@@ -1,182 +1,157 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB1235EDC1
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 13:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19B818FC86;
+	Wed, 28 Jan 2026 14:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769608080; cv=none; b=rYRsOR4zlN94+ANgDRVOGpC0Y6RLC0j/InvXWCdpJ5vq5+TtXxlot3WQpuYnC4dxNo8gs4V29bh12iSjp5zIzfZNTwOPeipcay/ASpQUG81+7+/N7cYW+sTRFv5u0GcRMb1hd4iegctRwS/eS8HS/SwatJHxiyDV4oC3Ef2F2us=
+	t=1769610199; cv=none; b=gUw02zGTCCYKDnnZUfMR1rMutPemi0Bodx8C8DWrEUZAaco2/WLuy3Zrjqo9mpeBykgz55pFP+xT4CYGZfVyb9JGahT/7/YJUgekPvJkP8cOwkrQZ2U6HcqtkKd4UcLkjlcRj9E27oqalAXhsnkIZJOijDwq/lg7T3GaRAOA0V0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769608080; c=relaxed/simple;
-	bh=/xpe0WZiMxl/GqX7qwhgJXFWRG2PG+0p92lLjw6JC0w=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=M/dpOqaGhJNaVrAVkigwoXiWJHr6NBm/zE834RUND9CCrI80Rik+/bDwXdeNNY2SIIa5dM1ksvlshjEbbas7W7m5Y+wIfPv9mu/xz1kSXWLc51XSzF/YcJiZqTzm5oKdyHdZJQ3S3jBQbj4ETS1NZcP5HIZl8eC65DZjbkXtAwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Q8YXT+Qe; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ISFSMnCi; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1769610199; c=relaxed/simple;
+	bh=GaqmXVC43+nsMMOnXtKrUQcuZ8BiG1QNfcEodbtQSW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XNfQyLdRGMnu8JG55PhkZVatPhGxUoaRJ/ZaZVskuf6/PjjGpGUpjGe47E5UkDdQCFsuL1rzFwp0zAiRXMCxW7VPwhDNqA2vqQPYo1xT2w+cVF1ZfmAbmKLQ8MTcZli/ykSA7/IJ3wc+9/r+dV1vSKNhSSf8Z3QCj1OTnoc/Zw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k/OnoK4k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Q8YXT+Qe";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ISFSMnCi"
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60S938Qj3247497
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 13:47:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	wGMo0m1R2L9wwbTRPxCXUEgVOcQ6/Yw3wU/Y91P03Q8=; b=Q8YXT+QeY4P06cQc
-	N/4uFGZiGouljnPWHr1Fr80N2Kqf0k01NRQuAeasyWrFpvFyzmVTsMc4hfLHsGjS
-	kfY8MdWdpwixcVYhsvoE6Ep5Af5lLrcA1cGYd+LMnvOVUQGEk/czRmf2Q/B0FwRH
-	2/daLG1us83CzfFERdEu+40Ibnf2W50lVoPtqVArBInciktD25oQBR3L95U8pGqm
-	D67ea37JPV3Cmzggkv0n3HQhYkjW+M29AnE5rPZchNY5DUoeHoCdBv8kAO0MZ4CG
-	7mWpd7mI830gRfF4o1taUUhf6H2YBqL4txuVAJKrcCrGFRP5M23b3CiY+Yi08O1e
-	oZCHGA==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bydfk1dwp-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 13:47:58 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2a0a8c465c1so6277245ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 05:47:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769608077; x=1770212877; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wGMo0m1R2L9wwbTRPxCXUEgVOcQ6/Yw3wU/Y91P03Q8=;
-        b=ISFSMnCin7fEsT555OMX+fEgRru+rUNLwkUS6MiqxhBtaLjSbY0bkICQHx8fA7m3Yj
-         FpbAeeWKrjen6P35KWgOEyAdgXLD9TRfr3lhSjXdycUffdjOYImQBYf+KQYEVV+cImJ+
-         xNyXmG0HZlR/sOaVzYanTcDaeF85kX2KVBTpzjERuKE2XM9ryeDZCkaUWUa0D1gkqPRv
-         SxiUBAYFgz8+GbIGx19hQO9hWn8VHmvYvPe9FTw/j7MDZ46qdHvQfN95eiTeJJwXYVvo
-         ePas4skvF+w1B2iJzr9s76/2/XHsFTnthr02DyLethWKIUfBuLZTh1SfMeIEmqF8ai6r
-         MNQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769608077; x=1770212877;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wGMo0m1R2L9wwbTRPxCXUEgVOcQ6/Yw3wU/Y91P03Q8=;
-        b=P1MVYQiDKC1nBpa87jow8eXyvMOOtiSql9At3IJxIvz55Y7/4S73l+kWGP6v4XtFrH
-         vg1UKLfq6RJz/7ICGEQGrcDNZkzbBblZBCGnjAoR/8g2ayzGLrpYJQyKYjvMKxXXBkIn
-         DUxLRsa0g8oN4jpIlclogqWpWwlrbpHDOHQPXg5EWEvbAY224ZRzLCUUFTEo91clwW80
-         5ka3l2m2HsN9rtl+cuJ47TRhMwY8POiO6dqBi55XyVZF5s/suiBEPuvIIHSYddqV+eI/
-         EtC5Uqcagpx+hwU3KsLvX7VsqOYUjXNGUo+Lr6i2AiEH5BC1se/0KLNcCdNn7OYncS60
-         sWJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX055dNLDfT8WS2wqYrPHrJhigY1g6aWDic1C/Spjz+0wdP2z+LIM4cFDW2wI9sf2prVSGwXiu93gpUg9rRVds=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIHfJv8jh4Mfmnsqbyqog2OQ4hNHgTsu2KdcTwHzEblFAfTh9j
-	/J8iLXPuvUFTCTA2J0NKPh7OUjTeLnzZvB62QiciXShn6ANAbreHzM6q0yU4hhwIqsd/LXVcdOa
-	5o6ONMqDqZRl1Eoa+Ww0Obqq8z35H7s9leiSD+Id7ws5VJC2aCRWaOWYKNo5gp6jvVXgTWGqKY0
-	Hcyv4=
-X-Gm-Gg: AZuq6aI+uwU4XU8KqyLcwne9SBDiE5F4RrgZFvAaKB58cd2bZOx0hwBil7TbuuzGe8g
-	ijAwIJyWgjvKZDLfyikqACBoZKltJXz/ywpNCp0Kj/On8ftx9wnjbwPcq1VTdAK5uTASxzRv/L5
-	KbfCdjTlrcxFxrTIvTAzgaG9S9Hk2vvDFPMI1ZJwBvEeNDEnawBwQUPfbRCvIKUQRrKB54BdXGK
-	gWOM5pLWowHpmhLcVKHNFR8XRCMjG9y1pE9b6x1Owk59D+7agGYXsBtX3gKS9SDOkiaT2TVeLEx
-	M4Cv+ch6AlxgTzhU4boD7e0dAHzJcYEj6Eqva0Kj/CrSpKkASBMiHiiUigkMpveTKqMOhWKago/
-	kOwVZifM=
-X-Received: by 2002:a17:902:f60b:b0:298:45e5:54a4 with SMTP id d9443c01a7336-2a87120f746mr50143845ad.1.1769608076695;
-        Wed, 28 Jan 2026 05:47:56 -0800 (PST)
-X-Received: by 2002:a17:902:f60b:b0:298:45e5:54a4 with SMTP id d9443c01a7336-2a87120f746mr50143365ad.1.1769608076044;
-        Wed, 28 Jan 2026 05:47:56 -0800 (PST)
-Received: from [192.168.1.102] ([120.60.55.34])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b4c45c4sm23790595ad.62.2026.01.28.05.47.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 05:47:55 -0800 (PST)
-From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-X-Google-Original-From: Manivannan Sadhasivam <mani@kernel.org>
-To: jingoohan1@gmail.com, lpieralisi@kernel.org, kwilczynski@kernel.org,
-        robh@kernel.org, bhelgaas@google.com, cassel@kernel.org,
-        Frank.Li@nxp.com, Koichiro Den <den@valinux.co.jp>
-Cc: vigneshr@ti.com, s-vadapalli@ti.com, hongxing.zhu@nxp.com,
-        l.stach@pengutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, minghuan.Lian@nxp.com,
-        mingkai.hu@nxp.com, roy.zang@nxp.com, jesper.nilsson@axis.com,
-        heiko@sntech.de, srikanth.thokala@intel.com,
-        marek.vasut+renesas@gmail.com, yoshihiro.shimoda.uh@renesas.com,
-        geert+renesas@glider.be, magnus.damm@gmail.com,
-        christian.bruel@foss.st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, kishon@kernel.org, jirislaby@kernel.org,
-        rongqianfeng@vivo.com, 18255117159@163.com, shawn.lin@rock-chips.com,
-        nicolas.frattaroli@collabora.com, linux.amoon@gmail.com,
-        vidyas@nvidia.com, shuah@kernel.org, linux-omap@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@axis.com,
-        linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-In-Reply-To: <20260124145012.2794108-1-den@valinux.co.jp>
-References: <20260124145012.2794108-1-den@valinux.co.jp>
-Subject: Re: [PATCH v10 0/8] PCI: endpoint: BAR subrange mapping support
-Message-Id: <176960806032.58847.15614322725355216575.b4-ty@kernel.org>
-Date: Wed, 28 Jan 2026 19:17:40 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k/OnoK4k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F12C4CEF1;
+	Wed, 28 Jan 2026 14:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769610199;
+	bh=GaqmXVC43+nsMMOnXtKrUQcuZ8BiG1QNfcEodbtQSW0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k/OnoK4kbx+TzB+RxBXXEoNYVe1eLdzXQxjt9Bz4sY/DY06uC1CZ9Qjechb7LDrIa
+	 fBJsl0gGw4ducuQgsQt7XdpzIL211PxnMLXqXgC0M9LF0WiPDEROVXdvc+7pa74zhQ
+	 4DRN7zBKcOGo3ewT/wkecY6RJI3FDfyiFRRuCvhJW4tGZkHqEx40bheiVD643UpIGr
+	 s+XvS8TOZ/GsJeHuxvshSnK0hqrtjP83brppNsELJxN0vdtf52IMv+pDBrjbd8VnOH
+	 l6r9hVULPTkp7J/z17Z4v4gClWW4tDcXd90RFDDVmU3o8Yu/aquYwLm1VPy2iuypDO
+	 NDdudkPpLXzAQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vl6Rq-0000000038v-3r43;
+	Wed, 28 Jan 2026 15:23:10 +0100
+Date: Wed, 28 Jan 2026 15:23:10 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+Message-ID: <aXobzoeooJqxMkEj@hovoldconsulting.com>
+References: <20260124170535.11756-1-johan@kernel.org>
+ <aXjgeNY-jf9rIw09@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI4MDExMyBTYWx0ZWRfX/3g3PA2kfq1e
- zsHNmye+0WV5T9r3UHClLpARQMe9jM7MiyGZQis5fyOmRvKwnNvW83WXovIvvsVAjf+2xdFJOYm
- XY8D7G3UORN5NQuIKj7nZDb1vSZ1UnMJJO/GGzCu1wRQhqfSFQRCgwyp/NsboYbvfHLtXnkipa8
- IeKfQjIklvUtSzYS+ItHtxbszLhZOCUFg+5MzaSa6g6XSXHEiWXFLLbpRguLOschZ2G3EvgkQt+
- rKQqWK2dWeHG44LAQZ1Y1zoxA8r0e0rKRh8n1GVq8zgQa5QVjfeFblktAcrknu1whAe0H+xI+0I
- peI6990RLV//nJDhWYCWEym4b0vB8lA1iGv6sH/3SkkVkItDHcdoyKT9SPY8otRyRLSY1cW7cF+
- bp1q9ISEG28/s2sx0NgXCDpBwKkUrMxN44BzcGWciVFo6SFFwWFz3ta+GwHjE7b0RWh7bIwySZr
- CP1JXrx5i0+kUPkWKhg==
-X-Authority-Analysis: v=2.4 cv=XfWEDY55 c=1 sm=1 tr=0 ts=697a138e cx=c_pps
- a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=F3mjE3T3/ow0zpRzCzjSvA==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=Ux4BfgyPd-WidXiTcjQA:9
- a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
-X-Proofpoint-GUID: 4MjgRZlJUZ4__FJK9tH_9Pw1io0s9bqT
-X-Proofpoint-ORIG-GUID: 4MjgRZlJUZ4__FJK9tH_9Pw1io0s9bqT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-28_02,2026-01-28_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 clxscore=1011 impostorscore=0 phishscore=0 priorityscore=1501
- suspectscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601280113
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aXjgeNY-jf9rIw09@google.com>
 
+On Tue, Jan 27, 2026 at 03:57:44PM +0000, Tzung-Bi Shih wrote:
+> On Sat, Jan 24, 2026 at 06:05:32PM +0100, Johan Hovold wrote:
+> > I was surprised to learn that the revocable functionality was merged last week
+> > given the community feedback on list and at LPC, but not least since there are
+> > no users of it, which we are supposed to require to be able to evaluate it
+> > properly.
+> > 
+> > The chromeos ec driver issue which motivated this work turned out not to need
+> > it as was found during review. And the example gpiolib conversion was posted
 
-On Sat, 24 Jan 2026 23:50:04 +0900, Koichiro Den wrote:
-> This series proposes support for mapping subranges within a PCIe endpoint
-> BAR and enables controllers to program inbound address translation for
-> those subranges.
+> Regarding cros_ec_chardev, my last attempt [2] to solve its hot-plug issue by
+> synchronizing misc_{de,}register() with file operations using a global lock
+> highlighted the difficulty of alternatives: that approach serialized all file
+> operations and could easily lead to hung tasks if any file operation slept.
+
+Yeah, fixing it at the chardev (or miscdevice) level would still require
+some changes at the driver level (e.g. to wakeup sleeping tasks).
+
+> Given the drawbacks of [2], I believe cros_ec_chardev remains a valid use
+> case for revocable.
+
+Yes, possibly. 
+
+Miscdevice is a bit of a special case however since you cannot tie the
+lifetime of your driver data to that of the miscdev, but there are ways
+to address that. And some drivers already handle this (i.e. without any
+changes to miscdevice).
+
+But notably the revocable design seems to derive from this quirk of
+miscdevice.
+
+[ Side note for completeness: Looking at the cros_ec driver it doesn't
+  seem to involve any hotpluggable buses so this looks like a mostly
+  theoretical issue of a developer with root access actively unbinding
+  an ec-driver while in use. ]
+
+> > the very same morning that this was merged which hardly provides enough time
+> > for evaluation (even if Bartosz quickly reported a performance regression).
 > 
-> Note: This series is a spin-off from a larger RFC series:
->       https://lore.kernel.org/all/20260118135440.1958279-1-den@valinux.co.jp/
->       The first user is the pci-endpoint-test, and the real user will
->       likely be epf-vntb for Remote eDMA-backed NTB transport, demonstrated
->       in that RFC series.
+> The gpiolib conversion was provided as the first concrete user to enable
+> this evaluation process.  The performance regression Bartosz identified is
+> valuable feedback, and I believe it is addressed by [3].  I plan to send the
+> next version of the series after v7.0-rc1 and revisit the issue.
 > 
-> [...]
+> [3] https://lore.kernel.org/all/20260121040204.2699886-1-tzungbi@kernel.org/
+>
+> > Turns out there are correctness issues with both the gpiolib conversion and
+> > the revocable design itself that can lead to use-after-free and hung tasks (see
+> > [1] and patch 3/3).
+> 
+> I appreciate you identifying the issues where multiple threads share a file
+> descriptor; this is a case I overlooked.  I see these kinds of findings as a
+> positive outcome of having wider review and a concrete user, allowing us to
+> identify and fix issues in the design.
 
-Applied, thanks!
+Yes, that's exactly why we always require a user *before* merging
+something like this. To be able to determine that the interface is sane.
 
-[1/8] PCI: endpoint: Add dynamic_inbound_mapping EPC feature
-      commit: 06a81c5940e46cc7bddee28f16bdd29a12a76344
-[2/8] PCI: endpoint: Add BAR subrange mapping support
-      commit: 31fb95400451040050361e22ff480476964280f0
-[3/8] PCI: dwc: Advertise dynamic inbound mapping support
-      commit: c0f1506f63546308e894469ceb0f1fadbdf9d2f9
-[4/8] PCI: dwc: ep: Support BAR subrange inbound mapping via Address Match Mode iATU
-      commit: cfbc98dbf44d52738976f592f30c2ca6bb282939
-[5/8] Documentation: PCI: endpoint: Clarify pci_epc_set_bar() usage
-      commit: 7d857a3f517df4591d4c85832c4ce5aeb0ddc038
-[6/8] PCI: endpoint: pci-epf-test: Add BAR subrange mapping test support
-      commit: 530e3701a81b228c369261798ce1b7f63f5d6c08
-[7/8] misc: pci_endpoint_test: Add BAR subrange mapping test case
-      commit: 622e1ad5e49c6949dd8c97d71f609bd17cfb8813
-[8/8] selftests: pci_endpoint: Add BAR subrange mapping test case
-      commit: 0ebf8e7943e01b2c38c199228f51adbb89c02425
+Now the user showed up on the same day as the merge, which is obviously
+not enough time for proper review and discussion.
 
-Best regards,
--- 
-Manivannan Sadhasivam <mani@kernel.org>
+[ And by short-circuiting the normal process you probably reduce the
+motivation for people to spend time on the example conversion too. ]
 
+> > And as was pointed out repeatedly during review, and again at the day of the
+> > merge, this does not look like the right interface for the chardev unplug
+> > issue.
+> 
+> My focus has been on miscdevice [2], but I suspect cdev solutions for device
+> hot-plug would face similar synchronization challenges between device removal
+> and in-flight file operations.
+
+But we need to look at that before throwing up our hands and saying that
+it's not possible and that each driver should take care of this itself.
+
+> > Revert the revocable implementation until a redesign has been proposed and
+> > evaluated properly.
+> 
+> I'll work on addressing the discovered issues and send follow-up fixes.  I
+> believe keeping the current series in linux-next would be beneficial, as it
+> allows for easier testing and wider evaluation by others, rather than
+> reverting at this stage.
+
+To the contrary, now is right time to do the revert as there are
+fundamental problems with the current interface that will require a
+redesign. That's not the kind of work that should be done during an rc
+stabilisation cycle.
+
+Give people a chance to see for themselves what the gpiolib conversion
+looks like, determine whether this abstraction makes the code more or
+less readable, and think about possible further uses of a mechanism like
+this.
+
+Johan
+
+> > [1] https://lore.kernel.org/all/aXT45B6vLf9R3Pbf@hovoldconsulting.com/
