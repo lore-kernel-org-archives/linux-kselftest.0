@@ -1,102 +1,104 @@
-Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC7033F38C
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 11:18:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E317E0E4;
+	Wed, 28 Jan 2026 11:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769599120; cv=none; b=mc+uI3OdjVNPl0DqGwTKBIUgs7KvnBWZ1KSBBp0etsTfRFe72zTnA6O8QGU8tlMGFNhGYcawnnKc/7kcCDh4MGgAMZFOWP3DGTvjzgzZcbBhVy75iG3P9wkLrNXH6TPHIc5m0vp4IM0QDwDQyvfHMgjX0hbNlMuchUUjXA9S5i0=
+	t=1769600398; cv=none; b=Qhf0LqjhKD+SE96g6nP1btbfaq/bcVn2ZPN1VfyEBy6ddTxq5BzQM3mzBZNUfBcAcaYNgv/pZBd5o3FaYzH5pfjpnDOqM24ujOgFGfiEQSWBBw3yy99wibY3UCzzObIVFWfaIDPWGYNf/EgXr5a3HkOY1FEEBLHN7z42XxllYcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769599120; c=relaxed/simple;
-	bh=EC4CajeL8lDheWSIIcXP+9QcBRi+1c/g3PBKw5bAIR0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TUx/78T/aXawJCgVIhIDjTgXA/18o4sj/iIy2SCnMaFlamlETII8PS/+nhca6lADFK9KDwXrrmhAm9LANDdjvZ6AwRR5wTrhBp2mLr4OSk/pd4w4q08fM47zGBOBtvsVcf7Ne/3qrlP9SzEQZY4Yp/laQjzt5xO0AOHWonS0WsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kUOAFaU9; arc=none smtp.client-ip=209.85.218.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1769600398; c=relaxed/simple;
+	bh=8JE6fgOxRKWA+V8VYu9R9Q+rh59VkQxn7th+VjXJ/kw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X/HNl3oXLIcsSDhOf7+74uf6JqbNcifNa34QXWafQIg4GQJr4RaIUj+JFZC7+TtTeR+oucuKWrqIN6A6Jv3UksgoyGGlk/5BpqWpGHY0oLse0abY36GN8g5tR5cTqiuiyKWfLz7MOJXDbyaE79WY/lOGjtzl/M6CYJnqZc9wzpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nMdvjuDp; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=n4uGvG1F; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kUOAFaU9"
-Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b8861544696so624196466b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 03:18:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769599116; x=1770203916; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EC4CajeL8lDheWSIIcXP+9QcBRi+1c/g3PBKw5bAIR0=;
-        b=kUOAFaU9kSU9MjXoCaqRWuCL92t/2MoW43yQr/Qbxz0JSpqLWtpzkzqNelGBV0i+78
-         KgBg+GZH99j5KUGCvUoo0H+BfADaDYpWxvq9Zqp4sTZNAUuD0TQihCs3r/Ok/DIx3UXs
-         8Qgu3fvV37uMt8lJlzqQDavzDMz0dsGLPInc0/QxOXTopLTUPAyf6IVRVT8n0+K9LpU/
-         p0ybA7jXuJ4iIHojiDN0ajP5FVxiUKWUdB5tuNqQgCnU/FIzj7Bp8xsltiSnGYFszAU8
-         FTR8fNy3OVe7aHwnqdyxrLysG4ZrKV8BgVjpYcfVx1tppbn/xk3WJL2pUf5Ma4EuJPtH
-         js4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769599116; x=1770203916;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EC4CajeL8lDheWSIIcXP+9QcBRi+1c/g3PBKw5bAIR0=;
-        b=d2X0UJKEOnBTl1augo2MG4dQYihehpn9SeAGbwWHj62n8f4p2pu+K03pcTiME8VEUU
-         9U7IUB3P+esPnVKXqj4+PUPfTQwgDW/C0Zebb4fR5ya5Yw8cWYaefdk1FdiROosls52W
-         cmFKM0jnfO0/PJRzhsPX5puLpQbsdBQMe1uCkslBzVBJNdgoCLOYtFfvYsRGR9hb+qzA
-         mJmTekGJMjqUM+5+K6rLdB2srv95+JiA1tKz4Z7od1rmErD6C6Lse2YuF9hbgpHrwxfQ
-         5AU+l76F2noMBd/uDoCKifY5SeaSATi4t5yehToZFbbvwy4YxMv3ORrPl+XlY09QjBTg
-         qyFg==
-X-Forwarded-Encrypted: i=1; AJvYcCUfd8QI5jtDj+HXcOYgMYOe2xA4H6QvCt/GJGP5OdXXTxRh8vlRW2ewRdPzX3+3nob5ndiAMFTIA2tLx2BAAwk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxUA6geG0ibnpevlPDooKgPXFA00IzKigQ7gJVsAAMSsW214Ux
-	zQMvTtrYa3QC5sloRwh+jcZ8+TH5OqV7W+4voWyfiiFNRb8QxkqyzjmBRhlQRnWrSSmmSe8vtC8
-	gPfhJhCEBDRFzXA==
-X-Received: from ejckj13.prod.google.com ([2002:a17:907:764d:b0:b73:5208:4052])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:3da5:b0:b87:7a69:226e with SMTP id a640c23a62f3a-b8dab28d15amr350226266b.10.1769599116237;
- Wed, 28 Jan 2026 03:18:36 -0800 (PST)
-Date: Wed, 28 Jan 2026 11:18:35 +0000
-In-Reply-To: <20260128-kselftest-fix-failures-file-v1-1-b58072c66317@linutronix.de>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nMdvjuDp";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="n4uGvG1F"
+Date: Wed, 28 Jan 2026 12:39:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1769600395;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CJTWYk+YesdvpGhIB0dJi/fYpBD0/tHDEy3akF3Lp+w=;
+	b=nMdvjuDpEd/rTbBSzhjmJ7NPshjPCK/ChOhAswnyHBSux2QG/poQiyRuQpG8sYjpSyeQCM
+	B6R4bdJDoGAt9sYZc8A03oR4c6R7zb+cLrVCHU1/UIm4LiLJMbpqq2rLKwNleKfWTHJAKM
+	hNoZNv4Ds0dT6J7dIi1y/LtAbplBtKLM7IWBCpB2Dh603e2jm4H4+PqdzOt2z5KYuHYEwM
+	T+tU8KhQMmSL4TcmKA7gomEGwP+HNFDtVNZ1x9kW0vBDSBmk15RPeQnzqmy/Qgi+vssnx1
+	qhTRS90raMm28UxTSfnp8tDJ6n+eyg1XRmrYbs0qumvCfeKoXOE/cAy1QEvlvA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1769600395;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CJTWYk+YesdvpGhIB0dJi/fYpBD0/tHDEy3akF3Lp+w=;
+	b=n4uGvG1FdMOreZxb92MIinReioVnN21YcMF5PuWN0mo2h1GNO/G04Okk0numKey41T76Ch
+	Ltc4M8gcyEujpjCg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Brendan Jackman <jackmanb@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: runner: Avoid spurious warning about missing
+ failures file
+Message-ID: <20260128123203-28c3a39f-3751-40ae-91a0-35355cb0ba5a@linutronix.de>
+References: <20260128-kselftest-fix-failures-file-v1-1-b58072c66317@linutronix.de>
+ <DG06J6S40UW7.15VFU5DA8YJIY@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260128-kselftest-fix-failures-file-v1-1-b58072c66317@linutronix.de>
-X-Mailer: aerc 0.21.0
-Message-ID: <DG06J6S40UW7.15VFU5DA8YJIY@google.com>
-Subject: Re: [PATCH] selftests: runner: Avoid spurious warning about missing
- failures file
-From: Brendan Jackman <jackmanb@google.com>
-To: "=?utf-8?q?Thomas_Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>, Shuah Khan <shuah@kernel.org>, 
-	Brendan Jackman <jackmanb@google.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, 
-	<linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DG06J6S40UW7.15VFU5DA8YJIY@google.com>
 
-On Wed Jan 28, 2026 at 9:05 AM UTC, Thomas Wei=C3=9Fschuh wrote:
-> When runner.sh is *not* executed via run_kselftest.sh,=20
+On Wed, Jan 28, 2026 at 11:18:35AM +0000, Brendan Jackman wrote:
+> On Wed Jan 28, 2026 at 9:05 AM UTC, Thomas Weiﬂschuh wrote:
+> > When runner.sh is *not* executed via run_kselftest.sh, 
+> 
+> Hm, what's the usecase for that? runner.sh is a "library", right? So in
+> my mind there's basically an undocumented contract that you need to set
+> this variable before you call the relevant functions.
 
-Hm, what's the usecase for that? runner.sh is a "library", right? So in
-my mind there's basically an undocumented contract that you need to set
-this variable before you call the relevant functions.
+This happens when using 'make run_tests' in a selftest directory.
+There the failure currently is also not reported to the caller of make.
+Maybe we should make the failures file also work there.
+I am not sure what the expected semantics actually are.
+In any case, a larger fix should wait for the next cycle,
+until then I'd like to get rid of the warning.
 
-The fix below opens the door to bugs where we fail to report test
-failures which would be... a shame!
+> The fix below opens the door to bugs where we fail to report test
+> failures which would be... a shame!
+> 
+> > the variable
+> > $kselftest_failures_file does not exist. This triggers a harmless but
+> > annyoing warning from runner.sh if a test fails:
+> >
+> > tools/testing/selftests/kselftest/runner.sh: line 50: : No such file or directory
+> >
+> > Silence the spurious warning.
+> >
+> > Fixes: d9e6269e3303 ("selftests/run_kselftest.sh: exit with error if tests fail")
+> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> 
+> Having said that, it's not a big deal, the risk of those bugs is not
+> that high and we'd probably notice them before too long. Assuming you
+> have a usecase where just setting the variable to /dev/null yourself is
+> a pain, this LGTM.
 
-> the variable
-> $kselftest_failures_file does not exist. This triggers a harmless but
-> annyoing warning from runner.sh if a test fails:
->
-> tools/testing/selftests/kselftest/runner.sh: line 50: : No such file or d=
-irectory
->
-> Silence the spurious warning.
->
-> Fixes: d9e6269e3303 ("selftests/run_kselftest.sh: exit with error if test=
-s fail")
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+Passing /dev/null explicitly would also work.
+I don't have a strong preference.
 
-Having said that, it's not a big deal, the risk of those bugs is not
-that high and we'd probably notice them before too long. Assuming you
-have a usecase where just setting the variable to /dev/null yourself is
-a pain, this LGTM.
+> Reviewed-By: Brendan Jackman <jackmanb@google.com>
 
-Reviewed-By: Brendan Jackman <jackmanb@google.com>
+Thanks
+
+
+Thomas
