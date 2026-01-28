@@ -1,441 +1,117 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C242D7DF3
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 23:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769644097; cv=pass; b=g+Wbv2EMLfaids+sZ+Hjb2Ji1+RJ7s2Mk9Y6b5bNplZDMoGMvFb9Y0wU9Aep1Iq3EknbClFW1lKl+C3NrpmvJiJ3OqhzRtU2IJDt5fwZyI49HM4yK8gmPAlOyGx1ZTncUf/ZP8VaOGG+pihhWgk/huWx8DyRC/B5rHqeQA0gY34=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769644097; c=relaxed/simple;
-	bh=QKP+AdSSsiB4D0SD1pkOBdxVF5JubvIxOCIWfnhFTQg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ubm9pUjnSEeFtstCWXFCIgOLhp0fobWkCZ0cGFRe0zKVP4NQn0AWCSPA4gu3zqYEZatO+UDP9pIGYvbaZ2v/d4KmHzShnHZXXOBtvaFGKqlCivjFpuOGZmg/ioFY9I54Gc7VmzEoS77mJ2fH3Xti9Yijaquh+qOaKxIiGjt/SBI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wggXsJph; arc=pass smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9882F33B6E0;
+	Wed, 28 Jan 2026 23:49:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769644196; cv=none; b=kLvxOXqTjDNkZVp+oFk9+7RIOeLGiz7QU9tmaZjUllplllAMuRd4pCCL2uuKqdecNwuiHDWL6QFoXyoD5otEmZzSPNlEIFvVHYnvmhi/dh+9ldZDcgFkgfARFmoKTCw9KGOISfiQnh8WOLnQ2B+P5l0Znf1WhDDawT7/lcwCX+w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769644196; c=relaxed/simple;
+	bh=uI3RDr7HqUZjxLfQKmdKrlNh8La0nTbxIAzpjwhvhL0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GtMxyITZaZJKaPme2+gtLRFqrAuR/7Ry0UKTsUWLRbwTbGQzUp3TBjCJa1D8+jjH8m/qJO3pWnGlRccrZ4XJabbBZuAXPbHF64iRQGLzv85gFyBiVwvP2vWKqr7zNwSWTSn8Jo46BiMZqy6aawnuM0hJmkDvuo0CNAW5TzBz1MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+M0cReD; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wggXsJph"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5033b0b6eabso98721cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 15:48:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769644092; cv=none;
-        d=google.com; s=arc-20240605;
-        b=I2VHGkyYicSg8PYaflaAfpUD9+d1AnFiSe5qzT1dFeiLzBNvPSTxmU5lTj5xZgcBzJ
-         naUDj6EdALTcVk6nzCZDHopYDrWnUFB1mGDKTulFPYTrBt7TL77McmOqWhkhadrWsTdk
-         PV7VGVjDUmDaR9svt5Lww+EINrI+9T+wKyfMjiwk89/QOj+mJOPo6/71YZGQMkRjg4Ig
-         dEJgaSm0aVmG9NuyECTPXqIjU6f879il5/3MhLlEAGwEcjgadWjP73TfueLUsKKSZzlQ
-         5Q/JAoig5M57et97ayWFDO1CxkuI3YY4w9w9PDwanfRkFRgnv9m2deuVHhd1nFxgjW7I
-         OpWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=wjvvUYK/4dE39UgAFnedAHeaRm7dJ/+QUmhTTPYz9t4=;
-        fh=/xuG8VwoV8WwehVBjY3FWcf3lZVMvWBoytPhjvoqjAY=;
-        b=S6vQbIIF8L8YwPH9t+/ydz9lS3x5fgVaXixy1uwB6FPlAa46Qx6NiXk7rOhVunQCtn
-         dQ7K5in/lojo83OgaQG04aSEJTOtWEbxB/iGopw7TGzwVN8kA6L/cq4X6GgA6Np8cvoV
-         DNqu5gg1q5zmpPNLR+nBkha/Oaam47A0F7sslpwKHKXel3bsJia9rDw8WnuCsYsLD6Ks
-         HcJeLrEMh3j4iEm7eXNJoQgvkbG3FSaL1Zw9CYm392NIep+RCxvF4TINz6Fz6LnQSpyH
-         Rc1WFpuZ8MQQoewDFxmQEX0Jbj8+b8n9m9gIKRwlRprv3zbHEO4ZjXi7Z5PBC5MkKn6H
-         9J6A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769644092; x=1770248892; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wjvvUYK/4dE39UgAFnedAHeaRm7dJ/+QUmhTTPYz9t4=;
-        b=wggXsJphagb/bSpj3IRsUGTXWgTMrE6SFYOybk+9pnBhkLoCWdphWLqnQ0gniyantv
-         m5TcrWoMvcp2am9alIjwnJT1XPZxf9trslYOW3hjy1UaPny1Hopfj5KRVxBdv4U/GkAk
-         g+W/y2p5UHxvjSIN5/ibYGkdYkqlWzPv29KYla/Feqv2d4NIr3bBeUP5lz8he+Jfet9t
-         747JXMN9vXd4kLoSWRCPyClmkc1m5QPt4cwuk2ANgV1wS6ZiZEGJO0iUMP4WGjnHe05+
-         VZcaETw8dNRDx1h0li/Wbl7oGD+6njjDBVMUH/yo2Nc/1isQ9lgVliEo2F7NJi8M4qSP
-         X0Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769644092; x=1770248892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wjvvUYK/4dE39UgAFnedAHeaRm7dJ/+QUmhTTPYz9t4=;
-        b=neV4E7Nc8EkAXmsotsNJiUvDLG9VvCsPXZfhahaHRn4JsVAP+ow0piAT1Djbg8dk+4
-         U/2KLMGnALM1QX2BOtR/kACD1LSoV4JLtay4xU2uYkTqhC9gkGsj10/H5kWym9mFozya
-         clMqd9d0fkB7M4/jz3vixUW7pDsr0/V6hbJaGwW1DYXzBKie0VzlNImBorrqeelp9gtu
-         JABbMR9MHfd03GOORDKY8InqMWTFqqk5e2sTdWAxijE2x9HmgpLdw4dkQyiwslL2HXV+
-         foIdXOAHQA9huF0zBmKNDU0DK40sQRPnZ6sPMdrITtb9O+kMJd5+qGTLmekFbCJ5n5cy
-         H5Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCXkPHy3LFx5wIQRKyCBKTL41pF6P6E/6EuT6ePlP6rvqUH49LSG37HVCiHI8IoAH5YZKTnFiLuvgwvVRq1J1zs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSypOx45lf1NLxWMKP9vXRbYHsz7K+ACtuCLgQz9tZAdElHuyp
-	VX6XmwD5RLDaaOp7WhZKWlqO+YF85hFyd2rKSlK0h7ICoPWxmevjH1EiDvbZoWMMMQVhGsWckGk
-	9YVhIrn4h52R7V1O3yTyodir6QoFnv1HfrrW6kk7E
-X-Gm-Gg: AZuq6aJvZ+9mLpL0czGRL39mjfwfklY57M1Zww/gPcfdzp5u8oGudYlFmZlR0P/LS0/
-	TqeixWdssDwUPwrTTkbKc+yGDasYAeoCfqs699M6BJdFGLf+ZJnHzziw/5TVzhBno10b6L1Ay5S
-	qNczAt22k/OoOUUgBXAI+kDyVSO2phfDvl4v7ZWRPL0drUdXcXj50L8O5U2Dcg//Prkj2Ejkval
-	nOC07W+H9WAnMHrEWnud8uBIB/FS7YXefPH0b/DBH0Gjdov1bbvOzqhni1X+CSx+udluz6MdJJ4
-	f/NlOw==
-X-Received: by 2002:ac8:59cd:0:b0:4ed:ff79:e678 with SMTP id
- d75a77b69052e-503b672c559mr4281001cf.18.1769644091830; Wed, 28 Jan 2026
- 15:48:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+M0cReD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769644196; x=1801180196;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uI3RDr7HqUZjxLfQKmdKrlNh8La0nTbxIAzpjwhvhL0=;
+  b=L+M0cReDyWpe8Y4irkASpa744AvxO65phHypLOTHYBXQ3GRuQLRuM/0a
+   lEvYREicZYZwuM4jVW4ji2aO1Q6ENCWgji2WzrGON49v2oovhuhmtXZ2r
+   s9JgI81eGoXXQc+2eiNFXNe1HJbkpyYlGAPshrFZgNN/+jR47o/kP6FrN
+   FIM9jn8NJ3Z1womb7Wt0ESZDc8Xj/2Wry1QRSBaxj3U7rF4WYDqbS3BLd
+   LNYMhHtcvWa2TWsK4rB9fhV6tcwDGLIz8bmMkOTA31YpP70r8qsv6kwfP
+   /pcjZTx2q6Sk9uH8pMkIuTsUd0JF906TZ87jcygAkApOtfRNLvqmjU5zO
+   Q==;
+X-CSE-ConnectionGUID: /B2XP+1iT8iO/zY+B+jW8w==
+X-CSE-MsgGUID: GlyKcnQbSbCv8hcKWROg7w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="70766512"
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="70766512"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 15:49:55 -0800
+X-CSE-ConnectionGUID: wWr+rVRHRnCwxh2cpWOBcw==
+X-CSE-MsgGUID: +lVlpeSaQQ2nnHHivX0AoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="208299916"
+Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
+  by fmviesa006.fm.intel.com with ESMTP; 28 Jan 2026 15:49:51 -0800
+Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vlFIB-00000000289-3eBH;
+	Wed, 28 Jan 2026 23:49:47 +0000
+Date: Thu, 29 Jan 2026 00:49:12 +0100
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH 3/5] selftests: kselftest: Add ksft_reset_state()
+Message-ID: <202601290039.37LnFCGx-lkp@intel.com>
+References: <20260128-kselftest-harness-v1-3-cb259fa81cd0@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260121225438.3908422-1-jmattson@google.com> <20260121225438.3908422-7-jmattson@google.com>
- <aXJal3srw2-3J5Dm@google.com>
-In-Reply-To: <aXJal3srw2-3J5Dm@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Wed, 28 Jan 2026 15:47:59 -0800
-X-Gm-Features: AZwV_Qi8faW06eVjZbFN4XkaAx91ISh9qtySVVj5Bkz3ATD0YuSAA9PlyfyxKGM
-Message-ID: <CALMp9eQm2fW=jbcBSZK9hO9p_Lec67B4gFsio2BBcsJfP1jtRg@mail.gmail.com>
-Subject: Re: [PATCH 6/6] KVM: selftests: x86: Add svm_pmu_hg_test for HG_ONLY bits
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260128-kselftest-harness-v1-3-cb259fa81cd0@linutronix.de>
 
-On Thu, Jan 22, 2026 at 9:12=E2=80=AFAM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Wed, Jan 21, 2026, Jim Mattson wrote:
-> > Add a selftest to verify KVM correctly virtualizes the AMD PMU Host-Onl=
-y
-> > (bit 41) and Guest-Only (bit 40) event selector bits across all relevan=
-t
-> > SVM state transitions.
-> >
-> > For both Guest-Only and Host-Only counters, verify that:
-> >   1. SVME=3D0: counter counts (HG_ONLY bits ignored)
-> >   2. Set SVME=3D1: counter behavior changes based on HG_ONLY bit
-> >   3. VMRUN to L2: counter behavior switches (guest vs host mode)
-> >   4. VMEXIT to L1: counter behavior switches back
-> >   5. Clear SVME=3D0: counter counts (HG_ONLY bits ignored again)
-> >
-> > Also confirm that setting both bits is the same as setting neither bit.
-> >
-> > Signed-off-by: Jim Mattson <jmattson@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
-> >  .../selftests/kvm/x86/svm_pmu_hg_test.c       | 297 ++++++++++++++++++
-> >  2 files changed, 298 insertions(+)
-> >  create mode 100644 tools/testing/selftests/kvm/x86/svm_pmu_hg_test.c
-> >
-> > diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/s=
-elftests/kvm/Makefile.kvm
-> > index e88699e227dd..06ba85d97618 100644
-> > --- a/tools/testing/selftests/kvm/Makefile.kvm
-> > +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> > @@ -112,6 +112,7 @@ TEST_GEN_PROGS_x86 +=3D x86/svm_vmcall_test
-> >  TEST_GEN_PROGS_x86 +=3D x86/svm_int_ctl_test
-> >  TEST_GEN_PROGS_x86 +=3D x86/svm_nested_shutdown_test
-> >  TEST_GEN_PROGS_x86 +=3D x86/svm_nested_soft_inject_test
-> > +TEST_GEN_PROGS_x86 +=3D x86/svm_pmu_hg_test
->
-> Maybe svm_nested_pmu_test?  Hmm, that makes it sound like "nested PMU" th=
-ough.
->
-> svm_pmu_host_guest_test?
+Hi Thomas,
 
-Sounds good.
+kernel test robot noticed the following build warnings:
 
-> > +#define MSR_F15H_PERF_CTL0   0xc0010200
-> > +#define MSR_F15H_PERF_CTR0   0xc0010201
-> > +
-> > +#define AMD64_EVENTSEL_GUESTONLY     BIT_ULL(40)
-> > +#define AMD64_EVENTSEL_HOSTONLY              BIT_ULL(41)
->
-> Please put architectural definitions in pmu.h (or whatever library header=
- we
-> have).
+[auto build test WARNING on 6d6ad32e22f028c525d5df471c5522616e645a6b]
 
-These should be redundant. I will confirm.
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/selftests-kselftest-Treat-xpass-as-successful-result/20260128-182856
+base:   6d6ad32e22f028c525d5df471c5522616e645a6b
+patch link:    https://lore.kernel.org/r/20260128-kselftest-harness-v1-3-cb259fa81cd0%40linutronix.de
+patch subject: [PATCH 3/5] selftests: kselftest: Add ksft_reset_state()
+config: i386-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260129/202601290039.37LnFCGx-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260129/202601290039.37LnFCGx-lkp@intel.com/reproduce)
 
-> > +struct hg_test_data {
->
-> Please drop "hg" (I keep reading it as "mercury").
->
-> > +     uint64_t l2_delta;
-> > +     bool l2_done;
-> > +};
-> > +
-> > +static struct hg_test_data *hg_data;
-> > +
-> > +static void l2_guest_code(void)
-> > +{
-> > +     hg_data->l2_delta =3D run_and_measure();
-> > +     hg_data->l2_done =3D true;
-> > +     vmmcall();
-> > +}
-> > +
-> > +/*
-> > + * Test Guest-Only counter across all relevant state transitions.
-> > + */
-> > +static void l1_guest_code_guestonly(struct svm_test_data *svm,
-> > +                                 struct hg_test_data *data)
-> > +{
-> > +     unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-> > +     struct vmcb *vmcb =3D svm->vmcb;
-> > +     uint64_t eventsel, delta;
-> > +
-> > +     hg_data =3D data;
-> > +
-> > +     eventsel =3D EVENTSEL_RETIRED_INSNS | AMD64_EVENTSEL_GUESTONLY;
-> > +     wrmsr(MSR_F15H_PERF_CTL0, eventsel);
-> > +     wrmsr(MSR_F15H_PERF_CTR0, 0);
-> > +
-> > +     /* Step 1: SVME=3D0; HG_ONLY ignored */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     /* Step 2: Set SVME=3D1; Guest-Only counter stops */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_EQ(delta, 0);
-> > +
-> > +     /* Step 3: VMRUN to L2; Guest-Only counter counts */
-> > +     generic_svm_setup(svm, l2_guest_code,
-> > +                       &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-> > +     vmcb->control.intercept &=3D ~(1ULL << INTERCEPT_MSR_PROT);
-> > +
-> > +     run_guest(vmcb, svm->vmcb_gpa);
-> > +
-> > +     GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-> > +     GUEST_ASSERT(data->l2_done);
-> > +     GUEST_ASSERT_NE(data->l2_delta, 0);
-> > +
-> > +     /* Step 4: After VMEXIT to L1; Guest-Only counter stops */
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_EQ(delta, 0);
-> > +
-> > +     /* Step 5: Clear SVME; HG_ONLY ignored */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     GUEST_DONE();
-> > +}
-> > +
-> > +/*
-> > + * Test Host-Only counter across all relevant state transitions.
-> > + */
-> > +static void l1_guest_code_hostonly(struct svm_test_data *svm,
-> > +                                struct hg_test_data *data)
-> > +{
-> > +     unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-> > +     struct vmcb *vmcb =3D svm->vmcb;
-> > +     uint64_t eventsel, delta;
-> > +
-> > +     hg_data =3D data;
-> > +
-> > +     eventsel =3D EVENTSEL_RETIRED_INSNS | AMD64_EVENTSEL_HOSTONLY;
-> > +     wrmsr(MSR_F15H_PERF_CTL0, eventsel);
-> > +     wrmsr(MSR_F15H_PERF_CTR0, 0);
-> > +
-> > +
-> > +     /* Step 1: SVME=3D0; HG_ONLY ignored */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     /* Step 2: Set SVME=3D1; Host-Only counter still counts */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     /* Step 3: VMRUN to L2; Host-Only counter stops */
-> > +     generic_svm_setup(svm, l2_guest_code,
-> > +                       &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-> > +     vmcb->control.intercept &=3D ~(1ULL << INTERCEPT_MSR_PROT);
-> > +
-> > +     run_guest(vmcb, svm->vmcb_gpa);
-> > +
-> > +     GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-> > +     GUEST_ASSERT(data->l2_done);
-> > +     GUEST_ASSERT_EQ(data->l2_delta, 0);
-> > +
-> > +     /* Step 4: After VMEXIT to L1; Host-Only counter counts */
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     /* Step 5: Clear SVME; HG_ONLY ignored */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     GUEST_DONE();
-> > +}
-> > +
-> > +/*
-> > + * Test that both bits set is the same as neither bit set (always coun=
-ts).
-> > + */
-> > +static void l1_guest_code_both_bits(struct svm_test_data *svm,
->
-> l1_guest_code gets somewhat redundant.  What about these to be more descr=
-iptive
-> about the salient points, without creating monstrous names?
->
->         l1_test_no_filtering // very open to suggestions for a better nam=
-e
->         l1_test_guestonly
->         l1_test_hostonly
->         l1_test_host_and_guest
->
-> Actually, why are there even separate helpers?  Very off the cuff, but th=
-is seems
-> trivial to dedup:
->
-> static void l1_guest_code(struct svm_test_data *svm, u64 host_guest_mask)
-> {
->         const bool count_in_host =3D !host_guest_mask ||
->                                    (host_guest_mask & AMD64_EVENTSEL_HOST=
-ONLY);
->         const bool count_in_guest =3D !host_guest_mask ||
->                                     (host_guest_mask & AMD64_EVENTSEL_GUE=
-STONLY);
->         unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
->         struct vmcb *vmcb =3D svm->vmcb;
->         uint64_t eventsel, delta;
->
->         wrmsr(MSR_F15H_PERF_CTL0, EVENTSEL_RETIRED_INSNS | host_guest_mas=
-k);
->         wrmsr(MSR_F15H_PERF_CTR0, 0);
->
->         /* Step 1: SVME=3D0; host always counts */
->         wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
->         delta =3D run_and_measure();
->         GUEST_ASSERT_NE(delta, 0);
->
->         /* Step 2: Set SVME=3D1; Guest-Only counter stops */
->         wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
->         delta =3D run_and_measure();
->         GUEST_ASSERT(!!delta =3D=3D count_in_host);
->
->         /* Step 3: VMRUN to L2; Guest-Only counter counts */
->         generic_svm_setup(svm, l2_guest_code,
->                           &l2_guest_stack[L2_GUEST_STACK_SIZE]);
->         vmcb->control.intercept &=3D ~(1ULL << INTERCEPT_MSR_PROT);
->
->         run_guest(vmcb, svm->vmcb_gpa);
->
->         GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
->         GUEST_ASSERT(data->l2_done);
->         GUEST_ASSERT(!!data->l2_delta =3D=3D count_in_guest);
->
->         /* Step 4: After VMEXIT to L1; Guest-Only counter stops */
->         delta =3D run_and_measure();
->         GUEST_ASSERT(!!delta =3D=3D count_in_host);
->
->         /* Step 5: Clear SVME; HG_ONLY ignored */
->         wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
->         delta =3D run_and_measure();
->         GUEST_ASSERT_NE(delta, 0);
->
->         GUEST_DONE();
-> }
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601290039.37LnFCGx-lkp@intel.com/
 
-Even better, I will fold this all into one test flow with 4 PMCs
-covering the bit permutations.
+All warnings (new ones prefixed by >>):
 
-> > +                                 struct hg_test_data *data)
-> > +{
-> > +     unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-> > +     struct vmcb *vmcb =3D svm->vmcb;
-> > +     uint64_t eventsel, delta;
-> > +
-> > +     hg_data =3D data;
-> > +
-> > +     eventsel =3D EVENTSEL_RETIRED_INSNS |
-> > +             AMD64_EVENTSEL_HOSTONLY | AMD64_EVENTSEL_GUESTONLY;
-> > +     wrmsr(MSR_F15H_PERF_CTL0, eventsel);
-> > +     wrmsr(MSR_F15H_PERF_CTR0, 0);
-> > +
-> > +     /* Step 1: SVME=3D0 */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     /* Step 2: Set SVME=3D1 */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     /* Step 3: VMRUN to L2 */
-> > +     generic_svm_setup(svm, l2_guest_code,
-> > +                       &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-> > +     vmcb->control.intercept &=3D ~(1ULL << INTERCEPT_MSR_PROT);
-> > +
-> > +     run_guest(vmcb, svm->vmcb_gpa);
-> > +
-> > +     GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-> > +     GUEST_ASSERT(data->l2_done);
-> > +     GUEST_ASSERT_NE(data->l2_delta, 0);
-> > +
-> > +     /* Step 4: After VMEXIT to L1 */
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     /* Step 5: Clear SVME */
-> > +     wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-> > +     delta =3D run_and_measure();
-> > +     GUEST_ASSERT_NE(delta, 0);
-> > +
-> > +     GUEST_DONE();
-> > +}
-> > +
-> > +static void l1_guest_code(struct svm_test_data *svm, struct hg_test_da=
-ta *data,
-> > +                       int test_num)
-> > +{
-> > +     switch (test_num) {
-> > +     case 0:
->
-> As above, I would much rather pass in the mask of GUEST_HOST bits to set,=
- and
-> then react accordingly, as opposed to passing in a magic/arbitrary @test_=
-num.
-> Then I'm pretty sure we don't need a dispatch function, just run the test=
-case
-> using the passed in mask.
->
-> > +             l1_guest_code_guestonly(svm, data);
-> > +             break;
-> > +     case 1:
-> > +             l1_guest_code_hostonly(svm, data);
-> > +             break;
-> > +     case 2:
-> > +             l1_guest_code_both_bits(svm, data);
-> > +             break;
-> > +     }
-> > +}
->
-> ...
->
-> > +int main(int argc, char *argv[])
-> > +{
-> > +     TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
-> > +     TEST_REQUIRE(kvm_is_pmu_enabled());
-> > +     TEST_REQUIRE(get_kvm_amd_param_bool("enable_mediated_pmu"));
-> > +
-> > +     run_test(0, "Guest-Only counter across all transitions");
-> > +     run_test(1, "Host-Only counter across all transitions");
-> > +     run_test(2, "Both HG_ONLY bits set (always count)");
->
-> As alluded to above, shouldn't we also test "no bits set"?
-> > +
-> > +     return 0;
-> > +}
-> > --
-> > 2.52.0.457.g6b5491de43-goog
-> >
+   In file included from ovpn-cli.c:35:
+>> tools/testing/selftests/../../../tools/testing/selftests/kselftest.h:488:2: warning: extra ';' outside of a function [-Wextra-semi]
+     488 | };
+         |  ^
+   1 warning generated.
+
+
+vim +488 tools/testing/selftests/../../../tools/testing/selftests/kselftest.h
+
+   478	
+   479	static inline void ksft_reset_state(void)
+   480	{
+   481		ksft_cnt.ksft_pass = 0;
+   482		ksft_cnt.ksft_fail = 0;
+   483		ksft_cnt.ksft_xfail = 0;
+   484		ksft_cnt.ksft_xpass = 0;
+   485		ksft_cnt.ksft_xskip = 0;
+   486		ksft_cnt.ksft_error = 0;
+   487		ksft_plan = 0;
+ > 488	};
+   489	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
