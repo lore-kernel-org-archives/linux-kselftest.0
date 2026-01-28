@@ -1,687 +1,97 @@
-Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146C828469A;
-	Wed, 28 Jan 2026 10:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186B22FC876;
+	Wed, 28 Jan 2026 10:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769595674; cv=none; b=bh3/cgJYk/Ile4N+VKKXfvLQ7ox049pbOBnp7V85qQf4fhw3P9gInND+WeE2KRFWn13KVuCLC3lI81B+DvFo7WovSBy5Ues2IIYSCbLODRJSkT+NnZqfNqFZVFY3dDP7Z0bxotwgyr6+XYaJ7wRrC81QhsVybqjUCE33YbTUTk8=
+	t=1769595879; cv=none; b=QQj4xV/XhkgQLbKCmJpe2y5gc/rsFG8Ld/tef7gfvCi2d6+VTWva8jsR//6uVw6RA5KslAO1Uo87xdH4aArngOnONcyxtae2lGYmSvCy2s8mqpTwcdawaNHsX26hXLRafny2JHou0axxYdiSenufzDxCmO72rz6g0LUxCbUm0QQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769595674; c=relaxed/simple;
-	bh=odb0vff0kIPCjmR16m4liuYPib8+czXtZx5j6oW44yc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VUv5tGQgd/0k8yR3CkmqBWjyLvk+YKasr3WMGaUVJ4lxo25YDBiGgbnwrz7mMUE0wdiNaWkeKGux8b88qM+/GvddMFb716ovtHfhUw4m5mPy2GnNwHiVwdanv8/9IJTM/bKgIhNnpVBtTB/PQMfLWaMD/tFO/oDt71c44JxOb+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=rSTxaGBM; arc=none smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
+	s=arc-20240116; t=1769595879; c=relaxed/simple;
+	bh=/bkZDOQNaL3Fri1YO7dGLMOOwtYGxYzR4x3dVKLNDJU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mP155NPI7A3eUTn5a5dLax06nxYZQv0Mvtx6NbTYh9kCe72RWNiFdZNpwAEHo4r5MsZ7SkfswW+5JBOsQBwPdTGV3KSx8xCW4wGL3DYhxU4p11YY6JxKZxAIVyOrrH5p1IQJvymPb5EpvhUhfhdw+tgmXXfmITx9JqBosDs/+C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mWECB+V0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=6sKM5vtO; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="rSTxaGBM"
-Received: from localhost (localhost [127.0.0.1])
-	by mx1.secunet.com (Postfix) with ESMTP id 5C49F2082E;
-	Wed, 28 Jan 2026 11:21:10 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from mx1.secunet.com ([127.0.0.1])
- by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T-O5vsIQPpwe; Wed, 28 Jan 2026 11:21:09 +0100 (CET)
-Received: from EXCH-02.secunet.de (rl2.secunet.de [10.32.0.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.secunet.com (Postfix) with ESMTPS id 0D739207B3;
-	Wed, 28 Jan 2026 11:21:09 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com 0D739207B3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
-	s=202301; t=1769595669;
-	bh=r25+zPXdrdlYbpwrtzlg1hN84CP5wzu6v5A/ikr7Oi8=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-	b=rSTxaGBMTgcDYk7mb7JWRgnXONE1f6KWBkH4eKYANfR5C2swS1n9nvUp3e+SIwWbl
-	 eQUwTFKfgWTHbuZEIgQpM3rCemaf3CMT2ypJIJF+oQBe3/7fgWGcANMFMCtXArQ9Na
-	 x8F+lkv+ajM4TJUnnXs5T5bKjLXqUV41QQrZpVMkK3b1bYQeEOOFz5o0XUeX+MxG1r
-	 F6/dQc55zZP/lAWkrkqHrSxMCQW5ou+Ns4MCfH6/MRuNeevhM60ektLnXJl8cRNesA
-	 7ogUjOIX4UYr56lCMlmBu0WM3sfehT53IpE6C9tOP/6A0QW+3p57lxpnqZQb68PhLz
-	 GlyhYDrp7q3eg==
-Received: from moon.secunet.de (172.18.149.1) by EXCH-02.secunet.de
- (10.32.0.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 28 Jan
- 2026 11:21:06 +0100
-From: Antony Antony <antony.antony@secunet.com>
-To: Antony Antony <antony.antony@secunet.com>, Jakub Kicinski
-	<kuba@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
-	<netdev@vger.kernel.org>
-CC: "David S . Miller" <davem@davemloft.net>, David Ahern
-	<dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
-	<pabeni@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, Shuah Khan
-	<shuah@kernel.org>, <devel@linux-ipsec.org>,
-	<linux-kselftest@vger.kernel.org>, Tobias Brunner <tobias@strongswan.org>,
-	Simon Horman <horms@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next v4 2/2] selftests: net: add ICMP error source address test over xfrm tunnel
-Date: Wed, 28 Jan 2026 11:20:45 +0100
-Message-ID: <af9a189bee31f7d8f3759ed71d09ab5a82437592.1769595011.git.antony.antony@secunet.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <cover.1769595011.git.antony.antony@secunet.com>
-References: <cover.1769595011.git.antony.antony@secunet.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mWECB+V0";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="6sKM5vtO"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1769595876;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Y7lly/MpgfydjzmMZO7EBcQleAqFnsRK7QMGKkXiLdI=;
+	b=mWECB+V0NnO+ldvZdE9r2NOTuiBi+c++PDq4tXW7QrzFZK7kzLBe2gtlyoKqHF5gAPfheT
+	VbwivwUGutvIfj52f+izbomMtGomq1bThNirBDLdKgARjWbOsWjLweknAUOqRJxcdb6IBn
+	XVukmeJVB5RNm3gStNKwB3TPuCOsWXfbkuOm69q5EVYnMkigkmtrIIe92p1E+FVv1DnqnG
+	xtJY48V3042s/Sa3A5j27bD9V3rL+SiOyisDO8m4b6+UkOtUsWTLfw+qyC7HeWaLiPTjMU
+	ZsW8e7Yz0U1AhkSlWhHGjhh3QJJGYeRGnu7Wnmqm8XDJMc3h5XF3gHKBvM/OCQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1769595876;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Y7lly/MpgfydjzmMZO7EBcQleAqFnsRK7QMGKkXiLdI=;
+	b=6sKM5vtOILQPL5RWB22GZeVdAYoFGVjeeo0ukZdLfQu4TBNXfIhJ5MMl67+JXCLJRc+gkC
+	LmMYWRaf/wcgaQBA==
+Subject: [PATCH 0/5] selftests: harness: Detect illegal mixing of kselftest
+ and harness functionality
+Date: Wed, 28 Jan 2026 11:24:32 +0100
+Message-Id: <20260128-kselftest-harness-v1-0-cb259fa81cd0@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EXCH-04.secunet.de (10.32.0.184) To EXCH-02.secunet.de
- (10.32.0.172)
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBG4avErBNMKKOrRAur3xwKCyciiO6et
+ PwW7z0kSAyhrngo4WLhPWZUZUFTcHGB4jmbjDaNrkyrVsHmT8ipgksRIqqGtm7U1teto9wdCZ7
+ v/9kP7/sBQWymfWMAAAA=
+X-Change-ID: 20260128-kselftest-harness-5e07ab07f58a
+To: Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Yuwen Chen <ywen.chen@foxmail.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769595876; l=1275;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=/bkZDOQNaL3Fri1YO7dGLMOOwtYGxYzR4x3dVKLNDJU=;
+ b=aH6oQ/mL31D6U/9h618OSK50eiC93mMjBwWqpKiIhyCi7X7HXsYno9yAOrxfsIbqKedpv3ePx
+ Saxxr003MnqBIIXNgmF1O3xow65sMxKzRg4Y6RVvatSMQgCMq62UqBv
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Test that ICMP error messages generated by an IPsec gateway use
-the correct source address (the gateway's address, not the
-unreachable destination).
+Users may accidentally use the kselftest_test_result_*() functions in
+their harness tests. If ksft_finished() is not used, the results
+reported in this way are silently ignored.
 
-Signed-off-by: Antony Antony <antony.antony@secunet.com>
+Detect such cases and fail the test.
+
+This should probably only go in during the next cycle.
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-v1->v2 : add kernel selftest script
-v2->v3 : fix test script. The IFS, space, got mangled.
-v3->v4 : added MTU tests
-       - fix test script based on reviews
+Thomas Weißschuh (5):
+      selftests: kselftest: Treat xpass as successful result
+      selftests: harness: Validate that explicit kselftest exitcodes are handled
+      selftests: kselftest: Add ksft_reset_state()
+      selftests: harness: Detect illegal mixing of kselftest and harness functionality
+      selftests: harness: Validate intermixing of kselftest and harness functionality
+
+ tools/testing/selftests/kselftest.h                | 12 +++++
+ tools/testing/selftests/kselftest_harness.h        |  9 ++++
+ .../selftests/kselftest_harness/harness-selftest.c | 40 +++++++++++++++++
+ .../kselftest_harness/harness-selftest.expected    | 52 ++++++++++++++++++----
+ 4 files changed, 104 insertions(+), 9 deletions(-)
 ---
- tools/testing/selftests/net/Makefile      |   1 +
- tools/testing/selftests/net/xfrm_state.sh | 578 ++++++++++++++++++++++
- 2 files changed, 579 insertions(+)
- create mode 100755 tools/testing/selftests/net/xfrm_state.sh
+base-commit: 6d6ad32e22f028c525d5df471c5522616e645a6b
+change-id: 20260128-kselftest-harness-5e07ab07f58a
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index afdea6d95bde..c8f4d5e19d19 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -119,6 +119,7 @@ TEST_PROGS := \
- 	vrf_route_leaking.sh \
- 	vrf_strict_mode_test.sh \
- 	xfrm_policy.sh \
-+	xfrm_state.sh \
- # end of TEST_PROGS
-
- TEST_PROGS_EXTENDED := \
-diff --git a/tools/testing/selftests/net/xfrm_state.sh b/tools/testing/selftests/net/xfrm_state.sh
-new file mode 100755
-index 000000000000..c820c68c85fb
---- /dev/null
-+++ b/tools/testing/selftests/net/xfrm_state.sh
-@@ -0,0 +1,578 @@
-+#!/bin/bash -e
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# xfrm/IPsec tests.
-+# Currently implemented:
-+# - ICMP error source address verification (IETF RFC 4301 section 6)
-+# - ICMP MTU exceeded handling over IPsec tunnels.
-+#
-+# Addresses and topology:
-+# IPv4 prefix 10.1.c.d  IPv6 prefix fc00:c::d/64 where c is the segment number
-+# and d is the interface identifier.
-+# IPv6 uses the same c:d as IPv4, and start with IPv6 prefix instead ipv4 prefix
-+#
-+# Network topology default: ns_set_v4 or ns_set_v6
-+#   1.1   1.2   2.1   2.2   3.1   3.2   4.1   4.2   5.1   5.2  6.1  6.2
-+#  eth0  eth1  eth0  eth1  eth0  eth1  eth0  eth1  eth0  eth1 eth0  eth1
-+# a -------- r1 -------- s1 -------- r2 -------- s2 -------- r3 -------- b
-+# a, b = Alice and Bob hosts without IPsec.
-+# r1, r2, r3 routers, without IPsec
-+# s1, s2, IPsec gateways/routers that setup tunnel(s).
-+
-+# Network topology x: IPsec gateway that generates ICMP response - ns_set_v4x or ns_set_v6x
-+#   1.1   1.2   2.1   2.2   3.1   3.2   4.1   4.2   5.1   5.2
-+#  eth0  eth1  eth0  eth1  eth0  eth1  eth0  eth1  eth0  eth1
-+# a -------- r1 -------- s1 -------- r2 -------- s2 -------- b
-+
-+source lib.sh
-+
-+EXIT_ON_TEST_FAIL=no
-+PAUSE=no
-+VERBOSE=${VERBOSE:-0}
-+
-+#               Name                          Description
-+tests="
-+	unreachable_ipv4		IPv4 unreachable from router r3
-+	unreachable_ipv6		IPv6 unreachable from router r3
-+	unreachable_gw_ipv4		IPv4 unreachable from IPsec gateway s2
-+	unreachable_gw_ipv6		IPv6 unreachable from IPsec gateway s2
-+	mtu_ipv4_s2			IPv4 MTU exceeded from IPsec gateway s2
-+	mtu_ipv6_s2			IPv6 MTU exceeded from IPsec gateway s2
-+	mtu_ipv4_r2			IPv4 MTU exceeded from ESP router r2
-+	mtu_ipv6_r2			IPv6 MTU exceeded from ESP router r2
-+	mtu_ipv4_r3			IPv4 MTU exceeded from router r3
-+	mtu_ipv6_r3			IPv6 MTU exceeded from router r3"
-+
-+prefix4="10.1"
-+prefix6="fc00"
-+
-+run_cmd_err() {
-+	cmd="$*"
-+
-+	if [ "$VERBOSE" -gt 0 ]; then
-+		printf "    COMMAND: $cmd\n"
-+	fi
-+
-+	out="$($cmd 2>&1)" && rc=0 || rc=$?
-+	if [ "$VERBOSE" -gt 1 ] && [ -n "$out" ]; then
-+		echo "    $out"
-+		echo
-+	fi
-+	return 0
-+}
-+
-+run_cmd() {
-+	run_cmd_err "$@" || exit 1
-+}
-+
-+run_test() {
-+	# If errexit is set, unset it for sub-shell and restore after test
-+	errexit=0
-+	if [[ $- =~ "e" ]]; then
-+		errexit=1
-+		set +e
-+	fi
-+
-+	(
-+		tname="$1"
-+		tdesc="$2"
-+
-+		unset IFS
-+
-+		fail="yes"
-+
-+		# Since cleanup() relies on variables modified by this sub shell,
-+		# it has to run in this context.
-+		trap 'log_test_error $?; cleanup' EXIT INT TERM
-+
-+		if [ "$VERBOSE" -gt 0 ]; then
-+			printf "\n#############################################################\n\n"
-+		fi
-+
-+		ret=0
-+		eval test_${tname}
-+		ret=$?
-+
-+		if [ $ret -eq 0 ]; then
-+			fail="no"
-+			printf "TEST: %-60s [ PASS ]\n" "${tdesc}"
-+		elif [ $ret -eq $ksft_skip ]; then
-+			fail="no"
-+			printf "TEST: %-60s [SKIP]\n" "${tdesc}"
-+		fi
-+
-+		return $ret
-+	)
-+	ret=$?
-+
-+	[ $errexit -eq 1 ] && set -e
-+
-+	case $ret in
-+	0)
-+		all_skipped=false
-+		[ $exitcode -eq $ksft_skip ] && exitcode=0
-+		;;
-+	$ksft_skip)
-+		[ $all_skipped = true ] && exitcode=$ksft_skip
-+		;;
-+	*)
-+		all_skipped=false
-+		exitcode=1
-+		;;
-+	esac
-+
-+	return 0 # don't trigger errexit (-e); actual status in exitcode
-+}
-+
-+# Find the auto-generated name for this namespace
-+nsname() {
-+	eval echo ns_$1
-+}
-+
-+nscmd() {
-+	eval echo "ip netns exec $1"
-+}
-+
-+setup_namespaces() {
-+	local namespaces=""
-+
-+	NS_A=""
-+	NS_B=""
-+	NS_R1=""
-+	NS_R2=""
-+	NS_R3=""
-+	NS_S1=""
-+	NS_S2=""
-+
-+	local namespaces=""
-+	for ns in ${ns_set}; do
-+		namespaces="$namespaces NS_${ns^^}"
-+	done
-+
-+	setup_ns $namespaces
-+
-+	ns_active= #ordered list of namespaces for this test.
-+
-+	[ -n "${NS_A}" ] && ns_a="ip netns exec ${NS_A}" && ns_active="${ns_active} $NS_A"
-+	[ -n "${NS_R1}" ] && ns_r1="ip netns exec ${NS_R1}" && ns_active="${ns_active} $NS_R1"
-+	[ -n "${NS_S1}" ] && ns_s1="ip netns exec ${NS_S1}" && ns_active="${ns_active} $NS_S1"
-+	[ -n "${NS_R2}" ] && ns_r2="ip netns exec ${NS_R2}" && ns_active="${ns_active} $NS_R2"
-+	[ -n "${NS_S2}" ] && ns_s2="ip netns exec ${NS_S2}" && ns_active="${ns_active} $NS_S2"
-+	[ -n "${NS_R3}" ] && ns_r3="ip netns exec ${NS_R3}" && ns_active="${ns_active} $NS_R3"
-+	[ -n "${NS_B}" ] && ns_b="ip netns exec ${NS_B}" && ns_active="${ns_active} $NS_B"
-+}
-+
-+addr_add() {
-+	local ns_cmd=$(nscmd $1)
-+	local ip="$2"
-+	local dev="$3"
-+
-+	run_cmd ${ns_cmd} ip addr add ${ip} dev ${dev}
-+	run_cmd ${ns_cmd} ip link set up ${dev}
-+}
-+
-+veth_add() {
-+	local ns=$2
-+	local pns=$1
-+	local ns_cmd=$(nscmd ${pns})
-+	local ln="eth0"
-+	local rn="eth1"
-+	run_cmd ${ns_cmd} ip link add ${ln} type veth peer name ${rn} netns $ns
-+}
-+
-+setup_icmp_filter() {
-+	local ns_cmd="${1:-${ns_r2}}"
-+
-+	run_cmd ${ns_cmd} nft add table inet filter
-+	run_cmd ${ns_cmd} nft add chain inet filter FORWARD \
-+		{ type filter hook forward priority filter\; policy drop \; }
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD counter ip protocol esp \
-+		counter log accept
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD counter ip protocol \
-+		icmp counter log drop
-+
-+	if [ "$VERBOSE" -gt 0 ]; then
-+		run_cmd ${ns_cmd} nft list ruleset
-+		echo "$out"
-+	fi
-+}
-+
-+setup_icmpv6_filter() {
-+	local ns_cmd=${ns_r2}
-+
-+	run_cmd ${ns_cmd} nft add table inet filter
-+	run_cmd ${ns_cmd} nft add chain inet filter FORWARD { type filter \
-+		hook forward priority filter\; policy drop \; }
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD ip6 nexthdr \
-+		ipv6-icmp icmpv6 type echo-request counter log drop
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD ip6 nexthdr esp \
-+		counter log accept
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD ip6 nexthdr \
-+		ipv6-icmp icmpv6 type {nd-neighbor-solicit,nd-neighbor-advert, \
-+				       nd-router-solicit,nd-router-advert} counter log drop
-+	if [ "$VERBOSE" -gt 0 ]; then
-+		run_cmd ${ns_cmd} nft list ruleset
-+		echo "$out"
-+	fi
-+}
-+
-+ns_set() {
-+	s1_src=${src}
-+	s1_dst=${dst}
-+	s1_src_net=${src_net}
-+	s1_dst_net=${dst_net}
-+}
-+
-+setup_ns_set_v4() {
-+	ns_set="a r1 s1 r2 s2 r3 b"    # Network topology default
-+	imax=$(echo "$ns_set" | wc -w) # number of namespaces in this topology
-+
-+	src="10.1.3.1"
-+	dst="10.1.4.2"
-+	src_net="10.1.1.0/24"
-+	dst_net="10.1.6.0/24"
-+
-+	prefix=${prefix4}
-+	prefix_len=24
-+	s="."
-+	S="."
-+
-+	ns_set
-+}
-+
-+setup_ns_set_v4x() {
-+	ns_set="a r1 s1 r2 s2 b"       # Network topology: x
-+	imax=$(echo "$ns_set" | wc -w) # number of namespaces in this topology
-+	prefix=${prefix4}
-+	s="."
-+	S="."
-+	src="10.1.3.1"
-+	dst="10.1.4.2"
-+	src_net="10.1.1.0/24"
-+	dst_net="10.1.5.0/24"
-+	prefix_len=24
-+
-+	ns_set
-+}
-+
-+setup_ns_set_v6() {
-+	ns_set="a r1 s1 r2 s2 r3 b"    # Network topology default
-+	imax=$(echo "$ns_set" | wc -w) # number of namespaces in this topology
-+	prefix=${prefix6}
-+	s=":"
-+	S="::"
-+	src="fc00:3::1"
-+	dst="fc00:4::2"
-+	src_net="fc00:1::0/64"
-+	dst_net="fc00:6::0/64"
-+	prefix_len=64
-+
-+	ns_set
-+}
-+
-+setup_ns_set_v6x() {
-+	ns_set="a r1 s1 r2 s2 b" # Network topology: x
-+	imax=6
-+	prefix=${prefix6}
-+	s=":"
-+	S="::"
-+	src="fc00:3::1"
-+	dst="fc00:4::2"
-+	src_net="fc00:1::0/64"
-+	dst_net="fc00:5::0/64"
-+	prefix_len=64
-+
-+	ns_set
-+}
-+
-+setup_network() {
-+	# Create veths and add addresses
-+	i=1
-+	p=""
-+	for ns in ${ns_active}; do
-+		ns_cmd=$(nscmd ${ns})
-+
-+		if [ ${i} -ne 1 ]; then
-+			# Create veth between previous and current namespace
-+			veth_add ${p} ${ns}
-+			# Add addresses: previous gets .1 on eth0, current gets .2 on eth1
-+			addr_add ${p} "${prefix}${s}$((i-1))${S}1/${prefix_len}" eth0
-+			addr_add ${ns} "${prefix}${s}$((i-1))${S}2/${prefix_len}" eth1
-+		fi
-+
-+		# Enable forwarding
-+		run_cmd ${ns_cmd} sysctl -q net/ipv4/ip_forward=1
-+		run_cmd ${ns_cmd} sysctl -q net/ipv6/conf/all/forwarding=1
-+		run_cmd ${ns_cmd} sysctl -q net/ipv6/conf/default/accept_dad=0
-+
-+		p=${ns}
-+		i=$((i + 1))
-+	done
-+
-+	# Add routes (needs all addresses to exist first)
-+	i=1
-+	for ns in ${ns_active}; do
-+		ns_cmd=$(nscmd ${ns})
-+
-+		# Forward routes to networks beyond this node
-+		if [ ${i} -ne ${imax} ]; then
-+			nhf="${prefix}${s}${i}${S}2" # nexthop forward
-+			for j in $(seq $((i + 1)) ${imax}); do
-+				run_cmd ${ns_cmd} ip route replace \
-+				       	"${prefix}${s}${j}${S}0/${prefix_len}" via ${nhf}
-+			done
-+		fi
-+
-+		# Reverse routes to networks before this node
-+		if [ ${i} -gt 1 ]; then
-+			nhr="${prefix}${s}$((i-1))${S}1" # nexthop reverse
-+			for j in $(seq 1 $((i - 2))); do
-+				run_cmd ${ns_cmd} ip route replace \
-+					"${prefix}${s}${j}${S}0/${prefix_len}" via ${nhr}
-+			done
-+		fi
-+
-+		i=$((i + 1))
-+	done
-+}
-+
-+setup_xfrm_mode() {
-+	local MODE=${1:-tunnel}
-+	if [ "${MODE}" != "tunnel" ] && [ "${MODE}" != "beet" ]; then
-+		echo "xfrm mode ${MODE} not supported"
-+		log_test_error
-+		return 1
-+	fi
-+
-+	run_cmd ${ns_s1} ip xfrm policy add src ${s1_src_net} dst ${s1_dst_net} dir out \
-+		tmpl src ${s1_src} dst ${s1_dst} proto esp reqid 1 mode ${MODE}
-+
-+	# no "input" policies. we are only doing forwarding so far
-+
-+	run_cmd ${ns_s1} ip xfrm policy add src ${s1_dst_net} dst ${s1_src_net} dir fwd \
-+		flag icmp tmpl src ${s1_dst} dst ${s1_src} proto esp reqid 2 mode ${MODE}
-+
-+	run_cmd ${ns_s1} ip xfrm state add src ${s1_src} dst ${s1_dst} proto esp spi 1 \
-+		reqid 1 mode ${MODE} aead 'rfc4106(gcm(aes))' \
-+		0x1111111111111111111111111111111111111111 96 \
-+		sel src ${s1_src_net} dst ${s1_dst_net} dir out
-+
-+	run_cmd ${ns_s1} ip xfrm state add src ${s1_dst} dst ${s1_src} proto esp spi 2 \
-+		reqid 2 flag icmp replay-window 8 mode ${MODE} aead 'rfc4106(gcm(aes))' \
-+		0x2222222222222222222222222222222222222222 96 \
-+		sel src ${s1_dst_net} dst ${s1_src_net} dir in
-+
-+	run_cmd ${ns_s2} ip xfrm policy add src ${s1_dst_net} dst ${s1_src_net} dir out \
-+		flag icmp tmpl src ${s1_dst} dst ${s1_src} proto esp reqid 2 mode ${MODE}
-+
-+	run_cmd ${ns_s2} ip xfrm policy add src ${s1_src_net} dst ${s1_dst_net} dir fwd \
-+		tmpl src ${s1_src} dst ${s1_dst} proto esp reqid 1 mode ${MODE}
-+
-+	run_cmd ${ns_s2} ip xfrm state add src ${s1_dst} dst ${s1_src} proto esp spi 2 \
-+		reqid 2 mode ${MODE} aead 'rfc4106(gcm(aes))' \
-+		0x2222222222222222222222222222222222222222 96 \
-+		sel src ${s1_dst_net} dst ${s1_src_net} dir out
-+
-+	run_cmd ${ns_s2} ip xfrm state add src ${s1_src} dst ${s1_dst} proto esp spi 1 \
-+		reqid 1 flag icmp replay-window 8 mode ${MODE} aead 'rfc4106(gcm(aes))' \
-+		0x1111111111111111111111111111111111111111 96 \
-+		sel src ${s1_src_net} dst ${s1_dst_net} dir in
-+}
-+
-+setup_xfrm() {
-+	setup_xfrm_mode tunnel
-+}
-+
-+setup() {
-+	[ "$(id -u)" -ne 0 ] && echo "  need to run as root" && return $ksft_skip
-+
-+	for arg; do
-+		eval setup_${arg} || {
-+			echo "  ${arg} not supported"
-+			return 1
-+		}
-+	done
-+}
-+
-+pause() {
-+	echo
-+	echo "Pausing. Hit enter to continue"
-+	read a
-+}
-+
-+log_test_error() {
-+	if [ "${fail}" = "yes" -a -n "${tdesc}" ]; then
-+		printf "TEST: %-60s [ FAIL ]  ${name}\n" "${tdesc}"
-+		[ -n "${cmd}" ] && echo -e "${cmd}\n"
-+		[ -n "${out}" ] && echo -e "${out}\n"
-+	fi
-+}
-+
-+cleanup() {
-+	[[ "$PAUSE" = "always" || ( "$PAUSE" = "fail" && "$fail" = "yes" ) ]] && pause
-+	cleanup_all_ns
-+	[ "${EXIT_ON_TEST_FAIL}" = "yes" -a "${fail}" = "yes" ] && exit 1
-+}
-+
-+test_unreachable_ipv6() {
-+	setup ns_set_v6 namespaces network xfrm icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:6::2
-+	run_cmd_err ${ns_a} ping -W 5 -w 4 -c 1 fc00:6::3
-+	rc=0
-+	echo -e "$out" | grep -q -E 'From fc00:5::2 icmp_seq.* Destination' || rc=1
-+	return ${rc}
-+}
-+
-+test_unreachable_gw_ipv6() {
-+	setup ns_set_v6x namespaces network xfrm icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:5::2
-+	run_cmd_err ${ns_a} ping -W 5 -w 4 -c 1 fc00:5::3
-+	rc=0
-+	echo -e "$out" | grep -q -E 'From fc00:4::2 icmp_seq.* Destination' || rc=1
-+	return ${rc}
-+}
-+
-+test_unreachable_ipv4() {
-+	setup ns_set_v4 namespaces network icmp_filter xfrm || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.6.2
-+	run_cmd_err ${ns_a} ping -W 5 -w 4 -c 1 10.1.6.3
-+	rc=0
-+	echo -e "$out" | grep -q -E 'From 10.1.5.2 icmp_seq.* Destination' || rc=1
-+	return ${rc}
-+}
-+
-+test_unreachable_gw_ipv4() {
-+	setup ns_set_v4x namespaces network icmp_filter xfrm || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.5.2
-+	run_cmd_err ${ns_a} ping -W 5 -w 4 -c 1 10.1.5.3
-+	rc=0
-+	echo -e "$out" | grep -q -E 'From 10.1.4.2 icmp_seq.* Destination' || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv4_r2() {
-+	setup ns_set_v4 namespaces network icmp_filter xfrm || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.6.2
-+	run_cmd ${ns_r2} ip route replace 10.1.3.0/24 dev eth1 src 10.1.3.2 mtu 1300
-+	run_cmd ${ns_r2} ip route replace 10.1.4.0/24 dev eth0 src 10.1.4.1 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1300 -W 5 -w 4 -c 1 10.1.6.2 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E "From 10.1.2.2 icmp_seq=.* Frag needed and DF set" || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv6_r2() {
-+	setup ns_set_v6 namespaces network xfrm icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:6::2
-+	run_cmd ${ns_r2} ip -6 route replace fc00:3::/64 dev eth1 metric 256 src fc00:3::2 mtu 1300
-+	run_cmd ${ns_r2} ip -6 route replace fc00:4::/64 dev eth0 metric 256 src fc00:4::1 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1300 -W 5 -w 4 -c 1 fc00:6::2 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E "From fc00:2::2 icmp_seq=.* Packet too big: mtu=1230" || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv4_r3() {
-+	setup ns_set_v4 namespaces network icmp_filter xfrm || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.6.2
-+	run_cmd ${ns_r3} ip route replace 10.1.6.0/24 dev eth0 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1350 -W 5 -w 4 -c 1 10.1.6.2 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E "From 10.1.5.2 .* Frag needed and DF set \(mtu = 1300\)" || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv4_s2() {
-+	setup ns_set_v4x namespaces network icmp_filter xfrm || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.5.2
-+	run_cmd ${ns_s2} ip route replace 10.1.5.0/24 dev eth0 src 10.1.5.1 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1350 -W 5 -w 4 -c 1 10.1.5.2 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E "From 10.1.4.2.*Frag needed and DF set \(mtu = 1300\)" || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv6_s2() {
-+	setup ns_set_v6x namespaces network xfrm icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:5::2
-+	run_cmd ${ns_s2} ip -6 route replace fc00:5::/64 dev eth0 metric 256 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1350 -W 5 -w 4 -c 1 fc00:5::2 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E "From fc00:4::2.*Packet too big: mtu=1300" || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv6_r3() {
-+	setup ns_set_v6 namespaces network xfrm icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:6::2
-+	run_cmd ${ns_r3} ip -6 route replace fc00:6::/64 dev eth1 metric 256 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1300 -W 5 -w 4 -c 1 fc00:6::2 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E "From fc00:5::2 icmp_seq=.* Packet too big: mtu=1300" || rc=1
-+	return ${rc}
-+}
-+
-+################################################################################
-+#
-+usage() {
-+	echo
-+	echo "$0 [OPTIONS] [TEST]..."
-+	echo "If no TEST argument is given, all tests will be run."
-+	echo
-+	echo -e "\t-p Pause on fail. Namespaces are kept for diagnostics"
-+	echo -e "\t-P Pause after the test. Namespaces are kept for diagnostics"
-+	echo -e "\t-v Verbose output. Show commands; -vv Show output also"
-+	echo "Available tests${tests}"
-+	exit 1
-+}
-+
-+################################################################################
-+#
-+exitcode=0
-+all_skipped=true
-+out=
-+cmd=
-+
-+while getopts :epPv o; do
-+	case $o in
-+	e) EXIT_ON_TEST_FAIL=yes ;;
-+	P) PAUSE=always ;;
-+	p) PAUSE=fail ;;
-+	v) VERBOSE=$((VERBOSE + 1)) ;;
-+	*) usage ;;
-+	esac
-+done
-+shift $(($OPTIND - 1))
-+
-+IFS=$'\t\n'
-+
-+for arg; do
-+	# Check first that all requested tests are available before running any
-+	command -v "test_${arg}" >/dev/null || {
-+		echo "=== Test ${arg} not found"
-+		usage
-+	}
-+done
-+
-+name=""
-+desc=""
-+fail="no"
-+
-+for t in ${tests}; do
-+	[ "${name}" = "" ] && name="${t}" && continue
-+	[ "${desc}" = "" ] && desc="${t}"
-+
-+	run_this=1
-+	for arg; do
-+		[ "${arg}" != "${arg#--*}" ] && continue
-+		[ "${arg}" = "${name}" ] && run_this=1 && break
-+		run_this=0
-+	done
-+	if [ $run_this -eq 1 ]; then
-+		run_test "${name}" "${desc}"
-+	fi
-+	name=""
-+	desc=""
-+done
-+
-+exit ${exitcode}
---
-2.39.5
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
