@@ -1,107 +1,83 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C0321A444
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 15:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F260D284672;
+	Thu, 29 Jan 2026 16:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769701926; cv=none; b=jSifdE7G9OAlemXMcHbJUto6DBigdZDY30RwOX/o0xyLPIAO6fgn7tkrFTr2B1hyQxqAZGCGW8Y7Saqt5qJfb/bdNQ98cwykykhHlaPX31Boq23Huo1SPkxDW0BIjuB5U+qavc+RpxLS8I44B0jxyLo7IIBdp3StAvN3MXgmgdc=
+	t=1769702426; cv=none; b=RTAxO/QNzWUXpNo4l7ky15XajzNWt/1fjmGHgKEOhesR1Te0Adnq/3WauNf/Ueifezuwqn2o8OaokWRdUbwTqfRVv5+TvEcQMnnduDAaIBbLE1tCsWejy9e17VfuS0xt+qur/vbLAZ5z2eVQaxL6bFo48vX73YjV3oYR0iPuNXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769701926; c=relaxed/simple;
-	bh=mADaWoz5BKunfhpDgnAPmjxwxFwKxNh7BPXGsZTuMu8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ehOww4dXNB9nNt8JsP/dumbQgnLAhYrl4t+k8fVFCqu7XlXVSIKIxKLLFBaTwG5A0D/cUAqZxJQDfzjMjVnSDUJTic1CSV1ZbQvyvp17u7Fkk0YHgiuZ0oUe+ek7zYJwP3BsQ25oxEO3q/Qo25y5qZ3n90yeubpdhqulrveHSls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vY9AWNcA; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vY9AWNcA"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769701922;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gIk3pddVOqWimPRGtGvBdRms1k4+AnvpJZJJoPVzhfU=;
-	b=vY9AWNcAEMyQ8/9xKjftxd2HgJH4sb8oDqzDzWBSRnwdcYz6VkopZ7OgxJgnHrFoMLE4Hc
-	KkLbhdeHk9LLu76jL2Q2YaROe1w7wZRT38yFm768lEljcli8JUVNgwDoxMCW4q9H7pdFVO
-	9J09OMPyu/sp6QBMmKJi5HipW70O17o=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v4 3/3] selftests/bpf: Enable get_func_args and get_func_ip tests on arm64
-Date: Thu, 29 Jan 2026 23:49:53 +0800
-Message-ID: <20260129154953.66915-4-leon.hwang@linux.dev>
-In-Reply-To: <20260129154953.66915-1-leon.hwang@linux.dev>
-References: <20260129154953.66915-1-leon.hwang@linux.dev>
+	s=arc-20240116; t=1769702426; c=relaxed/simple;
+	bh=8GW6eXYbLn1gHU+nPtBLOi1GLiB5vXDdUTDOnH+gq58=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Pn3m3rdp1yMKb+K2HtBzADrLUjJrZSqxjgSghqKw5O4ZATymE1ivCU8BkErQrkQtJXITJbhsw1XGk6Vk8vyGsNeVT9Bd0Ws24y22/ajeggzNCeORh1u5hGeGrOw5/bxfQLqDz1dpTSWLWAhr8TcsGK7Pz9ZQ4cMWXsSZligM/+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B63F8153B;
+	Thu, 29 Jan 2026 08:00:16 -0800 (PST)
+Received: from [10.57.53.17] (unknown [10.57.53.17])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A38413F632;
+	Thu, 29 Jan 2026 08:00:17 -0800 (PST)
+Message-ID: <3bfa15fc-187e-4c39-9cb3-a936fdd443b2@arm.com>
+Date: Thu, 29 Jan 2026 17:00:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 09/14] entry: Rework syscall_exit_to_user_mode_work()
+ for arch reuse
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
+ luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
+ deller@gmx.de, akpm@linux-foundation.org, charlie@rivosinc.com,
+ mark.rutland@arm.com, anshuman.khandual@arm.com, song@kernel.org,
+ ryan.roberts@arm.com, thuth@redhat.com, ada.coupriediaz@arm.com,
+ broonie@kernel.org, pengcan@kylinos.cn, liqiang01@kylinos.cn, kmal@cock.li,
+ dvyukov@google.com, reddybalavignesh9979@gmail.com,
+ richard.weiyang@gmail.com, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260128031934.3906955-1-ruanjinjie@huawei.com>
+ <20260128031934.3906955-10-ruanjinjie@huawei.com>
+ <56978cb8-f9de-4bf2-b1fc-b5564fec7387@arm.com>
+ <ef52449d-7ae0-11d0-c8a9-2ca572454425@huawei.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <ef52449d-7ae0-11d0-c8a9-2ca572454425@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Allow get_func_args, and get_func_ip fsession selftests to run on arm64.
+On 29/01/2026 14:11, Jinjie Ruan wrote:
+>>> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+>>> index e4a8287af822..c4fea642d931 100644
+>>> --- a/include/linux/entry-common.h
+>>> +++ b/include/linux/entry-common.h
+>>> @@ -125,14 +125,14 @@ void syscall_exit_work(struct pt_regs *regs, unsigned long work);
+>>>   * syscall_exit_to_user_mode_work - Handle work before returning to user mode
+>>>   * @regs:	Pointer to currents pt_regs
+>>>   *
+>>> - * Same as step 1 and 2 of syscall_exit_to_user_mode() but without calling
+>>> + * Same as step 1 of syscall_exit_to_user_mode() but without calling
+>>> + * local_irq_disable(), syscall_exit_to_user_mode_prepare() and
+>>>   * exit_to_user_mode() to perform the final transition to user mode.
+>>>   *
+>>> - * Calling convention is the same as for syscall_exit_to_user_mode() and it
+>>> - * returns with all work handled and interrupts disabled. The caller must
+>>> - * invoke exit_to_user_mode() before actually switching to user mode to
+>>> - * make the final state transitions. Interrupts must stay disabled between
+>>> - * return from this function and the invocation of exit_to_user_mode().
+>>> + * Calling convention is the same as for syscall_exit_to_user_mode(). The
+>>> + * caller must invoke local_irq_disable(), __exit_to_user_mode_prepare() and
+>> Shouldn't it be syscall_exit_to_user_mode_prepare() rather than
+>> __exit_to_user_mode_prepare()? The former has extra calls (e.g. rseq).
+> Perhaps we can just delete these comments — at present only generic
+> entry and arm64 use it, and nowhere else needs it; after the refactoring
+> the comments now seem rather unclear.
 
-Acked-by: Puranjay Mohan <puranjay@kernel.org>
-Tested-by: Puranjay Mohan <puranjay@kernel.org>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- tools/testing/selftests/bpf/progs/get_func_args_test.c | 2 +-
- tools/testing/selftests/bpf/progs/get_func_ip_test.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Agreed, the comments are essentially describing what each function
+calls; considering how short they are, directly reading the code is
+probably easier.
 
-diff --git a/tools/testing/selftests/bpf/progs/get_func_args_test.c b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-index 0a3236a7a109..180ba5098ca1 100644
---- a/tools/testing/selftests/bpf/progs/get_func_args_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-@@ -167,7 +167,7 @@ int BPF_PROG(tp_test2)
- }
- 
- __u64 test7_result = 0;
--#ifdef __TARGET_ARCH_x86
-+#if defined(bpf_target_x86) || defined(bpf_target_arm64)
- SEC("fsession/bpf_fentry_test1")
- int BPF_PROG(test7)
- {
-diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-index 65f7e1f182bf..43ff836a8ed8 100644
---- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-@@ -106,7 +106,7 @@ int BPF_URETPROBE(test8, int ret)
- 
- __u64 test9_entry_result = 0;
- __u64 test9_exit_result = 0;
--#ifdef __TARGET_ARCH_x86
-+#if defined(bpf_target_x86) || defined(bpf_target_arm64)
- SEC("fsession/bpf_fentry_test1")
- int BPF_PROG(test9, int a)
- {
--- 
-2.52.0
-
+- Kevin
