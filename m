@@ -1,147 +1,107 @@
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E73387591;
-	Thu, 29 Jan 2026 13:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5940227A91D
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769692300; cv=none; b=NG7zfn+GMtcx2v5jt+FU2m5lajEa4Cv26df99DWMHeBMvBvlHPa/EUPrb338n5CuSqLD1WiS0mScUusb+tLJcSpWCo2bVTNYCW79gnvCGvj1T0JpEmi766DApEdBk/pAMrg4lzzmrQoqtOf9Z5gazXgxXPWoA0Y/KXrioLqFPIU=
+	t=1769693273; cv=none; b=GU1WBwiTZWpFRvGIeuxSvQvDa8gLbRDer5kYpt7MH+/j5s3hTN8ns2hRJh4MJlbgJ/3+xLcPdiXAkgi8s42r8BfeB2IpgZu8SAi+/SarMqDu1Rsox69/a1s/Uryrb6Ydq5S1cwnlDOHPpWSyAudS7o4L2AxwL9qJ5EIAuRIskzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769692300; c=relaxed/simple;
-	bh=y446zHC2ezxUtqbIMwjhXUZ2odlitYqEfBmBI9D/4ok=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nzpeYdmolAk+oVuRgmgXwUy0bRPqJMRUs4Fh1T0Bb57ultoU4NbCmUymqNYRCCDSkuCQVcSYwd0xUaf6Zde+x1ES+ZSa/KS/8ofLS4cziDO/J7WSZngUJ/23RwiHu8Pm1yFFCETkUGAIhhiHIb6Le1SW5Q/09jdw0RGMuKKr69o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=yJSsIM95; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1769693273; c=relaxed/simple;
+	bh=Psm+sqOn+lU6WqolTua2QloJaIgTKAUHlHWHCdmIZpU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kU2cL7WqTLtrNxuKueZG63AYcAmeYgCLriSPP1cJiI9rI9y06A6qKH3cfqmRKgl9gFs5K1SwBDpF8VNmrV2/tHE965iV6+t0wnxkxpKhMhNXENjoRCtqr9syWjMBqCLTXP0FZsyrLY0jmj0vF5VeKJwfK62Hczjh+ptW8Da5ePw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=On+7JMl6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="yJSsIM95"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=lGAZNyC26tWnBJpgASq82yQ4JhsMQIeHg3yeTtqFNb0=;
-	b=yJSsIM95rQZsy9ixGAVeMZvy88LA9/2puiU80aDMKMMRhXL/+4+gA3boCys2k8m379qDJG8zg
-	dWqP4m4XUCKX7GBnaRNHsPpaSES4HGwg1W4/fw9yo5i458enHyvoBDYrVHjQwmUT5b8lGgF+CKM
-	ai0NaSnMxI/fSczfaJu7ctU=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4f1zvJ0LTszcb0x;
-	Thu, 29 Jan 2026 21:07:24 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 06A824036C;
-	Thu, 29 Jan 2026 21:11:36 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 29 Jan 2026 21:11:34 +0800
-Message-ID: <ef52449d-7ae0-11d0-c8a9-2ca572454425@huawei.com>
-Date: Thu, 29 Jan 2026 21:11:33 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="On+7JMl6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1838C2BC87
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:27:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769693273;
+	bh=Psm+sqOn+lU6WqolTua2QloJaIgTKAUHlHWHCdmIZpU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=On+7JMl6rfNv+eYR0ryFJKK225y0dgUo3ySFLVThp6BbnEjRrx8S0Q+eTmFzhqhMi
+	 wf3jxYww4M5FrXEmHQQXymE9Ss/zfIm3FddC7HWLaOUSDaTHvsDUq1OxojqMdCOLgA
+	 g9aCTWTu776KGhQmzPqUzMmm4zAGcPnOq1V1IsE4DhnAck3gqu0TCY1TVKChScDhhE
+	 nthSQbJZkkVF071DFP11mqGk7dwR0rMWB6lnuXHHpsFs90UlH3Xa/rW4fmHCyeyEQp
+	 nD4FvbykkHMbr9BrPZkMt1xaWcfaXcpESYWXI7i7+G/9ti5FLygFA1i0oQAof/tdJX
+	 3z1ScMfRCvhiw==
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-64997a4dc0fso901577d50.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 05:27:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWDVD/gbsm1U4pHT4QszPMOs4eu8gVCwTIunJ2ArOOU58/0VY6X3icr3IMo5mTgTvOBeXCSOoGdJWzy9t49icA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdYnq1cVDPtBIJ9tWeRoGBdLr7LHUZHAgiNEM1jwGCNIf2ngQY
+	S8Qpc3Ug+zaJwGG86w64LFTQCZJ8xA/7uS643XZsX/6ChWjj0VweAM6gE+yiSvgmC6Xa4P8VOdQ
+	LGUUpYsPw9OX+4HUeohx2Snzq/cO5K8s=
+X-Received: by 2002:a05:690e:4006:b0:645:527b:bc08 with SMTP id
+ 956f58d0204a3-6498fbe9699mr6570371d50.11.1769693272290; Thu, 29 Jan 2026
+ 05:27:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v11 09/14] entry: Rework syscall_exit_to_user_mode_work()
- for arch reuse
-Content-Language: en-US
-To: Kevin Brodsky <kevin.brodsky@arm.com>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <oleg@redhat.com>, <tglx@linutronix.de>,
-	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
-	<kees@kernel.org>, <wad@chromium.org>, <deller@gmx.de>,
-	<akpm@linux-foundation.org>, <charlie@rivosinc.com>, <mark.rutland@arm.com>,
-	<anshuman.khandual@arm.com>, <song@kernel.org>, <ryan.roberts@arm.com>,
-	<thuth@redhat.com>, <ada.coupriediaz@arm.com>, <broonie@kernel.org>,
-	<pengcan@kylinos.cn>, <liqiang01@kylinos.cn>, <kmal@cock.li>,
-	<dvyukov@google.com>, <reddybalavignesh9979@gmail.com>,
-	<richard.weiyang@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260128031934.3906955-1-ruanjinjie@huawei.com>
- <20260128031934.3906955-10-ruanjinjie@huawei.com>
- <56978cb8-f9de-4bf2-b1fc-b5564fec7387@arm.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <56978cb8-f9de-4bf2-b1fc-b5564fec7387@arm.com>
+References: <20260124170535.11756-1-johan@kernel.org> <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh> <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com> <aXovtrAM1r1UyWxA@hovoldconsulting.com>
+In-Reply-To: <aXovtrAM1r1UyWxA@hovoldconsulting.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Thu, 29 Jan 2026 14:27:40 +0100
+X-Gmail-Original-Message-ID: <CAD++jL=8ajGZa1RRdH9xERLp7VukGPgJCN2QP1_M6MNDoLPM_A@mail.gmail.com>
+X-Gm-Features: AZwV_Qik7SCPARxotDNzrWFsla5u6OCpEZeJYH1X1viUiMQxMXQhsyNGoPkMZn0
+Message-ID: <CAD++jL=8ajGZa1RRdH9xERLp7VukGPgJCN2QP1_M6MNDoLPM_A@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+To: Johan Hovold <johan@kernel.org>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <shuah@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Dan Williams <dan.j.williams@intel.com>, Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Bartosz Golaszewski <brgl@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Transfer-Encoding: quoted-printable
 
+Doing a quick interlude here,
 
+On Wed, Jan 28, 2026 at 4:48=E2=80=AFPM Johan Hovold <johan@kernel.org> wro=
+te:
 
-On 2026/1/29 20:06, Kevin Brodsky wrote:
-> On 28/01/2026 04:19, Jinjie Ruan wrote:
->> In the generic entry code, the beginning of
->> syscall_exit_to_user_mode_work() can be reused on arm64 so it makes
->> sense to rework it.
->>
->> In preparation for moving arm64 over to the generic entry
->> code, as nothing calls syscall_exit_to_user_mode_work() except for
->> syscall_exit_to_user_mode(), move local_irq_disable_exit_to_user() and
->> syscall_exit_to_user_mode_prepare() out from
->> syscall_exit_to_user_mode_work() to the only one caller.
->>
->> Also update the comment and no functional changes.
->>
->> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
->> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
->> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
->> ---
->>  include/linux/entry-common.h | 16 ++++++++--------
->>  1 file changed, 8 insertions(+), 8 deletions(-)
->>
->> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
->> index e4a8287af822..c4fea642d931 100644
->> --- a/include/linux/entry-common.h
->> +++ b/include/linux/entry-common.h
->> @@ -125,14 +125,14 @@ void syscall_exit_work(struct pt_regs *regs, unsigned long work);
->>   * syscall_exit_to_user_mode_work - Handle work before returning to user mode
->>   * @regs:	Pointer to currents pt_regs
->>   *
->> - * Same as step 1 and 2 of syscall_exit_to_user_mode() but without calling
->> + * Same as step 1 of syscall_exit_to_user_mode() but without calling
->> + * local_irq_disable(), syscall_exit_to_user_mode_prepare() and
->>   * exit_to_user_mode() to perform the final transition to user mode.
->>   *
->> - * Calling convention is the same as for syscall_exit_to_user_mode() and it
->> - * returns with all work handled and interrupts disabled. The caller must
->> - * invoke exit_to_user_mode() before actually switching to user mode to
->> - * make the final state transitions. Interrupts must stay disabled between
->> - * return from this function and the invocation of exit_to_user_mode().
->> + * Calling convention is the same as for syscall_exit_to_user_mode(). The
->> + * caller must invoke local_irq_disable(), __exit_to_user_mode_prepare() and
-> 
-> Shouldn't it be syscall_exit_to_user_mode_prepare() rather than
-> __exit_to_user_mode_prepare()? The former has extra calls (e.g. rseq).
+> What I've been trying to get across is that the chardev hot-unplug issue
+> is real and needs to be fixed where it still exists, while the manual
+> unbinding of drivers by root is a corner case which does not need to be
+> addressed at *any* cost.
 
-Perhaps we can just delete these comments — at present only generic
-entry and arm64 use it, and nowhere else needs it; after the refactoring
-the comments now seem rather unclear.
+I agree with Johans stance here.
 
-> 
-> - Kevin
-> 
->> + * exit_to_user_mode() before actually switching to user mode to
->> + * make the final state transitions.
->>   */
->>  static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
->>  {
->> @@ -155,8 +155,6 @@ static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
->>  	 */
->>  	if (unlikely(work & SYSCALL_WORK_EXIT))
->>  		syscall_exit_work(regs, work);
->> -	local_irq_disable_exit_to_user();
->> -	syscall_exit_to_user_mode_prepare(regs);
->>  }
->>  
->>  /**
->> @@ -192,6 +190,8 @@ static __always_inline void syscall_exit_to_user_mode(struct pt_regs *regs)
->>  {
->>  	instrumentation_begin();
->>  	syscall_exit_to_user_mode_work(regs);
->> +	local_irq_disable_exit_to_user();
->> +	syscall_exit_to_user_mode_prepare(regs);
->>  	instrumentation_end();
->>  	exit_to_user_mode();
->>  }
-> 
+I might have a skewed view of history and be a bit self-delusional,
+but at the time I began the work with the GPIO character device, what
+we were seeing were these GPIO adapters on USB.
+
+Those were/are hot-pluggable, and provide GPIOs that are not
+for "system critical" things, i.e. not critical for the computer/system
+it is running on.
+
+Instead these are things like the Mikroe Clickboard GPIO expander
+and TTY, or these GPIOs that come on FTDI USB adapters. These
+can and are certainly being used for things that are critical to the thing
+they are used for, such as regulating water reserves for your local
+hydro power plant. Of course only a madman would unplug that,
+but from Linux' POV they are very hot-pluggable, by their very nature.
+
+[Side quest on what are some insanities industrial system people
+do here... but these adapters are *very* popular.]
+
+Since they are hot-pluggable and will never appear in DTS files
+or such, a character device or other userspace ABI is the right
+abstraction, and it needs to be able to come and go without crashing
+or wasting memory. Plug/unplug the Mikroe clickboard GPIO
+10.000 times should be fine under any circumstances.
+
+And that is the problem that need to be solved *first*, before
+removing things on (local) I2C buses or unbinding random devices
+from sysfs making them unpluggable in theory.
+
+Yours,
+Linus Walleij
