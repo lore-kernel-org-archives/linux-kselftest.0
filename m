@@ -1,101 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75A61DF73A;
-	Thu, 29 Jan 2026 16:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A79C3168E8;
+	Thu, 29 Jan 2026 17:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769704872; cv=none; b=tMP/voGJ/8zGqrrsEJwD2jVH4vQ0sU04Py2yeYP9C58JXTy24+uN616zHkfPLr3VY2F7qU4cTw0yL4EOFxKm/WiuOSkIhbKjoOIOg9ujC2SJdYyb0/icpMHgkJM/4SNt5MnwnwHdUAdJo76zQRx1qUKggCyEct9HE8etgSE444c=
+	t=1769706320; cv=none; b=hVm/PvLFJQ+mWTzuM8uUbVSW1acwC2HmUHZ5gN9gN7RAIcWTk8X8PZ36D6NLm7CFGoQnFUTsLFmGsBfduuhlprqtzVKfxW0K6ZAiVMMfxJBeEDR9e1vXlvR9HzYAopU2Ek4v6FZQUP9T13pqOuGoNUioojlgk6P+LlFfMAByDhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769704872; c=relaxed/simple;
-	bh=zcYhc4E9Y5we1LZNadqpVIred1H/htdcjoFQTrA9p0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ABUuFVBJjYUwyazVOWQUeuvqK1Fa2Aq/a9GwzLBVG2yXVkswzFHMGcECzZuGXTopKxewvwZotscv5QFKnMT/e4/ZRSO8v5YwivaGej5V8ppbmkFGaMxGSvaH45AfTgHW3W9yH8/OX5lNquwE2TypEaaO8nUk/v0Dy7bcX8pHNpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ulEmku+G; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ulEmku+G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FA95C4CEF7;
-	Thu, 29 Jan 2026 16:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769704872;
-	bh=zcYhc4E9Y5we1LZNadqpVIred1H/htdcjoFQTrA9p0s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ulEmku+Go6b0WZUKmO2rXfq/EdAAnWU9xDDkJwNvrBGhSH9iaUbXaaxV3lK2hTYqz
-	 +F2eVVpguOE6p+qUDt0scevvaS6IL5HqC6Ig6SzquPFM3elZSCDcNiaoIayZ0dCiQN
-	 pJ2GdRSuNcO1YoszZ9X8DKHDJa9hZdzZJcFyJbqogsyS3A/tnRAfyF4qh0uE4ioMFr
-	 HIWj+xu4nQo3Gjzb/SeSk3Bva4DCXzVyR6yJAz07MqAzeRREZhdGwFuVKWiy6dsAkI
-	 UChEsqTzfEwkzN+Yce7zftxRM+0o+pUTGJMFprU9C/c9JfG6nn0v3lUiscPqDY/Qs7
-	 pn9TN0yjBkGJg==
-Date: Thu, 29 Jan 2026 16:41:05 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v9 04/30] arm64/fpsimd: Check enable bit for FA64 when
- saving EFI state
-Message-ID: <76bf33a0-968d-4b99-a157-3eef076af69d@sirena.org.uk>
-References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
- <20251223-kvm-arm64-sme-v9-4-8be3867cb883@kernel.org>
- <87343o8jay.fsf@draig.linaro.org>
+	s=arc-20240116; t=1769706320; c=relaxed/simple;
+	bh=4ZVWEeoRYiyQeROefWmDzEV1Ldxeg+QgF2VlnxTOXPE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ufu3yzqCVlWAHSCg5GTzecUUN8l9o8BFZWGaVyQ91a4qTeitPFhWrn40Rc5bkdDvXyoS/IHWCuxe1vssdaTuBALlwg/3CfabeBwnbsBLGsIpm7mQtadDkVx85cgemHvUJet7DlF2DKwpy2rAEp5+5d4tfeqK9rS9AKPd65/4v7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 2F91C160201;
+	Thu, 29 Jan 2026 17:05:15 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id 3B01F60015;
+	Thu, 29 Jan 2026 17:05:11 +0000 (UTC)
+Date: Thu, 29 Jan 2026 12:05:23 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Vincent Donnefort <vdonnefort@google.com>
+Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ linux-trace-kernel@vger.kernel.org, maz@kernel.org, oliver.upton@linux.dev,
+ joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ jstultz@google.com, qperret@google.com, will@kernel.org,
+ aneesh.kumar@kernel.org, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v10 15/30] tracing: selftests: Add trace remote tests
+Message-ID: <20260129120523.6f710ff2@gandalf.local.home>
+In-Reply-To: <20260126104419.1649811-16-vdonnefort@google.com>
+References: <20260126104419.1649811-1-vdonnefort@google.com>
+	<20260126104419.1649811-16-vdonnefort@google.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ISN2iHKE8mStxhEz"
-Content-Disposition: inline
-In-Reply-To: <87343o8jay.fsf@draig.linaro.org>
-X-Cookie: You have taken yourself too seriously.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: txaufewkoqfauzwkqo47d1diq43oa8q6
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 3B01F60015
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18BLc+YPC0Jad8q2qNeGSamiSkist3+hCI=
+X-HE-Tag: 1769706311-773773
+X-HE-Meta: U2FsdGVkX18Gk3kh6frTDRcDF0tQBXJ5dAmTOR263lq+mjgXcTAeLPXIei7FJ5BLztwLyBZ/hXl6282qf0MCx78WPvPe6Vd4hZ3PIYWs6aqPUk1zQHysAjLvy4PWfu9AeXLPj38m+I10sjlarN3a00PXUnFHJQX9Q5MOyImib//LQL1kI1ciw/GzqcOaBk2/HzpZTDnPxlrZDG7PqfRupWk7RJJOnqpfIpvAYNheYH44ACfHOpDFCvHEcSneqDvufOY14MT9W85629RcnJB2zXRvyjpWX8pd2/sGCkiPOBZ95Fpdlj71kk3Dw7E0oTWaWmKgQWyBEGEXGb1i0qEJModXvjth6QWh
+
+On Mon, 26 Jan 2026 10:44:04 +0000
+Vincent Donnefort <vdonnefort@google.com> wrote:
+
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
+> @@ -0,0 +1,127 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: Test trace remote non-consuming read
+> +# requires: remotes/test
+> +
+> +. $TEST_DIR/remotes/functions
+> +
+> +test_trace()
+> +{
+> +	echo 0 > tracing_on
+> +    assert_unloaded
+> +
+> +    echo 7 > buffer_size_kb
+> +    echo 1 > tracing_on
+> +    assert_loaded
+> +
+> +    # Simple test: Emit few events and try to read them
+> +    for i in $(seq 1 8); do
+> +        echo $i > write_event
+> +    done
+> +
+> +    check_trace 1 8 trace
+> +
+> +    #
+> +    # Test interaction with consuming read
+> +    #
+> +
+> +    cat trace_pipe > /dev/null &
+> +    pid=$!
+> +
+> +    sleep 1
+> +    kill $pid
+> +
+> +    test $(wc -l < trace) -eq 0
+> +
+> +    for i in $(seq 16 32); do
+> +        echo $i > write_event
+> +    done
+> +
+> +    check_trace 16 32 trace
+> +
+> +    #
+> +    # Test interaction with reset
+> +    #
+> +
+> +    echo 0 > trace
+> +
+> +    test $(wc -l < trace) -eq 0
+> +
+> +    for i in $(seq 1 8); do
+> +        echo $i > write_event
+> +    done
+> +
+> +    check_trace 1 8 trace
+> +
+> +    #
+> +    # Test interaction with lost events
+> +    #
+> +
+> +    # Ensure the writer is not on the reader page by reloading the buffer
+> +    echo 0 > tracing_on
+> +    echo 0 > trace
+> +    assert_unloaded
+> +    echo 1 > tracing_on
+> +    assert_loaded
+> +
+> +    # Ensure ring-buffer overflow by emitting events from the same CPU
+> +    for cpu in $(get_cpu_ids); do
+> +        break
+> +    done
+> +
+> +    events_per_page=$(($(get_page_size) / $(get_selftest_event_size))) # Approx: does not take TS into account
+> +    nr_events=$(($events_per_page * 2))
+> +    for i in $(seq 1 $nr_events); do
+> +        taskset -c $cpu echo $i > write_event
+> +    done
+> +
+> +    id=$(sed -n -e '1s/\[[0-9]*\]\s*[0-9]*.[0-9]*: [a-z]* id=\([0-9]*\)/\1/p' trace)
+> +    test $id -ne 1
+> +
+> +    check_trace $id $nr_events trace
+> +
+> +    #
+> +    # Test per-CPU interface
+> +    #
+> +    echo 0 > trace
+> +
+> +    for cpu in $(get_cpu_ids) ; do
+> +        taskset -c $cpu echo $cpu > write_event
+> +    done
+> +
+> +    for cpu in $(get_cpu_ids); do
+> +        cd per_cpu/cpu$cpu/
+> +
+> +        check_trace $cpu $cpu trace
+> +
+> +        cd - > /dev/null
+> +    done
+> +
+> +    #
+> +    # Test with hotplug
+> +    #
+> +
+> +    [ "$(get_cpu_ids | wc -l)" -ge 2 ] || return 0
+> +
+> +    echo 0 > trace
+> +
+> +    for cpu in $(get_cpu_ids); do
+> +        echo 0 > /sys/devices/system/cpu/cpu$cpu/online
+
+Note, my test VM doesn't have cpu0/online, so this needs to test for the
+existence of these files:
+
+ ./ftracetest: 105: /work/git/linux.git/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc: cannot create /sys/devices/system/cpu/cpu0/online: Permission denied
+
+-- Steve
 
 
---ISN2iHKE8mStxhEz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jan 29, 2026 at 04:39:33PM +0000, Alex Benn=E9e wrote:
-> Mark Brown <broonie@kernel.org> writes:
-
-> > Currently when deciding if we need to save FFR when in streaming mode p=
-rior
-> > to EFI calls we check if FA64 is supported by the system. Since KVM gue=
-st
-> > support will mean that FA64 might be enabled and disabled at runtime sw=
-itch
-> > to checking if traps for FA64 are enabled in SMCR_EL1 instead.
-
-> This is conflicting with the now merged 63de2b3859ba1 (arm64/efi: Remove
-> unneeded SVE/SME fallback preserve/store handling) so I think this patch
-> can now be dropped?
-
-Yes, this should go away in the next rebase.
-
---ISN2iHKE8mStxhEz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAml7jaAACgkQJNaLcl1U
-h9DOuwgAhasPmpBc5eULaLz4BwbLAgPXJs1nnK3Uo10v0P6qi43SvtDZav5SiPTZ
-ECyUrltHOpSjnbvnEn/i7lOw/lExJCneXkO58pfwuVbCLSdYXjQzCOy1Qau6b0ZA
-A9eRgPI2XX+UVJ7+aqYbwrvj1hVab3W7qYM/YL8nNN91Axx1FO3ERpdX9CP/Zxiq
-yCW+gCPqV1IeMCGVHV3dU8gZpFm6WXJBokYrFSuoCbKmSQujsYsJba8n1mZORZDf
-Y4Af37gikWOQdw+cxZXbsfM9FD5B7OZhxmXFrKp8ZoOSFTUBdTQx1Mb9nKNpL1xE
-efmMyBYUlPHYfwuWW7EQyCDOEqk2iQ==
-=FKQt
------END PGP SIGNATURE-----
-
---ISN2iHKE8mStxhEz--
+> +        break
+> +    done
+> +
+> +    for i in $(seq 1 8); do
+> +        echo $i > write_event
+> +    done
+> +
+> +    check_trace 1 8 trace
+> +
+> +    echo 1 > /sys/devices/system/cpu/cpu$cpu/online
+> +}
+> +
+> +if [ -z "$SOURCE_REMOTE_TEST" ]; then
+> +    set -e
+> +
+> +    setup_remote_test
+> +    test_trace
+> +fi
