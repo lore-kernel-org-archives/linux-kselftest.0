@@ -1,145 +1,99 @@
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418D43090C2;
-	Thu, 29 Jan 2026 18:50:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144C9312837;
+	Thu, 29 Jan 2026 19:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769712646; cv=none; b=VAyCYtw6uJ5V/8NBXZcAdCr1oksxtAgI3ezaw9Lbro28cOT1Rmjq2QveIOPVvU/CnddcuKhPx1rLw9bEoYF7WKrzH0A4HHQPfjlcJ30oZCi3HlhLEt0xSoAWxHwPo4N4Ld2BxVDOiRFUC37C2cblpIV2C3HnGuZVGkoW61laJzI=
+	t=1769714632; cv=none; b=koWp1GWQgOF6owYWjpDkSkHVVMBTK/BtzzkD88eL/+DI6z+cse4O55pylzPwX/c5Nb4ZJOD4cMiYfyJupAqPWNisJnmcYBthTtv5gIL1berzUW/lFpuAEwQgJZ/V35SOdc+P3I5+mFV61HftURPgSyAxKBKu2SA9Y00RfbDI8sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769712646; c=relaxed/simple;
-	bh=WKec3arCCMNRrGJBEnRE3sLK4j3onPSV3T75MrOsaWI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u3YM5BSGZd9EPLVs5ASWYQXQLUTwBMbH+Kqb45QbC7X4+z2YjdvQXOicXwp+1KNgiJ4cn54mjelVDX1be30HpL0q0HGw0JHtwEw0E0tTBlZr6he6Gszxpd6YJcLcJR+x/RVkNgbqcJTm1GcsXebgvkzrAGIWC5a5ijRktV79n8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=PfFwAT9U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NCNU3++S; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1769714632; c=relaxed/simple;
+	bh=7G4hK+Fx0+WXACikUbIwu/8/ScanNimNyKZLC59bpfE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=C0frviw52l7l3U6JO5ipDYALa1R1qJw2WeHY73xD9ql0Ta06jZYYfGKshMwLbxpziPYymciFr7iuSsHy6+OX4VMPUbkeNY+wdGIaJAiBAasM6eM8EFl++gtCErPInwtvqM7mpCFp5KizRRvtbP3fGldiJnv8zE21KnSnBefDLRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fZsW9XCk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="PfFwAT9U";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NCNU3++S"
-Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
-	by mailfout.phl.internal (Postfix) with ESMTP id 524CBEC0602;
-	Thu, 29 Jan 2026 13:50:42 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Thu, 29 Jan 2026 13:50:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1769712642;
-	 x=1769799042; bh=ufj3Z5ElDLmJd7fO42cOWXMjtgm9/Nt9Eiy1rxbPIFA=; b=
-	PfFwAT9UUE0dhiSQ+h5829y3AIAqVryHRhItnAQG8NX5AWay1xdQRd6N+Zs0TEDM
-	OZL47WwTcitp9t7kJGba6BJqXNj41Utpa+Vwl/iW47uqyM95G55HYUxLVXJpiH1h
-	JfXeMSfLdXJYcu2MIhR45hBLekrJyDTr2ubaY/4Cq+CTdv9Ndjf08z3AZkz82Wz6
-	Yh8Ep7wUMm3vaQpUCDu7+b2XFgt9EyiTeXoAo6NN0Rko0nf3g8rI9Ky5wh0tD+PU
-	i65XgYlM3GdVCwChHE42KXbEgZ9iTNJSPHNK6ycnvSuaOnW2idX4dtRpuzz0BP7o
-	/MsDUVJnLucLaVpFFWI/7Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1769712642; x=
-	1769799042; bh=ufj3Z5ElDLmJd7fO42cOWXMjtgm9/Nt9Eiy1rxbPIFA=; b=N
-	CNU3++SMvVM12tD6bZal5g6l4UDt3lkFDWZVeIG3afquAlzVvse1GPZ4zMgEYUeR
-	rpMFhoxLQykllbI+h4hZaS2/8FjXZFOp2UO4Xks6bty41UiYwNpWgH9Nwlkgu/FU
-	R2GpdJhS+6qGk/tdAL+iMKlh0lnVdSW51dH9SQxJDkA3oy1t7+1PwJ0G+C97b9uP
-	H9PH9CNLRvGpUj/L1U1c+3ijL7GqoxN9IuAyKNoCq+g0dSsspArY9BAAQoY0IDGZ
-	aMUIcYqAsPduqP/1q/d44e4WmJp5eGk7Ybu2GehVKcwqtwnUkITZinc8x6I1uuOH
-	yqRuOcLEnWYL8ODZVNJkg==
-X-ME-Sender: <xms:Aax7aeWS-lIvTJN2WFNH-JLygTLYjfzWr_LPUwvHHTeGI7WKHxOglA>
-    <xme:Aax7aQnByE7SA_ChI5cZ10Y75OqJZ4U5ywItwvklFQhcAbTs7MZKRN8vI57uUQLJ7
-    RRHDf5N5ThKPYD1tpXkerCJjtcv8W6ExDDn50E4iZim5JkKOqELug>
-X-ME-Received: <xmr:Aax7adOv9D6PTYAKA3cIs749ROzqde0UwDkgcX44bU8ArNDe67ezW-pry6M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduieeileeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkjghfofggtgfgsehtqhertdertdejnecuhfhrohhmpeetlhgvgicu
-    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeetuefgleefhfdvueegffdtffevhfffgfffiedutdetgffhheejtdekfeek
-    ieehgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghlvgigsehshhgriigsohhtrdhorhhg
-    pdhnsggprhgtphhtthhopedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepug
-    hmrghtlhgrtghksehgohhoghhlvgdrtghomhdprhgtphhtthhopehrughunhhlrghpsehi
-    nhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepthgvughlohhgrghnsehfsgdrtghomh
-    dprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghn
-    rghnthgrsehgohhoghhlvgdrtghomhdprhgtphhtthhopegrmhgrshhtrhhosehfsgdrtg
-    homhdprhgtphhtthhopehkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:Aax7aYJ_HHdpOwnUcx3pM__qj8vWsJWR7-9MmuB9ptXphqJayxXv_Q>
-    <xmx:Aax7aX3YAyPX45O0OaCPFUbT24K1PnR4f52bm9Yr4m-KCJFHKNxzEw>
-    <xmx:Aax7aUUB2LioUGNPEx92oplF9ZTTrNEcEWrQZlXfGto5SGlQoeY_TA>
-    <xmx:Aax7aRPMBr62WZQJTQutZa3_uwndURAe1rpe2D5YhA5XYk-3jukGUA>
-    <xmx:Aqx7aXHY0v-Z3_2ZWr_yDsuMNCLPkovj3iODpi1O3-b3zXJwLDJc0PmU>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Jan 2026 13:50:41 -0500 (EST)
-Date: Thu, 29 Jan 2026 11:50:39 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: David Matlack <dmatlack@google.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>, Ted Logan <tedlogan@fb.com>, Shuah
- Khan <shuah@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, Alex
- Mastro <amastro@fb.com>, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kernel test
- robot <lkp@intel.com>
-Subject: Re: [PATCH] vfio: selftests: fix format conversion compiler warning
-Message-ID: <20260129115039.10fe3c76@shazbot.org>
-In-Reply-To: <CALzav=cWEoydGBpf4j5gPWy0TzLoAPP3YeG3VocbeEzytHTFrw@mail.gmail.com>
-References: <20260128183750.1240176-1-tedlogan@fb.com>
-	<CALzav=dMhycS2iBxkhPCz3tMUKxkfgr1dCLFGYzGuXZCeYhijw@mail.gmail.com>
-	<9d992d4a-1aea-42a7-aa79-4ede80293f9b@infradead.org>
-	<CALzav=cWEoydGBpf4j5gPWy0TzLoAPP3YeG3VocbeEzytHTFrw@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZsW9XCk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 017C0C4CEF7;
+	Thu, 29 Jan 2026 19:23:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769714631;
+	bh=7G4hK+Fx0+WXACikUbIwu/8/ScanNimNyKZLC59bpfE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=fZsW9XCkX6tEhdoewkmvltyS24bdxh2jDTkZA1P4kTkT5S/y7DWyNNXvcL5Rhru2s
+	 cTHASoEBXub55JKsQkXWDkONuBjqWAXvbPhdoejgtnkkZSxcmaf4IS6Ub2to3Za6vY
+	 KZ4zrYd9NrrfAyFWsCQtNvQjDFaS0de+sWrqmP41qR7mmjYMDXYoa986F4fOPJDKGY
+	 vrUwdZ4sN7IaXeakQmsKIo/GDCfdcFO97ImbQ2ItzntRzEXSkxKN+pTWMd/HL1KfwW
+	 ovhS4s7IAhNq0lk1vO0RshJOMdOGxumUpdZ9ZyN7Oj7jS3QY+htQj0muRQCyWzVCuW
+	 8Y9OI/8FITB9Q==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 0/6] mptcp: implement .read_sock and .splice_read
+Date: Thu, 29 Jan 2026 20:23:33 +0100
+Message-Id: <20260129-net-next-mptcp-splice-v1-0-994cac40daa0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALWze2kC/zWMMQqAMAwAvyKZDdiggn5FHGqNGtBa2iIF8e8Ww
+ eGGG+5uCOyFA/TFDZ4vCXLaLKoswGzarowyZweqqK0UdWg5ZlLEw0XjMLhdDGNL81RrpTvTEOT
+ WeV4kfd8B/gTG53kB0sjm1XEAAAA=
+X-Change-ID: 20260129-net-next-mptcp-splice-62db4a1a9c52
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, David Ahern <dsahern@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Hannes Reinecke <hare@kernel.org>, Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1366; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=7G4hK+Fx0+WXACikUbIwu/8/ScanNimNyKZLC59bpfE=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKrNx9gr/2cWxSzTcYxenX/UZ59FsG1Ohbep9fO7ep5I
+ cHlsK2wo5SFQYyLQVZMkUW6LTJ/5vMq3hIvPwuYOaxMIEMYuDgFYCKlHYwMSwN+zV7+6fdfjzXr
+ VxV4VxVEb3jl6LXJMa3ty+IXf3NKFRn+6a1hm7nx3y/PLTNSQ17aH92RpuP+9crO95MPzFojn/4
+ kgh8A
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Wed, 28 Jan 2026 11:21:52 -0800
-David Matlack <dmatlack@google.com> wrote:
+This series is a preparation work for future in-kernel MPTCP sockets
+usage. Here, two interfaces are implemented: read_sock and splice_read.
+As a result of this series, splice() with MPTCP sockets -- which was
+already supported -- is now improved.
 
-> On Wed, Jan 28, 2026 at 11:12=E2=80=AFAM Randy Dunlap <rdunlap@infradead.=
-org> wrote:
-> > On 1/28/26 11:06 AM, David Matlack wrote: =20
-> > > On Wed, Jan 28, 2026 at 10:38=E2=80=AFAM Ted Logan <tedlogan@fb.com> =
-wrote: =20
-> > >>
-> > >> Use the standard format conversion macro PRIx64 to generate the
-> > >> appropriate format conversion for 64-bit integers. Fixes a compiler
-> > >> warning with -Wformat on i386.
-> > >>
-> > >> Signed-off-by: Ted Logan <tedlogan@fb.com>
-> > >> Reported-by: kernel test robot <lkp@intel.com>
-> > >> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-=
-lkp@intel.com/ =20
-> > >
-> > > Thanks for the patch.
-> > >
-> > > I've been seeing these i386 reports as well. I find the PRIx64, etc.
-> > > format specifiers make format strings very hard to read. And I think
-> > > there were some other issues when building VFIO selftests with i386
-> > > the last time I tried.
-> > >
-> > > I was thinking instead we should just not support i386 builds of VFIO
-> > > selftests. But I hadn't gotten around to figuring out the right
-> > > Makefile magic to make that happen. =20
-> >
-> > There are other 32-bit CPUs besides i386.
-> > Or do only support X86? =20
->=20
-> At this point I would only call x86_64 and arm64 as supported. At
-> least that is all I have access to and tested.
->=20
-> If there is legitimate desire to run these tests on 32-bit CPUs, then
-> we can support it.
->=20
-> Alex, do you test on 32-bit CPUs?
+- Patches 1-2: .read_sock implementation
 
-No, I haven't tested 32-bit in a very long time.  I'd like to think it
-works, but I'm not aware of any worthwhile use case.  Thanks,
+- Patches 3-4: .splice_read implementation
 
-Alex
+- Patches 5-6: validate splice() support with MPTCP sockets.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Geliang Tang (6):
+      mptcp: add eat_recv_skb helper
+      mptcp: implement .read_sock
+      tcp: export tcp_splice_state
+      mptcp: implement .splice_read
+      selftests: mptcp: add splice io mode
+      selftests: mptcp: connect: cover splice mode
+
+ include/net/tcp.h                                  |  11 ++
+ net/ipv4/tcp.c                                     |  13 +-
+ net/mptcp/protocol.c                               | 215 ++++++++++++++++++++-
+ tools/testing/selftests/net/mptcp/Makefile         |   1 +
+ tools/testing/selftests/net/mptcp/mptcp_connect.c  |  63 +++++-
+ .../selftests/net/mptcp/mptcp_connect_splice.sh    |   5 +
+ 6 files changed, 289 insertions(+), 19 deletions(-)
+---
+base-commit: e75e408dc524ba32b3bd66e89d2ba1e337877bfa
+change-id: 20260129-net-next-mptcp-splice-62db4a1a9c52
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
