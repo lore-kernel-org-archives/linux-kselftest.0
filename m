@@ -1,118 +1,158 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4048A3876D0;
-	Thu, 29 Jan 2026 12:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C45C3358CE;
+	Thu, 29 Jan 2026 13:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769688425; cv=none; b=Oh4YAmZbC6Jd9HERvt/smhsYmGKx0v7pDrsWo1Rd7QWBLB+pL6ExLXwf8UqfUTznAPDHzpjWClS06yty1jo8ltwdCzq1DfIvxYrwwyWoZUSsHot3hwwQ6p3UZSt8NE7PKl6ER4tz4igjYHvVo/ZEPGXEgmjYFe24ngEzLjb/IhA=
+	t=1769691996; cv=none; b=lSlAIXPptC8e+oFdYL44h+7fV50F6RouHuN888wsJUjV0+DBf4K/6CKOaPsub/TbNEUiS/+OC+69X8UslpTGrYuTakzmEKev68w869ki0oMEe9hVdo7BK06xEk5ZOycJhj9V6xKNJdCgfJN6RQf7ZsMFkBdXM2bynhipKwS3aG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769688425; c=relaxed/simple;
-	bh=NW1i4Q/lhiEcr3j1PkBLfg4MobaArKH0tH7WCgL9Suw=;
+	s=arc-20240116; t=1769691996; c=relaxed/simple;
+	bh=fDnRJ2yTV8Z95TcGaNprZrAHsp6BPXxO2333kqZhoZo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Fl9dzyGXz3PblCNIqNpdroj7oKuw5fd6+SUmXs7aa6c1n04eAZ5lBiIRGUowcG7cdmBST+33eZVvq3sB709/I1ByMNWIXxM8QkYCeMkBBOPKogUMeqlA/oye7VQ3HNV7NYjBVZSwY6vcJ5IOvKFXh0j7gBYpe5JRRXCDImu7Ib8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97929153B;
-	Thu, 29 Jan 2026 04:06:51 -0800 (PST)
-Received: from [10.44.160.76] (e126510-lin.lund.arm.com [10.44.160.76])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89C2E3F632;
-	Thu, 29 Jan 2026 04:06:52 -0800 (PST)
-Message-ID: <56978cb8-f9de-4bf2-b1fc-b5564fec7387@arm.com>
-Date: Thu, 29 Jan 2026 13:06:49 +0100
+	 In-Reply-To:Content-Type; b=r7zK4eN6CPD2DiljR/I7ApXhHu5uuBWSr2RQJ51vEkxcy0FoLvrsmkdROvTBAtRcsLjsh8UA++qJ/YLoUnrLsqYxsC24IpeHPCFMrS6WkooM7txNLyjm8E+euuXWzwjaEViYMEpvwL//Gvn+eJcA4L3MY0IyjVd6QOsODgk7yhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=3Y6xyqMw; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="3Y6xyqMw"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=GTnuhB/pVO7aMJD3sAaOMEUxG7l97PIRuZ4UqDZOeik=;
+	b=3Y6xyqMwnKDy5yc69pn0nYunYWkYMy0SUmue71GjH6RxwjkxPpo2dSeKqIABPbIsVeKHfH8Ju
+	H3avJCzPQ4w+59FyUopowm9ZxvmjP5zwZ0O1b1J8gALtMdDSPBqoGna8k2Up+xXD+keNhIBPYXQ
+	xZbCDOoBEazSyaljePt4ARg=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4f1znf0RTszpTJy;
+	Thu, 29 Jan 2026 21:02:30 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 58C3B4056D;
+	Thu, 29 Jan 2026 21:06:30 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 29 Jan 2026 21:06:28 +0800
+Message-ID: <0a650379-e4b4-0a30-e4b0-e8d131ae1dbb@huawei.com>
+Date: Thu, 29 Jan 2026 21:06:27 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 09/14] entry: Rework syscall_exit_to_user_mode_work()
- for arch reuse
-To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
- will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
- luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
- deller@gmx.de, akpm@linux-foundation.org, charlie@rivosinc.com,
- mark.rutland@arm.com, anshuman.khandual@arm.com, song@kernel.org,
- ryan.roberts@arm.com, thuth@redhat.com, ada.coupriediaz@arm.com,
- broonie@kernel.org, pengcan@kylinos.cn, liqiang01@kylinos.cn, kmal@cock.li,
- dvyukov@google.com, reddybalavignesh9979@gmail.com,
- richard.weiyang@gmail.com, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v11 03/14] arm64: ptrace: Move rseq_syscall() before
+ audit_syscall_exit()
+To: Kevin Brodsky <kevin.brodsky@arm.com>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <oleg@redhat.com>, <tglx@linutronix.de>,
+	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
+	<kees@kernel.org>, <wad@chromium.org>, <deller@gmx.de>,
+	<akpm@linux-foundation.org>, <charlie@rivosinc.com>, <mark.rutland@arm.com>,
+	<anshuman.khandual@arm.com>, <song@kernel.org>, <ryan.roberts@arm.com>,
+	<thuth@redhat.com>, <ada.coupriediaz@arm.com>, <broonie@kernel.org>,
+	<pengcan@kylinos.cn>, <liqiang01@kylinos.cn>, <kmal@cock.li>,
+	<dvyukov@google.com>, <reddybalavignesh9979@gmail.com>,
+	<richard.weiyang@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 References: <20260128031934.3906955-1-ruanjinjie@huawei.com>
- <20260128031934.3906955-10-ruanjinjie@huawei.com>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20260128031934.3906955-10-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20260128031934.3906955-4-ruanjinjie@huawei.com>
+ <c70d3fd6-0b62-464b-8e99-e74f07c20846@arm.com>
+Content-Language: en-US
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <c70d3fd6-0b62-464b-8e99-e74f07c20846@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-On 28/01/2026 04:19, Jinjie Ruan wrote:
-> In the generic entry code, the beginning of
-> syscall_exit_to_user_mode_work() can be reused on arm64 so it makes
-> sense to rework it.
->
-> In preparation for moving arm64 over to the generic entry
-> code, as nothing calls syscall_exit_to_user_mode_work() except for
-> syscall_exit_to_user_mode(), move local_irq_disable_exit_to_user() and
-> syscall_exit_to_user_mode_prepare() out from
-> syscall_exit_to_user_mode_work() to the only one caller.
->
-> Also update the comment and no functional changes.
->
-> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> ---
->  include/linux/entry-common.h | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-> index e4a8287af822..c4fea642d931 100644
-> --- a/include/linux/entry-common.h
-> +++ b/include/linux/entry-common.h
-> @@ -125,14 +125,14 @@ void syscall_exit_work(struct pt_regs *regs, unsigned long work);
->   * syscall_exit_to_user_mode_work - Handle work before returning to user mode
->   * @regs:	Pointer to currents pt_regs
->   *
-> - * Same as step 1 and 2 of syscall_exit_to_user_mode() but without calling
-> + * Same as step 1 of syscall_exit_to_user_mode() but without calling
-> + * local_irq_disable(), syscall_exit_to_user_mode_prepare() and
->   * exit_to_user_mode() to perform the final transition to user mode.
->   *
-> - * Calling convention is the same as for syscall_exit_to_user_mode() and it
-> - * returns with all work handled and interrupts disabled. The caller must
-> - * invoke exit_to_user_mode() before actually switching to user mode to
-> - * make the final state transitions. Interrupts must stay disabled between
-> - * return from this function and the invocation of exit_to_user_mode().
-> + * Calling convention is the same as for syscall_exit_to_user_mode(). The
-> + * caller must invoke local_irq_disable(), __exit_to_user_mode_prepare() and
 
-Shouldn't it be syscall_exit_to_user_mode_prepare() rather than
-__exit_to_user_mode_prepare()? The former has extra calls (e.g. rseq).
 
-- Kevin
+On 2026/1/29 20:06, Kevin Brodsky wrote:
+> On 28/01/2026 04:19, Jinjie Ruan wrote:
+>> commit a9f3a74a29af ("entry: Provide generic syscall exit function")
+>> introduce generic syscall exit function and call rseq_syscall()
+>> before audit_syscall_exit() and arch_syscall_exit_tracehook().
+>>
+>> And commit b74406f37737 ("arm: Add syscall detection for restartable
+>> sequences") add rseq support for arm32, which also call rseq_syscall()
+>> before audit_syscall_exit() and tracehook_report_syscall().
+>>
+>> However, commit 409d5db49867c ("arm64: rseq: Implement backend rseq
+>> calls and select HAVE_RSEQ") implement arm64 rseq and call
+>> rseq_syscall() after audit_syscall_exit() and tracehook_report_syscall().
+>> So compared to the generic entry and arm32 code, arm64 calls
+>> rseq_syscall() a bit later.
+>>
+>> But as commit b74406f37737 ("arm: Add syscall detection for restartable
+>> sequences") said, syscalls are not allowed inside restartable sequences,
+>> so should call rseq_syscall() at the very beginning of system call
+>> exiting path for CONFIG_DEBUG_RSEQ=y kernel. This could help us to detect
+>> whether there is a syscall issued inside restartable sequences.
+>>
+>> As for the impact of raising SIGSEGV via rseq_syscall(), it makes no
+>> practical difference to signal delivery because signals are processed
+>> in arm64_exit_to_user_mode() at the very end.
+>>
+>> As for the "regs", rseq_syscall() only checks and update
+>> instruction_pointer(regs), ptrace can not modify the "pc" on syscall exit
+>> path but 'only changes the return value', so calling rseq_syscall()
+>> before or after ptrace_report_syscall_exit() makes no difference.
+> 
+> Let's update this as discussed on v10 - PC can be modified when
+> ptrace_report_syscall_exit() is called.
 
-> + * exit_to_user_mode() before actually switching to user mode to
-> + * make the final state transitions.
->   */
->  static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
->  {
-> @@ -155,8 +155,6 @@ static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
->  	 */
->  	if (unlikely(work & SYSCALL_WORK_EXIT))
->  		syscall_exit_work(regs, work);
-> -	local_irq_disable_exit_to_user();
-> -	syscall_exit_to_user_mode_prepare(regs);
->  }
->  
->  /**
-> @@ -192,6 +190,8 @@ static __always_inline void syscall_exit_to_user_mode(struct pt_regs *regs)
->  {
->  	instrumentation_begin();
->  	syscall_exit_to_user_mode_work(regs);
-> +	local_irq_disable_exit_to_user();
-> +	syscall_exit_to_user_mode_prepare(regs);
->  	instrumentation_end();
->  	exit_to_user_mode();
->  }
+Should rseq see the PC modified by ptrace on the syscall exit path?
+If the PC modified by ptrace happens to fall inside the user-space rseq
+critical section, is that reasonable? If so, doesn't that make the order
+of rseq and ptrace syscall exit in generic entry incorrect?
+
+Could we have an rseq expert join the discussion — Thomas, what is your
+opinion?
+
+> 
+>> And audit_syscall_exit() only checks the return value (x0 for arm64),
+>> so calling rseq_syscall() before or after audit syscall exit makes
+>> no difference. trace_sys_exit() only uses syscallno and the return value,
+>> so calling rseq_syscall() before or after trace_sys_exit() also makes
+>> no difference.
+>>
+>> In preparation for moving arm64 over to the generic entry code, move
+>> rseq_syscall() ahead before audit_syscall_exit().
+>>
+>> No functional changes.
+> 
+> And naturally this is not the case.
+> 
+> - Kevin
+> 
+>> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+>> ---
+>>  arch/arm64/kernel/ptrace.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+>> index 9f9aa3087c09..785280c76317 100644
+>> --- a/arch/arm64/kernel/ptrace.c
+>> +++ b/arch/arm64/kernel/ptrace.c
+>> @@ -2443,6 +2443,8 @@ int syscall_trace_enter(struct pt_regs *regs, unsigned long flags)
+>>  
+>>  void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
+>>  {
+>> +	rseq_syscall(regs);
+>> +
+>>  	audit_syscall_exit(regs);
+>>  
+>>  	if (flags & _TIF_SYSCALL_TRACEPOINT)
+>> @@ -2450,8 +2452,6 @@ void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
+>>  
+>>  	if (flags & (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP))
+>>  		report_syscall_exit(regs);
+>> -
+>> -	rseq_syscall(regs);
+>>  }
+>>  
+>>  /*
+> 
