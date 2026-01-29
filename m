@@ -1,155 +1,133 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5226A36CE00
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 22:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769727510; cv=pass; b=IECfHBVIOqabAV4cx0f4g2WEZavfreMfxlJ1B+i/qAv7wpxYV//OsBzUtsnnsSuz55prQyV9n8UXn4j95DPmbbQO87xqC9p1R9Dx8nHunkgNJecsO08APhA1d+fTuAUkyGiP9n10AIujfbobT8WUrqIl8BXGX/pSgaxqxPVx4pI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769727510; c=relaxed/simple;
-	bh=SR/v5TklhOolnIhKUz8r75fq4feIeVJF3sBpfHfQPIg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z+oj/SebxenkHjC1YL9ztpmt/EgNZGOa6eRCfYhCnKC+DWeCELaDmiI0Bt+Zp8Ap9/4Qk638B0mgTM9oLlA/QQA6eQs9L6v0ngZroTfoZVEGjJ6Pw+Rzf7mA8znaXTdoafb9V9tkv0OQ7I4NteHl+RIclUD/zoA9ZXuCYHuFwZ0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j6VdjXwL; arc=pass smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E2E335554
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 23:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769729342; cv=none; b=EDYIF4l08XipVwn911IWE6FFUszFXOYpIdFijxfOmCRqL/LUFZWJpDAmHSRtrrtj2sGDVmledeoCds0Cw3DKOpy6bQZrk/GmX1fkIqNPLM40uw9KxnTjGJt9wir3enZo5vWz68lX1caKzgUexClLy4nhi+sZMTouF40ctN058ak=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769729342; c=relaxed/simple;
+	bh=62qGoba01/4xKWg0SglqZtm4/p5doWh/TYXL8RIiyWM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qCxtrH3ozLnKEamaju4cQWo5oWktxfL5xk9lSCqpUVTrWXUJYPDZv0gnRLZrmKi8JYoDBbfwnvIxrWWI2AysUbYp/hVQcBAXKT8XPyxGUBHGMkK6iuH51mvtAYEhj2doCjAx9chyFiChTqGoPvn7fffugVz4uHRcyA3XGxHHRnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0XLr8odv; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j6VdjXwL"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-59dd3e979ceso1560955e87.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 14:58:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769727506; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NAIOOHPDAhheYhJ5IDqJvCZ5RTPdilR6pj10z8VpgnqXwl7s/AtPCUuruYTjaap77/
-         0wRoUYGimgk7cs9gyBsdlcBBvJ8pFtCRhkDI+GTyVd7gjSnsvabY8BZuVKXQmJvrHiHO
-         hqmxJaNMIB5JUwapY3jN2u5H8gFK/NGgtbayDr+qK6W5jO9CnzEfXnHGzBNHH2wWmLF5
-         MwKG1Pel/171cXxJPOkDee2B9efHAVCIFnRvc3bOpal6YeGXZMO7NqMV4C/z8qIsa3+S
-         V2ZIEgEIlBWEzwNUxlkfMDWzc+q0FIZE5/bPGUTjhPM/wnRETnN7MYLLAO7gS3qLRORD
-         cD5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=F1bZu8R3pK4Srj8vXk4ihEBDH1LGtIFmZ9pqs3VyhmI=;
-        fh=euUC7O3jQusR+yUUrpmPU4eeHemfH1WMADplJCrtWCw=;
-        b=RbfQaitomSlE4OYJwdT6IPH7PVadcCOaSvbpyBgNWLhyKCvCL2nQJctIQzaFz5U8Ap
-         JRfmin4LB+9G9/3gxyf8F2l0EA8wBJBw3Kd2wFAtHzkEn50qtL17mMXB0JyxEkm38k1B
-         A21c2CN7XoT6uZKXaBkGB2Enw0sS84fM8Y8hswRVrK7Hn54SGbzNrptAY3wuRqxlUUZ9
-         6kvuZ+SniEusUd0Rk7uI1986/zfhwqa38UmaW5d+XGkRVQsS5tCEw5BDy62788s/NkmB
-         Vb1QGRn5l61IUBqhD0yDb9RB1JvK2LcBWjgaXiEWlB//xrD63N09kOZ375nkkJSL9ytu
-         9ffw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0XLr8odv"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2a13be531b2so14361595ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 15:29:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769727506; x=1770332306; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F1bZu8R3pK4Srj8vXk4ihEBDH1LGtIFmZ9pqs3VyhmI=;
-        b=j6VdjXwLnU/GrL4PSycE4Bs8pTm6JUOJaxs5c5AUwWB74VavgxsbMJg9+WIyMY1gag
-         9a76sMdqMP2vVr1sSKq1voZzWbHSaB2N88eKi4lAQh5otBeosvof9KeTyGsDzcy3O6M9
-         MJWXBS+69m+pNUsbs8yY60tlxf7lI4yOZKJMjQ9x2rWA+Wv+2VSVCMBtywVMTt1ZqElX
-         CUpyHCaGmCqaMS8fMH65H5KuF1Ew3TsOjwq5VzBRoKUzJYTnO4k9gTPTXeZsL5hw/Bb+
-         rCUziW8b8UorUQ039JoieEPLe4XTN5ftcpU0f1FY6s75AikrDGMCJu+g/KnvFjUYF0Q/
-         YKJg==
+        d=google.com; s=20230601; t=1769729340; x=1770334140; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HJBNjw3RNtSCw9MLJW2nzX+EmjmcAxr1O5/9KOr8e5k=;
+        b=0XLr8odvwuV7xaep7IlZFUMR+vzmU1qF6/u8rRPZS3maMKhzu765yIORvqC+1G0b8L
+         eRCSso7R2NlNZTIA5EnOY7y0eg24MZygdnzqSWikHeXx7uKc6beLSgi2fjPEvdZ4jTtf
+         LBYYaQeUT6apdG39G9qrDr4nmKKzPyZFbD6bwOZYA4J2arik0Iv3Z0G5o1Xd7lDzbhKU
+         kGM1kI5oo6fzDFpHqDrllS4D3AwGAyuHtSiLMYxd3PY+SqWGBKMBEQNH3Cv0ZctBVE+B
+         GZCubZTtiYOJ1bunmey+bhHNFsTEgNDYBYlIh34neBvWwaRA6nD0rhIvL8jP5efdjXqL
+         X5Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769727506; x=1770332306;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=F1bZu8R3pK4Srj8vXk4ihEBDH1LGtIFmZ9pqs3VyhmI=;
-        b=TyCma5plbRc69/7MMjJEnjwSYWSyMH7faxvdplJyfHsQNdAaTsFTttqKfADmrHhlXL
-         9RjqVLcPQlORH7V909CUMHPw1yXPnNRoicZ8lRTZ4kroVTNx61ipKtGYwT0bNU3oYx+b
-         qZXYYrGDrcYD+7DhCUnrbWX1h7DCYx2KggTb8dOfdfavm71fhSuFnkER2P+AbwEgePzA
-         C9gGP0K0ejiyUhe5AYua9DNBp4NcYqszPpezYAJ5myMJtC/5DOWmkMqCqeSMByQU85Q/
-         +TeZi8d1r402FJSnJLTmkzg9VpL9VectJTlswEWfnsOKU1ll05oS/8wwP+LVCPWD1uB/
-         f/kA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqlZwWUhoOATxV/lALoUzWsRHDQvYsBHwMP3Ua424Uuhu1LGm278CwP7nUXqKn+w8ab0QbdrW93BYAEfuzgpw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxlbb/FVP+C7xzvDB8wQrAaxBK5OZAHGBJkGmx69EWjV6dFiJ9W
-	XpXgqM3Nz6Z8Y0YayZNMpuKRxWw2sIWqoz+Gl9mmv1ffKAqtizi73yIYBiXjOaA7B3gzkGpT3o1
-	xuH1Kz+EtEihG5JiAuRma019UuEawwQ+fsV2ImDmN
-X-Gm-Gg: AZuq6aIxHb4/8PDowcPCF6uX+cbhtWdbUoGi19El1/YrGHPOI18b9RKLkweShEJ6BPL
-	iYQogcENDSQ7WdTNXurFSDp12OmqHLigHjV/lo0n5J1BDqDk32/f2FPCA3kjSAKK8Qp0ZJ3CNIx
-	g5uKoJoy6wiNIcyY4RIMEp1HVNk99B/GqE8Q6WnKJplT32XRHd/G89RymN78kTp4JQ9Ahwv01jv
-	y3+E1lNOuCq1nkWTjvvIcLtsZwv+c5pXKJv8eNZDNJkSVEKpz9oR2OuOiVlhJg//Ng5IA==
-X-Received: by 2002:a05:6512:1329:b0:59e:417:2ad2 with SMTP id
- 2adb3069b0e04-59e1645add1mr230619e87.50.1769727506186; Thu, 29 Jan 2026
- 14:58:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769729340; x=1770334140;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HJBNjw3RNtSCw9MLJW2nzX+EmjmcAxr1O5/9KOr8e5k=;
+        b=GqoNRUSp+NuCB6R5eUnMarGdf2gC3Vmpe7nJWWdESzpdbHs68sWdZK/IANkTW0mT7i
+         GyVh3Z8vtDIviGMEGT8liFRIyEoyoNAnQhSMsKv3KcU4M6KvqNCw9LwUAZARyv1Spq3x
+         nALy0/xn8vFHu8uyBpMv1tBXRUCOJBW7n0aT9acBR54i4JJtaV002LLgHqDTmhpueW6w
+         ltbngRkVjcup/Psg0ORdTlYneU2EGzB7LVxh12XF4FwamwcRO0XdHSIyWmi3wxd7UdzM
+         a+Rtc+Y3MGd3j7hAVTemBfxvVhN5ozvI5lR2DnBZXs6S36bdFNFUSnEyQ/7OqJi0rAG9
+         MGJg==
+X-Forwarded-Encrypted: i=1; AJvYcCVUTh0ueBlFg6CF0hPkCcSU73w7ypN6c7AoZZ+VBS78sR02oKcUwraEWAEvFymzR1joC+MYwZ6mRg8TnjYTBJI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCcVUm58e04qJurK+K9ZqbPuh3KncGIxOJv5kvir5Rue8jFX8e
+	oCDHMH0NZ8K8+n21MCe5+HRY2aPeHCkAjpusW3MiBR6AHPFm32kbxhKX/00HBGfu90C9PRClyMJ
+	dB0vfSqLEYlZR5w==
+X-Received: from ploc15.prod.google.com ([2002:a17:902:848f:b0:2a0:86eb:ac5f])
+ (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:cf01:b0:2a0:d629:903c with SMTP id d9443c01a7336-2a8d992f074mr7921925ad.30.1769729340083;
+ Thu, 29 Jan 2026 15:29:00 -0800 (PST)
+Date: Thu, 29 Jan 2026 15:28:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260128183750.1240176-1-tedlogan@fb.com> <CALzav=dMhycS2iBxkhPCz3tMUKxkfgr1dCLFGYzGuXZCeYhijw@mail.gmail.com>
- <9d992d4a-1aea-42a7-aa79-4ede80293f9b@infradead.org> <CALzav=cWEoydGBpf4j5gPWy0TzLoAPP3YeG3VocbeEzytHTFrw@mail.gmail.com>
- <20260129115039.10fe3c76@shazbot.org>
-In-Reply-To: <20260129115039.10fe3c76@shazbot.org>
-From: David Matlack <dmatlack@google.com>
-Date: Thu, 29 Jan 2026 14:57:59 -0800
-X-Gm-Features: AZwV_QjtbgKitpamFKkDtA6ex3xqSqJUofJoh4JUwSCpyN8Ze7Z7nXH4GwE_IC8
-Message-ID: <CALzav=cUDm6xSzw=KZeNmZT2=YKL+9N=_qLRmiCSvSBhbsAfew@mail.gmail.com>
-Subject: Re: [PATCH] vfio: selftests: fix format conversion compiler warning
-To: Alex Williamson <alex@shazbot.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>, Ted Logan <tedlogan@fb.com>, 
-	Shuah Khan <shuah@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, Alex Mastro <amastro@fb.com>, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
+Message-ID: <20260129232835.3710773-1-jmattson@google.com>
+Subject: [PATCH v2 0/5] KVM: x86/pmu: Add support for AMD Host-Only/Guest-Only bits
+From: Jim Mattson <jmattson@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: mizhang@google.com, yosryahmed@google.com, sandipan.das@amd.com, 
+	Jim Mattson <jmattson@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 29, 2026 at 10:50=E2=80=AFAM Alex Williamson <alex@shazbot.org>=
- wrote:
->
-> On Wed, 28 Jan 2026 11:21:52 -0800
-> David Matlack <dmatlack@google.com> wrote:
->
-> > On Wed, Jan 28, 2026 at 11:12=E2=80=AFAM Randy Dunlap <rdunlap@infradea=
-d.org> wrote:
-> > > On 1/28/26 11:06 AM, David Matlack wrote:
-> > > > On Wed, Jan 28, 2026 at 10:38=E2=80=AFAM Ted Logan <tedlogan@fb.com=
-> wrote:
-> > > >>
-> > > >> Use the standard format conversion macro PRIx64 to generate the
-> > > >> appropriate format conversion for 64-bit integers. Fixes a compile=
-r
-> > > >> warning with -Wformat on i386.
-> > > >>
-> > > >> Signed-off-by: Ted Logan <tedlogan@fb.com>
-> > > >> Reported-by: kernel test robot <lkp@intel.com>
-> > > >> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEF=
-D-lkp@intel.com/
-> > > >
-> > > > Thanks for the patch.
-> > > >
-> > > > I've been seeing these i386 reports as well. I find the PRIx64, etc=
-.
-> > > > format specifiers make format strings very hard to read. And I thin=
-k
-> > > > there were some other issues when building VFIO selftests with i386
-> > > > the last time I tried.
-> > > >
-> > > > I was thinking instead we should just not support i386 builds of VF=
-IO
-> > > > selftests. But I hadn't gotten around to figuring out the right
-> > > > Makefile magic to make that happen.
-> > >
-> > > There are other 32-bit CPUs besides i386.
-> > > Or do only support X86?
-> >
-> > At this point I would only call x86_64 and arm64 as supported. At
-> > least that is all I have access to and tested.
-> >
-> > If there is legitimate desire to run these tests on 32-bit CPUs, then
-> > we can support it.
-> >
-> > Alex, do you test on 32-bit CPUs?
->
-> No, I haven't tested 32-bit in a very long time.  I'd like to think it
-> works, but I'm not aware of any worthwhile use case.
+This series adds support for AMD's Host-Only and Guest-Only performance
+counter eventsel bits in KVM's mediated PMU passthrough implementation.
 
-Ok, thanks. Then let's defer making the selftests code 32-bit
-compatible until there's a use-case / demand.
+These bits allow an nSVM-enabled guest to configure performance counters
+that count only during L1 execution (Host-Only) or only during L2 execution
+(Guest-Only).
 
-Ted, would you be able to send another to change to opt-out VFIO
-selftests from 32-bit builds to avoid future kernel test robot
-reports?
+KVM updates the hardware event selector ENABLE bit at the following state
+transitions to ensure counters only count in the appropriate mode:
+
+  - EFER.SVME changes: Enable/disable Guest-Only counters
+  - Nested VMRUN: Disable Host-Only, enable Guest-Only counters
+  - Nested VMEXIT: Enable Host-Only, disable Guest-Only counters
+
+v1: https://lore.kernel.org/kvm/20260121225438.3908422-1-jmattson@google.com/
+
+v1 -> v2:
+  - Fixed various style issues, including indentation, comment
+    placement, and comparison to 0 [Sean]
+  - Replaced "hg_only" with "host_guest" [Sean]
+  - Reversed the polarity of the dormant/active logic [Sean]
+  - Removed the pmc_hostonly and pmc_guestonly bitmaps [Sean]
+  - Added a refresh helper that iterates over PMCs during transitions [Sean]
+  - Introduced svm_enter_guest_mode() and svm_leave_guest_mode() [Sean]
+  - Moved transition logic from VMRUN/VMEXIT emulation to the above [Sean]
+  - Moved architectural definitions in the selftest to pmu.h [Sean]
+  - Added a test for neither Host-Only nor Guest-Only [Sean]
+  - Refactored the selftest to program all 4 bit combinations
+    simultaneously, reducing code replication [Sean]
+
+
+Jim Mattson (5):
+  KVM: x86/pmu: Introduce amd_pmu_set_eventsel_hw()
+  KVM: x86/pmu: Disable Host-Only/Guest-Only events as appropriate for
+    vCPU state
+  KVM: x86/pmu: Refresh Host-Only/Guest-Only eventsel at nested
+    transitions
+  KVM: x86/pmu: Allow Host-Only/Guest-Only bits with nSVM and mediated
+    PMU
+  KVM: selftests: x86: Add svm_pmu_host_guest_test for
+    Host-Only/Guest-Only bits
+
+ arch/x86/include/asm/perf_event.h             |   2 +
+ arch/x86/kvm/svm/nested.c                     |   6 +-
+ arch/x86/kvm/svm/pmu.c                        |  42 +++-
+ arch/x86/kvm/svm/svm.c                        |   2 +
+ arch/x86/kvm/svm/svm.h                        |  17 ++
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ tools/testing/selftests/kvm/include/x86/pmu.h |   6 +
+ .../kvm/x86/svm_pmu_host_guest_test.c         | 199 ++++++++++++++++++
+ 8 files changed, 270 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c
+
+
+base-commit: 1a424e9e0616db91010f08e5985bcc6edc504205
+-- 
+2.53.0.rc1.225.gd81095ad13-goog
+
