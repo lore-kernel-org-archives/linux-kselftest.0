@@ -1,181 +1,71 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C5EF30AACA;
-	Thu, 29 Jan 2026 22:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FB236AB7D;
+	Thu, 29 Jan 2026 22:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769725323; cv=none; b=LEgVzYFc8Jk8pjy8oH1KC8K78HR1PaYnb3YQ3AB1zgVbtkcXqbo2giE7A4nubFmoVYeuurnA2Cj58RB9+t+/Z2g8oL/fp4TSUU2WIKxyOAkbL91Lhqgy/2zQ7EbpmpSYm8Kl8OuuwFrq/RQVGzZjIT7z0xJcXswR0/PsStMpbHI=
+	t=1769725749; cv=none; b=ucqdaEf/ZzwF7vhykJSs43Z3w4zI5vNoMlPfuts9yoKrlkLUccS11W3ThvEEp9DKqDmmHrbxBWjiwQ4PBBDfIaKnyPBfm22FtxB3SDKPJxZeFM3Mz7nU822OiDx5juXUIuaH8NzdHbUARdtRBhMgTI86ZbDwCfxBoGRoPk+DVhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769725323; c=relaxed/simple;
-	bh=YOhuPnqO0WqEosTb6OgiV/9VaOPjLa3inOLH+4qFvDA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WzHcpn57YuO0RlGgmxpnfOKVY2+HotJ3nUSXVOJUwzs6znaG290TrHjO9QP7HiDNC+PSV5KCWpIkIV/v8vXgHjS14A1hPfft2U8PKvLW1Tep7AZ3UK0QBxyoFAQ53V0GeQiDbNTUjFr001zSEtBWahMuXz5Of5gL5HicFAt1G/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JFbmvvQb; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1769725749; c=relaxed/simple;
+	bh=2rXS3Pzprfsua4VsU6G8SdcDmL3QDI093sbQD1oxjMY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=Ke/xoHpmscLYubp5+SmMwzmMQYxjm4EHEei2Pt/ftraJ8yOKUia0bzERuyoOqR07u7ZDTbUF+/SSzo6MyrqklFVQ2sTurPodhnJp30iZ4EqNDCGpBRPDS+Du2SDBaoGKR3AMT9Nq6b3dQkYNnICm3SXTDMpW129ydUzKsU2pSl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UpTNS0PO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JFbmvvQb"
-Received: from localhost (unknown [40.65.108.177])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 5D12120B7168;
-	Thu, 29 Jan 2026 14:22:00 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5D12120B7168
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1769725321;
-	bh=l69U1dIrB2ccHzImzegm889MzCj0l8Bz/N1WHXvfoHo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JFbmvvQbSZuWgKtGygvkszx2JeEWdtJpgkKy9JrbMd/Wd5/9p+qh8F8DQZUL3TZRu
-	 2F9IotVi63Q1+5xtXPAj5Z5VpgM5SnxXvlYLMhpARcjtNuquJ02rdkhqPezl4x+bzG
-	 YQ4Gy7p2dGglcG8jvPE5kn+665aOMwS0WLDY/OxQ=
-Date: Thu, 29 Jan 2026 14:21:58 -0800
-From: Jacob Pan <jacob.pan@linux.microsoft.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran
- <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro
- <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, Andrew Morton
- <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, David Rientjes
- <rientjes@google.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe
- <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke
- <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
- kexec@lists.infradead.org, kvm@vger.kernel.org, Leon Romanovsky
- <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, "=?UTF-8?Q?Mic?=
- =?UTF-8?Q?ha=C5=82?= Winiarski" <michal.winiarski@intel.com>, Mike Rapoport
- <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, Pasha Tatashin
- <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>,
- Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta
- <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed
- <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, Shuah Khan
- <skhan@linuxfoundation.org>, "Thomas =?UTF-8?Q?Hellstr=C3=B6m?="
- <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>,
- Vipin Sharma <vipinsh@google.com>, Vivek Kasireddy
- <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu
- <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
- Live Update
-Message-ID: <20260129142158.00004cdc@linux.microsoft.com>
-In-Reply-To: <20260129212510.967611-11-dmatlack@google.com>
-References: <20260129212510.967611-1-dmatlack@google.com>
-	<20260129212510.967611-11-dmatlack@google.com>
-Organization: LSG
-X-Mailer: Claws Mail 3.21.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UpTNS0PO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E50C4CEF7;
+	Thu, 29 Jan 2026 22:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769725749;
+	bh=2rXS3Pzprfsua4VsU6G8SdcDmL3QDI093sbQD1oxjMY=;
+	h=Date:Cc:To:From:Subject:References:In-Reply-To:From;
+	b=UpTNS0POcvypPCURNqScb3R+hnRiXr3CTJByRH3wWu+A+RO5zDI+2uEfYGbtvVDiM
+	 g1HbLqSL8LNeqg/742JKrc4gcM+Qw9MCYQw1wo4M5crsI5V9KTKbjGGVqrXAXrc/f4
+	 TRDOsyOi9c13polScvRTcUb2w3BVB8T88RuGzvPI4u/Pwarn5odWHniuoGbrHu0mL/
+	 ipvMEjJEfjbBpMb7QxG9Ap2BgNEqX2c1KTZmslw7uweBWmDDDA++/r5woSKII3RtyO
+	 qJl5h59IvoknOHO215uLjBEL509SM5uNqrZx1ZQ4u1XLikRFHX0kqPetIcrOWmMhKh
+	 lAQBvSs9PDi8g==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 29 Jan 2026 23:29:03 +0100
+Message-Id: <DG1FF2VY54AO.2Q3YHA4WNLV5C@kernel.org>
+Cc: "Jason Gunthorpe" <jgg@nvidia.com>, "Bartosz Golaszewski"
+ <bartosz.golaszewski@oss.qualcomm.com>, "Johan Hovold" <johan@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, "Tzung-Bi Shih" <tzungbi@kernel.org>, "Linus Walleij"
+ <linusw@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
+ <shuah@kernel.org>, "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
+ "Simona Vetter" <simona.vetter@ffwll.ch>, "Dan Williams"
+ <dan.j.williams@intel.com>, <linux-doc@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Bartosz
+ Golaszewski" <brgl@kernel.org>, <maarten.lankhorst@linux.intel.com>,
+ <mripard@kernel.org>, <tzimmermann@suse.de>
+To: "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+References: <20260124170535.11756-1-johan@kernel.org>
+ <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh>
+ <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
+ <20260127235232.GS1134360@nvidia.com> <20260129010822.GA3310904@killaraus>
+In-Reply-To: <20260129010822.GA3310904@killaraus>
 
-Hi David,
+(Cc: Maxime, Thomas, Maarten)
 
-On Thu, 29 Jan 2026 21:24:57 +0000
-David Matlack <dmatlack@google.com> wrote:
+On Thu Jan 29, 2026 at 2:08 AM CET, Laurent Pinchart wrote:
+> That's what I've been advocating for. The best way to ensure that driver
+> code will not accessed data freed at .remove() time is to prevent the
+> code to run at all.
 
-> From: Vipin Sharma <vipinsh@google.com>
->=20
-> Do not reset the device when a Live Update preserved vfio-pci device
-> is retrieved and first enabled. vfio_pci_liveupdate_freeze()
-> guarantees the device is reset prior to Live Update, so there's no
-> reason to reset it again after Live Update.
->=20
-> Since VFIO normally uses the initial reset to detect if the device
-> supports function resets, pass that from the previous kernel via
-> struct vfio_pci_core_dev_ser.
->=20
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
->  drivers/vfio/pci/vfio_pci_core.c       | 22 +++++++++++++++++-----
->  drivers/vfio/pci/vfio_pci_liveupdate.c |  1 +
->  include/linux/kho/abi/vfio_pci.h       |  2 ++
->  include/linux/vfio_pci_core.h          |  1 +
->  4 files changed, 21 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c
-> b/drivers/vfio/pci/vfio_pci_core.c index b01b94d81e28..c9f73f597797
-> 100644 --- a/drivers/vfio/pci/vfio_pci_core.c
-> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> @@ -515,12 +515,24 @@ int vfio_pci_core_enable(struct
-> vfio_pci_core_device *vdev) if (ret)
->  		goto out_power;
-> =20
-> -	/* If reset fails because of the device lock, fail this path
-> entirely */
-> -	ret =3D pci_try_reset_function(pdev);
-> -	if (ret =3D=3D -EAGAIN)
-> -		goto out_disable_device;
-> +	if (vdev->liveupdate_incoming_state) {
-> +		/*
-> +		 * This device was preserved by the previous kernel
-> across a
-> +		 * Live Update, so it does not need to be reset.
-> +		 */
-> +		vdev->reset_works =3D
-> vdev->liveupdate_incoming_state->reset_works;
-Just wondering what happened to skipping the bus master clearing. I
-understand this version does not preserve the device itself yet; I=E2=80=99m
-just curious whether there were specific difficulties that led to
-dropping the earlier patch which skipped clearing bus master.
-
-> +	} else {
-> +		/*
-> +		 * If reset fails because of the device lock, fail
-> this path
-> +		 * entirely.
-> +		 */
-> +		ret =3D pci_try_reset_function(pdev);
-> +		if (ret =3D=3D -EAGAIN)
-> +			goto out_disable_device;
-> +
-> +		vdev->reset_works =3D !ret;
-> +	}
-> =20
-> -	vdev->reset_works =3D !ret;
->  	pci_save_state(pdev);
->  	vdev->pci_saved_state =3D pci_store_saved_state(pdev);
->  	if (!vdev->pci_saved_state)
-> diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c
-> b/drivers/vfio/pci/vfio_pci_liveupdate.c index
-> 1ad7379c70c4..c52d6bdb455f 100644 ---
-> a/drivers/vfio/pci/vfio_pci_liveupdate.c +++
-> b/drivers/vfio/pci/vfio_pci_liveupdate.c @@ -57,6 +57,7 @@ static int
-> vfio_pci_liveupdate_preserve(struct liveupdate_file_op_args *args)=20
->  	ser->bdf =3D pci_dev_id(pdev);
->  	ser->domain =3D pci_domain_nr(pdev->bus);
-> +	ser->reset_works =3D vdev->reset_works;
-> =20
->  	args->serialized_data =3D virt_to_phys(ser);
->  	return 0;
-> diff --git a/include/linux/kho/abi/vfio_pci.h
-> b/include/linux/kho/abi/vfio_pci.h index 9bf58a2f3820..6c3d3c6dfc09
-> 100644 --- a/include/linux/kho/abi/vfio_pci.h
-> +++ b/include/linux/kho/abi/vfio_pci.h
-> @@ -34,10 +34,12 @@
->   *
->   * @bdf: The device's PCI bus, device, and function number.
->   * @domain: The device's PCI domain number (segment).
-> + * @reset_works: Non-zero if the device supports function resets.
->   */
->  struct vfio_pci_core_device_ser {
->  	u16 bdf;
->  	u16 domain;
-> +	u8 reset_works;
->  } __packed;
-> =20
->  #endif /* _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H */
-> diff --git a/include/linux/vfio_pci_core.h
-> b/include/linux/vfio_pci_core.h index 350c30f84a13..95835298e29e
-> 100644 --- a/include/linux/vfio_pci_core.h
-> +++ b/include/linux/vfio_pci_core.h
-> @@ -16,6 +16,7 @@
->  #include <linux/types.h>
->  #include <linux/uuid.h>
->  #include <linux/notifier.h>
-> +#include <linux/kho/abi/vfio_pci.h>
-> =20
->  #ifndef VFIO_PCI_CORE_H
->  #define VFIO_PCI_CORE_H
-
+With this we are in full agreement, I think that'd be best too. But, I also
+think that sometimes this isn't possible. For instance, DRM has such a case=
+ with
+atomic mode setting.
