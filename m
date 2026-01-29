@@ -1,175 +1,178 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f66.google.com (mail-lf1-f66.google.com [209.85.167.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93BF6381708;
-	Thu, 29 Jan 2026 10:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B29C385ECB
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 11:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769684200; cv=none; b=g2W/CI8+hGYLHzi4y4Mz0C5warewtbW6Dek2rXoe4ff+bUUzD2LtzZsX7seSjJ8L5KSDX7tzRd5+F4N9Zdbp69nOb2TQihfStQx0HuI7gVun7RsPWObMF0iuA0Fq6zQe2Q7Fjy+/KpQxIuEEc4mWov5KC8KZhrUc9njzIPGnKe8=
+	t=1769685020; cv=none; b=h8ucGxyYDGvUkIBXNb0p0P6CL8HCcvcHTRYUQ3aHdrnlBpapb5MMDA7jn0NrrfmD9s/j+yjAT3lQFktNJxtdOwKviqXs8fA4aGvn1pVo+VAQhM8Oe2R8cWK8PC8eZB+iJc44MoF193KtA3eqjT83Xapa8Zm43Wvbgj1BJACNV9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769684200; c=relaxed/simple;
-	bh=D7I8EfWd7ND+QvFM1o9ANyCbcetpqlyES+/JHz6LKo8=;
+	s=arc-20240116; t=1769685020; c=relaxed/simple;
+	bh=kRUBBMAYJVrvzKRxdllg3UUuYrBU5zUZBBbF/HzxRas=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cjkyRBXybN3BOdSD7WcraAwOAmoE6bjq5MAef3hxR5Ouj10YEfyDzR2qKXlJ12vk6HmvCY9NwLoQ4RUbQo2rdW6bOAIwIaMXSKzL031JALdBE8H2524CzmJRCZXEQRVuPcxKiYqnvhf1DXZJpCFPMLX4dGkMuPoX4xRlstgXZuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=mD56/ZSo; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ECt/5UwxaqTixIfekqacKb64w0RdP30MJxYwkT+WW1ZZqo3v5pp4ax9/fOKHA32zuAUVyeBxpfEkbcaH5DPgKqAHRpQ5U5u1Vj6Lz33iMCAV/D3WuTeyfNoIF+Gim6fEfoEtR2eYlr2d3LYe5FpaLSou59YvWJQpHArFYcDfQd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0QAyUCoN; arc=none smtp.client-ip=209.85.167.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="mD56/ZSo"
-Received: from killaraus.ideasonboard.com (2001-14ba-703d-e500--2a1.rev.dnainternet.fi [IPv6:2001:14ba:703d:e500::2a1])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id C41321AED;
-	Thu, 29 Jan 2026 11:55:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1769684158;
-	bh=D7I8EfWd7ND+QvFM1o9ANyCbcetpqlyES+/JHz6LKo8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mD56/ZSo3NVyNmCC7IxS6vn5SUGHcztlWtaV89okTlis+T4VLvNXPtWZmA5M1JCug
-	 Cel9cG+jA9Nqiqb39rwheIaPha3wQOIRTYyJG9TnDR8i0VKTsoikSt9W6tk+CEcpL9
-	 yeV5+18o/eMS0VO2OPA+3ZMR86GzKZR3Hncy2rgc=
-Date: Thu, 29 Jan 2026 12:56:34 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-Message-ID: <20260129105634.GC3317328@killaraus>
-References: <20260124170535.11756-1-johan@kernel.org>
- <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh>
- <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
- <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
- <aXovtrAM1r1UyWxA@hovoldconsulting.com>
- <CAMRc=MeMW4g5em_b9qGBR9OmQZNzyQp-S=zKDCPFu506ixy-cQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0QAyUCoN"
+Received: by mail-lf1-f66.google.com with SMTP id 2adb3069b0e04-59dd490be5fso999152e87.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 03:10:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769685016; x=1770289816; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=apF++zvcLgqSdwOs1FYPc9MkjitG47zUTTeeoONSIrw=;
+        b=0QAyUCoNUvu9FPzFTcrMMg02JXXHJsg7+uJSdWJOR8RLJ+euKam1jutj9n7x4xgdv8
+         12BcQ6LvHu89TNjOQaQXlEFVryGl5LOD5FcOAXXrsPrt8qbhD35DATI+LqF9utlWl+KC
+         CvF8nJk3S56bi32Aol4MXgn+fYDMjKx4HmErRrzXRiBMetQvUgxtbF9XzXNo+9/JdSyy
+         853J/IgxfA1vsyKPVKC00VepN7OMEZZiIuMg5kfKnQd2/IJB+4u96fXysq9I2DscSbXV
+         H5ihJRkHPgGf9Jz3uWynbooOUucteDQHtFzfjhgxhziAd4RycrMutUbiZtYDSBgqiCNL
+         Hsig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769685016; x=1770289816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=apF++zvcLgqSdwOs1FYPc9MkjitG47zUTTeeoONSIrw=;
+        b=FMtlMlLEUimSfnsPgs0k7CV2ZmffSXcT/xLDBbl6umTi65EptewifndhQInl1oIJIM
+         DIaNfa1BcSXUUv4eEVSctBkUmjWdSiI7ozo5WIlt8BBfuyZrvTv+9IZ2+RZbwCDEQ7/b
+         407cWstO2lW+cPxUsXz/m2ggsWRgVJaylAB5Cn4BhAqmqjO0ePpqYBRdDWlne9fGOVEP
+         R5fRaZo+BlXT7Ig5kc+HRNBuVohb/eFV8HUcSWp5Ta6zEhuOjkuiFE55Wpb3gRr8zwV1
+         voBfxwqvWG0876Ilpk7535BFfFG8liAkQ0/UBCr9pbD2Ki1q97f7klU06xAcziHDBsU7
+         shMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0cZQaDdVX8hg3JmnvVhUDE/ettsk6Hmk/u38wzzmCUEA9Y091C6ICNWVyKBy3jK1w0x0E02u+6zSR0FB/B98=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyb/3q7NpJ4jGdXlWMiIIiM+0s5/64yoEpoxVqSkJW/efCNIApo
+	qNOMiEsqDkzRaTqL8yegF9posmrRkSW2Q/T8gU3f7YB9sPnP60spRcDtJ7VTNdokXw==
+X-Gm-Gg: AZuq6aKfNvfyEp4+3z8Q5AINBv8GFcKm3qzogoC6KHJe7VAnFyQ5XU/jFdypJHlq8gL
+	WrsL33o3M2U6/ZU2ENVRtKmeM7K13OMcinejyGQp+l8XwhNNiuSKMok1bV+eplr1EH1IiAd7mSA
+	jxMPkMoQJsnftBR5VmY2gBaqPhMzFfQqlJF21s4zEfzjdGq1WwFghClTGEmejzCpLL4WfQP0vPu
+	5qNGholer22PkKy3vMaTx/ZhpbKNals2LjpHEt+PQbn7b5ZPVTcRyXBTjBQqgAeZF2RIgMyCLYY
+	xtcsS5T2SuwcUgPqgLBbMKH6LY31oyXL3eKNZy5h2IQrDQ6U0v1+CHnKaaRI6MzxQ1coZbXDvM3
+	JPgK5xIEQIaffTjOAgOECrwrnYLAJGzVkpkQW2iKOndKcYVADeI3NWJjvpAdnq6Au+bNeusLQ/W
+	i48BCumFedVSTaepgfML+3r1145qx18mGf2+lUflACjcY1YQ==
+X-Received: by 2002:a05:6512:3c86:b0:59e:133b:f76f with SMTP id 2adb3069b0e04-59e133bf83fmr81660e87.23.1769685015739;
+        Thu, 29 Jan 2026 03:10:15 -0800 (PST)
+Received: from google.com (133.23.88.34.bc.googleusercontent.com. [34.88.23.133])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e074814a1sm1097806e87.15.2026.01.29.03.10.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jan 2026 03:10:15 -0800 (PST)
+Date: Thu, 29 Jan 2026 11:10:12 +0000
+From: Quentin Perret <qperret@google.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Sean Christopherson <seanjc@google.com>, 
+	Ackerley Tng <ackerleytng@google.com>, Alexey Kardashevskiy <aik@amd.com>, cgroups@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, akpm@linux-foundation.org, 
+	binbin.wu@linux.intel.com, bp@alien8.de, brauner@kernel.org, chao.p.peng@intel.com, 
+	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@intel.com, 
+	dave.hansen@linux.intel.com, david@redhat.com, dmatlack@google.com, erdemaktas@google.com, 
+	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org, 
+	hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com, 
+	isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com, jarkko@kernel.org, 
+	jgowans@amazon.com, jhubbard@nvidia.com, jroedel@suse.de, jthoughton@google.com, 
+	jun.miao@intel.com, kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev, 
+	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com, mail@maciej.szmigiero.name, 
+	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
+	mhiramat@kernel.org, mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, 
+	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev, 
+	nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev, palmer@dabbelt.com, 
+	pankaj.gupta@amd.com, paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com, 
+	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, richard.weiyang@gmail.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, rostedt@goodmis.org, roypat@amazon.co.uk, 
+	rppt@kernel.org, shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com, 
+	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com, tglx@linutronix.de, 
+	thomas.lendacky@amd.com, vannapurve@google.com, vbabka@suse.cz, viro@zeniv.linux.org.uk, 
+	vkuznets@redhat.com, wei.w.wang@intel.com, will@kernel.org, willy@infradead.org, 
+	wyihan@google.com, xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com, 
+	yuzenghui@huawei.com, zhiquan1.li@intel.com
+Subject: Re: [RFC PATCH v1 05/37] KVM: guest_memfd: Wire up
+ kvm_get_memory_attributes() to per-gmem attributes
+Message-ID: <i22yykvttpc2e4expluuzucczqnetdnpee2wx2fzqwg7cnt45x@ovx7e7hok5iz>
+References: <cover.1760731772.git.ackerleytng@google.com>
+ <071a3c6603809186e914fe5fed939edee4e11988.1760731772.git.ackerleytng@google.com>
+ <07836b1d-d0d8-40f2-8f7b-7805beca31d0@amd.com>
+ <CAEvNRgEuez=JbArRf2SApLAL0usv5-Q6q=nBPOFMHrHGaKAtMw@mail.gmail.com>
+ <20260129003753.GZ1641016@ziepe.ca>
+ <aXqx3_eE0rNh6nP0@google.com>
+ <20260129011618.GA2307128@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=MeMW4g5em_b9qGBR9OmQZNzyQp-S=zKDCPFu506ixy-cQ@mail.gmail.com>
+In-Reply-To: <20260129011618.GA2307128@ziepe.ca>
 
-On Thu, Jan 29, 2026 at 10:11:46AM +0100, Bartosz Golaszewski wrote:
-> On Wed, Jan 28, 2026 at 4:48 PM Johan Hovold <johan@kernel.org> wrote:
-> > On Tue, Jan 27, 2026 at 10:18:27PM +0100, Bartosz Golaszewski wrote:
-> > > On Mon, Jan 26, 2026 at 2:50 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > > > It's certainly possible to handle the chardev unplug issue without
-> > > > revocable as several subsystems already do. All you need is a refcount,
-> > > > a lock and a flag.
-> > > >
-> > > > It may be possible to provide a generic solutions at the chardev level
-> > > > or some kind of helper implementation (similar to revocable) for
-> > > > subsystems to use directly.
-> > >
-> > > This echoes the heated exchange I recently had with Johan elsewhere so
-> > > I would like to chime in and use the wider forum of driver core
-> > > maintainers to settle an important question. It seems there are two
-> > > camps in this discussion: one whose perception of the problem is
-> > > limited to character devices being referenced from user-space at the
-> > > time of the driver unbind (favoring fixing the issues at the vfs
-> > > level) and another extending the problem to any driver unbinding where
-> > > we cannot ensure a proper ordering of the teardown (for whatever
-> > > reason: fw_devlink=off, helper auxiliary devices acting as
-> > > intermediates, or even user-space unbinding a driver manually with
-> > > bus-level sysfs attributes) leaving consumers of resources exposed by
-> > > providers that are gone with dangling references (focusing the
-> > > solutions on the subsystem level).
-> >
-> > What I've been trying to get across is that the chardev hot-unplug issue
-> > is real and needs to be fixed where it still exists, while the manual
-> > unbinding of drivers by root is a corner case which does not need to be
-> > addressed at *any* cost.
-> >
-> > If addressing the latter by wrapping every resource access in code that
-> > adds enough runtime overhead and makes drivers harder to write and
-> > maintain it *may* not be worth it and we should instead explore
-> > alternatives.
-> 
-> Alright, so we *do* agree at least on some parts. :)
-> 
-> I agree that any such change should not affect drivers. If you look at
-> the GPIO changes I did or the proposed nvmem rework - it never touched
-> drivers, only the subsystem level code. The latter especially is
-> really tiny, in fact:
-> 
->   drivers/nvmem/core.c      | 172 +++++++++++++++++++++++---------------
->   drivers/nvmem/internals.h |  17 +++-
-> 
-> is all you need to make it not crash in the situations I described
-> under that series. Runtime overhead in read-sections with SRCU or
-> read-write semaphores is negligible and typically we only have to
-> write on driver unbind. So that "wrapping every resource access"
-> sounds scary but really is not.
-> 
-> GPIO work was bigger but it addressed way more synchronization issues
-> than just supplier unbinding.
-> 
-> For I2C both the problem is different (subsystem waiting forever for
-> consumers to release all references) and the culprit: memory used to
-> hold the reference-counted struct device is released the supplier
-> unbind unconditionally. Unfortunately there's no way around it other
-> than to first move it into a separate chunk managed by i2c core.
+Hi all,
 
-Isn't there ? Can't the driver-specific data structure be
-reference-counted instead of unconditionally freed at unbind time ?
-
-> But
-> that's not the synchronization part that leaks into the drivers, just
-> the need to move struct device out of struct i2c_adapter.
+On Wednesday 28 Jan 2026 at 21:16:18 (-0400), Jason Gunthorpe wrote:
+> On Wed, Jan 28, 2026 at 05:03:27PM -0800, Sean Christopherson wrote:
 > 
-> > This may involve tracking consumers like fw_devlink already does today
-> > so that they are unbound before their dependencies are.
+> > For a dmabuf fd, the story is the same as guest_memfd.  Unless private vs. shared
+> > is all or nothing, and can never change, then the only entity that can track that
+> > info is the owner of the dmabuf.  And even if the private vs. shared attributes
+> > are constant, tracking it external to KVM makes sense, because then the provider
+> > can simply hardcode %true/%false.
 > 
-> During Saravana's talk at LPC we did briefly speak about whether it
-> would be possible to enforce devlinks for ALL devices linked in a
-> consumer-supplier fashion. I did in fact look into it for a bit on my
-> way back and it too would require at least subsystem-level changes
-> across all subsystems because you need to add that entry point at the
-> time of the resource being requested so it's not a no-cost operation.
-> But it is an alternative, yes though it'll require a comparable amount
-> of gap-plugging IMO.
-
-I recall at least one driver (omap3isp) having a circular resource
-issue. The ISP hardware block has the ability to produce a clock for the
-camera sensor, and the camera sensor is a resource acquired by the ISP
-driver. It's quite rare, but it happens. I would however not reject a
-solution that would solve the 99.99% of the problem without addressing
-this.
-
-> > Because in the end, how sound is a model where we allow critical
-> > resources to silently go away while a device is still in use (e.g. you
-> > won't discover that your emergency shutdown gpio is gone until you
-> > actually need it)?
+> Oh my I had not given that bit any thought. My remarks were just about
+> normal non-CC systems.
 > 
-> Well, we do allow it at the moment. It doesn't seem like devlink will
-> be able to cover 100% of use-cases anytime soon.
+> So MMIO starts out shared, and then converts to private when the guest
+> triggers it. It is not all or nothing, there are permanent shared
+> holes in the MMIO ranges too.
+> 
+> Beyond that I don't know what people are thinking.
+> 
+> Clearly VFIO has to revoke and disable the DMABUF once any of it
+> becomes private. VFIO will somehow have to know when it changes modes
+> from the TSM subsystem.
+> 
+> I guess we could have a special channel for KVM to learn the
+> shared/private page by page from VFIO as some kind of "aware of CC"
+> importer.
 
-We have this issue because designing resource management is hard. The
-decision we made not to pay that cost has now turned into a huge
-technical debt. There's no easy way around it, it won't be easier to
-solve it correctly today than it was years ago. I don't know when we
-will be able to fix the issue, but I know it will happen only when we
-decide to face the situation and stop with band-aids.
+Slightly out of my depth, but I figured I should jump in this discussion
+nonetheless; turns out dmabuf vs CoCo is a hot topic for pKVM[*], so
+please bear with me :)
 
-What I think is the biggest issue at the moment is the lack of
-motivation/time/money to address this huge, but I'm hopeful because I
-trust the technical expertise of the community.
+It occurred to me that lazily faulting a dmabuf page by page into a
+guest isn't particularly useful, because the entire dmabuf is 'paged in'
+by construction on the host side (regardless of whether that dmabuf is
+backed by memory or MMIO). There is a weird edge case where a memslot
+may not cover an entire dmabuf, but perhaps we could simply say 'don't
+do that'. Faulting-in the entire dmabuf in one go on the first guest
+access would be good for performance, but it doesn't really solve any of
+the problems you've listed above.
 
--- 
-Regards,
+A not-fully-thought-through-and-possibly-ridiculous idea that crossed
+my mind some time ago was to make KVM itself a proper dmabuf
+importer. You'd essentially see a guest as a 'device' (probably with an
+actual struct dev representing it), and the stage-2 MMU in front of it
+as its IOMMU. That could potentially allow KVM to implement dma_map_ops
+for that guest 'device' by mapping/unmapping pages into its stage-2 and
+such. And in order to get KVM to import a dmabuf, host userspace would
+have to pass a dmabuf fd to SET_USER_MEMORY_REGION2, a which point KVM
+could check properties about the dmabuf before proceeding with the
+import. We could set different expectations about the properties we
+want for CoCo vs non-CoCo guests at that level (and yes this could
+include having KVM use a special channel with the exporter to check
+that).
 
-Laurent Pinchart
+That has the nice benefit of having a clear KVM-level API to transition
+an entire dmabuf fd to 'private' in one go in the CoCo case. And in the
+non-CoCo case, we avoid the unnecessary lazy faulting of the dmabuf.
+
+It gets really funny when a CoCo guest decides to share back a subset of
+that dmabuf with the host, and I'm still wrapping my head around how
+we'd make that work, but at this point I'm ready to be told how all the
+above already doesn't work and that I should go back to the peanut
+gallery :-)
+
+Cheers,
+Quentin
+
+[*] https://www.youtube.com/watch?v=zaBxoyRepzA&list=PLW3ep1uCIRfxwmllXTOA2txfDWN6vUOHp&index=35
