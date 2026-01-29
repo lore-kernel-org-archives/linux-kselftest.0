@@ -1,225 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329322EBDD0;
-	Thu, 29 Jan 2026 14:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522B232E6A2;
+	Thu, 29 Jan 2026 14:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769697491; cv=none; b=InlhS24aXjgXd+5/DdJ1Mjylj/iZv15gVfQGW/wPHNdfitgZVebGM0ZBCKG8VoCKzdyJf8h5dCRfO7qPVX1z6rucVmqOqgq6+RZ//zW90hnuZdUfnGom+5YPjh5ksEG2wu7nSWSX/D+3pnDnxKe0vhjNqhY0cJ8gTYs4FCIjhDI=
+	t=1769697974; cv=none; b=gmpln3WU9I/sGYggncNcA93j1AF2xsPhXXC2D5vJGvo18ObSjQd0dqG11nGTTOf22Rwuz0ypS0TkrGEBL2VF8fLThHPvNXb6Zny4hPrpJC4fklTNZy2lzJhKFWPGvyQ7KD5+avWyg1Djvs8Pk98y+nCZcEjwq9+I6LgWyPnhN/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769697491; c=relaxed/simple;
-	bh=dOJ6JKliJBVh7PxmWDkV41V8SWn5nzmEj9VT88rYn38=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iAqxj7Lrm7u64VwSHa7wat3Kz7I3Ik+UtKXz/PXAwMr7ectlKE8JAUxs2jsssQfQcFEhMN7xlgr36kaXVyYPa80NaQgv7AA5TCHgWasBP4DIB7ETqbXxRZtDooe43DRvpxV1d3PJarx6lDiawZKNHTm9uFeeInLYaDL+wmg4CEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfEHdwX+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769697974; c=relaxed/simple;
+	bh=d/QXeUuY540RkVY1yxCPPN5ccneb3FXmZjSp+D7vLTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QHWAU4l4JdRvWlC44Usm4eevftPSsVe0fRcETbsO+bwF9sMIp0GWA8hNou25BbxskrJtAzZgvZo/mE6cPxxK+irQLkqHB+dfmu1dW9Y6tqxX1A9HpX+tzHeT77NhorcrPlNAMGtD+oUKrHNDwQLrxNJ6TM4bYtnS+QhukJZqHc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=L7KnIypt; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfEHdwX+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FA1C19422;
-	Thu, 29 Jan 2026 14:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769697490;
-	bh=dOJ6JKliJBVh7PxmWDkV41V8SWn5nzmEj9VT88rYn38=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GfEHdwX+ryfGzRkhy9lx5n8b5mUbp2mPpyVwp82fdH5DqnDlnax94XfJPcB7nQcWo
-	 GRkmlEo+dGCw1a21lVEQ9HwrohEjA0azwkiMahzwvQC8I25yijxRvnPYKd3/mijRB7
-	 hML6UF0SnfKrsT5bzvQTZPyiBiP2Q6GdEL30s1u3ADgIClqkAMtohuJr4khjIFL4M9
-	 CysURdIEjS8Z21bJsuQJ07YOfUQnSPNMBKtAh9nxmQtFA9yk45L13qqotHYF1Tyeyi
-	 3IxxZp6qEgNqLGNmROQSy56OcA9TzTDIU+rwr7vnQ3FswutkJYRon+bfkx8AcupzFG
-	 no8t92vzEvIoA==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>,
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="L7KnIypt"
+Received: from killaraus.ideasonboard.com (2001-14ba-703d-e500--2a1.rev.dnainternet.fi [IPv6:2001:14ba:703d:e500::2a1])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id CF6821661;
+	Thu, 29 Jan 2026 15:45:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1769697923;
+	bh=d/QXeUuY540RkVY1yxCPPN5ccneb3FXmZjSp+D7vLTo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L7KnIyptupms2szMN1PZCSN6ECNg6Qt53LH9vflq0Bz7KWqoH22wvxk5Z5GIIG6QK
+	 k0z+sqm+tY5Wo+iyhx1HAkhaAgG1o4z0uKFifKQZqI6Bdg0IHSNnJ2Y9GMPM2U5vOy
+	 2nnmaPFnxnE0XZ5t04VSz3tx/UqVfoX62J8vWFhs=
+Date: Thu, 29 Jan 2026 16:45:59 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Bartosz Golaszewski <brgl@kernel.org>, Johan Hovold <johan@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Johan Hovold <johan@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	tzungbi@kernel.org
-Subject: [PATCH 4/4] revocable: Add KUnit test for concurrent access
-Date: Thu, 29 Jan 2026 14:37:33 +0000
-Message-ID: <20260129143733.45618-5-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.53.0.rc1.217.geba53bf80e-goog
-In-Reply-To: <20260129143733.45618-1-tzungbi@kernel.org>
-References: <20260129143733.45618-1-tzungbi@kernel.org>
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+Message-ID: <20260129144559.GD3327197@killaraus>
+References: <20260124170535.11756-1-johan@kernel.org>
+ <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh>
+ <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
+ <aXovtrAM1r1UyWxA@hovoldconsulting.com>
+ <CAMRc=MeMW4g5em_b9qGBR9OmQZNzyQp-S=zKDCPFu506ixy-cQ@mail.gmail.com>
+ <20260129105634.GC3317328@killaraus>
+ <CAMRc=MfzByLPJ0FKySmG7b79Ah63Mtk1hs1N=6kv8pTDydrcGg@mail.gmail.com>
+ <20260129142836.GF2223369@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260129142836.GF2223369@nvidia.com>
 
-Add a test case to verify correct synchronization between concurrent
-readers and a revocation.
+On Thu, Jan 29, 2026 at 10:28:36AM -0400, Jason Gunthorpe wrote:
+> On Thu, Jan 29, 2026 at 08:50:30AM -0500, Bartosz Golaszewski wrote:
+> 
+> > and the ownership of that data belongs to the driver. There's no way we could
+> > address it now so the next best thing is to work towards moving the ownership
+> 
+> Think positive!
+> 
+> If this is common:
+> 
+>  struct my_i2c_drv_data *data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> 
+> Then change it into
+> 
+>  struct my_i2c_drv_data *data = devm_i2c_adaptor_alloc(struct my_i2c_drv_data, adap);
+> 
+> With Coccinelle or sed.
+> 
+> Audit all the drivers to catch the stragglers.
+> 
+> Now you have a refcount. Look at how fwctl_alloc_device() works to
+> understand the pattern.
+> 
+> Kernel community has done far harder transformations than this :)
+> 
+> Sure it is 200 drivers, I would ask Coccinelle team for help.
 
-The test setup involves:
-1. Consumer 1 enters the critical section (SRCU read lock) and verifies
-   access to the resource.
-2. Provider attempts to revoke the resource.  This should block until
-   Consumer 1 releases the lock.
-3. Consumer 2 attempts to enter the critical section while revocation
-   is pending.  It should see the resource as revoked (NULL).
-4. Consumer 1 exits, allowing the revocation to complete.
+We rewrote the device model between v2.4 and v2.6 (and by "we" I mostly
+mean kudos to Greg for that work, as well as to all the people who
+worked with him who I don't know about). That impacted *all* the
+drivers. We can do this if we want to.
 
-This ensures that the SRCU mechanism correctly enforces grace periods
-and that new readers are properly prevented from accessing the resource
-once revocation has begun.
+> Here is how I would approach it.
+> 
+> First, grep to find all the candidates:
+> 
+> $ git grep -E '^\s+struct i2c_adapter[^*]*;'
+> 
+> Get a kernel built with all those compiling and get a clangd database
+> going. Make a list of all possible candidate files with grep.
+> 
+> AI tells me (and AI is never right about Coccinelle sadly) that you
+> could use this:
+> 
+> // C1: Find any struct that has a member of type "struct i2c_adapter"
+> @ has_i2c_adapter_struct @
+> type S;
+> @@
+> struct S {
+>   ...
+>   struct i2c_adapter;
+>   ...
+> };
+> 
+> // C2: Replace sizeof(...) with fixme_sizeof(...)
+> @ sizeof_i2c_adapter_struct depends on has_i2c_adapter_struct @
+> type has_i2c_adapter_struct.S;
+> @@
+> - sizeof(struct S)
+> + fixme_sizeof(struct S)
+> 
+> The idea being the only reason to do sizeof(S) is for an allocation
+> and we want to find every allocation of a wrapper struct to fix it.
+> 
+> Now you have an index of all lines that need touching.
+> 
+> Look for common patterns, use Coccinelle or sed to make bulk
+> replacements. Group patches of all similar transformations. Sweep
+> through with grep to clean anything not caught. Probably there will be
+> a couple drivers doing something utterly insane, meditate on them and
+> clean them up by hand (this is what clangd is helpful for)
+> 
+> Betcha you can get through it in a few hours!
+> 
+> Jason
 
-A way to run the test:
-$ ./tools/testing/kunit/kunit.py run \
-	--kconfig_add CONFIG_REVOCABLE_KUNIT_TEST=y \
-	--kconfig_add CONFIG_PROVE_LOCKING=y \
-	--kconfig_add CONFIG_DEBUG_KERNEL=y \
-	--kconfig_add CONFIG_DEBUG_INFO=y \
-	--kconfig_add CONFIG_DEBUG_INFO_DWARF5=y \
-	--kconfig_add CONFIG_KASAN=y \
-	--kconfig_add CONFIG_DETECT_HUNG_TASK=y \
-	--kconfig_add CONFIG_DEFAULT_HUNG_TASK_TIMEOUT="10" \
-	--arch=x86_64 --raw_output=all \
-	revocable_test
-
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
- drivers/base/revocable_test.c | 104 ++++++++++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
-
-diff --git a/drivers/base/revocable_test.c b/drivers/base/revocable_test.c
-index a2818ec01298..27f5d7d96f4b 100644
---- a/drivers/base/revocable_test.c
-+++ b/drivers/base/revocable_test.c
-@@ -17,9 +17,14 @@
-  *
-  * - Provider Use-after-free: Verifies revocable_init() correctly handles
-  *   race conditions where the provider is being released.
-+ *
-+ * - Concurrent Access: Verifies multiple threads can access the resource.
-  */
- 
- #include <kunit/test.h>
-+#include <linux/completion.h>
-+#include <linux/delay.h>
-+#include <linux/kthread.h>
- #include <linux/refcount.h>
- #include <linux/revocable.h>
- 
-@@ -160,12 +165,111 @@ static void revocable_test_provider_use_after_free(struct kunit *test)
- 	KUNIT_EXPECT_NE(test, ret, 0);
- }
- 
-+struct test_concurrent_access_context {
-+	struct kunit *test;
-+	struct revocable_provider __rcu *rp;
-+	struct revocable rev;
-+	struct completion started, enter, exit;
-+	struct task_struct *thread;
-+	void *expected_res;
-+};
-+
-+static int test_concurrent_access_provider(void *data)
-+{
-+	struct test_concurrent_access_context *ctx = data;
-+
-+	complete(&ctx->started);
-+
-+	wait_for_completion(&ctx->enter);
-+	revocable_provider_revoke(&ctx->rp);
-+	KUNIT_EXPECT_PTR_EQ(ctx->test, unrcu_pointer(ctx->rp), NULL);
-+
-+	return 0;
-+}
-+
-+static int test_concurrent_access_consumer(void *data)
-+{
-+	struct test_concurrent_access_context *ctx = data;
-+	void *res;
-+
-+	complete(&ctx->started);
-+
-+	wait_for_completion(&ctx->enter);
-+	res = revocable_try_access(&ctx->rev);
-+	KUNIT_EXPECT_PTR_EQ(ctx->test, res, ctx->expected_res);
-+
-+	wait_for_completion(&ctx->exit);
-+	revocable_withdraw_access(&ctx->rev);
-+
-+	return 0;
-+}
-+
-+static void revocable_test_concurrent_access(struct kunit *test)
-+{
-+	struct revocable_provider __rcu *rp;
-+	void *real_res = (void *)0x12345678;
-+	struct test_concurrent_access_context *ctx;
-+	int ret, i;
-+
-+	rp = revocable_provider_alloc(real_res);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, rp);
-+
-+	ctx = kunit_kmalloc_array(test, 3, sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, ctx);
-+
-+	for (i = 0; i < 3; ++i) {
-+		ctx[i].test = test;
-+		init_completion(&ctx[i].started);
-+		init_completion(&ctx[i].enter);
-+		init_completion(&ctx[i].exit);
-+
-+		if (i == 0) {
-+			ctx[i].rp = rp;
-+			ctx[i].thread = kthread_run(
-+				test_concurrent_access_provider, ctx + i,
-+				"revocable_provider_%d", i);
-+		} else {
-+			ret = revocable_init(rp, &ctx[i].rev);
-+			KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+			ctx[i].thread = kthread_run(
-+				test_concurrent_access_consumer, ctx + i,
-+				"revocable_consumer_%d", i);
-+		}
-+		KUNIT_ASSERT_FALSE(test, IS_ERR(ctx[i].thread));
-+
-+		wait_for_completion(&ctx[i].started);
-+	}
-+	ctx[1].expected_res = real_res;
-+	ctx[2].expected_res = NULL;
-+
-+	/* consumer1 enters read-side critical section */
-+	complete(&ctx[1].enter);
-+	msleep(100);
-+	/* provider0 revokes the resource */
-+	complete(&ctx[0].enter);
-+	msleep(100);
-+	/* consumer2 enters read-side critical section */
-+	complete(&ctx[2].enter);
-+	msleep(100);
-+
-+	/* consumer{1,2} exit read-side critical section */
-+	complete(&ctx[1].exit);
-+	complete(&ctx[2].exit);
-+
-+	for (i = 0; i < 3; ++i)
-+		kthread_stop(ctx[i].thread);
-+	for (i = 1; i < 3; ++i)
-+		revocable_deinit(&ctx[i].rev);
-+}
-+
- static struct kunit_case revocable_test_cases[] = {
- 	KUNIT_CASE(revocable_test_basic),
- 	KUNIT_CASE(revocable_test_revocation),
- 	KUNIT_CASE(revocable_test_try_access_macro),
- 	KUNIT_CASE(revocable_test_try_access_macro2),
- 	KUNIT_CASE(revocable_test_provider_use_after_free),
-+	KUNIT_CASE(revocable_test_concurrent_access),
- 	{}
- };
- 
 -- 
-2.53.0.rc1.217.geba53bf80e-goog
+Regards,
 
+Laurent Pinchart
