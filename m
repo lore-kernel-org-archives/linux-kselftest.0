@@ -1,101 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.itpri.com (mx1.itpri.com [185.125.111.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80AB2DE6FC;
-	Thu, 29 Jan 2026 05:38:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2366C2741C0;
+	Thu, 29 Jan 2026 05:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.111.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769665121; cv=none; b=uiQkhQWiZAYqcZgQvrImrw+cVHaUopAy6hcsSQbbDZnvhClPkGRY7Q+RXlR7eLSC1wC56gmt06LgbRHV269fucAoytq+V2YNBp7Zbs/NkRSqthwz8feq6CozwVqtMHfepfgSCqyoj/xE3powJzvElLcx1LOrF/3KeRR5M9JdgxE=
+	t=1769665244; cv=none; b=ZTwOPON+W/vNBMfl7umGnNACTuxd/0Rw5QNAuOw10i2RK0Xug4Im16fR03s/qIuZ8FEQYC9/GhfdwKf0OHIQ5HIzu+FYRuvqqC0XSKNwOaeOdbY0nRbxpVXFakDyLmKnoV47WQmYB1GXhM9TXlsquzLa5P8IQv04WVVB9QEfafA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769665121; c=relaxed/simple;
-	bh=q4drvNjDlEwZOsIPnU+Qr6321KEqlvlkfs6jnkf5saI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ONS+T+c8ZscFO408+tbRz4pYwv3yK0697W582iEtEnGQ1FKweKcLRu6fdUN1aKuT2YwI9pgoU8vHyw+3HqO/fbdt1ARtXEK95l3nG4wjNUoW1KQKIoNWNfBpqCoTy+aVDxg33EZwBY2FEQf1Vq3bql6f7WSSugMngWvNc31Ighs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aDLRP77c; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769665244; c=relaxed/simple;
+	bh=70sTjwi6oA/dnqe8i9Y+rkZLzAq6nfQvpkl7GSjTT8E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WM0sk6swcwXUAfgqXkgSOo9zhLp0639wk7Px8/b87LIcMyVhtb45635Pf4hw9KPNyVO3IwLv53E8nNozuV2gFvv6LU5gApLWrGGb+5hHy4QL5Wy2H8IDy05PUf2Ikw1ZfYBsQztpVO8qDmj3qlFFOr/1oRn04SIRRT5KT/Q9jh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com; spf=pass smtp.mailfrom=zazolabs.com; dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b=ul8SDwIm; arc=none smtp.client-ip=185.125.111.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zazolabs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aDLRP77c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3191BC116D0;
-	Thu, 29 Jan 2026 05:38:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769665120;
-	bh=q4drvNjDlEwZOsIPnU+Qr6321KEqlvlkfs6jnkf5saI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=aDLRP77cy3As4a50hrokFnM0Ps/DIiIh9mQ7yXXsvKu3xphNWcrpKLBNhwvdp82LW
-	 gbhsANCXpaVBYS4Hl5CKSXFcE/PSfH5UOV+fZH0fIjafnmUvqSN9BWL92v6/Uc8xyN
-	 xFXdW51EFP3oJP7/4pwTbKC4uL4QTnA9mYy2fvJjLuGXkYpemhxsFj8Ddvn3drXpra
-	 ImT9dvhRv/RTxdJ2H9MbxiSNGkYz5hZ4I4fN7PHEuRe6GN27F3hXWCUM4BtZD2URqK
-	 XIcJridQuGQTevvo8zoIoToJO7QCl4JR1JDcpeL3o++qV9X5SCUdF5B05zsseFBb2e
-	 yLoCQfamYe9dw==
-Content-Type: multipart/mixed; boundary="===============0294624793989093549=="
+	dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b="ul8SDwIm"
+X-Virus-Scanned: Yes
+From: Alexander Atanasov <alex@zazolabs.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zazolabs.com; s=mail;
+	t=1769665233; bh=70sTjwi6oA/dnqe8i9Y+rkZLzAq6nfQvpkl7GSjTT8E=;
+	h=From:To:Cc:Subject;
+	b=ul8SDwImA8qTKz96Vj9rczAAMQs8xUoPLxSfd2gWK9v3MgpkJJu3Ei8kAQBPkMShp
+	 s5dJUGbVaAQGS3ziitBUcXbUZ/4RBxJ/VcfDtwhDO+sZHvEvdvEwfcftVYZxRsGcFU
+	 +B4x86tkBj4nEUBrtWc9/54og38/iN7nV7dtsUiBZMRAUAKh3NLfszuj6h5AEGs8YL
+	 PPjMnRGetdg/t0s1B925Z665mEV35yIYfHo5Ga6ZRX6Zzc49krbnH/N0ixMVYoH709
+	 4lvkVWasq2ufl370HfTdBpY7AN+slXFDn2omdqd/XqA1/rHoo1v3jixqXwf4hs1dsn
+	 HV19kW4Gn/sZdhwTleR4ul2T0JAplHSNiiErTOhY3C5ZzVBL7Nvlrz0+zQUIDqa23T
+	 r/AgXdh8Qw45b3K2St1C7iCrsjTecoxM43srCGYgRt8JAccdE+8QhfLc4IslXPrt1e
+	 GE7I9TVltLk7H4HdwtSirhyGVj7TCtaru2uOSaijGjODbN4bECv93V0FcR87EFpqo1
+	 n1MamSpkRFwT+mxkZRyZI2OmkXdOOC6rC0Okm3UM0MckEFPsvVRh0boKf0qaV2BUZN
+	 I+dy3gY3NDKO+Cyqv5+mRj7cNtdqB391TOoCdATHJpz1HGUpTACRlncz0VaDTksHbQ
+	 iIUy4YTZN/hdgsacI8HuEl5k=
+To: Ming Lei <ming.lei@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Alexander Atanasov <alex@zazolabs.com>,
+	linux-block@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: ublk: move test temp files into a sub directory
+Date: Thu, 29 Jan 2026 05:40:25 +0000
+Message-ID: <20260129054026.227828-1-alex@zazolabs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3141d10de14ab669ef0927bdb175b0fd1e1e0d1b0c6b6092385e3bcb1898ee4d@mail.kernel.org>
-In-Reply-To: <20260129050949.157410-1-skb99@linux.ibm.com>
-References: <20260129050949.157410-1-skb99@linux.ibm.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Return -1 from get_preempt_count() for unsupported architecture
-From: bot+bpf-ci@kernel.org
-To: skb99@linux.ibm.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 29 Jan 2026 05:38:40 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============0294624793989093549==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Create and use a temporary directory for the files created during
+test runs. If TMPDIR environment variable is set use it as a base
+for the temporary directory path.
+TMPDIR=/mnt/scratch make run_tests
+and
+TMPDIR=/mnt/scratch ./test_generic_01.sh
+will place test directory under /mnt/scratch
 
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> index a39576c8ba..87706a213a 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -628,7 +628,7 @@ static inline int get_preempt_count(void)
->  #elif defined(bpf_target_arm64)
->  	return bpf_get_current_task_btf()->thread_info.preempt.count;
->  #endif
-> -	return 0;
-> +	return -1;
->  }
-
-Returning -1 here causes incorrect behavior in all the bpf_in_* helper
-functions that call get_preempt_count(). Since -1 is 0xFFFFFFFF in
-twos complement, the bitmask operations in the callers produce non-zero
-results:
-
-    bpf_in_nmi():     -1 & NMI_MASK     = 0x00F00000 (non-zero)
-    bpf_in_hardirq(): -1 & HARDIRQ_MASK = 0x000F0000 (non-zero)
-    bpf_in_interrupt(): returns non-zero (falsely indicates interrupt ctx)
-    bpf_in_serving_softirq(): returns non-zero
-    bpf_in_task(): returns 0 (falsely indicates NOT in task context)
-
-Previously with return 0, these functions would return 0 on unsupported
-architectures. Now they return false positives indicating the system is
-in NMI/hardirq/softirq context when it may not be.
-
-Should the callers be updated to check for -1 before performing the
-bitmask operations? For example:
-
-    static inline int bpf_in_nmi(void)
-    {
-        int pcnt = get_preempt_count();
-        if (pcnt < 0)
-            return -1;  /* or 0? */
-        return pcnt & NMI_MASK;
-    }
-
-
+Signed-off-by: Alexander Atanasov <alex@zazolabs.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ tools/testing/selftests/ublk/test_common.sh | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21466700415
+diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
+index 7ff6ce79d62c..46983ccf5c1a 100755
+--- a/tools/testing/selftests/ublk/test_common.sh
++++ b/tools/testing/selftests/ublk/test_common.sh
+@@ -43,7 +43,7 @@ _create_backfile() {
+ 	old_file="${UBLK_BACKFILES[$index]}"
+ 	[ -f "$old_file" ] && rm -f "$old_file"
+ 
+-	new_file=$(mktemp ublk_file_"${new_size}"_XXXXX)
++	new_file=$(mktemp ${UBLK_TEST_DIR}/ublk_file_"${new_size}"_XXXXX)
+ 	truncate -s "${new_size}" "${new_file}"
+ 	UBLK_BACKFILES["$index"]="$new_file"
+ }
+@@ -60,7 +60,7 @@ _remove_files() {
+ _create_tmp_dir() {
+ 	local my_file;
+ 
+-	my_file=$(mktemp -d ublk_dir_XXXXX)
++	my_file=$(mktemp -d ${UBLK_TEST_DIR}/ublk_dir_XXXXX)
+ 	echo "$my_file"
+ }
+ 
+@@ -119,7 +119,9 @@ _prep_test() {
+ 	local type=$1
+ 	shift 1
+ 	modprobe ublk_drv > /dev/null 2>&1
+-	UBLK_TMP=$(mktemp ublk_test_XXXXX)
++	TDIR=$(mktemp -d ${TMPDIR:-.}/ublktest-dir.XXXXXX)
++	export UBLK_TEST_DIR=${TDIR}
++	UBLK_TMP=$(mktemp ${UBLK_TEST_DIR}/ublk_test_XXXXX)
+ 	[ "$UBLK_TEST_QUIET" -eq 0 ] && echo "ublk $type: $*"
+ }
+ 
+@@ -165,6 +167,7 @@ _cleanup_test() {
+ 	"${UBLK_PROG}" del -a
+ 
+ 	_remove_files
++	rmdir ${UBLK_TEST_DIR}
+ }
+ 
+ _have_feature()
+@@ -398,6 +401,8 @@ UBLK_PROG=$(_ublk_test_top_dir)/kublk
+ UBLK_TEST_QUIET=1
+ UBLK_TEST_SHOW_RESULT=1
+ UBLK_BACKFILES=()
++UBLK_TEST_DIR=${TMPDIR:-.}
+ export UBLK_PROG
+ export UBLK_TEST_QUIET
+ export UBLK_TEST_SHOW_RESULT
++export UBLK_TEST_DIR
 
-AI-authorship-score: low
-AI-authorship-explanation: Simple one-line change with clear human-authored commit message following standard kernel conventions.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Incomplete API change causes bpf_in_* functions to return false positives on unsupported architectures, but this only affects selftest code on non-x86/arm64 systems.
+base-commit: f46ebb910989a1db244f95bd1f937907591aa2ee
+-- 
+2.43.0
 
---===============0294624793989093549==--
