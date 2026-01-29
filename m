@@ -1,167 +1,105 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED992868B2
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F58E3148A6
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769694169; cv=none; b=ncwD8oMGSyFhrhHYJDOxA0hGtqR0DJuBDp+6nJ6Se559Vje2+x+j12ma7VOmJ5mHZZS2UZx9GzfcJDVouMKXhCrgc02cUKKXx8Du+UAMTZG4q/NHacL2ZCaMHg/BnyeHHJikzdwjnVycMIcLt6rx+maiT6zCdUNejR8oZTaech0=
+	t=1769694634; cv=none; b=ESBdwTUGVAE+vOARlrM6Y9UZMj6uaPPQIQdfQ1ZvOlu09srLbfvIzdTgo57Ib2PQtVI5Oo38M1atiP9wAfjgG47j7Yfp/lZ0Qk15u9+KAkMSp1KxhAYdIkGOb6kfd9Jhn8O5oKttHWmy/T4Qi6BuL8+f9CWohFf4ktGxbvIhrO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769694169; c=relaxed/simple;
-	bh=YBVpWb/wKpo5te9DXuKTTTurBJ7eElV5O2X8q6nV584=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CplRZDBjhPXOUjUF20RHYmqU+Vx+13MCg0DzDWQBc/AT/sR2yhZe5lLPemQdy44prKN22sYJFwGxi9oAgE601F7QHsIzMPtJhf9H1RJx+Ws71koi40EjiYqMveytxNAnVbWsb3A68EfAv3xIH9uaKC4jqMi3gdNV8DufbeUCwZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=bMTWVosz; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1769694634; c=relaxed/simple;
+	bh=GyDLU+pxiVbfK3HmawBgeoXh/3J+Q1LigJrF0nwWp+U=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jQK2698OVLLqi/CYbub03lj+WKMBsXrML+HS6c2oIMVns5smSI+HkwJVCR7Vi9w+Lq6mF3YY+gvGCeWAt9hHQaWhM0Vld6yZ5iyFHlHmdh7hNXEknSmvRrQmzEfU1MClI4LUkCknQgA5/tEU0a1jRhOobyPxxo/clQohblRqicA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EohpBTpV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="bMTWVosz"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-503347dea84so11129031cf.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 05:42:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1769694166; x=1770298966; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GDzgMbZmK6TIECiS2445LXqg7oI2wOpfTfzYF6w3p+0=;
-        b=bMTWVoszFlR7I632RUufRMqVojdaC+/4lJM+18oYWO2OEIvo+Fz3NXgLHTK2xOoRpv
-         3Ok3eNEsuKSipD7jdgqRjlAqSB0cNyBjjYxpfWaJ0kO/OESfoKuEJxqioDOVOdVqzquW
-         Ij8/KMc7p0hL5q6bQLHfDs0croHM2hS5qI9aHbn09GGG1cRUGt64Y3M3pAME9myasaSr
-         o5Tvj8xDiqgwpMKvoQwBMukFa1Tt1hE8bJJ2xuq1T1r58WRV9/7iy6tiN6eAX4LsEVa8
-         ul7lvO/7R2GTOhrIcc1r4spgOc+EMqGpMw/d3gsVefCFcnLxXPhlecRX2DvHuxeyPSgc
-         6DZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769694166; x=1770298966;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GDzgMbZmK6TIECiS2445LXqg7oI2wOpfTfzYF6w3p+0=;
-        b=sPAhSQAgHn/f+6hqGE4X66XANJXi/fL402UQmlVxr3qRMM/Hc5Dvl/Bft5HXELTnAB
-         erI2qdssArJllZrYgjACC88DBR40v2jwSOGx+odbTVcFNGQJQkfo0XRTUleU2wmViaeb
-         LuxwqGZ5k0gC4MkSNh2dQ6CgjiQR6aab/RHgeW8qgEC/dmEybccNgoqz1e8cQR12BiML
-         DW9lxQSDCLzOiH1nGN7lrpW0Tngfb5YJf3EGsHUOhFcQoQQZSXKKBQSZKT66eIBJS9Vz
-         Jb/LK78UdQE6CaQ1PkXTMhAxMEAj6bvqw5zYfLcliCoFU2ynAcF/Diu32xAsPpTZ5FO0
-         smCg==
-X-Forwarded-Encrypted: i=1; AJvYcCVyk/g+DCCwTWubXz621yS+STNXxcZ5Ld4Mwic9i/4gKNtnQFjiimBd36T10TeSSvqvJZMS2rqz7OA5ArzYbHs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykNlMjMT4VAa+tmsBUdU2rbz6MpJ8EsqOJCkSvJmp75+6u/5Al
-	LgHVZ0N2BzDK/iZwatEbc3WjkFRbg9WzD++GjzPGUdIDWvo7W/VeJDAGMNaxsAGUltk=
-X-Gm-Gg: AZuq6aIsU7ehBrqgAKnXmM8Kgv83PdFrIEXnCtKi7sT8MgUx0AT+LdKhNwxnFgxwAkE
-	xgnwiymS8q/713pZPgsO27r9I9yDUN8EpkO5iu+nrlD+g90zzzpGvBwhBsbw75O62EKZimk0i2b
-	ZSBLbAx3zfGAlsiAb29uXnSGCVv02CXGVs68LHLJ5ndKdAEQI+UJ3YlLsPLMI3MT36QUDBdHwGA
-	fKDq+lPLQ6nt955Pt227Qk2MjFpDLQpmHM1IzRaiBgPZilG/y3cdcsGJmQhkn0G3PNJwn4DSo4q
-	yM/38lJoEcVF4CmJY3IW3fKePBQIlCIgLQ/rwae0UEW6ocHyP/ywkphX7pP+pcoS31OmnWd7qaK
-	5hs7aOWWoVH1oTRK8O5ZZV5XyVkqSGIRyDMjoXWAIMkr2j9aw/F5jlChpUcJFQzsGDyD3Ptwmwe
-	/gSBFZBk2hwqUkgnVkGS/E7EiIaIJ1cOEjhDIUO/pl98UjWKhdSrfugJv3cJ3vIN79wlM=
-X-Received: by 2002:a05:622a:15c6:b0:4ee:1563:2829 with SMTP id d75a77b69052e-5032fa1cc0fmr108491201cf.72.1769694166378;
-        Thu, 29 Jan 2026 05:42:46 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-894d3764eb6sm37167556d6.49.2026.01.29.05.42.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jan 2026 05:42:45 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1vlSIH-00000009jxt-1Mph;
-	Thu, 29 Jan 2026 09:42:45 -0400
-Date: Thu, 29 Jan 2026 09:42:45 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Quentin Perret <qperret@google.com>
-Cc: Sean Christopherson <seanjc@google.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Alexey Kardashevskiy <aik@amd.com>, cgroups@vger.kernel.org,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-	akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
-	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org,
-	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com,
-	david@redhat.com, dmatlack@google.com, erdemaktas@google.com,
-	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com,
-	hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com,
-	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com,
-	jack@suse.cz, james.morse@arm.com, jarkko@kernel.org,
-	jgowans@amazon.com, jhubbard@nvidia.com, jroedel@suse.de,
-	jthoughton@google.com, jun.miao@intel.com, kai.huang@intel.com,
-	keirf@google.com, kent.overstreet@linux.dev,
-	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
-	mail@maciej.szmigiero.name, maobibo@loongson.cn,
-	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
-	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com,
-	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au,
-	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es,
-	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com,
-	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com,
-	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz,
-	richard.weiyang@gmail.com, rick.p.edgecombe@intel.com,
-	rientjes@google.com, rostedt@goodmis.org, roypat@amazon.co.uk,
-	rppt@kernel.org, shakeel.butt@linux.dev, shuah@kernel.org,
-	steven.price@arm.com, steven.sistare@oracle.com,
-	suzuki.poulose@arm.com, tabba@google.com, tglx@linutronix.de,
-	thomas.lendacky@amd.com, vannapurve@google.com, vbabka@suse.cz,
-	viro@zeniv.linux.org.uk, vkuznets@redhat.com, wei.w.wang@intel.com,
-	will@kernel.org, willy@infradead.org, wyihan@google.com,
-	xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com,
-	yuzenghui@huawei.com, zhiquan1.li@intel.com
-Subject: Re: [RFC PATCH v1 05/37] KVM: guest_memfd: Wire up
- kvm_get_memory_attributes() to per-gmem attributes
-Message-ID: <20260129134245.GD2307128@ziepe.ca>
-References: <cover.1760731772.git.ackerleytng@google.com>
- <071a3c6603809186e914fe5fed939edee4e11988.1760731772.git.ackerleytng@google.com>
- <07836b1d-d0d8-40f2-8f7b-7805beca31d0@amd.com>
- <CAEvNRgEuez=JbArRf2SApLAL0usv5-Q6q=nBPOFMHrHGaKAtMw@mail.gmail.com>
- <20260129003753.GZ1641016@ziepe.ca>
- <aXqx3_eE0rNh6nP0@google.com>
- <20260129011618.GA2307128@ziepe.ca>
- <i22yykvttpc2e4expluuzucczqnetdnpee2wx2fzqwg7cnt45x@ovx7e7hok5iz>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EohpBTpV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D399FC4CEF7
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:50:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769694633;
+	bh=GyDLU+pxiVbfK3HmawBgeoXh/3J+Q1LigJrF0nwWp+U=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
+	b=EohpBTpVjehn/IpbjgeLGwgHgo0zyjO1vPAlttzyG5ODhFlBomvMWyF/TU2LvcVFS
+	 9kZX+KDgSn4/fnmXIPIKPAt42u2aibIc6aGh5sB2diJaurIvYx0ReElgKV25PKHcm9
+	 QOy7NWY01cZPqTse9qKmgXEQfpk3WztfEHUD6glE/tJ3/yU9j8RVHra5CG5fAzXjhk
+	 plZVGf9DZqxvPhc9US+0+N1y9Ebrmur59pxrREUNoLI8WYlalNOyTzNcVUjJXyHA5n
+	 5nGY129TG5hplVdzNjtGDkSa3Quz+FtuUqND86lbeNTwodYybTMMnsaV3pcAHVmqCK
+	 6sXo6N0ws+NdA==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-59dd263bf42so1175452e87.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 05:50:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVQM0iiM2qnOf2ZZHO01zwOpz9j/JG0McjbPedsz98145+8SScQ7hJwN6lZzC6N6HpMZdKelUIXR3/oIPHnw9Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKEZhkGAAtU5n5U3RAfgmLkpGOQBW0yBWpGbcxA4r0Tda7IUyf
+	hCyF4Oy8JfJicah6zqXXULnqJC7yvzbyafdd9A2iu07v7dUdL+uu0QgkE2M4lueJ6ooijw71nQ6
+	6w2RnRa2svNwO3HBy6IDMo1dedDzn1b1WfzzW/q1N8Q==
+X-Received: by 2002:a05:6512:3b91:b0:59d:fd1e:50da with SMTP id
+ 2adb3069b0e04-59e040308e5mr3356331e87.36.1769694632521; Thu, 29 Jan 2026
+ 05:50:32 -0800 (PST)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 29 Jan 2026 08:50:30 -0500
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 29 Jan 2026 08:50:30 -0500
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <20260129105634.GC3317328@killaraus>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <i22yykvttpc2e4expluuzucczqnetdnpee2wx2fzqwg7cnt45x@ovx7e7hok5iz>
+References: <20260124170535.11756-1-johan@kernel.org> <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh> <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
+ <aXovtrAM1r1UyWxA@hovoldconsulting.com> <CAMRc=MeMW4g5em_b9qGBR9OmQZNzyQp-S=zKDCPFu506ixy-cQ@mail.gmail.com>
+ <20260129105634.GC3317328@killaraus>
+Date: Thu, 29 Jan 2026 08:50:30 -0500
+X-Gmail-Original-Message-ID: <CAMRc=MfzByLPJ0FKySmG7b79Ah63Mtk1hs1N=6kv8pTDydrcGg@mail.gmail.com>
+X-Gm-Features: AZwV_QjpXdX3Ru-gJaLnf59FQ94or1nANjD-GNCf2j-Nn3Da57dWcF9kfnGd2g0
+Message-ID: <CAMRc=MfzByLPJ0FKySmG7b79Ah63Mtk1hs1N=6kv8pTDydrcGg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Johan Hovold <johan@kernel.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Dan Williams <dan.j.williams@intel.com>, Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Bartosz Golaszewski <brgl@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jan 29, 2026 at 11:10:12AM +0000, Quentin Perret wrote:
+On Thu, 29 Jan 2026 11:56:34 +0100, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> said:
+> On Thu, Jan 29, 2026 at 10:11:46AM +0100, Bartosz Golaszewski wrote:
+>>
+>> For I2C both the problem is different (subsystem waiting forever for
+>> consumers to release all references) and the culprit: memory used to
+>> hold the reference-counted struct device is released the supplier
+>> unbind unconditionally. Unfortunately there's no way around it other
+>> than to first move it into a separate chunk managed by i2c core.
+>
+> Isn't there ? Can't the driver-specific data structure be
+> reference-counted instead of unconditionally freed at unbind time ?
+>
 
-> A not-fully-thought-through-and-possibly-ridiculous idea that crossed
-> my mind some time ago was to make KVM itself a proper dmabuf
-> importer. 
+Oh, for sure, if we did from the start. But we did not and there are now
+hundreds of i2c drivers that do:
 
-AFAIK this is already the plan. Since Intel cannot tolerate having the
-private MMIO mapped into a VMA *at all* there is no other choice.
+struct my_i2c_drv_data {
+	struct i2c_adapter adap;
+	int my_other_drv_data;
+};
 
-Since Intel has to build it it I figured everyone would want to use it
-because it is probably going to be much faster than reading VMAs.
+and in probe:
 
-Especially in the modern world of MMIO BARs in the 512GB range.
+struct my_i2c_drv_data *data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
 
-> You'd essentially see a guest as a 'device' (probably with an
-> actual struct dev representing it), and the stage-2 MMU in front of it
-> as its IOMMU. That could potentially allow KVM to implement dma_map_ops
-> for that guest 'device' by mapping/unmapping pages into its stage-2 and
-> such. 
+(or just kzalloc() with kfree() in remove, it doesn't matter)
 
-The plan isn't something so wild..
+and the ownership of that data belongs to the driver. There's no way we could
+address it now so the next best thing is to work towards moving the ownership
+of struct i2c_adapter to the i2c core and make it reference counted using the
+internal kobject of the associated struct device.
 
-https://github.com/jgunthorpe/linux/commits/dmabuf_map_type/
-
-The "Physical Address List" mapping type will let KVM just get a
-normal phys_addr_t list and do its normal stuff with it. No need for
-hacky DMA API things.
-
-Probably what will be hard for KVM is that it gets the entire 512GB in
-one shot and will have to chop it up to install the whole thing into
-the PTE sizes available in the S2. I don't think it even has logic
-like that right now??
-
-> It gets really funny when a CoCo guest decides to share back a subset of
-> that dmabuf with the host, and I'm still wrapping my head around how
-> we'd make that work, but at this point I'm ready to be told how all the
-> above already doesn't work and that I should go back to the peanut
-> gallery :-)
-
-Oh, I don't actually know how that ends up working but I suppose it
-could be meaningfully done :\
-
-Jason
+Bartosz
