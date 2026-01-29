@@ -1,120 +1,145 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B8734DB4F
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 17:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418D43090C2;
+	Thu, 29 Jan 2026 18:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769707788; cv=none; b=LHwhPO3ECXGoSegvffR4XPxQteQO9ey74FL7JPbFyU1Oy+ggGAyYeQwrD5EL9j5LxJJWT1GE7mJL7rPhhT4gQRjrsWn8SJZH/9bqywQ8VqwxcrwtRlkMMon6piZAiAc5b7KFXohjO7AV1JJrobiCsUr2kWmAXcE3oK/bN5aEP6Q=
+	t=1769712646; cv=none; b=VAyCYtw6uJ5V/8NBXZcAdCr1oksxtAgI3ezaw9Lbro28cOT1Rmjq2QveIOPVvU/CnddcuKhPx1rLw9bEoYF7WKrzH0A4HHQPfjlcJ30oZCi3HlhLEt0xSoAWxHwPo4N4Ld2BxVDOiRFUC37C2cblpIV2C3HnGuZVGkoW61laJzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769707788; c=relaxed/simple;
-	bh=be866/Yp5BAQJMoBK98y8dBJLQ2gHvccZfOQ5Qw+jAY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EDDVQ062v2VILgQDux2vqgwkFL8lJWv5nAizMa0CqHlO/hENeVvl+eCPJLHNP34oNcoJrkfFFYooOu6l6emkbGZT+7E+ipE6xY7rJOfrSlA5InpMb26knU4oI2n1zagMaTyA40PFIOIZ35m7IHf4ZOpcFSaoFpG8V1ChFH+QNg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wHwIu2Vl; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1769712646; c=relaxed/simple;
+	bh=WKec3arCCMNRrGJBEnRE3sLK4j3onPSV3T75MrOsaWI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=u3YM5BSGZd9EPLVs5ASWYQXQLUTwBMbH+Kqb45QbC7X4+z2YjdvQXOicXwp+1KNgiJ4cn54mjelVDX1be30HpL0q0HGw0JHtwEw0E0tTBlZr6he6Gszxpd6YJcLcJR+x/RVkNgbqcJTm1GcsXebgvkzrAGIWC5a5ijRktV79n8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=PfFwAT9U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NCNU3++S; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wHwIu2Vl"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4806d23e9f1so14181865e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 09:29:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1769707785; x=1770312585; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:user-agent
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=be866/Yp5BAQJMoBK98y8dBJLQ2gHvccZfOQ5Qw+jAY=;
-        b=wHwIu2VlC51zeYSWrFup//yLPuyf8rJC3TBNiTTLUi0VzqQrupIgBaCJ/AzM2VxAmw
-         Zg1Xi0BlHaY/jdGN8iIeD2Rydh/xwPBTyM/STgtUm8+90oPOJJNXvvG72yJfnKVUB5nE
-         p8ZOBFbd34St+Ip0pfYaPSUEpFxBTY9pdfhF3+XBsB1amjfdtVK/8UjhRPue+rnh51ur
-         FflmD70zt4F2+5ZZBcN163zATMyhb8zTFn47J1Zok6xknh1nHlH/WjTZ2S4b2leHxWLM
-         bM4dLlD92K6ZDAdLyNddhrbwye141vcvymhr7mqc3BrBJPy3km2AfQNFEBJaZBTY9ypa
-         bKqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769707785; x=1770312585;
-        h=content-transfer-encoding:mime-version:message-id:date:user-agent
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=be866/Yp5BAQJMoBK98y8dBJLQ2gHvccZfOQ5Qw+jAY=;
-        b=VGebxV6pR72E9UtaH8jeYT4ObVGJRxScVgRnh0YekdHZrDRdp/7D4idIlD/kTNWHL2
-         5EJ7n5LKO4p9gM3W7Yk0g4qJTMIHuUjZ2AHbfGo+uWq32PQv4GjGVJVirVBnej7VncZa
-         0Kn0TvPWCKGd0cwuYDSanM/+KwDy9v67myiv2NGPKdMik54e7xmHxbevxW9ngbdwK3La
-         a/gACMuQabC0wBO9vU4hH+C9iv5VtDAn6WZ9Kb1yAq+aG28GZeMowRTE+v1bDFrOg0iG
-         ab4IHkZhoe84yQ/14Yaww2BYK7r/G/IsWkTm7rVE1j+a4P6g/Mhl0puSLnm1/0IJzqCX
-         fSJA==
-X-Forwarded-Encrypted: i=1; AJvYcCX6Pe6ZqnhVsT05qfApo5OjiKUpdu50Yks18+Yp3CJ4DR+jWCI2YhSk1DU3JBpHIxEbn2VEcYsclWMSaZ+51Fo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv122uRyn/PBG0Appj5Rf3Vg9qg1n1J2Yaeq3I40AjvV8wZtZV
-	LjiG7O/8Q9FglgfIoYuxJJRXP3QN6uFi0+Dz85FBKuZBnd7cNj/kTl/itE3hipI56Bs=
-X-Gm-Gg: AZuq6aL0b2uXn9bp90t2Hsj48U6gBoI4f2IKnriqYSMBU+WWRAjEIYov+ZqifA2PNSo
-	QCxwD6R5Ght/6z75txRbWb7HD5AFg4qrOP0oKiIsmvDQq55ZgsWnMgPD2aewnzSVduFTI4XrlqG
-	7hU4FQ+8CpG3KKM9mhwOe+zy81vnhODhga83D33ao3yAqouF7wQ50fy5P9o4hXCUgt27mQI9Doi
-	akJkOR2fnJ55wEmfHQVyQmgpnxg8cxUHqbMtFiXeQ1frwqo9dpVHcLOZanrao3TedPfPLlc7hdU
-	UzP6c2Nx9QBjr2OJU5VHKL6xG66FbABcn7g8t8JccIUXNlrnMote98QCyhib9VOQ/tecW4unszW
-	Y1jfXxqXPgkUwwvxXrIwzyc4e7UN2vQSDJQ0lPhMsjr+bPfDzXmtEfY31qacMGZuzXkOmBOZfm1
-	yzmOZotR5GyPU=
-X-Received: by 2002:a05:600c:350b:b0:47a:935f:61a0 with SMTP id 5b1f17b1804b1-48069b9a017mr121874905e9.0.1769707784613;
-        Thu, 29 Jan 2026 09:29:44 -0800 (PST)
-Received: from draig.lan ([185.124.0.126])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482da8eba27sm66755e9.6.2026.01.29.09.29.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jan 2026 09:29:43 -0800 (PST)
-Received: from draig (localhost [IPv6:::1])
-	by draig.lan (Postfix) with ESMTP id 067175F878;
-	Thu, 29 Jan 2026 17:29:43 +0000 (GMT)
-From: =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>,  Joey Gouly <joey.gouly@arm.com>,
-  Catalin Marinas <catalin.marinas@arm.com>,  Suzuki K Poulose
- <suzuki.poulose@arm.com>,  Will Deacon <will@kernel.org>,  Paolo Bonzini
- <pbonzini@redhat.com>,  Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
- <shuah@kernel.org>,  Oliver Upton <oupton@kernel.org>,  Dave Martin
- <Dave.Martin@arm.com>,  Fuad Tabba <tabba@google.com>,  Mark Rutland
- <mark.rutland@arm.com>,  Ben Horgan <ben.horgan@arm.com>,
-  linux-arm-kernel@lists.infradead.org,  kvmarm@lists.linux.dev,
-  linux-kernel@vger.kernel.org,  kvm@vger.kernel.org,
-  linux-doc@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Peter
- Maydell <peter.maydell@linaro.org>,  Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v9 04/30] arm64/fpsimd: Check enable bit for FA64 when
- saving EFI state
-In-Reply-To: <76bf33a0-968d-4b99-a157-3eef076af69d@sirena.org.uk> (Mark
-	Brown's message of "Thu, 29 Jan 2026 16:41:05 +0000")
-References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
-	<20251223-kvm-arm64-sme-v9-4-8be3867cb883@kernel.org>
-	<87343o8jay.fsf@draig.linaro.org>
-	<76bf33a0-968d-4b99-a157-3eef076af69d@sirena.org.uk>
-User-Agent: mu4e 1.14.0-pre1; emacs 30.1
-Date: Thu, 29 Jan 2026 17:29:42 +0000
-Message-ID: <87wm1072ex.fsf@draig.linaro.org>
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="PfFwAT9U";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NCNU3++S"
+Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
+	by mailfout.phl.internal (Postfix) with ESMTP id 524CBEC0602;
+	Thu, 29 Jan 2026 13:50:42 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Thu, 29 Jan 2026 13:50:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1769712642;
+	 x=1769799042; bh=ufj3Z5ElDLmJd7fO42cOWXMjtgm9/Nt9Eiy1rxbPIFA=; b=
+	PfFwAT9UUE0dhiSQ+h5829y3AIAqVryHRhItnAQG8NX5AWay1xdQRd6N+Zs0TEDM
+	OZL47WwTcitp9t7kJGba6BJqXNj41Utpa+Vwl/iW47uqyM95G55HYUxLVXJpiH1h
+	JfXeMSfLdXJYcu2MIhR45hBLekrJyDTr2ubaY/4Cq+CTdv9Ndjf08z3AZkz82Wz6
+	Yh8Ep7wUMm3vaQpUCDu7+b2XFgt9EyiTeXoAo6NN0Rko0nf3g8rI9Ky5wh0tD+PU
+	i65XgYlM3GdVCwChHE42KXbEgZ9iTNJSPHNK6ycnvSuaOnW2idX4dtRpuzz0BP7o
+	/MsDUVJnLucLaVpFFWI/7Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1769712642; x=
+	1769799042; bh=ufj3Z5ElDLmJd7fO42cOWXMjtgm9/Nt9Eiy1rxbPIFA=; b=N
+	CNU3++SMvVM12tD6bZal5g6l4UDt3lkFDWZVeIG3afquAlzVvse1GPZ4zMgEYUeR
+	rpMFhoxLQykllbI+h4hZaS2/8FjXZFOp2UO4Xks6bty41UiYwNpWgH9Nwlkgu/FU
+	R2GpdJhS+6qGk/tdAL+iMKlh0lnVdSW51dH9SQxJDkA3oy1t7+1PwJ0G+C97b9uP
+	H9PH9CNLRvGpUj/L1U1c+3ijL7GqoxN9IuAyKNoCq+g0dSsspArY9BAAQoY0IDGZ
+	aMUIcYqAsPduqP/1q/d44e4WmJp5eGk7Ybu2GehVKcwqtwnUkITZinc8x6I1uuOH
+	yqRuOcLEnWYL8ODZVNJkg==
+X-ME-Sender: <xms:Aax7aeWS-lIvTJN2WFNH-JLygTLYjfzWr_LPUwvHHTeGI7WKHxOglA>
+    <xme:Aax7aQnByE7SA_ChI5cZ10Y75OqJZ4U5ywItwvklFQhcAbTs7MZKRN8vI57uUQLJ7
+    RRHDf5N5ThKPYD1tpXkerCJjtcv8W6ExDDn50E4iZim5JkKOqELug>
+X-ME-Received: <xmr:Aax7adOv9D6PTYAKA3cIs749ROzqde0UwDkgcX44bU8ArNDe67ezW-pry6M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduieeileeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfofggtgfgsehtqhertdertdejnecuhfhrohhmpeetlhgvgicu
+    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeetuefgleefhfdvueegffdtffevhfffgfffiedutdetgffhheejtdekfeek
+    ieehgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghlvgigsehshhgriigsohhtrdhorhhg
+    pdhnsggprhgtphhtthhopedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepug
+    hmrghtlhgrtghksehgohhoghhlvgdrtghomhdprhgtphhtthhopehrughunhhlrghpsehi
+    nhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepthgvughlohhgrghnsehfsgdrtghomh
+    dprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghn
+    rghnthgrsehgohhoghhlvgdrtghomhdprhgtphhtthhopegrmhgrshhtrhhosehfsgdrtg
+    homhdprhgtphhtthhopehkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
+    oheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:Aax7aYJ_HHdpOwnUcx3pM__qj8vWsJWR7-9MmuB9ptXphqJayxXv_Q>
+    <xmx:Aax7aX3YAyPX45O0OaCPFUbT24K1PnR4f52bm9Yr4m-KCJFHKNxzEw>
+    <xmx:Aax7aUUB2LioUGNPEx92oplF9ZTTrNEcEWrQZlXfGto5SGlQoeY_TA>
+    <xmx:Aax7aRPMBr62WZQJTQutZa3_uwndURAe1rpe2D5YhA5XYk-3jukGUA>
+    <xmx:Aqx7aXHY0v-Z3_2ZWr_yDsuMNCLPkovj3iODpi1O3-b3zXJwLDJc0PmU>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 29 Jan 2026 13:50:41 -0500 (EST)
+Date: Thu, 29 Jan 2026 11:50:39 -0700
+From: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>, Ted Logan <tedlogan@fb.com>, Shuah
+ Khan <shuah@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, Alex
+ Mastro <amastro@fb.com>, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kernel test
+ robot <lkp@intel.com>
+Subject: Re: [PATCH] vfio: selftests: fix format conversion compiler warning
+Message-ID: <20260129115039.10fe3c76@shazbot.org>
+In-Reply-To: <CALzav=cWEoydGBpf4j5gPWy0TzLoAPP3YeG3VocbeEzytHTFrw@mail.gmail.com>
+References: <20260128183750.1240176-1-tedlogan@fb.com>
+	<CALzav=dMhycS2iBxkhPCz3tMUKxkfgr1dCLFGYzGuXZCeYhijw@mail.gmail.com>
+	<9d992d4a-1aea-42a7-aa79-4ede80293f9b@infradead.org>
+	<CALzav=cWEoydGBpf4j5gPWy0TzLoAPP3YeG3VocbeEzytHTFrw@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Mark Brown <broonie@kernel.org> writes:
+On Wed, 28 Jan 2026 11:21:52 -0800
+David Matlack <dmatlack@google.com> wrote:
 
-> On Thu, Jan 29, 2026 at 04:39:33PM +0000, Alex Benn=C3=A9e wrote:
->> Mark Brown <broonie@kernel.org> writes:
->
->> > Currently when deciding if we need to save FFR when in streaming mode =
-prior
->> > to EFI calls we check if FA64 is supported by the system. Since KVM gu=
-est
->> > support will mean that FA64 might be enabled and disabled at runtime s=
-witch
->> > to checking if traps for FA64 are enabled in SMCR_EL1 instead.
->
->> This is conflicting with the now merged 63de2b3859ba1 (arm64/efi: Remove
->> unneeded SVE/SME fallback preserve/store handling) so I think this patch
->> can now be dropped?
->
-> Yes, this should go away in the next rebase.
+> On Wed, Jan 28, 2026 at 11:12=E2=80=AFAM Randy Dunlap <rdunlap@infradead.=
+org> wrote:
+> > On 1/28/26 11:06 AM, David Matlack wrote: =20
+> > > On Wed, Jan 28, 2026 at 10:38=E2=80=AFAM Ted Logan <tedlogan@fb.com> =
+wrote: =20
+> > >>
+> > >> Use the standard format conversion macro PRIx64 to generate the
+> > >> appropriate format conversion for 64-bit integers. Fixes a compiler
+> > >> warning with -Wformat on i386.
+> > >>
+> > >> Signed-off-by: Ted Logan <tedlogan@fb.com>
+> > >> Reported-by: kernel test robot <lkp@intel.com>
+> > >> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-=
+lkp@intel.com/ =20
+> > >
+> > > Thanks for the patch.
+> > >
+> > > I've been seeing these i386 reports as well. I find the PRIx64, etc.
+> > > format specifiers make format strings very hard to read. And I think
+> > > there were some other issues when building VFIO selftests with i386
+> > > the last time I tried.
+> > >
+> > > I was thinking instead we should just not support i386 builds of VFIO
+> > > selftests. But I hadn't gotten around to figuring out the right
+> > > Makefile magic to make that happen. =20
+> >
+> > There are other 32-bit CPUs besides i386.
+> > Or do only support X86? =20
+>=20
+> At this point I would only call x86_64 and arm64 as supported. At
+> least that is all I have access to and tested.
+>=20
+> If there is legitimate desire to run these tests on 32-bit CPUs, then
+> we can support it.
+>=20
+> Alex, do you test on 32-bit CPUs?
 
-Everything else applies cleanly though so thats good ;-)
+No, I haven't tested 32-bit in a very long time.  I'd like to think it
+works, but I'm not aware of any worthwhile use case.  Thanks,
 
---=20
-Alex Benn=C3=A9e
-Virtualisation Tech Lead @ Linaro
+Alex
