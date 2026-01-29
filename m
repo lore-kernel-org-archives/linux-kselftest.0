@@ -1,107 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03142315D31;
-	Thu, 29 Jan 2026 19:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B135C35A957
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 20:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769714651; cv=none; b=Mj2vlUCHb1Ih0gsu0yxtH3O2zYkHOiZnEJ19cNJUfLfmTSGH/AhhnLxUoWM4hZpjscAFKUBPvGY4HtN9EemleX5gMSZKhR2qOp/o1vEQpTbPIZsBB6DP7Sund1my82QDwna42aWo+nmYRhfBxG+lDMhGtuA2sSUlJFDvqI1/usc=
+	t=1769720242; cv=none; b=du19e+gyyGZIV4h7eah0I8AAvwNhWvzvRQeK/iX+AiaEmbwjtzcVD9Ea/QxnvNAKPNVbNmWrPd6StmKC/CFjFlZyk5dWFZ8UADvLXHssGIRZv1q6YPhtkSaekadIgOwv7IH0EjfjdUn0Tf/LsRhOsGXnY38+AQMC0CG4WpO7c40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769714651; c=relaxed/simple;
-	bh=NYrKe3jSMM7YRKmWugfiByo4IRoIPSw7w1LnB+9W8sI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=npu9LH2ESZwNPEt615cvl3uEjwcjbLN1D5w7bJXH+cC169qgrmhfGFZ4QkEr9kSb/wQGaD6W9X3p6qi0xaKRDilwO4VGrnXDvBt40XFRpcFvz1Tpqrh//zXOJsPe9rxuMwmBGvWt7frtoIL6WxWeQZI/s8//o1HJaFTc+HK9cKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ntlPkeaS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769720242; c=relaxed/simple;
+	bh=p4FTC5ZyH+C3t13NMpOGBz9eFYM/+qAG9LyXQfJNC38=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=uSb2kfW1wPaYBcyX9Rn/7DXXbZQU90u1U8CITDmNwPtU7tRQTHypwfWvekOJGw2jezcOVT8tzC7lRHy9tU5PmHHZSA8QRto1hsFBX1JV/0ZL4PuQUztJLGFEpVbYdQFtYYhksF5RtjUu+DMkDKm9bXKgmdEqM0xR/li58BYADr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZT5DwTai; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ft5UpGEu; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntlPkeaS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3188EC19421;
-	Thu, 29 Jan 2026 19:24:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769714648;
-	bh=NYrKe3jSMM7YRKmWugfiByo4IRoIPSw7w1LnB+9W8sI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ntlPkeaSTCbyRku81zy+RjJ2WscgFB5SDW/kpckO/CaKkZf0pZgTeRr+gR19NFLjt
-	 DLa1plmFTt+WQy/7TEJ17M58ArZ9X89OosZoxj009VLNApSfJJYsDuN1JWl4slt/mv
-	 vXS4f1G49wQlE9A4EhsV+DGJCY9CgMi368r7G4sf6hR0rgo8k6Xs79RfBpR6j3NvzL
-	 sAr8w4auI44rPqcYOwJCwx4r+Oe/dHxQ7JcKOwsI2v3dJMZGXKr7MtghqpZtLYKWYx
-	 unX5posTJOx1Zd7mUOJCvj8wZD2a/vRgRMqGUIH5XSBs7DDW1C5FYWE3z/kfKe+dig
-	 ca/6ABF2LFlCw==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Thu, 29 Jan 2026 20:23:39 +0100
-Subject: [PATCH net-next 6/6] selftests: mptcp: connect: cover splice mode
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZT5DwTai";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ft5UpGEu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769720239;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/QG3wvjCSAd8hZsGbKuvepZVeOKrzgGWIR2Hdb2A8lo=;
+	b=ZT5DwTaiqJqrvMcFGAR6vZtpt4VFyPD2LOp79CiLj8AxCAayA5DEDs+2cO7+NoF8qSXzo5
+	wwmEFd958CXbqXcw9m4JLkzPI8iK5YkD3g+cdSh+alwPDfleHyW3EkBM0ieZt7NDX4Ipt3
+	vr2O29izg0wMKGZaOGwEtqfGOc2zA6U=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-652-mJf7jTmcNOGYGI9cagPimw-1; Thu, 29 Jan 2026 15:57:18 -0500
+X-MC-Unique: mJf7jTmcNOGYGI9cagPimw-1
+X-Mimecast-MFC-AGG-ID: mJf7jTmcNOGYGI9cagPimw_1769720238
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c6deddd7f7so363793985a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 12:57:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769720238; x=1770325038; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/QG3wvjCSAd8hZsGbKuvepZVeOKrzgGWIR2Hdb2A8lo=;
+        b=Ft5UpGEuLbwdGSkVIPjEfpzx4urdH220iJox5JZ2B3V2Ib1ISQSgKU50NDD0hz2ABa
+         QD6fY+wi0TWItaZZaNGjTE2Bvhdunqs7upnX4f4iQhvpqFAPHd0XDg1R4RuGHsPdqjyk
+         iYQzGnjlfCOK8ISaduWxj2wOxb3aDZpkWGyD5JCQXwZliO7dZ9ZaEE4SBiZCBujpTX5n
+         EChL+CHc8KIKwxwJA8L2qon6moWSRGO8SzsPXnx78uhZPVynOXkbC3NR3kQK36Id0h1W
+         jhBJ6Zot4HoITChaReT2Djozc1xu3Rh7hSsZz86JyIOzUD/Abt1WOg41HfSmei64TIq1
+         k2aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769720238; x=1770325038;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/QG3wvjCSAd8hZsGbKuvepZVeOKrzgGWIR2Hdb2A8lo=;
+        b=nZXKjx0fJJFJHwB/7cPmlNoPvIsEVXS6B1eCI+QJQwBxlQ/5RuNwwNhlnBq5WGd1fd
+         u0Z+xCCha/AfPNHT3E2+EoUEtNKnWR7QduVG5JdBN2OtiXrGh3gCPyXm3QYT5QSj8xNU
+         CdJeIm202+PUWl8yeeABKq0zJtsn9CD7fl/oRQqiqb0xZbHYTXiaTskf4Xdc+vuzK7Ss
+         VmYBLDMxBP1rZ/yutekravmyOWOnZ8Ru/KpiWxjdC7JoA5IYqhbK2kMYhGwTGXIZKMXh
+         Ze5D+OdpMSyvE7XHGj9cCWklZK6RY5i5d3GEmoyeZPfdrqXGwmMUeNFGwrsN2vn3aL5p
+         K28g==
+X-Forwarded-Encrypted: i=1; AJvYcCWNDUYZjuJ4cKaTOt8/lKGGLb/VlCjDc5jZV4FKI7Fp6far8FoF8ZK+WLC1M2vXjWVLHw9b2h0k9TMRZeY+/hQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywid80yJmfQxJzKDnazx+ahy/6ekLCgxQSjgGpcw+D6TufYUg4r
+	OYpL5mNbrmJiUVw3gXDj8qKP880kJuIxp6eHwvbEGgLjrS77fjml4tIgEN3CbngfxgU8K/y6fSo
+	Uq4ih4SJ9XJXlUQxNgVGezVDsPl6TsNjXkb1iBWfhJJG1/JoiyJcVJjSMLkNVbmyjLVCddg==
+X-Gm-Gg: AZuq6aJLtUl67Xhwpwy6v7GPPjbrH2RQrEBf/Zv2/H/7l/bRl/nELXkpwj+vx/5Xu5M
+	znIwt/2xAALQ943jL23XqsE+4Cse8CBs3YcQaFLlpBvK/y2daANQEhcz5FUWo7EW4OWFK0UNhuV
+	TTC83z/cKpEfoRZOHDH4rpm6tJHMCF+ls5TpF95QLrALqANvjMvq9bEFRJJdUHxlAUg1fEQGJdl
+	dS4pabc1oZ0792/OdMQUFCEhaOcFkTFJW8Vsg2ohiP4rCEap3PYhjOHvTOadjUR8Wsd30L9WnN6
+	lTDNjsLNzPuyDuYoGJdHQfHt0/1nCGYQZ4ZLPJYmNe7gtzvUwk3Edq2pXVaoVezIwQXT3p9qva5
+	33qfjBylDa9QVfkD9OJU32QWzSM+gZje4JjMd+BccuIiTvE70+u6sattG
+X-Received: by 2002:a05:620a:4154:b0:8b2:e1d7:ca6a with SMTP id af79cd13be357-8c9eb31574bmr130735485a.75.1769720237903;
+        Thu, 29 Jan 2026 12:57:17 -0800 (PST)
+X-Received: by 2002:a05:620a:4154:b0:8b2:e1d7:ca6a with SMTP id af79cd13be357-8c9eb31574bmr130732385a.75.1769720237466;
+        Thu, 29 Jan 2026 12:57:17 -0800 (PST)
+Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c711b95e4esm536422085a.15.2026.01.29.12.57.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jan 2026 12:57:16 -0800 (PST)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <be3ca35e-ec22-47e7-8507-c637fbb39d51@redhat.com>
+Date: Thu, 29 Jan 2026 15:57:15 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH/for-next 2/2] cgroup/cpuset: Introduce a new top level
+ isolcpus_update_mutex
+To: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260128044251.1229702-1-longman@redhat.com>
+ <20260128044251.1229702-3-longman@redhat.com>
+ <08c3fad6-b881-4089-b081-bde6efbafbd2@huaweicloud.com>
+ <8fb3aab5-ba0a-4523-a404-5643b8a749c9@huaweicloud.com>
+Content-Language: en-US
+In-Reply-To: <8fb3aab5-ba0a-4523-a404-5643b8a749c9@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260129-net-next-mptcp-splice-v1-6-994cac40daa0@kernel.org>
-References: <20260129-net-next-mptcp-splice-v1-0-994cac40daa0@kernel.org>
-In-Reply-To: <20260129-net-next-mptcp-splice-v1-0-994cac40daa0@kernel.org>
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, David Ahern <dsahern@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1570; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=8UGJgd2vetfhMEQYLqhsyCyu0GJ8G+zo8jWjkOXYN3c=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKrNx/pYfuYbus4x+zeqeTM7OMxVzUnPP9xmPNxlfIuz
- g0fS62udJSyMIhxMciKKbJIt0Xmz3xexVvi5WcBM4eVCWQIAxenAExk+3GGfzpKRV8UjG9N+ZqT
- tL5iNduzZZ51N04c3aTodPeCkLlp4hGG/7V5Uwv69Bsf8xQfZdnTMJ9d5fXck+ct7p6JfxTfFCJ
- wlhsA
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On 1/29/26 3:20 AM, Chen Ridong wrote:
+>
+> On 2026/1/29 16:01, Chen Ridong wrote:
+>>
+>> On 2026/1/28 12:42, Waiman Long wrote:
+>>> The current cpuset partition code is able to dynamically update
+>>> the sched domains of a running system and the corresponding
+>>> HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
+>>> "isolcpus=domain,..." boot command line feature at run time.
+>>>
+>>> The housekeeping cpumask update requires flushing a number of different
+>>> workqueues which may not be safe with cpus_read_lock() held as the
+>>> workqueue flushing code may acquire cpus_read_lock() or acquiring locks
+>>> which have locking dependency with cpus_read_lock() down the chain. Below
+>>> is an example of such circular locking problem.
+>>>
+>>>    ======================================================
+>>>    WARNING: possible circular locking dependency detected
+>>>    6.18.0-test+ #2 Tainted: G S
+>>>    ------------------------------------------------------
+>>>    test_cpuset_prs/10971 is trying to acquire lock:
+>>>    ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at: touch_wq_lockdep_map+0x7a/0x180
+>>>
+>>>    but task is already holding lock:
+>>>    ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
+>>>
+>>>    which lock already depends on the new lock.
+>>>
+>>>    the existing dependency chain (in reverse order) is:
+>>>    -> #4 (cpuset_mutex){+.+.}-{4:4}:
+>>>    -> #3 (cpu_hotplug_lock){++++}-{0:0}:
+>>>    -> #2 (rtnl_mutex){+.+.}-{4:4}:
+>>>    -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
+>>>    -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
+>>>
+>>>    Chain exists of:
+>>>      (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
+>>>
+>>>    5 locks held by test_cpuset_prs/10971:
+>>>     #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
+>>>     #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x260/0x5f0
+>>>     #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b6/0x5f0
+>>>     #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at: cpuset_partition_write+0x77/0x130
+>>>     #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
+>>>
+>>>    Call Trace:
+>>>     <TASK>
+>>>       :
+>>>     touch_wq_lockdep_map+0x93/0x180
+>>>     __flush_workqueue+0x111/0x10b0
+>>>     housekeeping_update+0x12d/0x2d0
+>>>     update_parent_effective_cpumask+0x595/0x2440
+>>>     update_prstate+0x89d/0xce0
+>>>     cpuset_partition_write+0xc5/0x130
+>>>     cgroup_file_write+0x1a5/0x680
+>>>     kernfs_fop_write_iter+0x3df/0x5f0
+>>>     vfs_write+0x525/0xfd0
+>>>     ksys_write+0xf9/0x1d0
+>>>     do_syscall_64+0x95/0x520
+>>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>>
+>>> To avoid such a circular locking dependency problem, we have to
+>>> call housekeeping_update() without holding the cpus_read_lock()
+>>> and cpuset_mutex. One way to do that is to introduce a new top level
+>>> isolcpus_update_mutex which will be acquired first if the set of isolated
+>>> CPUs may have to be updated. This new isolcpus_update_mutex will provide
+>>> the need mutual exclusion without the need to hold cpus_read_lock().
+>>>
+> When I reviewed Frederic's patches, I concerned about this issue. However, I was
+> not certain whether any flush worker would need to acquire cpu_hotplug_lock or
+> cpuset_mutex.
+>
+> Despite this warning, I do not understand how wq_completion would need to
+> acquire cpu_hotplug_lock and cpuset_mutex.
+>
+> The reason I want to understand how wq_completion acquires cpu_hotplug_lock or
+> cpuset_mutex is to determine whether isolcpus_update_mutex is truly necessary.
+> As I mentioned in my previous email, I am concerned about a potential
+> use-after-free (UAF) issue, which might imply that isolcpus_update_mutex is
+> required in most places that currently acquire cpuset_mutex, with the possible
+> exception of the hotplug path?
 
-The "splice" alternate mode for mptcp_connect.sh/.c is available now,
-this patch adds mptcp_connect_splice.sh to test it in the MPTCP CI by
-default.
+A circular lock dependency can invoke more than 2 tasks/parties. In this 
+case, the task that hold wq_completion does not need to acquire 
+cpu_hotplug_lock. If a worker that flushes a work function required for 
+the completion to finish and it happens to acquire cpu_hotplug_lock with 
+another task trying to acquire cpus_write_lock in the interim, the 
+worker will wait there for the write lock to be released which will not 
+happen until the original task that calls flush_workqueue() release its 
+read lock. In essence, it is a deadlock.
 
-Note that this mode is also supported by stable kernel versions, but
-optimised in this patch series.
-
-Suggested-by: Matthieu Baerts <matttbe@kernel.org>
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
- tools/testing/selftests/net/mptcp/Makefile                | 1 +
- tools/testing/selftests/net/mptcp/mptcp_connect_splice.sh | 5 +++++
- 2 files changed, 6 insertions(+)
-
-diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
-index 4dd6278cd3dd..22ba0da2adb8 100644
---- a/tools/testing/selftests/net/mptcp/Makefile
-+++ b/tools/testing/selftests/net/mptcp/Makefile
-@@ -11,6 +11,7 @@ TEST_PROGS := \
- 	mptcp_connect_checksum.sh \
- 	mptcp_connect_mmap.sh \
- 	mptcp_connect_sendfile.sh \
-+	mptcp_connect_splice.sh \
- 	mptcp_join.sh \
- 	mptcp_sockopt.sh \
- 	pm_netlink.sh \
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect_splice.sh b/tools/testing/selftests/net/mptcp/mptcp_connect_splice.sh
-new file mode 100755
-index 000000000000..241254a966c9
---- /dev/null
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect_splice.sh
-@@ -0,0 +1,5 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+MPTCP_LIB_KSFT_TEST="$(basename "${0}" .sh)" \
-+	"$(dirname "${0}")/mptcp_connect.sh" -m splice "${@}"
-
--- 
-2.51.0
+Cheers,
+Longman
 
