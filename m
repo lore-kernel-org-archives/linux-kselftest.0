@@ -1,216 +1,381 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1A737D11F
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 07:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD33153BE9;
+	Thu, 29 Jan 2026 08:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769671898; cv=none; b=LLvM/AVU7++y3jfLGzKa3/HjpbN1OUJ+u5/jpzrF6GqBcaMpucpRkUx83BprJUx0uYBeRnQ2pf2um8szQhMaj7q1xpeB4TtGZqSSqzqEIdh10HKQjfq7a/A1+NMUxZ2TAARa7xG4/vWfFqSHdVgQWZeSE2wyU6K5j21zEnQn0ig=
+	t=1769673700; cv=none; b=hnCvVpTJ3GVlFMji9g2FzWFqPWlRRAiAvzsrZRbDbFgsGYK1kX/7u3/X9vvqnhZs1A8i4cnH1/+02mi+igTdS+KDh8Qa1IKMrLgoNLUvSCFG2Y0rudZeDMi7iyLJWAzfEzmJaJakD/5iXJdNqF4DFxsvX9zjMYaFVlPoc4bV0oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769671898; c=relaxed/simple;
-	bh=Y6op64SH3HVRwLLGtoxME3mldm3/W0c1FqQmgPaP16k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KtHQGjaCd8H6WLUp2+SlrHQ4W3kryk9HMcUgkpZD8HGioVrDvAVBzDfFxnu1QZj8evnNjZW0WHxelhYQjkylEuZfLB/R5pTpd71VpPXHowxspdw7DvD93jtECtcwvjQGfdfLSenfIYgBK1e84T4gebdOnj4huaIXg88zW9AhPd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JqlKmiu4; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JqlKmiu4"
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-4042f55de3aso477087fac.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 23:31:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769671895; x=1770276695; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M3hNaVpAB+vi7bZ5p4r2BEr0xFTlYHYJVlfyEjZdNd0=;
-        b=JqlKmiu42rjPUESJkCQLR0nL1cfkRQZxEWu8YU9SnBmhGtGtxpWO9sG50N/Fs8JdlL
-         bHK+Muh4OQA6UFUYwmEt7sTrqbGlPQZrYmSBhsW0PrV2om8wBy4vr/KjX5+JnaXE76yL
-         nNQq7xVS5RHvk00X6v9auGJ3IletGgRAGHXiCzNEJ87uKhm37GYygRKR7Q7CX1kVJN6c
-         umgPZIIlK33OrWGFHQfAQAAM8fVjzbdHFS7LIwQ56oS9PEj8KELOgR7n9Ll6AAVAWZJv
-         02RCgQB0/RX7c7eIAgz8MoDWYBNEL6gycEnByJzGIawSHp7U7zbIPS83PfHQ7MXznXJW
-         CqRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769671895; x=1770276695;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=M3hNaVpAB+vi7bZ5p4r2BEr0xFTlYHYJVlfyEjZdNd0=;
-        b=ujDwZkA+5IC5Xt/mQNvztnOFT4yk3bWuWBDu07UDfJbNCYpIJ1Plhxo2p5gormQGa/
-         3mYYl6/O9OhjimZlUlUxZPcEAN0sO/JVAP4JBUSfOvxGZe3XnpmSxvsh7mf21fbgTSWu
-         CU7Zhh6sARGoiPK/q5Oauy8IgjuLzTJn/F8E20hun6Y0XCUAioteL4vwGIBaSAPeCLz+
-         FfB2IlvtB7rQB8DVVlXJ8uNVPuUPEpaxTZWQR7bW+PEPF+3yd5gssn8WyOkqLGUB3QOF
-         L7HyXzkZoZxqi+XZNLPPxnJl6/M0sAg0CxIuTqoF35Org8sxJhQxXj/PjEM1+FHrTD1c
-         d1rw==
-X-Forwarded-Encrypted: i=1; AJvYcCWfQ5EIckGIBNUHhFrZYXfioUpCK7ha4mBVuWSUPyloZefN/ffTHJGd5xwkQg5yQWN3P4/1Fwv5mO/SyQv8T30=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI1Vtywi31e7a2vvW2K+oblWdrXpy4K3pwJqAr0JtBbNCzV+zG
-	a+jhtD8VXAw8LOQILNebfv6I5q1LWuk8+35OT8VJtStMtuTgkRTufSuB
-X-Gm-Gg: AZuq6aK2KgrV6ZdE6kEh4TIEDxmAheiuTwNgSE03hDp4KEc8rTOnkRhM0G7Ufl0qLpg
-	RNoD1p1IK3ZWsplq8ufD5ObTxeKERa3qnJodmXEPMMLaxzPvlZ0wwijGTB36xadH0+wJ62BdqQW
-	bqzSYgAbJU/xfWeuEfPh3WuQT8V1GxIkUarMZCp+A18bp4c8aJqGlWYpAYlYAlcdud12genPWQU
-	JGk5AH18kioB/37BiGjXKHpWNHqvZBbB+Z0YwJZh1ZpgbbWPVd6nPrIyHKkFJiA27ZceUzq4Ljm
-	wkD7YLls+sqQvQMevDW3HIjai172fK3xbEc+j83uuQhimOFbON//MvsD6IgNrSTRVVIwBujK9iZ
-	Jy636zTiqdHKRyhCwaXT+xGvMUO7gSlq+PHDwPItV2YsMxgLivckO7a36xdosZ+5CXI8yCPeH6R
-	09tQcn96Q+6j4hS318hkcgu1O53rVx82zjANf3zXvrzrgtAagMmSU=
-X-Received: by 2002:a05:6871:b10:b0:409:6148:e23e with SMTP id 586e51a60fabf-4097fb7cc1dmr1086285fac.10.1769671895554;
-        Wed, 28 Jan 2026 23:31:35 -0800 (PST)
-Received: from godzilla (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-409570f1413sm3442581fac.2.2026.01.28.23.31.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 23:31:35 -0800 (PST)
-From: Jim Cromie <jim.cromie@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: Jim Cromie <jim.cromie@gmail.com>,
-	Jason Baron <jbaron@akamai.com>,
-	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
-	Louis Chauvet <louis.chauvet@bootlin.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Dave Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org,
-	Petr Mladek <pmladek@suse.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-doc@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v9 29/32] selftests-dyndbg: add test_mod_submod
-Date: Thu, 29 Jan 2026 00:29:15 -0700
-Message-ID: <20260129072932.2190803-30-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260129072932.2190803-1-jim.cromie@gmail.com>
-References: <20260129072932.2190803-1-jim.cromie@gmail.com>
+	s=arc-20240116; t=1769673700; c=relaxed/simple;
+	bh=4crL0eMoYfyWgf32g5NnasNFk28y3yXQB8C/jhcqjX0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hESf+le8D794h7b+ACOm0MJpaUcGtI/Igz4IH8HN2Vwnk+ccUwDPKhyAp4T3vG9hI0tGbA919Laf5m/TQ5jUWA2mlzY7TAGAQFnu2XVbOntmLN/WATNAyI2kmB3pQpNqxvTXM27GyCpVyB2De5aB16eoviwKV7aziBoa7daHYeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f1s692kM4zKHMjf;
+	Thu, 29 Jan 2026 16:01:21 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 199EE40576;
+	Thu, 29 Jan 2026 16:01:35 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgD3o_TdE3tpBAANFg--.37298S2;
+	Thu, 29 Jan 2026 16:01:34 +0800 (CST)
+Message-ID: <08c3fad6-b881-4089-b081-bde6efbafbd2@huaweicloud.com>
+Date: Thu, 29 Jan 2026 16:01:33 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH/for-next 2/2] cgroup/cpuset: Introduce a new top level
+ isolcpus_update_mutex
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260128044251.1229702-1-longman@redhat.com>
+ <20260128044251.1229702-3-longman@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260128044251.1229702-3-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgD3o_TdE3tpBAANFg--.37298S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3ur1fXFW8tr45ur18KryDKFg_yoW8Jry8uo
+	WSq395Cr1rJw1UAFZ8Arn7AFWrGw4kKw4fJr429wnrWF13ZF17Ca47J342vFy3Ww4YkF48
+	Za4Sq3yvvrWxtF1Un29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUY27kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+	e7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+	jIksgUUUUU=
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-This new test-fn runs 3 module/submodule modprobe scenarios, variously
-using both the generic dyndbg=<queries> modprobe arg, and the
-test-module's classmap-params to manipulate the test-mod*'s pr_debugs.
-In all cases, the current flag-settings are counted and tested vs
-expectations.
 
-The 3rd scenario recapitulates the DRM_USE_DYNAMIC_DEBUG=y failure.
 
-1. 2 modprobes (super then sub), with separate dyndbg=class-settings
-   check module specific flag settings
+On 2026/1/28 12:42, Waiman Long wrote:
+> The current cpuset partition code is able to dynamically update
+> the sched domains of a running system and the corresponding
+> HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
+> "isolcpus=domain,..." boot command line feature at run time.
+> 
+> The housekeeping cpumask update requires flushing a number of different
+> workqueues which may not be safe with cpus_read_lock() held as the
+> workqueue flushing code may acquire cpus_read_lock() or acquiring locks
+> which have locking dependency with cpus_read_lock() down the chain. Below
+> is an example of such circular locking problem.
+> 
+>   ======================================================
+>   WARNING: possible circular locking dependency detected
+>   6.18.0-test+ #2 Tainted: G S
+>   ------------------------------------------------------
+>   test_cpuset_prs/10971 is trying to acquire lock:
+>   ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at: touch_wq_lockdep_map+0x7a/0x180
+> 
+>   but task is already holding lock:
+>   ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
+> 
+>   which lock already depends on the new lock.
+> 
+>   the existing dependency chain (in reverse order) is:
+>   -> #4 (cpuset_mutex){+.+.}-{4:4}:
+>   -> #3 (cpu_hotplug_lock){++++}-{0:0}:
+>   -> #2 (rtnl_mutex){+.+.}-{4:4}:
+>   -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
+>   -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
+> 
+>   Chain exists of:
+>     (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
+> 
+>   5 locks held by test_cpuset_prs/10971:
+>    #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
+>    #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x260/0x5f0
+>    #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b6/0x5f0
+>    #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at: cpuset_partition_write+0x77/0x130
+>    #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
+> 
+>   Call Trace:
+>    <TASK>
+>      :
+>    touch_wq_lockdep_map+0x93/0x180
+>    __flush_workqueue+0x111/0x10b0
+>    housekeeping_update+0x12d/0x2d0
+>    update_parent_effective_cpumask+0x595/0x2440
+>    update_prstate+0x89d/0xce0
+>    cpuset_partition_write+0xc5/0x130
+>    cgroup_file_write+0x1a5/0x680
+>    kernfs_fop_write_iter+0x3df/0x5f0
+>    vfs_write+0x525/0xfd0
+>    ksys_write+0xf9/0x1d0
+>    do_syscall_64+0x95/0x520
+>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> 
+> To avoid such a circular locking dependency problem, we have to
+> call housekeeping_update() without holding the cpus_read_lock()
+> and cpuset_mutex. One way to do that is to introduce a new top level
+> isolcpus_update_mutex which will be acquired first if the set of isolated
+> CPUs may have to be updated. This new isolcpus_update_mutex will provide
+> the need mutual exclusion without the need to hold cpus_read_lock().
+> 
+> As cpus_read_lock() is now no longer held when
+> tmigr_isolated_exclude_cpumask() is called, it needs to acquire it
+> directly.
+> 
+> The lockdep_is_cpuset_held() is also updated to check the new
+> isolcpus_update_mutex.
+> 
 
-2. modprobe submod, supermod is auto-loaded
-   set supermod class-params
-   check expected enablements in super & submod
+I worry about the issue:
 
-3. modprobe super, with param=setting (like drm.debug=0x1ef)
-   modprobe submod
-   validate submod's class'd pr_debugs get properly enabled
+CPU1				CPU2
+rmdir
+css->ss->css_killed(css);			
+cpuset_css_killed
+				__update_isolation_cpumasks
+				cpuset_full_unlock
+css->flags |= CSS_DYING;
+css_clear_dir(css);
+...
+// offline and free do not
+// get isolcpus_update_mutex
+cpuset_css_offline
+cpuset_css_free
+				cpuset_full_lock
+				...
+				// UAF?
 
-The test uses multi-queries, with both commas and percents (to avoid
-spaces and quoting).  This is the main reason the test wasn't earlier
-in the patchset, closer to the classmap patches its validating.
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c        | 79 ++++++++++++++++++++++++-----------
+>  kernel/sched/isolation.c      |  4 +-
+>  kernel/time/timer_migration.c |  3 +-
+>  3 files changed, 57 insertions(+), 29 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 98c7cb732206..96390ceb5122 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -78,7 +78,7 @@ static cpumask_var_t	subpartitions_cpus;
+>  static cpumask_var_t	isolated_cpus;
+>  
+>  /*
+> - * isolated_cpus updating flag (protected by cpuset_mutex)
+> + * isolated_cpus updating flag (protected by isolcpus_update_mutex)
+>   * Set if isolated_cpus is going to be updated in the current
+>   * cpuset_mutex crtical section.
+>   */
+> @@ -223,29 +223,46 @@ struct cpuset top_cpuset = {
+>  };
+>  
+>  /*
+> - * There are two global locks guarding cpuset structures - cpuset_mutex and
+> - * callback_lock. The cpuset code uses only cpuset_mutex. Other kernel
+> - * subsystems can use cpuset_lock()/cpuset_unlock() to prevent change to cpuset
+> - * structures. Note that cpuset_mutex needs to be a mutex as it is used in
+> - * paths that rely on priority inheritance (e.g. scheduler - on RT) for
+> - * correctness.
+> + * CPUSET Locking Convention
+> + * -------------------------
+>   *
+> - * A task must hold both locks to modify cpusets.  If a task holds
+> - * cpuset_mutex, it blocks others, ensuring that it is the only task able to
+> - * also acquire callback_lock and be able to modify cpusets.  It can perform
+> - * various checks on the cpuset structure first, knowing nothing will change.
+> - * It can also allocate memory while just holding cpuset_mutex.  While it is
+> - * performing these checks, various callback routines can briefly acquire
+> - * callback_lock to query cpusets.  Once it is ready to make the changes, it
+> - * takes callback_lock, blocking everyone else.
+> + * Below are the three global locks guarding cpuset structures in lock
+> + * acquisition order:
+> + *  - isolcpus_update_mutex (optional)
+> + *  - cpu_hotplug_lock (cpus_read_lock/cpus_write_lock)
+> + *  - cpuset_mutex
+> + *  - callback_lock (raw spinlock)
+>   *
+> - * Calls to the kernel memory allocator can not be made while holding
+> - * callback_lock, as that would risk double tripping on callback_lock
+> - * from one of the callbacks into the cpuset code from within
+> - * __alloc_pages().
+> + * The first isolcpus_update_mutex should only be held if the existing set of
+> + * isolated CPUs (in isolated partition) or any of the partition states may be
+> + * changed when some cpuset control files are being written into. Otherwise,
+> + * it can be skipped. Holding isolcpus_update_mutex/cpus_read_lock or
+> + * cpus_write_lock will ensure mutual exclusion of isolated_cpus update.
+>   *
+> - * If a task is only holding callback_lock, then it has read-only
+> - * access to cpusets.
+> + * As cpuset will now indirectly flush a number of different workqueues in
+> + * housekeeping_update() when the set of isolated CPUs is going to be changed,
+> + * it may not be safe from the circular locking perspective to hold the
+> + * cpus_read_lock. So cpuset_full_lock() will be released before calling
+> + * housekeeping_update() and re-acquired afterward.
+> + *
+> + * A task must hold all the remaining three locks to modify externally visible
+> + * or used fields of cpusets, though some of the internally used cpuset fields
+> + * can be modified by holding cpu_hotplug_lock and cpuset_mutex only. If only
+> + * reliable read access of the externally used fields are needed, a task can
+> + * hold either cpuset_mutex or callback_lock.
+> + *
+> + * If a task holds cpu_hotplug_lock and cpuset_mutex, it blocks others,
+> + * ensuring that it is the only task able to also acquire callback_lock and
+> + * be able to modify cpusets.  It can perform various checks on the cpuset
+> + * structure first, knowing nothing will change. It can also allocate memory
+> + * without holding callback_lock. While it is performing these checks, various
+> + * callback routines can briefly acquire callback_lock to query cpusets.  Once
+> + * it is ready to make the changes, it takes callback_lock, blocking everyone
+> + * else.
+> + *
+> + * Calls to the kernel memory allocator cannot be made while holding
+> + * callback_lock which is a spinlock, as the memory allocator may sleep or
+> + * call back into cpuset code and acquire callback_lock.
+>   *
+>   * Now, the task_struct fields mems_allowed and mempolicy may be changed
+>   * by other task, we use alloc_lock in the task_struct fields to protect
+> @@ -256,6 +273,7 @@ struct cpuset top_cpuset = {
+>   * cpumasks and nodemasks.
+>   */
+>  
+> +static DEFINE_MUTEX(isolcpus_update_mutex);
+>  static DEFINE_MUTEX(cpuset_mutex);
+>  
+>  /**
+> @@ -302,7 +320,7 @@ void cpuset_full_unlock(void)
+>  #ifdef CONFIG_LOCKDEP
+>  bool lockdep_is_cpuset_held(void)
+>  {
+> -	return lockdep_is_held(&cpuset_mutex);
+> +	return lockdep_is_held(&isolcpus_update_mutex);
+>  }
+>  #endif
+>  
+> @@ -1294,9 +1312,8 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
+>  static void __update_isolation_cpumasks(bool twork);
+>  static void isolation_task_work_fn(struct callback_head *cb)
+>  {
+> -	cpuset_full_lock();
+> +	guard(mutex)(&isolcpus_update_mutex);
+>  	__update_isolation_cpumasks(true);
+> -	cpuset_full_lock();
+>  }
+>  
+>  /*
+> @@ -1338,8 +1355,18 @@ static void __update_isolation_cpumasks(bool twork)
+>  		return;
+>  	}
+>  
+> +	lockdep_assert_held(&isolcpus_update_mutex);
+> +	/*
+> +	 * Release cpus_read_lock & cpuset_mutex before calling
+> +	 * housekeeping_update() and re-acquiring them afterward if not
+> +	 * calling from task_work.
+> +	 */
+> +	if (!twork)
+> +		cpuset_full_unlock();
+>  	ret = housekeeping_update(isolated_cpus);
+>  	WARN_ON_ONCE(ret < 0);
+> +	if (!twork)
+> +		cpuset_full_lock();
+>  
+>  	isolated_cpus_updating = false;
+>  }
+> @@ -3196,6 +3223,7 @@ ssize_t cpuset_write_resmask(struct kernfs_open_file *of,
+>  		return -EACCES;
+>  
+>  	buf = strstrip(buf);
+> +	mutex_lock(&isolcpus_update_mutex);
+>  	cpuset_full_lock();
+>  	if (!is_cpuset_online(cs))
+>  		goto out_unlock;
+> @@ -3226,6 +3254,7 @@ ssize_t cpuset_write_resmask(struct kernfs_open_file *of,
+>  		rebuild_sched_domains_locked();
+>  out_unlock:
+>  	cpuset_full_unlock();
+> +	mutex_unlock(&isolcpus_update_mutex);
+>  	if (of_cft(of)->private == FILE_MEMLIST)
+>  		schedule_flush_migrate_mm();
+>  	return retval ?: nbytes;
+> @@ -3329,6 +3358,7 @@ static ssize_t cpuset_partition_write(struct kernfs_open_file *of, char *buf,
+>  	else
+>  		return -EINVAL;
+>  
+> +	guard(mutex)(&isolcpus_update_mutex);
+>  	cpuset_full_lock();
+>  	if (is_cpuset_online(cs))
+>  		retval = update_prstate(cs, val);
+> @@ -3502,6 +3532,7 @@ static void cpuset_css_killed(struct cgroup_subsys_state *css)
+>  {
+>  	struct cpuset *cs = css_cs(css);
+>  
+> +	guard(mutex)(&isolcpus_update_mutex);
+>  	cpuset_full_lock();
+>  	/* Reset valid partition back to member */
+>  	if (is_partition_valid(cs))
+> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+> index 3b725d39c06e..ef152d401fe2 100644
+> --- a/kernel/sched/isolation.c
+> +++ b/kernel/sched/isolation.c
+> @@ -123,8 +123,6 @@ int housekeeping_update(struct cpumask *isol_mask)
+>  	struct cpumask *trial, *old = NULL;
+>  	int err;
+>  
+> -	lockdep_assert_cpus_held();
+> -
+>  	trial = kmalloc(cpumask_size(), GFP_KERNEL);
+>  	if (!trial)
+>  		return -ENOMEM;
+> @@ -136,7 +134,7 @@ int housekeeping_update(struct cpumask *isol_mask)
+>  	}
+>  
+>  	if (!housekeeping.flags)
+> -		static_branch_enable_cpuslocked(&housekeeping_overridden);
+> +		static_branch_enable(&housekeeping_overridden);
+>  
+>  	if (housekeeping.flags & HK_FLAG_DOMAIN)
+>  		old = housekeeping_cpumask_dereference(HK_TYPE_DOMAIN);
+> diff --git a/kernel/time/timer_migration.c b/kernel/time/timer_migration.c
+> index 6da9cd562b20..244a8d025e78 100644
+> --- a/kernel/time/timer_migration.c
+> +++ b/kernel/time/timer_migration.c
+> @@ -1559,8 +1559,6 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
+>  	cpumask_var_t cpumask __free(free_cpumask_var) = CPUMASK_VAR_NULL;
+>  	int cpu;
+>  
+> -	lockdep_assert_cpus_held();
+> -
+>  	if (!works)
+>  		return -ENOMEM;
+>  	if (!alloc_cpumask_var(&cpumask, GFP_KERNEL))
+> @@ -1570,6 +1568,7 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
+>  	 * First set previously isolated CPUs as available (unisolate).
+>  	 * This cpumask contains only CPUs that switched to available now.
+>  	 */
+> +	guard(cpus_read_lock)();
+>  	cpumask_andnot(cpumask, cpu_online_mask, exclude_cpumask);
+>  	cpumask_andnot(cpumask, cpumask, tmigr_available_cpumask);
+>  
 
-With some tedium, the tests could be refactored to split out early
-tests which avoid multi-cmds, and test only the class-params.
-
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- .../dynamic_debug/dyndbg_selftest.sh          | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
-
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index 513f6cb1db1d..09937dca3056 100755
---- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -279,10 +279,83 @@ function test_percent_splitting {
-     ifrmmod test_dynamic_debug
- }
- 
-+function test_mod_submod {
-+    echo -e "${GREEN}# TEST_MOD_SUBMOD ${NC}"
-+    if [ $LACK_TMOD -eq 1 ]; then
-+	echo "SKIP - test requires test-dynamic-debug.ko"
-+	return
-+    fi
-+    ifrmmod test_dynamic_debug_submod
-+    ifrmmod test_dynamic_debug
-+    ddcmd =_
-+
-+    # modprobe with class enablements
-+    modprobe test_dynamic_debug \
-+	dyndbg=class,D2_CORE,+pf%class,D2_KMS,+pt%class,D2_ATOMIC,+pm
-+
-+    check_match_ct '\[test_dynamic_debug\]' 23 -r
-+    check_match_ct =pf 1
-+    check_match_ct =pt 1
-+    check_match_ct =pm 1
-+
-+    modprobe test_dynamic_debug_submod
-+    check_match_ct test_dynamic_debug_submod 23 -r
-+    check_match_ct '\[test_dynamic_debug\]' 23 -r
-+    check_match_ct test_dynamic_debug 46 -r
-+
-+    # no enablements propagate here
-+    check_match_ct =pf 1
-+    check_match_ct =pt 1
-+    check_match_ct =pm 1
-+
-+    # change classes again, this time submod too
-+    ddcmd class,D2_CORE,+mf%class,D2_KMS,+lt%class,D2_ATOMIC,+ml "# add some prefixes"
-+    check_match_ct =pmf 1
-+    check_match_ct =plt 1
-+    check_match_ct =pml 1
-+    #  submod changed too
-+    check_match_ct =mf 1
-+    check_match_ct =lt 1
-+    check_match_ct =ml 1
-+
-+    # now work the classmap-params
-+    # fresh start, to clear all above flags (test-fn limits)
-+    ifrmmod test_dynamic_debug_submod
-+    ifrmmod test_dynamic_debug
-+    modprobe test_dynamic_debug_submod # get supermod too
-+
-+    echo 1 > /sys/module/test_dynamic_debug/parameters/p_disjoint_bits
-+    echo 4 > /sys/module/test_dynamic_debug/parameters/p_level_num
-+    # 2 mods * ( V1-3 + D2_CORE )
-+    check_match_ct =p 8
-+    echo 3 > /sys/module/test_dynamic_debug/parameters/p_disjoint_bits
-+    echo 0 > /sys/module/test_dynamic_debug/parameters/p_level_num
-+    # 2 mods * ( D2_CORE, D2_DRIVER )
-+    check_match_ct =p 4
-+    echo 0x16 > /sys/module/test_dynamic_debug/parameters/p_disjoint_bits
-+    echo 0 > /sys/module/test_dynamic_debug/parameters/p_level_num
-+    # 2 mods * ( D2_DRIVER, D2_KMS, D2_ATOMIC )
-+    check_match_ct =p 6
-+
-+    # recap DRM_USE_DYNAMIC_DEBUG regression
-+    ifrmmod test_dynamic_debug_submod
-+    ifrmmod test_dynamic_debug
-+    # set super-mod params
-+    modprobe test_dynamic_debug p_disjoint_bits=0x16 p_level_num=5
-+    check_match_ct =p 7
-+    modprobe test_dynamic_debug_submod
-+    # see them picked up by submod
-+    check_match_ct =p 14
-+    ifrmmod test_dynamic_debug_submod
-+    ifrmmod test_dynamic_debug
-+}
-+
- tests_list=(
-     basic_tests
-+    # these require test_dynamic_debug*.ko
-     comma_terminator_tests
-     test_percent_splitting
-+    test_mod_submod
- )
- 
- # Run tests
 -- 
-2.52.0
+Best regards,
+Ridong
 
