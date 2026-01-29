@@ -1,119 +1,160 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9EA5313E21
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 01:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B35134EF11
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 01:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769649257; cv=none; b=ZkB/w9z8quECU23l16uBkUpM6WH9dYuM5BkKl0KlyQ8gPnlYuK5jhb7F3HS1oWuGNG1jMW4T+pCy0NiR+vACS/pllgl5MssBVEZudouaJoCILUOd5si+m8leVNY3e+tPWvYfyngWOh1E69cZfeoyPrWgebEEqwItKSCDUlBCGNM=
+	t=1769649383; cv=none; b=edtZOgYISS7j1FohghGJL1L7pgjdHJkQ2jyBFPkPoeV9V1WPj7Zr2f89iooej7eCsZT7x2KcLQr3aFNWnXdwuqfcQJ29BqxYJJ3rnUDMt2W7WNmWsoJs2KZPULk1hb1v6zA27LoSroS1zv6seZa9kMZy54rSv79HK2nIXNHWukA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769649257; c=relaxed/simple;
-	bh=JwUKXO1Ia8RWi17FWbKEtvJ2PKaprLgYC/IMbu+JgtA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kJWbsEV/Kbh5afq9//tzs4QeTSrBy2gMlJm+YCf5A4m94kP6Y7jguPcvcxUaAdXIhe9So3r3XNW8yDD8Ix1ezyXu0zM1JVo6z0vXQco16tTP1CSwHXlU+/kclAMNhKOKj6zBL2DJcAIkq4GbZi3fqF8OysYg/nmgH7GWy0y0zFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hvtxWaio; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769649383; c=relaxed/simple;
+	bh=nHJ7z1F0QJ+ff3YYPLezHicV71ohVDGuIQUyQzSTkzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NbnrojcSQMMWolc5G4jDX6UwcJ14ondqRD/gGaNiCFRKeSSIM/vtdg67s8GXYBHYN3lRhWeHEOpjUZ8sevOoM0ENHn9VagrhdI8ttHVYHlk4mWZiiJuOP5N0jPqHKokouUQNt3tyKcfXG2gjupAp1nqwO/r9Wc4OWl1PI03dxpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=JimtEvw/; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hvtxWaio"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769649243;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Dl/DTgnR2LWZ4WWPq9bsPwP22gj/Iby75/e7ptvtrsk=;
-	b=hvtxWaioRsELgv1IwyJU6puKmtAvyQMj4OSLRY2L32HSM1UQfDRs0nQHSXKsnMJxOM4nKW
-	mtUGgnKGS+jMfQJ2IAwfsiU/jkNrd/8M9cBlJpQrZiOy+uOk47up35mqf7/9UaPimaHqw3
-	Ml1BJn6Dp6m+/leKr496oZi1r8RS1FM=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: bpf@vger.kernel.org, Leon Hwang <leon.hwang@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Menglong Dong <menglong8.dong@gmail.com>,
- Leon Hwang <leon.hwang@linux.dev>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-Subject:
- Re: [PATCH bpf-next v2 3/3] bpf/selftests: Enable get_func_args and
- get_func_ip tests on arm64
-Date: Thu, 29 Jan 2026 09:13:49 +0800
-Message-ID: <6233558.lOV4Wx5bFT@7940hx>
-In-Reply-To: <20260128150112.8873-4-leon.hwang@linux.dev>
-References:
- <20260128150112.8873-1-leon.hwang@linux.dev>
- <20260128150112.8873-4-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="JimtEvw/"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-8c6a822068eso67213585a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 17:16:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1769649380; x=1770254180; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WReYS7VDfIh+dvxdrk0biwhaBbpxlirvLLAI4b8c7GA=;
+        b=JimtEvw/M9s1zQiNQoK5XBOJVKAPBC0ZPH+Ww+nhg7HM120zXzPPDFQ66dxw3qVIkh
+         41KFAv5+ldYueku3BLZMrAHudLNNK/pjzR325IvCVYgAjfezrdFp+Ypjnmcs8Z2WWpms
+         Hnkz7ru3rUgn6MmQTBlVKZp0y6quJVwOYGhjcKcvZIbHB6f3VZF4HrJ7ENAeKE+2Ukuy
+         zFMq8IZPJX1HkYQk1TQQorMGWwZZ6+bCDV3o+M0HD2kYBy6jefimyqAQy7F5U5BqRVtD
+         kUo6mdW+EKWp7Wa5NI1ztftQRXc17I8/6KEDYfze9hhVxHgoa/rcyB0qcWZAHLRDjYK9
+         vixQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769649380; x=1770254180;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WReYS7VDfIh+dvxdrk0biwhaBbpxlirvLLAI4b8c7GA=;
+        b=xTa9YZP2hf0GuXBrH86Ynlhg3kVsaySRexS17HJopeZbBAWJs2xnH5xnFcNxYLtRPu
+         W06iQh3l52X3MruEuQStrAjjJieOW9f2GCzQU0JtTCupekKYbjJGmeTt/5U0S7lNMnkn
+         bwhqIP7RMsvRFlyGa2CfEvrOpa9/6aD7j5lMQE3mmOUdS7+TzqiXO5fFMnacH++1cjZL
+         v0K4J6JabxdZnds6mwtTVdNazAXmBlBpAi4HpONYV5XeCGj4ncbOSuVGvuPcDIWxrqQD
+         mZEsDiBDYiWDSr+zABsvRN05ZoVOz27uImEWCHOVqGzSWUhPTYzP6RbSC1rnh6D2cijo
+         bfww==
+X-Forwarded-Encrypted: i=1; AJvYcCX9ogPda8EaK8iRMiRYU4hdjFrVBbfgnxecABtqp9vSwTtcqU7iU/ZFQsJ/EAPkwclD9HRze1Umjzdd0/VgsuI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKE+zZqFqbFK2zPX0mz2dZvvITWLdFm8ilZifNVsGJjNb0ck8j
+	tFK1//Vlg8F5FfdaM2VKVkus+idhDLGfvD1yP4kVv1cf1Gr0WNLLPmex+5QGgB9Idok=
+X-Gm-Gg: AZuq6aIayvQRKMiZrw7I33vJb5domzsqwVlcJdCOB2Chw5q/TTeZzDCi310orwaS0+w
+	Z0bVwB1Yeh5df4zs/xvPLi/Oy0nmyUfBlJtNushu652ElStGzRy75U/Rb9tVSJAqfc/hJ3CGdOS
+	coMNA8HhIKhcKm8EznbR5/8iFQMTDHBx9zRSihHAnFh1iq3mAqH807IoSZJS+i6vq8etoSE8bGe
+	wwq/Y68Buzl+vWXWfNl4nh27xfZ95a7GGzXVNPjKk662h7v87lmGGlaCZQj2TSoFrna8X2WIpog
+	I30YoJHHB4E1BVFquLGIuEZbRbwhIhd71GsdXnI01qYzLWPE0hg0Rkm8Ck+BNygfDBZaphx5uGn
+	OE4seitiTJN16Q+hnL/8Y2qMdv0HoebJUVHpT+aG3KXRTFvxt09vmnTbds7qMuXUB+C7JWqlsxI
+	qbVlJX5Y0JEsysI73Bp8sc4PPzcM7TWIPwMJIQryh+FiVrZCtaGDkBYfBW5BSZWftGrLY=
+X-Received: by 2002:a05:620a:d88:b0:8c5:2ce6:dca with SMTP id af79cd13be357-8c70b841159mr939733985a.6.1769649380018;
+        Wed, 28 Jan 2026 17:16:20 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c711d2ab04sm283038485a.25.2026.01.28.17.16.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 17:16:19 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1vlGdu-00000009gKo-3mMh;
+	Wed, 28 Jan 2026 21:16:18 -0400
+Date: Wed, 28 Jan 2026 21:16:18 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Ackerley Tng <ackerleytng@google.com>,
+	Alexey Kardashevskiy <aik@amd.com>, cgroups@vger.kernel.org,
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+	akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
+	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org,
+	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com,
+	david@redhat.com, dmatlack@google.com, erdemaktas@google.com,
+	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com,
+	hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com,
+	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com,
+	jack@suse.cz, james.morse@arm.com, jarkko@kernel.org,
+	jgowans@amazon.com, jhubbard@nvidia.com, jroedel@suse.de,
+	jthoughton@google.com, jun.miao@intel.com, kai.huang@intel.com,
+	keirf@google.com, kent.overstreet@linux.dev,
+	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
+	mail@maciej.szmigiero.name, maobibo@loongson.cn,
+	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
+	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com,
+	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au,
+	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es,
+	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com,
+	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com,
+	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz,
+	qperret@google.com, richard.weiyang@gmail.com,
+	rick.p.edgecombe@intel.com, rientjes@google.com,
+	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org,
+	shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com,
+	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com,
+	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com,
+	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com,
+	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org,
+	wyihan@google.com, xiaoyao.li@intel.com, yan.y.zhao@intel.com,
+	yilun.xu@intel.com, yuzenghui@huawei.com, zhiquan1.li@intel.com
+Subject: Re: [RFC PATCH v1 05/37] KVM: guest_memfd: Wire up
+ kvm_get_memory_attributes() to per-gmem attributes
+Message-ID: <20260129011618.GA2307128@ziepe.ca>
+References: <cover.1760731772.git.ackerleytng@google.com>
+ <071a3c6603809186e914fe5fed939edee4e11988.1760731772.git.ackerleytng@google.com>
+ <07836b1d-d0d8-40f2-8f7b-7805beca31d0@amd.com>
+ <CAEvNRgEuez=JbArRf2SApLAL0usv5-Q6q=nBPOFMHrHGaKAtMw@mail.gmail.com>
+ <20260129003753.GZ1641016@ziepe.ca>
+ <aXqx3_eE0rNh6nP0@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aXqx3_eE0rNh6nP0@google.com>
 
-On 2026/1/28 23:01 Leon Hwang <leon.hwang@linux.dev> write:
-> Allow get_func_args, and get_func_ip selftests to run on arm64.
+On Wed, Jan 28, 2026 at 05:03:27PM -0800, Sean Christopherson wrote:
 
-Hi, Leon.
+> For a dmabuf fd, the story is the same as guest_memfd.  Unless private vs. shared
+> is all or nothing, and can never change, then the only entity that can track that
+> info is the owner of the dmabuf.  And even if the private vs. shared attributes
+> are constant, tracking it external to KVM makes sense, because then the provider
+> can simply hardcode %true/%false.
 
-I think you missed the fsession_test.c, right? You need to
-enable the test_fsession_test() for arm64 too. Therefore,
-the title of this patch maybe:
-    bpf/selftests: Enable fsession tests on arm64
+Oh my I had not given that bit any thought. My remarks were just about
+normal non-CC systems.
 
-Thanks!
-Menglong Dong
+So MMIO starts out shared, and then converts to private when the guest
+triggers it. It is not all or nothing, there are permanent shared
+holes in the MMIO ranges too.
 
-> 
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  tools/testing/selftests/bpf/progs/get_func_args_test.c | 2 +-
->  tools/testing/selftests/bpf/progs/get_func_ip_test.c   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/get_func_args_test.c b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-> index 0a3236a7a109..180ba5098ca1 100644
-> --- a/tools/testing/selftests/bpf/progs/get_func_args_test.c
-> +++ b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-> @@ -167,7 +167,7 @@ int BPF_PROG(tp_test2)
->  }
->  
->  __u64 test7_result = 0;
-> -#ifdef __TARGET_ARCH_x86
-> +#if defined(bpf_target_x86) || defined(bpf_target_arm64)
->  SEC("fsession/bpf_fentry_test1")
->  int BPF_PROG(test7)
->  {
-> diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> index 65f7e1f182bf..43ff836a8ed8 100644
-> --- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> +++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-> @@ -106,7 +106,7 @@ int BPF_URETPROBE(test8, int ret)
->  
->  __u64 test9_entry_result = 0;
->  __u64 test9_exit_result = 0;
-> -#ifdef __TARGET_ARCH_x86
-> +#if defined(bpf_target_x86) || defined(bpf_target_arm64)
->  SEC("fsession/bpf_fentry_test1")
->  int BPF_PROG(test9, int a)
->  {
-> -- 
-> 2.52.0
-> 
-> 
-> 
+Beyond that I don't know what people are thinking.
 
+Clearly VFIO has to revoke and disable the DMABUF once any of it
+becomes private. VFIO will somehow have to know when it changes modes
+from the TSM subsystem.
 
+I guess we could have a special channel for KVM to learn the
+shared/private page by page from VFIO as some kind of "aware of CC"
+importer.
 
+I suppose AMD needs to mangle the RMP when it changes, and KVM has to
+do that.
 
+I forget what ARM does, but I seem to recall there is a call to create
+a vPCI function and that is what stuffs the S2? So maybe KVM isn't
+even involved? (IIRC people were talking that something else would
+call the vPCI function but I haven't seen patches)
+
+No idea what x86 does beyond it has to unmap all the MMIO otherwise
+the machine crashes :P
+
+Oh man, what a horrible mess to even contemplate. I'm going to bed.
+
+Jason
