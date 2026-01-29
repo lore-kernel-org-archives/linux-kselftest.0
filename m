@@ -1,54 +1,54 @@
-Received: from mail-ua1-f73.google.com (mail-ua1-f73.google.com [209.85.222.73])
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE4336C0B1
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 23:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7122B36AB5F
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 23:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769729811; cv=none; b=qByRLFtlDSJhfaZegUVhuFlP2W6PE49Oi64Is591WF8fUJeLAnpTV0Q1aApCycETVBI0aNfhfe3n3fc80YHO5i9kdmPin6kr3d6KBIf5Rtb/+qsDk6kohPUigNrBQ7XoWxKOCjLAYIWkOz81PmUzTR/AtFmf4BkDWfgYtzmHrZY=
+	t=1769729849; cv=none; b=r5m6GoDOm3Jk20z2Hl0BcGsfQv2SRkyl1TMbx192YwA4yBegiL8Rw0TTouu4lJZhNwz9v8vEVVK5dgdiD1xh1O/6Gv7/WDnDVFHXRYbY/MjJ3+ZtbBeW1jxlbY0UOP3jX17oG2D1nJh3Ran14qQp4RNt8ZQ/pDtwzxbrYBbRZVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769729811; c=relaxed/simple;
-	bh=P2gomgDRGmJ4vLTkCMnRaUel1qN8UOZyfcbTRRVQbSk=;
+	s=arc-20240116; t=1769729849; c=relaxed/simple;
+	bh=qHC+qM9vQzWPKnzn+tAYv5l+c6MskpPE+ePAinyKV/8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DHwVY7VVohA9oCRNZX6I32L20XgiI5AFMoMg1Y4IGOYBLQRyew4DfBtbWo0161gjCxABR0AOyZZSsIrO0LT5bEN11TDhkIA0IgJasRAnLYpn5ASLoeLPOtLRsqPgZeGuI6n6+167BlpBogyWDaeA7CCShAeRP14t+Xg8fodzlTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NblwbJ69; arc=none smtp.client-ip=209.85.222.73
+	 To:Cc:Content-Type; b=fPKcqQWRlG5a+iwFaewMv9h1rtwXmPAf0YXljzCwdelOEqx0Ho1yawq4A9o/LJ1Oby8J7R91geITLFVKiXm1uq3hk0AvM7IlMQZnN8ljReUymeNrCP0OVEQN7m4GvXfagFihD0+k7rzi1VbRG5x8apY88fvi3ZXbukrxRYTKNKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v/UBQ19o; arc=none smtp.client-ip=74.125.82.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NblwbJ69"
-Received: by mail-ua1-f73.google.com with SMTP id a1e0cc1a2514c-9483c49a63fso4208378241.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 15:36:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v/UBQ19o"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-124a5098029so8202059c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 15:37:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769729809; x=1770334609; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1769729846; x=1770334646; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9edmz9F0+Ueeg69+oBnQppllXkvN4AaYJE9iZBV8Nzc=;
-        b=NblwbJ69fx2MkAnjBOVP7xZekR9hs2BR4TEbw2IxPD57txLUk4qpArM9P+ch9J6q8W
-         7dYAHI+W0MLlx6+ufJb+lyubOrLri9seqOp5fH+0YQ2mIUKUuF2fdcHbi4i1XOrsLY6o
-         6RImw8Gs5hFqOWqdzK/XN7+1OtlYKNHP1PjEPEBRYqq/MEqeBztPM1gP5ZobxWzsR0tN
-         hxMCWYJMLDWYCt6VBjs6TaPrYyWp2R7Oc9lal8VckNJcdCg+eix1/4W7xgr/zRkDwvtn
-         G4Pn1kbaQZT+XQGhXckfbfEghb9wWFWRBpQqpif5FYcF73qQw/FqTw9bFj7KTWelLNnp
-         6Sig==
+        bh=xtsoUbDwfLvbtoHg4zrUnWjIjv/OwLA41WjzQfN669k=;
+        b=v/UBQ19ofY45J3pQu297He88Xzzm2jE2KnW69FpJHpDYnPQ1lvgZ+cx/zUqjxdrG8t
+         n8IOMfhK5BsJNFhSeZQ/gfIzblqYLQ9csMJoMneTAym7Qtjw3zE2Ti4KzSQIrFUps2+N
+         7UQ2FPQW2JmeDZmiEAPHWQA6gUbTzt7E/7V38tzmWm9XBP3HPLyzI5427NhbJ1F0yyuK
+         4qhMawE551HtnlUI3rS+R8nI9bR/q65ieb46LyV+RNDSycl4yVl6RasDrlFORicaQ6xh
+         8zvxm93lqSnlLaas0Mris9odByz+pF2ORQpMilgI71341BlyDtcN6W06O2kEKq2FEgyp
+         qawQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769729809; x=1770334609;
+        d=1e100.net; s=20230601; t=1769729846; x=1770334646;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9edmz9F0+Ueeg69+oBnQppllXkvN4AaYJE9iZBV8Nzc=;
-        b=cfdrszbJ2SnWou2MbEh0P+5AY+wXnF5YJRksRyMTTHFiqw//SxmkEMFVNiIgc2hZnF
-         LX/cjUSDZL66to6CkwsRTRTHTdiLX9QqYeSr30hyGEon2MCL4QDa1ImBKaY7UdPgVIav
-         144e254NR/R05w0Lw9lRnZSArFAfQ02AmW69SH8NcVPeOhaLt58/iuIluyUbTy1q7rfJ
-         I8cokFkR0dffV2MXkbcgIri+rlLbFXXPh6j1/5sDlKbMoDFexLhN+axl2C5NuMaIxO/T
-         T2wo3ns44zpfLFlSTyUtMR438JGVaIpE5paRWgoAMn91imap0n5HSfy/fNxcqdO1M+Ha
-         gUdA==
-X-Forwarded-Encrypted: i=1; AJvYcCWaphMMdOhdYkmm40ACLlWT2Ts94ukzAagHmu6pUQrLQMltz/9McgjBaHhpdiaX8lj8NLzvdK1Wa+FTo6gC/d4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiiTfTuhNkUnP28PwfL/gjrhJsn6dVVImV9iAHqHttuWYp7jR2
-	aBVoLYHLz1AmdEtsb1bj0ZTnrDqYzQS10Yioh4Jo1ZgKky6GpNxJfUhwt210GeVF0o82kyxqfE0
-	Z16TcKrC1425peQ==
-X-Received: from plbll8.prod.google.com ([2002:a17:903:908:b0:2a8:759b:173d])
+        bh=xtsoUbDwfLvbtoHg4zrUnWjIjv/OwLA41WjzQfN669k=;
+        b=kegQeBpgKiUBB3PNTMjUFWWVTfOPEYCF/CeAjq9QQTGLBskaiQU/cjnOYkJLkRa5Kx
+         YJz21e84u07e83Vz0Q2KGOaR66D+iDcB2wSl/nVBiX9xSAO11KqnNaZl/o+aF6+Hss63
+         aYzP6rYV0mx3nc1Dbvnu4GZrQRdLogTeD8b9lekEefNl0NKPo4JjKEh7zqu/Y5QMOTag
+         HU/CQ3TI5JCdRGnziMdU/xiYm4Zrbi/nOjPUC1GCG9R6qJO2O7UwQF5oSALV4J5FPHqV
+         xWvRuCIYQkL1qtXCosSxfwBF2z5ZHub8obZexRLOm2gaZcu/fCY+r8PN0Wi8KSnlfhiB
+         s6TA==
+X-Forwarded-Encrypted: i=1; AJvYcCV3V4fT1OIXsHToQhvSrZSJ9f01aD67IIiuiYYigpNvSOCJNpdEhZLeAgCy16IAPhaVVmkLSMqnTfs8XskMbuA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCxOJWqXRWuTIOlEZSusmQlklTxD0at0JCiTaWHS9G7wAiRVca
+	fHfIdBpTxOwlKS4I/GQBpmfmlMHFB+ywFf3AV7zXYAn3v1dKX9bwB/+zi8ZwJd7Gk6et7bxbtwp
+	2SEHmK7b8ptjK9w==
+X-Received: from plgf14.prod.google.com ([2002:a17:902:ce8e:b0:2a5:9a03:d0b2])
  (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:d485:b0:2a0:9eed:5182 with SMTP id d9443c01a7336-2a8d96a6b54mr8177095ad.20.1769729346081;
- Thu, 29 Jan 2026 15:29:06 -0800 (PST)
-Date: Thu, 29 Jan 2026 15:28:09 -0800
+ 2002:a17:902:d50e:b0:2a4:8cd:c3cf with SMTP id d9443c01a7336-2a8d8181601mr10004875ad.49.1769729347764;
+ Thu, 29 Jan 2026 15:29:07 -0800 (PST)
+Date: Thu, 29 Jan 2026 15:28:10 -0800
 In-Reply-To: <20260129232835.3710773-1-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,9 +58,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260129232835.3710773-1-jmattson@google.com>
 X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260129232835.3710773-5-jmattson@google.com>
-Subject: [PATCH v2 4/5] KVM: x86/pmu: Allow Host-Only/Guest-Only bits with
- nSVM and mediated PMU
+Message-ID: <20260129232835.3710773-6-jmattson@google.com>
+Subject: [PATCH v2 5/5] KVM: selftests: x86: Add svm_pmu_host_guest_test for
+ Host-Only/Guest-Only bits
 From: Jim Mattson <jmattson@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -77,28 +77,260 @@ Cc: mizhang@google.com, yosryahmed@google.com, sandipan.das@amd.com,
 	Jim Mattson <jmattson@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-If the vCPU advertises SVM and uses the mediated PMU, allow the guest to
-set the Host-Only and Guest-Only bits in the event selector MSRs.
+Add a selftest to verify KVM correctly virtualizes the AMD PMU Host-Only
+(bit 41) and Guest-Only (bit 40) event selector bits across all relevant
+SVM state transitions.
+
+The test programs 4 PMCs simultaneously with all combinations of the
+Host-Only and Guest-Only bits, then verifies correct counting behavior:
+  1. SVME=0: all counters count (Host-Only/Guest-Only bits ignored)
+  2. Set SVME=1: Host-Only and neither/both count; Guest-Only stops
+  3. VMRUN to L2: Guest-Only and neither/both count; Host-Only stops
+  4. VMEXIT to L1: Host-Only and neither/both count; Guest-Only stops
+  5. Clear SVME=0: all counters count (bits ignored again)
 
 Signed-off-by: Jim Mattson <jmattson@google.com>
 ---
- arch/x86/kvm/svm/pmu.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ tools/testing/selftests/kvm/include/x86/pmu.h |   6 +
+ .../kvm/x86/svm_pmu_host_guest_test.c         | 199 ++++++++++++++++++
+ 3 files changed, 206 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c
 
-diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index e2a849fc7daa..7de7d8d00427 100644
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -243,6 +243,9 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 58eee0474db6..f20ddd58ee81 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -112,6 +112,7 @@ TEST_GEN_PROGS_x86 += x86/svm_vmcall_test
+ TEST_GEN_PROGS_x86 += x86/svm_int_ctl_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_shutdown_test
+ TEST_GEN_PROGS_x86 += x86/svm_nested_soft_inject_test
++TEST_GEN_PROGS_x86 += x86/svm_pmu_host_guest_test
+ TEST_GEN_PROGS_x86 += x86/tsc_scaling_sync
+ TEST_GEN_PROGS_x86 += x86/sync_regs_test
+ TEST_GEN_PROGS_x86 += x86/ucna_injection_test
+diff --git a/tools/testing/selftests/kvm/include/x86/pmu.h b/tools/testing/selftests/kvm/include/x86/pmu.h
+index 72575eadb63a..af9b279c78df 100644
+--- a/tools/testing/selftests/kvm/include/x86/pmu.h
++++ b/tools/testing/selftests/kvm/include/x86/pmu.h
+@@ -38,6 +38,12 @@
+ #define ARCH_PERFMON_EVENTSEL_INV		BIT_ULL(23)
+ #define ARCH_PERFMON_EVENTSEL_CMASK		GENMASK_ULL(31, 24)
  
- 	pmu->counter_bitmask[KVM_PMC_GP] = BIT_ULL(48) - 1;
- 	pmu->reserved_bits = 0xfffffff000280000ull;
-+	if (guest_cpu_cap_has(vcpu, X86_FEATURE_SVM) &&
-+	    kvm_vcpu_has_mediated_pmu(vcpu))
-+		pmu->reserved_bits &= ~AMD64_EVENTSEL_HOST_GUEST_MASK;
- 	pmu->raw_event_mask = AMD64_RAW_EVENT_MASK;
- 	/* not applicable to AMD; but clean them to prevent any fall out */
- 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
++/*
++ * These are AMD-specific bits.
++ */
++#define AMD64_EVENTSEL_GUESTONLY		BIT_ULL(40)
++#define AMD64_EVENTSEL_HOSTONLY			BIT_ULL(41)
++
+ /* RDPMC control flags, Intel only. */
+ #define INTEL_RDPMC_METRICS			BIT_ULL(29)
+ #define INTEL_RDPMC_FIXED			BIT_ULL(30)
+diff --git a/tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c b/tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c
+new file mode 100644
+index 000000000000..0536c0d96255
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c
+@@ -0,0 +1,199 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * KVM nested SVM PMU Host-Only/Guest-Only test
++ *
++ * Copyright (C) 2026, Google LLC.
++ *
++ * Test that KVM correctly virtualizes the AMD PMU Host-Only (bit 41) and
++ * Guest-Only (bit 40) event selector bits across all SVM state
++ * transitions.
++ *
++ * Programs 4 PMCs simultaneously with all combinations of Host-Only and
++ * Guest-Only bits, then verifies correct counting behavior through:
++ *   1. SVME=0: all counters count (Host-Only/Guest-Only bits ignored)
++ *   2. Set SVME=1: Host-Only and neither/both count; Guest-Only stops
++ *   3. VMRUN to L2: Guest-Only and neither/both count; Host-Only stops
++ *   4. VMEXIT to L1: Host-Only and neither/both count; Guest-Only stops
++ *   5. Clear SVME=0: all counters count (bits ignored again)
++ */
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include "test_util.h"
++#include "kvm_util.h"
++#include "processor.h"
++#include "svm_util.h"
++#include "pmu.h"
++
++#define L2_GUEST_STACK_SIZE	256
++
++#define EVENTSEL_RETIRED_INSNS	(ARCH_PERFMON_EVENTSEL_OS |	\
++				 ARCH_PERFMON_EVENTSEL_USR |	\
++				 ARCH_PERFMON_EVENTSEL_ENABLE |	\
++				 AMD_ZEN_INSTRUCTIONS_RETIRED)
++
++/* PMC configurations: index corresponds to Host-Only | Guest-Only bits */
++#define PMC_NEITHER	0  /* Neither bit set */
++#define PMC_GUESTONLY	1  /* Guest-Only bit set */
++#define PMC_HOSTONLY	2  /* Host-Only bit set */
++#define PMC_BOTH	3  /* Both bits set */
++#define NR_PMCS		4
++
++/* Bitmasks for which PMCs should be counting in each state */
++#define COUNTS_ALL	(BIT(PMC_NEITHER) | BIT(PMC_GUESTONLY) | \
++			 BIT(PMC_HOSTONLY) | BIT(PMC_BOTH))
++#define COUNTS_L1	(BIT(PMC_NEITHER) | BIT(PMC_HOSTONLY) | BIT(PMC_BOTH))
++#define COUNTS_L2	(BIT(PMC_NEITHER) | BIT(PMC_GUESTONLY) | BIT(PMC_BOTH))
++
++#define LOOP_INSNS	1000
++
++static __always_inline void run_instruction_loop(void)
++{
++	unsigned int i;
++
++	for (i = 0; i < LOOP_INSNS; i++)
++		__asm__ __volatile__("nop");
++}
++
++static __always_inline void read_counters(uint64_t *counts)
++{
++	int i;
++
++	for (i = 0; i < NR_PMCS; i++)
++		counts[i] = rdmsr(MSR_F15H_PERF_CTR + 2 * i);
++}
++
++static __always_inline void run_and_measure(uint64_t *deltas)
++{
++	uint64_t before[NR_PMCS], after[NR_PMCS];
++	int i;
++
++	read_counters(before);
++	run_instruction_loop();
++	read_counters(after);
++
++	for (i = 0; i < NR_PMCS; i++)
++		deltas[i] = after[i] - before[i];
++}
++
++static void assert_pmc_counts(uint64_t *deltas, unsigned int expected_counting)
++{
++	int i;
++
++	for (i = 0; i < NR_PMCS; i++) {
++		if (expected_counting & BIT(i))
++			GUEST_ASSERT_NE(deltas[i], 0);
++		else
++			GUEST_ASSERT_EQ(deltas[i], 0);
++	}
++}
++
++struct test_data {
++	uint64_t l2_deltas[NR_PMCS];
++	bool l2_done;
++};
++
++static struct test_data *test_data;
++
++static void l2_guest_code(void)
++{
++	run_and_measure(test_data->l2_deltas);
++	test_data->l2_done = true;
++	vmmcall();
++}
++
++static void l1_guest_code(struct svm_test_data *svm, struct test_data *data)
++{
++	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
++	struct vmcb *vmcb = svm->vmcb;
++	uint64_t deltas[NR_PMCS];
++	uint64_t eventsel;
++	int i;
++
++	test_data = data;
++
++	/* Program 4 PMCs with all combinations of Host-Only/Guest-Only bits */
++	for (i = 0; i < NR_PMCS; i++) {
++		eventsel = EVENTSEL_RETIRED_INSNS;
++		if (i & PMC_GUESTONLY)
++			eventsel |= AMD64_EVENTSEL_GUESTONLY;
++		if (i & PMC_HOSTONLY)
++			eventsel |= AMD64_EVENTSEL_HOSTONLY;
++		wrmsr(MSR_F15H_PERF_CTL + 2 * i, eventsel);
++		wrmsr(MSR_F15H_PERF_CTR + 2 * i, 0);
++	}
++
++	/* Step 1: SVME=0 - Host-Only/Guest-Only bits ignored; all count */
++	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
++	run_and_measure(deltas);
++	assert_pmc_counts(deltas, COUNTS_ALL);
++
++	/* Step 2: Set SVME=1 - In L1 "host mode"; Guest-Only stops */
++	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
++	run_and_measure(deltas);
++	assert_pmc_counts(deltas, COUNTS_L1);
++
++	/* Step 3: VMRUN to L2 - In "guest mode"; Host-Only stops */
++	generic_svm_setup(svm, l2_guest_code,
++			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
++	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
++
++	run_guest(vmcb, svm->vmcb_gpa);
++
++	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
++	GUEST_ASSERT(data->l2_done);
++	assert_pmc_counts(data->l2_deltas, COUNTS_L2);
++
++	/* Step 4: After VMEXIT to L1 - Back in "host mode"; Guest-Only stops */
++	run_and_measure(deltas);
++	assert_pmc_counts(deltas, COUNTS_L1);
++
++	/* Step 5: Clear SVME - Host-Only/Guest-Only bits ignored; all count */
++	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
++	run_and_measure(deltas);
++	assert_pmc_counts(deltas, COUNTS_ALL);
++
++	GUEST_DONE();
++}
++
++int main(int argc, char *argv[])
++{
++	vm_vaddr_t svm_gva, data_gva;
++	struct test_data *data_hva;
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm;
++	struct ucall uc;
++
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
++	TEST_REQUIRE(kvm_is_pmu_enabled());
++	TEST_REQUIRE(get_kvm_amd_param_bool("enable_mediated_pmu"));
++	TEST_REQUIRE(host_cpu_is_amd && kvm_cpu_family() >= 0x17);
++
++	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
++
++	vcpu_alloc_svm(vm, &svm_gva);
++
++	data_gva = vm_vaddr_alloc_page(vm);
++	data_hva = addr_gva2hva(vm, data_gva);
++	memset(data_hva, 0, sizeof(*data_hva));
++
++	vcpu_args_set(vcpu, 2, svm_gva, data_gva);
++
++	vcpu_run(vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++
++	switch (get_ucall(vcpu, &uc)) {
++	case UCALL_ABORT:
++		REPORT_GUEST_ASSERT(uc);
++		break;
++	case UCALL_DONE:
++		break;
++	default:
++		TEST_FAIL("Unknown ucall %lu", uc.cmd);
++	}
++
++	kvm_vm_free(vm);
++	return 0;
++}
 -- 
 2.53.0.rc1.225.gd81095ad13-goog
 
