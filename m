@@ -1,33 +1,35 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7EA5190473;
-	Thu, 29 Jan 2026 02:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F11264619;
+	Thu, 29 Jan 2026 02:50:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769653129; cv=none; b=YrbjU6y/gwHhE0YnQ4q4itoAmvtaVHqAiNYLDChPmH5bGR/v0iM0VB31MhPziRYa+K+QhcScCbEgkfQN8HL/ZYok9h9IMiv0GX+qiu4cyqFvlZgdiMSANj4CgE9nlTIWVGg3BkAPgabhppQ3z6WcnoJjmczyQZF8G0zPNsvc8fE=
+	t=1769655017; cv=none; b=MY+9n9yQaxJQcBkI0CD1X8wsTYcUQjRIjdiyIODclp7pJzhxHGHRG1OW2zbxOAu5rNsYmN0Xk+MeNJ7JQjlcQF68aNDn8RubmNJds52NjttbzMhYLtezjV26yen2rvDrzOn4zDevcQAr05y0yBOVkHvaEiW942ePVRTkYG7SemE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769653129; c=relaxed/simple;
-	bh=imWLegyaJny/1vo5iBqEUMVnSnATp/GFw0mOfGqOTBs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=alB6nY5PgV/C1NydPYXh3HWc5wkjSTI+NxznaHAlodqHWpdKP334zcDknvahvAN8odJEiUaO7CKC7BivS548jo/r61Hs1/qWy3AqLt6ToaXt2J0F7ZhC0j52nJeQb+1MFQ9//9k7vYnQ3HVFNfcXwHdYoaXaIzV/LbJBaxDFZ5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8Cx68KBw3ppNcUNAA--.44781S3;
-	Thu, 29 Jan 2026 10:18:41 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.213])
-	by front1 (Coremail) with SMTP id qMiowJBxbcKAw3pp0504AA--.40872S2;
-	Thu, 29 Jan 2026 10:18:41 +0800 (CST)
-From: Bibo Mao <maobibo@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: LoongArch: selftests: Add steal time test case
-Date: Thu, 29 Jan 2026 10:18:39 +0800
-Message-Id: <20260129021839.3674879-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.39.3
+	s=arc-20240116; t=1769655017; c=relaxed/simple;
+	bh=RMbQZGd6MTe6Yx7WbbqH0wbPl9UJbr0uWhS7gdlb8C0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=o1NhEPuPS1r5PlgK4q5AOQHK24SkuWKSwi9U+LC2PaQEnZQTIA1gN9JxLe8an7N4dvF8G9iO1poz1UDMRD9UfxpvoJDQKbN3rDIogO4NCnoK+e7OUXsSZh7HtUceHjNWRgCW69YQmTm4+xTOhcZYiT08+4EgyUYHXgivnDNj+n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EPi8ku3e; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EPi8ku3e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB5CC4CEF1;
+	Thu, 29 Jan 2026 02:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769655015;
+	bh=RMbQZGd6MTe6Yx7WbbqH0wbPl9UJbr0uWhS7gdlb8C0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=EPi8ku3eubNO0/BSRi76+WTFhWErjj+ovjRm9fdtfymmrnndbYv1xKFC82qtfsjSL
+	 6I83F6799B0lf1gWDrNKHGSHGxZUs+TjgRZMR5VFAdot41FSaPTPQXg7HHk/TV1SHz
+	 2CXzc0VQuxGllQgXJ3SwKKRCFEumKcK28aYBy0fNAEFJtIG5j6p+MpZkZk76lUOlI3
+	 EUqPquramASa+dc89Y/HOZTnERvESmr5zS7rxbwkozZWYfL0FG3nlST1zT0rdnp8hR
+	 0g1AQyFwPKYqctURD9AU0yCsRvqB5J6Jv0HQySlTcXNNHyTiWMr20hWH7PwiolvRUk
+	 82aeMVL9nxtgg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BBF7380AA61;
+	Thu, 29 Jan 2026 02:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,131 +37,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxbcKAw3pp0504AA--.40872S2
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-	nUUI43ZEXa7xR_UUUUUUUUU==
+Subject: Re: [PATCH bpf-next 0/2] bpf: Fix verifier_bug_if to account for
+ BPF_CALL
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176965500835.2326292.18318567298833649268.git-patchwork-notify@kernel.org>
+Date: Thu, 29 Jan 2026 02:50:08 +0000
+References: <20260127115912.3026761-1-luis.gerhorst@fau.de>
+In-Reply-To: <20260127115912.3026761-1-luis.gerhorst@fau.de>
+To: Luis Gerhorst <luis.gerhorst@fau.de>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, isolodrai@meta.com,
+ memxor@gmail.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-LoongArch KVM supports steal time accounting now, here add steal time
-test case on LoongArch.
+Hello:
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- tools/testing/selftests/kvm/Makefile.kvm |  1 +
- tools/testing/selftests/kvm/steal_time.c | 85 ++++++++++++++++++++++++
- 2 files changed, 86 insertions(+)
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index ba5c2b643efa..a18c00f1a4fa 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -228,6 +228,7 @@ TEST_GEN_PROGS_loongarch += kvm_page_table_test
- TEST_GEN_PROGS_loongarch += memslot_modification_stress_test
- TEST_GEN_PROGS_loongarch += memslot_perf_test
- TEST_GEN_PROGS_loongarch += set_memory_region_test
-+TEST_GEN_PROGS_loongarch += steal_time
- 
- SPLIT_TESTS += arch_timer
- SPLIT_TESTS += get-reg-list
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index 8edc1fca345b..ee13e8973c45 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -301,6 +301,91 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
- 	pr_info("\n");
- }
- 
-+#elif defined(__loongarch__)
-+/* steal_time must have 64-byte alignment */
-+#define STEAL_TIME_SIZE		((sizeof(struct kvm_steal_time) + 63) & ~63)
-+#define KVM_STEAL_PHYS_VALID	BIT_ULL(0)
-+
-+struct kvm_steal_time {
-+	__u64 steal;
-+	__u32 version;
-+	__u32 flags;
-+	__u32 pad[12];
-+};
-+
-+static bool is_steal_time_supported(struct kvm_vcpu *vcpu)
-+{
-+	int err;
-+	uint64_t val;
-+	struct kvm_device_attr attr = {
-+		.group = KVM_LOONGARCH_VCPU_CPUCFG,
-+		.attr = CPUCFG_KVM_FEATURE,
-+		.addr = (uint64_t)&val,
-+	};
-+
-+	err = __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
-+	if (err)
-+		return false;
-+
-+	err = __vcpu_ioctl(vcpu, KVM_GET_DEVICE_ATTR, &attr);
-+	if (err)
-+		return false;
-+
-+	return val & BIT(KVM_FEATURE_STEAL_TIME);
-+}
-+
-+static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
-+{
-+	struct kvm_vm *vm = vcpu->vm;
-+	uint64_t st_gpa;
-+	int err;
-+	struct kvm_device_attr attr = {
-+		.group = KVM_LOONGARCH_VCPU_PVTIME_CTRL,
-+		.attr = KVM_LOONGARCH_VCPU_PVTIME_GPA,
-+		.addr = (uint64_t)&st_gpa,
-+	};
-+
-+	/* ST_GPA_BASE is identity mapped */
-+	st_gva[i] = (void *)(ST_GPA_BASE + i * STEAL_TIME_SIZE);
-+	sync_global_to_guest(vm, st_gva[i]);
-+
-+	err = __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
-+	TEST_ASSERT(err == 0, "No PV stealtime Feature");
-+
-+	st_gpa = (unsigned long)st_gva[i] | KVM_STEAL_PHYS_VALID;
-+	err = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &attr);
-+	TEST_ASSERT(err == 0, "Fail to set PV stealtime GPA");
-+}
-+
-+static void guest_code(int cpu)
-+{
-+	struct kvm_steal_time *st = st_gva[cpu];
-+	uint32_t version;
-+
-+	memset(st, 0, sizeof(*st));
-+	GUEST_SYNC(0);
-+
-+	GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
-+	WRITE_ONCE(guest_stolen_time[cpu], st->steal);
-+	version = READ_ONCE(st->version);
-+	GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
-+	GUEST_SYNC(1);
-+
-+	GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
-+	GUEST_ASSERT(version < READ_ONCE(st->version));
-+	WRITE_ONCE(guest_stolen_time[cpu], st->steal);
-+	GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
-+	GUEST_DONE();
-+}
-+
-+static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
-+{
-+	struct kvm_steal_time *st = addr_gva2hva(vm, (ulong)st_gva[vcpu_idx]);
-+
-+	ksft_print_msg("VCPU%d:\n", vcpu_idx);
-+	ksft_print_msg("    steal:     %lld\n", st->steal);
-+	ksft_print_msg("    version:   %d\n", st->version);
-+}
- #endif
- 
- static void *do_steal_time(void *arg)
+On Tue, 27 Jan 2026 12:59:10 +0100 you wrote:
+> This fixes the verifier_bug_if() that runs on nospec_result to not trigger
+> for BPF_CALL (bug reported by Hu, Mei, and Mu). See patch 1 for a full
+> description and patch 2 for a test (based on the PoC from the report).
+> 
+> While working on this I noticed two other problems:
+> 
+> - nospec_result is currently ignored for BPF_CALL during patching, but it
+>   may be required if we assume the CPU may speculate into/out of functions.
+> 
+> [...]
 
-base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+Here is the summary with links:
+  - [bpf-next,1/2] bpf: Fix verifier_bug_if to account for BPF_CALL
+    https://git.kernel.org/bpf/bpf-next/c/cd3b6a3d49f8
+  - [bpf-next,2/2] bpf: Test nospec after dead stack write in helper
+    https://git.kernel.org/bpf/bpf-next/c/60d2c438c1bb
+
+You are awesome, thank you!
 -- 
-2.39.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
