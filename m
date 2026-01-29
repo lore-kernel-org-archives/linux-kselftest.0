@@ -1,291 +1,424 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DCC225F7A9;
-	Thu, 29 Jan 2026 04:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0BA199FBA;
+	Thu, 29 Jan 2026 04:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769659431; cv=none; b=e4Ryd8nq6g0MfRUWHeNQoBWB0RC8iUskhDtoEqD0RT5dU9Y+Bag55yiQYRC0mEyxPEqd2D8So8e63oD0JUx+tGEeInUFxMkqBVosHOQza5FHH2GFKfCLUnaMEEqIr6VaTgI8Kqs/1iHtcpgNoKgEM3eODkfubfxiqXnmr6tQosA=
+	t=1769660655; cv=none; b=WVHsq/aTQjH7HnSGksKBelCHvR6iYm7WBGoQt+COADVDkwbH4qjp3XD9Uxit0l/f1TzhvhyTd84LPZyRYPS4/dmqTOjwZa6VeBJ4q3daTMEtufzb/B95sSn4/x4sQgXfTOhL10aykJyIH2na+BZlqZ1uUj9HyeUtq5tnQB6tkP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769659431; c=relaxed/simple;
-	bh=qJkVBlaEbB0GI9ptpuChZz007VyTHOo92hXivG515Rw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QvdViqnmPpyoi6eL8NbEgtB7flZEht6aJVhDLpP/0RNJqnDfRRS3E1DQLx6zwqnhgknhyRCenYe+ywhvWG8roiicLJQ/1KS8IKxvzA2jWIQgVAmi7lg1R8XHth7lTFCNIisdf7E5Nstx1OAne9LZzsO7V7pdGidXqQ7YnW/QxT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f1lqm1gFzzKHMPk;
-	Thu, 29 Jan 2026 12:03:32 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id ADD434056E;
-	Thu, 29 Jan 2026 12:03:45 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP4 (Coremail) with SMTP id gCh0CgD3ovMg3HppQ0b5FQ--.60774S2;
-	Thu, 29 Jan 2026 12:03:45 +0800 (CST)
-Message-ID: <ccca8790-2bf9-46db-b355-ce8695ea7093@huaweicloud.com>
-Date: Thu, 29 Jan 2026 12:03:43 +0800
+	s=arc-20240116; t=1769660655; c=relaxed/simple;
+	bh=t9xnxpQK9RLSI5mJrEEcX/s/HlA2IQ0v/xE6C33zm04=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=LW6jHpbYKZOu+QURM3bAZuj9swtliOIZOHvwL/JJBopY65XE/AQN02Qx4jXQISPYpeldaj3JKKQGElZmbKF6z+zbShDJagljEQS/1fJ0n3aBcVZ5+dvBoWMgxyAZ/4u0eD9FYsPpCmxqIAyQjKna0bGtRh9VieK+Yw5WO/VcyDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2uXLMWn; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2uXLMWn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 972ABC116D0;
+	Thu, 29 Jan 2026 04:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769660654;
+	bh=t9xnxpQK9RLSI5mJrEEcX/s/HlA2IQ0v/xE6C33zm04=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=D2uXLMWnmVVYhhfIvx5vzJnnoEp7BhFv5nqLOWrcsn/1dy3tw73eFHNNFlseDJVnf
+	 CQsAJC2e0f9LpaAXH/F2P0drZfTwvQqKE9F/GuHMNTwJbLSlppSqHpmChCmHQk+L/S
+	 GsUvTugytATMcnpSl5nEZJi6ulWD6cUVpGFpk+iK4PV4ncHKYoc4HhS8L9WO61/oxW
+	 YC7cifwRfRIYKEKWda4pmwcqnZuViHFR2XAfwf8ME/pP8gvXHd/O6wmSo/U9ckImKn
+	 bIuzwD2RzisLaek4ivaZKkHNfVI9whSkSjHRRxpGfCuuZApSgBQQsUtnacfr8k40bC
+	 rYsPOoch7BA1Q==
+Date: Thu, 29 Jan 2026 13:24:12 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Cc: rostedt@goodmis.org, corbet@lwn.net, shuah@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 v5 2/3] tracing/fprobe: Support comma-separated
+ symbols and :entry/:exit
+Message-Id: <20260129132412.babdf9a72e72f0d8b6273510@kernel.org>
+In-Reply-To: <20260118011815.56516-3-seokwoo.chung130@gmail.com>
+References: <20260118011815.56516-1-seokwoo.chung130@gmail.com>
+	<20260118011815.56516-3-seokwoo.chung130@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH/for-next 1/2] cgroup/cpuset: Defer housekeeping_update()
- call from CPU hotplug to task_work
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260128044251.1229702-1-longman@redhat.com>
- <20260128044251.1229702-2-longman@redhat.com>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20260128044251.1229702-2-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3ovMg3HppQ0b5FQ--.60774S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKr1DAr1UJw1ruF48JrW5Wrg_yoWxtF17pr
-	y5KFWIyayqqF1a9343XwsrWr1rKws7J3W5Kr43Xr1xZFsxWFn7Z348KFnxtrWrWr95GFWr
-	ZFWDGw4fWF4UArUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Sat, 17 Jan 2026 20:18:14 -0500
+"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com> wrote:
 
-
-On 2026/1/28 12:42, Waiman Long wrote:
-> The update_isolation_cpumasks() function can be called either directly
-> from regular cpuset control file write with cpuset_full_lock() called
-> or via the CPU hotplug path with cpus_write_lock and cpuset_mutex held.
+> - Update DEFINE_FREE to use standard __free()
+> - Extend fprobe to support multiple symbols per event. Add parsing logic for
+>   lists, ! exclusions, and explicit suffixes. Update tracefs/README to reflect
+>   the new syntax
 > 
-> As we are going to enable dynamic update to the nozh_full housekeeping
-> cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
-> allowing the CPU hotplug path to call into housekeeping_update()
-> directly from update_isolation_cpumasks() will cause deadlock. So we
-> have to defer any call to housekeeping_update() after the CPU hotplug
-> operation has finished. This can be done via the task_work_add(...,
-> TWA_RESUME) API where the actual housekeeping_update() call, if needed,
-> will happen right before existing back to userspace.
-> 
-> Since the HK_TYPE_DOMAIN housekeeping cpumask should now track the
-> changes in "cpuset.cpus.isolated", add a check in test_cpuset_prs.sh to
-> confirm that the CPU hotplug deferral, if needed, is working as expected.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
 > ---
->  kernel/cgroup/cpuset.c                        | 49 ++++++++++++++++++-
->  .../selftests/cgroup/test_cpuset_prs.sh       |  9 ++++
->  2 files changed, 56 insertions(+), 2 deletions(-)
+>  kernel/trace/trace.c        |   3 +-
+>  kernel/trace/trace_fprobe.c | 209 +++++++++++++++++++++++++++---------
+>  2 files changed, 163 insertions(+), 49 deletions(-)
 > 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 7b7d12ab1006..98c7cb732206 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -84,6 +84,10 @@ static cpumask_var_t	isolated_cpus;
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index baec63134ab6..10cdcc7b194e 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -5578,7 +5578,8 @@ static const char readme_msg[] =
+>  	"\t           r[maxactive][:[<group>/][<event>]] <place> [<args>]\n"
+>  #endif
+>  #ifdef CONFIG_FPROBE_EVENTS
+> -	"\t           f[:[<group>/][<event>]] <func-name>[%return] [<args>]\n"
+> +	"\t           f[:[<group>/][<event>]] <func-name>[:entry|:exit] [<args>]\n"
+> +	"\t		(single symbols still accept %return)\n"
+>  	"\t           t[:[<group>/][<event>]] <tracepoint> [<args>]\n"
+>  #endif
+>  #ifdef CONFIG_HIST_TRIGGERS
+> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+> index 262c0556e4af..5a2a41eea603 100644
+> --- a/kernel/trace/trace_fprobe.c
+> +++ b/kernel/trace/trace_fprobe.c
+> @@ -187,11 +187,14 @@ DEFINE_FREE(tuser_put, struct tracepoint_user *,
 >   */
->  static bool isolated_cpus_updating;
+>  struct trace_fprobe {
+>  	struct dyn_event	devent;
+> +	char			*filter;
+>  	struct fprobe		fp;
+> +	bool			list_mode;
+> +	char			*nofilter;
+>  	const char		*symbol;
+> +	struct trace_probe	tp;
+>  	bool			tprobe;
+>  	struct tracepoint_user	*tuser;
+> -	struct trace_probe	tp;
+>  };
 >  
-> +/* Both cpuset_mutex and cpus_read_locked acquired */
-> +static bool cpuset_full_locked;
-> +static bool isolation_task_work_queued;
-> +
->  /*
->   * A flag to force sched domain rebuild at the end of an operation.
->   * It can be set in
-> @@ -285,10 +289,12 @@ void cpuset_full_lock(void)
->  {
->  	cpus_read_lock();
->  	mutex_lock(&cpuset_mutex);
-> +	cpuset_full_locked = true;
->  }
+>  static bool is_trace_fprobe(struct dyn_event *ev)
+> @@ -559,6 +562,8 @@ static void free_trace_fprobe(struct trace_fprobe *tf)
+>  		trace_probe_cleanup(&tf->tp);
+>  		if (tf->tuser)
+>  			tracepoint_user_put(tf->tuser);
+> +		kfree(tf->filter);
+> +		kfree(tf->nofilter);
+>  		kfree(tf->symbol);
+>  		kfree(tf);
+>  	}
+> @@ -838,7 +843,12 @@ static int __register_trace_fprobe(struct trace_fprobe *tf)
+>  	if (trace_fprobe_is_tracepoint(tf))
+>  		return __regsiter_tracepoint_fprobe(tf);
 >  
->  void cpuset_full_unlock(void)
->  {
-> +	cpuset_full_locked = false;
->  	mutex_unlock(&cpuset_mutex);
->  	cpus_read_unlock();
->  }
-> @@ -1285,25 +1291,64 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
->  	return false;
->  }
->  
-> +static void __update_isolation_cpumasks(bool twork);
-> +static void isolation_task_work_fn(struct callback_head *cb)
-> +{
-> +	cpuset_full_lock();
-> +	__update_isolation_cpumasks(true);
-> +	cpuset_full_lock();
-> +}
-> +
->  /*
-> - * update_isolation_cpumasks - Update external isolation related CPU masks
-> + * __update_isolation_cpumasks - Update external isolation related CPU masks
-> + * @twork - set if call from isolation_task_work_fn()
->   *
->   * The following external CPU masks will be updated if necessary:
->   * - workqueue unbound cpumask
->   */
-> -static void update_isolation_cpumasks(void)
-> +static void __update_isolation_cpumasks(bool twork)
->  {
->  	int ret;
->  
-> +	if (twork)
-> +		isolation_task_work_queued = false;
-> +
->  	if (!isolated_cpus_updating)
->  		return;
->  
-> +	/*
-> +	 * This function can be reached either directly from regular cpuset
-> +	 * control file write (cpuset_full_locked) or via hotplug
-> +	 * (cpus_write_lock && cpuset_mutex held). In the later case, we
-> +	 * defer the housekeeping_update() call to a task_work to avoid
-> +	 * the possibility of deadlock. The task_work will be run right
-> +	 * before exiting back to userspace.
+> -	/* TODO: handle filter, nofilter or symbol list */
+> +	/* Registration path:
+> +	 * - list_mode: pass filter/nofilter
+> +	 * - single: pass symbol only (legacy)
 > +	 */
-> +	if (!cpuset_full_locked) {
-> +		static struct callback_head twork_cb;
-> +
-> +		if (!isolation_task_work_queued) {
-> +			init_task_work(&twork_cb, isolation_task_work_fn);
-> +			if (!task_work_add(current, &twork_cb, TWA_RESUME))
-> +				isolation_task_work_queued = true;
-> +			else
-> +				/* Current task shouldn't be exiting */
-> +				WARN_ON_ONCE(1);
-> +		}
-> +		return;
-> +	}
-> +
->  	ret = housekeeping_update(isolated_cpus);
->  	WARN_ON_ONCE(ret < 0);
->  
->  	isolated_cpus_updating = false;
+> +	if (tf->list_mode)
+> +		return register_fprobe(&tf->fp, tf->filter, tf->nofilter);
+>  	return register_fprobe(&tf->fp, tf->symbol, NULL);
 >  }
 >  
-
-The logic is not straightforward; perhaps we can simplify it as follows,
-maybe I missed something, just correct me.
-
-static void isolation_task_work_fn(struct callback_head *cb)
-{
-	guard(mutex)(&isolcpus_update_mutex);
-	WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
-}
-
-/*
- * __update_isolation_cpumasks - Update external isolation related CPU masks
- * @twork - set if call from isolation_task_work_fn()
- *
- * The following external CPU masks will be updated if necessary:
- * - workqueue unbound cpumask
- */
-static void __update_isolation_cpumasks(bool twork)
-{
-	if (!isolated_cpus_updating)
-		return;
-
-	/*
-	 * This function can be reached either directly from regular cpuset
-	 * control file write (cpuset_full_locked) or via hotplug
-	 * (cpus_write_lock && cpuset_mutex held). In the later case, we
-	 * defer the housekeeping_update() call to a task_work to avoid
-	 * the possibility of deadlock. The task_work will be run right
-	 * before exiting back to userspace.
-	 */
-	if (twork) {
-		static struct callback_head twork_cb;
-
-		init_task_work(&twork_cb, isolation_task_work_fn);
-		if (task_work_add(current, &twork_cb, TWA_RESUME))
-			/* Current task shouldn't be exiting */
-			WARN_ON_ONCE(1);
-
-		return;
-	}
-
-	lockdep_assert_held(&isolcpus_update_mutex);
-	/*
-	 * Release cpus_read_lock & cpuset_mutex before calling
-	 * housekeeping_update() and re-acquiring them afterward if not
-	 * calling from task_work.
-	 */
-
-	cpuset_full_unlock();
-	WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
-	cpuset_full_lock();
-
-	isolated_cpus_updating = false;
-}
-
-static inline void update_isolation_cpumasks(void)
-{
-	__update_isolation_cpumasks(false);
-}
-
-If twork is true, add it directly to the work queue — note that this requires
-holding isolcpus_update_mutex and then calling housekeeping_update. Otherwise,
-release the 'full' lock before invoking housekeeping_update.
-
-> +static inline void update_isolation_cpumasks(void)
-> +{
-> +	__update_isolation_cpumasks(false);
-> +}
-> +
->  /**
->   * rm_siblings_excl_cpus - Remove exclusive CPUs that are used by sibling cpusets
->   * @parent: Parent cpuset containing all siblings
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index 5dff3ad53867..af4a2532cb3e 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -773,6 +773,7 @@ check_isolcpus()
->  	EXPECTED_ISOLCPUS=$1
->  	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
->  	ISOLCPUS=$(cat $ISCPUS)
-> +	HKICPUS=$(cat /sys/devices/system/cpu/isolated)
->  	LASTISOLCPU=
->  	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
->  	if [[ $EXPECTED_ISOLCPUS = . ]]
-> @@ -810,6 +811,14 @@ check_isolcpus()
->  	ISOLCPUS=
->  	EXPECTED_ISOLCPUS=$EXPECTED_SDOMAIN
+> @@ -1154,60 +1164,119 @@ static struct notifier_block tprobe_event_module_nb = {
+>  };
+>  #endif /* CONFIG_MODULES */
 >  
-> +	#
-> +	# The inverse of HK_TYPE_DOMAIN cpumask in $HKICPUS should match $ISOLCPUS
-> +	#
-> +	[[ "$ISOLCPUS" != "$HKICPUS" ]] && {
-> +		echo "Housekeeping isolated CPUs mismatch - $HKICPUS"
-> +		return 1
+> -static int parse_symbol_and_return(int argc, const char *argv[],
+> -				   char **symbol, bool *is_return,
+> -				   bool is_tracepoint)
+> +static bool has_wildcard(const char *s)
+>  {
+> -	char *tmp = strchr(argv[1], '%');
+> -	int i;
+> +	return s && (strchr(s, '*') || strchr(s, '?'));
+> +}
+>  
+> -	if (tmp) {
+> -		int len = tmp - argv[1];
+> +static int parse_fprobe_spec(const char *in, bool is_tracepoint,
+> +		char **base, bool *is_return, bool *list_mode,
+> +		char **filter, char **nofilter)
+> +{
+> +	char *work __free(kfree) = NULL;
+> +	char *b __free(kfree) = NULL;
+> +	char *f __free(kfree) = NULL;
+> +	char *nf __free(kfree) = NULL;
+> +	bool legacy_ret = false;
+> +	bool list = false;
+> +	const char *p;
+> +	int ret = 0;
+>  
+> -		if (!is_tracepoint && !strcmp(tmp, "%return")) {
+> -			*is_return = true;
+> -		} else {
+> -			trace_probe_log_err(len, BAD_ADDR_SUFFIX);
+> -			return -EINVAL;
+> -		}
+> -		*symbol = kmemdup_nul(argv[1], len, GFP_KERNEL);
+> -	} else
+> -		*symbol = kstrdup(argv[1], GFP_KERNEL);
+> -	if (!*symbol)
+> -		return -ENOMEM;
+> +	if (!in || !base || !is_return || !list_mode || !filter || !nofilter)
+> +		return -EINVAL;
+>  
+> -	if (*is_return)
+> -		return 0;
+> +	*base = NULL; *filter = NULL; *nofilter = NULL;
+> +	*is_return = false; *list_mode = false;
+>  
+>  	if (is_tracepoint) {
+> -		tmp = *symbol;
+> -		while (*tmp && (isalnum(*tmp) || *tmp == '_'))
+> -			tmp++;
+> -		if (*tmp) {
+> -			/* find a wrong character. */
+> -			trace_probe_log_err(tmp - *symbol, BAD_TP_NAME);
+> -			kfree(*symbol);
+> -			*symbol = NULL;
+> +		if (strchr(in, ',') || strchr(in, ':'))
+>  			return -EINVAL;
+> -		}
+> +		if (strstr(in, "%return"))
+> +			return -EINVAL;
+
+These checks look redundant. because below ensures there is no
+',', '/' and '%'.
+
+> +		for (p = in; *p; p++)
+> +			if (!isalnum(*p) && *p != '_')
+> +				return -EINVAL;
+
+Please report parse error via trace_probe_log_err() function so that
+user can check what was wrong via tracefs/error_log file. E.g.
+
+	trace_probe_log_err(p - in, BAD_TP_NAME);
+
+
+> +		b = kstrdup(in, GFP_KERNEL);
+> +		if (!b)
+> +			return -ENOMEM;
+
+Note: ENOMEM does not need to report via error_log.
+
+> +		*base = no_free_ptr(b);
+> +		return 0;
+>  	}
+>  
+> -	/* If there is $retval, this should be a return fprobe. */
+> -	for (i = 2; i < argc; i++) {
+> -		tmp = strstr(argv[i], "$retval");
+> -		if (tmp && !isalnum(tmp[7]) && tmp[7] != '_') {
+> -			if (is_tracepoint) {
+> -				trace_probe_log_set_index(i);
+> -				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
+> -				kfree(*symbol);
+> -				*symbol = NULL;
+> +	work = kstrdup(in, GFP_KERNEL);
+> +	if (!work)
+> +		return -ENOMEM;
+> +
+> +	p = strstr(work, "%return");
+> +	if (p && p[7] == '\0') {
+> +		*is_return = true;
+> +		legacy_ret = true;
+> +		*(char *)p = '\0';
+> +	} else {
+> +		/*
+> +		 * If "symbol:entry" or "symbol:exit" is given, it is new
+> +		 * style probe.
+> +		 */
+> +		p = strrchr(work, ':');
+> +		if (p) {
+> +			if (!strcmp(p, ":exit")) {
+> +				*is_return = true;
+> +				*(char *)p = '\0';
+> +			} else if (!strcmp(p, ":entry")) {
+> +				*(char *)p = '\0';
+> +			} else {
+>  				return -EINVAL;
+>  			}
+> -			*is_return = true;
+> -			break;
+>  		}
+>  	}
+> -	return 0;
+> +
+> +	list = !!strchr(work, ',');
+> +	
+> +	if (list && legacy_ret) {
+> +		return -EINVAL;
+> +	}
+
+You don't need braces for the above block.
+
+> +
+> +	if (legacy_ret)
+> +		*is_return = true;
+> +
+> +	b = kstrdup(work, GFP_KERNEL);
+> +	if (!b)
+> +		return -ENOMEM;
+> +
+> +	if (list) {
+
+Could you make this block as an independent function?
+
+> +		char *tmp = b, *tok;
+> +		size_t fsz, nfsz;
+> +
+> +		fsz = nfsz = strlen(b) + 1;
+> +
+> +		f = kzalloc(fsz, GFP_KERNEL);
+> +		nf = kzalloc(nfsz, GFP_KERNEL);
+> +		if (!f || !nf)
+> +			return -ENOMEM;
+> +
+> +		while ((tok = strsep(&tmp, ",")) != NULL) {
+> +			char *dst;
+> +			bool neg = (*tok == '!');
+> +
+> +			if (*tok == '\0') {
+> +				trace_probe_log_err(tmp - b - 1, BAD_TP_NAME);
+> +				return -EINVAL;
+
+You missed close brace '}' here. And that makes the build failure.
+Can you fix it and run all tests under tools/testing/selftests/ftrace/
+with your change?
+
+Thank you,
+
+
+> +
+> +			if (neg)
+> +				tok++;
+> +			dst = neg ? nf : f;
+> +			if (dst[0] != '\0')
+> +				strcat(dst, ",");
+> +			strcat(dst, tok);
+> +		}
+> +		*list_mode = true;
 > +	}
 > +
->  	#
->  	# Use the sched domain in debugfs to check isolated CPUs, if available
->  	#
+> +	*base = no_free_ptr(b);
+> +	*filter = no_free_ptr(f);
+> +	*nofilter = no_free_ptr(nf);
+> +
+> +	return ret;
+>  }
+>  
+>  static int trace_fprobe_create_internal(int argc, const char *argv[],
+> @@ -1241,6 +1310,8 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  	const char *event = NULL, *group = FPROBE_EVENT_SYSTEM;
+>  	struct module *mod __free(module_put) = NULL;
+>  	const char **new_argv __free(kfree) = NULL;
+> +	char *parsed_nofilter __free(kfree) = NULL;
+> +	char *parsed_filter __free(kfree) = NULL;
+>  	char *symbol __free(kfree) = NULL;
+>  	char *ebuf __free(kfree) = NULL;
+>  	char *gbuf __free(kfree) = NULL;
+> @@ -1249,6 +1320,7 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  	char *dbuf __free(kfree) = NULL;
+>  	int i, new_argc = 0, ret = 0;
+>  	bool is_tracepoint = false;
+> +	bool list_mode = false;
+>  	bool is_return = false;
+>  
+>  	if ((argv[0][0] != 'f' && argv[0][0] != 't') || argc < 2)
+> @@ -1270,11 +1342,26 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  
+>  	trace_probe_log_set_index(1);
+>  
+> -	/* a symbol(or tracepoint) must be specified */
+> -	ret = parse_symbol_and_return(argc, argv, &symbol, &is_return, is_tracepoint);
+> +	/* Parse spec early (single vs list, suffix, base symbol) */
+> +	ret = parse_fprobe_spec(argv[1], is_tracepoint, &symbol, &is_return,
+> +			&list_mode, &parsed_filter, &parsed_nofilter);
+>  	if (ret < 0)
+>  		return -EINVAL;
+>  
+> +	for (i = 2; i < argc; i++) {
+> +		char *tmp = strstr(argv[i], "$retval");
+> +
+> +		if (tmp && !isalnum(tmp[7]) && tmp[7] != '_') {
+> +			if (is_tracepoint) {
+> +				trace_probe_log_set_index(i);
+> +				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
+> +				return -EINVAL;
+> +			}
+> +			is_return = true;
+> +			break;
+> +		}
+> +	}
+> +
+>  	trace_probe_log_set_index(0);
+>  	if (event) {
+>  		gbuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
+> @@ -1287,6 +1374,15 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  	}
+>  
+>  	if (!event) {
+> +		/*
+> +		 * Event name rules:
+> +		 * - For list/wildcard: require explicit [GROUP/]EVENT
+> +		 * - For single literal: autogenerate symbol__entry/symbol__exit
+> +		 */
+> +		if (list_mode || has_wildcard(symbol)) {
+> +			trace_probe_log_err(0, NO_GROUP_NAME);
+> +			return -EINVAL;
+> +		}
+>  		ebuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
+>  		if (!ebuf)
+>  			return -ENOMEM;
+> @@ -1322,7 +1418,8 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  							NULL, NULL, NULL, sbuf);
+>  		}
+>  	}
+> -	if (!ctx->funcname)
+> +
+> +	if (!list_mode && !has_wildcard(symbol) && !is_tracepoint)
+>  		ctx->funcname = symbol;
+>  
+>  	abuf = kmalloc(MAX_BTF_ARGS_LEN, GFP_KERNEL);
+> @@ -1356,6 +1453,21 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  		return ret;
+>  	}
+>  
+> +	/* carry list parsing result into tf */
+> +	if (!is_tracepoint) {
+> +		tf->list_mode = list_mode;
+> +		if (parsed_filter) {
+> +			tf->filter = kstrdup(parsed_filter, GFP_KERNEL);
+> +			if (!tf->filter)
+> +				return -ENOMEM;
+> +		}
+> +		if (parsed_nofilter) {
+> +			tf->nofilter = kstrdup(parsed_nofilter, GFP_KERNEL);
+> +			if (!tf->nofilter)
+> +				return -ENOMEM;
+> +		}
+> +	}
+> +
+>  	/* parse arguments */
+>  	for (i = 0; i < argc; i++) {
+>  		trace_probe_log_set_index(i + 2);
+> @@ -1442,8 +1554,9 @@ static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
+>  	seq_printf(m, ":%s/%s", trace_probe_group_name(&tf->tp),
+>  				trace_probe_name(&tf->tp));
+>  
+> -	seq_printf(m, " %s%s", trace_fprobe_symbol(tf),
+> -			       trace_fprobe_is_return(tf) ? "%return" : "");
+> +	seq_printf(m, " %s", trace_fprobe_symbol(tf));
+> +	if (!trace_fprobe_is_tracepoint(tf) && trace_fprobe_is_return(tf))
+> +		seq_puts(m, ":exit");
+>  
+>  	for (i = 0; i < tf->tp.nr_args; i++)
+>  		seq_printf(m, " %s=%s", tf->tp.args[i].name, tf->tp.args[i].comm);
+> -- 
+> 2.43.0
+> 
+
 
 -- 
-Best regards,
-Ridong
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
