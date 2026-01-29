@@ -1,285 +1,181 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D399532AAC9
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 22:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C5EF30AACA;
+	Thu, 29 Jan 2026 22:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769725077; cv=none; b=gHlbrpnvlFX+hBhIZuseMQrhhJkodkzM6IFOcJlw7SlMUVth+6Fv+PB65Es9WwDrb+aNZBS5wmUwZoqSITuciiwc76j5M5doAl8f8d0r9F5tuuiHtUpZZFYMSz+lfDn/BAtfqvMSU4DwA7NcabWPG+Kvwd5/cUPpuG2JwDjFjus=
+	t=1769725323; cv=none; b=LEgVzYFc8Jk8pjy8oH1KC8K78HR1PaYnb3YQ3AB1zgVbtkcXqbo2giE7A4nubFmoVYeuurnA2Cj58RB9+t+/Z2g8oL/fp4TSUU2WIKxyOAkbL91Lhqgy/2zQ7EbpmpSYm8Kl8OuuwFrq/RQVGzZjIT7z0xJcXswR0/PsStMpbHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769725077; c=relaxed/simple;
-	bh=/zL7B3FCILle4gEIk42B7eSJqbXtnCdfr95PBh8NC8I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=B7dIl0z8Dj0yMvYTs7orMlogq06cuE/TqAfeEawPN2vnA7Yqt55zXLig+iCiczmu+ICpe8DZWoHjbqILFkE9IKMd5gUetQEYwk3LQMR3XSM+L8E5JttXp36bRzRWwqp4kcvTaIQMvLttVabT/iN4oRc/+d6H1/UMNjZaE4JkRhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J8SL3wOd; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769725323; c=relaxed/simple;
+	bh=YOhuPnqO0WqEosTb6OgiV/9VaOPjLa3inOLH+4qFvDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WzHcpn57YuO0RlGgmxpnfOKVY2+HotJ3nUSXVOJUwzs6znaG290TrHjO9QP7HiDNC+PSV5KCWpIkIV/v8vXgHjS14A1hPfft2U8PKvLW1Tep7AZ3UK0QBxyoFAQ53V0GeQiDbNTUjFr001zSEtBWahMuXz5Of5gL5HicFAt1G/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JFbmvvQb; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J8SL3wOd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769725074;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=HGj1Mvprj4t38CWkNwGjGCEoKgecHbX9MRBgck4BO/w=;
-	b=J8SL3wOdAIzZ32dnOeNphchckVxN/jmC8fB4ubq4AuDPoWTHOJz+yDObAeUYjSviRhGbJO
-	FrvzMthVv5GuXKdlmpFhtz2gyIAFqHfYPdI7wkTUaNO2ZORltLptOWnCTBPBcZy3SbeV8u
-	92V176q1RyaekbcgPlrgg0lNvXFhi2U=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-286-vU55RsBtPjuETsrkLiHW0Q-1; Thu,
- 29 Jan 2026 17:17:51 -0500
-X-MC-Unique: vU55RsBtPjuETsrkLiHW0Q-1
-X-Mimecast-MFC-AGG-ID: vU55RsBtPjuETsrkLiHW0Q_1769725070
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EC01319560B5;
-	Thu, 29 Jan 2026 22:17:49 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (unknown [10.22.66.39])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 59AE61800665;
-	Thu, 29 Jan 2026 22:17:49 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-	id AE7CEC17CB; Thu, 29 Jan 2026 17:17:48 -0500 (EST)
-Date: Thu, 29 Jan 2026 17:17:48 -0500
-From: Aristeu Rozanski <aris@redhat.com>
-To: linux-kselftest@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, liuye <liuye@kylinos.cn>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Subject: [PATCH] selftests/memfd: use IPC semaphore instead of SIGSTOP/SIGCONT
-Message-ID: <7888ed77-da89-41b2-a73e-09038b7c9285@work>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JFbmvvQb"
+Received: from localhost (unknown [40.65.108.177])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 5D12120B7168;
+	Thu, 29 Jan 2026 14:22:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5D12120B7168
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1769725321;
+	bh=l69U1dIrB2ccHzImzegm889MzCj0l8Bz/N1WHXvfoHo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=JFbmvvQbSZuWgKtGygvkszx2JeEWdtJpgkKy9JrbMd/Wd5/9p+qh8F8DQZUL3TZRu
+	 2F9IotVi63Q1+5xtXPAj5Z5VpgM5SnxXvlYLMhpARcjtNuquJ02rdkhqPezl4x+bzG
+	 YQ4Gy7p2dGglcG8jvPE5kn+665aOMwS0WLDY/OxQ=
+Date: Thu, 29 Jan 2026 14:21:58 -0800
+From: Jacob Pan <jacob.pan@linux.microsoft.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran
+ <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro
+ <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, Bjorn
+ Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, David Rientjes
+ <rientjes@google.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe
+ <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke
+ <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+ kexec@lists.infradead.org, kvm@vger.kernel.org, Leon Romanovsky
+ <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, "=?UTF-8?Q?Mic?=
+ =?UTF-8?Q?ha=C5=82?= Winiarski" <michal.winiarski@intel.com>, Mike Rapoport
+ <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, Pasha Tatashin
+ <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>,
+ Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta
+ <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed
+ <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, Shuah Khan
+ <skhan@linuxfoundation.org>, "Thomas =?UTF-8?Q?Hellstr=C3=B6m?="
+ <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>,
+ Vipin Sharma <vipinsh@google.com>, Vivek Kasireddy
+ <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu
+ <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
+ Live Update
+Message-ID: <20260129142158.00004cdc@linux.microsoft.com>
+In-Reply-To: <20260129212510.967611-11-dmatlack@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+	<20260129212510.967611-11-dmatlack@google.com>
+Organization: LSG
+X-Mailer: Claws Mail 3.21.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20241114-35-62db1e
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-In order to synchronize new processes to test inheritance of
-memfd_noexec sysctl, memfd_test sets up the sysctl with a value before
-creating the new process. The new process then sends itself a SIGSTOP
-in order to wait for the parent to flip the sysctl value and send a
-SIGCONT signal.
+Hi David,
 
-This would work as intended if it wasn't the fact that the new process
-is being created with CLONE_NEWPID, which creates a new PID namespace and
-the new process has PID 1 in this namespace. There're restrictions on
-sending signals to PID 1 and, although it's relaxed for other than root
-PID namespace, it's biting us here. In this specific case the SIGSTOP sent
-by the new process is ignored (no error to kill() is returned) and it never
-stops its execution. This is usually not noticiable as the parent usually
-manages to set the new sysctl value before the child has a chance to run
-and the test succeeds. But if you run the test in a loop, it eventually
-reproduces:
+On Thu, 29 Jan 2026 21:24:57 +0000
+David Matlack <dmatlack@google.com> wrote:
 
-	while [ 1 ]; do ./memfd_test >log 2>&1 || break; done; cat log
+> From: Vipin Sharma <vipinsh@google.com>
+>=20
+> Do not reset the device when a Live Update preserved vfio-pci device
+> is retrieved and first enabled. vfio_pci_liveupdate_freeze()
+> guarantees the device is reset prior to Live Update, so there's no
+> reason to reset it again after Live Update.
+>=20
+> Since VFIO normally uses the initial reset to detect if the device
+> supports function resets, pass that from the previous kernel via
+> struct vfio_pci_core_dev_ser.
+>=20
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  drivers/vfio/pci/vfio_pci_core.c       | 22 +++++++++++++++++-----
+>  drivers/vfio/pci/vfio_pci_liveupdate.c |  1 +
+>  include/linux/kho/abi/vfio_pci.h       |  2 ++
+>  include/linux/vfio_pci_core.h          |  1 +
+>  4 files changed, 21 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c
+> b/drivers/vfio/pci/vfio_pci_core.c index b01b94d81e28..c9f73f597797
+> 100644 --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -515,12 +515,24 @@ int vfio_pci_core_enable(struct
+> vfio_pci_core_device *vdev) if (ret)
+>  		goto out_power;
+> =20
+> -	/* If reset fails because of the device lock, fail this path
+> entirely */
+> -	ret =3D pci_try_reset_function(pdev);
+> -	if (ret =3D=3D -EAGAIN)
+> -		goto out_disable_device;
+> +	if (vdev->liveupdate_incoming_state) {
+> +		/*
+> +		 * This device was preserved by the previous kernel
+> across a
+> +		 * Live Update, so it does not need to be reset.
+> +		 */
+> +		vdev->reset_works =3D
+> vdev->liveupdate_incoming_state->reset_works;
+Just wondering what happened to skipping the bus master clearing. I
+understand this version does not preserve the device itself yet; I=E2=80=99m
+just curious whether there were specific difficulties that led to
+dropping the earlier patch which skipped clearing bus master.
 
-So this patch replaces the SIGSTOP/SIGCONT synchronization with IPC
-semaphore.
-
-Fixes: 6469b66e3f5a3 (selftests: improve vm.memfd_noexec sysctl tests, 2023-08-14)
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: liuye <liuye@kylinos.cn>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Aristeu Rozanski <aris@ruivo.org>
-
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -18,6 +18,9 @@
- #include <sys/stat.h>
- #include <sys/syscall.h>
- #include <sys/wait.h>
-+#include <sys/types.h>
-+#include <sys/ipc.h>
-+#include <sys/sem.h>
- #include <unistd.h>
- #include <ctype.h>
- 
-@@ -39,6 +42,20 @@
- 		    F_SEAL_EXEC)
- 
- #define MFD_NOEXEC_SEAL	0x0008U
-+union semun {
-+	int val;
-+	struct semid_ds *buf;
-+	unsigned short int *array;
-+	struct seminfo *__buf;
-+};
-+
-+/*
-+ * we use semaphores on nested wait tasks due the use of CLONE_NEWPID: the
-+ * children will be PID 1 and can't send SIGSTOP to itself due special
-+ * treatment of the init task, so the SIGSTOP/SIGCONT synchronization
-+ * approach can't be used here.
-+ */
-+#define SEM_KEY 0xdeadbeef
- 
- /*
-  * Default is not to test hugetlbfs
-@@ -1333,8 +1350,22 @@ static int sysctl_nested(void *arg)
- 
- static int sysctl_nested_wait(void *arg)
- {
--	/* Wait for a SIGCONT. */
--	kill(getpid(), SIGSTOP);
-+	int sem = semget(SEM_KEY, 1, 0600);
-+	struct sembuf sembuf;
-+
-+	if (sem < 0) {
-+		perror("semget:");
-+		abort();
-+	}
-+	sembuf.sem_num = 0;
-+	sembuf.sem_flg = 0;
-+	sembuf.sem_op = 0;
-+
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		abort();
-+	}
-+
- 	return sysctl_nested(arg);
- }
- 
-@@ -1355,7 +1386,9 @@ static void test_sysctl_sysctl2_failset(void)
- 
- static int sysctl_nested_child(void *arg)
- {
--	int pid;
-+	int pid, sem;
-+	union semun semun;
-+	struct sembuf sembuf;
- 
- 	printf("%s nested sysctl 0\n", memfd_str);
- 	sysctl_assert_write("0");
-@@ -1389,23 +1422,53 @@ static int sysctl_nested_child(void *arg)
- 			   test_sysctl_sysctl2_failset);
- 	join_thread(pid);
- 
-+	sem = semget(SEM_KEY, 1, IPC_CREAT | 0600);
-+	if (sem < 0) {
-+		perror("semget:");
-+		return 1;
-+	}
-+	semun.val = 1;
-+	sembuf.sem_op = -1;
-+	sembuf.sem_flg = 0;
-+	sembuf.sem_num = 0;
-+
- 	/* Verify that the rules are actually inherited after fork. */
- 	printf("%s nested sysctl 0 -> 1 after fork\n", memfd_str);
- 	sysctl_assert_write("0");
- 
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl1_failset);
- 	sysctl_assert_write("1");
--	kill(pid, SIGCONT);
-+
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
- 	printf("%s nested sysctl 0 -> 2 after fork\n", memfd_str);
- 	sysctl_assert_write("0");
- 
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl2_failset);
- 	sysctl_assert_write("2");
--	kill(pid, SIGCONT);
-+
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
- 	/*
-@@ -1415,28 +1478,62 @@ static int sysctl_nested_child(void *arg)
- 	 */
- 	printf("%s nested sysctl 2 -> 1 after fork\n", memfd_str);
- 	sysctl_assert_write("2");
-+
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl2);
- 	sysctl_assert_write("1");
--	kill(pid, SIGCONT);
-+
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
- 	printf("%s nested sysctl 2 -> 0 after fork\n", memfd_str);
- 	sysctl_assert_write("2");
-+
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl2);
- 	sysctl_assert_write("0");
--	kill(pid, SIGCONT);
-+
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
- 	printf("%s nested sysctl 1 -> 0 after fork\n", memfd_str);
- 	sysctl_assert_write("1");
-+
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl1);
- 	sysctl_assert_write("0");
--	kill(pid, SIGCONT);
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
-+	semctl(sem, 0, IPC_RMID);
-+
- 	return 0;
- }
- 
+> +	} else {
+> +		/*
+> +		 * If reset fails because of the device lock, fail
+> this path
+> +		 * entirely.
+> +		 */
+> +		ret =3D pci_try_reset_function(pdev);
+> +		if (ret =3D=3D -EAGAIN)
+> +			goto out_disable_device;
+> +
+> +		vdev->reset_works =3D !ret;
+> +	}
+> =20
+> -	vdev->reset_works =3D !ret;
+>  	pci_save_state(pdev);
+>  	vdev->pci_saved_state =3D pci_store_saved_state(pdev);
+>  	if (!vdev->pci_saved_state)
+> diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c
+> b/drivers/vfio/pci/vfio_pci_liveupdate.c index
+> 1ad7379c70c4..c52d6bdb455f 100644 ---
+> a/drivers/vfio/pci/vfio_pci_liveupdate.c +++
+> b/drivers/vfio/pci/vfio_pci_liveupdate.c @@ -57,6 +57,7 @@ static int
+> vfio_pci_liveupdate_preserve(struct liveupdate_file_op_args *args)=20
+>  	ser->bdf =3D pci_dev_id(pdev);
+>  	ser->domain =3D pci_domain_nr(pdev->bus);
+> +	ser->reset_works =3D vdev->reset_works;
+> =20
+>  	args->serialized_data =3D virt_to_phys(ser);
+>  	return 0;
+> diff --git a/include/linux/kho/abi/vfio_pci.h
+> b/include/linux/kho/abi/vfio_pci.h index 9bf58a2f3820..6c3d3c6dfc09
+> 100644 --- a/include/linux/kho/abi/vfio_pci.h
+> +++ b/include/linux/kho/abi/vfio_pci.h
+> @@ -34,10 +34,12 @@
+>   *
+>   * @bdf: The device's PCI bus, device, and function number.
+>   * @domain: The device's PCI domain number (segment).
+> + * @reset_works: Non-zero if the device supports function resets.
+>   */
+>  struct vfio_pci_core_device_ser {
+>  	u16 bdf;
+>  	u16 domain;
+> +	u8 reset_works;
+>  } __packed;
+> =20
+>  #endif /* _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H */
+> diff --git a/include/linux/vfio_pci_core.h
+> b/include/linux/vfio_pci_core.h index 350c30f84a13..95835298e29e
+> 100644 --- a/include/linux/vfio_pci_core.h
+> +++ b/include/linux/vfio_pci_core.h
+> @@ -16,6 +16,7 @@
+>  #include <linux/types.h>
+>  #include <linux/uuid.h>
+>  #include <linux/notifier.h>
+> +#include <linux/kho/abi/vfio_pci.h>
+> =20
+>  #ifndef VFIO_PCI_CORE_H
+>  #define VFIO_PCI_CORE_H
 
