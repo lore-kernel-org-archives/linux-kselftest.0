@@ -1,115 +1,123 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E928227563
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 15:19:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBAC25FA10
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 15:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769699978; cv=none; b=XrahsxvzqWV9n+Lv2tsbSmKP+feq7GTY8h0kqpO3RvS8L2apf9T1bOwV2rSCn1undM7kjYTr68sc6pUXjF8sSZgYJGjMzJzLPDbmu3zZDv7tSM8TPpsIIUfZDWL2DA4YQWArM6ftJoVaaeoQ3/fTd6rLcyUmjwaunytRcnw3vfU=
+	t=1769701885; cv=none; b=It1oXFzwPdyInzKOZzIeHG0cGLbSPuwHE5ufa59UC605L8x5yKOZNlPhDa09HP17eqwjRvVbrL9+xHn0p4CjFtjEForx31KnMEK/Ev5JNzlHy1s2B2usCKmjI1ZwcMtzoxazaCYZsxl1jBHqeT0xTBuP/VK1LDaEbxRSPJaQl18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769699978; c=relaxed/simple;
-	bh=wf9E53pS+pa+ZiyOt5s2q1+5OrQHBtyxnOCqcXwUAEY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=KHJSIK62ZR+1PPG+kNmZvkinwnlobupzHY+MaU15hjTegSrh6Sr3kv2dHTISdfuQhxMkuuLmlYHOj/Oq+2ezv4j2Eljra2+QRkDtu5oP3/2i0Pdp9gspZ5zU87A2pVCCpR1ZhvgwmZoENh5yIiksjnmworjygtIbDNfjzs96CwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OUq4eMJc; arc=none smtp.client-ip=91.218.175.186
+	s=arc-20240116; t=1769701885; c=relaxed/simple;
+	bh=jc86nxPbqmTKqXlbhlpra9MGSXv1JuBgM7NgrFBhGyk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VlTxXazo1U5BGfMEa7+nMUYssHNgXyizDAwJ+2T09EvOa1TybEivDBV90PpuQgmEfbr8JGb0x8FStu3s6lxrgVEvuAwuRPZhg9JWKBoKGs23rCsr+JjbuAFN0Dyj2muYm4/6m53V0GaXF/7OSSKFRPo6eyecmR1PEH19WokGwe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KzP36po8; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OUq4eMJc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KzP36po8"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769701879;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ctcQwPUhn/CREyCgaiX/XAgOXE8OMZeTnRPpvn+cap4=;
+	b=KzP36po8UqEg9VMmawwQF6A37EPdHBRGn3LJLrA/7uop7MwuIh3oPAbeSkS7/g3a9z9a3E
+	292g6Bj9vKAGW0s2XVwOgiR6IEOHtjDYF5jyB+DL7TrldX32oIB9PR79lLhXFn0rB1KdAO
+	dc7L/9fOu4AKUbMXkIqGfh4+V9w/Qog=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v4 0/3] bpf, arm64: Add fsession support
+Date: Thu, 29 Jan 2026 23:49:50 +0800
+Message-ID: <20260129154953.66915-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769699974;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DVbbNBM8h2hLry9+PjA9Xnf//1plR69ceWUdZQzpcN8=;
-	b=OUq4eMJc8eAdZ74vls9q8VxZhtpQjlW71HAqe06bfYZVmfblin6PvTAr9ovnnwAOqy2SHM
-	24swlbe1CfBBQ96jm4P6At9i0DMhjw3nRRxbO665shByg8zcgEDx90niAclRdqcXz0KwLW
-	/Khir5oloAjBwkPM0mh1F9tQ6FLJ5xo=
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 29 Jan 2026 23:19:19 +0800
-Message-Id: <DG16A1T5EJWO.D9L79G1ZE8H9@linux.dev>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
- <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
- <jolsa@kernel.org>, <puranjay@kernel.org>, <xukuohai@huaweicloud.com>,
- <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
- <menglong8.dong@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kernel-patches-bot@fb.com>, <martin.lau@kernel.org>, <clm@meta.com>,
- <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf: Add bpf_jit_supports_fsession()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Leon Hwang" <leon.hwang@linux.dev>
-To: <bot+bpf-ci@kernel.org>, <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
-References: <20260129142536.48637-2-leon.hwang@linux.dev>
- <97fd7e67669f887badde4e276fc501a5969ff9dac703a6dccedda386dacd25f1@mail.kernel.org>
-In-Reply-To: <97fd7e67669f887badde4e276fc501a5969ff9dac703a6dccedda386dacd25f1@mail.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On Thu Jan 29, 2026 at 10:54 PM +08, bot+bpf-ci wrote:
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index e7ff8394e0..6e0693ac72 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -24874,6 +24874,9 @@ int bpf_check_attach_target(struct bpf_verifier_=
-log *log,
->>  	case BPF_TRACE_FENTRY:
->>  	case BPF_TRACE_FEXIT:
->>  	case BPF_TRACE_FSESSION:
->> +		if (prog->expected_attach_type =3D=3D BPF_TRACE_FSESSION &&
->> +		    !bpf_jit_supports_fsession())
->> +			return -EOPNOTSUPP;
->
-> This isn't a bug, but other similar bpf_jit_supports_*() checks in
-> this file include a bpf_log() message before returning an error. For
-> example:
->
->   bpf_jit_supports_kfunc_call() -> "JIT does not support calling kernel f=
-unction"
->   bpf_jit_supports_exceptions() -> "JIT does not support calling kfunc...=
-"
->   bpf_jit_supports_arena()      -> "JIT doesn't support arena"
->   bpf_jit_supports_private_stack() -> "Private stack not supported by jit=
-"
->
-> Should this check also include a message like "JIT does not support
-> fsession" for consistency with other similar checks in the verifier?
->
+Similar to commit 98770bd4e6df ("bpf,x86: add fsession support for x86_64"),
+add fsession support on arm64.
 
-That makes sense.
+Patch #1 adds bpf_jit_supports_fsession() to prevent fsession loading
+on architectures that do not implement fsession support.
 
-Let me add the log message.
+Patch #2 implements fsession support in the arm64 BPF JIT trampoline.
 
-Thanks,
-Leon
+Patch #3 enables the relevant selftests on arm64, including get_func_ip,
+and get_func_args.
 
+All enabled tests pass on arm64:
 
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/214822=
-97342
->
-> AI-authorship-score: low
-> AI-authorship-explanation: The commit demonstrates specific debugging con=
-text with actual test output and errno values, correct understanding of ker=
-nel BPF conventions, and follows established patterns - typical of experien=
-ced human kernel developers.
-> issues-found: 1
-> issue-severity-score: low
-> issue-severity-explanation: Minor consistency issue - missing bpf_log() e=
-rror message compared to similar checks in the same file; does not affect f=
-unctionality or stability.
+ cd tools/testing/selftests/bpf
+ ./test_progs -t fsession
+ #135/1   fsession_test/fsession_test:OK
+ #135/2   fsession_test/fsession_reattach:OK
+ #135/3   fsession_test/fsession_cookie:OK
+ #135     fsession_test:OK
+ Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+
+ ./test_progs -t get_func
+ #138     get_func_args_test:OK
+ #139     get_func_ip_test:OK
+ Summary: 2/0 PASSED, 0 SKIPPED, 0 FAILED
+
+Changes:
+v3 -> v4:
+* Add a log when !bpf_jit_supports_fsession() in patch #1 (per AI).
+* v3: https://lore.kernel.org/bpf/20260129142536.48637-1-leon.hwang@linux.dev/
+
+v2 -> v3:
+* Fix typo in subject and patch message of patch #1 (per AI and Chris).
+* Collect Acked-by, and Tested-by from Puranjay, thanks.
+* v2: https://lore.kernel.org/bpf/20260128150112.8873-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+* Add bpf_jit_supports_fsession().
+* v1: https://lore.kernel.org/bpf/20260127163344.92819-1-leon.hwang@linux.dev/
+
+Leon Hwang (3):
+  bpf: Add bpf_jit_supports_fsession()
+  bpf, arm64: Add fsession support
+  selftests/bpf: Enable get_func_args and get_func_ip tests on arm64
+
+ arch/arm64/net/bpf_jit_comp.c                 | 71 ++++++++++++++++---
+ arch/x86/net/bpf_jit_comp.c                   |  5 ++
+ include/linux/bpf.h                           |  7 +-
+ include/linux/filter.h                        |  1 +
+ kernel/bpf/core.c                             |  5 ++
+ kernel/bpf/verifier.c                         |  5 ++
+ .../selftests/bpf/prog_tests/fsession_test.c  | 32 ++++++---
+ .../selftests/bpf/progs/get_func_args_test.c  |  2 +-
+ .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
+ 9 files changed, 110 insertions(+), 20 deletions(-)
+
+--
+2.52.0
+
