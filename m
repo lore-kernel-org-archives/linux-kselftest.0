@@ -1,427 +1,251 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C851A156236
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 21:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5AD3271F2
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 21:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769721394; cv=none; b=YFdgUdZZzzBZfEJ9+LjHf1N2PzhzpwGyLaRmugtAkQwfn56FFqhuLfOyE+fpZ2SQLskdSCtgwIERpg7Avj5nGsTv/DmHmdmM4FkSL1YXblC/3u/QnsIJcDlXVNn6t0ih5hxaAVl3nG+Cqrwh0/IVwLVffGG+Te0DwGKO2u6cy4I=
+	t=1769721940; cv=none; b=UNEGG5AoDz0vqeJhdIcvkz38I+oquI6NbyZHHuJZgaBsVP0vD3g9P/5T0dEtu/HQs4/RHIrQqgmEz7RJOty5uD6pO3t4FAtDICac8qMi35nmodI7OHVTQ9xgs4FXXQn0MxGolpOpG82njDdfOzmnJ1Rgo3CyDIORJmB2YCsLxK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769721394; c=relaxed/simple;
-	bh=H5q/NMUO5HBilpHqiI8W/GgeX6KSRBcuD3xZF9DIc/w=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=rZ30QypxfbyB3m5ZMcQRNc3C+MtZ3dad7lSU0eQYBXiVuaeCg2wXv2DIl2H6yCn4Utm5eCx86Xp16uO2o+EB6gLmgSaVHib8GlbnwI1bF6IwtQQ/r4rfCrPy5upBxIDhsIK6X4aOdu/kkNS+I7l5pa+28bXMcGbGIQKdmMsSuxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g4VStbx5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=oGfkt/vX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769721940; c=relaxed/simple;
+	bh=i4fTBf4JlgeFGGBKcJxBa5kh3xL/047pYN73iqANQCo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=dxvbyMJXZ4HLqCD7exwlNd5oBDhoPNgAJFA6adRdzGKHTtF1r8Z1yJpANMTZl1MN2yDIkwlUoI1odffcYyeRvt04bo/E3MoMAaE4bRLW8EtEkA3IG0WnwNsGYPfl93LGq7u5of2m01lIXgnTz7Hg0ozpwlQNEU8xvUYA6dliXwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rabo/T+8; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g4VStbx5";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="oGfkt/vX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769721390;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wXHnk3hH54f4btn//z/52twaEW5WoT4FbDzBsy0ygcQ=;
-	b=g4VStbx5Nxbkmm/jXe7ru1I8njDu0HZR3WRKCvIsJT92tZ/FBc/K7Dtb7VVPU04jgTzIHs
-	qqNYa+ukwn5sSrSxDMit8VeNAx+aL2Ym5a2jKGsx92x9Ck9n4Z+vFTf9TUj7Dd5EdeL8mP
-	wIOeE8mrhdZM4NiNjQaSHRYF3LNERuQ=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-103-AjdjCoJjMpG1vC1iRYgcSg-1; Thu, 29 Jan 2026 16:16:29 -0500
-X-MC-Unique: AjdjCoJjMpG1vC1iRYgcSg-1
-X-Mimecast-MFC-AGG-ID: AjdjCoJjMpG1vC1iRYgcSg_1769721389
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-50340e2b4dfso75292021cf.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:16:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rabo/T+8"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-34ac814f308so2198807a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:25:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769721389; x=1770326189; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wXHnk3hH54f4btn//z/52twaEW5WoT4FbDzBsy0ygcQ=;
-        b=oGfkt/vXQy1KePBWVaF5hiJ0+Q5mOQSszJ6XYaottbxgbtNopJ/1Lk7fWdTBl4g4f6
-         7u1LwbPTsrg/amKcVbkeo4qy6EBved7Mw50Ohz6NNNGGR9Q7O1fbDG1PDVNyG5cAQR3o
-         87hJLa/BqPJIP6FlP12WiNaDOY4CvUViAdrDMxOTB4ibPnKKCmBG6f9acxXM0jXHB3f/
-         n2yynCcUAx14Gpryyt0u1hTNd9EMQYIzcttzLxkFGwjFxQ1mR6nIFZ/+++aZgFrngpgO
-         3iZztG5sx3YQdNnnLNTFJ3/f/V0mWUuv25/1o57KyMXRl+OU53DAnW4Oj0FSzLesX0Sa
-         DAtg==
+        d=google.com; s=20230601; t=1769721938; x=1770326738; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=F7w0g/nR8ml7KkZqbualmYDfY5KbOVPfKhgZAMsaNL0=;
+        b=rabo/T+8aRjoD7P1QZ8TCY/4/GS6vNQ0egChJrpISJiM+F4VCOxEzL4le8ycju9fEv
+         lp0GcuNU/MOaAixSrbDVjoFVONl0TI3BBA5GWqC9CYxrZwicUgBVaWYNKKn77KqX/Sam
+         dgtIaJ6EpfOsEbSRTkKdBejlCF5Y+2nJBto+ehl1JsW1z85GvFmk8GSbx9IBrZKZJ29Z
+         Hg6XVlKxnWX0iRwa/GV15HYmLxTAnYA/Felbe1nyCkhHpKoaa1J6A9O1Ls8XDSteQjpo
+         D8hJxDHZnBxji1UpYMpx0rcJEL5b52AvCY6qrAVTWe9RAxZbr1przjpCsKcAmX4JqKzX
+         bUgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769721389; x=1770326189;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wXHnk3hH54f4btn//z/52twaEW5WoT4FbDzBsy0ygcQ=;
-        b=noqnUE481+OrjrfF9sxZdGd1S0CfMO41G5COn7PJezKClTaqzmkGnDgf0yABtssWUM
-         /HQtbRCfzNGn2BONH6rFiXi7otAyS9s2c5ZRtFlWx/A01nu5mTwaZLBQcnj10Lw5ZaMc
-         oc1srUeFaR08Rv7kHHP22eH4JswCniOirLUtOlmVxtqpxwu8/H87Uo7ODfOrWwUFhY9/
-         9uFJhUeRAxi3s8JfscchPf0qMQxsCQ4jGrlRBsFwwRhmzCX26OJ/0pF72prOaul7aPUz
-         53yI6RqPk+am6sDh4mkDrXlvqVFhq5s/Ay2LBfbNPQcDmi0iGx3J5eNivZTLaDLZDQzx
-         Qgeg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6daaRqp4Q1txObiWCi3Bo7dYFEE/p1xB+bPSUx76ADkmkKX9kW2U6ewVG9oWIRTZ+h9YDxt3peG9q0eWl1pg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpULph7wPHSYJdZfxSY8+oWv05GWkvVcaBVJBOJMyGy9xcCond
-	adm7tJG9aV087WpiEz8k+NWm3/CECUxvggD7E6/bc3D7OeqvjSiZe5d6uutoHbU+xObcUhxmjYX
-	BcT8RdhDctY6Ds+IjPo70qWPYnaR64hSh5+l6go6/OtdeEnCM+MuLsJIU/beF8sSEBo3HRw==
-X-Gm-Gg: AZuq6aLHN+AWMLHiPAzzfyqrZRKlPrnjQVqZSe4pHEK6E+ZjIGAZdShfiQjl0RtH2DD
-	wYlXh9Rpr2SwG9XXWPykSd1lYC6sMuvjDbKG1GtufgzkvPvTBW1KEZGN2iw+6ieWq+cdgdnYomU
-	Oo+MzGnbvY+WGjLph2xLW82AFc7yImAqkNZe86pvBw98rZqTJDacoesL4rzDxfE/M2/5TGrrjV8
-	g+Qa0hldesHNmVU2412YV4uxcLjLLiDf5AoK3r84iyMIGCiVwvEOOwacCVdbHJDP581kuRZ87Ym
-	haHYWCSVy77wFckPGLd6G2x/02pjucb3XX/qTVrT9WEuuOARz/vKQEcTaLrZf1Bac1cH1v520Ut
-	4WzDx+4GsaLEAIspVRVx2u9ng8qYMplR5hbryHUlWQtLG40vwWJ1hduEE
-X-Received: by 2002:ac8:5950:0:b0:4f1:de1c:dfa8 with SMTP id d75a77b69052e-505d2190592mr14168721cf.19.1769721388958;
-        Thu, 29 Jan 2026 13:16:28 -0800 (PST)
-X-Received: by 2002:ac8:5950:0:b0:4f1:de1c:dfa8 with SMTP id d75a77b69052e-505d2190592mr14168251cf.19.1769721388497;
-        Thu, 29 Jan 2026 13:16:28 -0800 (PST)
-Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-894d376e65bsm44985986d6.55.2026.01.29.13.16.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jan 2026 13:16:27 -0800 (PST)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <a6f6a5f6-ca71-424d-a56f-96a896a151ae@redhat.com>
-Date: Thu, 29 Jan 2026 16:16:26 -0500
+        d=1e100.net; s=20230601; t=1769721938; x=1770326738;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F7w0g/nR8ml7KkZqbualmYDfY5KbOVPfKhgZAMsaNL0=;
+        b=eG0SH0/RJLT1sCAuwYGmzLL6N42WF8XJpE8o2DArvaON8LSggg2nyQHHwwLvs0AqcE
+         pI4z8BX9bTRfj8Sss/aWx3YB8/brl/RKPuZbFaX2O1mUZ007zs/N7kw8uCDDNuCujxJJ
+         TVx4yBv8Ew5xDqZ4I9sMutR5xj3PhbCLCvATfhc3A6MtCe0qLedKI7ybE0zgWjvReT/m
+         wZAMYJGSMMZGzZpd7P3AcV034IL523VwnCUS11KffjXat1nVroj1KZHLC0SeNMsw2OXl
+         UN9aYJcvkJ67ih2p4xCA5G1wX3RQ2Q6/wA9GCSZBABQbVTc4GKP6L7z/Lp1lsCPDR/zH
+         dFpw==
+X-Forwarded-Encrypted: i=1; AJvYcCW7fYgYsoGpjuKoLK6LptnibT1RpTvCUI1G3L1xP+XRCBvO3DKGbdJoGt2v4biuzxNQFkSGbqp/bUQNCVyXzvo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmjJXyU/Ol77k9bvmi4FcW4sgeJjX+WfuA5VKk4xHYCNT+fKR8
+	G3X0uAEP5QBfxKLqoFymRhmpKk5EuDNpaa3dzkS/qr/I3nTRmCdqW/FP92QJ/41VCrOQw1euMkm
+	h7zBSJo8xG20AFg==
+X-Received: from pjd16.prod.google.com ([2002:a17:90b:54d0:b0:32e:ca6a:7ca9])
+ (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:4d06:b0:340:d81d:7874 with SMTP id 98e67ed59e1d1-3543b3b43f0mr808394a91.26.1769721937697;
+ Thu, 29 Jan 2026 13:25:37 -0800 (PST)
+Date: Thu, 29 Jan 2026 21:24:47 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH/for-next 2/2] cgroup/cpuset: Introduce a new top level
- isolcpus_update_mutex
-To: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260128044251.1229702-1-longman@redhat.com>
- <20260128044251.1229702-3-longman@redhat.com>
- <08c3fad6-b881-4089-b081-bde6efbafbd2@huaweicloud.com>
-Content-Language: en-US
-In-Reply-To: <08c3fad6-b881-4089-b081-bde6efbafbd2@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
+Message-ID: <20260129212510.967611-1-dmatlack@google.com>
+Subject: [PATCH v2 00/22] vfio/pci: Base Live Update support for VFIO device files
+From: David Matlack <dmatlack@google.com>
+To: Alex Williamson <alex@shazbot.org>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, 
+	Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
+	David Matlack <dmatlack@google.com>, David Rientjes <rientjes@google.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	"=?UTF-8?q?Micha=C5=82=20Winiarski?=" <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>, 
+	Parav Pandit <parav@nvidia.com>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Pranjal Shrivastava <praan@google.com>, Pratyush Yadav <pratyush@kernel.org>, 
+	Raghavendra Rao Ananta <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, 
+	"=?UTF-8?q?Thomas=20Hellstr=C3=B6m?=" <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>, 
+	Vipin Sharma <vipinsh@google.com>, Vivek Kasireddy <vivek.kasireddy@intel.com>, 
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On 1/29/26 3:01 AM, Chen Ridong wrote:
->
-> On 2026/1/28 12:42, Waiman Long wrote:
->> The current cpuset partition code is able to dynamically update
->> the sched domains of a running system and the corresponding
->> HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
->> "isolcpus=domain,..." boot command line feature at run time.
->>
->> The housekeeping cpumask update requires flushing a number of different
->> workqueues which may not be safe with cpus_read_lock() held as the
->> workqueue flushing code may acquire cpus_read_lock() or acquiring locks
->> which have locking dependency with cpus_read_lock() down the chain. Below
->> is an example of such circular locking problem.
->>
->>    ======================================================
->>    WARNING: possible circular locking dependency detected
->>    6.18.0-test+ #2 Tainted: G S
->>    ------------------------------------------------------
->>    test_cpuset_prs/10971 is trying to acquire lock:
->>    ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at: touch_wq_lockdep_map+0x7a/0x180
->>
->>    but task is already holding lock:
->>    ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
->>
->>    which lock already depends on the new lock.
->>
->>    the existing dependency chain (in reverse order) is:
->>    -> #4 (cpuset_mutex){+.+.}-{4:4}:
->>    -> #3 (cpu_hotplug_lock){++++}-{0:0}:
->>    -> #2 (rtnl_mutex){+.+.}-{4:4}:
->>    -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
->>    -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
->>
->>    Chain exists of:
->>      (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
->>
->>    5 locks held by test_cpuset_prs/10971:
->>     #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
->>     #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x260/0x5f0
->>     #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b6/0x5f0
->>     #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at: cpuset_partition_write+0x77/0x130
->>     #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
->>
->>    Call Trace:
->>     <TASK>
->>       :
->>     touch_wq_lockdep_map+0x93/0x180
->>     __flush_workqueue+0x111/0x10b0
->>     housekeeping_update+0x12d/0x2d0
->>     update_parent_effective_cpumask+0x595/0x2440
->>     update_prstate+0x89d/0xce0
->>     cpuset_partition_write+0xc5/0x130
->>     cgroup_file_write+0x1a5/0x680
->>     kernfs_fop_write_iter+0x3df/0x5f0
->>     vfs_write+0x525/0xfd0
->>     ksys_write+0xf9/0x1d0
->>     do_syscall_64+0x95/0x520
->>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
->>
->> To avoid such a circular locking dependency problem, we have to
->> call housekeeping_update() without holding the cpus_read_lock()
->> and cpuset_mutex. One way to do that is to introduce a new top level
->> isolcpus_update_mutex which will be acquired first if the set of isolated
->> CPUs may have to be updated. This new isolcpus_update_mutex will provide
->> the need mutual exclusion without the need to hold cpus_read_lock().
->>
->> As cpus_read_lock() is now no longer held when
->> tmigr_isolated_exclude_cpumask() is called, it needs to acquire it
->> directly.
->>
->> The lockdep_is_cpuset_held() is also updated to check the new
->> isolcpus_update_mutex.
->>
-> I worry about the issue:
->
-> CPU1				CPU2
-> rmdir
-> css->ss->css_killed(css);			
-> cpuset_css_killed
-> 				__update_isolation_cpumasks
-> 				cpuset_full_unlock
-> css->flags |= CSS_DYING;
-> css_clear_dir(css);
-> ...
-> // offline and free do not
-> // get isolcpus_update_mutex
-> cpuset_css_offline
-> cpuset_css_free
-> 				cpuset_full_lock
-> 				...
-> 				// UAF?
->
-That is the reason why I add a new top-level isolcpus_update_mutex. 
-cpuset_css_killed() and the update_isolation_cpumasks()'s unlock/lock 
-sequence will have to acquire this isolcpus_update_mutex first.
+This series can be found on GitHub:
 
-As long as all the possible paths (except CPU hotplug) that can call 
-into update_isolation_cpumasks() has acquired isolcpus_update_mutex, it 
-will block cpuset_css_killed() from completing. Note that I add a 
-"lockdep_assert_held(&isolcpus_update_mutex);" in 
-update_isolation_cpumasks().
+  https://github.com/dmatlack/linux/tree/liveupdate/vfio/cdev/v2
 
-Cheers,
-Longman
+This series adds the base support to preserve a VFIO device file across
+a Live Update. "Base support" means that this allows userspace to
+safely preserve a VFIO device file with LIVEUPDATE_SESSION_PRESERVE_FD
+and retrieve it with  LIVEUPDATE_SESSION_RETRIEVE_FD, but the device
+itself is not preserved in a fully running state across Live Update.
 
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/cgroup/cpuset.c        | 79 ++++++++++++++++++++++++-----------
->>   kernel/sched/isolation.c      |  4 +-
->>   kernel/time/timer_migration.c |  3 +-
->>   3 files changed, 57 insertions(+), 29 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 98c7cb732206..96390ceb5122 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -78,7 +78,7 @@ static cpumask_var_t	subpartitions_cpus;
->>   static cpumask_var_t	isolated_cpus;
->>   
->>   /*
->> - * isolated_cpus updating flag (protected by cpuset_mutex)
->> + * isolated_cpus updating flag (protected by isolcpus_update_mutex)
->>    * Set if isolated_cpus is going to be updated in the current
->>    * cpuset_mutex crtical section.
->>    */
->> @@ -223,29 +223,46 @@ struct cpuset top_cpuset = {
->>   };
->>   
->>   /*
->> - * There are two global locks guarding cpuset structures - cpuset_mutex and
->> - * callback_lock. The cpuset code uses only cpuset_mutex. Other kernel
->> - * subsystems can use cpuset_lock()/cpuset_unlock() to prevent change to cpuset
->> - * structures. Note that cpuset_mutex needs to be a mutex as it is used in
->> - * paths that rely on priority inheritance (e.g. scheduler - on RT) for
->> - * correctness.
->> + * CPUSET Locking Convention
->> + * -------------------------
->>    *
->> - * A task must hold both locks to modify cpusets.  If a task holds
->> - * cpuset_mutex, it blocks others, ensuring that it is the only task able to
->> - * also acquire callback_lock and be able to modify cpusets.  It can perform
->> - * various checks on the cpuset structure first, knowing nothing will change.
->> - * It can also allocate memory while just holding cpuset_mutex.  While it is
->> - * performing these checks, various callback routines can briefly acquire
->> - * callback_lock to query cpusets.  Once it is ready to make the changes, it
->> - * takes callback_lock, blocking everyone else.
->> + * Below are the three global locks guarding cpuset structures in lock
->> + * acquisition order:
->> + *  - isolcpus_update_mutex (optional)
->> + *  - cpu_hotplug_lock (cpus_read_lock/cpus_write_lock)
->> + *  - cpuset_mutex
->> + *  - callback_lock (raw spinlock)
->>    *
->> - * Calls to the kernel memory allocator can not be made while holding
->> - * callback_lock, as that would risk double tripping on callback_lock
->> - * from one of the callbacks into the cpuset code from within
->> - * __alloc_pages().
->> + * The first isolcpus_update_mutex should only be held if the existing set of
->> + * isolated CPUs (in isolated partition) or any of the partition states may be
->> + * changed when some cpuset control files are being written into. Otherwise,
->> + * it can be skipped. Holding isolcpus_update_mutex/cpus_read_lock or
->> + * cpus_write_lock will ensure mutual exclusion of isolated_cpus update.
->>    *
->> - * If a task is only holding callback_lock, then it has read-only
->> - * access to cpusets.
->> + * As cpuset will now indirectly flush a number of different workqueues in
->> + * housekeeping_update() when the set of isolated CPUs is going to be changed,
->> + * it may not be safe from the circular locking perspective to hold the
->> + * cpus_read_lock. So cpuset_full_lock() will be released before calling
->> + * housekeeping_update() and re-acquired afterward.
->> + *
->> + * A task must hold all the remaining three locks to modify externally visible
->> + * or used fields of cpusets, though some of the internally used cpuset fields
->> + * can be modified by holding cpu_hotplug_lock and cpuset_mutex only. If only
->> + * reliable read access of the externally used fields are needed, a task can
->> + * hold either cpuset_mutex or callback_lock.
->> + *
->> + * If a task holds cpu_hotplug_lock and cpuset_mutex, it blocks others,
->> + * ensuring that it is the only task able to also acquire callback_lock and
->> + * be able to modify cpusets.  It can perform various checks on the cpuset
->> + * structure first, knowing nothing will change. It can also allocate memory
->> + * without holding callback_lock. While it is performing these checks, various
->> + * callback routines can briefly acquire callback_lock to query cpusets.  Once
->> + * it is ready to make the changes, it takes callback_lock, blocking everyone
->> + * else.
->> + *
->> + * Calls to the kernel memory allocator cannot be made while holding
->> + * callback_lock which is a spinlock, as the memory allocator may sleep or
->> + * call back into cpuset code and acquire callback_lock.
->>    *
->>    * Now, the task_struct fields mems_allowed and mempolicy may be changed
->>    * by other task, we use alloc_lock in the task_struct fields to protect
->> @@ -256,6 +273,7 @@ struct cpuset top_cpuset = {
->>    * cpumasks and nodemasks.
->>    */
->>   
->> +static DEFINE_MUTEX(isolcpus_update_mutex);
->>   static DEFINE_MUTEX(cpuset_mutex);
->>   
->>   /**
->> @@ -302,7 +320,7 @@ void cpuset_full_unlock(void)
->>   #ifdef CONFIG_LOCKDEP
->>   bool lockdep_is_cpuset_held(void)
->>   {
->> -	return lockdep_is_held(&cpuset_mutex);
->> +	return lockdep_is_held(&isolcpus_update_mutex);
->>   }
->>   #endif
->>   
->> @@ -1294,9 +1312,8 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
->>   static void __update_isolation_cpumasks(bool twork);
->>   static void isolation_task_work_fn(struct callback_head *cb)
->>   {
->> -	cpuset_full_lock();
->> +	guard(mutex)(&isolcpus_update_mutex);
->>   	__update_isolation_cpumasks(true);
->> -	cpuset_full_lock();
->>   }
->>   
->>   /*
->> @@ -1338,8 +1355,18 @@ static void __update_isolation_cpumasks(bool twork)
->>   		return;
->>   	}
->>   
->> +	lockdep_assert_held(&isolcpus_update_mutex);
->> +	/*
->> +	 * Release cpus_read_lock & cpuset_mutex before calling
->> +	 * housekeeping_update() and re-acquiring them afterward if not
->> +	 * calling from task_work.
->> +	 */
->> +	if (!twork)
->> +		cpuset_full_unlock();
->>   	ret = housekeeping_update(isolated_cpus);
->>   	WARN_ON_ONCE(ret < 0);
->> +	if (!twork)
->> +		cpuset_full_lock();
->>   
->>   	isolated_cpus_updating = false;
->>   }
->> @@ -3196,6 +3223,7 @@ ssize_t cpuset_write_resmask(struct kernfs_open_file *of,
->>   		return -EACCES;
->>   
->>   	buf = strstrip(buf);
->> +	mutex_lock(&isolcpus_update_mutex);
->>   	cpuset_full_lock();
->>   	if (!is_cpuset_online(cs))
->>   		goto out_unlock;
->> @@ -3226,6 +3254,7 @@ ssize_t cpuset_write_resmask(struct kernfs_open_file *of,
->>   		rebuild_sched_domains_locked();
->>   out_unlock:
->>   	cpuset_full_unlock();
->> +	mutex_unlock(&isolcpus_update_mutex);
->>   	if (of_cft(of)->private == FILE_MEMLIST)
->>   		schedule_flush_migrate_mm();
->>   	return retval ?: nbytes;
->> @@ -3329,6 +3358,7 @@ static ssize_t cpuset_partition_write(struct kernfs_open_file *of, char *buf,
->>   	else
->>   		return -EINVAL;
->>   
->> +	guard(mutex)(&isolcpus_update_mutex);
->>   	cpuset_full_lock();
->>   	if (is_cpuset_online(cs))
->>   		retval = update_prstate(cs, val);
->> @@ -3502,6 +3532,7 @@ static void cpuset_css_killed(struct cgroup_subsys_state *css)
->>   {
->>   	struct cpuset *cs = css_cs(css);
->>   
->> +	guard(mutex)(&isolcpus_update_mutex);
->>   	cpuset_full_lock();
->>   	/* Reset valid partition back to member */
->>   	if (is_partition_valid(cs))
->> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
->> index 3b725d39c06e..ef152d401fe2 100644
->> --- a/kernel/sched/isolation.c
->> +++ b/kernel/sched/isolation.c
->> @@ -123,8 +123,6 @@ int housekeeping_update(struct cpumask *isol_mask)
->>   	struct cpumask *trial, *old = NULL;
->>   	int err;
->>   
->> -	lockdep_assert_cpus_held();
->> -
->>   	trial = kmalloc(cpumask_size(), GFP_KERNEL);
->>   	if (!trial)
->>   		return -ENOMEM;
->> @@ -136,7 +134,7 @@ int housekeeping_update(struct cpumask *isol_mask)
->>   	}
->>   
->>   	if (!housekeeping.flags)
->> -		static_branch_enable_cpuslocked(&housekeeping_overridden);
->> +		static_branch_enable(&housekeeping_overridden);
->>   
->>   	if (housekeeping.flags & HK_FLAG_DOMAIN)
->>   		old = housekeeping_cpumask_dereference(HK_TYPE_DOMAIN);
->> diff --git a/kernel/time/timer_migration.c b/kernel/time/timer_migration.c
->> index 6da9cd562b20..244a8d025e78 100644
->> --- a/kernel/time/timer_migration.c
->> +++ b/kernel/time/timer_migration.c
->> @@ -1559,8 +1559,6 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
->>   	cpumask_var_t cpumask __free(free_cpumask_var) = CPUMASK_VAR_NULL;
->>   	int cpu;
->>   
->> -	lockdep_assert_cpus_held();
->> -
->>   	if (!works)
->>   		return -ENOMEM;
->>   	if (!alloc_cpumask_var(&cpumask, GFP_KERNEL))
->> @@ -1570,6 +1568,7 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
->>   	 * First set previously isolated CPUs as available (unisolate).
->>   	 * This cpumask contains only CPUs that switched to available now.
->>   	 */
->> +	guard(cpus_read_lock)();
->>   	cpumask_andnot(cpumask, cpu_online_mask, exclude_cpumask);
->>   	cpumask_andnot(cpumask, cpumask, tmigr_available_cpumask);
->>   
+This series aims to provide a foundation on which to build the rest of
+the device preservation infrastructure, including:
+
+ - Preservation of iommufd files [1]
+ - Preservation of IOMMU driver state
+ - Preservation of PCI state (BAR resources, device state, bridge state, ...)
+ - Preservation of vfio-pci driver state
+
+Testing
+-------
+
+The patches at the end of this series provide comprehensive selftests
+for the new code added by this series. The selftests have been validated
+in both a VM environment using a virtio-net PCIe device, and in a
+baremetal environment on an Intel EMR server with an Intel DSA PCIe
+device.
+
+Here is an example of how to run the new selftests:
+
+vfio_pci_liveupdate_uapi_test:
+
+  $ tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+  $ tools/testing/selftests/vfio/vfio_pci_liveupdate_uapi_test 0000:00:04.0
+  $ tools/testing/selftests/vfio/scripts/cleanup.sh
+
+vfio_pci_liveupdate_kexec_test:
+
+  $ tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+  $ tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test --stage 1 0000:00:04.0
+  $ kexec ...
+
+  $ tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+  $ tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test --stage 2 0000:00:04.0
+  $ tools/testing/selftests/vfio/scripts/cleanup.sh
+
+It is also possible to run vfio_pci_liveupdate_kexec_test multiple times
+to preserve multiple devices simultaneously across a Live Update. This
+series has been tested with up to 8 devices concurrently preserved.
+
+Changelog
+---------
+
+v2:
+ - Rebase on top of linux-next (tag: next-20260115)
+ - Add missing EXPORT_SYMBOL_GPLs in LUO (Zhu)
+ - Add Missing EXPORT_SYMBOL_GPLs for vfio_device_fops (Zhu)
+ - Fix circular dependency between vfio-pci-core and vfio-pci (Zhu)
+ - Handle pci=assign-busses (Lukas)
+ - Drop driver_override patch (Jason)
+ - Use kho_alloc_preserve(), kho_unpreserve_free(), kho_restore_free() (Pasha)
+ - Don't access PCI FLB after device initialization (Jason)
+ - Fix folio leak in vfio_pci_liveupdate_retrieve() (Alex)
+ - Add Documentation (Pasha)
+
+v1: https://lore.kernel.org/kvm/20251126193608.2678510-1-dmatlack@google.com/
+
+rfc: https://lore.kernel.org/kvm/20251018000713.677779-1-vipinsh@google.com/
+
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Parav Pandit <parav@nvidia.com>
+Cc: Leon Romanovsky <leonro@nvidia.com>
+Cc: William Tu <witu@nvidia.com>
+Cc: Jacob Pan <jacob.pan@linux.microsoft.com>
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Pratyush Yadav <pratyush@kernel.org>
+Cc: Samiullah Khawaja <skhawaja@google.com>
+Cc: Chris Li <chrisl@kernel.org>
+Cc: Josh Hilke <jrhilke@google.com>
+Cc: David Rientjes <rientjes@google.com>
+
+[1] https://lore.kernel.org/linux-iommu/20251202230303.1017519-1-skhawaja@google.com/
+
+David Matlack (13):
+  liveupdate: Export symbols needed by modules
+  PCI: Add API to track PCI devices preserved across Live Update
+  PCI: Inherit bus numbers from previous kernel during Live Update
+  vfio/pci: Notify PCI subsystem about devices preserved across Live
+    Update
+  vfio: Enforce preserved devices are retrieved via
+    LIVEUPDATE_SESSION_RETRIEVE_FD
+  vfio/pci: Store incoming Live Update state in struct
+    vfio_pci_core_device
+  docs: liveupdate: Document VFIO device file preservation
+  vfio: selftests: Add Makefile support for TEST_GEN_PROGS_EXTENDED
+  vfio: selftests: Add vfio_pci_liveupdate_uapi_test
+  vfio: selftests: Expose iommu_modes to tests
+  vfio: selftests: Expose low-level helper routines for setting up
+    struct vfio_pci_device
+  vfio: selftests: Verify that opening VFIO device fails during Live
+    Update
+  vfio: selftests: Add continuous DMA to vfio_pci_liveupdate_kexec_test
+
+Vipin Sharma (9):
+  vfio/pci: Register a file handler with Live Update Orchestrator
+  vfio/pci: Preserve vfio-pci device files across Live Update
+  vfio/pci: Retrieve preserved device files after Live Update
+  vfio/pci: Skip reset of preserved device after Live Update
+  selftests/liveupdate: Move luo_test_utils.* into a reusable library
+  selftests/liveupdate: Add helpers to preserve/retrieve FDs
+  vfio: selftests: Build liveupdate library in VFIO selftests
+  vfio: selftests: Initialize vfio_pci_device using a VFIO cdev FD
+  vfio: selftests: Add vfio_pci_liveupdate_kexec_test
+
+ Documentation/userspace-api/liveupdate.rst    | 144 ++++++++++
+ MAINTAINERS                                   |   1 +
+ drivers/pci/Makefile                          |   1 +
+ drivers/pci/liveupdate.c                      | 212 +++++++++++++++
+ drivers/pci/probe.c                           |  23 +-
+ drivers/vfio/device_cdev.c                    |  25 +-
+ drivers/vfio/group.c                          |   9 +
+ drivers/vfio/pci/Makefile                     |   1 +
+ drivers/vfio/pci/vfio_pci.c                   |  11 +-
+ drivers/vfio/pci/vfio_pci_core.c              |  24 +-
+ drivers/vfio/pci/vfio_pci_liveupdate.c        | 246 +++++++++++++++++
+ drivers/vfio/pci/vfio_pci_priv.h              |  16 ++
+ drivers/vfio/vfio.h                           |  13 -
+ drivers/vfio/vfio_main.c                      |  23 +-
+ include/linux/kho/abi/pci.h                   |  55 ++++
+ include/linux/kho/abi/vfio_pci.h              |  45 +++
+ include/linux/pci.h                           |  47 ++++
+ include/linux/vfio.h                          |  58 ++++
+ include/linux/vfio_pci_core.h                 |   2 +
+ kernel/liveupdate/luo_core.c                  |   1 +
+ kernel/liveupdate/luo_file.c                  |   2 +
+ tools/testing/selftests/liveupdate/.gitignore |   1 +
+ tools/testing/selftests/liveupdate/Makefile   |  14 +-
+ .../include/libliveupdate.h}                  |  11 +-
+ .../selftests/liveupdate/lib/libliveupdate.mk |  20 ++
+ .../{luo_test_utils.c => lib/liveupdate.c}    |  43 ++-
+ .../selftests/liveupdate/luo_kexec_simple.c   |   2 +-
+ .../selftests/liveupdate/luo_multi_session.c  |   2 +-
+ tools/testing/selftests/vfio/Makefile         |  23 +-
+ .../vfio/lib/include/libvfio/iommu.h          |   2 +
+ .../lib/include/libvfio/vfio_pci_device.h     |   8 +
+ tools/testing/selftests/vfio/lib/iommu.c      |   4 +-
+ .../selftests/vfio/lib/vfio_pci_device.c      |  60 ++--
+ .../vfio/vfio_pci_liveupdate_kexec_test.c     | 256 ++++++++++++++++++
+ .../vfio/vfio_pci_liveupdate_uapi_test.c      |  93 +++++++
+ 35 files changed, 1410 insertions(+), 88 deletions(-)
+ create mode 100644 drivers/pci/liveupdate.c
+ create mode 100644 drivers/vfio/pci/vfio_pci_liveupdate.c
+ create mode 100644 include/linux/kho/abi/pci.h
+ create mode 100644 include/linux/kho/abi/vfio_pci.h
+ rename tools/testing/selftests/liveupdate/{luo_test_utils.h => lib/include/libliveupdate.h} (80%)
+ create mode 100644 tools/testing/selftests/liveupdate/lib/libliveupdate.mk
+ rename tools/testing/selftests/liveupdate/{luo_test_utils.c => lib/liveupdate.c} (89%)
+ create mode 100644 tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test.c
+ create mode 100644 tools/testing/selftests/vfio/vfio_pci_liveupdate_uapi_test.c
+
+
+base-commit: 9b7977f9e39b7768c70c2aa497f04e7569fd3e00
+-- 
+2.53.0.rc1.225.gd81095ad13-goog
 
