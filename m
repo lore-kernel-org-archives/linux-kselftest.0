@@ -1,133 +1,291 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17F828D8F1;
-	Thu, 29 Jan 2026 03:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DCC225F7A9;
+	Thu, 29 Jan 2026 04:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769658659; cv=none; b=TloFgEJs1JCuPI/ICkTsoSN2TcrCKkLIOcpaZyMXIN57A9/20PF668SaD2reZ0tViOT2BGFQpTCsCyO9V49PUhXrWVPje0LrSR5azyepo8fFTYXVEWBdoL7snt9bc236a6ifAhC3uRYUKjubb1y0vbdtnw8lrdDP7cYFYAisrnY=
+	t=1769659431; cv=none; b=e4Ryd8nq6g0MfRUWHeNQoBWB0RC8iUskhDtoEqD0RT5dU9Y+Bag55yiQYRC0mEyxPEqd2D8So8e63oD0JUx+tGEeInUFxMkqBVosHOQza5FHH2GFKfCLUnaMEEqIr6VaTgI8Kqs/1iHtcpgNoKgEM3eODkfubfxiqXnmr6tQosA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769658659; c=relaxed/simple;
-	bh=eqaSLRzR6Sm7aoUFN2otNzSWZcdnSacpVisDznooEzk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=oLZq/IPC3VTuw8oYTotVMDiX+pf8rcDiAa4acMlcLPC49N54kQXktOCESRtODjVIqQ/jCJD/wtt7EGTYUB2dnv+E0Di5LuZwqrU2XphtKBf161bazfReYaxi2mk9DHCHLh7Vz0pCiULvM3yHtPzF2SC5v7FXsfJdzuL7dgooGPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=t5xArDyF; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=t5xArDyF; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="t5xArDyF";
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="t5xArDyF"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=9IqDF5Tp7OG5Z/tvzpKjtKiy1V2o/uARLzGQm34pmBQ=;
-	b=t5xArDyFCrHHhIn9fb79pH6WbwcbJLHeVxl4ynjTqzMJVIBts4fJ8oWi0Moi0WvFKyejWhmWG
-	blspAwCcSq2E0F4Xiu3ExYGbWhEsLtePJT5fj2x4ypZLFYpvEp567BNxvph9pnXc9LBZV/4voRH
-	oE25OaqvfDJOl1Ddl96T2+0=
-Received: from canpmsgout01.his.huawei.com (unknown [172.19.92.178])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTPS id 4f1lXX14Fxz1BFqN;
-	Thu, 29 Jan 2026 11:50:20 +0800 (CST)
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=9IqDF5Tp7OG5Z/tvzpKjtKiy1V2o/uARLzGQm34pmBQ=;
-	b=t5xArDyFCrHHhIn9fb79pH6WbwcbJLHeVxl4ynjTqzMJVIBts4fJ8oWi0Moi0WvFKyejWhmWG
-	blspAwCcSq2E0F4Xiu3ExYGbWhEsLtePJT5fj2x4ypZLFYpvEp567BNxvph9pnXc9LBZV/4voRH
-	oE25OaqvfDJOl1Ddl96T2+0=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4f1lSD3qrFz1T4Gv;
-	Thu, 29 Jan 2026 11:46:36 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 24D0E40570;
-	Thu, 29 Jan 2026 11:50:50 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 29 Jan 2026 11:50:47 +0800
-Message-ID: <1543d9ab-f8b0-8221-c885-b031008ad3f5@huawei.com>
-Date: Thu, 29 Jan 2026 11:50:43 +0800
+	s=arc-20240116; t=1769659431; c=relaxed/simple;
+	bh=qJkVBlaEbB0GI9ptpuChZz007VyTHOo92hXivG515Rw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QvdViqnmPpyoi6eL8NbEgtB7flZEht6aJVhDLpP/0RNJqnDfRRS3E1DQLx6zwqnhgknhyRCenYe+ywhvWG8roiicLJQ/1KS8IKxvzA2jWIQgVAmi7lg1R8XHth7lTFCNIisdf7E5Nstx1OAne9LZzsO7V7pdGidXqQ7YnW/QxT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f1lqm1gFzzKHMPk;
+	Thu, 29 Jan 2026 12:03:32 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id ADD434056E;
+	Thu, 29 Jan 2026 12:03:45 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgD3ovMg3HppQ0b5FQ--.60774S2;
+	Thu, 29 Jan 2026 12:03:45 +0800 (CST)
+Message-ID: <ccca8790-2bf9-46db-b355-ce8695ea7093@huaweicloud.com>
+Date: Thu, 29 Jan 2026 12:03:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v10 05/16] arm64: ptrace: Move rseq_syscall() before
- audit_syscall_exit()
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH/for-next 1/2] cgroup/cpuset: Defer housekeeping_update()
+ call from CPU hotplug to task_work
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260128044251.1229702-1-longman@redhat.com>
+ <20260128044251.1229702-2-longman@redhat.com>
 Content-Language: en-US
-To: Kevin Brodsky <kevin.brodsky@arm.com>, Will Deacon <will@kernel.org>
-CC: <catalin.marinas@arm.com>, <oleg@redhat.com>, <tglx@linutronix.de>,
-	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
-	<kees@kernel.org>, <wad@chromium.org>, <macro@orcam.me.uk>,
-	<charlie@rivosinc.com>, <akpm@linux-foundation.org>, <ldv@strace.io>,
-	<anshuman.khandual@arm.com>, <mark.rutland@arm.com>, <thuth@redhat.com>,
-	<song@kernel.org>, <ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
-	<broonie@kernel.org>, <liqiang01@kylinos.cn>, <pengcan@kylinos.cn>,
-	<kmal@cock.li>, <dvyukov@google.com>, <richard.weiyang@gmail.com>,
-	<reddybalavignesh9979@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
- <20251222114737.1334364-6-ruanjinjie@huawei.com>
- <aXe6W69Esd1NLEU8@willie-the-truck>
- <28e54f74-9b3d-4c3c-9172-ceb429e7fcbe@arm.com>
- <4891191c-d1c3-6985-c2ea-1b29deb8abe1@huawei.com>
- <0f6212c1-7034-42f4-ba77-10e9ec52a4f5@arm.com>
- <6ff5d366-3a2d-089b-5ac7-e40b81a8664c@huawei.com>
- <647fe97e-e8c1-464f-bbc7-39dac0bda6b2@arm.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <647fe97e-e8c1-464f-bbc7-39dac0bda6b2@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260128044251.1229702-2-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+X-CM-TRANSID:gCh0CgD3ovMg3HppQ0b5FQ--.60774S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKr1DAr1UJw1ruF48JrW5Wrg_yoWxtF17pr
+	y5KFWIyayqqF1a9343XwsrWr1rKws7J3W5Kr43Xr1xZFsxWFn7Z348KFnxtrWrWr95GFWr
+	ZFWDGw4fWF4UArUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
 
 
-On 2026/1/28 22:53, Kevin Brodsky wrote:
-> On 28/01/2026 02:09, Jinjie Ruan wrote:
->>
->> On 2026/1/27 23:06, Kevin Brodsky wrote:
->>> On 27/01/2026 12:34, Jinjie Ruan wrote:
->>>>> [...]
->>>>>
->>>>>>  I'm also concerned that rseq_debug_update_user_cs()
->>>>>> operates on instruction_pointer(regs) which is something that can be
->>>>>> chaned by ptrace.
->>>>> Isn't that true regardless of where rseq_syscall() is called on the
->>>>> syscall exit path, though?
->>>> My understanding is that if instruction_pointer(regs) is hijacked and
->>>> modified via ptrace at the syscall exit (ptrace_report_syscall_exit()),
->>>> this modification will not be observed by rseq. Specifically, in the
->>>> generic entry syscall exit path, rseq_syscall() is unable to detect such
->>>> a PC modification.
->>> Good point. So concretely that means that currently on arm64, one could
->>> make the rseq debug check pass/fail by using the syscall exit trap to
->>> modify PC. OTOH this is impossible with generic entry because the rseq
->>> check is performed first. I'm not sure this is a feature anyone has even
->>> noticed, but it is a user-visible change indeed.
->> After digging into the ptrace code, I found that ptrace does not modify
->> instruction_pointer(regs) on the syscall exit path; it only changes the
->> return value as below.
->> Therefore, if my understanding is correct, Will's concern does not apply
->> here.
->>
->> ptrace_set_syscall_info()
->>   -> ptrace_set_syscall_info_exit()
->>      -> syscall_set_return_value(child, regs, 0, rval)
+On 2026/1/28 12:42, Waiman Long wrote:
+> The update_isolation_cpumasks() function can be called either directly
+> from regular cpuset control file write with cpuset_full_lock() called
+> or via the CPU hotplug path with cpus_write_lock and cpuset_mutex held.
 > 
-> I'm not following, how is that related to the call to
-> ptrace_report_syscall_exit()? That eventually results in a call to
-> ptrace_stop() (via ptrace_notify()), which synchronously causes the
-> tracee to sleep and allows the tracer to issue ptrace commands, e.g.
-> setting PC.
-
-I realize I had a misunderstanding — PTRACE_SET_SYSCALL_INFO is only one
-possible ptrace command. What I actually tried was to modify regs->pc on
-the syscall return path using PTRACE_SETREGSET, and the result shows
-that I can indeed change regs->pc to make the tracee segment fault.
-
+> As we are going to enable dynamic update to the nozh_full housekeeping
+> cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
+> allowing the CPU hotplug path to call into housekeeping_update()
+> directly from update_isolation_cpumasks() will cause deadlock. So we
+> have to defer any call to housekeeping_update() after the CPU hotplug
+> operation has finished. This can be done via the task_work_add(...,
+> TWA_RESUME) API where the actual housekeeping_update() call, if needed,
+> will happen right before existing back to userspace.
 > 
-> - Kevin
+> Since the HK_TYPE_DOMAIN housekeeping cpumask should now track the
+> changes in "cpuset.cpus.isolated", add a check in test_cpuset_prs.sh to
+> confirm that the CPU hotplug deferral, if needed, is working as expected.
 > 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c                        | 49 ++++++++++++++++++-
+>  .../selftests/cgroup/test_cpuset_prs.sh       |  9 ++++
+>  2 files changed, 56 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 7b7d12ab1006..98c7cb732206 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -84,6 +84,10 @@ static cpumask_var_t	isolated_cpus;
+>   */
+>  static bool isolated_cpus_updating;
+>  
+> +/* Both cpuset_mutex and cpus_read_locked acquired */
+> +static bool cpuset_full_locked;
+> +static bool isolation_task_work_queued;
+> +
+>  /*
+>   * A flag to force sched domain rebuild at the end of an operation.
+>   * It can be set in
+> @@ -285,10 +289,12 @@ void cpuset_full_lock(void)
+>  {
+>  	cpus_read_lock();
+>  	mutex_lock(&cpuset_mutex);
+> +	cpuset_full_locked = true;
+>  }
+>  
+>  void cpuset_full_unlock(void)
+>  {
+> +	cpuset_full_locked = false;
+>  	mutex_unlock(&cpuset_mutex);
+>  	cpus_read_unlock();
+>  }
+> @@ -1285,25 +1291,64 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
+>  	return false;
+>  }
+>  
+> +static void __update_isolation_cpumasks(bool twork);
+> +static void isolation_task_work_fn(struct callback_head *cb)
+> +{
+> +	cpuset_full_lock();
+> +	__update_isolation_cpumasks(true);
+> +	cpuset_full_lock();
+> +}
+> +
+>  /*
+> - * update_isolation_cpumasks - Update external isolation related CPU masks
+> + * __update_isolation_cpumasks - Update external isolation related CPU masks
+> + * @twork - set if call from isolation_task_work_fn()
+>   *
+>   * The following external CPU masks will be updated if necessary:
+>   * - workqueue unbound cpumask
+>   */
+> -static void update_isolation_cpumasks(void)
+> +static void __update_isolation_cpumasks(bool twork)
+>  {
+>  	int ret;
+>  
+> +	if (twork)
+> +		isolation_task_work_queued = false;
+> +
+>  	if (!isolated_cpus_updating)
+>  		return;
+>  
+> +	/*
+> +	 * This function can be reached either directly from regular cpuset
+> +	 * control file write (cpuset_full_locked) or via hotplug
+> +	 * (cpus_write_lock && cpuset_mutex held). In the later case, we
+> +	 * defer the housekeeping_update() call to a task_work to avoid
+> +	 * the possibility of deadlock. The task_work will be run right
+> +	 * before exiting back to userspace.
+> +	 */
+> +	if (!cpuset_full_locked) {
+> +		static struct callback_head twork_cb;
+> +
+> +		if (!isolation_task_work_queued) {
+> +			init_task_work(&twork_cb, isolation_task_work_fn);
+> +			if (!task_work_add(current, &twork_cb, TWA_RESUME))
+> +				isolation_task_work_queued = true;
+> +			else
+> +				/* Current task shouldn't be exiting */
+> +				WARN_ON_ONCE(1);
+> +		}
+> +		return;
+> +	}
+> +
+>  	ret = housekeeping_update(isolated_cpus);
+>  	WARN_ON_ONCE(ret < 0);
+>  
+>  	isolated_cpus_updating = false;
+>  }
+>  
+
+The logic is not straightforward; perhaps we can simplify it as follows,
+maybe I missed something, just correct me.
+
+static void isolation_task_work_fn(struct callback_head *cb)
+{
+	guard(mutex)(&isolcpus_update_mutex);
+	WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
+}
+
+/*
+ * __update_isolation_cpumasks - Update external isolation related CPU masks
+ * @twork - set if call from isolation_task_work_fn()
+ *
+ * The following external CPU masks will be updated if necessary:
+ * - workqueue unbound cpumask
+ */
+static void __update_isolation_cpumasks(bool twork)
+{
+	if (!isolated_cpus_updating)
+		return;
+
+	/*
+	 * This function can be reached either directly from regular cpuset
+	 * control file write (cpuset_full_locked) or via hotplug
+	 * (cpus_write_lock && cpuset_mutex held). In the later case, we
+	 * defer the housekeeping_update() call to a task_work to avoid
+	 * the possibility of deadlock. The task_work will be run right
+	 * before exiting back to userspace.
+	 */
+	if (twork) {
+		static struct callback_head twork_cb;
+
+		init_task_work(&twork_cb, isolation_task_work_fn);
+		if (task_work_add(current, &twork_cb, TWA_RESUME))
+			/* Current task shouldn't be exiting */
+			WARN_ON_ONCE(1);
+
+		return;
+	}
+
+	lockdep_assert_held(&isolcpus_update_mutex);
+	/*
+	 * Release cpus_read_lock & cpuset_mutex before calling
+	 * housekeeping_update() and re-acquiring them afterward if not
+	 * calling from task_work.
+	 */
+
+	cpuset_full_unlock();
+	WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
+	cpuset_full_lock();
+
+	isolated_cpus_updating = false;
+}
+
+static inline void update_isolation_cpumasks(void)
+{
+	__update_isolation_cpumasks(false);
+}
+
+If twork is true, add it directly to the work queue — note that this requires
+holding isolcpus_update_mutex and then calling housekeeping_update. Otherwise,
+release the 'full' lock before invoking housekeeping_update.
+
+> +static inline void update_isolation_cpumasks(void)
+> +{
+> +	__update_isolation_cpumasks(false);
+> +}
+> +
+>  /**
+>   * rm_siblings_excl_cpus - Remove exclusive CPUs that are used by sibling cpusets
+>   * @parent: Parent cpuset containing all siblings
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 5dff3ad53867..af4a2532cb3e 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -773,6 +773,7 @@ check_isolcpus()
+>  	EXPECTED_ISOLCPUS=$1
+>  	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
+>  	ISOLCPUS=$(cat $ISCPUS)
+> +	HKICPUS=$(cat /sys/devices/system/cpu/isolated)
+>  	LASTISOLCPU=
+>  	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
+>  	if [[ $EXPECTED_ISOLCPUS = . ]]
+> @@ -810,6 +811,14 @@ check_isolcpus()
+>  	ISOLCPUS=
+>  	EXPECTED_ISOLCPUS=$EXPECTED_SDOMAIN
+>  
+> +	#
+> +	# The inverse of HK_TYPE_DOMAIN cpumask in $HKICPUS should match $ISOLCPUS
+> +	#
+> +	[[ "$ISOLCPUS" != "$HKICPUS" ]] && {
+> +		echo "Housekeeping isolated CPUs mismatch - $HKICPUS"
+> +		return 1
+> +	}
+> +
+>  	#
+>  	# Use the sched domain in debugfs to check isolated CPUs, if available
+>  	#
+
+-- 
+Best regards,
+Ridong
+
