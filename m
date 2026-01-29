@@ -1,84 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1129125A9;
-	Thu, 29 Jan 2026 06:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61FB636D4EC
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 06:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769666843; cv=none; b=Qbezje8XQPYYYZWHyJ85mnvFAd5Etp0Z05d0FstTYP9CpuSL27S9d0w0p7BI3c6fdNbFkDs97ZUQN1GNMXRLcNculYD90G0g4GuVWXtKPvHAGnj5kX69tZRkZAtK5/WaPfwISPicYAUBuhh33omGEQtwq3lmUS8d/fMzGLxL4Bo=
+	t=1769668377; cv=none; b=d78uk/2vrlSHrnVCxS1CqFnrDrLXg71ANSSlAkw+orLQsYamk1gw7HbKTgtlGV1qZzZ8+4Z4cWfZPr7qoojF80ZjaQFIZ27qd46FaHnNVwj8H1jubA5wfxyoj0r3CVxaillG/tWjadjq/FASdaVEt/oPdUxQ/S3PYd/l6pwrNws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769666843; c=relaxed/simple;
-	bh=o1kr4MDge4qRt1w2EPnVZQ24pNn5eXA9+YNtbyjpTI0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=oeHcQLnRLOuiu0VbYZtYn7F3gHZnKtcYzagRXXVD1iNAux2gr/2x/8on0tTW2oVET2bRUwbd/iamKlOY4M4a/u0H9sbU46uShsfq0li5HhJxEHYvUNjFkMXRVHxDvYsrr5WEisYD2Od2iLCDinZmUrOEPd/bNTf/f3tRUHBx+fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iUaiYGpX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769668377; c=relaxed/simple;
+	bh=mnQ4xqmFgscPL6ExS4kZ4ROzI+Lmy9/KgUgWWqQjIAs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pUBAgzoAZGJ/v+M3zMj2Jk2EPTEo+09t9SE2pXNxB9sNyNundj6JKhkuIUYpyD1aEYZmi79Uz4ucTyyjttHl0LnIEOppTWUs9IqJQuSv/Ciq1qDaPruUq5L3L55/9u8btbOBUsYnXoTcJn4ZjTj4qD8M66RmAoi93PWT9oEMr6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=jL2XwF7N; arc=none smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iUaiYGpX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D916C116D0;
-	Thu, 29 Jan 2026 06:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769666842;
-	bh=o1kr4MDge4qRt1w2EPnVZQ24pNn5eXA9+YNtbyjpTI0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=iUaiYGpXxfcCx1eEb8ug76lUmIHTmS6TjnjJD/VDm6kzPipx7oKSGZatc5qq1GrXF
-	 ZINNbS6YtSUguHnnXpF/hLMQLluf4QahDr1FNZGM6cwGb6GRDPkSpMUH6yj4KHSL69
-	 87HuorROAHT20QZIdbt0UJzH0zpCc2nnI0iJX0OEOwsdcxQJ5+2/xo1I5IU+Pt5Ina
-	 Ka+nBpZjdsxY5aKFkp4H4nOroEXKCRLrnH/bCofUzzLLVk11qNZR6WX3udAO9pWybc
-	 Ec0E2fs60VqtwbggnE97NcMTWKMENYyWv3bD0e6I4t12MrK2b9OieJ9GHiwAnIjq+q
-	 38QV7n7i2Ev6Q==
-Content-Type: multipart/mixed; boundary="===============2621773127213540498=="
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="jL2XwF7N"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1233bb90317so1548926c88.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 22:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1769668375; x=1770273175; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O2Lgjx/8EY+0JxQrKQpdEcGo+/xiuBp0b0+rLtcl51g=;
+        b=jL2XwF7NxOh0A/hiaLb7WwIFLRgwAZLvEa0JWgAxADtWcDp8pD//aj/Oz86VFWmzZC
+         WAuK8MEvv60P75S4i71V2WWUfyP0ZVPSpKl1T7Z4Ireh1SgVGu0HciVLnk8odrHsptSu
+         WzbYkeCoPSvy63Qb3toK8mrqJwUxtLwsmHWVgaSxxngp5E17oxMz6UwYzVWHsZ2WIAgn
+         NSQ8/bmKw/qGh35nwk+Gix35HIvnlbk5S5/WmsovoUML5zqt13bHkUKnbncrynhRtVeA
+         Kst3sDGlQ5cYSvCJiftWKlZ0IuAKSS27m5HY1py9Ey8Yy2JbxdImNqm3Rowq0ljKKA9x
+         vzGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769668375; x=1770273175;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O2Lgjx/8EY+0JxQrKQpdEcGo+/xiuBp0b0+rLtcl51g=;
+        b=TFDY+3/pU+lzA2iCn6WeSja7yn9VjMxSHcBZgTPRuLeVMuY6d3kSzHSbDdFrofONwh
+         tmAg18CQ7V8pm9CwnDpLfCygXhYyXRaX+9esiDm1nSk5+ydgkBGwMaGOoOnNDS1g0pSA
+         sOsBZ1lVljtiCSrSavtUaWaF/qRKTvBd5scX9s7mdsvLkNbakjfK6kt8iOdfn5idxcGm
+         8IFGl/MsaAs8OGC5sALbz7l1jLsck6CzZkffavJbTQssAb5/LFp+IdnASFjNUu7PBMdy
+         jqz7VApkDl3rmuTTrU21hz8vr3dXZ3wpcjz1IjU/U99ZWxgv5WF0NEBWPQgZp13UkJh3
+         7qNw==
+X-Forwarded-Encrypted: i=1; AJvYcCX7UVGgqOvVqWW0BEEUuj3ImdRue5Fz4okYGpZCW5UQgzKLRX+4qp8mgfgJv1iSVvWRnrZXOxDUBi4HreQZSGQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS0M2x1yVb0ox837Hts0XCS7Rj1YMRgt9k2uWLLy/qojQR2PYl
+	bG7X7KtyXmr7KePzfnX6/dog00emU/bQjTB8s+c4emDmqvLo2h63hjlaHn8g4GtwUF0=
+X-Gm-Gg: AZuq6aJ8DXj7IRdeVsOKkwmpvzPRDB8SU8U/s/uUTwssuHV/eHXW5wijoMk06MUPNvq
+	xAbFLGOeYUSn90OB2oqQO5rCkJCYmshsPvzySL8CoBvAvR0u27vOFs9oc81AeAJ7CxStBTpzgQY
+	tBSCvBvP4tLH3d29kS17DiWUZB7MKouUPy9S4y0RnTRE9ToB/sQ60MksPdADvey/zhzQgtw0wKL
+	6SaIigbRmi6IBSK8mON8xAIjtwP0BhhnVRuHdEvVEbB6J4KcTmCRzfegUDat8mUZpKqOAUfQpCc
+	IVCbVWTq5u1all42Xg/cFFc1GzhS5E5qHUlPFyrIQzcljjEMxvC9KuU18Ig/7vzL6lkY3bnf3vI
+	/bg2OhxxaiDeI6ru1xzpl4/S+xpgOTN4UTXTf/RW4hok0uaIyfM932ushzl1nYhwWSPJbkJegsF
+	sS1Otfu6iypDM90jKDHRbHjacakTQ=
+X-Received: by 2002:a05:693c:2b04:b0:2ab:f490:79f9 with SMTP id 5a478bee46e88-2b7b185ebfemr1059367eec.21.1769668375354;
+        Wed, 28 Jan 2026 22:32:55 -0800 (PST)
+Received: from sw07.internal.sifive.com ([4.53.31.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a1af8ac0sm5735215eec.35.2026.01.28.22.32.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 22:32:55 -0800 (PST)
+From: Nylon Chen <nylon.chen@sifive.com>
+Date: Wed, 28 Jan 2026 22:32:52 -0800
+Subject: [PATCH] selftests/futex: skip futex_numa_mpol without libnuma
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ec269f64770e0c87c198d34bef01d818108015e8952d441d8708e5cf0e9c70b9@mail.kernel.org>
-In-Reply-To: <20260129054035.168078-1-skb99@linux.ibm.com>
-References: <20260129054035.168078-1-skb99@linux.ibm.com>
-Subject: Re: [PATCH] selftests/bpf: Add powerpc support for get_preempt_count() in selftest
-From: bot+bpf-ci@kernel.org
-To: skb99@linux.ibm.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,maddy@linux.ibm.com,mpe@ellerman.id.au,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 29 Jan 2026 06:07:22 +0000 (UTC)
-
---===============2621773127213540498==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260128-b4-futex-test-v1-1-ce73742068ad@sifive.com>
+X-B4-Tracking: v=1; b=H4sIABP/emkC/x3MQQqAIBBA0avIrBswC6muEi2sxpqNhVoI4t2Tl
+ m/xf4ZAninAJDJ4ejnw5SraRsB2GncQ8l4NSiotWzXg2qN9IiWMFCLqnTqzmdF0VkNtbk+W0/+
+ bl1I+Yy91hV8AAAA=
+X-Change-ID: 20260128-b4-futex-test-6de3aca9a3f6
+To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
+ Davidlohr Bueso <dave@stgolabs.net>, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Zong Li <zong.li@sifive.com>, Nylon Chen <nylon.chen@sifive.com>
+X-Mailer: b4 0.14.3
 
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> index a39576c8ba..147bbf6cd3 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -627,6 +627,8 @@ static inline int get_preempt_count(void)
->  	return *(int *) bpf_this_cpu_ptr(&__preempt_count);
->  #elif defined(bpf_target_arm64)
->  	return bpf_get_current_task_btf()->thread_info.preempt.count;
-> +#elif defined(bpf_target_powerpc)
-> +	return bpf_get_current_task_btf()->thread_info.preempt_count;
->  #endif
->  	return 0;
->  }
+Use pkg-config --exists numa to derive HAVE_LIBNUMA.
+Only keep futex_numa_mpol in TEST_GEN_PROGS when libnuma is present.
 
-Now that get_preempt_count() supports PowerPC, should the documentation
-comments for bpf_in_interrupt(), bpf_in_nmi(), bpf_in_hardirq(),
-bpf_in_serving_softirq(), and bpf_in_task() be updated to include
-PowerPC in their supported architecture lists? Currently these comments
-still say "Only works on the following archs: x86, arm64" but they now
-also work on PowerPC via this change to get_preempt_count().
+Signed-off-by: Zong Li <zong.li@sifive.com>
+Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
+---
+ tools/testing/selftests/futex/functional/Makefile | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index af7ec309ea78..ec3c39a51182 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -1,10 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ PKG_CONFIG ?= pkg-config
++HAVE_LIBNUMA := $(shell sh -c "$(PKG_CONFIG) --exists numa > /dev/null 2>&1 && echo y")
+ LIBNUMA_TEST = $(shell sh -c "$(PKG_CONFIG) numa --atleast-version 2.0.16 > /dev/null 2>&1 && echo SUFFICIENT || echo NO")
+ 
+ INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
+ CFLAGS := $(CFLAGS) -g -O2 -Wall -pthread -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64 $(INCLUDES) $(KHDR_INCLUDES) -DLIBNUMA_VER_$(LIBNUMA_TEST)=1
+-LDLIBS := -lpthread -lrt -lnuma
+ 
+ LOCAL_HDRS := \
+ 	../include/futextest.h \
+@@ -27,6 +27,13 @@ TEST_GEN_PROGS := \
+ 
+ TEST_PROGS := run.sh
+ 
++ifeq ($(HAVE_LIBNUMA),y)
++LDLIBS := -lpthread -lrt -lnuma
++else
++LDLIBS := -lpthread -lrt
++TEST_GEN_PROGS := $(filter-out futex_numa_mpol,$(TEST_GEN_PROGS))
++endif
++
+ top_srcdir = ../../../../..
+ DEFAULT_INSTALL_HDR_PATH := 1
+ include ../../lib.mk
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+change-id: 20260128-b4-futex-test-6de3aca9a3f6
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21467281843
+Best regards,
+-- 
+Nylon Chen <nylon.chen@sifive.com>
 
-AI-authorship-score: low
-AI-authorship-explanation: Straightforward kernel patch with natural technical writing style and minimal code changes consistent with human-authored commits.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Documentation comments not updated to reflect PowerPC support in helper functions; minor documentation mismatch in test code.
-
---===============2621773127213540498==--
