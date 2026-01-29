@@ -1,48 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4509273D8D;
-	Thu, 29 Jan 2026 05:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C51D290D81;
+	Thu, 29 Jan 2026 05:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769663151; cv=none; b=CVDIf3ZYfOsdFqm8ZAjDgyQAryv4kRm4GAGvGWOUAAYw41UduIwjR3XFJTKbiLxuOZqHvYexv6YhQR2RIZVZLKFRVySS7oko4jFIP2Jql4nHtjfYV+dD2mMVABNv+hKNLMJNQLrU6TZUjXQVa8hllkPIhN/a9rHDooplEXgffW4=
+	t=1769663423; cv=none; b=Ii0j7WKAGWQbyq2YI9PDPnxbYmnJyAMOCpinRYP5F71kYF/wm4j23nprJhZIgRpJVHioKYC08Hr9zexTXwr9ioyFQUj8gWCcMTBLL18o7bNmfLRlSig+Xbg7s65lbiKxevlEFDS2Numb5AN4TX67S4qhOBPrf0AtVSsjh+/gmWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769663151; c=relaxed/simple;
-	bh=HLNr9dI5JHOUxIcCFSOHuToW73gA4v+Td0q71Xlb1BA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MzUVvg1KVi+TUnhVVpvGkNGbZrblYFRMzF6nSDX9i1JkPr5RpnzINL1zlYltmjy7eTNXLXhzcc1MXwkt+Nh74AUMSGF1qNvLm5cmpCkccvL4PJ6xKB63iDnnZ7fpReeAFcORmwdE/VnvzbfN7SKFkS2PnP0xdqvhBKT1TF05mWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VDc9X+UK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769663423; c=relaxed/simple;
+	bh=7z2IQ7btc5Et00y2/fhUHitAb0l+Sdb5VtOcz51uMKA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=iWh8Qz1GLeaZInAmdFixCMIY4jIZajIPzvaTGaH84CqS5NNOQAKokX2XaMJ/WxgfRKZwLwNswBmtdcJHKFvD6R4Hiqtt4Sr8WOFW2I7eeodKZE2mIRbRad3YqBiF0hLJFgED9t5E+gW9QPfisgYm8t3qMbS0+ToZK3O6TI75DE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qXzdGaYV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VDc9X+UK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7908C116D0;
-	Thu, 29 Jan 2026 05:05:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qXzdGaYV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5407C116D0;
+	Thu, 29 Jan 2026 05:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769663150;
-	bh=HLNr9dI5JHOUxIcCFSOHuToW73gA4v+Td0q71Xlb1BA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VDc9X+UKY33unD8TPu0rWQZXL8u4x2Pou8wK9Bng73K4/+W7XECEVoG9ldAl8Z9R5
-	 Om0ohPpwM9HkYpT7eq7ntTfUCGdp8yhwvf0EKeSILinG12YWP6Vfx1SLJiPEfMj7kR
-	 YMFF1TZfinKYgIYEY9alYFTnrbwoeECDZQwbh2VIwQrZAdtYoWVze2O2dp8mJ/iQiS
-	 m0DyWXyqu7KEyYGVWws5ftgN2UxIJSahCEayDLvVRlnKPA1UYZnrh78bhDYPywVIzr
-	 JwXlmkmAS4859EKDGcK8RRsdAAmPopIHKfYjRdcCAqAXJ5e2KiBgtFAwLFrV1q5DA1
-	 qDIhfW7IQPzGA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: achender@kernel.org
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	edumazet@google.com,
-	allison.henderson@oracle.com,
-	horms@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	rds-devel@oss.oracle.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	linux-rdma@vger.kernel.org
-Subject: Re: [net-next,v2,7/7] net/rds: Trigger rds_send_ping() more than once
-Date: Wed, 28 Jan 2026 21:05:48 -0800
-Message-ID: <20260129050548.374535-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260128011351.78511-8-achender@kernel.org>
-References: <20260128011351.78511-8-achender@kernel.org>
+	s=k20201202; t=1769663422;
+	bh=7z2IQ7btc5Et00y2/fhUHitAb0l+Sdb5VtOcz51uMKA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=qXzdGaYVGCUmaZuiBfoPf7kAeA+v0/ECquDYoyQxqqkDyIK/alYxe375Qreodq8vo
+	 anjE08MOz0dAnbepU5fgbbL++vNOlA9U7Os5BwvDWoVfUSVZPo2OPlIiQ6sE6Osp96
+	 hHcnmH1/nyEL9VbL2ompLIQcXysbaYyr6HE9egNZDW6/v/LIR2c8NEdXXxQAOSUAdy
+	 wOyDS/ILSD99m9xbylCDpPGiKABtHWYc2ZCvsbQZuyELJV/g0N0fRdyNxVqwPVKhLD
+	 FO6sbNjzNPicPRKv2voZnX0YRusCXzmbUthrukGXkRVJS1cAS3tbHxxhsQMEkphgYd
+	 psqnLYDN785iw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11A4E380AA69;
+	Thu, 29 Jan 2026 05:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,45 +37,51 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/5] mptcp: avoid dup NL events and propagate error
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176966341585.2355196.1619926866071814475.git-patchwork-notify@kernel.org>
+Date: Thu, 29 Jan 2026 05:10:15 +0000
+References: <20260127-net-mptcp-dup-nl-events-v1-0-7f71e1bc4feb@kernel.org>
+In-Reply-To: <20260127-net-mptcp-dup-nl-events-v1-0-7f71e1bc4feb@kernel.org>
+To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org, marco.angaroni@italtel.com
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+Hello:
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-net/rds: Trigger rds_send_ping() more than once
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-This commit ensures rds_send_ping() is triggered after reconnect to
-properly communicate multipath capabilities, especially after an RDS
-module reload. It also validates source port modulo during fan-out.
+On Tue, 27 Jan 2026 20:27:22 +0100 you wrote:
+> Here are two fixes affecting the MPTCP Netlink events with their tests:
+> 
+> - Patches 1 & 2: a subflow closed NL event was visible multiple times in
+>   some specific conditions. A fix for v5.12.
+> 
+> - Patches 3 & 4: subflow closed NL events never contained the error
+>   code, even when expected. A fix for v5.11.
+> 
+> [...]
 
-> diff --git a/net/rds/send.c b/net/rds/send.c
-> index 599c2cfb7a1d..68f6b12c60ef 100644
-> --- a/net/rds/send.c
-> +++ b/net/rds/send.c
-> @@ -1339,6 +1339,24 @@ int rds_sendmsg(struct socket *sock, struct msghdr *msg, size_t payload_len)
->  		cpath = &conn->c_path[0];
->  	}
->
-> +	/* Check to see if we have talked to this peer before.
-> +	 * If not, this means conn->c_npaths will be zero,
-> +	 * and we should initiate a connection request to the
-> +	 * peer right away.
-> +	 */
-> +	if (conn->c_trans->t_mp_capable &&
-> +	    !rds_conn_path_up(&conn->c_path[0])) {
+Here is the summary with links:
+  - [net,1/5] mptcp: avoid dup SUB_CLOSED events after disconnect
+    https://git.kernel.org/netdev/net/c/280d654324e3
+  - [net,2/5] selftests: mptcp: check no dup close events after error
+    https://git.kernel.org/netdev/net/c/8467458dfa61
+  - [net,3/5] mptcp: only reset subflow errors when propagated
+    https://git.kernel.org/netdev/net/c/dccf46179ddd
+  - [net,4/5] selftests: mptcp: check subflow errors in close events
+    https://git.kernel.org/netdev/net/c/2ef9e3a3845d
+  - [net,5/5] selftests: mptcp: join: fix local endp not being tracked
+    https://git.kernel.org/netdev/net/c/c5d5ecf21fdd
 
-This isn't a bug, but the comment says "c_npaths will be zero" while
-the code checks "!rds_conn_path_up()". These conditions are different:
-c_npaths == 0 means no paths negotiated yet, while !rds_conn_path_up()
-is true for any state other than RDS_CONN_UP (DOWN, CONNECTING,
-DISCONNECTING, ERROR, RESETTING).
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The commit message mentions "after a re-connect to any peer" which
-aligns with the code, but the comment specifically mentions c_npaths.
-Should the comment be updated to reflect the actual logic?
 
-This was flagged in v1 review:
-https://lore.kernel.org/netdev/20260126174754.1393215-1-horms@kernel.org/
-
-[ ... ]
