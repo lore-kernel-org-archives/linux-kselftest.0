@@ -1,54 +1,54 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F331136681E
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 21:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C28364045
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 21:26:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769721966; cv=none; b=gExNFGFzDVyPLRRGRHZGusFw1044BzVJorWb3Xg9CuYsp479P4oK3BSKFpeLGOrqC2klmk45i6T616ybuWtz0V8ZYrJ2GQoNHyV5FGs7NXSBD0xuG0PPJQtoKj2HcoS2E+GVkFNwH4YJMv/ueUo17iCCpCVz4eo3hqF5fqDn55k=
+	t=1769721966; cv=none; b=QY69D6BLgmTEvdOWBisHM3CoCK18y1gghXUA+CN95e1gfcs3v46ZzKwPOlAMGs6pOk1uRQ3uy2pBeXhsV8AMUmnr12v//RMeMnWcgmso+w9QlFxike550MithRp+C83SP/lSY1gI8kTCef03ZTIeO1JQiOTrosIpWhA8L9+6i/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769721966; c=relaxed/simple;
-	bh=Cb9Y8KWzYaZZbnWLogkDgrwZwr7o6CbuJ0QS3Pv10oU=;
+	bh=vXiU4Ip82P/IqvKktUHvsDLiorMl5x2Nv3JVfbu29NU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Ng1BRC2U6nJWRRUlRThImC+Rj88UM1V7AtWET4GyeAJ1cLFL5Gx+pa4lMIRWsM8iK2D16j2jX9utMAGV+MQ9NcPtlPkIOl/i5xnjL/lNFcDXP+YYMp+P7FEt4/AQuvmuYxvr2x0o+TXVNfCPl63MblPHwYTz72XUvgN6l7JtsZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=y1MvxdcS; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=LT0ZpPtaBE8wC4EoDjBvSp7Iik36jwqwLeogAHr9IdtpOdB4E+Kz9kK0j7ds1L4YHM4ZdHe+7sHrjWIjc2R+wvRaEEnfTkMV9oz08JxhvUGnz39Cn+oRn/LJJ2CIcSOpy/Ln9MSkEfc+xi9R4f1gZJ1w7GATRa+gBy5oGiSNT/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m9IHXB9C; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="y1MvxdcS"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-29f2381ea85so33116895ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:26:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m9IHXB9C"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-34cc8bf226cso1383038a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 13:26:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769721962; x=1770326762; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1769721964; x=1770326764; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BqEhbyqURPyKNgE6Ne2XGuBboHLh1jY5l9yG8cIgxTg=;
-        b=y1MvxdcSHAA2tv1IsyzFmRw57KM/wXj1R1ZdYWaSIzlN1RSmx2DZC/lY7CimLxCBCS
-         0vK9SoPcz8XrCFytWn1qKRZdDSdeZ2t6R/Z91DQq/Tpgpc7vbc8pNHwoXbibrUy4JtUd
-         XRvw/ZkDVaWbdWDB8xoDlo+9pCWweFVIIAB9EwHkW1wCjh98cRA9acf88FsvMfg6F7V4
-         eOA4JZ1Xwkh9rCClweXAF4K4BDHCeLPr55MISxcyzWjgfkaiXXuW4QyrTxZChFoFlnTe
-         u8lC+qyEk85GD92i475reauTgqevO+KpL/a6ENkj51ChBaphwulFIdpnaq0r957wLCDr
-         8FGg==
+        bh=FUlLWwYhjyjIuuZGYT6Vav103VXsQgg/WHiCQN706aw=;
+        b=m9IHXB9Cp6Jpi/nyTdRxHE4/6DN9hBJh1C0uJSuyvJueP+8OMKZWh0SGIrQhiyqDfl
+         Sz+ZsTHN0And5FHO2urqkhKIGez5ZeKvLPrlsFmwjcaSWDxL0yTcBpaAXE/N/sXV8xhE
+         GRIpC+Le3zB4DCpTMbt8X1b6Xjk9U9xEzjPC9ZRHvk8vemfabwetCV277An8UxAlHGPA
+         o3xx0/3YQMU43654akvq35FFB8LpHO/8FYUbHA4W6nQzAezBqb7Gf0ZzUdXhv62No2U8
+         mSNEuOcWbNfrO8n1SS/AemlBqWKpoIp4C3JYlS0gUUyc5DHPnwY9fW+BAR2H2HJRfIGv
+         k2wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769721962; x=1770326762;
+        d=1e100.net; s=20230601; t=1769721964; x=1770326764;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BqEhbyqURPyKNgE6Ne2XGuBboHLh1jY5l9yG8cIgxTg=;
-        b=dJ5mdxJQau5zP/JaGMcoGKr8TlcdgH5bKIyhTRiUyYWI67/tYSlibsNfALCjtfkfm3
-         HWeIkfgw06Lmd5eMYTSskoh63wA8ks5Qr6oScdbOcs8zcc4K/f7IFaF8D9Mdks3B0lc9
-         2HcblW3bjNq+9lF/K9zE+8y4yDzyI5SX0XeE9/YEhGFm7sVvOyGN04EHpnZu7fLOR0FA
-         IezDp0VzgVfBDVsGO2nXwKZGJuj+PCUPTFf0dxWu4/wsZ+w+2S8O3ejGN/dGLBJAGaSj
-         cfc/LlIXxAwwtoms6G8+Rw6FlgRY0UkV+5n3iHbdGmeTDhFbLLC3FdU6zh8JHDaTOhli
-         QOEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVvTw1g0NTmDQ6CRP5dLcsz0iEo91TjyUywp9LqUGefxWo1/nh+yW4mXH6qpfTAYOu0EE4jJtLImN+Xl1voH+M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuAZ6gawd27/ovo0Gcub+uKBsGtQLJGIkUtH5oz7iZCUeIQL06
-	Rkc/PJU5S1Oz1az+yd3Qo8lC9I7CvIPO4E070SbN/Bhb+eZVH98FSsk0qbCjOzdoTTgmRTxzOVx
-	ZqxBSYEVn9p38XA==
-X-Received: from plot3.prod.google.com ([2002:a17:902:8c83:b0:2a7:78b9:f962])
+        bh=FUlLWwYhjyjIuuZGYT6Vav103VXsQgg/WHiCQN706aw=;
+        b=BWCpUfKD2nczyGwSC62sd2UNEN3cq8NFiAUsikuJ2XQFT3cH4Hckpf4FoSxFrsSiTm
+         /9ETWykt5UsY+DfuhoxWBpdoJV1Frieh+QXlnJNrlOpaWOdoHJ9AabPumN0lRVxbvhIt
+         axktaV1jNODu39gr5uMjJ05C+4fXSLO1KuUzFgJXvsAX02x0UAXHz1TYPMK4krA1Mmor
+         MAznTXNxggS786rlm2V2zEkL4yzZZYDGu88qNFoaTFJ7c1vheEyz8i1X1M1VqUAfQ9cj
+         Kxikugm2A3X+e5E28bC6l+z7xjUG7DjFm2geR7eYjrsnz/cPyELWiJXm+efAYz3toV0T
+         5boQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXfzeSccph+HbjMc9CSsIBfS+jBcoKuJetBQtSTlC9oyL3nXEu1crnyzLg9sA/84W8ghBLJM95A0Eg9NYf9Fzk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxqtj3e5QTA8Qnku+cVYFW93mCkCU7AWUca26DZCQzEChvMgcfg
+	xUosuog7uYIDJ2xkq17v/oGFPMG3hAT7Ze906Uj2FGabhqmv/ms4jFdOqlUr0Bh+EFoZbNTiasS
+	X6Sa5e5+6w+jGhw==
+X-Received: from pjps20.prod.google.com ([2002:a17:90a:a114:b0:352:ca2d:ce63])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:bd03:b0:2a7:a9b8:ebb0 with SMTP id d9443c01a7336-2a8d96a7ff3mr3875585ad.19.1769721962280;
- Thu, 29 Jan 2026 13:26:02 -0800 (PST)
-Date: Thu, 29 Jan 2026 21:25:02 +0000
+ 2002:a17:90a:d64e:b0:341:2b78:61b8 with SMTP id 98e67ed59e1d1-3543b3d65f8mr671636a91.20.1769721963975;
+ Thu, 29 Jan 2026 13:26:03 -0800 (PST)
+Date: Thu, 29 Jan 2026 21:25:03 +0000
 In-Reply-To: <20260129212510.967611-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260129212510.967611-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260129212510.967611-16-dmatlack@google.com>
-Subject: [PATCH v2 15/22] vfio: selftests: Add Makefile support for TEST_GEN_PROGS_EXTENDED
+Message-ID: <20260129212510.967611-17-dmatlack@google.com>
+Subject: [PATCH v2 16/22] vfio: selftests: Add vfio_pci_liveupdate_uapi_test
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex@shazbot.org>
 Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, 
@@ -84,43 +84,129 @@ Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.
 	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-Add Makefile support for TEST_GEN_PROGS_EXTENDED targets. These tests
-are not run by default.
-
-TEST_GEN_PROGS_EXTENDED will be used for Live Update selftests in
-subsequent commits. These selftests must be run manually because they
-require the user/runner to perform additional actions, such as kexec,
-during the test.
+Add a selftest to exercise preserving a various VFIO files through
+/dev/liveupdate. Ensure that VFIO cdev device files can be preserved and
+everything else (group-based device files, group files, and container
+files) all fail.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- tools/testing/selftests/vfio/Makefile | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ tools/testing/selftests/vfio/Makefile         |  1 +
+ .../vfio/vfio_pci_liveupdate_uapi_test.c      | 93 +++++++++++++++++++
+ 2 files changed, 94 insertions(+)
+ create mode 100644 tools/testing/selftests/vfio/vfio_pci_liveupdate_uapi_test.c
 
 diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
-index 1e50998529fd..f9c040094d4a 100644
+index f9c040094d4a..666310872217 100644
 --- a/tools/testing/selftests/vfio/Makefile
 +++ b/tools/testing/selftests/vfio/Makefile
-@@ -23,12 +23,15 @@ LDFLAGS += -pthread
- LIBS_O := $(LIBVFIO_O)
- LIBS_O += $(LIBLIVEUPDATE_O)
+@@ -4,6 +4,7 @@ TEST_GEN_PROGS += vfio_iommufd_setup_test
+ TEST_GEN_PROGS += vfio_pci_device_test
+ TEST_GEN_PROGS += vfio_pci_device_init_perf_test
+ TEST_GEN_PROGS += vfio_pci_driver_test
++TEST_GEN_PROGS += vfio_pci_liveupdate_uapi_test
  
--$(TEST_GEN_PROGS): %: %.o $(LIBS_O)
-+$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o $(LIBS_O)
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBS_O) $(LDLIBS) -o $@
- 
--TEST_GEN_PROGS_O = $(patsubst %, %.o, $(TEST_GEN_PROGS))
--TEST_DEP_FILES := $(patsubst %.o, %.d, $(TEST_GEN_PROGS_O))
-+TESTS_O := $(patsubst %, %.o, $(TEST_GEN_PROGS))
-+TESTS_O += $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
+ TEST_FILES += scripts/cleanup.sh
+ TEST_FILES += scripts/lib.sh
+diff --git a/tools/testing/selftests/vfio/vfio_pci_liveupdate_uapi_test.c b/tools/testing/selftests/vfio/vfio_pci_liveupdate_uapi_test.c
+new file mode 100644
+index 000000000000..3b4276b2532c
+--- /dev/null
++++ b/tools/testing/selftests/vfio/vfio_pci_liveupdate_uapi_test.c
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
-+TEST_DEP_FILES := $(patsubst %.o, %.d, $(TESTS_O))
- TEST_DEP_FILES += $(patsubst %.o, %.d, $(LIBS_O))
- -include $(TEST_DEP_FILES)
- 
--EXTRA_CLEAN += $(TEST_GEN_PROGS_O) $(TEST_DEP_FILES)
-+EXTRA_CLEAN += $(TESTS_O)
-+EXTRA_CLEAN += $(TEST_DEP_FILES)
++#include <libliveupdate.h>
++#include <libvfio.h>
++#include <kselftest_harness.h>
++
++static const char *device_bdf;
++
++FIXTURE(vfio_pci_liveupdate_uapi_test) {
++	int luo_fd;
++	int session_fd;
++	struct iommu *iommu;
++	struct vfio_pci_device *device;
++};
++
++FIXTURE_VARIANT(vfio_pci_liveupdate_uapi_test) {
++	const char *iommu_mode;
++};
++
++#define FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode)			\
++FIXTURE_VARIANT_ADD(vfio_pci_liveupdate_uapi_test, _iommu_mode) {	\
++	.iommu_mode = #_iommu_mode,					\
++}
++
++FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES();
++#undef FIXTURE_VARIANT_ADD_IOMMU_MODE
++
++FIXTURE_SETUP(vfio_pci_liveupdate_uapi_test)
++{
++	self->luo_fd = luo_open_device();
++	ASSERT_GE(self->luo_fd, 0);
++
++	self->session_fd = luo_create_session(self->luo_fd, "session");
++	ASSERT_GE(self->session_fd, 0);
++
++	self->iommu = iommu_init(variant->iommu_mode);
++	self->device = vfio_pci_device_init(device_bdf, self->iommu);
++}
++
++FIXTURE_TEARDOWN(vfio_pci_liveupdate_uapi_test)
++{
++	vfio_pci_device_cleanup(self->device);
++	iommu_cleanup(self->iommu);
++	close(self->session_fd);
++	close(self->luo_fd);
++}
++
++TEST_F(vfio_pci_liveupdate_uapi_test, preserve_device)
++{
++	int ret;
++
++	ret = luo_session_preserve_fd(self->session_fd, self->device->fd, 0);
++
++	/* Preservation should only be supported for VFIO cdev files. */
++	ASSERT_EQ(ret, self->iommu->iommufd ? 0 : -ENOENT);
++}
++
++TEST_F(vfio_pci_liveupdate_uapi_test, preserve_group_fails)
++{
++	int ret;
++
++	if (self->iommu->iommufd)
++		return;
++
++	ret = luo_session_preserve_fd(self->session_fd, self->device->group_fd, 0);
++	ASSERT_EQ(ret, -ENOENT);
++}
++
++TEST_F(vfio_pci_liveupdate_uapi_test, preserve_container_fails)
++{
++	int ret;
++
++	if (self->iommu->iommufd)
++		return;
++
++	ret = luo_session_preserve_fd(self->session_fd, self->iommu->container_fd, 0);
++	ASSERT_EQ(ret, -ENOENT);
++}
++
++int main(int argc, char *argv[])
++{
++	int fd;
++
++	fd = luo_open_device();
++	if (fd < 0) {
++		printf("open(%s) failed: %s, skipping\n", LUO_DEVICE, strerror(errno));
++		return KSFT_SKIP;
++	}
++	close(fd);
++
++	device_bdf = vfio_selftests_get_bdf(&argc, argv);
++	return test_harness_run(argc, argv);
++}
 -- 
 2.53.0.rc1.225.gd81095ad13-goog
 
