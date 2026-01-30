@@ -1,131 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EAD367F42
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 11:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D75DF2D660E;
+	Fri, 30 Jan 2026 13:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769772472; cv=none; b=lDJDaljlzF3/jMl8VIP/YMrXHP+jmbT3lJAPmQzQ+ERID3UzNmJ/Oq2xexlIWUDTsNcThpbfYyFggeL+0ZnW34u2MYvpigcHDfZkVns6ANhrzPvNpt/+ltpwsbPnB4EP8ddFKnUoGmpOIrPTLx+1SoupwyA0EdXWseZ4398MumQ=
+	t=1769779640; cv=none; b=lVHwGiSzOq68SaF6UqH1dchgcOBe+niSXT379A13Cgp/IebhWmBdfzj/8w5D0RsEjGt8Odqn5rGeNVUFol4tH1M7ileKvnCXlqcjnsBFZMvB09qvhiGDUqphMsd6mhaHiwTpIu8s1pa/3TMkW4ROMBOS/1uWe2uW+0ExjO4gQgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769772472; c=relaxed/simple;
-	bh=dOBb1/hX56xTU6QrC2APTZYbHhHs006flWmrSPNARLk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YiUOmpxwE3ENVHBvbQFmgPMKu4C1vC7SK75b8O41gObphcldJV3ded0oJG3mAf+XV9J1uqQJyip4AIgRyicMDuZHocwk6vFdnmpthDsX/n/mZ95YmpAYccvekWPSuJRHsVKri9rShP4ShWY2CTFOLUO0HrtOw9atx5j7+TyOtq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNoywkeW; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNoywkeW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5FE8C2BCB2
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 11:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769772471;
-	bh=dOBb1/hX56xTU6QrC2APTZYbHhHs006flWmrSPNARLk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fNoywkeWnjnHsueVxeZazQepbLaiS+aE+DimVIvw0oGYwhdyuh/HGFphMl2ZZU559
-	 pPk0i8oFHZ3ytAvyvITRPKxEVeXL9fCFJxm52GJZoTG/HYQC7poXjTHZHTNLJxL+wV
-	 4mmbFWuWEBg78o/+e5uBiRDmoYElHDPQmSv4i6C67K8k7vMK4b1WpP7be7MyRYzHh2
-	 73FeGbktAhgJdsNxAawIg1UIY8QE0JsX08V6ABOi4E5lVOPS+BqvfNKVcjTNt7vk+6
-	 OZzY0bbpl5uzGQlbw1GwOck/TQXysLnt3Mj6WL4kYL92ML1gY51hB+b1XSYAQtdMFw
-	 1QZP5asPLVK+w==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-385b6a15affso29674121fa.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 03:27:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVQkTOWmXrMdW4tL3gPLvdbCkkNZ0q//UGSpsLRos5l6MAB/W123rqxt9fQFI3Iw+OcZtv30pJ/rsq2WOCyASQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqfFzJtWT29NT1mtzsJ9bCi1++YoUx7HndzGxlZWzhkaoCuaL9
-	0Nfiql8uchaMT3JuaaA8cjY8kQ6GLo1iD4i+Oa6VDeWCJ6KSbJHMS//YzRIwx3rTiDA1YmyunDa
-	EEoQo9ndXJAVl300DncAfK9LYIT2eCZqbUJzzXjRIDQ==
-X-Received: by 2002:a05:651c:304d:b0:382:4f57:e8d1 with SMTP id
- 38308e7fff4ca-386466437d1mr10011641fa.18.1769772470520; Fri, 30 Jan 2026
- 03:27:50 -0800 (PST)
+	s=arc-20240116; t=1769779640; c=relaxed/simple;
+	bh=EpHEzX5oSY4/kv7rFwjFdQL4xQBp0DQ4cWf5uXb62A4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ZgKfHaTew35Grx0puu/1mqRiX34OtcH7BVXbJwSEhZHWQ1HGwtK478j7REtRG2zJp7QQN1jXEWsclS6EdvXWgELZW6mpb/e2k733avYpE34hZGaoGD7/VgYrCKczNmBcGH4vgjlRlSuiPWsFM2uUovBKZES3aH4CAV7hZOxN5zI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A0B4153B;
+	Fri, 30 Jan 2026 05:27:10 -0800 (PST)
+Received: from [10.57.51.191] (unknown [10.57.51.191])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6335F3F73F;
+	Fri, 30 Jan 2026 05:27:10 -0800 (PST)
+Message-ID: <13d22231-d84a-4993-9a69-e3922e45b500@arm.com>
+Date: Fri, 30 Jan 2026 14:27:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260124170535.11756-1-johan@kernel.org> <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh> <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
- <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
- <20260127235232.GS1134360@nvidia.com> <CAMRc=MfP1_fH91AVjerbnwVfhA0oqBKV+CTX0_1n32g1t-Pvuw@mail.gmail.com>
- <aXneX-aZofvuk8gl@ninjato> <20260128150538.GA1134360@nvidia.com>
- <CAMRc=McE5yTQ2hcLiR6asQWEi=Y1rhHzqq7G6FR58LCFZi6BAA@mail.gmail.com> <20260128160127.GC1134360@nvidia.com>
-In-Reply-To: <20260128160127.GC1134360@nvidia.com>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Fri, 30 Jan 2026 12:27:36 +0100
-X-Gmail-Original-Message-ID: <CAMRc=MdiSyCPm=X20Va-18ow7dZ1d+ZnXu0uBD1cL2MfppZQqg@mail.gmail.com>
-X-Gm-Features: AZwV_Qi2AjrACCeKnrRuZpJKb17VRq4mA_5DtAP65bEfHZ2Ak5o3zod9-ZDyCfM
-Message-ID: <CAMRc=MdiSyCPm=X20Va-18ow7dZ1d+ZnXu0uBD1cL2MfppZQqg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Johan Hovold <johan@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	Dan Williams <dan.j.williams@intel.com>, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 09/14] entry: Rework syscall_exit_to_user_mode_work()
+ for arch reuse
+To: Thomas Gleixner <tglx@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
+ catalin.marinas@arm.com, will@kernel.org, oleg@redhat.com,
+ peterz@infradead.org, luto@kernel.org, shuah@kernel.org, kees@kernel.org,
+ wad@chromium.org, deller@gmx.de, akpm@linux-foundation.org,
+ charlie@rivosinc.com, mark.rutland@arm.com, anshuman.khandual@arm.com,
+ song@kernel.org, ryan.roberts@arm.com, thuth@redhat.com,
+ ada.coupriediaz@arm.com, broonie@kernel.org, pengcan@kylinos.cn,
+ liqiang01@kylinos.cn, kmal@cock.li, dvyukov@google.com,
+ reddybalavignesh9979@gmail.com, richard.weiyang@gmail.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260128031934.3906955-1-ruanjinjie@huawei.com>
+ <20260128031934.3906955-10-ruanjinjie@huawei.com>
+ <56978cb8-f9de-4bf2-b1fc-b5564fec7387@arm.com>
+ <ef52449d-7ae0-11d0-c8a9-2ca572454425@huawei.com>
+ <3bfa15fc-187e-4c39-9cb3-a936fdd443b2@arm.com> <87o6mbl82j.ffs@tglx>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <87o6mbl82j.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 28, 2026 at 5:01=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> On Wed, Jan 28, 2026 at 04:20:02PM +0100, Bartosz Golaszewski wrote:
-> > On Wed, Jan 28, 2026 at 4:05=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com=
-> wrote:
-> > >
-> > > On Wed, Jan 28, 2026 at 11:01:03AM +0100, Wolfram Sang wrote:
-> > > >
-> > > > > One exception is I2C where the logic is so broken we need to firs=
-t
-> > > > > rework a lot of drivers.
-> > > >
-> > > > Let's say "bitrotten" instead of broken. People used what was avail=
-able
-> > > > at that time and they prevented the kernel from crashing, at least.=
- And
-> > > > up to now, nobody had the bandwidth to improve that part in I2C.
-> > > >
-> > > > > Wolfram is on board with that though.
-> > > >
-> > > > Ack. I want to emphasize here that for I2C the SRCU part goes into =
-the
-> > > > subsystem, not into the drivers.
-> > >
-> > > I would just gently advise again that SRCU is not a pancea and should
-> > > only be used if the read side sections are super performance
-> > > critical. I'm not sure that describes I2C. rwsem is often a simpler
-> > > and better choice.
-> > >
-> >
-> > Sure. We're not there yet so that's TBD. The reason for using SRCU in
-> > GPIO was the fact that we have consumers that may call into GPIOLIB
-> > from atomic context - so we must not sleep - but we also have sleeping
-> > controllers - so we must not take a spinlock before entering driver
-> > code. SRCU was about the only synchronization mechanism that worked in
-> > all cases as the locking at the subsystem level needs to be
-> > centralized.
->
-> Oh, I didn't know you could safely use SRCU within atomic
-> sections. That's a pretty good reason to use it in some places.
->
-> > struct subsys_data {
-> >   struct driver_data __rcu *priv;
-> >   struct device dev;
-> > }
->
-> IMHO this is not a good pattern.
->
-> The thing to RCU protect is the *driver ops* pointer, not the driver
-> data. It is what I was saying before, the goal is to not call ops if
-> the driver is revoked so that the ops can assume they are in a
-> Device<Bound> context.
->
-> It should not be normal for the core code to be touching priv at all,
-> it has no natural reason to ever load it. It does have to fetch ops!
->
+On 30/01/2026 11:16, Thomas Gleixner wrote:
+> On Thu, Jan 29 2026 at 17:00, Kevin Brodsky wrote:
+>> On 29/01/2026 14:11, Jinjie Ruan wrote:
+>>>>> - * Calling convention is the same as for syscall_exit_to_user_mode() and it
+>>>>> - * returns with all work handled and interrupts disabled. The caller must
+>>>>> - * invoke exit_to_user_mode() before actually switching to user mode to
+>>>>> - * make the final state transitions. Interrupts must stay disabled between
+>>>>> - * return from this function and the invocation of exit_to_user_mode().
+>>>>> + * Calling convention is the same as for syscall_exit_to_user_mode(). The
+>>>>> + * caller must invoke local_irq_disable(), __exit_to_user_mode_prepare() and
+>>>> Shouldn't it be syscall_exit_to_user_mode_prepare() rather than
+>>>> __exit_to_user_mode_prepare()? The former has extra calls (e.g. rseq).
+>>> Perhaps we can just delete these comments — at present only generic
+>>> entry and arm64 use it, and nowhere else needs it; after the refactoring
+>>> the comments now seem rather unclear.
+>> Agreed, the comments are essentially describing what each function
+>> calls; considering how short they are, directly reading the code is
+>> probably easier.
+> No. Please keep them. There is more information in them than just the
+> pure 'what's' called.
 
-This is just an example and priv can hold whatever. Ideally this would
-be ops but it's not always the case with existing code where ops and
-driver data are often mixed into a single structure.
+That is true before this patch, where it made sense to highlight that
+exit_to_user_mode() must still be called after this function (without
+re-enabling interrupts). With this patch there is however much more that
+this function is lacking, and it feels very likely that comments will go
+out of sync with exactly what syscall_exit_to_user_mode() calls.
 
-Bart
+I suppose we could simply point the reader to
+syscall_exit_to_user_mode() to find out what else is needed, and keep
+the comment about the calling convention being the same.
+
+- Kevin
