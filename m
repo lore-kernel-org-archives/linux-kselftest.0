@@ -1,169 +1,126 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CDE341AD8
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 11:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5203367F28
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 11:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769771921; cv=none; b=VWR5wD+nQ0V/8o84YVdAvVMyBTEu4tu9KsZMFUQOkv+U9hexpK1YKMpP/pLePuShH8NZS4IlBorIcwH7R+8KpP4jJNhZXQ9rCBjyUidizNcvWc2Yx5Zfd7099KnF/AGajgEDhAIbLtLK2ws3cCb6BMraPaAc26Fgg+t1gRa04Vw=
+	t=1769772016; cv=none; b=TflE5QMFj2irwLFYBtBu5u74kJLLbiKGOHA9i3q21XWncztC0GUhcQMre9G1kR9c/zlIPai1P2OQOzw/DjEJUw2m8X3cPLCf6ozg6CEz3iRldx+Tn9KsNLUf5Jm+bYxirNKvAEB3vE5QtpSk15aR9EIByKbN3qOyNHX+H93BVY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769771921; c=relaxed/simple;
-	bh=8p8+0GQ91MvaIBdkWEAgJ+nHZa2ENvIatBXaaQcwTnM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kcQpUYhxAv6oS3GeC22gTBe5mGSyrO5EBMyi13kMaHuZjWUEeaDUaEBFYOsFt0kxi2g6q+txzYMHhT2W31VdzGVMHVcPSNWdgDTD9/o4TVnSr60kXPqF7XRrRrU7VjlPwVnHMg8y1lTfC01fe6YKJYGWe1yiCa7COUe7uhzjVzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Rrv9sEAJ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769772016; c=relaxed/simple;
+	bh=TbpwvIB/ykZIuzImUFLin/BO6kcdCaNFZ+AaICv33Kw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DpeWqwFPUwqu4flSK6F3GaAWGuaxDQfww18qBjzkWL2Ouyq9SQBWUojkN95PdqBxdOXnFm8kMozfl1nFxcxfYkHn1VMHbRulrjqER1EhnCb0IgXdSqQCGE0xO7ieAGasvAUk9Cup9nIjMSU6ViRewoy8XEmJsFbh439v8MAVtTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MECPX5la; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Rrv9sEAJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769771919;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4SWxrZSh3IyqnmseS1WeTTaR+05pdp5g7SrBU1oEGUQ=;
-	b=Rrv9sEAJDVSNmAtMbjSB2Gal/Yy2cG6V3ifu6FHtz2U+1oCXRK9XVRq+XpzXsGTLIa74/C
-	sk3glO0Onz8a/HKAelqKdqqpa86gaePMdOqXlVB2PVsmsCdqZZw2MbK6eFfZzgWHrfjfoz
-	DsDFpQt3spcbNGnYAy7fMsOJhG54i3A=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-54-HL81I-JnPpeBG94G4989lQ-1; Fri,
- 30 Jan 2026 06:18:37 -0500
-X-MC-Unique: HL81I-JnPpeBG94G4989lQ-1
-X-Mimecast-MFC-AGG-ID: HL81I-JnPpeBG94G4989lQ_1769771916
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E3EC01956080;
-	Fri, 30 Jan 2026 11:18:35 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.45.224.204])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 311A518004D8;
-	Fri, 30 Jan 2026 11:18:32 +0000 (UTC)
-From: Paolo Abeni <pabeni@redhat.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 2/2] selftest: net: add a test-case for encap segmentation after GRO
-Date: Fri, 30 Jan 2026 12:17:47 +0100
-Message-ID: <276270cf825431817e46f6744d9b26d3ea954869.1769771825.git.pabeni@redhat.com>
-In-Reply-To: <cover.1769771825.git.pabeni@redhat.com>
-References: <cover.1769771825.git.pabeni@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MECPX5la"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B55FC2BC86
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 11:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769772016;
+	bh=TbpwvIB/ykZIuzImUFLin/BO6kcdCaNFZ+AaICv33Kw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=MECPX5la6uFxXK73oFvEt7Y6JP8vJ62q3eJTx+wotVm82a6PqBy42MGvO7JLkACce
+	 qUDwFbOk6USs0TUK5tru77l4t8Z0zkT0NlHcJlNCPByj9Ku13eBaOWVJUQihrTd07Q
+	 wNau1KslFqPbsNCVaNLeFGBEVHwnnMAQLoL/it72iPg/cMBUAfakMidb+pbuNBpjpV
+	 W1/DS+/0funLHo9ahOAvCAhzmDR9/G2jijtRnSuXfeQEEhWx4AsdopjLPlfVlaLoEl
+	 pSAnbG4qM2/Vc6s2wljphxJvjnJy8qaQEfvZsFOhB0xryUkExJ1wC9cZr5AheVUVoO
+	 YzQdrMk/tOvCw==
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-382fe06aa94so17380171fa.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 03:20:15 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXxOJD/KESthMA6j2vqgyU8Hn7rfYaeP8ooTHVbLC0LtTXNDHIF3fRskPua+Y1C66766jx6lEA1gyEHc+8w+ZU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjs8KBc3gl3F1Jv7K6qzkqzCRcYo2j/XDONH2t1d8Nf4YTBRfF
+	pIhoE8GQ72Xwwv1AXDd5xg19ZbsgF4MsDCFgeboXSfOB3RAdTc4xvCOezFRt2cwlM1esho+IZD/
+	TqTQAPJKrweI2GcnFw8aXjAJozVSaHCx+xXbIn2ShTQ==
+X-Received: by 2002:a2e:be9e:0:b0:37b:a30e:fe1e with SMTP id
+ 38308e7fff4ca-38646594a39mr10350221fa.18.1769772014175; Fri, 30 Jan 2026
+ 03:20:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+References: <20260124170535.11756-1-johan@kernel.org> <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh> <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
+ <aXovtrAM1r1UyWxA@hovoldconsulting.com> <CAMRc=MeMW4g5em_b9qGBR9OmQZNzyQp-S=zKDCPFu506ixy-cQ@mail.gmail.com>
+ <20260129105634.GC3317328@killaraus> <CAMRc=MfzByLPJ0FKySmG7b79Ah63Mtk1hs1N=6kv8pTDydrcGg@mail.gmail.com>
+ <20260129144906.GE3327197@killaraus>
+In-Reply-To: <20260129144906.GE3327197@killaraus>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Fri, 30 Jan 2026 12:19:59 +0100
+X-Gmail-Original-Message-ID: <CAMRc=McXfSOt4b3AHRcOZoKhkQQsYDt=yWGgS_doO7HC69R2rg@mail.gmail.com>
+X-Gm-Features: AZwV_Qj5xfuk3GOKjPkJG1J_aiopbJnwKIOtc32rNHZAgV4bR-fuRe1_A0LU5o0
+Message-ID: <CAMRc=McXfSOt4b3AHRcOZoKhkQQsYDt=yWGgS_doO7HC69R2rg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Johan Hovold <johan@kernel.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Dan Williams <dan.j.williams@intel.com>, Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-We had a few patches in this area and no explicit coverage so far.
-The test case covers the scenario addressed by the previous fix;
-reusing the existing udpgro_fwd.sh script to leverage part of the
-of the virtual network setup, even if such script is possibly not
-a perfect fit.
+On Thu, Jan 29, 2026 at 3:49=E2=80=AFPM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> On Thu, Jan 29, 2026 at 08:50:30AM -0500, Bartosz Golaszewski wrote:
+> > On Thu, 29 Jan 2026 11:56:34 +0100, Laurent Pinchart said:
+> > > On Thu, Jan 29, 2026 at 10:11:46AM +0100, Bartosz Golaszewski wrote:
+> > >>
+> > >> For I2C both the problem is different (subsystem waiting forever for
+> > >> consumers to release all references) and the culprit: memory used to
+> > >> hold the reference-counted struct device is released the supplier
+> > >> unbind unconditionally. Unfortunately there's no way around it other
+> > >> than to first move it into a separate chunk managed by i2c core.
+> > >
+> > > Isn't there ? Can't the driver-specific data structure be
+> > > reference-counted instead of unconditionally freed at unbind time ?
+> >
+> > Oh, for sure, if we did from the start. But we did not and there are no=
+w
+> > hundreds of i2c drivers that do:
+> >
+> > struct my_i2c_drv_data {
+> >       struct i2c_adapter adap;
+> >       int my_other_drv_data;
+> > };
+> >
+> > and in probe:
+> >
+> > struct my_i2c_drv_data *data =3D devm_kzalloc(dev, sizeof(*data), GFP_K=
+ERNEL);
+> >
+> > (or just kzalloc() with kfree() in remove, it doesn't matter)
+> >
+> > and the ownership of that data belongs to the driver. There's no way we=
+ could
+> > address it now so the next best thing is to work towards moving the own=
+ership
+> > of struct i2c_adapter to the i2c core and make it reference counted usi=
+ng the
+> > internal kobject of the associated struct device.
+>
+> What I'm reading here is essentially that we rolled out devm_kzalloc()
+> too quickly without understanding the consequences, and it has spread so
+> much that it can't be fixed properly now, so we need to find a
+> workaround. And now we're trying to work around the problem by rolling
+> out a revocable API that has barely seen any testing, and is known to
+> have design issues. Does any one else see the irony ? :-)
+>
 
-Note that the mentioned script already contains several shellcheck
-violation; this patch does not fix the existing code, just avoids
-adding more issues in the new one.
+No, this has nothing to do with devm_anything(). It's resource
+ownership. What driver creates at probe(), the driver should destroy
+at remove(). I really hate with a passion the pattern where a driver
+creates something in probe() and then tosses it over to the subsystem
+for management. If an entity registers the struct device, it should
+also be the one who allocates and manages the memory for it. Devres
+just made it a bit easier to commit this kind of errors but they would
+exist nevertheless.
 
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
----
- tools/testing/selftests/net/udpgro_fwd.sh | 65 +++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
-
-diff --git a/tools/testing/selftests/net/udpgro_fwd.sh b/tools/testing/selftests/net/udpgro_fwd.sh
-index a39fdc4aa2ff..f2c1f0630b77 100755
---- a/tools/testing/selftests/net/udpgro_fwd.sh
-+++ b/tools/testing/selftests/net/udpgro_fwd.sh
-@@ -162,6 +162,39 @@ run_test() {
- 	echo " ok"
- }
- 
-+run_test_csum() {
-+	local -r msg="$1"
-+	local -r dst="$2"
-+	local csum_error_filter=UdpInCsumErrors
-+	local csum_errors
-+
-+	printf "%-40s" "$msg"
-+
-+	is_ipv6 "$dst" && csum_error_filter=Udp6InCsumErrors
-+
-+	ip netns exec "$NS_DST" iperf3 -s -1 >/dev/null &
-+	wait_local_port_listen "$NS_DST" 5201 tcp
-+	local spid="$!"
-+	ip netns exec "$NS_SRC" iperf3 -c "$dst" -t 2 >/dev/null
-+	local retc="$?"
-+	wait "$spid"
-+	local rets="$?"
-+	if [ "$rets" -ne 0 ] || [ "$retc" -ne 0 ]; then
-+		echo " fail client exit code $retc, server $rets"
-+		ret=1
-+		return
-+	fi
-+
-+	csum_errors=$(ip netns exec "$NS_DST" nstat -as "$csum_error_filter" |
-+		      grep "$csum_error_filter" | awk '{print $2}')
-+	if [ -n "$csum_errors" ] && [ "$csum_errors" -gt 0 ]; then
-+		echo " fail - csum error on receive $csum_errors, expected 0"
-+		ret=1
-+		return
-+	fi
-+	echo " ok"
-+}
-+
- run_bench() {
- 	local -r msg=$1
- 	local -r dst=$2
-@@ -260,6 +293,38 @@ for family in 4 6; do
- 	ip netns exec $NS_SRC $PING -q -c 1 $OL_NET$DST_NAT >/dev/null
- 	run_test "GRO fwd over UDP tunnel" $OL_NET$DST_NAT 10 10 $OL_NET$DST
- 	cleanup
-+
-+	# force segmentation and re-aggregation
-+	create_vxlan_pair
-+	ip netns exec "$NS_DST" ethtool -K veth"$DST" generic-receive-offload on
-+	ip netns exec "$NS_SRC" ethtool -K veth"$SRC" tso off
-+	ip -n "$NS_SRC" link set dev veth"$SRC" mtu 1430
-+
-+	# forward to a 2nd veth pair
-+	ip -n "$NS_DST" link add br0 type bridge
-+	ip -n "$NS_DST" link set dev veth"$DST" master br0
-+
-+	# segment the aggregates TSO packet, without csum offload
-+	ip -n "$NS_DST" link add veth_segment type veth peer veth_rx
-+	for FEATURE in tso tx-udp-segmentation tx-checksumming; do
-+		ip netns exec "$NS_DST" ethtool -K veth_segment "$FEATURE" off
-+	done
-+	ip -n "$NS_DST" link set dev veth_segment master br0 up
-+	ip -n "$NS_DST" link set dev br0 up
-+	ip -n "$NS_DST" link set dev veth_rx up
-+
-+	# move the lower layer IP in the last added veth
-+	for ADDR in "$BM_NET_V4$DST/24" "$BM_NET_V6$DST/64"; do
-+		# the dad argument will let iproute emit a unharmfull warning
-+		# with ipv4 addresses
-+		ip -n "$NS_DST" addr del dev veth"$DST" "$ADDR" \
-+			nodad 2>/dev/null
-+		ip -n "$NS_DST" addr add dev veth_rx "$ADDR" \
-+			nodad 2>/dev/null
-+	done
-+
-+	run_test_csum "GSO after GRO" "$OL_NET$DST"
-+	cleanup
- done
- 
- exit $ret
--- 
-2.52.0
-
+Bartosz
