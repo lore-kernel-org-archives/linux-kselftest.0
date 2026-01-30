@@ -1,59 +1,51 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0A123BCF7;
-	Fri, 30 Jan 2026 09:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E26B313545;
+	Fri, 30 Jan 2026 09:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769764256; cv=none; b=tZqeNCqiGBLO3myB7zPQxWBCEQLSM1nfDa3T257+8tA9f/yCml0F4kvFtrZfuUrIXqE+/ZSlv5gI/FBXrO7V34b0Mcu1qYumrg5xkK2wXn9wb8WyFka75UjR4aZ2AqbWE6ipjIugcCotIcoOPUZw7myzYHuztuyCOnbAeKR2Qdw=
+	t=1769764330; cv=none; b=DdryTT3M6mBYlmZsYfIkUnPiVwn1TjQ3weTRK60/mdtuzh0xADPC44F/vS9gbzn/KO59I17Qop4eZShshnU3P69p6m0/Mhf1ik7tE+aBQnD2pNJGQ9MVxcLt60mS3EGxWLAu6B2uZ1+uTF5DtFmZx3YSuzFZym11P4c/IncQl0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769764256; c=relaxed/simple;
-	bh=g8NInngSP4JQW49dK+CcmwLJmBM7XnFr0I4GZEvsfu8=;
+	s=arc-20240116; t=1769764330; c=relaxed/simple;
+	bh=zSkklyuLE8HkmKOM+X8WC6cl4Z5Dw4K6neglavCVEfg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kHnvPtEReg2LA7jmxt/Kc83mBlQB7YbbRuPeTM1lrrycULhJmcYsR2fSUHLB+ubYzbjjRywrQw3IJSYrVdfzZVCXls4JlzIagfUx/Boi+T4fESxjjPOHxj6pzRPVVwr873DgjRU4zCXf96DEqyzJGHPDoOH7msKdUvv4icUx3i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=SDiYx7ub; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=npB+HFVzo64LnQZtIW3fVpP4QCWSVFyX9yoWg7FY2uYECQQrRDjUQWlDT7bg1BUsPPZNoZg0Ilw6k/Yy4AcE62txRrRWiSwX5+fjmf0pFQW6Ke8wjCRXcaY5TNGVi2+9FaMC4lQk8dNvtrd6NoP9fk2+jOdK5ZuvY88A53+35qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=I4Wj1v6i; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="SDiYx7ub"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="I4Wj1v6i"
 Received: from killaraus.ideasonboard.com (2001-14ba-703d-e500--2a1.rev.dnainternet.fi [IPv6:2001:14ba:703d:e500::2a1])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id BA4AD3A2;
-	Fri, 30 Jan 2026 10:10:12 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 9A1B03A2;
+	Fri, 30 Jan 2026 10:11:28 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1769764212;
-	bh=g8NInngSP4JQW49dK+CcmwLJmBM7XnFr0I4GZEvsfu8=;
+	s=mail; t=1769764288;
+	bh=zSkklyuLE8HkmKOM+X8WC6cl4Z5Dw4K6neglavCVEfg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SDiYx7ubFQZHN9BK5KjsxQlPR292p/G4VPlbfVXqVPYSpliIz6rcNAFPSrhQMzd02
-	 UdMbr0ATTVdZqiVkLtpzT2E3krDdziXT6c2ilCa7QQd5d6qGVhVg3k20I/d5oLSEW8
-	 Ika/2VPCnCR3kuVTsL+J1j52Wh9X18CPvaStKkgk=
-Date: Fri, 30 Jan 2026 11:10:49 +0200
+	b=I4Wj1v6ix1bkop733M4hhsYMnKkCxOJz/hsN33vDYYU7rgHfHp1SM7hB3t35VxzPh
+	 0g0NxSmSCaf/6bcrKizpQxQZUczhqHlJyWxopSKhOSg9Y2B8/065asunBdOFOaGyp1
+	 BXI0c39mslh6Hn/vIbzC8M4LXgz+DI1eSwo0VKcM=
+Date: Fri, 30 Jan 2026 11:12:05 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Johan Hovold <johan@kernel.org>,
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
 	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <shuah@kernel.org>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-Message-ID: <20260130091049.GH3374091@killaraus>
+Message-ID: <20260130091205.GI3374091@killaraus>
 References: <20260124170535.11756-1-johan@kernel.org>
- <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh>
- <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
- <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
- <20260127235232.GS1134360@nvidia.com>
- <20260129010822.GA3310904@killaraus>
- <DG1FF2VY54AO.2Q3YHA4WNLV5C@kernel.org>
+ <aXjgeNY-jf9rIw09@google.com>
+ <aXt2XqRnBjb25f81@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,21 +54,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DG1FF2VY54AO.2Q3YHA4WNLV5C@kernel.org>
+In-Reply-To: <aXt2XqRnBjb25f81@google.com>
 
-On Thu, Jan 29, 2026 at 11:29:03PM +0100, Danilo Krummrich wrote:
-> (Cc: Maxime, Thomas, Maarten)
+On Thu, Jan 29, 2026 at 03:01:50PM +0000, Tzung-Bi Shih wrote:
+> On Tue, Jan 27, 2026 at 03:57:44PM +0000, Tzung-Bi Shih wrote:
+> > On Sat, Jan 24, 2026 at 06:05:32PM +0100, Johan Hovold wrote:
+> > > Turns out there are correctness issues with both the gpiolib conversion and
+> > > the revocable design itself that can lead to use-after-free and hung tasks (see
+> > > [1] and patch 3/3).
+> > [...]
+> > > Revert the revocable implementation until a redesign has been proposed and
+> > > evaluated properly.
+> > 
+> > I'll work on addressing the discovered issues and send follow-up fixes.  I
+> > believe keeping the current series in linux-next would be beneficial, as it
+> > allows for easier testing and wider evaluation by others, rather than
+> > reverting at this stage.
 > 
-> On Thu Jan 29, 2026 at 2:08 AM CET, Laurent Pinchart wrote:
-> > That's what I've been advocating for. The best way to ensure that driver
-> > code will not accessed data freed at .remove() time is to prevent the
-> > code to run at all.
-> 
-> With this we are in full agreement, I think that'd be best too. But, I also
-> think that sometimes this isn't possible. For instance, DRM has such a case with
-> atomic mode setting.
+> FWIW: https://lore.kernel.org/all/20260129143733.45618-2-tzungbi@kernel.org/
+> and https://lore.kernel.org/all/20260129143733.45618-4-tzungbi@kernel.org/
+> are the proposed fixes.
 
-I don't see why it would be impossible there.
+I won't review that, sorry. As multiple people said in this mail thread,
+the API needs to go back to the design board.
 
 -- 
 Regards,
