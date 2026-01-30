@@ -1,312 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D56B313267;
-	Fri, 30 Jan 2026 08:02:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0556314D13;
+	Fri, 30 Jan 2026 08:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769760179; cv=none; b=WgyprDKEuP32oaOD6YgoFqMurvsk/B2oAqysNg0H8Un/B9QiEIhpyvVMo0nqF3euJWvcc8bSwjkooFsUHBvdht2cFl5g1UePmKy/o7+sHNuDREVmHeH/oWWF1u+nLkBmLUYaN73dckp9iQJNQnlJ9EkSBOou8gZaFkm8uj1uMps=
+	t=1769761430; cv=none; b=iuSXubSMOl65cL54/9kLOjbpMkQ6/Q8PHm3t6vlFt29tRU1t7ia9gFfTCYLAxcSStP47DAjHmaJt4cTeCezPXuYSJ7FOeP9WEZe7H5HD5FJweE91K09qg+Q7micM2fivkIxYDlJzHaVKggB5FfljmRzRcLQk8QdGbIVn5R9gukM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769760179; c=relaxed/simple;
-	bh=kuo/bpQcZBtBXWTSV/ztj+mmjW8gKNvB1ng213v2Vqc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QB7Ep+y7F2lyXtwtOPK8l0VowMTR12QnQmRGO+YNq2XpiOnN4HZ4jDrfbNbYfeRnUij9JJZIDzz6yHDqheFKKRB79RoECoB5KeSxO3Xgoc2lWkMRJ8pfzIgH9ZI5c92zYVp/BoNaLK8uGfAcQZvdP4lEwuXxwBk4OPzZEU/wkaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpNisSU3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769761430; c=relaxed/simple;
+	bh=YgQLkb8jX1AH0tbkh+QGod/x7UP32YjFb2qPFDBVPr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z7WC2V1oITZvRtbuPTNCvJNfTgWUwtYT85uhUGnjXv1M/AEhO1NeKmvtMB2VHe/1Y2pZyXM4Sja8dUa9uvMYMhO4S0t0vKTaPILJPaUx8AOhfZxGDrQlkQjyaehv2SfIhSekmJ5xdDJS5vWUgpycdyj2IM+9XcDP6DMnhX6y1Dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lCY5wdKj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DVBc4VdE; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpNisSU3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6BCC19425;
-	Fri, 30 Jan 2026 08:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769760178;
-	bh=kuo/bpQcZBtBXWTSV/ztj+mmjW8gKNvB1ng213v2Vqc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LpNisSU3wcMguKZMp7lPSDLJ8daACD0rPd33pNAONHaXB/p/ph4Vq5oYQnIszOk7u
-	 M9q0SnqvVd7SBDVfCyGT9wBu9nb0POoCu+01H4VAUdB0/b/UdxKZVIXNVmG019I3Ts
-	 17SFEydL5zd7Zo7nMcgh5XVdmr+UxFZYSzq9TH6KWuVVXd425WBLEOkpxtJO0PO054
-	 lW/NUeNs85wEFyeXUQB4eMT57E2uFwmynkwIgrlY3ETgP+88g0T+1ZgFYSmNlFammW
-	 udLHQpZ1cvhFvkzHjvzN+Yqimy5/vSiaTmYOU8AbnSb3UD/KPqavZsowVgKP2NnzQl
-	 tMHZ5fBuLEIrA==
-From: Allison Henderson <achender@kernel.org>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	rds-devel@oss.oracle.com,
-	kuba@kernel.org,
-	horms@kernel.org,
-	linux-rdma@vger.kernel.org,
-	allison.henderson@oracle.com
-Subject: [PATCH net-next v3 8/8] net/rds: Trigger rds_send_ping() more than once
-Date: Fri, 30 Jan 2026 01:02:50 -0700
-Message-ID: <20260130080250.696575-9-achender@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260130080250.696575-1-achender@kernel.org>
-References: <20260130080250.696575-1-achender@kernel.org>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lCY5wdKj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DVBc4VdE"
+Date: Fri, 30 Jan 2026 09:23:45 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1769761427;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=chYIUBt/EugIr0AL9E0F3IgPc9RzQg0oeO5t8YDREvM=;
+	b=lCY5wdKjIO3MK8kbGlbMUkDaALYyAEWlUiFPNaF1WgnTixxuoXJu5RM7dtG1PgS5jHU3Ht
+	PQQ1iKP+G8yy/wIk8p2IpWjPV7eRZm1aWTTWs1rfSAzvtsDjdCaAaxmxSxEpUP4n9a5c+N
+	ZbXm2AlPgDA91dYAGgVs+F/H6zH4zaqwSfjpzBgSMKY0/KOWhf8pvPeJDYikRYWH/Hhwm7
+	9pR5Rs7VqeHOC6wsXIFs52nzocC3bLNcwbK8H7laA1d6PPXP9XVdr1K7pK+KABINGctqMc
+	FaTHiKuvg++ebTkPdvcvychobShHN57Maw2ZaahlO1nkyYA7iQf6FxfXVaIPmg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1769761427;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=chYIUBt/EugIr0AL9E0F3IgPc9RzQg0oeO5t8YDREvM=;
+	b=DVBc4VdE9Ucp8bmBCDVhHHvEJ4Rdf4j0vFFrMDD4EVwC7yGODIWxsO4enXJjqWXWgJhUSw
+	s3wZafA+rfQ0DZBQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Kir Chou <note351@hotmail.com>
+Cc: akpm@linux-foundation.org, davidgow@google.com, geert@linux-m68k.org, 
+	visitorckw@gmail.com, brendan.higgins@linux.dev, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	"open list:S390 ARCHITECTURE" <linux-s390@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] lib/random32: convert selftest to KUnit
+Message-ID: <20260130091838-33f432c5-8a36-4844-aa8c-bd71b7470f52@linutronix.de>
+References: <20260124054134.71369-1-note351@hotmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260124054134.71369-1-note351@hotmail.com>
 
-From: Gerd Rausch <gerd.rausch@oracle.com>
+On Sat, Jan 24, 2026 at 02:41:33PM +0900, Kir Chou wrote:
+> This patch converts the existing prandom selftest (lib/random32.c) to use
+> the KUnit framework (lib/tests/random32_kunit.c). Unlike typical KUnit
+> tests, this file is directly #included into lib/random32.c.
+> 
+> Only the file name "random32_kunit.c" keeps random32, "prandom" is used
+> for all other places for aligning with the API semantics and avoiding
+> confusion with the cryptographically secure random.c,
+> 
+> The new test:
+> - Removes the legacy CONFIG_RANDOM32_SELFTEST.
 
-Even though a peer may have already received a
-non-zero value for "RDS_EXTHDR_NPATHS" from a node in the past,
-the current peer may not.
+This bit seems to be missing from the patch.
+'config RANDOM32_SELFTEST' still exists in lib/Kconfig.
 
-Therefore it is important to initiate another rds_send_ping()
-after a re-connect to any peer:
-It is unknown at that time if we're still talking to the same
-instance of RDS kernel modules on the other side.
+> - Adds CONFIG_PRANDOM_KUNIT_TEST (defaulting to KUNIT_ALL_TESTS).
+> - Moves the test logic to lib/tests/random32_kunit.c.
+> - Updates arch/s390/configs/debug_defconfig to use the new KUnit symbol.
+> 
+> This commit is verified by `./tools/testing/kunit/kunit.py run`
+> with the .kunit/.kunitconfig:
+> 
+> ```
+> CONFIG_KUNIT=y
+> CONFIG_PRANDOM_KUNIT_TEST=y
+> ```
+> 
+> Signed-off-by: Kir Chou <note351@hotmail.com>
+> ---
+>  arch/s390/configs/debug_defconfig |   2 +-
+>  lib/Kconfig.debug                 |  12 +++
+>  lib/random32.c                    | 173 +----------------------------
+>  lib/tests/random32_kunit.c        | 174 ++++++++++++++++++++++++++++++
+>  4 files changed, 189 insertions(+), 172 deletions(-)
+>  create mode 100644 lib/tests/random32_kunit.c
+> 
 
-Otherwise, the peer may just operate on a single lane
-("c_npaths == 0"), not knowing that more lanes are available.
+(...)
 
-However, if "c_with_sport_idx" is supported,
-we also need to check that the connection we accepted on lane#0
-meets the proper source port modulo requirement, as we fan out:
+> diff --git a/lib/tests/random32_kunit.c b/lib/tests/random32_kunit.c
+> new file mode 100644
+> index 000000000..ee50205b8
+> --- /dev/null
+> +++ b/lib/tests/random32_kunit.c
+> @@ -0,0 +1,174 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test cases for random32 functions.
+> + */
+> +
+> +#include <kunit/test.h>
+> +
+> +static struct prandom_test1 {
+> +	u32 seed;
+> +	u32 result;
+> +} test1[] = {
+> +	{ 1U, 3484351685U },
+> +	{ 2U, 2623130059U },
+> +	{ 3U, 3125133893U },
+> +	{ 4U,  984847254U },
+> +};
+> +
+> +static struct prandom_test2 {
 
-Since the exchange of "RDS_EXTHDR_NPATHS" and "RDS_EXTHDR_SPORT_IDX"
-is asynchronous, initially we have no choice but to accept an incoming
-connection (via "accept") in the first slot ("cp_index == 0")
-for backwards compatibility.
+These arrays can be 'const'.
 
-But that very connection may have come from a different lane
-with "cp_index != 0", since the peer thought that we already understood
-and handled "c_with_sport_idx" properly, as indicated by a previous
-exchange before a module was reloaded.
+> +	u32 seed;
+> +	u32 iteration;
+> +	u32 result;
+> +} test2[] = {
 
-In short:
-If a module gets reloaded, we recover from that, but do *not*
-allow a downgrade to support fewer lanes.
-
-Downgrades would require us to merge messages from separate lanes,
-which is rather tricky with the current RDS design.
-Each lane has its own sequence number space and all messages
-would need to be re-sequenced as we merge, all while
-handling "RDS_FLAG_RETRANSMITTED" and "cp_retrans" properly.
-
-Signed-off-by: Gerd Rausch <gerd.rausch@oracle.com>
-Signed-off-by: Allison Henderson <allison.henderson@oracle.com>
----
- net/rds/connection.c |  5 +++-
- net/rds/rds.h        |  2 +-
- net/rds/recv.c       |  7 +++++-
- net/rds/send.c       | 18 +++++++++++++++
- net/rds/tcp.h        |  2 +-
- net/rds/tcp_listen.c | 55 +++++++++++++++++++++++++++++++++-----------
- 6 files changed, 72 insertions(+), 17 deletions(-)
-
-diff --git a/net/rds/connection.c b/net/rds/connection.c
-index 4b7715eb2111..185f73b01694 100644
---- a/net/rds/connection.c
-+++ b/net/rds/connection.c
-@@ -447,13 +447,16 @@ void rds_conn_shutdown(struct rds_conn_path *cp)
- 	rcu_read_lock();
- 	if (!hlist_unhashed(&conn->c_hash_node)) {
- 		rcu_read_unlock();
-+		if (conn->c_trans->t_mp_capable &&
-+		    cp->cp_index == 0)
-+			rds_send_ping(conn, 0);
- 		rds_queue_reconnect(cp);
- 	} else {
- 		rcu_read_unlock();
- 	}
- 
- 	if (conn->c_trans->conn_slots_available)
--		conn->c_trans->conn_slots_available(conn);
-+		conn->c_trans->conn_slots_available(conn, false);
- }
- 
- /* destroy a single rds_conn_path. rds_conn_destroy() iterates over
-diff --git a/net/rds/rds.h b/net/rds/rds.h
-index 6d9f4a08b0ee..6e0790e4b570 100644
---- a/net/rds/rds.h
-+++ b/net/rds/rds.h
-@@ -549,7 +549,7 @@ struct rds_transport {
- 	 * messages received on the new socket are not discarded when no
- 	 * connection path was available at the time.
- 	 */
--	void (*conn_slots_available)(struct rds_connection *conn);
-+	void (*conn_slots_available)(struct rds_connection *conn, bool fan_out);
- 	int (*conn_path_connect)(struct rds_conn_path *cp);
- 
- 	/*
-diff --git a/net/rds/recv.c b/net/rds/recv.c
-index 889a5b7935e5..4b3f9e4a8bfd 100644
---- a/net/rds/recv.c
-+++ b/net/rds/recv.c
-@@ -209,6 +209,7 @@ static void rds_recv_hs_exthdrs(struct rds_header *hdr,
- 	bool new_with_sport_idx = false;
- 	u32 new_peer_gen_num = 0;
- 	int new_npaths;
-+	bool fan_out;
- 
- 	new_npaths = conn->c_npaths;
- 
-@@ -248,7 +249,11 @@ static void rds_recv_hs_exthdrs(struct rds_header *hdr,
- 		spin_lock_irqsave(&cp0->cp_lock, flags);
- 		conn->c_cp0_mprds_catchup_tx_seq = cp0->cp_next_tx_seq;
- 		spin_unlock_irqrestore(&cp0->cp_lock, flags);
-+		fan_out = true;
-+	} else {
-+		fan_out = false;
- 	}
-+
- 	/* if RDS_EXTHDR_NPATHS was not found, default to a single-path */
- 	conn->c_npaths = max_t(int, new_npaths, 1);
- 
-@@ -257,7 +262,7 @@ static void rds_recv_hs_exthdrs(struct rds_header *hdr,
- 
- 	if (conn->c_npaths > 1 &&
- 	    conn->c_trans->conn_slots_available)
--		conn->c_trans->conn_slots_available(conn);
-+		conn->c_trans->conn_slots_available(conn, fan_out);
- }
- 
- /* rds_start_mprds() will synchronously start multiple paths when appropriate.
-diff --git a/net/rds/send.c b/net/rds/send.c
-index 599c2cfb7a1d..6e96f108473e 100644
---- a/net/rds/send.c
-+++ b/net/rds/send.c
-@@ -1339,6 +1339,24 @@ int rds_sendmsg(struct socket *sock, struct msghdr *msg, size_t payload_len)
- 		cpath = &conn->c_path[0];
- 	}
- 
-+	 /* If we're multipath capable and path 0 is down, queue reconnect
-+	  * and send a ping. This initiates the multipath handshake through
-+	  * rds_send_probe(), which sends RDS_EXTHDR_NPATHS to the peer,
-+	  * starting multipath capability negotiation.
-+	  */
-+	if (conn->c_trans->t_mp_capable &&
-+	    !rds_conn_path_up(&conn->c_path[0])) {
-+		/* Ensures that only one request is queued.  And
-+		 * rds_send_ping() ensures that only one ping is
-+		 * outstanding.
-+		 */
-+		if (!test_and_set_bit(RDS_RECONNECT_PENDING,
-+				      &conn->c_path[0].cp_flags))
-+			queue_delayed_work(conn->c_path[0].cp_wq,
-+					   &conn->c_path[0].cp_conn_w, 0);
-+		rds_send_ping(conn, 0);
-+	}
-+
- 	rm->m_conn_path = cpath;
- 
- 	/* Parse any control messages the user may have included. */
-diff --git a/net/rds/tcp.h b/net/rds/tcp.h
-index b36af0865a07..39c86347188c 100644
---- a/net/rds/tcp.h
-+++ b/net/rds/tcp.h
-@@ -90,7 +90,7 @@ void rds_tcp_state_change(struct sock *sk);
- struct socket *rds_tcp_listen_init(struct net *net, bool isv6);
- void rds_tcp_listen_stop(struct socket *sock, struct work_struct *acceptor);
- void rds_tcp_listen_data_ready(struct sock *sk);
--void rds_tcp_conn_slots_available(struct rds_connection *conn);
-+void rds_tcp_conn_slots_available(struct rds_connection *conn, bool fan_out);
- int rds_tcp_accept_one(struct rds_tcp_net *rtn);
- void rds_tcp_keepalive(struct socket *sock);
- void *rds_tcp_listen_sock_def_readable(struct net *net);
-diff --git a/net/rds/tcp_listen.c b/net/rds/tcp_listen.c
-index c628f62421d4..04fafdf59d72 100644
---- a/net/rds/tcp_listen.c
-+++ b/net/rds/tcp_listen.c
-@@ -56,14 +56,8 @@ void rds_tcp_keepalive(struct socket *sock)
- 	tcp_sock_set_keepintvl(sock->sk, keepidle);
- }
- 
--/* rds_tcp_accept_one_path(): if accepting on cp_index > 0, make sure the
-- * client's ipaddr < server's ipaddr. Otherwise, close the accepted
-- * socket and force a reconneect from smaller -> larger ip addr. The reason
-- * we special case cp_index 0 is to allow the rds probe ping itself to itself
-- * get through efficiently.
-- */
--static struct rds_tcp_connection *
--rds_tcp_accept_one_path(struct rds_connection *conn, struct socket *sock)
-+static int
-+rds_tcp_get_peer_sport(struct socket *sock)
- {
- 	union {
- 		struct sockaddr_storage storage;
-@@ -71,11 +65,9 @@ rds_tcp_accept_one_path(struct rds_connection *conn, struct socket *sock)
- 		struct sockaddr_in sin;
- 		struct sockaddr_in6 sin6;
- 	} saddr;
--	int sport, npaths, i_min, i_max, i;
-+	int sport;
- 
--	if (conn->c_with_sport_idx &&
--	    kernel_getpeername(sock, &saddr.addr) == 0) {
--		/* cp->cp_index is encoded in lowest bits of source-port */
-+	if (kernel_getpeername(sock, &saddr.addr) == 0) {
- 		switch (saddr.addr.sa_family) {
- 		case AF_INET:
- 			sport = ntohs(saddr.sin.sin_port);
-@@ -90,6 +82,26 @@ rds_tcp_accept_one_path(struct rds_connection *conn, struct socket *sock)
- 		sport = -1;
- 	}
- 
-+	return sport;
-+}
-+
-+/* rds_tcp_accept_one_path(): if accepting on cp_index > 0, make sure the
-+ * client's ipaddr < server's ipaddr. Otherwise, close the accepted
-+ * socket and force a reconneect from smaller -> larger ip addr. The reason
-+ * we special case cp_index 0 is to allow the rds probe ping itself to itself
-+ * get through efficiently.
-+ */
-+static struct rds_tcp_connection *
-+rds_tcp_accept_one_path(struct rds_connection *conn, struct socket *sock)
-+{
-+	int sport, npaths, i_min, i_max, i;
-+
-+	if (conn->c_with_sport_idx)
-+		/* cp->cp_index is encoded in lowest bits of source-port */
-+		sport = rds_tcp_get_peer_sport(sock);
-+	else
-+		sport = -1;
-+
- 	npaths = max_t(int, 1, conn->c_npaths);
- 
- 	if (sport >= 0) {
-@@ -111,10 +123,12 @@ rds_tcp_accept_one_path(struct rds_connection *conn, struct socket *sock)
- 	return NULL;
- }
- 
--void rds_tcp_conn_slots_available(struct rds_connection *conn)
-+void rds_tcp_conn_slots_available(struct rds_connection *conn, bool fan_out)
- {
- 	struct rds_tcp_connection *tc;
- 	struct rds_tcp_net *rtn;
-+	struct socket *sock;
-+	int sport, npaths;
- 
- 	if (rds_destroy_pending(conn))
- 		return;
-@@ -124,6 +138,21 @@ void rds_tcp_conn_slots_available(struct rds_connection *conn)
- 	if (!rtn)
- 		return;
- 
-+	sock = tc->t_sock;
-+
-+	/* During fan-out, check that the connection we already
-+	 * accepted in slot#0 carried the proper source port modulo.
-+	 */
-+	if (fan_out && conn->c_with_sport_idx && sock &&
-+	    rds_addr_cmp(&conn->c_laddr, &conn->c_faddr) > 0) {
-+		/* cp->cp_index is encoded in lowest bits of source-port */
-+		sport = rds_tcp_get_peer_sport(sock);
-+		npaths = max_t(int, 1, conn->c_npaths);
-+		if (sport >= 0 && sport % npaths != 0)
-+			/* peer initiated with a non-#0 lane first */
-+			rds_conn_path_drop(conn->c_path, 0);
-+	}
-+
- 	/* As soon as a connection went down,
- 	 * it is safe to schedule a "rds_tcp_accept_one"
- 	 * attempt even if there are no connections pending:
--- 
-2.43.0
-
+(...)
