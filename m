@@ -1,258 +1,180 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347EE34679C
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 19:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5863803D1;
+	Fri, 30 Jan 2026 19:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769801324; cv=none; b=sK9zQ3BuJNJOxQ3mTifm2I7HgFClFhjk13agMKwLssWCRgJ/bNXz1q8q5CIHA8nuudeFrgrXUUi1J7ihB9swSZ+OpH7WY9yCeIp/tWpDRm0+DK6IhOEv0LGEkDdSfaRS4nvFcn04M7Eb4/r3BMuCz/DbVwNC6aFuWLk+XuPiyaA=
+	t=1769801358; cv=none; b=by4j2VBOKfK+1dAmkTL5d5uBhOgUliWZ1+TvlGtC6gVFZuYG/LsNQ/RpVHAoRRq3CnbXNperm7m8OkIqX9fY3BO/H58jKFIqAtH4tbrkPZJiNUkNM1MLpGoufF6i0Elzl1SBLOy0tN2pKIscP/jUyt2bOVhnt2EmqCWn9KrbUIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769801324; c=relaxed/simple;
-	bh=xha2tKLV6loVZapX6DrV2TpHDlxU/QfYCAu+9gTx3UM=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=K7fe9drcdJ2Ev2wRfXQAj8Rjb0DJ4Pok+xhVuv6+fwkOxD55aD6Mm3pC6EuzXXSLcFciR/9JBirzhGCTdxa0v5GqlYOin3ZyoX3BwBpDad1/K1Yl7fwi1yWfa5y/aA3PzK7O/USg3gEJYoZgVEuI1uZxzssXRwPzX7IxBgKdQ5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bn1+XZmM; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com
+	s=arc-20240116; t=1769801358; c=relaxed/simple;
+	bh=zq6M2ieGwRe+GhEG3KF4BXzKoi5EDrjXrv88b4TY3lk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EkHXyxvgHO3j6KB+v4n/OstoLkDSrJjpKqLRaT8Sb6jJahXCR/Ked2ByyG9Bfz2oq3AIXlGJzOqNOmHbpwHHCGkWdsCJjWtZXUrMsRwkbJScCZLI+V9fjQZeMYO0n4S6IMl/ss7uPiYxsHzpleUfnNUv+njO9iCAM+UnQCK2FNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HcN6dUJO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bn1+XZmM"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c660e51afb5so2937213a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 11:28:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769801321; x=1770406121; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rjy71wms5szan9FXTuTPKKlYyd/zTVsqWF/S5ag+Qgc=;
-        b=Bn1+XZmM4yCpFLf3ngU8Q7fgoD+jgdcNYJ4UGxvD4K80SbUs3jNXMwh9hztVmurzG/
-         sY7/PybZq/hw6lRjkdKzTiMq2t8ZwW3+GU6xLyVQkSyM3L1SoQl4fouqsvfMUuWNARcQ
-         A7H4UXMeoyZk+cN6KmU0yIuu5Lb6rw0h0FxHTtb2O40QXT+rNpuq16y9w0aoVgdGEmXz
-         h9fM3lj0lCe5o/0pYSZwa4JYs7MVscyppP/BK6lMnP/RSdUiGm15JJtGyPqQuYgfWi5E
-         ChSfS9tpfqGxa5xyfFLznE8z1tUadQOfOjhW+5K2nnoQS4sCh5A6FMC4GgtnQD+SQ3OX
-         cUvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769801321; x=1770406121;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rjy71wms5szan9FXTuTPKKlYyd/zTVsqWF/S5ag+Qgc=;
-        b=re0EaWIQrsBxx40pvvXe7Vwv+NAOENSDpb1q9EaRE8r3T3l+4uIPTcdQDIw1iwfhiQ
-         M0phMya6dftZ2cxM8gdC4pP6idGEGgb/KsD/pHBOeMCvdCh37r+OrfEzeNhXo+C77uo0
-         5fIg7mwUokuL9cphXWMydVWBZ51zpcZ/nzPjHC+Coxkw6YqJbz4tkreSXPQvgGQUubYu
-         oZ1LVQY30jZa/1uBbAfnCeii9RmTOVlI2SAzdozX4mo6a2Y/UT9sUpmCBYMKU9Ra6k8e
-         gV/MsRwHLgQGIkN1V27HYUevBRTN7baQpmVAW+MC8n/pLggc0OIWb5tBRMwF+xL4EShh
-         5xUw==
-X-Forwarded-Encrypted: i=1; AJvYcCXFGRzOxGgrnZzy7wFbdopnf3Q+NPd0TLGyWFqcwtB1sto8/5y7XBz0ghc5L+hXiHC/MteObvz+yrJvisEnwP8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/TERxnZKxHsBiicsvCJYoaMwmncXqimy6KU9aGbUfPJOEYWsl
-	W+u97rOpQgsCNT5yoiVGAAL1ucykprX4x9B1GA1PMccAsfYzOWbbyMWLI7zpxUdm2MH5ZdP0FHC
-	5agbOG5kGxnpkpQ==
-X-Received: from pgct22.prod.google.com ([2002:a05:6a02:5296:b0:bd9:19be:503c])
- (user=jiaqiyan job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:a11c:b0:38e:9d3b:470b with SMTP id adf61e73a8af0-392e01096dbmr3663945637.42.1769801321501;
- Fri, 30 Jan 2026 11:28:41 -0800 (PST)
-Date: Fri, 30 Jan 2026 19:28:37 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HcN6dUJO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DEEC4CEF7;
+	Fri, 30 Jan 2026 19:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769801358;
+	bh=zq6M2ieGwRe+GhEG3KF4BXzKoi5EDrjXrv88b4TY3lk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HcN6dUJOJuTHXw/R1apQEHOpKcXjCNi+GNgzFnSImRYxYPi3d2W46FRB+/wZEQnGC
+	 1t3LiM0Yzx+Mm6wv4gOsKXruVYbqmE+oogY3bocsL5RXvkvRCSfPvNpYUAeVVZ4qV0
+	 XJoRm4FeJYkJwCOjIgvV/mY1PsAHIZhfCVaA781SfMZ6vPI2HrHjkMUAio/fJxuOrm
+	 SvukIGv8Sb7SMQ4xVdq1ChJ335DHzHCeQhyurTRiWwX4Oq3D10aDSwUbFDNApWIadS
+	 MPpOcgNKnzQljAAnEzQTk093DjjemCu1wFdRhmKNCIgJlDd1B50E5vuol/ARtApF/b
+	 Duajkzx1wmKsg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	willemb@google.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drv-net: rss: validate min RSS table size
+Date: Fri, 30 Jan 2026 11:29:12 -0800
+Message-ID: <20260130192912.826454-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
-Message-ID: <20260130192837.890688-1-jiaqiyan@google.com>
-Subject: [PATCH v1] KVM: selftests: Improve sea_to_user test
-From: Jiaqi Yan <jiaqiyan@google.com>
-To: oupton@kernel.org
-Cc: sebott@redhat.com, gshan@redhat.com, yuzenghui@huawei.com, maz@kernel.org, 
-	rananta@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, 
-	pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Jiaqi Yan <jiaqiyan@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Several improvments to the test for KVM_EXIT_ARM_SEA:
+Add a test which checks that the RSS table is at least 4x the max
+queue count supported by the device. The original RSS spec from
+Microsoft stated that the RSS indirection table should be 2 to 8
+times the CPU count, presumably assuming queue per CPU. If the
+CPU count is not a power of two, however, a power-of-2 table
+2x larger than queue count results in a 33% traffic imbalance.
+Validate that the indirection table is at least 4x the queue
+count. This lowers the imbalance to 16% which empirically
+appears to be more acceptable to memcache-like workloads.
 
-- Refactor run_vm to catch GUEST_FAIL, instead of causing confusing
-  unhandled MMIO kvm exit.
-
-- Sync far_invalid to guest.
-
-- Exit test with KSFT_SKIP or KSFT_FAIL when should.
-
-- Add comment about VM backing memory type.
-
-Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../testing/selftests/kvm/arm64/sea_to_user.c | 94 +++++++++++--------
- 1 file changed, 53 insertions(+), 41 deletions(-)
+CC: shuah@kernel.org
+CC: willemb@google.com
+CC: linux-kselftest@vger.kernel.org
+---
+ .../testing/selftests/drivers/net/hw/Makefile |  1 +
+ .../selftests/drivers/net/hw/rss_drv.py       | 88 +++++++++++++++++++
+ 2 files changed, 89 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/rss_drv.py
 
-diff --git a/tools/testing/selftests/kvm/arm64/sea_to_user.c b/tools/testing/selftests/kvm/arm64/sea_to_user.c
-index 573dd790aeb8e..4a3511fa1f940 100644
---- a/tools/testing/selftests/kvm/arm64/sea_to_user.c
-+++ b/tools/testing/selftests/kvm/arm64/sea_to_user.c
-@@ -12,6 +12,11 @@
-  * including the notrigger feature. Otherwise the test will be skipped.
-  * The under-test platform's APEI should be unable to claim SEA. Otherwise
-  * the test will also be skipped.
-+ *
-+ * The VM backing memory is tied to HugeTLB 1G hugepage so far. Make sure
-+ * there are more than 4 1G hugepage on the system. They can be allocated
-+ * at runtime by:
-+ *   echo 4 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
-  */
- 
- #include <signal.h>
-@@ -98,11 +103,15 @@ static void write_einj_entry(const char *einj_path, uint64_t val)
- 
- static void inject_uer(uint64_t paddr)
- {
--	if (access("/sys/firmware/acpi/tables/EINJ", R_OK) == -1)
--		ksft_test_result_skip("EINJ table no available in firmware");
-+	if (access("/sys/firmware/acpi/tables/EINJ", R_OK) == -1) {
-+		ksft_test_result_skip("EINJ table not available in firmware\n");
-+		exit(KSFT_SKIP);
-+	}
- 
--	if (access(EINJ_ETYPE, R_OK | W_OK) == -1)
--		ksft_test_result_skip("EINJ module probably not loaded?");
-+	if (access(EINJ_ETYPE, R_OK | W_OK) == -1) {
-+		ksft_test_result_skip("EINJ module probably not loaded?\n");
-+		exit(KSFT_SKIP);
-+	}
- 
- 	write_einj_entry(EINJ_ETYPE, ERROR_TYPE_MEMORY_UER);
- 	write_einj_entry(EINJ_FLAGS, MASK_MEMORY_UER);
-@@ -123,12 +132,13 @@ static void sigbus_signal_handler(int sig, siginfo_t *si, void *v)
- 	ksft_print_msg("SIGBUS (%d) received, dumping siginfo...\n", sig);
- 	ksft_print_msg("si_signo=%d, si_errno=%d, si_code=%d, si_addr=%p\n",
- 		       si->si_signo, si->si_errno, si->si_code, si->si_addr);
--	if (si->si_code == BUS_MCEERR_AR)
-+	if (si->si_code == BUS_MCEERR_AR) {
- 		ksft_test_result_skip("SEA is claimed by host APEI\n");
--	else
-+		exit(KSFT_SKIP);
-+	} else {
- 		ksft_test_result_fail("Exit with signal unhandled\n");
--
--	exit(0);
-+		exit(KSFT_FAIL);
-+	}
- }
- 
- static void setup_sigbus_handler(void)
-@@ -158,7 +168,6 @@ static void expect_sea_handler(struct ex_regs *regs)
- {
- 	u64 esr = read_sysreg(esr_el1);
- 	u64 far = read_sysreg(far_el1);
--	bool expect_far_invalid = far_invalid;
- 
- 	GUEST_PRINTF("Handling Guest SEA\n");
- 	GUEST_PRINTF("ESR_EL1=%#lx, FAR_EL1=%#lx\n", esr, far);
-@@ -166,7 +175,7 @@ static void expect_sea_handler(struct ex_regs *regs)
- 	GUEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_DABT_CUR);
- 	GUEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
- 
--	if (expect_far_invalid) {
-+	if (far_invalid) {
- 		GUEST_ASSERT_EQ(esr & ESR_ELx_FnV, ESR_ELx_FnV);
- 		GUEST_PRINTF("Guest observed garbage value in FAR\n");
- 	} else {
-@@ -185,25 +194,19 @@ static void vcpu_inject_sea(struct kvm_vcpu *vcpu)
- 	vcpu_events_set(vcpu, &events);
- }
- 
--static void run_vm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
-+static void validate_kvm_exit_arm_sea(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
- {
--	struct ucall uc;
--	bool guest_done = false;
- 	struct kvm_run *run = vcpu->run;
- 	u64 esr;
- 
--	/* Resume the vCPU after error injection to consume the error. */
--	vcpu_run(vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_ARM_SEA);
- 
--	ksft_print_msg("Dump kvm_run info about KVM_EXIT_%s\n",
--		       exit_reason_str(run->exit_reason));
-+	ksft_print_msg("Dumping kvm_run as arm_sea:\n");
- 	ksft_print_msg("kvm_run.arm_sea: esr=%#llx, flags=%#llx\n",
- 		       run->arm_sea.esr, run->arm_sea.flags);
- 	ksft_print_msg("kvm_run.arm_sea: gva=%#llx, gpa=%#llx\n",
- 		       run->arm_sea.gva, run->arm_sea.gpa);
- 
--	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_ARM_SEA);
--
- 	esr = run->arm_sea.esr;
- 	TEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_DABT_LOW);
- 	TEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
-@@ -211,39 +214,48 @@ static void run_vm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
- 	TEST_ASSERT_EQ((esr & ESR_ELx_INST_SYNDROME), 0);
- 	TEST_ASSERT_EQ(esr & ESR_ELx_VNCR, 0);
- 
--	if (!(esr & ESR_ELx_FnV)) {
--		ksft_print_msg("Expect gva to match given FnV bit is 0\n");
-+	far_invalid = esr & ESR_ELx_FnV;
-+	sync_global_to_guest(vm, far_invalid);
+diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+index 9c163ba6feee..a64140333a46 100644
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@ -35,6 +35,7 @@ TEST_PROGS = \
+ 	pp_alloc_fail.py \
+ 	rss_api.py \
+ 	rss_ctx.py \
++	rss_drv.py \
+ 	rss_flow_label.py \
+ 	rss_input_xfrm.py \
+ 	toeplitz.py \
+diff --git a/tools/testing/selftests/drivers/net/hw/rss_drv.py b/tools/testing/selftests/drivers/net/hw/rss_drv.py
+new file mode 100755
+index 000000000000..2d1a33189076
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/rss_drv.py
+@@ -0,0 +1,88 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
-+	if (!far_invalid) {
-+		ksft_print_msg("Expect gva to match\n");
- 		TEST_ASSERT_EQ(run->arm_sea.gva, EINJ_GVA);
- 	}
- 
- 	if (run->arm_sea.flags & KVM_EXIT_ARM_SEA_FLAG_GPA_VALID) {
--		ksft_print_msg("Expect gpa to match given KVM_EXIT_ARM_SEA_FLAG_GPA_VALID is set\n");
-+		ksft_print_msg("Expect gpa to match\n");
- 		TEST_ASSERT_EQ(run->arm_sea.gpa, einj_gpa & PAGE_ADDR_MASK);
- 	}
-+}
- 
--	far_invalid = esr & ESR_ELx_FnV;
--
--	/* Inject a SEA into guest and expect handled in SEA handler. */
--	vcpu_inject_sea(vcpu);
-+static void run_vm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
-+{
-+	struct ucall uc;
-+	bool guest_done = false;
- 
- 	/* Expect the guest to reach GUEST_DONE gracefully. */
- 	do {
- 		vcpu_run(vcpu);
--		switch (get_ucall(vcpu, &uc)) {
--		case UCALL_PRINTF:
--			ksft_print_msg("From guest: %s", uc.buffer);
--			break;
--		case UCALL_DONE:
--			ksft_print_msg("Guest done gracefully!\n");
--			guest_done = 1;
--			break;
--		case UCALL_ABORT:
--			ksft_print_msg("Guest aborted!\n");
--			guest_done = 1;
--			REPORT_GUEST_ASSERT(uc);
--			break;
--		default:
--			TEST_FAIL("Unexpected ucall: %lu\n", uc.cmd);
-+		if (vcpu->run->exit_reason == KVM_EXIT_ARM_SEA) {
-+			validate_kvm_exit_arm_sea(vm, vcpu);
-+			vcpu_inject_sea(vcpu);
-+		} else {
-+			switch (get_ucall(vcpu, &uc)) {
-+			case UCALL_PRINTF:
-+				ksft_print_msg("From guest: %s", uc.buffer);
-+				break;
-+			case UCALL_DONE:
-+				ksft_print_msg("Guest done gracefully!\n");
-+				guest_done = 1;
-+				break;
-+			case UCALL_ABORT:
-+				ksft_print_msg("Guest aborted!\n");
-+				guest_done = 1;
-+				REPORT_GUEST_ASSERT(uc);
-+				break;
-+			default:
-+				TEST_FAIL("Unexpected ucall: %lu\n", uc.cmd);
-+			}
- 		}
- 	} while (!guest_done);
- }
++"""
++Driver-related behavior tests for RSS.
++"""
++
++from lib.py import ksft_run, ksft_exit, ksft_ge
++from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx
++from lib.py import defer, ethtool
++from lib.py import EthtoolFamily, NlError
++from lib.py import NetDrvEnv
++
++
++def _is_power_of_two(n):
++    return n > 0 and (n & (n - 1)) == 0
++
++
++def _get_rss(cfg, context=0):
++    return ethtool(f"-x {cfg.ifname} context {context}", json=True)[0]
++
++
++def _test_rss_indir_size(cfg, qcnt, context=0):
++    """Test that indirection table size is at least 4x queue count."""
++    ethtool(f"-L {cfg.ifname} combined {qcnt}")
++
++    rss = _get_rss(cfg, context=context)
++    indir = rss['rss-indirection-table']
++    ksft_ge(len(indir), 4 * qcnt, "Table smaller than 4x")
++    return len(indir)
++
++
++def _maybe_create_context(cfg, create_context):
++    """ Either create a context and return its ID or return 0 for main ctx """
++    if not create_context:
++        return 0
++    try:
++        ctx = cfg.ethnl.rss_create_act({'header': {'dev-index': cfg.ifindex}})
++        ctx_id = ctx['context']
++        defer(cfg.ethnl.rss_delete_act,
++              {'header': {'dev-index': cfg.ifindex}, 'context': ctx_id})
++    except NlError:
++        raise KsftSkipEx("Device does not support additional RSS contexts")
++
++    return ctx_id
++
++
++@ksft_variants([
++    KsftNamedVariant("main", False),
++    KsftNamedVariant("ctx", True),
++])
++def indir_size_4x(cfg, create_context):
++    """
++    Test that the indirection table has at least 4 entries per queue.
++    Empirically network-heavy workloads like memcache suffer with the 33%
++    imbalance of a 2x indirection table size.
++    4x table translates to a 16% imbalance.
++    """
++    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
++    ch_max = channels.get('combined-max', 0)
++    qcnt = channels['combined-count']
++
++    if ch_max < 3:
++        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
++
++    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
++    ethtool(f"-L {cfg.ifname} combined 3")
++
++    ctx_id = _maybe_create_context(cfg, create_context)
++
++    indir_sz = _test_rss_indir_size(cfg, 3, context=ctx_id)
++
++    # Test with max queue count (max - 1 if max is a power of two)
++    test_max = ch_max - 1 if _is_power_of_two(ch_max) else ch_max
++    if test_max > 3 and indir_sz < test_max * 4:
++        _test_rss_indir_size(cfg, test_max, context=ctx_id)
++
++
++def main() -> None:
++    """ Ksft boiler plate main """
++    with NetDrvEnv(__file__) as cfg:
++        cfg.ethnl = EthtoolFamily()
++        ksft_run([indir_size_4x], args=(cfg, ))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
-2.53.0.rc2.204.g2597b5adb4-goog
+2.52.0
 
