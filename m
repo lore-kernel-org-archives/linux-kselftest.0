@@ -1,33 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8208936C5A4;
-	Fri, 30 Jan 2026 10:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED14378D7C
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 11:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769769586; cv=none; b=bacam/o9R8zbcNF5M60JjJOXE/QJ4yuSFjerGdT+3l+IffYi4oF7Fee5fuCan10l9PomVtAjFdu45/7asjsZGJxdaSnlSLkmxJfKUoPBJ9P8vzAQ2DUgpKJ0tSWPuHWwuiu027+6NeWIVDxMAND5esSzg2Js1r1KrmAwh4SJmuY=
+	t=1769771630; cv=none; b=lzh7hvjpV+Aenr3ciNpJKLANHYR8JTGKux0RJELzEQ1ky/a2SdqAz9o6R1qeJ22YTo4Rgzq6JYNCVHNLrp/TnfA+qwxT54PZdbbng/9vUA32LSCDo6GONrvcYA6UfCsuookDVKc41DE0rYkYKmZfas39MIuf8jsyK+KWxupHOkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769769586; c=relaxed/simple;
-	bh=HqLf5fAjj919LYQEQ3fjjogDmxa6wbUD8HUVCT6MfUA=;
+	s=arc-20240116; t=1769771630; c=relaxed/simple;
+	bh=TCis+rQCC6z7XYAkYemlUIoHru5jgaTIrUqt6t+FWY4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U7CHvIChRNOKWstSVflYfoX7kCuA5Hvp34W3KFTASPpNW/4cesylBNftjbXT2d0njTinrcbVXVdUghm85ciBn+YEsvMti0tUodzKKWUKaMPqLMIXs+YEOjESdmo2Wbmdt7F+DxzmPwef5iTQKtTO0Io2+eUNColXucqamd7/Lx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnnDBNO/; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=oK47a/qjAJIsgzoGPIvpjvHt15r+nDHeVJaq85wbvg+Y1cww65uQ07gLyuBl7V2SjvZoGQvlUbgHGg2M/z+rBch6RLIEYrVOJq6yBIJNiCtmVu8dQBPdjBXNX93UgwGvQqyru7/YeJb0h9GfWHt5UcEZ3AYAwnWHVOQYUGy+9tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bijCiHCD; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnnDBNO/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D9FC19421;
-	Fri, 30 Jan 2026 10:39:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769769586;
-	bh=HqLf5fAjj919LYQEQ3fjjogDmxa6wbUD8HUVCT6MfUA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VnnDBNO/kG2fkcp9Rl0DaqlUw5pFJlYqqcbpgzlUaHW4PzNtYccnPo0uIYS0Z7QuC
-	 Cd/cXSRgptBXYilva4FihsbhIDFZSjDZLw6MooWAVvS+32V19BXNzesZomdNLjPIEM
-	 8bo2lgqs7UElyJR0mDi4cL9bOd8exIVb4cVgluUDkj+sWnRwXWrV/UR9LANR4YRXkO
-	 kD4E3E4miFzn8uTZ2k48zjckL5m2aNdrtabcI3vooDqf2aiQYaNpoEYHPCnL0jnm4p
-	 7sRuyYFE+1DAeBzUIL6SpgJCbErzHomCIEgUjeyVNmfhaoHOx7ZcOzLHEJHlSTJF0b
-	 hKi7lIMZ3X1Ew==
-Message-ID: <4e88f7b1-65bd-47e1-9875-03002bafdd04@kernel.org>
-Date: Fri, 30 Jan 2026 11:39:41 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bijCiHCD"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4327555464cso1546753f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 03:13:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769771627; x=1770376427; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w+yjYwZ7RDCJlqlGtt5ChUntZSWDd8aPFqDlY3AniEk=;
+        b=bijCiHCDiDsrfYSkVIjAqtFdXK0pP3y5v8itW4VnLqZB29KGa2STuu35LNttVG3FeD
+         3c42LD0VN3OVZl0OwXHeg2zrB8V3YNvwyL0HXxsDzB1qcEZ+YwhJ7CMckfyeQ+x5xU72
+         s2CrtAtfxPINwcj5teHNx/VBE9F7lnSx4sGwHfirvj88paMTt7kmu14fQ0auD7MuVxvX
+         8DnEgXkyvEy22rxA+B3tXASXH4HcS+Nki6mWmlmUFHjtWbY57ac9OYUKL90KW9PJMiLN
+         AunrO3J9F9L/zmEkvl+41y/JuzskrpStPTww79WkogBJh0QU+QarB0Sj1xg+1k9NaeNx
+         ZBRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769771627; x=1770376427;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w+yjYwZ7RDCJlqlGtt5ChUntZSWDd8aPFqDlY3AniEk=;
+        b=l23joDy3Hv6kV6tdCQ/vDL4LDnNiQHBoHeGwoqumtyAs0SJEJ1BU1dR9/OIE22sbLk
+         fURqRWJoLzp193sjldB+q/w7QAbCy+7ksN7rNqTlMCOYwW044q6+W7hIJHESfbFezVAb
+         6xzmzw3FId8vn/a9hRrKKsDaSIsQYhS8TO6B1t70v91nTggSS7j3wYvV1wwjq8XZDzQj
+         vqCybvUTA8KLIbCqLe7E6xQ+2quLDOmNcQL30TqdfP6pXGSQsLKAsvHb/NxlIiOJUcUF
+         noj/heNY/aS1B+0EgMT1gc++feaxOWwU+2MF66YY6bjK0JmOO+0As//UuCUiHRW8JErE
+         9u5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWPpK3KMaRdTZOTpDUh7sSyEiZyf84JEsypJsiehLu1LprIa/Fe7yBTxs4On3N9xPBqLjQd901xDGzPYaR1or4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlOpXHr8bbCaanDKkCiKzRr+xeAD7VFP9hCQxAEu8oJ0tK3Lei
+	8O7gV7foxqD0hqBv7N9Phibaohc80kBtY1Ozkbh+QRcrcYR2SkQmaTrB
+X-Gm-Gg: AZuq6aJEtp9Cvi/qCND8IgO8KpSq+02xeuJ2ch+1vY5g+dsOrmrhS9grE25StUtkDKh
+	cMNow2G3RisOInvVcPJBs/LJX9p2PAeMivj86e2NLoxTCHl3a0ImIfaC2+IO6bZH45cHhc6yvtw
+	fJUUMxjCE4lwUE0IuA/vtxKqRIBJ4AFc+Yak7iTkPst6v6hJR7/A0aLYA86qdjDQ/hefume8xX6
+	jfDZ6zziAfaw+VH7CeTyomIUCHQcKGek0EF+BKtXE+htaupQTVIK/gsdEjo7stAC7sP1M5RdaUs
+	kOsabOEozUv3B99s2Xq+xjerr+IW6fg5GuTI2axyBDNnuSKFps7T47VtgJW1/7e+IubWY/lioxU
+	ay2xZbDnDkJosmntYYXiBvv6jiE8VqtKahfFbPDCq37RuF2nQj5n1wqJWeF8l6gd/7qEVzuf5Xk
+	wBmg6vEy1ifTDxI5g3b3q94lYwqDLQeLTzVtr5xYHG5yF6t9vwjwF3ZNJbbrF2L0WJvo4l8GHcW
+	G7Abp4wUxocyaD7z7d6fsexLhkuhGsmqXFPYYDq1nceO04=
+X-Received: by 2002:a05:6000:2905:b0:431:16d:63d1 with SMTP id ffacd0b85a97d-435f3aaf59dmr4092783f8f.44.1769771626677;
+        Fri, 30 Jan 2026 03:13:46 -0800 (PST)
+Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:99eb])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e131cfc9sm21437487f8f.21.2026.01.30.03.13.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jan 2026 03:13:46 -0800 (PST)
+Message-ID: <c37ae03d-2b0e-4179-ac22-7d0c01ff601d@gmail.com>
+Date: Fri, 30 Jan 2026 11:13:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,92 +69,78 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 1/4] selftests: net: Move some UAPI header
- inclusions after libc ones
-Content-Language: en-GB, fr-BE
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
- linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
- libc-alpha@sourceware.org
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
- <20260120-uapi-sockaddr-v2-1-63c319111cf6@linutronix.de>
- <4e673f7f-c49c-46b0-85b4-bae6e4efcb3a@kernel.org>
- <20260130111949-4b4eb870-6df7-4026-a48c-730fa8660ad6@linutronix.de>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
- YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
- c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
- WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
- CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
- nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
- TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
- nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
- VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
- 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
- YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
- AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
- EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
- /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
- MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
- cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
- iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
- jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
- 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
- VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
- BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
- ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
- 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
- 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
- 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
- mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
- Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
- Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
- Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
- x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
- V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
- Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
- HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
- 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
- Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
- voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
- KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
- UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
- vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
- mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
- JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260130111949-4b4eb870-6df7-4026-a48c-730fa8660ad6@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH net-next v10 0/5] net: devmem: improve cpu cost of RX
+ token management
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+ Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Mina Almasry <almasrymina@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
+ <willemb@google.com>, Neal Cardwell <ncardwell@google.com>,
+ David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Shuah Khan <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ matttbe@kernel.org, skhawaja@google.com,
+ Bobby Eshleman <bobbyeshleman@meta.com>
+References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
+ <20260120170749.101e8bcc@kernel.org>
+ <CAHS8izMZxM6rcF+7Lfw=KFv4dmbHGSUrQBPmxO+sYj=V3TRuwQ@mail.gmail.com>
+ <aXe2QhzL4DoVbesQ@devvm11784.nha0.facebook.com>
+ <20260126173124.1f0bb98e@kernel.org> <aXhUfC7ZyYge1jti@mini-arch>
+ <CAKB00G3p9_VUTEW_KQvS1JAd+Ju_pjrU5r-v_p+K8Y=vH__mTQ@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAKB00G3p9_VUTEW_KQvS1JAd+Ju_pjrU5r-v_p+K8Y=vH__mTQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Thomas,
-
-On 30/01/2026 11:22, Thomas Weißschuh wrote:
-
-(...)
-
->> Note that I just noticed this is the only file from this directory where
->> the "includes" are not sorted by type and alphabetical order, see
->> pm_nl_ctl.c as an example. A bit of a detail, but if you plan to send a
->> v2, do you mind doing that too here while at it, please?
+On 1/27/26 06:48, Bobby Eshleman wrote:
+> On Mon, Jan 26, 2026 at 10:00 PM Stanislav Fomichev
+> <stfomichev@gmail.com> wrote:
+>>
+>> On 01/26, Jakub Kicinski wrote:
+>>> On Mon, 26 Jan 2026 10:45:22 -0800 Bobby Eshleman wrote:
+>>>> I'm onboard with improving what we have since it helps all of us
+>>>> currently using this API, though I'm not opposed to discussing a
+>>>> redesign in another thread/RFC. I do see the attraction to locating the
+>>>> core logic in one place and possibly reducing some complexity around
+>>>> socket/binding relationships.
+>>>>
+>>>> FWIW regarding nl, I do see it supports rtnl lock-free operations via
+>>>> '62256f98f244 rtnetlink: add RTNL_FLAG_DOIT_UNLOCKED' and routing was
+>>>> recently made lockless with that. I don't see / know of any fast path
+>>>> precedent. I'm aware there are some things I'm not sure about being
+>>>> relevant performance-wise, like hitting skb alloc an additional time
+>>>> every release batch. I'd want to do some minimal latency comparisons
+>>>> between that path and sockopt before diving head-first.
+>>>
+>>> FTR I'm not really pushing Netlink specifically, it may work it
+>>> may not. Perhaps some other ioctl-y thing exists. Just in general
+>>> setsockopt() on a specific socket feels increasingly awkward for
+>>> buffer flow. Maybe y'all disagree.
+>>>
+>>> I thought I'd clarify since I may be seen as "Mr Netlink Everywhere" :)
+>>
+>>  From my side, if we do a completely new uapi, my preference would be on
+>> an af_xdp like mapped rings (presumably on a netlink socket?) to completely
+>> avoid the user-kernel copies.
 > 
-> I'll send a v3 during the next cycle.
+> I second liking that approach. No put_cmsg() and or token alloc overhead (both
+> jump up in my profiling).
 
-Thanks!
->> If not, I can look at that later, but better to avoid doing that in
->> parallel.
-> 
-> If you want to fix this up already during this cycle,
-> that would also be most welcome.
+Hmm, makes me wonder why not use zcrx instead of reinventing it? It
+doesn't bind net_iov to sockets just as you do in this series. And it
+also returns buffers back via a shared ring. Otherwise you'll be facing
+same issues, like rings running out of space, and so you will need to
+have a fallback path. And user space will need to synchronise the ring
+if it's shared with other threads, and there will be a question of how
+to scale it next, possibly by creating multiple rings as I'll likely to
+do soon for zcrx.
 
-Sure, I can do that.
-
-Cheers,
-Matt
 -- 
-Sponsored by the NGI0 Core fund.
+Pavel Begunkov
 
