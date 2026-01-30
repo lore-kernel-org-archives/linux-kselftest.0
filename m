@@ -1,108 +1,258 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4A338944D;
-	Fri, 30 Jan 2026 19:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347EE34679C
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 19:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769801098; cv=none; b=c6vpzwy9RjEQfJcxfq37X3cMzEE+LlygTOkNH9F1g4fKevGSCNEivlWvIebQiwru5B5RBRs11YNAlZjrDEdxR4ZY2FOAkJz0sAEm+sSqbeBa47+Wu0AR/5T6DEF5EFInxSCsGya9gswlYQZ0W3uqSQSufJJJse1bGzC/8ZC5dxQ=
+	t=1769801324; cv=none; b=sK9zQ3BuJNJOxQ3mTifm2I7HgFClFhjk13agMKwLssWCRgJ/bNXz1q8q5CIHA8nuudeFrgrXUUi1J7ihB9swSZ+OpH7WY9yCeIp/tWpDRm0+DK6IhOEv0LGEkDdSfaRS4nvFcn04M7Eb4/r3BMuCz/DbVwNC6aFuWLk+XuPiyaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769801098; c=relaxed/simple;
-	bh=NYrKe3jSMM7YRKmWugfiByo4IRoIPSw7w1LnB+9W8sI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uS+TlzhFrQ3XROO+mBjgRmqfK0EH3kp6QMCKL601t6LHDmk7Y55OCIu3FqL9m9Q5VcJ7heumSlRLshHz+fkcUB75ch3dcQQ4Tzr5V250NO8cVLTUEAU6lIUjYjQHE92oiJFZ/YA4YWtoG1T8T2PjVusP8CW6IzMlGks9ugWn78w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eOffG6yS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769801324; c=relaxed/simple;
+	bh=xha2tKLV6loVZapX6DrV2TpHDlxU/QfYCAu+9gTx3UM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=K7fe9drcdJ2Ev2wRfXQAj8Rjb0DJ4Pok+xhVuv6+fwkOxD55aD6Mm3pC6EuzXXSLcFciR/9JBirzhGCTdxa0v5GqlYOin3ZyoX3BwBpDad1/K1Yl7fwi1yWfa5y/aA3PzK7O/USg3gEJYoZgVEuI1uZxzssXRwPzX7IxBgKdQ5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bn1+XZmM; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eOffG6yS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57741C4CEF7;
-	Fri, 30 Jan 2026 19:24:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769801098;
-	bh=NYrKe3jSMM7YRKmWugfiByo4IRoIPSw7w1LnB+9W8sI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=eOffG6ySIuakA/3fn6GKxx5l9aNw6miEHvNZQIBwlap3RvTL/EYEhHTVVUdm4benP
-	 NbePk61TpDL5PQD54yI7AdywSD8vHm1b2T8STHKqhE+SYumQY0CiVf0pnf1sRiBPGI
-	 hy1fHd+MEeMejYTs4ggHfECjzXTv6lvCEFYbrdWDdjeIKKtVTXLNfiRtgr6rnBtfFn
-	 cBI+Rx5PVPnmLckWdMCuEBOjZVV6cIamvzO/vbJzCeuD6t7j3r3LoBeghmbtDd2wTT
-	 l7h9ZQY0HKp5jB52w/s8OilLjxeuyFQxwRIA2M5A0RR4bK9lAYb0++MODYYr2j5mKR
-	 bq5+vq8ve3d3Q==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 30 Jan 2026 20:24:29 +0100
-Subject: [PATCH net-next v2 6/6] selftests: mptcp: connect: cover splice
- mode
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bn1+XZmM"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c660e51afb5so2937213a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 11:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769801321; x=1770406121; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rjy71wms5szan9FXTuTPKKlYyd/zTVsqWF/S5ag+Qgc=;
+        b=Bn1+XZmM4yCpFLf3ngU8Q7fgoD+jgdcNYJ4UGxvD4K80SbUs3jNXMwh9hztVmurzG/
+         sY7/PybZq/hw6lRjkdKzTiMq2t8ZwW3+GU6xLyVQkSyM3L1SoQl4fouqsvfMUuWNARcQ
+         A7H4UXMeoyZk+cN6KmU0yIuu5Lb6rw0h0FxHTtb2O40QXT+rNpuq16y9w0aoVgdGEmXz
+         h9fM3lj0lCe5o/0pYSZwa4JYs7MVscyppP/BK6lMnP/RSdUiGm15JJtGyPqQuYgfWi5E
+         ChSfS9tpfqGxa5xyfFLznE8z1tUadQOfOjhW+5K2nnoQS4sCh5A6FMC4GgtnQD+SQ3OX
+         cUvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769801321; x=1770406121;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rjy71wms5szan9FXTuTPKKlYyd/zTVsqWF/S5ag+Qgc=;
+        b=re0EaWIQrsBxx40pvvXe7Vwv+NAOENSDpb1q9EaRE8r3T3l+4uIPTcdQDIw1iwfhiQ
+         M0phMya6dftZ2cxM8gdC4pP6idGEGgb/KsD/pHBOeMCvdCh37r+OrfEzeNhXo+C77uo0
+         5fIg7mwUokuL9cphXWMydVWBZ51zpcZ/nzPjHC+Coxkw6YqJbz4tkreSXPQvgGQUubYu
+         oZ1LVQY30jZa/1uBbAfnCeii9RmTOVlI2SAzdozX4mo6a2Y/UT9sUpmCBYMKU9Ra6k8e
+         gV/MsRwHLgQGIkN1V27HYUevBRTN7baQpmVAW+MC8n/pLggc0OIWb5tBRMwF+xL4EShh
+         5xUw==
+X-Forwarded-Encrypted: i=1; AJvYcCXFGRzOxGgrnZzy7wFbdopnf3Q+NPd0TLGyWFqcwtB1sto8/5y7XBz0ghc5L+hXiHC/MteObvz+yrJvisEnwP8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/TERxnZKxHsBiicsvCJYoaMwmncXqimy6KU9aGbUfPJOEYWsl
+	W+u97rOpQgsCNT5yoiVGAAL1ucykprX4x9B1GA1PMccAsfYzOWbbyMWLI7zpxUdm2MH5ZdP0FHC
+	5agbOG5kGxnpkpQ==
+X-Received: from pgct22.prod.google.com ([2002:a05:6a02:5296:b0:bd9:19be:503c])
+ (user=jiaqiyan job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a20:a11c:b0:38e:9d3b:470b with SMTP id adf61e73a8af0-392e01096dbmr3663945637.42.1769801321501;
+ Fri, 30 Jan 2026 11:28:41 -0800 (PST)
+Date: Fri, 30 Jan 2026 19:28:37 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260130-net-next-mptcp-splice-v2-6-31332ba70d7f@kernel.org>
-References: <20260130-net-next-mptcp-splice-v2-0-31332ba70d7f@kernel.org>
-In-Reply-To: <20260130-net-next-mptcp-splice-v2-0-31332ba70d7f@kernel.org>
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, David Ahern <dsahern@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1570; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=8UGJgd2vetfhMEQYLqhsyCyu0GJ8G+zo8jWjkOXYN3c=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDJrWcuC999yWZed83Hy3P6bNX1M1+cwqty/1nfjxMZqD
- elHPoc/dJSyMIhxMciKKbJIt0Xmz3xexVvi5WcBM4eVCWQIAxenAEzkYT7DP13Loo9v1A+tq/ih
- +1bTQOiExDeny56JrPfcJmyrvVUrdoeR4cgWietmq/rvHO+x8Zoz/7+y+E2OK+7F7+ftY6k/Emx
- wkBMA
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
+Message-ID: <20260130192837.890688-1-jiaqiyan@google.com>
+Subject: [PATCH v1] KVM: selftests: Improve sea_to_user test
+From: Jiaqi Yan <jiaqiyan@google.com>
+To: oupton@kernel.org
+Cc: sebott@redhat.com, gshan@redhat.com, yuzenghui@huawei.com, maz@kernel.org, 
+	rananta@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, 
+	pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jiaqi Yan <jiaqiyan@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Several improvments to the test for KVM_EXIT_ARM_SEA:
 
-The "splice" alternate mode for mptcp_connect.sh/.c is available now,
-this patch adds mptcp_connect_splice.sh to test it in the MPTCP CI by
-default.
+- Refactor run_vm to catch GUEST_FAIL, instead of causing confusing
+  unhandled MMIO kvm exit.
 
-Note that this mode is also supported by stable kernel versions, but
-optimised in this patch series.
+- Sync far_invalid to guest.
 
-Suggested-by: Matthieu Baerts <matttbe@kernel.org>
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+- Exit test with KSFT_SKIP or KSFT_FAIL when should.
+
+- Add comment about VM backing memory type.
+
+Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
 ---
- tools/testing/selftests/net/mptcp/Makefile                | 1 +
- tools/testing/selftests/net/mptcp/mptcp_connect_splice.sh | 5 +++++
- 2 files changed, 6 insertions(+)
+ .../testing/selftests/kvm/arm64/sea_to_user.c | 94 +++++++++++--------
+ 1 file changed, 53 insertions(+), 41 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
-index 4dd6278cd3dd..22ba0da2adb8 100644
---- a/tools/testing/selftests/net/mptcp/Makefile
-+++ b/tools/testing/selftests/net/mptcp/Makefile
-@@ -11,6 +11,7 @@ TEST_PROGS := \
- 	mptcp_connect_checksum.sh \
- 	mptcp_connect_mmap.sh \
- 	mptcp_connect_sendfile.sh \
-+	mptcp_connect_splice.sh \
- 	mptcp_join.sh \
- 	mptcp_sockopt.sh \
- 	pm_netlink.sh \
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect_splice.sh b/tools/testing/selftests/net/mptcp/mptcp_connect_splice.sh
-new file mode 100755
-index 000000000000..241254a966c9
---- /dev/null
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect_splice.sh
-@@ -0,0 +1,5 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/kvm/arm64/sea_to_user.c b/tools/testing/selftests/kvm/arm64/sea_to_user.c
+index 573dd790aeb8e..4a3511fa1f940 100644
+--- a/tools/testing/selftests/kvm/arm64/sea_to_user.c
++++ b/tools/testing/selftests/kvm/arm64/sea_to_user.c
+@@ -12,6 +12,11 @@
+  * including the notrigger feature. Otherwise the test will be skipped.
+  * The under-test platform's APEI should be unable to claim SEA. Otherwise
+  * the test will also be skipped.
++ *
++ * The VM backing memory is tied to HugeTLB 1G hugepage so far. Make sure
++ * there are more than 4 1G hugepage on the system. They can be allocated
++ * at runtime by:
++ *   echo 4 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
+  */
+ 
+ #include <signal.h>
+@@ -98,11 +103,15 @@ static void write_einj_entry(const char *einj_path, uint64_t val)
+ 
+ static void inject_uer(uint64_t paddr)
+ {
+-	if (access("/sys/firmware/acpi/tables/EINJ", R_OK) == -1)
+-		ksft_test_result_skip("EINJ table no available in firmware");
++	if (access("/sys/firmware/acpi/tables/EINJ", R_OK) == -1) {
++		ksft_test_result_skip("EINJ table not available in firmware\n");
++		exit(KSFT_SKIP);
++	}
+ 
+-	if (access(EINJ_ETYPE, R_OK | W_OK) == -1)
+-		ksft_test_result_skip("EINJ module probably not loaded?");
++	if (access(EINJ_ETYPE, R_OK | W_OK) == -1) {
++		ksft_test_result_skip("EINJ module probably not loaded?\n");
++		exit(KSFT_SKIP);
++	}
+ 
+ 	write_einj_entry(EINJ_ETYPE, ERROR_TYPE_MEMORY_UER);
+ 	write_einj_entry(EINJ_FLAGS, MASK_MEMORY_UER);
+@@ -123,12 +132,13 @@ static void sigbus_signal_handler(int sig, siginfo_t *si, void *v)
+ 	ksft_print_msg("SIGBUS (%d) received, dumping siginfo...\n", sig);
+ 	ksft_print_msg("si_signo=%d, si_errno=%d, si_code=%d, si_addr=%p\n",
+ 		       si->si_signo, si->si_errno, si->si_code, si->si_addr);
+-	if (si->si_code == BUS_MCEERR_AR)
++	if (si->si_code == BUS_MCEERR_AR) {
+ 		ksft_test_result_skip("SEA is claimed by host APEI\n");
+-	else
++		exit(KSFT_SKIP);
++	} else {
+ 		ksft_test_result_fail("Exit with signal unhandled\n");
+-
+-	exit(0);
++		exit(KSFT_FAIL);
++	}
+ }
+ 
+ static void setup_sigbus_handler(void)
+@@ -158,7 +168,6 @@ static void expect_sea_handler(struct ex_regs *regs)
+ {
+ 	u64 esr = read_sysreg(esr_el1);
+ 	u64 far = read_sysreg(far_el1);
+-	bool expect_far_invalid = far_invalid;
+ 
+ 	GUEST_PRINTF("Handling Guest SEA\n");
+ 	GUEST_PRINTF("ESR_EL1=%#lx, FAR_EL1=%#lx\n", esr, far);
+@@ -166,7 +175,7 @@ static void expect_sea_handler(struct ex_regs *regs)
+ 	GUEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_DABT_CUR);
+ 	GUEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
+ 
+-	if (expect_far_invalid) {
++	if (far_invalid) {
+ 		GUEST_ASSERT_EQ(esr & ESR_ELx_FnV, ESR_ELx_FnV);
+ 		GUEST_PRINTF("Guest observed garbage value in FAR\n");
+ 	} else {
+@@ -185,25 +194,19 @@ static void vcpu_inject_sea(struct kvm_vcpu *vcpu)
+ 	vcpu_events_set(vcpu, &events);
+ }
+ 
+-static void run_vm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
++static void validate_kvm_exit_arm_sea(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+ {
+-	struct ucall uc;
+-	bool guest_done = false;
+ 	struct kvm_run *run = vcpu->run;
+ 	u64 esr;
+ 
+-	/* Resume the vCPU after error injection to consume the error. */
+-	vcpu_run(vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_ARM_SEA);
+ 
+-	ksft_print_msg("Dump kvm_run info about KVM_EXIT_%s\n",
+-		       exit_reason_str(run->exit_reason));
++	ksft_print_msg("Dumping kvm_run as arm_sea:\n");
+ 	ksft_print_msg("kvm_run.arm_sea: esr=%#llx, flags=%#llx\n",
+ 		       run->arm_sea.esr, run->arm_sea.flags);
+ 	ksft_print_msg("kvm_run.arm_sea: gva=%#llx, gpa=%#llx\n",
+ 		       run->arm_sea.gva, run->arm_sea.gpa);
+ 
+-	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_ARM_SEA);
+-
+ 	esr = run->arm_sea.esr;
+ 	TEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_DABT_LOW);
+ 	TEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
+@@ -211,39 +214,48 @@ static void run_vm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+ 	TEST_ASSERT_EQ((esr & ESR_ELx_INST_SYNDROME), 0);
+ 	TEST_ASSERT_EQ(esr & ESR_ELx_VNCR, 0);
+ 
+-	if (!(esr & ESR_ELx_FnV)) {
+-		ksft_print_msg("Expect gva to match given FnV bit is 0\n");
++	far_invalid = esr & ESR_ELx_FnV;
++	sync_global_to_guest(vm, far_invalid);
 +
-+MPTCP_LIB_KSFT_TEST="$(basename "${0}" .sh)" \
-+	"$(dirname "${0}")/mptcp_connect.sh" -m splice "${@}"
-
++	if (!far_invalid) {
++		ksft_print_msg("Expect gva to match\n");
+ 		TEST_ASSERT_EQ(run->arm_sea.gva, EINJ_GVA);
+ 	}
+ 
+ 	if (run->arm_sea.flags & KVM_EXIT_ARM_SEA_FLAG_GPA_VALID) {
+-		ksft_print_msg("Expect gpa to match given KVM_EXIT_ARM_SEA_FLAG_GPA_VALID is set\n");
++		ksft_print_msg("Expect gpa to match\n");
+ 		TEST_ASSERT_EQ(run->arm_sea.gpa, einj_gpa & PAGE_ADDR_MASK);
+ 	}
++}
+ 
+-	far_invalid = esr & ESR_ELx_FnV;
+-
+-	/* Inject a SEA into guest and expect handled in SEA handler. */
+-	vcpu_inject_sea(vcpu);
++static void run_vm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
++{
++	struct ucall uc;
++	bool guest_done = false;
+ 
+ 	/* Expect the guest to reach GUEST_DONE gracefully. */
+ 	do {
+ 		vcpu_run(vcpu);
+-		switch (get_ucall(vcpu, &uc)) {
+-		case UCALL_PRINTF:
+-			ksft_print_msg("From guest: %s", uc.buffer);
+-			break;
+-		case UCALL_DONE:
+-			ksft_print_msg("Guest done gracefully!\n");
+-			guest_done = 1;
+-			break;
+-		case UCALL_ABORT:
+-			ksft_print_msg("Guest aborted!\n");
+-			guest_done = 1;
+-			REPORT_GUEST_ASSERT(uc);
+-			break;
+-		default:
+-			TEST_FAIL("Unexpected ucall: %lu\n", uc.cmd);
++		if (vcpu->run->exit_reason == KVM_EXIT_ARM_SEA) {
++			validate_kvm_exit_arm_sea(vm, vcpu);
++			vcpu_inject_sea(vcpu);
++		} else {
++			switch (get_ucall(vcpu, &uc)) {
++			case UCALL_PRINTF:
++				ksft_print_msg("From guest: %s", uc.buffer);
++				break;
++			case UCALL_DONE:
++				ksft_print_msg("Guest done gracefully!\n");
++				guest_done = 1;
++				break;
++			case UCALL_ABORT:
++				ksft_print_msg("Guest aborted!\n");
++				guest_done = 1;
++				REPORT_GUEST_ASSERT(uc);
++				break;
++			default:
++				TEST_FAIL("Unexpected ucall: %lu\n", uc.cmd);
++			}
+ 		}
+ 	} while (!guest_done);
+ }
 -- 
-2.51.0
+2.53.0.rc2.204.g2597b5adb4-goog
 
