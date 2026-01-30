@@ -1,39 +1,30 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0030C13B;
-	Fri, 30 Jan 2026 01:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264943009D6;
+	Fri, 30 Jan 2026 01:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769735500; cv=none; b=rEMD+6pteKnzHfKDmbkGa/Ha5yx4om0A4fJSJE5jSDBg3dPlp5ccGh9U7VpAt2QokeaBYYtpqaVQ3uW0kAHxYgNYfyHMvyqZpsG85FYJ2u56iFvU02ucmUxZVnLzwlUMFfQoooOyOWY41EoJ4EATcNKgPZclpn6RbebLlkx16Co=
+	t=1769735815; cv=none; b=Khp0TOFNGrxnKfs0qm3IwD1X2jpibqN+KDE58qnomtesd34gBbbXEkqKYBURygWzrNXXA/oDWyXIhG+uixc4QapvKv7rkvO3pKMdgjeVPhv9c1uDph0tjHqrqOfN1Sd8Hwj6bD272gfOwXXQsuKVNC4gSC39FELWH9wPwrn5GXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769735500; c=relaxed/simple;
-	bh=GZwctE1GPzAuk4TYl0Xwxy7h1RdfjObOJBbgaLildfg=;
+	s=arc-20240116; t=1769735815; c=relaxed/simple;
+	bh=n4jwzUSPAtHPkkibAuq6XGTSF6d2mfRL2KvZSSE0jxs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GiHg54DUVhteDFoiUoB7Zw1y9d0K+sFAEs0qu4DTDlH0wBMLGh/7UNHRcOgipAMrwZGlydXqjrtgVlqBoOBuOS9Fc/XPBUtABV5j2Sz1WdiUmN7QmTryCYuJLy5C5mpYahbCE+6BxphpcCCsQJY5TF+KwA2O3k2Y6awS8Dh0nP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=QAtMajkJ; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="QAtMajkJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=GNIQ4X2KtjzAKIzMWdneTlmJODkXhrfE+MfCKHv0WNQ=; b=QAtMajkJY7AqszaVpQQDw3u9U/
-	WvdT9cWEtxXAFfN8OuGvV+Wlhfjz7SBQaHgT8GrqueukIfzpWgiVWV+dxsdlj5kdVPoeSbv513w1s
-	Cy9cwEhTyIruG0ACzcbNk3M0gUUhYGkRkZiZ2K+bLOzwubFAGt4CmvFKiyyRI/GxfU6l7M9l+PL1x
-	1UYZY3oUbL2oZYgqmjZT2iKOkI0Ldhu49Ei6lxpffFbvzjsL3szxtJiX+2DGLj6gmos4wStHyVGYZ
-	TJGbeqxVErG3nSerMxAbJC06VJm4V5v4JawSB8uXDcz4JuLhTmSDVj3MY8KY28+qMDSiAadDC4uWM
-	bBnjowRw==;
-Received: from [58.29.143.236] (helo=[192.168.1.2])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1vld2T-00BYTs-Nm; Fri, 30 Jan 2026 02:11:10 +0100
-Message-ID: <d41d48a9-f2f7-49fa-82bc-5b8237246c7b@igalia.com>
-Date: Fri, 30 Jan 2026 10:10:56 +0900
+	 In-Reply-To:Content-Type; b=tRUCdGFDXt3JOf+yUnqV0aYdJOaTBS/xikD9FTPo1loHkX9BqRZQSrhllcL4/zaJSNHdCTzllFoMJ/2lom8ajySS11sThr9VNIZHYS6mUGPlJCUg+HbKqI9CXSMw6uwsqQIAJRXRbYvbpUbppyC9w4vsJZ1PjUkkrEJ91AGxgLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f2J4g4QzgzKHMZn;
+	Fri, 30 Jan 2026 09:16:35 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 3C1DC40573;
+	Fri, 30 Jan 2026 09:16:50 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgCXQvOABnxpsINjFg--.46488S2;
+	Fri, 30 Jan 2026 09:16:49 +0800 (CST)
+Message-ID: <38196f54-c6df-4890-8ee8-2fa2881e1118@huaweicloud.com>
+Date: Fri, 30 Jan 2026 09:16:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,118 +32,161 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/bpf: Make x86 preempt_count access compatible
- across v6.14+
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- kernel-dev@igalia.com, bpf <bpf@vger.kernel.org>, sched-ext@lists.linux.dev,
- LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20260129135426.93424-1-changwoo@igalia.com>
- <CAADnVQL2huFSNAn4Pkbx2GOqAB=Z-rtd+Fp3BnJTZ-tbzOhgmw@mail.gmail.com>
-From: Changwoo Min <changwoo@igalia.com>
-Content-Language: en-US, ko-KR, en-US-large, ko, en-HK
-In-Reply-To: <CAADnVQL2huFSNAn4Pkbx2GOqAB=Z-rtd+Fp3BnJTZ-tbzOhgmw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH/for-next 2/2] cgroup/cpuset: Introduce a new top level
+ isolcpus_update_mutex
+To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260128044251.1229702-1-longman@redhat.com>
+ <20260128044251.1229702-3-longman@redhat.com>
+ <08c3fad6-b881-4089-b081-bde6efbafbd2@huaweicloud.com>
+ <8fb3aab5-ba0a-4523-a404-5643b8a749c9@huaweicloud.com>
+ <be3ca35e-ec22-47e7-8507-c637fbb39d51@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <be3ca35e-ec22-47e7-8507-c637fbb39d51@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCXQvOABnxpsINjFg--.46488S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtFy8ur1fCr4DCw4DJry8Grg_yoW7Ww45pr
+	ZIgayxtr45CrykCw47tr15Wry8tw4DJa1UJr1kGryxAFZIvF1Y9F4jqrna9r98WrZ3Ar42
+	vas8X3y3Zw1DAw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-Thank you, Alexei, for quick review.
 
-On 1/30/26 2:21 AM, Alexei Starovoitov wrote:
-> On Thu, Jan 29, 2026 at 5:54 AM Changwoo Min <changwoo@igalia.com> wrote:
+
+On 2026/1/30 4:57, Waiman Long wrote:
+> On 1/29/26 3:20 AM, Chen Ridong wrote:
 >>
->> Recent x86 kernels (v6.15+) export __preempt_count as a ksym, while older
->> kernels expose the preemption counter via pcpu_hot.preempt_count. The
->> existing selftest helper unconditionally dereferenced __preempt_count,
->> which breaks BPF program loading on older kernels.
+>> On 2026/1/29 16:01, Chen Ridong wrote:
+>>>
+>>> On 2026/1/28 12:42, Waiman Long wrote:
+>>>> The current cpuset partition code is able to dynamically update
+>>>> the sched domains of a running system and the corresponding
+>>>> HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
+>>>> "isolcpus=domain,..." boot command line feature at run time.
+>>>>
+>>>> The housekeeping cpumask update requires flushing a number of different
+>>>> workqueues which may not be safe with cpus_read_lock() held as the
+>>>> workqueue flushing code may acquire cpus_read_lock() or acquiring locks
+>>>> which have locking dependency with cpus_read_lock() down the chain. Below
+>>>> is an example of such circular locking problem.
+>>>>
+>>>>    ======================================================
+>>>>    WARNING: possible circular locking dependency detected
+>>>>    6.18.0-test+ #2 Tainted: G S
+>>>>    ------------------------------------------------------
+>>>>    test_cpuset_prs/10971 is trying to acquire lock:
+>>>>    ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at:
+>>>> touch_wq_lockdep_map+0x7a/0x180
+>>>>
+>>>>    but task is already holding lock:
+>>>>    ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at:
+>>>> cpuset_partition_write+0x85/0x130
+>>>>
+>>>>    which lock already depends on the new lock.
+>>>>
+>>>>    the existing dependency chain (in reverse order) is:
+>>>>    -> #4 (cpuset_mutex){+.+.}-{4:4}:
+>>>>    -> #3 (cpu_hotplug_lock){++++}-{0:0}:
+>>>>    -> #2 (rtnl_mutex){+.+.}-{4:4}:
+>>>>    -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
+>>>>    -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
+>>>>
+>>>>    Chain exists of:
+>>>>      (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
+>>>>
+>>>>    5 locks held by test_cpuset_prs/10971:
+>>>>     #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
+>>>>     #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at:
+>>>> kernfs_fop_write_iter+0x260/0x5f0
+>>>>     #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at:
+>>>> kernfs_fop_write_iter+0x2b6/0x5f0
+>>>>     #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at:
+>>>> cpuset_partition_write+0x77/0x130
+>>>>     #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at:
+>>>> cpuset_partition_write+0x85/0x130
+>>>>
+>>>>    Call Trace:
+>>>>     <TASK>
+>>>>       :
+>>>>     touch_wq_lockdep_map+0x93/0x180
+>>>>     __flush_workqueue+0x111/0x10b0
+>>>>     housekeeping_update+0x12d/0x2d0
+>>>>     update_parent_effective_cpumask+0x595/0x2440
+>>>>     update_prstate+0x89d/0xce0
+>>>>     cpuset_partition_write+0xc5/0x130
+>>>>     cgroup_file_write+0x1a5/0x680
+>>>>     kernfs_fop_write_iter+0x3df/0x5f0
+>>>>     vfs_write+0x525/0xfd0
+>>>>     ksys_write+0xf9/0x1d0
+>>>>     do_syscall_64+0x95/0x520
+>>>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>>>
+>>>> To avoid such a circular locking dependency problem, we have to
+>>>> call housekeeping_update() without holding the cpus_read_lock()
+>>>> and cpuset_mutex. One way to do that is to introduce a new top level
+>>>> isolcpus_update_mutex which will be acquired first if the set of isolated
+>>>> CPUs may have to be updated. This new isolcpus_update_mutex will provide
+>>>> the need mutual exclusion without the need to hold cpus_read_lock().
+>>>>
+>> When I reviewed Frederic's patches, I concerned about this issue. However, I was
+>> not certain whether any flush worker would need to acquire cpu_hotplug_lock or
+>> cpuset_mutex.
 >>
->> Make the x86 preemption count lookup version-agnostic by:
->> - Marking __preempt_count and pcpu_hot as weak ksyms.
->> - Introducing a BTF-described pcpu_hot___local layout with
->>    preserve_access_index.
->> - Selecting the appropriate access path at runtime using ksym availability
->>    and bpf_core_field_exists().
+>> Despite this warning, I do not understand how wq_completion would need to
+>> acquire cpu_hotplug_lock and cpuset_mutex.
 >>
->> This allows a single BPF binary to run correctly on both v6.14-and-older
->> and v6.15-and-newer kernels without relying on compile-time version checks.
+>> The reason I want to understand how wq_completion acquires cpu_hotplug_lock or
+>> cpuset_mutex is to determine whether isolcpus_update_mutex is truly necessary.
+>> As I mentioned in my previous email, I am concerned about a potential
+>> use-after-free (UAF) issue, which might imply that isolcpus_update_mutex is
+>> required in most places that currently acquire cpuset_mutex, with the possible
+>> exception of the hotplug path?
 > 
-> See.. with bpf approach instead of kfunc this new helpers
-> can work on old kernels without backporting kfuncs :)
-
-You are right. I love the flexibility of BPF in deployment! \o/
-
+> A circular lock dependency can invoke more than 2 tasks/parties. In this case,
+> the task that hold wq_completion does not need to acquire cpu_hotplug_lock. If a
+> worker that flushes a work function required for the completion to finish and it
+> happens to acquire cpu_hotplug_lock with another task trying to acquire
+> cpus_write_lock in the interim, the worker will wait there for the write lock to
+> be released which will not happen until the original task that calls
+> flush_workqueue() release its read lock. In essence, it is a deadlock.
 > 
->> Fixes: 4b69e31329b6 ("selftests/bpf: Introduce experimental bpf_in_interrupt()")
-> 
-> fixes tag is not appropriate. It's not a bug fix.
 
-Sure, I will drop the Fixes tag.
+Thanks, Longman,
 
-> 
->> Signed-off-by: Changwoo Min <changwoo@igalia.com>
->> ---
->>   tools/testing/selftests/bpf/bpf_experimental.h | 16 ++++++++++++++--
->>   1 file changed, 14 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
->> index a39576c8ba04..0194c0090e50 100644
->> --- a/tools/testing/selftests/bpf/bpf_experimental.h
->> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
->> @@ -614,7 +614,13 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
->>
->>   extern bool CONFIG_PREEMPT_RT __kconfig __weak;
->>   #ifdef bpf_target_x86
->> -extern const int __preempt_count __ksym;
->> +extern const int __preempt_count __ksym __weak;
->> +
->> +struct pcpu_hot___local {
->> +       int preempt_count;
->> +} __attribute__((preserve_access_index));
->> +
->> +extern struct pcpu_hot___local pcpu_hot __ksym __weak;
->>   #endif
->>
->>   struct task_struct___preempt_rt {
->> @@ -624,7 +630,13 @@ struct task_struct___preempt_rt {
->>   static inline int get_preempt_count(void)
->>   {
->>   #if defined(bpf_target_x86)
->> -       return *(int *) bpf_this_cpu_ptr(&__preempt_count);
->> +       /* v6.15 or later */
->> +       if (&__preempt_count)
->> +               return *(int *) bpf_this_cpu_ptr(&__preempt_count);
-> 
-> please use bpf_ksym_exists().
-> It helps to catch missing __weak. This patch adds it,
-> but let's demonstrate best coding practices.
+I looked through the relevant workers:
 
-Sure, will change it as suggested.
+	pci_probe_flush_workqueue()
+	mem_cgroup_flush_workqueue()
+	vmstat_flush_workqueue()
 
+However, I still haven’t found any worker function that actually acquires
+cpu_hotplug_lock or cpuset_mutex. Perhaps I missed something.
 
-> 
->> +       /* v6.14 or older */
->> +       if (bpf_core_field_exists(pcpu_hot.preempt_count))
->> +               return ((struct pcpu_hot___local *)
->> +                       bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
-> 
-> iirc pcpu_hot approach was there for a short time.
-> Like 5.x kernel didn't have it. It was per-cpu var too.
-> Pls adjust the comment.
-
-Sure, I found that pcpu_hot had been used only between 6.1 -- 6.14.
-
-I will send out v2 shortly.
-Regards,
-Changwoo Min
-
-> 
-> pw-bot: cr
-> 
+-- 
+Best regards,
+Ridong
 
