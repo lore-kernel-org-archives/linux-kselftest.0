@@ -1,159 +1,157 @@
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3D535295C
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 09:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA69F2DECA5;
+	Fri, 30 Jan 2026 10:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769764378; cv=none; b=CcLjHMZomBqHz/YM6LF4n/GfstV8rTSl7M3E7Q/pyuYEfIh+VRUKAccmgOz7WbTd59OekzpjbRW10JqAnFI+7TBluOJc95ZnGSLk3SvKT7aruDEby9UV8+J6X+C0dNJzGgIddwER12Y5fJwCLXCuc1OqNiKDoqJWMIKVeUvISlM=
+	t=1769767557; cv=none; b=cQqjq6LvTbwu8UkRLhqNhCrVeHnd2tRiD05gR+zjGEzwYPenmxknCZoNnWHoL5MbBzrU+1v/1mnJCcpWl79JerzC636M4mPdaJUSQSzZoz1erATm9lorX7qdDufwqIjQ4Si+pp4wMhcA97CFmsxE7ZCRoAmwyRLPQda1j6cFQXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769764378; c=relaxed/simple;
-	bh=tVSU1w5x5sqFlUfPefz5QPNvQ7ShmBvFI0HEu15jk9I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PLts6chpLNVEmTbzce4bSI9oM5nRpM9F4kvKA9brSnhMsdc+cb+nAmerlKOChSwfqGGCM5wW/ePXIehjZ2wMRoEnRcNId6HA2JDzS0LGyNxUhl+kVPAfJew0qZ5zK0qezO3GX86ckqNaH1YOR4XG15PUWtTKgGqAK6T6CePr/ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHkYlsOJ; arc=none smtp.client-ip=74.125.224.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769767557; c=relaxed/simple;
+	bh=BcLluus8DH03LER7CXGfhQox+YpRlCH2egU9ipltSfc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O9ua7TMx130qxwgkeb6PnjiBLrnUKMz+wszRU7UpC/0EaPlF79usGRpnExGI93UeRsEgIU6UQ6Vpjbon6CsZQx1P+ibSj4R3YIPm3Zzy+VomJB52tcTrRFPgwvRgzmHmafXEsr+5r2ClrYOQzIOn0QzDRAV6ctDyMGysNvFoxy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxhX106H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHkYlsOJ"
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-649523de91fso1745481d50.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Jan 2026 01:12:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769764375; x=1770369175; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BqsnWikU7Lohq8AD8p2s7XQz/GMEbrveKNhDBDZTgGs=;
-        b=hHkYlsOJkVN2yOPWTIzxlQSqBnib6rCkTSb9hSkp7dQ9iaqChv44lPVraJsUrvh439
-         WsIHIGSIjVBtrjwHolr4GnjmP9mqOsB3s2mW7rYa/i6u4cBRaYeDMHFk+UabTcL13sbN
-         Y1sm4628cS93WkafOwCiZr0s5z7+3JY2XAaSG3gx6Nwm/Fwc4t1i6MmEbyMdtTkuhHvn
-         3EOyAeQlxkZsqDAfCMKwpeaiv5zybwtZ+o6OUtl6pQdDK7ntX+frTfv4KaorL+fAFRso
-         TW/fla1ecuWSG15jCp/H/af7DdoGuCaOIr+mJZqf7kjWM6uC7II28H++6R/gXfLKeyzo
-         zKcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769764375; x=1770369175;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BqsnWikU7Lohq8AD8p2s7XQz/GMEbrveKNhDBDZTgGs=;
-        b=J5Jw6aGPXr+b2iOWpywqV3M5Yrhvm0g9g7Oei16cVLJYccDGZhuhOsv57V2Lbha76R
-         tz+piZiFNwu+yPrCHqCCpAuUufPSHHJTvrQFI/gutmNTO+RYbI3R5+RFuU0iWl+WRQ6d
-         pDPfsfhK7m7BVXtnPA9WwQhKTv2CxmKA3MXBA2+3VwtdkazxVc7rBi8c+EIVItmo/rWs
-         UVNka98vY8pCqcncBGDS10XSWkep41MuzsSClkogRmJQ1HQcuxExQFPRXyVhJKxP2Yho
-         dE5HXnegFKECgTcY23ahHPxhzPOEo1y8/xECBZf1alBG1GYGirFzlUBXeZ6RROrIvYHS
-         2WPA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+kvYDRE+aOR0blozqYrjweebLsfVt7hBhTh9fjYaKS6qQuN7eankXMgMycIghxbTLacF5Fsm2J3up48USWJc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwibRe1gEML26a/1I51yhSZD6cgka2w0OlQOp8x8Ag65zh48JDX
-	XX5xrhIYXay8ZgJ7g87vJeuTe4/LtXwS3FXOPMFEjWffNx/GHvHpa/z1YHr/H7+x
-X-Gm-Gg: AZuq6aLTzfLzThVqkGQ2+mbhtLRuL6Wd/H+o1Y/y54RICfeX7tnvsuBNMtsyYEUHciN
-	8yk/npFipIwLGarb2nB2tPaYIln4knspnon012fmryaOZtoHAK36I/sb03yaqGkAvELpRYGG5Zk
-	X8mPV2y9EzUQ9vkPVEgclzNXwstNyA2ao7Fsm341opd9KITlqjAVX4pkYDK6mmUc8U8s1y50ohw
-	0m+7rdQ1fmbPp84hIaJCY/LABw49lZSOGR7OT+fBCy9v1/m6aVqU+eCOrwhny1V6ue+dSFSk0IL
-	n3ExeKa7zoYW2wDVPw7wDjYKQtGkNXUe7GW1iI4j/qGqq4nIB3P7F7J9jhCiZqzLtU/rd1YnIVi
-	qvd3qXukQTubqd7l70t89C53QTRLSNSP4dy+yLWk/yM4d+OUoexvQzK2ohFVJdGlX3BwQfF6aiR
-	jYQxGkghMOA4LSSko4bn1LSI6mtOdox8fjk3z3HczQOFr6kaRmSjTT26jekkHVFLv1U/AXyTjN5
-	c7A8BNUbKJOc1lmg+kqXwLZDR07FQ3hHeZcsF1b7NouAxw=
-X-Received: by 2002:a05:690e:1688:b0:644:6ad4:fdfd with SMTP id 956f58d0204a3-649a84ee166mr1735838d50.71.1769764374801;
-        Fri, 30 Jan 2026 01:12:54 -0800 (PST)
-Received: from u2404-VMware-Virtual-Platform.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64996063f90sm3436470d50.2.2026.01.30.01.12.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 01:12:54 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net
-Cc: andrii@kernel.org,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH] selftests/bpf: skip deny_namespace when bpf LSM is not enabled
-Date: Fri, 30 Jan 2026 17:12:45 +0800
-Message-ID: <20260130091245.3824029-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxhX106H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62FDAC116D0;
+	Fri, 30 Jan 2026 10:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769767557;
+	bh=BcLluus8DH03LER7CXGfhQox+YpRlCH2egU9ipltSfc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=jxhX106HMfKlKbEVvEYUaXh/PbB47BfqFQKaGCp1rTPB5xmMt8k4Z26SKNRt3jDby
+	 IswXAifemV8eD8qUbP+D60hddHDNRpLgar8xv7pTni9eKPG3uRkcWre/UMClC56PVu
+	 Vti5uuuh6kMAG6YWaKVbaLZecMqW5c5ax00Zg/qCLILiTcaJJ1FenB4TVo8xEOVFw8
+	 zLbo1587bN2ff0upOKmVzCsZXk0icwls7XHHHx0Dw+T7iOAS5DkM6se8F8zF5JxUgG
+	 XlNkVqgNmHQLmFKM0iFbzl5zKhMRZ3GtU9xDd3AwtxEvATNa1P6B0/sX60MiyCHORt
+	 eXYHiBYAqThcA==
+Message-ID: <6c9f3c40-9a41-442e-9254-d7b1e37cf78a@kernel.org>
+Date: Fri, 30 Jan 2026 11:05:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 5/6] selftests: mptcp: add splice io mode
+Content-Language: en-GB, fr-BE
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, David Ahern <dsahern@kernel.org>,
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260129-net-next-mptcp-splice-v1-0-994cac40daa0@kernel.org>
+ <20260129-net-next-mptcp-splice-v1-5-994cac40daa0@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20260129-net-next-mptcp-splice-v1-5-994cac40daa0@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-deny_namespace/userns_create_bpf relies on BPF LSM being active in the LSM
-chain. When /sys/kernel/security/lsm does not contain "bpf" (e.g. virtme-ng
-default), this test can't validate the expected EPERM behavior. Reporting
-FAIL in that case is misleading noise for CI.
+Hello,
 
-Detect missing bpf in the active LSM list and skip the test with a short
-hint to boot with lsm=...,bpf.
+On 29/01/2026 20:23, Matthieu Baerts (NGI0) wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> This patch adds a new 'splice' io mode for mptcp_connect to test
+> the newly added read_sock() and splice_read() functions of MPTCP.
+> 
+> do_splice() efficiently transfers data directly between two file
+> descriptors (infd and outfd) without copying to userspace, using
+> Linux's splice() system call.
+> 
+> Usage:
+> 	./mptcp_connect.sh -m splice
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../selftests/bpf/prog_tests/deny_namespace.c | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
+(...)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/deny_namespace.c b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
-index 1bc6241b755b..5fb31912dd98 100644
---- a/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
-+++ b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
-@@ -5,6 +5,7 @@
- #include <sched.h>
- #include "cap_helpers.h"
- #include <stdio.h>
-+#include <string.h>
- 
- static int wait_for_pid(pid_t pid)
- {
-@@ -46,6 +47,36 @@ static int create_user_ns(void)
- 	return wait_for_pid(pid);
- }
- 
-+static bool bpf_lsm_enabled(void)
-+{
-+	FILE *f;
-+	char buf[512];
-+	bool enabled = false;
-+
-+	f = fopen("/sys/kernel/security/lsm", "r");
-+	if (!f)
-+		return false;
-+
-+	if (!fgets(buf, sizeof(buf), f)) {
-+		fclose(f);
-+		return false;
-+	}
-+	fclose(f);
-+
-+	buf[strcspn(buf, "\n")] = '\0';
-+
-+	for (char *saveptr = NULL, *tok = strtok_r(buf, ",", &saveptr);
-+		tok;
-+		tok = strtok_r(NULL, ",", &saveptr)) {
-+		if (!strcmp(tok, "bpf")) {
-+			enabled = true;
-+			break;
-+		}
-+	}
-+
-+	return enabled;
-+}
-+
- static void test_userns_create_bpf(void)
- {
- 	__u32 cap_mask = 1ULL << CAP_SYS_ADMIN;
-@@ -88,6 +119,13 @@ void test_deny_namespace(void)
- 	if (!ASSERT_OK_PTR(skel, "skel load"))
- 		goto close_prog;
- 
-+	if (!bpf_lsm_enabled()) {
-+		printf("%s:SKIP:bpf LSM not enabled (boot with lsm=...,bpf)\n",
-+		       __func__);
-+		test__skip();
-+		goto close_prog;
-+	}
-+
- 	err = test_deny_namespace__attach(skel);
- 	if (!ASSERT_OK(err, "attach"))
- 		goto close_prog;
+> diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+> index 10f6f99cfd4e..1c4fe60089a2 100644
+> --- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
+> +++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+
+(...)
+
+> @@ -935,6 +936,55 @@ static int copyfd_io_sendfile(int infd, int peerfd, int outfd,
+>  	return err;
+>  }
+>  
+> +static int do_splice(const int infd, const int outfd, const size_t len,
+> +		     struct wstate *winfo)
+> +{
+> +	int pipefd[2];
+> +	ssize_t bytes;
+> +	int err;
+> +
+> +	err = pipe(pipefd);
+> +	if (err)
+> +		return err;
+> +
+> +	while ((bytes = splice(infd, NULL, pipefd[1], NULL,
+> +			       len - winfo->total_len,
+> +			       SPLICE_F_MOVE | SPLICE_F_MORE)) > 0) {
+> +		splice(pipefd[0], NULL, outfd, NULL, bytes,
+> +		       SPLICE_F_MOVE | SPLICE_F_MORE);
+
+The review assistant rightly spotted errors with splice() are simply...
+ignored! Technically, the script launching this tool will check the
+integrity of the transfer, but still, that's clearly not a good practice!
+
+Sorry for the noise, I didn't spot that when sending these patches. I
+will fix the issues and send a v2 later.
+
+pw-bot: cr
+
+Cheers,
+Matt
 -- 
-2.43.0
+Sponsored by the NGI0 Core fund.
 
