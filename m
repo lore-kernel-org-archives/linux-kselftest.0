@@ -1,89 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805D62EB872;
-	Fri, 30 Jan 2026 10:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9FEE35C193;
+	Fri, 30 Jan 2026 10:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769768168; cv=none; b=j1WwGCZQ005OJzm/+dGS5vXR364TbSxcPob9WIcufGE8Som2eIjd/W3hALOEmpzcsqJ4btpyXSHKqHQyH8ReqbuP7qdv0/sEyDqtmpcn4kztGG5p8euVXqf5e8rVIuS/YO+dAbs5qzMMbjEMS+wPO2haTs9nw9K9VuuwXpBV7Gc=
+	t=1769768544; cv=none; b=Ma/qliDGP9oGEsrf+EGzi4QUajjiyDssDRuX/f1Anh0RT4DZJAndhoRcAWKd1RFolCjy8O1hAv6+9DN+7FVZv/qaVbUaWnp0vR1GgY/sLh+BDW8rwMDZhXCBc0W1G/963HXrSBC47MyliRIxFjTTXj5XTz1QeMSxDAF16dO7L3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769768168; c=relaxed/simple;
-	bh=senPl96VoP9NMbSYHN6CrZfoExUF5LHDmLR/j/T+dnQ=;
-	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KTieHh34wx4M5H0rQ61XxQxEZvwVMq2g95yOMQJgg9UTDVbMRtqUz0gubXGL4ndJ4nd/1Rpzm7Q6LTwfl8ifLQxBCYJbDIFu32Mv0vTCRxlYp29KxDZc7uNg0Y4mkbOh4vabBkgapxshD5HKyEE3rW/4Z5dmh35HxOI39sCvTjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LNo1C4Vr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769768544; c=relaxed/simple;
+	bh=Eq2G7Xi3OimnQOM/OPf23yrh0oiEwbP1aeWoGbFDTqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k2pHs5JD4ViBns+UTLs2nNOIPHNR7wt0zghHZnUXmEZCnfNu9V0uu241GsTvnK2tmYkDtOrnmrr7wvDT/9iZ3wkvaRrOgruh2sGrxvIi0f94ci/EWSn108mbdf+UxduwjGo/A+BnNu2xXsnQ6ZP8CRZJFgj+9nXuveaZPFPpg+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=i5nWeqU4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FHbe7Nps; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LNo1C4Vr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C70AC4CEF7;
-	Fri, 30 Jan 2026 10:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769768168;
-	bh=senPl96VoP9NMbSYHN6CrZfoExUF5LHDmLR/j/T+dnQ=;
-	h=From:To:Subject:In-Reply-To:References:Date:From;
-	b=LNo1C4Vrnx+Zr3b0dCaO3rUUayS6Rd7uMIEPp2GVFj5Y9QDIzX/ThDpngyYaM+hgf
-	 Ty4FWKpTZZ2IBBncUjV/pS6MPTEYvHy88AwzB4d61p/sLl1uRlColsFuy02AbGn6kT
-	 tGGbC5SCsJGeXTx6XtmOXTFntb77EJK6r+gpcAWiIvxq4jOBUu9to236YpzorD5/Y9
-	 MMUMph+ZByQpmPvOj6rEx97cK4ntIKJpp6Fjqc6fnwEoIvdzSozTq82M5VSXBF3if4
-	 VYjcfhQNWPdPnb7b0Y5vM/dfFGqiXAGKkRKkaSqMR+A0xvgnfClOg04m+pjJXPyOMu
-	 M4dF7l2BRqQ4A==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Kevin Brodsky <kevin.brodsky@arm.com>, Jinjie Ruan
- <ruanjinjie@huawei.com>, catalin.marinas@arm.com, will@kernel.org,
- oleg@redhat.com, peterz@infradead.org, luto@kernel.org, shuah@kernel.org,
- kees@kernel.org, wad@chromium.org, deller@gmx.de,
- akpm@linux-foundation.org, charlie@rivosinc.com, mark.rutland@arm.com,
- anshuman.khandual@arm.com, song@kernel.org, ryan.roberts@arm.com,
- thuth@redhat.com, ada.coupriediaz@arm.com, broonie@kernel.org,
- pengcan@kylinos.cn, liqiang01@kylinos.cn, kmal@cock.li,
- dvyukov@google.com, reddybalavignesh9979@gmail.com,
- richard.weiyang@gmail.com, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 09/14] entry: Rework
- syscall_exit_to_user_mode_work() for arch reuse
-In-Reply-To: <3bfa15fc-187e-4c39-9cb3-a936fdd443b2@arm.com>
-References: <20260128031934.3906955-1-ruanjinjie@huawei.com>
- <20260128031934.3906955-10-ruanjinjie@huawei.com>
- <56978cb8-f9de-4bf2-b1fc-b5564fec7387@arm.com>
- <ef52449d-7ae0-11d0-c8a9-2ca572454425@huawei.com>
- <3bfa15fc-187e-4c39-9cb3-a936fdd443b2@arm.com>
-Date: Fri, 30 Jan 2026 11:16:04 +0100
-Message-ID: <87o6mbl82j.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="i5nWeqU4";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FHbe7Nps"
+Date: Fri, 30 Jan 2026 11:22:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1769768540;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SfQHnA2BmBI6ftm9auzvWJDnwuKHz7JY0ERZmZ33OkI=;
+	b=i5nWeqU4DrtCSygkhNXk0clW9sdJeYUn+nu/Lp14hRLsdOkRPW/to9G74aQNkjj8/JTbn+
+	EVuWx+CmaVxnH53spKOTa7yTwq+7Tl5lbIaIOm6gfGtyYUgNE6YFmOkXoVoKgF7DIPCyUf
+	y1lAx0HgGSDiub5A9zPaedO1HVcaiXfp8sro3/sdIma6WQfHSaspq9hNO8iPB5ZcgcMbe7
+	NHxgCPJn4K4WRfNe8JCnTOItY+RoBL8mYl7doxD5VtpmDXKdPBP/9LsAR9z4WEYm+EfAXY
+	56WuhmuxkZV0tie3qdFvjlHPysRbMXP1CcsyWmgKLMDJcorskgLzg36usAwFSg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1769768540;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SfQHnA2BmBI6ftm9auzvWJDnwuKHz7JY0ERZmZ33OkI=;
+	b=FHbe7NpszOxXo2LOeb2aDyUedizHq4EKWZVTWJo3btpIoSScU03CQEk/9T3wpc7XZUEEHy
+	j7CSY3+NgBT2CcBA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
+	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	libc-alpha@sourceware.org
+Subject: Re: [PATCH net-next v2 1/4] selftests: net: Move some UAPI header
+ inclusions after libc ones
+Message-ID: <20260130111949-4b4eb870-6df7-4026-a48c-730fa8660ad6@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+ <20260120-uapi-sockaddr-v2-1-63c319111cf6@linutronix.de>
+ <4e673f7f-c49c-46b0-85b4-bae6e4efcb3a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4e673f7f-c49c-46b0-85b4-bae6e4efcb3a@kernel.org>
 
-On Thu, Jan 29 2026 at 17:00, Kevin Brodsky wrote:
-> On 29/01/2026 14:11, Jinjie Ruan wrote:
->>>> - * Calling convention is the same as for syscall_exit_to_user_mode() =
-and it
->>>> - * returns with all work handled and interrupts disabled. The caller =
-must
->>>> - * invoke exit_to_user_mode() before actually switching to user mode =
-to
->>>> - * make the final state transitions. Interrupts must stay disabled be=
-tween
->>>> - * return from this function and the invocation of exit_to_user_mode(=
-).
->>>> + * Calling convention is the same as for syscall_exit_to_user_mode().=
- The
->>>> + * caller must invoke local_irq_disable(), __exit_to_user_mode_prepar=
-e() and
->>> Shouldn't it be syscall_exit_to_user_mode_prepare() rather than
->>> __exit_to_user_mode_prepare()? The former has extra calls (e.g. rseq).
->> Perhaps we can just delete these comments =E2=80=94 at present only gene=
-ric
->> entry and arm64 use it, and nowhere else needs it; after the refactoring
->> the comments now seem rather unclear.
->
-> Agreed, the comments are essentially describing what each function
-> calls; considering how short they are, directly reading the code is
-> probably easier.
+(trimmed the recipient list)
 
-No. Please keep them. There is more information in them than just the
-pure 'what's' called.
+Hi Matt,
 
+On Mon, Jan 26, 2026 at 07:13:50PM +0100, Matthieu Baerts wrote:
+> On 20/01/2026 15:10, Thomas Weißschuh wrote:
+> > Interleaving inclusions of UAPI headers and libc headers is problematic.
+> > Both sets of headers define conflicting symbols. To enable their
+> > coexistence a compatibility-mechanism is in place.
+> > 
+> > An upcoming change will define 'struct sockaddr' from linux/socket.h.
+> > However sys/socket.h from libc does not yet handle this case and a
+> > symbol conflict will arise.
+> > 
+> > Furthermore libc-compat.h evaluates the state of the libc
+> > inclusions only once, at the point it is included first. If another
+> > problematic header from libc is included later, symbol conflicts arise.
+> > This will trigger other duplicate definitions when linux/libc-compat.h
+> > is added to linux/socket.h
+> > 
+> > Move the inclusion of UAPI headers after the inclusion of the glibc
+> > ones, so the libc-compat.h continues to work correctly.
+> 
+> Thank you for looking at this!
+> 
+> Here is my (late, sorry) review for the modifications related to MPTCP:
+> > diff --git a/tools/testing/selftests/net/mptcp/mptcp_diag.c b/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> > index 8e0b1b8d84b6..af25ebfd2915 100644
+> > --- a/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> > +++ b/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> > @@ -1,11 +1,6 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> >  /* Copyright (c) 2025, Kylin Software */
+> >  
+> > -#include <linux/sock_diag.h>
+> > -#include <linux/rtnetlink.h>
+> > -#include <linux/inet_diag.h>
+> > -#include <linux/netlink.h>
+> > -#include <linux/compiler.h>
+> >  #include <sys/socket.h>
+> >  #include <netinet/in.h>
+> >  #include <linux/tcp.h>
+> 
+> There is a remaining one (linux/tcp.h) here that you might want to move
+> below too.
+
+Good point.
+
+> > @@ -17,6 +12,12 @@
+> >  #include <errno.h>
+> >  #include <stdio.h>
+> >  
+> > +#include <linux/sock_diag.h>
+> > +#include <linux/rtnetlink.h>
+> > +#include <linux/inet_diag.h>
+> > +#include <linux/netlink.h>
+> > +#include <linux/compiler.h>
+> 
+> Note that I just noticed this is the only file from this directory where
+> the "includes" are not sorted by type and alphabetical order, see
+> pm_nl_ctl.c as an example. A bit of a detail, but if you plan to send a
+> v2, do you mind doing that too here while at it, please?
+
+I'll send a v3 during the next cycle.
+
+> If not, I can look at that later, but better to avoid doing that in
+> parallel.
+
+If you want to fix this up already during this cycle,
+that would also be most welcome.
+
+
+Thomas
