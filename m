@@ -1,336 +1,142 @@
-Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7122B36AB5F
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 23:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD1DD27E;
+	Fri, 30 Jan 2026 00:31:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769729849; cv=none; b=r5m6GoDOm3Jk20z2Hl0BcGsfQv2SRkyl1TMbx192YwA4yBegiL8Rw0TTouu4lJZhNwz9v8vEVVK5dgdiD1xh1O/6Gv7/WDnDVFHXRYbY/MjJ3+ZtbBeW1jxlbY0UOP3jX17oG2D1nJh3Ran14qQp4RNt8ZQ/pDtwzxbrYBbRZVE=
+	t=1769733116; cv=none; b=Ku1jTlPE9hz4bJCP0t6gzwYjFwvjHd7g/oVY/IOUaBWpojhHWgUTW6dFhf2wh0EcgR7/UOKrqTekBCrBynqTwg1Ul4X3JHuU1VbBnCs6fyfunqbKBY1EO2oltAQx3Acdvadoc8UbbLnRxL37FmJu9NtNvuFuIAWyIYiMGD4bGQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769729849; c=relaxed/simple;
-	bh=qHC+qM9vQzWPKnzn+tAYv5l+c6MskpPE+ePAinyKV/8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fPKcqQWRlG5a+iwFaewMv9h1rtwXmPAf0YXljzCwdelOEqx0Ho1yawq4A9o/LJ1Oby8J7R91geITLFVKiXm1uq3hk0AvM7IlMQZnN8ljReUymeNrCP0OVEQN7m4GvXfagFihD0+k7rzi1VbRG5x8apY88fvi3ZXbukrxRYTKNKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v/UBQ19o; arc=none smtp.client-ip=74.125.82.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+	s=arc-20240116; t=1769733116; c=relaxed/simple;
+	bh=iKHyY2AgpsoE57kanXCC6ExkTSdYkPtSVMy6708F8GM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Q+5swqGJfwKwXxHaVCNinYXLUbOgXNujYI5bMkxpZh5rsWDUmwC8W2aS6ION9MTJHIcXmLm08QwPqB7iTmjlg3PzLUYfCrFMQ9/AxOFFi/g3LM1Yc3ZIoainHxHDOkh3rsFqxDcskPBkBs+8JXB2kGkVgGSV5rPSjaYCP8XpfIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=eEaDTQq+; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v/UBQ19o"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-124a5098029so8202059c88.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jan 2026 15:37:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769729846; x=1770334646; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtsoUbDwfLvbtoHg4zrUnWjIjv/OwLA41WjzQfN669k=;
-        b=v/UBQ19ofY45J3pQu297He88Xzzm2jE2KnW69FpJHpDYnPQ1lvgZ+cx/zUqjxdrG8t
-         n8IOMfhK5BsJNFhSeZQ/gfIzblqYLQ9csMJoMneTAym7Qtjw3zE2Ti4KzSQIrFUps2+N
-         7UQ2FPQW2JmeDZmiEAPHWQA6gUbTzt7E/7V38tzmWm9XBP3HPLyzI5427NhbJ1F0yyuK
-         4qhMawE551HtnlUI3rS+R8nI9bR/q65ieb46LyV+RNDSycl4yVl6RasDrlFORicaQ6xh
-         8zvxm93lqSnlLaas0Mris9odByz+pF2ORQpMilgI71341BlyDtcN6W06O2kEKq2FEgyp
-         qawQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769729846; x=1770334646;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtsoUbDwfLvbtoHg4zrUnWjIjv/OwLA41WjzQfN669k=;
-        b=kegQeBpgKiUBB3PNTMjUFWWVTfOPEYCF/CeAjq9QQTGLBskaiQU/cjnOYkJLkRa5Kx
-         YJz21e84u07e83Vz0Q2KGOaR66D+iDcB2wSl/nVBiX9xSAO11KqnNaZl/o+aF6+Hss63
-         aYzP6rYV0mx3nc1Dbvnu4GZrQRdLogTeD8b9lekEefNl0NKPo4JjKEh7zqu/Y5QMOTag
-         HU/CQ3TI5JCdRGnziMdU/xiYm4Zrbi/nOjPUC1GCG9R6qJO2O7UwQF5oSALV4J5FPHqV
-         xWvRuCIYQkL1qtXCosSxfwBF2z5ZHub8obZexRLOm2gaZcu/fCY+r8PN0Wi8KSnlfhiB
-         s6TA==
-X-Forwarded-Encrypted: i=1; AJvYcCV3V4fT1OIXsHToQhvSrZSJ9f01aD67IIiuiYYigpNvSOCJNpdEhZLeAgCy16IAPhaVVmkLSMqnTfs8XskMbuA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCxOJWqXRWuTIOlEZSusmQlklTxD0at0JCiTaWHS9G7wAiRVca
-	fHfIdBpTxOwlKS4I/GQBpmfmlMHFB+ywFf3AV7zXYAn3v1dKX9bwB/+zi8ZwJd7Gk6et7bxbtwp
-	2SEHmK7b8ptjK9w==
-X-Received: from plgf14.prod.google.com ([2002:a17:902:ce8e:b0:2a5:9a03:d0b2])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:d50e:b0:2a4:8cd:c3cf with SMTP id d9443c01a7336-2a8d8181601mr10004875ad.49.1769729347764;
- Thu, 29 Jan 2026 15:29:07 -0800 (PST)
-Date: Thu, 29 Jan 2026 15:28:10 -0800
-In-Reply-To: <20260129232835.3710773-1-jmattson@google.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="eEaDTQq+"
+Received: from localhost (unknown [52.148.140.42])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 02ED820B7167;
+	Thu, 29 Jan 2026 16:31:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 02ED820B7167
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1769733114;
+	bh=5QTLnbHZvfOsZm6P1XTvKuZKL+X4Zqmm8W+hY1sTkg8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=eEaDTQq+Esr/RUhilvTOCceWy537iSweTVrOCQF87LN7ewfzzEyzyd4RUlTpzT2bW
+	 kg7uIcbs9tYpacoilvpa5mW4vUKyQ+xSa6CjgGAzcB47rSlnza3XRXVmL0xeyblupb
+	 26ODqz1MAroYBEfMeqzG7EalDwPpbFYk2tLsdDZs=
+Date: Thu, 29 Jan 2026 16:31:50 -0800
+From: Jacob Pan <jacob.pan@linux.microsoft.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran
+ <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro
+ <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, Bjorn
+ Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, David Rientjes
+ <rientjes@google.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe
+ <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke
+ <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+ kexec@lists.infradead.org, kvm@vger.kernel.org, Leon Romanovsky
+ <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, =?utf-8?Q?Mich?=
+ =?utf-8?Q?a=C5=82?= Winiarski <michal.winiarski@intel.com>, Mike Rapoport
+ <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, Pasha Tatashin
+ <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>,
+ Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta
+ <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed
+ <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, Shuah Khan
+ <skhan@linuxfoundation.org>, Thomas =?utf-8?Q?Hellstr=C3=B6m?=
+ <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>,
+ Vipin Sharma <vipinsh@google.com>, Vivek Kasireddy
+ <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu
+ <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
+ Live Update
+Message-ID: <20260129163150.000059a2@linux.microsoft.com>
+In-Reply-To: <aXvgKRrbfymW5NKb@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+	<20260129212510.967611-11-dmatlack@google.com>
+	<20260129142158.00004cdc@linux.microsoft.com>
+	<aXvgKRrbfymW5NKb@google.com>
+Organization: LSG
+X-Mailer: Claws Mail 3.21.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260129232835.3710773-1-jmattson@google.com>
-X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260129232835.3710773-6-jmattson@google.com>
-Subject: [PATCH v2 5/5] KVM: selftests: x86: Add svm_pmu_host_guest_test for
- Host-Only/Guest-Only bits
-From: Jim Mattson <jmattson@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: mizhang@google.com, yosryahmed@google.com, sandipan.das@amd.com, 
-	Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Add a selftest to verify KVM correctly virtualizes the AMD PMU Host-Only
-(bit 41) and Guest-Only (bit 40) event selector bits across all relevant
-SVM state transitions.
+Hi David,
 
-The test programs 4 PMCs simultaneously with all combinations of the
-Host-Only and Guest-Only bits, then verifies correct counting behavior:
-  1. SVME=0: all counters count (Host-Only/Guest-Only bits ignored)
-  2. Set SVME=1: Host-Only and neither/both count; Guest-Only stops
-  3. VMRUN to L2: Guest-Only and neither/both count; Host-Only stops
-  4. VMEXIT to L1: Host-Only and neither/both count; Guest-Only stops
-  5. Clear SVME=0: all counters count (bits ignored again)
+On Thu, 29 Jan 2026 22:33:13 +0000
+David Matlack <dmatlack@google.com> wrote:
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- tools/testing/selftests/kvm/include/x86/pmu.h |   6 +
- .../kvm/x86/svm_pmu_host_guest_test.c         | 199 ++++++++++++++++++
- 3 files changed, 206 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c
+> On 2026-01-29 02:21 PM, Jacob Pan wrote:
+> > On Thu, 29 Jan 2026 21:24:57 +0000 David Matlack
+> > <dmatlack@google.com> wrote: =20
+>=20
+> > > diff --git a/drivers/vfio/pci/vfio_pci_core.c
+> > > b/drivers/vfio/pci/vfio_pci_core.c index
+> > > b01b94d81e28..c9f73f597797 100644 ---
+> > > a/drivers/vfio/pci/vfio_pci_core.c +++
+> > > b/drivers/vfio/pci/vfio_pci_core.c @@ -515,12 +515,24 @@ int
+> > > vfio_pci_core_enable(struct vfio_pci_core_device *vdev) if (ret)
+> > >  		goto out_power;
+> > > =20
+> > > -	/* If reset fails because of the device lock, fail this
+> > > path entirely */
+> > > -	ret =3D pci_try_reset_function(pdev);
+> > > -	if (ret =3D=3D -EAGAIN)
+> > > -		goto out_disable_device;
+> > > +	if (vdev->liveupdate_incoming_state) {
+> > > +		/*
+> > > +		 * This device was preserved by the previous
+> > > kernel across a
+> > > +		 * Live Update, so it does not need to be reset.
+> > > +		 */
+> > > +		vdev->reset_works =3D
+> > > vdev->liveupdate_incoming_state->reset_works; =20
+> >
+> > Just wondering what happened to skipping the bus master clearing. I
+> > understand this version does not preserve the device itself yet; I=E2=
+=80=99m
+> > just curious whether there were specific difficulties that led to
+> > dropping the earlier patch which skipped clearing bus master. =20
+>=20
+> Hi Jacob,
+>=20
+> There's several places where bus master gets cleared that we need to
+> eventually eliminate to fully preserve the device.
+>=20
+>  1. vfio_pci_liveupdate_freeze() clears it during shutdown when it
+>     restores vdev->pci_saved_state.
+>  2. pci_device_shutdown() clears it during shutdown.
+>  3. vfio_pci_core_enable() clears it when the preserved device file
+>     is bound to an iommufd after the Live Update (in
+>     vfio_pci_core_enable()).
+>=20
+> I think it would be safe to skip (3) in this series, since that's very
+> similar to how this series skips resets during vfio_pci_core_enable()
+> for preserved devices.
+>=20
+> But I don't think it would be safe to skip (1) or (2) until the
+> attached iommufd is fully preserved.
+>=20
+> If you are just asking about (3) then I agree it could be skipped and
+> I can include that in the next version.
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 58eee0474db6..f20ddd58ee81 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -112,6 +112,7 @@ TEST_GEN_PROGS_x86 += x86/svm_vmcall_test
- TEST_GEN_PROGS_x86 += x86/svm_int_ctl_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_shutdown_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_soft_inject_test
-+TEST_GEN_PROGS_x86 += x86/svm_pmu_host_guest_test
- TEST_GEN_PROGS_x86 += x86/tsc_scaling_sync
- TEST_GEN_PROGS_x86 += x86/sync_regs_test
- TEST_GEN_PROGS_x86 += x86/ucna_injection_test
-diff --git a/tools/testing/selftests/kvm/include/x86/pmu.h b/tools/testing/selftests/kvm/include/x86/pmu.h
-index 72575eadb63a..af9b279c78df 100644
---- a/tools/testing/selftests/kvm/include/x86/pmu.h
-+++ b/tools/testing/selftests/kvm/include/x86/pmu.h
-@@ -38,6 +38,12 @@
- #define ARCH_PERFMON_EVENTSEL_INV		BIT_ULL(23)
- #define ARCH_PERFMON_EVENTSEL_CMASK		GENMASK_ULL(31, 24)
- 
-+/*
-+ * These are AMD-specific bits.
-+ */
-+#define AMD64_EVENTSEL_GUESTONLY		BIT_ULL(40)
-+#define AMD64_EVENTSEL_HOSTONLY			BIT_ULL(41)
-+
- /* RDPMC control flags, Intel only. */
- #define INTEL_RDPMC_METRICS			BIT_ULL(29)
- #define INTEL_RDPMC_FIXED			BIT_ULL(30)
-diff --git a/tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c b/tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c
-new file mode 100644
-index 000000000000..0536c0d96255
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c
-@@ -0,0 +1,199 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * KVM nested SVM PMU Host-Only/Guest-Only test
-+ *
-+ * Copyright (C) 2026, Google LLC.
-+ *
-+ * Test that KVM correctly virtualizes the AMD PMU Host-Only (bit 41) and
-+ * Guest-Only (bit 40) event selector bits across all SVM state
-+ * transitions.
-+ *
-+ * Programs 4 PMCs simultaneously with all combinations of Host-Only and
-+ * Guest-Only bits, then verifies correct counting behavior through:
-+ *   1. SVME=0: all counters count (Host-Only/Guest-Only bits ignored)
-+ *   2. Set SVME=1: Host-Only and neither/both count; Guest-Only stops
-+ *   3. VMRUN to L2: Guest-Only and neither/both count; Host-Only stops
-+ *   4. VMEXIT to L1: Host-Only and neither/both count; Guest-Only stops
-+ *   5. Clear SVME=0: all counters count (bits ignored again)
-+ */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+#include "pmu.h"
-+
-+#define L2_GUEST_STACK_SIZE	256
-+
-+#define EVENTSEL_RETIRED_INSNS	(ARCH_PERFMON_EVENTSEL_OS |	\
-+				 ARCH_PERFMON_EVENTSEL_USR |	\
-+				 ARCH_PERFMON_EVENTSEL_ENABLE |	\
-+				 AMD_ZEN_INSTRUCTIONS_RETIRED)
-+
-+/* PMC configurations: index corresponds to Host-Only | Guest-Only bits */
-+#define PMC_NEITHER	0  /* Neither bit set */
-+#define PMC_GUESTONLY	1  /* Guest-Only bit set */
-+#define PMC_HOSTONLY	2  /* Host-Only bit set */
-+#define PMC_BOTH	3  /* Both bits set */
-+#define NR_PMCS		4
-+
-+/* Bitmasks for which PMCs should be counting in each state */
-+#define COUNTS_ALL	(BIT(PMC_NEITHER) | BIT(PMC_GUESTONLY) | \
-+			 BIT(PMC_HOSTONLY) | BIT(PMC_BOTH))
-+#define COUNTS_L1	(BIT(PMC_NEITHER) | BIT(PMC_HOSTONLY) | BIT(PMC_BOTH))
-+#define COUNTS_L2	(BIT(PMC_NEITHER) | BIT(PMC_GUESTONLY) | BIT(PMC_BOTH))
-+
-+#define LOOP_INSNS	1000
-+
-+static __always_inline void run_instruction_loop(void)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < LOOP_INSNS; i++)
-+		__asm__ __volatile__("nop");
-+}
-+
-+static __always_inline void read_counters(uint64_t *counts)
-+{
-+	int i;
-+
-+	for (i = 0; i < NR_PMCS; i++)
-+		counts[i] = rdmsr(MSR_F15H_PERF_CTR + 2 * i);
-+}
-+
-+static __always_inline void run_and_measure(uint64_t *deltas)
-+{
-+	uint64_t before[NR_PMCS], after[NR_PMCS];
-+	int i;
-+
-+	read_counters(before);
-+	run_instruction_loop();
-+	read_counters(after);
-+
-+	for (i = 0; i < NR_PMCS; i++)
-+		deltas[i] = after[i] - before[i];
-+}
-+
-+static void assert_pmc_counts(uint64_t *deltas, unsigned int expected_counting)
-+{
-+	int i;
-+
-+	for (i = 0; i < NR_PMCS; i++) {
-+		if (expected_counting & BIT(i))
-+			GUEST_ASSERT_NE(deltas[i], 0);
-+		else
-+			GUEST_ASSERT_EQ(deltas[i], 0);
-+	}
-+}
-+
-+struct test_data {
-+	uint64_t l2_deltas[NR_PMCS];
-+	bool l2_done;
-+};
-+
-+static struct test_data *test_data;
-+
-+static void l2_guest_code(void)
-+{
-+	run_and_measure(test_data->l2_deltas);
-+	test_data->l2_done = true;
-+	vmmcall();
-+}
-+
-+static void l1_guest_code(struct svm_test_data *svm, struct test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb = svm->vmcb;
-+	uint64_t deltas[NR_PMCS];
-+	uint64_t eventsel;
-+	int i;
-+
-+	test_data = data;
-+
-+	/* Program 4 PMCs with all combinations of Host-Only/Guest-Only bits */
-+	for (i = 0; i < NR_PMCS; i++) {
-+		eventsel = EVENTSEL_RETIRED_INSNS;
-+		if (i & PMC_GUESTONLY)
-+			eventsel |= AMD64_EVENTSEL_GUESTONLY;
-+		if (i & PMC_HOSTONLY)
-+			eventsel |= AMD64_EVENTSEL_HOSTONLY;
-+		wrmsr(MSR_F15H_PERF_CTL + 2 * i, eventsel);
-+		wrmsr(MSR_F15H_PERF_CTR + 2 * i, 0);
-+	}
-+
-+	/* Step 1: SVME=0 - Host-Only/Guest-Only bits ignored; all count */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-+	run_and_measure(deltas);
-+	assert_pmc_counts(deltas, COUNTS_ALL);
-+
-+	/* Step 2: Set SVME=1 - In L1 "host mode"; Guest-Only stops */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
-+	run_and_measure(deltas);
-+	assert_pmc_counts(deltas, COUNTS_L1);
-+
-+	/* Step 3: VMRUN to L2 - In "guest mode"; Host-Only stops */
-+	generic_svm_setup(svm, l2_guest_code,
-+			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	GUEST_ASSERT(data->l2_done);
-+	assert_pmc_counts(data->l2_deltas, COUNTS_L2);
-+
-+	/* Step 4: After VMEXIT to L1 - Back in "host mode"; Guest-Only stops */
-+	run_and_measure(deltas);
-+	assert_pmc_counts(deltas, COUNTS_L1);
-+
-+	/* Step 5: Clear SVME - Host-Only/Guest-Only bits ignored; all count */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-+	run_and_measure(deltas);
-+	assert_pmc_counts(deltas, COUNTS_ALL);
-+
-+	GUEST_DONE();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	vm_vaddr_t svm_gva, data_gva;
-+	struct test_data *data_hva;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
-+	TEST_REQUIRE(kvm_is_pmu_enabled());
-+	TEST_REQUIRE(get_kvm_amd_param_bool("enable_mediated_pmu"));
-+	TEST_REQUIRE(host_cpu_is_amd && kvm_cpu_family() >= 0x17);
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
-+
-+	vcpu_alloc_svm(vm, &svm_gva);
-+
-+	data_gva = vm_vaddr_alloc_page(vm);
-+	data_hva = addr_gva2hva(vm, data_gva);
-+	memset(data_hva, 0, sizeof(*data_hva));
-+
-+	vcpu_args_set(vcpu, 2, svm_gva, data_gva);
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	case UCALL_DONE:
-+		break;
-+	default:
-+		TEST_FAIL("Unknown ucall %lu", uc.cmd);
-+	}
-+
-+	kvm_vm_free(vm);
-+	return 0;
-+}
--- 
-2.53.0.rc1.225.gd81095ad13-goog
+I was just asking about (3) and trying to understand the asymmetric
+handling compared to reset. I don=E2=80=99t have a strong preference since =
+this
+is temporary=E2=80=94thanks for the explanation.
+
+I=E2=80=99ve been testing my noiommu cdev patches on top of yours, and so f=
+ar
+they behave the same as with a real IOMMU. As you noted, however, final
+device preservation still depends on iommufd.
 
