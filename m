@@ -1,78 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38A01E1024;
-	Fri, 30 Jan 2026 02:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B735C33D6CF;
+	Fri, 30 Jan 2026 02:50:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769740999; cv=none; b=NSs2RjFAn2GRYlvivUSTqV55mnW6RZrZTf6jJ7KCZsCEBVrS5jr2npc+Uow52g/1uEXh00PYtioz4qsDyDZaeoCTeYXLKeOYwC/lVpmXcEAPLd1VKPUlJzIYz4KtRFSXevGQrcE8glghqQx5uU5E85iGrzuc7eG1AvmaFYAQ9+E=
+	t=1769741444; cv=none; b=kN8rbCjrasGw+KCRfYot3XfNAyeoIvRBjjZsI9EzNIYlM3eRC5ao0NbduKSGIYj6Drqhy+GmI7rNe8olQ7WW+7RQPSaLimXVjx/UAdnCJ4UBpquvHl+/3ZR5PvZ/M3CZJ54ijQLi+7tYVO8mp9AXalLxj3JvLZQRxg81bFSm8ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769740999; c=relaxed/simple;
-	bh=ERbeiUIYUnhqnTkv+lkant+gYUBDq4x7E8WNc0zXjps=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ATynHm/bAtvcQLcLKuNCIXfauCFvOjnzxl9XLIkdh0Jsn+IfqEr97NeCae/xjQBAWPGW1JsP0c6+A2P7qlJVDPjI7ohAXgjidJpGMmTjt3l63IMOjZE/tE5mYWOHzKuDj/qDoy1nKxhuAo5TRx8ogyhAgBJfyrXSlEXpuBjKEbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EBOowMJb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769741444; c=relaxed/simple;
+	bh=E2ljW2tst12WcrA4YHRudOeA3ZTNyuXhob66mOe0YeI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=VvQfKUphsinfw//XDyg6LkS9QpZqFjkP4DHtS7VjnpbqHmn3Io5XJnDjie//MqdLIM/PFoW9UMUBOliMdfrFnl8DWZYiOtvs6/4KaPZQNG1CcVwjr50uJ52UX2sNDCshqXy96YT9qkhz9syAWD/It0BDHGk5atD1EQmTa5fA+4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EM/RrRP4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EBOowMJb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2194C4CEF7;
-	Fri, 30 Jan 2026 02:43:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EM/RrRP4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55147C2BC86;
+	Fri, 30 Jan 2026 02:50:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769740999;
-	bh=ERbeiUIYUnhqnTkv+lkant+gYUBDq4x7E8WNc0zXjps=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EBOowMJbJENHprsyT0HESWLxhOifou73xl2JEcACaO/dcqAHmp0rrMdRzH4I5QtRc
-	 TGvA/NEOImttes36vwW9c42qPBf1OdYGqx+eGkvhjpyaq57N8ZvkevqE6PQmn1tEKh
-	 9IH+EYt5sx0OlYKEktjeRL6MyRTZMMODE9hOWTcZ81ccYMYloPjYxT9jtpKdx/aVX4
-	 7KdaYa334L8C6Xdm4qjLGfnMKf7k96NTpAKpniI1PcO7hsglFUtzVr3jAchujXVjHL
-	 NTOnZU92rUWnE+Nwye7laSgazHs9wFsafLqauLpV4YDUThCiTDab/grWAl16Mdc9AY
-	 leNT2ip3icChA==
-Date: Thu, 29 Jan 2026 18:43:18 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Antony Antony <antony.antony@secunet.com>
-Cc: Steffen Klassert <steffen.klassert@secunet.com>,
- <netdev@vger.kernel.org>, "David S . Miller" <davem@davemloft.net>, David
- Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, Shuah Khan
- <shuah@kernel.org>, <devel@linux-ipsec.org>,
- <linux-kselftest@vger.kernel.org>, Tobias Brunner <tobias@strongswan.org>,
- Simon Horman <horms@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v4 2/2] selftests: net: add ICMP error source
- address test over xfrm tunnel
-Message-ID: <20260129184318.53b1dabf@kernel.org>
-In-Reply-To: <af9a189bee31f7d8f3759ed71d09ab5a82437592.1769595011.git.antony.antony@secunet.com>
-References: <cover.1769595011.git.antony.antony@secunet.com>
-	<af9a189bee31f7d8f3759ed71d09ab5a82437592.1769595011.git.antony.antony@secunet.com>
+	s=k20201202; t=1769741444;
+	bh=E2ljW2tst12WcrA4YHRudOeA3ZTNyuXhob66mOe0YeI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=EM/RrRP4FOmLW6Zx+K1GP1DEWbht5gfsQK4gqPVqI6qE53y0D67bJw2lrfIKk7tg1
+	 hHf8cPPWYiMvykuM+88yUNK5BJsxz8fexS+MBNVhMyTmQw1QaJpvx9nlolUvjMsOlB
+	 9WnCNGtYlunP4siFgNMprv/fqBRFmT9KD0Ol6vVw/dNMGN1lLoln8Wk7OiqI0Mk6Fb
+	 8wz0XDEYLCSYc5V8zvPchNRWXb11bFLFCnoc6+DLzJNAc4OfF38ZmXvIU20BDRkd1M
+	 0EqzmAKTjVbLWTwYhiCqjcZJmwd01Qjq/75zuxcOqd60+k2yUO9PdbrfSN2Yt+/jT4
+	 x+LiemHyJri1g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4ECDD380CEE0;
+	Fri, 30 Jan 2026 02:50:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: drv-net: rss_flow_label: skip
+ unsupported
+ devices
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176974143685.3149010.1096640918791492655.git-patchwork-notify@kernel.org>
+Date: Fri, 30 Jan 2026 02:50:36 +0000
+References: <20260128090217.663366-1-noren@nvidia.com>
+In-Reply-To: <20260128090217.663366-1-noren@nvidia.com>
+To: Nimrod Oren <noren@nvidia.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, gal@nvidia.com
 
-On Wed, 28 Jan 2026 11:20:45 +0100 Antony Antony wrote:
-> Test that ICMP error messages generated by an IPsec gateway use
-> the correct source address (the gateway's address, not the
-> unreachable destination).
+Hello:
 
-could you check / fix shellcheck warnings?
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-+In xfrm_state.sh line 115:
-+	$ksft_skip)
-+        ^--------^ SC2254 (warning): Quote expansions in case patterns to match literally rather than as a glob.
+On Wed, 28 Jan 2026 11:02:17 +0200 you wrote:
+> The test_rss_flow_label_6only test case fails on devices that do not
+> support IPv6 flow label hashing. Make it skip neatly, consistent with
+> the behavior of the test_rss_flow_label case.
+> 
+> Reviewed-by: Gal Pressman <gal@nvidia.com>
+> Signed-off-by: Nimrod Oren <noren@nvidia.com>
+> 
+> [...]
 
-+In xfrm_state.sh line 157:
-+	[ -n "${NS_R1}" ] && ns_r1="ip netns exec ${NS_R1}" && ns_active="${ns_active} $NS_R1"
-+                             ^---^ SC2034 (warning): ns_r1 appears unused. Verify use (or export if used externally).
-+
-+
-+In xfrm_state.sh line 162:
-+	[ -n "${NS_B}" ] && ns_b="ip netns exec ${NS_B}" && ns_active="${ns_active} $NS_B"
-+                            ^--^ SC2034 (warning): ns_b appears unused. Verify use (or export if used externally).
+Here is the summary with links:
+  - [net-next] selftests: drv-net: rss_flow_label: skip unsupported devices
+    https://git.kernel.org/netdev/net-next/c/7b85c7758540
 
-+In xfrm_state.sh line 166:
-+	local ns_cmd=$(nscmd $1)
-+              ^----^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+You are awesome, thank you!
 -- 
-pw-bot: cr
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
