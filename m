@@ -1,160 +1,112 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F0E346FA2
-	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 17:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68842E54D1;
+	Sat, 31 Jan 2026 17:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769879939; cv=none; b=LQu4m+WmJBfu1n5nbV/bfH6LnrifsVGEzAIfopR9ZRBgLYjLegPLNhaRIBcpH+vxLPnfRbsNCSvavbxwMAM/i8rg2z/CyHvhjYvBZqKtoo5uNOML4U40B5r/4RStGyZADwlZ3HBYMQoybpxwfCNGPq84r/5TKaVFFTPBa8OgeTg=
+	t=1769880320; cv=none; b=sJOCOtxy7Fbts6voOSu6ckPujJMpdgqF0WfLykqmrYJXSNUj/MvxuRrPVbEcT/FCMmOryUrfz7nENiLKmH9PAHRqiLuCwvt6aqug0dun5jAXRj0bEGyerbr/AVAZYTAptVtKC6w30JxIFQ0uf7/uq+ESbqOwlV7ps73QGqf3OV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769879939; c=relaxed/simple;
-	bh=SRbpMgp//MlZoMroQOq3CCTxUaqu/v6YKoNy6fCQMoE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=XRSn4QMof7PWycw2GlStl6EQcdJzgFeyWn87k8v4LDruI6Nc7zjYIP0oAdWXZUubhebCZkpTByLF9xDXaLzU3IBzIg9QJto+apdNXx0OZ+ga7i9swo9w9rZRzPWYYvl9FwEEyZPsk5KMOz1jbLmb2ByAU9HstbHwB1Xc57VEi5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eVY8nC1x; arc=none smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769880320; c=relaxed/simple;
+	bh=VdrhpYX/xqvIWPFWCfZ0baQLFsfzzI9f0fA4hBvpNCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O3+W8ZWliBSrEUXOZpR89v6xUst4VY2A1ITCEEqDnpOCE2Nmmk4C7sSdpwSCoKwPDW1hPAQxzIrrY8L1YT46TtH9bi4xnvcFBJ9ZvuoqtL/nGdpls5UGzyhwB7kTS+PjzqBlzAF1Iq6TOgbWjW68lJgscsN9H2w3o79A+3ySkzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyOpOqHt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eVY8nC1x"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6481bd173c0so2761798d50.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 09:18:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769879937; x=1770484737; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nf1H39GseXa0MaF9o3mhYXYnAWA6yd8MoMX3kBkjYXQ=;
-        b=eVY8nC1xqm/DNSOrzzMhTrzIhfElUBvr9J37OkRa6RrmLJOZHOJ9PKgfeUzXV6kedI
-         GubIHzkZgpy430Kf3Ph2gsvaVOCMrSZQUvQ+uzecHeM2ywz9WXiMHsMas8fMlV3krZ0T
-         yu+EG1ySjNC1eE1nnYidKgd/5xZ6hjSQJSWvoAnbBlTF1m6IHHqDNFHl77oL6Zsa+rWx
-         aNLRG6Z66gz85crgIYbUh/6u9srxbxESPe5Xz+2grzOwoOnhI1zpFbkpGCIqVn6o6SkD
-         S3vwswfUNQAm1urkoGrnNn06HtrwdtCqbk5h5iWVIg7WhRFDcfdTPY5JqQUO+kEx+xof
-         sRiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769879937; x=1770484737;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nf1H39GseXa0MaF9o3mhYXYnAWA6yd8MoMX3kBkjYXQ=;
-        b=Faf4jAXnv+40TyisQ7r6T6m+9v+I8T5U61AtbUxbvdHwxGkLz+FJmg0/PcibSi/Gtb
-         mtZzVYQ20LuNsg4RmR75Mr/VqXKe1XzrKqM/rrZKOOSi9QheA4VesMRuVOmu9a4j+X9l
-         azd4UcmgLEyeCJvoxzaxGO7DzhHm+2LQUdtnbuIMOkG0A+vLBvFi1OjqUQhflec+cc+W
-         BO+Kl4iDHKSqtTupbjkeZnDCUQycekswCmVe4UEaKEEbzmzHweeUA/b9f9Jy4JDXx504
-         JWtIJ66+03v9exe4a3Wi4ZYEL5n9e3VRKnrXfgQ3//vghu/xNGr61t4nWsekZNAf/kMv
-         DQnA==
-X-Forwarded-Encrypted: i=1; AJvYcCXw5gA9rkdS5Idh7WVpI8qh85zzaRwXizutl3INWyvIqPkdtneYuAMM7ISCH50yFJYt71Sik4k8ugXYY09So8o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFH/F3mRHA2FihAxPu2FklbmnAxzkKmFvNXDTxQyzzNmbw9ScL
-	q1THNthuorbB6trdRBO1CG5T/sZTanRN9ZdC0S1yhe4sAasEtTUyN7c0
-X-Gm-Gg: AZuq6aK0nYXMwgRj6if/i4UIs4KLa7yWVXjojUc2DOTauImJ9ZHqDFAHDtJmR0Vc8V3
-	kP3Yd/bonJzKWDfJScAQ/6ADmG5RqAx8MqXN4SknrsxOpIJsoTU0cNTdIFxWXOpl9cyDXnKwdVU
-	e/IT3hVoh209Jbx/JKG3IxEXtOpUj1kqnyuT3APOPlhTSADShjnsLkHKZXlCdrC/ahvPxqZU972
-	Ub9ttaPq2p32mh1DOP17OKQxO25vkv6zaNm8mENx1y6fJ5XUt9Q/mV16WZ1VrjatsM76khBS6l7
-	Lb0MsI+CQGzIkH0SrQpkJuZqyNZK3CXlFdVrs7X8cWbdHqOatMPmwx9SQQhTBnFMP/a2Yi8/JYV
-	nbiVnwjWytK20p4oxfFDexrld+Yj3bqkih/Hk/wT4Ipy0PKIqaFN3U2ykUvkx2M6y29Z8bg+yMA
-	bqQbsIH1C2wDiTuZSwpTEbs+HcMRM9d0b4G2m7HpHMRex+grGVSGmjTWx/FA0=
-X-Received: by 2002:a05:690e:4106:b0:649:6a9b:9902 with SMTP id 956f58d0204a3-649a84e05bdmr4993542d50.65.1769879936963;
-        Sat, 31 Jan 2026 09:18:56 -0800 (PST)
-Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-64996105c96sm5135603d50.23.2026.01.31.09.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Jan 2026 09:18:56 -0800 (PST)
-Date: Sat, 31 Jan 2026 12:18:55 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- Jakub Kicinski <kuba@kernel.org>, 
- shuah@kernel.org, 
- willemb@google.com, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.29ba7c9e89f32@gmail.com>
-In-Reply-To: <20260130192912.826454-1-kuba@kernel.org>
-References: <20260130192912.826454-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next] selftests: drv-net: rss: validate min RSS table
- size
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyOpOqHt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D040DC4CEF1;
+	Sat, 31 Jan 2026 17:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769880320;
+	bh=VdrhpYX/xqvIWPFWCfZ0baQLFsfzzI9f0fA4hBvpNCU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lyOpOqHtctSBTT3RWfweLWjBSm8lFZdjvHAYZ8acBPsXKdsjhFaUI1HvBiJ+8esQx
+	 iZs9nM9nCkE7C41cwpNx07jcYh/Px++kGNvfXvuhwX+wcMLQRj3Vei2r7mL3A7gRAP
+	 7sPp2rRkruTZ74GGD8uXtl4d+ahRcbGFQ3JQro/P40AzkNF4VJ+T3MekVszUbRbz/N
+	 9XI2GGu2IoULhGPWnwnHmv6sxDJ79guFXCEv4zSwUe1AySyAk8Hu6XAtx17nkNtu9E
+	 3KTO/1xg6dk0qlgHyjCXxlSWgJg9zXp0c8PygCMTcs2k7jy8vycYji3w1BL7uj3OQQ
+	 vxGVswCFi595w==
+Date: Sat, 31 Jan 2026 09:25:17 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas.weissschuh@linutronix.de>
+Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn
+ <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Matthieu Baerts
+ <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, Geliang Tang
+ <geliang@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?=
+ <mic@digikod.net>, =?UTF-8?B?R8O8bnRoZXI=?= Noack <gnoack@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
+ <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+ libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, Adhemerval
+ Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>,
+ klibc@zytor.com, Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition
+ of 'struct sockaddr'
+Message-ID: <20260131092517.6639d84c@kernel.org>
+In-Reply-To: <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+	<20260121192729.2095aa25@kernel.org>
+	<20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
+	<20260130081741.425a92e0@kernel.org>
+	<3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Jakub Kicinski wrote:
-> Add a test which checks that the RSS table is at least 4x the max
-> queue count supported by the device. The original RSS spec from
-> Microsoft stated that the RSS indirection table should be 2 to 8
-> times the CPU count, presumably assuming queue per CPU. If the
-> CPU count is not a power of two, however, a power-of-2 table
-> 2x larger than queue count results in a 33% traffic imbalance.
-> Validate that the indirection table is at least 4x the queue
-> count. This lowers the imbalance to 16% which empirically
-> appears to be more acceptable to memcache-like workloads.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+On Sat, 31 Jan 2026 11:26:32 +0100 Thomas Wei=C3=9Fschuh wrote:
+> Jan 30, 2026 17:17:46 Jakub Kicinski <kuba@kernel.org>:
+>=20
+> > On Fri, 30 Jan 2026 11:34:15 +0100 Thomas Wei=C3=9Fschuh wrote: =20
+> >> Some of them get broken by the new 'struct sockaddr', but some others =
+are
+> >> already broken just by the new transitive inclusion of libc-compat.h.
+> >> So any header starting to use the compatibility machinery may trigger =
+breakage
+> >> in code including UAPI headers before libc header, even for completely=
+ new type
+> >> definitions which themselves would not conflict with libc. =20
+> >
+> > Let's split the uAPI header changes from any selftest changes.
+> > If you're saying the the selftests no longer build after the uAPI
+> > header changes then of course we can't apply the patches. =20
+>=20
+> Yes, the selftests don't build anymore after the uAPI changes.
+>=20
+> "can't apply" as in
+> * "can't apply separately"
+> * "are unacceptable in general"
 
-> +def _test_rss_indir_size(cfg, qcnt, context=0):
-> +    """Test that indirection table size is at least 4x queue count."""
-> +    ethtool(f"-L {cfg.ifname} combined {qcnt}")
+this one
 
-Remind me: does this work with devices that advertise RX N TX N rather
-than combined N?
+> * "are too late for this cycle"
+> ?
+>=20
+> None of this is urgent.
+> We can do the selftests in one cycle and the uAPI in another one.
+> Feel free to pick up the patches as you see fit.
+> (The mptcp changes already go through their tree, so need to be dropped h=
+ere)
+> I can also resubmit the patches differently if preferred.
 
-> +
-> +    rss = _get_rss(cfg, context=context)
-> +    indir = rss['rss-indirection-table']
-> +    ksft_ge(len(indir), 4 * qcnt, "Table smaller than 4x")
-> +    return len(indir)
-> +
-> +
-> +@ksft_variants([
-> +    KsftNamedVariant("main", False),
-> +    KsftNamedVariant("ctx", True),
-> +])
-> +def indir_size_4x(cfg, create_context):
-> +    """
-> +    Test that the indirection table has at least 4 entries per queue.
-> +    Empirically network-heavy workloads like memcache suffer with the 33%
-> +    imbalance of a 2x indirection table size.
-> +    4x table translates to a 16% imbalance.
-> +    """
-> +    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-> +    ch_max = channels.get('combined-max', 0)
+The selftests are just a canary in the coalmine. If we break a bunch of
+selftests chances are we'll also break compilation of real applications
+for people. Subjective, but I don't see a sufficient upside here to do
+that.
 
-Same here: not all drivers set this.
-
-Perhaps we should skip if absent?
-
-And does combined-max mean all queues across all contexts, or per
-context? The test seems to imply the second. My intuition was the
-first. Is it clearly defined across devices. per ethtool_channels,
-seems per device?
-
-  * @max_combined: Read only. Maximum number of combined channel the driver
-  *      support. Set of queues RX, TX or other.
-
-
-> +    qcnt = channels['combined-count']
-> +
-> +    if ch_max < 3:
-> +        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-> +
-> +    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-> +    ethtool(f"-L {cfg.ifname} combined 3")
-> +
-> +    ctx_id = _maybe_create_context(cfg, create_context)
-> +
-> +    indir_sz = _test_rss_indir_size(cfg, 3, context=ctx_id)
-> +
-> +    # Test with max queue count (max - 1 if max is a power of two)
-> +    test_max = ch_max - 1 if _is_power_of_two(ch_max) else ch_max
-> +    if test_max > 3 and indir_sz < test_max * 4:
-> +        _test_rss_indir_size(cfg, test_max, context=ctx_id)
-> +
-
+FWIW the typelimits change broke compilation of ethtool, we'll see if
+anyone "outside kernel community itself" complains.
