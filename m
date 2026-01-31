@@ -1,169 +1,195 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EEBD36073D
-	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 13:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4988B1DFD8B
+	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 13:48:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769866195; cv=none; b=uaNE9vNOBsLkS0GzDa8udp+0Bzwu38c0r+cGjKpXIw9DM+6qAN41zaCq5tdj261x12KtpSupAzmAYvGrvHmyZoqgHONM0eBIx3hYiwh9Y0c1lU9dg7TU2RIPCAeczyuTxlkgzlKAwdbFUSx1H+1SVXmsjb/Kjb+pC3ISzGl6+js=
+	t=1769867292; cv=none; b=R3bUh9JAXnr8Th8vVXNtsy3/8lqxZum/2PEy3w/vMqwFh2dpyh8I+GfeDI1LC0K/DkOVw5hk7/PAMadVjaktLispCMYNozAzSdxYjIagTsuAXOwXbN0k5IBLwj4X2OScto7FaM2WWzwe7cHxU/JFSimp5If2YGFZFX/ATuqfWQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769866195; c=relaxed/simple;
-	bh=D32IWT1yvJNiCztIHYR2AGCCVHmxZFcptNwe3+a563g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dff1RZgMOB2Bz0UBpZeS5839ewEJPTnHsA00y85GEWsdY+aJZubJCijeGBngqQ2dfXR7KdeVw2bfqYw2ifMnH8G0dfpPrgid+4fZXmQ7P8kXY5o/DxxmJB0ETjVgiytHiCyDb0TTc/G/L5xJ/shb9/67Jibwo0lapU+bsDubwIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mt3x14up; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
+	s=arc-20240116; t=1769867292; c=relaxed/simple;
+	bh=c3oubV9p9YJHRYzoh1WuJoK1gvVyMDzQ90tesi6at1A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jQJbiO+nofZQUtHmF7dkpMdluuV1RCDH9LSo3p//8eaSFOUC/qoiBKPMzW6uHDVrfgfFU33Raz3Q7pQu1K/dedec5kN2oiaAHMurW74hljPKkUpyDvtNomTYunv5+Ub1QTRlrSMUYxlwCko5dD75PfMZ3dbnZO9n37aZWKw5eiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gDOe7tcl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mt3x14up"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-47ee3dd7fc8so31048115e9.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 05:29:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769866190; x=1770470990; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x0jKC8f/iEFEqNg/0cUe99XmInCeV76uXOT4uvAYEUM=;
-        b=mt3x14upAydMErSxtmOcNJocB6FpFXXLeHupv/zFRpx+WwQxBJsduvRFjax9kTKTo2
-         GEsFFbIA9wfxEce+NaYjCzKzJTrrPKKqNLW4o4SfBaLObdPugagRehYOUI2vjXHOLfZ1
-         EzwiOoUKnXCLvJ7RCeiXKhD5nEfnFZDYin11nwpDFazYmqU1PfzY5IWg6wc2VgY6/OH1
-         UaOF9F8/pwg3tz8brzbr0EvXBtsClwi7a/QEezjpH+53EoRBausOUL6AZhbxhLvPqyuH
-         ltZerpxmkupMrxMg09BqCQgfwr+4TlysRO+9mn6wHn6C/af7wfmS0dkG8lo+cD7bFO9w
-         0uNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769866190; x=1770470990;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x0jKC8f/iEFEqNg/0cUe99XmInCeV76uXOT4uvAYEUM=;
-        b=L0P5Hsu6A1iwrjbV7V69x894XdsrjOJsAWBZzF5A9kHy2vKUuOosyzvWfr+IlUfiv5
-         VMQO80GTS/DOrvklBHbMh+vbHwPzfFVXQKlrnaM8CWe2jt6RsByk3BJMzUO0JDUBSQOS
-         vHU60JlDGZTnuL0uQz51zfXyRSedbbcNLb7iHozuiMl8Yd7siVu/ab05gspRdi8DD7GH
-         iMZidS4m6mQbi7+ydGZmTg7pXS0Myec1IsRJv9t+7uZ4n/BmPAgD4iVrg2D2x9l7a9/G
-         VbjyhtHyTXIWoII/owKob3oHPH5WwieHRZ0x2sCZ3KLiCADTvxhpwR0dJg9SNfxPdoQX
-         9Vlw==
-X-Forwarded-Encrypted: i=1; AJvYcCU+JyG8sUUARP7gd8+CL0Ijd3TyG5TzgpIopgAh4jDwESoJjDmsEEewsqkkvIZAJJXlj8eRWQ4Ohu+BqxeOwtM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDGkjjhDhds1gJ5FdGNE3QzV5XQHm7cPgz34EHk9D7987VkDri
-	7p5NNFTUJLrVcuKP0tg0kZD0s8PM+3VEkbI1SJ6p98TM7Div2Ah86eGiwNveD8cXP8K48y4PQLk
-	HJHtXKGRJO72TedquQOu/Ug==
-X-Received: from wmk26.prod.google.com ([2002:a05:600c:29a:b0:480:4a03:7b5e])
- (user=vdonnefort job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4443:b0:475:dd8d:2f52 with SMTP id 5b1f17b1804b1-482db4a317bmr74357055e9.32.1769866190616;
- Sat, 31 Jan 2026 05:29:50 -0800 (PST)
-Date: Sat, 31 Jan 2026 13:28:48 +0000
-In-Reply-To: <20260131132848.254084-1-vdonnefort@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gDOe7tcl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14AAC4CEF1
+	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 13:48:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769867292;
+	bh=c3oubV9p9YJHRYzoh1WuJoK1gvVyMDzQ90tesi6at1A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gDOe7tclJdmYyLaUerY6Oabrm+LOI84f6u1/nKIKZq2zfMvbGejPRq1ocHRys2HSh
+	 MNN/tKvxV+bsWRtag+udJYL+1HSohhAgQZNFtPTWI0AD9tUySFSbFfxlBeVX8o6tVU
+	 0OryRLhSDx/V620ceMXrtrH4EO+ET7ZywzRyXxL+PHpwDSSclZfSX9HVniBxYYx5h7
+	 8soT+vYK+4mT0RMZj+p7dwHGovOx0mExPV7Lnn/xPrma6LOwXScqbZFIQF4/wXS2e1
+	 dGJDd5SxBpgkZ2pwV8haCjQjaJ7YwFBTn5LuBqS+DtZ77RlkkbV2M6F6RG7l0Tvqmd
+	 DbTUaB5Nx5Kdw==
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b883787268fso441328466b.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 05:48:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX/x6tY7ov9VyRQ0GkLRdxSJ6EtUeCzK0A2HjlJz0MxZbLA96zgrBh//PMWkaIXGYIlAaX0gX6d5/TRC1qIc0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywhhfg8H0Por0nhsNVE0h2/DtxCo9VeozusOxMdAkCzizXvLN0M
+	g97K5beGu+ELPPOw2oBRQDabM/TytWJHTIm2qmktpH8tu/rM6umfejPJfqZJm2WphJPtCnHMD0v
+	qErj7wuPnDUFk++b5IeWtdcAGCBV7EAw=
+X-Received: by 2002:a17:907:7f88:b0:b87:a0df:2f98 with SMTP id
+ a640c23a62f3a-b8dff8d569fmr363155266b.63.1769867290575; Sat, 31 Jan 2026
+ 05:48:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260131132848.254084-1-vdonnefort@google.com>
-X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260131132848.254084-31-vdonnefort@google.com>
-Subject: [PATCH v11 30/30] tracing: selftests: Add hypervisor trace remote tests
-From: Vincent Donnefort <vdonnefort@google.com>
-To: rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	linux-trace-kernel@vger.kernel.org, maz@kernel.org, oliver.upton@linux.dev, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com
-Cc: kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	jstultz@google.com, qperret@google.com, will@kernel.org, 
-	aneesh.kumar@kernel.org, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, Vincent Donnefort <vdonnefort@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
+MIME-Version: 1.0
+References: <20260129021839.3674879-1-maobibo@loongson.cn>
+In-Reply-To: <20260129021839.3674879-1-maobibo@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 31 Jan 2026 21:47:58 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5yZbocBBBN5nMqb32UaVP6i8+9X4RNAwquVYVFVRaBVg@mail.gmail.com>
+X-Gm-Features: AZwV_Qgd5qP6x_0XeLUcaeDH7UqCvoexRJGD1aaE6ZCwmmez-OruVErJCGAuCPI
+Message-ID: <CAAhV-H5yZbocBBBN5nMqb32UaVP6i8+9X4RNAwquVYVFVRaBVg@mail.gmail.com>
+Subject: Re: [PATCH] KVM: LoongArch: selftests: Add steal time test case
+To: Bibo Mao <maobibo@loongson.cn>, "open list:LOONGARCH" <loongarch@lists.linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Run the trace remote selftests with the trace remote 'hypervisor', This
-trace remote is most likely created when the arm64 KVM nVHE/pKVM
-hypervisor is in use.
+Since paravirt preempt is also applied, I applied this one with some
+modifications, you can check whether it is correct.
 
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.g=
+it/commit/?h=3Dloongarch-kvm&id=3Dcf991b57ffc808d69cb1f911563b1d4658774ccf
 
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc
-new file mode 100644
-index 000000000000..64bf859d6406
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor trace buffer size
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/buffer_size.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_buffer_size
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc
-new file mode 100644
-index 000000000000..7fe3b09b34e3
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor trace buffer reset
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/reset.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_reset
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc
-new file mode 100644
-index 000000000000..b937c19ca7f9
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor non-consuming trace read
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/trace.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_trace
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc
-new file mode 100644
-index 000000000000..66aa1b76c147
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor consuming trace read
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/trace_pipe.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_trace_pipe
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc
-new file mode 100644
-index 000000000000..1dafde3414ab
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor trace buffer unloading
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/unloading.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_unloading
--- 
-2.53.0.rc1.225.gd81095ad13-goog
+Huacai
 
+On Thu, Jan 29, 2026 at 10:18=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wro=
+te:
+>
+> LoongArch KVM supports steal time accounting now, here add steal time
+> test case on LoongArch.
+>
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  tools/testing/selftests/kvm/Makefile.kvm |  1 +
+>  tools/testing/selftests/kvm/steal_time.c | 85 ++++++++++++++++++++++++
+>  2 files changed, 86 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/sel=
+ftests/kvm/Makefile.kvm
+> index ba5c2b643efa..a18c00f1a4fa 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -228,6 +228,7 @@ TEST_GEN_PROGS_loongarch +=3D kvm_page_table_test
+>  TEST_GEN_PROGS_loongarch +=3D memslot_modification_stress_test
+>  TEST_GEN_PROGS_loongarch +=3D memslot_perf_test
+>  TEST_GEN_PROGS_loongarch +=3D set_memory_region_test
+> +TEST_GEN_PROGS_loongarch +=3D steal_time
+>
+>  SPLIT_TESTS +=3D arch_timer
+>  SPLIT_TESTS +=3D get-reg-list
+> diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/sel=
+ftests/kvm/steal_time.c
+> index 8edc1fca345b..ee13e8973c45 100644
+> --- a/tools/testing/selftests/kvm/steal_time.c
+> +++ b/tools/testing/selftests/kvm/steal_time.c
+> @@ -301,6 +301,91 @@ static void steal_time_dump(struct kvm_vm *vm, uint3=
+2_t vcpu_idx)
+>         pr_info("\n");
+>  }
+>
+> +#elif defined(__loongarch__)
+> +/* steal_time must have 64-byte alignment */
+> +#define STEAL_TIME_SIZE                ((sizeof(struct kvm_steal_time) +=
+ 63) & ~63)
+> +#define KVM_STEAL_PHYS_VALID   BIT_ULL(0)
+> +
+> +struct kvm_steal_time {
+> +       __u64 steal;
+> +       __u32 version;
+> +       __u32 flags;
+> +       __u32 pad[12];
+> +};
+> +
+> +static bool is_steal_time_supported(struct kvm_vcpu *vcpu)
+> +{
+> +       int err;
+> +       uint64_t val;
+> +       struct kvm_device_attr attr =3D {
+> +               .group =3D KVM_LOONGARCH_VCPU_CPUCFG,
+> +               .attr =3D CPUCFG_KVM_FEATURE,
+> +               .addr =3D (uint64_t)&val,
+> +       };
+> +
+> +       err =3D __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
+> +       if (err)
+> +               return false;
+> +
+> +       err =3D __vcpu_ioctl(vcpu, KVM_GET_DEVICE_ATTR, &attr);
+> +       if (err)
+> +               return false;
+> +
+> +       return val & BIT(KVM_FEATURE_STEAL_TIME);
+> +}
+> +
+> +static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
+> +{
+> +       struct kvm_vm *vm =3D vcpu->vm;
+> +       uint64_t st_gpa;
+> +       int err;
+> +       struct kvm_device_attr attr =3D {
+> +               .group =3D KVM_LOONGARCH_VCPU_PVTIME_CTRL,
+> +               .attr =3D KVM_LOONGARCH_VCPU_PVTIME_GPA,
+> +               .addr =3D (uint64_t)&st_gpa,
+> +       };
+> +
+> +       /* ST_GPA_BASE is identity mapped */
+> +       st_gva[i] =3D (void *)(ST_GPA_BASE + i * STEAL_TIME_SIZE);
+> +       sync_global_to_guest(vm, st_gva[i]);
+> +
+> +       err =3D __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
+> +       TEST_ASSERT(err =3D=3D 0, "No PV stealtime Feature");
+> +
+> +       st_gpa =3D (unsigned long)st_gva[i] | KVM_STEAL_PHYS_VALID;
+> +       err =3D __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &attr);
+> +       TEST_ASSERT(err =3D=3D 0, "Fail to set PV stealtime GPA");
+> +}
+> +
+> +static void guest_code(int cpu)
+> +{
+> +       struct kvm_steal_time *st =3D st_gva[cpu];
+> +       uint32_t version;
+> +
+> +       memset(st, 0, sizeof(*st));
+> +       GUEST_SYNC(0);
+> +
+> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
+> +       WRITE_ONCE(guest_stolen_time[cpu], st->steal);
+> +       version =3D READ_ONCE(st->version);
+> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
+> +       GUEST_SYNC(1);
+> +
+> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
+> +       GUEST_ASSERT(version < READ_ONCE(st->version));
+> +       WRITE_ONCE(guest_stolen_time[cpu], st->steal);
+> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
+> +       GUEST_DONE();
+> +}
+> +
+> +static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+> +{
+> +       struct kvm_steal_time *st =3D addr_gva2hva(vm, (ulong)st_gva[vcpu=
+_idx]);
+> +
+> +       ksft_print_msg("VCPU%d:\n", vcpu_idx);
+> +       ksft_print_msg("    steal:     %lld\n", st->steal);
+> +       ksft_print_msg("    version:   %d\n", st->version);
+> +}
+>  #endif
+>
+>  static void *do_steal_time(void *arg)
+>
+> base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+> --
+> 2.39.3
+>
