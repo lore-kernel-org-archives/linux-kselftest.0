@@ -1,45 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB44276026
-	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 16:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F7D76026
+	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 16:24:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769876646; cv=none; b=s4IfDmtyy0HNak4A2gR48+Dr2WH2rf2RpU/YTxN7N2RvAtwMCRzpBB54P8wdhJfQD1fBTQ8wBcUQKSVnyq2U42Oki83qtoClsq6wfIcT8hSVkoz6a6lSMJLgMHL99UCunnS7IiLU4yAahX+qquslCRQT6/WH+GZC9s3jX94y20U=
+	t=1769876649; cv=none; b=QZVxzA2N8wZ6gs2n0G2xXI2bS8OlhQ97KSrVaNaaWmeH4/hsgLdijIp8cq7domGRzJbk60tri0yYsj6+Ofed4Cu94qNzPs7Jsx9e7HsoPZBE53a3s/E8efatOl0Cnf2ZEltaFeYY9uxMaT+S6fKu5KngDMYXVVtrWLyhRVfs1Xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769876646; c=relaxed/simple;
-	bh=8IkpL3fG1wFEl2K6cUYryGkZNhDoYAJk1YaUYAfJ9IE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XY0XFyPh4Rl7zrD34uh0LcGp/n4wnOaoFiLsWGXfIARZcqd9nsgDAVtbbA2DJXeU72fR0q42XPi6sHQM9tykyA22yuGQg352nd4hiw0UwCFwWDIf6QyzucF63JMyYARC/48Frnd5KCZkDxeM8RviKg0/FSGChaLOdG1iLQsPSu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TvYQ1flx; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1769876649; c=relaxed/simple;
+	bh=N59pbrkrtDqQ8Kt1y5xPyH9IE3QKxPGin2Uodd1KNNs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TpJdFkfOyiaovYLsnMNLqoFwDRF78wUkUXq8VoEOqEf5Goc3e2/Lpjeegnf8rIN9SWdpcP4GEl02QXhey+WR8nrFzi7XFQYUUkPD9ZLDIj5n9FhAPJLO46PJDQR6l0uHVoU0z4Fyw/yWyGRh2nLUEKv1N+lcD0BilyebD0nfz9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CeyUg54W; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TvYQ1flx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CeyUg54W"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769876643;
+	s=mimecast20190719; t=1769876646;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ssUp3Bgqcayra+cN6beKmooUoDbpPqzp7aq+FQYxFFo=;
-	b=TvYQ1flxnJMET74y0LfIU1xJ83Q9btJemw0T3cj+SysMrqADAFHDBOo6irhhp5bsRmS65h
-	27BFsJzBOB3Vya5yvCQCbZk4pKZuCJRJKjyABpO0QbTxI+sxffiZacJu9AmQcK8C8omD8e
-	jT7YpcxlFex3Abynubk5FZ7ifeN7KEA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1XTTF2DtOXsGJBNh4PlFufkZBOZSRQIB2LFt8wZ+AyY=;
+	b=CeyUg54Wd5ZMKtygxjabDPsHPYge+saWfm0LY3vHobrEt6g6ycSbEXQ3TzoFpXdluEi8f/
+	PEDvYEGgly0t83XpDkCM5ZShVSqRMQJAfH/uadh3UekalrWQpTn1xe5AdfTXWHVq2cplyp
+	UUxSQK9bfZmIFUygzRa/xCl63JtqaD8=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-570-jit4zEFFOSqQnn2-TfRDuA-1; Sat,
- 31 Jan 2026 11:23:59 -0500
-X-MC-Unique: jit4zEFFOSqQnn2-TfRDuA-1
-X-Mimecast-MFC-AGG-ID: jit4zEFFOSqQnn2-TfRDuA_1769876638
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-571-uykcQF6LOPGTy5rjVy82mw-1; Sat,
+ 31 Jan 2026 11:24:04 -0500
+X-MC-Unique: uykcQF6LOPGTy5rjVy82mw-1
+X-Mimecast-MFC-AGG-ID: uykcQF6LOPGTy5rjVy82mw_1769876643
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 894891800451;
-	Sat, 31 Jan 2026 16:23:58 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 23CF61956096;
+	Sat, 31 Jan 2026 16:24:03 +0000 (UTC)
 Received: from localhost (unknown [10.72.116.22])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5EF011956056;
-	Sat, 31 Jan 2026 16:23:56 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0EC841956056;
+	Sat, 31 Jan 2026 16:24:01 +0000 (UTC)
 From: Ming Lei <ming.lei@redhat.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	linux-block@vger.kernel.org
@@ -49,9 +51,11 @@ Cc: Caleb Sander Mateos <csander@purestorage.com>,
 	linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 0/9] selftests: ublk: test infrastructure improvements
-Date: Sun,  1 Feb 2026 00:23:31 +0800
-Message-ID: <20260131162342.13872-1-ming.lei@redhat.com>
+Subject: [PATCH 1/9] selftests: ublk: simplify UBLK_TEST_DIR handling
+Date: Sun,  1 Feb 2026 00:23:32 +0800
+Message-ID: <20260131162342.13872-2-ming.lei@redhat.com>
+In-Reply-To: <20260131162342.13872-1-ming.lei@redhat.com>
+References: <20260131162342.13872-1-ming.lei@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,68 +65,38 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hi,
+Remove intermediate TDIR variable and set UBLK_TEST_DIR directly
+in _prep_test(). Remove default initialization since the directory
+is created dynamically when tests run.
 
-This series improves the ublk selftests infrastructure with better
-organization and parallel test execution support.
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+---
+ tools/testing/selftests/ublk/test_common.sh | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Key improvements:
-
-1. Infrastructure enhancements:
-   - Add helper functions for device cleanup and parallel execution
-   - Implement group-based test targets for running test subsets
-   - Track created devices for proper per-test cleanup
-   - Increase timeouts to accommodate parallel test execution
-   - Test time can be reduced to 1/3 with parallel execution by passing JOBS=8
-
-2. Test organization:
-   - Reorganize tests into logical groups (integrity, recover)
-   - Refactor large tests into modular functions for maintainability
-
-3. I/O ordering verification:
-   - Remove test_generic_01.sh prone to false positives from block layer reordering
-   - Improve test_generic_02.sh with bpftrace-based verification
-   - Use block_io_start/block_rq_complete tracepoints for accurate tracking
-
-These changes make the test suite more maintainable, easier to run in parallel,
-and more reliable in detecting actual ublk driver issues vs. false positives.
-
-
-Ming Lei (9):
-  selftests: ublk: simplify UBLK_TEST_DIR handling
-  selftests: ublk: refactor test_loop_08 into separate functions
-  selftests: ublk: add _ublk_del_dev helper function
-  selftests: ublk: track created devices for per-test cleanup
-  selftests: ublk: add group-based test targets
-  selftests: ublk: add _ublk_sleep helper for parallel execution
-  selftests: ublk: increase timeouts for parallel test execution
-  selftests: ublk: reorganize tests into integrity and recover groups
-  selftests: ublk: improve I/O ordering test with bpftrace
-
- tools/testing/selftests/ublk/Makefile         |  54 ++++++-
- tools/testing/selftests/ublk/test_common.sh   |  51 +++++--
- .../testing/selftests/ublk/test_generic_01.sh |  47 ------
- .../testing/selftests/ublk/test_generic_02.sh |  22 ++-
- .../testing/selftests/ublk/test_generic_16.sh |   4 +-
- .../{test_null_04.sh => test_integrity_01.sh} |   8 +-
- .../selftests/ublk/test_integrity_02.sh       | 141 ++++++++++++++++++
- tools/testing/selftests/ublk/test_loop_08.sh  | 110 --------------
- tools/testing/selftests/ublk/test_part_02.sh  |   6 +-
- ...{test_generic_04.sh => test_recover_01.sh} |   0
- ...{test_generic_05.sh => test_recover_02.sh} |   0
- ...{test_generic_11.sh => test_recover_03.sh} |   0
- ...{test_generic_14.sh => test_recover_04.sh} |   0
- tools/testing/selftests/ublk/trace/seq_io.bt  |  47 ++++--
- 14 files changed, 284 insertions(+), 206 deletions(-)
- delete mode 100755 tools/testing/selftests/ublk/test_generic_01.sh
- rename tools/testing/selftests/ublk/{test_null_04.sh => test_integrity_01.sh} (96%)
- create mode 100755 tools/testing/selftests/ublk/test_integrity_02.sh
- delete mode 100755 tools/testing/selftests/ublk/test_loop_08.sh
- rename tools/testing/selftests/ublk/{test_generic_04.sh => test_recover_01.sh} (100%)
- rename tools/testing/selftests/ublk/{test_generic_05.sh => test_recover_02.sh} (100%)
- rename tools/testing/selftests/ublk/{test_generic_11.sh => test_recover_03.sh} (100%)
- rename tools/testing/selftests/ublk/{test_generic_14.sh => test_recover_04.sh} (100%)
-
+diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
+index 21ba51fcc7d7..8d298a7ee7b1 100755
+--- a/tools/testing/selftests/ublk/test_common.sh
++++ b/tools/testing/selftests/ublk/test_common.sh
+@@ -124,8 +124,7 @@ _prep_test() {
+ 	local type=$1
+ 	shift 1
+ 	modprobe ublk_drv > /dev/null 2>&1
+-	TDIR=$(mktemp -d ${TMPDIR:-.}/ublktest-dir.XXXXXX)
+-	export UBLK_TEST_DIR=${TDIR}
++	UBLK_TEST_DIR=$(mktemp -d ${TMPDIR:-.}/ublktest-dir.XXXXXX)
+ 	UBLK_TMP=$(mktemp ${UBLK_TEST_DIR}/ublk_test_XXXXX)
+ 	[ "$UBLK_TEST_QUIET" -eq 0 ] && echo "ublk $type: $*"
+ 	echo "ublk selftest: $TID starting at $(date '+%F %T')" | tee /dev/kmsg
+@@ -408,8 +407,6 @@ UBLK_PROG=$(_ublk_test_top_dir)/kublk
+ UBLK_TEST_QUIET=1
+ UBLK_TEST_SHOW_RESULT=1
+ UBLK_BACKFILES=()
+-UBLK_TEST_DIR=${TMPDIR:-.}
+ export UBLK_PROG
+ export UBLK_TEST_QUIET
+ export UBLK_TEST_SHOW_RESULT
+-export UBLK_TEST_DIR
 -- 
 2.47.0
 
