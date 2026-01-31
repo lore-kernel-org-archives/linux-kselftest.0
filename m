@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D822E33B955
-	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 16:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E495133C199
+	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 16:24:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769876676; cv=none; b=Qv8m7HFhzmj2wWRkURmkSwFu4eVHz9zKyUxHLvOXRPx6EEDki7kAQkx8Z+ividFG7juOQ20Q8Tqx2K+jecC//XTa9byiTCDBqZyIb7dhquOP14+7Du2o0cwvSx7OFekk1R1lADnBr/bYZQutuKcQo9H/jHLVVgXmsKzoTxs0m1w=
+	t=1769876684; cv=none; b=ltFhGuWZaVbS4+lEFcOV17yBxH8np68iBc+qSniyKmdPx/JAVWarrpiJ4BLa/7CyMb8qqSmTJz7IYuYXfNKogAVVjqzEqKyepi9U/MTrSKhz72vvvLhd/RT80J5fylDhem5QM/PAWk4yGCuHkhUelX6lR76XZ6zxU5B4dFYxGWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769876676; c=relaxed/simple;
-	bh=ASdEsV3C/bgZ7w+jWeqpbRaD40n7PH520TC0ueyTGIY=;
+	s=arc-20240116; t=1769876684; c=relaxed/simple;
+	bh=Mi7HlBbjV8Vdn1JpQSjJ7fRseZW5EK0UUZBp8VgJm+E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tpnlVDIc8jg8fvmOLKP8yZ3St5JB1Zrh3zq7pcoioAFTMq5uA364Qpqe/6vESyzr3TQZyUUsOPKIuqmxiE+6L+u7p1I+L4+CPNgoPmKYCDJJUUI3Y4zr6aj5Teyxoz+6ctpUvGHCGEsjg30GzE+iAh6jHnxhN9M6QW5NIBmq8Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bUZJL8Jh; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=KaYhK2TUKA8ZJ0d+A0p3qpToXUKcBvcc5FajgRPnVkVzokDe9vbijavojX/yeF8WiCASyHJK3yB6jlYwUwuIM+DWsNZ+o3KSGcMYT5OhCTa7YyuaJjqhRfysDkSlRe7IgkxgwbUnHVFlEXiqARy3ToHcRJcq7oEOMZPdUCaCe+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HZmf3a3r; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bUZJL8Jh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HZmf3a3r"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769876674;
+	s=mimecast20190719; t=1769876680;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GWKP+FGkMLzJhL/AdU11cfpwReTpbKlgetUioMZ1JRA=;
-	b=bUZJL8JhuRcAUT6TgYDD0VNJp5qrlyE/dROnE4YchcLToL0W4zmSCNRA2aUoJu2y47I91l
-	a3aSJjS9hS2H4gkW5ok5le/iHT3vyTO7/3yyXxTM3dvmWc5QlubDfCmXvQRd1h33XAvRDH
-	i90zpA1trh4px5q/ZV4q9N0dHaSTrXw=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=DaJL7uvk2FPsSFQQYFvfflepbkkZyiAsYpq8gh7jREs=;
+	b=HZmf3a3rL59ck/1pX4FekoyfKpG9BFl2p7nxY1U9Q2qbdpxYUHNtKDEzlVVCD3rb5AEXKy
+	pga843rzY+QrDuTtWK1m+j0c5BheBJyCsL8Q3v4mpG0TR4F2gzKLgiULn3EYsOKOhmNUtc
+	GASIedpiTPJYmYGuq7W6Ivb6IA2D0h4=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-210-gOVf6AJIOGSc1AUY2HCSsw-1; Sat,
- 31 Jan 2026 11:24:30 -0500
-X-MC-Unique: gOVf6AJIOGSc1AUY2HCSsw-1
-X-Mimecast-MFC-AGG-ID: gOVf6AJIOGSc1AUY2HCSsw_1769876669
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-348-WMcAsvkqNJeV2d787b3ppQ-1; Sat,
+ 31 Jan 2026 11:24:34 -0500
+X-MC-Unique: WMcAsvkqNJeV2d787b3ppQ-1
+X-Mimecast-MFC-AGG-ID: WMcAsvkqNJeV2d787b3ppQ_1769876673
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1EABA1800451;
-	Sat, 31 Jan 2026 16:24:29 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7B1DA1956046;
+	Sat, 31 Jan 2026 16:24:33 +0000 (UTC)
 Received: from localhost (unknown [10.72.116.22])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0A8C11800109;
-	Sat, 31 Jan 2026 16:24:27 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6013019560A2;
+	Sat, 31 Jan 2026 16:24:31 +0000 (UTC)
 From: Ming Lei <ming.lei@redhat.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	linux-block@vger.kernel.org
@@ -51,9 +51,9 @@ Cc: Caleb Sander Mateos <csander@purestorage.com>,
 	linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 7/9] selftests: ublk: increase timeouts for parallel test execution
-Date: Sun,  1 Feb 2026 00:23:38 +0800
-Message-ID: <20260131162342.13872-8-ming.lei@redhat.com>
+Subject: [PATCH 8/9] selftests: ublk: reorganize tests into integrity and recover groups
+Date: Sun,  1 Feb 2026 00:23:39 +0800
+Message-ID: <20260131162342.13872-9-ming.lei@redhat.com>
 In-Reply-To: <20260131162342.13872-1-ming.lei@redhat.com>
 References: <20260131162342.13872-1-ming.lei@redhat.com>
 Precedence: bulk
@@ -63,73 +63,108 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-When running tests in parallel with high JOBS count (e.g., JOBS=64),
-the existing timeouts can be insufficient due to system load:
+Move integrity-focused tests into new 'integrity' group:
+- test_null_04.sh -> test_integrity_01.sh
+- test_loop_08.sh -> test_integrity_02.sh
 
-- Increase state wait loops from 20/50 to 100 iterations in
-  _recover_ublk_dev(), __ublk_quiesce_dev(), and __ublk_kill_daemon()
-  to handle slower state transitions under heavy load
+Move recovery-focused tests into new 'recover' group:
+- test_generic_04.sh -> test_recover_01.sh
+- test_generic_05.sh -> test_recover_02.sh
+- test_generic_11.sh -> test_recover_03.sh
+- test_generic_14.sh -> test_recover_04.sh
 
-- Add --timeout=20 to udevadm settle calls to prevent indefinite
-  hangs when udev event queue is overwhelmed by rapid device
-  creation/deletion
+Update Makefile to reflect the reorganization.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- tools/testing/selftests/ublk/test_common.sh | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/testing/selftests/ublk/Makefile              | 14 ++++++++------
+ .../ublk/{test_null_04.sh => test_integrity_01.sh} |  0
+ .../ublk/{test_loop_08.sh => test_integrity_02.sh} |  0
+ .../{test_generic_04.sh => test_recover_01.sh}     |  0
+ .../{test_generic_05.sh => test_recover_02.sh}     |  0
+ .../{test_generic_11.sh => test_recover_03.sh}     |  0
+ .../{test_generic_14.sh => test_recover_04.sh}     |  0
+ 7 files changed, 8 insertions(+), 6 deletions(-)
+ rename tools/testing/selftests/ublk/{test_null_04.sh => test_integrity_01.sh} (100%)
+ rename tools/testing/selftests/ublk/{test_loop_08.sh => test_integrity_02.sh} (100%)
+ rename tools/testing/selftests/ublk/{test_generic_04.sh => test_recover_01.sh} (100%)
+ rename tools/testing/selftests/ublk/{test_generic_05.sh => test_recover_02.sh} (100%)
+ rename tools/testing/selftests/ublk/{test_generic_11.sh => test_recover_03.sh} (100%)
+ rename tools/testing/selftests/ublk/{test_generic_14.sh => test_recover_04.sh} (100%)
 
-diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
-index bd27a6875c1a..c3afd00783a2 100755
---- a/tools/testing/selftests/ublk/test_common.sh
-+++ b/tools/testing/selftests/ublk/test_common.sh
-@@ -216,7 +216,7 @@ _create_ublk_dev() {
- 	fi
+diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
+index 1ceae611acb7..a62a06e13006 100644
+--- a/tools/testing/selftests/ublk/Makefile
++++ b/tools/testing/selftests/ublk/Makefile
+@@ -10,18 +10,14 @@ LDLIBS += -lpthread -lm -luring
+ TEST_PROGS := test_generic_01.sh
+ TEST_PROGS += test_generic_02.sh
+ TEST_PROGS += test_generic_03.sh
+-TEST_PROGS += test_generic_04.sh
+-TEST_PROGS += test_generic_05.sh
+ TEST_PROGS += test_generic_06.sh
+ TEST_PROGS += test_generic_07.sh
  
- 	if [ "$settle" = "yes" ]; then
--		udevadm settle
-+		udevadm settle --timeout=20
- 	fi
+ TEST_PROGS += test_generic_08.sh
+ TEST_PROGS += test_generic_09.sh
+ TEST_PROGS += test_generic_10.sh
+-TEST_PROGS += test_generic_11.sh
+ TEST_PROGS += test_generic_12.sh
+ TEST_PROGS += test_generic_13.sh
+-TEST_PROGS += test_generic_14.sh
+ TEST_PROGS += test_generic_16.sh
  
- 	if [[ "$dev_id" =~ ^[0-9]+$ ]]; then
-@@ -240,7 +240,7 @@ _recover_ublk_dev() {
- 	local state
- 
- 	dev_id=$(_create_ublk_dev "recover" "yes" "$@")
--	for ((j=0;j<20;j++)); do
-+	for ((j=0;j<100;j++)); do
- 		state=$(_get_ublk_dev_state "${dev_id}")
- 		[ "$state" == "LIVE" ] && break
- 		sleep 1
-@@ -260,7 +260,7 @@ __ublk_quiesce_dev()
- 		return "$state"
- 	fi
- 
--	for ((j=0;j<50;j++)); do
-+	for ((j=0;j<100;j++)); do
- 		state=$(_get_ublk_dev_state "${dev_id}")
- 		[ "$state" == "$exp_state" ] && break
- 		sleep 1
-@@ -279,7 +279,7 @@ __ublk_kill_daemon()
- 	daemon_pid=$(_get_ublk_daemon_pid "${dev_id}")
- 	state=$(_get_ublk_dev_state "${dev_id}")
- 
--	for ((j=0;j<50;j++)); do
-+	for ((j=0;j<100;j++)); do
- 		[ "$state" == "$exp_state" ] && break
- 		kill -9 "$daemon_pid" > /dev/null 2>&1
- 		sleep 1
-@@ -304,7 +304,7 @@ __remove_ublk_dev_return() {
- 
- 	_ublk_del_dev "${dev_id}"
- 	local res=$?
--	udevadm settle
-+	udevadm settle --timeout=20
- 	return ${res}
- }
- 
+ TEST_PROGS += test_batch_01.sh
+@@ -31,7 +27,6 @@ TEST_PROGS += test_batch_03.sh
+ TEST_PROGS += test_null_01.sh
+ TEST_PROGS += test_null_02.sh
+ TEST_PROGS += test_null_03.sh
+-TEST_PROGS += test_null_04.sh
+ TEST_PROGS += test_loop_01.sh
+ TEST_PROGS += test_loop_02.sh
+ TEST_PROGS += test_loop_03.sh
+@@ -39,7 +34,14 @@ TEST_PROGS += test_loop_04.sh
+ TEST_PROGS += test_loop_05.sh
+ TEST_PROGS += test_loop_06.sh
+ TEST_PROGS += test_loop_07.sh
+-TEST_PROGS += test_loop_08.sh
++
++TEST_PROGS += test_integrity_01.sh
++TEST_PROGS += test_integrity_02.sh
++
++TEST_PROGS += test_recover_01.sh
++TEST_PROGS += test_recover_02.sh
++TEST_PROGS += test_recover_03.sh
++TEST_PROGS += test_recover_04.sh
+ TEST_PROGS += test_stripe_01.sh
+ TEST_PROGS += test_stripe_02.sh
+ TEST_PROGS += test_stripe_03.sh
+diff --git a/tools/testing/selftests/ublk/test_null_04.sh b/tools/testing/selftests/ublk/test_integrity_01.sh
+similarity index 100%
+rename from tools/testing/selftests/ublk/test_null_04.sh
+rename to tools/testing/selftests/ublk/test_integrity_01.sh
+diff --git a/tools/testing/selftests/ublk/test_loop_08.sh b/tools/testing/selftests/ublk/test_integrity_02.sh
+similarity index 100%
+rename from tools/testing/selftests/ublk/test_loop_08.sh
+rename to tools/testing/selftests/ublk/test_integrity_02.sh
+diff --git a/tools/testing/selftests/ublk/test_generic_04.sh b/tools/testing/selftests/ublk/test_recover_01.sh
+similarity index 100%
+rename from tools/testing/selftests/ublk/test_generic_04.sh
+rename to tools/testing/selftests/ublk/test_recover_01.sh
+diff --git a/tools/testing/selftests/ublk/test_generic_05.sh b/tools/testing/selftests/ublk/test_recover_02.sh
+similarity index 100%
+rename from tools/testing/selftests/ublk/test_generic_05.sh
+rename to tools/testing/selftests/ublk/test_recover_02.sh
+diff --git a/tools/testing/selftests/ublk/test_generic_11.sh b/tools/testing/selftests/ublk/test_recover_03.sh
+similarity index 100%
+rename from tools/testing/selftests/ublk/test_generic_11.sh
+rename to tools/testing/selftests/ublk/test_recover_03.sh
+diff --git a/tools/testing/selftests/ublk/test_generic_14.sh b/tools/testing/selftests/ublk/test_recover_04.sh
+similarity index 100%
+rename from tools/testing/selftests/ublk/test_generic_14.sh
+rename to tools/testing/selftests/ublk/test_recover_04.sh
 -- 
 2.47.0
 
