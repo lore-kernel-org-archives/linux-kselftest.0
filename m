@@ -1,117 +1,122 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4852C30F7EA
-	for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 17:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769880743; cv=pass; b=rSelOWaJrFQGicoTMxHfl3UIUUQKjLKZz7NmqAvvRbjepjxxs8DRgnUAGE5Ikz+WlsGuAqoRNwWkPJDn7oFKPBQ8N3q8cPwPN46n3FpQVKM+VT3AZCEIvdmYbAjq1kp5qBF+Vn6H9r9R4qDvLh0drZmN8uhiz5806NNaLh+k1t0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769880743; c=relaxed/simple;
-	bh=AH5Mp4HVfEwP7d3SekbzrvjttHLLachc5B85p75vV1U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pdoqoGE5hGHi4Wj2bNh25e9gM2BYumHEsh2bQS3qrNlxF1hK66V8SRwCzoqGoDOotLv3LvuEhp6ROubFObXftYL2cEbgDJlI5AwLU6dSnipRYoDeiqoWt3MVlxHU05GCf1ZIHjK9aJPBIy0k2uYlUOqvnJseURCUblnn53tHZ0c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZoH7zPjo; arc=pass smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A2C155757;
+	Sat, 31 Jan 2026 17:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769881849; cv=none; b=bNaAGCP81ABsdGsACL7BS8egReHr+0RhRPuieyBjririI4+QethxUfViNHXeScnRxrpSntCFPStqOv/qf4jAMVGqRVnCd/XSffyjl1LmAFIVjW+GJaoLaMZrLkhs6K0bjCygzvfXxNbyT1Oe2Q4H5a7V1l5bNAL6tCV/QxL6z1I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769881849; c=relaxed/simple;
+	bh=q0T8b+UAEAQOtNc3XJm5Jfy6vBCFYxNtHnU0E6OypNE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hwJoYZfsVqaKqJKSsDvaAi/A1vgVZQU7aCGngeq6A4atdEGM1lRCQGmuMHpC3fXPgoi2dmADj4eVBVhhQC9CNgKH/TMyVoKr5NmOKFzWN6U0yjDO++TZIR71VvSrjxR+iJfWeHp5TYk2G4Rc/wsyT+CME99HpmbQ96oPegRjvoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNQ4kv2k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZoH7zPjo"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-505d872f90fso14656401cf.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 09:32:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769880741; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MzDcfVYgZqxz+6EGcWofEaOEU1Sxm6bWOrFl1X2K/A/MfVV13SUhLd5n9uYiDMiHC4
-         V0RmNUlQ1dupY60XluB1qO2piki626ANKahbWOP4MzFpdjpQRImQcJz6hhPvm/DAuMcR
-         wj9Xd5higBhDkI92ecHC3EYdYcNJgRRjEdhxO4OPQYOjP20FL6xTAyXsX5bDKihHjFY2
-         JPOQmHPpeC5SENtGO/7Ih5yCT5bmh6GtBJ29Wvi1rSrtbYYacdxbknu8gT+hJ91CAJg3
-         /cYh8t0DsJybIyvX2ysOAsofXBkdWFCHgnO/4vZXFLv/LvxIwnqQHKXVrbonUvxjvOOq
-         Vjxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FFXR4/OMDB/Hha2547tcEC7+gK55Y57dEdHNOzamh28=;
-        fh=CUmjs3BmFQ9BwPpZtjetQJYBZpYZZVowNkL9lrHV/48=;
-        b=g3BrhIAOMgyOb/InNBz+WDhF8BFUtWkKvlPTs2MKTJYonj6biVeIwmVCWkR4Cf1AMH
-         vEPWlQt676DOUE8uU+J01MMwArDiQv8bEf4vOizsO5jI+1RT49pYG+xe6GYKfMepilCx
-         ponEei50nNuK8gRTbDA2lgNITWEkmKoh+f7bO+7ES3M5ztZ5BachUumK7REPJ8DPWSgi
-         8lE+NOpM4DbtaVXrxq+VTDGmejzApze/3ax7UM3iwm7/Npc1dKAWYK9Lbs2HCwyQ6/67
-         Ltoim7FKOE61bLQd0mCB1SBek3Jvbi+ZqFIBg+2YAnsJGEGBOrPp3CtYGr2RZVTCfb2Z
-         6NQQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769880741; x=1770485541; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FFXR4/OMDB/Hha2547tcEC7+gK55Y57dEdHNOzamh28=;
-        b=ZoH7zPjoBvg9IK/bhGX+tQtyaB+QlQHQyXyDczRnQqO2E8qAmDeodTNcW+t72hfzWT
-         qUCZ5NCz4COmChQKOb3WS13r/Jow7HLtORF3VJMZlptJN79GnGiJCjuInnjvLLTFVMTr
-         aNqswAm5tx8dNuySuYA7Qf6nG8Sx9ffXSS1ef4cK56oa05alM6+UC3FgB7OrQRBbviXD
-         DiMHJ5mB/tyXHcRO31W1lUI0M4SPPiD0KUCBVEy9NYvAsTPphjxGqjHbPhxvKOjX9fUc
-         xiLnrz24IW5kKq0LsaUI6EgKju8Pn0C7QhrOJ7LGEBMqZ2ktqAZ+bcACXMKRUOmVEJNb
-         HcAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769880741; x=1770485541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FFXR4/OMDB/Hha2547tcEC7+gK55Y57dEdHNOzamh28=;
-        b=qDiKW/huWlLH1yMFsB8Gaw+7w2KNwoFvceuw3VBeqGVX/zlramI0oR0yKvHSgDmUjk
-         tuLbtpq3pvUTd/UcF5kqpQkEhd3mWv8KrZI53E0gGMSew3oJ2LHkbnumWso7E1ZBG4Yb
-         LCH4iJBBNxsHyYMk9vE+yl++YSJR5fi6pQODKouWuMTCxgOfD3o8In5fcbRWabmOgG+A
-         WDfeTcqTMSyMTPKJM148nFni4vKr13/9YDijXaXsKMtRAO6umMjeOWloNt7uit6Oz3to
-         e46xJnfDXgbdYso3xfmk1Qckr0v49RmbDBLzfI13Ix0GO+lH/JbrS8HBh22Z9fX4jWGD
-         FDIw==
-X-Forwarded-Encrypted: i=1; AJvYcCWRdlYYnzmtUQYkYSUyKPGPMGTxp8dlak9Rzvj6hqDR7fWPvO67rC3c9n3r7swGDQHO/06ON+7XQAYFNBRx9po=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAQ8LvM3DP+zHmbDx+V9xfpU4GoaPLb5ZGgTePVZCkElt4MPHm
-	GMnnfCCkKreEIVliyUpzYhNInxtzwmcdETUZCErXNyvjuAgWGjgTNVrTPeBuuUHo86EBQw9hQzk
-	3UtHoS6EwMWp81CbQ+MtejbXQoDvqWMYvw01RV4wq
-X-Gm-Gg: AZuq6aIBS9f/V+CyQfqbpI+0xN13nvyHwqtrWHYgj1tHKkvYm8E20e30tAPaM/lwG3p
-	BqYE6+FZJoGrru1APwArQVoDdMt7aWcXb8D2YuBHCBVJnk6ZXIkmHZWFX8MqO/fKTTe3O0bLeZL
-	4h1gM/IzD4I6nhgKKNX7CDhHv6q4RA/xPeWABUBp4AMLbSBqmieT7BMc4R8M3jdwxgfzj1YNROx
-	sXXl+bZtRoB1fYWwVQdOhHCgp1IB7nbsBhtMu1qStNcnD1xVnN5erfcJM3Q0NDt3pMyjg==
-X-Received: by 2002:a05:622a:64f:b0:4ee:fe8:9348 with SMTP id
- d75a77b69052e-505d22a4946mr89976711cf.72.1769880740957; Sat, 31 Jan 2026
- 09:32:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNQ4kv2k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A198AC4CEF1;
+	Sat, 31 Jan 2026 17:50:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769881849;
+	bh=q0T8b+UAEAQOtNc3XJm5Jfy6vBCFYxNtHnU0E6OypNE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fNQ4kv2kegCfNR6OoRapRvvbKJPKMiXS8mKmjBAVppBGTNFvlNm1SAszSwg2WdBVD
+	 NF5Cei/NEvDPRqlX1HM4CYzD4Ju4IqIKwF0oh3PzchTsJvr1uef74QVOCqmcZke2LO
+	 Uj/M5Dm7VR6RCp/qSESmXdIC8V6eQsVxYvoysupsmynAan1WEeTwlk7eKZ5KbpyNwu
+	 51TijE8l3egwU+sr0VHRHwyiF12tqDJtiGWV4o9QwrmIsNpaKBw1G+mV0OwDkF7vlP
+	 F6JYSkBu+grEPqG/TtCWrkcEtYTqbqVL0uSeXSUEa4uRfLd/oGdEafLYhYJwA9UwN1
+	 Y/EEvbsI//SXg==
+Date: Sat, 31 Jan 2026 09:50:47 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, willemb@google.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: drv-net: rss: validate min RSS
+ table size
+Message-ID: <20260131095047.2096ac8f@kernel.org>
+In-Reply-To: <willemdebruijn.kernel.29ba7c9e89f32@gmail.com>
+References: <20260130192912.826454-1-kuba@kernel.org>
+	<willemdebruijn.kernel.29ba7c9e89f32@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260130192912.826454-1-kuba@kernel.org>
-In-Reply-To: <20260130192912.826454-1-kuba@kernel.org>
-From: Eric Dumazet <edumazet@google.com>
-Date: Sat, 31 Jan 2026 18:32:09 +0100
-X-Gm-Features: AZwV_QgPeezvCbcvz2jUIiYO-eyxh6cjEBmy1B5tUEpzAXkFkVVqzBMCpx9RMGM
-Message-ID: <CANn89iJXjCLyPsUwEnFBz2wR1Cst=UGOJehNV87UK0Ko4uEkOQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] selftests: drv-net: rss: validate min RSS table size
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com, 
-	andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org, willemb@google.com, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 30, 2026 at 8:29=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> Add a test which checks that the RSS table is at least 4x the max
-> queue count supported by the device. The original RSS spec from
-> Microsoft stated that the RSS indirection table should be 2 to 8
-> times the CPU count, presumably assuming queue per CPU. If the
-> CPU count is not a power of two, however, a power-of-2 table
-> 2x larger than queue count results in a 33% traffic imbalance.
-> Validate that the indirection table is at least 4x the queue
-> count. This lowers the imbalance to 16% which empirically
-> appears to be more acceptable to memcache-like workloads.
+On Sat, 31 Jan 2026 12:18:55 -0500 Willem de Bruijn wrote:
+> > +def _test_rss_indir_size(cfg, qcnt, context=0):
+> > +    """Test that indirection table size is at least 4x queue count."""
+> > +    ethtool(f"-L {cfg.ifname} combined {qcnt}")  
+> 
+> Remind me: does this work with devices that advertise RX N TX N rather
+> than combined N?
 
-I think this nice observation could be captured in
-Documentation/networking/scaling.rst
-amending your commit ?
+It doesn't. But I haven't seen a device which doesn't at least
+advertise combined made in this decade. I started typing this with
+support for "rx" vs "combined" initially, but it complicates the code
+for no real benefit.
 
-commit b91f2e13c972c3f2f33ecc873b0ff0ada3fa1854    docs: networking:
-document multi-RSS context
+If a driver which doesn't have "combined" starts reporting results 
+to NIPA I'll care, right now - CBA.
 
-Thanks !
+> > +    rss = _get_rss(cfg, context=context)
+> > +    indir = rss['rss-indirection-table']
+> > +    ksft_ge(len(indir), 4 * qcnt, "Table smaller than 4x")
+> > +    return len(indir)
+> > +
+> > +
+> > +@ksft_variants([
+> > +    KsftNamedVariant("main", False),
+> > +    KsftNamedVariant("ctx", True),
+> > +])
+> > +def indir_size_4x(cfg, create_context):
+> > +    """
+> > +    Test that the indirection table has at least 4 entries per queue.
+> > +    Empirically network-heavy workloads like memcache suffer with the 33%
+> > +    imbalance of a 2x indirection table size.
+> > +    4x table translates to a 16% imbalance.
+> > +    """
+> > +    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
+> > +    ch_max = channels.get('combined-max', 0)  
+> 
+> Same here: not all drivers set this.
+> 
+> Perhaps we should skip if absent?
+> 
+> And does combined-max mean all queues across all contexts, or per
+> context?
+
+Could you rephrase? Not sure I understand.
+
+channels are interrupts, we use it in place of max Rx queues because 
+we don't have an API to allocate queues directly.
+
+When queue count is changed and the user did not set the indirection
+table of the main context the main context's indir table is auto-
+-repopulated. It may also be resized.
+
+The indir tables of additional contexts are not repopulated.
+We do not have the concept of "default" indirection table in 
+an additional context because it has no practical use (just use
+the main table if you don't care about the queue selection!?)
+Since we don't have an explicit API to size them, (yet),
+we expect the size of additional contexts to follow the size 
+of the main indirection table.
+
+If a table is resized the expectation should be that the driver
+folds/unfolds the existing table eg [0, 1, 0, 1] can fold into [0, 1]
+or unfold into [0, 1, 0, 1, 0, 1, 0, 1]. Resizing tables of additional
+contexts is currently broken / no possible. My colleague is supposed
+to be working on fixing that but appears to be making slow progress :/
+
+> The test seems to imply the second. My intuition was the
+> first. Is it clearly defined across devices. per ethtool_channels,
+> seems per device?
+> 
+>   * @max_combined: Read only. Maximum number of combined channel the driver
+>   *      support. Set of queues RX, TX or other.
+
