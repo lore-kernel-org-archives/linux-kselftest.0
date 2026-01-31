@@ -1,137 +1,253 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401EADDAB;
-	Sat, 31 Jan 2026 00:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE107261A;
+	Sat, 31 Jan 2026 00:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769817757; cv=none; b=pCs/XicSeGGqb58c5zjyc9VJsmZswolLd0MB/GEB5Hi0iH07qoBDtbjMPofmRR3vFhnScqkwIgfj+Ms8FkBLW8Y/eWlQF2BUl0WTQRt4e0sLDlSUe2wBprObAnKwxI7ZMILzNYvfAS4IQdZib5KunTpj2226tbuwDsbwb73BRSw=
+	t=1769820471; cv=none; b=u27C6AWHLm3WbuKe+Xroryib8Tf4I3XtEx5/aVHcVFrUiIBeWS6KslxqcM83yxJDN1qEO+M4sZ1GEkxK6sKhQT8ZAlg/3D2RfcBiL8IXOy/kQ9hDErEuVta5mYMEkYu+6MZVvbgd5apzB5upD8vzlC77j8w1iSRz0ooTqt/DZOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769817757; c=relaxed/simple;
-	bh=ROriuGZ2shqP/DISbG6aVAP27Yp+LZde6oERbMk2rt4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=NcLL6+NMXDuh1oGbBbNP1BR1Mb1zoekbjlpQI+uA/ViCkga79uSNv2XiLgfbZVxLkqPUDuvZrKUEKaaa0EyjmhBjYPZUqNH15QGf/wn7tekq++pNxTODb/wCL9lfwrBjbU6gtuI71JzpX62G7MNPiiOBHVNNkVeqwKlrpI8O+bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=u8IPBsSd; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="u8IPBsSd"
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60UKmhAr3625665;
-	Fri, 30 Jan 2026 16:02:29 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=s2048-2025-q2; bh=jRuuDNAg+bEi4XQKCi
-	9JomUGnRgi2UhvYJe+qDFfrvQ=; b=u8IPBsSdGFq8Xbt4bZvQWi1KoVtxidkY9F
-	a33KQeL//5pWhpk3RQ62yussb+g8NuCiI4K0NlNZy4cPYIXybrc7dx18HkB3vwy5
-	33sudMwUBDq1UFnS/RkoQ0RvQSIBk7tH/rWxjpLLSGCgvA/m2OoSRRSlfWIrF3hW
-	wr2VQd/bZa48buWee7AYBY+LQnHnFZV6eYXOgxk9nQDrnN6twLll4a6WExuniEDF
-	5JjfK452yV1dZOuoqdDgXp3x9Qc2ASYz3HrJgxrGJusNLXc0zmfUGKgtOLGSgdPz
-	7wjsQUlfziMdywWSbuyNcjdcc6wOBOA9AwEcxL55Q1QiIrAHu9MQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4c140s9t68-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 30 Jan 2026 16:02:29 -0800 (PST)
-Received: from devvm6375.cco0.facebook.com (2620:10d:c085:208::7cb7) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.35; Sat, 31 Jan 2026 00:02:28 +0000
-From: Ted Logan <tedlogan@fb.com>
-Date: Fri, 30 Jan 2026 16:02:16 -0800
-Subject: [PATCH] vfio: selftests: only build tests on arm64 and x86_64
+	s=arc-20240116; t=1769820471; c=relaxed/simple;
+	bh=6YUy3EGUzavSE3JC4NM2cqgi5dw2VTnlldAwE5Cnw1w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FMgmb7B7q1am+4ciACsp/crrOrivWc76OQvYiBUd5ABjuL54rPsMTT/KFsAhiiglfVWc1RnVHBs0CmuPokhwI6YDdl/Dxq4SGbwLftbOs+qrZ+1g5gLdH/GqSIi+iA6cD9GBirNnqyRcRSdw7HfQqV0xPw8SUfVHyadO57QAxAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f2vNW28LqzKHMLG;
+	Sat, 31 Jan 2026 08:47:23 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 9B8734056B;
+	Sat, 31 Jan 2026 08:47:39 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgC3Y_QqUX1pBZXYFg--.24541S2;
+	Sat, 31 Jan 2026 08:47:39 +0800 (CST)
+Message-ID: <647ad3d2-364c-4e83-b46d-49a2a30b8f94@huaweicloud.com>
+Date: Sat, 31 Jan 2026 08:47:37 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH/for-next v2 1/2] cgroup/cpuset: Defer
+ housekeeping_update() call from CPU hotplug to workqueue
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260130154254.1422113-1-longman@redhat.com>
+ <20260130154254.1422113-2-longman@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260130154254.1422113-2-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <20260130-vfio-selftest-only-64bit-v1-1-d89ac0944c01@fb.com>
-X-B4-Tracking: v=1; b=H4sIAIhGfWkC/x3MTQqEMAxA4atI1hNo6y9eZZiF1VQD0kpTyoh4d
- 4vLb/HeBUKRSWCsLoiUWTj4Av2pYN4mvxLyUgxGmU7pWmF2HFBod4kkYfD7iV1jOWFjTKsHu5C
- deij5Ecnx/11/f/f9AG40UitqAAAA
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
-        Shuah Khan <shuah@kernel.org>
-CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>,
-        Ted Logan
-	<tedlogan@fb.com>
-X-Mailer: b4 0.13.0
-X-Authority-Analysis: v=2.4 cv=MYBhep/f c=1 sm=1 tr=0 ts=697d4695 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8 a=FOH2dFAWAAAA:8 a=dWR254cKOyREI92bUGEA:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: T1QNM0hRWSmF5D7-kv-9kIBpMHFLr6aO
-X-Proofpoint-GUID: T1QNM0hRWSmF5D7-kv-9kIBpMHFLr6aO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTMwMDE5NyBTYWx0ZWRfX/XO5+IKmIu86
- Dk/C+M991Y8hT/SNpf4o+KdgWhZOTTBX3LDiF3VvHo6RA/VBcCxPhDfGezLvmPK9B6S6uTvA0sx
- Si8qugoyI6pPnHo9RGmR9skIEKbx+GxPcvrM55cO8yys+jCArHKBWGgvem2SGFo+0KVtCHbEprb
- WE0L/+lMr6/CW4DkOy1ZVvR7x0f48SSgvBobR91AUSOSbwYRy6WHdPRcJzUGh2cu3pjNi8WhWOT
- 7F0eZCAgRbQA6zSzq+Ut1CajqH7mFmT9ZNg9pJdHFKeqZLYJ6/aYCAYby4crSbm/s5ikayvSIIC
- gMf5MbWOiRBlKSj3JovW3x1xaC14HS8wuGAehY54qDSRb/xZk0pkuEKwjzvnd3eJhbDUIMyzHjF
- TGWdxZc1Khenja8UEz3W8oycPDRmf+Wr8fj+H1CoxORowLzzLQ3798KOAjlXD/S6u4M2nrMaxD3
- JYOpPvv8ijZ/n4bLnwQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-30_04,2026-01-30_04,2025-10-01_01
+X-CM-TRANSID:gCh0CgC3Y_QqUX1pBZXYFg--.24541S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKw43XryDZrW5Zw1fuFWfXwb_yoWxXFyUpF
+	yFgrWIyrZ0gr13ua4SvwnrXr4F9wn7J3WUKanxJr1UZF13JFn2vr1kKrnxJrWrCr98CrZ8
+	ZF9rG397Wa1jy37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
+	0PDUUUU
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-Only build vfio self-tests on arm64 and x86_64; these are the only
-architectures where the vfio self-tests are run. Addresses compiler
-warnings for format and conversions on i386.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@intel.com/
-Signed-off-by: Ted Logan <tedlogan@fb.com>
----
-Do not build vfio self-tests for 32-bit architectures, where they're
-untested and unmaintained. Only build these tests for arm64 and x86_64,
-where they're regularly tested.
 
-Compiler warning fixed by patch:
+On 2026/1/30 23:42, Waiman Long wrote:
+> The update_isolation_cpumasks() function can be called either directly
+> from regular cpuset control file write with cpuset_full_lock() called
+> or via the CPU hotplug path with cpus_write_lock and cpuset_mutex held.
+> 
+> As we are going to enable dynamic update to the nozh_full housekeeping
+> cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
+> allowing the CPU hotplug path to call into housekeeping_update() directly
+> from update_isolation_cpumasks() will likely cause deadlock. So we
+> have to defer any call to housekeeping_update() after the CPU hotplug
+> operation has finished. This is now done via the workqueue where
+> the actual housekeeping_update() call, if needed, will happen after
+> cpus_write_lock is released.
+> 
+> We can't use the synchronous task_work API as call from CPU hotplug
+> path happen in the per-cpu kthread of the CPU that is being shut down
+> or brought up. Because of the asynchronous nature of workqueue, the
+> HK_TYPE_DOMAIN housekeeping cpumask will be updated a bit later than the
+> "cpuset.cpus.isolated" control file in this case.
+> 
+> Also add a check in test_cpuset_prs.sh and modify some existing
+> test cases to confirm that "cpuset.cpus.isolated" and HK_TYPE_DOMAIN
+> housekeeping cpumask will both be updated.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c                        | 37 +++++++++++++++++--
+>  .../selftests/cgroup/test_cpuset_prs.sh       | 13 +++++--
+>  2 files changed, 44 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 7b7d12ab1006..0b0eb1df09d5 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -84,6 +84,9 @@ static cpumask_var_t	isolated_cpus;
+>   */
+>  static bool isolated_cpus_updating;
+>  
+> +/* Both cpuset_mutex and cpus_read_locked acquired */
+> +static bool cpuset_locked;
+> +
+>  /*
+>   * A flag to force sched domain rebuild at the end of an operation.
+>   * It can be set in
+> @@ -285,10 +288,12 @@ void cpuset_full_lock(void)
+>  {
+>  	cpus_read_lock();
+>  	mutex_lock(&cpuset_mutex);
+> +	cpuset_locked = true;
+>  }
+>  
+>  void cpuset_full_unlock(void)
+>  {
+> +	cpuset_locked = false;
+>  	mutex_unlock(&cpuset_mutex);
+>  	cpus_read_unlock();
+>  }
+> @@ -1285,6 +1290,16 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
+>  	return false;
+>  }
+>  
+> +static void isolcpus_workfn(struct work_struct *work)
+> +{
+> +	cpuset_full_lock();
+> +	if (isolated_cpus_updating) {
+> +		WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
+> +		isolated_cpus_updating = false;
+> +	}
+> +	cpuset_full_unlock();
+> +}
+> +
+>  /*
+>   * update_isolation_cpumasks - Update external isolation related CPU masks
+>   *
+> @@ -1293,14 +1308,30 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
+>   */
+>  static void update_isolation_cpumasks(void)
+>  {
+> -	int ret;
+> +	static DECLARE_WORK(isolcpus_work, isolcpus_workfn);
+>  
+>  	if (!isolated_cpus_updating)
+>  		return;
+>  
 
-   In file included from tools/testing/selftests/vfio/lib/include/libvfio.h:6:
-   tools/testing/selftests/vfio/lib/include/libvfio/iommu.h:49:2: warning: format specifies type 'unsigned long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
-      49 |         VFIO_ASSERT_EQ(__iommu_unmap(iommu, region, NULL), 0);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/vfio/lib/include/libvfio/assert.h:32:37: note: expanded from macro 'VFIO_ASSERT_EQ'
-      32 | #define VFIO_ASSERT_EQ(_a, _b, ...) VFIO_ASSERT_OP(_a, _b, ==, ##__VA_ARGS__)
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/vfio/lib/include/libvfio/assert.h:27:22: note: expanded from macro 'VFIO_ASSERT_OP'
-      26 |         fprintf(stderr, "  Observed: %#lx %s %#lx\n",                           \
-         |                                              ~~~~
-      27 |                         (u64)__lhs, #_op, (u64)__rhs);                          \
-         |                                           ^~~~~~~~~~
----
- tools/testing/selftests/vfio/Makefile | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Can this happen?
 
-diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
-index ead27892ab65..eeb63ea2b4da 100644
---- a/tools/testing/selftests/vfio/Makefile
-+++ b/tools/testing/selftests/vfio/Makefile
-@@ -1,3 +1,10 @@
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
-+ifeq (,$(filter $(ARCH),arm64 x86_64))
-+nothing:
-+.PHONY: all clean run_tests install
-+.SILENT:
-+else
- CFLAGS = $(KHDR_INCLUDES)
- TEST_GEN_PROGS += vfio_dma_mapping_test
- TEST_GEN_PROGS += vfio_dma_mapping_mmio_test
-@@ -28,3 +35,4 @@ TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_PROGS_O) $(LIBVFIO_O))
- -include $(TEST_DEP_FILES)
- 
- EXTRA_CLEAN += $(TEST_GEN_PROGS_O) $(TEST_DEP_FILES)
-+endif
+cpu0					cpu1
+[...]
 
----
-base-commit: c3cbc276c2a33b04fc78a86cdb2ddce094cb3614
-change-id: 20260130-vfio-selftest-only-64bit-422518bdeba7
+isolated_cpus_updating = true;
+...
+// 'full_lock' is not acquired
+update_isolation_cpumasks
+					// exec worker concurrently
+					isolcpus_workfn
+					cpuset_full_lock
+					isolated_cpus_updating = false;
+					cpuset_full_unlock();
+// This returns uncorrectly
+if (!isolated_cpus_updating)
+	return;
 
-Best regards,
+> -	ret = housekeeping_update(isolated_cpus);
+> -	WARN_ON_ONCE(ret < 0);
+> +	/*
+> +	 * This function can be reached either directly from regular cpuset
+> +	 * control file write (cpuset_locked) or via hotplug (cpus_write_lock
+> +	 * && cpuset_mutex held). In the later case, we defer the
+> +	 * housekeeping_update() call to the system_unbound_wq to avoid the
+> +	 * possibility of deadlock. This also means that there will be a short
+> +	 * period of time where HK_TYPE_DOMAIN housekeeping cpumask will lag
+> +	 * behind isolated_cpus.
+> +	 */
+> +	if (!cpuset_locked) {
+> +		/*
+> +		 * We rely on WORK_STRUCT_PENDING_BIT to not requeue a work
+> +		 * item that is still pending.
+> +		 */
+> +		queue_work(system_unbound_wq, &isolcpus_work);
+> +		return;
+> +	}
+>  
+> +	WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
+>  	isolated_cpus_updating = false;
+>  }
+>  
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 5dff3ad53867..0502b156582b 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -245,8 +245,9 @@ TEST_MATRIX=(
+>  	"C2-3:P1:S+  C3:P2  .      .     O2=0   O2=1    .      .     0 A1:2|A2:3 A1:P1|A2:P2"
+>  	"C2-3:P1:S+  C3:P1  .      .     O2=0    .      .      .     0 A1:|A2:3 A1:P1|A2:P1"
+>  	"C2-3:P1:S+  C3:P1  .      .     O3=0    .      .      .     0 A1:2|A2: A1:P1|A2:P1"
+> -	"C2-3:P1:S+  C3:P1  .      .    T:O2=0   .      .      .     0 A1:3|A2:3 A1:P1|A2:P-1"
+> -	"C2-3:P1:S+  C3:P1  .      .      .    T:O3=0   .      .     0 A1:2|A2:2 A1:P1|A2:P-1"
+> +	"C2-3:P1:S+  C3:P2  .      .    T:O2=0   .      .      .     0 A1:3|A2:3 A1:P1|A2:P-2"
+> +	"C1-3:P1:S+  C3:P2  .      .      .    T:O3=0   .      .     0 A1:1-2|A2:1-2 A1:P1|A2:P-2 3|"
+> +	"C1-3:P1:S+  C3:P2  .      .      .    T:O3=0  O3=1    .     0 A1:1-2|A2:3 A1:P1|A2:P2  3"
+>  	"$SETUP_A123_PARTITIONS    .     O1=0    .      .      .     0 A1:|A2:2|A3:3 A1:P1|A2:P1|A3:P1"
+>  	"$SETUP_A123_PARTITIONS    .     O2=0    .      .      .     0 A1:1|A2:|A3:3 A1:P1|A2:P1|A3:P1"
+>  	"$SETUP_A123_PARTITIONS    .     O3=0    .      .      .     0 A1:1|A2:2|A3: A1:P1|A2:P1|A3:P1"
+> @@ -764,7 +765,7 @@ check_cgroup_states()
+>  # only CPUs in isolated partitions as well as those that are isolated at
+>  # boot time.
+>  #
+> -# $1 - expected isolated cpu list(s) <isolcpus1>{,<isolcpus2>}
+> +# $1 - expected isolated cpu list(s) <isolcpus1>{|<isolcpus2>}
+>  # <isolcpus1> - expected sched/domains value
+>  # <isolcpus2> - cpuset.cpus.isolated value = <isolcpus1> if not defined
+>  #
+> @@ -773,6 +774,7 @@ check_isolcpus()
+>  	EXPECTED_ISOLCPUS=$1
+>  	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
+>  	ISOLCPUS=$(cat $ISCPUS)
+> +	HKICPUS=$(cat /sys/devices/system/cpu/isolated)
+>  	LASTISOLCPU=
+>  	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
+>  	if [[ $EXPECTED_ISOLCPUS = . ]]
+> @@ -810,6 +812,11 @@ check_isolcpus()
+>  	ISOLCPUS=
+>  	EXPECTED_ISOLCPUS=$EXPECTED_SDOMAIN
+>  
+> +	#
+> +	# The inverse of HK_TYPE_DOMAIN cpumask in $HKICPUS should match $ISOLCPUS
+> +	#
+> +	[[ "$ISOLCPUS" != "$HKICPUS" ]] && return 1
+> +
+>  	#
+>  	# Use the sched domain in debugfs to check isolated CPUs, if available
+>  	#
+
 -- 
-Ted Logan <tedlogan@fb.com>
+Best regards,
+Ridong
 
