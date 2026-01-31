@@ -1,126 +1,175 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C44932B99F;
-	Sat, 31 Jan 2026 10:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108E17082F;
+	Sat, 31 Jan 2026 12:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769855204; cv=none; b=rAGGL4irw/u/c2xh9s3ZLkq7bcQQZD3n8bXccw1Sdbhek89M0Tb5k2Dn+6RNvV1gNsLLMIGiCDjCLpCB4W7JhIOi3QICMn8ejQ5A8DsUlwPjApM3HiCerUtuGePn8gIrHeoypSBFg/9uWrjE300KyX5cziwqpPim0zSx2ugzCkk=
+	t=1769863044; cv=none; b=Pg+JxSOFiww111EtfI1KzlNCjqrFRDMhF5dCv9cP5ye8UOs3NH38YJoCRrE4jntnirTMW9KkCAYUsqNac2NE8uxp/IJ0gTkQ7M8RRClmwQgslvnH5YImlv1R3Zh3gLSpchkWEQWdNJNyxvUGV8LeRid727TbQeN9LOjDFRhKvSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769855204; c=relaxed/simple;
-	bh=fSYUV7IS3o69dTdqJYCTCDDpkpgEmF9ZMQCatBCrxIY=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=PstHHjJ1DIEtlA3xO7/oN6p3z6qcnGUPwjmqzP4gy0f27NypuIJ2JkTgdf+Tpv1wa6PL6b2bxhc0eJJvosS/AKI/lF97t2e3ChXdhuEzgszN/zU66tmVLAojrERySmF7pmijecH9AiCR+16r09uqbSFEqyEO74MA1A2MSGgXGHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ujFcBGUs; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=o3Mf3maH; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1769863044; c=relaxed/simple;
+	bh=H+l9h16Lew6InNs2ZzvZSZ4Z7A2kn1exqhyCUB1RLK0=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LrYiJigid+IP0/9h3eFN+HiQ2O7Jpt3m18TbU0wqiL6pMmxOwAc7B84Rwgwkl4FkO4a3L1EaPzCqpHqMCSVgrpli4p6RxvUWVqvg1YRsFUde2QNRJ9zpgvMiJpOM6LJUDBb4moZfEWV6k+Sye878wwCUpKaAEzzzoWcDUSKRVt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=reEEehQ3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ujFcBGUs";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="o3Mf3maH"
-Date: Sat, 31 Jan 2026 11:26:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769855200;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fSYUV7IS3o69dTdqJYCTCDDpkpgEmF9ZMQCatBCrxIY=;
-	b=ujFcBGUsImqUv9Waw+ZtvA+p6fZ4LIbAmiS6QztDYuHyPXm/6tntcMoEMIYEjU8lOqcO84
-	JUUDN/6Kukil9yK//36hXfaWpntbhqwS7rpoYqgNp8J7vH2rEgPLSWBSOJCFhT370lMrz/
-	7gRztUGxucgA8FZM7aBr49ieKm/ipXKorVgUa2YcofyppS0h5L2o6S+vxx6wdHHiyZuQP7
-	4tDa97C40tHmopdF7sfKWCecB4iWhSWR6wxuCMHjQF5PnvXeR7OeAHevgmM2vMyuDCG3al
-	xfxPZ+QZ+kVu3G/6B75qY9SyFT5dp8UfXmQfVcVLA1dNhzZVtJfmKcKv2Y6xrg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769855200;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fSYUV7IS3o69dTdqJYCTCDDpkpgEmF9ZMQCatBCrxIY=;
-	b=o3Mf3maHGlMurUXPFEwRlLNYIUYFFIj6zqdetL38/IGpMYAIMViNT6qayDv5qUM3kMIQ3B
-	XwdioEIZ+jxY1TDQ==
-From: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	=?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org,
-	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org,
-	bpf@vger.kernel.org, libc-alpha@sourceware.org,
-	Carlos O'Donell <carlos@redhat.com>,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Rich Felker <dalias@libc.org>, klibc@zytor.com,
-	Florian Weimer <fweimer@redhat.com>
-Message-ID: <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
-In-Reply-To: <20260130081741.425a92e0@kernel.org>
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de> <20260121192729.2095aa25@kernel.org> <20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de> <20260130081741.425a92e0@kernel.org>
-Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition
- of 'struct sockaddr'
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="reEEehQ3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9274DC4CEF1;
+	Sat, 31 Jan 2026 12:37:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769863043;
+	bh=H+l9h16Lew6InNs2ZzvZSZ4Z7A2kn1exqhyCUB1RLK0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=reEEehQ3nh8RYvwtbrmLWy1plHoaLB8F6lEEKOloxSRyNL4c5k5Ewt+BSSULJJPBS
+	 wBjN4ID+3pO0inQw45Yea8cQnhV3mLA18DVovyqSGAgFeeggGf3XqQLIUJmC49LqaR
+	 +yeOgFz9mrgegKZWv8ORhlrb2mVRu5wq7Y4s6w78xZswhVo0B343GGXyKoeNNIQVy0
+	 oBhot26HilHhAiXALTogyyQOnOjRa1dua18piQ/eM4gDTReWJ6PDh0vTxnmYYHQrK7
+	 M7YrSjY/jvbvG+VYgDGxdaacyn35BeDf7RLXVWZh71jD3YXnVn5RJcieb2kNMzzM0n
+	 Pp+zZBXeSQwRA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vmAE4-00000007Hih-3fs1;
+	Sat, 31 Jan 2026 12:37:20 +0000
+Date: Sat, 31 Jan 2026 12:37:20 +0000
+Message-ID: <86y0le9cvz.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: oupton@kernel.org,
+	sebott@redhat.com,
+	gshan@redhat.com,
+	yuzenghui@huawei.com,
+	rananta@google.com,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	pbonzini@redhat.com,
+	shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] KVM: selftests: Improve sea_to_user test
+In-Reply-To: <20260130192837.890688-1-jiaqiyan@google.com>
+References: <20260130192837.890688-1-jiaqiyan@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jiaqiyan@google.com, oupton@kernel.org, sebott@redhat.com, gshan@redhat.com, yuzenghui@huawei.com, rananta@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Jan 30, 2026 17:17:46 Jakub Kicinski <kuba@kernel.org>:
+On Fri, 30 Jan 2026 19:28:37 +0000,
+Jiaqi Yan <jiaqiyan@google.com> wrote:
+> 
+> Several improvments to the test for KVM_EXIT_ARM_SEA:
+> 
+> - Refactor run_vm to catch GUEST_FAIL, instead of causing confusing
+>   unhandled MMIO kvm exit.
+> 
+> - Sync far_invalid to guest.
+> 
+> - Exit test with KSFT_SKIP or KSFT_FAIL when should.
+> 
+> - Add comment about VM backing memory type.
+> 
+> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> ---
+>  .../testing/selftests/kvm/arm64/sea_to_user.c | 94 +++++++++++--------
+>  1 file changed, 53 insertions(+), 41 deletions(-)
 
-> On Fri, 30 Jan 2026 11:34:15 +0100 Thomas Wei=C3=9Fschuh wrote:
->>> Are all those selftests / samples getting broken by this patch set?=C2=
-=A0
->>
->> Yes.
->>
->> Some of them get broken by the new 'struct sockaddr', but some others ar=
-e
->> already broken just by the new transitive inclusion of libc-compat.h.
->> So any header starting to use the compatibility machinery may trigger br=
-eakage
->> in code including UAPI headers before libc header, even for completely n=
-ew type
->> definitions which themselves would not conflict with libc.
->
-> Let's split the uAPI header changes from any selftest changes.
-> If you're saying the the selftests no longer build after the uAPI
-> header changes then of course we can't apply the patches.
+Overall, this test is still pretty broken.
 
-Yes, the selftests don't build anymore after the uAPI changes.
+For example, on my Altra box:
 
-"can't apply" as in
-* "can't apply separately"
-* "are unacceptable in general"
-* "are too late for this cycle"
-?
+maz@filthy-habits:~$ ./sea_to_user 
+Random seed: 0x6b8b4567
+# Mapped 0x40000 pages: gva=0x80000000 to gpa=0xff80000000
+# Before EINJect: data=0xbaadcafe
+# EINJ_GVA=0x81234bad, einj_gpa=0xff81234bad, einj_hva=0xffff41234bad, einj_hpa=0xbad
+ok 1 # SKIP EINJ table not available in firmware
 
-None of this is urgent.
-We can do the selftests in one cycle and the uAPI in another one.
-Feel free to pick up the patches as you see fit.
-(The mptcp changes already go through their tree, so need to be dropped her=
-e)
-I can also resubmit the patches differently if preferred.
+Well, not quite. EINJ *is* available, it is just that this test,
+contrary to *all* the other tests, requires some insanely high
+privileges. But the test is making stupid assumption.
 
+But that's not all:
 
-Thomas
+maz@filthy-habits:~$ sudo ./sea_to_user 
+Random seed: 0x6b8b4567
+# Mapped 0x40000 pages: gva=0x80000000 to gpa=0xff80000000
+# Before EINJect: data=0xbaadcafe
+# EINJ_GVA=0x81234bad, einj_gpa=0xff81234bad, einj_hva=0xffff41234bad, einj_hpa=0x80041234bad
+# echo 0x10 > /sys/kernel/debug/apei/einj/error_type - done
+# echo 0x2 > /sys/kernel/debug/apei/einj/flags - done
+# echo 0x80041234bad > /sys/kernel/debug/apei/einj/param1 - done
+# echo 0xffffffffffffffff > /sys/kernel/debug/apei/einj/param2 - done
+# echo 0x1 > /sys/kernel/debug/apei/einj/notrigger - done
+sh: 1: echo: echo: I/O error
+Bail out! Failed to write EINJ entry: Success (0)
+# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Failed? Or Success? Who knows...
+
+But frankly, the whole "embedded shell script" is disgusting. What is
+wrong with driving the injection from the test itself, rather than
+this access()+popen()? popen() itself is a liability (see the man page
+for system()), and should never be used for this sort of things.
+
+> 
+> diff --git a/tools/testing/selftests/kvm/arm64/sea_to_user.c b/tools/testing/selftests/kvm/arm64/sea_to_user.c
+> index 573dd790aeb8e..4a3511fa1f940 100644
+> --- a/tools/testing/selftests/kvm/arm64/sea_to_user.c
+> +++ b/tools/testing/selftests/kvm/arm64/sea_to_user.c
+> @@ -12,6 +12,11 @@
+>   * including the notrigger feature. Otherwise the test will be skipped.
+>   * The under-test platform's APEI should be unable to claim SEA. Otherwise
+>   * the test will also be skipped.
+> + *
+> + * The VM backing memory is tied to HugeTLB 1G hugepage so far. Make sure
+> + * there are more than 4 1G hugepage on the system. They can be allocated
+
+Why *more than*? Isn't that *at least* instead?
+
+> + * at runtime by:
+> + *   echo 4 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
+>   */
+
+Why can't you provide an adequate diagnostic instead of this stuff:
+
+maz@filthy-habits:~$ ./sea_to_user 
+Random seed: 0x6b8b4567
+==== Test Assertion Failure ====
+  include/kvm_syscalls.h:58: mem != MAP_FAILED
+  pid=887 tid=887 errno=12 - Cannot allocate memory
+     1	0x0000000000405b4f: __kvm_mmap at kvm_syscalls.h:58 (discriminator 3)
+     2	 (inlined by) kvm_mmap at kvm_syscalls.h:65 (discriminator 3)
+     3	 (inlined by) vm_mem_add at kvm_util.c:1036 (discriminator 3)
+     4	0x0000000000402373: vm_create_with_sea_handler at sea_to_user.c:290
+     5	 (inlined by) main at sea_to_user.c:336
+     6	0x0000ffffb0dc229b: ?? ??:0
+     7	0x0000ffffb0dc237b: ?? ??:0
+     8	0x00000000004027ef: _start at ??:?
+  mmap() failed, rc: -1 errno: 12 (Cannot allocate memory)
+
+What is preventing you from not requiring huge pages? And not
+requiring 4kB as the base page size?
+
+Given how broken this is, I'm likely to disable this test until you
+fix it for real.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
