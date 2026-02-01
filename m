@@ -1,140 +1,118 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E073D3B3
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 16:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D762926CE05
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 16:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769963660; cv=pass; b=qDN//vs6qA9aGbDJ9llRAwzfMIjr+5bOmG7zvUhV2WTQyL0aJI9gyisYTaTDAU74Be5y2b+WHOGyNyfJntC7O9RIR1JdhV4dQ1QtVMzVJ+NaSXh0SmFxh7yOYp5SCfWZoHeEMKzkVmbL9rfet4S3FeqdVu1fekzxL95qPNAgWWk=
+	t=1769964209; cv=pass; b=DxgkUBveu0a4wBS2Bf5SjFVevnlY9yb4hzYVMgdOX3yUIC3u4zXWM/COCoQnnxhYSJobmb6YHxjiHGzL4opIfmvWlE0O6OQWh0pHbfXEnOj0YyEBLrxz4j+V1TlaS7amMPNH1kztGfnOUZavtPWg8wpQcDl1Aqv0e/ZW0IXFw00=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769963660; c=relaxed/simple;
-	bh=9vARzbqm57tHwuhXaOkV/GDbi+y1/yz3tQ/mR3mTHg8=;
+	s=arc-20240116; t=1769964209; c=relaxed/simple;
+	bh=vy8irmUiSf/eXcG0W+j1BcyMBQYIq4gz6BF7D2WJiis=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Jw1KI46vDL1Tnw/oQ3Pdj8uEJFeOhBQNYEan1QvvsVedix60YXEKLIYnZ0epJBtzu0kvLWdhSnXR0/uPDTWZHOQI5f1gJel+UJ3jGhIvYLnveaqJbKwZQvcrW9NTTeDuqfov4gNmAdDTeysHxxInB8Ut8eJLsXucwlKf35qqHfA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SH26GhD1; arc=pass smtp.client-ip=209.85.128.42
+	 To:Cc:Content-Type; b=nyqlee+en62ZLkzU5rRHGiyui9TlCUgzYw7T4qFotAgnQ2MdQCVSc3WYa/hcnG1riB1OF1+tcHNgRLznqcPeOZPTqBxmrc7fRs5HofBhKyN5yuAAF6sYWO6J7FdX7kdyygk/tOl2TgyLetoRSVMH5TM/NAo7jXUW3zNfIdBqJU4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AOalesdV; arc=pass smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SH26GhD1"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48069a48629so38111225e9.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 08:34:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769963657; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AOalesdV"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4806e0f6b69so26300785e9.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 08:43:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769964205; cv=none;
         d=google.com; s=arc-20240605;
-        b=WTareNHx0jJYpo07Anz6dcim8JjMImZUG6rg5RjzszkmSleH4nVaVWFDBpIbERqnZI
-         Ep9b5sCxqcOWYTv54P5dftixb41moGF+jLjx73yJICQLjxNqX7ic46nEJ+7MdDSEKGzP
-         L3hrt2xyf2Wa/XLY/LU5DTcCxCtrMrddYh5QX5HNAg0Fk+A2l1ZMykfXnSKgvK5wh8N+
-         T2Q7lQzz1NMjMKV88TkvcxO8sf2pMCPWOPJNnGMEAaWLX1pNWZtziFMPwLrwjUV7Cd7o
-         CT+Gusv5+NMs9zrKU1ubMCG7hEdZ3M0DrJC7xabDTgCBb59W3Vk8FjIVmXAS6HHx3Xaa
-         Mizw==
+        b=iK9nD8RpKDxG8F7ffm0RJkW2mcp3pumLBUTgQxOzgTRKksVZURiAVXVcU/vmfJfEcL
+         Kicx9YOZSxooVRiuUhlJcmmGDuvJXSVXwg7fU0OhnE5gWyNI4teRK2gHj8Fc578TuNGY
+         RP72qhrOZUPicLxIoJ4YUdP/WsRcPoe9iDqQAQ7q5Vp2xZdaN7p0EEFqp+k+dF5yNWex
+         O3M09pbjYy44WiELcdHoAzsS3+ykodKkHAC5iKi2B1j8k4aqp8H+qgchFhAyzYSsCHA9
+         F0+croOs1yW2kwaZazhhEzOrFxoKvOKA2jwSMR6o601WTGfjrtyg496+yH2NrGZbneAI
+         9ijA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=u0Iy9aGR9ZHnPoAbdsA1GkEXv4tNmEq2SPJm+D/xhwc=;
-        fh=s9iiIKnPE7bj68S1Et2PEZEOLu+3SPV4fWPSwNJxX1w=;
-        b=WYQ962II3YpU1lIYYCLB7m8O1jC9lhcwv4ETdZfOGBU+tvirSOR8FHH6twTcPi6M/+
-         ukBmaJA3uGeuyuIwW3ls73206tTMeSsiNxs4IeChzQcn9/QwK3KWDy1Ol2zB+Ocb5232
-         4Z6Kpjr3aaYvzNHeIBBsTXlphq2VsWDcbdAE49v/tYhN25eikVjwFGFpCD3LALynsE54
-         tdl5wMAylPQWhg3JxcxmOR1IoG+IrEAse1auKQh8ne/WMQyOcgC8zdeI9iS3dD3V1+Bl
-         amKca9QbECz8zS4aSqoFmRvL5bdqfOAHIkUmg8LPIDdOm3MoYTccyJsbACSU8rrgKRYK
-         8W5w==;
+        bh=nc4emD7dbgLczqSrt1DDlXx/t82B84SIO2BT1dkonPY=;
+        fh=2FpqrLiX4tr4XGfwAWy59YmtCA9RB541PpoTOxaoAnc=;
+        b=LFrm9rxE/IgLtYRM9wDHJ85d23sarUvyQ1WzI0YD46eoq94mM325HdehWGbOcv2lNT
+         Bb4feu0gPKIfQKetNNlvKl/5MOM3lH4v/rTxHL9k+nnR68r2uUH+Gw48kthp0JheyIaX
+         pnHNNjqACcvFxU28c6Mm3Z2XMKiZlQcXVGb7X3QuCHMlYq36334t2mUTgKFo+AptZE5K
+         S+F1YbV0baQeCG5hBhtuWaEfFy6ym3sK0RzGpKrmW7tHfUEpEXYn4oObpw0GqCwBCyrx
+         Lei7klSvO7+K/sPyEp9NL+EhFiqfPF/+89w6onTy0sZdAqJb73y7pZPmLpu8cmenRF8y
+         9OBw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769963657; x=1770568457; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769964205; x=1770569005; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u0Iy9aGR9ZHnPoAbdsA1GkEXv4tNmEq2SPJm+D/xhwc=;
-        b=SH26GhD17Mc7LRD0W+pRH9GdbyywkcdDLfjEN25lZoyNq9U6dvEo4bjQ8OmURHNqf9
-         kY/ECSITSwhbJpZ0sXoqhTRqW0bZnjAn8ISaxq8ZUK4s1SxJl8yhMXN3iq6Dw2xR9wWc
-         KXwSaGHHQ2Ns4f7Lfkot2UUj9sO5PgOatIZxwekgfN/EiirYA8q6QobfPReQ8j0HJqKJ
-         TOGK2bSJyNy3zKgrW76lnp1h4BvG728gyAHHtZyBppuSDX0eNMwd8L53g8BNgr1D1L34
-         65rVzTJmR3WiAsBI6MNcnHKEMMirVe309IihVm5VD49wtNmRTZxSXpQhuWbGt3OvgqyU
-         jJbA==
+        bh=nc4emD7dbgLczqSrt1DDlXx/t82B84SIO2BT1dkonPY=;
+        b=AOalesdVMVRw8h2fXSrfWuB5pOUwDTO4rKEzX93Mhvlr1GVyl3UcOAXGtCgEQqymyb
+         oHdb84rg62VEcOgKFv15XAKjqFbqUNo86lX9gbMmpPreajkV0Uzmv+B2MkQPsPpud5VM
+         BI/B6g2YJOIKGhwtQCeAvdkmhvAtOht3khpcn6ABMfd/UJdvKKlaKeW7EDWBN4CqSGrs
+         SxAxiFhLY3Wta6lOzr2EZYk7IFXayU526BvB2E9lipA7LPD0+OsnPnvKDNg2I2yX1hoU
+         R1b1rjSjxdUZgHfzp4UlksmZAy1gbfd7/qmRgXBbaSODX/7V5KdR4IDCkPdB5RfC2yzw
+         EWgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769963657; x=1770568457;
+        d=1e100.net; s=20230601; t=1769964205; x=1770569005;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=u0Iy9aGR9ZHnPoAbdsA1GkEXv4tNmEq2SPJm+D/xhwc=;
-        b=Ck9FemYptYAYbImjtqAxvSarFxOKrsC9pXJIzOi1UHxdVm44PU2YfzxMbC9R1iidPY
-         Es5TX2qKBV7D76lPnZ128xD0MrbItScG2wYFcP51esivNDeDu6Bj6BbuL+Ti8pu4df7y
-         MG1OfhBg1+5QR6dm0ghK9HBPKpLn3ydyUHRNWLwUvlz7HWHHBPpOzsOuv2cqtQx2O3kv
-         rVbWTtftByipykeP/VEdrr9psm2GV9qaUO+mlti+h644B5MhaaVHXdceWaA6JpfL4mof
-         w4du5LFTqp/hk0Dm/Gu+Do9IEGg9cfwSHm4XVTjpblMMMOOgtppJoCfy7xDMYRFIZFAh
-         khSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXDJySSePdMgohcSxgt8d8AfuX0v3goxJ33388AE3sYcuMg/3AwhoysJkk3pjnKCQF9rqR42JngW9O0wSAYxAE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzThkXUdPuqTkpzPHTVWj199P+BDo8SGPQN1zM+8E9zKBMrW4Vn
-	vcahbShn+mh1TdmzgdMCjeS3Ogu6EWIqszU85jEoRnAn1QjCA3NwbMeJsOQB7TQtWUpL/yumTTs
-	xRJmiKVsTfJknZvHtvgO/XVe4cnvCEvY=
-X-Gm-Gg: AZuq6aIyZ21U5KtklgoEbecy7sxnh9uRMe1gXE3dQn3XhAETMkEu0/mjZ2zZWcktJTN
-	BHrKy17sbDMISjkg0tulVTI6NBfZqNLlK23OR8PvDi6EHpRw7s/GpMnfXGIXW4yfsweMez4Jc3T
-	/rLpTYig6u0W8Yfjd3K3sZj+e+BQMwg/Tank3b/dh/vBl4WT1v1UvCg/hNLK0pRsSsOLBQXwu8J
-	n22oAOwt8Vy8m9WaPR5c3XJ1Ynb0e8KDu925y9iKQVdo0R+3tw7sKgiPZfojMsdgBCSgcRD/6gC
-	kmJasJD6uPzF/LZwDOQvMFQ6sua60h6RchR3tTi2nWEl8hyqYJyLMMeF1z4kEK3cOTXm0ME9wGt
-	LsbejE0ETBMc0/VALBOk5N8pX
-X-Received: by 2002:a05:600c:4e12:b0:477:c478:46d7 with SMTP id
- 5b1f17b1804b1-482db481c85mr120406455e9.22.1769963656749; Sun, 01 Feb 2026
- 08:34:16 -0800 (PST)
+        bh=nc4emD7dbgLczqSrt1DDlXx/t82B84SIO2BT1dkonPY=;
+        b=i1ddHctuieBZ1UcwY9VnHOfiL0mxUmH1PFD+W7hkpZx76uhDeyCpbtk9eUymNpAeK1
+         IH/wg5a7y8kZhDdMJWkNf4JrURuDy4+ZcOYX0Mc3y2Q13mGuDcNq87j11xnOriK5FQRy
+         K1UcIKM//vfpJF+JfdIZn5VW4kGVmkhKZQaFyBWXmivF0P8liIsSlxooWriSEvSeUHH7
+         EcMA+3QNXYYwHxbzsrqmrsE88K3ZUP2xDB7WwUqrB/Xrb2BWeHHB6V8sAqf2rIJMNozo
+         P9+8MJAW8LWwU5RD5iR7x8sicVoF/ryqBkn593s6EuuyPS06XWydN1IIqR803Zrs+O9n
+         w6/A==
+X-Forwarded-Encrypted: i=1; AJvYcCU+wJDjqG7LdGNUeghhoLZnY/C3fM9GhjAZwHk49wA1M7c3U5yD5/DN8timitdMnABbaNY0NKaNXLnkN49V5vc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKv9oPted6SR6A3UFOxJXH6ugmG8jHbE+noO6aj+PXDijDT7Cd
+	aNB4Yf0Pz6ndoyFRnCGlmzxv707rFJL5IJ+kw53IJ13YS5ELYDoPI3Q3jl3Nsrp+XvPQxNk8UaU
+	/AoXOso0re0JEVVnLUqwszLq8I8Nl6ag=
+X-Gm-Gg: AZuq6aKOkZf8kSwV9JnnqIN6d5jPfsSHV1rlpuf1FBPf9MlqcG6G5vfIw20Cwd9XNe1
+	DK7Z7izDPTXTWFHnbmf53d1kGjtNEi+QlQzdbQ+YRn5/TXobV95+5mJ8LivSOjVvL0T4Fu33K55
+	BtgD8J1Enot3Ih7/CghCz7TQ1urLPAuXoUHCtaC34gqS5NqQ96gdSZijVhUni29GbQvmVHnx2QY
+	CyzaAlX69Yay3raV3q6/tEacXpIVZ2eZ0HCxaYbliBYXGDZ6K8xrXHNDmRPe0kRP+VCa8Q/lalb
+	hzjE/xADx6nH0qzjoPz59FQIVxgHLflydeyQEQzt6jme5Fea6eE/D1JRq9rBcwWdnhRwjJr/hqM
+	3PCjrnchlQIPQrA==
+X-Received: by 2002:a05:600c:3e1b:b0:477:7af8:c88b with SMTP id
+ 5b1f17b1804b1-482db45129bmr117686265e9.11.1769964205034; Sun, 01 Feb 2026
+ 08:43:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260201031607.32940-1-pilgrimtao@gmail.com> <20260201031607.32940-4-pilgrimtao@gmail.com>
-In-Reply-To: <20260201031607.32940-4-pilgrimtao@gmail.com>
+References: <20260130091245.3824029-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <20260130091245.3824029-1-sun.jian.kdev@gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 1 Feb 2026 08:34:05 -0800
-X-Gm-Features: AZwV_Qhcz2_dwtnHN0abQtq47NxLW3mB88GNnOnp3aBl9Ob11U6ru31evgMuNbs
-Message-ID: <CAADnVQLFBJ5BKv_6UBk7Wrv=-5QxZfG=856uj+rUKRDcxGWbhQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] selftests/bpf: Add supplementary tests for bpf_kptr_xchg
-To: chengkaitao <pilgrimtao@gmail.com>
+Date: Sun, 1 Feb 2026 08:43:14 -0800
+X-Gm-Features: AZwV_QhtfWodM26fUs_CN8HXo_1GbDHM_04TebfkG18a66-Lo1RgLS0c7sd7eH0
+Message-ID: <CAADnVQL-Gf9SAAhfu3zfPvNPQ11UQmMmF-7wZNYaNOvA=-Bmbg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: skip deny_namespace when bpf LSM is not enabled
+To: Sun Jian <sun.jian.kdev@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>
+	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 31, 2026 at 7:16=E2=80=AFPM chengkaitao <pilgrimtao@gmail.com> =
+On Fri, Jan 30, 2026 at 1:12=E2=80=AFAM Sun Jian <sun.jian.kdev@gmail.com> =
 wrote:
 >
-> From: Chengkaitao <chengkaitao@kylinos.cn>
+> @@ -88,6 +119,13 @@ void test_deny_namespace(void)
+>         if (!ASSERT_OK_PTR(skel, "skel load"))
+>                 goto close_prog;
 >
-> 1. Allow using bpf_kptr_xchg under lock-held context.
-> 2. The rb_node contains a __kptr pointer, eliminating the need to
->    perform the remove-read-readd operation sequence.
+> +       if (!bpf_lsm_enabled()) {
+> +               printf("%s:SKIP:bpf LSM not enabled (boot with lsm=3D...,=
+bpf)\n",
+> +                      __func__);
+> +               test__skip();
+> +               goto close_prog;
+> +       }
 
-typo
-
-> This patch implements the following workflow:
-> 1. Construct a rbtree with 16 elements.
-> 2. Traverse the rbtree, locate the kptr pointer in the target node,
->    and read the content pointed to by the pointer.
-> 3. Remove all nodes from the rbtree.
->
-> Signed-off-by: Chengkaitao <chengkaitao@kylinos.cn>
-
-Please use your full name. Like Feng did :
-
-> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-
-..
-
-> +#define private(name) (SEC(".data." #name) __hidden __aligned(8))
-> +
-> +private(A) struct bpf_rb_root root __contains(tree_node, node);
-> +private(A) struct bpf_spin_lock lock;
-
-It doesn't even build :(
-
-progs/rbtree_search_kptr.c:23:1: error: expected parameter declarator
-23 | private(A) struct bpf_rb_root root __contains(tree_node, node);
-| ^
+There are lots of bpf-lsm selftests.
+You're trying to skip one. What's the point?
+Pls use test_progs -d or -b to skip the tests in your step.
 
 pw-bot: cr
