@@ -1,518 +1,168 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E942D028A
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 06:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64B7284662
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 09:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769927928; cv=none; b=t+cKIRiLCXdph/WaDjffYvSwj0OqY5x00z5gyN4I/Clbdnt9fH/Z+ljW9eqaCgX1PuRE4cGIXL0pqbzIMXnBjQMv3XUFYNsgIDMA4A98geDwVyE8OA9w0tkEvJjobFDybEX8LLsZ6YBRkiMYdV8/SWk/7gAWJ1gfeZGjenZC7ng=
+	t=1769936489; cv=none; b=dmDqUeVT8DCquT9+4R4MxO74B0numDbz9lS9f5mVeegQpQ0kNO238BZ5rwmqGxO4R99doRAKzb6gR2ix2W6yqJfVHN424vwD6T/bFuFRj2B1Wp8Wny264LOLyT5Jy31T6hC8TEfxALrab1t/2GVTcWWc+gtFYdnxhj7Z37Wc+/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769927928; c=relaxed/simple;
-	bh=nbfNpQjgAzIEscLrdW9vuZG047Ckhgg+ZpH+MEM3RCU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FTKC31sSloSd/s8ZWU4Mmntz150qZfSgvduenL8R+MSPKhDm2TuQjyMMg9hNMhyb9SGzUkOdmcnKk0SBkaBmGtG5Nrl76dhOhG8ZE+n2VBFP3R6pYzk+/sXfHsK9RItgkfITWU9IeO3L6w14zFbQI2tizesQhThmzXFFI1d/x7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=smbFLQG3; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769936489; c=relaxed/simple;
+	bh=uLCjGvitM7MZI+iiZOhsAyamc3vLUAP3Bnzyj3zmxmw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K/KscdZdfoxuoMXsw2/21F/qNhbPvxxlduKnGrbnBes/fLUKV64X6+/VHgHJYu96/bFgb1qTJvfYe+GB+Sjo3DfBilpz/B4rWQg5wf3rDpqTp7XSaDf7guuSi8MH92sNyT2DMnu8sPvGVaXRPiyG1cI4pwqmznCImnWU/ZVZCmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XK9lUsSg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=U1PRsJnp; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="smbFLQG3"
-Message-ID: <44484594-5b5d-4237-993c-ac1e173ad62e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769927913;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XK9lUsSg";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="U1PRsJnp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769936485;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZwyK35BqHJ9vMxdC101Hpkz7OEl6VsmM8t+q1gtlYtQ=;
-	b=smbFLQG3fxi0EmdEQh5EfbtGQ62LpS961djirjg538qndfMoJIldCdV/L2GKzWYzuysN/1
-	/GumBEceCbaFABLQT0FDfy4W6hBDyhGvjE/RBwgY8Fercg7NI2raGGc+bgtYZDTz4/ErLu
-	bI04FQJ+kIrizpByKTlcv8fJSr/4ST4=
-Date: Sat, 31 Jan 2026 22:38:18 -0800
+	bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
+	b=XK9lUsSgv5NmGKEW2yTbUcVZFlIN3gn6FVpOPZzTGj2iAkW6M30LRWxWBpmXbgMYy2zEx4
+	UmOIm8j8nIfsLX05vipwZJ4njvGoLoJmOMchwA3pBhCJKiaE7YOXEPMnz0TBmZOaKHP1uf
+	Gh9ewvy+u49vmQVe2LPZZ50PPddgPA0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-492-0qkPuz4TPnG7gq8zUXh9Qw-1; Sun, 01 Feb 2026 04:01:24 -0500
+X-MC-Unique: 0qkPuz4TPnG7gq8zUXh9Qw-1
+X-Mimecast-MFC-AGG-ID: 0qkPuz4TPnG7gq8zUXh9Qw_1769936483
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-430fe16b481so2252089f8f.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 01:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769936483; x=1770541283; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
+        b=U1PRsJnpLnDt6xCnPPIfMra8LELIvxROw7qE+hyB2URGbVFeGBJYqSDEMOJTQHzdz0
+         sDU/W86iLqgbUjCCjzfMTgiU1RUqOMJX4JYQ0GkjXnFS9s+vz2IFyaZW2m+2IpTBPcnL
+         aUkKcz2iMSl9NkFKMkFjzOqGutRASDRxfHCHm15rFQHSvFKhQOG87K8K5aY3Acvgq2jM
+         tq0Pm/CPPV7qmTU98/vkqmKTyQXUECl0Elpu9fFtMSj3Sq42fkHau7FchxSsoW7j+wny
+         +R1Zm2Eg7mDrF1pwYypkCy5597RqUFl3s47MSvwzspuQwKubwTmJnQjzE9Ny1gG/YxQ8
+         sDtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769936483; x=1770541283;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
+        b=ba2GyvjHZQEybn7smU/7V4CWrZhRf03OFU1TUVNiv0qXHP5ijZ5kSOtzXG6fiDhtRs
+         3wUUoCW3nTRPvuPP5km8Xcrz19YsWIca8zQVE/c8HQo/LLqBGfPwQB+gSsu6BgzFJVtu
+         Ni+o3CppC44gGH0Ez4WeD9niDnNoH1s4C1QP8ykj/VE5o1LhnF+vcB2fQh1vpiQE8sPa
+         S1CxGRaBeuvvYBElTdEXBRixVnK+kg3eq/9Lo9sTmAHzoMf8+a46O+s5N9tIsWnu0iwJ
+         Vx/Ypl2B98OkEq6LWHYkwUTL2hFK+cYMlUH8VJFOFxEnAMbEeH3zKbH2FPJO9RZFFQRT
+         UXOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrbOHY37EKvVucJrBumMTfS/LiSbX0A1kYYDPGyZox5pXcyx3zbtbBibGFOxWQwcKEGPD3ARtICP3C5fphDvQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaFzaWHp+d6hU3XEANZmotMOsNIm/mRDnKCZ3UIpooA5j6+nrB
+	YyKcvcA9NLlUKfnq+lThxk9RqEBSEEcdqI1nr5LGTa6DVOUKI7xuhf7NvI1JTxCRDYsEWGA6AFn
+	eY7yyKsB0S2zRVF+rukapz1BPA3/0RwdNBaxKs0f+rXkX2cDFGdx1biVf23tGTPJDggEoyw==
+X-Gm-Gg: AZuq6aJtSaVa36uRCV8Jo3J12vdJwWyybd6IXhWXqvaK+ZL2Xa4hLLgfiT+y8zaZ2CI
+	/A1NhTE1I1mmgAMDIhGwMIR78r3nmaAJDay9O1pXyyeaPYjnBMn4AVvlRIfLbJw5InR7PXoq7tl
+	IHdDnlyKR50fub0REuJL+QcxIuXvzikwr0+h6/AIaP5qOftH7co8U56K27kYa+goWHoOaTsqK0X
+	NeIc9AkKW35LvAgd/G1e5H9CoGho9XN3cBoKqvu10cuTlVZHAPcCa7/3zyIL+/WYbcmwTWrnUJ8
+	3ud0thelOyGAWzBK6jF7uW5e+aKWKA05c2QiqHWX7JaKn2WMRqVQ+erxrrQFpyt+GRSsfyXLEI/
+	WsBFrr5O+EJsRse/gwohU9Tiu2Cw2ddbmwg==
+X-Received: by 2002:a05:6000:2883:b0:430:f742:fbb4 with SMTP id ffacd0b85a97d-435f3aaea5bmr11593876f8f.43.1769936482925;
+        Sun, 01 Feb 2026 01:01:22 -0800 (PST)
+X-Received: by 2002:a05:6000:2883:b0:430:f742:fbb4 with SMTP id ffacd0b85a97d-435f3aaea5bmr11593790f8f.43.1769936482295;
+        Sun, 01 Feb 2026 01:01:22 -0800 (PST)
+Received: from redhat.com (IGLD-80-230-34-155.inter.net.il. [80.230.34.155])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e131ce70sm36590005f8f.27.2026.02.01.01.01.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Feb 2026 01:01:21 -0800 (PST)
+Date: Sun, 1 Feb 2026 04:01:16 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: tariqt@nvidia.com, linux-rdma@vger.kernel.org, shaojijie@huawei.com,
+	shenjian15@huawei.com, salil.mehta@huawei.com, mbloch@nvidia.com,
+	saeedm@nvidia.com, leon@kernel.org, eperezma@redhat.com,
+	brett.creeley@amd.com, jasowang@redhat.com,
+	virtualization@lists.linux.dev, xuanzhuo@linux.alibaba.com,
+	pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
+	linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+	dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+	kuba@kernel.org, stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net,
+	liuhangbin@gmail.com, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, ij@kernel.org,
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Subject: Re: [PATCH v1 net-next 1/3] net: update commnets for SKB_GSO_TCP_ECN
+ and SKB_GSO_TCP_ACCECN
+Message-ID: <20260201040043-mutt-send-email-mst@kernel.org>
+References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260131225510.2946-2-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 02/22] PCI: Add API to track PCI devices preserved
- across Live Update
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
-Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
- Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
- Alistair Popple <apopple@nvidia.com>,
- Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal
- <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
- Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>,
- Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
- kexec@lists.infradead.org, kvm@vger.kernel.org,
- Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
- =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
- Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>,
- Pranjal Shrivastava <praan@google.com>, Pratyush Yadav
- <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>,
- Samiullah Khawaja <skhawaja@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>,
- =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
- Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>,
- Yi Liu <yi.l.liu@intel.com>
-References: <20260129212510.967611-1-dmatlack@google.com>
- <20260129212510.967611-3-dmatlack@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260129212510.967611-3-dmatlack@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20260131225510.2946-2-chia-yu.chang@nokia-bell-labs.com>
 
+On Sat, Jan 31, 2026 at 11:55:08PM +0100, chia-yu.chang@nokia-bell-labs.com wrote:
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> 
+> No functional changes.
+> 
+> Co-developed-by: Ilpo Järvinen <ij@kernel.org>
+> Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-åœ¨ 2026/1/29 13:24, David Matlack å†™é“:
-> Add an API to enable the PCI subsystem to track all devices that are
-> preserved across a Live Update, including both incoming devices (passed
-> from the previous kernel) and outgoing devices (passed to the next
-> kernel).
->
-> Use PCI segment number and BDF to keep track of devices across Live
-> Update. This means the kernel must keep both identifiers constant across
-> a Live Update for any preserved device. VFs are not supported for now,
-> since that requires preserving SR-IOV state on the device to ensure the
-> same number of VFs appear after kexec and with the same BDFs.
->
-> Drivers that preserve devices across Live Update can now register their
-> struct liveupdate_file_handler with the PCI subsystem so that the PCI
-> subsystem can allocate and manage File-Lifecycle-Bound (FLB) global data
-> to track the list of incoming and outgoing preserved devices.
->
->    pci_liveupdate_register_fh(driver_fh)
->    pci_liveupdate_unregister_fh(driver_fh)
+Subject: comments?
 
-Can the above 2 functions support the virtual devices? For example, 
-bonding, veth, iSWAP and RXE.
-
-These virtual devices do not have BDF. As such, I am not sure if your 
-patches take these virtual devices in to account.
-
-Thanks a lot.
-
-Zhu Yanjun
-
->
-> Drivers can notify the PCI subsystem whenever a device is preserved and
-> unpreserved with the following APIs:
->
->    pci_liveupdate_outgoing_preserve(pci_dev)
->    pci_liveupdate_outgoing_unpreserve(pci_dev)
->
-> After a Live Update, the PCI subsystem fetches its FLB global data
-> from the previous kernel from the Live Update Orchestrator (LUO) during
-> device initialization to determine which devices were preserved.
->
-> Drivers can check if a device was preserved before userspace retrieves
-> the file for it via pci_dev->liveupdate_incoming.
->
-> Once a driver has finished restoring an incoming preserved device, it
-> can notify the PCI subsystem with the following call, which clears
-> pci_dev->liveupdate_incoming.
->
->    pci_liveupdate_incoming_finish(pci_dev)
->
-> This API will be used in subsequent commits by the vfio-pci driver to
-> preserve VFIO devices across Live Update and by the PCI subsystem.
->
-> Signed-off-by: David Matlack <dmatlack@google.com>
 > ---
->   drivers/pci/Makefile        |   1 +
->   drivers/pci/liveupdate.c    | 212 ++++++++++++++++++++++++++++++++++++
->   drivers/pci/probe.c         |   2 +
->   include/linux/kho/abi/pci.h |  55 ++++++++++
->   include/linux/pci.h         |  47 ++++++++
->   5 files changed, 317 insertions(+)
->   create mode 100644 drivers/pci/liveupdate.c
->   create mode 100644 include/linux/kho/abi/pci.h
->
-> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
-> index 8c259a9a8796..a32f7658b9e5 100644
-> --- a/drivers/pci/Makefile
-> +++ b/drivers/pci/Makefile
-> @@ -16,6 +16,7 @@ obj-$(CONFIG_PROC_FS)		+= proc.o
->   obj-$(CONFIG_SYSFS)		+= pci-sysfs.o slot.o
->   obj-$(CONFIG_ACPI)		+= pci-acpi.o
->   obj-$(CONFIG_GENERIC_PCI_IOMAP) += iomap.o
-> +obj-$(CONFIG_LIVEUPDATE)	+= liveupdate.o
->   endif
->   
->   obj-$(CONFIG_OF)		+= of.o
-> diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
-> new file mode 100644
-> index 000000000000..182cfc793b80
-> --- /dev/null
-> +++ b/drivers/pci/liveupdate.c
-> @@ -0,0 +1,212 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (c) 2025, Google LLC.
-> + * David Matlack <dmatlack@google.com>
-> + */
-> +
-> +#include <linux/bsearch.h>
-> +#include <linux/io.h>
-> +#include <linux/kexec_handover.h>
-> +#include <linux/kho/abi/pci.h>
-> +#include <linux/liveupdate.h>
-> +#include <linux/mutex.h>
-> +#include <linux/mm.h>
-> +#include <linux/pci.h>
-> +#include <linux/sort.h>
-> +
-> +static DEFINE_MUTEX(pci_flb_outgoing_lock);
-> +
-> +static int pci_flb_preserve(struct liveupdate_flb_op_args *args)
-> +{
-> +	struct pci_dev *dev = NULL;
-> +	int max_nr_devices = 0;
-> +	struct pci_ser *ser;
-> +	unsigned long size;
-> +
-> +	for_each_pci_dev(dev)
-> +		max_nr_devices++;
-> +
-> +	size = struct_size_t(struct pci_ser, devices, max_nr_devices);
-> +
-> +	ser = kho_alloc_preserve(size);
-> +	if (IS_ERR(ser))
-> +		return PTR_ERR(ser);
-> +
-> +	ser->max_nr_devices = max_nr_devices;
-> +
-> +	args->obj = ser;
-> +	args->data = virt_to_phys(ser);
-> +	return 0;
-> +}
-> +
-> +static void pci_flb_unpreserve(struct liveupdate_flb_op_args *args)
-> +{
-> +	struct pci_ser *ser = args->obj;
-> +
-> +	WARN_ON_ONCE(ser->nr_devices);
-> +	kho_unpreserve_free(ser);
-> +}
-> +
-> +static int pci_flb_retrieve(struct liveupdate_flb_op_args *args)
-> +{
-> +	args->obj = phys_to_virt(args->data);
-> +	return 0;
-> +}
-> +
-> +static void pci_flb_finish(struct liveupdate_flb_op_args *args)
-> +{
-> +	kho_restore_free(args->obj);
-> +}
-> +
-> +static struct liveupdate_flb_ops pci_liveupdate_flb_ops = {
-> +	.preserve = pci_flb_preserve,
-> +	.unpreserve = pci_flb_unpreserve,
-> +	.retrieve = pci_flb_retrieve,
-> +	.finish = pci_flb_finish,
-> +	.owner = THIS_MODULE,
-> +};
-> +
-> +static struct liveupdate_flb pci_liveupdate_flb = {
-> +	.ops = &pci_liveupdate_flb_ops,
-> +	.compatible = PCI_LUO_FLB_COMPATIBLE,
-> +};
-> +
-> +#define INIT_PCI_DEV_SER(_dev) {		\
-> +	.domain = pci_domain_nr((_dev)->bus),	\
-> +	.bdf = pci_dev_id(_dev),		\
-> +}
-> +
-> +static int pci_dev_ser_cmp(const void *__a, const void *__b)
-> +{
-> +	const struct pci_dev_ser *a = __a, *b = __b;
-> +
-> +	return cmp_int(a->domain << 16 | a->bdf, b->domain << 16 | b->bdf);
-> +}
-> +
-> +static struct pci_dev_ser *pci_ser_find(struct pci_ser *ser,
-> +					struct pci_dev *dev)
-> +{
-> +	const struct pci_dev_ser key = INIT_PCI_DEV_SER(dev);
-> +
-> +	return bsearch(&key, ser->devices, ser->nr_devices,
-> +		       sizeof(key), pci_dev_ser_cmp);
-> +}
-> +
-> +static int pci_ser_delete(struct pci_ser *ser, struct pci_dev *dev)
-> +{
-> +	struct pci_dev_ser *dev_ser;
-> +	int i;
-> +
-> +	dev_ser = pci_ser_find(ser, dev);
-> +	if (!dev_ser)
-> +		return -ENOENT;
-> +
-> +	for (i = dev_ser - ser->devices; i < ser->nr_devices - 1; i++)
-> +		ser->devices[i] = ser->devices[i + 1];
-> +
-> +	ser->nr_devices--;
-> +	return 0;
-> +}
-> +
-> +int pci_liveupdate_outgoing_preserve(struct pci_dev *dev)
-> +{
-> +	struct pci_dev_ser new = INIT_PCI_DEV_SER(dev);
-> +	struct pci_ser *ser;
-> +	int i, ret;
-> +
-> +	/* Preserving VFs is not supported yet. */
-> +	if (dev->is_virtfn)
-> +		return -EINVAL;
-> +
-> +	guard(mutex)(&pci_flb_outgoing_lock);
-> +
-> +	if (dev->liveupdate_outgoing)
-> +		return -EBUSY;
-> +
-> +	ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (ser->nr_devices == ser->max_nr_devices)
-> +		return -E2BIG;
-> +
-> +	for (i = ser->nr_devices; i > 0; i--) {
-> +		struct pci_dev_ser *prev = &ser->devices[i - 1];
-> +		int cmp = pci_dev_ser_cmp(&new, prev);
-> +
-> +		if (WARN_ON_ONCE(!cmp))
-> +			return -EBUSY;
-> +
-> +		if (cmp > 0)
-> +			break;
-> +
-> +		ser->devices[i] = *prev;
-> +	}
-> +
-> +	ser->devices[i] = new;
-> +	ser->nr_devices++;
-> +	dev->liveupdate_outgoing = true;
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_liveupdate_outgoing_preserve);
-> +
-> +void pci_liveupdate_outgoing_unpreserve(struct pci_dev *dev)
-> +{
-> +	struct pci_ser *ser;
-> +	int ret;
-> +
-> +	guard(mutex)(&pci_flb_outgoing_lock);
-> +
-> +	ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
-> +	if (WARN_ON_ONCE(ret))
-> +		return;
-> +
-> +	WARN_ON_ONCE(pci_ser_delete(ser, dev));
-> +	dev->liveupdate_outgoing = false;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_liveupdate_outgoing_unpreserve);
-> +
-> +u32 pci_liveupdate_incoming_nr_devices(void)
-> +{
-> +	struct pci_ser *ser;
-> +	int ret;
-> +
-> +	ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)&ser);
-> +	if (ret)
-> +		return 0;
-> +
-> +	return ser->nr_devices;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_liveupdate_incoming_nr_devices);
-> +
-> +void pci_liveupdate_setup_device(struct pci_dev *dev)
-> +{
-> +	struct pci_ser *ser;
-> +	int ret;
-> +
-> +	ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)&ser);
-> +	if (ret)
-> +		return;
-> +
-> +	dev->liveupdate_incoming = !!pci_ser_find(ser, dev);
-> +}
-> +EXPORT_SYMBOL_GPL(pci_liveupdate_setup_device);
-> +
-> +void pci_liveupdate_incoming_finish(struct pci_dev *dev)
-> +{
-> +	dev->liveupdate_incoming = false;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_liveupdate_incoming_finish);
-> +
-> +int pci_liveupdate_register_fh(struct liveupdate_file_handler *fh)
-> +{
-> +	return liveupdate_register_flb(fh, &pci_liveupdate_flb);
-> +}
-> +EXPORT_SYMBOL_GPL(pci_liveupdate_register_fh);
-> +
-> +int pci_liveupdate_unregister_fh(struct liveupdate_file_handler *fh)
-> +{
-> +	return liveupdate_unregister_flb(fh, &pci_liveupdate_flb);
-> +}
-> +EXPORT_SYMBOL_GPL(pci_liveupdate_unregister_fh);
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 37329095e5fe..af6356c5a156 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -2060,6 +2060,8 @@ int pci_setup_device(struct pci_dev *dev)
->   	if (pci_early_dump)
->   		early_dump_pci_device(dev);
->   
-> +	pci_liveupdate_setup_device(dev);
-> +
->   	/* Need to have dev->class ready */
->   	dev->cfg_size = pci_cfg_space_size(dev);
->   
-> diff --git a/include/linux/kho/abi/pci.h b/include/linux/kho/abi/pci.h
-> new file mode 100644
-> index 000000000000..6577767f8da6
-> --- /dev/null
-> +++ b/include/linux/kho/abi/pci.h
-> @@ -0,0 +1,55 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +/*
-> + * Copyright (c) 2025, Google LLC.
-> + * David Matlack <dmatlack@google.com>
-> + */
-> +
-> +#ifndef _LINUX_KHO_ABI_PCI_H
-> +#define _LINUX_KHO_ABI_PCI_H
-> +
-> +#include <linux/compiler.h>
-> +#include <linux/types.h>
-> +
-> +/**
-> + * DOC: PCI File-Lifecycle Bound (FLB) Live Update ABI
-> + *
-> + * This header defines the ABI for preserving core PCI state across kexec using
-> + * Live Update File-Lifecycle Bound (FLB) data.
-> + *
-> + * This interface is a contract. Any modification to any of the serialization
-> + * structs defined here constitutes a breaking change. Such changes require
-> + * incrementing the version number in the PCI_LUO_FLB_COMPATIBLE string.
-> + */
-> +
-> +#define PCI_LUO_FLB_COMPATIBLE "pci-v1"
-> +
-> +/**
-> + * struct pci_dev_ser - Serialized state about a single PCI device.
-> + *
-> + * @domain: The device's PCI domain number (segment).
-> + * @bdf: The device's PCI bus, device, and function number.
-> + */
-> +struct pci_dev_ser {
-> +	u16 domain;
-> +	u16 bdf;
-> +} __packed;
-> +
-> +/**
-> + * struct pci_ser - PCI Subsystem Live Update State
-> + *
-> + * This struct tracks state about all devices that are being preserved across
-> + * a Live Update for the next kernel.
-> + *
-> + * @max_nr_devices: The length of the devices[] flexible array.
-> + * @nr_devices: The number of devices that were preserved.
-> + * @devices: Flexible array of pci_dev_ser structs for each device. Guaranteed
-> + *           to be sorted ascending by domain and bdf.
-> + */
-> +struct pci_ser {
-> +	u64 max_nr_devices;
-> +	u64 nr_devices;
-> +	struct pci_dev_ser devices[];
-> +} __packed;
-> +
-> +#endif /* _LINUX_KHO_ABI_PCI_H */
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 7e36936bb37a..9ead6d84aef6 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -40,6 +40,7 @@
->   #include <linux/resource_ext.h>
->   #include <linux/msi_api.h>
->   #include <uapi/linux/pci.h>
-> +#include <linux/liveupdate.h>
->   
->   #include <linux/pci_ids.h>
->   
-> @@ -582,6 +583,10 @@ struct pci_dev {
->   	u8		tph_mode;	/* TPH mode */
->   	u8		tph_req_type;	/* TPH requester type */
->   #endif
-> +#ifdef CONFIG_LIVEUPDATE
-> +	unsigned int	liveupdate_incoming:1;	/* Preserved by previous kernel */
-> +	unsigned int	liveupdate_outgoing:1;	/* Preserved for next kernel */
-> +#endif
->   };
->   
->   static inline struct pci_dev *pci_physfn(struct pci_dev *dev)
-> @@ -2854,4 +2859,46 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
->   	WARN_ONCE(condition, "%s %s: " fmt, \
->   		  dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
->   
-> +#ifdef CONFIG_LIVEUPDATE
-> +int pci_liveupdate_outgoing_preserve(struct pci_dev *dev);
-> +void pci_liveupdate_outgoing_unpreserve(struct pci_dev *dev);
-> +void pci_liveupdate_setup_device(struct pci_dev *dev);
-> +u32 pci_liveupdate_incoming_nr_devices(void);
-> +void pci_liveupdate_incoming_finish(struct pci_dev *dev);
-> +int pci_liveupdate_register_fh(struct liveupdate_file_handler *fh);
-> +int pci_liveupdate_unregister_fh(struct liveupdate_file_handler *fh);
-> +#else /* !CONFIG_LIVEUPDATE */
-> +static inline int pci_liveupdate_outgoing_preserve(struct pci_dev *dev)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline void pci_liveupdate_outgoing_unpreserve(struct pci_dev *dev)
-> +{
-> +}
-> +
-> +static inline void pci_liveupdate_setup_device(struct pci_dev *dev)
-> +{
-> +}
-> +
-> +static inline u32 pci_liveupdate_incoming_nr_devices(void)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline void pci_liveupdate_incoming_finish(struct pci_dev *dev)
-> +{
-> +}
-> +
-> +static inline int pci_liveupdate_register_fh(struct liveupdate_file_handler *fh)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline int pci_liveupdate_unregister_fh(struct liveupdate_file_handler *fh)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +#endif /* !CONFIG_LIVEUPDATE */
-> +
->   #endif /* LINUX_PCI_H */
->
--- 
-Best Regards,
-Yanjun.Zhu
+>  include/linux/skbuff.h | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index e6bfe5d0c525..30a8dc4233ba 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -671,7 +671,13 @@ enum {
+>  	/* This indicates the skb is from an untrusted source. */
+>  	SKB_GSO_DODGY = 1 << 1,
+>  
+> -	/* This indicates the tcp segment has CWR set. */
+> +	/* For Tx, this indicates the first TCP segment has CWR set, and any
+> +	 * subsequent segment in the same skb has CWR cleared. However, because
+> +	 * the connection to which the segment belongs is not tracked to use
+> +	 * RFC3168 or AccECN (RFC9768), and using RFC3168 ECN offload may clear
+> +	 * ACE signal (CWR is one of it). Therefore, this cannot be used on Rx.
+> +	 * Instead, SKB_GSO_TCP_ACCECN shall be used to avoid CWR corruption.
+> +	 */
+>  	SKB_GSO_TCP_ECN = 1 << 2,
+>  
+>  	__SKB_GSO_TCP_FIXEDID = 1 << 3,
+> @@ -706,6 +712,14 @@ enum {
+>  
+>  	SKB_GSO_FRAGLIST = 1 << 18,
+>  
+> +	/* For TX, this indicates the TCP segment uses the CWR flag as part of
+> +	 * ACE signal, and the CWR flag is not modified in the skb. For RX, any
+> +	 * CWR flagged segment must use SKB_GSO_TCP_ACCECN to ensure CWR flag
+> +	 * is not cleared by any RFC3168 ECN offload, and thus keeping ACE
+> +	 * signal of AccECN segments. This is particularly used for Rx of
+> +	 * virtio_net driver in order to tell latter GSO Tx in a forwarding
+> +	 * scenario that it is NOT ok to clean CWR flag from the 2nd segment.
+> +	 */
+>  	SKB_GSO_TCP_ACCECN = 1 << 19,
+>  
+>  	/* These indirectly map onto the same netdev feature.
+> -- 
+> 2.34.1
 
