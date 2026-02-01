@@ -1,177 +1,119 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A1F241690
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 09:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9F531A567
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 09:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769936713; cv=none; b=CWvf0BJqmgDdj+b9KW0REAiSoh1ABft1ZNNKM2HK/a2BuvZrpe9f54dO4+cWHP3Qm3ccjIOoB1byC1qbwzDfh1SWOkc1rcu7Q9Hx5lo+C/feXLLzy1JQvwfbujgHRRWw5dAyNCbzFpdBE7x/wbh6EcAaJtv1+kTxuqGSqAg1ItE=
+	t=1769937231; cv=none; b=kTnARbLW9hxkUAA8Sq4N3YMhM19+U+zC5ykqVJlVBgavTNQPC9zNTsN5BNWr5vk0bAiCx7SWEYs/hka3CZ5E1AVr3Q8u8XaL9Rs6UXvQwo0B30XQMitOFZ5tm6Ylj+1neEgD6Kl4bRRQPNj5Jw4S/NkJ0WtxWnJXE3zQsrA3VmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769936713; c=relaxed/simple;
-	bh=QEWaTUGYIM3AUbjp29sbAba2kUUYgtptVEBxmi5dzvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BnSH1TGbctS6xf+hHYBpz64YluDxIN0HWLzzf0EHTF2YRmWWM7x4iDcE6OBKJSpZITupV1oM0rr8/ZDQDasXG0brp6n8Vp1godtvrlsI0fkZvP/GeqzyHVt66auTnESY60tn1IrEyyMtlQCIbLJwBWBL+kYewOKP2noby1L1w/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ejGiy0yY; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=s9jbkz2e; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769937231; c=relaxed/simple;
+	bh=e+Fj3gCC5IydUvAZBsRrAStW/0EdHeaZFb835l6T23M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ism5DtRiZXJrjRDOC98MdOG7MFWgI9Tfj5vFv/oCVE2G5Sxo1mKXRJo35qTC2YVcwn8yzcG+/g10HwjCh48v+cvoeRp2iblyCCn7bbtVPS+lsWFMW0u1JQpwkEyqBsstVesQrTfAhVP5wcWCcpkApcGFGrdu+pss4jk3c4/JYQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHJp2uEN; arc=none smtp.client-ip=209.85.214.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ejGiy0yY";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="s9jbkz2e"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769936710;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=n3PpGZtslxQ3EtKo9C9Fdk6vH37O76cwSZfkhQe8fSc=;
-	b=ejGiy0yYrlzERbxn0s2DBF3yBt8IdYwD/wc6fstiXSGud87n2f//XjK6JbPl+8sN0CqxXh
-	e5RnJobBpuccb2BgpDlvWNN+Y49gydQtD8bou+OoRdNJdeCEG3plp2zxAzVxIIRU65rQn7
-	fXo2u1zIfUNIwTjqlAJukEWIKD6zlN4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-689-6AthOHDtMw2uqg5KHmcudg-1; Sun, 01 Feb 2026 04:05:09 -0500
-X-MC-Unique: 6AthOHDtMw2uqg5KHmcudg-1
-X-Mimecast-MFC-AGG-ID: 6AthOHDtMw2uqg5KHmcudg_1769936708
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-43284f60a8aso2894059f8f.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 01:05:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHJp2uEN"
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-2a0d52768ccso23277845ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 01:13:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769936708; x=1770541508; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n3PpGZtslxQ3EtKo9C9Fdk6vH37O76cwSZfkhQe8fSc=;
-        b=s9jbkz2eN7gN8syjeRgCFBcAIhMN4Cqa7RPo2gQzAk7QQaEaNTrdAEQ3fo0ittNrUc
-         tWpHk2fyq5itdr4wZDZ8TYYruwRCJbdGhZ97rsSjgO6Cc9eHzgynsc5xxHa2kiebCW3T
-         3pFO7TBti+J8H2dgL/KU+qk8Lrz36ii3SyNG5cxOC4UlsqnybTlmPXpwtEDOHdS36pJf
-         J6PFL9bjzJ1oKiYQ12pzv/S0WIlfQ0H4rldQtethFVKKlCYYZBvqKSHuRhew8xL7KGmY
-         sxD+oxG70O6OG90PBqxLRwTOUtfO19jRRqRlXYB/Dpt016wHR/C+9wrJztGJdDtmf4yW
-         Ijog==
+        d=gmail.com; s=20230601; t=1769937229; x=1770542029; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0OcmtjAb6TTPHvtHwhlT+XJweCDPW7WCRnecPZjWR3E=;
+        b=aHJp2uEN/2+LAFHzG4j5ssyPnJot3NVGSOdSPTRRmStPcdTIxq3gZnyHxnQpJ5bfqS
+         hDqOaeUf6LiUv9N6+VtwjlMuKuv6gnd0U2f1MktbeDAsYoXkCcxYis4+97fw2KzWxADy
+         dAVhppu+409w+9doI2OosBrgKxvEQ/ApVf43PiLDqTDYMxQ+NzsX/pX/TQ5uXBHdGmZA
+         l1kYk0xeIuge99gwuorCpFWvS/v1aftHho0hTQGnuMAXR57zof3g0UVlWrWhVGA9oOfz
+         M+FqSf/7WVowZcIbp6htRRdeQde1iwPlGtbMvIV1mYrMLm+paVySk4O4tyOEMVolx6Ys
+         0nJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769936708; x=1770541508;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3PpGZtslxQ3EtKo9C9Fdk6vH37O76cwSZfkhQe8fSc=;
-        b=JgLUBR3DWejFUS7hzu1RNKOLstRIIX4a/+chElc438liqeeCtVSzphgOJORGQXrRyE
-         HRyxT0NUHrL9d0z86Ee4EMI58D6ZMewlR0GBqfdhOkTOWxLJt1PoL80YJgVBAnUxBb1C
-         2Gwp9hP9w6FoxvNFBiDYeWiJbT5sBm0GMNKy3kguJ47kuL1ft3nm0kI5xgELL04r/TaW
-         DRQesAUEJiGUnrt7JpZU/c4OzCJRiQQSZ4kMMfK9MQd3A/iwM40s9nhOFsvMr0kokOQs
-         HFjuH5ZKkEUd1wlU2w7gbhl6OKglrzfSbRzwtW9o5OfxtNKY6j2GgV9mFT1LHGjg+wuS
-         ZZlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCHm43mL1Y9+g62b0Tjdaih1ym31V8ocELbvJrEph7/Z+P/WApfnlzeN9e55PahT0H5CeUYT5SLnjRsnYPlZE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPJUHwSTvjETRoojOhu8Q3f1MOyQ7o+m3n0qvGZp6xSZj5PgHm
-	I47Rb7Q4VTpErgsBw7m1tWy8kA1F5fLX0EvVBT/Mp3ovNoJjEQy41HxWIDilSxm9xKyHOfFg11W
-	LkViwOfRZjHXF7ZA8fLKR4jQtQWL4BJKQ6O6tQo6awVTZ5WSj7nXCZ/ECLrshw21P1JuFeQ==
-X-Gm-Gg: AZuq6aJNF284DUR3EZDL1OAywhGQPps+bWx7rF5IrzE6fUHxw6x3AH4ssx2E5I1MWAv
-	d+2Bfu1nP7L8gYOu42NHJHimnwcJ/i2QKJ02r0If6cdmclc6jljXJekNOd5SNmNDwGQtuRK2BI4
-	jZaePbt4flpIMWOCSTZXujTJ+RWg4mSGJyzXCQL3BIlZyQyAA6Tankuz/hyM4yp5zPp2Av9ftPv
-	xx/8y3qXvxL8gUFLWaDiC2RTpKsLFl8vrQBz+6xHBQXrU+sujoT+RbMjdnlwbHS6Dy5j9aIt3XH
-	PQc/9WmFuRA7qMRfnwOAAxXi5p2jZXzdVAkyc7MZ5mHUHnWLHJL00l/1tvzeSkgUPaN14uCtRxU
-	rdnacAQ776kWP/qg3f+YNC3XO0PnbYqcuMQ==
-X-Received: by 2002:a05:600c:4e56:b0:47e:f481:24b7 with SMTP id 5b1f17b1804b1-482db47cd9emr108399525e9.17.1769936708003;
-        Sun, 01 Feb 2026 01:05:08 -0800 (PST)
-X-Received: by 2002:a05:600c:4e56:b0:47e:f481:24b7 with SMTP id 5b1f17b1804b1-482db47cd9emr108399225e9.17.1769936707599;
-        Sun, 01 Feb 2026 01:05:07 -0800 (PST)
-Received: from redhat.com (IGLD-80-230-34-155.inter.net.il. [80.230.34.155])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482e04c13a2sm61038245e9.5.2026.02.01.01.05.03
+        d=1e100.net; s=20230601; t=1769937229; x=1770542029;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0OcmtjAb6TTPHvtHwhlT+XJweCDPW7WCRnecPZjWR3E=;
+        b=Or//fgkOx7RvYn5ayja6rSp+iBGgzspsfJPcU0pyGNY0ldPAOKGES6peNHVT/AfRdj
+         N/MFHcxReg0w+k+r7EeRNeL5hLN4NZiPjUFirMZOpP2W6aF2mk1t1EgUmmIgTCnzk/4Y
+         ubjBQ6CK0j7cyZcq3OhhNGf8nDGrHdiHypfzW+31Eh4wy9T/CfL+M+IlcY5boHTF1LLd
+         /ppBypPR48TMpiTzwXlp8Jb0kzAAN6+QkVyddZiQtB3tJOaidDyeJ2z8QJoY0tobPYxM
+         WIhdorSAgkwqFRdYL+YeIXZx9fpnc19nKA878d4zc6OfzcpVnY/T015NDi3fH6JKZfB9
+         742w==
+X-Forwarded-Encrypted: i=1; AJvYcCVZ9bjm8S3Y5cueHN1p/Cx9eitUPFY2BXYkv0s9gTXMuoVM50sIgGxT4oTDTIFHSCwxCAFHSt5+TZ+GniAYpDA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeniroCSPQ4qhYEktJhXlHxOrs3q7OhV1Hel9gRXktQixOHpX5
+	qnA7mCYgZcElKjmpu0vXMaUN6IXJzaGBCbmhYiashrm6b0gG+XeTEVY=
+X-Gm-Gg: AZuq6aIsrEF8SN4stGGVf/bZYyLFWY0wodIgRpCVBxE2CtbxjSXch/PAIrHFeGbVXc3
+	l2W0QmlcxphTbDikcTl+SedCaWJnqk8EUafwip5hEeTwl9WY6SGtDB8L6rrCZd551KANl+AMRPU
+	4tc2BcGyNsD0FrhHYguqDoa5gO1OncdwZKNZwEXJuxwVmzQ8OWL4b3bg1J9cCGoChAkWCL97llu
+	759uvQ+NRfU4S3qIovDRo9t1ioC6gfI2hr6ftsONoQSJ7SyKViDkdejwZzAf9S3KsmGh/ink59h
+	FH6+crfc/q4hBdheWSsDJinn/i3r5y6LN9VRuc/mWqkcPPrIRS6X4kbbOyJ/ZPsgxTEIagxsFZg
+	xG8kzDQLIT3OmPVJcL+WbWysLuiLZHmwf1ahSe+oCHj7vfPSh7pZ6lyRKdEVOt7Zoq7ZGvlQ55r
+	7zwf1mkwY1lzXB1TAOPBcBpUwd7IQMxg==
+X-Received: by 2002:a17:903:283:b0:29f:1fad:8e50 with SMTP id d9443c01a7336-2a8d959c8abmr92762215ad.3.1769937228976;
+        Sun, 01 Feb 2026 01:13:48 -0800 (PST)
+Received: from localhost.localdomain ([59.16.109.172])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b414fc4sm119553465ad.32.2026.02.01.01.13.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Feb 2026 01:05:07 -0800 (PST)
-Date: Sun, 1 Feb 2026 04:05:02 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: tariqt@nvidia.com, linux-rdma@vger.kernel.org, shaojijie@huawei.com,
-	shenjian15@huawei.com, salil.mehta@huawei.com, mbloch@nvidia.com,
-	saeedm@nvidia.com, leon@kernel.org, eperezma@redhat.com,
-	brett.creeley@amd.com, jasowang@redhat.com,
-	virtualization@lists.linux.dev, xuanzhuo@linux.alibaba.com,
-	pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
-	linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
-	dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
-	kuba@kernel.org, stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net,
-	liuhangbin@gmail.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, ij@kernel.org,
-	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Subject: Re: [PATCH v1 net-next 2/3] net: hns3/mlx5e: avoid corrupting CWR
- flag when receiving GRO packet
-Message-ID: <20260201040151-mutt-send-email-mst@kernel.org>
-References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
- <20260131225510.2946-3-chia-yu.chang@nokia-bell-labs.com>
+        Sun, 01 Feb 2026 01:13:48 -0800 (PST)
+From: Jinseok Kim <always.starving0@gmail.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>
+Cc: Rae Moar <raemoar63@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Jinseok Kim <always.starving0@gmail.com>
+Subject: [PATCH v2] kunit: reworded commit message
+Date: Sun,  1 Feb 2026 18:13:20 +0900
+Message-ID: <20260201091320.291408-1-always.starving0@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260112041322.2168-1-always.starving0@gmail.com>
+References: <20260112041322.2168-1-always.starving0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260131225510.2946-3-chia-yu.chang@nokia-bell-labs.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jan 31, 2026 at 11:55:09PM +0100, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> 
-> In Accurate ECN, ACE counter (AE, ECE, CWR flags) changes only when new
-> CE packets arrive, while setting SKB_GSO_TCP_ECN in case of not knowing
-> the ECN variant can result in header change that corrupts the ACE field.
-> The new flag SKB_GSO_TCP_ACCECN is to prevent SKB_GSO_TCP_ECN or
-> NETIF_F_TSO_ECN offloading to be used because they would corrupt CWR
-> flag somewhere.
-> 
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+When running kunit_tool_test.py, the test_run_raw_output_invalid test
+prints invalid usage text and error messages to stderr. This happens
+because the test triggers kunit.main() with an invalid argument, causing
+argparse to print the usage and exit.
 
-Not my driver, but a better format is something along the lines of:
+This output is confusing to the user because it looks like a test failure
+or usage error, even though the test passed successfully. Furthermore,
+argparse displays 'usage: kunit_tool_test.py run ...', which is misleading
+since the test script itself does not accept the 'run' command.
 
-Currently .... this is wrong because ... as the result .... fix this by ...
-so that ....
+This patch mocks sys.stderr in the test to suppress this expected error
+output, making the test execution output cleaner.
 
-the coding style does say that you should use the imperative form.
+Changes in v2:
+- Reworded commit message to keep lines less than 75 characters
 
+Signed-off-by: Jinseok Kim <always.starving0@gmail.com>
+---
+ tools/testing/kunit/kunit_tool_test.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index b5cc07c3d027..7a8ba8e4f1d4 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -690,8 +690,8 @@ class KUnitMainTest(unittest.TestCase):
+ 	def test_run_raw_output_invalid(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+ 		with mock.patch('sys.stderr', new=io.StringIO()):
+-            with self.assertRaises(SystemExit) as e:
+-                kunit.main(['run', '--raw_output=invalid'])
++			with self.assertRaises(SystemExit) as e:
++				kunit.main(['run', '--raw_output=invalid'])
+ 		self.assertNotEqual(e.exception.code, 0)
 
-> ---
->  drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 2 +-
->  drivers/net/ethernet/mellanox/mlx5/core/en_rx.c | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> index a47464a22751..3a1cf4335477 100644
-> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> @@ -3897,7 +3897,7 @@ static int hns3_gro_complete(struct sk_buff *skb, u32 l234info)
->  
->  	skb_shinfo(skb)->gso_segs = NAPI_GRO_CB(skb)->count;
->  	if (th->cwr)
-> -		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ECN;
-> +		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ACCECN;
->  
->  	if (l234info & BIT(HNS3_RXD_GRO_FIXID_B))
->  		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_FIXEDID;
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> index 1fc3720d2201..d174f83478a3 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> @@ -1311,7 +1311,7 @@ static void mlx5e_shampo_update_ipv4_tcp_hdr(struct mlx5e_rq *rq, struct iphdr *
->  	skb->csum_offset = offsetof(struct tcphdr, check);
->  
->  	if (tcp->cwr)
-> -		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ECN;
-> +		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ACCECN;
->  }
->  
->  static void mlx5e_shampo_update_ipv6_tcp_hdr(struct mlx5e_rq *rq, struct ipv6hdr *ipv6,
-> @@ -1332,7 +1332,7 @@ static void mlx5e_shampo_update_ipv6_tcp_hdr(struct mlx5e_rq *rq, struct ipv6hdr
->  	skb->csum_offset = offsetof(struct tcphdr, check);
->  
->  	if (tcp->cwr)
-> -		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ECN;
-> +		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ACCECN;
->  }
->  
->  static void mlx5e_shampo_update_hdr(struct mlx5e_rq *rq, struct mlx5_cqe64 *cqe, bool match)
-> -- 
-> 2.34.1
-
+ 	def test_run_raw_output_does_not_take_positional_args(self):
+--
+2.43.0
