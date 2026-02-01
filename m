@@ -1,307 +1,518 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2352773E9
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 03:16:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E942D028A
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 06:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769915791; cv=none; b=AYuxJEd2iWcSI8suWdo6QX7Nr2k5Vl/wqIPXSGZDHNv85oaM+P+vxH1gPhGjQxO1DcPv2agq3EQcn4M/5izN0hrpUTm+zyO28l+B2FeH3BrT0A+zzt5Tjv5yM2G5JCyaClLY8QQdRdFj8IW8Wmd9DXr6HRYt1kizn+usieH3g+M=
+	t=1769927928; cv=none; b=t+cKIRiLCXdph/WaDjffYvSwj0OqY5x00z5gyN4I/Clbdnt9fH/Z+ljW9eqaCgX1PuRE4cGIXL0pqbzIMXnBjQMv3XUFYNsgIDMA4A98geDwVyE8OA9w0tkEvJjobFDybEX8LLsZ6YBRkiMYdV8/SWk/7gAWJ1gfeZGjenZC7ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769915791; c=relaxed/simple;
-	bh=dwNUmlxcqa+1GX66MgxUDlnEQ+lIyB0CeInZdZx1Ebc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E/HOYEh/uQ6E29Ywk0DGKiNbECFaKx8WyvAkymZn5RVR4tdsWYNt001WjSUoj1dUPIR3adOSFwv2pLpjrIhZlRzks1YLilrgzltsshvYgghzIBmMXuYLlk8BxotbnzKkim6Sqqy8Opw76lsgAU/J/6EbCWqKLNxGS7zjSwCmUx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQt34JlX; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769927928; c=relaxed/simple;
+	bh=nbfNpQjgAzIEscLrdW9vuZG047Ckhgg+ZpH+MEM3RCU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FTKC31sSloSd/s8ZWU4Mmntz150qZfSgvduenL8R+MSPKhDm2TuQjyMMg9hNMhyb9SGzUkOdmcnKk0SBkaBmGtG5Nrl76dhOhG8ZE+n2VBFP3R6pYzk+/sXfHsK9RItgkfITWU9IeO3L6w14zFbQI2tizesQhThmzXFFI1d/x7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=smbFLQG3; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQt34JlX"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-352f00d0e83so1642699a91.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 31 Jan 2026 19:16:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769915789; x=1770520589; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aGPWhoujPZMCC5voFQpQuLH7IyYWH0J71f2m4GWhuCE=;
-        b=TQt34JlXm0gJ3jbTUuD5/jkvInSwTLJWZFnCz65fr+zlTpHBEMZpO+iQYhXZEZTVQg
-         3mDlCT1ZhvovzpkZVGjkVTjJBq5j9jEf/3YY2uhNQN0xkWHuTimRuNt32X0TjUsDGLyW
-         yG6I/pjfk2Fh+rmN/tCp6XfGjwYMRnTz9dUuBRiIetbzdRCWs+KUZmf2yhNxsN4z32xt
-         sDryAUVJpso9p8ioeHj9iYyNoVZnITQXcMQ7XTtmXURzpR3cxbz2ATlSvLWZ2/+l+96r
-         tE6w054Kl/SOyIwlUCOxXzHLdF01OeFU7S6zbpygXMCAEcyx9CiO7bu5YsJ0bsFPyMkr
-         ADig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769915789; x=1770520589;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aGPWhoujPZMCC5voFQpQuLH7IyYWH0J71f2m4GWhuCE=;
-        b=A5YUFTk6Kc9fO2x8lkR889dasmFoDG2JBvWPnEn/V5opa+zb428bXo13X/qnSEuYZ7
-         /0iNYUr6wVQHCIh+gdPRzbiAafgHsjZUyJmx5yDV9ig5n3LGuz2S+NV3YD6JtZNOLv0j
-         QSOP0MT2j+DxhtPLGUJ9bEATcv21hMu5HcU9GJeonTqA1K6qmkF7iF06NvTZVxtnBIyT
-         gvjA01xh/kTMRNwPDsJnGU+cuE4kLhPMzVMmPPt252aDaD2TPrwo0ZC7nPz6cbSR3AB3
-         Fou72qpO+frIGATSqE4j5XZZGcLTsrMUKen7R48qFwxlmpAySvJKHrN/LlE/PlP53MRj
-         +mYA==
-X-Forwarded-Encrypted: i=1; AJvYcCW0ulK4xWRhGXHDd3BwbngNX1c/j/YOv1nz51hTpCDPtKLwhIaQ9JITl7yREO3UU+B/ZMrJkwu/ALHhtjxmZa8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSDeO85MQ0GmpUe5wRLjKtdLNilOHEMcJzv+xOQcaFR3GlfAS3
-	N1Nu+XoMFT1z0AzwWQCURi+BhAG2cBXs7pYeXNHJDP+nj0eXyNi1ZY8d
-X-Gm-Gg: AZuq6aLKNztzID7TaIg4LMZBb8nh+gjnTs3foSalbX08jmLukmq/1ncpx7crl74XBXY
-	4SdFGOfMPNKtwGKkWZhF1MPNRq9WAnFWciuJZHPDBWj6gvMmgKGDBYU6DinjzmfzKqUoP3Zbr56
-	kwnfoiHNFWDm/cPSzMQKqcS/r7lOv0pfnmCsXTDurl+011HRJOPcL3lXdAX8ZH7F9ZslceyicBI
-	DEocaEcdrx7WpmHNjiV44hx7hlmcfD6x7HGbkT3ax2j1NB/Cp2sB/S7g+EHcoylpwWKCsPvLG9f
-	baLqNVOzTxv+vfT2JjRFrlUnvq04nptaBymAAecQrgAapez9CGKlgnPzGDtO1SGpcJ3eQ5Lhnei
-	vrPgVQsLpfSnQ6v7YhOR85fMQYO+hfklSuq0aSh6OtY/ynVtBaX6+J3IytUXBXy3F6JNzsK4Co3
-	Ls6nNGAfb7/ImY/GXPdt1eqoZkjz9JYCZNioxK6f1nfg==
-X-Received: by 2002:a17:90b:4c0f:b0:340:7b2e:64cc with SMTP id 98e67ed59e1d1-3543b32ae3emr8324057a91.15.1769915789441;
-        Sat, 31 Jan 2026 19:16:29 -0800 (PST)
-Received: from localhost.localdomain ([113.218.252.120])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379b6b2bdsm11810818b3a.30.2026.01.31.19.16.25
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 31 Jan 2026 19:16:29 -0800 (PST)
-From: chengkaitao <pilgrimtao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	yangfeng@kylinos.cn
-Cc: linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Chengkaitao <chengkaitao@kylinos.cn>
-Subject: [PATCH v2 3/3] selftests/bpf: Add supplementary tests for bpf_kptr_xchg
-Date: Sun,  1 Feb 2026 11:16:07 +0800
-Message-ID: <20260201031607.32940-4-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260201031607.32940-1-pilgrimtao@gmail.com>
-References: <20260201031607.32940-1-pilgrimtao@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="smbFLQG3"
+Message-ID: <44484594-5b5d-4237-993c-ac1e173ad62e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769927913;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZwyK35BqHJ9vMxdC101Hpkz7OEl6VsmM8t+q1gtlYtQ=;
+	b=smbFLQG3fxi0EmdEQh5EfbtGQ62LpS961djirjg538qndfMoJIldCdV/L2GKzWYzuysN/1
+	/GumBEceCbaFABLQT0FDfy4W6hBDyhGvjE/RBwgY8Fercg7NI2raGGc+bgtYZDTz4/ErLu
+	bI04FQJ+kIrizpByKTlcv8fJSr/4ST4=
+Date: Sat, 31 Jan 2026 22:38:18 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v2 02/22] PCI: Add API to track PCI devices preserved
+ across Live Update
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+ Alistair Popple <apopple@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal
+ <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
+ Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+ kexec@lists.infradead.org, kvm@vger.kernel.org,
+ Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+ =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
+ Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Pranjal Shrivastava <praan@google.com>, Pratyush Yadav
+ <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>,
+ Samiullah Khawaja <skhawaja@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+ Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>,
+ Yi Liu <yi.l.liu@intel.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-3-dmatlack@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20260129212510.967611-3-dmatlack@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Chengkaitao <chengkaitao@kylinos.cn>
 
-1. Allow using bpf_kptr_xchg under lock-held context.
-2. The rb_node contains a __kptr pointer, eliminating the need to
-   perform the remove-read-readd operation sequence.
+在 2026/1/29 13:24, David Matlack 写道:
+> Add an API to enable the PCI subsystem to track all devices that are
+> preserved across a Live Update, including both incoming devices (passed
+> from the previous kernel) and outgoing devices (passed to the next
+> kernel).
+>
+> Use PCI segment number and BDF to keep track of devices across Live
+> Update. This means the kernel must keep both identifiers constant across
+> a Live Update for any preserved device. VFs are not supported for now,
+> since that requires preserving SR-IOV state on the device to ensure the
+> same number of VFs appear after kexec and with the same BDFs.
+>
+> Drivers that preserve devices across Live Update can now register their
+> struct liveupdate_file_handler with the PCI subsystem so that the PCI
+> subsystem can allocate and manage File-Lifecycle-Bound (FLB) global data
+> to track the list of incoming and outgoing preserved devices.
+>
+>    pci_liveupdate_register_fh(driver_fh)
+>    pci_liveupdate_unregister_fh(driver_fh)
 
-This patch implements the following workflow:
-1. Construct a rbtree with 16 elements.
-2. Traverse the rbtree, locate the kptr pointer in the target node,
-   and read the content pointed to by the pointer.
-3. Remove all nodes from the rbtree.
+Can the above 2 functions support the virtual devices? For example, 
+bonding, veth, iSWAP and RXE.
 
-Signed-off-by: Chengkaitao <chengkaitao@kylinos.cn>
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- .../testing/selftests/bpf/prog_tests/rbtree.c |   6 +
- .../selftests/bpf/progs/rbtree_search_kptr.c  | 164 ++++++++++++++++++
- 2 files changed, 170 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
+These virtual devices do not have BDF. As such, I am not sure if your 
+patches take these virtual devices in to account.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/rbtree.c b/tools/testing/selftests/bpf/prog_tests/rbtree.c
-index d8f3d7a45fe9..a854fb38e418 100644
---- a/tools/testing/selftests/bpf/prog_tests/rbtree.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rbtree.c
-@@ -9,6 +9,7 @@
- #include "rbtree_btf_fail__wrong_node_type.skel.h"
- #include "rbtree_btf_fail__add_wrong_type.skel.h"
- #include "rbtree_search.skel.h"
-+#include "rbtree_search_kptr.skel.h"
- 
- static void test_rbtree_add_nodes(void)
- {
-@@ -193,3 +194,8 @@ void test_rbtree_search(void)
- {
- 	RUN_TESTS(rbtree_search);
- }
-+
-+void test_rbtree_search_kptr(void)
-+{
-+	RUN_TESTS(rbtree_search_kptr);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c b/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-new file mode 100644
-index 000000000000..5b853d6cb5a8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-@@ -0,0 +1,164 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 KylinSoft Corporation. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+#define NR_NODES 16
-+
-+struct node_data {
-+	int data;
-+};
-+
-+struct tree_node {
-+	struct bpf_rb_node node;
-+	u64 key;
-+	struct node_data __kptr * node_data;
-+};
-+
-+#define private(name) (SEC(".data." #name) __hidden __aligned(8))
-+
-+private(A) struct bpf_rb_root root __contains(tree_node, node);
-+private(A) struct bpf_spin_lock lock;
-+
-+static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
-+{
-+	struct tree_node *node_a, *node_b;
-+
-+	node_a = container_of(a, struct tree_node, node);
-+	node_b = container_of(b, struct tree_node, node);
-+
-+	return node_a->key < node_b->key;
-+}
-+
-+SEC("syscall")
-+__retval(0)
-+long rbtree_search_kptr(void *ctx)
-+{
-+	struct tree_node *tnode;
-+	struct bpf_rb_node *rb_n;
-+	struct node_data __kptr * node_data;
-+	int lookup_key  = NR_NODES / 2;
-+	int lookup_data = NR_NODES / 2;
-+	int i, data, ret = 0;
-+
-+	for (i = 0; i < NR_NODES && can_loop; i++) {
-+		tnode = bpf_obj_new(typeof(*tnode));
-+		if (!tnode)
-+			return __LINE__;
-+
-+		node_data = bpf_obj_new(typeof(*node_data));
-+		if (!node_data) {
-+			bpf_obj_drop(tnode);
-+			return __LINE__;
-+		}
-+
-+		tnode->key = i;
-+		node_data->data = i;
-+
-+		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
-+		if (node_data)
-+			bpf_obj_drop(node_data);
-+
-+		bpf_spin_lock(&lock);
-+		bpf_rbtree_add(&root, &tnode->node, less);
-+		bpf_spin_unlock(&lock);
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	rb_n = bpf_rbtree_root(&root);
-+	while (rb_n && can_loop) {
-+		tnode = container_of(rb_n, struct tree_node, node);
-+		node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
-+		if (!node_data) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		data = node_data->data;
-+		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
-+		if (node_data) {
-+			bpf_spin_unlock(&lock);
-+			bpf_obj_drop(node_data);
-+			return __LINE__;
-+		}
-+
-+		if (lookup_key == tnode->key) {
-+			if (data == lookup_data)
-+				break;
-+
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		if (lookup_key < tnode->key)
-+			rb_n = bpf_rbtree_left(&root, rb_n);
-+		else
-+			rb_n = bpf_rbtree_right(&root, rb_n);
-+	}
-+	bpf_spin_unlock(&lock);
-+
-+	rb_n = NULL;
-+	while (rb_n && can_loop) {
-+		bpf_spin_lock(&lock);
-+		rb_n = bpf_rbtree_first(&root);
-+		if (!rb_n) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		rb_n = bpf_rbtree_remove(&root, rb_n);
-+		if (!rb_n) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+		bpf_spin_unlock(&lock);
-+
-+		tnode = container_of(rb_n, struct tree_node, node);
-+		bpf_obj_drop(tnode->node_data);
-+		bpf_obj_drop(tnode);
-+	}
-+
-+	return 0;
-+fail:
-+	bpf_spin_unlock(&lock);
-+	return ret;
-+}
-+
-+
-+SEC("syscall")
-+__failure __msg("R1 type=scalar expected=map_value, ptr_, ptr_")
-+long non_own_ref_kptr_xchg_no_lock(void *ctx)
-+{
-+	struct tree_node *tnode;
-+	struct bpf_rb_node *rb_n;
-+	struct node_data __kptr * node_data;
-+	int data;
-+
-+	bpf_spin_lock(&lock);
-+	rb_n = bpf_rbtree_first(&root);
-+	if (!rb_n) {
-+		bpf_spin_unlock(&lock);
-+		return __LINE__;
-+	}
-+	bpf_spin_unlock(&lock);
-+
-+	tnode = container_of(rb_n, struct tree_node, node);
-+	node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
-+	if (!node_data)
-+		return __LINE__;
-+
-+	data = node_data->data;
-+	if (data < 0)
-+		return __LINE__;
-+
-+	node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
-+	if (node_data)
-+		return __LINE__;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+Thanks a lot.
+
+Zhu Yanjun
+
+>
+> Drivers can notify the PCI subsystem whenever a device is preserved and
+> unpreserved with the following APIs:
+>
+>    pci_liveupdate_outgoing_preserve(pci_dev)
+>    pci_liveupdate_outgoing_unpreserve(pci_dev)
+>
+> After a Live Update, the PCI subsystem fetches its FLB global data
+> from the previous kernel from the Live Update Orchestrator (LUO) during
+> device initialization to determine which devices were preserved.
+>
+> Drivers can check if a device was preserved before userspace retrieves
+> the file for it via pci_dev->liveupdate_incoming.
+>
+> Once a driver has finished restoring an incoming preserved device, it
+> can notify the PCI subsystem with the following call, which clears
+> pci_dev->liveupdate_incoming.
+>
+>    pci_liveupdate_incoming_finish(pci_dev)
+>
+> This API will be used in subsequent commits by the vfio-pci driver to
+> preserve VFIO devices across Live Update and by the PCI subsystem.
+>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>   drivers/pci/Makefile        |   1 +
+>   drivers/pci/liveupdate.c    | 212 ++++++++++++++++++++++++++++++++++++
+>   drivers/pci/probe.c         |   2 +
+>   include/linux/kho/abi/pci.h |  55 ++++++++++
+>   include/linux/pci.h         |  47 ++++++++
+>   5 files changed, 317 insertions(+)
+>   create mode 100644 drivers/pci/liveupdate.c
+>   create mode 100644 include/linux/kho/abi/pci.h
+>
+> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
+> index 8c259a9a8796..a32f7658b9e5 100644
+> --- a/drivers/pci/Makefile
+> +++ b/drivers/pci/Makefile
+> @@ -16,6 +16,7 @@ obj-$(CONFIG_PROC_FS)		+= proc.o
+>   obj-$(CONFIG_SYSFS)		+= pci-sysfs.o slot.o
+>   obj-$(CONFIG_ACPI)		+= pci-acpi.o
+>   obj-$(CONFIG_GENERIC_PCI_IOMAP) += iomap.o
+> +obj-$(CONFIG_LIVEUPDATE)	+= liveupdate.o
+>   endif
+>   
+>   obj-$(CONFIG_OF)		+= of.o
+> diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
+> new file mode 100644
+> index 000000000000..182cfc793b80
+> --- /dev/null
+> +++ b/drivers/pci/liveupdate.c
+> @@ -0,0 +1,212 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright (c) 2025, Google LLC.
+> + * David Matlack <dmatlack@google.com>
+> + */
+> +
+> +#include <linux/bsearch.h>
+> +#include <linux/io.h>
+> +#include <linux/kexec_handover.h>
+> +#include <linux/kho/abi/pci.h>
+> +#include <linux/liveupdate.h>
+> +#include <linux/mutex.h>
+> +#include <linux/mm.h>
+> +#include <linux/pci.h>
+> +#include <linux/sort.h>
+> +
+> +static DEFINE_MUTEX(pci_flb_outgoing_lock);
+> +
+> +static int pci_flb_preserve(struct liveupdate_flb_op_args *args)
+> +{
+> +	struct pci_dev *dev = NULL;
+> +	int max_nr_devices = 0;
+> +	struct pci_ser *ser;
+> +	unsigned long size;
+> +
+> +	for_each_pci_dev(dev)
+> +		max_nr_devices++;
+> +
+> +	size = struct_size_t(struct pci_ser, devices, max_nr_devices);
+> +
+> +	ser = kho_alloc_preserve(size);
+> +	if (IS_ERR(ser))
+> +		return PTR_ERR(ser);
+> +
+> +	ser->max_nr_devices = max_nr_devices;
+> +
+> +	args->obj = ser;
+> +	args->data = virt_to_phys(ser);
+> +	return 0;
+> +}
+> +
+> +static void pci_flb_unpreserve(struct liveupdate_flb_op_args *args)
+> +{
+> +	struct pci_ser *ser = args->obj;
+> +
+> +	WARN_ON_ONCE(ser->nr_devices);
+> +	kho_unpreserve_free(ser);
+> +}
+> +
+> +static int pci_flb_retrieve(struct liveupdate_flb_op_args *args)
+> +{
+> +	args->obj = phys_to_virt(args->data);
+> +	return 0;
+> +}
+> +
+> +static void pci_flb_finish(struct liveupdate_flb_op_args *args)
+> +{
+> +	kho_restore_free(args->obj);
+> +}
+> +
+> +static struct liveupdate_flb_ops pci_liveupdate_flb_ops = {
+> +	.preserve = pci_flb_preserve,
+> +	.unpreserve = pci_flb_unpreserve,
+> +	.retrieve = pci_flb_retrieve,
+> +	.finish = pci_flb_finish,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+> +static struct liveupdate_flb pci_liveupdate_flb = {
+> +	.ops = &pci_liveupdate_flb_ops,
+> +	.compatible = PCI_LUO_FLB_COMPATIBLE,
+> +};
+> +
+> +#define INIT_PCI_DEV_SER(_dev) {		\
+> +	.domain = pci_domain_nr((_dev)->bus),	\
+> +	.bdf = pci_dev_id(_dev),		\
+> +}
+> +
+> +static int pci_dev_ser_cmp(const void *__a, const void *__b)
+> +{
+> +	const struct pci_dev_ser *a = __a, *b = __b;
+> +
+> +	return cmp_int(a->domain << 16 | a->bdf, b->domain << 16 | b->bdf);
+> +}
+> +
+> +static struct pci_dev_ser *pci_ser_find(struct pci_ser *ser,
+> +					struct pci_dev *dev)
+> +{
+> +	const struct pci_dev_ser key = INIT_PCI_DEV_SER(dev);
+> +
+> +	return bsearch(&key, ser->devices, ser->nr_devices,
+> +		       sizeof(key), pci_dev_ser_cmp);
+> +}
+> +
+> +static int pci_ser_delete(struct pci_ser *ser, struct pci_dev *dev)
+> +{
+> +	struct pci_dev_ser *dev_ser;
+> +	int i;
+> +
+> +	dev_ser = pci_ser_find(ser, dev);
+> +	if (!dev_ser)
+> +		return -ENOENT;
+> +
+> +	for (i = dev_ser - ser->devices; i < ser->nr_devices - 1; i++)
+> +		ser->devices[i] = ser->devices[i + 1];
+> +
+> +	ser->nr_devices--;
+> +	return 0;
+> +}
+> +
+> +int pci_liveupdate_outgoing_preserve(struct pci_dev *dev)
+> +{
+> +	struct pci_dev_ser new = INIT_PCI_DEV_SER(dev);
+> +	struct pci_ser *ser;
+> +	int i, ret;
+> +
+> +	/* Preserving VFs is not supported yet. */
+> +	if (dev->is_virtfn)
+> +		return -EINVAL;
+> +
+> +	guard(mutex)(&pci_flb_outgoing_lock);
+> +
+> +	if (dev->liveupdate_outgoing)
+> +		return -EBUSY;
+> +
+> +	ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (ser->nr_devices == ser->max_nr_devices)
+> +		return -E2BIG;
+> +
+> +	for (i = ser->nr_devices; i > 0; i--) {
+> +		struct pci_dev_ser *prev = &ser->devices[i - 1];
+> +		int cmp = pci_dev_ser_cmp(&new, prev);
+> +
+> +		if (WARN_ON_ONCE(!cmp))
+> +			return -EBUSY;
+> +
+> +		if (cmp > 0)
+> +			break;
+> +
+> +		ser->devices[i] = *prev;
+> +	}
+> +
+> +	ser->devices[i] = new;
+> +	ser->nr_devices++;
+> +	dev->liveupdate_outgoing = true;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_outgoing_preserve);
+> +
+> +void pci_liveupdate_outgoing_unpreserve(struct pci_dev *dev)
+> +{
+> +	struct pci_ser *ser;
+> +	int ret;
+> +
+> +	guard(mutex)(&pci_flb_outgoing_lock);
+> +
+> +	ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
+> +	if (WARN_ON_ONCE(ret))
+> +		return;
+> +
+> +	WARN_ON_ONCE(pci_ser_delete(ser, dev));
+> +	dev->liveupdate_outgoing = false;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_outgoing_unpreserve);
+> +
+> +u32 pci_liveupdate_incoming_nr_devices(void)
+> +{
+> +	struct pci_ser *ser;
+> +	int ret;
+> +
+> +	ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)&ser);
+> +	if (ret)
+> +		return 0;
+> +
+> +	return ser->nr_devices;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_incoming_nr_devices);
+> +
+> +void pci_liveupdate_setup_device(struct pci_dev *dev)
+> +{
+> +	struct pci_ser *ser;
+> +	int ret;
+> +
+> +	ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)&ser);
+> +	if (ret)
+> +		return;
+> +
+> +	dev->liveupdate_incoming = !!pci_ser_find(ser, dev);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_setup_device);
+> +
+> +void pci_liveupdate_incoming_finish(struct pci_dev *dev)
+> +{
+> +	dev->liveupdate_incoming = false;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_incoming_finish);
+> +
+> +int pci_liveupdate_register_fh(struct liveupdate_file_handler *fh)
+> +{
+> +	return liveupdate_register_flb(fh, &pci_liveupdate_flb);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_register_fh);
+> +
+> +int pci_liveupdate_unregister_fh(struct liveupdate_file_handler *fh)
+> +{
+> +	return liveupdate_unregister_flb(fh, &pci_liveupdate_flb);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_liveupdate_unregister_fh);
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 37329095e5fe..af6356c5a156 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -2060,6 +2060,8 @@ int pci_setup_device(struct pci_dev *dev)
+>   	if (pci_early_dump)
+>   		early_dump_pci_device(dev);
+>   
+> +	pci_liveupdate_setup_device(dev);
+> +
+>   	/* Need to have dev->class ready */
+>   	dev->cfg_size = pci_cfg_space_size(dev);
+>   
+> diff --git a/include/linux/kho/abi/pci.h b/include/linux/kho/abi/pci.h
+> new file mode 100644
+> index 000000000000..6577767f8da6
+> --- /dev/null
+> +++ b/include/linux/kho/abi/pci.h
+> @@ -0,0 +1,55 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * Copyright (c) 2025, Google LLC.
+> + * David Matlack <dmatlack@google.com>
+> + */
+> +
+> +#ifndef _LINUX_KHO_ABI_PCI_H
+> +#define _LINUX_KHO_ABI_PCI_H
+> +
+> +#include <linux/compiler.h>
+> +#include <linux/types.h>
+> +
+> +/**
+> + * DOC: PCI File-Lifecycle Bound (FLB) Live Update ABI
+> + *
+> + * This header defines the ABI for preserving core PCI state across kexec using
+> + * Live Update File-Lifecycle Bound (FLB) data.
+> + *
+> + * This interface is a contract. Any modification to any of the serialization
+> + * structs defined here constitutes a breaking change. Such changes require
+> + * incrementing the version number in the PCI_LUO_FLB_COMPATIBLE string.
+> + */
+> +
+> +#define PCI_LUO_FLB_COMPATIBLE "pci-v1"
+> +
+> +/**
+> + * struct pci_dev_ser - Serialized state about a single PCI device.
+> + *
+> + * @domain: The device's PCI domain number (segment).
+> + * @bdf: The device's PCI bus, device, and function number.
+> + */
+> +struct pci_dev_ser {
+> +	u16 domain;
+> +	u16 bdf;
+> +} __packed;
+> +
+> +/**
+> + * struct pci_ser - PCI Subsystem Live Update State
+> + *
+> + * This struct tracks state about all devices that are being preserved across
+> + * a Live Update for the next kernel.
+> + *
+> + * @max_nr_devices: The length of the devices[] flexible array.
+> + * @nr_devices: The number of devices that were preserved.
+> + * @devices: Flexible array of pci_dev_ser structs for each device. Guaranteed
+> + *           to be sorted ascending by domain and bdf.
+> + */
+> +struct pci_ser {
+> +	u64 max_nr_devices;
+> +	u64 nr_devices;
+> +	struct pci_dev_ser devices[];
+> +} __packed;
+> +
+> +#endif /* _LINUX_KHO_ABI_PCI_H */
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 7e36936bb37a..9ead6d84aef6 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -40,6 +40,7 @@
+>   #include <linux/resource_ext.h>
+>   #include <linux/msi_api.h>
+>   #include <uapi/linux/pci.h>
+> +#include <linux/liveupdate.h>
+>   
+>   #include <linux/pci_ids.h>
+>   
+> @@ -582,6 +583,10 @@ struct pci_dev {
+>   	u8		tph_mode;	/* TPH mode */
+>   	u8		tph_req_type;	/* TPH requester type */
+>   #endif
+> +#ifdef CONFIG_LIVEUPDATE
+> +	unsigned int	liveupdate_incoming:1;	/* Preserved by previous kernel */
+> +	unsigned int	liveupdate_outgoing:1;	/* Preserved for next kernel */
+> +#endif
+>   };
+>   
+>   static inline struct pci_dev *pci_physfn(struct pci_dev *dev)
+> @@ -2854,4 +2859,46 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+>   	WARN_ONCE(condition, "%s %s: " fmt, \
+>   		  dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
+>   
+> +#ifdef CONFIG_LIVEUPDATE
+> +int pci_liveupdate_outgoing_preserve(struct pci_dev *dev);
+> +void pci_liveupdate_outgoing_unpreserve(struct pci_dev *dev);
+> +void pci_liveupdate_setup_device(struct pci_dev *dev);
+> +u32 pci_liveupdate_incoming_nr_devices(void);
+> +void pci_liveupdate_incoming_finish(struct pci_dev *dev);
+> +int pci_liveupdate_register_fh(struct liveupdate_file_handler *fh);
+> +int pci_liveupdate_unregister_fh(struct liveupdate_file_handler *fh);
+> +#else /* !CONFIG_LIVEUPDATE */
+> +static inline int pci_liveupdate_outgoing_preserve(struct pci_dev *dev)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline void pci_liveupdate_outgoing_unpreserve(struct pci_dev *dev)
+> +{
+> +}
+> +
+> +static inline void pci_liveupdate_setup_device(struct pci_dev *dev)
+> +{
+> +}
+> +
+> +static inline u32 pci_liveupdate_incoming_nr_devices(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void pci_liveupdate_incoming_finish(struct pci_dev *dev)
+> +{
+> +}
+> +
+> +static inline int pci_liveupdate_register_fh(struct liveupdate_file_handler *fh)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline int pci_liveupdate_unregister_fh(struct liveupdate_file_handler *fh)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +#endif /* !CONFIG_LIVEUPDATE */
+> +
+>   #endif /* LINUX_PCI_H */
+>
 -- 
-2.50.1 (Apple Git-155)
+Best Regards,
+Yanjun.Zhu
 
