@@ -1,118 +1,204 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D762926CE05
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 16:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769964209; cv=pass; b=DxgkUBveu0a4wBS2Bf5SjFVevnlY9yb4hzYVMgdOX3yUIC3u4zXWM/COCoQnnxhYSJobmb6YHxjiHGzL4opIfmvWlE0O6OQWh0pHbfXEnOj0YyEBLrxz4j+V1TlaS7amMPNH1kztGfnOUZavtPWg8wpQcDl1Aqv0e/ZW0IXFw00=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769964209; c=relaxed/simple;
-	bh=vy8irmUiSf/eXcG0W+j1BcyMBQYIq4gz6BF7D2WJiis=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nyqlee+en62ZLkzU5rRHGiyui9TlCUgzYw7T4qFotAgnQ2MdQCVSc3WYa/hcnG1riB1OF1+tcHNgRLznqcPeOZPTqBxmrc7fRs5HofBhKyN5yuAAF6sYWO6J7FdX7kdyygk/tOl2TgyLetoRSVMH5TM/NAo7jXUW3zNfIdBqJU4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AOalesdV; arc=pass smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3B92E7635
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 22:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769984354; cv=none; b=eAeUVlHmlqpSh8wcGgn64t80GgqljimFsBfda2ngSKRA1CBcdY8UFYeCJYsckENrRkK+2IhRQASXaN78ELvNre8MyqbBwFZeooxnJgmDEYNQEAZOxfg/tODtkURG/YnHXBmeChCjUBEtSirUy9hQihSTg/ZtstAKKV+sJaBsF8k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769984354; c=relaxed/simple;
+	bh=FW2IFjug0wipIm+wvKJOEqF0GHSnAGPr4QuVJ8hWyfI=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=diJxXJaZ10KgWb4Y1erYnNDby2Oc4l36FWHKRhw5SizpvRGcR7wTDluQ/FzLhu6AS38WXZXR1ZEBa1t5W2oGrZexVYDK8a1daE1oksOYp0/2t5mtyDbAhabYtHr3uBAhIjqyVaX3Arzz/4g9V0k2eKzJTqmuWYzAR5NoROL3u2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P6NYKWqs; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AOalesdV"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4806e0f6b69so26300785e9.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 08:43:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769964205; cv=none;
-        d=google.com; s=arc-20240605;
-        b=iK9nD8RpKDxG8F7ffm0RJkW2mcp3pumLBUTgQxOzgTRKksVZURiAVXVcU/vmfJfEcL
-         Kicx9YOZSxooVRiuUhlJcmmGDuvJXSVXwg7fU0OhnE5gWyNI4teRK2gHj8Fc578TuNGY
-         RP72qhrOZUPicLxIoJ4YUdP/WsRcPoe9iDqQAQ7q5Vp2xZdaN7p0EEFqp+k+dF5yNWex
-         O3M09pbjYy44WiELcdHoAzsS3+ykodKkHAC5iKi2B1j8k4aqp8H+qgchFhAyzYSsCHA9
-         F0+croOs1yW2kwaZazhhEzOrFxoKvOKA2jwSMR6o601WTGfjrtyg496+yH2NrGZbneAI
-         9ijA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nc4emD7dbgLczqSrt1DDlXx/t82B84SIO2BT1dkonPY=;
-        fh=2FpqrLiX4tr4XGfwAWy59YmtCA9RB541PpoTOxaoAnc=;
-        b=LFrm9rxE/IgLtYRM9wDHJ85d23sarUvyQ1WzI0YD46eoq94mM325HdehWGbOcv2lNT
-         Bb4feu0gPKIfQKetNNlvKl/5MOM3lH4v/rTxHL9k+nnR68r2uUH+Gw48kthp0JheyIaX
-         pnHNNjqACcvFxU28c6Mm3Z2XMKiZlQcXVGb7X3QuCHMlYq36334t2mUTgKFo+AptZE5K
-         S+F1YbV0baQeCG5hBhtuWaEfFy6ym3sK0RzGpKrmW7tHfUEpEXYn4oObpw0GqCwBCyrx
-         Lei7klSvO7+K/sPyEp9NL+EhFiqfPF/+89w6onTy0sZdAqJb73y7pZPmLpu8cmenRF8y
-         9OBw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P6NYKWqs"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-79496f0ea57so32452217b3.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 14:19:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769964205; x=1770569005; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1769984352; x=1770589152; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nc4emD7dbgLczqSrt1DDlXx/t82B84SIO2BT1dkonPY=;
-        b=AOalesdVMVRw8h2fXSrfWuB5pOUwDTO4rKEzX93Mhvlr1GVyl3UcOAXGtCgEQqymyb
-         oHdb84rg62VEcOgKFv15XAKjqFbqUNo86lX9gbMmpPreajkV0Uzmv+B2MkQPsPpud5VM
-         BI/B6g2YJOIKGhwtQCeAvdkmhvAtOht3khpcn6ABMfd/UJdvKKlaKeW7EDWBN4CqSGrs
-         SxAxiFhLY3Wta6lOzr2EZYk7IFXayU526BvB2E9lipA7LPD0+OsnPnvKDNg2I2yX1hoU
-         R1b1rjSjxdUZgHfzp4UlksmZAy1gbfd7/qmRgXBbaSODX/7V5KdR4IDCkPdB5RfC2yzw
-         EWgg==
+        bh=xoRg5azkP2+tD6BZ4JF2O1+QmNtK8W7tl0pO+XrNBaE=;
+        b=P6NYKWqsOy9qX+e7w4NE9FscgrQBIIGXQX4E+27ZFhSsQRv9QhibqXjn/LRdpzZ7EZ
+         DKitMTfUIqYgux3xm2WqZqK5aWJtzjq47K+7nrPwLi5UCf5tWoczGQylJDjL2Q7djErH
+         uxHi53pPf2E70xfEurQQ6tyySQ1iMO+LtrZfP2SqgYV3w+jTVvHDd8uoDqOZvBfEwqWg
+         lvgTfYX4SB9bxfn60EogZyJtVi6wtk4S31dnoo1lW6sME09D7IVwb1dshrWyk+CN6jko
+         biBXyWwtzPGpY6x7KMRcWH0hR+ragbLJQ/Wi0Rbry+szWWG0eDkjXjlxYFq95Z/sYlPV
+         MkDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769964205; x=1770569005;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nc4emD7dbgLczqSrt1DDlXx/t82B84SIO2BT1dkonPY=;
-        b=i1ddHctuieBZ1UcwY9VnHOfiL0mxUmH1PFD+W7hkpZx76uhDeyCpbtk9eUymNpAeK1
-         IH/wg5a7y8kZhDdMJWkNf4JrURuDy4+ZcOYX0Mc3y2Q13mGuDcNq87j11xnOriK5FQRy
-         K1UcIKM//vfpJF+JfdIZn5VW4kGVmkhKZQaFyBWXmivF0P8liIsSlxooWriSEvSeUHH7
-         EcMA+3QNXYYwHxbzsrqmrsE88K3ZUP2xDB7WwUqrB/Xrb2BWeHHB6V8sAqf2rIJMNozo
-         P9+8MJAW8LWwU5RD5iR7x8sicVoF/ryqBkn593s6EuuyPS06XWydN1IIqR803Zrs+O9n
-         w6/A==
-X-Forwarded-Encrypted: i=1; AJvYcCU+wJDjqG7LdGNUeghhoLZnY/C3fM9GhjAZwHk49wA1M7c3U5yD5/DN8timitdMnABbaNY0NKaNXLnkN49V5vc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKv9oPted6SR6A3UFOxJXH6ugmG8jHbE+noO6aj+PXDijDT7Cd
-	aNB4Yf0Pz6ndoyFRnCGlmzxv707rFJL5IJ+kw53IJ13YS5ELYDoPI3Q3jl3Nsrp+XvPQxNk8UaU
-	/AoXOso0re0JEVVnLUqwszLq8I8Nl6ag=
-X-Gm-Gg: AZuq6aKOkZf8kSwV9JnnqIN6d5jPfsSHV1rlpuf1FBPf9MlqcG6G5vfIw20Cwd9XNe1
-	DK7Z7izDPTXTWFHnbmf53d1kGjtNEi+QlQzdbQ+YRn5/TXobV95+5mJ8LivSOjVvL0T4Fu33K55
-	BtgD8J1Enot3Ih7/CghCz7TQ1urLPAuXoUHCtaC34gqS5NqQ96gdSZijVhUni29GbQvmVHnx2QY
-	CyzaAlX69Yay3raV3q6/tEacXpIVZ2eZ0HCxaYbliBYXGDZ6K8xrXHNDmRPe0kRP+VCa8Q/lalb
-	hzjE/xADx6nH0qzjoPz59FQIVxgHLflydeyQEQzt6jme5Fea6eE/D1JRq9rBcwWdnhRwjJr/hqM
-	3PCjrnchlQIPQrA==
-X-Received: by 2002:a05:600c:3e1b:b0:477:7af8:c88b with SMTP id
- 5b1f17b1804b1-482db45129bmr117686265e9.11.1769964205034; Sun, 01 Feb 2026
- 08:43:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769984352; x=1770589152;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xoRg5azkP2+tD6BZ4JF2O1+QmNtK8W7tl0pO+XrNBaE=;
+        b=VwUDmJo9I9Kws8QBc2VTCdmluPLnXIw/n283s1O1LqjWiclShVI4sM9wq7c8AUToM6
+         hwcjUri+Y+09sJXv9dH1A6zGP82MlIJkTNQl4PpNu9Xb6V6yjqCfjYiU0a1WoYAJGJ5o
+         KvZOnTRehQTpO9ZM3FssqH0Y9vYb8na+Zhz/A0Mha1fHNpnA8BHMHHOuDxQ3WFK3i4DL
+         qr5Fp3NVT4qIMefLTP0fhgwO6vtX2V+KUEuVhk6QUwZgazPzxOrapCeck2CdHPYO2s/F
+         NlynErBaau9jnpWsJchOTVFp/62Kbl4m07Ad22VDV98syi7tqXdWljBChuWJCWjf3ny8
+         MAyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUmMdXXaPIgS99R8T6tQXv2Szfxl4ZBL2n/YYkS7w/t8SzY3uriFPDzp3wtY82tGQoXC6I6zLreaT3EZW+5bSs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwissqMXuq0hjqO46XvJRVdKJlu/jZHJtP/iFo/jRixO4CJdOQI
+	WPlv4RBo9Pk8la/dlCczPNl3Ccyo1h3V5yqehBlreYsoOeBTReMsMv6D
+X-Gm-Gg: AZuq6aJul7BX1ZPG3QXezb04UdinGfjbzWaw5gkXZa1D1T0pL65OydbTbdXuQEe5HXM
+	EOknnRhA+zRtE5OEYmVJrlBjrVki0WLcYHDPPTOv9OyPDbdyIII4IGw9Ux4wQnXkyVkrDjWyZLH
+	aNJxQHzxz0Lb7a0tgvWkDkx9HhNowpSiLFPv7hOBTUlydb+G9uY/ZRtai88fPtT6lh/ATDdDIKm
+	iYZGIfggaUFaluT5sCPe7hDyameqJdSoNDkYI0hfj+1mzxaL60F41syjYl78N5cqTTYJrDdVHFd
+	5nxvzjaKPZDZkPVwVtKy16XoVizg06FRW5kVjQaDR0J3mmlcQ3qGOQRdEiEj0mewGrXA0gjYlSm
+	CRYQ2HhNl9xP9hAeaXgZmbqNs0EZ43f1VAEOLkJhlFPwgQqxsfuPLmVHTWWFu//Yg8WW43vt1sr
+	GPK/zdDCVeJkCqOqftO2w0U0hqlM3nzQrB0uCAy+46v5SYvX7WABqdzjM7E+Q=
+X-Received: by 2002:a05:690c:4b0b:b0:794:c810:6c4f with SMTP id 00721157ae682-794c8107296mr21604887b3.34.1769984352322;
+        Sun, 01 Feb 2026 14:19:12 -0800 (PST)
+Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-794b7356db4sm30204627b3.20.2026.02.01.14.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Feb 2026 14:19:11 -0800 (PST)
+Date: Sun, 01 Feb 2026 17:19:11 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Paolo Abeni <pabeni@redhat.com>, 
+ netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Willem de Bruijn <willemb@google.com>, 
+ Richard Gobert <richardbgobert@gmail.com>, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.14968a7a11ed8@gmail.com>
+In-Reply-To: <276270cf825431817e46f6744d9b26d3ea954869.1769771825.git.pabeni@redhat.com>
+References: <cover.1769771825.git.pabeni@redhat.com>
+ <276270cf825431817e46f6744d9b26d3ea954869.1769771825.git.pabeni@redhat.com>
+Subject: Re: [PATCH net 2/2] selftest: net: add a test-case for encap
+ segmentation after GRO
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260130091245.3824029-1-sun.jian.kdev@gmail.com>
-In-Reply-To: <20260130091245.3824029-1-sun.jian.kdev@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 1 Feb 2026 08:43:14 -0800
-X-Gm-Features: AZwV_QhtfWodM26fUs_CN8HXo_1GbDHM_04TebfkG18a66-Lo1RgLS0c7sd7eH0
-Message-ID: <CAADnVQL-Gf9SAAhfu3zfPvNPQ11UQmMmF-7wZNYaNOvA=-Bmbg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: skip deny_namespace when bpf LSM is not enabled
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 30, 2026 at 1:12=E2=80=AFAM Sun Jian <sun.jian.kdev@gmail.com> =
-wrote:
->
-> @@ -88,6 +119,13 @@ void test_deny_namespace(void)
->         if (!ASSERT_OK_PTR(skel, "skel load"))
->                 goto close_prog;
->
-> +       if (!bpf_lsm_enabled()) {
-> +               printf("%s:SKIP:bpf LSM not enabled (boot with lsm=3D...,=
-bpf)\n",
-> +                      __func__);
-> +               test__skip();
-> +               goto close_prog;
-> +       }
+Paolo Abeni wrote:
+> We had a few patches in this area and no explicit coverage so far.
+> The test case covers the scenario addressed by the previous fix;
+> reusing the existing udpgro_fwd.sh script to leverage part of the
+> of the virtual network setup, even if such script is possibly not
+> a perfect fit.
+> 
+> Note that the mentioned script already contains several shellcheck
+> violation; this patch does not fix the existing code, just avoids
+> adding more issues in the new one.
+> 
+> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 
-There are lots of bpf-lsm selftests.
-You're trying to skip one. What's the point?
-Pls use test_progs -d or -b to skip the tests in your step.
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-pw-bot: cr
+> ---
+>  tools/testing/selftests/net/udpgro_fwd.sh | 65 +++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/udpgro_fwd.sh b/tools/testing/selftests/net/udpgro_fwd.sh
+> index a39fdc4aa2ff..f2c1f0630b77 100755
+> --- a/tools/testing/selftests/net/udpgro_fwd.sh
+> +++ b/tools/testing/selftests/net/udpgro_fwd.sh
+> @@ -162,6 +162,39 @@ run_test() {
+>  	echo " ok"
+>  }
+>  
+> +run_test_csum() {
+> +	local -r msg="$1"
+> +	local -r dst="$2"
+> +	local csum_error_filter=UdpInCsumErrors
+> +	local csum_errors
+> +
+> +	printf "%-40s" "$msg"
+> +
+> +	is_ipv6 "$dst" && csum_error_filter=Udp6InCsumErrors
+> +
+> +	ip netns exec "$NS_DST" iperf3 -s -1 >/dev/null &
+> +	wait_local_port_listen "$NS_DST" 5201 tcp
+> +	local spid="$!"
+> +	ip netns exec "$NS_SRC" iperf3 -c "$dst" -t 2 >/dev/null
+> +	local retc="$?"
+> +	wait "$spid"
+> +	local rets="$?"
+> +	if [ "$rets" -ne 0 ] || [ "$retc" -ne 0 ]; then
+> +		echo " fail client exit code $retc, server $rets"
+> +		ret=1
+> +		return
+> +	fi
+> +
+> +	csum_errors=$(ip netns exec "$NS_DST" nstat -as "$csum_error_filter" |
+> +		      grep "$csum_error_filter" | awk '{print $2}')
+> +	if [ -n "$csum_errors" ] && [ "$csum_errors" -gt 0 ]; then
+> +		echo " fail - csum error on receive $csum_errors, expected 0"
+> +		ret=1
+> +		return
+> +	fi
+> +	echo " ok"
+> +}
+> +
+>  run_bench() {
+>  	local -r msg=$1
+>  	local -r dst=$2
+> @@ -260,6 +293,38 @@ for family in 4 6; do
+>  	ip netns exec $NS_SRC $PING -q -c 1 $OL_NET$DST_NAT >/dev/null
+>  	run_test "GRO fwd over UDP tunnel" $OL_NET$DST_NAT 10 10 $OL_NET$DST
+>  	cleanup
+> +
+> +	# force segmentation and re-aggregation
+> +	create_vxlan_pair
+> +	ip netns exec "$NS_DST" ethtool -K veth"$DST" generic-receive-offload on
+> +	ip netns exec "$NS_SRC" ethtool -K veth"$SRC" tso off
+> +	ip -n "$NS_SRC" link set dev veth"$SRC" mtu 1430
+> +
+> +	# forward to a 2nd veth pair
+> +	ip -n "$NS_DST" link add br0 type bridge
+> +	ip -n "$NS_DST" link set dev veth"$DST" master br0
+> +
+> +	# segment the aggregates TSO packet, without csum offload
+> +	ip -n "$NS_DST" link add veth_segment type veth peer veth_rx
+> +	for FEATURE in tso tx-udp-segmentation tx-checksumming; do
+> +		ip netns exec "$NS_DST" ethtool -K veth_segment "$FEATURE" off
+> +	done
+
+fwiw, tx off will disable all the dependent tx offloads too
+
+> +	ip -n "$NS_DST" link set dev veth_segment master br0 up
+> +	ip -n "$NS_DST" link set dev br0 up
+> +	ip -n "$NS_DST" link set dev veth_rx up
+> +
+> +	# move the lower layer IP in the last added veth
+> +	for ADDR in "$BM_NET_V4$DST/24" "$BM_NET_V6$DST/64"; do
+> +		# the dad argument will let iproute emit a unharmfull warning
+
+unimportant but minor typo: unharmful. Also above aggregates -> aggregated
+
+> +		# with ipv4 addresses
+> +		ip -n "$NS_DST" addr del dev veth"$DST" "$ADDR" \
+> +			nodad 2>/dev/null
+
+nodad probably only matters on add?
+
+> +		ip -n "$NS_DST" addr add dev veth_rx "$ADDR" \
+> +			nodad 2>/dev/null
+> +	done
+> +
+> +	run_test_csum "GSO after GRO" "$OL_NET$DST"
+> +	cleanup
+>  done
+>  
+>  exit $ret
+> -- 
+> 2.52.0
+> 
+
+
