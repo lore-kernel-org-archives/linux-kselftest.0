@@ -1,206 +1,160 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607881E32D6;
-	Mon,  2 Feb 2026 02:03:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B3620C00A
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 03:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769997828; cv=none; b=K7mnXMIkscIhVwhxTrsBGsBrGed0a0GWtmoMgxz8Q6Y3z0B+cKDgpuJxE6438lKwRrdmxn2QEu11gNXqGnBVDM4/sIS96dph8HxWkvCdaXsP7cJr695991qpiUrmQbBgOAUaWfoX0RbfT2UjjCS+e1sV/BzQ8a0Glq5iBuB89uU=
+	t=1770001947; cv=none; b=kZ4Z8f5HagamXW2oKfaQp9IOrmOZ4iIJ4eKzH0BAxDHgXCKbaqRmgR698FJuZh/2GWyIOiOyZDrPMTQKMP+tCM/lrj7j/mqPjjtdYm4VTyQoM5587FsBhoPbZLAloP/AISrnO1Y0me9RZQImwJ+NWpENy48jwmAGEGbp2LHxqLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769997828; c=relaxed/simple;
-	bh=AyEx9Vsn+zJmzDPorX/P1o+++XFEptNwuJBGpB1FtKs=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=LYYthJLMGHWuwGl15CTMuBBkSOsmRxBEaynbI2nhsjucDxGpCd2ijNZXlg8S0niWrZ5xkF9HxVl9nidtAHgO+zHang+zcZqXDY+xZr0xBOleqN7YFm7SqYmv1jN6pKL+IKScy8Gi1hir5Q38P8fyaBnaLlnSzsSytsy17VJ54zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.62])
-	by gateway (Coremail) with SMTP id _____8CxJMH7BYBppNQOAA--.1206S3;
-	Mon, 02 Feb 2026 10:03:39 +0800 (CST)
-Received: from [10.20.42.62] (unknown [10.20.42.62])
-	by front1 (Coremail) with SMTP id qMiowJAx38L1BYBpkrw9AA--.49183S3;
-	Mon, 02 Feb 2026 10:03:35 +0800 (CST)
-Subject: Re: [PATCH] KVM: LoongArch: selftests: Add steal time test case
-To: Huacai Chen <chenhuacai@kernel.org>,
- "open list:LOONGARCH" <loongarch@lists.linux.dev>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260129021839.3674879-1-maobibo@loongson.cn>
- <CAAhV-H5yZbocBBBN5nMqb32UaVP6i8+9X4RNAwquVYVFVRaBVg@mail.gmail.com>
-From: Bibo Mao <maobibo@loongson.cn>
-Message-ID: <865fdd00-b8ef-1e17-c1b9-1cb264e32914@loongson.cn>
-Date: Mon, 2 Feb 2026 10:00:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1770001947; c=relaxed/simple;
+	bh=W0maPzPO5M3pfvomopBHHuSGpDn/zGTQOAOllm67+rw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pv6YYnxbJRbRLuk9e77t3y7pQrIig40wFkGeba8UjjDz/MCiObhhOu/4YxJcSK3AAWZrJ6UewPxOevclc0NdtkybaQD8BAcKy3mfaYn76QcEBHShhHyOCAgfmeojAumqLR5R3ncGzWyJlmmJPURXK01TBTcGtmOLXYjYt5nZ92M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I9WZ6L/1; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I9WZ6L/1"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2a0d67f1877so25793635ad.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 19:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770001946; x=1770606746; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gRIVmJL3tSUzEWbmHeuBiYdL6z2LK0b9AkJ41US+kYI=;
+        b=I9WZ6L/1cNvIQ77LweVX02+SpkDdpH7G8N6eRrgdDWPwpAiASy2pk58ipiRiIU24ER
+         Hixtm/lPMlsEbcwQeI/LPWwREHg5ZRIWnVu93028vzuUBbauw/Y02hJAmfq+tu9VXSA1
+         lpvdI8qw/A31/Y5JH32TkTCUSeFiwr2OoR2tJa71ft0iqkAxnCHJsFT+EIswklwcVnHo
+         xEITxSSSey07D9iHe5oF9TtSYXrMH3vRbQfqyzQ513gxAtdGq2dClmEXmLWlR6DGUuY4
+         GsXQwrCk0NJeU4ej979FUJzNv7tbkuqQyRFXYuQ02j1HNWPbQUC6PKrhHGA10QtNxASI
+         mj3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770001946; x=1770606746;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gRIVmJL3tSUzEWbmHeuBiYdL6z2LK0b9AkJ41US+kYI=;
+        b=pfVV0N7ck6tHGV/m4YasozSwr+f1sXsbc0sh9EgI2tziL+G7vhJKlc8tWzx4AyDPnp
+         JcYAqfzbjZeFEvqL2tC4Qa0dNiIMUVDuPvMhxNTplmNIK81/23hoyWLaXheRQnse19LX
+         7BDXVCH79MJJPv6mzTXgnGG1CLX2juQazoBS1IhPHRy5HJkDtheXwb4KIaGfQxkH8VoI
+         p5YHljnDOlNZ6t0xTs3QbARukQUK497POmaCs6Q6033LHJZYL90GKDDBN535OVehrKUq
+         8i6mxkOld/dwCUBt24+J5StFlG/ZCqAGA0kAJZleQgZqna6Nh/vQEs+SDn3g2n5IwtkA
+         97lw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDkeXGlSARVz+NBltCziyYI7lYILaqRB5AFgIBdIm5FlXdbWra19fVKX9u0VFzsGCyiZeo95obL4zMLvkB83k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSx6H+a2xFv6pT03eAe9dsTXtU7g5dNBtlAD0OFUKVCP+NQ5YF
+	/PRbABb8e7RbBiY6YdPcwB4c6fuHESSY321e3/sJB+As5jvSaTXMcLQw
+X-Gm-Gg: AZuq6aJfw1YuenAZsy88GOJMrabASn4lgacv6awZ5PWWMurCLc3sayT2DL8wf1AO010
+	Q0A2EihopG2u/voo/9Cq0AWEzpfUgRBCjpR2BwFHqMHlq5r8+X7PSeVygO4OaSEs47lSUdIPQB3
+	A74BnNzqTb5niaS8665LDsmJVcdAe/3Vh3c4SCRYowQbVBrcCcFUP64J/sB56kVXPXJ/sfB8fXa
+	nduBoEhLnaj6s3MayF9vIf0Yh8dfmkN67tekJsO7kqAWFdbyXM0tx34PbXXc/pucCZvUt0gW40T
+	cC4cROWK6MIfau7RNSaCW/1isun6BRn42BlnF0otSPD+3AIXPkjT2mC/MbmfbuQ6SFyohE5mIGg
+	5aR+9yUdqYBXrmEamsPShh9zvy4+lvoJr3440dS/t8i3J8RWMjc2npPCKrKy5tuAFfcVadBwPtE
+	Vb32jB2/+AWtBX7FZrcx5SbRE7NKM2oBHUdUuCOXxmbQ==
+X-Received: by 2002:a17:902:e811:b0:2a7:7ca1:8621 with SMTP id d9443c01a7336-2a8d8038214mr101481645ad.34.1770001945777;
+        Sun, 01 Feb 2026 19:12:25 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b6e4110sm124318605ad.84.2026.02.01.19.12.18
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 01 Feb 2026 19:12:25 -0800 (PST)
+From: chengkaitao <pilgrimtao@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	yangfeng@kylinos.cn,
+	alexei.starovoitov@gmail.com
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Chengkaitao <chengkaitao@kylinos.cn>
+Subject: [PATCH v3 0/3] bpf/verifier: Expand the usage scenarios of bpf_kptr_xchg
+Date: Mon,  2 Feb 2026 11:12:12 +0800
+Message-ID: <20260202031214.69958-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5yZbocBBBN5nMqb32UaVP6i8+9X4RNAwquVYVFVRaBVg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx38L1BYBpkrw9AA--.49183S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuF4fZF13tw17Jw45KF18tFc_yoWrKr1xpF
-	Z2kFs0gFW0gr1xJr1kJ3yDuFsIqrs2kr4IvFy7Xr45Ar4vyrs7Jry09rW7KFn8Zws5WF1S
-	v3WSgFsruF4DJ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
-	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UU
-	UUU==
 
-Hi Huacai,
+From: Chengkaitao <chengkaitao@kylinos.cn>
 
-On 2026/1/31 下午9:47, Huacai Chen wrote:
-> Since paravirt preempt is also applied, I applied this one with some
-> modifications, you can check whether it is correct.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/commit/?h=loongarch-kvm&id=cf991b57ffc808d69cb1f911563b1d4658774ccf
+When using bpf_kptr_xchg, we triggered the following error:
+    31: (85) call bpf_kptr_xchg#194
+    function calls are not allowed while holding a lock
+bpf_kptr_xchg can now be used in lock-held contexts, so we extended
+its usage scope in [patch 1/2].
 
-I checked the pendning patches in loongarch-kvm branch, they all look 
-good to me.
+When writing test cases using bpf_kptr_xchg and bpf_rbtree_*, the
+following approach must be followed:
 
-Thanks for doing this.
+	bpf_spin_lock(&lock);
+	rb_n = bpf_rbtree_root(&root);
+	while (rb_n && can_loop) {
+		rb_n = bpf_rbtree_remove(&root, rb_n);
+		if (!rb_n)
+			goto fail;
 
-Regards
-Bibo Mao
-> 
-> Huacai
-> 
-> On Thu, Jan 29, 2026 at 10:18 AM Bibo Mao <maobibo@loongson.cn> wrote:
->>
->> LoongArch KVM supports steal time accounting now, here add steal time
->> test case on LoongArch.
->>
->> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->> ---
->>   tools/testing/selftests/kvm/Makefile.kvm |  1 +
->>   tools/testing/selftests/kvm/steal_time.c | 85 ++++++++++++++++++++++++
->>   2 files changed, 86 insertions(+)
->>
->> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
->> index ba5c2b643efa..a18c00f1a4fa 100644
->> --- a/tools/testing/selftests/kvm/Makefile.kvm
->> +++ b/tools/testing/selftests/kvm/Makefile.kvm
->> @@ -228,6 +228,7 @@ TEST_GEN_PROGS_loongarch += kvm_page_table_test
->>   TEST_GEN_PROGS_loongarch += memslot_modification_stress_test
->>   TEST_GEN_PROGS_loongarch += memslot_perf_test
->>   TEST_GEN_PROGS_loongarch += set_memory_region_test
->> +TEST_GEN_PROGS_loongarch += steal_time
->>
->>   SPLIT_TESTS += arch_timer
->>   SPLIT_TESTS += get-reg-list
->> diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
->> index 8edc1fca345b..ee13e8973c45 100644
->> --- a/tools/testing/selftests/kvm/steal_time.c
->> +++ b/tools/testing/selftests/kvm/steal_time.c
->> @@ -301,6 +301,91 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
->>          pr_info("\n");
->>   }
->>
->> +#elif defined(__loongarch__)
->> +/* steal_time must have 64-byte alignment */
->> +#define STEAL_TIME_SIZE                ((sizeof(struct kvm_steal_time) + 63) & ~63)
->> +#define KVM_STEAL_PHYS_VALID   BIT_ULL(0)
->> +
->> +struct kvm_steal_time {
->> +       __u64 steal;
->> +       __u32 version;
->> +       __u32 flags;
->> +       __u32 pad[12];
->> +};
->> +
->> +static bool is_steal_time_supported(struct kvm_vcpu *vcpu)
->> +{
->> +       int err;
->> +       uint64_t val;
->> +       struct kvm_device_attr attr = {
->> +               .group = KVM_LOONGARCH_VCPU_CPUCFG,
->> +               .attr = CPUCFG_KVM_FEATURE,
->> +               .addr = (uint64_t)&val,
->> +       };
->> +
->> +       err = __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
->> +       if (err)
->> +               return false;
->> +
->> +       err = __vcpu_ioctl(vcpu, KVM_GET_DEVICE_ATTR, &attr);
->> +       if (err)
->> +               return false;
->> +
->> +       return val & BIT(KVM_FEATURE_STEAL_TIME);
->> +}
->> +
->> +static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
->> +{
->> +       struct kvm_vm *vm = vcpu->vm;
->> +       uint64_t st_gpa;
->> +       int err;
->> +       struct kvm_device_attr attr = {
->> +               .group = KVM_LOONGARCH_VCPU_PVTIME_CTRL,
->> +               .attr = KVM_LOONGARCH_VCPU_PVTIME_GPA,
->> +               .addr = (uint64_t)&st_gpa,
->> +       };
->> +
->> +       /* ST_GPA_BASE is identity mapped */
->> +       st_gva[i] = (void *)(ST_GPA_BASE + i * STEAL_TIME_SIZE);
->> +       sync_global_to_guest(vm, st_gva[i]);
->> +
->> +       err = __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
->> +       TEST_ASSERT(err == 0, "No PV stealtime Feature");
->> +
->> +       st_gpa = (unsigned long)st_gva[i] | KVM_STEAL_PHYS_VALID;
->> +       err = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &attr);
->> +       TEST_ASSERT(err == 0, "Fail to set PV stealtime GPA");
->> +}
->> +
->> +static void guest_code(int cpu)
->> +{
->> +       struct kvm_steal_time *st = st_gva[cpu];
->> +       uint32_t version;
->> +
->> +       memset(st, 0, sizeof(*st));
->> +       GUEST_SYNC(0);
->> +
->> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
->> +       WRITE_ONCE(guest_stolen_time[cpu], st->steal);
->> +       version = READ_ONCE(st->version);
->> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
->> +       GUEST_SYNC(1);
->> +
->> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
->> +       GUEST_ASSERT(version < READ_ONCE(st->version));
->> +       WRITE_ONCE(guest_stolen_time[cpu], st->steal);
->> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
->> +       GUEST_DONE();
->> +}
->> +
->> +static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
->> +{
->> +       struct kvm_steal_time *st = addr_gva2hva(vm, (ulong)st_gva[vcpu_idx]);
->> +
->> +       ksft_print_msg("VCPU%d:\n", vcpu_idx);
->> +       ksft_print_msg("    steal:     %lld\n", st->steal);
->> +       ksft_print_msg("    version:   %d\n", st->version);
->> +}
->>   #endif
->>
->>   static void *do_steal_time(void *arg)
->>
->> base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
->> --
->> 2.39.3
->>
+		tnode = container_of(rb_n, struct tree_node, node);
+		node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
+		if (!node_data)
+			goto fail;
+
+		data = node_data->data;
+		/* use data to do something */
+
+		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
+		if (node_data)
+			goto fail;
+
+		bpf_rbtree_add(&root, rb_n, less);
+
+		if (lookup_key < tnode->key)
+			rb_n = bpf_rbtree_left(&root, rb_n);
+		else
+			rb_n = bpf_rbtree_right(&root, rb_n);
+	}
+	bpf_spin_unlock(&lock);
+
+The above illustrates a lock-remove-read-add-unlock workflow, which
+exhibits lower performance. To address this, we introduced support
+for a streamlined lock-read-unlock operation in [patch 2/2].
+
+Changes in v3:
+- Fix compilation errors
+Changes in v2:
+- Allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
+- Add test case
+
+Link to V2:
+https://lore.kernel.org/all/20260201031607.32940-1-pilgrimtao@gmail.com/
+Link to V1:
+https://lore.kernel.org/all/20260122081426.78472-1-pilgrimtao@gmail.com/
+
+Chengkaitao (3):
+  bpf/verifier: allow calling bpf_kptr_xchg while holding a lock
+  bpf/verifier: allow using bpf_kptr_xchg even if the NON_OWN_REF flag
+    is set
+  selftests/bpf: Add supplementary tests for bpf_kptr_xchg
+
+ kernel/bpf/verifier.c                         |   7 +-
+ .../testing/selftests/bpf/prog_tests/rbtree.c |   6 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
+ .../selftests/bpf/progs/rbtree_search_kptr.c  | 164 ++++++++++++++++++
+ 4 files changed, 179 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
+
+-- 
+2.50.1 (Apple Git-155)
 
