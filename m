@@ -1,119 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DA8307AD5
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 20:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770064855; cv=none; b=fR30p5WCuA882r9egppCLKcgWlvCzLdENMQ4SdR0djqkd+m8tGHF8Qmv8MDm8eC/BDyKO9uX+HAWiY9bBWJYf+tvV2nymz2tTDd/9zOZ5SnwOGtzXcyNzbxN+ZRqor2Bc0BJS4T0FOfhRcUPNnFYejMEey+vcFu37pbENvUnobU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770064855; c=relaxed/simple;
-	bh=LXxQqB4KAsGidoo9+6NNFlatKk5Irngdf6tU9OiZvOQ=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3300307AD5
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 20:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770064873; cv=pass; b=VMkAr0igjjmPKanjn+xH3P3/Fprg3Xuji1DDlAjYSN/WABx3l6HaXRj6DhH8dbxeip5ire9jbCfv+VDy2uq6X3OUqe4vDnYxuniWouLe7KHn9MEaDErf9XW4XfAy/50YTRklnMkf7xRxgILmPPvMif+qk365OE9AiugsIpbfOsQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770064873; c=relaxed/simple;
+	bh=06KjNwAaG6bm5+TYQv5otpaksSAxLs/PjhIpum3xg4U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KqslwPo04Mr+rGZdPbyFakkMJMEmPyawIJedMaDWmYl5dsXrK/qnX9O5S7+pNjqU6Z7IO1i1R742/vgbEyZjeee9QB1FIzyjIQHB6F2UZoRExbx51pr0/k2PwKXfHm9ZVZjguEA1IvjkYckx/cHX9zM7tx901NYhc63B7FE2080=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NA29DaiA; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=WHpF25+19jJregvWPty7V/PsDHhqiB6l8mmeAkvFWipvT+8HM0/y/Y+wvuUgtz6FPgu8satTBBH4obPya8nuB6H+Q+XZQXDkJwOfQxIScQ3BPwfYxq6Hj7faEkTlIloAn0+5GNYpuCnETeE6dMiU+JlPpdxMkt941Rgsz0K7yxQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rgGj6aOS; arc=pass smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NA29DaiA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72462C19421
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 20:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770064855;
-	bh=LXxQqB4KAsGidoo9+6NNFlatKk5Irngdf6tU9OiZvOQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NA29DaiA5CcARdxe58q3QpOo7rJvwTzCX8iS26/nwNP84AklLpwr4Gf+MG2e3pNyt
-	 b1kXx02iBKqHGL7h8nU1CRaoVXZrjMd7ToimWnIy7ZrmEH7jrfGjB4aMn6H2Ugw6Dp
-	 92kXA6XvW5xp8+kUquYHrtdNBlZxGSk8uiL8uWbFFPhbOhQhvwBrRaJXO9d2hfvf8C
-	 vSDZIySyK4n6SYSYsUWy8TyOiGIaKiL+exOOvpA1zeYzBlYUhd6iLVGuhjTSMnTsTa
-	 GqLTptfmgEQWDDjvIO5yLmHaUKu+2sNSNgSclo4Ulx+ni/SKixPCuhql08dQYobesv
-	 pHsWPIVQWzbSg==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-404254ffe8aso127002fac.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 12:40:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXNsX9auLAaTGC+kqIQhnlTXXTVo6Zzc0syKMMtQYdSL34W9G/Tj4vg1Ydvos58soePKRrLMBLMd1Sv9y/m7PU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyERcUQ7abS5KO3GKPft+3GEKIX8Kiy17StjqfIi+3ZBeIv5WKZ
-	812kMfPKobit4+LUNLFg3av9qWKUzA4N0lT3WurX9jH1Rvt1wVd5uZmWzXPZMJOs6vE+RFsN0P2
-	dT5Qqp488a6wVvgNfJFuZGZ/EJfmnvbg=
-X-Received: by 2002:a05:6870:61d4:b0:3e8:97ab:d06e with SMTP id
- 586e51a60fabf-40a3185f66fmr396884fac.9.1770064854548; Mon, 02 Feb 2026
- 12:40:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rgGj6aOS"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-65821afe680so128a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 12:41:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770064870; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZkuaYtOaQdQjfelTwCBYt4w8NRFZ8JIIqmYtZPUPaB2c1MGj/dWqxjRNvjGOAoB7QH
+         Ci6Zrj6FWy6HIzA1w+OGQHVs3cnSrm3ciH5urS4LjeG6IZZ6Dk9KjrEu1iCQ81dgG0Rx
+         96DLqJ+6O5p8sW6r88d0boqwRGf5TyE+D+t9uQnu+dTcC5R3+b9EdB8pTb7YrOrR52iF
+         4rxATIVwFDgOVymT37J6ybMCS06gigArmGGHDvkQHZnyNIVnlaOwe6J4BnGfV0R/eH2u
+         p9BWUtntEfzH1/kM6pEqdbYzl/LjGpiFmD/whJ89TJsmS+bXQzQH1wW+x5KOj/5RmvJ/
+         /PEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2IMh41X3lfsz0vhQymTprdXfmdt4B+CuibsxTGA9cUQ=;
+        fh=XQfaDbBhbB3BW0DUrVpx8H0nDbzzX6MzcQjlcxm6wfY=;
+        b=WDXybhFunmhO/c9Rzj9xbMc4d3KLG0GZLNBYjzJaCUFKjc3Td0MiewZnqHeU/8gi5d
+         uHhhqwJJTMG0ufIr+i/772jBCd2/9W8qXqU96p7aQ74qbD0unO8/8pd4QczEf70C7Q87
+         VvjM9xQZxY+5MkEk0mytRQ7b3dCjt11GtQkeeOi+DRAfiZMwcn6XbUgw2jwKn67PAU/m
+         68kzcFC1/FoK2xn/oxjBiRRbblE16E0SgLC98I4wzFLVkxZl+UCJJxhwNNUIbVO7oaFo
+         GDIfE9LWcjE0KhNs17S6wmg1WSSH0n1UeTeu7CUxU4DT0LUUeN/vomP/dwo9n5alvlYd
+         JTDA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770064870; x=1770669670; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2IMh41X3lfsz0vhQymTprdXfmdt4B+CuibsxTGA9cUQ=;
+        b=rgGj6aOSvZkNqQHpSH0CvpauW+Er0eKOBGeiWsJZaKnFdNTATmIysIsesnxEfSvBaE
+         +AqDrEkTUQrKYDHhZhZP4/KeEmaeIEIaZO+GrdoAd5OrDOkopJMCdN2jEI4+o32baLtl
+         JTRyOCr9H7AQ/KrZLW41i6M8wtjPReXqJF4XwZ2bw4D2qZmff51GLiYmqky+rrDPTPGo
+         ONw8RboNTqySKij5F/JOxIA5Ez5AAWyobm4fC19/JtXvdvNzDBMNjJIzVuOFZNhjfqNl
+         LqJyad4ddfAAo3rChZxc48/J+wihO6j0zc5EEsDH8b9ZckqCCJBLYfnXx4oxTwabnHlE
+         PW7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770064870; x=1770669670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2IMh41X3lfsz0vhQymTprdXfmdt4B+CuibsxTGA9cUQ=;
+        b=oUIJi65bSF6dZ/19SWqh8/LsmSzsn/iK9s8aSqdJC3pG5+op6GnDAWuWQc8f6qAgJZ
+         B4BBmSBFAdygYGEctXvuC10YEfZehUbqCQ+vD8PERQmL9yIy2czjjxssbYfznwh0eYff
+         CJiOwb1AxK9cSOrX0WFxhKzA3LMsOhDqDhTlHuJE27nantY5OUSUoF5/bb5HsRInscxZ
+         ZC4it9fsl8TSKgf/6ACWzWnAvLVw81qL8X5nedhxVR98tn/MhTvwtsegeTKUz9vO8hmK
+         lbwq5TOHub9qpjbHPPvWFXsCD6b7FGnElNpQh/8W0J7a94c1ITv/vu37DA91xu7GK0iq
+         uRfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUkCzEkmv67b6molpKmz4NSNH6ZE07fpS+dZyrwWw7KDEatS/p+hkWngKML2aeXpiVoauc84scTq06z5/Ld2DY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxIzKj9TDqBOZSax12YQ/rC6WgfvRKuknEB1F0H3I5B/pIfSZq
+	YAUuDvDHESCZi5fn+vxmDw9phgq8KhcjNUh3jlbNqmtJ8K1N8qi44X5RobQWc1HWpYj+WkSYrHe
+	IrB43Y32aPVw8k8ivBpH0lqSxZaTGlHSwB7a3W4kJ
+X-Gm-Gg: AZuq6aKiT5V6jZf90ZqRjesEHiELFgpO4PmUrfPAZ/uyoY5iTGkifedf2ZRFECcf2oU
+	topDfpQhZyR1dc0hyf3Z6C/wKrEvsrrBV45U2RzM30zHhisAizsE2Io/mN24tXiCiiLqgsgAAop
+	Ggj9ESr8PsH/381Vc+/k7zC8mkIObJi0eD0RgulxSCL3pW2nj6rBTpInDOogOjQjr7HWc2QnKyr
+	Bkmg/xGB0RtTyoAiiG7vkO96CPS8Swxgz6Ri46Pqu/qF22tTuJkK5ObgWyARmvhlwxtRcqNzr4O
+	FzuMcQ==
+X-Received: by 2002:aa7:c3c5:0:b0:658:133d:8eb9 with SMTP id
+ 4fb4d7f45d1cf-65933dfca2cmr9220a12.2.1770064870080; Mon, 02 Feb 2026 12:41:10
+ -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260124012133.2451708-1-wusamuel@google.com> <20260124012133.2451708-2-wusamuel@google.com>
- <CAJZ5v0jWCdEVgQxOAkek4qqVHMx3Xx4_W3ov9bvdJP=0acX=Yw@mail.gmail.com> <CAG2KctqqZ_12AWiJ89OhCfqDfNqxBH3UrzssycxrXbcbj-82VQ@mail.gmail.com>
-In-Reply-To: <CAG2KctqqZ_12AWiJ89OhCfqDfNqxBH3UrzssycxrXbcbj-82VQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 2 Feb 2026 21:40:43 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0g=RiFM3Uq2_rwuMt9Vut9dmZxvE6tL3DAGLGvjYG8sFA@mail.gmail.com>
-X-Gm-Features: AZwV_Qj-XhrIK5uBfxnL6lLjWm2xQ_I7kSYSt4RSOr2DcRazIpzT2Y5wJDlu5oA
-Message-ID: <CAJZ5v0g=RiFM3Uq2_rwuMt9Vut9dmZxvE6tL3DAGLGvjYG8sFA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] PM: wakeup: Handle empty list in wakeup_sources_walk
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260115232154.3021475-1-jmattson@google.com> <20260115232154.3021475-4-jmattson@google.com>
+ <mcxo54ct7bsu2d6xmalpsae6wq32ykjh6dd4kfgcgru474dqre@47flraln5zz5>
+In-Reply-To: <mcxo54ct7bsu2d6xmalpsae6wq32ykjh6dd4kfgcgru474dqre@47flraln5zz5>
+From: Jim Mattson <jmattson@google.com>
+Date: Mon, 2 Feb 2026 12:40:58 -0800
+X-Gm-Features: AZwV_QjDlpKgTWVJhvtudgSKth7iSkip7p3g3HVeq5o303u-FKzAbkVZnMyhL64
+Message-ID: <CALMp9eS+s=GM6Kr1Lfrx0S7bM174N0FQ6DepTTVMRnrDij0Ltg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] KVM: x86: nSVM: Add validity check for vmcb12 g_pat
+To: Yosry Ahmed <yosry.ahmed@linux.dev>
+Cc: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 2, 2026 at 9:23=E2=80=AFPM Samuel Wu <wusamuel@google.com> wrot=
-e:
->
-> On Tue, Jan 27, 2026 at 8:15=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> >
-> > On Sat, Jan 24, 2026 at 2:22=E2=80=AFAM Samuel Wu <wusamuel@google.com>=
+On Wed, Jan 21, 2026 at 5:41=E2=80=AFPM Yosry Ahmed <yosry.ahmed@linux.dev>=
  wrote:
-> > >
-> > > In the case of an empty wakeup_sources list, wakeup_sources_walk_star=
-t()
-> > > will return an invalid but non-NULL address. This also affects wrappe=
-rs
-> > > of the aforementioned function, like for_each_wakeup_source().
-> > >
-> > > This patch updates wakeup_sources_walk_start() to return NULL in case=
- of
-> > > an empty list.
-> > >
-> > > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > > ---
-> > >  drivers/base/power/wakeup.c | 4 +---
-> > >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.=
-c
-> > > index 1e1a0e7eeac5..e69033d16fba 100644
-> > > --- a/drivers/base/power/wakeup.c
-> > > +++ b/drivers/base/power/wakeup.c
-> > > @@ -275,9 +275,7 @@ EXPORT_SYMBOL_GPL(wakeup_sources_read_unlock);
-> > >   */
-> > >  struct wakeup_source *wakeup_sources_walk_start(void)
-> > >  {
-> > > -       struct list_head *ws_head =3D &wakeup_sources;
-> > > -
-> > > -       return list_entry_rcu(ws_head->next, struct wakeup_source, en=
-try);
-> > > +       return list_first_or_null_rcu(&wakeup_sources, struct wakeup_=
-source, entry);
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(wakeup_sources_walk_start);
-> > >
-> > > --
-> >
-> > This looks like a fix for the for_each_wakeup_source() users.
-> >
-> > I can apply it without the next two patches.
 >
-> Yes please. Feel free to apply this patch independently, as it can
-> exist as a standalone fix independent of the subsequent two patches in
-> the series.
+> On Thu, Jan 15, 2026 at 03:21:42PM -0800, Jim Mattson wrote:
+> > Add a validity check for g_pat, so that when nested paging is enabled f=
+or
+> > vmcb12, an invalid g_pat causes an immediate VMEXIT with exit code
+> > VMEXIT_INVALID, as specified in the APM, volume 2: "Nested Paging and
+> > VMRUN/VMEXIT."
+> >
+> > Update the signature of __nested_vmcb_check_save() to include a pointer=
+ to
+> > a struct vmcb_ctrl_area_cached, since the g_pat validity check depend o=
+n
+> > the nested paging control bit.
+> >
+> > Fixes: 3d6368ef580a ("KVM: SVM: Add VMRUN handler")
+> > Signed-off-by: Jim Mattson <jmattson@google.com>
+> > ---
+> >  arch/x86/kvm/svm/nested.c | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> > index 07a57a43fc3b..e65291434be9 100644
+> > --- a/arch/x86/kvm/svm/nested.c
+> > +++ b/arch/x86/kvm/svm/nested.c
+> > @@ -369,7 +369,8 @@ static bool __nested_vmcb_check_controls(struct kvm=
+_vcpu *vcpu,
+> >
+> >  /* Common checks that apply to both L1 and L2 state.  */
+> >  static bool __nested_vmcb_check_save(struct kvm_vcpu *vcpu,
+> > -                                  struct vmcb_save_area_cached *save)
+> > +                                  struct vmcb_save_area_cached *save,
+> > +                                  struct vmcb_ctrl_area_cached *contro=
+l)
+> >  {
+> >       if (CC(!(save->efer & EFER_SVME)))
+> >               return false;
+> > @@ -400,6 +401,10 @@ static bool __nested_vmcb_check_save(struct kvm_vc=
+pu *vcpu,
+> >       if (CC(!kvm_valid_efer(vcpu, save->efer)))
+> >               return false;
+> >
+> > +     if (CC((control->nested_ctl & SVM_NESTED_CTL_NP_ENABLE) &&
+> > +            npt_enabled && !kvm_pat_valid(save->g_pat)))
+>
+> If this lands after "KVM: nSVM: Drop the non-architectural consistency
+> check for NP_ENABLE" [1], the npt_enabled check can be dropped, as
+> SVM_NESTED_CTL_NP_ENABLE will be cleared if the guest cannot use NPTs.
+>
+> [1]https://lore.kernel.org/kvm/20260115011312.3675857-16-yosry.ahmed@linu=
+x.dev/
 
-OK, applied as 6.20/7.0 material, thanks!
+I don't see it today, but I will probably forget to keep checking. :)
+
+> > +             return false;
+> > +
+> >       return true;
+> >  }
+> >
+> > @@ -407,8 +412,9 @@ static bool nested_vmcb_check_save(struct kvm_vcpu =
+*vcpu)
+> >  {
+> >       struct vcpu_svm *svm =3D to_svm(vcpu);
+> >       struct vmcb_save_area_cached *save =3D &svm->nested.save;
+> > +     struct vmcb_ctrl_area_cached *ctl =3D &svm->nested.ctl;
+> >
+> > -     return __nested_vmcb_check_save(vcpu, save);
+> > +     return __nested_vmcb_check_save(vcpu, save, ctl);
+> >  }
+> >
+> >  static bool nested_vmcb_check_controls(struct kvm_vcpu *vcpu)
+> > @@ -1892,7 +1898,7 @@ static int svm_set_nested_state(struct kvm_vcpu *=
+vcpu,
+> >       if (!(save->cr0 & X86_CR0_PG) ||
+> >           !(save->cr0 & X86_CR0_PE) ||
+> >           (save->rflags & X86_EFLAGS_VM) ||
+> > -         !__nested_vmcb_check_save(vcpu, &save_cached))
+> > +         !__nested_vmcb_check_save(vcpu, &save_cached, &ctl_cached))
+>
+> save_cached here is from vmcb01, but ctl_cached is from vmcb12, right?
+> So we're conditioning the PAT validity check on L1's gPAT on NPT being
+> enabled for L2 IIUC.
+>
+> Perhaps we should pass 'bool guest_npt' instead of the cached control
+> area?  Then we can just pass npt_enabled here IIUC.
+
+I'm going to cache it on its own to avoid confusion.
+
+> >               goto out_free;
+> >
+> >
+> > --
+> > 2.52.0.457.g6b5491de43-goog
+> >
