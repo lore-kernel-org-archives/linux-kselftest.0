@@ -1,41 +1,60 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5540E2D8362
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 20:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E6F2EA731;
+	Mon,  2 Feb 2026 20:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770065084; cv=none; b=S5eGB5s+0lEvGdMaRAc+4N2tQDkpy9Q9BUcgTftmJalEhmYkwOy3arqWqe0rrzx6Uy3RXLTnWtam0N+FHbt6Ef4tSu4YOt2t/yDaKDPI0bFICzgbu9Q1fg/SKiQaysoDco7c4TaIIRkiZ8HAM0uVfvn7kKKnx+ZKZiTuiGGwZIM=
+	t=1770065298; cv=none; b=Uly8uLNEG0ooiR/dMrE4irSrEUf4beFTHdDQ1jT4H5UaZyrBRXHOtuRny0zjtcZ+KALMOmFZI2NGPsgWeghfASiY5J6CkFGWqo1jZOIchQixfdg9s6sGFHNH46GKSpmXyBisGTRiFKhgjgARl97mD06nQvyrzZewDv+hqIyZ5HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770065084; c=relaxed/simple;
-	bh=HEa/53gPFbou3og6OCMWaGACBfEjJA0P67QtI/gXCio=;
+	s=arc-20240116; t=1770065298; c=relaxed/simple;
+	bh=FcILvlT/I9R5y6ytmnV/QqDzufRt/2TbUBNE3Fob4FU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oLp/lt8jIIN3smRsjObGTv3qadogud2zZqllz9EGCM+ZDoYoWNMHwNQ4Q5cVjigTRVjyasb5B9HKBN3j6+t287QU/DQugtVv1Rvz2WdFPQBPHGOAsWpiV5i1TDSgGtquUBGFqipK+ofKljTnjBq5VkYs/GuSspEtenVvDA8hAG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o/y6xbqg; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=soYkYiMc4PyppjCUr5uxjcLDWNFgTTt6SmvD0SwfG0dGacLQXxnYilAAURv1D8i7ljqDP1IQOdNdcew9+YdGY0B5rNrWP028qi5w/EXO1D55gC8VrWqjCbvrWgAajHqBWnEsHquAIcSPEtR5re4rdGHikn0vP0+mDWtax07aB1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=b5xO/Agg; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o/y6xbqg"
-Date: Mon, 2 Feb 2026 20:44:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770065079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vumbmx0ORGVJ2XU9vfaSkwa13xhN2HHhdBz6/kFPDJM=;
-	b=o/y6xbqg716DDTnQw6MW33/HBpYDfHqw+849UppbGucPyJa9mKZs8R039A2L4rp4mBp/X8
-	hzbusQ6qpGKLLVLS5qSiq98d/VnujpVRZJ04HgYSm3pLt/Cd81LB1J1bQJ4BtraM9N8tT1
-	d7I7AjD/0JP61WxQlnu0A86VBm+zmGQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	seanjc@google.com, pbonzini@redhat.com, nikunj@amd.com, bp@alien8.de
-Subject: Re: [PATCH v5 4/5] KVM: SVM: Add support for
- KVM_CAP_X86_BUS_LOCK_EXIT on SVM CPUs
-Message-ID: <peroaux2ghnb2ypg2ebzflb3xvg3bzpaircqht3vdgy7tkrwn4@pfpkfhasn44i>
-References: <20250502050346.14274-1-manali.shukla@amd.com>
- <20250502050346.14274-5-manali.shukla@amd.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="b5xO/Agg"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=T1jq08TNdoCYYlZhkL7hgE4KpY/81wnO/NYZMkq8nno=; b=b5xO/AggIz4cnWcFe/H43k0C8/
+	kYR4OrnYMbdIYFG5CGl/wOwRhDYWYgWoUz0/0una2PAhwGuozVJFH+4sjMQdEysY0q0DLIiyLZWhE
+	Q53/xembNg/zeBExRngb2RYEoyJy5tStLLaPHpaHAbxYPi++aYgiur9c3t4x60EDOAWA/G9wIQ402
+	ClIt0waJSeSAcvA6oVslZScFAlyzVCUyT0NnjhizenhuzXVR8Omql5hxNyqCItz2K2/8Tw3ZOdWhB
+	mLyhoo1SilzhGLZt0jB6HlvCWRzJNx0Bv+5eMsSzAZ1wmSRT0355CQLdz62DseOfeeiUtnH3Kpmyn
+	5ZaeLQtQ==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vn0q7-0000000H2xD-2CxZ;
+	Mon, 02 Feb 2026 20:48:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 8E6FF3008E2; Mon, 02 Feb 2026 21:48:06 +0100 (CET)
+Date: Mon, 2 Feb 2026 21:48:06 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Waiman Long <llong@redhat.com>
+Cc: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH/for-next v3 2/3] cgroup/cpuset: Defer
+ housekeeping_update() calls from CPU hotplug to workqueue
+Message-ID: <20260202204806.GL1395266@noisy.programming.kicks-ass.net>
+References: <20260202201144.1669260-1-longman@redhat.com>
+ <20260202201144.1669260-3-longman@redhat.com>
+ <20260202201844.GJ1395266@noisy.programming.kicks-ass.net>
+ <a503d890-0c83-4741-b622-88798016787c@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,129 +63,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250502050346.14274-5-manali.shukla@amd.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <a503d890-0c83-4741-b622-88798016787c@redhat.com>
 
-On Fri, May 02, 2025 at 05:03:45AM +0000, Manali Shukla wrote:
-> Add support for KVM_CAP_X86_BUS_LOCK_EXIT on SVM CPUs with Bus Lock
-> Threshold, which is close enough to VMX's Bus Lock Detection VM-Exit to
-> allow reusing KVM_CAP_X86_BUS_LOCK_EXIT.
+On Mon, Feb 02, 2026 at 03:32:03PM -0500, Waiman Long wrote:
+> On 2/2/26 3:18 PM, Peter Zijlstra wrote:
+> > On Mon, Feb 02, 2026 at 03:11:43PM -0500, Waiman Long wrote:
+> > 
+> > > @@ -1310,14 +1321,34 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
+> > >    */
+> > >   static void update_isolation_cpumasks(void)
+> > >   {
+> > > -	int ret;
+> > > +	static DECLARE_WORK(isolcpus_work, isolcpus_workfn);
+> > >   	if (!isolated_cpus_updating)
+> > >   		return;
+> > > -	ret = housekeeping_update(isolated_cpus);
+> > > -	WARN_ON_ONCE(ret < 0);
+> > > +	/*
+> > > +	 * This function can be reached either directly from regular cpuset
+> > > +	 * control file write or via CPU hotplug. In the latter case, it is
+> > > +	 * the per-cpu kthread that calls cpuset_handle_hotplug() on behalf
+> > > +	 * of the task that initiates CPU shutdown or bringup.
+> > > +	 *
+> > > +	 * To have better flexibility and prevent the possibility of deadlock
+> > > +	 * when calling from CPU hotplug, we defer the housekeeping_update()
+> > > +	 * call to after the current cpuset critical section has finished.
+> > > +	 * This is done via workqueue.
+> > > +	 */
+> > > +	if (current->flags & PF_KTHREAD) {
+> > 		/* Serializes the static isolcpus_workfn. */
+> > 		lockdep_assert_held(&cpuset_mutex);
 > 
-> The biggest difference between the two features is that Threshold is
-> fault-like, whereas Detection is trap-like.  To allow the guest to make
-> forward progress, Threshold provides a per-VMCB counter which is
-> decremented every time a bus lock occurs, and a VM-Exit is triggered if
-> and only if the counter is '0'.
-> 
-> To provide Detection-like semantics, initialize the counter to '0', i.e.
-> exit on every bus lock, and when re-executing the guilty instruction, set
-> the counter to '1' to effectively step past the instruction.
-> 
-> Note, in the unlikely scenario that re-executing the instruction doesn't
-> trigger a bus lock, e.g. because the guest has changed memory types or
-> patched the guilty instruction, the bus lock counter will be left at '1',
-> i.e. the guest will be able to do a bus lock on a different instruction.
-> In a perfect world, KVM would ensure the counter is '0' if the guest has
-> made forward progress, e.g. if RIP has changed.  But trying to close that
-> hole would incur non-trivial complexity, for marginal benefit; the intent
-> of KVM_CAP_X86_BUS_LOCK_EXIT is to allow userspace rate-limit bus locks,
-> not to allow for precise detection of problematic guest code.  And, it's
-> simply not feasible to fully close the hole, e.g. if an interrupt arrives
-> before the original instruction can re-execute, the guest could step past
-> a different bus lock.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Manali Shukla <manali.shukla@amd.com>
-> ---
->  Documentation/virt/kvm/api.rst |  5 +++++
->  arch/x86/kvm/svm/nested.c      | 34 ++++++++++++++++++++++++++++++
->  arch/x86/kvm/svm/svm.c         | 38 ++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/svm/svm.h         |  1 +
->  4 files changed, 78 insertions(+)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index ad1859f4699e..f7d2d477c3cf 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -7989,6 +7989,11 @@ apply some other policy-based mitigation. When exiting to userspace, KVM sets
->  KVM_RUN_X86_BUS_LOCK in vcpu-run->flags, and conditionally sets the exit_reason
->  to KVM_EXIT_X86_BUS_LOCK.
->  
-> +Due to differences in the underlying hardware implementation, the vCPU's RIP at
-> +the time of exit diverges between Intel and AMD.  On Intel hosts, RIP points at
-> +the next instruction, i.e. the exit is trap-like.  On AMD hosts, RIP points at
-> +the offending instruction, i.e. the exit is fault-like.
-> +
->  Note! Detected bus locks may be coincident with other exits to userspace, i.e.
->  KVM_RUN_X86_BUS_LOCK should be checked regardless of the primary exit reason if
->  userspace wants to take action on all detected bus locks.
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 834b67672d50..5369d9517fbb 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -678,6 +678,33 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
->  	vmcb02->control.iopm_base_pa = vmcb01->control.iopm_base_pa;
->  	vmcb02->control.msrpm_base_pa = vmcb01->control.msrpm_base_pa;
->  
-> +	/*
-> +	 * Stash vmcb02's counter if the guest hasn't moved past the guilty
-> +	 * instrution; otherwise, reset the counter to '0'.
-> +	 *
-> +	 * In order to detect if L2 has made forward progress or not, track the
-> +	 * RIP at which a bus lock has occurred on a per-vmcb12 basis.  If RIP
-> +	 * is changed, guest has clearly made forward progress, bus_lock_counter
-> +	 * still remained '1', so reset bus_lock_counter to '0'. Eg. In the
-> +	 * scenario, where a buslock happened in L1 before VMRUN, the bus lock
-> +	 * firmly happened on an instruction in the past. Even if vmcb01's
-> +	 * counter is still '1', (because the guilty instruction got patched),
-> +	 * the vCPU has clearly made forward progress and so KVM should reset
-> +	 * vmcb02's counter to '0'.
-> +	 *
-> +	 * If the RIP hasn't changed, stash the bus lock counter at nested VMRUN
-> +	 * to prevent the same guilty instruction from triggering a VM-Exit. Eg.
-> +	 * if userspace rate-limits the vCPU, then it's entirely possible that
-> +	 * L1's tick interrupt is pending by the time userspace re-runs the
-> +	 * vCPU.  If KVM unconditionally clears the counter on VMRUN, then when
-> +	 * L1 re-enters L2, the same instruction will trigger a VM-Exit and the
-> +	 * entire cycle start over.
-> +	 */
-> +	if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip))
+> Do we require synchronization between the the queue_work() call and the
+> execution of the work function? I thought it is not needed, but I may be
+> wrong.
 
-Is vmcb02->save.rip the right thing to use here?
-
-IIUC, we want to find out if L2 made forward progress since the last bus
-lock #VMEXIT from L2 to L0, at which point we record bus_lock_rip.
-However, on nested VMRUN, vmcb02->save.rip is only populated from the
-vmcb12 in nested_vmcb02_prepare_save(), which doesn't happen until after
-nested_vmcb02_prepare_control(). So waht we're comparing against here is
-L2's RIP last time KVM ran it.
-
-It's even worse in the KVM_SET_NESTED_STATE path, because
-vmcb02->save.rip will be unintialized (probably zero).
-
-Probably you want to use vmcb12_rip here, as this is the RIP that L1
-wants to run L2 with, and what will end up in vmcb02->save.rip.
-
-HOWEVER, that is also broken in the KVM_SET_NESTED_STATE path. In that
-path we pass in the uninitialized vmcb02->save.rip as vmcb12_rip anyway.
-Fixing this is non-trivial because KVM_SET_REGS could be called before
-or after KVM_SET_NESTED_STATE, so the RIP may not be available at all at
-that point.
-
-We probably want to set a flag in svm_set_nested_state() that the RIP
-needs fixing up, and the perhaps in svm_vcpu_pre_run() fix up the
-control fields in vmcb02 that depend on it: namely the bus_lock_counter,
-next_rip, and soft_int_* fields.
-
-It gets worse because I think next_rip is also not always properly
-saved/restored because we do not sync it from vmcb02 to cache in
-nested_sync_control_from_vmcb02() -- but that one is not relevant to
-bus_lock_counter AFAICT.
-
-> +		vmcb02->control.bus_lock_counter = 1;
-> +	else
-> +		vmcb02->control.bus_lock_counter = 0;
-> +
->  	/* Done at vmrun: asid.  */
->  
->  	/* Also overwritten later if necessary.  */
+Well, something needs to ensure there aren't two threads trying to use
+this one work thing at the same time, no?
