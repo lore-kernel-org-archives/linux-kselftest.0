@@ -1,249 +1,153 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012063.outbound.protection.outlook.com [52.101.53.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B762C0269;
-	Mon,  2 Feb 2026 20:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB302D8362
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 20:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770063666; cv=fail; b=ezYntG9cxFKcxG86a69ZvNjdvqExX/uKRy2VERHGvNei0+n5k3Mp74YrCfef5EpeLf2Vsb9pr1BN1WFOhGmEt+oNs5mDyf5ilSkXb5cjtZdK3G4U+gCV/xf/uj6jmqhhJbmvmnW8b7BAzMnHaqljTG0w70m7K3tezlH3wSK2vjI=
+	t=1770063838; cv=pass; b=PavKHckMsQs3uwuaHEeJd44yWVbaLe3Gq0QW70GMM+2VfTJDbDcwj74MoLW0HF6vb2wwNoNgzPA6BRH/u2/sccRnZ5j54+BsDvkOyO5qp0XObXPdGZYAL4pEGK1h0MY91WuVr1wFpSmdtA6Puwdc1PVZDvtdbRxoZaJVfcDZh8U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770063666; c=relaxed/simple;
-	bh=eF+rbWj8MwjEpZVf1heTsF2Zk17BsacDZrbFNuIb5VA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=B2P7y1AwcpmMefbYWYSaI+mywCPIsviopsEzGbO83+SvPJumesLb5EcnsxYGJkSIsI7tBd0SLhf+JeHv2oammG+1BKguQwoaXxTCpey7PmR+/cYBxr/Nbbmta/wvUiV3e3rQUH5kAw2cAuznW+BFYCmO9GWC+tvAcl/DWCq3WLI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=r8QA3oL9; arc=fail smtp.client-ip=52.101.53.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1770063838; c=relaxed/simple;
+	bh=rygccUd18l19TzR5JCjH1aG9Ieh85FWBhgGrodwQfAk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JgTCpP5vPbVzRbICFMWExEbBv4PyOXiQVgy8fBxmZTQBkbf37IWP0Q0Gto0zxWrsM2krbuwGUICLo8GFJjl/qFc1yvcuCQJn3D7Oo2XoS+MxTM6UkGEGcxK66eJSsqfdMRGfmE7x9EGjekzVvx1UbNUsIkTmVOLe8vVryp4LfRA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U5aTzo61; arc=pass smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="r8QA3oL9"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=s48BZ2yFYmeVjua4cRljMr2COA1TkaNc7yEHEV9UWYWWdtVV9GEFgW8uXAdZ8dwsVNwZK2Gp4XAE/zzley1/25+BKstvymcpIvOeLaiEMjuonbKkn9ZOgArtH52eKX4O+7bB2Ib+BK6j8k23lBN5rjfzVCHKmBFRggqKrOSLtB/bJx7M+uDwM2yTaB7mKnn+FNR2ezqqE03vtMYKQN6wUk8LdPbB7Yy4+XYlXcWhPxpPsEC9TEIjjQUpa/nOvp/LR5SkMLSTNndl9vL+itwbTONAVgd0mZ72G6VebOLk1h4WELUfydE9HdMHBvglDiqSBmhJJV6emk+6OQKWFA5zzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rWcRitGH9u6MwrGGE7RWpSxEIC4r0xBBtPbmSN39Ads=;
- b=QWdhPRy2CszNcPJOU793SdjkhmCWdfxQ4FwQZv+Y7kUMwBouSrxlKST3OZLE2XwR+NchGxlXAOaiD1EXZZWNAADv/17g8E7QAo/Mi3xGWHWBxDD9/P2mpZxYoJf+I+fGCuEfCCiitmu+DTq7fLO/3414O/D+blQ2Wu9MW6vdEr/NSxsIbtHs5oLH9YG/x6FCFGClPh9Y6vrtXluuI+osOobYgrUg79nvlfBuGavTdPoGwgPg9XUyYOZM34p++SzBv3Rm7w+6VGtpTwjCXzXpP+7u4RmZHSV729CtnPcWCmzSVjF1K/Rr8p/YohiqIuMTawTn5FZXGYP6ydgK0tX7nQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rWcRitGH9u6MwrGGE7RWpSxEIC4r0xBBtPbmSN39Ads=;
- b=r8QA3oL9u2BoIUBF3lvpb0F/iegZnYUNNuOeI/UEYghONILg6R552gM4V5PpEx4Fiv2zuNDw1M0JBAfwqsOTDmLmXp/j0t23Vx/wHq4SOhLyprAoersZMYL3kmnM8JOAPsBD6v93Juz0UoCE5sjW4OQYrAxBmct1Wak9zejlWJoVKY2EEwwFbrknFrJ7f8ZuJoEnbVeEpuoXLZsnU7JMKvzI/TfiiQRRqo9DFP4/NJWVw7EI13l+3G2ZZH6PwEuFlJKyxs9XapdxZ0Cxknd5t+W8A5jIXSL3JzimO72zdZfPvEVhWgcR31Z8RtdPq5qAEOVVeWH5//fCsLSUuFaLlQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by IA0PR12MB9048.namprd12.prod.outlook.com (2603:10b6:208:408::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Mon, 2 Feb
- 2026 20:21:01 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9564.016; Mon, 2 Feb 2026
- 20:21:01 +0000
-Date: Mon, 2 Feb 2026 21:20:57 +0100
-From: Andrea Righi <arighi@nvidia.com>
-To: Tejun Heo <tj@kernel.org>
-Cc: David Vernet <void@manifault.com>, Changwoo Min <changwoo@igalia.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH sched_ext/for-6.20] selftests/sched_ext: Fix
- init_enable_count flakiness
-Message-ID: <aYEHKTYHBVuQflNu@gpd4>
-References: <03982d7b5642c0ad003668178f9e5df7@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03982d7b5642c0ad003668178f9e5df7@kernel.org>
-X-ClientProxiedBy: MI1P293CA0024.ITAP293.PROD.OUTLOOK.COM (2603:10a6:290:3::6)
- To LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U5aTzo61"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b8838339fc6so24902666b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 12:23:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770063836; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PmSh0rYY/Plis9DdTLERJzlfUHy+rztb5iXlRlDvfGlQi4crmKsXNXMOi5NCm3RoHR
+         wFnyiw4N21qfFmWvdcTVHscL34nFAwXaWOesLGarwd7oCZ0OJSY62IAlq68tQkNMuxQe
+         a+NFvgak865oS+MBEtddhGbsgPoTaS8x8CT9p136/KQLpMe+t15KMjsuKhail04/gH5s
+         JUis6HnL/AF7vIeORp2GXaXaWrPhjk34fUIAD68AbCxXgN3xsohdcwiG5zfcPS8fkBpC
+         KPrpNssgkw17nNkMvEm6C3d8L7nfCnN3nlVGb4uR7nwpsgvR6+zmFsl8N6iqK71MJmFI
+         qVZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=htIZPWHbD45Ax/xP9Qw9uEOw6k3b0vJzapO+gLliJ94=;
+        fh=l4DoI1uzSdazM/ls9i+H34u+FkG/S+1Qw8aCUln09Nw=;
+        b=IPzHrwAt5UDN6lu8ixUv7bgeN6N2lurrRl679x1BGQkoSR7XVA7MMilrIQGddefl6F
+         CYW6szIvzf5y+Q+wAr1kAChrfUywsvotmpWAwaDCsHwNpHaZb+t6XTJdTHwf7r62hSIM
+         PE73uu9DwbriDfqfp1yZU2sJeAHHuCduVr9IT3/xHS0c12NYnAz4/tV7DrLXl2CsrVTu
+         y3YSLTj6eLvy8d6PEgNTvhV/+dE9+AHYkozAbwjHXpSToLRmkGFHy/klcocEguMH9YSN
+         axzljS09ktWQAZtAwFPVFEeHXj6nlgxKKJmwb6iOx1Mb2xoMcmfquHXCHbqbQHbqQa9D
+         v/zw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770063836; x=1770668636; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=htIZPWHbD45Ax/xP9Qw9uEOw6k3b0vJzapO+gLliJ94=;
+        b=U5aTzo61c9/GFsxEM2m/A/746Ub8QrtfHQpE1rRZ5Vf54hERmqP4ON5eB4HH08LM+7
+         UI9XsRK69lkdz/LYxPZq52tIGUNny7M9dnq95j5P7Fmyp7Rw5Q6Ogr9TMk5I7pIpBLhI
+         NHz2enOQi0U4FMoF9/xgSFOAPf1z5kw8vrMQVJPSD2LucXCUtI+UBn0hlm3CyVTknHMF
+         K9t8VVvcZY+rQmf1yXA1kkzjBa+2daLFLDEU3vQih+VOcMi7/XGYzayGFKCtltNStaUX
+         bD2joBB4sBs1iANJaqA0UI7jWhqVyTZIJgXXiNlK5ei6bmSxOAHvOI868ew8CdZljfGD
+         GabQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770063836; x=1770668636;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=htIZPWHbD45Ax/xP9Qw9uEOw6k3b0vJzapO+gLliJ94=;
+        b=AFA1Or6Y6nxRbeprOXazXsKuV0MVa4u/s24MhIfFNmn77fc6qRib+nTneMYZxlA1f2
+         gW46uQiih3B+c9H17Z01kkRxYqBiTqq8o8xI4JovkazJ7H5bH89u1CSTVrDHV/83M8+S
+         4DvBu/EXjNViRMC47VOu/Rz0w25hhAZJ4yudMV3KQJJkT+cJ5rN2JIsvOeeh4VRyMBuG
+         ZcfHmx9yEcTQfMhbEKVU/XJmySLfS899a98Ro4yueqeXUJKg7WulXtTZXHn6QFyaZp1E
+         eDETc/WYvyRgpUGk8cNKx0Lsi8Br1G4NF2wnM+OIKoX9NsDi7xurFVDYhjEtgIAuXAtM
+         9CTw==
+X-Forwarded-Encrypted: i=1; AJvYcCUA/YyYHbqwExjjbWwg0PwpXtCPxgROoTBjg8LzXB0whNQ91DLj41fDbxG6p3myUQKF+JTsogj9QtruVVCBpbg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfMUzwQM+QvPfZ9fzmlfyKKq0l3+OgayHPTQcAuet5NrVDiEoa
+	s2+Xpdn7giSx2Du0igUjaQzhOAxOQXAQhQWd93vgZXtdcXnx/S+YXFq2qeH+M3UQIhNQpAMn8fY
+	a27SC3SC4KcsNbzJGyOtrXI4LAJtMgFdRNtO7y0QB
+X-Gm-Gg: AZuq6aIm22gNKUVMC0eQzypCLjyJohMgjGH39XS8t3vixTrTF4Lcn6ajQa++LjbpeWE
+	TeSXHFc8kQYg7UhzvylUb0635WUEJ2w3k2v16t2E/33PyHW+22QGKRghfiVT/2MdkN0eh3PQEoS
+	eAt1tlAqWLUxCWd/3kaMoaI+UvCJj2q1rrA69o2YgKTCR1Xvy0/2XNtXDvrJnplctfoA5jL/awz
+	twKhVBHPn7N5CIyvEhAXvxf/0oFxYdhU+fRclBPXfk5HWlFYDYCXaWaWscKXOJMsRpFecLxJZ9q
+	O0sCtsM4vzjlPWJMl/Qzpizmsw==
+X-Received: by 2002:a17:906:2092:b0:b88:5894:6ba1 with SMTP id
+ a640c23a62f3a-b8e8384b261mr34088266b.28.1770063835546; Mon, 02 Feb 2026
+ 12:23:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|IA0PR12MB9048:EE_
-X-MS-Office365-Filtering-Correlation-Id: 399c3dc1-451c-496b-5458-08de629894f5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?s0PvmhYDZYJDNWSDnPWWD5fARstfy/2o6KNq1oG0HcR9OV+8p6wFqUbYLsa4?=
- =?us-ascii?Q?Ei+5ZkgF8YeMJHfDqIdq3PVLKU2mLJKMD72/dK2k9vKQbFCSvKkvNqBjUhBt?=
- =?us-ascii?Q?CI+oStKJN8E0QwXA51GMs4JnNYWB6kLPzf9QQuRFqdkbeJTGDmI+tQIaX9hA?=
- =?us-ascii?Q?nKUEfzDoE0woAE6+kYpbRwEOWdB5SXe3d0UIvplaDb8GWyKKy4gZk7Fe3Tk9?=
- =?us-ascii?Q?UJjEa9J5ppLdSvaXPtL660LG5VmtY5W++6+hX3+nkUEd0MTYly75wWx5YUBg?=
- =?us-ascii?Q?eio7lqeEjKiYF19ZdWdY+zd6YxhzQwDaS15qCsHzYoJ3iMB+8d8Bxneh9qnr?=
- =?us-ascii?Q?8Jz7PGzenngnkQkSrUiCtxqwvHg6PvWaQNTChdPazH0SH9muCIj8Nuqqudel?=
- =?us-ascii?Q?6bfjYzZDrrLLGo4FXe6Xo4U91kh0IRFT7TVRcEgsv2I3mYuTWtUTJJo54Fg/?=
- =?us-ascii?Q?UY6bcbi7VuIVGHveraxzLOCuGbDC4x5xMB1bt7UKxn+07KtUqUptAaC6o5Yo?=
- =?us-ascii?Q?WB2PNHwWD/e0TS2eeEaKFBKMflXC7GdgPd/T/93zm5a7wyaWlo8MZYDajb8p?=
- =?us-ascii?Q?jw8Kg2yKcuhNK+KZ0uknpU6NO0gUX5/YFn5Dt3N0zto/X51N9vybrR0fcPf7?=
- =?us-ascii?Q?Ssmacw3ox1tsP+XrLAHkdV1L2WTCheuFFoBTnqobJdLQPLnSRLnCg/+DBzv7?=
- =?us-ascii?Q?sWwILawSGCM+hwM3VaqFxKPMNFG3KmBehjbTKYfJ4CziOgRb4JvgOi8UxDX5?=
- =?us-ascii?Q?6bsvrXOjDhCn5dIal6L74uCf7bDkCWvR3F65hRg+NzmVQLmxQT6uLvMx+UX9?=
- =?us-ascii?Q?rttM13kO56+YeUCcbrlDGi22oqlvp5uQMoGeUPGtG5hXcXiEq+f8qD4NcHZ8?=
- =?us-ascii?Q?7ocnULtE5U/DCXc3hD/QNrqAXByWrGhUTtPfNzdmGZGPR1aqU3z2d/5TgpPR?=
- =?us-ascii?Q?n5+7mpGfhLC81SDNlBNbT0L0SL+XaOT0GvtkdUSaqcQ2w3wVxNKOT5wawTD5?=
- =?us-ascii?Q?Qm/Lqbr352WRDmNcxIRvWsOoS5PMwfFVP44LGVii89EAXcw1To5fDerGJ01T?=
- =?us-ascii?Q?Ipin5FsRqZ9fUhrBLXda14JP6cy+XyTtx8ywKWl9vQT+QJ60R361DjQO9w7U?=
- =?us-ascii?Q?MGJcBy/ZZt6NwNK2JjaH1ceAhOAq5yRnTs5fvYueW20f7tit9qHQRa6xkTgi?=
- =?us-ascii?Q?UlCvzOuwHRSfZm6f1qgXBbHu16/gta9Q54TIrMh6dCdseZwBeHdEAm2XMArK?=
- =?us-ascii?Q?ezlGYAHeBE0c2oYfuTjtnTbUhelTP00h6nNvkLYrOqLsFFrBiNy+xXauVoMa?=
- =?us-ascii?Q?yweT3dZAptRC94wxwlX9MaCnSSaXRpupb1TTv59vRQ6aAyWZV1CkhLmf+jKi?=
- =?us-ascii?Q?7gCXu5DBkShyl8tTWbsQwtH4gHBre4Dk7xzUXJzbxXotS1zD5oP7sj5Yt7bt?=
- =?us-ascii?Q?sScZUuk/Ey9jO/iBwHoOezUWrfLItBOlG08KjrB7rUrREoPUK3oqd4J9U3X+?=
- =?us-ascii?Q?bY14xACN1tzKu5k1CdZ+/IaXpm6RJzjYxKCu3QQq7xEqLWe9BbhdE8W4ztfW?=
- =?us-ascii?Q?71C3sklzNXC2HeE48+A=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?EIfDFubtcHBrZD6pG6N330m8cJRKEEhM5wRmrmBF86lLNDjnM8X0xmFNudU4?=
- =?us-ascii?Q?nsV8Reh9MexS1BuMAPdEFGOjUZIlovhkna3hg0xgujSE0BPJTQ01qYVi0MfC?=
- =?us-ascii?Q?DEyODtpra7L929Ed9Js7YuZMfoj1nGdamUeyDMwGQurYGsN7F0+BXMAoSDbU?=
- =?us-ascii?Q?xaDugN3Dz3kC8Iw6DRuRvSWSsA5fxrC6ZtPuyEzc09LZxF8+q02BBZaSWdrT?=
- =?us-ascii?Q?bh9sQkfvMGJZU/aKfAkkY2r98R/o5X43yPSBS3717n7uLtXXOCm4sqWSLWKS?=
- =?us-ascii?Q?Kl0r15btmO6UFs5fgSDbjMBMK2mFbJ0qJ5NvsKze779Wk2UejWWtsozXJYwG?=
- =?us-ascii?Q?gO41xYlxvUDrdDmd8MxnpYH/RsHOQeCrQumHAyN5uXN1lMSK9SdOywnq2Don?=
- =?us-ascii?Q?N0NRB3wk2dZgiPnRnG3+o3K8M42XXvlGNLEEeje0adlPPsZrlXyG2pXwZHlw?=
- =?us-ascii?Q?c00eGO+A/H1YuooJXgFaONjf1Tct6aOy2Yq5dHO292fQEO1g8ms/tkD4Aogo?=
- =?us-ascii?Q?3Y1MaDYRhTJDvbL8uVqkSApugY8ATENfZPVsnc4UVgzS490KXvVlBUd2uz96?=
- =?us-ascii?Q?YxpQa5pb3Vt1EpRoSphzHQ+CTK4MGeM6i/NxrVbJaOKDc8WvzpGOPUw4tPoe?=
- =?us-ascii?Q?Ztt7rr25Y8QbP0LMd/CwJhzVSkiR5qs997BeiODWz5QnEIzlfm3SQEUDJFJC?=
- =?us-ascii?Q?MRhKh3E6SnX19LqfjQAWbC7pHJM6x96echEp0XmhGUtAWnperWG/BMh60Srh?=
- =?us-ascii?Q?7bFbYs0cZtL6gcrM52AY6H6+hOElessf2L00ie+3X9zH0xOEOFaMz0/YkeNq?=
- =?us-ascii?Q?+Mw2B7FWMHpf/Bnbvrqw1PSVuT2vyhHCnrwgDj1Hl17v83B9TQms4ZbtMl1s?=
- =?us-ascii?Q?E2MrpK/nEIp3+bhL79t01XsKAeKZB8ToXxHoWE0EDLeMGZgdzuXKZnmx+sHA?=
- =?us-ascii?Q?nUAE/DvgwNlNzSM3iS0QI+d554C/RtfNtUEmSpX3BAcwz2J9JfUi8FTKFeYx?=
- =?us-ascii?Q?8h3OI3NljUdZ+njChI6UjQpCQLLcBRWSSTS7Lqtxh4JZEEvmhMbOf4gQHXyD?=
- =?us-ascii?Q?bqiTYKdzngQ0weMdRhHUMez8Eb5aloD/kUdFTIMBN/xV0eK+ZREtoxB4e2n2?=
- =?us-ascii?Q?eFE8Kkwc3QhU39yyfrwj+OY/NUwLP54YC+qQQjt7/CkqQiQHNIHHhAGPzOw9?=
- =?us-ascii?Q?gXHe1o0MXHyarx/aMj7IMkOk1BgorKiY4LoTVpVjn8I1QnJCaT/CkmtQpUsz?=
- =?us-ascii?Q?9hXsIG41GrIH/hT91JeiqveYiwrcYI0jnpYsqQnh2gUQl0d9AS3zigkszyP3?=
- =?us-ascii?Q?oE7UREs7istx1wKasypUZVjY/w0xyf1FKjjp5xcQWXWg/+qQAhaw2zJ/C5WD?=
- =?us-ascii?Q?fCkItc6TxDWRWG/MuNvWfiEVIwr3sS38DvwmyZEwVVWvFJ+mmW+oAvV5K2u4?=
- =?us-ascii?Q?r1X3PRMv34i/XANjuOVcjuJ1BHi3gb/E+3eB8bEHvP9NtBoe3arD8oHVjyzq?=
- =?us-ascii?Q?c1X/Bv6n2U7rEovPRvj4MJUMIKrK0pAqj1W88UbCBcAUEr5HTkdIAaw8j6s9?=
- =?us-ascii?Q?XCxR5eIQl4b7zAiCOuGG1M2CfeOBgJTI0Kve2NoZitaH0LXSi2eSC8RQmCCt?=
- =?us-ascii?Q?agBN9k5e/pK9MjZeu/XxTvcAnXec3C814A338hjLmFt+a36naV1CWoAw3Mhb?=
- =?us-ascii?Q?8m4rlk+nicIR7LPJhBOYlxM/LtXDf9lIDHzJUhHWRlotvlp1?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 399c3dc1-451c-496b-5458-08de629894f5
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2026 20:21:00.9692
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a91ZMwEIBxhuVSma+y+0/blV3E+nzRpOj98DmBEEYfnPjeqO0+O8cYwA2EVDjyq+ZYQ7uFv0KRWrWVzMcpmgJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB9048
+References: <20260124012133.2451708-1-wusamuel@google.com> <20260124012133.2451708-2-wusamuel@google.com>
+ <CAJZ5v0jWCdEVgQxOAkek4qqVHMx3Xx4_W3ov9bvdJP=0acX=Yw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jWCdEVgQxOAkek4qqVHMx3Xx4_W3ov9bvdJP=0acX=Yw@mail.gmail.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Mon, 2 Feb 2026 12:23:42 -0800
+X-Gm-Features: AZwV_QgqKaDjKsxdqUkpb1jGTSFawd3uSAT91ZuKQiHw4J175hzMfkuvra288U8
+Message-ID: <CAG2KctqqZ_12AWiJ89OhCfqDfNqxBH3UrzssycxrXbcbj-82VQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] PM: wakeup: Handle empty list in wakeup_sources_walk
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 02, 2026 at 09:40:22AM -1000, Tejun Heo wrote:
-> The init_enable_count test is flaky. The test forks 1024 children before
-> attaching the scheduler to verify that existing tasks get ops.init_task()
-> called. The children were using sleep(1) before exiting.
-> 
-> 7900aa699c34 ("sched_ext: Fix cgroup exit ordering by moving sched_ext_free()
-> to finish_task_switch()") changed when tasks are removed from scx_tasks -
-> previously when the task_struct was freed, now immediately in
-> finish_task_switch() when the task dies.
-> 
-> Before the commit, pre-forked children would linger on scx_tasks until freed
-> regardless of when they exited, so the scheduler would always see them during
-> iteration. The sleep(1) was unnecessary. After the commit, children are
-> removed as soon as they die. The sleep(1) masks the problem in most cases but
-> the test becomes flaky depending on timing.
-> 
-> Fix by synchronizing properly using a pipe. All children block on read() and
-> the parent signals them to exit by closing the write end after attaching the
-> scheduler. The children are auto-reaped so there's no need to wait on them.
-> 
-> Reported-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> Cc: David Vernet <void@manifault.com>
-> Cc: Andrea Righi <arighi@nvidia.com>
-> Cc: Changwoo Min <changwoo@igalia.com>
-> Cc: Emil Tsalapatis <emil@etsalapatis.com>
-> Signed-off-by: Tejun Heo <tj@kernel.org>
+On Tue, Jan 27, 2026 at 8:15=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>
+> On Sat, Jan 24, 2026 at 2:22=E2=80=AFAM Samuel Wu <wusamuel@google.com> w=
+rote:
+> >
+> > In the case of an empty wakeup_sources list, wakeup_sources_walk_start(=
+)
+> > will return an invalid but non-NULL address. This also affects wrappers
+> > of the aforementioned function, like for_each_wakeup_source().
+> >
+> > This patch updates wakeup_sources_walk_start() to return NULL in case o=
+f
+> > an empty list.
+> >
+> > Signed-off-by: Samuel Wu <wusamuel@google.com>
+> > ---
+> >  drivers/base/power/wakeup.c | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> > index 1e1a0e7eeac5..e69033d16fba 100644
+> > --- a/drivers/base/power/wakeup.c
+> > +++ b/drivers/base/power/wakeup.c
+> > @@ -275,9 +275,7 @@ EXPORT_SYMBOL_GPL(wakeup_sources_read_unlock);
+> >   */
+> >  struct wakeup_source *wakeup_sources_walk_start(void)
+> >  {
+> > -       struct list_head *ws_head =3D &wakeup_sources;
+> > -
+> > -       return list_entry_rcu(ws_head->next, struct wakeup_source, entr=
+y);
+> > +       return list_first_or_null_rcu(&wakeup_sources, struct wakeup_so=
+urce, entry);
+> >  }
+> >  EXPORT_SYMBOL_GPL(wakeup_sources_walk_start);
+> >
+> > --
+>
+> This looks like a fix for the for_each_wakeup_source() users.
+>
+> I can apply it without the next two patches.
 
-LGTM.
+Yes please. Feel free to apply this patch independently, as it can
+exist as a standalone fix independent of the subsequent two patches in
+the series.
 
-Acked-by: Andrea Righi <arighi@nvidia.com>
-
--Andrea
-
-> ---
->  tools/testing/selftests/sched_ext/init_enable_count.c |   34 ++++++++++++------
->  1 file changed, 23 insertions(+), 11 deletions(-)
-> 
-> --- a/tools/testing/selftests/sched_ext/init_enable_count.c
-> +++ b/tools/testing/selftests/sched_ext/init_enable_count.c
-> @@ -4,6 +4,7 @@
->   * Copyright (c) 2023 David Vernet <dvernet@meta.com>
->   * Copyright (c) 2023 Tejun Heo <tj@kernel.org>
->   */
-> +#include <signal.h>
->  #include <stdio.h>
->  #include <unistd.h>
->  #include <sched.h>
-> @@ -23,6 +24,9 @@ static enum scx_test_status run_test(boo
->  	int ret, i, status;
->  	struct sched_param param = {};
->  	pid_t pids[num_pre_forks];
-> +	int pipe_fds[2];
-> +
-> +	SCX_FAIL_IF(pipe(pipe_fds) < 0, "Failed to create pipe");
-> 
->  	skel = init_enable_count__open();
->  	SCX_FAIL_IF(!skel, "Failed to open");
-> @@ -38,26 +42,34 @@ static enum scx_test_status run_test(boo
->  	 * ensure (at least in practical terms) that there are more tasks that
->  	 * transition from SCHED_OTHER -> SCHED_EXT than there are tasks that
->  	 * take the fork() path either below or in other processes.
-> +	 *
-> +	 * All children will block on read() on the pipe until the parent closes
-> +	 * the write end after attaching the scheduler, which signals all of
-> +	 * them to exit simultaneously. Auto-reap so we don't have to wait on
-> +	 * them.
->  	 */
-> +	signal(SIGCHLD, SIG_IGN);
->  	for (i = 0; i < num_pre_forks; i++) {
-> -		pids[i] = fork();
-> -		SCX_FAIL_IF(pids[i] < 0, "Failed to fork child");
-> -		if (pids[i] == 0) {
-> -			sleep(1);
-> +		pid_t pid = fork();
-> +
-> +		SCX_FAIL_IF(pid < 0, "Failed to fork child");
-> +		if (pid == 0) {
-> +			char buf;
-> +
-> +			close(pipe_fds[1]);
-> +			read(pipe_fds[0], &buf, 1);
-> +			close(pipe_fds[0]);
->  			exit(0);
->  		}
->  	}
-> +	close(pipe_fds[0]);
-> 
->  	link = bpf_map__attach_struct_ops(skel->maps.init_enable_count_ops);
->  	SCX_FAIL_IF(!link, "Failed to attach struct_ops");
-> 
-> -	for (i = 0; i < num_pre_forks; i++) {
-> -		SCX_FAIL_IF(waitpid(pids[i], &status, 0) != pids[i],
-> -			    "Failed to wait for pre-forked child\n");
-> -
-> -		SCX_FAIL_IF(status != 0, "Pre-forked child %d exited with status %d\n", i,
-> -			    status);
-> -	}
-> +	/* Signal all pre-forked children to exit. */
-> +	close(pipe_fds[1]);
-> +	signal(SIGCHLD, SIG_DFL);
-> 
->  	bpf_link__destroy(link);
->  	SCX_GE(skel->bss->init_task_cnt, num_pre_forks);
+Thanks!
