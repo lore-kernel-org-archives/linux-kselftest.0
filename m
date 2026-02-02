@@ -1,209 +1,178 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C4D355053
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 22:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770071803; cv=none; b=ex521ztVHQeu9iSlFizF9kXNrNRu5qyT+ra0dJClj0lsUCNyI5sKxJcWn8x8IUJVEncoIa3UnYpWeHmcMUFOzmhlXP3rOqlAMKYDQjmhSEjZPIQkC9ODf/HOYiqWDmRU4PQ3vR/W2ir+jQIDiaVZBKoWJP+ep9q3+MZoiRddLn0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770071803; c=relaxed/simple;
-	bh=rd4cIp68EbB1eyG0U+KW87jwWrcTdeVAndZQxaLa494=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=CZaq9Lw2WQpeEwf8RPyyB+79030/Tq6PITMmtUoZc6vE09N6RCEf/R86a1IuH43umOM3MkPqX/YqE3TtU+LXbPdSHj/zmej7IbOKyuAjWPHcLyU8U4FdnL7HJ/MZFrWkBkczw601RFN6uTsaJv2zKfcEzreTn2KNGPrDgqISSls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=thTIMi7R; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7843238E5D6
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 23:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770074993; cv=pass; b=pW3XsuBlwWWnHkL7DNooZbrLTbyxy/4Iqn4b+BeTHuVzhlSBXHBKFCpPkpSvArNeXvFUC3sDaQiv0Kzc7FNzZUvz7xjgqz3eyK7CJoooUf0L4jZpI5MbMpYMpOzEt/H4GrDvIJqNEacKGxltR44GdWqvHJfRLaTcZHdnTUxhAp4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770074993; c=relaxed/simple;
+	bh=9xU1ELIOPsspxRS0xVlva7nIQQ424SgRs/Lk+thb9jg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KsTySs8rvlz4GQrQPDZ5QciHkfJB4OXXCoHYOb7SiPP+VQFO1Osg2kbfy3XsGWnh423ReRAAPDySMY7iwFG36glfLZbl5SG62IvezRZ7Krpr6OqfNkfbZAQGjz1oGTGuf61XqY86mqRbhMMYHJATWh62BfuJEhryg1BBDMg5rQw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xw9aWkla; arc=pass smtp.client-ip=209.85.208.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="thTIMi7R"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35301003062so12024764a91.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 14:36:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xw9aWkla"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-385b6e77ef9so37960131fa.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 15:29:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770074990; cv=none;
+        d=google.com; s=arc-20240605;
+        b=icR5DzZbRtpCPVaM/D+gTuBd3fHiAoc6rq6XJcIBJCnTFnXcusgodXXP1DmVcFj7nj
+         WNdB88tW0buLkEarMWvjT0RoSPHJ2o1dcr3PeGe7kIgCWqswlzODCdGLk/zn4VvNqKEn
+         daF2ttyDmgVxY6forF958WRFI9N9VH6n5FNTtk7+DrIR5YfK4x3w/1dhuvzejc9n/Uge
+         ELU0yryzGxd87Oy1PTegiFpPPpww5/XcObA1aRpST8UoBgDS05X61tevOEhv0qk+nndp
+         K0GwD8JRCCf46D2jgcM64ap3k4MHdtOKKq6yyaZe943TaKloECM3Ns9PuNQYPg2aI450
+         fl0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xyS4gwVx0BMn3Qhvfk8Yq9Cz8TK3HsqiXevlJlXLDpE=;
+        fh=FxA2E/tQWScOLxo/m4wLWXHCX+L4wtQsv4Cq/ezKyqI=;
+        b=COXTRqfq4zrLJKdWPwDa+gqWpeD+3NYrOSzKV5F80xnYIuNr7Su5WHk75EZgxcgzE2
+         YCgoS2lgx8OO2H7Ei4uWk1lsUb3EiykFg//jHgjD8n6SLqYT4dct9wkF54ggjc8cULnk
+         DBFOajkOpmAqBDLn2L29+Pb+BrKwr6W/qoPm47hXNp71sNbMqgy9g7ZQI9Vi8FuJSOnx
+         Eq3gQLFooZU6FqHvlN9BGcGnnHZBXWqT/jaWXEIwBr2iuiki9lCVFquhd7iFQ3Pm07We
+         A7b/W51OOs8MmchFQE3fXnTeg4DxqNnzB3DH3wV0BNIlCtaOrutfshCFQO4kQukY/5tb
+         v8vw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770071801; x=1770676601; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DNNh9ZOREYZL1Quu16G4IBTWGm7mHiJACM3HXRVQXaY=;
-        b=thTIMi7R10CmJ7h4L4g8xyXXORnwNcO4/PV0atTb+I76KQ6viRGbgHmbbk1St9I+P5
-         S7QqsZBtPf0emvDIsdmb/KngyHaKsl0w2n/sU9IPaIEQl0B30MIdLaUlp3kcYpcFRv90
-         nF6PhEGUsKGGGlhF9QTVfFPe5xt2ND2c6FkK2a+ed8Igxie58ai99UOS96S1oNQ0P6JB
-         KtW5pRfEMDUN5Ffm1sdP2pMAM8MUSu43yoBgj35H2BnNCYT4/vYNAx6m8AmnuM1BxyyT
-         H+brF8OsiIY6ajDi2qoGJbgcpcqHab0rbTRg7zWPQH5khH++OFe7Fuot7/kuCOLtoPWY
-         zNEw==
+        d=google.com; s=20230601; t=1770074990; x=1770679790; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xyS4gwVx0BMn3Qhvfk8Yq9Cz8TK3HsqiXevlJlXLDpE=;
+        b=Xw9aWklaRp8xbMQxMaZ0KEbStqFxqWtYgVdP4zuzT1y1gcNPiKVNXvGxlsfR8QGQKC
+         oI8IBNozxfX1tvUDZuTvBJstzIHD/7N9ag+bJI96fhNJJmz2q9tK5Qke8AZw7DlOZI5f
+         7NicmcCaXiT3UODZJ8KXX3NqX7eZzj0lbGjtJK/7j+SzkS9jrN7OmUN5e0IG7KLBdZru
+         /ldrH6gv9KOXAII9kAx0CkGUTUkFbgp9Wh+N+E+oTMm54Ex02SFTDyKkfilMRRHJWiwX
+         gpMh72ndkwRzN6VT8/C/VwBN/R41t0eLDCqlkf4/cnNrpaHEVe8GiEZtc20R4Q47a42+
+         Cqdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770071801; x=1770676601;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DNNh9ZOREYZL1Quu16G4IBTWGm7mHiJACM3HXRVQXaY=;
-        b=EzZETV1NkCoiprwg3ofJvEH3hv4ZoJx/bJQg1HAt63YrvLSHX5Qr3uAWEFPN1iOEbU
-         U/L+HBDC6k1L/p76CPlpQd9Q0C8iRCHfaQPXDi84KMnu18FKOyIOodtlvjD7aj+CSmpQ
-         S9jgFd3ti0FzjY7Vn4ADuOIlwxB2MtM7H3USEI262Zh5czNfjfLgbtuXjkOG7hnKGYRN
-         YiMhbMYy9D/QyawyGPjRVkKBJXyfq2rEP1rf3CMDDYGMhewR8cIzMU4EH7p8qDDV9PD9
-         6tEBrDoUwaWw24e3VNS2PwMk0czQ+BuRezY8BrV1TUWXzqA14fLQTDjiOYUWOUgrH7fI
-         v4+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUhHxm2l/sfkFYYkLai1xwilse+sn/NI1YFzb2UP4iTf9JYfySkLKww44hFM0SffkjL5KqKWbTdgP44OU3SnjE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUGP88BFHKGF50s0LDOg9rZLR3E+XUJxAEEiAmLeWxiNYc1Mhp
-	+5BjCZzir7zXe/GkW47jOexiwTJZLxWPWpD1Vy6jsOvq0/D7wameZsTGvWVhpVPjoHuf/xfzT6i
-	J7gVTrGOCykjh69ZnndBmmA4Pzg==
-X-Received: from pjji9.prod.google.com ([2002:a17:90a:6509:b0:34a:bf4e:cb5c])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:41:b0:340:f009:ca89 with SMTP id 98e67ed59e1d1-3543b3941c6mr11450612a91.22.1770071800689;
- Mon, 02 Feb 2026 14:36:40 -0800 (PST)
-Date: Mon,  2 Feb 2026 14:36:37 -0800
+        d=1e100.net; s=20230601; t=1770074990; x=1770679790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=xyS4gwVx0BMn3Qhvfk8Yq9Cz8TK3HsqiXevlJlXLDpE=;
+        b=Wg/wMr/sIhzcBhHJixpasqAiOIvPS8G4C4fpbiUVWV5pTN5Gpkn2mrmNidsJ3zKs57
+         ss0kFC26HraXaaBNpJmUEEUcR3OaeD8dpG99jCU3/WANOCpjhuv4mqrCPJwK85ICA3Ev
+         1fqC/DFs/XTSuUKFRKFFpND/V26jBpD38cHJTe7ZMKciu6iY7jjOFzJDukL8CrHd23fx
+         pKeOhA82i8qjgr79TVnDBSa64/odJz1fFioOoJeNKm6EaOMYMH4LuhMcK86MJCHYxau7
+         aXzAp08CfK02xT/lhwsxvYmMq8/OkG7zknFEKy3m4v9w7l0pQk7Umom9jfOf2pP3hPt+
+         X9tg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTF1fVtM4yS9mFVhvjO4A+8cYyXu/RMq7ODsxVnXCcFcWcKdsfrVtM126UuNJ9SC1nX6bPhjl9rWeFTdyDdUI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxhu6iMZoB11+0z/JpqG/nlTVSgYbpNeBG/NKxXd+Tm+2jBN7rU
+	A2WBNsAPZ36bVhcZCE6y3cBYN0Kwp+Fag++GB4GGAXceaqqoggnOe0cwJkLLEcdr3/2BjLf8woP
+	X0YmSeCtlZQc3gXqMAHa9DmbiwbNCX0j3N9rLj/+t
+X-Gm-Gg: AZuq6aL1TDGsMl8QQ+r2RLhGsX2EoiWrmDmLfg7Iy6SKwzn2bPoZIRRs+dTdrjq3EAy
+	dYu8cp1iLYOtbclJTef4FMGsSD+vYTl6QB9uSsKDxZzcjZ0TaB4RyNE4oT1SmikCyo++eYolnN5
+	rPX4ZSx19aIIvB8j/OSPzMrsgdm5M1hekL6U7aBG0Joemzvkvb765HNtwMyZkgsK7D0VcdL9Q1J
+	7Sy25xVdTLZ0y/x0ZMD/GkPmA4i+/aBn7Aw33IYkbjhsAcrVhZPEHj/iSEE2ijDLMm7OGpz1yNT
+	iNmz
+X-Received: by 2002:a2e:bc82:0:b0:37b:9b58:dd0e with SMTP id
+ 38308e7fff4ca-38646558980mr44483011fa.10.1770074989357; Mon, 02 Feb 2026
+ 15:29:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <cover.1770071243.git.ackerleytng@google.com>
-Subject: [RFC PATCH v2 00/37] guest_memfd: In-place conversion support
-From: Ackerley Tng <ackerleytng@google.com>
-To: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	bp@alien8.de, brauner@kernel.org, chao.p.peng@intel.com, 
-	chao.p.peng@linux.intel.com, chenhuacai@kernel.org, corbet@lwn.net, 
-	dave.hansen@linux.intel.com, david@kernel.org, hpa@zytor.com, 
-	ira.weiny@intel.com, jgg@nvidia.com, jmattson@google.com, jroedel@suse.de, 
-	jthoughton@google.com, maobibo@loongson.cn, mathieu.desnoyers@efficios.com, 
-	maz@kernel.org, mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
-	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, seanjc@google.com, shivankg@amd.com, shuah@kernel.org, 
-	steven.price@arm.com, tabba@google.com, tglx@linutronix.de, 
-	vannapurve@google.com, vbabka@suse.cz, willy@infradead.org, wyihan@google.com, 
-	yan.y.zhao@intel.com, Ackerley Tng <ackerleytng@google.com>
+MIME-Version: 1.0
+References: <20260130-vfio-selftest-only-64bit-v1-1-d89ac0944c01@fb.com> <20260202144618.32bde071@shazbot.org>
+In-Reply-To: <20260202144618.32bde071@shazbot.org>
+From: David Matlack <dmatlack@google.com>
+Date: Mon, 2 Feb 2026 15:29:21 -0800
+X-Gm-Features: AZwV_QhScOtwfjmTMtLq8iYIDxDbkhhsR0KMkhQVUu2jAUHPbaRWrFkGYxFoz1Q
+Message-ID: <CALzav=fYNmy48T0qWOujvaM93iEUyO2PuG5FCeG4WnjkEDaj0w@mail.gmail.com>
+Subject: Re: [PATCH] vfio: selftests: only build tests on arm64 and x86_64
+To: Alex Williamson <alex@shazbot.org>
+Cc: Ted Logan <tedlogan@fb.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-(resending to fix Message-ID)
+On Mon, Feb 2, 2026 at 1:46=E2=80=AFPM Alex Williamson <alex@shazbot.org> w=
+rote:
+>
+> On Fri, 30 Jan 2026 16:02:16 -0800
+> Ted Logan <tedlogan@fb.com> wrote:
+>
+> > Only build vfio self-tests on arm64 and x86_64; these are the only
+> > architectures where the vfio self-tests are run. Addresses compiler
+> > warnings for format and conversions on i386.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp=
+@intel.com/
+> > Signed-off-by: Ted Logan <tedlogan@fb.com>
+> > ---
+> > Do not build vfio self-tests for 32-bit architectures, where they're
+> > untested and unmaintained. Only build these tests for arm64 and x86_64,
+> > where they're regularly tested.
+> >
+> > Compiler warning fixed by patch:
+> >
+> >    In file included from tools/testing/selftests/vfio/lib/include/libvf=
+io.h:6:
+> >    tools/testing/selftests/vfio/lib/include/libvfio/iommu.h:49:2: warni=
+ng: format specifies type 'unsigned long' but the argument has type 'u64' (=
+aka 'unsigned long long') [-Wformat]
+> >       49 |         VFIO_ASSERT_EQ(__iommu_unmap(iommu, region, NULL), 0=
+);
+> >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~
+> >    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:32:37: not=
+e: expanded from macro 'VFIO_ASSERT_EQ'
+> >       32 | #define VFIO_ASSERT_EQ(_a, _b, ...) VFIO_ASSERT_OP(_a, _b, =
+=3D=3D, ##__VA_ARGS__)
+> >          |                                     ^~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~~~
+> >    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:27:22: not=
+e: expanded from macro 'VFIO_ASSERT_OP'
+> >       26 |         fprintf(stderr, "  Observed: %#lx %s %#lx\n",       =
+                    \
+> >          |                                              ~~~~
+> >       27 |                         (u64)__lhs, #_op, (u64)__rhs);      =
+                    \
+> >          |                                           ^~~~~~~~~~
+> > ---
+> >  tools/testing/selftests/vfio/Makefile | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/self=
+tests/vfio/Makefile
+> > index ead27892ab65..eeb63ea2b4da 100644
+> > --- a/tools/testing/selftests/vfio/Makefile
+> > +++ b/tools/testing/selftests/vfio/Makefile
+> > @@ -1,3 +1,10 @@
+> > +ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
+> > +
+> > +ifeq (,$(filter $(ARCH),arm64 x86_64))
+> > +nothing:
+> > +.PHONY: all clean run_tests install
+> > +.SILENT:
+> > +else
+> >  CFLAGS =3D $(KHDR_INCLUDES)
+> >  TEST_GEN_PROGS +=3D vfio_dma_mapping_test
+> >  TEST_GEN_PROGS +=3D vfio_dma_mapping_mmio_test
+> > @@ -28,3 +35,4 @@ TEST_DEP_FILES =3D $(patsubst %.o, %.d, $(TEST_GEN_PR=
+OGS_O) $(LIBVFIO_O))
+> >  -include $(TEST_DEP_FILES)
+> >
+> >  EXTRA_CLEAN +=3D $(TEST_GEN_PROGS_O) $(TEST_DEP_FILES)
+> > +endif
+>
+> I see other Makefiles include tools/scripts/Makefile.arch which would
+> then just let us test for 'ifeq (${IS_64_BIT}, 1)'.  Would that more
+> directly address what we're trying to solve here?  Thanks,
 
-Here's a second revision of guest_memfd In-place conversion support.
-
-In this version, other than addressing comments from RFCv1 [1], the largest
-change is that guest_memfd now does not avoid participation in LRU; it
-participates in LRU by joining the unevictable list (no change from before this
-series).
-
-While checking for elevated refcounts during shared to private conversions,
-guest_memfd will now do an lru_add_drain_all() if elevated refcounts were found,
-before concluding that there are true users of the shared folio and erroring
-out.
-
-I'd still like feedback on these points, if any:
-
-1. Having private/shared status stored in a maple tree (Thanks Michael for your
-   support of using maple trees over xarrays for performance! [5]).
-2. Having a new guest_memfd ioctl (not a vm ioctl) that performs conversions.
-3. Using ioctls/structs/input attribute similar to the existing vm ioctl
-   KVM_SET_MEMORY_ATTRIBUTES to perform conversions.
-4. Storing requested attributes directly in the maple tree.
-5. Using a KVM module-wide param to toggle between setting memory attributes via
-   vm and guest_memfd ioctls (making them mututally exclusive - a single loaded
-   KVM module can only do one of the two.).
-
-This series is based on kvm/next as at 2026-01-21, and here's the tree for your
-convenience:
-
-https://github.com/googleprodkernel/linux-cc/commits/guest_memfd-inplace-conversion-v2
-
-The "Don't set FGP_ACCESSED when getting folios" patch from RFCv1 is still
-useful but no longer related to conversion, and was posted separately [6].
-
-Older series:
-
-+ RFCv1 is at [1]
-+ Previous versions of this feature, part of other series, are available at
-  [2][3][4].
-
-[1] https://lore.kernel.org/all/cover.1760731772.git.ackerleytng@google.com/T/
-[2] https://lore.kernel.org/all/bd163de3118b626d1005aa88e71ef2fb72f0be0f.1726009989.git.ackerleytng@google.com/
-[3] https://lore.kernel.org/all/20250117163001.2326672-6-tabba@google.com/
-[4] https://lore.kernel.org/all/b784326e9ccae6a08388f1bf39db70a2204bdc51.1747264138.git.ackerleytng@google.com/
-[5] https://lore.kernel.org/all/20250529054227.hh2f4jmyqf6igd3i@amd.com/
-[6] https://lore.kernel.org/all/20260129172646.2361462-1-ackerleytng@google.com/
-
-Ackerley Tng (19):
-  KVM: guest_memfd: Update kvm_gmem_populate() to use gmem attributes
-  KVM: Introduce KVM_SET_MEMORY_ATTRIBUTES2
-  KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
-  KVM: guest_memfd: Handle lru_add fbatch refcounts during conversion
-    safety check
-  KVM: selftests: Update framework to use KVM_SET_MEMORY_ATTRIBUTES2
-  KVM: selftests: Test using guest_memfd for guest private memory
-  KVM: selftests: Test basic single-page conversion flow
-  KVM: selftests: Test conversion flow when INIT_SHARED
-  KVM: selftests: Test indexing in guest_memfd
-  KVM: selftests: Test conversion before allocation
-  KVM: selftests: Convert with allocated folios in different layouts
-  KVM: selftests: Test precision of conversion
-  KVM: selftests: Test that truncation does not change shared/private
-    status
-  KVM: selftests: Test conversion with elevated page refcount
-  KVM: selftests: Reset shared memory after hole-punching
-  KVM: selftests: Provide function to look up guest_memfd details from
-    gpa
-  KVM: selftests: Make TEST_EXPECT_SIGBUS thread-safe
-  KVM: selftests: Update private_mem_conversions_test to mmap()
-    guest_memfd
-  KVM: selftests: Add script to exercise private_mem_conversions_test
-
-Sean Christopherson (18):
-  KVM: guest_memfd: Introduce per-gmem attributes, use to guard user
-    mappings
-  KVM: Rename KVM_GENERIC_MEMORY_ATTRIBUTES to KVM_VM_MEMORY_ATTRIBUTES
-  KVM: Enumerate support for PRIVATE memory iff kvm_arch_has_private_mem
-    is defined
-  KVM: Stub in ability to disable per-VM memory attribute tracking
-  KVM: guest_memfd: Wire up kvm_get_memory_attributes() to per-gmem
-    attributes
-  KVM: guest_memfd: Enable INIT_SHARED on guest_memfd for x86 Coco VMs
-  KVM: Move KVM_VM_MEMORY_ATTRIBUTES config definition to x86
-  KVM: Let userspace disable per-VM mem attributes, enable per-gmem
-    attributes
-  KVM: selftests: Create gmem fd before "regular" fd when adding memslot
-  KVM: selftests: Rename guest_memfd{,_offset} to gmem_{fd,offset}
-  KVM: selftests: Add support for mmap() on guest_memfd in core library
-  KVM: selftests: Add selftests global for guest memory attributes
-    capability
-  KVM: selftests: Add helpers for calling ioctls on guest_memfd
-  KVM: selftests: Test that shared/private status is consistent across
-    processes
-  KVM: selftests: Provide common function to set memory attributes
-  KVM: selftests: Check fd/flags provided to mmap() when setting up
-    memslot
-  KVM: selftests: Update pre-fault test to work with per-guest_memfd
-    attributes
-  KVM: selftests: Update private memory exits test work with per-gmem
-    attributes
-
- Documentation/virt/kvm/api.rst                |  72 ++-
- arch/x86/include/asm/kvm_host.h               |   2 +-
- arch/x86/kvm/Kconfig                          |  15 +-
- arch/x86/kvm/mmu/mmu.c                        |   4 +-
- arch/x86/kvm/x86.c                            |  13 +-
- include/linux/kvm_host.h                      |  53 +-
- include/trace/events/kvm.h                    |   4 +-
- include/uapi/linux/kvm.h                      |  17 +
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../kvm/guest_memfd_conversions_test.c        | 486 ++++++++++++++++++
- .../testing/selftests/kvm/guest_memfd_test.c  |  57 +-
- .../testing/selftests/kvm/include/kvm_util.h  | 128 ++++-
- .../testing/selftests/kvm/include/test_util.h |  31 +-
- tools/testing/selftests/kvm/lib/kvm_util.c    | 130 +++--
- tools/testing/selftests/kvm/lib/test_util.c   |   7 -
- .../selftests/kvm/pre_fault_memory_test.c     |   2 +-
- .../kvm/x86/private_mem_conversions_test.c    |  48 +-
- .../kvm/x86/private_mem_conversions_test.py   | 152 ++++++
- .../kvm/x86/private_mem_kvm_exits_test.c      |  36 +-
- virt/kvm/Kconfig                              |   4 +-
- virt/kvm/guest_memfd.c                        | 399 +++++++++++++-
- virt/kvm/kvm_main.c                           | 104 +++-
- 23 files changed, 1590 insertions(+), 176 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/guest_memfd_conversions_test.c
- create mode 100755 tools/testing/selftests/kvm/x86/private_mem_conversions_test.py
-
---
-2.53.0.rc1.225.gd81095ad13-goog
+I gave this a try but it seems like it results in a tricky situation.
+We must include tools/testing/selftests/lib.mk before
+tools/scripts/Makefile.arch so that $(CC) and $(CFLAGS) is set
+correctly. But TEST_GEN_* variables have to be defined before the
+include of tools/testing/selftests/lib.mk, which is what Ted is trying
+to avoid :(.
