@@ -1,217 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5D22E6CD0
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 18:29:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD5A303A37;
+	Mon,  2 Feb 2026 19:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770056983; cv=none; b=TC7AEYE/0rFjPzHwfTZ3EsSJ8/jgQxQOz4MUOz5NXEl94DvHsU7kwxKfMI1BkhxcHtUemK0QTQ8wKRLL4De/6R7ntvJdbkRBFTl7LBULzAP8le+gfyU7aSpPrckbYH3PycKzYikxhXFLj6UhpNyd+bUKMqKE33JvAMKaQiG+vd0=
+	t=1770061224; cv=none; b=gXGn7fL6tCH2qcvahoyPjHnoqrk2zJbZgv5h9KfmtlpUwBqHdB/kFDCQeDBBRIZTun2jU0QVqwZw4fhLNpMNkX2Na8LujiMT4HZktsNgQna+TUy7KgfvMl6g6U0jSaBbggK9DB7NRuUNwqo+wuvRAcN1BS06EbmVHY0L/Ykv2O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770056983; c=relaxed/simple;
-	bh=Cb2Eyh8arf/MeRSSAa5nOB4Xit1Y3bfK1KH37DtlQB0=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=t5fS3OKWTxSuu7chpUeNtnGbcvfDMIsQjDRw7hxoAHAFPu8dhrD4UZTdIB4jtjnaY2F0MUYD5EqIB4g/5vZFIVbEeuF7odih0yLVkOcDM7yEpKxOySIEa7LC42VbC//Z8YCMnDYchfjsa+TrHq2gjiNVKW8UNhV06ZKNgXh37BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gde7WOQL; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=pkgTkFYO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770061224; c=relaxed/simple;
+	bh=hEw7T2+5cUCWA/rrF46ZDF/Lb/3f2DSqHFyyZzcNOL8=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=FbaJISt3BmyVVMpMu8dOXg3yJ5VL6IetXqzUeqkgOwlfyXIHPYEl4UcnaWsIxuuDzE6HL/qCGLRDhUG12vkiReBzdsfS2ReqF19ueKXaXxCaL17sf6QC2NM7V/EAHb6dxJrgyuHWHHUxmm3WhuKTtCCBuxMvCxydikvpuf06yWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KIFjKsLy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gde7WOQL";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="pkgTkFYO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770056981;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Lx0wPsGKpXCnpSrbS7/WgY/ofBJqsTs0t6eZejc2q4s=;
-	b=Gde7WOQLXFezhQhbE49ckixBzk67YyQpg6JYNH9tkqaMs6svk2UixSz15s+MYeXMirH2gC
-	TJeccDkobkmBEnCyfBmG0ESpvgdkZirac34L9Mr+r6Nx19/h3O7fh9dMuW+ccXaQkKwAfw
-	xVAcl7h7E/latNOinCWGMzox06Mwdl0=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-389-2hoD2FxpPGuR8lZn8uWVGw-1; Mon, 02 Feb 2026 13:29:40 -0500
-X-MC-Unique: 2hoD2FxpPGuR8lZn8uWVGw-1
-X-Mimecast-MFC-AGG-ID: 2hoD2FxpPGuR8lZn8uWVGw_1770056979
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-89471079a13so280609996d6.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 10:29:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770056979; x=1770661779; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Lx0wPsGKpXCnpSrbS7/WgY/ofBJqsTs0t6eZejc2q4s=;
-        b=pkgTkFYOXtRFdDa2WYTXRPlmtvycR9Hiy3c2PcipyzQelihfaXqkPYtRV4WBjVlTGX
-         fEVnNK85Wa8GA+iMyxtGoJMRQVzaMOK0ZV2FCaBB06jJQkrVPbmnXJVjXE4dtm8ciN2v
-         CjKs3xyiL/6IlyYFXRra4GNwJ9IEspIoAjI0wfb+1nGnv+8erh0bkKGvGPAGfjns6BCO
-         gyWgItQendnnaBkEmLgtI+7AIP68dQb3fpbFVCz1EZV3uCh8nH53nd3a5Fo0X6Ak80p3
-         FUhvlYkHA+U39fq5yQTZd6kKdAmOn9hsApyA7eXp1qkwoChaqwm0x9GhRK8nQqW8AS5z
-         U4PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770056979; x=1770661779;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lx0wPsGKpXCnpSrbS7/WgY/ofBJqsTs0t6eZejc2q4s=;
-        b=CiDLjvJ4+EhFbKu7Xwn9hhvMSBBewsz/UXv1vJSNXedu8fwvHVK1Nii6U/5N6uBXvK
-         7As7B5GJArYt2A95nCSHFZJEjmj4zwU6v9pq5A0ricOfCAysQGs/DMXv5oCvJz7YYjdB
-         UNA1/I5hLRKT3KBxCZFmpS6nBZibT0jzwtktCx1ze/QxCIoJPzPDLDYnX8dY/e1GZ+gj
-         CqbkC0FTDGkIH7BJ9ySMVpxuLsPtgXB5K+oFczWdD9RAxCJunBJLJuQQMAmrkKiDCRhf
-         54KBJR4NRchwcBF/PYXNcYpOvxwG+FJhzjiblg/kBZS44Z7I/HF+j69OBdc5HfnJ+9jx
-         ub2A==
-X-Forwarded-Encrypted: i=1; AJvYcCXSIDfVnkoymMCvsQWz5hqQLDoDJG+XQcLvTEXhkApFksd8xDwAiboPGG/NC/1snNImcKoBJE+V7Bd9q3NIJlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm6F3gNfwcKMxpcZVYS0WNYvEhHd/llKDsGXwDH8JQP9J8tcXj
-	1IOOBIRrztm6zgL/0+haxLqTw7IxUQKFY72J34fX7ywPhlGeAdfvl9cZ5iKOjh+/O7i9qU2YD+s
-	m9Di/SF7P7Lf9vtDWu05iPyzrYcYPgPFsFF5hmUSWxu1RZIg539+Ft3lCZGeKyWvjHOrZgw==
-X-Gm-Gg: AZuq6aIXxAkpq8pwktpY7XM6OZH2nD4+KzyBqB96TzK2Cdklcgreg+iVhfs3WSOBE81
-	XMTD3/OSTPB1R1HiBQSh3mLxM1HZo5C0NlojcbQOCEAzVcS5cGX/UmIzW6xkLKYLSYFlcruy1a2
-	CZGIoMTk8XOGduWcB4EbXys4bH70eVcpkxqCgvp03Xn05ML8g/Ba9RIDJvnUpu5vKIeH3/nhOZV
-	MEVCzEsnES9KFBX1vdKf6+H87l66GtRZdvQ6NsJ/s/XMmNDBa2LAtiAY0AF9AteyL9vDoTtQGkr
-	stL/MOuwdyXk7wGQDSIMO9FtQ9MPU7zI2OoCUHSoyIxPrH53n9/5wpYsbhbgpg10L/fjhdScNYP
-	MR3eNOG1zE5tD5EEigsfHFyMx8JqKfeOx1uzi3hlAUjnRV3nPm7GtIt+r
-X-Received: by 2002:a05:6214:c2d:b0:890:8b82:4f31 with SMTP id 6a1803df08f44-894e9f40f6dmr201023126d6.10.1770056979495;
-        Mon, 02 Feb 2026 10:29:39 -0800 (PST)
-X-Received: by 2002:a05:6214:c2d:b0:890:8b82:4f31 with SMTP id 6a1803df08f44-894e9f40f6dmr201022696d6.10.1770056979036;
-        Mon, 02 Feb 2026 10:29:39 -0800 (PST)
-Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c711b8ec20sm1234132085a.19.2026.02.02.10.29.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Feb 2026 10:29:38 -0800 (PST)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <c8a56031-023d-4bbe-b7af-53e91c6d1dfc@redhat.com>
-Date: Mon, 2 Feb 2026 13:29:36 -0500
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KIFjKsLy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 903B7C116C6;
+	Mon,  2 Feb 2026 19:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770061223;
+	bh=hEw7T2+5cUCWA/rrF46ZDF/Lb/3f2DSqHFyyZzcNOL8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=KIFjKsLyAVi8J0rbvT3stDMFb5sf/3C6FUHc7S3QAkOHSQxQ/cIkvRMJLVdQ4Qhqw
+	 70ZoCzOu3HZfh9lO2weW4oUCb3HArnT24eh4vif2P0e996IsYjSiuRosLqoEdoQHAI
+	 pm3QhkbgCcAdFtPzKZnVY+FOVmpr4ZGqB60W0FRFR2asIuDaRlxBpRDncSRCNy7QGt
+	 fU+ffNA3guefFJzPIHZRCieErsU0o4KklVg2l7gku50mhpYzmY3HsUx46EJBNi71kV
+	 3BBDasV8DWOSWRsam1sbGppth6Q87pfXqAVclk5Fne36aAYXgkrn3xCjA8i03mx5L6
+	 MrO/KETOnrsVQ==
+Date: Mon, 02 Feb 2026 09:40:22 -1000
+Message-ID: <03982d7b5642c0ad003668178f9e5df7@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>,
+ sched-ext@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH sched_ext/for-6.20] selftests/sched_ext: Fix init_enable_count
+ flakiness
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH/for-next v2 2/2] cgroup/cpuset: Introduce a new top level
- cpuset_top_mutex
-To: Chen Ridong <chenridong@huaweicloud.com>, Waiman Long <llong@redhat.com>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260130154254.1422113-1-longman@redhat.com>
- <20260130154254.1422113-3-longman@redhat.com>
- <62022397-287c-4046-94de-058ff87ad728@huaweicloud.com>
- <a2fc3448-dd5c-42fe-ac21-c8e1c10e94b4@redhat.com>
- <0c26006b-fe0f-4743-88d0-29b21fa82ee7@huaweicloud.com>
-Content-Language: en-US
-In-Reply-To: <0c26006b-fe0f-4743-88d0-29b21fa82ee7@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 2/1/26 8:11 PM, Chen Ridong wrote:
->
-> On 2026/2/1 7:13, Waiman Long wrote:
->> On 1/30/26 9:53 PM, Chen Ridong wrote:
->>> On 2026/1/30 23:42, Waiman Long wrote:
->>>> The current cpuset partition code is able to dynamically update
->>>> the sched domains of a running system and the corresponding
->>>> HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
->>>> "isolcpus=domain,..." boot command line feature at run time.
->>>>
->>>> The housekeeping cpumask update requires flushing a number of different
->>>> workqueues which may not be safe with cpus_read_lock() held as the
->>>> workqueue flushing code may acquire cpus_read_lock() or acquiring locks
->>>> which have locking dependency with cpus_read_lock() down the chain. Below
->>>> is an example of such circular locking problem.
->>>>
->>>>     ======================================================
->>>>     WARNING: possible circular locking dependency detected
->>>>     6.18.0-test+ #2 Tainted: G S
->>>>     ------------------------------------------------------
->>>>     test_cpuset_prs/10971 is trying to acquire lock:
->>>>     ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at:
->>>> touch_wq_lockdep_map+0x7a/0x180
->>>>
->>>>     but task is already holding lock:
->>>>     ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at:
->>>> cpuset_partition_write+0x85/0x130
->>>>
->>>>     which lock already depends on the new lock.
->>>>
->>>>     the existing dependency chain (in reverse order) is:
->>>>     -> #4 (cpuset_mutex){+.+.}-{4:4}:
->>>>     -> #3 (cpu_hotplug_lock){++++}-{0:0}:
->>>>     -> #2 (rtnl_mutex){+.+.}-{4:4}:
->>>>     -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
->>>>     -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
->>>>
->>>>     Chain exists of:
->>>>       (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
->>>>
->>>>     5 locks held by test_cpuset_prs/10971:
->>>>      #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
->>>>      #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at:
->>>> kernfs_fop_write_iter+0x260/0x5f0
->>>>      #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at:
->>>> kernfs_fop_write_iter+0x2b6/0x5f0
->>>>      #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at:
->>>> cpuset_partition_write+0x77/0x130
->>>>      #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at:
->>>> cpuset_partition_write+0x85/0x130
->>>>
->>>>     Call Trace:
->>>>      <TASK>
->>>>        :
->>>>      touch_wq_lockdep_map+0x93/0x180
->>>>      __flush_workqueue+0x111/0x10b0
->>>>      housekeeping_update+0x12d/0x2d0
->>>>      update_parent_effective_cpumask+0x595/0x2440
->>>>      update_prstate+0x89d/0xce0
->>>>      cpuset_partition_write+0xc5/0x130
->>>>      cgroup_file_write+0x1a5/0x680
->>>>      kernfs_fop_write_iter+0x3df/0x5f0
->>>>      vfs_write+0x525/0xfd0
->>>>      ksys_write+0xf9/0x1d0
->>>>      do_syscall_64+0x95/0x520
->>>>      entry_SYSCALL_64_after_hwframe+0x76/0x7e
->>>>
->>>> To avoid such a circular locking dependency problem, we have to
->>>> call housekeeping_update() without holding the cpus_read_lock() and
->>>> cpuset_mutex. The current set of wq's flushed by housekeeping_update()
->>>> may not have work functions that call cpus_read_lock() directly,
->>>> but we are likely to extend the list of wq's that are flushed in the
->>>> future. Moreover, the current set of work functions may hold locks that
->>>> may have cpu_hotplug_lock down the dependency chain.
->>>>
->>>> One way to do that is to introduce a new top level cpuset_top_mutex
->>>> which will be acquired first.  This new cpuset_top_mutex will provide
->>>> the need mutual exclusion without the need to hold cpus_read_lock().
->>>>
->>> Introducing a new global lock warrants careful consideration. I wonder if we
->>> could make all updates to isolated_cpus asynchronous. If that is feasible, we
->>> could avoid adding a global lock altogether. If not, we need to clarify which
->>> updates must remain synchronous and which ones can be handled asynchronously.
->> Almost all the cpuset code are run with cpuset_mutex held with either
->> cpus_read_lock or cpus_write_lock. So there is no concurrent access/update to
->> any of the cpuset internal data. The new cpuset_top_mutex is aded to resolve the
->> possible deadlock scenarios with the new housekeeping_update() call without
->> breaking this model. Allow parallel concurrent access/update to cpuset data will
->> greatly complicate the code and we will likely missed some corner cases that we
-> I agree with that point. However, we already have paths where isolated_cpus is
-> updated asynchronously, meaning parallel concurrent access/update is already
-> happening. Therefore, we cannot entirely avoid such scenarios, so why not keep
-> the locking simple(make all updates to isolated_cpus asynchronous)?
+The init_enable_count test is flaky. The test forks 1024 children before
+attaching the scheduler to verify that existing tasks get ops.init_task()
+called. The children were using sleep(1) before exiting.
 
-isolated_cpus should only be updated in isolated_cpus_update() where 
-both cpuset_mutex and callback_lock are held. It can be read 
-asynchronously if either cpuset_mutex or callback_lock is held. Can you 
-show me the  places where this rule isn't followed?
+7900aa699c34 ("sched_ext: Fix cgroup exit ordering by moving sched_ext_free()
+to finish_task_switch()") changed when tasks are removed from scx_tasks -
+previously when the task_struct was freed, now immediately in
+finish_task_switch() when the task dies.
 
-Cheers,
-Longman
+Before the commit, pre-forked children would linger on scx_tasks until freed
+regardless of when they exited, so the scheduler would always see them during
+iteration. The sleep(1) was unnecessary. After the commit, children are
+removed as soon as they die. The sleep(1) masks the problem in most cases but
+the test becomes flaky depending on timing.
 
+Fix by synchronizing properly using a pipe. All children block on read() and
+the parent signals them to exit by closing the write end after attaching the
+scheduler. The children are auto-reaped so there's no need to wait on them.
+
+Reported-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: David Vernet <void@manifault.com>
+Cc: Andrea Righi <arighi@nvidia.com>
+Cc: Changwoo Min <changwoo@igalia.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+---
+ tools/testing/selftests/sched_ext/init_enable_count.c |   34 ++++++++++++------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
+
+--- a/tools/testing/selftests/sched_ext/init_enable_count.c
++++ b/tools/testing/selftests/sched_ext/init_enable_count.c
+@@ -4,6 +4,7 @@
+  * Copyright (c) 2023 David Vernet <dvernet@meta.com>
+  * Copyright (c) 2023 Tejun Heo <tj@kernel.org>
+  */
++#include <signal.h>
+ #include <stdio.h>
+ #include <unistd.h>
+ #include <sched.h>
+@@ -23,6 +24,9 @@ static enum scx_test_status run_test(boo
+ 	int ret, i, status;
+ 	struct sched_param param = {};
+ 	pid_t pids[num_pre_forks];
++	int pipe_fds[2];
++
++	SCX_FAIL_IF(pipe(pipe_fds) < 0, "Failed to create pipe");
+
+ 	skel = init_enable_count__open();
+ 	SCX_FAIL_IF(!skel, "Failed to open");
+@@ -38,26 +42,34 @@ static enum scx_test_status run_test(boo
+ 	 * ensure (at least in practical terms) that there are more tasks that
+ 	 * transition from SCHED_OTHER -> SCHED_EXT than there are tasks that
+ 	 * take the fork() path either below or in other processes.
++	 *
++	 * All children will block on read() on the pipe until the parent closes
++	 * the write end after attaching the scheduler, which signals all of
++	 * them to exit simultaneously. Auto-reap so we don't have to wait on
++	 * them.
+ 	 */
++	signal(SIGCHLD, SIG_IGN);
+ 	for (i = 0; i < num_pre_forks; i++) {
+-		pids[i] = fork();
+-		SCX_FAIL_IF(pids[i] < 0, "Failed to fork child");
+-		if (pids[i] == 0) {
+-			sleep(1);
++		pid_t pid = fork();
++
++		SCX_FAIL_IF(pid < 0, "Failed to fork child");
++		if (pid == 0) {
++			char buf;
++
++			close(pipe_fds[1]);
++			read(pipe_fds[0], &buf, 1);
++			close(pipe_fds[0]);
+ 			exit(0);
+ 		}
+ 	}
++	close(pipe_fds[0]);
+
+ 	link = bpf_map__attach_struct_ops(skel->maps.init_enable_count_ops);
+ 	SCX_FAIL_IF(!link, "Failed to attach struct_ops");
+
+-	for (i = 0; i < num_pre_forks; i++) {
+-		SCX_FAIL_IF(waitpid(pids[i], &status, 0) != pids[i],
+-			    "Failed to wait for pre-forked child\n");
+-
+-		SCX_FAIL_IF(status != 0, "Pre-forked child %d exited with status %d\n", i,
+-			    status);
+-	}
++	/* Signal all pre-forked children to exit. */
++	close(pipe_fds[1]);
++	signal(SIGCHLD, SIG_DFL);
+
+ 	bpf_link__destroy(link);
+ 	SCX_GE(skel->bss->init_task_cnt, num_pre_forks);
