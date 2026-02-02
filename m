@@ -1,106 +1,125 @@
-Received: from oak.phenome.org (unknown [193.110.157.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159DF23EA8B;
-	Mon,  2 Feb 2026 12:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.110.157.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770034547; cv=none; b=C7bFMWhEDLSRSoYNrjoGdT4pCNsKgQw4r+nUpaApH+zEcTND63BEmT/JjafaaNec98fj0MPkNTfFkBfBPX86DeGihnulyfUgjIdERVYOG9jBgBDQEDDifG/1n/ruapeVrdKbj7a3Gc53f46DvJC4WI6kol0RgnylV0nsEi/a0es=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770034547; c=relaxed/simple;
-	bh=J5YAUEvdRSPdIe0eFvACFFSbO6JcdQgRSZZxwU2kLRU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gvk3L1Mw6w668wtPZ7+oBTkLrqid/jmjexYxnT4LfLsBUaUHef4dhVavcEEaKk+q5bUAcpXyW3onw9riuU7N+0kDyR0mxoirsDTYB3yFlbLVYESFsXdpA/EEaiLKOVkImk7Lz/b8BrmW8Ah/QPil/MxYbm6DMgddDS07duQZQrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=phenome.org; spf=pass smtp.mailfrom=phenome.org; dkim=pass (2048-bit key) header.d=phenome.org header.i=@phenome.org header.b=lHdwoUwx; arc=none smtp.client-ip=193.110.157.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=phenome.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phenome.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53BE23EA8B
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 12:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770034962; cv=pass; b=GG/AX6nXl+w1UAcOLLWJm/s5S5FoQYL83JUmWZVf9mWU+ohamOjBAh1ZVtWTv0ACnfH9OgI9ffxmoDp8R8DlCtOZHsEl44baneNDyUFvYhwGDFevBpT81AsoWo91Q9ALbaxWv5QOjM0r9tpKh+2b+zMmYgWUTV1uMEmuu/zuV6s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770034962; c=relaxed/simple;
+	bh=9pfwSnYRbuqMRB57vP+4N+UsP6yRFCNRCgCrL1+OKPA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F48e/YhF93/qy1joU/Q8+C1J0QuDWevZducOkTL4ejIpi3ojlseXfE/HKF+lbnJLxOEy7Wuc+vr0jn5zz/mC48K6bUSh/ihU4BbhiQ5ij+djRo5OU4o21ud7SxfuFSqoW89TODGNc853JXURbBwOicUWFgjZjB1xPwc/EA5H+t4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1KZL/wTg; arc=pass smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=phenome.org header.i=@phenome.org header.b="lHdwoUwx"
-Authentication-Results: oak.phenome.org (amavisd); dkim=pass (2048-bit key)
- reason="pass (just generated, assumed good)" header.d=phenome.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=phenome.org; h=
-	in-reply-to:content-disposition:content-type:content-type
-	:mime-version:references:message-id:subject:subject:from:from
-	:date:date:received; s=oak1; t=1770034542; x=1770898543; bh=J5YA
-	UEvdRSPdIe0eFvACFFSbO6JcdQgRSZZxwU2kLRU=; b=lHdwoUwx2joWLS4FlpXc
-	UM5HqfMgCeTj2EVirubP+HrLXnFhSbab7KGj4jdKsAC8hjHBMKD1WietnKYxOndb
-	OZHeHlgoMK/iXwo9dVymB0BlSYTO+b1bYVHyZX5wE7YUxI4EXeQk3uXMLG2mfGVf
-	en+Ts0b/ZXaIXRE8arKx5XvzVti51wD5d5bHtD6JkTcpSKA8fWecVu2qsxwlLX6r
-	PWhCod1rMs3bDs07wEMe8JLnYsNg5H1qsqKlfGWwYVcD2aEuTcvOlNqlWxK7QqN7
-	5rdQ06dcT4ht21TUy7lZW0rtOExhnypiKzmbon1yne+lE3Ds4wO7YvLfT0ENSN2n
-	rg==
-X-Virus-Scanned: amavisd at oak.phenome.org
-Received: by oak.phenome.org (Postfix);
-	Mon, 02 Feb 2026 13:15:42 +0100 (CET)
-Date: Mon, 2 Feb 2026 13:15:41 +0100
-From: Antony Antony <antony@phenome.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Antony Antony <antony.antony@secunet.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Shuah Khan <shuah@kernel.org>, devel@linux-ipsec.org,
-	linux-kselftest@vger.kernel.org,
-	Tobias Brunner <tobias@strongswan.org>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [devel-ipsec] Re: [PATCH net-next v4 2/2] selftests: net: add
- ICMP error source address test over xfrm tunnel
-Message-ID: <aYCVbatEuE4kpVpg@Antony2201.local>
-References: <cover.1769595011.git.antony.antony@secunet.com>
- <af9a189bee31f7d8f3759ed71d09ab5a82437592.1769595011.git.antony.antony@secunet.com>
- <20260129184318.53b1dabf@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1KZL/wTg"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-5029af2b4bcso23851401cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 04:22:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770034960; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KFiWRQyzA96fFLEhdN4wZvmH2IvpQ893KCuFeFHZo9WaptByiHI+WuerQoMdeHNMqQ
+         PF9Djb4MxWsLIaOtGDYYJIoTWX1XBsebGKm1PByy19VJoLo2KXpDQhKKHMlmiOIG1Q2I
+         J+TPk7oWimbzuaDYEwKVoImK/iWEMReSkXeE6piV9/eI1TAgz6xYbDRem3of2IDD82lT
+         8hIwsi9PdNEMvNsW+HhaA/s/hwCojl4+3q9RI6E4Nym82M1Cnq0zN+cqVV0d9C7IUP3a
+         BeAIu1mno3tzdS9zoFqHlhmpYUooJUU5abmhx1SWxLVwwU4g06XRY6OzpgcwVHuizKid
+         MNiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9pfwSnYRbuqMRB57vP+4N+UsP6yRFCNRCgCrL1+OKPA=;
+        fh=Wyv3K81bLCLv8AwIFH+alVyjNb4FwV/Q4UqUrb7iZHo=;
+        b=Czvlo7cHBOaaLp+i2XW47xtf58QsjICFy8TEAN+TZuy7IVKVyyBsKl7sRiQHoM271X
+         q7XEumMEtfTaBa0Uf8OcKDMYN+RquKQQxSGmLAfKEMhctdv9FFepQBoaQ4wFwhvV3w1H
+         u+W4sktlO5GG0yn4GcTfCU1vUe8+YihM5srg6DSKAhQdUAN2pOosRjms6sunnW1WC/UT
+         rRIMfWlMJuJWQ78O0i60TDhCgHSqBs2/3OfIH5gUecRxBg4ahvBX+PCG3Dq8Mg+71Bbe
+         gTKWf3BkXdUP0dtELF7tTvJxJ4uQJZ1wfxbE9kgRaSRcAxl1a73olKz/yxlf4xG2HIWi
+         xDRg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770034960; x=1770639760; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9pfwSnYRbuqMRB57vP+4N+UsP6yRFCNRCgCrL1+OKPA=;
+        b=1KZL/wTgAQse6U0No6nNXtbbo/oLIL90JB4EH8oXLM/7VVwimrmufuFL8rHuNgV9eq
+         yRXJ0K3bpzXiajQ6vB2NVlRW4m0Q+kT1n4Zn3ml8x7RUEzfA0gfBzfVOi/jw0xgWaOfD
+         7D4VMkLdB6VElXXGX9QPEXfwLYmJoGcJbpDTR5DgANgIA2QksNnaRBTIVdRWFgAC8LSY
+         PfMRitsnmA+ENOPPWOdesjy1VjOpKMldC/AbNEyFzL3DOf5yKeC/3/2tr9feC2uB+gRK
+         OXXTqruShJK7Sg/T3sNvEwyOJPFbY1ZDjxuzBLQFMUcje/KwbWOT7QcbSExzZa78cdDm
+         QJ4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770034960; x=1770639760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9pfwSnYRbuqMRB57vP+4N+UsP6yRFCNRCgCrL1+OKPA=;
+        b=v2F6hQXc/1EA80diiz0CdLv9RcXtOjfk7bUj67uJLqZyTCg8ZD0zUiLZ9STvyZ+qit
+         4qzZ1Aowy+H4+8RA7nEP3iFBPQbtK4Seo1rtZaJo71NlDI4AGa/JQsZkFI2haHnpC2al
+         qqapl7yeg80oh6iQuE8mZj0GBLBZb03FAgYIZekpyS2eL1wJW2NIIre1/cLlwnu3dZqZ
+         g7OX+QLrrmuk2DjUJTwr2ZkgesO3IABvGnN8oaV9ePCz/jhB/6j8m0/kLerKTdxrCT0J
+         POExZPMcRzNymS8UGNhWmxMTlmpsZ2fQcdykkkjOss8gbkSHmp9iQgbChW0aQ50DMzv6
+         BuJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUosdyg3urmW7sOoNUiAIOTRHa+Itr1kGERUw3VNKEzs+nhfPtRJrekxMoImdInTpS219/OM5VTlsKIDwp0t3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0CAhxP52tcUN2i+06MFFNG3e9ZNn2IoA2ORmlDf+4wKI1xVfU
+	0ppy3z1WkhjOOabOS3Xgj+tMtTzSnQNN7FTHCrRgDSmIGSL9+k+q1O/5qT/A6bKl+8nsGYYGCWX
+	EgedeUkr6O+W2+UmVBj4cLKbGRYZladrGz7wbYuIM
+X-Gm-Gg: AZuq6aLbt6GhtPova9dgasbG40T1fmyUakwBhcQKAJZhDp/iBJZEyXCuI1WOdAZ+jYw
+	sWAP6Vv/P27NMmThzOkYE4bfQkIeeGMVGcuisnUl8yEGoMM156124VAlc4Kgi+M6fNBPY5sy4o3
+	8eTOOs9dOAmxGSDKCeWtMxFL007xXKaz/E0/U6vI1bZ3BVIVMitPCkbKCO0TadpDpGYILDIwN/E
+	BUlh0+qKEgJyXGWr4AQWY0oltpxCDN4/0m6ZvzcfIrRjkf8mGqVRCbO81eDCS43XKoWhs7R8RdB
+	gRc8Gg==
+X-Received: by 2002:ac8:5a8c:0:b0:4ed:b83f:78a3 with SMTP id
+ d75a77b69052e-505d2264074mr140685471cf.47.1770034959265; Mon, 02 Feb 2026
+ 04:22:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260129184318.53b1dabf@kernel.org>
+References: <cover.1770032084.git.pabeni@redhat.com> <562638dbebb3b15424220e26a180274b387e2a88.1770032084.git.pabeni@redhat.com>
+In-Reply-To: <562638dbebb3b15424220e26a180274b387e2a88.1770032084.git.pabeni@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 2 Feb 2026 13:22:27 +0100
+X-Gm-Features: AZwV_QgvBa-oT_GRK6FHEVAJW1yt1Df7ZjFVbgtcNuFODuwiXmakPwocOjt-MqY
+Message-ID: <CANn89i+fAQ3fCvJwmCJ9gvN4Yx9Xms0hTMdPrJs_qLnNnZdL4g@mail.gmail.com>
+Subject: Re: [PATCH v2 net 1/2] net: gro: fix outer network offset
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Richard Gobert <richardbgobert@gmail.com>, 
+	linux-kselftest@vger.kernel.org, aleksander.lobakin@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 29, 2026 at 06:43:18PM -0800, Jakub Kicinski via Devel wrote:
-> On Wed, 28 Jan 2026 11:20:45 +0100 Antony Antony wrote:
-> > Test that ICMP error messages generated by an IPsec gateway use
-> > the correct source address (the gateway's address, not the
-> > unreachable destination).
-> 
-> could you check / fix shellcheck warnings?
+On Mon, Feb 2, 2026 at 12:43=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
+te:
+>
+> The udp GRO complete stage assumes that all the packets inserted the RX
+> have the `encapsulation` flag zeroed. Such assumption is not true, as a
+> few H/W NICs can set such flag when H/W offloading the checksum for
+> an UDP encapsulated traffic, the tun driver can inject GSO packets with
+> UDP encapsulation and the problematic layout can also be created via
+> a veth based setup.
+>
+> Due to the above, in the problematic scenarios, udp4_gro_complete() uses
+> the wrong network offset (inner instead of outer) to compute the outer
+> UDP header pseudo checksum, leading to csum validation errors later on
+> in packet processing.
+>
+> Address the issue always clearing the encapsulation flag at GRO completio=
+n
+> time. Such flag will be set again as needed for encapsulated packets by
+> udp_gro_complete().
+>
+> Fixes: 5ef31ea5d053 ("net: gro: fix udp bad offset in socket lookup by ad=
+ding {inner_}network_offset to napi_gro_cb")
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+> ---
 
-lots of warnings. It looks like x-mas lights are still on:)
-
-> 
-> +In xfrm_state.sh line 115:
-> +	$ksft_skip)
-> +        ^--------^ SC2254 (warning): Quote expansions in case patterns to match literally rather than as a glob.
-
-I will add quotes to. Thare 30-40 of those!  
-
-> 
-> +In xfrm_state.sh line 157:
-> +	[ -n "${NS_R1}" ] && ns_r1="ip netns exec ${NS_R1}" && ns_active="${ns_active} $NS_R1"
-> +                             ^---^ SC2034 (warning): ns_r1 appears unused. Verify use (or export if used externally).
-> +
-> +
-> +In xfrm_state.sh line 162:
-> +	[ -n "${NS_B}" ] && ns_b="ip netns exec ${NS_B}" && ns_active="${ns_active} $NS_B"
-> +                            ^--^ SC2034 (warning): ns_b appears unused. Verify use (or export if used externally).
-> 
-> +In xfrm_state.sh line 166:
-> +	local ns_cmd=$(nscmd $1)
-> +              ^----^ SC2155 (warning): Declare and assign separately to avoid masking return values.
-
-other shell checks are harder to fix.
-
-+In xfrm_state.sh line 417:
-test_unreachable_ipv6() {
-^-- SC2329 (info): This function is never invoked. Check usage (or ignored 
-if invoked indirectly).
-
-those are invoked indirectly.  eval code I would like to keep. Would that 
-work for you? are you aiming fori strictly zero warnings?
-
-regards,
--antony
+Reviewed-by: Eric Dumazet <edumazet@google.com>
