@@ -1,88 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432C022B8B6;
-	Mon,  2 Feb 2026 15:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61F3233128;
+	Mon,  2 Feb 2026 16:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770045632; cv=none; b=DvjWe57C9EbTXlrSv5YxRSlHIsbGYvpz1VtJoZnoT7v9+5yW39/zHLt915+PjYiNe/zAOZ1pgPGlDmbZcBMzYTgGjstuC329Dm+VwXKnk2CkqWXiLZ+41HzwikvugSYVfe3ys2pXkFfSH19L4Ubk0yhTOsyYbqeLFeCHu2HokLU=
+	t=1770048945; cv=none; b=Jw554mK0IH/4bXyapvs6dddwhvieErMrVbnNDbk9dffMqeOauVLBP88uZPMIlfWknE8MBi2ikBmue/0328+DZJCOF2MWTHnue/u+MKEOc4ByRXhB2OFz07DDevj4eAlarZ0ZsZw4eQk5kxei3iHEMFH5dBCkSXuMLyIRMRssC/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770045632; c=relaxed/simple;
-	bh=2+BVUp4yJLPs+Eu+0SrlY7RCM7BTt+P0S/7fIW/pv3c=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=AByaGyUveftFA+RRDFBQYSfPscJCwwAfk/rFxotP4MzAqRslH1KaGojDNaltwy2hA6mBg3Gm+pkS39IpufcLSF8pjKcjYLgIM3Pl0eqb3uefFMx+X6iodXi0l0M8KtQznE5MSSKxEPHAqPqcFKBHyjXrd7QWpUxlCR1iIxN8re0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sNMGU0gH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770048945; c=relaxed/simple;
+	bh=ei22QOb+q/8HXhX8zmTOT+RphBhmkDDnCnWON1zXhvI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Lqs6a7RJQUKxx4jBhDiumwW/gfQj6IJkR9bbdXw46ElEL5IjUoUJ7XItxfR03g5I+VXTl2SN4nCxnD4EyEMJ+9x90ojMSi/EA0ahVrV8SXYzGJYmDwWQrYCjI6PoiVia5fb9rKoqiR7eORcqet99y43WkCDBDAYD1/r+3T02P/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UkatxLBH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sNMGU0gH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75AC5C116C6;
-	Mon,  2 Feb 2026 15:20:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UkatxLBH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D0CC19422;
+	Mon,  2 Feb 2026 16:15:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770045631;
-	bh=2+BVUp4yJLPs+Eu+0SrlY7RCM7BTt+P0S/7fIW/pv3c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=sNMGU0gHffA2/Fs/gNQCXzz9SII1InPgbmNfNYumw3KUy75LKMo+/Wg7ZdarZ7iQU
-	 EAJFHFvIONaG5F9oDsTdz9t+JCAGb2DdjKla5+akO5LPdVhkFPkkTSLIvTy/Djv4gl
-	 f5Z73htncVkp5GmY9M2Br4i3s3Hg57KV/myFtWDgnu7UDZLWMe3jMlXpYn4AbBK/po
-	 SgRTtGxPRc4r+LbQOouMgDaDu+6fW3I5v/XTTEU6oE81hmWurxdm3aJS8UsgnpMpvG
-	 y5nhgVyv4uOkaJICx1593zO2AIA9U3kZTk3UbVsDd3ycthYKndcbEUYx9KXawIWTmn
-	 69Lmyp0Y6NtRQ==
-Content-Type: multipart/mixed; boundary="===============1114375285770392558=="
+	s=k20201202; t=1770048945;
+	bh=ei22QOb+q/8HXhX8zmTOT+RphBhmkDDnCnWON1zXhvI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=UkatxLBHmOAoIfWfRg6Hbn4+8pewTAnH8tM1zDbYonnapT4jstvd55lJqM69XCuVI
+	 yzhiUHssg/c5f4+xSjWEg4/cnXPymUR//yTuzKnXn2oEQ5s5QQeakQ2geygmDc5wVE
+	 N8g16+A06CmwveWLNcqW5qKxxQIWRdSD4f8JrSW4oAbXHSrznT3kWK5UJeHZmcmgA1
+	 pwHX0jZHsLZTQJkqfPyCVyaKzF4UKQ623E5d9ahKZM9+GWXO777ILR0jYJg0vIULM7
+	 IaF5UAG7N4BNuzL0q5X3r9MEqwYV8QWqI0uh+Rfs5Xs8bscbjtXD7NJYMNSpo+/Ek+
+	 5t9kSb8houlDg==
+Date: Mon, 2 Feb 2026 16:15:40 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: linux-next: Tree for Feb 2
+Message-ID: <aYDNrCLRYulLfYH2@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <522069f8c39e10c3f59886c538d973dbf3a1a9035a07fa3ac18fed2dcf55abdb@mail.kernel.org>
-In-Reply-To: <20260202144749.22932-4-git@danielhodges.dev>
-References: <20260202144749.22932-4-git@danielhodges.dev>
-Subject: Re: [PATCH bpf-next v7 3/4] bpf: Add signature verification kfuncs
-From: bot+bpf-ci@kernel.org
-To: git@danielhodges.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,vadim.fedorenko@linux.dev,song@kernel.org,yatsenko@meta.com,martin.lau@linux.dev,eddyz87@gmail.com,haoluo@google.com,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,yonghong.song@linux.dev,herbert@gondor.apana.org.au,davem@davemloft.net,linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,git@danielhodges.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Feb 2026 15:20:31 +0000 (UTC)
-
---===============1114375285770392558==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-> index bf14856ab5..b763a6c5cd 100644
-> --- a/kernel/bpf/crypto.c
-> +++ b/kernel/bpf/crypto.c
-
-[ ... ]
-
-> +/**
-> + * bpf_sig_keysize() - Get the key size for signature context
-> + * @ctx:	The crypto context being used. The ctx must be a trusted pointer.
-> + *
-> + * Return: The key size in bytes, or negative error code on failure.
-> + */
-                         ^^^^^^^^
-
-The underlying crypto_sig_keysize() function in include/crypto/sig.h returns
-the key size in bits, not bytes:
-
-    /**
-     * crypto_sig_keysize() - Get key size
-     *
-     * Function returns the key size in bits.
-
-Should this documentation say "in bits" instead of "in bytes"?
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qbBOzscy82TlVFU4"
+Content-Disposition: inline
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+--qbBOzscy82TlVFU4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21595105586
+Hi all,
 
-AI-authorship-score: low
-AI-authorship-explanation: The code follows established kernel patterns and the documentation error is equally likely a human oversight.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Documentation comment states wrong units (bytes instead of bits) for bpf_sig_keysize return value, which could mislead BPF program developers.
+I have an added a KUnit intermediate build and test.
 
---===============1114375285770392558==--
+Changes since 20260130:
+
+The mips tree acquired a conflict with the at91 tree.
+
+The fs-next tree acquired a conflict with the mm-hotfixes tree.
+
+The mtd lost it's build failure.
+
+The drm tree acquired a conflict with the origin tree.
+
+The ftrace tree acquired a conflict with the bpf-next tree.
+
+The apparmor tree acquired a build failure, I used the version from
+20260130 instead.
+
+The iio tree acquired a conflict with the tip tree.
+
+Non-merge commits (relative to Linus' tree): 10258
+ 9963 files changed, 578007 insertions(+), 213177 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There is also the merge.log file in the Next
+directory.  Between each merge, the tree was built with a defconfig
+for arm64, an allmodconfig for x86_64, a multi_v7_defconfig for arm,
+an arm64 build of various kselftests, a KUnit build and run on arm64,
+and a native build of tools/perf.  After the final fixups (if any), I do
+an x86_64 modules_install followed by builds for x86_64 allnoconfig,
+arm64 allyesconfig, powerpc allnoconfig (32 and 64 bit),
+ppc44x_defconfig and pseries_le_defconfig and i386, s390, sparc and
+sparc64 defconfig and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 405 trees (counting Linus' and 121 trees of bug
+fix patches pending for the current release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Thanks to Paul Gortmaker for triage and bug fixes.
+
+--qbBOzscy82TlVFU4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmAzasACgkQJNaLcl1U
+h9BDGgf/U8iThYg3pCdtNbFDtnRJZYxff6KnUNtwaBMh/2L3AStR/qbMCvNqY8Pv
+9VeOA/ykDxKW1VPwzMtEJe04nGxukr/0d8dbcUTzJfavooNJPrDgC+DGefuqUuXf
+3Bdfc3k57hgKd/ZsZpLmWYOBt6JY2Al0e36/Ql7dvkuukgtMx+BfJoPc5g147Uk0
+cCnOudZ15AFbxxXTEKEXT+XDaPXnb/H0iJzUP25NeR0xFgkQy1GYsn7jyfcNVXY3
+0zF7LK5JdOy+A7V4Hfld7IcACBhlzEq/7V6OFuRQZF4ebNYPJLlQf3r4KaJTQQPg
+nl1E6YoSVrLStfbOOHQYYH4Bu7AeJg==
+=0Rh3
+-----END PGP SIGNATURE-----
+
+--qbBOzscy82TlVFU4--
