@@ -1,153 +1,203 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB302D8362
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 20:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0672FFDF4
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 20:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770063838; cv=pass; b=PavKHckMsQs3uwuaHEeJd44yWVbaLe3Gq0QW70GMM+2VfTJDbDcwj74MoLW0HF6vb2wwNoNgzPA6BRH/u2/sccRnZ5j54+BsDvkOyO5qp0XObXPdGZYAL4pEGK1h0MY91WuVr1wFpSmdtA6Puwdc1PVZDvtdbRxoZaJVfcDZh8U=
+	t=1770064056; cv=pass; b=YJ0pI1ftDstmQRl9SSXNyzB/NsKuRVKnd1c43nPP6nPQ0q5Co7QyQwABSWZBufIxB6YfXiAaeoT0jK583vrbTvCDNv5ehAjvC3VpvIhYowddw7dSOuKDCrPkJkAFnqtw1b59qld3OFPKEvLjOs05xpjuhiyWhaOD+1BDBc6AAbo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770063838; c=relaxed/simple;
-	bh=rygccUd18l19TzR5JCjH1aG9Ieh85FWBhgGrodwQfAk=;
+	s=arc-20240116; t=1770064056; c=relaxed/simple;
+	bh=jfXmnznKLJiTPbD5h8TXzPoCYSLFywcnZTDixTwqnvE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JgTCpP5vPbVzRbICFMWExEbBv4PyOXiQVgy8fBxmZTQBkbf37IWP0Q0Gto0zxWrsM2krbuwGUICLo8GFJjl/qFc1yvcuCQJn3D7Oo2XoS+MxTM6UkGEGcxK66eJSsqfdMRGfmE7x9EGjekzVvx1UbNUsIkTmVOLe8vVryp4LfRA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U5aTzo61; arc=pass smtp.client-ip=209.85.218.47
+	 To:Cc:Content-Type; b=OvYcPj0TsWgCRbnUffbFnEkbjs5NIqL/+cK2YbNgHb1lT8CIYXqmnpPOKpiYNgLKFZ3uvliYK3u1a2OZpUaTxt+v3H65N7UaPf5RRktXaY2GheIVXpCoTGDXnkX15oKZ9nAQMHpPM+go+4d0oGnfg8Vk41q2ZCjWIjIa3LOGfqI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i35lvgzw; arc=pass smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U5aTzo61"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b8838339fc6so24902666b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 12:23:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770063836; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i35lvgzw"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b8e526081ceso19944766b.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 12:27:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770064053; cv=none;
         d=google.com; s=arc-20240605;
-        b=PmSh0rYY/Plis9DdTLERJzlfUHy+rztb5iXlRlDvfGlQi4crmKsXNXMOi5NCm3RoHR
-         wFnyiw4N21qfFmWvdcTVHscL34nFAwXaWOesLGarwd7oCZ0OJSY62IAlq68tQkNMuxQe
-         a+NFvgak865oS+MBEtddhGbsgPoTaS8x8CT9p136/KQLpMe+t15KMjsuKhail04/gH5s
-         JUis6HnL/AF7vIeORp2GXaXaWrPhjk34fUIAD68AbCxXgN3xsohdcwiG5zfcPS8fkBpC
-         KPrpNssgkw17nNkMvEm6C3d8L7nfCnN3nlVGb4uR7nwpsgvR6+zmFsl8N6iqK71MJmFI
-         qVZw==
+        b=dkzzjvDhYAaNu2HQNpc30mvDFUL8KFxoCqWbkOQg0Iio8rz2qi53ipaDmA71/wBzZT
+         sJrWvWjii1ZZcXCxHju/rAy2H7m2fQ4GwwAiwEj0Q4RCK4FD+8hAV0NcL4cyk2dI4Gmf
+         awcfhKvy4bMURujtrSG/+eW+hvZxP0Yto6N7TeMmpSdDrD0El5O7xrBWN3h6FCNWtSj6
+         tMEeyzXPl0K5hpiuFjLlbJ1RuuFdz/3g1Fca31hPn6Ig617oYG+/9c5Ks02lk+0JhVkc
+         +gsWZcuGqwxaOn9HkDAFzWFZhKdb14SEffyAk+q0rEM00X0AdGP5Pj3HegXitqLOlJm+
+         vGCQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=htIZPWHbD45Ax/xP9Qw9uEOw6k3b0vJzapO+gLliJ94=;
-        fh=l4DoI1uzSdazM/ls9i+H34u+FkG/S+1Qw8aCUln09Nw=;
-        b=IPzHrwAt5UDN6lu8ixUv7bgeN6N2lurrRl679x1BGQkoSR7XVA7MMilrIQGddefl6F
-         CYW6szIvzf5y+Q+wAr1kAChrfUywsvotmpWAwaDCsHwNpHaZb+t6XTJdTHwf7r62hSIM
-         PE73uu9DwbriDfqfp1yZU2sJeAHHuCduVr9IT3/xHS0c12NYnAz4/tV7DrLXl2CsrVTu
-         y3YSLTj6eLvy8d6PEgNTvhV/+dE9+AHYkozAbwjHXpSToLRmkGFHy/klcocEguMH9YSN
-         axzljS09ktWQAZtAwFPVFEeHXj6nlgxKKJmwb6iOx1Mb2xoMcmfquHXCHbqbQHbqQa9D
-         v/zw==;
+        bh=tVRk+zilHW9UjKLQgTp2UA+pwv3RE3RSIRFfK1s01Ps=;
+        fh=JBbi3NE2wxgxOb/gWoKqTuYQIHZH1TQcrpREWdS0U6s=;
+        b=jpudqocVacgvUU+CA61RY0FQsExiptcijKwX4pcQ34C89H9OJhrLZo1gC84WB/KZzY
+         QTGYuyyLM6uFQgiKCK+NFMEABFQEGLeMFeN6FhXBTFQ5Wf5/sldgPQQoQlhH3pz6Bp0U
+         F0k2b43b+i/YNdqxxqhj3xh7IBcHtrMyaRM/H6jT6nLdhXrR8EHs7vNDb2LLZc1Kdq1C
+         M69WRrpgpzdDiYeS9wO/a+6rtCYWWIyI8xngAFXPmff/Z47Gc86JTOje84PBtzXi49Od
+         yT9WmumQCCFaE602hVney3zQ/3lEJQUorNd6ARQUCo/s/pg9gduaccJA4sH3sAPIPvOF
+         U8zA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770063836; x=1770668636; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1770064053; x=1770668853; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=htIZPWHbD45Ax/xP9Qw9uEOw6k3b0vJzapO+gLliJ94=;
-        b=U5aTzo61c9/GFsxEM2m/A/746Ub8QrtfHQpE1rRZ5Vf54hERmqP4ON5eB4HH08LM+7
-         UI9XsRK69lkdz/LYxPZq52tIGUNny7M9dnq95j5P7Fmyp7Rw5Q6Ogr9TMk5I7pIpBLhI
-         NHz2enOQi0U4FMoF9/xgSFOAPf1z5kw8vrMQVJPSD2LucXCUtI+UBn0hlm3CyVTknHMF
-         K9t8VVvcZY+rQmf1yXA1kkzjBa+2daLFLDEU3vQih+VOcMi7/XGYzayGFKCtltNStaUX
-         bD2joBB4sBs1iANJaqA0UI7jWhqVyTZIJgXXiNlK5ei6bmSxOAHvOI868ew8CdZljfGD
-         GabQ==
+        bh=tVRk+zilHW9UjKLQgTp2UA+pwv3RE3RSIRFfK1s01Ps=;
+        b=i35lvgzw+EpxLEACaPBJPib1skMRWoVPBETG80k2waGjMfR0bvTZjqFY4pJKbGWn5E
+         5z5qZlpRY0MUjIuDeqPiYZ5mJsYcukgBq4FlMWsg5BlznYf+Tb5OQV5igiNXwUBcKK8h
+         WanbW26nVcvkhzR6FzEL08DsaIBY1+GGPt4MZnGjaXjCQNR37xzJoWZal2rtGXPrqIhH
+         YTiFolGNtNFzwocVne0qhe4Glb8NUm+b4eM48yuDO8eM0RLgYVgm3aCewqU8C3vJdBRp
+         aumxQz3314vbyn9SMtuvn8s8DXlZfqEzcjauhwS7efbvBqHQVb8mQ9U15CmJgt116OhL
+         xI3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770063836; x=1770668636;
+        d=1e100.net; s=20230601; t=1770064053; x=1770668853;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=htIZPWHbD45Ax/xP9Qw9uEOw6k3b0vJzapO+gLliJ94=;
-        b=AFA1Or6Y6nxRbeprOXazXsKuV0MVa4u/s24MhIfFNmn77fc6qRib+nTneMYZxlA1f2
-         gW46uQiih3B+c9H17Z01kkRxYqBiTqq8o8xI4JovkazJ7H5bH89u1CSTVrDHV/83M8+S
-         4DvBu/EXjNViRMC47VOu/Rz0w25hhAZJ4yudMV3KQJJkT+cJ5rN2JIsvOeeh4VRyMBuG
-         ZcfHmx9yEcTQfMhbEKVU/XJmySLfS899a98Ro4yueqeXUJKg7WulXtTZXHn6QFyaZp1E
-         eDETc/WYvyRgpUGk8cNKx0Lsi8Br1G4NF2wnM+OIKoX9NsDi7xurFVDYhjEtgIAuXAtM
-         9CTw==
-X-Forwarded-Encrypted: i=1; AJvYcCUA/YyYHbqwExjjbWwg0PwpXtCPxgROoTBjg8LzXB0whNQ91DLj41fDbxG6p3myUQKF+JTsogj9QtruVVCBpbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfMUzwQM+QvPfZ9fzmlfyKKq0l3+OgayHPTQcAuet5NrVDiEoa
-	s2+Xpdn7giSx2Du0igUjaQzhOAxOQXAQhQWd93vgZXtdcXnx/S+YXFq2qeH+M3UQIhNQpAMn8fY
-	a27SC3SC4KcsNbzJGyOtrXI4LAJtMgFdRNtO7y0QB
-X-Gm-Gg: AZuq6aIm22gNKUVMC0eQzypCLjyJohMgjGH39XS8t3vixTrTF4Lcn6ajQa++LjbpeWE
-	TeSXHFc8kQYg7UhzvylUb0635WUEJ2w3k2v16t2E/33PyHW+22QGKRghfiVT/2MdkN0eh3PQEoS
-	eAt1tlAqWLUxCWd/3kaMoaI+UvCJj2q1rrA69o2YgKTCR1Xvy0/2XNtXDvrJnplctfoA5jL/awz
-	twKhVBHPn7N5CIyvEhAXvxf/0oFxYdhU+fRclBPXfk5HWlFYDYCXaWaWscKXOJMsRpFecLxJZ9q
-	O0sCtsM4vzjlPWJMl/Qzpizmsw==
-X-Received: by 2002:a17:906:2092:b0:b88:5894:6ba1 with SMTP id
- a640c23a62f3a-b8e8384b261mr34088266b.28.1770063835546; Mon, 02 Feb 2026
- 12:23:55 -0800 (PST)
+        bh=tVRk+zilHW9UjKLQgTp2UA+pwv3RE3RSIRFfK1s01Ps=;
+        b=BUgAK4CsMiL4hdmJctHELjbuyAsAppvMLj9JRTwuQFJzOj3+UAyPZ/mKDPYF9qzPM5
+         wI7uFP7UiyRiueaJJ0xMEE/UlpwWR8LA4a3FhwOeeMS73xOT9OUG364OC3SHpaHOGK9P
+         7Ei4Y4cQnJPEx7NEOUgNplWn4GAuFIh0KbsJgr7NfBDsw46MeVQ7Az38TJ2Q0CqLXc4A
+         WTQKxHM9xOE4wE8u5XGbKVi66kBPtjZq2A6dcZXe3bZV8RN652BMInhUrfBHzo/e5buX
+         1YFm3t404VBT0eGU5W1xy3fpKf8y6Gn+JyqHg8bBFQYBgmqffxscsvirRfNydU8AkqN1
+         bo9w==
+X-Forwarded-Encrypted: i=1; AJvYcCVIh4RaEiCql59HQDLJsbGyEqvsafFzBjEt2A2pR9JEuWD7tZCueF3bKVpWAEUO/UEHABVT323ct0Q8cBCKObM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaH3uassWCxGSaabM4XIatDs1ENgIqxPw2zL01XWymU5QICOow
+	IiLikWaCJt30o0zuo+LvCtqhOSrZA1MaqtiQR0I0QmPVjMKq1jeAYlvoSZ/Oyyui2ivwUKnFUmi
+	lQJjoaP7tNkRWuXUlNaLb7ha/6PPBB3Dd2t48MX5L
+X-Gm-Gg: AZuq6aJbjdEuiPEqf6Yj1u3I46N5krhOLhpyHOY3yokanz+TuQkMG6jH8LIFkCLpQhq
+	KndF3UMZ1xc4FjUpVjhXYYeIQWJTGnu+5LmFbBtL2zLHv/iSQ2FRRVjcVymOTfa0kHyoGyiIqkw
+	0eadIx8wTOimYzWXax2eb/s+4MzxRugO+VWEGwlQ+5w2LQUSAubjABqpyoLRxDkWTpKNbn8WXmB
+	coe8jSunZvz7Cj7rEsmZq8hkGIjbbLjK6F9JLBJA/Zkq2ZOuVgitMF8Vb+Rq2Tmyai4qzMhaCwS
+	JVQ4CAgmsxKN5uBUzX1UCajF497omnko0Epp
+X-Received: by 2002:a17:907:7252:b0:b8e:380:5669 with SMTP id
+ a640c23a62f3a-b8e83909daamr46612566b.32.1770064053184; Mon, 02 Feb 2026
+ 12:27:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260124012133.2451708-1-wusamuel@google.com> <20260124012133.2451708-2-wusamuel@google.com>
- <CAJZ5v0jWCdEVgQxOAkek4qqVHMx3Xx4_W3ov9bvdJP=0acX=Yw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jWCdEVgQxOAkek4qqVHMx3Xx4_W3ov9bvdJP=0acX=Yw@mail.gmail.com>
+References: <20260124012133.2451708-4-wusamuel@google.com> <9f904e57ca365036b12263b0d0a06b915e6090631df159d17f4e8a9651c1f5ff@mail.kernel.org>
+In-Reply-To: <9f904e57ca365036b12263b0d0a06b915e6090631df159d17f4e8a9651c1f5ff@mail.kernel.org>
 From: Samuel Wu <wusamuel@google.com>
-Date: Mon, 2 Feb 2026 12:23:42 -0800
-X-Gm-Features: AZwV_QgqKaDjKsxdqUkpb1jGTSFawd3uSAT91ZuKQiHw4J175hzMfkuvra288U8
-Message-ID: <CAG2KctqqZ_12AWiJ89OhCfqDfNqxBH3UrzssycxrXbcbj-82VQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] PM: wakeup: Handle empty list in wakeup_sources_walk
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+Date: Mon, 2 Feb 2026 12:27:21 -0800
+X-Gm-Features: AZwV_Qg29xnGZqAdFJeszWEWENOogIq3Hn6LIMQK7pgNDZsdLvyvbyvFqAYEMNc
+Message-ID: <CAG2KctpjRWiLEur+27JZZ0bftDfBLj-dy6TA79iLYk-DQfr2MQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Add tests for wakeup_sources
+To: bot+bpf-ci@kernel.org
+Cc: rafael@kernel.org, lenb@kernel.org, pavel@kernel.org, 
+	gregkh@linuxfoundation.org, dakr@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
+	kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com, 
+	ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 27, 2026 at 8:15=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+On Fri, Jan 23, 2026 at 5:50=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> On Sat, Jan 24, 2026 at 2:22=E2=80=AFAM Samuel Wu <wusamuel@google.com> w=
-rote:
-> >
-> > In the case of an empty wakeup_sources list, wakeup_sources_walk_start(=
-)
-> > will return an invalid but non-NULL address. This also affects wrappers
-> > of the aforementioned function, like for_each_wakeup_source().
-> >
-> > This patch updates wakeup_sources_walk_start() to return NULL in case o=
-f
-> > an empty list.
-> >
-> > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > ---
-> >  drivers/base/power/wakeup.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> > index 1e1a0e7eeac5..e69033d16fba 100644
-> > --- a/drivers/base/power/wakeup.c
-> > +++ b/drivers/base/power/wakeup.c
-> > @@ -275,9 +275,7 @@ EXPORT_SYMBOL_GPL(wakeup_sources_read_unlock);
-> >   */
-> >  struct wakeup_source *wakeup_sources_walk_start(void)
-> >  {
-> > -       struct list_head *ws_head =3D &wakeup_sources;
-> > -
-> > -       return list_entry_rcu(ws_head->next, struct wakeup_source, entr=
-y);
-> > +       return list_first_or_null_rcu(&wakeup_sources, struct wakeup_so=
-urce, entry);
-> >  }
-> >  EXPORT_SYMBOL_GPL(wakeup_sources_walk_start);
-> >
-> > --
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.=
+c b/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
+> > new file mode 100644
+> > index 000000000000..c8a38717e284
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
 >
-> This looks like a fix for the for_each_wakeup_source() users.
+> [ ... ]
 >
-> I can apply it without the next two patches.
+> > +static int get_ws_iter_stream(struct wakeup_source_iter *skel, int *it=
+er_fd,
+> > +                           FILE **iter_file)
+> > +{
+> > +     *iter_fd =3D bpf_iter_create(
+> > +                     bpf_link__fd(skel->links.wakeup_source_collector)=
+);
+> > +     if (!ASSERT_OK_FD(*iter_fd, "iter_create"))
+> > +             return -1;
+> > +
+> > +     *iter_file =3D fdopen(*iter_fd, "r");
+> > +     if (!ASSERT_OK_PTR(*iter_file, "fdopen"))
+> > +             return -1;
+> > +
+> > +     return 0;
+> > +}
+>
+> If bpf_iter_create() fails above, get_ws_iter_stream() returns -1 without
+> writing to *iter_file.
+>
 
-Yes please. Feel free to apply this patch independently, as it can
-exist as a standalone fix independent of the subsequent two patches in
-the series.
+This should be fine, if the BPF iter file isn't created, we will not
+write to that file.
 
-Thanks!
+> > +static void subtest_ws_iter_check_active_count(struct wakeup_source_it=
+er *skel)
+> > +{
+>
+> [ ... ]
+>
+> > +     char *line =3D NULL;
+> > +     bool found_ws =3D false;
+> > +     FILE *iter_file =3D NULL;
+> > +     int iter_fd =3D -1;
+>
+> This function correctly initializes iter_file and iter_fd before calling
+> get_ws_iter_stream().
+>
+> [ ... ]
+>
+> > +}
+> > +
+> > +static void subtest_ws_iter_check_sleep_times(struct wakeup_source_ite=
+r *skel)
+> > +{
+> > +     bool found_test_ws =3D false;
+> > +     struct WakeupSourceInfo ws_info;
+> > +     char *line =3D NULL;
+> > +     FILE *iter_file;
+> > +     int iter_fd;
+>
+> In contrast to subtest_ws_iter_check_active_count(), iter_file and iter_f=
+d
+> are not initialized here.
+>
+
+Ack, this is important and I can address it in the v4 of the patch.
+
+> > +
+> > +     if (get_ws_iter_stream(skel, &iter_fd, &iter_file))
+> > +             goto cleanup;
+>
+> [ ... ]
+>
+> > +cleanup:
+> > +     if (iter_file)
+> > +             fclose(iter_file);
+> > +     else if (iter_fd >=3D 0)
+> > +             close(iter_fd);
+> > +}
+>
+> If get_ws_iter_stream() fails at bpf_iter_create(), can this access
+> uninitialized iter_file and iter_fd? The cleanup code would then evaluate
+> garbage values, potentially calling fclose() with an invalid pointer.
+>
+
+Correct, and this issue will be fixed when the variables are
+initialized as pointed out in the previous comment.
+
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/213068=
+80863
