@@ -1,108 +1,219 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC77286D70
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Feb 2026 22:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6D12B2D7;
+	Mon,  2 Feb 2026 00:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769984515; cv=none; b=t+WXWdcBNx1A5t6/lQzm2jQ0WCShkE1CWUVfUipYvu+muZjIyhzUu9MjZiU+TPKadaqwH9zYQBYzudJ2KUpQ5epxFANdIaACbnCS+8xXo+VOa1PXmtk8MHYld+Vr4dlT0Oj0vSKJx7q8U9b6xVvaJ/nFDH3iJe0eKxurN4SvVXY=
+	t=1769993938; cv=none; b=Ih6TiOaRUKaWJ+nCxIaA29d6EvEp6sRUSyWz59W1wrOm0IPdXGsEmCKAK8MyVvI71B7xmENR16Jgh/fNKj6OyC9pGz1bb5PabbLgY7CzcWdJQQT/oijDKfwLFod0Kr1gq21G5AruRH81ReiqyNovJ7TFdffR/uHB/wWG7/ejq/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769984515; c=relaxed/simple;
-	bh=/50UstTYTe5qclwh6Uqp/GbNZAC9vdNY1YNsVLSBDY8=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Zse/68hZFbV+SBN/+NdAq+69kjn4dPWQnfdol9+/Qa1seO5OxAFUxhQabf12zPw09W0QIkmVDxzjhKN9QjYpVOE4vXxG6YI/pJj1tqUAmz3DCE1VuUep1/oQXbeiawQnnUTmVCc01SMSV/EPnRJeMBFGF5GWdqLkGsF1vnEwGKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TN/J/dWZ; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TN/J/dWZ"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-794d3bba0ccso3103547b3.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 14:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769984513; x=1770589313; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=92nSMhqZxV/o0GA4gQ9PG0AX7xo4zjcdqIMWnHaJQbk=;
-        b=TN/J/dWZogGd2wynsNIgBoOhrA4c4Z4V6xciwiN2lHlR50UfiDcyUIktfbT+M36H3d
-         evnal5zznseS1mhk8BFynONl+OjKLnPEO7/9UjI01+jC4sxJC+uOIOhCc8v5DxdGmQN+
-         Jy6aig68SNPCb77+sX2gbnXNu0o+5I94QW8dfUvKDXFn4NbjPBtEoU/6tVPnuX5n+qAL
-         alDTTUuct+3pJj6OCPk+gFIn93gMnwicvPJ6OZhlrsonYWms1OFAqY1CZiY6qlA6aaox
-         gy0MBbUdZAlxvz3cHA/OVxbMrlN7BdNoP5OxiwXZeDIdGKSyaCctwCp3F+2OU5HGisgz
-         JqVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769984513; x=1770589313;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=92nSMhqZxV/o0GA4gQ9PG0AX7xo4zjcdqIMWnHaJQbk=;
-        b=dcTrnmoarL3zm3RvJ2O0QmtR6kCuqkIArPEUoqY//b97GrW3EwE1UhzyblC0heyw4e
-         AqkB+za3l1/cxdbrbmrl/xkukHnUwaQSxESrhyYXFMGVcf/kWSoXpwaPh94/Sk/rM+Mb
-         bfqkH3F9GhsLGxW7WKN6C3QxpBS6z02P7eHGNwC/Es9tjiE39WlKJLn4KulwG/id5lKT
-         HbfFqM52HcPf1yJw/TJ3SGnRqvr+CO+vOgl8Q7WOUkRKIBr/3nf3QKdm2G7cMBKl3+2o
-         9y5jTJHQGVtQRGIscPFfqY7I7SsDGhlkqPo3AIdn1uiEPbuOU0uXHYY2/B0MkMoDebH4
-         EeUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX4Xk6Y77KBfzbOygXFkCrFipE9YPLUpT1mMURhA+1V6gue7bMj/npXZwsAtjJG9SoD9WT6DxKGnra3UgZwRb0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHTpXCVhbnCppsvkCvrchkQBgpca7IltMnecFgpWHvcpaIbmTn
-	4zjnaVGkrtdSIzSdxaFFqbRXhwuPOrO5HUdpmHtYKCp5iT2ptwkA4OKZ
-X-Gm-Gg: AZuq6aLCNLYQKODf7enzJWEfwQz5yIH9w3t/5uyyOYMmyJWccM6/gQeI+AuYrHOzeAY
-	568J50O1W2X53jLt4hRbyPiHL53U70nwqczhtna20HUW21Ll+BIf0SEZ1Q/1Uzra6uLaMX5j4S0
-	5ymEw5ISiIf6VuxNlRo4XtwhKtH/cowBzAe7GQrR9WiGljVccf8BSIdGXdiyNYOZdzCh7qF3QQW
-	0XD37c4rBAaueqXG+OgWRZXysTSQ+UeM1+5alXU0MtSp+0U6siCOm4utioQsLFPX1diFk54NXoO
-	hUCyxjZ2v8w21wbO0sj2Neq0gUPX77prn6uhaQzQ+6LSrw97bJEq0hVedGFqf/CPF0qJ2xzbsmy
-	hUwb1/a6DhTsjvK/avkFN83oe3yjB1ETLOXGPE0QBWkQ8UrYvXb1o+s8OgLTHGhRXmKzyiancRT
-	GAiWM4c/v/3hl9Yk8zvyYHdqYH7y2YlnQYiIXkRqcx6iXWzr17H1iCeKK2PkqKUJwG7z+v0g==
-X-Received: by 2002:a05:690c:6a83:b0:794:8f0f:e8cd with SMTP id 00721157ae682-7949e077adfmr89832787b3.70.1769984513172;
-        Sun, 01 Feb 2026 14:21:53 -0800 (PST)
-Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-794a89fc966sm38096557b3.1.2026.02.01.14.21.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Feb 2026 14:21:52 -0800 (PST)
-Date: Sun, 01 Feb 2026 17:21:51 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Willem de Bruijn <willemb@google.com>, 
- Richard Gobert <richardbgobert@gmail.com>, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.38507b06f982e@gmail.com>
-In-Reply-To: <5a0fd9f22844611b806d1cc8bdfbe1504bb33b47.1769771825.git.pabeni@redhat.com>
-References: <cover.1769771825.git.pabeni@redhat.com>
- <5a0fd9f22844611b806d1cc8bdfbe1504bb33b47.1769771825.git.pabeni@redhat.com>
-Subject: Re: [PATCH net 1/2] net: gro: fix outer network offset
+	s=arc-20240116; t=1769993938; c=relaxed/simple;
+	bh=aGkTxyZNrEuaxISgw/tFQ5XN+kaSv2O8fLncKnldUKc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OodBitGoivO1zr9mSxy3MIG8xLrmt5q7EYAiX0+PxeCZ0NtCWls1p6ty8lBzl5FcyIExRzT6SnIoDFIgQ1I33G308NA8CZwWS+67bIOQebJ+rZRu06V/KrlM6y8bTCYf68mp5+U6SzeBxEA9kTFS9Lcrl3Wuc2dLmDd3eURadcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f47XR659TzKHMNp;
+	Mon,  2 Feb 2026 08:58:31 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 4619040575;
+	Mon,  2 Feb 2026 08:58:51 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgCHM_TK9n9p6MPJFw--.28536S2;
+	Mon, 02 Feb 2026 08:58:51 +0800 (CST)
+Message-ID: <d47d4dfb-12cb-4bba-9bcb-b33c84f08e1f@huaweicloud.com>
+Date: Mon, 2 Feb 2026 08:58:49 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH/for-next v2 1/2] cgroup/cpuset: Defer
+ housekeeping_update() call from CPU hotplug to workqueue
+To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260130154254.1422113-1-longman@redhat.com>
+ <20260130154254.1422113-2-longman@redhat.com>
+ <7c7fddf5-9d32-415b-a1c4-3b9402e78d72@huaweicloud.com>
+ <781c0d8e-7cb6-4f3e-913a-b2a6b0bfed5e@redhat.com>
+ <444c73fd-bd24-41d9-8642-597a546de781@huaweicloud.com>
+ <2bd82e80-564b-4ec7-a97a-4722248a1a4a@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <2bd82e80-564b-4ec7-a97a-4722248a1a4a@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCHM_TK9n9p6MPJFw--.28536S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jr4DtrWkJr47Zw4kXFy3CFg_yoWxWr1rpr
+	ykKFW3trZ8Xr1rGw1aqw1UJrySqw18J3WDXrn5JFy8ArsrtFn29F4jqrnIgr18GrWfGr4U
+	ZF98WrZruFnrArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	bAw3UUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-Paolo Abeni wrote:
-> The udp GRO complete stage assumes that all the packets inserted the RX
-> have the `encapsulation` flag zeroed. Such assumption is not true, as a
-> few H/W NICs can set such flag when H/W offloading the checksum for
-> an UDP encapsulated traffic, the tun driver can inject GSO packets with
-> UDP encapsulation and the problematic layout can also be created via
-> a veth based setup.
-> 
-> Due to the above, in the problematic scenarios, udp4_gro_complete() uses
-> the wrong network offset (inner instead of outer) to compute the outer
-> UDP header pseudo checksum, leading to csum validation errors later on
-> in packet processing.
-> 
-> Address the issue always clearing the encapsulation flag at GRO completion
-> time. Such flag will be set again as needed for encapsulated packets by
-> udp_gro_complete().
-> 
-> Fixes: 5ef31ea5d053 ("net: gro: fix udp bad offset in socket lookup by adding {inner_}network_offset to napi_gro_cb")
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 
-Reviewed-by: Willem de Bruijn <willemb@google.com> 
+
+On 2026/2/1 7:00, Waiman Long wrote:
+> On 1/30/26 9:05 PM, Chen Ridong wrote:
+>>
+>> On 2026/1/31 9:45, Waiman Long wrote:
+>>> On 1/30/26 7:58 PM, Chen Ridong wrote:
+>>>> On 2026/1/30 23:42, Waiman Long wrote:
+>>>>> The update_isolation_cpumasks() function can be called either directly
+>>>>> from regular cpuset control file write with cpuset_full_lock() called
+>>>>> or via the CPU hotplug path with cpus_write_lock and cpuset_mutex held.
+>>>>>
+>>>>> As we are going to enable dynamic update to the nozh_full housekeeping
+>>>>> cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
+>>>>> allowing the CPU hotplug path to call into housekeeping_update() directly
+>>>>> from update_isolation_cpumasks() will likely cause deadlock. So we
+>>>>> have to defer any call to housekeeping_update() after the CPU hotplug
+>>>>> operation has finished. This is now done via the workqueue where
+>>>>> the actual housekeeping_update() call, if needed, will happen after
+>>>>> cpus_write_lock is released.
+>>>>>
+>>>>> We can't use the synchronous task_work API as call from CPU hotplug
+>>>>> path happen in the per-cpu kthread of the CPU that is being shut down
+>>>>> or brought up. Because of the asynchronous nature of workqueue, the
+>>>>> HK_TYPE_DOMAIN housekeeping cpumask will be updated a bit later than the
+>>>>> "cpuset.cpus.isolated" control file in this case.
+>>>>>
+>>>>> Also add a check in test_cpuset_prs.sh and modify some existing
+>>>>> test cases to confirm that "cpuset.cpus.isolated" and HK_TYPE_DOMAIN
+>>>>> housekeeping cpumask will both be updated.
+>>>>>
+>>>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>>>> ---
+>>>>>    kernel/cgroup/cpuset.c                        | 37 +++++++++++++++++--
+>>>>>    .../selftests/cgroup/test_cpuset_prs.sh       | 13 +++++--
+>>>>>    2 files changed, 44 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>>>> index 7b7d12ab1006..0b0eb1df09d5 100644
+>>>>> --- a/kernel/cgroup/cpuset.c
+>>>>> +++ b/kernel/cgroup/cpuset.c
+>>>>> @@ -84,6 +84,9 @@ static cpumask_var_t    isolated_cpus;
+>>>>>     */
+>>>>>    static bool isolated_cpus_updating;
+>>>>>    +/* Both cpuset_mutex and cpus_read_locked acquired */
+>>>>> +static bool cpuset_locked;
+>>>>> +
+>>>>>    /*
+>>>>>     * A flag to force sched domain rebuild at the end of an operation.
+>>>>>     * It can be set in
+>>>>> @@ -285,10 +288,12 @@ void cpuset_full_lock(void)
+>>>>>    {
+>>>>>        cpus_read_lock();
+>>>>>        mutex_lock(&cpuset_mutex);
+>>>>> +    cpuset_locked = true;
+>>>>>    }
+>>>>>      void cpuset_full_unlock(void)
+>>>>>    {
+>>>>> +    cpuset_locked = false;
+>>>>>        mutex_unlock(&cpuset_mutex);
+>>>>>        cpus_read_unlock();
+>>>>>    }
+>>>>> @@ -1285,6 +1290,16 @@ static bool prstate_housekeeping_conflict(int prstate,
+>>>>> struct cpumask *new_cpus)
+>>>>>        return false;
+>>>>>    }
+>>>>>    +static void isolcpus_workfn(struct work_struct *work)
+>>>>> +{
+>>>>> +    cpuset_full_lock();
+>>>>> +    if (isolated_cpus_updating) {
+>>>>> +        WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
+>>>>> +        isolated_cpus_updating = false;
+>>>>> +    }
+>>>>> +    cpuset_full_unlock();
+>>>>> +}
+>>>>> +
+>>>>>    /*
+>>>>>     * update_isolation_cpumasks - Update external isolation related CPU masks
+>>>>>     *
+>>>>> @@ -1293,14 +1308,30 @@ static bool prstate_housekeeping_conflict(int
+>>>>> prstate, struct cpumask *new_cpus)
+>>>>>     */
+>>>>>    static void update_isolation_cpumasks(void)
+>>>>>    {
+>>>>> -    int ret;
+>>>>> +    static DECLARE_WORK(isolcpus_work, isolcpus_workfn);
+>>>>>          if (!isolated_cpus_updating)
+>>>>>            return;
+>>>>>    -    ret = housekeeping_update(isolated_cpus);
+>>>>> -    WARN_ON_ONCE(ret < 0);
+>>>>> +    /*
+>>>>> +     * This function can be reached either directly from regular cpuset
+>>>>> +     * control file write (cpuset_locked) or via hotplug (cpus_write_lock
+>>>>> +     * && cpuset_mutex held). In the later case, we defer the
+>>>>> +     * housekeeping_update() call to the system_unbound_wq to avoid the
+>>>>> +     * possibility of deadlock. This also means that there will be a short
+>>>>> +     * period of time where HK_TYPE_DOMAIN housekeeping cpumask will lag
+>>>>> +     * behind isolated_cpus.
+>>>>> +     */
+>>>>> +    if (!cpuset_locked) {
+>>>> Adding a global variable makes this difficult to handle, especially in
+>>>> concurrent scenarios, since we could read it outside of a critical region.
+>>> No, cpuset_locked is always read from or written into inside a critical section.
+>>> It is under cpuset_mutex up to this point and then with the cpuset_top_mutex
+>>> with the next patch.
+>> This is somewhat confusing. cpuset_locked is only set to true when the "full
+>> lock" has been acquired. If cpuset_locked is false, that should mean we are
+>> outside of any critical region. Conversely, if we are inside a critical region,
+>> cpuset_locked should be true.
+>>
+>> The situation is a bit messy, it’s not clearly which lock protects which global
+>> variable.
+> 
+> There is a comment above "cpuset_locked" which state which lock protect it. The
+> locking situation is becoming more complicated. I think I will add a new patch
+> to more clearly document what each global variable is being protected by.
+> 
+
+Yes, We need that.
+
+> 
+>>
+>>>> I suggest removing cpuset_locked and adding async_update_isolation_cpumasks
+>>>> instead, which can indicate to the caller it should call without holding the
+>>>> full lock.
+>>> The point of this global variable is to distinguish between calling from CPU
+>>> hotplug and the other regular cpuset code paths. The only difference between
+>>> these two are having cpus_read_lock or cpus_write_lock held. That is why I think
+>>> adding a global variable in cpuset_full_lock() is the easy way. Otherwise, we
+>>> will to add extra argument to some of the functions to distinguish these two
+>>> cases.
+>>>
+>>> Cheers,
+>>> Longman
+>>>
+> 
+
+-- 
+Best regards,
+Ridong
+
