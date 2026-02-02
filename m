@@ -1,220 +1,225 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99AE27FD62
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 07:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 523AB29D297;
+	Mon,  2 Feb 2026 07:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770017490; cv=none; b=drB/7uZNzi/7vESOQZqmFwxjGiQtXjgLMrunfAiP6yH7x7+nbiv3JrMp0hzRPQ6zs4dqGOMe6pkVgZQHsYT+6pp5kbwaS0eG/dSRsvD2A5ultO5QMcGaoRx4n5bSGjbzfDk+dn4xF0yC8bM2jKM2Dq5CV+CgbVx18/S8tb1Rc1A=
+	t=1770017780; cv=none; b=AWFqXYGk+dZm3mQoa84GVZjLeKXoNIT60l25K1WtUE8/BPOPvirn4hrL0apwg4dxWyaW3IbK4cAIevWUrd52ZH/7Tj34NMH2Sy/l9/AFR5PuDr9bcLfeQtmVC68cOqAlYYnUBqQs0BTymEuRDShYa7UrDBBT5cZAhfFFZz11W+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770017490; c=relaxed/simple;
-	bh=712wRN6EWIS01X5o6JuTZ7FSNFfFpQ84hrmEyj7O/IA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vFCraE2dPCfX8hAnCyZS43kWKpO4hXxjl2QSDPa8YfmZf7hqeCpGGAahH6mSlen2Hr3445rMUQNVjfH5GN4GHsp7uGoLMGCvMxl04xpl22ZJTUkaiePQYaouw2s779A1K07lSrD0Hrl7yJ9eSMZ1x8/2/4tWxwYE++3+H1o+R2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDnQLyC2; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDnQLyC2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8112AC19421
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 07:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770017490;
-	bh=712wRN6EWIS01X5o6JuTZ7FSNFfFpQ84hrmEyj7O/IA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BDnQLyC2KqK6d0NgVcTpogIdhBeNKBOIEKe5WJ96foNL2lfPYFNYdIqcrwzxo56JP
-	 QbjzyA7APYtQsLFK2DMu8j4/cIU3/7JPRbvWTlWt/hatsspZ1XU8KkiWgXZVfu8OhZ
-	 imeH3Weej54qoxh57UrLgPCQM5f78X6ksKhA/ed5Y9Bj4DfVYvKgzqMNnv1AbREDD+
-	 rOIB7JJcJNlB8lY1C7I6WCi5rrcx+ZIeKVDrVt5qJwu20Wm0jJp6xFglRZlRNHOFpH
-	 VT3O/0LqJxR98pnizhnJIofjcW1mA4+dqRHJtWlRW0VvMm/GGNmT5AHWgu1ZxVS2jG
-	 okoJdxQ03b7og==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-658cc45847cso6219391a12.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 23:31:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVV3ZYJt7NSY9kO0XwlLTwgA0GYVyU7q6b4YlStGAuOtuj6yPmpUTZkfjQhJICnVK/mYZOALgredghWkLrxMc4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9Me6/XGaxJyev3/f+pBf1N7kCHMSnkpiQZolGIZitV11Bhed+
-	/3IIe7TADFsYuNbRQ6Cu0FFMuTK9UCSCD1VTtjdN7dVtPRdhc+tFPIN8ruTtxVjXVMRcE5/kcfb
-	Y2a+8q2yf1OMHDjrxDyMSWWgy6K+U5ns=
-X-Received: by 2002:a17:907:7f8a:b0:b73:6c97:af4b with SMTP id
- a640c23a62f3a-b8dff6f791cmr596960466b.45.1770017489080; Sun, 01 Feb 2026
- 23:31:29 -0800 (PST)
+	s=arc-20240116; t=1770017780; c=relaxed/simple;
+	bh=WUfXq+uO17hFScq5V/kXwLQOZdVa5rF7TWMEUg0R3NM=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=NJnTWbxbNiI6JTaMsVjz5JrnwYEX2IfHcpYq8v5PAdXbTEhZ1oTsUCdTWZjmL177FwhFxgdd2A2J3su//HzzAWzVHJQ9MmJ0W63MxRYPug1QF8igDyhd0TIippYd7dyq6jxsj4qosHjF5gBWJ734vhviTr686+Z3eJrW5kEdT2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8BxHMPsU4BpxOMOAA--.48083S3;
+	Mon, 02 Feb 2026 15:36:12 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowJCx98DqU4BpOgg+AA--.35552S3;
+	Mon, 02 Feb 2026 15:36:11 +0800 (CST)
+Subject: Re: [PATCH] KVM: LoongArch: selftests: Add steal time test case
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: "open list:LOONGARCH" <loongarch@lists.linux.dev>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260129021839.3674879-1-maobibo@loongson.cn>
+ <CAAhV-H5yZbocBBBN5nMqb32UaVP6i8+9X4RNAwquVYVFVRaBVg@mail.gmail.com>
+ <865fdd00-b8ef-1e17-c1b9-1cb264e32914@loongson.cn>
+ <CAAhV-H539vn34ptS-9N8VZ9qMjJ-Lk8LE1_GAbvoNR20L+k5Ng@mail.gmail.com>
+From: Bibo Mao <maobibo@loongson.cn>
+Message-ID: <eb3a4eea-0403-9b8f-770d-e3bf10eee513@loongson.cn>
+Date: Mon, 2 Feb 2026 15:33:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129021839.3674879-1-maobibo@loongson.cn> <CAAhV-H5yZbocBBBN5nMqb32UaVP6i8+9X4RNAwquVYVFVRaBVg@mail.gmail.com>
- <865fdd00-b8ef-1e17-c1b9-1cb264e32914@loongson.cn>
-In-Reply-To: <865fdd00-b8ef-1e17-c1b9-1cb264e32914@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 2 Feb 2026 15:31:18 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H539vn34ptS-9N8VZ9qMjJ-Lk8LE1_GAbvoNR20L+k5Ng@mail.gmail.com>
-X-Gm-Features: AZwV_QiFoBR3TEVIfrukpoQ-8BMqUcaGoOzl-sqqoB655rsSNqxxhBdI5qqbZ8M
-Message-ID: <CAAhV-H539vn34ptS-9N8VZ9qMjJ-Lk8LE1_GAbvoNR20L+k5Ng@mail.gmail.com>
-Subject: Re: [PATCH] KVM: LoongArch: selftests: Add steal time test case
-To: Bibo Mao <maobibo@loongson.cn>
-Cc: "open list:LOONGARCH" <loongarch@lists.linux.dev>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAAhV-H539vn34ptS-9N8VZ9qMjJ-Lk8LE1_GAbvoNR20L+k5Ng@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCx98DqU4BpOgg+AA--.35552S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW3AF4kKw15ZF43ZFW5Cr4UAwc_yoW7Cryrpr
+	Z2kF4jgFW0qr17Jr10gw1qvFnxtrn2kr4xZF17Xw45Ar1qvFsrJr18tryUCFn5Zwn5GF1S
+	v3Z5KF43uFW5JrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIY
+	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4R6wDU
+	UUU
 
-On Mon, Feb 2, 2026 at 10:03=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wrot=
-e:
->
-> Hi Huacai,
->
-> On 2026/1/31 =E4=B8=8B=E5=8D=889:47, Huacai Chen wrote:
-> > Since paravirt preempt is also applied, I applied this one with some
-> > modifications, you can check whether it is correct.
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongs=
-on.git/commit/?h=3Dloongarch-kvm&id=3Dcf991b57ffc808d69cb1f911563b1d4658774=
-ccf
->
-> I checked the pendning patches in loongarch-kvm branch, they all look
-> good to me.
-OK, then are there any updates on this one?
-https://lore.kernel.org/loongarch/CAAhV-H57b14qY+5jqe+Fd5FTQq6jrhurfNBCqBqw=
-G6SUpKFhTw@mail.gmail.com/T/#t
 
-Huacai
->
-> Thanks for doing this.
->
-> Regards
-> Bibo Mao
-> >
-> > Huacai
-> >
-> > On Thu, Jan 29, 2026 at 10:18=E2=80=AFAM Bibo Mao <maobibo@loongson.cn>=
- wrote:
-> >>
-> >> LoongArch KVM supports steal time accounting now, here add steal time
-> >> test case on LoongArch.
-> >>
-> >> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> >> ---
-> >>   tools/testing/selftests/kvm/Makefile.kvm |  1 +
-> >>   tools/testing/selftests/kvm/steal_time.c | 85 ++++++++++++++++++++++=
-++
-> >>   2 files changed, 86 insertions(+)
-> >>
-> >> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/=
-selftests/kvm/Makefile.kvm
-> >> index ba5c2b643efa..a18c00f1a4fa 100644
-> >> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> >> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> >> @@ -228,6 +228,7 @@ TEST_GEN_PROGS_loongarch +=3D kvm_page_table_test
-> >>   TEST_GEN_PROGS_loongarch +=3D memslot_modification_stress_test
-> >>   TEST_GEN_PROGS_loongarch +=3D memslot_perf_test
-> >>   TEST_GEN_PROGS_loongarch +=3D set_memory_region_test
-> >> +TEST_GEN_PROGS_loongarch +=3D steal_time
-> >>
-> >>   SPLIT_TESTS +=3D arch_timer
-> >>   SPLIT_TESTS +=3D get-reg-list
-> >> diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/=
-selftests/kvm/steal_time.c
-> >> index 8edc1fca345b..ee13e8973c45 100644
-> >> --- a/tools/testing/selftests/kvm/steal_time.c
-> >> +++ b/tools/testing/selftests/kvm/steal_time.c
-> >> @@ -301,6 +301,91 @@ static void steal_time_dump(struct kvm_vm *vm, ui=
-nt32_t vcpu_idx)
-> >>          pr_info("\n");
-> >>   }
-> >>
-> >> +#elif defined(__loongarch__)
-> >> +/* steal_time must have 64-byte alignment */
-> >> +#define STEAL_TIME_SIZE                ((sizeof(struct kvm_steal_time=
-) + 63) & ~63)
-> >> +#define KVM_STEAL_PHYS_VALID   BIT_ULL(0)
-> >> +
-> >> +struct kvm_steal_time {
-> >> +       __u64 steal;
-> >> +       __u32 version;
-> >> +       __u32 flags;
-> >> +       __u32 pad[12];
-> >> +};
-> >> +
-> >> +static bool is_steal_time_supported(struct kvm_vcpu *vcpu)
-> >> +{
-> >> +       int err;
-> >> +       uint64_t val;
-> >> +       struct kvm_device_attr attr =3D {
-> >> +               .group =3D KVM_LOONGARCH_VCPU_CPUCFG,
-> >> +               .attr =3D CPUCFG_KVM_FEATURE,
-> >> +               .addr =3D (uint64_t)&val,
-> >> +       };
-> >> +
-> >> +       err =3D __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
-> >> +       if (err)
-> >> +               return false;
-> >> +
-> >> +       err =3D __vcpu_ioctl(vcpu, KVM_GET_DEVICE_ATTR, &attr);
-> >> +       if (err)
-> >> +               return false;
-> >> +
-> >> +       return val & BIT(KVM_FEATURE_STEAL_TIME);
-> >> +}
-> >> +
-> >> +static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
-> >> +{
-> >> +       struct kvm_vm *vm =3D vcpu->vm;
-> >> +       uint64_t st_gpa;
-> >> +       int err;
-> >> +       struct kvm_device_attr attr =3D {
-> >> +               .group =3D KVM_LOONGARCH_VCPU_PVTIME_CTRL,
-> >> +               .attr =3D KVM_LOONGARCH_VCPU_PVTIME_GPA,
-> >> +               .addr =3D (uint64_t)&st_gpa,
-> >> +       };
-> >> +
-> >> +       /* ST_GPA_BASE is identity mapped */
-> >> +       st_gva[i] =3D (void *)(ST_GPA_BASE + i * STEAL_TIME_SIZE);
-> >> +       sync_global_to_guest(vm, st_gva[i]);
-> >> +
-> >> +       err =3D __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
-> >> +       TEST_ASSERT(err =3D=3D 0, "No PV stealtime Feature");
-> >> +
-> >> +       st_gpa =3D (unsigned long)st_gva[i] | KVM_STEAL_PHYS_VALID;
-> >> +       err =3D __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &attr);
-> >> +       TEST_ASSERT(err =3D=3D 0, "Fail to set PV stealtime GPA");
-> >> +}
-> >> +
-> >> +static void guest_code(int cpu)
-> >> +{
-> >> +       struct kvm_steal_time *st =3D st_gva[cpu];
-> >> +       uint32_t version;
-> >> +
-> >> +       memset(st, 0, sizeof(*st));
-> >> +       GUEST_SYNC(0);
-> >> +
-> >> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
-> >> +       WRITE_ONCE(guest_stolen_time[cpu], st->steal);
-> >> +       version =3D READ_ONCE(st->version);
-> >> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
-> >> +       GUEST_SYNC(1);
-> >> +
-> >> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
-> >> +       GUEST_ASSERT(version < READ_ONCE(st->version));
-> >> +       WRITE_ONCE(guest_stolen_time[cpu], st->steal);
-> >> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
-> >> +       GUEST_DONE();
-> >> +}
-> >> +
-> >> +static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
-> >> +{
-> >> +       struct kvm_steal_time *st =3D addr_gva2hva(vm, (ulong)st_gva[v=
-cpu_idx]);
-> >> +
-> >> +       ksft_print_msg("VCPU%d:\n", vcpu_idx);
-> >> +       ksft_print_msg("    steal:     %lld\n", st->steal);
-> >> +       ksft_print_msg("    version:   %d\n", st->version);
-> >> +}
-> >>   #endif
-> >>
-> >>   static void *do_steal_time(void *arg)
-> >>
-> >> base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
-> >> --
-> >> 2.39.3
-> >>
->
->
+
+On 2026/2/2 下午3:31, Huacai Chen wrote:
+> On Mon, Feb 2, 2026 at 10:03 AM Bibo Mao <maobibo@loongson.cn> wrote:
+>>
+>> Hi Huacai,
+>>
+>> On 2026/1/31 下午9:47, Huacai Chen wrote:
+>>> Since paravirt preempt is also applied, I applied this one with some
+>>> modifications, you can check whether it is correct.
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/commit/?h=loongarch-kvm&id=cf991b57ffc808d69cb1f911563b1d4658774ccf
+>>
+>> I checked the pendning patches in loongarch-kvm branch, they all look
+>> good to me.
+> OK, then are there any updates on this one?
+> https://lore.kernel.org/loongarch/CAAhV-H57b14qY+5jqe+Fd5FTQq6jrhurfNBCqBqwG6SUpKFhTw@mail.gmail.com/T/#t
+there is an update version and I am testing the patch.
+Will post the patch soon.
+
+Regards
+Bibo Mao
+> 
+> Huacai
+>>
+>> Thanks for doing this.
+>>
+>> Regards
+>> Bibo Mao
+>>>
+>>> Huacai
+>>>
+>>> On Thu, Jan 29, 2026 at 10:18 AM Bibo Mao <maobibo@loongson.cn> wrote:
+>>>>
+>>>> LoongArch KVM supports steal time accounting now, here add steal time
+>>>> test case on LoongArch.
+>>>>
+>>>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>>>> ---
+>>>>    tools/testing/selftests/kvm/Makefile.kvm |  1 +
+>>>>    tools/testing/selftests/kvm/steal_time.c | 85 ++++++++++++++++++++++++
+>>>>    2 files changed, 86 insertions(+)
+>>>>
+>>>> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+>>>> index ba5c2b643efa..a18c00f1a4fa 100644
+>>>> --- a/tools/testing/selftests/kvm/Makefile.kvm
+>>>> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+>>>> @@ -228,6 +228,7 @@ TEST_GEN_PROGS_loongarch += kvm_page_table_test
+>>>>    TEST_GEN_PROGS_loongarch += memslot_modification_stress_test
+>>>>    TEST_GEN_PROGS_loongarch += memslot_perf_test
+>>>>    TEST_GEN_PROGS_loongarch += set_memory_region_test
+>>>> +TEST_GEN_PROGS_loongarch += steal_time
+>>>>
+>>>>    SPLIT_TESTS += arch_timer
+>>>>    SPLIT_TESTS += get-reg-list
+>>>> diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+>>>> index 8edc1fca345b..ee13e8973c45 100644
+>>>> --- a/tools/testing/selftests/kvm/steal_time.c
+>>>> +++ b/tools/testing/selftests/kvm/steal_time.c
+>>>> @@ -301,6 +301,91 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+>>>>           pr_info("\n");
+>>>>    }
+>>>>
+>>>> +#elif defined(__loongarch__)
+>>>> +/* steal_time must have 64-byte alignment */
+>>>> +#define STEAL_TIME_SIZE                ((sizeof(struct kvm_steal_time) + 63) & ~63)
+>>>> +#define KVM_STEAL_PHYS_VALID   BIT_ULL(0)
+>>>> +
+>>>> +struct kvm_steal_time {
+>>>> +       __u64 steal;
+>>>> +       __u32 version;
+>>>> +       __u32 flags;
+>>>> +       __u32 pad[12];
+>>>> +};
+>>>> +
+>>>> +static bool is_steal_time_supported(struct kvm_vcpu *vcpu)
+>>>> +{
+>>>> +       int err;
+>>>> +       uint64_t val;
+>>>> +       struct kvm_device_attr attr = {
+>>>> +               .group = KVM_LOONGARCH_VCPU_CPUCFG,
+>>>> +               .attr = CPUCFG_KVM_FEATURE,
+>>>> +               .addr = (uint64_t)&val,
+>>>> +       };
+>>>> +
+>>>> +       err = __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
+>>>> +       if (err)
+>>>> +               return false;
+>>>> +
+>>>> +       err = __vcpu_ioctl(vcpu, KVM_GET_DEVICE_ATTR, &attr);
+>>>> +       if (err)
+>>>> +               return false;
+>>>> +
+>>>> +       return val & BIT(KVM_FEATURE_STEAL_TIME);
+>>>> +}
+>>>> +
+>>>> +static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
+>>>> +{
+>>>> +       struct kvm_vm *vm = vcpu->vm;
+>>>> +       uint64_t st_gpa;
+>>>> +       int err;
+>>>> +       struct kvm_device_attr attr = {
+>>>> +               .group = KVM_LOONGARCH_VCPU_PVTIME_CTRL,
+>>>> +               .attr = KVM_LOONGARCH_VCPU_PVTIME_GPA,
+>>>> +               .addr = (uint64_t)&st_gpa,
+>>>> +       };
+>>>> +
+>>>> +       /* ST_GPA_BASE is identity mapped */
+>>>> +       st_gva[i] = (void *)(ST_GPA_BASE + i * STEAL_TIME_SIZE);
+>>>> +       sync_global_to_guest(vm, st_gva[i]);
+>>>> +
+>>>> +       err = __vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &attr);
+>>>> +       TEST_ASSERT(err == 0, "No PV stealtime Feature");
+>>>> +
+>>>> +       st_gpa = (unsigned long)st_gva[i] | KVM_STEAL_PHYS_VALID;
+>>>> +       err = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &attr);
+>>>> +       TEST_ASSERT(err == 0, "Fail to set PV stealtime GPA");
+>>>> +}
+>>>> +
+>>>> +static void guest_code(int cpu)
+>>>> +{
+>>>> +       struct kvm_steal_time *st = st_gva[cpu];
+>>>> +       uint32_t version;
+>>>> +
+>>>> +       memset(st, 0, sizeof(*st));
+>>>> +       GUEST_SYNC(0);
+>>>> +
+>>>> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
+>>>> +       WRITE_ONCE(guest_stolen_time[cpu], st->steal);
+>>>> +       version = READ_ONCE(st->version);
+>>>> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
+>>>> +       GUEST_SYNC(1);
+>>>> +
+>>>> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
+>>>> +       GUEST_ASSERT(version < READ_ONCE(st->version));
+>>>> +       WRITE_ONCE(guest_stolen_time[cpu], st->steal);
+>>>> +       GUEST_ASSERT(!(READ_ONCE(st->version) & 1));
+>>>> +       GUEST_DONE();
+>>>> +}
+>>>> +
+>>>> +static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+>>>> +{
+>>>> +       struct kvm_steal_time *st = addr_gva2hva(vm, (ulong)st_gva[vcpu_idx]);
+>>>> +
+>>>> +       ksft_print_msg("VCPU%d:\n", vcpu_idx);
+>>>> +       ksft_print_msg("    steal:     %lld\n", st->steal);
+>>>> +       ksft_print_msg("    version:   %d\n", st->version);
+>>>> +}
+>>>>    #endif
+>>>>
+>>>>    static void *do_steal_time(void *arg)
+>>>>
+>>>> base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+>>>> --
+>>>> 2.39.3
+>>>>
+>>
+>>
+
