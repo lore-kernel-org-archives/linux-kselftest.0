@@ -1,364 +1,282 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011061.outbound.protection.outlook.com [52.101.65.61])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37201308F03;
-	Mon,  2 Feb 2026 21:09:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770066575; cv=fail; b=K92dZba5m0IgxWc7BHGmRqibXwly/VNnQUWZJ+C+o+1q1G+zqIn5hDC9o5/V21CIclPYvE5jw7jLKqgv3sIi7ahzGdEUQwsFxq5ZemfuhqKv8zh3yKfZpvIBg+b6K4dS0GSeepQPXA9VM2wjFPeuBSzHRrmUSfDo3DgwTUxBcFg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770066575; c=relaxed/simple;
-	bh=xkq/S85vUyS5iKg6ayGv0WbkmpBE1rwr1ETMqJ8H4X0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=TgAdQlBTK7rbuL+3+zyEGeyRTvd/i40lQSZkRSbJ+6AZU/GO5LAh38G/LzFH1rVphQL+rPGlTNBT5ZkcRm8/QnRvutZA9SPp1rqlFP6sA3UT+w2anjPhZ8uECV8f+cHcg6efPdazyHDLpsFLLKU2PjoWuaU2tgfgAR7mg0Hfjuk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=n+bdpNIl; arc=fail smtp.client-ip=52.101.65.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E66C26FDAC
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 21:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770067405; cv=none; b=B1kaZsn/v+dY4UO3Sf4gHy89ysBjAOLVV5vrG3xCrAv/NxGIIe9rHgFy3EOkXVxmsRcFrdwoDkBQaSmOnjdsuLvwyE1mw5W5+hO/CDNf/1xEzU2DEzAVTrrRIRf7QPURzd8UhwGIyhK9qrXRgQRlb1n/Smi1Wg+8fhZDk9xT+oA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770067405; c=relaxed/simple;
+	bh=lOs0xccYEQWyLRuzUgVsgIemarRJDZYE7WIRrqIMQgI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYD1V71uLK9dgFO+90zKcjkKuuIwCn5P3yfpAKMEdfu7yNZCRlTJw5dNkKkBM6r4zdmGkV0ZolATJAtPNgurieAXwA0uAHFF0dAGDrAE/dzfuXTa+Eweyjdtx7boVFQrzia+RzzAdweoyZFVHyLWMsu6h2KUcrByxATKiXHFB5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MIDUg233; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fJ90rynq; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="n+bdpNIl"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TqnCQxIN7V+p6B6ZS1VYLHX0O0XcazzB76qFhFlTC5KzSOOCPnMw0e+dvE3O1a1FuGOL5qBaR7146qO2Uv76IjdtF88NqdA6lUvKPv8vxX/1PHHP8KP1mgCF7lVOetJHm5DhoSZWFSvHVz/rNqNV2XyFv3udTIm7nxj0OBXN4iYj3i1dhWNKG+uTobHA3oB6NzEzxJblRsHjFdyEnud9rjEzsS6ScwPYdQkZ+jInyfHTowADjlDZEc+GiFr6r1AHl9Hj223rRtR3PnCIX2jFCm9yjArsu9DdKyckRceW9x2cxjS/NiciajI8x627CsQSkBo4D3Qe60m93BrhPfX3bQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LjomvUGWsd66Y9jbHaXhqlS99ya+BKpyCpHOt2HV91k=;
- b=h1TmUKmbPfq5t0ikyfcM+0wT0I5y83LXNDWjG7ad5sG8+GOiPeitQHlU9hKfgmefNtN7oCWnhDdI28E9xxCjJIcr9WptWxvuylwNJmHSNrsa+xJIoDJ+mwaFA7UzyHVnQr/zVUfU2ibZED/UyWmPTprNML8UmcEwZnY55mj0E0LNELuiasbPN1oiDySyrGJmsYV+ye7ZuMQU+Jl3xiz5PJkih+UU6TzHc0/7HEhEDfsqW9XrjHR5cME4v119L4Y7e+G3KICG9QZloIv89N5L89pmtTy3gB2Kbs3vcWoQfPiTXBKezZJglnfX23sRXI6dlYPTJipxAOGydhRjr16nYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
- header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LjomvUGWsd66Y9jbHaXhqlS99ya+BKpyCpHOt2HV91k=;
- b=n+bdpNIltcIpNRx1XuGyHQxXE2vqLMLboWUzGrP9J15t+YDmeDrm+qe79UQmpTLgvw3NZWAHACCznXd4R9Jqk4KCMLnGKFXgiDfsu14FeUYieOrXyttDLmnLl0OWbXG0HXNLxhrwT19A+d+SEIWK2cSRneMR8rdEO4IOvdo4S4fheDzNamZlYwA0t3nQ8oTwZ25Ja6DkHJK5VXdai3j4eosfXIqZCB5ajrSq7lQGWH3l5AjmMKbyPtZLx7kVTH09S54Bo0WIB81t3gUoRIGV1kLlnfoNLyG+1Na2EXz7UucHCtC5kZLzCmd8dFI7d26yGoiYFqOfs7QzNZbLp28X9Q==
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
- by VI0PR07MB10807.eurprd07.prod.outlook.com (2603:10a6:800:2c9::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Mon, 2 Feb
- 2026 21:09:28 +0000
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::b7f8:dc0a:7e8d:56%2]) with mapi id 15.20.9520.005; Mon, 2 Feb 2026
- 21:09:28 +0000
-From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-CC: "tariqt@nvidia.com" <tariqt@nvidia.com>, "linux-rdma@vger.kernel.org"
-	<linux-rdma@vger.kernel.org>, "shaojijie@huawei.com" <shaojijie@huawei.com>,
-	"shenjian15@huawei.com" <shenjian15@huawei.com>, "salil.mehta@huawei.com"
-	<salil.mehta@huawei.com>, "mbloch@nvidia.com" <mbloch@nvidia.com>,
-	"saeedm@nvidia.com" <saeedm@nvidia.com>, "leon@kernel.org" <leon@kernel.org>,
-	"eperezma@redhat.com" <eperezma@redhat.com>, "brett.creeley@amd.com"
-	<brett.creeley@amd.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
-	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>,
-	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
-	<edumazet@google.com>, "parav@nvidia.com" <parav@nvidia.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "corbet@lwn.net"
-	<corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
-	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
-	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
-	"stephen@networkplumber.org" <stephen@networkplumber.org>,
-	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
-	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
-	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
-	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
-	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
-	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
-	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
-	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
-	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
-	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Subject: RE: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in
- virtio_net_hdr
-Thread-Topic: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in
- virtio_net_hdr
-Thread-Index: AQHckwSvr7yGsOyrpUmxwtqxbyNbCbVtkSqAgAIPIWCAAAnvAIAACFrQ
-Date: Mon, 2 Feb 2026 21:09:28 +0000
-Message-ID:
- <PAXPR07MB7984B37862D3FBBE363AE5A8A39AA@PAXPR07MB7984.eurprd07.prod.outlook.com>
-References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
- <20260131225510.2946-4-chia-yu.chang@nokia-bell-labs.com>
- <20260201035912-mutt-send-email-mst@kernel.org>
- <AM9PR07MB79696F945D8DBEF370CD4DC6A39AA@AM9PR07MB7969.eurprd07.prod.outlook.com>
- <20260202121830-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20260202121830-mutt-send-email-mst@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|VI0PR07MB10807:EE_
-x-ms-office365-filtering-correlation-id: 593589ab-4a2a-4b6f-1ad1-08de629f5a2e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|13003099007|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?YeyKsOCZaSFMioY6hQHSapN5iBu/3Of8jK8KwV1H9VRc9LkKW8ALnro6VC7w?=
- =?us-ascii?Q?DvJb8Wss6RBD0Ig0ZYjBKDD7KwwR/Y7XGPFsY79n/CVNEE62ccD7Ny45cZRw?=
- =?us-ascii?Q?Nehs4jtAD7xlc0AR/MzdIPpQFKXL+RlZnKlQt9EaxQiyaZHRZL0H9JrwUCkr?=
- =?us-ascii?Q?y95JEMKyo+qNlN9GLuUjLBmRUxn0Gr2FCUt5t4zviJXu900xjJRrjKYGYtJd?=
- =?us-ascii?Q?T+7LMxj2s6jH9RG1oXdTWTRueaieX5G8EE8UOA1TECK6xp8D3NVgnpo99T1B?=
- =?us-ascii?Q?0m6/Rn27iOE2a0/7ZUPlSiOVTl+Tb9rYYVbBZKprcjnAPoXQ1y06OdjGmYwY?=
- =?us-ascii?Q?Y0IEeYGBoTz8N0dmRSmpLl2Who5V6nzNAgmnwZraZFiPyTOSYCE0zb77hYZu?=
- =?us-ascii?Q?SMUn7MBNTnumV9nNafSYFdLUm9rzaNzvxvKjJaV8KWGfQ0JdiwMmUSjfYxQs?=
- =?us-ascii?Q?dVSP2dAAZRYRoQohuQ/HPsNV6TCAgo3rCWoG1SzBdbK4qCf+ji0Tos9n4pdI?=
- =?us-ascii?Q?GnUBvSVtBSGcYVqSKwVuAc6bj6hw+x6LN9UeB2miZddEVskAzePHnVlagrmP?=
- =?us-ascii?Q?ZuDylbP3b5M0lrnd/uCDjEysmZHmrZtan+14RnNOE5PUuljPjTCJkmZYzNbE?=
- =?us-ascii?Q?51EjNI4aMCmUOLB0/3Rq/9mJsNtwDl1SFzOIIVbd5g4pLj+acuIL6RcoNbn/?=
- =?us-ascii?Q?x7p/BQEqK+YkXiGWBLXvr+/v794X1nP5Q/VWy4CJaOH4EUCaNL/l04a89Krj?=
- =?us-ascii?Q?dInhR75QIQvXLufjDHNjJjob8XNBmNTLSws9Wojkqrl0JGbc18pqxnFoeagC?=
- =?us-ascii?Q?rmAwmCFjUgKyqSX5sOrwvrZPJizpIJ52zOlRJuCBIDPSYicqT0qjmHLxXYtQ?=
- =?us-ascii?Q?kE0UHxxtFRumWo+BLrG686d1uwQX0s1vUjI55M7zU/+zd0P/9YY6TBa7Avvp?=
- =?us-ascii?Q?HtdX2ogYfmvmiKcQYI/73gcr0YK/qbif+mzC4mz/U+XRHPUrcWKlUv4/e/Mb?=
- =?us-ascii?Q?AwVyENa0uI4NZeZch6T7yaLka8FMnS4SzWdfJ3+1KCxpIVQQ+3cI30KXJ71U?=
- =?us-ascii?Q?hhNypnbuMEohjnOJ26Pu76ZyjGvaJXbXk+4ExKMdZq4pAdhHj3auuVT9b7xu?=
- =?us-ascii?Q?Eudo1egYCk5ted8vGF5h6Y6klm4zTdPrq3lenKDu43bhb2HXSmx9UOjuU4b4?=
- =?us-ascii?Q?ULMf8m8WVe7XZJdsP4hTGOjAYLRWIQ6W3WFypfvPoboU70UOxp33TWW14pXe?=
- =?us-ascii?Q?ViTsOCswTQB2SGkYGWiZ5KDeIsEt5QeiiVpDxB8EhaMsCszo/axiidsBILOX?=
- =?us-ascii?Q?AZRovFCEoPKW6Pct/PJ8hwBL95DUABKQF5H0ORizfKBNflnBIHk51WUfLWDH?=
- =?us-ascii?Q?IFvRjD5mONEHTvff2L4zESbm88OQaG1e65LMtnxa22+rgSw+yucD4LJd0j9N?=
- =?us-ascii?Q?IAB5Cg9vOXv2wVrAP6IpCLhn6vI4Gbq7VsB/TQDMT4rohpTQd84q/Yy6+aFw?=
- =?us-ascii?Q?9XMh3SdAWz+0Fx5uttK+cF0rF4abM6q0Lu0m9iqkqiPD185TKhugQZGi6Fbc?=
- =?us-ascii?Q?mwtn9GFYCmT6aXEtsB6URIN3JOsZtiBW7e4Ng8Ee?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(13003099007)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?UfMBdPQDbk1z8w+0vOJ++gTIw1bQXZhOdljtqVIJuiSIJyF4bgD85tdU9Ao+?=
- =?us-ascii?Q?YUrovmls2Oun00qeOKSsSQ0Gl/WiHRUqv/FZFAMWPmu8jKSs3rbIftasoODc?=
- =?us-ascii?Q?CDZ3RE4oX1BEh6jOxH9bAH6qUreIsmGu7mjZ9LhWSOgL/WxxtWN3gZ0hQsH9?=
- =?us-ascii?Q?xgq6Woz4jnIaSCcLAiwBNka96cIdMyPAkKd6lcMKiku/6bGYSBpwSpPly2Bk?=
- =?us-ascii?Q?WdKGSQ2Q3r+ct/DrirgP6F6eGK6eA4nFaNcr1/FlKzrbbr20xoW4xxG/KNTB?=
- =?us-ascii?Q?nZ9dtl78UQF5b1LGWI5dRXJi2lfpsDesZiE4R/8F97Wt+478FF4IdDBKNwUl?=
- =?us-ascii?Q?vexCYN4FUFjrr08oP7TJLGkgewjtpSmLk73fCrqL3mnBx3qSd3hec+ufD++7?=
- =?us-ascii?Q?LOkIDCofzNSZUMCcH24HtJSH3MrRELiVx//nqbO8vQaTx7t0GbKSogNObNlO?=
- =?us-ascii?Q?GD/rZE3+KIkCvgkdwxL+t7NNiCuKI2Uld2qTqdUzUUQtckJpaqAZocxCwuVI?=
- =?us-ascii?Q?d7PIqPIFjqv5WW3Vb104aOKM9KrT2HJAZS68TgRJQiz4YGLCg6KL7RvgrnCR?=
- =?us-ascii?Q?QqY1nWzby7Ez+/vF3xeOAOdnsCUhQDNkoBVkNR3Jdo80VqapGWWqUClQ5aAf?=
- =?us-ascii?Q?/01e3tlkd6Cx420irS94hO8KwKfYCfFQ95DCXgE7eEbkkWdW66nBdcCc+y4T?=
- =?us-ascii?Q?ZIJx+SWA2/X58MoE92nktHpBo+xKZjyhvRhsSxZ3SAmW68F0mNAYfDCv8RQc?=
- =?us-ascii?Q?2RZGUzQRmcei7nsLRq/TQzXMySp9y8/SDLArz7+ab2r8zpZABqM7uL4gtK0j?=
- =?us-ascii?Q?BdgX+mF1uWNdkh6hS73IgkFg0NWAAw8Cp5n/GltetPe/GEDwULOx4yK3LPYI?=
- =?us-ascii?Q?oYSaM5M1l68Aa+5KRck5v4uulD98zC17Krs8PnXZCFRPJBsDG8y82I0cu8lH?=
- =?us-ascii?Q?One5ytKLKB5gsJtMPOkBgBOFD9R8UaPWZ0H3bbMqRJen9TdUzlw+FjCaVwon?=
- =?us-ascii?Q?sf9QJowiuKJXMtbwksmbNR/o2JF/EwGAXnJUHzajQJf6gQkJW6WeULt7Ug67?=
- =?us-ascii?Q?2nJziZWVd35UiggCG/xNC+v6/6yg5gQRYjJ00dlsyc0iSSFe8DR2HGpO1Gfe?=
- =?us-ascii?Q?icGlP+xWQKU4Mm72OYmi/2KWP1POiKcn+ElP1xRzkSK9bJqagJZMigjSYiLk?=
- =?us-ascii?Q?trXwzzNGpZPK5z9O5w9sec6oRtEK+bRuL5ulO21FIf3r3ZNJZl+5d0wrqMqC?=
- =?us-ascii?Q?lrpEEy4nlVa6RoXRkaaNBE56zkDGeBQCF1iaDmL+ZfPFra1hAzee/+eRIILO?=
- =?us-ascii?Q?QYwGVwnlMOUmeSpDIQX0z5lILlFofuu82SeiGdgsUsK8yHGrxemIMjf+z7hj?=
- =?us-ascii?Q?w96iW/GdG/Wztcxcfir+mI5Vyb7gejx7B0cz9JoZ8OrhvdMck7dFvdrxloZt?=
- =?us-ascii?Q?aKW66faycEbIq4dj7nktjj9nd1pHiukK0qWpmE7W38zXB8ZbsT1HQwRQkhU2?=
- =?us-ascii?Q?yoEbT35Sl6jIfwSKKZoUigd2L9N8XrVuV2jneFu3vgbrnwVr+2xkQUclPAj0?=
- =?us-ascii?Q?fbx1gIZerWGaMrQlsGMV68o9Rzr46Oz/R5YLMh4Qerhlh+bOYLFr+/+1D0Xc?=
- =?us-ascii?Q?PToD/O1RuLoBWsTddoZwQUlqHfk9k5gsV0hF08lLBZ5Z0eZOW7T/geIy4uag?=
- =?us-ascii?Q?VoHAxU/YxYo0+WPdsQ+CKZr4IT+1Kapu/0XjowIFJFPd+Cf//L14IIIAao8U?=
- =?us-ascii?Q?VLPI5uJzRuSgC6BDucPXi7AaxYH/iK8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MIDUg233";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fJ90rynq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770067403;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TAkCddEGgJt8HRpnmblWaVWehXrqOQRfOa3v8YeWJbE=;
+	b=MIDUg233Jox8hSC9XwCr43H3D2mUCg0bTp3qhs4HVu/EzGtdG7+SwrqLZ6Uzphz8I7rRmD
+	9Yd018UsP+et6wmQrkxg6Lqb5UZgWjzO+v2Ljtsop/5XwIrZubiab4dsAhZJFlr3iwlu5A
+	qTmlC4o2InHfwaD0X4t24pPJRStGJUE=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-516-cZKa3OadN6ikpxWByDXNPw-1; Mon, 02 Feb 2026 16:23:22 -0500
+X-MC-Unique: cZKa3OadN6ikpxWByDXNPw-1
+X-Mimecast-MFC-AGG-ID: cZKa3OadN6ikpxWByDXNPw_1770067401
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-501473ee94fso248411581cf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 13:23:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770067401; x=1770672201; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TAkCddEGgJt8HRpnmblWaVWehXrqOQRfOa3v8YeWJbE=;
+        b=fJ90rynqHQiBCr/Yh8cLBRvzGpRh+KTbVV1vyb7C7INvlMoxcWrSBidpvjvmN/zd2z
+         5YKCfrOTOqevJqrluFImTPKZ4YvsJNHK8bvnH0qsEPcCavmtj8C5lyrWB1ILw36QkO2S
+         7uJhDUmGTVFKgqmVVmw+yH/lG8xIKr897vI74BMHWRWWh6Y1BJIizil4dH7P5VlOc0yz
+         TI4SyfjTKuV5UrG2pdOC6UUPZohdr4+jHlPRagGPvjZAsd39Ww0KAXTSNb2rMcJqRnSl
+         Fu278Ev+EknjdiGOr4zPd/fT1AmTXdX/OD8/SinfA6ZZ1OkNoVq7mcGy69adEKteXWc5
+         g02A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770067401; x=1770672201;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TAkCddEGgJt8HRpnmblWaVWehXrqOQRfOa3v8YeWJbE=;
+        b=Ax4GZfvCjEd6LKuMGWXutB4QECm3pIMpR+sifgza4JCWBQXchT+afvawFPvzhoUfbs
+         VBxkEnL1O5bvp6+Jhp9UznbzzgvRJ04XfUjmanh8lZC/jFCpGo55auD9oteZlnp5WVYD
+         kPe3bOTvlRqWC2sjQDk2NsuZDeCxAUTUOru2TBLs6+Ek5To1QPYs6jJX++zueGnDc1fm
+         KK4bllKWgviYrL2wE4sZuPw7CRX8zqdryzaFwwqvUyif8SBuOmAq1OKOczky5XC9GAwJ
+         9p+Y9TWwve89SRZj0R9ve8C10PaeOMamlR0bj6subI/i9sWojJUNayvBI08xA2xNJ8nF
+         4/mg==
+X-Forwarded-Encrypted: i=1; AJvYcCXTtYEBxKzM931hBDDY7kXjBRKs3ZvV9VVreBUbJOOCHdCWJLdn1MW9+IAxVl/Vl1+RLA6ccVI6O457WLnWK4Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/dX91KtaP8ZSRHatepHF3Vov0DNK+RQ6T4KP8BSC1N2PVu2rB
+	E+D837Qn9x4wR8Su0VBLtAdQVmVBn2WH7OT3t7tK2AYAn6zhM6CqdHZRFS/7l++apAun0b27z6/
+	Vg1gj10FToQl49Y7MJaFG/V2CydEoEU1UBiUUHluuZtw0GpjQ81VlqmBwjcR6mc5Qwhbung==
+X-Gm-Gg: AZuq6aL/AR7C37iZNI1PDlVf3eoswaqiNyaYfiSK1BG7cQ36EYdD1EJVHQfhZGAK3xy
+	+9SZ1FguMx66bmjs1jeqhQMm3p6koNVxlvRUt+p7X3rpEfv/bFmyVQBq9t489xY4cWSaHd/9GuX
+	YmdHYotkRvzuknQvTu6B1sHQ+IeY61vMthy6BAlT34jzBfE4HjOpdnXFAON10BbdxQ/cRoPVtKx
+	WDP073P0GOcxYW10MvWeauX/Gl9xrl9UEXSdiYJpMbwaahXDWRjaqzFyO41yvv34cWbnKQDNLc7
+	9+/Vpa7bnQf0l+xIemD5rqPhcMDjHov8n5tLWxaI35ZBjAGExhX0LTCfKmna3Qkcp8iJBQ3FhOo
+	9GJI=
+X-Received: by 2002:ac8:7e8f:0:b0:501:49f9:7488 with SMTP id d75a77b69052e-505d228ac65mr175015051cf.49.1770067400563;
+        Mon, 02 Feb 2026 13:23:20 -0800 (PST)
+X-Received: by 2002:ac8:7e8f:0:b0:501:49f9:7488 with SMTP id d75a77b69052e-505d228ac65mr175014571cf.49.1770067399931;
+        Mon, 02 Feb 2026 13:23:19 -0800 (PST)
+Received: from x1.local ([142.188.210.156])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c711d2847asm1309038885a.34.2026.02.02.13.23.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Feb 2026 13:23:19 -0800 (PST)
+Date: Mon, 2 Feb 2026 16:23:16 -0500
+From: Peter Xu <peterx@redhat.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@redhat.com>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 05/17] userfaultfd: retry copying with locks dropped
+ in mfill_atomic_pte_copy()
+Message-ID: <aYEVxD_vY-qimMNL@x1.local>
+References: <20260127192936.1250096-1-rppt@kernel.org>
+ <20260127192936.1250096-6-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 593589ab-4a2a-4b6f-1ad1-08de629f5a2e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2026 21:09:28.5121
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MtBBou0Yj+VZ41rnCedkIskWWA9dTgvC8gWbcnw/q+xoClo940lnu4n0y95Q8ycmcdsbudP4VesiZ5tuX/0sAxVB85InO4AIfRm9g4Wy/dGC7zFzh25zARgbnB4vhvWz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR07MB10807
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260127192936.1250096-6-rppt@kernel.org>
 
-> -----Original Message-----
-> From: Michael S. Tsirkin <mst@redhat.com>=20
-> Sent: Monday, February 2, 2026 6:20 PM
-> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-> Cc: tariqt@nvidia.com; linux-rdma@vger.kernel.org; shaojijie@huawei.com; =
-shenjian15@huawei.com; salil.mehta@huawei.com; mbloch@nvidia.com; saeedm@nv=
-idia.com; leon@kernel.org; eperezma@redhat.com; brett.creeley@amd.com; jaso=
-wang@redhat.com; virtualization@lists.linux.dev; xuanzhuo@linux.alibaba.com=
-; pabeni@redhat.com; edumazet@google.com; parav@nvidia.com; linux-doc@vger.=
-kernel.org; corbet@lwn.net; horms@kernel.org; dsahern@kernel.org; kuniyu@go=
-ogle.com; bpf@vger.kernel.org; netdev@vger.kernel.org; dave.taht@gmail.com;=
- jhs@mojatatu.com; kuba@kernel.org; stephen@networkplumber.org; xiyou.wangc=
-ong@gmail.com; jiri@resnulli.us; davem@davemloft.net; andrew+netdev@lunn.ch=
-; donald.hunter@gmail.com; ast@fiberby.net; liuhangbin@gmail.com; shuah@ker=
-nel.org; linux-kselftest@vger.kernel.org; ij@kernel.org; ncardwell@google.c=
-om; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.com>; g.whit=
-e@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsso=
-n.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vid=
-hi_goel@apple.com
-> Subject: Re: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in vir=
-tio_net_hdr
->=20
->=20
-> CAUTION: This is an external email. Please be very careful when clicking =
-links or opening attachments. See the URL nok.it/ext for additional informa=
-tion.
->=20
->=20
->=20
-> On Mon, Feb 02, 2026 at 04:56:38PM +0000, Chia-Yu Chang (Nokia) wrote:
-> > > -----Original Message-----
-> > > From: Michael S. Tsirkin <mst@redhat.com>
-> > > Sent: Sunday, February 1, 2026 10:18 AM
-> > > To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-> > > Cc: tariqt@nvidia.com; linux-rdma@vger.kernel.org;=20
-> > > shaojijie@huawei.com; shenjian15@huawei.com; salil.mehta@huawei.com;=
-=20
-> > > mbloch@nvidia.com; saeedm@nvidia.com; leon@kernel.org;=20
-> > > eperezma@redhat.com; brett.creeley@amd.com; jasowang@redhat.com;=20
-> > > virtualization@lists.linux.dev; xuanzhuo@linux.alibaba.com;=20
-> > > pabeni@redhat.com; edumazet@google.com; parav@nvidia.com;=20
-> > > linux-doc@vger.kernel.org; corbet@lwn.net; horms@kernel.org;=20
-> > > dsahern@kernel.org; kuniyu@google.com; bpf@vger.kernel.org;=20
-> > > netdev@vger.kernel.org; dave.taht@gmail.com; jhs@mojatatu.com;=20
-> > > kuba@kernel.org; stephen@networkplumber.org;=20
-> > > xiyou.wangcong@gmail.com; jiri@resnulli.us; davem@davemloft.net;=20
-> > > andrew+netdev@lunn.ch; donald.hunter@gmail.com; ast@fiberby.net;=20
-> > > liuhangbin@gmail.com; shuah@kernel.org;=20
-> > > linux-kselftest@vger.kernel.org; ij@kernel.org;=20
-> > > ncardwell@google.com; Koen De Schepper (Nokia)=20
-> > > <koen.de_schepper@nokia-bell-labs.com>; g.white@cablelabs.com;=20
-> > > ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson.com;=20
-> > > cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com;=20
-> > > vidhi_goel@apple.com
-> > > Subject: Re: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag=20
-> > > in virtio_net_hdr
-> > >
-> > >
-> > > CAUTION: This is an external email. Please be very careful when click=
-ing links or opening attachments. See the URL nok.it/ext for additional inf=
-ormation.
-> > >
-> > >
-> > >
-> > > Thanks for the patch! Yet something to improve:
-> > >
-> > > On Sat, Jan 31, 2026 at 11:55:10PM +0100, chia-yu.chang@nokia-bell-la=
-bs.com wrote:
-> > > > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> > > >
-> > > > Unlike RFC 3168 ECN, accurate ECN uses the CWR flag as part of the=
-=20
-> > > > ACE field to count new packets with CE mark; however, it will be=20
-> > > > corrupted by the RFC 3168 ECN-aware TSO. Therefore, fallback shall=
-=20
-> > > > be applied by seting NETIF_F_GSO_ACCECN to ensure that the CWR=20
-> > > > flag should not be changed within a super-skb.
-> > > >
-> > > > To apply the aforementieond new AccECN GSO for virtio, new featue=20
-> > > > bits for host and guest are added for feature negotiation between=20
-> > > > driver and device. And the translation of Accurate ECN GSO flag=20
-> > > > between virtio_net_hdr and skb header for NETIF_F_GSO_ACCECN is=20
-> > > > also added to avoid CWR flag corruption due to RFC3168 ECN TSO.
-> > > >
-> > > > Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> > >
-> > >
-> > > To the best of my understanding, this is a new feature - support for =
-VIRTIO_NET_F_HOST_ACCECN, VIRTIO_NET_F_GUEST_ACCECN?
-> > > The commit log makes it sound like it fixes some behaviour for existi=
-ng hardware, but that is not the case.
-> > >
-> >
-> > Thansk for the feedback, I will update commit message in v3.
-> > >
-> > > > ---
-> > > > v2:
-> > > > - Replace VIRTIO_NET_HDR_GSO_ECN with VIRTIO_NET_HDR_GSO_ECN_FLAGS
-> > >
-> > > but where is v2? this is v1...
-> >
-> > I shall update this version as v2, will do at the next version.
-> >
-> > [...]
-> > > > diff --git a/include/uapi/linux/virtio_net.h=20
-> > > > b/include/uapi/linux/virtio_net.h index 1db45b01532b..af5bfe45aa1f
-> > > > 100644
-> > > > --- a/include/uapi/linux/virtio_net.h
-> > > > +++ b/include/uapi/linux/virtio_net.h
-> > > > @@ -56,6 +56,8 @@
-> > > >  #define VIRTIO_NET_F_MQ      22      /* Device supports Receive Fl=
-ow
-> > > >                                        * Steering */
-> > > >  #define VIRTIO_NET_F_CTRL_MAC_ADDR 23        /* Set MAC address */
-> > > > +#define VIRTIO_NET_F_HOST_ACCECN 25  /* Host can handle GSO of=20
-> > > > +AccECN */ #define VIRTIO_NET_F_GUEST_ACCECN 26 /* Guest can=20
-> > > > +handle GSO of AccECN */
-> > > >  #define VIRTIO_NET_F_DEVICE_STATS 50 /* Device can provide=20
-> > > > device-level statistics. */  #define VIRTIO_NET_F_VQ_NOTF_COAL 52 /=
-* Device supports virtqueue notification coalescing */
-> > > >  #define VIRTIO_NET_F_NOTF_COAL       53      /* Device supports no=
-tifications coalescing */
-> > > > @@ -165,6 +167,9 @@ struct virtio_net_hdr_v1 {  #define=20
-> > > > VIRTIO_NET_HDR_GSO_UDP_TUNNEL (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV4 |=
- \
-> > > >                                      VIRTIO_NET_HDR_GSO_UDP_TUNNEL_=
-IPV6)
-> > > >  #define VIRTIO_NET_HDR_GSO_ECN               0x80    /* TCP has EC=
-N set */
-> > > > +#define VIRTIO_NET_HDR_GSO_ACCECN    0x10    /* TCP AccECN segment=
-ation */
-> > > > +#define VIRTIO_NET_HDR_GSO_ECN_FLAGS (VIRTIO_NET_HDR_GSO_ECN | \
-> > > > +                                      VIRTIO_NET_HDR_GSO_ACCECN)
-> > > >       __u8 gso_type;
-> > > >       __virtio16 hdr_len;     /* Ethernet + IP + tcp/udp hdrs */
-> > > >       __virtio16 gso_size;    /* Bytes to append to hdr_len per fra=
-me */
-> > >
-> > >
-> > > UAPI changes need to be added to the virtio spec.
-> > > Pls get this approved by the virtio TC.
-> > > Thanks!
-> >
-> > There were some discussions last October in virtio-comment@lists.linux.=
-dev mailing list.
->=20
->=20
-> That's it I could not find it. Could you include the archive link pls?
+Hi, Mike,
 
-The email thread I found is https://yhbt.net/lore/all/20250814120118.81787-=
-1-chia-yu.chang@nokia-bell-labs.com/T/#m62dd5e559a68e8d3e5872e85d37c924f65f=
-c7033
+On Tue, Jan 27, 2026 at 09:29:24PM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Implementation of UFFDIO_COPY for anonymous memory might fail to copy
+> data data from userspace buffer when the destination VMA is locked
+> (either with mm_lock or with per-VMA lock).
+> 
+> In that case, mfill_atomic() releases the locks, retries copying the
+> data with locks dropped and then re-locks the destination VMA and
+> re-establishes PMD.
+> 
+> Since this retry-reget dance is only relevant for UFFDIO_COPY and it
+> never happens for other UFFDIO_ operations, make it a part of
+> mfill_atomic_pte_copy() that actually implements UFFDIO_COPY for
+> anonymous memory.
+> 
+> shmem implementation will be updated later and the loop in
+> mfill_atomic() will be adjusted afterwards.
 
-There were discussions about updating the documents of SKB_GSO_TCP_ECN and =
-SKB_GSO_TCP_ACCECN, and you can find it in the first patch of this series.
+Thanks for the refactoring.  Looks good to me in general, only some
+nitpicks inline.
 
->=20
->=20
-> > At that moment, it is suggested to make Linux kernel accept new comment=
-s for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN first.
-> > So, could virtio-spec colleague give your feedback? (Parav?).
-> >
-> > Otherwise, the CWR handling of virtio will be wrong after all Accurate =
-ECN commits are merged in Linux.
-> >
-> > Chia-Yu
->=20
-> if there's a general agreement we don't need to block linux on tc approva=
-l.
->=20
-> --
-> MST
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  mm/userfaultfd.c | 70 +++++++++++++++++++++++++++++++-----------------
+>  1 file changed, 46 insertions(+), 24 deletions(-)
+> 
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index 45d8f04aaf4f..01a2b898fa40 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -404,35 +404,57 @@ static int mfill_copy_folio_locked(struct folio *folio, unsigned long src_addr)
+>  	return ret;
+>  }
+>  
+> +static int mfill_copy_folio_retry(struct mfill_state *state, struct folio *folio)
+> +{
+> +	unsigned long src_addr = state->src_addr;
+> +	void *kaddr;
+> +	int err;
+> +
+> +	/* retry copying with mm_lock dropped */
+> +	mfill_put_vma(state);
+> +
+> +	kaddr = kmap_local_folio(folio, 0);
+> +	err = copy_from_user(kaddr, (const void __user *) src_addr, PAGE_SIZE);
+> +	kunmap_local(kaddr);
+> +	if (unlikely(err))
+> +		return -EFAULT;
+> +
+> +	flush_dcache_folio(folio);
+> +
+> +	/* reget VMA and PMD, they could change underneath us */
+> +	err = mfill_get_vma(state);
+> +	if (err)
+> +		return err;
+> +
+> +	err = mfill_get_pmd(state);
+> +	if (err)
+> +		return err;
+> +
+> +	return 0;
+> +}
+> +
+>  static int mfill_atomic_pte_copy(struct mfill_state *state)
+>  {
+> -	struct vm_area_struct *dst_vma = state->vma;
+>  	unsigned long dst_addr = state->dst_addr;
+>  	unsigned long src_addr = state->src_addr;
+>  	uffd_flags_t flags = state->flags;
+> -	pmd_t *dst_pmd = state->pmd;
+>  	struct folio *folio;
+>  	int ret;
+>  
+> -	if (!state->folio) {
+> -		ret = -ENOMEM;
+> -		folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, dst_vma,
+> -					dst_addr);
+> -		if (!folio)
+> -			goto out;
+> +	folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, state->vma, dst_addr);
+> +	if (!folio)
+> +		return -ENOMEM;
+>  
+> -		ret = mfill_copy_folio_locked(folio, src_addr);
+> +	ret = -ENOMEM;
+> +	if (mem_cgroup_charge(folio, state->vma->vm_mm, GFP_KERNEL))
+> +		goto out_release;
+>  
+> +	ret = mfill_copy_folio_locked(folio, src_addr);
+> +	if (unlikely(ret)) {
+>  		/* fallback to copy_from_user outside mmap_lock */
+> -		if (unlikely(ret)) {
+> -			ret = -ENOENT;
+> -			state->folio = folio;
+> -			/* don't free the page */
+> -			goto out;
+> -		}
+> -	} else {
+> -		folio = state->folio;
+> -		state->folio = NULL;
+> +		ret = mfill_copy_folio_retry(state, folio);
 
-Shall I also submit patches to virtio-spec? Please suggest ways forwards.
+Yes, I agree this should work and should avoid the previous ENOENT
+processing that might be hard to follow.  It'll move the complexity into
+mfill_state though (e.g., now it's unknown on the vma lock state after this
+function returns..), but I guess it's fine.
 
-Thanks!
+> +		if (ret)
+> +			goto out_release;
+>  	}
+>  
+>  	/*
+> @@ -442,17 +464,16 @@ static int mfill_atomic_pte_copy(struct mfill_state *state)
+>  	 */
+>  	__folio_mark_uptodate(folio);
 
-Chia-Yu
+Since success path should make sure vma lock held when reaching here, but
+now with mfill_copy_folio_retry()'s presence it's not as clear as before,
+maybe we add an assertion for that here before installing ptes?  No strong
+feelings.
+
+>  
+> -	ret = -ENOMEM;
+> -	if (mem_cgroup_charge(folio, dst_vma->vm_mm, GFP_KERNEL))
+> -		goto out_release;
+> -
+> -	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
+> +	ret = mfill_atomic_install_pte(state->pmd, state->vma, dst_addr,
+>  				       &folio->page, true, flags);
+>  	if (ret)
+>  		goto out_release;
+>  out:
+>  	return ret;
+>  out_release:
+> +	/* Don't return -ENOENT so that our caller won't retry */
+> +	if (ret == -ENOENT)
+> +		ret = -EFAULT;
+
+I recall the code removed is the only path that can return ENOENT?  Then
+maybe this line isn't needed?
+
+>  	folio_put(folio);
+>  	goto out;
+>  }
+> @@ -907,7 +928,8 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+>  			break;
+>  	}
+>  
+> -	mfill_put_vma(&state);
+> +	if (state.vma)
+
+I wonder if we should move this check into mfill_put_vma() directly, it
+might be overlooked if we'll put_vma in other paths otherwise.
+
+> +		mfill_put_vma(&state);
+>  out:
+>  	if (state.folio)
+>  		folio_put(state.folio);
+> -- 
+> 2.51.0
+> 
+
+-- 
+Peter Xu
+
