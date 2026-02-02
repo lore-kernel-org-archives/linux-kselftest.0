@@ -1,296 +1,229 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD1936CE08
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 14:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2CA36CDE4
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 14:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770043098; cv=none; b=pCHx0bej3jqMUJmINfQsP6jPiFI3Irn0TCfE/Bqf536zqe16+/2qr7FkoroR+A6uXa+caf8Jr9aolbzjyBzYlvXNqvvWP8+yLl5+fvo/Su+4oaQrt6FzbFiimZN7+XZOcS6FK/gPdtfrRo3QOQtnMxIN8HgyK1248XEqA6Y9YBA=
+	t=1770043289; cv=none; b=XG8o3k+28yu2BmmUxRZ0h5NOA7Ero3XxsWAgjUX863nC3XIbAccAOmiCOwWVPmJxE4FofkQdYChNXiPS3L6VNxDFBWr7AbEFgVSwtPMswmOjMIjEteyhcDTPiQqKilMGyHjUkfIeoROP8yb1uzVagVMVL64K2kIWtH0nb/s/Xc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770043098; c=relaxed/simple;
-	bh=LTmtOJUbE7mku/xjnEHKOXOrNHA/LOkIWKGhPc+4CiU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nnkKjbqYqZ6sGt8ES5Kgdgdi9dnas2B4L0JnOx7Wz+eLlD03gvv7UgYD+ZrDfna0RO4cZnZqb7BtCowb9B/5Mkmgxy9CwZYhsjpShu1CgVpzbRdOnQ2otdq8sJLQVutZmFyRmmod7BMMpWHA55/ApPm2/UNOYa9ezfpZvTAahwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TOo1gUwF; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770043289; c=relaxed/simple;
+	bh=8611ZDges07A76Up+eMpDh8OqwpOEUfnmIdVKq+fFEs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=X7PLClCyTZ2Ce6ctzE7nM7TSVEk9qy63Rc4feW1ONtuofSfy3TJnsWXTHmRxhFz1kcK8412+dnaMv+AyP8E83PuvZqGkQDBGUCa501dAfpU7MJ/1bZUPafAvrg32KNSmf4ZGSBCx6lZRSrqV10m5fckpJvKeruf9iK1/7SIRquY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XLHE1k09; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TOo1gUwF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770043095;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XLHE1k09"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770043284;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LLPSi3nvHTn4l+eMte4lOVK2lLpRjSH202e/Dy3d0DM=;
-	b=TOo1gUwFtBz9sjZmahFddeqtd4wdQTazX/E4uGTHcOFDfrG3tASUWoYLxxaK/9ISRI4yYy
-	V2x/Re6xj12IOHwjCz5UN5ltUzlwrka8i44bAS9iWsL0qal+RrE+e8p+IiDjMX+5hL+w3p
-	Ig65kmTkWHDlem9zxHcCll4X1dqMdWE=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-523-cm_R2a_KNMOfV1SOjTvf4g-1; Mon,
- 02 Feb 2026 09:38:09 -0500
-X-MC-Unique: cm_R2a_KNMOfV1SOjTvf4g-1
-X-Mimecast-MFC-AGG-ID: cm_R2a_KNMOfV1SOjTvf4g_1770043087
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3DA2B1800371;
-	Mon,  2 Feb 2026 14:38:07 +0000 (UTC)
-Received: from napanee.usersys.redhat.com (unknown [10.22.66.39])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6752030001A7;
-	Mon,  2 Feb 2026 14:38:06 +0000 (UTC)
-Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
-	id C9644C197F; Mon,  2 Feb 2026 09:38:05 -0500 (EST)
-Date: Mon, 2 Feb 2026 09:38:05 -0500
-From: Aristeu Rozanski <aris@redhat.com>
-To: linux-kselftest@vger.kernel.org
-Cc: Aleksa Sarai <cyphar@cyphar.com>, Shuah Khan <shuah@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, liuye <liuye@kylinos.cn>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-mm@kvack.org
-Subject: [PATCH] selftests/memfd: use IPC semaphore instead of SIGSTOP/SIGCONT
-Message-ID: <a7776389-b3d6-4b18-b438-0b0e3ed1fd3b@work>
-References: <7888ed77-da89-41b2-a73e-09038b7c9285@work>
- <20260131132315.62b0b029dc1dd03febe97481@linux-foundation.org>
+	bh=SOP9FsLyggZ0t9qAXd0VsgAmwD5kRYUpSQzoquh1BzA=;
+	b=XLHE1k09NjOU1oGyMjJtUOCi1StlL5o1TlswFOOVw3VMV2pis+4qYfPHyhkgpUb/ZHz79v
+	owoOQn88Ylko60oOFst8WFtGNyDyYXRrTnnCxIzEBi+5/+IycAW1rhuwKo3wTGEw1MpQQv
+	/7PVJXx/QdXJCgQ/6nlv4jqx2j9j5Y4=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v9 1/9] bpf: Extend BPF syscall with common attributes support
+Date: Mon,  2 Feb 2026 22:40:38 +0800
+Message-ID: <20260202144046.30651-2-leon.hwang@linux.dev>
+In-Reply-To: <20260202144046.30651-1-leon.hwang@linux.dev>
+References: <20260202144046.30651-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260131132315.62b0b029dc1dd03febe97481@linux-foundation.org>
-User-Agent: NeoMutt/20241114-35-62db1e
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-selftests/memfd: use IPC semaphore instead of SIGSTOP/SIGCONT
+Extend the BPF syscall to support a set of common attributes shared
+across all BPF commands:
 
-In order to synchronize new processes to test inheritance of
-memfd_noexec sysctl, memfd_test sets up the sysctl with a value before
-creating the new process. The new process then sends itself a SIGSTOP
-in order to wait for the parent to flip the sysctl value and send a
-SIGCONT signal.
+1. 'log_buf': User-provided buffer for storing logs.
+2. 'log_size': Size of the log buffer.
+3. 'log_level': Log verbosity level.
+4. 'log_true_size': The size of log reported by kernel.
 
-This would work as intended if it wasn't the fact that the new process
-is being created with CLONE_NEWPID, which creates a new PID namespace and
-the new process has PID 1 in this namespace. There're restrictions on
-sending signals to PID 1 and, although it's relaxed for other than root
-PID namespace, it's biting us here. In this specific case the SIGSTOP sent
-by the new process is ignored (no error to kill() is returned) and it never
-stops its execution. This is usually not noticiable as the parent usually
-manages to set the new sysctl value before the child has a chance to run
-and the test succeeds. But if you run the test in a loop, it eventually
-reproduces:
+These common attributes are passed as the 4th argument to the BPF
+syscall, with the 5th argument specifying the size of this structure.
 
-	while [ 1 ]; do ./memfd_test >log 2>&1 || break; done; cat log
+To indicate the use of these common attributes from userspace, a new flag
+'BPF_COMMON_ATTRS' ('1 << 16') is introduced. This flag is OR-ed into the
+'cmd' field of the syscall.
 
-So this patch replaces the SIGSTOP/SIGCONT synchronization with IPC
-semaphore.
+When 'cmd & BPF_COMMON_ATTRS' is set, the kernel will copy the common
+attributes from userspace into kernel space for use.
 
-Fixes: 6469b66e3f5a3 (selftests: improve vm.memfd_noexec sysctl tests, 2023-08-14)
-Cc: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: liuye <liuye@kylinos.cn>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-mm@kvack.org
-Signed-off-by: Aristeu Rozanski <aris@redhat.com>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/testing/selftests/memfd/memfd_test.c |  113 ++++++++++++++++++++++++++---
- 1 file changed, 105 insertions(+), 8 deletions(-)
+ include/linux/syscalls.h       |  3 ++-
+ include/uapi/linux/bpf.h       |  8 ++++++++
+ kernel/bpf/syscall.c           | 25 +++++++++++++++++++++----
+ tools/include/uapi/linux/bpf.h |  8 ++++++++
+ 4 files changed, 39 insertions(+), 5 deletions(-)
 
---- linus-2.6.orig/tools/testing/selftests/memfd/memfd_test.c	2026-01-29 16:22:56.094182500 -0500
-+++ linus-2.6/tools/testing/selftests/memfd/memfd_test.c	2026-02-02 09:35:04.887782294 -0500
-@@ -18,6 +18,9 @@ // SPDX-License-Identifier: GPL-2.0
- #include <sys/stat.h>
- #include <sys/syscall.h>
- #include <sys/wait.h>
-+#include <sys/types.h>
-+#include <sys/ipc.h>
-+#include <sys/sem.h>
- #include <unistd.h>
- #include <ctype.h>
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index cf84d98964b2..729659202d77 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -937,7 +937,8 @@ asmlinkage long sys_seccomp(unsigned int op, unsigned int flags,
+ asmlinkage long sys_getrandom(char __user *buf, size_t count,
+ 			      unsigned int flags);
+ asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned int flags);
+-asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size);
++asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size,
++			struct bpf_common_attr __user *attr_common, unsigned int size_common);
+ asmlinkage long sys_execveat(int dfd, const char __user *filename,
+ 			const char __user *const __user *argv,
+ 			const char __user *const __user *envp, int flags);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c8d400b7680a..b2126c9641ec 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -994,6 +994,7 @@ enum bpf_cmd {
+ 	BPF_PROG_STREAM_READ_BY_FD,
+ 	BPF_PROG_ASSOC_STRUCT_OPS,
+ 	__MAX_BPF_CMD,
++	BPF_COMMON_ATTRS = 1 << 16, /* Indicate carrying syscall common attrs. */
+ };
  
-@@ -39,6 +42,20 @@ #define F_SEAL_EXEC	0x0020
- 		    F_SEAL_EXEC)
+ enum bpf_map_type {
+@@ -1500,6 +1501,13 @@ struct bpf_stack_build_id {
+ 	};
+ };
  
- #define MFD_NOEXEC_SEAL	0x0008U
-+union semun {
-+	int val;
-+	struct semid_ds *buf;
-+	unsigned short int *array;
-+	struct seminfo *__buf;
++struct bpf_common_attr {
++	__u64 log_buf;
++	__u32 log_size;
++	__u32 log_level;
++	__u32 log_true_size;
 +};
 +
-+/*
-+ * we use semaphores on nested wait tasks due the use of CLONE_NEWPID: the
-+ * child will be PID 1 and can't send SIGSTOP to themselves due special
-+ * treatment of the init task, so the SIGSTOP/SIGCONT synchronization
-+ * approach can't be used here.
-+ */
-+#define SEM_KEY 0xdeadbeef
+ #define BPF_OBJ_NAME_LEN 16U
  
- /*
-  * Default is not to test hugetlbfs
-@@ -1333,8 +1350,22 @@ return 0;
- 
- static int sysctl_nested_wait(void *arg)
- {
--	/* Wait for a SIGCONT. */
--	kill(getpid(), SIGSTOP);
-+	int sem = semget(SEM_KEY, 1, 0600);
-+	struct sembuf sembuf;
-+
-+	if (sem < 0) {
-+		perror("semget:");
-+		abort();
-+	}
-+	sembuf.sem_num = 0;
-+	sembuf.sem_flg = 0;
-+	sembuf.sem_op = 0;
-+
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		abort();
-+	}
-+
- 	return sysctl_nested(arg);
+ enum {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 5f59dd47a5b1..a58b16735e86 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -6176,8 +6176,10 @@ static int prog_assoc_struct_ops(union bpf_attr *attr)
+ 	return ret;
  }
  
-@@ -1355,7 +1386,9 @@ sysctl_fail_write("0");
- 
- static int sysctl_nested_child(void *arg)
+-static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
++static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
++		     bpfptr_t uattr_common, unsigned int size_common)
  {
--	int pid;
-+	int pid, sem;
-+	union semun semun;
-+	struct sembuf sembuf;
++	struct bpf_common_attr attr_common;
+ 	union bpf_attr attr;
+ 	int err;
  
- 	printf("%s nested sysctl 0\n", memfd_str);
- 	sysctl_assert_write("0");
-@@ -1389,23 +1422,53 @@ sysctl_assert_write("0");
- 			   test_sysctl_sysctl2_failset);
- 	join_thread(pid);
+@@ -6191,6 +6193,20 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
+ 	if (copy_from_bpfptr(&attr, uattr, size) != 0)
+ 		return -EFAULT;
  
-+	sem = semget(SEM_KEY, 1, IPC_CREAT | 0600);
-+	if (sem < 0) {
-+		perror("semget:");
-+		return 1;
-+	}
-+	semun.val = 1;
-+	sembuf.sem_op = -1;
-+	sembuf.sem_flg = 0;
-+	sembuf.sem_num = 0;
++	memset(&attr_common, 0, sizeof(attr_common));
++	if (cmd & BPF_COMMON_ATTRS) {
++		err = bpf_check_uarg_tail_zero(uattr_common, sizeof(attr_common), size_common);
++		if (err)
++			return err;
 +
- 	/* Verify that the rules are actually inherited after fork. */
- 	printf("%s nested sysctl 0 -> 1 after fork\n", memfd_str);
- 	sysctl_assert_write("0");
- 
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
++		cmd &= ~BPF_COMMON_ATTRS;
++		size_common = min_t(u32, size_common, sizeof(attr_common));
++		if (copy_from_bpfptr(&attr_common, uattr_common, size_common) != 0)
++			return -EFAULT;
++	} else {
++		size_common = 0;
 +	}
 +
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl1_failset);
- 	sysctl_assert_write("1");
--	kill(pid, SIGCONT);
-+
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
- 	printf("%s nested sysctl 0 -> 2 after fork\n", memfd_str);
- 	sysctl_assert_write("0");
- 
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl2_failset);
- 	sysctl_assert_write("2");
--	kill(pid, SIGCONT);
-+
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
- 	/*
-@@ -1415,28 +1478,62 @@ sysctl_assert_write("0");
- 	 */
- 	printf("%s nested sysctl 2 -> 1 after fork\n", memfd_str);
- 	sysctl_assert_write("2");
-+
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl2);
- 	sysctl_assert_write("1");
--	kill(pid, SIGCONT);
-+
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
- 	printf("%s nested sysctl 2 -> 0 after fork\n", memfd_str);
- 	sysctl_assert_write("2");
-+
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl2);
- 	sysctl_assert_write("0");
--	kill(pid, SIGCONT);
-+
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
- 	printf("%s nested sysctl 1 -> 0 after fork\n", memfd_str);
- 	sysctl_assert_write("1");
-+
-+	if (semctl(sem, 0, SETVAL, semun) < 0) {
-+		perror("semctl:");
-+		return 1;
-+	}
-+
- 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
- 			   test_sysctl_sysctl1);
- 	sysctl_assert_write("0");
--	kill(pid, SIGCONT);
-+	/* Allow child to continue */
-+	if (semop(sem, &sembuf, 1) < 0) {
-+		perror("semop:");
-+		return 1;
-+	}
- 	join_thread(pid);
- 
-+	semctl(sem, 0, IPC_RMID);
-+
- 	return 0;
+ 	err = security_bpf(cmd, &attr, size, uattr.is_kernel);
+ 	if (err < 0)
+ 		return err;
+@@ -6326,9 +6342,10 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
+ 	return err;
  }
  
+-SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)
++SYSCALL_DEFINE5(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size,
++		struct bpf_common_attr __user *, uattr_common, unsigned int, size_common)
+ {
+-	return __sys_bpf(cmd, USER_BPFPTR(uattr), size);
++	return __sys_bpf(cmd, USER_BPFPTR(uattr), size, USER_BPFPTR(uattr_common), size_common);
+ }
+ 
+ static bool syscall_prog_is_valid_access(int off, int size,
+@@ -6359,7 +6376,7 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
+ 	default:
+ 		return -EINVAL;
+ 	}
+-	return __sys_bpf(cmd, KERNEL_BPFPTR(attr), attr_size);
++	return __sys_bpf(cmd, KERNEL_BPFPTR(attr), attr_size, KERNEL_BPFPTR(NULL), 0);
+ }
+ 
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 5e38b4887de6..c4934c2370fd 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -994,6 +994,7 @@ enum bpf_cmd {
+ 	BPF_PROG_STREAM_READ_BY_FD,
+ 	BPF_PROG_ASSOC_STRUCT_OPS,
+ 	__MAX_BPF_CMD,
++	BPF_COMMON_ATTRS = 1 << 16, /* Indicate carrying syscall common attrs. */
+ };
+ 
+ enum bpf_map_type {
+@@ -1500,6 +1501,13 @@ struct bpf_stack_build_id {
+ 	};
+ };
+ 
++struct bpf_common_attr {
++	__u64 log_buf;
++	__u32 log_size;
++	__u32 log_level;
++	__u32 log_true_size;
++};
++
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+ enum {
+-- 
+2.52.0
 
