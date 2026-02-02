@@ -1,125 +1,130 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53BE23EA8B
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 12:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770034962; cv=pass; b=GG/AX6nXl+w1UAcOLLWJm/s5S5FoQYL83JUmWZVf9mWU+ohamOjBAh1ZVtWTv0ACnfH9OgI9ffxmoDp8R8DlCtOZHsEl44baneNDyUFvYhwGDFevBpT81AsoWo91Q9ALbaxWv5QOjM0r9tpKh+2b+zMmYgWUTV1uMEmuu/zuV6s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770034962; c=relaxed/simple;
-	bh=9pfwSnYRbuqMRB57vP+4N+UsP6yRFCNRCgCrL1+OKPA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F48e/YhF93/qy1joU/Q8+C1J0QuDWevZducOkTL4ejIpi3ojlseXfE/HKF+lbnJLxOEy7Wuc+vr0jn5zz/mC48K6bUSh/ihU4BbhiQ5ij+djRo5OU4o21ud7SxfuFSqoW89TODGNc853JXURbBwOicUWFgjZjB1xPwc/EA5H+t4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1KZL/wTg; arc=pass smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E64035E53C;
+	Mon,  2 Feb 2026 13:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770037539; cv=none; b=jT6W1ifUOGqJXcH7MwbD+lhClZR2saAL85Bquqaay+eZSLt1cktl9AL8O9kbQzYE8OFwaTzX78lF8lFGOElDbd2Omw8Iv5LtpsCHKpYluCmxJiRdDaXwldlJxibj9i4LlITK8wbjERFAKsiTJ37f9U9KXDfE5XdfBdwI2CsHLoU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770037539; c=relaxed/simple;
+	bh=F8crWnNiW1I5eGPcpKlPggbez0s5Ewo7AQLN4ei6+kM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GijowU/UqTsYXoS0fIMrKtl6q+CbGj8s9wbyBbbr6UftcVfJQJwzOpoxOYeQxUR6RzEjX5eZfuFPtkgav5NWZ1fyd9TBA1XQzPW2aUXKgIpIuGjgc/95pCPyqvCYEB0nnwVRgpkNmwz2waYisvjhEAdRctVC269z9GUxMNzMguI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pF3ZFb+y; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1KZL/wTg"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-5029af2b4bcso23851401cf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 04:22:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770034960; cv=none;
-        d=google.com; s=arc-20240605;
-        b=KFiWRQyzA96fFLEhdN4wZvmH2IvpQ893KCuFeFHZo9WaptByiHI+WuerQoMdeHNMqQ
-         PF9Djb4MxWsLIaOtGDYYJIoTWX1XBsebGKm1PByy19VJoLo2KXpDQhKKHMlmiOIG1Q2I
-         J+TPk7oWimbzuaDYEwKVoImK/iWEMReSkXeE6piV9/eI1TAgz6xYbDRem3of2IDD82lT
-         8hIwsi9PdNEMvNsW+HhaA/s/hwCojl4+3q9RI6E4Nym82M1Cnq0zN+cqVV0d9C7IUP3a
-         BeAIu1mno3tzdS9zoFqHlhmpYUooJUU5abmhx1SWxLVwwU4g06XRY6OzpgcwVHuizKid
-         MNiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9pfwSnYRbuqMRB57vP+4N+UsP6yRFCNRCgCrL1+OKPA=;
-        fh=Wyv3K81bLCLv8AwIFH+alVyjNb4FwV/Q4UqUrb7iZHo=;
-        b=Czvlo7cHBOaaLp+i2XW47xtf58QsjICFy8TEAN+TZuy7IVKVyyBsKl7sRiQHoM271X
-         q7XEumMEtfTaBa0Uf8OcKDMYN+RquKQQxSGmLAfKEMhctdv9FFepQBoaQ4wFwhvV3w1H
-         u+W4sktlO5GG0yn4GcTfCU1vUe8+YihM5srg6DSKAhQdUAN2pOosRjms6sunnW1WC/UT
-         rRIMfWlMJuJWQ78O0i60TDhCgHSqBs2/3OfIH5gUecRxBg4ahvBX+PCG3Dq8Mg+71Bbe
-         gTKWf3BkXdUP0dtELF7tTvJxJ4uQJZ1wfxbE9kgRaSRcAxl1a73olKz/yxlf4xG2HIWi
-         xDRg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770034960; x=1770639760; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9pfwSnYRbuqMRB57vP+4N+UsP6yRFCNRCgCrL1+OKPA=;
-        b=1KZL/wTgAQse6U0No6nNXtbbo/oLIL90JB4EH8oXLM/7VVwimrmufuFL8rHuNgV9eq
-         yRXJ0K3bpzXiajQ6vB2NVlRW4m0Q+kT1n4Zn3ml8x7RUEzfA0gfBzfVOi/jw0xgWaOfD
-         7D4VMkLdB6VElXXGX9QPEXfwLYmJoGcJbpDTR5DgANgIA2QksNnaRBTIVdRWFgAC8LSY
-         PfMRitsnmA+ENOPPWOdesjy1VjOpKMldC/AbNEyFzL3DOf5yKeC/3/2tr9feC2uB+gRK
-         OXXTqruShJK7Sg/T3sNvEwyOJPFbY1ZDjxuzBLQFMUcje/KwbWOT7QcbSExzZa78cdDm
-         QJ4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770034960; x=1770639760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9pfwSnYRbuqMRB57vP+4N+UsP6yRFCNRCgCrL1+OKPA=;
-        b=v2F6hQXc/1EA80diiz0CdLv9RcXtOjfk7bUj67uJLqZyTCg8ZD0zUiLZ9STvyZ+qit
-         4qzZ1Aowy+H4+8RA7nEP3iFBPQbtK4Seo1rtZaJo71NlDI4AGa/JQsZkFI2haHnpC2al
-         qqapl7yeg80oh6iQuE8mZj0GBLBZb03FAgYIZekpyS2eL1wJW2NIIre1/cLlwnu3dZqZ
-         g7OX+QLrrmuk2DjUJTwr2ZkgesO3IABvGnN8oaV9ePCz/jhB/6j8m0/kLerKTdxrCT0J
-         POExZPMcRzNymS8UGNhWmxMTlmpsZ2fQcdykkkjOss8gbkSHmp9iQgbChW0aQ50DMzv6
-         BuJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUosdyg3urmW7sOoNUiAIOTRHa+Itr1kGERUw3VNKEzs+nhfPtRJrekxMoImdInTpS219/OM5VTlsKIDwp0t3Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0CAhxP52tcUN2i+06MFFNG3e9ZNn2IoA2ORmlDf+4wKI1xVfU
-	0ppy3z1WkhjOOabOS3Xgj+tMtTzSnQNN7FTHCrRgDSmIGSL9+k+q1O/5qT/A6bKl+8nsGYYGCWX
-	EgedeUkr6O+W2+UmVBj4cLKbGRYZladrGz7wbYuIM
-X-Gm-Gg: AZuq6aLbt6GhtPova9dgasbG40T1fmyUakwBhcQKAJZhDp/iBJZEyXCuI1WOdAZ+jYw
-	sWAP6Vv/P27NMmThzOkYE4bfQkIeeGMVGcuisnUl8yEGoMM156124VAlc4Kgi+M6fNBPY5sy4o3
-	8eTOOs9dOAmxGSDKCeWtMxFL007xXKaz/E0/U6vI1bZ3BVIVMitPCkbKCO0TadpDpGYILDIwN/E
-	BUlh0+qKEgJyXGWr4AQWY0oltpxCDN4/0m6ZvzcfIrRjkf8mGqVRCbO81eDCS43XKoWhs7R8RdB
-	gRc8Gg==
-X-Received: by 2002:ac8:5a8c:0:b0:4ed:b83f:78a3 with SMTP id
- d75a77b69052e-505d2264074mr140685471cf.47.1770034959265; Mon, 02 Feb 2026
- 04:22:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pF3ZFb+y"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=WjzS76ZEx91D+z7A9/8sYiyzf4PTQPs3YN9XfWKCgtc=; b=pF3ZFb+yciTFja/40tXjEOuvgo
+	yrElhcy7bKt/xk0cEvyTjkRke0yv5oIN5Ml7PRqiOmjxGKbkydNnuuZM7Os8SeJ6+d+2nFVPT6wpa
+	SfQ53pF/16SfXLZz7KLbcKN9OKr17D3x8HDLP2Cq0fnz0g3hspkWDvqlXedI2UNRrSa942SK+/HLs
+	RATTy5+7bp5yclCUCIKklffARUoMxjFG0sFUPof5fSGTz2fHE7AIjoIvoVt1VfLmAeS0yHXOZ8gjf
+	MFN7vtryUH/v1T/HWsxW9q+ribGGxVggE3aVjE1OnfpPdADE7d/ey0hTWe+cryQbNlzw72yi51l0v
+	6RqZmtdA==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vmtcN-0000000GWAx-23vt;
+	Mon, 02 Feb 2026 13:05:27 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id DCC80300208; Mon, 02 Feb 2026 14:05:26 +0100 (CET)
+Date: Mon, 2 Feb 2026 14:05:26 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Waiman Long <longman@redhat.com>
+Cc: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH/for-next v2 1/2] cgroup/cpuset: Defer
+ housekeeping_update() call from CPU hotplug to workqueue
+Message-ID: <20260202130526.GE1395266@noisy.programming.kicks-ass.net>
+References: <20260130154254.1422113-1-longman@redhat.com>
+ <20260130154254.1422113-2-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1770032084.git.pabeni@redhat.com> <562638dbebb3b15424220e26a180274b387e2a88.1770032084.git.pabeni@redhat.com>
-In-Reply-To: <562638dbebb3b15424220e26a180274b387e2a88.1770032084.git.pabeni@redhat.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Mon, 2 Feb 2026 13:22:27 +0100
-X-Gm-Features: AZwV_QgvBa-oT_GRK6FHEVAJW1yt1Df7ZjFVbgtcNuFODuwiXmakPwocOjt-MqY
-Message-ID: <CANn89i+fAQ3fCvJwmCJ9gvN4Yx9Xms0hTMdPrJs_qLnNnZdL4g@mail.gmail.com>
-Subject: Re: [PATCH v2 net 1/2] net: gro: fix outer network offset
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Willem de Bruijn <willemb@google.com>, Richard Gobert <richardbgobert@gmail.com>, 
-	linux-kselftest@vger.kernel.org, aleksander.lobakin@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260130154254.1422113-2-longman@redhat.com>
 
-On Mon, Feb 2, 2026 at 12:43=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> The udp GRO complete stage assumes that all the packets inserted the RX
-> have the `encapsulation` flag zeroed. Such assumption is not true, as a
-> few H/W NICs can set such flag when H/W offloading the checksum for
-> an UDP encapsulated traffic, the tun driver can inject GSO packets with
-> UDP encapsulation and the problematic layout can also be created via
-> a veth based setup.
->
-> Due to the above, in the problematic scenarios, udp4_gro_complete() uses
-> the wrong network offset (inner instead of outer) to compute the outer
-> UDP header pseudo checksum, leading to csum validation errors later on
-> in packet processing.
->
-> Address the issue always clearing the encapsulation flag at GRO completio=
-n
-> time. Such flag will be set again as needed for encapsulated packets by
-> udp_gro_complete().
->
-> Fixes: 5ef31ea5d053 ("net: gro: fix udp bad offset in socket lookup by ad=
-ding {inner_}network_offset to napi_gro_cb")
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> ---
+On Fri, Jan 30, 2026 at 10:42:53AM -0500, Waiman Long wrote:
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+> +/* Both cpuset_mutex and cpus_read_locked acquired */
+> +static bool cpuset_locked;
+> +
+>  /*
+>   * A flag to force sched domain rebuild at the end of an operation.
+>   * It can be set in
+> @@ -285,10 +288,12 @@ void cpuset_full_lock(void)
+>  {
+>  	cpus_read_lock();
+>  	mutex_lock(&cpuset_mutex);
+> +	cpuset_locked = true;
+>  }
+>  
+>  void cpuset_full_unlock(void)
+>  {
+> +	cpuset_locked = false;
+>  	mutex_unlock(&cpuset_mutex);
+>  	cpus_read_unlock();
+>  }
+
+> @@ -1293,14 +1308,30 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
+>   */
+>  static void update_isolation_cpumasks(void)
+>  {
+> -	int ret;
+> +	static DECLARE_WORK(isolcpus_work, isolcpus_workfn);
+>  
+>  	if (!isolated_cpus_updating)
+>  		return;
+>  
+> -	ret = housekeeping_update(isolated_cpus);
+> -	WARN_ON_ONCE(ret < 0);
+> +	/*
+> +	 * This function can be reached either directly from regular cpuset
+> +	 * control file write (cpuset_locked) or via hotplug (cpus_write_lock
+> +	 * && cpuset_mutex held). In the later case, we defer the
+> +	 * housekeeping_update() call to the system_unbound_wq to avoid the
+> +	 * possibility of deadlock. This also means that there will be a short
+> +	 * period of time where HK_TYPE_DOMAIN housekeeping cpumask will lag
+> +	 * behind isolated_cpus.
+> +	 */
+> +	if (!cpuset_locked) {
+
+I agree with Chen that this is bloody terrible.
+
+At the very least this should have:
+
+	lockdep_assert_held(&cpuset_mutex);
+
+But ideally you'd do patches against this and tip/locking/core that add
+proper __guarded_by() annotations to this.
+
+> +		/*
+> +		 * We rely on WORK_STRUCT_PENDING_BIT to not requeue a work
+> +		 * item that is still pending.
+> +		 */
+> +		queue_work(system_unbound_wq, &isolcpus_work);
+> +		return;
+> +	}
+>  
+> +	WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
+>  	isolated_cpus_updating = false;
+>  }
