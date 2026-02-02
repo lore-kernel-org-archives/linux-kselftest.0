@@ -1,189 +1,132 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DE21C01;
-	Mon,  2 Feb 2026 01:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9D41DFE12
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 01:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769994715; cv=none; b=mnE+SXH5nYD5R4KqyxG2Hn7bg779gPo8dRAJ4hqZ0nHX5aKSDBoroQKpEVftNfTZxDC3D22Lhe4pEqCtNzJZ3Cpp0qHqK9RA35kqV63IiwtU8lMqqjn2bGWoR5t1yS60H3lMv5uU1TPyxNJ7p8hP1DrWk7JNjt23qfJZbLmBRzY=
+	t=1769994905; cv=none; b=cNZTAXHhng+Z2xQRtNCa5YP8rLtUzXODHgRQLFdIJ7v2h1+AdzU1hY0JZXl61UIC6HOaqZwd9QGqbxaLwxwEL+73INrkI+Sb7lLiuDfYIyg5TSsoR5rP82Ixyf1ij6+sy7N1Zi64n1tFWuCFxg8LmLuD4IujXU+/L/aGoiODBOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769994715; c=relaxed/simple;
-	bh=l/bCTFmjkufIayN9AzcLxFD71b/jsW+nxnHGpX4cLd8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ADYWQTW+gLhdkliUqlW6eVfP/JsKLC99EW+VBCYJ2sGrUN36Bb3zyo3M+0hkL4xmf5JRv47+0v/l4N4nmC9R2r12fM0/BeTQ33KjLYyEMnpM99N1hyxxKCqAZjuFcH42ot2GcbSmEs7GvrKM+L7iFvgd706O+YYjkMyswMKzUM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f47qN40PlzKHMJg;
-	Mon,  2 Feb 2026 09:11:28 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 0106E40574;
-	Mon,  2 Feb 2026 09:11:48 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP4 (Coremail) with SMTP id gCh0CgA34_PR+X9pxNnKFw--.29041S2;
-	Mon, 02 Feb 2026 09:11:47 +0800 (CST)
-Message-ID: <0c26006b-fe0f-4743-88d0-29b21fa82ee7@huaweicloud.com>
-Date: Mon, 2 Feb 2026 09:11:45 +0800
+	s=arc-20240116; t=1769994905; c=relaxed/simple;
+	bh=syzntiNe7cMdUYOVhT2KP31mPnru7JZE8PNdiV1OMh0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EmCcTUC6aq2p61qQmtqA2TObhb5leu0rqTmdgHs4JoEh/waoMa77EXqslg4Qo88aTIN/UGkNpMo3aMb5p/6LxIqEsqIGrP1v73owMf6ZIStcvfX+MxPikMrs64qH6Pp9lwbj0np8hSVlgUPJ8LsMAU6dM3H3pG/uT7/n0oyXG+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LBeRH6/n; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LBeRH6/n"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2a743050256so24354655ad.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Feb 2026 17:15:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769994903; x=1770599703; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wuc/jGt1/k/NrtrWQcCBMsVvTpJg7wRrACpBUDrc7M0=;
+        b=LBeRH6/nQgbjxFEdwr+45orN6IfDgjSOUi1mBUpJ4E3Ghxq6uzNkk9QXhcTFYf41N6
+         R/zjBEnB8+zIq3Kffxk8HJJtZHQp1K5NQxNzdQ/MoQqvsEJl6P/wJ8tRIMlvDmlXfcqq
+         jLAh/Qgb0w69Jasr4o9n9TEs5Ul6jAagAN8DQEw0oKWdSPjp7Yph3WmT5qs/fAQWiAb+
+         dYmjS+YwfrN6ZPnOdUPTg6/4XTLG32clwOlOBnW2zitwJoskBU4CJOekuH3Cgqp1XCCy
+         EX6fSn7ZUyzPcq379W8eUKwX5UZHrz84DCpnhDMDXo2Ik7pWnr0bYrT7ld8R9BxZuCOa
+         bqdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769994903; x=1770599703;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wuc/jGt1/k/NrtrWQcCBMsVvTpJg7wRrACpBUDrc7M0=;
+        b=m1lJ22oExmUmJuF41H/k/nPvBv8cZW72STyT5LJ2taBgdrGuV1JyQIzzooJU/s4oj5
+         7qCEvxrfqfGE1KLS4Tbr1USmKflRTP8ygG2fSIgwhgyzSPFJIM+Lxi4d5AWgJFliZztm
+         qahoVv3dJ133pnnqoad5ikMtCKb5WuDO3JKRqPgmoJD7dnhXfcPPvUSV/drbWogAlqIj
+         hdsGGo8jKZgT17/FXvFahva+LBknuuF4fsU2paTT3a2WdTZR/RdZK95foab0GcLgslOt
+         /ShKMuofLmxPWjFNbWFqoPUrEWzaXSKdFmQ3lq2qGRsM5kNB8LBEQQHkhdf4WaNxtyV7
+         QhxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsskY6OzSsbLD/uO0MoomEKoa+Gk7BCZUqCi6GH3Tt6PKFqIfmBDSi38BSWCCNniKiPnhutWpO77nOnnC/bsg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+7hZy/zQrjvoN3AcIBi8kKFdM4IF3oFDezne5jWC9SLplOo82
+	TMcEtl8OwlwxIokwu9+7VZCnZ7CnqMaxAXh00dnImfVyKoWRQ/6PTX8g
+X-Gm-Gg: AZuq6aJiELzhQlzGJRfYmJKXHRVCWsa4T8lFw0wIjXBT1kQoIwqPgfzG5RopxbRIjj5
+	xxNhCztK3Ryug5txRoDXGJCAF4UFu0TngUFemks/w3YVfpvaAl1jJh1WPpSZwhIVIkmGwLJ1xVV
+	nRfszGYuuIqyYlkoJK9+krrKCH/mW+nQ0j3639d05MpEDuR1PV1Pg/H11fPXFOt1yw6DM3Ta/QZ
+	hYjdWPQyCaI0kVJYUmdHUoVWTthl8zDwYhjkSwwMtNn8SpvM1UyPgfroda5a9Mn9JNMPTuT/UtL
+	DQm1tREF+oEEWcbXt/pPRK0jVMyUMJxN5CSWuM3Ezw2l9zSdywQJqGPG57QDtRxKPXhNjcNKgmL
+	PQLsjyOMIosolkTNbvkIeQgIc3ARwrzw9U3HkuABohrAcTWPpVDUFWyQSsoTbArdvqdpWD215r/
+	E26yEXmItkHQuho9A=
+X-Received: by 2002:a17:902:db01:b0:2a0:d692:5681 with SMTP id d9443c01a7336-2a8d96df1b2mr94411485ad.24.1769994903033;
+        Sun, 01 Feb 2026 17:15:03 -0800 (PST)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c6427da8441sm11937631a12.9.2026.02.01.17.14.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Feb 2026 17:15:02 -0800 (PST)
+Date: Mon, 2 Feb 2026 01:14:55 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+	Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+	Mahesh Bandewar <maheshb@google.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 net-next 0/3] bonding: fix 802.3ad churn machine and
+ port state issues
+Message-ID: <aX_6jyAQaDoqsR3G@fedora>
+References: <20260114064921.57686-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH/for-next v2 2/2] cgroup/cpuset: Introduce a new top level
- cpuset_top_mutex
-To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260130154254.1422113-1-longman@redhat.com>
- <20260130154254.1422113-3-longman@redhat.com>
- <62022397-287c-4046-94de-058ff87ad728@huaweicloud.com>
- <a2fc3448-dd5c-42fe-ac21-c8e1c10e94b4@redhat.com>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <a2fc3448-dd5c-42fe-ac21-c8e1c10e94b4@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgA34_PR+X9pxNnKFw--.29041S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw13WrWxury5Kw1xKr17ZFb_yoW7WFW7pF
-	ZY9FyIyrW5Kr97Cw17tr4rXr18t3y7Ga17Jrn5G348AFsIvF1v9F4jqrn3uF98KrZ7C3y2
-	vas0g3y7Z34DAw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	bAw3UUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260114064921.57686-1-liuhangbin@gmail.com>
 
 
+Hi Jakub, Paolo,
 
-On 2026/2/1 7:13, Waiman Long wrote:
+Is there anything I should do for this patchset ?
+
+Thanks
+Hangbin
+On Wed, Jan 14, 2026 at 06:49:18AM +0000, Hangbin Liu wrote:
+> This series fixes two issues in the bonding 802.3ad implementation
+> related to port state management and churn detection:
 > 
-> On 1/30/26 9:53 PM, Chen Ridong wrote:
->>
->> On 2026/1/30 23:42, Waiman Long wrote:
->>> The current cpuset partition code is able to dynamically update
->>> the sched domains of a running system and the corresponding
->>> HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
->>> "isolcpus=domain,..." boot command line feature at run time.
->>>
->>> The housekeeping cpumask update requires flushing a number of different
->>> workqueues which may not be safe with cpus_read_lock() held as the
->>> workqueue flushing code may acquire cpus_read_lock() or acquiring locks
->>> which have locking dependency with cpus_read_lock() down the chain. Below
->>> is an example of such circular locking problem.
->>>
->>>    ======================================================
->>>    WARNING: possible circular locking dependency detected
->>>    6.18.0-test+ #2 Tainted: G S
->>>    ------------------------------------------------------
->>>    test_cpuset_prs/10971 is trying to acquire lock:
->>>    ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at:
->>> touch_wq_lockdep_map+0x7a/0x180
->>>
->>>    but task is already holding lock:
->>>    ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at:
->>> cpuset_partition_write+0x85/0x130
->>>
->>>    which lock already depends on the new lock.
->>>
->>>    the existing dependency chain (in reverse order) is:
->>>    -> #4 (cpuset_mutex){+.+.}-{4:4}:
->>>    -> #3 (cpu_hotplug_lock){++++}-{0:0}:
->>>    -> #2 (rtnl_mutex){+.+.}-{4:4}:
->>>    -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
->>>    -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
->>>
->>>    Chain exists of:
->>>      (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
->>>
->>>    5 locks held by test_cpuset_prs/10971:
->>>     #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
->>>     #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at:
->>> kernfs_fop_write_iter+0x260/0x5f0
->>>     #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at:
->>> kernfs_fop_write_iter+0x2b6/0x5f0
->>>     #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at:
->>> cpuset_partition_write+0x77/0x130
->>>     #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at:
->>> cpuset_partition_write+0x85/0x130
->>>
->>>    Call Trace:
->>>     <TASK>
->>>       :
->>>     touch_wq_lockdep_map+0x93/0x180
->>>     __flush_workqueue+0x111/0x10b0
->>>     housekeeping_update+0x12d/0x2d0
->>>     update_parent_effective_cpumask+0x595/0x2440
->>>     update_prstate+0x89d/0xce0
->>>     cpuset_partition_write+0xc5/0x130
->>>     cgroup_file_write+0x1a5/0x680
->>>     kernfs_fop_write_iter+0x3df/0x5f0
->>>     vfs_write+0x525/0xfd0
->>>     ksys_write+0xf9/0x1d0
->>>     do_syscall_64+0x95/0x520
->>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
->>>
->>> To avoid such a circular locking dependency problem, we have to
->>> call housekeeping_update() without holding the cpus_read_lock() and
->>> cpuset_mutex. The current set of wq's flushed by housekeeping_update()
->>> may not have work functions that call cpus_read_lock() directly,
->>> but we are likely to extend the list of wq's that are flushed in the
->>> future. Moreover, the current set of work functions may hold locks that
->>> may have cpu_hotplug_lock down the dependency chain.
->>>
->>> One way to do that is to introduce a new top level cpuset_top_mutex
->>> which will be acquired first.  This new cpuset_top_mutex will provide
->>> the need mutual exclusion without the need to hold cpus_read_lock().
->>>
->> Introducing a new global lock warrants careful consideration. I wonder if we
->> could make all updates to isolated_cpus asynchronous. If that is feasible, we
->> could avoid adding a global lock altogether. If not, we need to clarify which
->> updates must remain synchronous and which ones can be handled asynchronously.
+> 1. When disabling a port, we need to set AD_RX_PORT_DISABLED to ensure
+>    proper state machine transitions, preventing ports from getting stuck
+>    in AD_RX_CURRENT state.
 > 
-> Almost all the cpuset code are run with cpuset_mutex held with either
-> cpus_read_lock or cpus_write_lock. So there is no concurrent access/update to
-> any of the cpuset internal data. The new cpuset_top_mutex is aded to resolve the
-> possible deadlock scenarios with the new housekeeping_update() call without
-> breaking this model. Allow parallel concurrent access/update to cpuset data will
-> greatly complicate the code and we will likely missed some corner cases that we
-
-I agree with that point. However, we already have paths where isolated_cpus is
-updated asynchronously, meaning parallel concurrent access/update is already
-happening. Therefore, we cannot entirely avoid such scenarios, so why not keep
-the locking simple(make all updates to isolated_cpus asynchronous)?
-
-This is just a thought in my mind.
-
-> have to fix in the future. We will only do that if cpuset is in a critical
-> performance path, but it is not. It is not just isolated_cpus that we are
-> protecting, all the other cpuset data may be at risk if we don't have another
-> top level mutex to protect them.
+> 2. The ad_churn_machine implementation is restructured to follow IEEE
+>    802.1AX-2014 specifications correctly. The current implementation has
+>    several issues: it doesn't transition to "none" state immediately when
+>    synchronization is achieved, and can get stuck in churned state in
+>    multi-aggregator scenarios.
 > 
-> Cheers,
-> Longman
+> 3. Selftests are enhanced to validate both mux state machine and churn
+>    state logic under aggregator selection and failover scenarios.
 > 
-
--- 
-Best regards,
-Ridong
-
+> These changes ensure proper LACP state machine behavior and fix issues
+> where ports could remain in incorrect states during aggregator failover.
+> 
+> 
+> v2:
+>   * The changes are large and not urgent. Post to net-next as Paolo suggested
+>   * set AD_RX_PORT_DISABLED only in ad_agg_selection_logic to avoid side effect. (Paolo Abeni)
+>   * remove actor_churn as it can only be true when the state is ACTOR_CHURN (Paolo Abeni)
+>   * remove AD_PORT_CHURNED since we don't need it anywhere (Paolo Abeni)
+>   * I didn't add new helper for ad_churn_machine() as it looks not help much.
+> 
+> v1: https://lore.kernel.org/netdev/20251124043310.34073-1-liuhangbin@gmail.com
+> 
+> Hangbin Liu (3):
+>   bonding: set AD_RX_PORT_DISABLED when disabling a port
+>   bonding: restructure ad_churn_machine
+>   selftests: bonding: add mux and churn state testing
+> 
+>  drivers/net/bonding/bond_3ad.c                | 97 ++++++++++++++-----
+>  .../selftests/drivers/net/bonding/Makefile    |  2 +-
+>  ...nd_lacp_prio.sh => bond_lacp_ad_select.sh} | 73 ++++++++++++++
+>  3 files changed, 146 insertions(+), 26 deletions(-)
+>  rename tools/testing/selftests/drivers/net/bonding/{bond_lacp_prio.sh => bond_lacp_ad_select.sh} (64%)
+> 
+> -- 
+> 2.50.1
+> 
