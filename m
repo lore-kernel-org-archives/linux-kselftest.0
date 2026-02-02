@@ -1,247 +1,296 @@
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010024.outbound.protection.outlook.com [52.101.69.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5903C0C;
-	Mon,  2 Feb 2026 14:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.24
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770041436; cv=fail; b=jlKuoE9h7ey9uIIMqP8Zj8FuZwClgqo+JMXg+CPPs7hYoOG6KMHjrP2KAbMRxsV6xLySsx1r0c2lxDysuXLPIMATqcbn4NK8BC/1F8rgH0hd44Pdd+gAPU/fhSoV016pg/2PsCVFWLBRmub++k7CakSBZBwQ1bBbq063+kDWs3g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770041436; c=relaxed/simple;
-	bh=0/pjI7LEPLjoCvOWp7H9JcjXyC8yVewW9SjWbv9z/54=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=McYtHdehjSStyGTaSQy8q4eZ/7rTNVRvEXSnVXzXtfkAxmcBs0pOVW9k/JTtc2ZnVQ+cauAhNLL6MCyF+QxovrHoL1LKY0OOfvDgfq8QBXet+7qcGMwP9i8el8dosM/2V0yr7kBZpLGsfbBdQFQHDnfkoWLuJwPwWOk2D4sbT+c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=lm69v6Hi; arc=fail smtp.client-ip=52.101.69.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD1936CE08
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 14:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770043098; cv=none; b=pCHx0bej3jqMUJmINfQsP6jPiFI3Irn0TCfE/Bqf536zqe16+/2qr7FkoroR+A6uXa+caf8Jr9aolbzjyBzYlvXNqvvWP8+yLl5+fvo/Su+4oaQrt6FzbFiimZN7+XZOcS6FK/gPdtfrRo3QOQtnMxIN8HgyK1248XEqA6Y9YBA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770043098; c=relaxed/simple;
+	bh=LTmtOJUbE7mku/xjnEHKOXOrNHA/LOkIWKGhPc+4CiU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nnkKjbqYqZ6sGt8ES5Kgdgdi9dnas2B4L0JnOx7Wz+eLlD03gvv7UgYD+ZrDfna0RO4cZnZqb7BtCowb9B/5Mkmgxy9CwZYhsjpShu1CgVpzbRdOnQ2otdq8sJLQVutZmFyRmmod7BMMpWHA55/ApPm2/UNOYa9ezfpZvTAahwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TOo1gUwF; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="lm69v6Hi"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zJG1byOQpAp/Iv3o4OETOTmxiyHbnGeoyF40QjiXdZaJrfE4JwmnNQXoTiCIMp0G7MMQGZ3I7OuAGUj4X9JjrOoruV8HvqRDcHH98eM164AMTUzo3EP5QKnzHArmmwp/s0z4GmUutvSP5lRGnOPLZb1YqPN5CIQQ+ji4NKslowcd3/f8R2NKtzUwfgOMUjWOxbcnReKVZfKNg9IsVjTiP/DlUqJPzz60SpYH7u1BDrtk3qQe0aGYYYQRfin6bEmKla8ctYxiO0vi/JeERNbDKhP1DxvqTIQ9hn68QSiSFnt4gNHHMQwzAMG9IMOrK862cLyJl35R4H+RUZnBmhKKYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dAP2zJ0LnNt/RLKRLAZpoEbj0KC/+3mwh/02pXWGOOw=;
- b=S27jWXNkA5VK2Sg9Ir9ygsQT3tULqi3Xf8dxSh2sKOZNAtKWUJPyzkKTwOlLWSsLBKA7iDW8IzO+WRfJC/TqSkL6rCSBW6lWIB7QCvTPl/MXS8t7PI/949wI+PVD8rvFT6zhlkvMPeAhN1kndAmePrU+RE0Qr6hEJfEtlzFHDVYV8gyDoFyR1rPehbhy+vEH04kHD6Jf1ru9Ri6LSKUKgNPJe1zH8cieSK+/YbriVtgWCwcjbLyv9Nx4qV89APqJ00UlUtn2u+uA6p+lgMovPUXChi+OFZAr337TJH98/fmb9guHXZxkUM+oa0/f5FmVuYuD1HljwnpJLwX7wGc/lQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
- header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dAP2zJ0LnNt/RLKRLAZpoEbj0KC/+3mwh/02pXWGOOw=;
- b=lm69v6HiJUnc/NxzAjBMRmYCfTjqhPmtsfFvU8+V0yFy5/opsZ3Niol5XY7fL/FuZLLmsablVYIw82hC8afhKSGx4k6HqAcpeitjw1esXf9IPqm+w+xKKBAvc4RsUCWzVOSSwS5mp1JRtyBxr95r2P9Bl4V/r+fHvDMCjB3WJ4xOfU8SCg1HqAhKYDiqvQc9Ai1hv3wzZBMdyZwbiLVTY9A583Pso3tplNxKEzHSnzHIcJOo42Gc8jPpXaAiDPd7XQ8VmZAh8MDeD7MFRfo1w4T/0gyyHNRFV6Mc8B7+8LoneOrfUUDmACHI/j9cl0zOaIEO8meWmiyu4HoaNU415w==
-Received: from AM9PR07MB7969.eurprd07.prod.outlook.com (2603:10a6:20b:302::15)
- by AMDPR07MB11453.eurprd07.prod.outlook.com (2603:10a6:20b:739::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Mon, 2 Feb
- 2026 14:10:31 +0000
-Received: from AM9PR07MB7969.eurprd07.prod.outlook.com
- ([fe80::b676:5e6b:e3e7:4bbd]) by AM9PR07MB7969.eurprd07.prod.outlook.com
- ([fe80::b676:5e6b:e3e7:4bbd%5]) with mapi id 15.20.9564.007; Mon, 2 Feb 2026
- 14:10:31 +0000
-From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: "tariqt@nvidia.com" <tariqt@nvidia.com>, "linux-rdma@vger.kernel.org"
-	<linux-rdma@vger.kernel.org>, "shaojijie@huawei.com" <shaojijie@huawei.com>,
-	"shenjian15@huawei.com" <shenjian15@huawei.com>, "salil.mehta@huawei.com"
-	<salil.mehta@huawei.com>, "mbloch@nvidia.com" <mbloch@nvidia.com>,
-	"saeedm@nvidia.com" <saeedm@nvidia.com>, "leon@kernel.org" <leon@kernel.org>,
-	"eperezma@redhat.com" <eperezma@redhat.com>, "brett.creeley@amd.com"
-	<brett.creeley@amd.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
-	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>,
-	"mst@redhat.com" <mst@redhat.com>, "xuanzhuo@linux.alibaba.com"
-	<xuanzhuo@linux.alibaba.com>, "pabeni@redhat.com" <pabeni@redhat.com>,
-	"edumazet@google.com" <edumazet@google.com>, "parav@nvidia.com"
-	<parav@nvidia.com>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"corbet@lwn.net" <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>,
-	"dsahern@kernel.org" <dsahern@kernel.org>, "kuniyu@google.com"
-	<kuniyu@google.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "dave.taht@gmail.com"
-	<dave.taht@gmail.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>,
-	"stephen@networkplumber.org" <stephen@networkplumber.org>,
-	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
-	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
-	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
-	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
-	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
-	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
-	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
-	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
-	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
-	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Subject: RE: [PATCH v1 net-next 0/3] ECN offload handling for AccECN series
-Thread-Topic: [PATCH v1 net-next 0/3] ECN offload handling for AccECN series
-Thread-Index: AQHckwSqNJd+cLpfckquPKO4yVYjJrVtAgcAgAJyxvA=
-Date: Mon, 2 Feb 2026 14:10:31 +0000
-Message-ID:
- <AM9PR07MB79692171B9BB1BC2C2C0B888A39AA@AM9PR07MB7969.eurprd07.prod.outlook.com>
-References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
- <20260131164516.4a423230@kernel.org>
-In-Reply-To: <20260131164516.4a423230@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR07MB7969:EE_|AMDPR07MB11453:EE_
-x-ms-office365-filtering-correlation-id: bbc26924-4047-46a2-b2d5-08de6264d339
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?xBsinDcdjbws4a8HIucfQz7pOSav191l7a9ypBIC3KI9zGV6EantkLHh7nx1?=
- =?us-ascii?Q?tyAUMnaJ59zY4ycpMYwI7d1HYFjaY/tJguG8QRWEflSUwxV51rUsO/t5PSw2?=
- =?us-ascii?Q?drah2UFwGeRbUmZk72vDSEgEBP6AKed+CxdLCKdI77FMrWjApygrIrSpjvTj?=
- =?us-ascii?Q?ePH80lg/U9FM1oqctzVqjvdGjgPSbI20MdvO/fce79makQCHxwr2k7QOcKKo?=
- =?us-ascii?Q?AL5cwu4+JejGy104HDyHxHU93lS0+qB+UhT4TYJd4YOq66zFhOSB22zl2bB3?=
- =?us-ascii?Q?1fkoeQHp3/s65S6gRYQDz8/y7Fyvuv1nO8uXFafc7veYsQtAoPCo27d/85IR?=
- =?us-ascii?Q?yNu0Qyt3o1W6WO/jdLowAGKpSrY05pj0O9nheP04ptA7urDMsY9yPmPYZEJk?=
- =?us-ascii?Q?vbvZ/xL4OlIzV0aF8TigyV2TwTKi8wDd+EsS1SPRnid1MAWzBvUJuAjS3aCa?=
- =?us-ascii?Q?lWD8jOK6Jg+oqqGjtukwNg9ur8HeBmPMtbu8Bd11Gl/m7MUow6RqNoUh1awe?=
- =?us-ascii?Q?DT4HDTJxBD3EyXsAYq2dfGfu7PzleGESn44YeShnC9TTnu0jzbImhiDMkSZ7?=
- =?us-ascii?Q?2tWl2xePdg0eLZ9JDEFaxQveX8DGwSP3F489la6uebX4zhaaAb0QXBj0Cv8v?=
- =?us-ascii?Q?I4Auv0uf12+yn2J3hIymgB9KKuz+xZWXMsT4K7BSPllif00xVur0DdpcTk/H?=
- =?us-ascii?Q?MXlqVUVxuPVdxzoM8ASwm2enPsCL3k0q3w7BdQiWApgG73hS48s3yPrSm+vH?=
- =?us-ascii?Q?1PrLdRzjz/sJPvJq+foModqIQRqpWKCWvIAO1NQaU9KHKSDxFwNPtEWNjqWI?=
- =?us-ascii?Q?ktFvMeiBKOFQnHojkfGlm0O6cxj9LDrmyU1/87Az9DzJJPSPqMxMN/cGzbjI?=
- =?us-ascii?Q?Y9Pc7MiUShDnpKZDe3LMDan/Wdd91wzXtDF4BqQjfOV9+IV6Z7IJqTrUGwzo?=
- =?us-ascii?Q?ETXrr89z2fVxhANWyuzM496B0k9l0stxqZmRmSdu3+Mfi5IdslPNDKHN5vFJ?=
- =?us-ascii?Q?0flwntJrxRdXJ2PeigQjc+Py2Lz5rrURZHLzFxcU51BmgseKRX0kQp4Uz7A3?=
- =?us-ascii?Q?BytV1vItUj46aoaCoCHDk/HBdaSqRppMzbE4Opx3G/ZWjF5P4heI97taMZph?=
- =?us-ascii?Q?CjWFqJ0p9gQ3oraKcYTUvgP7840xfdOnJv7biGxQjd+8/TArhAabkVSiuOs9?=
- =?us-ascii?Q?nO9MN3ZmKmX67U3/4nXjs6f78UZLnREN/ghG1OdwemUZj8baFmYe9SnljIt9?=
- =?us-ascii?Q?sY+xuvX9WIewpnyjNXWj9E2taMZlPkUoiQpCI9XrG64g2FSh3jeVlAKZlPF8?=
- =?us-ascii?Q?34n+qyjPkr9sEgKeJTGXSOibZ/tlWBcBICq4ZazFwTBm10Zjy2u5ga4sMaGs?=
- =?us-ascii?Q?IaKOigQYOnePzsqgiWfh3qveXyyK8ae9Yy2MkQYpUbbfdAHxQhMc7CnRS19Z?=
- =?us-ascii?Q?EQKo7dbnUWefF1k2+YkHR/EdEzpKqDofQ3f/cfIR0bk8cDtZM24MvSFLbdvz?=
- =?us-ascii?Q?1pGZbP1NexRLLiVT6HeRW99Kr6Aq5PCgqYI9gO8l0FjbXyYGeMw8hBkIOdPV?=
- =?us-ascii?Q?lN6v84vyX1KwYugWqJjRuBbJ+4QQtqlSnokuzWfn4EbB3w+OLJ8yw0fihoj+?=
- =?us-ascii?Q?LDMDW0xTR99gSRiRNAi7a8Q=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR07MB7969.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?32yFSAG2nX1cAT1bUj7i6jWZSdC7Ti8IKN85QrkVSGQUjQtTJnMwN70lmWo0?=
- =?us-ascii?Q?M+nT2VqLCdDF//o9R/hwyazFH4ZOhVgbkTOz3RFsEtB+KXHmBY9m4YFCbi3p?=
- =?us-ascii?Q?g2UI0dfKEGk5REq5iuvd1asKLuVW6H8QLrKSbceo/t5qkIMUYNdYu/X/jM0o?=
- =?us-ascii?Q?EhdzPRnpy2oFEtWQYG9mkrAhCUjmr+pbqbMVcYB7efEfTHD87tsukKdPE3m8?=
- =?us-ascii?Q?KttiDl2Fc92S4sWyddJW3jR3smPWNsaYVqSa/WXmJH7Zk6ZA53WojytTGqk2?=
- =?us-ascii?Q?wE2zRWYvWgiVC2hWDnCY8glICFDk7ZJAeAd3qVkYC3zOshPxAN3QvEmYZH4X?=
- =?us-ascii?Q?2syJfvz0xXQuYt/64KB3Ii/20JMDP/mIVXZeSHVFQGSpMpMloea9Hsll0z+y?=
- =?us-ascii?Q?zMbVtuz+VrnPTIoHF2rAUTUV0NVwmZOmJFVUEUCXMMPjGiqxXKBP3IHngLpl?=
- =?us-ascii?Q?qLYMNlPFzCHcxKUtyaWaxqWLLorsCV/5sYkk2A0GxA9JUrmgqyFkZYpm+lcY?=
- =?us-ascii?Q?JxGxvM+zuZkaqurECtqPiS2jl3IHjjp0XiiTCJKB5E5wLoc+dIWW3X5L3l1k?=
- =?us-ascii?Q?Nv0thTJiafKAoNjypTiMgHdFwPI+yra93vMowkDWQ20Cts96FyXBygcz8k4f?=
- =?us-ascii?Q?M79Gt5BPdFRhu+etuiSX0qEQfLdQs/FlMJB1da7NFDBXpQteUZg+yB8gTTpR?=
- =?us-ascii?Q?8GrEEbpEIj2V7YM8FdpAhAt8PlJhGT3QIiB3MKvmn4cBkQHEGYhH/eMFDF2x?=
- =?us-ascii?Q?tHXQoeclMWNSF75PBB9t9ALg7dOzFHfGWJ3227QidR8ki6ikLIax3o4QmPP/?=
- =?us-ascii?Q?MfrzA2qxemmzuayErA5D1xzntDaLBUOAeroGA0M47p+ph4jHHgOniNXKjWbn?=
- =?us-ascii?Q?yASyIULEeD+RZMEc8jswEfrV+6qXKA4XDkyEwLqwePhBr/Vvdxzg6FoV0VdK?=
- =?us-ascii?Q?CVu7McSGhNTkZGVTWnFFM24Cs8SZ2jWv6mkS6plq+meP8QcN2Wi7DmVfQDM4?=
- =?us-ascii?Q?EF3rEviySN0gYuoefa/rewHExfAmOPNWzGSEyZkvonrhwP7fTqacAJMumdvT?=
- =?us-ascii?Q?lansFOMTsAXTCJxYp76AEK062QKhNmve2mZlc7g74mHkTXkDkjIrCRTXojXd?=
- =?us-ascii?Q?ZZKmjtIR8jAk3u+yCw8T+FHI4UAyJN1DpbWQbeOTXtZE98k/yu9WLBKqytAJ?=
- =?us-ascii?Q?LccEERzfw4636DvaZX52wycnZA85GcnSsqWu2qdcW7DgWwGp4Pn6KASH9eIk?=
- =?us-ascii?Q?1IAYmbJg0vMhAAkVIu/JrUg6dbNLE4rfJUbt5kCbESe8U1E2uqHXA0wywBim?=
- =?us-ascii?Q?/0AJZCyPUjBI7jxPa3nXFWSWrDb+cnIpDX4wPY51gjW95as4gXNmhe3ficou?=
- =?us-ascii?Q?+46zCozwcXtqMv9TIIhY0+Tj0mQp04aBwgJAc00SVzYnndG0ZVkeYPXm6HaH?=
- =?us-ascii?Q?VOlRxk0ZxEc1sz4acZIkcrve55/EvBqNBOsjxFFfNdlWBtzwNAqX+WU4kEZT?=
- =?us-ascii?Q?mSU6lpE2FLxjXmRRB61nmlGDpgUgFuRKMk7GIVjZccCpyUKzzJQ5FyViB/5B?=
- =?us-ascii?Q?7PrXfVbijmEvBzOnN6WLqDUNQuQVBPlNEkamgiNoF2e/rCTdipG/Dgs0DKT8?=
- =?us-ascii?Q?pnjkjvtrk5jT5zgq69C88xdFXm0m1kHHG4XzREMADjKAVrBTymA9+CaocHpe?=
- =?us-ascii?Q?nydCvdQc5QX/k05sQamH1NiJ4V6PweeQ1TcxKiapYEBM84bc1CSO233nIncU?=
- =?us-ascii?Q?lweCwI8SJ5dPUYlzFUaXiFbYZUsN2GQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TOo1gUwF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770043095;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LLPSi3nvHTn4l+eMte4lOVK2lLpRjSH202e/Dy3d0DM=;
+	b=TOo1gUwFtBz9sjZmahFddeqtd4wdQTazX/E4uGTHcOFDfrG3tASUWoYLxxaK/9ISRI4yYy
+	V2x/Re6xj12IOHwjCz5UN5ltUzlwrka8i44bAS9iWsL0qal+RrE+e8p+IiDjMX+5hL+w3p
+	Ig65kmTkWHDlem9zxHcCll4X1dqMdWE=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-523-cm_R2a_KNMOfV1SOjTvf4g-1; Mon,
+ 02 Feb 2026 09:38:09 -0500
+X-MC-Unique: cm_R2a_KNMOfV1SOjTvf4g-1
+X-Mimecast-MFC-AGG-ID: cm_R2a_KNMOfV1SOjTvf4g_1770043087
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3DA2B1800371;
+	Mon,  2 Feb 2026 14:38:07 +0000 (UTC)
+Received: from napanee.usersys.redhat.com (unknown [10.22.66.39])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6752030001A7;
+	Mon,  2 Feb 2026 14:38:06 +0000 (UTC)
+Received: by napanee.usersys.redhat.com (Postfix, from userid 1000)
+	id C9644C197F; Mon,  2 Feb 2026 09:38:05 -0500 (EST)
+Date: Mon, 2 Feb 2026 09:38:05 -0500
+From: Aristeu Rozanski <aris@redhat.com>
+To: linux-kselftest@vger.kernel.org
+Cc: Aleksa Sarai <cyphar@cyphar.com>, Shuah Khan <shuah@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, liuye <liuye@kylinos.cn>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-mm@kvack.org
+Subject: [PATCH] selftests/memfd: use IPC semaphore instead of SIGSTOP/SIGCONT
+Message-ID: <a7776389-b3d6-4b18-b438-0b0e3ed1fd3b@work>
+References: <7888ed77-da89-41b2-a73e-09038b7c9285@work>
+ <20260131132315.62b0b029dc1dd03febe97481@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR07MB7969.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbc26924-4047-46a2-b2d5-08de6264d339
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2026 14:10:31.2991
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Lz+OGeQ7KOcaPyyeiokoZEbMOVmKmELtJTs2zHUUDLKrXOKU6iw4DaDHDTzS/fpbcbd451//PLSKHeAIUpocFB04J8kLMgCvU1UVl4P6lasGc4qGQUG4hnY6biAafeUk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMDPR07MB11453
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260131132315.62b0b029dc1dd03febe97481@linux-foundation.org>
+User-Agent: NeoMutt/20241114-35-62db1e
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-> -----Original Message-----
-> From: Jakub Kicinski <kuba@kernel.org>
-> Sent: Sunday, February 1, 2026 1:45 AM
-> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-> Cc: tariqt@nvidia.com; linux-rdma@vger.kernel.org; shaojijie@huawei.com; =
-shenjian15@huawei.com; salil.mehta@huawei.com; mbloch@nvidia.com; saeedm@nv=
-idia.com; leon@kernel.org; eperezma@redhat.com; brett.creeley@amd.com; jaso=
-wang@redhat.com; virtualization@lists.linux.dev; mst@redhat.com; xuanzhuo@l=
-inux.alibaba.com; pabeni@redhat.com; edumazet@google.com; parav@nvidia.com;=
- linux-doc@vger.kernel.org; corbet@lwn.net; horms@kernel.org; dsahern@kerne=
-l.org; kuniyu@google.com; bpf@vger.kernel.org; netdev@vger.kernel.org; dave=
-.taht@gmail.com; jhs@mojatatu.com; stephen@networkplumber.org; xiyou.wangco=
-ng@gmail.com; jiri@resnulli.us; davem@davemloft.net; andrew+netdev@lunn.ch;=
- donald.hunter@gmail.com; ast@fiberby.net; liuhangbin@gmail.com; shuah@kern=
-el.org; linux-kselftest@vger.kernel.org; ij@kernel.org; ncardwell@google.co=
-m; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.com>; g.white=
-@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson=
-.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vidh=
-i_goel@apple.com
-> Subject: Re: [PATCH v1 net-next 0/3] ECN offload handling for AccECN seri=
-es
->
->
-> CAUTION: This is an external email. Please be very careful when clicking =
-links or opening attachments. See the URL nok.it/ext for additional informa=
-tion.
->
->
->
-> On Sat, 31 Jan 2026 23:55:07 +0100 chia-yu.chang@nokia-bell-labs.com
-> wrote:
-> > ---
-> > v2:
-> > - Replace VIRTIO_NET_HDR_GSO_ECN with VIRTIO_NET_HDR_GSO_ECN_FLAGS
->
-> For the future:
->
-> Quoting documentation:
->
->   Limit patches outstanding on mailing list
->   -----------------------------------------
->
->   Avoid having more than 15 patches, across all series, outstanding for
->   review on the mailing list for a single tree. In other words, a maximum=
- of
->   15 patches under review on net, and a maximum of 15 patches under revie=
-w on
->   net-next.
->
->   This limit is intended to focus developer effort on testing patches bef=
-ore
->   upstream review. Aiding the quality of upstream submissions, and easing=
- the
->   load on reviewers.
->
-> See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#=
-limit-patches-outstanding-on-mailing-list
+selftests/memfd: use IPC semaphore instead of SIGSTOP/SIGCONT
 
-Hi Jakub,
+In order to synchronize new processes to test inheritance of
+memfd_noexec sysctl, memfd_test sets up the sysctl with a value before
+creating the new process. The new process then sends itself a SIGSTOP
+in order to wait for the parent to flip the sysctl value and send a
+SIGCONT signal.
 
-Sorry for my miss, I was thinking to submit up to 15 patches per series, wi=
-thout considering the overall limit on net-next.
-Will be careful next time. Thanks.
+This would work as intended if it wasn't the fact that the new process
+is being created with CLONE_NEWPID, which creates a new PID namespace and
+the new process has PID 1 in this namespace. There're restrictions on
+sending signals to PID 1 and, although it's relaxed for other than root
+PID namespace, it's biting us here. In this specific case the SIGSTOP sent
+by the new process is ignored (no error to kill() is returned) and it never
+stops its execution. This is usually not noticiable as the parent usually
+manages to set the new sysctl value before the child has a chance to run
+and the test succeeds. But if you run the test in a loop, it eventually
+reproduces:
 
-Chia-Yu
+	while [ 1 ]; do ./memfd_test >log 2>&1 || break; done; cat log
+
+So this patch replaces the SIGSTOP/SIGCONT synchronization with IPC
+semaphore.
+
+Fixes: 6469b66e3f5a3 (selftests: improve vm.memfd_noexec sysctl tests, 2023-08-14)
+Cc: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: liuye <liuye@kylinos.cn>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-mm@kvack.org
+Signed-off-by: Aristeu Rozanski <aris@redhat.com>
+---
+ tools/testing/selftests/memfd/memfd_test.c |  113 ++++++++++++++++++++++++++---
+ 1 file changed, 105 insertions(+), 8 deletions(-)
+
+--- linus-2.6.orig/tools/testing/selftests/memfd/memfd_test.c	2026-01-29 16:22:56.094182500 -0500
++++ linus-2.6/tools/testing/selftests/memfd/memfd_test.c	2026-02-02 09:35:04.887782294 -0500
+@@ -18,6 +18,9 @@ // SPDX-License-Identifier: GPL-2.0
+ #include <sys/stat.h>
+ #include <sys/syscall.h>
+ #include <sys/wait.h>
++#include <sys/types.h>
++#include <sys/ipc.h>
++#include <sys/sem.h>
+ #include <unistd.h>
+ #include <ctype.h>
+ 
+@@ -39,6 +42,20 @@ #define F_SEAL_EXEC	0x0020
+ 		    F_SEAL_EXEC)
+ 
+ #define MFD_NOEXEC_SEAL	0x0008U
++union semun {
++	int val;
++	struct semid_ds *buf;
++	unsigned short int *array;
++	struct seminfo *__buf;
++};
++
++/*
++ * we use semaphores on nested wait tasks due the use of CLONE_NEWPID: the
++ * child will be PID 1 and can't send SIGSTOP to themselves due special
++ * treatment of the init task, so the SIGSTOP/SIGCONT synchronization
++ * approach can't be used here.
++ */
++#define SEM_KEY 0xdeadbeef
+ 
+ /*
+  * Default is not to test hugetlbfs
+@@ -1333,8 +1350,22 @@ return 0;
+ 
+ static int sysctl_nested_wait(void *arg)
+ {
+-	/* Wait for a SIGCONT. */
+-	kill(getpid(), SIGSTOP);
++	int sem = semget(SEM_KEY, 1, 0600);
++	struct sembuf sembuf;
++
++	if (sem < 0) {
++		perror("semget:");
++		abort();
++	}
++	sembuf.sem_num = 0;
++	sembuf.sem_flg = 0;
++	sembuf.sem_op = 0;
++
++	if (semop(sem, &sembuf, 1) < 0) {
++		perror("semop:");
++		abort();
++	}
++
+ 	return sysctl_nested(arg);
+ }
+ 
+@@ -1355,7 +1386,9 @@ sysctl_fail_write("0");
+ 
+ static int sysctl_nested_child(void *arg)
+ {
+-	int pid;
++	int pid, sem;
++	union semun semun;
++	struct sembuf sembuf;
+ 
+ 	printf("%s nested sysctl 0\n", memfd_str);
+ 	sysctl_assert_write("0");
+@@ -1389,23 +1422,53 @@ sysctl_assert_write("0");
+ 			   test_sysctl_sysctl2_failset);
+ 	join_thread(pid);
+ 
++	sem = semget(SEM_KEY, 1, IPC_CREAT | 0600);
++	if (sem < 0) {
++		perror("semget:");
++		return 1;
++	}
++	semun.val = 1;
++	sembuf.sem_op = -1;
++	sembuf.sem_flg = 0;
++	sembuf.sem_num = 0;
++
+ 	/* Verify that the rules are actually inherited after fork. */
+ 	printf("%s nested sysctl 0 -> 1 after fork\n", memfd_str);
+ 	sysctl_assert_write("0");
+ 
++	if (semctl(sem, 0, SETVAL, semun) < 0) {
++		perror("semctl:");
++		return 1;
++	}
++
+ 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
+ 			   test_sysctl_sysctl1_failset);
+ 	sysctl_assert_write("1");
+-	kill(pid, SIGCONT);
++
++	/* Allow child to continue */
++	if (semop(sem, &sembuf, 1) < 0) {
++		perror("semop:");
++		return 1;
++	}
+ 	join_thread(pid);
+ 
+ 	printf("%s nested sysctl 0 -> 2 after fork\n", memfd_str);
+ 	sysctl_assert_write("0");
+ 
++	if (semctl(sem, 0, SETVAL, semun) < 0) {
++		perror("semctl:");
++		return 1;
++	}
++
+ 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
+ 			   test_sysctl_sysctl2_failset);
+ 	sysctl_assert_write("2");
+-	kill(pid, SIGCONT);
++
++	/* Allow child to continue */
++	if (semop(sem, &sembuf, 1) < 0) {
++		perror("semop:");
++		return 1;
++	}
+ 	join_thread(pid);
+ 
+ 	/*
+@@ -1415,28 +1478,62 @@ sysctl_assert_write("0");
+ 	 */
+ 	printf("%s nested sysctl 2 -> 1 after fork\n", memfd_str);
+ 	sysctl_assert_write("2");
++
++	if (semctl(sem, 0, SETVAL, semun) < 0) {
++		perror("semctl:");
++		return 1;
++	}
++
+ 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
+ 			   test_sysctl_sysctl2);
+ 	sysctl_assert_write("1");
+-	kill(pid, SIGCONT);
++
++	/* Allow child to continue */
++	if (semop(sem, &sembuf, 1) < 0) {
++		perror("semop:");
++		return 1;
++	}
+ 	join_thread(pid);
+ 
+ 	printf("%s nested sysctl 2 -> 0 after fork\n", memfd_str);
+ 	sysctl_assert_write("2");
++
++	if (semctl(sem, 0, SETVAL, semun) < 0) {
++		perror("semctl:");
++		return 1;
++	}
++
+ 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
+ 			   test_sysctl_sysctl2);
+ 	sysctl_assert_write("0");
+-	kill(pid, SIGCONT);
++
++	/* Allow child to continue */
++	if (semop(sem, &sembuf, 1) < 0) {
++		perror("semop:");
++		return 1;
++	}
+ 	join_thread(pid);
+ 
+ 	printf("%s nested sysctl 1 -> 0 after fork\n", memfd_str);
+ 	sysctl_assert_write("1");
++
++	if (semctl(sem, 0, SETVAL, semun) < 0) {
++		perror("semctl:");
++		return 1;
++	}
++
+ 	pid = spawn_thread(CLONE_NEWPID, sysctl_nested_wait,
+ 			   test_sysctl_sysctl1);
+ 	sysctl_assert_write("0");
+-	kill(pid, SIGCONT);
++	/* Allow child to continue */
++	if (semop(sem, &sembuf, 1) < 0) {
++		perror("semop:");
++		return 1;
++	}
+ 	join_thread(pid);
+ 
++	semctl(sem, 0, IPC_RMID);
++
+ 	return 0;
+ }
+ 
+
