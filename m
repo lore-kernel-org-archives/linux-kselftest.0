@@ -1,54 +1,54 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E099392C24
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 22:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E04392C4B
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 22:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770071457; cv=none; b=cqLulzDHMmIRoZQke6HG6tELTndgOnBKDKfgCHRngYT2szhOl/w8xnoECH9W3DSOvI59fM02Ho1/P+cyM+EZAz13kTR6slY5ilLrxpDUVn2oICoSM6ycp4jSLmMOU8ba8sdEQUrXmO221rj8s5rOE/h2FQtbHLPCrln14b3AjhE=
+	t=1770071458; cv=none; b=f5MxWd3QNhPwkYtiZd3Zq49vKFdj+b974a4soZfrxbu4emwDEr/H/FBPhzhRyaTjOJF3AmTArVRVAF3DhlnT+ZWj/mnzBM2yCFsOXKwPGvi8/3wzRa9tR42xhWDk0bXz79HPskfpH0rIrPXEpP7pyngoRpt/DEP1d3z089yVTvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770071457; c=relaxed/simple;
-	bh=TSJqpmK1RsKVbPQmLuqkhlsjblYPW5iV3gKVP8nyyM4=;
+	s=arc-20240116; t=1770071458; c=relaxed/simple;
+	bh=2Pig+BE6mlwz3Atq97H7ZcTJ4jMwJiYk8WbNx5KJYm4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=NLPdQ/7CcCTsCSmz4JE28tIDwKVgKjIsMjZnCaPYRNfKCixNuh7Wr31aeL30sMBWjvFe+dZI61qeng37lYdeZxGknzArExheO/yMAN4m97dJnkqJUttsqAQveJlO2/e/G5O4fc2xl9SEucdm78zOP1NifBgWrc2MG5fVfh/wMhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U9iHjTLA; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=Di59shzWici05tRVE7rkYEByGB9CCKPaoecRJ33L9h+NU1rOKNkpmEmf95UISuW/VpdTzKWIoDlRCB89nb1ot3yDiLFMfCoO8sZGBpJmWeXq6mG+4XJm1h/dT++YMTzBefCwziwp4DGspth20IFxz0IOvJhSdNdTGBMK4hpu4HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tpAXDRy+; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U9iHjTLA"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c61dee98720so2934950a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 14:30:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tpAXDRy+"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-34e70e2e363so5188726a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 14:30:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770071455; x=1770676255; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1770071457; x=1770676257; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qdva9cifLe8y5PcOFCkwGiruG9QI61t/cQ4m9u6jjyc=;
-        b=U9iHjTLAAR4TF4whzp/atWmPd+rypaWextVeOpY9fC3nvKeG4/T8WZcORZwUNfGYAG
-         5Whu9CumA17YeshVThdnWX01kSbCdu/dMKe4liqP/lbo8puvdkY98amqtEGL3dnDfSlj
-         QdY9vWgmUgDqunWxX+JFJvxq0cObnbTuXkHmZGoJWYwj2Itn3L7DVqAOaUj20/dmCCd8
-         jy9zzU/UykaG/OaHUVawP2WaoxZ/03Q5LlVruC8cRKbRX9PxA47H7vwVzjqQ3L7Om4Ny
-         1m6nDV11M4eVwLC71labowJk6TII2ZN3DtQNrk3LUAKQ/KsLyGm+APxGZBkAN5IOYQpN
-         9GTQ==
+        bh=KnXsdQ94XcuKuzn9mP+GBRZHRqSPvjoz+jTMa8UBwEA=;
+        b=tpAXDRy+MH62c8PBeVdoW7/3MYKlkUP8Uw89rf6CBHBshRelxSJOKPkqDchrwpFiTf
+         12HM/4cVagjt6NT+00MaVlvW6rZy9/0Ao+D1YrBYIcM7ReGTkLrJVf2AYeDrg52iQTXm
+         7LaW9Dq+M2LTx8rZp6HB8qkguOiLJ5jLHrPMH9Y6K9U4bXDcDuxFrY7lBfYFXUul1tP1
+         rXLIKY5vLdxRv3QupVFHtBgY+h4ULWd5tV8CYVy3yUwxsMu9lFwnlGbqFLrPRHGr7Yzv
+         pNR16ngbwrShrsBSpKZui+/cYFSNm5AdWyfcKA4dvvfOPWxukzFk+v9AT/n7VVrksr1K
+         Gynw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770071455; x=1770676255;
+        d=1e100.net; s=20230601; t=1770071457; x=1770676257;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qdva9cifLe8y5PcOFCkwGiruG9QI61t/cQ4m9u6jjyc=;
-        b=bgsVAe1WJq01lWvuCfsOxs7HtTmFerlau2ZjpTe3vUdEsGIzUNy9VRPnDxQ0YdEuAX
-         6LJbOd/YYVS7AuhMj9y6BVp99+5ONdKgG3Nw3r7tj3uN0KRPcbvtTAW8KfqkT6i8egil
-         Zw23isVb+bbySA5U3PYV+6A+ADNz1+zuHULc4aBtQ2ZxWJDF1DW7dO6jm9Oge05sAAuD
-         bdoSgs8v+TRo2gGLC+UN5+JFerj4uddP6zxM+mOfFROpgDvoTEWUOdbbtoIVGOcoSCD+
-         nVgCxQXoqiy/JXRwEU/gK/I2jlwUAN3vUpu79z4sEcBoBB/5+lXWLmxRcSKGXR1UomPQ
-         jCqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjBgx/qzRnRwpo/9HMIK+0MYhnrb2/BIUW5ovrNgXaBvWZ5wmIYKHi98RtxhdJoNt8w6pC+EY5vPAvGQY1RCU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxdegv/HBPovo/p4GJfBTcmgHwRYnrLQ8pFQzZ8jvklbmBTZaXP
-	E+oJMi5ZE1L88bMu9PwXhwBcouGwLMnT8mlbau7ogmOyNamz8fMrvP3HmWQRq1h/RFSOjgueDZ7
-	CnfyjKzobii3z+AoiR+gXJlKUbA==
-X-Received: from pgbfq18.prod.google.com ([2002:a05:6a02:2992:b0:c5e:f054:992b])
+        bh=KnXsdQ94XcuKuzn9mP+GBRZHRqSPvjoz+jTMa8UBwEA=;
+        b=oer6UKlrbX3I/DhOgr/jgzGcwV1JasZ47DblZhsH1crbW5OE3prXdQjn9wsi/hRtSy
+         xTykDzNxB/tQPGZVdplJvIMmnsQfqy8km0wo4Zzo6fh59BAuuyUYDoOsuN4QF9on3Sm5
+         z8fYbfN+hCF3ZWjMYhxdJ4nw3mkol5/5m2AUZi5lTGqXtrwwdf23YVqyCYYELAEPvzNR
+         LHDSP16P8dvonEtJt6711ZdRDy0nL5hXyU/XSIiofQckN57NeFISfh08xBaQgzZzWIGK
+         pSVDDTFOjzzv0ZNpdSj5loUl6ogKr/WO6rQiN6ulAE2RfhVDDQDGuKRWnN/q3pgzc4Du
+         kwjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXyUnRR9p3HwV1xCw/6YyKFYEJu9zYot8ByzrI1c0hECWtcriqWxa9ifrWukNsn39VcqQUfC6/EZ/df5wOXpls=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwquE00oPlg5L5WvOis6l4/hMrQXJrFFxFk5Gh0RWvgQpuIXUfY
+	DJkH1LIQOMvw6P/xNSBpOBKVVUaqhCN4xgWV+YYdYmzjSZ1yC0zZjsybbcEKoTnQQZ0oz/o7mwY
+	F1WN5xN27F1Jydd1a9n+K9JOqzQ==
+X-Received: from pjkh1.prod.google.com ([2002:a17:90a:7101:b0:350:fd27:2bc8])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:6196:b0:38d:fa67:e87f with SMTP id adf61e73a8af0-392dffe0986mr13676761637.12.1770071455021;
- Mon, 02 Feb 2026 14:30:55 -0800 (PST)
-Date: Mon,  2 Feb 2026 14:29:58 -0800
+ 2002:a17:90a:fc4f:b0:352:b674:2592 with SMTP id 98e67ed59e1d1-3543b30564bmr14178775a91.7.1770071456574;
+ Mon, 02 Feb 2026 14:30:56 -0800 (PST)
+Date: Mon,  2 Feb 2026 14:29:59 -0800
 In-Reply-To: <cover.1770071243.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,9 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1770071243.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <326d2a6afc5f972a1cb21a3f1e4fc3be26baa2b6.1770071243.git.ackerleytng@google.com>
-Subject: [RFC PATCH v2 20/37] KVM: selftests: Test basic single-page
- conversion flow
+Message-ID: <84cd59d887139f01a0624c214c0a43f4c0c730f8.1770071243.git.ackerleytng@google.com>
+Subject: [RFC PATCH v2 21/37] KVM: selftests: Test conversion flow when INIT_SHARED
 From: Ackerley Tng <ackerleytng@google.com>
 To: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
@@ -81,241 +80,46 @@ Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com,
 	yan.y.zhao@intel.com, Ackerley Tng <ackerleytng@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add a selftest for the guest_memfd memory attribute conversion ioctls.
-The test starts the guest_memfd as all-private (the default state), and
-verifies the basic flow of converting a single page to shared and then back
-to private.
-
-Add infrastructure that supports extensions to other conversion flow
-tests. This infrastructure will be used in upcoming patches for other
-conversion tests.
+Add a test case to verify that conversions between private and shared
+memory work correctly when the memory is initially created as shared.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 Co-developed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../kvm/guest_memfd_conversions_test.c        | 199 ++++++++++++++++++
- 2 files changed, 200 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/guest_memfd_conversions_test.c
+ .../selftests/kvm/guest_memfd_conversions_test.c     | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index ba5c2b643efa..1cbb20d51b01 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -143,6 +143,7 @@ TEST_GEN_PROGS_x86 += access_tracking_perf_test
- TEST_GEN_PROGS_x86 += coalesced_io_test
- TEST_GEN_PROGS_x86 += dirty_log_perf_test
- TEST_GEN_PROGS_x86 += guest_memfd_test
-+TEST_GEN_PROGS_x86 += guest_memfd_conversions_test
- TEST_GEN_PROGS_x86 += hardware_disable_test
- TEST_GEN_PROGS_x86 += memslot_modification_stress_test
- TEST_GEN_PROGS_x86 += memslot_perf_test
 diff --git a/tools/testing/selftests/kvm/guest_memfd_conversions_test.c b/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
-new file mode 100644
-index 000000000000..48265215f218
---- /dev/null
+index 48265215f218..438937980f04 100644
+--- a/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
 +++ b/tools/testing/selftests/kvm/guest_memfd_conversions_test.c
-@@ -0,0 +1,199 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2024, Google LLC.
-+ */
-+#include <sys/mman.h>
-+#include <unistd.h>
+@@ -95,6 +95,12 @@ static void __gmem_conversions_##test(test_data_t *t, int nr_pages)		\
+ #define GMEM_CONVERSION_TEST_INIT_PRIVATE(test)					\
+ 	__GMEM_CONVERSION_TEST_INIT_PRIVATE(test, 1)
+ 
++#define __GMEM_CONVERSION_TEST_INIT_SHARED(test, __nr_pages)			\
++	GMEM_CONVERSION_TEST(test, __nr_pages, GUEST_MEMFD_FLAG_INIT_SHARED)
 +
-+#include <linux/align.h>
-+#include <linux/kvm.h>
-+#include <linux/sizes.h>
++#define GMEM_CONVERSION_TEST_INIT_SHARED(test)					\
++	__GMEM_CONVERSION_TEST_INIT_SHARED(test, 1)
 +
-+#include "kvm_util.h"
-+#include "kselftest_harness.h"
-+#include "test_util.h"
-+#include "ucall_common.h"
-+
-+FIXTURE(gmem_conversions) {
-+	struct kvm_vcpu *vcpu;
-+	int gmem_fd;
-+	/* HVA of the first byte of the memory mmap()-ed from gmem_fd. */
-+	char *mem;
-+};
-+
-+typedef FIXTURE_DATA(gmem_conversions) test_data_t;
-+
-+FIXTURE_SETUP(gmem_conversions) { }
-+
-+static uint64_t page_size;
-+
-+static void guest_do_rmw(void);
-+#define GUEST_MEMFD_SHARING_TEST_GVA 0x90000000ULL
-+
-+/*
-+ * Defer setup until the individual test is invoked so that tests can specify
-+ * the number of pages and flags for the guest_memfd instance.
-+ */
-+static void gmem_conversions_do_setup(test_data_t *t, int nr_pages,
-+				      int gmem_flags)
+ struct guest_check_data {
+ 	void *mem;
+ 	char expected_val;
+@@ -186,6 +192,12 @@ GMEM_CONVERSION_TEST_INIT_PRIVATE(init_private)
+ 	test_convert_to_private(t, 0, 'C', 'E');
+ }
+ 
++GMEM_CONVERSION_TEST_INIT_SHARED(init_shared)
 +{
-+	const struct vm_shape shape = {
-+		.mode = VM_MODE_DEFAULT,
-+		.type = KVM_X86_SW_PROTECTED_VM,
-+	};
-+	/*
-+	 * Use high GPA above APIC_DEFAULT_PHYS_BASE to avoid clashing with
-+	 * APIC_DEFAULT_PHYS_BASE.
-+	 */
-+	const uint64_t gpa = SZ_4G;
-+	const uint32_t slot = 1;
-+	struct kvm_vm *vm;
-+
-+	vm = __vm_create_shape_with_one_vcpu(shape, &t->vcpu, nr_pages, guest_do_rmw);
-+
-+	vm_mem_add(vm, VM_MEM_SRC_SHMEM, gpa, slot, nr_pages,
-+		   KVM_MEM_GUEST_MEMFD, -1, 0, gmem_flags);
-+
-+	t->gmem_fd = kvm_slot_to_fd(vm, slot);
-+	t->mem = addr_gpa2hva(vm, gpa);
-+	virt_map(vm, GUEST_MEMFD_SHARING_TEST_GVA, gpa, nr_pages);
++	test_shared(t, 0, 0, 'A', 'B');
++	test_convert_to_private(t, 0, 'B', 'C');
++	test_convert_to_shared(t, 0, 'C', 'D', 'E');
 +}
-+
-+static void gmem_conversions_do_teardown(test_data_t *t)
-+{
-+	/* No need to close gmem_fd, it's owned by the VM structure. */
-+	kvm_vm_free(t->vcpu->vm);
-+}
-+
-+FIXTURE_TEARDOWN(gmem_conversions)
-+{
-+	gmem_conversions_do_teardown(self);
-+}
-+
-+/*
-+ * In these test definition macros, __nr_pages and nr_pages is used to set up
-+ * the total number of pages in the guest_memfd under test. This will be
-+ * available in the test definitions as nr_pages.
-+ */
-+
-+#define __GMEM_CONVERSION_TEST(test, __nr_pages, flags)				\
-+static void __gmem_conversions_##test(test_data_t *t, int nr_pages);		\
-+										\
-+TEST_F(gmem_conversions, test)							\
-+{										\
-+	gmem_conversions_do_setup(self, __nr_pages, flags);			\
-+	__gmem_conversions_##test(self, __nr_pages);				\
-+}										\
-+static void __gmem_conversions_##test(test_data_t *t, int nr_pages)		\
-+
-+#define GMEM_CONVERSION_TEST(test, __nr_pages, flags)				\
-+	__GMEM_CONVERSION_TEST(test, __nr_pages, (flags) | GUEST_MEMFD_FLAG_MMAP)
-+
-+#define __GMEM_CONVERSION_TEST_INIT_PRIVATE(test, __nr_pages)			\
-+	GMEM_CONVERSION_TEST(test, __nr_pages, 0)
-+
-+#define GMEM_CONVERSION_TEST_INIT_PRIVATE(test)					\
-+	__GMEM_CONVERSION_TEST_INIT_PRIVATE(test, 1)
-+
-+struct guest_check_data {
-+	void *mem;
-+	char expected_val;
-+	char write_val;
-+};
-+static struct guest_check_data guest_data;
-+
-+static void guest_do_rmw(void)
-+{
-+	for (;;) {
-+		char *mem = READ_ONCE(guest_data.mem);
-+
-+		GUEST_ASSERT_EQ(READ_ONCE(*mem), READ_ONCE(guest_data.expected_val));
-+		WRITE_ONCE(*mem, READ_ONCE(guest_data.write_val));
-+
-+		GUEST_SYNC(0);
-+	}
-+}
-+
-+static void run_guest_do_rmw(struct kvm_vcpu *vcpu, loff_t pgoff,
-+			     char expected_val, char write_val)
-+{
-+	struct ucall uc;
-+	int r;
-+
-+	guest_data.mem = (void *)GUEST_MEMFD_SHARING_TEST_GVA + pgoff * page_size;
-+	guest_data.expected_val = expected_val;
-+	guest_data.write_val = write_val;
-+	sync_global_to_guest(vcpu->vm, guest_data);
-+
-+	do {
-+		r = __vcpu_run(vcpu);
-+	} while (r == -1 && errno == EINTR);
-+
-+	TEST_ASSERT_EQ(r, 0);
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+	case UCALL_SYNC:
-+		break;
-+	default:
-+		TEST_FAIL("Unexpected ucall %lu", uc.cmd);
-+	}
-+}
-+
-+static void host_do_rmw(char *mem, loff_t pgoff, char expected_val,
-+			char write_val)
-+{
-+	TEST_ASSERT_EQ(READ_ONCE(mem[pgoff * page_size]), expected_val);
-+	WRITE_ONCE(mem[pgoff * page_size], write_val);
-+}
-+
-+static void test_private(test_data_t *t, loff_t pgoff, char starting_val,
-+			 char write_val)
-+{
-+	TEST_EXPECT_SIGBUS(WRITE_ONCE(t->mem[pgoff * page_size], write_val));
-+	run_guest_do_rmw(t->vcpu, pgoff, starting_val, write_val);
-+	TEST_EXPECT_SIGBUS(READ_ONCE(t->mem[pgoff * page_size]));
-+}
-+
-+static void test_convert_to_private(test_data_t *t, loff_t pgoff,
-+				    char starting_val, char write_val)
-+{
-+	gmem_set_private(t->gmem_fd, pgoff * page_size, page_size);
-+	test_private(t, pgoff, starting_val, write_val);
-+}
-+
-+static void test_shared(test_data_t *t, loff_t pgoff, char starting_val,
-+			char host_write_val, char write_val)
-+{
-+	host_do_rmw(t->mem, pgoff, starting_val, host_write_val);
-+	run_guest_do_rmw(t->vcpu, pgoff, host_write_val, write_val);
-+	TEST_ASSERT_EQ(READ_ONCE(t->mem[pgoff * page_size]), write_val);
-+}
-+
-+static void test_convert_to_shared(test_data_t *t, loff_t pgoff,
-+				   char starting_val, char host_write_val,
-+				   char write_val)
-+{
-+	gmem_set_shared(t->gmem_fd, pgoff * page_size, page_size);
-+	test_shared(t, pgoff, starting_val, host_write_val, write_val);
-+}
-+
-+GMEM_CONVERSION_TEST_INIT_PRIVATE(init_private)
-+{
-+	test_private(t, 0, 0, 'A');
-+	test_convert_to_shared(t, 0, 'A', 'B', 'C');
-+	test_convert_to_private(t, 0, 'C', 'E');
-+}
-+
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES) &
-+		     KVM_MEMORY_ATTRIBUTE_PRIVATE);
-+
-+	page_size = getpagesize();
-+
-+	return test_harness_run(argc, argv);
-+}
+ 
+ int main(int argc, char *argv[])
+ {
 -- 
 2.53.0.rc1.225.gd81095ad13-goog
 
