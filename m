@@ -1,86 +1,106 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from oak.phenome.org (unknown [193.110.157.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F8A363C62
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Feb 2026 11:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159DF23EA8B;
+	Mon,  2 Feb 2026 12:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.110.157.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770032770; cv=none; b=hGTOHPItj/kkBezALn6BkWFFnOxEnuiISNoQ+z3jxp5KSOdud+VkUxL6DSX8FKQql+9e1TE0huF+XLJWqr469/7OAAXtVQ7jPMldmf7Ute0PlbdBMvB1xcz52AJKJrSqi+gsYVpY0eSkM6ZAdXUx6TRgeEh2EcwKaJlWeJpug+k=
+	t=1770034547; cv=none; b=C7bFMWhEDLSRSoYNrjoGdT4pCNsKgQw4r+nUpaApH+zEcTND63BEmT/JjafaaNec98fj0MPkNTfFkBfBPX86DeGihnulyfUgjIdERVYOG9jBgBDQEDDifG/1n/ruapeVrdKbj7a3Gc53f46DvJC4WI6kol0RgnylV0nsEi/a0es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770032770; c=relaxed/simple;
-	bh=3hNBtBGDkQPJWapZDKQ/bB2f1GQppgKQ2llQ4Eq+yIU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kZasBpa/wUehi7bZC8TfDYp9WDdpWG4JLBEvI4JEPqGrAqADBafDc488b+udvmdexPLPLQj+3XdFyQR4qR5bKvVWW/4H+YgbFim4oGk/1bZ0dNM8/JrmMe3yYcW25HWaNANtIlx9/yrJoinmrrr/TU2Cog2YVrxviQ/fGG+7gpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AfAdtyD2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770034547; c=relaxed/simple;
+	bh=J5YAUEvdRSPdIe0eFvACFFSbO6JcdQgRSZZxwU2kLRU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gvk3L1Mw6w668wtPZ7+oBTkLrqid/jmjexYxnT4LfLsBUaUHef4dhVavcEEaKk+q5bUAcpXyW3onw9riuU7N+0kDyR0mxoirsDTYB3yFlbLVYESFsXdpA/EEaiLKOVkImk7Lz/b8BrmW8Ah/QPil/MxYbm6DMgddDS07duQZQrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=phenome.org; spf=pass smtp.mailfrom=phenome.org; dkim=pass (2048-bit key) header.d=phenome.org header.i=@phenome.org header.b=lHdwoUwx; arc=none smtp.client-ip=193.110.157.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=phenome.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phenome.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AfAdtyD2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770032767;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0m2WNskmehLOpzG2Tsn8qxJQ9fl2058+6Lxdh3ceV8s=;
-	b=AfAdtyD2+KYfBhl940djlJa3tFGP+OCTrEuxb2U8+ecphNKof8m/y/CHtuLP/Pt0W6jubD
-	74irPaZ5TMbNS7fcijfnE5Fgck4xEdW4MDsoeIch/1cEP+nR/IbTCSZFANmRr69A+YKYq+
-	QKA0TTbBeinSU76E/ZmUpAYK1rtaa4E=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-93-n2Vt-5pGNTSAQUG7d_9Bhw-1; Mon,
- 02 Feb 2026 06:43:37 -0500
-X-MC-Unique: n2Vt-5pGNTSAQUG7d_9Bhw-1
-X-Mimecast-MFC-AGG-ID: n2Vt-5pGNTSAQUG7d_9Bhw_1770032615
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1386E180045C;
-	Mon,  2 Feb 2026 11:43:35 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.45.224.250])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C28BE1956056;
-	Mon,  2 Feb 2026 11:43:31 +0000 (UTC)
-From: Paolo Abeni <pabeni@redhat.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Richard Gobert <richardbgobert@gmail.com>,
+	dkim=pass (2048-bit key) header.d=phenome.org header.i=@phenome.org header.b="lHdwoUwx"
+Authentication-Results: oak.phenome.org (amavisd); dkim=pass (2048-bit key)
+ reason="pass (just generated, assumed good)" header.d=phenome.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=phenome.org; h=
+	in-reply-to:content-disposition:content-type:content-type
+	:mime-version:references:message-id:subject:subject:from:from
+	:date:date:received; s=oak1; t=1770034542; x=1770898543; bh=J5YA
+	UEvdRSPdIe0eFvACFFSbO6JcdQgRSZZxwU2kLRU=; b=lHdwoUwx2joWLS4FlpXc
+	UM5HqfMgCeTj2EVirubP+HrLXnFhSbab7KGj4jdKsAC8hjHBMKD1WietnKYxOndb
+	OZHeHlgoMK/iXwo9dVymB0BlSYTO+b1bYVHyZX5wE7YUxI4EXeQk3uXMLG2mfGVf
+	en+Ts0b/ZXaIXRE8arKx5XvzVti51wD5d5bHtD6JkTcpSKA8fWecVu2qsxwlLX6r
+	PWhCod1rMs3bDs07wEMe8JLnYsNg5H1qsqKlfGWwYVcD2aEuTcvOlNqlWxK7QqN7
+	5rdQ06dcT4ht21TUy7lZW0rtOExhnypiKzmbon1yne+lE3Ds4wO7YvLfT0ENSN2n
+	rg==
+X-Virus-Scanned: amavisd at oak.phenome.org
+Received: by oak.phenome.org (Postfix);
+	Mon, 02 Feb 2026 13:15:42 +0100 (CET)
+Date: Mon, 2 Feb 2026 13:15:41 +0100
+From: Antony Antony <antony@phenome.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Antony Antony <antony.antony@secunet.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Shuah Khan <shuah@kernel.org>, devel@linux-ipsec.org,
 	linux-kselftest@vger.kernel.org,
-	aleksander.lobakin@intel.com
-Subject: [PATCH v2 net 0/2] net: gro: fix outer network offset
-Date: Mon,  2 Feb 2026 12:43:13 +0100
-Message-ID: <cover.1770032084.git.pabeni@redhat.com>
+	Tobias Brunner <tobias@strongswan.org>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [devel-ipsec] Re: [PATCH net-next v4 2/2] selftests: net: add
+ ICMP error source address test over xfrm tunnel
+Message-ID: <aYCVbatEuE4kpVpg@Antony2201.local>
+References: <cover.1769595011.git.antony.antony@secunet.com>
+ <af9a189bee31f7d8f3759ed71d09ab5a82437592.1769595011.git.antony.antony@secunet.com>
+ <20260129184318.53b1dabf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260129184318.53b1dabf@kernel.org>
 
-The GRO stage has still problems in some edge scenarios when dealing
-with encapsulated traffic: the first patch address an issue there
-leading to bad checksums.
+On Thu, Jan 29, 2026 at 06:43:18PM -0800, Jakub Kicinski via Devel wrote:
+> On Wed, 28 Jan 2026 11:20:45 +0100 Antony Antony wrote:
+> > Test that ICMP error messages generated by an IPsec gateway use
+> > the correct source address (the gateway's address, not the
+> > unreachable destination).
+> 
+> could you check / fix shellcheck warnings?
 
-The second patch introduces a test case covering the relevant scenario:
-S/W segmentation after GRO for encapsulated traffic.
+lots of warnings. It looks like x-mas lights are still on:)
 
-v1 -> v2:
-  - fixed typos in patch 2/2
+> 
+> +In xfrm_state.sh line 115:
+> +	$ksft_skip)
+> +        ^--------^ SC2254 (warning): Quote expansions in case patterns to match literally rather than as a glob.
 
-Paolo Abeni (2):
-  net: gro: fix outer network offset
-  selftest: net: add a test-case for encap segmentation after GRO
+I will add quotes to. Thare 30-40 of those!  
 
- net/core/gro.c                            |  2 +
- tools/testing/selftests/net/udpgro_fwd.sh | 64 +++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
+> 
+> +In xfrm_state.sh line 157:
+> +	[ -n "${NS_R1}" ] && ns_r1="ip netns exec ${NS_R1}" && ns_active="${ns_active} $NS_R1"
+> +                             ^---^ SC2034 (warning): ns_r1 appears unused. Verify use (or export if used externally).
+> +
+> +
+> +In xfrm_state.sh line 162:
+> +	[ -n "${NS_B}" ] && ns_b="ip netns exec ${NS_B}" && ns_active="${ns_active} $NS_B"
+> +                            ^--^ SC2034 (warning): ns_b appears unused. Verify use (or export if used externally).
+> 
+> +In xfrm_state.sh line 166:
+> +	local ns_cmd=$(nscmd $1)
+> +              ^----^ SC2155 (warning): Declare and assign separately to avoid masking return values.
 
--- 
-2.52.0
+other shell checks are harder to fix.
 
++In xfrm_state.sh line 417:
+test_unreachable_ipv6() {
+^-- SC2329 (info): This function is never invoked. Check usage (or ignored 
+if invoked indirectly).
+
+those are invoked indirectly.  eval code I would like to keep. Would that 
+work for you? are you aiming fori strictly zero warnings?
+
+regards,
+-antony
