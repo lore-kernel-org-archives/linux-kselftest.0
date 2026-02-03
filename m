@@ -1,172 +1,112 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F7E2C21EA
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 09:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BACD392C48;
+	Tue,  3 Feb 2026 09:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770109612; cv=none; b=V0zSV4+2K9MiFPu9AvyajylmfpvyC8PD6Sv/rPLVKr/YKNTXmCYSdp8qU+WMMCMmCZk2QCGPHmXdzGrlUkM9eGKTbzLJVV0lOCX3oUc+AKrTx5V8d8DJtnRtacMQt+6qRrFzbVfJ8ow+qg6ZgLhFJ/AYbLR+DgBq6Rnq6nhryNY=
+	t=1770109860; cv=none; b=GCbmLQLaP4BXXLB4T1/zpifyfXRCGQZ1hqQyuNZn7HnzRmpO/DUni4r0Z4r0YmTtZgrnIrZvSeTO5PIjtuvTaMttcwVnTCY1FOisBdb0mlrk4DrgjbmMYmoKcmK918RxTrEK8XFYww14E7lcVfOvoaywd5rx9AZ4wgBqeB0M77k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770109612; c=relaxed/simple;
-	bh=roPHS30FKONpEYdSShHFx8BOvw8b3TfAY4ZJXfFKDKg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LELaxsSA8leMe6+DdtXj9kBiNlo5zs88eEGKRLCGfqKnrnAJYRRnhrs09vBtc1Gct11Ne08kU7A1jPUTDkrnXocQCWKQElnofvxrScS2Z1wdm7t2WQNUnfUJVIvkuG090Ip/tXnsrL5NDDn0o3NiaKYQDijGfTZfSh98ZHSJ2vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Luy/iF2Y; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770109860; c=relaxed/simple;
+	bh=LlBEaY/B0j9hTW3yp6PhoNQDNcJfMfJRCMziWK3voPI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k3VZYGH5bogwoL+OtYkZ0oTry8kMYYBCpz2/437mZtzMAwizzVOEGASPEZAuJUdsCNlW7wmGkCCOhAUJVJkDrN8meKZQrTu/94Dj7DdwnUN2dO9ZZpZMTd/pAmdR/1tFUPov51yGiSOTd4gDFroPdNDbLF69MYNEAZy2/ZnzqOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AKkZbvrF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Luy/iF2Y"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-481188b7760so35467685e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 01:06:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770109609; x=1770714409; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DpbKMtC8BivCbI6h9yvvOEnL3PIMyeN3yev0pGv9rtk=;
-        b=Luy/iF2YKNS2I568YtWP9BkQ/cVc01nXQCdcfbHu8PyVQ/i2TwnSHFxOZMLv8RJzw0
-         4Higf/MO76iXrdZOIiZznjooGYJrBRIzdz37TD8fU921aEOcH6Dpas5i5k60VDCuqrnf
-         8HZFWaCO5DV4Rx4LAXOfDxF+bND1OC1WFe351W4wqefgMzbmrEc2wRqnM3eByUTa6/AE
-         mIq/DHCar1+cAKG7v8WgHCVZ2fCsVl/64GMUPN7i5Dvgic4Ce6PW53tRwoOuQkUor7eZ
-         3jdrDvj3GSYG+QLWviltCei6aa6Yk69ssZF1lPlJjeNZJv0CKS8/Ac4Kg4dSPpRIPm8v
-         5POQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770109609; x=1770714409;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DpbKMtC8BivCbI6h9yvvOEnL3PIMyeN3yev0pGv9rtk=;
-        b=YDemnWQBx2cLSd+n8ZvxYOgf92emNb39sXyHIjO3ldd2LLtz8cRoWj49NxwjEMYyvk
-         eRoBSOBMqQW6WE5DWCXTPcNK9fmQ0zESQ79PuUF8FOVxbh2EaiTeDZyZNONdseSY4iRv
-         qw0ayrIX7j8aMNbBJ1JDDfWMb6BOG3NNdFN3f9qHK4Nh3bmvEozM7vRWgkwBSl635GqS
-         Fey0zFd9kyZzGmSKFC9Q8qJe/cIAjF+cSFNcKVziqkmZyFpwyS+wGdgvLAJ5QYzvK6MQ
-         OmH9oeBy6Dx9lSLxpKnKuaxHWot3KWtAHsJgNEudY5WLJroWF/9kZqRPgETqYA6aCabF
-         R3hg==
-X-Gm-Message-State: AOJu0Yzffy3R/l9wWl6x29Os4e/7Bsdgu0sXFy9bn/PVmlqx+BWB+Nu4
-	ffJfbdJswfpixtEjwICLdLaEIHdM+YDuhnNqUtLektvw7HGRJ8ffQnai
-X-Gm-Gg: AZuq6aJdmMEUK4bg210kBKC358woIkRCe8y8D+Qs/e6w01SVUm+mkmannCjHwCpQn+Y
-	7XswOt5xy/2P81IVUs7wuyy1bpF4yM4WqNFqrOUsV64MVdxBD4ueIZM1fqNThRS6h7+Pw22f1/G
-	HKjq9r/qWwaWovJyh4ajNjj13Pl2UDoFZnkD1Z0c+BZLeCWIFleJktEYXp0YiqKKylAwbu8vDIL
-	bZyeEG3fBpqk4KfGhrPZVgpBPebQ1fLk/+KtIJ4K7l/0uHdEAQx9TcTbItRxgy3nCESWTtB2Qs7
-	u1ZxjpzBURj9G+8fwwhZ2AN+HCw3YJVbvDh9SWy2TPrcGfGrGcIp9IQgpzfaE7sgtDzruZbz/zK
-	3lKq1dthDCFC9no5E5/S5VC0AYruy54OokICoB6IQ6D9eabDzCvkzg5ToXF0iuKORguxkXd21sd
-	XqprtYmBaK8xkl3f8wKmnhXxWhtl4m6Pb5SSRtFKQh/ZjbaZdKuz0BRqYtIUD4uA==
-X-Received: by 2002:a05:600c:b99:b0:47a:8154:33e3 with SMTP id 5b1f17b1804b1-482db49a483mr188667685e9.28.1770109609053;
-        Tue, 03 Feb 2026 01:06:49 -0800 (PST)
-Received: from nixos.numericable.fr (38.42.3.89.rev.sfr.net. [89.3.42.38])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483051372cdsm78418655e9.13.2026.02.03.01.06.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 01:06:48 -0800 (PST)
-From: Titouan Ameline de Cadeville <titouan.ameline@gmail.com>
-X-Google-Original-From: Titouan Ameline de Cadeville <titouan.ameline-de-cadeville@epita.fr>
-To: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	davidgow@google.com,
-	raemoar63@gmail.com,
-	kees@kernel.org,
-	eleanor.lin@realtek.com,
-	visitorckw@gmail.com,
-	Titouan Ameline de Cadeville <titouan.ameline-de-cadeville@epita.fr>
-Subject: [PATCH v4] lib: math: tests: drop unnecessary KUnit param_value casts
-Date: Tue,  3 Feb 2026 10:06:09 +0100
-Message-ID: <20260203090609.30430-1-titouan.ameline-de-cadeville@epita.fr>
-X-Mailer: git-send-email 2.44.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AKkZbvrF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 750C0C116D0;
+	Tue,  3 Feb 2026 09:10:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770109860;
+	bh=LlBEaY/B0j9hTW3yp6PhoNQDNcJfMfJRCMziWK3voPI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AKkZbvrFGlkyF3SjquTxf2AxylwGIMeyjMAaHltGIHCHUur8gZkI7eI4CpLHAhSAo
+	 64LbmIU7NqNC15I5jM9uoJjmyAr4Ze2EIF7NkhOuZiN/uqZxHClUbyy0djD6tSBGhw
+	 +2Cfz9ZUn0tQuqGZhbRsgtwXJA0i1tCIxbnO5U5NK/h1m0K5eEVCuItYEGlCeXTs1W
+	 XYffYRHngcNeA9/ZgI6Rn/C6rx9JU9ekXeoUhdj1uwSPb83S9b3VBnuMSpIcl8Nw4a
+	 /bi9hAPR8ckrYPbz4zE1CkupV1SXttFPKYQ8p44MC39P7YRIJfA6NVnnlWfK4NLlS0
+	 hdupJ1Y8/mimQ==
+Date: Tue, 3 Feb 2026 10:10:57 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Johan Hovold <johan@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Tzung-Bi Shih <tzungbi@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Dan Williams <dan.j.williams@intel.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@kernel.org>, 
+	maarten.lankhorst@linux.intel.com, tzimmermann@suse.de
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+Message-ID: <20260203-lyrical-taipan-of-enhancement-df5615@houat>
+References: <20260124170535.11756-1-johan@kernel.org>
+ <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh>
+ <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
+ <20260127235232.GS1134360@nvidia.com>
+ <20260129010822.GA3310904@killaraus>
+ <DG1FF2VY54AO.2Q3YHA4WNLV5C@kernel.org>
+ <20260130091049.GH3374091@killaraus>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="udewh34oifiokydq"
+Content-Disposition: inline
+In-Reply-To: <20260130091049.GH3374091@killaraus>
 
-Drop unnecessary casts from KUnit parameter access since param_value
-is a void *. This improves readability and follows common kernel style.
 
-No functional change.
+--udewh34oifiokydq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+MIME-Version: 1.0
 
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Titouan Ameline de Cadeville <titouan.ameline-de-cadeville@epita.fr>
----
- lib/math/tests/gcd_kunit.c      | 2 +-
- lib/math/tests/int_log_kunit.c  | 4 ++--
- lib/math/tests/int_pow_kunit.c  | 2 +-
- lib/math/tests/int_sqrt_kunit.c | 2 +-
- lib/math/tests/rational_kunit.c | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
+Hi,
 
-diff --git a/lib/math/tests/gcd_kunit.c b/lib/math/tests/gcd_kunit.c
-index ede1883583b1..b9c9b8758991 100644
---- a/lib/math/tests/gcd_kunit.c
-+++ b/lib/math/tests/gcd_kunit.c
-@@ -34,7 +34,7 @@ KUNIT_ARRAY_PARAM(gcd, params, get_desc);
- 
- static void gcd_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, gcd(tc->val1, tc->val2));
- }
-diff --git a/lib/math/tests/int_log_kunit.c b/lib/math/tests/int_log_kunit.c
-index 14e854146cb4..9f9b48232701 100644
---- a/lib/math/tests/int_log_kunit.c
-+++ b/lib/math/tests/int_log_kunit.c
-@@ -43,7 +43,7 @@ KUNIT_ARRAY_PARAM(intlog2, intlog2_params, get_desc);
- 
- static void intlog2_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, intlog2(tc->value));
- }
-@@ -52,7 +52,7 @@ KUNIT_ARRAY_PARAM(intlog10, intlog10_params, get_desc);
- 
- static void intlog10_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, intlog10(tc->value));
- }
-diff --git a/lib/math/tests/int_pow_kunit.c b/lib/math/tests/int_pow_kunit.c
-index 34b33677d458..ef9c8a9bd8ac 100644
---- a/lib/math/tests/int_pow_kunit.c
-+++ b/lib/math/tests/int_pow_kunit.c
-@@ -31,7 +31,7 @@ KUNIT_ARRAY_PARAM(int_pow, params, get_desc);
- 
- static void int_pow_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, int_pow(tc->base, tc->exponent));
- }
-diff --git a/lib/math/tests/int_sqrt_kunit.c b/lib/math/tests/int_sqrt_kunit.c
-index 1798e1312eb7..9c46024b0fc1 100644
---- a/lib/math/tests/int_sqrt_kunit.c
-+++ b/lib/math/tests/int_sqrt_kunit.c
-@@ -45,7 +45,7 @@ KUNIT_ARRAY_PARAM(int_sqrt, params, get_desc);
- 
- static void int_sqrt_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, int_sqrt(tc->x));
- }
-diff --git a/lib/math/tests/rational_kunit.c b/lib/math/tests/rational_kunit.c
-index 47486a95f088..b05587a1e90a 100644
---- a/lib/math/tests/rational_kunit.c
-+++ b/lib/math/tests/rational_kunit.c
-@@ -33,7 +33,7 @@ KUNIT_ARRAY_PARAM(rational, test_parameters, get_desc);
- 
- static void rational_test(struct kunit *test)
- {
--	const struct rational_test_param *param = (const struct rational_test_param *)test->param_value;
-+	const struct rational_test_param *param = test->param_value;
- 	unsigned long n = 0, d = 0;
- 
- 	rational_best_approximation(param->num, param->den, param->max_num, param->max_den, &n, &d);
--- 
-2.44.2
+On Fri, Jan 30, 2026 at 11:10:49AM +0200, Laurent Pinchart wrote:
+> On Thu, Jan 29, 2026 at 11:29:03PM +0100, Danilo Krummrich wrote:
+> > (Cc: Maxime, Thomas, Maarten)
+> >=20
+> > On Thu Jan 29, 2026 at 2:08 AM CET, Laurent Pinchart wrote:
+> > > That's what I've been advocating for. The best way to ensure that dri=
+ver
+> > > code will not accessed data freed at .remove() time is to prevent the
+> > > code to run at all.
+> >=20
+> > With this we are in full agreement, I think that'd be best too. But, I =
+also
+> > think that sometimes this isn't possible. For instance, DRM has such a =
+case with
+> > atomic mode setting.
+>=20
+> I don't see why it would be impossible there.
 
+I'm not quite sure what you have in mind there, but DRM always allowed
+the DRM driver to stick around longer than its device to accomodate the
+fact that userspace might still have an open fd to it.
+
+If userspace has an open fd, it can still call ioctl so preventing to
+run any code is going to be difficult.
+
+Maxime
+
+--udewh34oifiokydq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaYG7oAAKCRAnX84Zoj2+
+dhQ+AX9t5YGtdLoSB+e30KEQ2ZIVpyqXJO3hiPBr8vM6IhmH0KLv6ZXX8wx4yL9j
+PMJjMNcBf3daV26VIEGZqSHQQvlG3R55Pw+pi42DgcP53HQStDBImAGErY1bXEZj
+8gxa/xvpUg==
+=HDDn
+-----END PGP SIGNATURE-----
+
+--udewh34oifiokydq--
