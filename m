@@ -1,55 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE5636BCEB;
-	Tue,  3 Feb 2026 06:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE4837C105
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 06:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770099141; cv=none; b=KATSqR3XyUZErm1UAQpUZC+Kn21uVvU6QmFUBCh5QoWzZjvQ/x5ebDmXAka0UNVBfkIE7mWSYsM3DTKL+POLE42nFIkS1BQsRrBn9QUhQ3//WArT5rqMXo5ni2Tgb97EHPL0Niev6XmqB72HMs0Zhj8rumwJZEwvZJNn8TJrwpQ=
+	t=1770100501; cv=none; b=IwSkWz+P1+7Jbd/tYdbLyQRCSuI+pLRbqo3qmCcLJEm0FeBybxfuMsK/NDNhmijXbqfOdPy8RhbFyRO+Knr2RY3D8Jr99f7nbkMJIyQHp7Ggrw8H3TDpwT3VXdJ28FiFzGay0qTsnCjIjJd6+tIexJVYhPPo9AM3ryjdFjp6B3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770099141; c=relaxed/simple;
-	bh=ldihWY52VOZDRWgJtWxRIOsufAG6wBHd6sUeYExdgBs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=etNfeBJ2DF5NiI4X0cWmA6TSQw6mo2z66P/AhZCInAqDOmFYzoLZWAaPygHvnv6fvPKdG/+tIz/4nveqGVeqX7EVuWgsU6/mLnpgMRL3b2nzcz457X4DKN+10n087qZlctY7pA/l+UAEog2YDAQykN/Ve8e/9G1rF3xfsR7+TKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJaGHU3j; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770100501; c=relaxed/simple;
+	bh=+jfAbJmK5NygcciGKp6EEwMSd5OUC57idgZm/cik9Ls=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qLjQIvHi91TmtCKU+1xuXjkfLZPJGDh6LlnZMqqby7IxFzpYK3vJHu+fpacdZXwOVF8uobJlbhCAOr63P5jmmuNkZ70PTMJbL1fh+9DGpJwPTnGXYpwdDkuOwT7B8zDFmPXfSNwJbZXwM57vZDfNDz2IwFA7Imw5DjXJ/xHo5+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uecs1NQ0; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJaGHU3j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6678BC2BC86;
-	Tue,  3 Feb 2026 06:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770099140;
-	bh=ldihWY52VOZDRWgJtWxRIOsufAG6wBHd6sUeYExdgBs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mJaGHU3jljibqPDab6tqYZlsKfG93kZu5gLYchcbaMnxi3EKmS9UeFjbj6PyRQV6g
-	 1XZkfhQiY/N7nNlFOnoin4EuJNz42ZCXn8UL/ImGiGbpeNhLOUcgSHD3Ly/aoFb4v1
-	 RL5Owm1F60a6syEOCzm/j3T2ixOoNgy+CJoxpyWbVEunRsJSVUBPRBPGUyQb5bgP3w
-	 iwwLOoSoGxUfUS1ln6et1hW9alBSe2AtUxKmEiC70JmhZx2RZ4RWSWpNG1yHXFJeLg
-	 G0iweisPLWg+a2nVB2FftXjIZNpdeOXjFcxlVN5hZobq4VRX/WKBw9u6m9TEsG1C/e
-	 1KEURwkzu4WYw==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linusw@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Johan Hovold <johan@kernel.org>,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uecs1NQ0"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-59b6f04cae6so5419638e87.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 22:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770100497; x=1770705297; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q7veAzn+ssv4gTO6PNq9GiaBpAmIsYoQzI7tl2meJ/s=;
+        b=Uecs1NQ0hQC+B0VmmpsdWHrtqMj/OivpTHDg5UYHhVRGBz73HmI9+/ZU7GqdIN48iU
+         gPoSOKPUTF00wK4DvkpaXTt1qezSA7BOroWM/WmIWnnuSttJA9obgDM8rz2oz2zK4Gbq
+         2fnQSZYk9yq8WWzkK8a+BG991DWqAZy5GXBmxkNI0bcG5XAOipbMh6+mJ33GhDXZHI6O
+         KYGMg0rILO40d2OGMEE+Mej3bXEhcKG104aqkEjs2p0T0REW4X4m52AhciWl77Ipt/B6
+         VOV2s2MWFb3nWvuz7Ulmncp5r2i63XK5q6JpimhIGJ61jgL2zY8zahU4m9Q//S4hCvm/
+         rSbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770100497; x=1770705297;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q7veAzn+ssv4gTO6PNq9GiaBpAmIsYoQzI7tl2meJ/s=;
+        b=D7FuAYbEJJXx5DnN+s2V2uOOZSRWpKurY0V1KuXHEu4OEtCWN4B9/UmWgFCNSZ8/RE
+         z0O7MEAbQS8LB1aIj4Vf227pImXyf1Snpccy8NQqhgnpz4+V6vU20AOk8qINQlCaZcj9
+         BUPxARzofGVmTFx3egMX0NlyhVE/Xo4/iT8UNgMf9yI7fEi14vsG1IPaQk/x6zrGld77
+         SSeelvCYGN8kEeBiTD6Lyyw6DI3Y5gfZHHG4chgwXEXeDyk7tgUGDcDH6HMjURmDTxh5
+         c1LiVWcqzv9/OlCpPWTeRXg0lmMpsfbPMPuWbZ6Gw8NNy7oCZMtI6ys3Q7QfyEzAR9k2
+         lQVg==
+X-Forwarded-Encrypted: i=1; AJvYcCWiCgsYc6GnDgNgsGlopjS0BQSzdBWZzJabgvNO2Y440zmq3mFIJXM903vA6iPC+sT2JmCMmaju/eYuXN2b5l4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9zemb+Zm3v0gEmGdyog8YybEg9lpVfTgL36MdqOnQkQhyOJHY
+	XTmrL/ad/lXRC+a5Ue57wAM7FctksVMh2TdF/swPAddqTEvT1FJ+kS2JqSwDxA==
+X-Gm-Gg: AZuq6aK/hXMIGFXVnvJ06y1BJZlmSA39cnpRTxVAuBxtmLitOitsGnxIk7AsUWalgOl
+	G1QVts+GMtibFS5auiaxnkDi8KX1dgXQzulIfBgHekYt67H0YllzT/NtMmWx6AzbP0o0bk+5iRD
+	ICmu0beY8gWJAGC94oyYFX89wd0PUhmFppvUDRoKQhGbmNBEVVp/W+ZWk3CDYRZfUFUTbP79WT1
+	EiTibRVavNxWHySuNb6L90X1EV3zlB24KQnoOND1mO1tyYqyQcqcOlH36Weoh2S+QkebgECYITx
+	0YYhRxt3NIcf1shnzWqe3moD7kQLYgM1+JjZXb11e9fnes5bEJagPyRHCfXrObgcArCcaDBrZr2
+	cX5rwISihDdy8iujRn9X3fjyEO+2FJSzLhXo1qi9rijsn9hjIT9yXHAfyWeYbm3lQQyT+oXJQXy
+	ltCOKbwendthhlF7aCRMXqrLAQa6Y9pSUx5WqQ3MXWr3Z972A+zlnPk6Ti6PPJTNaje9/MONLbj
+	iVnl3cc26ZY09qvyGFQDPI=
+X-Received: by 2002:a05:6512:238f:b0:59e:9b4:96a7 with SMTP id 2adb3069b0e04-59e164420cfmr4144034e87.37.1770100497341;
+        Mon, 02 Feb 2026 22:34:57 -0800 (PST)
+Received: from buildhost.darklands.se (h-94-254-104-176.A469.priv.bahnhof.se. [94.254.104.176])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e074889a7sm3993935e87.31.2026.02.02.22.34.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Feb 2026 22:34:56 -0800 (PST)
+From: Magnus Lindholm <linmag7@gmail.com>
+To: kees@kernel.org,
+	luto@amacapital.net,
+	wad@chromium.org,
+	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	tzungbi@kernel.org,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-gpio@vger.kernel.org
-Subject: [PATCH v2 11/11] gpio: Remove unused `chip` and `srcu` in struct gpio_device
-Date: Tue,  3 Feb 2026 06:10:58 +0000
-Message-ID: <20260203061059.975605-12-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
-In-Reply-To: <20260203061059.975605-1-tzungbi@kernel.org>
-References: <20260203061059.975605-1-tzungbi@kernel.org>
+	linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	glaubitz@physik.fu-berlin.de
+Cc: Magnus Lindholm <linmag7@gmail.com>
+Subject: [PATCH] selftests/seccomp: add Alpha support to seccomp_bpf
+Date: Tue,  3 Feb 2026 07:33:26 +0100
+Message-ID: <20260203063357.14320-1-linmag7@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,165 +79,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-`chip` and `srcu` in struct gpio_device are unused as their usages are
-replaced to use revocable.  Remove them.
+Enable seccomp_bpf selftests on the Alpha architecture by providing
+Alpha-specific register definitions and syscall accessors.
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+This allows the seccomp-bpf test suite to exercise syscall tracing,
+seccomp filters, and user notification on Alpha.
+
+Signed-off-by: Magnus Lindholm <linmag7@gmail.com>
 ---
-v2:
-- No changes.
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-v1: https://lore.kernel.org/all/20260116081036.352286-24-tzungbi@kernel.org
-
- drivers/gpio/gpiolib.c | 26 +-------------------------
- drivers/gpio/gpiolib.h |  4 ----
- 2 files changed, 1 insertion(+), 29 deletions(-)
-
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 347ff456858f..bcc7834b2362 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -423,8 +423,6 @@ static int gpiochip_get_direction(struct gpio_chip *gc, unsigned int offset)
- {
- 	int ret;
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 32e2d4df397b..db2c81bb89b6 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -136,6 +136,8 @@ struct seccomp_data {
+ #  define __NR_seccomp 354
+ # elif defined(__x86_64__)
+ #  define __NR_seccomp 317
++# elif defined(__alpha__)
++#  define __NR_seccomp 514
+ # elif defined(__arm__)
+ #  define __NR_seccomp 383
+ # elif defined(__aarch64__)
+@@ -1748,6 +1750,29 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+ # define ARCH_REGS		struct user_regs_struct
+ # define SYSCALL_NUM(_regs)	(_regs).orig_eax
+ # define SYSCALL_RET(_regs)	(_regs).eax
++#elif defined(__alpha__)
++#define ARCH_REGS struct pt_regs
++#define SYSCALL_NUM(_regs) ((_regs).r1)
++#define SYSCALL_NR_SET(_regs, _nr) \
++	((_regs).r1 = (unsigned long)(_nr))
++#define SYSCALL_RET(_regs)     ((_regs).r0)
++/*
++ * Alpha syscall ABI:
++ *  - r0 holds return value (or positive errno on failure)
++ *  - r19 (a3) is 0 on success, 1 on failure
++ */
++#define SYSCALL_RET_SET(_regs, _val)				\
++	do {							\
++		long __v = (long)(_val);			\
++		if (__v < 0) {					\
++			(_regs).r0  = (unsigned long)(-__v);	\
++			(_regs).r19 = 1;			\
++		} else {					\
++			(_regs).r0  = (unsigned long)__v;	\
++			(_regs).r19 = 0;			\
++		}						\
++	} while (0)
++
+ #elif defined(__arm__)
+ # define ARCH_REGS		struct pt_regs
+ # define SYSCALL_NUM(_regs)	(_regs).ARM_r7
+@@ -4643,6 +4668,10 @@ TEST(user_notification_wait_killable_pre_notification)
+ 	pid_t pid;
+ 	long ret;
+ 	char c;
++
++	#if defined(__alpha__)
++		SKIP(return, "/proc/<pid>/syscall not available on Alpha");
++	#endif
+ 	/* 100 ms */
+ 	struct timespec delay = { .tv_nsec = 100000000 };
  
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	if (WARN_ON(!gc->get_direction))
- 		return -EOPNOTSUPP;
- 
-@@ -875,7 +873,6 @@ static void gpiodev_release(struct device *dev)
- 	ida_free(&gpio_ida, gdev->id);
- 	kfree_const(gdev->label);
- 	kfree(gdev->descs);
--	cleanup_srcu_struct(&gdev->srcu);
- 	kfree(gdev);
- }
- 
-@@ -1076,14 +1073,9 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 		goto err_free_gdev;
- 	gdev->id = ret;
- 
--	ret = init_srcu_struct(&gdev->srcu);
--	if (ret)
--		goto err_free_ida;
--	rcu_assign_pointer(gdev->chip, gc);
--
- 	ret = init_srcu_struct(&gdev->desc_srcu);
- 	if (ret)
--		goto err_cleanup_gdev_srcu;
-+		goto err_free_ida;
- 
- 	ret = dev_set_name(&gdev->dev, GPIOCHIP_NAME "%d", gdev->id);
- 	if (ret)
-@@ -1277,8 +1269,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 
- err_cleanup_desc_srcu:
- 	cleanup_srcu_struct(&gdev->desc_srcu);
--err_cleanup_gdev_srcu:
--	cleanup_srcu_struct(&gdev->srcu);
- err_free_ida:
- 	ida_free(&gpio_ida, gdev->id);
- err_free_gdev:
-@@ -1315,8 +1305,6 @@ void gpiochip_remove(struct gpio_chip *gc)
- 	synchronize_srcu(&gpio_devices_srcu);
- 
- 	/* Numb the device, cancelling all outstanding operations */
--	rcu_assign_pointer(gdev->chip, NULL);
--	synchronize_srcu(&gdev->srcu);
- 	revocable_provider_revoke(&gdev->chip_rp);
- 	gpio_device_teardown_shared(gdev);
- 	gpiochip_irqchip_remove(gc);
-@@ -2822,8 +2810,6 @@ static int gpiochip_direction_input(struct gpio_chip *gc, unsigned int offset)
- {
- 	int ret;
- 
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	if (WARN_ON(!gc->direction_input))
- 		return -EOPNOTSUPP;
- 
-@@ -2839,8 +2825,6 @@ static int gpiochip_direction_output(struct gpio_chip *gc, unsigned int offset,
- {
- 	int ret;
- 
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	if (WARN_ON(!gc->direction_output))
- 		return -EOPNOTSUPP;
- 
-@@ -2930,8 +2914,6 @@ static int gpiochip_set(struct gpio_chip *gc, unsigned int offset, int value)
- {
- 	int ret;
- 
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	if (WARN_ON(unlikely(!gc->set)))
- 		return -EOPNOTSUPP;
- 
-@@ -3285,8 +3267,6 @@ static int gpiochip_get(struct gpio_chip *gc, unsigned int offset)
- {
- 	int ret;
- 
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	/* Make sure this is called after checking for gc->get(). */
- 	ret = gc->get(gc, offset);
- 	if (ret > 1)
-@@ -3340,8 +3320,6 @@ static int gpiod_get_raw_value_commit(const struct gpio_desc *desc)
- static int gpio_chip_get_multiple(struct gpio_chip *gc,
- 				  unsigned long *mask, unsigned long *bits)
- {
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	if (gc->get_multiple) {
- 		int ret;
- 
-@@ -3695,8 +3673,6 @@ static int gpiochip_set_multiple(struct gpio_chip *gc,
- 	unsigned int i;
- 	int ret;
- 
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	if (gc->set_multiple) {
- 		ret = gc->set_multiple(gc, mask, bits);
- 		if (ret > 0)
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index ce6273cc74f2..2179074d2362 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -28,7 +28,6 @@
-  * @chrdev: character device for the GPIO device
-  * @id: numerical ID number for the GPIO chip
-  * @owner: helps prevent removal of modules exporting active GPIOs
-- * @chip: pointer to the corresponding gpiochip, holding static
-  * data for this device
-  * @descs: array of ngpio descriptors.
-  * @valid_mask: If not %NULL, holds bitmask of GPIOs which are valid to be
-@@ -51,7 +50,6 @@
-  *                 process context
-  * @device_notifier: used to notify character device wait queues about the GPIO
-  *                   device being unregistered
-- * @srcu: protects the pointer to the underlying GPIO chip
-  * @chip_rp: revocable provider handle for the corresponding struct gpio_chip.
-  * @pin_ranges: range of pins served by the GPIO driver
-  *
-@@ -65,7 +63,6 @@ struct gpio_device {
- 	struct cdev		chrdev;
- 	int			id;
- 	struct module		*owner;
--	struct gpio_chip __rcu	*chip;
- 	struct gpio_desc	*descs;
- 	unsigned long		*valid_mask;
- 	struct srcu_struct	desc_srcu;
-@@ -79,7 +76,6 @@ struct gpio_device {
- 	rwlock_t		line_state_lock;
- 	struct workqueue_struct	*line_state_wq;
- 	struct blocking_notifier_head device_notifier;
--	struct srcu_struct	srcu;
- 	struct revocable_provider __rcu *chip_rp;
- 
- #ifdef CONFIG_PINCTRL
 -- 
-2.53.0.rc2.204.g2597b5adb4-goog
+2.52.0
 
