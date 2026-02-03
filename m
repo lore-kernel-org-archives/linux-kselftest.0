@@ -1,71 +1,72 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8655F2798ED
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 18:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FFF31B828
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 18:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770142412; cv=none; b=ekVzhErtuQFKeBUVZJ1IaxMdkXJdJ6eT19ncne3Nei8LeZnhH0RvTqFRzQa8WNv+ImOM2IVmKIlYx0ms7XCCiGINAf/qrfw/shibAPYQSC8z1SL8kw/sUwpDbol3tWWIYWtXypjQNtBO+yD7jMZ2ej1t5sisAc5u+PO0lt0+8IU=
+	t=1770142582; cv=none; b=tZT8pgoTV1sja+eI5uMKQaaePdCJXyB/06bkNbjcoNDAbq7r7U5/apN5vszl1M8kY89fYATTquDt92/WQItf3svucp3FV+Yjy56n8iQDbTovfycG0KR4/I2rb5Xpys2I58CFu70/ufEhOzI99LbgdCduLYL9/kmYpPQv4tg3PoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770142412; c=relaxed/simple;
-	bh=RgOdFHuomUx5cdPp0JGsemA2d5RVP7tNLyg3IMDaEeM=;
+	s=arc-20240116; t=1770142582; c=relaxed/simple;
+	bh=Qt7o89VltFIBegDzasIbqnP3PJ+WPuTLLON/GuX+fRQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=muaLEntbXr6K58RrbIAX3gFBD5pq86sFFzxkEZ8Zr9JiX5XL3o9nk75UKdcoxw1y3etDnTJmTpSEuc6NbhCiG5sgj9TUFuiTi5EOp+JizbCEsB5YCK51fldNTaL2H8VHuMQAbR6kIWCzt4ywaZm9lMS9xwEorHifOmWGS3gC0rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=oEtrnln0; arc=none smtp.client-ip=209.85.160.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=YeGjnKwaXhxlxzIEe+xU/tSWvI/Dm6Ympv/nCAuTUaiPyrf6NzMU6E58YMZB545JzUmy52L3dP3h6UgDERfUbGRsnvcc/beMsuev4m/hGJsynEz/+XI1E1itCV4d4cDeZgEOvZALbtO+5mE9guGl8vUqWnic8iI3qFf8+GxYIVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=Mniz/5oy; arc=none smtp.client-ip=209.85.219.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="oEtrnln0"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5029af2b4bcso32781371cf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 10:13:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="Mniz/5oy"
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-8947e6ffd30so70834866d6.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 10:16:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1770142410; x=1770747210; darn=vger.kernel.org;
+        d=ziepe.ca; s=google; t=1770142580; x=1770747380; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6rLJUepMBePw2/6rYXVBVUlKVexPKPCi+MRpKxp95Xc=;
-        b=oEtrnln0aEZ4MV0c7yM9IqhjQJwWubUZvYjG0eYwfhve6jxrNk4n8MxL3DLkkdoP9b
-         kx7SpDoUiUgB/4j4FXTa6wT/5bJVCntjPC+YUkAUjjM6JEBFbfzRRcDfbnYL1Ty/K6IR
-         zDjTnSTQ4a7xN+t94xh6VTJzVcusgQX1Fa5bp5oMdFJfiZtqO0IAbWOiZS6Ym7+PMAlq
-         cs8vA05/EjHp4IAd54Zbkeh8JO4WWepY2cxXHjcYHu/8BYZI/R+r1j72G3yWN9nmRCvi
-         js2ObNs8hhOsQVCVMR3dJ1LPwj8TX1NDKqnc8QzgnP9ykQxeOXuhpYtDczTB7OV/IRyr
-         3yvQ==
+        bh=mu1la4UZlbEX7cvXzj/Z/hgnRFrqjHU+qKtYtW0dmkY=;
+        b=Mniz/5oynk/qOI64zPIe8E+PNEyixk4fEB611FX5soFdbulK6R9KmPQtOu4aEAXjcB
+         efjpn/kLP3vsSPGaHohVu6/Rt0K9qXP7QtNggw4Y7iGiQ+lb7Btklx97aDYTLAlUztFI
+         h5yvBEF6xvd6QNj3f/5Rq9dS5pMAQ/wKBPWuMCDaLEXtmpFbJnXArLI2UIvYnmp155Zy
+         0b+yLcNYyG0uUnOruupOuHumm/8Fat9UIruRUI37sLCEsgtmT6QSkgWJF1h0NEiROxuz
+         1abL4IMKxz9NUHd0G1V4nEtr6+1cDHCJ7YB1uyGxhcm0aubd+Dk72keMw16xEPt7BDo4
+         yQIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770142410; x=1770747210;
+        d=1e100.net; s=20230601; t=1770142580; x=1770747380;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6rLJUepMBePw2/6rYXVBVUlKVexPKPCi+MRpKxp95Xc=;
-        b=kIn6bLG9Ceg5Y29BN3p0/iVgr/Q2qgjO/CZmPk/idOYQK0ASd22T814c2S8+igk9Bq
-         M0jI7vNd6Mlm4dDYMbEqgAA7nMIlEci5jNC0lLjczX2/zjQ4+FBFdd3H/oJTNNkYurWT
-         q3YHXI/6XiNRyaoknRDf5SX6Rm69NZ55VxvbnMAA/EWnnCEWoSYSdwUHBIPCX83HD8pQ
-         JKBu1w+jEPWsimQe9GX8paFvZNgjIkLUjXyrhid6a+QcBgwVZSE9g6ro0dwc3HqOtfDL
-         KRwu4n4HAUN0v5KZrDxmPK0wY9rNEFBy6CiQqCUEoysxq7zx+pg05tY2rYedGiGx3tYN
-         Lj9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWKD+v5gOv8vNavUi4uERXWCUL7TPaUNcjUlQEpz5SumV2u5a1NcvX0gd470MmbvlTpQpC6EwzF4qM76QOfYx4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsQvX7I56ekDJoCJJ8KIlfmxyNbqIZzTgrz7PtWHvfZiJ+C/q0
-	4aCNwGFsKghloEusIDuyy4ySCcBCuCoVhOXNIDEfngKU8ChFwrbvf2N7NBxwDgtWZcU=
-X-Gm-Gg: AZuq6aL74jxbH51/f58Vp7jZPqFzNcwHcSMNGcv58G9fGv3tpJVrbCJbQmk/izZmHCW
-	VtPhfYrvJT1eomp2rBxm9LF8bAkORIYlYfKsyjL8HKchFeCLICLVWVJgt8wPiW5GLkvJVhv+Dtj
-	80jLn5PNJIQBqLsY9BOri32HT0SrqK1+Y2JCGf/amIz5+cm08FPJn79wQ3+LK53OpCfkBhrI9xj
-	DCvLxVcYvm17EGSwwHnPW82yQGqHDir8U+fNcjLfQeXTymzS2oN96RDunKNxsOPhMQ8mqSfTA9R
-	PGN0VN/00A2AAePu5pahlvxyRNzad4X/O4+uz5xWR6mqIPwpjbwLHdwjnz7Owm4OLzvFCj2g7fx
-	QB0P51s31653Yfy9l/yRVklBR+AQFYQmRDG2yKeX7EJrQ5f9PVxfgTHnmdidGcM/2OiBgCYHJAA
-	7X/TgoQG9cZWxxsm6RU4xPC28DbMWx0WjShbH7/f+hmZX7pccJ1SsqHbhfREENbf8yRP8=
-X-Received: by 2002:ac8:1402:0:b0:4ee:42e6:a5 with SMTP id d75a77b69052e-5061c1ae28dmr1930741cf.57.1770142403217;
-        Tue, 03 Feb 2026 10:13:23 -0800 (PST)
+        bh=mu1la4UZlbEX7cvXzj/Z/hgnRFrqjHU+qKtYtW0dmkY=;
+        b=nWCipgYjqjzx3s5Y7JhNa7KB2pVTTd5S7MpwO5tS1gN3ujc7qLu6s4JVEMHY19taMs
+         McOgoqW5m3dOYWfnYhmIVTuSYtoCteUpa6ydSvX8e9aAO18z4NnvRgcBeyP3zgLdlBog
+         Hq/HzbtKERnV5uMOI+A3Wqewn2kXDSvTrcrZY4lI7JgQWReQ6NewbPOP+e0GqWblDZ3p
+         0gf1isV+KoN7ueerMaQ1/ta7acE6pcaMRkV9YyTkJakKBReC5HiTwO/RRIdPcRfVPvVO
+         cTdmi44yV5EQODs17RKo270uyub6fDMbIgngTYADM0Hop6CnYAlEf96N/AZsgFCcIawX
+         UZeg==
+X-Forwarded-Encrypted: i=1; AJvYcCV/qzz9dojJwgeiN26bBBF550CYzeNh/bvFX+StCV7xbijfU/LVepPpggCUIdc0vdGglT6xa6aEOR8zwMj5+wM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyHAqvaDQNVYrpshoECHg32YWqj0ggyd7JNZ2BPlKljqjyth2e
+	LtcS3YNOqfXiN5EcF7G6STCj9CcaJc1RD7uHuw4bnKZe050rgdx1msXEGPC2J5Blxrk=
+X-Gm-Gg: AZuq6aJKVwPvewPaQRvtMRsx+83MmWPBaCeKK6BED1cOr07MNPgn0o/T/uMMY2ijYJD
+	CUniVwy5VXX99VMV8P3Zd27kbUTFjS+aM/FdauEfZJGlOIpX1Z6+ZZ2qOmeN0vjvKtadDi32Vjn
+	ztag/gs7iWZJ/8wsklTh+5XSYb4s4RoFoNQKg1nU3SEY5/3YRhUooNbxtAV2eFZ0wXG/S+Lihva
+	iTTpw3THiUb14r7ozMZJ/vL54PqAOaYDh9EO5gogUZ7kxiW6n5750c6k9RV3vG4RDnWKuyE8wrn
+	SJsY2HrIiaSQVtWtsieUEwArk4rLKyrLanpjLMYJeWNcFCEVE+CyZjSu5eIylkXBI3B8al84Itn
+	Pq+CK3uhXik4NtgkDkyoc44Pd6TMoccRXz/fgx1VipX0xuVTZYiOzFYQ4YVDhbNoGw004Mc6X9y
+	1U5iqOG0P3p2tWbpzmnPJ7mipifqWzZdnv+59Tf9FdZjF00YOyvtcciyXgXZfyL9AFzxc=
+X-Received: by 2002:a05:6214:20ab:b0:87c:22f9:dac4 with SMTP id 6a1803df08f44-8952210b4a5mr5192876d6.15.1770142579616;
+        Tue, 03 Feb 2026 10:16:19 -0800 (PST)
 Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fa55983sm22226185a.10.2026.02.03.10.13.22
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89521c00173sm2728446d6.12.2026.02.03.10.16.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 10:13:22 -0800 (PST)
+        Tue, 03 Feb 2026 10:16:18 -0800 (PST)
 Received: from jgg by wakko with local (Exim 4.97)
 	(envelope-from <jgg@ziepe.ca>)
-	id 1vnKtt-0000000Gaft-0KdL;
-	Tue, 03 Feb 2026 14:13:21 -0400
-Date: Tue, 3 Feb 2026 14:13:21 -0400
+	id 1vnKwk-0000000Gah4-0kfw;
+	Tue, 03 Feb 2026 14:16:18 -0400
+Date: Tue, 3 Feb 2026 14:16:18 -0400
 From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Alexey Kardashevskiy <aik@amd.com>
+To: Xu Yilun <yilun.xu@linux.intel.com>
 Cc: Sean Christopherson <seanjc@google.com>,
-	Ackerley Tng <ackerleytng@google.com>, cgroups@vger.kernel.org,
+	Ackerley Tng <ackerleytng@google.com>,
+	Alexey Kardashevskiy <aik@amd.com>, cgroups@vger.kernel.org,
 	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
@@ -102,15 +103,14 @@ Cc: Sean Christopherson <seanjc@google.com>,
 	yilun.xu@intel.com, yuzenghui@huawei.com, zhiquan1.li@intel.com
 Subject: Re: [RFC PATCH v1 05/37] KVM: guest_memfd: Wire up
  kvm_get_memory_attributes() to per-gmem attributes
-Message-ID: <20260203181321.GX2328995@ziepe.ca>
+Message-ID: <20260203181618.GY2328995@ziepe.ca>
 References: <cover.1760731772.git.ackerleytng@google.com>
  <071a3c6603809186e914fe5fed939edee4e11988.1760731772.git.ackerleytng@google.com>
  <07836b1d-d0d8-40f2-8f7b-7805beca31d0@amd.com>
  <CAEvNRgEuez=JbArRf2SApLAL0usv5-Q6q=nBPOFMHrHGaKAtMw@mail.gmail.com>
  <20260129003753.GZ1641016@ziepe.ca>
  <aXqx3_eE0rNh6nP0@google.com>
- <20260129011618.GA2307128@ziepe.ca>
- <586121cf-eb31-468c-9300-e670671653e1@amd.com>
+ <aYHGVQTF6RUs7r3g@yilunxu-OptiPlex-7050>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -119,37 +119,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <586121cf-eb31-468c-9300-e670671653e1@amd.com>
+In-Reply-To: <aYHGVQTF6RUs7r3g@yilunxu-OptiPlex-7050>
 
-On Tue, Feb 03, 2026 at 12:07:46PM +1100, Alexey Kardashevskiy wrote:
-> On 29/1/26 12:16, Jason Gunthorpe wrote:
-> > On Wed, Jan 28, 2026 at 05:03:27PM -0800, Sean Christopherson wrote:
+On Tue, Feb 03, 2026 at 05:56:37PM +0800, Xu Yilun wrote:
+> > +1.  For guest_memfd, we initially defined per-VM memory attributes to track
+> > private vs. shared.  But as Ackerley noted, we are in the process of deprecating
+> > that support, e.g. by making it incompatible with various guest_memfd features,
+> > in favor of having each guest_memfd instance track the state of a given page.
 > > 
-> > > For a dmabuf fd, the story is the same as guest_memfd.  Unless private vs. shared
-> > > is all or nothing, and can never change, then the only entity that can track that
-> > > info is the owner of the dmabuf.  And even if the private vs. shared attributes
-> > > are constant, tracking it external to KVM makes sense, because then the provider
-> > > can simply hardcode %true/%false.
+> > The original guest_memfd design was that it would _only_ hold private pages, and
+> > so tracking private vs. shared in guest_memfd didn't make any sense.  As we've
+> > pivoted to in-place conversion, tracking private vs. shared in the guest_memfd
+> > has basically become mandatory.  We could maaaaaybe make it work with per-VM
+> > attributes, but it would be insanely complex.
 > > 
-> > Oh my I had not given that bit any thought. My remarks were just about
-> > normal non-CC systems.
-> > 
-> > So MMIO starts out shared, and then converts to private when the guest
-> > triggers it. It is not all or nothing, there are permanent shared
-> > holes in the MMIO ranges too.
-> > 
-> > Beyond that I don't know what people are thinking.
-> > 
-> > Clearly VFIO has to revoke and disable the DMABUF once any of it
-> > becomes private.
+> > For a dmabuf fd, the story is the same as guest_memfd.  Unless private vs. shared
+> > is all or nothing, and can never change, then the only entity that can track that
+> > info is the owner of the dmabuf.  And even if the private vs. shared attributes
+> > are constant, tracking it external to KVM makes sense, because then the provider
+> > can simply hardcode %true/%false.  
 > 
-> huh? Private MMIO still has to be mapped in the NPT (well, on
-> AMD). It is the userspace mapping which we do not want^wneed and we
-> do not by using dmabuf.
+> For CoCo-VM and Tee-IO, I'm wondering if host or KVM has to maintain
+> the private/shared attribute for "assigned MMIO". I'm not naming them
+> "host MMIO" cause unlike RAM host never needs to access them, either in
+> private manner or shared manner.
+> 
+> Traditionally, host maps these MMIOs only because KVM needs HVA->HPA
+> mapping to find pfn and setup KVM MMU.
 
-Well, we don't know what the DMABUF got imported into, so the non-KVM
-importers using the shared mapping certainly have to drop it.
+This is not actually completely true, the host mapping still ends up
+being used by KVM if it happens to trap and emulate a MMIO touching
+instruction.
 
-How exactly to make that happen is going to be interesting..
+It really shouldn't do this, but there is a whole set of complex
+machinery in KVM and qemu to handle this case.
+
+For example if the MSI-X window is not properly aligned then you have
+some MMIO that is trapped and must be reflected to real HW.
+
+So the sharable parts of the BAR should still end up being mmaped into
+userspace, I think.
+
+Which means we need VFIO to know what they are, and hopefully it is
+just static based on the TDISP reports..
 
 Jason
