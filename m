@@ -1,184 +1,142 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D733E202F65
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 18:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7630B2F7ACA;
+	Tue,  3 Feb 2026 18:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770143663; cv=none; b=g+VJywbPySATMMrZoLqdW4z+ebvVk2PM2YyCmSk3O0h0z2Sc1359tsqeS252UM+4NiIiSeQ2iM5FCql43uYOdHQ/myEyk/u4B2lUKJyvLU7HfM2OaILZBG2yPq9vlbop1E9ZhEDAyzK+sbiTsc/kvt4kksP/gqmCuLJA0e565WE=
+	t=1770144148; cv=none; b=kOf+8Hr21Jpu6Yadka4x0Pdu3drlpZqU/6Fo41TkkJiyhMKgeC2v+JLBW/HInk5mJSGYj+ypHtE6UXlSm+2Vxpg86D8Y1QJ2vfunxg+pTnT3jzAffdBts3zY9+0O4AhLKwptpQhmvXMvK0tjQTQK2zgvU99k8wiRp1/1ZLfPvWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770143663; c=relaxed/simple;
-	bh=pBOp8/P1hQCnGJgskG3YY0KJlWnmwCTblLlq6mNTV2M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ih5RbnAxK4nP6JDEo3s9R27rdZzVv6KitbskqXwq3TalCnL0zGv4KMiXW37ez4WTH9zb3dNPppMv694ugJzPAfNCi6qlShrqktPyHDQ52f8CzAx4ncdfmcjffOtSJk6gK7jIICIFsDe/rjTVbNBcIdZUTpgWyDFJn3wxJXs80xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fKRFbKHk; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770144148; c=relaxed/simple;
+	bh=wRIpaO20lQckRnYerb9WukDrN5roa3A/MNA4U+4guRg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=u2qLhfI9HJLOgBZ31D9f/t1yo5LlwVRhbCR98auk+I4T54mAgr5w6YT8gNWHZyaAvnZf/S+oplj+TjCDioYwLW8yi6zaUevO90aoCP8GWIDJaQ0m91yu9j8Rnpkwn8d7NWSDZ9oDJ+IcmP2EqN6sOtx+rI2WWr51fsqQSNZFnvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tiZJ35sP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fKRFbKHk"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-82310b74496so3462646b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 10:34:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770143661; x=1770748461; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o6uJLcE00Iq19qZLatJ2/SPEG6MVkQU0n0oI7YP48ZU=;
-        b=fKRFbKHkFdzdVesugMjN6MHatQ3vL0U7kztStrlgqNXUtO2yvB1VxYW3Tfkl88NUFt
-         nbSWqT7nGRtzWp+fDca4ZS/MOUNsKKMbr8SFk6FpAfQc4CZWz65FLBkiueEYgHT27r7M
-         IFsmSbCRAdammoobSnvbPPJ2T28hIwTk0auDITdnQ4UXMblL2+sehq7fTQ6R3vA0nKXc
-         4Je7Z5yt6Q7qUOWBoEWYmXharCSyVsqc5gqEyFr7u6RKu8+O/vGLAKgC1sYJOkXv0zL8
-         KkLKoAvsBCVzc7up58zUrcC9JtXJvNKRblBd11fyMfTv5AABF2M5UuAOY6DAiRJbrQi0
-         og3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770143661; x=1770748461;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o6uJLcE00Iq19qZLatJ2/SPEG6MVkQU0n0oI7YP48ZU=;
-        b=vEKiOCPNuHNqUQ0hPhcyKGRHPQDEDjvYnl5wTQ7sr3IS8Fb//RKk1heUEemyBqzbFl
-         MJc584Yb6CrOxhuMSeTxzzrsSABXWE7fanRZNLXpOnTo8GEuu/lah2A5nXk2O119LfXY
-         plG5DNzBIxWjzjMumtMnvtciu4yHa7Rde0Xprus9cUAf0cOt/x4fLE8+8BClat4e1oVV
-         4ZLVdqS+fj+LRhhBaCiSnPFH/9uLTkGSZkNP/EcBRbzYIoYiRvbGFOtvrQ7JLMFLG8Ba
-         l+XmLtNtcUcdrPqMj3i5Yq9lXOb2VLx2hxeKk8Fr9YA8vrCGJD5xQZs+E0iTfw7/SUQr
-         h/bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUjHdLqmunGm7KxmIlJF8aaDcGKuQUcf8R+pFtm+oXl/nJhbxCRpM24SxR5JBOVB4VISzX1VoR8zHDJ+1RmUWI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJiqEjFLNFdTAmM2lRuOnJsh0fJLYMndjTVE7wzNW4iy3Mzdww
-	vQZVAAIEIjk+uGB5yi3f5RVeIIPhxDf+kFBuqH4y6OeVJRKCENIcLzv3
-X-Gm-Gg: AZuq6aIj3IPAO5QcJPL/kHiBthlQPcZV+EAVEYG2PGooc2Gt20zbB1E6VFZDu1yebGm
-	RI3Cy6D99TQMV/uuDup+rXtMBkmWs0RO/nCqlSQl8fM+Pi8Yx0VGRDuStppsgSreUPwPT0rCv5z
-	UR/6Cp57aGHh99MrtsXZXxyrZdfwL4l6u0SOSqnGZzIMKnALhuHUDHhd9O3jhlEoFVGQE2cMMMo
-	JCIUEK+GbZruud8xYvDnqHNIRFLpq4a9EMBM4H+hP3dFs7DyQ6+/9ZQ7wr7dYfQK/GrgIhijH/0
-	W1cuQ4v0U6sOrzT6aibw0DcMc6QJy3HoA//2uHp7MUNDk+72Ab2+Q9tO86dyB3ZTbg9EmzcxH/4
-	3d/8/lb+xlmMKYB9d589SKxWOOISdeg+CBEfcL3JzMlbcnGHEB6DI/mLHiucvIFxx/5v6MJyj19
-	19Z7maQjXM99rm82J708x4K+ii
-X-Received: by 2002:a05:6a20:cf90:b0:38b:de3d:d542 with SMTP id adf61e73a8af0-393723c22c5mr326552637.51.1770143661043;
-        Tue, 03 Feb 2026 10:34:21 -0800 (PST)
-Received: from google.com ([2402:7500:479:35ee:ffa0:8c05:8b18:1c7a])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-354860fa13csm413520a91.7.2026.02.03.10.34.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 10:34:20 -0800 (PST)
-Date: Wed, 4 Feb 2026 02:34:16 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Titouan Ameline de Cadeville <titouan.ameline@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, davidgow@google.com,
-	raemoar63@gmail.com, kees@kernel.org, eleanor.lin@realtek.com
-Subject: Re: [PATCH v5] lib: math: tests: drop unnecessary KUnit param_value
- casts
-Message-ID: <aYI_qLX3DqxlymmD@google.com>
-References: <20260203173040.42158-1-titouan.ameline@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tiZJ35sP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08EB7C19425;
+	Tue,  3 Feb 2026 18:42:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770144148;
+	bh=wRIpaO20lQckRnYerb9WukDrN5roa3A/MNA4U+4guRg=;
+	h=From:Subject:Date:To:Cc:From;
+	b=tiZJ35sP0M7IuI9LonWVl2o0SvN79IdtumFLpGZnlqZCEI7NXgdz11zLhC293ptU+
+	 StHwcR3tUAyCuDTLlM0xSJZFaYK+dYbcYip2VqCCjrsfhinabJ6fTAelAPemxxjm6C
+	 gWg7Vh5Ge8vlj0mXnknrEoqWsyoAWqico2g2MlBqc9HYQOC2i5dqHssUlnvzq/k+GP
+	 SybrfYmsPXYYqs+B39P5/Lfdu1sAJ4l569lQF5JXOowdfifzo8EsNaeyd1gpIeQg1C
+	 WKmALzfh1m8wfULj3noJIbJ1rsHSinpSuR62GbxZSmSchZamNUW7X/TwjVFzsvz9IK
+	 sOmIuGSp74KLg==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 00/15] mptcp: misc. features for v6.20/7.0
+Date: Tue, 03 Feb 2026 19:41:16 +0100
+Message-Id: <20260203-net-next-mptcp-misc-feat-6-20-v1-0-31ec8bfc56d1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260203173040.42158-1-titouan.ameline@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAExBgmkC/zWMQQqAIBAAvxJ7bkEtpPpKdFDbag+ZqEQQ/T0JO
+ sxhDjM3JIpMCYbqhkgnJz58EVlX4DbjV0Kei4MSSgupOvSUC1fGPWQXcOfkcCGTUaMSKMj22sr
+ GutZAeYRIC1/ff4Q/hel5Xo9H2dx5AAAA
+X-Change-ID: 20260128-net-next-mptcp-misc-feat-6-20-0eb96b13bc4a
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ linux-trace-kernel@vger.kernel.org, 
+ David Laight <david.laight.linux@gmail.com>, Gang Yan <yangang@kylinos.cn>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3082; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=wRIpaO20lQckRnYerb9WukDrN5roa3A/MNA4U+4guRg=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKbHNuemLbz3WC2nPS2bfbHc8fsbTx7V3RwW7Sx1H1m9
+ au5vvRvRykLgxgXg6yYIot0W2T+zOdVvCVefhYwc1iZQIYwcHEKwETmpjP8T9nAoLJzu+vmzPS+
+ q0vPbzfjsfE6uu30hLf6/fsCd86eNo2RoXHhPqPSx95fb74/Umqy9IfSpj8BL13NPQ9OvmB96M2
+ SFGYA
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Tue, Feb 03, 2026 at 06:30:40PM +0100, Titouan Ameline de Cadeville wrote:
-> Drop unnecessary casts from KUnit parameter access since param_value
-> is a void *. This improves readability and follows common kernel style.
+This series contains a few independent new features, and small fixes for
+net-next:
 
-I'm not necessarily against this patch, but to be honest, I don't see
-how this "improves readability."
+ - Patches 1-2: two small fixes linked to the MPTCP receive buffer that
+   are not urgent, requiring code that has been recently changed, and is
+   needed for the next patch. Because we are at the end of the cycle, it
+   seems easier to send them to net-next, instead of dealing with
+   conflicts between net and net-next.
 
-Regards,
-Kuan-Wei
+ - Patch 3: a refactoring to simplify the code around MPTCP DRS.
 
-> 
-> No functional change.
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> Signed-off-by: Titouan Ameline de Cadeville <titouan.ameline@gmail.com>
-> ---
-> 
-> Changes in v5:
-> - Use consistent email address in From/Author/Signed-off-by (titouan.ameline@gmail.com).
-> - Add version changelog below the '---' line.
-> 
->  lib/math/tests/gcd_kunit.c      | 2 +-
->  lib/math/tests/int_log_kunit.c  | 4 ++--
->  lib/math/tests/int_pow_kunit.c  | 2 +-
->  lib/math/tests/int_sqrt_kunit.c | 2 +-
->  lib/math/tests/rational_kunit.c | 2 +-
->  5 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/lib/math/tests/gcd_kunit.c b/lib/math/tests/gcd_kunit.c
-> index ede1883583b1..b9c9b8758991 100644
-> --- a/lib/math/tests/gcd_kunit.c
-> +++ b/lib/math/tests/gcd_kunit.c
-> @@ -34,7 +34,7 @@ KUNIT_ARRAY_PARAM(gcd, params, get_desc);
->  
->  static void gcd_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, gcd(tc->val1, tc->val2));
->  }
-> diff --git a/lib/math/tests/int_log_kunit.c b/lib/math/tests/int_log_kunit.c
-> index 14e854146cb4..9f9b48232701 100644
-> --- a/lib/math/tests/int_log_kunit.c
-> +++ b/lib/math/tests/int_log_kunit.c
-> @@ -43,7 +43,7 @@ KUNIT_ARRAY_PARAM(intlog2, intlog2_params, get_desc);
->  
->  static void intlog2_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, intlog2(tc->value));
->  }
-> @@ -52,7 +52,7 @@ KUNIT_ARRAY_PARAM(intlog10, intlog10_params, get_desc);
->  
->  static void intlog10_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, intlog10(tc->value));
->  }
-> diff --git a/lib/math/tests/int_pow_kunit.c b/lib/math/tests/int_pow_kunit.c
-> index 34b33677d458..ef9c8a9bd8ac 100644
-> --- a/lib/math/tests/int_pow_kunit.c
-> +++ b/lib/math/tests/int_pow_kunit.c
-> @@ -31,7 +31,7 @@ KUNIT_ARRAY_PARAM(int_pow, params, get_desc);
->  
->  static void int_pow_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, int_pow(tc->base, tc->exponent));
->  }
-> diff --git a/lib/math/tests/int_sqrt_kunit.c b/lib/math/tests/int_sqrt_kunit.c
-> index 1798e1312eb7..9c46024b0fc1 100644
-> --- a/lib/math/tests/int_sqrt_kunit.c
-> +++ b/lib/math/tests/int_sqrt_kunit.c
-> @@ -45,7 +45,7 @@ KUNIT_ARRAY_PARAM(int_sqrt, params, get_desc);
->  
->  static void int_sqrt_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, int_sqrt(tc->x));
->  }
-> diff --git a/lib/math/tests/rational_kunit.c b/lib/math/tests/rational_kunit.c
-> index 47486a95f088..b05587a1e90a 100644
-> --- a/lib/math/tests/rational_kunit.c
-> +++ b/lib/math/tests/rational_kunit.c
-> @@ -33,7 +33,7 @@ KUNIT_ARRAY_PARAM(rational, test_parameters, get_desc);
->  
->  static void rational_test(struct kunit *test)
->  {
-> -	const struct rational_test_param *param = (const struct rational_test_param *)test->param_value;
-> +	const struct rational_test_param *param = test->param_value;
->  	unsigned long n = 0, d = 0;
->  
->  	rational_best_approximation(param->num, param->den, param->max_num, param->max_den, &n, &d);
-> -- 
-> 2.44.2
-> 
+ - Patch 4: a new trace event for MPTCP to help debugging receive buffer
+   auto-tuning issues.
+
+ - Patch 5: align internal MPTCP PM structure with NL specs, just to
+   manipulate the same thing.
+
+ - Patch 6: convert some min_t(int, ...) to min(): cleaner, and to avoid
+   future warnings.
+
+ - Patch 7: prepare future extensions replacing sk_write_space().
+
+ - Patch 8: sort all #include in MPTCP Diag tool in the selftests to
+   prevent future potential conflicts and ease the reading.
+
+ - Patches 9-11: improve the MPTCP Join selftest by waiting for an event
+   instead of a "random" sleep.
+
+ - Patches 12-14: some small cleanups in the selftests, seen while
+   working on the previous patches.
+
+ - Patch 15: avoid marking subtests as skipped while still validating
+   most checks when executing the last MPTCP selftests on older kernels.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+David Laight (1):
+      mptcp: Change some dubious min_t(int, ...) to min()
+
+Geliang Tang (1):
+      mptcp: allow overridden write_space to be invoked
+
+Matthieu Baerts (NGI0) (9):
+      mptcp: pm: align endpoint flags size with the NL specs
+      selftests: mptcp: diag: sort all #include
+      selftests: mptcp: join: wait for estab event instead of MPJ
+      selftests: mptcp: join: fix wait_mpj helper
+      selftests: mptcp: join: userspace: wait for new events
+      selftests: mptcp: join chk_stale_nr: avoid dup stats
+      selftests: mptcp: join: avoid declaring i if not used
+      selftests: mptcp: connect cleanup TFO setup
+      selftests: mptcp: join: no SKIP mark for group checks
+
+Paolo Abeni (4):
+      mptcp: do not account for OoO in mptcp_rcvbuf_grow()
+      mptcp: fix receive space timestamp initialization
+      mptcp: consolidate rcv space init
+      trace: mptcp: add mptcp_rcvbuf_grow tracepoint
+
+ include/trace/events/mptcp.h                      |  80 ++++++++++++++++
+ net/mptcp/protocol.c                              |  56 ++++++-----
+ net/mptcp/protocol.h                              |  12 ++-
+ net/mptcp/subflow.c                               |   2 -
+ tools/testing/selftests/net/mptcp/mptcp_connect.c |  17 ++--
+ tools/testing/selftests/net/mptcp/mptcp_diag.c    |  29 +++---
+ tools/testing/selftests/net/mptcp/mptcp_join.sh   | 107 +++++++++++-----------
+ 7 files changed, 189 insertions(+), 114 deletions(-)
+---
+base-commit: fae1c659d7bd5640012be21b5b5d6490b83c0df8
+change-id: 20260128-net-next-mptcp-misc-feat-6-20-0eb96b13bc4a
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
