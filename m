@@ -1,141 +1,136 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB46824BD
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 01:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770081504; cv=pass; b=Ns5bWzE6UWeI97yHeKYyt0MYiTjK9rOxthWhgrvl60EZL4rBMHyFUiCFaBC3SpwxG7Grn729mCn+gDvnVqpsHpd41oP/7VoQCkxxPcQlN3gseU3WpP3cNF+bkybtJ//Ym7c7hsw2DBJd3D5LQM4jpr/4aiNVSkrAtDRlDq5a0pw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770081504; c=relaxed/simple;
-	bh=Bmmhefj4WNLudxlkW4jKO5VYo++HONTS5JYUhkUAUgk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tgo7FiyZCH1f8jlKUZH7Wo1muWJ3HJoE+xjH/nkMsljY4PwLMM79AXx8Omz2wh8cfq/dqhRjDpx9dwC4Ne7pEWaw5cE9C62bkvTSgW3SVg7Zeexlp3zwdBo/5X8VqFecC84qVDuMOogRlffPQcKAcc8JpUA5B248etdYA7YlClw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wbz4nT+j; arc=pass smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4EF1799F
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 01:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770081754; cv=none; b=l22Yx07LcBW+Zw/M+5kQ937D/zamSoueb9kJYUA1ZLjqDqJ+vyqmPkXkkalyrZe1+18AySiQRHhT1MxD8TiFHAcFMklmjlilEOMuLUFrm1HFy8Ff+c9rHHF3hE3HheMbfTPoXIwb8XN2tqau6mTNGhVHa6uko4DEiOi6bOaE/fI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770081754; c=relaxed/simple;
+	bh=0ihaOCOCi0TtYTywQQ7PQ5EeQHpvVkR5/KEKBqLKb74=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rnk7QiKxnpbDVIaJUTF3AvdlclWUbKi2nGzutNsFOmxcRqKeLXX5DJ58fLncAa3G3LyKvoAcP5J5CRgmxtX42m8Q8Ldhi/rIBdKIJ7MesYty2t0yQdlIkCLoMz5gTTtCzJA3J4SBTEiTH8kgVA+8pJYSCM/f1mwBIdjVNVoT8uA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=qZ3naJov; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wbz4nT+j"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42fb4eeb482so3510446f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 17:18:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770081501; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Nam0ZVDOfCUYTr8/knsCGyBCvxWvWJ6OSZF/aqvmyezUeNRA8voF1/lKsAwqaQKQA/
-         XXfQeRRP8PFULdriRYR/bDJBwU96yzqPZ7OjTb2ALgDiVqJcosoVtr+iWTnAVCYZj+sv
-         ohYCvP4YUQANwYpla8AYw2cF8moac7YNGWhNrBSY+p7c+IJekHf2CCCiGtuPnrcHZ9Wf
-         PHeebU8hlABdKNn/PNoU4+vgSY7CEjzFEbBj7cMEbT6YVGX+Puxl5baOvEON6tWF34ed
-         Ck+flGglNPcNVP3D0HIE9mHU3MGvXIAKTY2bUYNLHsLclMsJkGvYOaCTpS0IiMlN63Nc
-         SNGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sd/d8SeUvWXvlGk9ddIMYzI+tIG2toE3t6Ukc4jQMvk=;
-        fh=XjxCgEfpZ9dYqXyIG/tIr5/KMOgSnKLejtL08JjczmQ=;
-        b=SujJbzS1vwh0e2yYe/4bB2zb6TlyK+8YJqcnYHltp+2h+E2bGDXw0rGJRosvsK+UO0
-         iTA5lwQ5Eibq5ke3/lrNxz7zlQWUzyosHLEETdGDhPE2Ly6ywOZwrql4WanVqjsOfiev
-         Byj8fpfk9jZzGgSPwjQbPCBkbo6HSs1OluXTc+w7+vVhRMjIvmS1GaHRTk7q89n1YzPK
-         Mc4ZGJ6mcfFaBe/D2OgNIx1Rdv/K7lcQuoz8ISxC19DDXUw6ZVf7p6cuVXBMDpaC8s3g
-         hQvd0mVezZ2Nl9lTERWcrWSaDKnVac62K09TDQh7+INLXHWXFvlggXM5owDsUbLhXBEi
-         a6zw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770081501; x=1770686301; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sd/d8SeUvWXvlGk9ddIMYzI+tIG2toE3t6Ukc4jQMvk=;
-        b=Wbz4nT+jhzBYIUKsP1eW5DHclBcI9vLSeb3sM1zIRAf04OdeLq7WRWRNOpC1Ci2f17
-         +ZeVpJUn+mpJd/8Zbklo4wqB2VSQWQ2WADbTzTNWMoFL5mf85P12AZsgRNNjWCXvpAXQ
-         y9MGGAWIg5BAVEwr0A0pXDxz0ff/yWYW6ctpAp/IssyAqmpDYU9aDJUf9a/YG3mc6xOF
-         pn6CpI2Oq+yhET/ziaNS5iug3R4i7lDDMj9RkMr1caIrFbF5bj5zsKVfsWAnv2iai9kP
-         AnL2UABdLXUC0HAxrvNDHhne4CxG0lQAzSdIwvrdc5bETIMopKCJcG0BNTu/Ei5RA9o3
-         2cbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770081501; x=1770686301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sd/d8SeUvWXvlGk9ddIMYzI+tIG2toE3t6Ukc4jQMvk=;
-        b=xJ2shoISN0/FW3CP5+uwuiaStueZLqgGS/UpSGi6WfyPsBKOG9QxQAfDrzsYxG0tJg
-         r7+JC54nH+lMYvxUMesSSJ4gDHZ6NBI6kNd2LCTXcfuj7MK2Xumvv/kByPccHiAPOIxL
-         +jvNy/wsQi6xwDqONep/+TQUMRr1ZlZiMbfTkMjx4wekD/uj7Q3NXmEBIpyhtQHbrLAz
-         +EcT89Nyr1i+g7boJqIw2y8+O7qx0wqfDljPeTXwPHuwfUuYAyp7/ic7iLpKRtEE9cXX
-         LcuOfGxO8QNZbn/53t5JKuqMjijDGK70Z3GkkZA9JB6hxvYQ73fbqazmXpIcaTKlpEc1
-         Zv8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVRQizuN2bxu7kcqCIR0MdbL6tnYl8pMq9OnbGkjIOEU3eoJ18rN5PeauVgq6WS9nTcBUmHHy7U9k82qabNjNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywnd//ZML1pIhaAeIkyJNSFf+RNr72YKj6P2RNNnsxd2QUiNaEA
-	n/A4k5K6yQfy+BoM5pHRB6CO4kJsUq89SpGPP32CSxziNoSOx9siEdWhxrQB8AzAsOTjqQuJOXM
-	6UnOuD6xpxL2JQjL/IMPyJUFwKb1Fq+g=
-X-Gm-Gg: AZuq6aLQaaUmj5vz0iVnWnMJmmykBCk1hgii5oC7+fjhY04tLPbG+JZcpPmcE5+8DWT
-	PvxOS1p4R0uJbJiXvPC7Cm9KUOxpHXjMSm4oU/S4t0B/xB51LfNgYJUX10vLpt++PXLe8IbTplS
-	mnwUV7KNCVQyGDobWXQhvOGeoSmcfi1wkTmOBjOfp4Yg0oe5CP6ppCSmWljBP1UJUunw/JszyO4
-	9h5S0LHW/RMJ9ieKHmTSvaMRuK9LChO8RLO8UxWhu+mcxU/y7NQg3l4+B53xoTkwUs0CrJjBBEm
-	sN8KJlbRyWRiRoC+z6CVmQK0aj/T3iNHgztpuoLHdzvbDlAk/jZOX+z6aM619b6GRZ3t65fXKV1
-	fszcm/oBFKCspfA==
-X-Received: by 2002:a05:6000:26cd:b0:430:f7c9:94c3 with SMTP id
- ffacd0b85a97d-435f3a864dcmr20856195f8f.25.1770081501267; Mon, 02 Feb 2026
- 17:18:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="qZ3naJov"
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 612MM8MC3891012
+	for <linux-kselftest@vger.kernel.org>; Mon, 2 Feb 2026 17:22:31 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=F+V+8Jpn+P9xEzO33GYn
+	WR123CrNUWJRUiQ/pM5RrWM=; b=qZ3naJovulPxJOMxdCex0tGtOB+Fw+0kKyYv
+	b4vdDomR76QVZyZpuJO73nju0aYOinAI9CEboRIITWeM8IdmVKsxMMD7Tp+s3Gwy
+	ZwRVjWEqEJ2vQpTsqvtlatsS0VSvqTI2JZAbv5Yr0Qwuwn/dAeXFufircnmii2zJ
+	ky+Ct19rd8avRfCM1AElFonP/RKLY6ewOh1iErKVaYze+8jbDxub3GixhsTfNdJZ
+	383mRzgvCIu7vmOTnshlU4BbQHRiW7HsGWXCBb+OOmWGldPBw+Jllejwp46lOKra
+	n85BkJz5s5pyYAc9E9X7z0e++KksnMeJBfAE18nGRieXng3e+Q==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4c30d2cynp-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Mon, 02 Feb 2026 17:22:31 -0800 (PST)
+Received: from twshared18212.03.snb2.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Tue, 3 Feb 2026 01:22:30 +0000
+Received: by devvm6375.cco0.facebook.com (Postfix, from userid 721855)
+	id 964EE10B1DD0; Mon,  2 Feb 2026 17:22:18 -0800 (PST)
+Date: Mon, 2 Feb 2026 17:22:18 -0800
+From: Ted Logan <tedlogan@fb.com>
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] vfio: selftests: only build tests on arm64 and x86_64
+Message-ID: <aYFNyifxe0vC6A67@devvm6375.cco0.facebook.com>
+References: <20260130-vfio-selftest-only-64bit-v1-1-d89ac0944c01@fb.com>
+ <aYE0QUnXYq6OYvq9@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202090051.87802-1-pilgrimtao@gmail.com> <20260202090051.87802-2-pilgrimtao@gmail.com>
- <CAADnVQJPFANbYvYYyG3OQdXh4174bGwsamAzD8HZ5f=noS=BnQ@mail.gmail.com> <CAAWJmAaiFAyK+PDLStoR_0sGAH6TeeekPMdOjhKwQ07rUm_oSA@mail.gmail.com>
-In-Reply-To: <CAAWJmAaiFAyK+PDLStoR_0sGAH6TeeekPMdOjhKwQ07rUm_oSA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 2 Feb 2026 17:18:10 -0800
-X-Gm-Features: AZwV_Qg8XA7JUMiNc7JyuqWoaZbv30QGWKAtdBVvQXzrT4x-mLO7ytNlIyiFJro
-Message-ID: <CAADnVQ+R-A1G7JO874fASUQNvDYuTeWovyvriCPth40Y=oLc9w@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] bpf/verifier: allow calling bpf_kptr_xchg while
- holding a lock
-To: Chengkaitao <pilgrimtao@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <aYE0QUnXYq6OYvq9@google.com>
+X-FB-Internal: Safe
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAzMDAwOCBTYWx0ZWRfXz8iGoR3d7lt3
+ mHCufAlAhcDbUZr9KHs0Kg/9XDqQLFemAknoncdzNC2nbMo4sXSz0AMuiEvncQgmAx4ZTTsXPPn
+ /rAA1ELOg709q8i3oV78k+lNsCh2bZCqhfK6rG/eUwEeDP/agk/oTWIKL+yES5gkxeF6qHA0Th0
+ 2pI2k3XBVGJUzeCTBe/I0UtedW89GoA2g7+qu6RvRilnC9v7ZZrYzKcsG+/4DtajG71S23vqszq
+ C6XMtCjDQgGuXnSavuBcJ0mQHA9xWVkvctcewqOL1hqnXCrEYuvZENoJofO4ISKAUIMoS2r7Z79
+ X4GPhVXU4Evw8z7Isq0CvAUXJhCNR5RcqhIDSi9pgTtXZimisue4BXiPqN9URzH7p72ijcvURT/
+ kNu7Gx3ABYZE8Fk/g1gsiYXBvIjCNe9P/9uTFly6xWNOZQ2qnYEGIJ1+QeCUuZ8QqL8Cpz7S5/R
+ 9QzXZqyuiAfxifVlfGQ==
+X-Authority-Analysis: v=2.4 cv=J7mnLQnS c=1 sm=1 tr=0 ts=69814dd7 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8 a=FOH2dFAWAAAA:8 a=rfWWMxf4HL6aVLy8pKMA:9
+ a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: LxCF5G0R7Vq9YA6841GE54LeUg-Lo4De
+X-Proofpoint-ORIG-GUID: LxCF5G0R7Vq9YA6841GE54LeUg-Lo4De
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-02_05,2026-02-02_01,2025-10-01_01
 
-On Mon, Feb 2, 2026 at 5:14=E2=80=AFPM Chengkaitao <pilgrimtao@gmail.com> w=
-rote:
->
-> On Tue, Feb 3, 2026 at 1:57=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Feb 2, 2026 at 1:01=E2=80=AFAM Chengkaitao <pilgrimtao@gmail.co=
-m> wrote:
-> > >
-> > > From: Chengkaitao <chengkaitao@kylinos.cn>
-> > >
-> > > For the following scenario:
-> > > struct tree_node {
-> > >     struct bpf_rb_node node;
-> > >     struct request __kptr *req;
-> > >     u64 key;
-> > > };
-> > > struct bpf_rb_root tree_root __contains(tree_node, node);
-> > > struct bpf_spin_lock tree_lock;
-> > >
-> > > If we need to traverse all nodes in the rbtree, retrieve the __kptr
-> > > pointer from each node, and read kernel data from the referenced
-> > > object, using bpf_kptr_xchg appears unavoidable.
-> > >
-> > > This patch skips the BPF verifier checks for bpf_kptr_xchg when
-> > > called while holding a lock.
-> > >
-> > > Signed-off-by: Chengkaitao <chengkaitao@kylinos.cn>
-> >
-> > You ignored earlier feedback. This is not ok.
-> >
-> It's my full name. Every region has its own customs and traditions,
-> so this isn't an essential change.
+On Mon, Feb 02, 2026 at 11:33:21PM +0000, David Matlack wrote:
+> On 2026-01-30 04:02 PM, Ted Logan wrote:
+> > Only build vfio self-tests on arm64 and x86_64; these are the only
+> > architectures where the vfio self-tests are run. Addresses compiler
+> > warnings for format and conversions on i386.
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@intel.com/
+> > Signed-off-by: Ted Logan <tedlogan@fb.com>
+> > ---
+> > Do not build vfio self-tests for 32-bit architectures, where they're
+> > untested and unmaintained. Only build these tests for arm64 and x86_64,
+> > where they're regularly tested.
+> > 
+> > Compiler warning fixed by patch:
+> > 
+> >    In file included from tools/testing/selftests/vfio/lib/include/libvfio.h:6:
+> >    tools/testing/selftests/vfio/lib/include/libvfio/iommu.h:49:2: warning: format specifies type 'unsigned long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
+> >       49 |         VFIO_ASSERT_EQ(__iommu_unmap(iommu, region, NULL), 0);
+> >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:32:37: note: expanded from macro 'VFIO_ASSERT_EQ'
+> >       32 | #define VFIO_ASSERT_EQ(_a, _b, ...) VFIO_ASSERT_OP(_a, _b, ==, ##__VA_ARGS__)
+> >          |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:27:22: note: expanded from macro 'VFIO_ASSERT_OP'
+> >       26 |         fprintf(stderr, "  Observed: %#lx %s %#lx\n",                           \
+> >          |                                              ~~~~
+> >       27 |                         (u64)__lhs, #_op, (u64)__rhs);                          \
+> >          |                                           ^~~~~~~~~~
+> > ---
+> >  tools/testing/selftests/vfio/Makefile | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> > index ead27892ab65..eeb63ea2b4da 100644
+> > --- a/tools/testing/selftests/vfio/Makefile
+> > +++ b/tools/testing/selftests/vfio/Makefile
+> > @@ -1,3 +1,10 @@
+> > +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+> 
+> What's the reason for the stderr redirection and "echo not"?
 
-We cannot accept your patch then.
-SOB has to be "Firstname Lastname"
+I got that from tools/testing/selftests/arm64/Makefile but it's probably
+not all that useful. I guess the idea is to allow for the possibility
+that uname could fail, but I don't really know if that's really useful.
+
+> I think you can just add the following line so that this is a valid
+> empty selftest Makefile on unsupported architectures, without having to
+> define all those targets:
+> 
+>   include ../lib.mk
+> 
+> Also I would recommend spacing things out a little so that the
+> unsupported architecture handling is more "off to the side".
+
+Thanks for the suggestion, I'll post an updated patch shortly.
+
+- Ted
