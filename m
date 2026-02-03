@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24D7369964;
-	Tue,  3 Feb 2026 06:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D613369964;
+	Tue,  3 Feb 2026 06:11:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770099113; cv=none; b=RV/vX82LG64aC1hXYyFveTYJAR4qPswRAgJg5YHeZrKEqFM00L+d3W1hMWxS4LZI0wNTQcNnRA9mn/P2+qtQSJs2tXE+p1FJVOdRjihm3LKldqiskyQTHRe9DLnjGtCoEV3pKPqEptcWy48hYNKjca7oYfsOtbiLvmGcR7tYmPA=
+	t=1770099116; cv=none; b=RNIFWSePWEVYWSvF1bivASjvdJZoNl7eBNW5iiNW69jygaXYq9/b+ANgspJxATmKzYuzLf0TIhiNXedBTpL9q3TNjMfSKKCl6yLg6OWyPHgpYq9rwQr4m3xlph5QAzU4NaMwxRewG9ikDYQOGXJgaLIO5Q1fn5UeRIlzOsCAQ3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770099113; c=relaxed/simple;
-	bh=9YxyRXQE5kVPwTtGkSgy0U2f3ePQUxO3G44Txlw2CP4=;
+	s=arc-20240116; t=1770099116; c=relaxed/simple;
+	bh=0vNR5cNKN4N6Ad0oCcxkV3hwFhTeIBItllECCwiylBA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JCosR/2QEXpep2CnKwkYCwSElKuIlIRvK1p+VjCsgWQawzSdL0Pa6PPWsPFWa4i3pYFSvOSIER6VPv9fxT2sqgwUooEmfvJYtxCIMvJDcFWa0DFwvAtuccLbN00cRzLuYrFakV55We/JiC52UMh+kEYWVyuva3VTWbu73DkMpyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oa1RfMNw; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=XjhxywuOV647VL+1t8NXgTTPv193zFFn6FdOriHqGt1IOkA+swcf8+p029xxopVXXRQZFnGjUt69ad0iYdWD8w4Smhn2VPAmx2TKWycos6tGF9er/xo9XSgYEspp+cWm/6T4hVBWZzzdLlT9ZkVGv05XISGqox73vuJWVG61x2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HPrjFc0j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oa1RfMNw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F45C2BC86;
-	Tue,  3 Feb 2026 06:11:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPrjFc0j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B86A5C16AAE;
+	Tue,  3 Feb 2026 06:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770099113;
-	bh=9YxyRXQE5kVPwTtGkSgy0U2f3ePQUxO3G44Txlw2CP4=;
+	s=k20201202; t=1770099116;
+	bh=0vNR5cNKN4N6Ad0oCcxkV3hwFhTeIBItllECCwiylBA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Oa1RfMNwz78iW7e/YjWiAp+BQrjFLnw4oJUi5eeGIFaIR/6nuXdTboMq4FhSCeCj9
-	 rizGM7Yk+AGmnSWqNWV62R0s1aIYY1jq70rowLWkrgjYHDSmQUjcfilgTRzyVzpcrm
-	 BzqATe1xT19KJl9RmnJBCCo095Iu6C3nEqqVECgx5zPIwSjFQ73KczvN+k9QYp5eZo
-	 ATrVYq8vtCEaaJo+PiRoa6mlJNKgl8GQoCjAY5TGDZ/rzXFpzC19UO7M/43ExFHe96
-	 J9ZY0q94KX8eTtfw/3C9/MNWLGfB9nPmqFk4XDn2jBV6kEg6GroFURhWiflEyqWcSJ
-	 82pynaxkGxUJg==
+	b=HPrjFc0jgdYeWIrmyvJq/ajTRd6lfW6UnK7IiKinOPu5OieOXbEzp2Z/KVFTUSetd
+	 WduZLwwAonMIq/FxWZ+64RFvqGWrwv4UEUxpCaCweSJLoF2MEpqEBZFizHYnrRlxR/
+	 f5fuZqyo0BIkPeTqb7v0hltinZBpredcmVH6gw8PzO3tCm3EDybcrKgmR58F7pRNeU
+	 2CwPh6Ho25Sq7hWG1gbm9PohAcbZejkA5q75T8rpEQ8md03zkj5kykPcARi8rvdtrC
+	 7yayDeR53WgT22bggPLonApZz9soBVYbuyuz35O5HcCdDH63/X309I1RaCiTuJ2ov0
+	 vieitVZGkP18g==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	tzungbi@kernel.org,
 	Dan Williams <dan.j.williams@intel.com>,
 	linux-gpio@vger.kernel.org
-Subject: [PATCH v2 01/11] gpio: Access `gpio_bus_type` in gpiochip_setup_dev()
-Date: Tue,  3 Feb 2026 06:10:48 +0000
-Message-ID: <20260203061059.975605-2-tzungbi@kernel.org>
+Subject: [PATCH v2 02/11] gpio: Remove redundant check for struct gpio_chip
+Date: Tue,  3 Feb 2026 06:10:49 +0000
+Message-ID: <20260203061059.975605-3-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
 In-Reply-To: <20260203061059.975605-1-tzungbi@kernel.org>
 References: <20260203061059.975605-1-tzungbi@kernel.org>
@@ -58,51 +58,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To make the intent clear, access `gpio_bus_type` only when it's ready in
-gpiochip_setup_dev().
+gpiolib_dbg_show() is only called by gpiolib_seq_show() which has
+ensured the struct gpio_chip.  Remove the redundant check in
+gpiolib_dbg_show().
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
 v2:
 - No changes.
 
-v1: https://lore.kernel.org/all/20260116081036.352286-7-tzungbi@kernel.org
+v1: https://lore.kernel.org/all/20260116081036.352286-8-tzungbi@kernel.org
 
- drivers/gpio/gpiolib.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/gpio/gpiolib.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 039cd3e56baf..f51f53511ae3 100644
+index f51f53511ae3..a6dd07be126c 100644
 --- a/drivers/gpio/gpiolib.c
 +++ b/drivers/gpio/gpiolib.c
-@@ -902,6 +902,8 @@ static int gpiochip_setup_dev(struct gpio_device *gdev)
- 	struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
- 	int ret;
+@@ -5308,23 +5308,14 @@ core_initcall(gpiolib_dev_init);
  
-+	gdev->dev.bus = &gpio_bus_type;
-+
- 	/*
- 	 * If fwnode doesn't belong to another device, it's safe to clear its
- 	 * initialized flag.
-@@ -1078,7 +1080,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+ #ifdef CONFIG_DEBUG_FS
  
- 	device_initialize(&gdev->dev);
- 	gdev->dev.type = &gpio_dev_type;
--	gdev->dev.bus = &gpio_bus_type;
- 	gdev->dev.parent = gc->parent;
- 	device_set_node(&gdev->dev, gpiochip_choose_fwnode(gc));
+-static void gpiolib_dbg_show(struct seq_file *s, struct gpio_device *gdev)
++static void gpiolib_dbg_show(struct seq_file *s, struct gpio_chip *gc)
+ {
+ 	bool active_low, is_irq, is_out;
+ 	struct gpio_desc *desc;
+ 	unsigned int gpio = 0;
+-	struct gpio_chip *gc;
+ 	unsigned long flags;
+ 	int value;
  
-@@ -1216,8 +1217,8 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	 * we get a device node entry in sysfs under
- 	 * /sys/bus/gpio/devices/gpiochipN/dev that can be used for
- 	 * coldplug of device nodes and other udev business.
--	 * We can do this only if gpiolib has been initialized.
--	 * Otherwise, defer until later.
-+	 * We can do this only if gpiolib has been initialized
-+	 * (i.e., `gpio_bus_type` is ready).  Otherwise, defer until later.
- 	 */
- 	if (gpiolib_initialized) {
- 		ret = gpiochip_setup_dev(gdev);
+-	guard(srcu)(&gdev->srcu);
+-
+-	gc = srcu_dereference(gdev->chip, &gdev->srcu);
+-	if (!gc) {
+-		seq_puts(s, "Underlying GPIO chip is gone\n");
+-		return;
+-	}
+-
+ 	for_each_gpio_desc(gc, desc) {
+ 		guard(srcu)(&desc->gdev->desc_srcu);
+ 		flags = READ_ONCE(desc->flags);
+@@ -5437,7 +5428,7 @@ static int gpiolib_seq_show(struct seq_file *s, void *v)
+ 	if (gc->dbg_show)
+ 		gc->dbg_show(s, gc);
+ 	else
+-		gpiolib_dbg_show(s, gdev);
++		gpiolib_dbg_show(s, gc);
+ 
+ 	return 0;
+ }
 -- 
 2.53.0.rc2.204.g2597b5adb4-goog
 
