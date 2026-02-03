@@ -1,176 +1,623 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED91B324707
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 17:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BD8346777
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 17:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770139917; cv=none; b=X192RAW6S0SKaicc941AP78L3DjyJcvm6bJVi4/e2OdetUgMaVdRcdcRRNaNncwp6dYo7O5opwn23j38u5w+L8RdaBE24EnrQ3cj0IQbsWweCPX3GEC4sffoavI0rX6QmuwgKTxw6+CFDAHqrqPbYQtr5xb6DjT3Xo2NV9dirtc=
+	t=1770140437; cv=none; b=ZRPZC++5Htiw2DnYLMyK3EKioEDIKTU0wjvhGlvjfiBbZH1X5pzsJoA36sTbxbKZHnVOntC0/yrs+AiFvDDoBE23WccI0Lfnrjx1vHbgTUL+Lay0x/ZTupbNeMAQiNRC2WWNZxNMaM6BRjGGmKorzc9qLKkp6VeAB9iqDxFubno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770139917; c=relaxed/simple;
-	bh=uNXxK7WLHpMlPbgY+TeUY0Z5PZ32vbrTx+aEsPz338A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XQCed57XYyqCnrNGn2TCHvtWpRYZR5ZtlcBlcFGj1UWHd1LIQPjN/n2zvRhTRN9iKvYX5Cf+9JpWjPpioXuYLuLvvGIfaDiNpjQq8Q6iVCtF/IHLXM/TdfMCTUXENoQOfLAk9XnbLUiqn55Vow0I3XKrkkDq98CODRzEDMTqaCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XwvGPHYD; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770140437; c=relaxed/simple;
+	bh=nPQ04KCgPzRBUY6zc9JevtSOo4Ne8+iCg79jSSWnDMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JwvK0XieEUx5OIaqGdU82Z/30TRhXjCPzCR+pxx3NCQUBlgmTAD+uKT62NbpkkKfr1+LTwyXJjEcBOC1mdBH2ofXMDCwGIwBobfqIUkwTfCxx1CjoEf0gXf1dZuh5xIsxphl15HvXWyA3pipcE9l3bIjOw7wQb/+qqsCEKBFI0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YU1ha99e; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=OTQ4N8Vh; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XwvGPHYD"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47ee937ecf2so466635e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 09:31:54 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YU1ha99e";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="OTQ4N8Vh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770140432;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nmSl7/1tMINHvaZwWji7tBNR9y3eOnNMtJc0andbC/g=;
+	b=YU1ha99eXA0xt0f1i3tOWVLWRxM5Nvf74Jdp5xGyfP7i8iyAuVFZPv4jmP5aBC7+ga2h6I
+	Oe+H59C2/NKn6M5z+NAKR7fVDj5CtM0G2wqL3qD7FfLGfMXeIWMqQrtmB4/CuzIT2gVPke
+	iUGccXqW6b9OMMF3SZzLpRN3FnJISfU=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-131-XYE8iN24Mtu-g_UKJLTfZQ-1; Tue, 03 Feb 2026 12:40:31 -0500
+X-MC-Unique: XYE8iN24Mtu-g_UKJLTfZQ-1
+X-Mimecast-MFC-AGG-ID: XYE8iN24Mtu-g_UKJLTfZQ_1770140431
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8c1cffa1f2dso12123585a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 09:40:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770139913; x=1770744713; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rBtQI5zA6navMOTUiG7Qoh+HnLf7L+vzMhsUMoPDOV0=;
-        b=XwvGPHYDPucmETXRESZsxhLGcjyWUmAcSS2nIOo1VZDxC/GyZwdnrcn10epfOYDVNg
-         ydVOAZRKokd0iNU/tDPtV7JrZc47t52MyX9uH7M3QQC9TKMxPustL2nysbagoJ/6iSGE
-         Yaws6IYmA9ax9DZot0h560KHJ1q5Jwc6yemFXlE75yIiwpyvm+q0JHASBQsVXiIYKMKH
-         InLumb1v9Pd6dRbjkMInUPUGPAXXzCv2RI7w6c4nFUJdmFt3VfFT/GMwT9oZgGwa2mMc
-         fT3zEUykA1z41+M6WGrO1GwSnNRQaaLnrwEq2zu12xUjNDKdQeKTTmQ5JWNtKzmLordC
-         aE9g==
+        d=redhat.com; s=google; t=1770140430; x=1770745230; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nmSl7/1tMINHvaZwWji7tBNR9y3eOnNMtJc0andbC/g=;
+        b=OTQ4N8VhFRpPexKMarR/TJNLWyi2E6Gi1ktSFoo4NXqTmCP2nJldqR7odDyHtoALVX
+         18P5KCYVkNz00aa2796+zQ0rcHYfxOCWUA02So4I65gHjBaZa5V4JoGnnDvTl1ibaTZI
+         1uhojB1Y2iVh4TC5HApEkhv2WtcZAt9DOOM8tXDmcDUrS4FS7xMfDb9M0iQPQVQkv7qq
+         k2CZSv+9WqphgV9fxkwxytw0G2nD6eopZXZ+73xCAH1vEKszfnU3dFUqAIg/MnqmNKK/
+         GxSpUlto/hN4lvFmIVriun0iMpeppBSaryl3TW4UMdLUCSc3I5fQIYBmZozIVp2FtWfe
+         bnQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770139913; x=1770744713;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rBtQI5zA6navMOTUiG7Qoh+HnLf7L+vzMhsUMoPDOV0=;
-        b=Zvb1At7sKhfrs7TkIRZ+dDPBFaR5ikEMNh01AdCfK4jBAX4tp86aYCMPTnO+LQNYVb
-         hUhyg26wxmukOVk8swnZjDDXt7LkbIMQUTxh1ZjTLun7FqDTM6vV0eNRsGuqmm0kt3Sr
-         5leiswnm6w0ieeR4HkPnHjGQ8/509EzmV9RPJVs1I1F0qIfPF6RLdGylPzwilONLG72p
-         ivKvpdXQ9R5fSHPgvPZmcyi9UNgUvep11nUedtqQxDQZxkOERbf6KDn9zz5E5E9cK6PQ
-         lvMuxH2NeB/NIinCOCK2Egxfh2W7Ymn2DL6qr2UQSetzDysnfBRDxE6w+j0G1cXKhUbt
-         iK2Q==
-X-Gm-Message-State: AOJu0YybHPO1gkayfiw0Z4vrInEjT7khWUZ285sLYl9n5wkaFuWAvVWD
-	b5LzK2COruZC86ToJ1Pz82Yrp9FfOFAW4TdjaJFaWBAUMhGnDFYldyHx
-X-Gm-Gg: AZuq6aLgT+JEZsPZqE0tFHeCclKTEDzhXqmlaXpJxXAg0A5u5X7PSBCHJxx3XQCGhUV
-	W3QesT2bg1zyG56g6LwX0oZu3YhwLyJ6aC9ZQDIBNcPbClrjprkeT6+0jcF9QqAqsOxEIwURUfK
-	d+hOnRuiL5/c7B1c+6B08W7ptPVd3BLS4vmxoPs+n5ePSYC2cX7dBfyrI1jLn16sPxO9CUD+gQC
-	tpunp7XQRAfsFGz2F1JBnNwYgXoe8CKjgzW2mAmWaAv08NFhQZScycEEefqQ23HuhB0sUHcQKRE
-	ZfWMiIreMaeNfJyS5FEQ8CrNpIZsS1REK2ZUM2gjHLzGX8X4z+WtpPqJE2ci0Ik4y11efQYZ9+e
-	iqJExhzY8SCEcLBRFqUmohCWpqNmRFLoePzd/uD5KG85alRA6QCv0B854VHxK4QV20jRGntXeo8
-	7dwwTYvTPVH3H6iqexHmGa3y7q5NxjrZNfQS4mcFvHwo/szg==
-X-Received: by 2002:a05:600c:8904:b0:47f:1332:e5f with SMTP id 5b1f17b1804b1-4830516490bmr49787005e9.12.1770139912880;
-        Tue, 03 Feb 2026 09:31:52 -0800 (PST)
-Received: from nixos.numericable.fr (38.42.3.89.rev.sfr.net. [89.3.42.38])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48305129321sm74868525e9.4.2026.02.03.09.31.51
+        d=1e100.net; s=20230601; t=1770140430; x=1770745230;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nmSl7/1tMINHvaZwWji7tBNR9y3eOnNMtJc0andbC/g=;
+        b=YAAqUFG2nQnxE8Rcn/Fqqo0r/ee59+cyBgIttEpjMFFsoNHV/rVOKSvW4lFpzsVJkw
+         fUDV0hafYn5ketZWQnTPicKA3fFMQap/y/LBJPByifAm5MlUHZbiUn/p/rMcSi3vzHgy
+         XkcTvKCZDed61yn88axF2wtuaEtR1F9RrKYXHKb1/HmA0AzPICBz+LacA4SVRviM2Kh1
+         ZZ8l+VRXlqtQCnYgVFYIHzuXVJH1XawPrOB4vTr3t41VaFB5XFc3aQPJX6vup500W+zt
+         dmS8zYlAbA09PDFGo7ndg3shvOG3ij2XmNJRY7K4A5h0X8vgHekh1lfBYk1EZieJx33h
+         IEkg==
+X-Forwarded-Encrypted: i=1; AJvYcCVaQXBmLTQvEVC0z5FR8eM5lqngs2V3Dt/Rl0cTyPH3Ei5mQPHdjDK2UgENTRdKHaWSev3Awk+P2/NGqORfUVc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVD+Hv3CvLHl1APr2VqKMl45Ig/NOpGD4DcpgzQo/YXxG3cfBb
+	Lp7CPhosSS2nr7Gb9FCzFhPBGjbKzT1CaqGgUn0B/clQ06Qae0vPbe8IG+OFzFbv0KbykutL85s
+	jc8LfSkw9doYVNA7vzqejFOQtIdnTOUK8Z+J67b31WDBly0gMO+p9H6RJXd+G6OWMVSSrJQ==
+X-Gm-Gg: AZuq6aK7haGHEcOpGz/bTPhTjy/Ss3HpAWCLGR46epvQBW3ie17fgJpX3sPDBmXWpwL
+	AutqwNoyMq0dBSjrOlqVyQzKCuzc4S8rTWDj9mCnLT1I6Odyr7vA+IKdrgjGsqhlQHFmH0VG4ae
+	a56qJ6rQInPrzdfR0dQDZRA685kBzmG6wC0/kQGjho597xukGqOhlPiflf9jL2bzPyi5DyBWpyS
+	PDvZC81ajtnFBIsS4K0U4aHTaEOrSpqQ8oAFzj+4Gvm7Q3SiHWnfVB8cv7aC+KYxguo/ufDnpdn
+	/YACSlF7Bxnbrp4Vd2pob4m2EDWmXTe6Ixz6LJf+z+Dliq9c7UmJduPbkue+ymCrMKUYzPF6I3C
+	zQW8=
+X-Received: by 2002:a05:620a:2910:b0:8c5:3045:854f with SMTP id af79cd13be357-8ca204ca94dmr428082785a.30.1770140430235;
+        Tue, 03 Feb 2026 09:40:30 -0800 (PST)
+X-Received: by 2002:a05:620a:2910:b0:8c5:3045:854f with SMTP id af79cd13be357-8ca204ca94dmr428079185a.30.1770140429666;
+        Tue, 03 Feb 2026 09:40:29 -0800 (PST)
+Received: from x1.local ([142.188.210.156])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fd56420sm16357985a.54.2026.02.03.09.40.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 09:31:52 -0800 (PST)
-From: Titouan Ameline de Cadeville <titouan.ameline@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	davidgow@google.com,
-	raemoar63@gmail.com,
-	kees@kernel.org,
-	eleanor.lin@realtek.com,
-	visitorckw@gmail.com,
-	Titouan Ameline de Cadeville <titouan.ameline@gmail.com>
-Subject: [PATCH v5] lib: math: tests: drop unnecessary KUnit param_value casts
-Date: Tue,  3 Feb 2026 18:30:40 +0100
-Message-ID: <20260203173040.42158-1-titouan.ameline@gmail.com>
-X-Mailer: git-send-email 2.44.2
+        Tue, 03 Feb 2026 09:40:29 -0800 (PST)
+Date: Tue, 3 Feb 2026 12:40:26 -0500
+From: Peter Xu <peterx@redhat.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@redhat.com>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 10/17] shmem, userfaultfd: implement shmem uffd
+ operations using vm_uffd_ops
+Message-ID: <aYIzCuh8cjd09zrP@x1.local>
+References: <20260127192936.1250096-1-rppt@kernel.org>
+ <20260127192936.1250096-11-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260127192936.1250096-11-rppt@kernel.org>
 
-Drop unnecessary casts from KUnit parameter access since param_value
-is a void *. This improves readability and follows common kernel style.
+On Tue, Jan 27, 2026 at 09:29:29PM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Add filemap_add() and filemap_remove() methods to vm_uffd_ops and use
+> them in __mfill_atomic_pte() to add shmem folios to page cache and
+> remove them in case of error.
+> 
+> Implement these methods in shmem along with vm_uffd_ops->alloc_folio()
+> and drop shmem_mfill_atomic_pte().
+> 
+> Since userfaultfd now does not reference any functions from shmem, drop
+> include if linux/shmem_fs.h from mm/userfaultfd.c
+> 
+> mfill_atomic_install_pte() is not used anywhere outside of
+> mm/userfaultfd, make it static.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-No functional change.
+This patch looks like a real nice cleanup on its own, thanks Mike!
 
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Titouan Ameline de Cadeville <titouan.ameline@gmail.com>
----
+I guess I never tried to read into shmem accountings, now after I read some
+of the codes I don't see any issue with your change.  We can also wait for
+some shmem developers double check those.  Comments inline below on
+something I spot.
 
-Changes in v5:
-- Use consistent email address in From/Author/Signed-off-by (titouan.ameline@gmail.com).
-- Add version changelog below the '---' line.
+> 
+> fixup
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
- lib/math/tests/gcd_kunit.c      | 2 +-
- lib/math/tests/int_log_kunit.c  | 4 ++--
- lib/math/tests/int_pow_kunit.c  | 2 +-
- lib/math/tests/int_sqrt_kunit.c | 2 +-
- lib/math/tests/rational_kunit.c | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
+[unexpected lines can be removed here]
 
-diff --git a/lib/math/tests/gcd_kunit.c b/lib/math/tests/gcd_kunit.c
-index ede1883583b1..b9c9b8758991 100644
---- a/lib/math/tests/gcd_kunit.c
-+++ b/lib/math/tests/gcd_kunit.c
-@@ -34,7 +34,7 @@ KUNIT_ARRAY_PARAM(gcd, params, get_desc);
- 
- static void gcd_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, gcd(tc->val1, tc->val2));
- }
-diff --git a/lib/math/tests/int_log_kunit.c b/lib/math/tests/int_log_kunit.c
-index 14e854146cb4..9f9b48232701 100644
---- a/lib/math/tests/int_log_kunit.c
-+++ b/lib/math/tests/int_log_kunit.c
-@@ -43,7 +43,7 @@ KUNIT_ARRAY_PARAM(intlog2, intlog2_params, get_desc);
- 
- static void intlog2_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, intlog2(tc->value));
- }
-@@ -52,7 +52,7 @@ KUNIT_ARRAY_PARAM(intlog10, intlog10_params, get_desc);
- 
- static void intlog10_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, intlog10(tc->value));
- }
-diff --git a/lib/math/tests/int_pow_kunit.c b/lib/math/tests/int_pow_kunit.c
-index 34b33677d458..ef9c8a9bd8ac 100644
---- a/lib/math/tests/int_pow_kunit.c
-+++ b/lib/math/tests/int_pow_kunit.c
-@@ -31,7 +31,7 @@ KUNIT_ARRAY_PARAM(int_pow, params, get_desc);
- 
- static void int_pow_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, int_pow(tc->base, tc->exponent));
- }
-diff --git a/lib/math/tests/int_sqrt_kunit.c b/lib/math/tests/int_sqrt_kunit.c
-index 1798e1312eb7..9c46024b0fc1 100644
---- a/lib/math/tests/int_sqrt_kunit.c
-+++ b/lib/math/tests/int_sqrt_kunit.c
-@@ -45,7 +45,7 @@ KUNIT_ARRAY_PARAM(int_sqrt, params, get_desc);
- 
- static void int_sqrt_test(struct kunit *test)
- {
--	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+	const struct test_case_params *tc = test->param_value;
- 
- 	KUNIT_EXPECT_EQ(test, tc->expected_result, int_sqrt(tc->x));
- }
-diff --git a/lib/math/tests/rational_kunit.c b/lib/math/tests/rational_kunit.c
-index 47486a95f088..b05587a1e90a 100644
---- a/lib/math/tests/rational_kunit.c
-+++ b/lib/math/tests/rational_kunit.c
-@@ -33,7 +33,7 @@ KUNIT_ARRAY_PARAM(rational, test_parameters, get_desc);
- 
- static void rational_test(struct kunit *test)
- {
--	const struct rational_test_param *param = (const struct rational_test_param *)test->param_value;
-+	const struct rational_test_param *param = test->param_value;
- 	unsigned long n = 0, d = 0;
- 
- 	rational_best_approximation(param->num, param->den, param->max_num, param->max_den, &n, &d);
+> ---
+>  include/linux/shmem_fs.h      |  14 ----
+>  include/linux/userfaultfd_k.h |  20 +++--
+>  mm/shmem.c                    | 148 ++++++++++++----------------------
+>  mm/userfaultfd.c              |  79 +++++++++---------
+>  4 files changed, 106 insertions(+), 155 deletions(-)
+> 
+> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+> index e2069b3179c4..754f17e5b53c 100644
+> --- a/include/linux/shmem_fs.h
+> +++ b/include/linux/shmem_fs.h
+> @@ -223,20 +223,6 @@ static inline pgoff_t shmem_fallocend(struct inode *inode, pgoff_t eof)
+>  
+>  extern bool shmem_charge(struct inode *inode, long pages);
+>  
+> -#ifdef CONFIG_USERFAULTFD
+> -#ifdef CONFIG_SHMEM
+> -extern int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
+> -				  struct vm_area_struct *dst_vma,
+> -				  unsigned long dst_addr,
+> -				  unsigned long src_addr,
+> -				  uffd_flags_t flags,
+> -				  struct folio **foliop);
+> -#else /* !CONFIG_SHMEM */
+> -#define shmem_mfill_atomic_pte(dst_pmd, dst_vma, dst_addr, \
+> -			       src_addr, flags, foliop) ({ BUG(); 0; })
+> -#endif /* CONFIG_SHMEM */
+> -#endif /* CONFIG_USERFAULTFD */
+> -
+>  /*
+>   * Used space is stored as unsigned 64-bit value in bytes but
+>   * quota core supports only signed 64-bit values so use that
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index 4d8b879eed91..75d5b09f2560 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -97,6 +97,21 @@ struct vm_uffd_ops {
+>  	 */
+>  	struct folio *(*alloc_folio)(struct vm_area_struct *vma,
+>  				     unsigned long addr);
+> +	/*
+> +	 * Called during resolution of UFFDIO_COPY request.
+> +	 * Should lock the folio and add it to VMA's page cache.
+> +	 * Returns 0 on success, error code on failre.
+
+failure
+
+> +	 */
+> +	int (*filemap_add)(struct folio *folio, struct vm_area_struct *vma,
+> +			 unsigned long addr);
+> +	/*
+> +	 * Called during resolution of UFFDIO_COPY request on the error
+> +	 * handling path.
+> +	 * Should revert the operation of ->filemap_add().
+> +	 * The folio should be unlocked, but the reference to it should not be
+> +	 * dropped.
+
+Might be slightly misleading to explicitly mention this?  As page cache
+also holds references and IIUC they need to be dropped there.  But I get
+your point, on keeping the last refcount due to allocation.
+
+IMHO the "should revert the operation of ->filemap_add()" is good enough
+and accurately describes it.
+
+> +	 */
+> +	void (*filemap_remove)(struct folio *folio, struct vm_area_struct *vma);
+>  };
+>  
+>  /* A combined operation mode + behavior flags. */
+> @@ -130,11 +145,6 @@ static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enum mfill_at
+>  /* Flags controlling behavior. These behavior changes are mode-independent. */
+>  #define MFILL_ATOMIC_WP MFILL_ATOMIC_FLAG(0)
+>  
+> -extern int mfill_atomic_install_pte(pmd_t *dst_pmd,
+> -				    struct vm_area_struct *dst_vma,
+> -				    unsigned long dst_addr, struct page *page,
+> -				    bool newly_allocated, uffd_flags_t flags);
+> -
+>  extern ssize_t mfill_atomic_copy(struct userfaultfd_ctx *ctx, unsigned long dst_start,
+>  				 unsigned long src_start, unsigned long len,
+>  				 uffd_flags_t flags);
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 87cd8d2fdb97..6f0485f76cb8 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -3169,118 +3169,73 @@ static inline struct inode *shmem_get_inode(struct mnt_idmap *idmap,
+>  #endif /* CONFIG_TMPFS_QUOTA */
+>  
+>  #ifdef CONFIG_USERFAULTFD
+> -int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
+> -			   struct vm_area_struct *dst_vma,
+> -			   unsigned long dst_addr,
+> -			   unsigned long src_addr,
+> -			   uffd_flags_t flags,
+> -			   struct folio **foliop)
+> -{
+> -	struct inode *inode = file_inode(dst_vma->vm_file);
+> -	struct shmem_inode_info *info = SHMEM_I(inode);
+> +static struct folio *shmem_mfill_folio_alloc(struct vm_area_struct *vma,
+> +					     unsigned long addr)
+> +{
+> +	struct inode *inode = file_inode(vma->vm_file);
+>  	struct address_space *mapping = inode->i_mapping;
+> +	struct shmem_inode_info *info = SHMEM_I(inode);
+> +	pgoff_t pgoff = linear_page_index(vma, addr);
+>  	gfp_t gfp = mapping_gfp_mask(mapping);
+> -	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+> -	void *page_kaddr;
+>  	struct folio *folio;
+> -	int ret;
+> -	pgoff_t max_off;
+> -
+> -	if (shmem_inode_acct_blocks(inode, 1)) {
+> -		/*
+> -		 * We may have got a page, returned -ENOENT triggering a retry,
+> -		 * and now we find ourselves with -ENOMEM. Release the page, to
+> -		 * avoid a BUG_ON in our caller.
+> -		 */
+> -		if (unlikely(*foliop)) {
+> -			folio_put(*foliop);
+> -			*foliop = NULL;
+> -		}
+> -		return -ENOMEM;
+> -	}
+>  
+> -	if (!*foliop) {
+> -		ret = -ENOMEM;
+> -		folio = shmem_alloc_folio(gfp, 0, info, pgoff);
+> -		if (!folio)
+> -			goto out_unacct_blocks;
+> +	if (unlikely(pgoff >= DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE)))
+> +		return NULL;
+>  
+> -		if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY)) {
+> -			page_kaddr = kmap_local_folio(folio, 0);
+> -			/*
+> -			 * The read mmap_lock is held here.  Despite the
+> -			 * mmap_lock being read recursive a deadlock is still
+> -			 * possible if a writer has taken a lock.  For example:
+> -			 *
+> -			 * process A thread 1 takes read lock on own mmap_lock
+> -			 * process A thread 2 calls mmap, blocks taking write lock
+> -			 * process B thread 1 takes page fault, read lock on own mmap lock
+> -			 * process B thread 2 calls mmap, blocks taking write lock
+> -			 * process A thread 1 blocks taking read lock on process B
+> -			 * process B thread 1 blocks taking read lock on process A
+> -			 *
+> -			 * Disable page faults to prevent potential deadlock
+> -			 * and retry the copy outside the mmap_lock.
+> -			 */
+> -			pagefault_disable();
+> -			ret = copy_from_user(page_kaddr,
+> -					     (const void __user *)src_addr,
+> -					     PAGE_SIZE);
+> -			pagefault_enable();
+> -			kunmap_local(page_kaddr);
+> -
+> -			/* fallback to copy_from_user outside mmap_lock */
+> -			if (unlikely(ret)) {
+> -				*foliop = folio;
+> -				ret = -ENOENT;
+> -				/* don't free the page */
+> -				goto out_unacct_blocks;
+> -			}
+> +	folio = shmem_alloc_folio(gfp, 0, info, pgoff);
+> +	if (!folio)
+> +		return NULL;
+>  
+> -			flush_dcache_folio(folio);
+> -		} else {		/* ZEROPAGE */
+> -			clear_user_highpage(&folio->page, dst_addr);
+> -		}
+> -	} else {
+> -		folio = *foliop;
+> -		VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
+> -		*foliop = NULL;
+> +	if (mem_cgroup_charge(folio, vma->vm_mm, GFP_KERNEL)) {
+> +		folio_put(folio);
+> +		return NULL;
+>  	}
+>  
+> -	VM_BUG_ON(folio_test_locked(folio));
+> -	VM_BUG_ON(folio_test_swapbacked(folio));
+> +	return folio;
+> +}
+> +
+> +static int shmem_mfill_filemap_add(struct folio *folio,
+> +				   struct vm_area_struct *vma,
+> +				   unsigned long addr)
+> +{
+> +	struct inode *inode = file_inode(vma->vm_file);
+> +	struct address_space *mapping = inode->i_mapping;
+> +	pgoff_t pgoff = linear_page_index(vma, addr);
+> +	gfp_t gfp = mapping_gfp_mask(mapping);
+> +	int err;
+> +
+>  	__folio_set_locked(folio);
+>  	__folio_set_swapbacked(folio);
+> -	__folio_mark_uptodate(folio);
+> -
+> -	ret = -EFAULT;
+> -	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -	if (unlikely(pgoff >= max_off))
+> -		goto out_release;
+>  
+> -	ret = mem_cgroup_charge(folio, dst_vma->vm_mm, gfp);
+> -	if (ret)
+> -		goto out_release;
+> -	ret = shmem_add_to_page_cache(folio, mapping, pgoff, NULL, gfp);
+> -	if (ret)
+> -		goto out_release;
+> +	err = shmem_add_to_page_cache(folio, mapping, pgoff, NULL, gfp);
+> +	if (err)
+> +		goto err_unlock;
+>  
+> -	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
+> -				       &folio->page, true, flags);
+> -	if (ret)
+> -		goto out_delete_from_cache;
+> +	if (shmem_inode_acct_blocks(inode, 1)) {
+
+We used to do this early before allocation, IOW, I think we still have an
+option to leave this to alloc_folio() hook.  However I don't see an issue
+either keeping it in filemap_add(). Maybe this movement should better be
+spelled out in the commit message anyway on how this decision is made.
+
+IIUC it's indeed safe we move this acct_blocks() here, I even see Hugh
+mentioned such in an older commit 3022fd7af96, but Hugh left uffd alone at
+that time:
+
+    Userfaultfd is a foreign country: they do things differently there, and
+    for good reason - to avoid mmap_lock deadlock.  Leave ordering in
+    shmem_mfill_atomic_pte() untouched for now, but I would rather like to
+    mesh it better with shmem_get_folio_gfp() in the future.
+
+I'm not sure if that's also what you wanted to do - to make userfaultfd
+code work similarly like what shmem_alloc_and_add_folio() does right now.
+Maybe you want to mention that too somewhere in the commit log when posting
+a formal patch.
+
+One thing not directly relevant is, shmem_alloc_and_add_folio() also does
+proper recalc of inode allocation info when acct_blocks() fails here.  But
+if that's a problem, that's pre-existing for userfaultfd, so IIUC we can
+also leave it alone until someone (maybe quota user) complains about shmem
+allocation failures on UFFDIO_COPY.. It's just that it looks similar
+problem here in userfaultfd path.
+
+> +		err = -ENOMEM;
+> +		goto err_delete_from_cache;
+> +	}
+>  
+> +	folio_add_lru(folio);
+
+This change is pretty separate from the work, but looks correct to me: IIUC
+we moved the lru add earlier now, and it should be safe as long as we're
+holding folio lock all through the process, and folio_put() (ultimately,
+__page_cache_release()) will always properly undo the lru change.  Please
+help double check if my understanding is correct.
+
+>  	shmem_recalc_inode(inode, 1, 0);
+> -	folio_unlock(folio);
+> +
+>  	return 0;
+> -out_delete_from_cache:
+> +
+> +err_delete_from_cache:
+>  	filemap_remove_folio(folio);
+> -out_release:
+> +err_unlock:
+> +	folio_unlock(folio);
+> +	return err;
+> +}
+> +
+> +static void shmem_mfill_filemap_remove(struct folio *folio,
+> +				       struct vm_area_struct *vma)
+> +{
+> +	struct inode *inode = file_inode(vma->vm_file);
+> +
+> +	filemap_remove_folio(folio);
+> +	shmem_recalc_inode(inode, 0, 0);
+>  	folio_unlock(folio);
+> -	folio_put(folio);
+> -out_unacct_blocks:
+> -	shmem_inode_unacct_blocks(inode, 1);
+
+This looks wrong, or maybe I miss somewhere we did the unacct_blocks()?
+
+> -	return ret;
+>  }
+>  #endif /* CONFIG_USERFAULTFD */
+>  
+> @@ -5317,6 +5272,9 @@ static bool shmem_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags)
+>  static const struct vm_uffd_ops shmem_uffd_ops = {
+>  	.can_userfault		= shmem_can_userfault,
+>  	.get_folio_noalloc	= shmem_get_folio_noalloc,
+> +	.alloc_folio		= shmem_mfill_folio_alloc,
+> +	.filemap_add		= shmem_mfill_filemap_add,
+> +	.filemap_remove		= shmem_mfill_filemap_remove,
+>  };
+>  #endif
+>  
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index b3c12630769c..54aa195237ba 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -14,7 +14,6 @@
+>  #include <linux/userfaultfd_k.h>
+>  #include <linux/mmu_notifier.h>
+>  #include <linux/hugetlb.h>
+> -#include <linux/shmem_fs.h>
+>  #include <asm/tlbflush.h>
+>  #include <asm/tlb.h>
+>  #include "internal.h"
+> @@ -337,10 +336,10 @@ static bool mfill_file_over_size(struct vm_area_struct *dst_vma,
+>   * This function handles both MCOPY_ATOMIC_NORMAL and _CONTINUE for both shmem
+>   * and anon, and for both shared and private VMAs.
+>   */
+> -int mfill_atomic_install_pte(pmd_t *dst_pmd,
+> -			     struct vm_area_struct *dst_vma,
+> -			     unsigned long dst_addr, struct page *page,
+> -			     bool newly_allocated, uffd_flags_t flags)
+> +static int mfill_atomic_install_pte(pmd_t *dst_pmd,
+> +				    struct vm_area_struct *dst_vma,
+> +				    unsigned long dst_addr, struct page *page,
+> +				    uffd_flags_t flags)
+>  {
+>  	int ret;
+>  	struct mm_struct *dst_mm = dst_vma->vm_mm;
+> @@ -384,9 +383,6 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
+>  		goto out_unlock;
+>  
+>  	if (page_in_cache) {
+> -		/* Usually, cache pages are already added to LRU */
+> -		if (newly_allocated)
+> -			folio_add_lru(folio);
+>  		folio_add_file_rmap_pte(folio, page, dst_vma);
+>  	} else {
+>  		folio_add_new_anon_rmap(folio, dst_vma, dst_addr, RMAP_EXCLUSIVE);
+> @@ -401,6 +397,9 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
+>  
+>  	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+>  
+> +	if (page_in_cache)
+> +		folio_unlock(folio);
+
+Nitpick: another small change that looks correct, but IMHO would be nice to
+either make it a small separate patch, or mention in the commit message.
+
+> +
+>  	/* No need to invalidate - it was non-present before */
+>  	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+>  	ret = 0;
+> @@ -507,13 +506,22 @@ static int __mfill_atomic_pte(struct mfill_state *state,
+>  	 */
+>  	__folio_mark_uptodate(folio);
+>  
+> +	if (ops->filemap_add) {
+> +		ret = ops->filemap_add(folio, state->vma, state->dst_addr);
+> +		if (ret)
+> +			goto err_folio_put;
+> +	}
+> +
+>  	ret = mfill_atomic_install_pte(state->pmd, state->vma, dst_addr,
+> -				       &folio->page, true, flags);
+> +				       &folio->page, flags);
+>  	if (ret)
+> -		goto err_folio_put;
+> +		goto err_filemap_remove;
+>  
+>  	return 0;
+>  
+> +err_filemap_remove:
+> +	if (ops->filemap_remove)
+> +		ops->filemap_remove(folio, state->vma);
+>  err_folio_put:
+>  	folio_put(folio);
+>  	/* Don't return -ENOENT so that our caller won't retry */
+> @@ -526,6 +534,18 @@ static int mfill_atomic_pte_copy(struct mfill_state *state)
+>  {
+>  	const struct vm_uffd_ops *ops = vma_uffd_ops(state->vma);
+>  
+> +	/*
+> +	 * The normal page fault path for a MAP_PRIVATE mapping in a
+> +	 * file-backed VMA will invoke the fault, fill the hole in the file and
+> +	 * COW it right away. The result generates plain anonymous memory.
+> +	 * So when we are asked to fill a hole in a MAP_PRIVATE mapping, we'll
+> +	 * generate anonymous memory directly without actually filling the
+> +	 * hole. For the MAP_PRIVATE case the robustness check only happens in
+> +	 * the pagetable (to verify it's still none) and not in the page cache.
+> +	 */
+> +	if (!(state->vma->vm_flags & VM_SHARED))
+> +		ops = &anon_uffd_ops;
+> +
+>  	return __mfill_atomic_pte(state, ops);
+>  }
+>  
+> @@ -545,7 +565,8 @@ static int mfill_atomic_pte_zeropage(struct mfill_state *state)
+>  	spinlock_t *ptl;
+>  	int ret;
+>  
+> -	if (mm_forbids_zeropage(dst_vma->vm_mm))
+> +	if (mm_forbids_zeropage(dst_vma->vm_mm) ||
+> +	    (dst_vma->vm_flags & VM_SHARED))
+>  		return mfill_atomic_pte_zeroed_folio(state);
+>  
+>  	_dst_pte = pte_mkspecial(pfn_pte(my_zero_pfn(dst_addr),
+> @@ -600,11 +621,10 @@ static int mfill_atomic_pte_continue(struct mfill_state *state)
+>  	}
+>  
+>  	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
+> -				       page, false, flags);
+> +				       page, flags);
+>  	if (ret)
+>  		goto out_release;
+>  
+> -	folio_unlock(folio);
+>  	return 0;
+>  
+>  out_release:
+> @@ -827,41 +847,18 @@ extern ssize_t mfill_atomic_hugetlb(struct userfaultfd_ctx *ctx,
+>  
+>  static __always_inline ssize_t mfill_atomic_pte(struct mfill_state *state)
+>  {
+> -	struct vm_area_struct *dst_vma = state->vma;
+> -	unsigned long src_addr = state->src_addr;
+> -	unsigned long dst_addr = state->dst_addr;
+> -	struct folio **foliop = &state->folio;
+>  	uffd_flags_t flags = state->flags;
+> -	pmd_t *dst_pmd = state->pmd;
+> -	ssize_t err;
+>  
+>  	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
+>  		return mfill_atomic_pte_continue(state);
+>  	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON))
+>  		return mfill_atomic_pte_poison(state);
+> +	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY))
+> +		return mfill_atomic_pte_copy(state);
+> +	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE))
+> +		return mfill_atomic_pte_zeropage(state);
+>  
+> -	/*
+> -	 * The normal page fault path for a shmem will invoke the
+> -	 * fault, fill the hole in the file and COW it right away. The
+> -	 * result generates plain anonymous memory. So when we are
+> -	 * asked to fill an hole in a MAP_PRIVATE shmem mapping, we'll
+> -	 * generate anonymous memory directly without actually filling
+> -	 * the hole. For the MAP_PRIVATE case the robustness check
+> -	 * only happens in the pagetable (to verify it's still none)
+> -	 * and not in the radix tree.
+> -	 */
+> -	if (!(dst_vma->vm_flags & VM_SHARED)) {
+> -		if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY))
+> -			err = mfill_atomic_pte_copy(state);
+> -		else
+> -			err = mfill_atomic_pte_zeropage(state);
+> -	} else {
+> -		err = shmem_mfill_atomic_pte(dst_pmd, dst_vma,
+> -					     dst_addr, src_addr,
+> -					     flags, foliop);
+> -	}
+
+It's great to merge these otherwise.
+
+Thanks!
+
+> -
+> -	return err;
+> +	return -EOPNOTSUPP;
+>  }
+>  
+>  static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+> -- 
+> 2.51.0
+> 
+
 -- 
-2.44.2
+Peter Xu
 
