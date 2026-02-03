@@ -1,188 +1,195 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290463EBF36
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 14:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6184393DF9
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 14:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770130497; cv=none; b=WyRNvys7ydY7xkfJPI/WC2aI9In6j0KjI9c0vm3JVZAOpcsLeUbXt2e6UcqygSTsEVzayRCD6o4x4cS1ofA6v+CGGZhGRTpNvbXtsU6yz62vQx7ZH8Su8vuW88FTH3Wf0zgl3TOlUUx8C/w8p3Eg7iZ3v7f3NB+fD8WENsmZ1v4=
+	t=1770130694; cv=none; b=LhjaO9ia2FwX7/cVaxDbx2UNheZn2keIzwb6BXZh6F85c6iubnGQ3Br0V9BNcxsXlIFKwlGN0gCW+07bTIqroHbXDbmBuCCUMz+MtwJ3e1rTk/sRJweT9A1YcMC5rPaC7Td65NIS1GH1i90S1ib265tgV1Hs2dRsZWO/7d/ul/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770130497; c=relaxed/simple;
-	bh=1h8VkPqC0AtstNgySYZODiaA2bt/n8qUC0fcONi7FXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=maa8C6jxQK75y1qEDUQKNE3kaAoZYe1kco1qoHpSrSjZTJzznj1Tqm6mEmBea1ABAhbF+K0liLpmpbkwQHe0AUaudzzxt8E2d+SCLFn8NDD4z/RcSI0doVlDxQwZp7Hxv4PJTL0OI8pP7q5cChlSxxrs9zrxHwe5ZmKm1kf9fc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YKKSoT6i; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770130694; c=relaxed/simple;
+	bh=OiYgYJnTLd10oKbXhqFZKdCJGpgrYs+k/cw5yaRayWw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=hg14RR+pjue6dRXxVjDRPX7oroM2kEZfhVff5TAQFFzuSuq6MPx+MaZxXjIWPUdX+AR4aqhkdKvVuOAbvtie0AuMaNwTzCtrLTUG5qKG8274HHrdV3TVSuUvwerm5hbCITPQ8mwERUdNkGhklSUJ8fHERyZ1gWKhFkTAor82IlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BY3VoGt4; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YKKSoT6i"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8230c33f477so2593090b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 06:54:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BY3VoGt4"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-353049e6047so4439971a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 06:58:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770130494; x=1770735294; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SwruOa+rqkI+mx5hTpN8rgA/A1w5qc1IEyyYTI3b8/c=;
-        b=YKKSoT6ibevfeYeeZEXaFD8oCA1+dJsBNozbL5b2NEoCQqmiVBUxJBAL6LuA5pMade
-         9hSM0FEvyNs+9lV4NwHsPEwWOjuuoCGg4PxP05FP0FHAgdbjMdrid639jUTX/yfk58wn
-         2aVU9n0k4aW8BfQHbfr9fiIslD7XsCbfMpyhh6FcJu//ZMtPBsaJdl6aV7zePtCoCLMA
-         c3fLecGVOBJ402ZbCmI/nKgk52+yrLnOUhsMeDxiDPomabNAzqooC4MscImZ/+HnWcMk
-         OYU//PDdhs0BugtmdtyRMtOsJDzOI47V0I1TaK/T8wJ/JjcR02DoVfXTcnJkuUwjlZ9u
-         ymrQ==
+        d=google.com; s=20230601; t=1770130691; x=1770735491; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w82IDFvykl0YHd41gNU5sR8h+mwuxYG5tbST4sK5PRg=;
+        b=BY3VoGt4ODGAxBL02WA5YZVSDSWjl4eV78bH0X/cX4dXHpQmd9rAKfjZcK1IXdeQg+
+         AJdN6Kb5M7cMozDQMrFi0EWg4v39y4c8PgerQvoxS4Mnm9LUqa9uZ6sQtjY7k25aHbBK
+         ymxJp0rhfn8G4+f/V6LCdoPqx7PZA7s6vOTX+HzfDioTYhcqjguGXQee+bZLY671Qnah
+         w7pUKOJfl1pIPwhQXgkEA8gFhDwhj7tDl6cAg6a0PDNa3s3/JniN6U+lMVLSmyCIF2lx
+         aG6LihkrM9x5xQ+uNcChDWVrICV7lktnTRTxoIrQdIFVWSbxfj7LqMJm8tuLPzr0lEqF
+         GArQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770130494; x=1770735294;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SwruOa+rqkI+mx5hTpN8rgA/A1w5qc1IEyyYTI3b8/c=;
-        b=kNNjTHzMulfSiUv17XpO8UDLZHFWm+3uXibePEM7TDZpwoaGH6KBO0dxcM9Jva97eC
-         C6UMYqpunTBE9Ohwqq+OpfBm8FlKbITOpuWMSboceXCS5+4hXRcA9hPL+01zX0iJ4a0L
-         SeaPu9ygbTsNygQhnhCDvleV2j4B3f0thltxN8tiK+agmSGewZpBh/Eety0dhKO22OcW
-         RqIV+C9wxK67NDos3FBY8ABwI0K5CzQQzR7/bdpnUzh10M1nJEIn4BvOdTOoi0mEj8CI
-         DJt/QrSfx7Eyy2WiT6YZq27QPsCkRZFzCjfVZmNtmeLNXhTxVo6hNc6ordE/hBZD3nNQ
-         dhkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUNZZJDjedYPgwMeOvneycB+R9bKwRJGwjPaPuFmMGYz5KeQN68zvNJ9WurBDXfy70rqaH6sZKPAC3twdgWXok=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzSawvZIMhPZpV3uJPDnhNkF2SSiJK09fpWfwmfJ8++7sUfsZR
-	o9bc3+/JzY7wfOsGqtDoX6BwrKfdJSGcUgY9JBqein22f7WtjelklXoR
-X-Gm-Gg: AZuq6aLVLCNkgcmuGZiioHEoQ9QfDIw38WntOcEaZIb2BLTue7MHTG5M6HvGyZH3Py1
-	y3/9CZrQM5Li4aKsrWLRuFOlyVllbGcIgP1OZN5ilnHwmalD9uRegimCHxYMCd5GqEVBZZ+mjj0
-	Eg239i4nDPUYL1+5lZhZX9cx4PIw+/uXj31DI1cTXgU6Yi3TweWcy7VRSujwysq87G2HnMZ4yZS
-	CRqdhUwa27xVI/glfVj5jQ50YM2nN3ftTq1kmm4ZDFZ0c/sFUr6VYtY0A9X1ZTCvhztwBVgr5Al
-	yCT3Wr446H7Px3haBe/MXBuC15gNqrfFUPEIEYJPcIB0JAZnwKf9rERUrS3D0/7Ql3Fdov8SQCR
-	aVAcGz+CFY4tOGJmAYFtAO2ErUK3DQAotdssZYPFo+7HMaZNZC4ysQefQEi+ES77s5YoJPlE6NM
-	7lfRuL7MZZVdJXzCAzRMCBl3JT
-X-Received: by 2002:a17:90b:1348:b0:352:d1a4:19cb with SMTP id 98e67ed59e1d1-3543b323becmr14114944a91.11.1770130493557;
-        Tue, 03 Feb 2026 06:54:53 -0800 (PST)
-Received: from google.com ([2402:7500:479:35ee:e4d3:f3eb:beee:73a1])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3543babe4aasm7657190a91.0.2026.02.03.06.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 06:54:52 -0800 (PST)
-Date: Tue, 3 Feb 2026 22:54:48 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Titouan Ameline de Cadeville <titouan.ameline@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, davidgow@google.com,
-	raemoar63@gmail.com, kees@kernel.org, eleanor.lin@realtek.com,
-	Titouan Ameline de Cadeville <titouan.ameline-de-cadeville@epita.fr>
-Subject: Re: [PATCH v4] lib: math: tests: drop unnecessary KUnit param_value
- casts
-Message-ID: <aYIMONemSs3GqJLT@google.com>
-References: <20260203090609.30430-1-titouan.ameline-de-cadeville@epita.fr>
+        d=1e100.net; s=20230601; t=1770130691; x=1770735491;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w82IDFvykl0YHd41gNU5sR8h+mwuxYG5tbST4sK5PRg=;
+        b=oi2fhO5IytL+taYA4EqYqXPOWkpWSWgg3pZfGx5GqhB3SYqDMWc8c8MRiAHUy3H9DI
+         QWX+5bZjtVaKzSbJzv90JSXa7ysbDBCABvZK0FRf57N8oAOvrtQWPtRH/zor9uizkIP1
+         v7dWZvUS+PdBpBx3RDRJHSSHHKFC5ETFVZmQhxe5QwxXQjIli9kdRXlcCIzzTR2wJD/V
+         TAzVYD55fAJBJ1WHMZPBzNySncoYpF00NfojKAJ6DT/f3qenw7HwUB6+GkJU9gy0MWea
+         jT5MM+ctsyqgLR9/eaxH7KxlwujlA8RBFcvKEJLNUQkTp+m9Vvk2an6DXHOIfAYazJxG
+         YAuw==
+X-Forwarded-Encrypted: i=1; AJvYcCXkiOli4XGhmmw4N5ZG6njMCcQZUyWm6PzaUdLo/ZjmAS8Y43kb5cTyoKIEs2JOZyDwUNnQl5vkmJ57/TUvspo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxojuXndrW11YVknWBpkQJjjQ1E3uXUhI8AvURFGp7w/c2xATH
+	zBASCdK3blcqMXq86l1TtoYZDExT6e62Dbt1eop624gDnkYNVcMhFdFifaRIr33MkV292gmU/mO
+	X5fPFqg==
+X-Received: from plyw20.prod.google.com ([2002:a17:902:d714:b0:2a9:3211:e2f8])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ea0c:b0:29e:76b8:41e5
+ with SMTP id d9443c01a7336-2a8d9919123mr154207415ad.30.1770130691106; Tue, 03
+ Feb 2026 06:58:11 -0800 (PST)
+Date: Tue, 3 Feb 2026 06:58:08 -0800
+In-Reply-To: <peroaux2ghnb2ypg2ebzflb3xvg3bzpaircqht3vdgy7tkrwn4@pfpkfhasn44i>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260203090609.30430-1-titouan.ameline-de-cadeville@epita.fr>
+Mime-Version: 1.0
+References: <20250502050346.14274-1-manali.shukla@amd.com> <20250502050346.14274-5-manali.shukla@amd.com>
+ <peroaux2ghnb2ypg2ebzflb3xvg3bzpaircqht3vdgy7tkrwn4@pfpkfhasn44i>
+Message-ID: <aYINAAGPto_TqLt-@google.com>
+Subject: Re: [PATCH v5 4/5] KVM: SVM: Add support for KVM_CAP_X86_BUS_LOCK_EXIT
+ on SVM CPUs
+From: Sean Christopherson <seanjc@google.com>
+To: Yosry Ahmed <yosry.ahmed@linux.dev>
+Cc: Manali Shukla <manali.shukla@amd.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, nikunj@amd.com, 
+	bp@alien8.de
+Content-Type: text/plain; charset="us-ascii"
 
-Hi Titouan,
-
-On Tue, Feb 03, 2026 at 10:06:09AM +0100, Titouan Ameline de Cadeville wrote:
-> Drop unnecessary casts from KUnit parameter access since param_value
-> is a void *. This improves readability and follows common kernel style.
+On Mon, Feb 02, 2026, Yosry Ahmed wrote:
+> On Fri, May 02, 2025 at 05:03:45AM +0000, Manali Shukla wrote:
+> > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> > index 834b67672d50..5369d9517fbb 100644
+> > --- a/arch/x86/kvm/svm/nested.c
+> > +++ b/arch/x86/kvm/svm/nested.c
+> > @@ -678,6 +678,33 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+> >  	vmcb02->control.iopm_base_pa = vmcb01->control.iopm_base_pa;
+> >  	vmcb02->control.msrpm_base_pa = vmcb01->control.msrpm_base_pa;
+> >  
+> > +	/*
+> > +	 * Stash vmcb02's counter if the guest hasn't moved past the guilty
+> > +	 * instrution; otherwise, reset the counter to '0'.
+> > +	 *
+> > +	 * In order to detect if L2 has made forward progress or not, track the
+> > +	 * RIP at which a bus lock has occurred on a per-vmcb12 basis.  If RIP
+> > +	 * is changed, guest has clearly made forward progress, bus_lock_counter
+> > +	 * still remained '1', so reset bus_lock_counter to '0'. Eg. In the
+> > +	 * scenario, where a buslock happened in L1 before VMRUN, the bus lock
+> > +	 * firmly happened on an instruction in the past. Even if vmcb01's
+> > +	 * counter is still '1', (because the guilty instruction got patched),
+> > +	 * the vCPU has clearly made forward progress and so KVM should reset
+> > +	 * vmcb02's counter to '0'.
+> > +	 *
+> > +	 * If the RIP hasn't changed, stash the bus lock counter at nested VMRUN
+> > +	 * to prevent the same guilty instruction from triggering a VM-Exit. Eg.
+> > +	 * if userspace rate-limits the vCPU, then it's entirely possible that
+> > +	 * L1's tick interrupt is pending by the time userspace re-runs the
+> > +	 * vCPU.  If KVM unconditionally clears the counter on VMRUN, then when
+> > +	 * L1 re-enters L2, the same instruction will trigger a VM-Exit and the
+> > +	 * entire cycle start over.
+> > +	 */
+> > +	if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip))
 > 
-> No functional change.
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> Signed-off-by: Titouan Ameline de Cadeville <titouan.ameline-de-cadeville@epita.fr>
+> Is vmcb02->save.rip the right thing to use here?
 
-v4 appears to be identical to the previous version. The same
-checkpatch.pl warning is still being reported. Please slow down and
-ensure the content is correct before resending.
+Objection, leading the witness your honor.
 
-> ---
+> IIUC, we want to find out if L2 made forward progress since the last bus
+> lock #VMEXIT from L2 to L0
 
-Also, please include a changelog below the --- line describing the
-changes between versions. This allows reviewers to easily track what
-has been modified.
+More or less.
+  
+>, at which point we record bus_lock_rip.
+> However, on nested VMRUN, vmcb02->save.rip is only populated from the
+> vmcb12 in nested_vmcb02_prepare_save(), which doesn't happen until after
+> nested_vmcb02_prepare_control(). So waht we're comparing against here is
+> L2's RIP last time KVM ran it.
 
-Regards,
-Kuan-Wei
+Hrm, that definitely seems like what past me intended[*], as this quite clearly
+suggests my intent was to check the RIP coming from vmcb12:
 
->  lib/math/tests/gcd_kunit.c      | 2 +-
->  lib/math/tests/int_log_kunit.c  | 4 ++--
->  lib/math/tests/int_pow_kunit.c  | 2 +-
->  lib/math/tests/int_sqrt_kunit.c | 2 +-
->  lib/math/tests/rational_kunit.c | 2 +-
->  5 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/lib/math/tests/gcd_kunit.c b/lib/math/tests/gcd_kunit.c
-> index ede1883583b1..b9c9b8758991 100644
-> --- a/lib/math/tests/gcd_kunit.c
-> +++ b/lib/math/tests/gcd_kunit.c
-> @@ -34,7 +34,7 @@ KUNIT_ARRAY_PARAM(gcd, params, get_desc);
->  
->  static void gcd_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, gcd(tc->val1, tc->val2));
->  }
-> diff --git a/lib/math/tests/int_log_kunit.c b/lib/math/tests/int_log_kunit.c
-> index 14e854146cb4..9f9b48232701 100644
-> --- a/lib/math/tests/int_log_kunit.c
-> +++ b/lib/math/tests/int_log_kunit.c
-> @@ -43,7 +43,7 @@ KUNIT_ARRAY_PARAM(intlog2, intlog2_params, get_desc);
->  
->  static void intlog2_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, intlog2(tc->value));
->  }
-> @@ -52,7 +52,7 @@ KUNIT_ARRAY_PARAM(intlog10, intlog10_params, get_desc);
->  
->  static void intlog10_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, intlog10(tc->value));
->  }
-> diff --git a/lib/math/tests/int_pow_kunit.c b/lib/math/tests/int_pow_kunit.c
-> index 34b33677d458..ef9c8a9bd8ac 100644
-> --- a/lib/math/tests/int_pow_kunit.c
-> +++ b/lib/math/tests/int_pow_kunit.c
-> @@ -31,7 +31,7 @@ KUNIT_ARRAY_PARAM(int_pow, params, get_desc);
->  
->  static void int_pow_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, int_pow(tc->base, tc->exponent));
->  }
-> diff --git a/lib/math/tests/int_sqrt_kunit.c b/lib/math/tests/int_sqrt_kunit.c
-> index 1798e1312eb7..9c46024b0fc1 100644
-> --- a/lib/math/tests/int_sqrt_kunit.c
-> +++ b/lib/math/tests/int_sqrt_kunit.c
-> @@ -45,7 +45,7 @@ KUNIT_ARRAY_PARAM(int_sqrt, params, get_desc);
->  
->  static void int_sqrt_test(struct kunit *test)
->  {
-> -	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-> +	const struct test_case_params *tc = test->param_value;
->  
->  	KUNIT_EXPECT_EQ(test, tc->expected_result, int_sqrt(tc->x));
->  }
-> diff --git a/lib/math/tests/rational_kunit.c b/lib/math/tests/rational_kunit.c
-> index 47486a95f088..b05587a1e90a 100644
-> --- a/lib/math/tests/rational_kunit.c
-> +++ b/lib/math/tests/rational_kunit.c
-> @@ -33,7 +33,7 @@ KUNIT_ARRAY_PARAM(rational, test_parameters, get_desc);
->  
->  static void rational_test(struct kunit *test)
->  {
-> -	const struct rational_test_param *param = (const struct rational_test_param *)test->param_value;
-> +	const struct rational_test_param *param = test->param_value;
->  	unsigned long n = 0, d = 0;
->  
->  	rational_best_approximation(param->num, param->den, param->max_num, param->max_den, &n, &d);
-> -- 
-> 2.44.2
-> 
+ : Again, it's imperfect, e.g. if L1 happens to run a different vCPU at the same
+ : RIP, then KVM will allow a bus lock for the wrong vCPU.  But the odds of that
+ : happening are absurdly low unless L1 is deliberately doing weird things, and so
+ : I don't think
+
+I have this vague feeling that I deliberately didn't check @vmcb12_rip, but the
+more I look at this, the more I'm convinced I simply didn't notice @vmcb12_rip
+when typing up the suggestion.
+
+[*] https://lore.kernel.org/all/Zw6rJ3y_F-10xBcH@google.com
+
+> It's even worse in the KVM_SET_NESTED_STATE path, because
+> vmcb02->save.rip will be unintialized (probably zero).
+
+FWIW, this one is arguably ideal, in the sense that KVM should probably assume
+the worst if userspace is loading guest state.
+
+> Probably you want to use vmcb12_rip here, as this is the RIP that L1
+> wants to run L2 with, and what will end up in vmcb02->save.rip.
+>
+> HOWEVER, that is also broken in the KVM_SET_NESTED_STATE path. In that
+> path we pass in the uninitialized vmcb02->save.rip as vmcb12_rip anyway.
+
+
+> Fixing this is non-trivial because KVM_SET_REGS could be called before
+> or after KVM_SET_NESTED_STATE, so the RIP may not be available at all at
+> that point.
+
+Eh, this code is completely meaningless on KVM_SET_NESTED_STATE.  There is no
+"right" answer, because KVM has no clue what constitutes forward progress.
+
+Luckily, no answer is completely "wrong" either, because the #VMEXIT is transparent
+to L1 and L2.  E.g. it's like saying that sending an IRQ to CPU running a vCPU is
+"wrong"; it's never truly "wrong", just suboptimal (sometimes *very* suboptimal).
+
+> We probably want to set a flag in svm_set_nested_state() that the RIP
+> needs fixing up, and the perhaps in svm_vcpu_pre_run() fix up the
+> control fields in vmcb02 that depend on it: namely the bus_lock_counter,
+> next_rip, and soft_int_* fields.
+
+Nah, not unless there's a meaningful, negative impact on a real world setup.
+And as above, in practice the only impact is effectively a performance blip due
+to generating an unwanted userspace exit.  If userspace is stuffing nested state
+so often that that's actually a performance problem, then userspace can set regs
+before nested state.
+
+There are a pile of edge cases and "what ifs" around this, none of which have a
+perfect answer since KVM doesn't know userspace's intent.  And so I want to go
+with a solution that is as simple as possible without risking putting L2 into an
+infinite loop.
+
+> It gets worse because I think next_rip is also not always properly
+> saved/restored because we do not sync it from vmcb02 to cache in
+> nested_sync_control_from_vmcb02() -- but that one is not relevant to
+> bus_lock_counter AFAICT.
+
+Correct.
+
+All in all, I think just this?
+
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index de90b104a0dd..482092b2051c 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -809,7 +809,7 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+         * L1 re-enters L2, the same instruction will trigger a VM-Exit and the
+         * entire cycle start over.
+         */
+-       if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip))
++       if (vmcb12_rip && (svm->nested.ctl.bus_lock_rip == vmcb12_rip))
+                vmcb02->control.bus_lock_counter = 1;
+        else
+                vmcb02->control.bus_lock_counter = 0;
