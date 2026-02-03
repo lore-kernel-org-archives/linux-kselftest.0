@@ -1,71 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0B530F927;
-	Tue,  3 Feb 2026 14:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2317F3A8FE6;
+	Tue,  3 Feb 2026 14:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770128216; cv=none; b=dZvcXWz03n+TQmTCPEE3R/AQQaPXO/+QK2k7qw1GqL02DXLvUPH5359ueymauRAvtkcWiTZDRGzQDTouBsK9ykiMfPRSX+RCjuaSOKnv5NyAzeR2tJqr8c/kMXh1oTJaZctU2HE7lTcbDA/GDn8Hk/3T6YwzcTLIG93fMRYShl8=
+	t=1770128440; cv=none; b=BPvDJ08RYJYipwXJobvRME2XKgeOaMVcRkekMN0nmyeZovqqYW/qIVngIknYKKq41bt55gWQDMlzTqgz3FJikyCHt1OS/Jmg2J5XaSOH5m+le19gHHbfTbdgqbx87S6SnUmAbpx5vn/isFsKrsXiTXEg7yiz3l5tte6HSv5bkb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770128216; c=relaxed/simple;
-	bh=zam1ZD1A+PoOm0WPOB3rGE8poSwUMpV98xoTtBaj0x4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=vCkzoMjjj0u5gYAhp38/cc4aVTb8VLJshoinyOO3jRKSliqF9tk8jTujGbx1rIsydq6dbOWbz+Q1fXTZ2AXHGD2xO/ITeOl7n3AKhWX9us4Oy7vglZGsm09Eq5lYJU3hrkB61X5ogrRxmyi1gdaUryJy2h0mz6NF18pV4T/GbO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QZMobXiy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770128440; c=relaxed/simple;
+	bh=bh7+IerRoy6AL9qQCND5lJKi+YgjZel6S467nOCTmzk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=a07gB91NfgzgSi4dcN5X9axHvX6jhcgHqL50Vuz6U0cQox2AYwsNqr8OQWZXc1M3uTZ7Qr+6F9MJHiKYjhakf3MqRuNWplh7kQgF4o+XRdv+ILdTwA6F3pPVrYHxouW+X95XEpDEzYgXIBgpDp/sWFKetZa61cgVGFfN2a9dkPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jBLpkqes; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QZMobXiy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A20C116D0;
-	Tue,  3 Feb 2026 14:16:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jBLpkqes"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E06C116D0;
+	Tue,  3 Feb 2026 14:20:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770128215;
-	bh=zam1ZD1A+PoOm0WPOB3rGE8poSwUMpV98xoTtBaj0x4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=QZMobXiyLkOcySOAwBTdVMHFtfmDobs8TrkIhE1Q2WnUEzAc/aatxUKA4cnpszgDX
-	 SjRVCF1MUd9aWGjcLwcIR9idOw77vZNpFCo9nwdTtF5lkXiegJbEny/7g75+J6E1zp
-	 zXtk1XtEJ7tBGO1gLlrwDDcYAp0DvAIJkWWlOtVz4c60pYBRtVnc/D7jDHDbvpPrV6
-	 ud6o+8kcgSOB1vkHQNnjVlSPdL0SXVeL/UOXBPFNWnvtBECuoXZq0NPWhlpjIVSyd/
-	 iwjNJidV9dF5dXxPaBKsgamZEvVzNTe+FF1J+urLZtdZ5n/GlRVNF3dK4ElCBOgWnM
-	 tHbvUsDisodPQ==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
- will@kernel.org, oleg@redhat.com, shuah@kernel.org, kees@kernel.org,
- luto@amacapital.net, wad@chromium.org, kevin.brodsky@arm.com,
- akpm@linux-foundation.org, charlie@rivosinc.com, ldv@strace.io,
- anshuman.khandual@arm.com, mark.rutland@arm.com, ryan.roberts@arm.com,
- thuth@redhat.com, song@kernel.org, ada.coupriediaz@arm.com,
- broonie@kernel.org, pengcan@kylinos.cn, liqiang01@kylinos.cn,
- kmal@cock.li, dvyukov@google.com, reddybalavignesh9979@gmail.com,
- richard.weiyang@gmail.com, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: ruanjinjie@huawei.com
-Subject: Re: [PATCH v12 00/13] arm64: entry: Convert to Generic Entry
-In-Reply-To: <20260203133728.848283-1-ruanjinjie@huawei.com>
-References: <20260203133728.848283-1-ruanjinjie@huawei.com>
-Date: Tue, 03 Feb 2026 15:16:51 +0100
-Message-ID: <87bji552uk.ffs@tglx>
+	s=k20201202; t=1770128439;
+	bh=bh7+IerRoy6AL9qQCND5lJKi+YgjZel6S467nOCTmzk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=jBLpkqes71HO/n5IeE6eAmpgINcqOttk0C0U0jGba4RUUBeCygc8B2vGJm+uwp9/4
+	 +cP06DGBLAV2RMu1gHkLuUrMDOCfDfrz3uaRcWw386yWapF0f24O0QL1PHZZWvjaM1
+	 mhfJhJNaKUjv3chl2jiyeysVSlC5Y17tUdZ7k3aS9YijcP9vxNMFy1iSkwLKDfYHgI
+	 H6vH3zYRR66VZBCbsljg9LTJbfP1/kaZL3jn9wuf1tq9fZc6as5lr3MvwyP+pj2YHd
+	 h7FfVu7Ujj9IY8fB+IRWpN5vCGSgyWBsuzHorMBPsB6O37efcIZ1vk5y4XNssIaENa
+	 59wUokk/JOWPg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 90F973808200;
+	Tue,  3 Feb 2026 14:20:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v13 net-next 00/15] AccECN protocol case handling series
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177012843606.1498169.6318995786040957061.git-patchwork-notify@kernel.org>
+Date: Tue, 03 Feb 2026 14:20:36 +0000
+References: <20260131222515.8485-1-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20260131222515.8485-1-chia-yu.chang@nokia-bell-labs.com>
+To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
+Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
+ linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+ dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+ kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
 
-On Tue, Feb 03 2026 at 21:37, Jinjie Ruan wrote:
-> Currently, x86, Riscv, Loongarch use the Generic Entry which makes
-> maintainers' work easier and codes more elegant. arm64 has already
-> successfully switched to the Generic IRQ Entry in commit
-> b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
-> time to completely convert arm64 to Generic Entry.
->
-> The goal is to bring arm64 in line with other architectures that already
-> use the generic entry infrastructure, reducing duplicated code and
-> making it easier to share future changes in entry/exit paths, such as
-> "Syscall User Dispatch".
->
-> This patch set is rebased on "sched/core". And the performance
+Hello:
 
-Why are you using sched/core, which contains a lot of unrelated
-changes. core/entry is the one which has the prerequisites and nothing
-else....
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Sat, 31 Jan 2026 23:25:00 +0100 you wrote:
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> 
+> Hello,
+> 
+> Plesae find the v13 AccECN case handling patch series, which covers
+> several excpetional case handling of Accurate ECN spec (RFC9768),
+> adds new identifiers to be used by CC modules, adds ecn_delta into
+> rate_sample, and keeps the ACE counter for computation, etc.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v13,net-next,01/15] tcp: try to avoid safer when ACKs are thinned
+    https://git.kernel.org/netdev/net-next/c/7885ce014740
+  - [v13,net-next,02/15] gro: flushing when CWR is set negatively affects AccECN
+    https://git.kernel.org/netdev/net-next/c/ab4c8b6f7fcb
+  - [v13,net-next,03/15] selftests/net: gro: add self-test for TCP CWR flag
+    https://git.kernel.org/netdev/net-next/c/6f74bc8b6e8d
+  - [v13,net-next,04/15] tcp: ECT_1_NEGOTIATION and NEEDS_ACCECN identifiers
+    https://git.kernel.org/netdev/net-next/c/100f946b8d44
+  - [v13,net-next,05/15] tcp: disable RFC3168 fallback identifier for CC modules
+    https://git.kernel.org/netdev/net-next/c/e68c28f22f46
+  - [v13,net-next,06/15] tcp: accecn: handle unexpected AccECN negotiation feedback
+    https://git.kernel.org/netdev/net-next/c/c5ff6b837159
+  - [v13,net-next,07/15] tcp: accecn: retransmit downgraded SYN in AccECN negotiation
+    https://git.kernel.org/netdev/net-next/c/3ae62b8b4a48
+  - [v13,net-next,08/15] tcp: add TCP_SYNACK_RETRANS synack_type
+    https://git.kernel.org/netdev/net-next/c/f1eaea5585e4
+  - [v13,net-next,09/15] tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN SYN/ACK
+    https://git.kernel.org/netdev/net-next/c/f326f1f17f37
+  - [v13,net-next,10/15] tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
+    https://git.kernel.org/netdev/net-next/c/4024081feb87
+  - [v13,net-next,11/15] tcp: accecn: fallback outgoing half link to non-AccECN
+    https://git.kernel.org/netdev/net-next/c/2ed661248e2b
+  - [v13,net-next,12/15] tcp: accecn: detect loss ACK w/ AccECN option and add TCP_ACCECN_OPTION_PERSIST
+    https://git.kernel.org/netdev/net-next/c/1247fb19cafe
+  - [v13,net-next,13/15] tcp: accecn: add tcpi_ecn_mode and tcpi_option2 in tcp_info
+    https://git.kernel.org/netdev/net-next/c/4fa4ac5e5848
+  - [v13,net-next,14/15] tcp: accecn: enable AccECN
+    https://git.kernel.org/netdev/net-next/c/8ae3e8e6ceed
+  - [v13,net-next,15/15] selftests/net: packetdrill: add TCP Accurate ECN cases
+    https://git.kernel.org/netdev/net-next/c/f85d9c45f1d4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
