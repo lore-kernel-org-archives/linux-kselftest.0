@@ -1,247 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FAE35BDD5
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 17:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8655F2798ED
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 18:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770140709; cv=none; b=OqKxutz2E85cwaoUGVaJqoKE5Po03mj7F6FIFy9qsQmI1KdtwayPVXw7m5qycvrNOUMGofW4ibGDKqS1AQHf1uaGrrWvd6d08FgZyt6E/ib32r4i1VVVWm3L+UKrf/LotFYMgWuO5k+cWNskVBGyTpkcwabXhcLXkgKQf+ugwEQ=
+	t=1770142412; cv=none; b=ekVzhErtuQFKeBUVZJ1IaxMdkXJdJ6eT19ncne3Nei8LeZnhH0RvTqFRzQa8WNv+ImOM2IVmKIlYx0ms7XCCiGINAf/qrfw/shibAPYQSC8z1SL8kw/sUwpDbol3tWWIYWtXypjQNtBO+yD7jMZ2ej1t5sisAc5u+PO0lt0+8IU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770140709; c=relaxed/simple;
-	bh=9t1fUsY8nDNXTD2RVVJumI8FxVBqWXScBzfMykEVp8U=;
+	s=arc-20240116; t=1770142412; c=relaxed/simple;
+	bh=RgOdFHuomUx5cdPp0JGsemA2d5RVP7tNLyg3IMDaEeM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C05iUChmhfGwI9Fz590p9SV3qhf+WR3lb/pvvk9AifVH9rTv+PiauncbhmVrzcAfXIkIYyseEyMS68Zes1bbkISOhadsMrAXZfz8SgI2Vzd4pigmdYCD9Gp9W6S6Zd38fGW2lBkVV8P6WlmIbFgY+QHKM8I8WR0V6OL3j2sW60U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FY9s5nF7; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=PqcnK/Y+; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=muaLEntbXr6K58RrbIAX3gFBD5pq86sFFzxkEZ8Zr9JiX5XL3o9nk75UKdcoxw1y3etDnTJmTpSEuc6NbhCiG5sgj9TUFuiTi5EOp+JizbCEsB5YCK51fldNTaL2H8VHuMQAbR6kIWCzt4ywaZm9lMS9xwEorHifOmWGS3gC0rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=oEtrnln0; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FY9s5nF7";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="PqcnK/Y+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770140707;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tlFrmjhVpayg8OBXKv6tROkmIHF/xjSd9Muscu3Dpsk=;
-	b=FY9s5nF7qrQQ/SpoSiAXwucg4M13UD90jHocFZj5mswY4pGFRBXGrg1GnAO2GSRLsuyqkJ
-	kTtEmHKd8u0aiiN8c/g9KoTNpoz/YQ4rCkLbgVgzFsxNIoG+DnfLZGOdDi3Sz0T00h9S7i
-	3IPoeAJKD4e/hqVqsYBMWnBLLiCrhV4=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-570-uku_stk3Os-CY3T3UievaA-1; Tue, 03 Feb 2026 12:45:06 -0500
-X-MC-Unique: uku_stk3Os-CY3T3UievaA-1
-X-Mimecast-MFC-AGG-ID: uku_stk3Os-CY3T3UievaA_1770140706
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-5014c9ee70bso56810011cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 09:45:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="oEtrnln0"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5029af2b4bcso32781371cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 10:13:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770140706; x=1770745506; darn=vger.kernel.org;
+        d=ziepe.ca; s=google; t=1770142410; x=1770747210; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tlFrmjhVpayg8OBXKv6tROkmIHF/xjSd9Muscu3Dpsk=;
-        b=PqcnK/Y+P5srIVqAQL7NO12bhlJArUFo761gJdPAvEMeFT1OIlkBEBFQhZEyeWRd1U
-         niEe6xS/8u9v6c1GNBP7aTffvDSl4ChTot+Hi7NCKKV3vNCGFqWoNYahCQK4rq13GlgV
-         nBe06UBjkDeyPnO38jwUbMRZB1CfWOyRhpUrVZv9LDG/1MNawhLIo4Fg/Wnq+FFus/+L
-         DVELzX+u6Y8YMgd7YA2ve77CaTx9RLX6dbCg9OHF8HUSXerWSi+gq+MWHz8U1ymXtTlP
-         jIDGvo7VKa7U6HKu5C5mxxfIQ3cATWJ486uuJq8BN3ctiWY5tQWSTZD4KIN0OwxqWOFP
-         HUPQ==
+        bh=6rLJUepMBePw2/6rYXVBVUlKVexPKPCi+MRpKxp95Xc=;
+        b=oEtrnln0aEZ4MV0c7yM9IqhjQJwWubUZvYjG0eYwfhve6jxrNk4n8MxL3DLkkdoP9b
+         kx7SpDoUiUgB/4j4FXTa6wT/5bJVCntjPC+YUkAUjjM6JEBFbfzRRcDfbnYL1Ty/K6IR
+         zDjTnSTQ4a7xN+t94xh6VTJzVcusgQX1Fa5bp5oMdFJfiZtqO0IAbWOiZS6Ym7+PMAlq
+         cs8vA05/EjHp4IAd54Zbkeh8JO4WWepY2cxXHjcYHu/8BYZI/R+r1j72G3yWN9nmRCvi
+         js2ObNs8hhOsQVCVMR3dJ1LPwj8TX1NDKqnc8QzgnP9ykQxeOXuhpYtDczTB7OV/IRyr
+         3yvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770140706; x=1770745506;
+        d=1e100.net; s=20230601; t=1770142410; x=1770747210;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tlFrmjhVpayg8OBXKv6tROkmIHF/xjSd9Muscu3Dpsk=;
-        b=hLPYdsxhVi+3/HMIloBqsKzTHs5ycl6FmaYlLtR0zRmEiogoSQatIlYOK6SwVISPZj
-         QI7F3F3mF4vYF1+4pKGEcBlZlRGwohgokKTm2X71s6Z0amH8p/8Wviwrt9LIg6JFY4gV
-         d9uUGgO4qfnatWxe1jDj26nXeNxx3anL5sEhzGHLH/lDbgoPGfV2q/LCWRYY2V8jD/WR
-         OU53hT+JgoWftMLv5E7b/DtAankRM58GzN2gLfVu2hpxz+w2Kd1XCoz8g+gHrh6urqlh
-         lom8aqJWydW2/nX+JhpE9U4PR8zQKWfTxyD3xPEWwwaVY06N5k93Z9UMKpbd4IHLOVL6
-         jaqg==
-X-Forwarded-Encrypted: i=1; AJvYcCXadOEwq9s5NYZKk1G582Yfw/pLRut95kP34u0X0VtpnOHTVQUmUyNKhQl5sGCosw+CywO6eXmXG89ozmgrXxQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFaTV3IzJeZaEHqGqjkj29+QSUtD8ikJg1CCbbeD3mF3LLOMvy
-	Iy65JOM9opVjehrJ0RDF8oHvX9RZrUHDdaUt44OxrmqECJO52x21YHF6/+20aFPhXG+zl007gIh
-	deRq7XjgQixL5DK+Nxo1oQGHNWJEmPIXkCtDyN+N7IYHiSeE+pz1aRE30tEDkSn9y+l8fog==
-X-Gm-Gg: AZuq6aLS/908byp2SngozUdBBx5QSeAxkI0sQ2omeVzu+870WeOAr1v5qqwMCI7v5te
-	xLqwuCcd2yBVF7D93VrEKyUVDzbJnNfWxSTBX4BMBgsfsSqlemgN9o3DMxvkMJNd7yRuDyFRUCY
-	KWZzP/LUBn0C98Poc3xq15tkPiIX+0r3sCUvV2lpQec0TedG4fxaibqcsQK0Aw38p0C4iUAuQAC
-	M4qXQi+zKjyehjw07L0gpr7asrJYfvs5aA4E1EU/YNfRMS0tQ6UO1iUFIsfC/41DHFbfo3jQbU5
-	3ouc5chsVvEmKvk5+MonE0qieYlhoRYDCxZkHJVlJP/EQEMcBwySLUNG29A7/4ZUHqLPGrEoIqU
-	VbdI=
-X-Received: by 2002:a05:622a:1ba3:b0:501:181d:f71e with SMTP id d75a77b69052e-5061c18ec18mr1176601cf.38.1770140705460;
-        Tue, 03 Feb 2026 09:45:05 -0800 (PST)
-X-Received: by 2002:a05:622a:1ba3:b0:501:181d:f71e with SMTP id d75a77b69052e-5061c18ec18mr1175931cf.38.1770140704851;
-        Tue, 03 Feb 2026 09:45:04 -0800 (PST)
-Received: from x1.local ([142.188.210.156])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5061c1f7764sm401081cf.23.2026.02.03.09.45.03
+        bh=6rLJUepMBePw2/6rYXVBVUlKVexPKPCi+MRpKxp95Xc=;
+        b=kIn6bLG9Ceg5Y29BN3p0/iVgr/Q2qgjO/CZmPk/idOYQK0ASd22T814c2S8+igk9Bq
+         M0jI7vNd6Mlm4dDYMbEqgAA7nMIlEci5jNC0lLjczX2/zjQ4+FBFdd3H/oJTNNkYurWT
+         q3YHXI/6XiNRyaoknRDf5SX6Rm69NZ55VxvbnMAA/EWnnCEWoSYSdwUHBIPCX83HD8pQ
+         JKBu1w+jEPWsimQe9GX8paFvZNgjIkLUjXyrhid6a+QcBgwVZSE9g6ro0dwc3HqOtfDL
+         KRwu4n4HAUN0v5KZrDxmPK0wY9rNEFBy6CiQqCUEoysxq7zx+pg05tY2rYedGiGx3tYN
+         Lj9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWKD+v5gOv8vNavUi4uERXWCUL7TPaUNcjUlQEpz5SumV2u5a1NcvX0gd470MmbvlTpQpC6EwzF4qM76QOfYx4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsQvX7I56ekDJoCJJ8KIlfmxyNbqIZzTgrz7PtWHvfZiJ+C/q0
+	4aCNwGFsKghloEusIDuyy4ySCcBCuCoVhOXNIDEfngKU8ChFwrbvf2N7NBxwDgtWZcU=
+X-Gm-Gg: AZuq6aL74jxbH51/f58Vp7jZPqFzNcwHcSMNGcv58G9fGv3tpJVrbCJbQmk/izZmHCW
+	VtPhfYrvJT1eomp2rBxm9LF8bAkORIYlYfKsyjL8HKchFeCLICLVWVJgt8wPiW5GLkvJVhv+Dtj
+	80jLn5PNJIQBqLsY9BOri32HT0SrqK1+Y2JCGf/amIz5+cm08FPJn79wQ3+LK53OpCfkBhrI9xj
+	DCvLxVcYvm17EGSwwHnPW82yQGqHDir8U+fNcjLfQeXTymzS2oN96RDunKNxsOPhMQ8mqSfTA9R
+	PGN0VN/00A2AAePu5pahlvxyRNzad4X/O4+uz5xWR6mqIPwpjbwLHdwjnz7Owm4OLzvFCj2g7fx
+	QB0P51s31653Yfy9l/yRVklBR+AQFYQmRDG2yKeX7EJrQ5f9PVxfgTHnmdidGcM/2OiBgCYHJAA
+	7X/TgoQG9cZWxxsm6RU4xPC28DbMWx0WjShbH7/f+hmZX7pccJ1SsqHbhfREENbf8yRP8=
+X-Received: by 2002:ac8:1402:0:b0:4ee:42e6:a5 with SMTP id d75a77b69052e-5061c1ae28dmr1930741cf.57.1770142403217;
+        Tue, 03 Feb 2026 10:13:23 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fa55983sm22226185a.10.2026.02.03.10.13.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 09:45:04 -0800 (PST)
-Date: Tue, 3 Feb 2026 12:45:02 -0500
-From: Peter Xu <peterx@redhat.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 01/17] userfaultfd: introduce
- mfill_copy_folio_locked() helper
-Message-ID: <aYI0HmP-XZNBI-gb@x1.local>
-References: <20260127192936.1250096-1-rppt@kernel.org>
- <20260127192936.1250096-2-rppt@kernel.org>
+        Tue, 03 Feb 2026 10:13:22 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1vnKtt-0000000Gaft-0KdL;
+	Tue, 03 Feb 2026 14:13:21 -0400
+Date: Tue, 3 Feb 2026 14:13:21 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Alexey Kardashevskiy <aik@amd.com>
+Cc: Sean Christopherson <seanjc@google.com>,
+	Ackerley Tng <ackerleytng@google.com>, cgroups@vger.kernel.org,
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+	akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
+	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org,
+	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com,
+	david@redhat.com, dmatlack@google.com, erdemaktas@google.com,
+	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com,
+	hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com,
+	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com,
+	jack@suse.cz, james.morse@arm.com, jarkko@kernel.org,
+	jgowans@amazon.com, jhubbard@nvidia.com, jroedel@suse.de,
+	jthoughton@google.com, jun.miao@intel.com, kai.huang@intel.com,
+	keirf@google.com, kent.overstreet@linux.dev,
+	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
+	mail@maciej.szmigiero.name, maobibo@loongson.cn,
+	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
+	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com,
+	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au,
+	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es,
+	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com,
+	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com,
+	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz,
+	qperret@google.com, richard.weiyang@gmail.com,
+	rick.p.edgecombe@intel.com, rientjes@google.com,
+	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org,
+	shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com,
+	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com,
+	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com,
+	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com,
+	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org,
+	wyihan@google.com, xiaoyao.li@intel.com, yan.y.zhao@intel.com,
+	yilun.xu@intel.com, yuzenghui@huawei.com, zhiquan1.li@intel.com
+Subject: Re: [RFC PATCH v1 05/37] KVM: guest_memfd: Wire up
+ kvm_get_memory_attributes() to per-gmem attributes
+Message-ID: <20260203181321.GX2328995@ziepe.ca>
+References: <cover.1760731772.git.ackerleytng@google.com>
+ <071a3c6603809186e914fe5fed939edee4e11988.1760731772.git.ackerleytng@google.com>
+ <07836b1d-d0d8-40f2-8f7b-7805beca31d0@amd.com>
+ <CAEvNRgEuez=JbArRf2SApLAL0usv5-Q6q=nBPOFMHrHGaKAtMw@mail.gmail.com>
+ <20260129003753.GZ1641016@ziepe.ca>
+ <aXqx3_eE0rNh6nP0@google.com>
+ <20260129011618.GA2307128@ziepe.ca>
+ <586121cf-eb31-468c-9300-e670671653e1@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260127192936.1250096-2-rppt@kernel.org>
+In-Reply-To: <586121cf-eb31-468c-9300-e670671653e1@amd.com>
 
-On Tue, Jan 27, 2026 at 09:29:20PM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Tue, Feb 03, 2026 at 12:07:46PM +1100, Alexey Kardashevskiy wrote:
+> On 29/1/26 12:16, Jason Gunthorpe wrote:
+> > On Wed, Jan 28, 2026 at 05:03:27PM -0800, Sean Christopherson wrote:
+> > 
+> > > For a dmabuf fd, the story is the same as guest_memfd.  Unless private vs. shared
+> > > is all or nothing, and can never change, then the only entity that can track that
+> > > info is the owner of the dmabuf.  And even if the private vs. shared attributes
+> > > are constant, tracking it external to KVM makes sense, because then the provider
+> > > can simply hardcode %true/%false.
+> > 
+> > Oh my I had not given that bit any thought. My remarks were just about
+> > normal non-CC systems.
+> > 
+> > So MMIO starts out shared, and then converts to private when the guest
+> > triggers it. It is not all or nothing, there are permanent shared
+> > holes in the MMIO ranges too.
+> > 
+> > Beyond that I don't know what people are thinking.
+> > 
+> > Clearly VFIO has to revoke and disable the DMABUF once any of it
+> > becomes private.
 > 
-> Split copying of data when locks held from mfill_atomic_pte_copy() into
-> a helper function mfill_copy_folio_locked().
-> 
-> This makes improves code readability and makes complex
-> mfill_atomic_pte_copy() function easier to comprehend.
-> 
-> No functional change.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> huh? Private MMIO still has to be mapped in the NPT (well, on
+> AMD). It is the userspace mapping which we do not want^wneed and we
+> do not by using dmabuf.
 
-The movement looks all fine,
+Well, we don't know what the DMABUF got imported into, so the non-KVM
+importers using the shared mapping certainly have to drop it.
 
-Acked-by: Peter Xu <peterx@redhat.com>
+How exactly to make that happen is going to be interesting..
 
-Just one pure question to ask.
-
-> ---
->  mm/userfaultfd.c | 59 ++++++++++++++++++++++++++++--------------------
->  1 file changed, 35 insertions(+), 24 deletions(-)
-> 
-> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index e6dfd5f28acd..a0885d543f22 100644
-> --- a/mm/userfaultfd.c
-> +++ b/mm/userfaultfd.c
-> @@ -238,6 +238,40 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
->  	return ret;
->  }
->  
-> +static int mfill_copy_folio_locked(struct folio *folio, unsigned long src_addr)
-> +{
-> +	void *kaddr;
-> +	int ret;
-> +
-> +	kaddr = kmap_local_folio(folio, 0);
-> +	/*
-> +	 * The read mmap_lock is held here.  Despite the
-> +	 * mmap_lock being read recursive a deadlock is still
-> +	 * possible if a writer has taken a lock.  For example:
-> +	 *
-> +	 * process A thread 1 takes read lock on own mmap_lock
-> +	 * process A thread 2 calls mmap, blocks taking write lock
-> +	 * process B thread 1 takes page fault, read lock on own mmap lock
-> +	 * process B thread 2 calls mmap, blocks taking write lock
-> +	 * process A thread 1 blocks taking read lock on process B
-> +	 * process B thread 1 blocks taking read lock on process A
-
-While moving, I wonder if we need this complex use case to describe the
-deadlock.  Shouldn't this already happen with 1 process only?
-
-  process A thread 1 takes read lock (e.g. reaching here but
-                     before copy_from_user)
-  process A thread 2 calls mmap, blocks taking write lock
-  process A thread 1 goes on copy_from_user(), trigger page fault,
-                     then tries to re-take the read lock
-
-IIUC above should already cause deadlock when rwsem prioritize the write
-lock here.
-
-> +	 *
-> +	 * Disable page faults to prevent potential deadlock
-> +	 * and retry the copy outside the mmap_lock.
-> +	 */
-> +	pagefault_disable();
-> +	ret = copy_from_user(kaddr, (const void __user *) src_addr,
-> +			     PAGE_SIZE);
-> +	pagefault_enable();
-> +	kunmap_local(kaddr);
-> +
-> +	if (ret)
-> +		return -EFAULT;
-> +
-> +	flush_dcache_folio(folio);
-> +	return ret;
-> +}
-> +
->  static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
->  				 struct vm_area_struct *dst_vma,
->  				 unsigned long dst_addr,
-> @@ -245,7 +279,6 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
->  				 uffd_flags_t flags,
->  				 struct folio **foliop)
->  {
-> -	void *kaddr;
->  	int ret;
->  	struct folio *folio;
->  
-> @@ -256,27 +289,7 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
->  		if (!folio)
->  			goto out;
->  
-> -		kaddr = kmap_local_folio(folio, 0);
-> -		/*
-> -		 * The read mmap_lock is held here.  Despite the
-> -		 * mmap_lock being read recursive a deadlock is still
-> -		 * possible if a writer has taken a lock.  For example:
-> -		 *
-> -		 * process A thread 1 takes read lock on own mmap_lock
-> -		 * process A thread 2 calls mmap, blocks taking write lock
-> -		 * process B thread 1 takes page fault, read lock on own mmap lock
-> -		 * process B thread 2 calls mmap, blocks taking write lock
-> -		 * process A thread 1 blocks taking read lock on process B
-> -		 * process B thread 1 blocks taking read lock on process A
-> -		 *
-> -		 * Disable page faults to prevent potential deadlock
-> -		 * and retry the copy outside the mmap_lock.
-> -		 */
-> -		pagefault_disable();
-> -		ret = copy_from_user(kaddr, (const void __user *) src_addr,
-> -				     PAGE_SIZE);
-> -		pagefault_enable();
-> -		kunmap_local(kaddr);
-> +		ret = mfill_copy_folio_locked(folio, src_addr);
->  
->  		/* fallback to copy_from_user outside mmap_lock */
->  		if (unlikely(ret)) {
-> @@ -285,8 +298,6 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
->  			/* don't free the page */
->  			goto out;
->  		}
-> -
-> -		flush_dcache_folio(folio);
->  	} else {
->  		folio = *foliop;
->  		*foliop = NULL;
-> -- 
-> 2.51.0
-> 
-
--- 
-Peter Xu
-
+Jason
