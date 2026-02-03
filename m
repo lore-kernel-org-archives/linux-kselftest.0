@@ -1,106 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91D93BB57;
-	Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7796E226CF7;
+	Tue,  3 Feb 2026 05:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770087880; cv=none; b=LTfhr0ImI3BEvYUvdRtP6ySMrb9+1oIDrb7VPcZ+o9BP9HHHxp9cocWPfy7V86nOnnsdodcwyIY39y94cnXfWO6kg/PEiuqhMf4Ozz3PyKnfLMH4zoX/HpFKLVndfUNhNJOydqffLhHWJErUyu9+i98pEqEziyAVvZtXHhRbhLY=
+	t=1770098247; cv=none; b=MXS/SPHT9p6oPMc3p49oXCHi76TErpvSbhAB+iKJ3tHlAmRxNmo23EtIeMKnNJFNdKuqLmJdRJ1ecC1oUkr9Wu21rNGf1lKjTrsWlrTJvhcUFJJnSFbd3udcdk3INIrxdU2mlT7DcPpKpPeAdKZubwjj7y805fn2F3QUKV2EDzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770087880; c=relaxed/simple;
-	bh=bF3DlkanlLmgqm9+KmI0PQ9tzBWPxly9drKEGHNWJfE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gK67e5IRhBvWV6bxR+94Aj03nS53qfEhi8jhXSlssxXp1hY+iShAYQt820W7uoi8lguJvUQc0PPzMUfbMoacv5bvoqvxM32T8pHQWZ8uZBL3kuB1bZpMMPfk+kLX6aLBHk7kvj3E5D3+mfna8rl+rnxhyGVMWhbWZ8L9/S049RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GC1MovLI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770098247; c=relaxed/simple;
+	bh=DXSiR8B4c49EgGwELyGZr5wCmUVFl5zkY7LYOaiMBm4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aHo69UDleMw2CRHRqAs94RrhH5rkyHxdWrBfLGjTCkNDQeVr0+InfM9pgbaar6jj4OWUQ7aChC/sdkGWkFhgNC3Y2fFOnI/tXbdnEOJ7Yf5y0kpMB2VzHjUKkHM0AfA4ESSnHqeTwS3zGoI33YrcJaR3lblkm4dzAkHjnN5uILM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dd6NSvdD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GC1MovLI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E774C116C6;
-	Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dd6NSvdD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D7EC116D0;
+	Tue,  3 Feb 2026 05:57:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770087880;
-	bh=bF3DlkanlLmgqm9+KmI0PQ9tzBWPxly9drKEGHNWJfE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=GC1MovLIDnCEGThK06dmsaJOKF+HvkHMsapCWVg1lrkeLN8CelHIF5fEV02YtYqbZ
-	 1TaDB/S54Pw/bx7C3Nji0NjrYNSyeIc8h+nEx3wj7RBGc5xpVIPKRfN2/U+xTKoRKn
-	 hFoDjS8OrEbgAMi7pXDABoR/JlpkPBBCQVnRMpsqgbFItxrEuqfZzL5YuTK8wrrOtN
-	 Y+DCq44BQ5+zq+s1wbnCbka7lIuoSgW51wx8LzuWgPy+yxxAGJVBt1B6LfgzKjbfBF
-	 jK9Q6IUFlVnONjSgUFth2TnyOHnnJMOmkPy/ligy3niFsy7YQX68dP/v8pFvGJOjYu
-	 SLBDUoJitEUWg==
-Content-Type: multipart/mixed; boundary="===============5018553600281611377=="
+	s=k20201202; t=1770098247;
+	bh=DXSiR8B4c49EgGwELyGZr5wCmUVFl5zkY7LYOaiMBm4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Dd6NSvdDAufwQxhzsnmRd6zGqUgT8cRpX3TPIEE0lv55+D/IRGY/e5f4YB3EWCNjR
+	 +pAqhDI32bFfZ7bQl1gIQm55NoJeC5YlSY9S4PbBA4BMFzU0l7LqgseeasWraiUVzr
+	 ZxQ+ya6zvszxjr45OZdvXFb0K/A5FTr8d2A7UiZ0F/O3f+Xitltbv9BNHeldWcmnUY
+	 73bbSSxrH3aBAsYd5l55XV49MgCEcZwhTouhNVnKw0x0740hmu11lxBItt6DkIFcp8
+	 Mt02V1fzum/VqfuOxu6dgzBiPlbpmceIwYcp8lTHg8RgFSoG8c+MdoaOjS9WvAb6Mz
+	 a4CoYLZY48n/Q==
+From: Allison Henderson <achender@kernel.org>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	rds-devel@oss.oracle.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	allison.henderson@oracle.com
+Subject: [PATCH net-next v5 0/8] net/rds: RDS-TCP protocol and extension improvements
+Date: Mon,  2 Feb 2026 22:57:15 -0700
+Message-ID: <20260203055723.1085751-1-achender@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <94483c320d8eaf29277fe60ca7d10ed70b0bb6ca636994a0eb07c26d5f139b0e@mail.kernel.org>
-In-Reply-To: <20260203022712.99347-3-pilgrimtao@gmail.com>
-References: <20260203022712.99347-3-pilgrimtao@gmail.com>
-Subject: Re: [PATCH v5 2/3] bpf/verifier: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,alexei.starovoitov@gmail.com
-Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============5018553600281611377==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Allison Henderson <allison.henderson@oracle.com>
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2dd860ae12..bb45fa5612 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9300,7 +9300,8 @@ static const struct bpf_reg_types timer_types = { .types = { PTR_TO_MAP_VALUE }
->  static const struct bpf_reg_types kptr_xchg_dest_types = {
->  	.types = {
->  		PTR_TO_MAP_VALUE,
-> -		PTR_TO_BTF_ID | MEM_ALLOC
-> +		PTR_TO_BTF_ID | MEM_ALLOC,
-> +		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF
->  	}
->  };
+Hi all,
 
-Is the MEM_RCU variant also needed here?
+This is subset 3 of the larger RDS-TCP patch series I posted last
+Oct.  The greater series aims to correct multiple rds-tcp issues that
+can cause dropped or out of sequence messages.  I've broken it down into
+smaller sets to make reviews more manageable.
 
-When ref_set_non_owning() marks a register as NON_OWN_REF, it also adds
-MEM_RCU if the node has a bpf_refcount field (refcount_off >= 0):
+In this set, we introduce extension headers for byte accounting
+and fix several RDS/TCP protocol issues including message preservation
+during connection transitions and multipath lane handling.
 
-    reg->type |= NON_OWN_REF;
-    if (rec->refcount_off >= 0)
-        reg->type |= MEM_RCU;
+The entire set can be viewed in the rfc here:
+https://lore.kernel.org/netdev/20251022191715.157755-1-achender@kernel.org/
 
-This means rbtree nodes with both a __kptr field and a bpf_refcount field
-would have type PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU, which
-won't match any entry in kptr_xchg_dest_types.
+Questions, comments, flames appreciated!
 
-Should this also add:
+Thanks,
+Allison
 
-    PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU
+Change Log:
+v2:
+   [PATCH net-next v2 1/7] net/rds: new extension header: rdma bytes
+     - Fixed AI complaints for uninitalized structs
 
-to handle that case?
+   [PATCH net-next v2 2/7] net/rds: Encode cp_index in TCP source port
+     - Fixed line length checkpatch complaints
 
-> @@ -9460,6 +9461,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
->  	}
->  	case PTR_TO_BTF_ID | MEM_ALLOC:
->  	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_ALLOC:
-> +	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
->  		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
->  		    meta->func_id != BPF_FUNC_kptr_xchg) {
+   [PATCH net-next v2 3/7] net/rds: rds_tcp_conn_path_shutdown must not
+   discard messages
+     - Added sk convenience variable to reduce dereferencing and line
+       wrapping
+     - Fixed line length checkpatch complaints
 
-Similarly, does this switch need a case for the MEM_RCU variant?
+   [PATCH net-next v2 6/7] net/rds: Use the first lane until
+     - Added rds_mprds_cp0_catchup helper to de-nest rds_send_xmit
+     - Fixed line length checkpatch complaints
 
+   [PATCH net-next v2 7/7] net/rds: Trigger rds_send_ping() more than
+   once
+     - Fixed ai complaints for comment clarification
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v3:
+  [PATCH net-next v3 1/8] net/rds: new extension header: rdma bytes
+    - Addressed ai complaints about unpacked/unpadded rds_ext_header_rdma_bytes
+    - Added return code checks to rds_message_add_extension
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21614799102
+  [PATCH net-next v3 06/8] net/rds: Update struct rds_statistics to
+  use u64 instead of uint64_t
+     - NEW
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit addresses a specific practical problem with minimal targeted changes, showing domain expertise typical of human kernel developers rather than AI-generated comprehensive solutions.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Missing MEM_RCU variant may prevent bpf_kptr_xchg on refcounted rbtree nodes, but this affects only a subset of use cases and causes verifier rejection rather than runtime issues.
+  [PATCH net-next v3 6/8] net/rds: Use the first lane until
+    - Fixed Prefer kernel type 'u64' over 'uint64_t' warnings
 
---===============5018553600281611377==--
+  [PATCH net-next v3 08/8] net/rds: Trigger rds_send_ping() more than once
+    - Addressed ai complaints for comment clarification
+
+v4:
+  [PATCH net-next v4 1/8] net/rds: new extension header: rdma bytes
+  - Fixed line length checkpatch complaints
+
+  [PATCH net-next v4 2/8] net/rds: Encode cp_index in TCP source port
+  - Addressed ai complaints for kernel_getpeername return code handling
+
+v5:
+  [PATCH net-next v3 08/8] net/rds: Trigger rds_send_ping() more than once
+  - Fixed patch author
+
+Allison Henderson (1):
+  net/rds: Update struct rds_statistics to use u64 instead of uint64_t
+
+Gerd Rausch (5):
+  net/rds: Encode cp_index in TCP source port
+  net/rds: rds_tcp_conn_path_shutdown must not discard messages
+  net/rds: Kick-start TCP receiver after accept
+  net/rds: Use the first lane until RDS_EXTHDR_NPATHS arrives
+  net/rds: Trigger rds_send_ping() more than once
+
+Håkon Bugge (1):
+  net/rds: Clear reconnect pending bit
+
+Shamir Rabinovitch (1):
+  net/rds: new extension header: rdma bytes
+
+ net/rds/connection.c  |   7 ++-
+ net/rds/ib_send.c     |  40 ++++++++++---
+ net/rds/message.c     |  66 ++++++++++++++++-----
+ net/rds/rds.h         | 105 ++++++++++++++++++++--------------
+ net/rds/recv.c        |  37 ++++++++++--
+ net/rds/send.c        | 130 +++++++++++++++++++++++++++++-------------
+ net/rds/stats.c       |   1 +
+ net/rds/tcp.c         |   1 +
+ net/rds/tcp.h         |   7 ++-
+ net/rds/tcp_connect.c |  79 +++++++++++++++++++++++--
+ net/rds/tcp_listen.c  |  92 +++++++++++++++++++++++++++---
+ net/rds/tcp_recv.c    |   4 ++
+ net/rds/tcp_send.c    |   2 +-
+ 13 files changed, 450 insertions(+), 121 deletions(-)
+
+-- 
+2.43.0
+
