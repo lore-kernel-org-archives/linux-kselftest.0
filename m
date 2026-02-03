@@ -1,115 +1,218 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2317F3A8FE6;
-	Tue,  3 Feb 2026 14:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FA7394486
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 14:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770128440; cv=none; b=BPvDJ08RYJYipwXJobvRME2XKgeOaMVcRkekMN0nmyeZovqqYW/qIVngIknYKKq41bt55gWQDMlzTqgz3FJikyCHt1OS/Jmg2J5XaSOH5m+le19gHHbfTbdgqbx87S6SnUmAbpx5vn/isFsKrsXiTXEg7yiz3l5tte6HSv5bkb0=
+	t=1770130202; cv=none; b=KXx4qxV1CINqa3Hpgo65WnUI81RWHZHHv8yaY0/A9HRt5yvXH/LS2lF35XtD1iYf6L6xh8C/4EDPU0d8nVneR2E72/7BO0wAxS80uuy+fR/KqoeWZkZCbRMy3I7DjMdYQMzRFlX1mcND7c7pqG0c+gV45iaVV8XwieNpqOmJZiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770128440; c=relaxed/simple;
-	bh=bh7+IerRoy6AL9qQCND5lJKi+YgjZel6S467nOCTmzk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=a07gB91NfgzgSi4dcN5X9axHvX6jhcgHqL50Vuz6U0cQox2AYwsNqr8OQWZXc1M3uTZ7Qr+6F9MJHiKYjhakf3MqRuNWplh7kQgF4o+XRdv+ILdTwA6F3pPVrYHxouW+X95XEpDEzYgXIBgpDp/sWFKetZa61cgVGFfN2a9dkPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jBLpkqes; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770130202; c=relaxed/simple;
+	bh=E74u0jGKKgScJhcG7CywPv/BLC9ROHC/CDFNoVIFw7g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H+qQexQfNXG4XAb4StVjbMtcZxof0BnU46zCINlfvEAsWXYIx7ovgZVj8jzrVE7NAlZyGqgwTsX2vx9znLIb3xMdlJvHCkrBGBc5T0ELoUoRjBrHwgsekwCORBWnL1PhBN6wSUKSLIZPE86b7GSxVkDgxqS32lWPciCaZI4JxVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T5AIFHQo; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jBLpkqes"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E06C116D0;
-	Tue,  3 Feb 2026 14:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770128439;
-	bh=bh7+IerRoy6AL9qQCND5lJKi+YgjZel6S467nOCTmzk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=jBLpkqes71HO/n5IeE6eAmpgINcqOttk0C0U0jGba4RUUBeCygc8B2vGJm+uwp9/4
-	 +cP06DGBLAV2RMu1gHkLuUrMDOCfDfrz3uaRcWw386yWapF0f24O0QL1PHZZWvjaM1
-	 mhfJhJNaKUjv3chl2jiyeysVSlC5Y17tUdZ7k3aS9YijcP9vxNMFy1iSkwLKDfYHgI
-	 H6vH3zYRR66VZBCbsljg9LTJbfP1/kaZL3jn9wuf1tq9fZc6as5lr3MvwyP+pj2YHd
-	 h7FfVu7Ujj9IY8fB+IRWpN5vCGSgyWBsuzHorMBPsB6O37efcIZ1vk5y4XNssIaENa
-	 59wUokk/JOWPg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 90F973808200;
-	Tue,  3 Feb 2026 14:20:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T5AIFHQo"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a0c09bb78cso7474905ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 06:50:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770130200; x=1770735000; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IVDd3GBOvMzVD83UrS8KsxUCcTMuzQYNfiw90DmWGMc=;
+        b=T5AIFHQo1n1PQhTtZwlqomvl+CD9z/i3CKDIq9fJTizIE5tUAT9PKVfPkn7phgUxMT
+         5mqIGxkTIk5c1DlYMTHcD41U13FIC9A3/9XPt6nIyxcs4Kh2grF007HIvucqsJHTAnyA
+         PA8riNoW6p8XXalKw+JXM3siXTRZakQLC0Oq6A5h3X1kEp5hnz1EKtJb9QGGgDu5ekRU
+         0dHYH8BaYYr9RS58n9S6FpAV2umCIyiLyrJb134LdJubBQiXLLZflN/oVMPtqQCVsJda
+         o26XD/85rdUEkecRmMZTz6VuDPxytkZmcFTLvtJ1qE2xwVig0L3HwNNOZGq8MzubsJ3s
+         vGTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770130200; x=1770735000;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IVDd3GBOvMzVD83UrS8KsxUCcTMuzQYNfiw90DmWGMc=;
+        b=PsLmpLHo0dW6gjVcgfgxWen3zadXuNVetJlwyOVxdwp4kQawJzwL+FgyQ89Ew+l48t
+         gvEFSZhaWOtqIm8qN0mJMeCEIoK992KDgy2hVdO/u93Ex1H5JRdmA5aMUvJ6/sHQmF1G
+         U0qHP5m7rR8QRFJOB6vNi6hYU87bWHuxRLAGniAbmbOChzcTuzWdVdqEdyu3OqDm/4M6
+         NJ2/31ku7jZ6gMBAkFAsO3dcg+OSEzQFqVYjYqxyiPKYUqDVKXJ4iPoy/qKbwxr3GEz2
+         QjQzL5JXe4kkpRHLq+pSCnj9jsMlg0rr2LoQ52baA6sjMrY4JJ9Z+twsRUYoq0Yuu2Xn
+         X+9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXWg2QVVJg5b37wiINqFqGGx8yIXdIHR0DA3GH9jUHGey7oalOtsoY1fyeh/ZNhAgwF/S2jYbyErIAWAr9yrJY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw8OdqodMdaNTiAVG/2LISR0grPK3+GD2XN2GpFz9xkbFeQi9j
+	jIp/gKtNlI/lQjXOdE7RBdECER6S6OR7daWapWS59Uw8ntmrjtnERnWu
+X-Gm-Gg: AZuq6aJxZEqR8/wlGTVi86zMVz7xnETJHY+ncrjnX1YXmgVNwqM8KgJD2UgsK5M8Noa
+	f0FXe9oECM6uqLT2g8e/r+a2qcMC29oDiVa2b9SNwlTbY+HP3F1K2aawgPjoNDs8bV8lAVuSrCl
+	EZjZ9wDyOGZ1idI8tvu5uvJtpFf8eYPMEGqsYk2YxBRup8Co3crghUT7P4jIq3suPa58NHffS1i
+	XSiv0RQI4pUQfcEDixOgZ0rTEt1eUOWssoSYpsXfvKTozT40V92SaeL/Aw+C3QdU2+h8Q+cJWCF
+	/e5SE9ajIESO2R8Ngaio8Nd5GI6JgMfW7d633ljZaIqSmyyzSOymFyliWyjPBdPgfz+IuMlAG4d
+	WEiKf+d0inAx5rzlJ0+d1XCgN2CjK1XW0B2d2OyXsF0qhqK5GS2EOOViLbNgPRZpRy7pF8ZZUQU
+	YkT7jw6JFhHiFPrOcabDuFDtx/soUjNCqdGSo=
+X-Received: by 2002:a17:902:ef12:b0:2a7:5f26:aaf9 with SMTP id d9443c01a7336-2a92465d24fmr31324055ad.14.1770130199997;
+        Tue, 03 Feb 2026 06:49:59 -0800 (PST)
+Received: from google.com ([2402:7500:479:35ee:e4d3:f3eb:beee:73a1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a9281585d5sm34101205ad.87.2026.02.03.06.49.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 06:49:59 -0800 (PST)
+Date: Tue, 3 Feb 2026 22:49:54 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Titouan Ameline de cadeville <titouan.ameline-de-cadeville@epita.fr>
+Cc: Titouan Ameline de Cadeville <titouan.ameline@gmail.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+	"davidgow@google.com" <davidgow@google.com>,
+	"raemoar63@gmail.com" <raemoar63@gmail.com>,
+	"kees@kernel.org" <kees@kernel.org>,
+	"eleanor.lin@realtek.com" <eleanor.lin@realtek.com>
+Subject: Re: [PATCH v3] lib: math: tests: drop unnecessary KUnit param_value
+ casts
+Message-ID: <aYILEnkE6ZV90HCe@google.com>
+References: <20260203083608.29109-1-titouan.ameline-de-cadeville@epita.fr>
+ <aYG5YsZF6w0RJZpM@google.com>
+ <PAZP264MB276566C20A6B2AF39554339BE49BA@PAZP264MB2765.FRAP264.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v13 net-next 00/15] AccECN protocol case handling series
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177012843606.1498169.6318995786040957061.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Feb 2026 14:20:36 +0000
-References: <20260131222515.8485-1-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20260131222515.8485-1-chia-yu.chang@nokia-bell-labs.com>
-To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
- linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
- dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
- kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
- donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
- ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
+In-Reply-To: <PAZP264MB276566C20A6B2AF39554339BE49BA@PAZP264MB2765.FRAP264.PROD.OUTLOOK.COM>
 
-Hello:
+Hi Titouan,
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sat, 31 Jan 2026 23:25:00 +0100 you wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+On Tue, Feb 03, 2026 at 11:05:30AM +0000, Titouan Ameline de cadeville wrote:
+> Hi Kuan-Wei,
 > 
-> Hello,
+> Thanks for the warning,
+> I’ve resent this as v4 without email address mismatch.
+
+Please avoid top-posting.
+Also, please ensure the email is sent as strict plain text, without
+html or base64 encoding.
+
+Regards,
+Kuan-Wei
+
 > 
-> Plesae find the v13 AccECN case handling patch series, which covers
-> several excpetional case handling of Accurate ECN spec (RFC9768),
-> adds new identifiers to be used by CC modules, adds ecn_delta into
-> rate_sample, and keeps the ACE counter for computation, etc.
+> Best regards,
+> Titouan
+> ________________________________
+> De : Kuan-Wei Chiu <visitorckw@gmail.com>
+> Envoyé : mardi 3 février 2026 10:01
+> À : Titouan Ameline de Cadeville <titouan.ameline@gmail.com>
+> Cc : linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; linux-kselftest@vger.kernel.org <linux-kselftest@vger.kernel.org>; kunit-dev@googlegroups.com <kunit-dev@googlegroups.com>; davidgow@google.com <davidgow@google.com>; raemoar63@gmail.com <raemoar63@gmail.com>; kees@kernel.org <kees@kernel.org>; eleanor.lin@realtek.com <eleanor.lin@realtek.com>; Titouan Ameline de cadeville <titouan.ameline-de-cadeville@epita.fr>
+> Objet : Re: [PATCH v3] lib: math: tests: drop unnecessary KUnit param_value casts
 > 
-> [...]
-
-Here is the summary with links:
-  - [v13,net-next,01/15] tcp: try to avoid safer when ACKs are thinned
-    https://git.kernel.org/netdev/net-next/c/7885ce014740
-  - [v13,net-next,02/15] gro: flushing when CWR is set negatively affects AccECN
-    https://git.kernel.org/netdev/net-next/c/ab4c8b6f7fcb
-  - [v13,net-next,03/15] selftests/net: gro: add self-test for TCP CWR flag
-    https://git.kernel.org/netdev/net-next/c/6f74bc8b6e8d
-  - [v13,net-next,04/15] tcp: ECT_1_NEGOTIATION and NEEDS_ACCECN identifiers
-    https://git.kernel.org/netdev/net-next/c/100f946b8d44
-  - [v13,net-next,05/15] tcp: disable RFC3168 fallback identifier for CC modules
-    https://git.kernel.org/netdev/net-next/c/e68c28f22f46
-  - [v13,net-next,06/15] tcp: accecn: handle unexpected AccECN negotiation feedback
-    https://git.kernel.org/netdev/net-next/c/c5ff6b837159
-  - [v13,net-next,07/15] tcp: accecn: retransmit downgraded SYN in AccECN negotiation
-    https://git.kernel.org/netdev/net-next/c/3ae62b8b4a48
-  - [v13,net-next,08/15] tcp: add TCP_SYNACK_RETRANS synack_type
-    https://git.kernel.org/netdev/net-next/c/f1eaea5585e4
-  - [v13,net-next,09/15] tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN SYN/ACK
-    https://git.kernel.org/netdev/net-next/c/f326f1f17f37
-  - [v13,net-next,10/15] tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
-    https://git.kernel.org/netdev/net-next/c/4024081feb87
-  - [v13,net-next,11/15] tcp: accecn: fallback outgoing half link to non-AccECN
-    https://git.kernel.org/netdev/net-next/c/2ed661248e2b
-  - [v13,net-next,12/15] tcp: accecn: detect loss ACK w/ AccECN option and add TCP_ACCECN_OPTION_PERSIST
-    https://git.kernel.org/netdev/net-next/c/1247fb19cafe
-  - [v13,net-next,13/15] tcp: accecn: add tcpi_ecn_mode and tcpi_option2 in tcp_info
-    https://git.kernel.org/netdev/net-next/c/4fa4ac5e5848
-  - [v13,net-next,14/15] tcp: accecn: enable AccECN
-    https://git.kernel.org/netdev/net-next/c/8ae3e8e6ceed
-  - [v13,net-next,15/15] selftests/net: packetdrill: add TCP Accurate ECN cases
-    https://git.kernel.org/netdev/net-next/c/f85d9c45f1d4
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Hi Titouan,
+> 
+> On Tue, Feb 03, 2026 at 09:36:08AM +0100, Titouan Ameline de Cadeville wrote:
+> > Drop unnecessary casts from KUnit parameter access since param_value
+> > is a void *. This improves readability and follows common kernel style.
+> >
+> > No functional change.
+> >
+> > Reviewed-by: David Gow <davidgow@google.com>
+> > Signed-off-by: Titouan Ameline de Cadeville <titouan.ameline-de-cadeville@epita.fr>
+> 
+> checkpatch.pl reported the following warning:
+> 
+> WARNING: From:/Signed-off-by: email address mismatch: 'From: Titouan Ameline de Cadeville <titouan.ameline@gmail.com>' != 'Signed-off-by: Titouan Ameline de Cadeville <titouan.ameline-de-cadeville@epita.fr>'
+> 
+> total: 0 errors, 1 warnings, 0 checks, 48 lines checked
+> 
+> Regards,
+> Kuan-Wei
+> 
+> > ---
+> >  lib/math/tests/gcd_kunit.c      | 2 +-
+> >  lib/math/tests/int_log_kunit.c  | 4 ++--
+> >  lib/math/tests/int_pow_kunit.c  | 2 +-
+> >  lib/math/tests/int_sqrt_kunit.c | 2 +-
+> >  lib/math/tests/rational_kunit.c | 2 +-
+> >  5 files changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/lib/math/tests/gcd_kunit.c b/lib/math/tests/gcd_kunit.c
+> > index ede1883583b1..b9c9b8758991 100644
+> > --- a/lib/math/tests/gcd_kunit.c
+> > +++ b/lib/math/tests/gcd_kunit.c
+> > @@ -34,7 +34,7 @@ KUNIT_ARRAY_PARAM(gcd, params, get_desc);
+> >
+> >  static void gcd_test(struct kunit *test)
+> >  {
+> > -     const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
+> > +     const struct test_case_params *tc = test->param_value;
+> >
+> >        KUNIT_EXPECT_EQ(test, tc->expected_result, gcd(tc->val1, tc->val2));
+> >  }
+> > diff --git a/lib/math/tests/int_log_kunit.c b/lib/math/tests/int_log_kunit.c
+> > index 14e854146cb4..9f9b48232701 100644
+> > --- a/lib/math/tests/int_log_kunit.c
+> > +++ b/lib/math/tests/int_log_kunit.c
+> > @@ -43,7 +43,7 @@ KUNIT_ARRAY_PARAM(intlog2, intlog2_params, get_desc);
+> >
+> >  static void intlog2_test(struct kunit *test)
+> >  {
+> > -     const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
+> > +     const struct test_case_params *tc = test->param_value;
+> >
+> >        KUNIT_EXPECT_EQ(test, tc->expected_result, intlog2(tc->value));
+> >  }
+> > @@ -52,7 +52,7 @@ KUNIT_ARRAY_PARAM(intlog10, intlog10_params, get_desc);
+> >
+> >  static void intlog10_test(struct kunit *test)
+> >  {
+> > -     const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
+> > +     const struct test_case_params *tc = test->param_value;
+> >
+> >        KUNIT_EXPECT_EQ(test, tc->expected_result, intlog10(tc->value));
+> >  }
+> > diff --git a/lib/math/tests/int_pow_kunit.c b/lib/math/tests/int_pow_kunit.c
+> > index 34b33677d458..ef9c8a9bd8ac 100644
+> > --- a/lib/math/tests/int_pow_kunit.c
+> > +++ b/lib/math/tests/int_pow_kunit.c
+> > @@ -31,7 +31,7 @@ KUNIT_ARRAY_PARAM(int_pow, params, get_desc);
+> >
+> >  static void int_pow_test(struct kunit *test)
+> >  {
+> > -     const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
+> > +     const struct test_case_params *tc = test->param_value;
+> >
+> >        KUNIT_EXPECT_EQ(test, tc->expected_result, int_pow(tc->base, tc->exponent));
+> >  }
+> > diff --git a/lib/math/tests/int_sqrt_kunit.c b/lib/math/tests/int_sqrt_kunit.c
+> > index 1798e1312eb7..9c46024b0fc1 100644
+> > --- a/lib/math/tests/int_sqrt_kunit.c
+> > +++ b/lib/math/tests/int_sqrt_kunit.c
+> > @@ -45,7 +45,7 @@ KUNIT_ARRAY_PARAM(int_sqrt, params, get_desc);
+> >
+> >  static void int_sqrt_test(struct kunit *test)
+> >  {
+> > -     const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
+> > +     const struct test_case_params *tc = test->param_value;
+> >
+> >        KUNIT_EXPECT_EQ(test, tc->expected_result, int_sqrt(tc->x));
+> >  }
+> > diff --git a/lib/math/tests/rational_kunit.c b/lib/math/tests/rational_kunit.c
+> > index 47486a95f088..b05587a1e90a 100644
+> > --- a/lib/math/tests/rational_kunit.c
+> > +++ b/lib/math/tests/rational_kunit.c
+> > @@ -33,7 +33,7 @@ KUNIT_ARRAY_PARAM(rational, test_parameters, get_desc);
+> >
+> >  static void rational_test(struct kunit *test)
+> >  {
+> > -     const struct rational_test_param *param = (const struct rational_test_param *)test->param_value;
+> > +     const struct rational_test_param *param = test->param_value;
+> >        unsigned long n = 0, d = 0;
+> >
+> >        rational_best_approximation(param->num, param->den, param->max_num, param->max_den, &n, &d);
+> > --
+> > 2.44.2
+> >
