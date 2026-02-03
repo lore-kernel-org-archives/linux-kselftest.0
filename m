@@ -1,81 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BD8346777
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 17:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FAE35BDD5
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 17:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770140437; cv=none; b=ZRPZC++5Htiw2DnYLMyK3EKioEDIKTU0wjvhGlvjfiBbZH1X5pzsJoA36sTbxbKZHnVOntC0/yrs+AiFvDDoBE23WccI0Lfnrjx1vHbgTUL+Lay0x/ZTupbNeMAQiNRC2WWNZxNMaM6BRjGGmKorzc9qLKkp6VeAB9iqDxFubno=
+	t=1770140709; cv=none; b=OqKxutz2E85cwaoUGVaJqoKE5Po03mj7F6FIFy9qsQmI1KdtwayPVXw7m5qycvrNOUMGofW4ibGDKqS1AQHf1uaGrrWvd6d08FgZyt6E/ib32r4i1VVVWm3L+UKrf/LotFYMgWuO5k+cWNskVBGyTpkcwabXhcLXkgKQf+ugwEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770140437; c=relaxed/simple;
-	bh=nPQ04KCgPzRBUY6zc9JevtSOo4Ne8+iCg79jSSWnDMs=;
+	s=arc-20240116; t=1770140709; c=relaxed/simple;
+	bh=9t1fUsY8nDNXTD2RVVJumI8FxVBqWXScBzfMykEVp8U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JwvK0XieEUx5OIaqGdU82Z/30TRhXjCPzCR+pxx3NCQUBlgmTAD+uKT62NbpkkKfr1+LTwyXJjEcBOC1mdBH2ofXMDCwGIwBobfqIUkwTfCxx1CjoEf0gXf1dZuh5xIsxphl15HvXWyA3pipcE9l3bIjOw7wQb/+qqsCEKBFI0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YU1ha99e; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=OTQ4N8Vh; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=C05iUChmhfGwI9Fz590p9SV3qhf+WR3lb/pvvk9AifVH9rTv+PiauncbhmVrzcAfXIkIYyseEyMS68Zes1bbkISOhadsMrAXZfz8SgI2Vzd4pigmdYCD9Gp9W6S6Zd38fGW2lBkVV8P6WlmIbFgY+QHKM8I8WR0V6OL3j2sW60U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FY9s5nF7; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=PqcnK/Y+; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YU1ha99e";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="OTQ4N8Vh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FY9s5nF7";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="PqcnK/Y+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770140432;
+	s=mimecast20190719; t=1770140707;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nmSl7/1tMINHvaZwWji7tBNR9y3eOnNMtJc0andbC/g=;
-	b=YU1ha99eXA0xt0f1i3tOWVLWRxM5Nvf74Jdp5xGyfP7i8iyAuVFZPv4jmP5aBC7+ga2h6I
-	Oe+H59C2/NKn6M5z+NAKR7fVDj5CtM0G2wqL3qD7FfLGfMXeIWMqQrtmB4/CuzIT2gVPke
-	iUGccXqW6b9OMMF3SZzLpRN3FnJISfU=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=tlFrmjhVpayg8OBXKv6tROkmIHF/xjSd9Muscu3Dpsk=;
+	b=FY9s5nF7qrQQ/SpoSiAXwucg4M13UD90jHocFZj5mswY4pGFRBXGrg1GnAO2GSRLsuyqkJ
+	kTtEmHKd8u0aiiN8c/g9KoTNpoz/YQ4rCkLbgVgzFsxNIoG+DnfLZGOdDi3Sz0T00h9S7i
+	3IPoeAJKD4e/hqVqsYBMWnBLLiCrhV4=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-131-XYE8iN24Mtu-g_UKJLTfZQ-1; Tue, 03 Feb 2026 12:40:31 -0500
-X-MC-Unique: XYE8iN24Mtu-g_UKJLTfZQ-1
-X-Mimecast-MFC-AGG-ID: XYE8iN24Mtu-g_UKJLTfZQ_1770140431
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8c1cffa1f2dso12123585a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 09:40:31 -0800 (PST)
+ us-mta-570-uku_stk3Os-CY3T3UievaA-1; Tue, 03 Feb 2026 12:45:06 -0500
+X-MC-Unique: uku_stk3Os-CY3T3UievaA-1
+X-Mimecast-MFC-AGG-ID: uku_stk3Os-CY3T3UievaA_1770140706
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-5014c9ee70bso56810011cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 09:45:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770140430; x=1770745230; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1770140706; x=1770745506; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nmSl7/1tMINHvaZwWji7tBNR9y3eOnNMtJc0andbC/g=;
-        b=OTQ4N8VhFRpPexKMarR/TJNLWyi2E6Gi1ktSFoo4NXqTmCP2nJldqR7odDyHtoALVX
-         18P5KCYVkNz00aa2796+zQ0rcHYfxOCWUA02So4I65gHjBaZa5V4JoGnnDvTl1ibaTZI
-         1uhojB1Y2iVh4TC5HApEkhv2WtcZAt9DOOM8tXDmcDUrS4FS7xMfDb9M0iQPQVQkv7qq
-         k2CZSv+9WqphgV9fxkwxytw0G2nD6eopZXZ+73xCAH1vEKszfnU3dFUqAIg/MnqmNKK/
-         GxSpUlto/hN4lvFmIVriun0iMpeppBSaryl3TW4UMdLUCSc3I5fQIYBmZozIVp2FtWfe
-         bnQA==
+        bh=tlFrmjhVpayg8OBXKv6tROkmIHF/xjSd9Muscu3Dpsk=;
+        b=PqcnK/Y+P5srIVqAQL7NO12bhlJArUFo761gJdPAvEMeFT1OIlkBEBFQhZEyeWRd1U
+         niEe6xS/8u9v6c1GNBP7aTffvDSl4ChTot+Hi7NCKKV3vNCGFqWoNYahCQK4rq13GlgV
+         nBe06UBjkDeyPnO38jwUbMRZB1CfWOyRhpUrVZv9LDG/1MNawhLIo4Fg/Wnq+FFus/+L
+         DVELzX+u6Y8YMgd7YA2ve77CaTx9RLX6dbCg9OHF8HUSXerWSi+gq+MWHz8U1ymXtTlP
+         jIDGvo7VKa7U6HKu5C5mxxfIQ3cATWJ486uuJq8BN3ctiWY5tQWSTZD4KIN0OwxqWOFP
+         HUPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770140430; x=1770745230;
+        d=1e100.net; s=20230601; t=1770140706; x=1770745506;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nmSl7/1tMINHvaZwWji7tBNR9y3eOnNMtJc0andbC/g=;
-        b=YAAqUFG2nQnxE8Rcn/Fqqo0r/ee59+cyBgIttEpjMFFsoNHV/rVOKSvW4lFpzsVJkw
-         fUDV0hafYn5ketZWQnTPicKA3fFMQap/y/LBJPByifAm5MlUHZbiUn/p/rMcSi3vzHgy
-         XkcTvKCZDed61yn88axF2wtuaEtR1F9RrKYXHKb1/HmA0AzPICBz+LacA4SVRviM2Kh1
-         ZZ8l+VRXlqtQCnYgVFYIHzuXVJH1XawPrOB4vTr3t41VaFB5XFc3aQPJX6vup500W+zt
-         dmS8zYlAbA09PDFGo7ndg3shvOG3ij2XmNJRY7K4A5h0X8vgHekh1lfBYk1EZieJx33h
-         IEkg==
-X-Forwarded-Encrypted: i=1; AJvYcCVaQXBmLTQvEVC0z5FR8eM5lqngs2V3Dt/Rl0cTyPH3Ei5mQPHdjDK2UgENTRdKHaWSev3Awk+P2/NGqORfUVc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVD+Hv3CvLHl1APr2VqKMl45Ig/NOpGD4DcpgzQo/YXxG3cfBb
-	Lp7CPhosSS2nr7Gb9FCzFhPBGjbKzT1CaqGgUn0B/clQ06Qae0vPbe8IG+OFzFbv0KbykutL85s
-	jc8LfSkw9doYVNA7vzqejFOQtIdnTOUK8Z+J67b31WDBly0gMO+p9H6RJXd+G6OWMVSSrJQ==
-X-Gm-Gg: AZuq6aK7haGHEcOpGz/bTPhTjy/Ss3HpAWCLGR46epvQBW3ie17fgJpX3sPDBmXWpwL
-	AutqwNoyMq0dBSjrOlqVyQzKCuzc4S8rTWDj9mCnLT1I6Odyr7vA+IKdrgjGsqhlQHFmH0VG4ae
-	a56qJ6rQInPrzdfR0dQDZRA685kBzmG6wC0/kQGjho597xukGqOhlPiflf9jL2bzPyi5DyBWpyS
-	PDvZC81ajtnFBIsS4K0U4aHTaEOrSpqQ8oAFzj+4Gvm7Q3SiHWnfVB8cv7aC+KYxguo/ufDnpdn
-	/YACSlF7Bxnbrp4Vd2pob4m2EDWmXTe6Ixz6LJf+z+Dliq9c7UmJduPbkue+ymCrMKUYzPF6I3C
-	zQW8=
-X-Received: by 2002:a05:620a:2910:b0:8c5:3045:854f with SMTP id af79cd13be357-8ca204ca94dmr428082785a.30.1770140430235;
-        Tue, 03 Feb 2026 09:40:30 -0800 (PST)
-X-Received: by 2002:a05:620a:2910:b0:8c5:3045:854f with SMTP id af79cd13be357-8ca204ca94dmr428079185a.30.1770140429666;
-        Tue, 03 Feb 2026 09:40:29 -0800 (PST)
+        bh=tlFrmjhVpayg8OBXKv6tROkmIHF/xjSd9Muscu3Dpsk=;
+        b=hLPYdsxhVi+3/HMIloBqsKzTHs5ycl6FmaYlLtR0zRmEiogoSQatIlYOK6SwVISPZj
+         QI7F3F3mF4vYF1+4pKGEcBlZlRGwohgokKTm2X71s6Z0amH8p/8Wviwrt9LIg6JFY4gV
+         d9uUGgO4qfnatWxe1jDj26nXeNxx3anL5sEhzGHLH/lDbgoPGfV2q/LCWRYY2V8jD/WR
+         OU53hT+JgoWftMLv5E7b/DtAankRM58GzN2gLfVu2hpxz+w2Kd1XCoz8g+gHrh6urqlh
+         lom8aqJWydW2/nX+JhpE9U4PR8zQKWfTxyD3xPEWwwaVY06N5k93Z9UMKpbd4IHLOVL6
+         jaqg==
+X-Forwarded-Encrypted: i=1; AJvYcCXadOEwq9s5NYZKk1G582Yfw/pLRut95kP34u0X0VtpnOHTVQUmUyNKhQl5sGCosw+CywO6eXmXG89ozmgrXxQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFaTV3IzJeZaEHqGqjkj29+QSUtD8ikJg1CCbbeD3mF3LLOMvy
+	Iy65JOM9opVjehrJ0RDF8oHvX9RZrUHDdaUt44OxrmqECJO52x21YHF6/+20aFPhXG+zl007gIh
+	deRq7XjgQixL5DK+Nxo1oQGHNWJEmPIXkCtDyN+N7IYHiSeE+pz1aRE30tEDkSn9y+l8fog==
+X-Gm-Gg: AZuq6aLS/908byp2SngozUdBBx5QSeAxkI0sQ2omeVzu+870WeOAr1v5qqwMCI7v5te
+	xLqwuCcd2yBVF7D93VrEKyUVDzbJnNfWxSTBX4BMBgsfsSqlemgN9o3DMxvkMJNd7yRuDyFRUCY
+	KWZzP/LUBn0C98Poc3xq15tkPiIX+0r3sCUvV2lpQec0TedG4fxaibqcsQK0Aw38p0C4iUAuQAC
+	M4qXQi+zKjyehjw07L0gpr7asrJYfvs5aA4E1EU/YNfRMS0tQ6UO1iUFIsfC/41DHFbfo3jQbU5
+	3ouc5chsVvEmKvk5+MonE0qieYlhoRYDCxZkHJVlJP/EQEMcBwySLUNG29A7/4ZUHqLPGrEoIqU
+	VbdI=
+X-Received: by 2002:a05:622a:1ba3:b0:501:181d:f71e with SMTP id d75a77b69052e-5061c18ec18mr1176601cf.38.1770140705460;
+        Tue, 03 Feb 2026 09:45:05 -0800 (PST)
+X-Received: by 2002:a05:622a:1ba3:b0:501:181d:f71e with SMTP id d75a77b69052e-5061c18ec18mr1175931cf.38.1770140704851;
+        Tue, 03 Feb 2026 09:45:04 -0800 (PST)
 Received: from x1.local ([142.188.210.156])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fd56420sm16357985a.54.2026.02.03.09.40.28
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5061c1f7764sm401081cf.23.2026.02.03.09.45.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 09:40:29 -0800 (PST)
-Date: Tue, 3 Feb 2026 12:40:26 -0500
+        Tue, 03 Feb 2026 09:45:04 -0800 (PST)
+Date: Tue, 3 Feb 2026 12:45:02 -0500
 From: Peter Xu <peterx@redhat.com>
 To: Mike Rapoport <rppt@kernel.org>
 Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
@@ -96,11 +96,11 @@ Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
 	Suren Baghdasaryan <surenb@google.com>,
 	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 10/17] shmem, userfaultfd: implement shmem uffd
- operations using vm_uffd_ops
-Message-ID: <aYIzCuh8cjd09zrP@x1.local>
+Subject: Re: [PATCH RFC 01/17] userfaultfd: introduce
+ mfill_copy_folio_locked() helper
+Message-ID: <aYI0HmP-XZNBI-gb@x1.local>
 References: <20260127192936.1250096-1-rppt@kernel.org>
- <20260127192936.1250096-11-rppt@kernel.org>
+ <20260127192936.1250096-2-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -109,511 +109,135 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260127192936.1250096-11-rppt@kernel.org>
+In-Reply-To: <20260127192936.1250096-2-rppt@kernel.org>
 
-On Tue, Jan 27, 2026 at 09:29:29PM +0200, Mike Rapoport wrote:
+On Tue, Jan 27, 2026 at 09:29:20PM +0200, Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Add filemap_add() and filemap_remove() methods to vm_uffd_ops and use
-> them in __mfill_atomic_pte() to add shmem folios to page cache and
-> remove them in case of error.
+> Split copying of data when locks held from mfill_atomic_pte_copy() into
+> a helper function mfill_copy_folio_locked().
 > 
-> Implement these methods in shmem along with vm_uffd_ops->alloc_folio()
-> and drop shmem_mfill_atomic_pte().
+> This makes improves code readability and makes complex
+> mfill_atomic_pte_copy() function easier to comprehend.
 > 
-> Since userfaultfd now does not reference any functions from shmem, drop
-> include if linux/shmem_fs.h from mm/userfaultfd.c
-> 
-> mfill_atomic_install_pte() is not used anywhere outside of
-> mm/userfaultfd, make it static.
+> No functional change.
 > 
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-This patch looks like a real nice cleanup on its own, thanks Mike!
+The movement looks all fine,
 
-I guess I never tried to read into shmem accountings, now after I read some
-of the codes I don't see any issue with your change.  We can also wait for
-some shmem developers double check those.  Comments inline below on
-something I spot.
+Acked-by: Peter Xu <peterx@redhat.com>
 
-> 
-> fixup
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-[unexpected lines can be removed here]
+Just one pure question to ask.
 
 > ---
->  include/linux/shmem_fs.h      |  14 ----
->  include/linux/userfaultfd_k.h |  20 +++--
->  mm/shmem.c                    | 148 ++++++++++++----------------------
->  mm/userfaultfd.c              |  79 +++++++++---------
->  4 files changed, 106 insertions(+), 155 deletions(-)
+>  mm/userfaultfd.c | 59 ++++++++++++++++++++++++++++--------------------
+>  1 file changed, 35 insertions(+), 24 deletions(-)
 > 
-> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-> index e2069b3179c4..754f17e5b53c 100644
-> --- a/include/linux/shmem_fs.h
-> +++ b/include/linux/shmem_fs.h
-> @@ -223,20 +223,6 @@ static inline pgoff_t shmem_fallocend(struct inode *inode, pgoff_t eof)
->  
->  extern bool shmem_charge(struct inode *inode, long pages);
->  
-> -#ifdef CONFIG_USERFAULTFD
-> -#ifdef CONFIG_SHMEM
-> -extern int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
-> -				  struct vm_area_struct *dst_vma,
-> -				  unsigned long dst_addr,
-> -				  unsigned long src_addr,
-> -				  uffd_flags_t flags,
-> -				  struct folio **foliop);
-> -#else /* !CONFIG_SHMEM */
-> -#define shmem_mfill_atomic_pte(dst_pmd, dst_vma, dst_addr, \
-> -			       src_addr, flags, foliop) ({ BUG(); 0; })
-> -#endif /* CONFIG_SHMEM */
-> -#endif /* CONFIG_USERFAULTFD */
-> -
->  /*
->   * Used space is stored as unsigned 64-bit value in bytes but
->   * quota core supports only signed 64-bit values so use that
-> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> index 4d8b879eed91..75d5b09f2560 100644
-> --- a/include/linux/userfaultfd_k.h
-> +++ b/include/linux/userfaultfd_k.h
-> @@ -97,6 +97,21 @@ struct vm_uffd_ops {
->  	 */
->  	struct folio *(*alloc_folio)(struct vm_area_struct *vma,
->  				     unsigned long addr);
-> +	/*
-> +	 * Called during resolution of UFFDIO_COPY request.
-> +	 * Should lock the folio and add it to VMA's page cache.
-> +	 * Returns 0 on success, error code on failre.
-
-failure
-
-> +	 */
-> +	int (*filemap_add)(struct folio *folio, struct vm_area_struct *vma,
-> +			 unsigned long addr);
-> +	/*
-> +	 * Called during resolution of UFFDIO_COPY request on the error
-> +	 * handling path.
-> +	 * Should revert the operation of ->filemap_add().
-> +	 * The folio should be unlocked, but the reference to it should not be
-> +	 * dropped.
-
-Might be slightly misleading to explicitly mention this?  As page cache
-also holds references and IIUC they need to be dropped there.  But I get
-your point, on keeping the last refcount due to allocation.
-
-IMHO the "should revert the operation of ->filemap_add()" is good enough
-and accurately describes it.
-
-> +	 */
-> +	void (*filemap_remove)(struct folio *folio, struct vm_area_struct *vma);
->  };
->  
->  /* A combined operation mode + behavior flags. */
-> @@ -130,11 +145,6 @@ static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enum mfill_at
->  /* Flags controlling behavior. These behavior changes are mode-independent. */
->  #define MFILL_ATOMIC_WP MFILL_ATOMIC_FLAG(0)
->  
-> -extern int mfill_atomic_install_pte(pmd_t *dst_pmd,
-> -				    struct vm_area_struct *dst_vma,
-> -				    unsigned long dst_addr, struct page *page,
-> -				    bool newly_allocated, uffd_flags_t flags);
-> -
->  extern ssize_t mfill_atomic_copy(struct userfaultfd_ctx *ctx, unsigned long dst_start,
->  				 unsigned long src_start, unsigned long len,
->  				 uffd_flags_t flags);
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 87cd8d2fdb97..6f0485f76cb8 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -3169,118 +3169,73 @@ static inline struct inode *shmem_get_inode(struct mnt_idmap *idmap,
->  #endif /* CONFIG_TMPFS_QUOTA */
->  
->  #ifdef CONFIG_USERFAULTFD
-> -int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
-> -			   struct vm_area_struct *dst_vma,
-> -			   unsigned long dst_addr,
-> -			   unsigned long src_addr,
-> -			   uffd_flags_t flags,
-> -			   struct folio **foliop)
-> -{
-> -	struct inode *inode = file_inode(dst_vma->vm_file);
-> -	struct shmem_inode_info *info = SHMEM_I(inode);
-> +static struct folio *shmem_mfill_folio_alloc(struct vm_area_struct *vma,
-> +					     unsigned long addr)
-> +{
-> +	struct inode *inode = file_inode(vma->vm_file);
->  	struct address_space *mapping = inode->i_mapping;
-> +	struct shmem_inode_info *info = SHMEM_I(inode);
-> +	pgoff_t pgoff = linear_page_index(vma, addr);
->  	gfp_t gfp = mapping_gfp_mask(mapping);
-> -	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
-> -	void *page_kaddr;
->  	struct folio *folio;
-> -	int ret;
-> -	pgoff_t max_off;
-> -
-> -	if (shmem_inode_acct_blocks(inode, 1)) {
-> -		/*
-> -		 * We may have got a page, returned -ENOENT triggering a retry,
-> -		 * and now we find ourselves with -ENOMEM. Release the page, to
-> -		 * avoid a BUG_ON in our caller.
-> -		 */
-> -		if (unlikely(*foliop)) {
-> -			folio_put(*foliop);
-> -			*foliop = NULL;
-> -		}
-> -		return -ENOMEM;
-> -	}
->  
-> -	if (!*foliop) {
-> -		ret = -ENOMEM;
-> -		folio = shmem_alloc_folio(gfp, 0, info, pgoff);
-> -		if (!folio)
-> -			goto out_unacct_blocks;
-> +	if (unlikely(pgoff >= DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE)))
-> +		return NULL;
->  
-> -		if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY)) {
-> -			page_kaddr = kmap_local_folio(folio, 0);
-> -			/*
-> -			 * The read mmap_lock is held here.  Despite the
-> -			 * mmap_lock being read recursive a deadlock is still
-> -			 * possible if a writer has taken a lock.  For example:
-> -			 *
-> -			 * process A thread 1 takes read lock on own mmap_lock
-> -			 * process A thread 2 calls mmap, blocks taking write lock
-> -			 * process B thread 1 takes page fault, read lock on own mmap lock
-> -			 * process B thread 2 calls mmap, blocks taking write lock
-> -			 * process A thread 1 blocks taking read lock on process B
-> -			 * process B thread 1 blocks taking read lock on process A
-> -			 *
-> -			 * Disable page faults to prevent potential deadlock
-> -			 * and retry the copy outside the mmap_lock.
-> -			 */
-> -			pagefault_disable();
-> -			ret = copy_from_user(page_kaddr,
-> -					     (const void __user *)src_addr,
-> -					     PAGE_SIZE);
-> -			pagefault_enable();
-> -			kunmap_local(page_kaddr);
-> -
-> -			/* fallback to copy_from_user outside mmap_lock */
-> -			if (unlikely(ret)) {
-> -				*foliop = folio;
-> -				ret = -ENOENT;
-> -				/* don't free the page */
-> -				goto out_unacct_blocks;
-> -			}
-> +	folio = shmem_alloc_folio(gfp, 0, info, pgoff);
-> +	if (!folio)
-> +		return NULL;
->  
-> -			flush_dcache_folio(folio);
-> -		} else {		/* ZEROPAGE */
-> -			clear_user_highpage(&folio->page, dst_addr);
-> -		}
-> -	} else {
-> -		folio = *foliop;
-> -		VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
-> -		*foliop = NULL;
-> +	if (mem_cgroup_charge(folio, vma->vm_mm, GFP_KERNEL)) {
-> +		folio_put(folio);
-> +		return NULL;
->  	}
->  
-> -	VM_BUG_ON(folio_test_locked(folio));
-> -	VM_BUG_ON(folio_test_swapbacked(folio));
-> +	return folio;
-> +}
-> +
-> +static int shmem_mfill_filemap_add(struct folio *folio,
-> +				   struct vm_area_struct *vma,
-> +				   unsigned long addr)
-> +{
-> +	struct inode *inode = file_inode(vma->vm_file);
-> +	struct address_space *mapping = inode->i_mapping;
-> +	pgoff_t pgoff = linear_page_index(vma, addr);
-> +	gfp_t gfp = mapping_gfp_mask(mapping);
-> +	int err;
-> +
->  	__folio_set_locked(folio);
->  	__folio_set_swapbacked(folio);
-> -	__folio_mark_uptodate(folio);
-> -
-> -	ret = -EFAULT;
-> -	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
-> -	if (unlikely(pgoff >= max_off))
-> -		goto out_release;
->  
-> -	ret = mem_cgroup_charge(folio, dst_vma->vm_mm, gfp);
-> -	if (ret)
-> -		goto out_release;
-> -	ret = shmem_add_to_page_cache(folio, mapping, pgoff, NULL, gfp);
-> -	if (ret)
-> -		goto out_release;
-> +	err = shmem_add_to_page_cache(folio, mapping, pgoff, NULL, gfp);
-> +	if (err)
-> +		goto err_unlock;
->  
-> -	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
-> -				       &folio->page, true, flags);
-> -	if (ret)
-> -		goto out_delete_from_cache;
-> +	if (shmem_inode_acct_blocks(inode, 1)) {
-
-We used to do this early before allocation, IOW, I think we still have an
-option to leave this to alloc_folio() hook.  However I don't see an issue
-either keeping it in filemap_add(). Maybe this movement should better be
-spelled out in the commit message anyway on how this decision is made.
-
-IIUC it's indeed safe we move this acct_blocks() here, I even see Hugh
-mentioned such in an older commit 3022fd7af96, but Hugh left uffd alone at
-that time:
-
-    Userfaultfd is a foreign country: they do things differently there, and
-    for good reason - to avoid mmap_lock deadlock.  Leave ordering in
-    shmem_mfill_atomic_pte() untouched for now, but I would rather like to
-    mesh it better with shmem_get_folio_gfp() in the future.
-
-I'm not sure if that's also what you wanted to do - to make userfaultfd
-code work similarly like what shmem_alloc_and_add_folio() does right now.
-Maybe you want to mention that too somewhere in the commit log when posting
-a formal patch.
-
-One thing not directly relevant is, shmem_alloc_and_add_folio() also does
-proper recalc of inode allocation info when acct_blocks() fails here.  But
-if that's a problem, that's pre-existing for userfaultfd, so IIUC we can
-also leave it alone until someone (maybe quota user) complains about shmem
-allocation failures on UFFDIO_COPY.. It's just that it looks similar
-problem here in userfaultfd path.
-
-> +		err = -ENOMEM;
-> +		goto err_delete_from_cache;
-> +	}
->  
-> +	folio_add_lru(folio);
-
-This change is pretty separate from the work, but looks correct to me: IIUC
-we moved the lru add earlier now, and it should be safe as long as we're
-holding folio lock all through the process, and folio_put() (ultimately,
-__page_cache_release()) will always properly undo the lru change.  Please
-help double check if my understanding is correct.
-
->  	shmem_recalc_inode(inode, 1, 0);
-> -	folio_unlock(folio);
-> +
->  	return 0;
-> -out_delete_from_cache:
-> +
-> +err_delete_from_cache:
->  	filemap_remove_folio(folio);
-> -out_release:
-> +err_unlock:
-> +	folio_unlock(folio);
-> +	return err;
-> +}
-> +
-> +static void shmem_mfill_filemap_remove(struct folio *folio,
-> +				       struct vm_area_struct *vma)
-> +{
-> +	struct inode *inode = file_inode(vma->vm_file);
-> +
-> +	filemap_remove_folio(folio);
-> +	shmem_recalc_inode(inode, 0, 0);
->  	folio_unlock(folio);
-> -	folio_put(folio);
-> -out_unacct_blocks:
-> -	shmem_inode_unacct_blocks(inode, 1);
-
-This looks wrong, or maybe I miss somewhere we did the unacct_blocks()?
-
-> -	return ret;
->  }
->  #endif /* CONFIG_USERFAULTFD */
->  
-> @@ -5317,6 +5272,9 @@ static bool shmem_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags)
->  static const struct vm_uffd_ops shmem_uffd_ops = {
->  	.can_userfault		= shmem_can_userfault,
->  	.get_folio_noalloc	= shmem_get_folio_noalloc,
-> +	.alloc_folio		= shmem_mfill_folio_alloc,
-> +	.filemap_add		= shmem_mfill_filemap_add,
-> +	.filemap_remove		= shmem_mfill_filemap_remove,
->  };
->  #endif
->  
 > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index b3c12630769c..54aa195237ba 100644
+> index e6dfd5f28acd..a0885d543f22 100644
 > --- a/mm/userfaultfd.c
 > +++ b/mm/userfaultfd.c
-> @@ -14,7 +14,6 @@
->  #include <linux/userfaultfd_k.h>
->  #include <linux/mmu_notifier.h>
->  #include <linux/hugetlb.h>
-> -#include <linux/shmem_fs.h>
->  #include <asm/tlbflush.h>
->  #include <asm/tlb.h>
->  #include "internal.h"
-> @@ -337,10 +336,10 @@ static bool mfill_file_over_size(struct vm_area_struct *dst_vma,
->   * This function handles both MCOPY_ATOMIC_NORMAL and _CONTINUE for both shmem
->   * and anon, and for both shared and private VMAs.
->   */
-> -int mfill_atomic_install_pte(pmd_t *dst_pmd,
-> -			     struct vm_area_struct *dst_vma,
-> -			     unsigned long dst_addr, struct page *page,
-> -			     bool newly_allocated, uffd_flags_t flags)
-> +static int mfill_atomic_install_pte(pmd_t *dst_pmd,
-> +				    struct vm_area_struct *dst_vma,
-> +				    unsigned long dst_addr, struct page *page,
-> +				    uffd_flags_t flags)
->  {
->  	int ret;
->  	struct mm_struct *dst_mm = dst_vma->vm_mm;
-> @@ -384,9 +383,6 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
->  		goto out_unlock;
+> @@ -238,6 +238,40 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
+>  	return ret;
+>  }
 >  
->  	if (page_in_cache) {
-> -		/* Usually, cache pages are already added to LRU */
-> -		if (newly_allocated)
-> -			folio_add_lru(folio);
->  		folio_add_file_rmap_pte(folio, page, dst_vma);
->  	} else {
->  		folio_add_new_anon_rmap(folio, dst_vma, dst_addr, RMAP_EXCLUSIVE);
-> @@ -401,6 +397,9 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
->  
->  	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
->  
-> +	if (page_in_cache)
-> +		folio_unlock(folio);
-
-Nitpick: another small change that looks correct, but IMHO would be nice to
-either make it a small separate patch, or mention in the commit message.
-
+> +static int mfill_copy_folio_locked(struct folio *folio, unsigned long src_addr)
+> +{
+> +	void *kaddr;
+> +	int ret;
 > +
->  	/* No need to invalidate - it was non-present before */
->  	update_mmu_cache(dst_vma, dst_addr, dst_pte);
->  	ret = 0;
-> @@ -507,13 +506,22 @@ static int __mfill_atomic_pte(struct mfill_state *state,
->  	 */
->  	__folio_mark_uptodate(folio);
->  
-> +	if (ops->filemap_add) {
-> +		ret = ops->filemap_add(folio, state->vma, state->dst_addr);
-> +		if (ret)
-> +			goto err_folio_put;
-> +	}
-> +
->  	ret = mfill_atomic_install_pte(state->pmd, state->vma, dst_addr,
-> -				       &folio->page, true, flags);
-> +				       &folio->page, flags);
->  	if (ret)
-> -		goto err_folio_put;
-> +		goto err_filemap_remove;
->  
->  	return 0;
->  
-> +err_filemap_remove:
-> +	if (ops->filemap_remove)
-> +		ops->filemap_remove(folio, state->vma);
->  err_folio_put:
->  	folio_put(folio);
->  	/* Don't return -ENOENT so that our caller won't retry */
-> @@ -526,6 +534,18 @@ static int mfill_atomic_pte_copy(struct mfill_state *state)
->  {
->  	const struct vm_uffd_ops *ops = vma_uffd_ops(state->vma);
->  
+> +	kaddr = kmap_local_folio(folio, 0);
 > +	/*
-> +	 * The normal page fault path for a MAP_PRIVATE mapping in a
-> +	 * file-backed VMA will invoke the fault, fill the hole in the file and
-> +	 * COW it right away. The result generates plain anonymous memory.
-> +	 * So when we are asked to fill a hole in a MAP_PRIVATE mapping, we'll
-> +	 * generate anonymous memory directly without actually filling the
-> +	 * hole. For the MAP_PRIVATE case the robustness check only happens in
-> +	 * the pagetable (to verify it's still none) and not in the page cache.
+> +	 * The read mmap_lock is held here.  Despite the
+> +	 * mmap_lock being read recursive a deadlock is still
+> +	 * possible if a writer has taken a lock.  For example:
+> +	 *
+> +	 * process A thread 1 takes read lock on own mmap_lock
+> +	 * process A thread 2 calls mmap, blocks taking write lock
+> +	 * process B thread 1 takes page fault, read lock on own mmap lock
+> +	 * process B thread 2 calls mmap, blocks taking write lock
+> +	 * process A thread 1 blocks taking read lock on process B
+> +	 * process B thread 1 blocks taking read lock on process A
+
+While moving, I wonder if we need this complex use case to describe the
+deadlock.  Shouldn't this already happen with 1 process only?
+
+  process A thread 1 takes read lock (e.g. reaching here but
+                     before copy_from_user)
+  process A thread 2 calls mmap, blocks taking write lock
+  process A thread 1 goes on copy_from_user(), trigger page fault,
+                     then tries to re-take the read lock
+
+IIUC above should already cause deadlock when rwsem prioritize the write
+lock here.
+
+> +	 *
+> +	 * Disable page faults to prevent potential deadlock
+> +	 * and retry the copy outside the mmap_lock.
 > +	 */
-> +	if (!(state->vma->vm_flags & VM_SHARED))
-> +		ops = &anon_uffd_ops;
+> +	pagefault_disable();
+> +	ret = copy_from_user(kaddr, (const void __user *) src_addr,
+> +			     PAGE_SIZE);
+> +	pagefault_enable();
+> +	kunmap_local(kaddr);
 > +
->  	return __mfill_atomic_pte(state, ops);
->  }
->  
-> @@ -545,7 +565,8 @@ static int mfill_atomic_pte_zeropage(struct mfill_state *state)
->  	spinlock_t *ptl;
->  	int ret;
->  
-> -	if (mm_forbids_zeropage(dst_vma->vm_mm))
-> +	if (mm_forbids_zeropage(dst_vma->vm_mm) ||
-> +	    (dst_vma->vm_flags & VM_SHARED))
->  		return mfill_atomic_pte_zeroed_folio(state);
->  
->  	_dst_pte = pte_mkspecial(pfn_pte(my_zero_pfn(dst_addr),
-> @@ -600,11 +621,10 @@ static int mfill_atomic_pte_continue(struct mfill_state *state)
->  	}
->  
->  	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
-> -				       page, false, flags);
-> +				       page, flags);
->  	if (ret)
->  		goto out_release;
->  
-> -	folio_unlock(folio);
->  	return 0;
->  
->  out_release:
-> @@ -827,41 +847,18 @@ extern ssize_t mfill_atomic_hugetlb(struct userfaultfd_ctx *ctx,
->  
->  static __always_inline ssize_t mfill_atomic_pte(struct mfill_state *state)
+> +	if (ret)
+> +		return -EFAULT;
+> +
+> +	flush_dcache_folio(folio);
+> +	return ret;
+> +}
+> +
+>  static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
+>  				 struct vm_area_struct *dst_vma,
+>  				 unsigned long dst_addr,
+> @@ -245,7 +279,6 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
+>  				 uffd_flags_t flags,
+>  				 struct folio **foliop)
 >  {
-> -	struct vm_area_struct *dst_vma = state->vma;
-> -	unsigned long src_addr = state->src_addr;
-> -	unsigned long dst_addr = state->dst_addr;
-> -	struct folio **foliop = &state->folio;
->  	uffd_flags_t flags = state->flags;
-> -	pmd_t *dst_pmd = state->pmd;
-> -	ssize_t err;
+> -	void *kaddr;
+>  	int ret;
+>  	struct folio *folio;
 >  
->  	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
->  		return mfill_atomic_pte_continue(state);
->  	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_POISON))
->  		return mfill_atomic_pte_poison(state);
-> +	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY))
-> +		return mfill_atomic_pte_copy(state);
-> +	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE))
-> +		return mfill_atomic_pte_zeropage(state);
+> @@ -256,27 +289,7 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
+>  		if (!folio)
+>  			goto out;
 >  
-> -	/*
-> -	 * The normal page fault path for a shmem will invoke the
-> -	 * fault, fill the hole in the file and COW it right away. The
-> -	 * result generates plain anonymous memory. So when we are
-> -	 * asked to fill an hole in a MAP_PRIVATE shmem mapping, we'll
-> -	 * generate anonymous memory directly without actually filling
-> -	 * the hole. For the MAP_PRIVATE case the robustness check
-> -	 * only happens in the pagetable (to verify it's still none)
-> -	 * and not in the radix tree.
-> -	 */
-> -	if (!(dst_vma->vm_flags & VM_SHARED)) {
-> -		if (uffd_flags_mode_is(flags, MFILL_ATOMIC_COPY))
-> -			err = mfill_atomic_pte_copy(state);
-> -		else
-> -			err = mfill_atomic_pte_zeropage(state);
-> -	} else {
-> -		err = shmem_mfill_atomic_pte(dst_pmd, dst_vma,
-> -					     dst_addr, src_addr,
-> -					     flags, foliop);
-> -	}
-
-It's great to merge these otherwise.
-
-Thanks!
-
+> -		kaddr = kmap_local_folio(folio, 0);
+> -		/*
+> -		 * The read mmap_lock is held here.  Despite the
+> -		 * mmap_lock being read recursive a deadlock is still
+> -		 * possible if a writer has taken a lock.  For example:
+> -		 *
+> -		 * process A thread 1 takes read lock on own mmap_lock
+> -		 * process A thread 2 calls mmap, blocks taking write lock
+> -		 * process B thread 1 takes page fault, read lock on own mmap lock
+> -		 * process B thread 2 calls mmap, blocks taking write lock
+> -		 * process A thread 1 blocks taking read lock on process B
+> -		 * process B thread 1 blocks taking read lock on process A
+> -		 *
+> -		 * Disable page faults to prevent potential deadlock
+> -		 * and retry the copy outside the mmap_lock.
+> -		 */
+> -		pagefault_disable();
+> -		ret = copy_from_user(kaddr, (const void __user *) src_addr,
+> -				     PAGE_SIZE);
+> -		pagefault_enable();
+> -		kunmap_local(kaddr);
+> +		ret = mfill_copy_folio_locked(folio, src_addr);
+>  
+>  		/* fallback to copy_from_user outside mmap_lock */
+>  		if (unlikely(ret)) {
+> @@ -285,8 +298,6 @@ static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
+>  			/* don't free the page */
+>  			goto out;
+>  		}
 > -
-> -	return err;
-> +	return -EOPNOTSUPP;
->  }
->  
->  static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+> -		flush_dcache_folio(folio);
+>  	} else {
+>  		folio = *foliop;
+>  		*foliop = NULL;
 > -- 
 > 2.51.0
 > 
