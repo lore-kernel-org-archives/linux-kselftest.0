@@ -1,104 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B5E25DB0D;
-	Tue,  3 Feb 2026 21:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E25C30CDBD;
+	Tue,  3 Feb 2026 22:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770154508; cv=none; b=FKiMPie4flH0b2+quV5Bi2bI3MwfAdWBEo0fOgH4oZfQyYCamu+u3zVmKvC8Qf3eM0PBVY8zsG5W36PuoKO6pmbxqY7jfkDcP9TEFY0ed+mPQmbzhynU92ABhQS1qE8mHJM2HcbKhw3Dlh5TT88f1ge+JZ6+HeHJKrMW4dsRg8Q=
+	t=1770158414; cv=none; b=Alq9RsUvTRst9viktS6z3pg7EZLLeBKRF3uMe+EgZhh3XuUGVU8ZAxcS9AkcwsNsX5S5VwwzRS/g6yZk4swXw9iE7m9xT77oObKBO/RTODdhqBLLB+IbHa47/8RUgOYHo6yi6JAt4lJYJueo0y4e81RQ6jsk565Q6OEyAf9drXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770154508; c=relaxed/simple;
-	bh=oFX0C4fdZz7L/7wnPCWwkkaD+kBob1iCjMkch5/ls9E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Pxnq1uLyXWOXVko91nYlxgRwGx0zjKIgycLSQz2QJ4F0uNXRx+YgMFLH5edOy5FNzM4xWepmlApbB2ODv0k409iwNNyovSTIjNKw9+V0ohznVt0jIZ7w+Xz/dup2Y0DY70i3Ay/P6wu5x4Syexy6DdCdMTqRdcv6S4D6iuntiOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KEEHxe2V; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770158414; c=relaxed/simple;
+	bh=ZKt32DmVQN5n0rHwckCvF6Q/gd1U4TEdtu6Ncmef1x8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h4csp1Cdqn0xAaVtPqgZpooYNxrduMeXnClZSBnZYjZR+ydozD9hgUcAZEUACt82hEUYCufk7nwnTWkiw5WlewrmuVsa0zQ+nw7G/M3YvzuF7bCAP33L17ltOuJEAPl+BbKxrElBDDE1IfZjIaldU2hL75Jg8sUwrkXscScxnaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlEnh9Gd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KEEHxe2V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B3CC116D0;
-	Tue,  3 Feb 2026 21:35:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlEnh9Gd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A1DC116D0;
+	Tue,  3 Feb 2026 22:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770154507;
-	bh=oFX0C4fdZz7L/7wnPCWwkkaD+kBob1iCjMkch5/ls9E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=KEEHxe2VcgTjrD7JvmlMBtNQCOcbIEHkj9xBWExAueBm8EmbiewF5rNLSk8iPETlk
-	 6axlT3IlZuMMckjehyVM1HdLIcaa9sXtRC23e+JtlHC7QLBBmMQet+WO+Cq3iwM7hw
-	 yJeAWX4/4q0XRRT58pfEiOjbXhSUywZDNAT26DcYiB0Se+6Kti9Rpll3S6Q0K2c+cJ
-	 doyERSk8o5EfqTyXbAWJF0qvg8DxnUuGoIR5xtgxHkocL3G79WduT9TbuvRgqPfosi
-	 VGvpBBjyp8q+iLTEqUiuYoz9j/iWL6NHlqUcIoVtozVosTfS2ijAK5crXNP5zOU81m
-	 SXcgaOtwD7YBw==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Nylon Chen <nylon.chen@sifive.com>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?utf-8?Q?Andr=C3=A9?= Almeida
- <andrealmeid@igalia.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Zong Li
- <zong.li@sifive.com>, Nylon Chen <nylon.chen@sifive.com>
-Subject: Re: [PATCH] selftests/futex: skip futex_numa_mpol without libnuma
-In-Reply-To: <20260128-b4-futex-test-v1-1-ce73742068ad@sifive.com>
-References: <20260128-b4-futex-test-v1-1-ce73742068ad@sifive.com>
-Date: Tue, 03 Feb 2026 22:35:04 +0100
-Message-ID: <877bst33zr.ffs@tglx>
+	s=k20201202; t=1770158414;
+	bh=ZKt32DmVQN5n0rHwckCvF6Q/gd1U4TEdtu6Ncmef1x8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=HlEnh9GdbCfUV64zm5s1iTYMt5kWY5Cbsp0jDPCRAruj1k4qZUpn9sGiZhFGTI5Cv
+	 uWHsW2dajLBmpwqtb9YOYu356a5JisCfqsqFILJaUxlcMWPNEiIqnbo4BUDXj379vo
+	 IO3QrQun9eJgR3bRBMYaeAOr5ApZttFzFLugtWiDQJ8aK+5h9FmAaBa5qhlFYHiVgn
+	 25tcp8DtwgSebQNNa446NuXp0Cea3hXTQy68gCd0WQ2++wWoSXSHdG+BgMCAziDd7I
+	 vEO2lSp4PhsWrr+XvH3ZajK9EZ+HSSaYS9eXDjdJV2RR5MyECdZFb9dkpAq7jdKwx2
+	 LpMjow9qJmRTA==
+Date: Tue, 3 Feb 2026 14:40:11 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas.weissschuh@linutronix.de>
+Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn
+ <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Matthieu Baerts
+ <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, Geliang Tang
+ <geliang@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?=
+ <mic@digikod.net>, =?UTF-8?B?R8O8bnRoZXI=?= Noack <gnoack@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
+ <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+ libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, Adhemerval
+ Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>,
+ klibc@zytor.com, Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition
+ of 'struct sockaddr'
+Message-ID: <20260203144011.32d5b223@kernel.org>
+In-Reply-To: <20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+	<20260121192729.2095aa25@kernel.org>
+	<20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
+	<20260130081741.425a92e0@kernel.org>
+	<3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
+	<20260131092517.6639d84c@kernel.org>
+	<20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 28 2026 at 22:32, Nylon Chen wrote:
+On Tue, 3 Feb 2026 12:42:22 +0100 Thomas Wei=C3=9Fschuh wrote:
+> > FWIW the typelimits change broke compilation of ethtool, we'll see if
+> > anyone "outside kernel community itself" complains. =20
+>=20
+> Can you point me to that breakage? I was unable to find it.
 
-> Use pkg-config --exists numa to derive HAVE_LIBNUMA.
-> Only keep futex_numa_mpol in TEST_GEN_PROGS when libnuma is present.
->
-> Signed-off-by: Zong Li <zong.li@sifive.com>
-> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
-> ---
->  tools/testing/selftests/futex/functional/Makefile | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-> index af7ec309ea78..ec3c39a51182 100644
-> --- a/tools/testing/selftests/futex/functional/Makefile
-> +++ b/tools/testing/selftests/futex/functional/Makefile
-> @@ -1,10 +1,10 @@
->  # SPDX-License-Identifier: GPL-2.0
->  PKG_CONFIG ?= pkg-config
-> +HAVE_LIBNUMA := $(shell sh -c "$(PKG_CONFIG) --exists numa > /dev/null 2>&1 && echo y")
->  LIBNUMA_TEST = $(shell sh -c "$(PKG_CONFIG) numa --atleast-version 2.0.16 > /dev/null 2>&1 && echo SUFFICIENT || echo NO")
+Not reported on the ML, and it's kinda annoying to repro because=20
+the uAPI header sync script isn't committed :/ You have to check=20
+this out
 
-Why another test? LIBNUMA_TEST fails when it does not exist or when the
-version number is not enough. 
+ https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/
 
->  INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
->  CFLAGS := $(CFLAGS) -g -O2 -Wall -pthread -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64 $(INCLUDES) $(KHDR_INCLUDES) -DLIBNUMA_VER_$(LIBNUMA_TEST)=1
-> -LDLIBS := -lpthread -lrt -lnuma
->  
->  LOCAL_HDRS := \
->  	../include/futextest.h \
-> @@ -27,6 +27,13 @@ TEST_GEN_PROGS := \
->  
->  TEST_PROGS := run.sh
->  
-> +ifeq ($(HAVE_LIBNUMA),y)
-> +LDLIBS := -lpthread -lrt -lnuma
-> +else
-> +LDLIBS := -lpthread -lrt
-> +TEST_GEN_PROGS := $(filter-out futex_numa_mpol,$(TEST_GEN_PROGS))
+and run a script like this to sync headers from the kernel (then build):
 
-Why? The test contains more than just the libnuma dependend stuff. There
-are two issues here:
+#!/bin/bash -e
 
-One is -lnuma, which is trivial to solve:
+sn=3D"${0##*/}"
+export ARCH=3D"x86_64"
 
-LDLIBS := -lpthread -lrt
-ifeq ($(LIBNUMA_TEST),SUFFICIENT)
-LDLIBS += -lnuma
-endif
+if [ ! -d "$LINUX_GIT" ]; then
+    echo "${sn}: LINUX_GIT not set" >&2
+    exit 1
+fi
 
-The other is the include <numa*.h> in the source. I assume you can
-figure out how to prevent those headers from being included, right?
+pushd "$LINUX_GIT"
+if [ -n "$1" ]; then
+    git checkout "$1"
+fi
+desc=3D$(git describe --exact-match 2>/dev/null \
+       || git show -s --abbrev=3D12 --pretty=3D'commit %h')
+kobj=3D$(mktemp -d)
+make -j16 O=3D"$kobj" allmodconfig
+make -j16 O=3D"$kobj" prepare
+make -j16 O=3D"$kobj" INSTALL_HDR_PATH=3D"${kobj}/hdr" headers_install
+popd
 
-Thanks,
+pushd uapi
+find . -type f -name '*.h' -exec cp -v "${kobj}/hdr/include/{}" {} \;
+popd
+rm -rf "$kobj"
 
-        tglx
+git add uapi
+git commit -s -F - <<EOT
+update UAPI header copies
+
+Update to kernel ${desc}.
+
+EOT
