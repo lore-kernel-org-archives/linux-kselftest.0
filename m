@@ -1,112 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BACD392C48;
-	Tue,  3 Feb 2026 09:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34776393DF5;
+	Tue,  3 Feb 2026 09:51:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770109860; cv=none; b=GCbmLQLaP4BXXLB4T1/zpifyfXRCGQZ1hqQyuNZn7HnzRmpO/DUni4r0Z4r0YmTtZgrnIrZvSeTO5PIjtuvTaMttcwVnTCY1FOisBdb0mlrk4DrgjbmMYmoKcmK918RxTrEK8XFYww14E7lcVfOvoaywd5rx9AZ4wgBqeB0M77k=
+	t=1770112320; cv=none; b=Fz8/+5TV5NaRHtVR520oZyiBDScEM726FfkP22h/AasnbT2RmAhZYfWu3yMvDOMI/bJE1ksFl0Azxvcs0AapYEBJZHNf7/Z/C20m3d+2AN/2B3jGB6ZBdwUSOFfO3Xxgp5a7i5AJFsiotlveggMe1EnnKzmrz6xFLCW74en7g/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770109860; c=relaxed/simple;
-	bh=LlBEaY/B0j9hTW3yp6PhoNQDNcJfMfJRCMziWK3voPI=;
+	s=arc-20240116; t=1770112320; c=relaxed/simple;
+	bh=JoSo1U6Ut8p2NIj9qp0jlb4l/KgJvCWtB/NubAXASxo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k3VZYGH5bogwoL+OtYkZ0oTry8kMYYBCpz2/437mZtzMAwizzVOEGASPEZAuJUdsCNlW7wmGkCCOhAUJVJkDrN8meKZQrTu/94Dj7DdwnUN2dO9ZZpZMTd/pAmdR/1tFUPov51yGiSOTd4gDFroPdNDbLF69MYNEAZy2/ZnzqOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AKkZbvrF; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=flQ5V3zoRRriKpAfzwmglGj2CFqziYKEkpcqOf0FQsJY2zIH9PwkMhA9f1yy3gGTHxds5tXPS9YA1SHAmWe+fyXXsxkfoQ/J07rc/ZDq8Llp3Er8rzkZ/1CVUofj/Q3wOiYr45/CuoLValoNM5TZi+lBQT2itbZXPK2T7rB+tkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yh7zXQ74; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AKkZbvrF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 750C0C116D0;
-	Tue,  3 Feb 2026 09:10:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yh7zXQ74"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672ADC116D0;
+	Tue,  3 Feb 2026 09:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770109860;
-	bh=LlBEaY/B0j9hTW3yp6PhoNQDNcJfMfJRCMziWK3voPI=;
+	s=k20201202; t=1770112319;
+	bh=JoSo1U6Ut8p2NIj9qp0jlb4l/KgJvCWtB/NubAXASxo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AKkZbvrFGlkyF3SjquTxf2AxylwGIMeyjMAaHltGIHCHUur8gZkI7eI4CpLHAhSAo
-	 64LbmIU7NqNC15I5jM9uoJjmyAr4Ze2EIF7NkhOuZiN/uqZxHClUbyy0djD6tSBGhw
-	 +2Cfz9ZUn0tQuqGZhbRsgtwXJA0i1tCIxbnO5U5NK/h1m0K5eEVCuItYEGlCeXTs1W
-	 XYffYRHngcNeA9/ZgI6Rn/C6rx9JU9ekXeoUhdj1uwSPb83S9b3VBnuMSpIcl8Nw4a
-	 /bi9hAPR8ckrYPbz4zE1CkupV1SXttFPKYQ8p44MC39P7YRIJfA6NVnnlWfK4NLlS0
-	 hdupJ1Y8/mimQ==
-Date: Tue, 3 Feb 2026 10:10:57 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Danilo Krummrich <dakr@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>, 
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Johan Hovold <johan@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, Linus Walleij <linusw@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	Dan Williams <dan.j.williams@intel.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@kernel.org>, 
-	maarten.lankhorst@linux.intel.com, tzimmermann@suse.de
-Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-Message-ID: <20260203-lyrical-taipan-of-enhancement-df5615@houat>
-References: <20260124170535.11756-1-johan@kernel.org>
- <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh>
- <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
- <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
- <20260127235232.GS1134360@nvidia.com>
- <20260129010822.GA3310904@killaraus>
- <DG1FF2VY54AO.2Q3YHA4WNLV5C@kernel.org>
- <20260130091049.GH3374091@killaraus>
+	b=Yh7zXQ7443ey47b/4qL7hWhikaxa7wSLA9BvoIZd/S8NGfOpmskBo62jAFK1E0k1R
+	 M1u48wDhNaYfRQVYJP2cNktX6g77jpAKi1z3Hir9j82XX7fsALNQf+94U9RSyZPZIS
+	 FRs8+P3uJAYK0YhwQTTBthhNjBHY6uSRS8vn6rf5rmDHZk6RgotMcj3REsevjWsFEH
+	 6e462cyswn4UFcwfdIJy4h9qAuVex2BqOeJsVhCIKoT16cWyO72WmqV4MiTTtq146E
+	 342uCEEtFkQ5Odn+ZPo5PpGypDgY+LfrJhyL6Hz5XuAPSNb7FcrUEUvboSHSF4ZkKG
+	 ENu9tai4XJxkw==
+Date: Tue, 3 Feb 2026 09:51:55 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linusw@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Johan Hovold <johan@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	Dan Williams <dan.j.williams@intel.com>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 08/11] gpio: cdev: Leverage revocable for accessing
+ struct gpio_chip
+Message-ID: <aYHFO0TlXMP4Bli-@google.com>
+References: <20260203061059.975605-1-tzungbi@kernel.org>
+ <20260203061059.975605-9-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="udewh34oifiokydq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260130091049.GH3374091@killaraus>
+In-Reply-To: <20260203061059.975605-9-tzungbi@kernel.org>
 
+On Tue, Feb 03, 2026 at 06:10:55AM +0000, Tzung-Bi Shih wrote:
+> ---
+> v2:
+> - Change usages accordingly after applying
+>   https://lore.kernel.org/all/20260129143733.45618-4-tzungbi@kernel.org.
+>   - Preserve a local storage for `struct revocable`.
+> - Combine multiple patches (see "v1:").
 
---udewh34oifiokydq
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-MIME-Version: 1.0
+Forgot to mention it in the changelog:
+- v2 fixes a race condition reported in
+  https://lore.kernel.org/all/CAMRc=McDaipt85OHm0MksLkuf6E79dY1uNSqqbcJnoQTUs81Pw@mail.gmail.com/
+  and analyzed in
+  https://lore.kernel.org/all/aXEEUWwkxHZzCnaI@tzungbi-laptop/.
+  In v1, the blocking_notifier_chain_unregister() will be skipped if the
+  chip has been removed, leading an UAF in gpiolib_cdev_unregister().
+  In v2, it won't skip blocking_notifier_chain_unregister().
 
-Hi,
-
-On Fri, Jan 30, 2026 at 11:10:49AM +0200, Laurent Pinchart wrote:
-> On Thu, Jan 29, 2026 at 11:29:03PM +0100, Danilo Krummrich wrote:
-> > (Cc: Maxime, Thomas, Maarten)
-> >=20
-> > On Thu Jan 29, 2026 at 2:08 AM CET, Laurent Pinchart wrote:
-> > > That's what I've been advocating for. The best way to ensure that dri=
-ver
-> > > code will not accessed data freed at .remove() time is to prevent the
-> > > code to run at all.
-> >=20
-> > With this we are in full agreement, I think that'd be best too. But, I =
-also
-> > think that sometimes this isn't possible. For instance, DRM has such a =
-case with
-> > atomic mode setting.
->=20
-> I don't see why it would be impossible there.
-
-I'm not quite sure what you have in mind there, but DRM always allowed
-the DRM driver to stick around longer than its device to accomodate the
-fact that userspace might still have an open fd to it.
-
-If userspace has an open fd, it can still call ioctl so preventing to
-run any code is going to be difficult.
-
-Maxime
-
---udewh34oifiokydq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaYG7oAAKCRAnX84Zoj2+
-dhQ+AX9t5YGtdLoSB+e30KEQ2ZIVpyqXJO3hiPBr8vM6IhmH0KLv6ZXX8wx4yL9j
-PMJjMNcBf3daV26VIEGZqSHQQvlG3R55Pw+pi42DgcP53HQStDBImAGErY1bXEZj
-8gxa/xvpUg==
-=HDDn
------END PGP SIGNATURE-----
-
---udewh34oifiokydq--
+> 
+> v1:
+> - https://lore.kernel.org/all/20260116081036.352286-14-tzungbi@kernel.org
+> - https://lore.kernel.org/all/20260116081036.352286-15-tzungbi@kernel.org
+> - https://lore.kernel.org/all/20260116081036.352286-16-tzungbi@kernel.org
+> - https://lore.kernel.org/all/20260116081036.352286-17-tzungbi@kernel.org
+> - https://lore.kernel.org/all/20260116081036.352286-18-tzungbi@kernel.org
