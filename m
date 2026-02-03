@@ -1,90 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D5C1A073F;
-	Tue,  3 Feb 2026 02:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91D93BB57;
+	Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770085827; cv=none; b=pvJI9y853j1PWqJPdc5TFrh71uewYOIblRQC49OQZXMY/+WEpU5AVPP+0sf476i0yEAVBPQeI7RXq1hBdphm2rBA19p7OrXZ1+XZAgcJ1KAxZeGZGRkigwfVl7SqQg5mX8GVHqrwMOrPSLikLwOT/V6j4SgvjJ37x+CIHzoTPl8=
+	t=1770087880; cv=none; b=LTfhr0ImI3BEvYUvdRtP6ySMrb9+1oIDrb7VPcZ+o9BP9HHHxp9cocWPfy7V86nOnnsdodcwyIY39y94cnXfWO6kg/PEiuqhMf4Ozz3PyKnfLMH4zoX/HpFKLVndfUNhNJOydqffLhHWJErUyu9+i98pEqEziyAVvZtXHhRbhLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770085827; c=relaxed/simple;
-	bh=lX8dUKz+kZPoLRJ/NK05u+YSz9Nvge7N8Rt8EjIGNgc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=NYc1/GeCYGmBvcEw3FJEAD9knF8CL4BnRrRaFIhLB3Kn04qVaANVBcF3G55LPDaOUd9gtaeICUbKk708pNftNbn67vMeOal9TkCKrFJVqB7xbcrPnQoHyohZjNb6BvA3CAFPrf4SPf1FnSWZHCLfbRpzNH4OXFgDlSLn9kWmuZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qIlV0kgT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770087880; c=relaxed/simple;
+	bh=bF3DlkanlLmgqm9+KmI0PQ9tzBWPxly9drKEGHNWJfE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=gK67e5IRhBvWV6bxR+94Aj03nS53qfEhi8jhXSlssxXp1hY+iShAYQt820W7uoi8lguJvUQc0PPzMUfbMoacv5bvoqvxM32T8pHQWZ8uZBL3kuB1bZpMMPfk+kLX6aLBHk7kvj3E5D3+mfna8rl+rnxhyGVMWhbWZ8L9/S049RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GC1MovLI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qIlV0kgT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 261F2C116C6;
-	Tue,  3 Feb 2026 02:30:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GC1MovLI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E774C116C6;
+	Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770085827;
-	bh=lX8dUKz+kZPoLRJ/NK05u+YSz9Nvge7N8Rt8EjIGNgc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=qIlV0kgT3rG4JV3oDiQ60I/HYU5JvsuLwZGU2fEdZYx+RWCR7+Z2qgxhaBtDxFGY6
-	 O4zgJPrxFAlpWJgY9OlkuktipA1JZ37OI3G5hwCWTBGkpuS6FtuMbM+G1tB6hIb14y
-	 b89d0f+Isp1sWBWGUZrFGqXnQa/w8mX/t1npep9L7eBmsb07hS4olOfeG2779eCrLg
-	 e9e/74BNW3FDVkZHpsykUm4PrSW69WIR4y0FxJyC6IpxXBQg8InIOfJq/Uhq66wvF8
-	 x6SwsLz5OdIGeRmas3ucLXc+KMeKG6vtbvCIVEdKsLcx1GNlC6GZdBjQi+ctrUr1Vo
-	 00eQrips+/aaA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 16E543808200;
-	Tue,  3 Feb 2026 02:30:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1770087880;
+	bh=bF3DlkanlLmgqm9+KmI0PQ9tzBWPxly9drKEGHNWJfE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=GC1MovLIDnCEGThK06dmsaJOKF+HvkHMsapCWVg1lrkeLN8CelHIF5fEV02YtYqbZ
+	 1TaDB/S54Pw/bx7C3Nji0NjrYNSyeIc8h+nEx3wj7RBGc5xpVIPKRfN2/U+xTKoRKn
+	 hFoDjS8OrEbgAMi7pXDABoR/JlpkPBBCQVnRMpsqgbFItxrEuqfZzL5YuTK8wrrOtN
+	 Y+DCq44BQ5+zq+s1wbnCbka7lIuoSgW51wx8LzuWgPy+yxxAGJVBt1B6LfgzKjbfBF
+	 jK9Q6IUFlVnONjSgUFth2TnyOHnnJMOmkPy/ligy3niFsy7YQX68dP/v8pFvGJOjYu
+	 SLBDUoJitEUWg==
+Content-Type: multipart/mixed; boundary="===============5018553600281611377=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/6] mptcp: implement .read_sock and
- .splice_read
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177008582361.1282989.10777198341213634475.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Feb 2026 02:30:23 +0000
-References: <20260130-net-next-mptcp-splice-v2-0-31332ba70d7f@kernel.org>
-In-Reply-To: <20260130-net-next-mptcp-splice-v2-0-31332ba70d7f@kernel.org>
-To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- ncardwell@google.com, kuniyu@google.com, dsahern@kernel.org,
- shuah@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- hare@kernel.org
+Message-Id: <94483c320d8eaf29277fe60ca7d10ed70b0bb6ca636994a0eb07c26d5f139b0e@mail.kernel.org>
+In-Reply-To: <20260203022712.99347-3-pilgrimtao@gmail.com>
+References: <20260203022712.99347-3-pilgrimtao@gmail.com>
+Subject: Re: [PATCH v5 2/3] bpf/verifier: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
+From: bot+bpf-ci@kernel.org
+To: pilgrimtao@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,alexei.starovoitov@gmail.com
+Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
 
-Hello:
+--===============5018553600281611377==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2dd860ae12..bb45fa5612 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9300,7 +9300,8 @@ static const struct bpf_reg_types timer_types = { .types = { PTR_TO_MAP_VALUE }
+>  static const struct bpf_reg_types kptr_xchg_dest_types = {
+>  	.types = {
+>  		PTR_TO_MAP_VALUE,
+> -		PTR_TO_BTF_ID | MEM_ALLOC
+> +		PTR_TO_BTF_ID | MEM_ALLOC,
+> +		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF
+>  	}
+>  };
 
-On Fri, 30 Jan 2026 20:24:23 +0100 you wrote:
-> This series is a preparation work for future in-kernel MPTCP sockets
-> usage. Here, two interfaces are implemented: read_sock and splice_read.
-> As a result of this series, splice() with MPTCP sockets -- which was
-> already supported -- is now improved.
-> 
-> - Patches 1-2: .read_sock implementation
-> 
-> [...]
+Is the MEM_RCU variant also needed here?
 
-Here is the summary with links:
-  - [net-next,v2,1/6] mptcp: add eat_recv_skb helper
-    https://git.kernel.org/netdev/net-next/c/436510df0caf
-  - [net-next,v2,2/6] mptcp: implement .read_sock
-    https://git.kernel.org/netdev/net-next/c/250d9766a984
-  - [net-next,v2,3/6] tcp: export tcp_splice_state
-    https://git.kernel.org/netdev/net-next/c/2d85088d467f
-  - [net-next,v2,4/6] mptcp: implement .splice_read
-    https://git.kernel.org/netdev/net-next/c/22f3bd9bf8e8
-  - [net-next,v2,5/6] selftests: mptcp: add splice io mode
-    https://git.kernel.org/netdev/net-next/c/6a059c6bfb55
-  - [net-next,v2,6/6] selftests: mptcp: connect: cover splice mode
-    https://git.kernel.org/netdev/net-next/c/2f2dc84645fb
+When ref_set_non_owning() marks a register as NON_OWN_REF, it also adds
+MEM_RCU if the node has a bpf_refcount field (refcount_off >= 0):
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+    reg->type |= NON_OWN_REF;
+    if (rec->refcount_off >= 0)
+        reg->type |= MEM_RCU;
+
+This means rbtree nodes with both a __kptr field and a bpf_refcount field
+would have type PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU, which
+won't match any entry in kptr_xchg_dest_types.
+
+Should this also add:
+
+    PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU
+
+to handle that case?
+
+> @@ -9460,6 +9461,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+>  	}
+>  	case PTR_TO_BTF_ID | MEM_ALLOC:
+>  	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_ALLOC:
+> +	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
+>  		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
+>  		    meta->func_id != BPF_FUNC_kptr_xchg) {
+
+Similarly, does this switch need a case for the MEM_RCU variant?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21614799102
+
+AI-authorship-score: low
+AI-authorship-explanation: The commit addresses a specific practical problem with minimal targeted changes, showing domain expertise typical of human kernel developers rather than AI-generated comprehensive solutions.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Missing MEM_RCU variant may prevent bpf_kptr_xchg on refcounted rbtree nodes, but this affects only a subset of use cases and causes verifier rejection rather than runtime issues.
+
+--===============5018553600281611377==--
