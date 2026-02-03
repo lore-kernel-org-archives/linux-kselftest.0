@@ -1,43 +1,51 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A072D350A27
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 15:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CC886341;
+	Tue,  3 Feb 2026 15:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770132201; cv=none; b=C38CD9z4M86MhEtF+RPeAEkeRNif0bzp5A+1cSLbY7tCUXvWkMwbyPLsXQE+C/51nxelJOsE7soFgG7qzwC5D/ivaTo36AFz3fR7xeoY+RW1TmH7ozsy5mr4MefQ/co0YABP1m9bwp8D95Tubue+dbLS1sX5+I+JxnijDNrEftQ=
+	t=1770133444; cv=none; b=Na6lSPLAuGTSTMSen90ostIvt6VnS4B9e+hJ66+yUQ++H6vPM1dXk0tGgqrLJzENba8Z5/b850qQHtADT+HEiRkY1Mq9ZCJgFSwpwE4GXVTajboang5Ax+p78DtAPPmJ7/bTQCHAirZxjqMdpOmubALjn+jyrDZ4+zGY4N9sdR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770132201; c=relaxed/simple;
-	bh=rzQGt1N2ZO8dOd7i79sx1Ao/WEEnEvDQP1VOYJUDuaE=;
+	s=arc-20240116; t=1770133444; c=relaxed/simple;
+	bh=ltZFyY1DPGKYrqNfDsbnDIgO4PkNS1nW1IMc0nsjNTM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f0Jrci9V6dbKTN/Zlr9k2DgzKtizG7JxIx82Z2l7xpYMPNVizDM2amjBuO41p1gCtlPubczmetvrUTh4KjM0jZgWGX+7odTjTIQjnyU/a9qIv+fnAhBtdnXzyicYy8x4MaCbY4ne9h4AqOzfosSgLZtoWPzdEFRI52JAcHxUJjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XvVq5FrJ; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=ummmt9smjbBKG9Z1eqEjB5hTQ4T3cW7YHUqPmVsFOUPteSXu20whntSGF19rwQBH5c27PFx0oiqcErCUKvUQ0mHBIEriaizsd6ptTGs0TRhCwyCU20+5TsX5va5li6LtyPtHGan2jqp5pcDBfCez4usj0uA+Lp4SKOJsAog+qQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YydcbOpL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XvVq5FrJ"
-Date: Tue, 3 Feb 2026 15:23:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770132187;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HvRUbJAJAbOWe9IJQankgjel8Z/R5+36b3jfTfYLbOk=;
-	b=XvVq5FrJWuTtHIVgOoTGTflq0zBhAJ2MrAY8DKjvDDbt1Rah1QdzL2tXN4r2S7fNBHI5bB
-	z7sKK2RlgyY6npl1Uef9d7csmM8ZDG424f9ji2Qdot6gP9q6nNK/mCJEt4p8ieDT51TWlq
-	GlIcao1EN2aZ1iQ3dajJFZOmhPDPD+E=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Manali Shukla <manali.shukla@amd.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, nikunj@amd.com, bp@alien8.de
-Subject: Re: [PATCH v5 4/5] KVM: SVM: Add support for
- KVM_CAP_X86_BUS_LOCK_EXIT on SVM CPUs
-Message-ID: <mn5drqp24qayx7lmjdpwjtjztjkc5cezgdrv4gvqb5xu3obowc@jwlkjbpcuew6>
-References: <20250502050346.14274-1-manali.shukla@amd.com>
- <20250502050346.14274-5-manali.shukla@amd.com>
- <peroaux2ghnb2ypg2ebzflb3xvg3bzpaircqht3vdgy7tkrwn4@pfpkfhasn44i>
- <aYINAAGPto_TqLt-@google.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YydcbOpL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C0EC116D0;
+	Tue,  3 Feb 2026 15:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1770133444;
+	bh=ltZFyY1DPGKYrqNfDsbnDIgO4PkNS1nW1IMc0nsjNTM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YydcbOpLh00Ebx2GQnErBg62hvemJJGylWV6k8LYJwF1/JOCOx3wt6dFLdTejp/i1
+	 KdqpLlCgAJ9ZFsgj2bouNT7JxCwQQZUBWaWaKf5SzdqtBMfdmySNfOPANlWpuOZzlV
+	 n5CuGxnPsnPVvaakxDDhk28jUK6ImW9UGUw175tA=
+Date: Tue, 3 Feb 2026 16:44:01 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Johan Hovold <johan@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+Message-ID: <2026020316-regain-posing-df8e@gregkh>
+References: <20260124170535.11756-1-johan@kernel.org>
+ <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh>
+ <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <aYHm9pr0e7myeqS3@hovoldconsulting.com>
+ <2026020315-twins-probe-d988@gregkh>
+ <20260203135711.GA12013@killaraus>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,160 +54,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aYINAAGPto_TqLt-@google.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20260203135711.GA12013@killaraus>
 
-On Tue, Feb 03, 2026 at 06:58:08AM -0800, Sean Christopherson wrote:
-> On Mon, Feb 02, 2026, Yosry Ahmed wrote:
-> > On Fri, May 02, 2025 at 05:03:45AM +0000, Manali Shukla wrote:
-> > > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> > > index 834b67672d50..5369d9517fbb 100644
-> > > --- a/arch/x86/kvm/svm/nested.c
-> > > +++ b/arch/x86/kvm/svm/nested.c
-> > > @@ -678,6 +678,33 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
-> > >  	vmcb02->control.iopm_base_pa = vmcb01->control.iopm_base_pa;
-> > >  	vmcb02->control.msrpm_base_pa = vmcb01->control.msrpm_base_pa;
-> > >  
-> > > +	/*
-> > > +	 * Stash vmcb02's counter if the guest hasn't moved past the guilty
-> > > +	 * instrution; otherwise, reset the counter to '0'.
-> > > +	 *
-> > > +	 * In order to detect if L2 has made forward progress or not, track the
-> > > +	 * RIP at which a bus lock has occurred on a per-vmcb12 basis.  If RIP
-> > > +	 * is changed, guest has clearly made forward progress, bus_lock_counter
-> > > +	 * still remained '1', so reset bus_lock_counter to '0'. Eg. In the
-> > > +	 * scenario, where a buslock happened in L1 before VMRUN, the bus lock
-> > > +	 * firmly happened on an instruction in the past. Even if vmcb01's
-> > > +	 * counter is still '1', (because the guilty instruction got patched),
-> > > +	 * the vCPU has clearly made forward progress and so KVM should reset
-> > > +	 * vmcb02's counter to '0'.
-> > > +	 *
-> > > +	 * If the RIP hasn't changed, stash the bus lock counter at nested VMRUN
-> > > +	 * to prevent the same guilty instruction from triggering a VM-Exit. Eg.
-> > > +	 * if userspace rate-limits the vCPU, then it's entirely possible that
-> > > +	 * L1's tick interrupt is pending by the time userspace re-runs the
-> > > +	 * vCPU.  If KVM unconditionally clears the counter on VMRUN, then when
-> > > +	 * L1 re-enters L2, the same instruction will trigger a VM-Exit and the
-> > > +	 * entire cycle start over.
-> > > +	 */
-> > > +	if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip))
+On Tue, Feb 03, 2026 at 03:57:11PM +0200, Laurent Pinchart wrote:
+> On Tue, Feb 03, 2026 at 01:26:58PM +0100, Greg KH wrote:
+> > On Tue, Feb 03, 2026 at 01:15:50PM +0100, Johan Hovold wrote:
+> > > On Mon, Jan 26, 2026 at 02:50:05PM +0100, Johan Hovold wrote:
+> > > > On Sun, Jan 25, 2026 at 01:47:14PM +0100, Greg Kroah-Hartman wrote:
+> > > 
+> > > > > True, but we do need something.  I took these patches without a real
+> > > > > user as a base for us to start working off of.  The rust implementation
+> > > > > has shown that the design-pattern is a good solution for the problem,
+> > > > > and so I feel we should work with it and try to get this working
+> > > > > properly.  We've been sitting and talking about it for years now, and
+> > > > > here is the first real code submission that is getting us closer to fix
+> > > > > the problem properly.  It might not be perfict, but let's evolve it from
+> > > > > here for what is found not to work correctly.
+> > > > 
+> > > > It's a design pattern that's perhaps needed for rust, but not
+> > > > necessarily elsewhere. But either way there is no need to rush this. If
+> > > > it turns out to be usable, it can be merged along with a future user.
+> > > > 
+> > > > Dropping the revocable_provider and revocable abstraction split should
+> > > > even make it more palatable.
+> > > > 
+> > > > And with a new interface and a non-trivial user we can see what the
+> > > > end-result looks like and decide where to go from there. 
+> > > > 
+> > > > > So I don't want to take these reverts, let's try this out, by putting
+> > > > > this into the driver core now, we have the base to experiment with in a
+> > > > > "safe" way in lots of different driver subsytems at the same time.  If
+> > > > > it doesn't work out, worst case we revert it in a release or two because
+> > > > > it didn't get used.
+> > > > 
+> > > > Please reconsider. Perhaps I didn't stress the point enough that the
+> > > > current API needs to be reworked completely since there's no longer any
+> > > > need for the two revocable abstractions.
+> > > 
+> > > I noticed that you picked up the proposed incremental fixes to the
+> > > issues I reported without anyone even having reviewed them. The fixes
+> > > being incremental makes it a lot harder to review, but based on a quick
+> > > look it seems there needs to be further changes.
+> > > 
+> > > And again, what is the rush? Anyone wanting to experiment with this
+> > > functionality only needs to apply a single patch. And exposing the API
+> > > before it is stable is just going to be a mess as subsystems may start
+> > > using it from day one.
+> > > 
+> > > So please, just drop it for 6.20. You can still merge this for the next
+> > > cycle when the basic functionality has been fixed.
 > > 
-> > Is vmcb02->save.rip the right thing to use here?
+> > The fixes seemed correct on my review, what was wrong with them?  And
+> > having the code fixed for known issues is a good thing here, it gives
+> > the gpio people a base to test their work on.
+> > 
+> > As no one is currently using this, I will disable this from the build,
+> > but keeping the code in the tree right now is a good thing as I do feel
+> > this is the right way forward, and others can work off of it easier this
+> > way.
 > 
-> Objection, leading the witness your honor.
+> The reason why I (and others) would like to see this series reverted is
+> because be believe it is *not* the right way forward. There's no
+> consensus on that topic. While having code in mainline can improve
+> collaboration and accelerate development, we don't traditionally do that
+> when a large portion of the parties involved believe the approach is
+> wrong, and no user should be added until a consensus on the API is
+> found.
 
-Withdrawn.
+Ah, but I do think this is the way forward, given that the pattern/idea
+works in the rust side of the kernel, and it's exactly what I've been
+asking for for years now :)
 
-> 
-> > IIUC, we want to find out if L2 made forward progress since the last bus
-> > lock #VMEXIT from L2 to L0
-> 
-> More or less.
->   
-> >, at which point we record bus_lock_rip.
-> > However, on nested VMRUN, vmcb02->save.rip is only populated from the
-> > vmcb12 in nested_vmcb02_prepare_save(), which doesn't happen until after
-> > nested_vmcb02_prepare_control(). So waht we're comparing against here is
-> > L2's RIP last time KVM ran it.
-> 
-> Hrm, that definitely seems like what past me intended[*], as this quite clearly
-> suggests my intent was to check the RIP coming from vmcb12:
-> 
->  : Again, it's imperfect, e.g. if L1 happens to run a different vCPU at the same
->  : RIP, then KVM will allow a bus lock for the wrong vCPU.  But the odds of that
->  : happening are absurdly low unless L1 is deliberately doing weird things, and so
->  : I don't think
-> 
-> I have this vague feeling that I deliberately didn't check @vmcb12_rip, but the
-> more I look at this, the more I'm convinced I simply didn't notice @vmcb12_rip
-> when typing up the suggestion.
+But yes, without a real user, it's hard for me to justify it.  But, I
+want it present in the tree now so that lots of others can play with it
+easily.  If it turns out it is not correct, and does not work properly,
+then great, we will delete the files entirely.  But I'm not so sure that
+we are there yet.
 
-Yeah I looked through the history trying to figure out if the choice was
-intentional but I couldn't find a clue.
+thanks,
 
-> 
-> [*] https://lore.kernel.org/all/Zw6rJ3y_F-10xBcH@google.com
-> 
-> > It's even worse in the KVM_SET_NESTED_STATE path, because
-> > vmcb02->save.rip will be unintialized (probably zero).
-> 
-> FWIW, this one is arguably ideal, in the sense that KVM should probably assume
-> the worst if userspace is loading guest state.
-> 
-> > Probably you want to use vmcb12_rip here, as this is the RIP that L1
-> > wants to run L2 with, and what will end up in vmcb02->save.rip.
-> >
-> > HOWEVER, that is also broken in the KVM_SET_NESTED_STATE path. In that
-> > path we pass in the uninitialized vmcb02->save.rip as vmcb12_rip anyway.
-> 
-> 
-> > Fixing this is non-trivial because KVM_SET_REGS could be called before
-> > or after KVM_SET_NESTED_STATE, so the RIP may not be available at all at
-> > that point.
-> 
-> Eh, this code is completely meaningless on KVM_SET_NESTED_STATE.  There is no
-> "right" answer, because KVM has no clue what constitutes forward progress.
-> 
-> Luckily, no answer is completely "wrong" either, because the #VMEXIT is transparent
-> to L1 and L2.  E.g. it's like saying that sending an IRQ to CPU running a vCPU is
-> "wrong"; it's never truly "wrong", just suboptimal (sometimes *very* suboptimal).
-> 
-> > We probably want to set a flag in svm_set_nested_state() that the RIP
-> > needs fixing up, and the perhaps in svm_vcpu_pre_run() fix up the
-> > control fields in vmcb02 that depend on it: namely the bus_lock_counter,
-> > next_rip, and soft_int_* fields.
-> 
-> Nah, not unless there's a meaningful, negative impact on a real world setup.
-> And as above, in practice the only impact is effectively a performance blip due
-> to generating an unwanted userspace exit.  If userspace is stuffing nested state
-> so often that that's actually a performance problem, then userspace can set regs
-> before nested state.
-
-But the wrong @vmcb12_rip also affects soft IRQ injection, which I know
-is not relevant here, but is part of the reason I brought this up.
-
-If the guest has NRIPS, we use @vmcb12_rip to figure out if we need to
-reset next_rip after a VMRUN. If the guest does not have NRIPS, we put
-it directly in next_rip.
-
-Either way we could end up with a messed up next_rip, and that can mess
-up the guest IIUC. Of course, all of that only happens if we migrate
-with a pending soft IRQ which is probably unlikely, but could happen.
-
-> 
-> There are a pile of edge cases and "what ifs" around this, none of which have a
-> perfect answer since KVM doesn't know userspace's intent.  And so I want to go
-> with a solution that is as simple as possible without risking putting L2 into an
-> infinite loop.
-> 
-> > It gets worse because I think next_rip is also not always properly
-> > saved/restored because we do not sync it from vmcb02 to cache in
-> > nested_sync_control_from_vmcb02() -- but that one is not relevant to
-> > bus_lock_counter AFAICT.
-> 
-> Correct.
-> 
-> All in all, I think just this?
-
-For the bus lock thing that's probably the right thing to do. It fixes
-the usual nested VMRUN path and doesn't really make the
-KVM_SET_NESTED_STATE path any worse (feel free to add a Reviewed-by from
-me).
-
-But I am wondering if we should also fix @vmcb12_rip in the
-KVM_SET_NESTED_STATE path (separately), for the soft IRQ case as well.
-
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index de90b104a0dd..482092b2051c 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -809,7 +809,7 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
->          * L1 re-enters L2, the same instruction will trigger a VM-Exit and the
->          * entire cycle start over.
->          */
-> -       if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip))
-> +       if (vmcb12_rip && (svm->nested.ctl.bus_lock_rip == vmcb12_rip))
->                 vmcb02->control.bus_lock_counter = 1;
->         else
->                 vmcb02->control.bus_lock_counter = 0;
+greg "we all want more hours in a day" k-h
