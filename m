@@ -1,166 +1,266 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FFF31B828
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 18:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55789369201
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Feb 2026 18:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770142582; cv=none; b=tZT8pgoTV1sja+eI5uMKQaaePdCJXyB/06bkNbjcoNDAbq7r7U5/apN5vszl1M8kY89fYATTquDt92/WQItf3svucp3FV+Yjy56n8iQDbTovfycG0KR4/I2rb5Xpys2I58CFu70/ufEhOzI99LbgdCduLYL9/kmYpPQv4tg3PoE=
+	t=1770142585; cv=none; b=BcYS1qIZIv5e55485b2f7M4T463GUKb0oO0wvbXh+tQDCOZVFSWMyEiojmzwsfNv67MWuPZmyhdiQh/tv4Jxg15978R1uPoRfnF+u+1lH7VhB4/b56nfgi+D0Fdvz/ThQ4LgRoZQbmGXrDDeZK4/se6CV54+pHoTIc7SMlKVdCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770142582; c=relaxed/simple;
-	bh=Qt7o89VltFIBegDzasIbqnP3PJ+WPuTLLON/GuX+fRQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YeGjnKwaXhxlxzIEe+xU/tSWvI/Dm6Ympv/nCAuTUaiPyrf6NzMU6E58YMZB545JzUmy52L3dP3h6UgDERfUbGRsnvcc/beMsuev4m/hGJsynEz/+XI1E1itCV4d4cDeZgEOvZALbtO+5mE9guGl8vUqWnic8iI3qFf8+GxYIVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=Mniz/5oy; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1770142585; c=relaxed/simple;
+	bh=4uJPwTtGdOf+GukpMdunMop58+8Bn2s7OyEFP8RIwsY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RHujVjeLra+D6qVJsIorcX3Q+Ofuh0G1LBUxA8us2P2Ag1d2eGg1d0aYX0GimorC18wdhT1nxSQQrn0cKItqr/jASpi6BO5jPHGGObXZ+fgx9NCp9t9rIqban1dkfOqPvVLYVhvfs+uO3XqMARZHCe+U5R24+ApMSZXp79cckZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dqDfhQT+; arc=none smtp.client-ip=209.85.216.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="Mniz/5oy"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-8947e6ffd30so70834866d6.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 10:16:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dqDfhQT+"
+Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-34f634dbfd6so4544665a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 10:16:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1770142580; x=1770747380; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mu1la4UZlbEX7cvXzj/Z/hgnRFrqjHU+qKtYtW0dmkY=;
-        b=Mniz/5oynk/qOI64zPIe8E+PNEyixk4fEB611FX5soFdbulK6R9KmPQtOu4aEAXjcB
-         efjpn/kLP3vsSPGaHohVu6/Rt0K9qXP7QtNggw4Y7iGiQ+lb7Btklx97aDYTLAlUztFI
-         h5yvBEF6xvd6QNj3f/5Rq9dS5pMAQ/wKBPWuMCDaLEXtmpFbJnXArLI2UIvYnmp155Zy
-         0b+yLcNYyG0uUnOruupOuHumm/8Fat9UIruRUI37sLCEsgtmT6QSkgWJF1h0NEiROxuz
-         1abL4IMKxz9NUHd0G1V4nEtr6+1cDHCJ7YB1uyGxhcm0aubd+Dk72keMw16xEPt7BDo4
-         yQIw==
+        d=gmail.com; s=20230601; t=1770142583; x=1770747383; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mjla1q3jju6XkNYbTp39sGOpZWNK/5G6gOcu20xqemI=;
+        b=dqDfhQT+YSiilM+/jAV4Di0mctg5/N+hXgFPCxfncdCoDexOjpEPPpr00uLcXWXHEy
+         IejN0XxY+tM4sFdMrAZW1DnuvofJzpgYGWf4aCCJYoESWKvzTC7Vnxjrk3CLDiIktRCq
+         uNCZDY7YqJSo3zLF2PWAvYREXc7cLmdeL5BFGB+xa3BRqQrlzLelcsCdJnONFW1JQ8e3
+         pYV3XdVvUDAIPzclEkKkQlkzW2E42kS+KFWQXANI03K2TN9pBF0PGWfGyydDw1xT/ofe
+         zUKx8kFJVcwEGr6ICOwwIauOIt5/0ZCtTs/xSlZfW1s7OC2CrS6UMCfn2YCS+rqwKzNo
+         xYwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770142580; x=1770747380;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mu1la4UZlbEX7cvXzj/Z/hgnRFrqjHU+qKtYtW0dmkY=;
-        b=nWCipgYjqjzx3s5Y7JhNa7KB2pVTTd5S7MpwO5tS1gN3ujc7qLu6s4JVEMHY19taMs
-         McOgoqW5m3dOYWfnYhmIVTuSYtoCteUpa6ydSvX8e9aAO18z4NnvRgcBeyP3zgLdlBog
-         Hq/HzbtKERnV5uMOI+A3Wqewn2kXDSvTrcrZY4lI7JgQWReQ6NewbPOP+e0GqWblDZ3p
-         0gf1isV+KoN7ueerMaQ1/ta7acE6pcaMRkV9YyTkJakKBReC5HiTwO/RRIdPcRfVPvVO
-         cTdmi44yV5EQODs17RKo270uyub6fDMbIgngTYADM0Hop6CnYAlEf96N/AZsgFCcIawX
-         UZeg==
-X-Forwarded-Encrypted: i=1; AJvYcCV/qzz9dojJwgeiN26bBBF550CYzeNh/bvFX+StCV7xbijfU/LVepPpggCUIdc0vdGglT6xa6aEOR8zwMj5+wM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyHAqvaDQNVYrpshoECHg32YWqj0ggyd7JNZ2BPlKljqjyth2e
-	LtcS3YNOqfXiN5EcF7G6STCj9CcaJc1RD7uHuw4bnKZe050rgdx1msXEGPC2J5Blxrk=
-X-Gm-Gg: AZuq6aJKVwPvewPaQRvtMRsx+83MmWPBaCeKK6BED1cOr07MNPgn0o/T/uMMY2ijYJD
-	CUniVwy5VXX99VMV8P3Zd27kbUTFjS+aM/FdauEfZJGlOIpX1Z6+ZZ2qOmeN0vjvKtadDi32Vjn
-	ztag/gs7iWZJ/8wsklTh+5XSYb4s4RoFoNQKg1nU3SEY5/3YRhUooNbxtAV2eFZ0wXG/S+Lihva
-	iTTpw3THiUb14r7ozMZJ/vL54PqAOaYDh9EO5gogUZ7kxiW6n5750c6k9RV3vG4RDnWKuyE8wrn
-	SJsY2HrIiaSQVtWtsieUEwArk4rLKyrLanpjLMYJeWNcFCEVE+CyZjSu5eIylkXBI3B8al84Itn
-	Pq+CK3uhXik4NtgkDkyoc44Pd6TMoccRXz/fgx1VipX0xuVTZYiOzFYQ4YVDhbNoGw004Mc6X9y
-	1U5iqOG0P3p2tWbpzmnPJ7mipifqWzZdnv+59Tf9FdZjF00YOyvtcciyXgXZfyL9AFzxc=
-X-Received: by 2002:a05:6214:20ab:b0:87c:22f9:dac4 with SMTP id 6a1803df08f44-8952210b4a5mr5192876d6.15.1770142579616;
-        Tue, 03 Feb 2026 10:16:19 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89521c00173sm2728446d6.12.2026.02.03.10.16.18
+        d=1e100.net; s=20230601; t=1770142583; x=1770747383;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mjla1q3jju6XkNYbTp39sGOpZWNK/5G6gOcu20xqemI=;
+        b=BwUxbvIPOkO00fAJVW/NYpbNAvQpyepnYYiKMbu1pN5VMWpCsuIRO9/GIeWWGqcDkD
+         xKca9WOSPJKiPRKeLDxyQKnxpmvqULGyK0BbCXKSnXIFr3J8FbviNTcyhtJfmk2+/5Ye
+         GKR5w/P6tGLow/N9tuQ1PzJ0SRgIYEKdba6Hv20EqUJFaQwx+bfVXdabQ24m7NPJDV0P
+         Eb9eC8pLmgOaKGm0pK+hebKOWLFo8SIoaIjpR9LK/tZhDcgpbEbNdyN3okMlyyCqRW8o
+         GxLIUT9LMMudRDD/jmLecwwZOxl0p3GIspjFJDZ+GqPITnr/aiP5o5ZTFBDUcVuLTSWj
+         WEog==
+X-Forwarded-Encrypted: i=1; AJvYcCXMKdvJT455cjHJy7q6i+hjaB3L1cv1qhQeIdBLAILh7twBHqWLI4uUwjNV1JBvDpIgD5BTF3I1K3O17bIkuXY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx54ntd17lkLvXBAj2EJJTBqtme48jWz9sYJKYVC9rakz+rl9Km
+	/EoFqecXZSciFvIWzgjTPvubqMiQPXPtvAIX9CTFynrvASN+N637a7w=
+X-Gm-Gg: AZuq6aJvjz2Wf7WRpwwmGuKLs5w3KmSZO1UdsxXuoat34lLgZzmljQF6drG+EzAe6Zu
+	jdmOW+JAqzWbp6nULa8ETKhd/wcflxIxJvlFF4fDlWeiNviBK8neblIW4SzSlhyeiH2A0xP4wIS
+	HLCUTHHkjt9YX3K2yJWxDrveYUaThd8bpt5d7I88OCRIAjOkAfp5x0uLwooh9Y+d6rVhhNKB3se
+	x9YibKrTBNgvdBTghYfbT4OM/JN3V09Hj/jPdjjmf3wsGHoEyRQRyU7WTD6G/vW3Fbk4y+pr7Tg
+	mzt9kawx3LJcR0T+8bK9y++9D07ZA3DDMlZ/nQFUaUiv2jyTbteuQMQ33s3YJRdSvzAaVG4NanY
+	F34K8NRFHE04EB33cxCJiAek0MuPBQRgF89QYXomWD3EFqyzDWozZ1e2YhwxHiA+9dVg4T/Rin3
+	qYwaalZVdp3wqoXC6pqN6ClDI7icoN+Ddk/Wpi8C+J
+X-Received: by 2002:a17:90a:ec8f:b0:340:bde5:c9e8 with SMTP id 98e67ed59e1d1-3548719372cmr167467a91.22.1770142582737;
+        Tue, 03 Feb 2026 10:16:22 -0800 (PST)
+Received: from localhost.localdomain ([59.16.109.172])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35485eb8dc6sm313230a91.9.2026.02.03.10.16.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 10:16:18 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1vnKwk-0000000Gah4-0kfw;
-	Tue, 03 Feb 2026 14:16:18 -0400
-Date: Tue, 3 Feb 2026 14:16:18 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: Sean Christopherson <seanjc@google.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Alexey Kardashevskiy <aik@amd.com>, cgroups@vger.kernel.org,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-	akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
-	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org,
-	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com,
-	david@redhat.com, dmatlack@google.com, erdemaktas@google.com,
-	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com,
-	hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com,
-	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com,
-	jack@suse.cz, james.morse@arm.com, jarkko@kernel.org,
-	jgowans@amazon.com, jhubbard@nvidia.com, jroedel@suse.de,
-	jthoughton@google.com, jun.miao@intel.com, kai.huang@intel.com,
-	keirf@google.com, kent.overstreet@linux.dev,
-	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
-	mail@maciej.szmigiero.name, maobibo@loongson.cn,
-	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
-	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com,
-	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au,
-	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es,
-	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com,
-	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com,
-	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz,
-	qperret@google.com, richard.weiyang@gmail.com,
-	rick.p.edgecombe@intel.com, rientjes@google.com,
-	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org,
-	shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com,
-	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com,
-	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com,
-	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com,
-	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org,
-	wyihan@google.com, xiaoyao.li@intel.com, yan.y.zhao@intel.com,
-	yilun.xu@intel.com, yuzenghui@huawei.com, zhiquan1.li@intel.com
-Subject: Re: [RFC PATCH v1 05/37] KVM: guest_memfd: Wire up
- kvm_get_memory_attributes() to per-gmem attributes
-Message-ID: <20260203181618.GY2328995@ziepe.ca>
-References: <cover.1760731772.git.ackerleytng@google.com>
- <071a3c6603809186e914fe5fed939edee4e11988.1760731772.git.ackerleytng@google.com>
- <07836b1d-d0d8-40f2-8f7b-7805beca31d0@amd.com>
- <CAEvNRgEuez=JbArRf2SApLAL0usv5-Q6q=nBPOFMHrHGaKAtMw@mail.gmail.com>
- <20260129003753.GZ1641016@ziepe.ca>
- <aXqx3_eE0rNh6nP0@google.com>
- <aYHGVQTF6RUs7r3g@yilunxu-OptiPlex-7050>
+        Tue, 03 Feb 2026 10:16:22 -0800 (PST)
+From: Jinseok Kim <always.starving0@gmail.com>
+To: shuah@kernel.org
+Cc: Jan Kara <jack@suse.cz>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Matthew Bobrowski <repnop@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: [RFC PATCH] selftests: fanotify: Add basic create/modify/delete event test
+Date: Wed,  4 Feb 2026 03:15:43 +0900
+Message-ID: <20260203181549.21750-1-always.starving0@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYHGVQTF6RUs7r3g@yilunxu-OptiPlex-7050>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 03, 2026 at 05:56:37PM +0800, Xu Yilun wrote:
-> > +1.  For guest_memfd, we initially defined per-VM memory attributes to track
-> > private vs. shared.  But as Ackerley noted, we are in the process of deprecating
-> > that support, e.g. by making it incompatible with various guest_memfd features,
-> > in favor of having each guest_memfd instance track the state of a given page.
-> > 
-> > The original guest_memfd design was that it would _only_ hold private pages, and
-> > so tracking private vs. shared in guest_memfd didn't make any sense.  As we've
-> > pivoted to in-place conversion, tracking private vs. shared in the guest_memfd
-> > has basically become mandatory.  We could maaaaaybe make it work with per-VM
-> > attributes, but it would be insanely complex.
-> > 
-> > For a dmabuf fd, the story is the same as guest_memfd.  Unless private vs. shared
-> > is all or nothing, and can never change, then the only entity that can track that
-> > info is the owner of the dmabuf.  And even if the private vs. shared attributes
-> > are constant, tracking it external to KVM makes sense, because then the provider
-> > can simply hardcode %true/%false.  
-> 
-> For CoCo-VM and Tee-IO, I'm wondering if host or KVM has to maintain
-> the private/shared attribute for "assigned MMIO". I'm not naming them
-> "host MMIO" cause unlike RAM host never needs to access them, either in
-> private manner or shared manner.
-> 
-> Traditionally, host maps these MMIOs only because KVM needs HVA->HPA
-> mapping to find pfn and setup KVM MMU.
+Hello,
 
-This is not actually completely true, the host mapping still ends up
-being used by KVM if it happens to trap and emulate a MMIO touching
-instruction.
+Currently there are almost no automated selftests for fanotify notification
+events in tools/testing/selftests/ (only mount namespace
+related tests exist).
 
-It really shouldn't do this, but there is a whole set of complex
-machinery in KVM and qemu to handle this case.
+This patch adds a very basic selftest that exercises three fundamental
+fanotify events:
+    - FAN_CREATE (file creation)
+    - FAN_MODIFY (file content modification via write())
+    - FAN_DELETE (file removal)
 
-For example if the MSI-X window is not properly aligned then you have
-some MMIO that is trapped and must be reflected to real HW.
+The test
+    - creates a test file, appends data, and removes it
+    - verifies that corresponding events are received and the masks contain
+      the expected bits (0x100, 0x2, 0x200)
 
-So the sharable parts of the BAR should still end up being mmaped into
-userspace, I think.
+Test TAP output:
+    ok 1 FAN_CREATE detected
+    ok 2 FAN_MODIFY detected
+    ok 3 FAN_DELETE detected
+    # PASSED: 1 / 1 tests passed.
 
-Which means we need VFIO to know what they are, and hopefully it is
-just static based on the TDISP reports..
+This is intentionally kept minimal as a starting point.
 
-Jason
+Future work ideas (not in this patch):
+    - Test permission events
+    - Test rename/move events
+    - Verify file names
+    - Run under different filesystems
+
+Any feedback on the direction, style, or additional test cases
+would be greatly appreciated.
+
+Thanks,
+Jinseok.
+
+Signed-off-by: Jinseok Kim <always.starving0@gmail.com>
+---
+ tools/testing/selftests/filesystems/Makefile  |   7 +
+ .../selftests/filesystems/fanotify_basic.c    | 122 ++++++++++++++++++
+ 2 files changed, 129 insertions(+)
+ create mode 100644 tools/testing/selftests/filesystems/Makefile
+ create mode 100644 tools/testing/selftests/filesystems/fanotify_basic.c
+
+diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
+new file mode 100644
+index 0000000..c0e0242
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++
++CFLAGS += $(KHDR_INCLUDES)
++TEST_GEN_PROGS := devpts_pts file_stressor anon_inode_test kernfs_test fclog fanotify_basic
++TEST_GEN_PROGS_EXTENDED := dnotify_test
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/filesystems/fanotify_basic.c b/tools/testing/selftests/filesystems/fanotify_basic.c
+new file mode 100644
+index 0000000..4a4fbb4
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/fanotify_basic.c
+@@ -0,0 +1,122 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <fcntl.h>
++#include <sys/fanotify.h>
++#include <linux/fanotify.h>
++#include "../kselftest_harness.h"
++#include "wrappers.h"
++
++static void create_file(const char *filename)
++{
++	int fd;
++	int ret;
++
++	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
++	if (fd == -1)
++		ksft_exit_fail_msg("(create)open failed: %s\n", strerror(errno));
++	ret = write(fd, "create_file", 11);
++	if (ret == -1)
++		ksft_exit_fail_msg("(create) writing failed: %s\n", strerror(errno));
++	close(fd);
++}
++
++static void modify_file(const char *filename)
++{
++	int fd;
++	int ret;
++
++	fd = open(filename, O_RDWR);
++	if (fd == -1)
++		ksft_exit_fail_msg("(modify)open failed :%s\n", strerror(errno));
++	if (lseek(fd, 0, SEEK_END) < 0)
++		ksft_exit_fail_msg("(modify)lseek failed");
++	ret = write(fd, "modify_file", 11);
++	if (ret == -1)
++		ksft_exit_fail_msg("(modify)write failed :%s\n", strerror(errno));
++	if (fsync(fd) == -1)
++		ksft_exit_fail_msg("(modify)fsync failed: %s\n", strerror(errno));
++
++	close(fd);
++}
++
++TEST(fanotify_cud_test)
++{
++	int fan_fd;
++	char buf[4096];
++	int ret;
++	ssize_t len;
++	struct fanotify_event_metadata *meta;
++
++	fan_fd = fanotify_init(FAN_CLASS_NOTIF | FAN_REPORT_FID, O_RDONLY);
++	ASSERT_GE(fan_fd, 0)
++	TH_LOG("fanotify_init failed: %s", strerror(errno));
++
++	ret = fanotify_mark(fan_fd, FAN_MARK_ADD,
++				  FAN_EVENT_ON_CHILD | FAN_CREATE |
++				  FAN_MODIFY | FAN_DELETE,
++				  AT_FDCWD, "/tmp");
++	ASSERT_GE(ret, 0)
++	TH_LOG("fanotify_mark failed: %s", strerror(errno));
++
++	// FAN_CREATE Test
++	create_file("/tmp/fanotify_test");
++	len = read(fan_fd, buf, sizeof(buf));
++	ASSERT_GT(len, 0)
++	TH_LOG("No event after create_file");
++
++	meta = (void *)buf;
++	if (FAN_EVENT_OK(meta, len)) {
++		TH_LOG("Event after create: mask = 0x%llx, pid=%d",
++		       (unsigned long long)meta->mask, meta->pid);
++		if (meta->mask & FAN_CREATE)
++			ksft_test_result_pass("FAN_CREATE detected\n");
++		else
++			TH_LOG("FAN_CREATE missing");
++	} else
++		ksft_test_result_fail("Invalid event metadata after create\n");
++
++	// FAN_MODIFY Test
++	modify_file("/tmp/fanotify_test");
++	len = read(fan_fd, buf, sizeof(buf));
++	ASSERT_GT(len, 0)
++		TH_LOG("No event after modify_file");
++
++	meta = (void *)buf;
++	if (FAN_EVENT_OK(meta, len)) {
++		TH_LOG("Event after modify: mask = 0x%llx, pid=%d",
++		       (unsigned long long)meta->mask, meta->pid);
++		if (meta->mask & FAN_MODIFY)
++			ksft_test_result_pass("FAN_MODIFY detected\n");
++		else
++			ksft_test_result_fail("FAN_MODIFY missing\n");
++	} else
++		ksft_test_result_fail("Invalid event metadata after modify\n");
++
++	// FAN_DELETE
++	ASSERT_EQ(unlink("/tmp/fanotify_test"), 0)
++		TH_LOG("unlink failed: %s", strerror(errno));
++
++	len = read(fan_fd, buf, sizeof(buf));
++	ASSERT_GT(len, 0)
++		TH_LOG("No event after unlink");
++
++	meta = (void *)buf;
++	if (FAN_EVENT_OK(meta, len)) {
++		TH_LOG("Event after delete: mask = 0x%llx, pid=%d",
++		       (unsigned long long)meta->mask, meta->pid);
++		if (meta->mask & FAN_DELETE)
++			ksft_test_result_pass("FAN_DELETE detected\n");
++		else
++			ksft_test_result_fail("FAN_DELETE missing\n");
++	} else
++		ksft_test_result_fail("Invalid event metadata after delete\n");
++
++	// Clean up
++	if (fan_fd >= 0) {
++		fanotify_mark(fan_fd, FAN_MARK_REMOVE, 0, AT_FDCWD, ".");
++		close(fan_fd);
++	}
++}
++
++TEST_HARNESS_MAIN
+--
+2.43.0
