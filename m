@@ -1,101 +1,160 @@
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D12D221F17;
-	Wed,  4 Feb 2026 14:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2AD423162
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 15:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770216473; cv=none; b=Sgyqxzy3cAm2HhSb/nFWuExtMI60rJHt3jXfu9J1z4yc0l7any0NlDCKI1tCLfXdcw5Gx2vy/0o2+eigh5sLD8f+AY4PJ/XrNCRt70R0x3OIOcN64Y6bgADTQo8VFRfnshPK43D/COdrJ42qNNkAtUtExPiq16uw2jL72B12qgo=
+	t=1770218409; cv=none; b=RT3lMwGK4F6yTgpZBPualBMrNI5XYdTjVvWo/GQD9Z2ZuVPwRcJc2lte7tN7XrU5zm3ygl0IDCzuu88ZeYpVE7drggW5aRRkADVftEFy1SkHjyLZTohY3631ZC4yhvCEVLTjQjxJ+UKY24SnO/mAl4ryn+utIpPDh0RYL4K7V6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770216473; c=relaxed/simple;
-	bh=cVT8WHJfGk4nWcdIZW1SwkZ+I/WqqtloyVvg5OJj7F0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LN2zQjpJ1s0CLQH7PS/oG1jSWk5NfHW+akkd1dG7Nn7bL5p4JW07PHV++bSGIz1vDPJ4+zfL0YU2v0x+0Ce73RX4etxFDqOk+LZw/OEmrG5MQtWGNNvXIJndgB3YX1pp2aPF8VZmSoICA092mRdsrvqc8Kdp1+mvQolgSkayp6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=GJ+gReji; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=mQLgS5BF; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
+	s=arc-20240116; t=1770218409; c=relaxed/simple;
+	bh=KwwAKDopHJRILboAztm5XFNPGYVwREHQpS8M1jc01Js=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dRfkFfddlMUeMhbJQU9vAg806uCG1lS/6NZ1p7AZZPTdMekN2mIQKrmRotEMaIfdQB7kkTbwAlh2VIMfI51CjV2jT02j74OSgyLa29aBoPZW7GjWiqGUQRH/uP/7EGiXH7gDt2BhXCdKiDb0yvcdgTWCISfbqzPqK/hFiyAr5OI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dgH1Sw+Z; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="GJ+gReji";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="mQLgS5BF"
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1770216444; bh=Nd0aRRqAD41vHNXvjIxkaZr
-	PI0JaUhJaiMQx5lXea8s=; b=GJ+gRejiEzUS7gbWSS2RTGHstaVD8poePmqxz9av4bpAbMIawF
-	zsZcQt2SSSxWj0Je7KVWPB0nUYXU3QsnzhPQ7hcWYD3qHLTzwOoFnRdKW9WCyXKaROZ0HCNmH1l
-	yfIFt6OrdNgCTIh6GmojCcX7K0+FQh+RHsZ7pWBT71wjrtPC98LUv+jGBepmDDTDyruLo6pz8/x
-	RbCOdP5N/6QA9GUwjx6KSNeGBwWkcfxjIk1GyY1lsJa/Xh5eB+1vUx3FHNn2MzzGxgF1IdtZYg7
-	/TcPM1EAT45QVYBQLQrEFhP9NKEUbo61f3bPoTfGsmW5ugQDg7S56gtgMu24PdbVkjQ==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1770216444; bh=Nd0aRRqAD41vHNXvjIxkaZr
-	PI0JaUhJaiMQx5lXea8s=; b=mQLgS5BF6o5ZzdbTQW3NXQdfWy1Ex26DeHgffPaYihoDvvnzgb
-	iQu6G80+yBGcinNoNwhdX2nlOS5hCePU30BA==;
-Date: Wed, 4 Feb 2026 09:47:24 -0500
-From: Daniel Hodges <daniel@danielhodges.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Daniel Hodges <git@danielhodges.dev>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	Song Liu <song@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Yonghong Song <yonghong.song@linux.dev>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v7 3/4] bpf: Add signature verification kfuncs
-Message-ID: <ow6qiz7tusazk4gb4it3qvilwygk7qroifuwbtruao4rww4ddl@orh4uw5dz3st>
-References: <20260202144749.22932-1-git@danielhodges.dev>
- <20260202144749.22932-4-git@danielhodges.dev>
- <CAADnVQJKjv5fZ0suJkOKtybMNsrDr9d+Au8T08AvHCPzP3z8sw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dgH1Sw+Z"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-794ed669269so16732917b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 07:20:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770218408; x=1770823208; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1I7Mk9Hd5K7WwRUz0geICz1s9Dm05KM3tUh5w1KEMTc=;
+        b=dgH1Sw+ZIWUdnbONrvvmk1pCcMofW/HNjGrLHxko3KIqjz8MNWs0j7X9tsQw8+rD2g
+         hwKEa/y1fzqLfiQ2GBkFvkWJHprQbKY8TPoMagHCKSytZfQK0oCvwmWj3xF5MCsnnkhC
+         XT9C6ojorOUZy5NeOcLc8G6tFl90sW6SNCN96m0c2MXUJUyCLWvl8UniBShkjI/4mgt6
+         a2ChzLHZ1xIRHxh/RJcPu5BAKlqBCj5291U+kVVBtYnAFJrlfPfpMEF2aHc0d3QyxdnR
+         rMHn0J74oZLeVWKYXY4/eWKOH5erDLp14wUMiPQK6YJNNF6TTPvQ5eBAalvqfBcXQkHv
+         rVKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770218408; x=1770823208;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1I7Mk9Hd5K7WwRUz0geICz1s9Dm05KM3tUh5w1KEMTc=;
+        b=ivZwRqnNiymZGUCrhDcaE36W9xD52x0REDH/3dakkOYKw04sHWorkeh9uqO04mguSZ
+         Su7YSlOofBB//6frwFWCQ07RDCQckDJUmfLDh728RXGrFGE5qLMkiMJsLIGSvyOv1dgN
+         65OC3DIQ2p0d7ZP/S41OHPZxnS44ceF5clSh9QcQic7h5KZk+WcPbHh7mOx38lq2KlJA
+         rqauhN/F2AZEX+UCHUG5vDqoORAHmd5jxq1TQ49U7hpDfpkRJPVY9CHCiwIvL44X0H2s
+         +KExI3f+BxawYnHXQlVrQwMVOIIOL2Q5lw50/xEeUb5wrbE9SC8gO/94lAH7WZ9cf9rg
+         xa4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVkrq+IfpBIfZrJsIIWgEqxMh/Wb+dJezJAI3hdLZ+xkK71dGzj0efZExN2gg+YD/tne8C9OJPCvcFsw4OfcUQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxacK65xQ9Ec/zZ2Jupx72ZBfgQdClOIWxMtdD7A7c7LYvuNRWm
+	EINrvSw+PWJkzOgowQVe1Ayhjq0rNDaAvAQvYgbA+kP+G4DQKMbZvHs3
+X-Gm-Gg: AZuq6aJUwK6+VVQMHo0qevlD1UEIFtmGyIkmtdF3MyEsgru+kh/4P1pU2mewVLzK/TL
+	P8Pefk0dik31jF3pZa/k+Y3ADzmg3WtdVogyZmCOhiy+j743iAl17FA1FPgMyymmEHH6/hIZY7N
+	mN4AsdPgU8tX/+xJpHdwj5oyF3cOUpX1eDPxrsk/sRLqqVEdQ2PiB9HFuTSQcY3m56hI1s0Vm3Y
+	+4Bx+c7By48aTBKH+NRYL59ma/Q8nqnnnJ1Rt6aqLqY/jh7pmHOjrr+asltnigbSoSDDsdblYNE
+	PJcV5XCwGQ+3wHI8ABrjq5Vxc9cIsyT/4JU+cHdZznVTmjhrHhGmpnls5z55qNyiiSshjGg+QmX
+	nAv7iZ2OATqf2GOMjwzI0MSC6jU8HVaBZ+90/KpeZijIQJolWFQILPh0wfyIOHTwHnqGBywdMJ8
+	kWR975H6P2TLU6ryK8eNo=
+X-Received: by 2002:a05:690c:7207:b0:795:905:c00e with SMTP id 00721157ae682-7950905c893mr14361537b3.14.1770218408089;
+        Wed, 04 Feb 2026 07:20:08 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:5a::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-794fefd00b5sm23148567b3.43.2026.02.04.07.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 07:20:07 -0800 (PST)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+Subject: [PATCH net-next 0/9] psp: support rekeying psp protected tcp
+ connections
+Date: Wed, 04 Feb 2026 07:20:04 -0800
+Message-Id: <20260204-psp-v1-0-5f034e2dfa36@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJKjv5fZ0suJkOKtybMNsrDr9d+Au8T08AvHCPzP3z8sw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKRjg2kC/x2MQQqAIBAAvyJ7TjBLib4SHWJbay8mKiGIf0+6D
+ AwMUyFRZEqwigqRXk78+C7jIADvw18k+ewOWmmrOmRIQU64kHbWoMEZehkiOS7/ZQNPWXoqGfb
+ WPg9D4ZBfAAAA
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Donald Hunter <donald.hunter@gmail.com>, Boris Pismenny <borisp@nvidia.com>, 
+ Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+ Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Daniel Zahka <daniel.zahka@gmail.com>
+X-Mailer: b4 0.13.0
 
-On Tue, Feb 03, 2026 at 10:44:05AM -0800, Alexei Starovoitov wrote:
-> On Mon, Feb 2, 2026 at 6:48 AM Daniel Hodges <git@danielhodges.dev> wrote:
-> >
-> > Add a bpf_crypto_sig module that registers signature verification
-> > algorithms with the BPF crypto type system. This enables signature
-> > operations (like ECDSA) to use the unified bpf_crypto_ctx structure.
-> >
-> > The module provides:
-> >    - alloc_tfm/free_tfm for crypto_sig transform lifecycle
-> >    - has_algo to check algorithm availability
-> >    - setkey for public key configuration
-> >    - verify for signature verification
-> >    - get_flags for crypto API flags
-> >
-> > Introduce bpf_sig_verify, bpf_sig_keysize, bpf_sig_digestsize,
-> > and bpf_sig_maxsize kfuncs enabling BPF programs to verify digital
-> > signatures using the kernel's crypto infrastructure.
-> >
-> > Add enum bpf_crypto_type_id for runtime type checking to ensure
-> > operations are performed on the correct crypto context type. The enum
-> > values are assigned to all crypto type modules (skcipher, hash, sig).
-> >
-> > The verify kfunc takes a crypto context (initialized with the sig
-> > type and appropriate algorithm like "ecdsa-nist-p256"), a message
-> > digest, and a signature. These kfuncs support any signature algorithm
-> > registered with the crypto subsystem (e.g., ECDSA, RSA).
-> >
-> > Signed-off-by: Daniel Hodges <git@danielhodges.dev>
-> > ---
-> >  MAINTAINERS                |   1 +
-> >  crypto/Makefile            |   3 +
-> >  crypto/bpf_crypto_sig.c    |  89 ++++++++++++++++++++++++++++
-> >  include/linux/bpf_crypto.h |   4 ++
-> >  kernel/bpf/crypto.c        | 117 +++++++++++++++++++++++++++++++++++++
-> >  5 files changed, 214 insertions(+)
-> >  create mode 100644 crypto/bpf_crypto_sig.c
-> 
-> Other than the issue spotted by AI the patches look fine,
-> but we need Ack from crypto maintainers.
+The PSP architecture spec specifies the need for rekeying connections
+in the event of a device key rotation. After a device key rotation has
+occurred, a new rx derived key needs to be generated and sent out to
+the other end of the connection sometime before the next device key
+rotation occurs.
 
-Sounds good, I'll wait to hear from them before sending anything else.
+Because PSP connections involve two different keys at each endpoint,
+one for decrypting ingress traffic, and one for encrypting egress
+traffic, there are two types of rekeying events that need to be
+supported. From the perspective of one endpoint of the connection:
+
+1. rx rekey: we need to allocate a new spi and decryption key on the
+current device key to provide to our peer.
+
+2. tx rekey: our peer has provided us with a new spi + encryption key
+pair which we should use for encrypting traffic immediately.
+
+In the case of rx rekeying, there is a period where it makes sense to
+accept packets authenticated from either the previous or current
+spi. To deal with that we allow a socket to keep a chain of a max of
+two psp assocs at any time. If authentication state does not match the
+most recent assoc, the previous one will be tried.
+
+In the case of tx rekeying, as soon as we install the new tx key, we
+have no use for the previous one, and it can be disposed of
+immediately. The only catch, is in the case where hw uses a key handle
+in tx descriptor state (as opposed to inlining the key directly). If
+this is the case, psp core needs to be sure that any of these
+unaccounted for references to key state are gone by the time it tries
+to sync a deleted key to hw.
+
+To deal with this race condition, the series includes a driver api for
+implementing deferred tx key deletion, where the driver can signal
+back to the core when it is safe to dispose of old tx keys.
+
+Lastly, some test cases for rekeying are included that go through key
+rotations and rekeying.
+
+Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+---
+Daniel Zahka (9):
+      psp: support rx rekey operation
+      psp: move code from psp_sock_assoc_set_tx() into helper functions
+      psp: support tx rekey operation
+      psp: refactor psp_dev_tx_key_del()
+      psp: add driver api for deferred tx key deletion
+      psp: add core tracked stats for deferred key deletion
+      mlx5: psp: implement deferred tx key deletion
+      selftests: drv-net: psp: lift psp connection setup out of _data_basic_send() testcase
+      selftests: drv-net: psp: add tests for rekeying connections
+
+ Documentation/netlink/specs/psp.yaml               |  14 ++
+ .../net/ethernet/mellanox/mlx5/core/en_accel/psp.c | 101 +++++++++-
+ .../net/ethernet/mellanox/mlx5/core/en_accel/psp.h |   7 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_stats.h |   1 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_tx.c    |   1 +
+ include/net/psp/functions.h                        |   6 +
+ include/net/psp/types.h                            |  39 ++++
+ include/uapi/linux/psp.h                           |   2 +
+ net/psp/psp.h                                      |   7 +-
+ net/psp/psp_main.c                                 | 101 +++++++++-
+ net/psp/psp_nl.c                                   |   9 +-
+ net/psp/psp_sock.c                                 | 213 +++++++++++++++------
+ tools/testing/selftests/drivers/net/psp.py         | 133 ++++++++++++-
+ .../testing/selftests/drivers/net/psp_responder.c  | 131 +++++++++++++
+ 14 files changed, 685 insertions(+), 80 deletions(-)
+---
+base-commit: 9a9424c756feee9ee6e717405a9d6fa7bacdef08
+change-id: 20260202-psp-3c8e2f65c5c4
+
+Best regards,
+-- 
+Daniel Zahka <daniel.zahka@gmail.com>
+
