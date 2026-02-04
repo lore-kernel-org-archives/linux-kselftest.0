@@ -1,40 +1,40 @@
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F3523AB8D;
-	Wed,  4 Feb 2026 01:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADF81509AB;
+	Wed,  4 Feb 2026 01:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770167680; cv=none; b=LKmvha3h2ftPwFTEzqKZuW+tlH56GmD/yX30qkg93++k1aKCiCrTZ/ph/Z2rotl0I6+HMWZpYlqLGWiJZN8mKlZ8GWJEtppk9UZSjpprT6juk5QqsPYDfMINLZDQNDiWhTm+bzOvFIj4ZCScmAdvFY9gddPrixQvQBm/dJDTi6I=
+	t=1770168527; cv=none; b=VSMSjx6pCBFQZ35Q2d9GPkHnP6cKkp5osQm3UDKV/2uBVOpnc5Jqc00a49vcYFqKoXB0bCJt24EEwI7CExyyoIV9RE7/FtwMITj8j6AwcJsTD1SrBxe2CT3uLAB37PIMSUQ19I3iplc9x1wJd9J/AsCyBoIt0akSyfQj5sIMSIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770167680; c=relaxed/simple;
-	bh=00nfPGyTtc8tXm9bcLTfP0n/oJ3YOvF8pB/jtPDLcHM=;
+	s=arc-20240116; t=1770168527; c=relaxed/simple;
+	bh=zuXHPHrmnipfBcKaPWh8E1J7pTJeHGrJVGetj5dq+ok=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=tmcLjmYERAjzfLh2ouxXXRUju0aEYp40J/73/uoRoIPTjGUVdPhILqZaPGXw0k0cljgkLOg6hnU6n2FJHMpaFi27fNmvqW6U50Xn6RmaeOrML0i4M05hZN2Qfwfw9eyLdmxAZnqKQzseaX3JhG3MxUWBoqhL9vuzFgikYN/J0QM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=wZ7gQZbd; arc=none smtp.client-ip=113.46.200.221
+	 In-Reply-To:Content-Type; b=fUruBu/sngx2a1VnV8ANsOtjAvuSDBAJdX/nh/KMQq1895KErXqffWY2UdwHIGL5CegiXzA84FTesfAI9ZbOYlrVq/g+QSHh7oIIbry2al/2WUY9nSW9nB77Tkt/P3FZEGhInYK/jjLI/nAV2w342zMn1gExZYIp2yEvpZIsCjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=zpUsv6Z5; arc=none smtp.client-ip=113.46.200.222
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="wZ7gQZbd"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="zpUsv6Z5"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=Sab77aD3NRaoRo9PD9BOaCGAGHr4ZUPWfgWJALWIRPg=;
-	b=wZ7gQZbdRK1+GZJS0jqOE3vl4vndzym+EBkMx/e87JCQYlMowNqiiWFcFFSOLsIodNDjDP7VH
-	Pbf6sr2gRUP2LA39TVUIGDKMjf5xKd0XjR+qKjsbVrgUGRo0+8feiw2xtUjSeNAl8zXJCQVGVWv
-	edQ7DVAwewg5jGt33bT1164=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4f5Mhn016vzRhXJ;
-	Wed,  4 Feb 2026 09:10:01 +0800 (CST)
+	bh=L+0hqhwwEEcFoOBs1tRRgPrd1kMmn8Imhm5OGfDiaX8=;
+	b=zpUsv6Z5Y8Lo53Zlj04UUtA46/PV3thl93doCgX194Q7eZyh0HmebxnRFUajgX1o5/q3btODi
+	ek88WT3o7pvrEB2dTiOuq3PuG/qz27cnuVfJ6Ko/7BEGuUev5OQRCD3I3EoqKqGIwGNB3PIDPMj
+	ZN1eBcP//+5yOU2Fe4SmtUs=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4f5N135NR4zLlSB;
+	Wed,  4 Feb 2026 09:24:07 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6D26A4056A;
-	Wed,  4 Feb 2026 09:14:34 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 852DD40363;
+	Wed,  4 Feb 2026 09:28:41 +0800 (CST)
 Received: from [10.67.109.254] (10.67.109.254) by
  dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 4 Feb 2026 09:14:32 +0800
-Message-ID: <a22ccdb5-5449-5e48-790a-5c3dd0de7544@huawei.com>
-Date: Wed, 4 Feb 2026 09:14:31 +0800
+ 15.2.1544.11; Wed, 4 Feb 2026 09:28:39 +0800
+Message-ID: <2699bcdc-8d56-7fe9-fa9a-a3d61476e806@huawei.com>
+Date: Wed, 4 Feb 2026 09:28:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,7 +61,7 @@ From: Jinjie Ruan <ruanjinjie@huawei.com>
 In-Reply-To: <87bji552uk.ffs@tglx>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
  dggpemf500011.china.huawei.com (7.185.36.131)
 
 
@@ -85,10 +85,11 @@ On 2026/2/3 22:16, Thomas Gleixner wrote:
 > changes. core/entry is the one which has the prerequisites and nothing
 > else....
 
-Sorry for misunderstanding your v11 reply—however, these patches can
-still be applied directly to the core/entry branch.
+By the way，it looks like core/entry and arm64 for-next/entry have
+diverged: the first three patches of this series are already in arm64
+for-next/entry but missing from core/entry.
+Perhaps the two branches should be reconciled so that both contain the
+same baseline.
 
-Thanks,
-Jinjie
 > 
 > 
