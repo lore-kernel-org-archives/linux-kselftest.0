@@ -1,66 +1,66 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BDD425CE3
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 15:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E853A426684
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 15:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770218415; cv=none; b=R+q65ZGdees6bhmbLgXynuPL0oPoz5i1BPdpZ7jYRl1GdXNSxU62ESyvdIqRzzl3/GRpb/xHX/nDgHhwTTeE5sM9w8qS1Ygj5/5HNfS9duvIkMw1Hm1A/gTrv0pf2K34t1jE5iETiNLC7qvlHYXEZ99+wASfvgcbTx5ThuRvoOY=
+	t=1770218417; cv=none; b=fl+Qw44zVIoi0bHt1PnhUlX/n7SuNJV0jmhPmxeC+Tbzj5FHMLnR4Ygmg9IotfxJuZFki7acNDiqAp8f7LDURtBuvDvNubECDPaUal0BKZnFNyk7KejvuAn56YLKbfqgLkfZIidEqXVvY3jYBotSdBHtSeKR2xyBZvqylc2fcto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770218415; c=relaxed/simple;
-	bh=+R5voXuQnEBX8+p5l7a0pUX07F4bMFsDu15P/f+RDe8=;
+	s=arc-20240116; t=1770218417; c=relaxed/simple;
+	bh=dUNNNkgwiKs0jJ3gqltiLi3w3ZESyBFOHecX2yXYAvo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=p3Psy+Ew5Nsp40aVopEyUMAkEHHWbi8OJCqg7aan53EJHxyoIQxU9Jm2nzN2Y0rD7T1CO0O01CcPO0mEf5ijUH+NQ/O9vSnoDgLezR15I+xxT2a21TgdNllnYQgQcrK0zjJldhvNLVA2P/Ys4lzNgUA5pYINITLEEjzOnNT684Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F1DO1ajT; arc=none smtp.client-ip=209.85.128.178
+	 In-Reply-To:To:Cc; b=ZO3YJ8KGKyQ1daoZTBKjRutn5Yz8V7EGSGgapa2OwZLkNy3Zb4XJvioA2uW0lMnKGeEwVqWsvlc4jSeoT0WdC9Q50yRWhqnmMpZKnqzVmDpmuKeA+tbW3mkONxWIDnMhg0KezN+ePaP1SzfAr4oUdkZevN/p6VbRqFM6yXVwhJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dm9oZ6NW; arc=none smtp.client-ip=74.125.224.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F1DO1ajT"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-794d05dbe22so38790147b3.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 07:20:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dm9oZ6NW"
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-649e456e7a8so401004d50.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 07:20:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770218415; x=1770823215; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770218416; x=1770823216; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iIuhi4GGL+4aZmNOIWvGI/sDSV9rn1npcZ0exHynTsg=;
-        b=F1DO1ajTMUBWIobA/cWik+0B7J6EByBMnBnSdcrCyjXbhO//ck6kIMkNDxawkN9Lbp
-         CXyJqiIS6cFmOrLxWHVo9bQoXBL26tE106oNi4/ACboZTSULIhGcQONtXL0iZBfI5qUN
-         3/WPOn9jSUfRDt4a4qEpTfvplfIhTHjxG0TUDoFqtJl/77ZnErYXaaOJyBiI831X1IIL
-         H8pnQpuIqj+C61TQXu/CMWOStMn1sJfRUhS1X2VdV0v4TI26AZTTg5lAEqXTruHjafRE
-         Ex/lldCy6x694KDourhZRTxt7NkmKtwB+VUA7HznfKnZFwWGm3+79WW30p73m0QaTwiz
-         QgvA==
+        bh=IXQzycVLoUHsvmViNXRoUwIsMbZHmx/4dfU4u4ceWho=;
+        b=Dm9oZ6NWXV6avRJpS8iAefZlsrT5NdaEN0ZDwZfsa3U4wABIEUfYK7LvhRsUNxE5Eg
+         WWz865/68d97mVY7oMxwPdGI8+i5izjY3UCIQZTDVmBf70oscqeYJnE+H2x38MMDq7QW
+         d22i8RpenYqSYWv5nHXmDzHykpGoTmDJ9zH9+c5K61YDWv70xIlFgjrWLDFsPRsNbZen
+         pD9Pl++mrpOyYkysdFxNe3BAY506U49/ZwnVZ41kVPUcMGkcj2SdO5ZLkAEP0/LS606e
+         h7AQ3P2wcgV8agQmSaNUQEikIjFxMhd2VK5kGbyjSnEHm7BXg1+ahvm4DobnNCTUAa84
+         LMpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770218415; x=1770823215;
+        d=1e100.net; s=20230601; t=1770218416; x=1770823216;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=iIuhi4GGL+4aZmNOIWvGI/sDSV9rn1npcZ0exHynTsg=;
-        b=KxM/ZzwKneEHHiUbZwEmKmGJOBRp5qJfVhceXbWyB/KR9MDrEhR1pA0n4NXqBubUHN
-         QZrp2Yu1LNFQ/OvliTimpdOIUsZOU0aRQhrLliq2ldZLD3jWOojdiBX8qDJArg2I7Jo5
-         BzNDxyP5WvbX1QEvxqYekLlTDlJ9N2FSq+VRYM80QOVL44vkKdFNO3DTBROJB/hiRPn6
-         aLkvmXjoZk/wF37N3caZMrynN6JqmRQ1CQ3IyyVznnGGHZxEwrVciW5vUFDl2V78p+jg
-         BrD5kJFabyXfXLSIHl8lm06dL6Dw3vJbKubhQlJleCgLAAkX8kDKEeqiWEcblux2by4e
-         cGPg==
-X-Forwarded-Encrypted: i=1; AJvYcCXg6/Kyr748Uz9cVI+Ls1WJtUFEhZeUUvjJH9y2j4JbGVqOZ3tXssavkSlccU3ImaYHTK/mjMhXVflGMtn6rZA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcSyXRhKqIaTSwj8LJPAEzUxpsOeEprQteQ71Fwwmwzkn+WxCn
-	ZIP/xxZe4IFfA/8rRRZACidKz2WUgo/dDO5+CA5Gclctiof2jGo9SVYn
-X-Gm-Gg: AZuq6aLcc0H5Zqdl1z41RTQatqK4U/9CkpLydXZWvaueqh4O3XFTeJjSO4kgmcSOdlG
-	AYvh+KkseNOpNFok9GCfpO/p4PudNpBG4vf1qGyQjIH+1wbzXv3mkkVkS2VYT+yuDQ//NbLABC3
-	1/j6v1XRJeD9QAHEo8X6DuXsJocmDQ1UGCAzae0d8Vv4InxQfybWpz0q8d8lnkGCiXL52I06AIS
-	Qg5lqA2tUJfMYHdvnXEmM8ALcY+UPqzHO768gjFM2vQu1oGfBWLaL3RT5Bw7bfPSojOuzhVHrln
-	bhI7D2mcIhR0hmZBGlNgQwD6RE///6dYzrnadYXfwH7sLutzUzy0r+Wq1w2Q/sdyaxnDVxBZZCP
-	F2txWqsPzxfGD7fkfDkI6SwGA4mgfddd9f899XrbHwo5y+CBQU7UvTeltA6qAe9DYwlVo4vBVxY
-	BYFBdzl/ay
-X-Received: by 2002:a05:690c:6d82:b0:794:b36f:7a6e with SMTP id 00721157ae682-794fe62cac4mr29521157b3.9.1770218414446;
-        Wed, 04 Feb 2026 07:20:14 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:57::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-794feeb1937sm23269477b3.21.2026.02.04.07.20.13
+        bh=IXQzycVLoUHsvmViNXRoUwIsMbZHmx/4dfU4u4ceWho=;
+        b=vxcDxxpgewlDmWod5qYEIwAhj+FIZOZ8/kncH1pTFGdzxKfQCpsVhTAJXuO+FFJ600
+         aJ3uyRpIBGQN+5c0dSQenlBtxvASrJaFtungEbeOoDaeVlsu4WLJ5eS1JekIY0dULfRK
+         Evs/9qtxHmqgem/38/Zpd5cp+vCFMa+gkV8VWu9YMU5nXYatlp0reBJ23RXKi0pBGds3
+         JEChT8+aow66weCSTYHnwN0mJCQeJ+qB7ofKTrfG9nQCWGUrXTkoRg1pviw7tzZKKGW6
+         0B8u9hiI7SH18BHYSVKE8D7GcIO2egVx1QT33u+3gdk9Ghxdp8vT6/XpgVdWV+QfJI0r
+         IeMA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOUO41+bpCBYYMobwWSxp7aZ/i4UlKvv71twzpvPQCDPuMMYQS+xZDTmNJdgQedAT7GIBWLAuIvOcBMCzvANU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZgz6vB6SWW0TlDlib5yllaKf+vvUM2NkibWmUgBpT0o3y4im0
+	yRPNZuWIel/sLe035lkMb6BnymAv0AiX6d6z1hv5RUGruLirbsFY84tr
+X-Gm-Gg: AZuq6aIB1oHBwDbP1keDtsNYitNMDDthidWPp72oz5qhBHcKWJFB5YYbnWPqO2fbIG6
+	G8/eaVPqcjneB2l2xrXCw3dfNvYJXI909kwBwKH7TCbiOjs3dDIwfAY9TT0faeRY9r2InFslw4E
+	J3vJwf809sZgmDXG9Pdj3GHWlSDGY/d3KuUNNtOL7xfwRX4pjlX8Gm7mGz0OeSK7muJQYnbGeG0
+	omHeuam5/wtMwV2YeirrGYx/Tqq5uKURGUV2lF8MTRtVI87lU4Qgi06OqLJcJNWQ+OeKDz38g7G
+	GJD7sv8E+yZoGka8/gGZ+MWo6I9szoUQ7+nYV1HERsJVlcOmmvhIcWWKXljXaCTb/jO0RqZEw8E
+	srAgzSqOlVRC4Xa4V3j/K3CkMjnL1B/t1YrDJ+9nu5UpBb348BhdbbPAoKs5JeLcGsQ3Cc+SrVz
+	qI4kHuCiY=
+X-Received: by 2002:a05:690e:424a:b0:649:da44:78b2 with SMTP id 956f58d0204a3-649db4c4ecdmr1915176d50.90.1770218415725;
+        Wed, 04 Feb 2026 07:20:15 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:b::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-649dc5e0b65sm2592932d50.21.2026.02.04.07.20.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 07:20:13 -0800 (PST)
+        Wed, 04 Feb 2026 07:20:14 -0800 (PST)
 From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Wed, 04 Feb 2026 07:20:09 -0800
-Subject: [PATCH net-next 5/9] psp: add driver api for deferred tx key
+Date: Wed, 04 Feb 2026 07:20:10 -0800
+Subject: [PATCH net-next 6/9] psp: add core tracked stats for deferred key
  deletion
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260204-psp-v1-5-5f034e2dfa36@gmail.com>
+Message-Id: <20260204-psp-v1-6-5f034e2dfa36@gmail.com>
 References: <20260204-psp-v1-0-5f034e2dfa36@gmail.com>
 In-Reply-To: <20260204-psp-v1-0-5f034e2dfa36@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -85,282 +85,142 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Daniel Zahka <daniel.zahka@gmail.com>
 X-Mailer: b4 0.13.0
 
-There is a race condition during tx key deletion on devices that use
-key identifiers in tx metadata, as opposed to inlining keys
-directly. When a key is requested to be deleted, there may be skb's in
-the tx ring, whose metadata descriptors contain unaccounted references
-to a tx key. Under these conditions, the skb sitting in the tx ring
-can race against the request to fw to delete the tx key handle.
+It is useful to keep track of two stats related to deferred key
+deletion:
 
-The solution implemented here is to provide an api for core to defer
-tx key deletion operations until after the driver signals that it is
-safe to do so.
-
-Core informs the driver that a key deletion grace period is starting
-via psp_dev::tx_grace_begin(). While a grace period is active, core
-will queue keys to be deleted to the psp_dev::tx_del_next queue.
-
-Core will then periodically query the driver with
-psp_dev::tx_grace_end() to determine if it is safe to delete the
-keys it has queued. If it is, core will then move the queued keys into
-a new list and begin deleting them, allowing the psp_dev::tx_del_next
-queue to begin filling for the next grace period.
+- tx_key_cnt: the number of outstanding tx keys from the hw's
+  perspective
+- grace_periods: the number of grace periods that core has retired for
+  this dev.
 
 Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
- include/net/psp/types.h | 32 +++++++++++++++++
- net/psp/psp.h           |  1 +
- net/psp/psp_main.c      | 93 +++++++++++++++++++++++++++++++++++++++++++++++++
- net/psp/psp_sock.c      | 13 ++++++-
- 4 files changed, 138 insertions(+), 1 deletion(-)
+ Documentation/netlink/specs/psp.yaml | 14 ++++++++++++++
+ include/net/psp/types.h              |  4 ++++
+ include/uapi/linux/psp.h             |  2 ++
+ net/psp/psp_main.c                   |  1 +
+ net/psp/psp_nl.c                     |  3 +++
+ net/psp/psp_sock.c                   |  9 ++++++++-
+ 6 files changed, 32 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/netlink/specs/psp.yaml b/Documentation/netlink/specs/psp.yaml
+index f3a57782d2cf..efaf3f61e37a 100644
+--- a/Documentation/netlink/specs/psp.yaml
++++ b/Documentation/netlink/specs/psp.yaml
+@@ -153,6 +153,18 @@ attribute-sets:
+         doc: |
+           Number of PSP packets for transmission with errors.
+           Device statistic (from the PSP spec).
++      -
++        name: tx-key-cnt
++        type: sint
++        doc: |
++          Current number of TX keys installed on the device.
++          Kernel statistic.
++      -
++        name: grace-periods
++        type: uint
++        doc: |
++          Number of TX key deletion grace periods completed.
++          Kernel statistic.
+ 
+ operations:
+   list:
+@@ -267,6 +279,8 @@ operations:
+             - dev-id
+             - key-rotations
+             - stale-events
++            - tx-key-cnt
++            - grace-periods
+         pre: psp-device-get-locked
+         post: psp-device-unlock
+       dump:
 diff --git a/include/net/psp/types.h b/include/net/psp/types.h
-index 52844ac6f870..280c7fdc713c 100644
+index 280c7fdc713c..d790efd9d4bc 100644
 --- a/include/net/psp/types.h
 +++ b/include/net/psp/types.h
-@@ -5,6 +5,7 @@
- 
- #include <linux/mutex.h>
- #include <linux/refcount.h>
-+#include <linux/workqueue.h>
- 
- struct netlink_ext_ack;
- 
-@@ -58,6 +59,10 @@ struct psp_dev_config {
-  * @prev_assocs:	associations which use old (but still usable)
-  *			device key
-  * @stale_assocs:	associations which use a rotated out key
-+ * @tx_del_active:	TX keys to be deleted after the current grace period
-+ * @tx_del_next:	TX keys queued for deletion during current grace period
-+ * @tx_del_work:	workqueue for periodic grace period checking
-+ * @tx_grace_active:	true if a grace period is in progress
-  *
+@@ -67,6 +67,8 @@ struct psp_dev_config {
   * @stats:	statistics maintained by the core
   * @stats.rotations:	See stats attr key-rotations
-@@ -85,6 +90,11 @@ struct psp_dev {
- 	struct list_head prev_assocs;
- 	struct list_head stale_assocs;
- 
-+	struct list_head tx_del_active;
-+	struct list_head tx_del_next;
-+	struct delayed_work tx_del_work;
-+	bool tx_grace_active;
-+
+  * @stats.stales:	See stats attr stale-events
++ * @stats.tx_key_cnt:	See stats attr tx-key-cnt
++ * @stats.grace_periods:	See stats attr grace-periods
+  *
+  * @rcu:	RCU head for freeing the structure
+  */
+@@ -98,6 +100,8 @@ struct psp_dev {
  	struct {
  		unsigned long rotations;
  		unsigned long stales;
-@@ -208,6 +218,28 @@ struct psp_dev_ops {
- 	 */
- 	void (*tx_key_del)(struct psp_dev *psd, struct psp_assoc *pas);
++		long tx_key_cnt;
++		unsigned long grace_periods;
+ 	} stats;
  
-+	/**
-+	 * @tx_grace_begin: begin TX grace period tracking
-+	 * Begin a new TX grace period. Core will queue tx keys for deletion
-+	 * and not delete them until the grace period has elapsed.
-+	 *
-+	 * Return: 0 on success, error code otherwise. If the operation fails,
-+	 * core will try again later and a grace period is not activated.
-+	 */
-+	int (*tx_grace_begin)(struct psp_dev *psd);
-+
-+	/**
-+	 * @tx_grace_end: check if TX grace period has ended
-+	 * Check if the current TX grace period has ended.
-+	 *
-+	 * Return:
-+	 *   0: grace period has ended, core will delete queued tx keys
-+	 *   -EAGAIN: grace period has not ended, core will requery later
-+	 *   other error: internal error (e.g., device reconfigured), core
-+	 *                should return to the tx_grace_begin() phase
-+	 */
-+	int (*tx_grace_end)(struct psp_dev *psd);
-+
- 	/**
- 	 * @get_stats: get statistics from the device
- 	 * Stats required by the spec must be maintained and filled in.
-diff --git a/net/psp/psp.h b/net/psp/psp.h
-index b86539d5137a..d09fdd956fcb 100644
---- a/net/psp/psp.h
-+++ b/net/psp/psp.h
-@@ -15,6 +15,7 @@ extern struct mutex psp_devs_lock;
+ 	struct rcu_head rcu;
+diff --git a/include/uapi/linux/psp.h b/include/uapi/linux/psp.h
+index a3a336488dc3..208ab60e2c88 100644
+--- a/include/uapi/linux/psp.h
++++ b/include/uapi/linux/psp.h
+@@ -58,6 +58,8 @@ enum {
+ 	PSP_A_STATS_TX_PACKETS,
+ 	PSP_A_STATS_TX_BYTES,
+ 	PSP_A_STATS_TX_ERROR,
++	PSP_A_STATS_TX_KEY_CNT,
++	PSP_A_STATS_GRACE_PERIODS,
  
- void psp_dev_free(struct psp_dev *psd);
- int psp_dev_check_access(struct psp_dev *psd, struct net *net);
-+void psp_tx_key_queue_del(struct psp_dev *psd, struct psp_assoc *pas);
- 
- void psp_nl_notify_dev(struct psp_dev *psd, u32 cmd);
- 
+ 	__PSP_A_STATS_MAX,
+ 	PSP_A_STATS_MAX = (__PSP_A_STATS_MAX - 1)
 diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
-index 982c96f74ae3..2fb886edc384 100644
+index 2fb886edc384..4a7b2ffa718e 100644
 --- a/net/psp/psp_main.c
 +++ b/net/psp/psp_main.c
-@@ -14,6 +14,10 @@
- DEFINE_XARRAY_ALLOC1(psp_devs);
- struct mutex psp_devs_lock;
+@@ -215,6 +215,7 @@ static void psp_tx_del_work_fn(struct work_struct *work)
+ 		}
  
-+#define PSP_TX_DEL_INTERVAL_MS  100
-+
-+static void psp_tx_del_work_fn(struct work_struct *work);
-+
- /**
-  * DOC: PSP locking
-  *
-@@ -64,6 +68,9 @@ psp_dev_create(struct net_device *netdev,
- 		    !psd_ops->get_stats))
- 		return ERR_PTR(-EINVAL);
+ 		psd->tx_grace_active = false;
++		psd->stats.grace_periods++;
+ 	}
  
-+	if (WARN_ON(!!psd_ops->tx_grace_begin != !!psd_ops->tx_grace_end))
-+		return ERR_PTR(-EINVAL);
-+
- 	psd = kzalloc(sizeof(*psd), GFP_KERNEL);
- 	if (!psd)
- 		return ERR_PTR(-ENOMEM);
-@@ -77,6 +84,9 @@ psp_dev_create(struct net_device *netdev,
- 	INIT_LIST_HEAD(&psd->active_assocs);
- 	INIT_LIST_HEAD(&psd->prev_assocs);
- 	INIT_LIST_HEAD(&psd->stale_assocs);
-+	INIT_LIST_HEAD(&psd->tx_del_active);
-+	INIT_LIST_HEAD(&psd->tx_del_next);
-+	INIT_DELAYED_WORK(&psd->tx_del_work, psp_tx_del_work_fn);
- 	refcount_set(&psd->refcnt, 1);
- 
- 	mutex_lock(&psp_devs_lock);
-@@ -118,6 +128,8 @@ void psp_dev_unregister(struct psp_dev *psd)
- {
- 	struct psp_assoc *pas, *next;
- 
-+	cancel_delayed_work_sync(&psd->tx_del_work);
-+
- 	mutex_lock(&psp_devs_lock);
- 	mutex_lock(&psd->lock);
- 
-@@ -130,6 +142,15 @@ void psp_dev_unregister(struct psp_dev *psd)
- 	xa_store(&psp_devs, psd->id, NULL, GFP_KERNEL);
- 	mutex_unlock(&psp_devs_lock);
- 
-+	list_splice_init(&psd->tx_del_active, &psd->tx_del_next);
-+	list_for_each_entry_safe(pas, next, &psd->tx_del_next, assocs_list) {
-+		list_del(&pas->assocs_list);
-+		psp_dev_tx_key_del(psd, pas);
-+		psp_assoc_put(pas->prev);
-+		psp_dev_put(psd);
-+		kfree(pas);
-+	}
-+
- 	list_splice_init(&psd->active_assocs, &psd->prev_assocs);
- 	list_splice_init(&psd->prev_assocs, &psd->stale_assocs);
- 	list_for_each_entry_safe(pas, next, &psd->stale_assocs, assocs_list) {
-@@ -149,6 +170,78 @@ void psp_dev_unregister(struct psp_dev *psd)
- }
- EXPORT_SYMBOL(psp_dev_unregister);
- 
-+void psp_tx_key_queue_del(struct psp_dev *psd, struct psp_assoc *pas)
-+{
-+	lockdep_assert_held(&psd->lock);
-+
-+	list_add_tail(&pas->assocs_list, &psd->tx_del_next);
-+	if (!delayed_work_pending(&psd->tx_del_work))
-+		schedule_delayed_work(&psd->tx_del_work,
-+				      msecs_to_jiffies(PSP_TX_DEL_INTERVAL_MS));
-+}
-+
-+static void psp_tx_del_work_fn(struct work_struct *work)
-+{
-+	struct delayed_work *dwork = to_delayed_work(work);
-+	struct psp_dev *psd = container_of(dwork, struct psp_dev, tx_del_work);
-+	struct psp_assoc *pas, *tmp;
-+	bool need_reschedule = false;
-+	LIST_HEAD(to_free);
-+	int err;
-+
-+	mutex_lock(&psd->lock);
-+
-+	if (!psp_dev_is_registered(psd))
-+		goto out_unlock;
-+
-+	if (psd->tx_grace_active) {
-+		err = psd->ops->tx_grace_end(psd);
-+		if (err == -EAGAIN) {
-+			need_reschedule = true;
-+			goto out_unlock;
-+		}
-+		if (err) {
-+			/* Driver error, restart grace period */
-+			psd->tx_grace_active = false;
-+			list_splice_init(&psd->tx_del_active, &psd->tx_del_next);
-+			goto start_grace;
-+		}
-+
-+		list_for_each_entry_safe(pas, tmp, &psd->tx_del_active,
-+					 assocs_list) {
-+			list_del(&pas->assocs_list);
-+			psp_dev_tx_key_del(psd, pas);
-+			list_add_tail(&pas->assocs_list, &to_free);
-+		}
-+
-+		psd->tx_grace_active = false;
-+	}
-+
-+start_grace:
-+	if (!list_empty(&psd->tx_del_next)) {
-+		err = psd->ops->tx_grace_begin(psd);
-+		if (!err) {
-+			list_splice_init(&psd->tx_del_next, &psd->tx_del_active);
-+			psd->tx_grace_active = true;
-+		}
-+		need_reschedule = true;
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&psd->lock);
-+
-+	list_for_each_entry_safe(pas, tmp, &to_free, assocs_list) {
-+		list_del(&pas->assocs_list);
-+		psp_assoc_put(pas->prev);
-+		psp_dev_put(psd);
-+		kfree(pas);
-+	}
-+
-+	if (need_reschedule)
-+		schedule_delayed_work(&psd->tx_del_work,
-+				      msecs_to_jiffies(PSP_TX_DEL_INTERVAL_MS));
-+}
-+
- unsigned int psp_key_size(u32 version)
- {
- 	switch (version) {
+ start_grace:
+diff --git a/net/psp/psp_nl.c b/net/psp/psp_nl.c
+index a540a1e77694..f0006d2e85c8 100644
+--- a/net/psp/psp_nl.c
++++ b/net/psp/psp_nl.c
+@@ -526,6 +526,9 @@ psp_nl_stats_fill(struct psp_dev *psd, struct sk_buff *rsp,
+ 	    nla_put_uint(rsp, PSP_A_STATS_KEY_ROTATIONS,
+ 			 psd->stats.rotations) ||
+ 	    nla_put_uint(rsp, PSP_A_STATS_STALE_EVENTS, psd->stats.stales) ||
++	    nla_put_sint(rsp, PSP_A_STATS_TX_KEY_CNT, psd->stats.tx_key_cnt) ||
++	    nla_put_uint(rsp, PSP_A_STATS_GRACE_PERIODS,
++			 psd->stats.grace_periods) ||
+ 	    nla_put_uint(rsp, PSP_A_STATS_RX_PACKETS, stats.rx_packets) ||
+ 	    nla_put_uint(rsp, PSP_A_STATS_RX_BYTES, stats.rx_bytes) ||
+ 	    nla_put_uint(rsp, PSP_A_STATS_RX_AUTH_FAIL, stats.rx_auth_fail) ||
 diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-index 1a97609564e7..d038da122ebb 100644
+index d038da122ebb..bf6d089657b6 100644
 --- a/net/psp/psp_sock.c
 +++ b/net/psp/psp_sock.c
-@@ -88,6 +88,11 @@ void psp_dev_tx_key_del(struct psp_dev *psd, struct psp_assoc *pas)
- 	psd->ops->tx_key_del(psd, pas);
+@@ -80,12 +80,19 @@ static struct psp_assoc *psp_assoc_dummy(struct psp_assoc *pas)
+ static int psp_dev_tx_key_add(struct psp_dev *psd, struct psp_assoc *pas,
+ 			      struct netlink_ext_ack *extack)
+ {
+-	return psd->ops->tx_key_add(psd, pas, extack);
++	int rc;
++
++	rc = psd->ops->tx_key_add(psd, pas, extack);
++	if (!rc)
++		psd->stats.tx_key_cnt++;
++
++	return rc;
  }
  
-+static bool psp_dev_needs_defer(struct psp_dev *psd)
-+{
-+	return !!psd->ops->tx_grace_begin;
-+}
-+
- static void psp_assoc_free(struct work_struct *work)
+ void psp_dev_tx_key_del(struct psp_dev *psd, struct psp_assoc *pas)
  {
- 	struct psp_assoc *pas = container_of(work, struct psp_assoc, work);
-@@ -96,8 +101,14 @@ static void psp_assoc_free(struct work_struct *work)
- 	mutex_lock(&psd->lock);
- 	if (psd->ops) {
- 		list_del(&pas->assocs_list);
--		if (pas->tx.spi && !pas->tx_moved)
-+		if (pas->tx.spi && !pas->tx_moved) {
-+			if (psp_dev_needs_defer(psd)) {
-+				psp_tx_key_queue_del(psd, pas);
-+				mutex_unlock(&psd->lock);
-+				return;
-+			}
- 			psp_dev_tx_key_del(psd, pas);
-+		}
- 	}
- 	mutex_unlock(&psd->lock);
- 	psp_assoc_put(pas->prev);
+ 	psd->ops->tx_key_del(psd, pas);
++	psd->stats.tx_key_cnt--;
+ }
+ 
+ static bool psp_dev_needs_defer(struct psp_dev *psd)
 
 -- 
 2.47.3
