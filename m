@@ -1,64 +1,64 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-yw1-f195.google.com (mail-yw1-f195.google.com [209.85.128.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8D8322DD6
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 20:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE4838B98D
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 20:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770237957; cv=none; b=IF2ggjNXqCD/aTNKIIJYqBcMCPhYfpOlpifsZqTMLU56xFgOWqARgd5nsIU3D/M58gCRXzxupv0pvBKKPkfWSVIZNzEc2KhauoksEhv5R6eqFYD4Cc5cb+n7e/vCIg4PIxM8/n84qUPrOIb9EI194Ggj3cGFWCcNXQzDSWhl6Ww=
+	t=1770237968; cv=none; b=V2wqW5Fb89zsIGyWr0kFISXTjLvv/6eAKtig2qpXxYHU9691YJFm+NdpzRiR12hYrtQMX7HpG8schF5qGw/Ed5ICPRLA/xACFutvFs3+SMuiwCIjHDCMoZRWkjpnoXc2loBsH04vbyi9hv1JFn4apZZbH5ycOtvbPbWR161w6HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770237957; c=relaxed/simple;
-	bh=+ZPlCLyFbv56EWcS4ecmR/INDwI/6I9mXAdIgZj9ob8=;
+	s=arc-20240116; t=1770237968; c=relaxed/simple;
+	bh=qWOblQYebZr3b4DNcrCHxa/N9wKXw3nJYtVNLvKaaQY=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=uxg3C7zwi/j6IV0IIkGYANTf0S1KZwkUGFQ6b3/mNH3+V7az8kIqezn0R1+dnBKZSoyev54MDr4Gtlzd2B7J09gkmyg+HKXv+iG6oCjh63BVwKxMi0dHVQHzKXALAxkjIs1fPF7Ep+Iu88u+AaGq93ggP7KNMchx+Bo2nUFuCtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PX/x6/pB; arc=none smtp.client-ip=209.85.128.177
+	 Mime-Version:Content-Type; b=R2VuvyrJ35EYNp98N/azLYsbPEFsq0QV4Ll2LRZprhLWpHlV+BbtXlsf211yq55Uhq0jz+uMTKDsq97j5rwIytMa01wI3WpDZOtqOM+YWbsrwjgSu3RByvLIkiNpVsXfnh0nbXXhLBbjgD5uR/1ELoYQYmJRCz1FrNTlaUPkwsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TLm6F9P7; arc=none smtp.client-ip=209.85.128.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PX/x6/pB"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-794ed669269so4945887b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 12:45:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TLm6F9P7"
+Received: by mail-yw1-f195.google.com with SMTP id 00721157ae682-7948e902fadso1963717b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 12:46:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770237956; x=1770842756; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770237967; x=1770842767; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BmhmeFhOmptzVfU8Ket2zRg/1yOdaQIeRxT7DL1GOYw=;
-        b=PX/x6/pBMHut4DD9SVXKYhgECFLfzhOyMpGjAB287Bmag2kptOsbFFG7FzadD4UGB9
-         v+ei0TYEOoh/VV/uTREH6QKuxD7jP+Iiy+E4P2CVxiw29qp4qogNOb/JHkYs2oiwtkxR
-         BJ3iZEavABcNmrRZgM3m5SwQmHNDMzaZUYSFWOTMTCRT0WkVvPh/5iSTjJRnINqJNFXV
-         C2ZflabbN/pVckd1k2p01dymvLHbV6VR3lTIjg6oSwWncRv6m9JXOlHaR+GTw2t1NxoS
-         sFZUsf4EMkca9NXpOXmunug0dkluTni+yHmfAX7hZnbpVACRYTq6KzU1BWrTJWwAQ7mp
-         vaIQ==
+        bh=lv3YIJDutvl3nESEPNZZVBaLc1dGe42cfk2JLGqHhBo=;
+        b=TLm6F9P7ldF+YU8Rwy9dxlZr8s/xBXZTQegnDCJjYcbJSfTUyGrO369x6qjkHLiAPz
+         mbQvXQv+K488XglrsyVPQKIEAZPX0hfZqTwxs57R0vmJyeE8Ycjqeo0UWAFXM3cWvH5n
+         w6llfBE+zhA7RxgdpLT6WjGazLzV94I5cx8xO9m7DYg/QlufefjL96Wf0LLnHJE/G93B
+         HqJOeapor5LJrsSPqp76wAGjh6hBcZMkWo8s4SdD+7H8mM2BK3/IAc1WlLjH6j8waZKT
+         Absn6D4bknL/lRkzXLIct1s/RZkXKSsWV1gtHL3FgKZn6rjGUP9QCvURd12cb/Vjb63y
+         UdXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770237956; x=1770842756;
+        d=1e100.net; s=20230601; t=1770237967; x=1770842767;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BmhmeFhOmptzVfU8Ket2zRg/1yOdaQIeRxT7DL1GOYw=;
-        b=q6Hi4bpBonMwrmADfZvp8zhhMG87kDfsJOysjN3BWgi8/LS7zx97yxhNpar0AbbQSM
-         C5kapQyhZk1yb83eMcEP94wT1jVxyHP76OtOD0TqF1uVpLBeSGNNrPp/FyIkzg+dT3BA
-         Em11EgZtZlNIDu3GCUF6HCLAc/VnltS4OEq7cF2OrN+9+cLMYQeyM0m92IjsiCdxEE8U
-         dNCTO+e17nQqTf7kJQFZMVmnWgZgwlyrntN05IMPwG75O6olpY2Y0sZVn04+5C4efxZA
-         +OFl5ZqtbpnQ6X7bcU6MSrR5nScsEJD28Ixns9yCleLVjtybCUwcJ/SfSyWU+4OAFOhj
-         ffXw==
-X-Forwarded-Encrypted: i=1; AJvYcCUh980Sf4iN7KR0I6F/z3oZVz2UAwJQh4wjrpXiBS1Fxh9iebCakEsj/cL41SAXQOb+rK5f1lGvVQiOSHqwKm0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzs/GIbVfgkN4DYOu3HiHzZYnJKZkPspbHF3zxxEtyywwQqedPE
-	0tnr7V8klYe4T0SrFNZNV+I1f9ZjUNqDUkefh91iE8/j0EaVanG/fGJn
-X-Gm-Gg: AZuq6aKaSRwONztfcpIr7xZeVqMDTAejqwf10fBC47GwHzpfK3nRa3A2YpvoJ2/ELZP
-	1EReT7qtsdCBZakFRq1v0FBx1gXck2bmmS11ukJ7O91Co/TbuC3pRjH8rQ7H8HU/6Oo75/jemgX
-	PIrdRTBIaU78WEJMVsBGLl/fQZwGhMeIrKlCeS94QLuSXFhMZ/wOYDX5LOJ8j/g/F5gcMn2V52j
-	QX/aatW6wmHahM/b5nmXBVkzCHrY1IAJcbOsZCQR1h4WvX5PJsDhgvCjP/Mne1ZRxiTkNZd2Fl7
-	VmDPt3WvcFDd3RtQBEfoeWRzgVlQMVSPumuL9J4Q3NM6pcJzEeMPP+DRdqBmbV3liui/at4fV4E
-	9Gultv8GEMUcAhyVOQzLVj5ox9fBq8HQC4BAbJuIdG8+vUfLEm7H/fg0FTX+QSXJajXHtbfe/bv
-	j+F0BEeAVxfYmpxdv3+sNDX6Eowm10muvutO44zPOGIFmrrNnLv8iLkw2oMgs=
-X-Received: by 2002:a05:690c:c50d:b0:794:d9f0:2375 with SMTP id 00721157ae682-7951501ef63mr5799507b3.0.1770237956288;
-        Wed, 04 Feb 2026 12:45:56 -0800 (PST)
+        bh=lv3YIJDutvl3nESEPNZZVBaLc1dGe42cfk2JLGqHhBo=;
+        b=iTcwZQPFZmyuGcnXmHEZUme4uyVtucKUQUp5bw1axVUqVTj69PGC4agUI7YjQR47jD
+         5OlbFPQvbfc0+BCFdNc0Jt/KoSFfNXD1J5DaoE4B94DlakBmj49HtReLq3ju/X+Rs/iy
+         9Mm0MhQoityg/p25HOjNsYtT8wsLAjvcZ/6EjotvG2FoH+WEA3qDjljBB/E+NjiFJq9X
+         146uaNk8AeOLMmckjW738cUwCNvC5r3M9/lLsH4UDwcEM/2Z1TAC2Z7jWKhIwQzloxr9
+         Uq1DyBh9yJaHWI5WsxT90sYD6PY0knr9SwPo4HD0R442pQuRPCiz3B/d4gA4JzlLOqic
+         YrSA==
+X-Forwarded-Encrypted: i=1; AJvYcCV/udSwXJMQBsJXyQg48L9vKgl9jYDRJZREMdrRUgrYrV5YdYyREy5fyof5R+zfIUkvKzQMWDJ5zZxAG5UoF04=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJcz+iqh7wFl+pK3dcjEIn7g0digM56JdRge6Fsbja8bU5VXnF
+	OticQtxIamjNovN0OMsgjX0vbWGtaWmAT7/dsm33aY7qIGlKMP+jYWvF
+X-Gm-Gg: AZuq6aKZAM2jOGUhI+4oF7/ZOP+2OLR9wsTM47D7Q3kMcBSKIucETbio0aM+IVm9ke0
+	wgkN/hEyIWmwbh+BMRF7t7qa/ETA1VdCr3GnZQN6avEoXuv+Tb3UUtXwyuWInPgMiZqQWwuNFMu
+	XJIxhGyuozD01CmP+FbNOnko6Oi/9H/ofxINRtvjI9vvspyIZ3by3uewoD40v1l0MxKWM8cMxW/
+	JbHNSYTgHqhxrEOmFFb16s00loGnqiPEnw+4BzBv+P5Y7JMezBUrnzcTACL1Ze0DfuzIx1QmeRQ
+	hPbF1a3V6NomaIBBgWbeII7Jte79k0zv33qiVUIgAlUTgEhW2INA9phWWNP9jEY3+9hauos9w2B
+	8z9kurdUuOdx6XU01QMMRNbT2dHOtMTmKhfaBJscbhWkhSuPc5kfr6pg+OSZRG2r7EVlO4RY4OT
+	GzZAmYxviHs601k6qOx8bpC/JLBrPLPB4t0NoE3rlaYaGiOsHK6PlegX69jPpOKrpxLQCpZQ==
+X-Received: by 2002:a05:690c:883:b0:794:fcf8:f822 with SMTP id 00721157ae682-794fe651c96mr39194847b3.7.1770237967533;
+        Wed, 04 Feb 2026 12:46:07 -0800 (PST)
 Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-794fee8294csm30725247b3.2.2026.02.04.12.45.55
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-794ff0144e9sm30202817b3.56.2026.02.04.12.46.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 12:45:55 -0800 (PST)
-Date: Wed, 04 Feb 2026 15:45:54 -0500
+        Wed, 04 Feb 2026 12:46:07 -0800 (PST)
+Date: Wed, 04 Feb 2026 15:46:06 -0500
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Daniel Zahka <daniel.zahka@gmail.com>, 
  "David S. Miller" <davem@davemloft.net>, 
@@ -78,11 +78,12 @@ To: Daniel Zahka <daniel.zahka@gmail.com>,
 Cc: netdev@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  Daniel Zahka <daniel.zahka@gmail.com>
-Message-ID: <willemdebruijn.kernel.37bf21c78aadd@gmail.com>
-In-Reply-To: <20260204-psp-v1-0-5f034e2dfa36@gmail.com>
+Message-ID: <willemdebruijn.kernel.26cf34e993f40@gmail.com>
+In-Reply-To: <20260204-psp-v1-2-5f034e2dfa36@gmail.com>
 References: <20260204-psp-v1-0-5f034e2dfa36@gmail.com>
-Subject: Re: [PATCH net-next 0/9] psp: support rekeying psp protected tcp
- connections
+ <20260204-psp-v1-2-5f034e2dfa36@gmail.com>
+Subject: Re: [PATCH net-next 2/9] psp: move code from psp_sock_assoc_set_tx()
+ into helper functions
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,52 +95,10 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Daniel Zahka wrote:
-> The PSP architecture spec specifies the need for rekeying connections
-> in the event of a device key rotation. After a device key rotation has
-> occurred, a new rx derived key needs to be generated and sent out to
-> the other end of the connection sometime before the next device key
-> rotation occurs.
+> This commit is a pure refactor. Its purpose is to lift code that needs
+> to be called from both initial tx establishment and tx rekeying into
+> dedicated functions.
 > 
-> Because PSP connections involve two different keys at each endpoint,
-> one for decrypting ingress traffic, and one for encrypting egress
-> traffic, there are two types of rekeying events that need to be
-> supported. From the perspective of one endpoint of the connection:
-> 
-> 1. rx rekey: we need to allocate a new spi and decryption key on the
-> current device key to provide to our peer.
-> 
-> 2. tx rekey: our peer has provided us with a new spi + encryption key
-> pair which we should use for encrypting traffic immediately.
-> 
-> In the case of rx rekeying, there is a period where it makes sense to
-> accept packets authenticated from either the previous or current
-> spi. To deal with that we allow a socket to keep a chain of a max of
-> two psp assocs at any time. If authentication state does not match the
-> most recent assoc, the previous one will be tried.
-> 
-> In the case of tx rekeying, as soon as we install the new tx key, we
-> have no use for the previous one, and it can be disposed of
-> immediately.
+> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 
-So this defines a rekey event as an instant in time. An alternative
-choice is to rekey at a specific seqno.
-
-The difference matters only for retransmits.
-
-Not sure there is a strong reason for either. But probably good to
-state the choice explicitly.
-
-> The only catch, is in the case where hw uses a key handle
-> in tx descriptor state (as opposed to inlining the key directly). If
-> this is the case, psp core needs to be sure that any of these
-> unaccounted for references to key state are gone by the time it tries
-> to sync a deleted key to hw.
-> 
-> To deal with this race condition, the series includes a driver api for
-> implementing deferred tx key deletion, where the driver can signal
-> back to the core when it is safe to dispose of old tx keys.
-> 
-> Lastly, some test cases for rekeying are included that go through key
-> rotations and rekeying.
-
-Still reading the code, first pass only.
+Reviewed-by: Willem de Bruijn <willemb@google.com>
