@@ -1,63 +1,63 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7043B3BFE5A
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 09:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28479387357
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 09:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770199017; cv=none; b=sF6ppniSmyTKaajwoqgK5/8kFsPt3SJ0WWaLdz91UQ5gv4zu3pzMDwPFp8DPKm3kyETYojNgstjtK21QYPWvhbLAdAJHJ/lbTb1jVB2MPULhp3cZyWnzipWLLZgSeu4O6/fKb84tNNtawLQ8DTxQi3gEfAYFLMeJ79sFAwcvYAw=
+	t=1770199111; cv=none; b=ZpbFImlyN8cPxDX4TzDZH2y2dDmQJPIbIYnYmFvvNplhuB3XCtOLc44RI/8ErsUvDIabFUkugpZX9qfb4tGD+pdCotUf+kw+vZOQyZVQ+BLjd/b+NsgBqaLSxXHfLOnzzqM9/GFgRDQjzb2J0dDu5/7kjzDNqV5ELbTT9a0iZfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770199017; c=relaxed/simple;
-	bh=c0SSiNKESavwRZtHeDYtsFbwwGk+w/EGhOCZVlQW4wQ=;
+	s=arc-20240116; t=1770199111; c=relaxed/simple;
+	bh=RqUvHqsbdJMXbroQSbdoa+j17A8Lq78NDNCD6CEhGH8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iYyrJIjVT1mRNb89pntbsBAYIlZ9iwA1+qtytdAcate8kHvakNol+Q+nO6wsodNCQS6NYvDvxF9PUSqC9Jms8ZHYlWP8DbnYygjT/V0/ZjkmkVm8qVRAeV1qtMkcYR+tf3hQT5qFvccwyjEwE7vJtL7xLBD9fCx1J0T9E0kDarw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=yQXnBIkG; arc=none smtp.client-ip=209.85.128.65
+	 Content-Type:Content-Disposition:In-Reply-To; b=MwJbmjffc8yJ7xxybZcB324hp/j8PMHW6WyLRSV35h+rSpnt3NFLUti7YedKAXHCbVHiJVh+trXmmTnHIiT1vy7PiPyJ54K4nZkD+tYUacILZ7tDMf9Jyn5e2RhIGKopMnRky5CTTuSIL4VfkyeM6GshSgpNLKySnz3H7ebicu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=Km5MWAOq; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="yQXnBIkG"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4806f3fc50bso65971765e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 01:56:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="Km5MWAOq"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-435903c4040so4429488f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 01:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1770199016; x=1770803816; darn=vger.kernel.org;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1770199110; x=1770803910; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TaBsez7vELTsNb/sMEe0+EHGenrpZkeztrL57KkgMuE=;
-        b=yQXnBIkGW0ElIC/OXWcyplPwOOU0IIyJdg2coACLZBwEAL3kAFpLZpCqnTmfDTPtiG
-         2zVbqzDrgzqlUL7Ja9XWDQV0ujbRrO5KZL3G5M0n+dPQwbNMj3+CF+EZfFliCM6N5Txa
-         rJDqCgzxoFgzjS0did4KHpryRo02BpSKDJ5y5T0VqSbZTfwlHO0/fFwwV2T0Vf4EIVlY
-         rIOegYO/OE1z3Su9rBc5No3IDgGWqcEHRb9NeGDzU+kEenwKqvCoQoQKtdcWRsUgtQPp
-         lisED1YCVMCvDSG0056FrhEsGYv8OwiFcsE5MZXwmgR35UH9O7JhFcEvjVLyvS3s3WjO
-         DT+Q==
+        bh=XsS2W/JwCUgw6NN0Wz3AYONgmZuWQ5joMlv0dByi4ao=;
+        b=Km5MWAOqgKvfPhv0SPoi64vQ23QnUBw9q2/Ua2FnDxfvG4yejUVVUVKTURAtFCcUsQ
+         xUCskVjp7dw/KAlS1RyxfllziMWMOytV3ZKR2X1uBYv/qoRmNB4kKOafr+v5COwoOt4j
+         475IIpIpCnORYHO+5VkI5u0Qa3VnQ6GCLBIH+Jm2jebh1aNrW9070zKmM/xzFrwzZ9ZN
+         XfVbC+hI94PN9SPGkoTQ4xsLMSMrsnjd0Q6TnATV7JVJzaY47y9QhypUe9962Y3F0k2e
+         IEPuZP6WjrCJh/Oh+mQsSdTDqVILIJWiTyyh/F7ZZaPV4qGikhpvv8UShGn32T6PXqPA
+         zAWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770199016; x=1770803816;
+        d=1e100.net; s=20230601; t=1770199110; x=1770803910;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TaBsez7vELTsNb/sMEe0+EHGenrpZkeztrL57KkgMuE=;
-        b=q8lzZAFwNe7+R5qrZ1BlDdNd8/u5A/aaXWvMcsVGUM8BCvxdXcraHk6aYiHzEWT1e5
-         eZntRnGqNHXmMDe/CMPvYdswbggNoKBQ2L2aPgqI/gBiQ6X/mnYnu8jf/VckfQv3MP8X
-         ApPLmU2IdLnsqCh3rOFwRGBvuxFISW4tbq2GCAc+urweqE1PoyV0XOUMPY9lOEvvbtvn
-         9t4pwgynN6/YByRthdYag4I9l1nWJWfvSpQCPClYtbw/yLmHIQArqh5yAmhXiX3Sm61I
-         xjrRp7jE+uCon2FydQKGDSxFFKJ0V9v7yRboUhEcPNaDnKcWMbMQLyBGbzF6ooK2Zx2H
-         YbXA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWy4Fu7VZcWEnBL+XLO9F9609XS11aV177Jxiq0ARGc5Dv6vzYNXUq8Lv1QUZtPq7IKV8WkB4Nuk5jMO6McEE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9NwheB99seu6kptl+mDT4otx5PhDYGm0Fd0QdJ2XD2ADhhnwv
-	mH+2kLD42ZsZowmG8U+PZuHncHqJXpFxgIv1XqH+GkO5NP2REOZiaq/oLp7in3eIVC8=
-X-Gm-Gg: AZuq6aIr7m7eFYKgbzbn8yjKwJ1GnmpBPzFkxECSjY1u1yEXRmn5u/yDCUzz+LETYGg
-	emKtcImNkNmVmextiuPCBMnhgnZfE0XLI5aRtoONCmP6htp5p219K8GAN/9rJerO4Cbgxrni5jb
-	hQ8TNmd+IJUJHDUeYyfoBMCeBEvdUyIypBdOh+YWtON+hDvKkhCYJRYo/d3p091t1jUFQAeHCeS
-	I+7ByxzSLZnBXFQrl3zDXdY67ZhnAu+fcPUyVFK2ggxeP7+YV9A0MVx7ezCju71moa0BLcAz/OJ
-	EU5Zy2Bd5h/B/7levhc/MaeCZVJz19l+a5uKeY5uzO52ktAI7+wEgOYPViv7xL0tOygYNrsyDd2
-	VEOMwqANeFECvlEbgZ/PFsEIMcMKBidlcq0t9O+jrQebugjLU+Ej8BylQfzb6mvfAjQTOFZQB8N
-	vTE0+fCDxAZIO8fB5E+Po=
-X-Received: by 2002:a05:600c:34c3:b0:480:1a3a:5ce6 with SMTP id 5b1f17b1804b1-4830e93ddd9mr31664665e9.14.1770199015702;
-        Wed, 04 Feb 2026 01:56:55 -0800 (PST)
+        bh=XsS2W/JwCUgw6NN0Wz3AYONgmZuWQ5joMlv0dByi4ao=;
+        b=OJip4LzQoIK37M8vx9FjGbUAMzkmajDLFDIYuV3PlKzNMK4Grx56/1fEqUQKp+BYQ1
+         A5rkm4UwluHP5mG0CMBgTOQ7VCW3KmNyE68Egetz8TVxWtliBX0uADMxJxetGgYb+Vwb
+         5yF9JoEUlY+XseIUn+gs+gji7wLPnh8LQ6n0OjgHsH/UGEwedHXd+v+Smc/N0T3bfIyT
+         6wsXHOMJDVpuqT6M4bZR66PGDHCgPj8zQ20fXn14LUe+wovhgKzxgfjW8MbumjMb4uJp
+         cyazdjT8MlHVgh/+SuaFGnIbWiUIpOPOLRRaGchtD+lEs6pZb8sAc0GShslA/9nm49VJ
+         Kmeg==
+X-Forwarded-Encrypted: i=1; AJvYcCXVq+u9mi5YR6MIrCzUQAhvnTI8PzKAOPYkhVm2Z1bf5qA6n5CdEDw5FVK/NxNBWFxxaghnloOE5caPiayg6Oo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhoJn5mu8/edPx6DlWu9asGCUVw5EnRHWeXy/XZtYD3Igdqv01
+	EAa5xeDE0FxZkqpAmju9rfCvCmj+zqm88ep5vuTErg4i6eB+juQoGySc3kyA2StqLIQ=
+X-Gm-Gg: AZuq6aJWchWDtduEB4AaeHJsRkjXSK+WvOx8L7hqeCAOtO1ALTtoQRZUKJ7WkP1JU2J
+	J52JkeApdRZ6jQcxY0BmQYE45dXpju3E/tMHYHZDXnWq/hZfumFsNs642Im/8Ke4XWugHZyLgho
+	vd53N5tWIbRpsPNdSY1BwZLRTb0CFFkDT7DVIlK0kzflLtVrqoCNYbnhTW0fws6eRPXlBPnNhS3
+	aDHpmH5lhk77KfPvQ9B1pIRRCpSiudtMer3twQkesFUDtdmOr/Jfijo05O/4vJww1tsIowinFP8
+	n6pVvwEU8LEiyWoX6lIe/yUIAjUV5re0gZtw8Lixp/s/Ajmq6XYzVWMKACHEaL6IjDAA+L0XhSf
+	dVm217ztE5wvf3s1gnMtIMfE8VBTRYUjnUC8jFYTinU6POM9CYQAtJinz8Rmim2OfJui5cXpr2Q
+	+ghP4hTMrY6gcfP85jSQg=
+X-Received: by 2002:a05:6000:290b:b0:431:b6e:8be3 with SMTP id ffacd0b85a97d-43618053a95mr3496064f8f.38.1770199109610;
+        Wed, 04 Feb 2026 01:58:29 -0800 (PST)
 Received: from FV6GYCPJ69 ([85.163.81.98])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4831089d547sm44206485e9.14.2026.02.04.01.56.54
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43617e25d02sm5028086f8f.3.2026.02.04.01.58.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 01:56:55 -0800 (PST)
-Date: Wed, 4 Feb 2026 10:56:53 +0100
+        Wed, 04 Feb 2026 01:58:29 -0800 (PST)
+Date: Wed, 4 Feb 2026 10:58:27 +0100
 From: Jiri Pirko <jiri@resnulli.us>
 To: Tariq Toukan <tariqt@nvidia.com>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -69,10 +69,11 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
 	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
 	Moshe Shemesh <moshe@nvidia.com>, Shay Drori <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
 	Or Har-Toov <ohartoov@nvidia.com>
-Subject: Re: [PATCH net-next 5/5] devlink: Document port-level resources
-Message-ID: <ew6f3nuo3u7cwegwadlmqotxl6ns7c6pa3h4ljbuxkqbq3xxe7@sy74qkffcpze>
+Subject: Re: [PATCH net-next 1/5] devlink: Add port-level resource
+ infrastructure
+Message-ID: <tvw3nu7emtvoozmgsskpqqxej74ku4pprztx7kmy3vyv7gygx5@tpfdfghwmrru>
 References: <20260203071033.1709445-1-tariqt@nvidia.com>
- <20260203071033.1709445-6-tariqt@nvidia.com>
+ <20260203071033.1709445-2-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,76 +82,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260203071033.1709445-6-tariqt@nvidia.com>
+In-Reply-To: <20260203071033.1709445-2-tariqt@nvidia.com>
 
-Tue, Feb 03, 2026 at 08:10:33AM +0100, tariqt@nvidia.com wrote:
+Tue, Feb 03, 2026 at 08:10:29AM +0100, tariqt@nvidia.com wrote:
 >From: Or Har-Toov <ohartoov@nvidia.com>
->
->Add documentation for the port-level resource feature to
->devlink-resource.rst. Port-level resources allow viewing resources
->associated with specific devlink ports.
->
->Currently, port-level resources only support the show command for
->viewing resource information.
->
->Signed-off-by: Or Har-Toov <ohartoov@nvidia.com>
->Reviewed-by: Shay Drori <shayd@nvidia.com>
->Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
->Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
->---
-> .../networking/devlink/devlink-resource.rst   | 36 +++++++++++++++++++
-> 1 file changed, 36 insertions(+)
->
->diff --git a/Documentation/networking/devlink/devlink-resource.rst b/Documentation/networking/devlink/devlink-resource.rst
->index 3d5ae51e65a2..4cdfc1dce180 100644
->--- a/Documentation/networking/devlink/devlink-resource.rst
->+++ b/Documentation/networking/devlink/devlink-resource.rst
->@@ -74,3 +74,39 @@ attribute, which represents the pending change in size. For example:
+
+[...]
+
 > 
-> Note that changes in resource size may require a device reload to properly
-> take effect.
->+
->+Port-level Resources
->+====================
->+
->+In addition to device-level resources, ``devlink`` also supports port-level
->+resources. These resources are associated with a specific devlink port rather
->+than the device as a whole.
->+
->+Currently, port-level resources only support the ``show`` command for viewing
->+resource information.
->+
->+Port-level resources can be viewed for a specific port:
->+
->+.. code:: shell
->+
->+    $ devlink port resource show pci/0000:03:00.0/196608
->+      pci/0000:03:00.0/196608:
->+        name max_sfs size 20 unit entry
->+
->+Or for ports of a specific device:
->+
->+.. code:: shell
->+
->+    $ devlink port resource show pci/0000:03:00.0
->+      pci/0000:03:00.0/196608:
->+        name max_sfs size 20 unit entry
->+
->+Or for all ports across all devices:
->+
->+.. code:: shell
->+
->+    $ devlink port resource show
->+      pci/0000:03:00.0/196608:
->+        name max_sfs size 20 unit entry
->+      pci/0000:03:00.1/262144:
->+        name max_SFs size 20 unit entry
+> 	DEVLINK_CMD_NOTIFY_FILTER_SET,
+> 
+>+	DEVLINK_CMD_PORT_RESOURCE_GET,	/* can dump */
 
-"max_SFs" vs "max_sfs", be consistent. Better to copy-paste actual
-command output :)
+Hmm, I assume that "set" is somehow on the horizon. Wouldn't it make
+sense to add the enum as a placeholder to have the cmds
+together?
 
 
+>+
+> 	/* add new commands above here */
+> 	__DEVLINK_CMD_MAX,
+> 	DEVLINK_CMD_MAX = __DEVLINK_CMD_MAX - 1
 
->-- 
->2.40.1
->
+[...]
