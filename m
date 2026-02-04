@@ -1,116 +1,278 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8FD3A7F4C;
-	Wed,  4 Feb 2026 09:28:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF1E3B8D46
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 09:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770197323; cv=none; b=aAS8da+0NHqKH0QnBotC6/OvaPb+xM6mRgzU8Oq8oR34U+wFr9zJNU7796OI3DGW+RsxXV9vDrihPC425u4z5IORjlC4tWkMcI7HnVVpaUEeqRhdGOD/nnW9fn9Bi2wBB9o5KUGcBCh7NxcsCLsliHYokn7knqo7l6jrTRMKif0=
+	t=1770198721; cv=none; b=Yy02WJsXk2VeDBV1oWLif7KudRLNs5wOLYRM69noxHZCIwVUyjSbolA1YxsFr/RWcV6aOUl9Jiva0N7YnYaZGjVY/1uA4WUrI3/TVYR+o+D32PbTFaWMDpnOUgFLP4qBkuwe3UwApF1RiFNw5uZ1HAYkW1U8liHTdfcB0w7skEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770197323; c=relaxed/simple;
-	bh=wNmreD1B96IJwY1XBdvP/FHXcUDoGKx185+NrO65AHU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=NMHNgkg2wGxjjGyhj+N9q/tksSBzcHJ/KFcK1z4FM8nFBYnSbiORhqDKDJqtzUIMehhQLlJfGi3r/GbsTDMZUTAj33+6E4xiq1l4VCS3RPcHr3plnWRvZ4n+twk00/MuXvDpIaLyc33x32NRklm2DOHvwA/nXq4/sevfn8wgILQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFSx54P8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770198721; c=relaxed/simple;
+	bh=8hDLDbF72dr7b/O4Zo0ApKCVlf3BYvSzKKhomnUdGFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LGpiwWJvFsHO32h5QMKnQGjbC+TP8o1fSpKCBtuwN7UAXKcVbHag2dJ1QjIzqTQfiMdE78mX4E4ED2UvhFP6fV2GyQydGgYHkLazebp7BzpQnUBzlTPjYXF7asOK5FNJoA7RTzu5OAFVl+oI7YtGpol8U9XMNxx02Y8kUB+6P3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=TwAO/UPJ; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFSx54P8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF48BC4CEF7;
-	Wed,  4 Feb 2026 09:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770197323;
-	bh=wNmreD1B96IJwY1XBdvP/FHXcUDoGKx185+NrO65AHU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=AFSx54P8bWsWcKCo3dw/7CAusa6aLI+b4yMUNsGB4Ux5ceAOJBU7zoi3JUNOzBbYc
-	 9oHVWnYgY/WmA1CVyAo0UI6r+m3rYBgu3W9dUg0jiGqByoxz4+zHhbhueezyHgh6t7
-	 kKrOxA9zuxkC5AOu5T8QDqCr828iKaIkn73q4V8BGl+VVWT73YZ47tyXsrSYlefftl
-	 zmZmIw8ea/zJ1+/dLVH7dhbnqMImPbd486nAd7rnw4lMfwqC0nlSTceXptUMhXQ8HR
-	 Ry8/jNQ4ib598H8RXm17+FE1TUvAWp3tT0Ae+bA6ETEpGYjkcZBZRVdsUVhSyIPShf
-	 Q93mDkPKVXg9g==
-Content-Type: multipart/mixed; boundary="===============6939426097549955783=="
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="TwAO/UPJ"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42fed090e5fso344540f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 01:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1770198718; x=1770803518; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dGP603QDqaJG/dpPYsMG8GNhu8nGqxt3dyDV5ITQFhU=;
+        b=TwAO/UPJHfH8/0kLBF6V9c6SiQn6pzA0ohafydvmLqYpFsNd0dNjbP5nnlpGo5RCGT
+         TWXzypiVOeZ+1EHrx1CyH5XxjWsCKVs6WMQKRO0zQ4KVhpdUUZeFT07eezOYwrix6uXr
+         141ZtOR84lWvNw4y8rbWcbL871IXHuRJD68UrKZPeFM8rv+PTEhr+2JwS0D541PcJRu0
+         yeardM6mH9Uq15CVJ5VAho5ogy0mjNVnoSX3ux/fQV+quOAspFtMymX8pewOyk2jscTZ
+         pZ0PeDCK5CnXS1JAazN49NGdcLCX7pSLpgnR9J24EPvR2RtHkmSmMxHL5QujC/Iaa7KF
+         Qq2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770198718; x=1770803518;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dGP603QDqaJG/dpPYsMG8GNhu8nGqxt3dyDV5ITQFhU=;
+        b=O+oknm79NDkMx6fB0Xpdat85s8dGf5zTo1W57xB8yDh9b9KL6HM/3iLn1vlARhZ01r
+         /rSOgw7j/AEWkHyujLfnCEUWjOzsH+f3eiyIbVcCrLUd/jIfYfyCuScz1XvwptJ0hN2/
+         dLwOnRA0PLVszsh3gbIyneq65NmzSdZuA43nJs+fBGOLG18TS5RE14sDVpXttmG9Ndlg
+         ry8xQYGZjkkjvP1hyexAgJ2+QUGQt9kTDaU1lHf5gTGjmwqLZSBCxaJNWymUPe5UMdT7
+         zoBkxaF69hRjfYwNPtGd52dHU4mNyJ2KqwzSugHTiYNYAAsva8GTOPA6y3O5QAaobNPe
+         C4uw==
+X-Forwarded-Encrypted: i=1; AJvYcCUpipj2DyXZkPfPwo4DV9N/NbPMZvesDanzGzP9zSJMUrZg3+7iXxR9yL2+ZQXziAOdKN1XPtdgViESAxnyH64=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmPUHUGnktUhA5JXeK5ATFWyYWvMtlEZD4zpor3W0HUzOQHPUI
+	sHd5+A2t/w10Zss4rB5fchu7u23KuiRTHJ9btleK52schz2TefCNrztlCQo/bzw6jCM=
+X-Gm-Gg: AZuq6aIrnCU9lG6iJDGbZyY3avrqXC4Vx6gUY4scbE7ff98YRTPXDK6KHktqoQSHZ+g
+	e/NbEnZOfsEZXVPeZ0Bsps8qVp1rbEQOHTm+cIhxJurTC58vpMFQjbB9j5gm+jm+jiS2FMwnxgb
+	LBSLAG5n3hLxxAyzwfGS8d45XxKcNZr9Ws7/CuqwiLPmbnuvpt58cDAlrS/XhD57cqeFfyg9UVu
+	eiBYOjXV1gRueZU7pdG4Fx1Oda19In3NOBMeVlyyDh0UOvSF7M69xfsudzf9jcm35ytbbJ3CYUf
+	QAoJ0P4m+sTmE2vVGY/6HWdN2P+c9VPSa23+kUp5vaD4wb6ao/G89eoxi98Rx6RjkKLAUdHikak
+	/5MG2bCQ4u6x4r/d6BN11kQIdw4RzhQbSM73W+qLpQKzer09ujyRd9PN9BTXbFBgsJCUMjJKgdN
+	uttDU2TRRe6WRfR+VHtg4=
+X-Received: by 2002:a05:6000:40d9:b0:435:a370:2d7a with SMTP id ffacd0b85a97d-43618053444mr3194322f8f.36.1770198717973;
+        Wed, 04 Feb 2026 01:51:57 -0800 (PST)
+Received: from FV6GYCPJ69 ([85.163.81.98])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4361805edcfsm5124440f8f.35.2026.02.04.01.51.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 01:51:57 -0800 (PST)
+Date: Wed, 4 Feb 2026 10:51:55 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
+	Moshe Shemesh <moshe@nvidia.com>, Shay Drori <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
+	Or Har-Toov <ohartoov@nvidia.com>
+Subject: Re: [PATCH net-next 1/5] devlink: Add port-level resource
+ infrastructure
+Message-ID: <rye7fponvzxqbeexkreuxwvjlder34vfkofib4gwrhkbw3vres@udo2xxeek6xv>
+References: <20260203071033.1709445-1-tariqt@nvidia.com>
+ <20260203071033.1709445-2-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <bec784d0d78a505dfbfbd17ffe95840dc356c80ceec2a96f9659b442b64c92c6@mail.kernel.org>
-In-Reply-To: <8b9d7d9485c627dc05cdeb6863abd5a1c81c95ec.1770194182.git.zhuhui@kylinos.cn>
-References: <8b9d7d9485c627dc05cdeb6863abd5a1c81c95ec.1770194182.git.zhuhui@kylinos.cn>
-Subject: Re: [RFC PATCH bpf-next v6 05/12] libbpf: introduce bpf_map__attach_struct_ops_opts()
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,akpm@linux-foundation.org,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,peterz@infradead.org,ojeda@kernel.org,nathan@kernel.org,kees@kernel.org,tj@kernel.org,jeffxu@chromium.org,mkoutny@suse.com,kernel@jfarr.cc,brauner@kernel.org,rdunlap@infradead.org,brgerst@gmail.com,masahiroy@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,inwardvessel@gmail.com,willemb@google.com,kerneljasonxing@gmail.com,paul.chaignon@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,chenridong@huaweicloud.com,lance.yang@linux.dev,jiayuan.chen@linux.dev,linux-kernel@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  4 Feb 2026 09:28:42 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260203071033.1709445-2-tariqt@nvidia.com>
 
---===============6939426097549955783==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 0c8bf0b5c..70a00da54 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -13503,7 +13510,9 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
->  		return &link->link;
->  	}
+Tue, Feb 03, 2026 at 08:10:29AM +0100, tariqt@nvidia.com wrote:
+>From: Or Har-Toov <ohartoov@nvidia.com>
 >
-> -	fd = bpf_link_create(map->fd, 0, BPF_STRUCT_OPS, NULL);
-> +	link_opts.cgroup.relative_fd = OPTS_GET(opts, relative_fd, 0);
-> +
-> +	fd = bpf_link_create(map->fd, 0, BPF_STRUCT_OPS, &link_opts);
-
-The expected_revision field from bpf_struct_ops_opts is defined in the public
-API but doesn't appear to be forwarded here. bpf_link_create() reads
-opts->cgroup.expected_revision for BPF_STRUCT_OPS, and similar functions like
-bpf_program__attach_cgroup_opts() forward all fields including expected_revision.
-
-Was the expected_revision field intentionally left unused, or should there be a
-line here like:
-
-    link_opts.cgroup.expected_revision = OPTS_GET(opts, expected_revision, 0);
-
-Note: A later commit in this series (e83943e72 "libbpf: Support passing
-user-defined flags for struct_ops") adds forwarding for the flags field, but
-expected_revision remains unused through the end of the series.
-
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index dfc37a615..5aef44bcf 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -920,6 +920,20 @@ bpf_program__attach_cgroup_opts(const struct bpf_program *prog, int cgroup_fd,
->  struct bpf_map;
+>The current devlink resource infrastructure only supports device-level
+>resources. Some hardware resources are associated with specific ports
+>rather than the entire device, and today we have no way to show resource
+>per-port.
 >
->  LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
-> +
-> +struct bpf_struct_ops_opts {
-> +	/* size of this struct, for forward/backward compatibility */
-> +	size_t sz;
-> +	__u32 flags;
-> +	__u32 relative_fd;
-> +	__u64 expected_revision;
-                ^^^^^^^^^^^^^^^^^
-The expected_revision field is defined here but is not read by
-bpf_map__attach_struct_ops_opts() in libbpf.c, so any value set by users
-will be silently ignored.
+>Add support for registering and querying resources at the port level,
+>allowing drivers to expose per-port resource limits and usage.
+>
+>Example output:
+>
+>  $ devlink port resource show
+>  pci/0000:03:00.0/196608:
+>    name max_SFs size 20 unit entry
+>  pci/0000:03:00.1/262144:
+>    name max_SFs size 20 unit entry
+>
+>  $ devlink port resource show pci/0000:03:00.0/196608
+>  pci/0000:03:00.0/196608:
+>    name max_SFs size 20 unit entry
+>
+>Signed-off-by: Or Har-Toov <ohartoov@nvidia.com>
+>Reviewed-by: Shay Drori <shayd@nvidia.com>
+>Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
+>Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+>---
+> Documentation/netlink/specs/devlink.yaml |  23 ++
+> include/net/devlink.h                    |   8 +
+> include/uapi/linux/devlink.h             |   2 +
+> net/devlink/netlink.c                    |   2 +-
+> net/devlink/netlink_gen.c                |  32 ++-
+> net/devlink/netlink_gen.h                |   6 +-
+> net/devlink/port.c                       |   3 +
+> net/devlink/resource.c                   | 282 ++++++++++++++++++-----
+> 8 files changed, 301 insertions(+), 57 deletions(-)
 
-> +	size_t :0;
-> +};
+Way too big for a single patch. Could you split it in logical chunks
+please?
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+>diff --git a/Documentation/netlink/specs/devlink.yaml b/Documentation/netlink/specs/devlink.yaml
+>index 837112da6738..0290db1b8393 100644
+>--- a/Documentation/netlink/specs/devlink.yaml
+>+++ b/Documentation/netlink/specs/devlink.yaml
+>@@ -2336,3 +2336,26 @@ operations:
+>             - bus-name
+>             - dev-name
+>             - port-index
+>+
+>+    -
+>+      name: port-resource-get
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21665371660
+Why this is not aligned with DEVLINK_CMD_RESOURCE_* ?
+$ git grep CMD_RESOURCE_ include/uapi/linux/devlink.h
+include/uapi/linux/devlink.h:   DEVLINK_CMD_RESOURCE_SET,
+include/uapi/linux/devlink.h:   DEVLINK_CMD_RESOURCE_DUMP,
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit follows standard libbpf API extension patterns with consistent naming and structure typical of experienced kernel developers.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: The expected_revision field in the public API struct is silently ignored, which could confuse users but does not cause system instability or crashes.
+I'm aware that DEVLINK_CMD_RESOURCE_DUMP only implements "do" now, but I
+think both should be named the same, no?
 
---===============6939426097549955783==--
+
+>+      doc: Get port resources.
+>+      attribute-set: devlink
+>+      dont-validate: [strict]
+>+      do:
+>+        pre: devlink-nl-pre-doit-port
+>+        post: devlink-nl-post-doit
+>+        request:
+>+          value: 85
+>+          attributes: *port-id-attrs
+>+        reply: &port-resource-get-reply
+>+          value: 85
+>+          attributes:
+>+            - bus-name
+>+            - dev-name
+>+            - port-index
+>+            - resource-list
+>+      dump:
+>+        request:
+>+          attributes: *dev-id-attrs
+>+        reply: *port-resource-get-reply
+
+[...]
+
+
+>-int devl_resource_register(struct devlink *devlink,
+>-			   const char *resource_name,
+>-			   u64 resource_size,
+>-			   u64 resource_id,
+>-			   u64 parent_resource_id,
+>-			   const struct devlink_resource_size_params *size_params)
+>+static int
+>+devl_resource_reg_by_list(struct devlink *devlink,
+
+
+can't this be "register"?
+
+Also, why "by_list"? Sounds odd. Could you perhaps have it as
+__devl_resource_register(). That's the usual pattern for similar
+functions here, isn't it?
+
+Also, could you do this "list" abstraction in a separate patch?
+
+
+
+>+			  struct list_head *res_list_head,
+>+			  const char *resource_name, u64 resource_size,
+>+			  u64 resource_id, u64 parent_res_id,
+>+			  const struct devlink_resource_size_params *params)
+> {
+> 	struct devlink_resource *resource;
+> 	struct list_head *resource_list;
+>@@ -341,9 +344,10 @@ int devl_resource_register(struct devlink *devlink,
+> 
+> 	lockdep_assert_held(&devlink->lock);
+> 
+>-	top_hierarchy = parent_resource_id == DEVLINK_RESOURCE_ID_PARENT_TOP;
+>+	top_hierarchy = parent_res_id == DEVLINK_RESOURCE_ID_PARENT_TOP;
+> 
+>-	resource = devlink_resource_find(devlink, NULL, resource_id);
+>+	resource = devlink_resource_find_by_list(res_list_head, NULL,
+>+						 resource_id);
+> 	if (resource)
+> 		return -EEXIST;
+> 
+>@@ -352,15 +356,15 @@ int devl_resource_register(struct devlink *devlink,
+> 		return -ENOMEM;
+> 
+> 	if (top_hierarchy) {
+>-		resource_list = &devlink->resource_list;
+>+		resource_list = res_list_head;
+> 	} else {
+>-		struct devlink_resource *parent_resource;
+>+		struct devlink_resource *parent_res;
+> 
+>-		parent_resource = devlink_resource_find(devlink, NULL,
+>-							parent_resource_id);
+>-		if (parent_resource) {
+>-			resource_list = &parent_resource->resource_list;
+>-			resource->parent = parent_resource;
+>+		parent_res = devlink_resource_find_by_list(res_list_head, NULL,
+>+							   parent_res_id);
+>+		if (parent_res) {
+>+			resource_list = &parent_res->resource_list;
+>+			resource->parent = parent_res;
+> 		} else {
+> 			kfree(resource);
+> 			return -EINVAL;
+>@@ -372,46 +376,78 @@ int devl_resource_register(struct devlink *devlink,
+> 	resource->size_new = resource_size;
+> 	resource->id = resource_id;
+> 	resource->size_valid = true;
+>-	memcpy(&resource->size_params, size_params,
+>-	       sizeof(resource->size_params));
+>+	memcpy(&resource->size_params, params, sizeof(resource->size_params));
+> 	INIT_LIST_HEAD(&resource->resource_list);
+> 	list_add_tail(&resource->list, resource_list);
+> 
+> 	return 0;
+> }
+>+
+>+/**
+>+ * devl_resource_register - devlink resource register
+>+ *
+>+ * @devlink: devlink
+>+ * @resource_name: resource's name
+>+ * @resource_size: resource's size
+>+ * @resource_id: resource's id
+>+ * @parent_resource_id: resource's parent id
+>+ * @params: size parameters
+>+ *
+>+ * Generic resources should reuse the same names across drivers.
+>+ * Please see the generic resources list at:
+>+ * Documentation/networking/devlink/devlink-resource.rst
+>+ *
+>+ * Return: 0 on success, negative error code otherwise.
+>+ */
+>+int devl_resource_register(struct devlink *devlink, const char *resource_name,
+>+			   u64 resource_size, u64 resource_id,
+>+			   u64 parent_resource_id,
+>+			   const struct devlink_resource_size_params *params)
+>+{
+>+	return devl_resource_reg_by_list(devlink, &devlink->resource_list,
+>+					      resource_name, resource_size,
+>+					      resource_id, parent_resource_id,
+>+					      params);
+>+}
+
+[...]
