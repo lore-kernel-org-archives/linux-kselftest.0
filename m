@@ -1,58 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A9B3E8C48
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 10:33:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6563D4109
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 10:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770201235; cv=none; b=gYOUFYMsWCRHjmE1lB7qBZezy832swSoRqUhpMwmB98o/RpB4iLUNTyhlMBfq4ySEWPPtwFAc2r0+yaMpMxi1Agy9/Hid4a9upDlNfGHQrMMsyNb6kNIZ06zc1ecs/YZx/Tkp0TFSfd3MYSAJ2ZPVdkTUiDTnU8cTrXmeIQywRg=
+	t=1770201365; cv=none; b=lwDeMObSXNshQfTAiL9RJBBhstQqqlIm9gI5mOG7Brm7WPztzB/qcL+etZxMEmTmN9TxMJPGBtRIj2tT8NNGSMXug07PrXRWytNaJ1vMN9TfTdcsu6I1WiPQBf1RhG4sTndX7aRiwNNzpTnN7ZSwjUYhLGEuBOoT8im6GPH/Je0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770201235; c=relaxed/simple;
-	bh=5OSL+7WcWh98AmsDv3ZmrtGEZRnhu6O+5lr9ibRn8JM=;
+	s=arc-20240116; t=1770201365; c=relaxed/simple;
+	bh=ptoiRVAlZGzIJyLYt+jTEV9MYD0gUd7D7nxLeNRCiIg=;
 	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JSncVhPjrsMzVxvt4DmKXsCwpKW8eD4P5y6MgA60eUFY10665cRMLNAF0niwocTGsyfgVSgd2UgT768+be0U4rnIt1NCul7P9379KlrDE1CbSu8YBcChsWa2Pu8vKiJE0AZa5lE0LeQD6IxLeYRDKenYFAzbbkIVa5ALPHIjeYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jR/iRkSa; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=GA7xdkexb4zz2v5Uit0at3ozonArhETfQPWiRGApISVytI3sB14/vk0pqbdYpJsdA+xyTkAnkazQUUMqwQOH+lw2sq4OYi76PXHsTebmYWFihyiZv6GJjUlKMhaULSEChJVWGwOBHtzcUSARY8QvFaa67V+LgwKPWkFqcNAnkCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqWKQBFc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jR/iRkSa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12113C2BCB5
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 10:33:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqWKQBFc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E478EC4AF09
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 10:36:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770201235;
-	bh=5OSL+7WcWh98AmsDv3ZmrtGEZRnhu6O+5lr9ibRn8JM=;
+	s=k20201202; t=1770201364;
+	bh=ptoiRVAlZGzIJyLYt+jTEV9MYD0gUd7D7nxLeNRCiIg=;
 	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=jR/iRkSaXDd6bkJ1onH7EvTLRK0L1C+N/CFUwmCRwXHTRkCbf4LEFnbBg8akH2uFG
-	 Uyj+l8CtalAnpfFIGmodm+NX6rWX2vigajIUNlAroVRy3iO7T8c1LroI2Lxnw4n3C7
-	 jy9wVZCKRYav8UTieeL343zfayOpPbIifthjy5zmvzyF9kG13GerPJRlfofbO+jBKF
-	 w4/Hpz0aFs1WBpKIr+qqZriA5J8BmqEb4cxHhn7iRgfU3IpDX44u2KEawyIvp87Voz
-	 itQOX2/zZE6gBEDWG1oHxCscT2O5FwYz4ewyZ4rv/FADugbCUWavafGW0YJUzsJj9n
-	 FHS68cBjxymXw==
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-124a677c9afso3920084c88.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 02:33:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV1tl4uYS6+rN0PSAI1D6pW8TCm5kwnlG0+LsqbbQSNYOWOvAOEhOf1g6YagprAQYBe/9FU+OKC15wI5Aacslk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6D2gPm7HIshUtomLNNrC3o6LYohdIqHJg4uz2y2xyag3Hpq/x
-	UTOAQfNFLWCdaPmUwWsiN7iA6Ppi/P+SvA/X7Mar4R//2gLdZGN9kOyUo7RjK/ZbtemafbqcMXE
-	Itc8jj9TzhBD/xe9ka+2BvT+coVk1A5g7vHW2xQy1Qg==
-X-Received: by 2002:a05:7022:311:b0:123:3500:b688 with SMTP id
- a92af1059eb24-126f478f004mr1069615c88.19.1770201234321; Wed, 04 Feb 2026
- 02:33:54 -0800 (PST)
+	b=oqWKQBFcDJcd9f1QJy9XjVcA2AhXIvgR3hr3U79caPl44alCys5qm2+XEX3tgyW4l
+	 V+/BErkKPFstKGNeY39aDWJyx7dJi/qgGt+mXizf87eKJmtjjJfT4YnIvmlX/8j3Rn
+	 SdMaQYw/TrdP30BEfT3TjivfQXCLQQmxwQdFFgku8cjEzjqAJzwJFUEAqQ7kKIVdKX
+	 /N0MkioTnzlqoDvPMK2w+bsxSgdDdfM1RzIPxdvKG+kH1MQ7w1RkDHZb0eeRvUuS7G
+	 uqGOckrxqoHj2ACuXx6czvL6LAatrcNr0qsDVrNkNsnr+We6kmxk6lyyJ9cbHs7mmB
+	 ELFLsYKx7VqyQ==
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-126ea4e9694so5760422c88.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 02:36:04 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWUKq3LcbVUY9uKzWsvXpscmVeoyAP5cPzBUzZuZGxrQYLv3uEp9kdsqAKqmQsSFxkAo0zFrBhAlIh2iHSxqEQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxx1+E5GnI7WIbOLwdkoqxPup/lIyW5y1HYROKY6+NuVNyaBL2Q
+	rjP5cWibxxw8egIwoFatK64o0GbKmPgYGmO7tbiRdTh6cA9r44VU6bNOSMQw2x8ufggoNOb6km5
+	5wUVMvCxDguP8ffzLo1ZkzoP3UZjyUY8jGV3kbxMH0Q==
+X-Received: by 2002:a05:7022:1a85:b0:123:2c98:f6ac with SMTP id
+ a92af1059eb24-126f477cf3fmr1038188c88.12.1770201364221; Wed, 04 Feb 2026
+ 02:36:04 -0800 (PST)
 Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 4 Feb 2026 04:33:50 -0600
+ HTTPREST; Wed, 4 Feb 2026 04:36:00 -0600
 Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 4 Feb 2026 04:33:50 -0600
+ HTTPREST; Wed, 4 Feb 2026 04:36:00 -0600
 From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260203061059.975605-4-tzungbi@kernel.org>
+In-Reply-To: <20260203061059.975605-5-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203061059.975605-1-tzungbi@kernel.org> <20260203061059.975605-4-tzungbi@kernel.org>
-Date: Wed, 4 Feb 2026 04:33:50 -0600
-X-Gmail-Original-Message-ID: <CAMRc=Mf=gUMEaeExH6mVrhMSNWbCchRfkrugr492Ccp-j3V8Ag@mail.gmail.com>
-X-Gm-Features: AZwV_QhEv-yhMkubasYNV84XftIGHjdrMbauFxWu6WSjB5e2tMs6x5Bsi0Ob9Uc
-Message-ID: <CAMRc=Mf=gUMEaeExH6mVrhMSNWbCchRfkrugr492Ccp-j3V8Ag@mail.gmail.com>
-Subject: Re: [PATCH v2 03/11] gpio: sysfs: Remove redundant check for struct gpio_chip
+References: <20260203061059.975605-1-tzungbi@kernel.org> <20260203061059.975605-5-tzungbi@kernel.org>
+Date: Wed, 4 Feb 2026 04:36:00 -0600
+X-Gmail-Original-Message-ID: <CAMRc=McJjJNsrG7ZfWYQTBb2-8CgV4OVqZKhSFJDw=cTB0r=dA@mail.gmail.com>
+X-Gm-Features: AZwV_QjU2SVHMmU9hsEFQVuFDP83BW1jovz7xlKNYthT1RHWjVgH8VnPNfzupmc
+Message-ID: <CAMRc=McJjJNsrG7ZfWYQTBb2-8CgV4OVqZKhSFJDw=cTB0r=dA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/11] gpio: Ensure struct gpio_chip for gpiochip_setup_dev()
 To: Tzung-Bi Shih <tzungbi@kernel.org>
 Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
 	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
@@ -64,99 +64,15 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
 	Danilo Krummrich <dakr@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linusw@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 3 Feb 2026 07:10:50 +0100, Tzung-Bi Shih <tzungbi@kernel.org> said:
-> gpiochip_sysfs_unregister() is only called by gpiochip_remove() where
-> the struct gpio_chip is ensured.
->
-> Remove the redundant check.
+On Tue, 3 Feb 2026 07:10:51 +0100, Tzung-Bi Shih <tzungbi@kernel.org> said:
+> Ensure struct gpio_chip for gpiochip_setup_dev().  This eliminates a few
+> checks for struct gpio_chip.
 >
 > Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
-> v2:
-> - No changes.
->
-> v1: https://lore.kernel.org/all/20260116081036.352286-9-tzungbi@kernel.org
->
->  drivers/gpio/gpiolib-sysfs.c | 9 +--------
->  drivers/gpio/gpiolib-sysfs.h | 6 ++++--
->  drivers/gpio/gpiolib.c       | 2 +-
->  3 files changed, 6 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/gpio/gpiolib-sysfs.c b/drivers/gpio/gpiolib-sysfs.c
-> index cd553acf3055..8e6b09d8b559 100644
-> --- a/drivers/gpio/gpiolib-sysfs.c
-> +++ b/drivers/gpio/gpiolib-sysfs.c
-> @@ -1048,11 +1048,10 @@ int gpiochip_sysfs_register(struct gpio_device *gdev)
->  	return 0;
->  }
->
-> -void gpiochip_sysfs_unregister(struct gpio_device *gdev)
-> +void gpiochip_sysfs_unregister(struct gpio_device *gdev, struct gpio_chip *chip)
->  {
->  	struct gpiodev_data *data;
->  	struct gpio_desc *desc;
-> -	struct gpio_chip *chip;
->
->  	scoped_guard(mutex, &sysfs_lock) {
->  		data = gdev_get_data(gdev);
-> @@ -1066,12 +1065,6 @@ void gpiochip_sysfs_unregister(struct gpio_device *gdev)
->  		kfree(data);
->  	}
->
-> -	guard(srcu)(&gdev->srcu);
-> -
-> -	chip = srcu_dereference(gdev->chip, &gdev->srcu);
-> -	if (!chip)
-> -		return;
-> -
->  	/* unregister gpiod class devices owned by sysfs */
->  	for_each_gpio_desc_with_flag(chip, desc, GPIOD_FLAG_SYSFS) {
->  		gpiod_unexport(desc);
-> diff --git a/drivers/gpio/gpiolib-sysfs.h b/drivers/gpio/gpiolib-sysfs.h
-> index b794b396d6a5..93debe8e118c 100644
-> --- a/drivers/gpio/gpiolib-sysfs.h
-> +++ b/drivers/gpio/gpiolib-sysfs.h
-> @@ -8,7 +8,8 @@ struct gpio_device;
->  #ifdef CONFIG_GPIO_SYSFS
->
->  int gpiochip_sysfs_register(struct gpio_device *gdev);
-> -void gpiochip_sysfs_unregister(struct gpio_device *gdev);
-> +void gpiochip_sysfs_unregister(struct gpio_device *gdev,
-> +			       struct gpio_chip *chip);
->
->  #else
->
-> @@ -17,7 +18,8 @@ static inline int gpiochip_sysfs_register(struct gpio_device *gdev)
->  	return 0;
->  }
->
-> -static inline void gpiochip_sysfs_unregister(struct gpio_device *gdev)
-> +static inline void gpiochip_sysfs_unregister(struct gpio_device *gdev,
-> +					     struct gpio_chip *chip)
->  {
->  }
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index a6dd07be126c..3137e6f1108a 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -1281,7 +1281,7 @@ void gpiochip_remove(struct gpio_chip *gc)
->  	struct gpio_device *gdev = gc->gpiodev;
->
->  	/* FIXME: should the legacy sysfs handling be moved to gpio_device? */
-> -	gpiochip_sysfs_unregister(gdev);
-> +	gpiochip_sysfs_unregister(gdev, gc);
 
-I understand the intention here but I really don't like passing both gc and
-gdev here. We can get the address of the gpio_device from gpio_chip so why not
-do this and pass only variable?
+Same comment as patch 3. I don't like seeing both gpio_chip and gpio_device
+being passed to the same function. If you already dereferenced gpio_chip, pass
+it on its own and get the address of the associated devices from its member
+pointer.
 
 Bartosz
-
->  	gpiochip_free_hogs(gc);
->  	gpiochip_free_remaining_irqs(gc);
->
-> --
-> 2.53.0.rc2.204.g2597b5adb4-goog
->
->
