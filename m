@@ -1,93 +1,93 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C773DA7E4
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 19:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C966F393DC8
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 19:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770234535; cv=pass; b=WIA1whrje/Ceq1/OGgqeHBjVOyaq2nBdcbOHas1TlijRZMmEmPuLWLrhgKmTnG2L87GjZSfU1ZZQjBtFT1x/yusUxhe4ArcEBABUPRmTk59utyVP+zyLJuD2iNT0zeoWkgi3CxEf0VsUXbUj7fJVigadqNn80gAyMMDSDnEGMak=
+	t=1770234540; cv=pass; b=Zxbvf7tXwVhv+k3cPlZJoOWV/W+SqsLHnQ2zDkfXTI0nzpoBkTIMgwH1B0KOvNChQmueA+e32Ub+l5sxx4Q+Gs4rwY+6MrIH/CU1pndyLY7+SEoRXOIO9CO325PPiF8LVFfQDbNC0VqZWMBpTMR9NnpfzO116A0fHez5pZZZj8A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770234535; c=relaxed/simple;
-	bh=bSIrMjvVryS3QuF3cPDJgDoly4qpEwj7FUTfJRKsTHs=;
+	s=arc-20240116; t=1770234540; c=relaxed/simple;
+	bh=B3y43fdvkCJvjh5Z6KJwL8Qv+EAMqv2LGtVQzZKKa94=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R5YtRnT0v9KfWjI8RTvtt14ijsItqJCXWbl9WTd9INDzuGz+UgdJhpdX2PfHYfx/XxvNmPNvnOAmuuogzgkj+RaE6AoS5ATgJY3mRQuwQ+1S3a6nuQNfl8d+g5wr9dc9QJYXb8AeVXTia4nDVeJ+xB3IuoVltypyXtUyhWadxLg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TnHVWCsR; arc=pass smtp.client-ip=209.85.216.44
+	 To:Cc:Content-Type; b=aeb2zUEo9IIjRVIdYBv3VRZ1HBc8GA0Xd/8mmxY1XGiG+GtLaeIapsKUzz63g2tSrDktGSIcC2Od5LQc9eaD55xHxLGlIm3laSEUtJAfqKxRkZEUuq0m8Xc7cAPF43rlqRkpQZbqfrti2dj0WSnYfpXkruZayktdNf6pCIfFRic=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y+DkgA+a; arc=pass smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TnHVWCsR"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34ab8e0df53so55601a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 11:48:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770234535; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y+DkgA+a"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c5e051a47ddso49947a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 11:49:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770234540; cv=none;
         d=google.com; s=arc-20240605;
-        b=ZfrH2NSos09+qEhlUB2VXEo6xw5OVUH5H/u8WrNgkCMeKILvmQNtz6v9qT/gTM6YKi
-         lLfONy6JgwvOrEGW7D2GmHyZ1z173XPOA0q8IOpmFniL7XRsXBpc9vLFrxmcGsF+oFHR
-         JtEw2vKqHdpvMS5DnRuUw4JShFRnQh99fPtUoiPQ1/Nx5fK95cyDJQjM0lGncDh91Tdc
-         aC/l4Ccjnm2K55ZKYzu0osA1Yle0XaSj+PzEWjvNcYLMhAyNEbcIwPxHVo3RGWOkaeY6
-         TnKnunrkjdmpH8Y/ZntKwXmd06iF6x219req2FePKqSQzHLb+Hfu7JoQVTTUjGh6m3+2
-         wxOg==
+        b=FQgGTGRn7c76TV/PljYcr8lfThZQCQmjeVgytNxrJYTAsoek8w0aKml9L6DnIjVCN4
+         E7cqSWhmYuNxic/l5zpSjGkuahdTQf3VpczQv5qv+0D3pYEKiY/9ViqYj7KB+uEkvvX+
+         KBK6LGCUDtH4w5qOQsmO+M9xBi92O90PnnDMXs/SrTGSK9t6Ao1bpy78b+BSzCSrIvjU
+         /hlnGe2p3+h3PDQFaFCcFneI0z2u52oXVXMe8lh8jwQbD5iaQoYCfdwLz2H7ha2VD7e0
+         OGnvsB5EPmfUjSpySWBOV6EvYYkgn0clApIqU5xTx1/9HuWMh0l6dXU9jp8/b+CldAtq
+         4Lbg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=MhxIQ4idA8yZgMj8bntXp33AUjuSpj6i0GkwuCvW47c=;
-        fh=v2L76k77CreziOeWZg6FhQxevssVAAkaNLLD5n35QNE=;
-        b=lhahgwWzyPV+6DhH+p2zzsnqtV86gH4NhCW6X10bVQFUWodrke2PoT9WJGgA8toMiX
-         08gjpO37Z2nyn2evLqnokrzfELeYaXrjtttwOyIMC+SYO5vYjvav6YmbhPDkqPwRFYlA
-         ouHNSdVi4ZxdlidH9QfXYCY/maUa8VBo8IwoTSuHdmMGpeQvgv2LiKxPjfPlaUXQqYIs
-         khKgBLCtKs6xh5ex8WXUsR1ZwJUvYL8XGX7Qv9VfEw/iNF/5X2lcIKJUJZbaPAK5Du89
-         cIBP47a4aa0SHGcXfDvpM13yTS0PqDoBTlaZ1hFsSrxFfNv0kpO5j6NYEvQGdXSWnK7L
-         ktvg==;
+        bh=ou3bUaOU6pyPsxirJGD47BajZ+kCq3l+P77vnFSOEKM=;
+        fh=wsvyMoM78nyGNZ0ILOyf1MJ9I4/jg2DSckqAFGi2y3k=;
+        b=Bwht6WrUaWYsfBOYgO9VoR7vlcimQVTsYGSic/pzj9mxEfFuHqDTxytVQ0QlbRN7PI
+         Wfjyk8N6DYkii19gGOITlzNfcPrf2b4OA54KQjXGwCrwc/1WcyFcu1h1vAyPXfjLsUW9
+         AZkh6ffa8BhbJOSsaI8DhLhLCZgPCSTHZDTa9w3+bevLGPGrVw0fBVUOp2zFjYK6wUCV
+         zZkIVCyrSF8MWOkhDGAKBwnJl+fJr52rPSLT3mCqE8u3p6qTpqGrqzdGturHnM28shSg
+         XPrimOh6rKH7d+wxHW1qJTg7cg/C1Yk+7g6DWU7ZNt9/AbAfJPrVpOIYTEaAjePXnCh5
+         AI5w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770234535; x=1770839335; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770234540; x=1770839340; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MhxIQ4idA8yZgMj8bntXp33AUjuSpj6i0GkwuCvW47c=;
-        b=TnHVWCsRX5CuO4JStAQwX9v1LRMLvYS4IZ0izbBLMbh08SU0RpvFQ30w4lAnaiS04H
-         gpWmHtyvk2ZSPTKJV5k0FWbOZwbL2aEWRWMWRrdKbJw/WvtVMxunDgQ184sqPyeVAfqF
-         NpYlL41FpyFwtnFq2HIADB7oYkA0iLNEBEbNmgNEm9II6NH0nMSMzOuXy0ifosmoUoQs
-         0OZAaCKfD4F/XY1dTLgGtoP7nlZtjnEYjsJEkNDlpHB37DAK8Hok+zdZK+CX4DVNWWNw
-         zkNXLw/VLiHk3i+Qx6Ysd1raLdeR1kQr6eQ0D0C+zwoqm/i48nQ3hYou1Px5f63qdrnx
-         bWZw==
+        bh=ou3bUaOU6pyPsxirJGD47BajZ+kCq3l+P77vnFSOEKM=;
+        b=Y+DkgA+aINdjpTwfL4D9odDSkqgXwawF9kQcOARx3c9RvxscRiza7UdtNemb3S0W0x
+         IOcShVmT3D+XKC8GwvNRBTojGU4xDupCX6Om5xv0NRME6GBsoft7/eA/eApWZV85xDjm
+         8SRFX2NIkeDb0BhHskW/XbrGTcs04Xl3Kl97RXd3kkWhtRITGXQx0lxhB5VhOhIQYOtm
+         I+Bp312iaQwUFUgYkHiiBlCmhbnr+6HZlbn70t0DnJ7NTZDHXecb3RMyM2AccrxLatVq
+         TvKUv+4WU4a0VFlxqQl9tbRCRgxRaEv95LI4tsLdjHjpKr1+zp0y+AjUbfrVXoldvWZi
+         75iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770234535; x=1770839335;
+        d=1e100.net; s=20230601; t=1770234540; x=1770839340;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=MhxIQ4idA8yZgMj8bntXp33AUjuSpj6i0GkwuCvW47c=;
-        b=ETeE2+JwNer2WfMnCTpfGneANWCV/XwO/9ZNKgAV/K5HjlkOpyYb4Hdnl3rh6vqC4p
-         sYiMuzvgue9LMeEryvnDqOfIK0qdPuw/c4P49i5/ruazKko2dLoz5W3bBmLsXrukU8bh
-         E29E0R8jQ8aeia2R8teSo4fs+E8cE0qmlU0JtXJJtb6V+VV1FpTzjtZ45RxJQPiMMUXN
-         rLtkqUKjiNaKTyPzPBtQOluO9JqbbAqylMbify4Aof7kXjxtCYnCk175W3KQn64eIYXf
-         QisZ0B4A8x82tBBEiJTJbnhQ/Hu9ycb3JThF5uP5HsILsnSPMAg8pGW16JdXLXgNu5yM
-         98TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUu7JXi/530WUkSHc7K9x5Y7WPVoJXVC39bzMfTChwGpthpBsqLFxRI3eOqnjVY7KXuw50DUadub+XGvhmepI0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx72My47EQI7FmXdAcZxBLQydrUSvJR9dQr70K8X8acOIpk1auV
-	myQdq/kkPppE9S6XshClX4Ordd10IZhrBHt510s19uzDMIGWSAbOnULt4HBTDeAUsTOgSQTR9/V
-	/MdtbZV21ut/tsNpUQQINcbti0/I4u8M=
-X-Gm-Gg: AZuq6aJ9cLZZltMBUmePPuIsjySfHDPwi3bcBJBqqHBB0aJf9SbfA3IzxnRgyR/NR+6
-	9ssvDyB7OQnra9C409RPrxZJkZnRen1GKHoQOK0/AeH/ZcAdGOZJAacVLNkzZDoeGNXTCileW4t
-	SQkigOY4bciBMXdKIHrgdmoj0UL+EHkY1+stk6cLXjajco+qKzQTxs7EexozDE7r8xc6rDLo9wj
-	EHHoI+//eK6GyWUfzM12A60K73QINcerXvg8GUNJ/qxz5ko5/TawZk0OkcgSbVkO0DoNjmHCkcv
-	pj4yb5AtjV4=
-X-Received: by 2002:a17:90b:3f45:b0:340:a1a8:eb87 with SMTP id
- 98e67ed59e1d1-354871f13dfmr3876158a91.35.1770234535011; Wed, 04 Feb 2026
- 11:48:55 -0800 (PST)
+        bh=ou3bUaOU6pyPsxirJGD47BajZ+kCq3l+P77vnFSOEKM=;
+        b=bqdPFFcc0aVB5xYe5PVDfzpF1YALTfaShoB1K3udB8Fo0g+yoOcssRrgivirNAapYG
+         ApnrERTOxWP8YrI3aWHLQl+DQGQloIxOOnYMBoYviLh/k+f/NrvqQZTKTwIO8JxjuJuh
+         EaKM4teRypiUwA4wHLcMDkGRjHk7htz8I8E207O387WJIMHd7dQxfoQFLdWf+MCEvnDr
+         Mchc9/xPm6huONwAE+RJbFp8r6oh8+6egilYxoWy08uvZ1o5ZnWEnz5TIhw77YSPm+2+
+         IIr0NvM9rax/agF+Q6zjBKDaJXLv6WG/CBO0nrTqEIQpNR5UDi12Nom373qN0gXRYcUR
+         6HAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVcx7UxKHNcMKmtV+xOdlk/t2Tkge4eUWhzedL823tZyee6c1g57MJJTVv4i32r+eJGgjewfhGuhqwHK1h4H/c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2aD9EdcDXsf0Rm9+M1I/RP3e3RgRGrPC2ti2xh1bdmxg9gXge
+	dyc7xHNvnYfp8+sljucHD4TK2WGZYk4WFkf5jG8s8PeyyigPr9r1/4bgwoVb8CVVUbruycBtDvX
+	2T6jkRwEnA7P0AgidtGJUlidg/fucU0s=
+X-Gm-Gg: AZuq6aLFZwMUOUCuc6XYB3smeWKGRMujQvxeTHjlDTeNN2hBfrECtLpG3t6epIxgk7Q
+	vXjcbukbwZuR2mY2hZVZDTDsSAQU/xwMo+AW3Id31khlz5dr07pou4CqCiAwhn0e398/ofhh1bB
+	wEBYHP6o2CU7wU8m5Nz9kZigwUbLLm1nbvm79JQfSgT23mVHCD7IANGnMYb6zCE4y+0R/3duhfr
+	W2NmTidUBj96CpsFoXn7c53dPzUcsY1IuSal26hyiiDsqvaGSUOv7NQEEUa3DtnBB/zIS7pq4xN
+	NJsRKLzgwlQ=
+X-Received: by 2002:a17:90b:35c8:b0:340:b86b:39c7 with SMTP id
+ 98e67ed59e1d1-354870e4f05mr3605002a91.11.1770234540184; Wed, 04 Feb 2026
+ 11:49:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202144046.30651-1-leon.hwang@linux.dev> <20260202144046.30651-3-leon.hwang@linux.dev>
-In-Reply-To: <20260202144046.30651-3-leon.hwang@linux.dev>
+References: <20260202144046.30651-1-leon.hwang@linux.dev> <20260202144046.30651-4-leon.hwang@linux.dev>
+In-Reply-To: <20260202144046.30651-4-leon.hwang@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 4 Feb 2026 11:48:39 -0800
-X-Gm-Features: AZwV_QidYTjvoEYC0f1oARTkbpeV2p90PM7rVpmH2nsmMkKOPAJuwbUzYyRsbSk
-Message-ID: <CAEf4BzZ7Sa2dAUyw5kjaLiwtr7q4_H97uTpb2bsbqFuiy153fg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 2/9] libbpf: Add support for extended bpf syscall
+Date: Wed, 4 Feb 2026 11:48:43 -0800
+X-Gm-Features: AZwV_QgJ7Bm5-XV_jmFavQ2YE0pj8PhX0zAxJIGqH2A1WMmMepCAC4lZG3IYaek
+Message-ID: <CAEf4Bza+n2-tq0cGvAit23OduWbqO6teF211iPnOfp0s_ZwEPw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 3/9] bpf: Refactor reporting log_true_size for prog_load
 To: Leon Hwang <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
@@ -106,30 +106,126 @@ Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 2, 2026 at 6:41=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
+On Mon, Feb 2, 2026 at 6:42=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
 ote:
 >
-> To support the extended BPF syscall introduced in the previous commit,
-> introduce the following internal APIs:
+> The next commit will add support for reporting logs via extended common
+> attributes, including 'log_true_size'.
 >
-> * 'sys_bpf_ext()'
-> * 'sys_bpf_ext_fd()'
->   They wrap the raw 'syscall()' interface to support passing extended
->   attributes.
-> * 'probe_sys_bpf_ext()'
->   Check whether current kernel supports the BPF syscall common attributes=
-.
+> To prepare for that, refactor the 'log_true_size' reporting logic by
+> introducing a new struct bpf_log_attr to encapsulate log-related behavior=
+:
+>
+>  * bpf_prog_load_log_attr_init(): initialize the log fields, which will
+>    support extended common attributes in the next commit.
+>  * bpf_log_attr_finalize(): handle log finalization and write back
+>    'log_true_size' to userspace.
 >
 > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  tools/lib/bpf/bpf.c             | 36 +++++++++++++++++++++++++++++++++
->  tools/lib/bpf/features.c        |  8 ++++++++
->  tools/lib/bpf/libbpf_internal.h |  3 +++
->  3 files changed, 47 insertions(+)
+>  include/linux/bpf.h          |  4 +++-
+>  include/linux/bpf_verifier.h | 10 ++++++++++
+>  kernel/bpf/log.c             | 35 +++++++++++++++++++++++++++++++++++
+>  kernel/bpf/syscall.c         |  8 +++++---
+>  kernel/bpf/verifier.c        | 13 +++----------
+>  5 files changed, 56 insertions(+), 14 deletions(-)
 >
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index cd9b96434904..d4dbcc7ad156 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2913,7 +2913,9 @@ int bpf_check_uarg_tail_zero(bpfptr_t uaddr, size_t=
+ expected_size,
+>                              size_t actual_size);
+>
+>  /* verify correctness of eBPF program */
+> -int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr=
+, u32 uattr_size);
+> +struct bpf_log_attr;
+> +int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr=
+,
+> +             struct bpf_log_attr *attr_log);
+>
+>  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>  void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 8355b585cd18..c805b85b6f7a 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -631,6 +631,16 @@ static inline bool bpf_verifier_log_needed(const str=
+uct bpf_verifier_log *log)
+>         return log && log->level;
+>  }
+>
+> +struct bpf_log_attr {
+> +       u32 offsetof_true_size;
+> +       u32 uattr_size;
+> +       bpfptr_t uattr;
+> +};
+> +
+> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *attr_log, union bpf=
+_attr *attr,
+> +                               bpfptr_t uattr, u32 size);
+> +int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier=
+_log *log);
+> +
+>  #define BPF_MAX_SUBPROGS 256
+>
+>  struct bpf_subprog_arg_info {
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index a0c3b35de2ce..ff579fcba36f 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -863,3 +863,38 @@ void print_insn_state(struct bpf_verifier_env *env, =
+const struct bpf_verifier_st
+>         }
+>         print_verifier_state(env, vstate, frameno, false);
+>  }
+> +
+> +static void bpf_log_attr_init(struct bpf_log_attr *attr_log, int offseto=
+f_true_size, bpfptr_t uattr,
+> +                             u32 uattr_size)
+> +{
+> +       memset(attr_log, 0, sizeof(*attr_log));
+> +       attr_log->offsetof_true_size =3D offsetof_true_size;
+> +       attr_log->uattr_size =3D uattr_size;
+> +       attr_log->uattr =3D uattr;
+> +}
+> +
+> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *attr_log, union bpf=
+_attr *attr,
+> +                               bpfptr_t uattr, u32 size)
+> +{
+> +       bpf_log_attr_init(attr_log, offsetof(union bpf_attr, log_true_siz=
+e), uattr, size);
+> +       return 0;
+> +}
+> +
+> +int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier=
+_log *log)
+> +{
+> +       u32 log_true_size;
+> +       size_t size;
+> +       int err;
+> +
+> +       if (!log)
+> +               return 0;
 
-LGTM
+can this ever happen? why guard against this?
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> +
+> +       err =3D bpf_vlog_finalize(log, &log_true_size);
+> +
+> +       size =3D sizeof(log_true_size);
+> +       if (attr->uattr_size >=3D attr->offsetof_true_size + size &&
+> +           copy_to_bpfptr_offset(attr->uattr, attr->offsetof_true_size, =
+&log_true_size, size))
+> +               err =3D -EFAULT;
+
+minor nit: return -EFAULT;
+
+> +
+> +       return err;
+> +}
 
 [...]
