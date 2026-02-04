@@ -1,87 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3888628980E;
-	Wed,  4 Feb 2026 02:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FF1261B96;
+	Wed,  4 Feb 2026 02:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770171260; cv=none; b=SDROBgzO1s5TJDjm7NX8tlVLxzw1b/b2pYB7tT+z/TpfElcxaUWHAFFcaReLAcXiaEictDgUL2BaVw1kTrYK0+KJ8R67benghV3GGXJI9wLaOhYmvL3smaq/nR/LGPFPYNBiDaUAv65adeIr8HuyYpmJkzOUtyq7FzXKxr2GjEU=
+	t=1770172014; cv=none; b=WqLKk68YYwuoMwVTZXG2Q5uA782IL6f68TDkFBEDPJmyPaGYfqt3W1SFjemFksLyeEgBFx8yr0ISeuFKky2UbO0jQcmdifMJJavBGqlZDqJMlE8zSR/5cfD3d/HeHjWzfaRNGgF/69/+hiPA+4ndoi6tmDCGRl8bBq55fYK97Mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770171260; c=relaxed/simple;
-	bh=Un5Ao1i2HGVwBkHeGiBEE4V1wnLL8+sWjW5dihBWKWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mrhGrKpo0M82IWfvHm9xmpJaTSi7Li3scXLHf4Gz79TCSdfNRWUPvAxIASgqTq7ysW9PGMMEOetnvBZxk1WQDMMimhcj5slUuMBSeqelhDLEK7cbWYKIjAbV0y69O+U5MpUpGi3TdYq9gL8X83XaWNDbUOeKci1lYO74YQBG4G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahKnpcSm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770172014; c=relaxed/simple;
+	bh=7iHhDhmroXilqUpiAl9DOqvbDNkQ3iGMApcbhd1avnY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iPqc000Sxl511uT4bjIvxMEq4ros+hA6S4PcDN1qfsK7t11Ct6y9MNwMn4q4DJ2fVWkqdHxHOyMoQcPeKZzgb1G93eIgxnC0I3IcYBnOmZDFNvKx9tvCHT0oH483bMc3P+2Q7yRRC5DIjteyAms3MmNEeL1pMW2TjvL9fdarSoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKvYfzvz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahKnpcSm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A16C116D0;
-	Wed,  4 Feb 2026 02:14:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKvYfzvz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C50C116D0;
+	Wed,  4 Feb 2026 02:26:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770171259;
-	bh=Un5Ao1i2HGVwBkHeGiBEE4V1wnLL8+sWjW5dihBWKWg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ahKnpcSmufQ3wRTr42dWbiKE7df9t2yNNMbdJ3PL3ErArqxtA1GnF/QZPXp92wDvd
-	 o3Lm98oUZW7JqTwjjmTKSqfuiFMRs89EjNWBP2HLD0lRKrzCO5/p75QYIp8htjSgU7
-	 9zJyAxpZ104+Qz+nii7qNXjMPiYQ+x6qSuEDOwMuwwhM204c6XTvxdJsmRFlEpwQWo
-	 2PM9Pr0Rny2kIejzlOgIwamZpR/3I5FwLT0AQHe0YAVn2ZWGVwajMNET/YCWFBMgiE
-	 +oDHQ/nj05/t0SGH+pSN5l40TOXlmIKDlWrU/bZLtHpovfuuJEJ7r9AhOR1LYX7u4H
-	 Ww3lE9XYnpq/A==
-Date: Wed, 4 Feb 2026 02:14:15 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Johan Hovold <johan@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] driver core: disable revocable code from build
-Message-ID: <aYKrdxw3fYf-y52P@google.com>
-References: <20260124170535.11756-1-johan@kernel.org>
- <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh>
- <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
- <aYHm9pr0e7myeqS3@hovoldconsulting.com>
- <2026020315-twins-probe-d988@gregkh>
- <2026020307-rimmed-dreamy-5a67@gregkh>
+	s=k20201202; t=1770172013;
+	bh=7iHhDhmroXilqUpiAl9DOqvbDNkQ3iGMApcbhd1avnY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YKvYfzvzIEOFw3H6Ta6HXVlrqr2uY2VY+MW3ygbDI4Bba9vW/wbnBccsDoPZ39fUq
+	 WCg75jlFiVPoYxIxHKlbtb1oWy8qlUwMo0kF2tMVQNTXYx56vyvAbaPiXLYNUNKhcN
+	 Qcl8kOj4B1s/fU74SB2YE870qep5V/cIEJQoIWG/5tvgrlfKu8kH9k5EQANbZZwGPb
+	 MINbRdMXlh3PbV3iR5UyHaNYrMD+6erJRf1KxT12MvFdJzc2E8SfelZ7XKye44d5tF
+	 vJG4maBSIqG2bBmYxSZmYkEbza+MXbnNzgiFsqY4baE+VIWC6X1s8yv97lV4Ah5ah/
+	 d17UnfjAlX2qQ==
+Date: Tue, 3 Feb 2026 18:26:52 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, Jiri Pirko
+ <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed
+ <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Mark Bloch
+ <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman
+ <gal@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>, Shay Drori
+ <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, Or Har-Toov
+ <ohartoov@nvidia.com>
+Subject: Re: [PATCH net-next 4/5] selftest: netdevsim: Add devlink port
+ resource test
+Message-ID: <20260203182652.39a3620d@kernel.org>
+In-Reply-To: <ce09e17d-2b74-4bda-a8ec-352c92659a6e@redhat.com>
+References: <20260203071033.1709445-1-tariqt@nvidia.com>
+	<20260203071033.1709445-5-tariqt@nvidia.com>
+	<ce09e17d-2b74-4bda-a8ec-352c92659a6e@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2026020307-rimmed-dreamy-5a67@gregkh>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 03, 2026 at 01:30:37PM +0100, Greg Kroah-Hartman wrote:
-> The revocable code is still under active discussion, and there is no
-> in-kernel users of it.  So disable it from the build for now so that no
-> one suffers from it being present in the tree, yet leave it in the
-> source tree so that others can easily test it by reverting this commit
-> and building off of it for future releases.
-> 
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Tue, 3 Feb 2026 11:16:45 +0100 Paolo Abeni wrote:
+> # Error: netdevsim: Exceeded number of supported fib entries.
+> # Error: netdevsim: Exceeded number of supported fib entries.
+> # kernel answers: Operation not permitted
+> # TEST: resource test                                                 [ OK ]
+> # Command "resource" not found
+> # Command "resource" not found
+> # TEST: port resource test                                            [FAIL]
+> # Failed to show port resource for netdevsim/netdevsim10/0
+> # TEST: dev_info test                                                 [ OK ]
+> # TEST: empty reporter test                                           [ OK ]
+> # kernel answers: Success
+> # kernel answers: Success
+> # ./devlink.sh: line 614: echo: write error: Invalid argument
+> # Error: netdevsim: User setup the recover to fail for testing purposes.
 
-And also:
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 11b6515ce3d0..56e44a98d6a5 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -17,7 +17,6 @@ TARGETS += damon
- TARGETS += devices/error_logs
- TARGETS += devices/probe
- TARGETS += dmabuf-heaps
--TARGETS += drivers/base/revocable
- TARGETS += drivers/dma-buf
- TARGETS += drivers/ntsync
- TARGETS += drivers/s390x/uvdevice
-
-With that,
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+I suppose this is because iproute2 needs patching. Tariq, could you
+post the user space bits or share a link where we can pull them from?
+I'll revive this in PW once we have CLI updated..
