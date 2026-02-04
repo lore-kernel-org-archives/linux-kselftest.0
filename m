@@ -1,86 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF60129C325
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 04:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF012DECA1
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 04:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770180426; cv=none; b=DHe0uhAK+hoGGHfCOEFQKSDXtb2MGWm+xMEEmVjbXzKd9XhTIwD9u28is1bt9NJ5ygYzLDVsvEelFqgf77Lt0BPYFayP64X2gexH+YEAI+X3rlyY8mvP03mGEUTDOW2N+TsvVy2Oh+NxuYvLZZ3Q+AHhVNUuH7WDlLjkPILqcZA=
+	t=1770180542; cv=none; b=khQTSUNwpE1I2u2nrDPIhQk80hVxx4wr3rhguLzcPiQWyqUr2LQPjbuOhikugFSySkq5YQXrFCOyiFesieP58XptPp9UGRHduKR0TErY0ZJa4Zb/f5P8XF6Z2/7+EbUPacA6nTyz7LfiEP86HYHp8Pt+rwzppsnMcrIXzo3Xkkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770180426; c=relaxed/simple;
-	bh=rLaRsKu7CREx5s6WYnmkbwSOEU+GT9F+qtG079ipLls=;
+	s=arc-20240116; t=1770180542; c=relaxed/simple;
+	bh=+czzITXfo7mastxUUGo/aH9kzFCTW8TcppL4zk1k7Fc=;
 	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=PaIqSjt1bhAs7Qh4hj5drAf0jwzhaNjreuy/0lum6SeCVaNOfNmcWmPrjEc7YqoDls4lSL1UqEYUxN3ONga7CJdcGWlvsJY6kmDtzI+/YHjrIu6tDiQsJT8WSjoIT4T75bDJHFNYmLFbQFYp7UGvZ25MhJwATcWaDBdyTYSVH60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U4sXaOyV; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=q7TMnUtl; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=MIIgN6RT2q8yQea8DIx1cQ1SrTV2yCKVx12IJe5wDl9miXrSXq7XkcO1xnSHe9X7NOLWr9oJ2nIIRwMxA7sqGHRCMPNODdyfutRuI/5vih3dT05CYxqzgFfTFoooK7AjKLaWsZbMnv7h5Mq5O/aObsCsEn3/Kkz8LYkSKDtx9xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cCQo1LBZ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=U9jlkeow; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U4sXaOyV";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="q7TMnUtl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cCQo1LBZ";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="U9jlkeow"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770180424;
+	s=mimecast20190719; t=1770180541;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3Y69ODIoURgASqSeV5hS5rWlgMMnpQL1tFExn4zKMhQ=;
-	b=U4sXaOyViNSG89fS1tPa8XQLQX59JLbi3xTkKbGmvmtTxSnAkXUjOgwKSqqA+JZjReq18o
-	wqIbZp9b4to0b/4V8kxa4QNE4L946bY8CWkzU456etcWFAJLEfriVRv+wWcgigPD5Xfv+e
-	eOstd03M6i6/UGb/DOt2tcXd4jAup5c=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=q/2+xTfIjtGMBVQrmAcGgdqv6JTdvdwaafvX4/TR3+8=;
+	b=cCQo1LBZqlfjBkg4gysCS+BbhYlcka2gDJoi2JuvkfbXxdd/Bpd6wjuYKxmiAgsRiEGPXt
+	tK37x7QkPkqEibximlxDIrePo/KVWkJ9u1T7iiI3fBd2groycbG3xoiil4McpbR6gJL8k+
+	wAXzbHToa49myNxKFS+Fe/xTKJO1fa0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-6-f78cCP7UM9K34O4Liz53fA-1; Tue, 03 Feb 2026 23:47:03 -0500
-X-MC-Unique: f78cCP7UM9K34O4Liz53fA-1
-X-Mimecast-MFC-AGG-ID: f78cCP7UM9K34O4Liz53fA_1770180423
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-88a39993e5fso16652196d6.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 20:47:03 -0800 (PST)
+ us-mta-41-VPOSW_SUOnuX9YgvEn_ROA-1; Tue, 03 Feb 2026 23:49:00 -0500
+X-MC-Unique: VPOSW_SUOnuX9YgvEn_ROA-1
+X-Mimecast-MFC-AGG-ID: VPOSW_SUOnuX9YgvEn_ROA_1770180540
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-5014ad65e3eso23642421cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Feb 2026 20:49:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770180423; x=1770785223; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1770180540; x=1770785340; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=3Y69ODIoURgASqSeV5hS5rWlgMMnpQL1tFExn4zKMhQ=;
-        b=q7TMnUtlLpR71OVK5RBkXvhVFslYIer3Xjk6uD94PVju8pZsHHDJK3aZR17nir5LfF
-         cL0vI6BZK0giaecQla+3OcyXvy+lAQJg0ngGa1EtaAG5w+42Ia30CKZPltc4DqhGYs5a
-         /plzFsLGqbSdsCTcGqK4DquF9NQv0HPErfUCSIuOjWA9ZslXetgjxALYykIt/Zc9RhoH
-         ne2MDXncSiNInnHq3OQAumAaDxEVmOLTCeFjSqdqWER6U8MQTqApO0u1rSoUt1poV4Vb
-         UhM0rwKQvGRfVLtzopFcht1ho1lS9hgVJgj7x1Er6UbkDN3USsX3BzTgFMupHOUxZ5lL
-         GNfA==
+        bh=q/2+xTfIjtGMBVQrmAcGgdqv6JTdvdwaafvX4/TR3+8=;
+        b=U9jlkeowKB825g+fHJm8BA3l4ZzLi5VmD2p3xUl1VBfloyCW8byabYLZ7WB4SB1IEe
+         A5HlqjP4Qa2nnuf6AIeGCEAXmRw/VjWkgxOaWF9l+kG9SkJhGOE+ax2NTeMcARDmve44
+         UiTF/FcYm0j4u/SxvMCirwwTtclfBq+T2JmqBopIp83TH3WewNUr+ffnekDfVYwR/Uai
+         i6dwJkSk+hW2uF3y1GA5eCd3CVArpPTD3QN/4etULZe39Q4EIniXeB0Dcnf6ZDaqmylL
+         OGmtHLDT7rkVTO2W3isBmljcbI1RI9UQXbr804htjVzihquR9hfbxYUMkw2zIx6OLwZL
+         WPWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770180423; x=1770785223;
+        d=1e100.net; s=20230601; t=1770180540; x=1770785340;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Y69ODIoURgASqSeV5hS5rWlgMMnpQL1tFExn4zKMhQ=;
-        b=giYgi0rj5smdv3FrYj8OuUCWuVuH+cMgxJFQiNRihHrYcY5lQij3b9UUk+ssbbn1Fz
-         iVHFDpeccA3TbhlH2/eBF5VOnYygcsuRMzM4Ptvmbk42/yBUqhHJNfBwnYS82HO3OgsC
-         Hs3xp3nc1y+GAOHOrV1C85y795mzwUOO6/YpdltGK1tLk4RvAj6Sjx2ChR5Pkx2GyBE6
-         EMHvlrKIblJqcKoInOjcSUlRauIWlTlqUEXPEsTjtNRWCZG2DGJ2m6tks4hItuEG9KK5
-         RaJxVs82bKE0gDB/Q4uz+Ga+rglpoS5jify6ZvCvWaxao3lwsp2Hkj4qQ09gGwYQy7Cv
-         Etaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ05NN7x8vNX+uQ4JfA/wzFzr6kWU3/Gj6IeayQUzfOkGx2WmD/eP0WhPZZ3ZxUSeYRQwT97wN+GEtqOtzOAk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyatoViY+rY/SY15a+9x6RI35lxYwJhV1T2zkXHhvoO8tt7xfm0
-	VzkPHebLkQ2/iJd7pRefmzer3rLqNYIWgWrm/hB2mcWTuXC+C/0veQz4YsfHVHk2dPJGKY84WNR
-	mutU3/17F3frAwjLawVvUM9mi0CjtPNZ3X3SRRZXJNAVRxzElhYE7GfrpRbR92LZkfr/T6g==
-X-Gm-Gg: AZuq6aIeTq7tBKDuJHoj9PN3XedvCY63XparKIhXuX4tsyLd4rqXt8a49ZUE/uwVpg/
-	4Mrajwmx6xz08eYaZp6P3XRo1iYD10MJPSUTkHqb9f17mtAj4oQhI3EekPSvobGvfh6oHzIdOoG
-	JGhIhjNf79UG8mGZVP9kQsMGe80nznHexojlW3GeqtIu6EDy+Xvsnf++ZdK/gQeRAGJqx7yyoA+
-	TxE3aLUqEWxaMZepxyXt6aOaOhYCxt9rSZyFC4Cef6jfEzp+w64RGTXOthZZBTjbDlh6zR6tCDe
-	dQyvNxNm9ZEVynn6Q70lbSNeCQuV9I43bmPV2AvwTKQMWB7Sj+VFJ7KrsLWoHb78/hSTri9KkeI
-	QRcBCu4ThdA064IK4HKTmJOgxJgp8TJ8m1QhEnqr6C1ojYtw23vn5GgJH
-X-Received: by 2002:a05:620a:4805:b0:8c5:38ee:2fad with SMTP id af79cd13be357-8ca2fa5ea0amr230627085a.84.1770180423170;
-        Tue, 03 Feb 2026 20:47:03 -0800 (PST)
-X-Received: by 2002:a05:620a:4805:b0:8c5:38ee:2fad with SMTP id af79cd13be357-8ca2fa5ea0amr230625685a.84.1770180422748;
-        Tue, 03 Feb 2026 20:47:02 -0800 (PST)
+        bh=q/2+xTfIjtGMBVQrmAcGgdqv6JTdvdwaafvX4/TR3+8=;
+        b=A7cuS9y2qf15aNHzHx2j9oeUOukcAYet2HEfiel4KZoUck2OqjmQ1ro5TrKAMOkIrm
+         UMxAkWrs0UQ4KN5QuZp5NiNa9QO6qO1hxr2ZQs5tppC7QamHN8+qRM0Dlr4yW23r6MHS
+         Y9DIHqrsQ0Ie61GNCldZ1nuKc5mJYa9us5m1ujqi7x7j498Hqqw5nREj00gDiqVBL2Fk
+         L0cBYbD/RDOYg5ddOwqdPp+j/0idS37yIKfsmCLrCRxsB3lfVbEKdtm7aQfu+mkN6dNW
+         iWcdH+DZLL+crBg3UZVSSQnzDYcVCNn2pj8LsWoZx8aVJ/e5uItmNqkYLb9gOvOJ4+hS
+         Hwdw==
+X-Forwarded-Encrypted: i=1; AJvYcCWOhzn3TcYHa5z1+ZhMqp2g2wiSYqq93jR1k4ABerEUHI4208ZcWP61vxFnX1qhkeHYXVVecQUgKVai4SqV7Vk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTt3+pWS1wsA45cIZBL585C4CqJ3ldanfJuEoy/zHj9y37dwey
+	Oz8dyXJ72c9IqDRl/J+/fWurRK29mvHm87Jz2pX9UM7nEo2/0fGATX0cyu0N/hWycWx7Xf881LL
+	SFYQywBOUGbDMCgJrU/pZ1j1WMyDYb6CvDztOhUkSr5vTzzaJEOpvqfsCvfbpOEXc3WrHsQ==
+X-Gm-Gg: AZuq6aLXb5rPezb3mwFaIltdh/OHEZiGR5H08qBEJ4Ya7I+PeOCz6A6psjQMsUwYIP6
+	AKJuV1gl8mJ+fdYa8yIQTwHjxSiA6P6Brr5k8eSmgxuJxfgKgPwxfTE7TUzL8kDWWM4osJ6h6rn
+	6Umwiqc2kVXlgM+/5v8sXHQVn5GUynhaLvOrs4aRorizZ/RtglnPXtjBAs19FsZ22pHM64abc5o
+	toFlG13urYAB185lvgRY6Q0koak0EDUhyvVV75qRWwv0V/Pbj7NgG2IeW/oFykhQ+MUbtQsT0ax
+	8/00DAEaaQcVzVPWOTzpohbrjmbgvD+5RET2IPEUsWBEA7EqT+VEvZh4Ax6TTJWsQtbPEmJVhZP
+	OGpmtc44JuisM7QzwOgCJk/txb1bUHvTKCvj6X/pJR1A5hs370S5q8LmC
+X-Received: by 2002:a05:622a:11c9:b0:505:e529:11e9 with SMTP id d75a77b69052e-5060930a73cmr78411511cf.36.1770180539526;
+        Tue, 03 Feb 2026 20:48:59 -0800 (PST)
+X-Received: by 2002:a05:622a:11c9:b0:505:e529:11e9 with SMTP id d75a77b69052e-5060930a73cmr78411211cf.36.1770180539100;
+        Tue, 03 Feb 2026 20:48:59 -0800 (PST)
 Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89521d2788asm11831606d6.47.2026.02.03.20.47.01
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89521d3cbb1sm11553216d6.55.2026.02.03.20.48.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Feb 2026 20:47:02 -0800 (PST)
+        Tue, 03 Feb 2026 20:48:58 -0800 (PST)
 From: Waiman Long <llong@redhat.com>
 X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <83d0426d-92ea-4e2b-83bc-62998218b212@redhat.com>
-Date: Tue, 3 Feb 2026 23:47:00 -0500
+Message-ID: <cd44676f-ab39-4b59-8215-7986b5a3e21b@redhat.com>
+Date: Tue, 3 Feb 2026 23:48:57 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -104,45 +104,230 @@ Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20260202201144.1669260-1-longman@redhat.com>
  <20260202201144.1669260-4-longman@redhat.com>
- <1fff6bd2-b62a-48d9-9408-af3b5552815e@huaweicloud.com>
+ <da771006-c1ca-435a-bdec-793e866a2b49@huaweicloud.com>
 Content-Language: en-US
-In-Reply-To: <1fff6bd2-b62a-48d9-9408-af3b5552815e@huaweicloud.com>
+In-Reply-To: <da771006-c1ca-435a-bdec-793e866a2b49@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2/3/26 9:51 PM, Chen Ridong wrote:
+On 2/3/26 9:44 PM, Chen Ridong wrote:
 >
 > On 2026/2/3 4:11, Waiman Long wrote:
->> --- a/kernel/time/timer_migration.c
->> +++ b/kernel/time/timer_migration.c
->> @@ -1559,8 +1559,6 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
->>   	cpumask_var_t cpumask __free(free_cpumask_var) = CPUMASK_VAR_NULL;
->>   	int cpu;
+>> The current cpuset partition code is able to dynamically update
+>> the sched domains of a running system and the corresponding
+>> HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
+>> "isolcpus=domain,..." boot command line feature at run time.
+>>
+>> The housekeeping cpumask update requires flushing a number of different
+>> workqueues which may not be safe with cpus_read_lock() held as the
+>> workqueue flushing code may acquire cpus_read_lock() or acquiring locks
+>> which have locking dependency with cpus_read_lock() down the chain. Below
+>> is an example of such circular locking problem.
+>>
+>>    ======================================================
+>>    WARNING: possible circular locking dependency detected
+>>    6.18.0-test+ #2 Tainted: G S
+>>    ------------------------------------------------------
+>>    test_cpuset_prs/10971 is trying to acquire lock:
+>>    ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at: touch_wq_lockdep_map+0x7a/0x180
+>>
+>>    but task is already holding lock:
+>>    ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
+>>
+>>    which lock already depends on the new lock.
+>>
+>>    the existing dependency chain (in reverse order) is:
+>>    -> #4 (cpuset_mutex){+.+.}-{4:4}:
+>>    -> #3 (cpu_hotplug_lock){++++}-{0:0}:
+>>    -> #2 (rtnl_mutex){+.+.}-{4:4}:
+>>    -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
+>>    -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
+>>
+>>    Chain exists of:
+>>      (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
+>>
+>>    5 locks held by test_cpuset_prs/10971:
+>>     #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
+>>     #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x260/0x5f0
+>>     #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b6/0x5f0
+>>     #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at: cpuset_partition_write+0x77/0x130
+>>     #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
+>>
+>>    Call Trace:
+>>     <TASK>
+>>       :
+>>     touch_wq_lockdep_map+0x93/0x180
+>>     __flush_workqueue+0x111/0x10b0
+>>     housekeeping_update+0x12d/0x2d0
+>>     update_parent_effective_cpumask+0x595/0x2440
+>>     update_prstate+0x89d/0xce0
+>>     cpuset_partition_write+0xc5/0x130
+>>     cgroup_file_write+0x1a5/0x680
+>>     kernfs_fop_write_iter+0x3df/0x5f0
+>>     vfs_write+0x525/0xfd0
+>>     ksys_write+0xf9/0x1d0
+>>     do_syscall_64+0x95/0x520
+>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>
+>> To avoid such a circular locking dependency problem, we have to
+>> call housekeeping_update() without holding the cpus_read_lock() and
+>> cpuset_mutex. The current set of wq's flushed by housekeeping_update()
+>> may not have work functions that call cpus_read_lock() directly,
+>> but we are likely to extend the list of wq's that are flushed in the
+>> future. Moreover, the current set of work functions may hold locks that
+>> may have cpu_hotplug_lock down the dependency chain.
+>>
+>> One way to do that is to defer the housekeeping_update() call after
+>> the current cpuset critical section has finished without holding
+>> cpus_read_lock. For cpuset control file write, this can be done by
+>> deferring it using task_work right before returning to userspace.
+>>
+>> To enable mutual exclusion between the housekeeping_update() call and
+>> other cpuset control file write actions, a new top level cpuset_top_mutex
+>> is introduced. This new mutex will be acquired first to allow sharing
+>> variables used by both code paths. However, cpuset update from CPU
+>> hotplug can still happen in parallel with the housekeeping_update()
+>> call, though that should be rare in production environment.
+>>
+>> As cpus_read_lock() is now no longer held when
+>> tmigr_isolated_exclude_cpumask() is called, it needs to acquire it
+>> directly.
+>>
+>> The lockdep_is_cpuset_held() is also updated to check the new
+>> cpuset_top_mutex.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset.c        | 103 +++++++++++++++++++++++++++-------
+>>   kernel/sched/isolation.c      |   4 +-
+>>   kernel/time/timer_migration.c |   3 +-
+>>   3 files changed, 86 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index e98a2e953392..d2f51f40f87e 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -65,14 +65,28 @@ static const char * const perr_strings[] = {
+>>    * CPUSET Locking Convention
+>>    * -------------------------
+>>    *
+>> - * Below are the three global locks guarding cpuset structures in lock
+>> + * Below are the four global/local locks guarding cpuset structures in lock
+>>    * acquisition order:
+>> + *  - cpuset_top_mutex
+>>    *  - cpu_hotplug_lock (cpus_read_lock/cpus_write_lock)
+>>    *  - cpuset_mutex
+>>    *  - callback_lock (raw spinlock)
+>>    *
+>> - * A task must hold all the three locks to modify externally visible or
+>> - * used fields of cpusets, though some of the internally used cpuset fields
+>> + * As cpuset will now indirectly flush a number of different workqueues in
+>> + * housekeeping_update() to update housekeeping cpumasks when the set of
+>> + * isolated CPUs is going to be changed, it may be vulnerable to deadlock
+>> + * if we hold cpus_read_lock while calling into housekeeping_update().
+>> + *
+>> + * The first cpuset_top_mutex will be held except when calling into
+>> + * cpuset_handle_hotplug() from the CPU hotplug code where cpus_write_lock
+>> + * and cpuset_mutex will be held instead. The main purpose of this mutex
+>> + * is to prevent regular cpuset control file write actions from interfering
+>> + * with the call to housekeeping_update(), though CPU hotplug operation can
+>> + * still happen in parallel. This mutex also provides protection for some
+>> + * internal variables.
+>> + *
+>> + * A task must hold all the remaining three locks to modify externally visible
+>> + * or used fields of cpusets, though some of the internally used cpuset fields
+>>    * and internal variables can be modified without holding callback_lock. If only
+>>    * reliable read access of the externally used fields are needed, a task can
+>>    * hold either cpuset_mutex or callback_lock which are exposed to other
+>> @@ -100,6 +114,7 @@ static const char * const perr_strings[] = {
+>>    * cpumasks and nodemasks.
+>>    */
 >>   
->> -	lockdep_assert_cpus_held();
->> -
->>   	if (!works)
->>   		return -ENOMEM;
->>   	if (!alloc_cpumask_var(&cpumask, GFP_KERNEL))
->> @@ -1570,6 +1568,7 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
->>   	 * First set previously isolated CPUs as available (unisolate).
->>   	 * This cpumask contains only CPUs that switched to available now.
->>   	 */
->> +	guard(cpus_read_lock)();
->>   	cpumask_andnot(cpumask, cpu_online_mask, exclude_cpumask);
->>   	cpumask_andnot(cpumask, cpumask, tmigr_available_cpumask);
+>> +static DEFINE_MUTEX(cpuset_top_mutex);
+>>   static DEFINE_MUTEX(cpuset_mutex);
 >>   
-> It may lead to lockdep issue.
+>>   /*
+>> @@ -111,6 +126,8 @@ static DEFINE_MUTEX(cpuset_mutex);
+>>    *
+>>    * CSCB: Readable by holding either cpuset_mutex or callback_lock. Writable
+>>    *	 by holding both cpuset_mutex and callback_lock.
+>> + *
+>> + * T:	 Read/write-able by holding the cpuset_top_mutex.
+>>    */
+>>   
+>>   /*
+>> @@ -135,6 +152,13 @@ static cpumask_var_t	isolated_cpus;		/* CSCB */
+>>    */
+>>   static bool		isolated_cpus_updating;	/* RWCS */
+>>   
+>> +/*
+>> + * Copy of isolated_cpus to be processed by housekeeping_update()
+>> + */
+>> +static cpumask_var_t	isolated_hk_cpus;	/* T */
+>> +static bool		isolcpus_twork_queued;	/* T */
+>> +
+>> +
+>>   /*
+>>    * A flag to force sched domain rebuild at the end of an operation.
+>>    * It can be set in
+>> @@ -298,6 +322,7 @@ void lockdep_assert_cpuset_lock_held(void)
+>>    */
+>>   void cpuset_full_lock(void)
+>>   {
+>> +	mutex_lock(&cpuset_top_mutex);
+>>   	cpus_read_lock();
+>>   	mutex_lock(&cpuset_mutex);
+>>   }
+>> @@ -306,12 +331,13 @@ void cpuset_full_unlock(void)
+>>   {
+>>   	mutex_unlock(&cpuset_mutex);
+>>   	cpus_read_unlock();
+>> +	mutex_unlock(&cpuset_top_mutex);
+>>   }
+>>   
+>>   #ifdef CONFIG_LOCKDEP
+>>   bool lockdep_is_cpuset_held(void)
+>>   {
+>> -	return lockdep_is_held(&cpuset_mutex);
+>> +	return lockdep_is_held(&cpuset_top_mutex);
+>>   }
+>>   #endif
+>>   
+> void cpuset_lock(void)
+> {
+> 	mutex_lock(&cpuset_mutex);
+> }
 >
-> tmigr_init_isolation
-> 	guard(cpus_read_lock)()
-> 	tmigr_isolated_exclude_cpumask(cpumask)
-> 		guard(cpus_read_lock)()
+> void cpuset_unlock(void)
+> {
+> 	mutex_unlock(&cpuset_mutex);
+> }
 >
-Good catch. I haven't set up "isolcpus" in my test environment. That is 
-why this lockdep splat didn't get triggered. I will fix that in the next 
-version.
+> void lockdep_assert_cpuset_lock_held(void)
+> {
+> 	lockdep_assert_held(&cpuset_mutex);
+> }
+>
+> A potential issue is that lockdep_is_cpuset_held() only checks cpuset_top_mutex.
+> In the call chain below, only cpuset_mutex is acquired:
+>
+> rebuild_sched_domains_cpuslocked ---only cpuset_mutex is acquired
+> rebuild_sched_domains_locked
+> partition_sched_domains
+> dl_rebuild_rd_accounting
+> dl_rebuild_rd_accounting
+> dl_update_tasks_root_domain
+> dl_add_task_root_domain
+> dl_get_task_effective_cpus
+> housekeeping_cpumask
+> housekeeping_dereference_check
+> if (IS_ENABLED(CONFIG_CPUSETS) && lockdep_is_cpuset_held())
+>
+> Since lockdep_is_cpuset_held() validates cpuset_top_mutex rather than
+> cpuset_mutex, could this lead to false lockdep warnings?
 
-Cheers,
+Right, it should check for either cpuset_mutex or cpuset_top_mutex.
+
+Thanks,
 Longman
 
