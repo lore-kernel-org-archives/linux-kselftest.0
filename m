@@ -1,94 +1,93 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED2A34D38A
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 19:48:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C773DA7E4
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 19:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770234530; cv=pass; b=qvCA9hUJx3LIcWvo51nPWIEoqI+bKy/CTbKKk0xCLXmKW3bLeEDAkdxLuVali9PcRcLwM0TW/ykpiCKkU2S0/Hpifnl1h9B33xhvJXiEDedlmYC90kw12csR7ksBsl+jFDqKP0iN1Wy08my0MpGsEGsc66nDU4RED+M+gK/zQIE=
+	t=1770234535; cv=pass; b=WIA1whrje/Ceq1/OGgqeHBjVOyaq2nBdcbOHas1TlijRZMmEmPuLWLrhgKmTnG2L87GjZSfU1ZZQjBtFT1x/yusUxhe4ArcEBABUPRmTk59utyVP+zyLJuD2iNT0zeoWkgi3CxEf0VsUXbUj7fJVigadqNn80gAyMMDSDnEGMak=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770234530; c=relaxed/simple;
-	bh=JSaxY0XhGcOSeu31HU5l9vEV9baQLzqFjwH/9t5p01Q=;
+	s=arc-20240116; t=1770234535; c=relaxed/simple;
+	bh=bSIrMjvVryS3QuF3cPDJgDoly4qpEwj7FUTfJRKsTHs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OTm3mLLzsSjLAcZD5V14OA0N1MovQN3ZWJkcY2R7NIdVzmd5jVpLMGtOQsHQduoAhLCiHF4HMoZj/GjH91255wDJNrhqSzwmh7JUYA5tRxTiSiRXg+m/PvQMKOm4DuCeWKd5p3bsn8ACQQxgPqX1kxnDg/qQ0C+s1+ZscxwM2WY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cZSCuhXh; arc=pass smtp.client-ip=209.85.215.177
+	 To:Cc:Content-Type; b=R5YtRnT0v9KfWjI8RTvtt14ijsItqJCXWbl9WTd9INDzuGz+UgdJhpdX2PfHYfx/XxvNmPNvnOAmuuogzgkj+RaE6AoS5ATgJY3mRQuwQ+1S3a6nuQNfl8d+g5wr9dc9QJYXb8AeVXTia4nDVeJ+xB3IuoVltypyXtUyhWadxLg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TnHVWCsR; arc=pass smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZSCuhXh"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c635559e1c3so110167a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 11:48:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770234529; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TnHVWCsR"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34ab8e0df53so55601a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 11:48:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770234535; cv=none;
         d=google.com; s=arc-20240605;
-        b=jdOiz2Z2PK5uPcsxHX8s/d8PXJVZIMJ4YVjl+5oRQaj6yy+dk2BxVqxRhp6ducEFws
-         GOycEDcxAa4Z9xQoRdbTPJwi+RFwXoahejg8t7WW+o0w8LwvR4Pg1iIBApT0yITz6M04
-         DqZxlVHOOskbxNFBbw1Vsvo25cP/EBjavAb3iw26gENlXbRGCH02my4IEsyxGrv3p4LU
-         WITnMbIQNfxm10urjUIRYz/NboPdZ2xZfgGWtr+Bp0+bZkFXprGJBar84KOGlgc1P1J+
-         vUMt3UDknHttj40ztg7eMB/azFPwSxTZHT4ojABTsNPvo4mRmMY0lagHs1yP/l4nF/sU
-         oxbw==
+        b=ZfrH2NSos09+qEhlUB2VXEo6xw5OVUH5H/u8WrNgkCMeKILvmQNtz6v9qT/gTM6YKi
+         lLfONy6JgwvOrEGW7D2GmHyZ1z173XPOA0q8IOpmFniL7XRsXBpc9vLFrxmcGsF+oFHR
+         JtEw2vKqHdpvMS5DnRuUw4JShFRnQh99fPtUoiPQ1/Nx5fK95cyDJQjM0lGncDh91Tdc
+         aC/l4Ccjnm2K55ZKYzu0osA1Yle0XaSj+PzEWjvNcYLMhAyNEbcIwPxHVo3RGWOkaeY6
+         TnKnunrkjdmpH8Y/ZntKwXmd06iF6x219req2FePKqSQzHLb+Hfu7JoQVTTUjGh6m3+2
+         wxOg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=BqaY+jlyASjji0VRhimoxVMsJ9WH26mRw0zvhRsW3No=;
-        fh=bk8eTII4eju0AobSJyBWzjFA9hPts3UkEZzDanDmbBU=;
-        b=Js4CX2zUIUIBYIjDpa31tu0Xhd5foKMBlzv+P/Aiku3vblkfzkryUn+zWSkr5KSrx+
-         B7BnxGJSZn6QSduo2yGTSZqs5a+CIwRVpVrjpnjvE3TwU/OsWCRCCrayD0Oj0I6Eu2Mt
-         kFWk3pxM7ezLluNwSUlaACE+NzDZn31l5E+EeG256vM+K8CxpIIRLx7w6dtGxhkZNnBH
-         Uon7wafvtFf6x1a7shxdK3WzEVtrghBJLZABVyVmq+jG9sPlFwIkvVJt3o2hykWI18nN
-         KaozgBCsG3mSUoWJZ/fr1JwDJnhF0t5QCuVk4jwa9F8je47YSYQ2nrkzilLKFn9r3DDj
-         8U1w==;
+        bh=MhxIQ4idA8yZgMj8bntXp33AUjuSpj6i0GkwuCvW47c=;
+        fh=v2L76k77CreziOeWZg6FhQxevssVAAkaNLLD5n35QNE=;
+        b=lhahgwWzyPV+6DhH+p2zzsnqtV86gH4NhCW6X10bVQFUWodrke2PoT9WJGgA8toMiX
+         08gjpO37Z2nyn2evLqnokrzfELeYaXrjtttwOyIMC+SYO5vYjvav6YmbhPDkqPwRFYlA
+         ouHNSdVi4ZxdlidH9QfXYCY/maUa8VBo8IwoTSuHdmMGpeQvgv2LiKxPjfPlaUXQqYIs
+         khKgBLCtKs6xh5ex8WXUsR1ZwJUvYL8XGX7Qv9VfEw/iNF/5X2lcIKJUJZbaPAK5Du89
+         cIBP47a4aa0SHGcXfDvpM13yTS0PqDoBTlaZ1hFsSrxFfNv0kpO5j6NYEvQGdXSWnK7L
+         ktvg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770234529; x=1770839329; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770234535; x=1770839335; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BqaY+jlyASjji0VRhimoxVMsJ9WH26mRw0zvhRsW3No=;
-        b=cZSCuhXhrLuGSUtbz2sXoaUexxUrdVT5NLcOZSxKfRSXz2r40fpreN8Uyr0IpV6SA4
-         s0f+W3L3Spda6QeznSPfysNNysYSlHtXFyhK+RtrsPQCEgQKDz+EnqgAlp4iuYLFeLvy
-         uN8nvfj9kIkn1C0RrONtWHbIeOZGRLbl/J2RDyl94fHK6K/CB5ZDz0dZQf8TDU6dTHqc
-         6ksOOv8UlMzrOh/4yJN7X+zKB/0EPBMml9cjCYp0cpZMpOHxVLU3mV+MDcA9/IBxQC/0
-         e2+QdyWUkeHwzoUuqFOvoy+veth0Tv5a2zLDvFgsStpVT+iN/KxCuBYvD5pjlIc7NaUA
-         Kxeg==
+        bh=MhxIQ4idA8yZgMj8bntXp33AUjuSpj6i0GkwuCvW47c=;
+        b=TnHVWCsRX5CuO4JStAQwX9v1LRMLvYS4IZ0izbBLMbh08SU0RpvFQ30w4lAnaiS04H
+         gpWmHtyvk2ZSPTKJV5k0FWbOZwbL2aEWRWMWRrdKbJw/WvtVMxunDgQ184sqPyeVAfqF
+         NpYlL41FpyFwtnFq2HIADB7oYkA0iLNEBEbNmgNEm9II6NH0nMSMzOuXy0ifosmoUoQs
+         0OZAaCKfD4F/XY1dTLgGtoP7nlZtjnEYjsJEkNDlpHB37DAK8Hok+zdZK+CX4DVNWWNw
+         zkNXLw/VLiHk3i+Qx6Ysd1raLdeR1kQr6eQ0D0C+zwoqm/i48nQ3hYou1Px5f63qdrnx
+         bWZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770234529; x=1770839329;
+        d=1e100.net; s=20230601; t=1770234535; x=1770839335;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=BqaY+jlyASjji0VRhimoxVMsJ9WH26mRw0zvhRsW3No=;
-        b=tn47wJbQ0Lwg+JyKHndpGX8P1thuFeDZOHXq4wlWR3N/6lJY2qggjaKHQCSrvZ9INE
-         fWqnyS9QUzbizY08J8mq/1BQYJWG33QcGwi5sV3sn9NQfXIPK0Tk3akFzWQJlXpFYMpP
-         NTF5nAORLzr8Gu5XwDWjuoJBMYOnBn/hemjcJMYcuwclRiJdee5HttJEHcGOsL9huG2B
-         Fw0R+h2KCHxHzYZNiNGrbVxv6cAGLExwsfYUq2BiY4wsSq9XTTfZqTfh4lUmufBUIJ+v
-         m/2nfW1pro1EM3SR2seDMSfdDydcUgQhWmllv6CrBYp/+IhKBnsh3OqzogD8C+HVN3yA
-         pLpA==
-X-Forwarded-Encrypted: i=1; AJvYcCUsqWlZr2xVYPEbvGDmqqU/zEct/qxKiK/YL71Kj8GLzcolsVkmwWbZTPpUxBabqoZ6znu5uNero8A1QrOA9GM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCG0VEug6uszIEWtfAZnahNUW9Ouw3dVFUhGYA5RrK/Z63godP
-	UFUY4jh62Nmr3po9U4p5/E42Lj+FMqlHfi3YSsnm8KaqdgOZ4JDsr0k1DBKJlvtxkovGOodhiRv
-	S5GTuw6F20yWqZOKPWE6sBoAtf/TCwjs=
-X-Gm-Gg: AZuq6aLYccAa3X8PhEzAk7QPinrzutqBvusv8Mi/btUZOYv0yd6y+jFeve+GI5WxlgC
-	7lQqkwLxic3vNAKMcf9V8b6hXfACEKSPJK1H7RiEpUbH30JHxGyVYSA6OdQWujjGW8hDYftzQuf
-	leNzGas2MeCJYFf0OfxtLwwFmNerkhKyGaEv7eXVTSvieYdM1uOxcEvQ6Xq+X/outiykTJkd9aU
-	doqaafltFc4rNcN9H+7qGGyiQqhjCq62QRJw7nzYUz+PPSjDB/zumUfcz5xtF8ZuTB6EdRe9AlQ
-	kqQci2vJh90=
-X-Received: by 2002:a17:90b:2b43:b0:352:d0cf:9d18 with SMTP id
- 98e67ed59e1d1-3549bafc8d5mr399008a91.5.1770234529339; Wed, 04 Feb 2026
- 11:48:49 -0800 (PST)
+        bh=MhxIQ4idA8yZgMj8bntXp33AUjuSpj6i0GkwuCvW47c=;
+        b=ETeE2+JwNer2WfMnCTpfGneANWCV/XwO/9ZNKgAV/K5HjlkOpyYb4Hdnl3rh6vqC4p
+         sYiMuzvgue9LMeEryvnDqOfIK0qdPuw/c4P49i5/ruazKko2dLoz5W3bBmLsXrukU8bh
+         E29E0R8jQ8aeia2R8teSo4fs+E8cE0qmlU0JtXJJtb6V+VV1FpTzjtZ45RxJQPiMMUXN
+         rLtkqUKjiNaKTyPzPBtQOluO9JqbbAqylMbify4Aof7kXjxtCYnCk175W3KQn64eIYXf
+         QisZ0B4A8x82tBBEiJTJbnhQ/Hu9ycb3JThF5uP5HsILsnSPMAg8pGW16JdXLXgNu5yM
+         98TQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUu7JXi/530WUkSHc7K9x5Y7WPVoJXVC39bzMfTChwGpthpBsqLFxRI3eOqnjVY7KXuw50DUadub+XGvhmepI0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx72My47EQI7FmXdAcZxBLQydrUSvJR9dQr70K8X8acOIpk1auV
+	myQdq/kkPppE9S6XshClX4Ordd10IZhrBHt510s19uzDMIGWSAbOnULt4HBTDeAUsTOgSQTR9/V
+	/MdtbZV21ut/tsNpUQQINcbti0/I4u8M=
+X-Gm-Gg: AZuq6aJ9cLZZltMBUmePPuIsjySfHDPwi3bcBJBqqHBB0aJf9SbfA3IzxnRgyR/NR+6
+	9ssvDyB7OQnra9C409RPrxZJkZnRen1GKHoQOK0/AeH/ZcAdGOZJAacVLNkzZDoeGNXTCileW4t
+	SQkigOY4bciBMXdKIHrgdmoj0UL+EHkY1+stk6cLXjajco+qKzQTxs7EexozDE7r8xc6rDLo9wj
+	EHHoI+//eK6GyWUfzM12A60K73QINcerXvg8GUNJ/qxz5ko5/TawZk0OkcgSbVkO0DoNjmHCkcv
+	pj4yb5AtjV4=
+X-Received: by 2002:a17:90b:3f45:b0:340:a1a8:eb87 with SMTP id
+ 98e67ed59e1d1-354871f13dfmr3876158a91.35.1770234535011; Wed, 04 Feb 2026
+ 11:48:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202144046.30651-1-leon.hwang@linux.dev> <20260202144046.30651-9-leon.hwang@linux.dev>
-In-Reply-To: <20260202144046.30651-9-leon.hwang@linux.dev>
+References: <20260202144046.30651-1-leon.hwang@linux.dev> <20260202144046.30651-3-leon.hwang@linux.dev>
+In-Reply-To: <20260202144046.30651-3-leon.hwang@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 4 Feb 2026 11:48:35 -0800
-X-Gm-Features: AZwV_QgJy7fB-V7u2aIUi_WBvMRT4bLPItNSz_ncka0FXGNgBUOJOI58gJ1sfVA
-Message-ID: <CAEf4Bzb=96Ja38VGBr9YGGSSjaWwhkfH_oWjMJULykA-a7jZxA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 8/9] libbpf: Add syscall common attributes
- support for map_create
+Date: Wed, 4 Feb 2026 11:48:39 -0800
+X-Gm-Features: AZwV_QidYTjvoEYC0f1oARTkbpeV2p90PM7rVpmH2nsmMkKOPAJuwbUzYyRsbSk
+Message-ID: <CAEf4BzZ7Sa2dAUyw5kjaLiwtr7q4_H97uTpb2bsbqFuiy153fg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 2/9] libbpf: Add support for extended bpf syscall
 To: Leon Hwang <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
@@ -107,115 +106,30 @@ Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 2, 2026 at 6:43=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
+On Mon, Feb 2, 2026 at 6:41=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
 ote:
 >
-> With the previous commit adding common attribute support for
-> BPF_MAP_CREATE, users can now retrieve detailed error messages when map
-> creation fails via the log_buf field.
+> To support the extended BPF syscall introduced in the previous commit,
+> introduce the following internal APIs:
 >
-> Introduce struct bpf_log_opts with the following fields:
-> log_buf, log_size, log_level, and log_true_size.
->
-> Extend bpf_map_create_opts with a new field log_opts, allowing users to
-> capture and inspect log messages on map creation failures.
+> * 'sys_bpf_ext()'
+> * 'sys_bpf_ext_fd()'
+>   They wrap the raw 'syscall()' interface to support passing extended
+>   attributes.
+> * 'probe_sys_bpf_ext()'
+>   Check whether current kernel supports the BPF syscall common attributes=
+.
 >
 > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  tools/lib/bpf/bpf.c | 16 +++++++++++++++-
->  tools/lib/bpf/bpf.h | 17 ++++++++++++++++-
->  2 files changed, 31 insertions(+), 2 deletions(-)
+>  tools/lib/bpf/bpf.c             | 36 +++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/features.c        |  8 ++++++++
+>  tools/lib/bpf/libbpf_internal.h |  3 +++
+>  3 files changed, 47 insertions(+)
 >
 
 LGTM
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 9d8740761b7a..0c3e40844d80 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -209,6 +209,9 @@ int bpf_map_create(enum bpf_map_type map_type,
->                    const struct bpf_map_create_opts *opts)
->  {
->         const size_t attr_sz =3D offsetofend(union bpf_attr, excl_prog_ha=
-sh_size);
-> +       const size_t attr_common_sz =3D sizeof(struct bpf_common_attr);
-> +       struct bpf_common_attr attr_common;
-> +       struct bpf_log_opts *log_opts;
->         union bpf_attr attr;
->         int fd;
->
-> @@ -242,7 +245,18 @@ int bpf_map_create(enum bpf_map_type map_type,
->         attr.excl_prog_hash =3D ptr_to_u64(OPTS_GET(opts, excl_prog_hash,=
- NULL));
->         attr.excl_prog_hash_size =3D OPTS_GET(opts, excl_prog_hash_size, =
-0);
->
-> -       fd =3D sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
-> +       log_opts =3D OPTS_GET(opts, log_opts, NULL);
-> +       if (log_opts && feat_supported(NULL, FEAT_BPF_SYSCALL_COMMON_ATTR=
-S)) {
-> +               memset(&attr_common, 0, attr_common_sz);
-> +               attr_common.log_buf =3D ptr_to_u64(OPTS_GET(log_opts, log=
-_buf, NULL));
-> +               attr_common.log_size =3D OPTS_GET(log_opts, log_size, 0);
-> +               attr_common.log_level =3D OPTS_GET(log_opts, log_level, 0=
-);
-> +               fd =3D sys_bpf_ext_fd(BPF_MAP_CREATE, &attr, attr_sz, &at=
-tr_common, attr_common_sz);
-> +               OPTS_SET(log_opts, log_true_size, attr_common.log_true_si=
-ze);
-> +       } else {
-> +               fd =3D sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
-> +               OPTS_SET(log_opts, log_true_size, 0);
-> +       }
->         return libbpf_err_errno(fd);
->  }
->
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 2c8e88ddb674..59673f094f86 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -37,6 +37,18 @@ extern "C" {
->
->  LIBBPF_API int libbpf_set_memlock_rlim(size_t memlock_bytes);
->
-> +struct bpf_log_opts {
-> +       size_t sz; /* size of this struct for forward/backward compatibil=
-ity */
-> +
-> +       char *log_buf;
-> +       __u32 log_size;
-> +       __u32 log_level;
-> +       __u32 log_true_size;
-
-please mention in the comment here that this is an out parameter set
-by the kernel
-
-> +
-> +       size_t :0;
-> +};
-> +#define bpf_log_opts__last_field log_true_size
-> +
->  struct bpf_map_create_opts {
->         size_t sz; /* size of this struct for forward/backward compatibil=
-ity */
->
-> @@ -57,9 +69,12 @@ struct bpf_map_create_opts {
->
->         const void *excl_prog_hash;
->         __u32 excl_prog_hash_size;
-> +
-> +       struct bpf_log_opts *log_opts;
-> +
->         size_t :0;
->  };
-> -#define bpf_map_create_opts__last_field excl_prog_hash_size
-> +#define bpf_map_create_opts__last_field log_opts
->
->  LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
->                               const char *map_name,
-> --
-> 2.52.0
->
+[...]
