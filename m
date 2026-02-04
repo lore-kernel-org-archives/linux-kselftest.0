@@ -1,106 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2582BE639;
-	Wed,  4 Feb 2026 12:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB66032D0F0
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 12:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770206869; cv=none; b=WnYbtA/yetSWB1tU9FQqWgwFcXXP7uEoZkvwAJy/yhVw7qXZIoMwI90uJ3vJnlnG3y63nZlHLcC+qnjn9Hv929f4LtrH756yHc8ZgPN+X7duTF1FYIRSyMxNiJ0+9/gmN4pT+91y/p8/iF0WRnngYShcFpYw4KjBdbhZr63zNIU=
+	t=1770209238; cv=none; b=e4ryQC3wkfQTZ6aL2PghDB8Jur76sMipTB7IbZostGa9m0iYkBHfL/E5wqUqjBprYNCld1tZwUZpEb8x1Q6FJoPX1Z8WO3SRwr8DSJ7UIrW55GXVU0M7G3YZ1PWqy5tVJtmA15+qT79YtL0m0lu7sZVBsP67irfknbpqIYqtgYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770206869; c=relaxed/simple;
-	bh=Xzsj0E6vrWYH/XkemxWZu7ieGiKYV4GnOsHPNEi3sBQ=;
+	s=arc-20240116; t=1770209238; c=relaxed/simple;
+	bh=sIl8zPvTMavW7op27NWntwAoYxbkYCvD1OGJGO1W/G4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FFoesh2VfKnOqKHBA0b6DDT7x6d6pFIx7PmcfsMAf4YVb/b+9Dj0E2G4X4mcxI8RzvjM5Tu4aaTu1+dOWTsKzzthfOwQ5JlRepGcbDfdohi69JuTjaxhoJzYBhkm6nAuf8sIiOek4eKKcMif1EHpS5334eV6S4S8S7BQiYpvkes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNoj/8pH; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=CbPXcnjC4mpGnCKawrTA43gl2his5GWbscKvWap2zNYqSLRX65Vn/dkA5HtPY6kT9EhqkrH3hCAR67qs743CWa9lJn13k4zmxNuGmIPF61n29X2aZieSXHtWAq1wb8UGOSiApXUmghNCWoZTtVrLwjfzZGUMcwtufi4MH4thhvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=GW4VHNlj; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNoj/8pH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918FCC4CEF7;
-	Wed,  4 Feb 2026 12:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770206868;
-	bh=Xzsj0E6vrWYH/XkemxWZu7ieGiKYV4GnOsHPNEi3sBQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HNoj/8pHDGsxCxIsn8XFJx2+hkYhVd3cwXe67h/uc0eMOwEFO4pmsYh9knCAKu1my
-	 QipNfgCJ33OWeh9tXAZX71GrmbJYCRdA2GF+hymnAxE1qUJF/hcWfFGXZ52tVNR0Wf
-	 PT9e8Yq7TZ6xoePwmteSN51k28AN/6EQLH4FWBNanrJkae3tNC2klAMTuHztsqFsPW
-	 LX3zACkcIgRNkusYR+hZiUV+IMB0IOR0SzhZDVglcOu62ZqhWljWfW53jG4AX5Q5f7
-	 AH5+Xi83MFES9ub7BM9jR06ywYojnGO0W0j4jiH+IHwrNHxnkC5lQDEkthuOgyDkAU
-	 V7m645f6R0kAQ==
-Date: Wed, 4 Feb 2026 12:07:40 +0000
-From: Will Deacon <will@kernel.org>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
-	oleg@redhat.com, shuah@kernel.org, kees@kernel.org,
-	luto@amacapital.net, wad@chromium.org, kevin.brodsky@arm.com,
-	akpm@linux-foundation.org, charlie@rivosinc.com, ldv@strace.io,
-	anshuman.khandual@arm.com, mark.rutland@arm.com,
-	ryan.roberts@arm.com, thuth@redhat.com, song@kernel.org,
-	ada.coupriediaz@arm.com, broonie@kernel.org, pengcan@kylinos.cn,
-	liqiang01@kylinos.cn, kmal@cock.li, dvyukov@google.com,
-	reddybalavignesh9979@gmail.com, richard.weiyang@gmail.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v12 00/13] arm64: entry: Convert to Generic Entry
-Message-ID: <aYM2jM5BMRGdjnt4@willie-the-truck>
-References: <20260203133728.848283-1-ruanjinjie@huawei.com>
- <87bji552uk.ffs@tglx>
- <2699bcdc-8d56-7fe9-fa9a-a3d61476e806@huawei.com>
- <87y0l823o9.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="GW4VHNlj"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5028fb9d03bso59183051cf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 04:47:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1770209237; x=1770814037; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+U8LpVemtW+m+yu1KTxoehmwVgUgV8X5ud3ORfVCCrA=;
+        b=GW4VHNljJYFgI4mruLbg7vYCpHKew/dRjvlqzTeNn86+wrDMfx4zpIj/dioyccLJXP
+         XACl0ggJFwCgkw29MoP/25q6//IrEkYd5b1PaWKqIt2jogVrM5cjO4x8m4SXMm5gCTeq
+         7+sRa7wqOIMHi2uMMWQ4hgsHW3KpXETuwQdLYmSxbznzYiFF/OpfJ5wYd2+ZEE/Uq1FI
+         Y4nSEVvDEDY7SKTbbuouPMPgd9Kb81K7EZt/IwblUTd+zVebhGIivCskRSb47BFJPge9
+         pAIPD6qNA+nYIkrf2Ayi8x0N4WX83p8Cy9t0L1BJVFY9mZOU1Aekk1WQ1812YLGIQSQW
+         a64g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770209237; x=1770814037;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+U8LpVemtW+m+yu1KTxoehmwVgUgV8X5ud3ORfVCCrA=;
+        b=q+BHjMEgt2iOMaJMcnQ2jC84+t3Ij9Adr4Ao3R9JbMbAQCxu9hJtuRz2MDmanJH9su
+         C0o2zKCoEoD4KwzwCyTnZLB6Fdag18vvZlIRE9EkV3StT5POriY+gfg3r6wN3ZylGOCu
+         7tcxYUGH/nRMiEIwKUIKqbYNnuaEh2zmSH/7E3HWAfrR4denA9nbzTBAwfZoTtaz1Dmg
+         mIcMz2GbIe+LOBOxNQSmli/7UDzUqwtuVFykbnpKvW4ozQdgHzTYUeN4gMig0zZlXNsb
+         WFbU04BdyxsE/7ZaJv+gR1tEmFgqAgkGIn1/A9npmSUk+alwpMaT/CGIQTdkgR+yZ+3a
+         uNBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUb+jUMnqSo2aF5+4D2Zy2ZH1ouj/ByvkEeqNFzR6UsfmCAZas910+nF+nLLu9R18R6wIPPBppp0lmzWe4nQHc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyW9nye0bVv6BfeRpSrS3DFL0pbkibJsTu6VNpYicF6GXVMwcFp
+	asuCdjRbX/KMhHMlnkEIGEpVos1/W2fBjf4wqi5+IPgtIStVKlnq4YNc0TIa/JyGnK0=
+X-Gm-Gg: AZuq6aLmoDdYQnRhuwYOnxfF2mrlolorxj66sYL8lAwYB+3fwFBpvZZT0BlX7dLxnoR
+	82PjTUdSVghlblxW+wQ1ETSESAB0hb9SmKJTmIoXqClk9T0odKEyWG3eiIPKVWBPayGJ8DutNwL
+	Y7QLp7tywW9652GsZ2LnCC4+wu1nHR7cwLSGwPHqhJpJf7zI0zuj2TYI31+ImgNZaCwYT5w+6Cl
+	QP+cfMStxYmXmvOl71JocyRUS+sNeC2zDz9m6W9g2kDZoaCQJP7maTdUJItaYupUwqZ1bYKJJ5u
+	+sysoJqP++QDftKkLU+P7iSqefSAQcUvl7oAIOh5JQEfuH2YtyjLKU0tBJAiCzRtCJVaUf0ywfV
+	vB4uy9VHk7cHblqfpFKROrdH6JY7WBxkffW7LJUOpt4GUjT7vktLTky/vCuvZsNv8jS7UD0lMP5
+	RsPfjdVxpytSMRnq/EEIwkupGpJ0cXbe9XkLLEftMJ8fDHKcLoDLK2hp0DBNdpvvZMEIo=
+X-Received: by 2002:ac8:7f4d:0:b0:4ee:5fc:43d9 with SMTP id d75a77b69052e-5061c0d57d6mr32950401cf.16.1770209236488;
+        Wed, 04 Feb 2026 04:47:16 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5061c14815asm18573661cf.6.2026.02.04.04.47.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 04:47:15 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1vncHr-0000000Gzio-1QmV;
+	Wed, 04 Feb 2026 08:47:15 -0400
+Date: Wed, 4 Feb 2026 08:47:15 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: Sean Christopherson <seanjc@google.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Alexey Kardashevskiy <aik@amd.com>, cgroups@vger.kernel.org,
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+	akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
+	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org,
+	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com,
+	david@redhat.com, dmatlack@google.com, erdemaktas@google.com,
+	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com,
+	hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com,
+	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com,
+	jack@suse.cz, james.morse@arm.com, jarkko@kernel.org,
+	jgowans@amazon.com, jhubbard@nvidia.com, jroedel@suse.de,
+	jthoughton@google.com, jun.miao@intel.com, kai.huang@intel.com,
+	keirf@google.com, kent.overstreet@linux.dev,
+	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
+	mail@maciej.szmigiero.name, maobibo@loongson.cn,
+	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
+	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com,
+	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au,
+	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es,
+	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com,
+	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com,
+	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz,
+	qperret@google.com, richard.weiyang@gmail.com,
+	rick.p.edgecombe@intel.com, rientjes@google.com,
+	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org,
+	shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com,
+	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com,
+	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com,
+	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com,
+	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org,
+	wyihan@google.com, xiaoyao.li@intel.com, yan.y.zhao@intel.com,
+	yilun.xu@intel.com, yuzenghui@huawei.com, zhiquan1.li@intel.com
+Subject: Re: [RFC PATCH v1 05/37] KVM: guest_memfd: Wire up
+ kvm_get_memory_attributes() to per-gmem attributes
+Message-ID: <20260204124715.GA2328995@ziepe.ca>
+References: <cover.1760731772.git.ackerleytng@google.com>
+ <071a3c6603809186e914fe5fed939edee4e11988.1760731772.git.ackerleytng@google.com>
+ <07836b1d-d0d8-40f2-8f7b-7805beca31d0@amd.com>
+ <CAEvNRgEuez=JbArRf2SApLAL0usv5-Q6q=nBPOFMHrHGaKAtMw@mail.gmail.com>
+ <20260129003753.GZ1641016@ziepe.ca>
+ <aXqx3_eE0rNh6nP0@google.com>
+ <aYHGVQTF6RUs7r3g@yilunxu-OptiPlex-7050>
+ <20260203181618.GY2328995@ziepe.ca>
+ <aYLOZIZU0nwk+0UN@yilunxu-OptiPlex-7050>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87y0l823o9.ffs@tglx>
+In-Reply-To: <aYLOZIZU0nwk+0UN@yilunxu-OptiPlex-7050>
 
-On Wed, Feb 04, 2026 at 11:39:34AM +0100, Thomas Gleixner wrote:
-> On Wed, Feb 04 2026 at 09:28, Jinjie Ruan wrote:
-> > On 2026/2/3 22:16, Thomas Gleixner wrote:
-> >> On Tue, Feb 03 2026 at 21:37, Jinjie Ruan wrote:
-> >>> Currently, x86, Riscv, Loongarch use the Generic Entry which makes
-> >>> maintainers' work easier and codes more elegant. arm64 has already
-> >>> successfully switched to the Generic IRQ Entry in commit
-> >>> b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
-> >>> time to completely convert arm64 to Generic Entry.
-> >>>
-> >>> The goal is to bring arm64 in line with other architectures that already
-> >>> use the generic entry infrastructure, reducing duplicated code and
-> >>> making it easier to share future changes in entry/exit paths, such as
-> >>> "Syscall User Dispatch".
-> >>>
-> >>> This patch set is rebased on "sched/core". And the performance
-> >> 
-> >> Why are you using sched/core, which contains a lot of unrelated
-> >> changes. core/entry is the one which has the prerequisites and nothing
-> >> else....
-> >
-> > By the way，it looks like core/entry and arm64 for-next/entry have
-> > diverged: the first three patches of this series are already in arm64
-> > for-next/entry but missing from core/entry.
-> > Perhaps the two branches should be reconciled so that both contain the
-> > same baseline.
+On Wed, Feb 04, 2026 at 12:43:16PM +0800, Xu Yilun wrote:
+> > Which means we need VFIO to know what they are, and hopefully it is
+> > just static based on the TDISP reports..
 > 
-> The first three patches of this series are ARM specific and have nothing
-> to do with the queued core/entry changes in tip. They are independent of
-> each other and these three ARM64 changes have no business in my tree.
-> 
-> If the ARM64 folks want to apply the rest of your series then they have
-> to pull the core/entry branch into their for-next/core branch first so
-> the whole thing builds.
-> 
-> But given that the merge window opens on sunday, this is probably moot
-> anyway and the rest of this series can go on top of rc1 in the ARM64
-> tree w/o any further complications.
+> I don't think VMM need to check TDISP report. The only special thing is
+> the MSI-X mixed pages which can be figured out by standard PCI
+> discovery.
 
-Yup, the rest of the series (beyond what we've both queued) also needs
-some more review so this is all post -rc1 material.
+Either that or follow along with the guests's choices on
+shared/private.
 
-In the meantime, thanks for picking up the generic bits.
+We can't let VFIO mmap a private MMIO page, so it has to know which
+pages are private at any moment, and it can't guess.
 
-Cheers,
-
-Will
+Jason
