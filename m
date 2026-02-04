@@ -1,438 +1,228 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013004.outbound.protection.outlook.com [40.107.201.4])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD822D7393;
-	Wed,  4 Feb 2026 02:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770173895; cv=fail; b=PasldvZov0c5z24IFQ+ZXpjJpXAjhiPzbcdVatCk1cDI9nt+jahmmZ9bxs6BTEBLjZAGrQv5ILXPyUY+0+kGozQJlObovCInrzHKPA2SzqCKqqsQNI4FBgJc3r5PqT4fApENW3ZnnCPiH/4mN8ycif8mY2wtXCPzDFbtGuBoDg4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770173895; c=relaxed/simple;
-	bh=cLr9FOYt8ybX1OZVtJTPtmUEqtk0l4pdETLekAo1LP8=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=qZCZAVLFIfL8S6Tfed62mrtUF1OTQDgivRPr7JTw48t4hW5rnbI31Tk2gJlgQHopKO7a2jV2/HYzVEEPfpk3IHTRlsJgjPuTKQ5eKpRddmWNW/5XVylrVldfIf8qLlZlS8nqo5abvZc+UP9ck1V2CjbFIvaUi6AXO3hxsTFUWAE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cNUHgBaZ; arc=fail smtp.client-ip=40.107.201.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cNUHgBaZ"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iDQeJTRWlL/3BDvjPYrxEHYRlJmDEz/n/vv23kU1E7R5PdAihn2F39alzycXizeibY67iFIiUMY4OqzhnVvyyjXkDc2O3haN7GBB8zlkFd5U3Qt+3Xpjbty6wFADJhpMlIEQZwZ7gmvtDEWLWQ2BWLifm/D2tWuKYVbbcVRCs8mUx1G2NFp3OHe8tOwpaNAaW9UhoPcQGnPvW+WlOYNptWSWJzu7yd3eCtDdgcAjgZS++0+BUs6YluqmSuTTc5T6tBA7nl+bbKRJFWaApDg0EidWGYEzwsnezfzKYpfBuHdXNQ+DaqwFNmZXHBjxs+x1kpjYed4gkq6KQGq/34gqJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4eoVIqVxp+PeC2vE4FfkEr3p3jepNKbRdV5uqAGMOlU=;
- b=nMZNSizi1QIOecerRh5mZ27yotu73FVLKWfpNoXbnBe2yFDYxf9j8rpON1UTHRELX5zR59eP431JyhNft5Tx3ZLicJYTqvi6znVG8wAQiGYOInTFjNKBFxNYHrItO7Y1QXm5UsayYJhJtQvrzWGxI+P4AUbBIsiEHOsjIIc0RjfTyg2Af3F4enMv3G8s/Hha7RJeOiZDmcAMj964+DkczdV0HNRr8BeWYT8b6G/XHm7VBkQ/Uc1UQIM5uyob/2Ls7SyqsbT1uekNZV4d5Zpd2D0gpucxbjrtO1FYYQaMRoXpIzTow6aYxZ/kVhAY+QGf5t9fIe/EPqV7d1B7aAMb8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4eoVIqVxp+PeC2vE4FfkEr3p3jepNKbRdV5uqAGMOlU=;
- b=cNUHgBaZfW0oRXZN2Kci5PhTNxMa5ARn1VlKaLhIz/93hbAyEEI7tMjl7mhGluhJWZ8ycQ/kS7BX4b081aXc9P5XeH5MuGCr3tZe2Z6WvUTkd2yIrJNTRtSagoDWrMPRnfLXgoIU/ikkxhAE0rIzrvQmpJCIgATp7ggpWkWBAEmP6l/Tg5JX5Y9k+1zUUfFRLsygYY0Uad4XFVk/QmvKl9Dw3q4/HTlMTFSxiQh72m3TD0J5+ZFF8UQGcEDQc8fqBMU1ePqmzSzRCYGTzRU3cUalCrqID2pFDJWoNyjmGatrloNVxbI+QRzosKBkaVmtHNImmnyW/4jVOEypiPKU6A==
-Received: from SJ0PR12MB6806.namprd12.prod.outlook.com (2603:10b6:a03:478::7)
- by SA0PR12MB4413.namprd12.prod.outlook.com (2603:10b6:806:9e::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.12; Wed, 4 Feb
- 2026 02:58:08 +0000
-Received: from SJ0PR12MB6806.namprd12.prod.outlook.com
- ([fe80::99df:c2ad:bede:3eec]) by SJ0PR12MB6806.namprd12.prod.outlook.com
- ([fe80::99df:c2ad:bede:3eec%3]) with mapi id 15.20.9564.016; Wed, 4 Feb 2026
- 02:58:08 +0000
-From: Parav Pandit <parav@nvidia.com>
-To: "chia-yu.chang@nokia-bell-labs.com" <chia-yu.chang@nokia-bell-labs.com>,
-	Tariq Toukan <tariqt@nvidia.com>, "linux-rdma@vger.kernel.org"
-	<linux-rdma@vger.kernel.org>, "shaojijie@huawei.com" <shaojijie@huawei.com>,
-	"shenjian15@huawei.com" <shenjian15@huawei.com>, "salil.mehta@huawei.com"
-	<salil.mehta@huawei.com>, Mark Bloch <mbloch@nvidia.com>, Saeed Mahameed
-	<saeedm@nvidia.com>, "leon@kernel.org" <leon@kernel.org>,
-	"eperezma@redhat.com" <eperezma@redhat.com>, "brett.creeley@amd.com"
-	<brett.creeley@amd.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
-	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>,
-	"mst@redhat.com" <mst@redhat.com>, "xuanzhuo@linux.alibaba.com"
-	<xuanzhuo@linux.alibaba.com>, "pabeni@redhat.com" <pabeni@redhat.com>,
-	"edumazet@google.com" <edumazet@google.com>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
-	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
-	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
-	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
-	"stephen@networkplumber.org" <stephen@networkplumber.org>,
-	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
-	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
-	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
-	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
-	"ncardwell@google.com" <ncardwell@google.com>,
-	"koen.de_schepper@nokia-bell-labs.com"
-	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
-	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
-	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
-	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
-	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Subject: RE: [PATCH v3 net-next 3/3] virtio_net: add AccECN feature
- negotiation and correct ECN flag handling
-Thread-Topic: [PATCH v3 net-next 3/3] virtio_net: add AccECN feature
- negotiation and correct ECN flag handling
-Thread-Index: AQHclSfQf1F72vDnk0OFZ3Q1D/pxILVx2QNQ
-Date: Wed, 4 Feb 2026 02:58:08 +0000
-Message-ID:
- <SJ0PR12MB68063FA9A88458992B37F4DBDC98A@SJ0PR12MB6806.namprd12.prod.outlook.com>
-References: <20260203161126.2436-1-chia-yu.chang@nokia-bell-labs.com>
- <20260203161126.2436-4-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20260203161126.2436-4-chia-yu.chang@nokia-bell-labs.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR12MB6806:EE_|SA0PR12MB4413:EE_
-x-ms-office365-filtering-correlation-id: a5f152de-088d-43d6-1ea9-08de639939dc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|1800799024|10070799003|366016|38070700021|921020|7053199007;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?hPY5EYse5KhfYR2F+CBw/BYvtTcXZBsQjAZIKYJ5z/Gwof1IoVudbnUjf1KL?=
- =?us-ascii?Q?JGM8ud1GhljMvrJitSJIeLaDd0NWBdCERdhh2tDJj2SX2J4Uwx+wpwaSxHP8?=
- =?us-ascii?Q?odvd91Ez4coZOjUXh6z0U+lj2cFsN60WTUEDzAUKtVHzNn1qX3sma04BVnI1?=
- =?us-ascii?Q?qM6aTmqFQbz8meaDZQIoS6wChKqMotYbs4MY2xWozq0J6Djl+b9NiJNuooo5?=
- =?us-ascii?Q?WlLFM3Zft5MUnu0xJgRKzrH/P149zEKJgcrnpqasmFHE8JN7BbYj5cIUQv8O?=
- =?us-ascii?Q?mkSWWkzN+Xim2/xslVWhy0TpR9VOkxmnhstYYm4wcwW6AD5Rp+c4J7GVQ3fY?=
- =?us-ascii?Q?iQ9WGmTSJwsneqE3+e92/GCzxj6yOTlExeaUILLSkQN8HybST71F016DtP17?=
- =?us-ascii?Q?ImMX9QRX0E5weKTyAKxkoJ6RBzmyt9IjGiGulaQO1C15dsgviVc/7yIBNBzT?=
- =?us-ascii?Q?B3mjEVhLev8LRQe1tLVoIxUvwgBE/7Bk2WPm4i5n6k2geUqnxAfnoKws88EL?=
- =?us-ascii?Q?AMf2mHtxidbzrhdN1rvQQHOy52JrnLa3q53QA8Jr7lcndOalWG+UoSuoTMmM?=
- =?us-ascii?Q?MTZqJu6jedJJGmCyDthnoxIBhbcQZAyWqcD7f1iNMVjB4LsdNQsyUv4mbTtj?=
- =?us-ascii?Q?BEWZ0np6XRHr0tgTAMmmNg0XtXUQ34iFhYjMhQ22QNkhMivf9fgzSev92rG0?=
- =?us-ascii?Q?duppJUYqRbNmkGqd0QofPJzkr6FGKwmc5AwkCt60pq/5Guh6kvN2t6ZskZzw?=
- =?us-ascii?Q?/u/zgcEKY6wZT9zUSmdQgkmfOG94rPIjHJkqsrN/so9dyrQVyNU9bspnw112?=
- =?us-ascii?Q?0Ou+KRwU0NsShTgTj8uqTKKbZImvc+aAGizyE5XFLqeVjRCClbYT5tENOYzi?=
- =?us-ascii?Q?TAuShj93LwMxofhO4FU/WNbc8om9ExGd4FVBP+HO93ioNQkebT3Nm326Yxe6?=
- =?us-ascii?Q?E8hRWP/tbdwCHnAMNfExvGyFxpdKBCPN0fEVjVSArzkH7N4PFClNfW38XyWM?=
- =?us-ascii?Q?FGeqO9S9psi2m9zobHfZq4hXI3dultxIQfrXL41DmXbY1fpgTyUTFYjxOmMJ?=
- =?us-ascii?Q?JyE8xqQaBh2Icus3+nn1Fs0rg5CJDKlgJBqjZzr7Ev8dzxhQZgWeVov5Rtue?=
- =?us-ascii?Q?7tMZxpDFtU32G1NZAvGYUQr7KDaqO5X8hun0KSLs5BNRQh+iNs3Wxui4V+R3?=
- =?us-ascii?Q?WV3ZS60BBj/30gg6ct2Vs+KyULxgBWvxs72lX1gj976GW9vgoZSC3TfgvapL?=
- =?us-ascii?Q?2GYW78nt9zOG443N++Lul9vdyTSm1scfiiIYZ7CoEvZRQtC2xU6GDMyZ7+7m?=
- =?us-ascii?Q?LqO1obtddFznON8WuO7DoSJuk21fLqH9I7zR3UbeupDgJjrqDl3EeC/oFUrR?=
- =?us-ascii?Q?x4YFA/R3l9GK/7AiHZtfy6/T5UwJ5UDa7DdD5QEDt7cK/YMRA8Yd56Ru3t+a?=
- =?us-ascii?Q?fTGiOd9buUSeIObl+txF7NuI8ufry2ELQv0odneme23OegYr/SeSTl9PSQff?=
- =?us-ascii?Q?O+2oXUJDEZKdwHYQ5fRPgsd/sf02EJdlnFkyiKX1Ks5pi6lJNt1n9JCRxQ2x?=
- =?us-ascii?Q?cYez1zT6movuKoyuRvUYKb/w5HWyCNiXg/JEteJhPR9w0FRc1qm3iNMwTisY?=
- =?us-ascii?Q?iAOkmHSG26EDBoxPwJCWO76XG3alB1OBmfk7ArNMXlO/?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB6806.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(10070799003)(366016)(38070700021)(921020)(7053199007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?uATcTfGrRYyMz5Do/SxOvAZQNHVrBvLXeoABc7cPgR2SiKCXHpWHbvWkFN8Z?=
- =?us-ascii?Q?VMfFALZ2IxTEXyEIlPpWose1DUrm++4eG1WN6mgfq/5dUjMl0QMXtVrQu5xw?=
- =?us-ascii?Q?ydrq3SnVSjUr7ajQjDya/ci8e40MJ++TaAp9s0J3Expt6xCnadRk4R15SzHg?=
- =?us-ascii?Q?ccAdtHc95cPdJxEnf3TrCGPCy2VpezF2pBanWyalrik6W1cK04xYp09H+86E?=
- =?us-ascii?Q?8ueRWOuyLrtUMohc+BIa+yQKMzWUoL+O/DpLCTvrvocxqOjZql+m8kmp6Umj?=
- =?us-ascii?Q?ub2RjrYFu9IJA2iKt0dEYAo6VTwd3kGTYxfEZju2r8KTe8XSBRAl2t1l/d7G?=
- =?us-ascii?Q?v5xkpRw/WBa2FVcmXlqiU9cbJyQFiN9TpWiO6jAHuvYW1ch+F0scwDUhD3e+?=
- =?us-ascii?Q?hHGuufBmImEB1sJjMC097omCG2muGTrLEjk3ERXyCNMcY9s/vCM9vmuYXctr?=
- =?us-ascii?Q?UUWuZs+bOc+1l+sMJjUiXIrikrrUV4HOXyX4249A7dU8qyuwTVrdOkTRGn8E?=
- =?us-ascii?Q?5c7cG7vfxTWK1o5/m1kpwHbviQROS534WJgPB5xKlR1aRUp2CswWfuPlJjd2?=
- =?us-ascii?Q?i/byDYTLJKHcJD8i6DlxVGE0Y9UHQ9q6hfU8GXUibwV/BzjD9rT5GJKUisZI?=
- =?us-ascii?Q?nbJneuYi5mlPRD/fDxdMp0+Vk1PyrtKII2knB/v+aABTjM7prx8ChqsVW79n?=
- =?us-ascii?Q?/E3sVeDq8S9abZx6sC83PHkSMWcNyz3zqurOytSwtd8aG+ixUBR8dh/b564p?=
- =?us-ascii?Q?jlsGTytFXCvY9ipyfCdD2q/vGQeZrouhuTArGknxyLTugmWB997hRoL+ThJX?=
- =?us-ascii?Q?jafKkliSxGq7uUgjeQYmpP1wfh61TY5wVbQJkc65/mXDIGZKpHjWkSBCLYBl?=
- =?us-ascii?Q?3syrhpKIng65qZlwCZx2PUtSj4GGmCCeBy/NGxbhTpO2w9XK3SS0LUIMhDO8?=
- =?us-ascii?Q?ooUEDGh91lwE5aY5/mA7rQ6jW07i+V+2ThlEE4yuJigz4xZcd0MN+COvFz9R?=
- =?us-ascii?Q?rpSus9s2pL/c7u2zxJ1wgCCeQYtIctiwSRs1GZ87V5hpZba9LAkQ6FOD36pa?=
- =?us-ascii?Q?T50eZM7GRuLRoRto1mBcELw2dwMl1JfSF/x4b/Cd9jGmoGalkWqSuvbZrwH3?=
- =?us-ascii?Q?HCuSgso9plypxJqigpCSk/ckVI0grmv0HydSa7NsXAWSVJNsOHVW/9QDqFYe?=
- =?us-ascii?Q?k2htBydWKox7NMvt37egzysxGBlQVpKRoJj1bBn8XB1IUYdim2MTfxN402Qs?=
- =?us-ascii?Q?KanJavl4hVyyUNiK79ka30tC9MikSxE3FKmd5xPQDR3JA9B6RQ2Hxan+9Uot?=
- =?us-ascii?Q?xKkc7u7/HeiatwNBbDA5m+vG5poBfxoM13S0b6PzH6eGz62ikpzvmEQpcKT+?=
- =?us-ascii?Q?i/h3CwKLkljWRCjbWCZ5PNfZE0oSbBT+l8fRhwlVySYovblyYsAjT6jKMySM?=
- =?us-ascii?Q?ws3NYAJlI6UsVCDnjUzLkTj60XoPAWshcKScDobWxSWlIqHIVn2dNfr6Hf8n?=
- =?us-ascii?Q?QjHEwYxiuwTWK4EGbsbGqfuBM/HZFGmNzSWTGYMVuRO7IAHsl4718I8mY3J/?=
- =?us-ascii?Q?/6E6SQ3U0i5JxdgAeB/acz4YE0MX6sYWArVWgnbMbhwxYcfBQaAikyjog6XT?=
- =?us-ascii?Q?4Y9pO32Svsp76kPC7ONafeBbr+VxucKfIvr3nt7Yrnsr0vOUB47y1emvv4Gy?=
- =?us-ascii?Q?pNOkxBq7SDBzymsZ0LCBx8Hfv5aR/kC6xYavwZeB1+x/OytprpsTDhAgToy5?=
- =?us-ascii?Q?Epu7C5MBMe+fthdq4n9CKd0xpmAecKlByz9p37GBnNkRpzl2Jna/?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ECD92DECA0;
+	Wed,  4 Feb 2026 03:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770175686; cv=none; b=V8NCpPJ0m1MOyOPsiHTM8bqCTe99khixrAMI3hThfRjd9Sx39G2+VH8LR3Cc1Gam7x31PYT/Smtq9STnDdL4HsVca/caqGz1YMStge7EBdf+xkS09NUNAlm9d+G6Z2Z1XsEwKOqTKUz0bO5TSNuuZ6VHSCZsvui/JSJlArtjZCs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770175686; c=relaxed/simple;
+	bh=HC5jeYQAu3u6Y01BVOW+OAVSxxRAV1q5oOHjgOxLllw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=grNlo1WxxcP3EfSfBiBckdbsUC66c6P/vEG/xj+tdGWDJwJQvwIUDZZb8dc1gB14LsZVHD61aaySXBCS0dW7H4BjAKh+gq4T1MDK7EcizA/fbw1VIZN0S1hHkKS+H75l0nsb7X1mR9b3fn7elar82W/oS+mk8+Y4Ce6SS/DPYT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4f5Ql54W74zYQtkM;
+	Wed,  4 Feb 2026 11:27:13 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 0BF184056E;
+	Wed,  4 Feb 2026 11:28:02 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP1 (Coremail) with SMTP id cCh0CgD3ZevAvIJpAthnGA--.16729S2;
+	Wed, 04 Feb 2026 11:28:01 +0800 (CST)
+Message-ID: <bddeef2f-1bde-480d-ba36-c0a59b6467b3@huaweicloud.com>
+Date: Wed, 4 Feb 2026 11:27:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB6806.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5f152de-088d-43d6-1ea9-08de639939dc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Feb 2026 02:58:08.3814
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rN3D6mqsHHLXXcGeHfA12yJHuKtQFTJhzmgcaKKclepTrQslG5CyagCejz9br6aa6qM/PAdZ9NWpTsarWrak+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4413
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH/for-next v3 2/3] cgroup/cpuset: Defer
+ housekeeping_update() calls from CPU hotplug to workqueue
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260202201144.1669260-1-longman@redhat.com>
+ <20260202201144.1669260-3-longman@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260202201144.1669260-3-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgD3ZevAvIJpAthnGA--.16729S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKw43tF1fGr43Jr1kJrW3trb_yoW7KFW3pF
+	y8KrWSyrW5Kr13uasa93srXr4F9ws7J3W7twsxGr1UZF13KFn29r1vqrnxJrWrur98urW5
+	ZF9xG39xWa1jyrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
+	0PDUUUU
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
 
 
-> From: chia-yu.chang@nokia-bell-labs.com <chia-yu.chang@nokia-bell-labs.co=
-m>
-> Sent: 03 February 2026 09:41 PM
->=20
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
->=20
-> virtio_net currently negotiates ECN-related capabilities through
-> VIRTIO_NET_F_HOST_ECN and VIRTIO_NET_F_GUEST_ECN. This is not sufficient
-> for flows using AccECN (RFC9768), because AccECN requires preserving the
-> ACE signal (CWR flag is part of it) across GSO operations. Without
-> explicit AccECN capability bits, the device and driver may treat AccECN
-> traffic using the RFC3168 ECN offload logic, causing the CWR flag to be
-> cleared. As a result, AccECN segments may lose their ACE signal integrity=
-.
->=20
-> Fix this by adding new AccECN capability bits for negotiation between
-> host and guest: VIRTIO_NET_F_HOST_ACCECN and VIRTIO_NET_F_GUEST_ACCECN.
-> In addition, translate the AccECN GSO flag correctly between the virtio
-> header (VIRTIO_NET_HDR_GSO_ACCECN) and skb metadata (SKB_GSO_TCP_ACCECN)
-> to ensure correct ACE signal preservation bwtwen virtio_net and the
-> socket stacki.
->=20
-> This corresponds to discussions in virtio mailing list:
-> https://lore.kernel.org/all/20250814120118.81787-1-chia-yu.chang@nokia-be=
-ll-labs.com/
-> And it was suggested to clarify documents of SKB_GSO_TCP_ECN and
-> SKB_GSO_TCP_ACCECN first.
->=20
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
->=20
+On 2026/2/3 4:11, Waiman Long wrote:
+> The update_isolation_cpumasks() function can be called either directly
+> from regular cpuset control file write with cpuset_full_lock() called
+> or via the CPU hotplug path with cpus_write_lock and cpuset_mutex held.
+> 
+> As we are going to enable dynamic update to the nozh_full housekeeping
+> cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
+> allowing the CPU hotplug path to call into housekeeping_update() directly
+> from update_isolation_cpumasks() will likely cause deadlock. So we
+> have to defer any call to housekeeping_update() after the CPU hotplug
+> operation has finished. This is now done via the workqueue where
+> the actual housekeeping_update() call, if needed, will happen after
+> cpus_write_lock is released.
+> 
+> We can't use the synchronous task_work API as call from CPU hotplug
+> path happen in the per-cpu kthread of the CPU that is being shut down
+> or brought up. Because of the asynchronous nature of workqueue, the
+> HK_TYPE_DOMAIN housekeeping cpumask will be updated a bit later than the
+> "cpuset.cpus.isolated" control file in this case.
+> 
+> Also add a check in test_cpuset_prs.sh and modify some existing
+> test cases to confirm that "cpuset.cpus.isolated" and HK_TYPE_DOMAIN
+> housekeeping cpumask will both be updated.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
 > ---
-> v3:
-> - Update commit message and title for clarity
->=20
-> v2:
-> - Replace VIRTIO_NET_HDR_GSO_ECN with VIRTIO_NET_HDR_GSO_ECN_FLAGS
-> ---
->  drivers/net/virtio_net.c        | 14 +++++++++++---
->  drivers/vdpa/pds/debugfs.c      |  6 ++++++
->  include/linux/virtio_net.h      | 18 +++++++++++-------
->  include/uapi/linux/virtio_net.h |  5 +++++
->  4 files changed, 33 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index db88dcaefb20..103fb87c690e 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -75,6 +75,7 @@ static const unsigned long guest_offloads[] =3D {
->  	VIRTIO_NET_F_GUEST_TSO4,
->  	VIRTIO_NET_F_GUEST_TSO6,
->  	VIRTIO_NET_F_GUEST_ECN,
-> +	VIRTIO_NET_F_GUEST_ACCECN,
->  	VIRTIO_NET_F_GUEST_UFO,
->  	VIRTIO_NET_F_GUEST_CSUM,
->  	VIRTIO_NET_F_GUEST_USO4,
-> @@ -87,6 +88,7 @@ static const unsigned long guest_offloads[] =3D {
->  #define GUEST_OFFLOAD_GRO_HW_MASK ((1ULL << VIRTIO_NET_F_GUEST_TSO4) | \
->  			(1ULL << VIRTIO_NET_F_GUEST_TSO6) | \
->  			(1ULL << VIRTIO_NET_F_GUEST_ECN)  | \
-> +			(1ULL << VIRTIO_NET_F_GUEST_ACCECN) | \
->  			(1ULL << VIRTIO_NET_F_GUEST_UFO)  | \
->  			(1ULL << VIRTIO_NET_F_GUEST_USO4) | \
->  			(1ULL << VIRTIO_NET_F_GUEST_USO6) | \
-> @@ -5976,6 +5978,7 @@ static int virtnet_xdp_set(struct net_device *dev, =
-struct bpf_prog *prog,
->  	    && (virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO4) ||
->  	        virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO6) ||
->  	        virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ECN) ||
-> +		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ACCECN) ||
->  		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_UFO) ||
->  		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_CSUM) ||
->  		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_USO4) ||
-> @@ -6635,6 +6638,7 @@ static bool virtnet_check_guest_gso(const struct vi=
-rtnet_info *vi)
->  	return virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO4) ||
->  		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO6) ||
->  		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ECN) ||
-> +		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ACCECN) ||
->  		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_UFO) ||
->  		(virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_USO4) &&
->  		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_USO6));
-> @@ -6749,6 +6753,8 @@ static int virtnet_probe(struct virtio_device *vdev=
-)
->  			dev->hw_features |=3D NETIF_F_TSO6;
->  		if (virtio_has_feature(vdev, VIRTIO_NET_F_HOST_ECN))
->  			dev->hw_features |=3D NETIF_F_TSO_ECN;
-> +		if (virtio_has_feature(vdev, VIRTIO_NET_F_HOST_ACCECN))
-> +			dev->hw_features |=3D NETIF_F_GSO_ACCECN;
->  		if (virtio_has_feature(vdev, VIRTIO_NET_F_HOST_USO))
->  			dev->hw_features |=3D NETIF_F_GSO_UDP_L4;
->=20
-> @@ -7169,9 +7175,11 @@ static struct virtio_device_id id_table[] =3D {
->  	VIRTIO_NET_F_CSUM, VIRTIO_NET_F_GUEST_CSUM, \
->  	VIRTIO_NET_F_MAC, \
->  	VIRTIO_NET_F_HOST_TSO4, VIRTIO_NET_F_HOST_UFO, VIRTIO_NET_F_HOST_TSO6, =
-\
-> -	VIRTIO_NET_F_HOST_ECN, VIRTIO_NET_F_GUEST_TSO4, VIRTIO_NET_F_GUEST_TSO6=
-, \
-> -	VIRTIO_NET_F_GUEST_ECN, VIRTIO_NET_F_GUEST_UFO, \
-> -	VIRTIO_NET_F_HOST_USO, VIRTIO_NET_F_GUEST_USO4, VIRTIO_NET_F_GUEST_USO6=
-, \
-> +	VIRTIO_NET_F_HOST_ECN, VIRTIO_NET_F_HOST_ACCECN, \
-> +	VIRTIO_NET_F_GUEST_TSO4, VIRTIO_NET_F_GUEST_TSO6, \
-> +	VIRTIO_NET_F_GUEST_ECN, VIRTIO_NET_F_GUEST_ACCECN, \
-> +	VIRTIO_NET_F_GUEST_UFO, VIRTIO_NET_F_HOST_USO, \
-> +	VIRTIO_NET_F_GUEST_USO4, VIRTIO_NET_F_GUEST_USO6, \
->  	VIRTIO_NET_F_MRG_RXBUF, VIRTIO_NET_F_STATUS, VIRTIO_NET_F_CTRL_VQ, \
->  	VIRTIO_NET_F_CTRL_RX, VIRTIO_NET_F_CTRL_VLAN, \
->  	VIRTIO_NET_F_GUEST_ANNOUNCE, VIRTIO_NET_F_MQ, \
-> diff --git a/drivers/vdpa/pds/debugfs.c b/drivers/vdpa/pds/debugfs.c
-> index c328e694f6e7..90bd95db0245 100644
-> --- a/drivers/vdpa/pds/debugfs.c
-> +++ b/drivers/vdpa/pds/debugfs.c
-> @@ -78,6 +78,9 @@ static void print_feature_bits_all(struct seq_file *seq=
-, u64 features)
->  		case BIT_ULL(VIRTIO_NET_F_GUEST_ECN):
->  			seq_puts(seq, " VIRTIO_NET_F_GUEST_ECN");
->  			break;
-> +		case BIT_ULL(VIRTIO_NET_F_GUEST_ACCECN):
-> +			seq_puts(seq, " VIRTIO_NET_F_GUEST_ACCECN");
-> +			break;
-This hunk should be a separate patch for the pds driver. It confuses with t=
-he subject.
-
->  		case BIT_ULL(VIRTIO_NET_F_GUEST_UFO):
->  			seq_puts(seq, " VIRTIO_NET_F_GUEST_UFO");
->  			break;
-> @@ -90,6 +93,9 @@ static void print_feature_bits_all(struct seq_file *seq=
-, u64 features)
->  		case BIT_ULL(VIRTIO_NET_F_HOST_ECN):
->  			seq_puts(seq, " VIRTIO_NET_F_HOST_ECN");
->  			break;
-> +		case BIT_ULL(VIRTIO_NET_F_HOST_ACCECN):
-> +			seq_puts(seq, " VIRTIO_NET_F_HOST_ACCECN");
-> +			break;
->  		case BIT_ULL(VIRTIO_NET_F_HOST_UFO):
->  			seq_puts(seq, " VIRTIO_NET_F_HOST_UFO");
->  			break;
-> diff --git a/include/linux/virtio_net.h b/include/linux/virtio_net.h
-> index 75dabb763c65..0cf86b026828 100644
-> --- a/include/linux/virtio_net.h
-> +++ b/include/linux/virtio_net.h
-> @@ -11,7 +11,7 @@
->=20
->  static inline bool virtio_net_hdr_match_proto(__be16 protocol, __u8 gso_=
-type)
+>  kernel/cgroup/cpuset.c                        | 37 +++++++++++++++++--
+>  .../selftests/cgroup/test_cpuset_prs.sh       | 13 +++++--
+>  2 files changed, 44 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index d705c5ba64a7..e98a2e953392 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1302,6 +1302,17 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
+>  	return false;
+>  }
+>  
+> +static void isolcpus_workfn(struct work_struct *work)
+> +{
+> +	cpuset_full_lock();
+> +	if (isolated_cpus_updating) {
+> +		isolated_cpus_updating = false;
+> +		WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
+> +		rebuild_sched_domains_locked();
+> +	}
+> +	cpuset_full_unlock();
+> +}
+> +
+>  /*
+>   * update_isolation_cpumasks - Update external isolation related CPU masks
+>   *
+> @@ -1310,14 +1321,34 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
+>   */
+>  static void update_isolation_cpumasks(void)
 >  {
-> -	switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
-> +	switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN_FLAGS) {
->  	case VIRTIO_NET_HDR_GSO_TCPV4:
->  		return protocol =3D=3D cpu_to_be16(ETH_P_IP);
->  	case VIRTIO_NET_HDR_GSO_TCPV6:
-> @@ -31,7 +31,7 @@ static inline int virtio_net_hdr_set_proto(struct sk_bu=
-ff *skb,
->  	if (skb->protocol)
->  		return 0;
->=20
-> -	switch (hdr->gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
-> +	switch (hdr->gso_type & ~VIRTIO_NET_HDR_GSO_ECN_FLAGS) {
->  	case VIRTIO_NET_HDR_GSO_TCPV4:
->  	case VIRTIO_NET_HDR_GSO_UDP:
->  	case VIRTIO_NET_HDR_GSO_UDP_L4:
-> @@ -58,7 +58,7 @@ static inline int __virtio_net_hdr_to_skb(struct sk_buf=
-f *skb,
->  	unsigned int ip_proto;
->=20
->  	if (hdr_gso_type !=3D VIRTIO_NET_HDR_GSO_NONE) {
-> -		switch (hdr_gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
-> +		switch (hdr_gso_type & ~VIRTIO_NET_HDR_GSO_ECN_FLAGS) {
->  		case VIRTIO_NET_HDR_GSO_TCPV4:
->  			gso_type =3D SKB_GSO_TCPV4;
->  			ip_proto =3D IPPROTO_TCP;
-> @@ -84,7 +84,9 @@ static inline int __virtio_net_hdr_to_skb(struct sk_buf=
-f *skb,
->  			return -EINVAL;
->  		}
->=20
-> -		if (hdr_gso_type & VIRTIO_NET_HDR_GSO_ECN)
-> +		if (hdr_gso_type & VIRTIO_NET_HDR_GSO_ACCECN)
-> +			gso_type |=3D SKB_GSO_TCP_ACCECN;
-> +		else if (hdr_gso_type & VIRTIO_NET_HDR_GSO_ECN)
->  			gso_type |=3D SKB_GSO_TCP_ECN;
->=20
->  		if (hdr->gso_size =3D=3D 0)
-> @@ -159,7 +161,7 @@ static inline int __virtio_net_hdr_to_skb(struct sk_b=
-uff *skb,
->  		unsigned int nh_off =3D p_off;
->  		struct skb_shared_info *shinfo =3D skb_shinfo(skb);
->=20
-> -		switch (gso_type & ~SKB_GSO_TCP_ECN) {
-> +		switch (gso_type & ~(SKB_GSO_TCP_ECN | SKB_GSO_TCP_ACCECN)) {
->  		case SKB_GSO_UDP:
->  			/* UFO may not include transport header in gso_size. */
->  			nh_off -=3D thlen;
-> @@ -231,7 +233,9 @@ static inline int virtio_net_hdr_from_skb(const struc=
-t sk_buff *skb,
->  			hdr->gso_type =3D VIRTIO_NET_HDR_GSO_UDP_L4;
->  		else
->  			return -EINVAL;
-> -		if (sinfo->gso_type & SKB_GSO_TCP_ECN)
-> +		if (sinfo->gso_type & SKB_GSO_TCP_ACCECN)
-> +			hdr->gso_type |=3D VIRTIO_NET_HDR_GSO_ACCECN;
-> +		else if (sinfo->gso_type & SKB_GSO_TCP_ECN)
->  			hdr->gso_type |=3D VIRTIO_NET_HDR_GSO_ECN;
->  	} else
->  		hdr->gso_type =3D VIRTIO_NET_HDR_GSO_NONE;
-> @@ -282,7 +286,7 @@ virtio_net_hdr_tnl_to_skb(struct sk_buff *skb,
->  		return -EINVAL;
->=20
->  	/* The UDP tunnel must carry a GSO packet, but no UFO. */
-> -	gso_inner_type =3D hdr->gso_type & ~(VIRTIO_NET_HDR_GSO_ECN |
-> +	gso_inner_type =3D hdr->gso_type & ~(VIRTIO_NET_HDR_GSO_ECN_FLAGS |
->  					   VIRTIO_NET_HDR_GSO_UDP_TUNNEL);
->  	if (!gso_inner_type || gso_inner_type =3D=3D VIRTIO_NET_HDR_GSO_UDP)
->  		return -EINVAL;
-> diff --git a/include/uapi/linux/virtio_net.h b/include/uapi/linux/virtio_=
-net.h
-> index 1db45b01532b..af5bfe45aa1f 100644
-> --- a/include/uapi/linux/virtio_net.h
-> +++ b/include/uapi/linux/virtio_net.h
-> @@ -56,6 +56,8 @@
->  #define VIRTIO_NET_F_MQ	22	/* Device supports Receive Flow
->  					 * Steering */
->  #define VIRTIO_NET_F_CTRL_MAC_ADDR 23	/* Set MAC address */
-> +#define VIRTIO_NET_F_HOST_ACCECN 25	/* Host can handle GSO of AccECN */
-> +#define VIRTIO_NET_F_GUEST_ACCECN 26	/* Guest can handle GSO of AccECN *=
-/
->  #define VIRTIO_NET_F_DEVICE_STATS 50	/* Device can provide device-level =
-statistics. */
->  #define VIRTIO_NET_F_VQ_NOTF_COAL 52	/* Device supports virtqueue notifi=
-cation coalescing */
->  #define VIRTIO_NET_F_NOTF_COAL	53	/* Device supports notifications coale=
-scing */
-> @@ -165,6 +167,9 @@ struct virtio_net_hdr_v1 {
->  #define VIRTIO_NET_HDR_GSO_UDP_TUNNEL (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV=
-4 | \
->  				       VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV6)
->  #define VIRTIO_NET_HDR_GSO_ECN		0x80	/* TCP has ECN set */
-> +#define VIRTIO_NET_HDR_GSO_ACCECN	0x10	/* TCP AccECN segmentation */
-> +#define VIRTIO_NET_HDR_GSO_ECN_FLAGS	(VIRTIO_NET_HDR_GSO_ECN | \
-> +					 VIRTIO_NET_HDR_GSO_ACCECN)
-As Michael suggested, given this is yet to be approved by the virtio-commun=
-ity, can you please roll this patch later to net-next?
-This way your rest of the 2 patches in net with fixes tag and new comment f=
-or ACCEN in net-next can proceed?
+> -	int ret;
+> +	static DECLARE_WORK(isolcpus_work, isolcpus_workfn);
+>  
+>  	if (!isolated_cpus_updating)
+>  		return;
+>  
+> -	ret = housekeeping_update(isolated_cpus);
+> -	WARN_ON_ONCE(ret < 0);
+> +	/*
+> +	 * This function can be reached either directly from regular cpuset
+> +	 * control file write or via CPU hotplug. In the latter case, it is
+> +	 * the per-cpu kthread that calls cpuset_handle_hotplug() on behalf
+> +	 * of the task that initiates CPU shutdown or bringup.
+> +	 *
+> +	 * To have better flexibility and prevent the possibility of deadlock
+> +	 * when calling from CPU hotplug, we defer the housekeeping_update()
+> +	 * call to after the current cpuset critical section has finished.
+> +	 * This is done via workqueue.
+> +	 */
+> +	if (current->flags & PF_KTHREAD) {
+> +		/*
+> +		 * We rely on WORK_STRUCT_PENDING_BIT to not requeue a work
+> +		 * item that is still pending.
+> +		 */
+> +		queue_work(system_unbound_wq, &isolcpus_work);
+> +		/* Also defer sched domains regeneration to the work function */
+> +		force_sd_rebuild = false;
 
->  	__u8 gso_type;
->  	__virtio16 hdr_len;	/* Ethernet + IP + tcp/udp hdrs */
->  	__virtio16 gso_size;	/* Bytes to append to hdr_len per frame */
-> --
-> 2.34.1
+Eh, looking at the call path:
+
+cpuset_hotplug_update_tasks
+	update_parent_effective_cpumask
+		update_isolation_cpumasks
+		force_sd_rebuild = false;
+	cpuset_force_rebuild();
+
+Setting force_sd_rebuild to false here might be redundant, given that
+cpuset_force_rebuild() is called immediately afterward.
+
+> +		return;
+> +	}
+>  
+> +	WARN_ON_ONCE(housekeeping_update(isolated_cpus) < 0);
+>  	isolated_cpus_updating = false;
+>  }
+>  
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 5dff3ad53867..0502b156582b 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -245,8 +245,9 @@ TEST_MATRIX=(
+>  	"C2-3:P1:S+  C3:P2  .      .     O2=0   O2=1    .      .     0 A1:2|A2:3 A1:P1|A2:P2"
+>  	"C2-3:P1:S+  C3:P1  .      .     O2=0    .      .      .     0 A1:|A2:3 A1:P1|A2:P1"
+>  	"C2-3:P1:S+  C3:P1  .      .     O3=0    .      .      .     0 A1:2|A2: A1:P1|A2:P1"
+> -	"C2-3:P1:S+  C3:P1  .      .    T:O2=0   .      .      .     0 A1:3|A2:3 A1:P1|A2:P-1"
+> -	"C2-3:P1:S+  C3:P1  .      .      .    T:O3=0   .      .     0 A1:2|A2:2 A1:P1|A2:P-1"
+> +	"C2-3:P1:S+  C3:P2  .      .    T:O2=0   .      .      .     0 A1:3|A2:3 A1:P1|A2:P-2"
+> +	"C1-3:P1:S+  C3:P2  .      .      .    T:O3=0   .      .     0 A1:1-2|A2:1-2 A1:P1|A2:P-2 3|"
+> +	"C1-3:P1:S+  C3:P2  .      .      .    T:O3=0  O3=1    .     0 A1:1-2|A2:3 A1:P1|A2:P2  3"
+>  	"$SETUP_A123_PARTITIONS    .     O1=0    .      .      .     0 A1:|A2:2|A3:3 A1:P1|A2:P1|A3:P1"
+>  	"$SETUP_A123_PARTITIONS    .     O2=0    .      .      .     0 A1:1|A2:|A3:3 A1:P1|A2:P1|A3:P1"
+>  	"$SETUP_A123_PARTITIONS    .     O3=0    .      .      .     0 A1:1|A2:2|A3: A1:P1|A2:P1|A3:P1"
+> @@ -764,7 +765,7 @@ check_cgroup_states()
+>  # only CPUs in isolated partitions as well as those that are isolated at
+>  # boot time.
+>  #
+> -# $1 - expected isolated cpu list(s) <isolcpus1>{,<isolcpus2>}
+> +# $1 - expected isolated cpu list(s) <isolcpus1>{|<isolcpus2>}
+>  # <isolcpus1> - expected sched/domains value
+>  # <isolcpus2> - cpuset.cpus.isolated value = <isolcpus1> if not defined
+>  #
+> @@ -773,6 +774,7 @@ check_isolcpus()
+>  	EXPECTED_ISOLCPUS=$1
+>  	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
+>  	ISOLCPUS=$(cat $ISCPUS)
+> +	HKICPUS=$(cat /sys/devices/system/cpu/isolated)
+>  	LASTISOLCPU=
+>  	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
+>  	if [[ $EXPECTED_ISOLCPUS = . ]]
+> @@ -810,6 +812,11 @@ check_isolcpus()
+>  	ISOLCPUS=
+>  	EXPECTED_ISOLCPUS=$EXPECTED_SDOMAIN
+>  
+> +	#
+> +	# The inverse of HK_TYPE_DOMAIN cpumask in $HKICPUS should match $ISOLCPUS
+> +	#
+> +	[[ "$ISOLCPUS" != "$HKICPUS" ]] && return 1
+> +
+>  	#
+>  	# Use the sched domain in debugfs to check isolated CPUs, if available
+>  	#
+
+-- 
+Best regards,
+Ridong
 
