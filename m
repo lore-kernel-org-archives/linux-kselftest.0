@@ -1,92 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EEF21ABB9;
-	Wed,  4 Feb 2026 05:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D405A350A00;
+	Wed,  4 Feb 2026 05:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770182903; cv=none; b=JUOlqSmlhNUTIPqHB3DiqdMKq1+tvWcE1bPHERrnSb35QYbC4fLX/MJ6iZW6lBBsocbbQGkZSKOSrhfjecNnrcXvfTh2svYcXyhc3ufxVx2O11u3PF1XULfefHBPdZ8kTr6HGKbr56Bxu7bLnokRUFb0IRtWIhzSHMrt4Xp+i4g=
+	t=1770184311; cv=none; b=DfNGdCpErIqkxD8AnfDMSyt21id1UwKZc8+eCC3Y4kryu6MJdy5EqW7RYstnG1sfz/T4SCztuGaNWJbVQ0gKBsWkZcJ5MWczTTJRmLRxhw9RU6Jud0ebcK3Tq74DOIZw3cGk6aOw3/n8Bt3L3HhLZWrbuRkOHA1o9qL5i5/A5Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770182903; c=relaxed/simple;
-	bh=wiAYeO0Zy2v91IbkE9VovIGytIW74HUqn7avtTiOrho=;
+	s=arc-20240116; t=1770184311; c=relaxed/simple;
+	bh=WyeMu1AkwqKC5I7WTqh9UrxM26rqyj+dwIwTtP2n/uA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LTe4uKNXtnVp/IS//mzsfGB/ySdWn5a+cQW8cuWOW5mfZd+UIZsjMMMIFbT2Slm9+RJiGLb8B81lmEP96SejPP/Wb98JDVeYQ72A28avAttA/5uFG941InHst0W7Q3zJjZRUnWjcQ8goeqF4ft+vqXX9RRmX+IptApsJSKTuFFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KjFwi7Jh; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OyTpPnMVPJmVRzfW4eAZ1gmzg1ckR0JF4Z8Iia4QBQu/5JdxmUmwamOFdsfBH8xpaQE2OTh1234tVWiIhTB2ETgIpCb3aH2nX8uV7hjL++DtAj1cyzumAqUlugu72FNInSFquMTtomJT5A/WJqDyKr+g9blfFIFiZCXDPp71vlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mH1c+uNa; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=d6ZMtz0u; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KjFwi7Jh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE7D0C116C6;
-	Wed,  4 Feb 2026 05:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770182903;
-	bh=wiAYeO0Zy2v91IbkE9VovIGytIW74HUqn7avtTiOrho=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KjFwi7JhZWF75i+n/FHiVLVymv/EpBGALUc5pvIMOTi6FjiAL9nBEQYkzzB/PpFBP
-	 sUnfc12FksThlDc2jetLNd1/Bti8+gsTTlvxuSxW7Uj9twTOOPQd+laW4N0foxkNig
-	 aHDfmQjYINQbosby4D37gzOTYa7g/LlNP0i6u5Zx7643H08Be9XSZgAn9tep4bT8Nr
-	 7x2XdUCjl948i3rq3bBJGOJAyUz2+lrc3b4OLf6IU9UmT4c/u7l4AHncYQuWQhrCnD
-	 hiVKXDlU56IY2kdD/cOXgNaSeeFTG2MTil11dfNysfS05RW62rPzaeiCjdco00bcwP
-	 nN91pYbyJ1WKQ==
-Date: Wed, 4 Feb 2026 05:28:18 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Johan Hovold <johan@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Disable revocable code from build
-Message-ID: <aYLY8lkSv4Lr2B2r@google.com>
-References: <20260124170535.11756-1-johan@kernel.org>
- <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh>
- <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
- <aYHm9pr0e7myeqS3@hovoldconsulting.com>
- <2026020315-twins-probe-d988@gregkh>
- <2026020307-rimmed-dreamy-5a67@gregkh>
- <aYKrdxw3fYf-y52P@google.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mH1c+uNa";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="d6ZMtz0u"
+Date: Wed, 4 Feb 2026 06:51:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1770184308;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sZHCk7fKGvf7QzEKyi64QeW2Liq4IP/rnnD/aBkMl5c=;
+	b=mH1c+uNacxWRUNxmS4+KhnW02S+ScCNg0PSMrRBV3jl5Y9gLNvMzn2wKTFE119EqwrHZVK
+	0Xs2BQCwy0xLs2a7+gdd8+UIN1NJkFxmfKrvCWu8BRowAICffN4IDMn7nvd5n8pRhGlOTI
+	/lcoeDTVwx4C/5arPqxl4Pr1DwVM/XXISPy+Ud/+o5dE+3KjyDGBJawYLfFhBLuzKlHeEe
+	Jjaaa07nXgXxFL74kUd+x+t5iZVGeWcu8qhM/QlOyI3o3mdtjH2S9THZPgLNdLZakBJJlE
+	ZR3GP0J25NhG4p4mppsRJ+sb9ftJwtMZWzQmpngxhxJY0va5sW06twgDzT0yog==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1770184308;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sZHCk7fKGvf7QzEKyi64QeW2Liq4IP/rnnD/aBkMl5c=;
+	b=d6ZMtz0uUl3VOFryIOVmf39EYhSjv1iRpyzj0W6e5d3GCAZeC1TF0aBjXeboj7tm1lJ6gw
+	gmXb8/M6hAEDp/DQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
+	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
+	Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition of
+ 'struct sockaddr'
+Message-ID: <20260204064248-d9c4ab78-f6d4-4ac6-8d55-e939bc1df6d2@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+ <20260121192729.2095aa25@kernel.org>
+ <20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
+ <20260130081741.425a92e0@kernel.org>
+ <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
+ <20260131092517.6639d84c@kernel.org>
+ <20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
+ <20260203144011.32d5b223@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <aYKrdxw3fYf-y52P@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260203144011.32d5b223@kernel.org>
 
-The revocable code is still under active discussion, and there is no
-in-kernel users of it.  So disable it from the build for now so that no
-one suffers from it being present in the tree, yet leave it in the
-source tree so that others can easily test it by reverting this commit
-and building off of it for future releases.
+On Tue, Feb 03, 2026 at 02:40:11PM -0800, Jakub Kicinski wrote:
+> On Tue, 3 Feb 2026 12:42:22 +0100 Thomas Weißschuh wrote:
+> > > FWIW the typelimits change broke compilation of ethtool, we'll see if
+> > > anyone "outside kernel community itself" complains.  
+> > 
+> > Can you point me to that breakage? I was unable to find it.
+> 
+> Not reported on the ML, and it's kinda annoying to repro because 
+> the uAPI header sync script isn't committed :/ You have to check 
+> this out
+> 
+>  https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/
+> 
+> and run a script like this to sync headers from the kernel (then build):
+> 
+> #!/bin/bash -e
+> 
+> sn="${0##*/}"
+> export ARCH="x86_64"
+> 
+> if [ ! -d "$LINUX_GIT" ]; then
+>     echo "${sn}: LINUX_GIT not set" >&2
+>     exit 1
+> fi
+> 
+> pushd "$LINUX_GIT"
+> if [ -n "$1" ]; then
+>     git checkout "$1"
+> fi
+> desc=$(git describe --exact-match 2>/dev/null \
+>        || git show -s --abbrev=12 --pretty='commit %h')
+> kobj=$(mktemp -d)
 
-Fixes: dd7762c73b1c ("driver core: disable revocable code from build")
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
-Greg: I realized "driver core: disable revocable code from build" is
-already in driver-core-testing branch.  Sent this independent patch
-in case it'd need to.
+> make -j16 O="$kobj" allmodconfig
+> make -j16 O="$kobj" prepare
 
- tools/testing/selftests/Makefile | 1 -
- 1 file changed, 1 deletion(-)
+These are not necessary.
+The UAPI generation does not need a kernel configuration.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 11b6515ce3d0..56e44a98d6a5 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -17,7 +17,6 @@ TARGETS += damon
- TARGETS += devices/error_logs
- TARGETS += devices/probe
- TARGETS += dmabuf-heaps
--TARGETS += drivers/base/revocable
- TARGETS += drivers/dma-buf
- TARGETS += drivers/ntsync
- TARGETS += drivers/s390x/uvdevice
--- 
-2.53.0.rc2.204.g2597b5adb4-goog
+> make -j16 O="$kobj" INSTALL_HDR_PATH="${kobj}/hdr" headers_install
+> popd
+> 
+> pushd uapi
+> find . -type f -name '*.h' -exec cp -v "${kobj}/hdr/include/{}" {} \;
+
+Here only those headers which already exist in ethtool's uapi/ directory
+are copied. As linux/typelimits.h is new, it is now missing.
+Honestly, if a user fiddles with the internals of the UAPI headers like
+this, it is on them to update their code if the internal structure
+changes. In your case a simple 'touch uapi/linux/typelimits.h'
+before running the script will be enough. Also internal.h now requires
+an explicit inclusion of <limits.h>, as that is not satisfied by the
+UAPI anymore.
+
+> popd
+> rm -rf "$kobj"
+> 
+> git add uapi
+> git commit -s -F - <<EOT
+> update UAPI header copies
+> 
+> Update to kernel ${desc}.
+> 
+> EOT
