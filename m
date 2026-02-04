@@ -1,125 +1,94 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EB07640E
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Feb 2026 00:10:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F3523AB8D;
+	Wed,  4 Feb 2026 01:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770163819; cv=none; b=cmlZSa9hgc/qh+faX503h4+BjAOYY49E6RUwT1W2RbJtjLYSBtzwVZELA6pXV954R6ZhcbF6Z0ZtPRwflpTOK36Fhn/qEJ6Al2LYQK4MFtcj07HqvCNwREyQAgwwE5P6Dj9mJsgc//BVy8die6j2DVT8edyNGjCOxI9FxvzRCcI=
+	t=1770167680; cv=none; b=LKmvha3h2ftPwFTEzqKZuW+tlH56GmD/yX30qkg93++k1aKCiCrTZ/ph/Z2rotl0I6+HMWZpYlqLGWiJZN8mKlZ8GWJEtppk9UZSjpprT6juk5QqsPYDfMINLZDQNDiWhTm+bzOvFIj4ZCScmAdvFY9gddPrixQvQBm/dJDTi6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770163819; c=relaxed/simple;
-	bh=ESxIp4/yXKBosB0FyqK/1O/fQD+MS4ChEKPfTEhgPBo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r1iQpmFDICeg+d9Gju13U98Kzx5gh0DMWpa+O/RtpPsiGBnCVwo4NZHlYPBpG3QygZf4xh6yOZeRFNyeb7sw/bOw+tz1aJOdcf9D+oCCi7OmHLI+fa23RhVXLRxtkacbypk7bKMKFX3nAqjsaAkk0FQjHN89JKHU302yoE68XAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ApRMKyWe; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770167680; c=relaxed/simple;
+	bh=00nfPGyTtc8tXm9bcLTfP0n/oJ3YOvF8pB/jtPDLcHM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=tmcLjmYERAjzfLh2ouxXXRUju0aEYp40J/73/uoRoIPTjGUVdPhILqZaPGXw0k0cljgkLOg6hnU6n2FJHMpaFi27fNmvqW6U50Xn6RmaeOrML0i4M05hZN2Qfwfw9eyLdmxAZnqKQzseaX3JhG3MxUWBoqhL9vuzFgikYN/J0QM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=wZ7gQZbd; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ApRMKyWe"
-Message-ID: <7e49472c-4bbc-49fe-92c6-621e4675d882@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770163814;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zPnG+2FnaGlQfzxXfIjWuGajlOFPpBxdoaiBCLVKvoU=;
-	b=ApRMKyWeexGTzglygbcOHhU7Wfd4rnLeiMI+Jogeatu2nhRqIkK0lA//+bUOV3vFAbHCoJ
-	mS0BsrYP93R9bxyxRU1fhniBcUvx2p4NhTCXzAkUT0zL/EyR+YUdOmdiWZC6zP6HhDzLGT
-	UyQfu6GTd6zJWiBQ6KJq5hvzWsaEowg=
-Date: Tue, 3 Feb 2026 16:10:04 -0800
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="wZ7gQZbd"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Sab77aD3NRaoRo9PD9BOaCGAGHr4ZUPWfgWJALWIRPg=;
+	b=wZ7gQZbdRK1+GZJS0jqOE3vl4vndzym+EBkMx/e87JCQYlMowNqiiWFcFFSOLsIodNDjDP7VH
+	Pbf6sr2gRUP2LA39TVUIGDKMjf5xKd0XjR+qKjsbVrgUGRo0+8feiw2xtUjSeNAl8zXJCQVGVWv
+	edQ7DVAwewg5jGt33bT1164=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4f5Mhn016vzRhXJ;
+	Wed,  4 Feb 2026 09:10:01 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6D26A4056A;
+	Wed,  4 Feb 2026 09:14:34 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 4 Feb 2026 09:14:32 +0800
+Message-ID: <a22ccdb5-5449-5e48-790a-5c3dd0de7544@huawei.com>
+Date: Wed, 4 Feb 2026 09:14:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 02/22] PCI: Add API to track PCI devices preserved
- across Live Update
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>,
- Adithya Jayachandran <ajayachandra@nvidia.com>,
- Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
- Alistair Popple <apopple@nvidia.com>,
- Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal
- <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
- Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>,
- Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
- kexec@lists.infradead.org, kvm@vger.kernel.org,
- Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
- =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
- Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>,
- Pranjal Shrivastava <praan@google.com>, Pratyush Yadav
- <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>,
- Samiullah Khawaja <skhawaja@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>,
- =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
- Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>,
- Yi Liu <yi.l.liu@intel.com>
-References: <20260129212510.967611-1-dmatlack@google.com>
- <20260129212510.967611-3-dmatlack@google.com>
- <44484594-5b5d-4237-993c-ac1e173ad62e@linux.dev>
- <CALzav=d1ZrHrWd-HhZJ8aY6aqxkBcLoet_5+-LL1mOakVTj6Ww@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v12 00/13] arm64: entry: Convert to Generic Entry
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <CALzav=d1ZrHrWd-HhZJ8aY6aqxkBcLoet_5+-LL1mOakVTj6Ww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Thomas Gleixner <tglx@kernel.org>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <oleg@redhat.com>, <shuah@kernel.org>, <kees@kernel.org>,
+	<luto@amacapital.net>, <wad@chromium.org>, <kevin.brodsky@arm.com>,
+	<akpm@linux-foundation.org>, <charlie@rivosinc.com>, <ldv@strace.io>,
+	<anshuman.khandual@arm.com>, <mark.rutland@arm.com>, <ryan.roberts@arm.com>,
+	<thuth@redhat.com>, <song@kernel.org>, <ada.coupriediaz@arm.com>,
+	<broonie@kernel.org>, <pengcan@kylinos.cn>, <liqiang01@kylinos.cn>,
+	<kmal@cock.li>, <dvyukov@google.com>, <reddybalavignesh9979@gmail.com>,
+	<richard.weiyang@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+References: <20260203133728.848283-1-ruanjinjie@huawei.com>
+ <87bji552uk.ffs@tglx>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <87bji552uk.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
 
-On 2/2/26 10:14 AM, David Matlack wrote:
-> On Sat, Jan 31, 2026 at 10:38 PM Zhu Yanjun <yanjun.zhu@linux.dev> wrote:
->> 在 2026/1/29 13:24, David Matlack 写道:
->>> Add an API to enable the PCI subsystem to track all devices that are
->>> preserved across a Live Update, including both incoming devices (passed
->>> from the previous kernel) and outgoing devices (passed to the next
->>> kernel).
->>>
->>> Use PCI segment number and BDF to keep track of devices across Live
->>> Update. This means the kernel must keep both identifiers constant across
->>> a Live Update for any preserved device. VFs are not supported for now,
->>> since that requires preserving SR-IOV state on the device to ensure the
->>> same number of VFs appear after kexec and with the same BDFs.
->>>
->>> Drivers that preserve devices across Live Update can now register their
->>> struct liveupdate_file_handler with the PCI subsystem so that the PCI
->>> subsystem can allocate and manage File-Lifecycle-Bound (FLB) global data
->>> to track the list of incoming and outgoing preserved devices.
->>>
->>>     pci_liveupdate_register_fh(driver_fh)
->>>     pci_liveupdate_unregister_fh(driver_fh)
->> Can the above 2 functions support the virtual devices? For example,
->> bonding, veth, iSWAP and RXE.
+
+On 2026/2/3 22:16, Thomas Gleixner wrote:
+> On Tue, Feb 03 2026 at 21:37, Jinjie Ruan wrote:
+>> Currently, x86, Riscv, Loongarch use the Generic Entry which makes
+>> maintainers' work easier and codes more elegant. arm64 has already
+>> successfully switched to the Generic IRQ Entry in commit
+>> b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
+>> time to completely convert arm64 to Generic Entry.
 >>
->> These virtual devices do not have BDF. As such, I am not sure if your
->> patches take these virtual devices in to account.
-> No this patch series only supports PCI devices, since those are the
-> only devices so far we've needed to support.
->
-> I am not familiar with any of the devices that you mentioned. If they
-> are virtual then does that mean it's all just software? In that case I
-> would be curious to know what problem is solved by preserving them in
-> the kernel, vs. tearing them down and rebuilding them across a Live
-> Udpate.
+>> The goal is to bring arm64 in line with other architectures that already
+>> use the generic entry infrastructure, reducing duplicated code and
+>> making it easier to share future changes in entry/exit paths, such as
+>> "Syscall User Dispatch".
+>>
+>> This patch set is rebased on "sched/core". And the performance
+> 
+> Why are you using sched/core, which contains a lot of unrelated
+> changes. core/entry is the one which has the prerequisites and nothing
+> else....
 
-Bonding, veth, rxe, and siw can be used in KVM environments.
+Sorry for misunderstanding your v11 reply—however, these patches can
+still be applied directly to the core/entry branch.
 
-Although these are software-only virtual devices with no associated 
-hardware,
-
-they may maintain state that is observable by userspace.
-
-As a result, Live Update should preserve their state across the update.
-
-Zhu Yanjun
-
+Thanks,
+Jinjie
+> 
+> 
