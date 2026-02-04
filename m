@@ -1,96 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A73389459;
-	Wed,  4 Feb 2026 11:27:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2582BE639;
+	Wed,  4 Feb 2026 12:07:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770204422; cv=none; b=mrh6dgYitbwgJ5tcDZ9rYd/IeUApxGaZb3HvWxfP2q6Pm/6tZrm/Pd/dofB2Sw5qj3TMNRPQsD5rEG5rmyOWtKdSykXeRvKto4gK3I6xj0RNp1H//XXKP2hfLU4nGyskTiWzE4Lp8NaE7QMoTAuoksowYaficxt7PRFZcW8bHpI=
+	t=1770206869; cv=none; b=WnYbtA/yetSWB1tU9FQqWgwFcXXP7uEoZkvwAJy/yhVw7qXZIoMwI90uJ3vJnlnG3y63nZlHLcC+qnjn9Hv929f4LtrH756yHc8ZgPN+X7duTF1FYIRSyMxNiJ0+9/gmN4pT+91y/p8/iF0WRnngYShcFpYw4KjBdbhZr63zNIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770204422; c=relaxed/simple;
-	bh=67+xiOhUAy8ZHXdYxyV0ZxTN94Teb/rCt2o03FasqGU=;
+	s=arc-20240116; t=1770206869; c=relaxed/simple;
+	bh=Xzsj0E6vrWYH/XkemxWZu7ieGiKYV4GnOsHPNEi3sBQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uhRz0QZkueqEHnnE186CKVjikz3pFsnPHhZwA1yH4Ov3KXaq3OnGpuumvp7rr46VMdpHD6zl03B8/y+W/4QrRjzry4FZdjPf/Ex431/mkyb/6eFWq/WlwkKQqxLVBsvaAknbqfXAp2o1Fze+xdnDfFTPK/Hu1K30hDqZlo/5LlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GqnineN8; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=FFoesh2VfKnOqKHBA0b6DDT7x6d6pFIx7PmcfsMAf4YVb/b+9Dj0E2G4X4mcxI8RzvjM5Tu4aaTu1+dOWTsKzzthfOwQ5JlRepGcbDfdohi69JuTjaxhoJzYBhkm6nAuf8sIiOek4eKKcMif1EHpS5334eV6S4S8S7BQiYpvkes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNoj/8pH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GqnineN8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC00C4CEF7;
-	Wed,  4 Feb 2026 11:26:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNoj/8pH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918FCC4CEF7;
+	Wed,  4 Feb 2026 12:07:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770204422;
-	bh=67+xiOhUAy8ZHXdYxyV0ZxTN94Teb/rCt2o03FasqGU=;
+	s=k20201202; t=1770206868;
+	bh=Xzsj0E6vrWYH/XkemxWZu7ieGiKYV4GnOsHPNEi3sBQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GqnineN8A0U5/3483dusTDdxv5M41AfF1XwayjJyq75iO/hnIVQEsi/EJnLJfvV4B
-	 ZtIJzMvcfzz6aPLrEKPFKQaEB9I2b4J+2rWJzzbyowNVEM7gacY9S9cazBWutVr7K3
-	 eXdoYVdVy8c48r+9EUTTns6qvbJm5HANuc7OqYqGaQrObUXt7xB6a6tMnLGGdZKWOU
-	 9KH+kNBKK3dQ2JE9Vq/bP2xOyTJRE8mBZLxL2Y55OnK/vArZR7w/IlUhlYcmHanAQg
-	 ZN0w/QQaRgsxApteE8kndm5ZTaUq3yWYTBEjNcyG02Oqa9x3ZF+m+lD/5n0KzXZepm
-	 8oDK8/oJt7Sng==
-Date: Wed, 4 Feb 2026 11:26:57 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, david@kernel.org,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	nao.horiguchi@gmail.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] selftests/mm: add memory failure anonymous page
- test
-Message-ID: <2028f5e1-e032-4909-8240-15fe0b3c82a5@sirena.org.uk>
-References: <20260204073331.899406-1-linmiaohe@huawei.com>
- <20260204073331.899406-2-linmiaohe@huawei.com>
+	b=HNoj/8pHDGsxCxIsn8XFJx2+hkYhVd3cwXe67h/uc0eMOwEFO4pmsYh9knCAKu1my
+	 QipNfgCJ33OWeh9tXAZX71GrmbJYCRdA2GF+hymnAxE1qUJF/hcWfFGXZ52tVNR0Wf
+	 PT9e8Yq7TZ6xoePwmteSN51k28AN/6EQLH4FWBNanrJkae3tNC2klAMTuHztsqFsPW
+	 LX3zACkcIgRNkusYR+hZiUV+IMB0IOR0SzhZDVglcOu62ZqhWljWfW53jG4AX5Q5f7
+	 AH5+Xi83MFES9ub7BM9jR06ywYojnGO0W0j4jiH+IHwrNHxnkC5lQDEkthuOgyDkAU
+	 V7m645f6R0kAQ==
+Date: Wed, 4 Feb 2026 12:07:40 +0000
+From: Will Deacon <will@kernel.org>
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+	oleg@redhat.com, shuah@kernel.org, kees@kernel.org,
+	luto@amacapital.net, wad@chromium.org, kevin.brodsky@arm.com,
+	akpm@linux-foundation.org, charlie@rivosinc.com, ldv@strace.io,
+	anshuman.khandual@arm.com, mark.rutland@arm.com,
+	ryan.roberts@arm.com, thuth@redhat.com, song@kernel.org,
+	ada.coupriediaz@arm.com, broonie@kernel.org, pengcan@kylinos.cn,
+	liqiang01@kylinos.cn, kmal@cock.li, dvyukov@google.com,
+	reddybalavignesh9979@gmail.com, richard.weiyang@gmail.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v12 00/13] arm64: entry: Convert to Generic Entry
+Message-ID: <aYM2jM5BMRGdjnt4@willie-the-truck>
+References: <20260203133728.848283-1-ruanjinjie@huawei.com>
+ <87bji552uk.ffs@tglx>
+ <2699bcdc-8d56-7fe9-fa9a-a3d61476e806@huawei.com>
+ <87y0l823o9.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="abbEY5s8WnurDw/O"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260204073331.899406-2-linmiaohe@huawei.com>
-X-Cookie: Are you having fun yet?
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87y0l823o9.ffs@tglx>
 
+On Wed, Feb 04, 2026 at 11:39:34AM +0100, Thomas Gleixner wrote:
+> On Wed, Feb 04 2026 at 09:28, Jinjie Ruan wrote:
+> > On 2026/2/3 22:16, Thomas Gleixner wrote:
+> >> On Tue, Feb 03 2026 at 21:37, Jinjie Ruan wrote:
+> >>> Currently, x86, Riscv, Loongarch use the Generic Entry which makes
+> >>> maintainers' work easier and codes more elegant. arm64 has already
+> >>> successfully switched to the Generic IRQ Entry in commit
+> >>> b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
+> >>> time to completely convert arm64 to Generic Entry.
+> >>>
+> >>> The goal is to bring arm64 in line with other architectures that already
+> >>> use the generic entry infrastructure, reducing duplicated code and
+> >>> making it easier to share future changes in entry/exit paths, such as
+> >>> "Syscall User Dispatch".
+> >>>
+> >>> This patch set is rebased on "sched/core". And the performance
+> >> 
+> >> Why are you using sched/core, which contains a lot of unrelated
+> >> changes. core/entry is the one which has the prerequisites and nothing
+> >> else....
+> >
+> > By the way，it looks like core/entry and arm64 for-next/entry have
+> > diverged: the first three patches of this series are already in arm64
+> > for-next/entry but missing from core/entry.
+> > Perhaps the two branches should be reconciled so that both contain the
+> > same baseline.
+> 
+> The first three patches of this series are ARM specific and have nothing
+> to do with the queued core/entry changes in tip. They are independent of
+> each other and these three ARM64 changes have no business in my tree.
+> 
+> If the ARM64 folks want to apply the rest of your series then they have
+> to pull the core/entry branch into their for-next/core branch first so
+> the whole thing builds.
+> 
+> But given that the merge window opens on sunday, this is probably moot
+> anyway and the rest of this series can go on top of rc1 in the ARM64
+> tree w/o any further complications.
 
---abbEY5s8WnurDw/O
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yup, the rest of the series (beyond what we've both queued) also needs
+some more review so this is all post -rc1 material.
 
-On Wed, Feb 04, 2026 at 03:33:29PM +0800, Miaohe Lin wrote:
+In the meantime, thanks for picking up the generic bits.
 
-> +TEST_HARNESS_MAIN
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index 29be9038bfb0..afdcfd0d7cef 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -91,6 +91,8 @@ separated by spaces:
->  	test VMA merge cases behave as expected
->  - rmap
->  	test rmap behaves as expected
-> +- memory-failure
-> +	test memory-failure behaves as expected
+Cheers,
 
-In -next I added a hack with wrapper scripts per category to improve the
-integration of the mm selftests with the kselftest framework, could you
-please wire things up into that, see:
-
-  6ce964c02f1c (selftests/mm: have the harness run each test category separately)
-
-for details.  It's rather dumb and simple but gets the job done.
-
---abbEY5s8WnurDw/O
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmDLQAACgkQJNaLcl1U
-h9Djpgf+PbySdJPMTJ001ksm8zd44+zqROSj/FgWNpwp8wtHVquGpsqIVpo0rIVN
-4CdxpVHlKfsSbq468aJ4PLYruyVwdyzpId9R3RZjaFs4ISEidAE4jAvZajoHKBLU
-Bk1RStR2Myefw46L0Zow4K8d6vTV/8RHRvfjQxLSN7T6FOJXFhMAbVX1O2nCst6R
-6pqU/YtDBnErDWP0G8jaSM8eKmQwfzW/X9OR4oJnYD2tsUFuyVH69Sq3vrL3ZUUE
-AGLo9lhqlRO1zkod5MfLNNigq3idf97jgKFPHU+8f3XzKyzypk6XrNpPFNQRCdaG
-rBRMukNS95sCTkzUyFtvTI6h1FJKfQ==
-=m9hf
------END PGP SIGNATURE-----
-
---abbEY5s8WnurDw/O--
+Will
