@@ -1,133 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527193B8D7B;
-	Thu,  5 Feb 2026 11:56:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179853D333A
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 12:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770292612; cv=none; b=V2BGka9kt0PsZDM4bIi8qZgK3L8gHPhjSZS8WKYOyTH6BCNMJGZow0ghwSDqfbmEdW/el4epoTdRyai2+/6vYbAaCW2NUj0Wnq59HleEv7KedctWWzoEfnIuHNiW9J4dRTFOKtgxzDG8mbYbI0eeSFN+MHcG1MlTckWQs+6Ud0U=
+	t=1770294093; cv=none; b=YXJwMkTS+MaP6Mnw5kW9XX8MXkUt/lCIBFMrs+Xfl07THGpAzrSEOqjHpEJdUtOuFl+fXbyvlELeVOvThmJ/LQRitp5QrvMxCcazIGDTw1S78taRtqymB3pDzn9ZnhWyGzPgYpEZ/VZar5YaRkrHvGar8T1W258usj4mCvQzabE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770292612; c=relaxed/simple;
-	bh=Lq1WS/feqcmneRYONaUcKaBFbqjoIGbWkZe7TeY1dWw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=I08URq6uQgw3F2hs+y0JM5L2Tnf+rJcFjWuChTDPDEnXjVDtX1dJU0S7wavT++U3V08Vu63brafH6r9sPb9hxDzsziqMV5x9U6TnmsJ7uCxLMjs75n86yevmpI0g883d9t8XUfnCRthZmPBBiqhiJFr3c5rvgg4PNv0dlC2/cyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MJegvFl8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770294093; c=relaxed/simple;
+	bh=qNW2890p8UbP5TyLdPSapSQG9zMim8uZEJvK8SqLrEE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LmnwZzM1N1oq0m108Nv1UqO3v+II1mY1k0f9yYs2FhjzIH1ghvo/fVYdujaX0NDTRfgcCjB3hyocATZqAzu4/FE8zQshHwUXhEsslGk2ZiGAo/ut4r6ySVmnzJx0tFvsDD5RaetbfXIFoT8i8F71wFO7jESGY3rI9tzPM53GMb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=qFn1R5IY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=rqiIM4Y8; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=qFn1R5IY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=rqiIM4Y8; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MJegvFl8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1FE7C4CEF7;
-	Thu,  5 Feb 2026 11:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770292611;
-	bh=Lq1WS/feqcmneRYONaUcKaBFbqjoIGbWkZe7TeY1dWw=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=MJegvFl8zNIFEdCVsIfXc9m0ZW29CQwqJPCT9HtZw3FosEk3mDUAvJOclzswdx19S
-	 0ll4ypcwSaqi3hJFow0sazMsqH8SJOp5Gxc79l2PEpZ5JcB0jCo7aqGcnNy/oLaGW4
-	 KCzj7uEuGcjXiNUcftTNdkgmHzQSYn6UEKjEp1MryzamEvymy98JdyeK4AkQl/hnHo
-	 7sKwf4YHu42Q3Tn7VGRYfrwb3QglQcw/H50T4zoPXyKPy7LXxPDwcrjaE82jU5nwr9
-	 KMf10liy6QaT9sMKhpUzgXTFWMkpEBeAxAB+0e3zVXkRsxsFEr9f3kDyzH8S6MSq4O
-	 7rtFcoWpJxvBg==
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qFn1R5IY";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="rqiIM4Y8";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qFn1R5IY";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="rqiIM4Y8"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 568945BDA2;
+	Thu,  5 Feb 2026 12:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770294091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IW64qyTb9m2ml2RSRkBPjQexYWMmZ5YenryH5wNBEIY=;
+	b=qFn1R5IYx0CbcwUAzz7livNr+vbnPFnXOQeWjyqu5le97rM2DLn9KH4yZHuEmR42T0Ly3i
+	ExRHBd+cl9D+MV5w3i4mKVFbLxOsFC8eyYYjYO6H2OOHooZe7vRxKLQTlMyEA2AVvOuPxJ
+	r++cn638KXsGF47FlhJ/AThN6SauRtw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770294091;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IW64qyTb9m2ml2RSRkBPjQexYWMmZ5YenryH5wNBEIY=;
+	b=rqiIM4Y8Ad/63qSKP0Vh+hN/9wZdjVmDtiGpQcUeU+qU/k53AxfntorXu8Q9G1/CtHNA+r
+	10PKG77XauGYzLCw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=qFn1R5IY;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=rqiIM4Y8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770294091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IW64qyTb9m2ml2RSRkBPjQexYWMmZ5YenryH5wNBEIY=;
+	b=qFn1R5IYx0CbcwUAzz7livNr+vbnPFnXOQeWjyqu5le97rM2DLn9KH4yZHuEmR42T0Ly3i
+	ExRHBd+cl9D+MV5w3i4mKVFbLxOsFC8eyYYjYO6H2OOHooZe7vRxKLQTlMyEA2AVvOuPxJ
+	r++cn638KXsGF47FlhJ/AThN6SauRtw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770294091;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IW64qyTb9m2ml2RSRkBPjQexYWMmZ5YenryH5wNBEIY=;
+	b=rqiIM4Y8Ad/63qSKP0Vh+hN/9wZdjVmDtiGpQcUeU+qU/k53AxfntorXu8Q9G1/CtHNA+r
+	10PKG77XauGYzLCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 415AC3EA63;
+	Thu,  5 Feb 2026 12:21:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id iILvD0uLhGnfOAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 05 Feb 2026 12:21:31 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 013AEA09D8; Thu,  5 Feb 2026 13:21:26 +0100 (CET)
+Date: Thu, 5 Feb 2026 13:21:26 +0100
+From: Jan Kara <jack@suse.cz>
+To: Jinseok Kim <always.starving0@gmail.com>
+Cc: jack@suse.cz, amir73il@gmail.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, repnop@google.com, 
+	shuah@kernel.org
+Subject: Re: [RFC PATCH] selftests: fanotify: Add basic create/modify/delete
+ event
+Message-ID: <kn2il642ie7z3obmojppjd7kdyswuqrkpsabozeyvm62va64ak@6ss43nmzmjl6>
+References: <dnncglg3x26gdsshcniw5yb4l2zlxz6qcwjqyekkpngb6v26q4@ftqnoe5eeapy>
+ <20260205100437.1834-1-always.starving0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Feb 2026 12:56:47 +0100
-Message-Id: <DG70CSP8NCJ0.316VXMVLD2ARN@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v2 3/3] Revert "revocable: Revocable resource
- management"
-Cc: "Johan Hovold" <johan@kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
- "Bartosz Golaszewski" <bartosz.golaszewski@oss.qualcomm.com>, "Linus
- Walleij" <linusw@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
- Khan" <shuah@kernel.org>, "Laurent Pinchart"
- <laurent.pinchart@ideasonboard.com>, "Wolfram Sang"
- <wsa+renesas@sang-engineering.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Dan Williams" <dan.j.williams@intel.com>, "Jason
- Gunthorpe" <jgg@nvidia.com>, <linux-doc@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-To: "Tzung-Bi Shih" <tzungbi@kernel.org>
-References: <20260204142849.22055-1-johan@kernel.org>
- <20260204142849.22055-4-johan@kernel.org> <aYRaB5wI3mS2J54K@google.com>
-In-Reply-To: <aYRaB5wI3mS2J54K@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260205100437.1834-1-always.starving0@gmail.com>
+X-Spam-Score: -2.51
+X-Spamd-Result: default: False [-2.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_CC(0.00)[suse.cz,gmail.com,vger.kernel.org,google.com,kernel.org];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.com:email]
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 568945BDA2
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
 
-On Thu Feb 5, 2026 at 9:51 AM CET, Tzung-Bi Shih wrote:
-> On Wed, Feb 04, 2026 at 03:28:49PM +0100, Johan Hovold wrote:
->> Specifically, the latest design relies on RCU for storing a pointer to
->> the revocable provider, but since the resource can be shared by value
->> (e.g. as in the now reverted selftests) this does not work at all and
->> can also lead to use-after-free:
-> [...]
->> 	producer:
->>=20
->> 	priv->rp =3D revocable_provider_alloc(&priv->res);
->> 	// pass priv->rp by value to consumer
->> 	revocable_provider_revoke(&priv->rp);
->>=20
->> 	consumer:
->>=20
->> 	struct revocable_provider __rcu *rp =3D filp->private_data;
->> 	struct revocable *rev;
->>=20
->> 	revocable_init(rp, &rev);
->>=20
->> as _rp would still be non-NULL in revocable_init() regardless of whether
->> the producer has revoked the resource and set its pointer to NULL.
->
-> You're right to point out the issue with copying the pointer of revocable
-> provider.  If a consumer stores this pointer directly, rcu_replace_pointe=
-r()
-> in the producer's revocable_provider_revoke() will not affect the consume=
-r's
-> copy.  I understand this concern.
->
-> The intention was never for consumers to cache the pointer of revocable
-> provider long-term.  The design relies on consumers obtaining the current
-> valid provider pointer at the point of access.
+Hello!
 
-Yeah, I think this part is not a bug in the API, but I think revocable_init=
-()
-should be
+On Thu 05-02-26 19:04:34, Jinseok Kim wrote:
+> Thanks for the feedback!
+> 
+> I agree LTP has very comprehensive fanotify/inotify tests.
+> 
+> However, the motivation for adding basic tests to kernel selftests is:
+>     - Quick and lightweight regression checking during kernel
+>     development/boot (no external LTP install needed)
+>     - Non-root basic cases (many LTP tests require root or complex setup)
 
-	int revocable_init(struct revocable_provider __rcu **_rp, ...)
+Hum, I don't quite buy the "LTP is difficult to run" argument. I find it as
+hard as running kernel selftests to be honest :). I don't even bother
+installing LTP and just directly run testcases from LTP source tree. The
+"LTP tests require root" is a valid argument but not really problematic for
+the setup I use.
 
-instead of
+The point I'm trying to make is: I'm not strictly opposed to fanotify
+kernel selftests but they do add some maintenance burden and I don't see the
+usefulness of this. So maybe can you start with explaining your usecase -
+how are these tests going to make your life easier?
 
-	int revocable_init(struct revocable_provider __rcu *_rp, ...)
+> Do you think a different approach (LTP improvement instead)
+> would be better?
 
-for the same reason revocable_provider_revoke() takes a double pointer.
+As Amir wrote we definitely don't plan on moving all tests from LTP to
+selftests so if you are missing some functionality from tests in LTP, it
+would be good to add it there...
 
-Otherwise this seems racy:
-
-	int revocable_init(struct revocable_provider __rcu *_rp, struct revocable =
-*rev)
-	{
-		struct revocable_provider *rp;
-
-		if (!_rp)
-			return -ENODEV;
-
-		/*
-		 * If revocable_provider_revoke() is called concurrently at this
-		 * point, _rp is not affectd by rcu_replace_pointer().
-		 *
-		 * Additionally, nothing prevents a concurrent kfree_rcu() from
-		 * freeing the revocable provider before we enter the RCU
-		 * read-side critical section below.
-		 */
-
-		/*
-		 * Enter a read-side critical section.
-		 *
-		 * This prevents kfree_rcu() from freeing the struct revocable_provider
-		 * memory, for the duration of this scope.
-		 */
-		scoped_guard(rcu) {
-
-		...
-	}
-
-Do I miss anything?
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
