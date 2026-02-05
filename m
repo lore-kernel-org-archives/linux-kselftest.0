@@ -1,185 +1,143 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42790241696
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 03:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A1C22339
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 03:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770263143; cv=none; b=cQ3gPEEcSssHdv1Nid/IZQdBWBTBnjnRoyacwpqYKZoVpRsFt20+q7e63Fy0EiFfUZm5jiMTfq3XKsnqbCOjePh3MzuHVq2Wwgrfx1cyY/yLyKQ62gWxBTfODCor5gtT62kS0FB7DY03TQzvCFOIGl1GT/cpWNvMPzWqssTcSq0=
+	t=1770263287; cv=none; b=eGbQbuJ9cCk7cmm7zNnGomU1pU0zybGhBBvyuUVQqKF2iQFoAcLlOKULZqdIao6PTE7wsMyi/thnOfm2zzA+lTThbcCJCFihNNpAOkFAY2XHPY11nsJmaj1cYTvVbnHw8m9AbgTyUlUfRPtE/9P148X6MtRGe5ly+bQoTbSGpXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770263143; c=relaxed/simple;
-	bh=WJ/jeHkIfNNujYEUHSpYWtmxLO6yVMycMG1TYHXvJ/s=;
+	s=arc-20240116; t=1770263287; c=relaxed/simple;
+	bh=7y9Hk6JlXCrERWliXg/TQZ3X+/C2SnPJyTWz26+wDdA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ESWHXZLzNbP89xLsYF02fLU1iRspfi053ydS75Zjbxcjh0mOIfqqk5eAKficVtJfz/pllySzyQ0LY55x3Ic4wAoPBwupjYd6bwqFEuRUdjFKX4ZyP0cAz4kWEButJApSwa1/d2W9olN89Z/rzZPQVsayqeUoX10JdCkWaC9YCsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P2N0/gsD; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=rFyRNFlonyCoKzwRr3YVIPZ18M102e2phEedUFFh/GuXAiAJWQzFdoKyAIeH/jEI2IJQepu8PuOcapcwNyYBkzGvvf3M5jnRTH6ydXtReXc4xxaGprMIKrzCk3jmIdQGsQ8W0q55AHKnxVRjQiWGI+tNlvhMyWuATV+tMCyYA1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=zvUqzBm6; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P2N0/gsD"
-Message-ID: <da08f1b6-53da-4774-a05f-072260e4a797@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770263131;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ikkVCtqFFnuGi3PCNZVDX6A6swIGnFYJIrnmzPcH2b4=;
-	b=P2N0/gsD+bqwC6ZgFow5sgOtkoDtUELLLhFP/R4AemtFYv4ne/e0HWcKQZSAgRI0g0n6u+
-	OluPkCP/SWLydIxuWA9jKWAesBekbg+JyIV2iN3pYJm1GHcjuV6iRY24lR8cS1uT40ZIy7
-	rooxv3GMniRBsv4ZERBF5+vAaXsQslw=
-Date: Thu, 5 Feb 2026 11:45:14 +0800
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="zvUqzBm6"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7d1890f7ee4so343548a34.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Feb 2026 19:48:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1770263286; x=1770868086; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QofIONG1uzBkxrXk9BfqK0VXCGMliXskB+p+bTvurvE=;
+        b=zvUqzBm65B1vzoarWWF4Hxh+tJQomRWyeL860QlOQlGrnN/7L+9aIlgHt4+Sgo9fTx
+         UWH+VUahrhmzC9uaMgmDQfwygwkwV4UniCDkBKe1Ygew4kd9vx5olhGa1ZUBLsODQlR2
+         hMP1Yxan/By/ZSoDM6zpDN0U1FxG8xC+pYUHjWqWv2b/fnxnAzfFM/dnc1+G9rwwZrTN
+         gS7chibU+9uS460RhWb24oo6nueO4nb1QNmjtDVM9u5Jswqf+3edpgqmpu03/QlWk2ky
+         j5F/AHTIP1fRAmnqU2C+skRTeH2g8GDRkcjcdY6yfWynkly5XpowYGk3bz10aV6drc9q
+         lsBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770263286; x=1770868086;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QofIONG1uzBkxrXk9BfqK0VXCGMliXskB+p+bTvurvE=;
+        b=S881KsdOaVF+twlFfqmIqPKtlN1KuPu3yTYIdJR7ByIrbR9O5+2oewoPVJ6urlTioF
+         3qO5PHE26FUb5jPljzLYWluo45hfYslZujznTyGvANSjNAZeOX5IC72JMRjW5zFtyzdU
+         vqDgj7O/YAaEaWOLHhDwlclu/55HmLcfC+HNPwD7K0qE/Zp0OuRGNQ5AV+6jlypRvYrw
+         Q/tdV/Cx0o5jWTVfLIxxQc7W/jOEjKvIgizcClujPfXxFcI6HZKp+NX60Qga37vJ8pPR
+         nIZBnKv2gfE88xWELTGQNKTZvASbCL1RnXyx5NDwqfJrOlpagotSk7sRZHs9HgCVWnW5
+         +CyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVjy7z4+ukEy0gxzJhkuTkYQWj1muVSfeoBL8l9KnvSu0Mi/B8StUxw0Yv8V7PzSYVsCDkgg58le6xuv8dtnKk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNjKfphBN8Mv41crNIeJKh+bFNlY5XaICqDMC/l57BScqusABJ
+	zzmITIOqEUqXvIQPwDv5+xN5muuu5DXNqwBqzjaTy1siIZWBFxYGpT0dnu6K51fGDx4=
+X-Gm-Gg: AZuq6aJf4f76zbyYiS/8IuVJJECyUE8pL3xtKqNSHah2XutQk0TgTUkCaxFvlGlqRbM
+	40rLunmXyCKWId/qIhT9mzygRCDd8sN2zqbNIepiyjWbB+mBiQBrNS31ovsSV5KA6n+LMMTqtIF
+	JSQAvuv8zAsDU5HTQOpNRQNgL85DUUqH99t0Rf1Z/Vp3wtKFEk3l0ZpD0o1vTNuesOpwystGaia
+	vbGI0ygd57btQq51IMeWZFH0lD28/YduSya1tNEFoUvU7/Tcw3ZjZLbPhS8Z2LadAhteyo9Rbcz
+	1TGngjTSnEvkGF4Nge/fcCvTHLzlBNURvxUO5iTIP3O0/+9ortv3cGlXwyHWHNv2PkLQgHx+EQR
+	oEWovmrCRWF2aEgwkSHbTg/hWzMA1+M97iiQLNtcl5d8EwiqegFQZXcWIPlUp/1kKe8K0hrE2dV
+	Y9aQXsS75eJVUicM2Gn8ULnWjQ8wwpmOTyYPMLZQrJZat8oMFr/I86FjQ8RlmNwjK/R9sMOg==
+X-Received: by 2002:a05:6830:6181:b0:7c6:cd24:6392 with SMTP id 46e09a7af769-7d448c1fffemr3274000a34.34.1770263285661;
+        Wed, 04 Feb 2026 19:48:05 -0800 (PST)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d44922a33csm2799317a34.25.2026.02.04.19.48.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Feb 2026 19:48:05 -0800 (PST)
+Message-ID: <55108bac-9edf-439c-ba54-ee25a1901d6c@kernel.dk>
+Date: Wed, 4 Feb 2026 20:48:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v9 8/9] libbpf: Add syscall common attributes
- support for map_create
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 0/5] net: devmem: improve cpu cost of RX
+ token management
+To: Pavel Begunkov <asml.silence@gmail.com>,
+ Bobby Eshleman <bobbyeshleman@gmail.com>,
+ Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Mina Almasry <almasrymina@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
+ <willemb@google.com>, Neal Cardwell <ncardwell@google.com>,
+ David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Shuah Khan <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ matttbe@kernel.org, skhawaja@google.com,
+ Bobby Eshleman <bobbyeshleman@meta.com>
+References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
+ <20260120170749.101e8bcc@kernel.org>
+ <CAHS8izMZxM6rcF+7Lfw=KFv4dmbHGSUrQBPmxO+sYj=V3TRuwQ@mail.gmail.com>
+ <aXe2QhzL4DoVbesQ@devvm11784.nha0.facebook.com>
+ <20260126173124.1f0bb98e@kernel.org> <aXhUfC7ZyYge1jti@mini-arch>
+ <CAKB00G3p9_VUTEW_KQvS1JAd+Ju_pjrU5r-v_p+K8Y=vH__mTQ@mail.gmail.com>
+ <c37ae03d-2b0e-4179-ac22-7d0c01ff601d@gmail.com>
 Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260202144046.30651-1-leon.hwang@linux.dev>
- <20260202144046.30651-9-leon.hwang@linux.dev>
- <CAEf4Bzb=96Ja38VGBr9YGGSSjaWwhkfH_oWjMJULykA-a7jZxA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4Bzb=96Ja38VGBr9YGGSSjaWwhkfH_oWjMJULykA-a7jZxA@mail.gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <c37ae03d-2b0e-4179-ac22-7d0c01ff601d@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
 
-
-
-On 5/2/26 03:48, Andrii Nakryiko wrote:
-> On Mon, Feb 2, 2026 at 6:43 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+On 1/30/26 4:13 AM, Pavel Begunkov wrote:
+> On 1/27/26 06:48, Bobby Eshleman wrote:
+>> On Mon, Jan 26, 2026 at 10:00?PM Stanislav Fomichev
+>> <stfomichev@gmail.com> wrote:
+>>>
+>>> On 01/26, Jakub Kicinski wrote:
+>>>> On Mon, 26 Jan 2026 10:45:22 -0800 Bobby Eshleman wrote:
+>>>>> I'm onboard with improving what we have since it helps all of us
+>>>>> currently using this API, though I'm not opposed to discussing a
+>>>>> redesign in another thread/RFC. I do see the attraction to locating the
+>>>>> core logic in one place and possibly reducing some complexity around
+>>>>> socket/binding relationships.
+>>>>>
+>>>>> FWIW regarding nl, I do see it supports rtnl lock-free operations via
+>>>>> '62256f98f244 rtnetlink: add RTNL_FLAG_DOIT_UNLOCKED' and routing was
+>>>>> recently made lockless with that. I don't see / know of any fast path
+>>>>> precedent. I'm aware there are some things I'm not sure about being
+>>>>> relevant performance-wise, like hitting skb alloc an additional time
+>>>>> every release batch. I'd want to do some minimal latency comparisons
+>>>>> between that path and sockopt before diving head-first.
+>>>>
+>>>> FTR I'm not really pushing Netlink specifically, it may work it
+>>>> may not. Perhaps some other ioctl-y thing exists. Just in general
+>>>> setsockopt() on a specific socket feels increasingly awkward for
+>>>> buffer flow. Maybe y'all disagree.
+>>>>
+>>>> I thought I'd clarify since I may be seen as "Mr Netlink Everywhere" :)
+>>>
+>>>  From my side, if we do a completely new uapi, my preference would be on
+>>> an af_xdp like mapped rings (presumably on a netlink socket?) to completely
+>>> avoid the user-kernel copies.
 >>
->> With the previous commit adding common attribute support for
->> BPF_MAP_CREATE, users can now retrieve detailed error messages when map
->> creation fails via the log_buf field.
->>
->> Introduce struct bpf_log_opts with the following fields:
->> log_buf, log_size, log_level, and log_true_size.
->>
->> Extend bpf_map_create_opts with a new field log_opts, allowing users to
->> capture and inspect log messages on map creation failures.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  tools/lib/bpf/bpf.c | 16 +++++++++++++++-
->>  tools/lib/bpf/bpf.h | 17 ++++++++++++++++-
->>  2 files changed, 31 insertions(+), 2 deletions(-)
->>
+>> I second liking that approach. No put_cmsg() and or token alloc
+>> overhead (both jump up in my profiling).
 > 
-> LGTM
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> 
+> Hmm, makes me wonder why not use zcrx instead of reinventing it? It
 
-Thanks for your review.
+Was thinking the same throughout most of this later discussion... We
+already have an API for this.
 
->> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
->> index 9d8740761b7a..0c3e40844d80 100644
->> --- a/tools/lib/bpf/bpf.c
->> +++ b/tools/lib/bpf/bpf.c
->> @@ -209,6 +209,9 @@ int bpf_map_create(enum bpf_map_type map_type,
->>                    const struct bpf_map_create_opts *opts)
->>  {
->>         const size_t attr_sz = offsetofend(union bpf_attr, excl_prog_hash_size);
->> +       const size_t attr_common_sz = sizeof(struct bpf_common_attr);
->> +       struct bpf_common_attr attr_common;
->> +       struct bpf_log_opts *log_opts;
->>         union bpf_attr attr;
->>         int fd;
->>
->> @@ -242,7 +245,18 @@ int bpf_map_create(enum bpf_map_type map_type,
->>         attr.excl_prog_hash = ptr_to_u64(OPTS_GET(opts, excl_prog_hash, NULL));
->>         attr.excl_prog_hash_size = OPTS_GET(opts, excl_prog_hash_size, 0);
->>
->> -       fd = sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
->> +       log_opts = OPTS_GET(opts, log_opts, NULL);
->> +       if (log_opts && feat_supported(NULL, FEAT_BPF_SYSCALL_COMMON_ATTRS)) {
->> +               memset(&attr_common, 0, attr_common_sz);
->> +               attr_common.log_buf = ptr_to_u64(OPTS_GET(log_opts, log_buf, NULL));
->> +               attr_common.log_size = OPTS_GET(log_opts, log_size, 0);
->> +               attr_common.log_level = OPTS_GET(log_opts, log_level, 0);
->> +               fd = sys_bpf_ext_fd(BPF_MAP_CREATE, &attr, attr_sz, &attr_common, attr_common_sz);
->> +               OPTS_SET(log_opts, log_true_size, attr_common.log_true_size);
->> +       } else {
->> +               fd = sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
->> +               OPTS_SET(log_opts, log_true_size, 0);
->> +       }
->>         return libbpf_err_errno(fd);
->>  }
->>
->> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
->> index 2c8e88ddb674..59673f094f86 100644
->> --- a/tools/lib/bpf/bpf.h
->> +++ b/tools/lib/bpf/bpf.h
->> @@ -37,6 +37,18 @@ extern "C" {
->>
->>  LIBBPF_API int libbpf_set_memlock_rlim(size_t memlock_bytes);
->>
->> +struct bpf_log_opts {
->> +       size_t sz; /* size of this struct for forward/backward compatibility */
->> +
->> +       char *log_buf;
->> +       __u32 log_size;
->> +       __u32 log_level;
->> +       __u32 log_true_size;
-> 
-> please mention in the comment here that this is an out parameter set
-> by the kernel
-> 
-
-Ack.
-
-I'll add a comment in the next revision.
-
-Thanks,
-Leon
-
->> +
->> +       size_t :0;
->> +};
->> +#define bpf_log_opts__last_field log_true_size
->> +
->>  struct bpf_map_create_opts {
->>         size_t sz; /* size of this struct for forward/backward compatibility */
->>
->> @@ -57,9 +69,12 @@ struct bpf_map_create_opts {
->>
->>         const void *excl_prog_hash;
->>         __u32 excl_prog_hash_size;
->> +
->> +       struct bpf_log_opts *log_opts;
->> +
->>         size_t :0;
->>  };
->> -#define bpf_map_create_opts__last_field excl_prog_hash_size
->> +#define bpf_map_create_opts__last_field log_opts
->>
->>  LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
->>                               const char *map_name,
->> --
->> 2.52.0
->>
-
+-- 
+Jens Axboe
