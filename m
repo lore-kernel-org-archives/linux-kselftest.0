@@ -1,70 +1,263 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E5342B744;
-	Thu,  5 Feb 2026 15:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0DE42DFE4
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 15:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770306968; cv=none; b=D7O7TCSMJ7tCGMw2vvKl/JCzw5QF7vnDBI/UPQwKUjxGHPh4nTWMnesYd9Ekj4j+baObnuUK23oX0DfF/xZETgFiqIj09JtwOx77niJ/m8CAIXvz+VKLHR4GcjfLQN7wtA00wvjbcYt9fKKB+bzjTqr8wa6JHPhvVe4XrZNb+K8=
+	t=1770307100; cv=none; b=Ik6EVF6K3tLapIpITtefxSQVVWYng5StMnZAxBT09kF+LeY8m8UM6GcFcj+QvzThNjxY+sF+pKndlneGta9hdi4nO5N1UiO6JV5VVxktkSVENNYlR3jKc8jDlJ3oaIn/nznJyckejZq5otEEvs+wz9Icms+5jRrqDyC0mVkG5y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770306968; c=relaxed/simple;
-	bh=JsMEdml05UXXO1TecyJMAgJegqNJqFJvEoxu8Sh3KiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HRkPpbcu2dYA/b4zLo7qXRU+a3XPQOsGSGSa3/HmP8LbYzeRI2D78cjhLbN7Ei911n0xLaEmtiGMbBbcrCeN2RiEhsCNJaLp+PbN039A3C/0Ry37LzDrYqbzvz0AmVCNRmogfSwvlVDVfGAkmkh9NHFGKdKTpWulfUNkop/eqMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dhv8sfSs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770307100; c=relaxed/simple;
+	bh=/fvPzUpDUHLCfd+m6YMOUQH3DCjmOR2ccQob3Ksagr0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YpJ+fVltHS7b9GhiegizpaA7Vc/svVgekNbaNG73h7e5BGKFBq1W2fBy/Sf5png8mI5SmD6hgFCvsjWSZLHsO8FVUTPIL6l32YYr1dYgbBUydif0y+0XvDJGzz8XhPnROULqPfhcINSYaOiYmZ6FSthWsPj3IO4+XbOGPJTbwrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HSuWCLqg; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=FRVe9mF5; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dhv8sfSs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED19C4CEF7;
-	Thu,  5 Feb 2026 15:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770306967;
-	bh=JsMEdml05UXXO1TecyJMAgJegqNJqFJvEoxu8Sh3KiA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Dhv8sfSs/6RteMCIQGiy2gyd5LNsb5jMsmlzIdShaca6u0IMHOrF5Eriv730NNNGH
-	 Gdd/J930K/hWd++bC8zTB7eg7gqKw9k/Ig6saLHia4JgeMnFudVvrbEIRzyDqNES1u
-	 NgTsD6Z+UEDY6cmM+iZh/5aJAsURJo7NmBcq+dCb1KxORyhimuJPq4D9rD6dEf9NIF
-	 fzxBRvDX82bFvfvhEeMia4xxPqPHDrg5uX0DJ9ryK6VNE5fWOsvVSsNy1sS5eBs9bx
-	 qXIFW5GpRUPCgw6TQfAhZOwVlzICQSaJhZaUBvkY+YJDdk6Q0VfjY/QZDIYgievVr0
-	 HMYJfv/CZVDFA==
-Date: Thu, 5 Feb 2026 07:56:06 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 3/4] mptcp: fix kdoc warnings
-Message-ID: <20260205075606.5b94c492@kernel.org>
-In-Reply-To: <f2f5c43d-bf6d-4fe9-9062-1f649d5c276b@kernel.org>
-References: <20260204-net-mptcp-misc-fixes-6-19-rc8-v1-0-cb559fb6b50a@kernel.org>
-	<20260204-net-mptcp-misc-fixes-6-19-rc8-v1-3-cb559fb6b50a@kernel.org>
-	<f2f5c43d-bf6d-4fe9-9062-1f649d5c276b@kernel.org>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HSuWCLqg";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="FRVe9mF5"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 615Blal64135816
+	for <linux-kselftest@vger.kernel.org>; Thu, 5 Feb 2026 15:58:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=reJd7/At3u/sqytH15vAL/oA
+	6cLufQfOxqNK9KuV5k4=; b=HSuWCLqgch53TzV1zbT0mlcPKlCQp7Qr4bLHE7+Y
+	cNWEZhnnKeTTIXTtOG0K1tnYZB5zwCPZJdFy3wxXmTNOIqBapUAI+E1kSNggsZ+S
+	M+qgKYok/LypjwqRxRmeb7a4JlLbO6X+LVc0ZWi8ZSKqzFa4GbD4ldowA4QnKEwM
+	5R2Im+xhHxd2nBx2ti+HNGv7gBq3G0AAL7SnqCkirBRopRZL2MQOrsp/NTI73sfc
+	L0Cgus6rjordj1lLzWhVBoiL7nLMcmdFxplw+SrMIYSiEp6cEny74WFuGYhaP9jB
+	Wz7EIEBLiG6A/J8hBEyBBesMvViHFFXW+ljtr9i9sQkNRw==
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c4tn40sqm-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 05 Feb 2026 15:58:19 +0000 (GMT)
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-2b724ff60e6so982054eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Feb 2026 07:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1770307099; x=1770911899; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=reJd7/At3u/sqytH15vAL/oA6cLufQfOxqNK9KuV5k4=;
+        b=FRVe9mF5PdSvYcYJKOVR7M7O68IqjM34e0ZYyMEf9OMLwL0eRf/zMUUfgvjyTwcydL
+         GpKGxQ0k8PLKH578GxcP4S3NI7Ox9d+CNMLRy/J3XeeyEsgs4/nNKjyynGi/A8YMzii9
+         8w/brACih0N1OB6+EXyEW336LUeWBscI+Hrz0gKd51+/1DLURo2H1bcQpIFsR8VP+rMS
+         cym4ICvQ8W/YUJlJ+6btTaoG7F6wq0tuDIjdoSiYvsmcCnA0T9IFTXHAre8/jMm+Qh1E
+         1YdFGS7V8kbf91WtB9f/VU+XYkhUC7LvkzYFM4lIT+wObBZE41XtU0JIRS/XW0oHG6+r
+         ag6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770307099; x=1770911899;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=reJd7/At3u/sqytH15vAL/oA6cLufQfOxqNK9KuV5k4=;
+        b=xFnrLkS+HVHP1QLlpULUA539hWsLaFjF5AAs6PzsHXW/SrFCvocDt5wmJAVna24O0b
+         d/I0c2alalgSeZY6sTGigSdqP8dd+O2fnb4MhI33SwsygRBJAAA27XBpdBiatACxIHMP
+         Rk+ex9mUHv6PQcGM4trVsAM2xwfG+J604koymLkcXcaQoIaoTdLUghw6MqkTHgL39l04
+         +CnEarOPHWC13HhWEgOk6Sn/WHFMmswM0Pi2XODIIE+QRNAbyn6j0T9OZtcxBXSnal0c
+         H+w9BK4H0DJrVZtszu/mmjZYteGIKf0RJTbrM0K3LYvs1rwMlgdGFuf8VNsECuFdHkk0
+         M+/g==
+X-Forwarded-Encrypted: i=1; AJvYcCXwsxMl5cyxTIK5ZfmH0+J4yyaTwCW9vycYOOHuvypa1qFJe59o57ryO7vO8kdt108q9OmEC2bfkL6pJaNcd8g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZV0lMuUy+lJNwN4BSYmIPm0CcD2td5qQNcwGhvQCNqVfsDSnY
+	QIXAh9MTZfUyPfID6nIlifr7vr58QCNFj8kaQKt/rKNbFHiEHHp3d0lWarau6eoUF5sf55Q5yN9
+	eTi8XUCAOfst6Uzw9159J2Bw+KAk1VrbnleOP4KJjCNsBifdInLHhsUeKd4X+kLrGDYfETxI=
+X-Gm-Gg: AZuq6aIn9VStJPBywUoHDWG0DctzccojSJTK1I7GPjAc66lu45XArAF+QrQnFYZPbU8
+	t14g3d/WMw7KjKOA1Y74yuYDPf+F9wTjR4SrrBIL1bizB0U6+gn/+CqmAn0XZuondJofjOS2fsp
+	7eAGGhq4WevEHNa7Z/Qzv32s95d6REUxpIrigBQ4MAWeZsNbp2CJDpvhXJ+rMLiUIYfv/jHstzL
+	GWpldtDFZBTLAvUUEDFpVEwDSRP9wniLxYi2UFMHWu2mRIgVFTeCxREYNNX2E7UtRJbL6+lB6Yx
+	tTYNJJH+PyrgghHBZbMRLUiTZM9Um6jc1mO5kGruOa7LyrNumQmBW05yLTjJgNAweh+JG5LnLym
+	JFfk4Wzsj/7F4+sjmwoE=
+X-Received: by 2002:a05:7300:cd8d:b0:2b6:fa0c:6c44 with SMTP id 5a478bee46e88-2b83291cd6dmr2805967eec.12.1770307098411;
+        Thu, 05 Feb 2026 07:58:18 -0800 (PST)
+X-Received: by 2002:a05:7300:cd8d:b0:2b6:fa0c:6c44 with SMTP id 5a478bee46e88-2b83291cd6dmr2805941eec.12.1770307097841;
+        Thu, 05 Feb 2026 07:58:17 -0800 (PST)
+Received: from localhost ([140.82.166.162])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b832fe59fasm3427697eec.34.2026.02.05.07.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Feb 2026 07:58:17 -0800 (PST)
+Date: Thu, 5 Feb 2026 09:58:15 -0600
+From: Andrew Jones <andrew.jones@oss.qualcomm.com>
+To: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atish.patra@linux.dev>, Paul Walmsley <pjw@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Jiakai Xu <jiakaiPeanut@gmail.com>
+Subject: Re: [PATCH v6 2/2] RISC-V: KVM: selftests: Add RISC-V SBI STA shmem
+ alignment tests
+Message-ID: <gcspbbvqkr7y53c4ytkqqycygkcqkiakle4aelq2z7nsnlyegl@addv4v655cbg>
+References: <20260205010502.2554381-1-xujiakai2025@iscas.ac.cn>
+ <20260205010502.2554381-3-xujiakai2025@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260205010502.2554381-3-xujiakai2025@iscas.ac.cn>
+X-Proofpoint-GUID: O2C3vtWh2ANhp0VwwvyTyBsT5wLyrSrk
+X-Proofpoint-ORIG-GUID: O2C3vtWh2ANhp0VwwvyTyBsT5wLyrSrk
+X-Authority-Analysis: v=2.4 cv=Dfgaa/tW c=1 sm=1 tr=0 ts=6984be1b cx=c_pps
+ a=Uww141gWH0fZj/3QKPojxA==:117 a=cvcws7F5//HeuvjG1O1erQ==:17
+ a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=pGLkceISAAAA:8 a=reGFDpqf7T0RaJXXVMIA:9
+ a=CjuIK1q_8ugA:10 a=PxkB5W3o20Ba91AHUih5:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA1MDEyMCBTYWx0ZWRfX814mRBHj/C5s
+ gkeJ+wTLQ7+U4Mpx+x2oQg5xX1Qijym7M+XYgPfEOZfSBYonkKrfX9JtBCTv3Ju/lZEmKIoQKnZ
+ 8g9D/uA++6i5X1/2VMk4SuAQONyEak09fvp5IB4B1OVlBHiLA7/GKt+ehpDrd4PlwE5FDfv5lsd
+ NHk4y7+EHSZkkIcgmtXFAZgWREFBQLtrzuOAq3C3bDMwmiNdS6UpvZEWOQPPszt9fugi/pTQtyR
+ rJf21VP6F/ItjqyRjOVc3NUcl9iuYWgSUBkrM1wFf7LBz6qpLi09sXcgeWpCOaMVyChRgHu9fog
+ F089Pjj8J5XHM9d/peV5UZDIN4V9DhPp6bM3lVOAtVpcEsc11O0Ic6xANF7Tu2+9KuaSkkaFnOZ
+ KzF34/DW3S5nVz9AgkkFQ+AckapSCFhvjdTWUSCnpRXgT9nCnVpy6J2XoRhaW9gzr2veDwAwY7G
+ kSAhxsfR/SSjpqgnjqg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-05_03,2026-02-05_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 bulkscore=0 malwarescore=0
+ phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602050120
 
-On Thu, 5 Feb 2026 11:56:39 +0100 Matthieu Baerts wrote:
-> > diff --git a/include/uapi/linux/mptcp_pm.h b/include/uapi/linux/mptcp_pm.h
-> > index c97d060ee90b..fe9863d75350 100644
-> > --- a/include/uapi/linux/mptcp_pm.h
-> > +++ b/include/uapi/linux/mptcp_pm.h
-> > @@ -11,7 +11,7 @@
-> >  #define MPTCP_PM_VER	1
-> >  
-> >  /**
-> > - * enum mptcp_event_type
-> > + * enum mptcp_event_type - Netlink MPTCP event types  
+On Thu, Feb 05, 2026 at 01:05:02AM +0000, Jiakai Xu wrote:
+> Add RISC-V KVM selftests to verify the SBI Steal-Time Accounting (STA)
+> shared memory alignment requirements.
 > 
-> I forgot that this file was auto-generated from a YAML file.
+> The SBI specification requires the STA shared memory GPA to be 64-byte
+> aligned, or set to all-ones to explicitly disable steal-time accounting.
+> This test verifies that KVM enforces the expected behavior when
+> configuring the SBI STA shared memory via KVM_SET_ONE_REG.
 > 
-> Sorry for the noise, I will send a v2 also adapting the YAML file.
+> Specifically, the test checks that:
+> - misaligned GPAs are rejected with -EINVAL
+> - 64-byte aligned GPAs are accepted
+> - INVALID_GPA correctly disables steal-time accounting
+> 
+> Signed-off-by: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+> Signed-off-by: Jiakai Xu <jiakaiPeanut@gmail.com>
+> ---
+>  .../selftests/kvm/include/riscv/processor.h   |  4 +++
+>  tools/testing/selftests/kvm/steal_time.c      | 33 +++++++++++++++++++
+>  2 files changed, 37 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
+> index e58282488beb3..c3551d129d2f6 100644
+> --- a/tools/testing/selftests/kvm/include/riscv/processor.h
+> +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+> @@ -62,6 +62,10 @@ static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t subtype,
+>  						     KVM_REG_RISCV_SBI_SINGLE,		\
+>  						     idx, KVM_REG_SIZE_ULONG)
+>  
+> +#define RISCV_SBI_STA_REG(idx)	__kvm_reg_id(KVM_REG_RISCV_SBI_STATE,	\
+> +						     KVM_REG_RISCV_SBI_STA,			\
+> +						     idx, KVM_REG_SIZE_ULONG)
 
-Hm, do we need some clever way to teach the codegen about short
-descriptions?
+We don't need this because...
+
+> +
+>  bool __vcpu_has_ext(struct kvm_vcpu *vcpu, uint64_t ext);
+>  
+>  static inline bool __vcpu_has_isa_ext(struct kvm_vcpu *vcpu, uint64_t isa_ext)
+> diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+> index 8edc1fca345ba..30b98d1b601c3 100644
+> --- a/tools/testing/selftests/kvm/steal_time.c
+> +++ b/tools/testing/selftests/kvm/steal_time.c
+> @@ -209,6 +209,7 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+>  
+>  /* SBI STA shmem must have 64-byte alignment */
+>  #define STEAL_TIME_SIZE		((sizeof(struct sta_struct) + 63) & ~63)
+> +#define INVALID_GPA (~(u64)0)
+>  
+>  static vm_paddr_t st_gpa[NR_VCPUS];
+>  
+> @@ -301,6 +302,34 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+>  	pr_info("\n");
+>  }
+>  
+> +static void test_riscv_sta_shmem_alignment(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_one_reg reg;
+> +	uint64_t shmem;
+> +	int ret;
+> +
+> +	reg.id = RISCV_SBI_STA_REG(0);
+
+...here we should use KVM_REG_RISCV_SBI_STA_REG(shmem_lo)
+
+> +	reg.addr = (uint64_t)&shmem;
+> +
+> +	/* Case 1: misaligned GPA */
+> +	shmem = ST_GPA_BASE + 1;
+> +	ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
+> +	TEST_ASSERT(ret == -1 && errno == EINVAL,
+> +		    "misaligned STA shmem should return -EINVAL");
+
+remove the word 'should'
+
+"misaligned STA shmem returns -EINVAL"
+
+> +
+> +	/* Case 2: 64-byte aligned GPA */
+> +	shmem = ST_GPA_BASE;
+> +	ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
+> +	TEST_ASSERT(ret == 0,
+> +		    "aligned STA shmem should succeed");
+
+same comment about 'should'
+
+> +
+> +	/* Case 3: INVALID_GPA disables STA */
+> +	shmem = INVALID_GPA;
+> +	ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
+> +	TEST_ASSERT(ret == 0,
+> +		    "INVALID_GPA should disable STA successfully");
+
+We're not testing that STA was successfully disabled, only that all-ones
+input doesn't generate an error. So the message should be along the lines
+of "all-ones for STA shmem succeeds"
+
+> +}
+> +
+>  #endif
+>  
+>  static void *do_steal_time(void *arg)
+> @@ -369,6 +398,10 @@ int main(int ac, char **av)
+>  	TEST_REQUIRE(is_steal_time_supported(vcpus[0]));
+>  	ksft_set_plan(NR_VCPUS);
+>  
+> +#ifdef __riscv
+> +	test_riscv_sta_shmem_alignment(vcpus[0]);
+> +#endif
+
+We like to try to avoid #ifdefs in common functions by providing stubs for
+architectures that don't need them [yet]. So we should rename this to
+something more generic, like
+
+ check_steal_time_uapi()
+
+and then call it for all architectures. Actually the other architectures
+can already make use of it since both x86 and arm64 do uapi tests in
+their steal_time_init() functions and that's not really the right
+place to do that. I suggest creating another patch that first moves those
+tests into new functions (check_steal_time_uapi()) which only needs to
+be called once for vcpu[0] outside the vcpu loop, as you do here. In
+that patch check_steal_time_uapi() will be a stub for riscv. Then in 
+a second patch fill in that stub with the tests above.
+
+Thanks,
+drew
+
+> +
+>  	/* Run test on each VCPU */
+>  	for (i = 0; i < NR_VCPUS; ++i) {
+>  		steal_time_init(vcpus[i], i);
+> -- 
+> 2.34.1
+> 
