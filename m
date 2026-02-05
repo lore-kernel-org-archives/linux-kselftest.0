@@ -1,281 +1,135 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013059.outbound.protection.outlook.com [52.101.72.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B352253EF;
-	Thu,  5 Feb 2026 13:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770298859; cv=fail; b=St+s2WmpzJPKb8P9AsMfpAoO0YMaNRCgZO8dALwJ4HkYtfdqOWXfOm6FAKpHqN9dITApZ/yU63HeogRSrS+2aY34meFO7zzU0V+VyiO/q+TjjhIrfWgjw1M4NRLwDTPyJGecie6LJh0VuHNCLkuoYD+Jllby+dHJfNtNebtufBE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770298859; c=relaxed/simple;
-	bh=iHWGAsYaLYqjpce37sqXkjLoeCmTayaUpI6zF/MA2ys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=OkGHxp73cd4L3BKOwbK1UkkiDjaLaqxuSK80pj0KuOxE/iJLAzHi/24y1lLh3+R3jOn7s3uVd1Qm/67UID8r1H+4SQIsS8oowke3siTnxanndAnDSDf6SL026krcSDrtxNwMOmsvSINE0Qx6eSB2R75rxwEcSKMJNDteV59VecM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=C9m4c5Ow; arc=fail smtp.client-ip=52.101.72.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C5A3D3D00
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 13:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770299928; cv=none; b=rJTHpNqKo4W2NpARG7fznzAahG88HQG4QUYGGJPlJwokxno6YLiX5jtPnR1y9sMX/2vjI2Bl0pY1Jj0YcCO6iiPjq2YuoVF8WCZ+QkseQnMXlyn+7PEPW92G1/RYvcfaoUAefJBQZebH5lJ/oc6yYq0bwLrB8v2JuXHRw4Hd594=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770299928; c=relaxed/simple;
+	bh=E4HFJMThakiyZ3PNDQdEq1HCxaDForK49Da5ZoVfT3A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iJeWiMjGCjhVqAxxBm90+QFi9GPz1WXwxBm0DFz5FVB7pIQYCpfhdZpb+iTAe21BWEzM4cEHdRwX+kn0i75JJHn3nBLJPmK5FAJIgcsdZOsCIvKIKKmN5uzRn4i3eR4K0IFb6F5exmWIGAH8/kkl688OqxOg/1Dt4kq1Hu1DlRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CWKingNP; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="C9m4c5Ow"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SNR2JHLeQKTq70PivarG3+TEA3Tbnnf3TX0qhlKeL+0/3nPxKa4PUHX5x4tpxTnEDbiZd6ifD6tKMZvrb26uRfvKx1nU5hGzWrBUL6as2MRLUMAJ4ZGdxJPkA8oHmSbXfnQzVsmgeIwrJIO+kTDZ/KhNBbj1P5j+1H81Xb60s/gu8YJAFHSV8yC3nc6i4mWRVLkvhUmvl6Sf0eUkHOJ4MiQnaftZAlinypQHLXH8aLY4Vqlz/+OZHNtQMqi7bJGNk05fCFRprJgeUhWjYOfpDxgTbDZguVYBqGiqy2Ekr98CBOScCm+9X+3ByGpfHtHAWRhF4zxebbSNqcQo8JXIOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iMNzhGghf6eVc8eDGWAkHCnxgiSU3RzkEqHzYFdDEm0=;
- b=MdW9UV4aAAT49fcK30Up0VOjQS2Le9wFgAzomX9/Wd1jcii9GL/v44+ETa02CbdLIkpnzcS55jDzRYOqysZxmgMbSLcVMtDEFykHg3S5BsvW98oAh2dlbT6FbMo9pkluG5SFmY5efc6johaMv3MAsWYhUzKyKtcRM0XHlacXVl/ckMFkTTe0H24FELH+AUNxs+nrbuTnEMBNSxaJDI32+DmxXyrsViVyKOEi2pZ+ckecnskMukszbDcsfXiYc68QzucM0+L4YeddW+yA1quw8qOvaQ5CWvRL+h3Cq5mRrNYszLYXhc1aZpCRksK5wFhDKamRR2YelPLgPDI+B8mkqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iMNzhGghf6eVc8eDGWAkHCnxgiSU3RzkEqHzYFdDEm0=;
- b=C9m4c5OwrWqUqi7sXqaHJnQt+VtoOIzet3swHNbptU8gbJQENapGUHUqrmjCAttBpaAeQ2vn2S6gT2F0+7xr4Lkc8RY9GrjlbzSgfHRJ6/F0gbvRyuLVFio0LUiKX5D+zoQBEvKwu3OPZal0PmINnuYn7LV2cH2gP9a0jcS3shsjAvdtcn9BCFXiClMBtWILW7PJ754jderJGhv51421dXdpB24F7f5q1Rc1yJMQ0+bM8cmjbIh65TlPxQfRjH3K64KTF5u4IrytDGQ2hDw/ZXcn5Ka7zqieTzIjg2KUhmVPCtrd0of2C56yC8lkNdr9fAiO/N9GbNJUmsQ4M2i/+Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by GV1PR04MB10478.eurprd04.prod.outlook.com (2603:10a6:150:1d2::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Thu, 5 Feb
- 2026 13:40:52 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9564.016; Thu, 5 Feb 2026
- 13:40:51 +0000
-Date: Thu, 5 Feb 2026 15:40:46 +0200
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: Larysa Zaremba <larysa.zaremba@intel.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
-	Tushar Vyavahare <tushar.vyavahare@intel.com>,
-	Jason Xing <kernelxing@tencent.com>,
-	Ricardo =?utf-8?B?Qi4gTWFybGniiJrCrnJl?= <rbm@suse.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
- frag_size
-Message-ID: <20260205134046.pggwyosutj7ggi4i@skbuf>
-References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
- <20260203105417.2302672-7-larysa.zaremba@intel.com>
- <20260205005901.gnju3zmqimtgeu2b@skbuf>
- <20260204173401.282899d0@kernel.org>
- <20260205122953.lscemcctayrvszdu@skbuf>
- <aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
- <20260205124638.hxzvjiocephzlrk3@skbuf>
- <aYSZw4wbd-nvLTuD@soc-5CG4396X81.clients.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYSZw4wbd-nvLTuD@soc-5CG4396X81.clients.intel.com>
-X-ClientProxiedBy: VI1PR08CA0239.eurprd08.prod.outlook.com
- (2603:10a6:802:15::48) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CWKingNP"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8c710439535so58255885a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Feb 2026 05:58:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770299927; x=1770904727; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rSpavQGrbW9Sk1NhHLCmCOMh7WCFB8hsxDAgv+wU+rk=;
+        b=CWKingNP+Qtnyr8iyFrjElg98FlHwRcI9yu3xSF+kPA0jJ2v2uePllJVV2VyCrVidW
+         SM04oyW7ifsuu36YDEocnlUj7vMW1HVnFuicYtIGViWdUbVVrfPkqnxx2+FZgtxXi326
+         QHtB3wYgNcF1AtaE9Dk8aCGvk/9/td6BkLhdvXpFtcu5SZrKZ2gHEuP+w3eY0pAunieh
+         0guo31hDLF9gJ/KmvrTRMjqrBvUi7G+Z1l+FpfzGv1fazeqBcF5xBwr8g2euiRP++vmx
+         0T49yOwkXNkdiDRXQKElWcauFsGqQHJSW5EC+tH3UfMGF+OiTfFUi8YXqNOLZT4GJbVg
+         239g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770299927; x=1770904727;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rSpavQGrbW9Sk1NhHLCmCOMh7WCFB8hsxDAgv+wU+rk=;
+        b=XFJlhIFaRhP94/ljaDuSH9pgkz8k+qElgWprWyWPJu9gRnIQKLda5d6VzhQmYrl/0c
+         TU/a61BU11/rPG4q8kQ1qGTmyyVwFA/mvkaiy+jOQs4VcYM5Iujoi6HQFsPDzj8g5BEJ
+         lWB4mwzDSrFzn9ciHaSleQCBJLb4p9z9vBJKP+MWhr6EPFfv0vIZvw+B3l5vpEb9eI/T
+         A04S3OKQiFjJn+o9KlJYB040h2t80KHPr3XgbB4WJ8qXlmRP/Eva+0kO7yVFzm2VFXuT
+         9OBG3jknsUuyEGwCJSrDSzZWEPGMCdpzDt45oZrW9EmioS/+1wB7kaMC1j+ozJechrMJ
+         NT2A==
+X-Forwarded-Encrypted: i=1; AJvYcCXa30wYwSd7NpesTkdTxA95Mslpxf4JqH7WiQ7ICgSrxhYRFGtgOIHMLTOW4LiEq7UpT+GFNUqh3yah8cV1IvE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyfriix0t8CTKsq7Xqa5ShrzbZTKFk4CZbwMhK/I3hHQlulmHsJ
+	rFAG2f/W7bz36or4FhQ7RmjCc61bnvwpcDog+GrAKorx/F+Q9bQtTBs3
+X-Gm-Gg: AZuq6aJk/tAJhVNVGnUED+IgH3+IlzX1UDEFHD69oH584hiqnd2/SAeqRW5poqsy/fe
+	Gs68Lqazd5E3xK137p2vJBv6KC2hzr/D8QgdBpttcmT53KIUaQIyhGGcMNGjvNLA4ptfoIirjmx
+	HQtB8afkLvcjQU5Nb8CfhKpodyBnbEUrfvpn8h9zdnE0GoOLoMptWwuQ5CjVj52ChdioVi254Rg
+	n/8361mwW56j3A+gDRVtBmN5qpRmsP8LKpqbYlrY1GfJ3rFZRYLlYxVOahcxGKcn6Rf+T0TYq80
+	PR2QJ0OhAbaoJXzsZ4Z/gz+Zp6xedv5LHYG/PHTNNozDf6pwHH9lWsLxyV0l0EvYRVTjdnk5gGS
+	ELYEtvRLKulXQeKAmhMZBKB290FsFwcO/XJ02QXWs6kmyNoQklgcL4R3X5YwVGv6ID+tYF6SqkA
+	4G4mqN49XO/+M/9IbvH7pZamcywKx9pnxYPaBXSauk+bB04VdNbhldqzIMpvzAfh4oBAzJdnpnb
+	PiX40P5CQ==
+X-Received: by 2002:a05:620a:4146:b0:80e:3af7:7a0c with SMTP id af79cd13be357-8ca2f9bb02emr906508885a.43.1770299926871;
+        Thu, 05 Feb 2026 05:58:46 -0800 (PST)
+Received: from pc.mynetworksettings.com ([2600:4041:4491:2000:87a6:ecbb:44f:b3c1])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fd40f9asm404975985a.41.2026.02.05.05.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Feb 2026 05:58:46 -0800 (PST)
+From: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+To: mhiramat@kernel.org
+Cc: rostedt@goodmis.org,
+	corbet@lwn.net,
+	shuah@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Subject: [PATCH v6 0/4] tracing/fprobe: Support comma-separated symbol lists and :entry/:exit suffixes
+Date: Thu,  5 Feb 2026 08:58:38 -0500
+Message-ID: <20260205135842.20517-1-seokwoo.chung130@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|GV1PR04MB10478:EE_
-X-MS-Office365-Filtering-Correlation-Id: 27692714-31ed-4984-4629-08de64bc2d2a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|19092799006|1800799024|366016|10070799003;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?OcpjA/lGwKtmXTgaOGJGDELocES41U2Pu5YfbQwbuKVA7Z19PhG/GSE/h2AC?=
- =?us-ascii?Q?TEy700yZahgNBKC/7DgauIMVThrezhg8AqINXtVtv7GNcLUA5QxBWHSAhKMN?=
- =?us-ascii?Q?Vv5pU8doKv8NK+cGDwB8HXsuhn+4NPPZOmzw9bHecI2fDDlKNzHjtyl0F0Jy?=
- =?us-ascii?Q?Y5K0pEDkzRmQlbqOoGRSh1KF8tlTZ1t1gDjNCqqd1DiBS6dm5tQF1mRK/E5Q?=
- =?us-ascii?Q?uYWje7HzHCbwSu/+iEDMP8JubcDynprayUcsGbj7XKGR5kELXd4K1pShF+jJ?=
- =?us-ascii?Q?IiOLwXn2SxpON0XB0lHrZQUnTvJ/Jgrva1zmRuJQn8N90FItHbg61GK5mm9h?=
- =?us-ascii?Q?0W6lC5mleJCXN+KRbJJlGTwPSG3FguuyIWSeS//DX6Q84OmFOYxegE9NldQN?=
- =?us-ascii?Q?p1XRckOVJTpf37X70mTXkZCekybXcyqZERVar0SaNRa+fX8ZIjaYXtFFt6Zp?=
- =?us-ascii?Q?+5TuXregQK+d5GZ6tAAMuXlYoUH/LS27qq6cIZHcwboU/1i+Qgw7Mm1W0zWL?=
- =?us-ascii?Q?NXteNB4zIrZHZW+/Ij0lqV6HSxt8uoEBWYFs7cx5rOyqBCJ9VPGUkkRvcONk?=
- =?us-ascii?Q?n6a9fJiqQUH+pcnPxsS76aGtXiyM5oEuBJAhAE7dQPmf2xT18PG8v5QWJJV8?=
- =?us-ascii?Q?WxcjeVHMq9Pz6HnFknNA5MQpdlJj3/mBcnck9RjFyO/ow8j7cnMGqPOYbX9/?=
- =?us-ascii?Q?TjIU5DjCNu5oWV2ewMrTgQ+rLgsOC/B+TPHosX9r4aXL2Nf+Ewjt4ksE4N1d?=
- =?us-ascii?Q?IvgpGKkOZ+uI4qCc7dlHhmvhwBIRA/SHj9mYIFbInV53LmpdskxQNy6QRdEA?=
- =?us-ascii?Q?eNSCstiX/mBfoznT6h5QMzNvo3H17aPPf4wjUJYtFyEmuD0UQih5acuDOMqh?=
- =?us-ascii?Q?a61+4uPudPOOlJ8WHZAZWw5NIZNqO3KRShFqj+lFRl6al1DyJiYzf0zCkqS6?=
- =?us-ascii?Q?z7xb0vXneY59Yp/mLyux65zBKm/Odqp/uyM0ZU4xwIbb8HPHhlDJnAzeqd6w?=
- =?us-ascii?Q?prRleESOZ26sTETj+0Hn8jZjD8A/KFWTZOIIOzxahnFxHceB0QeZP8j2e93K?=
- =?us-ascii?Q?fRsg5RHdDxAgEU+D+RHXo6qR1ypXdbmJhiNZoHHx+COKgRulBlR9hmtZHVZd?=
- =?us-ascii?Q?AOD2OQeDmD0KAzyewjZ6+6Co0AjU+7rs12MHcqCK0i+8Aiwvbi6nsx04GX3d?=
- =?us-ascii?Q?w9JaUx4s1xL6Qzg/uhrbSwWHze7NRuAFjVAEzWOis+sdHX2JC9bERyfEIDF6?=
- =?us-ascii?Q?rVpVIhxHCrQcxUhoPVASh3DLcFxO3IGUuycldNBrhl+sNCsw+wjOmeqc/lSK?=
- =?us-ascii?Q?aT2rRFOxScvubIpIQKz2mF1aUsHZRoSinHbOJQ2u7MXsqCOYsAJXye0Wv+ph?=
- =?us-ascii?Q?0WREKn3RWHHUzUllJ3ecK4hKO3wXH79oyGKQV221M9rbDVASxBvhwIL/sbu3?=
- =?us-ascii?Q?Ca7uPuPoY1j79j1uCES3NvUN3m8BIUr8bSSl3fJVqNnwzDR1DPK96KffSG4q?=
- =?us-ascii?Q?UVzUUM8ZUb4+fLjbLIGoy3v29oxaD8E3D0HnNGCfvgiKxlqOCWgfKJ6TOsD6?=
- =?us-ascii?Q?wyL0KbPmQLSXTGnOAhE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(19092799006)(1800799024)(366016)(10070799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?owbVyTug8VyosgvjIMJQyrLaYFfrZw6YeCjflw9QeySndAktFp6kNaYH+1df?=
- =?us-ascii?Q?7u69o3PK3fw5JXTvXiNldjwujkY75ZsIzcZPxS8k7ytYjUP+EBYg+pW+ite4?=
- =?us-ascii?Q?BOnOQFoJF50sT5NrL0eydEqD2vdGiF23EoDNO6JPAJcHvHwABjWlv1lIDxau?=
- =?us-ascii?Q?Zc7OM+Od4fMNs03e1vKRdyuK/58NWwX4IpbYornz5WV71EAAVSmAEMWc12Lv?=
- =?us-ascii?Q?WFt2auzTizXb9iaEp2EVuuGyE5yWL+IxvbEGA4c5eClORIKZjuRDSfUHzB0S?=
- =?us-ascii?Q?7366bJ+xFz8WvqWLMjaYyVG5O7No86dquLQcLe24C74Vny/xdDQDETu6uOLB?=
- =?us-ascii?Q?GsauCuYkgKNzJDxv1mAZ1fOVznp0e2u+m4jx4bGXDrjNgMbx4b2kt5bGqlzK?=
- =?us-ascii?Q?kW4a2zELqpSwLV6vzWHl4Bs9LA1sajjAWrAEG7ZqGmNa4qtT9QA/Wk4M2TA3?=
- =?us-ascii?Q?oMZPqatRVN8wvZ4hWhlbDV5Cf6i5j0A2IUifPJrJNEChkbdua/uXD+Rxwtdl?=
- =?us-ascii?Q?kjpIvAyfHQ6jaMwQOTRc+wGD5F5L+X/jdJGagaJcDvtnfAHUj0Y9QS87Gmpz?=
- =?us-ascii?Q?OQjwpd9bvNWpNDOlG5DyeqO2x/TfpRY2rbRmW2DkCJoqUdlP84j9hPf5PHJz?=
- =?us-ascii?Q?LbrAMXAu2dDrrtEsjI++ZEa+sc9iaI+QTuOV3Lt7zLAwy12c97QTKOrqCitK?=
- =?us-ascii?Q?/D1iG5gaIPXOc8AHpe2FNOgopse9e3pE+jGsjVQItv39vrPuoXMOyGQhccWj?=
- =?us-ascii?Q?mrym1VnJrmPBOt1bu9pRxOHAspIZmTUWAay6DEtY4s/kaRjxaVAOl4cKT37k?=
- =?us-ascii?Q?wG4b5Om6fcvcz7SfCUXpfX8TI+UXbhE0D4/Rip5F1jzfOOT6pMbdWugh0fY0?=
- =?us-ascii?Q?RnaUveSh1/+0345kyzTEXBmaFD2foi0wPHOuDKA/jfznHdKd/YoTFjNNpd3f?=
- =?us-ascii?Q?DG17Zuz/sIxcTpilH/UA+fo8v2XPgJhn/y1OWxPRCDfhJOaWuCnS+A7UjYWs?=
- =?us-ascii?Q?bK+dW2xQyeyRRe4y1p06EBukr0p+QpZkAmbc99jrr635OKz2iUIsAVpLoV1o?=
- =?us-ascii?Q?SYtX6h/HghA/OATZ+45jzUETXPp9Si5cJQtFWMTmw7j43IOwvnb1tdxtXcNk?=
- =?us-ascii?Q?rC8hULqgwFR6CYzvIA3Vlb7YyUWyI4UeH0XQyaJgPsjJ+d+LBi/k+vbtcNmd?=
- =?us-ascii?Q?ionLaiDuMHbRZB4Vty7IMyAimW9eekFIeq/JDf8r3FtpnOFWKOB15jVRSeAX?=
- =?us-ascii?Q?K7LGJ3QqqbSi3hg7ZqmOFBByiYA2d7+miDBScwR2I+6nzzqfUvuwH4tDbj5O?=
- =?us-ascii?Q?qGtoqz6m/oLY35Vi4a1Du2vt8p9obVGEzeLsgcc2/PXsE7bdqEZ73acMwQ1e?=
- =?us-ascii?Q?ZI99/pooQNPzQoduRP4eNJc3+06Po5awq9l5sc5X4eD4tw5oeuYPJtYGTcMW?=
- =?us-ascii?Q?y4Vp/XR+orm08jFDkkQF16w6fvEHr296o+yBdaLwX+EAhDsjQFNYVVjnOdnY?=
- =?us-ascii?Q?tFH3D8eZgfaiEgGCHDOhRXRx0aLKrknPxCud0sTvzxk2wPLni3KvWUmY0BcW?=
- =?us-ascii?Q?wT/dxvWgyLsWaD3SFYRs7Ht0cBSgiKVX46KRAFbTvwSAkfZLAcyINUuXfXB3?=
- =?us-ascii?Q?J72l2DO7ZePE7bqzr48OpyG3BKnSoniVRTzpPf1exR64oijPOXv1ckdWzIvd?=
- =?us-ascii?Q?MY7brz0SrUxcxwtnuC44Q/tNnM+axnTzj+16MXDiHEpJPYIk3PwLgLvd1p7c?=
- =?us-ascii?Q?j9flgr0WN29UsvG6sIWwol5wWUb6c7uh8cSrrIMCv8P4DK0FPamV4fz3fBFr?=
-X-MS-Exchange-AntiSpam-MessageData-1: R70149CyZNn8z/Q9ExY+mlua9c7GChNe88o=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27692714-31ed-4984-4629-08de64bc2d2a
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2026 13:40:50.9954
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NyKYHxXyaxGsdh5rzLWG2XbvBVgDEr4BosE/6r/isdUmgAzFPX77CBDYBekDp+mO/s5zrXaeA8N4lvCYvj/Gfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10478
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 05, 2026 at 02:23:15PM +0100, Larysa Zaremba wrote:
-> On Thu, Feb 05, 2026 at 02:46:38PM +0200, Vladimir Oltean wrote:
-> > On Thu, Feb 05, 2026 at 01:41:03PM +0100, Larysa Zaremba wrote:
-> > > On Thu, Feb 05, 2026 at 02:29:53PM +0200, Vladimir Oltean wrote:
-> > > > On Wed, Feb 04, 2026 at 05:34:01PM -0800, Jakub Kicinski wrote:
-> > > > > On Thu, 5 Feb 2026 02:59:01 +0200 Vladimir Oltean wrote:
-> > > > > > Thanks! This is an extremely subtle corner case. I appreciate the patch
-> > > > > > and explanation.
-> > > > > > 
-> > > > > > I did run tests on the blamed commit (which I still have), but to catch
-> > > > > > a real issue in a meaningful way it would have been required to have a
-> > > > > > program which calls bpf_xdp_adjust_tail() with a very large offset.
-> > > > > > I'm noting that I'm seeing the WARN_ON() much easier after your fix, but
-> > > > > > before, it was mostly inconsequential for practical cases.
-> > > > > > 
-> > > > > > Namely, the ENETC truesize is 2048, and XDP_PACKET_HEADROOM is 256.
-> > > > > > First buffers also contain the skb_shared_info (320 bytes), while
-> > > > > > subsequent buffers don't.
-> > > > > 
-> > > > > I can't wrap my head around this series, hope you can tell me where I'm
-> > > > > going wrong. AFAICT enetc splits the page into two halves for small MTU.
-> > > > > 
-> > > > > So we have 
-> > > > > 
-> > > > >  |                 2k          |             2k              |
-> > > > >   ----------------------------- ----------------------------- 
-> > > > >  | hroom | data | troom/shinfo | hroom | data | troom/shinfo |
-> > > > >   ----------------------------- ----------------------------- 
-> > > > > 
-> > > > > If we attach the second chunk as frag well have:
-> > > > >   offset = 2k + hroom
-> > > > >   size = data.len
-> > > > > But we use
-> > > > >   truesize / frag_size = 2k
-> > > > > so
-> > > > >   tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
-> > > > >   tailroom = 2k - data.len - 2k
-> > > > >   tailroom = -data.len
-> > > > >   WARN(tailroom < 0) -> yes
-> > > > > 
-> > > > > The frag_size thing is unusable for any driver that doesn't hand out
-> > > > > full pages to frags?
-> > > > 
-> > > > This is an excellent question.
-> > > > 
-> > > > Yes, you're right, bpf_xdp_frags_increase_tail() only has a 50% chance
-> > > > of working - the paged data has to be in the first half of the page,
-> > > > otherwise the tailroom calculations are not correct due to rxq->frag_size,
-> > > > and the WARN_ON() will trigger.
-> > > > 
-> > > > The reason why I didn't notice this during my testing is stupid. I was
-> > > > attaching the BPF program to the interface and then detaching it after
-> > > > each test, and each test was sending less than the RX ring size (2048)
-> > > > worth of packets. So all multi-buffer frames were using buffers which
-> > > > were fresh out of enetc_setup_rxbdr() -> ... -> enetc_new_page() (first
-> > > > halves) and never out of flipped pages (enetc_bulk_flip_buff()).
-> > > > 
-> > > > This seems to be a good reason to convert this driver to use page pool,
-> > > > which I can look into. I'm not sure that there's anything that can be
-> > > > done to make the rxq->frag_size mechanism compatible with the current
-> > > > buffer allocation scheme.
-> > > 
-> > > I was just about to send an answer.
-> > > 
-> > > Seems like my mistake here. I actually think adjusting the tail should work, if 
-> > > we set rxq->frag_size to PAGE_SIZE in enetc and i40e_rx_pg_size() in i40e, and 
-> > > not to (PAGE_SIZE / 2), as I did at first, but in such case naming this 
-> > > frag_size is just utterly wrong. Glad Jakub has pointed this out.
-> > 
-> > I mean, it should "work" given the caveat that calling bpf_xdp_adjust_tail()
-> > on a first-half page buffer with a large offset risks leaking into the
-> > second half, which may also be in use, and this will go undetected, right?
-> > Although the practical chances of that happening are low, the requested
-> > offset needs to be in the order of hundreds still.
-> 
-> Oh, I did get carried away there...
-> Well, one thing is shared page memory model in enetc and i40e, another thing is
-> xsk_buff_pool, where chunk size can be between 2K and PAGE_SIZE. What about
-> 
-> tailroom = rxq->frag_size - skb_frag_size(frag) -
->            (skb_frag_off(frag) % rxq->frag_size);
-> 
-> When frag_size is set to 2K, headroom is let's say 256, so aligned DMA write
-> size is 1420.
-> last frag at the start of the page: offset=256, size<=1420
->     tailroom >= 2K - 1420 - 256 = 372
-> last frag in the middle of the page: offset=256+2K, size<=1420
->     tailroom >= 2K - 1420 - ((256 + 2K) % 2K) = 372
-> 
-> And for drivers that do not fragment pages for multi-buffer packets, nothing
-> changes, since offset is always less than rxq->frag_size.
-> 
-> This brings us back to rxq->frag_size being half of a page for enetc and i40e,
-> and seems like in ZC mode it should be pool->chunk_size to work properly.
+Extend the fprobe event interface to accept comma-separated symbol lists
+with ! exclusion prefix, and :entry/:exit suffixes as an alternative to
+%return.  Single-symbol probes retain full backward compatibility with
+%return.
 
-With skb_frag_off() taken into account modulo 2K for the tailroom
-calculation, I can confirm bpf_xdp_frags_increase_tail() works well for
-ENETC. I haven't fully considered the side effects, though.
+Example usage:
+  f:mygroup/myevent vfs_read,!vfs_write,vfs_open:entry
+  f:mygroup/myexit  vfs_read,vfs_open:exit
+
+Changes since v5:
+  - Fix missing closing brace in the empty-token check that caused a
+    build error.
+  - Remove redundant strchr/strstr checks for tracepoint validation;
+    the character validation loop already rejects ',', ':', and '%'.
+  - Add trace_probe_log_err() to the tracepoint character validation
+    loop so users see what went wrong in tracefs/error_log (reviewer
+    feedback from Masami Hiramatsu).
+  - Remove unnecessary braces around single-statement if per kernel
+    coding style (reviewer feedback).
+  - Extract list parsing into parse_fprobe_list() to keep
+    parse_fprobe_spec() focused (reviewer feedback).
+  - New patch 2/4: add glob_match_comma_list() in kernel/trace/fprobe.c
+    so register_fprobe() correctly handles comma-separated filter
+    strings.  Without this, enabling a list-mode fprobe event failed
+    with "Could not enable event" because glob_match() does not
+    understand commas.
+  - Reorder: documentation patch now comes after all code changes.
+  - Updated selftest commit message to note that existing tests
+    (add_remove_fprobe.tc, fprobe_syntax_errors.tc,
+    add_remove_fprobe_repeat.tc) report UNSUPPORTED because their
+    "requires" lines still check for the old %return syntax in README.
+    Their requires lines need updating in a follow-up patch.
+
+Tested in QEMU/KVM but I am not too confident if I configured correctly and
+would like to ask for further testing. 
+
+Seokwoo Chung (Ryan) (4):
+  tracing/fprobe: Support comma-separated symbols and :entry/:exit
+  fprobe: Support comma-separated filters in register_fprobe()
+  docs: tracing/fprobe: Document list filters and :entry/:exit
+  selftests/ftrace: Add accept cases for fprobe list syntax
+
+ Documentation/trace/fprobetrace.rst           |  17 +-
+ kernel/trace/fprobe.c                         |  30 ++-
+ kernel/trace/trace.c                          |   3 +-
+ kernel/trace/trace_fprobe.c                   | 219 ++++++++++++++----
+ .../ftrace/test.d/dynevent/fprobe_list.tc     |  92 ++++++++
+ 5 files changed, 308 insertions(+), 53 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc
+
+-- 
+2.43.0
+
