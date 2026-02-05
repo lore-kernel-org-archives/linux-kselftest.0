@@ -1,88 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76DD2DECBA;
-	Thu,  5 Feb 2026 11:28:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770290928; cv=none; b=tYV05L27Jzv5WmiXSiLW2IBOxGTFboVjphUtOiot8XNVFlWWaumxS/G8v98/ntzSqE1o2BA61hv+2CGPjY4OtjfGqnMy8rNVigPyCTpczBaxbb8RO9O6CWkbEMsPm/rdV0q6BDUY0NxL5hcPJZJjideo7ZvkpLmmPyl95Nd/gvc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770290928; c=relaxed/simple;
-	bh=Ir3rF+We/v/jeDeCoAQnTP2mNTyALL/4ipRHcYZSqOo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aR4EbiV6WjYsWQJM9ZwSfLHrjSFb4CTZs1OpSU5rtKtL9D4kUt+cwzrpYr6z+L5W98YHPGwT3ZKX5gJzZZXzMaAFDFJTjh5KRAYWAsdAjhYpboY2VlxR1Hy+lB/Lr+Cs1iDsRfSI4C0VIAwvtKOQGC5IB19chTTH8runtxk4mXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ae/tFLNI; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAD43A9DA7
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 11:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770291271; cv=pass; b=QkeZWoJwhwHCH6qrLfcSTmcVFUPos8CRUWfBmRwzQ07f8OgsAHUH9m1aNQ/K/IpvxYaQeRYkKL0ttrXOHlSdh2l6oBWT5zwpk6FGVL/1kUSk9gGAPkSqP+eb7wHNW5gVesS6XVVr3mkl+OI0UpIfgb8VgJeSOAmsv7fln/5Rgl0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770291271; c=relaxed/simple;
+	bh=Wllrb4WsKy79JRK0IRKHL+OD/vSc5rdMQLpSobXKH9Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XqEGrcc5azmKCu0V+fyqw5GniK5LCXnPOEXbZprGpS9hZSdUv2SwriNJWgDjrcACK+8TwqTN//poze3zrWtOFbTE71na9bvVG0w9YR7MR5hdgIDuATXj0l6EnkA+hnbAJb1gld6u+fKLqcOOSr2wSzPtlJS6CX4LpatUEQ78/Pk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d12Np2dW; arc=pass smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ae/tFLNI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064C0C4CEF7;
-	Thu,  5 Feb 2026 11:28:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770290928;
-	bh=Ir3rF+We/v/jeDeCoAQnTP2mNTyALL/4ipRHcYZSqOo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ae/tFLNIlQiLcQz3w8qXISrY1vDad4PIFtdLksZwSB7zFP9q80c3+9IXI+0VB8hgr
-	 rE0cvyT0qRDjhbRXKQOiKN4doIAm9GDkH8VF5ZfLLYnACC4ZAPRejDlDNxMMSVdeih
-	 E0Pl2GXqay2Q/+j/PE92lgsCniVqfMUhqfT1PQxJ8yRFyB3JEzJe+W13+luQpKBN+p
-	 wHjitr44gt44OO+2F5CI/YfTlZ3fXhw8BFnDO3X2uDi+Pz24er9rOOqXaFG5n/JUSk
-	 f8tu25tEQVfOFn2DPZcN8gmCJ3o77GdmlggG4kuJd4ShLnPBBcEZP1DfOdXm/6JAaY
-	 PwtHNcCi24CWA==
-Date: Thu, 5 Feb 2026 11:28:43 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, david@kernel.org,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	nao.horiguchi@gmail.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] selftests/mm: add memory failure anonymous page
- test
-Message-ID: <73756615-b779-44b1-8ff5-b4b2d5e3c7cf@sirena.org.uk>
-References: <20260204073331.899406-1-linmiaohe@huawei.com>
- <20260204073331.899406-2-linmiaohe@huawei.com>
- <2028f5e1-e032-4909-8240-15fe0b3c82a5@sirena.org.uk>
- <0a84104a-32e3-8518-ebc0-703814e233d4@huawei.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d12Np2dW"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-64b92abe63aso1683595a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Feb 2026 03:34:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770291270; cv=none;
+        d=google.com; s=arc-20240605;
+        b=W1Hfm2G6tp627Cl0SA+JdL8GTNN6gwrsho/saZij/bF8MsCHqFaV8eODuUAHMYyJ7q
+         S2JKL/8IC3coLuD6iP5hnS2CFocush/1qgw6kDTLhDVMoJyWlzwqRmJK13s/Ygg+VRWC
+         hn2MV1QxGvKuN53e4mV0azA3QRg36/2+N0SWlDSTUtWUN1abmmsXqRiRVAjreXDnc/k4
+         ek/Pjk8AcQH3/gUw+/zAfdXXRTjoWocTDkX/J7cS8wv4+d1CxOXw9xZeS1q179xb2eNt
+         pZyj1GRhtmIXThYjWWzIfEt3TAX/j3d9XEHz3i2nHiVr4MnBD2h6zR5iK8vXnnoAmlpV
+         Y+5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Ny70VYSd1xmz+6UjM3gPopGsV2FlfYDUrotLR2sKK5A=;
+        fh=rW3zKTv91+riM+1Kv3AG3wFALQTQbU4SA4Za/yeXQvw=;
+        b=AOdrFHnLauEyo3LzZBS+QkeWhGxv0PnRzGrUauZTKW5R6QPbRfJBID2m1Ut2Uqg06R
+         Lci8ot1SapzUpS2j0C35upP2IuXKiAknDt3MP6ROV/vb75HWUAbFJH9XHoiFUjko0A9s
+         Aa3TypJyooAtyaGEVPzpFU8R/izzj/AOT+50mZ+ToKP3tK07hbba7zIyxysjx5m2wWZ0
+         rkXrrvy86i9AE/wY+MwHolRxieKXZLPW/b7bZRTBykygSwz8wxlESkhS4CHwgLsLQfHt
+         tR4XNoLKlRp2Usu7EsLvPOPSVRUkeImR8nEYSNzyrSqCk905arPdbaROWAEvFCCLnZwl
+         pdsA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770291270; x=1770896070; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ny70VYSd1xmz+6UjM3gPopGsV2FlfYDUrotLR2sKK5A=;
+        b=d12Np2dWrxrrPfVW7VTgOLLvCxeDrSPXqWGIRLB29Yf4PCyVmWUZfJ+hfQhge2XRcN
+         pWNTqfvUuYukLwgK44tomY77lHZONJtsrfwuGqsGl7dKwftvOkS7KIQr8gnnyIsFRoIy
+         e/BiWowsDK0FxN0BQzhuMJ1QYPgl6gdVhjK3Uzl6wLkKT6Iry+m9ggqbSFmpO9l9w0pV
+         XraW7IyVCEn93qySmzrSv6KteVr/Iz4pK4i1rTqLeqzE/ooRwacbTQyACHJsJ8DxkZGD
+         Wp/N2w7z3gKD8VAiph1Q2ugpyZIyKiWZNxl8nOP6GuG48+NNCZB1fGjsuD/3ddXkWSJY
+         NTIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770291270; x=1770896070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ny70VYSd1xmz+6UjM3gPopGsV2FlfYDUrotLR2sKK5A=;
+        b=X06gWD4EXRnVS1HFaPpdeGjYCSCOPWP08VEUx2NZWFAarTm//Cmetj96MKYXDysbb3
+         XFfpUFrYPoWG2oE9rHCQiYtMzm+mb9C7y6SUxnNNSw4yFphUqhpA+0O+Db+wxQ1Q+W+E
+         lY7Y3kotgRSH/rpx11nDpS0yrM16sOGOgBqfrMB6grrWQnp8e+RID8aeQKGEMuhXZGpP
+         iaHr/vLPUKkKaj+/Z21nUWa7GDrgMs8UP/9LkVcwFnCiXewd1aiPCkP37Wppr96wHDBi
+         /6zYRmdQaU++C8dis/jGbk4d+TNN8hIKKCShGalOddSrOUehhcyJzzIzBqBE68HHuGCL
+         Gbuw==
+X-Forwarded-Encrypted: i=1; AJvYcCUNDcU/bSJkAUJ66bpzyOrpxRlPSvCWFspIe/Mgmd1lh9jmEl8+3l8yJqJ0LjfDPxCafvhp/Xc5pffkPB/GQRw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/6AM6qx413Basv9MOFZFYaMONT7k38ezxo4HnV60AZ+cxdhU2
+	toPOsPl+t76HaWfWiPiaSQHgVuW3QvCtD6uDB9m+3xAIIfwr6NQE7Fdfo2DBQnt3YNJM/prGvvV
+	N0QXQQw8a/WAfdbIVSBA9ZPhRHAiU1/8=
+X-Gm-Gg: AZuq6aI4dQVapk90bc1gJU2t23vqTP/QmOa11xwp4aoyfZqPsJsg3/65v3WzqindCj8
+	nYFBDNJPE6K9yQ6sZ7u//9ip2LxbmYEaSUmacOkHTNfum+WaUU0KEErQhkqByO5dW27AVowkii+
+	qo5mkLXg5xt03IO7o26SjmmSwfNgFzyC/5IGbL7U5bC8lOH4ngZrZlfbNvM+wEMRyAuU3Ri5JCw
+	TedM/aOSyF6Hl0CRd7vslV1DbBipbqY+90cnZDK31yaSIa0S8nJLUAtNArVdPb/p+gDME5U8V0F
+	NmBxSlQyCOZLJzu73lUgrFAMsHK68Q==
+X-Received: by 2002:a05:6402:f29:b0:64b:5562:c8f4 with SMTP id
+ 4fb4d7f45d1cf-65949bb6cfcmr2908607a12.7.1770291269875; Thu, 05 Feb 2026
+ 03:34:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qmBBxdvcuvo1k9qE"
-Content-Disposition: inline
-In-Reply-To: <0a84104a-32e3-8518-ebc0-703814e233d4@huawei.com>
-X-Cookie: Non-sequiturs make me eat lampshades.
+References: <dnncglg3x26gdsshcniw5yb4l2zlxz6qcwjqyekkpngb6v26q4@ftqnoe5eeapy> <20260205100437.1834-1-always.starving0@gmail.com>
+In-Reply-To: <20260205100437.1834-1-always.starving0@gmail.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Thu, 5 Feb 2026 12:34:18 +0100
+X-Gm-Features: AZwV_QgE8wjfM8FlpFwp8a5QJSoz0VKfXZCzKeg29kODXXrJs5HemCJ7Q7cL1Ok
+Message-ID: <CAOQ4uxiax3v03XeSP-MRHUqx5WTa67qOjtusSw=M-Tk0zARv6w@mail.gmail.com>
+Subject: Re: [RFC PATCH] selftests: fanotify: Add basic create/modify/delete event
+To: Jinseok Kim <always.starving0@gmail.com>
+Cc: jack@suse.cz, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, repnop@google.com, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Feb 5, 2026 at 11:05=E2=80=AFAM Jinseok Kim <always.starving0@gmail=
+.com> wrote:
+>
+> Thanks for the feedback!
+>
+> I agree LTP has very comprehensive fanotify/inotify tests.
+>
+> However, the motivation for adding basic tests to kernel selftests is:
+>     - Quick and lightweight regression checking during kernel
+>     development/boot (no external LTP install needed)
+>     - Non-root basic cases (many LTP tests require root or complex setup)
+>
+> Similar to how selftests/mm or selftests/net have basic syscall wrappers
+> even though LTP covers them deeply.
+>
 
---qmBBxdvcuvo1k9qE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+If you just want to add some basic sanity tests, maybe this is ok, but...
 
-On Thu, Feb 05, 2026 at 02:58:50PM +0800, Miaohe Lin wrote:
-> On 2026/2/4 19:26, Mark Brown wrote:
+> Do you think a different approach (LTP improvement instead)
+> would be better?
+>
 
-> > In -next I added a hack with wrapper scripts per category to improve the
-> > integration of the mm selftests with the kselftest framework, could you
-> > please wire things up into that, see:
+Using the word "improvement" here suggest that you want more than
+basic sanity and if you want more than basic sanity then by all means,
+we do not want to duplicate all of the test LTP test coverage here
+so please invest your time in improving LTP tests coverage.
 
-> Sorry, I missed that. Do you mean adding something like below to run memory-failure test separately?
+mount-notify was written as selftest because there was no good infrastructu=
+re
+to test user namespaces in LTP.
 
-Yes, pretty much - I'd keep the list of TEST_PROGS sorted but otherwise
-that's it.
+If anything, I would recommend trying to move those selftests to LTP.
 
---qmBBxdvcuvo1k9qE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmEfuoACgkQJNaLcl1U
-h9CBBQf+PU/CcNHjF6foxK8v9Dc0VdDIgPTuJgv98j4HpNS1sFKDSmYY8E99jo1a
-ri3Cfy+MwxIeD9KHMnk/wJPhFQh6NzhKLl80lR87yS9PUFTTwAg83Q7M+UDu3DUz
-mL1vyDbo4yqmLiXDLcXvgRbTy3iVaUBXRO9iC8M8RbR6L31p08SuJKlIV+SbN8js
-h3vptu7nIBLkJzWCMQM9hko9m150v/7I8uVif8SNKTO+AB/HFtUIs1413jOYEQ98
-n4Tc9vP9beAxASPS1mbxmUXFMx7Dxea/9CMwIJliH5pprLXa2g1mBHdrZcVzZd6j
-q74R/rofwXu0N928mS2XhwwX3PONOQ==
-=FBpU
------END PGP SIGNATURE-----
-
---qmBBxdvcuvo1k9qE--
+Thanks,
+Amir.
