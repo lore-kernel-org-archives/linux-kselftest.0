@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7238C2BE64F;
-	Thu,  5 Feb 2026 17:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635042F5A29;
+	Thu,  5 Feb 2026 17:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770312871; cv=none; b=O/vRZfDWf9duOhvWbBOq9AKxddDpGGxxVANCEKqNda47rTucgpmIdhq59/cw2iMiav3MwTnDr2fPeF1YZ+s+I1Lbv0P0neqUEGMGmcihYq3Ny91pyc1uP6hx8PU4tD8qoWMGg3ZnTxU/v7ti7rwzv7evHDBODPWAy8LH7NJBGvI=
+	t=1770312880; cv=none; b=SixAfNjamZD5f4/gaCQoAqRYGgva5PX0JompFpHFpAQQGt2AaM2nwFQ0D2hp3dYF3Rn7aACA28cDj/35IqIpyGLequ+X5w8DV3UerVHU0EgnbPwI/KvVxqx1j/4FiUMR12f+pq5HD/GSWCdOu3pfl4uiq8ChOWXA/Ji3FfEHGlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770312871; c=relaxed/simple;
-	bh=2C16gBetgYeprk8qMWPd4VtC9f+xr40ryhjM9KIq00Y=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FD+VFWDXmEuoKJZU78bXgcLTgdR6na7SnYIqhcAtOQ8tes2H03ltghtgkqNz5ruNvglpistS/ttw57UAIO1RsxBBhroj50raE1/AyLhY96tf36XjTCVRJWupVLSyHfb70PaN4WVnwOUTKIMGJEVbqKhgmVV9TYEMSxDrtjfkYvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kf7yf/w+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770312880; c=relaxed/simple;
+	bh=vipdnvkq6uyreagW24yf/YuCiyUEI9cmZmP5NDb9Fq8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=g1lakSBfJVaY+/4CyA8EbdD0rU8a0cyAJ9zLcrvcLL2KEzVysd9KZ1c7IoxoqZYWK+6ikIHZnO9bWhng9v7pskKoidXeW1FdH7b/8Uin1CVFmM581U/YgZS5eTFOv/QRneC4bPmMz6iPh0IMNumBrrGuMTWSxwUhA1ShTSHTSAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CGl+MAbt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kf7yf/w+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71217C116D0;
-	Thu,  5 Feb 2026 17:34:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CGl+MAbt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469FCC19421;
+	Thu,  5 Feb 2026 17:34:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770312871;
-	bh=2C16gBetgYeprk8qMWPd4VtC9f+xr40ryhjM9KIq00Y=;
-	h=From:Subject:Date:To:Cc:From;
-	b=Kf7yf/w+xVTMSXALSpMBjZEM5+9KulzLgbhPaAmI0NZ1s882hZqgIp16o4Aqzk6Vb
-	 g7+74uXyMaZq9CyjqkFhe83dSqxNv6JKy1O6j6Ai2vme/k7+netnAIt1M6wVmazSZ6
-	 r69y3XUIWTwINf/l0kXfc2yFoFefGWAcfGtVr722PjqYWYrCyUPZYwoTd5TxVOIaUT
-	 hiOTnKEnUdH3p3H/lWgtN3gd23y5fqZHa+wQz8XFh8jA5aOnVI9DNQOHRHLRiNpRRy
-	 7xLnjyDYoZmulR957gNAN+V7EqvRLditkQM9AbWD0Ol5c9lmVA6U98PxLCHrbNXQD6
-	 FP4c4GhNESxpQ==
+	s=k20201202; t=1770312880;
+	bh=vipdnvkq6uyreagW24yf/YuCiyUEI9cmZmP5NDb9Fq8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=CGl+MAbtRgM3FmcVYWNHtB5eKwzKhhOi9HJOl+cUC7Zvc7VpzuWz79r4fSuBmX1US
+	 e4Hzb2hSMoXTxqS8qMdpiBM2tX7F9dClO5OTXkZnP1pVOXEcB9FWhDd2awaKFvT6FK
+	 +ktSdam/PYeoCZglWtLHDxcqL22PIY+eFe+IqgrT625uyIJ3zOe5yWohwhGKY0hi7W
+	 s1e0ohNmClRNl8KOp2kN0b2s1PNC0lpJFInkM5fFMT8wCVDVW90iWEL/DpplMqsH0T
+	 Q+rlw+hUO2R5oir9otS2PAyY5hD/n/czynnR3mEloCiNg4ADFnKvXZ1hTZ2+Rqvdi+
+	 zpuohGpovZ2tw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net v2 0/4] mptcp: misc fixes for v6.19-rc8
-Date: Thu, 05 Feb 2026 18:34:20 +0100
-Message-Id: <20260205-net-mptcp-misc-fixes-6-19-rc8-v2-0-c2720ce75c34@kernel.org>
+Date: Thu, 05 Feb 2026 18:34:24 +0100
+Subject: [PATCH net v2 4/4] selftests: mptcp: connect: fix
+ maybe-uninitialize warn
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -36,77 +37,65 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJzUhGkC/42NTQ6CMBCFr0Jm7Zi2kRFceQ/DotQBJkohU0I0h
- LvbcAKX7+97GyRW4QS3YgPlVZJMMQt3KiAMPvaM8swanHFknLlg5AXHeQkzjpICdvLhhIS2Rg0
- VkicKFXnruitkxqx8NDLiAXkKTTYHScuk3+NztUf0J361aDC0ZVl3LbWl8fcXa+T3edIemn3ff
- 1IfGbTQAAAA
-X-Change-ID: 20260204-net-mptcp-misc-fixes-6-19-rc8-6a66c86a12f7
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260205-net-mptcp-misc-fixes-6-19-rc8-v2-4-c2720ce75c34@kernel.org>
+References: <20260205-net-mptcp-misc-fixes-6-19-rc8-v2-0-c2720ce75c34@kernel.org>
+In-Reply-To: <20260205-net-mptcp-misc-fixes-6-19-rc8-v2-0-c2720ce75c34@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
  Simon Horman <horms@kernel.org>
 Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- stable@vger.kernel.org, 
- syzbot+f56f7d56e2c6e11a01b6@syzkaller.appspotmail.com, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1936; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=2C16gBetgYeprk8qMWPd4VtC9f+xr40ryhjM9KIq00Y=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDJbriy0WeYXLrFO663/Ks+w4KbLjCWzbl6Iuphc6/lBq
- eLU+vvrOkpZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACbi3sLIMHfyyVZG5oXzp2/R
- nTz3cdZv39wCvoPb1Rg4d8g/XdGov4nhf30s04XLn8vdli+5LZgr+105vnbqbeHKB2cMNi5+o6V
- 1hBkA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1511; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=vipdnvkq6uyreagW24yf/YuCiyUEI9cmZmP5NDb9Fq8=;
+ b=kA0DAAoWfCLwwvNHCpcByyZiAGmE1KTIIUtqIJ4+1J4/ew7GrKBSZPUzop1jEqgvyfLkHNVq6
+ Ih1BAAWCgAdFiEEG4ZZb5nneg10Sk44fCLwwvNHCpcFAmmE1KQACgkQfCLwwvNHCpchnQD/ehpj
+ 2DTWtEcxaDZb4zWrIjXpZQaLyebh1NrE0FaRSlcA/24rLaJmG/2YhrPpGutdwbP6MwlJ7Cco9kt
+ di/wvztoI
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Here are various unrelated fixes:
+This warning can be seen with GCC 15.2:
 
-- Patch 1: when removing an MPTCP in-kernel PM endpoint, always mark the
-  corresponding ID as "available". Syzbot found a corner case where it
-  is not marked as such. A fix for up to v5.10.
+  mptcp_connect.c: In function ‘main_loop’:
+  mptcp_connect.c:1422:37: warning: ‘peer’ may be used uninitialized [-Wmaybe-uninitialized]
+   1422 |                 if (connect(fd, peer->ai_addr, peer->ai_addrlen))
+        |                                 ~~~~^~~~~~~~~
+  mptcp_connect.c:1377:26: note: ‘peer’ was declared here
+   1377 |         struct addrinfo *peer;
+        |                          ^~~~
 
-- Patch 2: Linked to the previous patch, the variable name was confusing
-  and was probably partly responsible for the issue fixed by patch 1. No
-  "Fixes" tag: no need to backport that for the moment, but better to
-  avoid confusion now.
+This variable is set in sock_connect_mptcp() in some conditions. If not,
+this helper returns an error, and the program stops. So this is a false
+positive, but better removing it by initialising peer to NULL.
 
-- Patch 3: fix all existing kdoc warnings linked to MPTCP code. No
-  "Fixes" tag: they were there for a while, and not considered as
-  important to backport.
-
-- Patch 4: silence a compiler (false-positive) warning in the selftests.
-  No "Fixes" tag: it is a false-positive warning, only seen with some
-  versions.
-
+Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Changes in v2:
-- patch 1: clarify commit message (NIPA Review assistant)
-- patch 3: also modify mptcp_pm.yaml (NIPA ynl)
-- Link to v1: https://patch.msgid.link/20260204-net-mptcp-misc-fixes-6-19-rc8-v1-0-cb559fb6b50a@kernel.org
-
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
 ---
-Matthieu Baerts (NGI0) (4):
-      mptcp: pm: in-kernel: always set ID as avail when rm endp
-      mptcp: pm: in-kernel: clarify mptcp_pm_remove_anno_addr()
-      mptcp: fix kdoc warnings
-      selftests: mptcp: connect: fix maybe-uninitialize warn
+ tools/testing/selftests/net/mptcp/mptcp_connect.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/netlink/specs/mptcp_pm.yaml         |  1 +
- include/uapi/linux/mptcp_pm.h                     |  2 +-
- net/mptcp/pm_kernel.c                             | 29 ++++++++++-------------
- net/mptcp/token.c                                 | 16 +++++++------
- tools/testing/selftests/net/mptcp/mptcp_connect.c |  2 +-
- 5 files changed, 24 insertions(+), 26 deletions(-)
----
-base-commit: bbf4a17ad9ffc4e3d7ec13d73ecd59dea149ed25
-change-id: 20260204-net-mptcp-misc-fixes-6-19-rc8-6a66c86a12f7
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+index 10f6f99cfd4e..24b4abac8687 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+@@ -1296,8 +1296,8 @@ void xdisconnect(int fd)
+ 
+ int main_loop(void)
+ {
++	struct addrinfo *peer = NULL;
+ 	int fd = 0, ret, fd_in = 0;
+-	struct addrinfo *peer;
+ 	struct wstate winfo;
+ 
+ 	if (cfg_input && cfg_sockopt_types.mptfo) {
 
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.51.0
 
