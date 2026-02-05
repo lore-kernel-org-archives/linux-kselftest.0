@@ -1,122 +1,131 @@
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69222F99BD;
-	Thu,  5 Feb 2026 17:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BAB30DD37
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 21:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770313301; cv=none; b=fHqQcTbi4FBLA9Fjk+agxMyQZrMFI0z7l9gRBRvg1mkyLO5CQfNbu019CyDMooHv/QQppmzPmDlmKbyzp/Ap18W7XOF9RpHj0+sAoYRFPuP2mmMBuV+6iVQWYkZZgRDP1ryxjL02pQ8C1b/w6OaI2ROIHCCUoLfD2E8pBif8lWw=
+	t=1770327818; cv=none; b=mVorl+dm8/TpmF9/2S/pwJQMUVyLwblfnG7mVfncy9gDKCXVyIgnFK+1PY3AUUn7ptMOr1hrJkHHA8i0WbIv6o+zqyZEiOXXHVvsjzHxE2eY4v3c97wKFsXFyGA3LrBSk05PCUTTzLmY4cuVlutZUIYjI5hnPOvsuqRUFyhVlgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770313301; c=relaxed/simple;
-	bh=dmL7Lk+6dlXqEGvGe/Bs7X3mYeHB1WOarIYKrEOGFXI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Rz+SOUsYlUmBkpneC4ceYmVsSSCc0+YU/PGRgqc9U+W34ykIrAGat14HACrN0XlE6gcxe+MPBn5UVUEeaaZ5CZW0//n7qGNh0EZm/JnKv66M20y+I2M/yTjj1O80cpMPaWD1KG4nYE16um6rugJ0xj5mQGjK0Ko2yUl63wyBhRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 0A3238C109;
-	Thu,  5 Feb 2026 17:41:37 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 1CB9120024;
-	Thu,  5 Feb 2026 17:41:34 +0000 (UTC)
-Date: Thu, 5 Feb 2026 12:42:08 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Vincent Donnefort <vdonnefort@google.com>
-Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- linux-trace-kernel@vger.kernel.org, maz@kernel.org, oliver.upton@linux.dev,
- joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
- kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- jstultz@google.com, qperret@google.com, will@kernel.org,
- aneesh.kumar@kernel.org, kernel-team@android.com,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 15/30] tracing: selftests: Add trace remote tests
-Message-ID: <20260205124208.2ed7cff8@gandalf.local.home>
-In-Reply-To: <20260131132848.254084-16-vdonnefort@google.com>
-References: <20260131132848.254084-1-vdonnefort@google.com>
-	<20260131132848.254084-16-vdonnefort@google.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1770327818; c=relaxed/simple;
+	bh=tCblJoq9g/HMbi+utPa6tWkGtYvQHIGZ3smM0wbHPKQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=TbZLTLbkP7pGeEzLdTGpADuDrUl9Qrm7H9gUWmH8LWLY3FpPOqUqaCvWfGh/U1yVOQBo3a/9dzHz/GuhXX6w4qVj88v+6hcS58y9+3mcS/cjpruti45j8BjCHgOQZUnyIWW34xB+B5tUv37/2ag2FdOyfjy4AXDFBvCjWhT7mcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QiQpQ0Su; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QiQpQ0Su"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c56848e6f53so819632a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Feb 2026 13:43:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770327818; x=1770932618; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NTt3Yt6WZ7YQmoJsNOI79U3marZK5bHkKaL7b6P4x+M=;
+        b=QiQpQ0Su/+s8beQk6Qehefqcr245UbugC3o6dfQsP3oW072RdO07kI3f8gvezNN2S5
+         SxjzRsl9cvWL4vkUD7iz8gYn7Dm/ILqMzJKDr8vFGtbUen+qsd74Z3rwFKIJboFkBkve
+         0aM6h9caeoETQdOnMCSL/zyfrj5INbsWTGweeFshsUnDqcmUOwDR4RadMKUKqEhpxRi2
+         BhPVHYluKuxbFt/wn6wo/OWtBJ3UW+jbLem0jhE/uSHWF9D6YUD1gdi78P3fNSZ1dXk5
+         PlqN3DFcHuWZtLn5B+zgR56H6oBevqi2bANXOWPEAe5I7CoPsTrEGFj1ZR7OqyfMhZ9r
+         r0Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770327818; x=1770932618;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NTt3Yt6WZ7YQmoJsNOI79U3marZK5bHkKaL7b6P4x+M=;
+        b=EAoILJUu7tVE6jlw0TrLbAugVrpdq2Y2hKl6xcBelrh77TVBdQBAoAk/5YV6ziotgm
+         +uK/O1P3aRG0KbyMykXzsb5+7M3IlQwub3AycQ4JsyQ6sdW0RKbDm3t6WZgHNnQgPF0z
+         UlpUZ72Fh87VdGr2XGOIWrW2hBieG1P4YWcluHNRaOPz5bokYjEs5lERsMCGVRkykpUK
+         1vBpATPcwlXB4i+uAYh2qqRKywvyczSiHtYMkpjKld7Hj6vmK/jt6x5dYKSN8PYn+1IK
+         Yppjj/O7X5h/8RRcnzb1IB4nh4lbrhZCZ+LMDRHAMgH3WGopX5+zt10xcN0/Cabxrl0J
+         JK9A==
+X-Forwarded-Encrypted: i=1; AJvYcCVURup+ni6uPBz7sKMGX3s9rXwPYXQvEXq8r1WehVE/SSizAr8IwbAIiuB59C7P+4brZkoFCJ11Z6r2vTmeY/A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSHHq7yHeA67XGa2S1iBmkpPuVf1tLoO3xvklW8o8oTKDzR26/
+	vpdco9jrz1/1D3jle/abH4fV47Ez5MgXZHYumm4GEPdNOtz5YxBkhGSJGqpN/bhMVF5W1+jTbNO
+	9nF+Zx/2d5IqZkQ==
+X-Received: from pge15.prod.google.com ([2002:a05:6a02:2d0f:b0:c61:7e5d:a81])
+ (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:151b:b0:342:44f3:d1bc with SMTP id adf61e73a8af0-393aef76be4mr328688637.35.1770327817947;
+ Thu, 05 Feb 2026 13:43:37 -0800 (PST)
+Date: Thu,  5 Feb 2026 13:43:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 1CB9120024
-X-Stat-Signature: xrqfaergycraki9ixirzx4pqwqpkshpz
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/AAJG0H2Y0nJ6yIVW93vc/rmOZvsTHdvc=
-X-HE-Tag: 1770313294-751280
-X-HE-Meta: U2FsdGVkX1+uuRgLPQ0ZgTKxMjzwxSS3wkxfEc/ttq2P0equ3WYuTk1Eo8BUqwVZX+pHP5PyilUVvCZrp/Id69DfyKfI2Lcp/JUghTpize8GQcHlrhj+pA1vcARhFNwS9fozq1kAOB1M5jjdhbgyyftg7E6q0Tm13V0vgY0dBYjaHm8CJ9e43ks2XZGIkfziMs32Vie/pcc9aL59qt67rJDOd8YNL9sFIg4S/bmc3qWX6TEookAaDBK0BzqiQTGiYhmLBwffXuSRZsCBHFPgG/lyEUt40fCk9nEWr/1+qTYjj82gzk1WqrJTqJK1Isyl4D6JObzKUKNVidE/baBu0TfHLiCDT7J7kI1mj9b80sNlo4rLU0R/bknCw+sIoPJs4g4uWStQ1N19ite56C3RWzGZxfFk+rXqZPVMs/Cnb5Q=
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
+Message-ID: <20260205214326.1029278-1-jmattson@google.com>
+Subject: [PATCH v3 0/8] KVM: x86: nSVM: Improve PAT virtualization
+From: Jim Mattson <jmattson@google.com>
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yosry Ahmed <yosry.ahmed@linux.dev>
+Cc: Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 31 Jan 2026 13:28:33 +0000
-Vincent Donnefort <vdonnefort@google.com> wrote:
+Currently, KVM's implementation of nested SVM treats the PAT MSR the same
+way whether or not nested NPT is enabled: L1 and L2 share a single
+PAT. However, the APM specifies that when nested NPT is enabled, the host
+(L1) and the guest (L2) should have independent PATs: hPAT for L1 and gPAT
+for L2. This patch series implements the architectural specification in
+KVM.
 
-> Exercise the tracefs interface for trace remote with a set of tests to
-> check:
-> 
->   * loading/unloading (unloading.tc)
->   * reset (reset.tc)
->   * size changes (buffer_size.tc)
->   * consuming read (trace_pipe.tc)
->   * non-consuming read (trace.tc)
-> 
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+Use the existing PAT MSR (vcpu->arch.pat) for hPAT. Add a new field,
+svm->nested.gpat, for gPAT. With nested NPT enabled, redirect guest
+accesses to the IA32_PAT MSR to gPAT. All other accesses, including
+userspace accesses via KVM_{GET,SET}_MSRS, continue to reference hPAT.  The
+special handling of userspace accesses ensures save/restore forward
+compatibility (i.e. resuming a new checkpoint on an older kernel). When an
+old kernel restores a checkpoint from a new kernel, the gPAT will be lost,
+and L2 will simply use L1's PAT, which is the existing behavior of the old
+kernel anyway.
 
-This still fails:
+v1: https://lore.kernel.org/kvm/20260113003016.3511895-1-jmattson@google.com/
+v2: https://lore.kernel.org/kvm/20260115232154.3021475-1-jmattson@google.com/
 
-=== Ftrace unit tests ===
-[1] Test trace remote buffer size	[PASS]
-[2] Test hypervisor trace buffer size	[UNSUPPORTED]
-[3] Test hypervisor trace buffer reset	[UNSUPPORTED]
-[4] Test hypervisor consuming trace read	[UNSUPPORTED]
-[5] Test hypervisor non-consuming trace read	[UNSUPPORTED]
-[6] Test hypervisor trace buffer unloading	[UNSUPPORTED]
-[7] Test trace remote reset	[PASS]
-[8] Test trace remote consuming read	[FAIL]
-[9] Test trace remote non-consuming read	[FAIL]
-[10] Test trace remote unloading	[PASS]
+v2 -> v3:
 
-I added this patch and the two failed tests now pass:
+* Extract VMCB_NPT clean bit fix as a separate patch [Yosry]
+* Squash v2 patches 2 and 3 (cache and validate g_pat) [Yosry]
+* Drop redundant npt_enabled check in g_pat validation since existing
+  nested_vmcb_check_controls() already rejects NP_ENABLE when !npt_enabled
+  [Yosry]
+* Fix svm_set_hpat() to propagate to vmcb02 only when !nested_npt_enabled,
+  not unconditionally when in guest mode [Jim]
+* Warn in svm_{get,set}_msr() if host_initiated and vcpu_wants_to_run when
+  accessing IA32_PAT [Sean]
+* Use dedicated svm->nested.gpat field instead of vmcb_save_area_cached
+* Use dedicated header field (kvm_svm_nested_state_hdr.gpat) for nested
+  state save/restore instead of overwriting vmcb01 save area
+* Replace restore_gpat_from_pat with legacy_gpat_semantics to correctly
+  handle KVM_GET_NESTED_STATE before the first KVM_RUN [Jim]
+* Remove nested_vmcb02_compute_g_pat() after removing all callers [Yosry]
 
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
-index 081133ec45ff..dfc954a6a380 100644
---- a/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
-@@ -106,8 +106,10 @@ test_trace()
-     echo 0 > trace
- 
-     for cpu in $(get_cpu_ids); do
--        echo 0 > /sys/devices/system/cpu/cpu$cpu/online
--        break
-+        if [ -f /sys/devices/system/cpu/cpu$cpu/online ]; then
-+            echo 0 > /sys/devices/system/cpu/cpu$cpu/online
-+            break
-+        fi
-     done
- 
-     for i in $(seq 1 8); do
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
-index d28eaee10c7c..146f0a9fe311 100644
---- a/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
-@@ -102,8 +102,10 @@ test_trace_pipe()
-     echo 0 > trace
- 
-     for cpu in $(get_cpu_ids); do
--        echo 0 > /sys/devices/system/cpu/cpu$cpu/online
--        break
-+        if [ -f /sys/devices/system/cpu/cpu$cpu/online ]; then
-+            echo 0 > /sys/devices/system/cpu/cpu$cpu/online
-+            break
-+        fi
-     done
- 
-     for i in $(seq 1 8); do
+Jim Mattson (8):
+  KVM: x86: nSVM: Clear VMCB_NPT clean bit when updating g_pat in L2
+  KVM: x86: nSVM: Cache and validate vmcb12 g_pat
+  KVM: x86: nSVM: Set vmcb02.g_pat correctly for nested NPT
+  KVM: x86: nSVM: Redirect IA32_PAT accesses to either hPAT or gPAT
+  KVM: x86: nSVM: Save gPAT to vmcb12.g_pat on VMEXIT
+  KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
+  KVM: x86: nSVM: Handle restore of legacy nested state
+  KVM: selftests: nSVM: Add svm_nested_pat test
 
--- Steve
+ arch/x86/include/uapi/asm/kvm.h               |   5 +
+ arch/x86/kvm/svm/nested.c                     |  51 ++-
+ arch/x86/kvm/svm/svm.c                        |  37 ++-
+ arch/x86/kvm/svm/svm.h                        |  35 +-
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/x86/svm_nested_pat_test.c   | 298 ++++++++++++++++++
+ 6 files changed, 406 insertions(+), 21 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/svm_nested_pat_test.c
+
+
+base-commit: e944fe2c09f405a2e2d147145c9b470084bc4c9a
+-- 
+2.53.0.rc2.204.g2597b5adb4-goog
+
