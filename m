@@ -1,94 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058EA1A23B1;
-	Thu,  5 Feb 2026 01:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392E122CBD9;
+	Thu,  5 Feb 2026 02:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770256519; cv=none; b=tSO5MsOha7JXKG5RdDCkQ0/xFNsyt3DV8Ta3z74K94zkz0ystYrzXAiMKhespL1KjFwbrvht9scOO/Bs62Mb3Wgh0+jvBwBZ8CddXzHEwJO2NyjfPVFxh2qRR6Cl2aBH+Z7ivpnsG1342zdmMyhXHaohUzXuNXj0SHjNausgO6w=
+	t=1770257075; cv=none; b=GS3v7zBBpRsdbg5rMiojTyYjFMHITg3lTPpAbASbdwr4OiXTTjIQ/Bs7syDbAfURCdSLSmNHjLtPKtMLcYpDb+MZbFdLIPjG7nOb3hJA8KxGEvlTAH2xb6DjwqzKdUn/svaY5jlqh2hs8n+K8JvWcKuNAWAP+MRZX7/9WGEykWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770256519; c=relaxed/simple;
-	bh=DqFzxfYKPrIKrr839txO83upVWq6NyZCqghWeivv+sM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Jm90W8NQMcsFR/Vk2jwF1k/DHh2WDma+pE7GhtZoUfll6FJP/bpEjvIaLI82jlayqKyw2TOS9+tTDFZWPtnonasVl8R+9qLEpdvadjqA2t7UwOXQxJwN2fdrjhP731MoNyloojvA52it+brw2mqaIJopq0VP68KnLjXgRws3/28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u4MTjYBz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770257075; c=relaxed/simple;
+	bh=xkmRbIXdODdc3sKKgWm5dUnPLT2mKDf57i94AB3LXgw=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version:Content-Type; b=ebUy0HMu3zP3tyt2Z72qDWQfap47xQuwXi5puQtTGDs2rpCtkGuiKo/kEA3utuGOvBh/MBf0YyD5KZTTV7+2Ogg6/yFoZRcjuifhRywq60DXPUKTLxbcsRdiGjgA1QYXxW9ua4P7FNIeX0366kvdQyGSLF1RZbyft8fJM1apBx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=pyRm9vct; arc=none smtp.client-ip=162.62.57.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u4MTjYBz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC52C4CEF7;
-	Thu,  5 Feb 2026 01:55:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770256518;
-	bh=DqFzxfYKPrIKrr839txO83upVWq6NyZCqghWeivv+sM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=u4MTjYBzUC00Jp6Rz0XqqegSaclwupRA1DEMrwtQ8N9rHkJRVDInSW3JHT9UX1xMo
-	 XxUiteY99zUGZ0zTEf39+is5Wg8dyRyqTNGS238N7RoGf5Jdup1jsgdY8I0Ehg9FFH
-	 MLSys+JKlvQpuUIXImWIDq49UH+JCB0BZmr0vZMCt61jtrMcwCvnXLhrOKdE+yrauu
-	 YPnRXW2gnG0n16PqCFnx/jNdV/IzB9kKyuNjAo+SCKVt+LUwoe+xQXdqrk+Eylimt5
-	 oIRggQV7kkEatTNb9LArL2uuxwGFpla+txIj6KCQ7vPCwmlYOxVMIDrEIM+G0ASFON
-	 iVZ8s7AXcPCZg==
-Date: Wed, 4 Feb 2026 17:55:16 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas.weissschuh@linutronix.de>
-Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
- <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn
- <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Matthieu Baerts
- <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, Geliang Tang
- <geliang@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?=
- <mic@digikod.net>, =?UTF-8?B?R8O8bnRoZXI=?= Noack <gnoack@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
- linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
- libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, Adhemerval
- Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>,
- klibc@zytor.com, Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition
- of 'struct sockaddr'
-Message-ID: <20260204175516.4fb11966@kernel.org>
-In-Reply-To: <20260204064248-d9c4ab78-f6d4-4ac6-8d55-e939bc1df6d2@linutronix.de>
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
-	<20260121192729.2095aa25@kernel.org>
-	<20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
-	<20260130081741.425a92e0@kernel.org>
-	<3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
-	<20260131092517.6639d84c@kernel.org>
-	<20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
-	<20260203144011.32d5b223@kernel.org>
-	<20260204064248-d9c4ab78-f6d4-4ac6-8d55-e939bc1df6d2@linutronix.de>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="pyRm9vct"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1770257063;
+	bh=097lNhljVmbTkEEYPb3lzz09QPVwAD1qq/GVIch2LME=;
+	h=From:To:Cc:Subject:Date;
+	b=pyRm9vctbOI6FJCCwMLCURVvoFYo/PNLM/kdn0NxL8GqjIvpkf0C8+bBFr2th6oMT
+	 CFVVG7Hf6AQb0EnXV2dhZVr4L10Mq+ABUEayjQxGjXGd+KzMgDyYFDVYVSIYDXOzQr
+	 0oniCNplxXeelaEzqaFgh42S/IEJY0nEmR+7Or1A=
+Received: from meizu-Precision-3660.meizu.com ([14.21.33.152])
+	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
+	id 3225EA6; Thu, 05 Feb 2026 10:00:50 +0800
+X-QQ-mid: xmsmtpt1770256850txj2jfxdo
+Message-ID: <tencent_35CFB8AE9D4BE7917D95763D15B972638C0A@qq.com>
+X-QQ-XMAILINFO: NT7uTz3cNku2JOKtnNtqxFpbXFycUyRfrrNPAM5IePfxTwD7EW8VneDdciYz7b
+	 wl6RdewizTU3RvuxBwQXW3M+wL51leaQkrTJj6E/w6qvNuohU1UQ5+rxSQGPoP7knVuwBiswu5+N
+	 uKxD4WITcjHeFojJ0Ru/DnM1KSVWc602tvP5WUVctAYaxKJxkeQOiqsTlvkDqfzDwXD1UFGWF95E
+	 NQtzvADPjtwhwUP8VGEd6TFd7ORTq/vYROa4tFqfmYBa+y0bRA4i4hBlFqOHEVOubJP4whvrCcMx
+	 4MmYnHDRrDS5isYZt/5kdD6/cONSwWVMEBIQIA37xi4CAcbF9fASDNdUXYY7Ms3WVhdyqIbx8UYx
+	 Z7aSUB5xRxAkRdqaxPkNVJYpTSMF1D+iUCxs0ALGQQjV4SRimC2Jl2QEUWDSpdFnNJLnQbGTY3tB
+	 M4T477ScWJu0svofvTD9eXYtao4wUcXPBk0+5ETX4o4Sd6NWFv6tE4u8mh7C51xsaQt+7BBT+QAJ
+	 4hFAjeG7gy6JpBD8vRHgL0F+Y735NlHamhOhmBDuJw0NtJR4YRl2ZO/TY+1dbxXf62MaKHeJDE3F
+	 3v4PqmqFhIBtUXFZEk+f4CPXvDan0Z5/Ul7kywnge3E8W+bkZZ251fqtKaryBYMxzVSEG9jURF7t
+	 ojFUNyN63TtjhZqyOM1+ec922t0LZjHKPr+WLKIbJgq3AGL6UK+vJ+jhxknLs0NsSwm8mvlZRd+h
+	 yltDNVHEx6JW4HxgIQinyKJ/s4oYTETHd444uuDf+65W5k1qLmyAaoxhIlcVhQ20PhU/8RL8hwgD
+	 Yi6Zb6ystAwd4VyFZCr8s+7T4Bbp6tRfZWNcraO/MY+BWSVjBC9JsXB8+c4nTDbPpNjhKmQ4O5PO
+	 Q6JcAsjD493F4OvFkJSOoLG2IuaigoS4cd2AkVybD3uios9+e3mFL2eEh4mW66YI8ZH8TgMDz5Q1
+	 O+bouwCI2YHwdrsWzR4m6/kXo4Bnv5Ycb3BuwLP3OuNsxL3b43TWDZHEAUagitnmw6eB9mhjxdWR
+	 u3Nj6dgsPXjCZ0E7W8aE/X7CKpvLIOSNhXmgHFcX7KJmIt4brULpwDhwsxryOnPGUh6SjFN4CDRc
+	 /b357TVB5N/AqWKDI=
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+From: Yuwen Chen <ywen.chen@foxmail.com>
+To: tglx@kernel.org
+Cc: ywen.chen@foxmail.com,
+	akpm@linux-foundation.org,
+	andrealmeid@igalia.com,
+	bigeasy@linutronix.de,
+	colin.i.king@gmail.com,
+	dave@stgolabs.net,
+	dvhart@infradead.org,
+	edliaw@google.com,
+	justinstitt@google.com,
+	kernel-team@android.com,
+	licayy@foxmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	luto@mit.edu,
+	mingo@redhat.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	peterz@infradead.org,
+	shuah@kernel.org,
+	usama.anjum@collabora.com,
+	wakel@google.com
+Subject: [PATCH v5 0/2] selftests/futex: fix the failed futex_requeue test
+Date: Thu,  5 Feb 2026 10:00:49 +0800
+X-OQ-MSGID: <20260205020049.72688-1-ywen.chen@foxmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 
-On Wed, 4 Feb 2026 06:51:46 +0100 Thomas Wei=C3=9Fschuh wrote:
-> > make -j16 O=3D"$kobj" INSTALL_HDR_PATH=3D"${kobj}/hdr" headers_install
-> > popd
-> >=20
-> > pushd uapi
-> > find . -type f -name '*.h' -exec cp -v "${kobj}/hdr/include/{}" {} \; =
-=20
->=20
-> Here only those headers which already exist in ethtool's uapi/ directory
-> are copied. As linux/typelimits.h is new, it is now missing.
-> Honestly, if a user fiddles with the internals of the UAPI headers like
-> this, it is on them to update their code if the internal structure
-> changes. In your case a simple 'touch uapi/linux/typelimits.h'
-> before running the script will be enough. Also internal.h now requires
-> an explicit inclusion of <limits.h>, as that is not satisfied by the
-> UAPI anymore.
+This test item has extremely high requirements for timing and can only
+pass the test under specific conditions. The following situations will
+lead to test failure:
 
-Hopefully you understand that while due to uapi header copy this is not
-a huge issue for ethtool itself, but it is a proof that your changes
-can break normal user space applications which do not vendor in uapi.
+    MainThread                  Thread1
+        │
+  pthread_create-------------------┐
+        │                          │
+ futex_cmp_requeue                 │
+        │                     futex_wait
+        │                          │
+
+If the child thread is not waiting in the futex_wait function when the
+main thread reaches the futex_cmp_requeue function, the test will fail.
+
+This patch avoids this problem by checking whether the child thread is
+in a sleeping state in the main thread.
+
+v1->v2:
+    1. Fix the issue of abnormal use of fscanf in the get_thread_state function
+    2. Add timeout logic
+
+v2->v3: https://lore.kernel.org/all/tencent_B9DBF2ECBE56BAB68BDAB949C6935D01CE09@qq.com/
+    1. Use /proc/[pid]/wchan instead of /proc/[pid]/stat to check if a process has entered the sleep state
+    2. Refactor part of the logic to facilitate code reuse.
+
+v3->v4: https://lore.kernel.org/all/tencent_FC5FB35D2545AFDCA6E377AE4DE75C79AF08@qq.com/
+    1. Add a new futex_thread.h file.
+    2. Add a new function named futex_thread_destroy.
+    3. Fix the issue that threads are not reclaimed in futex_requeue.
+
+v4->v5: https://lore.kernel.org/all/tencent_204540DCC2E303AEB6E77679C05F5C5D3808@qq.com/
+    1. Split the patch into two.
+    2. Modify the thread interface to support returning error codes.
+    3. In the test cases, check the return values of the threads.
+    4. Modify the macro definitions to more understandable names.
+    5. When failing to open the /proc/%d/wchan file, delay for 100 ms.
+    6. Modify the parameter description of the interface.
+
