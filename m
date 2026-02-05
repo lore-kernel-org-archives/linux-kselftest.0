@@ -1,117 +1,133 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56B82BE053;
-	Thu,  5 Feb 2026 06:58:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DC0334C04;
+	Thu,  5 Feb 2026 07:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770274736; cv=none; b=QtWiDgYIyFZZYOxo5/2AH2Vqm1+p0r7pcvA2386lC87pMRdzt4GPaRlCueVSI8GRzGawjyqdfJxPSa02YqR5HXmiKGWffDou881bEMV+7aypGwLyxvS7Nt4B5MNRt3iqZoph28SWbOOV6Lxycnt12LYwYm41RHn0019SLPghIOQ=
+	t=1770276227; cv=none; b=QESX9Gs4wQm0n+jSf9nBu0BfImtexKF7Rh7rc2fVlYJ9pgU6dNQ/Gp7miFIN3lvXH7HDeUudRnP8qY0UaRSPQ1gNjsmiw93HzIjtLr6mLfIX5YfK0mQZDaPDjzPudYr/IHwRkZ16wIwjYjjUVcPh/KkxP6INlTyB0pMVUxTbqSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770274736; c=relaxed/simple;
-	bh=Q3eMzabblyac6Lc1mi7X/ueYLrHOXrQP7GVxji6b2io=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Zkay99HtLxazVo1BVY84cpdB/6FSiFK96i3qWVv0e9s8V5dznYwhiZFbb0t0kAWc0xKg6uf1rLpuxPgs0ZKzcUcP9Q/ag8jAf5WIXjiYIwHQjsjGLAC6muLZPetHNn44+GTWDjbm1nsZvFAitbHevsHr5ty3SZF9f0lltIS13LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=NmjiaT9K; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1770276227; c=relaxed/simple;
+	bh=FgmZNaT1AJdOs3lof3+rnMI62Gul05tMmOYxnVyfbkM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GP424HfNlp/tDTUgBHk19t/qxLuNZWZthNvecfytWPYxaFNTjtR6sbPbLR67K+MRMuzOqfqv64CALZmOz8Ro7yGDEVs9gsphsTrTib0I7yH+yPWBNYS6nt3nOCxl1JVF5a0HbsIFxMs7bfkkJN3tbvtAtKCP84DYxO35jFxCabU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=agCF42zA; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="NmjiaT9K"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=J6qFZpvt332CWfnqiedPQcDy2pMKUb2TChFJK4dmduI=;
-	b=NmjiaT9KAgTcZnqLfzY2T+P0jf5y+K35HhScOksU/2hP8azoXPD5lTVTenvlTv2hjAIGL0yAU
-	h4CRBB9XyMG0YGWG719WF28Pse1IzXBfdmzfTpU7Ao3i6ojqE0ATpxexkexdR7BXPeFl62lYMRL
-	9YPplnAxmPfwy2LR8C26Yg0=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4f67Hm13f5z1T4fy;
-	Thu,  5 Feb 2026 14:54:28 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id C983F40538;
-	Thu,  5 Feb 2026 14:58:51 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 5 Feb 2026 14:58:51 +0800
-Received: from [10.173.125.37] (10.173.125.37) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 5 Feb 2026 14:58:50 +0800
-Subject: Re: [PATCH v3 1/3] selftests/mm: add memory failure anonymous page
- test
-To: Mark Brown <broonie@kernel.org>
-CC: <akpm@linux-foundation.org>, <shuah@kernel.org>, <david@kernel.org>,
-	<lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
-	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
-	<nao.horiguchi@gmail.com>, <linux-mm@kvack.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260204073331.899406-1-linmiaohe@huawei.com>
- <20260204073331.899406-2-linmiaohe@huawei.com>
- <2028f5e1-e032-4909-8240-15fe0b3c82a5@sirena.org.uk>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <0a84104a-32e3-8518-ebc0-703814e233d4@huawei.com>
-Date: Thu, 5 Feb 2026 14:58:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="agCF42zA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770276227; x=1801812227;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FgmZNaT1AJdOs3lof3+rnMI62Gul05tMmOYxnVyfbkM=;
+  b=agCF42zAxuBVhVQS8q2VvWYrlrkCT2ODu1cM10v8ui1sFGAjRUkxbNR6
+   rnhFQaTT0mrhYPT59/WMkhR14DuNtxVGgHKLHtP5Eaqr1oZm/XZtyM/J1
+   6NsyzpV6WhKKCPxbEW1Fgx399k2t0kP1ebX+BOPEwpoFTKi3dSWr+xSQ7
+   dlx3QdbplY4XPr8nBhlISDcxVt/BohwMEwIQwYdeD9FuBGUZeqghZgdBs
+   zFnBjM7BjGxUtFHHglP/nr0xGUKM68xtGKao1KBE08j68SxhMnw6UrH3u
+   zS6Frw3kKkKjm73pEQVOTdp/Q4LhAJLLxhz+7ZGcJTRL7nOvUBYyNFm1W
+   g==;
+X-CSE-ConnectionGUID: n81A8imZTBikNvPrxWRJ7Q==
+X-CSE-MsgGUID: ToEhKqrwTDWDAOks9art2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="75322708"
+X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
+   d="scan'208";a="75322708"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 23:23:44 -0800
+X-CSE-ConnectionGUID: w4M3nSSLQ/mBj1j0Il6KlQ==
+X-CSE-MsgGUID: NkzCqGaoSdu69QFLY8HZpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
+   d="scan'208";a="214913923"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa005.fm.intel.com with ESMTP; 04 Feb 2026 23:23:21 -0800
+Date: Thu, 5 Feb 2026 15:04:48 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Sean Christopherson <seanjc@google.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Alexey Kardashevskiy <aik@amd.com>, cgroups@vger.kernel.org,
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+	akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
+	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org,
+	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com,
+	david@redhat.com, dmatlack@google.com, erdemaktas@google.com,
+	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com,
+	hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com,
+	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com,
+	jack@suse.cz, james.morse@arm.com, jarkko@kernel.org,
+	jgowans@amazon.com, jhubbard@nvidia.com, jroedel@suse.de,
+	jthoughton@google.com, jun.miao@intel.com, kai.huang@intel.com,
+	keirf@google.com, kent.overstreet@linux.dev,
+	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
+	mail@maciej.szmigiero.name, maobibo@loongson.cn,
+	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
+	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com,
+	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au,
+	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es,
+	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com,
+	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com,
+	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz,
+	qperret@google.com, richard.weiyang@gmail.com,
+	rick.p.edgecombe@intel.com, rientjes@google.com,
+	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org,
+	shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com,
+	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com,
+	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com,
+	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com,
+	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org,
+	wyihan@google.com, xiaoyao.li@intel.com, yan.y.zhao@intel.com,
+	yilun.xu@intel.com, yuzenghui@huawei.com, zhiquan1.li@intel.com
+Subject: Re: [RFC PATCH v1 05/37] KVM: guest_memfd: Wire up
+ kvm_get_memory_attributes() to per-gmem attributes
+Message-ID: <aYRBEJSan8eoT8xw@yilunxu-OptiPlex-7050>
+References: <cover.1760731772.git.ackerleytng@google.com>
+ <071a3c6603809186e914fe5fed939edee4e11988.1760731772.git.ackerleytng@google.com>
+ <07836b1d-d0d8-40f2-8f7b-7805beca31d0@amd.com>
+ <CAEvNRgEuez=JbArRf2SApLAL0usv5-Q6q=nBPOFMHrHGaKAtMw@mail.gmail.com>
+ <20260129003753.GZ1641016@ziepe.ca>
+ <aXqx3_eE0rNh6nP0@google.com>
+ <aYHGVQTF6RUs7r3g@yilunxu-OptiPlex-7050>
+ <20260203181618.GY2328995@ziepe.ca>
+ <aYLOZIZU0nwk+0UN@yilunxu-OptiPlex-7050>
+ <20260204124715.GA2328995@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <2028f5e1-e032-4909-8240-15fe0b3c82a5@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260204124715.GA2328995@ziepe.ca>
 
-On 2026/2/4 19:26, Mark Brown wrote:
-> On Wed, Feb 04, 2026 at 03:33:29PM +0800, Miaohe Lin wrote:
+On Wed, Feb 04, 2026 at 08:47:15AM -0400, Jason Gunthorpe wrote:
+> On Wed, Feb 04, 2026 at 12:43:16PM +0800, Xu Yilun wrote:
+> > > Which means we need VFIO to know what they are, and hopefully it is
+> > > just static based on the TDISP reports..
+> > 
+> > I don't think VMM need to check TDISP report. The only special thing is
+> > the MSI-X mixed pages which can be figured out by standard PCI
+> > discovery.
 > 
->> +TEST_HARNESS_MAIN
->> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
->> index 29be9038bfb0..afdcfd0d7cef 100755
->> --- a/tools/testing/selftests/mm/run_vmtests.sh
->> +++ b/tools/testing/selftests/mm/run_vmtests.sh
->> @@ -91,6 +91,8 @@ separated by spaces:
->>  	test VMA merge cases behave as expected
->>  - rmap
->>  	test rmap behaves as expected
->> +- memory-failure
->> +	test memory-failure behaves as expected
+> Either that or follow along with the guests's choices on
+> shared/private.
 > 
-> In -next I added a hack with wrapper scripts per category to improve the
-> integration of the mm selftests with the kselftest framework, could you
-> please wire things up into that, see:
+> We can't let VFIO mmap a private MMIO page, so it has to know which
+> pages are private at any moment, and it can't guess.
+
+No we could only let VFIO mmap MMIO pages that need emulation (like this
+MSI-X mixed page). MMIOs in such page cannot be assigned to guest so no
+way to convert to private.
+
+We don't allow VFIO mmap all asigned MMIO pages, no matter they will be
+private or shared. They are assigned to guest, so host don't touch them.
+Does that make sense?
+
 > 
->   6ce964c02f1c (selftests/mm: have the harness run each test category separately)
-
-Sorry, I missed that. Do you mean adding something like below to run memory-failure test separately?
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index cd7ed1d6769f..b531fd2f4e4c 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -171,6 +171,7 @@ TEST_PROGS += ksft_thp.sh
- TEST_PROGS += ksft_userfaultfd.sh
- TEST_PROGS += ksft_vma_merge.sh
- TEST_PROGS += ksft_vmalloc.sh
-+TEST_PROGS += ksft_memory_failure.sh
-
- TEST_FILES := test_vmalloc.sh
- TEST_FILES += test_hmm.sh
-diff --git a/tools/testing/selftests/mm/ksft_memory_failure.sh b/tools/testing/selftests/mm/ksft_memory_failure.sh
-new file mode 100644
-index 000000000000..ae1614d4d49b
---- /dev/null
-+++ b/tools/testing/selftests/mm/ksft_memory_failure.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh -e
-+# SPDX-License-Identifier: GPL-2.0
-+
-+./run_vmtests.sh -t memory-failure
-
-Thanks.
-.
-
+> Jason
