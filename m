@@ -1,259 +1,96 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011008.outbound.protection.outlook.com [40.107.130.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FCF260588;
-	Thu,  5 Feb 2026 12:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770295607; cv=fail; b=Epz/I69bBhom82z13ZocQ52mdBH1bw0PS63FLjpvPsGZI6T9MH1r1CJZVBLGV+5i2j7+lK8lfrhSzxrMKevbtzCbddMh4QZPpq+aM5ilDwJ7HA1poo+YA9ag0bG1zqz9bdNjB39x/o1931w1F15HeUfHsy//1XFWnn9pM3MOx40=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770295607; c=relaxed/simple;
-	bh=M5ksgVBWDKvlCJon6u76/TCLq9zFF10lIfz7J3CpgTY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=aMeWgXFNqN3OgwOpGUq3Q2xgBLp5q0Vb5rD5NaG7O5zNdlJqtzYL0yubH3+NB3szr3HB0BuI7qfoy8Cb4aIfS9cCmsSbC7XaT2bDfU6ZyBFSQT3TwwNpNpFhEJ3vmFpJc9QwDQFsFJyM0KB0SSBiov8ndD5n1Wi5yxEfnmfIUP0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=BltFniUW; arc=fail smtp.client-ip=40.107.130.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2954934D3BB
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 12:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770296160; cv=none; b=Inps5bXE58eACG71FeqxWgLJvUfI5/vyf9LhSC/Red5UTPNnOET4bAx12MTh9IFnfh4OTrJL6XtWejG+XrJya/fW0YnnvM+YuSkLWw0Ac4gMgQpm0g6Gy7t4EofHKhhrRszzjhSXytt1mBsK+swmz9J/H7N2VYbf8fNcyFWYdlk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770296160; c=relaxed/simple;
+	bh=GSF3GMzynwkCshZ7kizNQpLPGCKsO3X5EUXhE/ESrIY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OkbQgSPaFTm9NVmNSQNOU6O5lMc3qnBJpwCoP7R2/RPbELb9hl4cNtkxUXO9yfBfQUq9eaK2AdDHW65ckzehzw2s90cTSMTyODK/2kAbq9Y6uUmwhMMEBJ3VmjlKPazxyX99wrwXxhf8CunV2Fc4lfdAw2dpAU5FcpwFCnrvhfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ps2eMCj3; arc=none smtp.client-ip=209.85.214.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="BltFniUW"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IZUzqms3FkV9ryRBOw2fvGjRllUg9qk/VQDSNubNcWM/ysTU2qdlT593aBgIKa5RhRylpD++2jhR66KhTz89cR3c782uF3VGDpHni4RJ/e9OY2ZU2lc94/rxp3F5oNPafNnUFbG8CXlK1Yokda3jVqKTUmQpIEACM/r2BMYU510BJoUENkUQf22xHuzAGUXsCKwQZKBD1ZlTFxPW2nkHJa0eLT+4+7Jz/HK88Ducpp4e8pA03p1x41AzE52CbbZdtnvTouggToh+m4v7n+wpSd2urj5gys2X0MLE+kYSQi0MlYbjloSsn1kIQS6M4ak/+jVFL6S1AZIOLIwspYw6nQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HL/KLI9FlEATDsQYpaC8qLWkZTrbyhTT2XaTA2tYbgk=;
- b=i2tfNkYuuXYgqMD2rW1kKNV1QEhtSj7qBidX2OQ97J/AbqGePKo61td4/lBzw+VcfsYkm39/jyqzudKTToZl3SGMsdvea8oYxAiTVH0Hd69Ejv+fvyIpi55EumqpEXa8J5Ulf9SYMdWn9p4yJz7uiguQwdjiNulZr8/S9dQ5/nBxLkU4tXEA4r2T6pE+fBZk+uHCEM/Y1eFfJJ8lEVKp7J32SDx7BJ2MTD+2vQ3OVjdx+pf9baBkBgbyDKi4F722Hwo9P6eZoMl97tUG0QB2j/AacDohcleXq+o+hRbUQjsKGkxuEgjRN2XiIJJtvXffzab3OwcvqpFvKs8TvsskZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HL/KLI9FlEATDsQYpaC8qLWkZTrbyhTT2XaTA2tYbgk=;
- b=BltFniUWypU0cEmV/rg4QYXPNZOlQTAlu3u2L8/fjoeiRK7Zzz9ksFeBrrEh52SABbrI3AYINpRbKR3/2HSzU0yJWndZ18m4NKvjQvT770iyoHgg+xdG/eY63D/9ZKbA07G+M+cQJAKBbQR7ug+rA7rdfjr6WKBWlQBxRyPSox+6h2zky0RnQTfEDyXP2g6LXAOml8murA0mSkC/1kBphbVqRvLtklc+vE5qFmg8n684zJi3vFqp3VERqiKq3dkKxOkjG3EMDxwUmts0mcjTPCVzW+rJiQKA8Nbr2NL8LUTSvi563w2QR9uUxopN4AIzHC4KbTpgXKMprF1/efOFfA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by AM9PR04MB8841.eurprd04.prod.outlook.com (2603:10a6:20b:408::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.14; Thu, 5 Feb
- 2026 12:46:43 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9564.016; Thu, 5 Feb 2026
- 12:46:43 +0000
-Date: Thu, 5 Feb 2026 14:46:38 +0200
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: Larysa Zaremba <larysa.zaremba@intel.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
-	Tushar Vyavahare <tushar.vyavahare@intel.com>,
-	Jason Xing <kernelxing@tencent.com>,
-	Ricardo =?utf-8?B?Qi4gTWFybGniiJrCrnJl?= <rbm@suse.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
- frag_size
-Message-ID: <20260205124638.hxzvjiocephzlrk3@skbuf>
-References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
- <20260203105417.2302672-7-larysa.zaremba@intel.com>
- <20260205005901.gnju3zmqimtgeu2b@skbuf>
- <20260204173401.282899d0@kernel.org>
- <20260205122953.lscemcctayrvszdu@skbuf>
- <aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
-X-ClientProxiedBy: VI1PR09CA0155.eurprd09.prod.outlook.com
- (2603:10a6:803:12c::39) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ps2eMCj3"
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-2a9042df9a2so5099605ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Feb 2026 04:55:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770296159; x=1770900959; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GSF3GMzynwkCshZ7kizNQpLPGCKsO3X5EUXhE/ESrIY=;
+        b=Ps2eMCj3FFKPY1nqOrQRxUoLXsl0jd7OA45BOy1NmbpXp5ZaW137McRJV2gKcnNk0f
+         rbRX/7qWXftxSiaC0X9cy6BecS9ltdTWTzVErporSYYoZhwngiHkVzIBZP63vWnRGzzX
+         fDUOl8MFJbl7aGuu0ZSEDjVSd0QFwDltUd63h/3VmhjRwwJ3LsSYQCDgJ8lyTCZklWte
+         PpBaQftFV2qYIiNSiqFwMTj0QBqwsoHSO+T3ElD0VRaUMlQNnvnJlRLBtQJRqyYiDWhf
+         cgW7ustzy8p1+gUlewqZEfdO4kNXMHKumVJ3CuCa+ZgH6OSXyPdJ1R3IeXfuWAPSdFbW
+         VI6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770296159; x=1770900959;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GSF3GMzynwkCshZ7kizNQpLPGCKsO3X5EUXhE/ESrIY=;
+        b=T1jEo/ulIs7lidpnIkDOhnNT6Fh+AV498y3GKy60W7IB8CH4PvONLuz4CM+zvi3TnV
+         J+KK33TdcQCqngBw/Kr3NkA60EQTxhxjEy5l+7aXxpWbu5IJjUpU7BqsLVdF8dzr+HG9
+         7nhDjPvH9YhQFJwx/i5hqXjzxNVEGoLL9QK7NTbZYcPa5zhpSYqdPn4uEOKXYLPC/5cu
+         RIJPw3Al/GmipHyULhRquuAfeAhog0rX0zF016YfCuaSSfj/iCnWsWCrGRBQxIboWFmt
+         ocp+idKZ3diZWpZeXheRtVgdBTlfX0CEL3nKgcApIwY/sj+shoz6Cm0pgVQ3HD8U8DHv
+         Ab7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWS2KVpJPYM+FlkmR2ia/9dJBnFaDBAwAt9VCTQzbw4AmMPAisHLyDpiNh1Q/4EKltJ4qg6c6GBd9NCpo1bO54=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLjRkO6jpVPNIZ7Eh8d+4JzjKavXjpbslqyzuD9vqTXc3L1IeD
+	MqjEqqDCx+UPHx8sVe9sejigaqVO4Tk256oXacxlgFC7CSajrCrmVk8=
+X-Gm-Gg: AZuq6aKrW5pdlZtaVCnwpzUO/wfD7T63YzEUYxspXZqudvcSE07imYg3waHv8tEup2W
+	6hJjKVSLuJMoEOFH3VVQHvUoVEsaA0XFn1iiuAZQp+C9HFf65/lbMw6xlJsCgSsyDs41/xqfSbO
+	sOEEPqbhBxWDwzFiI0S7YI7J8D61AYCoW0m2MVTy317Krdf5FawOJ6yeXxe39nBD4ZDvRvWaX7G
+	YYNT3MU7RzwGoyi4IxEZ2wC6G1nRkD6ML8wvSz1NMeg0zEnyd8NrmOAAyjn5XkcunJorFUgAUPJ
+	qMmh/fRaJMn5IVtuA3X+mZrcfR5uHDxAWs0eb6WnyhtP+RYNYq0ZGAzc3qXO2be2JgCP0Y/3smn
+	Tdh6vrPaz+qV1pqez5BJzbSIIqrO/AE53k0Mclx8jpXKcshRrQlYu4y7fkHaUA60i5rtNACIxeE
+	J7eb17QKlojAIwFNg67Wa8kGMpTHP51w==
+X-Received: by 2002:a17:903:350b:b0:2a7:6aa5:68f3 with SMTP id d9443c01a7336-2a933fb0cf5mr63521385ad.34.1770296159482;
+        Thu, 05 Feb 2026 04:55:59 -0800 (PST)
+Received: from localhost.localdomain ([59.16.109.172])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a93386b5d2sm54006755ad.24.2026.02.05.04.55.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Feb 2026 04:55:59 -0800 (PST)
+From: Jinseok Kim <always.starving0@gmail.com>
+To: amir73il@gmail.com,
+	jack@suse.cz
+Cc: linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	repnop@google.com,
+	shuah@kernel.org
+Subject: [RFC PATCH] selftests: fanotify: Add basic create/modify/delete event
+Date: Thu,  5 Feb 2026 21:55:09 +0900
+Message-ID: <20260205125534.3286-1-always.starving0@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAOQ4uxiax3v03XeSP-MRHUqx5WTa67qOjtusSw=M-Tk0zARv6w@mail.gmail.com>
+References: <CAOQ4uxiax3v03XeSP-MRHUqx5WTa67qOjtusSw=M-Tk0zARv6w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|AM9PR04MB8841:EE_
-X-MS-Office365-Filtering-Correlation-Id: 591ce24c-759c-4818-aa3f-08de64b49da7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|19092799006|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?evE79FNDBdIYnt3gZSOZbPEFcdSzI49SEkQCo1xNn+ImwZRA4AF5ct5wqOVy?=
- =?us-ascii?Q?MtkNVuuMfy06Ro/gfz/aUXZ2BcxbzfD3FwvXc46zsxG8s8DfYCe2su+7g4CG?=
- =?us-ascii?Q?l9RgLrgf45XfKmJ6U7pOaPOFZITJDyUlRECNJsXWMRP1q1GkTAx9XkL6tHtz?=
- =?us-ascii?Q?VTh4e+fdrep7+nqnCE9yF7tbi5pwDBnR4bAT2rGeeFNYADOPbcBr86QBrvgH?=
- =?us-ascii?Q?VNAdef0gEIU4Wvtvxmtj9LLsuMX34vBZcFPoS84a7QXbylxMwZBPyaTD+SJX?=
- =?us-ascii?Q?bxTAsfGCuyz7nvnZCGe2As8ivP2Rk5fW0Dow30+Vu3O5SbcBF2qQ7kHFxV5Z?=
- =?us-ascii?Q?6mL+l3QsGUnXtHLsJtrBSKQIapBfFx/Xxdu9WUUdL883YbF6pFnKxWfWInSY?=
- =?us-ascii?Q?257cuyFVPKnYB+kh2gZcDhYJj/inG2jbEYEPXRj5jI+C4Gh1dZUwSz0xuNjd?=
- =?us-ascii?Q?f1kPuMt6M6Fn6zxoWgZvS5tVSWpbeIt0CtNmgokEiGuBj2mPhS9FN9zilGNf?=
- =?us-ascii?Q?8W16gRzXaUdoZNYewo/4KX0jxe1N4Vht4TFJgmdEkoGtsLjkVfh/hDK0hJau?=
- =?us-ascii?Q?UhbS5NgBdUWeVV3H0zIpmK5q57TZ6rAg6PbFZs5C/xRzpC9Vw27z7C/BlMAK?=
- =?us-ascii?Q?/mOk/GohzfIx/NiDh7QttInljhAYgD0ThrEK+FPytewO/3lVPu+/qeY57cxx?=
- =?us-ascii?Q?K8lv++296c23/ISRp69EUBmOwUAtGbeQSfF8wNEVXqn6qH/5hSsB506lY9tI?=
- =?us-ascii?Q?j0pOBJGVFTMUMpKP8JABBhGLyMmYbwjMQUuHD9EPEFT70eWLtq9uPP0toIKq?=
- =?us-ascii?Q?oqTxOUNLQxkBrVg3HpBnBhJa6QjfX3O5vp2WcxdNfiC70v/F1FaU4ZjsgXwd?=
- =?us-ascii?Q?LynTlVFeVWrtRh2i5CqdEmO2Ov0SPa+PJuoYKZjzy2xI3QvQ7CLEqcW0yXLx?=
- =?us-ascii?Q?Ghr+MXi6DsuaRJ3c8LnLaG8LjGu2IZVsbhvzhexG2XgRnLUpY4J+Lu7e/Rb0?=
- =?us-ascii?Q?fO1e+8n8FJMEy6qbRAxYOjX/dECMNCsv4ZnWeziCxncIl9d7WLGCnIBDOP1S?=
- =?us-ascii?Q?19lcOJ1IUyB7vyVdKU5OMLoDpVCuKTCrpg3lNxVoWw8xJgxUwBJwjHE8saI3?=
- =?us-ascii?Q?zpzcqEfY1PYZIPzXW4rXt3ION3e2dquo1teVxJkm1zqKqNR8dTfSeB4kdK8e?=
- =?us-ascii?Q?uzYIORk0k81JWVeH0SyA7DL/Kb5nKH+cZgYzibjVo0b2EUxoAU9fOY6j4BvT?=
- =?us-ascii?Q?SGNT4kLQoZnMStjpuAicohsgMM8JSjmJwTF6jIl9s+yAIW87O9ktmt0sYe2T?=
- =?us-ascii?Q?rQwnkx78YvwXLWh6I/zgCTE4oyxdT7b4XS6kLEGQeTrmHHKEoM/7hdJLyeQV?=
- =?us-ascii?Q?kBsANj22uIZ+azDf2qc/1gEvKnbom/k1gVT8xygcNg/LeaAYmQIx0C3+a0l4?=
- =?us-ascii?Q?ef/KcF0i3hignWG7awW6kHH65zj/sBlGz/FKAu7+Nkzv11ApA72VsdYWHCRs?=
- =?us-ascii?Q?fXo6RHLEkDByC+WOcmkQC71SJhmlUnD3smCFYan6rx4WL2ns9iUltQ5X0c96?=
- =?us-ascii?Q?lbPZipohAGGg9gJuvZw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(19092799006)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?FQ1z6OntvFS5y6KJHaSBD3DsGxSFDCeEdR34Wlh8uc9jiv4QzZwocHVg24/T?=
- =?us-ascii?Q?FmUT5hhi8BKGqqT5gd5Sz40gUzrxyaX8fdq+KNMFeXbt4cdLzS8LpJpdPoGR?=
- =?us-ascii?Q?rdLYCHo/qy48yNGP+J1OOI8qbDgM++gj+taJvP71DR9GscFLf0FJc97MxtKQ?=
- =?us-ascii?Q?oztU0zjk347lAB62ULlx4QhyhDBCwh8GYWW0NMZKMn1Poxpdd/H8LwAjdtn/?=
- =?us-ascii?Q?dAHCOGjlzjT41OhYLNL4W6Jk3M+C/bWuU6ig8+fVtBHPpTVTAyKsRcpd2jCW?=
- =?us-ascii?Q?wwB5opbKH0Q4YGT8eRg1n+0MiM951o5tbwjUSfRuDyDgDzcWRvsbX8H8C8LL?=
- =?us-ascii?Q?K6xcbf/PxBaxR+Gtt3nbu42TRkkjwdBOpmILrH6E9Vh+uD/UiVmmxBLccEF2?=
- =?us-ascii?Q?TTM9B8ofCJtU7tMMut7c8PoTT6GTWB5V7M90KiWPV8tEJRSesG3Zp6YviTRy?=
- =?us-ascii?Q?eYFoS7xvqvpxeKHNof8vnDSeRupRWHhl6wkClKBAgIoSUrelk7rupV+5kQlM?=
- =?us-ascii?Q?yJ6YXUICIa6K/dVIqUwzgJUsySjcHv7zXVJPFmv59i9+ihcWk5sYPyIxcKs4?=
- =?us-ascii?Q?p898E72gcGze6IBoBr/qDo5IFGEbdSYalBiyaQQigr720lSyMj7dcYsxm1th?=
- =?us-ascii?Q?RDbirfpqOpes5wlpMuC/7e02V+TriC/lIZgdZbe+P0QOThCyyhOoCguPXGTR?=
- =?us-ascii?Q?6HJKAF99Fn+XHwxTEOE/Jb7eaZI2Z317ViMgPf4oYaaenL9Fr1+57Ah0LjyD?=
- =?us-ascii?Q?7yfuWSsUqR0UPjq2pheZMScd8q5BEx3mv3Mivs1HJXd8x+3usYqRTIBVdbqv?=
- =?us-ascii?Q?WTJjpP2V5yOPskkmC6BSQlnZRgMUNAnwKSIVNQBxGwmC9oHmmcNiEZB8xVK9?=
- =?us-ascii?Q?SuoHYLkM27d/Rzr7VhaoKrqwjtBDIxt57++erKnJ2W69oJOyqzsIiKMQMvpC?=
- =?us-ascii?Q?6IPqM4bhsPjAeMopoKfn3e3zozIAQbuo40HsxU+cflf5EZbzh00FZQgQ+867?=
- =?us-ascii?Q?p6qUv7Zv6KQlhLARqcvGTuFKf1Z30iW6Whp1NS/HjYRIUalReRjmr8CPbv8a?=
- =?us-ascii?Q?xEVzCTHsGp8MUIfRAKFWhRmf/B/pHnhhrf/81zOXUmEQKihBQySCRpqm5Bgl?=
- =?us-ascii?Q?AfnaS2Kz6WjSvd+AO96J/8suzyWksTCJFhRZPQuryY3YvgGRZpdKK2js3c8f?=
- =?us-ascii?Q?+HDWz+CwX3dRWvIKrNtiAPJ4qt6KIZMQMPLRecgLtjnHaCm4eu9Sq/CexWOq?=
- =?us-ascii?Q?zaEUcFeQH+2Lc/WgZNCDsLetwdPztE3VTi5Maa02psT/Fp3+bTDZMVDHQxnm?=
- =?us-ascii?Q?ywJiAprGONcZ+FA0AXncxD4pHXyJN4OrIagG/FbDRKYWv1wwTxuCHOwIKVTf?=
- =?us-ascii?Q?LTG77F12nKfiwONgTQp61a+Rmt0YD0gYlapg1REllpV9lJVOu9Rr3SaQGDoQ?=
- =?us-ascii?Q?ADJyl70rBjwSrCgFiDXbfFY4zZyFiJDkuF8OHdQnWaDDLZ0b/jck9oUPOqcq?=
- =?us-ascii?Q?t9ruV8dOx0sZNZWSn6cy84UKTZkUb7x+C2jERstLYC5mxI8F+t5/DCZgwTqk?=
- =?us-ascii?Q?0C67SZ5HukCg6/I1PSwQPBEtVaG1C4gmMoEcG5+4NItiq5e9OAerz3MZxL8l?=
- =?us-ascii?Q?d6ujzoigJIiSe25PVOjq3o6N6tAN1dmPxJGMVj4KD+JqBdOQhwePObtnsW2c?=
- =?us-ascii?Q?YDaKjvmgOZL/ncgHNPp68ziVQ2Oq2VLbFhdeVhd8sBLE6CKFhaKr1J0sZKQj?=
- =?us-ascii?Q?1r9/07DOOEi9G8tXOynwYAvQJmwUKbaD1pJwebEvPpGWBlrfUnLSGNNvkTGI?=
-X-MS-Exchange-AntiSpam-MessageData-1: VyRNnX72SDKUe1EBPiBEbxeEMJbeyBTsj8k=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 591ce24c-759c-4818-aa3f-08de64b49da7
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2026 12:46:43.6118
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GPTWfJzpejdIWV4uDJ/+lUefnnvu9rpXTTWr+ah+7v2l2kiMNLfZtqtf48EuZ5bLSEA/9oze8fyeBqa0h5zPFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8841
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 05, 2026 at 01:41:03PM +0100, Larysa Zaremba wrote:
-> On Thu, Feb 05, 2026 at 02:29:53PM +0200, Vladimir Oltean wrote:
-> > On Wed, Feb 04, 2026 at 05:34:01PM -0800, Jakub Kicinski wrote:
-> > > On Thu, 5 Feb 2026 02:59:01 +0200 Vladimir Oltean wrote:
-> > > > Thanks! This is an extremely subtle corner case. I appreciate the patch
-> > > > and explanation.
-> > > > 
-> > > > I did run tests on the blamed commit (which I still have), but to catch
-> > > > a real issue in a meaningful way it would have been required to have a
-> > > > program which calls bpf_xdp_adjust_tail() with a very large offset.
-> > > > I'm noting that I'm seeing the WARN_ON() much easier after your fix, but
-> > > > before, it was mostly inconsequential for practical cases.
-> > > > 
-> > > > Namely, the ENETC truesize is 2048, and XDP_PACKET_HEADROOM is 256.
-> > > > First buffers also contain the skb_shared_info (320 bytes), while
-> > > > subsequent buffers don't.
-> > > 
-> > > I can't wrap my head around this series, hope you can tell me where I'm
-> > > going wrong. AFAICT enetc splits the page into two halves for small MTU.
-> > > 
-> > > So we have 
-> > > 
-> > >  |                 2k          |             2k              |
-> > >   ----------------------------- ----------------------------- 
-> > >  | hroom | data | troom/shinfo | hroom | data | troom/shinfo |
-> > >   ----------------------------- ----------------------------- 
-> > > 
-> > > If we attach the second chunk as frag well have:
-> > >   offset = 2k + hroom
-> > >   size = data.len
-> > > But we use
-> > >   truesize / frag_size = 2k
-> > > so
-> > >   tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
-> > >   tailroom = 2k - data.len - 2k
-> > >   tailroom = -data.len
-> > >   WARN(tailroom < 0) -> yes
-> > > 
-> > > The frag_size thing is unusable for any driver that doesn't hand out
-> > > full pages to frags?
-> > 
-> > This is an excellent question.
-> > 
-> > Yes, you're right, bpf_xdp_frags_increase_tail() only has a 50% chance
-> > of working - the paged data has to be in the first half of the page,
-> > otherwise the tailroom calculations are not correct due to rxq->frag_size,
-> > and the WARN_ON() will trigger.
-> > 
-> > The reason why I didn't notice this during my testing is stupid. I was
-> > attaching the BPF program to the interface and then detaching it after
-> > each test, and each test was sending less than the RX ring size (2048)
-> > worth of packets. So all multi-buffer frames were using buffers which
-> > were fresh out of enetc_setup_rxbdr() -> ... -> enetc_new_page() (first
-> > halves) and never out of flipped pages (enetc_bulk_flip_buff()).
-> > 
-> > This seems to be a good reason to convert this driver to use page pool,
-> > which I can look into. I'm not sure that there's anything that can be
-> > done to make the rxq->frag_size mechanism compatible with the current
-> > buffer allocation scheme.
-> 
-> I was just about to send an answer.
-> 
-> Seems like my mistake here. I actually think adjusting the tail should work, if 
-> we set rxq->frag_size to PAGE_SIZE in enetc and i40e_rx_pg_size() in i40e, and 
-> not to (PAGE_SIZE / 2), as I did at first, but in such case naming this 
-> frag_size is just utterly wrong. Glad Jakub has pointed this out.
+Thanks again for the detailed feedback and explanations!
 
-I mean, it should "work" given the caveat that calling bpf_xdp_adjust_tail()
-on a first-half page buffer with a large offset risks leaking into the
-second half, which may also be in use, and this will go undetected, right?
-Although the practical chances of that happening are low, the requested
-offset needs to be in the order of hundreds still.
+I completely understand your concerns about maintenance burden and
+overlap with LTP's comprehensive coverage.
 
-> ice and idpf are fine, since they use libeth for Rx buffers, so mbuf packets
-> always reside in 3K+ buffers. But for xsk_buff_pool seems like all drivers 
-> should have PAGE_SIZE as frag_size? I will let the discussion go on for at least
-> a day and then will send v2 with patches reordered and those sizes corrected, 
-> maybe add ZC fixes on top.
+I agree that improving LTP's fanotify tests would be a better use of
+time rather than adding to selftests.
+
+I'll shift my focus to LTP contributions instead.
+
+Thanks for the guidance — really appreciate your time!
+
+Jinseok
