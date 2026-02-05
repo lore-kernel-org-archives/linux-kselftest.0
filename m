@@ -1,212 +1,335 @@
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010013.outbound.protection.outlook.com [52.101.201.13])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29CF22FE11;
-	Thu,  5 Feb 2026 14:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770301911; cv=fail; b=qYcKQFZj1Rprpgsx4LIP7BsKj+Q0D5GeadAXRVgVKxkxooMh6f4CpRg+B55LwgRi+hjbbNZlSt62zC61lk4HQ5g/y57UoEfKuchmMMMIiGLa0+CiHGmVQchCR24QbNVK8vjrmfeAkToXwi0S+xYLJ02LqGpywBm65hBlL2vAwpQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770301911; c=relaxed/simple;
-	bh=C1/qlCXlY/g3y6rDUqeYFl5SPwQsnVqfSAbGos7cdP8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RnMV3CVEUjQgetcFCIhrHmv5ArKcE3WsaC+RxkVIck5dv8te54JACSuemV3+VUeqTDexHjUDhLYgUkOOheXS6OZxW2WJdBdz7UPZknfRivDlTgWdDSkypZz8hOpXQ3ae55VDA2QSo6DD/IucoBI6NF2DGSD+moojux3aPvp6CV0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YVsPnTl7; arc=fail smtp.client-ip=52.101.201.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBE641C311;
+	Thu,  5 Feb 2026 14:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770303404; cv=none; b=Kp+HdE/0ulXlArAgGyZvjHNWCflcPKmFvGvPeAYI46z+B4fzhSzkNBdtacCXbFhCDthH9saOclVXhkbB1Ssp1HLSTKwFwhy/ICDL7YJ6fWZ7od4eekrkINSr23/6vDkd+FoGdJpFJJEhnXhKXHbc7wLoXxb05EKPsE4IOagAJN4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770303404; c=relaxed/simple;
+	bh=ihSzUDt1aGgwhJCB6NN/ZdDcDlr5hD6W3yAsj6bonjY=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=G+kO4+I4et8KiDb+U2Q3GEJ2yrc7YZCY6YKCgYLjypMHD2hSbOmWGNnwlfCEgjmyEizdEbNo0a+H4qKNLt3p7Lq1IJBI9EWKO31xyszhoytUKLdBvzJ5OSd5zIfuVKP1P+ZmWZJ1pV4Pbx6s04FOel0AWK7ef3NVoWJTaPHIafI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sk88o5cv; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YVsPnTl7"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=C58/GDp3H1IHQzy5qwXuWUIUXKZN57A/QHnP9TjPYxOTQDOHX3HaCUtmMQ/vIXRjSi2OZFPfNT34eYuUfakVyICuIYaMZ4ipKfbiqI2FdSd9a0PmtvvPSJw89puFU8Wsg4G3tZaLqlYrjSZ85j4u3Kzq8bjT3cYvHs69IbA8fbbj2fPSWBBoKtbXr44c51u7ztNO81JKqSP5xRcHlS9NwmZn1+oembVTKRlj4oVd3SeZf0KKyIUCO3uG9aB+4KzkFqsp8tAQQnejq8DhPg0n8ls+IJPYvusU8Q6diCIq+P8rr9kuox7wl4uozqzoxTi0Hjcr59yT3AP5kWpMJJmq6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IsCch8jB9WVgPCnIxO6po+wWaLa7sxXat+GS5eT1eeo=;
- b=fakm/B2474prh86XCSjzZ8hnBQ8gxxhXVNlL7vbYvS76Yc9L7mIFRPa0fSqhvPCoyd6KGFa5IjmYN05QR8klPGxAq7BCGy6zoXQeYsdyBu4XDxQL9KPdHBl3Bdw6YYLZhfR8ZeAzrCyoA+LIPbdclKSDzg0fC40ErewPLB9ZMzPRsE33bXg1hRc5ft5JkYHfOoJXJVkheEraTZ4+8TVcOhFGUMU5qdDiGqnDmVNTh5C2Lv/UscooUqsTxGETCBgAWh0q4E4TEretGdCumTEANswwNSslMh6hjCOirF5d4VhRgTPLN/Rj5gHZdTHG738Wq6+ySsFZAwgfx/64m6++Eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IsCch8jB9WVgPCnIxO6po+wWaLa7sxXat+GS5eT1eeo=;
- b=YVsPnTl7tbWj36lWtp0Uqc2Pc9Dpa46kJjHv5lZYbDHLFRy/DLAZypAYY3DB3NA4ibnmHJTd/apS+0/LTg+lXYKNFqeZj0CQStZbhbbZXEnm5ihzkYM3pN41zMYX/yiR9nCWLDwiOkM3hKuHhZBy9bGO0K2rFVA8hD0VdX3i3Xd/7QVsG5qRWMyyEOQDwcB5b3U23haQQ+FiIMUJg4EFELm8gyN9sgAgGowHe2dnJG27p8aB4efbJhtUucfnDiqgPFMtWK9kZb2giJPZxjs08cKgdi+e6nmvVwwsrVotcyWcnOrKpP//CDvyztF2fBgbyBPNNLK5MvzM8mrrSBydNw==
-Received: from CH0PR04CA0097.namprd04.prod.outlook.com (2603:10b6:610:75::12)
- by MW4PR12MB7144.namprd12.prod.outlook.com (2603:10b6:303:21b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.13; Thu, 5 Feb
- 2026 14:31:45 +0000
-Received: from DS3PEPF000099E0.namprd04.prod.outlook.com
- (2603:10b6:610:75:cafe::4c) by CH0PR04CA0097.outlook.office365.com
- (2603:10b6:610:75::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.12 via Frontend Transport; Thu,
- 5 Feb 2026 14:31:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- DS3PEPF000099E0.mail.protection.outlook.com (10.167.17.203) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9587.10 via Frontend Transport; Thu, 5 Feb 2026 14:31:44 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 5 Feb
- 2026 06:31:21 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 5 Feb 2026 06:31:20 -0800
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Thu, 5 Feb 2026 06:31:15 -0800
-From: Tariq Toukan <tariqt@nvidia.com>
-To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>
-CC: Donald Hunter <donald.hunter@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-	Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed <saeedm@nvidia.com>, "Leon
- Romanovsky" <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
-	<mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-rdma@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, Gal Pressman
-	<gal@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>, Shay Drori
-	<shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, Or Har-Toov
-	<ohartoov@nvidia.com>
-Subject: [PATCH net-next V2 7/7] devlink: Document port-level resources
-Date: Thu, 5 Feb 2026 16:28:33 +0200
-Message-ID: <20260205142833.1727929-8-tariqt@nvidia.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20260205142833.1727929-1-tariqt@nvidia.com>
-References: <20260205142833.1727929-1-tariqt@nvidia.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sk88o5cv"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 615482Q8020399;
+	Thu, 5 Feb 2026 14:56:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=C1QVcx
+	89xJLUfn8qHtMTrZdJKubsb+NMK2PGpnfJGaE=; b=sk88o5cvWxFBYMs4NV1YwH
+	Slk029KZmpP1iNiWjLwTrozfOHe0VZQwjG2JM3sf7wl21lmP7vMgn6iOBHCuEmLu
+	ewHAc3oMMsRJ0mNUnNMpgriynBljbFtx3MLei37YwSY7t8kEN9meShC+nvXu215D
+	zKc0aBKdnWIqLR8OI5X7NLEfcUD8Tlaonj0nBvS/A5r7fzaaMqdt7Zu/oI0QA1l3
+	WMBMxC/d811JdCmupJZodbfSvBiYFcmKu34XBTu5o+Z84MBpRbcJhRq0jv+RKuyq
+	H1hqH2alBtIvYpN9/NSC5UD1f6GMqIKc4TXN50AkVGtBQ1gC5IkhUb90cMAfqI/Q
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19f6qb07-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Feb 2026 14:56:03 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 615EsWZl017604;
+	Thu, 5 Feb 2026 14:56:03 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19f6qb05-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Feb 2026 14:56:02 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 615CoaO9027353;
+	Thu, 5 Feb 2026 14:56:01 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c1xs1hx8h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Feb 2026 14:56:01 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 615Eu0Bl13173472
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 5 Feb 2026 14:56:00 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0686158052;
+	Thu,  5 Feb 2026 14:56:00 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C029058050;
+	Thu,  5 Feb 2026 14:55:51 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.61.246.105])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu,  5 Feb 2026 14:55:51 +0000 (GMT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099E0:EE_|MW4PR12MB7144:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5835a10a-681c-4c6d-2306-08de64c3494f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|7416014|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Yqgn+PzhofIMIskHf9hWtVN7PT6nt5AI7jtT2C5ZAdX6U5F7EpnuV2i7aO1u?=
- =?us-ascii?Q?45VIlYDSGc648q2ujO4M3PRqZDJOK3pjNWub3wK5QyJ+RkNjjw4ZOk2aLb4/?=
- =?us-ascii?Q?DJYc+RQ7Yt5esSKIfGyK3RSxRgZpXvIZo5t9be9QCbeo/3/K2Bv/ORVnvymX?=
- =?us-ascii?Q?ByaG1Mgu1HpOTRrFb7urO3Q6uV0oEGz9Sd3ed+pje763xV0h46OdMXaSM5B1?=
- =?us-ascii?Q?5HsR+0CKY3DNDOvJ6siYMikKyUkwLvy2qsvithm6/LTwjG+C2oLKyK+2lbe9?=
- =?us-ascii?Q?tH3XizePLlMVpXPrtIDwK3m/T2RaJ6X4sKzE7y0gwO7HM2DVOTP95k4AatGd?=
- =?us-ascii?Q?Wh5jFkIiYHjiVHdGhvujt4ctpE/RAL5zRH9mQnHrVieGT1gCf+qdP+TdU4Pq?=
- =?us-ascii?Q?KrD2ngw0WNpMqjuH6ZSl5CWAkDdMRlgDICQBd6tAQJF2515xPEySrhCRbcS3?=
- =?us-ascii?Q?9Q+HiKeeR7LxRLbBJ0oKFG6NNfuzIK+nbtapDqMvH/dZwDkdhITSy1u2gANW?=
- =?us-ascii?Q?29hdNen48RgE0lawqXCosn98RHs4pCQ5YQzvC+KIIR2X4k+7M7TMeV9BCM5s?=
- =?us-ascii?Q?1xvAck353/xhuMqtHMgBod7H7CL/iQJcBUSuaQ1bgyOK3vHbj58QYVrrQr5O?=
- =?us-ascii?Q?KHOZwR6FrXyNnmFv3mCleDDIIEoGy4b4l4gaUYAQEJCYrDkQVhCWubCj8TiS?=
- =?us-ascii?Q?oXRWbPVTF6Lkedw9yOUiWSxNhDnNiap0/vERBAX9hihcYvZF6cNRyYf86PN3?=
- =?us-ascii?Q?19PzOzdbWUEO1K5fwUAZpGxX6SNMvlqnrWHlcIhUTgxe/hK2oGa7bF/Awqug?=
- =?us-ascii?Q?ql2o/380mAvFroEZu65XAivhMKBA4JmfcTdmRQn0mlXaM1Yv9AC84Rm2dKAE?=
- =?us-ascii?Q?ka9ApIOlHq+SspQZJx6WaCsdEKRdTQ0Iuipm/JFbKU8b2k+k7A0yT1yNp0Pm?=
- =?us-ascii?Q?ytDmuP2KDyT2kABv9ajoTe/Habo6SlxHy5JEDIpcu++pfkyP3gz6uHQnzvOF?=
- =?us-ascii?Q?MjKVs8W/U8+SnM17/naK39wlFcTtUDAlf6aplBlOiNZBkzWQathelcxvT+37?=
- =?us-ascii?Q?dpbEvk0CwbpsQ9+ApeYQ/4Kn6Zk/xaloSiweP4E4u/8OhYFsiMbU5UuaXGFf?=
- =?us-ascii?Q?9Lo5h2M7hOCBM7tAVqh/r6ggbmXChLqdKBjvai8VWkDYBzJPDrINM/VGFOIn?=
- =?us-ascii?Q?KCtjiJQCZBjk/qTwTTiroY1FIwDNvxjVom4WlV2hxAR6aDu5rGcro1c2f5LD?=
- =?us-ascii?Q?WGCkeQmC5eOJlABub10bwUNYt2tDnXlrE28vJpp4J+dmOiBrDX0LdBMl7Znm?=
- =?us-ascii?Q?t9fqB9nWgyMQkXJl/hyKzSMQdvNLZ/1qHnLd7/PxygMMSUN9Ux+cNNNeM+Iz?=
- =?us-ascii?Q?QuRDPIVm/4FeX+iR0pvcyaX+zbHg9C71Y5UgXuk+ZZF06+Bk5d1MdyWrHXqN?=
- =?us-ascii?Q?Frr8AORsaYA+ZFjI9qzf7jZR4p4Tc1KsASTTlE4km/1/AaG5xv43/Un02C+y?=
- =?us-ascii?Q?ksKxoTtAoswLQRTlU2MVRCJvxK6tsmFPVN6h+hWaIt7vMkqgVvyoFPPfnDwA?=
- =?us-ascii?Q?LzEFtPT0iYGfoDsBZNW/FzQ0F9+uuubFQMdVCI8umKyZSMmFO+vb3r24XCMc?=
- =?us-ascii?Q?p8NeywkquLofK32iTjMCK9LxS8dFm3DJ0v+XBW0F56QP/2kzebOgeNXRkY+O?=
- =?us-ascii?Q?M1PNFw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	1ri8maCkY+p2FxY1VVy6Qh7PuUilU9n36qEwGV8PlKD1cU5Sg1V8dTSbyGdfkWgYd7WzIfQ7/Dhpi2Z3+ygdbsOQN8sU+fcJHf/dXKCVzJBgzjOP1wNHWH68ZClgvVKnnz51pf5tAiOsPFbFXib1bqGktXxkAqsWtdB+e9HkB/mZhodeOuEZ8nMYOuFlEUdcalfPoK9gcsQ+ZKm6s+dhDStL+6CpbrZy6gV1q0BctzuNxmzXaTImvtCS41ZX/LUN8cDj0cOHHoe7bjKmLeIpETfK8Xr48Eql0CyH3PDmDObcu4JCCkUEjjbeRrh0wMkXU9rNK8qH4lC2tOChUnKVx4eGt4mz0Cibx19HXe0KfXB5ZxJaUQJ/OKmpO60s0SgX6+R8oORp0YGYSfQc9TNXC50s+8TS1LTTGOdQZgdRYTKkAhHrdbcuuZKVA2zcnltB
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2026 14:31:44.3252
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5835a10a-681c-4c6d-2306-08de64c3494f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF000099E0.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7144
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.300.41.1.7\))
+Subject: Re: [PATCH v5 0/6] powerpc64/bpf: Support tailcalls with subprogs &
+ BPF exceptions
+From: Venkat <venkat88@linux.ibm.com>
+In-Reply-To: <20260124075223.6033-1-adubey@linux.ibm.com>
+Date: Thu, 5 Feb 2026 20:25:38 +0530
+Cc: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
+        iii@linux.ibm.com, shuah@kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <806FB5EA-F429-406D-8916-CDA12476790A@linux.ibm.com>
+References: <20260124075223.6033-1-adubey@linux.ibm.com>
+To: adubey@linux.ibm.com
+X-Mailer: Apple Mail (2.3864.300.41.1.7)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: YfAaPik6j-LOo4NcfkpKN9DtAt3n_Aha
+X-Authority-Analysis: v=2.4 cv=drTWylg4 c=1 sm=1 tr=0 ts=6984af83 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=XfyschVtOzqIvrHFB38A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: wLblhyGenrLrhgE7dKEgdxYLBuM8naH5
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA1MDExMiBTYWx0ZWRfX+/aqUuKF+P4x
+ ExXaTUMtHCEbOoekG3RwHkUkicvV52mVFlqiQ7OaopXYSoSDisv1Nj4fOF1KT1r8FQ8gd5jW3AV
+ My2+LcdXb92lYqIoH7UNAQQwa/YX7AVRr0HXoLWh5T+Wohbvs11eqxDvJmQ7+QnmqtgiLTybP+n
+ dCm59GzrE9pg2ML2ZkFT6ujZmq6kaChAvrFBFHLTfuYPpPd+BGH+sqGMipUMTqYfbbW4BffvB35
+ Wmo2Cy3KUWthawCDem9vlrbTWPKNDFQ2tTvxxQWZTlybEF41GV+lmFuc0YyPrtNc7weIBkB/jAD
+ hLGY2XsbAw5ac7CQuVmFRIOyQ13m6XnuKumoIlhJVw93P6xAfknFZqOP8803CzA99vVdtTSetiM
+ ezDUmZIxSPXaS5ZsfuLCL7NuIxxHRPohg+GiUw9AaNeVQqoGcTZE0+5okM1m41qrghX5UvF9W2p
+ e2bgk6oT1v6FbCqX2QQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-05_03,2026-02-05_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1011 spamscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
+ definitions=main-2602050112
 
-From: Or Har-Toov <ohartoov@nvidia.com>
 
-Add documentation for the port-level resource feature to
-devlink-resource.rst. Port-level resources allow viewing resources
-associated with specific devlink ports.
 
-Currently, port-level resources only support the show command for
-viewing resource information.
+> On 24 Jan 2026, at 1:22=E2=80=AFPM, adubey@linux.ibm.com wrote:
+>=20
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+>=20
+> This patch series enables support for two BPF JIT features
+> on powerpc64. The first three patches target support for
+> tail calls with subprogram combinations. The first patch
+> supports realignment of tail_call_cnt offset in stack frame.
+> Implementation details are provided in the commit messages.
+>=20
+> The last three patches add support for BPF exceptions. An
+> architecture-specific stack walker is implemented to assist
+> with stack walk during exceptions.
+>=20
+> All selftests related to tailcalls and exceptions are passing:
+>=20
+> # ./test_progs -t tailcalls
+> #442/1   tailcalls/tailcall_1:OK
+> #442/2   tailcalls/tailcall_2:OK
+> #442/3   tailcalls/tailcall_3:OK
+> #442/4   tailcalls/tailcall_4:OK
+> #442/5   tailcalls/tailcall_5:OK
+> #442/6   tailcalls/tailcall_6:OK
+> #442/7   tailcalls/tailcall_bpf2bpf_1:OK
+> #442/8   tailcalls/tailcall_bpf2bpf_2:OK
+> #442/9   tailcalls/tailcall_bpf2bpf_3:OK
+> #442/10  tailcalls/tailcall_bpf2bpf_4:OK
+> #442/11  tailcalls/tailcall_bpf2bpf_5:OK
+> #442/12  tailcalls/tailcall_bpf2bpf_6:OK
+> #442/13  tailcalls/tailcall_bpf2bpf_fentry:OK
+> #442/14  tailcalls/tailcall_bpf2bpf_fexit:OK
+> #442/15  tailcalls/tailcall_bpf2bpf_fentry_fexit:OK
+> #442/16  tailcalls/tailcall_bpf2bpf_fentry_entry:OK
+> #442/17  tailcalls/tailcall_poke:OK
+> #442/18  tailcalls/tailcall_bpf2bpf_hierarchy_1:OK
+> #442/19  tailcalls/tailcall_bpf2bpf_hierarchy_fentry:OK
+> #442/20  tailcalls/tailcall_bpf2bpf_hierarchy_fexit:OK
+> #442/21  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_fexit:OK
+> #442/22  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_entry:OK
+> #442/23  tailcalls/tailcall_bpf2bpf_hierarchy_2:OK
+> #442/24  tailcalls/tailcall_bpf2bpf_hierarchy_3:OK
+> #442/25  tailcalls/tailcall_freplace:OK
+> #442/26  tailcalls/tailcall_bpf2bpf_freplace:OK
+> #442/27  tailcalls/tailcall_failure:OK
+> #442/28  tailcalls/reject_tail_call_spin_lock:OK
+> #442/29  tailcalls/reject_tail_call_rcu_lock:OK
+> #442/30  tailcalls/reject_tail_call_preempt_lock:OK
+> #442/31  tailcalls/reject_tail_call_ref:OK
+> #442     tailcalls:OK
+> Summary: 1/31 PASSED, 0 SKIPPED, 0 FAILED
+>=20
+> # ./test_progs -t exceptions
+> #105/1   exceptions/exception_throw_always_1:OK
+> #105/2   exceptions/exception_throw_always_2:OK
+> #105/3   exceptions/exception_throw_unwind_1:OK
+> #105/4   exceptions/exception_throw_unwind_2:OK
+> #105/5   exceptions/exception_throw_default:OK
+> #105/6   exceptions/exception_throw_default_value:OK
+> #105/7   exceptions/exception_tail_call:OK
+> #105/8   exceptions/exception_ext:OK
+> #105/9   exceptions/exception_ext_mod_cb_runtime:OK
+> #105/10  exceptions/exception_throw_subprog:OK
+> #105/11  exceptions/exception_assert_nz_gfunc:OK
+> #105/12  exceptions/exception_assert_zero_gfunc:OK
+> #105/13  exceptions/exception_assert_neg_gfunc:OK
+> #105/14  exceptions/exception_assert_pos_gfunc:OK
+> #105/15  exceptions/exception_assert_negeq_gfunc:OK
+> #105/16  exceptions/exception_assert_poseq_gfunc:OK
+> #105/17  exceptions/exception_assert_nz_gfunc_with:OK
+> #105/18  exceptions/exception_assert_zero_gfunc_with:OK
+> #105/19  exceptions/exception_assert_neg_gfunc_with:OK
+> #105/20  exceptions/exception_assert_pos_gfunc_with:OK
+> #105/21  exceptions/exception_assert_negeq_gfunc_with:OK
+> #105/22  exceptions/exception_assert_poseq_gfunc_with:OK
+> #105/23  exceptions/exception_bad_assert_nz_gfunc:OK
+> #105/24  exceptions/exception_bad_assert_zero_gfunc:OK
+> #105/25  exceptions/exception_bad_assert_neg_gfunc:OK
+> #105/26  exceptions/exception_bad_assert_pos_gfunc:OK
+> #105/27  exceptions/exception_bad_assert_negeq_gfunc:OK
+> #105/28  exceptions/exception_bad_assert_poseq_gfunc:OK
+> #105/29  exceptions/exception_bad_assert_nz_gfunc_with:OK
+> #105/30  exceptions/exception_bad_assert_zero_gfunc_with:OK
+> #105/31  exceptions/exception_bad_assert_neg_gfunc_with:OK
+> #105/32  exceptions/exception_bad_assert_pos_gfunc_with:OK
+> #105/33  exceptions/exception_bad_assert_negeq_gfunc_with:OK
+> #105/34  exceptions/exception_bad_assert_poseq_gfunc_with:OK
+> #105/35  exceptions/exception_assert_range:OK
+> #105/36  exceptions/exception_assert_range_with:OK
+> #105/37  exceptions/exception_bad_assert_range:OK
+> #105/38  exceptions/exception_bad_assert_range_with:OK
+> #105/39  exceptions/non-throwing fentry -> exception_cb:OK
+> #105/40  exceptions/throwing fentry -> exception_cb:OK
+> #105/41  exceptions/non-throwing fexit -> exception_cb:OK
+> #105/42  exceptions/throwing fexit -> exception_cb:OK
+> #105/43  exceptions/throwing extension (with custom cb) -> =
+exception_cb:OK
+> #105/44  exceptions/throwing extension -> global func in =
+exception_cb:OK
+> #105/45  exceptions/exception_ext_mod_cb_runtime:OK
+> #105/46  exceptions/throwing extension (with custom cb) -> global func =
+in exception_cb:OK
+> #105/47  exceptions/exception_ext:OK
+> #105/48  exceptions/non-throwing fentry -> non-throwing subprog:OK
+> #105/49  exceptions/throwing fentry -> non-throwing subprog:OK
+> #105/50  exceptions/non-throwing fentry -> throwing subprog:OK
+> #105/51  exceptions/throwing fentry -> throwing subprog:OK
+> #105/52  exceptions/non-throwing fexit -> non-throwing subprog:OK
+> #105/53  exceptions/throwing fexit -> non-throwing subprog:OK
+> #105/54  exceptions/non-throwing fexit -> throwing subprog:OK
+> #105/55  exceptions/throwing fexit -> throwing subprog:OK
+> #105/56  exceptions/non-throwing fmod_ret -> non-throwing subprog:OK
+> #105/57  exceptions/non-throwing fmod_ret -> non-throwing global =
+subprog:OK
+> #105/58  exceptions/non-throwing extension -> non-throwing subprog:OK
+> #105/59  exceptions/non-throwing extension -> throwing subprog:OK
+> #105/60  exceptions/non-throwing extension -> non-throwing subprog:OK
+> #105/61  exceptions/non-throwing extension -> throwing global =
+subprog:OK
+> #105/62  exceptions/throwing extension -> throwing global subprog:OK
+> #105/63  exceptions/throwing extension -> non-throwing global =
+subprog:OK
+> #105/64  exceptions/non-throwing extension -> main subprog:OK
+> #105/65  exceptions/throwing extension -> main subprog:OK
+> #105/66  exceptions/reject_exception_cb_type_1:OK
+> #105/67  exceptions/reject_exception_cb_type_2:OK
+> #105/68  exceptions/reject_exception_cb_type_3:OK
+> #105/69  exceptions/reject_exception_cb_type_4:OK
+> #105/70  exceptions/reject_async_callback_throw:OK
+> #105/71  exceptions/reject_with_lock:OK
+> #105/72  exceptions/reject_subprog_with_lock:OK
+> #105/73  exceptions/reject_with_rcu_read_lock:OK
+> #105/74  exceptions/reject_subprog_with_rcu_read_lock:OK
+> #105/75  exceptions/reject_with_rbtree_add_throw:OK
+> #105/76  exceptions/reject_with_reference:OK
+> #105/77  exceptions/reject_with_cb_reference:OK
+> #105/78  exceptions/reject_with_cb:OK
+> #105/79  exceptions/reject_with_subprog_reference:OK
+> #105/80  exceptions/reject_throwing_exception_cb:OK
+> #105/81  exceptions/reject_exception_cb_call_global_func:OK
+> #105/82  exceptions/reject_exception_cb_call_static_func:OK
+> #105/83  exceptions/reject_multiple_exception_cb:OK
+> #105/84  exceptions/reject_exception_throw_cb:OK
+> #105/85  exceptions/reject_exception_throw_cb_diff:OK
+> #105/86  exceptions/reject_set_exception_cb_bad_ret1:OK
+> #105/87  exceptions/reject_set_exception_cb_bad_ret2:OK
+> #105/88  exceptions/check_assert_eq_int_min:OK
+> #105/89  exceptions/check_assert_eq_int_max:OK
+> #105/90  exceptions/check_assert_eq_zero:OK
+> #105/91  exceptions/check_assert_eq_llong_min:OK
+> #105/92  exceptions/check_assert_eq_llong_max:OK
+> #105/93  exceptions/check_assert_lt_pos:OK
+> #105/94  exceptions/check_assert_lt_zero:OK
+> #105/95  exceptions/check_assert_lt_neg:OK
+> #105/96  exceptions/check_assert_le_pos:OK
+> #105/97  exceptions/check_assert_le_zero:OK
+> #105/98  exceptions/check_assert_le_neg:OK
+> #105/99  exceptions/check_assert_gt_pos:OK
+> #105/100 exceptions/check_assert_gt_zero:OK
+> #105/101 exceptions/check_assert_gt_neg:OK
+> #105/102 exceptions/check_assert_ge_pos:OK
+> #105/103 exceptions/check_assert_ge_zero:OK
+> #105/104 exceptions/check_assert_ge_neg:OK
+> #105/105 exceptions/check_assert_range_s64:OK
+> #105/106 exceptions/check_assert_range_u64:OK
+> #105/107 exceptions/check_assert_single_range_s64:OK
+> #105/108 exceptions/check_assert_single_range_u64:OK
+> #105/109 exceptions/check_assert_generic:OK
+> #105/110 exceptions/check_assert_with_return:OK
+> #105     exceptions:OK
+> Summary: 1/110 PASSED, 0 SKIPPED, 0 FAILED
+>=20
+> [v1]: =
+https://lore.kernel.org/all/20260105105212.136645-1-adubey@linux.ibm.com/
+> [v2]: =
+https://lore.kernel.org/all/20260114114450.30405-1-adubey@linux.ibm.com/
+> [v3]: =
+https://lore.kernel.org/all/20260122165716.10508-1-adubey@linux.ibm.com/
+> [v4]: =
+https://lore.kernel.org/all/20260122211854.5508-1-adubey@linux.ibm.com/
+>=20
+> Changes v4->v5:
+> Patch comments and code refactoring
+> Handle exception callback and boundary frame checks
+> Changes v3->v4:
+>        Handle bpf-ci warnings
+> Changes v2->v3:
+>        Added PPC_BCC_CONST_SHORT for short jumps of constant offset
+>        Optimize tailcall allocation for BPF_TRAMP_F_CALL_ORIG flag
+>        New helper for stack size calculation during exceptions
+>        Prologue JIT optimizations during non exception prog case
+> Changes v1->v2:
+>        Move tail_call_cnt to offset 0 in stack frame
+>        Remove trampoline NVR remapping-patch3/6
+>=20
+> Abhishek Dubey (6):
+>  powerpc64/bpf: Moving tail_call_cnt to bottom of frame
+>  powerpc64/bpf: Support tailcalls with subprogs
+>  powerpc64/bpf: Avoid tailcall restore from trampoline
+>  powerpc64/bpf: Add arch_bpf_stack_walk() for BPF JIT
+>  powerpc64/bpf: Support exceptions
+>  powerpc64/bpf: Additional NVR handling for bpf_throw
+>=20
+> arch/powerpc/net/bpf_jit.h        |  16 ++
+> arch/powerpc/net/bpf_jit_comp.c   |  85 +++++++--
+> arch/powerpc/net/bpf_jit_comp64.c | 276 +++++++++++++++++++++++++-----
+> 3 files changed, 315 insertions(+), 62 deletions(-)
+>=20
+> --=20
+> 2.48.1
+>=20
 
-Signed-off-by: Or Har-Toov <ohartoov@nvidia.com>
-Reviewed-by: Shay Drori <shayd@nvidia.com>
-Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
----
- .../networking/devlink/devlink-resource.rst   | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
+Tested this series, it=E2=80=99s working as expected. Please add below =
+tag.
 
-diff --git a/Documentation/networking/devlink/devlink-resource.rst b/Documentation/networking/devlink/devlink-resource.rst
-index 3d5ae51e65a2..c2bb7e429a26 100644
---- a/Documentation/networking/devlink/devlink-resource.rst
-+++ b/Documentation/networking/devlink/devlink-resource.rst
-@@ -74,3 +74,39 @@ attribute, which represents the pending change in size. For example:
- 
- Note that changes in resource size may require a device reload to properly
- take effect.
-+
-+Port-level Resources
-+====================
-+
-+In addition to device-level resources, ``devlink`` also supports port-level
-+resources. These resources are associated with a specific devlink port rather
-+than the device as a whole.
-+
-+Currently, port-level resources only support the ``show`` command for viewing
-+resource information.
-+
-+Port-level resources can be viewed for a specific port:
-+
-+.. code:: shell
-+
-+    $ devlink port resource show pci/0000:03:00.0/196608
-+      pci/0000:03:00.0/196608:
-+        name max_SFs size 20 unit entry
-+
-+Or for ports of a specific device:
-+
-+.. code:: shell
-+
-+    $ devlink port resource show pci/0000:03:00.0
-+      pci/0000:03:00.0/196608:
-+        name max_SFs size 20 unit entry
-+
-+Or for all ports across all devices:
-+
-+.. code:: shell
-+
-+    $ devlink port resource show
-+      pci/0000:03:00.0/196608:
-+        name max_SFs size 20 unit entry
-+      pci/0000:03:00.1/262144:
-+        name max_SFs size 20 unit entry
--- 
-2.44.0
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 
+Regards,
+Venkat.=
