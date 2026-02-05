@@ -1,166 +1,119 @@
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825001A0BF3;
-	Thu,  5 Feb 2026 01:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421EB1F5842;
+	Thu,  5 Feb 2026 01:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770253524; cv=none; b=SquIQ0NipU9vHxaXu17+yZu/ryLp+Y2GoEv0lt2fDnURde9zlUX08s77lZD8kSU24YLBmLGe9G0mCvqQvGYBf6BRQcyXSZsxVGORCIf4htXVWMV0JBpis0iDUpezuT1720hjoFs/IOJ8gcif3BIGbTio9qdQCc3msJfja+Nt7RQ=
+	t=1770254298; cv=none; b=XzfE6GTi/LV9Pp6GxWSVTggvO984TYWJ4Vf2+P4pNzUZrnhuuVpzOKyeVmMgjarVsc2v5SGpPn+WXJARGzJXngXPpPnoRXDAJRCanb0FBKq4FUrO4fy1avYnt0cUXTEYYl7rcsj53E0V18cQYFdeVdEFuDEmvKWSIM2BDggv03k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770253524; c=relaxed/simple;
-	bh=QHsjVMGkgiV8AH3RnGbijs0L2IzNi5CzSF7b9hE5cPk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Hlm9F4n3z+RI0QDiDEQBtXctxLt84lIKwlSU7phYp1ROAzFFjuMVVMeN4c98DN9SBBUih4YSFBKsy8JNRmi4uPQKiz0JoAC7+1iO+uxSDUn2NTe//goFwFvknC6EqDu3BmocudoIUSG1TinQtsR244QFQyR0k2vY2T+CJU7QqUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from fric.. (unknown [210.73.43.101])
-	by APP-03 (Coremail) with SMTP id rQCowACXt97A7INpzKW1Bw--.43975S4;
-	Thu, 05 Feb 2026 09:05:05 +0800 (CST)
-From: Jiakai Xu <xujiakai2025@iscas.ac.cn>
-To: linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Cc: Anup Patel <anup@brainfault.org>,
-	Atish Patra <atish.patra@linux.dev>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiakai Xu <xujiakai2025@iscas.ac.cn>,
-	Jiakai Xu <jiakaiPeanut@gmail.com>
-Subject: [PATCH v6 2/2] RISC-V: KVM: selftests: Add RISC-V SBI STA shmem alignment tests
-Date: Thu,  5 Feb 2026 01:05:02 +0000
-Message-Id: <20260205010502.2554381-3-xujiakai2025@iscas.ac.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260205010502.2554381-1-xujiakai2025@iscas.ac.cn>
-References: <20260205010502.2554381-1-xujiakai2025@iscas.ac.cn>
+	s=arc-20240116; t=1770254298; c=relaxed/simple;
+	bh=myCYmedByJpoEdUbCWYLEQPymvHMA0rNtV1X53P8u/U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=N4DAW9uS3OQaA4qDfesu6qTRfaQKAuEXwAtHG3A8JX5yEc8y4wbgSWiQcRgZvwqnUTW5mbMeiXKgtC9gAuqLvICy4jXldJGAe+tndBbTnYjCTJomOe62yT4182gCQkTEM4HnITCNXWiDKKOLjUKsr354YiygTGWnGX2pwrimkOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=UilPor7K; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="UilPor7K"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=xI/2KWmPVAxqEykMkOoqWIvnmzgEQ82nJSITMhdtX+M=;
+	b=UilPor7KF1mQGZU80iF1wm9uhANb7eLpdUAAfT1EbAVqyz5f3MuJC2tHNZlVA+SgG/hUuthBb
+	RxsdNeqfsHmppNRpkAktCBK4yL8IkwzfAa3s1QbgOejRAyaXY1R+f43osfcPzm2Pb9yzWIkUTqk
+	OCgU5AQ7rP5i+K5xwCtHvW4=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4f5zkb65ZLz1T4GK;
+	Thu,  5 Feb 2026 09:13:43 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2F21540567;
+	Thu,  5 Feb 2026 09:18:07 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 5 Feb 2026 09:18:05 +0800
+Message-ID: <39165a75-bf07-7e3c-6ed5-9431958b706a@huawei.com>
+Date: Thu, 5 Feb 2026 09:18:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v12 00/13] arm64: entry: Convert to Generic Entry
+To: Thomas Gleixner <tglx@kernel.org>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <oleg@redhat.com>, <shuah@kernel.org>, <kees@kernel.org>,
+	<luto@amacapital.net>, <wad@chromium.org>, <kevin.brodsky@arm.com>,
+	<akpm@linux-foundation.org>, <charlie@rivosinc.com>, <ldv@strace.io>,
+	<anshuman.khandual@arm.com>, <mark.rutland@arm.com>, <ryan.roberts@arm.com>,
+	<thuth@redhat.com>, <song@kernel.org>, <ada.coupriediaz@arm.com>,
+	<broonie@kernel.org>, <pengcan@kylinos.cn>, <liqiang01@kylinos.cn>,
+	<kmal@cock.li>, <dvyukov@google.com>, <reddybalavignesh9979@gmail.com>,
+	<richard.weiyang@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+References: <20260203133728.848283-1-ruanjinjie@huawei.com>
+ <87bji552uk.ffs@tglx> <2699bcdc-8d56-7fe9-fa9a-a3d61476e806@huawei.com>
+ <87y0l823o9.ffs@tglx>
+Content-Language: en-US
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <87y0l823o9.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowACXt97A7INpzKW1Bw--.43975S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr1fKw17CF15CrWfXrW3Awb_yoW5trW5pF
-	WkCwn0vFW8KFWxt34xKr1vqF4Fg3ykKr4vvrWxu3yrAF4xtrWxJrsrKFyDZ34DWrZ5X3WS
-	vFyIgF4Uua1UXa7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-	8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxd
-	M2kKe7AKxVWUXVWUAwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv04
-	87Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
-	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67
-	IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWr
-	XwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-	026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-	GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20x
-	vEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
-	67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-	uYvjTRu89NDUUUU
-X-CM-SenderInfo: 50xmxthndljiysv6x2xfdvhtffof0/1tbiDAcJCWmD6tsHtgAAsh
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-Add RISC-V KVM selftests to verify the SBI Steal-Time Accounting (STA)
-shared memory alignment requirements.
 
-The SBI specification requires the STA shared memory GPA to be 64-byte
-aligned, or set to all-ones to explicitly disable steal-time accounting.
-This test verifies that KVM enforces the expected behavior when
-configuring the SBI STA shared memory via KVM_SET_ONE_REG.
 
-Specifically, the test checks that:
-- misaligned GPAs are rejected with -EINVAL
-- 64-byte aligned GPAs are accepted
-- INVALID_GPA correctly disables steal-time accounting
+On 2026/2/4 18:39, Thomas Gleixner wrote:
+> On Wed, Feb 04 2026 at 09:28, Jinjie Ruan wrote:
+>> On 2026/2/3 22:16, Thomas Gleixner wrote:
+>>> On Tue, Feb 03 2026 at 21:37, Jinjie Ruan wrote:
+>>>> Currently, x86, Riscv, Loongarch use the Generic Entry which makes
+>>>> maintainers' work easier and codes more elegant. arm64 has already
+>>>> successfully switched to the Generic IRQ Entry in commit
+>>>> b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
+>>>> time to completely convert arm64 to Generic Entry.
+>>>>
+>>>> The goal is to bring arm64 in line with other architectures that already
+>>>> use the generic entry infrastructure, reducing duplicated code and
+>>>> making it easier to share future changes in entry/exit paths, such as
+>>>> "Syscall User Dispatch".
+>>>>
+>>>> This patch set is rebased on "sched/core". And the performance
+>>>
+>>> Why are you using sched/core, which contains a lot of unrelated
+>>> changes. core/entry is the one which has the prerequisites and nothing
+>>> else....
+>>
+>> By the way，it looks like core/entry and arm64 for-next/entry have
+>> diverged: the first three patches of this series are already in arm64
+>> for-next/entry but missing from core/entry.
+>> Perhaps the two branches should be reconciled so that both contain the
+>> same baseline.
+> 
+> The first three patches of this series are ARM specific and have nothing
+> to do with the queued core/entry changes in tip. They are independent of
+> each other and these three ARM64 changes have no business in my tree.
+> 
+> If the ARM64 folks want to apply the rest of your series then they have
+> to pull the core/entry branch into their for-next/core branch first so
+> the whole thing builds.
+> 
+> But given that the merge window opens on sunday, this is probably moot
+> anyway and the rest of this series can go on top of rc1 in the ARM64
+> tree w/o any further complications.
 
-Signed-off-by: Jiakai Xu <xujiakai2025@iscas.ac.cn>
-Signed-off-by: Jiakai Xu <jiakaiPeanut@gmail.com>
----
- .../selftests/kvm/include/riscv/processor.h   |  4 +++
- tools/testing/selftests/kvm/steal_time.c      | 33 +++++++++++++++++++
- 2 files changed, 37 insertions(+)
+Thanks for the clear explanation, many thanks as well for the extensive
+review work and the prompt replies on the generic entry changes.
 
-diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-index e58282488beb3..c3551d129d2f6 100644
---- a/tools/testing/selftests/kvm/include/riscv/processor.h
-+++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-@@ -62,6 +62,10 @@ static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t subtype,
- 						     KVM_REG_RISCV_SBI_SINGLE,		\
- 						     idx, KVM_REG_SIZE_ULONG)
- 
-+#define RISCV_SBI_STA_REG(idx)	__kvm_reg_id(KVM_REG_RISCV_SBI_STATE,	\
-+						     KVM_REG_RISCV_SBI_STA,			\
-+						     idx, KVM_REG_SIZE_ULONG)
-+
- bool __vcpu_has_ext(struct kvm_vcpu *vcpu, uint64_t ext);
- 
- static inline bool __vcpu_has_isa_ext(struct kvm_vcpu *vcpu, uint64_t isa_ext)
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index 8edc1fca345ba..30b98d1b601c3 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -209,6 +209,7 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
- 
- /* SBI STA shmem must have 64-byte alignment */
- #define STEAL_TIME_SIZE		((sizeof(struct sta_struct) + 63) & ~63)
-+#define INVALID_GPA (~(u64)0)
- 
- static vm_paddr_t st_gpa[NR_VCPUS];
- 
-@@ -301,6 +302,34 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
- 	pr_info("\n");
- }
- 
-+static void test_riscv_sta_shmem_alignment(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_one_reg reg;
-+	uint64_t shmem;
-+	int ret;
-+
-+	reg.id = RISCV_SBI_STA_REG(0);
-+	reg.addr = (uint64_t)&shmem;
-+
-+	/* Case 1: misaligned GPA */
-+	shmem = ST_GPA_BASE + 1;
-+	ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
-+	TEST_ASSERT(ret == -1 && errno == EINVAL,
-+		    "misaligned STA shmem should return -EINVAL");
-+
-+	/* Case 2: 64-byte aligned GPA */
-+	shmem = ST_GPA_BASE;
-+	ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
-+	TEST_ASSERT(ret == 0,
-+		    "aligned STA shmem should succeed");
-+
-+	/* Case 3: INVALID_GPA disables STA */
-+	shmem = INVALID_GPA;
-+	ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
-+	TEST_ASSERT(ret == 0,
-+		    "INVALID_GPA should disable STA successfully");
-+}
-+
- #endif
- 
- static void *do_steal_time(void *arg)
-@@ -369,6 +398,10 @@ int main(int ac, char **av)
- 	TEST_REQUIRE(is_steal_time_supported(vcpus[0]));
- 	ksft_set_plan(NR_VCPUS);
- 
-+#ifdef __riscv
-+	test_riscv_sta_shmem_alignment(vcpus[0]);
-+#endif
-+
- 	/* Run test on each VCPU */
- 	for (i = 0; i < NR_VCPUS; ++i) {
- 		steal_time_init(vcpus[i], i);
--- 
-2.34.1
+Regards,
+Jinjie
 
+> 
+> Thanks,
+> 
+>         tglx
+> 
