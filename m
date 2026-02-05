@@ -1,143 +1,227 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010048.outbound.protection.outlook.com [52.101.46.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F06C334374;
-	Thu,  5 Feb 2026 14:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770300208; cv=none; b=BD0I7XDJGZmnaFKnluZ0+GnfAG/kt0/farAQSHvfpdjcnexHHxF53EZSm6oXVtiK834Ud7SehBbYdCf1joH9+t1HnrDYJgsHbcPY6TnwySqyujdSplIVOxAWywl71De+njJH2w7tKA/q1UANMS0+V2+leESUm/J/kWeIGNE20iQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770300208; c=relaxed/simple;
-	bh=JVbJvrsP3hVFvb66ENZiWRE1g74g9hAd9aW7lxA4BD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvR/IMd0TJ0Q3WE0LdrANsoen0d2O6I/rAn8YCue/a9raiooe8zRG2ijvj9aOMkAoHDZa1XBKKyTv/LdQE3VAUGDLPpvNoyIbxIX6NE5Te/5NDsy+CgHOk0CSiqseAklUoDU7IWZpmPHTb39/r6nskdEV/bHdcYbnrcTq4+i9HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uumh975x; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FCF218845;
+	Thu,  5 Feb 2026 14:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770301864; cv=fail; b=coGEKrgqwIFmafuu5kyIm0FObNVqceS/tEt9ei80SyLv4HxRxQcpRAcaTj0eDvzVUp++oK+Me9m6GEf4kuAOA90q6PKxE9+INEfcQT72n7kx6qexTnO9hVMrEYJubWSffQswCA5q89+jYFCZi2dX2u0DzLGbhAjXyxXtpEFb7k0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770301864; c=relaxed/simple;
+	bh=2CHOeT539KpSsqg0RfDx+UajNjNV3t2llxoFH0QMDbQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=J0+fqIbptpjWME6IdvhdNPD+BEkkmpTH+68tF0OwzXszloU+OQPn6viWdeTjbn8DzVwFt6IBM4VGim6HLKgE1Iyeqxigz/tkSbeqt4wFpwEWnIbKXGD2a7BcoIXp0h3ItGTI/vBjds44YB1vzruv+8y1tS0rMkl1eEPvu7+A/9I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eHkddD8C; arc=fail smtp.client-ip=52.101.46.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uumh975x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04AECC4CEF7;
-	Thu,  5 Feb 2026 14:03:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770300208;
-	bh=JVbJvrsP3hVFvb66ENZiWRE1g74g9hAd9aW7lxA4BD8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Uumh975xxFVtaDo3bIgivLnE7loIlu7xKlaPPF4sJ+K2KQ4hpB+at6FbLB0nd268W
-	 tiLfz7+e0gi2ot4Ei4PgGQfthqs9XP5FA9bSmax/EW41mgdKZZpMT+CbH/s3ulQcVp
-	 nnyGRMGU49SnBJ8hFkIH6N54AvRjgPmEV6kdX86mdDvytSD3rHVhk1+T8Id34+aU8j
-	 f5FQmDavsCedrB+pr8W5sAezDjNoRv8J6rwOPHW+vZyE64cK7sdRNpzFjzkwUbIU/H
-	 hsPFcXJwvr1UZ5vqtcmQSTEqex1eObLdoIKWCX/ofcztxeKFELS77CZ484aycmb6Zm
-	 sc98g4bDLjljA==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vnzx3-000000004t8-0n96;
-	Thu, 05 Feb 2026 15:03:21 +0100
-Date: Thu, 5 Feb 2026 15:03:21 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] Revert "revocable: Revocable resource management"
-Message-ID: <aYSjKaUGdTngCXWK@hovoldconsulting.com>
-References: <20260204142849.22055-1-johan@kernel.org>
- <20260204142849.22055-4-johan@kernel.org>
- <aYRaB5wI3mS2J54K@google.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eHkddD8C"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EolqKAvfTnEn3rzlNQZIeGsc+4+EMUo90Cemj8+L9xZ0XByys6ajsintZRDuCpMCGxtbaw+4TSkRTGFCO9pNJi0mqUW4KFz9Tt0FoM/RTBul+p+H7zGimmtAnT6H1kTMV+9CRFumxTcQw5tcKtxpbtVpG5R2ayy9noN/vAUKvvz9ULG9E6elnbnJ00+GCPzM34FqFlKPaYC4oWsbZ8XMmlGgtTqWkOcGRJwjTa1hjgqrkHNCgFpfq/KunfXsDvYOB1x7h06MhIHgD5aUigQosycn0Lat70eZr254aKpX2QIafOmqVSVo/0NY8yjh8AUGDLW/mYgHLCtJgaXgO8GC9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+/zdk2ndmGt9gGUI4Y9819rRXu1ejUA9UP6c2xvG4rY=;
+ b=vqkIFpHA/8o6ilCetpwGPQvFiZ/DAZZ3tjAyev2ykwftc7LOqMAsA/0kOb2Qwg50kqZane1Wf6OIvzMcLtwble6FbOAZyu/OtedWDjYDhtFVLiNAmcoIU9qnEgsifrZXqS5dw5KjzLYr0ILyY9kCn/k9Hr/Hg61nEsoclSncF2lQAyDxZ/c3fGwkyRX54dQpoNVQ0AmXFJ6carQO67Cbcran1NIQXEEb1kQIQzRut7Paa4atZU+R6oJM0jcdvhM37TGlAlNJ55oDmooOBEchtoU1koh1EZaIjbIeWYd38Mfg241HQqncHw5xbFLxZMiODg5IsnhoQ0xohnxJ7B3Isg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+/zdk2ndmGt9gGUI4Y9819rRXu1ejUA9UP6c2xvG4rY=;
+ b=eHkddD8C2TQiCXXcSTcmpxIU2unoohVhEpWdEknjmyah5bCphBH/89QxzIoHu6dXUdV5JWVmhLMaxeVNjqibxYyF6t1TL0XoYhs6Vy7y4q6SlQA0Sqx2/9uaDhx+4kpP4V2srbGEmZ6yEk7VydqR9manx/24myUGmchCXnAveC9+WPVz2mNaT8AgXMkpwKltWfpEiOmMxNLxn/0+yFgkXZV5BVCu8+gxSyUBNa1WUj5vA4B4hn4+C/5uVWRPQ90Cssf1mIJyHfXc372oYC1gOwu+qHFMlN/tuomKO/FTfv6oyN7GJCLBAxvIWKGaE6Wdgil9VfHkIOx8LX0mw5bfWA==
+Received: from BN9PR03CA0378.namprd03.prod.outlook.com (2603:10b6:408:f7::23)
+ by BN7PPF34483F4BA.namprd12.prod.outlook.com (2603:10b6:40f:fc02::6cb) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.12; Thu, 5 Feb
+ 2026 14:30:59 +0000
+Received: from BN3PEPF0000B06B.namprd21.prod.outlook.com
+ (2603:10b6:408:f7:cafe::6b) by BN9PR03CA0378.outlook.office365.com
+ (2603:10b6:408:f7::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.14 via Frontend Transport; Thu,
+ 5 Feb 2026 14:30:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN3PEPF0000B06B.mail.protection.outlook.com (10.167.243.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9611.0 via Frontend Transport; Thu, 5 Feb 2026 14:30:59 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 5 Feb
+ 2026 06:30:40 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Thu, 5 Feb 2026 06:30:40 -0800
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Thu, 5 Feb 2026 06:30:35 -0800
+From: Tariq Toukan <tariqt@nvidia.com>
+To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>
+CC: Donald Hunter <donald.hunter@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+	Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed <saeedm@nvidia.com>, "Leon
+ Romanovsky" <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
+	<mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-rdma@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, Gal Pressman
+	<gal@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>, Shay Drori
+	<shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>
+Subject: [PATCH net-next V2 0/7] devlink: add per-port resource support
+Date: Thu, 5 Feb 2026 16:28:26 +0200
+Message-ID: <20260205142833.1727929-1-tariqt@nvidia.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYRaB5wI3mS2J54K@google.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06B:EE_|BN7PPF34483F4BA:EE_
+X-MS-Office365-Filtering-Correlation-Id: ac0283fd-4264-4971-b502-08de64c32e65
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014|7416014|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?5/nUr+DONj2vOvsr3Wt9AoD5/mfhPegKYtKoUEoPKRxmK6BDE53P4zH+y2cr?=
+ =?us-ascii?Q?ehpAOWhEn4Z6L0Ui+ILaRi+CgqyjB29akBAvh/aS2OzyPjIC6MmfnBCOOGj5?=
+ =?us-ascii?Q?ue/8X9qHtYfa00oktDmE4Lool7mYGTotR88xfAp9epEbEr+MNfhKtUq8I12o?=
+ =?us-ascii?Q?zLBwmjvGGvOnXO9yGthpsG9m5A4P1iqmZxjqSXSBYuNpL1/27/bInSJA5nuP?=
+ =?us-ascii?Q?iJuQ5EveOV1icqC/MjWV78RAxV4nSCJYYUNMeIZeYRQ+o0lvOG8oOfIuPaZB?=
+ =?us-ascii?Q?GOLs6tvCfcjcS9TLuMok5nKR5xsaDy/qZ2XLESWjFbj5HBXerZJKhsKXLaG3?=
+ =?us-ascii?Q?qHQU9mkwXwDhEvfPEAovuXhBDXJA9TQqM0nXJdECAtG8esTbjPJECyThS2A6?=
+ =?us-ascii?Q?1L/AzcH+TUg2Xkwq+C1rpF5qqXAXLLw4tZvm4YUThd6M2P9/6Sco61Jc2eHT?=
+ =?us-ascii?Q?ic73lHuvib50v149h9535wAS/Qk2Z1A1DEXY31+cxJfEapnfJOjyD2m2VsmP?=
+ =?us-ascii?Q?lxzqhkvQvvg+v9wuIBO3j2E5FcpXmTQsEzro68gZU60a4rrOfOh2rW4LF1RX?=
+ =?us-ascii?Q?VXXgDuarkeEfUwGexwbBUYu/YmG/oSf8XRpKBxrrAKoBrZaIjsENVy4UdPc1?=
+ =?us-ascii?Q?0k9jQ5njRgea2C5IXIGI3UsnTwc0MndAvSq1hsinmjEPQjLh4Y9uyBIIjIG4?=
+ =?us-ascii?Q?/RGIxRa1Qmc+yHERaO5qis+7aQyLYNmj2ir/+e/WuA2QlpAiFPyoGZ6cvgo2?=
+ =?us-ascii?Q?RoiLqvdoB/EbwDo/zt38m/zq3VcDdWctNVndmN/6xCMjGeqp3Qfo8wXRlgQH?=
+ =?us-ascii?Q?66i+5wL8Oc01yL8PzOXSuu8x9sOkL6hkKQ6zM0BhNy8HGwf5S+RVyXMTlzfD?=
+ =?us-ascii?Q?42l3a9awpNjvr/ovZVM4+vE0loxWO/iQIyFJBJaJdWiuWpD9dePSbHJmSwTN?=
+ =?us-ascii?Q?AZ/wK/qbEIWsTzrFHkt8ErQm61cRr6uC93KIK0Zg/PzSat2ZumQfTnm9cQXw?=
+ =?us-ascii?Q?kS/zF/xS3/dV9CCbR6RqtcgYmz2i928y/bs1bQ1/vDL0L5CxEz17vTetx3zt?=
+ =?us-ascii?Q?7Nzw9VuRNYIAWNstE5//VoJxtBEzaGb1VB0jh9C33hOshshpXUo7vU9WmwtG?=
+ =?us-ascii?Q?Uvm3uJ+QheFf6Mg+jqdK/U0awoY53K3Q+y3b9uml6CdMYFP57/Jo37WAxUha?=
+ =?us-ascii?Q?l/zb/yJ3due7YQJthkv79ol/2XKXJNvRqLW5PGaRUY/zqnsscTDbImIbq1XW?=
+ =?us-ascii?Q?KDguql6j7KrCil4yipOlSjYTGiln8Ckb/nOrleHcYs1oLZA/D7UkoPadVApI?=
+ =?us-ascii?Q?YtrGqrB4H6z9y4WKJATykTGlnMFw0ZFdYpHSZGns/5GSeoGa27VcORSgpYPa?=
+ =?us-ascii?Q?WYmqm9+LUoQDpEzYo8JzbtoYNZ1MJf7xvLdXWv0Zzk32sYVsEza4Fl+Tcq4e?=
+ =?us-ascii?Q?oEVcwJnFboEjQVpDg342FCV2kQHOi2xiEtd2biy2spn70phEhJlUOLY3wbuQ?=
+ =?us-ascii?Q?0loYEK2lMUyHWoCBrCnITlAPyI0VPLqGnIR/xPVl66FT8KQqm1d4oG1XDvm9?=
+ =?us-ascii?Q?yaYZ/09rdw7zS5FnVASdElM7ujVoY/kQOdy2DU1AObfKJyor5rCK1HxPs4d4?=
+ =?us-ascii?Q?4fkN9M4Z8mAkHBV7G1YAQ48=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(7416014)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	HchDD9I9ADz5laiLkBNCJrMaMJ5i6dUCid/6Kgm4vcYc4sHOUYHom/9iWNG8wj3LXl/BqiAnGcKlU1i/kLhb/r41guCYbo0RfvJcd5MO7KKbgoIvv74tQEvsuZ9EIkcqvQxEgVblDgFCGx8EQEcakjLVtbBOPLN8nZ/5h0PphQ+Rg5IZGCrNQloZVsQa+dhxUWglvVoshm9Vm4NoW2N6Bg2uirqfEpanNNMNtEt4l7VbcKeH9Ejs05RQCETb+/a5h78xyc6UlUCKx8ALceafUzA9j72xkIP7J1uwF1bdJKcxVspFbye0cN+1JPxExTEzdh3pCVoGIGOtyOAeYAZxGFwk2JOIUIh01SjAUpabMI03LAOZT3oEip6jTF7KWgaluX8RvB/Ix8OvcCfGWaeSO3eWrmlnjtok5fA4nWgkWWdlB9hv4HL99PwFHq9lEsxQ
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2026 14:30:59.1096
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac0283fd-4264-4971-b502-08de64c32e65
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B06B.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PPF34483F4BA
 
-On Thu, Feb 05, 2026 at 08:51:19AM +0000, Tzung-Bi Shih wrote:
-> On Wed, Feb 04, 2026 at 03:28:49PM +0100, Johan Hovold wrote:
-> > Specifically, the latest design relies on RCU for storing a pointer to
-> > the revocable provider, but since the resource can be shared by value
-> > (e.g. as in the now reverted selftests) this does not work at all and
-> > can also lead to use-after-free:
-> [...]
-> > 	producer:
-> > 
-> > 	priv->rp = revocable_provider_alloc(&priv->res);
-> > 	// pass priv->rp by value to consumer
-> > 	revocable_provider_revoke(&priv->rp);
-> > 
-> > 	consumer:
-> > 
-> > 	struct revocable_provider __rcu *rp = filp->private_data;
-> > 	struct revocable *rev;
-> > 
-> > 	revocable_init(rp, &rev);
-> > 
-> > as _rp would still be non-NULL in revocable_init() regardless of whether
-> > the producer has revoked the resource and set its pointer to NULL.
-> 
-> You're right to point out the issue with copying the pointer of revocable
-> provider.  If a consumer stores this pointer directly, rcu_replace_pointer()
-> in the producer's revocable_provider_revoke() will not affect the consumer's
-> copy.  I understand this concern.
-> 
-> The intention was never for consumers to cache the pointer of revocable
-> provider long-term.  The design relies on consumers obtaining the current
-> valid provider pointer at the point of access.
+Hi,
 
-But that is not what the selftest does currently, nor is it what you
-need for your initial motivation for this which was miscdev where you
-don't have any reference counted driver data to store the pointer in.
+This series adds devlink per-port resource support.
+See detailed description by Or below [1].
 
-> In the latest GPIO transition series [5], the usage pattern has been refined
-> to avoid locally storing the pointer of revocable provider.  Instead, it's
-> fetched from a source of truth when needed.
+Regards,
+Tariq
 
-Right, but then you don't need all the RCU stuff. And revocable becomes
-just a convoluted abstraction for a lock and flag (as was pointed out
-early on).
+[1]
+Currently, devlink resources are only available at the device level.
+However, some resources are inherently per-port, such as the maximum
+number of subfunctions (SFs) that can be created on a specific PF port.
+This limitation prevents user space from obtaining accurate per-port
+capacity information.
+This series adds infrastructure for per-port resources in devlink core
+and implements it in the mlx5 driver to expose the max_SFs resource on
+PF devlink ports.
 
-> I agree that the risks and correct usage patterns need to be much clearer.
-> I'll update the Documentation and the selftests to explicitly highlight
-> this limitation and demonstrate the proper way to interact with the API,
-> avoiding the storage of the provider pointer by value in consumer contexts.
+Patch #1 refactors resource functions to be generic
+Patch #2 adds port-level resource registration functions
+Patch #3 adds port resource netlink command
+Patch #4 registers SF resource on PF port representor in mlx5
+Patch #5 adds port resource registration to netdevsim for testing
+Patch #6 adds selftest for devlink port resources
+Patch #7 adds documentation for port-level resources
 
-And again, that's precisely why we need to evaluate the API in a
-non-trivial context *before* merging yet another version of this.
+With this series (and upcoming userspace patches), users can query
+per-port resources:
 
-> > Essentially revocable still relies on having a pointer to reference
-> > counted driver data which holds the revocable provider, which makes all
-> > the RCU protection unnecessary along with most of the current revocable
-> > design and implementation.
-> 
-> (I'm assuming you are referring to the example in [6].)
-> 
-> I'm not sure I follow your reasoning.  Per my understanding:
-> - The reference counted driver data (e.g. `gdev` in the GPIO example) is to
->   ensure the pointer of revocable provider isn't freed.
-> - The RCU protects the pointer value from concurrent access and updates
->   during the revocation process [7].
-> 
-> These seem to address different aspects.  Could you provide more context
-> on why you see the RCU protection as redundant?
+$ devlink port resource show pci/0000:03:00.0/196608
+pci/0000:03:00.0/196608:
+  name max_SFs size 20 unit entry
 
-I wasn't thinking of any particular example.
+$ devlink port resource show
+pci/0000:03:00.0/196608:
+  name max_SFs size 20 unit entry
+pci/0000:03:00.1/262144:
+  name max_SFs size 20 unit entry
 
-The struct revocable_provider is already reference counted and you don't
-need anything more than that as long as you only take another reference
-in a context where you already hold a reference. (And struct
-revocable_provider should be renamed struct revocable).
+Userspace patches for iproute2:
+https://github.com/ohartoov/iproute2/tree/port_resource
 
-SRCU is what prevents the race against revoke, no need for RCU.
+V2:
+- Skip selftest on old userspace that doesn't have the devlink
+  port resource command.
+- Add link to the userspace patch.
+- Rename internal helper functions to follow kernel __ prefix
+  convention.
+- Split first patch into three logical commits.
+- Change names with "res" to "resource".
+- Change netdevsim test resource to be generic and not with max_sfs.
+- Change "max_sfs" to "max_SFs" in documentation file.
+- V1 link: https://lore.kernel.org/all/20260203071033.1709445-1-tariqt@nvidia.com/
 
-But this is designing yet another version of revocable. And that should
-be done out-of-tree.
+Or Har-Toov (7):
+  devlink: Refactor resource functions to be generic
+  devlink: Add port-level resource registration infrastructure
+  devlink: Add port resource netlink command
+  net/mlx5: Register SF resource on PF port representor
+  netdevsim: Add devlink port resource registration
+  selftest: netdevsim: Add devlink port resource test
+  devlink: Document port-level resources
 
-Johan
+ Documentation/netlink/specs/devlink.yaml      |  23 ++
+ .../networking/devlink/devlink-resource.rst   |  36 +++
+ .../net/ethernet/mellanox/mlx5/core/devlink.h |   4 +
+ .../mellanox/mlx5/core/esw/devlink_port.c     |  37 +++
+ drivers/net/netdevsim/dev.c                   |  23 +-
+ drivers/net/netdevsim/netdevsim.h             |   4 +
+ include/net/devlink.h                         |   8 +
+ include/uapi/linux/devlink.h                  |   3 +
+ net/devlink/netlink.c                         |   2 +-
+ net/devlink/netlink_gen.c                     |  32 +-
+ net/devlink/netlink_gen.h                     |   6 +-
+ net/devlink/port.c                            |   3 +
+ net/devlink/resource.c                        | 281 ++++++++++++++----
+ .../drivers/net/netdevsim/devlink.sh          |  37 ++-
+ 14 files changed, 441 insertions(+), 58 deletions(-)
+
+
+base-commit: 021718d2cc1a2df2f53b06968fa89280199371bd
+-- 
+2.44.0
+
