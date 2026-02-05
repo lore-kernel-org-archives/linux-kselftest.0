@@ -1,140 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3695535F8C5;
-	Thu,  5 Feb 2026 08:23:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BB634A3C1;
+	Thu,  5 Feb 2026 08:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770279798; cv=none; b=KvfMzNrwVHoT8ovmPMGf1dbDP+Os6I1xD/XmvXoDdQB7JB1dE/hSxx/OB2s6mJy5xym4FKVFKWuakLOrjWL0e/32WJ+wzeTfJXjG6EI9vsQFXMBTmIwooboTHCugj9LPSlZVjWA1hxExtk2mUIB8aDDWwxXk6DtbftiH6wSzIcE=
+	t=1770281484; cv=none; b=OhVtbyZ1ndWOiu7ldijA8YhslZUXBNEWBNYoIMyVc4bydlGwoFsLATSk0Xdgah4GiqFYoTqn6FPOaIgdyfYu+egN9fzVon96B0S958uQoLHbr/JmKJqZ5dSK8ml9ajoJNChNShs8It5zSxyaDjBCIIo/KEpaxOysoYPOUtrcKgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770279798; c=relaxed/simple;
-	bh=9OMvDNGE1BflGwQ1LtGcGldUmbSQlVdBmdpXoID4eCE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eNGhRQ2mfJhRa4TWTPIipNteFcOqjwCjam+3oE9iQjX8oqd4XGuepNBiPLSTJNwN/Wv1Pv7LKVZy6cQMCHtw0rXPZOe8Fa2zu+gh+wu0zIBxq54a3G97QPG/qAQWqD+/5OKFhwypnQ24cIjQ4ol9hHwMemDkM+HeF69nhGWU93A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xv0P6ASo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770281484; c=relaxed/simple;
+	bh=/SWVbyh1ixpEifEztr1IRRPKrj6UPmqtnMLLEAkPJec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j0uMzmmmc+0v7NDXm9qwYqaUDR1c1DGDRxwUhE3P0PCdEGyqE0paokjt5Cc6jFdaJP/7MQs7q/bDTJ20TukGTPl7myxKtQ8Y9gnoTsBnFlC4/ls0Cu8PiScl6hsQFFQBsZE8uRz1phPkRbuFI+2TFdBgzpg3UYFFLFr/bpFRAS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxsG2kaU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xv0P6ASo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA1F7C19421;
-	Thu,  5 Feb 2026 08:23:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxsG2kaU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3576C4CEF7;
+	Thu,  5 Feb 2026 08:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770279797;
-	bh=9OMvDNGE1BflGwQ1LtGcGldUmbSQlVdBmdpXoID4eCE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Xv0P6ASoydC3vGi3iORWF4CwYtyMCU/a2CLAqT4tPV0F9x58dOF8vjkwxaEFjMssJ
-	 2ZR3AZSFgr1T6Mvy5MPyoFGTlBOjXG1BOdEiS//2qhfb9HIz0q4YOIY7K0on3IdgMI
-	 pUvVgVv+W9FXbfIoGJxEQUP7MEKJRe3u9GHHXh1EohTz41IuRtzMDzHTxdfMdqDrza
-	 MQodE661cyOA+aW49uC7LBtQnKO/Ukiu6jmw9w+3FlKAiGFfCPWC59k1ii+OJkqfFV
-	 sB+FCaCYm7WumXGu8AjnGrhJMUVBxAJDu1EEulv/B+7s3GoPNZ2U/U5yuCEDGD2vKs
-	 UG+SUYH5EpiMA==
-Message-ID: <7d9a4ad0-7e96-4927-aec7-0992613d1282@kernel.org>
-Date: Thu, 5 Feb 2026 09:23:11 +0100
+	s=k20201202; t=1770281484;
+	bh=/SWVbyh1ixpEifEztr1IRRPKrj6UPmqtnMLLEAkPJec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qxsG2kaUhtAT9xl4vzkVUC6QDMnwfpocmk0NWXsjRpJaDs5SmGnHfI9r0iLS4IVSf
+	 Wr2xekBuWu6+NuMVLvctz6jh1iEyqHcoY5KOFMrZcM0Z23vV231tldcd5kO+svH53W
+	 tim1Kfuvt5pn8cKUgnmPg81Z8a609cCOeTisImfqN39aNpqRl7ttqSpu1fd1/GRTWV
+	 qdzuKeHKy8kLQWiaDkLUjy6dVhpvQ2T+7C2TJhoHNkVbcZ+TWGxBu/RjyEDFjOKCFX
+	 /fKorCFK7ImZh3TPkS3OhzF2rMLxvuyj8uDy/rwl7nLbkul3bTPa5B1SaNuwPPtzOG
+	 H/PQyNpKkfIcA==
+Date: Thu, 5 Feb 2026 08:51:19 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] Revert "revocable: Revocable resource management"
+Message-ID: <aYRaB5wI3mS2J54K@google.com>
+References: <20260204142849.22055-1-johan@kernel.org>
+ <20260204142849.22055-4-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 07/15] mptcp: allow overridden write_space to be
- invoked
-Content-Language: en-GB, fr-BE
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Gang Yan <yangang@kylinos.cn>
-References: <20260203-net-next-mptcp-misc-feat-6-20-v1-0-31ec8bfc56d1@kernel.org>
- <20260203-net-next-mptcp-misc-feat-6-20-v1-7-31ec8bfc56d1@kernel.org>
- <8037fb73-4e18-4ed1-9eaf-e4cd8b2c9d53@kernel.org>
- <20260204184439.4f1a65a0@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260204184439.4f1a65a0@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260204142849.22055-4-johan@kernel.org>
 
-Hi Jakub,
-
-On 05/02/2026 03:44, Jakub Kicinski wrote:
-> On Wed, 4 Feb 2026 11:47:13 +0100 Matthieu Baerts wrote:
->>> diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
->>> index f4bfe91ca7f9..0bd1ee860316 100644
->>> --- a/net/mptcp/protocol.h
->>> +++ b/net/mptcp/protocol.h
->>> @@ -975,7 +975,7 @@ static inline void mptcp_write_space(struct sock *sk)
->>>  	/* pairs with memory barrier in mptcp_poll */
->>>  	smp_mb();
->>>  	if (mptcp_stream_memory_free(sk, 1))
->>> -		sk_stream_write_space(sk);
->>> +		INDIRECT_CALL_1(sk->sk_write_space, sk_stream_write_space, sk);  
->>
->> Is it possible to drop only this patch from this series? It is
->> independent of the rest, and the AI review tool spotted that
->> sk->sk_write_space is not sk_stream_write_space by default.
->>
->> I can send a v2 without this patch if preferred.
+On Wed, Feb 04, 2026 at 03:28:49PM +0100, Johan Hovold wrote:
+> Specifically, the latest design relies on RCU for storing a pointer to
+> the revocable provider, but since the resource can be shared by value
+> (e.g. as in the now reverted selftests) this does not work at all and
+> can also lead to use-after-free:
+[...]
+> 	producer:
 > 
-> Ack, looks like this is the last patch in terms of real code
-> so can do.
-
-Thank you for having applied this series without this patch!
-
-> BTW I've been offering other sub-maintainers to
-> run the AI stuff on their patchwork instances. Looks like
-> there's a mptcp instance in k.org patchwork. 
+> 	priv->rp = revocable_provider_alloc(&priv->res);
+> 	// pass priv->rp by value to consumer
+> 	revocable_provider_revoke(&priv->rp);
 > 
-> LMK if you want me to hook it up (..when time allows).
+> 	consumer:
+> 
+> 	struct revocable_provider __rcu *rp = filp->private_data;
+> 	struct revocable *rev;
+> 
+> 	revocable_init(rp, &rev);
+> 
+> as _rp would still be non-NULL in revocable_init() regardless of whether
+> the producer has revoked the resource and set its pointer to NULL.
 
-That would be great to catch issues early, and avoid multiple versions.
-So, yes please, but take your time, that's not urgent. Thank you!
+You're right to point out the issue with copying the pointer of revocable
+provider.  If a consumer stores this pointer directly, rcu_replace_pointer()
+in the producer's revocable_provider_revoke() will not affect the consumer's
+copy.  I understand this concern.
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+The intention was never for consumers to cache the pointer of revocable
+provider long-term.  The design relies on consumers obtaining the current
+valid provider pointer at the point of access.
 
+In the latest GPIO transition series [5], the usage pattern has been refined
+to avoid locally storing the pointer of revocable provider.  Instead, it's
+fetched from a source of truth when needed.
+
+I agree that the risks and correct usage patterns need to be much clearer.
+I'll update the Documentation and the selftests to explicitly highlight
+this limitation and demonstrate the proper way to interact with the API,
+avoiding the storage of the provider pointer by value in consumer contexts.
+
+> Essentially revocable still relies on having a pointer to reference
+> counted driver data which holds the revocable provider, which makes all
+> the RCU protection unnecessary along with most of the current revocable
+> design and implementation.
+
+(I'm assuming you are referring to the example in [6].)
+
+I'm not sure I follow your reasoning.  Per my understanding:
+- The reference counted driver data (e.g. `gdev` in the GPIO example) is to
+  ensure the pointer of revocable provider isn't freed.
+- The RCU protects the pointer value from concurrent access and updates
+  during the revocation process [7].
+
+These seem to address different aspects.  Could you provide more context
+on why you see the RCU protection as redundant?
+
+[5] https://lore.kernel.org/all/20260203061059.975605-9-tzungbi@kernel.org
+[6] https://lore.kernel.org/all/20260203061059.975605-8-tzungbi@kernel.org
+[7] https://lore.kernel.org/all/20260129143733.45618-2-tzungbi@kernel.org
