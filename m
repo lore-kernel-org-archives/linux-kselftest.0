@@ -1,401 +1,90 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E5C339B34
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 21:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A943D28A3EF;
+	Thu,  5 Feb 2026 22:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770327830; cv=none; b=nAmauN+bHCJwLVgNPl1ZujvPp3eoQDLmKsItQOEOikQ0QpLANwP2eS2COpKweERRcQoaQ0uV1/e1hWgbGopizrVgSJ+4j+EVXMA0MZxrGrZvopEuKUOrD/rdxIC9ZvDvSXAPvFASlrIF1xoh3CoWud4uMbRCv9pAdONjAP03GeQ=
+	t=1770329241; cv=none; b=KubIlUcXKC7zXAHs8drkP65OqMYNckPp7Aru/WvwjFckSYCUqtqZCsGn/xZ+cabUEYPAyXzMgLo7tnw1ADxJlYSOuhQKJaI5yX8959ZsSprqAVBank5+jmjV4mcxTzDLzcTNtFePg1AnCXuItTMyIpbLTWRLB7axpZcQcmROjv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770327830; c=relaxed/simple;
-	bh=JZ5ruax6Fqre5VIwRYbUJVDDyy/C2tkKudh0Pd6yX/M=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=BgdBJz77TiOZIe0GF0u7xv3HtLvan4oFzDGXejovUVzimVSYjb3hkjXxXPNTRfNJIGMAv1Ijm1qwwDCziMV1+UTSgyz/8hrFwQiwCE/sCbW70B7vAYzHLhgFEUbPOI5+5XSn1XSVtwg0pCyKdGo7SLm8k1YkyCNJFEzyXf0/aXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2CXF8Ou8; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+	s=arc-20240116; t=1770329241; c=relaxed/simple;
+	bh=eMJ2Nzro0JFUNNIfB+sTNQrje4HKqIjU6wTN/iWewC4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YP6FvYu5ios4+dpNwgLNYrh/ISgA7podmPL7qEUHd+t2FkLDSCSN3MJFWbv7nP4r7Z+1PDdOJwW9SsQ8ViocafRTWaAa0liZeO128k4ve9zaNNt3EqPKR0tto9/8zN3VSW2ucgaQb+kkdxsPItJ0n1i5OCO9AZvlqosURNHV4bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJwh4m7A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2CXF8Ou8"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2a0bae9acd4so10814155ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Feb 2026 13:43:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770327829; x=1770932629; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1yRMb4qc+aRpKM0YfgdxkNe0DvJ7aTkEuu9+gYbrEts=;
-        b=2CXF8Ou81t60wqGx1B4aiqHvpCDSZJPGD4UK0Vv1Lp1U64bZPb7pONh+KURj9HBich
-         jAAdrY0MpXemYjgwUW5vJgVZdXKUaOSObVR/tGefyhuZmt71LK3YiAMRnF/FmsJAivuk
-         sb5DW7FTyY+XwKWgNzVmJxhSmTxPyuxO24E7QkOErCwY0DsAZ47Cd8ely5CxQpvw/9Hv
-         tocZYNj/zsL7PUiXa4LjFS8NG0CLgLNRw8SuFXyDdQgpMCUGg7h/jvh56Xtg/Fi3cCRw
-         zErIPnRZFunXl6QozOmFznrR9FqLseyFaJsnMjVVJbM++YCqdNhP4Mb9QFlcL9wQDyUI
-         T4fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770327829; x=1770932629;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1yRMb4qc+aRpKM0YfgdxkNe0DvJ7aTkEuu9+gYbrEts=;
-        b=qcTf1mPK/R6objW7wIdMe2y2og4ccpOMcQa4+jzFmcN6h4Wv/sBnmTCXWE0HY7J1tP
-         mLIebKY1vN/Ep5Ts0gn0QakbKqWdgdZeTL0afyYCk/f5dwAR6uYGhvOkiCXvFkoRMwaW
-         G0YNAzY98W5E8Erc0yuZg2W6FnzYp7vNyV5qtU9PKbxEUjUYi0e9vYqgH9mIlyBrlAEA
-         y4nwZytybdl5nBARvyH6tBzpNju/xkX3qS5BOGGWBgP9bqlcha12zJRanSPnGRWsFzxL
-         +0VSIBT+e8nLeIoRy76zhhtYpA4bLswfvZ34Izi99CLck3VPtIIeBOgNneZjmLhXTJ4I
-         kUnA==
-X-Forwarded-Encrypted: i=1; AJvYcCW0+FG8DeIOM8G/oyUyHkDUtQVtsvOOvK7uyJfMCjEilLqIOmfNABEuGJLjTMyTSnUyLNlQyGIMS0go/a4qnYk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7NqanEkoQiz+Kw9fhxPxuCFKbz9ohTb9qdQMMIlwPoAlqPjnR
-	mt4FSAdqJ84fkmB5v4ruvdh7kqjfaQv/C7vqb+04tktxxfSHAmskQDe+p8ulnyYTlAHosz1Ee3u
-	1qSfyetNbRgSktA==
-X-Received: from pjbqd12.prod.google.com ([2002:a17:90b:3ccc:b0:352:b687:3b20])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:4f45:b0:343:7714:4cab with SMTP id 98e67ed59e1d1-354b3e2f162mr294708a91.22.1770327829498;
- Thu, 05 Feb 2026 13:43:49 -0800 (PST)
-Date: Thu,  5 Feb 2026 13:43:08 -0800
-In-Reply-To: <20260205214326.1029278-1-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJwh4m7A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C0EC4CEF7;
+	Thu,  5 Feb 2026 22:07:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770329241;
+	bh=eMJ2Nzro0JFUNNIfB+sTNQrje4HKqIjU6wTN/iWewC4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iJwh4m7AOE00qqTYbE5RcMqxMgjEe2znIpcmBrk/83LE70vg01nHmi7INZ5FPVKug
+	 tplTU+1/BGwQPQyLQf4vue9MPUQ6x2F4a+sxh+ofE8qGkSTxwHQWG1m+ai88V3xnxs
+	 BL8Xg8obo0gjVS2O/OL50WZ9Vw71wuN1QEU/Hvhoy62P0s+zo74lQmKanJgFD5FQKn
+	 QhzYzzTInNv4lwAmA2Ea+op49l2hGQf8gfMLXXh2T/9N+NZQXz2VbJIvvzZG2R2jbN
+	 mI7QVmwH985Bs9Qp2ipZN7BpQ6ceT07Ats2nqwoklHOt0tNrLBwIZQKXT3MrsXl8Wo
+	 mGhgxs/wrzo+Q==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	shuah@kernel.org,
+	willemb@google.com,
+	petrm@nvidia.com,
+	donald.hunter@gmail.com,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	linux-kselftest@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 0/9] net: stats, tools, driver tests for HW GRO
+Date: Thu,  5 Feb 2026 14:05:32 -0800
+Message-ID: <20260205220541.2992807-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260205214326.1029278-1-jmattson@google.com>
-X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
-Message-ID: <20260205214326.1029278-9-jmattson@google.com>
-Subject: [PATCH v3 8/8] KVM: selftests: nSVM: Add svm_nested_pat test
-From: Jim Mattson <jmattson@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Yosry Ahmed <yosry.ahmed@linux.dev>
-Cc: Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Verify that when nested NPT is enabled, L1 and L2 have independent PATs,
-and changes to the PAT by either guest are not visible to the other.
+Add miscellaneous pieces related to production use of HW-GRO:
+ - report standard stats from drivers (bnxt included here,
+   Gal recently posted patches for mlx5 which is great)
+ - CLI tool for calculating HW GRO savings / effectiveness
+ - tests for the stats, packet ordering and depth
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/x86/svm_nested_pat_test.c   | 298 ++++++++++++++++++
- 2 files changed, 299 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/svm_nested_pat_test.c
+Jakub Kicinski (9):
+  eth: bnxt: gather and report HW-GRO stats
+  tools: ynltool: factor out qstat dumping
+  tools: ynltool: add qstats analysis for HW-GRO efficiency / savings
+  selftests: net: move gro to lib for HW vs SW reuse
+  selftests: drv-net: give HW stats sync time extra 25% of margin
+  selftests: drv-net: gro: use SO_TXTIME to schedule packets together
+  selftests: drv-net: gro: test GRO stats
+  selftests: drv-net: gro: add test for packet ordering
+  selftests: drv-net: gro: add a test for HW-GRO depth
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 58eee0474db6..dddaaa6ac157 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -110,6 +110,7 @@ TEST_GEN_PROGS_x86 += x86/state_test
- TEST_GEN_PROGS_x86 += x86/vmx_preemption_timer_test
- TEST_GEN_PROGS_x86 += x86/svm_vmcall_test
- TEST_GEN_PROGS_x86 += x86/svm_int_ctl_test
-+TEST_GEN_PROGS_x86 += x86/svm_nested_pat_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_shutdown_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_soft_inject_test
- TEST_GEN_PROGS_x86 += x86/tsc_scaling_sync
-diff --git a/tools/testing/selftests/kvm/x86/svm_nested_pat_test.c b/tools/testing/selftests/kvm/x86/svm_nested_pat_test.c
-new file mode 100644
-index 000000000000..08c1428969b0
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/svm_nested_pat_test.c
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * KVM nested SVM PAT test
-+ *
-+ * Copyright (C) 2026, Google LLC.
-+ *
-+ * Test that KVM correctly virtualizes the PAT MSR and VMCB g_pat field
-+ * for nested SVM guests:
-+ *
-+ * o With nested NPT disabled:
-+ *     - L1 and L2 share the same PAT
-+ *     - The vmcb12.g_pat is ignored
-+ * o With nested NPT enabled:
-+ *     - Invalid g_pat in vmcb12 should cause VMEXIT_INVALID
-+ *     - L2 should see vmcb12.g_pat via RDMSR, not L1's PAT
-+ *     - L2's writes to PAT should be saved to vmcb12 on exit
-+ *     - L1's PAT should be restored after #VMEXIT from L2
-+ *     - State save/restore should preserve both L1's and L2's PAT values
-+ */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+
-+#define L2_GUEST_STACK_SIZE 256
-+
-+#define PAT_DEFAULT		0x0007040600070406ULL
-+#define L1_PAT_VALUE		0x0007040600070404ULL  /* Change PA0 to WT */
-+#define L2_VMCB12_PAT		0x0606060606060606ULL  /* All WB */
-+#define L2_PAT_MODIFIED		0x0606060606060604ULL  /* Change PA0 to WT */
-+#define INVALID_PAT_VALUE	0x0808080808080808ULL  /* 8 is reserved */
-+
-+/*
-+ * Shared state between L1 and L2 for verification.
-+ */
-+struct pat_test_data {
-+	uint64_t l2_pat_read;
-+	uint64_t l2_pat_after_write;
-+	uint64_t l1_pat_after_vmexit;
-+	uint64_t vmcb12_gpat_after_exit;
-+	bool l2_done;
-+};
-+
-+static struct pat_test_data *pat_data;
-+
-+static void l2_guest_code(void)
-+{
-+	pat_data->l2_pat_read = rdmsr(MSR_IA32_CR_PAT);
-+	wrmsr(MSR_IA32_CR_PAT, L2_PAT_MODIFIED);
-+	pat_data->l2_pat_after_write = rdmsr(MSR_IA32_CR_PAT);
-+	pat_data->l2_done = true;
-+	vmmcall();
-+}
-+
-+static void l2_guest_code_saverestoretest(void)
-+{
-+	pat_data->l2_pat_read = rdmsr(MSR_IA32_CR_PAT);
-+
-+	GUEST_SYNC(1);
-+	GUEST_ASSERT_EQ(rdmsr(MSR_IA32_CR_PAT), pat_data->l2_pat_read);
-+
-+	wrmsr(MSR_IA32_CR_PAT, L2_PAT_MODIFIED);
-+	pat_data->l2_pat_after_write = rdmsr(MSR_IA32_CR_PAT);
-+
-+	GUEST_SYNC(2);
-+	GUEST_ASSERT_EQ(rdmsr(MSR_IA32_CR_PAT), L2_PAT_MODIFIED);
-+
-+	pat_data->l2_done = true;
-+	vmmcall();
-+}
-+
-+static void l2_guest_code_multi_vmentry(void)
-+{
-+	pat_data->l2_pat_read = rdmsr(MSR_IA32_CR_PAT);
-+	wrmsr(MSR_IA32_CR_PAT, L2_PAT_MODIFIED);
-+	pat_data->l2_pat_after_write = rdmsr(MSR_IA32_CR_PAT);
-+	vmmcall();
-+
-+	pat_data->l2_pat_read = rdmsr(MSR_IA32_CR_PAT);
-+	pat_data->l2_done = true;
-+	vmmcall();
-+}
-+
-+static struct vmcb *l1_common_setup(struct svm_test_data *svm,
-+				    struct pat_test_data *data,
-+				    void *l2_guest_code,
-+				    void *l2_guest_stack)
-+{
-+	struct vmcb *vmcb = svm->vmcb;
-+
-+	pat_data = data;
-+
-+	wrmsr(MSR_IA32_CR_PAT, L1_PAT_VALUE);
-+	GUEST_ASSERT_EQ(rdmsr(MSR_IA32_CR_PAT), L1_PAT_VALUE);
-+
-+	generic_svm_setup(svm, l2_guest_code, l2_guest_stack);
-+
-+	vmcb->save.g_pat = L2_VMCB12_PAT;
-+	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
-+
-+	return vmcb;
-+}
-+
-+static void l1_assert_l2_state(struct pat_test_data *data, uint64_t expected_pat_read)
-+{
-+	GUEST_ASSERT(data->l2_done);
-+	GUEST_ASSERT_EQ(data->l2_pat_read, expected_pat_read);
-+	GUEST_ASSERT_EQ(data->l2_pat_after_write, L2_PAT_MODIFIED);
-+}
-+
-+static void l1_svm_code_npt_disabled(struct svm_test_data *svm,
-+				     struct pat_test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb;
-+
-+	vmcb = l1_common_setup(svm, data, l2_guest_code,
-+			       &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	l1_assert_l2_state(data, L1_PAT_VALUE);
-+
-+	data->l1_pat_after_vmexit = rdmsr(MSR_IA32_CR_PAT);
-+	GUEST_ASSERT_EQ(data->l1_pat_after_vmexit, L2_PAT_MODIFIED);
-+
-+	GUEST_DONE();
-+}
-+
-+static void l1_svm_code_invalid_gpat(struct svm_test_data *svm,
-+				     struct pat_test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb;
-+
-+	vmcb = l1_common_setup(svm, data, l2_guest_code,
-+			       &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	vmcb->save.g_pat = INVALID_PAT_VALUE;
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_ERR);
-+	GUEST_ASSERT(!data->l2_done);
-+
-+	GUEST_DONE();
-+}
-+
-+static void l1_svm_code_npt_enabled(struct svm_test_data *svm,
-+				    struct pat_test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb;
-+
-+	vmcb = l1_common_setup(svm, data, l2_guest_code,
-+			       &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	l1_assert_l2_state(data, L2_VMCB12_PAT);
-+
-+	data->vmcb12_gpat_after_exit = vmcb->save.g_pat;
-+	GUEST_ASSERT_EQ(data->vmcb12_gpat_after_exit, L2_PAT_MODIFIED);
-+
-+	data->l1_pat_after_vmexit = rdmsr(MSR_IA32_CR_PAT);
-+	GUEST_ASSERT_EQ(data->l1_pat_after_vmexit, L1_PAT_VALUE);
-+
-+	GUEST_DONE();
-+}
-+
-+static void l1_svm_code_saverestore(struct svm_test_data *svm,
-+				    struct pat_test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb;
-+
-+	vmcb = l1_common_setup(svm, data, l2_guest_code_saverestoretest,
-+			       &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	GUEST_ASSERT(data->l2_done);
-+
-+	GUEST_ASSERT_EQ(rdmsr(MSR_IA32_CR_PAT), L1_PAT_VALUE);
-+	GUEST_ASSERT_EQ(vmcb->save.g_pat, L2_PAT_MODIFIED);
-+
-+	GUEST_DONE();
-+}
-+
-+static void l1_svm_code_multi_vmentry(struct svm_test_data *svm,
-+				      struct pat_test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb;
-+
-+	vmcb = l1_common_setup(svm, data, l2_guest_code_multi_vmentry,
-+			       &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+
-+	GUEST_ASSERT_EQ(data->l2_pat_after_write, L2_PAT_MODIFIED);
-+	GUEST_ASSERT_EQ(vmcb->save.g_pat, L2_PAT_MODIFIED);
-+	GUEST_ASSERT_EQ(rdmsr(MSR_IA32_CR_PAT), L1_PAT_VALUE);
-+
-+	vmcb->save.rip += 3;  /* vmmcall */
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	GUEST_ASSERT(data->l2_done);
-+	GUEST_ASSERT_EQ(data->l2_pat_read, L2_PAT_MODIFIED);
-+	GUEST_ASSERT_EQ(rdmsr(MSR_IA32_CR_PAT), L1_PAT_VALUE);
-+
-+	GUEST_DONE();
-+}
-+
-+static void run_test(void *l1_code, const char *test_name, bool npt_enabled,
-+		     bool do_save_restore)
-+{
-+	struct pat_test_data *data_hva;
-+	vm_vaddr_t svm_gva, data_gva;
-+	struct kvm_x86_state *state;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+
-+	pr_info("Testing: %s\n", test_name);
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, l1_code);
-+	if (npt_enabled)
-+		vm_enable_npt(vm);
-+
-+	vcpu_alloc_svm(vm, &svm_gva);
-+
-+	data_gva = vm_vaddr_alloc_page(vm);
-+	data_hva = addr_gva2hva(vm, data_gva);
-+	memset(data_hva, 0, sizeof(*data_hva));
-+
-+	if (npt_enabled)
-+		tdp_identity_map_default_memslots(vm);
-+
-+	vcpu_args_set(vcpu, 2, svm_gva, data_gva);
-+
-+	for (;;) {
-+		vcpu_run(vcpu);
-+		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+			/* NOT REACHED */
-+		case UCALL_SYNC:
-+			if (do_save_restore) {
-+				pr_info("  Save/restore at sync point %ld\n",
-+					uc.args[1]);
-+				state = vcpu_save_state(vcpu);
-+				kvm_vm_release(vm);
-+				vcpu = vm_recreate_with_one_vcpu(vm);
-+				vcpu_load_state(vcpu, state);
-+				kvm_x86_state_cleanup(state);
-+			}
-+			break;
-+		case UCALL_DONE:
-+			pr_info("  PASSED\n");
-+			kvm_vm_free(vm);
-+			return;
-+		default:
-+			TEST_FAIL("Unknown ucall %lu", uc.cmd);
-+		}
-+	}
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_NPT));
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_NESTED_STATE));
-+
-+	run_test(l1_svm_code_npt_disabled, "nested NPT disabled", false, false);
-+
-+	run_test(l1_svm_code_invalid_gpat, "invalid g_pat", true, false);
-+
-+	run_test(l1_svm_code_npt_enabled, "nested NPT enabled", true, false);
-+
-+	run_test(l1_svm_code_saverestore, "save/restore", true, true);
-+
-+	run_test(l1_svm_code_multi_vmentry, "multiple entries", true, false);
-+
-+	return 0;
-+}
+ tools/testing/selftests/drivers/net/Makefile  |   1 -
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ tools/testing/selftests/net/lib/Makefile      |   1 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |   4 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  17 +-
+ tools/net/ynl/ynltool/qstats.c                | 170 +++++---
+ .../selftests/{drivers/net => net/lib}/gro.c  | 242 +++++++++++-
+ .../testing/selftests/drivers/net/.gitignore  |   1 -
+ tools/testing/selftests/drivers/net/gro.py    |   2 +-
+ .../selftests/drivers/net/hw/gro_hw.py        | 374 ++++++++++++++++++
+ .../selftests/drivers/net/lib/py/env.py       |   4 +-
+ tools/testing/selftests/net/lib/.gitignore    |   1 +
+ 12 files changed, 748 insertions(+), 70 deletions(-)
+ rename tools/testing/selftests/{drivers/net => net/lib}/gro.c (87%)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/gro_hw.py
+
 -- 
-2.53.0.rc2.204.g2597b5adb4-goog
+2.53.0
 
