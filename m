@@ -1,106 +1,94 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26322E7BB4
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 03:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE228168BD;
+	Thu,  5 Feb 2026 05:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770263659; cv=none; b=Hj/KUH5fDezSzhc/V8/sF+c4KDZ1BFK6zKTERIOEOSTWgKaAP0q6FtvX4b8VEk5ul9L/i60Of8LF3v68BevVRhp+SBEbqncKBQ9TNDX4IX9HD7Oad3591cz8bv2YZsnhcwcK/M4V4kzf1m9eyImWDRD426+rL0r4WhqpVBdWLlw=
+	t=1770267625; cv=none; b=HfM+D4Xfd+ZvlsJtm4gOFZIS2W2w+igNSkP7QnuknKMWboDsQ4tFGRzCvaBTb6zpGuZhgqrubvbBaXaHvbu1BH+gsBVC0XO0J490waFi08uhIYZQ5A1qzNnCmFwDEdWvaj09hkge4euepKvVOgturTHtDh6ZPEXj9zU+aD3TizE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770263659; c=relaxed/simple;
-	bh=EDzbVnWsaolK7bt356IBQRQhbNq88nRcMZLD3NRKgL8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FZnn+j5NCnJH29k4bHpavdrC6IiZWiz6vIBGYfLGm0fkl4SCK91jooRUiDeVt+cSBDhvrwnqUaEQ3hQwyhZTi+lP8rxLMmW09C10KDkja5L08CVgVZ81MmA8YuSkKomAXzex/Dnw4+exGmdgdOwqOGnFvSfbB9rZD0L9gy/pk58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=O0oajHir; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770267625; c=relaxed/simple;
+	bh=u0ucK9KnTdbKPPfUH0M6A9QcdAgEnXMvsatR63D2NCI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=lSd9q0UgqWqBwDf74Dlk9Sir0FuwgKj74SafFTrM37HLTw1LAk90mfC4rbVjliqFN7SRYsAk56lKA0f+wOnlEWSibALHkVc16VaeP+280d9v/HhD3g15TGQXiLsY2XmWRKPwL+o83hNOq8Pe9h3WwMYGPYmL8eyTYe84bdz6Y3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OzxqKLxm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="O0oajHir"
-Message-ID: <11bb515b-35fd-44f3-9647-9c39580ce6a1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770263646;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WaBtND/7awN/SSuV1JIN93DjuyLnhAQAfNp10RP53CE=;
-	b=O0oajHirx1etMhbfwCKJrGOE8bwmUmdb4X597u7RlsJclcn7gJuARPqzcwX7aSdTm2B5YC
-	25T7e9FhSMldbXQfkD4D51woYU5DktFfZvv1z5oNWtAMEB9qo4Ncdg7RAUAkczsZ2W6AOQ
-	Vr1jVBrkj4tdUziBJiou1YQpZFXle44=
-Date: Thu, 5 Feb 2026 11:53:40 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OzxqKLxm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52143C4CEF7;
+	Thu,  5 Feb 2026 05:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770267625;
+	bh=u0ucK9KnTdbKPPfUH0M6A9QcdAgEnXMvsatR63D2NCI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=OzxqKLxmYe3SIXqGKP3oZumOUf0EQBeZaQy5GsSXQ3O1J0l8suAbbxqWiTYESobIg
+	 9UDE1VqXiWiwOnaxJl60kyo4W9SDie4RzIujCRE6hVKurhIaJdrYL3ZbYJeiVzxlEF
+	 vLMxVSwytzKLxnC2RWvIiOL6HzAaUfK6VbxogvgEFGmXr1KkjNZ2NU60v1J7oxiPaL
+	 QYlW4MisAx0tvjC7dd8HXTAoNiRKIUO645ZfTcWrNWx7vmqrVZGij+7YVVIqeHOV9g
+	 FplHMhJQ/Bx1ylzFP3vGqZl2i3qTjDRcKnSBmOxhTordyufVGSPmQqr9erXUcwMC0+
+	 UoBhl66DRyDhQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8542F3808200;
+	Thu,  5 Feb 2026 05:00:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v9 9/9] selftests/bpf: Add tests to verify map
- create failure log
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260202144046.30651-1-leon.hwang@linux.dev>
- <20260202144046.30651-10-leon.hwang@linux.dev>
- <CAADnVQLXWQ8Miq2WBoXRDsEVP1QPwk=a5=Rj_uPN+9qKHZZmZw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQLXWQ8Miq2WBoXRDsEVP1QPwk=a5=Rj_uPN+9qKHZZmZw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH net-next v5 0/8] net/rds: RDS-TCP protocol and extension
+ improvements
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177026762333.167759.12194069820318825126.git-patchwork-notify@kernel.org>
+Date: Thu, 05 Feb 2026 05:00:23 +0000
+References: <20260203055723.1085751-1-achender@kernel.org>
+In-Reply-To: <20260203055723.1085751-1-achender@kernel.org>
+To: Allison Henderson <achender@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ pabeni@redhat.com, edumazet@google.com, rds-devel@oss.oracle.com,
+ kuba@kernel.org, horms@kernel.org, linux-rdma@vger.kernel.org,
+ allison.henderson@oracle.com
 
+Hello:
 
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On 5/2/26 04:14, Alexei Starovoitov wrote:
-> On Mon, Feb 2, 2026 at 6:43 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> +
->> +#define BPF_LOG_FIXED  8
->> +
->> +static void test_map_create(enum bpf_map_type map_type, const char *map_name,
->> +                           struct bpf_map_create_opts *opts, const char *exp_msg)
->> +{
->> +       const int key_size = 4, value_size = 4, max_entries = 1;
->> +       char log_buf[128];
->> +       int fd;
->> +       LIBBPF_OPTS(bpf_log_opts, log_opts);
->> +
->> +       log_buf[0] = '\0';
->> +       log_opts.log_buf = log_buf;
->> +       log_opts.log_size = sizeof(log_buf);
->> +       log_opts.log_level = BPF_LOG_FIXED;
+On Mon,  2 Feb 2026 22:57:15 -0700 you wrote:
+> From: Allison Henderson <allison.henderson@oracle.com>
 > 
-> Why? Which part of the test needs the log with this flag?
+> Hi all,
+> 
+> This is subset 3 of the larger RDS-TCP patch series I posted last
+> Oct.  The greater series aims to correct multiple rds-tcp issues that
+> can cause dropped or out of sequence messages.  I've broken it down into
+> smaller sets to make reviews more manageable.
+> 
+> [...]
 
-BPF_LOG_FIXED looks odd here.
+Here is the summary with links:
+  - [net-next,v5,1/8] net/rds: new extension header: rdma bytes
+    https://git.kernel.org/netdev/net-next/c/46f257ee6904
+  - [net-next,v5,2/8] net/rds: Encode cp_index in TCP source port
+    https://git.kernel.org/netdev/net-next/c/a20a6992558f
+  - [net-next,v5,3/8] net/rds: rds_tcp_conn_path_shutdown must not discard messages
+    https://git.kernel.org/netdev/net-next/c/826c1004d4ae
+  - [net-next,v5,4/8] net/rds: Kick-start TCP receiver after accept
+    https://git.kernel.org/netdev/net-next/c/aa0cd656f032
+  - [net-next,v5,5/8] net/rds: Clear reconnect pending bit
+    https://git.kernel.org/netdev/net-next/c/b89fc7c2523b
+  - [net-next,v5,6/8] net/rds: Update struct rds_statistics to use u64 instead of uint64_t
+    https://git.kernel.org/netdev/net-next/c/9d30ad8a8bc0
+  - [net-next,v5,7/8] net/rds: Use the first lane until RDS_EXTHDR_NPATHS arrives
+    https://git.kernel.org/netdev/net-next/c/a1f53d5fb6b2
+  - [net-next,v5,8/8] net/rds: Trigger rds_send_ping() more than once
+    https://git.kernel.org/netdev/net-next/c/9d27a0fb122f
 
-This test sets 'log_level = BPF_LOG_FIXED' to match the behavior of
-bpf_vlog_init() as initialized by bpf_log_attr_create_vlog() in
-patch #7. BPF_LOG_FIXED is intended to be the default log_level
-there.
-
-Thanks,
-Leon
-
-
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
