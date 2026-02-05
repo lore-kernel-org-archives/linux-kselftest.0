@@ -1,55 +1,53 @@
-Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
+Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E06F3EBF08
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 02:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBAF1C862D;
+	Thu,  5 Feb 2026 02:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770257359; cv=none; b=oPS2Tlau9v1qj4a+Zz2AtGIUPmxGdIytqx+Y99gQ5KG3djvpz38WLGHF25bxZZGRVgEvi2f6S3zOApnjd3EAWNCx7c008q1DDl2izfI/bwcyOd3lpOk+SijvGp1kK2inlJVlQGo6Bhqv+A2F5OTSLoYYWKYCcUn68QYS9RgcC/k=
+	t=1770257604; cv=none; b=DSMQiShOOQn3M0zHBr75IABW6giokCOHixXxfU0ZviwnaF4m8rloY8U+Mt/NF6+4ZKeWnJWmQBkXyhbQjCXJYCHc2CpCwnAEAL1T+d1pso1msiJctzEyhxT1+DErC3k1r+HhFguKH9wFotZOnznXKuP1x8wcqLRvYhe4qdwMXCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770257359; c=relaxed/simple;
+	s=arc-20240116; t=1770257604; c=relaxed/simple;
 	bh=fb1Mbx3SLPWmpDgD6i6KbhFAiwzWQNILbfhBnUNff90=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h78NgTfcObNnnTHPSO0AeyvizNVnOvUfs2Wevp7khZvt0/5lHnpDngSaGCIASkdMkNzoNWL06cfz3JghO5knBIW7VhPrz3NEtg8Dv+ptSUX5WNLkfBlHc7ywcbZHnTGZgSyHqw+zC6TNkaf2DYvHy8XSufZ3ohKqDsBQm2RiJKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=T7m7TzKO; arc=none smtp.client-ip=203.205.221.164
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version:Content-Type; b=Pj3h/qL+5ALpb1zWLgGxa2KwcrfQNnnjIh/v0tihZUSR1n1m7BD7Mj/uSF7GC5vFuMuA3WWR6MJ2wFdtA56NFl0nnBr4pT1+TnTo0ru553uOjAkAwAWi0V0jZvYJlB1oPdDrg/JlzMeh4x8laKtdGewX3hJE6bKeBDsOHzz3k5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=bUXdd/6Y; arc=none smtp.client-ip=162.62.58.216
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="T7m7TzKO"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="bUXdd/6Y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1770257350;
+	s=s201512; t=1770257599;
 	bh=26sGN0d1XMLgaCDx05Ku0bo80dezRV707jZTOVforbA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=T7m7TzKOGJCvQZrpFhhgpBvrQD/dzmTxd/szRdG/+z00pvxpYfWjiAtcKPbnAil4b
-	 Vk19ion161wT+pg44xDT517LIeadVI6+OrE05ha/mYayJARZzHgC4CMVwbKyHdxkkt
-	 oiBRDjZnKX0t4HpkMDn5KYUgWPax7do4NTvaQ+8o=
-Received: from meizu-Precision-3660.meizu.com ([112.91.84.72])
-	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
-	id 24632678; Thu, 05 Feb 2026 10:09:06 +0800
-X-QQ-mid: xmsmtpt1770257346t1bpuweii
-Message-ID: <tencent_7F45D13FB7CF789CEBCCF945DEF897481706@qq.com>
-X-QQ-XMAILINFO: Mpk1SqVBRfAQML2wpvmLvUraBsoY4MnzIVVpiwLTpMDVVbkL6t6bDNWckq5KDO
-	 7aX7itmdhfzLpO8RPqOTZgcEhcO7BfFX3TgHIqrcD3Dy2DWqNOM1W15VhymgbsC7ETTVOVGqRFZU
-	 yrmeUbBbGqxIjw9iuY2OR1mAQvJ8bRBhVIgKkGFxs5P8ncBtG6mtTQQsH8vZLo50ckcqiKN1rAmq
-	 Mi+RgALQgHhO9k85pSuVT3M/WjFS0lF3feMTZPQxtgHuK7AfH7uUPx8J7kfHPcCCqxfDfHkzIIXM
-	 Z6qIQnnwqu+qjh9bbabmEpAWEvDinyt8FwFs4eM9MNU+83ej0ECxihV5RjIofjei+DP4sRKgEPlS
-	 Ybs8yh1wNODmHuRko58KKwrXkskgM/8BdScomnZnzokXgTNz0QMvvkdPukrMF7TZj3lgZ77EZEvH
-	 dWpHi1pwzkVMx3eHp+N56SKFvhLh8gDNgcJ9OdNR6DZylVzNqXbgLe361OTgIcOCUCgCh8KIl8/W
-	 yv+gyh3glxkwSDMEaY31NEGRVfAB5i+OetgpIlWBRBq3t7T8tsyL62oyah3iIr/PSI49YnJDqZ03
-	 VFOuSrAo2dckE3Hmujl/rb+7h6kSiw4JfaZ/j59WY3T1uK3yE6ueXf94/JEj6u95+Zuv1jORU2LZ
-	 PyjHfKUOk/WIRzuLEIgp9Fk0i1b4watxRLI+sIWxV68HnhOkD+SLJsc33oDTsEaYrHqrn2Bo+677
-	 at9p6F2s8OblpwMW68p8qemm5+P6LF1zcDlRfV7ky9h9oHhPa7fkF1XsM7Ic5qdDno4znwLOiEAV
-	 cGavGwaqQzyZ0PHgUQWZJH1f8Tsi4045DjNKBZzxGWBAvarKKYwmA+V2EiKBckOmZa9ZvSbUH7cS
-	 yO0ppRKoXONCUodteHvjwYlrAySkQx8Vbh3YJCVuPQpSEpRCgjbdtMmMTwJ1Heri3wYbDuoBJ2H3
-	 /IbxE3RgOUv+RDQl/mqSHnM5BLmmi1l6xcUu6NZ0cfXxp+rS3crypecWvIOTCCstPbvr7zhmD7qA
-	 efMqf3wWNSKlXFPJTl9ux0PLTOaS9apOSQFpYjIgYsdpBr0v9OAcFowexVsxXJILJsmrtwfH1Ggv
-	 Ezz+ebQLQ0WWyJBRCPgiAJAYFqJs483myvdtfiugXGvptkqnW9Xw4t9T6+SgDKuR1hl0xDFAoNd/
-	 jCmm21t+MnkQTfeOL3lgLgCZpg5Jr3W7UlAA/dDOHsPt6X7eBPIFxXib9OpDxhnGK08qgrg4voB6
-	 3i4g==
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+	h=From:To:Cc:Subject:Date;
+	b=bUXdd/6Y1rWh2gdECNxcgEklhKD9iQ4RRYN4mRacoS5yU/UvkkdIvxeDTx/qMboz1
+	 SSAO86lGV2FBv88DSwj94mdoRxXowXZfXAV7e4jH8QPm79eaLSJkifx0C3Wm+jOuof
+	 a+6rotZNFDilqof5ntVutGZ5rnWSFvkY4QdylyQQ=
+Received: from meizu-Precision-3660.meizu.com ([14.21.33.152])
+	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
+	id 16B336D3; Thu, 05 Feb 2026 10:05:43 +0800
+X-QQ-mid: xmsmtpt1770257143ty42dc4hr
+Message-ID: <tencent_C274DC06E392AEDCE7D1790D5FEC5D164508@qq.com>
+X-QQ-XMAILINFO: NHTNowOA4hJdtPjOzjM70EiQz4J/gr3Z1frgd8ZAtkhMDmyTOWMhV7THAQdVVy
+	 dR08k44s0A1CIGihz1yXInyhfcrnKq4tSLX9YIoFsqFjwNqWZZNXC7JZvSJW048cFp5xoArblpiT
+	 dmY78XHxaDrVaRx1rOziaiFeOCZH3h2xH00NB3jrJGie8v9rhQ4uU+mfkd+IidpOl+5jKCPg872s
+	 ZXMlIa4uJS9tlUdZfLhh9Tj6CmpJh0xVWjNoxXmvz76mwgSRXCFwNOi1Dp+FL/CJpQibfeBWdTaF
+	 Z4r2Ygv8n7VXxe2t9RLqE3L5880Avzze9ta5fVHcJWMPDcMWYHttV84G1+7D/yrR4M+FEizPfWtL
+	 0MuiZo2Rokl4tlRo2cArDm4MIY3v3MiBSQNUVaMVzdpqAJIQOD2dYRp8C1R1ZQlglZ5LBz5o7nI/
+	 hXy/JaecKPuisjz5hfKB2iRIRJmD8EgrW1Fn6XHYaTdwyN6Gg2zvXP2h6F2Vg1FyRqBX0eECNoSI
+	 aVdTG/FiE9ZlxYsMO7ZW8tRIloMtd0k+cLuQYqzoCSMoRZviX+i/5Moll0j+uDoBXjhdl22/CqWJ
+	 RNSr5I0QPKqGe7tiyYKsaB3pREpexyhznNO9DuLmy0PZMGwYpih0wlUegMeIzbQ/OtPe9lp3/VY0
+	 xgoE9gKAFxk5RqQViS7/yrpANb1k5vWS2UuFmLFCWHiaJ19PFK818ZDzSHqs6XomIZ6g0dARnGRZ
+	 PN/ttrpCD5aDr0YYesgNo3rtUvGkpKPUQsvqtnikfq4B7VQocQzxL/UgMPuBs69zHnBoBpXXugvW
+	 7wbmmY4ZTsxcs4VhXd9G1Q7GAyhRAdMc77EngNASMpJNN8uA0iAUibvfp5jyRRkPzT1E9mdP23c0
+	 xBCYUdJ68rxTWRvAN/swC5REann97+k8OcEVBZj5UDcz324cGkv97ROCFSeUEHXUWcr+p/45vvt3
+	 qTTaHQdfwPkkIrEDfq9+zL0Hr8smkUBfS1eInfJ1Br0kQKUtgXVRHY0DdfQ5bn0y2Gb8BxlLPH5P
+	 HteOVsFMT0qwnAdhCejAB1pAggNaqZ4WIlP2sMYH2n5tr/hw6a7qIyEqDylGbW2Tk9gqkudm/bbw
+	 GK9748PxZ/6L4PG+Kw2nAAjoonL8akEfTBoxOsn1H/ROWY1GY=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
 From: Yuwen Chen <ywen.chen@foxmail.com>
-To: ywen.chen@foxmail.com
-Cc: akpm@linux-foundation.org,
+To: tglx@kernel.org
+Cc: ywen.chen@foxmail.com,
+	akpm@linux-foundation.org,
 	andrealmeid@igalia.com,
 	bigeasy@linutronix.de,
 	colin.i.king@gmail.com,
@@ -68,15 +66,12 @@ Cc: akpm@linux-foundation.org,
 	ndesaulniers@google.com,
 	peterz@infradead.org,
 	shuah@kernel.org,
-	tglx@kernel.org,
 	usama.anjum@collabora.com,
 	wakel@google.com
 Subject: [PATCH v5 2/2] selftests/futex: fix the failed futex_requeue test issue
-Date: Thu,  5 Feb 2026 10:09:05 +0800
-X-OQ-MSGID: <20260205020905.72951-1-ywen.chen@foxmail.com>
+Date: Thu,  5 Feb 2026 10:05:41 +0800
+X-OQ-MSGID: <20260205020541.72861-1-ywen.chen@foxmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <tencent_35CFB8AE9D4BE7917D95763D15B972638C0A@qq.com>
-References: <tencent_35CFB8AE9D4BE7917D95763D15B972638C0A@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
