@@ -1,62 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D851A23B6;
-	Thu,  5 Feb 2026 02:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CA1299922
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 02:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770257877; cv=none; b=Jnkmzp7T4M98JZVNDRKAnDJKlfvWH42V8/PFNBjEWlsr/5hJgs4okyLd006boZSik1yflgJPHN9AJeJMDytBsqpGXjBg/oe/ToswyDIye03lJeR2ZwD7fUJb+sUef1opJGf0jy8EFRAX9rSmKF4sDCIb54gHlxoFRclkiPsx1Q0=
+	t=1770258066; cv=none; b=UYKcFxrIATahPeEE5erex+CNKvhJEsisL3Ey9fO/EQ5Jgrv52LF2EG4AF9hUHmedRXDFsIIZa8cT5KRtrSL8nEaAb6mEXYH8D+PT97Ck5tSNu88TjihkT8+QNZ3vBne7nJ7CcDf8FAO9G8yiAp8zL4KVKe7ediufZvsSYrrtCxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770257877; c=relaxed/simple;
-	bh=L0DvYHQJNJF/lC2P+KJGIREVhsBH84sxbUkIriKsYvw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AEgI5BnooF3082dm4SgJcmNTpxWip1luBS8slBEmlfMKLLoisFBMFqqt/8mpXYT6s2ydlLMxKwiZ9sOu7uyqYshnu003vRMpxFsnF2AMkzVrwzEQZ4eh1ZUUgNjCbeKK78frZTO6NswbLjK/pTBAfKVB6LiAyX96FzSrzNRfbW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDJ5IFaS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770258066; c=relaxed/simple;
+	bh=2XE8HbfhFXMkSTQ1DjZ0dz3yRk4XRucvW0j10qt/2c8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ehTV3egNCc/LVQY1x2DgbEMFrixnsjtnl3qb8+FWb3ru2wFNDrLQ8ve7yiQFIdORSI4Nd6ajGwmGJ3cFQzdYSXZCqLL9wgiurGpdB7b0D+CTXfNaneezaGuND12/pSOFfLV2K8PXvhZ/mljQqQPEumalmNU4litwEd5SMmzDTuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p66kndHN; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDJ5IFaS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3FAC4CEF7;
-	Thu,  5 Feb 2026 02:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770257876;
-	bh=L0DvYHQJNJF/lC2P+KJGIREVhsBH84sxbUkIriKsYvw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CDJ5IFaSPf4+lkkU8WykvVjk3cg/Y4IRTcNsjJeysbwSeJY9nNqjHiyY6F//5G+hK
-	 gZRbt6lAtxzZmheg/kdC5WUJk1tk1ODvxRxoKZAf6SaE8qYzCZvvcxRounKA9hmvVK
-	 4cdYqgipTIoMmvxdOTnmlWkzgOgLuoQDluTfGu8Als5vPv1PuVprshmCgJbizclvBu
-	 TwaiNlHuK9XgQDWaBKNcg9DLXAZQRwknpxzaJX4HA6JOKI3cvLVsVDVi8XY1Wzyeh/
-	 kwkPbFIWQ8X6A2SQja0YO4z4RrBurb3Uz3r8SnIOtFpVP7qlHFKNqyduSSsCcCdOtK
-	 S0CnFr27yym0w==
-Date: Wed, 4 Feb 2026 18:17:56 -0800
-From: Kees Cook <kees@kernel.org>
-To: Magnus Lindholm <linmag7@gmail.com>
-Cc: luto@amacapital.net, wad@chromium.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org, glaubitz@physik.fu-berlin.de
-Subject: Re: [PATCH] selftests/seccomp: add Alpha support to seccomp_bpf
-Message-ID: <202602041817.3967F048D@keescook>
-References: <20260203063357.14320-1-linmag7@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p66kndHN"
+Message-ID: <8ff3384a-24a2-4833-b614-16d2c7227b5e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770258062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oNWaH+3MFLvOh6Xfm+sXWjDEBIlfcpUNTm0CfSMiejg=;
+	b=p66kndHNUsxax//oN/L/DwtqYmNC9orbMSlZws0UL5XF1SkdIFwfKWopH1SAWTT3jIe2MI
+	OzLF+cjOpRIbhHhcJyHfu4gGgl4K7XBR1RpO6W84rbXW3jeHHdEqslAA0E2WOuZH8xjMrD
+	WUb1VYLes3LwcjNLrOrJJLfJhPIXsmE=
+Date: Thu, 5 Feb 2026 10:20:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260203063357.14320-1-linmag7@gmail.com>
+Subject: Re: [PATCH bpf-next v9 3/9] bpf: Refactor reporting log_true_size for
+ prog_load
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
+ Andrey Albershteyn <aalbersh@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
+ linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260202144046.30651-1-leon.hwang@linux.dev>
+ <20260202144046.30651-4-leon.hwang@linux.dev>
+ <CAEf4Bza+n2-tq0cGvAit23OduWbqO6teF211iPnOfp0s_ZwEPw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4Bza+n2-tq0cGvAit23OduWbqO6teF211iPnOfp0s_ZwEPw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Feb 03, 2026 at 07:33:26AM +0100, Magnus Lindholm wrote:
-> Enable seccomp_bpf selftests on the Alpha architecture by providing
-> Alpha-specific register definitions and syscall accessors.
+
+
+On 5/2/26 03:48, Andrii Nakryiko wrote:
+> On Mon, Feb 2, 2026 at 6:42 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> The next commit will add support for reporting logs via extended common
+>> attributes, including 'log_true_size'.
+>>
+>> To prepare for that, refactor the 'log_true_size' reporting logic by
+>> introducing a new struct bpf_log_attr to encapsulate log-related behavior:
+>>
+>>  * bpf_prog_load_log_attr_init(): initialize the log fields, which will
+>>    support extended common attributes in the next commit.
+>>  * bpf_log_attr_finalize(): handle log finalization and write back
+>>    'log_true_size' to userspace.
+>>
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> ---
+>>  include/linux/bpf.h          |  4 +++-
+>>  include/linux/bpf_verifier.h | 10 ++++++++++
+>>  kernel/bpf/log.c             | 35 +++++++++++++++++++++++++++++++++++
+>>  kernel/bpf/syscall.c         |  8 +++++---
+>>  kernel/bpf/verifier.c        | 13 +++----------
+>>  5 files changed, 56 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index cd9b96434904..d4dbcc7ad156 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -2913,7 +2913,9 @@ int bpf_check_uarg_tail_zero(bpfptr_t uaddr, size_t expected_size,
+>>                              size_t actual_size);
+>>
+>>  /* verify correctness of eBPF program */
+>> -int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size);
+>> +struct bpf_log_attr;
+>> +int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr,
+>> +             struct bpf_log_attr *attr_log);
+>>
+>>  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>>  void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 8355b585cd18..c805b85b6f7a 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -631,6 +631,16 @@ static inline bool bpf_verifier_log_needed(const struct bpf_verifier_log *log)
+>>         return log && log->level;
+>>  }
+>>
+>> +struct bpf_log_attr {
+>> +       u32 offsetof_true_size;
+>> +       u32 uattr_size;
+>> +       bpfptr_t uattr;
+>> +};
+>> +
+>> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *attr_log, union bpf_attr *attr,
+>> +                               bpfptr_t uattr, u32 size);
+>> +int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier_log *log);
+>> +
+>>  #define BPF_MAX_SUBPROGS 256
+>>
+>>  struct bpf_subprog_arg_info {
+>> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+>> index a0c3b35de2ce..ff579fcba36f 100644
+>> --- a/kernel/bpf/log.c
+>> +++ b/kernel/bpf/log.c
+>> @@ -863,3 +863,38 @@ void print_insn_state(struct bpf_verifier_env *env, const struct bpf_verifier_st
+>>         }
+>>         print_verifier_state(env, vstate, frameno, false);
+>>  }
+>> +
+>> +static void bpf_log_attr_init(struct bpf_log_attr *attr_log, int offsetof_true_size, bpfptr_t uattr,
+>> +                             u32 uattr_size)
+>> +{
+>> +       memset(attr_log, 0, sizeof(*attr_log));
+>> +       attr_log->offsetof_true_size = offsetof_true_size;
+>> +       attr_log->uattr_size = uattr_size;
+>> +       attr_log->uattr = uattr;
+>> +}
+>> +
+>> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *attr_log, union bpf_attr *attr,
+>> +                               bpfptr_t uattr, u32 size)
+>> +{
+>> +       bpf_log_attr_init(attr_log, offsetof(union bpf_attr, log_true_size), uattr, size);
+>> +       return 0;
+>> +}
+>> +
+>> +int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier_log *log)
+>> +{
+>> +       u32 log_true_size;
+>> +       size_t size;
+>> +       int err;
+>> +
+>> +       if (!log)
+>> +               return 0;
 > 
-> This allows the seccomp-bpf test suite to exercise syscall tracing,
-> seccomp filters, and user notification on Alpha.
+> can this ever happen? why guard against this?
 > 
-> Signed-off-by: Magnus Lindholm <linmag7@gmail.com>
 
-Great! Thanks for doing this. How did you test it?
+In patch #7, 'log' can be NULL when users do not provide 'log_buf'.
 
--Kees
+However, bpf_vlog_finalize() already guards against this case, so I'll
+drop this check.
 
--- 
-Kees Cook
+>> +
+>> +       err = bpf_vlog_finalize(log, &log_true_size);
+>> +
+>> +       size = sizeof(log_true_size);
+>> +       if (attr->uattr_size >= attr->offsetof_true_size + size &&
+>> +           copy_to_bpfptr_offset(attr->uattr, attr->offsetof_true_size, &log_true_size, size))
+>> +               err = -EFAULT;
+> 
+> minor nit: return -EFAULT;
+> 
+
+Ack.
+
+Thanks,
+Leon
+
+
