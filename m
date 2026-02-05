@@ -1,121 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D69288C30;
-	Thu,  5 Feb 2026 02:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECA228DB54;
+	Thu,  5 Feb 2026 02:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770258865; cv=none; b=C5b1aaoDo8Hm14piawen4O6j8IqY08+dk/rzt4tuJ9KpMGWQ14X2oEbo95U5FXCzcjGmDvMbTrl/Gvb9xLqPHj65gyLuESAvBtM0MROSvfoyh08KO7Eh/LpWiVgr9pJAih5Qe8Axh+6v9HwJMuD2/8fOt/uAd/xPz0lzf7qvY64=
+	t=1770259481; cv=none; b=QuYEXefpaNUswMPMmX64s18JqBvnKIC+8ClIa9xPRo8vQLXOQZkmlV99+RO43+8VNs+KH5Eic/x7G/CgFAtBXf4cfNbmGsP1zwuvFUk5A1tV6QRKT9hAN1bA7cMFC15sXBYx4Tg3mAxOliYcZxeYnV5zxGvmP7Irj0gR4fXJvZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770258865; c=relaxed/simple;
-	bh=B9S9jXBEC8CG/byBROfOYsXHweZLxU0jwg1eJQh5kGs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S3DdcnSQ262AojN+2ehd60mj1Flll8CTr1Untw+GkCEDBXvr3ICZ7525BGzC0+Ijbf1HHg/hPN3bfVnnr9Jc11sfLJmNiTyZ9CbLeFm9KhXUoukH8MIzwxkZwrvV2Pjtp1fh2IlPLnP5HfnI65t6DhEAyxZHMAn4kW4p3bAOJM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWwNQdli; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770259481; c=relaxed/simple;
+	bh=82wiatBuHnfM4LF/SRUhPD6lg8sy5nMAA9K0lKu65QM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IeGqVx4GSWzXITx31hmhagfM0LVofnbh0Ai+4ujMayrqFaUPn1Po/pJ0Dd513wF3nirteOvT21nBpvauKJ2nurP4binxlKG4y8EDjO7CEGOVdIA62w3hlpMMIQN2OxloNyaWvfHFeajmU6AUdgXD38UHClcE9n5a07rRuCVlYMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F7lzGvhd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWwNQdli"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770258864; x=1801794864;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=B9S9jXBEC8CG/byBROfOYsXHweZLxU0jwg1eJQh5kGs=;
-  b=FWwNQdligCCgVbZhLfh+pYopkjW8kpfSaTTRkq1mJfK+VtnhOvjm9Q0u
-   1zdGKc2GJINPrYsTIjkAW4e/u97cOsFTztwdMdGDLVkecx/N+WDSjmreJ
-   ndFTEjtoycHUJWou9lrmwjPCFbzQ/atsUF3IVvnrwgRx5Ul5EzU6Y3AeA
-   A+prMzQUDg/A7gyzV8yCfiTxH7fCVPIjzWe9EgeH7Fx528MQgV6YUw2ch
-   SAZEwquUPpSuef1KBw1kifTOndJHURscGErS/c+IuFp0yH5hnPyIqSyW9
-   /9I+TdDNmVgCfoYJlO4NvA+85T3xkfsHh4exWLU0uX92x2qeDeTAvEy1W
-   A==;
-X-CSE-ConnectionGUID: Ru2fL8y5SqCtaa7TJW28dg==
-X-CSE-MsgGUID: vB3MoMuCR5e7FlXpxaSB2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="74057969"
-X-IronPort-AV: E=Sophos;i="6.21,273,1763452800"; 
-   d="scan'208";a="74057969"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 18:34:24 -0800
-X-CSE-ConnectionGUID: RFMeHWWGRneJcBn4KhO4fQ==
-X-CSE-MsgGUID: UTS9hJKCRqChOhgGEFRUvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,273,1763452800"; 
-   d="scan'208";a="214872085"
-Received: from spr-duan.bj.intel.com ([172.16.114.123])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 18:34:22 -0800
-From: Zhenzhong Duan <zhenzhong.duan@intel.com>
-To: linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev
-Cc: dwmw2@infradead.org,
-	baolu.lu@linux.intel.com,
-	joro@8bytes.org,
-	will@kernel.org,
-	robin.murphy@arm.com,
-	jgg@ziepe.ca,
-	kevin.tian@intel.com,
-	Zhenzhong Duan <zhenzhong.duan@intel.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/3] iommufd/selftest: Test dirty tracking on PASID
-Date: Wed,  4 Feb 2026 21:34:04 -0500
-Message-ID: <20260205023405.41583-4-zhenzhong.duan@intel.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260205023405.41583-1-zhenzhong.duan@intel.com>
-References: <20260205023405.41583-1-zhenzhong.duan@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F7lzGvhd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5AF4C4CEF7;
+	Thu,  5 Feb 2026 02:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770259481;
+	bh=82wiatBuHnfM4LF/SRUhPD6lg8sy5nMAA9K0lKu65QM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=F7lzGvhdy0pCp1uxnGnieKSZWe3O2W8e6C0IYvZqXMx0gyEgEzFGPZMnaMH1ervol
+	 jnPrCOLd4waieiwTyJb+vfUVYWRMeWHLy6hSHJC/r4MnaZbdqN7s6IVGyTUdjvDJJb
+	 4b59mkLVxEoDPK3P+4dwX+BTqBC+2rbpuCyvGl4ffaQeXsNaLvMiW9aZ5UpvUoIzK9
+	 hjsyuanAxPOq3thPFOmlsIkqE9vSC7pcutPCex8l9EPQ5SpJa29tstBjmE3H5iydie
+	 bXAm7Pa+WApOdtcjlqDHyI+p24zt8NJq7GHRaG4LfNAzchfjmjfYXOLFrtewNuoamI
+	 Z8836GJzrhSIQ==
+Date: Wed, 4 Feb 2026 18:44:39 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Gang Yan <yangang@kylinos.cn>
+Subject: Re: [PATCH net-next 07/15] mptcp: allow overridden write_space to
+ be invoked
+Message-ID: <20260204184439.4f1a65a0@kernel.org>
+In-Reply-To: <8037fb73-4e18-4ed1-9eaf-e4cd8b2c9d53@kernel.org>
+References: <20260203-net-next-mptcp-misc-feat-6-20-v1-0-31ec8bfc56d1@kernel.org>
+	<20260203-net-next-mptcp-misc-feat-6-20-v1-7-31ec8bfc56d1@kernel.org>
+	<8037fb73-4e18-4ed1-9eaf-e4cd8b2c9d53@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add test case for dirty tracking on a domain attached to PASID, also
-confirm attachment to PASID fail if device doesn't support dirty tracking.
+On Wed, 4 Feb 2026 11:47:13 +0100 Matthieu Baerts wrote:
+> > diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+> > index f4bfe91ca7f9..0bd1ee860316 100644
+> > --- a/net/mptcp/protocol.h
+> > +++ b/net/mptcp/protocol.h
+> > @@ -975,7 +975,7 @@ static inline void mptcp_write_space(struct sock *sk)
+> >  	/* pairs with memory barrier in mptcp_poll */
+> >  	smp_mb();
+> >  	if (mptcp_stream_memory_free(sk, 1))
+> > -		sk_stream_write_space(sk);
+> > +		INDIRECT_CALL_1(sk->sk_write_space, sk_stream_write_space, sk);  
+> 
+> Is it possible to drop only this patch from this series? It is
+> independent of the rest, and the AI review tool spotted that
+> sk->sk_write_space is not sk_stream_write_space by default.
+> 
+> I can send a v2 without this patch if preferred.
 
-Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
----
- tools/testing/selftests/iommu/iommufd.c | 27 +++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Ack, looks like this is the last patch in terms of real code
+so can do. BTW I've been offering other sub-maintainers to
+run the AI stuff on their patchwork instances. Looks like
+there's a mptcp instance in k.org patchwork. 
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index dadad277f4eb..d1fe5dbc2813 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -2275,6 +2275,33 @@ TEST_F(iommufd_dirty_tracking, set_dirty_tracking)
- 	test_ioctl_destroy(hwpt_id);
- }
- 
-+TEST_F(iommufd_dirty_tracking, pasid_set_dirty_tracking)
-+{
-+	uint32_t stddev_id, ioas_id, hwpt_id, pasid = 100;
-+	uint32_t dev_flags = MOCK_FLAGS_DEVICE_PASID;
-+
-+	/* Regular case */
-+	test_cmd_hwpt_alloc(self->idev_id, self->ioas_id,
-+			    IOMMU_HWPT_ALLOC_PASID | IOMMU_HWPT_ALLOC_DIRTY_TRACKING,
-+			    &hwpt_id);
-+	test_cmd_mock_domain_flags(hwpt_id, dev_flags, &stddev_id, NULL, NULL);
-+	ASSERT_EQ(0, _test_cmd_pasid_attach(self->fd, stddev_id, pasid, hwpt_id));
-+	test_cmd_set_dirty_tracking(hwpt_id, true);
-+	test_cmd_set_dirty_tracking(hwpt_id, false);
-+	ASSERT_EQ(0, _test_cmd_pasid_detach(self->fd, stddev_id, pasid));
-+
-+	test_ioctl_destroy(stddev_id);
-+
-+	/* IOMMU device does not support dirty tracking */
-+	dev_flags |= MOCK_FLAGS_DEVICE_NO_DIRTY;
-+	test_ioctl_ioas_alloc(&ioas_id);
-+	test_cmd_mock_domain_flags(ioas_id, dev_flags, &stddev_id, NULL, NULL);
-+	EXPECT_ERRNO(EINVAL, _test_cmd_pasid_attach(self->fd, stddev_id, pasid, hwpt_id));
-+
-+	test_ioctl_destroy(stddev_id);
-+	test_ioctl_destroy(hwpt_id);
-+}
-+
- TEST_F(iommufd_dirty_tracking, device_dirty_capability)
- {
- 	uint32_t caps = 0;
--- 
-2.47.3
-
+LMK if you want me to hook it up (..when time allows).
