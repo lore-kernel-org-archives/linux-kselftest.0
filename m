@@ -1,147 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59745312831;
-	Thu,  5 Feb 2026 10:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76DD2DECBA;
+	Thu,  5 Feb 2026 11:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770289005; cv=none; b=TRwesAMeADJMM72215Bz7lO6h8P4ETnCdS4jAp5R0w2rOI+pSaYAph9JlY+DCcbKOm1o+ikcP+m1TDPNickiiYN+p+D04rptQuJ4c3WgDw8FGsZADQIKewhTA7142QyMa/4p3WZXQGoqX/9UVbjQG//0QVCEgm3HAshaTwQIkoA=
+	t=1770290928; cv=none; b=tYV05L27Jzv5WmiXSiLW2IBOxGTFboVjphUtOiot8XNVFlWWaumxS/G8v98/ntzSqE1o2BA61hv+2CGPjY4OtjfGqnMy8rNVigPyCTpczBaxbb8RO9O6CWkbEMsPm/rdV0q6BDUY0NxL5hcPJZJjideo7ZvkpLmmPyl95Nd/gvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770289005; c=relaxed/simple;
-	bh=48gw7CorCig2kZWRu8WyCrsAzR32JozsBH/nXxnW5KU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mqfDK8lDaBZDXHtwyjPlFnipAcpJwzy2lmIJ9ZwX6T1SD4vDqVjkWJVXwk0K5Nt5+bO8EORf2a/knK0gG6cBnW+YzJEjF1Pce36eEOU9oY4MZp5iviKYZ/rZcQXp+l/LGv8FOM06Vcvsw30bfqlPFqGi4+zafPQWfl0aFb79usQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SYMTr7Tl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770290928; c=relaxed/simple;
+	bh=Ir3rF+We/v/jeDeCoAQnTP2mNTyALL/4ipRHcYZSqOo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aR4EbiV6WjYsWQJM9ZwSfLHrjSFb4CTZs1OpSU5rtKtL9D4kUt+cwzrpYr6z+L5W98YHPGwT3ZKX5gJzZZXzMaAFDFJTjh5KRAYWAsdAjhYpboY2VlxR1Hy+lB/Lr+Cs1iDsRfSI4C0VIAwvtKOQGC5IB19chTTH8runtxk4mXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ae/tFLNI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SYMTr7Tl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F7BC4CEF7;
-	Thu,  5 Feb 2026 10:56:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ae/tFLNI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064C0C4CEF7;
+	Thu,  5 Feb 2026 11:28:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770289005;
-	bh=48gw7CorCig2kZWRu8WyCrsAzR32JozsBH/nXxnW5KU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SYMTr7TlCa+4sQIlK0epucAaDCbt6nu7/wAFGNGXV8vcMpxzl8eJ6gbKwCT172fze
-	 lV/IY2c5VYpJS6fH7ZqLict1K54w/7dOEEDYtjBHcbjJjOT7Hb42Cz9Z63du22b/vV
-	 OnJX/8JsDQ2yh3Q1ZeiRUsaxZpw7IRqKTE2F0gMhv9UNZHcu4TnYd7KQs62b1o5Moe
-	 VmaIc21Ixs1DuqxUj+zF3iUDjPQi6ZXC+5zUu0LRnaqS43tqwz66WS2hfXF8boivmJ
-	 OHhYoXjukAH2FAYTC8ywORXUIEC0tE3wcCJfdKjztofklTYXrxysfPWwSu3TXUIy80
-	 wqGS8CNz1wmeg==
-Message-ID: <f2f5c43d-bf6d-4fe9-9062-1f649d5c276b@kernel.org>
-Date: Thu, 5 Feb 2026 11:56:39 +0100
+	s=k20201202; t=1770290928;
+	bh=Ir3rF+We/v/jeDeCoAQnTP2mNTyALL/4ipRHcYZSqOo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ae/tFLNIlQiLcQz3w8qXISrY1vDad4PIFtdLksZwSB7zFP9q80c3+9IXI+0VB8hgr
+	 rE0cvyT0qRDjhbRXKQOiKN4doIAm9GDkH8VF5ZfLLYnACC4ZAPRejDlDNxMMSVdeih
+	 E0Pl2GXqay2Q/+j/PE92lgsCniVqfMUhqfT1PQxJ8yRFyB3JEzJe+W13+luQpKBN+p
+	 wHjitr44gt44OO+2F5CI/YfTlZ3fXhw8BFnDO3X2uDi+Pz24er9rOOqXaFG5n/JUSk
+	 f8tu25tEQVfOFn2DPZcN8gmCJ3o77GdmlggG4kuJd4ShLnPBBcEZP1DfOdXm/6JAaY
+	 PwtHNcCi24CWA==
+Date: Thu, 5 Feb 2026 11:28:43 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Miaohe Lin <linmiaohe@huawei.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, david@kernel.org,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	nao.horiguchi@gmail.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] selftests/mm: add memory failure anonymous page
+ test
+Message-ID: <73756615-b779-44b1-8ff5-b4b2d5e3c7cf@sirena.org.uk>
+References: <20260204073331.899406-1-linmiaohe@huawei.com>
+ <20260204073331.899406-2-linmiaohe@huawei.com>
+ <2028f5e1-e032-4909-8240-15fe0b3c82a5@sirena.org.uk>
+ <0a84104a-32e3-8518-ebc0-703814e233d4@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net 3/4] mptcp: fix kdoc warnings
-Content-Language: en-GB, fr-BE
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260204-net-mptcp-misc-fixes-6-19-rc8-v1-0-cb559fb6b50a@kernel.org>
- <20260204-net-mptcp-misc-fixes-6-19-rc8-v1-3-cb559fb6b50a@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260204-net-mptcp-misc-fixes-6-19-rc8-v1-3-cb559fb6b50a@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qmBBxdvcuvo1k9qE"
+Content-Disposition: inline
+In-Reply-To: <0a84104a-32e3-8518-ebc0-703814e233d4@huawei.com>
+X-Cookie: Non-sequiturs make me eat lampshades.
 
-Hello,
 
-On 04/02/2026 17:57, Matthieu Baerts (NGI0) wrote:
-> The following warnings were visible:
-> 
->   $ ./scripts/kernel-doc -Wall -none \
->         net/mptcp/ include/net/mptcp.h include/uapi/linux/mptcp*.h \
->         include/trace/events/mptcp.h
->   Warning: net/mptcp/token.c:108 No description found for return value of 'mptcp_token_new_request'
->   Warning: net/mptcp/token.c:151 No description found for return value of 'mptcp_token_new_connect'
->   Warning: net/mptcp/token.c:246 No description found for return value of 'mptcp_token_get_sock'
->   Warning: net/mptcp/token.c:298 No description found for return value of 'mptcp_token_iter_next'
->   Warning: net/mptcp/protocol.c:4431 No description found for return value of 'mptcp_splice_read'
->   Warning: include/uapi/linux/mptcp_pm.h:13 missing initial short description on line:
->    * enum mptcp_event_type
-> 
-> Address all of them: either by using the 'Return:' keyword, or by adding
-> a missing initial short description.
-> 
-> The MPTCP CI will soon report issues with kdoc to avoid introducing new
-> issues and being flagged by the Netdev CI.
-> 
-> Reviewed-by: Geliang Tang <geliang@kernel.org>
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> ---
->  include/uapi/linux/mptcp_pm.h |  2 +-
->  net/mptcp/token.c             | 16 +++++++++-------
->  2 files changed, 10 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/uapi/linux/mptcp_pm.h b/include/uapi/linux/mptcp_pm.h
-> index c97d060ee90b..fe9863d75350 100644
-> --- a/include/uapi/linux/mptcp_pm.h
-> +++ b/include/uapi/linux/mptcp_pm.h
-> @@ -11,7 +11,7 @@
->  #define MPTCP_PM_VER	1
->  
->  /**
-> - * enum mptcp_event_type
-> + * enum mptcp_event_type - Netlink MPTCP event types
+--qmBBxdvcuvo1k9qE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I forgot that this file was auto-generated from a YAML file.
+On Thu, Feb 05, 2026 at 02:58:50PM +0800, Miaohe Lin wrote:
+> On 2026/2/4 19:26, Mark Brown wrote:
 
-Sorry for the noise, I will send a v2 also adapting the YAML file.
+> > In -next I added a hack with wrapper scripts per category to improve the
+> > integration of the mm selftests with the kselftest framework, could you
+> > please wire things up into that, see:
 
-pw-bot: cr
+> Sorry, I missed that. Do you mean adding something like below to run memory-failure test separately?
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+Yes, pretty much - I'd keep the list of TEST_PROGS sorted but otherwise
+that's it.
 
+--qmBBxdvcuvo1k9qE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmEfuoACgkQJNaLcl1U
+h9CBBQf+PU/CcNHjF6foxK8v9Dc0VdDIgPTuJgv98j4HpNS1sFKDSmYY8E99jo1a
+ri3Cfy+MwxIeD9KHMnk/wJPhFQh6NzhKLl80lR87yS9PUFTTwAg83Q7M+UDu3DUz
+mL1vyDbo4yqmLiXDLcXvgRbTy3iVaUBXRO9iC8M8RbR6L31p08SuJKlIV+SbN8js
+h3vptu7nIBLkJzWCMQM9hko9m150v/7I8uVif8SNKTO+AB/HFtUIs1413jOYEQ98
+n4Tc9vP9beAxASPS1mbxmUXFMx7Dxea/9CMwIJliH5pprLXa2g1mBHdrZcVzZd6j
+q74R/rofwXu0N928mS2XhwwX3PONOQ==
+=FBpU
+-----END PGP SIGNATURE-----
+
+--qmBBxdvcuvo1k9qE--
