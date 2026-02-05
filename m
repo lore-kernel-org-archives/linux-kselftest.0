@@ -1,189 +1,121 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CA1299922
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 02:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D69288C30;
+	Thu,  5 Feb 2026 02:34:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770258066; cv=none; b=UYKcFxrIATahPeEE5erex+CNKvhJEsisL3Ey9fO/EQ5Jgrv52LF2EG4AF9hUHmedRXDFsIIZa8cT5KRtrSL8nEaAb6mEXYH8D+PT97Ck5tSNu88TjihkT8+QNZ3vBne7nJ7CcDf8FAO9G8yiAp8zL4KVKe7ediufZvsSYrrtCxc=
+	t=1770258865; cv=none; b=C5b1aaoDo8Hm14piawen4O6j8IqY08+dk/rzt4tuJ9KpMGWQ14X2oEbo95U5FXCzcjGmDvMbTrl/Gvb9xLqPHj65gyLuESAvBtM0MROSvfoyh08KO7Eh/LpWiVgr9pJAih5Qe8Axh+6v9HwJMuD2/8fOt/uAd/xPz0lzf7qvY64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770258066; c=relaxed/simple;
-	bh=2XE8HbfhFXMkSTQ1DjZ0dz3yRk4XRucvW0j10qt/2c8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ehTV3egNCc/LVQY1x2DgbEMFrixnsjtnl3qb8+FWb3ru2wFNDrLQ8ve7yiQFIdORSI4Nd6ajGwmGJ3cFQzdYSXZCqLL9wgiurGpdB7b0D+CTXfNaneezaGuND12/pSOFfLV2K8PXvhZ/mljQqQPEumalmNU4litwEd5SMmzDTuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p66kndHN; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770258865; c=relaxed/simple;
+	bh=B9S9jXBEC8CG/byBROfOYsXHweZLxU0jwg1eJQh5kGs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=S3DdcnSQ262AojN+2ehd60mj1Flll8CTr1Untw+GkCEDBXvr3ICZ7525BGzC0+Ijbf1HHg/hPN3bfVnnr9Jc11sfLJmNiTyZ9CbLeFm9KhXUoukH8MIzwxkZwrvV2Pjtp1fh2IlPLnP5HfnI65t6DhEAyxZHMAn4kW4p3bAOJM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWwNQdli; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p66kndHN"
-Message-ID: <8ff3384a-24a2-4833-b614-16d2c7227b5e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770258062;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oNWaH+3MFLvOh6Xfm+sXWjDEBIlfcpUNTm0CfSMiejg=;
-	b=p66kndHNUsxax//oN/L/DwtqYmNC9orbMSlZws0UL5XF1SkdIFwfKWopH1SAWTT3jIe2MI
-	OzLF+cjOpRIbhHhcJyHfu4gGgl4K7XBR1RpO6W84rbXW3jeHHdEqslAA0E2WOuZH8xjMrD
-	WUb1VYLes3LwcjNLrOrJJLfJhPIXsmE=
-Date: Thu, 5 Feb 2026 10:20:44 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWwNQdli"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770258864; x=1801794864;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=B9S9jXBEC8CG/byBROfOYsXHweZLxU0jwg1eJQh5kGs=;
+  b=FWwNQdligCCgVbZhLfh+pYopkjW8kpfSaTTRkq1mJfK+VtnhOvjm9Q0u
+   1zdGKc2GJINPrYsTIjkAW4e/u97cOsFTztwdMdGDLVkecx/N+WDSjmreJ
+   ndFTEjtoycHUJWou9lrmwjPCFbzQ/atsUF3IVvnrwgRx5Ul5EzU6Y3AeA
+   A+prMzQUDg/A7gyzV8yCfiTxH7fCVPIjzWe9EgeH7Fx528MQgV6YUw2ch
+   SAZEwquUPpSuef1KBw1kifTOndJHURscGErS/c+IuFp0yH5hnPyIqSyW9
+   /9I+TdDNmVgCfoYJlO4NvA+85T3xkfsHh4exWLU0uX92x2qeDeTAvEy1W
+   A==;
+X-CSE-ConnectionGUID: Ru2fL8y5SqCtaa7TJW28dg==
+X-CSE-MsgGUID: vB3MoMuCR5e7FlXpxaSB2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="74057969"
+X-IronPort-AV: E=Sophos;i="6.21,273,1763452800"; 
+   d="scan'208";a="74057969"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 18:34:24 -0800
+X-CSE-ConnectionGUID: RFMeHWWGRneJcBn4KhO4fQ==
+X-CSE-MsgGUID: UTS9hJKCRqChOhgGEFRUvQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,273,1763452800"; 
+   d="scan'208";a="214872085"
+Received: from spr-duan.bj.intel.com ([172.16.114.123])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 18:34:22 -0800
+From: Zhenzhong Duan <zhenzhong.duan@intel.com>
+To: linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev
+Cc: dwmw2@infradead.org,
+	baolu.lu@linux.intel.com,
+	joro@8bytes.org,
+	will@kernel.org,
+	robin.murphy@arm.com,
+	jgg@ziepe.ca,
+	kevin.tian@intel.com,
+	Zhenzhong Duan <zhenzhong.duan@intel.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 3/3] iommufd/selftest: Test dirty tracking on PASID
+Date: Wed,  4 Feb 2026 21:34:04 -0500
+Message-ID: <20260205023405.41583-4-zhenzhong.duan@intel.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260205023405.41583-1-zhenzhong.duan@intel.com>
+References: <20260205023405.41583-1-zhenzhong.duan@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v9 3/9] bpf: Refactor reporting log_true_size for
- prog_load
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260202144046.30651-1-leon.hwang@linux.dev>
- <20260202144046.30651-4-leon.hwang@linux.dev>
- <CAEf4Bza+n2-tq0cGvAit23OduWbqO6teF211iPnOfp0s_ZwEPw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4Bza+n2-tq0cGvAit23OduWbqO6teF211iPnOfp0s_ZwEPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+Add test case for dirty tracking on a domain attached to PASID, also
+confirm attachment to PASID fail if device doesn't support dirty tracking.
 
+Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+---
+ tools/testing/selftests/iommu/iommufd.c | 27 +++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-On 5/2/26 03:48, Andrii Nakryiko wrote:
-> On Mon, Feb 2, 2026 at 6:42 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> The next commit will add support for reporting logs via extended common
->> attributes, including 'log_true_size'.
->>
->> To prepare for that, refactor the 'log_true_size' reporting logic by
->> introducing a new struct bpf_log_attr to encapsulate log-related behavior:
->>
->>  * bpf_prog_load_log_attr_init(): initialize the log fields, which will
->>    support extended common attributes in the next commit.
->>  * bpf_log_attr_finalize(): handle log finalization and write back
->>    'log_true_size' to userspace.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  include/linux/bpf.h          |  4 +++-
->>  include/linux/bpf_verifier.h | 10 ++++++++++
->>  kernel/bpf/log.c             | 35 +++++++++++++++++++++++++++++++++++
->>  kernel/bpf/syscall.c         |  8 +++++---
->>  kernel/bpf/verifier.c        | 13 +++----------
->>  5 files changed, 56 insertions(+), 14 deletions(-)
->>
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index cd9b96434904..d4dbcc7ad156 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -2913,7 +2913,9 @@ int bpf_check_uarg_tail_zero(bpfptr_t uaddr, size_t expected_size,
->>                              size_t actual_size);
->>
->>  /* verify correctness of eBPF program */
->> -int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size);
->> +struct bpf_log_attr;
->> +int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr,
->> +             struct bpf_log_attr *attr_log);
->>
->>  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
->>  void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 8355b585cd18..c805b85b6f7a 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -631,6 +631,16 @@ static inline bool bpf_verifier_log_needed(const struct bpf_verifier_log *log)
->>         return log && log->level;
->>  }
->>
->> +struct bpf_log_attr {
->> +       u32 offsetof_true_size;
->> +       u32 uattr_size;
->> +       bpfptr_t uattr;
->> +};
->> +
->> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *attr_log, union bpf_attr *attr,
->> +                               bpfptr_t uattr, u32 size);
->> +int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier_log *log);
->> +
->>  #define BPF_MAX_SUBPROGS 256
->>
->>  struct bpf_subprog_arg_info {
->> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
->> index a0c3b35de2ce..ff579fcba36f 100644
->> --- a/kernel/bpf/log.c
->> +++ b/kernel/bpf/log.c
->> @@ -863,3 +863,38 @@ void print_insn_state(struct bpf_verifier_env *env, const struct bpf_verifier_st
->>         }
->>         print_verifier_state(env, vstate, frameno, false);
->>  }
->> +
->> +static void bpf_log_attr_init(struct bpf_log_attr *attr_log, int offsetof_true_size, bpfptr_t uattr,
->> +                             u32 uattr_size)
->> +{
->> +       memset(attr_log, 0, sizeof(*attr_log));
->> +       attr_log->offsetof_true_size = offsetof_true_size;
->> +       attr_log->uattr_size = uattr_size;
->> +       attr_log->uattr = uattr;
->> +}
->> +
->> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *attr_log, union bpf_attr *attr,
->> +                               bpfptr_t uattr, u32 size)
->> +{
->> +       bpf_log_attr_init(attr_log, offsetof(union bpf_attr, log_true_size), uattr, size);
->> +       return 0;
->> +}
->> +
->> +int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier_log *log)
->> +{
->> +       u32 log_true_size;
->> +       size_t size;
->> +       int err;
->> +
->> +       if (!log)
->> +               return 0;
-> 
-> can this ever happen? why guard against this?
-> 
-
-In patch #7, 'log' can be NULL when users do not provide 'log_buf'.
-
-However, bpf_vlog_finalize() already guards against this case, so I'll
-drop this check.
-
->> +
->> +       err = bpf_vlog_finalize(log, &log_true_size);
->> +
->> +       size = sizeof(log_true_size);
->> +       if (attr->uattr_size >= attr->offsetof_true_size + size &&
->> +           copy_to_bpfptr_offset(attr->uattr, attr->offsetof_true_size, &log_true_size, size))
->> +               err = -EFAULT;
-> 
-> minor nit: return -EFAULT;
-> 
-
-Ack.
-
-Thanks,
-Leon
-
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index dadad277f4eb..d1fe5dbc2813 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -2275,6 +2275,33 @@ TEST_F(iommufd_dirty_tracking, set_dirty_tracking)
+ 	test_ioctl_destroy(hwpt_id);
+ }
+ 
++TEST_F(iommufd_dirty_tracking, pasid_set_dirty_tracking)
++{
++	uint32_t stddev_id, ioas_id, hwpt_id, pasid = 100;
++	uint32_t dev_flags = MOCK_FLAGS_DEVICE_PASID;
++
++	/* Regular case */
++	test_cmd_hwpt_alloc(self->idev_id, self->ioas_id,
++			    IOMMU_HWPT_ALLOC_PASID | IOMMU_HWPT_ALLOC_DIRTY_TRACKING,
++			    &hwpt_id);
++	test_cmd_mock_domain_flags(hwpt_id, dev_flags, &stddev_id, NULL, NULL);
++	ASSERT_EQ(0, _test_cmd_pasid_attach(self->fd, stddev_id, pasid, hwpt_id));
++	test_cmd_set_dirty_tracking(hwpt_id, true);
++	test_cmd_set_dirty_tracking(hwpt_id, false);
++	ASSERT_EQ(0, _test_cmd_pasid_detach(self->fd, stddev_id, pasid));
++
++	test_ioctl_destroy(stddev_id);
++
++	/* IOMMU device does not support dirty tracking */
++	dev_flags |= MOCK_FLAGS_DEVICE_NO_DIRTY;
++	test_ioctl_ioas_alloc(&ioas_id);
++	test_cmd_mock_domain_flags(ioas_id, dev_flags, &stddev_id, NULL, NULL);
++	EXPECT_ERRNO(EINVAL, _test_cmd_pasid_attach(self->fd, stddev_id, pasid, hwpt_id));
++
++	test_ioctl_destroy(stddev_id);
++	test_ioctl_destroy(hwpt_id);
++}
++
+ TEST_F(iommufd_dirty_tracking, device_dirty_capability)
+ {
+ 	uint32_t caps = 0;
+-- 
+2.47.3
 
