@@ -1,163 +1,236 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011010.outbound.protection.outlook.com [52.101.70.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179853D333A
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 12:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770294093; cv=none; b=YXJwMkTS+MaP6Mnw5kW9XX8MXkUt/lCIBFMrs+Xfl07THGpAzrSEOqjHpEJdUtOuFl+fXbyvlELeVOvThmJ/LQRitp5QrvMxCcazIGDTw1S78taRtqymB3pDzn9ZnhWyGzPgYpEZ/VZar5YaRkrHvGar8T1W258usj4mCvQzabE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770294093; c=relaxed/simple;
-	bh=qNW2890p8UbP5TyLdPSapSQG9zMim8uZEJvK8SqLrEE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LmnwZzM1N1oq0m108Nv1UqO3v+II1mY1k0f9yYs2FhjzIH1ghvo/fVYdujaX0NDTRfgcCjB3hyocATZqAzu4/FE8zQshHwUXhEsslGk2ZiGAo/ut4r6ySVmnzJx0tFvsDD5RaetbfXIFoT8i8F71wFO7jESGY3rI9tzPM53GMb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=qFn1R5IY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=rqiIM4Y8; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=qFn1R5IY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=rqiIM4Y8; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F463A9D95;
+	Thu,  5 Feb 2026 12:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770294605; cv=fail; b=K6lOf/iFc7OyjQK/MxgK9g35ouxSOodSmaxTEwiLCaizGGSxICeqq3Y9BYrA8aM0I3dOQ/iKd7ucx7gMFRVPWc4lCYG81NGG+348ZWyqAXftdYt1+ghlv0HL7fq9HiDlnxVUMSkeSvArrKIX4XI2/EAmhxfjwaQRsUrkcPEUoYE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770294605; c=relaxed/simple;
+	bh=k4InlOS3AKQIS5dfbcOHfZKmuZHLBywGf5WhFpj8TCk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=fA5cnxKAKjDgczVFLvvugCsDU5MiksAbCz2GN9DL0rP3Dd7khfaEOpHQCuMqcbIVe1p+kh4YfjkhnKVRvxxOqYI+Idz2Wf5vnPTOj+5fDEOlg8Wpq5CEXBqFklB1xH9hfIcwNGsGNJ4QKoxITWsS7OK9Ag2BsgR8R80gXaJyABE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Qf+z7Q7B; arc=fail smtp.client-ip=52.101.70.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qFn1R5IY";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="rqiIM4Y8";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qFn1R5IY";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="rqiIM4Y8"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 568945BDA2;
-	Thu,  5 Feb 2026 12:21:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1770294091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IW64qyTb9m2ml2RSRkBPjQexYWMmZ5YenryH5wNBEIY=;
-	b=qFn1R5IYx0CbcwUAzz7livNr+vbnPFnXOQeWjyqu5le97rM2DLn9KH4yZHuEmR42T0Ly3i
-	ExRHBd+cl9D+MV5w3i4mKVFbLxOsFC8eyYYjYO6H2OOHooZe7vRxKLQTlMyEA2AVvOuPxJ
-	r++cn638KXsGF47FlhJ/AThN6SauRtw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1770294091;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IW64qyTb9m2ml2RSRkBPjQexYWMmZ5YenryH5wNBEIY=;
-	b=rqiIM4Y8Ad/63qSKP0Vh+hN/9wZdjVmDtiGpQcUeU+qU/k53AxfntorXu8Q9G1/CtHNA+r
-	10PKG77XauGYzLCw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=qFn1R5IY;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=rqiIM4Y8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1770294091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IW64qyTb9m2ml2RSRkBPjQexYWMmZ5YenryH5wNBEIY=;
-	b=qFn1R5IYx0CbcwUAzz7livNr+vbnPFnXOQeWjyqu5le97rM2DLn9KH4yZHuEmR42T0Ly3i
-	ExRHBd+cl9D+MV5w3i4mKVFbLxOsFC8eyYYjYO6H2OOHooZe7vRxKLQTlMyEA2AVvOuPxJ
-	r++cn638KXsGF47FlhJ/AThN6SauRtw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1770294091;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IW64qyTb9m2ml2RSRkBPjQexYWMmZ5YenryH5wNBEIY=;
-	b=rqiIM4Y8Ad/63qSKP0Vh+hN/9wZdjVmDtiGpQcUeU+qU/k53AxfntorXu8Q9G1/CtHNA+r
-	10PKG77XauGYzLCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 415AC3EA63;
-	Thu,  5 Feb 2026 12:21:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id iILvD0uLhGnfOAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 05 Feb 2026 12:21:31 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 013AEA09D8; Thu,  5 Feb 2026 13:21:26 +0100 (CET)
-Date: Thu, 5 Feb 2026 13:21:26 +0100
-From: Jan Kara <jack@suse.cz>
-To: Jinseok Kim <always.starving0@gmail.com>
-Cc: jack@suse.cz, amir73il@gmail.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, repnop@google.com, 
-	shuah@kernel.org
-Subject: Re: [RFC PATCH] selftests: fanotify: Add basic create/modify/delete
- event
-Message-ID: <kn2il642ie7z3obmojppjd7kdyswuqrkpsabozeyvm62va64ak@6ss43nmzmjl6>
-References: <dnncglg3x26gdsshcniw5yb4l2zlxz6qcwjqyekkpngb6v26q4@ftqnoe5eeapy>
- <20260205100437.1834-1-always.starving0@gmail.com>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Qf+z7Q7B"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pxPt5DKPkLe7fnlhqD6DNH3eRPqjxMTFrn/cbjeHsRD25pkEd6jorSeE7sc2FchdpbFt2pgNduBQe8RumJBNIUldoCGxiFIp7il6SblgxzvZ9RcRs+xXAAMmu7SeL4iKDfDhiswmQtExKCA+pTVsRNPRU7JY9PnsVqMOjY2jlWARiRzVd174sXMlrpz3h1AeVXj1E+/MBocyy6mcbvQIe5X8wVIB4ZKm51YkCkZ4PPXzY1ccMbmkOYZi17VUCCRCJy0ePlJ+weKPHAU/WQy44e9FkxwA6PTz5nvTS+4V3a/vmgtPCDR+zXPKjFT/sZl2X6jnz4QliERbmuVanlGUiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=75yYusQdvCFJr0kyvBlGJkUDXhpUvje7WrzZO83KY9I=;
+ b=LWKPfdWCqh9aH+SkUem4e6u66/qyprg7OsodljebxEKmMj1dumz0gDdTLra6xxswtmbaGtCEHj7aB8inmDdC6Ejnj+zwkCMHNgFTQTlH+4RmYdTREKl/aVDs8CQ/pqiLXyrEitgJwznWYC78c+eOo0k99ER/BaV51KEbuBZ0o7xtMI4bn5fGTh9rATtymhJct1v/OxzSm+GWe+++N8A0lXYxFi+04S/2PbqF1wSIzDoWU6GY8ry0WjzBnRviRSOdNgfj+MFjtt1YidJ7PYWLBfK0pKc+hUyXdQelsqRa5WMWd54tGWZ7iHhEyroQtl/S0XTILnyYBOILSVgJYXVhww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=75yYusQdvCFJr0kyvBlGJkUDXhpUvje7WrzZO83KY9I=;
+ b=Qf+z7Q7BgdoRYVjAr3po3BPb9Reu/Btt+iFSXLo2SyWkCmRgXf53rNUIfnFskOgmr8jGz865NpQOUxNqs0Y1a4nF5jfBxF7fYdfwDVfGITSnk8cV9udx01Hirpiy5LEEeuk1Q2D+KayxxQSP98fK0dEmksNLY5yTOH2gAiYaNCMQjv+66HTM4DjzYXRvil6ajkGF7OQ+5ePnXBKcLc9yAZiU+Uy8afKY4KR+VG5An3iqMD57pKVmnfyJgTun7FYCIu0gAS99nx2xneuKpOd8gMpsreptxbzJrnfD48k6oT8o0yM2x3w7d6QMUdBwANk+aleyej5qnDhG5p/coxQpFg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
+ by AM8PR04MB8049.eurprd04.prod.outlook.com (2603:10a6:20b:24c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Thu, 5 Feb
+ 2026 12:29:59 +0000
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9564.016; Thu, 5 Feb 2026
+ 12:29:59 +0000
+Date: Thu, 5 Feb 2026 14:29:53 +0200
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org,
+	Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
+	Tushar Vyavahare <tushar.vyavahare@intel.com>,
+	Jason Xing <kernelxing@tencent.com>,
+	Ricardo =?utf-8?B?Qi4gTWFybGniiJrCrnJl?= <rbm@suse.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Toke Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
+ frag_size
+Message-ID: <20260205122953.lscemcctayrvszdu@skbuf>
+References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+ <20260203105417.2302672-7-larysa.zaremba@intel.com>
+ <20260205005901.gnju3zmqimtgeu2b@skbuf>
+ <20260204173401.282899d0@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260204173401.282899d0@kernel.org>
+X-ClientProxiedBy: VI1PR08CA0246.eurprd08.prod.outlook.com
+ (2603:10a6:803:dc::19) To AM9PR04MB8585.eurprd04.prod.outlook.com
+ (2603:10a6:20b:438::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205100437.1834-1-always.starving0@gmail.com>
-X-Spam-Score: -2.51
-X-Spamd-Result: default: False [-2.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_CC(0.00)[suse.cz,gmail.com,vger.kernel.org,google.com,kernel.org];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.com:email]
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 568945BDA2
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|AM8PR04MB8049:EE_
+X-MS-Office365-Filtering-Correlation-Id: deb5711e-4c4f-46ec-2ae7-08de64b246b8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|376014|7416014|366016|10070799003|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?muKJjtnYJ2XleOSj+sbHT2gyRdQHmigNBxXKgyaPqCIbLa4Lw73EZM99u55G?=
+ =?us-ascii?Q?OScPyinZ9MFUxo5j6VrxsTEzKlStt2xzhzpGixoGSoPKRBUmZJW0PX9o45hx?=
+ =?us-ascii?Q?GgzNk2gx4CBJYsKrNb6R7908cr5CGOTzkGti1F8SEzpesSG70N/9WYNSliRW?=
+ =?us-ascii?Q?2okCz26aJrZ+SUodJDYB9Mcuu9Fk1CIjNXIOUr8YWs50iUXigmSNCcRL1ASB?=
+ =?us-ascii?Q?8X04xUWiJZxTCv4iefls/6+SZLKB2Mw8oiwjkCwY+WS86kwG0xPvxvtnHiVL?=
+ =?us-ascii?Q?GXpreJQ8wRnCOD30w7ZjivNuFKt9Ao8E3+cvEtR6wXbf7mLSakEYrUxWBtN4?=
+ =?us-ascii?Q?qprxcsbyGNrcrGIaZTSktUUS5MP4/dopkAE841v8A9zTZwv6JDhlwW6Q52b/?=
+ =?us-ascii?Q?76ac1I0Rnr8ziKs7NCe8/HEusGJ/VfNL2kjaanPVENrGSWCcYCRrHgbN58yn?=
+ =?us-ascii?Q?ffsMilBi8FfF8YinW8evhKwFIc7fhqrhqNzOHnWN0JAuYfXG3A+M/M6qISUz?=
+ =?us-ascii?Q?UM985DZjEq+xTZSSCuAaJ9SMEcPMoYE36WOPL0je0zlAEyL/csOAQmnDk/bS?=
+ =?us-ascii?Q?X+Y/4IqX/fvfG1MI501PEZRRdFEsqH8WrIYMVEdW2PrXMsSuK0mkI1XNR+7r?=
+ =?us-ascii?Q?RClUT4KqHByKBh0cD3KUloCkb21FUKw9jy0T4NuDFvyKljpp78hN3rRNzGfm?=
+ =?us-ascii?Q?a3sdPrm4PO7Tio9pVSoXZTfBa/tqVX2YEOeA9Ppb2BBmkB67zZvkpi5EAdVn?=
+ =?us-ascii?Q?x/IiYcLqlbbH8iA8QsjtIlBSzKm1lsuEnRlkkDOWnDjIXbef8Fn1B3fwZ0y5?=
+ =?us-ascii?Q?peA4nrI+oBQLSUZ0V3AtiAIr9hfWnpQKjcBF3UxiLNMuP4HlwJIYxhn9p7pe?=
+ =?us-ascii?Q?mPFKyxNzS9S/7I+Cv8jbM8eyJJEIH+c3aeZy6s5qExAi+zQi2I7Mpbg8JcmA?=
+ =?us-ascii?Q?yej7B/Z5hEsBqJN1ErMtvjNlxTRKgW8JNdvu1EwgESwjk3l7PSECF1K3643N?=
+ =?us-ascii?Q?p8Rb0Ak17qmp2rzijPYbBKFrzOJGlk23ntV65HeN7xjBAIVsQQSOHeV39Fy8?=
+ =?us-ascii?Q?XvAQkpAIKDnRVrkDM3fAVS1PG1JiJ7m/dpm/+YCMVmc9KZMoZDeBSMF11Ypi?=
+ =?us-ascii?Q?UBPIBrfrHooyN+BRloE5hCMFz/zbwc6FM1V5tgkoHz3w2fudYtQFsS/gJ2Xr?=
+ =?us-ascii?Q?0tsSoG26MKMUZYfjxN7cwEWEtRvfnm9b4eoXyD5t2nv+1FNdpMJmue3f9db9?=
+ =?us-ascii?Q?H+hQOgfFeeeORsstEPmqJaBoEFwgf4ibq0UeON2uB0Kiq0Lw5ZgJQRhQqnGn?=
+ =?us-ascii?Q?LAOxWNuDT60eLJGrTNCfFYP/t73nu6JDHKKChUNxzOAibmcpkHBClN1/7NCG?=
+ =?us-ascii?Q?GWXyb8fz3qhUX+hwY5e1LO7ydoe3KqRBWxF5ZB307ey4ZHL/W8TaNjc4Af5n?=
+ =?us-ascii?Q?J13TABO6HCsAMf7uSAwsJ18hdop2oBjqL+YZ/Dn5o85DqbEjAvI3bDcwoBYD?=
+ =?us-ascii?Q?yKRgSbdYp2bnCfPxPhUqa8l/+YKCXm9dN0OJFMEEf5Hp5CxGB5AkZjs2Zli/?=
+ =?us-ascii?Q?g+MqGpMBnlSmSb5tfzE=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(376014)(7416014)(366016)(10070799003)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?TdSz5nAHf93i4v02QINRGa2fk7HrJHyv0WH6Kv1Mo7haFfX+eKvyrpaygJhj?=
+ =?us-ascii?Q?OCS3haGwZnzvR2Vaw9vBUaoMExXP/0NJvmIjFoKF2cTTmh+7rzNQyFTOKYTf?=
+ =?us-ascii?Q?/WcefDEdFu3MW5upQEUGqqBOo4EkkRRU71LQbv7KOUJdDchQytz/8QHhBM5J?=
+ =?us-ascii?Q?tOYxuRnoZ51B8u/Q/pEGpG3szEoBGXXtA/D4v2/GvWjFtMWXRjxQwSS5Z/wj?=
+ =?us-ascii?Q?neTe1umE33++BB2l+o1Bbuuv9RBzSt1jplBrxryFVrXV3xnblib8IhfyRFwu?=
+ =?us-ascii?Q?WblemQvcqAu8hP/QoFiWCDU9y0ugPFBIGWOtUtLQokobGl7yEUn7UeHQksNb?=
+ =?us-ascii?Q?xfbwWTiQ8QaQMjeQU669jevMPjX8OoPgzZWkGGgoyvbpcwmt9ilPuMZdfcbw?=
+ =?us-ascii?Q?PkV9Hl3X7feNcrfOlh45hjUu7LXyyw3ZuCaGym+lYMWme4YfSiO33Qz03TVO?=
+ =?us-ascii?Q?FwIRcYjucn+b7jFxsS94KKhN8Nh6Y+FEIgm2+DeNc6//Z2hWtRbxWjb4nRpQ?=
+ =?us-ascii?Q?s9QlSzJ525rQ/MF9sXGPyn+NQOL5OE76gRZV3v/ebg1mOkxr4/PyAeQQPv5T?=
+ =?us-ascii?Q?IFEzkawJUnJAmgFQerlW07estUvPxWfigKnrGSD0je28m29tzhKkrYoajaIt?=
+ =?us-ascii?Q?ZqQPNhK2u/ULXJXfzxw1YmWYyPqrtbhCFDYKGx7VC4404aJXDxLlbS7n5F7f?=
+ =?us-ascii?Q?e7a1/Z6+bQedLWKilgsdXORyJVPiPduFE79VUi5DNq4VujPeo9sCosQDCCHy?=
+ =?us-ascii?Q?frKqqaX+gQIWgSbyrL3v4PjIJsMfqx/+ZC9l4xPXSjSNA8jFDanf6jyGRjTG?=
+ =?us-ascii?Q?f+UCnGSV+G/6SrT/Kl5KlLAbSJ1gFKCyZKqR31qYa1UfqLbuIslgB+chnfVZ?=
+ =?us-ascii?Q?ENu67Z0LyL5xaRd83lWUOJqm5jbpHC4Ij8fLIpQ9GAUdwbcuZTfWUsS/+ZB0?=
+ =?us-ascii?Q?DG1fhW2naoMWGzx8oz23jOXN9iLJiffIkOSm5/fxWPuj6KXZZThp076caUl/?=
+ =?us-ascii?Q?I9vO8nNmDpBnuhjt8SC/YVUNAnlBWapXDYyjR4w7rh4LjqUABm8NQ6DnTIAW?=
+ =?us-ascii?Q?a3KbchP3N6ulH6VY7aQMFPF5nruyRSi9Leo5RJlJww5Ounoyj69CAZeV3e73?=
+ =?us-ascii?Q?ZTiH2fndOHINY9fhs7L305WQ+PEXpUJxlwBUISmbiQhTW8T7zECzD0zUVn26?=
+ =?us-ascii?Q?OLm2PrraKhSMmNQdbibmDkW+n1MQXnG5veWS9K1K04wmFGh32Q7FBt0Psm7Q?=
+ =?us-ascii?Q?iqCZBy+lpdZhqFjYmMrBuAVWhtgIYn0dyLPparBqcPqWlhiTUHWjGalhWHqc?=
+ =?us-ascii?Q?3qKhK4WaN80+CM5ZWz2hz4wX5YcCanR9bu1YvwSsFncNH6YyfpULdthoaHQU?=
+ =?us-ascii?Q?/XOGHPqqMtMplRl+2yMu1kGXsyYdllQNoLB0jLzz+LpH8+2VX6Q+PfltZk8W?=
+ =?us-ascii?Q?+dsLHCvKYpkc/L7BIUsSPutI56ulZZJaEA6RFgVmkF1cV+ecrpyP3bJh1ZaZ?=
+ =?us-ascii?Q?Hy1XXxbefU4/CBmZ8G/ELCqHA4k5/mRUW1dHfXfBeDmQV4dXscSbycBA9A2w?=
+ =?us-ascii?Q?vfnTexBRviw5R/HrWN5TPvh5DzeVYJIfJ/E4hDs/ktQlnFzQI6WeSYy75S5B?=
+ =?us-ascii?Q?JS9NKuoQ9b2whDEMlUO2ykErao39Q6aOE39XLSZJHeS623ieYuMSsUG+Z7d2?=
+ =?us-ascii?Q?B5bElgbC8PLPDwsgUHdtVE2/pWKdl6X7nFtI3oJQQZMRBc9GnXc84uS1go+p?=
+ =?us-ascii?Q?EzrrOdggEGMIEraBTXTqs1MRUtPaRjy1Hz5bn744qj9BdKZAvzqkyGSt/hDz?=
+X-MS-Exchange-AntiSpam-MessageData-1: chMYX4JM2yeYMBH8Hvw0GZ1xtc+NZDyZ1aQ=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: deb5711e-4c4f-46ec-2ae7-08de64b246b8
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2026 12:29:58.9934
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q5HMyxDzKn4uoQ7GXNYg/Un5791lr2LKXTsykBEsgbHGsPGjJENju7WvhnoQeCWy8LjqLcCL450gj3ASkgnBeA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB8049
 
-Hello!
-
-On Thu 05-02-26 19:04:34, Jinseok Kim wrote:
-> Thanks for the feedback!
+On Wed, Feb 04, 2026 at 05:34:01PM -0800, Jakub Kicinski wrote:
+> On Thu, 5 Feb 2026 02:59:01 +0200 Vladimir Oltean wrote:
+> > Thanks! This is an extremely subtle corner case. I appreciate the patch
+> > and explanation.
+> > 
+> > I did run tests on the blamed commit (which I still have), but to catch
+> > a real issue in a meaningful way it would have been required to have a
+> > program which calls bpf_xdp_adjust_tail() with a very large offset.
+> > I'm noting that I'm seeing the WARN_ON() much easier after your fix, but
+> > before, it was mostly inconsequential for practical cases.
+> > 
+> > Namely, the ENETC truesize is 2048, and XDP_PACKET_HEADROOM is 256.
+> > First buffers also contain the skb_shared_info (320 bytes), while
+> > subsequent buffers don't.
 > 
-> I agree LTP has very comprehensive fanotify/inotify tests.
+> I can't wrap my head around this series, hope you can tell me where I'm
+> going wrong. AFAICT enetc splits the page into two halves for small MTU.
 > 
-> However, the motivation for adding basic tests to kernel selftests is:
->     - Quick and lightweight regression checking during kernel
->     development/boot (no external LTP install needed)
->     - Non-root basic cases (many LTP tests require root or complex setup)
+> So we have 
+> 
+>  |                 2k          |             2k              |
+>   ----------------------------- ----------------------------- 
+>  | hroom | data | troom/shinfo | hroom | data | troom/shinfo |
+>   ----------------------------- ----------------------------- 
+> 
+> If we attach the second chunk as frag well have:
+>   offset = 2k + hroom
+>   size = data.len
+> But we use
+>   truesize / frag_size = 2k
+> so
+>   tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
+>   tailroom = 2k - data.len - 2k
+>   tailroom = -data.len
+>   WARN(tailroom < 0) -> yes
+> 
+> The frag_size thing is unusable for any driver that doesn't hand out
+> full pages to frags?
 
-Hum, I don't quite buy the "LTP is difficult to run" argument. I find it as
-hard as running kernel selftests to be honest :). I don't even bother
-installing LTP and just directly run testcases from LTP source tree. The
-"LTP tests require root" is a valid argument but not really problematic for
-the setup I use.
+This is an excellent question.
 
-The point I'm trying to make is: I'm not strictly opposed to fanotify
-kernel selftests but they do add some maintenance burden and I don't see the
-usefulness of this. So maybe can you start with explaining your usecase -
-how are these tests going to make your life easier?
+Yes, you're right, bpf_xdp_frags_increase_tail() only has a 50% chance
+of working - the paged data has to be in the first half of the page,
+otherwise the tailroom calculations are not correct due to rxq->frag_size,
+and the WARN_ON() will trigger.
 
-> Do you think a different approach (LTP improvement instead)
-> would be better?
+The reason why I didn't notice this during my testing is stupid. I was
+attaching the BPF program to the interface and then detaching it after
+each test, and each test was sending less than the RX ring size (2048)
+worth of packets. So all multi-buffer frames were using buffers which
+were fresh out of enetc_setup_rxbdr() -> ... -> enetc_new_page() (first
+halves) and never out of flipped pages (enetc_bulk_flip_buff()).
 
-As Amir wrote we definitely don't plan on moving all tests from LTP to
-selftests so if you are missing some functionality from tests in LTP, it
-would be good to add it there...
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+This seems to be a good reason to convert this driver to use page pool,
+which I can look into. I'm not sure that there's anything that can be
+done to make the rxq->frag_size mechanism compatible with the current
+buffer allocation scheme.
