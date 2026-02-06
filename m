@@ -1,318 +1,143 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B9933C1B2
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 08:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC17349B05
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 08:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770365837; cv=none; b=jxkqojxGE/xbvxTziVwTJO73rumwBpW6/2ChrQUnHeHkcbLWycL75tnrq9e0eAuq2aGdlXZeA1xlV20IYTNNK3nJdbQHhHffQA6kHGAmoGdw9vB/51kesUC89DxK5J61fyhTuKN0gGrIfDAJlCqm1c1idi50z80WbnbUjlAPmNs=
+	t=1770366764; cv=none; b=TeQ+ZkQHqzp8Qvy5RuJKt5OfxO/otQl+RJkRvKHKhAB+34LzBq1z7T8u2KSrjPoHg1EsJh3mFeCOpRH8BJl+wv+UWzgUmOS8Xa+FwJ26T48B87fbC1ESuPcjRch34WVbzLrQtBaYDmQ4i14QbK2wN4U7Z1/5vv5tR8Hew99jADk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770365837; c=relaxed/simple;
-	bh=c7PQOE0iMHjHxkRzpLy5wyWcpXy4hEdVWeuqSuOUeEI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ODahTZiZFbpqM/dQyJmwfDQY2EpsIEzBU9Z2W3s/GyW7CqqlMZKnnaP7/TnPIQMDDa9J2M8+4aYVIjdYqb/pAEy0JPHgY4FgNCW09SyTuIIIGtolSRymetMmMMMxJC4o29jeABPI9h96OyS1V04UFQXnjiDEYbHi36uYC4jb8tI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NIJpk2s3; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NIJpk2s3"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-352ccc61658so982972a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 00:17:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770365837; x=1770970637; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JCT2HUHLs8OeyVWtYlHn7qjboQomP4IpKbaE1KAoCHE=;
-        b=NIJpk2s3BuWEugfJ3uNVac7Z1peetzh4UaiRtalaUgYRqOehJX2+WQfNZ6HNVict5X
-         ZoBktA9aDwE0Suoz7OMFX3uqdEQp+ackhi4SRNveEKICqOqwOsPe8JYoTVXE5eLE90BX
-         HABzf47ZuR4+tB0k9TaWSb+sm1tHz3Qnc8plEt56fQoWNe3USqMVc7mq7GFHjURM9rwW
-         91uvLj8LAn4GmAaZcpcp/D4624E8JyS4SkYLnvN9abRjHSACVSP9NpB/fyVqa4FotZf7
-         u71Heus0UUw3YT3W9l3z4ppRvc1LoRYFB09OSfNPXjlEZl4dHcxvrF5QAVMilTQBcibP
-         EYJw==
+	s=arc-20240116; t=1770366764; c=relaxed/simple;
+	bh=yZcU9zqmWydFOpKqECr31syO3KL5FI1L7fu+fuKt0V0=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=D6fP+l4EPIP1pse8G+fw73YRRv/JUFUWIIqN8xGtlQNIff0Yql9sLyfvWRBRqt9QbLxxhwE3RZS3/qUPOml2UBgtJZvr/YGY02jAT4Cf7Xe4m58r7EE638MrzvbP0rkvuwKHYPLtOb6LMT7O38NxU1mRFVJxNaZyUpXXO92+7dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-663126bb42dso7965698eaf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 00:32:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770365837; x=1770970637;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JCT2HUHLs8OeyVWtYlHn7qjboQomP4IpKbaE1KAoCHE=;
-        b=KuWjz+uKYWxFs10oLqO4qpDZOJkHrWdge0QWLZgsl9cCTPiv9E31irQBK/SRYOjkZH
-         zO+Mj8squ8/V5r+Tke4J4yHkEUUd5uEI/1vVyWac9vUaxgUcTJ8uklIFXGiu4O2Uv9vr
-         ZXmsAVtLTcNIwkx2skJzTDZ693N7lSs6s/+no0jcOtvQL6NA4AmjZXjQsvn2137D3FdC
-         Snbttqa6HlBPqvIREh9boaH0HCD6vFHr5VIBMqDyqlmipbiW2wtS33pXVqhoqbgNsNl2
-         3BYwr84jCNJZmtnd/xjdxqVkcpRVWEavwjsi0cO2hnTth/A2Gjo9sGxXVOHNc6IApOEt
-         +x4w==
-X-Gm-Message-State: AOJu0YyrqgEAnizGOoTHCiW9PTu0aBFJrwAiXS0w0Y6Dm4YPAERQt2Uh
-	v38Kfeloyf/t6jQs/f2yUC6AC5ADG2obpDTo2iaXYYQh8gT8p0QTgRvn+pmRkxC2
-X-Gm-Gg: AZuq6aKtzUOUO+xqs/+w5QV+YSg4ov2cwMmICEKSeCNpWTHeLDhvxyr0lc0+vcNe+UI
-	cqNNmIHS/LQCfeEoOFG4oaEkz+oAn97hL8ctcIf9UJ1taZCWcAU93ZIY92vWWbXrjvC1rCe4OK7
-	hDcUigaGHqamocj5+n9/mZdL+eE2fSz5j9Ptz4MlQlLdfbWDU7RS+8h/21fXmcT7p1C/X2ne9t8
-	xZv8simgeRzerXTZJ64AbvmeDgeRN+Dw1VVJ+f9R2GbziyuJGLGXP9RGzaYi0TmnRNCpLQAAkE+
-	rUqYcKgudMYE0fsH3q4ujXOhozlBsteFleBZfZumcKV5tvWmfTA6ZtaAYu54g8lIp7PRoIrckYh
-	rfn2N+3pDtWHIazN8l3Z4u8EYcdBsL9ZyIevKog/uGAfkc8Zsmgwr+DeFbVh5J8DBlX4UBvyzoW
-	Aa+KQAJoZ9p5Wp0fY=
-X-Received: by 2002:a17:90b:2fc3:b0:354:a1bc:f99b with SMTP id 98e67ed59e1d1-354b3e15243mr1655063a91.37.1770365836747;
-        Fri, 06 Feb 2026 00:17:16 -0800 (PST)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-354b4686dfesm755671a91.11.2026.02.06.00.17.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Feb 2026 00:17:15 -0800 (PST)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: linux-kselftest@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	netdev@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH selftests] selftests: Use ktap helpers for runner.sh
-Date: Fri,  6 Feb 2026 08:17:04 +0000
-Message-ID: <20260206081704.53215-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.50.1
+        d=1e100.net; s=20230601; t=1770366763; x=1770971563;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HGcULbifs2XydNzYSTlCyu/fOsNa5SM6If0TWsmBnX0=;
+        b=aHwUD45z8hM31SB+281Yzl8wP3T/PFLWtFiOU1xD534qjITYSIMFFWB35KevmJav0M
+         pVByluVMnW2NOqLPOTXaghHqnsAkSgt5mUfpdqcF424Ar7gMWRonLo3SOC9gJbPKVFZN
+         fCR6rMuSV8kBfc8VDad5tT0+YeTWhgReqH5CafHdCfDsnd8gyn7vH+bXfaP+NpNuaWxS
+         XzObTt0I+Dw8yCaq0I+0CGSVd+BS6blnh+eWKjYNW/edDVRsjMPMjDtI0zcdjRZ7SEZj
+         O3hGEotV6teEtxCv321qUrWLAcgB4zsuvzxvb5cSIIIUJ3PzC/fQZrEF0GydjTKTPYEc
+         8EvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCViYXZJhYFMUgG+xn6yQo78WvryJ+GSkINBLDnWsr7aRnXETR25z5I8yGJLixBATe17A4c3pS1+++vqJjaOHK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqJg/hNYjdPnqcJ2dCNwV2IGl3fm4n/r1ACkKPrvIvqJ+AUCi+
+	Poq7DT5MAQn6H9pwZB1Bm2Eg4fmdnOFAGQJRyW5JetiPnLQRHJmAMYLo+SyU1qQTy+5vNV6tpht
+	exEyXLMIFG6enKSI067Z4xONHXkRVcjFHTYbXsw/p8ID57rOPLd4gHs1JMfs=
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6820:f02a:b0:659:9a49:8efe with SMTP id
+ 006d021491bc7-66d09cb2ff0mr939322eaf.15.1770366763404; Fri, 06 Feb 2026
+ 00:32:43 -0800 (PST)
+Date: Fri, 06 Feb 2026 00:32:43 -0800
+In-Reply-To: <20260206022419.1357513-1-achender@kernel.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6985a72b.050a0220.3b3015.0035.GAE@google.com>
+Subject: [syzbot ci] Re: net/rds: RDS-TCP reconnect and fanout improvements
+From: syzbot ci <syzbot+ci858e84e8400d24b3@syzkaller.appspotmail.com>
+To: achender@kernel.org, allison.henderson@oracle.com, edumazet@google.com, 
+	horms@kernel.org, kuba@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	rds-devel@oss.oracle.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-This has been on my todo list for a long time. We should use ktap
-helpers in runner.sh. I saw Brendan did some work in d9e6269e3303
-("selftests/run_kselftest.sh: exit with error if tests fail") to make
-run_kselftest.sh exit with the correct return value. But we still use a
-custom solution in runner.sh. Let's convert all the print messages to use
-formal ktap helpers. Here’s what I changed:
+syzbot ci has tested the following series
 
-  1. Move TAP header from runner.sh to run_kselftest.sh, since run_kselftest.sh
-     is the only caller of run_many().
-  2. In run_kselftest.sh, call run_many() in main process to count the
-     pass/fail numbers.
-  3. In run_kselftest.sh, do not generate kselftest_failures_file; just
-     use ktap_print_totals to report the result.
-  4. In runner.sh run_one(), get the return value and use ktap helpers for
-     all pass/fail reporting. This allows counting pass/fail numbers in the
-     main process.
-  5. In runner.sh run_in_netns(), also return the correct rc, so we can
-     count results during wait.
+[v1] net/rds: RDS-TCP reconnect and fanout improvements
+https://lore.kernel.org/all/20260206022419.1357513-1-achender@kernel.org
+* [PATCH net-next v1 1/3] net/rds: Delegate fan-out to a background worker
+* [PATCH net-next v1 2/3] net/rds: Use proper peer port number even when not connected
+* [PATCH net-next v1 3/3] net/rds: rds_sendmsg should not discard payload_len
 
-After the change, the printed result looks like:
+and found the following issue:
+BUG: sleeping function called from invalid context in rds_tcp_conn_free
 
-  not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=1
-  # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+Full report is available here:
+https://ci.syzbot.org/series/1a5ef180-c02c-401d-9df7-670b18570a55
 
-  ]# echo $?
-  1
+***
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+BUG: sleeping function called from invalid context in rds_tcp_conn_free
+
+tree:      net-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/netdev/net-next.git
+base:      7a4cd71fa4514cd85df39b3cf99da8142660cdcd
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/77f47047-43cb-4c25-b0b6-73b8746cea2a/config
+syz repro: https://ci.syzbot.org/findings/49698f1e-4f36-4446-9dd1-c409366e6296/syz_repro
+
+BUG: sleeping function called from invalid context at kernel/workqueue.c:4390
+in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 6005, name: syz.2.19
+preempt_count: 1, expected: 0
+RCU nest depth: 1, expected: 0
+2 locks held by syz.2.19/6005:
+ #0: ffffffff8e35a360 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #0: ffffffff8e35a360 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:867 [inline]
+ #0: ffffffff8e35a360 (rcu_read_lock){....}-{1:3}, at: __rds_conn_create+0x2e4/0x22d0 net/rds/connection.c:177
+ #1: ffffffff8fa00a98 (rds_conn_lock){....}-{3:3}, at: __rds_conn_create+0x18e2/0x22d0 net/rds/connection.c:304
+irq event stamp: 752
+hardirqs last  enabled at (751): [<ffffffff8b7cc843>] __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
+hardirqs last  enabled at (751): [<ffffffff8b7cc843>] _raw_spin_unlock_irq+0x23/0x50 kernel/locking/spinlock.c:202
+hardirqs last disabled at (752): [<ffffffff8b7cc61a>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
+hardirqs last disabled at (752): [<ffffffff8b7cc61a>] _raw_spin_lock_irqsave+0x1a/0x60 kernel/locking/spinlock.c:162
+softirqs last  enabled at (32): [<ffffffff8ac0cd59>] rds_sendmsg+0x7b9/0x2150 net/rds/send.c:1266
+softirqs last disabled at (30): [<ffffffff89463a1f>] spin_lock_bh include/linux/spinlock.h:356 [inline]
+softirqs last disabled at (30): [<ffffffff89463a1f>] release_sock+0x2f/0x1f0 net/core/sock.c:3793
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 0 UID: 0 PID: 6005 Comm: syz.2.19 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ __might_resched+0x378/0x4d0 kernel/sched/core.c:8829
+ __cancel_work_sync+0x6d/0x110 kernel/workqueue.c:4390
+ rds_tcp_conn_free+0x2c/0x170 net/rds/tcp.c:361
+ __rds_conn_create+0x1bfb/0x22d0 net/rds/connection.c:334
+ rds_conn_create_outgoing+0x43/0x60 net/rds/connection.c:377
+ rds_sendmsg+0xff5/0x2150 net/rds/send.c:1321
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg+0x21c/0x270 net/socket.c:742
+ ____sys_sendmsg+0x4d7/0x810 net/socket.c:2592
+ ___sys_sendmsg+0x2a5/0x360 net/socket.c:2646
+ __sys_sendmsg net/socket.c:2678 [inline]
+ __do_sys_sendmsg net/socket.c:2683 [inline]
+ __se_sys_sendmsg net/socket.c:2681 [inline]
+ __x64_sys_sendmsg+0x1bd/0x2a0 net/socket.c:2681
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f5b6bf9acb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f5b6cd8b028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f5b6c216090 RCX: 00007f5b6bf9acb9
+RDX: 0000000000000000 RSI: 0000200000000480 RDI: 0000000000000004
+RBP: 00007f5b6c008bf7 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f5b6c216128 R14: 00007f5b6c216090 R15: 00007ffc17760058
+ </TASK>
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
 ---
- tools/testing/selftests/kselftest/runner.sh | 83 ++++++++++++---------
- tools/testing/selftests/run_kselftest.sh    | 21 ++++--
- 2 files changed, 62 insertions(+), 42 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 3a62039fa621..f3307f2d1f48 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -1,8 +1,8 @@
--#!/bin/sh
-+#!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- #
- # Runs a set of tests in a given subdirectory.
--export skip_rc=4
-+. $(dirname "$(readlink -e "${BASH_SOURCE[0]}")")/ktap_helpers.sh
- export timeout_rc=124
- export logfile=/dev/stdout
- export per_test_logging=
-@@ -44,17 +44,11 @@ tap_timeout()
- 	fi
- }
- 
--report_failure()
--{
--	echo "not ok $*"
--	echo "$*" >> "$kselftest_failures_file"
--}
--
- run_one()
- {
- 	DIR="$1"
- 	TEST="$2"
--	local test_num="$3"
-+	local rc test_num="$3"
- 
- 	BASENAME_TEST=$(basename $TEST)
- 
-@@ -102,16 +96,17 @@ run_one()
- 	# Command line timeout overrides the settings file
- 	if [ -n "$kselftest_override_timeout" ]; then
- 		kselftest_timeout="$kselftest_override_timeout"
--		echo "# overriding timeout to $kselftest_timeout" >> "$logfile"
-+		ktap_print_msg "overriding timeout to $kselftest_timeout" >> "$logfile"
- 	else
--		echo "# timeout set to $kselftest_timeout" >> "$logfile"
-+		ktap_print_msg "timeout set to $kselftest_timeout" >> "$logfile"
- 	fi
- 
- 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
- 	echo "# $TEST_HDR_MSG"
- 	if [ ! -e "$TEST" ]; then
--		echo "# Warning: file $TEST is missing!"
--		report_failure "$test_num $TEST_HDR_MSG"
-+		ktap_print_msg "Warning: file $TEST is missing!"
-+		ktap_test_fail "$test_num $TEST_HDR_MSG"
-+		rc=$KSFT_FAIL
- 	else
- 		if [ -x /usr/bin/stdbuf ]; then
- 			stdbuf="/usr/bin/stdbuf --output=L "
-@@ -122,33 +117,37 @@ run_one()
- 		elif [ -x "./ksft_runner.sh" ]; then
- 			cmd="$stdbuf ./ksft_runner.sh ./$BASENAME_TEST"
- 		else
--			echo "# Warning: file $TEST is not executable"
-+			ktap_print_msg "Warning: file $TEST is not executable"
- 
- 			if [ $(head -n 1 "$TEST" | cut -c -2) = "#!" ]
- 			then
- 				interpreter=$(head -n 1 "$TEST" | cut -c 3-)
- 				cmd="$stdbuf $interpreter ./$BASENAME_TEST"
- 			else
--				report_failure "$test_num $TEST_HDR_MSG"
--				return
-+				ktap_test_fail "$test_num $TEST_HDR_MSG"
-+				return $KSFT_FAIL
- 			fi
- 		fi
- 		cd `dirname $TEST` > /dev/null
--		((((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
-+		(((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
- 			tap_prefix >&4) 3>&1) |
--			(read xs; exit $xs)) 4>>"$logfile" &&
--		echo "ok $test_num $TEST_HDR_MSG") ||
--		(rc=$?;	\
--		if [ $rc -eq $skip_rc ]; then	\
--			echo "ok $test_num $TEST_HDR_MSG # SKIP"
--		elif [ $rc -eq $timeout_rc ]; then \
--			echo "#"
--			report_failure "$test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
-+			(read xs; exit $xs)) 4>>"$logfile"
-+		rc=$?
-+		if [ "$rc" -eq "$KSFT_PASS" ]; then
-+			ktap_test_pass "$test_num $TEST_HDR_MSG"
-+		elif [ "$rc" -eq "$KSFT_SKIP" ]; then
-+			ktap_test_skip "$test_num $TEST_HDR_MSG"
-+		elif [ "$rc" -eq "$KSFT_XFAIL" ]; then
-+			ktap_test_xfail "$test_num $TEST_HDR_MSG"
-+		elif [ "$rc" -eq "$timeout_rc" ]; then
-+			ktap_test_fail "$test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
- 		else
--			report_failure "$test_num $TEST_HDR_MSG # exit=$rc"
--		fi)
-+			ktap_test_fail "$test_num $TEST_HDR_MSG # exit=$rc"
-+		fi
- 		cd - >/dev/null
- 	fi
-+
-+	return $rc
- }
- 
- in_netns()
-@@ -164,27 +163,34 @@ in_netns()
- 
- run_in_netns()
- {
--	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
- 	local tmplog="/tmp/$(mktemp -u ${BASENAME_TEST}-XXXXXX)"
-+	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
-+	local rc
-+
- 	ip netns add $netns
- 	if [ $? -ne 0 ]; then
--		echo "# Warning: Create namespace failed for $BASENAME_TEST"
--		echo "not ok $test_num selftests: $DIR: $BASENAME_TEST # Create NS failed"
-+		ktap_print_msg "Warning: Create namespace failed for $BASENAME_TEST"
-+		ktap_test_fail "$test_num selftests: $DIR: $BASENAME_TEST # Create NS failed"
- 	fi
- 	ip -n $netns link set lo up
-+
- 	in_netns $netns &> $tmplog
-+	rc=$?
-+
- 	ip netns del $netns &> /dev/null
-+	# Cat the log at once to avoid parallel netns logs.
- 	cat $tmplog
- 	rm -f $tmplog
-+	return $rc
- }
- 
- run_many()
- {
--	echo "TAP version 13"
- 	DIR="${PWD#${BASE_DIR}/}"
- 	test_num=0
--	total=$(echo "$@" | wc -w)
--	echo "1..$total"
-+	local rc
-+	pids=()
-+
- 	for TEST in "$@"; do
- 		BASENAME_TEST=$(basename $TEST)
- 		test_num=$(( test_num + 1 ))
-@@ -194,10 +200,19 @@ run_many()
- 		fi
- 		if [ -n "$RUN_IN_NETNS" ]; then
- 			run_in_netns &
-+			pids+=($!)
- 		else
- 			run_one "$DIR" "$TEST" "$test_num"
- 		fi
- 	done
- 
--	wait
-+	# Handle the return values when running in netns.
-+	for pid in "${pids[@]}"; do
-+		wait "$pid"
-+		rc=$?
-+		[ "$rc" -eq "$KSFT_PASS" ] && KTAP_CNT_PASS=$((KTAP_CNT_PASS+1))
-+		[ "$rc" -eq "$KSFT_FAIL" ] && KTAP_CNT_FAIL=$((KTAP_CNT_FAIL+1))
-+		[ "$rc" -eq "$KSFT_SKIP" ] && KTAP_CNT_SKIP=$((KTAP_CNT_SKIP+1))
-+		[ "$rc" -eq "$KSFT_XFAIL" ] && KTAP_CNT_XFAIL=$((KTAP_CNT_XFAIL+1))
-+	done
- }
-diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-index d4be97498b32..10930d09f2a5 100755
---- a/tools/testing/selftests/run_kselftest.sh
-+++ b/tools/testing/selftests/run_kselftest.sh
-@@ -110,18 +110,23 @@ if [ -n "$TESTS" ]; then
- 	available="$(echo "$valid" | sed -e 's/ /\n/g')"
- fi
- 
--kselftest_failures_file="$(mktemp --tmpdir kselftest-failures-XXXXXX)"
--export kselftest_failures_file
--
-+curdir=$(pwd)
-+total=$(echo "$available" | wc -w)
- collections=$(echo "$available" | cut -d: -f1 | sort | uniq)
-+
-+ktap_print_header
-+ktap_set_plan "$total"
-+
- for collection in $collections ; do
- 	[ -w /dev/kmsg ] && echo "kselftest: Running tests in $collection" >> /dev/kmsg
- 	tests=$(echo "$available" | grep "^$collection:" | cut -d: -f2)
--	($dryrun cd "$collection" && $dryrun run_many $tests)
-+	$dryrun cd "$collection" && $dryrun run_many $tests
-+	$dryrun cd "$curdir"
- done
- 
--failures="$(cat "$kselftest_failures_file")"
--rm "$kselftest_failures_file"
--if "$ERROR_ON_FAIL" && [ "$failures" ]; then
--	exit 1
-+ktap_print_totals
-+if "$ERROR_ON_FAIL" && [ "$KTAP_CNT_FAIL" -ne 0 ]; then
-+	exit "$KSFT_FAIL"
-+else
-+	exit "$KSFT_PASS"
- fi
--- 
-2.50.1
-
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
