@@ -1,46 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1D92857EA;
-	Fri,  6 Feb 2026 15:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13172874FE
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 15:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770390784; cv=none; b=mye/CZX7lhEM9iN7fTk6SXVRMRL0NTlETV2cEGOzilqdOhO1Rjlstb4QlEQvTq+2TbS5i+Wtypp9GHm4iWPQATxxtPRVTCcw71TB8GvrFJPlTo2fX1P589Rb6vHqvkAMbPY1Ung0qAn+iWefOYoKRiB99cOCWTv4TtPAP7blnaQ=
+	t=1770391197; cv=none; b=QDW8+ksBUsKhxziuVOq2k3VdyTLZEegVZCEnVF2AtLpfZusa7iE5dEqldtmRUc7qVGoGYhYpmuGSx9wjijtDZnPehyxhD9DBxAKqVO1R+U3Y3CvPCZQIMqIwZeLLxv5gQ71gmGgfaAOmRdwwEUuM9pZS4mgAOOBTsOb7Q7On1nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770390784; c=relaxed/simple;
-	bh=jkGgDaN/QHDmhxym2ZnD+FsCncUfwyM3ZBNW0Zae7Mk=;
+	s=arc-20240116; t=1770391197; c=relaxed/simple;
+	bh=AnolthdRwrDB3AfcOEmQl+aamqXR8J3J5EqMAqspUdc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H/R3DX6UAmmU6BWYLxpjhbVDF/ZS2iGjMXUe1NxXSMEngSWKRJkRSNTPMtKA9PW/X10U1WwYgACQlsS159NEtRL0/4pnQn7LBZ14jjzt8tB0fGBY3mCZZG2RzOH2hNjdoVpr7or2Qd+7f5HzcFDP+WqgKBkwZY4e+0ah7/eFOQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tNHme8Fq; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=cGg0gr/RcePopnSisy5jEIb4g/jHByAcUl9oHL+VcIuy0IDu/AC1SguYS0hfKTdHPn0Cd4pwyfGuyDt4dfV7oGSYWr8Eh3/XEEI1W9RP9DIJj8MVcyZenvmF/2eWMlurGbt72HaOqSJnGabunWyPJ1P1NLMyNzS+QWWeaXoR14M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aywzXuhD; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tNHme8Fq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A576C116C6;
-	Fri,  6 Feb 2026 15:13:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1770390784;
-	bh=jkGgDaN/QHDmhxym2ZnD+FsCncUfwyM3ZBNW0Zae7Mk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tNHme8Fqj0skeD9Wm0M1zoE1FRfne8WmshRZqn1vRdTnIK17dA63UDEkK4O6R/MYF
-	 0gI8Vh4MsxQwXLC3jfx9TbmW3rvhUfEdeM/Udp9fr6+9GKSr/soQhbv7ArCpioxcga
-	 C8aIGK3M3tX0E3bKRAAddBnALOI6+/7z4HE6dqCE=
-Date: Fri, 6 Feb 2026 16:13:00 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Revert "revocable: Revocable resource management"
-Message-ID: <2026020624-buddhism-clavicle-7a90@gregkh>
-References: <20260204142849.22055-1-johan@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aywzXuhD"
+Date: Fri, 6 Feb 2026 15:19:31 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770391184;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ChC6m5WfVroGjS9ENqi35nDBudi2mtW1bc10jN5JpMM=;
+	b=aywzXuhD3aIRl8d7DfaV1A4HZXwVjqvlCIQ3oXkRUMWqETv6Fnc28cJp0x4vYuQGoNZP7+
+	COR3c6t8nqalS9d43VhLxDSGTWIjGkRXjKp/Wy5GOwnvvY+KVi+1+6FwRnBLRWb+V351o4
+	FPmWoT/JsuNl2LGBhfueWqgH+YiY3nM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yosry Ahmed <yosry.ahmed@linux.dev>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: linux-mm@kvack.org, Jiayuan Chen <jiayuan.chen@shopee.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chengming Zhou <chengming.zhou@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm: zswap: add per-memcg stat for incompressible
+ pages
+Message-ID: <iphymajz5xn6cbntby7z5s3eioraigs4doqylijoljfhzrexup@f23vxl2deyfr>
+References: <20260206072220.144008-1-jiayuan.chen@linux.dev>
+ <20260206072220.144008-2-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,56 +50,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260204142849.22055-1-johan@kernel.org>
+In-Reply-To: <20260206072220.144008-2-jiayuan.chen@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Feb 04, 2026 at 03:28:46PM +0100, Johan Hovold wrote:
-> I was surprised to learn that the revocable functionality was merged the other
-> week given the community feedback on list and at LPC, but not least since there
-> are no users of it, which we are supposed to require to be able to evaluate it
-> properly.
+On Fri, Feb 06, 2026 at 03:22:15PM +0800, Jiayuan Chen wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
 > 
-> The chromeos ec driver issue which motivated this work turned out not to need
-> it as was found during review. And the example gpiolib conversion was posted
-> the very same morning that this was merged which hardly provides enough time
-> for evaluation (even if Bartosz quickly reported a performance regression).
+> The global zswap_stored_incompressible_pages counter was added in commit
+> dca4437a5861 ("mm/zswap: store <PAGE_SIZE compression failed page as-is")
+> to track how many pages are stored in raw (uncompressed) form in zswap.
+> However, in containerized environments, knowing which cgroup is
+> contributing incompressible pages is essential for effective resource
+> management [1].
 > 
-> Turns out there are correctness issues with both the gpiolib conversion and
-> the revocable design itself that can lead to use-after-free and hung tasks (see
-> [1] and [2]).
+> Add a new memcg stat 'zswap_incomp' to track incompressible pages per
+> cgroup. This helps administrators and orchestrators to:
 > 
-> And as was pointed out repeatedly during review, and again at the day of the
-> merge, this does not look like the right interface for the chardev unplug
-> issue.
+> 1. Identify workloads that produce incompressible data (e.g., encrypted
+>    data, already-compressed media, random data) and may not benefit from
+>    zswap.
 > 
-> Despite the last-minute attempt at addressing the issues mentioned above
-> incrementally, the revocable design is still fundamentally flawed (see patch
-> 3/3).
+> 2. Make informed decisions about workload placement - moving
+>    incompressible workloads to nodes with larger swap backing devices
+>    rather than relying on zswap.
 > 
-> We have processes like requiring a user before merging a new interface so that
-> issues like these can be identified and the soundness of an API be evaluated.
-> They also give a sense of when things are expected to happen, which allows our
-> scarce reviewers to manage their time (e.g. to not be forced to drop everything
-> else they are doing when things are merged prematurely).
+> 3. Debug zswap efficiency issues at the cgroup level without needing to
+>    correlate global stats with individual cgroups.
 > 
-> There really is no reason to exempt any new interface from this regardless of
-> whether one likes the underlying concept or not.
+> While the compression ratio can be estimated from existing stats
+> (zswap / zswapped * PAGE_SIZE), this doesn't distinguish between
+> "uniformly poor compression" and "a few completely incompressible pages
+> mixed with highly compressible ones". The zswap_incomp stat provides
+> direct visibility into the latter case.
 > 
-> Revert the revocable implementation until a redesign has been proposed and
-> evaluated properly.
+> [1]: https://lore.kernel.org/linux-mm/CAF8kJuONDFj4NAksaR4j_WyDbNwNGYLmTe-o76rqU17La=nkOw@mail.gmail.com/
+> Acked-by: Nhat Pham <nphamcs@gmail.com>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst | 5 +++++
+>  include/linux/memcontrol.h              | 1 +
+>  mm/memcontrol.c                         | 8 ++++++++
+>  3 files changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 7f5b59d95fce..78a329414615 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1737,6 +1737,11 @@ The following nested keys are defined.
+>  	  zswpwb
+>  		Number of pages written from zswap to swap.
+>  
+> +	  zswap_incomp
+> +		Number of incompressible pages currently stored in zswap
+> +		without compression. These pages could not be compressed to
+> +		a size smaller than PAGE_SIZE, so they are stored as-is.
+> +
+>  	  thp_fault_alloc (npn)
+>  		Number of transparent hugepages which were allocated to satisfy
+>  		a page fault. This counter is not present when CONFIG_TRANSPARENT_HUGEPAGE
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index b6c82c8f73e1..d8ec05dd5d43 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -39,6 +39,7 @@ enum memcg_stat_item {
+>  	MEMCG_KMEM,
+>  	MEMCG_ZSWAP_B,
+>  	MEMCG_ZSWAPPED,
+> +	MEMCG_ZSWAP_INCOMP,
+>  	MEMCG_NR_STAT,
+>  };
+>  
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 007413a53b45..a6b6cf5f1aeb 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -341,6 +341,7 @@ static const unsigned int memcg_stat_items[] = {
+>  	MEMCG_KMEM,
+>  	MEMCG_ZSWAP_B,
+>  	MEMCG_ZSWAPPED,
+> +	MEMCG_ZSWAP_INCOMP,
+>  };
+>  
+>  #define NR_MEMCG_NODE_STAT_ITEMS ARRAY_SIZE(memcg_node_stat_items)
+> @@ -1346,6 +1347,7 @@ static const struct memory_stat memory_stats[] = {
+>  #ifdef CONFIG_ZSWAP
+>  	{ "zswap",			MEMCG_ZSWAP_B			},
+>  	{ "zswapped",			MEMCG_ZSWAPPED			},
+> +	{ "zswap_incomp",		MEMCG_ZSWAP_INCOMP		},
+>  #endif
+>  	{ "file_mapped",		NR_FILE_MAPPED			},
+>  	{ "file_dirty",			NR_FILE_DIRTY			},
+> @@ -5458,6 +5460,9 @@ void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size)
+>  	memcg = obj_cgroup_memcg(objcg);
+>  	mod_memcg_state(memcg, MEMCG_ZSWAP_B, size);
+>  	mod_memcg_state(memcg, MEMCG_ZSWAPPED, 1);
+> +	/* size == PAGE_SIZE means compression failed, page is incompressible */
 
-After thinking about this a lot, and talking it over with Danilo a bit,
-I've applied this series that reverts these changes.
+I think the comment is not very useful, but maybe not worth sending a
+new version. Otherwise LGTM:
 
-Kernel developers / maintainers are only "allowed" one major argument /
-fight a year, and I really don't want to burn my 2026 usage so early in
-the year :)
+Reviewed-by: Yosry Ahmed <yosry.ahmed@linux.dev>
 
-Tzung-Bi, can you take the feedback here, and what you have learned from
-the gpio patch series, and rework this into a "clean" patch series for
-us to review and comment on for future releases?  That should give us
-all a baseline on which to work off of, without having to worry about
-the different versions/fixes floating around at the moment.
-
-thanks,
-
-greg k-h
+> +	if (size == PAGE_SIZE)
+> +		mod_memcg_state(memcg, MEMCG_ZSWAP_INCOMP, 1);
+>  	rcu_read_unlock();
+>  }
+>  
+> @@ -5481,6 +5486,9 @@ void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size)
+>  	memcg = obj_cgroup_memcg(objcg);
+>  	mod_memcg_state(memcg, MEMCG_ZSWAP_B, -size);
+>  	mod_memcg_state(memcg, MEMCG_ZSWAPPED, -1);
+> +	/* size == PAGE_SIZE means compression failed, page is incompressible */
+> +	if (size == PAGE_SIZE)
+> +		mod_memcg_state(memcg, MEMCG_ZSWAP_INCOMP, -1);
+>  	rcu_read_unlock();
+>  }
+>  
+> -- 
+> 2.43.0
+> 
