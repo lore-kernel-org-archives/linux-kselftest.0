@@ -1,90 +1,108 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D04242669B
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 17:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770400372; cv=none; b=ZGKnh3iwGQMVNQoOCrHstXP89YuWZGvt2tw0rTLJCo0ZeEk7bz2Eb+04dDBGtsLGTQ0JPLozEgUMPoaKONsic/91REcRsJUdK31tGTsXjzAZSoSR7DzvWIwPHuUUS21O+TJoVQ8VQz+TdrnYYpmL1dJwjwC2+Q7+mgQ90qdIP6E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770400372; c=relaxed/simple;
-	bh=pY5ju9pn92zusS9+/KKoBWqSlGsJaJH7q0Nebo59Las=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=enQr7hWiDK/zSxlOw9gUfmK646V99i+uERSxtAfG011T1T3SRNSt3HYYSRfewWoVe6tbVBC6kWV/5NyOxbOc1YvzzVno6kv8fuq9+B/lQ14WArGHa7Ap0qtckC3TO153QDPfoxv62+08jPCyvREA4BoU4yJnEYO1QvNHClR0TSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NNOcaFy2; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293D6425CE6
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 17:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770400523; cv=pass; b=fQqFlFQGp+LDnR3m4bp34DGnxNDOmYsVyvK/wdR27FYl9cAKHUm7wnwPpgJEaTkphzZrjVSo9p3+uT8f7xIOvotW/B17jAXgGc/JnpwUMfTnrlpOYtfwpFuyNFdYk1pVFe0kWuNLrKOjZSkJhwyCCc9iNzZVdYPBVDKyMN34EFI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770400523; c=relaxed/simple;
+	bh=CQs3qizMq3SbCY1dailXM4UPmWUUNs7Uy0jKl1/hvIo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o2eaZnux3GtkIgOwCT46oQehkq6rYvdZNmAYzWS33dhYhn4U4LL2LYQQfqvNstDFDjnQI6ZsNcTvycmdylZMnCwU0mcIry11NEUT69YOQqf1nqyu8DcSmCN1lwvLuOACTzBFkAwxxToxvOFPkY79RoX93YbIAkugfgC1vn//qvA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iVLADzda; arc=pass smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NNOcaFy2"
-Date: Fri, 6 Feb 2026 09:52:43 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770400369;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iglojX4sGUyAtQslTyBLFp6CalS9+S4aj8OW0MG/LxI=;
-	b=NNOcaFy2R2zTQsGUVb+84nFaFJk+vqlHDL7Z3ZTYWxk4WpcnHwDLyQW0yB6ehur4GHdHOU
-	ZfLbAOGmvNb0kDL+ELwCJ3W8PD3zO4+OBRsoqUhpmdyCiiTYsDsGp+P1kFPc23CWTJJgCa
-	sX7Mt5vlWWf+lNfPNbUX+XoboaSYV/M=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: linux-mm@kvack.org, Jiayuan Chen <jiayuan.chen@shopee.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Yosry Ahmed <yosry.ahmed@linux.dev>, Chengming Zhou <chengming.zhou@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm: zswap: add per-memcg stat for incompressible
- pages
-Message-ID: <aYYqT6Z3R3phADu_@linux.dev>
-References: <20260206072220.144008-1-jiayuan.chen@linux.dev>
- <20260206072220.144008-2-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iVLADzda"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-385bdc72422so21347871fa.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 09:55:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770400521; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Qf1P8ui5FkV9B3iXyOAYIGAvg1npKHq8OA4DBIi95UkhPZF7BJlSsgDF1APB63yCI7
+         KE0qnpdEGKD9UXUHUC+wFU9TOStfAOWrkh293SUhGiUMHhc6LfwhoxuupeamS44AZvgW
+         vedWSFjEvF5+TjgX9nbKYzb1DBkeXdSgNSIJABK0pCOWuuPc6M1nxzgdZVCMI1FWMcZ4
+         P5IOGOihHbWHgVLHGVXC19YzHlcOCEHPWws99005SHuthEWQBmpWcFuVGWTAoY0rx7vu
+         sCnD7n2jOwcnAQrUYKUZ5euGLn/COsdkoCod7GWXjt8ow2kvAA/fT8yU5DyWzlSNkpyG
+         2lbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=CQs3qizMq3SbCY1dailXM4UPmWUUNs7Uy0jKl1/hvIo=;
+        fh=XkZ18o7l1uWKHqomuxoJCI8/5rgX8t1vpOg3dNGOzrQ=;
+        b=dDc1kHtojx7spfCE613mSA69KT8LHI8aPwHKMmZljS1w8IMUJBGN3btTl4ZVm5p2T7
+         NuQodXAXDod2c2uRRHdtzcMRctvNtFw85dBj4TLbEoCT2zbCVNDxv5D4Wq29Xds0ccT5
+         kxGYT4wjUsFtG+SCemVsAqPcEc3QQNeX/mlJKwS8EdCuSco5OzFZ8Y39SX2YfY0rnwd1
+         yXjoCFa21OFXT4vqj/MWPz3CapTfirhI3EVOE8ucfm/CYkFYw9cTHL3dQCOHVXd9lOLH
+         A39DWScgcWObNsNMI4QPoUbT7aebre3I6c7lEE6NFGsjdBI4TKdLbjwFXUDq+aVesx5R
+         hsjg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770400521; x=1771005321; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CQs3qizMq3SbCY1dailXM4UPmWUUNs7Uy0jKl1/hvIo=;
+        b=iVLADzdaD0oZa1faECWjz9DDhEdD8N/CZtDRQmCRjyq+v/tmY/6t8TBnKMk4Hs+f7o
+         sBhu5gyJ45rStzKgG9x5fZaTkrUHsG14eVzumxPifC3vBhWYI+piGkbszSZM093uBf6h
+         m/irnSf2zWxu3anoBPyNa3Ia/DOLmcq8EqYCHnvvWqMIMbLFZ9g4cY8l4bVKqKgK6g+p
+         DUY6R6iL4oDMQtt6Du+PRzC6zEZrKU07GxY74q6iJSdv+Mpnq/etpygMIaldSuMZlu9f
+         3GOoFxqATHibKat3Yz0mL5dQ0GWnHVwvh908krQWtSLi8yfD/qmvM4u5S/Z9KWSY7VZw
+         HXBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770400521; x=1771005321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=CQs3qizMq3SbCY1dailXM4UPmWUUNs7Uy0jKl1/hvIo=;
+        b=UyqJRAhV47pzftob/jBju9tJ8Q1/g0EQMViza0fvCCmIiIF/aEIkCI3+Jv0kMS8x1A
+         uApVvCVxfGODoLh8aayhKH3S5Bf02MpxmkZDihSXnv6X/fwFzYpaTGMLUwCzYvlIU+N/
+         nKEk1K5iHc7+Mf6/036sto0hs5Jc8cvOlu69pBKgvxN++PkwCO1s496MvYk/v/rYm6ZF
+         gn2gm9M4QuxqbSWGFaZZQhymgJa1nOYdRti4WfXo8kQBVGJZzopsAjAOflMIgibmaKcX
+         nBpvS4p9MgVw83fegz0xjNey9JXK+fUGWJKGa2YiIAcYyYmCstFY7sNH5d0v8yblQOWK
+         5GkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVUz4bRqQ8N0pz6z6x21i9p03tYEczxpaFkfccdVzfa5RaeXpPN87aKQWOe/A8lhaYrETv9qnbtJcVXTMyUJDo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsHum+iUVMRr0XpZcyWAaixFCnnIo/0OKlk0FlI/WRfmxEif+i
+	nZZaNdDEIgHErxkXJlIw3E9jrLq1rtJJy9vNzs/YY5YLoSWmPLdFTXca9UNhlodukgrV7vRvw4J
+	nuuVwG0Ah2ruyimkMqHbTY3u33GN17PRG3m3+sYsY
+X-Gm-Gg: AZuq6aJPhpaSBmAWpHjpItU3wNoOk5b6IT2CoXG4CJBZf/zZExDi2bFvuBlYkk4XD2W
+	oYvXt1JxBGGidWnkulgXei8nnypaowKBxghrS7HfxmiIW8t55/vdEKgv6alSe9/ipefGuHkc7CC
+	s28mRFbyDE1qNGF5dfCIs4NVtqK6jSZeOwfRCaUJHHSvAjwVwDbl/JiicqU9Pi74lQTFYJYNY2F
+	62Z9hl1LUdNp/cNXRXxFtwgmmhyyG3NZtmaNWiNet6yIsBMj66vjrArUlXc87BLPtKFXg8=
+X-Received: by 2002:a2e:bc84:0:b0:385:f2fb:14db with SMTP id
+ 38308e7fff4ca-386b513b416mr17372541fa.36.1770400521052; Fri, 06 Feb 2026
+ 09:55:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260206072220.144008-2-jiayuan.chen@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+In-Reply-To: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+From: David Matlack <dmatlack@google.com>
+Date: Fri, 6 Feb 2026 09:54:52 -0800
+X-Gm-Features: AZwV_QgTrk3DAg7DGpaF40s0Bjc0dzuDlKfmgb-NfhnAhfOJ4GnGSp8CJdyHMsI
+Message-ID: <CALzav=d3Yd_v8WJHkhB==22hsbrroNZguk=2ssT==AVBzxkN0w@mail.gmail.com>
+Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and x86_64
+To: Ted Logan <tedlogan@fb.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 06, 2026 at 03:22:15PM +0800, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> 
-> The global zswap_stored_incompressible_pages counter was added in commit
-> dca4437a5861 ("mm/zswap: store <PAGE_SIZE compression failed page as-is")
-> to track how many pages are stored in raw (uncompressed) form in zswap.
-> However, in containerized environments, knowing which cgroup is
-> contributing incompressible pages is essential for effective resource
-> management [1].
-> 
-> Add a new memcg stat 'zswap_incomp' to track incompressible pages per
-> cgroup. This helps administrators and orchestrators to:
-> 
-> 1. Identify workloads that produce incompressible data (e.g., encrypted
->    data, already-compressed media, random data) and may not benefit from
->    zswap.
-> 
-> 2. Make informed decisions about workload placement - moving
->    incompressible workloads to nodes with larger swap backing devices
->    rather than relying on zswap.
-> 
-> 3. Debug zswap efficiency issues at the cgroup level without needing to
->    correlate global stats with individual cgroups.
-> 
-> While the compression ratio can be estimated from existing stats
-> (zswap / zswapped * PAGE_SIZE), this doesn't distinguish between
-> "uniformly poor compression" and "a few completely incompressible pages
-> mixed with highly compressible ones". The zswap_incomp stat provides
-> direct visibility into the latter case.
-> 
-> [1]: https://lore.kernel.org/linux-mm/CAF8kJuONDFj4NAksaR4j_WyDbNwNGYLmTe-o76rqU17La=nkOw@mail.gmail.com/
-> Acked-by: Nhat Pham <nphamcs@gmail.com>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+On Mon, Feb 2, 2026 at 5:24=E2=80=AFPM Ted Logan <tedlogan@fb.com> wrote:
+>
+> Only build vfio self-tests on arm64 and x86_64; these are the only
+> architectures where the vfio self-tests are run. Addresses compiler
+> warnings for format and conversions on i386.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@i=
+ntel.com/
+> Signed-off-by: Ted Logan <tedlogan@fb.com>
 
-Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+Reviewed-by: David Matlack <dmatlack@google.com>
