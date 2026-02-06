@@ -1,63 +1,63 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD8E2FE59A
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 09:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C8F3612D4
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 09:42:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770370674; cv=none; b=mU6P45aNtHCB2lo4LNZk9RMfhHKnJe2wYWuq4FBBek8YHkPfH2l+v07JKn1WNuBmUpjAxq3nhplTnvp6iluAqicqLhVGuaoUrs2MQMtPmw07m27enWiUy7cszt/5Nb77Q526ljd8uB04kkJE20Ty4Tfs751SBbLXKf7R9odowb0=
+	t=1770370955; cv=none; b=IFKqpOoqv5rrSRRFK6YkNH4jNNs0MRD2BVcyyFqO0QnHs/oFDzBWNLof9sx0zqDwQltesnmPITIXvFakI9raPBlHJJjdwM3/P+qRTnuy7mc6xmQwJJhvyAk5e0lY7ORsTGQQ8kexWpnFRxrBSFofCrT1AwyRLF/gwMT6Bmo84nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770370674; c=relaxed/simple;
-	bh=a6WHFOsQ0XLpXBz9nVNPRhoAOYofYpq507RpRUTDNVY=;
+	s=arc-20240116; t=1770370955; c=relaxed/simple;
+	bh=tko29gTh2LLoTYAs4568Z4zBWZMgYShefsZIF5Fo0Ns=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bLjxFqMOzTaQgPFP2vKmHBee2t4V7pCIqJJEibbL9zZ7KgAhe2FSiHWr13iBfKllADAFIa0y0X+StVKqFP3lXygo+Y1safBl988LvNiQRtpljNAPwx4Qu9Samc11TrkqJgVDkTqIXHG5nGWXYFRDJbshEfCI+4T/PIPewEm0III=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=muPmwwzu; arc=none smtp.client-ip=209.85.128.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=gLkeZPjaD8yXVSKoKP2Qn1NKYVTggRj+JFHwkP2B411mwj93BtAXrsBLNvQ0iAZgFMF5uRHRCo4xmqn4vTUPMiRt7nhxlgtoQny52vmlRmPSopnITAtwigvtW9T0vh/kfOlCXnAL5ex/VKlmPTI/dCZOK7UAsR9H5b/c3pgYTvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=IQXaoLDK; arc=none smtp.client-ip=209.85.128.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="muPmwwzu"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47ee07570deso4036455e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 01:37:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="IQXaoLDK"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4806cc07ce7so18657245e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 01:42:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1770370672; x=1770975472; darn=vger.kernel.org;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1770370954; x=1770975754; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wlRYgpRsjcg2ejK1OLntwoYIyfilHOYKa44N62R1+TI=;
-        b=muPmwwzueX6ChKrMLIUoFIuPthLqjLgti/xB4Kj9EoFbpNIvzKFy2b19Ux0lUxQ8aR
-         PS4QM0bwvXC5fYZW36TtrJ86G7lfyRYSLyFLNPKOafnSVHcjD7VoPdsI9h6PvGQy+A1p
-         9pG2Qjm6hx2+DvLoBPMo2U0fdmtytCIJK4Mt98UnHcMckvf8TOYjzUCq0oIEPLv4H68j
-         gQFdUThrQ12CgQE+5tITcOUEYR+MYxOhy5Pa0iLesVWBxWGQZN7scP6KnBvv758bZUr8
-         XLDgn1vu3zFI69+zeyrQKo5RDMmkgrHIXTcmlHJvHYiC9MGpRVpqVQs63+Etg/ftiLYd
-         dsOQ==
+        bh=iyNDbUvGFsSfZP0FW1tm6li3l4kdarvpP/zPKhRvGdY=;
+        b=IQXaoLDKFjHthosSnThWePVKl1dPx9eQLoXjQogTiefOpN+1Nhcv1cwIwOxXD0efOM
+         Sc1zlYJ5KjoD7FBAX4zj2PyeOh9k6RdMk3JVofUjip5+nuQgy6r4arWdk0w/QaNvCEad
+         fi3n+mb3ZpQxO5PRMxYpRINEOcE+nWyTISbq3AQ77DxvQyOS+MZm8xZx04OsAKg5nEcr
+         IV3lbl50pc8Seet8k9ECZ+Hee75zbtgolAajF1okRTlEBj6ofbVjmd9kMzvxq8FCzkUz
+         tcxX5UlU03BIvl0TSN5QKsj8YXh4gwTn/F0h33eIcSkJlWxKt7OPEgVpYm0N7J51+xz9
+         UOAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770370672; x=1770975472;
+        d=1e100.net; s=20230601; t=1770370954; x=1770975754;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wlRYgpRsjcg2ejK1OLntwoYIyfilHOYKa44N62R1+TI=;
-        b=Ihw4VxZpeVLsjlApFuA2sFC0Bma0gxY+EkAGHrd3gMBzRmLlx1SsGbS2vkALj2OJT7
-         x77lWsBw6UDsCRkdTvpJSykNiHkqMe9Mc3hfFsaceuSiEY/w6WxNIe8QacRXP0ygwLsR
-         OVdjLpFCoSd4k5koIqxaXJRkGm9xP/2byjZrsW0bte010/tfHmJPHp96tTXqqgkwBy35
-         dD16GR6yIgR6xARp19MrqsON5pEWb9/5ovuuGcjI4sVYQ0XFKDjyHXP7TjT+AYnM051U
-         pGIi29QlJMkuD2AAqniNjqU4enVdMfHbUDMTG96Ws65jZ6uXt1qc736uKIoNxR2ZMrc8
-         7MEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWyIF9o72h3FbEJwpsvRGCmaOo/qefB0nVT/4HiSr3U+OD5VFCDW3DEO37nzTlgIZmBP6y229XfjNObva5R8OQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxCCgVaDYDHURjC0oAg/9scNJBHb3QMF4K+hHp17f8KzQt6x1q
-	sT6M5l4jsEj75m5/ji/oMw1nXQTMqc5BYKQHKhosUihmIb1WzqW9/dJBmRPxSymwRl4=
-X-Gm-Gg: AZuq6aIh4/YnoG07pQU+O9yqlXUzREavnM6iGP8sjHtQXEDjwlQ4/rxrIvOfg1FnXZH
-	hVkMgq1V8xAh+ng/gh3N5jxoZaP+59E/u80Vs2Rj5v6TxD24lPv+PLSRZE5jmayIgBrviCCLvN0
-	PkFBfWshVVmV8+lylT6RrPCqmbhGTqE2+m8HKUuPGX8N1YbipXpIxZHkxGCceraW3/Y4mxp+SrR
-	J8sSrOfUTHyEVE/TGH46k8vvGZ7FDY2gbYgZGaDdbaMJ/ZVsWud9cyNxNo4+/AdLrKmbxcW6SQw
-	z2miR3B9aDH/4AWuf/iIOVHFhATbDwOd/3h5rJj2XhF5A7H0IEvaIVKJZyvtrYH2x8GvCbLDJ1U
-	0kZizalBlrZZAhTO0IsYQQju58trNAp3pfGhuPS034h3xD2iPNqarTCvmSb1ECVZXYEzJizQeVE
-	8v+gC+ICofcfeMMumg3Is=
-X-Received: by 2002:a05:600c:8b88:b0:47e:e20e:bbb0 with SMTP id 5b1f17b1804b1-483201d9fa8mr30397895e9.6.1770370671772;
-        Fri, 06 Feb 2026 01:37:51 -0800 (PST)
+        bh=iyNDbUvGFsSfZP0FW1tm6li3l4kdarvpP/zPKhRvGdY=;
+        b=Mw7gYkB8F7SGEkr7dAWdvgBDpw5j7SJZqFmIlgRAgs/tBabID5I+NxwrJaH1Yjv6gs
+         NVaJfCsOQcixxl9MQPuQNltaJUxSjq1yKBZONjbsuoKwGszJ2A6Iwa+qVdgo0/LWtjA/
+         VaDL9I2XU3V8swVSnC4tMCVAir9bn0PEBpuj6BN7B8dqwQy4blLo2thkeUOkMsPKjnl4
+         /kblxoYiuIwe/KHyuPhmNhvekBQUUZ+U9gYSb2c1xdRKaUKmU4MIKnzZaF0BjonccobP
+         zK34PXKPxB9/nIoobXMnyYWXBf7Z86O0k3AOutsiK1W1zCYo0g1ZKhlaP+d7U74jaNLe
+         MXOw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpwpPNt5SnsmuigKTfuKToytvw3pHy0VHLxc2Vtgr/Oe4CyqUvoxglfFCzB2LUTcaUIeqfY1Y7HT5HtAonEC0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyFpz+eSeSTwOOJZpsMy/242YARVq1KqZTW2oNuXHD9deQNhxg
+	BaCYnFrde5HRlOAOOixji6yTe/j0zZJn+9Kw6gooq+JcLyF8qgsJcMrzSY2Fi/V0qao=
+X-Gm-Gg: AZuq6aIV5Gp2oyba2vxf3dLU9dOoVk2SFi2KgugYossGgbl0h0jo9W0kohLoYZhD5co
+	qaVuihfDbplAUKInEFGc2nCrzvg5WdydRdULf0GBrX7S9wv8KS1ST5tZn11TrCRTdp+yLhWRZBQ
+	isBl/XUmRPdJr2g0mpDwky3xBchNZ9RN4FId6RvdfP/C0FTUiQmGyJ4Yqwk0EonXf332zMA6g43
+	TvgythjWmBm0D1EmuPRrlzL1AOrEoxIYFYfszHJPrF/uGNZ47FVWZEv3shmDmtE1WsHlTjfdZLg
+	g6PxID0wuLzKFdFf5rogu612RE2h4AXz6eOdpi0FySvRAH9Z+c1zzRKzHsnsMYzAFccdTZhk87/
+	O1gxBNqJGcOd10fgTRulHqeYRJIYJUTSZhsJM+v3309SO9kELOYgPcihP6x4DONoEfAnbMelPFY
+	Oa2BKfNItFKG3rGGCMfJEuGeC8sZx23Q==
+X-Received: by 2002:a05:600c:3f08:b0:477:a246:8398 with SMTP id 5b1f17b1804b1-483201dcfc4mr31888195e9.2.1770370953809;
+        Fri, 06 Feb 2026 01:42:33 -0800 (PST)
 Received: from FV6GYCPJ69 ([85.163.81.98])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483206cc7d3sm37505745e9.5.2026.02.06.01.37.50
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483228ed4f8sm24728865e9.0.2026.02.06.01.42.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Feb 2026 01:37:51 -0800 (PST)
-Date: Fri, 6 Feb 2026 10:37:49 +0100
+        Fri, 06 Feb 2026 01:42:33 -0800 (PST)
+Date: Fri, 6 Feb 2026 10:42:31 +0100
 From: Jiri Pirko <jiri@resnulli.us>
 To: Tariq Toukan <tariqt@nvidia.com>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -69,11 +69,10 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
 	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
 	Moshe Shemesh <moshe@nvidia.com>, Shay Drori <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
 	Or Har-Toov <ohartoov@nvidia.com>
-Subject: Re: [PATCH net-next V2 6/7] selftest: netdevsim: Add devlink port
- resource test
-Message-ID: <eakcy4lgflnovn64jagsilopjst7xvmhcfujbxwlnphh7pdf5f@jkwcgn5e2ujr>
+Subject: Re: [PATCH net-next V2 7/7] devlink: Document port-level resources
+Message-ID: <djpsyhzawzquyjhq2dgepf5twxi7fwjjqm5rjwcbwkn7ub43k2@unfqnj2fx4ah>
 References: <20260205142833.1727929-1-tariqt@nvidia.com>
- <20260205142833.1727929-7-tariqt@nvidia.com>
+ <20260205142833.1727929-8-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,81 +81,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260205142833.1727929-7-tariqt@nvidia.com>
+In-Reply-To: <20260205142833.1727929-8-tariqt@nvidia.com>
 
-Thu, Feb 05, 2026 at 03:28:32PM +0100, tariqt@nvidia.com wrote:
+Thu, Feb 05, 2026 at 03:28:33PM +0100, tariqt@nvidia.com wrote:
 >From: Or Har-Toov <ohartoov@nvidia.com>
 >
->Add selftest to verify port-level resource functionality using netdevsim.
+>Add documentation for the port-level resource feature to
+>devlink-resource.rst. Port-level resources allow viewing resources
+>associated with specific devlink ports.
+>
+>Currently, port-level resources only support the show command for
+>viewing resource information.
 >
 >Signed-off-by: Or Har-Toov <ohartoov@nvidia.com>
 >Reviewed-by: Shay Drori <shayd@nvidia.com>
 >Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
 >Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
 >---
-> .../drivers/net/netdevsim/devlink.sh          | 37 ++++++++++++++++++-
-> 1 file changed, 36 insertions(+), 1 deletion(-)
+> .../networking/devlink/devlink-resource.rst   | 36 +++++++++++++++++++
+> 1 file changed, 36 insertions(+)
 >
->diff --git a/tools/testing/selftests/drivers/net/netdevsim/devlink.sh b/tools/testing/selftests/drivers/net/netdevsim/devlink.sh
->index 1b529ccaf050..272e60eb7bfe 100755
->--- a/tools/testing/selftests/drivers/net/netdevsim/devlink.sh
->+++ b/tools/testing/selftests/drivers/net/netdevsim/devlink.sh
->@@ -5,7 +5,7 @@ lib_dir=$(dirname $0)/../../../net/forwarding
+>diff --git a/Documentation/networking/devlink/devlink-resource.rst b/Documentation/networking/devlink/devlink-resource.rst
+>index 3d5ae51e65a2..c2bb7e429a26 100644
+>--- a/Documentation/networking/devlink/devlink-resource.rst
+>+++ b/Documentation/networking/devlink/devlink-resource.rst
+>@@ -74,3 +74,39 @@ attribute, which represents the pending change in size. For example:
 > 
-> ALL_TESTS="fw_flash_test params_test  \
-> 	   params_default_test regions_test reload_test \
->-	   netns_reload_test resource_test dev_info_test \
->+	   netns_reload_test resource_test port_resource_test dev_info_test \
-> 	   empty_reporter_test dummy_reporter_test rate_test"
-> NUM_NETIFS=0
-> source $lib_dir/lib.sh
->@@ -856,6 +856,41 @@ rate_test()
-> 	log_test "rate test"
-> }
-> 
->+port_resource_test()
->+{
->+	RET=0
+> Note that changes in resource size may require a device reload to properly
+> take effect.
 >+
->+	if ! devlink port help 2>&1 | grep -q resource; then
->+		echo "SKIP: missing devlink port resource support"
->+		return
->+	fi
+>+Port-level Resources
+>+====================
 >+
->+	local first_port="${DL_HANDLE}/0"
->+	local name
->+	local size
+>+In addition to device-level resources, ``devlink`` also supports port-level
+>+resources. These resources are associated with a specific devlink port rather
+>+than the device as a whole.
 >+
->+	devlink port resource show "$first_port" > /dev/null 2>&1
->+	check_err $? "Failed to show port resource for $first_port"
->+
->+	name=$(cmd_jq "devlink port resource show $first_port -j" \
->+		      ".[][][].name")
->+	[ "$name" == "max_sfs" ]
+>+Currently, port-level resources only support the ``show`` command for viewing
+>+resource information.
 
-Test resource name not updated.
+As this documentation should be kernel one, saying "show command" sound
+odd as from perspective of the kernel, there's nothing like that.
 
 
-
->+	check_err $? "Unexpected resource name $name (expected max_sfs)"
 >+
->+	size=$(cmd_jq "devlink port resource show $first_port -j" \
->+		      ".[][][].size")
->+	[ "$size" == "20" ]
->+	check_err $? "Unexpected resource size $size (expected 20)"
+>+Port-level resources can be viewed for a specific port:
 >+
->+	devlink port resource show "$DL_HANDLE" > /dev/null 2>&1
->+	check_err $? "Failed to show port resources for $DL_HANDLE"
+>+.. code:: shell
 >+
->+	devlink port resource show > /dev/null 2>&1
->+	check_err $? "Failed to dump all port resources"
+>+    $ devlink port resource show pci/0000:03:00.0/196608
+>+      pci/0000:03:00.0/196608:
+>+        name max_SFs size 20 unit entry
 >+
->+	log_test "port resource test"
->+}
+>+Or for ports of a specific device:
 >+
-> setup_prepare()
-> {
-> 	modprobe netdevsim
+>+.. code:: shell
+>+
+>+    $ devlink port resource show pci/0000:03:00.0
+>+      pci/0000:03:00.0/196608:
+>+        name max_SFs size 20 unit entry
+>+
+>+Or for all ports across all devices:
+>+
+>+.. code:: shell
+>+
+>+    $ devlink port resource show
+>+      pci/0000:03:00.0/196608:
+>+        name max_SFs size 20 unit entry
+>+      pci/0000:03:00.1/262144:
+>+        name max_SFs size 20 unit entry
 >-- 
 >2.44.0
 >
