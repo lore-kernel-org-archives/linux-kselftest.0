@@ -1,55 +1,57 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E2C2F7440;
-	Fri,  6 Feb 2026 03:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6C12D0635
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 07:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770347198; cv=none; b=NSl3tnWJYtS0vbq0Lmx7sif4ZbVUSxyACzmQb2ed+HhxJHSJ/SzW4P9Nj7RWbccpMecYV14WeB15V3ij075KGCJLxuWFAYHgsum7wDMU2Nugp008W7eJBXSsXJxxeib5meV7s4XZ2HR+RCfiPAvLlDrRE6WQYRiN5PTW7rLcYgk=
+	t=1770362561; cv=none; b=hV+WI/IqC2hJW6Qvad1zvbvSbtcjJtqABNOTMJQAYHNRybUPzSV+xUs5d7IzxQBOW9YcbNtmnPspHHAKz8beQS6mCzQHXyBQts2X0LRwEICLpoHHF9hICRbrEt8NXfob3Ckoz1E6S1+HHOz/UbXlmdEMBqh1XebpLAj9cEzTXlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770347198; c=relaxed/simple;
-	bh=eXHqgD1fZvdDw7Ej6HRXpRkpUOZ3ZKCBYwsPo/Gwjj4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dXxtNIjHR+aNrNezCML0h819YlVSwocPmOD2dOlDLGEqoj9HvyKuJO5aXPtRJyU2jxEkDI5vAbJRsPnH5ogESjZ9bsIEvRJLnSDhLH+E2kQ8qDDHAgEIFjIwD4sW03aIBvmM/pgWReLJP2zMzRwR9qRk0gco7lywU14v5Cvc0eE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=bS+LYkvr; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1770362561; c=relaxed/simple;
+	bh=F7W3yiVr/M0UglItoXhkGkH8zbC0c5HRKNf8oOiaVgk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mJVzFObTYlPgfvMFH76SFkELEDAxtygi1UJnpsExgtYa8ZVGlEKgwaib7kg6KylSw9E9OmnF00gyhyogGJNWVcdAt/tfvXOwWETqTQJrdZPbbJOxOioN0dTsOLpZWjLCobz8pD7VXPLuDhruvErhdN69Odx1ucwfxVFWERhcwYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kWhW/9Q2; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="bS+LYkvr"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=s09W6T/GPRyuerNlrv5Ie2L5UW/FX11530s9MFvNE9k=;
-	b=bS+LYkvrjYAQ2n6R77Wd+cwuAY5NfZdg8JR8ntIaEENdBt5a0JxU6C3WY7K1+EGFL1PPNJiLX
-	BeRkw2I6/1xUhoPQgI7WW1fgkOjxxugRuwvPawScgtx8VKSYBH/l5vASkO9L2fNvY5N1SOCO/8u
-	Zxb4rj4UuHY35Ne3yoF3Ggw=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4f6f585B66z1T4Fj;
-	Fri,  6 Feb 2026 11:02:04 +0800 (CST)
-Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9074C20168;
-	Fri,  6 Feb 2026 11:06:29 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 6 Feb 2026 11:06:29 +0800
-Received: from huawei.com (10.173.125.37) by kwepemq500010.china.huawei.com
- (7.202.194.235) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 6 Feb
- 2026 11:06:28 +0800
-From: Miaohe Lin <linmiaohe@huawei.com>
-To: <akpm@linux-foundation.org>, <shuah@kernel.org>
-CC: <david@kernel.org>, <lorenzo.stoakes@oracle.com>,
-	<Liam.Howlett@oracle.com>, <vbabka@suse.cz>, <rppt@kernel.org>,
-	<surenb@google.com>, <mhocko@suse.com>, <nao.horiguchi@gmail.com>,
-	<broonie@kernel.org>, <linmiaohe@huawei.com>, <linux-mm@kvack.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v4 3/3] selftests/mm: add memory failure dirty pagecache test
-Date: Fri, 6 Feb 2026 11:16:39 +0800
-Message-ID: <20260206031639.2707102-4-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20260206031639.2707102-1-linmiaohe@huawei.com>
-References: <20260206031639.2707102-1-linmiaohe@huawei.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kWhW/9Q2"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770362559;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FlgnQqPR0Eqtlq7a3B9xxhSsLwOvW1r1+v4iZpc7xIc=;
+	b=kWhW/9Q2R5RI8yTcLIJXaW0F0l2jwPZG+wn3xYTgRi6V2vts0omDsq/CDPphq2QsoFQECt
+	pB69MQnUf5fELBEb3fISrxDsqxbq4Sup6C9qWK5NiqR0+CP+L6VppMGK7XQRDgrd+KCkPl
+	HxmYS3RrMHIqcKlfVnmPms3K/Gs431M=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: linux-mm@kvack.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Yosry Ahmed <yosry.ahmed@linux.dev>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 1/2] mm: zswap: add per-memcg stat for incompressible pages
+Date: Fri,  6 Feb 2026 15:22:15 +0800
+Message-ID: <20260206072220.144008-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260206072220.144008-1-jiayuan.chen@linux.dev>
+References: <20260206072220.144008-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,138 +59,114 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+X-Migadu-Flow: FLOW_OUT
 
-This patch adds a new testcase to validate memory failure handling for
-dirty pagecache. This performs similar operations as clean pagecaches
-except fsync() is not used to keep pages dirty.
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-This test helps ensure that memory failure handling for dirty pagecache
-works correctly, including proper SIGBUS delivery, page isolation, and
-recovery paths.
+The global zswap_stored_incompressible_pages counter was added in commit
+dca4437a5861 ("mm/zswap: store <PAGE_SIZE compression failed page as-is")
+to track how many pages are stored in raw (uncompressed) form in zswap.
+However, in containerized environments, knowing which cgroup is
+contributing incompressible pages is essential for effective resource
+management [1].
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Add a new memcg stat 'zswap_incomp' to track incompressible pages per
+cgroup. This helps administrators and orchestrators to:
+
+1. Identify workloads that produce incompressible data (e.g., encrypted
+   data, already-compressed media, random data) and may not benefit from
+   zswap.
+
+2. Make informed decisions about workload placement - moving
+   incompressible workloads to nodes with larger swap backing devices
+   rather than relying on zswap.
+
+3. Debug zswap efficiency issues at the cgroup level without needing to
+   correlate global stats with individual cgroups.
+
+While the compression ratio can be estimated from existing stats
+(zswap / zswapped * PAGE_SIZE), this doesn't distinguish between
+"uniformly poor compression" and "a few completely incompressible pages
+mixed with highly compressible ones". The zswap_incomp stat provides
+direct visibility into the latter case.
+
+[1]: https://lore.kernel.org/linux-mm/CAF8kJuONDFj4NAksaR4j_WyDbNwNGYLmTe-o76rqU17La=nkOw@mail.gmail.com/
+Acked-by: Nhat Pham <nphamcs@gmail.com>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
 ---
- tools/testing/selftests/mm/memory-failure.c | 62 +++++++++++++++++++--
- 1 file changed, 58 insertions(+), 4 deletions(-)
+ Documentation/admin-guide/cgroup-v2.rst | 5 +++++
+ include/linux/memcontrol.h              | 1 +
+ mm/memcontrol.c                         | 8 ++++++++
+ 3 files changed, 14 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
-index 3aa624db9577..3d9e0b9ffb41 100644
---- a/tools/testing/selftests/mm/memory-failure.c
-+++ b/tools/testing/selftests/mm/memory-failure.c
-@@ -29,8 +29,10 @@ enum inject_type {
- enum result_type {
- 	MADV_HARD_ANON,
- 	MADV_HARD_CLEAN_PAGECACHE,
-+	MADV_HARD_DIRTY_PAGECACHE,
- 	MADV_SOFT_ANON,
- 	MADV_SOFT_CLEAN_PAGECACHE,
-+	MADV_SOFT_DIRTY_PAGECACHE,
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 7f5b59d95fce..78a329414615 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1737,6 +1737,11 @@ The following nested keys are defined.
+ 	  zswpwb
+ 		Number of pages written from zswap to swap.
+ 
++	  zswap_incomp
++		Number of incompressible pages currently stored in zswap
++		without compression. These pages could not be compressed to
++		a size smaller than PAGE_SIZE, so they are stored as-is.
++
+ 	  thp_fault_alloc (npn)
+ 		Number of transparent hugepages which were allocated to satisfy
+ 		a page fault. This counter is not present when CONFIG_TRANSPARENT_HUGEPAGE
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index b6c82c8f73e1..d8ec05dd5d43 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -39,6 +39,7 @@ enum memcg_stat_item {
+ 	MEMCG_KMEM,
+ 	MEMCG_ZSWAP_B,
+ 	MEMCG_ZSWAPPED,
++	MEMCG_ZSWAP_INCOMP,
+ 	MEMCG_NR_STAT,
  };
  
- static jmp_buf signal_jmp_buf;
-@@ -162,6 +164,7 @@ static void check(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure
- 	case MADV_SOFT_ANON:
- 	case MADV_HARD_CLEAN_PAGECACHE:
- 	case MADV_SOFT_CLEAN_PAGECACHE:
-+	case MADV_SOFT_DIRTY_PAGECACHE:
- 		/* It is not expected to receive a SIGBUS signal. */
- 		ASSERT_EQ(setjmp, 0);
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 007413a53b45..a6b6cf5f1aeb 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -341,6 +341,7 @@ static const unsigned int memcg_stat_items[] = {
+ 	MEMCG_KMEM,
+ 	MEMCG_ZSWAP_B,
+ 	MEMCG_ZSWAPPED,
++	MEMCG_ZSWAP_INCOMP,
+ };
  
-@@ -172,6 +175,7 @@ static void check(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure
- 		ASSERT_NE(pagemap_get_pfn(self->pagemap_fd, vaddr), self->pfn);
- 		break;
- 	case MADV_HARD_ANON:
-+	case MADV_HARD_DIRTY_PAGECACHE:
- 		/* The SIGBUS signal should have been received. */
- 		ASSERT_EQ(setjmp, 1);
- 
-@@ -244,6 +248,18 @@ TEST_F(memory_failure, anon)
- 	ASSERT_EQ(munmap(addr, self->page_size), 0);
+ #define NR_MEMCG_NODE_STAT_ITEMS ARRAY_SIZE(memcg_node_stat_items)
+@@ -1346,6 +1347,7 @@ static const struct memory_stat memory_stats[] = {
+ #ifdef CONFIG_ZSWAP
+ 	{ "zswap",			MEMCG_ZSWAP_B			},
+ 	{ "zswapped",			MEMCG_ZSWAPPED			},
++	{ "zswap_incomp",		MEMCG_ZSWAP_INCOMP		},
+ #endif
+ 	{ "file_mapped",		NR_FILE_MAPPED			},
+ 	{ "file_dirty",			NR_FILE_DIRTY			},
+@@ -5458,6 +5460,9 @@ void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size)
+ 	memcg = obj_cgroup_memcg(objcg);
+ 	mod_memcg_state(memcg, MEMCG_ZSWAP_B, size);
+ 	mod_memcg_state(memcg, MEMCG_ZSWAPPED, 1);
++	/* size == PAGE_SIZE means compression failed, page is incompressible */
++	if (size == PAGE_SIZE)
++		mod_memcg_state(memcg, MEMCG_ZSWAP_INCOMP, 1);
+ 	rcu_read_unlock();
  }
  
-+static int prepare_file(const char *fname, unsigned long size)
-+{
-+	int fd;
-+
-+	fd = open(fname, O_RDWR | O_CREAT, 0664);
-+	if (fd >= 0) {
-+		unlink(fname);
-+		ftruncate(fd, size);
-+	}
-+	return fd;
-+}
-+
- /* Borrowed from mm/gup_longterm.c. */
- static int get_fs_type(int fd)
- {
-@@ -259,17 +275,14 @@ static int get_fs_type(int fd)
- 
- TEST_F(memory_failure, clean_pagecache)
- {
--	const char *fname = "./clean-page-cache-test-file";
- 	int fd;
- 	char *addr;
- 	int ret;
- 	int fs_type;
- 
--	fd = open(fname, O_RDWR | O_CREAT, 0664);
-+	fd = prepare_file("./clean-page-cache-test-file", self->page_size);
- 	if (fd < 0)
- 		SKIP(return, "failed to open test file.\n");
--	unlink(fname);
--	ftruncate(fd, self->page_size);
- 	fs_type = get_fs_type(fd);
- 	if (!fs_type || fs_type == TMPFS_MAGIC)
- 		SKIP(return, "unsupported filesystem :%x\n", fs_type);
-@@ -302,4 +315,45 @@ TEST_F(memory_failure, clean_pagecache)
- 	ASSERT_EQ(close(fd), 0);
+@@ -5481,6 +5486,9 @@ void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size)
+ 	memcg = obj_cgroup_memcg(objcg);
+ 	mod_memcg_state(memcg, MEMCG_ZSWAP_B, -size);
+ 	mod_memcg_state(memcg, MEMCG_ZSWAPPED, -1);
++	/* size == PAGE_SIZE means compression failed, page is incompressible */
++	if (size == PAGE_SIZE)
++		mod_memcg_state(memcg, MEMCG_ZSWAP_INCOMP, -1);
+ 	rcu_read_unlock();
  }
  
-+TEST_F(memory_failure, dirty_pagecache)
-+{
-+	int fd;
-+	char *addr;
-+	int ret;
-+	int fs_type;
-+
-+	fd = prepare_file("./dirty-page-cache-test-file", self->page_size);
-+	if (fd < 0)
-+		SKIP(return, "failed to open test file.\n");
-+	fs_type = get_fs_type(fd);
-+	if (!fs_type || fs_type == TMPFS_MAGIC)
-+		SKIP(return, "unsupported filesystem :%x\n", fs_type);
-+
-+	addr = mmap(0, self->page_size, PROT_READ | PROT_WRITE,
-+		    MAP_SHARED, fd, 0);
-+	if (addr == MAP_FAILED)
-+		SKIP(return, "mmap failed, not enough memory.\n");
-+	memset(addr, 0xce, self->page_size);
-+
-+	prepare(_metadata, self, addr);
-+
-+	ret = sigsetjmp(signal_jmp_buf, 1);
-+	if (!self->triggered) {
-+		self->triggered = true;
-+		ASSERT_EQ(variant->inject(self, addr), 0);
-+		FORCE_READ(*addr);
-+	}
-+
-+	if (variant->type == MADV_HARD)
-+		check(_metadata, self, addr, MADV_HARD_DIRTY_PAGECACHE, ret);
-+	else
-+		check(_metadata, self, addr, MADV_SOFT_DIRTY_PAGECACHE, ret);
-+
-+	cleanup(_metadata, self, addr);
-+
-+	ASSERT_EQ(munmap(addr, self->page_size), 0);
-+
-+	ASSERT_EQ(close(fd), 0);
-+}
-+
- TEST_HARNESS_MAIN
 -- 
-2.33.0
+2.43.0
 
