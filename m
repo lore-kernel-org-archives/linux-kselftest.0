@@ -1,41 +1,42 @@
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D655A2EDD45;
-	Fri,  6 Feb 2026 03:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91193238D22;
+	Fri,  6 Feb 2026 03:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770347196; cv=none; b=J64fFk9m7z8O+CcgZx9i+Ex38xSdTZwfabwsTgg8JH9yKma3BKlX/AMs6Hbp+y70fA9PRn3r/R4Fl/l/ul0nN0RDXsLWdai/bWSY5IikaiF7Hrv7xGxpdvIPCckq4sp+8lk5WxhN2fkGvSc/ju/4PllgazbdKLGoz8dgCJhGlSg=
+	t=1770347196; cv=none; b=I3gGX+Mr8u6z4vhdqEmC8/PeMHIMx55UqPInSv882NpyhQpKmRo1HkuUzmTwGP01Hp/cfRpEDAyqQpD945n0X5fv2b3iyP5L0JvIOCwkDzrxm8eBmdIskes0slaWJAovDibiWPa3TXsv94Z+oFdopJcKcdNNMxgZ72sS9sF7c2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1770347196; c=relaxed/simple;
-	bh=AilvU05ZvX2NjJZaJe4332dTSsUUP8eEee3MYk9GCM8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LrFHATFeqbIDpQ3gxwuZltYftteiEBHxzJQ0FalNKo7ZHJk7NPkLJy4mPJXxTV5J+yoDn8yXmnW6e01odWE29q4aPTsTMFgEqVNnAor+ul7OjrOP82sNjYX1ThtcejHmTgTy4v9HgrTkQcN5OXb3CNlaD88d/IIK+We6bUndmt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=0lRWbwgH; arc=none smtp.client-ip=113.46.200.224
+	bh=0SoinLGkvc1G3oQakfi3dIFvIrPctwTc0xqJyqa7cmo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YwSgXuPgN0JgrgmkjV/jM4zH8nN30cXU5AiZSzzBwqkeDGLiJuogpvNbH5OfTtGjhlX64fcWr64MR4E32i7VZfy6Y2kzOAFo3lpw36519BYZfRmgsR2Rw3+4CRLRQEVOiurUU/IkP0VkK/wpJ4tcQFbDhaLZeUWzL1G6dj3O4cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FJDRmYjE; arc=none smtp.client-ip=113.46.200.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="0lRWbwgH"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FJDRmYjE"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=5aans9xtPXcHB4+FARFiU0HO5Ds9Y+W0WJVItIfQaoc=;
-	b=0lRWbwgHsACO1GzWRxaWJ8wtj3zoekSkWRxh+S9G2RTCeZ5l4VrHuXoEvQWnGb/jyKdGab+Io
-	306DNK/6NrQjH3Q0FQIhzexiwNM8rbX+RR6c6yosM5tTdFFHTAWhwXGSxjZQ1yKopbpxco1UYNY
-	nQ18hj3ih1BTXAzmmHZo8vo=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4f6f4v5b5cz1cyPT;
-	Fri,  6 Feb 2026 11:01:51 +0800 (CST)
-Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id AFF9440565;
-	Fri,  6 Feb 2026 11:06:26 +0800 (CST)
+	bh=H3YiiVFivrrauzk3iKGEroyfSWtS+uhzpXgx86baWfE=;
+	b=FJDRmYjEvpZ5Mw6YCHGLaPTuWpc5QPIkdROpfBAG2W51dvebMJYG3WjKT0uCAKD6KJudxm3I3
+	TftngB0IEUqsK+7dRy+jquR4y6bwNlt0+BmTVDtgYWLXYyZJkD+ZQuzKY/oppLqecFo+Wesusth
+	vWgOFpJzYVWdfeqI1kRO9r4=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f6f5p5m5bznTVK;
+	Fri,  6 Feb 2026 11:02:38 +0800 (CST)
+Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9DA7D40563;
+	Fri,  6 Feb 2026 11:06:27 +0800 (CST)
 Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 6 Feb 2026 11:06:26 +0800
+ 15.2.1544.11; Fri, 6 Feb 2026 11:06:27 +0800
 Received: from huawei.com (10.173.125.37) by kwepemq500010.china.huawei.com
  (7.202.194.235) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 6 Feb
- 2026 11:06:25 +0800
+ 2026 11:06:26 +0800
 From: Miaohe Lin <linmiaohe@huawei.com>
 To: <akpm@linux-foundation.org>, <shuah@kernel.org>
 CC: <david@kernel.org>, <lorenzo.stoakes@oracle.com>,
@@ -43,10 +44,12 @@ CC: <david@kernel.org>, <lorenzo.stoakes@oracle.com>,
 	<surenb@google.com>, <mhocko@suse.com>, <nao.horiguchi@gmail.com>,
 	<broonie@kernel.org>, <linmiaohe@huawei.com>, <linux-mm@kvack.org>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v4 0/3] selftests/mm: add memory failure selftests
-Date: Fri, 6 Feb 2026 11:16:36 +0800
-Message-ID: <20260206031639.2707102-1-linmiaohe@huawei.com>
+Subject: [PATCH v4 1/3] selftests/mm: add memory failure anonymous page test
+Date: Fri, 6 Feb 2026 11:16:37 +0800
+Message-ID: <20260206031639.2707102-2-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20260206031639.2707102-1-linmiaohe@huawei.com>
+References: <20260206031639.2707102-1-linmiaohe@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,48 +61,450 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
  kwepemq500010.china.huawei.com (7.202.194.235)
 
-Introduce selftests to validate the functionality of memory failure.
-These tests help ensure that memory failure handling for anonymous
-pages, pagecaches pages works correctly, including proper SIGBUS
-delivery to user processes, page isolation, and recovery paths.
+This patch adds a new kselftest to validate memory failure handling for
+anonymous pages. The test performs the following operations:
+1. Allocates anonymous pages using mmap().
+2. Injects memory failure via madvise syscall.
+3. Verifies expected error handling behavior.
+4. Unpoison memory.
 
-Currently madvise syscall is used to inject memory failures. And only
-anonymous pages and pagecaches are tested. More test scenarios, e.g.
-hugetlb, shmem, thp, will be added. Also more memory failure injecting
-methods will be supported, e.g. APEI Error INJection, if required.
+This test helps ensure that memory failure handling for anonymous pages
+works correctly, including proper SIGBUS delivery to user processes, page
+isolation and recovery paths.
 
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
-Changes in v4:
-  Support running memory-failure test separately per Mark.
-
-Changes in v3:
-  Add HWPOISON_INJECT and MEMORY_FAILURE to config per Mark.
-  Fix kernel test robot warning.
-
-Changes in v2:
-  Add some codes to guard pagecache testcases against tmpfs. Testcases
-for tmpfs will be added soon.
-
-  Thanks!
----
-Miaohe Lin (3):
-  selftests/mm: add memory failure anonymous page test
-  selftests/mm: add memory failure clean pagecache test
-  selftests/mm: add memory failure dirty pagecache test
-
  MAINTAINERS                                   |   1 +
  tools/testing/selftests/mm/.gitignore         |   1 +
  tools/testing/selftests/mm/Makefile           |   2 +
  tools/testing/selftests/mm/config             |   2 +
  .../selftests/mm/ksft_memory_failure.sh       |   4 +
- tools/testing/selftests/mm/memory-failure.c   | 359 ++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh     |  21 +
- tools/testing/selftests/mm/vm_util.c          |  41 ++
+ tools/testing/selftests/mm/memory-failure.c   | 239 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |  21 ++
+ tools/testing/selftests/mm/vm_util.c          |  41 +++
  tools/testing/selftests/mm/vm_util.h          |   3 +
- 9 files changed, 434 insertions(+)
+ 9 files changed, 314 insertions(+)
  create mode 100755 tools/testing/selftests/mm/ksft_memory_failure.sh
  create mode 100644 tools/testing/selftests/mm/memory-failure.c
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 64006f19954e..18d1ebf053db 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11691,6 +11691,7 @@ F:	include/linux/memory-failure.h
+ F:	include/trace/events/memory-failure.h
+ F:	mm/hwpoison-inject.c
+ F:	mm/memory-failure.c
++F:	tools/testing/selftests/mm/memory-failure.c
+ 
+ HYCON HY46XX TOUCHSCREEN SUPPORT
+ M:	Giulio Benetti <giulio.benetti@benettiengineering.com>
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index 702e5723c35d..bfd94a79e975 100644
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -12,6 +12,7 @@ map_hugetlb
+ map_populate
+ thuge-gen
+ compaction_test
++memory-failure
+ migration
+ mlock2-tests
+ mrelease_test
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 905f1e034963..4847c6d6c1b0 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -75,6 +75,7 @@ TEST_GEN_FILES += map_populate
+ ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64))
+ TEST_GEN_FILES += memfd_secret
+ endif
++TEST_GEN_FILES += memory-failure
+ TEST_GEN_FILES += migration
+ TEST_GEN_FILES += mkdirty
+ TEST_GEN_FILES += mlock-random-test
+@@ -154,6 +155,7 @@ TEST_PROGS += ksft_ksm_numa.sh
+ TEST_PROGS += ksft_madv_guard.sh
+ TEST_PROGS += ksft_madv_populate.sh
+ TEST_PROGS += ksft_memfd_secret.sh
++TEST_PROGS += ksft_memory_failure.sh
+ TEST_PROGS += ksft_migration.sh
+ TEST_PROGS += ksft_mkdirty.sh
+ TEST_PROGS += ksft_mlock.sh
+diff --git a/tools/testing/selftests/mm/config b/tools/testing/selftests/mm/config
+index deba93379c80..1dbe2b4558ab 100644
+--- a/tools/testing/selftests/mm/config
++++ b/tools/testing/selftests/mm/config
+@@ -11,3 +11,5 @@ CONFIG_ANON_VMA_NAME=y
+ CONFIG_FTRACE=y
+ CONFIG_PROFILING=y
+ CONFIG_UPROBES=y
++CONFIG_MEMORY_FAILURE=y
++CONFIG_HWPOISON_INJECT=m
+diff --git a/tools/testing/selftests/mm/ksft_memory_failure.sh b/tools/testing/selftests/mm/ksft_memory_failure.sh
+new file mode 100755
+index 000000000000..ae1614d4d49b
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_memory_failure.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t memory-failure
+diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
+new file mode 100644
+index 000000000000..37806a58f4b4
+--- /dev/null
++++ b/tools/testing/selftests/mm/memory-failure.c
+@@ -0,0 +1,239 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Memory-failure functional tests.
++ *
++ * Author(s): Miaohe Lin <linmiaohe@huawei.com>
++ */
++
++#include "../kselftest_harness.h"
++
++#include <sys/mman.h>
++#include <linux/mman.h>
++#include <linux/string.h>
++#include <signal.h>
++#include <setjmp.h>
++#include <unistd.h>
++#include <fcntl.h>
++
++#include "vm_util.h"
++
++enum inject_type {
++	MADV_HARD,
++	MADV_SOFT,
++};
++
++enum result_type {
++	MADV_HARD_ANON,
++	MADV_SOFT_ANON,
++};
++
++static jmp_buf signal_jmp_buf;
++static siginfo_t siginfo;
++const char *pagemap_proc = "/proc/self/pagemap";
++const char *kpageflags_proc = "/proc/kpageflags";
++
++FIXTURE(memory_failure)
++{
++	unsigned long page_size;
++	unsigned long corrupted_size;
++	unsigned long pfn;
++	int pagemap_fd;
++	int kpageflags_fd;
++	bool triggered;
++};
++
++FIXTURE_VARIANT(memory_failure)
++{
++	enum inject_type type;
++	int (*inject)(FIXTURE_DATA(memory_failure) * self, void *vaddr);
++};
++
++static int madv_hard_inject(FIXTURE_DATA(memory_failure) * self, void *vaddr)
++{
++	return madvise(vaddr, self->page_size, MADV_HWPOISON);
++}
++
++FIXTURE_VARIANT_ADD(memory_failure, madv_hard)
++{
++	.type = MADV_HARD,
++	.inject = madv_hard_inject,
++};
++
++static int madv_soft_inject(FIXTURE_DATA(memory_failure) * self, void *vaddr)
++{
++	return madvise(vaddr, self->page_size, MADV_SOFT_OFFLINE);
++}
++
++FIXTURE_VARIANT_ADD(memory_failure, madv_soft)
++{
++	.type = MADV_SOFT,
++	.inject = madv_soft_inject,
++};
++
++static void sigbus_action(int signo, siginfo_t *si, void *args)
++{
++	memcpy(&siginfo, si, sizeof(siginfo_t));
++	siglongjmp(signal_jmp_buf, 1);
++}
++
++static int setup_sighandler(void)
++{
++	struct sigaction sa = {
++		.sa_sigaction = sigbus_action,
++		.sa_flags = SA_SIGINFO,
++	};
++
++	return sigaction(SIGBUS, &sa, NULL);
++}
++
++FIXTURE_SETUP(memory_failure)
++{
++	memset(self, 0, sizeof(*self));
++
++	self->page_size = (unsigned long)sysconf(_SC_PAGESIZE);
++
++	memset(&siginfo, 0, sizeof(siginfo));
++	if (setup_sighandler())
++		SKIP(return, "setup sighandler failed.\n");
++
++	self->pagemap_fd = open(pagemap_proc, O_RDONLY);
++	if (self->pagemap_fd == -1)
++		SKIP(return, "open %s failed.\n", pagemap_proc);
++
++	self->kpageflags_fd = open(kpageflags_proc, O_RDONLY);
++	if (self->kpageflags_fd == -1)
++		SKIP(return, "open %s failed.\n", kpageflags_proc);
++}
++
++static void teardown_sighandler(void)
++{
++	struct sigaction sa = {
++		.sa_handler = SIG_DFL,
++		.sa_flags = SA_SIGINFO,
++	};
++
++	sigaction(SIGBUS, &sa, NULL);
++}
++
++FIXTURE_TEARDOWN(memory_failure)
++{
++	close(self->kpageflags_fd);
++	close(self->pagemap_fd);
++	teardown_sighandler();
++}
++
++static void prepare(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self,
++		    void *vaddr)
++{
++	self->pfn = pagemap_get_pfn(self->pagemap_fd, vaddr);
++	ASSERT_NE(self->pfn, -1UL);
++
++	ASSERT_EQ(get_hardware_corrupted_size(&self->corrupted_size), 0);
++}
++
++static bool check_memory(void *vaddr, unsigned long size)
++{
++	char buf[64];
++
++	memset(buf, 0xce, sizeof(buf));
++	while (size >= sizeof(buf)) {
++		if (memcmp(vaddr, buf, sizeof(buf)))
++			return false;
++		size -= sizeof(buf);
++		vaddr += sizeof(buf);
++	}
++
++	return true;
++}
++
++static void check(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self,
++		  void *vaddr, enum result_type type, int setjmp)
++{
++	unsigned long size;
++	uint64_t pfn_flags;
++
++	switch (type) {
++	case MADV_SOFT_ANON:
++		/* It is not expected to receive a SIGBUS signal. */
++		ASSERT_EQ(setjmp, 0);
++
++		/* The page content should remain unchanged. */
++		ASSERT_TRUE(check_memory(vaddr, self->page_size));
++
++		/* The backing pfn of addr should have changed. */
++		ASSERT_NE(pagemap_get_pfn(self->pagemap_fd, vaddr), self->pfn);
++		break;
++	case MADV_HARD_ANON:
++		/* The SIGBUS signal should have been received. */
++		ASSERT_EQ(setjmp, 1);
++
++		/* Check if siginfo contains correct SIGBUS context. */
++		ASSERT_EQ(siginfo.si_signo, SIGBUS);
++		ASSERT_EQ(siginfo.si_code, BUS_MCEERR_AR);
++		ASSERT_EQ(1UL << siginfo.si_addr_lsb, self->page_size);
++		ASSERT_EQ(siginfo.si_addr, vaddr);
++
++		/* XXX Check backing pte is hwpoison entry when supported. */
++		ASSERT_TRUE(pagemap_is_swapped(self->pagemap_fd, vaddr));
++		break;
++	default:
++		SKIP(return, "unexpected inject type %d.\n", type);
++	}
++
++	/* Check if the value of HardwareCorrupted has increased. */
++	ASSERT_EQ(get_hardware_corrupted_size(&size), 0);
++	ASSERT_EQ(size, self->corrupted_size + self->page_size / 1024);
++
++	/* Check if HWPoison flag is set. */
++	ASSERT_EQ(pageflags_get(self->pfn, self->kpageflags_fd, &pfn_flags), 0);
++	ASSERT_EQ(pfn_flags & KPF_HWPOISON, KPF_HWPOISON);
++}
++
++static void cleanup(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self,
++		    void *vaddr)
++{
++	unsigned long size;
++	uint64_t pfn_flags;
++
++	ASSERT_EQ(unpoison_memory(self->pfn), 0);
++
++	/* Check if HWPoison flag is cleared. */
++	ASSERT_EQ(pageflags_get(self->pfn, self->kpageflags_fd, &pfn_flags), 0);
++	ASSERT_NE(pfn_flags & KPF_HWPOISON, KPF_HWPOISON);
++
++	/* Check if the value of HardwareCorrupted has decreased. */
++	ASSERT_EQ(get_hardware_corrupted_size(&size), 0);
++	ASSERT_EQ(size, self->corrupted_size);
++}
++
++TEST_F(memory_failure, anon)
++{
++	char *addr;
++	int ret;
++
++	addr = mmap(0, self->page_size, PROT_READ | PROT_WRITE,
++		    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (addr == MAP_FAILED)
++		SKIP(return, "mmap failed, not enough memory.\n");
++	memset(addr, 0xce, self->page_size);
++
++	prepare(_metadata, self, addr);
++
++	ret = sigsetjmp(signal_jmp_buf, 1);
++	if (!self->triggered) {
++		self->triggered = true;
++		ASSERT_EQ(variant->inject(self, addr), 0);
++		FORCE_READ(*addr);
++	}
++
++	if (variant->type == MADV_HARD)
++		check(_metadata, self, addr, MADV_HARD_ANON, ret);
++	else
++		check(_metadata, self, addr, MADV_SOFT_ANON, ret);
++
++	cleanup(_metadata, self, addr);
++
++	ASSERT_EQ(munmap(addr, self->page_size), 0);
++}
++
++TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 29be9038bfb0..afdcfd0d7cef 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -91,6 +91,8 @@ separated by spaces:
+ 	test VMA merge cases behave as expected
+ - rmap
+ 	test rmap behaves as expected
++- memory-failure
++	test memory-failure behaves as expected
+ 
+ example: ./run_vmtests.sh -t "hmm mmap ksm"
+ EOF
+@@ -527,6 +529,25 @@ CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
+ 
+ CATEGORY="rmap" run_test ./rmap
+ 
++# Try to load hwpoison_inject if not present.
++HWPOISON_DIR=/sys/kernel/debug/hwpoison/
++if [ ! -d "$HWPOISON_DIR" ]; then
++	if ! modprobe -q -R hwpoison_inject; then
++		echo "Module hwpoison_inject not found, skipping..."
++	else
++		modprobe hwpoison_inject > /dev/null 2>&1
++		LOADED_MOD=1
++	fi
++fi
++
++if [ -d "$HWPOISON_DIR" ]; then
++	CATEGORY="memory-failure" run_test ./memory-failure
++fi
++
++if [ -n "${LOADED_MOD}" ]; then
++	modprobe -r hwpoison_inject > /dev/null 2>&1
++fi
++
+ if [ "${HAVE_HUGEPAGES}" = 1 ]; then
+ 	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
+ fi
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index d954bf91afd5..a6d4ff7dfdc0 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -723,3 +723,44 @@ int ksm_stop(void)
+ 	close(ksm_fd);
+ 	return ret == 1 ? 0 : -errno;
+ }
++
++int get_hardware_corrupted_size(unsigned long *val)
++{
++	unsigned long size;
++	char *line = NULL;
++	size_t linelen = 0;
++	FILE *f = fopen("/proc/meminfo", "r");
++	int ret = -1;
++
++	if (!f)
++		return ret;
++
++	while (getline(&line, &linelen, f) > 0) {
++		if (sscanf(line, "HardwareCorrupted: %12lu kB", &size) == 1) {
++			*val = size;
++			ret = 0;
++			break;
++		}
++	}
++
++	free(line);
++	fclose(f);
++	return ret;
++}
++
++int unpoison_memory(unsigned long pfn)
++{
++	int unpoison_fd, len;
++	char buf[32];
++	ssize_t ret;
++
++	unpoison_fd = open("/sys/kernel/debug/hwpoison/unpoison-pfn", O_WRONLY);
++	if (unpoison_fd < 0)
++		return -errno;
++
++	len = sprintf(buf, "0x%lx\n", pfn);
++	ret = write(unpoison_fd, buf, len);
++	close(unpoison_fd);
++
++	return ret > 0 ? 0 : -errno;
++}
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index 522f7f9050f5..e9c4e24769c1 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -20,6 +20,7 @@
+ 
+ #define KPF_COMPOUND_HEAD             BIT_ULL(15)
+ #define KPF_COMPOUND_TAIL             BIT_ULL(16)
++#define KPF_HWPOISON                  BIT_ULL(19)
+ #define KPF_THP                       BIT_ULL(22)
+ /*
+  * Ignore the checkpatch warning, we must read from x but don't want to do
+@@ -154,6 +155,8 @@ long ksm_get_full_scans(void);
+ int ksm_use_zero_pages(void);
+ int ksm_start(void);
+ int ksm_stop(void);
++int get_hardware_corrupted_size(unsigned long *val);
++int unpoison_memory(unsigned long pfn);
+ 
+ /*
+  * On ppc64 this will only work with radix 2M hugepage size
 -- 
 2.33.0
 
