@@ -1,130 +1,105 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F686244692
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 02:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D655A2EDD45;
+	Fri,  6 Feb 2026 03:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770346267; cv=none; b=sSfFBSlVq7Z3Et86yRNJENJGih/ImsZlDObCeSMpux2pnTSm/IbdsSE0XGr5sTTpgmvIPSH5m8sJ1ZJKzAiywliUS6EUZwMEne1gZhzHeo5X2lHp5rxY6lqfOTIV2U/34agbl3TkYHVNoPdZ7CP2P+MKo29SBuDSszpGGWxUtBA=
+	t=1770347196; cv=none; b=J64fFk9m7z8O+CcgZx9i+Ex38xSdTZwfabwsTgg8JH9yKma3BKlX/AMs6Hbp+y70fA9PRn3r/R4Fl/l/ul0nN0RDXsLWdai/bWSY5IikaiF7Hrv7xGxpdvIPCckq4sp+8lk5WxhN2fkGvSc/ju/4PllgazbdKLGoz8dgCJhGlSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770346267; c=relaxed/simple;
-	bh=KPsoKFcT8quPYSqcGLovDIzzaIHZundOb4SQzWLpqd4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iE/LbCQ9f5eQ3ZIqi/SwUSmMDZNk/rnMFbkm5kIo4nJmhtdmXphwea9cGVaXQQIA13s3p3U7VBLb1ZkGYcDDuta4uAjiLr9dtEzmLdFM+mK92oO4ICk2ziW8i9dwU19Q2b/qx+0oBui/EEw1s4sNYd4hStaL+UlzeP+WyC9KMTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DJFw2EGU; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770347196; c=relaxed/simple;
+	bh=AilvU05ZvX2NjJZaJe4332dTSsUUP8eEee3MYk9GCM8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LrFHATFeqbIDpQ3gxwuZltYftteiEBHxzJQ0FalNKo7ZHJk7NPkLJy4mPJXxTV5J+yoDn8yXmnW6e01odWE29q4aPTsTMFgEqVNnAor+ul7OjrOP82sNjYX1ThtcejHmTgTy4v9HgrTkQcN5OXb3CNlaD88d/IIK+We6bUndmt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=0lRWbwgH; arc=none smtp.client-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DJFw2EGU"
-Message-ID: <8a3825e2-4e86-4570-94e7-362ec9dd55f8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770346254;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BdDOF9QlOYrRUuSSIvJzRgKKYp00tJsyJhHkyge3XkY=;
-	b=DJFw2EGUavWc1GwCtpN8dWcS5jnmn0DOB+k0/1yCHlQ0mFYE6+Y96jisO6uvL8bKXeyEnR
-	jX0tu4kA26fb3OiEM+ApnNTDTKoImItZe0UnAFQWbZFSpFpICa3ZL5NW4ziAoQC4viwk/G
-	Qgh9ZeSIsJWcMW+ZRvFyoVMidgQ6oWA=
-Date: Fri, 6 Feb 2026 10:50:43 +0800
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="0lRWbwgH"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=5aans9xtPXcHB4+FARFiU0HO5Ds9Y+W0WJVItIfQaoc=;
+	b=0lRWbwgHsACO1GzWRxaWJ8wtj3zoekSkWRxh+S9G2RTCeZ5l4VrHuXoEvQWnGb/jyKdGab+Io
+	306DNK/6NrQjH3Q0FQIhzexiwNM8rbX+RR6c6yosM5tTdFFHTAWhwXGSxjZQ1yKopbpxco1UYNY
+	nQ18hj3ih1BTXAzmmHZo8vo=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4f6f4v5b5cz1cyPT;
+	Fri,  6 Feb 2026 11:01:51 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id AFF9440565;
+	Fri,  6 Feb 2026 11:06:26 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 6 Feb 2026 11:06:26 +0800
+Received: from huawei.com (10.173.125.37) by kwepemq500010.china.huawei.com
+ (7.202.194.235) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 6 Feb
+ 2026 11:06:25 +0800
+From: Miaohe Lin <linmiaohe@huawei.com>
+To: <akpm@linux-foundation.org>, <shuah@kernel.org>
+CC: <david@kernel.org>, <lorenzo.stoakes@oracle.com>,
+	<Liam.Howlett@oracle.com>, <vbabka@suse.cz>, <rppt@kernel.org>,
+	<surenb@google.com>, <mhocko@suse.com>, <nao.horiguchi@gmail.com>,
+	<broonie@kernel.org>, <linmiaohe@huawei.com>, <linux-mm@kvack.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH v4 0/3] selftests/mm: add memory failure selftests
+Date: Fri, 6 Feb 2026 11:16:36 +0800
+Message-ID: <20260206031639.2707102-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v9 9/9] selftests/bpf: Add tests to verify map
- create failure log
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260202144046.30651-1-leon.hwang@linux.dev>
- <20260202144046.30651-10-leon.hwang@linux.dev>
- <CAADnVQLXWQ8Miq2WBoXRDsEVP1QPwk=a5=Rj_uPN+9qKHZZmZw@mail.gmail.com>
- <11bb515b-35fd-44f3-9647-9c39580ce6a1@linux.dev>
- <CAADnVQKYwi2bNc8Hsg-r9dF0ACYYEzRyZDc33G2Kr_o0bu3bow@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQKYwi2bNc8Hsg-r9dF0ACYYEzRyZDc33G2Kr_o0bu3bow@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
+Introduce selftests to validate the functionality of memory failure.
+These tests help ensure that memory failure handling for anonymous
+pages, pagecaches pages works correctly, including proper SIGBUS
+delivery to user processes, page isolation, and recovery paths.
 
+Currently madvise syscall is used to inject memory failures. And only
+anonymous pages and pagecaches are tested. More test scenarios, e.g.
+hugetlb, shmem, thp, will be added. Also more memory failure injecting
+methods will be supported, e.g. APEI Error INJection, if required.
 
-On 6/2/26 07:18, Alexei Starovoitov wrote:
-> On Wed, Feb 4, 2026 at 7:54 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->>
->>
->> On 5/2/26 04:14, Alexei Starovoitov wrote:
->>> On Mon, Feb 2, 2026 at 6:43 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>>>
->>>> +
->>>> +#define BPF_LOG_FIXED  8
->>>> +
->>>> +static void test_map_create(enum bpf_map_type map_type, const char *map_name,
->>>> +                           struct bpf_map_create_opts *opts, const char *exp_msg)
->>>> +{
->>>> +       const int key_size = 4, value_size = 4, max_entries = 1;
->>>> +       char log_buf[128];
->>>> +       int fd;
->>>> +       LIBBPF_OPTS(bpf_log_opts, log_opts);
->>>> +
->>>> +       log_buf[0] = '\0';
->>>> +       log_opts.log_buf = log_buf;
->>>> +       log_opts.log_size = sizeof(log_buf);
->>>> +       log_opts.log_level = BPF_LOG_FIXED;
->>>
->>> Why? Which part of the test needs the log with this flag?
->>
->> BPF_LOG_FIXED looks odd here.
->>
->> This test sets 'log_level = BPF_LOG_FIXED' to match the behavior of
->> bpf_vlog_init() as initialized by bpf_log_attr_create_vlog() in
->> patch #7. BPF_LOG_FIXED is intended to be the default log_level
->> there.
-> 
-> I don't think you answered my question.
-> bpf_vlog_init() is using whatever log_level user space provided.
-> Why do you pass BPF_LOG_FIXED ?
->
+---
+Changes in v4:
+  Support running memory-failure test separately per Mark.
 
-The intention behind passing BPF_LOG_FIXED was to ensure the log used
-the buffer in a fixed mode, since the allocated buffer was large enough
-to hold the full log message from the kernel. It was not intended to
-test against log_level itself.
+Changes in v3:
+  Add HWPOISON_INJECT and MEMORY_FAILURE to config per Mark.
+  Fix kernel test robot warning.
 
-After reviewing commit 121664093803 ("bpf: Switch BPF verifier log to be
-a rotating log by default"), I realized that BPF_LOG_FIXED was
-introduced specifically to disable the rotating log behavior. In this
-test case, that distinction is not relevant, so BPF_LOG_FIXED is indeed
-unnecessary.
+Changes in v2:
+  Add some codes to guard pagecache testcases against tmpfs. Testcases
+for tmpfs will be added soon.
 
-I tested with 'log_level is 0' and 'log_level is non-zero'. The tests
-fail when log_level is 0, and pass when log_level is non-zero. So I will
-switch to using 'log_level = 1' in the next revision.
+  Thanks!
+---
+Miaohe Lin (3):
+  selftests/mm: add memory failure anonymous page test
+  selftests/mm: add memory failure clean pagecache test
+  selftests/mm: add memory failure dirty pagecache test
 
-Thanks,
-Leon
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/mm/.gitignore         |   1 +
+ tools/testing/selftests/mm/Makefile           |   2 +
+ tools/testing/selftests/mm/config             |   2 +
+ .../selftests/mm/ksft_memory_failure.sh       |   4 +
+ tools/testing/selftests/mm/memory-failure.c   | 359 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |  21 +
+ tools/testing/selftests/mm/vm_util.c          |  41 ++
+ tools/testing/selftests/mm/vm_util.h          |   3 +
+ 9 files changed, 434 insertions(+)
+ create mode 100755 tools/testing/selftests/mm/ksft_memory_failure.sh
+ create mode 100644 tools/testing/selftests/mm/memory-failure.c
+
+-- 
+2.33.0
 
