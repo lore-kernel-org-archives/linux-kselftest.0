@@ -1,88 +1,138 @@
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3231E991B;
-	Fri,  6 Feb 2026 02:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238C61E5B7B
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 02:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770345377; cv=none; b=frfM9bba/CWH6sTW3SITG+0yfFR2XFDF5C++2jm+IYd8x9YXd3G46yxozecVyVybADSiUjQ8GDamLGKtLhMqmTSyLJwyQHkk8nznM08jTRtolhuAL0OnQjF5Sd+iG+grWOLux+/LtF+3nXit+buol7W4GfPLN6a+jQuh+86RjOw=
+	t=1770345933; cv=none; b=U2I2AV4Y6B8e2Nh0Wo9ewhyT5yufuSkpai2BVkOP/AN0+jm6Lf3q+b3qHG/5T3TfbrjQcmoTTY54WpGCP3TvgLdU6+F2MJdXyvG4Jc9Gee4xTGHqJUUssKZK0RwkJhsiHYBHll55JT+NHAoQiDr5jG5u2ZqnIbol4P0X2gdReg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770345377; c=relaxed/simple;
-	bh=kMw3EEd28RthZmZA8Fo+EKBU3vahW78MzxUIWbmmL0g=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=otDJZ5QPEm7AZrMo6MSdTd1KVsZZ3mi94ceH8NIX6f60INQALDWGHdt0wauY4//TrEYiv2d7gaegR6GH2G76upxXEF7YZmFmEdoeI6jN3fMQElgMX9GpEKkO9gYbKI/biNKhMvgi9AkmvJtizTWxAJyqT678k0jGygipaHjmuPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=s4aantJR; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1770345933; c=relaxed/simple;
+	bh=Z+JWro3E8aRvfngoe/6LubDVzHtuFX4mcalY38TDisw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kK/90B85L4nZTcULB+/q6MZ5gF8NCdFS4Dqpl504YtRO0YxKllFOlnyws1fvJ17vfh7atIniP8ZWNlRqzSLzaDbLCwWcNgCysAziZPhTSAN0u6sZrnz7zFGp/p3qb21PhQGStZI8ng+atB0p9G0RYSUxWzKZjKCEGGJdUT0wpwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oPwCIleO; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="s4aantJR"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ezukT8gf6vSf0QeciExJA8vVhdyq2uEBdV2mhNDadD4=;
-	b=s4aantJRfPssrCTa1yKJyIcOivrhh0gnt+2+HS1+182XHUQoAjcmUsCCwlGCcCW5dna5kD/Tj
-	2OdvS7KYVXF41Xxj1VvwJZwa4d2K18QfufeULKIkramvSMwkaTpVYwTto6aT8OKViDrr4q3IBEi
-	fiiwQAorO5zkQeydhJ3YdZw=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4f6dPv742bzKm4s;
-	Fri,  6 Feb 2026 10:31:31 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id BB32A40562;
-	Fri,  6 Feb 2026 10:36:07 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 6 Feb 2026 10:36:07 +0800
-Received: from [10.173.125.37] (10.173.125.37) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 6 Feb 2026 10:36:06 +0800
-Subject: Re: [PATCH v3 1/3] selftests/mm: add memory failure anonymous page
- test
-To: Mark Brown <broonie@kernel.org>
-CC: <akpm@linux-foundation.org>, <shuah@kernel.org>, <david@kernel.org>,
-	<lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
-	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
-	<nao.horiguchi@gmail.com>, <linux-mm@kvack.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260204073331.899406-1-linmiaohe@huawei.com>
- <20260204073331.899406-2-linmiaohe@huawei.com>
- <2028f5e1-e032-4909-8240-15fe0b3c82a5@sirena.org.uk>
- <0a84104a-32e3-8518-ebc0-703814e233d4@huawei.com>
- <73756615-b779-44b1-8ff5-b4b2d5e3c7cf@sirena.org.uk>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <92c543fd-4316-d5dd-451a-a2c668fc98aa@huawei.com>
-Date: Fri, 6 Feb 2026 10:36:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oPwCIleO"
+Message-ID: <097f4aa3-dfa6-4847-8395-8108323b020f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770345930;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VFSlinCyA0+SI/xvgDMbNOQR7AvWVKP4QIPnbgTtWvc=;
+	b=oPwCIleO+x6qGEM2MPOk1oahBLC874RmsIV3FYPsjS+ThIOuUSrGtg98iITL0/cFrXRZKv
+	FmzYyBU1skxQCEk+86jQvm43siMpAk1ABkej8TKgy1HwY46NqkWGCv5Qb7dhAJ63JJSaiI
+	QNGZyT7v88Mc/Wk19Mj48rwvkeUtU5c=
+Date: Fri, 6 Feb 2026 10:45:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <73756615-b779-44b1-8ff5-b4b2d5e3c7cf@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"
+Subject: Re: [PATCH bpf-next v9 4/9] bpf: Add syscall common attributes
+ support for prog_load
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
+ Andrey Albershteyn <aalbersh@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
+ linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260202144046.30651-1-leon.hwang@linux.dev>
+ <20260202144046.30651-5-leon.hwang@linux.dev>
+ <CAEf4Bza-PM9ExqJS=Q_oj7Cqc5dvmbN_Zv9-4UnJNtsZU28FoQ@mail.gmail.com>
+ <a31b7f19-a22a-44ab-8ecd-9df9dead9c3d@linux.dev>
+ <CAEf4BzZWawrE+mXaPNPAT8zcz0Qy+5QYA6r4JzEVw7UAcUH-uA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzZWawrE+mXaPNPAT8zcz0Qy+5QYA6r4JzEVw7UAcUH-uA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2026/2/5 19:28, Mark Brown wrote:
-> On Thu, Feb 05, 2026 at 02:58:50PM +0800, Miaohe Lin wrote:
->> On 2026/2/4 19:26, Mark Brown wrote:
-> 
->>> In -next I added a hack with wrapper scripts per category to improve the
->>> integration of the mm selftests with the kselftest framework, could you
->>> please wire things up into that, see:
-> 
->> Sorry, I missed that. Do you mean adding something like below to run memory-failure test separately?
-> 
-> Yes, pretty much - I'd keep the list of TEST_PROGS sorted but otherwise
-> that's it.
 
-Sounds good to me. Will do.
 
-Thanks.
-.
+On 6/2/26 06:18, Andrii Nakryiko wrote:
+> On Wed, Feb 4, 2026 at 7:42 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+
+[...]
+
+>>>> +
+>>>> +       if (!attr->log_buf && attr_common->log_buf) {
+>>>> +               attr->log_buf = attr_common->log_buf;
+>>>> +               attr->log_size = attr_common->log_size;
+>>>> +               attr->log_level = attr_common->log_level;
+>>>
+>>> why are we setting this? Do we still have code that can access
+>>> attr->log_buf even though we pass attr_log everywhere? If yes, should
+>>> we still have that "split brain" code?
+>>>
+>>
+>> 'attr->log_buf' is accessed only in bpf_check().
+> 
+> bpf_check should be changed then, see below
+> 
+>>
+>>> If we don't have this assignment, then I think we don't need to have
+>>> bpf_prog_load-specific and btf_load-specific log_attr_init() helpers.
+>>> They can be unified into generic log_attr_init, where for
+>>> bpf_prog_load you'll pass offsetof(log_true_size) +
+>>> attr->log_{buf,size,level}, and for btf_load you'll pass different
+>>> offset of and btf-specific attr->btf_log*
+>>>
+>>> This helper will just be making decision whether to use common_attr's
+>>> log fields or passed directly command-specific ones.
+>>>
+>>> Or what am I missing?
+>>>
+>>
+>> If the log attributes differ, where should the effective
+>> log_* values be stored?
+>>
+>> Should they live in struct bpf_common_attr, or should we extend
+>> struct bpf_log_attr to carry them?
+>>
+>> Note that in v8, Alexei suggested struct bpf_log_attr only needs
+>>   u32 offsetof_true_size;
+>>   bpfptr_t uattr;
+>>
+>> so I’d like to clarify the intended direction here. Once that’s clear, a
+>> single generic log_attr_init() should be sufficient to handle this.
+>>
+> 
+> The intended direction is to have log buf/size/level in one place
+> (after attr and common_attr validations), so we keep internal logic
+> simple. Let's put all of that and log_true_size **pointer** (we don't
+> have to much with offsetof, just calculate user addr for
+> log_true_size, which just might be NULL) into bpf_log_attrs and teach
+> all code to look and work *only* with that struct, ignoring anything
+> log related from attr.
+> 
+It’s clear now.
+
+I’ll follow this direction in the next revision and consolidate all
+log-related fields (including the log_true_size pointer) into
+bpf_log_attr, so that internal code relies solely on that struct.
+
+Thanks,
+Leon
 
