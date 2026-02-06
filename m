@@ -1,52 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AD5357A54;
-	Fri,  6 Feb 2026 09:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2272264D9
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 09:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770369269; cv=none; b=QNSe1ZS0aHhJYnox788ZHJLoh5EY8eXcsGyZzfZjELIe5UprFBJV3ONvYJnu/+a4F76M5HlQItOgoTMPYs9PRruNNDU3TQ4k6C6gejxvoqo8YYl9UIm0izF8vcHR4xUOLCl7JTj9Hxo76wShYWbPbG8oSGUEUiZbZSPrRECK+qU=
+	t=1770369578; cv=none; b=F2rVanRbiFBdrkcNI5E71wNmEJg7ZCJ9MxreWbZPUcPUyUO/+USfKiZ6VRN+XQUQ9mHExB2gSEOuKh4Pg21/wcF4TaJDfNxb0PaSRKt9cyddv3fJhyRuWn+Ad/WS59CdIBttjQ9ipw5PabzrsT2Lmv/lMlg/DgfdNsafyDyITy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770369269; c=relaxed/simple;
-	bh=GR8fSTSThsm9CDioVWJRxSN6y95a/im/CBM5f1ZeE1E=;
+	s=arc-20240116; t=1770369578; c=relaxed/simple;
+	bh=NOjMrvXLnxubIJ98sxIqIaFk16kAXp6BZ67WoBvZ684=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DQFn3GVUGzFibOpZw1KWyYhV8nzIaDBLBRmn/ZmiADijqHk8/LmutyFZNzdeWRdP4+/TO7WvybvQVzVC6Z0snC9gsy6SCgkobo+opEvji28xO1TCb3pm+Ccxb7W2nO0nwDfY7B7bEOjY+9boqX2zPwYwg95i8E0S34jcZVaJZX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QGRsEiu3; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=lwd/234q7wNjzzAa8G2CiMRSFv+dw4plybKxh50xRx6pdDf8pv2WT+YBQjnFosCWocRcXDICD4ySgdrLbRC3RQi5tEgeqqq3NFNRU439AFbqNOIgy2/D+SCe7n28wkJpf+vcsDrQ6cOXLe0ZVuNHvvweC5Bh2GO2o1bC+j35oE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=tGNdjA6m; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QGRsEiu3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECBCC116C6;
-	Fri,  6 Feb 2026 09:14:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770369269;
-	bh=GR8fSTSThsm9CDioVWJRxSN6y95a/im/CBM5f1ZeE1E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QGRsEiu3AU9jqkqEBUd9fe3DyxmRQkoM2COqmCMf3ZSNgsos+K8ehdMG27obM6/Kh
-	 E8UKUNVmHTYqUlffNxHJk7m8cZlzjuu8NhhRSqmKtsVsQ8Aw45OV/M/1gMT5YIyfso
-	 9yfM276Yy3dSg0w4M+tkNqMRX1CbLOrMG5ccbhddZtqmhWdyHy9Ii+01slv7X+vbHD
-	 pWDvg3zairuHbiFHF4DVPX/g7TAr43X3DHjFm4NKgiqw9g3fa0uaX0nOhNGAHYMck/
-	 RevuvkuZxC72MCvJtVWdpzr7XAllUOAmt6WaOOFc9RMij1nkSUMMfxw6Y9Kv3RSZ1c
-	 tkF/q1XayYKWA==
-Date: Fri, 6 Feb 2026 09:14:25 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] Revert "revocable: Revocable resource management"
-Message-ID: <aYWw8Th89QwHAuyT@google.com>
-References: <20260204142849.22055-1-johan@kernel.org>
- <20260204142849.22055-4-johan@kernel.org>
- <aYRaB5wI3mS2J54K@google.com>
- <DG70CSP8NCJ0.316VXMVLD2ARN@kernel.org>
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="tGNdjA6m"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso18903035e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 01:19:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1770369575; x=1770974375; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NOjMrvXLnxubIJ98sxIqIaFk16kAXp6BZ67WoBvZ684=;
+        b=tGNdjA6mjSn1RcZh6sOY3d4GJU3BT5sSZ4BcgHgairWhCv0eS3vXcD0Dbehjh78ipl
+         618Qfv1FxWjfvqsVZdaSy+/sUzOznx5sLmRNyBVeVHYSxUBgmrMoCsvkeAhqJyfYf9Bg
+         ZR7bRpPHQ7jKNsmueVoWYDPb1Aiom9Fw52D3OBLbV01fCoc6ok5WZtJGyMbvf9YcVOVI
+         4WJf1GPk9XMeAzFtTXWzph+9XDoGYOtEj1rq6hR3f9fFhcpoKCdKcXJ9/37MWPZY5/+1
+         tuLDrmhBR//mGNosouBCLR7dFeEJDwDUxwN4ost0VDE/aFBaiQIxladGo/WiQhgJI2Pu
+         uz7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770369575; x=1770974375;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NOjMrvXLnxubIJ98sxIqIaFk16kAXp6BZ67WoBvZ684=;
+        b=e9q9187/Na9/pu/+HHg5m0cUUictdSXpTTGQzl0TU/wCKYJWUZSG0KEUl3PK4ts0GG
+         x1yFEEbLtyiE3/3rOdZhe4sgaq9Km5uzpa1avlto5ny2eS5metZkICAVN68UjsPxcW8Q
+         T4zPcpHe6wLNUxIaPqTi2sGpUGXpIPiQy2dG3zAHrs8PQ70yU6UvH8glx4FJ+b5x+dVg
+         B4soe/i38O8fv8fHilR1UlO4/tBVqhlO8Noo31diAIdGen2kImQ235QduY+3TNzF18A8
+         G/PfmDLhGq3yLFDk30p6732xrEDR+74M8AxvtJ8XLaPe9VhQciIPz8vYhdt1mfpxUFAO
+         5oVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVLq9Lmb+5lPPGKGMFNRNnCHeR1hSON8EEdKFZLxRrSvMbzlr/aZfhocqVWSNgpcp+kWsCeJZt+p6xewdMiQwc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZWJWOi0qWqFXoq1arFpZkna2DMt3IOCGiplQvirAwOJotz5fO
+	kqRna1ppksNdpHGmXxZpA8oWojocd5NmYqTP4woGzwTDPjuzXH0w1JUi4qWtt2dy5Hg=
+X-Gm-Gg: AZuq6aK1vxIUkKHQEa22Qs3fsuhAV6m6UjQOAFAOKvQQRgMMRUjfqSkikaSekF4zkmZ
+	Ul8AtpKFPoLRq0pvuNQ1TBfcECUWKIESGlVsQ5dZ+vZQAkXeWQicdzQCiUabMn4LTLRfGEnLyKG
+	oY++KikERVmMyEqGVuUADmQXU07wsN2Tapr2yNyGI1l22+xsPFX2fe74LsIMPgLmLcKuiMlC2MB
+	2yyeRxpzztrY8IB4UtI0J5ikhkdejQEHlRdnmvHWPMKy/i8R7kudxG4C4yE9dZ33jGuq9RNc5vB
+	AqbRi0EZxifft/qW5ANQe6qq4+jUxNPkfbFKMGSRDL6grwrhEJt4Sp1oT7iYww5uUk+KasqsN5C
+	VmRAclNk/9uvRQIPQKpUJq/TdFFFWlBtZa/wxGxCtNtjqyrYjFjsgVIZrRZJciQf3rqi9getbjJ
+	k+nCxeXfihIhuv0xh+64A=
+X-Received: by 2002:a7b:c3d5:0:b0:47e:e38b:a83 with SMTP id 5b1f17b1804b1-483178ebf8emr52443975e9.7.1770369574701;
+        Fri, 06 Feb 2026 01:19:34 -0800 (PST)
+Received: from FV6GYCPJ69 ([85.163.81.98])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48317d8e8d4sm112369355e9.15.2026.02.06.01.19.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Feb 2026 01:19:33 -0800 (PST)
+Date: Fri, 6 Feb 2026 10:19:30 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
+	Moshe Shemesh <moshe@nvidia.com>, Shay Drori <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
+	Or Har-Toov <ohartoov@nvidia.com>
+Subject: Re: [PATCH net-next V2 1/7] devlink: Refactor resource functions to
+ be generic
+Message-ID: <f56e4xngd6byd5gta2hcvfzwwntqbybpbbqv3nw2i7734cc5kx@vwaqvacwxiyp>
+References: <20260205142833.1727929-1-tariqt@nvidia.com>
+ <20260205142833.1727929-2-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,48 +82,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DG70CSP8NCJ0.316VXMVLD2ARN@kernel.org>
+In-Reply-To: <20260205142833.1727929-2-tariqt@nvidia.com>
 
-On Thu, Feb 05, 2026 at 12:56:47PM +0100, Danilo Krummrich wrote:
-> should be
-> 
-> 	int revocable_init(struct revocable_provider __rcu **_rp, ...)
-> 
-> instead of
-> 
-> 	int revocable_init(struct revocable_provider __rcu *_rp, ...)
-> 
-> for the same reason revocable_provider_revoke() takes a double pointer.
-> 
-> Otherwise this seems racy:
-> 
-> 	int revocable_init(struct revocable_provider __rcu *_rp, struct revocable *rev)
-> 	{
-> 		struct revocable_provider *rp;
-> 
-> 		if (!_rp)
-> 			return -ENODEV;
-> 
-> 		/*
-> 		 * If revocable_provider_revoke() is called concurrently at this
-> 		 * point, _rp is not affectd by rcu_replace_pointer().
-> 		 *
-> 		 * Additionally, nothing prevents a concurrent kfree_rcu() from
-> 		 * freeing the revocable provider before we enter the RCU
-> 		 * read-side critical section below.
-> 		 */
-> 
-> 		/*
-> 		 * Enter a read-side critical section.
-> 		 *
-> 		 * This prevents kfree_rcu() from freeing the struct revocable_provider
-> 		 * memory, for the duration of this scope.
-> 		 */
-> 		scoped_guard(rcu) {
-> 
-> 		...
-> 	}
-> 
-> Do I miss anything?
+Thu, Feb 05, 2026 at 03:28:27PM +0100, tariqt@nvidia.com wrote:
+>From: Or Har-Toov <ohartoov@nvidia.com>
+>
+>Currently the resource functions take devlink pointer as parameter
+>and take the resource list from there.
+>Allows the resource functions to work with other resource lists
 
-You're right.  Will fix that.
+s/Allows/Allow/ ?
+
+
+>that will be added in next patches and not only with the devlink's
+>resource list.
+>
+>Signed-off-by: Or Har-Toov <ohartoov@nvidia.com>
+>Reviewed-by: Shay Drori <shayd@nvidia.com>
+>Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+
+Otherwise, the code looks fine to me:
+
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
