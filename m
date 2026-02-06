@@ -1,90 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6376126CE2D;
-	Fri,  6 Feb 2026 02:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3231E991B;
+	Fri,  6 Feb 2026 02:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770344663; cv=none; b=MtRGkI7w6L2kBAn7P4YAjujTmyaUkHauoVSA3sRW04KyOu2y+heDGhS54Wts9Y/ahBMbhUrXF/e4yAT/QNOMqK4BO6An2kj948hfvkaZ9Iat/JWASjCQbZHB07YPHb9BGCOkXg2LACc3x2VWawFtwYP6mNno7lQu3OkWjsA1mE0=
+	t=1770345377; cv=none; b=frfM9bba/CWH6sTW3SITG+0yfFR2XFDF5C++2jm+IYd8x9YXd3G46yxozecVyVybADSiUjQ8GDamLGKtLhMqmTSyLJwyQHkk8nznM08jTRtolhuAL0OnQjF5Sd+iG+grWOLux+/LtF+3nXit+buol7W4GfPLN6a+jQuh+86RjOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770344663; c=relaxed/simple;
-	bh=TUGZs3VCsG3R3upJb5hZDjDQh0S2r6zsbhzPDbzbjhM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j97jriuqIlfhikeTWQXAbtyY8gVjSW+TSIdwqqdXSnYqClJyW9D0V/jBjSpXosAHOvTQbb8FElPm7F4MiF3i/ilDtlPoewdTqxmpTA9Ji+ZqKyKtyl1gR9kzpRv2P9dOMiW6JC/6QXx+CYihy3Q3KlG96ErsFke1mrWMlbK8jCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e2MCWaS/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770345377; c=relaxed/simple;
+	bh=kMw3EEd28RthZmZA8Fo+EKBU3vahW78MzxUIWbmmL0g=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=otDJZ5QPEm7AZrMo6MSdTd1KVsZZ3mi94ceH8NIX6f60INQALDWGHdt0wauY4//TrEYiv2d7gaegR6GH2G76upxXEF7YZmFmEdoeI6jN3fMQElgMX9GpEKkO9gYbKI/biNKhMvgi9AkmvJtizTWxAJyqT678k0jGygipaHjmuPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=s4aantJR; arc=none smtp.client-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e2MCWaS/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A73C19423;
-	Fri,  6 Feb 2026 02:24:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770344663;
-	bh=TUGZs3VCsG3R3upJb5hZDjDQh0S2r6zsbhzPDbzbjhM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=e2MCWaS/4d2v5jy/otnmBzgH5ONueOJ3Z//Wltf7fEUAx+nLfkY+gAl8wZ3x6beig
-	 Wjk6aiBdCykDnzhnpop3nZ/LHREUTNjsqrX/EJ/ExPG+37Gk7eKDHnf8loaMk19Nh7
-	 XISe2uF10wEUU7edyLX+5Uat8zloELP+Vc6/a6Wmxhk8ssdkNglNIuk4LAIP1wCcOg
-	 dB07rMu0dpbtXNOjZ5hapQk9ziQY2L00epk5WB8xJpcRdu3ijlD1ar1UiS9+aySHrX
-	 PhCdjUXwQRMenSCIJ3X85CVnIeaA1R6yOatXYvub7qKwY+YwNrhf23JxbpFgvs4GLi
-	 7Clu4Wq6NQlYg==
-From: Allison Henderson <achender@kernel.org>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	rds-devel@oss.oracle.com,
-	kuba@kernel.org,
-	horms@kernel.org,
-	linux-rdma@vger.kernel.org,
-	allison.henderson@oracle.com
-Subject: [PATCH net-next v1 3/3] net/rds: rds_sendmsg should not discard payload_len
-Date: Thu,  5 Feb 2026 19:24:19 -0700
-Message-ID: <20260206022419.1357513-4-achender@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260206022419.1357513-1-achender@kernel.org>
-References: <20260206022419.1357513-1-achender@kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="s4aantJR"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ezukT8gf6vSf0QeciExJA8vVhdyq2uEBdV2mhNDadD4=;
+	b=s4aantJRfPssrCTa1yKJyIcOivrhh0gnt+2+HS1+182XHUQoAjcmUsCCwlGCcCW5dna5kD/Tj
+	2OdvS7KYVXF41Xxj1VvwJZwa4d2K18QfufeULKIkramvSMwkaTpVYwTto6aT8OKViDrr4q3IBEi
+	fiiwQAorO5zkQeydhJ3YdZw=
+Received: from mail.maildlp.com (unknown [172.19.162.92])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4f6dPv742bzKm4s;
+	Fri,  6 Feb 2026 10:31:31 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id BB32A40562;
+	Fri,  6 Feb 2026 10:36:07 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 6 Feb 2026 10:36:07 +0800
+Received: from [10.173.125.37] (10.173.125.37) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 6 Feb 2026 10:36:06 +0800
+Subject: Re: [PATCH v3 1/3] selftests/mm: add memory failure anonymous page
+ test
+To: Mark Brown <broonie@kernel.org>
+CC: <akpm@linux-foundation.org>, <shuah@kernel.org>, <david@kernel.org>,
+	<lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
+	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
+	<nao.horiguchi@gmail.com>, <linux-mm@kvack.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+References: <20260204073331.899406-1-linmiaohe@huawei.com>
+ <20260204073331.899406-2-linmiaohe@huawei.com>
+ <2028f5e1-e032-4909-8240-15fe0b3c82a5@sirena.org.uk>
+ <0a84104a-32e3-8518-ebc0-703814e233d4@huawei.com>
+ <73756615-b779-44b1-8ff5-b4b2d5e3c7cf@sirena.org.uk>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <92c543fd-4316-d5dd-451a-a2c668fc98aa@huawei.com>
+Date: Fri, 6 Feb 2026 10:36:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <73756615-b779-44b1-8ff5-b4b2d5e3c7cf@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-From: Allison Henderson <allison.henderson@oracle.com>
+On 2026/2/5 19:28, Mark Brown wrote:
+> On Thu, Feb 05, 2026 at 02:58:50PM +0800, Miaohe Lin wrote:
+>> On 2026/2/4 19:26, Mark Brown wrote:
+> 
+>>> In -next I added a hack with wrapper scripts per category to improve the
+>>> integration of the mm selftests with the kselftest framework, could you
+>>> please wire things up into that, see:
+> 
+>> Sorry, I missed that. Do you mean adding something like below to run memory-failure test separately?
+> 
+> Yes, pretty much - I'd keep the list of TEST_PROGS sorted but otherwise
+> that's it.
 
-Commit 3db6e0d172c9 ("rds: use RCU to synchronize work-enqueue with
-connection teardown") modifies rds_sendmsg to avoid enqueueing work
-while a tear down is in progress. However, it also changed the return
-value of rds_sendmsg to that of rds_send_xmit instead of the
-payload_len. This means the user may incorrectly receive errno values
-when it should have simply received a payload of 0 while the peer
-attempts a reconnections.  So this patch corrects the teardown handling
-code to only use the out error path in that case, thus restoring the
-original payload_len return value.
+Sounds good to me. Will do.
 
-Signed-off-by: Allison Henderson <allison.henderson@oracle.com>
----
- net/rds/send.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/net/rds/send.c b/net/rds/send.c
-index 6e96f108473e..a1039e422a38 100644
---- a/net/rds/send.c
-+++ b/net/rds/send.c
-@@ -1431,9 +1431,11 @@ int rds_sendmsg(struct socket *sock, struct msghdr *msg, size_t payload_len)
- 		else
- 			queue_delayed_work(cpath->cp_wq, &cpath->cp_send_w, 1);
- 		rcu_read_unlock();
-+
-+		if (ret)
-+			goto out;
- 	}
--	if (ret)
--		goto out;
-+
- 	rds_message_put(rm);
- 
- 	for (ind = 0; ind < vct.indx; ind++)
--- 
-2.43.0
+Thanks.
+.
 
