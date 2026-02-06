@@ -1,176 +1,180 @@
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011010.outbound.protection.outlook.com [52.101.52.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8A02765F8;
-	Fri,  6 Feb 2026 15:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770390187; cv=fail; b=B7T4jcP8Hn8Cariyqz477xGbVMr9gf8ssh1RxAcXZI9VDySoGiaqp44HrpGZRol3lKuWQQTfsIg/ym/hhxiXPvIa/2+HkHGhQO/XxxP2KVff4+MdfXQ5WiYScwWlwwN5br6esdiODBrNV5UPObZZhigExg8grarRl0wOfE9h59A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770390187; c=relaxed/simple;
-	bh=q+w8vLxYNyKjX7Es27XNXzenv1dicxTs5STWE8Yi0zE=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=of02+T+HkBL3cUlQNH7QecmRk0X1N/PligbOJKSN+p8Bqk4Gj9hHuE62HL/fvpc8ZcbYFFIuhssfZOY7IAncYt0KlVi0D8wtiLKCHiqCleF7kTjOR5l/TRXkwkW8x/taeSX+U1Rl18RsTxIe7+cRqnxnM/kMxG/jCrm+LR7ckUw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=s6ziI3wI; arc=fail smtp.client-ip=52.101.52.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC5527381E;
+	Fri,  6 Feb 2026 15:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770390441; cv=none; b=U9/qDCVWrHHVAGTSpe8KHgrqEOlUsiDaJxYXjomKw7G19+LANG5YQbVTBo1rhBXkQcoP9CKPAkhm9TnjHIefFh6Tu+PuMT0pNV9Irf+Cj64iVhKMt8zRqPOYyDL2huPOFSYzkGFn3L+Ak0ZY8eVpiybm9gU8b0i5oCqbJoXfQXY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770390441; c=relaxed/simple;
+	bh=kui+rp66NObqhCZ5Bqj4PFC3PthfR7x9lEBEylzf8tA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nUKAG0mp0SRciuXImym00wb191opYnGORZ3K0LlRNKuRqN6UnRbO8w2qMa/8ox6uUiQDlEjUb8UTRlgfUMIChvsanX7h3QkWS1xG/ssu1CKl4hR/msHyguNRqmabIQR1V7q7yNYK1nGkitSUa3RzYGGZqxX8DfRTUdszVDUDbI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NoBEQLFL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="s6ziI3wI"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Nb/b3Y/t+6ovB7TOE7kgqBsX3NT2E4R8lPeQdgdQr7zFut0FZsBOZeK68mSar0cqudKGAv7hJEcV+aYJdsC+Q8IuwjDiC6wY4VrpdGpqWvx/fnUO2GXs4EepCoJdLAc2pIB2u+9CmGY7fVoMenh+0oRKQ4M9+JpL3myl/qF74DRqo1SV7r18YdApD6vTY6yEB4Xg2Z8/L+H9BgBFIlShbeqqD1sebVOvr5GkvEweZn5ufOR4PUyZ1QRTnxI1wa2xBkG/G+DXJzqsjmkkXIGUy5kf3HSsIHWyNctn+yrtCnsJ452ajbT/hfWvOeT5tVRpUNiwhazGv4zyhV2oJ6SR7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xOuSLoQQL7jtMguh6UIM1yGrivZzpBPPULJHXlDBxl8=;
- b=FEzA1oYvrXdAhka721q0kTodKBCVrMBMOLryhTx6sBxJ8BEkWkJip9y47APJCn14h265HDwkit2fJDGQ4djof9p4bX7HZGw1OUHTV4+dONi/kHngKXkNuUOW7pO89fXFK5YfvAkqCZ8pASrkV1fLdt6MbcTvtUr6gz4bJtUx4gNZDGOpIRiRX2UCo9JvJjL7fltG7VBoB0EYbAmhBnNGTUBmc5gAVlQbDumAea9c7HUTBJ5tAD/iOlwHRP6YhpDKLtYVxE5izigXeBzvqGM1Xjp0WdClvWHPNjFRD2SMWamIEVu1G/Hh64oLrQR/7ODKhqC2pw8cMNWmsl8MMUNjew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xOuSLoQQL7jtMguh6UIM1yGrivZzpBPPULJHXlDBxl8=;
- b=s6ziI3wIv9q1p4/J3WYpGcX/CTn+SK6UV6fOvJ3WEUifSrBvqCqb5OkhNj/E5HB4alIsW255gwkH22o4TGDKsuu9RwFbJw8KaNEatSwVEKBHSb9/OI4mM8C+5lMchPz0pQ7bRtrtnq7OqTvLYaE1MqkQcBDJJ36n5nZmdyNkiVDq0mt50KLKwE383mJfxP8nXlu1+aq1C5oz/VqNSc3DiymNS+e3CguhtXczcvR6Riv8LuZ3tmcFTAdJHbnF83WOsL1Qf8SkcIH0xV23qSsOlt+5CP8ZwdbLfdzrSST3BS0r5AEcIIgCWTHpCY1OoTfZaAdfy28GjG75NkZiRPq4pg==
-Received: from DS7PR03CA0033.namprd03.prod.outlook.com (2603:10b6:5:3b5::8) by
- DS0PR12MB999106.namprd12.prod.outlook.com (2603:10b6:8:301::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.13; Fri, 6 Feb
- 2026 15:03:04 +0000
-Received: from CH3PEPF00000012.namprd21.prod.outlook.com
- (2603:10b6:5:3b5:cafe::89) by DS7PR03CA0033.outlook.office365.com
- (2603:10b6:5:3b5::8) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.15 via Frontend Transport; Fri,
- 6 Feb 2026 15:03:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH3PEPF00000012.mail.protection.outlook.com (10.167.244.117) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9632.0 via Frontend Transport; Fri, 6 Feb 2026 15:03:03 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 6 Feb
- 2026 07:02:40 -0800
-Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 6 Feb
- 2026 07:02:34 -0800
-References: <20260205220541.2992807-1-kuba@kernel.org>
- <20260205220541.2992807-6-kuba@kernel.org>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
-	<shuah@kernel.org>, <willemb@google.com>, <petrm@nvidia.com>,
-	<donald.hunter@gmail.com>, <michael.chan@broadcom.com>,
-	<pavan.chebbi@broadcom.com>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 5/9] selftests: drv-net: give HW stats sync
- time extra 25% of margin
-Date: Fri, 6 Feb 2026 15:40:30 +0100
-In-Reply-To: <20260205220541.2992807-6-kuba@kernel.org>
-Message-ID: <87cy2h29vj.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NoBEQLFL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD9FC116C6;
+	Fri,  6 Feb 2026 15:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770390441;
+	bh=kui+rp66NObqhCZ5Bqj4PFC3PthfR7x9lEBEylzf8tA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NoBEQLFL6v8ayYZsTdH8L0SQEmvUAFuXPDzfqQcwoZ4pJt3f9t1bmw97lCQnmNWCA
+	 UdS8TH+EdaXMtGOozje7+SxHGSoY+yYTjIoXSlvMqp7N6kNfjU80H46622OV2ihafa
+	 1YjU2razOJbjpMVwufpT/Am+gY4rNVeeqOCpjymvj1+i12keYq6DCdxu7v4hujxuE0
+	 MABzDUCMnjF2iXafocJ4dEhbLMNJY0BEjcntD0oWx12z23oBYy42XGgGJpAfS6ylYI
+	 2dZr+39Vyz+R2gxBePhceCAlXqK3q/M1oYGmf+0KprgMdYplv97rfUCNxprD7J3JRR
+	 btY1OijCZRXpQ==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1voNQQ-0000000079i-4Bvu;
+	Fri, 06 Feb 2026 16:07:15 +0100
+Date: Fri, 6 Feb 2026 16:07:14 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] Revert "revocable: Revocable resource management"
+Message-ID: <aYYDoqpZx88gV1hh@hovoldconsulting.com>
+References: <20260204142849.22055-1-johan@kernel.org>
+ <20260204142849.22055-4-johan@kernel.org>
+ <aYRaB5wI3mS2J54K@google.com>
+ <aYSjKaUGdTngCXWK@hovoldconsulting.com>
+ <aYWw5XvrYKlY6y5V@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000012:EE_|DS0PR12MB999106:EE_
-X-MS-Office365-Filtering-Correlation-Id: f35a2b9a-fbd5-4f82-9937-08de6590d409
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|82310400026|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?C4LFKmYlntpds2FPRcFrwRCi8EgCqL4skAaztYD1/Ip18ne0QC9GUgrevmgJ?=
- =?us-ascii?Q?B88gZjhsAsbbIHLjzYC9HfrZYFD9p0rg5zi+J8eRFAJX5O94Nd73wya561ev?=
- =?us-ascii?Q?0eTu2t897BYg+cSH5kGW2WUxORS3MH+34dVbx7zxwabWiiuYe7YMGfr5Ldvb?=
- =?us-ascii?Q?qCZ0xyXQ6kbpJel9pv8L9XSEscrSIxHQN9vBuSjXw5/QFWpG4QPux9te7IhR?=
- =?us-ascii?Q?+VOabEgXTMoBanPpb4JDR7bJGPSB8KhCpt3a+C7yOHo6zB4awn9kOyVJgTMT?=
- =?us-ascii?Q?SqKJB7WBs1kz+DnSLwad5Qzaxg1TWpbSEX27qNw+DNO28cZOIWROKlHX7IA1?=
- =?us-ascii?Q?B2syTQWJzVSo7pnKj/j7d8ffI9R8LJgh3eXAukd0+x+OX7ynFx6YAfSOMBjT?=
- =?us-ascii?Q?YWqw069aXHyZ74TobgYi8fzM6vhKMl7wfHFo9mlNdThDH0wDOXkDBN4a9fiV?=
- =?us-ascii?Q?0h1HogtWsOwBIqChs96TxkE4uiK6+Kk3VPbzUE3G24nbSvZVwVnM+ChdYkz5?=
- =?us-ascii?Q?83yT9RYJ8KVllBKvX9vSJnFql3x/hsVEqgNPs8NTT6u1H2M4RxVJROyxmswj?=
- =?us-ascii?Q?9ZQs0E0HH+fo4Vb2BI7VXiPZX7e6HT+m7a8btxf4s3I2GANW/Z4Xc041wAlj?=
- =?us-ascii?Q?UzMk/17NN7ezj1ZJ3e+co3Ds0PVwNt8gwJ+VDdpz6+49L8O0XEBqQFOJu9I2?=
- =?us-ascii?Q?Dx410YAtaFXnw5xHRxJhl5iMim+WmKmzG/qroqRBAwQ90MkvdWG3h/ZB/PSG?=
- =?us-ascii?Q?+j38PsK2umXwNTp9GLJHI4/3QttHu7r7i2lADeBuvriwBTQ2AhIWJsZRCDmA?=
- =?us-ascii?Q?1FRJQ3uWNr6sWVRXwIJC1A2DegvALUJCDb3KaB/obXfWJ1+VED8ggeJTj3oM?=
- =?us-ascii?Q?wE0LxKr+gIdkA4Wd0V0B4mjq2rtYdFFxhd53HbwS6/OTLZVqA6gE9y2cO1R/?=
- =?us-ascii?Q?DJbMY1ItLXCLepEJNcKptvAjSmtZ+B+b1+VS4g2QKIBkCfW/IdHe0bcqCNik?=
- =?us-ascii?Q?ovNK3rq1F+4AP9WL82kRQj36HYAI16ujQb+IZJzD3TIFa+nTVIC4AZs7E/uF?=
- =?us-ascii?Q?1eFBL5OcoorQt/EF6KrlLKCf4/FuuunMbvUr5x4w4YNRUE1g3yMULgLn6LeQ?=
- =?us-ascii?Q?Oa/t71dYXjMklOoKGdGYGG0EZOE2JM4I2yj+1M59+1DX3fPpqlkbbhqf9cI5?=
- =?us-ascii?Q?DKg+/qNUeENJI7KJhq0oVy/VEOZw9iiHPktN2Kb1zPHy3gYgYwX2/dvw6O0I?=
- =?us-ascii?Q?uVwMwn+zHQSQzfK23X0RXvmnh/NcLFReKj8WAEyD3sGeTwIgARf77/Q7yGVh?=
- =?us-ascii?Q?Y5ZYVdQ9gYQ8jeo+svt+LF0cdyxIvF8G8Bcx/c3LHOPmKWwlaHyVVfHB4wqF?=
- =?us-ascii?Q?tD0HmuluBe38wqQJwpo1C1L4h0i2gPJNICznIJcsqZNiK32EpQJMewIs9GgL?=
- =?us-ascii?Q?w1GdottaOPEuzUeDgNPg/iOuMS2omcpsNI2yDdiDLPbUIt/B/UySF2hrqfuw?=
- =?us-ascii?Q?TgN25FYAs9TxBOJaZSNsaJoQWwjI5x3PEqqm4/oL0u+opbz/dEAHOS56Ax+b?=
- =?us-ascii?Q?+hY/f39dZo87yWjzNkrfoCOcBd281NDFDnxCZNQSoxCU9Q+yCotLhvLDS50Z?=
- =?us-ascii?Q?XoqpwFkriVH7kmqjjILRvvs=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(82310400026)(36860700013);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	WJf/0u5bdfDA8b37UQ43Fq0uvSCtR/M95NqEAqNjoAJMk5TaWF9Or4lU+n3nIcLuTqaxKJKk9joUtwO/XHhq3UE2FQqeo3e1EDxyvj8huAm1iif3pNZ2DvpRKh+6o2SVimf4WUyTBXs5ykEdSHM6pmNrZ3+QMjrMDRSEVJDCyl15jNWdvLJ1kp6IIqsb0nM3v76rHUFDU8P7WR56kuQaxADkcbrI4674skw7k8+yuFNlj4lN3uxXC4dziuxie0/x3JlAIz1FqBqVyG48ynkirmCuB79MZK4DnZkbwzkBbzMgauW657IiiUam2C+Uea15xXpxN2QGMUdqkUVRL7fg49lc8u8n8No9DFpENw2esHFsxXKMFvweC1BuKMBsw7TXhOn1PHvqkm8vSBkaDj4Pxu9HWUEMo5c77BBP0hodCQA0kyPXd7GULMmgNr8mqGIj
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2026 15:03:03.8637
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f35a2b9a-fbd5-4f82-9937-08de6590d409
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF00000012.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB999106
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aYWw5XvrYKlY6y5V@google.com>
 
+On Fri, Feb 06, 2026 at 09:14:13AM +0000, Tzung-Bi Shih wrote:
+> On Thu, Feb 05, 2026 at 03:03:21PM +0100, Johan Hovold wrote:
+> > On Thu, Feb 05, 2026 at 08:51:19AM +0000, Tzung-Bi Shih wrote:
 
-Jakub Kicinski <kuba@kernel.org> writes:
+> > > You're right to point out the issue with copying the pointer of revocable
+> > > provider.  If a consumer stores this pointer directly, rcu_replace_pointer()
+> > > in the producer's revocable_provider_revoke() will not affect the consumer's
+> > > copy.  I understand this concern.
+> > > 
+> > > The intention was never for consumers to cache the pointer of revocable
+> > > provider long-term.  The design relies on consumers obtaining the current
+> > > valid provider pointer at the point of access.
+> > 
+> > But that is not what the selftest does currently, nor is it what you
+> 
+> Understood.  As mentioned in my previous email, I'll update the selftests to
+> reflect this.  The test case somehow is simplified to setup the scenario it
+> wants to test.
+> 
+> > need for your initial motivation for this which was miscdev where you
+> > don't have any reference counted driver data to store the pointer in.
+> 
+> You're right that cros_ec_chardev.c needs to be adjusted before using the
+> version of revocable.
 
-> There are transient failures for devices which update stats
-> periodically, especially if it's the FW DMA'ing the stats
-> rather than host periodic work querying the FW. Wait 25%
-> longer than strictly necessary.
->
-> For devices which don't report stats-block-usecs we retain
-> 25 msec as the default wait time.
+That's part of the problem here. It's unclear what problem or problems
+you're trying to solve. You started off with the miscdev issue, this
+thing morphed into something else, and now everything is just a big
+mess with unclear semantics and a totally confused implementation.
 
-Right, because now the default is 0.2, and we apply the 1.25 multiplier.
+Look, I'm not blaming you for how we ended up here. This thing should
+not have been merged until there was a general agreement on the
+usefulness of the API (which requires a problem statement and use case).
 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The right people clearly didn't look at this in any detail since they
+did not expect it to be merged any time soon.
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+And it's just unfair to you to have to redesign the whole thing under
+time pressure a few days before the merge window opens. New code is
+supposed to be ready weeks in advance, not be created and merged only
+days before.
 
-> ---
->  tools/testing/selftests/drivers/net/lib/py/env.py | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-> index 41cc248ac848..39a98eb2592e 100644
-> --- a/tools/testing/selftests/drivers/net/lib/py/env.py
-> +++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-> @@ -285,7 +285,7 @@ from .remote import Remote
->                  if "Operation not supported" not in e.cmd.stderr:
->                      raise
->  
-> -            self._stats_settle_time = 0.025 + \
-> -                data.get('stats-block-usecs', 0) / 1000 / 1000
-> +            self._stats_settle_time = \
-> +                1.25 * data.get('stats-block-usecs', 20000) / 1000 / 1000
->  
->          time.sleep(self._stats_settle_time)
+> > > In the latest GPIO transition series [5], the usage pattern has been refined
+> > > to avoid locally storing the pointer of revocable provider.  Instead, it's
+> > > fetched from a source of truth when needed.
+> > 
+> > Right, but then you don't need all the RCU stuff. And revocable becomes
+> > just a convoluted abstraction for a lock and flag (as was pointed out
+> > early on).
+> 
+> I'm not sure if I understand you: as we're discussing about the stale pointer
+> of revocable provider consumers might cache here, do you mean it doesn't need
+> RCU at all to protect the race you reported in
+> https://lore.kernel.org/all/aXdy-b3GOJkzGqYo@hovoldconsulting.com/?
 
+Right. It's not needed. You have a refcounted structure and you can use
+the refcount to prevent it from going away.
+
+> > > I agree that the risks and correct usage patterns need to be much clearer.
+> > > I'll update the Documentation and the selftests to explicitly highlight
+> > > this limitation and demonstrate the proper way to interact with the API,
+> > > avoiding the storage of the provider pointer by value in consumer contexts.
+> > 
+> > And again, that's precisely why we need to evaluate the API in a
+> > non-trivial context *before* merging yet another version of this.
+> > 
+> > > > Essentially revocable still relies on having a pointer to reference
+> > > > counted driver data which holds the revocable provider, which makes all
+> > > > the RCU protection unnecessary along with most of the current revocable
+> > > > design and implementation.
+> > > 
+> > > (I'm assuming you are referring to the example in [6].)
+> > > 
+> > > I'm not sure I follow your reasoning.  Per my understanding:
+> > > - The reference counted driver data (e.g. `gdev` in the GPIO example) is to
+> > >   ensure the pointer of revocable provider isn't freed.
+> > > - The RCU protects the pointer value from concurrent access and updates
+> > >   during the revocation process [7].
+> > > 
+> > > These seem to address different aspects.  Could you provide more context
+> > > on why you see the RCU protection as redundant?
+> > 
+> > I wasn't thinking of any particular example.
+> > 
+> > The struct revocable_provider is already reference counted and you don't
+> > need anything more than that as long as you only take another reference
+> > in a context where you already hold a reference. (And struct
+> 
+> The reference count in struct revocable_provider can't protect the race
+> reported https://lore.kernel.org/all/aXdy-b3GOJkzGqYo@hovoldconsulting.com/.
+
+Yes, it can. You just need to make sure you hold a reference. And
+redesign the API to let you do so.
+
+> > revocable_provider should be renamed struct revocable).
+> 
+> Probably no, struct revocable is for consumer handle.  It needs somewhere to
+> store the SRCU index.
+
+Yeah, you'd need to store the SRCU index elsewhere (e.g. int, typedef,
+context struct).
+
+> > SRCU is what prevents the race against revoke, no need for RCU.
+> 
+> No, without the RCU, it can't prevent the race between revoking and creating
+> a new consumer handle.
+
+Yes, it can. You just need to take a step back and redesign this thing
+again.
+
+> > But this is designing yet another version of revocable. And that should
+> > be done out-of-tree.
+
+And that should be done out-of-tree.
+
+Johan
