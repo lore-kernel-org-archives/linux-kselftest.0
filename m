@@ -1,151 +1,70 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2473433A712
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Feb 2026 23:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770333494; cv=pass; b=HqKldu2OMD9dWP2aR4RaI7phPbmwfYUkzHjMIocvooGK2RtFd+A7hzrQDUyxE4gAvvrh13pQ3yU5z/9qECe8cjvgHrmAg9I/cyJm0KxQNcm+V2frzzXZ2G6UiwRvhhEAFZlcN6LcHiioW3uJ6Cl1m/ttwsBk3Kr7yMrj5MEZn6I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770333494; c=relaxed/simple;
-	bh=3DMdSbOnTDuQkq267j9yDrVRURkKzUdqV8Rm0kiBb5E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WxgKfac34ai3M68O2OjHT1itn9jSAkeT8q0tNgUXMCm/maYsX8mDu9ztDtJE82cY2zHpw9j2Qmd/YkaWdc45p49Y1QErq+5zedlSj0euunyGkeNm/0FInVHKqn8dnB32o/8hy3fxI2mO82soBSaI0ZmtkY9UIMXy0AjmrUbkAoc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KsFEC+5x; arc=pass smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E5215A86D;
+	Fri,  6 Feb 2026 00:17:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770337069; cv=none; b=i0IfNo7KAI0/Bh/beyzg67mRf2MuCJ/ej9QNKmskOdltfKZUNOouaSC1eldJBV/l2VaORGbalJnqm/p+dIYALQU3S1sZkhGMfGK/J9qrClGTw7EO8Av6MpONzHAjE0Wi0foxSOrTDGxtF9bo4hw7yOWLcy/BZrHdXh7gwnrfvBw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770337069; c=relaxed/simple;
+	bh=DQrq5c1J+kiv5UEj7nlCQrtJTusd0d502vuVJr1r7pE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Io1r9SIYEgGXX3KlMpXo3ixm1xyuru3Ou5LXVTbOiH3iuYYjeE/KdpnWiy93JmELwfarLxGEhjbDzRrS/Y08KPYXrYerqQzKYbQrrVvCjCHKsxQi6Svxd9/upStEXtac/Ot6vW7Q3IZvgDe1iQNW4bbreagocs4tWa2/ljEhCds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gf9tjtCJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KsFEC+5x"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-42fb0fc5aa9so61598f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Feb 2026 15:18:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770333492; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PxaGzBvilmkbtWqDpa9b0yitQ1GD1LnjE1SoKXYS6n7I5tAnmPsE+c4M/soHqE09E4
-         P+nz3ObKGuzsypHt3HaIUf+vRHjdwtEgRK+L5yutcZT9Uo/66MvSLl1pJ+w5T+6Jumh/
-         NHU36GWSFodtCouYTGBdHmGIM0NmLhrmZHcRlRGIg7I3riSOnXSKv7acBOoRiHOvxWnc
-         2E1lUmDjVP4P0RLeagMpHI8Nz+x1NPvD82HaCpM4A0ISSoYGViBiqXFuQLbm4e9nhLhu
-         7RI0hzmftY+ntAecGsb+9lV/xZ3g2qvqSdi2RBL4yhIpuiyaCwun7xHwyU6roW+pzBHa
-         Dc7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+gVxik1Rd2HR9YOH7lBv/JwMwx8oMND3FQlaYRrhj3M=;
-        fh=xPiwyVEsWVCxp1vfV8MqxlQessdB+eYwD9gMANHZJPM=;
-        b=Q4Hs2kBDZz8HkU4kzrc4mu4DSp75rF7/dxlzBwxsgskfnuqV6dvq121Q0SZSjm6XIL
-         B+pdGgD/DbMQKiMAJen5GEdMTUBo+rqTe34kVTgQTUCJhB79m09vG3ECe4+k3fyewfey
-         mxtz5bjaeGXSLzV5o9btaz2A3F89yBEIHIFbhAZSxC3YY/aSPDTm1OQTHzlTg+avkbSu
-         CkcflB9OEakv4WUuMOK76K48qg7uUf/aRkf1nk3Lxm4V6ckJL76WYJiXZPiQ/g2FBX/t
-         CcBrrw9Agbh5qVZO1PHlJPAMHXrUZD7kAfpIXQhCv+YSKyiKf6oySljbiSxmwGukTjWT
-         4JeA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770333492; x=1770938292; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+gVxik1Rd2HR9YOH7lBv/JwMwx8oMND3FQlaYRrhj3M=;
-        b=KsFEC+5xJJ1pF6iyIreneP2yUGYbr5Zur8v5VVisrEy/PRfRqCg8Ov3FW/+TEjTr8o
-         n1REryVfGIVanWoMukYiheyROgDhgCAgIyZfMlm7VDEN/yle6NhEVOEDE57kZffAxesC
-         Om4gDAdHZ4bQKl+1AldcE4txCGAVoLrUOtNiWfZe05f+maskeO/svj51iRXy2wmnpP+L
-         okCu1ynLqxC6TC9ZZT+SJa8UWFE9i8N+HOSntnvNnZFiAuxlH7UGiia+HJkT8TMXQlHJ
-         Abgt4TgzhHGrQmrckg0ZYgrzx6jRVg4W+luCL/CQfxJSb42ImyCohYhWZc0GOaWI5DYn
-         WvPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770333492; x=1770938292;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+gVxik1Rd2HR9YOH7lBv/JwMwx8oMND3FQlaYRrhj3M=;
-        b=EfpsAoIZdjAb69ZxhZJ9AJs8KUZb3b/ccGHGe+nDvMdcdea7Fu/PX6uXQ2DfF9pXz7
-         Qqs4F99QeY8oiQ5qNin2oqMbujXgZgBhXbebtnEn8p+svuI0jl8FIiS6qq9YF0ZsfcQR
-         tihQo/sp3Ccv0W0nqB7EiFrksTlr5AiYkYstzmMzyLPW+pU0X4TKh3icpSP/hpuE8RpS
-         EGo5vuustil5O9C7IYzLjTBgAtKEeEFv9rTdnv5CIXPhQ8YbXn7VpD7nRjnwrpBIaqio
-         OP48Do3qjL0SEwtwvB16vHSBtFnVczBqhMXgdf+5PXEIs1NPcfP2Pt1rdkymBS0ccvVS
-         vDIw==
-X-Forwarded-Encrypted: i=1; AJvYcCVLkUS7C+79Dw70sZKxmIfD9pkEiB3VhEVdacVIEaZ1SBppsYYEH6SFerqCbBk7DW6wfzObIzFvYaHR2CGj9Bg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxtvLbdu+0J4RnG4hF1ixu7UUT7bCynjZ2IK2dfM1YOtOqdshx
-	wdZZYdoUrDOUXvDtUzwGbELxpUxx/fIr8GXuD3vESBY5sr0MOn0v6q5StC8b3J27KmOh/vlpev+
-	foMPspej5M0xX1WhV5WMCy4u/qcbytU4=
-X-Gm-Gg: AZuq6aIMW0l0OItevIkechc1R0OUiUNC/7AtLdy+MvGYQmNWCCZKtcoi+EDQWEovRas
-	7OuMhaOeczhQ3TUcqChzRM91UnMHZg2uAoilJgQxGbbWqW9yOYHlGmo5oHw5k0UsdDWhQ8T809O
-	veWXG4K701+dU8N8asVlyqMDWLoER+OORuwgu0OKIUfIQuV5/IvM8bymXsIGeStOtaZjZYFnu/D
-	X3qgiXR4KTM9AVKQKsrNvD+aKbjVTEZclSSpQ/hBGC7/XD0qZctNCt3EhmnEVh5BX4gAqOFspBf
-	LAntyl/yukoz02AdHHnUL9tbHjoBkIBUXVq33YDHnUdvUeIUn+Gf7N1eFpyFy2kUkkSQYWc0ECO
-	pF84ODB3jYNDKlQ==
-X-Received: by 2002:a05:6000:25c5:b0:435:a160:4480 with SMTP id
- ffacd0b85a97d-436293b3972mr1289485f8f.29.1770333492352; Thu, 05 Feb 2026
- 15:18:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gf9tjtCJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59429C4CEF7;
+	Fri,  6 Feb 2026 00:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770337069;
+	bh=DQrq5c1J+kiv5UEj7nlCQrtJTusd0d502vuVJr1r7pE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=gf9tjtCJFiCokVo3TecNVaL7vYEpVzQS+7qD7EkE4j0zwz6pQa8CJzf8yq9jCKQPh
+	 inzUgyrJC/kXCAypadw2sf4WwKVDYiZpLAJ3vJtNXFKbaMABNo/IABgZ78lhjDoy3T
+	 KrRc97EcUTmRJ5KPSZratWTiMDx2crawaWu41OnmHKeRBkPTjPlAqEg7qbQRoCqYQu
+	 wcdjmdRXX/zZctk/GubMb8xTmTrtJiEbmboWrZfXfzGiNRfxIYC/uyEJwhU/T1twax
+	 RhHenQ/IlbuNZ8iCDPEeuLPPZrOhuOmRsGkmzn98SaM2Sio/TXjfFDM9+suE00uxKk
+	 yBIBVmhLjVuog==
+Date: Thu, 5 Feb 2026 16:17:47 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, Jiri Pirko
+ <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed
+ <saeedm@nvidia.com>, "Leon Romanovsky" <leon@kernel.org>, Mark Bloch
+ <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, Gal Pressman <gal@nvidia.com>, Moshe
+ Shemesh <moshe@nvidia.com>, Shay Drori <shayd@nvidia.com>, Jiri Pirko
+ <jiri@nvidia.com>
+Subject: Re: [PATCH net-next V2 0/7] devlink: add per-port resource support
+Message-ID: <20260205161747.26dd7bc5@kernel.org>
+In-Reply-To: <20260205142833.1727929-1-tariqt@nvidia.com>
+References: <20260205142833.1727929-1-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202144046.30651-1-leon.hwang@linux.dev> <20260202144046.30651-10-leon.hwang@linux.dev>
- <CAADnVQLXWQ8Miq2WBoXRDsEVP1QPwk=a5=Rj_uPN+9qKHZZmZw@mail.gmail.com> <11bb515b-35fd-44f3-9647-9c39580ce6a1@linux.dev>
-In-Reply-To: <11bb515b-35fd-44f3-9647-9c39580ce6a1@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 5 Feb 2026 15:18:01 -0800
-X-Gm-Features: AZwV_QglFJ6RG-mGREyP1kc1aziDJK4mQg7BQEXe8BuO6fsVJnqTfOcc_yniLk8
-Message-ID: <CAADnVQKYwi2bNc8Hsg-r9dF0ACYYEzRyZDc33G2Kr_o0bu3bow@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 9/9] selftests/bpf: Add tests to verify map
- create failure log
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
-	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
-	Rong Tao <rongtao@cestc.cn>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux API <linux-api@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 4, 2026 at 7:54=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> wr=
-ote:
->
->
->
-> On 5/2/26 04:14, Alexei Starovoitov wrote:
-> > On Mon, Feb 2, 2026 at 6:43=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev=
-> wrote:
-> >>
-> >> +
-> >> +#define BPF_LOG_FIXED  8
-> >> +
-> >> +static void test_map_create(enum bpf_map_type map_type, const char *m=
-ap_name,
-> >> +                           struct bpf_map_create_opts *opts, const ch=
-ar *exp_msg)
-> >> +{
-> >> +       const int key_size =3D 4, value_size =3D 4, max_entries =3D 1;
-> >> +       char log_buf[128];
-> >> +       int fd;
-> >> +       LIBBPF_OPTS(bpf_log_opts, log_opts);
-> >> +
-> >> +       log_buf[0] =3D '\0';
-> >> +       log_opts.log_buf =3D log_buf;
-> >> +       log_opts.log_size =3D sizeof(log_buf);
-> >> +       log_opts.log_level =3D BPF_LOG_FIXED;
-> >
-> > Why? Which part of the test needs the log with this flag?
->
-> BPF_LOG_FIXED looks odd here.
->
-> This test sets 'log_level =3D BPF_LOG_FIXED' to match the behavior of
-> bpf_vlog_init() as initialized by bpf_log_attr_create_vlog() in
-> patch #7. BPF_LOG_FIXED is intended to be the default log_level
-> there.
+On Thu, 5 Feb 2026 16:28:26 +0200 Tariq Toukan wrote:
+> Userspace patches for iproute2:
+> https://github.com/ohartoov/iproute2/tree/port_resource
 
-I don't think you answered my question.
-bpf_vlog_init() is using whatever log_level user space provided.
-Why do you pass BPF_LOG_FIXED ?
+I pulled this but the test still doesn't pass:
+
+# TEST: resource test                                                 [ OK ]
+# TEST: port resource test                                            [FAIL]
+# Unexpected resource name test_resource (expected max_sfs)
+# TEST: dev_info test                                                 [ OK ]
+# TEST: empty reporter test                                           [ OK ]
+
+https://netdev-ctrl.bots.linux.dev/logs/vmksft/netdevsim/results/505601/9-devlink-sh/stdout
+-- 
+pw-bot: cr
