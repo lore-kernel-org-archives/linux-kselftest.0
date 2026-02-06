@@ -1,171 +1,158 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010050.outbound.protection.outlook.com [52.101.46.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13172874FE
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 15:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770391197; cv=none; b=QDW8+ksBUsKhxziuVOq2k3VdyTLZEegVZCEnVF2AtLpfZusa7iE5dEqldtmRUc7qVGoGYhYpmuGSx9wjijtDZnPehyxhD9DBxAKqVO1R+U3Y3CvPCZQIMqIwZeLLxv5gQ71gmGgfaAOmRdwwEUuM9pZS4mgAOOBTsOb7Q7On1nU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770391197; c=relaxed/simple;
-	bh=AnolthdRwrDB3AfcOEmQl+aamqXR8J3J5EqMAqspUdc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cGg0gr/RcePopnSisy5jEIb4g/jHByAcUl9oHL+VcIuy0IDu/AC1SguYS0hfKTdHPn0Cd4pwyfGuyDt4dfV7oGSYWr8Eh3/XEEI1W9RP9DIJj8MVcyZenvmF/2eWMlurGbt72HaOqSJnGabunWyPJ1P1NLMyNzS+QWWeaXoR14M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aywzXuhD; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16D9346A0C;
+	Fri,  6 Feb 2026 15:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770391213; cv=fail; b=gGsDfXTUIh++zS9pOBL92e9p42lvb4oFoJs58z9Dbce2w/lqOxQqturGkSDqTyDhyusXgOCf0EY7qVsEaLmdW1YIl7LkjOowTE1RobbhJK8VZBFlni+Tn5Yf90dw4l0EeaoE3/R61avmpELAkBEUA4xfTV4VnMwYPsoJmYZFxXs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770391213; c=relaxed/simple;
+	bh=f2ImIQlgjemv/cyPq9Y2ZOAxcAiIYTqGSDYb5n9ALr8=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=OzSNBV3DMKkH1AiKCGwfqtxTVB6bXkudobNRK0DJ8VyS6dNwI5tZXGWGluXdbvLYeW51dKL8jsPWlw3ZPywHbG4A59h1sOd19Wh6xwWu9cWT4AGLIcXKFLXBYL3zRThVpOojV4CeSCP4Pky7maoHOKvpHQw5dpm1wTiu1in2dbs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=PltN2noJ; arc=fail smtp.client-ip=52.101.46.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aywzXuhD"
-Date: Fri, 6 Feb 2026 15:19:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770391184;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ChC6m5WfVroGjS9ENqi35nDBudi2mtW1bc10jN5JpMM=;
-	b=aywzXuhD3aIRl8d7DfaV1A4HZXwVjqvlCIQ3oXkRUMWqETv6Fnc28cJp0x4vYuQGoNZP7+
-	COR3c6t8nqalS9d43VhLxDSGTWIjGkRXjKp/Wy5GOwnvvY+KVi+1+6FwRnBLRWb+V351o4
-	FPmWoT/JsuNl2LGBhfueWqgH+YiY3nM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: linux-mm@kvack.org, Jiayuan Chen <jiayuan.chen@shopee.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chengming Zhou <chengming.zhou@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm: zswap: add per-memcg stat for incompressible
- pages
-Message-ID: <iphymajz5xn6cbntby7z5s3eioraigs4doqylijoljfhzrexup@f23vxl2deyfr>
-References: <20260206072220.144008-1-jiayuan.chen@linux.dev>
- <20260206072220.144008-2-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="PltN2noJ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vWeVkx9Pg2UoHTfMr2aSC9jrN7wdrk0DNBIp8tuAU85J/GEb6XbZqg4rYs2PHh0imEUFfC9IhV2nY1zGr3UNrtjU+DRr4SwcUWAL/o4TQOn77pIh0RJW0hrSr3GCC9zxV/N4kFzLOrIG09gm+sTA/iXigdsZSoE8CM3kEDWoua5ad5klBtJy1oZgK4yLOoXXzu2tbn9Mzshi46zpAJizNyFGExF1a8rKIbncfsJ24jjlXgWqQPJS1GmnKFmoFJ4Y9xy37VtsOspyCgsI2nRr6gHLf8f+0GJ68O6B9tzYTeE3vqOpYQz3lf2zLxB//tZ6a+dlMd1WjN2tWT5ufVyR0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f2ImIQlgjemv/cyPq9Y2ZOAxcAiIYTqGSDYb5n9ALr8=;
+ b=Lmyr/Vl+TiuPBj+ma4KIOFI3Gu/V1rDja+OS14DnuRJziS1gOkZ+CsW/qFR5jVAhG6u/JZUe6L/tv+Y5JKVky9ViNmHZvoVknT2WA5CubI0JHMdTBdsX92M9Np4BcPTa/34GI/8n1xnZFD24xsEfuZuO9azyewUgVFKZHA2CX7ndHcHkdQeCYhUJUtdHNxhQfluc/U3nT0wC0nipqGbqyYmbb82EhBPBtHl1JD2ittJN2Wf7LY0aTQqQm2qIyogbQMmEjdXnNGzKNC8aif763xQ6ZS/iskK1qVKbNBvhHQL2q85ef/fIE3FJZ4regrJgqwdD+3pb+9r1t4tSfiXbww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f2ImIQlgjemv/cyPq9Y2ZOAxcAiIYTqGSDYb5n9ALr8=;
+ b=PltN2noJD7C8FO2X/N5BFM7qZFDHYe0xMH0UydaFez21i4z/CQgoUUNhgNmAqwOEO9qGkGKT0eHUFk0JZDv3yaBMnsuBbVzlTkA+k84a/diSPAjN0hTM99243N4vd7wIs7lEouQZqXxsd7aisNqRq0itBdM132fflKO5tN7TV1oxiG+LgBMJdcxRJYIh8ixv5m1uQs3y+l1jh9Cs5B4JwW/FbmQox0/9g6JRqAlKO1886gal0VHqRIHYw1/H2lyEF4AFa9lx66taHWn9buaMY9B9IuuyHu9KqLzgB7mvh4F+fdnNxNHidslcKxMAcr7RkqxusniR7Sn9Ny2MomNmRg==
+Received: from BYAPR11CA0098.namprd11.prod.outlook.com (2603:10b6:a03:f4::39)
+ by IA0PR12MB8837.namprd12.prod.outlook.com (2603:10b6:208:491::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.12; Fri, 6 Feb
+ 2026 15:20:09 +0000
+Received: from SJ1PEPF00001CE0.namprd05.prod.outlook.com
+ (2603:10b6:a03:f4:cafe::d3) by BYAPR11CA0098.outlook.office365.com
+ (2603:10b6:a03:f4::39) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.15 via Frontend Transport; Fri,
+ 6 Feb 2026 15:20:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF00001CE0.mail.protection.outlook.com (10.167.242.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9587.10 via Frontend Transport; Fri, 6 Feb 2026 15:20:09 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 6 Feb
+ 2026 07:19:50 -0800
+Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 6 Feb
+ 2026 07:19:44 -0800
+References: <20260205220541.2992807-1-kuba@kernel.org>
+ <20260205220541.2992807-7-kuba@kernel.org>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
+	<shuah@kernel.org>, <willemb@google.com>, <petrm@nvidia.com>,
+	<donald.hunter@gmail.com>, <michael.chan@broadcom.com>,
+	<pavan.chebbi@broadcom.com>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next 6/9] selftests: drv-net: gro: use SO_TXTIME to
+ schedule packets together
+Date: Fri, 6 Feb 2026 16:19:26 +0100
+In-Reply-To: <20260205220541.2992807-7-kuba@kernel.org>
+Message-ID: <878qd5292w.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260206072220.144008-2-jiayuan.chen@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE0:EE_|IA0PR12MB8837:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2cb51b15-98a8-450b-655a-08de6593370e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|36860700013|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?88HiN1LBzhLMtZqX+Uu9posWtpprFv/42LxMo/W19LcEPccTct0MdHUBpg8S?=
+ =?us-ascii?Q?1nE56Y3941DVhBpMxSIBlpy0mr+BHNvqV3WXgjsyb/1WV9dzgRPKowxrJUoT?=
+ =?us-ascii?Q?bMSnj0wSdQ0R4cYYkWiF+XZNvyoKFHpn7zNXY+4FdSvIk54STS2zdfpcKLq4?=
+ =?us-ascii?Q?sm5wOBBkN2moHFjY4qAmiDm8XqXD2ZqWE58jo0ZZ8ctajSDgGts/HGDowcbh?=
+ =?us-ascii?Q?zhiEmiCGwjSLI7T/+xKqZ/em6iTzldr0SSx0mz4YWOuQaUivy+w+2Kch9DAm?=
+ =?us-ascii?Q?Cf/K5a4U+rL6A+ES9aKtIytPcJsJ0543qArVhjp1SbE/RntObyM/uGarA1hN?=
+ =?us-ascii?Q?oClp1kyOqQT5vCJ5mY5qIzhjFJzHHTGL/L76OmbJrA2/Rjxak6wOwR+IB3ja?=
+ =?us-ascii?Q?2YpLLLZGnYPtamJ/uU++x7HG7hnhB0AGIoGPlh/oTCcGTpRyT/S86dJ4K2tZ?=
+ =?us-ascii?Q?pGAXDvozhhUg1v/QOCW5v+CFSJwV4G70Bws7E+B33lVqPcs97bNagh45F4FY?=
+ =?us-ascii?Q?vLW+I9zz8+ZdSyQO5lP6mH2Z90AZE2nepxCRQd9iCrhKq9QX/Wco9DZh5BJL?=
+ =?us-ascii?Q?PpzIfVvvNWmQ+cIB547bMYA1yBUp9/76Nm9di+ipz26+0SNJDph+IfcrKxd0?=
+ =?us-ascii?Q?+s8ptS2kMdEzzkOWgx2IWYxyZqjKBxtvBP5QazJqYiRhEJFJj743KZAcfK8u?=
+ =?us-ascii?Q?c59Xex9UW9wbj7RqwyTllk2FYSFV1PVkSNG10BLlB8WU1F9o1m3fNcemLqLg?=
+ =?us-ascii?Q?0KBAxHX8hIImeOMrDCP3ecK/5kuRWq8xHyDmiPHQqy4NO9NDN5tFzLgrY9BZ?=
+ =?us-ascii?Q?gXzH6Oa10lxI5NsJ0t9v9gKF/nCHxxQDtRPw7PXdgftHojAWXwKIfbiuSm/P?=
+ =?us-ascii?Q?h6oBu89Oa3Vv9LbYhSqoKl1S1bw5YhGmI0L+3s19blGNdt7WTb6Hm+J/H4x8?=
+ =?us-ascii?Q?fvyfs+iSHr82ef08obBMN1851ISPrRf2acSnZuRAdOnTfMkJzgkjorFUBt2A?=
+ =?us-ascii?Q?POZxCl9vJt7BVPJckXKi9YSVZDVQuIN7+z/wBroAGOnKfkwGZmKiGEC8xmIp?=
+ =?us-ascii?Q?QPqNEy8bD0OpjQrRwinOcei7wqW5MYYZkHqDaUyeE/nszUlfSVrePw47AF+L?=
+ =?us-ascii?Q?M+2lBt9tC7lYjiWnCkTnMjtJ9QSU8UFDPxwq+Jid+QMCE1xx+N83CuKHSamJ?=
+ =?us-ascii?Q?9ep47J4mXLNX3bjj9AukDWSNWUcvMdvsIBj87w2DV3nCVIQuCebJuw3LmJWs?=
+ =?us-ascii?Q?IBqXKFo4Qc1vO7AMP9T2AVyq8hP6Yo0zDIkmc0FoD1a2BXptLxnx/3B1YtPx?=
+ =?us-ascii?Q?cSxT3pRJ4L8QOYvNVNccijErVyJtx4ueJaCH+JdAtEIkBrbi11QD9J4SMmVS?=
+ =?us-ascii?Q?VX8pbBf8LnkeQcBuupGghj3NsaOTQ0oXVYswTlK5pBefc7knZPt+oH/iu5uu?=
+ =?us-ascii?Q?1EbguTpaa+FwXjK0brihfP7PMA2P2+65HFj1H4kaN5GDejDbFnRphXBoduep?=
+ =?us-ascii?Q?3c1relDOVeKZVJKg/e/nFE2B9IB119wKb0H6ARWxRnaIEq/6+nZEREru2Pto?=
+ =?us-ascii?Q?EgNyR4T2vQ+zZsWXIkVjGPjxVEb5BN+rrbB2wmCCnxoS7uiAKurChr5JZBt3?=
+ =?us-ascii?Q?xivslnIxkACqkcP+GSDlyuT7jP81wyl6125B2UZLPAxP1Vb2BdwrEooR+/b/?=
+ =?us-ascii?Q?BWH4Og=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	juQwm2WZo/tEJf1QYWJwKn3j3LwqoX6vCF0yEITB5dmtmsCTNOnK0bH2ZxHLmDWTpxwEPdQgImmk1QgfYYqNvRNSUTnT3XBrLn4lcU8rk02rHAXe8ktJ4KJSjagMxR/1yZsNsCZWaR1ZwQvNyxLHfTcY0hffBU0mOOXVowjAmiXdghm1q9bjH5u9/NfPPqdgRbC8b50A8ZcNTm8U8IckaD+D1F/NQC0kID2vf64+2PbO4ErOj5G3dBSjh7+9gMHLfaGNRS2BcqQKYKYoQnnCqveP95D7jnJmoKhF+QDBOpZqLblhJPYVcRCo/yUfG7EjUGSkfG+46pxt+BH7ly/u7dUdy7uGRMcSoKSvMcOlGWyjcrepU6W41JlsR0bSs40/Cq1YAOunZzMsQdW+GylYsgXrn3Up4BVxCtpdf/iYexitO6KNSJoeyjrOAado2C8a
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2026 15:20:09.1122
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cb51b15-98a8-450b-655a-08de6593370e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE0.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8837
 
-On Fri, Feb 06, 2026 at 03:22:15PM +0800, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> 
-> The global zswap_stored_incompressible_pages counter was added in commit
-> dca4437a5861 ("mm/zswap: store <PAGE_SIZE compression failed page as-is")
-> to track how many pages are stored in raw (uncompressed) form in zswap.
-> However, in containerized environments, knowing which cgroup is
-> contributing incompressible pages is essential for effective resource
-> management [1].
-> 
-> Add a new memcg stat 'zswap_incomp' to track incompressible pages per
-> cgroup. This helps administrators and orchestrators to:
-> 
-> 1. Identify workloads that produce incompressible data (e.g., encrypted
->    data, already-compressed media, random data) and may not benefit from
->    zswap.
-> 
-> 2. Make informed decisions about workload placement - moving
->    incompressible workloads to nodes with larger swap backing devices
->    rather than relying on zswap.
-> 
-> 3. Debug zswap efficiency issues at the cgroup level without needing to
->    correlate global stats with individual cgroups.
-> 
-> While the compression ratio can be estimated from existing stats
-> (zswap / zswapped * PAGE_SIZE), this doesn't distinguish between
-> "uniformly poor compression" and "a few completely incompressible pages
-> mixed with highly compressible ones". The zswap_incomp stat provides
-> direct visibility into the latter case.
-> 
-> [1]: https://lore.kernel.org/linux-mm/CAF8kJuONDFj4NAksaR4j_WyDbNwNGYLmTe-o76rqU17La=nkOw@mail.gmail.com/
-> Acked-by: Nhat Pham <nphamcs@gmail.com>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> ---
->  Documentation/admin-guide/cgroup-v2.rst | 5 +++++
->  include/linux/memcontrol.h              | 1 +
->  mm/memcontrol.c                         | 8 ++++++++
->  3 files changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 7f5b59d95fce..78a329414615 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1737,6 +1737,11 @@ The following nested keys are defined.
->  	  zswpwb
->  		Number of pages written from zswap to swap.
->  
-> +	  zswap_incomp
-> +		Number of incompressible pages currently stored in zswap
-> +		without compression. These pages could not be compressed to
-> +		a size smaller than PAGE_SIZE, so they are stored as-is.
-> +
->  	  thp_fault_alloc (npn)
->  		Number of transparent hugepages which were allocated to satisfy
->  		a page fault. This counter is not present when CONFIG_TRANSPARENT_HUGEPAGE
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index b6c82c8f73e1..d8ec05dd5d43 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -39,6 +39,7 @@ enum memcg_stat_item {
->  	MEMCG_KMEM,
->  	MEMCG_ZSWAP_B,
->  	MEMCG_ZSWAPPED,
-> +	MEMCG_ZSWAP_INCOMP,
->  	MEMCG_NR_STAT,
->  };
->  
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 007413a53b45..a6b6cf5f1aeb 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -341,6 +341,7 @@ static const unsigned int memcg_stat_items[] = {
->  	MEMCG_KMEM,
->  	MEMCG_ZSWAP_B,
->  	MEMCG_ZSWAPPED,
-> +	MEMCG_ZSWAP_INCOMP,
->  };
->  
->  #define NR_MEMCG_NODE_STAT_ITEMS ARRAY_SIZE(memcg_node_stat_items)
-> @@ -1346,6 +1347,7 @@ static const struct memory_stat memory_stats[] = {
->  #ifdef CONFIG_ZSWAP
->  	{ "zswap",			MEMCG_ZSWAP_B			},
->  	{ "zswapped",			MEMCG_ZSWAPPED			},
-> +	{ "zswap_incomp",		MEMCG_ZSWAP_INCOMP		},
->  #endif
->  	{ "file_mapped",		NR_FILE_MAPPED			},
->  	{ "file_dirty",			NR_FILE_DIRTY			},
-> @@ -5458,6 +5460,9 @@ void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size)
->  	memcg = obj_cgroup_memcg(objcg);
->  	mod_memcg_state(memcg, MEMCG_ZSWAP_B, size);
->  	mod_memcg_state(memcg, MEMCG_ZSWAPPED, 1);
-> +	/* size == PAGE_SIZE means compression failed, page is incompressible */
 
-I think the comment is not very useful, but maybe not worth sending a
-new version. Otherwise LGTM:
+Jakub Kicinski <kuba@kernel.org> writes:
 
-Reviewed-by: Yosry Ahmed <yosry.ahmed@linux.dev>
+> Longer packet sequence tests are quite flaky when the test is run
+> over a real network. Try to avoid at least the jitter on the sender
+> side by scheduling all the packets to be sent at once using SO_TXTIME.
+> Use hardcoded tx time of 5msec in the future. In my test increasing
+> this time past 2msec makes no difference so 5msec is plenty of margin.
+> Since we now expect more output buffering make sure to raise SNDBUF.
+>
+> Experimenting with long sequences I see frequent failures when sending
+> 200 packets, only 50-100 packets get coalesced. With this change
+> up to 1000 packets get coalesced relatively reliably.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-> +	if (size == PAGE_SIZE)
-> +		mod_memcg_state(memcg, MEMCG_ZSWAP_INCOMP, 1);
->  	rcu_read_unlock();
->  }
->  
-> @@ -5481,6 +5486,9 @@ void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size)
->  	memcg = obj_cgroup_memcg(objcg);
->  	mod_memcg_state(memcg, MEMCG_ZSWAP_B, -size);
->  	mod_memcg_state(memcg, MEMCG_ZSWAPPED, -1);
-> +	/* size == PAGE_SIZE means compression failed, page is incompressible */
-> +	if (size == PAGE_SIZE)
-> +		mod_memcg_state(memcg, MEMCG_ZSWAP_INCOMP, -1);
->  	rcu_read_unlock();
->  }
->  
-> -- 
-> 2.43.0
-> 
+Reviewed-by: Petr Machata <petrm@nvidia.com>
