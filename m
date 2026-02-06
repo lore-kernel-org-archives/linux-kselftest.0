@@ -1,70 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E5215A86D;
-	Fri,  6 Feb 2026 00:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986A225B305;
+	Fri,  6 Feb 2026 00:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770337069; cv=none; b=i0IfNo7KAI0/Bh/beyzg67mRf2MuCJ/ej9QNKmskOdltfKZUNOouaSC1eldJBV/l2VaORGbalJnqm/p+dIYALQU3S1sZkhGMfGK/J9qrClGTw7EO8Av6MpONzHAjE0Wi0foxSOrTDGxtF9bo4hw7yOWLcy/BZrHdXh7gwnrfvBw=
+	t=1770337459; cv=none; b=WePAaz8KrgFiLrZksEEuJF7F4B1p/xmcLKekRxwKa8xDtuVg9S3r10MTHQE3WUakmqRABnzpbWWqdyjiyuXU/DUYKc3KyXlMgdQVc63HMLb9Uf/koI+eAHqzSIW0LMPX3PLLLOeOE7MYYECHdvsRqql41Ns9vDh/RO9GuBnghoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770337069; c=relaxed/simple;
-	bh=DQrq5c1J+kiv5UEj7nlCQrtJTusd0d502vuVJr1r7pE=;
+	s=arc-20240116; t=1770337459; c=relaxed/simple;
+	bh=FzacWZOycLmb1z1P+m8rf0bLUI57xeUY2XxyxSqj1DQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Io1r9SIYEgGXX3KlMpXo3ixm1xyuru3Ou5LXVTbOiH3iuYYjeE/KdpnWiy93JmELwfarLxGEhjbDzRrS/Y08KPYXrYerqQzKYbQrrVvCjCHKsxQi6Svxd9/upStEXtac/Ot6vW7Q3IZvgDe1iQNW4bbreagocs4tWa2/ljEhCds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gf9tjtCJ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=blOs2dMbMtDliS/m4gtcgqsbXHorCrXM7/8tDbdxIzzObxXuaIIY3duDe2dT3/jGsuF7qJUQ4I8gVgQlzbqJ3HEwDCCLKtfYuvts76BWFXFwrcP+QBH3SFVU/a0EMGnmfYwJz7phtuHL10B/8TlD0rSCODa+aW+KMw8YfMQIews=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nzua87+F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gf9tjtCJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59429C4CEF7;
-	Fri,  6 Feb 2026 00:17:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nzua87+F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB709C2BC9E;
+	Fri,  6 Feb 2026 00:24:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770337069;
-	bh=DQrq5c1J+kiv5UEj7nlCQrtJTusd0d502vuVJr1r7pE=;
+	s=k20201202; t=1770337459;
+	bh=FzacWZOycLmb1z1P+m8rf0bLUI57xeUY2XxyxSqj1DQ=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=gf9tjtCJFiCokVo3TecNVaL7vYEpVzQS+7qD7EkE4j0zwz6pQa8CJzf8yq9jCKQPh
-	 inzUgyrJC/kXCAypadw2sf4WwKVDYiZpLAJ3vJtNXFKbaMABNo/IABgZ78lhjDoy3T
-	 KrRc97EcUTmRJ5KPSZratWTiMDx2crawaWu41OnmHKeRBkPTjPlAqEg7qbQRoCqYQu
-	 wcdjmdRXX/zZctk/GubMb8xTmTrtJiEbmboWrZfXfzGiNRfxIYC/uyEJwhU/T1twax
-	 RhHenQ/IlbuNZ8iCDPEeuLPPZrOhuOmRsGkmzn98SaM2Sio/TXjfFDM9+suE00uxKk
-	 yBIBVmhLjVuog==
-Date: Thu, 5 Feb 2026 16:17:47 -0800
+	b=nzua87+FqhXh4d7C9WvEmMdcUfxUI9Hh0bJUhOmF2sNG9XsmY9LDZ4bgVP8gleQ7L
+	 BJ6CTciAADDmBlXHrBLSbXE7owLIOSaRiIE2rEmkbNL/wMmWlszHx6oM8SRjj5X7r4
+	 7bAufw1Dcov3dTL2OTM+rxixImofgNsURQCsCeR22pyp4qOJNJO8yx8Mrw6hqhu6U1
+	 o9clRGzeFMatqSUPnTukeML127ntkQCopL9ge3T8HdisWAtUbdWLDPdIguiKRbrdh9
+	 swVthODJihsGUa6RHzInhUeBiizU/azNiggpVRQTW0l6hSF99Tn94uOlkdfyESzFnM
+	 dLHvRc+m9hwTg==
+Date: Thu, 5 Feb 2026 16:24:17 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, Jiri Pirko
- <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed
- <saeedm@nvidia.com>, "Leon Romanovsky" <leon@kernel.org>, Mark Bloch
- <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, Gal Pressman <gal@nvidia.com>, Moshe
- Shemesh <moshe@nvidia.com>, Shay Drori <shayd@nvidia.com>, Jiri Pirko
- <jiri@nvidia.com>
-Subject: Re: [PATCH net-next V2 0/7] devlink: add per-port resource support
-Message-ID: <20260205161747.26dd7bc5@kernel.org>
-In-Reply-To: <20260205142833.1727929-1-tariqt@nvidia.com>
-References: <20260205142833.1727929-1-tariqt@nvidia.com>
+To: Michael Chan <michael.chan@broadcom.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, willemb@google.com, petrm@nvidia.com,
+ donald.hunter@gmail.com, pavan.chebbi@broadcom.com,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/9] eth: bnxt: gather and report HW-GRO stats
+Message-ID: <20260205162417.3e735880@kernel.org>
+In-Reply-To: <CACKFLinY4qNTf-pPQZ4R3efm8F4EnAiZsOqPknLcc32qTaiHUw@mail.gmail.com>
+References: <20260205220541.2992807-1-kuba@kernel.org>
+	<20260205220541.2992807-2-kuba@kernel.org>
+	<CACKFLinY4qNTf-pPQZ4R3efm8F4EnAiZsOqPknLcc32qTaiHUw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 5 Feb 2026 16:28:26 +0200 Tariq Toukan wrote:
-> Userspace patches for iproute2:
-> https://github.com/ohartoov/iproute2/tree/port_resource
+On Thu, 5 Feb 2026 14:44:53 -0800 Michael Chan wrote:
+> On Thu, Feb 5, 2026 at 2:07=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+> >
+> > Count and report HW-GRO stats as seen by the kernel.
+> > The device stats for GRO seem to not reflect the reality,
+> > perhaps they count sessions which did not actually result
+> > in any aggregation. =20
+>=20
+> Yes, the HW count includes single packets without additional
+> aggregations.  In the driver, when we see only 1 segment, we treat it
+> as a non GRO packet.  That's likely the discrepancy you're seeing.
+>=20
+> Also, for completeness, should we count LRO packets as well?
 
-I pulled this but the test still doesn't pass:
+Not in this counter:
 
-# TEST: resource test                                                 [ OK ]
-# TEST: port resource test                                            [FAIL]
-# Unexpected resource name test_resource (expected max_sfs)
-# TEST: dev_info test                                                 [ OK ]
-# TEST: empty reporter test                                           [ OK ]
+      -
+        name: rx-hw-gro-wire-packets
+        doc: |
+          Number of packets that were coalesced to bigger packetss with the
+          HW-GRO netdevice feature. LRO-coalesced packets are not counted.
 
-https://netdev-ctrl.bots.linux.dev/logs/vmksft/netdevsim/results/505601/9-devlink-sh/stdout
--- 
-pw-bot: cr
+I don't think we have a counter defined for LRO, yet.
+
+> > @@ -1814,6 +1815,11 @@ static inline struct sk_buff *bnxt_gro_skb(struc=
+t bnxt *bp,
+> >         if (segs =3D=3D 1)
+> >                 return skb;
+> >
+> > +       if (bp->dev->features & NETIF_F_GRO_HW) { =20
+>=20
+> If we enter this function, NETIF_F_GRO_HW should always be true.
+
+Ah, I see it now.. will drop the condition.
