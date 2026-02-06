@@ -1,93 +1,120 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2B2426D36
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 18:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DD730EF76
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 18:19:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770401641; cv=none; b=kfP6kv3N2OYZ/eGlzIfsmMWkyR5n3Pd3UswrJKNKNvWFvP2CUlZvQHmgPRyna4KBtgp7rAM9UeVsGtqgOKPD9r+9SKCimUgc1jwCOcl2aOSJ40DB9zkH4T7pnXl5sbZw5aFIXvUF+tu2kh/WAazEbdwIUBwIb5nsiv3fmBWLGR8=
+	t=1770401988; cv=none; b=jEQotMrIlc2rsQMBY5rJ8Nr0WF+i70lkEuEX7qxdXx8FmJ87Hvc5hEmBfdAPCymfsyPU6/BD3ucjvRAq1dp5itgy17laVJxSoZEFHf+OwmkpAGdW2D0o/w+cueugk0lHuqOUEjo33nBKJ3U/jCP7aYtWm6JKpHQmM7ndQ6tgrPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770401641; c=relaxed/simple;
-	bh=31l9a/J3ky9SSmLpO5OPKYpJeNyF1GgMD+f+x/7HQnI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=avqFizB7MJETj40JYeCdgDUXPdkrVNKBKFT/m8lj5Kz4L0q0D1507seOxanjGQGXK7S4YBixLdUMf1q4Yc/NQMzOQU/etr7ONKA9IwO+OoZ+CDibLPh7n3rXpAaojq6SArC5bZMG8MI30r96OE/l1yW3txVs3eW6B0REO2/JM9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ldwtKf+R; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770401988; c=relaxed/simple;
+	bh=duHfASxkiLCK0yIeVX+u0DBwaVXH4lup2H7rNt0YfWo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=DKl6SlaEvCcs5oeO8ZkPOpyCEr04RQsdXZKT7iP5ZZEgnCANmwmbulOzCrjidahaqk18FBb0xfTnh0pIbgbAd6epHZyIB/11bvP00YzAWDsQ/t3RURuSpibRPJ3DfHAulOozU8lvEBiXMSHCi4NJcCqMWotGTdrRMkzghPHNNXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DiCPi45i; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ldwtKf+R"
-Date: Fri, 6 Feb 2026 10:13:33 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770401629;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g5Gy1VnuwP3PRcgfNvx+OUQirue6Tb+SWeRbQ4+gTFk=;
-	b=ldwtKf+RlhBjVz8gW9tXGFBeH8QYbZvKLVfPvUO6+wkMhQ3QSSDUOVoaWpNn9b16Vm4Nba
-	tDIeGZvul77SFT9Ck2OrTXNC5bTf8CaDletMpTENThSVk65UomdZufhBvGqEwoAm1L7G8Y
-	IIaCLRscj0sRvFK1lyfkq8eFQ1ceYvw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: linux-mm@kvack.org, Jiayuan Chen <jiayuan.chen@shopee.com>, 
-	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Yosry Ahmed <yosry.ahmed@linux.dev>, Nhat Pham <nphamcs@gmail.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/cgroup: add test for zswap
- incompressible pages
-Message-ID: <aYYvNq0CibG_ABEG@linux.dev>
-References: <20260206072220.144008-1-jiayuan.chen@linux.dev>
- <20260206072220.144008-3-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DiCPi45i"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-352c7924ebcso993570a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 10:19:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770401987; x=1771006787; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZTIXOxloDpdjhXpaBbigu7Y3M7v9e+xWUhcs+CNLKKA=;
+        b=DiCPi45ivuR/VCDsYMqyL7OjeMrjZqH8hGfCWLohPNopfQiJeTqNol6/ix5e09mFfz
+         23+qT6Y7fjwjxtRwmdrF42z/D+/dUQVcyi9VxJVwqlwGoMB/IHu11ga4Kx+kG99mKxKh
+         foaXdnqfTpo0XNaN6qilAErLU3RezjFWrYSKhq+neulZBsiXUaA5s0uGm96ZzjN3VFhg
+         4wLSl8lSbZ8Ep8EBWWxgRdmZqdUbGjWngPHJaM3RtDLdGU1iwREx6huMKQTND5GLNmii
+         nvX2butopBkIRW0kbhQTX3xD8Jzi3HOipkw80wOYVs4CIyfARA6hcfwwvTbex/5xebLQ
+         7ctw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770401987; x=1771006787;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZTIXOxloDpdjhXpaBbigu7Y3M7v9e+xWUhcs+CNLKKA=;
+        b=rjKrmY6ss3LfzkdbK50+6NByyv26tY+f2BcbkrNKr9y+cnLkzs1wVRHo1uJBAVYKpU
+         I5XR+NGVUtPenos7SltztDfQTwZ30zu9EVXCKD2iGo/h6P0U0gTsoL81Fg8SbGDH3fSK
+         0C+DOvPeB4/xr3hw7VsTRyWW2CW/g9xrWkpOUBaOJSby1NMDc92IBtzwiSfxoH5wxRzo
+         1tNH/tilemOqW/f6Le7yyBw5yrmPHMBIwVpb0qbQLyxaxFfT1L3HJs/g5V0POOHtXz1G
+         gVv1h/AsBkLJg69gzYjuNK30lUFR9GeHUxtBkmbv4soWU9KdBtBEiUZPN3FLyc6IZqPd
+         PdPg==
+X-Forwarded-Encrypted: i=1; AJvYcCWuuf7rhieBA4bbx2/07F5qR4aUXH9uwru1eJR+0RIxhX0CJfUgBMD/O2NzqJPpKS8x5VLuMoiS0qJgN+QdJnY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKSK6l2ecJZ9mfpQP40NXb0hVI5ihBwASHWbHmduwrYhvi054u
+	E1MUJnWgQ5vPg9KWjklvdBzhleEa7B/7I3Z8lANBDH1Az40UPKlzR4qAW0cXF579QKsbjU9b9K0
+	S3Rq6nQ==
+X-Received: from pjzl3.prod.google.com ([2002:a17:90b:783:b0:34a:bebf:c162])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:534b:b0:354:a065:ec3e
+ with SMTP id 98e67ed59e1d1-354b3e4b3f8mr3044668a91.26.1770401987544; Fri, 06
+ Feb 2026 10:19:47 -0800 (PST)
+Date: Fri, 6 Feb 2026 10:19:45 -0800
+In-Reply-To: <20260205214326.1029278-3-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260206072220.144008-3-jiayuan.chen@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20260205214326.1029278-1-jmattson@google.com> <20260205214326.1029278-3-jmattson@google.com>
+Message-ID: <aYYwwWjMDJQh6uDd@google.com>
+Subject: Re: [PATCH v3 2/8] KVM: x86: nSVM: Cache and validate vmcb12 g_pat
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yosry Ahmed <yosry.ahmed@linux.dev>
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, Feb 06, 2026 at 03:22:16PM +0800, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+On Thu, Feb 05, 2026, Jim Mattson wrote:
+> Cache g_pat from vmcb12 in svm->nested.gpat to avoid TOCTTOU issues, and
+> add a validity check so that when nested paging is enabled for vmcb12, an
+> invalid g_pat causes an immediate VMEXIT with exit code VMEXIT_INVALID, as
+> specified in the APM, volume 2: "Nested Paging and VMRUN/VMEXIT."
 > 
-> Add test_zswap_incompressible() to verify that the zswap_incomp memcg
-> stat correctly tracks incompressible pages.
+> Fixes: 3d6368ef580a ("KVM: SVM: Add VMRUN handler")
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>  arch/x86/kvm/svm/nested.c | 4 +++-
+>  arch/x86/kvm/svm/svm.h    | 3 +++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
 > 
-> The test allocates memory filled with random data from /dev/urandom,
-> which cannot be effectively compressed by zswap. When this data is
-> swapped out to zswap, it should be stored as-is and tracked by the
-> zswap_incomp counter.
-> 
-> The test verifies that:
-> 1. Pages are swapped out to zswap (zswpout increases)
-> 2. Incompressible pages are tracked (zswap_incomp increases)
-> 
-> test:
-> dd if=/dev/zero of=/swapfile bs=1M count=2048
-> chmod 600 /swapfile
-> mkswap /swapfile
-> swapon /swapfile
-> echo Y > /sys/module/zswap/parameters/enabled
-> 
-> ./test_zswap
->  TAP version 13
->  1..8
->  ok 1 test_zswap_usage
->  ok 2 test_swapin_nozswap
->  ok 3 test_zswapin
->  ok 4 test_zswap_writeback_enabled
->  ok 5 test_zswap_writeback_disabled
->  ok 6 test_no_kmem_bypass
->  ok 7 test_no_invasive_cgroup_shrink
->  ok 8 test_zswap_incompressible
->  Totals: pass:8 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index f72dbd10dcad..1d4ff6408b34 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -1027,9 +1027,11 @@ int nested_svm_vmrun(struct kvm_vcpu *vcpu)
+>  
+>  	nested_copy_vmcb_control_to_cache(svm, &vmcb12->control);
+>  	nested_copy_vmcb_save_to_cache(svm, &vmcb12->save);
+> +	svm->nested.gpat = vmcb12->save.g_pat;
+>  
+>  	if (!nested_vmcb_check_save(vcpu) ||
+> -	    !nested_vmcb_check_controls(vcpu)) {
+> +	    !nested_vmcb_check_controls(vcpu) ||
+> +	    (nested_npt_enabled(svm) && !kvm_pat_valid(svm->nested.gpat))) {
+>  		vmcb12->control.exit_code    = SVM_EXIT_ERR;
+>  		vmcb12->control.exit_info_1  = 0;
+>  		vmcb12->control.exit_info_2  = 0;
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 986d90f2d4ca..42a4bf83b3aa 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -208,6 +208,9 @@ struct svm_nested_state {
+>  	 */
+>  	struct vmcb_save_area_cached save;
+>  
+> +	/* Cached guest PAT from vmcb12.save.g_pat */
+> +	u64 gpat;
 
-Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+Shouldn't this go in vmcb_save_area_cached?
+
+> +
+>  	bool initialized;
+>  
+>  	/*
+> -- 
+> 2.53.0.rc2.204.g2597b5adb4-goog
+> 
