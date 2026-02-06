@@ -1,262 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0182D2264D9;
-	Fri,  6 Feb 2026 22:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C0C2264D9;
+	Fri,  6 Feb 2026 22:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770415365; cv=none; b=Z2gRSu88NA526c+X+ywOpAzNVFi5I5xoi/jNDjA3Ozj/QxR2h7JVmwbUb9h1wEQkhjOwzmqsbPlXzHVhKzfprJ0k8xRI4rmGhwaOfJliSmaVejnzwuD0K8kFqnHes9MtTBQFFaX5EKlt72ojzHH9GomGPKO9cDClBoBNFKyX4nc=
+	t=1770415522; cv=none; b=X/VS5exOEPRG0QSF1GkjpNGphpB9KMYXiSSRXD/a+4noCyJT78nL5kKpPsKl8ZCtt+MRjNtsbarYCIPGr2zuyVSWElj94ZAdPOObupaC+BOHVp394QdTbTY1+B/rEeBq64nt54BNOgdWa9zKqvSMWWNBrIp4LsDqaYAA3ke7Mrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770415365; c=relaxed/simple;
-	bh=bfPUMs2b42VX42YQ1nfGegyoQworNugo/zCJtYGGP3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oTxFZf6y2ywiCa7v3tuY5ThEr0YSdU5t9F5SxJjvare5j+VVJwG6dtEXmH6/QceyqYExxltiUWTD6jg3oqHZD/48PnmiDYhbZrFtFI69tO2ulTjZCbiVq1vITF3fCXO0hCYp/ecGmzNCeevNjAWZBm6Lu0Zt3qUMd3dI0jZL6KY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m5lNQAGP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770415522; c=relaxed/simple;
+	bh=mDHGzI7C1PnFq7j1rNz8G+LCW0rfw71fJltKl2Fu5VY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AlrqfM1XOrTmZp1JEDo0tinzRnnU+ZrDkpBA5w40Vz6z/I7i4B9f+XVKruA8rK0q6cSw8/Ygp3IcT4XiXjsfevc2j25RPhYrbGPDKTaTNpCm35vtKD4o8LrWvCkG1cBuwaNp5h1I4jBtJV0vb+wwrfNgNcD83YW8/J9KVs+Ui/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=ndLBkBOm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WTtenmkC; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m5lNQAGP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22C6C116C6;
-	Fri,  6 Feb 2026 22:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770415364;
-	bh=bfPUMs2b42VX42YQ1nfGegyoQworNugo/zCJtYGGP3M=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=m5lNQAGPw4lfc9EU6KMQLYf4GvC5QUtL4EmGcfqHX3kyv1EgRLJAsPMMLRmetZETB
-	 Py4hL0wyqbotb889upEQTYijoAKtK3xNpDPOBvYcKKDeoFVq9j/PG04wuzjqHMlXkm
-	 fLJIureI8XXAt0xkRxkPi4ApRgXQ3dizqGr0Vry6g8Z7nUZS1aUIp+1+I8TtFi1dkQ
-	 ZGLaImNn5OhMije3K+CGQPHAY7l/LL5wJhV0oVT/yWbakcBYROJ688LXNWCSQoVb9I
-	 18B0rkEmGrxe85jUXQ05Z2C8Bv9SvpvhuYEvb8EaCWNLzPsj26vrIz4xzrZ9Yu6V88
-	 X35JGr6jhZmZg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 29797CE0F9F; Fri,  6 Feb 2026 14:02:44 -0800 (PST)
-Date: Fri, 6 Feb 2026 14:02:44 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Johan Hovold <johan@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>, linux-kernel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] revocable: hide the implementation details from users
-Message-ID: <fc68da89-7c2b-432b-9a78-6ab55fcb0e9e@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260206103216.38623-1-bartosz.golaszewski@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="ndLBkBOm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WTtenmkC"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.stl.internal (Postfix) with ESMTP id 7F5421D000EB;
+	Fri,  6 Feb 2026 17:05:20 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Fri, 06 Feb 2026 17:05:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1770415520;
+	 x=1770501920; bh=af0GCyiGSvGeOiThvz/dtqIqyfCOJUrFAhMkfwKMKz0=; b=
+	ndLBkBOmXnNxRVdteesaj5W6Fb70ViAg8LYgAlz6RkE2KOVXKnMV+7Miqp2TNBuW
+	3iJey0sMiS+Car9MHE4zg9aVEBrZnz9vJVFKedFqGwSyWHWS37Al6ESlFx6JIkaV
+	XPbcuSzo+1DP/anYh7srNKvScfBEWHn5mom6by6VMsOGw0FqqGDqIPuW1iGIulKB
+	9xm2o+WxeAWDNtD8c/Zf+PDjCwkdMIVkSzTCXcop6lZ1dPtTX92/AEGvw4GBSEQg
+	/hwFRnrR/9msNGVLCuIXX5jmihuz6XwVqmTIZzJto4NzkYpIVc4poiI9PsH7O0uP
+	vrP3djBUZPqEW/bU7L4DRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770415520; x=
+	1770501920; bh=af0GCyiGSvGeOiThvz/dtqIqyfCOJUrFAhMkfwKMKz0=; b=W
+	TtenmkC0+m/6QNwAFkDg6HsXXb8LdmzG6360rRlyQDt1UNbRjEMhASB8GLYevPz8
+	oJ5iSbl7Ez41uL6hRgsAk2h75pzaagtOgErcjIAWqRmYM9/yMNyiSe9X+asaC3nQ
+	G1NwCWUGBvZCml7E4mp3y7r6R5TkuycaxPxclbFbREubOT3zwLG4fo1f+kua6cn5
+	88RA+0En49/hiZIWdB3uLh1d6IaZNNbQWLVawGkEHXpZiWV2lUpjpXb8ky9W8aWI
+	6KWlLqKb5ZL2ykvCDVSKuiYZPUdL31vLgRg4dDjBqP3Lrnv9VtP6ofEt0OWUMebM
+	rK9azhicf8uI3FyI0iT4Q==
+X-ME-Sender: <xms:n2WGaaq8DTUUT3AgvFKIPlv8k1obKz9XN6kvLrGnIL9Z5rwIctsGqA>
+    <xme:n2WGaStwX5m4jpSypTkSy_kLEMAzVY7OJdFzWS75DAZQJfFacbHNx3Zes-bH54owL
+    xdJRI0Xa21j_k3dnF1h0WIdQ4kIetUa4gQhCllquAIqXjhpk2hIuQ>
+X-ME-Received: <xmr:n2WGafG_5zEkasXW7B3ydHYF9ns2wfnqCZKKosB2YmAsx2ra8wd7kjdFcIk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukeelfedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
+    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeekheejieetffefueeiteejtdejffdvleelvdeuvdffvdefteeghfevkeeu
+    vdefvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghlvgigsehshhgriigsohhtrdhorhhg
+    pdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtvg
+    gulhhoghgrnhesfhgsrdgtohhmpdhrtghpthhtohepughmrghtlhgrtghksehgohhoghhl
+    vgdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidq
+    khhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
+    hnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehl
+    khhpsehinhhtvghlrdgtohhm
+X-ME-Proxy: <xmx:n2WGabY6tPRWv6_T2nIK137yZjY-0-gpdmv78YlhwM-0NaJv9b3cJA>
+    <xmx:n2WGaXVB0aQzcTcegujFeHMIW4IO6D3lB-h9fibstsxtpM5e079_Hw>
+    <xmx:n2WGaZkarXDbwa0GJEYdHS6C-IecmutH-AdGnL-doHpo9YN-3dAJ0w>
+    <xmx:n2WGaaBX5Npf5UsMMOzuOOYpFCnfSAqC7dStj4Yq6HfoLV1trf5mew>
+    <xmx:oGWGaVZQz0F7KOGEVt-5HxDc5dGmzLQPm3tll4zAQhiyTvQeLonceEs4>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 6 Feb 2026 17:05:19 -0500 (EST)
+Date: Fri, 6 Feb 2026 15:05:17 -0700
+From: Alex Williamson <alex@shazbot.org>
+To: Ted Logan <tedlogan@fb.com>
+Cc: David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>,
+ <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and
+ x86_64
+Message-ID: <20260206150517.3976db13@shazbot.org>
+In-Reply-To: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260206103216.38623-1-bartosz.golaszewski@oss.qualcomm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Feb 06, 2026 at 11:32:06AM +0100, Bartosz Golaszewski wrote:
-> Revocable stacks two layers of SRCU on top of each other: one to protect
-> the actual revocable resource and another to synchronize the revoking.
-> While this design itself is questionable, it also forces the user of
-> revokable to think about the implementation details and annotate the
-> pointer holding the address of the revocable_provider struct with __rcu.
-> Hide the real type of struct revokable_provider behind a typedef to free
-> the users from this responsability. While adding new typedefs goes
-> against current guidelines, it's still better than the current
-> requirement.
+On Mon, 2 Feb 2026 17:23:53 -0800
+Ted Logan <tedlogan@fb.com> wrote:
+
+> Only build vfio self-tests on arm64 and x86_64; these are the only
+> architectures where the vfio self-tests are run. Addresses compiler
+> warnings for format and conversions on i386.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@intel.com/
+> Signed-off-by: Ted Logan <tedlogan@fb.com>
 > ---
-> I realized that one important person was missing from the whole review
-> process: Paul E. McKenney who wrote and maintains SRCU. I had Paul look
-> at the SRCU usage in GPIO and I think he should have also signed off on
-> revocable before it got queued.
+> Do not build vfio self-tests for 32-bit architectures, where they're
+> untested and unmaintained. Only build these tests for arm64 and x86_64,
+> where they're regularly tested.
 > 
-> Paul: I'm Cc'ing you on this patch to bring revocable to your attention.
-> The series that implemented it and made its way into v7.0 is here:
+> Compiler warning fixed by patch:
 > 
->   https://lore.kernel.org/all/20260116080235.350305-1-tzungbi@kernel.org/
+>    In file included from tools/testing/selftests/vfio/lib/include/libvfio.h:6:
+>    tools/testing/selftests/vfio/lib/include/libvfio/iommu.h:49:2: warning: format specifies type 'unsigned long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
+>       49 |         VFIO_ASSERT_EQ(__iommu_unmap(iommu, region, NULL), 0);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:32:37: note: expanded from macro 'VFIO_ASSERT_EQ'
+>       32 | #define VFIO_ASSERT_EQ(_a, _b, ...) VFIO_ASSERT_OP(_a, _b, ==, ##__VA_ARGS__)
+>          |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:27:22: note: expanded from macro 'VFIO_ASSERT_OP'
+>       26 |         fprintf(stderr, "  Observed: %#lx %s %#lx\n",                           \
+>          |                                              ~~~~
+>       27 |                         (u64)__lhs, #_op, (u64)__rhs);                          \
+>          |                                           ^~~~~~~~~~
+> ---
+> Changes in v2:
+> - Add white space around arch checks
+> - Clean up uname command
+> - Link to v1: https://lore.kernel.org/r/20260130-vfio-selftest-only-64bit-v1-1-d89ac0944c01@fb.com
+> ---
+>  tools/testing/selftests/vfio/Makefile | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> Could you please take a look and say if the design looks sane to you?
-> Especially the double SRCU on the revocable_provider.
-
-The first patch in the above URL adds SRCU, and the other
-two add various tests.  I do not see a double SRCU, just an
-srcu_read_lock() in revocable_try_access() and an srcu_read_unlock()
-in revocable_withdraw_access().
-
-You are allowed to nest srcu_read_lock(), if that is what you are asking.
-*However*, nesting revocable_try_access() on the same revocable structure
-is buggy because the second call to revocable_try_access() would overwrite
-the rp->srcu value written by the first call.  This could result in both
-SRCU grace-period hangs and too-short SRCU grace periods, more likely
-the former than the latter.
-
-Or do you mean something else by "double SRCU"?
-
-							Thanx, Paul
-
->  drivers/base/revocable.c                           |  8 ++++----
->  drivers/base/revocable_test.c                      | 14 +++++++-------
->  include/linux/revocable.h                          |  8 +++++---
->  .../base/revocable/test_modules/revocable_test.c   |  4 ++--
->  4 files changed, 18 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/base/revocable.c b/drivers/base/revocable.c
-> index 8532ca6a371c..02dd3ec2c9ad 100644
-> --- a/drivers/base/revocable.c
-> +++ b/drivers/base/revocable.c
-> @@ -82,7 +82,7 @@ struct revocable_provider {
->   * Return: The pointer of struct revocable_provider.  NULL on errors.
->   * It enforces the caller handles the returned pointer in RCU ways.
->   */
-> -struct revocable_provider __rcu *revocable_provider_alloc(void *res)
-> +revocable_provider_t revocable_provider_alloc(void *res)
->  {
->  	struct revocable_provider *rp;
->  
-> @@ -94,7 +94,7 @@ struct revocable_provider __rcu *revocable_provider_alloc(void *res)
->  	RCU_INIT_POINTER(rp->res, res);
->  	kref_init(&rp->kref);
->  
-> -	return (struct revocable_provider __rcu *)rp;
-> +	return (revocable_provider_t)rp;
->  }
->  EXPORT_SYMBOL_GPL(revocable_provider_alloc);
->  
-> @@ -120,7 +120,7 @@ static void revocable_provider_release(struct kref *kref)
->   * It enforces the caller to pass a pointer of pointer of resource provider so
->   * that it sets \*rp_ptr to NULL to prevent from keeping a dangling pointer.
->   */
-> -void revocable_provider_revoke(struct revocable_provider __rcu **rp_ptr)
-> +void revocable_provider_revoke(revocable_provider_t *rp_ptr)
->  {
->  	struct revocable_provider *rp;
->  
-> @@ -143,7 +143,7 @@ EXPORT_SYMBOL_GPL(revocable_provider_revoke);
->   *
->   * Return: 0 on success, -errno otherwise.
->   */
-> -int revocable_init(struct revocable_provider __rcu *_rp, struct revocable *rev)
-> +int revocable_init(revocable_provider_t _rp, struct revocable *rev)
->  {
->  	struct revocable_provider *rp;
->  
-> diff --git a/drivers/base/revocable_test.c b/drivers/base/revocable_test.c
-> index 27f5d7d96f4b..732197c887ef 100644
-> --- a/drivers/base/revocable_test.c
-> +++ b/drivers/base/revocable_test.c
-> @@ -30,7 +30,7 @@
->  
->  static void revocable_test_basic(struct kunit *test)
->  {
-> -	struct revocable_provider __rcu *rp;
-> +	revocable_provider_t rp;
->  	struct revocable rev;
->  	void *real_res = (void *)0x12345678, *res;
->  	int ret;
-> @@ -52,7 +52,7 @@ static void revocable_test_basic(struct kunit *test)
->  
->  static void revocable_test_revocation(struct kunit *test)
->  {
-> -	struct revocable_provider __rcu *rp;
-> +	revocable_provider_t rp;
->  	struct revocable rev;
->  	void *real_res = (void *)0x12345678, *res;
->  	int ret;
-> @@ -79,7 +79,7 @@ static void revocable_test_revocation(struct kunit *test)
->  
->  static void revocable_test_try_access_macro(struct kunit *test)
->  {
-> -	struct revocable_provider __rcu *rp;
-> +	revocable_provider_t rp;
->  	void *real_res = (void *)0x12345678, *res;
->  
->  	rp = revocable_provider_alloc(real_res);
-> @@ -101,7 +101,7 @@ static void revocable_test_try_access_macro(struct kunit *test)
->  
->  static void revocable_test_try_access_macro2(struct kunit *test)
->  {
-> -	struct revocable_provider __rcu *rp;
-> +	revocable_provider_t rp;
->  	void *real_res = (void *)0x12345678, *res;
->  	bool accessed;
->  
-> @@ -128,7 +128,7 @@ static void revocable_test_try_access_macro2(struct kunit *test)
->  
->  static void revocable_test_provider_use_after_free(struct kunit *test)
->  {
-> -	struct revocable_provider __rcu *rp;
-> +	revocable_provider_t rp;
->  	struct revocable_provider *old_rp;
->  	struct revocable rev;
->  	void *real_res = (void *)0x12345678;
-> @@ -167,7 +167,7 @@ static void revocable_test_provider_use_after_free(struct kunit *test)
->  
->  struct test_concurrent_access_context {
->  	struct kunit *test;
-> -	struct revocable_provider __rcu *rp;
-> +	revocable_provider_t rp;
->  	struct revocable rev;
->  	struct completion started, enter, exit;
->  	struct task_struct *thread;
-> @@ -206,7 +206,7 @@ static int test_concurrent_access_consumer(void *data)
->  
->  static void revocable_test_concurrent_access(struct kunit *test)
->  {
-> -	struct revocable_provider __rcu *rp;
-> +	revocable_provider_t rp;
->  	void *real_res = (void *)0x12345678;
->  	struct test_concurrent_access_context *ctx;
->  	int ret, i;
-> diff --git a/include/linux/revocable.h b/include/linux/revocable.h
-> index e3d6d2c953a3..f0aea6f56a25 100644
-> --- a/include/linux/revocable.h
-> +++ b/include/linux/revocable.h
-> @@ -12,6 +12,8 @@
->  struct device;
->  struct revocable_provider;
->  
-> +typedef struct revocable_provider __rcu *revocable_provider_t;
+> diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> index ead27892ab65..8e90e409e91d 100644
+> --- a/tools/testing/selftests/vfio/Makefile
+> +++ b/tools/testing/selftests/vfio/Makefile
+> @@ -1,3 +1,10 @@
+> +ARCH ?= $(shell uname -m)
 > +
->  /**
->   * struct revocable - A handle for resource consumer.
->   * @rp: The pointer of resource provider.
-> @@ -22,10 +24,10 @@ struct revocable {
->  	int idx;
->  };
+> +ifeq (,$(filter $(ARCH),arm64 x86_64))
+> +# Do nothing on unsupported architectures
+> +include ../lib.mk
+> +else
+> +
+>  CFLAGS = $(KHDR_INCLUDES)
+>  TEST_GEN_PROGS += vfio_dma_mapping_test
+>  TEST_GEN_PROGS += vfio_dma_mapping_mmio_test
+> @@ -28,3 +35,5 @@ TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_PROGS_O) $(LIBVFIO_O))
+>  -include $(TEST_DEP_FILES)
 >  
-> -struct revocable_provider __rcu *revocable_provider_alloc(void *res);
-> -void revocable_provider_revoke(struct revocable_provider __rcu **rp);
-> +revocable_provider_t revocable_provider_alloc(void *res);
-> +void revocable_provider_revoke(revocable_provider_t *rp);
->  
-> -int revocable_init(struct revocable_provider __rcu *rp, struct revocable *rev);
-> +int revocable_init(revocable_provider_t rp, struct revocable *rev);
->  void revocable_deinit(struct revocable *rev);
->  void *revocable_try_access(struct revocable *rev) __acquires(&rev->rp->srcu);
->  void revocable_withdraw_access(struct revocable *rev) __releases(&rev->rp->srcu);
-> diff --git a/tools/testing/selftests/drivers/base/revocable/test_modules/revocable_test.c b/tools/testing/selftests/drivers/base/revocable/test_modules/revocable_test.c
-> index a560ceda7318..30cc9c145725 100644
-> --- a/tools/testing/selftests/drivers/base/revocable/test_modules/revocable_test.c
-> +++ b/tools/testing/selftests/drivers/base/revocable/test_modules/revocable_test.c
-> @@ -17,7 +17,7 @@
->  static struct dentry *debugfs_dir;
->  
->  struct revocable_test_provider_priv {
-> -	struct revocable_provider __rcu *rp;
-> +	revocable_provider_t rp;
->  	struct dentry *dentry;
->  	char res[16];
->  };
-> @@ -37,7 +37,7 @@ static ssize_t revocable_test_consumer_read(struct file *filp,
->  	char data[16];
->  	size_t len;
->  	struct revocable rev;
-> -	struct revocable_provider __rcu *rp = filp->private_data;
-> +	revocable_provider_t rp = filp->private_data;
->  
->  	switch (*offset) {
->  	case 0:
-> -- 
-> 2.47.3
+>  EXTRA_CLEAN += $(TEST_GEN_PROGS_O) $(TEST_DEP_FILES)
+> +
+> +endif
 > 
+> ---
+> base-commit: c3cbc276c2a33b04fc78a86cdb2ddce094cb3614
+> change-id: 20260130-vfio-selftest-only-64bit-422518bdeba7
+> 
+> Best regards,
+
+Applied to vfio next branch for v7.0/6.20.  Thanks,
+
+Alex
