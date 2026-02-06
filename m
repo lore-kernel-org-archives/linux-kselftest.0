@@ -1,87 +1,120 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B1330AABC
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 19:50:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2EB430E858
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Feb 2026 20:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770407404; cv=none; b=dOFGz3u866brbDBgz/582gfKIkPyiv02/DxD60KKd2Q1pTj1ObrL3yaMt5ccC/onunwQJ5b+0/yuupvDNtsQ5OzpvmM66iG+9xCIfDNlibX9eCA7Vd675GDdnpf/QW8f0zZYtvS3nEHaAF1yJU3GK1zmS/dkthcGd8S4La89UFA=
+	t=1770410268; cv=none; b=hpQKeQthU6vQr3KNcpGL8gmRI7IogxCAA2KTV3bTxG2pkHOJzYpkVWLR1dtHfoVfPblAwzplf9yK1iNFya6lJbbTWitqzQBOzMDcz5GOL/rTrlXAFljjEeY5KdbR5fQetwhN/xy3gtylvde0gsMazf5M6YNM92hlvftM1KA6kR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770407404; c=relaxed/simple;
-	bh=TsEFJkcKhYzvgcG5/7ppTLt6u4oGU7jCOQ+Ejqe0MDI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=AY1WKZLCJedp8jQckBDbodKN8kbsrEGrW+RShY75bRNtmvmK/jTopamyH/n7YwpCTs0uuUsHyO0Eb/3RV/3EEmlD8MY0bWbyLJX2pTPhQPWxlkwuGLFGWNrVaCPBTkggp7pAlTVuO3TcMb4s/CsnmpqFuDBgj5D4L7HB+I/iihs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CgsXjoJz; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1770410268; c=relaxed/simple;
+	bh=i4Uh+l4kvRN5zATgc6vOIEZ/4peCmiUHtNn9nTVYxI8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P/i+HbIf7fgS8kka6AL9Z1/5XG9J4hxNOhi2yVWArtSpT2YeqBBJVNkiFvFwLCtUcJTeO7hY5XuDuTmOgGJZoYD8yJaIlkXQWuDc1lKJ3/o9w4rAwn+nIRiIjuxHnB6YOW7Qlx4mi7xo28mjzWfryOcSlhz5r40Qn0xNs1RrvDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fvLiAQGT; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CgsXjoJz"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-81ecb6279d9so2501072b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 11:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770407404; x=1771012204; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I1jJkQvNi67f2WiL1rB6LTa3epncK2iO2DDRLCaSJpk=;
-        b=CgsXjoJzdtoSjjdXAD7DMhaOEe7SoLjp3nmJ6xlfFFmU2yoK9K1IH0yHilvsuQgC2d
-         w6nU6RC3fGicS44KiT6/CxULGL21yHu8IkEtxp9S9nDtRh7Ro2RRkCSPU33z8BqhMi4C
-         5pR3ozrOuXQileKtfVoNch5JGuXd90bBM5rMX60bsKfKTMeF94Iwh5oFR4QnitFCg37+
-         dFm/rYupbizQpt2TmI7uzzaQ3866Kb+gY3srEzGSLaMogU79518veCFka4qFlZtpbqee
-         jS6q/OQu+iwlYyu04kzMQpqWJJ6y529ipljGXJDx2/rE2meltloEa7p8Kl8k0gQtbzBa
-         mWVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770407404; x=1771012204;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I1jJkQvNi67f2WiL1rB6LTa3epncK2iO2DDRLCaSJpk=;
-        b=EgKpnsLBmpD8GBLGQDwSZ2+ofV1irsAP3zLTej8akwM6Q/qLpXfdSvvrhGna1LcP3q
-         VECrQBo45uoea+KZSNlWv3+wum2eJ/22AzmoiMwalsCLCkBo5nW5JxPFJCYq2tA+3xnm
-         hS4RbvF8Lg/8sCf63uz/N3iBdGjEUKKkBfudLcJXhAzavW2x4BQm7ug1xsY4DtiyrYZK
-         rsZUZIycjCwKGcP5+BjrktmVxU55tZyRo5bBqw/vGKWedgW8OS7jrtpnVF8AmWIfvrG5
-         Jlw8dLguoUx+n4/4m7I7EYZSY4lgWDAPln/akZUtrUfPaDmUiQhqVRN3EX1z8pyeiLnb
-         ii1A==
-X-Forwarded-Encrypted: i=1; AJvYcCXY62ajh5JIatxoZ0zzWS+pJ+3B+URcLlQ8oTxsrH+Whrb/9iLCN/YTxZcxc9JwCMudxkfXYFRLZ8k9iQL/0ZA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyqech03ppq/kdEXnJVIdv7I9J8ujUkizKmmd4e2flu/OyDLqYk
-	jlKD7Pnxbqi/KiPpsgd1h3jT0T8EoSZfwUINDMm+VImjrE2zYq7mE0iCD7EEbu2Iql9D68CS02W
-	FhXsKQA==
-X-Received: from pfbdi5.prod.google.com ([2002:a05:6a00:4805:b0:823:efc:21ba])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3914:b0:823:9e5:855e
- with SMTP id d2e1a72fcca58-824413c8e09mr3610811b3a.0.1770407403686; Fri, 06
- Feb 2026 11:50:03 -0800 (PST)
-Date: Fri, 6 Feb 2026 11:50:02 -0800
-In-Reply-To: <u566x5dz5a7trddlb3s6kustfvewdredrfldbu7yxlnl54wicp@tvzanbhtbmbd>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fvLiAQGT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770410266;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=h4LBYUTBx6JOuIa9T2/oVmdddjNcWzl+HbR8l6hPpQY=;
+	b=fvLiAQGTCm2wnPXWw16UURfnadEUygQ+apz/nk8waVi0h7SoEeog3vUFv695Con49CaxTC
+	jt5L8AoCXbTt6JjVgMgWXo8ZQQ8H7FJ7YHQiuYEgPkr1JlYvK46f73uvnWLOZbilYU444w
+	jthqEzE8RnkRSu22neNqqpKOB8ctf78=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-456-i0hvvCDUOfaf6Wiv6Cq27g-1; Fri,
+ 06 Feb 2026 15:37:40 -0500
+X-MC-Unique: i0hvvCDUOfaf6Wiv6Cq27g-1
+X-Mimecast-MFC-AGG-ID: i0hvvCDUOfaf6Wiv6Cq27g_1770410257
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2B38D1956068;
+	Fri,  6 Feb 2026 20:37:36 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.90.86])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5EF5218003F6;
+	Fri,  6 Feb 2026 20:37:31 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Chen Ridong <chenridong@huaweicloud.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH/for-next v4 0/4] cgroup/cpuset: Fix partition related locking issues
+Date: Fri,  6 Feb 2026 15:37:08 -0500
+Message-ID: <20260206203712.1989610-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260205214326.1029278-1-jmattson@google.com> <20260205214326.1029278-3-jmattson@google.com>
- <aYYwwWjMDJQh6uDd@google.com> <fb750b1bb21bd47f85eb133d69b2c059188f4c05@linux.dev>
- <CALMp9eTJAD4Dc88egovSjV-N2YHd8G80ZP-dL5wXFDAC+WR6fA@mail.gmail.com>
- <aYY9JOMDBPDY48lA@google.com> <u566x5dz5a7trddlb3s6kustfvewdredrfldbu7yxlnl54wicp@tvzanbhtbmbd>
-Message-ID: <aYZF6sYhDIdi-pvh@google.com>
-Subject: Re: [PATCH v3 2/8] KVM: x86: nSVM: Cache and validate vmcb12 g_pat
-From: Sean Christopherson <seanjc@google.com>
-To: Yosry Ahmed <yosry.ahmed@linux.dev>
-Cc: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Fri, Feb 06, 2026, Yosry Ahmed wrote:
-> On Fri, Feb 06, 2026 at 11:12:36AM -0800, Sean Christopherson wrote:
-> > Oh, and if we do plumb in @ctrl to __nested_vmcb_check_save(), I vote to
-> > opportunistically drop the useless single-use wrappers (probably in a standalone
-> > patch to plumb in @ctrl).  E.g. (completely untested)
-> 
-> They are dropped by
-> https://lore.kernel.org/kvm/20260206190851.860662-9-yosry.ahmed@linux.dev/.
+ v4:
+  - Fix various issues as reported by Chen Ridong.
 
-At least I'm consistent?  Hmm.  Jim, can you base your next version on v5 of
-Yosry's series?  I think when I apply, I'll splice in this series between patches
-20 and 21.  I could resolve the conflicts when applying, but since I'll probably
-tag these for stable@ as well, I'd rather apply patches that are closer to what
-was posted.
+ v3:
+  - Add a new patch to clarify the locking rules for internal variables
+  - Defer all housekeeping_update() calls with associated
+    rebuild_sched_domains*() calls to either workqueue or task_work.
+
+ v2:
+  - Change patch 1 to use workqueue instead of task run as it is a
+    per-cpu kthread that performs the cpuset shutdown and bringup work.
+  - Simplify and streamline some of the code.
+
+After booting the latest cgroup for-next debug kernel with the latest
+cgroup changes as well as Federic's "cpuset/isolation: Honour kthreads
+preferred affinity" patch series [1] merged on top and running the
+test-cpuset-prs.sh test, a circular locking dependency lockdep splat
+was reported. See patch 2 for details.
+
+To fix this issue, a new top level cpuset_top_mutex is added and the
+call to housekeeping_update() is deferred to either a task_work or to
+a workqueue.
+
+With these changes in place, the cpuset test ran to completion with no
+failure and no lockdep splat.
+
+[1] https://lore.kernel.org/lkml/20260125224541.50226-1-frederic@kernel.org/
+
+Waiman Long (4):
+  cgroup/cpuset: Clarify exclusion rules for cpuset internal variables
+  cgroup/cpuset: Defer housekeeping_update() calls from CPU hotplug to
+    workqueue
+  cgroup/cpuset: Call housekeeping_update() without holding
+    cpus_read_lock
+  cgroup/cpuset: Eliminate some duplicated rebuild_sched_domains() calls
+
+ kernel/cgroup/cpuset.c                        | 241 +++++++++++++-----
+ kernel/sched/isolation.c                      |   4 +-
+ kernel/time/timer_migration.c                 |   4 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       |  13 +-
+ 4 files changed, 196 insertions(+), 66 deletions(-)
+
+-- 
+2.52.0
+
