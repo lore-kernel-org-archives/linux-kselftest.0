@@ -1,439 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BE8265CBE;
-	Sat,  7 Feb 2026 01:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5E6238C03
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Feb 2026 01:23:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770427314; cv=none; b=scAlnb/eJlJr0zSJIWN1auXP9JpNruaNwOidt5xn+f6ILpO/iqVnifDnILWj+a8jUxFScMe2Y4M18b/wCcCNxLIYmnoGz7g4jgFDJJbG76YCfb0pPSa8ZD+Y3RsZJxHQKDrz1mHKrpG8sUzK8PNHofLeuwUWaI1LXIzvrvL8nCc=
+	t=1770427434; cv=none; b=tu2yDGMPEYbs8OFCSd1afB0gK3gqHoZdVrruslzenCLcYOcxos4UmH0VkGNqADC55ZUOgA60xle1tQxHW1oflRGAMh/hy0t+OnJoSjc+M3KILRMh34mAVe3ZQ8fGjqJlPeYqHrLWZP7QS47NhjiFbFG6BWxBZwbiI4du6wXPC7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770427314; c=relaxed/simple;
-	bh=1ploFQFSW4xM1HWjDkKu9Op/F4aJ2wf4SFMmu1yJtAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ecc33KU4cPPv9jyl7Gw6B/Vmm5AabmBIvrkzCNCO+xo6BPrx131z1KnSBMBgm7t/r/FIGC5+pQPEyuy6jHoDx2cgBh9dyyIaJY/2gOeYQBTEtiM1f+YdM7XcQbdxOEf/q3rEa7YtrQddTeXEAcNuZLGYk/F3VZEy4cPSrQTMPHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ophAAmrN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770427434; c=relaxed/simple;
+	bh=dbXNLQnXNLyXQ9CT/B6ZGUFhbJ3b6yLRqpkwxAjNO5g=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=CJ3+clnqpYlM486KnTTKwsN9rVVSEVL35bmqJcz3+xdY/XKtejkkyag/GBD9WP91U7k2wWNchceUigg6qpvG3eUuGcRTjICYqvKcM/55byEBNPhyCXzM2lTikMPD8WT6+viSOXrwV2VnCx/HnqcYLQOGowJsgJMy1Cytb/UFNts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SLGclmpL; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ophAAmrN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C44C116C6;
-	Sat,  7 Feb 2026 01:21:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770427314;
-	bh=1ploFQFSW4xM1HWjDkKu9Op/F4aJ2wf4SFMmu1yJtAo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ophAAmrNjpi2SFK1IBmdcjhkOUxXiBzNKMHDqZniz5jZY37ZpM2Zx75+oG2c44Bw/
-	 iWS7FMXikPhpfspSPvvzKF+ogywNlaxdT8J1tkXMAGzb/JTa/D5shLpsC1xc4YcIlE
-	 Y6C2FboSwh1heVR4KFhqoViriwGpboXKdhN43ebz3K4rx3iwVDOsiQ7y238+qf5EcG
-	 sdxbmgf+CuoXFDixiW+oNwRjDudYHTUGnuyEQpNqakvbQvfkG0nvwKF99nR71+e8iY
-	 3wyG9xHitfgXK3KoQp5IRFGeCVH6iRFdilWct9rRYcqBYjPeYR2uUgl0A8+fxoD0tu
-	 z5+Pfr+DfHPsg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	danieller@nvidia.com,
-	petrm@nvidia.com
-Subject: [PATCH net-next] selftests: drv-net: port_split: convert to ksft format and mark disruptive
-Date: Fri,  6 Feb 2026 17:21:51 -0800
-Message-ID: <20260207012151.3972723-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SLGclmpL"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c6b1b22b134so1598061a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 17:23:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770427434; x=1771032234; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zx9cflBOvMN2Fre5G6WHM7bbDYv06YwaCyO7rWPF26U=;
+        b=SLGclmpLSC5f+b2lHOUddrZVZntDo3NmvP7g8ZpcA99lvnk2/5gz252p8Cui8qb0RV
+         GfEYuAgo0K8EwxLGbYja5FywWyGgA04Ghim2Nb66RhtkxQqmIib57ppl5GWglEzd3BSd
+         GIQc7Lg5fnzfaJRd3uVjCiICz8UJjbXfnRGocVWrqfb/DYV+lYF0bcsqW9pg2zeeGUn1
+         +iqNnpMbeO5kRWPr9fBb3yJF0grnkksUgBaU4DsLPWlkmGaU4znahdlMhxYB/nu8QYkv
+         DHiwGnaOr/6YApP1yBoI5+5F9++SBnGbC71YwgSPM4qeBe4eNZUJup863BWlb9vNp0z1
+         StQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770427434; x=1771032234;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zx9cflBOvMN2Fre5G6WHM7bbDYv06YwaCyO7rWPF26U=;
+        b=kwyvi7O+88S6xp3b7tG+hbDO3oZz09M3G6Z9LbLcYSUE25vqy4yxo20jLTPAXHjmOM
+         0gtUvQPp3QCULos99PyI35ONJZZBDrP0+Xr1sNAyT2ShmKoGQCbO31LoGekzR/NWRnlO
+         MAXlrTqgW0qt4reGguaKnk8QDSEN4XZ3S1krBTF30rlmySJR1+BRfTfz9SZw+lmDRMRa
+         cldOoNw/BEwJM8hWf9Smc1Us8WNPccJBBRPYbgP43/N18DoX79iJ8/vWmycpLTwq8x5T
+         O9nI886Z/c5RzG2OQf1yzc081MyYMhBUfC1GZh3i688vPeIQYJ74KYbF2MMOJ1Fcb3YN
+         Mq9g==
+X-Forwarded-Encrypted: i=1; AJvYcCVZ2R7Dr7+CECTaLcJ/9IOIgLjmfaKbahQvOw/6xCKVlq5BrnaF3GlVpHsRRLp+LPe1skR7Wl2kOHdpcvqdAEQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8JcVHxPZzUSDPR1g56evy8EmnZw2/dbN8i6qf6Yz0UzaFaEdT
+	3lF1ni7G86fIYtx1Z3puNcm/8k+OvnGUSIo8ePVf0zX7CpfSeDF9IgmejoyhXwv89UWo/0ZBoAB
+	TXogNV/uLoNFtdw==
+X-Received: from pgbdo14.prod.google.com ([2002:a05:6a02:e8e:b0:c62:b045:9c6])
+ (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:681:b0:38e:c1c3:b1ed with SMTP id adf61e73a8af0-393ad33ab08mr4698774637.44.1770427433658;
+ Fri, 06 Feb 2026 17:23:53 -0800 (PST)
+Date: Fri,  6 Feb 2026 17:23:26 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
+Message-ID: <20260207012339.2646196-1-jmattson@google.com>
+Subject: [PATCH v3 0/5] KVM: x86/pmu: Add support for AMD Host-Only/Guest-Only bits
+From: Jim Mattson <jmattson@google.com>
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Yosry Ahmed <yosry.ahmed@linux.dev>, 
+	Mingwei Zhang <mizhang@google.com>, Sandipan Das <sandipan.das@amd.com>
+Cc: Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-The devlink port split test is included in the HW tests,
-but it does not obey our KSFT_DISRUPTIVE marking.
-If someone tries to run driver tests over SSH on a device
-that supports port splitting the outcome will be loss of
-connectivity.
+This series adds support for AMD's Host-Only and Guest-Only performance
+counter eventsel bits in KVM's mediated PMU passthrough implementation.
 
-Convert the test to conform to our "driver test environment".
-Mark it as disruptive.
+These bits allow an nSVM-enabled guest to configure performance counters
+that count only during L1 execution (Host-Only) or only during L2 execution
+(Guest-Only).
 
-This is completely untested, I'd appreciate if someone with
-the right setup could give this a go (and probably fix up
-the bugs I introduced).
+KVM updates the hardware event selector ENABLE bit at the following state
+transitions to ensure counters only count in the appropriate mode:
 
-CC: danieller@nvidia.com
-CC: petrm@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- .../drivers/net/hw/devlink_port_split.py      | 243 ++++++------------
- 1 file changed, 77 insertions(+), 166 deletions(-)
+  - EFER.SVME changes: Enable/disable Guest-Only counters
+  - Nested VMRUN: Disable Host-Only, enable Guest-Only counters
+  - Nested VMEXIT: Enable Host-Only, disable Guest-Only counters
 
-diff --git a/tools/testing/selftests/drivers/net/hw/devlink_port_split.py b/tools/testing/selftests/drivers/net/hw/devlink_port_split.py
-index 2d84c7a0be6b..c7b38f5e94fd 100755
---- a/tools/testing/selftests/drivers/net/hw/devlink_port_split.py
-+++ b/tools/testing/selftests/drivers/net/hw/devlink_port_split.py
-@@ -1,75 +1,48 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
--from subprocess import PIPE, Popen
--import json
--import time
--import argparse
-+"""
-+Test port split configuration using devlink-port lanes attribute.
-+The test is skipped in case the attribute is not available.
-+
-+First, check that all the ports with 1 lane fail to split.
-+Second, check that all the ports with more than 1 lane can be split
-+to all valid configurations (e.g., split to 2, split to 4 etc.)
-+"""
-+
- import collections
--import sys
-+import json
-+import os
- 
--#
--# Test port split configuration using devlink-port lanes attribute.
--# The test is skipped in case the attribute is not available.
--#
--# First, check that all the ports with 1 lane fail to split.
--# Second, check that all the ports with more than 1 lane can be split
--# to all valid configurations (e.g., split to 2, split to 4 etc.)
--#
-+from lib.py import ksft_run, ksft_exit, ksft_pr
-+from lib.py import ksft_eq, ksft_disruptive
-+from lib.py import NetDrvEnv
-+from lib.py import KsftSkipEx
-+from lib.py import cmd
- 
- 
--# Kselftest framework requirement - SKIP code is 4
--KSFT_SKIP=4
- Port = collections.namedtuple('Port', 'bus_info name')
- 
- 
--def run_command(cmd, should_fail=False):
-+def get_devlink_ports(dev):
-     """
--    Run a command in subprocess.
--    Return: Tuple of (stdout, stderr).
-+    Get a list of physical devlink ports.
-+    Return: Array of tuples (bus_info, name).
-     """
- 
--    p = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
--    stdout, stderr = p.communicate()
--    stdout, stderr = stdout.decode(), stderr.decode()
-+    arr = []
- 
--    if stderr != "" and not should_fail:
--        print("Error sending command: %s" % cmd)
--        print(stdout)
--        print(stderr)
--    return stdout, stderr
-+    result = cmd("devlink -j port show")
-+    ports = json.loads(result.stdout)['port']
- 
-+    validate_devlink_output(ports, 'flavour')
- 
--class devlink_ports(object):
--    """
--    Class that holds information on the devlink ports, required to the tests;
--    if_names: A list of interfaces in the devlink ports.
--    """
-+    for port in ports:
-+        if dev in port:
-+            if ports[port]['flavour'] == 'physical':
-+                arr.append(Port(bus_info=port, name=ports[port]['netdev']))
- 
--    def get_if_names(dev):
--        """
--        Get a list of physical devlink ports.
--        Return: Array of tuples (bus_info/port, if_name).
--        """
--
--        arr = []
--
--        cmd = "devlink -j port show"
--        stdout, stderr = run_command(cmd)
--        assert stderr == ""
--        ports = json.loads(stdout)['port']
--
--        validate_devlink_output(ports, 'flavour')
--
--        for port in ports:
--            if dev in port:
--                if ports[port]['flavour'] == 'physical':
--                    arr.append(Port(bus_info=port, name=ports[port]['netdev']))
--
--        return arr
--
--    def __init__(self, dev):
--        self.if_names = devlink_ports.get_if_names(dev)
-+    return arr
- 
- 
- def get_max_lanes(port):
-@@ -78,10 +51,8 @@ Port = collections.namedtuple('Port', 'bus_info name')
-     Return: number of lanes, e.g. 1, 2, 4 and 8.
-     """
- 
--    cmd = "devlink -j port show %s" % port
--    stdout, stderr = run_command(cmd)
--    assert stderr == ""
--    values = list(json.loads(stdout)['port'].values())[0]
-+    result = cmd(f"devlink -j port show {port}")
-+    values = list(json.loads(result.stdout)['port'].values())[0]
- 
-     if 'lanes' in values:
-         lanes = values['lanes']
-@@ -96,47 +67,12 @@ Port = collections.namedtuple('Port', 'bus_info name')
-     Return: split ability, true or false.
-     """
- 
--    cmd = "devlink -j port show %s" % port.name
--    stdout, stderr = run_command(cmd)
--    assert stderr == ""
--    values = list(json.loads(stdout)['port'].values())[0]
-+    result = cmd(f"devlink -j port show {port.name}")
-+    values = list(json.loads(result.stdout)['port'].values())[0]
- 
-     return values['splittable']
- 
- 
--def split(k, port, should_fail=False):
--    """
--    Split $port into $k ports.
--    If should_fail == True, the split should fail. Otherwise, should pass.
--    Return: Array of sub ports after splitting.
--            If the $port wasn't split, the array will be empty.
--    """
--
--    cmd = "devlink port split %s count %s" % (port.bus_info, k)
--    stdout, stderr = run_command(cmd, should_fail=should_fail)
--
--    if should_fail:
--        if not test(stderr != "", "%s is unsplittable" % port.name):
--            print("split an unsplittable port %s" % port.name)
--            return create_split_group(port, k)
--    else:
--        if stderr == "":
--            return create_split_group(port, k)
--        print("didn't split a splittable port %s" % port.name)
--
--    return []
--
--
--def unsplit(port):
--    """
--    Unsplit $port.
--    """
--
--    cmd = "devlink port unsplit %s" % port
--    stdout, stderr = run_command(cmd)
--    test(stderr == "", "Unsplit port %s" % port)
--
--
- def exists(port, dev):
-     """
-     Check if $port exists in the devlink ports.
-@@ -144,7 +80,7 @@ Port = collections.namedtuple('Port', 'bus_info name')
-     """
- 
-     return any(dev_port.name == port
--               for dev_port in devlink_ports.get_if_names(dev))
-+               for dev_port in get_devlink_ports(dev))
- 
- 
- def exists_and_lanes(ports, lanes, dev):
-@@ -157,29 +93,15 @@ Port = collections.namedtuple('Port', 'bus_info name')
-     for port in ports:
-         max_lanes = get_max_lanes(port)
-         if not exists(port, dev):
--            print("port %s doesn't exist in devlink ports" % port)
-+            ksft_pr(f"port {port} doesn't exist in devlink ports")
-             return False
-         if max_lanes != lanes:
--            print("port %s has %d lanes, but %s were expected"
--                  % (port, lanes, max_lanes))
-+            ksft_pr(f"port {port} has {max_lanes} lanes, "
-+                    f"but {lanes} were expected")
-             return False
-     return True
- 
- 
--def test(cond, msg):
--    """
--    Check $cond and print a message accordingly.
--    Return: True is pass, False otherwise.
--    """
--
--    if cond:
--        print("TEST: %-60s [ OK ]" % msg)
--    else:
--        print("TEST: %-60s [FAIL]" % msg)
--
--    return cond
--
--
- def create_split_group(port, k):
-     """
-     Create the split group for $port.
-@@ -194,11 +116,11 @@ Port = collections.namedtuple('Port', 'bus_info name')
-     Test that splitting of unsplittable port fails.
-     """
- 
--    # split to max
--    new_split_group = split(k, port, should_fail=True)
--
--    if new_split_group != []:
--        unsplit(port.bus_info)
-+    result = cmd(f"devlink port split {port.bus_info} count {k}", fail=False)
-+    if result.ret == 0:
-+        ksft_pr(f"split an unsplittable port {port.name}")
-+        cmd(f"devlink port unsplit {port.bus_info}")
-+    ksft_eq(result.ret != 0, True, f"{port.name} is unsplittable")
- 
- 
- def split_splittable_port(port, k, lanes, dev):
-@@ -206,20 +128,22 @@ Port = collections.namedtuple('Port', 'bus_info name')
-     Test that splitting of splittable port passes correctly.
-     """
- 
--    new_split_group = split(k, port)
-+    result = cmd(f"devlink port split {port.bus_info} count {k}", fail=False)
-+
-+    if result.ret != 0:
-+        ksft_pr(f"didn't split a splittable port {port.name}")
-+        return
- 
-     # Once the split command ends, it takes some time to the sub ifaces'
-     # to get their names. Use udevadm to continue only when all current udev
-     # events are handled.
--    cmd = "udevadm settle"
--    stdout, stderr = run_command(cmd)
--    assert stderr == ""
-+    cmd("udevadm settle")
- 
--    if new_split_group != []:
--        test(exists_and_lanes(new_split_group, lanes/k, dev),
--             "split port %s into %s" % (port.name, k))
-+    new_split_group = create_split_group(port, k)
-+    ksft_eq(exists_and_lanes(new_split_group, lanes / k, dev), True,
-+            f"split port {port.name} into {k}")
- 
--    unsplit(port.bus_info)
-+    cmd(f"devlink port unsplit {port.bus_info}")
- 
- 
- def validate_devlink_output(devlink_data, target_property=None):
-@@ -231,7 +155,7 @@ Port = collections.namedtuple('Port', 'bus_info name')
-     skip_reason = None
-     if any(devlink_data.values()):
-         if target_property:
--            skip_reason = "{} not found in devlink output, test skipped".format(target_property)
-+            skip_reason = f"{target_property} not found in devlink output, test skipped"
-             for key in devlink_data:
-                 if target_property in devlink_data[key]:
-                     skip_reason = None
-@@ -239,44 +163,22 @@ Port = collections.namedtuple('Port', 'bus_info name')
-         skip_reason = 'devlink output is empty, test skipped'
- 
-     if skip_reason:
--        print(skip_reason)
--        sys.exit(KSFT_SKIP)
-+        raise KsftSkipEx(skip_reason)
- 
- 
--def make_parser():
--    parser = argparse.ArgumentParser(description='A test for port splitting.')
--    parser.add_argument('--dev',
--                        help='The devlink handle of the device under test. ' +
--                             'The default is the first registered devlink ' +
--                             'handle.')
-+@ksft_disruptive
-+def test_port_split(cfg):
-+    """Test port split configuration using devlink-port lanes attribute."""
-+    dev = f"pci/{cfg.pci}"
- 
--    return parser
-+    result = cmd(f"devlink dev show {dev}", fail=False)
-+    if result.ret != 0:
-+        raise KsftSkipEx(f"devlink device {dev} can not be found")
- 
--
--def main(cmdline=None):
--    parser = make_parser()
--    args = parser.parse_args(cmdline)
--
--    dev = args.dev
--    if not dev:
--        cmd = "devlink -j dev show"
--        stdout, stderr = run_command(cmd)
--        assert stderr == ""
--
--        validate_devlink_output(json.loads(stdout))
--        devs = json.loads(stdout)['dev']
--        dev = list(devs.keys())[0]
--
--    cmd = "devlink dev show %s" % dev
--    stdout, stderr = run_command(cmd)
--    if stderr != "":
--        print("devlink device %s can not be found" % dev)
--        sys.exit(1)
--
--    ports = devlink_ports(dev)
-+    ports = get_devlink_ports(dev)
- 
-     found_max_lanes = False
--    for port in ports.if_names:
-+    for port in ports:
-         max_lanes = get_max_lanes(port.name)
- 
-         # If max lanes is 0, do not test port splitting at all
-@@ -285,15 +187,15 @@ Port = collections.namedtuple('Port', 'bus_info name')
- 
-         # If 1 lane, shouldn't be able to split
-         elif max_lanes == 1:
--            test(not get_split_ability(port),
--                 "%s should not be able to split" % port.name)
-+            ksft_eq(get_split_ability(port), False,
-+                    f"{port.name} should not be able to split")
-             split_unsplittable_port(port, max_lanes)
- 
-         # Else, splitting should pass and all the split ports should exist.
-         else:
-             lane = max_lanes
--            test(get_split_ability(port),
--                 "%s should be able to split" % port.name)
-+            ksft_eq(get_split_ability(port), True,
-+                    f"{port.name} should be able to split")
-             while lane > 1:
-                 split_splittable_port(port, lane, max_lanes, dev)
- 
-@@ -301,8 +203,17 @@ Port = collections.namedtuple('Port', 'bus_info name')
-         found_max_lanes = True
- 
-     if not found_max_lanes:
--        print(f"Test not started, no port of device {dev} reports max_lanes")
--        sys.exit(KSFT_SKIP)
-+        raise KsftSkipEx(f"No port of device {dev} reports max_lanes")
-+
-+
-+def main() -> None:
-+    """Ksft boiler plate main"""
-+    with NetDrvEnv(__file__, nsim_test=False) as cfg:
-+        cfg.pci = os.path.basename(
-+            os.path.realpath(f"/sys/class/net/{cfg.ifname}/device")
-+        )
-+        ksft_run([test_port_split], args=(cfg,))
-+    ksft_exit()
- 
- 
- if __name__ == "__main__":
+v1: https://lore.kernel.org/kvm/20260121225438.3908422-1-jmattson@google.com/
+
+v2: https://lore.kernel.org/kvm/20260129232835.3710773-1-jmattson@google.com/
+
+v2 -> v3:
+     * Dropped the svm_enter_guest_mode() and svm_leave_guest_mode()
+       wrappers introduced in v2 [Yosry]
+     * Introduced a generic nested_transition callback in kvm_x86_ops to
+       avoid confusing SVM-specific wrappers and unnecessary code replication
+     * Fixed a latent bug with L2 stack alignment, which was triggered by
+       a movdqa instruction in l2_guest_code() that referenced the L2 stack.
+       Note that l2_guest_code() expects the stack to be 16-byte misaligned
+       at function entry. It was not.
+
+Jim Mattson (5):
+  KVM: x86/pmu: Introduce amd_pmu_set_eventsel_hw()
+  KVM: x86/pmu: Disable Host-Only/Guest-Only events as appropriate for
+    vCPU state
+  KVM: x86/pmu: Refresh Host-Only/Guest-Only eventsel at nested
+    transitions
+  KVM: x86/pmu: Allow Host-Only/Guest-Only bits with nSVM and mediated
+    PMU
+  KVM: selftests: x86: Add svm_pmu_host_guest_test for
+    Host-Only/Guest-Only bits
+
+ arch/x86/include/asm/kvm-x86-ops.h            |   1 +
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/include/asm/perf_event.h             |   2 +
+ arch/x86/kvm/kvm_cache_regs.h                 |   2 +
+ arch/x86/kvm/svm/pmu.c                        |  42 +++-
+ arch/x86/kvm/svm/svm.c                        |   3 +
+ arch/x86/kvm/svm/svm.h                        |   5 +
+ arch/x86/kvm/x86.c                            |   1 +
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ tools/testing/selftests/kvm/include/x86/pmu.h |   6 +
+ .../selftests/kvm/include/x86/processor.h     |   2 +
+ .../kvm/x86/svm_pmu_host_guest_test.c         | 199 ++++++++++++++++++
+ 12 files changed, 264 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/svm_pmu_host_guest_test.c
+
 -- 
-2.53.0
+2.53.0.rc2.204.g2597b5adb4-goog
 
