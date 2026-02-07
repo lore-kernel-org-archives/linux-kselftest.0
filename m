@@ -1,108 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BAAD21A92F;
-	Sat,  7 Feb 2026 14:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568B2271A9A
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Feb 2026 14:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770472859; cv=none; b=FwxtnmLKzMHk18XBi6HtjgK0HkNGF+cEPn/QlLXhVAGUv/6uP4mE+CAx5o6bomhuUxXuMksxMbv6uxdsgJWpbr+betlaKtGskQTL4/7yWBWkHJbVnGkJMgJfkoSWIDQVfdZE1TZk9c13bYwfn0qLyr8c71fmqthqRHsYVI+EF+c=
+	t=1770474918; cv=none; b=mdyGlV8Gr5v5DzIJ+tumriyJu5JMdQQ+yCiyTpIoiFxPdtspCbV8As3TOtbQVuaWpiIXuUCKg3HHgORjdGvg9NmAgWQ/Tlk4+fq4x8TDA7eYWe/bOb4pDfrWlpPJQl8t7nXjPVKL8pI7OI6D6FnYNcGQLK7GcTAwPL0baFRgn/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770472859; c=relaxed/simple;
-	bh=ipmA27PT7L4J7VlPzxsEb8IpZwj1SopV4GIlkZpo15M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BdYeQJm4HeBf3V61W3l5lRmSENXl40L2SUuX6Cpx/QsfzDvTF/yohWaqbn66eZoKhBVjvwWH43XCObCzOHNahEbiIRijLSj+QwrpF5HhV09pAvKBpw4tUMrt2GxmjfHw9LZLbpxCUgNmHyrgmUqjj8HPboxpHIlLoW4RYoSHbOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DgLx2j9Q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770474918; c=relaxed/simple;
+	bh=IF+whSWHEyl63o5dNlnAmREIs1w6LwjIMd7WB+fF4eY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=j+JXyne1Y3Jr3tf0MK1lZ36vgKOP4OsL3SDXrOGH31d1W6KC/adc7NUwKAI65i5BDMXM7UhjZ43fo0mfWnT++AgBcoqpzWWDr5FY6lhHq0J95/v/gPNlo7J4zK77HX+bVvLHn/hkM5YSZWRmvI+EyCQajin+IdWSHSPYsIP67r4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=GvqwWWmZ; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DgLx2j9Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09AA0C116D0;
-	Sat,  7 Feb 2026 14:00:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770472858;
-	bh=ipmA27PT7L4J7VlPzxsEb8IpZwj1SopV4GIlkZpo15M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DgLx2j9QiaTeIHfN5C/Ip4ZVAqDYFy4VSgcEwAdV551M6TIhtLIXYkeAhvP0vvHxb
-	 F3ozXf/gKDp0o5ABqFSnr23Lme3Y2svkzZcGSUhycf2h3joMYOVEgTYcZh1Y76zTKF
-	 cDmNIFUjYFK8dcLOJgKnmTngWlDGyuQulhOv4u4QRu/CFRfjdIxx3zLQNSefJ1qxLS
-	 Ji7EtF6ZD9mZgcealEUaeO2d+UhFVcq/g8RcV9eG5e3hjm6otW2YtI+60mu2Uger36
-	 q6tSbwhXscCU0GjWe8fa072MreC1qaJBhwlenn/9A4Gk3y9hDE+Agkos4CBaQO0+Wu
-	 Z9C2hlbiL+ASA==
-Date: Sat, 7 Feb 2026 22:00:53 +0800
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Johan Hovold <johan@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Revert "revocable: Revocable resource management"
-Message-ID: <aYdFle_Un6du3FZS@tzungbi-laptop>
-References: <20260204142849.22055-1-johan@kernel.org>
- <2026020624-buddhism-clavicle-7a90@gregkh>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="GvqwWWmZ"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1vojOv-00Aiu6-7N; Sat, 07 Feb 2026 15:35:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=iiwqZmvHpK4U5djj6CwxOagEF++9Cz/mSVLs8FweoX0=; b=GvqwWWmZw4B8dmUjAsMS3ucBHk
+	BmE24LozWYNS/3sbzTpAz1annsr4uMV+MBt2OgxOmV0CRjrxCUqqDCYAVKQrRNA87gQOOqp/wPrQc
+	A1ILLfDz+Adrnf5F05OCTsGyXbe1UelTk/VPQCwwx3CiBtI6lHqapV9tWPk42VHlgqxdd0U+ZbG3U
+	tL/i2mVebPNwlQxTJwuU0BfP6tlsgQ/cUk9h9mLopDKf4x1TCB+yC2ejvNHgzuFsXDI6Ks/rAkfkN
+	/+J1wCQApexGT0QwQX8IPyYYXI2v2mGtfIVjeeYnlnMhqWp0WaR5PFFB1oQbJBBhKiy/j0QabtBJx
+	YE7bbl+w==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1vojOu-0007TN-Nh; Sat, 07 Feb 2026 15:35:08 +0100
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vojOs-006OQ1-B0; Sat, 07 Feb 2026 15:35:06 +0100
+From: Michal Luczaj <mhal@rbox.co>
+Date: Sat, 07 Feb 2026 15:34:55 +0100
+Subject: [PATCH bpf v2 2/4] bpf, sockmap: Use
+ sock_map_sk_{acquire,release}() where open-coded
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2026020624-buddhism-clavicle-7a90@gregkh>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260207-unix-proto-update-null-ptr-deref-v2-2-9f091330e7cd@rbox.co>
+References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
+In-Reply-To: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Willem de Bruijn <willemb@google.com>, Cong Wang <cong.wang@bytedance.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.14.3
 
-On Fri, Feb 06, 2026 at 04:13:00PM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Feb 04, 2026 at 03:28:46PM +0100, Johan Hovold wrote:
-> > I was surprised to learn that the revocable functionality was merged the other
-> > week given the community feedback on list and at LPC, but not least since there
-> > are no users of it, which we are supposed to require to be able to evaluate it
-> > properly.
-> > 
-> > The chromeos ec driver issue which motivated this work turned out not to need
-> > it as was found during review. And the example gpiolib conversion was posted
-> > the very same morning that this was merged which hardly provides enough time
-> > for evaluation (even if Bartosz quickly reported a performance regression).
-> > 
-> > Turns out there are correctness issues with both the gpiolib conversion and
-> > the revocable design itself that can lead to use-after-free and hung tasks (see
-> > [1] and [2]).
-> > 
-> > And as was pointed out repeatedly during review, and again at the day of the
-> > merge, this does not look like the right interface for the chardev unplug
-> > issue.
-> > 
-> > Despite the last-minute attempt at addressing the issues mentioned above
-> > incrementally, the revocable design is still fundamentally flawed (see patch
-> > 3/3).
-> > 
-> > We have processes like requiring a user before merging a new interface so that
-> > issues like these can be identified and the soundness of an API be evaluated.
-> > They also give a sense of when things are expected to happen, which allows our
-> > scarce reviewers to manage their time (e.g. to not be forced to drop everything
-> > else they are doing when things are merged prematurely).
-> > 
-> > There really is no reason to exempt any new interface from this regardless of
-> > whether one likes the underlying concept or not.
-> > 
-> > Revert the revocable implementation until a redesign has been proposed and
-> > evaluated properly.
-> 
-> After thinking about this a lot, and talking it over with Danilo a bit,
-> I've applied this series that reverts these changes.
-> 
-> Kernel developers / maintainers are only "allowed" one major argument /
-> fight a year, and I really don't want to burn my 2026 usage so early in
-> the year :)
-> 
-> Tzung-Bi, can you take the feedback here, and what you have learned from
-> the gpio patch series, and rework this into a "clean" patch series for
-> us to review and comment on for future releases?  That should give us
-> all a baseline on which to work off of, without having to worry about
-> the different versions/fixes floating around at the moment.
+Instead of repeating the same (un)locking pattern, reuse
+sock_map_sk_{acquire,release}(). This centralizes the code and makes it
+easier to adapt sockmap to af_unix-specific locking.
 
-Acknowledged.  I'll start reworking this into a unified series that
-incorporates the feedback and lessons learned.
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+ net/core/sock_map.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
+
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index d4f15b846ad4..b6586d9590b7 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -353,11 +353,9 @@ static void sock_map_free(struct bpf_map *map)
+ 		sk = xchg(psk, NULL);
+ 		if (sk) {
+ 			sock_hold(sk);
+-			lock_sock(sk);
+-			rcu_read_lock();
++			sock_map_sk_acquire(sk);
+ 			sock_map_unref(sk, psk);
+-			rcu_read_unlock();
+-			release_sock(sk);
++			sock_map_sk_release(sk);
+ 			sock_put(sk);
+ 		}
+ 	}
+@@ -1176,11 +1174,9 @@ static void sock_hash_free(struct bpf_map *map)
+ 		 */
+ 		hlist_for_each_entry_safe(elem, node, &unlink_list, node) {
+ 			hlist_del(&elem->node);
+-			lock_sock(elem->sk);
+-			rcu_read_lock();
++			sock_map_sk_acquire(elem->sk);
+ 			sock_map_unref(elem->sk, elem);
+-			rcu_read_unlock();
+-			release_sock(elem->sk);
++			sock_map_sk_release(elem->sk);
+ 			sock_put(elem->sk);
+ 			sock_hash_free_elem(htab, elem);
+ 		}
+@@ -1676,8 +1672,7 @@ void sock_map_close(struct sock *sk, long timeout)
+ 	void (*saved_close)(struct sock *sk, long timeout);
+ 	struct sk_psock *psock;
+ 
+-	lock_sock(sk);
+-	rcu_read_lock();
++	sock_map_sk_acquire(sk);
+ 	psock = sk_psock(sk);
+ 	if (likely(psock)) {
+ 		saved_close = psock->saved_close;
+@@ -1685,16 +1680,14 @@ void sock_map_close(struct sock *sk, long timeout)
+ 		psock = sk_psock_get(sk);
+ 		if (unlikely(!psock))
+ 			goto no_psock;
+-		rcu_read_unlock();
+ 		sk_psock_stop(psock);
+-		release_sock(sk);
++		sock_map_sk_release(sk);
+ 		cancel_delayed_work_sync(&psock->work);
+ 		sk_psock_put(sk, psock);
+ 	} else {
+ 		saved_close = READ_ONCE(sk->sk_prot)->close;
+ no_psock:
+-		rcu_read_unlock();
+-		release_sock(sk);
++		sock_map_sk_release(sk);
+ 	}
+ 
+ 	/* Make sure we do not recurse. This is a bug.
+
+-- 
+2.52.0
+
