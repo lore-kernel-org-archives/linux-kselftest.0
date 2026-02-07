@@ -1,104 +1,164 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6677E29B77C
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Feb 2026 01:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9622298987
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Feb 2026 01:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770427441; cv=none; b=VMGFBsLgQySPM51QQpu40FHU3YHBuQN/FYZt5n1zftIPLOHvZsc/U8CnFH7Vm/b+4wMfW8luu7H2RxW8qEgXo6xH1lPkbvYOqTCfrqycFTCO+1zTkYG2efW3Cdzh3gojin3TMoATKpxbNWqkGFMTnOVefxp5nBdKPi0/s9JkjZw=
+	t=1770427821; cv=none; b=jFhrmfZ040skM61UjFmAzwGaIr5jdCIj75gedYQqSOky0mWuJHGLofN6c96HszphodDqKBYHp7fpqzgTLta7p6OU9/cONo1GTZZlU98OtDzb1WDhuSXBhqPbnsEckz8wCzHiKvV0S/yDk8gj14W7Pau+SPU0PhF4o0yE/9gNldo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770427441; c=relaxed/simple;
-	bh=VX6DCgwNWjB+/bxyXx2Y/ERrnxSlvMrxT8BUrW+i6nk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dyuB74EEUWHl+eV8uRY/q1d8Gpr6gsqMW9nvW96ekI4R8IXlZoxHyynmDcjuHHFJDeWA84maoy49qTI8NDQ8gHxK6ykVZC1C/VzTEQsZ1mj4yJ/6fG4TD1o2cMJJMFmHmnVrRZmiO0Lu6frb9hokJD6cXITj/SGWLGCh5ymCCxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IjOQ+/4R; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+	s=arc-20240116; t=1770427821; c=relaxed/simple;
+	bh=A+ftBd2Jtc29Pgy/SA6btDqagDLkGK8wLmvgN28yyX0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KCyjm8SXyA/YcUkfGDW9fvQ3ipfk8yqn65t9VyVQd4MTTxMabOLVJKgjqOqfdm7t8T3PLW7k15LGKU76BuFHzzXDKcMPRmtVHcINEYjHm8/XV4jsu+b7+8O3V8R4YVv1GRHvUt2TmOVNFJqxVodyRGEuFypcf1qkI8UNULOVf/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=etfkEqN9; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IjOQ+/4R"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-354c0234c1fso590907a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 17:23:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="etfkEqN9"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7d148dd3421so496264a34.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Feb 2026 17:30:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770427439; x=1771032239; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2fG+Y9KC4ijGwyN19NJSb/KoIzzrPjnkRSfXL2ajm3I=;
-        b=IjOQ+/4RuSquwHXKoAa9vFe/yfc+SUwVw3ngAcB1u7guSkjCeZsNMJNJ4WD13gqXVz
-         pRpSGajBjF4DIay+yyPeu8G5dPjn6gDCUiRdlkD5w7SXC7OMPulzV0FV6yqD86x7v4zl
-         yMo4hbBLVzhTZF8AJwFz21LcE2DHOeSwH3UOU2uvEW8/juW9/pPJIrtj5SUmmQ+0CyKq
-         4AioybtSBxjAM/hwTFgntglIw37/ibNhVh5Wq6UUtuyn8l0+wO0F0b77e7vuAz9xKyXK
-         hq/NmHrph5WRnxJ02tc8KtI1/zmwP9omdNU8A4taYcj7rH23ffEy1lBZRckU8yoQRnwZ
-         fsAA==
+        d=gmail.com; s=20230601; t=1770427820; x=1771032620; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rYNkIW0UP5hKW4DkRpPD0FYrX4D16Qtz0FKf0quRohI=;
+        b=etfkEqN9XhIZXROyBZwH+SizgI6DKLVx94R/ldgfJT3lQjlDTgdYDMTSXMiHxEGAsV
+         rsKl7bvvxChBuRC216JqWOrvUCLisIrggwuaGcYOkInhV+TdEeg19Jq8V4lM6yG3iuIQ
+         C5fngSQyXovVmnIpaADbj55+oKmDJZMr202n12yJIBDf95ma5pxX5cxyPOEC4Xb0Fx4V
+         +gbs2uYeEbh08d9BHiFf0+hujdtQ0+ldFu9XRNWf9WzPIIA4SMTz3U6FgqPlbOVx6YdW
+         JOuNTzD8DdDjVzaWv0OoWrm7SCoVf0MCLCnHfzgQCNWG3Wfzl3wqcBPKh00/bAFIT88n
+         pp8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770427439; x=1771032239;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2fG+Y9KC4ijGwyN19NJSb/KoIzzrPjnkRSfXL2ajm3I=;
-        b=XqTL+CD13exBGT7IknveGiWWkNwvK7KMsNE63vo4Bgt0menNcit0mNbViLHk2oqOYy
-         wKbuMXnvXFCctGc5+n08BqFEXJHwmfJixzCVmu4Q3MWs4Cqvh12IAeSa1dtnP0WZN4qW
-         cuSV1PWB9NrioGUX8tFWLtiuTrtnvkI0B8zqsD6kvMCasFGTxUSzJ41znes/VJJ9T1WD
-         seDR/7EG4xh3wzjdRaQVAtn0tZ8Bm9Wc6F6/ejQ4DM4qO/dd8eD1FrjVKRjRlIs0MfzD
-         udsTHAKtcsOD+k9uEsJI33Htg5dIEk7JZPEa9QOsaCoFlSML/5YcBCUmr/9DMR44Hj0U
-         6cNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXGI80cvTyQ25clRVtMT7b+YWUDnpcKbL+GT3GmYGYwGi7gz9wXvyLIcAts4uxLxINqBWzpCQvzmMchVhYX5Dw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+ynd8YyC+mmsw8pMGfuH8MWTlqPzbGQY5dRLjn5nsDXWzwhmL
-	htP/ybUO3i0xeC5nDKsNqCoQSrFmtbCeRErjNjQpdqJIhiKdg/QqvpoLjgGT+lniF8uAAsYb55S
-	aAuLL99MoxlbzMw==
-X-Received: from pgum10.prod.google.com ([2002:a65:6a0a:0:b0:b49:d798:eefa])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:a127:b0:366:14b0:4b0b with SMTP id adf61e73a8af0-393ad3ddbf4mr4788833637.71.1770427439372;
- Fri, 06 Feb 2026 17:23:59 -0800 (PST)
-Date: Fri,  6 Feb 2026 17:23:30 -0800
-In-Reply-To: <20260207012339.2646196-1-jmattson@google.com>
+        d=1e100.net; s=20230601; t=1770427820; x=1771032620;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rYNkIW0UP5hKW4DkRpPD0FYrX4D16Qtz0FKf0quRohI=;
+        b=KwxmeqGZy+nAeYvbacnSFqXOlzoDP3O9djb4Sb/AQPaP0ti7OlSkKBADXvE3anh4Pu
+         CZitNuGB/RKihi7HJ3ZZeLS46WNbVQ54CwLt9HrvfamvlFVtZkoq5HRncQqa1pcy2tFd
+         MwdMs91Aj1mBdt1Sd3DOBe81YSj6Tn6x5xY6fIVeL0NikNgVJjl3nuDbtw0nW+bWEG1C
+         TOnc3hPin54wVxA4A0nE6wvlU7vtjDnzfgu/ythatyM1Qxov8qE7+NwmGys9fIJIaPPQ
+         njkVnYP2q30g539P6OuAwphAEPI4WlC3zeS+R7hyQN8tl/OfNOlJHMbVUCVL3gNoIzY1
+         OVrA==
+X-Forwarded-Encrypted: i=1; AJvYcCVXE9T5aizfA9GTIlXdZPZslRn14nDLypdSQtcXuNqtT2AG28AOJzHwA3vDtGuk59l6eRnAp7gxsNHpYH7e4+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyg+IlKj7tY46l/eWYQQNmdfEde2e3HPTXDAeog1GP/mSFxEspF
+	qw3aGcjKyGCC+LfGcRXbdaQ+3l3xNEsCFa9/54a+0t4W88fFXckKsO4QX9o/rw==
+X-Gm-Gg: AZuq6aJ8IER4UvygjDlqphLoEZS4Bd1WY/IkN6+OLDRy+M22HFJr4XVETIOmWfYFKMe
+	zxrQpHTXBQEAxMO4seeQTQmvQFCeVQAm+DKL3R8yEJE9y8apzb0i1DsxEX/MiAKXe/fPyNWMvae
+	N44hQ6PaE+Caqi/fpuXO8wycQDkaTd0QSjtoazEvZs7W3xZGjzexS3jdc53UdaxjUVyzkqET+/h
+	tswhLumYcWE8el3X4tJx6MK9AnafZPjxeAz/KiOUVNSRowI6AYlWFiHLtR+LpbWmBqh6BnwRrme
+	FDMECdSqNjmFDQLvhWh44Uyn1xTAOk2VQWuH2DGpwygfc6vF+dns/Qb01DmVf2JAyWL5gpPo0K+
+	pQYCBVzuyOuQ5uWuyrHuGU0LJXKLZxGdsH19gWvEDMHBmsB+iibPmFsxKUm3gq+FG0oeV4l8CqC
+	UljSa9IN3zEsCkK/V1
+X-Received: by 2002:a05:6830:2b0e:b0:7cf:c485:be43 with SMTP id 46e09a7af769-7d4643e7eddmr2341449a34.7.1770427819735;
+        Fri, 06 Feb 2026 17:30:19 -0800 (PST)
+Received: from localhost ([2a03:2880:12ff:4::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d46470da04sm2765988a34.7.2026.02.06.17.30.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Feb 2026 17:30:19 -0800 (PST)
+From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Willem de Bruijn <willemb@google.com>,
+	Petr Machata <petrm@nvidia.com>,
+	Gal Pressman <gal@nvidia.com>,
+	Nimrod Oren <noren@nvidia.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drivers: net: hw: Modify toeplitz.c to poll for packets
+Date: Fri,  6 Feb 2026 17:30:18 -0800
+Message-ID: <20260207013018.551347-1-dimitri.daskalakis1@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260207012339.2646196-1-jmattson@google.com>
-X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
-Message-ID: <20260207012339.2646196-5-jmattson@google.com>
-Subject: [PATCH v3 4/5] KVM: x86/pmu: Allow Host-Only/Guest-Only bits with
- nSVM and mediated PMU
-From: Jim Mattson <jmattson@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Yosry Ahmed <yosry.ahmed@linux.dev>, 
-	Mingwei Zhang <mizhang@google.com>, Sandipan Das <sandipan.das@amd.com>
-Cc: Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-If the vCPU advertises SVM and uses the mediated PMU, allow the guest to
-set the Host-Only and Guest-Only bits in the event selector MSRs.
+Prior to this the receiver would sleep for the configured timeout,
+then attempt to receive as many packets as possible. This would result
+in a large burst of packets, and we don't necessarily need that many samples.
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
+The tests now run faster.
+
+Before
+
+ ok 12 toeplitz.test.rps_udp_ipv6
+ # Totals: pass:12 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+ real	0m54.792s
+ user	0m12.486s
+ sys	0m10.887s
+
+After
+
+ ok 12 toeplitz.test.rps_udp_ipv6
+ # Totals: pass:12 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+ real	0m36.892s
+ user	0m4.203s
+ sys	0m8.314s
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
 ---
- arch/x86/kvm/svm/pmu.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../selftests/drivers/net/hw/toeplitz.c       | 25 ++++++++++++++++---
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index e2a849fc7daa..7de7d8d00427 100644
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -243,6 +243,9 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.c b/tools/testing/selftests/drivers/net/hw/toeplitz.c
+index cd4bf58a44ee..315e353dafab 100644
+--- a/tools/testing/selftests/drivers/net/hw/toeplitz.c
++++ b/tools/testing/selftests/drivers/net/hw/toeplitz.c
+@@ -72,6 +72,8 @@
  
- 	pmu->counter_bitmask[KVM_PMC_GP] = BIT_ULL(48) - 1;
- 	pmu->reserved_bits = 0xfffffff000280000ull;
-+	if (guest_cpu_cap_has(vcpu, X86_FEATURE_SVM) &&
-+	    kvm_vcpu_has_mediated_pmu(vcpu))
-+		pmu->reserved_bits &= ~AMD64_EVENTSEL_HOST_GUEST_MASK;
- 	pmu->raw_event_mask = AMD64_RAW_EVENT_MASK;
- 	/* not applicable to AMD; but clean them to prevent any fall out */
- 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
+ #define RPS_MAX_CPUS 16UL	/* must be a power of 2 */
+ 
++#define MIN_PKT_SAMPLES 40 	/* minimum number of packets to receive */
++
+ /* configuration options (cmdline arguments) */
+ static uint16_t cfg_dport =	8000;
+ static int cfg_family =		AF_INET6;
+@@ -251,15 +253,30 @@ static bool recv_block(struct ring_state *ring)
+ 	return true;
+ }
+ 
+-/* simple test: sleep once unconditionally and then process all rings */
++/* simple test: process all rings until MIN_PKT_SAMPLES packets are received,
++ * or the test times out. */
+ static void process_rings(void)
+ {
++	struct timeval start, now;
++	bool pkts_found = true;
++	long elapsed_usec;
+ 	int i;
+ 
+-	usleep(1000 * cfg_timeout_msec);
++	gettimeofday(&start, NULL);
+ 
+-	for (i = 0; i < num_cpus; i++)
+-		do {} while (recv_block(&rings[i]));
++	do {
++		if (!pkts_found)
++			usleep(100);
++
++		pkts_found = false;
++		for (i = 0; i < num_cpus; i++)
++			pkts_found |= recv_block(&rings[i]);
++
++		gettimeofday(&now, NULL);
++		elapsed_usec = (now.tv_sec - start.tv_sec) * 1000000 +
++			       (now.tv_usec - start.tv_usec);
++	} while (frames_received - frames_nohash < MIN_PKT_SAMPLES &&
++		 elapsed_usec < cfg_timeout_msec * 1000);
+ 
+ 	fprintf(stderr, "count: pass=%u nohash=%u fail=%u\n",
+ 		frames_received - frames_nohash - frames_error,
 -- 
-2.53.0.rc2.204.g2597b5adb4-goog
+2.47.3
 
