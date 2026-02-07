@@ -1,319 +1,331 @@
-Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11020096.outbound.protection.outlook.com [52.101.229.96])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99EF42253A1;
-	Sat,  7 Feb 2026 16:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83662D3725
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Feb 2026 22:00:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770482387; cv=fail; b=CTLl9JzD8ke3ZUxZtDOhKK1N1aLfJ2vmDxu4SQ2ISQZJa7ZnhKS2dmTyAohey9ZZl6fTjP1dGOfSqOj6m8zQh8v1fgMVkbQwBmB3fP5C24Sbd/zJahthDydqm2t0UakaiTqCr4nAeo5dv5JKsSxjvw196v2nCUnFso+KZZv1XBk=
+	t=1770501647; cv=pass; b=afjXejg/yV1yp0GqfPQ93drlo0L6ScP7ZHA5RZYrYcGrINm6xRQvMQsdpPVGlrxjGfz+jrKp0FGoCc71j6l7eQN0mO/grBpdywxK/9lfO72dzgWSshLFuyAAC6xJ6yEN0VBrYfx5ETXSIIup8dF/PPodVrypnEoqmNT3iDI0JLQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770482387; c=relaxed/simple;
-	bh=9y6z4x5K1JDD/UX8erMrZ7WDSFaCP8p0rCfOmY/15pQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=hOwaDl2BiHGtJZ1/ppvk9zLAS0IKAG74UZY5P+z8A+q8oHLhbWNGG28rvxTw1aZvqxrJkwF+pLst60WC0xOf69UYKAS/U84m9WohdL/dA6uZuNmtnNfZm2ZEFI4b1FV/1eEZ4wfavSWfFLjHoOYuz7g1k4mBfZqJ5v0/WFeNnto=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=DjQNOkVC; arc=fail smtp.client-ip=52.101.229.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
+	s=arc-20240116; t=1770501647; c=relaxed/simple;
+	bh=JDXfqM338ohvB1O9rA0vcFQqdt+sfLaxVbYRueQmL8M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y09gkZcRK3Z8bwkjMQxAH43SiYmsndMlS1ui/m8GQatturj2aNYFfH1V49qQV4RQpg8AjPgjtqfwPdhoqGSLzD8+1EzNetVXxU5RJbOcMLp4GLuF5CB7Zq61xnWdJxzOZ7hHfDX8wMV9LDxwzqFjuzwMNoCVGxqy8cLFQQTNcHg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=diBcCVa4; arc=pass smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="DjQNOkVC"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=p++nGRdJT+hJR23oCeGLjxYgDOqtXQswIt3tXqJharNZLT0hzIXfRrziXSBpQeVrOPa9+yDlkkx1g/xlNLfPsUiCLBP5DyhHjqj2sTyHcyZLC05M+xQ7PRloBSZPvfuFpdKS7xRDYRLGTTdoKg6EkerpouF6NGfi4cqWXZ2uSMdGkRDZZc/vku/eJpxbMgRfHR1TgMuvpz6KcLN9YFxJ9e8qRG1zYU07UNxnkfs8u5llrrbmBjAbCCYR6WuthfgdDm/o+oU9OB7gl1JzhFGDAPOETktEhwcrbjCWozCVLXwfqukRoKl8OjMA6A0SW9Tq8t/q7jkCqOF7IKd9Jwnf4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T2Xh/O3BvpkbvvYlCGPPLWzMG1yEkx4qYKyLxJBFJdE=;
- b=QYPNFGcst3aYjCCTfvR1eeCDEGZhMFot09GwX2Dx9PSF4XYFf4QaSXcaV8vRHwplDNJlay7clyM8b8LoZXj1uezdbWn7s9OQlI8FGP2WJWOUpKvBqKKAJ2CVc6Nyf2ZnVraNqdXxXbcMbzSI9Cw0oGMNw/CE0sZeHAIax8x1DAuTzKIKTuO0Yabq4X8OTXPtTQeVh6JQ3lOGRJiY5T7OkkfLrt8JjcJS95SEUpEjRhfvWZWBDGmUlTbzKOfWeJMcGes7lL2fYa98xj9LpJUmdL1QL/a6/gNBc0c1sFi06Zn6IULL4hHvwucENNx7hU2CJrD07fNLOZ/LjabSGjHeNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
- header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T2Xh/O3BvpkbvvYlCGPPLWzMG1yEkx4qYKyLxJBFJdE=;
- b=DjQNOkVCkf9Pg6s4gEGFZZ4i9VefdRGEQIhazIQTxCVrCMylBLdMS3FtF4c+Yw8gYi7HPQOTXLvxoNpkzKuO6jJ9yXotIqkfZOZpuRfZ+zYqgfphx7zxhmYnyococQ/OTnUUF8mFdRA0Z+W88JRXlECk8e1sozL2O8QnXpY6lHo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=valinux.co.jp;
-Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
- by TYYP286MB3009.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2f7::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.17; Sat, 7 Feb
- 2026 16:39:43 +0000
-Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9587.010; Sat, 7 Feb 2026
- 16:39:42 +0000
-Date: Sun, 8 Feb 2026 01:39:40 +0900
-From: Koichiro Den <den@valinux.co.jp>
-To: Frank Li <Frank.li@nxp.com>, cassel@kernel.org
-Cc: vkoul@kernel.org, mani@kernel.org, jingoohan1@gmail.com, 
-	lpieralisi@kernel.org, kwilczynski@kernel.org, robh@kernel.org, bhelgaas@google.com, 
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/9] PCI: endpoint: Add remote resource query API
-Message-ID: <ihe4sguchgrbiskeq5ht3tcti7yjzhsdhu7nobvbejbqtlr7dd@3n6p2poipy6d>
-References: <20260206172646.1556847-1-den@valinux.co.jp>
- <20260206172646.1556847-5-den@valinux.co.jp>
- <aYYsfSTrrLbR_txR@lizhi-Precision-Tower-5810>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYYsfSTrrLbR_txR@lizhi-Precision-Tower-5810>
-X-ClientProxiedBy: TYCP286CA0009.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:26c::11) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:405:38f::10)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="diBcCVa4"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12713e56abdso219390c88.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Feb 2026 14:00:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770501646; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MWfc14h4SFxh9adGbP1Guti+tF+4lT5Ei2dyw65NDqP6KRm/SNolL+tTTsbTABmo+z
+         E85QT1zrhkl4TunfuJZYPkTCOCG5cR9tlPeqZTuD8vPTO7H8fkGDbfm7tOuTUlRQHV6u
+         4OocT0XSHKfSn1JairmTDDyZ9gCLK0UruAwCsMk+vmZxrH0lhLsx+FFrESgrWWXd5+Ac
+         sRsz8k16g11sR69jdEWeb2//3b1htiSImb5dHURATomq6YxHRvqMLuSEwDfULsmIMwoq
+         q6J4uyRyXOyKZwIrIbME4sNHJpwAaXfoG4NkkLqOcLaEKwvMOt8eiUblYfspGf87szJU
+         xtSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1lbuS73M4nRAMSUMQkgHo/xlGfKNIQW3qCJPmnbJ+uc=;
+        fh=rQW8H9Qwr8DK5FmnNbuFz/u2b5knzcPfiv+fsS2BCV8=;
+        b=ItDYCllRthn9vPE/Q9Yr3BSWCkkwEO04RE1G7uLGCAU1WPbKC4IVOuO+IDg/dizQ4v
+         OUVqfYfpsmcCPmrVn8DiW7VWNbKTAnSVRzq80+v6XVAwFQS2jS8Pwe0IM+r1FAGjL3pl
+         h1prP2kIUrMPCn88bkBdC3gjMI9c0/C9DgtxJFU63ABzywozhqufYSE+M1k7J/jOsM3U
+         dEQWSNe/D5wezvFxEgFgHWBf7MyGNErguy76G9iRrfSykDbXj1wT8Uin+HlHPXtJd9uB
+         xT63YuzicXHoy1LMNhIFbwhl3OqMtTfyRcCz7IJKwN+rCR6sCFOtxz9tu3+kuoPRoEiX
+         RXFg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770501646; x=1771106446; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1lbuS73M4nRAMSUMQkgHo/xlGfKNIQW3qCJPmnbJ+uc=;
+        b=diBcCVa42dcqTlGFWSsbHkJ9QMaFFXxrX7rOhCie5vMTNI34f+ep0IPPwYbXS+EEFc
+         xuoCrRdR8R3tCy9p/vpBWKj2matoRcNU+9acpvUKmwaHGR25U3Tpg3eRoMx9frD+tuTh
+         errHgwlKwsX998yrVFV45whsLwRqitDyFeGNNlxPhCOeqPSJHiGfw5KvSqBKnvH6lp++
+         HXz5kbmWxQnaBDRltiGKQjBz243n1AxwUNkLxwJM2n6R/xcem7jCuowilHH/5YO/s4OZ
+         30OJTyBTASwqSEg4His8Vx9j1Bb5O3VoVyXZXx6TdVU+2v1mvVv3SixCk1T29NVHN9Wd
+         onFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770501646; x=1771106446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1lbuS73M4nRAMSUMQkgHo/xlGfKNIQW3qCJPmnbJ+uc=;
+        b=kHHvIJ/lvwNWyilfjDuxJvrBtf9Y80B3GAF/igG5uJJZqzlz+A6ltmjdSWLxfa/PCv
+         gp6rJQzC+MyZE6+/UCQJnPoWl8beIsBv1bguq2Ue8lLBmsOw/8rNjhIwG61iuPsFRKAH
+         S4OgK8SPkpCQKpHFnYF2k5sBpVYBnNusTbI2tpehH+VpYifBnlOToQsvvvyGNom1EKUL
+         a5gInum+REZM99+hEf+UdKKH5N6XygRxm5lA8692/RhTiq/ePBpzRZGMTdEnl9yLZPjv
+         sCH3/uLxFMzJYUr+ZZwcQMOQ9/hKZE2sMijsicvif/1pteLp11WWaeYo3ZcNWdlZrsGd
+         FuXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXJ7nMySCRJrKK2HBKDWuFX6hco2VmoCV/wFJ7wa5vv7ul6pn0RmY9yTIpPSjVcfffOW2/TwH1GSgtXHS0TDq0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwP3j7D03jsrf2Fq0rN/EAcTN1u6IkiVE59SsX2oX9jij6yYbMS
+	FAjhNoRRGLJw1qDFvC4BrovRkG/iohMKk6sKAeYlvG4fiQaMXLuHvjN8D4HVCpao+A3HrS/8HI4
+	HM8trh6WYFUUoCUzZql77KXXGMwTCgt1RNdF4q+A7
+X-Gm-Gg: AZuq6aLTKbPDojFeuCRP8ceT++5DtZYvTV761W7T/Z1gFZvlWVLcml9UM3dP9s+Mbxy
+	5tiN8t8MItS2c9VY4RVxR3kIs9MRi1p9qL8UfJQcbPt1eD0xMesoETKYDqVSO447aGLHeY4A28w
+	8RlAYZFiPljLgqlv1Q/lEKTjPqVT+216NlgQ6oTYRFLpO7DqrobmZmY7u0KPiWmcECUSJ2wunEL
+	VVVgR8uGSfw3QHDk2sJD8Uvj6yVTeqVp2i5DKdeZnrJM4ozkemW72w7Xwj3orIBtSGPawaP0vHQ
+	c2l605WsaaBcZfkxWkjp5e/IHnbuBqVGv4vofNDaS5zx+ZfeQT0H7qpdCmGc
+X-Received: by 2002:a05:7022:6894:b0:119:e569:f865 with SMTP id
+ a92af1059eb24-12703f17080mr3211761c88.2.1770501645337; Sat, 07 Feb 2026
+ 14:00:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|TYYP286MB3009:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9b4cdcbc-a8a6-44a6-05c4-08de66677e4c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Z0SH1ZZyjYh3zA/WVhq1qpVWbjUCW5m5iRthc6o4qw2C2SlkrGMWYgGZdu5h?=
- =?us-ascii?Q?ra8P0GnF0T/eCHJL8DwpzXOSEXBb8jV7qQoZDS47KmymjAnaeIkGkwbLIdF1?=
- =?us-ascii?Q?EembxOXBI0Y/ft/gtE5q8kMt5nGW8tWQHMu37Lr/wiIFpN57z6v38VIEh72p?=
- =?us-ascii?Q?QCBvi/ttF/Rxr9G6FqO/dyCSxZexEwooegMWqxEji+5mTmuRsx74IlXayNRf?=
- =?us-ascii?Q?q7J/vh8xhmeGP3+U79apMsioxiaPGBLH8yXAtkK/xmQN/Je/m/7qkewNXEhu?=
- =?us-ascii?Q?xTpjMCrUAoUogxi5LPAwSFaji9pXoUPH1p5xqqii5NqxeyWjs4Kx2lyhnAPF?=
- =?us-ascii?Q?tSzoqy2C3bIov+o1wg7qRThzTbIwCyR17/HLcG37v6RkVaVLfapGgtY8BeHS?=
- =?us-ascii?Q?prhm+ASrhCSszVpsZerR8O3O02t9gB1PiuDip20h0Lhe6c4w4/Vmr6E+uOty?=
- =?us-ascii?Q?be2GO9xu0251ZmRYcGJUj9+GpWbzwhokih5b8QKMNAD9qgxl596cPC3JIT84?=
- =?us-ascii?Q?MV4hI3RBCMstwPOrtG+8dN2WNRW1E6QUvhKjQcPtTBbjM0FciJdxEFzi+4ZW?=
- =?us-ascii?Q?pq/4Bo/aNo64JQbx8x7pyKdEKwhXEF6IPO4CDhA7JdV+ZREQtprB4uFfM+v6?=
- =?us-ascii?Q?NablNgr81hGFK7Le19P7kp9xktpfCWARppJdoY0R9tQgMQZYC4ChoFft0W6/?=
- =?us-ascii?Q?5RLRssVCdddFX1au5MlZwo2+mFzDfw0dsdzpgUHmdfrhHdJKKChczvFFDQ92?=
- =?us-ascii?Q?xQoDTvyks/azdlCmcmjd+U2V0l/As2lvwLHtXn22O0xpWRd+yq5R7HN9Xn98?=
- =?us-ascii?Q?Wba5ZvDw30KPKreqKJFsJfaHAtlWZhXpS+ewwDw/SYtf7IccHH0pow6kg798?=
- =?us-ascii?Q?Ilvb9w5zoHxx6xBZGj/v375IOR6bDKV+I2W+oE3qv0W3IyhxjB9IRu2TrttK?=
- =?us-ascii?Q?vaGxXrR53hS9w0X86Zfd4jV7OIfiGdv+2pVd9uwWz5B3TXO4E0VHm685ZlAY?=
- =?us-ascii?Q?45Ow2b8p/HgTcFnd9zxrvXN0aXVTY2QSPiGm/x+7IMPhr57hVtn50V4El1vs?=
- =?us-ascii?Q?cQfcVgcaj0Vrec3VQwA9Kch/R7AIgwkMORhX/CdOAPWMVxoxZlbRXNZD94S2?=
- =?us-ascii?Q?jr5uXFktJD9XiSp0OmgragKMXtqAEevsaOjHKspixABkazWS1qgQk499hAfD?=
- =?us-ascii?Q?ue5f2Yd2S0SMBWoFQBnKs9OtKNVNwz8Nt4IA0FQ352uI0mXYXrQrL6Gyv6/+?=
- =?us-ascii?Q?yPv4bWHRW6gKRacZA0NlGnLRTc0blQNhHj1RfyEoP0dfH4zfZkCv/PCXR4CR?=
- =?us-ascii?Q?haoK7Zu3EdinoYWykOh5tvGT1U8M0vVA9/Uw8bo4IPjywClOt3RUDigXne/d?=
- =?us-ascii?Q?7gfSo5XFnXF/0NCnPKUU1PxmDkt9WiAT1s1BNKn4o7JsukqnZOwOs/n/MMEN?=
- =?us-ascii?Q?kr47Oo2Cq6Xmt4U4tTLqJXx9qxsO1lIy+LDdp3tzwj2Ovo3SWuIgVO77wn4d?=
- =?us-ascii?Q?oz818ymtkw9dlrxjgJCoj16DezcOt1j+KlnhF2wBGl2Gp7nMDt2GgANS8hyE?=
- =?us-ascii?Q?6w/cEH84NYl4TGQJIw0=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IoHl6fQREvDbWBB7qUMQ9jq5pf0LBjBA1qLbctmeRKJrJtyPIGlwu6hkgAES?=
- =?us-ascii?Q?Wt7OI90U0X85LzHwnc6vjjfmHmRj22FZ1k6FaTOpWJ7TQ7pFFiprlxop8bNS?=
- =?us-ascii?Q?Gul1CVTSJe/MFy76neE0SgZPV9T6X8trvsduYbij0npjSGAxchiymXqsbtfU?=
- =?us-ascii?Q?ET4eZcq4wLbANpAycQJaiflDHRwkn/C7C7zZn/zX+K2Iua/oTScGjASXCsUv?=
- =?us-ascii?Q?kcTsgq00UZB4K+1luc11BiCKt3MK9Vc6kTt4WJbAIFXFEIFZVUx1jzwJyBuf?=
- =?us-ascii?Q?yLGQFkV0EKCh2RwK2Bh5edao40qjmZ6JFERzmFy1cNcX/Fo5FVTBk67mpq4m?=
- =?us-ascii?Q?hIAKo3htchRWZ25EPW6OpVQm8JUcRmU9VaaX9JKOARjYPfB5pXja3xCPaSIa?=
- =?us-ascii?Q?/wFmviS83FFz+urLN4FQL9oX6U6vIBwSX1jYlyf5MPkeTwhG5F2rHjh44HyI?=
- =?us-ascii?Q?IcuLmiMySHviw34uxW8mCSjL+qf2R5xjSx2Ky7075XkZWYreEzxzt+8TfM/v?=
- =?us-ascii?Q?KsMPPO6UIesFgx5NryHPw3NntGs14D6tzQnYITirsDvOoH7UFyswWH6+mzCi?=
- =?us-ascii?Q?NxDpTUnlbfH83Gz5Qt89856oqGz1jv+NtrMEUDyquw4EiOyY8sNPsNKAV143?=
- =?us-ascii?Q?VxNvOfDa9bhNl59h/mBhJisctaxUGEQdmJufrygrM7t+hKnWu6iH8JlsIdqZ?=
- =?us-ascii?Q?fbfaYxFe5BlWiaHiVHgebqjrafdvWgckkw3NLqBdbtOYXzSUb5o29u3Nyybd?=
- =?us-ascii?Q?ZVVNfYjvqtl5yoQ7xZ4bntqMIH1s5jvdIioCOg9BR0Pp9GicUj2cjkO7MIKg?=
- =?us-ascii?Q?TGyqaUcY1AgngnSfA87oJ22iDov5juNWXRztiW8JjK9NVzKA70dguBiA4H1z?=
- =?us-ascii?Q?9DTeafv3B7gHJNGPhRFRUaH8QWRKAmzgTs70QItjRxxHUm1MMkP+c3ilsMMn?=
- =?us-ascii?Q?uOj+mDcn0wfkecOWfumt5LOY1hqffn38rcLtXX2mqx57DeLobDBt+SEsJsBZ?=
- =?us-ascii?Q?HbysO00gq48NqGZEheo37xd0p5EVIRjh/9DsLRNlizoLvvyudnz1h4InjcBH?=
- =?us-ascii?Q?HT3PVgHhSXWMy8v1mYAviwvzBJ7g7JllVlg6sECRFWTClVVVKIOYD5NeYZHv?=
- =?us-ascii?Q?2ogpGN/k86IYi6Qfp7BXIhZiwWNklNilHEgnFQnTsYPZCpHOQQZjc++MQNeZ?=
- =?us-ascii?Q?cvl3rGHlssQ+rJerQJSgUpraWu+PfJkFU3eBvjJhF4glI2+7QuclF/Hno0Er?=
- =?us-ascii?Q?nCx000eWESLdES6/hzP/DC6PA16xxgFDLjIGKejpti0saaSW85ssTHlhJq3G?=
- =?us-ascii?Q?fo160uGI/GV7RyqYeGP4sLcb1Ngb8UajbPZs0xNzOC2T0NC5XT0y/QI6jYSo?=
- =?us-ascii?Q?wNoENWEnF0ITNZSvsfPsX06OWMl4BqJFwRHJ9pYQEcxlHGLbtWBnDEOuhJ9a?=
- =?us-ascii?Q?AFfSPBAztMDQ3M5RNaoJ9h4eAnlYGKH/rxKh4PIEHfZ3lh+4PRpjHFT4veXo?=
- =?us-ascii?Q?122W1hm0XiqIfi9Ld52oCn20Wz2Zx1+tr1B+pOSkyTO1pAPeBOjopUFiK1zm?=
- =?us-ascii?Q?7jtsAJ9x2ud1bArHzIOYrMiZtprRuzDHQWME4N8bCtZ4rgztrAO2EN0LNh8Q?=
- =?us-ascii?Q?T/4nXQRdXw4HqQtN4SDCk2YKi+0we2vtGZr6e7jkrBZPDpld5PmajD3Ix+RQ?=
- =?us-ascii?Q?sVPkP4IzqqMRH1Wlekzsy/n4Ja6qQ+8dHw+7+oCbpnoWXoet221pz9G/cjhf?=
- =?us-ascii?Q?qd15imF9iVtnK2HRvDYKx9U2+4PH4E/bdYEMzevc/7OuXUxSx0CS?=
-X-OriginatorOrg: valinux.co.jp
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b4cdcbc-a8a6-44a6-05c4-08de66677e4c
-X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2026 16:39:42.0441
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zF2HelymIi+cxPn6Zc2OAquHVqc5yFPqIKs6XuQxCB4W3u9yFLuNF0N9E8Mwhyesyjldj8lTgl39hHB5cNeXow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYP286MB3009
+References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
+ <20260207-unix-proto-update-null-ptr-deref-v2-3-9f091330e7cd@rbox.co>
+In-Reply-To: <20260207-unix-proto-update-null-ptr-deref-v2-3-9f091330e7cd@rbox.co>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Sat, 7 Feb 2026 14:00:34 -0800
+X-Gm-Features: AZwV_Qhu3MPuQb3J9B5R5j7S51Pywg9lHfEECqmBAAcVo3Fs_Cs-5RFQ9cfaiIc
+Message-ID: <CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 3/4] bpf, sockmap: Adapt for the af_unix-specific lock
+To: Michal Luczaj <mhal@rbox.co>
+Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Willem de Bruijn <willemb@google.com>, 
+	Cong Wang <cong.wang@bytedance.com>, Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 06, 2026 at 01:01:33PM -0500, Frank Li wrote:
-> On Sat, Feb 07, 2026 at 02:26:41AM +0900, Koichiro Den wrote:
-> > Endpoint controller drivers may integrate auxiliary blocks (e.g. DMA
-> > engines) whose register windows and descriptor memories metadata need to
-> > be exposed to a remote peer. Endpoint function drivers need a generic
-> > way to discover such resources without hard-coding controller-specific
-> > helpers.
-> >
-> > Add pci_epc_get_remote_resources() and the corresponding pci_epc_ops
-> > get_remote_resources() callback. The API returns a list of resources
-> > described by type, physical address and size, plus type-specific
-> > metadata.
-> >
-> > Passing resources == NULL (or num_resources == 0) returns the required
-> > number of entries.
-> >
-> > Signed-off-by: Koichiro Den <den@valinux.co.jp>
-> > ---
-> >  drivers/pci/endpoint/pci-epc-core.c | 41 +++++++++++++++++++++++++
-> >  include/linux/pci-epc.h             | 46 +++++++++++++++++++++++++++++
-> >  2 files changed, 87 insertions(+)
-> >
-> > diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-> > index 068155819c57..fa161113e24c 100644
-> > --- a/drivers/pci/endpoint/pci-epc-core.c
-> > +++ b/drivers/pci/endpoint/pci-epc-core.c
-> > @@ -155,6 +155,47 @@ const struct pci_epc_features *pci_epc_get_features(struct pci_epc *epc,
-> >  }
-> >  EXPORT_SYMBOL_GPL(pci_epc_get_features);
-> >
-> > +/**
-> > + * pci_epc_get_remote_resources() - query EPC-provided remote resources
-> 
-> I am not sure if it good naming, pci_epc_get_additional_resources().
-> Niklas Cassel may have good suggest, I just find you forget cc him.
+On Sat, Feb 7, 2026 at 6:35=E2=80=AFAM Michal Luczaj <mhal@rbox.co> wrote:
+>
+> unix_stream_connect() sets sk_state (`WRITE_ONCE(sk->sk_state,
+> TCP_ESTABLISHED)`) _before_ it assigns a peer (`unix_peer(sk) =3D newsk`)=
+.
+> sk_state =3D=3D TCP_ESTABLISHED makes sock_map_sk_state_allowed() believe=
+ that
+> socket is properly set up, which would include having a defined peer. IOW=
+,
+> there's a window when unix_stream_bpf_update_proto() can be called on
+> socket which still has unix_peer(sk) =3D=3D NULL.
+>
+>           T0 bpf                            T1 connect
+>           ------                            ----------
+>
+>                                 WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
+> sock_map_sk_state_allowed(sk)
+> ...
+> sk_pair =3D unix_peer(sk)
+> sock_hold(sk_pair)
+>                                 sock_hold(newsk)
+>                                 smp_mb__after_atomic()
+>                                 unix_peer(sk) =3D newsk
+>
+> BUG: kernel NULL pointer dereference, address: 0000000000000080
+> RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
+> Call Trace:
+>   sock_map_link+0x564/0x8b0
+>   sock_map_update_common+0x6e/0x340
+>   sock_map_update_elem_sys+0x17d/0x240
+>   __sys_bpf+0x26db/0x3250
+>   __x64_sys_bpf+0x21/0x30
+>   do_syscall_64+0x6b/0x3a0
+>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>
+> Initial idea was to move peer assignment _before_ the sk_state update[1],
+> but that involved an additional memory barrier, and changing the hot path
+> was rejected. Then a check during proto update was considered[2], but a
+> follow-up discussion[3] concluded the root cause is sockmap taking a wron=
+g
+> lock.
+>
+> Thus, teach sockmap about the af_unix-specific locking: instead of the
+> usual lock_sock() involving sock::sk_lock, af_unix protects critical
+> sections under unix_state_lock() operating on unix_sock::lock.
+>
+> [1]: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@=
+rbox.co/
+> [2]: https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.=
+com/
+> [3]: https://lore.kernel.org/netdev/7603c0e6-cd5b-452b-b710-73b64bd9de26@=
+linux.dev/
+>
+> This patch also happens to fix a deadlock that may occur when
+> bpf_iter_unix_seq_show()'s lock_sock_fast() takes the fast path and the
+> iter prog attempts to update a sockmap. Which ends up spinning at
+> sock_map_update_elem()'s bh_lock_sock():
 
-That's true, I just naively followed the get_maintainers.pl output.
+Hmm.. this seems to be a more general problem for
+bpf iter vs sockmap.  bpf_iter_{tcp,udp}_seq_show() also
+hold lock_sock(),  where this patch's solution does not help.
+We need to resolve this regardless of socket family.
 
-Niklas, I'd be happy to hear your thoughts on the naming here.
-One other option I had in mind after Frank's feedback is
-pci_epc_get_aux_resources().
+Also, I feel lock_sock() should be outside of unix_state_lock()
+since the former is usually sleepable.  If we used such locking
+order in the future, it would trigger ABBA deadlock and we would
+have to revisit this problem.
 
-Thanks,
-Koichiro
 
-> 
-> Frank
-> > + * @epc: EPC device
-> > + * @func_no: function number
-> > + * @vfunc_no: virtual function number
-> > + * @resources: output array (may be NULL to query required count)
-> > + * @num_resources: size of @resources array in entries (0 when querying count)
-> > + *
-> > + * Some EPC backends integrate auxiliary blocks (e.g. DMA engines) whose control
-> > + * registers and/or descriptor memories can be exposed to the host by mapping
-> > + * them into BAR space. This helper queries the backend for such resources.
-> > + *
-> > + * Return:
-> > + *   * >= 0: number of resources returned (or required, if @resources is NULL)
-> > + *   * -EOPNOTSUPP: backend does not support remote resource queries
-> > + *   * other -errno on failure
-> > + */
-> > +int pci_epc_get_remote_resources(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
-> > +				 struct pci_epc_remote_resource *resources,
-> > +				 int num_resources)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (!epc || !epc->ops)
-> > +		return -EINVAL;
-> > +
-> > +	if (func_no >= epc->max_functions)
-> > +		return -EINVAL;
-> > +
-> > +	if (!epc->ops->get_remote_resources)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	mutex_lock(&epc->lock);
-> > +	ret = epc->ops->get_remote_resources(epc, func_no, vfunc_no,
-> > +					     resources, num_resources);
-> > +	mutex_unlock(&epc->lock);
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_epc_get_remote_resources);
-> > +
-> >  /**
-> >   * pci_epc_stop() - stop the PCI link
-> >   * @epc: the link of the EPC device that has to be stopped
-> > diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
-> > index c021c7af175f..7d2fce9f3a63 100644
-> > --- a/include/linux/pci-epc.h
-> > +++ b/include/linux/pci-epc.h
-> > @@ -61,6 +61,44 @@ struct pci_epc_map {
-> >  	void __iomem	*virt_addr;
-> >  };
-> >
-> > +/**
-> > + * enum pci_epc_remote_resource_type - remote resource type identifiers
-> > + * @PCI_EPC_RR_DMA_CTRL_MMIO: Integrated DMA controller register window (MMIO)
-> > + * @PCI_EPC_RR_DMA_CHAN_DESC: Per-channel DMA descriptor
-> > + *
-> > + * EPC backends may expose auxiliary blocks (e.g. DMA engines) by mapping their
-> > + * register windows and descriptor memories into BAR space. This enum
-> > + * identifies the type of each exposable resource.
-> > + */
-> > +enum pci_epc_remote_resource_type {
-> > +	PCI_EPC_RR_DMA_CTRL_MMIO,
-> > +	PCI_EPC_RR_DMA_CHAN_DESC,
-> > +};
-> > +
-> > +/**
-> > + * struct pci_epc_remote_resource - a physical resource that can be exposed
-> > + * @type:      resource type, see enum pci_epc_remote_resource_type
-> > + * @phys_addr: physical base address of the resource
-> > + * @size:      size of the resource in bytes
-> > + * @u:         type-specific metadata
-> > + *
-> > + * For @PCI_EPC_RR_DMA_CHAN_DESC, @u.dma_chan_desc provides per-channel
-> > + * information.
-> > + */
-> > +struct pci_epc_remote_resource {
-> > +	enum pci_epc_remote_resource_type type;
-> > +	phys_addr_t phys_addr;
-> > +	resource_size_t size;
-> > +
-> > +	union {
-> > +		/* PCI_EPC_RR_DMA_CHAN_DESC */
-> > +		struct {
-> > +			int irq;
-> > +			resource_size_t db_offset;
-> > +		} dma_chan_desc;
-> > +	} u;
-> > +};
-> > +
-> >  /**
-> >   * struct pci_epc_ops - set of function pointers for performing EPC operations
-> >   * @write_header: ops to populate configuration space header
-> > @@ -84,6 +122,8 @@ struct pci_epc_map {
-> >   * @start: ops to start the PCI link
-> >   * @stop: ops to stop the PCI link
-> >   * @get_features: ops to get the features supported by the EPC
-> > + * @get_remote_resources: ops to retrieve controller-owned resources that can be
-> > + *			  exposed to the remote host (optional)
-> >   * @owner: the module owner containing the ops
-> >   */
-> >  struct pci_epc_ops {
-> > @@ -115,6 +155,9 @@ struct pci_epc_ops {
-> >  	void	(*stop)(struct pci_epc *epc);
-> >  	const struct pci_epc_features* (*get_features)(struct pci_epc *epc,
-> >  						       u8 func_no, u8 vfunc_no);
-> > +	int	(*get_remote_resources)(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
-> > +					struct pci_epc_remote_resource *resources,
-> > +					int num_resources);
-> >  	struct module *owner;
-> >  };
-> >
-> > @@ -309,6 +352,9 @@ int pci_epc_start(struct pci_epc *epc);
-> >  void pci_epc_stop(struct pci_epc *epc);
-> >  const struct pci_epc_features *pci_epc_get_features(struct pci_epc *epc,
-> >  						    u8 func_no, u8 vfunc_no);
-> > +int pci_epc_get_remote_resources(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
-> > +				 struct pci_epc_remote_resource *resources,
-> > +				 int num_resources);
-> >  enum pci_barno
-> >  pci_epc_get_first_free_bar(const struct pci_epc_features *epc_features);
-> >  enum pci_barno pci_epc_get_next_free_bar(const struct pci_epc_features
-> > --
-> > 2.51.0
-> >
+
+>
+> WARNING: possible recursive locking detected
+> --------------------------------------------
+> test_progs/1393 is trying to acquire lock:
+> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: sock_map_update_elem+0x=
+db/0x1f0
+>
+> but task is already holding lock:
+> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0=
+xe0
+>
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+>
+>        CPU0
+>        ----
+>   lock(slock-AF_UNIX);
+>   lock(slock-AF_UNIX);
+>
+>  *** DEADLOCK ***
+>
+>  May be due to missing lock nesting notation
+>
+> 4 locks held by test_progs/1393:
+>  #0: ffff88814b59c790 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x59/0x10d=
+0
+>  #1: ffff88811ec25fd8 (sk_lock-AF_UNIX){+.+.}-{0:0}, at: bpf_seq_read+0x4=
+2c/0x10d0
+>  #2: ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0=
+x37/0xe0
+>  #3: ffffffff85a6a7c0 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+=
+0x51d/0xb00
+>
+> Call Trace:
+>  dump_stack_lvl+0x5d/0x80
+>  print_deadlock_bug.cold+0xc0/0xce
+>  __lock_acquire+0x130f/0x2590
+>  lock_acquire+0x14e/0x2b0
+>  _raw_spin_lock+0x30/0x40
+>  sock_map_update_elem+0xdb/0x1f0
+>  bpf_prog_2d0075e5d9b721cd_dump_unix+0x55/0x4f4
+>  bpf_iter_run_prog+0x5b9/0xb00
+>  bpf_iter_unix_seq_show+0x1f7/0x2e0
+>  bpf_seq_read+0x42c/0x10d0
+>  vfs_read+0x171/0xb20
+>  ksys_read+0xff/0x200
+>  do_syscall_64+0x6b/0x3a0
+>  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>
+> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
+> Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
+> Fixes: 2c860a43dd77 ("bpf: af_unix: Implement BPF iterator for UNIX domai=
+n socket.")
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> ---
+> Keeping sparse annotations in sock_map_sk_{acquire,release}() required so=
+me
+> hackery I'm not proud of. Is there a better way?
+> ---
+>  net/core/sock_map.c | 47 +++++++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 39 insertions(+), 8 deletions(-)
+>
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index b6586d9590b7..0c638b1f363a 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/list.h>
+>  #include <linux/jhash.h>
+>  #include <linux/sock_diag.h>
+> +#include <net/af_unix.h>
+>  #include <net/udp.h>
+>
+>  struct bpf_stab {
+> @@ -115,17 +116,49 @@ int sock_map_prog_detach(const union bpf_attr *attr=
+, enum bpf_prog_type ptype)
+>  }
+>
+>  static void sock_map_sk_acquire(struct sock *sk)
+> -       __acquires(&sk->sk_lock.slock)
+> +       __acquires(sock_or_unix_lock)
+>  {
+> -       lock_sock(sk);
+> +       if (sk_is_unix(sk)) {
+> +               unix_state_lock(sk);
+> +               __release(sk); /* Silence sparse. */
+> +       } else {
+> +               lock_sock(sk);
+> +       }
+> +
+>         rcu_read_lock();
+>  }
+>
+>  static void sock_map_sk_release(struct sock *sk)
+> -       __releases(&sk->sk_lock.slock)
+> +       __releases(sock_or_unix_lock)
+>  {
+>         rcu_read_unlock();
+> -       release_sock(sk);
+> +
+> +       if (sk_is_unix(sk)) {
+> +               unix_state_unlock(sk);
+> +               __acquire(sk); /* Silence sparse. */
+> +       } else {
+> +               release_sock(sk);
+> +       }
+> +}
+> +
+> +static inline void sock_map_sk_acquire_fast(struct sock *sk)
+> +{
+> +       local_bh_disable();
+> +
+> +       if (sk_is_unix(sk))
+> +               unix_state_lock(sk);
+> +       else
+> +               bh_lock_sock(sk);
+> +}
+> +
+> +static inline void sock_map_sk_release_fast(struct sock *sk)
+> +{
+> +       if (sk_is_unix(sk))
+> +               unix_state_unlock(sk);
+> +       else
+> +               bh_unlock_sock(sk);
+> +
+> +       local_bh_enable();
+>  }
+>
+>  static void sock_map_add_link(struct sk_psock *psock,
+> @@ -604,16 +637,14 @@ static long sock_map_update_elem(struct bpf_map *ma=
+p, void *key,
+>         if (!sock_map_sk_is_suitable(sk))
+>                 return -EOPNOTSUPP;
+>
+> -       local_bh_disable();
+> -       bh_lock_sock(sk);
+> +       sock_map_sk_acquire_fast(sk);
+>         if (!sock_map_sk_state_allowed(sk))
+>                 ret =3D -EOPNOTSUPP;
+>         else if (map->map_type =3D=3D BPF_MAP_TYPE_SOCKMAP)
+>                 ret =3D sock_map_update_common(map, *(u32 *)key, sk, flag=
+s);
+>         else
+>                 ret =3D sock_hash_update_common(map, key, sk, flags);
+> -       bh_unlock_sock(sk);
+> -       local_bh_enable();
+> +       sock_map_sk_release_fast(sk);
+>         return ret;
+>  }
+>
+>
+> --
+> 2.52.0
+>
