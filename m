@@ -1,249 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A250314D0F;
-	Sat,  7 Feb 2026 01:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62DB22A1E1;
+	Sat,  7 Feb 2026 02:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770428132; cv=none; b=HCgYiAVJUqz/5LDTAV2dabBeY+RD+0/Uvh8XHoZ4Gh9VyokA4hDkWC0SSTjgOcIsCXkwONZ27cz9Jo6+nwKLOEX4pjQXIOYUJ+hNu/7+vVOgGMZeOQuFVsWOcF4DE41YlmGD1sGpkcdSgiUs7wbSA9Vc1wxsXJw61GXYTRhlruc=
+	t=1770433058; cv=none; b=W8DyLpVrD5fuowcefVfRP/FIk+VPnnqGcPMqO+a6Tpyot06EYpfUDaMyyenX24V6/F4WrvsXnFibFxNzH8cJUckn2dbF3Ashkvy8/JtW5ue4Et6MQyY01xeOsjupx8eh88OaV2k5mjgJ/Rfg7eMelbc1+0JT32msO/bp55a21Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770428132; c=relaxed/simple;
-	bh=UQZjrgT2+C5sGvrewfIsj+BiY95FtrloV3QjcSk1pj8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=adEOSKRy6lJfBuTFbuVepDnX+NL/4NOVo8RU8DJRechV9n5WajUIWzrbOAk19grQzhdKhpZ5nbF3mD2uiQAgAC7RF86i6lYhWfkSvhY7gvIb48W5Bc19LQVw9v3SDskKUK+rWA0Fi6+0w/oDcg99cSzODKV+I62AaAnmtog8eoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hOBVLw19; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770433058; c=relaxed/simple;
+	bh=fEJXLRawPbdCf3xetPQEnbQsr9d6YyTUk64NobkmyKw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NkvZzwgqOwXQwxeRN+h/WPXcAPq7qiYl8VRzLrcprDMAgxUnZcqh/aCipm82gpPDJSy0GlczRHNVsEJezi2V7H73TvlabycaEkVft4HK01iQy4uvRrI1FPeRYbkFefBHAgx+LIYo3Tth0/cHTOirDonOsAObm81RA42Q64/KBnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oPkt7rGC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hOBVLw19"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB27CC116C6;
-	Sat,  7 Feb 2026 01:35:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oPkt7rGC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30CAC116C6;
+	Sat,  7 Feb 2026 02:57:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770428132;
-	bh=UQZjrgT2+C5sGvrewfIsj+BiY95FtrloV3QjcSk1pj8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hOBVLw19hzyNdvsmQFl6r4uIKKUUC1+sKGnWq80YxOP0V9mrY7/cfavno86LKYHvC
-	 o2u/2IvPeLCTwpr1u69Gd2OZgXkYL42bXtGUrDIwhqd3UOwtWE0mB7m5cl52QAK6R8
-	 xMCsnFfJ+YDVX/JfqVs0QW+mix1NbuE4CaB1U1CcoAZ1MgJSK+lbqP4bezSjfJ4/26
-	 W3lx+jo1IkzWOnMHhIJcmYqTlxA7wUQM41TlV1ykOEz+Xq4xVAlzkC6jiK5HhwK6cE
-	 5QnJQSd6q6cEsYsLPl2jtGtCxxqtmDQUmn2NOXUSII1asL/H0uqKNJdVEwSYAC10wO
-	 oVXHqRg9SbsZQ==
-From: SeongJae Park <sj@kernel.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: SeongJae Park <sj@kernel.org>,
-	linux-mm@kvack.org,
-	Jiayuan Chen <jiayuan.chen@shopee.com>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Yosry Ahmed <yosry.ahmed@linux.dev>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/cgroup: add test for zswap incompressible pages
-Date: Fri,  6 Feb 2026 17:35:28 -0800
-Message-ID: <20260207013529.69681-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260206072220.144008-3-jiayuan.chen@linux.dev>
-References: 
+	s=k20201202; t=1770433058;
+	bh=fEJXLRawPbdCf3xetPQEnbQsr9d6YyTUk64NobkmyKw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oPkt7rGC0FvsPX3scZHiX4yFkazHdSma2rHcjUNE+XplJnIuJIH+g0x3qT0JrSqP0
+	 e+KSmkhZHKOonSFsWFXjIEHIvSv58IFC1Tpr0o1uCEVxru8ZL6DbGmwhh1uUSSwVXg
+	 l8U1urkkBbTwCEEvcsRgFEkis0kn+wl7Yy33vxPtsQcLb9F7BSPCTrfp6f3UWBfEtt
+	 LOTYxIx8iHCD75aQc344YfRivo7h5oi2ynwyXCJVlE4WaAkJnbCbTaQy66xB5Yz1SK
+	 C+zNBEb/vygekFf+kZ9j2c6PI+3ZP0++LJaOYsxEnBfSIMeqZEviymfulgtLZvpJde
+	 JcW6+CxRddl1Q==
+Date: Fri, 6 Feb 2026 18:57:35 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Larysa Zaremba <larysa.zaremba@intel.com>
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>, <bpf@vger.kernel.org>,
+ "Claudiu Manoil" <claudiu.manoil@nxp.com>, Wei Fang <wei.fang@nxp.com>,
+ Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>, Tony Nguyen
+ <anthony.l.nguyen@intel.com>, "Przemek Kitszel"
+ <przemyslaw.kitszel@intel.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, "Stanislav Fomichev"
+ <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
+ <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>, "Bastien Curutchet
+ (eBPF Foundation)" <bastien.curutchet@bootlin.com>, Tushar Vyavahare
+ <tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, "Ricardo
+ B. =?UTF-8?B?TWFybGniiJrCrnJl?=" <rbm@suse.com>, Eelco Chaudron
+ <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, "Toke
+ Hoiland-Jorgensen" <toke@redhat.com>, <imx@lists.linux.dev>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <intel-wired-lan@lists.osuosl.org>, <linux-kselftest@vger.kernel.org>,
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
+ frag_size
+Message-ID: <20260206185735.787fb0e5@kernel.org>
+In-Reply-To: <aYWoBRmt-lcM_JkG@soc-5CG4396X81.clients.intel.com>
+References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+	<20260203105417.2302672-7-larysa.zaremba@intel.com>
+	<20260205005901.gnju3zmqimtgeu2b@skbuf>
+	<20260204173401.282899d0@kernel.org>
+	<20260205122953.lscemcctayrvszdu@skbuf>
+	<aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
+	<20260205124638.hxzvjiocephzlrk3@skbuf>
+	<aYSZw4wbd-nvLTuD@soc-5CG4396X81.clients.intel.com>
+	<20260205134046.pggwyosutj7ggi4i@skbuf>
+	<20260205175408.30ab72a1@kernel.org>
+	<aYWoBRmt-lcM_JkG@soc-5CG4396X81.clients.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri,  6 Feb 2026 15:22:16 +0800 Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
-
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+On Fri, 6 Feb 2026 09:36:21 +0100 Larysa Zaremba wrote:
+> > FWIW my feeling is that instead of nickel and diming leftover space 
+> > in the frags if someone actually cared about growing mbufs we should
+> > have the helper allocate a new page from the PP and append it to the
+> > shinfo. Much simpler, "infinite space", and works regardless of the
+> > driver. I don't mean that to suggest you implement it, purely to point
+> > out that I think nobody really uses positive offsets.. So we can as
+> > well switch more complicated drivers back to xdp_rxq_info_reg().
 > 
-> Add test_zswap_incompressible() to verify that the zswap_incomp memcg
-> stat correctly tracks incompressible pages.
+> As Vladimir has mentioned, if the driver does not use header split, frags will 
+> have a tailroom of a size of skb_shared_info, so tail growing does work in 
+> practice.
 > 
-> The test allocates memory filled with random data from /dev/urandom,
-> which cannot be effectively compressed by zswap. When this data is
-> swapped out to zswap, it should be stored as-is and tracked by the
-> zswap_incomp counter.
-> 
-> The test verifies that:
-> 1. Pages are swapped out to zswap (zswpout increases)
-> 2. Incompressible pages are tracked (zswap_incomp increases)
-> 
-> test:
-> dd if=/dev/zero of=/swapfile bs=1M count=2048
-> chmod 600 /swapfile
-> mkswap /swapfile
-> swapon /swapfile
-> echo Y > /sys/module/zswap/parameters/enabled
-> 
-> ./test_zswap
->  TAP version 13
->  1..8
->  ok 1 test_zswap_usage
->  ok 2 test_swapin_nozswap
->  ok 3 test_zswapin
->  ok 4 test_zswap_writeback_enabled
->  ok 5 test_zswap_writeback_disabled
->  ok 6 test_no_kmem_bypass
->  ok 7 test_no_invasive_cgroup_shrink
->  ok 8 test_zswap_incompressible
->  Totals: pass:8 fail:0 xfail:0 xpass:0 skip:0 error:0
+> Allocating a page_pool buffer (given XDP queue has one attached) is certainly an 
+> option, although I am not sure if anyone needs it. Furthermore, growing tail 
+> would still fail for a single-buf case.
 
-Nice test.  This is also testing the functionality of zswap's incompressible
-page handling.
-
-> 
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-> ---
->  tools/testing/selftests/cgroup/test_zswap.c | 96 +++++++++++++++++++++
->  1 file changed, 96 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-> index 64ebc3f3f203..8cb8a131357d 100644
-> --- a/tools/testing/selftests/cgroup/test_zswap.c
-> +++ b/tools/testing/selftests/cgroup/test_zswap.c
-> @@ -5,6 +5,7 @@
->  #include <unistd.h>
->  #include <stdio.h>
->  #include <signal.h>
-> +#include <fcntl.h>
->  #include <sys/sysinfo.h>
->  #include <string.h>
->  #include <sys/wait.h>
-> @@ -574,6 +575,100 @@ static int test_no_kmem_bypass(const char *root)
->  	return ret;
->  }
->  
-> +static int allocate_random_and_wait(const char *cgroup, void *arg)
-> +{
-> +	size_t size = (size_t)arg;
-> +	char *mem;
-> +	int fd;
-> +	ssize_t n;
-> +
-> +	mem = malloc(size);
-> +	if (!mem)
-> +		return -1;
-> +
-> +	/* Fill with random data from /dev/urandom - incompressible */
-> +	fd = open("/dev/urandom", O_RDONLY);
-> +	if (fd < 0) {
-> +		free(mem);
-> +		return -1;
-> +	}
-> +
-> +	for (size_t i = 0; i < size; ) {
-> +		n = read(fd, mem + i, size - i);
-> +		if (n <= 0)
-> +			break;
-> +		i += n;
-> +	}
-> +	close(fd);
-> +
-> +	/* Touch all pages to ensure they're faulted in */
-> +	for (size_t i = 0; i < size; i += 4096)
-
-Nit.  I show test_zswapin() is using PAGE_SIZE.  Maybe the above code can also
-use it?
-
-> +		mem[i] = mem[i];
-> +
-> +	/* Keep memory alive for parent to reclaim and check stats */
-> +	pause();
-> +	free(mem);
-> +	return 0;
-> +}
-> +
-> +static long get_zswap_incomp(const char *cgroup)
-> +{
-> +	return cg_read_key_long(cgroup, "memory.stat", "zswap_incomp ");
-> +}
-> +
-> +/*
-> + * Test that incompressible pages (random data) are tracked by zswap_incomp.
-> + *
-> + * Since incompressible pages stored in zswap are charged at full PAGE_SIZE
-> + * (no memory savings), we cannot rely on memory.max pressure to push them
-> + * into zswap. Instead, we allocate random data within memory.max, then use
-> + * memory.reclaim to proactively push pages into zswap while checking the stat
-> + * before the child exits (zswap_incomp is a gauge that decreases on free).
-> + */
-> +static int test_zswap_incompressible(const char *root)
-> +{
-> +	int ret = KSFT_FAIL;
-> +	char *test_group;
-> +	long zswap_incomp;
-> +	pid_t child_pid;
-> +	int child_status;
-> +
-> +	test_group = cg_name(root, "zswap_incompressible_test");
-> +	if (!test_group)
-> +		goto out;
-> +	if (cg_create(test_group))
-> +		goto out;
-> +	if (cg_write(test_group, "memory.max", "32M"))
-> +		goto out;
-> +
-> +	child_pid = cg_run_nowait(test_group, allocate_random_and_wait,
-> +				  (void *)MB(4));
-> +	if (child_pid < 0)
-> +		goto out;
-> +
-> +	/* Wait for child to finish allocating */
-> +	usleep(500000);
-
-We might be better to revisit here in future to avoid racy test results.  But
-this seems good enough for now.
-
-> +
-> +	/* Proactively reclaim to push random pages into zswap */
-> +	cg_write_numeric(test_group, "memory.reclaim", MB(4));
-> +
-> +	zswap_incomp = get_zswap_incomp(test_group);
-> +	if (zswap_incomp <= 0) {
-> +		ksft_print_msg("zswap_incomp not increased: %ld\n", zswap_incomp);
-> +		goto out_kill;
-> +	}
-> +
-> +	ret = KSFT_PASS;
-> +
-> +out_kill:
-> +	kill(child_pid, SIGTERM);
-> +	waitpid(child_pid, &child_status, 0);
-> +out:
-> +	cg_destroy(test_group);
-> +	free(test_group);
-> +	return ret;
-> +}
-> +
->  #define T(x) { x, #x }
->  struct zswap_test {
->  	int (*fn)(const char *root);
-> @@ -586,6 +681,7 @@ struct zswap_test {
->  	T(test_zswap_writeback_disabled),
->  	T(test_no_kmem_bypass),
->  	T(test_no_invasive_cgroup_shrink),
-> +	T(test_zswap_incompressible),
->  };
->  #undef T
->  
-> -- 
-> 2.43.0
-
-
-Thanks,
-SJ
-
-[...]
+sbuf is a different code path, sbuf has precise frame_sz per frame,
+not a single value in rxq, no? Don't mean to argue, just making sure
+my mental model is correct ;)
