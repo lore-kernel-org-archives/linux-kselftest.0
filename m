@@ -1,143 +1,178 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C571A1482E8
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Feb 2026 02:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936CE153BE9
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Feb 2026 02:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770516051; cv=none; b=DxGJkDdvqladXA3qKMV+9EVq/TePRuBICVppfN8ZzNUo//vXPytO3PRfuq9RMANJX8ie1JUt0JoKKpYmOIe8hAnLrk/gILHwWOxYEwAwLGx3+XyVABD7uAGvQo6DKd+CdADZbVVCuKt7DUplGqp3J6MJPOMflIC7nCC3HYHym6Q=
+	t=1770518944; cv=none; b=ZHBaWnRlXOx8mfIxt8ZNmnAYecMuwHE2gxUOvrw0jv4e7EULA5LeCk+0FmARvFiyoEbXjkuy8swC1wACIW/hGLx7h9VSw4TzLEEdy/VwXEI4DIjGXAs+85trJ8HMQXLJj9FzGlLmJCfopUR9FGxfELpsHiqZBmXem1mTRosqxQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770516051; c=relaxed/simple;
-	bh=k/52INH8GyEadxGakCCLL4rMhjYRUVyVZopaV2PxmcM=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Z15RopKb5UY+aYU6MtEfdmqcpHgQvHl9MdCAs5zH1Yh/kBGZRz5gUzYyrrmICym1wH0IYhMavFZ3NYPbdhhbS1WKyVWImftqUwaNJECGlojdOcESD94bccsSBAUH7MQJmp3k2ePIliZ3zfhXU1umOZ1IJoiFl65c5sRrhrJQc7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LVakoOX0; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qxNMvmAN; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770518944; c=relaxed/simple;
+	bh=ggaDIpn3ewDGn+U09yPrXsdr7h8u5fNEwSg1M3wvUWM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DsrzF1/nY86Qx0hr+2gRMHPxB6UnNwKq8l+66Sh2Ow0dJWcNh6r8Q3h0AtOyHOa6dmelHxXR49q1Q/CUZwWaTSceWXKWTyfNV0BKVVbLLBSPqp+GtaO4RYOqXSY/CLU62NvlPWzKMH2b6NTJkObwxwWFOeq+CNO11BZ1KYU8pNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NfNsrqoX; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LVakoOX0";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qxNMvmAN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770516049;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ehzROgKFMFthllC8CHPpVVo0jz1By/sLiuctOrPjOCs=;
-	b=LVakoOX0TIa8jRc5PtSn810t/OllS6jLk8ag9HOj9KbJZ4RN9JkMostK9obWebpt+u9WeX
-	0ejKpTkK+C+H0r7wmwB35jFIQXK5rjVBNmKKK9TRU3myOYQyFLjjrz9VY+jOnhx1LpdyVD
-	swemRQVWmZEpE6mrYfFdWf8Xj7+s0LU=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-691-d1GuM8bfMTKtIi8sUCXQgg-1; Sat, 07 Feb 2026 21:00:48 -0500
-X-MC-Unique: d1GuM8bfMTKtIi8sUCXQgg-1
-X-Mimecast-MFC-AGG-ID: d1GuM8bfMTKtIi8sUCXQgg_1770516048
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-5019f8a18cdso113230771cf.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Feb 2026 18:00:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NfNsrqoX"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a8a7269547so31065155ad.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Feb 2026 18:49:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770516048; x=1771120848; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ehzROgKFMFthllC8CHPpVVo0jz1By/sLiuctOrPjOCs=;
-        b=qxNMvmANY3glUigpsAx/cb1UY71K4dIFNTA/TQr0iAn81IWhRI+B2xSyRYk6I1pZ0i
-         l/JZwYFDzvjPMD5mgtz2+SEyRnzYJ1levyQsTA73mehdlL+++go5Q2TCtG8urFg4cHv/
-         Jc/w4ALwHishXwXt96owXYOmPXn8X8Ay0V1axYfXR8H2D6D8C0272prTKQhRgCmWbsD7
-         Jyyl/mNbyWyGiQzXUG+w4KBUsfPuipTHYGJAjX35abAJUNCd4VX7sbuIIgE4Dd2fK5G3
-         IdZgDhxWNTNg9zpt5qkcnsS8dxaNaM23pMK9972NZwesYizc8XlWQoEWypxQQdB0kWsg
-         ztKw==
+        d=gmail.com; s=20230601; t=1770518944; x=1771123744; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJE7ntfEvSYVWyw3WIf0KrfyfMPjDLGhWYcYr6XtYJU=;
+        b=NfNsrqoXaiLA1PL7fzChDL5OtZpDifgnOMYPnNrqhRgatjRa62JUBQdr55ntPT4AeS
+         ulK7nsfIX+smPKvzvesJMq0iwWNlYYIZZQcmMVn0WQv0+j/ulQEAmA5YfyOJs4ngdino
+         mYmYvQX4gVc7RkPHqpGZmtc0Zyec25YISw0T4/qhQ4Vcb0d/taGcwpNr9umVIy0Dihxx
+         nmZ+RVPrEIJMCLLd0826w7ixDXDNT8B/4kPTazU+JNqMkNNthI7ahTedpG7vdByhiSrL
+         KVq6JyGxvPuyf+60SQy2WnrwATZMwNklUZUoCpkEQ37UQHSxRRenp6WRmdy33KGjRbfo
+         1DbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770516048; x=1771120848;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ehzROgKFMFthllC8CHPpVVo0jz1By/sLiuctOrPjOCs=;
-        b=jufwiu+SU2RCZAg10BTHKDHCNYmfMOtCGWo8/arRVvqAXJ3ZIQiIeAD3AS26VezfXP
-         zXpt0hdEV5x1x1LSxSTLHAa+GAZvA4zNvAC4t1u4ZPGP7v44bbjsf7LhtmW/al67/bHY
-         CGN2FAZlSKZcv9a2Rh3rORT3nAKF9qqYRWx02i86I5XxdTAlWudjgU94gTIA1mKWNpiK
-         tSWyjzkgZ5hYQ40Du0a4+jN3eZIhHgCjBNOaLqsjmaeRS45njFXOnh4db6vbCn/MWqtq
-         T5OFVL819dnKPuZ2GwgREz29F/8zo/Wb0rJ5mYeJMdZ2rnx0jKhDBowSsjL/9GNRiPAg
-         AFYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ8asX4AoqNtUO41iXF14IXDByOLVB+6828NXowKsonZXQAxAZUcWFM84DoA3y2P82dCUFowrf6KSQ74cjHE8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMmPsU6rRJQxXqokBaUNR3SI4rGNXdhEl8b6oSuio564IJX2H8
-	cGpDZfnZCgvC29yelk/PXZ55L5f+lRrR8njTfanl7iA6Ymmw07H81DW1LbwYaRogLqwYp26OSZB
-	4D4ka3lOnlG1XrBPpP+QfMRIOntEmz8qqSWM6b+4FrIkbBSfOqd2W6bfemXhVaH2GyNmFUg==
-X-Gm-Gg: AZuq6aKo9zoGHTjM2vTMjtQDYwFZxMGA8MFxwEqPUc108byuLJJ8048Lw56JL84Csg5
-	yB/k/wCrpb5akoXF4V+P83jvH/Ik/YCsnsVrQ5Hz64inN4keYrGlXIuaYkeys8KolYIt7BYWKQ3
-	7dsBscT9fNqX/GyJMTAPV7wEzYPTk2O72G5bSniQFxX15kxPgPeNE2aR0S6LLh3aYk9T/pR0xip
-	hMQ8/ANwPkSUcKJ1XFAgfqTcGy2qh0h8a9ZILqc1XvBZgd9jG2MJGjins7/h0S24iVXTiE5Yl6q
-	SSQPwMPlSgCRTs/v9Euo7yk3npJv41BfzBJi0xSV3gOqotCzT/ntANopgZE3GUV0Y9Jbzwhzbes
-	DXjWsClNl9DwE1h0rKLDQ0Xug52+SgPHJSdH1oni8pa8cIVULjlBI0so0
-X-Received: by 2002:a05:622a:13c8:b0:501:3e5e:b027 with SMTP id d75a77b69052e-506398fe05emr101988871cf.19.1770516048048;
-        Sat, 07 Feb 2026 18:00:48 -0800 (PST)
-X-Received: by 2002:a05:622a:13c8:b0:501:3e5e:b027 with SMTP id d75a77b69052e-506398fe05emr101988501cf.19.1770516047672;
-        Sat, 07 Feb 2026 18:00:47 -0800 (PST)
-Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cafa3bff8asm493432085a.51.2026.02.07.18.00.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Feb 2026 18:00:46 -0800 (PST)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <d1e4b070-9438-4152-847e-ef6ff6aa7820@redhat.com>
-Date: Sat, 7 Feb 2026 21:00:45 -0500
+        d=1e100.net; s=20230601; t=1770518944; x=1771123744;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yJE7ntfEvSYVWyw3WIf0KrfyfMPjDLGhWYcYr6XtYJU=;
+        b=dF6waOFqXYLYeQt3tKkyVDW4p5VWbHIAwV6I+Wgh5Gx2AVeOq3rGRtWU1ssdcjc57b
+         hl4YWKne3ltGAtNWDkIlZys/Hr6N/vg89li163/ROuIEk+7qyA0ZyYoRWEQFxmN3V4qt
+         yDKku0YqggIbVjW9ZWnb7/nx9HbGCXUl4GG4bSUTaY7XYW6gUf8IGyk7X1+/GQabYwsS
+         sQxClvVH+2HOAezziT/CBTWAlPaxf9rFz/8fTVWc6/QzUSKo3L7zfGULNJGhmn7wLyai
+         IxaRC/xrhgDpFNZRRveRKDVFwtN5++LHvR+tqa01MS0+B2aDEDkKjUgXjOHDI3L7xvzx
+         d07g==
+X-Forwarded-Encrypted: i=1; AJvYcCWbaO4NL7WtLXnOGIMrv8ge0KiPSVOlYcg3FUzZtCt0/HFV3hlveJ0rimh8pBCjxwBqU1WU1rbd7ylPOziq2So=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoGETAhklHpe5dYwgT4yZBg1VNQ3aKmBOH8jGLIyouA6yRkc9/
+	86540LWWtJZL8ppk9O+Vpa4NWrfao3ZJbO6lpjqeyPMf052mGIknDjAU
+X-Gm-Gg: AZuq6aIotjN2wwMjPyiAlHfkDmoMuNBfT++9SBInZN4xt07eygN4pQIvb22jbkXtFg9
+	NPF26E5G6EFTPVgVFWzIRIJavkxw2bZ+pL6XCr56DTKternEDNsWV0b0Rz39se0mtmX4meewJPR
+	o+tn0BVbjLBY/kJ5KjB/3bqPAsIG2KXaEiZs4zRJpGmzuKN0cR5xCyS5Y4uXisa5qACYYOm6YYf
+	NBMYIwy3qAYSlTaT1MKwkVNTXt3T0vYAs0XPmcKQ3cVEAJhNs+j9huuLgfsBeUtwal7wfdwyBCU
+	L85ws8VxBlu7I/dphsMIn+cREez02ZZqzH7HcdGlTECcbbcHPelXG9mVcDrbJRUUXeuH5CSq50f
+	dJP/39m1tiED/yeZL9cb0AN5PiMoIdcPIaHze6h6re3SHcLcc480VNzbIyIxreWwwxOvrzmoXJC
+	jt9zhz0IiEqRefLeWSyPYaIemuWdnTK864ZaHIrZGV
+X-Received: by 2002:a17:903:1c2:b0:2a9:4450:abbc with SMTP id d9443c01a7336-2a95164f64dmr88105895ad.26.1770518943797;
+        Sat, 07 Feb 2026 18:49:03 -0800 (PST)
+Received: from localhost.localdomain ([113.218.252.53])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a9521b9f5esm67194715ad.51.2026.02.07.18.48.51
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 07 Feb 2026 18:49:02 -0800 (PST)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	yangfeng@kylinos.cn,
+	alexei.starovoitov@gmail.com
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Kaitao Cheng <chengkaitao@kylinos.cn>
+Subject: [PATCH v6 0/5] bpf/verifier: Expand the usage scenarios of bpf_kptr_xchg
+Date: Sun,  8 Feb 2026 10:48:41 +0800
+Message-ID: <20260208024846.18653-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH/for-next v4 2/4] cgroup/cpuset: Defer
- housekeeping_update() calls from CPU hotplug to workqueue
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260206203712.1989610-1-longman@redhat.com>
- <20260206203712.1989610-3-longman@redhat.com>
- <aYZrJaIIbTX4E-nO@pavilion.home>
-Content-Language: en-US
-In-Reply-To: <aYZrJaIIbTX4E-nO@pavilion.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2/6/26 5:28 PM, Frederic Weisbecker wrote:
-> Le Fri, Feb 06, 2026 at 03:37:10PM -0500, Waiman Long a écrit :
->> The update_isolation_cpumasks() function can be called either directly
->> from regular cpuset control file write with cpuset_full_lock() called
->> or via the CPU hotplug path with cpus_write_lock and cpuset_mutex held.
->>
->> As we are going to enable dynamic update to the nozh_full housekeeping
->> cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
->> allowing the CPU hotplug path to call into housekeeping_update() directly
->> from update_isolation_cpumasks() will likely cause deadlock. So we
-> Why do we need to call housekeeping_update() from hotplug? I would
-> expect it to be called only when cpuset control file are written since
-> housekeeping cpumask don't deal with online CPUs but with possible
-> CPUs.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-It needs to call housekeeping_update() only in the special case where 
-there is only one active CPU in an isolated partition and that CPU goes 
-offline. In this case, the partition becomes disabled that causes change 
-in the isolated CPUs. I know this special case shouldn't happen in real 
-world, but I do have test case to test that.
+When using bpf_kptr_xchg, we triggered the following error:
+    31: (85) call bpf_kptr_xchg#194
+    function calls are not allowed while holding a lock
+bpf_kptr_xchg can now be used in lock-held contexts, so we extended
+its usage scope in [patch 1/5].
 
-Theoretically, we can add code to handle this special case to keep this 
-offline isolated CPU in a special pool without changing isolated_cpus 
-and hence  HK_TYPE_DOMAIN cpumask. In this way, we shouldn't need to 
-call housekeeping_update() from CPU hotplug. I will probably do that as 
-CPU hotplug will be used when we make HK_TYPE_KERNEL_NOISE cpumask 
-dynamic in the near future.
+When writing test cases using bpf_kptr_xchg and bpf_rbtree_*, the
+following approach must be followed:
 
-Cheers,
-Longman
+	bpf_spin_lock(&lock);
+	rb_n = bpf_rbtree_root(&root);
+	while (rb_n && can_loop) {
+		rb_n = bpf_rbtree_remove(&root, rb_n);
+		if (!rb_n)
+			goto fail;
+
+		tnode = container_of(rb_n, struct tree_node, node);
+		node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
+		if (!node_data)
+			goto fail;
+
+		data = node_data->data;
+		/* use data to do something */
+
+		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
+		if (node_data)
+			goto fail;
+
+		bpf_rbtree_add(&root, rb_n, less);
+
+		if (lookup_key < tnode->key)
+			rb_n = bpf_rbtree_left(&root, rb_n);
+		else
+			rb_n = bpf_rbtree_right(&root, rb_n);
+	}
+	bpf_spin_unlock(&lock);
+
+The above illustrates a lock-remove-read-add-unlock workflow, which
+exhibits lower performance. To address this, we introduced support
+for a streamlined lock-read-unlock operation in [patch 2/5] and
+[patch 4/5].
+
+Changes in v6:
+- allow using bpf_kptr_xchg even if the MEM_RCU flag is set
+- Add test case
+Changes in v5:
+- add lastname
+Changes in v4:
+- Fix the dead logic issue in the test case
+Changes in v3:
+- Fix compilation errors
+Changes in v2:
+- Allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
+- Add test case
+
+Link to v5:
+https://lore.kernel.org/all/20260203022712.99347-1-pilgrimtao@gmail.com/
+Link to v4:
+https://lore.kernel.org/all/20260202090051.87802-1-pilgrimtao@gmail.com/
+Link to V3:
+https://lore.kernel.org/all/20260202055818.78231-1-pilgrimtao@gmail.com/
+Link to V2:
+https://lore.kernel.org/all/20260201031607.32940-1-pilgrimtao@gmail.com/
+Link to V1:
+https://lore.kernel.org/all/20260122081426.78472-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (5):
+  bpf/verifier: allow calling bpf_kptr_xchg while holding a lock
+  bpf/verifier: allow using bpf_kptr_xchg even if the NON_OWN_REF flag
+    is set
+  selftests/bpf: Add supplementary tests for bpf_kptr_xchg
+  bpf/verifier: allow using bpf_kptr_xchg even if the MEM_RCU flag is
+    set
+  selftests/bpf: Add test case for rbtree nodes that contain both
+    bpf_refcount and kptr fields.
+
+ kernel/bpf/verifier.c                         |   9 +-
+ .../testing/selftests/bpf/prog_tests/rbtree.c |   6 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
+ .../selftests/bpf/progs/rbtree_search_kptr.c  | 290 ++++++++++++++++++
+ 4 files changed, 307 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
+
+-- 
+2.50.1 (Apple Git-155)
 
