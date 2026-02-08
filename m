@@ -1,64 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1483EBF0E;
-	Sun,  8 Feb 2026 08:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA310487BE;
+	Sun,  8 Feb 2026 09:49:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770541085; cv=none; b=pKeuqrIN90AYJTVhLfivW5ctZ5OFb/4lm42Vv9dqsJJ1yR9TEkWQ4BmE9du+46Wu+8QYg25N5Qjl0Q3SYPO2S5B5rOkn5Oe4cvUXXwPfrj7cNCThdxujcnK8rCXeG8YUTmrc3bJmEQzySeC7D6HnmdZI8xlNJoPwkifX5qRVBAk=
+	t=1770544178; cv=none; b=RY2HdYKEFo8BFOLVgRBj0Ssv6ibPCUTQBemkDOJRrcyIcETgyakpvibP42JZK3vCy4lpqu1oIjvj7Wuwp9gho76f9Qw99b392s6T0lddC7F5F1lvPZlWWsrBADs2+WWoV768GvtHPTRJfJ1vnv8YenyY8ujOXfon5xVQ0tdUCHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770541085; c=relaxed/simple;
-	bh=6PXYYyFWwCKZhzlGOOe6zlKrU0nwj6paIBBqgxvvRSE=;
+	s=arc-20240116; t=1770544178; c=relaxed/simple;
+	bh=dad1qQG14Id6LY4XasdkZA/u/K3SW5eX6EZX2zBf4BM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sYcooltfrARoRxRPJhUPA1nGtUozcoCG1nV/+OvGsgsO0GRgfpoC6mjTrpO3Y1IQs/w1/W/B78Y61WZWI3z6aMXlG6YJRpHp52EM0wO1yg4yq7KGZBw3aEkiHVxnJsJy3goOgZdCt49ZSKNBB19vCZgwZg9q/ASxRqFAeCjcT4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FC+BoQ7r; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=h4bAAJVvfaH5hCqiaWrzBgVe1UbW6ouJcy1wtO3wu/JlUWYX/7GszRhXnculg34gvq5GBB6FaII5DZ/rEkietZcdxiyS6SPvzfT8jEP+BMD6ndggZyEZeDvvSoMdNMHbi6XCukbXkvl6zd6ZCehkBc9NmwTdcSytND7aiXHUc1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hz7CIBWk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FC+BoQ7r"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770541085; x=1802077085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6PXYYyFWwCKZhzlGOOe6zlKrU0nwj6paIBBqgxvvRSE=;
-  b=FC+BoQ7rcdk1GYo5FRDaEP3FGmb+mNbFUvvcq/lPwiD5a5YwNRT7WL1y
-   G7kiqaePLzIoQQp/Z+S0+3dyrgRe0jiS/MNvCQ9B6b/amuuB+1SxbnUGt
-   u69j56EfFbZo/J/4kvNi2/UjGuFH2c/iEAFHYqDqqv0V2QN0i3KucyVmL
-   wq015JgL8gIq2dtWw5bC2HCrZSPugzjb2AwJ/DRCs8dRg713zPURoc5hw
-   Nj8MRz/eZHde+xxONGgjlmPyQBH7L7JbRtYGxPWtVh/tLQm5DSlUFfrGr
-   zER8qaHDZi0fy1EHDCLXdxFrmQdKd+jsvmvb0PIhe0JGWtyBKnuiSdbFW
-   w==;
-X-CSE-ConnectionGUID: 7qaiEXn9R6myACv96HO7rg==
-X-CSE-MsgGUID: aYLKGzH/QFixaP3pzKPILQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11694"; a="83056644"
-X-IronPort-AV: E=Sophos;i="6.21,279,1763452800"; 
-   d="scan'208";a="83056644"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2026 00:58:04 -0800
-X-CSE-ConnectionGUID: hivW+x3DRgWV5innbmpaXw==
-X-CSE-MsgGUID: RsoW97q6SVqRU4qzOyxhPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,279,1763452800"; 
-   d="scan'208";a="215475021"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 08 Feb 2026 00:58:01 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vp0cA-00000000m76-1env;
-	Sun, 08 Feb 2026 08:57:58 +0000
-Date: Sun, 8 Feb 2026 16:57:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Koichiro Den <den@valinux.co.jp>, vkoul@kernel.org, mani@kernel.org,
-	Frank.Li@nxp.com, jingoohan1@gmail.com, lpieralisi@kernel.org,
-	kwilczynski@kernel.org, robh@kernel.org, bhelgaas@google.com
-Cc: oe-kbuild-all@lists.linux.dev, dmaengine@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/9] dmaengine: dw-edma: Export per-channel IRQ and
- doorbell register offset
-Message-ID: <202602081640.ChGzNbe8-lkp@intel.com>
-References: <20260206172646.1556847-4-den@valinux.co.jp>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hz7CIBWk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649B7C4CEF7;
+	Sun,  8 Feb 2026 09:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770544178;
+	bh=dad1qQG14Id6LY4XasdkZA/u/K3SW5eX6EZX2zBf4BM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Hz7CIBWk+BanWnWsjwmGQuuBnJ6GS1FGyOLDJGQ6voZfjDwkbQPPVzj7mof+SYYku
+	 aZJZQWvuySWH9WBmsc5GVAry8qs4nFCtuWtttSVxzxoPDgpwjzYgg+xobfkrpqARR6
+	 yhmN2j6+GacCPdoL8CnXX3l/J6OuHmbMtnDHR0LDesuHToOppkkaIoyoTTGoLA6SHw
+	 Se/YmgMtvCoJHuiNd3WkaRPy5yyoNdl18MPxXLjXnjaiDLgepDWeYkwJmR5Bf5gNzk
+	 6feyIqqMfoHSexciIygXgmQrXIAonUw05Nko9juey1Bh8uOoF6h/C1tlSGlXY+lFpb
+	 wevcUFtyXv0Bw==
+Date: Sun, 8 Feb 2026 11:49:27 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Peter Xu <peterx@redhat.com>
+Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@redhat.com>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 01/17] userfaultfd: introduce
+ mfill_copy_folio_locked() helper
+Message-ID: <aYhcJy86AYesUSEe@kernel.org>
+References: <20260127192936.1250096-1-rppt@kernel.org>
+ <20260127192936.1250096-2-rppt@kernel.org>
+ <aYI0HmP-XZNBI-gb@x1.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,78 +61,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260206172646.1556847-4-den@valinux.co.jp>
+In-Reply-To: <aYI0HmP-XZNBI-gb@x1.local>
 
-Hi Koichiro,
+Hi Peter,
 
-kernel test robot noticed the following build warnings:
+On Tue, Feb 03, 2026 at 12:45:02PM -0500, Peter Xu wrote:
+> On Tue, Jan 27, 2026 at 09:29:20PM +0200, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > Split copying of data when locks held from mfill_atomic_pte_copy() into
+> > a helper function mfill_copy_folio_locked().
+> > 
+> > This makes improves code readability and makes complex
+> > mfill_atomic_pte_copy() function easier to comprehend.
+> > 
+> > No functional change.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> 
+> The movement looks all fine,
+> 
+> Acked-by: Peter Xu <peterx@redhat.com>
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v6.19-rc8 next-20260205]
-[cannot apply to vkoul-dmaengine/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks!
+ 
+> Just one pure question to ask.
+> 
+> > ---
+> >  mm/userfaultfd.c | 59 ++++++++++++++++++++++++++++--------------------
+> >  1 file changed, 35 insertions(+), 24 deletions(-)
+> > 
+> > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> > index e6dfd5f28acd..a0885d543f22 100644
+> > --- a/mm/userfaultfd.c
+> > +++ b/mm/userfaultfd.c
+> > @@ -238,6 +238,40 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
+> >  	return ret;
+> >  }
+> >  
+> > +static int mfill_copy_folio_locked(struct folio *folio, unsigned long src_addr)
+> > +{
+> > +	void *kaddr;
+> > +	int ret;
+> > +
+> > +	kaddr = kmap_local_folio(folio, 0);
+> > +	/*
+> > +	 * The read mmap_lock is held here.  Despite the
+> > +	 * mmap_lock being read recursive a deadlock is still
+> > +	 * possible if a writer has taken a lock.  For example:
+> > +	 *
+> > +	 * process A thread 1 takes read lock on own mmap_lock
+> > +	 * process A thread 2 calls mmap, blocks taking write lock
+> > +	 * process B thread 1 takes page fault, read lock on own mmap lock
+> > +	 * process B thread 2 calls mmap, blocks taking write lock
+> > +	 * process A thread 1 blocks taking read lock on process B
+> > +	 * process B thread 1 blocks taking read lock on process A
+> 
+> While moving, I wonder if we need this complex use case to describe the
+> deadlock.  Shouldn't this already happen with 1 process only?
+> 
+>   process A thread 1 takes read lock (e.g. reaching here but
+>                      before copy_from_user)
+>   process A thread 2 calls mmap, blocks taking write lock
+>   process A thread 1 goes on copy_from_user(), trigger page fault,
+>                      then tries to re-take the read lock
+> 
+> IIUC above should already cause deadlock when rwsem prioritize the write
+> lock here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Koichiro-Den/dmaengine-dw-edma-Add-per-channel-interrupt-routing-control/20260207-013042
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260206172646.1556847-4-den%40valinux.co.jp
-patch subject: [PATCH v4 3/9] dmaengine: dw-edma: Export per-channel IRQ and doorbell register offset
-config: arc-randconfig-002-20260208 (https://download.01.org/0day-ci/archive/20260208/202602081640.ChGzNbe8-lkp@intel.com/config)
-compiler: arc-linux-gcc (GCC) 12.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260208/202602081640.ChGzNbe8-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602081640.ChGzNbe8-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/dma/dw-edma/dw-edma-core.c: In function 'dw_edma_chan_info':
->> drivers/dma/dw-edma/dw-edma-core.c:1109:26: warning: variable 'dchan' set but not used [-Wunused-but-set-variable]
-    1109 |         struct dma_chan *dchan;
-         |                          ^~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for CAN_DEV
-   Depends on [n]: NETDEVICES [=n] && CAN [=y]
-   Selected by [y]:
-   - CAN [=y] && NET [=y]
-
-
-vim +/dchan +1109 drivers/dma/dw-edma/dw-edma-core.c
-
-  1103	
-  1104	int dw_edma_chan_info(struct dw_edma_chip *chip, unsigned int ch_idx,
-  1105			      struct dw_edma_chan_info *info)
-  1106	{
-  1107		struct dw_edma *dw = chip->dw;
-  1108		struct dw_edma_chan *chan;
-> 1109		struct dma_chan *dchan;
-  1110		u32 ch_cnt;
-  1111		int ret;
-  1112	
-  1113		if (!chip || !info || !dw)
-  1114			return -EINVAL;
-  1115	
-  1116		ch_cnt = dw->wr_ch_cnt + dw->rd_ch_cnt;
-  1117		if (ch_idx >= ch_cnt)
-  1118			return -EINVAL;
-  1119	
-  1120		chan = &dw->chan[ch_idx];
-  1121		dchan = &chan->vc.chan;
-  1122	
-  1123		ret = dw_edma_core_ch_info(dw, chan, info);
-  1124		if (ret)
-  1125			return ret;
-  1126	
-  1127		info->irq = dw->irq[chan->irq_idx].irq;
-  1128		return 0;
-  1129	}
-  1130	EXPORT_SYMBOL_GPL(dw_edma_chan_info);
-  1131	
+We surely can improve the description here, but it should be a separate
+patch with its own changelog and it's out of scope of this series.
+ 
+> > +	 *
+> > +	 * Disable page faults to prevent potential deadlock
+> > +	 * and retry the copy outside the mmap_lock.
+> > +	 */
+> > +	pagefault_disable();
+> > +	ret = copy_from_user(kaddr, (const void __user *) src_addr,
+> > +			     PAGE_SIZE);
+> > +	pagefault_enable();
+> > +	kunmap_local(kaddr);
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sincerely yours,
+Mike.
