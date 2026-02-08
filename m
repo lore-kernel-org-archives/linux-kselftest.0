@@ -1,58 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D659020DE3;
-	Sun,  8 Feb 2026 10:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209073358B1;
+	Sun,  8 Feb 2026 12:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770546954; cv=none; b=a+8oEagyQGz24LmdHbdM5nqTTwbYPcUQI6fmA7dfR6mwSz61qRPZE0lum9f1LGZj/mXH+PWpHjbrZFNDy3JBRTRGlvQgvvdJUvs63rrgZjfq0fCjbInx0wqa8wIwRxSPGiprOmcbnADLybEwvtcB9+Qp+IOE99XCOy9EB9Y9ndk=
+	t=1770554171; cv=none; b=aV2DM+yZLMFoMk/P3+LU9DhzohoxGbkQhMyCd5M2x6JhQmFM7aLOC4rWbOQktxsHX755e+jPz6sfoFcdgbxksWlFkoUqethIv3ouXfpE9pnMJh1voMQNDU1k5edhj/UxWWszTsYPl5yxPIw6DIrZ1urahOCAGAJPar8CWDB+E+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770546954; c=relaxed/simple;
-	bh=NCs3O9G0c7KmfcC7DUEEfBaavqJKwtKWSCCSSJCxCXI=;
+	s=arc-20240116; t=1770554171; c=relaxed/simple;
+	bh=z9KLnrAUU3N91Lg0uRjeEXtQWzGV2NgVHqAR/6XXqDc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tNqCfXU1f9yHBy3xsiASkpk/XRBOBmtPc+/PiAv9OxcU5rY8g6/ldkpHby8YqSXUZ+djQhATAc+zYqpV80uostpQGAZSl9Zr+Sb3OdKCHE3Xhm59tEtsyy7bY2KxgYq70Q4f0MsX/rfv9WdQgAhmHT+dAUNSn1hAHahehRhptIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHI2emSy; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=EsHJp1JdUjyWK6KqrZujrTyXSv0R4+W6bzYw2Egn8bPTC+Hwa7KlLGtAeH4iggTAcgdX2UaSsCi3I9IESwKKwyGgzO2UiPDa/QhEnMD6q6O/zf9YDHze6WRX1NcDfTWpIEvXXfq668Drf9ol1WFmk2xC57ihNR7yUUijX5p9VSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JRYIFWI5; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHI2emSy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44937C4CEF7;
-	Sun,  8 Feb 2026 10:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770546954;
-	bh=NCs3O9G0c7KmfcC7DUEEfBaavqJKwtKWSCCSSJCxCXI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DHI2emSyf/h9KNTv2IQa99c6pbUNy9Y3CyumFJhfQM9X9sNJK2YKz96xu4+MvoShI
-	 chp7QJ63k+b7JYA5WIljxUYJ1tO9iCEPCP4fW3j4FC7/5mrQnZvqltsS2DOdYrxwMU
-	 o9leLokeK6IE5wXm8Hi30/fuUWxWLyiUokHEL+NA7GVobITxA1AMqAFGOFAoNR2Azp
-	 Ac0vKsyJ+LvNPFNJOWsWwWkdq5Y0XswOIHqlARomtxWu1vODPKYBYCyiLmnNZmEeGm
-	 2MqT4sQDHyGPGQ2ZD9UlJ1/V+LqIPtVvLHnboQUcjkAhbWf0SBrwqAGjF+L/1h6ABA
-	 bCW+eewRE9VIA==
-Date: Sun, 8 Feb 2026 12:35:43 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Peter Xu <peterx@redhat.com>
-Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 10/17] shmem, userfaultfd: implement shmem uffd
- operations using vm_uffd_ops
-Message-ID: <aYhm_4difwN5XXxe@kernel.org>
-References: <20260127192936.1250096-1-rppt@kernel.org>
- <20260127192936.1250096-11-rppt@kernel.org>
- <aYIzCuh8cjd09zrP@x1.local>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JRYIFWI5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770554170; x=1802090170;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z9KLnrAUU3N91Lg0uRjeEXtQWzGV2NgVHqAR/6XXqDc=;
+  b=JRYIFWI5fsMxd8CpprkkYDnAQFoOMNbztFqrWYTq1ZdVzwIFbJX2H+m3
+   YOXmFPgcbG7380Jyg42KbyDgY6raxAhOiuqfUNieCdUB12Vm1wMlE0+qA
+   hFF4K4199HkWnyeC8KhkUseFrwpJsFxvPJzzkSAP38CTMXvXYYExRoBbT
+   jm7uGpahpDHjBOPP33M469lMnFtb3lPkJOunxrL/0134kVIm8m6YU7Dmh
+   LNPgd/DCb1bQI3nmz7RC/VaY/ZjUYnABPmJF2rl9zw79dfEjzeSyJIosS
+   RVAjPnyLv15pTdLh3g4AxgOSMrH8Ncys4sP8BNm/uGKnPHHC96Jv8x0pg
+   g==;
+X-CSE-ConnectionGUID: cV0YLUp4QW6J0tu2d5YudQ==
+X-CSE-MsgGUID: KI6zaBFuRUyDfCWRmV66hQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11694"; a="75540053"
+X-IronPort-AV: E=Sophos;i="6.21,280,1763452800"; 
+   d="scan'208";a="75540053"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2026 04:36:09 -0800
+X-CSE-ConnectionGUID: CzKml9euSIylSd3uQxwF0w==
+X-CSE-MsgGUID: e37On1BcRtGKQd0NT1Q/fA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,280,1763452800"; 
+   d="scan'208";a="216311972"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 08 Feb 2026 04:36:06 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vp41D-00000000mBs-2FEx;
+	Sun, 08 Feb 2026 12:36:03 +0000
+Date: Sun, 8 Feb 2026 20:35:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Koichiro Den <den@valinux.co.jp>, vkoul@kernel.org, mani@kernel.org,
+	Frank.Li@nxp.com, jingoohan1@gmail.com, lpieralisi@kernel.org,
+	kwilczynski@kernel.org, robh@kernel.org, bhelgaas@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/9] PCI: endpoint: pci-epf-test: Add embedded
+ doorbell variant
+Message-ID: <202602082040.oSU5mO1p-lkp@intel.com>
+References: <20260206172646.1556847-8-den@valinux.co.jp>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,210 +67,158 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aYIzCuh8cjd09zrP@x1.local>
+In-Reply-To: <20260206172646.1556847-8-den@valinux.co.jp>
 
-On Tue, Feb 03, 2026 at 12:40:26PM -0500, Peter Xu wrote:
-> On Tue, Jan 27, 2026 at 09:29:29PM +0200, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > Add filemap_add() and filemap_remove() methods to vm_uffd_ops and use
-> > them in __mfill_atomic_pte() to add shmem folios to page cache and
-> > remove them in case of error.
-> > 
-> > Implement these methods in shmem along with vm_uffd_ops->alloc_folio()
-> > and drop shmem_mfill_atomic_pte().
-> > 
-> > Since userfaultfd now does not reference any functions from shmem, drop
-> > include if linux/shmem_fs.h from mm/userfaultfd.c
-> > 
-> > mfill_atomic_install_pte() is not used anywhere outside of
-> > mm/userfaultfd, make it static.
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> 
-> This patch looks like a real nice cleanup on its own, thanks Mike!
-> 
-> I guess I never tried to read into shmem accountings, now after I read some
-> of the codes I don't see any issue with your change.  We can also wait for
-> some shmem developers double check those.  Comments inline below on
-> something I spot.
-> 
-> > 
-> > fixup
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> 
-> [unexpected lines can be removed here]
+Hi Koichiro,
 
-Sure :)
- 
-> > ---
-> >  include/linux/shmem_fs.h      |  14 ----
-> >  include/linux/userfaultfd_k.h |  20 +++--
-> >  mm/shmem.c                    | 148 ++++++++++++----------------------
-> >  mm/userfaultfd.c              |  79 +++++++++---------
-> >  4 files changed, 106 insertions(+), 155 deletions(-)
-> > 
-> > diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-> > index e2069b3179c4..754f17e5b53c 100644
-> > --- a/include/linux/shmem_fs.h
-> > +++ b/include/linux/shmem_fs.h
-> > @@ -97,6 +97,21 @@ struct vm_uffd_ops {
-> >  	 */
-> >  	struct folio *(*alloc_folio)(struct vm_area_struct *vma,
-> >  				     unsigned long addr);
-> > +	/*
-> > +	 * Called during resolution of UFFDIO_COPY request.
-> > +	 * Should lock the folio and add it to VMA's page cache.
-> > +	 * Returns 0 on success, error code on failre.
-> 
-> failure
+kernel test robot noticed the following build errors:
 
-Thanks, will fix.
- 
-> > +	 */
-> > +	int (*filemap_add)(struct folio *folio, struct vm_area_struct *vma,
-> > +			 unsigned long addr);
-> > +	/*
-> > +	 * Called during resolution of UFFDIO_COPY request on the error
-> > +	 * handling path.
-> > +	 * Should revert the operation of ->filemap_add().
-> > +	 * The folio should be unlocked, but the reference to it should not be
-> > +	 * dropped.
-> 
-> Might be slightly misleading to explicitly mention this?  As page cache
-> also holds references and IIUC they need to be dropped there.  But I get
-> your point, on keeping the last refcount due to allocation.
-> 
-> IMHO the "should revert the operation of ->filemap_add()" is good enough
-> and accurately describes it.
+[auto build test ERROR on pci/next]
+[also build test ERROR on next-20260205]
+[cannot apply to vkoul-dmaengine/next pci/for-linus linus/master v6.19-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yeah, sounds good.
- 
-> > +	 */
-> > +	void (*filemap_remove)(struct folio *folio, struct vm_area_struct *vma);
-> >  };
-> >  
-> >  /* A combined operation mode + behavior flags. */
+url:    https://github.com/intel-lab-lkp/linux/commits/Koichiro-Den/dmaengine-dw-edma-Add-per-channel-interrupt-routing-control/20260207-013042
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20260206172646.1556847-8-den%40valinux.co.jp
+patch subject: [PATCH v4 7/9] PCI: endpoint: pci-epf-test: Add embedded doorbell variant
+config: um-randconfig-002-20260208 (https://download.01.org/0day-ci/archive/20260208/202602082040.oSU5mO1p-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260208/202602082040.oSU5mO1p-lkp@intel.com/reproduce)
 
-...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602082040.oSU5mO1p-lkp@intel.com/
 
-> > +static int shmem_mfill_filemap_add(struct folio *folio,
-> > +				   struct vm_area_struct *vma,
-> > +				   unsigned long addr)
-> > +{
-> > +	struct inode *inode = file_inode(vma->vm_file);
-> > +	struct address_space *mapping = inode->i_mapping;
-> > +	pgoff_t pgoff = linear_page_index(vma, addr);
-> > +	gfp_t gfp = mapping_gfp_mask(mapping);
-> > +	int err;
-> > +
-> >  	__folio_set_locked(folio);
-> >  	__folio_set_swapbacked(folio);
-> > -	__folio_mark_uptodate(folio);
-> > -
-> > -	ret = -EFAULT;
-> > -	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
-> > -	if (unlikely(pgoff >= max_off))
-> > -		goto out_release;
-> >  
-> > -	ret = mem_cgroup_charge(folio, dst_vma->vm_mm, gfp);
-> > -	if (ret)
-> > -		goto out_release;
-> > -	ret = shmem_add_to_page_cache(folio, mapping, pgoff, NULL, gfp);
-> > -	if (ret)
-> > -		goto out_release;
-> > +	err = shmem_add_to_page_cache(folio, mapping, pgoff, NULL, gfp);
-> > +	if (err)
-> > +		goto err_unlock;
-> >  
-> > -	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
-> > -				       &folio->page, true, flags);
-> > -	if (ret)
-> > -		goto out_delete_from_cache;
-> > +	if (shmem_inode_acct_blocks(inode, 1)) {
-> 
-> We used to do this early before allocation, IOW, I think we still have an
-> option to leave this to alloc_folio() hook.  However I don't see an issue
-> either keeping it in filemap_add(). Maybe this movement should better be
-> spelled out in the commit message anyway on how this decision is made.
-> 
-> IIUC it's indeed safe we move this acct_blocks() here, I even see Hugh
-> mentioned such in an older commit 3022fd7af96, but Hugh left uffd alone at
-> that time:
-> 
->     Userfaultfd is a foreign country: they do things differently there, and
->     for good reason - to avoid mmap_lock deadlock.  Leave ordering in
->     shmem_mfill_atomic_pte() untouched for now, but I would rather like to
->     mesh it better with shmem_get_folio_gfp() in the future.
-> 
-> I'm not sure if that's also what you wanted to do - to make userfaultfd
-> code work similarly like what shmem_alloc_and_add_folio() does right now.
-> Maybe you want to mention that too somewhere in the commit log when posting
-> a formal patch.
-> 
-> One thing not directly relevant is, shmem_alloc_and_add_folio() also does
-> proper recalc of inode allocation info when acct_blocks() fails here.  But
-> if that's a problem, that's pre-existing for userfaultfd, so IIUC we can
-> also leave it alone until someone (maybe quota user) complains about shmem
-> allocation failures on UFFDIO_COPY.. It's just that it looks similar
-> problem here in userfaultfd path.
+All errors (new ones prefixed by >>):
 
-I actually wanted to have ordering as close as possible to
-shmem_alloc_and_add_folio(), that's the first reason on moving acct_blocks
-to ->filemap_add().
-Another reason, is that it simplifies rollback in case of a failure, as
-shmem_recalc_inode(inode, 0, 0); in ->filemap_remove() takes care of the
-block accounting as well.
+   In file included from drivers/pci/endpoint/functions/pci-epf-test.c:12:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/pci/endpoint/functions/pci-epf-test.c:858:3: error: cannot jump from this goto statement to its label
+     858 |                 goto set_status_err;
+         |                 ^
+   drivers/pci/endpoint/functions/pci-epf-test.c:861:34: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     861 |         struct pci_epc_remote_resource *resources __free(kfree) =
+         |                                         ^
+   1 warning and 1 error generated.
 
-> > +		err = -ENOMEM;
-> > +		goto err_delete_from_cache;
-> > +	}
-> >  
-> > +	folio_add_lru(folio);
-> 
-> This change is pretty separate from the work, but looks correct to me: IIUC
-> we moved the lru add earlier now, and it should be safe as long as we're
-> holding folio lock all through the process, and folio_put() (ultimately,
-> __page_cache_release()) will always properly undo the lru change.  Please
-> help double check if my understanding is correct.
 
-This follows shmem_alloc_and_add_folio(), and my understanding as well that
-this is safe as long as we hold folio lock.
+vim +858 drivers/pci/endpoint/functions/pci-epf-test.c
 
-> > +static void shmem_mfill_filemap_remove(struct folio *folio,
-> > +				       struct vm_area_struct *vma)
-> > +{
-> > +	struct inode *inode = file_inode(vma->vm_file);
-> > +
-> > +	filemap_remove_folio(folio);
-> > +	shmem_recalc_inode(inode, 0, 0);
-> >  	folio_unlock(folio);
-> > -	folio_put(folio);
-> > -out_unacct_blocks:
-> > -	shmem_inode_unacct_blocks(inode, 1);
-> 
-> This looks wrong, or maybe I miss somewhere we did the unacct_blocks()?
-
-This is handled by shmem_recalc_inode(inode, 0, 0).
- 
-> > @@ -401,6 +397,9 @@ int mfill_atomic_install_pte(pmd_t *dst_pmd,
-> >  
-> >  	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-> >  
-> > +	if (page_in_cache)
-> > +		folio_unlock(folio);
-> 
-> Nitpick: another small change that looks correct, but IMHO would be nice to
-> either make it a small separate patch, or mention in the commit message.
-
-I'll address this in the commit log, 
- 
-> > +
-> >  	/* No need to invalidate - it was non-present before */
-> >  	update_mmu_cache(dst_vma, dst_addr, dst_pte);
-> >  	ret = 0;
+   838	
+   839	static void pci_epf_test_enable_doorbell_embedded(struct pci_epf_test *epf_test,
+   840							  struct pci_epf_test_reg *reg)
+   841	{
+   842		struct pci_epc_remote_resource *dma_ctrl = NULL, *chan0 = NULL;
+   843		const char *irq_name = "pci-ep-test-doorbell-embedded";
+   844		u32 status = le32_to_cpu(reg->status);
+   845		struct pci_epf *epf = epf_test->epf;
+   846		struct pci_epc *epc = epf->epc;
+   847		struct device *dev = &epf->dev;
+   848		enum pci_barno bar;
+   849		size_t align_off;
+   850		unsigned int i;
+   851		int cnt, ret;
+   852		u32 db_off;
+   853	
+   854		cnt = pci_epc_get_remote_resources(epc, epf->func_no, epf->vfunc_no,
+   855						   NULL, 0);
+   856		if (cnt <= 0) {
+   857			dev_err(dev, "No remote resources available for embedded doorbell\n");
+ > 858			goto set_status_err;
+   859		}
+   860	
+   861		struct pci_epc_remote_resource *resources __free(kfree) =
+   862					kcalloc(cnt, sizeof(*resources), GFP_KERNEL);
+   863		if (!resources)
+   864			goto set_status_err;
+   865	
+   866		ret = pci_epc_get_remote_resources(epc, epf->func_no, epf->vfunc_no,
+   867						   resources, cnt);
+   868		if (ret < 0) {
+   869			dev_err(dev, "Failed to get remote resources: %d\n", ret);
+   870			goto set_status_err;
+   871		}
+   872		cnt = ret;
+   873	
+   874		for (i = 0; i < cnt; i++) {
+   875			if (resources[i].type == PCI_EPC_RR_DMA_CTRL_MMIO)
+   876				dma_ctrl = &resources[i];
+   877			else if (resources[i].type == PCI_EPC_RR_DMA_CHAN_DESC &&
+   878				 !chan0)
+   879				chan0 = &resources[i];
+   880		}
+   881	
+   882		if (!dma_ctrl || !chan0) {
+   883			dev_err(dev, "Missing DMA ctrl MMIO or channel #0 info\n");
+   884			goto set_status_err;
+   885		}
+   886	
+   887		bar = pci_epc_get_next_free_bar(epf_test->epc_features,
+   888						epf_test->test_reg_bar + 1);
+   889		if (bar < BAR_0) {
+   890			dev_err(dev, "No free BAR for embedded doorbell\n");
+   891			goto set_status_err;
+   892		}
+   893	
+   894		ret = pci_epf_align_inbound_addr(epf, bar, dma_ctrl->phys_addr,
+   895						 &epf_test->db_bar.phys_addr,
+   896						 &align_off);
+   897		if (ret)
+   898			goto set_status_err;
+   899	
+   900		db_off = chan0->u.dma_chan_desc.db_offset;
+   901		if (db_off >= dma_ctrl->size ||
+   902		    align_off + db_off >= epf->bar[bar].size) {
+   903			dev_err(dev, "BAR%d too small for embedded doorbell (off %#zx + %#x)\n",
+   904				bar, align_off, db_off);
+   905			goto set_status_err;
+   906		}
+   907	
+   908		epf_test->db_variant = PCI_EPF_TEST_DB_EMBEDDED;
+   909	
+   910		ret = request_irq(chan0->u.dma_chan_desc.irq,
+   911				  pci_epf_test_doorbell_embedded_irq_handler,
+   912				  IRQF_SHARED, irq_name, epf_test);
+   913		if (ret) {
+   914			dev_err(dev, "Failed to request embedded doorbell IRQ: %d\n",
+   915				chan0->u.dma_chan_desc.irq);
+   916			goto err_cleanup;
+   917		}
+   918		epf_test->db_irq = chan0->u.dma_chan_desc.irq;
+   919	
+   920		reg->doorbell_data = cpu_to_le32(0);
+   921		reg->doorbell_bar = cpu_to_le32(bar);
+   922		reg->doorbell_offset = cpu_to_le32(align_off + db_off);
+   923	
+   924		epf_test->db_bar.barno = bar;
+   925		epf_test->db_bar.size = epf->bar[bar].size;
+   926		epf_test->db_bar.flags = epf->bar[bar].flags;
+   927	
+   928		ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, &epf_test->db_bar);
+   929		if (ret)
+   930			goto err_cleanup;
+   931	
+   932		status |= STATUS_DOORBELL_ENABLE_SUCCESS;
+   933		reg->status = cpu_to_le32(status);
+   934		return;
+   935	
+   936	err_cleanup:
+   937		pci_epf_test_doorbell_cleanup(epf_test);
+   938	set_status_err:
+   939		status |= STATUS_DOORBELL_ENABLE_FAIL;
+   940		reg->status = cpu_to_le32(status);
+   941	}
+   942	
 
 -- 
-Sincerely yours,
-Mike.
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
