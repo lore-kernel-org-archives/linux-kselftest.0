@@ -1,192 +1,89 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203593815FF
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Feb 2026 16:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770655499; cv=pass; b=CF19t7PNqgMCNI7arZKtg3c6vEgjBtVu+49nysXhA0oN1lI2XxPED/6IvSp71SRxlYJ+Z6ODFJr583y0ow63vMPxihFf7yayM6M1Cs1L08DPgMrioCLQmYVRBuegpT71BQTPTpbNzFwwOURbgkh2BE2CHArJpwDoFh71H1Cre3s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770655499; c=relaxed/simple;
-	bh=wrdplUFA6RKQnfr1gdqv3J36haYwyiXQ+Y3/DHl6WiA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jWf7pdwNkla+7OsQPXGa5aG5OTYsnWEiUYv8dwWieUkTOjuMrrG5YurKNQlxMXYlHCOHLuOPCDf+iQc8bKSj/bZoO+5jyRwcq0BjRr8xd77hAPWyrg0vjqIs4V0YuRsgO6qFLehzbVUna9FFWntdgHINIaOED3xwmCqN9+TnzNU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=To2cRWNE; arc=pass smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="To2cRWNE"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-64baa44df99so14396a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Feb 2026 08:44:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770655497; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RollEYN4DRLoUGdlAhYto7PmmTJixtkKcGIvRvcQtv5//VPUMZ/FV/9pjU6ZO0CWC3
-         DnaRHjXri5GHVNx5HfD0vUsUdGZaQVLaeuiYhzltWbem18cgexiJZpUbhIgdbnAyFwPI
-         BDVB46xtIJ62O3o6g1hjsVzvUV8Ftil1tlCqArdrpgZqXZfwETjz+d7WlRML9stxQ6Or
-         eoOXs5zc5eRhJiw/kCNW2lPn5UjAwjG5A3sOEyWePHqqGRY9XhhE0TTEkOIDOhbyOyEV
-         pPQPE9XgnFMc+xOUI59Ad+yPwij1vmH5c0roaEyXX9lPMWhERlnRN/3RHKcUoZRtGRIW
-         jiUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tmyTl6q+tqeF975POxGfJcIFC8oCHkJvZ2/ujs9yNDE=;
-        fh=BYUlYV4dt+QTcjdpLuNAxOP14YE1p97bEAfJvHIOENA=;
-        b=BZ7Ow80OO24/O7CTWxx2sQ3FC3gtwTk9FTgpiSm1RUUaOrs7N4DEGuGMLlAcaxhPGj
-         GU/Cpam1TQgqDvn60UKoLptVKqpLJsyde18m9HizWLhXi0pL3wlqOgdM4ipOysiywfb2
-         fg1PCxVzW1elOGLOapRNgxlKfe+8Cx/PYLFkvjkvfCJ9++WQPJP8GaDBp98HuXri4+QF
-         yp+lmhfGmPZHvo/JhHXWmcWEMKIEYruBbxzojfxFokgHidIPgyT96kBhNmI8niVsvMkU
-         ad7j/5v9lBRGhsJF3zNg3LAHxnak7ECWOaPQch430eq3MJx6dx4HJcJ5qpfrrTURfRk8
-         vYdQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770655497; x=1771260297; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tmyTl6q+tqeF975POxGfJcIFC8oCHkJvZ2/ujs9yNDE=;
-        b=To2cRWNE6e1wPUuwK+alUHmmPkgmsDFZNBNFUblIFSNZ+YQMKtWFDLiDHBDRqRr0sI
-         ZlyOciUTc/AqGOZnglish7Ov6HHg6PtaO5pBWlxx9eHytl1gZWo5OPZ/U3WzLvYZN5qu
-         ybHnZqGZoPO7sKU4+3Zj5HdlGKM1louIt/ZzOMFWh16/0YJYaLecSwHEBZHId+ksoAmA
-         Udj8kSDFuuMCAijS4ulUMzM8hne+zhrWMjPEL4t44UdeMgwTAvLFgBNpNXb1mOiGLUj2
-         uvFPL92zT6wBmWXE8GFNdhmVJ71bPNrPu4VTyY+CjksBdkBBJIITs/aCf1pE57gtTZv2
-         bW8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770655497; x=1771260297;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tmyTl6q+tqeF975POxGfJcIFC8oCHkJvZ2/ujs9yNDE=;
-        b=F5709yG5YPMc6hRwJt3Eqn4chhOCbGrVxEWPAc16IzqWipPCPyqZmlsFCWk5ni5e4U
-         /cDyczTqv9j28wJLdkmYOgbaCbT0RBCrfMQ5wYjR4aLf5zJ59xo3WSIjA7Yy5N08PVuR
-         6daeKoZEbF+43z15w/fG1+eo7hDARlHdlOPCT+bBbat4ZFPacS4kFLsmjlGwO+STaN7w
-         mFTMoiZXfA8SMYwHJK51nda6MSGOnl/VJFidhZ4guAre+niwxgxujBRQoCqJPOO1t9HV
-         0OmUrUAyRw6nqexWbBsm9w8mZUxwQoPYfup6fSqwUEPF7+itW5SJ8aBm6/3Sni4oc0Be
-         ylXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXB3D2thF/ewBrlnCpbGz5og7Ar928tcVc7TFIDTFqAzmPEegegd3soVW+xlo7BA57vrg0mHo2VZGZm1EbDweo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwT6k27nsBqSNzhYgy9z+V2ZrMzWELn48KeqVYK6oqIj0tQDIFo
-	ahsxyc8soa1HNZA5ew/KdwUIJlY6tYrtrDPgTd2VvO+/49wTFxD6MYkzKtKyGFtS39a5cCeqSSO
-	Pu0bkgaEWi1TRUqTRSw7+GgdJLrdCLSXCq264M704
-X-Gm-Gg: AZuq6aKkavWGvFIdceQYE7w3DuibmSKdNp9SHplawBenL8izOAwxGCjVDW6Vk/LnoYQ
-	srgLVxHCQWHDz6zXSYCR32FFwp5s4z/bskDcU14htveZTG/iJlm03WIHdYNscEKm8MKzH8mcGSG
-	RVVacR0eGQ3N0Byzj3GSqHRCQNmSoJGLTKfeqPH2FZMOU47E7NufMzW9cZT63vd6++zq/BIYde3
-	/1+c7nFwUv/HW9fRtk1GEx1u4qVS9w96vIATjNpzwEYvl+KpNClUboXvGnoWIVyvbdyxKE=
-X-Received: by 2002:aa7:c617:0:b0:63e:447d:6aee with SMTP id
- 4fb4d7f45d1cf-659a7265904mr60684a12.0.1770655497156; Mon, 09 Feb 2026
- 08:44:57 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DBC3033D2;
+	Mon,  9 Feb 2026 18:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770663432; cv=none; b=puS6ztst0pXrguCXV//PcydCuRIJTpZPzbH3bXqZ3vNZi8bmuVGESUCBg3yVPBYm8k5qS5kHyM5MBlcmKa10tydhGG2hdlvNeTNjBldXP+WU5QMtyBgK19yxReHtFy6C+UJQskAeZuGVktVeMos5oYl5XmWk0da/HCcynU9CdIk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770663432; c=relaxed/simple;
+	bh=Pd6X/zKUpHxyzsOzhkFBQXmftpIR9RT4sACEVCZ1rs0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hbnABhU1FI6ynYL/QzOVqM/zztHZbYvrBzwaAT6ZOsKQcpKqy+HBp7fsHsKNwBsOoGdPXbb7pmoyAq7pCRTuBC8HkR9lqGqngBjIdoH9TuxvarD6bXFOpXlg69x85yHO1CUawZsJMaUHAHWxTEp2VzXJzSeW0ZIjaKaFvEvqyvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BAC1339;
+	Mon,  9 Feb 2026 10:57:05 -0800 (PST)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8D043F740;
+	Mon,  9 Feb 2026 10:57:08 -0800 (PST)
+Date: Mon, 9 Feb 2026 18:57:06 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
+	broonie@kernel.org, oliver.upton@linux.dev, miko.lenczewski@arm.com,
+	kevin.brodsky@arm.com, ardb@kernel.org, suzuki.poulose@arm.com,
+	lpieralisi@kernel.org, scott@os.amperecomputing.com,
+	joey.gouly@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com,
+	shuah@kernel.org, mark.rutland@arm.com, arnd@arndb.de
+Subject: Re: [PATCH v12 2/7] arm64: cpufeature: add FEAT_LSUI
+Message-ID: <aYouAv_EjICIN8oA@arm.com>
+References: <20260121190622.2218669-1-yeoreum.yun@arm.com>
+ <20260121190622.2218669-3-yeoreum.yun@arm.com>
+ <aYY2CyHWtplQ-fuS@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260207012339.2646196-1-jmattson@google.com> <20260207012339.2646196-3-jmattson@google.com>
- <8e032a54-1444-46ce-8ddf-371ca74debc9@amd.com>
-In-Reply-To: <8e032a54-1444-46ce-8ddf-371ca74debc9@amd.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Mon, 9 Feb 2026 08:44:44 -0800
-X-Gm-Features: AZwV_QjUWlKwn7roG1diwoLDEG8hWuwKopezzs7giHM4EoO_JkdZbGU4Y-mmfc0
-Message-ID: <CALMp9eRpNxDz_AkeZ8GgfbLr1fnYRrKDUJY4SsZ97oJZGsGiuA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] KVM: x86/pmu: Disable Host-Only/Guest-Only events
- as appropriate for vCPU state
-To: Sandipan Das <sandipan.das@amd.com>
-Cc: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Yosry Ahmed <yosry.ahmed@linux.dev>, 
-	Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aYY2CyHWtplQ-fuS@arm.com>
 
-On Sun, Feb 8, 2026 at 11:46=E2=80=AFPM Sandipan Das <sandipan.das@amd.com>=
- wrote:
->
-> On 2/7/2026 6:53 AM, Jim Mattson wrote:
-> > Update amd_pmu_set_eventsel_hw() to clear the event selector's hardware
-> > enable bit when the PMC should not count based on the guest's Host-Only=
- and
-> > Guest-Only event selector bits and the current vCPU state.
-> >
-> > Signed-off-by: Jim Mattson <jmattson@google.com>
-> > ---
-> >  arch/x86/include/asm/perf_event.h |  2 ++
-> >  arch/x86/kvm/svm/pmu.c            | 18 ++++++++++++++++++
-> >  2 files changed, 20 insertions(+)
-> >
-> > diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/p=
-erf_event.h
-> > index 0d9af4135e0a..4dfe12053c09 100644
-> > --- a/arch/x86/include/asm/perf_event.h
-> > +++ b/arch/x86/include/asm/perf_event.h
-> > @@ -58,6 +58,8 @@
-> >  #define AMD64_EVENTSEL_INT_CORE_ENABLE                       (1ULL << =
-36)
-> >  #define AMD64_EVENTSEL_GUESTONLY                     (1ULL << 40)
-> >  #define AMD64_EVENTSEL_HOSTONLY                              (1ULL << =
-41)
-> > +#define AMD64_EVENTSEL_HOST_GUEST_MASK                       \
-> > +     (AMD64_EVENTSEL_HOSTONLY | AMD64_EVENTSEL_GUESTONLY)
-> >
-> >  #define AMD64_EVENTSEL_INT_CORE_SEL_SHIFT            37
-> >  #define AMD64_EVENTSEL_INT_CORE_SEL_MASK             \
-> > diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-> > index d9ca633f9f49..8d451110a94d 100644
-> > --- a/arch/x86/kvm/svm/pmu.c
-> > +++ b/arch/x86/kvm/svm/pmu.c
-> > @@ -149,8 +149,26 @@ static int amd_pmu_get_msr(struct kvm_vcpu *vcpu, =
-struct msr_data *msr_info)
-> >
-> >  static void amd_pmu_set_eventsel_hw(struct kvm_pmc *pmc)
-> >  {
-> > +     struct kvm_vcpu *vcpu =3D pmc->vcpu;
-> > +     u64 host_guest_bits;
+On Fri, Feb 06, 2026 at 06:42:19PM +0000, Catalin Marinas wrote:
+> On Wed, Jan 21, 2026 at 07:06:17PM +0000, Yeoreum Yun wrote:
+> > +#ifdef CONFIG_ARM64_LSUI
+> > +static bool has_lsui(const struct arm64_cpu_capabilities *entry, int scope)
+> > +{
+> > +	if (!has_cpuid_feature(entry, scope))
+> > +		return false;
 > > +
-> >       pmc->eventsel_hw =3D (pmc->eventsel & ~AMD64_EVENTSEL_HOSTONLY) |
-> >                          AMD64_EVENTSEL_GUESTONLY;
+> > +	/*
+> > +	 * A CPU that supports LSUI should also support FEAT_PAN,
+> > +	 * so that SW_PAN handling is not required.
+> > +	 */
+> > +	if (WARN_ON(!__system_matches_cap(ARM64_HAS_PAN)))
+> > +		return false;
 > > +
-> > +     if (!(pmc->eventsel & ARCH_PERFMON_EVENTSEL_ENABLE))
-> > +             return;
-> > +
-> > +     if (!(vcpu->arch.efer & EFER_SVME))
-> > +             return;
-> > +
-> > +     host_guest_bits =3D pmc->eventsel & AMD64_EVENTSEL_HOST_GUEST_MAS=
-K;
-> > +     if (!host_guest_bits || host_guest_bits =3D=3D AMD64_EVENTSEL_HOS=
-T_GUEST_MASK)
-> > +             return;
-> > +
-> > +     if (!!(host_guest_bits & AMD64_EVENTSEL_GUESTONLY) =3D=3D is_gues=
-t_mode(vcpu))
-> > +             return;
->
-> This seems to disable the PMCs after exits from an L2 guest to the L0 hyp=
-ervisor.
-> For such transitions, the corresponding L1 vCPU's PMC has GuestOnly set b=
-ut
-> is_guest_mode() is false as this function is called at the very end of
-> leave_guest_mode() after vcpu->stat.guest_mode is set to 0.
->
-> Is this a correct interpretation of the condition above?
+> > +	return true;
+> > +}
+> > +#endif
+> 
+> I still find this artificial dependency a bit strange. Maybe one doesn't
+> want any PAN at all (software or hardware) and won't get LSUI either
+> (it's unlikely but possible).
+> 
+> We have the uaccess_ttbr0_*() calls already for !LSUI, so maybe
+> structuring the macros in a way that they also take effect with LSUI.
+> For futex, we could add some new functions like uaccess_enable_futex()
+> which wouldn't do anything if LSUI is enabled with hw PAN.
 
-I think you are confusing the VMCB02 bits (that always have Guest-Only
-set) and the VMCB12 bits (which are under the control of L1.
+Hmm, I forgot that we removed CONFIG_ARM64_PAN for 7.0, so it makes it
+harder to disable. Give it a try but if the macros too complicated, we
+can live with the additional check in has_lsui().
 
-If L1 sets only Guest-Only, that indicates a desire to monitor only L2
-execution. So, yes, after emulating an exit from L2 to L1, the PMC is
-disabled.
+However, for completeness, we need to check the equivalent of
+!system_uses_ttbr0_pan() but probing early, something like:
 
-> > +
-> > +     pmc->eventsel_hw &=3D ~ARCH_PERFMON_EVENTSEL_ENABLE;
-> >  }
-> >
-> >  static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr=
-_info)
->
+	if (IS_ENABLED(CONFIG_ARM64_SW_TTBR0_PAN) &&
+	    !__system_matches_cap(ARM64_HAS_PAN)) {
+		pr_info_once("TTBR0 PAN incompatible with FEAT_LSUI; disabling FEAT_LSUI");
+		return false;
+	}
+
+-- 
+Catalin
