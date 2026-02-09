@@ -1,64 +1,64 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0FF25B1DA
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Feb 2026 02:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C812868AB
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Feb 2026 02:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770604643; cv=none; b=lZdliML5nRGs38T9YUXcPwBHFMsmYDiYMtIQTJnT/fD8Tu6HivLRihBiLPVI+Qtsz0EOmVqUmE7JnDyuOj2F0GIQ4xvnm6CWELgr60doGUyejaI7mUhQYu4WXqjNykyDkBLDOvineBPaU6O/rb4dnZQ5tEIpgFiNwA38d9wzU+4=
+	t=1770604780; cv=none; b=tG1L6omBwCegKs1u29fvYsh5bWWUaOz3tqEvhUF/MG2qkZN7yPID+7OFpVI6fhkN4VPwuytWwAwoYPuBFQjyBKzkggSP3feHwkaygeypRSaTIYFdI1aRZrGdTQHuOXlSCGYlcmNTPv/Ui5cxRV4Z7W2nEN9nX1W2KgWmG9Mbp6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770604643; c=relaxed/simple;
-	bh=pRQAO/ZYBYUQ77y7rK0JvvKA04zg434VlWUpr7akJJU=;
+	s=arc-20240116; t=1770604780; c=relaxed/simple;
+	bh=Dyqcoo3l1nUDiS2sC0rr3LvrOLDTeVtTXp4q+Se3w7U=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=VUHCKjYJzB77ROCvZqLcj/RrayLFKwZEsL3ZcST3FPjdgZoM61tqhbO9UdznoT3P1k80VlJiYODgdpV7foSpz0BLxR+ZRdU1/funbuED3s6aMuyK04UHVwYLqGZqYPL0PtsUAmyj1JrVCvJ4WtlYv2z+myiBj16aHo5q47r2Z3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z8Gl5npm; arc=none smtp.client-ip=74.125.224.47
+	 Mime-Version:Content-Type; b=Bi4KFrbFXWzgz5IaymNc2pHzZdxNsXVoDhwcXucgflPhwhUrLM4oSD1thnK2BER9T1ei/e+41UWa2jQ08rCn+Dtkp0huiMG/M+6WGG97BMRWCaypQVjYemaKhRrDkwqRPIAYRhYmNOM0oEAPA5wbfKHqgqdlSRpLcRNjZ9tg0Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iW0JAQoN; arc=none smtp.client-ip=209.85.128.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z8Gl5npm"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-649c070ef3bso3701061d50.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Feb 2026 18:37:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iW0JAQoN"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7964f1405a0so1105387b3.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Feb 2026 18:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770604642; x=1771209442; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770604779; x=1771209579; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1/V4WyWhAAZkw5TNJuCQHRUvYWFPGZ8OrTECOGPh6Dk=;
-        b=Z8Gl5npmF3h7BCvIlBv/pdDg14pBOhE7A0097ii0q4ziW3+5N36BhFE4j1+cpzG2yf
-         cdTB2cL805tGfyxtCQQC6CU3bTStqPz3l4AKPwTXROewVrmtDSNxCQt8omTSMbGSfS59
-         juAkqXrhv7bipf8K2Rx0/ApHj9AEaB0zbEVDOeZL47+nZrkxEvLmn9y8oFNOcNMbTKMa
-         whuYLwmUGsYVr8fUV555PoinzLiDT/wSy4xoz+ne4MjXzzb/VvKrvt0iBLaGlhyZZho5
-         UBqy9/Xw8NU7eWFGFeTpEUMLP4V4RJcrFIovsHg7Hh4tuBuK2PMrZBRNZuhcDsqrmnxQ
-         aVEA==
+        bh=dzmTmGA9U4NoHGqPknBLmfObKJ7TSgXNKWJaNi5i9mw=;
+        b=iW0JAQoNEjyVIt74uTX6YEW8f7CawiIJI5+TOTQzZ3PZPjMfo25MyJXUbCp3qDhS+v
+         On2NKGbWV/F3TsJQ0D8S90E7d+TohOYO4tJyFjOkUzJyMHVmoYtc7d/USggQmlJdX8yF
+         +6tD2m+SjUtiSyNk485wE749yreVi5GJoBg+t9dkQ11/jZcq8D4h53O5wUWwJZQvS2/D
+         N7DajpFHf9VlW/2uXoOs1B4gNW3bDQJHdPSeb3RM5O0LZ8gH+1e+h0fYp9xdv53Mm6bP
+         ngwsrbs+Ko8JHMH8133mY8Ino9beAIQiH65FMoGvemrdBmQ3j9HFC09EEcAmf7dl39wn
+         d6/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770604642; x=1771209442;
+        d=1e100.net; s=20230601; t=1770604779; x=1771209579;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1/V4WyWhAAZkw5TNJuCQHRUvYWFPGZ8OrTECOGPh6Dk=;
-        b=w5oUQoryEkTZmImyW+9Mpg+E3iNarzeR3qb7UMPqWtb00RqsSlPd52MQaXOiUNwHBO
-         3+ffZn1SHFxWvBOjIbnNoZrMnI8aKQBTVQ73BIaCVtt5CNt6j+oZ+quyDuxCKPOcHFmj
-         0qZ86hKHmqqzZflcBY1hnSTdTUyF1LlFjKhupPsWrc6na3jFn85VEIaepQzfEFy295po
-         BnJ3BU/ktzy9fHWKg6mtqh2PPg3gFDag31/PrGf+G7JFjGWjq9jzra6SmpzhedsTw+fK
-         IJaoLELjuK+ae1v/zOUmE0qL63Xw9j9b5OwXblYDmKeRsWxG9gDUBG9RHl6TbREqs/5j
-         mQ9g==
-X-Forwarded-Encrypted: i=1; AJvYcCU2tO4FqARSihkpzvlIBY0FT2iqXZ6ktx67XZyyYDUReXMBK5fVbRwcBQEFuZ+bq5TUmDqBVrKpiy006z2VROA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxssLYCkNPOvLwlO7JID1Q9jTn51zLVxSYRzxzRo5syc7MENzzB
-	6/KKcr6muZDIWxYfMGHe5stgFR+gpqUnRgcdbSVsz1iRQkuGxNHehal0
-X-Gm-Gg: AZuq6aK5gip73S/AfFaisupym+IO75xk4H0DsCwihil3nkEEsB4CcW3O6WTXW6Kp0Pf
-	1pstbAPunSi9I4uN1F0+U0bHoCmHnLeYB0fH44tXtRytPgjEXh17E0IaaBoOR0SCikXX5dlhcbD
-	0HTx0nzrTfuLoS4g29IJ+0QxKVoc7qWKhwiuney23O3QpvrlNPT1zOyIOOuZOH1H04hR3LtdqHL
-	ec7UE5LObziCM6943Vu0VQBFD/dDP/Vlz2LI4FaBLIaVtZpZ1zU4PtNM/0/iyacaimqkXjuobSl
-	E0N6cEwvu0yIOSeduqQnFjVDdbBQvqt0iP7hsv5jCx8Y2OBOt2Sra/roUs49LOkw+NV3LuYVa5m
-	ENyi4yA1BNd0PAzdkzL+dEuToIp7H0K+XZQ1hz41zEmSvdHAmQkOtThK3Hk7ExXOd1dI8+I8TdV
-	PBxOlQ6ItjqEMGArZVX6dJc05Y5AtFglExDr7J48xCFLRiiI+0Ez3XwjGXjVGflPVqXc9R6w==
-X-Received: by 2002:a05:690c:c50d:b0:796:4486:b7d7 with SMTP id 00721157ae682-7964486c022mr20245177b3.26.1770604641852;
-        Sun, 08 Feb 2026 18:37:21 -0800 (PST)
+        bh=dzmTmGA9U4NoHGqPknBLmfObKJ7TSgXNKWJaNi5i9mw=;
+        b=RzuMhg4WdM/bHJUfcgf32Xq+ri3zghTdrjboclmHJll+ldszllsPL2z4/lmgC4MOCj
+         U+s0B8BxxP8g+rFkOe1D4e5KBIdHipTZTXW+OqReWaltXbjWVNtrFryJ7ob7dGhBAV/g
+         JmdnCwG0Qlx3NSLlYw7V1ZwOYG1hi31f6Br7U5VnQi7ON3AEvuXjU/bGYIey81MQxlSz
+         Nude8okIjXVtrEY5xEmSg5veXWe5Q5sXSxPsCZRVJQSt9qZdsh1CRikxp3ekvQcsh5DD
+         mzk8/wX6hMWCBcbQGdVj/akrtVwfbZFprm5sHSMyUbCAoLD+TUKMeI5dkRmKZ/m6b5oB
+         hFFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW9VX+wUlZcrhZAd3obK5bj4xchBtamodamI/ykmqTqEiueWk1Au8yb1FNnFnQvEMcXkfuFpsgVCr3hwUzSxZw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya7rC6qTKJAi284DIJ2iFi753ofNBST6T254nm7mkkQbaE+2Tt
+	KFCp3QBtoL8y22DHiSbCfqjT+/D2vpiMi/J3R2hTDprGLI7gfpyD8MSu
+X-Gm-Gg: AZuq6aI7Zyv2hjDAhCKitxquRlepZyeYb8/gEOf1cUznwQgU8E7tYm6nOdERaPlHrJ/
+	uh39aD+FrrcsMI+RVkOP3vU+jTKrh5UBgRmYsBfAzZzduMEZLNsakAduFlcjE0bTp839ll22yEQ
+	B886a84vt7wkwHvMH+w0AMUa39opYN+mTK5DWUcExKQLnts/sussbUod3MFZM/xfeKtmyFb/E5e
+	0tvdUko0Ykf8xPhm1Rt9+xeBvmhtLf73BttVeCtUIe2fLntgIYIL1UdP8UfouI17kci+Pjd5r99
+	11S9Kga+PnRXqIkeydvpmi4XnAL3cqhoMtyxdkjke1E45Mc8A8Z8nsNVyo3DuGA/9BUKRMcDk3j
+	Q/EWo+/mS5J4NTnsqLx7AYMOy6MjLUUJC7XLaK+QPkLLEjdTX+3jWJlN0QX/4XJwFlqVrWo817F
+	Vgk/b4m1vG7nnaBF1P7eb7eykkPEPBANaCOPvSAIr+ybPj37X7qARyhl32rLE=
+X-Received: by 2002:a05:690c:9b0a:b0:795:616:434e with SMTP id 00721157ae682-7952aa91578mr105276447b3.16.1770604778920;
+        Sun, 08 Feb 2026 18:39:38 -0800 (PST)
 Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-7952a1db63csm80694087b3.33.2026.02.08.18.37.21
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-7952a1d9b38sm80237017b3.27.2026.02.08.18.39.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 18:37:21 -0800 (PST)
-Date: Sun, 08 Feb 2026 21:37:20 -0500
+        Sun, 08 Feb 2026 18:39:38 -0800 (PST)
+Date: Sun, 08 Feb 2026 21:39:38 -0500
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Jakub Kicinski <kuba@kernel.org>, 
  davem@davemloft.net
@@ -75,12 +75,12 @@ Cc: netdev@vger.kernel.org,
  pavan.chebbi@broadcom.com, 
  linux-kselftest@vger.kernel.org, 
  Jakub Kicinski <kuba@kernel.org>
-Message-ID: <willemdebruijn.kernel.35e36b64302f9@gmail.com>
-In-Reply-To: <20260207003509.3927744-6-kuba@kernel.org>
+Message-ID: <willemdebruijn.kernel.743811e01cc@gmail.com>
+In-Reply-To: <20260207003509.3927744-7-kuba@kernel.org>
 References: <20260207003509.3927744-1-kuba@kernel.org>
- <20260207003509.3927744-6-kuba@kernel.org>
-Subject: Re: [PATCH net-next v2 5/9] selftests: drv-net: give HW stats sync
- time extra 25% of margin
+ <20260207003509.3927744-7-kuba@kernel.org>
+Subject: Re: [PATCH net-next v2 6/9] selftests: drv-net: gro: use SO_TXTIME to
+ schedule packets together
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,15 +92,19 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Jakub Kicinski wrote:
-> There are transient failures for devices which update stats
-> periodically, especially if it's the FW DMA'ing the stats
-> rather than host periodic work querying the FW. Wait 25%
-> longer than strictly necessary.
+> Longer packet sequence tests are quite flaky when the test is run
+> over a real network. Try to avoid at least the jitter on the sender
+> side by scheduling all the packets to be sent at once using SO_TXTIME.
+> Use hardcoded tx time of 5msec in the future. In my test increasing
+> this time past 2msec makes no difference so 5msec is plenty of margin.
+> Since we now expect more output buffering make sure to raise SNDBUF.
 > 
-> For devices which don't report stats-block-usecs we retain
-> 25 msec as the default wait time (0.025sec == 20,000usec * 1.25).
+> Experimenting with long sequences I see frequent failures when sending
+> 200 packets, only 50-100 packets get coalesced. With this change
+> up to 1000 packets get coalesced relatively reliably.
 > 
 > Reviewed-by: Petr Machata <petrm@nvidia.com>
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Does this require having FQ installed? I don't see any qdisc config
+in the GRO test.
