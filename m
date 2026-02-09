@@ -1,110 +1,113 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C812868AB
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Feb 2026 02:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702191B4138
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Feb 2026 02:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770604780; cv=none; b=tG1L6omBwCegKs1u29fvYsh5bWWUaOz3tqEvhUF/MG2qkZN7yPID+7OFpVI6fhkN4VPwuytWwAwoYPuBFQjyBKzkggSP3feHwkaygeypRSaTIYFdI1aRZrGdTQHuOXlSCGYlcmNTPv/Ui5cxRV4Z7W2nEN9nX1W2KgWmG9Mbp6w=
+	t=1770605583; cv=none; b=ZuBrroXRY5AbgOuD1wQBOIDQ4k+sgqVfAOwKwicAwyy/sp+2wCukA3tRwkr76xTDbKIswXtluBlNnykWoCRxv2Aj+/KvdO5LnyE/K63J9KD3r4w3uBS/V2SPMDj+FEgHxGK2IONim9/1xu5IvtqQtqMChIUqbsYBFXWwxPtf+9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770604780; c=relaxed/simple;
-	bh=Dyqcoo3l1nUDiS2sC0rr3LvrOLDTeVtTXp4q+Se3w7U=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Bi4KFrbFXWzgz5IaymNc2pHzZdxNsXVoDhwcXucgflPhwhUrLM4oSD1thnK2BER9T1ei/e+41UWa2jQ08rCn+Dtkp0huiMG/M+6WGG97BMRWCaypQVjYemaKhRrDkwqRPIAYRhYmNOM0oEAPA5wbfKHqgqdlSRpLcRNjZ9tg0Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iW0JAQoN; arc=none smtp.client-ip=209.85.128.170
+	s=arc-20240116; t=1770605583; c=relaxed/simple;
+	bh=dJFXZ8N4JWJZscr14sAaw3digTqHt1nANcFmMFYBbA0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sWhdc1u+nMCMWhCQ47V+rVSA9gwO8TrmBzgobE6xEd0AgleD14L9Aqb2Rf80ivhmqJ7zlDlrxFzcKWJLiQthlwqnFwF7AOP6Utkh4+GbpQSmRL5wPW+gf0xzt5zdNdCtAzLAOUIk7fLuAvxnBDEqGGxw9uSkVo94P8XMKjlZxpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fthIFe6m; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iW0JAQoN"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7964f1405a0so1105387b3.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Feb 2026 18:39:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fthIFe6m"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-354b79a9ad5so1099157a91.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Feb 2026 18:53:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770604779; x=1771209579; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dzmTmGA9U4NoHGqPknBLmfObKJ7TSgXNKWJaNi5i9mw=;
-        b=iW0JAQoNEjyVIt74uTX6YEW8f7CawiIJI5+TOTQzZ3PZPjMfo25MyJXUbCp3qDhS+v
-         On2NKGbWV/F3TsJQ0D8S90E7d+TohOYO4tJyFjOkUzJyMHVmoYtc7d/USggQmlJdX8yF
-         +6tD2m+SjUtiSyNk485wE749yreVi5GJoBg+t9dkQ11/jZcq8D4h53O5wUWwJZQvS2/D
-         N7DajpFHf9VlW/2uXoOs1B4gNW3bDQJHdPSeb3RM5O0LZ8gH+1e+h0fYp9xdv53Mm6bP
-         ngwsrbs+Ko8JHMH8133mY8Ino9beAIQiH65FMoGvemrdBmQ3j9HFC09EEcAmf7dl39wn
-         d6/A==
+        d=gmail.com; s=20230601; t=1770605583; x=1771210383; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PcQrXxB8xFn6uOssbnZNVp5Np7J4WmkCCnxi5G5T/ik=;
+        b=fthIFe6mIB3lavNYjMY29p6eQBfHltaPOa/QlQ3e9wPaWCVXxAItT01GlLHiWSkb5a
+         IHvlaHv8oEq70K+h5QiSD6tRY7kR9Y3GxnN5ixZ5qvjLJe9kPO89bKj0ztuMb0dx1hk7
+         iibT/jJOIowfgYjSttA4zRMLV7RVMCpendFOEpQ52bCV2PZT4YZKnz2TtJIe0EA40wvE
+         /6Vu1d5RsWrSBFLvSEIu8rV+ez9ahwtqttEEkOvKWevoa2KuKFjIT1qgbE9OLS+xcTVl
+         H9z8XE64o6sEzQ9Aq+kuLfoLNuGojLxFhkhhGDQNj6r51sogRqFJdBMunC0SjPuCOL4N
+         1GQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770604779; x=1771209579;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dzmTmGA9U4NoHGqPknBLmfObKJ7TSgXNKWJaNi5i9mw=;
-        b=RzuMhg4WdM/bHJUfcgf32Xq+ri3zghTdrjboclmHJll+ldszllsPL2z4/lmgC4MOCj
-         U+s0B8BxxP8g+rFkOe1D4e5KBIdHipTZTXW+OqReWaltXbjWVNtrFryJ7ob7dGhBAV/g
-         JmdnCwG0Qlx3NSLlYw7V1ZwOYG1hi31f6Br7U5VnQi7ON3AEvuXjU/bGYIey81MQxlSz
-         Nude8okIjXVtrEY5xEmSg5veXWe5Q5sXSxPsCZRVJQSt9qZdsh1CRikxp3ekvQcsh5DD
-         mzk8/wX6hMWCBcbQGdVj/akrtVwfbZFprm5sHSMyUbCAoLD+TUKMeI5dkRmKZ/m6b5oB
-         hFFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW9VX+wUlZcrhZAd3obK5bj4xchBtamodamI/ykmqTqEiueWk1Au8yb1FNnFnQvEMcXkfuFpsgVCr3hwUzSxZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya7rC6qTKJAi284DIJ2iFi753ofNBST6T254nm7mkkQbaE+2Tt
-	KFCp3QBtoL8y22DHiSbCfqjT+/D2vpiMi/J3R2hTDprGLI7gfpyD8MSu
-X-Gm-Gg: AZuq6aI7Zyv2hjDAhCKitxquRlepZyeYb8/gEOf1cUznwQgU8E7tYm6nOdERaPlHrJ/
-	uh39aD+FrrcsMI+RVkOP3vU+jTKrh5UBgRmYsBfAzZzduMEZLNsakAduFlcjE0bTp839ll22yEQ
-	B886a84vt7wkwHvMH+w0AMUa39opYN+mTK5DWUcExKQLnts/sussbUod3MFZM/xfeKtmyFb/E5e
-	0tvdUko0Ykf8xPhm1Rt9+xeBvmhtLf73BttVeCtUIe2fLntgIYIL1UdP8UfouI17kci+Pjd5r99
-	11S9Kga+PnRXqIkeydvpmi4XnAL3cqhoMtyxdkjke1E45Mc8A8Z8nsNVyo3DuGA/9BUKRMcDk3j
-	Q/EWo+/mS5J4NTnsqLx7AYMOy6MjLUUJC7XLaK+QPkLLEjdTX+3jWJlN0QX/4XJwFlqVrWo817F
-	Vgk/b4m1vG7nnaBF1P7eb7eykkPEPBANaCOPvSAIr+ybPj37X7qARyhl32rLE=
-X-Received: by 2002:a05:690c:9b0a:b0:795:616:434e with SMTP id 00721157ae682-7952aa91578mr105276447b3.16.1770604778920;
-        Sun, 08 Feb 2026 18:39:38 -0800 (PST)
-Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-7952a1d9b38sm80237017b3.27.2026.02.08.18.39.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 18:39:38 -0800 (PST)
-Date: Sun, 08 Feb 2026 21:39:38 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- shuah@kernel.org, 
- willemb@google.com, 
- petrm@nvidia.com, 
- donald.hunter@gmail.com, 
- michael.chan@broadcom.com, 
- pavan.chebbi@broadcom.com, 
- linux-kselftest@vger.kernel.org, 
- Jakub Kicinski <kuba@kernel.org>
-Message-ID: <willemdebruijn.kernel.743811e01cc@gmail.com>
-In-Reply-To: <20260207003509.3927744-7-kuba@kernel.org>
-References: <20260207003509.3927744-1-kuba@kernel.org>
- <20260207003509.3927744-7-kuba@kernel.org>
-Subject: Re: [PATCH net-next v2 6/9] selftests: drv-net: gro: use SO_TXTIME to
- schedule packets together
+        d=1e100.net; s=20230601; t=1770605583; x=1771210383;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PcQrXxB8xFn6uOssbnZNVp5Np7J4WmkCCnxi5G5T/ik=;
+        b=LJcS4z3D0Z9DpMVDim0hzOMtJycM3TvEoG+mngClVzyVFuHlFmADW91UQdkkgxqzoC
+         j72SPhQO7CXH31pRrbpqK/TTcTk03jcqfXmsZeOxVaRBdNgAtHsyfGZs8UsYUlYEqZvA
+         14MtoHxK3zsgMcbM9gz1ryR2HqpQntohre+RVapH9/FpsMtX95TtCjcACkfypBfyID1o
+         TDCT3kjmVhXf4ZMZGWKdLFZqvu9c3gwSWX4bAfqtYKNCJJcXZ7JlZ27tvnbNEzsf8wxn
+         gQfYe/8BscVtAspJ4GSQh3LAjj6KUbQ9Dvlr7vT0iZMzrieujFeHiKGVmdK67LnicGLj
+         Rt4g==
+X-Forwarded-Encrypted: i=1; AJvYcCWaYxXQj7CTrQGuZ8cwPcGHFw2rsQgTJM+4MtDEKI+suFmfBcGP4PCuwHKbLJt6OYcTlOPYFfuy6do6VGIepIg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjQ3DDwin/3Kqq7KjVdQUtziA3AqlLXoI/LvKLYB8BT/NuxgHR
+	tJt5zWu+qU+NMayYfAfjliN1QAzvj1Y+y4ZzuXGRD+f5GVUEmc0I86eK
+X-Gm-Gg: AZuq6aJa4wpzkN6KZeT62Qc/hf9Cclhzd/lgURsKqlkY23G5a7a1D8goEVjuNmi8wGt
+	SjQgw7bTXhUj7XZmpx+FFlEwDRc15vDtbew8g1lUdR9ufd6QqUeREXxZnTjT5SVSyu53GdfEhQp
+	US+XrzAg/iqOEgkokd2jPJGYG74uXbtbtlAXYsAvWFKQLrTgANk4wCqxGF5WP6RMV0QMWqR/VFt
+	Lk/ilTWt88g3s206Wy14JcXgnFKyD3+dMrMWGIz1o96w5wFPx4tRkNlUVD4SJ9G+o4gjr2jlGZo
+	vHz6pD+lGKw4cs7roH6o9fn9uwJe9vOlgKA7ZaqwGR6HBZ7QzUTklLNzeWcMCbZNCkagfSsWJta
+	WyHzwVCGntyoqQEVo9dirzYimprDc9T1dleZXsTt2yW3e3t8kMhVHdpIzqfkynzeurzzyXqVfea
+	5u/lzPnf+q+yx1KhDpH1DL7YQXxQr21/b9fkrQ5c5AMg==
+X-Received: by 2002:a17:90b:5648:b0:356:2c7b:c010 with SMTP id 98e67ed59e1d1-3562c7bdbc7mr4273704a91.11.1770605582741;
+        Sun, 08 Feb 2026 18:53:02 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35621177896sm6302649a91.15.2026.02.08.18.52.55
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 08 Feb 2026 18:53:02 -0800 (PST)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org
+Cc: chengkaitao@kylinos.cn,
+	leon.hwang@linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] bpf: Introduce the bpf_list_del API
+Date: Mon,  9 Feb 2026 10:52:48 +0800
+Message-ID: <20260209025250.55750-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski wrote:
-> Longer packet sequence tests are quite flaky when the test is run
-> over a real network. Try to avoid at least the jitter on the sender
-> side by scheduling all the packets to be sent at once using SO_TXTIME.
-> Use hardcoded tx time of 5msec in the future. In my test increasing
-> this time past 2msec makes no difference so 5msec is plenty of margin.
-> Since we now expect more output buffering make sure to raise SNDBUF.
-> 
-> Experimenting with long sequences I see frequent failures when sending
-> 200 packets, only 50-100 packets get coalesced. With this change
-> up to 1000 packets get coalesced relatively reliably.
-> 
-> Reviewed-by: Petr Machata <petrm@nvidia.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Does this require having FQ installed? I don't see any qdisc config
-in the GRO test.
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported.
+
+We propose introducing the bpf_list_del API, which allows users
+to directly remove a node from the list if the node pointer is
+obtained beforehand. This patch enhances the BPF list API,
+making it more list-like.
+
+Kaitao Cheng (2):
+  bpf: Introduce the bpf_list_del kfunc.
+  selftests/bpf: Add test cases for bpf_list_del
+
+ kernel/bpf/helpers.c                          | 19 +++++++++
+ kernel/bpf/verifier.c                         |  6 ++-
+ .../testing/selftests/bpf/bpf_experimental.h  | 11 +++++
+ .../selftests/bpf/progs/refcounted_kptr.c     | 41 +++++++++++++++++++
+ 4 files changed, 76 insertions(+), 1 deletion(-)
+
+-- 
+2.50.1 (Apple Git-155)
+
