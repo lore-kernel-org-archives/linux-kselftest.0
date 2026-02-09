@@ -1,124 +1,366 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013071.outbound.protection.outlook.com [52.101.72.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D144C37756D
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Feb 2026 16:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770653162; cv=none; b=uxT1YD5Ze2P19rkw+rYwX+9lBRHTOJF/kHwboOusjtM6L3dDhkc++LKNQJETkCKy5Qhlw8SdfTdsoOQPmEmkM863X8FoNcI7MZuJkbUbov7iXS4xj1R08sN9rvV1YFzkOZM4HxfBiXQA6tfNNC9XKmO1HpRvM0gzMP1qqzvhlnE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770653162; c=relaxed/simple;
-	bh=BThjGlM5C8zPKvz55IHhMJUZD/VwsIDK1vbQ1XU3Ok4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qv4amRZjhMZzxjDzDobTwCSc9snTlwSooSVzAtCGe4915duXOweSy4c2rzZLi8QgYLALvLtuCLIf6PYmhuYVGQHMWKPb9Bn4h/q8L/YfMtjlGK9ON51+x5rVMqmb1bcISqUtWJUR3kJaO13f4bT9nsCq+YHKJ6oTUOLLzd+khR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D8nd+jX/; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BDF3806B2;
+	Mon,  9 Feb 2026 16:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770653633; cv=fail; b=dfhS//xr64kOyrV8E1y7SUJBg5wWrywnQ0mwawinzR6d0TXkdpwV+f++1o2ZXxD5fpoH0fFWwfE2gy4OMaxWUd4kztQm4U5Sy68cDgZPL93A/JCUpnGUShD4dGit2vi5r8JIZEBUCU9kg2ndL6rbGVuYNh70BosIljs7y6QUo8E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770653633; c=relaxed/simple;
+	bh=xHCRqET5ELhYlkT12CRlSDku/FSdOuk3eQ2v8BYkDSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=nYLbp0ebmUswu7FJ40cZCUx9ZXaukMyGNswfc1zJ89pOWZ9v+BslxIeJ9tm92sOuwNNBWGmTLagTU8JIt56l/SdT6OBQwikcsJgiftzMwY9mgboV0HqVrVPj380zwaMlYAqieDItRjNzg5uI1vtj6nuhGJkw0Acz1KT9GQ7Cwkk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=A4+M+Pg+; arc=fail smtp.client-ip=52.101.72.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D8nd+jX/"
-Date: Mon, 9 Feb 2026 16:05:41 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770653150;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=af799B6iT69sVNLhSxX5YpPxUpFdRI/IblJVCoe32D4=;
-	b=D8nd+jX/3qo4KRUlNmdG/X0YljkyI0Kmm2cCTh+dqBrYgfU71jpTAPMBOT4ohutdr4W/DQ
-	l+vkO0zDbfpoZrx2XeeQ3VYeoa6geIPLZJKLtLG7O1FdtkUDSLRB4oxGw6yp0s1EWdxfTm
-	u+lfhSZDc9We2qVP9tN5K9g/yKvBdLo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jim Mattson <jmattson@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 1/8] KVM: x86: nSVM: Clear VMCB_NPT clean bit when
- updating g_pat in L2
-Message-ID: <mfejpune47o6ebsbv4bpn6qlgpwcc5rld3tik4c7xp7odxfa5u@w7ovavcrxn43>
-References: <20260205214326.1029278-1-jmattson@google.com>
- <20260205214326.1029278-2-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="A4+M+Pg+"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MvV7uouHZrZShwe/LsHPOV/AeCgrR9F/fgbW0za+RSES8UtiIKYCeglULBMIUakmh6bB4wpLTmH24EiE/ZCCIp8jN/RScAkxDTYTZ60t1WIYM4Ns0bPc5FuWp7QVd0YjuH/w+5hCxCxnCQIZsoyoQdCizCMroPjtqtZjjh6NteGsv5IKsED64a5JTM1FJ3qhV2N6ShM4VDXj20tD+tCD4di2rn22yFlxMrdgrajM9hxUHeY6lD1gRoecderF2GJF8VyrXyWONT+vWn08wGHOcpU22F42gwKsSes/VBFYdM2+45A7MQYm0UGiQQbIaI2SDF3lv9on0wCmxXpvjn13Nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wD9dN7jr7gbljHzyPNpfjroGONPjCsK9VBhFRtZR/AA=;
+ b=Ik02yfRlAlKNZ08tZa650XqLhPDP6Zy/H0DaD5M5xJVfzyug4O2aEYZpt5Y1jYdmMqXC1mawtDFmGIBxTX+/qJEAqIPeEKuCg0geCa26tkV9iU1XgQCchO52v06GtZRVMl6S+Ncl41czI6dpN06omVkh1+14SUDPtU/sS9XQGAr78/8iOeIdLo1FGQWWB7GBQF+cROnZNFqQYCqvsnnI31nCHlZwSeVDGxWddLIqLm+QeYXkZo9u4yg9Gp7cHO0C7HT/LKJ33zR8BMZCT9ajgb5BC9fynGbIES8n+K0dTNKn9PYlxIY9vx26LOhakHyiAOIwXCtcu6TuEwhjKTFmig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wD9dN7jr7gbljHzyPNpfjroGONPjCsK9VBhFRtZR/AA=;
+ b=A4+M+Pg+z8HPTM2lqBjhHYQoPKa/OF6gLzTbULFaYRRTLUzT9HewNQ7eCDPZ8qr+KmoQRxUsVDkchxFOBDExjQBmYs0FDuc6Ah5Cm1XkFbdkLaJc0Cepq8yzVmDIhuBEbuQzqBTKseUXKVUkTJeexGYl/+ui8G+VWNJgFAZNCZ9aoWqzXmNhoAtvJjxuUN4Yfhajc6sSoC8d23ZZhchXNRZDMVvLWiJymKxT/GIU9EstfeYS8YdYcv5/5eLtHxLxEWKM0x1pQz2P4DStlDH9XKJ5jgYmISLMnnJ5PSg6paTB4MAkBIZ6CXj8Zfxz7wHlFU3vAgg3yepvYPKvuIL9yg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
+ by PA1PR04MB11532.eurprd04.prod.outlook.com (2603:10a6:102:4e0::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.18; Mon, 9 Feb
+ 2026 16:13:50 +0000
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9587.010; Mon, 9 Feb 2026
+ 16:13:50 +0000
+Date: Mon, 9 Feb 2026 11:13:40 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Koichiro Den <den@valinux.co.jp>
+Cc: vkoul@kernel.org, mani@kernel.org, cassel@kernel.org,
+	jingoohan1@gmail.com, lpieralisi@kernel.org, kwilczynski@kernel.org,
+	robh@kernel.org, bhelgaas@google.com, kishon@kernel.org,
+	jdmason@kudzu.us, allenbh@gmail.com, dmaengine@vger.kernel.org,
+	linux-pci@vger.kernel.org, ntb@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/8] dmaengine: dw-edma: Cache per-channel IRQ and
+ emulation doorbell offset
+Message-ID: <aYoHtP5dsEHQEm7c@lizhi-Precision-Tower-5810>
+References: <20260209125316.2132589-1-den@valinux.co.jp>
+ <20260209125316.2132589-3-den@valinux.co.jp>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260209125316.2132589-3-den@valinux.co.jp>
+X-ClientProxiedBy: SJ0PR03CA0171.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::26) To PA4PR04MB9366.eurprd04.prod.outlook.com
+ (2603:10a6:102:2a9::8)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205214326.1029278-2-jmattson@google.com>
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|PA1PR04MB11532:EE_
+X-MS-Office365-Filtering-Correlation-Id: 909fa51e-4089-4028-a9ef-08de67f6361d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|19092799006|376014|52116014|7416014|1800799024|38350700014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ZHfEh2PuNBtqNgnG9A03dzDUHYZyivaKKoUv3T60gebY5kU9OIXG03oWhmd0?=
+ =?us-ascii?Q?E5UQnQEU6fEvYmmw6HdZfQr6relGltj/vBOA4I6Lcs3M3VmCqoEslUamSKzn?=
+ =?us-ascii?Q?6Nu0TTK2kXTonVFuXSiLbpFag3/14hORjXjbBJzFgI+74pHuByS1UAMHIIZO?=
+ =?us-ascii?Q?sWqEvUDulaCirDPVuXPcI7pBHK+WJjWF9pETskoZmIrM8kjWQANNO0vV3mZL?=
+ =?us-ascii?Q?imF1mh5bwgPRMd2J9p2X4ySK7PtVsIaM4luPDgidXAhRo3C3o/Egd46lIsh6?=
+ =?us-ascii?Q?VqNn4/PlP1pN9a7pCbTi/P8ct5vDO8P2V2q9QoJ7Iq/cLy0e7KKA1DDpfRhz?=
+ =?us-ascii?Q?PPPGM73A/GpVK1XGo4yTf7i8fTHgzkgNcWwZ+5TqAsb+Jlxq/2MpIstmDWKb?=
+ =?us-ascii?Q?oDcUpanYeVCDwLxNfbwGABi3H2OrSY5W0XXYoFemaYU5eh+yqsaCjyvu+ail?=
+ =?us-ascii?Q?v94lufpofuwe1G7qvLX4uyhIcCTs3ysFfYHOvjLZGdP4SPV6mTZAGNU8s1GI?=
+ =?us-ascii?Q?Jj3gECNmYqkpbS5yxbwIdkje6KsfWyR9Y6FX00kYQztH3olPxl5RzJhBELp3?=
+ =?us-ascii?Q?CmExdrAA/0eE/GiPMKvXYA/3JGCKb0QxK7DZ3nv1Mj8pLbe4ZEmZZ1eTMPj7?=
+ =?us-ascii?Q?6wQ9siWECV1X+/Gh+ZRCSb0abDcGZKoo8ia3t8AlYZ0pCj+VNmFM0u1H1xtw?=
+ =?us-ascii?Q?dvmC3TKRCQXzaCWe+ycaNnKmaGuPo0B8yFd7bMj/8TWTDi5kA8cfsg8Bi7tZ?=
+ =?us-ascii?Q?tHVLeFipDn8zXUgcDbZUUQ6DclgfDhpPhaPBgqIZ09EIpydp2bdWvWMUBlCQ?=
+ =?us-ascii?Q?xCix0j5jPnBfgZXBu9hRLe3+g/X1IB0EZQtMjqVFLoVmZ9PcSVCIYGvBC3uO?=
+ =?us-ascii?Q?/NUvE4QadA2lh5eG5ZB/erNtoKuzUBGLWDqRgu1srQ0tPF0PkanykE3S3H29?=
+ =?us-ascii?Q?UAcbDd5Nf9W1irnCZcUhCoudZEsDWR4ZZdcCrZP/fmpjx/WIuXY0qbgtjASD?=
+ =?us-ascii?Q?TVLzvaB3HTmIoNZ68YuQw/ah6ciApgoO9mWO+u8WVOg7Gss1qxeotjzer0/u?=
+ =?us-ascii?Q?zbrDum/cbiumyDLzifrwZ9oR/6I6szEX7Y+GlpW8kodk06OuicTY/Ky5yio7?=
+ =?us-ascii?Q?q47fBL/z+QVDEuszscaNFCJlq5HSMyGvweGrtq+RWw+qn1QdE73TWIS6m+RA?=
+ =?us-ascii?Q?4A/dNU727snV1MfX/khnBsMjV3ey9QLK2nmJbRvKg9Q/vKBhEzbEhHUpq9Ml?=
+ =?us-ascii?Q?B0m4tiOx5GPM+5lh9oEJ9jFHcv2QCrMoLocc+D93zla4JqP0S+FxhmfZdN7j?=
+ =?us-ascii?Q?v7GhBtlfGWq4DXoanxgFabUnIF5IsEOeKZ5EAhTFTyaoJnsrGqiM7ctSi1/+?=
+ =?us-ascii?Q?IXSqSYpIpuzLQQoLc/aMpJeM4zqgOYvlxIeCTV9lyGswzvXDxMAzwQdXKeDq?=
+ =?us-ascii?Q?GOyF6VzgNDWkH+sFqkwqo/mQa6Ja8tLUHuvZU0vdPAMCq8CanOYh2wZ1fSGv?=
+ =?us-ascii?Q?qqPlMxMWhdkdBx1cpI0CJEJw77n67MXkCcmbIvgfFxZxSMx0Y3bCncYMVJm3?=
+ =?us-ascii?Q?VYNA1h9pNRN6XOjqFO17CHdzUBNCvWWaFPX2S8kUwuw1OqIZhqdocI2PZ5f/?=
+ =?us-ascii?Q?3nzmlZ8yAhGMmiuwACmrQBE=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(376014)(52116014)(7416014)(1800799024)(38350700014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?HTYk33ziAUrvuC3X4VK4IiyiFu7wI+JUmYFshsr4HwbTyfQNQZV6tIWSirDL?=
+ =?us-ascii?Q?1aCZYwpgZoc4/HvMzYZIZUID8PW/679RqhtoFoJYGxbQRziK2jQBrEWYeQq3?=
+ =?us-ascii?Q?K/2SSvCtrnYT0l2UImq2stxbZQBhBJE0UUI5HEtuGXP1dCqewLFIUKhafwUi?=
+ =?us-ascii?Q?GGa4OsDWpzMGY5o9eIm+bv2M6l1/ztBJ+DcgqGP3iZxUI52RCbi1n44HbGvC?=
+ =?us-ascii?Q?wV4iuprEL2Ki7nrsXNGhWbLF5oQtrrVtgTc6JDAw5/gK1OsvKik96Kz+utCb?=
+ =?us-ascii?Q?SCLhoU5r1q2fymUAJUSwLIuUAIh1L4C1lQFSUA657ugzF/CCy2Ay35urVMmL?=
+ =?us-ascii?Q?sxPTSDPhN3CEt3w38GVfyiFyPDo4UHBfTje2n3WuheTWl8TwmtykA1wzGcBz?=
+ =?us-ascii?Q?7FezRSNYrmlxPA2UBZFqgFCC72QPYliP1A0OgWdf0ciEqaqM4sX0wXrfgVJ3?=
+ =?us-ascii?Q?J/4LDRLIs8LLaozeOYoSooaUBR6zrmkg0U2/GEvRj1722gfW3HFmC9OITMfA?=
+ =?us-ascii?Q?TRrvfA0gQAkLPIXYuP5VrHPFShfm9XvfzvHtIz1n51r4+0790XecdFr1QQkz?=
+ =?us-ascii?Q?B1jwwJX46WaDSsU5QG6e03/+sa7EU9An9kOtgNpkyVIhGATASrukvp4HCOfT?=
+ =?us-ascii?Q?avZ/3NS3FuE7NhyKROtIR6JEXCiQJ7KvbKg6tRtsMp+Z5ZULQR6b7jhfY5ZX?=
+ =?us-ascii?Q?uZHXuHfcw/RkoDAOmNo/wmucteTEDic079QUM9F+roQFo+QqV5ox7ZVguXxW?=
+ =?us-ascii?Q?r5+uaScvF5IkfiVfiCaLC18Rx7HPEj6wCWTpz7b0PjFZ6kvDU2ygtfX6CITp?=
+ =?us-ascii?Q?7c1YFARsUQOz+eoq2SRH4qP0xShnFeweINaTX7ev6S/QyE++L/0sCeOuEyB6?=
+ =?us-ascii?Q?/OI20aFVLR8OjoxsFhWFrUcLSek2fEs6yE2e839e2W8z8KxwnzkZMWYvTccm?=
+ =?us-ascii?Q?0iAd8urMdW6L1wh5bCUBk9TiGubA6oCXHcm1iF1ZiToPLyubiFIUnHpttZL0?=
+ =?us-ascii?Q?2TLaUPqh52prX3B4OwxfK0+O0+R00qIr07OkVvpvEItKg9HZxiBt5pv6ky4R?=
+ =?us-ascii?Q?+h/pM2jvv41gZtKCQzjjodJsO2dNf3+PRuTO9aXYv5O6bbhSR3d8hNfqNHFh?=
+ =?us-ascii?Q?bfY9ns8OZELaAV/KxzjjRUgHzGTGgPoA43gDHfTjGylvzTTU1vmx3ixqdgqS?=
+ =?us-ascii?Q?kR4hpJPWY8w8xixR7TJxptyaMz4YjyXDtgSOQL04eDz0heM2bDZZpJOTQFWb?=
+ =?us-ascii?Q?DgGWho8p0zhMeAasnoKmYr+AIK4pkC1cP09ooy3VFYdMc77uFhtMRIw+ptSl?=
+ =?us-ascii?Q?XozC/G/QD84bR7r+fA7BNK0b0mQJlRzE+S/eTNSjQXUwFLQrt8Jb1idoVUvA?=
+ =?us-ascii?Q?jONf1RYZo+Wcm2ewc9LsodbHCinaB1oTvcpUTATOtFzoHMLgPduUAoZRWNaY?=
+ =?us-ascii?Q?aU+/QdcWlYbNEaUb1m8xffC33fi23xiDgX12zclWOMFWA8sk0Q/xFAOzaGCn?=
+ =?us-ascii?Q?MIF98dU1hrRGoSchINf/D8jv06HOW6BHHuxvbz2Xu2YSanVYeIp6qCHBNqK0?=
+ =?us-ascii?Q?RJwOxqyO1qWRFWwr+j4urDpkRojL5EJMFHMxbspM+KG9vI9H1RDNdcDS0odN?=
+ =?us-ascii?Q?s8pyLR11xVWJB/DueOoz/MBtkwtJEi2vAMNCU/aMq7lzlWHPq4t3vABYYaUE?=
+ =?us-ascii?Q?P+r1O1OHJjIXBAXyTesX1S8FiTy5wuPgtJLZIpFD5ZISI8UG?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 909fa51e-4089-4028-a9ef-08de67f6361d
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2026 16:13:50.2305
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WlY9aZiWfqiX+ImUnWtW+xofCNutKpVLvbnTuhV1AeNWoQWCnv0zHyGqVye8IlxJ2XRHnp4cP8331blZY0J/Mw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB11532
 
-On Thu, Feb 05, 2026 at 01:43:01PM -0800, Jim Mattson wrote:
-> When running an L2 guest and writing to MSR_IA32_CR_PAT, the host PAT value
-> is stored in vmcb01.ptr->save.g_pat, but the clean bit was only being
-> cleared for svm->vmcb, which points to vmcb02 in guest mode.
-> 
-> Introduce the helper svm_set_vmcb_gpat() which sets vmcb->save.g_pat and
-> marks the VMCB dirty for VMCB_NPT. Use this helper in both svm_set_msr()
-> for updating vmcb01 and in nested_vmcb02_compute_g_pat() for updating
-> vmcb02, ensuring both VMCBs are properly marked dirty.
-> 
-> Fixes: 4995a3685f1b ("KVM: SVM: Use a separate vmcb for the nested L2 guest")
-> Signed-off-by: Jim Mattson <jmattson@google.com>
+On Mon, Feb 09, 2026 at 09:53:10PM +0900, Koichiro Den wrote:
+> Some DesignWare PCIe endpoint controllers integrate a DesignWare
+> eDMA/HDMA instance. In remote eDMA use cases (e.g. exposing the eDMA
+> MMIO window and per-channel linked-list regions to a peer via BARs),
+> consumers need a stable way to discover:
+>   - the Linux IRQ number associated with a given channel's interrupt
+>     vector,
+>   - an offset within the eDMA register window that can be used as an
+>     interrupt-emulation doorbell for that channel.
+>
+> Store the requested Linux IRQ number in struct dw_edma_irq at IRQ
+> request time and cache per-channel metadata in struct dw_edma_chip
+> (ch_info_wr/rd) during channel setup. Add a core callback, .ch_info(),
+> to fill core-specific metadata such as the doorbell register offset;
+> implement it for the v0 eDMA core (use rd_int_status as a suitable
+> doorbell target) and provide a placeholder for HDMA until the correct
+> offset is known.
+>
+> No functional change for normal DMA operation. This only makes the
+> metadata available to controller/platform drivers that need to expose or
+> consume eDMA-related resources.
+>
+> Signed-off-by: Koichiro Den <den@valinux.co.jp>
 > ---
->  arch/x86/kvm/svm/nested.c | 2 +-
->  arch/x86/kvm/svm/svm.c    | 3 +--
->  arch/x86/kvm/svm/svm.h    | 6 ++++++
->  3 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index de90b104a0dd..f72dbd10dcad 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -636,7 +636,7 @@ void nested_vmcb02_compute_g_pat(struct vcpu_svm *svm)
->  		return;
->  
->  	/* FIXME: merge g_pat from vmcb01 and vmcb12.  */
-> -	svm->nested.vmcb02.ptr->save.g_pat = svm->vmcb01.ptr->save.g_pat;
-> +	svm_set_vmcb_gpat(svm->nested.vmcb02.ptr, svm->vmcb01.ptr->save.g_pat);
+>  drivers/dma/dw-edma/dw-edma-core.c    |  9 +++++++++
+>  drivers/dma/dw-edma/dw-edma-core.h    |  9 +++++++++
+>  drivers/dma/dw-edma/dw-edma-v0-core.c | 11 +++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c |  8 ++++++++
+>  include/linux/dma/edma.h              | 17 +++++++++++++++++
+>  5 files changed, 54 insertions(+)
+>
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index fe131abf1ca3..bd5ff4a4431a 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -760,6 +760,7 @@ static int dw_edma_channel_setup(struct dw_edma *dw, u32 wr_alloc, u32 rd_alloc)
+>  {
+>  	struct dw_edma_chip *chip = dw->chip;
+>  	struct device *dev = chip->dev;
+> +	struct dw_edma_ch_info *info;
+>  	struct dw_edma_chan *chan;
+>  	struct dw_edma_irq *irq;
+>  	struct dma_device *dma;
+> @@ -779,9 +780,11 @@ static int dw_edma_channel_setup(struct dw_edma *dw, u32 wr_alloc, u32 rd_alloc)
+>  		if (i < dw->wr_ch_cnt) {
+>  			chan->id = i;
+>  			chan->dir = EDMA_DIR_WRITE;
+> +			info = &chip->ch_info_wr[chan->id];
+>  		} else {
+>  			chan->id = i - dw->wr_ch_cnt;
+>  			chan->dir = EDMA_DIR_READ;
+> +			info = &chip->ch_info_rd[chan->id];
+>  		}
+>
+>  		chan->configured = false;
+> @@ -807,6 +810,10 @@ static int dw_edma_channel_setup(struct dw_edma *dw, u32 wr_alloc, u32 rd_alloc)
+>
+>  		irq = &dw->irq[pos];
+>
+> +		/* cache channel-specific info */
+> +		dw_edma_core_ch_info(dw, chan, info);
+> +		info->irq = irq->irq;
+> +
+>  		if (chan->dir == EDMA_DIR_WRITE)
+>  			irq->wr_mask |= BIT(chan->id);
+>  		else
+> @@ -910,6 +917,7 @@ static int dw_edma_irq_request(struct dw_edma *dw,
+>  		if (irq_get_msi_desc(irq))
+>  			get_cached_msi_msg(irq, &dw->irq[0].msi);
+>
+> +		dw->irq[0].irq = irq;
+>  		dw->nr_irqs = 1;
+>  	} else {
+>  		/* Distribute IRQs equally among all channels */
+> @@ -936,6 +944,7 @@ static int dw_edma_irq_request(struct dw_edma *dw,
+>
+>  			if (irq_get_msi_desc(irq))
+>  				get_cached_msi_msg(irq, &dw->irq[i].msi);
+> +			dw->irq[i].irq = irq;
+>  		}
+>
+>  		dw->nr_irqs = i;
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.h b/drivers/dma/dw-edma/dw-edma-core.h
+> index 50b87b63b581..82f8f3b38752 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.h
+> +++ b/drivers/dma/dw-edma/dw-edma-core.h
+> @@ -93,6 +93,7 @@ struct dw_edma_irq {
+>  	u32				wr_mask;
+>  	u32				rd_mask;
+>  	struct dw_edma			*dw;
+> +	int				irq;
+>  };
+>
+>  struct dw_edma {
+> @@ -127,6 +128,7 @@ struct dw_edma_core_ops {
+>  	void (*ch_config)(struct dw_edma_chan *chan);
+>  	void (*debugfs_on)(struct dw_edma *dw);
+>  	void (*ack_emulated_irq)(struct dw_edma *dw);
+> +	void (*ch_info)(struct dw_edma_chan *chan, struct dw_edma_ch_info *info);
+>  };
+>
+>  struct dw_edma_sg {
+> @@ -216,4 +218,11 @@ static inline int dw_edma_core_ack_emulated_irq(struct dw_edma *dw)
+>  	return 0;
 >  }
->  
->  static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12)
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 5f0136dbdde6..08f145eb9215 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -2939,10 +2939,9 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
->  		if (ret)
->  			break;
->  
-> -		svm->vmcb01.ptr->save.g_pat = data;
-> +		svm_set_vmcb_gpat(svm->vmcb01.ptr, data);
->  		if (is_guest_mode(vcpu))
->  			nested_vmcb02_compute_g_pat(svm);
-> -		vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
->  		break;
->  	case MSR_IA32_SPEC_CTRL:
->  		if (!msr->host_initiated &&
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index ebd7b36b1ceb..986d90f2d4ca 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -420,6 +420,12 @@ static inline bool vmcb_is_dirty(struct vmcb *vmcb, int bit)
->          return !test_bit(bit, (unsigned long *)&vmcb->control.clean);
->  }
->  
-> +static inline void svm_set_vmcb_gpat(struct vmcb *vmcb, u64 data)
-
-Nit: vmcb_set_gpat() is probably more consistent with other helpers
-(e.g.  vmcb_set_intercept() and vmcb_set_seg()).
-
+>
+> +static inline void
+> +dw_edma_core_ch_info(struct dw_edma *dw, struct dw_edma_chan *chan,
+> +		     struct dw_edma_ch_info *info)
 > +{
-> +	vmcb->save.g_pat = data;
-> +	vmcb_mark_dirty(vmcb, VMCB_NPT);
+> +	dw->core->ch_info(chan, info);
 > +}
 > +
->  static __always_inline struct vcpu_svm *to_svm(struct kvm_vcpu *vcpu)
->  {
->  	return container_of(vcpu, struct vcpu_svm, vcpu);
-> -- 
-> 2.53.0.rc2.204.g2597b5adb4-goog
-> 
+>  #endif /* _DW_EDMA_CORE_H */
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
+> index 82b9c063c10f..0b8d4b6a5e26 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
+> @@ -519,6 +519,16 @@ static void dw_edma_v0_core_ack_emulated_irq(struct dw_edma *dw)
+>  	SET_BOTH_32(dw, int_clear, 0);
+>  }
+>
+> +static void dw_edma_v0_core_ch_info(struct dw_edma_chan *chan,
+> +				    struct dw_edma_ch_info *info)
+> +{
+> +	/*
+> +	 * rd_int_status is chosen arbitrarily, but wr_int_status would be
+> +	 * equally suitable.
+> +	 */
+> +	info->db_offset = offsetof(struct dw_edma_v0_regs, rd_int_status);
+> +}
+> +
+>  static const struct dw_edma_core_ops dw_edma_v0_core = {
+>  	.off = dw_edma_v0_core_off,
+>  	.ch_count = dw_edma_v0_core_ch_count,
+> @@ -528,6 +538,7 @@ static const struct dw_edma_core_ops dw_edma_v0_core = {
+>  	.ch_config = dw_edma_v0_core_ch_config,
+>  	.debugfs_on = dw_edma_v0_core_debugfs_on,
+>  	.ack_emulated_irq = dw_edma_v0_core_ack_emulated_irq,
+> +	.ch_info = dw_edma_v0_core_ch_info,
+>  };
+>
+>  void dw_edma_v0_core_register(struct dw_edma *dw)
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> index e3f8db4fe909..1076b394c45f 100644
+> --- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> @@ -283,6 +283,13 @@ static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
+>  	dw_hdma_v0_debugfs_on(dw);
+>  }
+>
+> +static void dw_hdma_v0_core_ch_info(struct dw_edma_chan *chan,
+> +				    struct dw_edma_ch_info *info)
+> +{
+> +	/* Implement once the correct offset is known. */
+> +	info->db_offset = ~0;
+> +}
+> +
+>  static const struct dw_edma_core_ops dw_hdma_v0_core = {
+>  	.off = dw_hdma_v0_core_off,
+>  	.ch_count = dw_hdma_v0_core_ch_count,
+> @@ -291,6 +298,7 @@ static const struct dw_edma_core_ops dw_hdma_v0_core = {
+>  	.start = dw_hdma_v0_core_start,
+>  	.ch_config = dw_hdma_v0_core_ch_config,
+>  	.debugfs_on = dw_hdma_v0_core_debugfs_on,
+> +	.ch_info = dw_hdma_v0_core_ch_info,
+>  };
+>
+>  void dw_hdma_v0_core_register(struct dw_edma *dw)
+> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> index 3080747689f6..921250204a08 100644
+> --- a/include/linux/dma/edma.h
+> +++ b/include/linux/dma/edma.h
+> @@ -60,6 +60,19 @@ enum dw_edma_chip_flags {
+>  	DW_EDMA_CHIP_LOCAL	= BIT(0),
+>  };
+>
+> +/**
+> + * struct dw_edma_ch_info - DW eDMA channel metadata
+> + * @irq:	Linux IRQ number used by this channel's interrupt vector
+> + * @db_offset:	offset within the eDMA register window that can be used as
+> + *		an interrupt-emulation doorbell for this channel
+> + */
+> +struct dw_edma_ch_info {
+> +	int			irq;
+> +
+> +	/* Fields below are filled in by dw_edma_core_ops->ch_info() */
+> +	resource_size_t		db_offset;
+> +};
+> +
+>  /**
+>   * struct dw_edma_chip - representation of DesignWare eDMA controller hardware
+>   * @dev:		 struct device of the eDMA controller
+> @@ -96,6 +109,10 @@ struct dw_edma_chip {
+>  	struct dw_edma_region	dt_region_wr[EDMA_MAX_WR_CH];
+>  	struct dw_edma_region	dt_region_rd[EDMA_MAX_RD_CH];
+>
+> +	/* cached channel info */
+> +	struct dw_edma_ch_info	ch_info_wr[EDMA_MAX_WR_CH];
+> +	struct dw_edma_ch_info	ch_info_rd[EDMA_MAX_RD_CH];
+> +
+
+suppose this info only used in side dw edma driver, so it should be in
+dw_edma.
+
+dw_edma_chip is useful to exchange informaiton between EPC/PCI controller
+and dma engine when call dw_edma_probe().
+
+Frand
+
+>  	enum dw_edma_map_format	mf;
+>
+>  	struct dw_edma		*dw;
+> --
+> 2.51.0
+>
