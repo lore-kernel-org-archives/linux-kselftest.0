@@ -1,196 +1,170 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D69C1D7E5C
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Feb 2026 18:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9C519D89E
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Feb 2026 02:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770576545; cv=none; b=f9Pi0QXGWsSimmrQjc54FuOWasT+8Yzk31AC5ScpJ65HEh7dLaiApwL0Q2YsB+NTlBLJt6MVFOBp9gBgFrhjtfLEeQ72LBQm6Y/rRWzXI7J4M4587NAqalo/7LO+eMM4AcOXGTEHw2thrXIz8hW3AARW3tUtUAuNnvXDQHqHiLg=
+	t=1770603667; cv=none; b=rBx7nQ8ozcfPNR3hPRhJJUpWLl96bpH2KxRP29EaAoyQNN0i7CUpDeRUi0/VQ9+UzQs3qOLumFedv0mOR+nrA31I/7d0GE6+6xjkGcBzGoJ5ToKUKTpFYjgJAX1lgMjOQ3K7lwEJ6zJT3dwC+jG/iZ1ZYxgBvGL7jG19PdC9ybU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770576545; c=relaxed/simple;
-	bh=jbkOKX+7We/ed814ylwi+VmJ5YtwoCud7lki6vAYny8=;
+	s=arc-20240116; t=1770603667; c=relaxed/simple;
+	bh=36vmme40spUORRRGja9cLP0VDiz/9cWAynETdXfq024=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c2D+To1sLLJLpwYxm/7rVViYyfae408zUML8X2WhfTqiGKxHPTkbkC9YTRFnnfMi4QYTAmUuaNPlwcJeASTQ4UaNbYTdxhQks3eGPfREonMOd53ErpTDoNI5ajmuD5oZqkWzDbap+dHmhJyhtPw0jVDV3pzKYGDaGeDewHzKlsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FLieK65i; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=deyEVCGFvM3dO4awmVrpIh0xL2SklRVDhPYUx0/LSy1vGY8nIP6Ja5vBQ5ejG+/J/PAly7IbSXlvvGYREefJ7syR2XWKVgtBNwITiZLPvhfgket1YCCUnyCAWLy7eKUQDJFos4nXgt26BD4gJS51VFWWioiC78FuEEK7vRyZGQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aLXexndb; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FLieK65i"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-823f9f81da5so1908808b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Feb 2026 10:49:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770576545; x=1771181345; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ut1sGkenUeI9BD3BBVG16G8F8nlxjScJIq5pNB0m984=;
-        b=FLieK65iSaA/+VgvWYvFCayVU/+JRn820zw0FFXth/biRGJS2kSErdw8/wq3tx12D/
-         Rop91pNnaDBdpldVStOsUu/sP50hpI2LT1v9qJc5xLA6x5tfM+DVe5ksQUi0dIwKVWpn
-         3ZV2jfRbcodYIDLE/FyEzGVWiXRBRIYX2bzkGlBR6vDcG6zl9toKrxHpdVDaZGxevRn1
-         aHF83doVlN+sVLNGs8JzYQJhnYmYyLQQ+x0mCSvMWw1znyZJSCvkGeRTPmuto5M02Dmn
-         xN3wRng7vqwksKnlGGk0idnttjqyGCtrng0BI7xq2im6lX/5RJUMVVjjmy2A7VCRMq6D
-         szew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770576545; x=1771181345;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ut1sGkenUeI9BD3BBVG16G8F8nlxjScJIq5pNB0m984=;
-        b=tQnFnVEfN1kt0gH634K2Jh71RlUQPYSq1C8LMoyTk+9EmuF/L7wN/4BB0/ZZRz2nKZ
-         gfoOupv/dlzCwUfHy/U5QkICKkI4igDO0ZCYJs1TCQROQJGeCaHWaBS9233c6cGHEzOM
-         45KYnxDAdEDC+yUMaHbiqcE0Z/wxlkLM7L7WmUJhtnzLp/xhIw9FAFESo9aoMxkQCZ/y
-         uiIBKDTUhYbSf21lTHXZBq/Hp1d8KhpDbwIF3QwpPz8+UHmepaOPBMF174JYOZtWoZh3
-         6VIrv2lJDPalqiEyHV1bkj0oThBL+Bq1HtqZ1x+Hfxb6bDXHuPQ0vmWKRnvvZz9R3Num
-         pFIw==
-X-Forwarded-Encrypted: i=1; AJvYcCXs4gFHcc803ryW7HA9hcZA4PV7QffkU0OHw/KyS/TDt9bwSXb/jopJNp40XdlCKX+uFtsk9P2wnIWdEvrkaMo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyF1UcEBMzvwxzjbfsAEgkqSD9npVvBA3aLa5NpVzvy5maPbziK
-	tGXFC0VONVoZ2/sVExI5tHh6FWt7EKCQaKpdvnKnY+o1eecLkyZGGRSs
-X-Gm-Gg: AZuq6aJxOOTLx6OFRuxSBKNOHt8v5oKiflgnyZvLmThlaqCufOyHwYmDjJC/aDPXo0G
-	AzL1eiFy5xPzqvSpN6jkBKjt/KVT50XStRawmwru29G0O1qQiuGNWDSdhlxP3v+a7sm+z+90grm
-	vpxvQATUOQOOZxd8Zs6RFc6GcpsyBCvf5NtWR2r3L+sosR1bhJYcyBjS1JGkcWpmDCtZ2kvyIiP
-	YK7J4Oa1ZufRSzSvvXCTeFBcsgb4QLrmoCb1pJQZsKwXxVUzZ7uQfod3SwYgIi1iMZt1N5WlFOY
-	re/jXPH/4O+G34/oxD6jhiyQBkyfZx4CI1x7sBuHYpRECUYF/KOXw3y8bvHJy0Ry39bWjf+efK5
-	D7JDasbSDsrNs+TZDisnPKDwW1V9J8dfHco4eRrpR4yWtyAPe26zHJCIUvg4oYUbB3JJe6010kX
-	WDH3SdHGwkTVzQXLyN0JFe
-X-Received: by 2002:a05:6a20:d524:b0:2bf:183c:ac86 with SMTP id adf61e73a8af0-393ad00062amr8537931637.25.1770576544736;
-        Sun, 08 Feb 2026 10:49:04 -0800 (PST)
-Received: from [192.168.4.196] ([73.222.117.172])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c6dcb3cb742sm7636288a12.0.2026.02.08.10.49.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Feb 2026 10:49:04 -0800 (PST)
-Message-ID: <3d7e7e82-594c-4387-8dbd-2b78e888ead4@gmail.com>
-Date: Sun, 8 Feb 2026 10:49:02 -0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aLXexndb"
+Message-ID: <d1770ffe-e89f-4ccc-97a0-be74be4e81a2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770603655;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OQN407ZmYQBloA6BAF7c/l2mr9zhF3xU5Rg1TJMGq9I=;
+	b=aLXexndbUwlN08ZbKLTgVZ3S+Cbm85Eh/H41U4JdL/Q+E/mWv4gQ9k3I628Wp/AiIU5+LQ
+	laJ0F7j7YblXLM10Jh4ObSziGAKFyblkgQO3O1+S82HtB1jar0rYvFDzqOqUVeo8pp/46f
+	VFtG+BLtbatP7AajwURsO3VFzaSFlbk=
+Date: Mon, 9 Feb 2026 10:20:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] selftests/cgroup: add test for zswap
- incompressible pages
-To: SeongJae Park <sj@kernel.org>, Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: linux-mm@kvack.org, Jiayuan Chen <jiayuan.chen@shopee.com>,
+Subject: Re: [PATCH v2 1/2] mm: zswap: add per-memcg stat for incompressible
+ pages
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, linux-mm@kvack.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>, Nhat Pham <nphamcs@gmail.com>,
  Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
  =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
  Jonathan Corbet <corbet@lwn.net>, Michal Hocko <mhocko@kernel.org>,
  Roman Gushchin <roman.gushchin@linux.dev>,
  Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
  Andrew Morton <akpm@linux-foundation.org>,
- Yosry Ahmed <yosry.ahmed@linux.dev>, Nhat Pham <nphamcs@gmail.com>,
- Chengming Zhou <chengming.zhou@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ Yosry Ahmed <yosry.ahmed@linux.dev>, Shuah Khan <shuah@kernel.org>,
  cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260207013529.69681-1-sj@kernel.org>
-Content-Language: en-US
-From: JP Kobryn <inwardvessel@gmail.com>
-In-Reply-To: <20260207013529.69681-1-sj@kernel.org>
+References: <20260206072220.144008-1-jiayuan.chen@linux.dev>
+ <20260206072220.144008-2-jiayuan.chen@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Chengming Zhou <chengming.zhou@linux.dev>
+In-Reply-To: <20260206072220.144008-2-jiayuan.chen@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2/6/26 5:35 PM, SeongJae Park wrote:
-> On Fri,  6 Feb 2026 15:22:16 +0800 Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+On 2026/2/6 15:22, Jiayuan Chen wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
 > 
->> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-[...]
->> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
->> index 64ebc3f3f203..8cb8a131357d 100644
->> --- a/tools/testing/selftests/cgroup/test_zswap.c
->> +++ b/tools/testing/selftests/cgroup/test_zswap.c
->> @@ -5,6 +5,7 @@
->>   #include <unistd.h>
->>   #include <stdio.h>
->>   #include <signal.h>
->> +#include <fcntl.h>
->>   #include <sys/sysinfo.h>
->>   #include <string.h>
->>   #include <sys/wait.h>
->> @@ -574,6 +575,100 @@ static int test_no_kmem_bypass(const char *root)
->>   	return ret;
->>   }
->>   
->> +static int allocate_random_and_wait(const char *cgroup, void *arg)
->> +{
->> +	size_t size = (size_t)arg;
->> +	char *mem;
->> +	int fd;
->> +	ssize_t n;
->> +
->> +	mem = malloc(size);
->> +	if (!mem)
->> +		return -1;
->> +
->> +	/* Fill with random data from /dev/urandom - incompressible */
->> +	fd = open("/dev/urandom", O_RDONLY);
->> +	if (fd < 0) {
->> +		free(mem);
->> +		return -1;
->> +	}
->> +
->> +	for (size_t i = 0; i < size; ) {
->> +		n = read(fd, mem + i, size - i);
->> +		if (n <= 0)
->> +			break;
->> +		i += n;
->> +	}
->> +	close(fd);
->> +
->> +	/* Touch all pages to ensure they're faulted in */
->> +	for (size_t i = 0; i < size; i += 4096)
+> The global zswap_stored_incompressible_pages counter was added in commit
+> dca4437a5861 ("mm/zswap: store <PAGE_SIZE compression failed page as-is")
+> to track how many pages are stored in raw (uncompressed) form in zswap.
+> However, in containerized environments, knowing which cgroup is
+> contributing incompressible pages is essential for effective resource
+> management [1].
 > 
-> Nit.  I show test_zswapin() is using PAGE_SIZE.  Maybe the above code can also
-> use it?
+> Add a new memcg stat 'zswap_incomp' to track incompressible pages per
+> cgroup. This helps administrators and orchestrators to:
 > 
->> +		mem[i] = mem[i];
->> +
->> +	/* Keep memory alive for parent to reclaim and check stats */
->> +	pause();
->> +	free(mem);
->> +	return 0;
->> +}
->> +
->> +static long get_zswap_incomp(const char *cgroup)
->> +{
->> +	return cg_read_key_long(cgroup, "memory.stat", "zswap_incomp ");
->> +}
->> +
->> +/*
->> + * Test that incompressible pages (random data) are tracked by zswap_incomp.
->> + *
->> + * Since incompressible pages stored in zswap are charged at full PAGE_SIZE
->> + * (no memory savings), we cannot rely on memory.max pressure to push them
->> + * into zswap. Instead, we allocate random data within memory.max, then use
->> + * memory.reclaim to proactively push pages into zswap while checking the stat
->> + * before the child exits (zswap_incomp is a gauge that decreases on free).
->> + */
->> +static int test_zswap_incompressible(const char *root)
->> +{
->> +	int ret = KSFT_FAIL;
->> +	char *test_group;
->> +	long zswap_incomp;
->> +	pid_t child_pid;
->> +	int child_status;
->> +
->> +	test_group = cg_name(root, "zswap_incompressible_test");
->> +	if (!test_group)
->> +		goto out;
->> +	if (cg_create(test_group))
->> +		goto out;
->> +	if (cg_write(test_group, "memory.max", "32M"))
->> +		goto out;
->> +
->> +	child_pid = cg_run_nowait(test_group, allocate_random_and_wait,
->> +				  (void *)MB(4));
->> +	if (child_pid < 0)
->> +		goto out;
->> +
->> +	/* Wait for child to finish allocating */
->> +	usleep(500000);
+> 1. Identify workloads that produce incompressible data (e.g., encrypted
+>     data, already-compressed media, random data) and may not benefit from
+>     zswap.
 > 
-> We might be better to revisit here in future to avoid racy test results.  But
-> this seems good enough for now.
+> 2. Make informed decisions about workload placement - moving
+>     incompressible workloads to nodes with larger swap backing devices
+>     rather than relying on zswap.
+> 
+> 3. Debug zswap efficiency issues at the cgroup level without needing to
+>     correlate global stats with individual cgroups.
+> 
+> While the compression ratio can be estimated from existing stats
+> (zswap / zswapped * PAGE_SIZE), this doesn't distinguish between
+> "uniformly poor compression" and "a few completely incompressible pages
+> mixed with highly compressible ones". The zswap_incomp stat provides
+> direct visibility into the latter case.
+> 
+> [1]: https://lore.kernel.org/linux-mm/CAF8kJuONDFj4NAksaR4j_WyDbNwNGYLmTe-o76rqU17La=nkOw@mail.gmail.com/
+> Acked-by: Nhat Pham <nphamcs@gmail.com>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-How about using some form of synchronization like an eventfd? The parent
-can wait here for the child to write the event and avoid the race with
-the arbitrary sleep.
+Reviewed-by: Chengming Zhou <chengming.zhou@linux.dev>
+
+Thanks!
+
+> ---
+>   Documentation/admin-guide/cgroup-v2.rst | 5 +++++
+>   include/linux/memcontrol.h              | 1 +
+>   mm/memcontrol.c                         | 8 ++++++++
+>   3 files changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 7f5b59d95fce..78a329414615 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1737,6 +1737,11 @@ The following nested keys are defined.
+>   	  zswpwb
+>   		Number of pages written from zswap to swap.
+>   
+> +	  zswap_incomp
+> +		Number of incompressible pages currently stored in zswap
+> +		without compression. These pages could not be compressed to
+> +		a size smaller than PAGE_SIZE, so they are stored as-is.
+> +
+>   	  thp_fault_alloc (npn)
+>   		Number of transparent hugepages which were allocated to satisfy
+>   		a page fault. This counter is not present when CONFIG_TRANSPARENT_HUGEPAGE
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index b6c82c8f73e1..d8ec05dd5d43 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -39,6 +39,7 @@ enum memcg_stat_item {
+>   	MEMCG_KMEM,
+>   	MEMCG_ZSWAP_B,
+>   	MEMCG_ZSWAPPED,
+> +	MEMCG_ZSWAP_INCOMP,
+>   	MEMCG_NR_STAT,
+>   };
+>   
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 007413a53b45..a6b6cf5f1aeb 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -341,6 +341,7 @@ static const unsigned int memcg_stat_items[] = {
+>   	MEMCG_KMEM,
+>   	MEMCG_ZSWAP_B,
+>   	MEMCG_ZSWAPPED,
+> +	MEMCG_ZSWAP_INCOMP,
+>   };
+>   
+>   #define NR_MEMCG_NODE_STAT_ITEMS ARRAY_SIZE(memcg_node_stat_items)
+> @@ -1346,6 +1347,7 @@ static const struct memory_stat memory_stats[] = {
+>   #ifdef CONFIG_ZSWAP
+>   	{ "zswap",			MEMCG_ZSWAP_B			},
+>   	{ "zswapped",			MEMCG_ZSWAPPED			},
+> +	{ "zswap_incomp",		MEMCG_ZSWAP_INCOMP		},
+>   #endif
+>   	{ "file_mapped",		NR_FILE_MAPPED			},
+>   	{ "file_dirty",			NR_FILE_DIRTY			},
+> @@ -5458,6 +5460,9 @@ void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size)
+>   	memcg = obj_cgroup_memcg(objcg);
+>   	mod_memcg_state(memcg, MEMCG_ZSWAP_B, size);
+>   	mod_memcg_state(memcg, MEMCG_ZSWAPPED, 1);
+> +	/* size == PAGE_SIZE means compression failed, page is incompressible */
+> +	if (size == PAGE_SIZE)
+> +		mod_memcg_state(memcg, MEMCG_ZSWAP_INCOMP, 1);
+>   	rcu_read_unlock();
+>   }
+>   
+> @@ -5481,6 +5486,9 @@ void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size)
+>   	memcg = obj_cgroup_memcg(objcg);
+>   	mod_memcg_state(memcg, MEMCG_ZSWAP_B, -size);
+>   	mod_memcg_state(memcg, MEMCG_ZSWAPPED, -1);
+> +	/* size == PAGE_SIZE means compression failed, page is incompressible */
+> +	if (size == PAGE_SIZE)
+> +		mod_memcg_state(memcg, MEMCG_ZSWAP_INCOMP, -1);
+>   	rcu_read_unlock();
+>   }
+>   
