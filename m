@@ -1,113 +1,123 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3276244665;
-	Mon,  9 Feb 2026 13:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770644054; cv=none; b=fDKucmtPTsnP0aTXnIVn5aSNofGt8UocUDWSWGb+XWZ0ifxbq3wRkaJuxmimou0ek17NLq3TjUbYjA00N+P6/Qh/EqB5es/ecX7sdM+tRDP+qWtsGaZ+GMIr1F8IZz2npDky3C78k0WgS6zWA2cuISLdjThJRjmhH3hRtq86ufo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770644054; c=relaxed/simple;
-	bh=IOCckDQmO3bCx6vIbKsdQfr+uc3RnkYrCh6Yh98UfAA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HXQoA2Dzz1AmrArXrWzIEOb5EUX+t9h/5Y866oJGh5pyAHEp2N4I8GCIVM5hV3HJFNqboc+Y9qqENpTG9bzCuLhACh6cI3pFPKvMbjkE+n5rzsPJvSO0h8ND6F4T954HXATHNoT1Ea0VMeJd8X9bhdfPzW22COSE7wMtHdY+8H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YlR9bj5Z; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1J7rxPcV; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4CF3793D2
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Feb 2026 15:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770650337; cv=pass; b=gEWF4VqOjP3FiZgVk8zXchRtirxouBHSMVKe2tF0yh8LCZT+HaZFKZqCMISEsPoHxxKnUrZpZdV9QZGUS2h2943JpOoIg4RlDyZtCYUR8JVUadU7oAI366+4sWjF3R70CpRxZEmrdcDQtKj7JxHubCqqidttU2+EiiK7DeH1C7o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770650337; c=relaxed/simple;
+	bh=e3bUDvDDCERCxLHccqCKh5cXslCrqGzgEb8uS+QsJ98=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sLu5vUwsbyoH+rTqvPQ6N8CuoH9FM4eBR8Kkcm7XC0u94jjtuZ0IHoEYOUpvFXg1cr2LfYfyxdRG0FuBMHGL5KVdXOz/18V8jWlLHaqy09UHkMqmFrCyir8PbSf6V8TJCk3s7DSoWf0oVQi+LrKs+ReoDQ7SRCIDMTlVtJ6urXM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LKoGnH63; arc=pass smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YlR9bj5Z";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1J7rxPcV"
-Date: Mon, 9 Feb 2026 14:34:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1770644051;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60PQiy2iBpgFewxiruovzAslbmJSAAtPFOFOOiKjjPA=;
-	b=YlR9bj5ZIrN5Hl5gkUFTHUhbBNirduv8CgJZeENp11uU3U6thi6j/OtC/KQPAKc9QoY16b
-	iqhuyzi/b0ZQ7M7VUfUOm6xDjdKBiVAcL0NDslJlAhb3BeoAwDRRtJnPjGMbf1mFXVv7bt
-	NMrFeatDijOgXhtd0UkwblQQRQ31qH8+8sJoew6J5Wkmb20RAzlLTsuX1HheIftYOGQ2/H
-	DD0vYw+2DrYDfmR/vW+TfUOUQruDrKryktRtVAgS4glEN42/iCi7e94OG0AE7SlxspDuCq
-	Or+Gco28APE0lsa0wk71wKJNamcmGRe8DaKywyoaJhATqU9E7ZWe6UypX84Xbg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1770644051;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60PQiy2iBpgFewxiruovzAslbmJSAAtPFOFOOiKjjPA=;
-	b=1J7rxPcVC/2n9mif2u5PsOumsh3UqugEaRYJHku7wMkXPEW7VFN4X8Fwwg9s/kVlJ7j0qj
-	wEPG5ci9hZIbMODg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
-	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
-	Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition of
- 'struct sockaddr'
-Message-ID: <20260209143003-80d3cb63-38c6-4280-a319-ee6879eeab11@linutronix.de>
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
- <20260121192729.2095aa25@kernel.org>
- <20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
- <20260130081741.425a92e0@kernel.org>
- <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
- <20260131092517.6639d84c@kernel.org>
- <20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
- <20260203144011.32d5b223@kernel.org>
- <20260204064248-d9c4ab78-f6d4-4ac6-8d55-e939bc1df6d2@linutronix.de>
- <20260204175516.4fb11966@kernel.org>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LKoGnH63"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7927b1620ddso64526367b3.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Feb 2026 07:18:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770650336; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Jp27l7boE9HfijF6UrDUzoGrd/Q4wKTktMWlP/mrnH7AAxSrwaEFajEIsACY1+XUmk
+         +2MiL0SZCIea3qf4biex2Z6Ds+Z5tSrzW+Ypkoi0IXs+30FO0+qprlNRLeE+GEv9JCWB
+         qdDC/R9QduxfTcf0SNyocReJKX9dNMdHF8pR19uc7czkMnysfpVr6OTLCzXq/YaFK+x+
+         AnINMZ27DXbgJNpBAjwLwQIAbrOCu0DKTL26EKZuH88LFEWzC6WAxmFqmmN1jNLbRz7C
+         cmoADqg7r4XpaXF9FMeqqbco0+cXka6ImEg7z4IzN1xgIRUUZUMVHC20Db0KL6HQfGDB
+         gKiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=e3bUDvDDCERCxLHccqCKh5cXslCrqGzgEb8uS+QsJ98=;
+        fh=0sz+rrIa4bYg+/oFefujMF8l4tnmLxxAsKKSafTUMYQ=;
+        b=OL79PaUexXh+782BFIGXw41OOug3ndALw8zRCwStHdopHaZIX920eJxSdFWb2UarLK
+         qBobv2JILeiNMFQqiNAmxjQZ+EPfqdf+YDreQpM1yQ3+NWuBqmao7jBDTFZLMnGTijoz
+         MPai5J1BQRcS2MmZ/XnQUZ5zlQtxsyw9Q0wFvJ+Z9loxePHLVuZv1GoXeqkmZUZqj+Og
+         evx2rAFAuwkgKbZjKGwKmoT+rTshJ/mYhbg7HPVC0KfVKFQH/bRIkWVexfoxMRBzqq4U
+         Svrh7IloOM+i7NOccrgWzPFU8sOlGfju0YeqG8iJRpQLQKKqZ/fCv/1sIECRi+hcmzqz
+         NDfg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1770650336; x=1771255136; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e3bUDvDDCERCxLHccqCKh5cXslCrqGzgEb8uS+QsJ98=;
+        b=LKoGnH63YlYTTc2EIEVciBLSbEozVqYrEQBhkRJIkpiAtwcmgege5rWCHdYgIz6CZ/
+         KLC73lgO1wpVMp19dGD4PfVCAYOqFQp2HSFIVPmRT8QvDvj7TyOx/yF6xGUATLAYJv+f
+         Yp6XuheWTZhNVWe49qlpUGI7GTWmO0Xk1BFbILzHm2bwipWkLNrgoiQKQJumvOU5b6c9
+         tkLIYzmYePQJL7+FxatCuXFWFpujuYzclSemiCpYhtI++E8QWZzWB9rn+yBWUw9aa2gN
+         6GVNeQpMCdNB9i3So36vnniCPXmys1AjdIHqNp1BPExc8ojus28BCkacoD6wR+CUBb0P
+         JtOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770650336; x=1771255136;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e3bUDvDDCERCxLHccqCKh5cXslCrqGzgEb8uS+QsJ98=;
+        b=b+bzNN/XooOXhoNN1EIyXAeDgM9uWvqtrYjesymc9topvJlYKnH+aEsQvLauOBSQso
+         xfArT2PMwNIePuuJlJFRzWSWLsExxogwpne+AKs0go+hvPaiVk2pzW366/+taYSMxLsr
+         61ozD3k5ef1uKwPA7Sg9sNIrll9ljR4FpL6Eh6H4w9431eOPhPf0HqnpOlEBlc3iKYKb
+         n38AvBTZIxKeMS2ETquqot5WXXOMG9WMEpw99HsSOlLg8tb97kRQ3FMC93R5jrn6lKYW
+         v00Nmg/e6+L8f1I4y6VD0zbutV/tid/WvfIfrG+R4JKhFo4PSJ4dan93cDtmWSzzqds8
+         6R7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWtLziGf+OUb5EpKfgphDpr91X+ExJr4IB0oap80uFiZ/phBHOfyxW0zQLSLwcUiiBLIhBozmEe4gB95vnKZlY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1wssB2kUQhNmwgYZ9dJlAl1607lJBchuXYgh2D9eLCsBPb3EM
+	7Z+t0eMjY9WXQZvBI6iqb5YAsacJimN/chrjd4tAvftOtLXa3MFJIMawSqYCEan81dCg6tyOTf4
+	oOOAIKMBN6i59zsOkTeJrOkOLC2tKipFNQb/c/lGsvg==
+X-Gm-Gg: AZuq6aKp3ZkwPB4iAcUyYyLrIBbp5OwRESFnry0Di1TNViQP8gFbb7BqThOBUtOjHN9
+	VjW3msUaqrSI/B8vMCKcu135qfKeP0bqrD1ix0O2SyM/3L72QCXRtJTCuSeSS/a879dYchvU2cy
+	XkNpln7HJJAjmeqvco2pNweniB8MvTaImkfT6ylLDhh1RAmJiZffP0Rh3fMr1ubSN0NKGuGnAR+
+	t3/CD/fvF7Y5gvrdHbn5PPPusYzmEMQtNpwQ0kCcX2zDymCGk2ecJCwabIgxhPYiP9hXeuG7GdI
+	EHdhjt1X5ixwEaZFLhI7zuQ4T6GKaOgyinlUFHMLpirnHSkQMqCtOVI=
+X-Received: by 2002:a05:690c:e08:b0:794:87bf:76ef with SMTP id
+ 00721157ae682-7952a63ec7amr99106367b3.7.1770650335943; Mon, 09 Feb 2026
+ 07:18:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260204175516.4fb11966@kernel.org>
+References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org> <20251223-kvm-arm64-sme-v9-10-8be3867cb883@kernel.org>
+In-Reply-To: <20251223-kvm-arm64-sme-v9-10-8be3867cb883@kernel.org>
+From: Peter Maydell <peter.maydell@linaro.org>
+Date: Mon, 9 Feb 2026 15:18:43 +0000
+X-Gm-Features: AZwV_Qj3JfZxsU8iVNrT9S4IUwlHEkuMD3WG7W3HRrHxULDnwFPH-_uH0mM-meA
+Message-ID: <CAFEAcA-nhHdwuQODmT4-dBCEuiut-jbHsCGVYByoMF77-UWbCg@mail.gmail.com>
+Subject: Re: [PATCH v9 10/30] KVM: arm64: Document the KVM ABI for SME
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
+	Fuad Tabba <tabba@google.com>, Mark Rutland <mark.rutland@arm.com>, Ben Horgan <ben.horgan@arm.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Eric Auger <eric.auger@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Feb 04, 2026 at 05:55:16PM -0800, Jakub Kicinski wrote:
-> On Wed, 4 Feb 2026 06:51:46 +0100 Thomas Weißschuh wrote:
-> > > make -j16 O="$kobj" INSTALL_HDR_PATH="${kobj}/hdr" headers_install
-> > > popd
-> > > 
-> > > pushd uapi
-> > > find . -type f -name '*.h' -exec cp -v "${kobj}/hdr/include/{}" {} \;  
-> > 
-> > Here only those headers which already exist in ethtool's uapi/ directory
-> > are copied. As linux/typelimits.h is new, it is now missing.
-> > Honestly, if a user fiddles with the internals of the UAPI headers like
-> > this, it is on them to update their code if the internal structure
-> > changes. In your case a simple 'touch uapi/linux/typelimits.h'
-> > before running the script will be enough. Also internal.h now requires
-> > an explicit inclusion of <limits.h>, as that is not satisfied by the
-> > UAPI anymore.
-> 
-> Hopefully you understand that while due to uapi header copy this is not
-> a huge issue for ethtool itself, but it is a proof that your changes
-> can break normal user space applications which do not vendor in uapi.
+On Tue, 23 Dec 2025 at 01:22, Mark Brown <broonie@kernel.org> wrote:
+>
+> SME, the Scalable Matrix Extension, is an arm64 extension which adds
+> support for matrix operations, with core concepts patterned after SVE.
 
-A regular application which uses a full UAPI headers tree will get
-access to the new header automatically.
-If the application uses symbols from <limits.h> without including <limits.h>
-on its own, it is broken.
+A late reply, but I just noticed that the cover letter says:
 
+> Userspace access to ZA and (if configured) ZT0 is always available, they
+> will be zeroed when the guest runs if disabled in SVCR and the value
+> read will be zero if the guest stops with them disabled. This mirrors
+> the behaviour of the architecture, enabling access causes ZA and ZT0 to
+> be zeroed, while allowing access to SVCR, ZA and ZT0 to be performed in
+> any order.
 
-Thomas
+but the doc patch itself says:
+
+> +Access to the ZA and ZT0 registers is only available if SVCR.ZA is set
+> +to 1.
+
+Which one is the intention here ?
+
+thanks
+-- PMM
