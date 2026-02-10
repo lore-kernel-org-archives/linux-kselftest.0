@@ -1,232 +1,63 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DED257849
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 00:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247991D5160;
+	Tue, 10 Feb 2026 00:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770683919; cv=none; b=S9F7RL4pupOr8NNYKoWcS7KV1iP41kx95wOAI4HKP5Az0EfuwaZ79jFEHL6Mn+YcFk4pE5vMavM2LwEp5uBY19IUBM/W2SOFCOouSdlXV/ZMXIFvr3NAnxvfC+Z36QxcmWj+iX1iSW88bJ2O0o6RttIm81v/aM8e4Ty/TSrJ+kc=
+	t=1770684607; cv=none; b=U8NvarXqLm3BxJ3/0Q30dSzuh7bYHvuZvoAovaKzvbZ2lRgC4bMlEfi2PWSRFpVReziL9shV8QKj6DLMVFG29QSUWyBqStqNxiHtzWuZ/dqsTT8dXgNOFC4eCWNEXyaK6eh01M8PSfTxAMFFSvSmhQ1AwplJ5UwB8x0jJVUgrnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770683919; c=relaxed/simple;
-	bh=1Qt94GB4G3IwGLclm8KcPaUi5sZ/Z6HPS+sk0iKFMzE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=oP1VXYVcNvzEfOg8+BhCl3sBkcmW9mXw4sHrrwlda/42Z8DErxleicEszV7wNRd1+nldrCxPOQZWNUkMsAtiFd2EeIE8oP1OvZ/vYg+3xxkrlabRqrolcPfJINW/CIR0WnuBl68uz1yWO0vPUBWdjsXgwv6QpvCCuJhAWOu42o4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3Wbbg7Tp; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+	s=arc-20240116; t=1770684607; c=relaxed/simple;
+	bh=s2e81F7iyu1gBMKf3T2kewsAInT9msLlqWNghOCTa1k=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=g/vcUu1Kh1FchK/hlbOil2pG+HgX3rpI07vD3b7qR1gTuI1CM/30JVpYLrscp8T44zLEe1xT4dPUD+Ep0QZiOrPzX6/J8SuBmQUBNk2BpiqUBZw7aLOQ3qK8VmKNHoLxWiTFlbGDxxAnBa4QwfF6bFsk0WPj8mvQNIFONTCCrSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dDLIwCfv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3Wbbg7Tp"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a7b7f04a11so7436695ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Feb 2026 16:38:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770683917; x=1771288717; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0Pi0e7p+zApj87fVsFVxZlxRDj171oPkvxq1iRYRTY=;
-        b=3Wbbg7TpK9Xu4R+smXq77Pzb8HFn3IhHQdo3ZV6vAs6likXrwBjBK41dNcCVDkh58z
-         cP1nOCEVVxGa/wYoKfmOSEq024dYBTfezNYay4tVcZAHaq13u+ZrB+93HuMInfMiPBff
-         Pga/Xacrj6YtpL5AjD0qzbrNHWz6wiMYD66jURzTKaON83LLmk4a23K5U60NMqXMBya0
-         6LFGIovsI9sWyL2Vnt3P4UFDEWbDIxMBAV+vnxMPHrgfMEpsH1tpXvPLkb1d2wwXtnGo
-         ZxkP/glCnhawW9n7i9rDxB2H4IBQ/AITXwts2NCj7cb3rAfmMWmmiYsS1I0ulnt0tPH7
-         090A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770683917; x=1771288717;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0Pi0e7p+zApj87fVsFVxZlxRDj171oPkvxq1iRYRTY=;
-        b=EoiwO2ekWT5AweRD51zEUSxRvxI1UQMqGR7ObfrgMVUcv7O5YuIIUDrB1CTRzfRxiN
-         7oKIQXfFIjmcTaE75OAZBQpdUd1WaRRA+H2MqJz0DOZbNCvdPdH2Z7uxPOWpvRBYdYNi
-         zzNtjfp9C91sCP5T3EKZWWM98PPp+at3KieDHYh4r4K7QjjXa6RYK/BUI7XY0JjnKMpF
-         dxjRsu/mvaaER8+1GcpIXkZmjoQcHyjmkHQqCULb8IAmOZIxr/Go9UXRTZjPRQTe9qPP
-         7BIfwGNejR1j0XdQRHUIRvxqtF4t6Lu4KIFZsLyB4n3EodY3fEXsNaao1RikM4OUMZXr
-         oEuw==
-X-Forwarded-Encrypted: i=1; AJvYcCUgOjSptrYpKEIx4YBJNxIIgJl5T8MPm4n2Gk3a121VVm1DKCREx7kPaYd7sUdp4cSs2GDZDrQ1XkqLCZw0VdM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVUsgX29ZU9Z0RwogXv+vjIGrKrj0b69+mOVxu3NUu5APecg30
-	QZ5Ma+PA88K/TsvmxyIPdOO0GXPvQ/RkVr4xV+YXUaUV5FwYcHnn5fpnqVl0WRIsHQJy+Nsgwnr
-	jijOmx2WlyC4yDNneoA==
-X-Received: from plzv5.prod.google.com ([2002:a17:902:b7c5:b0:2a8:759b:173d])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:e744:b0:2a1:3cd9:a737 with SMTP id d9443c01a7336-2a95194698fmr165463975ad.36.1770683916818;
- Mon, 09 Feb 2026 16:38:36 -0800 (PST)
-Date: Mon,  9 Feb 2026 16:38:01 -0800
-In-Reply-To: <20260210003801.2834976-1-tjmercier@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dDLIwCfv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06088C19425;
+	Tue, 10 Feb 2026 00:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770684607;
+	bh=s2e81F7iyu1gBMKf3T2kewsAInT9msLlqWNghOCTa1k=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=dDLIwCfv4tY4AhZNKhQjfKSjBpRUilZUiv/OfuUQTM/lXMVOMxtsa8XW1aVi0fqDc
+	 +yfNGm/yiXHYWzCDYdHwgjiSrST2TP0Tpap40i/tt0GBxY+uOLhguqX8+AygmwsC1c
+	 elcCPcHSaOYOXDRTcZFj/qmBmInUvagwkJQ0vfGxLgZ/igTxv/rLOX/o+UiLCIBvHC
+	 P/DG6EhEeyzf65ZoFebpxhU/5sv6eqnjwLF4c/soxefqC0u3u8XuCSHeaPjQfOeezL
+	 cTRbI9ClJn7ywLezfuWYNdcNV8FkRyrnK8BbkEVk2J2+YbyJVJXb2Qv5eDls8nKxj7
+	 eM6wAmoP2DXKg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EFD70380AA4B;
+	Tue, 10 Feb 2026 00:50:03 +0000 (UTC)
+Subject: Re: [GIT PULL] kunit next update for Linux 6.20-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <bfb8f2e7-3572-4b1a-ae27-995f940d2938@linuxfoundation.org>
+References: <bfb8f2e7-3572-4b1a-ae27-995f940d2938@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
+X-PR-Tracked-Message-Id: <bfb8f2e7-3572-4b1a-ae27-995f940d2938@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-6.20-rc1
+X-PR-Tracked-Commit-Id: db0c35ca36526f3072affcb573631ccf8c85f827
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7d726a34d68597899a43001dd2bc1aeac7801008
+Message-Id: <177068460293.3270491.1613870862513078701.pr-tracker-bot@kernel.org>
+Date: Tue, 10 Feb 2026 00:50:02 +0000
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260210003801.2834976-1-tjmercier@google.com>
-X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
-Message-ID: <20260210003801.2834976-4-tjmercier@google.com>
-Subject: [PATCH 3/3] selftests: memcg: Add tests IN_DELETE_SELF and IN_IGNORED
- on memory.events
-From: "T.J. Mercier" <tjmercier@google.com>
-To: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: "T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
 
-Add two new tests that verify inotify events are sent when memcg files
-are removed.
+The pull request you sent on Fri, 30 Jan 2026 03:07:53 -0700:
 
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
----
- .../selftests/cgroup/test_memcontrol.c        | 126 ++++++++++++++++++
- 1 file changed, 126 insertions(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-6.20-rc1
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 4e1647568c5b..25a495347f7c 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -10,6 +10,7 @@
- #include <sys/stat.h>
- #include <sys/types.h>
- #include <unistd.h>
-+#include <sys/inotify.h>
- #include <sys/socket.h>
- #include <sys/wait.h>
- #include <arpa/inet.h>
-@@ -1625,6 +1626,129 @@ static int test_memcg_oom_group_score_events(const char *root)
- 	return ret;
- }
- 
-+static int read_event(int inotify_fd, int expected_event, int expected_wd)
-+{
-+	struct inotify_event event;
-+	ssize_t len = 0;
-+
-+	len = read(inotify_fd, &event, sizeof(event));
-+	if (len < (ssize_t)sizeof(event))
-+		return -1;
-+
-+	if (event.mask != expected_event || event.wd != expected_wd) {
-+		fprintf(stderr,
-+			"event does not match expected values: mask %d (expected %d) wd %d (expected %d)\n",
-+			event.mask, expected_event, event.wd, expected_wd);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int test_memcg_inotify_delete_file(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *memcg, *child_memcg;
-+	int fd, wd;
-+	struct inotify_event event;
-+	ssize_t len = 0;
-+
-+	memcg = cg_name(root, "memcg_test_0");
-+
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	if (cg_write(memcg, "cgroup.subtree_control", "+memory"))
-+		goto cleanup;
-+
-+	child_memcg = cg_name(memcg, "child");
-+	if (!child_memcg)
-+		goto cleanup;
-+
-+	if (cg_create(child_memcg))
-+		goto cleanup;
-+
-+	fd = inotify_init1(0);
-+	if (fd == -1)
-+		goto cleanup;
-+
-+	wd = inotify_add_watch(fd, cg_control(child_memcg, "memory.events"), IN_DELETE_SELF);
-+	if (wd == -1)
-+		goto cleanup;
-+
-+	cg_write(memcg, "cgroup.subtree_control", "-memory");
-+
-+	if (read_event(fd, IN_DELETE_SELF, wd))
-+		goto cleanup;
-+
-+	if (read_event(fd, IN_IGNORED, wd))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	if (child_memcg)
-+		cg_destroy(child_memcg);
-+	free(child_memcg);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
-+static int test_memcg_inotify_delete_rmdir(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *memcg;
-+	int fd, wd;
-+	struct inotify_event event;
-+	ssize_t len = 0;
-+
-+	memcg = cg_name(root, "memcg_test_0");
-+
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	fd = inotify_init1(0);
-+	if (fd == -1)
-+		goto cleanup;
-+
-+	wd = inotify_add_watch(fd, cg_control(memcg, "memory.events"), IN_DELETE_SELF);
-+	if (wd == -1)
-+		goto cleanup;
-+
-+	if (cg_destroy(memcg))
-+		goto cleanup;
-+	free(memcg);
-+	memcg = NULL;
-+
-+	if (read_event(fd, IN_DELETE_SELF, wd))
-+		goto cleanup;
-+
-+	if (read_event(fd, IN_IGNORED, wd))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct memcg_test {
- 	int (*fn)(const char *root);
-@@ -1644,6 +1768,8 @@ struct memcg_test {
- 	T(test_memcg_oom_group_leaf_events),
- 	T(test_memcg_oom_group_parent_events),
- 	T(test_memcg_oom_group_score_events),
-+	T(test_memcg_inotify_delete_file),
-+	T(test_memcg_inotify_delete_rmdir),
- };
- #undef T
- 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7d726a34d68597899a43001dd2bc1aeac7801008
+
+Thank you!
+
 -- 
-2.53.0.rc2.204.g2597b5adb4-goog
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
