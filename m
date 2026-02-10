@@ -1,156 +1,146 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F5B2DB781
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 22:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770763710; cv=pass; b=mu7tj8JIidJAzQbw+S1NkNVnL3Q6yK4+SO4/eREBI6wpIY79UoPLKAFn4BYRzlW7ybZfpgkb3pYgGnWt9Lb//sEg+Qwgv1NprPQlKycidFhhQRsjYroZFlWiCazpzRwgVu/0xxApqvk1SO3TWdZpH38EakAjU97Q7uIQXCtk41I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770763710; c=relaxed/simple;
-	bh=7RueDEbxvfiJY9nFUB8GTsk9UAZbqARgQdFKPxdici8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Db5SFUgMTaXw1WuTe8NC2WY/y4i2B7PCgQHZfyifhJludr7PNepQdsnbAXQ3o2qeABAbef9v6YJNsTL0HlQ+5Um7Qkz65BkVWrUJzHXyZZRm0+XisHSDsUKSRkg83fY5udT/JF4LSXHmp+lUOBuwZ3nVurqW4ug0glbyxmIhwx0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZfTG0Rio; arc=pass smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FA63164DF;
+	Tue, 10 Feb 2026 23:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770766475; cv=none; b=LyuSNGlk88LhqEEONOOJfUlOqw94iRbcLaL7pHon6z00KWpuAU1Gk+53XWozQuLCnxJh7w1CzSp6P/VI0JVREdmlw4Gev7gtNfVSoMhvdx9d09Qy6fbaLcEOBa4KpEx1icGmUJfkOABXhg/14fuKJIyWp8ET/nJFcXS2Z0zpxMI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770766475; c=relaxed/simple;
+	bh=WL3AiKr6GV94bmAe/MsgjLprAEoI+6+DxMhvOsSny0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LyfNjN1eFj4xmds8aU9a8q70MpDZwvoXJ1oQeg/oJcyn5tfQH9vNZTQUOPMCz7pVxhUtWjrZdusZCodHJcCG2sKm2gyoO3jIf4HVh4L6oURN9arTj6NbupXvPvjxeLYNcuyDTP7BB24q+khwIaQ8pWoklKF0BUp5mtxtBY2nzMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W+kIDCET; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZfTG0Rio"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48318d08ec2so9505e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 14:48:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770763708; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LLIL7iNT/tht6voP1Oc+Rum8lV+psu2g538zelIDNCk56tXqQMv71LcuvOMyM8v6fQ
-         J7Bpv/nf9ClHDS8t4XvuDS1OkcC63CsIzEw9J4AhZnutW9bIi/p8inCoNhTY5dRWaCPS
-         SE7iTsGNn6mHKQHfaKU0wNH7gi24V7LTMPfRooHv4nhQC4uEZQlI27uhW8YEk+zST/2q
-         ygHvdY63okUZndyezaUa+L58fWab1Uejjf7+6jnzP+OQ/8hJTUm14lcGmkadWKCcRLUr
-         S4IC7hPHDoSOOa0uTd3slBpqDy1bga5kVbV2ou44dQOIbmT130l0y5HldYDBnnpBbyrj
-         icZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PuqeYntCSLTt3WclOHSOnzeNRZzfBKcRNCGgofm7tCg=;
-        fh=Y+PCivsLfLvB3v5zsdxNJGRBGVYHxZQLzVHIYQABG2M=;
-        b=gevMjNMCqkUw4NFEt+VKT/qphFq3tKyF7rJn+SgwHNcQZ+0MaE1qquZLA6sU5EZKbx
-         3l0ZIrNIbY04eouPqPElM4Q8o8+agGXfwLxtR5CQgMDvsPyAFkqmxTjLAnEKOmfvrodD
-         t9RjjbU3mdXqyYUSaGsNJ2f2lBVmvhwRil36enwvuKL8aTrbnMCVKlc02sMsok9Q3ABT
-         8e8yZmfa6R+orYXqoQmFWk84d3RekYGN2X/wvAXInFTRrELx5QA8sabyjYEA2o96Ik3X
-         jw53OMg5zovAukZO89cl0pNw3inyrhsH9z+Bv//0UO0xGXPXveyg0y7ebFr/lLK8zNGm
-         Xs1Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770763708; x=1771368508; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PuqeYntCSLTt3WclOHSOnzeNRZzfBKcRNCGgofm7tCg=;
-        b=ZfTG0RioDJXR7P2P+zWbJpWvwOVBQLuMvOIrHH8oMTXOACHwbc6C5PkcN6avuZJugh
-         yiXSQsl4F+KS0PhG75cdb1m4juEg48wK31FlnAjPxPJ2IoyRdJNtPScJy1tIFjipr3LP
-         CS1PQbUi7hy/vIMscZeSoOB/lnpc35UJZ/oSH1ETTDwdOb/WzVYAKMsQ1H8rlpMXkbyA
-         oPRWeldYOVk9LP/WrD3i/lmA9TN8sc6rGH4J8DO8el/NJGYKEPjN3Ub/bnMWK+SXhUXk
-         0s+ZTDNg/EYhXryRXwxydjhQr8gxEEpvsHiiNOnW4ZH5h6mcM/eRDGshkfS+rxknEupg
-         DNbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770763708; x=1771368508;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PuqeYntCSLTt3WclOHSOnzeNRZzfBKcRNCGgofm7tCg=;
-        b=igLDf6HKWrVwEw8eoHw/T3mzGFV3wcm1ZG7bGjeGvPzY7UjGfnILICNiAgwxUjjVL0
-         ent/DhMsmmEmJByvYjDNDBWkBcRG9BL9OOn3IpVLapLUhbuTBKE9DtDZ7JyF8NJ4SyG1
-         Pt9nBEbJDeMQySgvBeXh1S9HKSxOJbB34pelniXXqlbYTSeC26otchhYfvrfpvEnqUgD
-         3/a/Wyj+idJSf+iaNgh3oVoCtwN39HYA8+exi3K1uloVpMjpLxEZBCyoBSmmR4Qt5Tm6
-         NqBAe1qB20tosspG+cRRFYT1zRO5oPnSaBwNrOUimfzIRYdhumq+YSaiy6J0e2s6qdo8
-         TjlA==
-X-Forwarded-Encrypted: i=1; AJvYcCXm6KIPqledNlkIFS9XtwjUize6e2Nl0uMnOM2gast0dDPvXXAuXPu9L9u7q/VxNS/5TKiiracnXpnpIXIgz50=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHeU9fk3Zb3LKKsQdaI2N6ajRcSCccE5MiucYuQwPjkIw/9zpt
-	rGkrEi7lNR0Vg+mVhqjevBCINflcuOHLiiY/dWlClMQsCRrW+rmG2enW7jWitqay4R3WpeedORx
-	/9EuIylXpLToau6apK4ZddEo6/kKX5nKNbMJeD7hl
-X-Gm-Gg: AZuq6aIsyUbe5ozfeFtlMm1VHjEYRzkOR9p9xHc2MkQxkP+xAeAhmup0bwMkeOf19On
-	G9010hspMp5WACGfTv/EW6ghPnpIUfxkxzRRDXDJXLD2OSQq7m2gylotljvkPFok2dwEsxv1A0S
-	gkC46sjx4p+Q9xIram/p4cbbDLStkvXIplTtXsKZkpYul6T5W6AQSZ6rYl77/rz71kHVaw9ju8X
-	S6j8qijVAMaFspGojuQW96Rc55Dez3gb3RF48dnuluULrbtmey7BG9tv1EzHtC5aQj6B34gK8ap
-	ojyxGjDc56P6l5jCqGhQWYZL5rIXG9XzGdkcrWWhLiqeYkfr
-X-Received: by 2002:a05:600c:1492:b0:47b:e29f:c63f with SMTP id
- 5b1f17b1804b1-4835cebf7ffmr48345e9.11.1770763707610; Tue, 10 Feb 2026
- 14:48:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W+kIDCET"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF38C116C6;
+	Tue, 10 Feb 2026 23:34:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770766475;
+	bh=WL3AiKr6GV94bmAe/MsgjLprAEoI+6+DxMhvOsSny0Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=W+kIDCETdcR57Gdq6oPgbCzQ/OZIL8IPm8cCz3+4fVw8eB1YwvVfwxr7s9VxqUoKn
+	 lfgGjCJRU8NX/mpI6MOPYW4tBTosqEvUnJsTZbVDmUurrT2pLXQIaN7qE2eQ5enEaJ
+	 +YoqDve7sdI3tFC5+6UVIWWcZ+ILo7OC1Hr7C0OwY4WluZBZB+FWQtHZojL+QwqqyW
+	 fh88zr70rv/R6LZrV0wLyr9XPFgBCz8DV1b/6Y1Y/Y+TVI5fnpNUxLPex8G6wzEZ80
+	 XoXgnYzckOqsiY0UhBorg6Yreuw1SPIR/xKNvDJCccmo/3Bvj1CWg8KqerocSulZIi
+	 E9ODU0hNcjMEA==
+Date: Tue, 10 Feb 2026 15:34:33 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Petr Machata
+ <petrm@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, Amit Cohen
+ <amcohen@nvidia.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] selftests: forwarding: fix pedit tests failure with
+ br_netfilter enabled
+Message-ID: <20260210153433.0b282662@kernel.org>
+In-Reply-To: <20260210185129.480015-4-aleksey.oladko@virtuozzo.com>
+References: <20260210185129.480015-1-aleksey.oladko@virtuozzo.com>
+	<20260210185129.480015-4-aleksey.oladko@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260210003801.2834976-1-tjmercier@google.com>
- <20260210003801.2834976-3-tjmercier@google.com> <aYu0WZ-xCZr-bmsq@slm.duckdns.org>
-In-Reply-To: <aYu0WZ-xCZr-bmsq@slm.duckdns.org>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Tue, 10 Feb 2026 14:48:15 -0800
-X-Gm-Features: AZwV_QgfVPfvMntqiVCLNCIUNKNlybv8eQNNTRFicqch08xd5Yhkj2QTYq81v9w
-Message-ID: <CABdmKX36bog6EvLd1bkGk+hd8FyPqjgqGZZ3T1gvskgvjZGxmw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
-To: Tejun Heo <tj@kernel.org>
-Cc: gregkh@linuxfoundation.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 10, 2026 at 2:42=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> On Mon, Feb 09, 2026 at 04:38:00PM -0800, T.J. Mercier wrote:
-> ...
-> >  static void __kernfs_remove(struct kernfs_node *kn)
-> >  {
-> >       struct kernfs_node *pos, *parent;
-> > @@ -1520,6 +1538,9 @@ static void __kernfs_remove(struct kernfs_node *k=
-n)
-> >                       struct kernfs_iattrs *ps_iattr =3D
-> >                               parent ? parent->iattr : NULL;
-> >
-> > +                     if (kernfs_type(kn) =3D=3D KERNFS_FILE)
->
-> kernfs_type(pos)?
+On Tue, 10 Feb 2026 18:51:29 +0000 Aleksei Oladko wrote:
+> The tests use the tc pedit action to modify the IPv4 source address
+> ("pedit ex munge ip src set"), but the IP header checksum is not
+> recalculated after the modification. As a result, the modified packet
+> fails sanity checks in br_netfilter after bridging and is dropped,
+> which causes the test to fail.
+>=20
+> Fix this by adding an explicit checksum recalculation using the
+> "csum ip" action, so the modified packet contains a valid IPv4
+> checksum.
+>=20
+> Note on IPv6:
+>   The tests in pedit_ip.sh also cover IPv6 (test_ip6_src, test_ip6_dst).
+>   The csum ip action is harmless for IPv6 packets since IPv6 has no
+>   header checksum =E2=80=94 it will be a no-op.
 
-Oh, yes you are right. Thanks.
+I think this makes the test fail for us:
 
-> > +                             kernfs_notify_file_deleted(pos);
-> > +
-> ...
-> > -static void kernfs_notify_workfn(struct work_struct *work)
-> > +static int fsnotify_self_event(int event)
-> > +{
-> > +     if (event =3D=3D FS_DELETE)
-> > +             return FS_DELETE_SELF;
-> > +
-> > +     return event;
-> > +}
-> > +
-> > +void kernfs_notify_workfn(struct work_struct *work)
-> >  {
-> >       struct kernfs_node *kn;
-> >       struct kernfs_super_info *info;
-> >       struct kernfs_root *root;
-> >       u32 notify_event;
-> > +     u32 self_event;
-> >  repeat:
-> >       /* pop one off the notify_list */
-> >       spin_lock_irq(&kernfs_notify_lock);
-> > @@ -929,6 +938,8 @@ static void kernfs_notify_workfn(struct work_struct=
- *work)
-> >       kn->attr.notify_event =3D 0;
-> >       spin_unlock_irq(&kernfs_notify_lock);
-> >
-> > +     self_event =3D fsnotify_self_event(notify_event);
->
-> Maybe just inline the conversion?
+make: Entering directory '/srv/vmksft/testing/wt-3/tools/testing/selftests'
+make[1]: Nothing to be done for 'all'.
+TAP version 13
+1..1
+# timeout set to 10800
+# selftests: net/forwarding: pedit_ip.sh
+# 6.13 [+6.13] TEST: ping                                                  =
+        [ OK ]
+# 7.09 [+0.97] TEST: ping6                                                 =
+        [ OK ]
+# 7.12 [+0.02] Error: Failed to load TC action module.
+# 7.12 [+0.00] We have an error talking to the kernel
+# 8.36 [+1.24] TEST: dev veth1 ingress pedit ip src set 198.51.100.1       =
+        [FAIL]
+# 8.36 [+0.01] Expected to get 10 packets, but got 0.
+# 8.37 [+0.01] Error: Cannot find specified filter chain.
+# 8.38 [+0.00] We have an error talking to the kernel
+# 8.39 [+0.01] Error: Failed to load TC action module.
+# 8.39 [+0.00] We have an error talking to the kernel
+# 9.63 [+1.24] TEST: dev veth2 egress pedit ip src set 198.51.100.1        =
+        [FAIL]
+# 9.63 [+0.01] Expected to get 10 packets, but got 0.
+# 9.64 [+0.00] Error: Cannot find specified filter chain.
+# 9.64 [+0.00] We have an error talking to the kernel
+# 9.65 [+0.01] Error: Failed to load TC action module.
+# 9.65 [+0.00] We have an error talking to the kernel
+# 10.89 [+1.24] TEST: dev veth1 ingress pedit ip dst set 198.51.100.1      =
+         [FAIL]
+# 10.89 [+0.00] Expected to get 10 packets, but got 0.
+# 10.90 [+0.01] Error: Cannot find specified filter chain.
+# 10.91 [+0.00] We have an error talking to the kernel
+# 10.91 [+0.01] Error: Failed to load TC action module.
+# 10.91 [+0.00] We have an error talking to the kernel
+# 12.14 [+1.23] TEST: dev veth2 egress pedit ip dst set 198.51.100.1       =
+         [FAIL]
+# 12.15 [+0.01] Expected to get 10 packets, but got 0.
+# 12.15 [+0.00] Error: Cannot find specified filter chain.
+# 12.16 [+0.00] We have an error talking to the kernel
+# 12.17 [+0.01] Error: Failed to load TC action module.
+# 12.17 [+0.00] We have an error talking to the kernel
+# 13.42 [+1.24] TEST: dev veth1 ingress pedit ip6 src set 2001:db8:2::1    =
+         [FAIL]
+# 13.42 [+0.00] Expected to get 10 packets, but got 0.
+# 13.43 [+0.01] Error: Cannot find specified filter chain.
+# 13.43 [+0.00] We have an error talking to the kernel
+# 13.45 [+0.01] Error: Failed to load TC action module.
+# 13.45 [+0.00] We have an error talking to the kernel
+# 14.69 [+1.24] TEST: dev veth2 egress pedit ip6 src set 2001:db8:2::1     =
+         [FAIL]
+# 14.69 [+0.00] Expected to get 10 packets, but got 0.
+# 14.70 [+0.00] Error: Cannot find specified filter chain.
+# 14.70 [+0.00] We have an error talking to the kernel
+# 14.71 [+0.01] Error: Failed to load TC action module.
+# 14.72 [+0.00] We have an error talking to the kernel
+# 15.96 [+1.24] TEST: dev veth1 ingress pedit ip6 dst set 2001:db8:2::1    =
+         [FAIL]
+# 15.96 [+0.00] Expected to get 10 packets, but got 0.
+# 15.97 [+0.01] Error: Cannot find specified filter chain.
+# 15.97 [+0.00] We have an error talking to the kernel
+# 15.99 [+0.01] Error: Failed to load TC action module.
+# 15.99 [+0.00] We have an error talking to the kernel
+# 17.23 [+1.24] TEST: dev veth2 egress pedit ip6 dst set 2001:db8:2::1     =
+         [FAIL]
+# 17.23 [+0.01] Expected to get 10 packets, but got 0.
+# 17.24 [+0.00] Error: Cannot find specified filter chain.
+# 17.24 [+0.00] We have an error talking to the kernel
+not ok 1 selftests: net/forwarding: pedit_ip.sh # exit=3D1
 
-Sure, sgtm. I figured the named function was a bit more
-self-documenting, but it's just as easy to add checks for FS_DELETE
-where self_event is used.
 
-> Thanks.
+https://netdev-ctrl.bots.linux.dev/logs/vmksft/forwarding/results/512621/80=
+-pedit-ip-sh/stdout
 
->
-> --
-> tejun
+I could be wrong, kernel.org is having a DNS outage so our CI is a bit
+unstable.
+--=20
+pw-bot: cr
