@@ -1,41 +1,42 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F09038B7C7;
-	Tue, 10 Feb 2026 18:51:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D6B39448B;
+	Tue, 10 Feb 2026 18:51:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770749514; cv=none; b=ZvPA6o0USl/4sTHX9U8huGB+ZcL7e3PGjRrq9IAUyLXftilUnnK8e83RPMeOnpLo/1hvEmELNBY+PpZxoX5H1bYq0Edp3iQmK1oH1wbvrbAhiwr42Vf46CXG8KhZJkfSJyj5csVOL3tSO7rfEYItvR84TyRa7/fCty1/C4tE5+I=
+	t=1770749517; cv=none; b=FgK8d3trczvF9LwOOWv1LVSEOLnVYoSZL6fE4e00X+MNRCKsVsGJA24ysII5o/W8f2CvXJ0W6TK/LIstf8LNuyLkjaRISLZ31ex4bOw8z73icOO2+/zciBZ7bUQBcFEB/vRZN2jAVFhEqiBXEzRpPuTLiVRks1xM2EKkWgqmED0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770749514; c=relaxed/simple;
-	bh=G7cX29D8QcLZjtL/pzMzC6d65K3q2ndWEsgHuXtW/n4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GAKU/STiBbUolzHt8xQ8fIU1pGWH/fY3nrr5pokDvC+kILBb75HlNTD7UIs0bg8lo8pWypb9U8fkD07VEFbzhOb4F9ruLrDOwzMZ0RIxe7zrZ78/ifVXv1iawJ5/CdurtNnxoP16gFlVOmiC2i0ts5uGW8EMWLePhjjNgDpIXSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=PZlwPz3w; arc=none smtp.client-ip=130.117.225.111
+	s=arc-20240116; t=1770749517; c=relaxed/simple;
+	bh=E0PbZC8PEYwiRCBXwi6xK0GwQ4bGRsWMgQpxNYKH6NY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eocgQ4C1xqLX+HCNyoOvYq/IBM6flezVQMvzPoV5YQVU1K9zCbP4Qhzt2c4g9sMu5ozne+scsjJonfUOxHfSkRb3otYbW1A6iAWhQC/phTo0PBILiN1hbQ4QtqrREXe78T+kEuIQ8SqFMx9CIXnPsobRYZG7GboSOuH5qzlP6/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=PiMhhJuQ; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="PZlwPz3w"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="PiMhhJuQ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=Content-Type:MIME-Version:Message-ID:Date:Subject
-	:From; bh=ZKUbiyo/WJt3LVGjEqWPdJ60gNGtjVCkYtfmvI9e74c=; b=PZlwPz3wCH/QdJceDkw
-	jjBy2BHxGXLzBNZ5GjyGW2PaTD/kGzmp0e1QFe0WGSbkMAaRurQ/WhsKHFbIU2peUandCSZB+9vX6
-	PGt1pZuv2rT1ekX+8Bmsx/RTCDvBUlz9qPhQzvgJI6MX3uXLSnesaf2dMa4M+OrI1J1LOClq66JX/
-	OZWBAcDdu3s+8R2S331TmnadG5F31ALXii+UyFVTtOTA2hL04oswRq2UfOgFs0c5GSSqc08lYofpX
-	0vwdmI5pUcfw26xKCLANF18lLKJ6KggVv4cQmEj+RqIzH4Zfo/2LtokKIsl4hsxJ6uW8sYT5Kteo7
-	bJS3gHAApcyZ1jA==;
+	:From; bh=GcQUDSAjUqO9ChaaBwPRlImvElsS6HbUiMepA5nvobY=; b=PiMhhJuQjuZEjYZxgd3
+	f/YLoRzbz1AmFvJwk8ootRuQw1fBq2f4cgpVC/rwJvMh/u4PwUYwWmRzePgv6r4EqBJRvHnbqEPt8
+	7rjgbNT2+PHz+wnouPBHfp28NTE2ftuahWKDeoaDEqvqJUVzWvLdeoFt5qmMxSFI8DDoPRXwmBcll
+	mI5Rr+ixjIIlwmEM5S0McuhL/NrfLAJVpOgFWEVKOTntz5yNiY1Bvj7+KY3d/hTlQA4heyuPFyKUe
+	YtB476Gf4PbTCkNzh1CyQAwQU93g06uVi6xDY8/BJIzozt0UtjZ/VW6wM6Z565lC/O9k2s/4Xa5Kk
+	vuSZoFUixIN8UHQ==;
 Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
 	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vpsou-00DI8q-1q;
-	Tue, 10 Feb 2026 19:51:35 +0100
+	id 1vpsp0-00DJJB-11;
+	Tue, 10 Feb 2026 19:51:40 +0100
 Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 61AIphbo480032
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 61AIpnRh480040
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 10 Feb 2026 18:51:44 GMT
+	Tue, 10 Feb 2026 18:51:49 GMT
 Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 61AIpgA2480031;
-	Tue, 10 Feb 2026 18:51:42 GMT
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 61AIpnh4480039;
+	Tue, 10 Feb 2026 18:51:49 GMT
 From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
 To: "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
@@ -45,10 +46,12 @@ To: "David S . Miller" <davem@davemloft.net>,
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH 0/3] selftests: forwarding: fix br_netfilter related test failures
-Date: Tue, 10 Feb 2026 18:51:26 +0000
-Message-ID: <20260210185129.480015-1-aleksey.oladko@virtuozzo.com>
+Subject: [PATCH 2/3] selftests: forwarding: vxlan_bridge_1d_ipv6: fix test failure with br_netfilter enabled
+Date: Tue, 10 Feb 2026 18:51:28 +0000
+Message-ID: <20260210185129.480015-3-aleksey.oladko@virtuozzo.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260210185129.480015-1-aleksey.oladko@virtuozzo.com>
+References: <20260210185129.480015-1-aleksey.oladko@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,28 +61,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello
+The test generates VXLAN traffic using mausezahn, where the encapsulated
+inner IPv6 packet has an incorrect payload length set in the IPv6 header.
+After VXLAN decapsulation, such packets do not pass sanity checks in
+br_netfilter and are dropped, which causes the test to fail.
 
-This patch series fixes kselftests that fail when the br_nefilter
-module is loaded. The failures occur because the tests generate
-packets that are either modified or encapsulated, but their IP
-headers are not fully correct for sanity checks performed by
-be_netfilter.
+Fix this by setting the correct IPv6 payload length for the encapsulated
+packet generated by mausezahn, so that the packet is accepted
+by br_netfilter.
 
-Aleksei Oladko (3):
-  selftests: forwarding: vxlan_bridge_1d: fix test failure with
-    br_netfilter enabled
-  selftests: forwarding: vxlan_bridge_1d_ipv6: fix test failure with
-    br_netfilter enabled
-  selftests: forwarding: fix pedit tests failure with br_netfilter
-    enabled
+tools/testing/selftests/net/forwarding/vxlan_bridge_1d_ipv6.sh
+lines 698-706
 
- .../selftests/net/forwarding/pedit_dsfield.sh |  5 ++--
- .../selftests/net/forwarding/pedit_ip.sh      |  2 +-
- .../net/forwarding/vxlan_bridge_1d.sh         | 26 ++++++++++++-------
- .../net/forwarding/vxlan_bridge_1d_ipv6.sh    |  2 +-
- 4 files changed, 21 insertions(+), 14 deletions(-)
+              )"00:03:"$(           : Payload length
+              )"3a:"$(              : Next header
+              )"04:"$(              : Hop limit
+              )"$saddr:"$(          : IP saddr
+              )"$daddr:"$(          : IP daddr
+              )"80:"$(              : ICMPv6.type
+              )"00:"$(              : ICMPv6.code
+              )"00:"$(              : ICMPv6.checksum
+              )
 
+Data after IPv6 header:
+• 80: — 1 byte (ICMPv6 type)
+• 00: — 1 byte (ICMPv6 code)
+• 00: — 1 byte (ICMPv6 checksum, truncated)
+
+Total: 3 bytes → 00:03 is correct. The old value 00:08 did not match
+the actual payload size.
+
+Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+---
+ tools/testing/selftests/net/forwarding/vxlan_bridge_1d_ipv6.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/forwarding/vxlan_bridge_1d_ipv6.sh b/tools/testing/selftests/net/forwarding/vxlan_bridge_1d_ipv6.sh
+index a603f7b0a08f..e642feeada0e 100755
+--- a/tools/testing/selftests/net/forwarding/vxlan_bridge_1d_ipv6.sh
++++ b/tools/testing/selftests/net/forwarding/vxlan_bridge_1d_ipv6.sh
+@@ -695,7 +695,7 @@ vxlan_encapped_ping_do()
+ 		    )"6"$(			  : IP version
+ 		    )"$inner_tos"$(               : Traffic class
+ 		    )"0:00:00:"$(                 : Flow label
+-		    )"00:08:"$(                   : Payload length
++		    )"00:03:"$(                   : Payload length
+ 		    )"3a:"$(                      : Next header
+ 		    )"04:"$(                      : Hop limit
+ 		    )"$saddr:"$(		  : IP saddr
 -- 
 2.43.0
 
