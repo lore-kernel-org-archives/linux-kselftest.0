@@ -1,73 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AE0329E56;
-	Tue, 10 Feb 2026 13:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45007340A62
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 13:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770730613; cv=none; b=oHE5MX5Ldx6hh3a5msOmtKSydcouOrUwr79azw/AQ1l13KuEVkVFWJGUeKmJ8d1+7Y7A8MLr4vyOJ3w0GGIPWfGL8fSj/zg5NBOSiooBNerQGMKw2CnmCsu9qOQiNhCsgEDFWLLOEDNXlWjPCxUMP3fc324yvTMCzgSV563ofw4=
+	t=1770731647; cv=none; b=JqIXsZ4koC3crWdC2yf9Xvp0GVJ/6k1x75CttWYVVoTC18HfZ+2C7d07rLto7SkbWtvUHmEzHJtX8xtzRM/FRbWI5fpsdkAnmltKs7icCJa7lCITW2wZ69fiJ1V7/anWxhK1uZa6x0VgoZ3SozQsPLXTtXQM2uFQW72bzpgQgss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770730613; c=relaxed/simple;
-	bh=XvsVHmXgB2+jGFb6YS8QQQ6oUeNSCspDyi2HthD7WhI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=O0Tu4YiuhFQc7ukgQ6iL9AccsgzCXer9Bc1aJxe5kZRI7pY3yz059GeyXF3xJfupRL6j0LutLz3q+zlnPyBdUu8FYxnpPdquZrw2kIKFUixX8IR7/GNefnmZZchZAPYBb1XTsErJbIMFncAAghIfzNGL7fI0E+0939aMS5daI5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J2ZWaqcD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770731647; c=relaxed/simple;
+	bh=48INu6i1vXT0SP2V6eXa8OheecMZ+eqEsZn99K/dkpA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BcELPFawyc6LnS7LUtG9134TqjaEiCT3ro7cPq3EiVXLz+33TIhQQNeNx9xTjflaLos3KlCE2tih8fbau96NUfUomghGgFyiO2qyeGQmaqiHfAZtUQcQPpJPU5HEtRCtfUhMuC2F4o9O5rFc3HONaVLyxoqQCrdRoMcb0oLQV/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQ4Kcvw2; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J2ZWaqcD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67066C116C6;
-	Tue, 10 Feb 2026 13:36:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770730612;
-	bh=XvsVHmXgB2+jGFb6YS8QQQ6oUeNSCspDyi2HthD7WhI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=J2ZWaqcD1CsAlXKJRUBGX6uNdaZxBjXPTVV8R2T1A8UkKjj8diU6V0BOdzx7c500E
-	 qeneZE4Pesfgv+FsGQZeZM+qA+rmuQnrADW9kQjNFQeRn9XCGgYfaVNee7yAhSLA8+
-	 5wyFR+2ZVgiKyvrxGzhV37VFZ0l7M711hDt1D9GgAGsVKFrda1iNT4xw22ZzzGMmCD
-	 Pck5QWk45FlLjvAetTptJPxBvbwgZipCK6ixjjkIjr+YLQOFtitcbfL16kOhon3LSF
-	 PJbEXx1XeJ9iG0rBWDB0Wed6yuDcg7Ro3bS/xrGiOJugs7++i84UNOMm3JsY9Pymmo
-	 AWFJ6NKkAxi4Q==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Zhu Yanjun <yanjun.zhu@linux.dev>
-Cc: pasha.tatashin@soleen.com,  rppt@kernel.org,  pratyush@kernel.org,
-  shuah@kernel.org,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/1] selftests/liveupdate: Cleanup kernel optio
- CONFIG_LIVEUPDATE_TEST
-In-Reply-To: <9da09064-5005-4b30-8f9b-9ac9b9858d46@linux.dev> (Zhu Yanjun's
-	message of "Thu, 29 Jan 2026 20:31:34 -0800")
-References: <20260130042840.1469-1-yanjun.zhu@linux.dev>
-	<9da09064-5005-4b30-8f9b-9ac9b9858d46@linux.dev>
-Date: Tue, 10 Feb 2026 14:36:49 +0100
-Message-ID: <2vxz4inou3da.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQ4Kcvw2"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-354c825dc77so596036a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 05:54:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770731645; x=1771336445; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1j/tIh/MZYSfdIpB/1XoIEBSzjfDVOmdxRG8wPNAmbM=;
+        b=mQ4Kcvw2nCGc1Pc3rstTvhjKhvskNN7vMBSARxCwN++sAbEWh4isKQQB2z69x+dNpF
+         WES5ePLWpxT4WX8Ah+MQns3JW3HhXolSYDbrzJ8laDR5aGzmv1NoOrsS41+1OnvhCQAv
+         9NLD2o6g5fSt6H4YCuDI3WG8MZt4zmnHjN9x2eW6P0rcN0R+Y0f9LLj6zLri8cxTM469
+         tKgmBbq/aai9hpFNOrgcW9MWn5C0nn06G4ZHmhoT0HLUMSK0jhiHQjus0ngtb+iTSsJB
+         hKMaA2KqynVIdGpeS1vIkJvw5DAOadmGk5hxfUokrc1X5PDLDaSv8hC6KatFvfQT5dSJ
+         2WTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770731645; x=1771336445;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1j/tIh/MZYSfdIpB/1XoIEBSzjfDVOmdxRG8wPNAmbM=;
+        b=aiD79drOuhqw23Jhzi30CYdIsQ4Q3FURDE2s5n/PEC69aE2g4MOR/83gwhLADQ97jv
+         17dHRu08B9XEv9Qa3kg02B6nMgd/8vwNL6VHZl+i7L+/OvtOMFt0MpohveR706hKBCnE
+         SySlNyemvgHtfmY/0SJ78F50N4twJsD73BEnxEKvDeMs4FMa3IIRD2thi2GGwnjXN2Kr
+         F8OuwhwWNcuA6vmPmDJGJ7fJBWK6o4UPhS9lyf2qHsUwYDbYAOayZQ/JftYCawAcHx6H
+         nEj0eI0RT+zYtzFybP40pUm6DaV+hMoMesoKfTj0jcZPFwwqqriodFmQLqfJrPAD//UW
+         mQHA==
+X-Gm-Message-State: AOJu0Yyh8mYakJjkEQW8r6WJEN8+3CugKIrZgSo/0eyWK9jKOI1RiC3t
+	dSoSOH1mb1S5gwb1+RRfwoNg/7ErO+cZZn/Tb8rUatge24oN50aOjEB8
+X-Gm-Gg: AZuq6aKmeGFeiw0XAhK0BCA72D7rREsKwCgMu7iwbf2LfgC5e60deeDYqH+hy6/7nnC
+	PgSXkCkPI0VPOO5H/8kEsjeszf2TK/LD6XTxZ/98X/P6Tvy/3/9c3GQVBkJU9IcljDkyNOxza6t
+	6fQItjGitJVmREloE5V/tRUpR8uJFXkXQlorjiKT3IUrC9PAUzig1xYgFL+zxyG3mqnWTVinqE9
+	FirnIPKMWyOtpXapQt1ocZRCNIE+5w3dFj+xABm2NwMQn983Dbf70olygSCmVEVlKMUo9tvAAYp
+	d9J6qGg9EXrn2PihJYe4Bl2lk0d0LEBkck7Q5e/xJhAayZitrbnOr6AGXXTa/I+zA24MFv77hXt
+	2bE8c1G1+KelDb+/OFbvci5jfgpgcwzmAy85Bm1Kbary0aMLuC+1xqp7+nTizCUISv4q+NI796P
+	onS6SA3wYbBxj+tiVCarxVPryAGfJ9LMfFk99vntUEPDPHMIE012kD+5N5Yg==
+X-Received: by 2002:a17:90b:3505:b0:34c:7182:cf9d with SMTP id 98e67ed59e1d1-354b3e4b3edmr9029077a91.25.1770731645447;
+        Tue, 10 Feb 2026 05:54:05 -0800 (PST)
+Received: from neogulmanpassingby.local.lan ([219.248.48.210])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35662e50d3dsm2799763a91.2.2026.02.10.05.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Feb 2026 05:54:04 -0800 (PST)
+From: UYeol Jo <jouyeol8739@gmail.com>
+To: shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	richard.weiyang@gmail.com,
+	akpm@linux-foundation.org,
+	sef1548@gmail.com,
+	UYeol Jo <jouyeol8739@gmail.com>
+Subject: [PATCH v2] selftests/ipc: skip msgque test when MSG_COPY is unsupported
+Date: Tue, 10 Feb 2026 22:53:59 +0900
+Message-ID: <20260210135359.178636-1-jouyeol8739@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 29 2026, Zhu Yanjun wrote:
+msgque kselftest uses msgrcv(..., MSG_COPY) to copy messages. When the
+kernel is built without CONFIG_CHECKPOINT_RESTORE, prepare_copy() is
+stubbed out and msgrcv() returns -ENOSYS. The test currently reports this
+as a failure even though it is simply a missing feature/configuration.
 
-> =E5=9C=A8 2026/1/29 20:28, Zhu Yanjun =E5=86=99=E9=81=93:
->> The kernel option CONFIG_LIVEUPDATE_TEST does not exist currently.
->> Remove it.
->
-> In kernel 6.19-rc7, this kernel option still exists in the file
->
-> tools/testing/selftests/liveupdate/config. Thus I send out this commit to=
- remove
-> it.
+Skip the test when msgrcv() fails with ENOSYS.
 
-Yes, but the patch to add the config is in mm-nonmm-unstable. I am not
-sure if this worth the churn of removing this and re-adding it when that
-patch lands later. Do you see a real problem with this?
+Signed-off-by: UYeol Jo <jouyeol8739@gmail.com>
+---
+v2:
+ - Clarify in commit message why MSG_COPY returns -ENOSYS without
+   CONFIG_CHECKPOINT_RESTORE (prepare_copy() stub).
 
->
-[...]
+ tools/testing/selftests/ipc/msgque.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---=20
-Regards,
-Pratyush Yadav
+diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
+index e107379d185c..82f73cdae120 100644
+--- a/tools/testing/selftests/ipc/msgque.c
++++ b/tools/testing/selftests/ipc/msgque.c
+@@ -161,6 +161,9 @@ int dump_queue(struct msgque_data *msgque)
+ 		ret = msgrcv(msgque->msq_id, &msgque->messages[i].mtype,
+ 				MAX_MSG_SIZE, i, IPC_NOWAIT | MSG_COPY);
+ 		if (ret < 0) {
++			if (errno == ENOSYS)
++				ksft_exit_skip("MSG_COPY not supported\n");
++
+ 			ksft_test_result_fail("Failed to copy IPC message: %m (%d)\n", errno);
+ 			return -errno;
+ 		}
+-- 
+2.43.0
+
