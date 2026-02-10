@@ -1,92 +1,110 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35B17478
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 09:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAB834253C;
+	Tue, 10 Feb 2026 09:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770717246; cv=none; b=RKC4m8lzL8k1X5xOJ5Q/+310NTWT0/AFwg03MCPRY9jMUUaWBJvk0YR6rAhc/6e73QCpJMpP+lhC0dYkFw5jfyqHmjGUNuRp/vqEOUqmGl6mutDv7SwPTuV1WNAx6uaL+YXBg0+2IWjiQP8OcWnYABaEkSBPOxAegOj3BfQiCzg=
+	t=1770717257; cv=none; b=nRWrnaSYNQtU1T4VUnMlm/qJ3yutvg7gcNW3cXXz2f79ADUjbzUR3eTg0VhMlFhuNJVOxDkeXFJsn24EA96e6i/jKhIlMwUG1cxt0guGdDPqwGtnA+Sv+Drk8kSQbg/H7olwLPhnaXUR4tFr4AxDJlKwT+TCkeVQ3Msart5UM+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770717246; c=relaxed/simple;
-	bh=i0w+JJnI8EQ1ANeeI6I1RLGGDxI7WbHm2A3p2XQTLJw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ue1sKM8UeITI8o5YpeXHbPGBj8rfDzOoysmqIIMWpSbCCSr0Py3FLU5TEhtDMqGLnKcSz84vWev5SL4m5p8HSClgafPGI5IYaBPOwIsdKcXMB5Ww3Y81wXUxjzKN+y1jgdUsmL4fENWqkm9X6elcTLoA4/piRMZYATLWQGqzMgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cXOcBI2o; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770717257; c=relaxed/simple;
+	bh=F/LKCWFo88ew4oyZzRTInRnAbUm9ChGZiHCOXADEEXk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dUxw6U7UxmIecAUWqtahbmE7uB4I+T7RGZ21w7QRIM7j/UVS4nNlor8MrjgSZr0jRNIvypzFcVwNQEdRfkkaqCxAkv25NPJqpT4dwP7Rs6C7q8OlwTFzg9PZnLCkI0e6QjTWb2PTiswdSKcvD3jcaW+u2nVYG3pWxHRoBDd9CRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aryfLk3C; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cXOcBI2o"
-Message-ID: <5c4bbbea-d68c-4089-b3aa-adb4b05696ba@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770717232;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bY2w/gFpe4hqGmltQJxPswTFNUUVRovXPzch+Q2omm0=;
-	b=cXOcBI2obVyz8/uVaDicrDq3MM8FcZNT6T+NqRAPva0UIEBCo1j0CYDU2l+540n7q0QyZR
-	JImIJ6h/phJO6I2Cp6LHjhbxun0/+XEKSDl9jsYq6eEr7b9CsnfK8PTcIwYEFHcKNNGAX3
-	sGPab92uevecxsto9+C1tCn69BFm6cY=
-Date: Tue, 10 Feb 2026 17:53:07 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aryfLk3C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE74CC116C6;
+	Tue, 10 Feb 2026 09:54:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770717257;
+	bh=F/LKCWFo88ew4oyZzRTInRnAbUm9ChGZiHCOXADEEXk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aryfLk3C8Q1oDnXgwabgfVC4o/WdgLK9/Hxt5CHV/1oNkOjFP/acC5h9llLx/dfvx
+	 TkK/QkqErnSiul5/JpaE59uOya1UEQdK6cfvx+4mWpj8jBm0D2lMjeulVHwcQfzWqx
+	 mV00BfMul2RzxBeTclFjEb9p8f4DCCHH8Xkvcxn2rCo6q3JrLJTYE6acOyi6A9psFO
+	 mN7miDdMJuiSex1q8qxGBy1Geof/LUQvoxGruOGRGVU6M7DMkNM0p64lte+P7+v/tl
+	 F0F8qZTjsTeJUsoJzTlaiJzTG44kbvnuEKJgU4ToG5NV72XehAzGJLmBH7pcBLMSv/
+	 QUZ1XbAufxDBw==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Gabriele Monaco <gmonaco@redhat.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 1/2] selftests/tracing: Fix to make --logdir option work again
+Date: Tue, 10 Feb 2026 18:54:12 +0900
+Message-ID:  <177071725191.2369897.14781037901532893911.stgit@mhiramat.tok.corp.google.com>
+X-Mailer: git-send-email 2.53.0.239.g8d8fc8a987-goog
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v9 1/1] smb/client: introduce KUnit test to check search
- result of smb2_error_map_table
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: bharathsm@microsoft.com, chenxiaosong@kylinos.cn, dhowells@redhat.com,
- linkinjeon@kernel.org, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-cifs@vger.kernel.org, pc@manguebit.org, ronniesahlberg@gmail.com,
- senozhatsky@chromium.org, smfrench@gmail.com, sprasad@microsoft.com,
- tom@talpey.com
-References: <20260118091313.1988168-1-chenxiaosong.chenxiaosong@linux.dev>
- <20260210081040.4156383-1-geert@linux-m68k.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: ChenXiaoSong <chenxiaosong.chenxiaosong@linux.dev>
-In-Reply-To: <20260210081040.4156383-1-geert@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Geert,
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Thank you for reviewing this patch.
+Since commit a0aa283c53a7 ("selftest/ftrace: Generalise ftracetest to
+use with RV") moved the default LOG_DIR setting after --logdir option
+parser, it overwrites the user given LOG_DIR.
+This fixes it to check the --logdir option parameter when setting new
+default LOG_DIR with a new TOP_DIR.
 
-The KUnit test cases are only executed when the CONFIG_SMB_KUNIT_TESTS 
-is enabled.
+Fixes: a0aa283c53a7 ("selftest/ftrace: Generalise ftracetest to use with RV")
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ tools/testing/selftests/ftrace/ftracetest |   18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-Making it a separate test module would require exporting local variables 
-and functions so that the test code can access them. However, exporting 
-local variables and functions would likely make the code much uglier, as 
-it would require adding "#if" conditionals into the production code to 
-isolate the test code.
-
-Geert, please let me know if you have a better idea.
-
-I am also discussing this with the ext4 community, and we all hope to 
-find a way to make the tests a separate module.
-
-Thanks,
-ChenXiaoSong <chenxiaosong@kylinos.cn>
-
-On 2/10/26 4:10 PM, Geert Uytterhoeven wrote:
->   	Hi ChenXiaoSong,
-> 
-> Thanks for your patch, which is now commit 480afcb19b61385d
-> ("smb/client: introduce KUnit test to check search result of
-> smb2_error_map_table") in linus/master
-> 
->> The KUnit test are executed when cifs.ko is loaded.
-> This means the tests are_always_ executed when cifs.ko is loaded,
-> which is different from how most other test modules work.
-> Please make it a separate test module, so it can be loaded independently
-> of the main cifs module.  That way people can enable all tests in
-> production kernels, without affecting the system unless a test module
-> is actually loaded.
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 3230bd54dba8..0a56bf209f6c 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -130,8 +130,7 @@ parse_opts() { # opts
+       shift 1
+     ;;
+     --logdir|-l)
+-      LOG_DIR=$2
+-      LINK_PTR=
++      USER_LOG_DIR=$2
+       shift 2
+     ;;
+     --rv)
+@@ -199,6 +198,7 @@ fi
+ TOP_DIR=`absdir $0`
+ TEST_DIR=$TOP_DIR/test.d
+ TEST_CASES=`find_testcases $TEST_DIR`
++USER_LOG_DIR=
+ KEEP_LOG=0
+ KTAP=0
+ DEBUG=0
+@@ -210,12 +210,18 @@ RV_TEST=0
+ # Parse command-line options
+ parse_opts $*
+ 
++[ $DEBUG -ne 0 ] && set -x
++
++# TOP_DIR can be changed for rv. Setting log directory.
+ LOG_TOP_DIR=$TOP_DIR/logs
+ LOG_DATE=`date +%Y%m%d-%H%M%S`
+-LOG_DIR=$LOG_TOP_DIR/$LOG_DATE/
+-LINK_PTR=$LOG_TOP_DIR/latest
+-
+-[ $DEBUG -ne 0 ] && set -x
++if [ -n "$USER_LOG_DIR" ]; then
++  LOG_DIR=$USER_LOG_DIR
++  LINK_PTR=
++else
++  LOG_DIR=$LOG_TOP_DIR/$LOG_DATE/
++  LINK_PTR=$LOG_TOP_DIR/latest
++fi
+ 
+ if [ $RV_TEST -ne 0 ]; then
+ 	TRACING_DIR=$TRACING_DIR/rv
 
