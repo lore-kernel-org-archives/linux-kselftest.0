@@ -1,107 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA981CEAC2;
-	Tue, 10 Feb 2026 08:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719B21CEAC2;
+	Tue, 10 Feb 2026 09:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770713403; cv=none; b=kmIhVWULlqfuXrnXF+0o72YyPs42Cl6urrWoxwxSDr10l1lqWx6U6VC1OeE8C5PW08dMgCom9U98WUdN0fwBFl34K2lT0J1k62lxoWNKasYgQc3rZJJh8IJyyBcuZcI6apVKaZwKLACR/ObzyYdhC9xWzgy4lcWVUOdoW2LJc/E=
+	t=1770714757; cv=none; b=NxvZva9T3Z7T1rPqPxrm0N2e82kTV3EvBWdiGLN0n6TZz/F0y0OJvQ1G9CVFntFn1FPoy2MLFimQnbZpfVxJ7J0eJKc8SfacpHl0hE1kwyimej9Gt0DMVxDwNdWmdYpjqhKgmxxatHwS+g5CysefHLtJiPwek6cava1kyQgR4Ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770713403; c=relaxed/simple;
-	bh=Si2j2OamdKyuLhvOjLLri8raYiy2rhxS+VNLI8ItD0E=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lj6Nq9MNOcFWpIgablmAlN5Xx20eFuackNY1zXPuyg8IhqqxPQncCbBX2MKFtEz3FEh+rDK73H2+y0BiM+4Xe62R+1kbuE77699rhri4dG+f4vC8T6fDfYkGX1Xf/m0sIqZHB+Icu3cOfbwVNpQxVSeSU6W9m8kgpwYCgjmhdL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YULiDm7y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770714757; c=relaxed/simple;
+	bh=a4kGJg4WbAjnEgn9ulvPgmWFvR8pCZo3tPkDFyWVr3A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WHUyD1hE+F2U3GX+zk/Qu0kHWRQsmZ0m0eCOxitFM3JEei3obcwJPHumfynuztPtKEUfCX+l78KR3NhFYeCRYKPAS0K9wP9+Pjxocd/tOHVFJDDQVOu3fQt/AvLWhH6UlS6m9Splr3eNiDQv7XsCMuFWgRRJ/xK5H1fGDO8mBI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p01is1n8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YULiDm7y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93512C116C6;
-	Tue, 10 Feb 2026 08:50:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p01is1n8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FC9C116C6;
+	Tue, 10 Feb 2026 09:12:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770713402;
-	bh=Si2j2OamdKyuLhvOjLLri8raYiy2rhxS+VNLI8ItD0E=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YULiDm7y4e6NWsk69SA37Ym2P/kMkdwfXgqOKL/WfmPH2grAXUuICIzya//ACFRil
-	 SBDa9yZisRh7dwXFBh6KMkGZMzlS6g0DzaCt2tEWUqhzOAhWY6lS6t8ktjTshUQEsN
-	 KLlyoDD7Cq96kMv8nIeEtyR4P8F2hEi9JWz0VqTvDGEPnwu7pc+2FJkH9a30hxGqar
-	 51VFK/Ms1JJFNG2BoQzOjRUazH5UOuBurIQPiwmJUogXYJ3+ARRZ7X00ELjPt8KG3/
-	 nsiughIMp2/0Y8EjI6eAt0wb/XYm3jTTt9IAprnZ0mTM0Kl27YJi6TYrg9Vk2QR0kd
-	 r/MfTJ9KLLJXg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vpjRX-00000009zjd-3spB;
-	Tue, 10 Feb 2026 08:50:00 +0000
-Date: Tue, 10 Feb 2026 08:49:59 +0000
-Message-ID: <86v7g5asp4.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: kvm@vger.kernel.org,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mingwei Zhang <mizhang@google.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 00/19] ARM64 PMU Partitioning
-In-Reply-To: <20260209221414.2169465-1-coltonlewis@google.com>
-References: <20260209221414.2169465-1-coltonlewis@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1770714757;
+	bh=a4kGJg4WbAjnEgn9ulvPgmWFvR8pCZo3tPkDFyWVr3A=;
+	h=From:To:Cc:Subject:Date:From;
+	b=p01is1n8ih5qrat3ot9M8va2R2rz1Qk7QBzR+hjIrkgseUQpWzClSM8d+RjUhhr+/
+	 DJSBzd32r5oc7r0Win2arHKOZGh3ODX6sDzWJT9ioGe8JEt/sls2mouPk7Zzc8hH7s
+	 pUjH5ZTCdOhJWiP2ytHwtCmnYb6sotNu7Iw4s3/Mj4f/GGteTa+1qgjlLqWfotJ4GL
+	 WaGsxNiup96toXZRuwfPUOBC0xGeJePDPfsGb+fRVpv6aZHNttgvNpeBrwutiU2Q+P
+	 eEURDjM9CMPCdDXfKpuDCcSAsfPBLH2k0dE60D700XABuAKMtE2L3hP7VOF31we2Z5
+	 iu38iRWjxZF8Q==
+From: Allison Henderson <achender@kernel.org>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	rds-devel@oss.oracle.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	allison.henderson@oracle.com
+Subject: [PATCH net-next v3 0/4] net/rds: RDS-TCP reconnect and fanout improvements
+Date: Tue, 10 Feb 2026 02:12:31 -0700
+Message-ID: <20260210091235.1817860-1-achender@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, mizhang@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 09 Feb 2026 22:13:55 +0000,
-Colton Lewis <coltonlewis@google.com> wrote:
-> 
-> This series creates a new PMU scheme on ARM, a partitioned PMU that
-> allows reserving a subset of counters for more direct guest access,
-> significantly reducing overhead. More details, including performance
-> benchmarks, can be read in the v1 cover letter linked below.
-> 
-> An overview of what this series accomplishes was presented at KVM
-> Forum 2025. Slides [1] and video [2] are linked below.
-> 
-> IMPORTANT: This iteration does not yet implement the dynamic counter
-> reservation approach suggested by Will Deacon in January [3]. I am
-> working on it, but wanted to send this version first to keep momentum
-> going and ensure I've addressed all issues besides that.
+Hi all,
 
-[...]
+This is subset 4 of the larger RDS-TCP patch series I posted last
+Oct.  The greater series aims to correct multiple rds-tcp issues that
+can cause dropped or out of sequence messages.  I've broken it down into
+smaller sets to make reviews more manageable.
 
-As I have asked before, this is missing an example of how userspace is
-going to use this. Without it, it is impossible to correctly review
-this series.
+In this set, we address some reconnect issues occurring during connection
+teardowns, and also move connection fanout operations to a background
+worker.
 
-Please consider this as a blocker.
+The entire set can be viewed in the rfc here:
+https://lore.kernel.org/netdev/20251022191715.157755-1-achender@kernel.org/
+
+Questions, comments, flames appreciated!
 
 Thanks,
+Allison
 
-	M.
+Change Log
+v2:
+   [PATCH net-next v2 1/4] net/rds: Refactor __rds_conn_create for
+   blocking transport cleanup
+      - NEW
+
+   [PATCH net-next v2 2/4] net/rds: Delegate fan-out to a background
+    worker
+      - Added syzbot report link
+v3:
+  [PATCH net-next v3 1/4] net/rds: Fix NULL pointer dereference in
+  rds_tcp_accept_one
+    - NEW
+    - Fixes syzbot bug
+      https://syzkaller.appspot.com/bug?extid=96046021045ffe6d7709
+
+  [PATCH net-next v3 2/4] net/rds: Refactor __rds_conn_create for
+  blocking transport cleanup
+    - Moved syzbot report link from "Delegate fan-out to a background
+      worker" to this patch
+    - this patch fixes syzbot bug flaged in next patch
+      https://ci.syzbot.org/series/1a5ef180-c02c-401d-9df7-670b18570a55
+
+   [PATCH net-next v3 3/4] net/rds: Delegate fan-out to a background
+    worker
+     - Moved syzbot report link to previous patch
+
+   [PATCH net-next v3 4/4] net/rds: Use proper peer port number even
+   when not connected
+     - Fixed ai comment complaint
+
+   [PATCH net-next v2 4/4] net/rds: rds_sendmsg should not discard
+   payload_len
+     - Removed
+     - Deffered to net instead of net-next
+
+Allison Henderson (2):
+  net/rds: Fix NULL pointer dereference in rds_tcp_accept_one
+  net/rds: Refactor __rds_conn_create for blocking transport cleanup
+
+Gerd Rausch (1):
+  net/rds: Delegate fan-out to a background worker
+
+Greg Jumper (1):
+  net/rds: Use proper peer port number even when not connected
+
+ net/rds/connection.c  | 32 +++++++++--------
+ net/rds/tcp.c         |  3 ++
+ net/rds/tcp.h         |  7 ++--
+ net/rds/tcp_connect.c |  2 ++
+ net/rds/tcp_listen.c  | 80 +++++++++++++++++++++++++++++++++----------
+ 5 files changed, 86 insertions(+), 38 deletions(-)
 
 -- 
-Without deviation from the norm, progress is not possible.
+2.43.0
+
