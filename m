@@ -1,79 +1,41 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355FA3859CF
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 15:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1083385EDA;
+	Tue, 10 Feb 2026 16:15:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770738863; cv=none; b=n6MyAsxxhwQpgIF+bhMK4eBhUOu5rxhRKnzfNRhMTPu/+65ewxSxSnKAbXkBHHsYf8uCy140cXzrWf0ovS1347T+MVYjd8n+ohCAwUJv1TtFWCyGU2NwsZ6W1C5+HYok/OKj5yRvempI2xFL4pCvGW/Axxkq/SGys4+/mPBlF/w=
+	t=1770740103; cv=none; b=l4dPWSQoz74UxmrwuuMWa+oZpX9ATkj3ElUrjEOKT/9GAzznLGIxXtsN5q24/h+4WWmqEJ93TFKwBANoJKzNO8sRURIgcmVqWOCBIKpmYUfzsZbzl5X07+bkMM7HqvEoTcQZiFgyp76SbDOuThFgu/YhHGfNARTMrODiOFUrQ+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770738863; c=relaxed/simple;
-	bh=ST2OYSUr/9BOxuSHmo6m8vzlEriASf+JxzHewy/ojBw=;
+	s=arc-20240116; t=1770740103; c=relaxed/simple;
+	bh=9vtbxyiMLrYNdwBoK7qoue5mhebGylj6qkZTJg0n2wo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VEJgus44t60uV33No0ZOZnIteQ1JkxDEJ8hbgkO+BuCK4Ig7uMFK3qkBh5xtoifi/hAQeuujR6ZZEqYRitM3MZ6UjT989B/sQMuyZ3aDlGU17w1cki1ttvgtelGDNBpMCX5H4euvcG7t4uk6fIy7PRsu2FsVZ38l2rPgKfsYBek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=plwfd2eA; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="plwfd2eA"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-482f454be5bso57610825e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 07:54:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770738860; x=1771343660; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uXRC/tAwqGKh/o1ifn7jOx1oKAbcp0FPsYzrynQiNbU=;
-        b=plwfd2eAVC0V9X+tF+xaq4ZPgKfVzc/1WZXoln9uzlB7IripnJA/vsNhyAsG10mI0O
-         8aw/MCu2W6SCfsJdczcb2xT9RlZ0fuZmYsn+KV9jmAKX4tZma4VuxMCBBLP1PcVJeD4x
-         A4asbbz5hWhImnIcbcUQZiBE5TL6mQb2pQVCktPUAs95CdTCKzsrTsouu26dlMOb1ZLq
-         AvJOgZVUlCB6Zf7vREGfuAVp63D19mrE6tm/qVZSOiw0ov9leaVVwUo5MGDUTk+eIbU3
-         Se84MvL3UYgvsPsMp+O2ekGfBewuCalfmRRxwMiWj1PSxuA8tuhuMYvEsQgMWfc20Gu3
-         3aMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770738860; x=1771343660;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uXRC/tAwqGKh/o1ifn7jOx1oKAbcp0FPsYzrynQiNbU=;
-        b=xM+i7csLzP+AmIgzHuxy+NV95c9AG4g09wV646i1K3N1ZaasoLFfmyQP5/2Q0S0/TN
-         +hV/ylBMilN7AsPFsoooq1VLyeui+GQiuvzblf07hnhEONQ31NuLIi0b8Ek81igUGVnE
-         kmilT0vbnk4Y4l3qR7N3caZeiIoFs7oQcs+QFoJLMQ9Rl4Sd7fWyqxe1JDThVpjVFtJA
-         SZzX3N50zRUo8P6BGotWLtzGf5fUaRGzbX2EijulX4kh1SVk9ze2Dms19dXUSTBq+yjv
-         cIStRvfO9p86fiL2qJylcKS7M2gKVinWjMBasaRqTvvwvCSWg7btnDGS/eDGz6SuLPwk
-         wFSw==
-X-Forwarded-Encrypted: i=1; AJvYcCVhh2GesgvCXMp9okPPOtkGJr52iuSVlPulXigd5WFWM39GY98evsYuNJ/WSFE5HXvjC3zv9j3IAmzt4vEYwNU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztVVb18DFNxPEyEXDSh+S9vIEAXfeL7Z9bjmhJT3vT/zd5xFM5
-	NUAq0111kwBR3H7kWVXhol0cAhbyBXMAQPQBGisf25rybKrrEOOCIdzPJoCww9jQzQ==
-X-Gm-Gg: AZuq6aJYHYRl5tFK6TqkkKk9qDzdMOFwFOO5sh/oUD4FC1NGdE4mtt8sb5I5LpqTTFn
-	k2HoOsQfQD3RfFslszQLDP4SAWwz9RAtRJTks74o8bpEYKdb+cb6MYERABLP0oD6oM0sYp+izXz
-	e9ol0oKdMSo4wVKP2H/eRO/tE7filVpxdSIyUtqENHzUMYfY9IR6gpK1TvgZghcpnCjy6dwxHSQ
-	KQ9DyH6fGIDk3mmK7sp+8X2uKeIFIZuSVyebX5mG7kDZ32EzDovM6XDkOsFFp3YpKnUE3k2Dl2U
-	Q/j4zRcRUHOKutyqWj49MDUMAW71g9ZWQ3G0GjWG/F4OD529isQ2ODiCR4bjwf3f+K8UiRYxwnT
-	0xCmN0/D/X/2cg0cL+m0w1R71PxgV0U9Tc/BmB8KVhRdhyvMszEaznvlHmlLaNl09lAFfjoPDTm
-	NS+86txHeC4BBYj2i/Bg715VMJtBDfR29HCwRtFQkcofpA/VN/tOHwkdv4I2X8rRDxLps=
-X-Received: by 2002:a05:600c:3b8b:b0:477:a289:d854 with SMTP id 5b1f17b1804b1-48350511771mr44119235e9.5.1770738860235;
-        Tue, 10 Feb 2026 07:54:20 -0800 (PST)
-Received: from google.com (135.91.155.104.bc.googleusercontent.com. [104.155.91.135])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d5ebd34sm71526575e9.7.2026.02.10.07.54.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 07:54:19 -0800 (PST)
-Date: Tue, 10 Feb 2026 15:54:16 +0000
-From: Vincent Donnefort <vdonnefort@google.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
-	linux-trace-kernel@vger.kernel.org, maz@kernel.org,
-	oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, kvmarm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, jstultz@google.com,
-	qperret@google.com, will@kernel.org, aneesh.kumar@kernel.org,
-	kernel-team@android.com, linux-kernel@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 15/30] tracing: selftests: Add trace remote tests
-Message-ID: <aYtUqOw8SdX7gqZT@google.com>
-References: <20260131132848.254084-1-vdonnefort@google.com>
- <20260131132848.254084-16-vdonnefort@google.com>
- <20260205124208.2ed7cff8@gandalf.local.home>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KsL1Yc5RbDcK+idFtIj02MEsicWF/g8nEROpQC/Xm/LKUR0CYsEOsCh2RqzoEFcCkg41d2xXVW1N4tCJIUmfyA3gUuzGMpjIS0q3H4NwvWldo/DGjXI5Z2xfCgtqFO0K4NbovD6qqoHjvOK9vjyL+5VV0rDGfQfLFBUfIyz4PbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9AB9B339;
+	Tue, 10 Feb 2026 08:14:53 -0800 (PST)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C179F3F632;
+	Tue, 10 Feb 2026 08:14:56 -0800 (PST)
+Date: Tue, 10 Feb 2026 16:14:54 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
+	broonie@kernel.org, oliver.upton@linux.dev, miko.lenczewski@arm.com,
+	kevin.brodsky@arm.com, ardb@kernel.org, suzuki.poulose@arm.com,
+	lpieralisi@kernel.org, scott@os.amperecomputing.com,
+	joey.gouly@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com,
+	shuah@kernel.org, mark.rutland@arm.com, arnd@arndb.de
+Subject: Re: [PATCH v12 2/7] arm64: cpufeature: add FEAT_LSUI
+Message-ID: <aYtZfpWjRJ1r23nw@arm.com>
+References: <20260121190622.2218669-1-yeoreum.yun@arm.com>
+ <20260121190622.2218669-3-yeoreum.yun@arm.com>
+ <aYY2CyHWtplQ-fuS@arm.com>
+ <aYouAv_EjICIN8oA@arm.com>
+ <aYsAaaQgBaLbDSsW@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,83 +44,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260205124208.2ed7cff8@gandalf.local.home>
+In-Reply-To: <aYsAaaQgBaLbDSsW@e129823.arm.com>
 
-On Thu, Feb 05, 2026 at 12:42:08PM -0500, Steven Rostedt wrote:
-> On Sat, 31 Jan 2026 13:28:33 +0000
-> Vincent Donnefort <vdonnefort@google.com> wrote:
-> 
-> > Exercise the tracefs interface for trace remote with a set of tests to
-> > check:
-> > 
-> >   * loading/unloading (unloading.tc)
-> >   * reset (reset.tc)
-> >   * size changes (buffer_size.tc)
-> >   * consuming read (trace_pipe.tc)
-> >   * non-consuming read (trace.tc)
-> > 
-> > Cc: Shuah Khan <skhan@linuxfoundation.org>
-> > Cc: linux-kselftest@vger.kernel.org
-> > Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-> 
-> This still fails:
-> 
-> === Ftrace unit tests ===
-> [1] Test trace remote buffer size	[PASS]
-> [2] Test hypervisor trace buffer size	[UNSUPPORTED]
-> [3] Test hypervisor trace buffer reset	[UNSUPPORTED]
-> [4] Test hypervisor consuming trace read	[UNSUPPORTED]
-> [5] Test hypervisor non-consuming trace read	[UNSUPPORTED]
-> [6] Test hypervisor trace buffer unloading	[UNSUPPORTED]
-> [7] Test trace remote reset	[PASS]
-> [8] Test trace remote consuming read	[FAIL]
-> [9] Test trace remote non-consuming read	[FAIL]
-> [10] Test trace remote unloading	[PASS]
-> 
-> I added this patch and the two failed tests now pass:
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
-> index 081133ec45ff..dfc954a6a380 100644
-> --- a/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
-> @@ -106,8 +106,10 @@ test_trace()
->      echo 0 > trace
->  
->      for cpu in $(get_cpu_ids); do
-> -        echo 0 > /sys/devices/system/cpu/cpu$cpu/online
-> -        break
-> +        if [ -f /sys/devices/system/cpu/cpu$cpu/online ]; then
-> +            echo 0 > /sys/devices/system/cpu/cpu$cpu/online
-> +            break
-> +        fi
+Hi Levi,
 
-Hum weird, I have changed it in v11 to 
-
-echo 0 > /sys/devices/system/cpu/cpu$cpu/online || return 0
-
-That doesn't work? Because I would simply stop the test there if we can't
-offline the CPU.
-
-
->      done
->  
->      for i in $(seq 1 8); do
-> diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
-> index d28eaee10c7c..146f0a9fe311 100644
-> --- a/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
-> @@ -102,8 +102,10 @@ test_trace_pipe()
->      echo 0 > trace
->  
->      for cpu in $(get_cpu_ids); do
-> -        echo 0 > /sys/devices/system/cpu/cpu$cpu/online
-> -        break
-> +        if [ -f /sys/devices/system/cpu/cpu$cpu/online ]; then
-> +            echo 0 > /sys/devices/system/cpu/cpu$cpu/online
-> +            break
-> +        fi
->      done
->  
->      for i in $(seq 1 8); do
+On Tue, Feb 10, 2026 at 09:54:49AM +0000, Yeoreum Yun wrote:
+> > On Fri, Feb 06, 2026 at 06:42:19PM +0000, Catalin Marinas wrote:
+> > > On Wed, Jan 21, 2026 at 07:06:17PM +0000, Yeoreum Yun wrote:
+> > > > +#ifdef CONFIG_ARM64_LSUI
+> > > > +static bool has_lsui(const struct arm64_cpu_capabilities *entry, int scope)
+> > > > +{
+> > > > +	if (!has_cpuid_feature(entry, scope))
+> > > > +		return false;
+> > > > +
+> > > > +	/*
+> > > > +	 * A CPU that supports LSUI should also support FEAT_PAN,
+> > > > +	 * so that SW_PAN handling is not required.
+> > > > +	 */
+> > > > +	if (WARN_ON(!__system_matches_cap(ARM64_HAS_PAN)))
+> > > > +		return false;
+> > > > +
+> > > > +	return true;
+> > > > +}
+> > > > +#endif
+> > >
+> > > I still find this artificial dependency a bit strange. Maybe one doesn't
+> > > want any PAN at all (software or hardware) and won't get LSUI either
+> > > (it's unlikely but possible).
+> > > We have the uaccess_ttbr0_*() calls already for !LSUI, so maybe
+> > > structuring the macros in a way that they also take effect with LSUI.
+> > > For futex, we could add some new functions like uaccess_enable_futex()
+> > > which wouldn't do anything if LSUI is enabled with hw PAN.
+> >
+> > Hmm, I forgot that we removed CONFIG_ARM64_PAN for 7.0, so it makes it
+> > harder to disable. Give it a try but if the macros too complicated, we
+> > can live with the additional check in has_lsui().
+> >
+> > However, for completeness, we need to check the equivalent of
+> > !system_uses_ttbr0_pan() but probing early, something like:
+> >
+> > 	if (IS_ENABLED(CONFIG_ARM64_SW_TTBR0_PAN) &&
+> > 	    !__system_matches_cap(ARM64_HAS_PAN)) {
+> > 		pr_info_once("TTBR0 PAN incompatible with FEAT_LSUI; disabling FEAT_LSUI");
+> > 		return false;
+> > 	}
 > 
-> -- Steve
+> TBH, I'm not sure whether it's a artifical dependency or not.
+> AFAIK, FEAT_PAN is mandatory from Armv8.1 and the FEAT_LSUI seems to
+> implements based on the present of "FEAT_PAN".
+> 
+> So, for a hardware which doesn't have FEAT_PAN but has FEAT_LSUI
+> sounds like "wrong" hardware and I'm not sure whether it's right
+> to enable FEAT_LSUI in this case.
+
+In principle we shouldn't have such hardware but, as Will pointed out,
+we might have such combination due to other reasons like virtualisation,
+id reg override.
+
+It's not that FEAT_LSUI requires FEAT_PAN but rather that the way you
+implemented it, the FEAT_LSUI futex code is incompatible with SW_PAN
+because you no longer call uaccess_enable_privileged(). So I suggested a
+small tweak above to make this more obvious. I would also remove the
+WARN_ON, or at least make it WARN_ON_ONCE() if you still want the stack
+dump.
+
+However...
+
+> SW_PAN case is the same problem. Since If system uses SW_PAN,
+> that means this hardware doesn't have a "FEAT_PAN"
+> So this question seems to ultimately boil down to whether
+> it is appropriate to allow the use of FEAT_LSUI
+> even when FEAT_PAN is not supported.
+> 
+> That's why I think the purpose of "has_lsui()" is not for artifical
+> dependency but to disable for unlike case which have !FEAT_PAN and FEAT_LSUI
+> and IMHO it's enough to check only check with "ARM64_HAS_PAN" instead of
+> making a new function like uaccess_enable_futex().
+
+Why not keep uaccess_enable_privileged() in
+arch_futex_atomic_op_inuser() and cmpxchg for all cases and make it a
+no-op if FEAT_LSUI is implemented together with FEAT_PAN? A quick grep
+shows a recent addition in __lse_swap_desc() (and the llsc equivalent)
+but this one can also use CAST with FEAT_LSUI.
+
+BTW, with the removal of uaccess_enable_privileged(), we now get MTE tag
+checks for the futex operations. I think that's good as it matches the
+other uaccess ops, though it's a slight ABI change. If we want to
+preserve the old behaviour, we definitely need
+uaccess_enable_privileged() that only does mte_enable_tco().
+
+-- 
+Catalin
