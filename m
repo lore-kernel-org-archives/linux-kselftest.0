@@ -1,75 +1,123 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015DB309F1D
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 18:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5470638B7BA;
+	Tue, 10 Feb 2026 18:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770747331; cv=none; b=lCuZmKLacDVkoklul2zFx0a0b1FcfPRKJCyOrXry1nbbN52swOTwB/4nFeUUZ1KYkytsj47bj8smXtkChnAe9ppvxjy5BdYeg8knSJFDyfCDTs0U3o3XO+CC1FJqqEpLli7AYendfjtOBRtIfJPBDuS9jVsKDikEizzMlEc2QHY=
+	t=1770749513; cv=none; b=Ur5r+5lsygFaMRDkYebjJ/DXN7LaTdN4TNZbiAkk0MsnwRerj4cyEqokqtvSAHco7IxOeoxaEBvFRj8Gq+9gi1/Oqf02VI0SAFqASCE+1di4q8k9dEixeNm5U0NQieQW2/i88SOINje5s0gNQ6bf7RYWRCC2NuKdak2pMR8KmZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770747331; c=relaxed/simple;
-	bh=KjrRTfYfg1h+OAqEk/PCKo0cFoOaXI3SIh01p7aZ+cg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oYvqK9/iwTA/24L7056PE0u9NF9rGo04CTiF8jd5KTZFRWznKx26Rxi3TejVlM7l2OUaFSaoC04yz4XBEXgMYzqNVRHyAyvjxB3FCuGXM/o+sv+eSWhscC0Y93RcBDxUO9pZOIcP2t8a6x8OCHW7WYY+XaV6HMj5cLyFcqr4gZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <51f77faa-5d8b-4e8b-8cfd-04ae06726864@linux.dev>
-Date: Tue, 10 Feb 2026 10:15:07 -0800
+	s=arc-20240116; t=1770749513; c=relaxed/simple;
+	bh=9qSWNqmZtl1eAid4nDqA9BtCZjbh+DXVBRur5Lnsbew=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=I2+7g88XOjzeMnD1uEdnkwzOp8uBM8tiRWANI2TqTB34PBg+38txfM34WsfEWgSUMRcG/x8+cA3ehDKPUZy10utXw8VcM+6k3gqrKqbTqB79rHdh06e2sd1EfVRnC0ocFmQfZwogb35d11iseAnkwfkRvaxiyLyzG95QpK261uA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=JkIiukWF; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="JkIiukWF"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
+	Content-Type; bh=kvxXTq9rTsjJRgY8HpV206SkpT7OPYHYm1UHpG3IliU=; b=JkIiukWFLdJ6
+	FowJ6KJU3y/ryYGTIDQ5nuGzh/UeElKuEt21ImeoAzqnaVpoSdjhLO5F0JVPxmd/RpiP52uBlhAgn
+	pdLm+1z2oA3ftTr206csV4VJcbbvD74yGTgEdeYKOomjdspfvNHu9+01yKGH8RcYpYPMWAuzk7WNY
+	Mb5jexgGmMBl6XEgmI/ieuvGF3X+l6tFiik0V1evQCv51WNlPKkmls4HGWWGjfj1ubPvKV0k3/0QX
+	gQAk8efSt3cEwEjTX58uLHl+t3tNtjzQ0OP6o6n0uuDfITZ3FOhM1afAeLTavIbmdh6ddwdkdHDd/
+	E+h+Q+YhPv4vHxwnL9mzSw==;
+Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
+	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aleksey.oladko@virtuozzo.com>)
+	id 1vpsow-00DIAB-0K;
+	Tue, 10 Feb 2026 19:51:36 +0100
+Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 61AIpjFG480036
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 10 Feb 2026 18:51:45 GMT
+Received: (from root@localhost)
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 61AIpj2E480035;
+	Tue, 10 Feb 2026 18:51:45 GMT
+From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+To: "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>, Amit Cohen <amcohen@nvidia.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Subject: [PATCH 1/3] selftests: forwarding: vxlan_bridge_1d: fix test failure with br_netfilter enabled
+Date: Tue, 10 Feb 2026 18:51:27 +0000
+Message-ID: <20260210185129.480015-2-aleksey.oladko@virtuozzo.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260210185129.480015-1-aleksey.oladko@virtuozzo.com>
+References: <20260210185129.480015-1-aleksey.oladko@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/1] selftests/liveupdate: Cleanup kernel optio
- CONFIG_LIVEUPDATE_TEST
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: pasha.tatashin@soleen.com, rppt@kernel.org, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260130042840.1469-1-yanjun.zhu@linux.dev>
- <9da09064-5005-4b30-8f9b-9ac9b9858d46@linux.dev>
- <2vxz4inou3da.fsf@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <2vxz4inou3da.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+The test generates VXLAN traffic using mausezahn, where the encapsulated
+inner IPv4 packet contains a zero IP header checksum. After VXLAN
+decapsulation, such packets do not pass sanity checks in br_netfilter
+and are dropped, which causes the test to fail.
 
-On 2/10/26 5:36 AM, Pratyush Yadav wrote:
-> On Thu, Jan 29 2026, Zhu Yanjun wrote:
->
->> 在 2026/1/29 20:28, Zhu Yanjun 写道:
->>> The kernel option CONFIG_LIVEUPDATE_TEST does not exist currently.
->>> Remove it.
->> In kernel 6.19-rc7, this kernel option still exists in the file
->>
->> tools/testing/selftests/liveupdate/config. Thus I send out this commit to remove
->> it.
-> Yes, but the patch to add the config is in mm-nonmm-unstable. I am not
-> sure if this worth the churn of removing this and re-adding it when that
-> patch lands later. Do you see a real problem with this?
-Thanks for the feedback.
+Fix this by calculating and setting a valid IPv4 header checksum for the
+encapsulated packet generated by mausezahn, so that the packet is accepted
+by br_netfilter.
 
-I understand that the patch adding this functionality is currently in 
-mm-nonmm-unstable. My concern was primarily adhering to the 
-documentation, which suggests keeping the kernel configs pruned of 
-unused options to avoid confusion for those running selftests.
+Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+---
+ .../net/forwarding/vxlan_bridge_1d.sh         | 26 ++++++++++++-------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
 
-However, I see your point regarding the churn. If you prefer, we can 
-wait until the mm-nonmm-unstable branch is merged into the mainline. 
-Once that happens, if this option remains truly redundant or if the 
-implementation changes, I can resubmit the cleanup then.
+diff --git a/tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh b/tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh
+index b43816dd998c..457f41d5e584 100755
+--- a/tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh
++++ b/tools/testing/selftests/net/forwarding/vxlan_bridge_1d.sh
+@@ -567,6 +567,21 @@ vxlan_encapped_ping_do()
+ 	local inner_tos=$1; shift
+ 	local outer_tos=$1; shift
+ 
++	local ipv4hdr=$(:
++		    )"45:"$(                      : IP version + IHL
++		    )"$inner_tos:"$(              : IP TOS
++		    )"00:54:"$(                   : IP total length
++		    )"99:83:"$(                   : IP identification
++		    )"40:00:"$(                   : IP flags + frag off
++		    )"40:"$(                      : IP TTL
++		    )"01:"$(                      : IP proto
++		    )"CHECKSUM:"$(                : IP header csum
++		    )"c0:00:02:03:"$(             : IP saddr: 192.0.2.3
++		    )"c0:00:02:01"$(              : IP daddr: 192.0.2.1
++		)
++	local checksum=$(payload_template_calc_checksum "$ipv4hdr")
++	ipv4hdr=$(payload_template_expand_checksum "$ipv4hdr" $checksum)
++
+ 	$MZ $dev -c $count -d 100msec -q \
+ 		-b $next_hop_mac -B $dest_ip \
+ 		-t udp tos=$outer_tos,sp=23456,dp=$VXPORT,p=$(:
+@@ -577,16 +592,7 @@ vxlan_encapped_ping_do()
+ 		    )"$dest_mac:"$(               : ETH daddr
+ 		    )"$(mac_get w2):"$(           : ETH saddr
+ 		    )"08:00:"$(                   : ETH type
+-		    )"45:"$(                      : IP version + IHL
+-		    )"$inner_tos:"$(              : IP TOS
+-		    )"00:54:"$(                   : IP total length
+-		    )"99:83:"$(                   : IP identification
+-		    )"40:00:"$(                   : IP flags + frag off
+-		    )"40:"$(                      : IP TTL
+-		    )"01:"$(                      : IP proto
+-		    )"00:00:"$(                   : IP header csum
+-		    )"c0:00:02:03:"$(             : IP saddr: 192.0.2.3
+-		    )"c0:00:02:01:"$(             : IP daddr: 192.0.2.1
++		    )"$ipv4hdr:"$(                : IPv4 header
+ 		    )"08:"$(                      : ICMP type
+ 		    )"00:"$(                      : ICMP code
+ 		    )"8b:f2:"$(                   : ICMP csum
+-- 
+2.43.0
 
-Does that sound like a reasonable compromise to you?
-
-Best regards,
-
-Yanjun.Zhu
-
->
-> [...]
->
