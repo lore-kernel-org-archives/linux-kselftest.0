@@ -1,47 +1,38 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE5A30CD80;
-	Tue, 10 Feb 2026 16:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 382423203BC;
+	Tue, 10 Feb 2026 16:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770741505; cv=none; b=JVjm1fDcC9huOWWcp22Ooupwx0ow3GB+g1HIuhkTR3GvVeyRnoIUrxZS3SI4renRvT0a0KH/zlzqaaJPg78g43D1MDbjdpjJYXqkr4zmGmIJZztcmApFcXpLhH9R4YnBaOBTmCdM0biW2QIFZTHRCMfyV0u8vpbjapDA5PblUP4=
+	t=1770741921; cv=none; b=p4jZndZrO9gxwFZzBYkA/4ijBiLvgeAt8dX+rr1cCrCtq64ox0c/yzr0DX7jtUMMA6IqBudVpPReLWr14uTIUMTZHBB019GHjrRyGFX1r0DygRM9FIGc7EwVKqWJkrHjadArHd857RrMfDtC+v/4vGPKtEPEmrcDAH3iE5QMNXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770741505; c=relaxed/simple;
-	bh=ee9fB6bIjiVMrs4NtEF4Te4n44P3upDDcYNINlYRaXs=;
+	s=arc-20240116; t=1770741921; c=relaxed/simple;
+	bh=dMush2K0571ehpAANLKxDb3nHTfySaTETlhFpRasweE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C4aREGuMaLxBBnezDkUy7HfTfnx8RTFft1Q83t7EjQLdv2DQAkeYfxPkJ2h4vFjd3TzK7WI2tnwuNRnt9OvCL1O6kv2GV/FhCALbVoky87G42DScdL6Zm6c1EL6FhIyjVwl6GGH93xY1cq5DbBOkvVIbNbNgqGDeXS3YA6zO3ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E2LI7R6A; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E2LI7R6A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D7D9C116C6;
-	Tue, 10 Feb 2026 16:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770741505;
-	bh=ee9fB6bIjiVMrs4NtEF4Te4n44P3upDDcYNINlYRaXs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E2LI7R6AU7iLNsiFgF6B1QPKsM5HrW5y6elh1V5WaTnkEVzoixNq+sugTsZ0BmClL
-	 b1ZgVQ6XsmZwx+49hFJUvyHmGQT/n/Tyv1QYflQO1zwwwB20x1vnMRCVsR9NN0KkJi
-	 AlS9msH4zbk1r2Rq1oYnhHHmLvfeEEuS6xlLWD3Pu1EKekJTzdcAUjhjced1NPpQYs
-	 nPYn4xSlbwyweoPMeaWpUPTJ7a4603/ue9AeIt8/MLAo9MEHfQNdD4qu2YgqqU0jW+
-	 5MdRNiEdY4PN0ufKmKMQhh8mm2lj7gGYTBPnech0onVxiLEIzNYfFIC/LGN7u1kUQh
-	 N2olMWyd4MHnA==
-Date: Tue, 10 Feb 2026 17:38:19 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Koichiro Den <den@valinux.co.jp>
-Cc: vkoul@kernel.org, mani@kernel.org, Frank.Li@nxp.com,
-	jingoohan1@gmail.com, lpieralisi@kernel.org, kwilczynski@kernel.org,
-	robh@kernel.org, bhelgaas@google.com, kishon@kernel.org,
-	jdmason@kudzu.us, allenbh@gmail.com, dmaengine@vger.kernel.org,
-	linux-pci@vger.kernel.org, ntb@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 6/8] PCI: endpoint: pci-epf-test: Don't free doorbell
- IRQ unless requested
-Message-ID: <aYte-7hTxb7kXNlQ@ryzen>
-References: <20260209125316.2132589-1-den@valinux.co.jp>
- <20260209125316.2132589-7-den@valinux.co.jp>
- <aYsmTbSmn94J6uN0@ryzen>
- <uvuugqkiaravp6gmn6o7x5koyvo5zkmbwwbhdq6ctvvdtdhoyd@rnxwhlysqs7d>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qL+UWxsHk9u1Wi/ALWJLqE3faK5nGcuEN6yWSGjLam/B19zn8+jXYmoLC0vcLmJmOYKA6N3NNPlbw0+eCE+Sb4WYgeVtcHIkcRedi9e/tOU+gyktERoaIPoe8HGknovu8bNe/QLJ9l61XNTm9mAajL+xbn24dvIDKED0bsgij9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D6A1339;
+	Tue, 10 Feb 2026 08:45:13 -0800 (PST)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6423A3F632;
+	Tue, 10 Feb 2026 08:45:16 -0800 (PST)
+Date: Tue, 10 Feb 2026 16:45:13 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
+	broonie@kernel.org, oliver.upton@linux.dev, miko.lenczewski@arm.com,
+	kevin.brodsky@arm.com, ardb@kernel.org, suzuki.poulose@arm.com,
+	lpieralisi@kernel.org, scott@os.amperecomputing.com,
+	joey.gouly@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com,
+	shuah@kernel.org, mark.rutland@arm.com, arnd@arndb.de
+Subject: Re: [PATCH v12 6/7] arm64: futex: support futex with FEAT_LSUI
+Message-ID: <aYtgmZZhAKAvtfaK@arm.com>
+References: <20260121190622.2218669-1-yeoreum.yun@arm.com>
+ <20260121190622.2218669-7-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,95 +41,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <uvuugqkiaravp6gmn6o7x5koyvo5zkmbwwbhdq6ctvvdtdhoyd@rnxwhlysqs7d>
+In-Reply-To: <20260121190622.2218669-7-yeoreum.yun@arm.com>
 
-On Tue, Feb 10, 2026 at 10:54:20PM +0900, Koichiro Den wrote:
-> On Tue, Feb 10, 2026 at 01:36:29PM +0100, Niklas Cassel wrote:
-> > On Mon, Feb 09, 2026 at 09:53:14PM +0900, Koichiro Den wrote:
-> > > pci_epf_test_enable_doorbell() allocates a doorbell and then installs
-> > > the interrupt handler with request_threaded_irq(). On failures before
-> > > the IRQ is successfully requested (e.g. no free BAR,
-> > > request_threaded_irq() failure), the error path jumps to
-> > > err_doorbell_cleanup and calls pci_epf_test_doorbell_cleanup().
-> > > 
-> > > pci_epf_test_doorbell_cleanup() unconditionally calls free_irq() for the
-> > > doorbell virq, which can trigger "Trying to free already-free IRQ"
-> > > warnings when the IRQ was never requested.
-> > > 
-> > > Track whether the doorbell IRQ has been successfully requested and only
-> > > call free_irq() when it has.
-> > > 
-> > > Fixes: eff0c286aa91 ("PCI: endpoint: pci-epf-test: Add doorbell test support")
-> > > Signed-off-by: Koichiro Den <den@valinux.co.jp>
-> > > ---
-> > >  drivers/pci/endpoint/functions/pci-epf-test.c | 9 ++++++++-
-> > >  1 file changed, 8 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > index 6952ee418622..23034f548c90 100644
-> > > --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > @@ -86,6 +86,7 @@ struct pci_epf_test {
-> > >  	bool			dma_private;
-> > >  	const struct pci_epc_features *epc_features;
-> > >  	struct pci_epf_bar	db_bar;
-> > > +	bool			db_irq_requested;
-> > >  	size_t			bar_size[PCI_STD_NUM_BARS];
-> > >  };
-> > >  
-> > > @@ -715,7 +716,10 @@ static void pci_epf_test_doorbell_cleanup(struct pci_epf_test *epf_test)
-> > >  	struct pci_epf_test_reg *reg = epf_test->reg[epf_test->test_reg_bar];
-> > >  	struct pci_epf *epf = epf_test->epf;
-> > >  
-> > > -	free_irq(epf->db_msg[0].virq, epf_test);
-> > > +	if (epf_test->db_irq_requested && epf->db_msg) {
-> > > +		free_irq(epf->db_msg[0].virq, epf_test);
-> > > +		epf_test->db_irq_requested = false;
-> > > +	}
-> > >  	reg->doorbell_bar = cpu_to_le32(NO_BAR);
-> > >  
-> > >  	pci_epf_free_doorbell(epf);
-> > > @@ -741,6 +745,8 @@ static void pci_epf_test_enable_doorbell(struct pci_epf_test *epf_test,
-> > >  	if (bar < BAR_0)
-> > >  		goto err_doorbell_cleanup;
-> > >  
-> > > +	epf_test->db_irq_requested = false;
-> > > +
-> > >  	ret = request_threaded_irq(epf->db_msg[0].virq, NULL,
-> > >  				   pci_epf_test_doorbell_handler, IRQF_ONESHOT,
-> > >  				   "pci-ep-test-doorbell", epf_test);
-> > 
-> > Another bug in pci_epf_test_enable_doorbell():
-> > 
-> > Since we reuse the BAR size, and use dynamic inbound mapping,
-> > what if the returned DB offset is larger than epf->bar[bar].size ?
-> > 
-> > I think we need something like this before calling pci_epc_set_bar():
-> > 
-> > if (reg->doorbell_offset >= epf->bar[bar].size)
-> >     goto err_doorbell_cleanup;
-> 
-> Right, I remember this coming up in another thread.
-> 
-> If there are no objections from either of you, I'm happy to include a fix
-> patch for this in v7.
+I wonder whether we can shorten this function a bit. Not sure it would
+be more readable but it would be shorter.
 
-No objection from me.
+On Wed, Jan 21, 2026 at 07:06:21PM +0000, Yeoreum Yun wrote:
+> +static __always_inline int
+> +__lsui_cmpxchg32(u32 __user *uaddr, u32 oldval, u32 newval, u32 *oval)
+> +{
+> +	u64 __user *uaddr64;
+> +	bool futex_on_lo;
+> +	int ret, i;
+> +	u32 other, orig_other;
+> +	union {
+> +		struct futex_on_lo {
+> +			u32 val;
+> +			u32 other;
+> +		} lo_futex;
+> +
+> +		struct futex_on_hi {
+> +			u32 other;
+> +			u32 val;
+> +		} hi_futex;
+> +
+> +		u64 raw;
+> +	} oval64, orig64, nval64;
 
+	union {
+		u32 futex[2];
+		u64 raw;
+	}
 
-Ideally I would also like:
+> +
+> +	uaddr64 = (u64 __user *) PTR_ALIGN_DOWN(uaddr, sizeof(u64));
+> +	futex_on_lo = IS_ALIGNED((unsigned long)uaddr, sizeof(u64));
 
-	if (!(test->ep_caps & CAP_DYNAMIC_INBOUND_MAPPING))
-		return -EOPNOTSUPP;
+	futex_pos = (unsigned long)uaddr & 4 ? 1 : 0;
 
-and that the pci_endpoint_test selftest would return skip on -EOPNOTSUPP,
-since the doorbell test currently relies on CAP_DYNAMIC_INBOUND_MAPPING,
-but that might make your series too big.
+> +
+> +	if (futex_on_lo) {
+> +		oval64.lo_futex.val = oldval;
+> +		ret = get_user(oval64.lo_futex.other, uaddr + 1);
+> +	} else {
+> +		oval64.hi_futex.val = oldval;
+> +		ret = get_user(oval64.hi_futex.other, uaddr - 1);
+> +	}
 
+and here use
 
-Thus, I'm happy if you add a safety check for:
-reg->doorbell_offset >= epf->bar[bar].size
+	get_user(oval64.raw, uaddr64);
+	futex[futex_pos] = oldval;
 
+> +
+> +	if (ret)
+> +		return -EFAULT;
+> +
+> +	ret = -EAGAIN;
+> +	for (i = 0; i < FUTEX_MAX_LOOPS; i++) {
+> +		orig64.raw = nval64.raw = oval64.raw;
+> +
+> +		if (futex_on_lo)
+> +			nval64.lo_futex.val = newval;
+> +		else
+> +			nval64.hi_futex.val = newval;
+> +
+> +		if (__lsui_cmpxchg64(uaddr64, &oval64.raw, nval64.raw))
+> +			return -EFAULT;
+> +
+> +		if (futex_on_lo) {
+> +			oldval = oval64.lo_futex.val;
+> +			other = oval64.lo_futex.other;
+> +			orig_other = orig64.lo_futex.other;
+> +		} else {
+> +			oldval = oval64.hi_futex.val;
+> +			other = oval64.hi_futex.other;
+> +			orig_other = orig64.hi_futex.other;
+> +		}
 
-Kind regards,
-Niklas
+Something similar here to use futex[futex_pos].
+
+We probably also need to check that the user pointer is 32-bit aligned
+and return -EFAULT if not.
+
+-- 
+Catalin
