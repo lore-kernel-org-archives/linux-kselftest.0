@@ -1,90 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD4438A9CF;
-	Tue, 10 Feb 2026 17:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015DB309F1D
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 18:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770746102; cv=none; b=QGS8C8lF2PdJlFCJJOiMOJ7uuL0vxXHX11nfGl+9/EaUsU0HYKebpm4c3k7Y8HN0OTHysdsL21o8+sFm2jv5KWQrJ7DyA0L9UFUhl2b443gAEgZYBVaUoN1h9h71DTpvZIr1CCoprcmGwbXkS+OP4NGM92fsflIrrhrKkYePW+c=
+	t=1770747331; cv=none; b=lCuZmKLacDVkoklul2zFx0a0b1FcfPRKJCyOrXry1nbbN52swOTwB/4nFeUUZ1KYkytsj47bj8smXtkChnAe9ppvxjy5BdYeg8knSJFDyfCDTs0U3o3XO+CC1FJqqEpLli7AYendfjtOBRtIfJPBDuS9jVsKDikEizzMlEc2QHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770746102; c=relaxed/simple;
-	bh=oakjD26/4tkGvWqhilxMCc4hiHX5ft4jQ4Iq6CfC8Ok=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Vlcwarck/nxOkijC9qquUww3WHFA0xddfS8Z0IDcUwd/DbaBKv8UE3GvXko5qdYSnT2Dc13GF+CsFVHfivxMEXeMZI9I1qA8EKaDCWD+wT7XbY+bdafMNqud6AEXChXpnL/wBROD7Hd0J7rt9pDQoVD3UhrDLWidrxaBhjLRLKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IV5HWXkc; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IV5HWXkc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E45DC116C6;
-	Tue, 10 Feb 2026 17:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770746102;
-	bh=oakjD26/4tkGvWqhilxMCc4hiHX5ft4jQ4Iq6CfC8Ok=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=IV5HWXkc/FCiRpLej35EorMs268YVetMhHEcMuM8RZrQDwNon4ujlVriIsWMItPQO
-	 EqpPqMEeYxMCD6O4YFIrEvdJEAaFfqIGPwZOjfLqaxtmbteFvtM06iSeex9Dz5XBgO
-	 eId3ASq6UbrOQNwrEjse/Tdi30l18VlSWm7BlPWh5mf4t33MAhtXT3IbgjW51LF+r9
-	 vzEBdcZkI3eZTjdO3Q29eABxls3qZxt/DDPJl5+t8fLfEvnhAh5SbzAkjEx5m1VN5S
-	 rM53+ku47GAnrwJMK4bvWMODcdVtJF+2hO0GTGelBaK5cYQfywiYVchoItLmFSR3p/
-	 OS8Eizj1vbL9A==
-Content-Type: multipart/mixed; boundary="===============7295902335523839857=="
+	s=arc-20240116; t=1770747331; c=relaxed/simple;
+	bh=KjrRTfYfg1h+OAqEk/PCKo0cFoOaXI3SIh01p7aZ+cg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oYvqK9/iwTA/24L7056PE0u9NF9rGo04CTiF8jd5KTZFRWznKx26Rxi3TejVlM7l2OUaFSaoC04yz4XBEXgMYzqNVRHyAyvjxB3FCuGXM/o+sv+eSWhscC0Y93RcBDxUO9pZOIcP2t8a6x8OCHW7WYY+XaV6HMj5cLyFcqr4gZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <51f77faa-5d8b-4e8b-8cfd-04ae06726864@linux.dev>
+Date: Tue, 10 Feb 2026 10:15:07 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8d3fe8a5425f2e6af5a75f8d1a26d1b460719b1e904b6e1499747ca479b73832@mail.kernel.org>
-In-Reply-To: <20260210-bpf-xdp-meta-rxcksum-v1-4-e5d55caa0541@kernel.org>
-References: <20260210-bpf-xdp-meta-rxcksum-v1-4-e5d55caa0541@kernel.org>
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Add selftest support for bpf_xdp_metadata_rx_checksum
-From: bot+bpf-ci@kernel.org
-To: lorenzo@kernel.org,donald.hunter@gmail.com,kuba@kernel.org,davem@davemloft.net,edumazet@google.com,pabeni@redhat.com,horms@kernel.org,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrew+netdev@lunn.ch,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,aleksander.lobakin@intel.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,maciej.fijalkowski@intel.com
-Cc: jakub@cloudflare.com,netdev@vger.kernel.org,bpf@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,lorenzo@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 10 Feb 2026 17:55:01 +0000 (UTC)
-
---===============7295902335523839857==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-> index 09bb8a038d52..ef6a5584a187 100644
-> --- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-> +++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-
-[ ... ]
-
-> @@ -98,6 +98,7 @@ int rx(struct xdp_md *ctx)
->  	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
->  	bpf_xdp_metadata_rx_vlan_tag(ctx, &meta->rx_vlan_proto,
->  				     &meta->rx_vlan_tci);
-> +	bpf_xdp_metadata_rx_checksum(ctx, &meta->ip_summed, &meta->cksum_meta);
-
-Is there a missing extern declaration for bpf_xdp_metadata_rx_checksum()?
-The other kfuncs used in this file have extern declarations with __ksym:
-
-extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
-                                         __u64 *timestamp) __ksym;
-extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
-                                    enum xdp_rss_hash_type *rss_type) __ksym;
-extern int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
-                                        __be16 *vlan_proto,
-                                        __u16 *vlan_tci) __ksym;
-
-Without a similar declaration for bpf_xdp_metadata_rx_checksum(), the BPF
-program may fail to compile or link.
+Subject: Re: [PATCH 1/1] selftests/liveupdate: Cleanup kernel optio
+ CONFIG_LIVEUPDATE_TEST
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: pasha.tatashin@soleen.com, rppt@kernel.org, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260130042840.1469-1-yanjun.zhu@linux.dev>
+ <9da09064-5005-4b30-8f9b-9ac9b9858d46@linux.dev>
+ <2vxz4inou3da.fsf@kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <2vxz4inou3da.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+On 2/10/26 5:36 AM, Pratyush Yadav wrote:
+> On Thu, Jan 29 2026, Zhu Yanjun wrote:
+>
+>> 在 2026/1/29 20:28, Zhu Yanjun 写道:
+>>> The kernel option CONFIG_LIVEUPDATE_TEST does not exist currently.
+>>> Remove it.
+>> In kernel 6.19-rc7, this kernel option still exists in the file
+>>
+>> tools/testing/selftests/liveupdate/config. Thus I send out this commit to remove
+>> it.
+> Yes, but the patch to add the config is in mm-nonmm-unstable. I am not
+> sure if this worth the churn of removing this and re-adding it when that
+> patch lands later. Do you see a real problem with this?
+Thanks for the feedback.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21875603263
+I understand that the patch adding this functionality is currently in 
+mm-nonmm-unstable. My concern was primarily adhering to the 
+documentation, which suggests keeping the kernel configs pruned of 
+unused options to avoid confusion for those running selftests.
 
-AI-authorship-score: low
-AI-authorship-explanation: The code follows standard BPF selftest patterns and appears to be written by a domain expert familiar with XDP metadata kfuncs.
-issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: Missing extern declaration for bpf_xdp_metadata_rx_checksum kfunc will cause BPF program build failure.
+However, I see your point regarding the churn. If you prefer, we can 
+wait until the mm-nonmm-unstable branch is merged into the mainline. 
+Once that happens, if this option remains truly redundant or if the 
+implementation changes, I can resubmit the cleanup then.
 
---===============7295902335523839857==--
+Does that sound like a reasonable compromise to you?
+
+Best regards,
+
+Yanjun.Zhu
+
+>
+> [...]
+>
