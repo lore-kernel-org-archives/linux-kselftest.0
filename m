@@ -1,222 +1,140 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010067.outbound.protection.outlook.com [52.101.193.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B2018C03E;
-	Tue, 10 Feb 2026 09:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770715929; cv=fail; b=JpWMngQVCaF++DI8KdHFGi/JjjG+xxiQeoofoWmUq/T0dmh96EFhOr8JzYKttCqVYDdBRuJQ21WXZS0qC90h5UiLd5/ccBH5NAfeQZxcL6QChb4leY2tjVN7qT9QJ/Kx8S8WfczOh/2puHNcElReA3xhktiHV/ERABlfSwO/X8Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770715929; c=relaxed/simple;
-	bh=z62uKFejWYrl87I/9mwd9s9vLL9hi0o+9iUmdsLIYOQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mWo5IsIMDimvCYTOfH4I+PmaJMNMrvjD4fWctc98XE/+XBu0O22DimZEF8ea7BgKTkzI8/Xe91zBC6N+pkYEcqPiw945XGnWQjrCjiPWZ5CzAylh8VcsVhx+0xwX5YWLvg7H7T/wZIThCeMxceS59ST6cZRW/yGL3u6k0fUGMso=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JhKAH1vM; arc=fail smtp.client-ip=52.101.193.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A309341AC1
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 09:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770717058; cv=none; b=M8I2KZYEc4ncLxFICG0EeofmjU52VBoh7AnWys8O3iPvRNOyZ+hUVFFY21jYidMJPtpmvySqh1K9QYn7uhBh+jwn5feU1Kp0UZKqAid6g1hSog0wriRpAiJS9Qfd+EmmBxCTRnseJkrwRnz6hRmCLUxLfUGr/lrcmc+HRUSECm0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770717058; c=relaxed/simple;
+	bh=OH6Cz1JXGQI7jBhXos7xy16tyEEuj/rvFS04YSzI86w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kI9Y8hu8sfLQ7h+hpu++u2jUaM8mAGLCW5Bal/rXw6JP2f+9F85YvCXuK3tlNXSajxPGr8u9kRsvSIMEchJhLfwY2HJZZzbgVHZXaLIZplFKX6rXXUtv68b/sU0Fi/uXozlgsDcq9VSQ417Qs50B7pgURg1/sAOx1/wO2XOuj+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=kO94Vyr+; arc=none smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JhKAH1vM"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FeDRdde+Jv/fOt5WioW65N1BFSeFf9KzRMqO+GAwNQpqwfoCPEOcIqe5EE9XPP69g8ZL+IiH7ue6zYtdEUs9l6dKXL8J+niJ2BtomK9QFoXN80R//I9KLdMCRxXdyhUiaWT6Q8eWxJ1ro3abSt4xvpTmcCPTcSyBO6XPqaOFo2tafCJofSvTQJ/VOC1knxD+sD7o4CXGzjzA7d2Z8xGjUMmvGp337z25I/n4WzjYFwJUbGHUB0zYcHwKbmD9SYDqLD4xIXZfr7//JP4IE0tmqDp3blMwT1h3xCR9AKmdv4tjhrRIxsun08kMAMCT0DqiBCvF7yvPLorlh97iLYDCLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NPMNxKbpDpKr5qQ+zJhoeNjz0E6p+lmLlGkyfrJEtVA=;
- b=tWORbxjCucMfUOU04LI0zuXthhNWZUHFrzJ+wje0zBA0t3VVhewk8f7QoIJ5LdaEltl2LMcikAwRV0K3avpXOIB4d3RwYSKX2UDUHMlSG7aKTUt+zahKdeczU3y4roey0jjaUpss6rap8Z/ZNe/XxpYj1H8bCwiFyPPkvLlCJFG0qGmBja5/PfFJLx8anoaCjWU0jKV1IryeKBb51hsrXDpOU3iOzupq/Y9f+gJfnGBadfDop7LAeGvko6i3Ji3vJn8AtXrOwQi6rNRilN6cnZuM0xNP/pSxEVofXfpk2C5PcXwECEW2lTcQdps1vp5IR/dMrFxJV9CvXD3TGGoYAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NPMNxKbpDpKr5qQ+zJhoeNjz0E6p+lmLlGkyfrJEtVA=;
- b=JhKAH1vM5s6lEwliqJDRCVyc/zcCPblvEmKaJPOPImGh/CvqwR6vPNBtws7bjvCBLfV+rTIjDS7OwhIzHtFY/ScA81Y0pBJXlF63rJKuPII20ahbmJPvxxAfOZxJbP7Eo8/DhUZ6/GvS/5VurdWQxkghiiFW6JLbyz+U+C2MvZO9/i4CNYLk1iLTLDgqTSqPWvPHCx5ynGHhl58vFtYDPbdLT3HGekrbhN3cnWS1j+pukAN4bOq0W8muIEERKRb7OTq2z33Kufjqhd4iUsZ/msyNNUxM68eTvbvx+Xti3POPfDBv6CC5eJvpBduRl3A0ALB8Jaq+FemimR+YTwwR+Q==
-Received: from PH8P220CA0006.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:345::7)
- by LV8PR12MB9083.namprd12.prod.outlook.com (2603:10b6:408:18c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.8; Tue, 10 Feb
- 2026 09:31:59 +0000
-Received: from CY4PEPF0000E9D1.namprd03.prod.outlook.com
- (2603:10b6:510:345:cafe::91) by PH8P220CA0006.outlook.office365.com
- (2603:10b6:510:345::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9611.8 via Frontend Transport; Tue,
- 10 Feb 2026 09:31:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000E9D1.mail.protection.outlook.com (10.167.241.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9611.8 via Frontend Transport; Tue, 10 Feb 2026 09:31:58 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 10 Feb
- 2026 01:31:15 -0800
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 10 Feb
- 2026 01:31:15 -0800
-Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Tue, 10
- Feb 2026 01:31:11 -0800
-From: Gal Pressman <gal@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	<netdev@vger.kernel.org>
-CC: Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>,
-	"Petr Machata" <petrm@nvidia.com>, <linux-kselftest@vger.kernel.org>, Gal
- Pressman <gal@nvidia.com>, Nimrod Oren <noren@nvidia.com>
-Subject: [PATCH net] selftests: drv-net: limit RPS test CPUs to supported range
-Date: Tue, 10 Feb 2026 11:31:10 +0200
-Message-ID: <20260210093110.1935149-1-gal@nvidia.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="kO94Vyr+"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1233c155a42so614468c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 01:50:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1770717056; x=1771321856; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vh1cK2yINspecrRl26Uw/wjS1t036TnATM/7cQD3vNs=;
+        b=kO94Vyr+sakCaX5gTxWY7DOV0JRxc/wkhNNbkF91+0Y+SMzzGQKgHMlHnUzs84Zo/H
+         k2yzjJ/UcRjuLksGzvHwtCeZImdGM80lXjyWpIVLQnckM/VjNZkiKyZrGvpZw8Zby6xW
+         k5XKAR66XolMSOpmE+6UGoJbe5ege7PLs/QRnTFn3m38N3Up/2jyAY5eD3j9w00d35Xb
+         rzZLjZwRkgNXMgW1ZQ4Gi8GGn9IC52EcTrJNYZCEunm82YmxRQOCCO2ge/xYJGQ1c0TF
+         mAQN/vpjS00ZLwo8Gem9YsoXSAio3lKz4HHz0irlxHTET8FYxvQlno5lmOPtNTKVxlDj
+         Tdww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770717056; x=1771321856;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vh1cK2yINspecrRl26Uw/wjS1t036TnATM/7cQD3vNs=;
+        b=Z60RFUJUida94iNAuJEBU5DJaaVZa/ncWNk2UoMDNjSkZNYNztVJcId/CJlqj4wUiq
+         QCJFnsu0HYU44ryRPH0Igum9sZJfCjcU2Woyi1eVPRVECtjgyT3I3uoG1zDXmRKYw755
+         rPsyuHrHyNs0mPL6L+xgHfsl5hfQILQP8QsCXEA3vffc6Tb4fwYicaWbdh31YX3V43tp
+         2841dfuRmPsvemiG2H6niHl7X4xZwPy/dCKVoPJ5CTnAr5DjgGTvm5WQJ8Lv9FJY8rAO
+         TJ10I+YjjPagVNL7cwiQz3GKxLB/cz8uh/9rH9yQXpkciNPVHjLv7Xa9Dv50oe624/Me
+         pwLw==
+X-Forwarded-Encrypted: i=1; AJvYcCWrTnBToihV6XjQlJBAjFvpq3I47+ykdql93mPvm4R//KRen9E5Gy96GRb5gL+zGnRXwhKd+o2KdJqdPYake4Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8S10DwClmgo29Gjy/XLN8/SWhhpThm1Su9jWh6ike9xs/x0ma
+	5R6RyjZk8hB/11JxW6XeHz6u6cC56CvzGoalG0z6QNuw/sjSgAOznOPA18GMHhzY4pQ=
+X-Gm-Gg: AZuq6aJQZih2wYy6tdZI2lSyC5EVsoFv2VdJHr/776WHj/z7hsI+SwoRhdHhfZPXMhU
+	i8n7DKjbKGN/3U2EGq/DnV385d7uqAMbcPVUQcZmD4rbUmsj0JemghYGMS/aFWUdzmht4iPGrVE
+	L5+toxtLwLiGvZDc1LOstTk5fpOFobFVjaGzDO88EIpQT7ZqJY7AjbZjHbto5h07YfjIP5JGBl4
+	fQ82obNbc+Ev/cjP/s3CXHXJWginXWy+N1GGGLKonTqyQ/xpUsyzamYu5vTg4hkr+O894xBj/L5
+	4ucJ9onr9sVoYq//cMb7tgcYhO/wZMClMj4/5iCfcLll943EaTi1G22lcqE7pY5oirDvJhmTayD
+	mzF25JZ7N9JgSBdDhMgvBeeZ2zznm9Ok+q4SMjWhCmw4dbCuVRlwMDBG6xMponiCjPz13ALUMgF
+	9t+4nplL2iD3uk/wMdQFk3Q0q5Z4R6ooVuYvGCHNY=
+X-Received: by 2002:a05:7022:160b:b0:11b:ceee:a46d with SMTP id a92af1059eb24-12703fe5da9mr4382447c88.15.1770717056203;
+        Tue, 10 Feb 2026 01:50:56 -0800 (PST)
+Received: from sw07.internal.sifive.com ([4.53.31.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b855af6452sm9354712eec.9.2026.02.10.01.50.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Feb 2026 01:50:55 -0800 (PST)
+From: Nylon Chen <nylon.chen@sifive.com>
+Date: Tue, 10 Feb 2026 01:50:51 -0800
+Subject: [PATCH v2] selftests/futex: conditionally include libnuma support
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D1:EE_|LV8PR12MB9083:EE_
-X-MS-Office365-Filtering-Correlation-Id: f255718f-ab4c-45c9-0129-08de68873cdf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014|7142099003;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YrII3hgoMzy9spFBmmCUBbYUULPeWxUzSSZ2G7q3nJH39siQekT55+EkJSXw?=
- =?us-ascii?Q?O2ku7vhBWihLEdhcPzw3DycFzsf2deSYN46xkcaQYPSba4CQwjvmUrt8Ub1e?=
- =?us-ascii?Q?EdnrgKkD7pdHSBTh/pj6HpmSTWnxYB03YiCXkGvQZL3xLCZDsEdcty6RYCV8?=
- =?us-ascii?Q?XjQJOZldHG6RxMkgcjemaa5AGXh3XIlNbcJDZ8O61m3Al9bY8WRrgd4ILxWJ?=
- =?us-ascii?Q?DJU7EYl53J+TOmfK1GwNCS8QwgPMBO8w1FVGqqnMOCj8jBfCiF2f8TriyopB?=
- =?us-ascii?Q?w0LZBvZYmfi4tCTPB/h+PHAYK5Ob3EGHHvLrdLo+2trrlsbuiTjQcVNQtuee?=
- =?us-ascii?Q?j7URBp9AnM7kToquBYIVl/V0wUnjnipeU0lNoKbDlb0PmACYRWL8DDSMIUd4?=
- =?us-ascii?Q?D1GqLJOW2a9E3NZwfm1iIvY+iqXix6+3mLqe9/y6CZGyer2YTjbNIs+vr5Bm?=
- =?us-ascii?Q?MNKz0ISPg4ZzMij+C0I8u6lTUiiSt+JUZYkiZEBK/vwJXk4x1cberSSJ6Eqn?=
- =?us-ascii?Q?/hqf5qyzB8PRhEyGcU/nHeccoZB9/jHQ8bQoE2L+XC3w3O65wnM1SBmCT5oG?=
- =?us-ascii?Q?3CHi7QXhq67i/8kWppDwWwZOr1EL1nku1EeKspC9/2KfAL1meLqm/ewHJZGW?=
- =?us-ascii?Q?2Q3W6xXzI2G7oovJ6f3wtGfgQnbSQ//VDPCIvzv3tHUgeFUlURuz9BBS97Nc?=
- =?us-ascii?Q?XFMwgkhQVxACE0EGxlzSRdiMn4p5ZnuJ8DoKx8DrD+uXY7NeeJMVTyJKtVbz?=
- =?us-ascii?Q?dIKnf1pzWJbHD6WHplkvzDV7gF393hXizlQ5vsT65CMFe3zV7H1TOWnEg1az?=
- =?us-ascii?Q?ozYJ/qrwUBh+rtjVvYJ5XMEdrRn0u9qSiUElGU+MEA6iZT7xYyvGEQTpwoNj?=
- =?us-ascii?Q?B4gGt4JsHH0eA1bgk4yoRrDu9f4n0TJdCV+BY/GFXLbeT1i68CrnyCbxTYZo?=
- =?us-ascii?Q?o+lmTp5GaTtV61Q8LHg7dziTuxiRAwrlus99emvt3Zjk71m+M33DRsdXmGnr?=
- =?us-ascii?Q?WwG4HHTQvnxKe8B8S3J0uk8hMHC+IcWaafS8RBfkMMQUkGi98HN5YcuV74JT?=
- =?us-ascii?Q?8UElPL6uznE62YKTe22RWEQvimKk4e1VdZ6E+EHE2PnUoxDHNwRDBwwUMa1i?=
- =?us-ascii?Q?dLcNPLWWueexaAaHAaLd7JWkz8CXifHArdQMmCR5T6uXbntI3cSmJ/thkgdJ?=
- =?us-ascii?Q?mGjPHp+cfQPx4Wfz69dCbGEIz9G0EdkInpyMSlBibXKqU1y4F5fEze+RTyPI?=
- =?us-ascii?Q?8cdekt74IeAX9A4BE024ECkWLhO87WQ2fDpzPMCOSA8c6tsFr41JMJGF8F/7?=
- =?us-ascii?Q?M3REYTdpCKLjtlejmk2x74XauXQBt433v6W4WGNH4TG3+EerZqZqQE1Ay/OK?=
- =?us-ascii?Q?1wKg+zFYZg5SpjpwiFS/RSieKWNSo1XcXkhfrFzRUDrGIK0ZiAVQnbKJc9KN?=
- =?us-ascii?Q?q5RZvzAx2j13zRiDtvOeQe8avQPStPd3dP2keSOF6GTCArIvHgGRq1L9Ex9e?=
- =?us-ascii?Q?IGEE0Q4p0JNXypwwU+toAujAS72Qknhl6PCI0OxFDApni73yNgAr+F9O58uU?=
- =?us-ascii?Q?/4yQR+rmn97m0nrOYRLYJMY/zQmHCKpzWA/zvJBy3MCGsQJ6HoEgYR+HiNvQ?=
- =?us-ascii?Q?UxpAFmuZonhW4CzfgeLwCNpTkfq8H+j+hbo1FiHeDnuZkGMVt0le7bbPPGFY?=
- =?us-ascii?Q?cdTCbg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(7142099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	IGygneXoDi1PgzUmRVHtDc/rxj+VgZLHwNcKp4ok4tJahZdXN3xMt34SkVKOoXER26otedMarcYlbjshUniKKrDLnEUi767FVMouGf8fxKcyXyipFx/ct9jZoqAJ8aHSVlw3+kibmunAqfgAKQ28MruG66QDRx8mVDx3WevJT1eyoy1voBdBorEHzsNUKMLvhbD5gImvY2iati0ntlWl6OKOW7vtrbTT79XhjmG4VtIsMhNWKlOsKhoXcLEOmOmebm0+czo8kg1bdtXijFNYKZ99khRr9nBy2cxryMT7QjEghY1jQfTPp4XzXpHdNrjF4/8GxMtovblUTMtqLBHCfpec+6lDbA0svb+bxZymDkYKcN/RVkACSwPcSMWOrs1C2kaLDRcvl2mgmAIkzHuQK5IqFjizgjM4bI0K4lLe41jmSQbwxbfUbz6BJ6tGD9wb
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2026 09:31:58.2869
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f255718f-ab4c-45c9-0129-08de68873cdf
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D1.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9083
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260210-20260128_nylon_chen_sifive_com-v2-1-630bcb707d7a@sifive.com>
+X-B4-Tracking: v=1; b=H4sIAHr/imkC/x2N0QqEIBAAfyX2OUG3qLhfOULE1lro1kNBiujfk
+ 95mXmYuyJSYMnyaCxIVzhylCrYN+M3JSoqX6oAaB41GqxcMTlbOPYr1G4nNHLiQ9fGnHA1hcdq
+ MXe+gRv6JAh/v4Dvf9wN9ihIscAAAAA==
+X-Change-ID: 20260210-20260128_nylon_chen_sifive_com-ae6fda01734a
+To: tglx@kernel.org, mingo@redhat.com, shuah@kernel.org
+Cc: peterz@infradead.org, dvhart@infradead.org, dave@stgolabs.net, 
+ andrealmeid@igalia.com, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, zong.li@sifive.com, 
+ Nylon Chen <nylon.chen@sifive.com>
+X-Mailer: b4 0.14.3
 
-The _get_unused_cpus() function can return CPU numbers >= 16, which
-exceeds RPS_MAX_CPUS in toeplitz.c. When this happens, the test fails
-with a cryptic message:
+Use LIBNUMA_TEST to conditionally add -lnuma to LDLIBS.
+Guard numa header includes with #ifdef LIBNUMA_VER_SUFFICIENT
+to allow compilation without libnuma installed.
 
-  # Exception| Traceback (most recent call last):
-  # Exception|   File "/tmp/cur/linux/tools/testing/selftests/net/lib/py/ksft.py", line 319, in ksft_run
-  # Exception|     func(*args)
-  # Exception|   File "/tmp/cur/linux/tools/testing/selftests/drivers/net/hw/toeplitz.py", line 189, in test
-  # Exception|     with bkg(" ".join(rx_cmd), ksft_ready=True, exit_wait=True) as rx_proc:
-  # Exception|          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  # Exception|   File "/tmp/cur/linux/tools/testing/selftests/net/lib/py/utils.py", line 124, in __init__
-  # Exception|     super().__init__(comm, background=True,
-  # Exception|   File "/tmp/cur/linux/tools/testing/selftests/net/lib/py/utils.py", line 77, in __init__
-  # Exception|     raise Exception("Did not receive ready message")
-  # Exception| Exception: Did not receive ready message
-
-Rename _get_unused_cpus() to _get_unused_rps_cpus() and cap the CPU
-search range to RPS_MAX_CPUS.
-
-Fixes: 9cf9aa77a1f6 ("selftests: drv-net: hw: convert the Toeplitz test to Python")
-Reviewed-by: Nimrod Oren <noren@nvidia.com>
-Signed-off-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Zong Li <zong.li@sifive.com>
+Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
 ---
- .../selftests/drivers/net/hw/toeplitz.py        | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+Changes in v2:
+- Remove redundant HAVE_LIBNUMA variable, use existing LIBNUMA_TEST
+- Keep futex_numa_mpol in TEST_GEN_PROGS
+- Conditionally add -lnuma based on LIBNUMA_TEST
+- Use #ifdef LIBNUMA_VER_SUFFICIENT to guard numa headers in source
 
-diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.py b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-index d288c57894f6..cd7e080e6f84 100755
---- a/tools/testing/selftests/drivers/net/hw/toeplitz.py
-+++ b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-@@ -19,6 +19,8 @@ from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, KsftFailEx
+selftests/futex: conditionally include libnuma support
+---
+ tools/testing/selftests/futex/functional/Makefile          | 5 ++++-
+ tools/testing/selftests/futex/functional/futex_numa_mpol.c | 2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index af7ec309ea78..b65ad750395e 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -4,7 +4,10 @@ LIBNUMA_TEST = $(shell sh -c "$(PKG_CONFIG) numa --atleast-version 2.0.16 > /dev
  
- # "define" for the ID of the Toeplitz hash function
- ETH_RSS_HASH_TOP = 1
-+# Must match RPS_MAX_CPUS in toeplitz.c
-+RPS_MAX_CPUS = 16
+ INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
+ CFLAGS := $(CFLAGS) -g -O2 -Wall -pthread -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64 $(INCLUDES) $(KHDR_INCLUDES) -DLIBNUMA_VER_$(LIBNUMA_TEST)=1
+-LDLIBS := -lpthread -lrt -lnuma
++LDLIBS := -lpthread -lrt
++ifeq ($(LIBNUMA_TEST),SUFFICIENT)
++LDLIBS += -lnuma
++endif
  
+ LOCAL_HDRS := \
+ 	../include/futextest.h \
+diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+index 220ef219c823..35ad2177f5af 100644
+--- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
++++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+@@ -10,8 +10,10 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#ifdef LIBNUMA_VER_SUFFICIENT
+ #include <numa.h>
+ #include <numaif.h>
++#endif
  
- def _check_rps_and_rfs_not_configured(cfg):
-@@ -67,23 +69,24 @@ def _get_irq_cpus(cfg):
-     return cpus
- 
- 
--def _get_unused_cpus(cfg, count=2):
-+def _get_unused_rps_cpus(cfg, count=2):
-     """
--    Get CPUs that are not used by Rx queues.
--    Returns a list of at least 'count' CPU numbers.
-+    Get CPUs that are not used by Rx queues for RPS.
-+    Returns a list of at least 'count' CPU numbers within
-+    the RPS_MAX_CPUS supported range.
-     """
- 
-     # Get CPUs used by Rx queues
-     rx_cpus = set(_get_irq_cpus(cfg))
- 
--    # Get total number of CPUs
--    num_cpus = os.cpu_count()
-+    # Get total number of CPUs, capped by RPS_MAX_CPUS
-+    num_cpus = min(os.cpu_count(), RPS_MAX_CPUS)
- 
-     # Find unused CPUs
-     unused_cpus = [cpu for cpu in range(num_cpus) if cpu not in rx_cpus]
- 
-     if len(unused_cpus) < count:
--        raise KsftSkipEx(f"Need at {count} CPUs not used by Rx queues, found {len(unused_cpus)}")
-+        raise KsftSkipEx(f"Need at least {count} CPUs in range 0..{num_cpus - 1} not used by Rx queues, found {len(unused_cpus)}")
- 
-     return unused_cpus[:count]
- 
-@@ -181,7 +184,7 @@ def test(cfg, proto_flag, ipver, grp):
-         ksft_pr(f"RSS using CPUs: {irq_cpus}")
-     elif grp == "rps":
-         # Get CPUs not used by Rx queues and configure them for RPS
--        rps_cpus = _get_unused_cpus(cfg, count=2)
-+        rps_cpus = _get_unused_rps_cpus(cfg, count=2)
-         rps_mask = _configure_rps(cfg, rps_cpus)
-         defer(_configure_rps, cfg, [])
-         rx_cmd += ["-r", rps_mask]
+ #include <linux/futex.h>
+ #include <sys/mman.h>
+
+---
+base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+change-id: 20260210-20260128_nylon_chen_sifive_com-ae6fda01734a
+
+Best regards,
 -- 
-2.52.0
+Nylon Chen <nylon.chen@sifive.com>
 
