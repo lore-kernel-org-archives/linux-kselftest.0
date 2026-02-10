@@ -1,120 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F7F3A8F7;
-	Tue, 10 Feb 2026 12:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE47321428
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 13:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770726996; cv=none; b=T9LkRUe3h1cTtCB1uHDq7eFayVw7x338rml9qHmktMqHPVMTol6aGmSYEw5z+13xIPKH5zpPL88eEexBbbf8QqpMFVGk643rEyIB4CkYtHbC8ZbUbnWzikik5CkrkqX30g6s5mCQHfOmapTYfm6CxAcb82Zbv1o91MWRdpCAPLE=
+	t=1770729043; cv=none; b=p48tPUiigFCjDIHXdId59PjC0q2nQyoHi2jziYSIGuPWNjnbklk7hLgRMEI4AzxE3pBFViUvjOiQWef/LFc1RnO7pIh8w7xaQvENjLLkk0pOTwkEkeYNMW6xdeynHD++WQ4GZPSNrqUD3HYVkcmsCDRP2Kc1j97/NIVKq18TH1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770726996; c=relaxed/simple;
-	bh=gzH2YGvZRc9iV5d+RW89R0NxYY96RI7zn+dgQ4Iw8Wg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ci/TeL59/zf3JQDMAD9s3fVuHlyi29IGW/zLokKbGJPocS+Yh7/4R9tyH518ko1gfNdy9TnUMAKPSaBYXK6MvKQTiQBI2ORcFSRriHZG+61bP0kywOqKKIPsp521pqqbZ7DHYLGbV3a4B6ZqpKm7yT08rc7E14QXS69zdQgWAJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nLuRfnSy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770729043; c=relaxed/simple;
+	bh=f05M7zKV2fcU0dWyXqgOAv9DwNG8MuhQQy725jkKzOs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NTWFZMW4eND+mh4LStZqlncfkdjoLQBfrNArByglX6V0t5MR80P3KM8OlRPfpw/RdvJ2bXfjZQ0qbqJMBZ0z/hz8KlsbrFRlgu2dDLd0nauZ28D0XTLtVbK6OuHWXPnFXhJp0bUydKx0oABTNeElpfLpxF8EyMqxKT88DiGaNyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gMNsfjpT; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nLuRfnSy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A888C116C6;
-	Tue, 10 Feb 2026 12:36:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770726995;
-	bh=gzH2YGvZRc9iV5d+RW89R0NxYY96RI7zn+dgQ4Iw8Wg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nLuRfnSyt3b6YxGjiBXA0qXmaewKKdJ2NbcH9G7Tw04N4Pk9HtXZJT+M8pK4QfOxM
-	 x32Ezkv0H+gRZrnfBr1HqfKrLIMrlrtW6p6RkVBqycsS0oU0hjVcmnkXRGHVwEWo4o
-	 vL7N7dcp2J1g9G+Zjmcu5k54PxwJuiXFVbLjjkAjYsBXZR0VJ85B2qauMMEXj9RVGY
-	 uG8D90P5bKHgByMr/bGkV9obU0jEK/vWX8I+8vas3QbBQzpYiCjHs40SSEtaqNi5Ap
-	 tXapki1uRBWBkAqMlU2DW2ZTvN3GKknO95KfPGb6Q3uLwFhyVZYL7Af2lzYethc4lU
-	 GAQkeKJ3G+MRA==
-Date: Tue, 10 Feb 2026 13:36:29 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Koichiro Den <den@valinux.co.jp>
-Cc: vkoul@kernel.org, mani@kernel.org, Frank.Li@nxp.com,
-	jingoohan1@gmail.com, lpieralisi@kernel.org, kwilczynski@kernel.org,
-	robh@kernel.org, bhelgaas@google.com, kishon@kernel.org,
-	jdmason@kudzu.us, allenbh@gmail.com, dmaengine@vger.kernel.org,
-	linux-pci@vger.kernel.org, ntb@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 6/8] PCI: endpoint: pci-epf-test: Don't free doorbell
- IRQ unless requested
-Message-ID: <aYsmTbSmn94J6uN0@ryzen>
-References: <20260209125316.2132589-1-den@valinux.co.jp>
- <20260209125316.2132589-7-den@valinux.co.jp>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gMNsfjpT"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-81ea3358dd3so3490605b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Feb 2026 05:10:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770729042; x=1771333842; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9ewPRZs8qcG6Pa4UShVQRu75Ce5Dkf9jkx+qJlthNoo=;
+        b=gMNsfjpT7F7zskBuLwar9fnJPrg2HruJ6CA919u5JJyNzM8F2pOdQuQzJxuezL+pgD
+         qzKoFWRk3nfjKrN+ZJw3AeJrDjxAa1o6OFAx7UwOjQwil4gIR0azqXgcaHY5bvKrv64l
+         UX1TzlQRlnKOWOnJ9CE1TOc3fy0yhNX4L32EoZJcJOffPIJZPqA0QeEiE6ByhJqRuXML
+         A1ZuS232SkTj3ct0N6N3fQoR9DXvBzwsKiQ16wA7dhwnrZnbE9GFvF55nwO1II6jDNeV
+         YyRAyGO0JP4CYlSsKd1Y3FognK5yV7g/6j452hIO6AZ7GiKUscdDSzJR1YJ2gaSf2A8O
+         MT7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770729042; x=1771333842;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9ewPRZs8qcG6Pa4UShVQRu75Ce5Dkf9jkx+qJlthNoo=;
+        b=YPW6dUMjxCaSnwtr4i7Z+jkICV2IZ3m58ApfjCZbI1yWwI2TAP2R73YOnUsoOsaygz
+         AH5dkY3LXCtLJboy4CQUFfd1UmrG9U2UO9BS05PL6RH6Nx6HyBiqSZh6VDmKVZP6cqqd
+         kqWiBfFUkTHF3hRfOvuP7WZZSSuP5Yb/uSb6CtF0kWRhzDSsfiotz1DrsEA8wvhZ+PkK
+         J/YosAYjBzW8/pavNPp2ZiBdsUp398TW8DMFMeGeRJcJ5MJ/ImE7RTDpT6SEEDjRoUZh
+         em7C3nTNfOzpDsBNS8/T+4EdKlyhPBjxok9gWo71Auj69eBPnq6HDVtVgRWkkgYHyjGg
+         dOAw==
+X-Forwarded-Encrypted: i=1; AJvYcCXpfWOTvVe7qmO1SxDIVqwtOQXtjxovsADxMA+HMnjwstDkIZFwHBe+x+CsAkDCCfzQyLDiSaLgG/OT7tkg430=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtCxT86FuJaG3ZG5E2VGt6Tagj46Tu9J5zO96wWKUIf3+px8fi
+	1Ycfyie/Wxl/do+IDgsQRpFpHtmI88NUa33BXBPfbDX5h8oSJh7V0KJUbkppXSFApUr8IGp63Vh
+	5fe57ikQsmKuKlg==
+X-Received: from pfbjw17.prod.google.com ([2002:a05:6a00:9291:b0:81f:84ba:9ee])
+ (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:b90b:b0:81e:f623:ba09 with SMTP id d2e1a72fcca58-82441609475mr11545607b3a.3.1770729041639;
+ Tue, 10 Feb 2026 05:10:41 -0800 (PST)
+Date: Tue, 10 Feb 2026 21:10:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260209125316.2132589-7-den@valinux.co.jp>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
+Message-ID: <20260210131029.3851957-1-davidgow@google.com>
+Subject: [PATCH] MAINTAINERS: Update email address for David Gow
+From: David Gow <davidgow@google.com>
+To: shuah@kernel.org, brendan.higgins@linux.dev, raemoar63@gmail.com, 
+	David Gow <david@davidgow.net>
+Cc: David Gow <davidgow@google.com>, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 09, 2026 at 09:53:14PM +0900, Koichiro Den wrote:
-> pci_epf_test_enable_doorbell() allocates a doorbell and then installs
-> the interrupt handler with request_threaded_irq(). On failures before
-> the IRQ is successfully requested (e.g. no free BAR,
-> request_threaded_irq() failure), the error path jumps to
-> err_doorbell_cleanup and calls pci_epf_test_doorbell_cleanup().
-> 
-> pci_epf_test_doorbell_cleanup() unconditionally calls free_irq() for the
-> doorbell virq, which can trigger "Trying to free already-free IRQ"
-> warnings when the IRQ was never requested.
-> 
-> Track whether the doorbell IRQ has been successfully requested and only
-> call free_irq() when it has.
-> 
-> Fixes: eff0c286aa91 ("PCI: endpoint: pci-epf-test: Add doorbell test support")
-> Signed-off-by: Koichiro Den <den@valinux.co.jp>
-> ---
->  drivers/pci/endpoint/functions/pci-epf-test.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> index 6952ee418622..23034f548c90 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> @@ -86,6 +86,7 @@ struct pci_epf_test {
->  	bool			dma_private;
->  	const struct pci_epc_features *epc_features;
->  	struct pci_epf_bar	db_bar;
-> +	bool			db_irq_requested;
->  	size_t			bar_size[PCI_STD_NUM_BARS];
->  };
->  
-> @@ -715,7 +716,10 @@ static void pci_epf_test_doorbell_cleanup(struct pci_epf_test *epf_test)
->  	struct pci_epf_test_reg *reg = epf_test->reg[epf_test->test_reg_bar];
->  	struct pci_epf *epf = epf_test->epf;
->  
-> -	free_irq(epf->db_msg[0].virq, epf_test);
-> +	if (epf_test->db_irq_requested && epf->db_msg) {
-> +		free_irq(epf->db_msg[0].virq, epf_test);
-> +		epf_test->db_irq_requested = false;
-> +	}
->  	reg->doorbell_bar = cpu_to_le32(NO_BAR);
->  
->  	pci_epf_free_doorbell(epf);
-> @@ -741,6 +745,8 @@ static void pci_epf_test_enable_doorbell(struct pci_epf_test *epf_test,
->  	if (bar < BAR_0)
->  		goto err_doorbell_cleanup;
->  
-> +	epf_test->db_irq_requested = false;
-> +
->  	ret = request_threaded_irq(epf->db_msg[0].virq, NULL,
->  				   pci_epf_test_doorbell_handler, IRQF_ONESHOT,
->  				   "pci-ep-test-doorbell", epf_test);
+Update my email address for KUnit related things in MAINTAINERS (and add
+an entry to .mailmap so nothing gets lost).
 
-Another bug in pci_epf_test_enable_doorbell():
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ .mailmap    | 1 +
+ MAINTAINERS | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Since we reuse the BAR size, and use dynamic inbound mapping,
-what if the returned DB offset is larger than epf->bar[bar].size ?
+diff --git a/.mailmap b/.mailmap
+index da4afd2b2415..b2376b713fc4 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -213,6 +213,7 @@ Daniel Thompson <danielt@kernel.org> <daniel.thompson@linaro.org>
+ Danilo Krummrich <dakr@kernel.org> <dakr@redhat.com>
+ David Brownell <david-b@pacbell.net>
+ David Collins <quic_collinsd@quicinc.com> <collinsd@codeaurora.org>
++David Gow <david@davidgow.net> <davidgow@google.com>
+ David Heidelberg <david@ixit.cz> <d.okias@gmail.com>
+ David Hildenbrand <david@kernel.org> <david@redhat.com>
+ David Rheinsberg <david@readahead.eu> <dh.herrmann@gmail.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fcf39de76838..eb653a328338 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13796,7 +13796,7 @@ F:	fs/smb/server/
+ 
+ KERNEL UNIT TESTING FRAMEWORK (KUnit)
+ M:	Brendan Higgins <brendan.higgins@linux.dev>
+-M:	David Gow <davidgow@google.com>
++M:	David Gow <david@davidgow.net>
+ R:	Rae Moar <raemoar63@gmail.com>
+ L:	linux-kselftest@vger.kernel.org
+ L:	kunit-dev@googlegroups.com
+@@ -14607,7 +14607,7 @@ F:	drivers/misc/lis3lv02d/
+ F:	drivers/platform/x86/hp/hp_accel.c
+ 
+ LIST KUNIT TEST
+-M:	David Gow <davidgow@google.com>
++M:	David Gow <david@davidgow.net>
+ L:	linux-kselftest@vger.kernel.org
+ L:	kunit-dev@googlegroups.com
+ S:	Maintained
+-- 
+2.53.0.rc2.204.g2597b5adb4-goog
 
-I think we need something like this before calling pci_epc_set_bar():
-
-if (reg->doorbell_offset >= epf->bar[bar].size)
-    goto err_doorbell_cleanup;
-
-
-
-Kind regards,
-Niklas
