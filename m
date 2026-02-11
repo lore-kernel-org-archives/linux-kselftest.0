@@ -1,46 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860FE29BDA5;
-	Wed, 11 Feb 2026 01:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198242D4806;
+	Wed, 11 Feb 2026 01:56:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770774683; cv=none; b=LBE/cHM9uzIF7YirL/6aWQDFUORbObDQ4xCM5/IA9D7IbChd20Yx57RMNgk94k+uXLpOWJupCBE16+JLMWYdyyXwLdLAeNWm/vXNF/KNbrH4SMgF02AlhdB+HE7SwJIKW/Ijwm7ulAsCr4VCrK6bo0Gv3QhNl8AWYFQ9Br9gV/g=
+	t=1770775000; cv=none; b=tqldzTXXYgW98brfJ+HYdc2nvzzviNqhYzWIVVL8O10OOz2SkQK0DeoqyxyK4ATGZjw9bv9gLjFCPyOZho3OeHglJUalKEMfFV4G5rgbDtSxb97Fuh/0ozOFhPqpCvID23wk0KSj7b4eWib81ulYxRfxxuf2F0nOo+wmdumc+QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770774683; c=relaxed/simple;
-	bh=h8C9VD+IRSSM7yo0G0lTxSTIvniyCWQVHaaMz8OKIhg=;
+	s=arc-20240116; t=1770775000; c=relaxed/simple;
+	bh=BMY9+yKdeAiBkeAYgMFch3HHKhcWuWYgHyr8mhgMM1k=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nLGRLvz1JMwb6qi/XJWPc2K813TYna5+Jo14od0oBK84MxFcmOeiCrvAjTdKRYWOJAvlNXwATPDzazX0+TQqEMiXW3LSsoGjQ5DGSgyCbn8OZ0+m4gGZ0rUfByutyVWFTli4mWNAdma0toWlPMDRX3J26ZFCuypTX1cuEOhSiAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uJrP44hG; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=hu/Xp8XsxKq+8U7B4xMdPJ1PN0APtcPMPrNtjnKA9cB2iN1/tKcknwVKPsTPjDGgbZ1zJJ3zApPdmvKoYBOLYFYorsAz1o349yOfBcmo+PWtNShc+j8OyhHwWSmyDdaqxXk1MvnSmI238KxEivoIPwagGVEQIYGqVSFNcoHpl/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NN1v05Kh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uJrP44hG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1E8C116C6;
-	Wed, 11 Feb 2026 01:51:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NN1v05Kh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3947C116C6;
+	Wed, 11 Feb 2026 01:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770774683;
-	bh=h8C9VD+IRSSM7yo0G0lTxSTIvniyCWQVHaaMz8OKIhg=;
+	s=k20201202; t=1770774999;
+	bh=BMY9+yKdeAiBkeAYgMFch3HHKhcWuWYgHyr8mhgMM1k=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=uJrP44hGfmqlpvasWX+aUwyO525f7NiWyLA75pJc/IJ5lPPiv9cSM2TwM8nO7tY+w
-	 QFVO/09Y5Cto+lF7Joair/0ksy2lZCsWxjMns+czaWb3IA3LL4Jpk49GwYjpcWnJhY
-	 EKNosc3Dwhl1BPMdLJhHNnsLYDjbKteS0cGRmIh9mXwT4HoBO4msITAHzzJhAjBEzx
-	 Aucb0EpkVU9cbubNtQcYKmADlV2shrrzLDOsLKXXPHE/eHDMbv/aJ249653yoZiXMY
-	 v0qQvPBrh5N0LpExu0C+w6FoxESgIMSYs3j7e6JItH0wGrrlY9mPv6FWQdozD/+JXu
-	 VqbtxHrqnXGlg==
-Date: Tue, 10 Feb 2026 17:51:21 -0800
+	b=NN1v05KhlBhfgpDMAO4i6qxV4EfwOA80jEm81MpnglwxPREGtJNB0Lq5Z3ETCSbrC
+	 AI9Io/w5UYMNE4GZm6FHIvLFv7MlvOpzLRksEHgp2JrF7OGcKaGotwr0qNMT40dCzu
+	 I2uEQElwTfLNCQIf7uY57zlN3aVdjD4u1HsUCSDC2mWlThh6YQ9QvcP0PE/KELYNxu
+	 zsHUM1N3qgoWE6zc6mbak+MkDdcbd8GePhWYgkxx+ZnW9hlAbJZoBdfCHuaQEGMJmR
+	 u96gJCrNpvW5EjjVV3Ih2r/p99hgdVKjHh4aKGo79CTr+wOVuZlCV/ULP+sI0EBxfA
+	 PKldZe73yRz3w==
+Date: Tue, 10 Feb 2026 17:56:38 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Michael Chan <michael.chan@broadcom.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
  shuah@kernel.org, willemb@google.com, petrm@nvidia.com,
- donald.hunter@gmail.com, pavan.chebbi@broadcom.com,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/9] eth: bnxt: gather and report HW-GRO
- stats
-Message-ID: <20260210175121.174bd1e5@kernel.org>
-In-Reply-To: <CACKFLimgibJ0qkM1AacZVh8MKKy-pE_AAc4KPKZ7GUqebmXW9A@mail.gmail.com>
+ donald.hunter@gmail.com, michael.chan@broadcom.com,
+ pavan.chebbi@broadcom.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 6/9] selftests: drv-net: gro: use SO_TXTIME
+ to schedule packets together
+Message-ID: <20260210175638.123782b2@kernel.org>
+In-Reply-To: <willemdebruijn.kernel.743811e01cc@gmail.com>
 References: <20260207003509.3927744-1-kuba@kernel.org>
-	<20260207003509.3927744-2-kuba@kernel.org>
-	<CACKFLimgibJ0qkM1AacZVh8MKKy-pE_AAc4KPKZ7GUqebmXW9A@mail.gmail.com>
+	<20260207003509.3927744-7-kuba@kernel.org>
+	<willemdebruijn.kernel.743811e01cc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,11 +50,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sat, 7 Feb 2026 16:09:13 -0800 Michael Chan wrote:
-> > @@ -13492,6 +13497,8 @@ static void bnxt_get_one_ring_err_stats(struct bnxt *bp,  
+On Sun, 08 Feb 2026 21:39:38 -0500 Willem de Bruijn wrote:
+> Jakub Kicinski wrote:
+> > Longer packet sequence tests are quite flaky when the test is run
+> > over a real network. Try to avoid at least the jitter on the sender
+> > side by scheduling all the packets to be sent at once using SO_TXTIME.
+> > Use hardcoded tx time of 5msec in the future. In my test increasing
+> > this time past 2msec makes no difference so 5msec is plenty of margin.
+> > Since we now expect more output buffering make sure to raise SNDBUF.
+> > 
+> > Experimenting with long sequences I see frequent failures when sending
+> > 200 packets, only 50-100 packets get coalesced. With this change
+> > up to 1000 packets get coalesced relatively reliably.
+> > 
+> > Reviewed-by: Petr Machata <petrm@nvidia.com>
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>  
 > 
-> With the new GRO counters, this function is no longer limited to error
-> stats.  So maybe rename it to something like
-> bnxt_get_one_ring_misc_stats()?
+> Does this require having FQ installed? I don't see any qdisc config
+> in the GRO test.
 
-Ack, I'll queue up a cleanup after the merge window.
+It's a bit of an opportunistic optimization.
+
+I initially intended it for for the "long sequence of packets"
+test. But I failed to get AF_PACKET+FQ to cooperate sufficiently
+to queue all of the packets in the same bucket. Otherwise FQ "sorts"
+the packets, and breaks what the test is trying to do :(
+
+Oh, and as mentioned in the commit msg - this improvement is intended
+for HW-GRO, which may have very low timeouts. The test already
+configures timeout for SW GRO to a very high value, so don't think
+we would gain anything from setting up FQ on veth/netdevsim for the 
+SW test.
+
+So IDK what to do with this patch. Maybe I should just drop it?
+It _seemed_ useful, but I don't have enough datapoints to do a real
+comparison of how much it improves reliability.
