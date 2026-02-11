@@ -1,87 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198242D4806;
-	Wed, 11 Feb 2026 01:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA8F2E62AC;
+	Wed, 11 Feb 2026 02:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770775000; cv=none; b=tqldzTXXYgW98brfJ+HYdc2nvzzviNqhYzWIVVL8O10OOz2SkQK0DeoqyxyK4ATGZjw9bv9gLjFCPyOZho3OeHglJUalKEMfFV4G5rgbDtSxb97Fuh/0ozOFhPqpCvID23wk0KSj7b4eWib81ulYxRfxxuf2F0nOo+wmdumc+QI=
+	t=1770775214; cv=none; b=UXyWx0Ny+KeJLX3jK4ukjmHpyHyV3vx0oiwxRQFBEUbnIeKBvcxlkwsCME1tXc9KisuuB0dqN5E6GJoATuMl7ZTLqdM7L4wNPLSjSx5bezcrb1smyjJ1OHzp9GLZBHnFo5BbEP+Sl9hkgiSN/DqJ+AZ9ffGdhn+azjgDXzZHpdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770775000; c=relaxed/simple;
-	bh=BMY9+yKdeAiBkeAYgMFch3HHKhcWuWYgHyr8mhgMM1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hu/Xp8XsxKq+8U7B4xMdPJ1PN0APtcPMPrNtjnKA9cB2iN1/tKcknwVKPsTPjDGgbZ1zJJ3zApPdmvKoYBOLYFYorsAz1o349yOfBcmo+PWtNShc+j8OyhHwWSmyDdaqxXk1MvnSmI238KxEivoIPwagGVEQIYGqVSFNcoHpl/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NN1v05Kh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770775214; c=relaxed/simple;
+	bh=3+d0+A9SYm9BfWYujapbGAM9JXvxM5dKR5JqFFTZlzI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Wt5Vkh5uxahF4CULkqZycfR8BtzqT3HkqWvuHM4vxQANiW+3OTN0mje7VIP5iSLj2Dw4D5AXXchX8mn9cIql5vhgpJaBs2JWJwrDIJcZ5DE3rMH4G/DTFjg8IF9ykqE4TBBNX0R56oTlXjOCqkpIgeK0BRLl+leajx5sQw/ba6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=6KUAlBXW; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NN1v05Kh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3947C116C6;
-	Wed, 11 Feb 2026 01:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770774999;
-	bh=BMY9+yKdeAiBkeAYgMFch3HHKhcWuWYgHyr8mhgMM1k=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NN1v05KhlBhfgpDMAO4i6qxV4EfwOA80jEm81MpnglwxPREGtJNB0Lq5Z3ETCSbrC
-	 AI9Io/w5UYMNE4GZm6FHIvLFv7MlvOpzLRksEHgp2JrF7OGcKaGotwr0qNMT40dCzu
-	 I2uEQElwTfLNCQIf7uY57zlN3aVdjD4u1HsUCSDC2mWlThh6YQ9QvcP0PE/KELYNxu
-	 zsHUM1N3qgoWE6zc6mbak+MkDdcbd8GePhWYgkxx+ZnW9hlAbJZoBdfCHuaQEGMJmR
-	 u96gJCrNpvW5EjjVV3Ih2r/p99hgdVKjHh4aKGo79CTr+wOVuZlCV/ULP+sI0EBxfA
-	 PKldZe73yRz3w==
-Date: Tue, 10 Feb 2026 17:56:38 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- shuah@kernel.org, willemb@google.com, petrm@nvidia.com,
- donald.hunter@gmail.com, michael.chan@broadcom.com,
- pavan.chebbi@broadcom.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 6/9] selftests: drv-net: gro: use SO_TXTIME
- to schedule packets together
-Message-ID: <20260210175638.123782b2@kernel.org>
-In-Reply-To: <willemdebruijn.kernel.743811e01cc@gmail.com>
-References: <20260207003509.3927744-1-kuba@kernel.org>
-	<20260207003509.3927744-7-kuba@kernel.org>
-	<willemdebruijn.kernel.743811e01cc@gmail.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="6KUAlBXW"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ZZqq8+GdDbSaKyMlWj6dTYFz3jUfvOrHZvzVP/UCqjc=;
+	b=6KUAlBXWjliPhu85Hxd5e9/rPI7je4cwWb0UP+A9t7JJy04FcZjeU7ZkMUIgmb2Z1pB9YO3RS
+	PgrKxsp7K2M2a0XYSlK4lxE0/0tbAOxyaiZZrg7aZS5Df2f/EQNqaRVF7KCO2UOM3ZE2ovCbis/
+	ZCM5+dHZFs8ma0h3IvoOMNE=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4f9hMy3JVBzRhWB;
+	Wed, 11 Feb 2026 09:55:26 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id 151452012A;
+	Wed, 11 Feb 2026 10:00:04 +0800 (CST)
+Received: from huawei.com (10.50.85.128) by dggpemf500002.china.huawei.com
+ (7.185.36.57) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 11 Feb
+ 2026 10:00:03 +0800
+From: Yue Haibing <yuehaibing@huawei.com>
+To: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <horms@kernel.org>, <shuah@kernel.org>,
+	<petrm@nvidia.com>, <razor@blackwall.org>
+CC: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <yuehaibing@huawei.com>
+Subject: [PATCH net] selftests: net: lib: Fix jq parsing error
+Date: Wed, 11 Feb 2026 10:21:46 +0800
+Message-ID: <20260211022146.190948-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-On Sun, 08 Feb 2026 21:39:38 -0500 Willem de Bruijn wrote:
-> Jakub Kicinski wrote:
-> > Longer packet sequence tests are quite flaky when the test is run
-> > over a real network. Try to avoid at least the jitter on the sender
-> > side by scheduling all the packets to be sent at once using SO_TXTIME.
-> > Use hardcoded tx time of 5msec in the future. In my test increasing
-> > this time past 2msec makes no difference so 5msec is plenty of margin.
-> > Since we now expect more output buffering make sure to raise SNDBUF.
-> > 
-> > Experimenting with long sequences I see frequent failures when sending
-> > 200 packets, only 50-100 packets get coalesced. With this change
-> > up to 1000 packets get coalesced relatively reliably.
-> > 
-> > Reviewed-by: Petr Machata <petrm@nvidia.com>
-> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>  
-> 
-> Does this require having FQ installed? I don't see any qdisc config
-> in the GRO test.
+The testcase failed as below:
+$./vlan_bridge_binding.sh
+...
++ adf_ip_link_set_up d1
++ local name=d1
++ shift
++ ip_link_is_up d1
++ ip_link_has_flag d1 UP
++ local name=d1
++ shift
++ local flag=UP
++ shift
+++ ip -j link show d1
+++ jq --arg flag UP 'any(.[].flags.[]; . == $flag)'
+jq: error: syntax error, unexpected '[', expecting FORMAT or QQSTRING_START
+ (Unix shell quoting issues?) at <top-level>, line 1:
+any(.[].flags.[]; . == $flag)
+jq: 1 compile error
 
-It's a bit of an opportunistic optimization.
+Remove the extra dot (.) after flags array to fix this.
 
-I initially intended it for for the "long sequence of packets"
-test. But I failed to get AF_PACKET+FQ to cooperate sufficiently
-to queue all of the packets in the same bucket. Otherwise FQ "sorts"
-the packets, and breaks what the test is trying to do :(
+Fixes: 4baa1d3a5080 ("selftests: net: lib: Add ip_link_has_flag()")
+Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
+---
+ tools/testing/selftests/net/lib.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Oh, and as mentioned in the commit msg - this improvement is intended
-for HW-GRO, which may have very low timeouts. The test already
-configures timeout for SW GRO to a very high value, so don't think
-we would gain anything from setting up FQ on veth/netdevsim for the 
-SW test.
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index 0ec131b339bc..b40694573f4c 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -577,7 +577,7 @@ ip_link_has_flag()
+ 	local flag=$1; shift
+ 
+ 	local state=$(ip -j link show "$name" |
+-		      jq --arg flag "$flag" 'any(.[].flags.[]; . == $flag)')
++		      jq --arg flag "$flag" 'any(.[].flags[]; . == $flag)')
+ 	[[ $state == true ]]
+ }
+ 
+-- 
+2.39.2
 
-So IDK what to do with this patch. Maybe I should just drop it?
-It _seemed_ useful, but I don't have enough datapoints to do a real
-comparison of how much it improves reliability.
