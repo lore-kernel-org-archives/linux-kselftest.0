@@ -1,239 +1,182 @@
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010037.outbound.protection.outlook.com [52.101.85.37])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F053C0C;
-	Wed, 11 Feb 2026 08:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770797511; cv=fail; b=Nu7xuE2i22AVsZugUbfpmL+Nz8oVz+8Om0hwUYhmoRI0956v6QY7LUddrkiznA6jK2we4zFxiDIeyc0I14vhF+Rvksj7fh5Pb0vjnfe9GtQ/7128yjjLSvwVOcjTpR4mB7zrUkC81iSbkCKk151w/aR5jT49OoHGzZVq0fwpfVA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770797511; c=relaxed/simple;
-	bh=p1l6KJf5I7Vb1BVNCHuc1u52CINt6c2PLBK+huqYz9o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=YGlxASdtqwZBb5Td6glhnzgkCKbmGyZAD3G7d70dIXCSTXid8JCImtZGRQD1JGxJusoKdm2LTqddJrBnYEAgc2gaBxShDY8AOclgm7PYy9e++gBlb8xnMtKWa7cho1T6MZOPzqPjRD8mZILAoT+9Pjjcy62UtAewl1aJa/DWn64=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mMrpRzcv; arc=fail smtp.client-ip=52.101.85.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 324243161BE
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 08:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770797815; cv=none; b=pB5DcGCgbCWi++QCQtsOm2WIQjK+Gs8H7+MLkyE+T+8b4iX3EPqKAunVBc7H2Edl+LALbt/ENvuhg1zfb1Z8OLjnwsQHSLL59auRPD4ymZ9MHr2GzR/vZYK4D3FbzIXMGpFZtClrD7PcQDA0+XRX6QcxoNfBADMqfnMhdHQ8DFA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770797815; c=relaxed/simple;
+	bh=YVkdKE56KfMUt8ZBwibIPxcn0zR1Ob7YbeDJslFalXo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=k2668HAeNrGh68x255grFVbNZZSoGBjESwZX7F/9P5tiPLr1pUyb2toGqlGq1uFhKXlHx5ivmru7JMURteyzQ9sXd/lgKx0Xn1s64+vP+eUml7fkMiN60wMi7JLZCk0FeWiKBhbGPzvvUnK6fLQ7We6W9cuHzx9xhcGydmET/SQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Pdve4/F1; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VSXSHcF5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mMrpRzcv"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=E9iDI7Q+dHfR3smES+nMLoM4p3d54/5JGR5l3+suoPyld6rUiYAsEPGzWVKwKFaCjxVK+YskKp2GvByiSMypcfaD0wpzsnIHIYS3HC5jT6qtB/qBuPVB0ZPI7xgh80Q+1JOBY9aK50HNpsm+LviGcyVFnZ4YSiFr5sbZE6AuC6fzebIV56xxl+uh0zYzHuESUx4hlfYjeGgTI3o0oA5DihEkKhUyE+mRVsDexgqMvLT8H5p6WOpdG5yvoXgOTEVrkLY97EcGwW7gigrhimKlapB+JR/FGNMu4gpa/2FAHql06w98iLdLT7NiU2BjPt6G8E1wYFVOPU0yS6e7Ev+ROA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bRabceVk1ZolKIAx8ucmjdy8CRxV6Hyqe8uOXx6f8rY=;
- b=BxsFfzgNJ14ZVq4nsy2LY+bSAczLHUzhiGqOEFuVKQCWoyIKg0uu58vtI5ks3gusj8oOD5uqxFt7wuzvUsS+TMqdQnIoL/Bl3vXo7hUqfLscBnlvUQGTlFonVvB+ECe0ZUpAq/oRgxXcymYA/0Lu3mq/0yhSY9zNv6oCgWonsPlw3l3Srx0Td4txH/4JCTHBWMaU1gkawiW3aaZo5jSA7kgkG+2mIX1XhxoYEL4Ihnps6NCsQIRv1sajXvyr4fMdRopG6zzmQrGDbN8tFkh4BujEgnsfwDjMbAg8MkumqrQ1sGl/j/eJ59R4RsZ3EifzbwvVUDPvilRw04ZgW+seVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bRabceVk1ZolKIAx8ucmjdy8CRxV6Hyqe8uOXx6f8rY=;
- b=mMrpRzcvikN5hdoRHok83vMAF7Mocn/jkVwhAvRzH+55u1iaoFf4VWra5FDePPSTjqafo69+WIdYNQlZ9xsgOkpP5il5i5iiB20K/mZ0tP5mtbsU9HjSoGI69J+K1oiXPk/BqpTrGIsYdSVW1arexuJL08YQBNWp8nCeEmSs7wBSf9LIGwrsd2uUmDPd1ujZvHDs2ZsOr81u9vUr+1yk5sc2AyQ28D6AF/YdvfP/VIEqp2Jke9+XfDUEnIJ1uJmdZIdJxoeRuuEhpU++axun+EtAwxOLiaLE8LhXwLIHnoxVzJ234kHWLPxeY5yRwuK/05LCHzDzROh4g56skrSqWA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by BN7PPF34483F4BA.namprd12.prod.outlook.com (2603:10b6:40f:fc02::6cb) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.10; Wed, 11 Feb
- 2026 08:11:45 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%2]) with mapi id 15.20.9587.016; Wed, 11 Feb 2026
- 08:11:38 +0000
-Date: Wed, 11 Feb 2026 10:11:29 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Petr Machata <petrm@nvidia.com>, Amit Cohen <amcohen@nvidia.com>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] selftests: forwarding: fix pedit tests failure with
- br_netfilter enabled
-Message-ID: <20260211081129.GA475567@shredder>
-References: <20260210185129.480015-1-aleksey.oladko@virtuozzo.com>
- <20260210185129.480015-4-aleksey.oladko@virtuozzo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260210185129.480015-4-aleksey.oladko@virtuozzo.com>
-X-ClientProxiedBy: FR3P281CA0016.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::21) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pdve4/F1";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VSXSHcF5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770797813;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=2SX4sleE5xgzwOzs5l1BotG3ooT9aeHoVAoWb2ZNeBo=;
+	b=Pdve4/F1RyOqi11Ac3kpqJWkqn9DD0348xqL3dYzGxlhYs27M4kj0EZZmxCRakp+CPydBG
+	OkgNn18DxMs8LizSq5jMPHiM8yCZbT92jhyTzw3kvSrhnbuwcW51l3G6T0xMGONuLeGJIr
+	OqjgGnqcJHeYXOHKFQBdborSsrezLAY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-610-bp9xQCeqMeev5HV0_h2PIg-1; Wed, 11 Feb 2026 03:16:52 -0500
+X-MC-Unique: bp9xQCeqMeev5HV0_h2PIg-1
+X-Mimecast-MFC-AGG-ID: bp9xQCeqMeev5HV0_h2PIg_1770797811
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-47ee432070aso46343685e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 00:16:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770797811; x=1771402611; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2SX4sleE5xgzwOzs5l1BotG3ooT9aeHoVAoWb2ZNeBo=;
+        b=VSXSHcF5W52gakw8VWXuy+h59g5EVrdCsJkus9yNtUdRxFmkGY8XE8nQoIp9zlHxCR
+         5udMQ0uBwAhbrCorG0xgF7MopnSmdbOB14spdAVIopPkRuMYzoDsgTXL1pfya8QRGXuH
+         QOJfrmbE6PfwesERG4b759VEXWC09Srwu8n4biQ4nAVEsEpT5IhOwbPJndCFzuCOMiyj
+         xggIUtaLi/gV6vatYsTTaOdKru/deAg2eHXSJiHUhVNZhry4Yx4Aw3YI7XxgyBRFd9qE
+         WqTlnagIzyNoy9frXPlfnP1XTtypip31F7XHAie9EsT67PSVIT8k2W6rNEtbfF5nES6P
+         wK7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770797811; x=1771402611;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2SX4sleE5xgzwOzs5l1BotG3ooT9aeHoVAoWb2ZNeBo=;
+        b=jttDS4Sfxpqtikshj5YH2X+CQTzwLcz/iEUeCWS3hi/vrLrlNYv7jBQNbO0bt5qb3M
+         clEGZm3EX5Qgo1oMPMCIy0ZSKgx7oCfyM0I8+SdZOv8xKg07Co77dFnnNanGp6X2U2j6
+         X2uiCkjN28cbJfFZz0qECn3mtIAGzr81Lb7DZr9KBphd0YkoAy+dCnq+/dTBdkqpV+Fz
+         5dyhRQx4NAQIsOQ8K9vJUXZlYYzTEBcUZMFJYiNrN17fFGv/YY0vVlWrzBMcWKMAQDHX
+         jZKo6tLKFcvq/qpoG8XgIK2+tdUtzbb0Er18aG/UDbm1TBjlHOxX4SBJjXxA1OLc4JL3
+         srIw==
+X-Forwarded-Encrypted: i=1; AJvYcCWVhvx+mClgzZi7vrmZ0zMHKFQX8siKjBTN5x05ZHuwswFNjaFYpQ5tD6w5zF4+icvxIyPQUISGMqXL/UhWe+s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbTOYl+gAhUy5nfNs4MaGDdhw+d6rEIdO/6qQHfdxWaNJpYKPf
+	3gfLQs616G8BFv9F9yI2FUP93mArD0UvkfqTKDwNLOQH/+zfMPVxtavkC79hgmxHQDPaLMNlRis
+	N24WE4n4SJu/QrmEo6WSQXTQMSq0Ew8aRFydUnFZLalp6LFFwTupDIMsV9yAvMD2gY3w/6g==
+X-Gm-Gg: AZuq6aLFUzji5oAV+FNygdw6NvopsqukK+pL4qmN4cJeFb4e23oEzisIVyX0rAQGXCK
+	hR6Sd3xrbg4v8yZsL4TlPGeqYzVHGnRqCfWhwaBBGZahknbagzRBO/hSPUqoG3Z8ulTu0TJD40M
+	VcwygAdXb4hkYVdKUbF+cZLIIjU05uaS7NkdO3p3kCV4Au/GSX2AiT36OGqNvBRGzzF6xiqvsQn
+	w2Q3d3eByN4CX4Z7zpQ76VpkrY7kj2CRbQyEv2sWWvba229+bf3fKCUFJy1C9M8acc5c0LinZBY
+	StvFi4YBtxSwdNILxVDHVfsGeg1BoyhmmQf3yx/oWcktgQ2GmTH0APOxHgElnX8K3/VeIsXHz5m
+	cQS9c2+RPtJGDxsoCF0d46B9kmj8xVaont9p48IjPYMgkM4+10by2oLQZpqZqqf1kZ32ymWYflT
+	fWOzvfnWgywWiawNRVmMvG
+X-Received: by 2002:a05:600c:a00f:b0:475:dcbb:7903 with SMTP id 5b1f17b1804b1-4835b90c8f2mr19871385e9.9.1770797810758;
+        Wed, 11 Feb 2026 00:16:50 -0800 (PST)
+X-Received: by 2002:a05:600c:a00f:b0:475:dcbb:7903 with SMTP id 5b1f17b1804b1-4835b90c8f2mr19871115e9.9.1770797810288;
+        Wed, 11 Feb 2026 00:16:50 -0800 (PST)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb (185-132-178-103.hosted-by-worldstream.net. [185.132.178.103])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4835d9895b1sm24073995e9.1.2026.02.11.00.16.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Feb 2026 00:16:49 -0800 (PST)
+Message-ID: <ada4f1dc5ca34d8adf3d68396080e6d2e5e834eb.camel@redhat.com>
+Subject: Re: [PATCH 1/2] selftests/tracing: Fix to make --logdir option work
+ again
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Steven Rostedt
+	 <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Wed, 11 Feb 2026 09:16:48 +0100
+In-Reply-To: <177071725191.2369897.14781037901532893911.stgit@mhiramat.tok.corp.google.com>
+References: 
+	<177071725191.2369897.14781037901532893911.stgit@mhiramat.tok.corp.google.com>
+Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
+ keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
+ 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
+ Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
+ cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
+ T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
+ eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
+ 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|BN7PPF34483F4BA:EE_
-X-MS-Office365-Filtering-Correlation-Id: 485fa28a-5452-4b3b-2f37-08de69452e2e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ankrd1FPTG9XMTFtV1AxR2lBSFJLK1p0TzVKWHpOUDJRZDVPSDVKK3JncU5o?=
- =?utf-8?B?MzlOODFJZnRSNjA5Rm1MVWFhUW11eGUvbE12QlM3WHd2L2xIMURidzVabzNF?=
- =?utf-8?B?cUtmYjVZV3JGbkFsNHBudGpzRU9NTmkrcmkwRzBqTVpPRi9WUFJtWFkrNGJw?=
- =?utf-8?B?SFRZeEcveXE3N3BrelNUMDFndkNWVTZIaVhSTGpVMW4zV1oyNjJiUG40V3Vu?=
- =?utf-8?B?bmZ4cnQ5WWxzTjFhNjhlZy8yZGtWNTJ2QytEaDRKNHhUZktZZFVTVWJWU1Qr?=
- =?utf-8?B?TzVTUEtPU2FQL2c4bU9yWjc1eDVYa1N4TEZDQUpiY1Zsck9JYzZZUDBCajcr?=
- =?utf-8?B?RlRPeUZPVzQzNnN1NGpBV1V5VFJNQ2ZiQno0M2dvS0FkeSs1REpRYmo2N3Rr?=
- =?utf-8?B?eFFMWWpBaWJhZVFMNDk4ZHRLdEF1YmNLcWxKdFdVQ0krVTdYVjRITWZ4cTBi?=
- =?utf-8?B?T1V5NWJmNVNQUjVOMDNrU0YrLzJZRjZCTlRQalNwZE80ZXh2Q1dLY2E2Snkz?=
- =?utf-8?B?Smd2VXBGS1lyVzdGbXF0TVNuREdaN3JGdzVITVRlUUhOdDdWTFNILzRpZEto?=
- =?utf-8?B?YTI1TVRRb1kvbDdTN3JLNzY1dlM3YWZHdzkrUW1xQUVkRndrOHVKS1pNU3RS?=
- =?utf-8?B?RkR2c29NZlZsRUxtc3c0TTRSb0k3cUpQVnljdlBRRjkySWo5VmE0cEJzY05K?=
- =?utf-8?B?SHJyYmJqUHpZdklWTmlOdy9mK2V2d05DUU9pK1BETXlLWG91N25QZEZhdE13?=
- =?utf-8?B?VUFQOUw4R3FidyttQzhBeGtVR1FQbmczbVdRVWxFaVordWZ6Q0xqZ3FvWUtX?=
- =?utf-8?B?em5yOEFBSDIrQzdycDRib0JLS3M1eUdDemFyZEdISGQ2d0xZdEQ3OHpSSE9W?=
- =?utf-8?B?Q0JiVlhISTdzVUlMb1NGODFYeXRpalNuL0ZuMTE0Tmw5QXdiL3BnaTkzVkpt?=
- =?utf-8?B?N1dvWWc2VWZLR0ZsdCtlaitJZFNqakYyQzkxUm5pdDdUck05bTdTZ0lpYVpy?=
- =?utf-8?B?VWcvRU5ZdGEzMU52OXcyaWJ5dmRCbjZCZ2ZoNEU3Y1lsWndmWmx5MnhoYmcr?=
- =?utf-8?B?dktPR2R4bU1iSEx3T3VCYlpJRXE2dWdWQ25DM0djU1MvSWtWQkUvK004NEhh?=
- =?utf-8?B?a0dQbFltSHU5dVBWN3F3ZFRlaHE3T1FJQ2dMRzk0NGg2VmRxaDBDNndCUUtu?=
- =?utf-8?B?eTZVRUhrWWFhQ1VDVDN5THNKVlhJaTNmVnNSTEl6c2RDQTlWSHcyMFdROUVR?=
- =?utf-8?B?TERaTEQ1MXppalF6TWt3RGJTTzhTVW1oNFBlQlJkdVRkaW1DMU44bzhvbFZY?=
- =?utf-8?B?cThZQWxzUUF6NnNRVmFvMktURy96UlpRclBNazVKR216MjNwMHFTaDdlQW5I?=
- =?utf-8?B?ZzZ1T0w5SmI0bUpDRFJ3cUEwc2IwOFQ2UE1saXBFOW0ycDIrTEdYWnFHN3dn?=
- =?utf-8?B?aTFRODArMkswQUZWdGNzcWdYUXB0QkluOGdHQUkveWxpcVBlb043MllNQ0RB?=
- =?utf-8?B?aGJ1RHk2ZW9tR0xxRTRkZ2NZQUlRZ1hzWEpzdU5KSUxWRDU3d1c4eDl4aEJi?=
- =?utf-8?B?ampHR2VhS1h1UGRJNmJDSFFuRnZHNmw0ZDFPN1dlYllqbktSaGdMd1BUbHpZ?=
- =?utf-8?B?aEdDSUUxTUZjMWhwMDU2eHYwUTJEZ21VQkk4MlltbWlHUzVrUFBBWi9HREwr?=
- =?utf-8?B?Q0FYTTN3L3lNWUdQQVp2VkE5d3N3V1dFZEFPRlpyNTgzUFVKRG5XL0Qva3Zi?=
- =?utf-8?B?c1JlRUw0YVQrSXZiQWovN1RQVm1nTnFKNGZhbFpIeDNNWGFpTXdaUzBZajZ1?=
- =?utf-8?B?Ym8zbUpPem9IQS91T2FON2ViV2txaElxMm0zSy9YYjBjZHlTaEZKTTFXMndC?=
- =?utf-8?B?Y2lkNGpyNnk1b2RhU3hGWmJFa3FYejdibitJZFZKWFNTU1k0S1JjeGxPd0s0?=
- =?utf-8?B?Vk9DRENUcmJMNUxsT1AyZkxXUUpSMEhHaFFsdHRRbytFUEtsYTVkaUFxVnhX?=
- =?utf-8?B?SExZOWN2dUt1N2UraWR1RVc3UkU0QndteHJrNzdBb01BdjlYSUdReEhXeEZn?=
- =?utf-8?B?SnpCOHZVeGFwL2NoMW1NWFE1OEc1cmJMRnhEU1p3Z0dKR2xCTlBsSTJuNEJN?=
- =?utf-8?Q?vfCw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aE5hOGx5eFJTSGhHc1pUdUthczNnK0hJRkZhODdJY2YvbzMwMUo3RDA0elky?=
- =?utf-8?B?MlozUnMwNEhCWGhhUlg5WGpWbHR1ZkJaMHloVTBGNklMSkxjRGpFUEJucWdL?=
- =?utf-8?B?Snp5S1lJdGlLTzdPaHhORWlSbmNueTE3cVRmb25nM1FOL0ZCQzNWcU5ZOHZp?=
- =?utf-8?B?Q3BGbzEwNTR3WWZlRENBemFQbmVLTmk2eHFMZ0pqS2FNb2d6ekhYSUJxZTI4?=
- =?utf-8?B?TGVmc3h3SFpsVXNmWGpteG1CNlFKWDNBT0pnK2t5WnJtM2o2NzJ6b2NvaDl5?=
- =?utf-8?B?SGJXYzZOM2FZM212V0UzNERJT05Ud1c2VC9SdlBIRnJHZHYvTlJKZE5ER2JX?=
- =?utf-8?B?c2FGeEpxOFlPMUcwRGl3WHl5b0RGV01MZ1ZjQk1ycG9XMnZnbWY0T3pCQkVH?=
- =?utf-8?B?aVlwbUphUm9vejVPN1JSU0tRM01RR1NSWUFVOTNTdXF1d291bVlObmwrZU5K?=
- =?utf-8?B?QzR3QlREZ3pFL2oxdTRhdmhpbUFGN29INWp0azFpWDRvZnJCSTk1WmJ0bFZk?=
- =?utf-8?B?OFVGQjIzWWtvWnVGR2prM1JyV0NSY283aWJlZklIRmpuNmpOd05PVU1sT0cr?=
- =?utf-8?B?aHpFMUpoNDhacFJwSFdweWhMOUQ5Y0RoQm5CcHN3OG9wZlg3N1k0enRRR2Vs?=
- =?utf-8?B?cU5RZ3hCMVZVek52SnBYMy9pcHhSMmNGOXFrTFJvRHRnVCsrNVVEN0tJc1Yv?=
- =?utf-8?B?ckdaR2VYV2ZPbnJzKzZzZWUzQitwL3hWTTFmZFVISUtYWW9DOUtvUStSSDRH?=
- =?utf-8?B?dklzN25aQVBkSUswVTVibThvYS9Edm9lNFVmWUVHSEh4NmJpS0NkVE5HcGE5?=
- =?utf-8?B?bzV1WVBTNDJVNkVxMU9vT2Naa2RHK3E3ZkhKcndNU2dua3Vha3JzdGt3eitW?=
- =?utf-8?B?ejF3SS9pcUhZUnBhNXJlYzBYcURud0srV1lWRFNrRWx2SXZ6T2tSVTk2aEFG?=
- =?utf-8?B?OGlnZ2NLd0ZBTUU4RU42VjR4Q1h3VStUMTNDMlNSdktua2JqNmlYNEFrU0xW?=
- =?utf-8?B?aWtxSmplWUtnem9uM2l0dFhYN2lwTXluNXpJTFFYdkR4cUlseTUyNlNjbzA2?=
- =?utf-8?B?SXBkS0I3M2RtcGV0OFE0NGs3MmJrN2RyejlSVm5BTk9YeHc5UXNscG44dTBW?=
- =?utf-8?B?NVh5eU9uR3R4T0lTcW1Jam9jalFGUFpFcWEvS3R6M1FUcElvbzFHVFJCRjJ0?=
- =?utf-8?B?Y2FWcDUwOWp1RThOeTFONFNWMUhtTGwwWktLdzFDUXRiRXcvOVdPQ1FZTGlE?=
- =?utf-8?B?ajN3N3RFZ1NYSlN5MUpiVW9VOXI3dDQrQUVBdG1VVW0veE11aWJBSVRhUHpF?=
- =?utf-8?B?RzU2U2JCdEpQRmpta1cxSEhuRGI2K21GMkIyNnMzdXA3L0RFQjRIRVo4Tmdu?=
- =?utf-8?B?L3N2ajkwSlBNLzJtNjFDb1J3NGZhK20vcmkrQzAra2pFT2JXS1hTTlV0dnV0?=
- =?utf-8?B?NFpkaDJWQmM1cVlqeE8ycE8zcStuZmtXMk1XYlZyOTRTVi8rOWQrVGtlT25n?=
- =?utf-8?B?Z1BXeUFYWGpNMS9KNU9Rb2F0NWdsVGpJaWI4ZWZuQjF2ZWR5K2JQZWRMdzhh?=
- =?utf-8?B?T0k3SERlZ3JLT3J3eUU2UjdqR0tNN1diMEhrT2htVXlWNEk4K1BVQk52QjZo?=
- =?utf-8?B?ekMvSUxKK0dtVVIxZjJ2Y2pDYTZla281eGFoZlZiYkxVTXdZVVQ2VTBmNzZa?=
- =?utf-8?B?aTBPWVo1M1dYQy83NEhPNVlBUHNZS3hQVWtuNmwydGlvZ1ZGaGF4aFJibjVB?=
- =?utf-8?B?NkMydVhXWjhENExLL2RYazdYcGpFSHhHalZ3WEo4bnlhakNKQzArTlhuK3VB?=
- =?utf-8?B?MGNBNzE2ZzkrcGVlZTdqMVNxWXMwakFTc3QyZGg0eTlkRGJKQjF2cE5nU29F?=
- =?utf-8?B?RTEwWEREaTlmdmNITEQrb1RMNWdlKzBrWUFNdVA2NkZ6MkVqOGpwT1JDTDJ2?=
- =?utf-8?B?a01nMVphRDRGSVhoejZwTTlLQm5MQzJvTmVtSXpkQ2ZUa0doLy9Dak1wMDJy?=
- =?utf-8?B?aldTK1Q0OURDTEt1TXRSSWdVbythanJLUUVVdFpYSHNkb2xLb1dKMFgrVnpZ?=
- =?utf-8?B?NTV2Qjh3MWZhN29SODlzNEpUSDlVVXJjU25nSVVPRGQ2NGVHeTQ5ek5kVE5y?=
- =?utf-8?B?ZlVsNExmWEtxZEV0c1VXMlBESElsS3NTZGhMbVZKSTQ4YTJuVXJJSWtXZitl?=
- =?utf-8?B?OTRGaHBxUmwxd3ZlU3lTUkpSQnRPNXBSdEVsdnE2OCs1cHlVVDJiS2NPZjAv?=
- =?utf-8?B?VGtJempvbklqZUE5cFgxUm5Yc2FFMlhZaFlEN3BML2ViYnh3ZTF1aHBCZ0Ex?=
- =?utf-8?Q?lFo3foH1Femgg2GPg/?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 485fa28a-5452-4b3b-2f37-08de69452e2e
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2026 08:11:38.3643
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5qcRFshJxetvLXAtI6Bs7fm1+NotlqoUZrFszcsrWmOUH8D57JxMxMsW52jpRfS22vdDxhTmwr/gigoQHBPWiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PPF34483F4BA
 
-On Tue, Feb 10, 2026 at 06:51:29PM +0000, Aleksei Oladko wrote:
-> The tests use the tc pedit action to modify the IPv4 source address
-> ("pedit ex munge ip src set"), but the IP header checksum is not
-> recalculated after the modification. As a result, the modified packet
-> fails sanity checks in br_netfilter after bridging and is dropped,
-> which causes the test to fail.
-> 
-> Fix this by adding an explicit checksum recalculation using the
-> "csum ip" action, so the modified packet contains a valid IPv4
-> checksum.
-> 
-> Note on IPv6:
->   The tests in pedit_ip.sh also cover IPv6 (test_ip6_src, test_ip6_dst).
->   The csum ip action is harmless for IPv6 packets since IPv6 has no
->   header checksum — it will be a no-op.
-> 
-> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+On Tue, 2026-02-10 at 18:54 +0900, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>=20
+> Since commit a0aa283c53a7 ("selftest/ftrace: Generalise ftracetest to
+> use with RV") moved the default LOG_DIR setting after --logdir option
+> parser, it overwrites the user given LOG_DIR.
+> This fixes it to check the --logdir option parameter when setting new
+> default LOG_DIR with a new TOP_DIR.
+>=20
+> Fixes: a0aa283c53a7 ("selftest/ftrace: Generalise ftracetest to use with =
+RV")
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > ---
->  tools/testing/selftests/net/forwarding/pedit_dsfield.sh | 5 +++--
->  tools/testing/selftests/net/forwarding/pedit_ip.sh      | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/pedit_dsfield.sh b/tools/testing/selftests/net/forwarding/pedit_dsfield.sh
-> index af008fbf2725..310f96fb2274 100755
-> --- a/tools/testing/selftests/net/forwarding/pedit_dsfield.sh
-> +++ b/tools/testing/selftests/net/forwarding/pedit_dsfield.sh
-> @@ -156,7 +156,7 @@ do_test_pedit_dsfield()
->  	local daddr=$1; shift
->  
->  	tc filter add $pedit_locus handle 101 pref 1 \
-> -	   flower action pedit ex munge $pedit_action
-> +	   flower action pedit ex munge $pedit_action pipe action csum ip
 
-I believe that this is going to be a problem when running the test over
-a device that does not support "action csum" offload.
+Thanks for catching this! I should have tested all the options..
+The fix works fine on my side.
 
-Can you instead set "net.bridge.bridge-nf-call-iptables" to "0"
-(assuming it exists) and restore its original value at the end?
+Tested-by: Gabriele Monaco <gmonaco@redhat.com>
 
->  	tc filter add dev $h2 ingress handle 101 pref 1 prot $match_prot \
->  	   flower skip_hw $match_flower action pass
->  
-> @@ -229,7 +229,8 @@ do_test_ip_dscp_ecn()
->  
->  	tc filter add $locus handle 101 pref 1				\
->  	   flower action pedit ex munge ip dsfield set 124 retain 0xfc	\
-> -		  action pedit ex munge ip dsfield set 1 retain 0x03
-> +		  action pedit ex munge ip dsfield set 1 retain 0x03	\
-> +		  pipe action csum ip
->  	tc filter add dev $h2 ingress handle 101 pref 1 prot ip		\
->  	   flower skip_hw ip_tos 125 action pass
->  
-> diff --git a/tools/testing/selftests/net/forwarding/pedit_ip.sh b/tools/testing/selftests/net/forwarding/pedit_ip.sh
-> index d14efb2d23b2..a53ee3b1ef67 100755
-> --- a/tools/testing/selftests/net/forwarding/pedit_ip.sh
-> +++ b/tools/testing/selftests/net/forwarding/pedit_ip.sh
-> @@ -122,7 +122,7 @@ do_test_pedit_ip()
->  	local mz_flags=$1; shift
->  
->  	tc filter add $pedit_locus handle 101 pref 1 \
-> -	   flower action pedit ex munge $pedit_action
-> +	   flower action pedit ex munge $pedit_action pipe action csum ip
->  	tc filter add dev $h2 ingress handle 101 pref 1 prot $match_prot \
->  	   flower skip_hw $match_flower action pass
->  
-> -- 
-> 2.43.0
-> 
+> =C2=A0tools/testing/selftests/ftrace/ftracetest |=C2=A0=C2=A0 18 ++++++++=
+++++------
+> =C2=A01 file changed, 12 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/ftrace/ftracetest
+> b/tools/testing/selftests/ftrace/ftracetest
+> index 3230bd54dba8..0a56bf209f6c 100755
+> --- a/tools/testing/selftests/ftrace/ftracetest
+> +++ b/tools/testing/selftests/ftrace/ftracetest
+> @@ -130,8 +130,7 @@ parse_opts() { # opts
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 shift 1
+> =C2=A0=C2=A0=C2=A0=C2=A0 ;;
+> =C2=A0=C2=A0=C2=A0=C2=A0 --logdir|-l)
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LOG_DIR=3D$2
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LINK_PTR=3D
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 USER_LOG_DIR=3D$2
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 shift 2
+> =C2=A0=C2=A0=C2=A0=C2=A0 ;;
+> =C2=A0=C2=A0=C2=A0=C2=A0 --rv)
+> @@ -199,6 +198,7 @@ fi
+> =C2=A0TOP_DIR=3D`absdir $0`
+> =C2=A0TEST_DIR=3D$TOP_DIR/test.d
+> =C2=A0TEST_CASES=3D`find_testcases $TEST_DIR`
+> +USER_LOG_DIR=3D
+> =C2=A0KEEP_LOG=3D0
+> =C2=A0KTAP=3D0
+> =C2=A0DEBUG=3D0
+> @@ -210,12 +210,18 @@ RV_TEST=3D0
+> =C2=A0# Parse command-line options
+> =C2=A0parse_opts $*
+> =C2=A0
+> +[ $DEBUG -ne 0 ] && set -x
+> +
+> +# TOP_DIR can be changed for rv. Setting log directory.
+> =C2=A0LOG_TOP_DIR=3D$TOP_DIR/logs
+> =C2=A0LOG_DATE=3D`date +%Y%m%d-%H%M%S`
+> -LOG_DIR=3D$LOG_TOP_DIR/$LOG_DATE/
+> -LINK_PTR=3D$LOG_TOP_DIR/latest
+> -
+> -[ $DEBUG -ne 0 ] && set -x
+> +if [ -n "$USER_LOG_DIR" ]; then
+> +=C2=A0 LOG_DIR=3D$USER_LOG_DIR
+> +=C2=A0 LINK_PTR=3D
+> +else
+> +=C2=A0 LOG_DIR=3D$LOG_TOP_DIR/$LOG_DATE/
+> +=C2=A0 LINK_PTR=3D$LOG_TOP_DIR/latest
+> +fi
+> =C2=A0
+> =C2=A0if [ $RV_TEST -ne 0 ]; then
+> =C2=A0	TRACING_DIR=3D$TRACING_DIR/rv
+
