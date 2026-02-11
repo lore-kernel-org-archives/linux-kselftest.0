@@ -1,81 +1,82 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119E9352FBF
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 19:35:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80E1352C4F
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 19:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770838540; cv=none; b=Lu+9YESA5ir9kfLR0N+yAA9uEoLgAmEBuF5cMa3LRzo0XtApEUus/Ji+Me2ft5Rc8RqskS190wVLhBpz3oGalukPV9uBkvhA46Kzwc3CphFGOxLyYJbDc92U+M8z1rWJ/WZaVyzSnh8pyHVCgzD+q5DSFIr0V2yj5Is9J1eJ+xo=
+	t=1770838654; cv=none; b=OJpG/JHW309YgwEC+KynSUCbRBS5zNXhkacDmpYQVPn40hbWJD8UkKHg/AWmakMtQrIxX8aayGyJnVXMljG4U5jk3bmYVQtrJ2plSLx7Ht/q5aOVFRaROu9TbUppInxZbTfmaJ++zPogNzm411WQm0TtPatjOeNlChwtqMj/fw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770838540; c=relaxed/simple;
-	bh=kLqcLZsDQ9l50Dv8gTv/4rexnpIHIVZchPmWgXkcMhM=;
+	s=arc-20240116; t=1770838654; c=relaxed/simple;
+	bh=9E8xym4kPqUtQ4zv5yeII+4X0aDlSLDVsQXEk9VD660=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tk8BiTcDtIN97veYqeqkY6Vh5LS3uA4pOTeT8FBKFz0n+JoczZXnNA2fcT7H0nhXpOS1sX4NUWdudQEBK1RinzchapeJvq657YG5rcRDfGVMiPk5TDBl1r+41WMWgxOOYk2xW1eyfW1EzgI78CsJ3ssGu5lN9aZtBSH4sbGdvxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=baG4KHJq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=awuxn6O/; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=uVtN3FOwuFL8zwcWq7+9Mv2tXxCQjYW0ySLPsSbPVefgm7F/9GmYgzkG9oi+qRAzuDQRKMaLoe3CRU1TiICnss8RiVqR2jy50qUQvkerx6SGyBpWb+6/GZwlTYxxFgCXXZVk5o0jRF6h2WDXOWIaIo4smvlmtRgNs82AvWK0MOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ihwN/HIR; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=J+MuA8SH; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="baG4KHJq";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="awuxn6O/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ihwN/HIR";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="J+MuA8SH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770838538;
+	s=mimecast20190719; t=1770838650;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MHfswB8BrOCWLJXsVwUk+XHyA8BLSR/huUJvBA9oUpg=;
-	b=baG4KHJqInD+sIF+F8t0TEtdyb5leB8tDvQ04fXgR8vMXhpBJMOJssxvE5wVKZanDW4cd4
-	ZuZfIpAG0visRLJDTUR1ewemqd04+EUx5DTp2rUZlsv+rW1MfrYbxvwc+S1bSglYY3hI7P
-	geBMa+inEvOTAGS8/0kghzqwelX94ls=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=3HnSln6BmAeJW+dBA3yyxX0sDcUZ80hLGHPfC7uKPVU=;
+	b=ihwN/HIRHg+g6mpBpmGJ8eY6bzSpWKrv+syfIgYaD/dsg/zzxCkpNZwLaFRTszNuyXFCUF
+	xz0CF3gR+EmOukogDW4fSjaO+sWWWEvg0LUdwfyKvwx/oIV6CnMO/q6pWBG3l9lIWVl8Qq
+	Ed7b+o8Bm9G+HW3QhZSeSgLzjXIg8as=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-599-OBJkb8XDOsGD297XZtbfWQ-1; Wed, 11 Feb 2026 14:35:37 -0500
-X-MC-Unique: OBJkb8XDOsGD297XZtbfWQ-1
-X-Mimecast-MFC-AGG-ID: OBJkb8XDOsGD297XZtbfWQ_1770838536
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-89493622b50so38620676d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 11:35:36 -0800 (PST)
+ us-mta-182-ERR2gxUJN3OPL0ek1uxfDg-1; Wed, 11 Feb 2026 14:37:29 -0500
+X-MC-Unique: ERR2gxUJN3OPL0ek1uxfDg-1
+X-Mimecast-MFC-AGG-ID: ERR2gxUJN3OPL0ek1uxfDg_1770838649
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c6ad709d8fso306526785a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 11:37:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770838536; x=1771443336; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1770838649; x=1771443449; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MHfswB8BrOCWLJXsVwUk+XHyA8BLSR/huUJvBA9oUpg=;
-        b=awuxn6O/CjPTmDjDvH92FtKXOGRayEYOkBFl9fiz7QpuJ7cO/XMCWcVk986cO5L0pU
-         F7EY/76ca4QwKcnqsFCzI+LrAY6QKNePLlJ84cCWWxQJrusVjpIlArW8moWPrHhvxiN9
-         7sVTvxpAxvCH+0IDv3G0tYJJq1L27n0qchcAXdkmG0C5u4wqyxMDzHCFgJcRvEp9al6Z
-         LsbNc8jerjKgmnMqH0pwB3PLz2k+H4D3HVIX4wMhVW9KXDxJQ98RwL4eF9j3HrzFgM22
-         bcGv2aqgvBvLeWDQZ5LGA3Y3ZaXblUPsuQUGqTVQLaXWscHpYTO3OANcrsB+Wz/ZoGxS
-         tseA==
+        bh=3HnSln6BmAeJW+dBA3yyxX0sDcUZ80hLGHPfC7uKPVU=;
+        b=J+MuA8SHYGyELefHY2x7cOLzx67VNAKone7JYxXA7217PwFt94YzzuSs16VE6897Jn
+         qpUAhSRKrS5xZRCdkp7VR/uOxMFW1zGoMz1lkyYkWJxz9Uod17sJD4di5Mnkipokpf1W
+         8hKU4yxDQLF4SWACdXLnWFua5UoQkgrYn3PWpCGRes6AXA56PQhGLv3RwGgDax298ULt
+         7Uo+yEllsuuBsD+nkoeEktYUIjaxeUOdo6VeTcZY5kQls3NbBisNf4190cX+B+/LDwbZ
+         UP8oO6rJ/TCQyCw1DTtGW+2Pp4TUwDm9z2YnNaJzt1cXcChd9Y+uziYwN0SIYkaM1OMO
+         hXTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770838536; x=1771443336;
+        d=1e100.net; s=20230601; t=1770838649; x=1771443449;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MHfswB8BrOCWLJXsVwUk+XHyA8BLSR/huUJvBA9oUpg=;
-        b=nIVaeqF0oGDli09c3XJvAiOUfHamS9Eb5+YymYwYyeMbbpd+TIeeqwTPogmXLTr4zb
-         c7/Iv6RGBnOReDqd/Rw1mgOf+Ot8yWoxwAPsWy8c+ZYOBqi6a+UxHqoBcMbFAAXI0RlB
-         yD3kUxot0NEl6oVhuJUyokcFLFG5YBvf8kcbLvb+fAdFSp9GvZ8N8T1SRcSn5djSk24b
-         Ky/OLxUbugDK0vHsXScxJeyx0GKczsFT+w+8zgy1EoLU9nWjO8oKT7XxmKO2ZuRF33MB
-         Lu11h12uhRvvEtSaNNY58XHgDvAh4uMG6U0460jkkV0moJSuDDfUcx+T9WbvK+Z/151K
-         2esQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXKdZkDHSPQ9zhmN2r1mewn3AvLVIii133Tq+mM9gdESrdIDIlMKb8a1awF0bJMvpnMP5YDZTiSI6ErfHKTMkE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQoYM8XD+coW48itEOKNW6SITP0fWg7gDRXKAmSc/ZijBtO0t8
-	ZfytOumW0ykcU9ePDlV/p3QVQVl0eBiqb7+PfqlPl+UCZnb5KgCmVV0zmpj9SLQ2gJAyTuIMOIO
-	J2Q6637d2iyqzLuAmOwlQh/p3VRi9pZgTO2napB/pLmWpKK4ztp/lCFopRlTL3m2jUl5RgA==
-X-Gm-Gg: AZuq6aIr/yglIGg0yJnZaQIqm0TQ6pCmrhlSxXbqCm+xE6phgBkRUUb+ULp1OBg2j1V
-	EfBhUw1Dhvz+RHNJzlxyLYGYkUsNGLBfce5eQMObcduKODRRHaMXuVrB74oNkZ+ekolU5FaKWO4
-	Mp5KIP0DEp0+dauxJG8CKOlcrWL/+ShMpaDZmKeyXH3As0DCxhmKPRxAT4LSCHb0B1DolL8sbBR
-	RghFCYUAWT5GVFfHrrD+11cPjCJQByZeJ6gFo0Hmkvp/wCU9Xg2fBRzJZuxvHpt9UUzojKTVcgZ
-	6D3hWDV91rNaGD10c81+/MyIDw6szCQzxcL84cRmp2M1gfOIuJu77M/NwYGp2WGt8iKVTmL93gX
-	j8r/gcA7WVrXlIA==
-X-Received: by 2002:a05:6214:e66:b0:896:a692:caba with SMTP id 6a1803df08f44-89727899bdamr10537016d6.31.1770838536095;
-        Wed, 11 Feb 2026 11:35:36 -0800 (PST)
-X-Received: by 2002:a05:6214:e66:b0:896:a692:caba with SMTP id 6a1803df08f44-89727899bdamr10536576d6.31.1770838535519;
-        Wed, 11 Feb 2026 11:35:35 -0800 (PST)
-Received: from x1.local ([174.91.117.149])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cdb19b6sm22142416d6.40.2026.02.11.11.35.33
+        bh=3HnSln6BmAeJW+dBA3yyxX0sDcUZ80hLGHPfC7uKPVU=;
+        b=C1JXjEjk2d9dvgjCjz7yaeQH7epRvfpQGeHkyit7wOytGYageXQnpTwXprGXvcMo4k
+         /cZRfkFak1pju71K5HJjvqgF5IcuJF7HoM/euadvHVgbWoYagyNBr6ecsXNIIOJG7nS1
+         bVvC1dU9f3YMtdP5xsinOEjegQ41Ipte8qLdQssJgducMOtO3WWp8LG9zuLQQGy7P3Fl
+         pjawwmH8wyxnHiLm4mKk1fWGQSEOvgX4Xkr2E3Izbu97qqcZ7lduZSlhI+kLNfnYuiRd
+         puF6DazJBLodwaEbaDqaTOKRw7sqTYPqM7kLDaFYVmAjfxnI3FN6JblPr2MP58CFEYJ9
+         t0Bw==
+X-Forwarded-Encrypted: i=1; AJvYcCXoXBuiQrwsOzNAcwSaxrJXILK0yE3vt1fIk9xKelZ+GxoF5AAQRsSUxo0lyMeYt57d2ESOYN8iox7j1LqWXV4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy54CZxdILeL5RnaQwuUaa/WRJujLpgvzIINMgvc/0RHYPN7aON
+	rHsRkbppvrkFKjYKPPhIrg/9SYpGGDslzDww0M95gZfoD/y/B8dB3QvSUrbt8AYp2Arelv3Sd7R
+	ftg5uGCkJdUpwMTMw4ZrYUfobltZ+HjhcPMFP9rnUxzXHvogcX5tLNPSmnOJPWqxKnvTe9Q==
+X-Gm-Gg: AZuq6aK6ko3MWkPs8KsPefwT7+yl6qiJcRtt5UJhQW/QhyEYRkXJwDsbvavqUtTj0If
+	xuGjFvE51k0fCC1VWJV0w+sqh+wPMfSRmBrib28fv+zjGtmlN3KsxzOkzjFwZEa/zuQMWletsrn
+	Q2inTFGxRBQxeIZD1gOBriTUwDNfqhJg473wFV+3uskcH74AjfRn51kBdCdoOC6aeHwzB9cE45j
+	uL+ON3Xdhri04o93QTR5V/nbMWl78KRhNft4Kc6st81utXMrqNEsZriKhtxV6mjfHjRQUvt9q38
+	Ow2t2ek4gyq/xR3JK3scDqUf+nAzFsX84n8+ms9YiB60c9mgSnGAtm0Vj5/Wjo6iYBID1SEtlaP
+	HB6Xic+F9K2Vb/cnIM6kCFS91Ey+SPhKt+8OBgYlAI3A9RrZwARywpf7DZVOS62S0N/E/FOUEb0
+	Ga2za7QA==
+X-Received: by 2002:a05:620a:bcd:b0:8c7:110e:9cd5 with SMTP id af79cd13be357-8cb33d8c6fdmr4445285a.45.1770838649071;
+        Wed, 11 Feb 2026 11:37:29 -0800 (PST)
+X-Received: by 2002:a05:620a:bcd:b0:8c7:110e:9cd5 with SMTP id af79cd13be357-8cb33d8c6fdmr4438985a.45.1770838648496;
+        Wed, 11 Feb 2026 11:37:28 -0800 (PST)
+Received: from x1.local (bras-vprn-aurron9134w-lp130-03-174-91-117-149.dsl.bell.ca. [174.91.117.149])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cd8aff6sm21074646d6.27.2026.02.11.11.37.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 11:35:35 -0800 (PST)
-Date: Wed, 11 Feb 2026 14:35:23 -0500
+        Wed, 11 Feb 2026 11:37:28 -0800 (PST)
+Date: Wed, 11 Feb 2026 14:37:26 -0500
 From: Peter Xu <peterx@redhat.com>
 To: Mike Rapoport <rppt@kernel.org>
 Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
@@ -96,12 +97,13 @@ Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
 	Suren Baghdasaryan <surenb@google.com>,
 	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 07/17] userfaultfd: introduce vm_uffd_ops
-Message-ID: <aYzZ-zBipYQ2OA_n@x1.local>
+Subject: Re: [PATCH RFC 09/17] userfaultfd: introduce
+ vm_uffd_ops->alloc_folio()
+Message-ID: <aYzadvQRCw3iOVsc@x1.local>
 References: <20260127192936.1250096-1-rppt@kernel.org>
- <20260127192936.1250096-8-rppt@kernel.org>
- <aYEY6PC0Qfu0m5gu@x1.local>
- <aYhh2XzyFsJbohll@kernel.org>
+ <20260127192936.1250096-10-rppt@kernel.org>
+ <aYEhgA1dY0biVYb8@x1.local>
+ <aYhj_H2X141wU3oF@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -110,165 +112,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aYhh2XzyFsJbohll@kernel.org>
+In-Reply-To: <aYhj_H2X141wU3oF@kernel.org>
 
-On Sun, Feb 08, 2026 at 12:13:45PM +0200, Mike Rapoport wrote:
-> Hi Peter,
-> 
-> On Mon, Feb 02, 2026 at 04:36:40PM -0500, Peter Xu wrote:
-> > On Tue, Jan 27, 2026 at 09:29:26PM +0200, Mike Rapoport wrote:
-> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > > 
-> > > Current userfaultfd implementation works only with memory managed by
-> > > core MM: anonymous, shmem and hugetlb.
-> > > 
-> > > First, there is no fundamental reason to limit userfaultfd support only
-> > > to the core memory types and userfaults can be handled similarly to
-> > > regular page faults provided a VMA owner implements appropriate
-> > > callbacks.
-> > > 
-> > > Second, historically various code paths were conditioned on
-> > > vma_is_anonymous(), vma_is_shmem() and is_vm_hugetlb_page() and some of
-> > > these conditions can be expressed as operations implemented by a
-> > > particular memory type.
-> > > 
-> > > Introduce vm_uffd_ops extension to vm_operations_struct that will
-> > > delegate memory type specific operations to a VMA owner.
-> > > 
-> > > Operations for anonymous memory are handled internally in userfaultfd
-> > > using anon_uffd_ops that implicitly assigned to anonymous VMAs.
-> > > 
-> > > Start with a single operation, ->can_userfault() that will verify that a
-> > > VMA meets requirements for userfaultfd support at registration time.
-> > > 
-> > > Implement that method for anonymous, shmem and hugetlb and move relevant
-> > > parts of vma_can_userfault() into the new callbacks.
-> > > 
-> > > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > > ---
-> > >  include/linux/mm.h            |  5 +++++
-> > >  include/linux/userfaultfd_k.h |  6 +++++
-> > >  mm/hugetlb.c                  | 21 ++++++++++++++++++
-> > >  mm/shmem.c                    | 23 ++++++++++++++++++++
-> > >  mm/userfaultfd.c              | 41 ++++++++++++++++++++++-------------
-> > >  5 files changed, 81 insertions(+), 15 deletions(-)
-> > > 
-> > > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > > index 15076261d0c2..3c2caff646c3 100644
-> > > --- a/include/linux/mm.h
-> > > +++ b/include/linux/mm.h
-> > > @@ -732,6 +732,8 @@ struct vm_fault {
-> > >  					 */
-> > >  };
+On Sun, Feb 08, 2026 at 12:22:52PM +0200, Mike Rapoport wrote:
+> On Mon, Feb 02, 2026 at 05:13:20PM -0500, Peter Xu wrote:
+> > On Tue, Jan 27, 2026 at 09:29:28PM +0200, Mike Rapoport wrote:
+> > 
+> > [...]
+> > 
+> > > -static int mfill_atomic_pte_zeroed_folio(pmd_t *dst_pmd,
+> > > -					 struct vm_area_struct *dst_vma,
+> > > -					 unsigned long dst_addr)
+> > > +static int mfill_atomic_pte_copy(struct mfill_state *state)
+> > >  {
+> > > -	struct folio *folio;
+> > > -	int ret = -ENOMEM;
+> > > -
+> > > -	folio = vma_alloc_zeroed_movable_folio(dst_vma, dst_addr);
+> > > -	if (!folio)
+> > > -		return ret;
+> > > -
+> > > -	if (mem_cgroup_charge(folio, dst_vma->vm_mm, GFP_KERNEL))
+> > > -		goto out_put;
+> > > +	const struct vm_uffd_ops *ops = vma_uffd_ops(state->vma);
 > > >  
-> > > +struct vm_uffd_ops;
-> > > +
-> > >  /*
-> > >   * These are the virtual MM functions - opening of an area, closing and
-> > >   * unmapping it (needed to keep files on disk up-to-date etc), pointer
-> > > @@ -817,6 +819,9 @@ struct vm_operations_struct {
-> > >  	struct page *(*find_normal_page)(struct vm_area_struct *vma,
-> > >  					 unsigned long addr);
-> > >  #endif /* CONFIG_FIND_NORMAL_PAGE */
-> > > +#ifdef CONFIG_USERFAULTFD
-> > > +	const struct vm_uffd_ops *uffd_ops;
-> > > +#endif
-> > >  };
+> > > -	/*
+> > > -	 * The memory barrier inside __folio_mark_uptodate makes sure that
+> > > -	 * zeroing out the folio become visible before mapping the page
+> > > -	 * using set_pte_at(). See do_anonymous_page().
+> > > -	 */
+> > > -	__folio_mark_uptodate(folio);
+> > > +	return __mfill_atomic_pte(state, ops);
+> > > +}
 > > >  
-> > >  #ifdef CONFIG_NUMA_BALANCING
-> > > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> > > index a49cf750e803..56e85ab166c7 100644
-> > > --- a/include/linux/userfaultfd_k.h
-> > > +++ b/include/linux/userfaultfd_k.h
-> > > @@ -80,6 +80,12 @@ struct userfaultfd_ctx {
+> > > -	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
+> > > -				       &folio->page, true, 0);
+> > > -	if (ret)
+> > > -		goto out_put;
+> > > +static int mfill_atomic_pte_zeroed_folio(struct mfill_state *state)
+> > > +{
+> > > +	const struct vm_uffd_ops *ops = vma_uffd_ops(state->vma);
 > > >  
-> > >  extern vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason);
-> > >  
-> > > +/* VMA userfaultfd operations */
-> > > +struct vm_uffd_ops {
-> > > +	/* Checks if a VMA can support userfaultfd */
-> > > +	bool (*can_userfault)(struct vm_area_struct *vma, vm_flags_t vm_flags);
-> > > +};
-> > > +
-> > >  /* A combined operation mode + behavior flags. */
-> > >  typedef unsigned int __bitwise uffd_flags_t;
-> > >  
-> > > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > > index 51273baec9e5..909131910c43 100644
-> > > --- a/mm/hugetlb.c
-> > > +++ b/mm/hugetlb.c
-> > > @@ -4797,6 +4797,24 @@ static vm_fault_t hugetlb_vm_op_fault(struct vm_fault *vmf)
-> > >  	return 0;
+> > > -	return 0;
+> > > -out_put:
+> > > -	folio_put(folio);
+> > > -	return ret;
+> > > +	return __mfill_atomic_pte(state, ops);
 > > >  }
 > > >  
-> > > +#ifdef CONFIG_USERFAULTFD
-> > > +static bool hugetlb_can_userfault(struct vm_area_struct *vma,
-> > > +				  vm_flags_t vm_flags)
-> > > +{
-> > > +	/*
-> > > +	 * If user requested uffd-wp but not enabled pte markers for
-> > > +	 * uffd-wp, then hugetlb is not supported.
-> > > +	 */
-> > > +	if (!uffd_supports_wp_marker() && (vm_flags & VM_UFFD_WP))
-> > > +		return false;
+> > >  static int mfill_atomic_pte_zeropage(struct mfill_state *state)
+> > > @@ -542,7 +546,7 @@ static int mfill_atomic_pte_zeropage(struct mfill_state *state)
+> > >  	int ret;
+> > >  
+> > >  	if (mm_forbids_zeropage(dst_vma->vm_mm))
+> > > -		return mfill_atomic_pte_zeroed_folio(dst_pmd, dst_vma, dst_addr);
+> > > +		return mfill_atomic_pte_zeroed_folio(state);
 > > 
-> > IMHO we don't need to dup this for every vm_uffd_ops driver.  It might be
-> > unnecessary to even make driver be aware how pte marker plays the role
-> > here, because pte markers are needed for all page cache file systems
-> > anyway.  There should have no outliers.  Instead we can just let
-> > can_userfault() report whether the driver generically supports userfaultfd,
-> > leaving the detail checks for core mm.
-> > 
-> > I understand you wanted to also make anon to be a driver, so this line
-> > won't apply to anon.  However IMHO anon is special enough so we can still
-> > make this in the generic path.
+> > After this patch, mfill_atomic_pte_zeroed_folio() should be 100% the same
+> > impl with mfill_atomic_pte_copy(), so IIUC we can drop it.
 > 
-> Well, the idea is to drop all vma_is*() in can_userfault(). And maybe
-> eventually in entire mm/userfaultfd.c
-> 
-> If all page cache filesystems need this, something like this should work,
-> right?
-> 
-> 	if (!uffd_supports_wp_marker() && (vma->vm_flags & VM_SHARED) &&
-> 	    (vm_flags & VM_UFFD_WP))
-> 		return false;
+> It will be slightly different after the next patch to emphasize that
+> copying into MAP_PRIVATE actually creates anonymous memory.
 
-Sorry for a late response.
-
-IIUC we can't check against VM_SHARED, because we need pte markers also for
-MAP_PRIVATE on file mappings.
-
-The need of pte markers come from the fact that the vma has a page cache
-backing it, rather than whether it's a shared or private mapping.  Consider
-if a file mapping vma + MAP_PRIVATE, if we wr-protect the vma with nothing
-populated, we want to still get notified whenever there's a write.
-
-So the original check should be good.
-
-I'm fine with most of the rest comments in this series I left and I'm OK if
-you prefer settle things down first.  For this one, I still want to see if
-we can move this to uffd core code.
-
-The whole point is I want to have zero info leaked about pte marker into
-module ops.
-
-For that, IMHO it'll be fine we use one vma_is_anonymous() is uffd core
-code once.
-
-Actually, I don't think uffd core can get rid of handling anon specially.
-With this series applied, mfill_atomic_pte_copy() will still need to
-hard-code anon processing on MAP_PRIVATE and I don't think it can go away..
-
-mfill_atomic_pte_copy():
-	if (!(state->vma->vm_flags & VM_SHARED))
-		ops = &anon_uffd_ops;
-
-IMHO using vma_is_anonymous() for one more time should be better than
-leaking pte marker whole concept to modules. So the driver should only
-report if the driver supports UFFD_WP in general.  It shouldn't care about
-anything the core mm would already do otherwise, including this one on
-"whether system config / arch has globally enabled pte markers" and the
-relation between that config and the WP feature impl details.
+True.  It might be helpful to leave a line in the commit message so it's
+intentional to temporarily have two functions do the same thing, but I'm OK
+either way.
 
 Thanks,
 
