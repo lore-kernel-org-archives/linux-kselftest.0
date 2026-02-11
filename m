@@ -1,89 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37602DB788;
-	Wed, 11 Feb 2026 02:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852542F0C6A;
+	Wed, 11 Feb 2026 02:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770775339; cv=none; b=jn1EiwY5eaMJqZvkDNMZv+elAjFMW/VdKL8P4ZVI4Hu+U0GFzNIflDOktJrlcGTSkBYCauew8Tf4lSEtaDo6BiPQ1jjDNqPY+VBn2Lsjs/l+Td7CreVeTCToCwh7WSdLcrQnvHHaMF78237F1tDUaI+OCAzBTDpLt+cNXf6eLBg=
+	t=1770775530; cv=none; b=iKVZU3rZEpPisRX2OI8pHD0nw20XiBodoyyZ78miikHlWeySjLi7sYkzWk51EJbYpx7yGlywvAwqPAwb4ummHYAHKrzEjC5Z8uKqSyvoW0arxXlBsnTxJ7eWlY1oNlhiYRj1xDANtrk2v3JI9HfiKS+vV7Qtv+mOmYpGIk4/91Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770775339; c=relaxed/simple;
-	bh=OaL7HmtY8PqZLX4O+1g7qbPlaK6jtij1faPJYo7M6cs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bSsQ2YTosL4D0DRY8ZVaYBGnipN/j2LpbKMLMPbR5IhCqCZ+6RqMVYfGh0TnV5gMBU16sYLL+OqPtUxLw93a7KohfiJ7tYVYqnkEttCuQW6hVOFUMUrKBMRII43GfNL3Lapl+bxaV6fe7G2sdfnA4MUV3RBwfbbkFTC2QzXhBH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nxE1JbuX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770775530; c=relaxed/simple;
+	bh=mq82685wUv7wXQeQIeQd9ybDzA4WIRKloSSUCitGcpY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BAohp1gdln5czKTTexWfie4NvppvcRBucMBPaYijH59LCanJ9gXitrTv34QGTqBTccrlx2cp27+pNq4HPejsFH+RVLeXsHTwjmAmMhy9XKBN7vi76F6Sss4eYbC/ySqRKiYwkfrVFdUGohi7lx9dITJ4LxK3ruWSVq6FyYubAYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IzfFouI5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nxE1JbuX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A19C116C6;
-	Wed, 11 Feb 2026 02:02:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IzfFouI5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88624C116C6;
+	Wed, 11 Feb 2026 02:05:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770775338;
-	bh=OaL7HmtY8PqZLX4O+1g7qbPlaK6jtij1faPJYo7M6cs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nxE1JbuXS8wPbm1dDTh9Ig4ncqbH7TE+/RsRs23hStcbYsElRZI2XY529fcgfAi/c
-	 R1UwvauzlXAosiWhA01TC9cFd95YvlFnVVYUGj1uL6dgvYP4QTyKGhBPjxTVR8KNWm
-	 XE0Wt/z6JV9x7yQnTuHg1ljHE48vq0RmkVwy3FGrgqbti4ZvCklQQ84Q4vhVgidef4
-	 59dRXj1fCCUJBev/zdXvVZCyDcLeI+5bPm6W+1y+m7x2DKFVW7SLkQI+syC7xYgfjA
-	 4vAP29Vd32+9v7Ipr13i0WCn8WUZNpcUYqdZqpQGTOCyYR5+2udandhrRXt9KeKX7h
-	 aKCC0nFldJTAQ==
-Date: Tue, 10 Feb 2026 18:02:17 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Danielle Ratson <danieller@nvidia.com>
-Cc: "davem@davemloft.net" <davem@davemloft.net>, "netdev@vger.kernel.org"
- <netdev@vger.kernel.org>, "edumazet@google.com" <edumazet@google.com>,
- "pabeni@redhat.com" <pabeni@redhat.com>, "andrew+netdev@lunn.ch"
- <andrew+netdev@lunn.ch>, "horms@kernel.org" <horms@kernel.org>,
- "shuah@kernel.org" <shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
- <linux-kselftest@vger.kernel.org>, Petr Machata <petrm@nvidia.com>
-Subject: Re: [PATCH net-next] selftests: drv-net: port_split: convert to
- ksft format and mark disruptive
-Message-ID: <20260210180217.3615df89@kernel.org>
-In-Reply-To: <DM6PR12MB4516D06845B4A6D2691E46F4D865A@DM6PR12MB4516.namprd12.prod.outlook.com>
-References: <20260207012151.3972723-1-kuba@kernel.org>
-	<DM6PR12MB4516D06845B4A6D2691E46F4D865A@DM6PR12MB4516.namprd12.prod.outlook.com>
+	s=k20201202; t=1770775530;
+	bh=mq82685wUv7wXQeQIeQd9ybDzA4WIRKloSSUCitGcpY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IzfFouI5o8HHhM61yNuuNcyN8ksRXhrHY0BqTaxTuc3Ujx0+t8ou2PLD/gBE5aBjM
+	 Vh8xHedB2qyTRIr8x/w4b8sEq71mfbiOimVWssFrnHIEzYCMzjdjn06WUvOKVyBDka
+	 puX5sJTPQbXMdb5KNslBAOmdNZU2anT6A5EmOr/bUUkZvV90PaSiqJ34WPb5mTtTa0
+	 6xPFiQ0JA2n6xsWzmaIUVe8jS6EsZXaDEGP4E6LbtvPi8IATo6ZlBB4YZjwmi35ar+
+	 FHJm/u7SJNatJo8qruGUxT/CMqD2vAX5V2S4yt5B17VYoBMbRtyvglJvjdHYJiBHe8
+	 0JNWrgSzLdm1w==
+Date: Wed, 11 Feb 2026 02:05:26 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: paulmck@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH] revocable: hide the implementation details from users
+Message-ID: <aYvj5h4tEZI-habX@google.com>
+References: <20260206103216.38623-1-bartosz.golaszewski@oss.qualcomm.com>
+ <fc68da89-7c2b-432b-9a78-6ab55fcb0e9e@paulmck-laptop>
+ <CAMRc=MeHWkDCi0GvXFYxDhCeWMydjT9wOw3_d1d+c+VE7y0-7Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MeHWkDCi0GvXFYxDhCeWMydjT9wOw3_d1d+c+VE7y0-7Q@mail.gmail.com>
 
-On Mon, 9 Feb 2026 09:54:08 +0000 Danielle Ratson wrote:
-> Few comments:
+On Mon, Feb 09, 2026 at 05:13:17AM -0600, Bartosz Golaszewski wrote:
+> On Fri, 6 Feb 2026 23:02:44 +0100, "Paul E. McKenney" <paulmck@kernel.org> said:
+> > On Fri, Feb 06, 2026 at 11:32:06AM +0100, Bartosz Golaszewski wrote:
+> >> Revocable stacks two layers of SRCU on top of each other: one to protect
+> >> the actual revocable resource and another to synchronize the revoking.
+> >> While this design itself is questionable, it also forces the user of
+> >> revokable to think about the implementation details and annotate the
+> >> pointer holding the address of the revocable_provider struct with __rcu.
+> >> Hide the real type of struct revokable_provider behind a typedef to free
+> >> the users from this responsability. While adding new typedefs goes
+> >> against current guidelines, it's still better than the current
+> >> requirement.
+> >>
+> >> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+> >> ---
+> >> I realized that one important person was missing from the whole review
+> >> process: Paul E. McKenney who wrote and maintains SRCU. I had Paul look
+> >> at the SRCU usage in GPIO and I think he should have also signed off on
+> >> revocable before it got queued.
+> >>
+> >> Paul: I'm Cc'ing you on this patch to bring revocable to your attention.
+> >> The series that implemented it and made its way into v7.0 is here:
+> >>
+> >>   https://lore.kernel.org/all/20260116080235.350305-1-tzungbi@kernel.org/
+> >>
+> >> Could you please take a look and say if the design looks sane to you?
+> >> Especially the double SRCU on the revocable_provider.
+> >
+> > The first patch in the above URL adds SRCU, and the other
+> > two add various tests.  I do not see a double SRCU, just an
+> > srcu_read_lock() in revocable_try_access() and an srcu_read_unlock()
+> > in revocable_withdraw_access().
+> >
+> > You are allowed to nest srcu_read_lock(), if that is what you are asking.
+> > *However*, nesting revocable_try_access() on the same revocable structure
+> > is buggy because the second call to revocable_try_access() would overwrite
+> > the rp->srcu value written by the first call.  This could result in both
+> > SRCU grace-period hangs and too-short SRCU grace periods, more likely
+> > the former than the latter.
+> >
+> > Or do you mean something else by "double SRCU"?
+> >
 > 
-> 1. Before the change we simply ran the test without extra info, like
-> that: $ ./devlink_port_split.py
+> This series didn't have it yet, it appeared as a fix to a race reported after
+> it was queued, sorry for the confusion. I'm talking about this bit[1] here.
+> It returns an __rcu-annotated pointer, forcing the user to keep and manage it.
 > 
-> Now the new infrastructure requires to run with:
-> $ NETIF=swp1 ./devlink_port_split.py
-> 
-> While swp1 is an example for some interface in the machine using to
-> indicate the real target device.
-> 
-> Otherwise, the test fails- if no NETIF is configured, the framework
-> defaults to netdevsim (SW mode), and since the test sets
-> 'nsim_test=False', it emits an error. So the new change, breaks the
-> way the test was running by now.
-> 
-> However, I managed to work around that by adding a configuration file
-> to the selftests dir:
-> 
-> $ cat drivers/net/hw/net.config
-> NETIF=swp1
-> 
-> 2. The test fails for waiting for the carrier to come up. But
-> actually, we should skip the carrier check. The port split test
-> doesn't require carrier to be up since it's only testing port
-> configuration (split/unsplit) functionality, not the data path.
-> 
-> I tried to run it while overriding the NetDrvEnv __enter__ method to
-> bring the interface up without waiting for carrier:
+> This is because when revoking the resource[2], the pointer storing the address
+> of the revokable provider is also managed by SRCU - in addition to the
+> revokable resource itself which seems to me like a weird concept. I understand
+> the race condition it fixes but I assumed the whole concept of revokable is to
+> free the user from being bothered by the implementation details behind it which
+> leak out of the API if you need to keep __rcu around.
 
-Hm, I think we can risk removing the carrier wait for NetDrvEnv.
-Only the "endpoint" env (NetDrvEpEnv) should really depend on the NIC
-being able to send and receive packets. I guess I added the carrier
-wait to the base class to save LoC.
+Please hold off on reviewing the patch and the "double SRCU" usage for now.
+I'll remove the second RCU in the next version, which should serve as a
+better starting point for a clean review.
 
-Thanks a lot for trying it out! I'll send a v2 after the merge window.
+Side note: It was actually one SRCU and one RCU, not a double SRCU.
