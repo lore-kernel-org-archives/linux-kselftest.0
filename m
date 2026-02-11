@@ -1,148 +1,277 @@
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D592BAF8
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 17:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119E9352FBF
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 19:35:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770830552; cv=none; b=iSC27T4h6DvP4EHyTE8NzvVic74ztDjCuhlwyrOLMxCChEtvh4kSdaCnu5f2zNCFG15hRaT817jALYRndiPSQ0wLuM2EDZvjbYrtPCzpOyJL0rmP/1duC9LPU6x6ra/0lNlMmPVXIMak/ABULEAMFqaEq0pJLx/5fNAWDRJnWPY=
+	t=1770838540; cv=none; b=Lu+9YESA5ir9kfLR0N+yAA9uEoLgAmEBuF5cMa3LRzo0XtApEUus/Ji+Me2ft5Rc8RqskS190wVLhBpz3oGalukPV9uBkvhA46Kzwc3CphFGOxLyYJbDc92U+M8z1rWJ/WZaVyzSnh8pyHVCgzD+q5DSFIr0V2yj5Is9J1eJ+xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770830552; c=relaxed/simple;
-	bh=7JJEbaI8gADvksOgSC/RqZsRMhXUw/AVhllJQLiiqS0=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=MKp4K/8gYIf0wJYy00Sti9tMSWWvDBH4K3C82eGjfFF8cZCFBVVzUCrJDlt3m5sE4eZ260cWH4ok7epN4SN5gPUY74cpwHuLkRWjDCRjZTuf1/o8qoyTCaWAN08kcLrA1xFZEG1ljwgwnoHmVdnD5MzDNSHyMQbuBa0a42Km5xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BSTaXBzL; arc=none smtp.client-ip=74.125.224.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770838540; c=relaxed/simple;
+	bh=kLqcLZsDQ9l50Dv8gTv/4rexnpIHIVZchPmWgXkcMhM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tk8BiTcDtIN97veYqeqkY6Vh5LS3uA4pOTeT8FBKFz0n+JoczZXnNA2fcT7H0nhXpOS1sX4NUWdudQEBK1RinzchapeJvq657YG5rcRDfGVMiPk5TDBl1r+41WMWgxOOYk2xW1eyfW1EzgI78CsJ3ssGu5lN9aZtBSH4sbGdvxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=baG4KHJq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=awuxn6O/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BSTaXBzL"
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-64ada2c30a1so3930192d50.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 09:22:30 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="baG4KHJq";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="awuxn6O/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770838538;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MHfswB8BrOCWLJXsVwUk+XHyA8BLSR/huUJvBA9oUpg=;
+	b=baG4KHJqInD+sIF+F8t0TEtdyb5leB8tDvQ04fXgR8vMXhpBJMOJssxvE5wVKZanDW4cd4
+	ZuZfIpAG0visRLJDTUR1ewemqd04+EUx5DTp2rUZlsv+rW1MfrYbxvwc+S1bSglYY3hI7P
+	geBMa+inEvOTAGS8/0kghzqwelX94ls=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-599-OBJkb8XDOsGD297XZtbfWQ-1; Wed, 11 Feb 2026 14:35:37 -0500
+X-MC-Unique: OBJkb8XDOsGD297XZtbfWQ-1
+X-Mimecast-MFC-AGG-ID: OBJkb8XDOsGD297XZtbfWQ_1770838536
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-89493622b50so38620676d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 11:35:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770830549; x=1771435349; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wOPQYb8U+ctug5FsMgUJIr/auxzVIvYKdx/PJfk6yUs=;
-        b=BSTaXBzLrVSI8po5vn/kystCdl7+M+5unWrIMI0ukIpP4/YQtGBGKk9rj/ZQlhOrS8
-         cIGbQhRheZnfl/6bHI+csINg8+uKoRDt/hynlEhoi1uWx6YA99hqZVfOXnrfl4w1tMNy
-         54m5L790dNRnteodDLPXMXlvAYc9Kvhy0QBiFk+mqKTM333SXDBf1RiS151Ie1iNx1vO
-         2p1JcSmsz2x4mAfNAhosoZUH6veqdRy9oUrQtLc8wgkvepf+JkX1LEaBOOH2k4llZg3i
-         Qw1nNUM2aQdhRy28HyiEBU6cERF6a3cQO2rlXcwRmuugZRR1c5Ufd34M9xDaNOyG3aUH
-         a4oA==
+        d=redhat.com; s=google; t=1770838536; x=1771443336; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MHfswB8BrOCWLJXsVwUk+XHyA8BLSR/huUJvBA9oUpg=;
+        b=awuxn6O/CjPTmDjDvH92FtKXOGRayEYOkBFl9fiz7QpuJ7cO/XMCWcVk986cO5L0pU
+         F7EY/76ca4QwKcnqsFCzI+LrAY6QKNePLlJ84cCWWxQJrusVjpIlArW8moWPrHhvxiN9
+         7sVTvxpAxvCH+0IDv3G0tYJJq1L27n0qchcAXdkmG0C5u4wqyxMDzHCFgJcRvEp9al6Z
+         LsbNc8jerjKgmnMqH0pwB3PLz2k+H4D3HVIX4wMhVW9KXDxJQ98RwL4eF9j3HrzFgM22
+         bcGv2aqgvBvLeWDQZ5LGA3Y3ZaXblUPsuQUGqTVQLaXWscHpYTO3OANcrsB+Wz/ZoGxS
+         tseA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770830549; x=1771435349;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wOPQYb8U+ctug5FsMgUJIr/auxzVIvYKdx/PJfk6yUs=;
-        b=OAxN1u+FwCOvXZdInl8JT2skkyl3ImBrbLVJkEzvsTe4ZJObZE0zZ82GQt+G34lct7
-         itKJ3VoERGNKBZ5kilURmGq0ipx9FRS0xTh8px/E5Oip7zXMVzmj5ZrlibOt5fYNfbuj
-         4d5C0s8utp5ennvqX/JwCVhDAh+FWA0I1EVcCqFI8lNh1YovKYDlkvJ6IbcROL/vryXJ
-         SeaUXWW5yoDu+DBSJXACqP2lRq5vTxy3IkL5LNqjmr++7Ds8VVxz4Dt8jVpDhCQiqMwB
-         cRNXD23RW3wZdZAoHz7NbDOrJ+rBz/bxl2Qso3PQUeaDZ/ySybagouIBmsMece2GgeSR
-         KJlg==
-X-Forwarded-Encrypted: i=1; AJvYcCVhJe8IgOiJ8yQ4Rtm+pIOpCVXEWDEC4yxAEQmiUR0jvWazZqbr71dOziNVXHQsJ6etGu7w72j3hggIVunNncA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMs7iowU0BSrGZ4hNJToEQITw5iFa6Nu0j0NiXMuAHotvmLuYY
-	7Cop2CAR4kSjsgwXJO8HkkSPXTRFd1YKvSd2d1RcGoWVOe7fUQl+ssjU
-X-Gm-Gg: AZuq6aKKDBS0ra4W5ePcjxlsmHy4A5ahsPVVifCUZZ7EVr/1GOaWR4L2IIwNPd+cFck
-	HowD4bFaHOf69L0wxM57SydwckADQ0PryIxGKz9Ufn3Wtf2HCCqhkpmFY0MaFW09yM6D2sYRKu4
-	74M1RwJij1RVMex6FBFjJWfRfm0h21Wivft3TwjdjKvs5hsFo7SQHwKHMSVcg7Mb/wqVT62ZLup
-	oIpSRtUWsfjyDexZ5efURQuq5Xihui2zUiZR6zk3uvAnPCtOhMQRwFbh+dGPUDUR6Hn48mXfkbF
-	u4xTAQBJah134ahULIcuRfBXvnOM8YKJ5BjTX1ZK7Gqb0cb+etmoZnDo2l4k9HSXl8cnO+KSoVd
-	Ellm0u2fjujSOAdI5ZHqTWXCTHh+sU4BNQVEjNwoSZlvzv1JWKj8rsZwL2jwVJgQfwyMQ4NGdUS
-	hMZTbBYFAe6aXW7gbB4wdmZatxGwWpK/DTMqTY/9hV52BIsY4saQ0XpTu4+gS2LyssaCmJFQk=
-X-Received: by 2002:a05:690e:1513:b0:649:bb4b:f822 with SMTP id 956f58d0204a3-64bbaafb604mr17332d50.48.1770830549204;
-        Wed, 11 Feb 2026 09:22:29 -0800 (PST)
-Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-64afc73fe6asm2480743d50.0.2026.02.11.09.22.28
+        d=1e100.net; s=20230601; t=1770838536; x=1771443336;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MHfswB8BrOCWLJXsVwUk+XHyA8BLSR/huUJvBA9oUpg=;
+        b=nIVaeqF0oGDli09c3XJvAiOUfHamS9Eb5+YymYwYyeMbbpd+TIeeqwTPogmXLTr4zb
+         c7/Iv6RGBnOReDqd/Rw1mgOf+Ot8yWoxwAPsWy8c+ZYOBqi6a+UxHqoBcMbFAAXI0RlB
+         yD3kUxot0NEl6oVhuJUyokcFLFG5YBvf8kcbLvb+fAdFSp9GvZ8N8T1SRcSn5djSk24b
+         Ky/OLxUbugDK0vHsXScxJeyx0GKczsFT+w+8zgy1EoLU9nWjO8oKT7XxmKO2ZuRF33MB
+         Lu11h12uhRvvEtSaNNY58XHgDvAh4uMG6U0460jkkV0moJSuDDfUcx+T9WbvK+Z/151K
+         2esQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXKdZkDHSPQ9zhmN2r1mewn3AvLVIii133Tq+mM9gdESrdIDIlMKb8a1awF0bJMvpnMP5YDZTiSI6ErfHKTMkE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQoYM8XD+coW48itEOKNW6SITP0fWg7gDRXKAmSc/ZijBtO0t8
+	ZfytOumW0ykcU9ePDlV/p3QVQVl0eBiqb7+PfqlPl+UCZnb5KgCmVV0zmpj9SLQ2gJAyTuIMOIO
+	J2Q6637d2iyqzLuAmOwlQh/p3VRi9pZgTO2napB/pLmWpKK4ztp/lCFopRlTL3m2jUl5RgA==
+X-Gm-Gg: AZuq6aIr/yglIGg0yJnZaQIqm0TQ6pCmrhlSxXbqCm+xE6phgBkRUUb+ULp1OBg2j1V
+	EfBhUw1Dhvz+RHNJzlxyLYGYkUsNGLBfce5eQMObcduKODRRHaMXuVrB74oNkZ+ekolU5FaKWO4
+	Mp5KIP0DEp0+dauxJG8CKOlcrWL/+ShMpaDZmKeyXH3As0DCxhmKPRxAT4LSCHb0B1DolL8sbBR
+	RghFCYUAWT5GVFfHrrD+11cPjCJQByZeJ6gFo0Hmkvp/wCU9Xg2fBRzJZuxvHpt9UUzojKTVcgZ
+	6D3hWDV91rNaGD10c81+/MyIDw6szCQzxcL84cRmp2M1gfOIuJu77M/NwYGp2WGt8iKVTmL93gX
+	j8r/gcA7WVrXlIA==
+X-Received: by 2002:a05:6214:e66:b0:896:a692:caba with SMTP id 6a1803df08f44-89727899bdamr10537016d6.31.1770838536095;
+        Wed, 11 Feb 2026 11:35:36 -0800 (PST)
+X-Received: by 2002:a05:6214:e66:b0:896:a692:caba with SMTP id 6a1803df08f44-89727899bdamr10536576d6.31.1770838535519;
+        Wed, 11 Feb 2026 11:35:35 -0800 (PST)
+Received: from x1.local ([174.91.117.149])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cdb19b6sm22142416d6.40.2026.02.11.11.35.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 09:22:28 -0800 (PST)
-Date: Wed, 11 Feb 2026 12:22:28 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- shuah@kernel.org, 
- willemb@google.com, 
- petrm@nvidia.com, 
- donald.hunter@gmail.com, 
- michael.chan@broadcom.com, 
- pavan.chebbi@broadcom.com, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.b86b179834ad@gmail.com>
-In-Reply-To: <20260211090013.12991cd0@kernel.org>
-References: <20260207003509.3927744-1-kuba@kernel.org>
- <20260207003509.3927744-7-kuba@kernel.org>
- <willemdebruijn.kernel.743811e01cc@gmail.com>
- <20260210175638.123782b2@kernel.org>
- <willemdebruijn.kernel.503ed4ace7bf@gmail.com>
- <20260210194814.21a0c403@kernel.org>
- <willemdebruijn.kernel.172899765680b@gmail.com>
- <20260211090013.12991cd0@kernel.org>
-Subject: Re: [PATCH net-next v2 6/9] selftests: drv-net: gro: use SO_TXTIME to
- schedule packets together
+        Wed, 11 Feb 2026 11:35:35 -0800 (PST)
+Date: Wed, 11 Feb 2026 14:35:23 -0500
+From: Peter Xu <peterx@redhat.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@redhat.com>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 07/17] userfaultfd: introduce vm_uffd_ops
+Message-ID: <aYzZ-zBipYQ2OA_n@x1.local>
+References: <20260127192936.1250096-1-rppt@kernel.org>
+ <20260127192936.1250096-8-rppt@kernel.org>
+ <aYEY6PC0Qfu0m5gu@x1.local>
+ <aYhh2XzyFsJbohll@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aYhh2XzyFsJbohll@kernel.org>
 
-Jakub Kicinski wrote:
-> On Tue, 10 Feb 2026 23:21:07 -0500 Willem de Bruijn wrote:
-> > > > I wonder what's going wrong here.
-> > > > 
-> > > > fq_classify should pick the queue based on skb->sk also for packet
-> > > > sockets.
-> > > > 
-> > > > And flow_queue_add should add the packets to the tail of the linear
-> > > > list if the delivery time is identical to that of the tail.  
-> > > 
-> > > It works but requires that we either modify the qdisc config to set
-> > > a orphan_mask of 1, or somehow set the skb->hash on the AF_PACKET skbs.  
-> > 
-> > Oh right, fq_classify does not use skb->sk for packet sockets because
-> > they are in default sk_state TCP_CLOSE.
-> > 
-> > And this is by design, as clearly documented, as packet sockets should
-> > not be assumed to be a single flow:
-> > 
-> >         } else if (sk->sk_state == TCP_CLOSE) {
-> >                 unsigned long hash = skb_get_hash(skb) & q->orphan_mask;
-> >                 /*
-> >                  * Sockets in TCP_CLOSE are non connected.
-> >                  * Typical use case is UDP sockets, they can send packets
-> >                  * with sendto() to many different destinations.
-> >                  * We probably could use a generic bit advertising
-> >                  * non connected sockets, instead of sk_state == TCP_CLOSE,
-> >                  * if we care enough.
-> >                  */
-> >                 sk = (struct sock *)((hash << 1) | 1UL);
-> >         }
-> > 
-> > An orphan_mask of 1 sounds like an effective workaround.
-> > 
-> > I don't see a way to force a specific skb_get_hash result across
-> > flows, given hashrnd.
+On Sun, Feb 08, 2026 at 12:13:45PM +0200, Mike Rapoport wrote:
+> Hi Peter,
 > 
-> So WDYT about the patch? I don't wanna tweak qdiscs on real interfaces.
-> It's way to hard to undo. IMHO either we keep the patch as is with its
-> limited effect or just drop it.
+> On Mon, Feb 02, 2026 at 04:36:40PM -0500, Peter Xu wrote:
+> > On Tue, Jan 27, 2026 at 09:29:26PM +0200, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > 
+> > > Current userfaultfd implementation works only with memory managed by
+> > > core MM: anonymous, shmem and hugetlb.
+> > > 
+> > > First, there is no fundamental reason to limit userfaultfd support only
+> > > to the core memory types and userfaults can be handled similarly to
+> > > regular page faults provided a VMA owner implements appropriate
+> > > callbacks.
+> > > 
+> > > Second, historically various code paths were conditioned on
+> > > vma_is_anonymous(), vma_is_shmem() and is_vm_hugetlb_page() and some of
+> > > these conditions can be expressed as operations implemented by a
+> > > particular memory type.
+> > > 
+> > > Introduce vm_uffd_ops extension to vm_operations_struct that will
+> > > delegate memory type specific operations to a VMA owner.
+> > > 
+> > > Operations for anonymous memory are handled internally in userfaultfd
+> > > using anon_uffd_ops that implicitly assigned to anonymous VMAs.
+> > > 
+> > > Start with a single operation, ->can_userfault() that will verify that a
+> > > VMA meets requirements for userfaultfd support at registration time.
+> > > 
+> > > Implement that method for anonymous, shmem and hugetlb and move relevant
+> > > parts of vma_can_userfault() into the new callbacks.
+> > > 
+> > > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > > ---
+> > >  include/linux/mm.h            |  5 +++++
+> > >  include/linux/userfaultfd_k.h |  6 +++++
+> > >  mm/hugetlb.c                  | 21 ++++++++++++++++++
+> > >  mm/shmem.c                    | 23 ++++++++++++++++++++
+> > >  mm/userfaultfd.c              | 41 ++++++++++++++++++++++-------------
+> > >  5 files changed, 81 insertions(+), 15 deletions(-)
+> > > 
+> > > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > > index 15076261d0c2..3c2caff646c3 100644
+> > > --- a/include/linux/mm.h
+> > > +++ b/include/linux/mm.h
+> > > @@ -732,6 +732,8 @@ struct vm_fault {
+> > >  					 */
+> > >  };
+> > >  
+> > > +struct vm_uffd_ops;
+> > > +
+> > >  /*
+> > >   * These are the virtual MM functions - opening of an area, closing and
+> > >   * unmapping it (needed to keep files on disk up-to-date etc), pointer
+> > > @@ -817,6 +819,9 @@ struct vm_operations_struct {
+> > >  	struct page *(*find_normal_page)(struct vm_area_struct *vma,
+> > >  					 unsigned long addr);
+> > >  #endif /* CONFIG_FIND_NORMAL_PAGE */
+> > > +#ifdef CONFIG_USERFAULTFD
+> > > +	const struct vm_uffd_ops *uffd_ops;
+> > > +#endif
+> > >  };
+> > >  
+> > >  #ifdef CONFIG_NUMA_BALANCING
+> > > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> > > index a49cf750e803..56e85ab166c7 100644
+> > > --- a/include/linux/userfaultfd_k.h
+> > > +++ b/include/linux/userfaultfd_k.h
+> > > @@ -80,6 +80,12 @@ struct userfaultfd_ctx {
+> > >  
+> > >  extern vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason);
+> > >  
+> > > +/* VMA userfaultfd operations */
+> > > +struct vm_uffd_ops {
+> > > +	/* Checks if a VMA can support userfaultfd */
+> > > +	bool (*can_userfault)(struct vm_area_struct *vma, vm_flags_t vm_flags);
+> > > +};
+> > > +
+> > >  /* A combined operation mode + behavior flags. */
+> > >  typedef unsigned int __bitwise uffd_flags_t;
+> > >  
+> > > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > > index 51273baec9e5..909131910c43 100644
+> > > --- a/mm/hugetlb.c
+> > > +++ b/mm/hugetlb.c
+> > > @@ -4797,6 +4797,24 @@ static vm_fault_t hugetlb_vm_op_fault(struct vm_fault *vmf)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +#ifdef CONFIG_USERFAULTFD
+> > > +static bool hugetlb_can_userfault(struct vm_area_struct *vma,
+> > > +				  vm_flags_t vm_flags)
+> > > +{
+> > > +	/*
+> > > +	 * If user requested uffd-wp but not enabled pte markers for
+> > > +	 * uffd-wp, then hugetlb is not supported.
+> > > +	 */
+> > > +	if (!uffd_supports_wp_marker() && (vm_flags & VM_UFFD_WP))
+> > > +		return false;
+> > 
+> > IMHO we don't need to dup this for every vm_uffd_ops driver.  It might be
+> > unnecessary to even make driver be aware how pte marker plays the role
+> > here, because pte markers are needed for all page cache file systems
+> > anyway.  There should have no outliers.  Instead we can just let
+> > can_userfault() report whether the driver generically supports userfaultfd,
+> > leaving the detail checks for core mm.
+> > 
+> > I understand you wanted to also make anon to be a driver, so this line
+> > won't apply to anon.  However IMHO anon is special enough so we can still
+> > make this in the generic path.
+> 
+> Well, the idea is to drop all vma_is*() in can_userfault(). And maybe
+> eventually in entire mm/userfaultfd.c
+> 
+> If all page cache filesystems need this, something like this should work,
+> right?
+> 
+> 	if (!uffd_supports_wp_marker() && (vma->vm_flags & VM_SHARED) &&
+> 	    (vm_flags & VM_UFFD_WP))
+> 		return false;
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Sorry for a late response.
 
-I would say keep it. When respinning, maybe add an explicit note that
-for this to be effective FQ needs to be installed.
+IIUC we can't check against VM_SHARED, because we need pte markers also for
+MAP_PRIVATE on file mappings.
 
-Aside: there currently is no API for the kernel to communicate whether
-a cmsg SO_TXTIME request was honored or ignored. But if a caller cares
-it can either request a Tx timestamp.
+The need of pte markers come from the fact that the vma has a page cache
+backing it, rather than whether it's a shared or private mapping.  Consider
+if a file mapping vma + MAP_PRIVATE, if we wr-protect the vma with nothing
+populated, we want to still get notified whenever there's a write.
+
+So the original check should be good.
+
+I'm fine with most of the rest comments in this series I left and I'm OK if
+you prefer settle things down first.  For this one, I still want to see if
+we can move this to uffd core code.
+
+The whole point is I want to have zero info leaked about pte marker into
+module ops.
+
+For that, IMHO it'll be fine we use one vma_is_anonymous() is uffd core
+code once.
+
+Actually, I don't think uffd core can get rid of handling anon specially.
+With this series applied, mfill_atomic_pte_copy() will still need to
+hard-code anon processing on MAP_PRIVATE and I don't think it can go away..
+
+mfill_atomic_pte_copy():
+	if (!(state->vma->vm_flags & VM_SHARED))
+		ops = &anon_uffd_ops;
+
+IMHO using vma_is_anonymous() for one more time should be better than
+leaking pte marker whole concept to modules. So the driver should only
+report if the driver supports UFFD_WP in general.  It shouldn't care about
+anything the core mm would already do otherwise, including this one on
+"whether system config / arch has globally enabled pte markers" and the
+relation between that config and the WP feature impl details.
+
+Thanks,
+
+-- 
+Peter Xu
+
