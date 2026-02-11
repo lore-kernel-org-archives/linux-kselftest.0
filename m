@@ -1,79 +1,86 @@
-Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE94350D7E
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 11:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE361D7E42;
+	Wed, 11 Feb 2026 13:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770808582; cv=none; b=kkTe1c2R380yWgdMUOIoxUP/nXxILbdBZTWSrUOjy0s2u0DVRiAWGUA4rwTkbfkk39RtdLNaKAFKMZcm14q4PmyOkJlFTis87GnmXS31Z4XShW4eVZ7fWepJ2L3fg5a5sHPw522MCUT4VNoVhRezJOuww22a94mSMQgDwGj0yW0=
+	t=1770816315; cv=none; b=ZdRAYvRNf/UjFfCQ2+tLnvZ/nHLCQ9v65Pw1TggYh3eOXcrFJ3sD0uAdHlfUyyAxEuQiKc84pdLA8ITQhExYWwHKpqXXw9ZEwU//3m8z220Jgs4QPgNRAJrggJbbShQmZrzCfibDQPEwkT361iNaQJW06hX9VtWcSyZchsUUcOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770808582; c=relaxed/simple;
-	bh=/Hq/qB0lGjwwN5C/Eaa5yEbAKTkQUqcLM2Xc2flmtn0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ONbHCHFTDbrHgLDpJZXvlPkOryEVeyderZ3AzM4YqN/eqLlIkHcN46BqvQYGmPOMKHYcF8Ov/VC1v5bOFMdmKmwNFYD4XU7G0APuoffk1tyU6WN6BUEQ2k3zx18STMoWs6YolCPks81XN+hW/jPWSkMOdNrfIdjHhHStcAwX1RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=CJToK9is; arc=none smtp.client-ip=185.125.25.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1770816315; c=relaxed/simple;
+	bh=MeqT4MBhzEQ0JXyfgc6pcwR3/iMUdwXMuOky8LQC3eQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=QFBkqzyA4qb7BX/pkaikle23BNmgmFWUI8ka/dtLcH6mi0YWdVYJwaKB3s+WiTnlJpzcm6NslDSLhCnrZDvtq4oP9RL43eWUNuFRy/8QFLj86Nxg42TP1pcFWnuoig8tLiMiLuSDa8AnlmQRiDNhrfTGGrJ00aRzFh5VgMXOy2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=lpJcv4nE; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="CJToK9is"
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f9wpx72sYzSxJ;
-	Wed, 11 Feb 2026 12:16:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1770808569;
-	bh=dCI4QP633NwXgmVSxk0byHC6mLunBnF6KDgi1+dof5M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CJToK9isw/R0h5IYdu+r8ZKYRpdtUm7jgG5kEX//ZxuyCOphD9i7R97yCmLKLbdd9
-	 2CUwDQeaToIuNGPCpClD3G5iq/rkZLw3BB0/Roiz2/VLuKajsBdpOUx7b9nkphqeoM
-	 RunQa4KJYy3AzVB/R9k0Gpd8LZixLb+XEXc3lplo=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4f9wpx2ZzjzjKX;
-	Wed, 11 Feb 2026 12:16:08 +0100 (CET)
-Date: Wed, 11 Feb 2026 12:16:02 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Chen Ni <nichen@iscas.ac.cn>
-Cc: gnoack@google.com, shuah@kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/landlock: Remove duplicate include of stdio.h
-Message-ID: <20260211.Sahriegigei2@digikod.net>
-References: <20260211062122.2975127-1-nichen@iscas.ac.cn>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="lpJcv4nE"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1vqAD8-009lQv-8o; Wed, 11 Feb 2026 14:24:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:From:Subject:MIME-Version:Date:Message-ID;
+	bh=MeqT4MBhzEQ0JXyfgc6pcwR3/iMUdwXMuOky8LQC3eQ=; b=lpJcv4nEKb8mXH/5CmzCdq1SO7
+	P88BiuoWX1s3rFWsH3WwIV9qzDmtE9OtLknEBpk1EBRRaNhhB/H46A0tlgikascHLrYXCIusLCzR3
+	K44WgvoJbwHFMEQV7gw0HVZBKIsHQCabLRhNYQMqVhflzDSDmcZycagVjNG8psH46wHHtfK0/y5oU
+	KLQGKnglUeAKmRmCREXWSBXVSTnoMchAVDkty4VffGiAIDi2nCUZNNw+5PY1CCmqPdTTX6dVC29f2
+	3qg0pyxrDJspLf0lluSxNeMsRT+im7L/+UirH/h5aEw2502TqFnHTbapbc2LAnyf2krmuZCOYzifi
+	noxSxxnQ==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1vqAD6-00040Y-Uw; Wed, 11 Feb 2026 14:24:53 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vqACm-000Fks-O1; Wed, 11 Feb 2026 14:24:32 +0100
+Message-ID: <6d8a18c1-867b-49d2-86e4-c7ccfc1e3ad4@rbox.co>
+Date: Wed, 11 Feb 2026 14:24:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260211062122.2975127-1-nichen@iscas.ac.cn>
-X-Infomaniak-Routing: alpha
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2 3/4] bpf, sockmap: Adapt for the af_unix-specific
+ lock
+From: Michal Luczaj <mhal@rbox.co>
+To: Martin KaFai Lau <martin.lau@linux.dev>,
+ Kuniyuki Iwashima <kuniyu@google.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Willem de Bruijn <willemb@google.com>, Cong Wang <cong.wang@bytedance.com>,
+ Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
+ <20260207-unix-proto-update-null-ptr-deref-v2-3-9f091330e7cd@rbox.co>
+ <CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com>
+ <c4eaead1-ad69-42f0-9699-5f2d555a7693@rbox.co>
+ <a2f2c260-38e8-4ba3-8655-cffbee046259@linux.dev>
+ <b75bbc3f-85fd-4209-9ce1-3bf685ba62ff@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <b75bbc3f-85fd-4209-9ce1-3bf685ba62ff@rbox.co>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 11, 2026 at 02:21:22PM +0800, Chen Ni wrote:
-> Remove duplicate inclusion of stdio.h in fs_bench.c to clean up
-> redundant code.
+Replying to correct myself:
 
-Thanks!  I also detected this issue while running `sort -u` on the
-includes, so this is already taken into account in my next branch (with
-other small fixes).
+> Since sockmap update can happen in a tracing prog, can you really expect a
+> socket to be always owned?
 
-> 
-> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
-> ---
->  tools/testing/selftests/landlock/fs_bench.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/fs_bench.c b/tools/testing/selftests/landlock/fs_bench.c
-> index 733c1264e5fd..551cb615ad93 100644
-> --- a/tools/testing/selftests/landlock/fs_bench.c
-> +++ b/tools/testing/selftests/landlock/fs_bench.c
-> @@ -26,7 +26,6 @@
->  #include <linux/prctl.h>
->  #include <stdbool.h>
->  #include <stdio.h>
-> -#include <stdio.h>
->  #include <errno.h>
->  #include <stdlib.h>
->  #include <string.h>
-> -- 
-> 2.25.1
-> 
-> 
+Ha, but I'm wrong! Of tracers only BPF_TRACE_ITER allows calling
+sock_map_update_elem(). And those are supposed to lock_sock(). Except some
+don't, e.g. sock_map_seq_show(). Or is there something else I'm missing?
+
