@@ -1,80 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21A933120D;
-	Wed, 11 Feb 2026 10:20:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE94350D7E
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 11:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770805210; cv=none; b=NwJijr968B4IRerWGG2wK+uRborHrrsK92l772qj+B/hRr3LFcIBPKdcLuOBNavXdhaxNmPHsPYn9n76vPrdKlQRyR0A03ui4emWnIHlEE6LAA2pdsFBCz4oIIKZEU/hAypoTzapW7IjjgG1w1LVAKhjG/PVgWaZRMxeKFl6XJM=
+	t=1770808582; cv=none; b=kkTe1c2R380yWgdMUOIoxUP/nXxILbdBZTWSrUOjy0s2u0DVRiAWGUA4rwTkbfkk39RtdLNaKAFKMZcm14q4PmyOkJlFTis87GnmXS31Z4XShW4eVZ7fWepJ2L3fg5a5sHPw522MCUT4VNoVhRezJOuww22a94mSMQgDwGj0yW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770805210; c=relaxed/simple;
-	bh=tigK3WjfnGAezt46CWIc99ueCYXkiaw1F0UQOfpMvc8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=rlMfOS1pM9kAVB0NIgI0O02dM6SkW3ws7aIVM7CyKrszVEXCf0o8q6td6n2gZ+zX8WxGedoP/q43THGE3UIPL/XO0jnx7n2bqxY7Mte/lDn7woR4g+5WPfMqLUnZLQMX3RbvcOTtVQoJmLMLgYfrJ0nX86cClCLSWahYzVi5H9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bekD7L3R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770808582; c=relaxed/simple;
+	bh=/Hq/qB0lGjwwN5C/Eaa5yEbAKTkQUqcLM2Xc2flmtn0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ONbHCHFTDbrHgLDpJZXvlPkOryEVeyderZ3AzM4YqN/eqLlIkHcN46BqvQYGmPOMKHYcF8Ov/VC1v5bOFMdmKmwNFYD4XU7G0APuoffk1tyU6WN6BUEQ2k3zx18STMoWs6YolCPks81XN+hW/jPWSkMOdNrfIdjHhHStcAwX1RM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=CJToK9is; arc=none smtp.client-ip=185.125.25.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bekD7L3R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6443DC4CEF7;
-	Wed, 11 Feb 2026 10:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770805209;
-	bh=tigK3WjfnGAezt46CWIc99ueCYXkiaw1F0UQOfpMvc8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bekD7L3RMXMAgs5CHViWy6+fJB4zWh+qiU0XdBxO13tR9nMoO6Jkl0tTSsGV/JbS4
-	 tdnpzWfEQr4mlupl/aUtq2laKrlCzEpj+oPY8jsgLjiwndiXCvD9mWsezBJPd5jtTU
-	 ssqdfgdeRq8rXn+Drq1X5fAeNPqZi6TMuYCpdxFzhmqahVPzvZ3hyp75q0CB9X6Xbf
-	 91NHvZeWG6SByuMeLgQEuHlss1PpCFtpyRUm5kKaQkvoNVYKWHuYs3E/DmoMI69OPH
-	 +Po9uUkzBV6etERyr2hgePDLcbyj4KMPbbTGhXMCzytIIKrxjp6okkmlsoAgrd08r6
-	 KTWAG81Hjd3wg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8530439E9607;
-	Wed, 11 Feb 2026 10:20:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="CJToK9is"
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f9wpx72sYzSxJ;
+	Wed, 11 Feb 2026 12:16:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1770808569;
+	bh=dCI4QP633NwXgmVSxk0byHC6mLunBnF6KDgi1+dof5M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CJToK9isw/R0h5IYdu+r8ZKYRpdtUm7jgG5kEX//ZxuyCOphD9i7R97yCmLKLbdd9
+	 2CUwDQeaToIuNGPCpClD3G5iq/rkZLw3BB0/Roiz2/VLuKajsBdpOUx7b9nkphqeoM
+	 RunQa4KJYy3AzVB/R9k0Gpd8LZixLb+XEXc3lplo=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4f9wpx2ZzjzjKX;
+	Wed, 11 Feb 2026 12:16:08 +0100 (CET)
+Date: Wed, 11 Feb 2026 12:16:02 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Chen Ni <nichen@iscas.ac.cn>
+Cc: gnoack@google.com, shuah@kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/landlock: Remove duplicate include of stdio.h
+Message-ID: <20260211.Sahriegigei2@digikod.net>
+References: <20260211062122.2975127-1-nichen@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: drivers: net: hw: Modify toeplitz.c
- to
- poll for packets
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177080520433.111319.12570283784652241957.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Feb 2026 10:20:04 +0000
-References: <20260207013018.551347-1-dimitri.daskalakis1@gmail.com>
-In-Reply-To: <20260207013018.551347-1-dimitri.daskalakis1@gmail.com>
-To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, shuah@kernel.org, andrew+netdev@lunn.ch,
- willemb@google.com, petrm@nvidia.com, gal@nvidia.com, noren@nvidia.com,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260211062122.2975127-1-nichen@iscas.ac.cn>
+X-Infomaniak-Routing: alpha
 
-Hello:
+On Wed, Feb 11, 2026 at 02:21:22PM +0800, Chen Ni wrote:
+> Remove duplicate inclusion of stdio.h in fs_bench.c to clean up
+> redundant code.
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Thanks!  I also detected this issue while running `sort -u` on the
+includes, so this is already taken into account in my next branch (with
+other small fixes).
 
-On Fri,  6 Feb 2026 17:30:18 -0800 you wrote:
-> Prior to this the receiver would sleep for the configured timeout,
-> then attempt to receive as many packets as possible. This would result
-> in a large burst of packets, and we don't necessarily need that many samples.
 > 
-> The tests now run faster.
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> ---
+>  tools/testing/selftests/landlock/fs_bench.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> Before
+> diff --git a/tools/testing/selftests/landlock/fs_bench.c b/tools/testing/selftests/landlock/fs_bench.c
+> index 733c1264e5fd..551cb615ad93 100644
+> --- a/tools/testing/selftests/landlock/fs_bench.c
+> +++ b/tools/testing/selftests/landlock/fs_bench.c
+> @@ -26,7 +26,6 @@
+>  #include <linux/prctl.h>
+>  #include <stdbool.h>
+>  #include <stdio.h>
+> -#include <stdio.h>
+>  #include <errno.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> -- 
+> 2.25.1
 > 
-> [...]
-
-Here is the summary with links:
-  - [net-next] selftests: drivers: net: hw: Modify toeplitz.c to poll for packets
-    https://git.kernel.org/netdev/net-next/c/ccb327266698
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> 
