@@ -1,124 +1,80 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DCB356A14;
-	Wed, 11 Feb 2026 10:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21A933120D;
+	Wed, 11 Feb 2026 10:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770804179; cv=none; b=tGGvfd5js2tthRHyHkOfcKgCtUCeh1GmcDIv9BULyWHxNpoiEDqHF8BT1MgHCCJbP8Ry42qY/I3nCjtgIs86ucl0vRTBb+sY6eFHVV6TtGoMLGCA5z6cbcMiO5EBxVEM/cA/uyOOY++BAeHJpZsGhiQPfBn+PRLMKzB/h9zBq0s=
+	t=1770805210; cv=none; b=NwJijr968B4IRerWGG2wK+uRborHrrsK92l772qj+B/hRr3LFcIBPKdcLuOBNavXdhaxNmPHsPYn9n76vPrdKlQRyR0A03ui4emWnIHlEE6LAA2pdsFBCz4oIIKZEU/hAypoTzapW7IjjgG1w1LVAKhjG/PVgWaZRMxeKFl6XJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770804179; c=relaxed/simple;
-	bh=jN+m9KJe/SwQ8DqClAtfykRlVVUMngHq8nXiGABhfmY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JlSOXGqvoGJwxq1n8pjEnW3czL1d2b2Y0tCpFqTNdFroUJe8c2bW+eSGQsPp3B04nTLabCsEl+AkJG9e2+u+7I+xKUc5EiegN8fZ2eRuo8U5Y3Wp8esfQoOAJKXGvv2WqPUQVvWpKOKkOtbzE6wrl35knCjhgek76m/qJh5NgnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=iondu5/x; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1770805210; c=relaxed/simple;
+	bh=tigK3WjfnGAezt46CWIc99ueCYXkiaw1F0UQOfpMvc8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=rlMfOS1pM9kAVB0NIgI0O02dM6SkW3ws7aIVM7CyKrszVEXCf0o8q6td6n2gZ+zX8WxGedoP/q43THGE3UIPL/XO0jnx7n2bqxY7Mte/lDn7woR4g+5WPfMqLUnZLQMX3RbvcOTtVQoJmLMLgYfrJ0nX86cClCLSWahYzVi5H9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bekD7L3R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="iondu5/x"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vq73I-009Gd2-Ub; Wed, 11 Feb 2026 11:02:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=3W2hLzHXfNmIW4Z7uWIgEuhgIuj2w9wMS7oKHXEkaVA=; b=iondu5/xfOoACHyhg0GSiYpP0y
-	N2BS+/XarKUo6TV7tLqtMzfvy/znawlD22jRhBBucTzrxlxFJMd1X7iyBP7y2DfHRriVUHvqI5D69
-	rsk7kt68N8OY96LGZj+LrPCIRMOgsCeBfeN4778mDzOs2Znd4CSBkoL/4G25egu8MjACT76HT4r2B
-	aEANzvVpzPbTspagOf/fcAcnhTswsdtjxuvVSXnVak23EfyzKjfBxsUX0pAveQG06lS3ne0nvzJRl
-	XQozoqdyG9k8Ymp7Al3g+Llzb9xBp0oYLeu2u0w52WegbMrZSQih7sf73B2EYb0pwVxV0Br0HWKTD
-	HrRufFTQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vq73H-0003s4-0F; Wed, 11 Feb 2026 11:02:31 +0100
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vq73F-00HJAD-Ej; Wed, 11 Feb 2026 11:02:29 +0100
-Message-ID: <b75bbc3f-85fd-4209-9ce1-3bf685ba62ff@rbox.co>
-Date: Wed, 11 Feb 2026 11:02:27 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bekD7L3R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6443DC4CEF7;
+	Wed, 11 Feb 2026 10:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770805209;
+	bh=tigK3WjfnGAezt46CWIc99ueCYXkiaw1F0UQOfpMvc8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=bekD7L3RMXMAgs5CHViWy6+fJB4zWh+qiU0XdBxO13tR9nMoO6Jkl0tTSsGV/JbS4
+	 tdnpzWfEQr4mlupl/aUtq2laKrlCzEpj+oPY8jsgLjiwndiXCvD9mWsezBJPd5jtTU
+	 ssqdfgdeRq8rXn+Drq1X5fAeNPqZi6TMuYCpdxFzhmqahVPzvZ3hyp75q0CB9X6Xbf
+	 91NHvZeWG6SByuMeLgQEuHlss1PpCFtpyRUm5kKaQkvoNVYKWHuYs3E/DmoMI69OPH
+	 +Po9uUkzBV6etERyr2hgePDLcbyj4KMPbbTGhXMCzytIIKrxjp6okkmlsoAgrd08r6
+	 KTWAG81Hjd3wg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8530439E9607;
+	Wed, 11 Feb 2026 10:20:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 3/4] bpf, sockmap: Adapt for the af_unix-specific
- lock
-To: Martin KaFai Lau <martin.lau@linux.dev>,
- Kuniyuki Iwashima <kuniyu@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Willem de Bruijn <willemb@google.com>, Cong Wang <cong.wang@bytedance.com>,
- Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
- <20260207-unix-proto-update-null-ptr-deref-v2-3-9f091330e7cd@rbox.co>
- <CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com>
- <c4eaead1-ad69-42f0-9699-5f2d555a7693@rbox.co>
- <a2f2c260-38e8-4ba3-8655-cffbee046259@linux.dev>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <a2f2c260-38e8-4ba3-8655-cffbee046259@linux.dev>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: drivers: net: hw: Modify toeplitz.c
+ to
+ poll for packets
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177080520433.111319.12570283784652241957.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Feb 2026 10:20:04 +0000
+References: <20260207013018.551347-1-dimitri.daskalakis1@gmail.com>
+In-Reply-To: <20260207013018.551347-1-dimitri.daskalakis1@gmail.com>
+To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, andrew+netdev@lunn.ch,
+ willemb@google.com, petrm@nvidia.com, gal@nvidia.com, noren@nvidia.com,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-On 2/9/26 21:17, Martin KaFai Lau wrote:
-> On 2/8/26 9:14 AM, Michal Luczaj wrote:
->> On 2/7/26 23:00, Kuniyuki Iwashima wrote:
->>> On Sat, Feb 7, 2026 at 6:35 AM Michal Luczaj <mhal@rbox.co> wrote:
->>>> This patch also happens to fix a deadlock that may occur when
->>>> bpf_iter_unix_seq_show()'s lock_sock_fast() takes the fast path and the
->>>> iter prog attempts to update a sockmap. Which ends up spinning at
->>>> sock_map_update_elem()'s bh_lock_sock():
->>>
->>> Hmm.. this seems to be a more general problem for
->>> bpf iter vs sockmap.  bpf_iter_{tcp,udp}_seq_show() also
->>> hold lock_sock(),  where this patch's solution does not help.
->>> We need to resolve this regardless of socket family.
->>
->> I don't see any deadlocks there. Note that I've mentioned lock_sock_fast()
->> fast path was a problem, not lock_sock().
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Fri,  6 Feb 2026 17:30:18 -0800 you wrote:
+> Prior to this the receiver would sleep for the configured timeout,
+> then attempt to receive as many packets as possible. This would result
+> in a large burst of packets, and we don't necessarily need that many samples.
 > 
-> For the tcp/udp, I think the bpf_iter should be fine: lock_sock() in 
-> seq_show and bh_lock_sock() in map_update. It seems redundant though.
+> The tests now run faster.
+> 
+> Before
+> 
+> [...]
 
-I wasn't sure what exactly you suspect of being redundant, so I did some
-digging:
+Here is the summary with links:
+  - [net-next] selftests: drivers: net: hw: Modify toeplitz.c to poll for packets
+    https://git.kernel.org/netdev/net-next/c/ccb327266698
 
-lock_sock() in tcp/udp iter is expected (among others?) by kfunc
-bpf_sock_destroy(). Relevant commit 4ddbcb886268 ("bpf: Add
-bpf_sock_destroy kfunc"),
-https://lore.kernel.org/all/20230519225157.760788-8-aditi.ghag@isovalent.com/
-In short: lock must be taken for synchronization of proto::diag_destroy().
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Reasons for bh_lock_sock() during bpf sockmap update are explained in
-commit 0126240f448d ("bpf: sockmap: Allow update from BPF"),
-https://lore.kernel.org/bpf/20200821102948.21918-6-lmb@cloudflare.com/
-In short: socket shouldn't be allowed to change its state during the
-update. BH lock because bpf can't sleep.
-
->  From looking at may_update_sockmap(), other bpf progs (e.g., tc) can do 
-> map_update also. On those paths, I am not sure why 
-> sock_map_update_elem() does not need to check "!sock_owned_by_user(sk)". 
-> If it is indeed an issue, it probably needs to be addressed separately.
-
-Since sockmap update can happen in a tracing prog, can you really expect a
-socket to be always owned?
-
-> It should also be helpful to be consistent with tcp/udp iter and use 
-> lock_sock() instead of lock_sock_fast() in bpf_iter_unix_seq_show().
-
-OK, I'll tweak that in v3.
 
