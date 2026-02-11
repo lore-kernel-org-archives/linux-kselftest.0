@@ -1,50 +1,50 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BFCE2309AA;
-	Wed, 11 Feb 2026 23:37:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF586301493;
+	Wed, 11 Feb 2026 23:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770853044; cv=none; b=p/1+7LUa8ObWZ4gtEn47On6cZnXdkurRqndSsTnfPDjdt9NFRsV5Nmm+rct0cLJTeCloXmwh/971ip1bAn/ggP7JqCKXuHKi2w2InidaClSmkhBsxEqQND4cB1qxWJlccafhLYgy4aHFCNEr9vhCjBx8ucyME898Hts1VKcCJ1I=
+	t=1770853047; cv=none; b=uikCZRt1bRSc1fMSIV8qn+a/sES+WsljRiqFS1vMia/EgSBaXXxJDWruka84LNzMO8aRr2w3DuwgRyv5XZcVhXKU1+6xj11eD6YkmCMGZLHrVTHN3s1xstE9tD/4/Qc6uOEFLI/QXBw8jihMdty3JJhXNQCnXFMlYwjcHXS/2o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770853044; c=relaxed/simple;
-	bh=d70P8BgJWrM5BS94U7Avsj0AtcFvIYcVY1eR1EEIOes=;
+	s=arc-20240116; t=1770853047; c=relaxed/simple;
+	bh=olz2dcO9Zm8wYtumYJCwZYVbCalQt/d4wcq+zOTPXok=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xzh8U+c+9rFXealSGr78eMgCB/yl2uST1hlwyXhCQHA0JFn88Vt7/myROTvxh6Sg6DCCfMmUEE9hMKr/IG15bUbJ9Dye4JgeUCHxqRErH75cVX5mow9eMvR9PCxdENVNuikFQm/BeYdGYMLNa8WO7UP39xIaX/K2sNm7KrDC34o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NAImxoY8; arc=none smtp.client-ip=192.198.163.17
+	 In-Reply-To:Content-Type; b=PMzhlZiYy50W3Dfs0o5BXRlsKzXseaM5h/m3aauohRqhdxj0JyffQONT+OD4wF8Wup3dVQ3M6Dq9gUdiRCTqUU47fFMeHDMVoRGXo/ckzaYccHrrKC6FN/SBwB4VVH1ylHwR6KTMtl/akBMrgV+eYpYuyD6NW4FMKdcO+st6os8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ktomDEF5; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NAImxoY8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ktomDEF5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770853043; x=1802389043;
+  t=1770853046; x=1802389046;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=d70P8BgJWrM5BS94U7Avsj0AtcFvIYcVY1eR1EEIOes=;
-  b=NAImxoY8PICYL6OG45/UlUqa7mYcQkDDkKyAw+EZx19vjkWcZp7Cx5OX
-   DF7ELH9yJ1FDpDJo1vjw4t4s5AeBcw78RsUreVjBHI3woyl6Levn+6gSi
-   dLIIwyJLl4XWdpeIDmTIVSlkWkvo+jqrfZzZhFSrovIfWdOq1Fq3T7UUs
-   nn9MasB2y/2ZFAcCOGP8g9eIq0Y75qiiY2A7A93VArriu5FzltFQiL6kV
-   uS+xxU/KgAVGz1TGXo1FZ7bvhullgCLRBPlapOV+ho2qVwNo0rukXKnlE
-   lfNtC3rfPreRdcg/PpfimkruWh69m8vbkyrHB+gdqUS68e6JdYt1eC+dS
-   Q==;
-X-CSE-ConnectionGUID: Lsb0o6d7SiOgwd9D3nIHRA==
-X-CSE-MsgGUID: dUYvAs3gR660/WNobv2g8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="71916628"
+  bh=olz2dcO9Zm8wYtumYJCwZYVbCalQt/d4wcq+zOTPXok=;
+  b=ktomDEF5M4CavreFZBL/m8DCmKr7qjSCDKIk1eJZbwUSqZtobYa2jGgD
+   2HXjfbzI4p2buu+dPiTTGn5whzbo980ArIq5rxLPZT0KtNEC73KfHAthB
+   KqeoBqNvJ7z/4LWjSTQ7gnM3A1IlpJVn5G/BRz0g+5PL45Cbe1akwDgw1
+   9f+oC+LuAERCmE1ZD+qibWdauDqGEcnGy4U3X4+21+fizuygaNSq8vtDU
+   9P6/8AFVj3zYr18tfI8vJBM/aBzkODMbojuqxQsSWtQnPl+EWazj4I93l
+   3PbnZb+Q9aaToRidyaPMtq19j4GUWdRMTpL4FjVHGfTu43D5E87n1Rhun
+   w==;
+X-CSE-ConnectionGUID: FXntblNvSkufJ6g5wU54pA==
+X-CSE-MsgGUID: lgRg2J8NR9CMfPgsUFUGEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="71916643"
 X-IronPort-AV: E=Sophos;i="6.21,285,1763452800"; 
-   d="scan'208";a="71916628"
+   d="scan'208";a="71916643"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 15:37:22 -0800
-X-CSE-ConnectionGUID: eAVK927PRtSoHd7raM2/xA==
-X-CSE-MsgGUID: rpuR4iAmSu+DsZRBmGNIkQ==
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 15:37:25 -0800
+X-CSE-ConnectionGUID: k1+BYeRQQ/ePww4d04qX5g==
+X-CSE-MsgGUID: 06JboBe1S5qkqEfv1vmKEQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,285,1763452800"; 
-   d="scan'208";a="212495883"
+   d="scan'208";a="212495922"
 Received: from unknown (HELO [10.241.241.163]) ([10.241.241.163])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 15:37:23 -0800
-Message-ID: <ae46c7fb-dbc4-4f62-89b9-0cb003e65547@intel.com>
-Date: Wed, 11 Feb 2026 15:37:21 -0800
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 15:37:26 -0800
+Message-ID: <ee039e1a-d2aa-4387-ab62-00d425e46423@intel.com>
+Date: Wed, 11 Feb 2026 15:37:25 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,8 +52,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/8] selftests/resctrl: Prepare for parsing multiple
- events per iMC
+Subject: Re: [PATCH 3/8] selftests/resctrl: Support multiple events associated
+ with iMC
 To: Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org,
  Dave.Martin@arm.com, james.morse@arm.com, tony.luck@intel.com,
  peternewman@google.com, babu.moger@amd.com, ilpo.jarvinen@linux.intel.com
@@ -61,34 +61,38 @@ Cc: dapeng1.mi@linux.intel.com, fenghuay@nvidia.com,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  patches@lists.linux.dev
 References: <cover.1770406608.git.reinette.chatre@intel.com>
- <3ab21be3fcd9a85e1e204d4e28443fbe984998e1.1770406608.git.reinette.chatre@intel.com>
+ <a8928af52dcc2f2f5a97149416d009e267d23593.1770406608.git.reinette.chatre@intel.com>
 Content-Language: en-US
 From: "Chen, Zide" <zide.chen@intel.com>
-In-Reply-To: <3ab21be3fcd9a85e1e204d4e28443fbe984998e1.1770406608.git.reinette.chatre@intel.com>
+In-Reply-To: <a8928af52dcc2f2f5a97149416d009e267d23593.1770406608.git.reinette.chatre@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
 On 2/10/2026 8:50 AM, Reinette Chatre wrote:
-> The events needed to read memory bandwidth are discovered by iterating
-> over every memory controller (iMC) within /sys/bus/event_source/devices.
-> Each iMC's PMU is assumed to have one event to measure read memory
-> bandwidth that is represented by the sysfs cas_count_read file. The event's
-> configuration is read from "cas_count_read" and stored as an element of
-> imc_counters_config[] by read_from_imc_dir() that receives the
-> index of the array where to store the configuration as argument.
+> The resctrl selftests discover needed parameters to perf_event_open() via
+> sysfs. The PMU associated with every memory controller (iMC) is discovered
+> via the /sys/bus/event_source/devices/uncore_imc_N/type file while
+> the read memory bandwidth event type and umask is discovered via
+> /sys/bus/event_source/devices/uncore_imc_N/events/cas_count_read.
 > 
-> It is possible that an iMC's PMU may have more than one event that should
-> be used to measure memory bandwidth.
+> Newer systems may have multiple events that expose read memory bandwidth.
+> For example,
+>  /sys/bus/event_source/devices/uncore_imc_N/events/cas_count_read_sch0
+>  /sys/bus/event_source/devices/uncore_imc_N/events/cas_count_read_sch1
 > 
-> Change semantics to not provide the index of the array to
-> read_from_imc_dir() but instead a pointer to the index. This enables
-> read_from_imc_dir() to store configurations for more than one event by
-> incrementing the index to imc_counters_config[] itself.
+> Support parsing of iMC PMU properties when the PMU may have multiple events
+> to measure read memory bandwidth. The PMU only needs to be discovered once.
+> Split the parsing of event details from actual PMU discovery in order to
+> loop over all events associated with the PMU. Match all events with the
+> cas_count_read prefix instead of requiring there to be one file with that
+> name.
 > 
-> Ensure that the same type is consistently used for the index as it is
-> passed around during counter configuration.
+> Make the parsing code more robust. With strings passed around to create
+> needed paths, use snprintf() instead of sprintf() to ensure there is
+> always enough space to create the path. Ensure there is enough room in
+> imc_counters_config[] before attempting to add an entry.
 > 
 > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 
@@ -96,63 +100,159 @@ Reviewed-by: Zide Chen <zide.chen@intel.com>
 
 
 > ---
->  tools/testing/selftests/resctrl/resctrl_val.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>  tools/testing/selftests/resctrl/resctrl_val.c | 112 ++++++++++++++----
+>  1 file changed, 90 insertions(+), 22 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-> index 2cc22f61a1f8..25c8101631e0 100644
+> index 25c8101631e0..7aae0cc5aee9 100644
 > --- a/tools/testing/selftests/resctrl/resctrl_val.c
 > +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-> @@ -73,7 +73,7 @@ static void read_mem_bw_ioctl_perf_event_ioc_disable(int i)
->   * @cas_count_cfg:	Config
->   * @count:		iMC number
->   */
-> -static void get_read_event_and_umask(char *cas_count_cfg, int count)
-> +static void get_read_event_and_umask(char *cas_count_cfg, unsigned int count)
->  {
->  	char *token[MAX_TOKENS];
->  	int i = 0;
-> @@ -110,7 +110,7 @@ static int open_perf_read_event(int i, int cpu_no)
+> @@ -11,10 +11,10 @@
+>  #include "resctrl.h"
+>  
+>  #define UNCORE_IMC		"uncore_imc"
+> -#define READ_FILE_NAME		"events/cas_count_read"
+> +#define READ_FILE_NAME		"cas_count_read"
+>  #define DYN_PMU_PATH		"/sys/bus/event_source/devices"
+>  #define SCALE			0.00006103515625
+> -#define MAX_IMCS		20
+> +#define MAX_IMCS		40
+>  #define MAX_TOKENS		5
+>  
+>  #define CON_MBM_LOCAL_BYTES_PATH		\
+> @@ -109,21 +109,102 @@ static int open_perf_read_event(int i, int cpu_no)
+>  	return 0;
 >  }
 >  
+> +static int parse_imc_read_bw_events(char *imc_dir, unsigned int type,
+> +				    unsigned int *count)
+> +{
+> +	char imc_events[1024], imc_counter_cfg[1024], cas_count_cfg[1024];
+> +	unsigned int org_count = *count;
+> +	struct dirent *ep;
+> +	int path_len;
+> +	int ret = -1;
+> +	FILE *fp;
+> +	DIR *dp;
+> +
+> +	path_len = snprintf(imc_events, sizeof(imc_events), "%sevents", imc_dir);
+> +	if (path_len >= sizeof(imc_events)) {
+> +		ksft_print_msg("Unable to create path to %sevents\n", imc_dir);
+> +		return -1;
+> +	}
+> +	dp = opendir(imc_events);
+> +	if (dp) {
+> +		while ((ep = readdir(dp))) {
+> +			/*
+> +			 * Parse all event files with READ_FILE_NAME
+> +			 * prefix that contain the event number and umask.
+> +			 * Skip files containing "." that contain unused
+> +			 * properties of event.
+> +			 */
+> +			if (!strstr(ep->d_name, READ_FILE_NAME) ||
+> +			    strchr(ep->d_name, '.'))
+> +				continue;
+> +
+> +			path_len = snprintf(imc_counter_cfg, sizeof(imc_counter_cfg),
+> +					    "%s/%s", imc_events, ep->d_name);
+> +			if (path_len >= sizeof(imc_counter_cfg)) {
+> +				ksft_print_msg("Unable to create path to %s/%s\n",
+> +					       imc_events, ep->d_name);
+> +				goto out_close;
+> +			}
+> +			fp = fopen(imc_counter_cfg, "r");
+> +			if (!fp) {
+> +				ksft_perror("Failed to open iMC config file");
+> +				goto out_close;
+> +			}
+> +			if (fscanf(fp, "%1023s", cas_count_cfg) <= 0) {
+> +				ksft_perror("Could not get iMC cas count read");
+> +				fclose(fp);
+> +				goto out_close;
+> +			}
+> +			fclose(fp);
+> +			if (*count >= MAX_IMCS) {
+> +				ksft_print_msg("Maximum iMC count exceeded\n");
+> +				goto out_close;
+> +			}
+> +
+> +			imc_counters_config[*count].type = type;
+> +			get_read_event_and_umask(cas_count_cfg, *count);
+> +			/* Do not fail after incrementing *count. */
+> +			*count += 1;
+> +		}
+> +		if (*count == org_count) {
+> +			ksft_print_msg("Unable to find events in %s\n", imc_events);
+> +			goto out_close;
+> +		}
+> +	} else {
+> +		ksft_perror("Unable to open PMU events directory");
+> +		goto out;
+> +	}
+> +	ret = 0;
+> +out_close:
+> +	closedir(dp);
+> +out:
+> +	return ret;
+> +}
+> +
 >  /* Get type and config of an iMC counter's read event. */
-> -static int read_from_imc_dir(char *imc_dir, int count)
-> +static int read_from_imc_dir(char *imc_dir, unsigned int *count)
+>  static int read_from_imc_dir(char *imc_dir, unsigned int *count)
 >  {
->  	char cas_count_cfg[1024], imc_counter_cfg[1024], imc_counter_type[1024];
+> -	char cas_count_cfg[1024], imc_counter_cfg[1024], imc_counter_type[1024];
+> +	char imc_counter_type[1024];
+> +	unsigned int type;
+> +	int path_len;
 >  	FILE *fp;
-> @@ -123,7 +123,7 @@ static int read_from_imc_dir(char *imc_dir, int count)
+> +	int ret;
+>  
+>  	/* Get type of iMC counter */
+> -	sprintf(imc_counter_type, "%s%s", imc_dir, "type");
+> +	path_len = snprintf(imc_counter_type, sizeof(imc_counter_type),
+> +			    "%s%s", imc_dir, "type");
+> +	if (path_len >= sizeof(imc_counter_type)) {
+> +		ksft_print_msg("Unable to create path to %s%s\n",
+> +			       imc_dir, "type");
+> +		return -1;
+> +	}
+>  	fp = fopen(imc_counter_type, "r");
+>  	if (!fp) {
+>  		ksft_perror("Failed to open iMC counter type file");
 >  
 >  		return -1;
 >  	}
-> -	if (fscanf(fp, "%u", &imc_counters_config[count].type) <= 0) {
-> +	if (fscanf(fp, "%u", &imc_counters_config[*count].type) <= 0) {
+> -	if (fscanf(fp, "%u", &imc_counters_config[*count].type) <= 0) {
+> +	if (fscanf(fp, "%u", &type) <= 0) {
 >  		ksft_perror("Could not get iMC type");
 >  		fclose(fp);
 >  
-> @@ -147,7 +147,8 @@ static int read_from_imc_dir(char *imc_dir, int count)
+> @@ -131,24 +212,11 @@ static int read_from_imc_dir(char *imc_dir, unsigned int *count)
 >  	}
 >  	fclose(fp);
 >  
-> -	get_read_event_and_umask(cas_count_cfg, count);
-> +	get_read_event_and_umask(cas_count_cfg, *count);
-> +	*count += 1;
+> -	/* Get read config */
+> -	sprintf(imc_counter_cfg, "%s%s", imc_dir, READ_FILE_NAME);
+> -	fp = fopen(imc_counter_cfg, "r");
+> -	if (!fp) {
+> -		ksft_perror("Failed to open iMC config file");
+> -
+> -		return -1;
+> -	}
+> -	if (fscanf(fp, "%1023s", cas_count_cfg) <= 0) {
+> -		ksft_perror("Could not get iMC cas count read");
+> -		fclose(fp);
+> -
+> -		return -1;
+> +	ret = parse_imc_read_bw_events(imc_dir, type, count);
+> +	if (ret) {
+> +		ksft_print_msg("Unable to parse bandwidth event and umask\n");
+> +		return ret;
+>  	}
+> -	fclose(fp);
+> -
+> -	get_read_event_and_umask(cas_count_cfg, *count);
+> -	*count += 1;
 >  
 >  	return 0;
 >  }
-> @@ -196,13 +197,12 @@ static int num_of_imcs(void)
->  			if (temp[0] >= '0' && temp[0] <= '9') {
->  				sprintf(imc_dir, "%s/%s/", DYN_PMU_PATH,
->  					ep->d_name);
-> -				ret = read_from_imc_dir(imc_dir, count);
-> +				ret = read_from_imc_dir(imc_dir, &count);
->  				if (ret) {
->  					closedir(dp);
->  
->  					return ret;
->  				}
-> -				count++;
->  			}
->  		}
->  		closedir(dp);
 
