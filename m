@@ -1,51 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7CF10FD;
-	Wed, 11 Feb 2026 04:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD771373;
+	Wed, 11 Feb 2026 06:04:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770785961; cv=none; b=iMLlZAoUSrgKx5rLjP+3BgwTdG9ZsiV46yS+jOnmXADsWPYaXWuAWUsv5YnTHBXB+Qfug6744GAoXb/5J82SRNKt3s0A7OJnF9OnOZ1v/j0Z0UK8JVCNV+VZdCqgjowHoQsQXudiKe/7eqLAr3nuJPBxxCvUx84OG7HrKKJdmoc=
+	t=1770789861; cv=none; b=CUotEKFLWO+tJxcB9rmTUKaZSDLv/RRKEvA5yPhCDdRjcvOEHnxKJ6IFeNyoHlqFN+g/zw5ZlqOhJw21T6roHPWWdcrvb3qoHJWRUKPbqQox8lmevPubA+ftC/0w+0aiVJHc5KzNqHCGWMSSa0bhTyt83z7VOPhh1voTQRyuzu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770785961; c=relaxed/simple;
-	bh=IBdsFALaueCcwFrYtMP1OcZ7X8mIO5re89iQmAye/MU=;
+	s=arc-20240116; t=1770789861; c=relaxed/simple;
+	bh=1ba4HtqH6wJILWm4/0xJUBvvlpODk4MGkINVKN5zbxU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=neXJakkX03DXg+7fsz62ZKOnImFZWufzLT6HjtF/LaIhamJwaCq3SnCgbN+UruIjhOCKhsuy5YawtYCtoEJSvFzCDlQle4v2+j+4FghJqjF0clrserHn0yy4VhOctiyBWhbr6TJW52mZ1Qem5LJyw8S+OxlxsGMZGHuLZz17bl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GLg00499; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=eJ/P/iMkhtcUDH3TN0mci1qiVStGOFwmOkwsyuSj8+hutK4MxMa3uqKreRuWBqSZ54fNc/hqrHZsS4NwjBMWauDf1uUCd8g4SbtffCf66a/r5CIbiACKZXpyWwdg3298cdOViGQ0zGstn4VuAlZSAxiT9MAg+VOSWuPFNi67pdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xu5Mobm0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GLg00499"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F71C4CEF7;
-	Wed, 11 Feb 2026 04:59:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xu5Mobm0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB967C4CEF7;
+	Wed, 11 Feb 2026 06:04:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770785961;
-	bh=IBdsFALaueCcwFrYtMP1OcZ7X8mIO5re89iQmAye/MU=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=GLg004993sjxd1je4KGt9fqnN4SMaKxkcC8q13dgjeBWGA5ZhKtyX+5gQ5J8ZRiK6
-	 i3DHsE6byHcPOKVrezAgC9Wwk6+aGR45eG7O7H9qvU8vVVGTMoUPENmb0AwxXdrVLa
-	 G/hcwqSD2c7da3IZEDeufZBlz26XHyOlfATXtNXkQG6dM1zAu1MaB2Fc9urkXUq5zR
-	 YcXY/sxUl0FP1nQFflsnhuHFi0mviYpOqgnfTdTiVYM4Eg/oH0pdaWGR/kZJj6lMzE
-	 86N8ZLn17Ni70hMzfN5wMFrHSVmm5wvXsQNz2Kwku+mTj19jy8fSgHf6Y8X7DXAysd
-	 vnjzqgOABfebA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id A50C7CE0E40; Tue, 10 Feb 2026 20:59:20 -0800 (PST)
-Date: Tue, 10 Feb 2026 20:59:20 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Subject: Re: [PATCH] revocable: hide the implementation details from users
-Message-ID: <de233174-795f-4549-abfe-08060016c541@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260206103216.38623-1-bartosz.golaszewski@oss.qualcomm.com>
- <fc68da89-7c2b-432b-9a78-6ab55fcb0e9e@paulmck-laptop>
- <CAMRc=MeHWkDCi0GvXFYxDhCeWMydjT9wOw3_d1d+c+VE7y0-7Q@mail.gmail.com>
- <aYvj5h4tEZI-habX@google.com>
+	s=k20201202; t=1770789860;
+	bh=1ba4HtqH6wJILWm4/0xJUBvvlpODk4MGkINVKN5zbxU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xu5Mobm0F8wyhieAmIGzh63x8lptqVNcvo43aLWfKj6Tzv+Zl/kKchoY9ZdsHpeY9
+	 7VY7AX4De2TIfQU33FMKPr6fbkei4k9WsONs2oo7VhZtr3CQp7M+FrWIMR0CcEV2Bw
+	 idpILaIQ8PtxB+tqtiZhDkYCY0OamXU/ZQC6DQvOWE0CgBDJ4sBAW/xcziwr/oevAp
+	 ATuo35V/KFJp1kLKUH/ym/DEQd7QymS16+vW/OsOhdX9h0EfVKeWyVrw07I45sDb7d
+	 0FXA6azSR3Rqcixdu+T53iaoPlH+4auPPf+s5B2tud/yLWQPikgXkLOxXx/3AwixPf
+	 Fpqc4cdK//yzQ==
+Date: Wed, 11 Feb 2026 08:04:09 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+	Andrea Arcangeli <aarcange@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 00/17] mm, kvm: allow uffd suppot in guest_memfd
+Message-ID: <aYwb2XgRiFayzBXS@kernel.org>
+References: <20260127192936.1250096-1-rppt@kernel.org>
+ <aYJg5lT9MG0BQFkG@x1.local>
+ <0032ac8b-06ba-4f4b-ad66-f0195eea1c15@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,73 +60,141 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aYvj5h4tEZI-habX@google.com>
+In-Reply-To: <0032ac8b-06ba-4f4b-ad66-f0195eea1c15@kernel.org>
 
-On Wed, Feb 11, 2026 at 02:05:26AM +0000, Tzung-Bi Shih wrote:
-> On Mon, Feb 09, 2026 at 05:13:17AM -0600, Bartosz Golaszewski wrote:
-> > On Fri, 6 Feb 2026 23:02:44 +0100, "Paul E. McKenney" <paulmck@kernel.org> said:
-> > > On Fri, Feb 06, 2026 at 11:32:06AM +0100, Bartosz Golaszewski wrote:
-> > >> Revocable stacks two layers of SRCU on top of each other: one to protect
-> > >> the actual revocable resource and another to synchronize the revoking.
-> > >> While this design itself is questionable, it also forces the user of
-> > >> revokable to think about the implementation details and annotate the
-> > >> pointer holding the address of the revocable_provider struct with __rcu.
-> > >> Hide the real type of struct revokable_provider behind a typedef to free
-> > >> the users from this responsability. While adding new typedefs goes
-> > >> against current guidelines, it's still better than the current
-> > >> requirement.
-> > >>
-> > >> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> > >> ---
-> > >> I realized that one important person was missing from the whole review
-> > >> process: Paul E. McKenney who wrote and maintains SRCU. I had Paul look
-> > >> at the SRCU usage in GPIO and I think he should have also signed off on
-> > >> revocable before it got queued.
-> > >>
-> > >> Paul: I'm Cc'ing you on this patch to bring revocable to your attention.
-> > >> The series that implemented it and made its way into v7.0 is here:
-> > >>
-> > >>   https://lore.kernel.org/all/20260116080235.350305-1-tzungbi@kernel.org/
-> > >>
-> > >> Could you please take a look and say if the design looks sane to you?
-> > >> Especially the double SRCU on the revocable_provider.
-> > >
-> > > The first patch in the above URL adds SRCU, and the other
-> > > two add various tests.  I do not see a double SRCU, just an
-> > > srcu_read_lock() in revocable_try_access() and an srcu_read_unlock()
-> > > in revocable_withdraw_access().
-> > >
-> > > You are allowed to nest srcu_read_lock(), if that is what you are asking.
-> > > *However*, nesting revocable_try_access() on the same revocable structure
-> > > is buggy because the second call to revocable_try_access() would overwrite
-> > > the rp->srcu value written by the first call.  This could result in both
-> > > SRCU grace-period hangs and too-short SRCU grace periods, more likely
-> > > the former than the latter.
-> > >
-> > > Or do you mean something else by "double SRCU"?
-> > >
-> > 
-> > This series didn't have it yet, it appeared as a fix to a race reported after
-> > it was queued, sorry for the confusion. I'm talking about this bit[1] here.
-> > It returns an __rcu-annotated pointer, forcing the user to keep and manage it.
-> > 
-> > This is because when revoking the resource[2], the pointer storing the address
-> > of the revokable provider is also managed by SRCU - in addition to the
-> > revokable resource itself which seems to me like a weird concept. I understand
-> > the race condition it fixes but I assumed the whole concept of revokable is to
-> > free the user from being bothered by the implementation details behind it which
-> > leak out of the API if you need to keep __rcu around.
+On Mon, Feb 09, 2026 at 04:35:47PM +0100, David Hildenbrand (Arm) wrote:
+> On 2/3/26 21:56, Peter Xu wrote:
+>
+> > +static vm_fault_t fault_process_userfaultfd(struct vm_fault *vmf)
+> > +{
+> > +	struct vm_area_struct *vma = vmf->vma;
+> > +	struct inode *inode = file_inode(vma->vm_file);
+> > +	/*
+> > +	 * NOTE: we could double check this hook present when
+> > +	 * UFFDIO_REGISTER on MISSING or MINOR for a file driver.
+> > +	 */
+> > +	struct folio *folio =
+> > +	    vma->vm_ops->uffd_ops->get_folio_noalloc(inode, vmf->pgoff);
+> > +
+> > +	if (!IS_ERR_OR_NULL(folio)) {
+> > +		/*
+> > +		 * TODO: provide a flag for get_folio_noalloc() to avoid
+> > +		 * locking (or even the extra reference?)
+> > +		 */
+> > +		folio_unlock(folio);
+> > +		folio_put(folio);
+> > +		if (userfaultfd_minor(vma))
+> > +			return handle_userfault(vmf, VM_UFFD_MINOR);
+> > +	} else {
+> > +		return handle_userfault(vmf, VM_UFFD_MISSING);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   /*
+> >    * The mmap_lock must have been held on entry, and may have been
+> >    * released depending on flags and vma->vm_ops->fault() return value.
+> > @@ -5370,16 +5397,20 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
+> >   			return VM_FAULT_OOM;
+> >   	}
+> > +	/*
+> > +	 * If this is an userfaultfd trap, process it in advance before
+> > +	 * triggering the genuine fault handler.
+> > +	 */
+> > +	if (userfaultfd_missing(vma) || userfaultfd_minor(vma)) {
+> > +		ret = fault_process_userfaultfd(vmf);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+
+I agree this is neater than handling VM_FAULT_UFFD.
+I'd just move the checks for userfaultfd_minor() and userfaultfd_missing()
+inside fault_process_userfaultfd().
+
+> > +
+> >   	ret = vma->vm_ops->fault(vmf);
+> >   	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY |
+> > -			    VM_FAULT_DONE_COW | VM_FAULT_UFFD_MINOR |
+> > -			    VM_FAULT_UFFD_MISSING))) {
+> > -		if (ret & VM_FAULT_UFFD_MINOR)
+> > -			return handle_userfault(vmf, VM_UFFD_MINOR);
+> > -		if (ret & VM_FAULT_UFFD_MISSING)
+> > -			return handle_userfault(vmf, VM_UFFD_MISSING);
+> > +			    VM_FAULT_DONE_COW)))
+> >   		return ret;
+> > -	}
+> >   	folio = page_folio(vmf->page);
+> >   	if (unlikely(PageHWPoison(vmf->page))) {
+> > diff --git a/mm/shmem.c b/mm/shmem.c
+> > index eafd7986fc2ec..5286f28b3e443 100644
+> > --- a/mm/shmem.c
+> > +++ b/mm/shmem.c
+> > @@ -2484,13 +2484,6 @@ static int shmem_get_folio_gfp(struct inode *inode, pgoff_t index,
+> >   	fault_mm = vma ? vma->vm_mm : NULL;
+> >   	folio = filemap_get_entry(inode->i_mapping, index);
+> > -	if (folio && vma && userfaultfd_minor(vma)) {
+> > -		if (!xa_is_value(folio))
+> > -			folio_put(folio);
+> > -		*fault_type = VM_FAULT_UFFD_MINOR;
+> > -		return 0;
+> > -	}
+> > -
+> >   	if (xa_is_value(folio)) {
+> >   		error = shmem_swapin_folio(inode, index, &folio,
+> >   					   sgp, gfp, vma, fault_type);
+> > @@ -2535,11 +2528,6 @@ static int shmem_get_folio_gfp(struct inode *inode, pgoff_t index,
+> >   	 * Fast cache lookup and swap lookup did not find it: allocate.
+> >   	 */
+> > -	if (vma && userfaultfd_missing(vma)) {
+> > -		*fault_type = VM_FAULT_UFFD_MISSING;
+> > -		return 0;
+> > -	}
+> > -
+> >   	/* Find hugepage orders that are allowed for anonymous shmem and tmpfs. */
+> >   	orders = shmem_allowable_huge_orders(inode, vma, index, write_end, false);
+> >   	if (orders > 0) {
+> > diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> > index 14cca057fc0ec..bd0de685f42f8 100644
+> > --- a/virt/kvm/guest_memfd.c
+> > +++ b/virt/kvm/guest_memfd.c
+> > @@ -421,26 +421,6 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
+> >   	folio = __filemap_get_folio(inode->i_mapping, vmf->pgoff,
+> >   				    FGP_LOCK | FGP_ACCESSED, 0);
+> > -	if (userfaultfd_armed(vmf->vma)) {
+> > -		/*
+> > -		 * If userfaultfd is registered in minor mode and a folio
+> > -		 * exists, return VM_FAULT_UFFD_MINOR to trigger the
+> > -		 * userfaultfd handler.
+> > -		 */
+> > -		if (userfaultfd_minor(vmf->vma) && !IS_ERR_OR_NULL(folio)) {
+> > -			ret = VM_FAULT_UFFD_MINOR;
+> > -			goto out_folio;
+> > -		}
+> > -
+> > -		/*
+> > -		 * Check if userfaultfd is registered in missing mode. If so,
+> > -		 * check if a folio exists in the page cache. If not, return
+> > -		 * VM_FAULT_UFFD_MISSING to trigger the userfaultfd handler.
+> > -		 */
+> > -		if (userfaultfd_missing(vmf->vma) && IS_ERR_OR_NULL(folio))
+> > -			return VM_FAULT_UFFD_MISSING;
+> > -	}
+> > -
+> >   	/* folio not in the pagecache, try to allocate */
+> >   	if (IS_ERR(folio))
+> >   		folio = __kvm_gmem_folio_alloc(inode, vmf->pgoff);
 > 
-> Please hold off on reviewing the patch and the "double SRCU" usage for now.
-> I'll remove the second RCU in the next version, which should serve as a
-> better starting point for a clean review.
+> That looks better in general. We should likely find a better/more consistent
+> name for fault_process_userfaultfd().
 
-Will do, thank you!
+__do_userfault()? :)
+ 
+> -- 
+> Cheers,
+> 
+> David
 
-> Side note: It was actually one SRCU and one RCU, not a double SRCU.
-
-That does sound more likely, though you really could nest SRCU or use
-different srcu_struct structures in the same algorithm.  But let's see
-what you come up with.
-
-							Thanx, Paul
+-- 
+Sincerely yours,
+Mike.
