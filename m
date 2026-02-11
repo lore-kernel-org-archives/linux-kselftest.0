@@ -1,75 +1,250 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4318E35CBB6;
-	Wed, 11 Feb 2026 21:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770846201; cv=none; b=hl6mx3Z/v9v6bhNC6wZQwgNW3VXuEP1PXZag5V6wSDk6bRTwxKbUJkth3Ms9ezO7THbPOWdiQ9MFs7/iPEe8ZoQzLRYo0boqj7IqFwE/15EsjVkBcb6hl2uo7F0jo2AnDdgKaqVQRbmpPyJPbbJEfHQFWwsvoohnRobUOtzLQEo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770846201; c=relaxed/simple;
-	bh=bNROb0Xm5noBpNAsZ86T2IEmyxyNRIYb+fro2hrL7VE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tle34z+c8/Yq67q1C45E6R7dxLENKng8e3TWQSHlDPKszWCk+QkoGn/lNeZVuJbBf8nuP3cTvn+os+Hxm0X+iG+jEgLbALIAW1mJjoPz8imOhBEiy7i491r8F84yQX0a5H6+PyRkwLf7dwGA3Wu9D7ke9Bhc8AxhKUJNgXvM3xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7GwLPJq; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B613C3161AB
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 22:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770847727; cv=pass; b=bKtsFs/hLd0eBEKSWYCelnbQ+62jLKlo2KbjcxRajEhwfKdTcvpvDAPHp2ZO16o3OVy1kh1UYDLXH2RmMo07l2gv73ZAoHYuQP22RL1TwTSjs4vo6ab58G/UGrijs7ZPoXSbFRYgnD4SB8EjxxL79rY74km6LXSLTybHYE3oEk0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770847727; c=relaxed/simple;
+	bh=YTEc7yz++McjM/QESfkzmoIxz5gszvA6+FEULAO3vW8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Sc708/0y+4eQVd6N7SWDKvPz1x13q7QbftEP0AdwzXkW6Dnoqf8/fCvsqh1Y3TifSwjASqdIN1Rp2bMu7G68hO0ZpwsqPl8NVEBDmKnquckJ44vFOZFUabQs7GY9/Wc4JgQ9lHKjUQ1elTAQF7IzJBXiTwMnDIS4OUgvsQG70kE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NKEMc8KQ; arc=pass smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7GwLPJq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3100BC4CEF7;
-	Wed, 11 Feb 2026 21:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770846200;
-	bh=bNROb0Xm5noBpNAsZ86T2IEmyxyNRIYb+fro2hrL7VE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=d7GwLPJqptyvu2mMgLGqSkQahZxDJTuw6WPZDdRR153DQiX7ILoOXpHjo+AFvNDeH
-	 vLJyxe5+WZt4ltQITakdwkfg0IzORzDNmU1Vx430VEm6YRXEe45Nd+qhM0YBV1h86s
-	 xwhOdj99IJaYoHN8XgBFMVNuU/Zf0Tm+7CcFMxnsNbAVQL51A9sHpg2P1JvJlNvRTj
-	 +TAqm+SCYbi3fKMVd66WoCOTAuzvcg2NGdOzJCqHRZriLynBT/jsFqo7oEhcigkh4D
-	 xmTzHOmNF5N8B+ZYurWvuXU6whSv1/8ZsrdNEpTpZOfgCBQ7eHn9zCPeaEpGkRqKt6
-	 73ov9q/gQqH2Q==
-Date: Wed, 11 Feb 2026 13:43:19 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Yael Chemla <ychemla@nvidia.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, Willem de
- Bruijn <willemb@google.com>, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>, Gal
- Pressman <gal@nvidia.com>, noren@nvidia.com
-Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: rss: validate min
- RSS table size
-Message-ID: <20260211134319.39710c1d@kernel.org>
-In-Reply-To: <9f535014-80eb-4f57-b047-3638579bde9a@nvidia.com>
-References: <20260131225454.1225151-1-kuba@kernel.org>
-	<9f535014-80eb-4f57-b047-3638579bde9a@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NKEMc8KQ"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-35640ad94d3so2065646a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 14:08:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770847726; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LIrtyIhUDVc2Aq1QliZjJWenJUOHz7ylrpwt70C90BCgtZnzzroK+eK77wa+MLg0Eb
+         227GY0fwolZtbNtWO4ZgpwY7v+P0W1D6xFnH0hXp2kK0U/78pla1vftuZg5oAPXPSR7a
+         NKMjdFS+86zUWyzchMDUfqZewmxzwra8bJIRCZouKb4fFABoI+TIxphVuUlrcSIIwatD
+         NGRHXIQdRVPsHL2vZ0YbG64nmeJEXGlq+zUdofHC+mgAp98xgXwQPiiiZBIi/yAnOt7r
+         YFpqYNc9qiniV1LO4xKgFIcTBda+Gg8zVS1u6KTcOTP9uxWfzGvoN+R1onY3aBihx0D5
+         gdfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=aBH8LUgAoQkvcJBNFakHNRaolsL29KJZe94++vwPAx8=;
+        fh=nkVcec6cWV7LEDWZZv6/EhMWdmVxipHJdngy5rvDyBA=;
+        b=QNWWRxZTGQfwQlqQKXJAx3TW8skAKi0finmZjZeMvcb9k3U1VmFplfp4sJ5iuO1ksa
+         izWs2a75WY0Hj1oUf3vTA6cztghXvdy16XmAOi0dVfoRaWXM3Jl7Iw8PINKejP9BHQsr
+         yGshfVzjPcYRrtDLgkvU1fzGU6m273LccgIx9E3wZVv0tVuGGKxYjLks2z/bgtyE/HKH
+         pgOn4MX7owijVk/X8PgGJhSz5nBTXuEcR8qp1gMuAsIP3ghNb0wZXW3eVM3nCT6kVWdm
+         jV+wuIaBZflvj0omeL63KamT8rUlkcbdWyeDKazHcZIEymLZ3rFTOywP6bvtaB+Uk+GA
+         6OWg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770847726; x=1771452526; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aBH8LUgAoQkvcJBNFakHNRaolsL29KJZe94++vwPAx8=;
+        b=NKEMc8KQYqzZgd/32ApugbQfpSTM7iHGzu6RpUeOFRcsNzbJ581VL8koHKiDCS7jLd
+         +QXz/2qgsrKBFznkGa3zcPjBAsvyJCNTGDdXXSu7xR6o0hpIIAwpBL0ZmnwyBXW0Bhz/
+         lmpRn5fvDW3UDRTs149pe75NLdTfD6X0ZlKM1vnEmly2Eep6NHEh7v2R3Dx7RTDwacoJ
+         voH13EGmXoWY2lS0uUXiMmVfm9wk6J4t/0JA+ISqwKTWt1fm1jsledz3UOGPZAUHg7WS
+         +0z9EvVT+uWnp50Z211j6RliwMItsiIh+AqI9M17M9TAADxQyA2NLhcbHlpDBQLCWwfH
+         HBHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770847726; x=1771452526;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aBH8LUgAoQkvcJBNFakHNRaolsL29KJZe94++vwPAx8=;
+        b=rP+w2j+mylx5UEjFAmrBUekhrhk/MzcQ8gqrj+J6tHGfDxWKtpI4uxr8PXeZbu/b1a
+         csVI3S1NCJ5ZL6jwpDTYGPEZ+EvEuPbmnvif4D5qhXO+C7lJQ8ufDth4v/jYZxA7ACzF
+         ieFPy/dU1yTESe9ZE6CKfr7Jr5ZZiL7DkAlFB1llImoAYvO+mi/2jNgxFHQCkhGbCdsU
+         rNN5z1P1ZFxKiL5aepJMzF3xeVa9sh84dUTvAbtRZrDXQlxhNga+k2RRKLjItX3sTCwL
+         1QVgCaKbVzpNJ3mzZvh8rDEMK3j9Ei51bvEYWWfbzG7UMP9qEq+YesLOc1SZz+cHLqBs
+         BklQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVKACyWZeWm35dfBWpY5H4OI6tQ6dtzSmLJauNr8LJ6Y7DaQA837bbKBa0YVBtq392YFvjWH2APL8YK0XJiyfw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCaD6UBKiaGBD+B9R7+MKe5MNRVJgNgUxWTHMWFoNyigfuSqzs
+	9aE3YxO5zsB5dg+zEbeawForMb7InFBzV+AbnxGj1HfD4O0trNz/WPdko52bOFXbRQGNIHCzZwB
+	8y7YsoVPFGGa9oSDJYgetAUdOOtDUwOk=
+X-Gm-Gg: AZuq6aLf6PtVuux35n7uiWvoFWF1oHJB3I6fO0omZJU96Gk+2Gjo7DciwYkAMeT0vPH
+	3gngOVs7HPq3ZoUvqf2EapZjHBC475F/mu5JVluEp9nJ89UFHzyXAo98CFw78ZNEncLtTUHWUI9
+	Yt3oCUcAwFboiZ8reThFpb97u3MK9EaYsBDR4G7X725gyfVvD+el/YP2ZcKv7HDLqDJxNIciW24
+	4r55o29KqdpnaS52mr2jzJBmB23/DDSSpGpkn+MduWQ3VwCGu9HjGfAQEL6eQLeHuffhb/C5mdM
+	jbxAplZ+jjhC5pn9Dn2IiKI=
+X-Received: by 2002:a17:90b:4ecd:b0:32b:c9c0:2a11 with SMTP id
+ 98e67ed59e1d1-35693cbc9b2mr148121a91.4.1770847726037; Wed, 11 Feb 2026
+ 14:08:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260211151115.78013-1-leon.hwang@linux.dev> <20260211151115.78013-5-leon.hwang@linux.dev>
+In-Reply-To: <20260211151115.78013-5-leon.hwang@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 11 Feb 2026 14:08:32 -0800
+X-Gm-Features: AZwV_Qh1cQXIN4noSjTPx6D9rnW3i7gLc8B_jvGvfZ948hxwQMFC6HuziGukW0c
+Message-ID: <CAEf4BzbTtC19E_=RCk_KCjrOimbefhnXCEfURw4b+caxCY6SRQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v10 4/8] bpf: Add syscall common attributes
+ support for prog_load
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
+	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
+	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
+	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
+	Rong Tao <rongtao@cestc.cn>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 11 Feb 2026 22:10:56 +0200 Yael Chemla wrote:
-> Thanks for the test addition. I wanted to raise a concern regarding the
-> spread factor requirement that may apply to mlx5 and potentially other
-> drivers as well.
-> The real issue arises when the hardware's maximum RQT (indirection
-> table) size isn't large enough to accommodate both the desired number of
-> channels and a spread factor of 4. RX queues/channels serve multiple
-> purposes beyond RSS - they're also used for XDP, AF_XDP, and direct
-> queue steering via ntuple filters or TC.
-> Artificially limiting the number of channels based solely on RSS spread
-> requirements would be overly restrictive for these non-RSS use cases.
-> In such scenarios, we'd rather have a slightly degraded spread factor
-> (< 4) than limit channel availability.
-> We'd appreciate any feedback on this approach.
+On Wed, Feb 11, 2026 at 7:13=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> BPF_PROG_LOAD can now take log parameters from both union bpf_attr and
+> struct bpf_common_attr. The merge rules are:
+>
+> - if both sides provide a complete log tuple (buf/size/level) and they
+>   match, use it;
+> - if only one side provides log parameters, use that one;
+> - if both sides provide complete tuples but they differ, return -EINVAL.
+>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  include/linux/bpf_verifier.h |  3 ++-
+>  kernel/bpf/log.c             | 31 ++++++++++++++++++++++++++++++-
+>  kernel/bpf/syscall.c         |  2 +-
+>  3 files changed, 33 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index dbd9bdb955b3..34f28d40022a 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -643,7 +643,8 @@ struct bpf_log_attr {
+>  };
+>
+>  int bpf_log_attr_init(struct bpf_log_attr *log, u64 log_buf, u32 log_siz=
+e, u32 log_level,
+> -                     u32 __user *log_true_size);
+> +                     u32 __user *log_true_size, struct bpf_common_attr *=
+common, bpfptr_t uattr,
+> +                     u32 size);
+>  int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier=
+_log *log);
+>
+>  #define BPF_MAX_SUBPROGS 256
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index e31747b84fe2..a2b41bf5e9cb 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -864,14 +864,43 @@ void print_insn_state(struct bpf_verifier_env *env,=
+ const struct bpf_verifier_st
+>         print_verifier_state(env, vstate, frameno, false);
+>  }
+>
+> +static bool bpf_log_attrs_set(u64 log_buf, u32 log_size, u32 log_level)
+> +{
+> +       return log_buf && log_size && log_level;
+> +}
+> +
+> +static bool bpf_log_attrs_diff(struct bpf_common_attr *common, u64 log_b=
+uf, u32 log_size,
+> +                              u32 log_level)
+> +{
+> +       return bpf_log_attrs_set(log_buf, log_size, log_level) &&
+> +               bpf_log_attrs_set(common->log_buf, common->log_size, comm=
+on->log_level) &&
+> +               (log_buf !=3D common->log_buf || log_size !=3D common->lo=
+g_size ||
+> +                log_level !=3D common->log_level);
+> +}
+> +
 
-That's fine. In fact IIRC ixgbe (infamously) had more queues than 
-it could fit in its RSS table. So none of this is new. At the same
-time if user _does_ want to use a lot of queues in the main context
-fewer than 4x entries in the indir table is inadequate.
+I'm not sure this check is doing what we discussed previously?... If
+log_buf is set, but log_size or log_level is zero, you'll just ignore
+log_buf here...
 
-The test is based on production experience, and provides valuable
-guidance to device developers.
+Maybe let's keep it super simple:
 
-I'm not sure what you want me to say here.
+if (log_buf && common->log_buf && log_buf !=3D common->log_buf)
+    return -EINVAL;
+/* same for log_size, log_level, log_true_size */
+
+and then below just
+
+log->log_buf =3D u64_to_user_ptr(log_buf ?: common->log_buf);
+log->log_size =3D log_size ?: common->log_size;
+
+and so on
+
+
+We can be stricter than that, of course (as in, all triplets have to
+be completely set in either/both common_attr and attr, and they should
+completely match), but it's just more code for little benefit.
+
+>  int bpf_log_attr_init(struct bpf_log_attr *log, u64 log_buf, u32 log_siz=
+e, u32 log_level,
+> -                     u32 __user *log_true_size)
+> +                     u32 __user *log_true_size, struct bpf_common_attr *=
+common, bpfptr_t uattr,
+> +                     u32 size)
+>  {
+> +       if (bpf_log_attrs_diff(common, log_buf, log_size, log_level))
+> +               return -EINVAL;
+> +
+>         memset(log, 0, sizeof(*log));
+>         log->log_buf =3D u64_to_user_ptr(log_buf);
+>         log->log_size =3D log_size;
+>         log->log_level =3D log_level;
+>         log->log_true_size =3D log_true_size;
+> +
+> +       if (!log_buf && common->log_buf) {
+> +               log->log_buf =3D u64_to_user_ptr(common->log_buf);
+> +               log->log_size =3D common->log_size;
+> +               log->log_level =3D common->log_level;
+> +               if (size >=3D offsetofend(struct bpf_common_attr, log_tru=
+e_size))
+> +                       log->log_true_size =3D uattr.user +
+> +                               offsetof(struct bpf_common_attr, log_true=
+_size);
+> +               else
+> +                       log->log_true_size =3D NULL;
+
+why not treat log_true_size same as log_buf/log_level/log_size? If
+both are provided, they should match, and then we don't have a
+possibility of inconsistency?
+
+> +       }
+>         return 0;
+>  }
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index e86674811996..17116603ff51 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -6247,7 +6247,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uat=
+tr, unsigned int size,
+>                 if (from_user && size >=3D offsetofend(union bpf_attr, lo=
+g_true_size))
+>                         log_true_size =3D uattr.user + offsetof(union bpf=
+_attr, log_true_size);
+>                 err =3D bpf_log_attr_init(&attr_log, attr.log_buf, attr.l=
+og_size, attr.log_level,
+> -                                       log_true_size);
+> +                                       log_true_size, &attr_common, uatt=
+r_common, size_common);
+>                 err =3D err ?: bpf_prog_load(&attr, uattr, &attr_log);
+>                 break;
+>         case BPF_OBJ_PIN:
+> --
+> 2.52.0
+>
