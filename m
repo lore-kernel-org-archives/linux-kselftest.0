@@ -1,234 +1,160 @@
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11021077.outbound.protection.outlook.com [52.101.125.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E152C9D;
-	Thu, 12 Feb 2026 15:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770909261; cv=fail; b=Tf/4i5/JAEne3O7L/euawcj0hUiYDCYeDiCsHm0hhQtCp5BPoFVLV6NIunmRlYUxauwr+2+IQbN7N6ijseBPEoolGmDOwA0hrHwkCyaDlavHiYWltZqF284AtQPhLxT24LJttiqWZt4IRkirlq3NdmhnyAAjxDaXPl9u5tv2Cxo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770909261; c=relaxed/simple;
-	bh=7wIiuJnH73Q26If4P9WJoDhzEpvsx8mK1pSHuJL+gJ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=FA/s7ffSQQskqoN2MK9c7QUeMfjyREnls583xymIC1p2cdSD1hm4LdlZRvZqNcUkNCg97TPCmDKaaqNwmj3spgijPpf1Ixb/aSC4rhL5I7cfZVQ5pDkLBqh9FN/XHGI3/znv9lFdoOBxuNLGYAPQ6H02o7MuSkepVofG767Wbi4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=jNC0lcKV; arc=fail smtp.client-ip=52.101.125.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB531E868;
+	Thu, 12 Feb 2026 15:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770909798; cv=none; b=cNurdr94iCit0A8xYbxx8NLof0Z4srVhWTeA6CDHYDgeEjT07NWcecmERi346/y6vCuS860E4EkV9K07x+gDQkE2du+zLjRyB/TALGnjbNj2RAmYleraFvjOZnxeSbLFQrv0jU37sE1VksAgqxI4EE+BYJmw99JtBEyPmxjUmsc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770909798; c=relaxed/simple;
+	bh=CXREZTqBenKo9jtPZTzM+VTNbxYZim0gWfWTgptwF30=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N/DZc+SwgthQKYIP020Zo3AqcdDbm5mGJa122q9Yi44evo3dUNPTxyiWDYF09kF9g8YOsTnfOzCK4rdWa6Kx0YDxG+ta9vNG0YIzOj0md58m9TV+Ad25bdu7zhpIZCRdu2SU/3oUsxNO7BozO2TEkxiRu+Bytm6UHPTP+QiAmfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wngCniLs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="jNC0lcKV"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ku03wSrABnHieCGxUpKhsrIoZWL3R6ibMl+rbBxXuhmB1wNhbUVkUEiWfNDdN6LrKbyThLn+aeSKReosba3ynHsw6tNq4vjLioYOvadxv91CbPBCfFU+tAO+WrIQKzhsIvseIm4c3zLyVdMe9EQghnwEMCoN+5lXJYB6KqYOT4RJva2iIhGxmRkChJz452HZEyT53f1CcYcmd5uG4jgfNmSOcP7rvLGpaCXwo42a/kIItwyOL+Qxyqf9K/9Gxq/56JGqJSop+MKMKAL96s3UeIvYiPTTB3wCcvktC0Zes6mJxr8yD49J1XEsoOebe7eT48d4kl1o3wrn9q7zardXAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qQflI0TtXusYh+dSQtRDBy8LY+4T2ArddPGXaKF8u9U=;
- b=PYGxIXbXTQzAhwzDU9ymZ2mxSBcJ6rjiuiLEnbYgW8MHm3l70Hr5zbWzucs8tbCyyHtKHh0MKxkdQ00dYVwGzOrjCoagtZWbZrx1b14XMyJ3799gM0dDprskiP4EjpQzyFXxmez4WQsJ00dFzIjDaiHor0NfIUnZDZMjGR65Gogt83puOj+oUTMBscssUpGDtdG2sEb9Q8gf4s5v5PSbEDc2Ako9ImXnSYjKyHtEZ3f/BqEGDN8RXTDh+Pv8VhRjHb0itCbFCQYB1Yzrp+fia1Lc+BMFzq3bdnccV2DxNv2S7e/TPY0oEITSHyDcajBeUAmIcddqWR/laKbmySdSzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
- header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qQflI0TtXusYh+dSQtRDBy8LY+4T2ArddPGXaKF8u9U=;
- b=jNC0lcKVjtAiOXrYsqhspsOi4jxS1pRHi2JiL40OOUXT3bN4OxoKlxEZbjBxNol3qb+iKlvi6g4LGoYXIOQggPGM0WSjT5m2Ado7h5yIlyecBWmQ5tlisMLWZFMj/oY6biiGEex2TpGt8aHa96oOl5CMFZndqITifInhseRWKss=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=valinux.co.jp;
-Received: from OSOP286MB7730.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:468::22)
- by TYWP286MB2844.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2fb::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.13; Thu, 12 Feb
- 2026 15:14:17 +0000
-Received: from OSOP286MB7730.JPNP286.PROD.OUTLOOK.COM
- ([fe80::b7ab:6af2:d18e:4a71]) by OSOP286MB7730.JPNP286.PROD.OUTLOOK.COM
- ([fe80::b7ab:6af2:d18e:4a71%3]) with mapi id 15.20.9611.008; Thu, 12 Feb 2026
- 15:14:17 +0000
-Date: Fri, 13 Feb 2026 00:14:15 +0900
-From: Koichiro Den <den@valinux.co.jp>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: vkoul@kernel.org, mani@kernel.org, Frank.Li@nxp.com, 
-	jingoohan1@gmail.com, lpieralisi@kernel.org, kwilczynski@kernel.org, robh@kernel.org, 
-	bhelgaas@google.com, kishon@kernel.org, jdmason@kudzu.us, allenbh@gmail.com, 
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org, ntb@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Manikanta Maddireddy <mmaddireddy@nvidia.com>
-Subject: Re: [PATCH v6 0/8] PCI: endpoint: pci-ep-msi: Add embedded doorbell
- fallback
-Message-ID: <cf4mpl64e5tms5kw7z33f6cwoarmtmkzykoexoozwamtpz3bvo@q52h7ycdy7mb>
-References: <20260209125316.2132589-1-den@valinux.co.jp>
- <aYsjfTtA0EsXwh69@ryzen>
- <2lii3hhzie5n2kkoan7hvittid2bo2jgvkb2fndyscc527xglp@dubt3ie7exdq>
- <aYtdEnZM5mnmcgtY@ryzen>
- <23p74hldtvi2xn6aza2rc6kh5hidzutu46ugzt6mzliyjzylka@k5gchw3amcig>
- <aYyz5WF_iJuNwA35@ryzen>
- <fblyz2hldxgqo2i7fywpgzuaqxzxsbavme7pfahj3uftgloeqq@pxeddjzm4sdj>
- <aY2q80zeRKSRO21H@fedora>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aY2q80zeRKSRO21H@fedora>
-X-ClientProxiedBy: TYCP286CA0194.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:382::8) To OSOP286MB7730.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:604:468::22)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wngCniLs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BFDAC4CEF7;
+	Thu, 12 Feb 2026 15:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1770909797;
+	bh=CXREZTqBenKo9jtPZTzM+VTNbxYZim0gWfWTgptwF30=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wngCniLsYobfy+cnJ0iQ8hJvHAE59mq29LzSxEBhVQD6cI6RhSToLCotLXlve5lyC
+	 8O9Cv1a38Xqxsewi18XZ0aua6LyV4dre6Smx82wZWl8uDMPY+BtIhiLNMp0LTdQ+lo
+	 QrW8b4Sy7tngQXd9V3e/ck2hvS4+DiaRwSdmf39A=
+Date: Thu, 12 Feb 2026 16:23:14 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Gabriele Paoloni <gpaoloni@redhat.com>
+Cc: corbet@lwn.net, skhan@linuxfoundation.org, arnd@arndb.de,
+	brendan.higgins@linux.dev, raemoar63@gmail.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	acarminati@nvidia.com, linux-mm@kvack.org,
+	safety-architecture@lists.elisa.tech, kstewart@linuxfoundation.org,
+	chuckwolber@gmail.com
+Subject: Re: [RFC PATCH v3 1/6] Documentation: extend the 'Function
+ documentation' with expected behavior and constraints of use
+Message-ID: <2026021207-hatchery-spore-2800@gregkh>
+References: <20260212124923.222484-1-gpaoloni@redhat.com>
+ <20260212124923.222484-2-gpaoloni@redhat.com>
+ <2026021221-grading-clatter-b7bf@gregkh>
+ <CA+wEVJaFX4AE5ruKLvgYZhmNsOabovLp=2LAaLUYe5B9r51qEA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OSOP286MB7730:EE_|TYWP286MB2844:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3bb0dc4d-c453-4050-867e-08de6a49638d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?bF6WsKHt2D3qvSi2iJrw2P0OMHXY9VPgXpUfzfJPOCw9nwqsH4iYOIXWIRWJ?=
- =?us-ascii?Q?UqOV21q3TyUetTJ8g2KzJ+6n1hAu58cHAiiG6XfUhoDyD+Ud5zNeU+T75F1v?=
- =?us-ascii?Q?k4o1f/4IgrxqZ98mddde4uxq/GXE2XHLtGc5JI3kj8CP2uU7CzDU42EcPoc+?=
- =?us-ascii?Q?feMcdGPomVuwVV6s8sZtmO8P3K8C2RfAUBzJxSXGuYtkjblH9ZDSfAY2bBL7?=
- =?us-ascii?Q?u+OfAkj0Z6ZFA3wFJc91dPxFaa5A3y7f8AjIq1QeXhKrf/URLzMzSrAIkDRt?=
- =?us-ascii?Q?jkZY7dmsOe1eFXe/RtCArP3It7hBHXrYCoCUWOOcc2MwhJHMyAOwEMqYmzeP?=
- =?us-ascii?Q?moDLsIR+RPEdoHMSdIt15dphGflqwm3NMWjTtRdH35AH+knqJ+8JN0KgNfdq?=
- =?us-ascii?Q?2PIrCFWF66tdZy+4FqGBNvlrP375MLLnomm4x2ioLh9XBsqSwJnn6dpfF7Bm?=
- =?us-ascii?Q?fiR/ry3wFaK+3IWQqycYdLWRFab5GF8a3XJxcVEC0y/Q7h+rz3/C6iLExA4w?=
- =?us-ascii?Q?QqtItYrRZLxycZHU4TsVtgowG06j3yxO0rlXZtvao8qX2JWUwIZVtbOqZgpI?=
- =?us-ascii?Q?6Td+V8NLZyHMsMFhKeMAjvPLE7fhcQIPIHL3LJh0esWtIWHZn0ImJf6ZLpw9?=
- =?us-ascii?Q?HOLndxTz9eZYahr52yLKVFLnTJeJg6IgpGP4pqqGiN+jnmfYLs80hNSK4ZuG?=
- =?us-ascii?Q?QWmzHresHlUqAC6GPiqCa8UoI2EEA7UPgBjhHdYh13g/4C1ELY3hLy6nYz66?=
- =?us-ascii?Q?T7mItitYF7d+dDYLR++eZvToLuuZwNFzx1rww15WfICyk0OLphe9k2EDs1iz?=
- =?us-ascii?Q?wlv64aa9g5d0JERWpNAad9bMcdGNbCW87QhGjoZg1bduoWthNw0BwhdxS568?=
- =?us-ascii?Q?nEKQtygMVTWGK67CGeQkYWyYCU+fXSAVBwTckp5SOa6ElDMSLUivPkhjg5rx?=
- =?us-ascii?Q?LENyltytQPvvpCLhIdullfxHswSeiFvpIYpzaw62ZxoIKz6bGZjiz83MrnTn?=
- =?us-ascii?Q?0kao8VOysr94EG1pMkws2N/1i+D+Dtfw0TMnsC523Xg30hmE5176JBqE7SDI?=
- =?us-ascii?Q?m4EhTWfM476rea6iFrNuz9APyFb8Krue4WWIOFCJF0DIYI+OlIZyT6YySoZ7?=
- =?us-ascii?Q?03bgZXp4PK0l3PoIAQIukigmLcDHL4a6rzVYM2NwclEbcuzUbCKdZ9MVSDsh?=
- =?us-ascii?Q?GwcSRiGAkUptXQMonm+jy5dJoagSOeTICYDpri2cvNfSthkud9dNegPUbP60?=
- =?us-ascii?Q?KqOYC+QnWcCvPP6yyfP5C6iMf3v+4u9EW2oExn5/OQzgANh76Dtg7WqIh54w?=
- =?us-ascii?Q?8XVH3W6BAtfeusdQPdvf+jlLpsN+Lni5tp3F8siN2HnmtwtpMHHeYv2rI9EZ?=
- =?us-ascii?Q?Drtu8YtEECRlpRWP6/Ml2uwObXY7VQEU8Jovu5hb0un5W1DC3gxGOCcd/q1A?=
- =?us-ascii?Q?el9/75EeIovAQTaiTmkqKno5BUUzpYYTmmxhCEEBqJy5mcAX+KdPNl8gpcnD?=
- =?us-ascii?Q?Y2ReE6AGtBLgcHZ/XgL85I94J57pIgxn8eg8/8ZYfFq4lZZs4rhdNnD2T7ND?=
- =?us-ascii?Q?dWst/ozd9iV8HEqPEmU=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSOP286MB7730.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?wal3tm4CQGwwjFx7UE+fw0ZXoC6Zwm+5h4EMw8pximlbgDva0hZZ72FE8gSI?=
- =?us-ascii?Q?AoO4Z/xwYBshPan8G/n20bSAZmyVk4ZW2BYDwNeUH7F53oUIyDSgtBrjR02W?=
- =?us-ascii?Q?8VOYXWh5DT8wFbb7zwBQfEiPQuZYHdzq2PFn+lgNU8R5WvSvj1zLEMVYphAZ?=
- =?us-ascii?Q?ruiVu9uH6rvBP1mg1HeBbJr8AeiOt/NwOTvBYJm6qb8AprM1grhAXBR5ZPNh?=
- =?us-ascii?Q?u05V7XDvCJ6Xy2TJFkwWPCXE1boUHk/ZwPiL1JoZRDx+xwJ500V4bmm6Zx8L?=
- =?us-ascii?Q?BxOc4BzD8DhEssBMnnE3b9/6fyBoSSYpPtWw4yHgOroq1RqNZl/kvPQrw/I0?=
- =?us-ascii?Q?qHvRFxZsNYr87obCuCoew0X4V/7UFZXPDXE7wjkQQRErIm+xVcEoaG/ZtYqH?=
- =?us-ascii?Q?DGGdWwiZ2TnNts04Aqt/bJVmo4fuG/cDtggQLQuYJ38Ijc17b7CVP2K954NE?=
- =?us-ascii?Q?lgtcG9Edo1N2tspCv+NgSUq2I2zWPCJd/h8/vjXDojhkFbE2JvVgtJSyCGV5?=
- =?us-ascii?Q?siQRHnaNU6H+tJlw37amMYAIME2Pk1/551xWWqhirSwEj5b27uRX4NHXupfS?=
- =?us-ascii?Q?+TDDe3ZlQIaXQoBlrRZPVQ8VHsUCsHgdOkWKTmAlyjMNB6arAM6dk73tjsPP?=
- =?us-ascii?Q?DblSfbm8DdMhDo0czzL/dxvwGgAo5GvLHxawL4UAQKq3u3mlchQ2LpQCIM5f?=
- =?us-ascii?Q?gdIrxLdzaQldNhdUE08my/b19sX7Tde0xxMhzP9UAIHHm0A50Ej1GRNRNxY2?=
- =?us-ascii?Q?nRzSFH1scP05TXqKylQzAUSRoGqN4Jhf4GK1MAN46QyvBrP1DT7zQndsYggI?=
- =?us-ascii?Q?26shovUcDRyOzEoHqWataczp+oPy+lp4Bha6fbipYrVt/iNrJAJdJcS1iAsv?=
- =?us-ascii?Q?zwno3mBbLKgD5ChGz5S3KPkL4T5/s1WVR5TOlrvl1rNuK3ghStTc8UnpovEq?=
- =?us-ascii?Q?Mjj2zL3zypaBRzU2+q+PuW+EMit9McymSBb/YCnFvBabHKFX9WKYS8dcjzl9?=
- =?us-ascii?Q?pMiylehsdwOEJBARn8zcZQe4GraFhY4JfPbFa+WtMtLOOCNnAGDgTCJwCDUb?=
- =?us-ascii?Q?Bs+B2PSP/4mDBODP+iVpmhxQGd+eij//BZSIMJX6xRExml6PpQ/Sp/xwMhDA?=
- =?us-ascii?Q?Zo9yhtZGRx9MIq6D52MdGaVDr3R9eMDbuVriFg4W6loK3B4wSELifG85b5sA?=
- =?us-ascii?Q?1CK8alZ0sVS7wnWFp4H+4gLjkAbi/HTU+3qvT6S1kKIAZyGI26qqQFkrgCBC?=
- =?us-ascii?Q?jLn4euibWF2hZYNVANKNXZoVPQdHl7snodaw9HG3569Ag02DDC0HU9FJDSlG?=
- =?us-ascii?Q?72W27J2rvjimuykON5d0JDhzfejtCscPPs9UXay85MfrtHOFZij9tDDhbevn?=
- =?us-ascii?Q?10lGsRHIagH9Nf+qigDp1mx7g6SsZftyBst5jUSZiF/ZgaLrzJqfDswr3dpj?=
- =?us-ascii?Q?DyG4+5AeIay8YbxvMy14Fei6Rsagp67xFW5+vJ4RG+LdtCE6hn99WsGWNRXJ?=
- =?us-ascii?Q?WwIRKaaeOoibI+fJd9Ufnr2MClgsYj5mrWTqAAmy7JxbvIm+8SmIlol9XaLs?=
- =?us-ascii?Q?j1LITEzvqYRbH2TiDnWvxqp4eQhIzjA5vubFLxLjIvkDlXX1vdB9n6ZDQpjI?=
- =?us-ascii?Q?Zms0+9icLo3aU1ubWRLrc3Z3xGhN2iqNAUYDm/9EypntvKUojoi3F4ahfbbP?=
- =?us-ascii?Q?D1+O1Tz+u6c9Hvu8WkMFEJFEI9ROi9gRHTmQzW6JJw//yC2pTg0ZvMgJj8VN?=
- =?us-ascii?Q?oyXsTqaLC/4oG7gOKIvxBJDs78hVcuvuIqcQCzc++SuU5dB1nW+7?=
-X-OriginatorOrg: valinux.co.jp
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3bb0dc4d-c453-4050-867e-08de6a49638d
-X-MS-Exchange-CrossTenant-AuthSource: OSOP286MB7730.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2026 15:14:16.9190
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PWD1tXTH43P++sxedIeFD0xtj+tUFxM7Qxkf1Exqv1wK8vvBQF+vDq3uSGJyiO9XpSnvDMF4HFNFySRt2pDDmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB2844
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+wEVJaFX4AE5ruKLvgYZhmNsOabovLp=2LAaLUYe5B9r51qEA@mail.gmail.com>
 
-On Thu, Feb 12, 2026 at 11:26:59AM +0100, Niklas Cassel wrote:
-> On Thu, Feb 12, 2026 at 12:26:49PM +0900, Koichiro Den wrote:
-> > On Wed, Feb 11, 2026 at 05:52:53PM +0100, Niklas Cassel wrote:
-> > 
-> > Thanks for the additional context.
-> > Even if we introduce the distinction between BAR_RESERVED and BAR_DISABLED,
-> > as I understand it, we currently lack a way to describe what actually
-> > resides behind a BAR_RESERVED region.
-> > 
-> > Perhaps extending pci_epc_bar_desc to describe what a reserved BAR
-> > contains (e.g. DMA register block) might allow us to handle this in a
-> > cleaner and more generic way. It would at least be cleaner than treating it
-> > as a quirk and hard-code the reserved BAR+offset+contents.
+On Thu, Feb 12, 2026 at 03:00:01PM +0100, Gabriele Paoloni wrote:
+> On Thu, Feb 12, 2026 at 1:59 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Feb 12, 2026 at 01:49:18PM +0100, Gabriele Paoloni wrote:
+> > > Extend the longer description section of a function kernel-doc
+> > > header with an itemised list of function's behaviors and
+> > > constraints of use.
+> > > These are useful to link and trace test cases (e.g. KUnit) to
+> > > the different behavior IDs and define the constraints to be
+> > > met by the function's caller.
+> > >
+> > > Signed-off-by: Gabriele Paoloni <gpaoloni@redhat.com>
+> > > ---
+> > >  Documentation/doc-guide/kernel-doc.rst | 19 +++++++++++++++++++
+> > >  1 file changed, 19 insertions(+)
+> > >
+> > > diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-guide/kernel-doc.rst
+> > > index 8d2c09fb36e4..23e6c4b45b14 100644
+> > > --- a/Documentation/doc-guide/kernel-doc.rst
+> > > +++ b/Documentation/doc-guide/kernel-doc.rst
+> > > @@ -83,6 +83,25 @@ The general format of a function and function-like macro kernel-doc comment is::
+> > >     *
+> > >     * The longer description may have multiple paragraphs.
+> > >     *
+> > > +   * When specifying testable code behaviour the longer description must contain
+> > > +   * a paragraph formatted as follows:
+> > > +   *
+> > > +   * function_name behavior:
+> > > +   * [ID1] - [expected behavior]
+> > > +   *
+> > > +   * [ID2] - [expected behavior]
+> > > +   *
+> > > +   * [...]
+> > > +   *
+> > > +   * [IDn] - [expected behavior]
+> > > +   *
+> > > +   * function_name constraints of use:
+> > > +   * [ID1] - [constraint to be met by the caller]
+> > > +   *
+> > > +   * [ID2] - [constraint to be met by the caller]
+> > > +   *
+> > > +   * [IDn] - [constraint to be met by the caller]
+> >
+> > So the same "id" is used for a behavior, AND a constraint?
 > 
-> Yes, you are absolutely right.
-> 
-> Improving struct pci_epc_bar_desc to be able give more information about a
-> BAR_RESERVED BAR would be a next logical step.
-> 
-> If we take RK3588 as an example:
-> BAR4 offset 0x0 is eDMA registers.
-> BAR4 offset 0x2000 is ATU registers.
-> BAR4 offset 0x4000 is MSI-X table.
-> BAR4 offset 0x5000 is MSI-X PBA.
-> 
-> 
-> Many different SoCs have the MSI-X table in one of the BARs.
-> 
-> pci-epf-test always puts the MSI-X table in BAR0 (test_reg_bar), after the
-> pci_epf_test_reg registers.
-> 
-> On RK3588, this mostly works fine, e.g. the MSI-X test case in the
-> pci_endpoint_test selftest passes with the MSI-X table in BAR0, however,
-> e.g. dw_pcie_ep_raise_msix_irq_doorbell() does not work when the MSI-X
-> table is in BAR0. If I hack the pci-epf-test code to have the MSI-X table
-> in BAR4 (as it is by default), then dw_pcie_ep_raise_msix_irq_doorbell()
-> works fine.
+> The idea is to have a specific behaviour or constraint of use
+> identified by the tuple [function_name behavior][ID].
+> So I think we could have a problem for duplicated symbols (but
+> it is a sort of corner case...)
 
-Yes, I remember this was discussed in another patch thread.
+I am trying to say that you have ID1 listed in two places above.  So
+that's not unique with a [function_name][ID] pair, where does the
+"behavior" part come in?
 
-> 
-> This would however require an EPF driver to be able to get an EPC drivers'
-> "desired" MSI-X table and MSI-X PBA location, so that it could call
-> pci_epc_set_msix() with these "desired" locations.
-> 
-> 
-> I guess we would just need to add a new "get desired MSI-X location" API
-> in epc->ops. However, I have been too busy to work on this, so right now it
-> is only an idea. (Anyone with some spare cycles are free to implement it.)
+What is now parsing these comments to ensure that they are unique, in
+correct order, and are used elsewhere?  What is the text for such a
+behavior and constraint?
 
-While I think the MSI-X table placement issue is not directly relevant to
-the eDMA register case (which needs to be addressed in this patch series),
-they similarly appear to be consequences of SoC-level integration
-decisions.
+Heck, what does a "constraint" mean?
 
-From that perspective, I feel that extending pci_epc_bar_desc so it can
-describe (1) what resides behind a BAR_RESERVED region and (2) whether it
-must be reused rather than accessed via a new iATU inbound mapping, would
-be a clearer and more generic, extensible solution than adding a dedicated
-epc->ops API for each such case.
-
-Anyway, I think that the MSI-X Table case should be handled in another
-patch series.
-
-Best regards,
-Koichiro
-
+> > And what defines an "id"?  I see in your example you use number.number,
+> > but is that specified?
 > 
-> I know for a fact that many other SoCs with the DWC PCIe EP controller have
-> the MSI-X table in one of the BARs by default, so this would also allow
-> them to use dw_pcie_ep_raise_msix_irq_doorbell(). (And would also allow us
-> to no longer force disable these BAR_RESERVED BARs, as the PCI endpoint
-> currently has no way to make use for these BAR_RESERVED BARs.)
+> I thought that there is no need to specify an ID format as long as the ID is
+> unique and referenced by the kunit tests testing the symbol.
+> Basically I thought that in some cases it is easier to enumerate 1, 2, 3,
+> whereas in others a, b, c can be used or even a mix 1a, 1b, 2a, 2b etc.
+> So I wanted to leave such freedom to the programmer.
+
+Ok, so be aware that people will then put whatever they want in there,
+making it impossible for you to parse :(
+
+> > And how is a id going to stay in sync across different files?  That
+> > feels impossible to maintain for any length of time, and puts a burden
+> > on the developer who wishes to add/remove a test or "id", AND a
+> > maintainer who has to remember to go and look in multiple places for
+> > such an id sync up.
 > 
-> 
-> Kind regards,
-> Niklas
+> Well given that the tested ids are defined by the tuples mentioned above,
+> the relation between a kunit test and the tested tuples should be not
+> ambiguous.
+
+How do I "know" that there is a test that matches the tuple at all?
+Your patch series proves this, it adds the tuple in one, and then the
+test in another.  If you add another patch that adds another comment,
+how do I as a maintainer know if this refers to an existing test, or a
+new one somewhere else?
+
+> Also I thought that, when writing a kunit test, the tester should know which
+> behavior is being tested and hence it should be easy to define the tested
+> tuples in the kunit header.
+> So I do not see much of a burden, but maybe I am missing something here...
+
+if there is no automatic way of linking a comment to a test, the ids
+WILL get out of sync.  We have 20+ years of history for "simple" things
+like enums and strings getting out of sync in the same exact file.
+Whenever you are going to allow a free-form structure like this, and yet
+expect a maintainer and developer to always know how to keep it in sync,
+that's just an impossible task, please do not do that.
+
+And let's go back to the root issue, why have an id at all?  Who
+benefits from this?  Who requires it?  Who wants it?  Who will do the
+work to add/maintain/update them all?
+
+thanks,
+
+greg k-h
