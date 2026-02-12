@@ -1,286 +1,190 @@
-Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11020143.outbound.protection.outlook.com [52.101.228.143])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264EF1DD525;
-	Thu, 12 Feb 2026 03:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.143
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770866816; cv=fail; b=Pj5H6Hc8/YrZPT58MdROdjydNF/k8+q93YLS9cDQyNZNJtH6Ous2Bgb6C/EXG2vzTGTO8KmrCBrp0CcRJFZhs38XkoYdfYq7cblNu5ilzY2rCT3IyxybyIe86yVfW6nUBDP0LO14B84qGQBHwmXqaVP0eeXawjAsxYqN41C/A/c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770866816; c=relaxed/simple;
-	bh=VoZ35TpJFAFcKZCCHuhPgz/FfmRa82U9qdYX9r3x50c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=WuwQ3OkIepp3gG6v4emwoWpypSc4cTza96HZsJqKP2ENDOMrxf6fNXQSXtI7D/4GVXKWGuXzi7iv25PEu48wEiFKhs5szbR+2hK13ERFCwMUUr/wEfaDAJJ8BGzRS5L4eLwx/3f6OfeXh6kE7RA3nU1XzkCF8h88HuSGiRu7ohI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=mPqpIhzA; arc=fail smtp.client-ip=52.101.228.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B675173
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 03:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770867956; cv=none; b=s8pnpjg+pKvPui/stNdmE/nPhZCJL+09je4ejN8s7uZEFkMuNM24sTJogHW6vP5UStplGAIOcLpPLq0vziZNHvb1pM5roXsa4hQwKfilhd7fFsjDoO/Nut0G/MGtkf3Im+yXxMu7nLtcf3bKctg4UlJZ3eeNQDvVrGjpHYejGSU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770867956; c=relaxed/simple;
+	bh=3/pFoT7VwY4XYxl8Pm0Zwg7Bm4NUYgI78VGG2y+61YE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SCua4Obfb5KsDtldRXy482C2sPqN/w90mHt3O9EHN01QERoAOfqaGW/8L5mQtC/GGYktCx4R0eZtQACTGcFT/F/s9lCX1gqJo0lfXaSi1lxJL7K2r6c8bXt8Z43LBHDPGEiAaYXY4m8UKP1soj2SgRDh6b20qPg3NfUmlUfwNMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RKuRJGeP; arc=none smtp.client-ip=209.85.167.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="mPqpIhzA"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UiloHYpfjrKpwfU9q7LzvxFyM+4RKMTYlu23Ap8i8kg/kh3Nt8icuInHuf4x+Zq2QZyOqnMNa34n18lAuV0TIY3p3oXxRQxkYjV1rrBDoiWhDv+Ic4ae4Qh36UETp5Ib27EFJIMhYYsWrgDFrDdLPPJFnCrXw4950S+wZsUIVkDf/7676k+Vxib+075L7Snb4EiDZZxkIcUVFIbFoyutHKJ4cEzZ1pwGFQGL8SSsuWLZbGTGVBNCHvR7qSvllZAjO2+VGo0paQQaBbsI7I3avlxDmxCopflSE8OqRg3Ibj1LyRow002wNMPu5HuXayRNX+ImYqoo1uVhYoImEmkNFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=grUo6QMPC5ha+CZJ19I3yUxIftiEbj+1/48Me0e+jfE=;
- b=RRoC6Cv/ff2pjeHEbe4PbG9YKuG+K05eJjSW5S7r+Gmi4BEfREA4s4c4CMUNKu/+ojudS8w02InAe64/BEvlAmr8oacmzO/Cm/dDTEpnQNr2knuII7CGJ1jg+FPZps54BgFrGSQGd/PC0ljYMZVI5Isphh2/6uhS8ZnAzuiFte2izy/kT8R14/TKBme6LRQ7iafQzyZEI8cqmFKDKVoGDmuUTVJ3bih+aZDoWenU9nOmWyt9fyfijRxtPTwNgrpUpdbMN+Y4lVvANHZMpyd8hGGgpkbvNdKSZ7C384sRuKgFzGODThXhR22o237qcZ22SvNkFzhFyac913IpHeKX+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
- header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=grUo6QMPC5ha+CZJ19I3yUxIftiEbj+1/48Me0e+jfE=;
- b=mPqpIhzAJYqcwwSFSs/EthHyTs5VDOrKbl80SwkNJ3BFWwmsWnUzFwPolXU6LzJKSHAcjH/NrChx1Le5lo2YYYwBu6Wz5cJYmFo6AHc+4iFZYhpRtmgC+ExJRj06WUqtSZy2cqrQzrQBgvk+m2QrypF4D2PSo/50wQ2I/bw912A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=valinux.co.jp;
-Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
- by OS7P286MB7190.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:456::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.11; Thu, 12 Feb
- 2026 03:26:50 +0000
-Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9611.008; Thu, 12 Feb 2026
- 03:26:50 +0000
-Date: Thu, 12 Feb 2026 12:26:49 +0900
-From: Koichiro Den <den@valinux.co.jp>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: vkoul@kernel.org, mani@kernel.org, Frank.Li@nxp.com, 
-	jingoohan1@gmail.com, lpieralisi@kernel.org, kwilczynski@kernel.org, robh@kernel.org, 
-	bhelgaas@google.com, kishon@kernel.org, jdmason@kudzu.us, allenbh@gmail.com, 
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org, ntb@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Manikanta Maddireddy <mmaddireddy@nvidia.com>
-Subject: Re: [PATCH v6 0/8] PCI: endpoint: pci-ep-msi: Add embedded doorbell
- fallback
-Message-ID: <fblyz2hldxgqo2i7fywpgzuaqxzxsbavme7pfahj3uftgloeqq@pxeddjzm4sdj>
-References: <20260209125316.2132589-1-den@valinux.co.jp>
- <aYsjfTtA0EsXwh69@ryzen>
- <2lii3hhzie5n2kkoan7hvittid2bo2jgvkb2fndyscc527xglp@dubt3ie7exdq>
- <aYtdEnZM5mnmcgtY@ryzen>
- <23p74hldtvi2xn6aza2rc6kh5hidzutu46ugzt6mzliyjzylka@k5gchw3amcig>
- <aYyz5WF_iJuNwA35@ryzen>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYyz5WF_iJuNwA35@ryzen>
-X-ClientProxiedBy: TYCP286CA0328.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:3b7::17) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:405:38f::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RKuRJGeP"
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-460f3f9fdb1so1095393b6e.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 19:45:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770867954; x=1771472754; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tK21a4JoivTAPugf5a0tgKET71snd9+E0xX3YsV0FIM=;
+        b=RKuRJGePexikpaOmpE4BIgrlbmS9PF2RqX1+CqwXZ5aXLcf7hAMaCw87N96VOD9TTv
+         FBSwaqwbpJidMAZihaJYM4b0wbSjxQmZQuL7kEpW9TWFW0EzavPUVBkDIx0ylQ2hTFTG
+         GBs4Q946vQsbai6orKdAKlLX6ebYIxAV0I5LdcofjGF4MG2vpWPxVp399CiBSRhfxD0E
+         59eZZIVOojqqYP5USYW4nQ6PkbrqSqrZfNH8HTkdgvsRw2GNBdsHS7e3nvM7c/eVOWTk
+         ox0TElPNqWAMOHl7hCDMCDYTtuauCe8pprdwvd/zLkIpHqXtWWPdgWf/bCZi8KJuUB9Y
+         e/ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770867954; x=1771472754;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tK21a4JoivTAPugf5a0tgKET71snd9+E0xX3YsV0FIM=;
+        b=atFJacKAYFK3l6BzRZ01iwIWNk13gepSj56aeLqjQyFT7s7990D/yhLDzq8HcXNVtB
+         VzCKOBqbbvDKFNpdb4yo/14x9LOy93Zx+3AyMckCGLvvTsb/pF0TGoeOde9thurRc+0s
+         06c6csFQdo4WpxdQKvlQl2QeyfWcWF2o4J+WEAgULCFGWklK8Piu5GP3pHAV55qY6rd+
+         eAyivpiYDnDyt4dfZufvNYSQ8K4sH/QR1czKeg4fjd6zXrdUsd1kSwA6vwQdnCB4hmdo
+         3vhTcpiL3NQE03HY9mAwERgyuqJ272g8rWHbcq1DEUsU/kCKDhJIHfBfmDx0uCDIg12A
+         KZsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWXXV8oRtPkOGFW8IKrTOATWyby/2fR6icv7VOxBHCueEdgfipqNcecnMXVpn9IyX/R/O7CbiBI7W5tAa8yuJg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1TNEaAdlgjE9l09k/cvC4C6STcz9SfvZgbAZWKwNO+zCY5aBL
+	5nXsmublVpCngyMgadqcbmT4mHkfO6M+z2ZaNCjDnnrrf5idNhqvBwbg2TY4
+X-Gm-Gg: AZuq6aKiRMNRQQKJKV+RcfFHKDi4T0CMpuYdiW7K78m92OqDHedqbFNAWjglQuytWhv
+	Dn1W8EmklUNJi/hXQmq7E9MiwAusPmHgrPkmvhyjLWro+yo3FF8v2kNYFMjfcawWSHX1dGTXKjq
+	d0J2Fbno1X30AAVFTqWyPcpWEy9Zxl5CgoPElCjO/aiYtEpTQRoH6+SM709KwKAdSrtUYcNnm2U
+	/XuNBNi27dmPQJm7tSht7UhmJa98/T1GonY9+DMv0hChQClexpJhhJ7+2QmLDxPUWLOg6V4/1dl
+	qDG7jQA/YPHV3mr7/LslI+DHQuVQTIpRn3Wu+V9DYViNLEuodhrI6YKtmm6N6Q0eqwzz6rGmUwl
+	7fjKuca/t5Zgm4GLoB5ehiAIufsjqMLEIz/ezjsBtP++JsfT7CUHz7H6az8cY1IXxs6tACDkJxS
+	2RMbTn6BkNJJMsIztdYjCkrRXCV9Fjxixs51k8uZsiU4pySnJlWR0uWPjEQPqLmzwp6E9PI0+V+
+	hC6kououZBhdvr+zw==
+X-Received: by 2002:a05:7022:249f:b0:121:d898:edae with SMTP id a92af1059eb24-1272fd99529mr389245c88.24.1770861432625;
+        Wed, 11 Feb 2026 17:57:12 -0800 (PST)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1272a6e943fsm2870384c88.11.2026.02.11.17.57.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Feb 2026 17:57:12 -0800 (PST)
+Date: Wed, 11 Feb 2026 17:57:11 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next v2 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aY0zd4Esewxa-8hw@mini-arch>
+References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
+ <20250925-bpf-xdp-meta-rxcksum-v2-1-6b3fe987ce91@kernel.org>
+ <aNYUqdaIJV1cvFCb@mini-arch>
+ <e03d6d69-73ea-46dc-b632-149ef5831f85@kernel.org>
+ <aNcZdfCivLR2slFw@mini-arch>
+ <aYtqKfv0F0l2-hgy@lore-desk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|OS7P286MB7190:EE_
-X-MS-Office365-Filtering-Correlation-Id: d6e43a6e-f283-4116-5fd4-08de69e68f3f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|10070799003|7416014|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?t3t/hjOpdzMiqbUDLP91qkQQ+VXaETozS3eEt54vAPv3G+vhNnmMQkLNrv6y?=
- =?us-ascii?Q?0grIkhi6OoDVDsAI6cCgbaxsbIFr6tz2irpVT53StN8QroEsZ9XzEoSgr4a/?=
- =?us-ascii?Q?8q3Z3/CPcSF8FZLBIFh1rcA7lrKYCEgmWQGG1SFNtd8CoxXMHw0Mrz+pv86G?=
- =?us-ascii?Q?9l0bZx3K+K4VT5nhkEkn6fSHpSNSXZMJ2yT7ju48++QlpZmv5P9DcvC6/dav?=
- =?us-ascii?Q?dYfLEvcpCyeoiWdcluB9BitYHOT+LQxl5Wme/ALeIK+6WsipYelM4aUxYH9F?=
- =?us-ascii?Q?N/X0BcxVHQEkq5YN7PIhlN47PWXwsVEjkZ1TODl4s5SwoObz1Wr9Rwc743tW?=
- =?us-ascii?Q?J5dXvwmqe0Ir7GfU8QW6hMri2JmCmVpGV96lzJzk1a5L+20xqQSfDws8AlLI?=
- =?us-ascii?Q?9BleCzJQ3O85M6KLXLqOxb3339otO1ES19imKyIH1o8Y2EVBplSuzTrV0Jwa?=
- =?us-ascii?Q?t5vfCQaeTyRkKOALnwxlwmJauqyA6lRT/gGlZXFpmNzzcog/H6QK5GSD/LLE?=
- =?us-ascii?Q?04jf3/bFF6o2vN3VjwlYWOFyJjDuBoDpBEFZC77aY1K32oSmAQdf2p5FQe8Y?=
- =?us-ascii?Q?cw913o5XsWFQu9zsqfqz/2nI8/pMlWmJV3P9OH4GJPOPk5G6S4G0y+9YeBBp?=
- =?us-ascii?Q?+eKTM32zAS9k+Or7XSoPBWvpPMLzsUbnaTGDID/4p7I5ZbfUfu8N/s2m7d2H?=
- =?us-ascii?Q?r5fRrwF5NQx/Pn0pyLMmCZEwqi+7gqkX4vzl8dEyhbpXcmdQxGxmwVSa6F8Y?=
- =?us-ascii?Q?0oqRwMa054K1xotekMT//WG4EpZ0npb1PZPfV3Slg/MRjcaJ+1VWOm0v2+mY?=
- =?us-ascii?Q?EW3PbEYiyBvN6Wl/I35yIjy79uzmVjxyR+cjKllIcvqXLjVEoH+u6skLK0Wk?=
- =?us-ascii?Q?jm+VGpFmqIKT0IoV2cvpjwPkGUWJwemKUaWXs24F7T/utBKPDvjKZRNg83wT?=
- =?us-ascii?Q?hRJGawyHneqPeRQhd5s4ObiDu+LTmnG67m8+k+bUFMqYbgOyDJIpkmGU+ns8?=
- =?us-ascii?Q?LutJWG4JkzU70JWWyFToY5X0+hAFHybdHdx/3SOnGKqSdJEjU6XmvWtfqz7g?=
- =?us-ascii?Q?vYW+yDomLf2k7HIk7B+b0DBTRESdvpxpDrAkI1GPm8M7NGbiTLQvmf7jcP1D?=
- =?us-ascii?Q?nmArz2Hvmc9JViv9idhDVrZpdIc4Cu+1eUkGd2FFIVJII4rVG7+7i5if0EdA?=
- =?us-ascii?Q?tztgivEys5W0MZzpvyYm1fYFnxM/XtJngI/IpEwmZ8o3RPv65io0O4K/Qn+3?=
- =?us-ascii?Q?lwIT4C+WShMjQFC1CR97cXIrOv63Iu97HHz5SkQUdE9JE27TLZHpYxOJLANP?=
- =?us-ascii?Q?EKm24kzS2vCfl6sVmMd01G4uY7mbXiYBupplBv5PqLbyVVzxvxnhuH9QmE7S?=
- =?us-ascii?Q?z9CTB4qTd3an8qPA2r2ZxmNRFE9U4iFWCkfBKTywj2eNqMDrBpelbPMK4hx+?=
- =?us-ascii?Q?mnYeghvQ1Ty8wRk3jU0w2FiQGModiYcxsKtzvoJjgYZCxWVhV/V8twfS3+nh?=
- =?us-ascii?Q?gb/Eod9fPOA9WfJpR22CgSu6deelC7ID8lF8jnhCJ8hvCpmS/XAisWz3CQdX?=
- =?us-ascii?Q?02T+1UnKvnPiv9CT7M4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(7416014)(1800799024)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?G6n5HE+puT3kFQy/6wNWv2bSpPWGrknhERK6wZomIMKVjOsAIKT2W6QuofGJ?=
- =?us-ascii?Q?z8YsEAy1PYXhGuvPzKyVlKcCVkndO57LMreOf/Em9eAnwJv9TIPXhm8b1H7I?=
- =?us-ascii?Q?x0vvwOZf2kXJ53p5hah2qAk+InUSuffh5idTOOZmbrgl5fwmMkrM5bHKLyqp?=
- =?us-ascii?Q?T/SsvHHQYOzvs8J4LWr9+4SuypSzvB+KWcNBKdJlUycxE6ulZWKEHwTZGx2I?=
- =?us-ascii?Q?qmk3LCcOkh5zKiFCNJXFXj6nj/77RnPMa4eRyQgjQ1Y9ZLfOs1BH0qUX/Y3P?=
- =?us-ascii?Q?z0c9+9EyG47h0wwmJC67j1l02+on4a07mQepPQAKI3brHVORRF07d5X0Sbwr?=
- =?us-ascii?Q?kwtjKNkZiDQ8S/lDpqvZvi7wm3JuK5yMVt+yXIHbAFcImDVB4AettPVJxQCq?=
- =?us-ascii?Q?ZQwwup0EC6cVadmCEQtNn5guAHi41bC8U03I+R3uZqU57Cb7MCrzpHogVJ0X?=
- =?us-ascii?Q?GzAHyfCuezwk6b5vxpdqyA1cC4uwbqTeJmy75OT7WdteTglf6Jgxt5zPOGdj?=
- =?us-ascii?Q?7yIxaIs3Bcz+HyRh8Mn2qwcIjQFSI6x/j2QrWS/2/KixmD/No5i3D8pN7ORs?=
- =?us-ascii?Q?w4b/NCWi6oMrpL6Mpe1dgEwVGKp/4VMKOKDSpR2eIE6LEIv+XV2bTFc6z/ye?=
- =?us-ascii?Q?b4i9Q3GBosqPgATzgtpkNUXQuCQFRZP1gLdzq6D/pIz6NxBTjavzWV1MnVWA?=
- =?us-ascii?Q?u7Eiwyl5uqYV3amBK9gxHtReefZYRO9UX3JHgUu3CAEQspybjCUZvDbV8DdU?=
- =?us-ascii?Q?pgCGab1X2nF6moivIyIdczQSNt31NN+sBvSq6Tlerk8K/z4ZQyzMMVu1ASKO?=
- =?us-ascii?Q?R5psLVZTe/0859hnfRGtZCAPYdmLYV5l6iBqqcvWc+iSFYmYB7gt6Rz+ScSq?=
- =?us-ascii?Q?avitzK38jyhkj6h1JXbBmAlZGNb/t2OdYKgREpGzg98Kpp77aSzhAeocvw7G?=
- =?us-ascii?Q?6hD9HTYkTOXco2rVc9VcppEgM+5a523iwB3hfGp9gcOgRoHFA+3T5ebJ7Hfi?=
- =?us-ascii?Q?JTeKXfaWmy7WuILS6Hu9OIMPc1WtDVTMW/mIZ6c/H9c2lPPP5fQdDaGhlJvo?=
- =?us-ascii?Q?3aplHCiLFfHUohBhFbggrvus/sJxR0G0vAA+OFhZ6q/5mkbSqSMxnFLgEfd7?=
- =?us-ascii?Q?gWEnjnOL5Rs3ScpFHStloGp9lhOqOFM9NXtTIqs5VaZcbqRnrt8lhixzGBb1?=
- =?us-ascii?Q?yFRBIAeATv09W72+A3qNO9DPFs5X/JjuiacQV5DjxJMAxC7axjm7uDfAzUnS?=
- =?us-ascii?Q?G+fNZFyy1s3NXJ+dlsSW+AHuT75enEw9X8Eo0rF1y0/Moia8oE9e6nbhwlba?=
- =?us-ascii?Q?RROV8vqXnwEBQ93wuGwGCzL0Ynp3+sWcZKGJN5pVv+ndSt3/Zi/S08UwGr2X?=
- =?us-ascii?Q?/h+fYuopxTLhwemWOHdEVEAQGX1caar2mWHO/NgK78dF7kMgUK/CVdjKYeTt?=
- =?us-ascii?Q?SqT30rCo/vNw5YA8EMoO4hh63TLANsX2K8WsAxxBMhUZxWPkhIEAN4zM9Wo0?=
- =?us-ascii?Q?9KMd8iEiUAvx4JL1HIk8IFdQNJStcYSdEfDwS30at8/cM2Si8ZmuzGa6QNEu?=
- =?us-ascii?Q?L5dclOfmmzc9/9f/Oinzv6VZC88SIzYTKAOeDMs+ETjug2clGgRhO1ICeQTJ?=
- =?us-ascii?Q?6OKne6E1LBpBmGPhTtmhVL+wktM9AMaXHqgcgclI2MlrTQvPE2eP5DCZP5dO?=
- =?us-ascii?Q?v5+NTnd93nLq6xDVDY20cAnamhqt4yjq+L5HTbHAqPMpE9mWDjZgb2c8ObbE?=
- =?us-ascii?Q?jrYhu8Yf62+NJQkEB5unlOV/x/ZgYoqXIUqXL2B4iXzu468B6dmk?=
-X-OriginatorOrg: valinux.co.jp
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6e43a6e-f283-4116-5fd4-08de69e68f3f
-X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2026 03:26:50.1047
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i7dOaAc9xd+Pxt2uQtyzKX1+bVn4HUBF9byInvUeTqpThji0O/Jp2EeaJV8WaNlBXL8hU3oaNRL8fdhB+aZytg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS7P286MB7190
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aYtqKfv0F0l2-hgy@lore-desk>
 
-On Wed, Feb 11, 2026 at 05:52:53PM +0100, Niklas Cassel wrote:
-> On Thu, Feb 12, 2026 at 12:57:52AM +0900, Koichiro Den wrote:
-> > Could you try a quick experiment on the Rock 5B EP side?
+On 02/10, Lorenzo Bianconi wrote:
+> > On 09/26, Jesper Dangaard Brouer wrote:
+> > > 
+> > > 
+> > > On 26/09/2025 06.20, Stanislav Fomichev wrote:
+> > > > On 09/25, Lorenzo Bianconi wrote:
+> > > > > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> > > > > checksum will be use by devices capable of exposing receive checksum
+> > > > > result via bpf_xdp_metadata_rx_checksum().
+> > > > > Moreover, introduce xmo_rx_checksum netdev callback in order allow the
+> > > > > eBPF program bounded to the device to retrieve the RX checksum result
+> > > > > computed by the hw NIC.
+> > > > > 
+> > > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > > > ---
+> > > > >   Documentation/netlink/specs/netdev.yaml |  5 +++++
+> > > > >   include/net/xdp.h                       | 14 ++++++++++++++
+> > > > >   net/core/xdp.c                          | 29 +++++++++++++++++++++++++++++
+> > > > >   3 files changed, 48 insertions(+)
+> > > > > 
+> > > > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+> > > > > index e00d3fa1c152d7165e9485d6d383a2cc9cef7cfd..00699bf4a7fdb67c6b9ee3548098b0c933fd39a4 100644
+> > > > > --- a/Documentation/netlink/specs/netdev.yaml
+> > > > > +++ b/Documentation/netlink/specs/netdev.yaml
+> > > > > @@ -61,6 +61,11 @@ definitions:
+> > > > >           doc: |
+> > > > >             Device is capable of exposing receive packet VLAN tag via
+> > > > >             bpf_xdp_metadata_rx_vlan_tag().
+> > > > > +      -
+> > > > > +        name: checksum
+> > > > > +        doc: |
+> > > > > +          Device is capable of exposing receive checksum result via
+> > > > > +          bpf_xdp_metadata_rx_checksum().
+> > > > >     -
+> > > > >       type: flags
+> > > > >       name: xsk-flags
+> > > > > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > > > > index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2074b70618a9d4f32544d8b9a30b63 100644
+> > > > > --- a/include/net/xdp.h
+> > > > > +++ b/include/net/xdp.h
+> > > > > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+> > > > >   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+> > > > >   			   bpf_xdp_metadata_rx_vlan_tag, \
+> > > > >   			   xmo_rx_vlan_tag) \
+> > > > > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> > > > > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> > > > > +			   bpf_xdp_metadata_rx_checksum, \
+> > > > > +			   xmo_rx_checksum)
+> > > > >   enum xdp_rx_metadata {
+> > > > >   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> > > > > @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
+> > > > >   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
+> > > > >   };
+> > > > > +enum xdp_checksum {
+> > > > > +	XDP_CHECKSUM_NONE		= CHECKSUM_NONE,
+> > > > > +	XDP_CHECKSUM_UNNECESSARY	= CHECKSUM_UNNECESSARY,
+> > > > > +	XDP_CHECKSUM_COMPLETE		= CHECKSUM_COMPLETE,
+> > > > > +	XDP_CHECKSUM_PARTIAL		= CHECKSUM_PARTIAL,
+> > > > > +};
+> > > > 
+> > > > Btw, might be worth mentioning, awhile ago we had settled on a smaller set of
+> > > > exposed types:
+> > > > 
+> > > > https://lore.kernel.org/netdev/20230811161509.19722-13-larysa.zaremba@intel.com/
+> > > > 
+> > > > Maybe go through the previous postings and check if the arguments are
+> > > > still relevant? (or explain why we want more checksum now)
+> > > 
+> > > IHMO the linked proposal reduced the types too much.
 > > 
-> >   devmem 0xa403800a0 32 1
-> >   devmem 0xa403800a0 32 2
-> >   devmem 0xa403800a0 32 4
-> >   devmem 0xa403800a0 32 8
+> > IIRC, PARTIAL was removed because it's mostly (or only) a TX feature?
+> > So no real need to expose it as an rx hint. And I think empty xdp_csum_status
+> > in that proposal might have indicated NONE?
 > 
-> Here it goes:
-> 
-> # cat /proc/interrupts | grep edma
->  53:          0          0          0          0          0          0          0          0    GICv3 303 Level     dw-edma-core:a40000000.pcie-ep, pci-ep-test-doorbell
->  54:          0          0          0          0          0          0          0          0    GICv3 304 Level     dw-edma-core:a40000000.pcie-ep
->  55:          0          0          0          0          0          0          0          0    GICv3 301 Level     dw-edma-core:a40000000.pcie-ep
->  56:          0          0          0          0          0          0          0          0    GICv3 302 Level     dw-edma-core:a40000000.pcie-ep
-> # devmem 0xa403800a0 32 1
-> # cat /proc/interrupts | grep edma
->  53:          0          0          0          0          0          0          0          0    GICv3 303 Level     dw-edma-core:a40000000.pcie-ep, pci-ep-test-doorbell
->  54:          1          0          0          0          0          0          0          0    GICv3 304 Level     dw-edma-core:a40000000.pcie-ep
->  55:          0          0          0          0          0          0          0          0    GICv3 301 Level     dw-edma-core:a40000000.pcie-ep
->  56:          0          0          0          0          0          0          0          0    GICv3 302 Level     dw-edma-core:a40000000.pcie-ep
-> # devmem 0xa403800a0 32 1
-> # cat /proc/interrupts | grep edma
->  53:          0          0          0          0          0          0          0          0    GICv3 303 Level     dw-edma-core:a40000000.pcie-ep, pci-ep-test-doorbell
->  54:          2          0          0          0          0          0          0          0    GICv3 304 Level     dw-edma-core:a40000000.pcie-ep
->  55:          0          0          0          0          0          0          0          0    GICv3 301 Level     dw-edma-core:a40000000.pcie-ep
->  56:          0          0          0          0          0          0          0          0    GICv3 302 Level     dw-edma-core:a40000000.pcie-ep
-> # devmem 0xa403800a0 32 1
-> [  104.217632] pci_epf_test_doorbell_primary
-> # cat /proc/interrupts | grep edma
->  53:          1          0          0          0          0          0          0          0    GICv3 303 Level     dw-edma-core:a40000000.pcie-ep, pci-ep-test-doorbell
->  54:          2          0          0          0          0          0          0          0    GICv3 304 Level     dw-edma-core:a40000000.pcie-ep
->  55:          0          0          0          0          0          0          0          0    GICv3 301 Level     dw-edma-core:a40000000.pcie-ep
->  56:          0          0          0          0          0          0          0          0    GICv3 302 Level     dw-edma-core:a40000000.pcie-ep
-> # devmem 0xa403800a0 32 1
-> # cat /proc/interrupts | grep edma
->  53:          1          0          0          0          0          0          0          0    GICv3 303 Level     dw-edma-core:a40000000.pcie-ep, pci-ep-test-doorbell
->  54:          2          0          0          0          0          0          0          0    GICv3 304 Level     dw-edma-core:a40000000.pcie-ep
->  55:          1          0          0          0          0          0          0          0    GICv3 301 Level     dw-edma-core:a40000000.pcie-ep
->  56:          0          0          0          0          0          0          0          0    GICv3 302 Level     dw-edma-core:a40000000.pcie-ep
-> 
-> 
-> Seems very random if you ask me.
-> 
-> Same randomness is observed when I write other values, e.g. 2.
+> Sorry for the (very) late reply. According to [0] CHECKSUM_PARTIAL can be used
+> even on Rx side, right?
 
-Thanks for the testing and sharing the actual behavior. That helps a lot.
+So is this for virtio (which I don't think you need)? Or something else?
+Can we start with the "easy" cases of UNNECESSARY/COMPLETE/NONE? I'm not even
+sure we need to expose the csum_level (start with level=0 and handle
+encap if/when there is a real usecase). With kfuncs we should be able to
+change/extend the API when needed.
 
-> 
-> 
-> Could this randomness be because I do not have:
-> https://lore.kernel.org/dmaengine/20260105075904.1254012-1-den@valinux.co.jp/
-> 
-> Or do you think that is completely unrelated?
-
-I didn't clearly answer this in my previous response, apologies.
-
-I believe that patch is unrelated. It addresses MSI data handling for
-multi-vector IMWr generation (i.e. remote interrupts), whereas here we are
-dealing with the emulated interrupt path for the embedded doorbell.
-
-If applying that patch changes the emulated interrupt behavior in your
-environment, please let me know. That would be very interesting.
-
-> 
-> 
-> 
-> > > RK3588 (pcie-dw-rockchip.c) exposes the DMA registers in BAR4 by default.
-> > > If I hack pci-epf-test on top of your patch to unconditionally return BAR4 with
-> > > offset 0xa0, it works. So my best guess is that the fixed inbound translation
-> > > in BAR4 (to the eDMA registers) somehow messes with the inbound translation if
-> > > another BAR tries to use an inbound translation to the eDMA registers as well.
-> 
-> Adding Manikanta to CC.
-> 
-> RK3588 is not the only SoC that has the eDMA registers exposed via a BAR,
-> some other SoCs like Tegra234 also has the eDMA registers exposed via a BAR.
-> 
-> Me and Manikanta were discussing this a few days ago:
-> https://lore.kernel.org/linux-pci/aYsQu9lQi4IzfBiP@ryzen/
-> 
-> 
-> > 
-> > Thanks a lot for letting me know that. I see two possible ways forward:
-> > 
-> >   (a) extend PCI_EPC_AUX_DMA_CTRL_MMIO to optionally describe that the DMA
-> >       MMIO window is already mapped to a fixed BAR and should be reused, so
-> >       EPFs avoid creating a second mapping to the same target. I guess it
-> >       could be treated as a quirk for "rockchip,rk3588-pcie-ep".
-> 
-> I do like the idea that an EPC driver can somehow provide the BAR number
-> which the eDMA registers are already exposed in, together with the offset
-> and the size within that BAR. After that pci-epf-test could still work with
-> the emulated doorbell (only difference is that it would not program the iATU).
-> 
-> (This would also require Manikanta suggestion of having both a BAR_RESERVED and
-> a BAR_DISABLED type, and support in pci_endpoint_test to ignore RESERVED BARs.)
-
-Thanks for the additional context.
-Even if we introduce the distinction between BAR_RESERVED and BAR_DISABLED,
-as I understand it, we currently lack a way to describe what actually
-resides behind a BAR_RESERVED region.
-
-Perhaps extending pci_epc_bar_desc to describe what a reserved BAR
-contains (e.g. DMA register block) might allow us to handle this in a
-cleaner and more generic way. It would at least be cleaner than treating it
-as a quirk and hard-code the reserved BAR+offset+contents.
-
-> 
-> 
-> > 
-> >   (b) alternatively, clear the default BAR4 mapping on RK3588 at least
-> >       temporarily when using the pci-epf-msi doorbell fallback.
-> 
-> So for these SoCs like RK3588 and Tegra234, it appears that the option to
-> expose the eDMA registers in one of the BARs is a Synopsys DWC config that
-> you set when you synthesize the DWC core.
-> When you do this, it appear that that BAR will always some kind of fixed
-> inbound address translation (i.e. even when you disable all inbound iATUs
-> this translation for BAR4 to eDMA registers is still there).
-
-Thanks a lot for this input, so (b) would not be viable from the beginning.
-
-Best regards,
-Koichiro
-
-> 
-> 
-> Kind regards,
-> Niklas
+(for PARTIAL, not even sure what the BPF prog is supposed to do with it)
