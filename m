@@ -1,101 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39575F50F;
-	Thu, 12 Feb 2026 09:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F541A08A3
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 09:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770887274; cv=none; b=USUufp7/MC0mE7gJ5Nj+jnDtC13KLPK7HkrS3PEibZnpoPS+2rb906iceoPSDKU7dR4+M3UWmHdJ7Rs8f2zFjK+ZCMCGAcg9sQ1254mLZspQsw7rHwNGLEDZyTDaMMt77SqhyIgmr4hTD2PDBYcvcpxADJw55QFlkY8UJcuVy9k=
+	t=1770888188; cv=none; b=mc1EU1aiUNEPefCie/nYbqHliEs+UXoC/R8Syb7z8Wpwooxa0QwcGkFI93pNVyjYc52Y2Cy8LPgUR6VbLWtVdK/5KBvW3qeHZEuOsy0Ptd8ALCk19MtubVJQV91cRqYRpDKbgDmd2YM12ivOV8wY7sKLVesUGlBM+xJUC/rRUW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770887274; c=relaxed/simple;
-	bh=7X/ZE+464SFMrcWXG+fw9L92P1t1gtPIejSOE1mm8Sg=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CRYqH6osKWZFuXlKUnqfxev2UCZyTQthLX7UK7YTtsqGd2Tqj2AEMx0ya7YCvyARL+3UHvUXbEUo4zK720XJ6qTwW/vHkf0+cy0jJBArRUnyh/yfVtlWu9NPZT/c9eJdQrqSh15Mk2C2lFdzYDLJO4nvgOmj2pHjoMJwLKInlsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SRDzJd4y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770888188; c=relaxed/simple;
+	bh=ZhiMTHRn9zJu2lrX5+uOW7rcWa+9/2xEdqrmmvgHRvo=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=CSFqK8ktBM6AgGHWTkoTvxvP6KMubpwfchm3nUMv4Ak49NZFnF2og/x91YHTNJ9uB0icFMVe6cPDFnpgq/fsmZ895baBr1ueQJDNtft6Iyd5oeHxnKlZmhO0mpZdfgDFBG3sGN1TPkkCSINZdpQ1SUItE2QuteczG++JYFuv4aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nvPqHxHr; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SRDzJd4y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1428BC4CEF7;
-	Thu, 12 Feb 2026 09:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770887274;
-	bh=7X/ZE+464SFMrcWXG+fw9L92P1t1gtPIejSOE1mm8Sg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SRDzJd4y7pdwghuIRwEX+milR/vWqoeZRao4cczsY/oRSB7rXxGuJLbC8pO7iCSw4
-	 /1fHpKlD9QC8Pr36ty9iBxiTNpXaDNYp9kxfY175hoKc70tInFruadKyuacdByotDw
-	 giDuJK9Yv4AbMPDUN5IleiHk09y0vDFg4IFOf1Va0BfXrwqu9s3EcPhdfYle0DOYSg
-	 Po0zabmL17OlVZC5nq6r8y/4vDgWU5l1/ykpkYYbjQp+nF7oNrOcToyCcJwcrWAWRT
-	 TlUDUSJIbuvgS7XUw4PVNj+qOU1x9wo3jckCVZzmRgQeTQjpQnhNQht/dATAuEMT5X
-	 Wv6weRnqIFc7A==
-Received: from [185.219.108.64] (helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vqSfv-0000000AYzI-2Zos;
-	Thu, 12 Feb 2026 09:07:51 +0000
-Date: Thu, 12 Feb 2026 09:07:33 +0000
-Message-ID: <86ldgyba96.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: kvm@vger.kernel.org,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mingwei Zhang <mizhang@google.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 09/19] KVM: arm64: Write fast path PMU register handlers
-In-Reply-To: <20260209221414.2169465-10-coltonlewis@google.com>
-References: <20260209221414.2169465-1-coltonlewis@google.com>
-	<20260209221414.2169465-10-coltonlewis@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nvPqHxHr"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, mizhang@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770888184;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MOtwOaawqm5YCOOGpYlVVEXa/IipPl5Ioo0RNIEb2Qg=;
+	b=nvPqHxHr0KgdC09FjroI0w+XrWY/hJ68UL4/0rh2ftPJh5s8PEVk6tHapWR7m/Ri5dxtnv
+	nNQ0yX2uF46GhiKFyKQsKJbEln8+aTnsFZAO98AyIIXUrkhEn4mrYuzBh7bi7l7Nsdwoo+
+	gniHvShoHs+8GogwC2C38z+MWvWD6r0=
+Date: Thu, 12 Feb 2026 09:23:00 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: hui.zhu@linux.dev
+Message-ID: <9302f6e6d89af6b68d673a2f90e366ebcf947e29@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Check
+ bpf_mem_cgroup_page_state return value
+To: bot+bpf-ci@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+ roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev,
+ akpm@linux-foundation.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ shuah@kernel.org, zhuhui@kylinos.cn, inwardvessel@gmail.com,
+ cgroups@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
+ clm@meta.com, ihor.solodrai@linux.dev
+In-Reply-To: <0d926bdc5b5e030fafc82de73c3f3e5412c051fc6763f77da9ea6aa316bd8f13@mail.kernel.org>
+References: <042df9438d9e78bcd66f1fa0e7043b9ea8cda96c.1770883926.git.zhuhui@kylinos.cn>
+ <0d926bdc5b5e030fafc82de73c3f3e5412c051fc6763f77da9ea6aa316bd8f13@mail.kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 09 Feb 2026 22:14:04 +0000,
-Colton Lewis <coltonlewis@google.com> wrote:
-> 
-> We may want a partitioned PMU but not have FEAT_FGT to untrap the
-> specific registers that would normally be untrapped. Add a handler for
-> those registers in the fast path so we can still get a performance
-> boost from partitioning.
-> 
-> The idea is to handle traps for all the PMU registers quickly by
-> writing directly to the hardware when possible instead of hooking into
-> the emulated vPMU as the standard handlers in sys_regs.c do.
+2026=E5=B9=B42=E6=9C=8812=E6=97=A5 16:50, bot+bpf-ci@kernel.org mailto:bo=
+t+bpf-ci@kernel.org  =E5=86=99=E5=88=B0:
 
-This seems extremely premature. My assumption is that PMU traps are
-rare, and that doing a full exit should be acceptable. Until you
-demonstrate the contrary, I don't want this sort of massive bloat in
-the most performance-critical path.
 
-"Start walking before you try to run".
+>=20
+>=20>=20
+>=20> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_mem=
+cg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> >  --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> >  +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> >=20
+>=20[ ... ]
+>=20
+>=20>=20
+>=20> @@ -170,6 +180,8 @@ static void test_pgfault(struct bpf_link *link,=
+ struct memcg_query *memcg_query)
+> >  if (!ASSERT_OK(read_stats(link), "read stats"))
+> >  goto cleanup;
+> >=20
+>=20>  + ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
+> >  + "bpf_mem_cgroup_page_state PGFAULT");
+> >=20
+>=20 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>=20
+>=20The assertion message references bpf_mem_cgroup_page_state(), but the=
+ BPF
+> program actually uses bpf_mem_cgroup_vm_events() to retrieve the pgfaul=
+t
+> value:
+>=20
+>=20tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c:
+>  memcg_query.pgfault =3D bpf_mem_cgroup_vm_events(memcg, PGFAULT);
+>=20
+>=20Should the message be "bpf_mem_cgroup_vm_events PGFAULT" instead?
 
-	M.
+Good catch!  I will fix it in the next version.
 
--- 
-Without deviation from the norm, progress is not possible.
+Best,
+Hui
+
+>=20
+>=20---
+> AI reviewed your patch. Please fix the bug or email reply why it's not =
+a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/REA=
+DME.md
+>=20
+>=20CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21=
+939182103
+>=20
+>=20AI-authorship-score: low
+> AI-authorship-explanation: The commit message uses first-person narrati=
+ve describing a real back-porting scenario, and the code changes are simp=
+le repetitive assertions typical of human-written test improvements.
+> issues-found: 1
+> issue-severity-score: low
+> issue-severity-explanation: Minor documentation issue where an assertio=
+n message references the wrong BPF function name; does not affect test co=
+rrectness or system behavior.
+>
