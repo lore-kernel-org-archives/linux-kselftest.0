@@ -1,113 +1,112 @@
-Received: from mail-oa1-f74.google.com (mail-oa1-f74.google.com [209.85.160.74])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1292C234A
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 21:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594252DB7A1
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 21:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770930520; cv=none; b=UMj3OoyhuKDRNjUc6IJK1ZtLSr5Gc+vZCJOs/XCWXYJv1AufSV+cYHENZ9TWJ6EPx2rjEJmEFBR0PIoLsG9WRqYAxkKBJoFIp7vZrWUveQwDNhQRa/TN26BxNQS5qoAYSuEV/gBycGd6WjOBXkGZ1p9O3k5AUNA5bGxl2GZFuyA=
+	t=1770933508; cv=none; b=PVlKsYWh6nxadXW6/hI6VZu8MDlcYMXCzgc2SqpeJy8tkqAKm+PqgApOkFeeZnT4eroDymRiJhVvmmuJftxITKtG/EYXoIuDDysDO+qbzxZkKJYQvEHqXsZ8qa4TK+dUkW/0+JEvtfXScMFzHYwO2ZCpfUXIzq3cFk6m/2FuOP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770930520; c=relaxed/simple;
-	bh=Si4a3lubEVIsFr5xg//zf0cPvmnb0GNinNu5h5MauAE=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=DGj+YT9ZbGw1yNI5cNSx15z+A95HVXkADzkTsPDhe2BPKrg59tNGztwWWNlks27euaVfZ+DeD4k/DxsOPDWRSOIkOjXjU1+SFQKCwc1DOGfxHMQDDULaHS3iPW0xvLzpcMN7gUUMIOkvREVWXQbFVOXxfy1q+uW4ZuKU/J3Etxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f8jy3zsw; arc=none smtp.client-ip=209.85.160.74
+	s=arc-20240116; t=1770933508; c=relaxed/simple;
+	bh=rvm09WjgPTpfJFIcHNYOPR/b9d2nODdgLBbyUw3INaM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=cjKeUNGBcla5ze5qFVSaG8yD0uBp0cqOiPTFOsu1g2ktTZIDwRi2vo7zkGaC6FEKhV1pJ3m53nlaGJol7tovdEAL/wum4TvKT7xQTzt5R8roC8ZlwH2SNJT7/LRQGUvBi5DEr6kzqzi4d3kA1h6frGx9qAB2Xn/HpAuY6La1YNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qd4lARPX; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f8jy3zsw"
-Received: by mail-oa1-f74.google.com with SMTP id 586e51a60fabf-409037c3f0bso1430299fac.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 13:08:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qd4lARPX"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a7a98ba326so2819645ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 13:58:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770930518; x=1771535318; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DEi6lE69DtAre9+98et1Td5y86Gv96d2+RPCeTq+27M=;
-        b=f8jy3zsw9Uhk0b4rInPMiIs/KIJkcZftveWo2R13oY5ZXtqJoVJZKhiYEPY/PzrFzr
-         mpCP0oOH9McaaBPWnQyEGSqZLIs47USxQ5YmisJIjhA5xl/cXYd7krqkBh1h6BWqk/gY
-         EoiZIuUnBCzmJmrlmECggq37K3gNx+6mbmCqHLWVeCri9A7STJDwzVovNcnMG5KBoiNt
-         wlj8rrJ9h7bFf3Cow96e3Voems+MqtAm5rjlVWu9fmRAnvzIMRK4TlvkKl68BmVNYIG6
-         uhw3Mw4o+HOsOgeTRuu067BqT9eBnV5WK0CeqSH7vIt5vMEOQKnzzVO0qsErxTxKkAXF
-         eH2A==
+        d=google.com; s=20230601; t=1770933507; x=1771538307; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IGPiVsRR2IN2A+m6Bv8PgAftkVsRzQaURBceo4FlM+o=;
+        b=Qd4lARPXXYTjmgUxKfAK+erBQzcm9KfCzmheAg4Qmu7YB88cLBiZ672Ep7ecI3vCAp
+         u+UrRA+vkUKQ9baBOEDUNFaTyjRxlc5WZf4yGjXjynjnDEZjplUbpQimWu2gNLKn8uTF
+         6GvmjEVO8HhFzGxdX5NiPDvfNpz6H393ucan9SQgjN4/eJcwFKvRUytpOVDfkCum1JgR
+         JIHeVTa43hMqx5MIvIkaaHX5NAfSiBWB1lbLzB5m8eu51Ia/WxXJS4oDTE09AwB8PUqD
+         P2fx4YQiYnCHVHPZIXRF6zO8dzVL7kfz1e9qSIBZctbqNntvd3vANUZRhgv52Cve9tIP
+         Z4vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770930518; x=1771535318;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DEi6lE69DtAre9+98et1Td5y86Gv96d2+RPCeTq+27M=;
-        b=dOarTEoKor+lk+tvTCCJ6x0hFbMPvLkpIoK5T3nQSmkEFS8pW/sm1iXImDbF1hReRZ
-         q8D9Qv8UdZmBxEA7G645nAK0sDS3W90UtknmYQPEhufA0JVwA5TX1twdg1bqGXV8XVUJ
-         VmfKpWuEzuJ92OuOTvtEdaOyH2mIp81iFEdR+566ljmUTOPzrqJ/R12yBNe54uP0bYlf
-         6yEsNJcVB2AkEhH6ow3kV/vd2hVt/eayltLR4Uk2iY3qnfprKi5WsBAxyXSdj+hW93Ts
-         il3WwviMGHz34ttRp9GxxQIlUsUySf09K3TCqJLNOcH1vDVkgXe/IfkLlUrXfBDeQ6v9
-         6hCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/dv37hOdJWaRTxAmSxPKh9FZLuGtmeeoG7RT6EYsfYGGwI9lQsskdYgo5FdiJwlkXIIb6ZD83QKebqEw/sTE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkGO/3FDZF/ztjsYepjEGv9zTUPSR/CIC+CjNarvdrakDvZeI/
-	7Kab9H9YopW3XewMRAyyPC9MTF/XHftLdgeD6ynvOugRTDNwX3NfuJs75qtY+g1dZEbGCN3DjtV
-	FIt2g3zlAPtQZRjUxo8uDE5Je5w==
-X-Received: from ilmv6.prod.google.com ([2002:a92:c6c6:0:b0:468:4e21:6fcf])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6820:61d:b0:663:2b12:14f1 with SMTP id 006d021491bc7-677243b521amr65721eaf.83.1770930517469;
- Thu, 12 Feb 2026 13:08:37 -0800 (PST)
-Date: Thu, 12 Feb 2026 21:08:36 +0000
-In-Reply-To: <86v7g5asp4.wl-maz@kernel.org> (message from Marc Zyngier on Tue,
- 10 Feb 2026 08:49:59 +0000)
+        d=1e100.net; s=20230601; t=1770933507; x=1771538307;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IGPiVsRR2IN2A+m6Bv8PgAftkVsRzQaURBceo4FlM+o=;
+        b=Ll9hIIoS7bfEV0+Fmj49BpnQXyNdOZcwAl3RkPcP7hk0+0N1vEvcLH/cHmmPffkS7r
+         kMtLXCEYxyzTNdAMqW3+l47/T9clRzYUTKKa+2Wsd9sfaNQPnpnmu2uneL9IdHMiNnXO
+         HHJxQ61hNKTDnGRIfu/32We0PWGXn9yohoT4a/cBQLhL91hqXUiwBElFXoyYwcX98yB3
+         mHQeE3A3tmfxzvvpXoRf8Szv8hzufkq5COArp0ChgaMQ8V3MONBX/jPxGKbfhnYCp5fP
+         //CE/SS1HdOcVeYpzTzcUn75la3DtOdoQIDMHcIA/tmHXxlkdQO+ou2lwKKmiGkTdCg7
+         SOQw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9CRct+DY/QzOkm8YdadExWErVy2MO5kfuPyZUtfhZi2hBrXlKJv23TiYjBqzHrQkFXixWbuUOPXxO5a/Koio=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3Bpyx7x3PojxNlGEMuAJEgb+yQeVKaEmXuD3PHNHF1DIoRzhe
+	ucSPJQJSeoxeK0Cs+a6Jc77T2CcGKMaZ030e5vfb3Y9Tob0JUVJzLOoU/EmflwIL2Qs7l+jtaBv
+	BFyo8llaC2yuied59/w==
+X-Received: from plbkn7.prod.google.com ([2002:a17:903:787:b0:2a7:73f7:74d6])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:b47:b0:2a9:327f:ac57 with SMTP id d9443c01a7336-2ab3ac3ea7dmr43993265ad.28.1770933506507;
+ Thu, 12 Feb 2026 13:58:26 -0800 (PST)
+Date: Thu, 12 Feb 2026 13:58:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Message-ID: <gsnt8qcxhdpn.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v6 00/19] ARM64 PMU Partitioning
-From: Colton Lewis <coltonlewis@google.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, 
-	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Mailer: git-send-email 2.53.0.273.g2a3d683680-goog
+Message-ID: <20260212215814.629709-1-tjmercier@google.com>
+Subject: [PATCH v2 0/3] kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED support
+ for files
+From: "T.J. Mercier" <tjmercier@google.com>
+To: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: "T.J. Mercier" <tjmercier@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hey Marc, thanks for the review.
+This series adds support for IN_DELETE_SELF and IN_IGNORED inotify
+events to kernfs files.
 
-Marc Zyngier <maz@kernel.org> writes:
+Currently, kernfs (used by cgroup and others) supports IN_MODIFY events
+but fails to notify watchers when the file is removed (e.g. during
+cgroup destruction). This forces userspace monitors to maintain resource
+intensive side-channels like pidfds, procfs polling, or redundant
+directory watches to detect when a cgroup dies and a watched file is
+removed.
 
-> On Mon, 09 Feb 2026 22:13:55 +0000,
-> Colton Lewis <coltonlewis@google.com> wrote:
+By generating IN_DELETE_SELF events on destruction, we allow watchers to
+rely on a single watch descriptor for the entire lifecycle of the
+monitored file, reducing resource usage (file descriptors, CPU cycles)
+and complexity in userspace.
 
->> This series creates a new PMU scheme on ARM, a partitioned PMU that
->> allows reserving a subset of counters for more direct guest access,
->> significantly reducing overhead. More details, including performance
->> benchmarks, can be read in the v1 cover letter linked below.
+The series is structured as follows:
+Patch 1 refactors kernfs_elem_attr to support arbitrary event types.
+Patch 2 implements the logic to generate DELETE_SELF and IGNORED events
+        on file removal.
+Patch 3 adds selftests to verify the new behavior.
 
->> An overview of what this series accomplishes was presented at KVM
->> Forum 2025. Slides [1] and video [2] are linked below.
+---
+Changes in v2:
+Remove unused variables from new selftests per kernel test robot
+Fix kernfs_type argument per Tejun
+Inline checks for FS_MODIFY, FS_DELETE in kernfs_notify_workfn per Tejun
 
->> IMPORTANT: This iteration does not yet implement the dynamic counter
->> reservation approach suggested by Will Deacon in January [3]. I am
->> working on it, but wanted to send this version first to keep momentum
->> going and ensure I've addressed all issues besides that.
+T.J. Mercier (3):
+  kernfs: allow passing fsnotify event types
+  kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
+  selftests: memcg: Add tests IN_DELETE_SELF and IN_IGNORED on
+    memory.events
 
-> [...]
+ fs/kernfs/dir.c                               |  21 +++
+ fs/kernfs/file.c                              |  20 ++-
+ fs/kernfs/kernfs-internal.h                   |   3 +
+ include/linux/kernfs.h                        |   1 +
+ .../selftests/cgroup/test_memcontrol.c        | 122 ++++++++++++++++++
+ 5 files changed, 161 insertions(+), 6 deletions(-)
 
-> As I have asked before, this is missing an example of how userspace is
-> going to use this. Without it, it is impossible to correctly review
-> this series.
 
-> Please consider this as a blocker.
+base-commit: ba268514ea14b44570030e8ed2aef92a38679e85
+-- 
+2.53.0.273.g2a3d683680-goog
 
-Understood. I remember you asking for a QEMU patch specifically.
-
-I had hoped that the use in the selftest was sufficient to show how to
-use the uAPI. If not, I can send out an example QEMU patch to the QEMU
-ARM mailing list.
-
-> Thanks,
-
-> 	M.
-
-> --
-> Without deviation from the norm, progress is not possible.
