@@ -1,60 +1,84 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E454333985A;
-	Thu, 12 Feb 2026 11:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84573570B6
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 12:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770894104; cv=none; b=aRMtQPriessY4ptKRAmD42XEvtVcU7lwwxouq0fq+BH7bq7Ih8NDGHq8TwxrB167/fDCvd0CegUFp1AhdpoKyANtaOVpRQyKeYqLY2haTApqYnxYT/cHbGFzMLpw7qB/S2j+XW3m4z30pa+lP4kfwUme6KpCzW98vrhX7ZdU720=
+	t=1770898609; cv=none; b=mK/dbSt6wvykSwro5LBT0K936u2FVQ3rrEyY+3Qcd12gHQda7jJH4pzoKBYCOCVaOcWLZyoHJlNvqbyALmEPMA+jiOAuE5j9Mpaf+kr27UFGus1j+3o2IQUoFn2wgnmpQL65u6XyB+nyJpkOAlVdAF3yK4J8ul74ReQM2HHCcmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770894104; c=relaxed/simple;
-	bh=a6m8qaYBgeEpzg6g8VMPD+I3VU2nLvfu9LzlA00n+8w=;
+	s=arc-20240116; t=1770898609; c=relaxed/simple;
+	bh=JWljiblHKdW/kvLi+oANTy8OmaENQH4T3UWSJZWjvFg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CWPqb5aG2R00IgwK3K4qMmuCd7o9q4M7OAT3TBtuKanzZ5ocJbzQ/vj9UJxJPELi2rvR5JfI9y7KgI4Gqu/qaaH7MtIbkABHMfTfspoN8btAE6KKNGI4MJm7uiiysEYgpLzbWaaGiQ5zSbnDa/7DyMwWm3A20qJ+95CHoNtBg9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W6deOLrS; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 In-Reply-To:Content-Type; b=QzCAbRzhHIdwbJpETuvQBT4H0sAS04jJI43XUutg6Kz8KEWAu4RbEmtMa0t8BsGComkbdrErjdqdROrGbykz45BBLNdFxiKNLdDaB784pFjEifWfKa+pYMTc4b5Ll2p+cddkGJ/RboS7JfyLD++pK0By6igiUlURJ5dxvvzeUxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eiP9VDfq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=acorpGF4; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W6deOLrS"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61C6UE1H394028;
-	Thu, 12 Feb 2026 10:54:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=kC5PBC
-	rX/sgH2Fq02LEGV9wm5gA5lKwK+RKOC9phkJk=; b=W6deOLrSmmtVXSPitFAh/t
-	/yBHKrAlcNTtI9G2w3XSfMQ6B1/zODmHq06iD+ZfKumubAs6nV6iTliB+UEp0Ntl
-	8Cs7U338COVX2cWNF+AIo6nyGVtLY0smGBojDsAH/hRyXDcp6lL7X7O8vpRrnt9a
-	oYu8b7RW2DFx0998nUBXhu0s7m3sl2kWFiPw/K9pi6jJA0Pfh/pjKvUINHi26nim
-	l/j+HsqLiL385OXH5hHyXP4/xh8COWTuL7cY6ke5qKFjUYhpvo81VJ6KQbTb+Ctg
-	/mFfB/IqEHmolK7w6f/4lowqdRGlStPCg3TQngK9BSyhKJkWqD1R7SDBthKZX5xg
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696wdq7f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Feb 2026 10:54:48 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61C7nV98002631;
-	Thu, 12 Feb 2026 10:54:47 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c6fqst8v0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Feb 2026 10:54:47 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61CAsjQH34538186
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Feb 2026 10:54:45 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 86C0C5803F;
-	Thu, 12 Feb 2026 10:54:45 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1985158054;
-	Thu, 12 Feb 2026 10:54:37 +0000 (GMT)
-Received: from [9.61.249.62] (unknown [9.61.249.62])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 12 Feb 2026 10:54:36 +0000 (GMT)
-Message-ID: <ab6ee329-ca59-4765-b309-22e64dfca861@linux.ibm.com>
-Date: Thu, 12 Feb 2026 16:24:32 +0530
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eiP9VDfq";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="acorpGF4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770898606;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4ASZtwC4Jr2vY7rfr/wbGtVzwGSZEjBKWQrjrryCwDs=;
+	b=eiP9VDfqbtlvai58YJ3XwBgfuidAfFpKf/EHQo2V1qH1lZs05qvPnHXxKwXYqRNjbT3Fek
+	uZykAkq/pUaCRRjdTYUVwgRVuD0nV3ctkUBdKIO5EQE0diB5j+n5r0RI4LXSMUO34OSRyi
+	9TtZgXbvP/u/HPDPmg3z14ZpAfV9H0I=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-183-BMGoR8G6PIKIGixlHtyeug-1; Thu, 12 Feb 2026 07:16:45 -0500
+X-MC-Unique: BMGoR8G6PIKIGixlHtyeug-1
+X-Mimecast-MFC-AGG-ID: BMGoR8G6PIKIGixlHtyeug_1770898604
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-480711d09f1so41510585e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 04:16:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770898604; x=1771503404; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ASZtwC4Jr2vY7rfr/wbGtVzwGSZEjBKWQrjrryCwDs=;
+        b=acorpGF4kFx8o5/6t6OW4yUJji1mF9Tl9Vmid/46M0+rLwid8Ej469iqO3ijuBwdwK
+         I4KdrQyydVq8GvDiKUTj/XYffmtfMj5IgtbtwNLi5+snAprHLtZhaE4loJqrhN9tMN+K
+         Mf/bZT2uZi+RcyNmLR1BrMSqnRuj5OqN3QX5UVE/pe9IW3QMG9UtZX7SIg5t6S7HoQph
+         VGRoaxwJrGRng4hKiJxEkkCpGUAloNRL1d7sY5g428MD3lIXiquXKGFqQP3RjQcO2Xwn
+         AOVR9+xbQj5Nt+XEeqT8PoaWWG1Aric8NtLcOpU3nIFInH5jJ2K87qOPMEp3AabuU/wu
+         LteA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770898604; x=1771503404;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4ASZtwC4Jr2vY7rfr/wbGtVzwGSZEjBKWQrjrryCwDs=;
+        b=Si07SlLkhQPMNYA+vDe3oR+Yz8WQPTWiQ5m2XOXIwyiDPF+gMoWGLSiCs6/k1n8r4/
+         4uD3yilIjCpc7oOXWhtZlyvVerCh1D811wj6Rd9MwQNTYCxrdLZUkljXfUCoqSKLSq8H
+         vIWkPk+NV4nrhJYOjT9fFQ6p/MzPxm/giGgNXlIKPu1xT+g2GssTraQZgRa29YgUVEkh
+         0iMsKmqWecgrFYZa0psokvqccg0VdvDQO3mgzRn4gSb7OgqieFUnNw7fsn72h6vO6TOc
+         GfBEIq5/vAkhcmg6Rn4AKtMca2GkhV0qxvZTSy2CuUlNBZAbJZfU2csQDlCGyrNOyd5m
+         nHVg==
+X-Gm-Message-State: AOJu0YydK2zBncE6aDx00pkeFU1TjAsJFSNZOZD5UmH+mN2BC3Qnwmz3
+	2Er31ZzjwGSS90d5ucEH2codRgS0/q/MbDbuF83RgF+ExvPob3gNQlM933PezRjH83nBh8rNNaw
+	LQAC98yqzm7qq85p8dGnrhEBjyPjh1l73rD/UgO5DAODjfmpk+vj86PXyVn6W1BKDExFYbw==
+X-Gm-Gg: AZuq6aJOFqIywU5jiOFVro2cMtVUbzfZhPIWU1GMtQpRJ2XdsCLvRmgT0EBRiA1Ktkb
+	nG0ggYZNxNnjGJLzSrrS9DWXNHPMptHJ1PacHWV31a802Czai+vO//rN+IXSa28JZQZmtQJJVy0
+	c+vt9drAwEvub8XD12Ho8i1FO74spa0rKiyu7/CwDSSm5M+JdZVm3ijY7IFzwBfq+mirOGDD8uf
+	XgO+Ct/z4LmqBwKJm65FaHkPm8DsnpYAzYUVuFJvKk/N98K5+EzQmuQQgKPTyNKyt5DwfWPoEEm
+	5fVaCS0ilT/yLG71tyjevanHc1/Tzy9oqNzvpIxmHsrOm2/R+rJrANHrHye1P5w4JxjUWSn9IyI
+	q7hJFuZp0owt6hqFIpwqPn7ZRxA==
+X-Received: by 2002:a05:600c:3b12:b0:477:98f7:2aec with SMTP id 5b1f17b1804b1-483670fac23mr28141745e9.3.1770898604174;
+        Thu, 12 Feb 2026 04:16:44 -0800 (PST)
+X-Received: by 2002:a05:600c:3b12:b0:477:98f7:2aec with SMTP id 5b1f17b1804b1-483670fac23mr28141325e9.3.1770898603714;
+        Thu, 12 Feb 2026 04:16:43 -0800 (PST)
+Received: from [192.168.88.32] ([212.105.155.220])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d82a4afsm365332535e9.11.2026.02.12.04.16.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Feb 2026 04:16:43 -0800 (PST)
+Message-ID: <e52a10e2-b208-460c-a3e3-305b91433531@redhat.com>
+Date: Thu, 12 Feb 2026 13:16:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,186 +86,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/bpf: Add powerpc support for
- get_preempt_count() in selftest
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
-        eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-        haoluo@google.com, jolsa@kernel.org, christophe.leroy@csgroup.eu,
-        maddy@linux.ibm.com, mpe@ellerman.id.au
-References: <20260212092558.370623-1-skb99@linux.ibm.com>
-Content-Language: en-GB
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-In-Reply-To: <20260212092558.370623-1-skb99@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=YeCwJgRf c=1 sm=1 tr=0 ts=698db178 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=dEnyWooXetdK__wXnIsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: vWFzbJ8g7-APD3QRBeCM2NAPYlHWG-t7
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEyMDA4MCBTYWx0ZWRfXwEgo77BKqPdE
- iImaK5TJ1OnJGXC4bb24zqQOdCkx9cxPxpk3CGWIxYa+4qjLLH1ncmwATrKAV6eS9TAXWQaFs72
- Hwwklk+/t/hvrJBGI+AtNCWScJrctvdEs7FCX+Zws1VMi5seAibiLj6TIL6T9YYQDzpGtn3FBHQ
- 2idSMCok3s10aRKZHvAYvMvDgIsoV3QCsPZmICDbox7Vmo3qCksV2bdFhtWMd3piPReKu7dpK7i
- xOf+X0GNlfVo4jL/H0CQX4fBxq/PoI4E6r7hI9o3l/eEzZB24rRoMhplPBbjNFiKjkdIq/IMaOS
- Z6oCVzDQpFsDvhkIQ7Izb763jSfBmbrE7jpTpCrJZXij2DhsPv5sT75PkIFhdob4PMKqKSzFFh4
- 4btmZDOx4kh74MxS0BQ4Z58Koc8ilQpcxRFWhwPXpY1oczIlUbcKlJz4fYLRzFCGRwkG+Jp4xTr
- fYPuyaT/ott0OGgxu9w==
-X-Proofpoint-ORIG-GUID: 2WhUC-_kZ49qYXhZKIZ4D9ah3Ix5TocJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-12_03,2026-02-11_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 impostorscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602120080
+Subject: Re: [PATCH net-next v4 0/4] net/rds: RDS-TCP reconnect and fanout
+ improvements
+To: Allison Henderson <achender@kernel.org>, netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, edumazet@google.com,
+ rds-devel@oss.oracle.com, kuba@kernel.org, horms@kernel.org,
+ linux-rdma@vger.kernel.org, allison.henderson@oracle.com
+References: <20260212053230.1921241-1-achender@kernel.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260212053230.1921241-1-achender@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 2/12/26 6:32 AM, Allison Henderson wrote:
+> This is subset 4 of the larger RDS-TCP patch series I posted last
+> Oct.  The greater series aims to correct multiple rds-tcp issues that
+> can cause dropped or out of sequence messages.  I've broken it down into
+> smaller sets to make reviews more manageable.
+> 
+> In this set, we address some reconnect issues occurring during connection
+> teardowns, and also move connection fanout operations to a background
+> worker.
+> 
+> The entire set can be viewed in the rfc here:
+> https://lore.kernel.org/netdev/20251022191715.157755-1-achender@kernel.org/
+> 
+> Questions, comments, flames appreciated!
 
-On 12/02/26 2:55 pm, Saket Kumar Bhaskar wrote:
-> get_preempt_count() is enabled to return preempt_count for powerpc,
-> so that bpf_in_interrupt()/bpf_in_nmi()/bpf_in_serving_softirq()/
-> bpf_in_task()/bpf_in_hardirq()/get_preempt_count() works for
-> powerpc as well.
->
-> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+I think you could resubmit the first patch for net after that Linus pull
+the currently pending MR.
 
+---
+## Form letter - net-next-closed
 
-Tested this patch by applying on mainline kernel, and below selftests 
-passes.
+We have already submitted our pull request with net-next material for v7.0,
+and therefore net-next is closed for new drivers, features, code refactoring
+and optimizations. We are currently accepting bug fixes only.
 
+Please repost when net-next reopens after Feb 23rd.
 
-Please add below tag.
+RFC patches sent for review only are obviously welcome at any time.
 
+See:
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+-- 
+pw-bot: defer
 
-Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-
-
-
-./test_progs -t exe_ctx
-[  610.897388] bpf_testmod: loading out-of-tree module taints kernel.
-[  610.907373] audit: type=1334 audit(1771408772.036:229): prog-id=72 
-op=LOAD
-[  610.907385] audit: type=1334 audit(1771408772.036:230): prog-id=72 
-op=UNLOAD
-[  610.907461] audit: type=1334 audit(1771408772.036:231): prog-id=73 
-op=LOAD
-[  610.907467] audit: type=1334 audit(1771408772.036:232): prog-id=73 
-op=UNLOAD
-[  610.941282] audit: type=1334 audit(1771408772.076:233): prog-id=74 
-op=LOAD
-[  610.941290] audit: type=1334 audit(1771408772.076:234): prog-id=74 
-op=UNLOAD
-[  610.956474] audit: type=1334 audit(1771408772.086:235): prog-id=75 
-op=LOAD
-[  610.956481] audit: type=1334 audit(1771408772.086:236): prog-id=75 
-op=UNLOAD
-[  610.956964] audit: type=1334 audit(1771408772.086:237): prog-id=76 
-op=LOAD
-[  610.956970] audit: type=1334 audit(1771408772.086:238): prog-id=76 
-op=UNLOAD
-#109     exe_ctx:OK
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-
-./test_progs -t timer_interrupt
-[  730.106678] kauditd_printk_skb: 6 callbacks suppressed
-[  730.106685] audit: type=1334 audit(1771408891.236:245): prog-id=80 
-op=LOAD
-[  730.106700] audit: type=1334 audit(1771408891.236:246): prog-id=80 
-op=UNLOAD
-[  730.106787] audit: type=1334 audit(1771408891.236:247): prog-id=81 
-op=LOAD
-[  730.106794] audit: type=1334 audit(1771408891.236:248): prog-id=81 
-op=UNLOAD
-[  730.136150] audit: type=1334 audit(1771408891.266:249): prog-id=82 
-op=LOAD
-[  730.136158] audit: type=1334 audit(1771408891.266:250): prog-id=82 
-op=UNLOAD
-[  730.151245] audit: type=1334 audit(1771408891.286:251): prog-id=83 
-op=LOAD
-[  730.151252] audit: type=1334 audit(1771408891.286:252): prog-id=83 
-op=UNLOAD
-[  730.151572] audit: type=1334 audit(1771408891.286:253): prog-id=84 
-op=LOAD
-[  730.151578] audit: type=1334 audit(1771408891.286:254): prog-id=84 
-op=UNLOAD
-#490     timer_interrupt:OK
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-
-Regards,
-
-Venkat.
-
-> ---
-> Changes since v1:
-> * Updated the comments to include powerpc for the APIs.
->
-> v1: https://lore.kernel.org/bpf/20260129054035.168078-1-skb99@linux.ibm.com/
-> ---
->   tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
->   1 file changed, 7 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> index 4b7210c318dd..9df77e59d4f5 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -645,6 +645,8 @@ static inline int get_preempt_count(void)
->   			bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
->   #elif defined(bpf_target_arm64)
->   	return bpf_get_current_task_btf()->thread_info.preempt.count;
-> +#elif defined(bpf_target_powerpc)
-> +	return bpf_get_current_task_btf()->thread_info.preempt_count;
->   #endif
->   	return 0;
->   }
-> @@ -653,6 +655,7 @@ static inline int get_preempt_count(void)
->    *	Report whether it is in interrupt context. Only works on the following archs:
->    *	* x86
->    *	* arm64
-> + *	* powerpc64
->    */
->   static inline int bpf_in_interrupt(void)
->   {
-> @@ -672,6 +675,7 @@ static inline int bpf_in_interrupt(void)
->    *	Report whether it is in NMI context. Only works on the following archs:
->    *	* x86
->    *	* arm64
-> + *	* powerpc64
->    */
->   static inline int bpf_in_nmi(void)
->   {
-> @@ -682,6 +686,7 @@ static inline int bpf_in_nmi(void)
->    *	Report whether it is in hard IRQ context. Only works on the following archs:
->    *	* x86
->    *	* arm64
-> + *	* powerpc64
->    */
->   static inline int bpf_in_hardirq(void)
->   {
-> @@ -692,6 +697,7 @@ static inline int bpf_in_hardirq(void)
->    *	Report whether it is in softirq context. Only works on the following archs:
->    *	* x86
->    *	* arm64
-> + *	* powerpc64
->    */
->   static inline int bpf_in_serving_softirq(void)
->   {
-> @@ -710,6 +716,7 @@ static inline int bpf_in_serving_softirq(void)
->    *	Report whether it is in task context. Only works on the following archs:
->    *	* x86
->    *	* arm64
-> + *	* powerpc64
->    */
->   static inline int bpf_in_task(void)
->   {
