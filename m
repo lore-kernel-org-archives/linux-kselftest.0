@@ -1,163 +1,247 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010033.outbound.protection.outlook.com [52.101.193.33])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F2F2DE711;
-	Thu, 12 Feb 2026 10:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.33
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770893141; cv=fail; b=TBkGx4h332NgfGvRJF0nmSs94JNI9GvGYkh85dlz+K9D+3amgYxN7vKDW8wi3Hq8j1q+4oJmW6+s/GQXJvYtxz9CcnmT0D/05y+P42hMd7ndXabfyE8Tvm0Fq+rhwn1z599iBg3LwDML2ZBDv3JbKoLnh2TXFeG+fTCTS/tgDVw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770893141; c=relaxed/simple;
-	bh=UzHGKZNdH0oh+nnljDDuSvtUyAjH0r+sSVBqhJNdv0k=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=EeSDMF0GYgDxosB6/npXc01Lda2bocQbkOzzlGqQTEgi7lIh6Qhw9tDwAJi/NYnPggBuE3HKox4orLyyVgU0IA2EMgkyEv6Uq6wVe/IJwrCpSupXDDM/Y+zd1YFRRcMQkqkqYMYASQyjwc4hjZxNaW5yHh33WN1wQnkbwKzl/cY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ny+wZ+B3; arc=fail smtp.client-ip=52.101.193.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E454333985A;
+	Thu, 12 Feb 2026 11:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770894104; cv=none; b=aRMtQPriessY4ptKRAmD42XEvtVcU7lwwxouq0fq+BH7bq7Ih8NDGHq8TwxrB167/fDCvd0CegUFp1AhdpoKyANtaOVpRQyKeYqLY2haTApqYnxYT/cHbGFzMLpw7qB/S2j+XW3m4z30pa+lP4kfwUme6KpCzW98vrhX7ZdU720=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770894104; c=relaxed/simple;
+	bh=a6m8qaYBgeEpzg6g8VMPD+I3VU2nLvfu9LzlA00n+8w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CWPqb5aG2R00IgwK3K4qMmuCd7o9q4M7OAT3TBtuKanzZ5ocJbzQ/vj9UJxJPELi2rvR5JfI9y7KgI4Gqu/qaaH7MtIbkABHMfTfspoN8btAE6KKNGI4MJm7uiiysEYgpLzbWaaGiQ5zSbnDa/7DyMwWm3A20qJ+95CHoNtBg9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W6deOLrS; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ny+wZ+B3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mkbGppCOucHcvtuNxnr53YsnlIVDR0p316F/pmDJmNYMVZndzjldKwsriy9eAzN8BMi6quGBE0qrBCR94jqUritKqzBKTnKEsjw9dHOPXQzD6tbZW8XLo8739Mk4UPQZnqxmRLbBCNDx80796LeD+bGiPrjGCHMJ/Z3OF21Hwh6XNdEAAZRWOghy1j1IWETDKUnUJNv9prPdUUW5PBU0y73lGpaneOWu2ACNUVv3fap/keYSaGwMb0ypCAqYcTJG7fLdkebOZNQ0pHXpBLbeBxezl9Z1FdmaRXjfPnAvi+Vy11mb/kfWxor2BRzN8Pk2JThsOtUx7/hO9J7kj+WKQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fXdk8Q3jw2WSvaG858+F8BIhyMO9CSIlLA4Q2HqHxC4=;
- b=ZYmrGU5CiKPlgmwQDNJ9Bpf0VuUJGwQEe7/XHXdOtdcDDeNhIgbHXRbvIHX9YkzkXyKrVe+hHhzZ2gKvhG35sgnZHE0OCABeDP+IletEuaKnut+einN2a93OPIUqAJN86r1jgEeH3OGUlbKHawjQOkDuk8+RIxV6mja7CzZM1c32f8DCjZaTnCGoCzcnEHXOxwlnXrLcZMVGSxSKhu4Z1sQ7OSjqX7pI/H0XYlKRji87GuI7LCHz6CKULZpAz5EwgYqKfuIFLN+d05To9w2zqaaQJC8w9bUQ28RaqkxGihde/7PQLKdyFV+3iexR3Q+G7DRVMuIWKA/jxwl4q0DX2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fXdk8Q3jw2WSvaG858+F8BIhyMO9CSIlLA4Q2HqHxC4=;
- b=ny+wZ+B3geDztes77ipPwF7KmiyaHs7EaSzOwf6N2wfTNawNqaM6ySCQCq0eMgZhhDvBpPW1Gz7xXkSG9Qef9Cia/nz5zg49KrPtykHB22oPrXJD9kTdkaZDNr+WLG5ASHyW680vsuCmFsctwzmh7Zv4QNrleDcqYzgRQMfGmQMHw87NtApjr3gFsGTuWOnDYHoUmFIYrLdoC2kLl/jvkRHKRhlcP+OhUwWGo6vqmtzOtmWnvdhkdDZmJmpbG5+apNqj1Z7ABq9s2WbYnKJ7jA9gJC5MoFox+hVd2ff9bSfeQHLGekrj6b8CxJEjKU7NkILZbCCb37YRGeja6bbZRA==
-Received: from SN7P220CA0025.NAMP220.PROD.OUTLOOK.COM (2603:10b6:806:123::30)
- by SJ5PPFA5F0E981D.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::99d) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.14; Thu, 12 Feb
- 2026 10:45:34 +0000
-Received: from SA2PEPF00003AE9.namprd02.prod.outlook.com
- (2603:10b6:806:123:cafe::f5) by SN7P220CA0025.outlook.office365.com
- (2603:10b6:806:123::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9611.11 via Frontend Transport; Thu,
- 12 Feb 2026 10:45:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SA2PEPF00003AE9.mail.protection.outlook.com (10.167.248.9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9611.8 via Frontend Transport; Thu, 12 Feb 2026 10:45:33 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 12 Feb
- 2026 02:45:23 -0800
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 12 Feb
- 2026 02:45:18 -0800
-References: <20260211022146.190948-1-yuehaibing@huawei.com>
- <87qzqr5ktl.fsf@nvidia.com>
- <34e17499-e385-4017-801c-332c9c40d484@huawei.com>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Yue Haibing <yuehaibing@huawei.com>
-CC: Petr Machata <petrm@nvidia.com>, <davem@davemloft.net>,
-	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<horms@kernel.org>, <shuah@kernel.org>, <razor@blackwall.org>,
-	<netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] selftests: net: lib: Fix jq parsing error
-Date: Thu, 12 Feb 2026 10:51:15 +0100
-In-Reply-To: <34e17499-e385-4017-801c-332c9c40d484@huawei.com>
-Message-ID: <87ms1e5jgm.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W6deOLrS"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61C6UE1H394028;
+	Thu, 12 Feb 2026 10:54:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=kC5PBC
+	rX/sgH2Fq02LEGV9wm5gA5lKwK+RKOC9phkJk=; b=W6deOLrSmmtVXSPitFAh/t
+	/yBHKrAlcNTtI9G2w3XSfMQ6B1/zODmHq06iD+ZfKumubAs6nV6iTliB+UEp0Ntl
+	8Cs7U338COVX2cWNF+AIo6nyGVtLY0smGBojDsAH/hRyXDcp6lL7X7O8vpRrnt9a
+	oYu8b7RW2DFx0998nUBXhu0s7m3sl2kWFiPw/K9pi6jJA0Pfh/pjKvUINHi26nim
+	l/j+HsqLiL385OXH5hHyXP4/xh8COWTuL7cY6ke5qKFjUYhpvo81VJ6KQbTb+Ctg
+	/mFfB/IqEHmolK7w6f/4lowqdRGlStPCg3TQngK9BSyhKJkWqD1R7SDBthKZX5xg
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696wdq7f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Feb 2026 10:54:48 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61C7nV98002631;
+	Thu, 12 Feb 2026 10:54:47 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c6fqst8v0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Feb 2026 10:54:47 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61CAsjQH34538186
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 12 Feb 2026 10:54:45 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 86C0C5803F;
+	Thu, 12 Feb 2026 10:54:45 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1985158054;
+	Thu, 12 Feb 2026 10:54:37 +0000 (GMT)
+Received: from [9.61.249.62] (unknown [9.61.249.62])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 12 Feb 2026 10:54:36 +0000 (GMT)
+Message-ID: <ab6ee329-ca59-4765-b309-22e64dfca861@linux.ibm.com>
+Date: Thu, 12 Feb 2026 16:24:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE9:EE_|SJ5PPFA5F0E981D:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e3170a7-4d92-4738-10d9-08de6a23d98f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|7416014|376014|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Wk+pkxvq80334djpiRE991kIWcbd8U7hNWHtgcQ/JHpSOBAJrgsbDI2cFtUh?=
- =?us-ascii?Q?vHKEZ5adwJuDqPiNwB47maYVs5TI12nzKAVjHWOtwNNkrpv1+WD6fGn1Vvqj?=
- =?us-ascii?Q?ckjy+xAmlp5OLXCWLRR9xrHVMdJYI1/OCjSM/zr/Xt27L7HCb154QXq9tihQ?=
- =?us-ascii?Q?FSzYVo1QicOy6TmHv+NTsm1c9L33SqetZxu83HImRNLvV3SMCMeKRYmwmj3t?=
- =?us-ascii?Q?1v8rsX/oqtVvK3e4mylf5gp3y8KEHuCBxqVqwfpMdk2Gjss50UTjOhTdZDxI?=
- =?us-ascii?Q?a2pHEBwmfVqoEdVm+PAUn7gjqdihb1cDh9K0rJn523aD70zMary2OJOwLP41?=
- =?us-ascii?Q?iR/5K1x9p3x/nI3Cn3DjqsczZQn9xjvqO/aJzIojNcz/izNoSKGOUAOO6oMA?=
- =?us-ascii?Q?pzA3wKKwwdntWvCMAZr95tIFRuzUnA9NQaxTstMbNa8saXI1nVcc6e+hR8OZ?=
- =?us-ascii?Q?2Fj12CuPIErRSj++3DztOT5c2nutn2sDDyhqZOgcyuETgAUz4wLMxF7yPpVi?=
- =?us-ascii?Q?26GR/0Lz559qwJv90Hf3zZeR5+hxQEryTwUu8fvJJJ4cHA2LTzwV403mePHF?=
- =?us-ascii?Q?T5q/Kg6Hjtl/lco2y2AGktQGdYOwPjEZzUOitVQIJBW77I00z5GX4U06SbVO?=
- =?us-ascii?Q?Pisc7foV67H5CMbdN1VUBLzm8lWobqS8PY4MIubcZkw9XD9vyXJpqBw46+ZR?=
- =?us-ascii?Q?32bQOdJJYcOiEmz1wCKsKYuW4oWzgVDuCOfjPuwH0pGsp6F7emo9NT8y3TJa?=
- =?us-ascii?Q?atbA9gTG9YlBL0T23NRUkZAkuPFr3LyITspQr7Lce2mlX2/c/BqYUhJCt0j7?=
- =?us-ascii?Q?IChETNGlvhIYZfE++7F0dG3TEauFih1Yw0/LxkFNcSflDPvrqk72KxA3HA0Z?=
- =?us-ascii?Q?6iqZRj5I8cSZXDtZluiUQ3yZr3ywttf03RxYm/TkKO5OuwSCoZVPryUQmY6J?=
- =?us-ascii?Q?DofFHLmxbOR6xJuM1abic4yx28cRYZlf0mZ9vzxegPmj3InooFLSXllh/uYH?=
- =?us-ascii?Q?ostg8VzA8VX9We+Izb6G98s15+quhWR4kDg1t+qlqPs521097yDeRzpGXP4W?=
- =?us-ascii?Q?P9fafEyCLNWpu3aqrr2CI+A40iYSffhkDrn5bd4BhdegfQfI0zmvkzOB375D?=
- =?us-ascii?Q?Ur9keBzywmI97TTMjVUgX7JnfRo+pPMZYr7NoWD33Bg4NHMSRDnndw8kvHyR?=
- =?us-ascii?Q?AHn7KzvdT+Y0Qkci7NYn9Hdiv3oMj/UQzeknyMHhMOBRkTJNXylCl3xUEm8b?=
- =?us-ascii?Q?6HsJQ6LOqQznMiaV0CVDqCUUui+g85t1B8HdU9FSNdL4gkGdftGzcBez0XGM?=
- =?us-ascii?Q?y+CzRWrGAAPwKoumBtGiM2afKwbqaDu7pqZV8wcYHqbbiuEpUQf1x8pQn76K?=
- =?us-ascii?Q?X6N3ydm9rFfEOdxIxkf8vAfDb+Ff3my/oA1HEUsFnZvD4R6ASsgLI3Lyz+h6?=
- =?us-ascii?Q?ELO1j5sOk1iGx2iMI9qcZd7adbAjpUn1k/GhC5/2KB3hCukiD1eY4xk9gwjI?=
- =?us-ascii?Q?6Lt5qrYNf2TtVoPNUKeTI1qnu+5h7C42F8A9bwVnFm0wUrSu4B3YIpLIPy5Y?=
- =?us-ascii?Q?aJYHC0l1EcPBfzue6R5k5+mXFpnXnD7/ndmOlooY8fP6bk6Mybha4jzPVsQD?=
- =?us-ascii?Q?ncezKeXxLRpdO1WzuGPstDTBAygcf7uFJ2HB8cYd2AbzqanIflqXRKq/Wnyj?=
- =?us-ascii?Q?VLsCww=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	siOdnOzTcc7j2iZRVLmh1B7dNuqTBBqj9KjpLFaDfuvCTS7SiG5qapwG4tCL1UEHDi3kv2/SEWboAI6FOMH0zHRcnnuIsYLRh2ZhokDYxIjUEXxMQnAplInCOBgvCP1OkxzbM34W1wSoSqQBAWnhuD2Cg0FtOJcNTpOXL+XQM49s3bT3knI1R44BgBWEP/UCkA1WXsHe/LUqbJ1QqtJZ0ldSQ7WoHZb4yysXdnWvMspXwOL95jhO8yWUPceiNJlfTk48bFLtpeAkaze1M7lwKjTUXPleDGnUngSA9bZzUNMNnLPHB82tsGR77fHvD5Xv0SVR2o1wZOMYf4fet38VinFlg95kErqenTFQZF0y4JqAR0oPy14XnFlsgLdRw3uEMCWJlFHXSyutpQrxxsAlQSC8ps0CO1l+6ijPNhXjPhYFcEnLdNWrFpPHhquOqYoW
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2026 10:45:33.8338
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e3170a7-4d92-4738-10d9-08de6a23d98f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003AE9.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPFA5F0E981D
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/bpf: Add powerpc support for
+ get_preempt_count() in selftest
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+        haoluo@google.com, jolsa@kernel.org, christophe.leroy@csgroup.eu,
+        maddy@linux.ibm.com, mpe@ellerman.id.au
+References: <20260212092558.370623-1-skb99@linux.ibm.com>
+Content-Language: en-GB
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+In-Reply-To: <20260212092558.370623-1-skb99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=YeCwJgRf c=1 sm=1 tr=0 ts=698db178 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=dEnyWooXetdK__wXnIsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: vWFzbJ8g7-APD3QRBeCM2NAPYlHWG-t7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEyMDA4MCBTYWx0ZWRfXwEgo77BKqPdE
+ iImaK5TJ1OnJGXC4bb24zqQOdCkx9cxPxpk3CGWIxYa+4qjLLH1ncmwATrKAV6eS9TAXWQaFs72
+ Hwwklk+/t/hvrJBGI+AtNCWScJrctvdEs7FCX+Zws1VMi5seAibiLj6TIL6T9YYQDzpGtn3FBHQ
+ 2idSMCok3s10aRKZHvAYvMvDgIsoV3QCsPZmICDbox7Vmo3qCksV2bdFhtWMd3piPReKu7dpK7i
+ xOf+X0GNlfVo4jL/H0CQX4fBxq/PoI4E6r7hI9o3l/eEzZB24rRoMhplPBbjNFiKjkdIq/IMaOS
+ Z6oCVzDQpFsDvhkIQ7Izb763jSfBmbrE7jpTpCrJZXij2DhsPv5sT75PkIFhdob4PMKqKSzFFh4
+ 4btmZDOx4kh74MxS0BQ4Z58Koc8ilQpcxRFWhwPXpY1oczIlUbcKlJz4fYLRzFCGRwkG+Jp4xTr
+ fYPuyaT/ott0OGgxu9w==
+X-Proofpoint-ORIG-GUID: 2WhUC-_kZ49qYXhZKIZ4D9ah3Ix5TocJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-12_03,2026-02-11_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 impostorscore=0
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602120080
 
 
-Yue Haibing <yuehaibing@huawei.com> writes:
-
-> On 2026/2/12 0:01, Petr Machata wrote:
->> 
->> Yue Haibing <yuehaibing@huawei.com> writes:
->> 
->>> ++ jq --arg flag UP 'any(.[].flags.[]; . == $flag)'
->>> jq: error: syntax error, unexpected '[', expecting FORMAT or QQSTRING_START
->>>  (Unix shell quoting issues?) at <top-level>, line 1:
->>> any(.[].flags.[]; . == $flag)
->>> jq: 1 compile error
->>>
->>> Remove the extra dot (.) after flags array to fix this.
->> 
->> Interesting, both work for me on 1.7.1. What jq version do you use?
+On 12/02/26 2:55 pm, Saket Kumar Bhaskar wrote:
+> get_preempt_count() is enabled to return preempt_count for powerpc,
+> so that bpf_in_interrupt()/bpf_in_nmi()/bpf_in_serving_softirq()/
+> bpf_in_task()/bpf_in_hardirq()/get_preempt_count() works for
+> powerpc as well.
 >
-> I run this on Ubuntu 23.04,
-> jq - commandline JSON processor [version 1.6]
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 
-Hmm, I see, 1.6 doesn't seem to have accepted the syntax.
-Thanks for the fix!
+
+Tested this patch by applying on mainline kernel, and below selftests 
+passes.
+
+
+Please add below tag.
+
+
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+
+
+
+./test_progs -t exe_ctx
+[  610.897388] bpf_testmod: loading out-of-tree module taints kernel.
+[  610.907373] audit: type=1334 audit(1771408772.036:229): prog-id=72 
+op=LOAD
+[  610.907385] audit: type=1334 audit(1771408772.036:230): prog-id=72 
+op=UNLOAD
+[  610.907461] audit: type=1334 audit(1771408772.036:231): prog-id=73 
+op=LOAD
+[  610.907467] audit: type=1334 audit(1771408772.036:232): prog-id=73 
+op=UNLOAD
+[  610.941282] audit: type=1334 audit(1771408772.076:233): prog-id=74 
+op=LOAD
+[  610.941290] audit: type=1334 audit(1771408772.076:234): prog-id=74 
+op=UNLOAD
+[  610.956474] audit: type=1334 audit(1771408772.086:235): prog-id=75 
+op=LOAD
+[  610.956481] audit: type=1334 audit(1771408772.086:236): prog-id=75 
+op=UNLOAD
+[  610.956964] audit: type=1334 audit(1771408772.086:237): prog-id=76 
+op=LOAD
+[  610.956970] audit: type=1334 audit(1771408772.086:238): prog-id=76 
+op=UNLOAD
+#109     exe_ctx:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+
+./test_progs -t timer_interrupt
+[  730.106678] kauditd_printk_skb: 6 callbacks suppressed
+[  730.106685] audit: type=1334 audit(1771408891.236:245): prog-id=80 
+op=LOAD
+[  730.106700] audit: type=1334 audit(1771408891.236:246): prog-id=80 
+op=UNLOAD
+[  730.106787] audit: type=1334 audit(1771408891.236:247): prog-id=81 
+op=LOAD
+[  730.106794] audit: type=1334 audit(1771408891.236:248): prog-id=81 
+op=UNLOAD
+[  730.136150] audit: type=1334 audit(1771408891.266:249): prog-id=82 
+op=LOAD
+[  730.136158] audit: type=1334 audit(1771408891.266:250): prog-id=82 
+op=UNLOAD
+[  730.151245] audit: type=1334 audit(1771408891.286:251): prog-id=83 
+op=LOAD
+[  730.151252] audit: type=1334 audit(1771408891.286:252): prog-id=83 
+op=UNLOAD
+[  730.151572] audit: type=1334 audit(1771408891.286:253): prog-id=84 
+op=LOAD
+[  730.151578] audit: type=1334 audit(1771408891.286:254): prog-id=84 
+op=UNLOAD
+#490     timer_interrupt:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+
+Regards,
+
+Venkat.
+
+> ---
+> Changes since v1:
+> * Updated the comments to include powerpc for the APIs.
+>
+> v1: https://lore.kernel.org/bpf/20260129054035.168078-1-skb99@linux.ibm.com/
+> ---
+>   tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> index 4b7210c318dd..9df77e59d4f5 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> @@ -645,6 +645,8 @@ static inline int get_preempt_count(void)
+>   			bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
+>   #elif defined(bpf_target_arm64)
+>   	return bpf_get_current_task_btf()->thread_info.preempt.count;
+> +#elif defined(bpf_target_powerpc)
+> +	return bpf_get_current_task_btf()->thread_info.preempt_count;
+>   #endif
+>   	return 0;
+>   }
+> @@ -653,6 +655,7 @@ static inline int get_preempt_count(void)
+>    *	Report whether it is in interrupt context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_interrupt(void)
+>   {
+> @@ -672,6 +675,7 @@ static inline int bpf_in_interrupt(void)
+>    *	Report whether it is in NMI context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_nmi(void)
+>   {
+> @@ -682,6 +686,7 @@ static inline int bpf_in_nmi(void)
+>    *	Report whether it is in hard IRQ context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_hardirq(void)
+>   {
+> @@ -692,6 +697,7 @@ static inline int bpf_in_hardirq(void)
+>    *	Report whether it is in softirq context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_serving_softirq(void)
+>   {
+> @@ -710,6 +716,7 @@ static inline int bpf_in_serving_softirq(void)
+>    *	Report whether it is in task context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_task(void)
+>   {
