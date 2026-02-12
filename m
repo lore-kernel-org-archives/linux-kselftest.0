@@ -1,145 +1,155 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA971F12E0
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 01:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAB62AD22
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 01:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770861053; cv=pass; b=XJDhmWm00fUlcDgoNtbMfNZdV1dCOulkkR80oP5I+8DLyU2nSaMveBZyUIlVrgTJvjvF3pzaJHiCeRt9/zr3hFb3ORHEaax53eDAjIoQmAmGjKYrzxOUjnZ88aSf27x7SsN6RD9O4u58DgfvHeJEU4ug77cw4S+cspVTKYS1t5o=
+	t=1770861387; cv=pass; b=EMwQYFElmD/LztMtg7qqGiLEAWbbhqwAR4vGZINRzEf3D3Wi+RaexJeH/AbOhWmb/ZmUF5KamxvrWQiDdul7Y0qFO+oOd4luf0MutvHFA1d9NJIlMBg9uzIPWnngDZdjonyHHd4CUORIbfF7edV+b0Bz10D0HVbNJ1iBTk1KsH4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770861053; c=relaxed/simple;
-	bh=N9VaTXpJcAFUMLGUpQQ/AsHV0xjic/FqepdABw0OE+s=;
+	s=arc-20240116; t=1770861387; c=relaxed/simple;
+	bh=frWKgDH5s6+x8xNUS5+okrMlTZrWCJFmfSis+/4QHEI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SouLJguXvgca6QFvkejIw+JriVDLhL1VE0M/pezMYrzir/wEK05MDn//E51SqigvoJwWKP2p+cgy77XxqJxZC83qLASrr5PqedUcDBezi1YsjqY2RDGF007BfUnwyHqQnC5Q6Nqu6FxBv/MH4X7RbxJy/DFIXpLjc3guo5tuPI8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ygo9WDmb; arc=pass smtp.client-ip=209.85.221.48
+	 To:Cc:Content-Type; b=IUhKTH9bJazlsBaYv2D339yLsH5Xf+1gwbR0vFccOWs0W1nszsiRpPZSuam1LR7FrQCrxRW7XkT+96jRrdYDCtXQvBMeW4sY8ioZ7Cw8/HoOtgjB5oX48wLKsvYg0U9qC0CeviGL9yGKe3yi7EFh/wi3IZpSAXGyA0hRjsDXwi0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nkSpx6jQ; arc=pass smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ygo9WDmb"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4362507f0feso3860699f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 17:50:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770861051; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkSpx6jQ"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4359a316d89so2236967f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 17:56:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770861384; cv=none;
         d=google.com; s=arc-20240605;
-        b=YSAd69ZyvZIk/Tv5ar/Vm/4BbtNWi0KNrhkGGNVtKZXtGjzZzLgMvU3Z82SiDikpiw
-         SEJIHD21U53/SaUmklhARP/AInWHtQvFh5j5pk1qYr6CIeYf6GMb077S+cfDGbufJbdM
-         +FopmLeUdqMyVArgE46zcZArnWE7z3CUT3iGNHeU1QnXth+7/STwtE0vFwGTsUEaE+y2
-         WsFI1V6a5lFKFEi4r6q1oNm74RgipibuqEHxhyE4sAbBgIS05LzFH5H/6hNwu/bBSH1H
-         hsXX8tgHPAXt1FZPvaSlTIAsbOgkyQ2VuA8Px/GURiPVXqadccKc+pR3hkUrOZkCccF6
-         6zsg==
+        b=DRZzjXlWZdkfVLTT2SF27k4PrzxOjMBJrageKfqI1CJ+K5knGisRuvRsVmtZurCWQ+
+         YCpoQ1okBt0pReUOvBwMtbis8X7FWLslnFWF3JUrBGSVVaAJB2TajCxtJeV4Myx8qQmz
+         PYFLcaUslbvpIaGW0VgxTOkRWedjXBUClATUpJHNk0dqdYiFSXpXafUKSJojavXPOUGZ
+         1gHn74VyXa2FA0GC/hVWEBC+Jb/TAj6zAxmZUGqP7QUQhSmGAO8fLK+MYnD9GGxrf2FL
+         3TDfZXU7SoEL+763RnSntkixU5jx1/Ivb/rBodPgz23mvfZl49porlHJn8k+7E+Py7J/
+         uekw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=hW1jLKEJu2CXzvb9NvuLQpt6Y245YIl4LJuVa/TdN7g=;
-        fh=oAuEacJdUMxQZAFws2T36OhiFxsY8LFclhEfnsc90ek=;
-        b=kFvn+ybhvO9+JBGkpl97laSSt2s0sUAI/c9e4dP6XYHvJNVtE/8gpjZVhL9jOk+3MC
-         VGgPwU6s5ZgTlne2xntQQRG4tZcRJELU6kZuYlg8aMFfUoWc0H3sb2UTKmBjt1QarYRR
-         pUQmo5OY6S0Zy64UJ1c8ajmrF8jZoIIBx5JBW5uywaoF74IRH5Bm+VI+3lLCdpG37ckm
-         6uV6gM/qoRHamOyGx8UrkFUcW+XxYfP9dystcVktvRdnXLhwcAPfHGxzbbcjKh498mcj
-         Wy3lJ8h+k0gO5KQRxMHXW5vUegiVFSm4GpukY90j3gLgSdAtVKto8jX43aTkFMOuZYAR
-         HNVw==;
+        bh=hTq0b2jT5IC669GVrEU+cppahygOALNim8bS9Ug7FH0=;
+        fh=r/FNPyNijEhDJQiq0ab5mCQCp6Z2eOIX5elXbHPmoOk=;
+        b=WVI+3cBVffGVVoVutOmafMEG12fGer4XK1Ow8wOQyGxAJfalqqnBPHIOhTxigJLvoq
+         bij70aW4bUMPfFwFiinEC8RiLCyAiWND0ZhYyO1vnWU3cglMh9ubb3bIUREP6YL8AnXG
+         PcdR3MwnauwKDv6SI6S+OxP+J7LWZkhJsNTvJs1T/2a7rS8FBdjiyNdnO/1oomt7daIL
+         GTneCc55/tgTeNRyfuL7b1xpWRGehD9e5a2bNj3BdNxEa2+nJYPy9Zujx1QjmzINMRM4
+         uQsW0jtw1fIUtKLMdxh0QB1o5koSJ2dNf/EgaSN8l5XG2Wp6je8vjGUThmdZpx/5MzI4
+         hCKQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770861051; x=1771465851; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770861384; x=1771466184; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hW1jLKEJu2CXzvb9NvuLQpt6Y245YIl4LJuVa/TdN7g=;
-        b=Ygo9WDmbgpG0tPmP1YQ1Ze8i0tVxqLOLuId0psVOA8+TSIczvBi6ZntbI89JKaPrJ5
-         dt6ko+z/Bkgnd2M/bbbqvu5lxuPBEVPsyb3wsIHp36mSl1ISWh3LdXLTbjrehg7/5/7N
-         l0e57Acl3y7xaz+eG3ivAlzLYK/b3xdtxRRE9MBn82UB451Hi3zM0DSsZIUB6Q7Vyulp
-         WJFP33BMuncVXwXkIIrHhXCy4sAv5AI9BTnaduxiFHrDtuqJmGA8tmsO8y9PnOONDo3A
-         lYrPQSUBA3FcTPlHjqeO7T4RUBm+B19LuijXkKG/RdFJQTgSqZtFeM8OSVA2+/f2cpY9
-         dPqw==
+        bh=hTq0b2jT5IC669GVrEU+cppahygOALNim8bS9Ug7FH0=;
+        b=nkSpx6jQ0ouv6NzI5gSTrani1DdBkD/wFQ3JpPMAIOimG7QP8X66BeHpQJHbgI6uKY
+         EhLyXpkuWiTOnE29k1xcBhp2Q6bs5IpIsceRVh9TiU4snwodRD6lHtQECQFHAd+T6EtG
+         9GKQgexheHU8I9LdgNYKQknsGXZZIsq/Q7vAjONevjb6cfkWwQwJHuOgGf6+DvTRDI5a
+         /fjK/tiq72VEyw8D8tyXkhF+PjreS22+wyKJOdb7QZ/UeLjGAZi56fltdyH5ze1qRMFZ
+         7i1upNsg2UxatO9QcQyXrJCoeLSJcKF2vkDLMMh0KepO1Nlv3yWKni+xzEVW2cVVCvLh
+         yNhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770861051; x=1771465851;
+        d=1e100.net; s=20230601; t=1770861384; x=1771466184;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=hW1jLKEJu2CXzvb9NvuLQpt6Y245YIl4LJuVa/TdN7g=;
-        b=l5qdV5jH/AOX2eUOraj1YVgWrTSISOnJH0RKlI5V4RU4o8nRHHYn/jVvZzLPI75Tg/
-         Pt83fbnXHhkHM+xyi+Q8BUuHtgVOcWJ2NyxerRPQSQpRPx1iCmCy6bZerVjmV3Zq4s1p
-         Hm16jUlhdtCdaztyVMtxwXFdVUjTXRn610IgjFRxDyEzWE4W8xN9tvK+s11FJGKgip5I
-         4jST+J434VuQnQblHUZom2ayhtKduLZ1r1ie1kZdM6nL2r2LLIkSTxiWqLLQxIzPw2hs
-         0Jh4rAc04yYe6pmwEWSpYsrd57uSG0q5QHB5Mw7qcSTQjeEXOOZEuhQ6s933yXH7MMzD
-         ZNIw==
-X-Forwarded-Encrypted: i=1; AJvYcCVDThuf5hc+8/J+rdJfisWegPYSPEgUYESZOYGMMMKtOc7iCzZ34Hu+THdCynvHzjtFkGuzEORpKZp8ofOKoVo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzejRZsNoiE/Qk7sApYzDrZNIJeBMwUzN/D74AjJZiL5UZmkPj
-	XBzuKD5FU0ZvVUgtdtfzqmor7J9pD+5ujzKMtPDITTl5xl8Z2L0Tu/HIIhjIdIty/mlnNSbiKEv
-	S3ZLYSbjfRdIaWoUxyKDqhACotpEremE=
-X-Gm-Gg: AZuq6aIYorZ5yKEPcYnK6+VVzdu2E6w2a68cmyXUYPYtcCAP+9SkIxd/nbe6WIeDDbp
-	lq9cIce/lpeWLSAveZXA7qt6oKKEuGtFuDD11Xx/htMCN+hFUx6KeOUk+TDrOBZ7qwUxUQs+tTf
-	E5QSN+XARUABfhh20gjLeo/Jtw2ruFGWKtSRpg8XcubM7IE9v8AnA46xgCmkaEknfMpSew77dCe
-	E3eKLeRALr2N73xB7ZwfDPlHSOEuPevgy+FpcIRBxUVH43cro/qp3f50Eloywxh/NSbSTnITB5A
-	0CWh5Xr0U5pwo+RgF5WFmmkaWloaI73cywux16eGHZ1LP3nZwgmm/wT6jGsVa+H+ttKtspEWc3x
-	wkVs3pTt7ztSptoxBmjOkZhzhXw==
-X-Received: by 2002:a05:6000:381:b0:437:8941:2f7b with SMTP id
- ffacd0b85a97d-4378aa127bcmr1990471f8f.19.1770861050874; Wed, 11 Feb 2026
- 17:50:50 -0800 (PST)
+        bh=hTq0b2jT5IC669GVrEU+cppahygOALNim8bS9Ug7FH0=;
+        b=YZ5keoSZZqB3F+9wJ09vjvqcQSYlDuag7OaPzoeCIMByT2vbaRsaVhRa+giETOAWi8
+         cdmp4xJC0RuHUnLG1kHuKCy6TYsO/WXTLa7+1++ZFQgwnkMNtFk7J7QrsN9is6r0HxZV
+         gJTzrfrBD0UB8ibvt094C9s59Z/9BC8Rg2M1TjcgHa5igNMVw2L+FPTvJTiIx80wgnwu
+         v8LMc98xMd4YzTCqdS97yrveqes4qR77jLcngpnrfRyFL82nMsse1bXrpx4se48fdWLQ
+         ow+QvQMTKYcK68hyaIPWOXnAMumnBz8vtBD1YqECgBkTTAul6pj4zUBM8p7lnf+RlMio
+         4kGA==
+X-Forwarded-Encrypted: i=1; AJvYcCWxwYw5henwlwM8eI1Ae/IbsE1a5fIxAeDsF2n9bkH0vkDG+kJtv8esM3ZY3pCQVZW/AaQys35UO8xaJzb4uEA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGefnBcGqPg3a3EU+jtRTcKxnWiIZo/ff91pQP+/VOSKWSWpzs
+	qdoR06diDNq6uztFAEbK0YU3n2sRLHSnMdmRMQHF6I8zgK9FUXASqyboKlMWDNWvnGeQzjCWtw1
+	altsSaTN7fg6/zaYtZr+l2D5ZOJVKyKM=
+X-Gm-Gg: AZuq6aLCBBOxrQXvLJNV8fS0IJm8WxHScJmsDmlrqXbmrliq86WkfDezXPYKQYjDHt7
+	+4J+mn7Qhw08uOWF/U1DjNL5iBuNkcs9vzfwcMe9WIu/34KoKDHs8sDhKdnxg/Gp/iAk9iMfV9m
+	FmQ4tYHYQ4FDwc3tIJRJYh34H9ncBtNggZMmyHpelLBAqI36Ky8ZPXyc57AiNv6s+0DJfLKy6Lw
+	dU+YN81Lp5J71rU6UGWGGHSUeReUi82DxDipmYwTFpdETycuaNyLceXMxifVebOz97WM15d7ZqY
+	mD3kV42Y7YWoh9In3Zga5OuS3canzmp/1ZGmXSyyppa/O6XjLpkDSk56PrCw7Zd7WKCcUSX55rv
+	Cbs1OtQc25GfXRtew5GRl4iaJF32fGSrAB6Jp
+X-Received: by 2002:a5d:5848:0:b0:436:32e9:993f with SMTP id
+ ffacd0b85a97d-4378f1287bbmr799251f8f.3.1770861383994; Wed, 11 Feb 2026
+ 17:56:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260208024846.18653-1-pilgrimtao@gmail.com> <20260208024846.18653-3-pilgrimtao@gmail.com>
-In-Reply-To: <20260208024846.18653-3-pilgrimtao@gmail.com>
+References: <20260209025250.55750-1-pilgrimtao@gmail.com> <20260209025250.55750-2-pilgrimtao@gmail.com>
+In-Reply-To: <20260209025250.55750-2-pilgrimtao@gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 11 Feb 2026 17:50:39 -0800
-X-Gm-Features: AZwV_QgQXArdtIYEmbbcfD1bwDb31voO5uw2pqH4zCeeZ4p3zxbpQkEHhdgexR0
-Message-ID: <CAADnVQJdwqeoqi+mPjQjmNbUqz2RxAjq-dVsGb7c_MCqpqmwhA@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] bpf/verifier: allow using bpf_kptr_xchg even if
- the NON_OWN_REF flag is set
+Date: Wed, 11 Feb 2026 17:56:13 -0800
+X-Gm-Features: AZwV_QgbUPOCqax4vo6tL1O5Dezv89cLftb45HLIstLVEAqCtVnRNwq9HWpLVsw
+Message-ID: <CAADnVQKjBdfL17d0H6eHdiHYbXOr0Xz6BC=AbwMctQ6860-P5w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] bpf: Introduce the bpf_list_del kfunc.
 To: Chengkaitao <pilgrimtao@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
 	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Kaitao Cheng <chengkaitao@kylinos.cn>
+	Shuah Khan <shuah@kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>, 
+	Leon Hwang <leon.hwang@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 7, 2026 at 6:49=E2=80=AFPM Chengkaitao <pilgrimtao@gmail.com> w=
+On Sun, Feb 8, 2026 at 6:53=E2=80=AFPM Chengkaitao <pilgrimtao@gmail.com> w=
 rote:
 >
 > From: Kaitao Cheng <chengkaitao@kylinos.cn>
 >
-> When traversing an rbtree using bpf_rbtree_left/right, if bpf_kptr_xchg
-> is used to access the __kptr pointer contained in a node, it currently
-> requires first removing the node with bpf_rbtree_remove and clearing the
-> NON_OWN_REF flag, then re-adding the node to the original rbtree with
-> bpf_rbtree_add after usage. This process significantly degrades rbtree
-> traversal performance. The patch enables accessing __kptr pointers with
-> the NON_OWN_REF flag set while holding the lock, eliminating the need
-> for this remove-read-add sequence.
+> If a user holds ownership of a node in the middle of a list, they
+> can directly remove it from the list without strictly adhering to
+> deletion rules from the head or tail.
+>
+> This is typically paired with bpf_refcount. After calling
+> bpf_list_del, it is generally necessary to drop the reference to
+> the list node twice to prevent reference count leaks.
 >
 > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 > ---
->  kernel/bpf/verifier.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  kernel/bpf/helpers.c  | 19 +++++++++++++++++++
+>  kernel/bpf/verifier.c |  6 +++++-
+>  2 files changed, 24 insertions(+), 1 deletion(-)
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 05a6a6606b6c..bb3ff4bbb3a2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9260,7 +9260,8 @@ static const struct bpf_reg_types timer_types =3D {=
- .types =3D { PTR_TO_MAP_VALUE }
->  static const struct bpf_reg_types kptr_xchg_dest_types =3D {
->         .types =3D {
->                 PTR_TO_MAP_VALUE,
-> -               PTR_TO_BTF_ID | MEM_ALLOC
-> +               PTR_TO_BTF_ID | MEM_ALLOC,
-> +               PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index db72b96f9c8c..44d9b9ea8d40 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2388,6 +2388,24 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_bac=
+k(struct bpf_list_head *head)
+>         return __bpf_list_del(head, true);
+>  }
+>
+> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *hea=
+d,
+> +                                              struct bpf_list_node *node=
+)
+> +{
+> +       struct bpf_list_node_kern *knode =3D (struct bpf_list_node_kern *=
+)node;
+> +       struct list_head *h =3D (void *)head;
+> +
+> +       if (unlikely(!knode))
+> +               return NULL;
+> +
+> +       if (WARN_ON_ONCE(READ_ONCE(knode->owner) !=3D h))
+> +               return NULL;
 
-add a comma, so the next patch doesn't need to add it and
-has less churn.
-PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU , <-- comma too
+Existing __bpf_list_del() is actually using 'head',
+but here... passing 'head' just to warn on it ?
+Seems overkill.
+Pass 'node' only. Then it will be more list-like.
 
-Also don't invent new prefixes.
-Either "bpf: ..." or "selftests/bpf: ...".
+Any other apis are missing?
 
 pw-bot: cr
