@@ -1,182 +1,153 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623603EBF14
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 00:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770856565; cv=pass; b=VFfqDs1hT6KkieAC+RrrQb90yGBXeC8pmYSaV1pKY3tVVTQlW/5c+OzhhaGyqeVvdw9DlJxg3+uyjmrDtnEqoUA3ZnB+GpPuPRKes0ODj4S6IPIU91bbRSTbLro5OeHl+MfOvGAnmTb0uaTMCGIrR96C1d30GHEjk6SdXHDiY60=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770856565; c=relaxed/simple;
-	bh=XdAcy1RFVCA0eq2T/NMlU1dD9CXy+pSvKgYe0WCodyY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UcMlpimmO6zG9SF5FGjA4SswtfxuxRFd9Yi85XLqfC0PVJ6U/K9ShEQWC93565Pb6GlqiTIiK8ayLFeNDzx006aoNy5FGWtN39em/ly3o5+FseWRzqSnZIncQjtx63mCxicJRpNxuHmlMeagH2AOxLMxU8vE5TWbZi9nsGdV+Q8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WrusRRl0; arc=pass smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D59617D2
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 01:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770858110; cv=none; b=YLmXbnrpoXOvYDNkjzGtXJOcuFKYXIH9fqbunYBqH5gCvV/EgLuA/zslXM2gij+BDGBMX47PQg7p3ADxIB5zL4UCVAbHFqCRLvyzqzSZ6wkM8QGNCQB13tyc1GaaY3L+gGzMGLB+7XHggFQXV9CDgUXsyPMZGVgukEpAM8BIt1o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770858110; c=relaxed/simple;
+	bh=NNigq33vVJIbcoGBYh+URUoEg1c2javLVb9mFublwzQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fUGq/mcS7MW8QTQGsKwQxNoYlUDguUF7++xYkTH7rFyKlZr1SEnnGcbbHeej37ddYRLWIMJtX4SriW9MFaps3ZnbDfs0KCL1DUFuappLvVONQWLzylh8du5LaEyWb/B7Steqko8gfU1Jj9NltvIqdP8jaausfSh5jx6DfGmEAPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GLiqsZFx; arc=none smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WrusRRl0"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-65a3fdeb7d9so1942898a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 16:36:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770856561; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bJciaQwplBzJZE1VqsSK1AT2GGZFBSlp6GEyP9swCt5ZbfmphBTzScHTs/DkD7oFI0
-         Xk0Pg0/28B+n8dZTYi51YYAdk0rGkJmIjNOEnGb2PDHFcGDTD+pKDhBqCeUi2EBM3l0D
-         29PlYMgmeA6+HHXJy95khnqxLCzfayXXBa55G3vi1wJmJwHBUDquqL57ZRdjsPhf1KQw
-         UpXxYNBJiw8/ER83qgn++xSW4nsRY6UfTRsbS8T1Ox3r6BSkGkw3WixV3z5VTMvu7gpa
-         83E8jhVrw31f2eDyB9k64d/CghKzN758WEXKmkL6P/PDfLYE5lBCEuJE0kPFjLbVj5D0
-         CgKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/qABditqdorMY8GlszRCaOVFO4i9AqMmA5efRo8ZvMo=;
-        fh=lvKawU40K2X5BqejNiaPiQzZfpTZd56Xitp64ujP0RA=;
-        b=lmh6emjnOxKpwh730zf2AQPxVoUDBvKNoEQaQabdU6bxSPevg3hwUPxSc0K2ef856j
-         e6DWV5cNltC5+uzj3K/6H6iSwoTYCxISme/yx8gWUBxwRXfU5ZoUcurVQA7ewUKk/X+T
-         coKHOaZe5gZqMwbPVKXhWtjJRVVjr/700QxpGzcndp1e1EKo7hVAMoFJ9jlBAgel5nlA
-         Qt+HzS5/O7BdXNpDDrlXe1dywXtpEsH6DA/XhI3bS+603Wtlf/p7ybuJ45iO0BlsqoE2
-         7nFduwb2hQd3k5WgZIDbWpe28bAUDZP/HV2ksnxOVR4oYY4x01/BqspP5H2QMnhCs4/F
-         r9Fw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GLiqsZFx"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-64ad62a294bso5199330d50.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Feb 2026 17:01:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770856561; x=1771461361; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/qABditqdorMY8GlszRCaOVFO4i9AqMmA5efRo8ZvMo=;
-        b=WrusRRl08CltGucQ/i9uYwAQudsowEZGgNjcsyziBDI9hMZbwPyG1LshZ7ajSEnvvt
-         Jg/BIuIKT4Hkx4J8plV+HPDfR8JATt+qHEqw+DXIKJrYrV6vB3SHnE5vCQOhaAD2MCNy
-         HKK1kP+1s2Yl1+yjv7D15z2Ru6SK+V7XDE0OOOo8EQURH32AH9gKfKXQAJ8KGS/DNoFI
-         Ig0mtNszbABjKY+oS5bsKKuncK0RUnqfk4P9o78hnNswyeilfud5nOEbPiZ7Wx6jXNea
-         5e7GPGKgO7FmZuTw1+DHZoxFzJfwxid5nnzuOmwSb7Ki5EhP7S8Cxo9FrZC36IT8q4Mz
-         5CLQ==
+        d=gmail.com; s=20230601; t=1770858108; x=1771462908; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9LHpONSdJI596ZCuRsuiRBi+ORL1P4Wx9UbBWVB59mE=;
+        b=GLiqsZFxx9x/nv0aHRNYK/wic7FNHwBcyOnUOzjEzoo8fRPmKK9mE75mzxhV86SWXJ
+         xQ+AKAyVQqmdnPddcIC8GaCbsVBQEKw7tr7A0ei/3qfmfWw5XeUVmrrBjyJr5fz9Tzpm
+         HrQpjRDccZUCIrmPTWWgv2OJp33mqaJwjolS/dW57eVTM1eD6U+EkkAsnnV9159Mj5tQ
+         /S5bjpDQ8J+TQKB2ifdnOP2lAyywfdO7ZXQC8cCW/wu9k1HDkmyqjMISOGJbaR1AQw2+
+         xAhX0LSQAdNWNbbsnwEidqZXd8v+3cjQ0NG2wydDRuQ+gymbGgOu4WTvBn4oeh7DgfM2
+         va4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770856561; x=1771461361;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/qABditqdorMY8GlszRCaOVFO4i9AqMmA5efRo8ZvMo=;
-        b=Bxwk0T9PH9fQ5F1e40G5BhNjbHY4RNzfIiSYfUFdqm98FoS7cYRybn5462KMF3utPg
-         uCMbXbzssH5F13TeFNa/7ugicNFEB8LCkiEsWippUOcu/GVwQIT8oZYtPXHBz/1GZSBG
-         bX7Eyku0g/a5SZUghfqz6qUxyEtgJMlE47WRM/YsAdK2aQzy23N7z89F232dBM2TT/AC
-         vE9dUR1ki9aLxpfLy9uHBcu2SGhMqqa6olLGqral3RobbqdJqD91zU/+gSiR+2lQxYkN
-         7+tLje8aXsj8yOAFTq49Ps3tvvHPpcBBWwkWi3Ge20nzLiiyDP7zJaQW9CVB5Kcl7OMY
-         RMTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWZWWAd+wQTUcyiFs9B0arMwDOrGYiQF5E30HgN6Bx2RwmoaojmMT+8bUkYS49dmyeSbgHwrP9Jxz1Qel0/CKs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywaf8A6cuMCXd7XE4b8Q/hvRD6lzCT1j86q65YWgmBjzszgCWiG
-	Rs7tS7ZccTfyS9MpxWn3ptKI2ybukrpVRT720WdS4IpCKCgp7Cym9C1qZemIJYpCvk4pqGn0xxz
-	y1Afg1DxDK3b5CkW3+s34QaFOa6A/gwB8pr41GofO
-X-Gm-Gg: AZuq6aKpS2V/6j+Xdg4+RHELRZ7CzKmk0aZQsb1+FFS1bkEaTmaZ7JFTI/ikLhw9ZbS
-	Nk2kH/Hk+g6Clt1AASzXCDv8ncRaXJP6tC1Hp8hkjdda8ZpQ6qxJK/22a1VMSD6Tp52/TMzwI0T
-	U3slbX/uHGRQcCkTyfYDP31dEzwk3g6swrnrx5nOwe0gLU2btd/T/zyCJI1AOwj+Cpilln+WrcW
-	IuAjPmepQIBl/2r2bd0dCz9elhTs6pf27BpooTnLmI7I8XQaGEZc6WiKmMIE3bsmCZlLNVwa1qp
-	s0W0M6eRU5SeMYKXpGFt0bNMCaj6bFuEIP77KkPPGw==
-X-Received: by 2002:a17:906:4fca:b0:b8e:15cf:78e3 with SMTP id
- a640c23a62f3a-b8f8f8531a7mr45691766b.62.1770856560501; Wed, 11 Feb 2026
- 16:36:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770858108; x=1771462908;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9LHpONSdJI596ZCuRsuiRBi+ORL1P4Wx9UbBWVB59mE=;
+        b=IglMwcBEsmmqtR+jGv71eqWa/D91q0ddEa+xz9SyX2RcrNNTIWHNHxZx3f55ncBArS
+         m2LdD/SuOP/z8S+z5zV6Zed6kcrhtRg6jJIQ3BdIBM8VPCxsywtmpsPFDKNpxUIqJfkZ
+         LZy6MLJI384D8kqbtLSoeQ+xl/wrHfSBcK2sDqkzqeSzF3JGM4QzXVWikt50cqZLkNk8
+         XYCFRuZxJ8K0h3KjQGbGu2nkgiNbL5Fnm9utb4KaciO5e3CrkAYv0kGRhxKeSaP0uQ5s
+         Vk8zd6jDKtDP2wzp/OQ0HRohZvaU5BXLHtVp0v1gF7ycQOU8n97Srbggc/EB5SsZi0Po
+         1ZNA==
+X-Forwarded-Encrypted: i=1; AJvYcCVwOu1YNn8WXhgnclqyR2rrpMVyBvrFYanPT5zeL/bLqjstShN/AxnW/ez6KwSpO57FZkGN3/h/iE9gH4x6iEo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRtENEr73oDmq/XnDnIKG5Z2pFEEJE31MIparPJJOfhHixr/RQ
+	E0kfHYZH7rzRcHUP6rCNrXioD4NeN3x7onTxPyoUVYB6c+xkfCzgye7w
+X-Gm-Gg: AZuq6aJG66W5aquF7WMt95J9U5joMrpvrUfZWjxKD8R6Z/lkoaR6i2C1y0Y7+VeZRSZ
+	qFrVgD/g66fgXIN60gh11IuwM8Xwh5bmGTtvUPe4EsnCeATXmxUrISBsYwn88kJt1Vi845+boob
+	TGIQvn2sDKdoLkf6breZVsC7175+ExZsK4VLXeSIZw0yztIx2V/sY8bo2CngYvrNPRPFsTnSe0j
+	Kvi8cHiEtiOgTY7hrx0UKxBUc7oxe6//r0qYW9JOVv19WEDL1dUEjFjv61oO5qbs3PuF+I5Dsva
+	PARxUU7uHSWt7jX5oIXP1DUXZYv4TLn0KHBZYrLXhMvHkY5ZMTbZqV8sfTUn1oMdzEyXvCicaB+
+	yE3NS8TzRwc/bwcrWgboxyuvf+sCMUBd2pkb0bLob2kErFsIZNUyHkvj4Mqlut9PhUdHaGGxD73
+	PXcAbaKMy/jdcfVQFy5mrSWQ==
+X-Received: by 2002:a05:690e:18f:b0:64a:d605:dbd0 with SMTP id 956f58d0204a3-64bbab62feemr790973d50.92.1770858107959;
+        Wed, 11 Feb 2026 17:01:47 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64afc83ff82sm3573234d50.2.2026.02.11.17.01.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Feb 2026 17:01:47 -0800 (PST)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net 0/4] eth: fbnic: fix and improve header/data split
+ configuration
+Date: Wed, 11 Feb 2026 17:00:40 -0800
+Message-Id: <20260211-fbnic-tcp-hds-fixes-v1-0-55d050e6f606@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260211235055.239024-2-wusamuel@google.com> <957536c0c710b7277d3fbc374ff4299bb38542e54de680aaa16d46e72c503e10@mail.kernel.org>
-In-Reply-To: <957536c0c710b7277d3fbc374ff4299bb38542e54de680aaa16d46e72c503e10@mail.kernel.org>
-From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 11 Feb 2026 16:35:48 -0800
-X-Gm-Features: AZwV_QhoQjc3qfgFkcvMcmU0GlRusAKXgy3l4Am8cmehf0eiZaDBQu0iu37yTrw
-Message-ID: <CAG2KctqkkNF0aB3f0BmY-7us2DgHvGOpHvKUL9g8af0usz+Nuw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Add wakeup_source iterator
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	kernel-team@android.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com, 
-	ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADkmjWkC/x3JQQqEMAwF0KuEvzZgq4j2KoOLtkbNpiONyIB49
+ wHf9t0wqSqGQDeqXGr6LQjkGkLeY9mEdUEg+NYPrXeO11Q085kP3hfjVX9iLN3o+inGFNOIhnB
+ UeQOBPihyYn6eP5gCKWZqAAAA
+X-Change-ID: 20260211-fbnic-tcp-hds-fixes-e38149aabab8
+To: Alexander Duyck <alexanderduyck@fb.com>, 
+ Jakub Kicinski <kuba@kernel.org>, kernel-team@meta.com, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Paolo Abeni <pabeni@redhat.com>, Mohsin Bashir <mohsin.bashr@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-On Wed, Feb 11, 2026 at 4:19=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/kernel/bpf/wakeup_source_iter.c b/kernel/bpf/wakeup_source=
-_iter.c
-> > new file mode 100644
-> > index 000000000000..ab83d212a1f9
-> > --- /dev/null
-> > +++ b/kernel/bpf/wakeup_source_iter.c
->
-> [ ... ]
->
-> > +static void wakeup_source_iter_seq_stop(struct seq_file *seq, void *v)
-> > +{
-> > +     int *srcuidx =3D seq->private;
-> > +
-> > +     if (*srcuidx >=3D 0)
-> > +             wakeup_sources_read_unlock(*srcuidx);
-> > +     *srcuidx =3D -1;
-> > +}
->
-> Should seq_stop invoke the BPF program with a NULL wakeup_source when
-> iteration completes? Other BPF iterators follow this pattern:
->
-> kernel/bpf/map_iter.c:bpf_map_seq_stop():
->     if (!v)
->         (void)__bpf_map_seq_show(seq, v, true);
->
-> kernel/bpf/prog_iter.c:bpf_prog_seq_stop():
->     if (!v)
->         (void)__bpf_prog_seq_show(seq, v, true);
->
-> kernel/bpf/link_iter.c:bpf_link_seq_stop():
->     if (!v)
->         (void)__bpf_link_seq_show(seq, v, true);
->
-> The __wakeup_source_seq_show() function already accepts the in_stop
-> parameter but is never called with in_stop=3Dtrue from seq_stop. This wou=
-ld
-> allow BPF programs to know when iteration is complete and perform any
-> finalization (e.g., outputting summary statistics).
+This series fixes TCP HDS configuration in the fbnic driver and adds a
+devmem selftest for the intended behavior.
 
-As noted in the v3 email thread, I don't see a current need for
-additional handling at the end of the wakeup_sources iterator.
+The issues fixed include setting the correct CSR for EN_HDR_SPLIT,
+adjusting the hds threshold clamp to avoid long headers overflowing into
+the payload page, and configuring the device to use L4/L3/L2 header
+boundaries when present by programming the DMA hint bit unconditionally
+for all steering rule types.
 
-> > +static int __wakeup_source_seq_show(struct seq_file *seq, void *v, boo=
-l in_stop)
-> > +{
-> > +     struct bpf_iter_meta meta =3D {
-> > +             .seq =3D seq,
-> > +     };
-> > +     struct bpf_iter__wakeup_source ctx =3D {
-> > +             .meta =3D &meta,
-> > +             .wakeup_source =3D v,
-> > +     };
-> > +     struct bpf_prog *prog =3D bpf_iter_get_info(&meta, in_stop);
-> > +
-> > +     if (prog)
-> > +             return bpf_iter_run_prog(prog, &ctx);
-> > +
-> > +     return 0;
-> > +}
->
-> [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/219279=
-83378
->
-> AI-authorship-score: low
-> AI-authorship-explanation: The code follows standard kernel BPF iterator =
-patterns with no unusual characteristics suggesting AI generation.
-> issues-found: 1
-> issue-severity-score: low
-> issue-severity-explanation: Missing end-of-iteration callback is an API c=
-onsistency issue, not a crash or security problem.
+Prior to these fixes, small payloads fail devmem.check_rx_hds().
+
+Testing:
+
+IFC0=enp1s0
+IFC1=eth0
+
+export REMOTE_TYPE=netns
+export REMOTE_ARGS=ns-remote
+export NETIF=$IFC0
+export LOCAL_V4=192.0.3.1
+export REMOTE_V4=192.0.3.2
+sysctl -w net.ipv6.conf.$IFC0.keep_addr_on_down=1
+
+./tools/testing/selftests/drivers/net/hw/devmem.py
+
+TAP version 13
+1..4
+ok 1 devmem.check_rx
+ok 2 devmem.check_tx
+ok 3 devmem.check_tx_chunks
+ok 4 devmem.check_rx_hds
+
+To: Alexander Duyck <alexanderduyck@fb.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: kernel-team@meta.com
+To: Andrew Lunn <andrew+netdev@lunn.ch>
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Mohsin Bashir <mohsin.bashr@gmail.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+---
+Bobby Eshleman (4):
+      eth: fbnic: set FBNIC_QUEUE_RDE_CTL0_EN_HDR_SPLIT on RDE_CTL0
+      eth: fbnic: increase FBNIC_HDR_BYTES_MIN from 128 to 256 bytes
+      eth: fbnic: set DMA_HINT_L4 for all flows
+      selftests: drv-net: add HDS payload sweep test for devmem TCP
+
+ drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c   |  3 +++
+ drivers/net/ethernet/meta/fbnic/fbnic_rpc.c       |  5 ++---
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c      | 25 +++++++++++++----------
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.h      |  2 +-
+ tools/testing/selftests/drivers/net/hw/devmem.py  | 19 ++++++++++++++++-
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c | 11 +++++++++-
+ 6 files changed, 48 insertions(+), 17 deletions(-)
+---
+base-commit: bf9cf80cab81e39701861a42877a28295ade266f
+change-id: 20260211-fbnic-tcp-hds-fixes-e38149aabab8
+
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
+
