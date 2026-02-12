@@ -1,170 +1,140 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA7F28B4F0;
-	Thu, 12 Feb 2026 09:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96772225A34
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 09:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770888712; cv=none; b=oVP5AYYVR3pc44ksIw+zrVwX/XDneI8kl0+f2EX0wJbH4mhkWVzxAWNj8XdbXm5lihFDSwnKye/CoPu7m6QJhkgWWT5ju3VwUuzCF8zl1hShtNMYjHhMjVSsy1oVFziqPwIcDNzZ2vqDPx5hOozFj9u/dQp1ZvX5dzvFteZiaE4=
+	t=1770889283; cv=none; b=HrTxb9Owya8NmOhCBfUm6Bafgb3YAWPinESlOlgCbx1N4zkAVL5dO6ZRY+LcGXz7eVMD5Z7zJwV2nn/8EOYNJw5aypgc/3vQ/Ki1TBxZOpD6vHOQHKebZakOoYaIkIMcE14GVZF+rBD++AWJandp8GDo9mmKGs7Zf1Yytovcc7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770888712; c=relaxed/simple;
-	bh=6v5ueOuoizItCs4xbX6/bBRRJfIi3+966dfqYFUcPaM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T+lM0ymiXb6BnoY84MvSMZEYn45zaqw9gFy4ctBhMFo5ORiJJH1kzodESoa920A/z5gYHBl73bvME6B3e8BTnsojrCcPK9UEBqDzCIhSh+D/0WxDXmRMIvxQxMNsgpDz+d7uW5/z921hDXdoHyumh8iuZT3Cc5W++oP3tyfesxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=afpRfTWP; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1770889283; c=relaxed/simple;
+	bh=yIY/11Dq1CPkCm/A2dAowYLqnGZWKwSB10TrnqAw+10=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nufek9xMaoVi83I0+bO/2Z65qzce7mXqe3YHMSKHLQx5NtIlNmZ3XX51aGJ46f2o+O/VuEXCRUXdPqGz5D8R19qSVWLpI0Nq5RBtRSUt/UDe55vPgt1JR7KZv5PXnrGissqj69rOMd8NEI7rP0ILSEqV4sZ0OW6h8cSKEYOCiwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bgYLzNUU; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="afpRfTWP"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61C7u78n806309;
-	Thu, 12 Feb 2026 09:26:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=ks4BWxfs6IP6kZxAGA0CrXgQnXf5n4rU8aglfzaiF
-	S4=; b=afpRfTWPxTn+G7zuh3Y7TNVBuAa0tLiJUZr895YQUL8ErYQxrh5nYh0mn
-	5G5gkUSHaFHcuRK/CVXeSOZAGjTNM0GeeaqdPPGtcJnTNE7Ov23e23ihmN0QCYO+
-	u2FrpKSlT2DdH9DnFJx5KEMnzImayAMqN1WDdcBhlESSbQqEDEB0ivlt8RXK1Uc3
-	Z96yUG3L695RauHq4NuvTD+TgWhWBTf76Zv/Ndc70EaM61EVmQ6Mud72jiH9ytBQ
-	CdpuZC0mC6Q/crnHea7UZ0HbgZRlLLuhPD4b06IO8hnlxcZhk/BF6FY+3/mWh2w0
-	9AfB/3cmQbADZRCU/IlVkANuAtdIQ==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696unc74-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Feb 2026 09:26:09 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61C4jsf9012626;
-	Thu, 12 Feb 2026 09:26:08 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4c6h7khnka-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Feb 2026 09:26:08 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61C9Q4Jl39518520
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Feb 2026 09:26:04 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6E77E20040;
-	Thu, 12 Feb 2026 09:26:04 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CD6F220043;
-	Thu, 12 Feb 2026 09:25:59 +0000 (GMT)
-Received: from li-1cb9f04c-2ae1-11b2-a85c-a8a0a83790a8.in.ibm.com (unknown [9.109.207.131])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 12 Feb 2026 09:25:59 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
-        andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        christophe.leroy@csgroup.eu, maddy@linux.ibm.com, mpe@ellerman.id.au
-Subject: [PATCH v2] selftests/bpf: Add powerpc support for get_preempt_count() in selftest
-Date: Thu, 12 Feb 2026 14:55:58 +0530
-Message-ID: <20260212092558.370623-1-skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bgYLzNUU"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4359228b7c6so4138634f8f.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 01:41:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770889281; x=1771494081; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nwjxeLZCnF17rcxqGqeGmiS56iGGEOFnXmQIiNjxVnc=;
+        b=bgYLzNUUZD2HqtlSiww6qDfu0GL/itYcSfZ9JKl3P6gq8f3VcXGcQXQ8eXrRWRNnnG
+         2KPWACV64CVhls0FL1j421mdxVf5VeDlkUfzxEmzvfH62RsweUL+6WSsrIxpVLAjXgE8
+         LYYfyfsu/7f1iNPSU+yCRO8aohRvWbFQV30a93WpBJxWVS+vFquTLmHYI3JDiIpfM+OS
+         W76Fyz5xs+Xz4Pruom3UfmA6BAlWZI1ANVvEYsueQIw9xv9N3y7ApRtCO+SF9fNcrVG1
+         SJJsohE03108YMOSgNVuM8YqgeYlQjW8jQJ0yjp4ZizhCdAPAljpNb30ZIygNMa9kZTs
+         emeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770889281; x=1771494081;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nwjxeLZCnF17rcxqGqeGmiS56iGGEOFnXmQIiNjxVnc=;
+        b=D78fWy1YpZEj5sJQ9iN7DPCgV19ZVHP/z1MwC6vIkekUAl0RL3iX0fIbeGV78jVflo
+         jS/hxRSTf2EZ0BzGIvjKcTvKGNKexdC+su3p1Fr6WK9/z0f7RNswCpI1BRxWwuQqmfta
+         gtnFEcl7V+BiP6bna95nw+rC/C4TK5cBN9ROhcAdXUmpJNV8p4tFTD1je2NvSckLDMWy
+         ju9NrbJrxxqy74wS0s97q8NhfD8WA4x/n2kwSOav2UzqPT67nqptoIbqMBuBH/YmR4lJ
+         F2VUG8bbTThPCioIo3m3WJ3MfcbU1SMq7+X8YrewVjFWDjxPxk6qCcZRnmU2xjQ1vvQB
+         HazA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+S2Ti/dzI887hFnzkUcb4u6a9BlCpZXpnI3vMC0mKfROj16TCKWrJzvS46U1VJ3aRteRE1cPkr44QGqLgk8k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7/FkX87M+MKtL3dlf1mhFvuZDoxItHgIH6rsI07GXubjaLADT
+	V2ITnh57sevnQVc2WB6eDPE/Mmiylke0NY+Ds9xkc57Hk1XaqxEzemR3
+X-Gm-Gg: AZuq6aLUJrg3HW6M1VjFh3zx1/uQnuu/VwaZGhHDcubQdOdh+mVPU8ZUORaUOI3Tjim
+	rp+1E4v64V8tZn8KEpbQMndX7khPYyAWGj6stk/2Vv3aUolyotZC49B4F82CSuICL2WqT3LQhOC
+	xq8J+oTxuxCaFyhhUMoQPlfYSlZ3oZDy/xuilBJMCUAlfP5A8sgpMG1GUIobPkpbj5d3XIf4Ird
+	7GuKTUgJV8tddmmNvHzA8yqwQ+xaq2h0DiwE/Q0kco2suEUpew8ePW2t9Fe1+U9IFl/sj3AeHfR
+	pQKVBSYah3JqU5e25pAFwOkvjKOGNGFaSOZ5D0PfrOORYuUO1QUScCgOlPP7cwjh9u2UzELqOds
+	8hT/Zd+GUSJ5C866wd5L9lwBzz5o47j7ibcMCHzw++tMB9Qt2w//RG9YYimON3vuVkPYxJosxgS
+	FfuNB0qImd0n4hSvRf440hwj8ADYBO7lz1Ag3eESeGDkHabg==
+X-Received: by 2002:adf:e50d:0:b0:437:8ff8:fea3 with SMTP id ffacd0b85a97d-4378ff90099mr1644282f8f.21.1770889280803;
+        Thu, 12 Feb 2026 01:41:20 -0800 (PST)
+Received: from [10.221.203.72] ([165.85.126.46])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43783e5c550sm11501359f8f.36.2026.02.12.01.41.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Feb 2026 01:41:20 -0800 (PST)
+Message-ID: <dbbe9690-996f-4a63-90a0-baec52c27236@gmail.com>
+Date: Thu, 12 Feb 2026 11:41:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=YZiwJgRf c=1 sm=1 tr=0 ts=698d9cb2 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=RLNl__C_HODNSpg9kEgA:9
-X-Proofpoint-ORIG-GUID: LFwYoB5YgqT2ivpOH70C3OkLaxkxwh9W
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEyMDA2OCBTYWx0ZWRfX2TEliqCAk0cE
- ZzqxsGG/rmSvlc1lN191Xxb3pfmkkN9PxUYiu3w3gtfOuwTBXx0PzOpNoms1QWBeZjfxhoGnROx
- Zy0NKDu5axiwdWqw141pR6Bl2d725Fd4mhpZuFyK/SkylnoJa7dO2gqNt0kRJLlT2G/iAbe4Aot
- mDaUO8okuoj4TWh6h3UrZ/py0ldNtposaqllqyspW5NFAFlztdFU8XYhePDz0aWFiP87ak9Aq1G
- xTsFdMaoFUR9XgXKzPrCsJZFKiBBK18+eg9P2q5Obv4mO8+e6NAX3/adcHBhl0cClUBpK2NgNQ+
- ApZm4qkTl4JC9wUdhDXNzm/VMUoGkfxWNNGslW3NBZ48TCogfB1pOf/0fEiBvaapd0gDPY86xSf
- MXW4mRyV6RvgnUNdnoJM3QsgphG7/kemVwvTnFxABnt5ro1NY9AnjQNaDh37WHBT4Vt6vkxZKjP
- FODi8FhR/aNN2oVU5mg==
-X-Proofpoint-GUID: i1J05qq25vvJNc-Aa6lbYJrB11DndFMM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-12_02,2026-02-11_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602120068
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: rss: validate min RSS
+ table size
+To: Jakub Kicinski <kuba@kernel.org>, Yael Chemla <ychemla@nvidia.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ Willem de Bruijn <willemb@google.com>, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
+ Gal Pressman <gal@nvidia.com>, noren@nvidia.com
+References: <20260131225454.1225151-1-kuba@kernel.org>
+ <9f535014-80eb-4f57-b047-3638579bde9a@nvidia.com>
+ <20260211134319.39710c1d@kernel.org>
+Content-Language: en-US
+From: Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20260211134319.39710c1d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-get_preempt_count() is enabled to return preempt_count for powerpc,
-so that bpf_in_interrupt()/bpf_in_nmi()/bpf_in_serving_softirq()/
-bpf_in_task()/bpf_in_hardirq()/get_preempt_count() works for
-powerpc as well.
 
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
----
-Changes since v1:
-* Updated the comments to include powerpc for the APIs.
 
-v1: https://lore.kernel.org/bpf/20260129054035.168078-1-skb99@linux.ibm.com/
----
- tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+On 11/02/2026 23:43, Jakub Kicinski wrote:
+> On Wed, 11 Feb 2026 22:10:56 +0200 Yael Chemla wrote:
+>> Thanks for the test addition. I wanted to raise a concern regarding the
+>> spread factor requirement that may apply to mlx5 and potentially other
+>> drivers as well.
+>> The real issue arises when the hardware's maximum RQT (indirection
+>> table) size isn't large enough to accommodate both the desired number of
+>> channels and a spread factor of 4. RX queues/channels serve multiple
+>> purposes beyond RSS - they're also used for XDP, AF_XDP, and direct
+>> queue steering via ntuple filters or TC.
+>> Artificially limiting the number of channels based solely on RSS spread
+>> requirements would be overly restrictive for these non-RSS use cases.
+>> In such scenarios, we'd rather have a slightly degraded spread factor
+>> (< 4) than limit channel availability.
+>> We'd appreciate any feedback on this approach.
+> 
+> That's fine. In fact IIRC ixgbe (infamously) had more queues than
+> it could fit in its RSS table. So none of this is new. At the same
+> time if user _does_ want to use a lot of queues in the main context
+> fewer than 4x entries in the indir table is inadequate.
+> 
+> The test is based on production experience, and provides valuable
+> guidance to device developers.
+> 
+> I'm not sure what you want me to say here.
+> 
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 4b7210c318dd..9df77e59d4f5 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -645,6 +645,8 @@ static inline int get_preempt_count(void)
- 			bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
- #elif defined(bpf_target_arm64)
- 	return bpf_get_current_task_btf()->thread_info.preempt.count;
-+#elif defined(bpf_target_powerpc)
-+	return bpf_get_current_task_btf()->thread_info.preempt_count;
- #endif
- 	return 0;
- }
-@@ -653,6 +655,7 @@ static inline int get_preempt_count(void)
-  *	Report whether it is in interrupt context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_interrupt(void)
- {
-@@ -672,6 +675,7 @@ static inline int bpf_in_interrupt(void)
-  *	Report whether it is in NMI context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_nmi(void)
- {
-@@ -682,6 +686,7 @@ static inline int bpf_in_nmi(void)
-  *	Report whether it is in hard IRQ context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_hardirq(void)
- {
-@@ -692,6 +697,7 @@ static inline int bpf_in_hardirq(void)
-  *	Report whether it is in softirq context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_serving_softirq(void)
- {
-@@ -710,6 +716,7 @@ static inline int bpf_in_serving_softirq(void)
-  *	Report whether it is in task context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_task(void)
- {
--- 
-2.52.0
+No doubt that larger factors help overcome imbalance issues, and it's 
+fine to recommend using 4x (or even larger) factors.
+
+The point is, when this comes with a selftest, it's less of a 
+recommendation/guidance anymore, it becomes kind of a requirement, an 
+expected behavior. Otherwise the test fails.
+
+This ignores multiple other considerations:
+
+1. Existing behavior: In general, mlx5e today implies 2x factor, so it 
+would fail this new test.
+
+2. Device resources: In large scale (high num of channels, or high num 
+of netdevs on the same chip, or both), it is not obvious that increasing 
+the indirection table size is still desirable, or even possible. To pass 
+the selftest, you'll have to limit the max number of channels.
+
+3. ch_max should win: Related to point #2. Driver should not enforce 
+limitations on supported ch_max just to fulfill the recommendation and 
+pass the test. I prefer flexibility, give the admin the control. That 
+means, driver would use 4x factor (or larger) whenever possible, but 
+would not block configurations in which the 4x factor cannot be satisfied.
+
 
