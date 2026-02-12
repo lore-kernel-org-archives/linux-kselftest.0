@@ -1,207 +1,123 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CDF3587A2
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 16:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699DD1547EE
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 16:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770914263; cv=none; b=V55JdUMjdbZkRDGC1QMYZsEjdBs+2ZZ2OVqJKhE5CM5z1629YOYaz7u9R5fyUwyzQQ5GTUs1lWjcAouDPiJLKbvW7kzbRZ8rFmTKbasMcGIX85MxUq0xBH2e/p8YZ/QYGx76XOcC+JzmBL2NaneJ8MFE6BSOYVmDX9edhvYjmao=
+	t=1770914887; cv=none; b=jlI4osxBTEf7vCX1JRE6wDsH41LwZ1eQcBOyyAKYqu0tsVgLhIuFiiBUCYOV2Ou4FgTztEidEUMgE2HCAhO1DtLYVVA5WRDYM+VbWpqm/FyH0lUUa/uzh5mMepivXeN3wp6xUar3EIFYfvNmokQOC3ClEG9Sd4yt8lTAHeLcJlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770914263; c=relaxed/simple;
-	bh=bNYJhF/vrfnqfdjS1Xo0X9csm/vyWSOMWcUkGWy2eqI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Q9c7YFb+x6XGCiuybgMuhrIiTl/NlmdYG+/EVot+xQWK+oONeBuHDzCcvMe+jAC4sV8xzuZzSsWCnxCfc1qtdGCrJGF/RwQ42FbxBVoX4WK4QLSEwG8K9uih+cXc8r++9+xu3Zt7xyZXy64Bkn93q//LyxkWVIF0IvYQMQeiEYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dzJRB6dG; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770914887; c=relaxed/simple;
+	bh=uwuysDv4Egm6HWkJcFBTn/BxyyKBdYqBBBP9D+4JqtU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gg680h+9SFH5m3MJgyzSrqYganxwPMdyq8AfRTD0Z3qG9U61qNv0++DfoJTgB/F9N5BzQXy74tt2zTrR5qi8b3d3sVz7b/bWesw4XrBfwEl6dS6w0K9JZWuAAs7z+G/X+pHLzLrz/VAUIKWoMqV7M6kq5m86YT62gQo2QmaX66c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UdSSXF9H; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dzJRB6dG"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a7b47a5460so12165855ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 08:37:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770914260; x=1771519060; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RshJ2GX59bxxjI+XoqRN3YBnxOSZhELYxBIuUEvTR0k=;
-        b=dzJRB6dGPRJ3/lYhnj/U+zlJS+Ux7Qez5+p2k1tsest8HMOr8fVvRE7qEWI9knqkWX
-         6faCRfYKYPO3ipII2coxhA1ViqxrYoImlWQspUkWAC1OhBcB4ixKil+W3cPrt2Ln/e4i
-         0MTvF74XqZJCusYtY3PW4msLE8K9U2ddSg0ISjl8+VNcKkHP4O8EGa6uxA1/udLNByJ3
-         euktrEXkeR0gibd8RorIDxXPnNLfpZbBX5ouG/s3N5DPBwjLNYD5DgtoMOkchQjLjDQt
-         zZTDYNXavCg+IvZzDElqM+umcHEx6nxmXwMuLJ26cicwHMto3T8YgEEjeorubcNwsGHa
-         49HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770914260; x=1771519060;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RshJ2GX59bxxjI+XoqRN3YBnxOSZhELYxBIuUEvTR0k=;
-        b=q3SJovoPwtLe7iGukNqu3rvPq7jfzdWI9S5fUFBYdMgKM7Ii2hjnYmy19NC+QT/UbA
-         b8f1QOWfTo8QZMBgquEPgK82cYAySowJWDpXgMdDAAgvsfaVrrKmYRA2Lg+X0px0nSer
-         PibnfcYk8bjnD682l7VLb3Yru64R1eTS2KxRlFOEHr4BqE4KkR1L+BsY1QAcyCO2a+3Z
-         15f1WQ0QEMY1za8ReLoLF85tfdzHpJkiL2QDYuM5AEky0wz3L1ueCDHyEfIl3v4AcEH+
-         aYk0399chlkaxCgyxkY3EUmbxrqmxEr4QRBva0LsCo4JveZmzJTq72VNIManpRwkGTSq
-         1G1g==
-X-Gm-Message-State: AOJu0YxpmqvzsohYhmo031oH8UsFayRiGUmCRlmLPVWQ8qNqZD1jPGgj
-	HqZ1ftlbvS1c7iYnE9niT4pe6tmiYsESv8df/qAIV1gJW1V1ncv3hJS5jdk9RZG1
-X-Gm-Gg: AZuq6aKZKWf5ZoOYkbIqT8XgVdvsyJDlCu2/ceDlEzyQaE1Pq+hA85yYUIVE8YNN2Uf
-	t5HqRNU+nIqO7txRrtr2YAQAUY4R8GSNSPPCPBIx+zZ8sHUl0S5zcJ9nARyNDpmy5AkBmQkeEZ+
-	p1UN35SgU/SkLJ8zK3L8EPzC1Hbm0OhkwIrXdEQIYo+2jmkw0cfvnLw4o/POAKnqAAiHA6IKC8U
-	QJy36bVsIxHnuUChUIYh1OtOD/rGqtubp0JYBMbK9JKj/tc8sZZVuNFbs5jpt9huEXC5r/Udrfw
-	GYhHnsrK8kR+xfByAi6UDPqm8YOIMjhrDry2daPDBPbr7VRa8l2MONQju1XgBIHpN0qCICWyLLb
-	NoL6zj4FQYk26nlUnn1KxLQNPgorPMpVvPSCopK3A+jpp/CsNesancYXcwy6YTgw2mWr9b5Ers9
-	FEjVSoTC+mhQnj1+M1rML+V74zUMAE1xs=
-X-Received: by 2002:a17:903:28c:b0:2aa:d2f4:9c11 with SMTP id d9443c01a7336-2ab3a635772mr31062095ad.5.1770914259478;
-        Thu, 12 Feb 2026 08:37:39 -0800 (PST)
-Received: from [172.16.80.107] ([210.228.119.9])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ab2997bc2fsm60525635ad.76.2026.02.12.08.37.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Feb 2026 08:37:38 -0800 (PST)
-From: Ryota Sakamoto <sakamo.ryota@gmail.com>
-Date: Fri, 13 Feb 2026 01:37:32 +0900
-Subject: [PATCH] kunit: Add --list_suites to show suites
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UdSSXF9H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770914885;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Fv0QQ/LzpI3se0WIY5xcYuoXMkPUfDvoExJnqJMuXLA=;
+	b=UdSSXF9HvaaytDlrDYyy7n9hwtToNS6qlBjcW1rEc/aUkAksknl+Bmra9KG23dePT1unIH
+	zlaJl4z2pWnjUwqqS7Mq//uReIegiqnesp9RMV4rbYuj/CEkyRwkorONDol+EAdSyw3lxT
+	jDMC3SWpFS9NnfoyoL5i2wHleqVbwbk=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-13-NtwfyrDXMBa8kZ1dcxoubA-1; Thu,
+ 12 Feb 2026 11:48:01 -0500
+X-MC-Unique: NtwfyrDXMBa8kZ1dcxoubA-1
+X-Mimecast-MFC-AGG-ID: NtwfyrDXMBa8kZ1dcxoubA_1770914879
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1A69D19560AA;
+	Thu, 12 Feb 2026 16:47:59 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.80.194])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2962918003F5;
+	Thu, 12 Feb 2026 16:47:55 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Chen Ridong <chenridong@huaweicloud.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v5 0/6] cgroup/cpuset: Fix partition related locking issues
+Date: Thu, 12 Feb 2026 11:46:34 -0500
+Message-ID: <20260212164640.2408295-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260213-kunit-list_suites-v1-1-6e6394faf4c7@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avIrBNUqKCrRETpVENh4WgE0t2Tl
- m/xfwbGQMjQiQwBb2I6fYGuBNht8itKcsVglGmU0VruyVOUB3EcOVFElnZStrZzi65xULor4EL
- P/+yH9/0Ab+iRKWMAAAA=
-X-Change-ID: 20260211-kunit-list_suites-ca0c5cb7ed6d
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- linux-kernel@vger.kernel.org, Ryota Sakamoto <sakamo.ryota@gmail.com>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Currently, kunit.py allows listing all individual tests via --list_tests.
-However, users often need to see only the available test suites.
+ v5:
+  - Reapply on top of the latest upstream linux tree.
+  - Add a new fix patch for a cpuset bug found during testing.
+  - Add a patch to not update isolated_cpus when calling from CPU
+    hotplug. As a result, CPU hotplug won't need to call
+    housekeeping_update() at all and the corresponding wq deferral
+    patch is dropped.
 
-Add --list_suites to show suites. This option parses the test list output
-from the kernel and prints only the suite names.
+ v4:
+  - https://lore.kernel.org/lkml/20260206203712.1989610-1-longman@redhat.com/
 
-Example of the output of --list_suites:
-  example_init
-  miscdev_init
-  printk-ringbuffer
+After booting the latest cgroup for-next debug kernel with the latest
+cgroup changes as well as Federic's "cpuset/isolation: Honour kthreads
+preferred affinity" patch series [1] merged on top and running the
+test-cpuset-prs.sh test, a circular locking dependency lockdep splat
+was reported. See patch 5 for details.
 
-Signed-off-by: Ryota Sakamoto <sakamo.ryota@gmail.com>
----
- tools/testing/kunit/kunit.py           | 16 ++++++++++++++--
- tools/testing/kunit/kunit_tool_test.py | 16 +++++++++++++---
- 2 files changed, 27 insertions(+), 5 deletions(-)
+To fix this issue, the cpuset code is modified to not doing any
+update to isolated_cpus when calling from CPU hotplug. In addition,
+the housekeeping_update() call, when needed, is deferred to task_work
+so that it can be called without holding a cpus_read_lock. A new top
+level cpuset_top_mutex is also added to have more exclusion control.
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 4ec5ecba6d49b1ba3360515a2b66a2a98813bd18..742f5c555666021f61c44a98229bb34f9664d3c2 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -63,6 +63,7 @@ class KunitExecRequest(KunitParseRequest):
- 	run_isolated: Optional[str]
- 	list_tests: bool
- 	list_tests_attr: bool
-+	list_suites: bool
- 
- @dataclass
- class KunitRequest(KunitExecRequest, KunitBuildRequest):
-@@ -168,6 +169,12 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
- 		for line in attr_output:
- 			print(line.rstrip())
- 		return KunitResult(status=KunitStatus.SUCCESS, elapsed_time=0.0)
-+	if request.list_suites:
-+		tests = _list_tests(linux, request)
-+		output = _suites_from_test_list(tests)
-+		for line in output:
-+			print(line.rstrip())
-+		return KunitResult(status=KunitStatus.SUCCESS, elapsed_time=0.0)
- 	if request.run_isolated:
- 		tests = _list_tests(linux, request)
- 		if request.run_isolated == 'test':
-@@ -438,6 +445,9 @@ def add_exec_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--list_tests_attr', help='If set, list all tests and test '
- 			    'attributes.',
- 			    action='store_true')
-+	parser.add_argument('--list_suites', help='If set, list all suites that will be '
-+			    'run.',
-+			    action='store_true')
- 
- def add_parse_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--raw_output', help='If set don\'t parse output from kernel. '
-@@ -501,7 +511,8 @@ def run_handler(cli_args: argparse.Namespace) -> None:
- 					kernel_args=cli_args.kernel_args,
- 					run_isolated=cli_args.run_isolated,
- 					list_tests=cli_args.list_tests,
--					list_tests_attr=cli_args.list_tests_attr)
-+					list_tests_attr=cli_args.list_tests_attr,
-+					list_suites=cli_args.list_suites)
- 	result = run_tests(linux, request)
- 	if result.status != KunitStatus.SUCCESS:
- 		sys.exit(1)
-@@ -550,7 +561,8 @@ def exec_handler(cli_args: argparse.Namespace) -> None:
- 					kernel_args=cli_args.kernel_args,
- 					run_isolated=cli_args.run_isolated,
- 					list_tests=cli_args.list_tests,
--					list_tests_attr=cli_args.list_tests_attr)
-+					list_tests_attr=cli_args.list_tests_attr,
-+					list_suites=cli_args.list_suites)
- 	result = exec_tests(linux, exec_request)
- 	stdout.print_with_timestamp((
- 		'Elapsed time: %.3fs\n') % (result.elapsed_time))
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index b67408147c1faaab12b168aabe3bfba8bf1b00aa..a7402afd33743455b3ece72a495a6c8769ed51af 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -855,7 +855,7 @@ class KUnitMainTest(unittest.TestCase):
- 		self.linux_source_mock.run_kernel.return_value = ['TAP version 14', 'init: random output'] + want
- 
- 		got = kunit._list_tests(self.linux_source_mock,
--				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False))
-+				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False, False))
- 		self.assertEqual(got, want)
- 		# Should respect the user's filter glob when listing tests.
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
-@@ -868,7 +868,7 @@ class KUnitMainTest(unittest.TestCase):
- 
- 		# Should respect the user's filter glob when listing tests.
- 		mock_tests.assert_called_once_with(mock.ANY,
--				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False))
-+				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False, False))
- 		self.linux_source_mock.run_kernel.assert_has_calls([
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', filter='', filter_action=None, timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', filter='', filter_action=None, timeout=300),
-@@ -881,13 +881,23 @@ class KUnitMainTest(unittest.TestCase):
- 
- 		# Should respect the user's filter glob when listing tests.
- 		mock_tests.assert_called_once_with(mock.ANY,
--				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'test', False, False))
-+				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'test', False, False, False))
- 		self.linux_source_mock.run_kernel.assert_has_calls([
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', filter='', filter_action=None, timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', filter='', filter_action=None, timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test1', filter='', filter_action=None, timeout=300),
- 		])
- 
-+	@mock.patch.object(kunit, '_list_tests')
-+	@mock.patch.object(sys, 'stdout', new_callable=io.StringIO)
-+	def test_list_suites(self, mock_stdout, mock_tests):
-+		mock_tests.return_value = ['suite.test1', 'suite.test2', 'suite2.test1']
-+		kunit.main(['run', '--list_suites'])
-+
-+		want = ['suite', 'suite2']
-+		output = mock_stdout.getvalue().split()
-+		self.assertEqual(output, want)
-+
- 	@mock.patch.object(sys, 'stdout', new_callable=io.StringIO)
- 	def test_list_cmds(self, mock_stdout):
- 		kunit.main(['--list-cmds'])
+With these changes in place, the cpuset test ran to completion with no
+failure and no lockdep splat.
 
----
-base-commit: db0c35ca36526f3072affcb573631ccf8c85f827
-change-id: 20260211-kunit-list_suites-ca0c5cb7ed6d
+[1] https://lore.kernel.org/lkml/20260125224541.50226-1-frederic@kernel.org/
 
-Best regards,
+Waiman Long (6):
+  cgroup/cpuset: Fix incorrect change to effective_xcpus in
+    partition_xcpus_del()
+  cgroup/cpuset: Clarify exclusion rules for cpuset internal variables
+  cgroup/cpuset: Set isolated_cpus_updating only if isolated_cpus is
+    changed
+  cgroup/cpuset: Don't update isolated_cpus from CPU hotplug
+  cgroup/cpuset: Call housekeeping_update() without holding
+    cpus_read_lock
+  cgroup/cpuset: Eliminate some duplicated rebuild_sched_domains() calls
+
+ kernel/cgroup/cpuset.c                        | 313 ++++++++++++++----
+ kernel/sched/isolation.c                      |   4 +-
+ kernel/time/timer_migration.c                 |   4 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       |  21 +-
+ 4 files changed, 259 insertions(+), 83 deletions(-)
+
 -- 
-Ryota Sakamoto <sakamo.ryota@gmail.com>
+2.52.0
 
