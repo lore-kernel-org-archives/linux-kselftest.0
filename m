@@ -1,228 +1,132 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C279035E528
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 21:58:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06CC41367
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 23:52:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770933521; cv=none; b=loI1bMWFw0F/yPIDVbggPRq4CPiE5Uj0RVB3aYA79rbUTxkfpNbHVpQgfTUW2+ftqyDJfUa8ddXdENthNgnvbV33BAoSDWQGshcT/ZOIEo3jqAA3vT3RAx5GNBG2LovCI+nbr1uXKnGPra9kAhS2fEbzcJQnLLgNnw62Eg3N4Tg=
+	t=1770940336; cv=none; b=s8dwrsrAP6AzTNaVI5LdU5mng7rVBX6kyMVUIGmMlRCKYbF4+mxph6zO+TmW7+oI5L5RxFDulwywu6I9cb7kMmyboFq3pM9tTaxtpQ5/+pnuzKHP3rNmcqQXPWEhiauZ4q3h9Hi9LPFAjClruybKb9cqI96sKQnWQeBrUN9wLYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770933521; c=relaxed/simple;
-	bh=ezbBm/Tq1NbOZNYchfM5BrbiYJXHM46rp75jJpESgIM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=YoHnVMy+i2g1ujpH2MXu+KqRDwOFyUMWxf2KUK3+Y8jed2yn2uLvpZqXg7lPWtT6C1PU4h3HLGB+7M0MVxCuuqQNRH6UgjqVVDN6AQB0w7W8pFSkbAb4AYpctkhW15315Gp2CH+LdnDph95yixPL7GjGSkE8h9B3Y5ZXaQOXy8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cwnua99f; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+	s=arc-20240116; t=1770940336; c=relaxed/simple;
+	bh=1Gv34DN+wpw2vQsxJlIaG2grupH6BycIl6ffM7xkWLA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=okPb/oeJ26wDeCuRcHxF3tHh/GqbBRS1ZM+n9ruufGjs+Wu4VbcgfqTOPlcPq6WMp8M/3eVqwOo8hhxhMXlS5qCq203h4El10Oolxo6HIjgzJko0B+LO6XnH4Zxs8N9YFFfzox8lrHNO0mK6+6y3CrhVKSPSFEHDZkjr19nore8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F+8nzL6V; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cwnua99f"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a75ed2f89dso2715675ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 13:58:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770933518; x=1771538318; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/49beE9xrDbjk2PTkq3bWwQqpKtfvuvBtaf8t9tZ8yg=;
-        b=cwnua99fB0+vvZARrjQFt2miVg+prGDbN9oZs8jB2HxK+GLIItGcsZ8RhBu0tPl5Ks
-         FwIjMBKXn6hfVVGCPeSN4XD4fBLobGDf+RXFLP9RyiD6hH+eQWCAZXWWPJYge0aCUHN0
-         mVwaUY/03pV5wEs7VH7a4him0RbU2HiSifwQOszre/RrgNqXXsI0Hvu0b8wLkQRvON9a
-         jE1v3Ar8l2WQdbFahdVVRJwuiSR3quYjEz/GgfxXoB0vcpz6tA1M/3B6Oq4bp1BMK4I9
-         4yjZZxZc1tsLwWEZLNtv4o553Wa6kjv3pXWWXb8uzmKPKoGQpN+MBaT5/9vdrofO4EpN
-         yrIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770933518; x=1771538318;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/49beE9xrDbjk2PTkq3bWwQqpKtfvuvBtaf8t9tZ8yg=;
-        b=DQTCJTJTXq57kdBeKR3xX1hCmvD0WBB9pkKqkoBWDvssMO18N0hS0ZYsTqknDveszT
-         3TxII906iNi5w02chWE+ZsXMRlsNi3w94psVzQ5YMhUAU/apjFUZrvlggTwMwvBUmJjM
-         b+bvcNdKwBNPjZFEIhwmvFifv2AQx2nRQ9rVBlOpNVK1eebFe9/+qpNJshdsG5L31/EK
-         lgRkRwE8OveFi4YnkF+CBqpKp1QuQ0seynug08MeBEzgw+KzMIH4cldBmJmAHuhqRK2s
-         XnrJLfxTY6QQWBrzFVmJDBz/7PzzaGiczD5joF+wLzV3MOAe6MdjnbbZUI0eNl+6sWB1
-         nzaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUD09xHdCxE7qGuIV7Ri4JyTxJp111EZUcic0Z5GS9zrg5MxJzsN6xTSkooYDTzvbHxjJUictEb4L4PWRU8Hgs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnxzoYUH5HpSgZr2Lcwqzuxw631hvw+WrJMGC4xPYeaaIIfdru
-	H6El7kq1akiupt7S60VZ5j1ynjQ1sQtmQ2y9X20WFK73rV3Xh/0JZhiazPiras/8yXqXTzf+2JF
-	gMSG8MvrNtGWytPyTrA==
-X-Received: from pjbqx6.prod.google.com ([2002:a17:90b:3e46:b0:354:c41d:dd42])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:544e:b0:356:268e:ff97 with SMTP id 98e67ed59e1d1-356a792ab7fmr512870a91.20.1770933517978;
- Thu, 12 Feb 2026 13:58:37 -0800 (PST)
-Date: Thu, 12 Feb 2026 13:58:14 -0800
-In-Reply-To: <20260212215814.629709-1-tjmercier@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F+8nzL6V"
+Message-ID: <a3dfdbc2-bd72-412d-83b4-f17d68949c6b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770940333;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1xQI/Fr3XtpQFzHaYiW8tEPZj7GG6uqufZbmsGpsNuo=;
+	b=F+8nzL6VuN/9C+H8xOTeUws+J2lN3fCcDtq/8xVHSnu/kueFQJ9rnkDiSzxP+YY/TlALnU
+	pQAlBOf/PL9rAFc50w5Mj7MPm2IIGKC5ZmoUbOyJcDLxpuluuJhH7hatQfnjIRsQw27bC+
+	zVXz3Rei2l2NR5xlhDhN7A5wKAxVptM=
+Date: Thu, 12 Feb 2026 15:52:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260212215814.629709-1-tjmercier@google.com>
-X-Mailer: git-send-email 2.53.0.273.g2a3d683680-goog
-Message-ID: <20260212215814.629709-4-tjmercier@google.com>
-Subject: [PATCH v2 3/3] selftests: memcg: Add tests IN_DELETE_SELF and
- IN_IGNORED on memory.events
-From: "T.J. Mercier" <tjmercier@google.com>
-To: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: "T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Subject: Re: [PATCH v2] selftests/bpf: Add powerpc support for
+ get_preempt_count() in selftest
+Content-Language: en-GB
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+ andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ christophe.leroy@csgroup.eu, maddy@linux.ibm.com, mpe@ellerman.id.au
+References: <20260212092558.370623-1-skb99@linux.ibm.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260212092558.370623-1-skb99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Add two new tests that verify inotify events are sent when memcg files
-are removed.
 
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
----
- .../selftests/cgroup/test_memcontrol.c        | 122 ++++++++++++++++++
- 1 file changed, 122 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 4e1647568c5b..be0e78809494 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -10,6 +10,7 @@
- #include <sys/stat.h>
- #include <sys/types.h>
- #include <unistd.h>
-+#include <sys/inotify.h>
- #include <sys/socket.h>
- #include <sys/wait.h>
- #include <arpa/inet.h>
-@@ -1625,6 +1626,125 @@ static int test_memcg_oom_group_score_events(const char *root)
- 	return ret;
- }
- 
-+static int read_event(int inotify_fd, int expected_event, int expected_wd)
-+{
-+	struct inotify_event event;
-+	ssize_t len = 0;
-+
-+	len = read(inotify_fd, &event, sizeof(event));
-+	if (len < (ssize_t)sizeof(event))
-+		return -1;
-+
-+	if (event.mask != expected_event || event.wd != expected_wd) {
-+		fprintf(stderr,
-+			"event does not match expected values: mask %d (expected %d) wd %d (expected %d)\n",
-+			event.mask, expected_event, event.wd, expected_wd);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int test_memcg_inotify_delete_file(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *memcg, *child_memcg;
-+	int fd, wd;
-+
-+	memcg = cg_name(root, "memcg_test_0");
-+
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	if (cg_write(memcg, "cgroup.subtree_control", "+memory"))
-+		goto cleanup;
-+
-+	child_memcg = cg_name(memcg, "child");
-+	if (!child_memcg)
-+		goto cleanup;
-+
-+	if (cg_create(child_memcg))
-+		goto cleanup;
-+
-+	fd = inotify_init1(0);
-+	if (fd == -1)
-+		goto cleanup;
-+
-+	wd = inotify_add_watch(fd, cg_control(child_memcg, "memory.events"), IN_DELETE_SELF);
-+	if (wd == -1)
-+		goto cleanup;
-+
-+	cg_write(memcg, "cgroup.subtree_control", "-memory");
-+
-+	if (read_event(fd, IN_DELETE_SELF, wd))
-+		goto cleanup;
-+
-+	if (read_event(fd, IN_IGNORED, wd))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	if (child_memcg)
-+		cg_destroy(child_memcg);
-+	free(child_memcg);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
-+static int test_memcg_inotify_delete_rmdir(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *memcg;
-+	int fd, wd;
-+
-+	memcg = cg_name(root, "memcg_test_0");
-+
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	fd = inotify_init1(0);
-+	if (fd == -1)
-+		goto cleanup;
-+
-+	wd = inotify_add_watch(fd, cg_control(memcg, "memory.events"), IN_DELETE_SELF);
-+	if (wd == -1)
-+		goto cleanup;
-+
-+	if (cg_destroy(memcg))
-+		goto cleanup;
-+	free(memcg);
-+	memcg = NULL;
-+
-+	if (read_event(fd, IN_DELETE_SELF, wd))
-+		goto cleanup;
-+
-+	if (read_event(fd, IN_IGNORED, wd))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct memcg_test {
- 	int (*fn)(const char *root);
-@@ -1644,6 +1764,8 @@ struct memcg_test {
- 	T(test_memcg_oom_group_leaf_events),
- 	T(test_memcg_oom_group_parent_events),
- 	T(test_memcg_oom_group_score_events),
-+	T(test_memcg_inotify_delete_file),
-+	T(test_memcg_inotify_delete_rmdir),
- };
- #undef T
- 
--- 
-2.53.0.273.g2a3d683680-goog
+On 2/12/26 1:25 AM, Saket Kumar Bhaskar wrote:
+> get_preempt_count() is enabled to return preempt_count for powerpc,
+> so that bpf_in_interrupt()/bpf_in_nmi()/bpf_in_serving_softirq()/
+> bpf_in_task()/bpf_in_hardirq()/get_preempt_count() works for
+> powerpc as well.
+>
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> ---
+> Changes since v1:
+> * Updated the comments to include powerpc for the APIs.
+>
+> v1: https://lore.kernel.org/bpf/20260129054035.168078-1-skb99@linux.ibm.com/
+> ---
+>   tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> index 4b7210c318dd..9df77e59d4f5 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> @@ -645,6 +645,8 @@ static inline int get_preempt_count(void)
+>   			bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
+>   #elif defined(bpf_target_arm64)
+>   	return bpf_get_current_task_btf()->thread_info.preempt.count;
+> +#elif defined(bpf_target_powerpc)
+> +	return bpf_get_current_task_btf()->thread_info.preempt_count;
+>   #endif
+
+Maybe do
+   #elif defined(bpf_target_arm64) || defined(bpf_target_powerpc)
+?
+
+>   	return 0;
+>   }
+> @@ -653,6 +655,7 @@ static inline int get_preempt_count(void)
+>    *	Report whether it is in interrupt context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_interrupt(void)
+>   {
+> @@ -672,6 +675,7 @@ static inline int bpf_in_interrupt(void)
+>    *	Report whether it is in NMI context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_nmi(void)
+>   {
+> @@ -682,6 +686,7 @@ static inline int bpf_in_nmi(void)
+>    *	Report whether it is in hard IRQ context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_hardirq(void)
+>   {
+> @@ -692,6 +697,7 @@ static inline int bpf_in_hardirq(void)
+>    *	Report whether it is in softirq context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_serving_softirq(void)
+>   {
+> @@ -710,6 +716,7 @@ static inline int bpf_in_serving_softirq(void)
+>    *	Report whether it is in task context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_task(void)
+>   {
 
