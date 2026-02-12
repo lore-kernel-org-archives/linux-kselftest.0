@@ -1,214 +1,146 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011067.outbound.protection.outlook.com [40.107.130.67])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE7B1EDA2B;
-	Thu, 12 Feb 2026 08:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.67
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770883767; cv=fail; b=DLvDdI6lXFBU6NH6ci5l0Fbh0XXX4irF+UhhWrxnBDKPzMkcpS8bikfhWJgB5Jvn/Sor9jybitoXlkutbsbiRpo2xvD+fQQU6X/f3uVjiUQRiJ5j8OGPfLjJk5FR5gVZ5nIeyXkW4ZoPyH62sbr8sfiUs4h+bg4qoMw4zaCvkwI=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770883767; c=relaxed/simple;
-	bh=2cDjXtRS/2bcAVkttX/3fUE+0z1GeC0pZYG3r1B6nn8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=u+9C5RU/zK1d3jAdRj9bE1E75tL1n0MK9QB0tqxgbZlunASYL32GYSdB8dMHeH6digaKkT6/GVRLrQYtdM8wfCAiQ8VZTsd/BubqHMq6xp4FImNrb7bD4w2YF9lAAcVDGV+aVq41lB4BdWmf5zDXHsQ7LjhNOMK7Z41U7XHO/Lo=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=QIdVGzGh; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=QIdVGzGh; arc=fail smtp.client-ip=40.107.130.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01991D61BC
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 08:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770884634; cv=none; b=Dv+HoxaZhnxSyacFC/BHHD4FF8UsOsqhPmbJzlbM+Zu1rUKTynOGSzafyEoCyQdUXQ92f7tUxlErCXPlTybcJzHv2HCcy6Nvs2yh/KXK3jEPcHhyH7pivP8XgcahHTIF9sV49Qwhn9f9zQSoxPP4W8E6AuL8/IKINBptBgNuOvA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770884634; c=relaxed/simple;
+	bh=9oiwq5b/PMLGO5TFSs8W4xMUf5GGnvMwLUvLVmePqIg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mrqtKO0Gu3Wmv4MS8XZYmhl1rDBH2rBZUix+ZNxx4yMzQu10LqELO4ijyozSMxL1axEAJRIRo8ocUfGnHFckTF6xM6Mudww4yNO/Nxv14dOEMjJqPcYOcWVRGVi7fDacgrB2MGgxjTsGvKCKV8nRqI4jQ8yPcXHRsjHxuX4Zaww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TDKuVggx; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="QIdVGzGh";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="QIdVGzGh"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=pUKKu19TSorHRnYq6gWGtY8qU722CBhaaN17TU+Khz4T+UV3OKWFAshmBLjAvQtqFJ+WZsG9YZCAeFlhqLI3300LaWpDkoacebjtVa4luJn5EeETDW4lFhnEk/9kWWZ96H5GqpxWXGhU8ZWm5AfxO9EI5tf0LLgvnatZOzMYPM48W69tc6+suTnwMTI+gASvk1/UQyQFOwZ5QETqnmSPmT9z5ygPj6U0GT66EKYsU8wEcz6rNcJw8415kFt1SNg/Ssl8AVA6xvLiLqHYIh0UM4qBq0TWkR1YwPduBfkqwdUUhv8LLdAgFYK9TWjsQx/RtWWQ4M7WCCrZK+go4lmZXg==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2cDjXtRS/2bcAVkttX/3fUE+0z1GeC0pZYG3r1B6nn8=;
- b=lSUgVUFKvTqzhtQJIZ5LLyyiwlYGlK7i5SV2gZlTwzVEzRUkc/HYqMflV0LJL92vkle3Y+HBUVgpfxgTL66qtbmCrl2oBm+7VozWuyaYeRVNuiiDLW9f+L+Oj0AplgmfDZkpkYQR4tTvIFRNqqRqjD9ARHRCPOspi2ipWSM0lLZISIRWZjpeYcFCSPboCOwsPtaeAjjxJdl4mzIhju4b2BxWJRwGTzvebeWBmbDwqfrzX8vIxSIkFJR1Yf72e9dNoNqMC68/z4Xxjii495vaoNR16CDb+TZJV2lpiESrlZhcTGtLLZiuwF4ar+/1C00Tc5eeL/poSk56JXsgsOuQBg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2cDjXtRS/2bcAVkttX/3fUE+0z1GeC0pZYG3r1B6nn8=;
- b=QIdVGzGhdO6dIlfppOPC13U2IVox0iubCUUjPQcYRbbZH1DiPEnJn2wmAPrf8wC3ejCpokFV6LqxIQ0hGIA9j9gubDL87M6KLBAIBEz7HvRHhskIQpgxCvkePI7FAra6l+z5kla+y0JZ9xoqMfSjTZqllOw824VGlpBq4tl5SbU=
-Received: from DB8PR04CA0018.eurprd04.prod.outlook.com (2603:10a6:10:110::28)
- by DU5PR08MB10633.eurprd08.prod.outlook.com (2603:10a6:10:51b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.19; Thu, 12 Feb
- 2026 08:09:19 +0000
-Received: from DB1PEPF000509F3.eurprd02.prod.outlook.com
- (2603:10a6:10:110:cafe::ca) by DB8PR04CA0018.outlook.office365.com
- (2603:10a6:10:110::28) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9611.10 via Frontend Transport; Thu,
- 12 Feb 2026 08:09:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DB1PEPF000509F3.mail.protection.outlook.com (10.167.242.149) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9611.8
- via Frontend Transport; Thu, 12 Feb 2026 08:09:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H6Ucn4Vev60GaG6k0ISDrUI7MZH2qYcuJFBB0dD36ltFQZk6mewDvL0ME0zYueG0zlg1rfBDL1GQMbRd09nomeNdw+C34bi4vrXrU3ueaynt3OH5HeAcEsLm+4d2akYHPx93JfyfjjYuFlslT/prpanntwMKmhCbIekukT784VcbgQ1DZYAEbCfpz3iIBFJZcL3Q9ULEvAfLxh8hJRRyfAGs5MEUAxblLNhh5qeanpCD0wp+hRWh/PPCNdCcfFpZFQlbkOJcJopKgxs5Y9Y3RNNW39halqVuvHWMRLo1vVG8gruh4EKGowcZaRffSZf/uVgMoavbFTveYsK+fE5NwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2cDjXtRS/2bcAVkttX/3fUE+0z1GeC0pZYG3r1B6nn8=;
- b=HitYgJHK3YV0TV8dDesNu3xOQyrXm5Nqb43+/S7fe5eeXOjEJfKcP6NCMJ7upOfGs8mpB9mDsaOsdvLkA6wmrct6xjElVzj4OUpC5lb1tiHWBtaBYfE7motkFK6poNdk7KKXMxfzkyng2g6iQol9NPMYtiJVnlXDhcq5eXDRC69xEdtMT0/D8ykdbbexa8Jor0X9kdkV72ganwpnpeuHyEXdbt1MKr0WrOvTvVklYIkZ+Z+4le0n//Byni3JCTbNbOXSLc1RWz67iAF88s/+klYa01Ylzdwer+yPW2dhSGRrCEPYrSOQ0pTTQOY9uqAikIh42EeEhZg3/XRkCXodIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2cDjXtRS/2bcAVkttX/3fUE+0z1GeC0pZYG3r1B6nn8=;
- b=QIdVGzGhdO6dIlfppOPC13U2IVox0iubCUUjPQcYRbbZH1DiPEnJn2wmAPrf8wC3ejCpokFV6LqxIQ0hGIA9j9gubDL87M6KLBAIBEz7HvRHhskIQpgxCvkePI7FAra6l+z5kla+y0JZ9xoqMfSjTZqllOw824VGlpBq4tl5SbU=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20) by AS8PR08MB9621.eurprd08.prod.outlook.com
- (2603:10a6:20b:61a::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.10; Thu, 12 Feb
- 2026 08:08:16 +0000
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::8c9b:58d2:2080:eb98]) by GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::8c9b:58d2:2080:eb98%3]) with mapi id 15.20.9611.008; Thu, 12 Feb 2026
- 08:08:15 +0000
-Date: Thu, 12 Feb 2026 08:08:11 +0000
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
-	broonie@kernel.org, oliver.upton@linux.dev, miko.lenczewski@arm.com,
-	kevin.brodsky@arm.com, ardb@kernel.org, suzuki.poulose@arm.com,
-	lpieralisi@kernel.org, scott@os.amperecomputing.com,
-	joey.gouly@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com,
-	shuah@kernel.org, mark.rutland@arm.com, arnd@arndb.de
-Subject: Re: [PATCH v12 0/7] support FEAT_LSUI
-Message-ID: <aY2KaxaI+HWwXisM@e129823.arm.com>
-References: <20260121190622.2218669-1-yeoreum.yun@arm.com>
- <aYWuqTqM5MvudI5V@e129823.arm.com>
- <aYY0h1DtvDpEyekd@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYY0h1DtvDpEyekd@arm.com>
-X-ClientProxiedBy: LNXP265CA0091.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:76::31) To GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TDKuVggx"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770884630;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=crYbU+ThqI1KboSIh+EReNJtidB4zxhxhtyNUFlO0rY=;
+	b=TDKuVggxscYGSctBSiDWdBR38fcvT+Z3PytbqBFCVFWT9qlg6PqmrB3xUNFaLH/XhUnQ0V
+	/cNlB+mkcXUIsmjYfm600iLmjAGnPJAZe3pq7FPg8OY0WRq6FSaPe0IjxmUObaf1pjtqLO
+	L5j2gXzjnb1A/e/bJWzIh5DBJ9GmIzg=
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Hui Zhu <zhuhui@kylinos.cn>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 1/3] selftests/bpf: Check bpf_mem_cgroup_page_state return value
+Date: Thu, 12 Feb 2026 16:23:14 +0800
+Message-ID: <042df9438d9e78bcd66f1fa0e7043b9ea8cda96c.1770883926.git.zhuhui@kylinos.cn>
+In-Reply-To: <cover.1770883926.git.zhuhui@kylinos.cn>
+References: <cover.1770883926.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	GV1PR08MB10521:EE_|AS8PR08MB9621:EE_|DB1PEPF000509F3:EE_|DU5PR08MB10633:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc5a329d-4738-41d7-9076-08de6a0e0621
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info-Original:
- =?us-ascii?Q?s9zhb0uZDV/AlleW/YrkqaHOt+iU53x/GFFHibfkDiP5a3TSC+OJEhCU0J8B?=
- =?us-ascii?Q?S9vgtq/sN4ucsCpf8TXEEk8DM7uVlnuyIt2k29fWry5NRnCjE4312kRrd6wt?=
- =?us-ascii?Q?ZJNh8da1z4frxDoXcOTekYgGxF7CV5NAOeQNruzx6ouf20k5MzMmgM1pyh+i?=
- =?us-ascii?Q?ecHu65iej6b8KwKbZK3578wtN5kxYV9Yd7w23NFbJPU7sTnepZwQH5PxgF/1?=
- =?us-ascii?Q?8I/6+Cx/NYdFVinHY4C5E47ogg/sG+gAOtjBhB0jSdErEB47yqq/omFMWI0O?=
- =?us-ascii?Q?j1TD84R/cZCv55LP8SvsPHL33MLUY70el6uMYGG/1NMmUBTeFp2VpeaU6UsR?=
- =?us-ascii?Q?ayd8RZAUwCCA8ToE3tqHulsrTyI1OzoLLGQzMSJIHXKgRX4Kmt1Cdx/RZ2ZT?=
- =?us-ascii?Q?wJ7PXMUHIJGswe+79xfpa2CQQ68NyMeg74kxaWIyDKJ35sP7AFbyOE2KQ/pk?=
- =?us-ascii?Q?cvEwhJ/1pacW/QHozmF7wNgrK+11RVWTYbORaPRzxNZrdAcqaE7qTG7wStme?=
- =?us-ascii?Q?/xdmJA8M7XK6gkbxKBRTgZkfNE4/ETI6NJHTBYFe+Gcq2Pf18i1sK7qLBCG/?=
- =?us-ascii?Q?1HaDBJOsApwp64uPIE4WnlkJiM+DuM+qBQISX2XJ//LBtbLk4hkSpuotdU3v?=
- =?us-ascii?Q?shlXD7dT13sM1tYvcyIk0KRw54EsWUqDljBGNikhKT2kmfICfAAX2BYolLUp?=
- =?us-ascii?Q?Qecu6i+q52BPcGg5y5msOx1vsz3tP11Ie/xzrBks2+3Y+yd140nZkFv5jK2M?=
- =?us-ascii?Q?qYfYgdkTyKRFS6guZV2ZZb/aoecbl7g9QShkstmchOqw07atgE1+wGTqQKP0?=
- =?us-ascii?Q?gOjt13VTdoWTSezKBC4y4vw6ISTR96HX7SBLahIse5+uh8XeWGRmhtRS5Oug?=
- =?us-ascii?Q?0Thj4iQJ4k7TE5c5ydDFEzg5fXwaB1FF6gMY/UisCpdhizKkbEx30GNIV9VM?=
- =?us-ascii?Q?wz/bk/JSJoUKOgXWV0xaTE5atAuCChy5GBYbba2V8HiiT2z1CDLgCQWA/szq?=
- =?us-ascii?Q?EvhKikziXyTwzDQ9fKlsUkvfB+mrH0fp2LQ94zsq4j8eS0+rsE+C5i4abHLL?=
- =?us-ascii?Q?XfLPe1tkV5tjUUZ7hAh7R9fQ1Af30Oq2eIpKGJua0FjxIU+V2/A4sGyncE6c?=
- =?us-ascii?Q?Ev4RF5Sn/k73dTi0xdqUzyPCL44dAz9Jk3/2rJVHipRgj67FCLj89e2I0L2S?=
- =?us-ascii?Q?y2ODZ5qBbhAlizePDlEhYCCRL3F58pTuU7zL9P01K1Rno3gW/pq6HDmQdcHS?=
- =?us-ascii?Q?gd8Nm7RW8iQt65tjPjsYIQYmjdYeM0Mc5/OP+9EOEFYJ5TtvyVKFRXtAIQVg?=
- =?us-ascii?Q?yZqJpfbMCr44gDp14feWu/3Grr0aC2oe1ICXpuyXpAXbXHpf9LgS7yfI3OJP?=
- =?us-ascii?Q?Gj1/5n+cv2HGyA5cue3mv2GaDjsUvBDTtRDF/+f2PafNiiaoK/hBjEsBT0vb?=
- =?us-ascii?Q?cAvBYwbzua3xw5NvTpugdhL6RJWpVCcwvT0tO96keHQ1LxzunwZcd9IrBU65?=
- =?us-ascii?Q?9Q30mrwyq5RgG/wLKfSQSM5xSOI3qj357tKJjceL8UMBTGkHgn9qoHS+dCh3?=
- =?us-ascii?Q?gPM4dE4CXR05Vt3JbVc=3D?=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR08MB10521.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9621
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DB1PEPF000509F3.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	c3156e02-93c1-4b55-91ea-08de6a0ddf71
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|36860700013|14060799003|376014|35042699022|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?mHpP6HDmObtXyRP4PqznBnQ91t6zZnpiHmP1VxxhwkcIB2HutvaMUiq/eoKY?=
- =?us-ascii?Q?c7UMHfIlqXAPjoeFzncxHfxhWNqKfPL+jkFl2w0wO0pmZNVrOEPwFrZuIAWE?=
- =?us-ascii?Q?iSQZgVNIiy7I+p6G62YuHFpa9kFLEOEenqh5a3qpDosFHqiXNnJN80GWtQ77?=
- =?us-ascii?Q?09rFZ1h7jpe1lEESfm5pZ2hak1NX3vftZHat2YL20RoIMHsYgtJBbUaQ615Y?=
- =?us-ascii?Q?pcgpD+bc/9bRmbVnrbxYlBx8M1dwVih4adqV7VmvAdvMwesKWc4Dc90haB6s?=
- =?us-ascii?Q?Psh5uWnNdbkFFnZFPZekWnwwPi9fggH/V0DFO15GzQCgKOBLJl0QkXvQrHal?=
- =?us-ascii?Q?w+wcyAV0dyxJWERenYNreSNBKPN7Y+nI3Zvohz6IjryEB3xKh6G+cTA44H3K?=
- =?us-ascii?Q?/NAP0MZFhv8hKPEE8/N/BXYm2jfEibDml5qGRiRAnKjvRGm4VGg3h555bf8C?=
- =?us-ascii?Q?CKaxd3QubmUTz0zVADdz65kyqJdlYo4gFEvyB0SBOannXfFe0ia09qr7gKIN?=
- =?us-ascii?Q?iQfrO/bZjvtKUhg3pWOKOQHz6TNKJt4OFfouiDmYoBHgb8Bj1rkOSWBHK7dc?=
- =?us-ascii?Q?N6dGLt9GAQHC3jO6WY+1maDAzCnHAd5D7kT7T+48cPa7UgPwB0kKrlq5ZHCW?=
- =?us-ascii?Q?s0+w2YlyF720ulG3lLDn/Vjva86MljcRgnRdmnsn43FOmSNC5p4VdeER6b+Z?=
- =?us-ascii?Q?uvbL3F8NR0gseIOi5N1qMf8stDroxllwOyZCWrfArOuY4OuJONvGuvU4bthN?=
- =?us-ascii?Q?KoKjX/aEdbvUSSq/nMGwQJKMNcynqwbrDrZgDPtMUtS4+9wIhtX03oxZ6gvZ?=
- =?us-ascii?Q?VetaeOvtujoeRfhmE2YUb2DTa6s4hG+yg/qu4jsuZ//sxZsjuMFpWVnHLn6L?=
- =?us-ascii?Q?BWBTgHN2ZG8D1si/MEn1Hu8didm3tX5zN786nymMAwgpBiMyDIxqxLOBBsz7?=
- =?us-ascii?Q?9k8/lHSDKVtdCfvvM1YyBi6TN+Z5pYHgGziG5BZkcg1MZU+QMECkxZGNfdlV?=
- =?us-ascii?Q?jznJjHRkdgGzY5HgNZ0hSx5GCdmPl4xnWxgUJTGsyqjKFXGVRnFcXm2d8g7g?=
- =?us-ascii?Q?V4qCCKkMg7ctQf61NJAybqPL4t8lr4XhwMvMH3kefsJshlwSqdEK6tz8Uikx?=
- =?us-ascii?Q?fNlzpb4X7FxWVncQgphGN5mCNyNERlw8sBhl3ES2ONLdRxFZXN08+j0PCO5E?=
- =?us-ascii?Q?zBaspVpM0GCzmUb34y/6vkApZI5m8YXkOUS500ZFfUOUwmHMe1VsiY4Xlgp0?=
- =?us-ascii?Q?DJSp9iXk0PRdehsTxYQZgYiCs8N1AED4vl683/DC1A2SU/DG7rSqhE4vP1+w?=
- =?us-ascii?Q?3uqqz6QyjGGm7LrIIxv9piceb6NSHEqKICKKLa55V85j0C/w+2cSjWVp9TdN?=
- =?us-ascii?Q?QDeS1JTnKql9ri2OvjxCPQIsoChKU10QuhWHDhhX7Lbtwqk0eNX/ONXKf6Yh?=
- =?us-ascii?Q?qJn6t39l4nnVYzLoR6TTHc1vQxTpTlB+NefywYeU2S8y02rCipgk5r6/qFrS?=
- =?us-ascii?Q?jpQ0ZNHVKi8r/DQTzhmQSXmCX9FYwGiZmC8aq3ugTlLD0Z6bUpkrsCkAFa4B?=
- =?us-ascii?Q?gwazdsY/RYPUdoyyDRxnGM/aufHwfovMogZKfo/Xq2dL/X+SEx9vcS/zDGKJ?=
- =?us-ascii?Q?bc2eWRwWHoIrY73ycI+A0Y4cVTClaX+jPp+rgY/G/Di/?=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(36860700013)(14060799003)(376014)(35042699022)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	EJc1BKnda3acohtGXkrEQtA7iEim8djsEp3SSG/iAuk3548gH7AfRyrThqBbTvpTXOKZbN+9J0wrI3fhM3DCglgyB0DRymv4o6VOALwrL+xl+9kpnGCpltEBJU563UFYeD3WbmXbVF7ajxlkjmS+2vZoVO48NENspGDOM60hO6hR0mZ0tvhYPgW89+Lf5or1wAr2s71d7v2etxJGLS61jsV+TDPB8LAA8ipbZV6gAEiLHPE/WfHFcXzoi+7r0a0FnI9cG012OkT76c4P6qHQGGQ2lwFr6TO2iy0rn3872QmRmg5OzG89tekQKt4HGblkXfvAJtrZu3yeufB5TDmhHkDVfaoxhRDOpbVZieIiKpBKw6RM4IHR+MRdts1DqVoXyqB9h6ByCukpCsT/iy2VNzxEL+Lre+jamEOUiU1pNQWTTs65lpi8audTxGtpzNQX
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2026 08:09:19.7136
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc5a329d-4738-41d7-9076-08de6a0e0621
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB1PEPF000509F3.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU5PR08MB10633
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-> On Fri, Feb 06, 2026 at 09:04:41AM +0000, Yeoreum Yun wrote:
-> > Gentle ping in case of forgotten.
->
-> Not forgotten but lower priority given that the merging window is about
-> to open this Sunday. The LSUI series is now aimed at the next cycle.
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Thanks for keeping this series in your mind :D
+When back-porting test_progs to different kernel versions, I encountered
+an issue where the test_cgroup_iter_memcg test would falsely pass even
+when bpf_mem_cgroup_page_state() failed.
 
---
-Sincerely,
-Yeoreum Yun
+The problem occurs when test_progs compiled on one kernel version is
+executed on another kernel with different enum values for memory
+statistics (e.g., NR_ANON_MAPPED, NR_FILE_PAGES). In such cases,
+bpf_mem_cgroup_page_state() returns -1 to indicate failure, but the test
+didn't check for this error condition and incorrectly reported success.
+
+This patch adds explicit checks to ensure bpf_mem_cgroup_page_state()
+doesn't return -1 before validating the actual statistics values. This
+prevents false positives when running test_progs in cross-kernel
+environments.
+
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+---
+ .../selftests/bpf/prog_tests/cgroup_iter_memcg.c     | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+index a5afd16705f0..13b299512429 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+@@ -53,6 +53,8 @@ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
+ 
++	ASSERT_NEQ(memcg_query->nr_anon_mapped, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state NR_ANON_MAPPED");
+ 	ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
+ 
+ cleanup:
+@@ -88,6 +90,10 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup_map;
+ 
++	ASSERT_NEQ(memcg_query->nr_file_pages, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state NR_FILE_PAGES");
++	ASSERT_NEQ(memcg_query->nr_file_mapped, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state NR_FILE_MAPPED");
+ 	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
+ 	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
+ 
+@@ -119,6 +125,8 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
+ 
++	ASSERT_NEQ(memcg_query->nr_shmem, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state NR_SHMEM");
+ 	ASSERT_GT(memcg_query->nr_shmem, 0, "final shmem value");
+ 
+ cleanup:
+@@ -143,6 +151,8 @@ static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
+ 
++	ASSERT_NEQ(memcg_query->memcg_kmem, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state MEMCG_KMEM");
+ 	ASSERT_GT(memcg_query->memcg_kmem, 0, "kmem value");
+ 
+ cleanup:
+@@ -170,6 +180,8 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
+ 
++	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state PGFAULT");
+ 	ASSERT_GT(memcg_query->pgfault, 0, "final pgfault val");
+ 
+ cleanup:
+-- 
+2.43.0
+
