@@ -1,86 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3496C3EBF31;
-	Thu, 12 Feb 2026 08:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39575F50F;
+	Thu, 12 Feb 2026 09:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770886235; cv=none; b=W2qzc7R4+mI9VIqwKqSdf8NoDmR+iKbl0qY3Z/IdmGpwPc7Szh5SwLe71+EExQRLnHa6f5NPFMD0lBnWJhk8k3H862FKWBh0Hhz4hXTZ/IzqpDZPidRrfES9IN3wKPKSMCaqKPsO3KJYHix5Cl+hgRAfen/mkJpRVlyt9DBEagQ=
+	t=1770887274; cv=none; b=USUufp7/MC0mE7gJ5Nj+jnDtC13KLPK7HkrS3PEibZnpoPS+2rb906iceoPSDKU7dR4+M3UWmHdJ7Rs8f2zFjK+ZCMCGAcg9sQ1254mLZspQsw7rHwNGLEDZyTDaMMt77SqhyIgmr4hTD2PDBYcvcpxADJw55QFlkY8UJcuVy9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770886235; c=relaxed/simple;
-	bh=tFZNX6x5kQa3R5bh2C+SIIXI/4UmBn0oMjHEk4eUOEs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=lXvFF0BX3yajI4TOFW+4MRSiIspqdWrkcm80dG/+hbMKdsTWSZ3kWl6WCF8xzVFyyLzYIe4YBOt2/cjfzVGIteN83sJp/xfSeP4iFURPGOTlHdGhwgIyL/oQ4HcESrddNFsllYoSWkv5uNyMieaB0mWDvpJ+60PSXqm3x6PzkKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XNDmJQoV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770887274; c=relaxed/simple;
+	bh=7X/ZE+464SFMrcWXG+fw9L92P1t1gtPIejSOE1mm8Sg=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CRYqH6osKWZFuXlKUnqfxev2UCZyTQthLX7UK7YTtsqGd2Tqj2AEMx0ya7YCvyARL+3UHvUXbEUo4zK720XJ6qTwW/vHkf0+cy0jJBArRUnyh/yfVtlWu9NPZT/c9eJdQrqSh15Mk2C2lFdzYDLJO4nvgOmj2pHjoMJwLKInlsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SRDzJd4y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XNDmJQoV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379E7C4CEF7;
-	Thu, 12 Feb 2026 08:50:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SRDzJd4y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1428BC4CEF7;
+	Thu, 12 Feb 2026 09:07:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770886234;
-	bh=tFZNX6x5kQa3R5bh2C+SIIXI/4UmBn0oMjHEk4eUOEs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=XNDmJQoV2PMqhuDh97GJvfMGlGBF7Q4ElssERNNNLKV2ldSnj4QlGhLAA9YAvptAG
-	 4sTNQ55sWaWq9ec3QQPI+mvBLBCPKrLZ1WrcV8AuLDz3F7ojRZPae8DDf4HXxKBnrd
-	 /KB9ua7da3oyfyjNSG7JGNdiWChdRIK0EYJ1yFoNBUYjK4Ts/BkMzFhFWZl1Loyl4r
-	 EtvR6WUW/0tR63+S4ugd29vq+hmqVkrJzI0H/Z/Ion2miO6+CgocvMp7vrzl/EVhAQ
-	 llK68uWfw68MNc4uXAJtGuyS5EmJ83OabHpPpA6SNX3xHXosfD+nnKagX/WuXvUELv
-	 f3UNhYxZ1Zq9A==
-Content-Type: multipart/mixed; boundary="===============4217100397236680912=="
+	s=k20201202; t=1770887274;
+	bh=7X/ZE+464SFMrcWXG+fw9L92P1t1gtPIejSOE1mm8Sg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=SRDzJd4y7pdwghuIRwEX+milR/vWqoeZRao4cczsY/oRSB7rXxGuJLbC8pO7iCSw4
+	 /1fHpKlD9QC8Pr36ty9iBxiTNpXaDNYp9kxfY175hoKc70tInFruadKyuacdByotDw
+	 giDuJK9Yv4AbMPDUN5IleiHk09y0vDFg4IFOf1Va0BfXrwqu9s3EcPhdfYle0DOYSg
+	 Po0zabmL17OlVZC5nq6r8y/4vDgWU5l1/ykpkYYbjQp+nF7oNrOcToyCcJwcrWAWRT
+	 TlUDUSJIbuvgS7XUw4PVNj+qOU1x9wo3jckCVZzmRgQeTQjpQnhNQht/dATAuEMT5X
+	 Wv6weRnqIFc7A==
+Received: from [185.219.108.64] (helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vqSfv-0000000AYzI-2Zos;
+	Thu, 12 Feb 2026 09:07:51 +0000
+Date: Thu, 12 Feb 2026 09:07:33 +0000
+Message-ID: <86ldgyba96.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Colton Lewis <coltonlewis@google.com>
+Cc: kvm@vger.kernel.org,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Mingwei Zhang <mizhang@google.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 09/19] KVM: arm64: Write fast path PMU register handlers
+In-Reply-To: <20260209221414.2169465-10-coltonlewis@google.com>
+References: <20260209221414.2169465-1-coltonlewis@google.com>
+	<20260209221414.2169465-10-coltonlewis@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <0d926bdc5b5e030fafc82de73c3f3e5412c051fc6763f77da9ea6aa316bd8f13@mail.kernel.org>
-In-Reply-To: <042df9438d9e78bcd66f1fa0e7043b9ea8cda96c.1770883926.git.zhuhui@kylinos.cn>
-References: <042df9438d9e78bcd66f1fa0e7043b9ea8cda96c.1770883926.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Check bpf_mem_cgroup_page_state return value
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,akpm@linux-foundation.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,zhuhui@kylinos.cn,inwardvessel@gmail.com,cgroups@vger.kernel.org,linux-mm@kvack.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 12 Feb 2026 08:50:34 +0000 (UTC)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, mizhang@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
---===============4217100397236680912==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, 09 Feb 2026 22:14:04 +0000,
+Colton Lewis <coltonlewis@google.com> wrote:
+> 
+> We may want a partitioned PMU but not have FEAT_FGT to untrap the
+> specific registers that would normally be untrapped. Add a handler for
+> those registers in the fast path so we can still get a performance
+> boost from partitioning.
+> 
+> The idea is to handle traps for all the PMU registers quickly by
+> writing directly to the hardware when possible instead of hooking into
+> the emulated vPMU as the standard handlers in sys_regs.c do.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+This seems extremely premature. My assumption is that PMU traps are
+rare, and that doing a full exit should be acceptable. Until you
+demonstrate the contrary, I don't want this sort of massive bloat in
+the most performance-critical path.
 
-[ ... ]
+"Start walking before you try to run".
 
-> @@ -170,6 +180,8 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
->  	if (!ASSERT_OK(read_stats(link), "read stats"))
->  		goto cleanup;
->
-> +	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
-> +		  "bpf_mem_cgroup_page_state PGFAULT");
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	M.
 
-The assertion message references bpf_mem_cgroup_page_state(), but the BPF
-program actually uses bpf_mem_cgroup_vm_events() to retrieve the pgfault
-value:
-
-tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c:
-    memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
-
-Should the message be "bpf_mem_cgroup_vm_events PGFAULT" instead?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21939182103
-
-AI-authorship-score: low
-AI-authorship-explanation: The commit message uses first-person narrative describing a real back-porting scenario, and the code changes are simple repetitive assertions typical of human-written test improvements.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Minor documentation issue where an assertion message references the wrong BPF function name; does not affect test correctness or system behavior.
-
---===============4217100397236680912==--
+-- 
+Without deviation from the norm, progress is not possible.
