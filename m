@@ -1,113 +1,242 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF30D1386DA;
-	Fri, 13 Feb 2026 01:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC8926299;
+	Fri, 13 Feb 2026 01:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770945737; cv=none; b=uV38LbupvvAP15tNBlh78v+xaWq15l2t0ug3rbin7w8YiKwjvhLlGh3BrqyXecDc/ZdovDTX8VeeRqdaMvmbZlA1jN0aeEqX6tm3ROX/EdpMwwsHYlQNlMGyLWKqozjMtwxuHfuE9gvGSygRIsrXc+7WoJK9pksCVbp2amS3yhE=
+	t=1770946569; cv=none; b=Jg56VA5gYG85d1WRml89taE7InvbGSeHXWbxnUDmlHPr2lGGO87UQ1c1zOYa6oD1C4Hg3Fps4FlA9/vqnvZGauyE83EEUxCQwZHEC7Pi94mbZCiExrljiSLD5ilxFz3lS9GnJ0XIjkntSFbR9S7yIKJ/AEPOVbYTcH3ahnDedys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770945737; c=relaxed/simple;
-	bh=fV90tJ7gdPh2Pj9/Q235En+ABb/bjRugS5dU4Rm+nlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MAwoBy9d3UMSNitq/+oC4OeMgyhWhJU0J4PBXB8/GMIYyP3uja5HHvpmXUbrKLrrnYjxazSB+MH6GbWe6hMkuiFU9zvgU498OeiI1KbvzDSvQNmBrSiLFfdYq9iqaBvRDYcR60pXd8Gk0Jkhi1Q47PMX5xirToyebNJO711mHQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRc74ysD; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRc74ysD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D25ADC4CEF7;
-	Fri, 13 Feb 2026 01:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770945737;
-	bh=fV90tJ7gdPh2Pj9/Q235En+ABb/bjRugS5dU4Rm+nlM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=sRc74ysDqJYJS9c4iM/b5Nl+k8sfzcilp+eEdPCI9OhPXdqbtm5uDg1V2sva3/CgP
-	 b0E0Wal5W0AMw2LgrHdeYibLZr4tiM3zTW2WTzWcLbI/J0RjkEWiKGi/vA0F6/bIZc
-	 8bL8SjUakcH4Ax1wGkYw2kduaLp4UgvsJ+XmI/MMy1tpvU3UZJZLe8GX2G9ud0ljwQ
-	 P2ZlY7VzRqD0o+ywgAbrFHQcVsrr74NYMOCMe76GbvSg3EFVRzN9kivul1FsHlqeRF
-	 gyaWSgsRVFxGCQWUmFL1I2shvvVPKT3sgbyuvbQtbAnDprGhm6fxbvs/tD3pVa8DfU
-	 DtZTuUencYW5g==
-Date: Thu, 12 Feb 2026 17:22:15 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Tariq Toukan <ttoukan.linux@gmail.com>
-Cc: Yael Chemla <ychemla@nvidia.com>, davem@davemloft.net,
- netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, Willem de Bruijn
- <willemb@google.com>, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- Tariq Toukan <tariqt@nvidia.com>, Gal Pressman <gal@nvidia.com>,
- noren@nvidia.com
-Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: rss: validate min
- RSS table size
-Message-ID: <20260212172215.0a3295a0@kernel.org>
-In-Reply-To: <dbbe9690-996f-4a63-90a0-baec52c27236@gmail.com>
-References: <20260131225454.1225151-1-kuba@kernel.org>
-	<9f535014-80eb-4f57-b047-3638579bde9a@nvidia.com>
-	<20260211134319.39710c1d@kernel.org>
-	<dbbe9690-996f-4a63-90a0-baec52c27236@gmail.com>
+	s=arc-20240116; t=1770946569; c=relaxed/simple;
+	bh=ucGfc+LewX9mYZnCRr0Pz7704RkgbamgkrNAoo/rkwI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EJzY8Nijqss/N1DGx/f/lwVkqjCBISZXDxzWTTrmuJd9YWWn4BsAsVBMbvLv8+5MnlhH/GuZ3DJfI0MbSLguAvSfa36DmzZ0SHdyuYNacLBvY6iUpNAF4I79q3bLW7wx3WW8Xld8MwcIZe6V3YLfjqhs06uG2WHd6LWpbgRGGfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fBvrX2k7mzYQtxH;
+	Fri, 13 Feb 2026 09:35:56 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id C911240576;
+	Fri, 13 Feb 2026 09:35:58 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgCXQvP9f45pRrn1HA--.6835S2;
+	Fri, 13 Feb 2026 09:35:58 +0800 (CST)
+Message-ID: <2db5e0d9-fe33-4731-8b10-939d9b7a35b7@huaweicloud.com>
+Date: Fri, 13 Feb 2026 09:35:56 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/6] cgroup/cpuset: Clarify exclusion rules for cpuset
+ internal variables
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260212164640.2408295-1-longman@redhat.com>
+ <20260212164640.2408295-3-longman@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260212164640.2408295-3-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgCXQvP9f45pRrn1HA--.6835S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtw48Jw1xJr43Ary5uFyUKFg_yoWxCF15pF
+	4jg3W7AryUJr17uw17t3W7Cr1rKws5GF47C3WfK3WfuF9rtF1q9a4jv3Z0gFW8K3s3WFWD
+	ZFWDWwsrWF1qk37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-On Thu, 12 Feb 2026 11:41:19 +0200 Tariq Toukan wrote:
-> On 11/02/2026 23:43, Jakub Kicinski wrote:
-> > On Wed, 11 Feb 2026 22:10:56 +0200 Yael Chemla wrote:  
-> >> Thanks for the test addition. I wanted to raise a concern regarding the
-> >> spread factor requirement that may apply to mlx5 and potentially other
-> >> drivers as well.
-> >> The real issue arises when the hardware's maximum RQT (indirection
-> >> table) size isn't large enough to accommodate both the desired number of
-> >> channels and a spread factor of 4. RX queues/channels serve multiple
-> >> purposes beyond RSS - they're also used for XDP, AF_XDP, and direct
-> >> queue steering via ntuple filters or TC.
-> >> Artificially limiting the number of channels based solely on RSS spread
-> >> requirements would be overly restrictive for these non-RSS use cases.
-> >> In such scenarios, we'd rather have a slightly degraded spread factor
-> >> (< 4) than limit channel availability.
-> >> We'd appreciate any feedback on this approach.  
-> > 
-> > That's fine. In fact IIRC ixgbe (infamously) had more queues than
-> > it could fit in its RSS table. So none of this is new. At the same
-> > time if user _does_ want to use a lot of queues in the main context
-> > fewer than 4x entries in the indir table is inadequate.
-> > 
-> > The test is based on production experience, and provides valuable
-> > guidance to device developers.
-> > 
-> > I'm not sure what you want me to say here.
-> 
-> No doubt that larger factors help overcome imbalance issues, and it's 
-> fine to recommend using 4x (or even larger) factors.
-> 
-> The point is, when this comes with a selftest, it's less of a 
-> recommendation/guidance anymore, it becomes kind of a requirement, an 
-> expected behavior. Otherwise the test fails.
-> 
-> This ignores multiple other considerations:
-> 
-> 1. Existing behavior: In general, mlx5e today implies 2x factor, so it 
-> would fail this new test.
-> 
-> 2. Device resources: In large scale (high num of channels, or high num 
-> of netdevs on the same chip, or both), it is not obvious that increasing 
-> the indirection table size is still desirable, or even possible. To pass 
-> the selftest, you'll have to limit the max number of channels.
-> 
-> 3. ch_max should win: Related to point #2. Driver should not enforce 
-> limitations on supported ch_max just to fulfill the recommendation and 
-> pass the test. I prefer flexibility, give the admin the control. That 
-> means, driver would use 4x factor (or larger) whenever possible, but 
-> would not block configurations in which the 4x factor cannot be satisfied.
 
-Oh I see.. I wasn't aware the CX7 has a limitation of the indirection
-table size. I wrote the test because of a similar limitation in a
-different NIC, but that one has been fixed.. I have limited access to
-CX7 NICs, the one I tested on maxed out at 63 queues so the test has
-passed.
 
-Is it not possible to create an indirection table larger than 256
-entries? 256 is not a lot, AMD Venice (to pick one) will have up 
-to 256 CPU cores (not threads) in a single CPU package.
+On 2026/2/13 0:46, Waiman Long wrote:
+> Clarify the locking rules associated with file level internal variables
+> inside the cpuset code. There is no functional change.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c | 105 ++++++++++++++++++++++++-----------------
+>  1 file changed, 61 insertions(+), 44 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index a366ef84f982..e55855269432 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -61,6 +61,58 @@ static const char * const perr_strings[] = {
+>  	[PERR_REMOTE]    = "Have remote partition underneath",
+>  };
+>  
+> +/*
+> + * CPUSET Locking Convention
+> + * -------------------------
+> + *
+> + * Below are the three global locks guarding cpuset structures in lock
+> + * acquisition order:
+> + *  - cpu_hotplug_lock (cpus_read_lock/cpus_write_lock)
+> + *  - cpuset_mutex
+> + *  - callback_lock (raw spinlock)
+> + *
+> + * A task must hold all the three locks to modify externally visible or
+> + * used fields of cpusets, though some of the internally used cpuset fields
+> + * and internal variables can be modified without holding callback_lock. If only
+> + * reliable read access of the externally used fields are needed, a task can
+> + * hold either cpuset_mutex or callback_lock which are exposed to other
+> + * external subsystems.
+> + *
+> + * If a task holds cpu_hotplug_lock and cpuset_mutex, it blocks others,
+> + * ensuring that it is the only task able to also acquire callback_lock and
+> + * be able to modify cpusets.  It can perform various checks on the cpuset
+> + * structure first, knowing nothing will change. It can also allocate memory
+> + * without holding callback_lock. While it is performing these checks, various
+> + * callback routines can briefly acquire callback_lock to query cpusets.  Once
+> + * it is ready to make the changes, it takes callback_lock, blocking everyone
+> + * else.
+> + *
+> + * Calls to the kernel memory allocator cannot be made while holding
+> + * callback_lock which is a spinlock, as the memory allocator may sleep or
+> + * call back into cpuset code and acquire callback_lock.
+> + *
+> + * Now, the task_struct fields mems_allowed and mempolicy may be changed
+> + * by other task, we use alloc_lock in the task_struct fields to protect
+> + * them.
+> + *
+> + * The cpuset_common_seq_show() handlers only hold callback_lock across
+> + * small pieces of code, such as when reading out possibly multi-word
+> + * cpumasks and nodemasks.
+> + */
+> +
+> +static DEFINE_MUTEX(cpuset_mutex);
+> +
+> +/*
+> + * File level internal variables below follow one of the following exclusion
+> + * rules.
+> + *
+> + * RWCS: Read/write-able by holding either cpus_write_lock (and optionally
+> + *	 cpuset_mutex) or both cpus_read_lock and cpuset_mutex.
+> + *
+> + * CSCB: Readable by holding either cpuset_mutex or callback_lock. Writable
+> + *	 by holding both cpuset_mutex and callback_lock.
+> + */
+> +
+>  /*
+>   * For local partitions, update to subpartitions_cpus & isolated_cpus is done
+>   * in update_parent_effective_cpumask(). For remote partitions, it is done in
+> @@ -70,19 +122,18 @@ static const char * const perr_strings[] = {
+>   * Exclusive CPUs distributed out to local or remote sub-partitions of
+>   * top_cpuset
+>   */
+> -static cpumask_var_t	subpartitions_cpus;
+> +static cpumask_var_t	subpartitions_cpus;	/* RWCS */
+>  
+>  /*
+> - * Exclusive CPUs in isolated partitions
+> + * Exclusive CPUs in isolated partitions (shown in cpuset.cpus.isolated)
+>   */
+> -static cpumask_var_t	isolated_cpus;
+> +static cpumask_var_t	isolated_cpus;		/* CSCB */
+>  
+>  /*
+> - * isolated_cpus updating flag (protected by cpuset_mutex)
+> - * Set if isolated_cpus is going to be updated in the current
+> - * cpuset_mutex crtical section.
+> + * Set if isolated_cpus is being updated in the current cpuset_mutex
+> + * critical section.
+>   */
+> -static bool isolated_cpus_updating;
+> +static bool		isolated_cpus_updating;	/* RWCS */
+>  
+>  /*
+>   * A flag to force sched domain rebuild at the end of an operation.
+> @@ -98,7 +149,7 @@ static bool isolated_cpus_updating;
+>   * Note that update_relax_domain_level() in cpuset-v1.c can still call
+>   * rebuild_sched_domains_locked() directly without using this flag.
+>   */
+> -static bool force_sd_rebuild;
+> +static bool force_sd_rebuild;			/* RWCS */
+>  
+>  /*
+>   * Partition root states:
+> @@ -218,42 +269,6 @@ struct cpuset top_cpuset = {
+>  	.partition_root_state = PRS_ROOT,
+>  };
+>  
+> -/*
+> - * There are two global locks guarding cpuset structures - cpuset_mutex and
+> - * callback_lock. The cpuset code uses only cpuset_mutex. Other kernel
+> - * subsystems can use cpuset_lock()/cpuset_unlock() to prevent change to cpuset
+> - * structures. Note that cpuset_mutex needs to be a mutex as it is used in
+> - * paths that rely on priority inheritance (e.g. scheduler - on RT) for
+> - * correctness.
+> - *
+> - * A task must hold both locks to modify cpusets.  If a task holds
+> - * cpuset_mutex, it blocks others, ensuring that it is the only task able to
+> - * also acquire callback_lock and be able to modify cpusets.  It can perform
+> - * various checks on the cpuset structure first, knowing nothing will change.
+> - * It can also allocate memory while just holding cpuset_mutex.  While it is
+> - * performing these checks, various callback routines can briefly acquire
+> - * callback_lock to query cpusets.  Once it is ready to make the changes, it
+> - * takes callback_lock, blocking everyone else.
+> - *
+> - * Calls to the kernel memory allocator can not be made while holding
+> - * callback_lock, as that would risk double tripping on callback_lock
+> - * from one of the callbacks into the cpuset code from within
+> - * __alloc_pages().
+> - *
+> - * If a task is only holding callback_lock, then it has read-only
+> - * access to cpusets.
+> - *
+> - * Now, the task_struct fields mems_allowed and mempolicy may be changed
+> - * by other task, we use alloc_lock in the task_struct fields to protect
+> - * them.
+> - *
+> - * The cpuset_common_seq_show() handlers only hold callback_lock across
+> - * small pieces of code, such as when reading out possibly multi-word
+> - * cpumasks and nodemasks.
+> - */
+> -
+> -static DEFINE_MUTEX(cpuset_mutex);
+> -
+>  /**
+>   * cpuset_lock - Acquire the global cpuset mutex
+>   *
+> @@ -1163,6 +1178,8 @@ static void reset_partition_data(struct cpuset *cs)
+>  static void isolated_cpus_update(int old_prs, int new_prs, struct cpumask *xcpus)
+>  {
+>  	WARN_ON_ONCE(old_prs == new_prs);
+> +	lockdep_assert_held(&callback_lock);
+> +	lockdep_assert_held(&cpuset_mutex);
+>  	if (new_prs == PRS_ISOLATED)
+>  		cpumask_or(isolated_cpus, isolated_cpus, xcpus);
+>  	else
+
+Reviewed-by: Chen Ridong <chenridong@huaweicloud.com>
+
+-- 
+Best regards,
+Ridong
+
