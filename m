@@ -1,56 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1501834D4F1;
-	Fri, 13 Feb 2026 09:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B463D335543;
+	Fri, 13 Feb 2026 10:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770975096; cv=none; b=eRK7bk6OFlyoPRCf9wQGMewX9dI+qmMZFIXwSEWhGE9iAxfEk5nbrRdDMinsAC2sA4jRMj4D/P+4KYVhYsjRpeVJmq4V/urlreLRJ4ykQhKa2FUpiVRQIMPwrEEwYT7Mh8A0LhKz2iHw1DLhmZOcPr7wHBJCkqIqrhhCIX9zF3s=
+	t=1770979021; cv=none; b=EVobwycMUoy6OzHTl9ih7yoArFEnxptpJrwGrUcRoMRJqgqjfsQWWsu2qCnWs0AlcE+ZgF0XS3NBbVBd15Hy+9GAEQGHRiGCy6IZBXhEWGbe9q7G//t3ylMoaA2oPWa/QZMJoMm/JG58dLtoQ5BXUuMmkZguYfSetPHhgFhyWzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770975096; c=relaxed/simple;
-	bh=HELCfPtNvCvEoazpaboPAkrUFqcVe3WmgWs+WHvPHis=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qoq4UdfYFZ0kNv55m4v2xNFwI8Y7rm4njQskaRZ7nrAXD/2NzxYf9wYdFaP7v0l41B4FgZ5j4XEUacOlssJ+gN+dU+VN/PNNTCuE4RCsbFQCbJpLDsj8iaQKdQ1BHAT1Gu2BJ78KjoHeMM9CWSVHScNX6E7yAhgjiA2AB91GdwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PTeHzrz7; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PTeHzrz7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1832EC2BC86;
-	Fri, 13 Feb 2026 09:31:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770975095;
-	bh=HELCfPtNvCvEoazpaboPAkrUFqcVe3WmgWs+WHvPHis=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PTeHzrz7fBmNzxotEJYS7hqWo2i21aU5yS451f2gH4/xkQC65J7JEaSfuZGwdEp5h
-	 qaRw7SH2+YHJ0Rk5gqCgL3oitiq+K51odE8tuTAeeEgp0d17UyPa0HZ8ae5wphzFaW
-	 lK+sU9wfAR3J5aTT+riG+cP75ynvcG2RU1WDeSQv+exRBfecv1A3VBDzrnN4sUCPi3
-	 i2lmYTCSj3ZBMF7fDJ2EZplvqZIUTErpa9VUGxj7axVVGeDT/Iy8GNjWPN2wynTXag
-	 AO7PGO4RDDfwNAOWi7Els9HNOtwzbfDr2Fs2QrmZ8tCRzve1DKP3RX4ohb0iPkfpDr
-	 FoBArUrhNA9Rw==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Bartosz Golaszewski <brgl@kernel.org>,
-	Linus Walleij <linusw@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
+	s=arc-20240116; t=1770979021; c=relaxed/simple;
+	bh=zwMKAQFVwkPKkCQMq65uZ1GxN38XckvtletF7h923/o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=hPXqFmUou802tEtOcwEKH5QvIP7OUJx3owcZM0q/QLFDSmGJpWCgCUW0QZ9m0zR176eQFfaIZvNeANDYPzsoAYg9idHbm9rSx8RoVn6Zl+ID3nGY3b2edVgiQ1oyWxjzWj2FDPH7c8cnTuuRoyPfw+LKJ3FDzOQbIr4W1cNbAT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from fric.. (unknown [210.73.43.101])
+	by APP-05 (Coremail) with SMTP id zQCowAC3RgqO_o5pQN4uCA--.25463S4;
+	Fri, 13 Feb 2026 18:36:01 +0800 (CST)
+From: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+To: linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Cc: Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Johan Hovold <johan@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	chrome-platform@lists.linux.dev,
-	tzungbi@kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 11/11] gpio: Remove unused `chip` and `srcu` in struct gpio_device
-Date: Fri, 13 Feb 2026 09:29:58 +0000
-Message-ID: <20260213092958.864411-12-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.53.0.310.g728cabbaf7-goog
-In-Reply-To: <20260213092958.864411-1-tzungbi@kernel.org>
-References: <20260213092958.864411-1-tzungbi@kernel.org>
+	Jiakai Xu <xujiakai2025@iscas.ac.cn>,
+	Jiakai Xu <jiakaiPeanut@gmail.com>
+Subject: [PATCH v7 2/3] KVM: selftests: Refactor UAPI tests into dedicated function
+Date: Fri, 13 Feb 2026 10:35:56 +0000
+Message-Id: <20260213103557.3207335-3-xujiakai2025@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260213103557.3207335-1-xujiakai2025@iscas.ac.cn>
+References: <20260213103557.3207335-1-xujiakai2025@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,169 +47,186 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowAC3RgqO_o5pQN4uCA--.25463S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr4kXr17Gr18Jr17urWUtwb_yoW7XFWkpF
+	97CrZIqrW8tr4fKw1xWrWv9F15Gw4vkrn7Zry7Zw4rAr4kKrZrJF1xCryjvF98KFZ5X3Wf
+	Za4SvF47uF4qkF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
+	8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vY
+	z4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
+	02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
+	4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4
+	IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48J
+	MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbyCJJUUUUU==
+X-CM-SenderInfo: 50xmxthndljiysv6x2xfdvhtffof0/1tbiBwoRCWmOijX6igAAs9
 
-`chip` and `srcu` in struct gpio_device are unused as their usages are
-replaced to use revocable.  Remove them.
+Move steal time UAPI tests from steal_time_init() into a separate
+check_steal_time_uapi() function for better code organization and
+maintainability.
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Previously, x86 and ARM64 architectures performed UAPI validation
+tests within steal_time_init(), mixing initialization logic with
+uapi tests.
+
+Changes by architecture:
+x86_64:
+  - Extract MSR reserved bits test from steal_time_init()
+  - Move to check_steal_time_uapi() which tests that setting
+    MSR_KVM_STEAL_TIME with KVM_STEAL_RESERVED_MASK fails
+ARM64:
+  - Extract three UAPI tests from steal_time_init():
+    	Device attribute support check
+    	Misaligned IPA rejection (EINVAL)
+    	Duplicate IPA setting rejection (EEXIST)
+  - Move all tests to check_steal_time_uapi()
+RISC-V:
+  - Add empty check_steal_time_uapi() stub for future use
+  - No changes to steal_time_init() (had no tests to extract)
+
+The new check_steal_time_uapi() function:
+  - Is called once before the per-VCPU test loop
+
+No functional change intended.
+
+Signed-off-by: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+Signed-off-by: Jiakai Xu <jiakaiPeanut@gmail.com>
 ---
-v3:
-- No changes.
+ tools/testing/selftests/kvm/steal_time.c | 63 ++++++++++++++++++------
+ 1 file changed, 47 insertions(+), 16 deletions(-)
 
-v2: https://lore.kernel.org/all/20260203061059.975605-12-tzungbi@kernel.org
-- No changes.
-
-v1: https://lore.kernel.org/all/20260116081036.352286-24-tzungbi@kernel.org
-
- drivers/gpio/gpiolib.c | 26 +-------------------------
- drivers/gpio/gpiolib.h |  4 ----
- 2 files changed, 1 insertion(+), 29 deletions(-)
-
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 2ba78add3417..01be9f6978f2 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -423,8 +423,6 @@ static int gpiochip_get_direction(struct gpio_chip *gc, unsigned int offset)
+diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+index 8edc1fca345ba..a814f6f3f8b41 100644
+--- a/tools/testing/selftests/kvm/steal_time.c
++++ b/tools/testing/selftests/kvm/steal_time.c
+@@ -69,16 +69,10 @@ static bool is_steal_time_supported(struct kvm_vcpu *vcpu)
+ 
+ static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
  {
- 	int ret;
- 
--	lockdep_assert_held(&gc->gpiodev->srcu);
+-	int ret;
 -
- 	if (WARN_ON(!gc->get_direction))
- 		return -EOPNOTSUPP;
+ 	/* ST_GPA_BASE is identity mapped */
+ 	st_gva[i] = (void *)(ST_GPA_BASE + i * STEAL_TIME_SIZE);
+ 	sync_global_to_guest(vcpu->vm, st_gva[i]);
  
-@@ -875,7 +873,6 @@ static void gpiodev_release(struct device *dev)
- 	ida_free(&gpio_ida, gdev->id);
- 	kfree_const(gdev->label);
- 	kfree(gdev->descs);
--	cleanup_srcu_struct(&gdev->srcu);
- 	kfree(gdev);
+-	ret = _vcpu_set_msr(vcpu, MSR_KVM_STEAL_TIME,
+-			    (ulong)st_gva[i] | KVM_STEAL_RESERVED_MASK);
+-	TEST_ASSERT(ret == 0, "Bad GPA didn't fail");
+-
+ 	vcpu_set_msr(vcpu, MSR_KVM_STEAL_TIME, (ulong)st_gva[i] | KVM_MSR_ENABLED);
  }
  
-@@ -1076,14 +1073,9 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 		goto err_free_gdev;
- 	gdev->id = ret;
+@@ -99,6 +93,18 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+ 			st->pad[8], st->pad[9], st->pad[10]);
+ }
  
--	ret = init_srcu_struct(&gdev->srcu);
--	if (ret)
--		goto err_free_ida;
--	rcu_assign_pointer(gdev->chip, gc);
--
- 	ret = init_srcu_struct(&gdev->desc_srcu);
- 	if (ret)
--		goto err_cleanup_gdev_srcu;
-+		goto err_free_ida;
++static void check_steal_time_uapi(struct kvm_vcpu *vcpu)
++{
++	int ret;
++
++	st_gva[0] = (void *)(ST_GPA_BASE);
++	sync_global_to_guest(vcpu->vm, st_gva[0]);
++
++	ret = _vcpu_set_msr(vcpu, MSR_KVM_STEAL_TIME,
++			    (ulong)st_gva[0] | KVM_STEAL_RESERVED_MASK);
++	TEST_ASSERT(ret == 0, "Bad GPA didn't fail");
++}
++
+ #elif defined(__aarch64__)
  
- 	ret = dev_set_name(&gdev->dev, GPIOCHIP_NAME "%d", gdev->id);
- 	if (ret)
-@@ -1276,8 +1268,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 
- err_cleanup_desc_srcu:
- 	cleanup_srcu_struct(&gdev->desc_srcu);
--err_cleanup_gdev_srcu:
--	cleanup_srcu_struct(&gdev->srcu);
- err_free_ida:
- 	ida_free(&gpio_ida, gdev->id);
- err_free_gdev:
-@@ -1314,8 +1304,6 @@ void gpiochip_remove(struct gpio_chip *gc)
- 	synchronize_srcu(&gpio_devices_srcu);
- 
- 	/* Numb the device, cancelling all outstanding operations */
--	rcu_assign_pointer(gdev->chip, NULL);
--	synchronize_srcu(&gdev->srcu);
- 	revocable_revoke(gdev->chip_rp);
- 	gpio_device_teardown_shared(gdev);
- 	gpiochip_irqchip_remove(gc);
-@@ -2815,8 +2803,6 @@ static int gpiochip_direction_input(struct gpio_chip *gc, unsigned int offset)
+ /* PV_TIME_ST must have 64-byte alignment */
+@@ -170,7 +176,6 @@ static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
  {
- 	int ret;
+ 	struct kvm_vm *vm = vcpu->vm;
+ 	uint64_t st_ipa;
+-	int ret;
  
--	lockdep_assert_held(&gc->gpiodev->srcu);
+ 	struct kvm_device_attr dev = {
+ 		.group = KVM_ARM_VCPU_PVTIME_CTRL,
+@@ -178,21 +183,12 @@ static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
+ 		.addr = (uint64_t)&st_ipa,
+ 	};
+ 
+-	vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &dev);
 -
- 	if (WARN_ON(!gc->direction_input))
- 		return -EOPNOTSUPP;
+ 	/* ST_GPA_BASE is identity mapped */
+ 	st_gva[i] = (void *)(ST_GPA_BASE + i * STEAL_TIME_SIZE);
+ 	sync_global_to_guest(vm, st_gva[i]);
  
-@@ -2832,8 +2818,6 @@ static int gpiochip_direction_output(struct gpio_chip *gc, unsigned int offset,
- {
- 	int ret;
- 
--	lockdep_assert_held(&gc->gpiodev->srcu);
+-	st_ipa = (ulong)st_gva[i] | 1;
+-	ret = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
+-	TEST_ASSERT(ret == -1 && errno == EINVAL, "Bad IPA didn't report EINVAL");
 -
- 	if (WARN_ON(!gc->direction_output))
- 		return -EOPNOTSUPP;
- 
-@@ -2921,8 +2905,6 @@ static int gpiochip_set(struct gpio_chip *gc, unsigned int offset, int value)
- {
- 	int ret;
- 
--	lockdep_assert_held(&gc->gpiodev->srcu);
+ 	st_ipa = (ulong)st_gva[i];
+ 	vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
 -
- 	if (WARN_ON(unlikely(!gc->set)))
- 		return -EOPNOTSUPP;
+-	ret = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
+-	TEST_ASSERT(ret == -1 && errno == EEXIST, "Set IPA twice without EEXIST");
+ }
  
-@@ -3270,8 +3252,6 @@ static int gpiochip_get(struct gpio_chip *gc, unsigned int offset)
- {
- 	int ret;
+ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+@@ -205,6 +201,34 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+ 	ksft_print_msg("    st_time: %ld\n", st->st_time);
+ }
  
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	/* Make sure this is called after checking for gc->get(). */
- 	ret = gc->get(gc, offset);
- 	if (ret > 1)
-@@ -3323,8 +3303,6 @@ static int gpiod_get_raw_value_commit(const struct gpio_desc *desc)
- static int gpio_chip_get_multiple(struct gpio_chip *gc,
- 				  unsigned long *mask, unsigned long *bits)
- {
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	if (gc->get_multiple) {
- 		int ret;
++static void check_steal_time_uapi(struct kvm_vcpu *vcpu)
++{
++	struct kvm_vm *vm = vcpu->vm;
++	uint64_t st_ipa;
++	int ret;
++
++	struct kvm_device_attr dev = {
++		.group = KVM_ARM_VCPU_PVTIME_CTRL,
++		.attr = KVM_ARM_VCPU_PVTIME_IPA,
++		.addr = (uint64_t)&st_ipa,
++	};
++
++	vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &dev);
++
++	st_gva[0] = (void *)(ST_GPA_BASE);
++	sync_global_to_guest(vm, st_gva[0]);
++
++	st_ipa = (ulong)st_gva[0] | 1;
++	ret = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
++	TEST_ASSERT(ret == -1 && errno == EINVAL, "Bad IPA didn't report EINVAL");
++
++	st_ipa = (ulong)st_gva[0];
++	vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
++
++	ret = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
++	TEST_ASSERT(ret == -1 && errno == EEXIST, "Set IPA twice without EEXIST");
++}
++
+ #elif defined(__riscv)
  
-@@ -3668,8 +3646,6 @@ static int gpiochip_set_multiple(struct gpio_chip *gc,
- 	unsigned int i;
- 	int ret;
+ /* SBI STA shmem must have 64-byte alignment */
+@@ -301,6 +325,11 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpu_idx)
+ 	pr_info("\n");
+ }
  
--	lockdep_assert_held(&gc->gpiodev->srcu);
--
- 	if (gc->set_multiple) {
- 		ret = gc->set_multiple(gc, mask, bits);
- 		if (ret > 0)
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index a254a57f37f5..6a97d9726c20 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -28,7 +28,6 @@
-  * @chrdev: character device for the GPIO device
-  * @id: numerical ID number for the GPIO chip
-  * @owner: helps prevent removal of modules exporting active GPIOs
-- * @chip: pointer to the corresponding gpiochip, holding static
-  * data for this device
-  * @descs: array of ngpio descriptors.
-  * @valid_mask: If not %NULL, holds bitmask of GPIOs which are valid to be
-@@ -51,7 +50,6 @@
-  *                 process context
-  * @device_notifier: used to notify character device wait queues about the GPIO
-  *                   device being unregistered
-- * @srcu: protects the pointer to the underlying GPIO chip
-  * @chip_rp: revocable provider handle for the corresponding struct gpio_chip.
-  * @pin_ranges: range of pins served by the GPIO driver
-  *
-@@ -65,7 +63,6 @@ struct gpio_device {
- 	struct cdev		chrdev;
- 	int			id;
- 	struct module		*owner;
--	struct gpio_chip __rcu	*chip;
- 	struct gpio_desc	*descs;
- 	unsigned long		*valid_mask;
- 	struct srcu_struct	desc_srcu;
-@@ -79,7 +76,6 @@ struct gpio_device {
- 	rwlock_t		line_state_lock;
- 	struct workqueue_struct	*line_state_wq;
- 	struct blocking_notifier_head device_notifier;
--	struct srcu_struct	srcu;
- 	struct revocable	*chip_rp;
++static void check_steal_time_uapi(struct kvm_vcpu *vcpu)
++{
++	/* RISC-V UAPI tests will be added in a subsequent patch */
++}
++
+ #endif
  
- #ifdef CONFIG_PINCTRL
+ static void *do_steal_time(void *arg)
+@@ -369,6 +398,8 @@ int main(int ac, char **av)
+ 	TEST_REQUIRE(is_steal_time_supported(vcpus[0]));
+ 	ksft_set_plan(NR_VCPUS);
+ 
++	check_steal_time_uapi(vcpus[0]);
++
+ 	/* Run test on each VCPU */
+ 	for (i = 0; i < NR_VCPUS; ++i) {
+ 		steal_time_init(vcpus[i], i);
 -- 
-2.53.0.310.g728cabbaf7-goog
+2.34.1
 
