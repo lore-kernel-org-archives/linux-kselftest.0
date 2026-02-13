@@ -1,156 +1,185 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45ECD362136
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 15:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE4A3624C2;
+	Fri, 13 Feb 2026 15:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770996032; cv=none; b=jXbgX8YAFhnDo5fRkkO/VYDuu/gq9pJaSgVWfbHTQdekrWOU/3kf2ykru4KbWGi5RSBOwFMH+n1zaZwRAiQJI1LEkf95p/Cfrx/+r+hP+b5Xc3wxT6jICHRBMCC8R/ZBrUYiVO0Y31tv9cZduevCLBSMjN7XK1dv0s+EqOr9nsU=
+	t=1770996126; cv=none; b=gjXXn1b/VEvux37RJFxuPaBr/pbovqFCdviwtUKGcld6Zia4tehncEF7+VpcLv6PTfR4LORzWYwVOdhA4tG1FCbPeIU33ziarHotVPXxrQiwg1eWq3DcYCPLnMaZjOWJDyHX8zKBPtS8yF1et4nn8Z8S27hEKBznjYyPd2yWQZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770996032; c=relaxed/simple;
-	bh=Rttl4d9sGgG3Lhh7v6oLA+vPF2preIIqOyYcVD4IJkw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fo9MCf7lGmm0YZGLmrjeYI+XVO65Y+qZbOl2jXSnNeDNNQdcmUGpbZHsl4p7jwjltjlWiKkROjGzx0aS3Qd5w2blz3VKzL3yYuIziznEfxxD9OgI+so09hDFSVDp3ca0/yHwJufWULyosabz2oGCYwPAUf351V37tdF1ydxIr5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p6yPUz0K; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1770996126; c=relaxed/simple;
+	bh=uiXKGrta5YSlOI9oj98H0JbtZs40BXq+md8wHRRZ+YA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cXFMiQHODd+BEacJwGYMjaFkw9bJhlzWIozAhCqdVOij1GGWfVKfO9RahQ8aWJfuJbd5cBZBE6WO6MM6JWwy7WQPLpe/CMRxqBI6v0nKJNoTSbZoKYOxysnhj8GtaCliKSYsgWYuLu78ePcoUo7sFdxvgmwib+Jv7TLlNJWWG2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGw9ILGu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p6yPUz0K"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2aaeafeadbcso12643725ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 07:20:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770996030; x=1771600830; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DXZgws1eGwFodcFEr+AzFaRA44BFbU5sqkzQqm7Vi/g=;
-        b=p6yPUz0KaPYL/rL6Wu8Isz56jaZb5L3X3EcnX+A3LHfm2WpjGdrbwTdaEh9bHv77sd
-         E34ItJt27w8LVnpfGwxUyVvTsZ2reAhyL8Ep0Ja+EusUl1LEPAy0DdYizWx5dKOCDhPW
-         3I/itbDOcHCoHjFA7/FG3Scg+Ej3QCoYzs0vGoY+rM6dlU1IAmNlnkfjs8LoTN/hiTQb
-         AH3RNF4dr62pPAbFH4HFCo90/AJRhvPrRG36b8x5B7v11zPnjmxBkKRfGryZIYkV7RrP
-         vxnUWyzDCChOf3+H1hceMD1U8PnlpBKEbz/51DvjDscS0K2OXtTR3vFhYWOcQ4lI582i
-         e1NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770996030; x=1771600830;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DXZgws1eGwFodcFEr+AzFaRA44BFbU5sqkzQqm7Vi/g=;
-        b=dRLOXc20N+vzBz8WtG7zFhXR72nLb5iPrlocIwleQS97Qr8X2TcUvA0+N809pYI+A2
-         jTHhi5ctXjYSlOp2voCCFaaAqVNuwZToKVw8s2R8Doi8PHoVIlTKwzHIBAPL+EAewUF1
-         TMx5236Gkg+NxY7Qzd9Z4cBIhrLR+VWgfiGjQ5jxhzno7IbBCgvb5a8ZziUh9wx7x8b2
-         Dp8g6EeDtuOMU20vlgdz6WqX4h4ltReTO/cNtYFOwW+4X3JwTpMIvpvT3mQrapYBb9Gd
-         LVGVBUpfv7gc/Ye0Q1PJPbWXPEtRZzgQyOSl8lv9hnwR45zcqsm1ZQOeh/TKPEAiZ0q6
-         nA/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWFUbpoY2XCymxdaWctg46Rf4/HzBICq87thkfOpNqF7PkzVYaMsGHRK/OGuOA0ybFtriZgO338S5oGa5W2BEg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz60VP1IzkkJXtgvnDUpgaEw2TndatUNXjkdb5K3BsuKu3m7Wc3
-	Mld+Uhc4f/vYPVg9EnGrv9Irqj9IgAREDz+ZPoxxru1kXWLwBeMUY4p45kBxxN+H7OlpibFYmrt
-	oboed0Q==
-X-Received: from pjvn19.prod.google.com ([2002:a17:90a:de93:b0:34c:c510:f186])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:486:b0:2bf:183c:ac86
- with SMTP id adf61e73a8af0-3946c816108mr1883855637.25.1770996030340; Fri, 13
- Feb 2026 07:20:30 -0800 (PST)
-Date: Fri, 13 Feb 2026 07:20:28 -0800
-In-Reply-To: <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGw9ILGu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D33C2BC86;
+	Fri, 13 Feb 2026 15:22:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770996126;
+	bh=uiXKGrta5YSlOI9oj98H0JbtZs40BXq+md8wHRRZ+YA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mGw9ILGuBrof3W4ID1AXaRcRnWS+kvUe3FQSoaOotADVb3P1+lkFpDJx7SZ/rsNLP
+	 lbQwMFYHr2exFPdbAgOzH5VWP0xmXnQzWKbVS+WVH9riUpsC2RnaK4VyhlWYiHeJRE
+	 XeD7rthBaCh+xiTm1VJ6cGvPMlcnwWKjwkwUsnXUmf0gazK3hOApJrYbEkDJyzcNqX
+	 5gUxrcwaI0X9ilHL6V/SODI9T/awsKhEh2niVe4F3mCPpT50kuesxEol/Z5Ck0wf5x
+	 a+kNvDip0saLJHQFWVlr/jY81zF6sc2vP+ZW1+052sC008Vyyf1H8FqdiRmfI4UbIP
+	 ZnZWYmY77zCvQ==
+Date: Fri, 13 Feb 2026 16:22:03 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+	"Kitszel, Przemyslaw" <przemyslaw.kitszel@intel.com>,
+	"Lobakin, Aleksander" <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	"Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [Intel-wired-lan] [PATCH bpf-next 2/5] net: veth: Add
+ xmo_rx_checksum callback to veth driver
+Message-ID: <aY9Bm0ewK6lLWpqe@lore-desk>
+References: <20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org>
+ <20260210-bpf-xdp-meta-rxcksum-v1-2-e5d55caa0541@kernel.org>
+ <IA3PR11MB8986DFE4F3C0D804F50B0A56E563A@IA3PR11MB8986.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260212155905.3448571-1-jmattson@google.com> <20260212155905.3448571-5-jmattson@google.com>
- <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
-Message-ID: <aY9BPKhzgxo4UuHB@google.com>
-Subject: Re: [PATCH v4 4/8] KVM: x86: nSVM: Redirect IA32_PAT accesses to
- either hPAT or gPAT
-From: Sean Christopherson <seanjc@google.com>
-To: Yosry Ahmed <yosry.ahmed@linux.dev>
-Cc: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HFmkBUtLTk0X/kCd"
+Content-Disposition: inline
+In-Reply-To: <IA3PR11MB8986DFE4F3C0D804F50B0A56E563A@IA3PR11MB8986.namprd11.prod.outlook.com>
 
-Please trim your replies.  Scrolling through 100+ lines of quoted text to find
-the ~12 lines of context that actually matter is annoying.
 
-On Fri, Feb 13, 2026, Yosry Ahmed wrote:
-> On Thu, Feb 12, 2026 at 07:58:52AM -0800, Jim Mattson wrote:
-> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> > index a49c48459e0b..88549705133f 100644
-> > --- a/arch/x86/kvm/svm/svm.h
-> > +++ b/arch/x86/kvm/svm/svm.h
-> > @@ -607,6 +607,22 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
-> >  	return svm->nested.ctl.misc_ctl & SVM_MISC_ENABLE_NP;
+--HFmkBUtLTk0X/kCd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+>=20
+>=20
+> > -----Original Message-----
+> > From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf
+> > Of Lorenzo Bianconi
+> > Sent: Tuesday, February 10, 2026 6:22 PM
+> > To: Donald Hunter <donald.hunter@gmail.com>; Jakub Kicinski
+> > <kuba@kernel.org>; David S. Miller <davem@davemloft.net>; Eric Dumazet
+> > <edumazet@google.com>; Paolo Abeni <pabeni@redhat.com>; Simon Horman
+> > <horms@kernel.org>; Alexei Starovoitov <ast@kernel.org>; Daniel
+> > Borkmann <daniel@iogearbox.net>; Jesper Dangaard Brouer
+> > <hawk@kernel.org>; John Fastabend <john.fastabend@gmail.com>;
+> > Stanislav Fomichev <sdf@fomichev.me>; Andrew Lunn
+> > <andrew+netdev@lunn.ch>; Nguyen, Anthony L
+> > <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
+> > <przemyslaw.kitszel@intel.com>; Lobakin, Aleksander
+> > <aleksander.lobakin@intel.com>; Andrii Nakryiko <andrii@kernel.org>;
+> > Martin KaFai Lau <martin.lau@linux.dev>; Eduard Zingerman
+> > <eddyz87@gmail.com>; Song Liu <song@kernel.org>; Yonghong Song
+> > <yonghong.song@linux.dev>; KP Singh <kpsingh@kernel.org>; Hao Luo
+> > <haoluo@google.com>; Jiri Olsa <jolsa@kernel.org>; Shuah Khan
+> > <shuah@kernel.org>; Fijalkowski, Maciej <maciej.fijalkowski@intel.com>
+> > Cc: Jakub Sitnicki <jakub@cloudflare.com>; netdev@vger.kernel.org;
+> > bpf@vger.kernel.org; intel-wired-lan@lists.osuosl.org; linux-
+> > kselftest@vger.kernel.org; Lorenzo Bianconi <lorenzo@kernel.org>
+> > Subject: [Intel-wired-lan] [PATCH bpf-next 2/5] net: veth: Add
+> > xmo_rx_checksum callback to veth driver
+> >=20
+> > Implement xmo_rx_checksum callback in veth driver to report RX
+> > checksum result to the eBPF program bounded to the veth device.
+> >=20
+> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > ---
+> >  drivers/net/veth.c | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> >=20
+> > diff --git a/drivers/net/veth.c b/drivers/net/veth.c index
+> > 14e6f2a2fb7783334d8f6afd54e658cf9a0e6f3d..38b70ad62db7e92cccc6c6c9ed1f
+> > 5573d8baf48b 100644
+> > --- a/drivers/net/veth.c
+> > +++ b/drivers/net/veth.c
+> > @@ -1693,6 +1693,25 @@ static int veth_xdp_rx_vlan_tag(const struct
+> > xdp_md *ctx, __be16 *vlan_proto,
+> >  	return err;
 > >  }
-> >  
-> > +static inline void svm_set_gpat(struct vcpu_svm *svm, u64 data)
+> >=20
+> > +static int veth_xdp_rx_checksum(const struct xdp_md *ctx,
+> > +				enum xdp_checksum *ip_summed,
+> > +				u32 *cksum_meta)
 > > +{
-> > +	svm->nested.save.g_pat = data;
-> > +	vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+> > +	const struct veth_xdp_buff *_ctx =3D (void *)ctx;
+> > +	const struct sk_buff *skb =3D _ctx->skb;
+> > +
+> > +	if (!skb)
+> > +		return -ENODATA;
+> > +
+> > +	/* For locally generated packets ip_summed is set to
+> > +	 * CHECKSUM_PARTIAL.
+> > +	 */
+> > +	*ip_summed =3D skb->ip_summed;
+> > +	*cksum_meta =3D 0;
+> > +
+> > +	return 0;
 > > +}
 > > +
-> > +static inline void svm_set_hpat(struct vcpu_svm *svm, u64 data)
-> > +{
-> > +	svm->vcpu.arch.pat = data;
-> > +	if (npt_enabled) {
+> >  static const struct net_device_ops veth_netdev_ops =3D {
+> >  	.ndo_init            =3D veth_dev_init,
+> >  	.ndo_open            =3D veth_open,
+> > @@ -1718,6 +1737,7 @@ static const struct xdp_metadata_ops
+> > veth_xdp_metadata_ops =3D {
+> >  	.xmo_rx_timestamp		=3D veth_xdp_rx_timestamp,
+> >  	.xmo_rx_hash			=3D veth_xdp_rx_hash,
+> >  	.xmo_rx_vlan_tag		=3D veth_xdp_rx_vlan_tag,
+> > +	.xmo_rx_checksum		=3D veth_xdp_rx_checksum,
+> >  };
+> >=20
+> >  #define VETH_FEATURES (NETIF_F_SG | NETIF_F_FRAGLIST |
+> > NETIF_F_HW_CSUM | \
+> >=20
+> > --
+> > 2.53.0
+>=20
+> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 
-Peeking at the future patches, if we make this:
+@Aleksandr: veth implementation is quite different in v2 so I will
+remove your Reviewed-by tag.
+Can you please take a look to the new version when you have some free cycle=
+s?
+Thanks in advance.
 
-	if (!npt_enabled)
-		return;
+Regards,
+Lorenzo
 
-then we can end up with this:
+--HFmkBUtLTk0X/kCd
+Content-Type: application/pgp-signature; name=signature.asc
 
-	if (npt_enabled)
-		return;
+-----BEGIN PGP SIGNATURE-----
 
-	vmcb_set_gpat(svm->vmcb01.ptr, data);
-	if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm))
-		vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaY9BmwAKCRA6cBh0uS2t
+rM9GAP9pqasZqU5mkbE9HeZKaEA/3fmJnoxbUinX2RuFECIihQD+MfrvsdLGCvNi
+SmxAUR2eFsKybJxZcgoL96b8QXXhzgQ=
+=09aw
+-----END PGP SIGNATURE-----
 
-	if (svm->nested.legacy_gpat_semantics)
-		svm_set_l2_pat(svm, data);
-
-Because legacy_gpat_semantics can only be true if npt_enabled is true.  Without
-that guard, KVM _looks_ buggy because it's setting gpat in the VMCB even when
-it shouldn't exist.
-
-Actually, calling svm_set_l2_pat() when !is_guest_mode() is wrong too, no?  E.g.
-shouldn't we end up with this?
-
-  static inline void svm_set_l1_pat(struct vcpu_svm *svm, u64 data)
-  {
-	svm->vcpu.arch.pat = data;
-
-	if (npt_enabled)
-		return;
-
-	vmcb_set_gpat(svm->vmcb01.ptr, data);
-
-	if (is_guest_mode(&svm->vcpu)) {
-		if (svm->nested.legacy_gpat_semantics)
-			svm_set_l2_pat(svm, data);
-		else if (!nested_npt_enabled(svm))
-			vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
-	}
-  }
-
-
-> > +		vmcb_set_gpat(svm->vmcb01.ptr, data);
-> > +		if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm))
-> > +			vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
-> > +	}
-> > +}
-> 
-> Is it me, or is it a bit confusing that svm_set_gpat() sets L2's gPAT
-> not L1's, and svm_set_hpat() calls vmcb_set_gpat()?
-
-It's not just you.  I don't find it confusing per se, more that it's really
-subtle.
-
-> "gpat" means different things in the context of the VMCB or otherwise,
-> which kinda makes sense but is also not super clear. Maybe
-> svm_set_l1_gpat() and svm_set_l2_gpat() is more clear?
-
-I think just svm_set_l1_pat() and svm_set_l2_pat(), because gpat straight up
-doesn't exist when NPT is disabled/unsupported.
+--HFmkBUtLTk0X/kCd--
