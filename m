@@ -1,74 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D665324718;
-	Fri, 13 Feb 2026 08:25:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3399329C6C;
+	Fri, 13 Feb 2026 08:28:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770971144; cv=none; b=Ly4s6gfeJHsHC9E+MBzOERKRkzTMdx6VK2ncmI+kUjUcrdpRyAkkU7r8paFM6CxUhR3i61ZuBT4CVyI8kSNm5ZvCJhiTrwFYtTLg0skCZfHWxOJ6TalSDunwN1765bmuZAO8swht2thzKgWxuF+QEoAoJGxNIQN6BXmqZXME1bY=
+	t=1770971287; cv=none; b=REVLxivWdMEOsVi9SLTWhcaKpbRxwPW1gb+6RsSP+O9FODFmzXSMKv+FtilKTenPG0XqSdCyGsYzlIcMDnrrC07A7P/5UDKgM2nUBFv7kR/6k+KTtN1Okn7P2uEip3XD+cJjowX34mS0n4ITcrZ+YZsHg/imzZyFf/ddqSmLpXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770971144; c=relaxed/simple;
-	bh=CY0Jfwt0xWXKmsrgxJkrVRvcMD4iIf9ccvujVW8gwGs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Bw7fn8KloeYQu55i8OkBOLiEwnG3bPwPI/LI9xovzAMH8ABOk/AmcV2in6IJVzBBX/uNAjtPr/Wwd39J0qWqtGFXJpJFa/vzsfs+PUwEE06y63ZY/uFdy708z+dlqcGb1UsKXoceKGw8y5aTA3P19ItdEme+74GLuwnYEyYa6Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=trRwsoDr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770971287; c=relaxed/simple;
+	bh=a5f9nQfti0Tq2jhHV6xeyiyqksD8zxt8zYDfrv1119w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eZ/2eSaYGf1I89E/jwP/Imifj5nHughZMoa0Zp3XwYKqgUZNbthwPd+BCrnErlq0IimdGpj1Swioh6ehe1cNf8lOJ+1DW0pIMPQgnsFpqN8mcm6zzAByOEVLpohh9TeiVjaaLMCEjypW2COstm55iv6jSe5pg1fvBZBkDN7WErk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K7CPZY4f; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="trRwsoDr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F431C19424;
-	Fri, 13 Feb 2026 08:25:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7CPZY4f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF88C116C6;
+	Fri, 13 Feb 2026 08:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770971143;
-	bh=CY0Jfwt0xWXKmsrgxJkrVRvcMD4iIf9ccvujVW8gwGs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=trRwsoDrRRF7lKzdDFa/pxFvXsfzE9MGnee6m4fy79RK6JTwnqqtYK5DH7BhgXjzL
-	 12apsmAwazf1rlpdJuEKWzCKb75AVEPh8w7UYt5d/DZZizmunaPJxvGwhHRazgzAWg
-	 0Lo8MUOrsWJMAXrRN6cU57HcrN0rvgb3YCa8czufP7m7lGl4sx9hTRP7lDet8QQZxm
-	 5xs9VtikGgg3UTdhRPubyJQkFGpdgwvp26Mr3Ei2vP6WV9V/VvUkmXnZj2DN8B0aQF
-	 6c3Qz67ky+aX3BDpTD4I3QuOhZWzT0HXDEXwX05t2Q6krRenaaiwgmuFKZzKN1EPMu
-	 YUjC01pSDqnUw==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Yuwen Chen <ywen.chen@foxmail.com>, ywen.chen@foxmail.com
-Cc: akpm@linux-foundation.org, andrealmeid@igalia.com,
- bigeasy@linutronix.de, colin.i.king@gmail.com, dave@stgolabs.net,
- dvhart@infradead.org, justinstitt@google.com, kernel-team@android.com,
- licayy@foxmail.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, luto@mit.edu, mingo@redhat.com,
- morbo@google.com, nathan@kernel.org, peterz@infradead.org,
- shuah@kernel.org, usama.anjum@collabora.com, wakel@google.com
-Subject: Re: [PATCH v5 2/2] selftests/futex: fix the failed futex_requeue
- test issue
-In-Reply-To: <tencent_7F45D13FB7CF789CEBCCF945DEF897481706@qq.com>
-References: <tencent_35CFB8AE9D4BE7917D95763D15B972638C0A@qq.com>
- <tencent_7F45D13FB7CF789CEBCCF945DEF897481706@qq.com>
-Date: Fri, 13 Feb 2026 09:25:36 +0100
-Message-ID: <87ikc182yn.ffs@tglx>
+	s=k20201202; t=1770971286;
+	bh=a5f9nQfti0Tq2jhHV6xeyiyqksD8zxt8zYDfrv1119w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=K7CPZY4fO8L37RcqMooOZp6M/1J4jq55hCH7xhyO8/eN6Uohf64LOjhAH+pEv9o33
+	 mvRBITdPBpQJ2/mMg500hq9e+j/FW0JAqcGFWvLEgohBG8nvN1K7dO9z4ioV6RZ13C
+	 KQJHJDvKvOGGEDhyMWVpHpwkk8S5r/N9/+zMwW4jKr6qcmTSyApe/jSoQlvce7/CaK
+	 YoX9ipRfxcidgsi4fgRFUr6k0Pr+69INXGnH97FU6scb886xnUNsQroSaGZ1Qmbmh5
+	 s0wx22PEml8b2I+FNqGZ0eH8CsPkUpGU72ppiUaN6B3vlyGYJSSWWMkl29ZKH0mvol
+	 taWWQsP6DC3Ig==
+Received: from johan by rho.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vqoWr-000000008Fr-2BJa;
+	Fri, 13 Feb 2026 09:27:58 +0100
+Date: Fri, 13 Feb 2026 09:27:57 +0100
+From: Johan Hovold <johan@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	linux-kernel@vger.kernel.org, driver-core@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH] revocable: hide the implementation details from users
+Message-ID: <aY7gjQEcRq6kvHpn@hovoldconsulting.com>
+References: <20260206103216.38623-1-bartosz.golaszewski@oss.qualcomm.com>
+ <fc68da89-7c2b-432b-9a78-6ab55fcb0e9e@paulmck-laptop>
+ <CAMRc=MeHWkDCi0GvXFYxDhCeWMydjT9wOw3_d1d+c+VE7y0-7Q@mail.gmail.com>
+ <aYvj5h4tEZI-habX@google.com>
+ <de233174-795f-4549-abfe-08060016c541@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de233174-795f-4549-abfe-08060016c541@paulmck-laptop>
 
-On Thu, Feb 05 2026 at 10:09, Yuwen Chen wrote:
->  TEST(requeue_single)
->  {
-> +	struct futex_thread waiter;
->  	volatile futex_t _f1 = 0;
->  	volatile futex_t f2 = 0;
-> -	pthread_t waiter[10];
->  
->  	f1 = &_f1;
->  
->  	/*
->  	 * Requeue a waiter from f1 to f2, and wake f2.
->  	 */
-> -	ASSERT_EQ(0, pthread_create(&waiter[0], NULL, waiterfn, NULL));
-> -
-> -	usleep(WAKE_WAIT_US);
-> +	ASSERT_EQ(0, futex_thread_create(&waiter, waiterfn, NULL));
-> +	futex_wait_for_thread(&waiter);
+On Tue, Feb 10, 2026 at 08:59:20PM -0800, Paul E. McKenney wrote:
+> On Wed, Feb 11, 2026 at 02:05:26AM +0000, Tzung-Bi Shih wrote:
+> > On Mon, Feb 09, 2026 at 05:13:17AM -0600, Bartosz Golaszewski wrote:
+> > > On Fri, 6 Feb 2026 23:02:44 +0100, "Paul E. McKenney" <paulmck@kernel.org> said:
+> > > > On Fri, Feb 06, 2026 at 11:32:06AM +0100, Bartosz Golaszewski wrote:
 
-This is a horrible hack. If that wait fails, there is no point to
-continue.
+> > > >> Could you please take a look and say if the design looks sane to you?
+> > > >> Especially the double SRCU on the revocable_provider.
+> > > >
+> > > > The first patch in the above URL adds SRCU, and the other
+> > > > two add various tests.  I do not see a double SRCU, just an
+> > > > srcu_read_lock() in revocable_try_access() and an srcu_read_unlock()
+> > > > in revocable_withdraw_access().
 
+> > > This series didn't have it yet, it appeared as a fix to a race reported after
+> > > it was queued, sorry for the confusion. I'm talking about this bit[1] here.
+> > > It returns an __rcu-annotated pointer, forcing the user to keep and manage it.
+
+> > Please hold off on reviewing the patch and the "double SRCU" usage for now.
+> > I'll remove the second RCU in the next version, which should serve as a
+> > better starting point for a clean review.
+
+In case Paul or anyone else reading this wonders, the "revocable" code
+was reverted last Friday so that's why the links Bartosz posted are
+broken:
+
+	https://lore.kernel.org/lkml/20260204142849.22055-1-johan@kernel.org/
+
+Johan
