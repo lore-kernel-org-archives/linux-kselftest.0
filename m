@@ -1,78 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64543275AF0;
-	Fri, 13 Feb 2026 20:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56676266B72
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 22:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771014887; cv=none; b=K+74p/5ErKs8t3jLx3UGOWOJbAJa55mnUjzxM7ZDO4qQeHrYwXH78Jd+lEYZxmwe4j3Tm7SqT3KH4VaSUw4kxlhESflJUVD1EIAtGlqHd/nxTHkGAqKcotX1RT11cCQUYN5hCzG0AIHq0ofTe/Itmr6VrAd5i5d/Y3qFAFhlWX0=
+	t=1771021146; cv=none; b=ZLt59l3cDgjshQLnBaWR0MBUTvGkbEOVJX7JrCll+XttkPbaKUVfHHMal2F7X/TA3JUlcax43baU/b/DnFsRPUTYCogDePFEOOYd316rRH3cTZY29uiwsSS2lYjbB4H3aZN7lddVNqqM2XVm9kY8gytNMct96iMdQPl0+ZBMEu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771014887; c=relaxed/simple;
-	bh=XxUt9o01tkl2YeDC894gfSKrSV9JalAY+MmXygvGPhk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WnE3EgMBX6eDeMquIR35kb4+5N3pA1+M0m9RpraZNLcVrQY+tXCPCpjUuc53WKXPdrftEU5XuDmZfgTKegJ0v+sMvNbjTdGf/9pBHjbnCLM9OD3/0u4uLrB4S+c3W0KrZ2MJukyUtXp+KG+5Uo9gzKqFJJbYBaI22Q0jcQfvNck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hDp60Yyh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771021146; c=relaxed/simple;
+	bh=4SfVeVyOopNUEYpALsPtH/J4tdgq8bQHBnqCt9tGo8k=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=l2HJonhdZpJh7Bp6YOhp20RTA3nISyNsti/YHbsvHmCGQgfCFj6QqKO3rcy9UEqWR5UeAIALTaZsUKpCXlYE8ZGtQvCHIZ6Yrmb0vIsd9GXlxMGBG9XgQ+24exFSE6PuQPDzVnLAhEdfVzFWDGVrL3fAM3WX2T9qAmo3+cUqDV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lp1JxfpW; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hDp60Yyh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13816C116C6;
-	Fri, 13 Feb 2026 20:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771014887;
-	bh=XxUt9o01tkl2YeDC894gfSKrSV9JalAY+MmXygvGPhk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=hDp60Yyho4yXiHjPDWqvFUJnMKAiJv7mwRpUKs0th2GCzeNB+Froz1yzy6qvMW7MR
-	 Fau2WLI+fY9sPaBEFU577fpBUmaZt3TjJWBWKloUV9JpEkQCxPt+RgCRzP/0X8byCs
-	 lzxfCwb6bpODUIUEXWbcP3isLC9l9yuvBc6EbJWmqOkEwf4Bqvp5lbEuHNCj4VxcXU
-	 QUNKJeQTF2nRqwHbO2777R+lSnwQsn4FBRGdnE7kVFQOAFKzfg4/l+FyQbHOYu/d9E
-	 /YdFBaoWReY6379kNQ03msQ3Hhdrw6hwdAu2GYoFe00CPDhnxuOEweL6qsXDXBt9QF
-	 9vuP2MXDPvBUw==
-Date: Fri, 13 Feb 2026 12:34:44 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Larysa Zaremba <larysa.zaremba@intel.com>
-Cc: bpf@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir
- Oltean <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
- <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
- <bastien.curutchet@bootlin.com>, Tushar Vyavahare
- <tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, "Ricardo
- B. =?UTF-8?B?TWFybGnDqHJl?=" <rbm@suse.com>, Eelco Chaudron
- <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, Toke
- Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
- Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Dragos Tatulea
- <dtatulea@nvidia.com>
-Subject: Re: [PATCH bpf v2 1/9] xdp: use modulo operation to calculate XDP
- frag tailroom
-Message-ID: <20260213123444.12fd433e@kernel.org>
-In-Reply-To: <20260212183328.1883148-3-larysa.zaremba@intel.com>
-References: <20260212183328.1883148-2-larysa.zaremba@intel.com>
-	<20260212183328.1883148-3-larysa.zaremba@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lp1JxfpW"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2ad147cdf07so4364525ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 14:19:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771021145; x=1771625945; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zjKURXqU+Zr0HcMfUxCtx2SVToxbcyc0zFBF1VQb9Ag=;
+        b=lp1JxfpWhfKo64z3xcrr73d7ItxzQ3cbS4g+iRbelY9/K5W/lqlEuLHKzRPoh1kwXC
+         m68lShZZqkRFoNhqg0eODPykfNVZhSZaRUac+U22U74avuLy9LwNpiLDMR5gkdfKeXuo
+         qBs0Eo1M7+7WNKiZbvCp9CTeBopKn7T9x+VYBMG8h79nuUoLZlKJk/zNR+3A7Ndfp7Ah
+         R5OzxMVpjhyUxozDLYOLJsEBoyeXzoa3dvP/SLKD2Ne9XdVjY/sWRPzPjiktI4f/Incn
+         1reJvTBad01CcKJeUMhfobFEiIA2YSz+FGj0mud9ZfDJHC11tTF9wXPriWPsZmQd+qiC
+         ez2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771021145; x=1771625945;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zjKURXqU+Zr0HcMfUxCtx2SVToxbcyc0zFBF1VQb9Ag=;
+        b=GKJ0w+FPf4LQDAK/8t0n7H80IVlnze8SNnE2h1WHeZQov6eNOK9alPZGPhfsGpJJ0M
+         r7glFYNjhr7ggGudXw8AxHGq5TP2kFM0NDRhiXoS9UGnGRNg07HwO+ba2i7WvhUpglJc
+         FEc0a9wvYOn8S6Nj6Ya8vrXVPhUOK4xdtuIQWJ4IkH2CsjCig9MhnLK22urpL7sF6cId
+         17Zvgme0AgPL0QddLfxvdr2yUWqAeAeJQpwYt9w/36b2583HVu1gVKm1knBGYUASL8qe
+         A9cCOyBweDVCh0KVefh9YPiLGvIa+hMINxP/Dy8ID9IjHZn8m7owJOzbHYiqePo2EqV1
+         IXog==
+X-Forwarded-Encrypted: i=1; AJvYcCXGEs0r8iNL6KrQ8X4bYrpMP0nCRwTOoWhFCEttnOD5tKl50HjU4HpRcaRBIPEq/ZjZWEvi88wdwWN6R6byBOU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxxk1RyzPJGa9wU/fne3/b8bL8PhXzBaaHfAyfehyoB427bpfSW
+	nCHFWfuX6h10X939O2jhhZQAbkiMh0BYLqux3TKU75+11745NMbuQds8+FosMWvwiTGlXG2dlls
+	flxyFoA==
+X-Received: from pjbsx13.prod.google.com ([2002:a17:90b:2ccd:b0:354:c63c:5ed6])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1c2:b0:2a7:9ded:9b4a
+ with SMTP id d9443c01a7336-2ad174dcf04mr9334615ad.36.1771021144404; Fri, 13
+ Feb 2026 14:19:04 -0800 (PST)
+Date: Fri, 13 Feb 2026 14:19:02 -0800
+In-Reply-To: <CALMp9eR4ayj_gwsDQVH8pQvzqgEYVB6ExWp3aFgJXRWikLEikw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260212155905.3448571-1-jmattson@google.com> <20260212155905.3448571-5-jmattson@google.com>
+ <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
+ <aY9BPKhzgxo4UuHB@google.com> <CALMp9eR4ayj_gwsDQVH8pQvzqgEYVB6ExWp3aFgJXRWikLEikw@mail.gmail.com>
+Message-ID: <aY-jViitsLQm9B83@google.com>
+Subject: Re: [PATCH v4 4/8] KVM: x86: nSVM: Redirect IA32_PAT accesses to
+ either hPAT or gPAT
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Yosry Ahmed <yosry.ahmed@linux.dev>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 12 Feb 2026 19:33:16 +0100 Larysa Zaremba wrote:
-> -	tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
-> +	tailroom = rxq->frag_size - skb_frag_size(frag) -
-> +		   skb_frag_off(frag) % rxq->frag_size;
->  	if (unlikely(offset > tailroom))
+On Fri, Feb 13, 2026, Jim Mattson wrote:
+> On Fri, Feb 13, 2026 at 7:20=E2=80=AFAM Sean Christopherson <seanjc@googl=
+e.com> wrote:
+> > > > +static inline void svm_set_hpat(struct vcpu_svm *svm, u64 data)
+> > > > +{
+> > > > +   svm->vcpu.arch.pat =3D data;
+> > > > +   if (npt_enabled) {
+> >
+> > Peeking at the future patches, if we make this:
+> >
+> >         if (!npt_enabled)
+> >                 return;
+> >
+> > then we can end up with this:
+> >
+> >         if (npt_enabled)
+> >                 return;
+> >
+> >         vmcb_set_gpat(svm->vmcb01.ptr, data);
+> >         if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm))
+> >                 vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+> >
+> >         if (svm->nested.legacy_gpat_semantics)
+> >                 svm_set_l2_pat(svm, data);
+> >
+> > Because legacy_gpat_semantics can only be true if npt_enabled is true. =
+ Without
+> > that guard, KVM _looks_ buggy because it's setting gpat in the VMCB eve=
+n when
+> > it shouldn't exist.
+> >
+> > Actually, calling svm_set_l2_pat() when !is_guest_mode() is wrong too, =
+no?  E.g.
+> > shouldn't we end up with this?
+>=20
+> Sigh. legacy_gpat_semantics is supposed to be set only when
+> is_guest_mode() and nested_npt_enabled(). I forgot about back-to-back
+> invocations of KVM_SET_NESTED_STATE. Are there other ways of leaving
+> guest mode or disabling nested NPT before the next KVM_RUN?
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+KVM_SET_VCPU_EVENTS will do it if userspace forces a change in SMM state:
+
+		if (!!(vcpu->arch.hflags & HF_SMM_MASK) !=3D events->smi.smm) {
+			kvm_leave_nested(vcpu);
+			kvm_smm_changed(vcpu, events->smi.smm);
+		}
+
+I honestly wasn't even thinking of anything in particular, it just looked w=
+eird.
+
+> > > > +           vmcb_set_gpat(svm->vmcb01.ptr, data);
+> > > > +           if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(sv=
+m))
+> > > > +                   vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+> > > > +   }
+> > > > +}
+> > >
+> > > Is it me, or is it a bit confusing that svm_set_gpat() sets L2's gPAT
+> > > not L1's, and svm_set_hpat() calls vmcb_set_gpat()?
+> >
+> > It's not just you.  I don't find it confusing per se, more that it's re=
+ally
+> > subtle.
+> >
+> > > "gpat" means different things in the context of the VMCB or otherwise=
+,
+> > > which kinda makes sense but is also not super clear. Maybe
+> > > svm_set_l1_gpat() and svm_set_l2_gpat() is more clear?
+> >
+> > I think just svm_set_l1_pat() and svm_set_l2_pat(), because gpat straig=
+ht up
+> > doesn't exist when NPT is disabled/unsupported.
+>=20
+> My intention was that "gpat" and "hpat" were from the perspective of the =
+vCPU.
+>=20
+> I dislike svm_set_l1_pat() and svm_set_l2_pat(). As you point out
+> above, there is no independent L2 PAT when nested NPT is disabled. I
+> think that's less obvious than the fact that there is no gPAT from the
+> vCPU's perspective. My preference is to follow the APM terminology
+> when possible. Making up our own terms just leads to confusion.
+
+How about svm_set_pat() and svm_get_gpat()?  Because hPAT doesn't exist whe=
+n NPT
+is unsupported/disabled, but KVM still needs to set the vCPU's emulated PAT=
+ value.
