@@ -1,239 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29110352C2E;
-	Fri, 13 Feb 2026 10:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32C2354AE2;
+	Fri, 13 Feb 2026 11:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770979230; cv=none; b=mfSOSMiMkk1Z+xmrEYS8eag/fBaavLLCkeHsTwq26WPSifNE7dnm2ZWq6yoOQus9tiY8n7phy1zSvRp04/NhX2cPA/6JDcMFLwsUemyrmp7B12shHZJF7J+8946Sdj8Axi1x8IgFieGiK/BSjEBbPomoEKG+Z6GNbAGa21l81Sg=
+	t=1770980573; cv=none; b=J6DyT5YwAHSzuO5F0wAJDQUDnL5i1J0EcYrhWFOe1AGrsEXoD9mGCxNQTuOUZlt49W94ku2F2bmIShIcjYGZH3lB8zZy0S3o+sdQD+Ou9Ry7LPrR/WsnsS/umtXT0VrFt3K18hiSU3emT31AbYMVOwuN4rVNvYwxTo5YtWIDyJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770979230; c=relaxed/simple;
-	bh=SC2ovmnTmN31BJMgWSDQstBBBIerODPENfDec9d9YDM=;
+	s=arc-20240116; t=1770980573; c=relaxed/simple;
+	bh=UaoXLDuKM7W4LVs2b+N6DWDNPZ7brGJ4dmoEN3+mt3k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I3ZlsLbtYmkKdh4m8BaK91ryObnUi74AvjEDIGC4Arc5t3g1MblYyLhHsJ+ovyDVqNrqL0hRB/M7BejbORDK8xGFvSYtY8aipVYjTpaPAsSlHkTz/+peH3jlbiOO+TZs+giIRQV8tddFnfBO23PWyDAZCPhltdE+OSlLsMX4aZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAdbZlLl; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kBVSxtlh7EPIWFMEP2l0XdgLvzgJ5cj3MqyBREs5OB67LNa2l37zOdQnlANXyd4QphS9kSXDgQcZWoK84Jh1vbfIQo3qb0cCFlB7o2I2bQ3lsKXyMVJ2dkHPQjBPGKrrh8daUu60i1KeETKaIa572jp5NtOaut24YSsh7pGIrYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=anFUloTR; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAdbZlLl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CD8C116C6;
-	Fri, 13 Feb 2026 10:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770979229;
-	bh=SC2ovmnTmN31BJMgWSDQstBBBIerODPENfDec9d9YDM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mAdbZlLlE2sYlveU4i9kF08qSHcQUHP3CpPs4Zj5+WqKzalKAeEPuvX3K6k4peRql
-	 gMK+S09NxnEhq0iJwR0aCKlws6UHTq3w2hQIQ84G2TlbZpnYApfNxmGSSMCa0CNrBs
-	 2S0ZMe2kAWouyXlIlaffTcNyEdDn7SzDB89hFurup7S6g/iBz0nuX0VImNEJtXP0Mu
-	 TqpfuXbE+xaDpMelpayQ7cAy4ED9vDGY53FTrfuHKvlFRl+MBlZB4jBii+bv/KMlmf
-	 2RSUbDfzvtovAQ8+N0BuOxsMz+P/ZEDFUGYQun0kN+scYNscoHdeboWsYY1hPMBzN3
-	 yT5cvSKD0p3VA==
-Date: Fri, 13 Feb 2026 11:40:27 +0100
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <aY7_m0CEjL9zTQ45@lore-desk>
-References: <20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org>
- <20260210-bpf-xdp-meta-rxcksum-v1-1-e5d55caa0541@kernel.org>
- <aY60QrE6DpXVecze@mini-arch>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="anFUloTR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gGY9mjNmnYiEGqmmSKnj+anrGWP6cFH8GMKxfF8SvcI=; b=anFUloTR5e87QUrovEFgzRlF3N
+	Bq0w6Vgz4WwzBvkH/RITWQQJGLciH8j9utNJjniRskXcA2/WRSaUphtk80EuMiQnft0qc/TqP7wrU
+	NVgzxh34jK1COkrSmEcZmG4hNYDNie5hjbV5ppNHzCqajhg8yEMexyPS63MjfJ48wnR2txEYGyaWb
+	R6UVmqfpGFTaQ857oPuRVhHc/ssfpkafSr/xecuIlZTYzVU0oEizM3epsnwIYSP4GdaP9rsLXZLOX
+	cZqaBCdef/VRyTHXhRBjH4xtBCaMjreMqgv1pIKwKfyn6edQbH0oCjtYuOI9CIW0UH9+y/QN9pERM
+	APfe3wEA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vqqwX-0000000C7oQ-2xs7;
+	Fri, 13 Feb 2026 11:02:38 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 1DC173007B5; Fri, 13 Feb 2026 12:02:37 +0100 (CET)
+Date: Fri, 13 Feb 2026 12:02:37 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Christian Brauner <christian@brauner.io>,
+	Shuah Khan <shuah@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>,
+	seanjc@google.com
+Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
+Message-ID: <20260213110237.GC3031506@noisy.programming.kicks-ass.net>
+References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
+ <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
+ <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
+ <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
+ <5b0b8e1e-6f50-4e18-bf46-39b00376c26e@nvidia.com>
+ <20250501114235.GP4198@noisy.programming.kicks-ass.net>
+ <20250501124646.GC4356@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qwJIGiRKX8fs1N5o"
-Content-Disposition: inline
-In-Reply-To: <aY60QrE6DpXVecze@mini-arch>
-
-
---qwJIGiRKX8fs1N5o
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250501124646.GC4356@noisy.programming.kicks-ass.net>
 
-On Feb 12, Stanislav Fomichev wrote:
-> On 02/10, Lorenzo Bianconi wrote:
-> > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
-> > checksum will be use by devices capable of exposing receive checksum
-> > result via bpf_xdp_metadata_rx_checksum().
-> > Moreover, introduce xmo_rx_checksum netdev callback in order allow the
-> > eBPF program bounded to the device to retrieve the RX checksum result
-> > computed by the hw NIC.
-> >=20
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > ---
-> >  Documentation/netlink/specs/netdev.yaml |  5 +++++
-> >  include/net/xdp.h                       | 14 ++++++++++++++
-> >  include/uapi/linux/netdev.h             |  3 +++
-> >  net/core/xdp.c                          | 29 +++++++++++++++++++++++++=
-++++
-> >  tools/include/uapi/linux/netdev.h       |  3 +++
-> >  5 files changed, 54 insertions(+)
-> >=20
-> > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/ne=
-tlink/specs/netdev.yaml
-> > index 596c306ce52b8303b20680ff0cd34d4fd9db0e48..58eda634668a07860447a65=
-d9fc2284839af6244 100644
-> > --- a/Documentation/netlink/specs/netdev.yaml
-> > +++ b/Documentation/netlink/specs/netdev.yaml
-> > @@ -61,6 +61,11 @@ definitions:
-> >          doc: |
-> >            Device is capable of exposing receive packet VLAN tag via
-> >            bpf_xdp_metadata_rx_vlan_tag().
-> > +      -
-> > +        name: checksum
-> > +        doc: |
-> > +          Device is capable of exposing receive checksum result via
-> > +          bpf_xdp_metadata_rx_checksum().
-> >    -
-> >      type: flags
-> >      name: xsk-flags
-> > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2074b70618a9d=
-4f32544d8b9a30b63 100644
-> > --- a/include/net/xdp.h
-> > +++ b/include/net/xdp.h
-> > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_in=
-fo *info,
-> >  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
-> >  			   bpf_xdp_metadata_rx_vlan_tag, \
-> >  			   xmo_rx_vlan_tag) \
-> > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
-> > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
-> > +			   bpf_xdp_metadata_rx_checksum, \
-> > +			   xmo_rx_checksum)
-> > =20
-> >  enum xdp_rx_metadata {
-> >  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
-> > @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
-> >  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_=
-L3_DYNHDR,
-> >  };
-> > =20
-> > +enum xdp_checksum {
-> > +	XDP_CHECKSUM_NONE		=3D CHECKSUM_NONE,
-> > +	XDP_CHECKSUM_UNNECESSARY	=3D CHECKSUM_UNNECESSARY,
-> > +	XDP_CHECKSUM_COMPLETE		=3D CHECKSUM_COMPLETE,
-> > +	XDP_CHECKSUM_PARTIAL		=3D CHECKSUM_PARTIAL,
-> > +};
-> > +
-> >  struct xdp_metadata_ops {
-> >  	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
-> >  	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
-> >  			       enum xdp_rss_hash_type *rss_type);
-> >  	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16 *vlan_proto,
-> >  				   u16 *vlan_tci);
-> > +	int	(*xmo_rx_checksum)(const struct xdp_md *ctx,
-> > +				   enum xdp_checksum *ip_summed,
-> > +				   u32 *cksum_meta);
-> >  };
-> > =20
-> >  #ifdef CONFIG_NET
-> > diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-> > index e0b579a1df4f2126acec6c44c299e97bbbefe640..d20da430cfd57bc26b5ea2f=
-406c27b48d8a81693 100644
-> > --- a/include/uapi/linux/netdev.h
-> > +++ b/include/uapi/linux/netdev.h
-> > @@ -47,11 +47,14 @@ enum netdev_xdp_act {
-> >   *   hash via bpf_xdp_metadata_rx_hash().
-> >   * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing rec=
-eive
-> >   *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
-> > + * @NETDEV_XDP_RX_METADATA_CHECKSUM: Device is capable of exposing rec=
-eive
-> > + *   checksum result via bpf_xdp_metadata_rx_checksum().
-> >   */
-> >  enum netdev_xdp_rx_metadata {
-> >  	NETDEV_XDP_RX_METADATA_TIMESTAMP =3D 1,
-> >  	NETDEV_XDP_RX_METADATA_HASH =3D 2,
-> >  	NETDEV_XDP_RX_METADATA_VLAN_TAG =3D 4,
-> > +	NETDEV_XDP_RX_METADATA_CHECKSUM =3D 8,
-> >  };
-> > =20
-> >  /**
-> > diff --git a/net/core/xdp.c b/net/core/xdp.c
-> > index fee6d080ee85fc2d278bfdddfd1365633058ec06..e51346ad3031f28d11c11f8=
-205da6cd954da82de 100644
-> > --- a/net/core/xdp.c
-> > +++ b/net/core/xdp.c
-> > @@ -961,6 +961,35 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const=
- struct xdp_md *ctx,
-> >  	return -EOPNOTSUPP;
-> >  }
-> > =20
-> > +/**
-> > + * bpf_xdp_metadata_rx_checksum - Read XDP frame RX checksum.
-> > + * @ctx: XDP context pointer.
-> > + * @ip_summed: Return value pointer indicating checksum result.
-> > + * @cksum_meta: Return value pointer indicating checksum result metada=
-ta.
-> > + *
-> > + * In case of success, ``ip_summed`` is set to the RX checksum result.=
- Possible
-> > + * values are:
-> > + * ``XDP_CHECKSUM_NONE``
-> > + * ``XDP_CHECKSUM_UNNECESSARY``
-> > + * ``XDP_CHECKSUM_COMPLETE``
-> > + * ``XDP_CHECKSUM_PARTIAL``
-> > + *
-> > + * In case of success, ``cksum_meta`` contains the hw computed checksu=
-m value
-> > + * for ``XDP_CHECKSUM_COMPLETE`` or the ``csum_level`` for
-> > + * ``XDP_CHECKSUM_UNNECESSARY``. It is set to 0 for ``XDP_CHECKSUM_NON=
-E`` and
-> > + * ``XDP_CHECKSUM_PARTIAL``.
-> > + *
-> > + * Return:
-> > + * * Returns 0 on success or ``-errno`` on error.
-> > + * * ``-EOPNOTSUPP`` : means device driver does not implement kfunc
-> > + * * ``-ENODATA``    : means no RX-timestamp available for this frame
-> > + */
-> > +__bpf_kfunc int bpf_xdp_metadata_rx_checksum(const struct xdp_md *ctx,
-> > +					     u8 *ip_summed, u32 *cksum_meta)
-> > +{
->=20
-> Any reason not to do enum xdp_checksum *ip_summed here as well?
+On Thu, May 01, 2025 at 02:46:46PM +0200, Peter Zijlstra wrote:
+> On Thu, May 01, 2025 at 01:42:35PM +0200, Peter Zijlstra wrote:
+> > On Wed, Oct 16, 2024 at 07:14:34PM -0700, John Hubbard wrote:
+> > > On 10/16/24 3:06 PM, Lorenzo Stoakes wrote:
+> > > > On Wed, Oct 16, 2024 at 02:00:27PM -0600, Shuah Khan wrote:
+> > > > > On 10/16/24 04:20, Lorenzo Stoakes wrote:
+> > > ...
+> > > > > > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+> > > > > > index 88d6830ee004..1640b711889b 100644
+> > > > > > --- a/tools/testing/selftests/pidfd/pidfd.h
+> > > > > > +++ b/tools/testing/selftests/pidfd/pidfd.h
+> > > > > > @@ -50,6 +50,14 @@
+> > > > > >    #define PIDFD_NONBLOCK O_NONBLOCK
+> > > > > >    #endif
+> > > > > > +/* System header file may not have this available. */
+> > > > > > +#ifndef PIDFD_SELF_THREAD
+> > > > > > +#define PIDFD_SELF_THREAD -100
+> > > > > > +#endif
+> > > > > > +#ifndef PIDFD_SELF_THREAD_GROUP
+> > > > > > +#define PIDFD_SELF_THREAD_GROUP -200
+> > > > > > +#endif
+> > > > > > +
+> > > > > 
+> > > > > As mentioned in my response to v1 patch:
+> > > > > 
+> > > > > kselftest has dependency on "make headers" and tests include
+> > > > > headers from linux/ directory
+> > > > 
+> > > > Right but that assumes you install the kernel headers on the build system,
+> > > > which is quite a painful thing to have to do when you are quickly iterating
+> > > > on a qemu setup.
+> > > > 
+> > > > This is a use case I use all the time so not at all theoretical.
+> > > > 
+> > > 
+> > > This is turning out to be a fairly typical reaction from kernel
+> > > developers, when presented with the "you must first run make headers"
+> > > requirement for kselftests.
+> > > 
+> > > Peter Zijlstra's "NAK NAK NAK" response [1] last year was the most
+> > > colorful, so I'll helpfully cite it here. :)
+> > 
+> > Let me re-try this.
+> > 
+> > This is driving me insane. I've spend the past _TWO_ days trying to
+> > build KVM selftests and I'm still failing.
+> > 
+> > This is absolute atrocious crap and is costing me valuable time.
+> > 
+> > Please fix this fucking selftests shit to just build. This is unusable
+> > garbage.
+> 
+> So after spending more time trying to remember how to debug Makefiles (I
+> hate my life), I found that not only do I need this headers shit, the
+> kvm selftests Makefile is actively broken if you use: make O=foo
+> 
+> -INSTALL_HDR_PATH = $(top_srcdir)/usr
+> +INSTALL_HDR_PATH = $(top_srcdir)/$(O)/usr
+> 
+> 
+> And then finally, I can do:
+> 
+> make O=foo headers_install
+> make O=foo -C tools/testing/selftests/kvm/
+> 
+> So yeah, thank you very much for wasting my time *AGAIN*.
 
-ack, I will fix it in v2.
+And *AGAIN*.. this is still the state of things. Selftests are still
+hopelessly broken and useless.
 
-Regards,
-Lorenzo
-
-
---qwJIGiRKX8fs1N5o
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaY7/mwAKCRA6cBh0uS2t
-rPcoAQCb7m6pbv19sIu76bYil26EtBbnmmstPmm4RPxwfLKneAEA63LE9ex6Lo4S
-bBOpGzrQF7VzBTabcYLSnAVzI5jkiQI=
-=YHsg
------END PGP SIGNATURE-----
-
---qwJIGiRKX8fs1N5o--
+Maybe we should just delete the lot?
