@@ -1,138 +1,96 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32C2354AE2;
-	Fri, 13 Feb 2026 11:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8078CA5A;
+	Fri, 13 Feb 2026 13:19:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770980573; cv=none; b=J6DyT5YwAHSzuO5F0wAJDQUDnL5i1J0EcYrhWFOe1AGrsEXoD9mGCxNQTuOUZlt49W94ku2F2bmIShIcjYGZH3lB8zZy0S3o+sdQD+Ou9Ry7LPrR/WsnsS/umtXT0VrFt3K18hiSU3emT31AbYMVOwuN4rVNvYwxTo5YtWIDyJY=
+	t=1770988771; cv=none; b=koEmXpSvzSn1F6/H7CTAMvWvje6WDKkNJ+ER558c0X/KcBV29iPMrSi25EiAchNjl6dfQHrWtKdVw3LEzQyl0/b6RY6lflzPMLgaOVZzaM77/UrbLzfjfnCZzt0WJhIDGGaC3sS9PgMBN9rS6ss5ULyzOFrt50tUcjNwRfs2iYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770980573; c=relaxed/simple;
-	bh=UaoXLDuKM7W4LVs2b+N6DWDNPZ7brGJ4dmoEN3+mt3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kBVSxtlh7EPIWFMEP2l0XdgLvzgJ5cj3MqyBREs5OB67LNa2l37zOdQnlANXyd4QphS9kSXDgQcZWoK84Jh1vbfIQo3qb0cCFlB7o2I2bQ3lsKXyMVJ2dkHPQjBPGKrrh8daUu60i1KeETKaIa572jp5NtOaut24YSsh7pGIrYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=anFUloTR; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1770988771; c=relaxed/simple;
+	bh=IxiFmLLs//uQgpXVZzvly8fD0zfQla47F+czGjQAI0k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Yh5QYsATmoKAJkJNDoCtmDT7M/HXAsRViccgghDgoWoQZQX1RhEBvg7o+sm7Goj1OoV0gg3va85iTBAPghymIhZVZrMRi9hI12u48PkAi2oaLAAOnEunGp62qQBsLP43gYioI2Cw7YpLvUKDWABMW0GeqPl4BcmPh8H2AQxcqd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=snq2FEev; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="anFUloTR"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="snq2FEev"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=gGY9mjNmnYiEGqmmSKnj+anrGWP6cFH8GMKxfF8SvcI=; b=anFUloTR5e87QUrovEFgzRlF3N
-	Bq0w6Vgz4WwzBvkH/RITWQQJGLciH8j9utNJjniRskXcA2/WRSaUphtk80EuMiQnft0qc/TqP7wrU
-	NVgzxh34jK1COkrSmEcZmG4hNYDNie5hjbV5ppNHzCqajhg8yEMexyPS63MjfJ48wnR2txEYGyaWb
-	R6UVmqfpGFTaQ857oPuRVhHc/ssfpkafSr/xecuIlZTYzVU0oEizM3epsnwIYSP4GdaP9rsLXZLOX
-	cZqaBCdef/VRyTHXhRBjH4xtBCaMjreMqgv1pIKwKfyn6edQbH0oCjtYuOI9CIW0UH9+y/QN9pERM
-	APfe3wEA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vqqwX-0000000C7oQ-2xs7;
-	Fri, 13 Feb 2026 11:02:38 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 1DC173007B5; Fri, 13 Feb 2026 12:02:37 +0100 (CET)
-Date: Fri, 13 Feb 2026 12:02:37 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Christian Brauner <christian@brauner.io>,
-	Shuah Khan <shuah@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>,
-	seanjc@google.com
-Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
-Message-ID: <20260213110237.GC3031506@noisy.programming.kicks-ass.net>
-References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
- <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
- <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
- <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
- <5b0b8e1e-6f50-4e18-bf46-39b00376c26e@nvidia.com>
- <20250501114235.GP4198@noisy.programming.kicks-ass.net>
- <20250501124646.GC4356@noisy.programming.kicks-ass.net>
+	d=virtuozzo.com; s=relay; h=Content-Type:MIME-Version:Message-ID:Date:Subject
+	:From; bh=KLNYh7klbqTf1ytmWVMbQwmLLWqKUw7PqJT19WiTQtQ=; b=snq2FEevRCPIICTtL1p
+	MToT1MpKT3hjHkX/DKmvYNQEtRDCFajNz+GSiCjhFK1OLj+l67s5N4P/1qrHVlKp07/VQP/+VfEww
+	grtfdNnycvC8qSfXd42Y2up1erKxiVcZ276077rywk3X3qkxgfBdmRgAjpy17Wh2GJUPI1+C8TQVV
+	g/JUo7srUETvVIMe7pd7R/f7mWzpqHmuDTn5lKnWTF7wXLrEz3Crxjmq/kX6phsKt+EOZJ1+5UFke
+	bQXGWIGn943GVLl7LVuPJbtyrofcb2E2LkBAWT9YM0xf2aGUK9rX7VKJB2tzpxR5rwPSKXS36cH2v
+	yytQR5ur+NYxkXg==;
+Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
+	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aleksey.oladko@virtuozzo.com>)
+	id 1vqt3f-0014LI-2B;
+	Fri, 13 Feb 2026 14:19:08 +0100
+Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 61DDJAd2043368
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Fri, 13 Feb 2026 13:19:11 GMT
+Received: (from root@localhost)
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 61DDJ8p1043367;
+	Fri, 13 Feb 2026 13:19:08 GMT
+From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+To: "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>, Amit Cohen <amcohen@nvidia.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Subject: [PATCH net v2 0/3] selftests: forwarding: fix br_netfilter related test failures
+Date: Fri, 13 Feb 2026 13:19:04 +0000
+Message-ID: <20260213131907.43351-1-aleksey.oladko@virtuozzo.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250501124646.GC4356@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 01, 2025 at 02:46:46PM +0200, Peter Zijlstra wrote:
-> On Thu, May 01, 2025 at 01:42:35PM +0200, Peter Zijlstra wrote:
-> > On Wed, Oct 16, 2024 at 07:14:34PM -0700, John Hubbard wrote:
-> > > On 10/16/24 3:06 PM, Lorenzo Stoakes wrote:
-> > > > On Wed, Oct 16, 2024 at 02:00:27PM -0600, Shuah Khan wrote:
-> > > > > On 10/16/24 04:20, Lorenzo Stoakes wrote:
-> > > ...
-> > > > > > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-> > > > > > index 88d6830ee004..1640b711889b 100644
-> > > > > > --- a/tools/testing/selftests/pidfd/pidfd.h
-> > > > > > +++ b/tools/testing/selftests/pidfd/pidfd.h
-> > > > > > @@ -50,6 +50,14 @@
-> > > > > >    #define PIDFD_NONBLOCK O_NONBLOCK
-> > > > > >    #endif
-> > > > > > +/* System header file may not have this available. */
-> > > > > > +#ifndef PIDFD_SELF_THREAD
-> > > > > > +#define PIDFD_SELF_THREAD -100
-> > > > > > +#endif
-> > > > > > +#ifndef PIDFD_SELF_THREAD_GROUP
-> > > > > > +#define PIDFD_SELF_THREAD_GROUP -200
-> > > > > > +#endif
-> > > > > > +
-> > > > > 
-> > > > > As mentioned in my response to v1 patch:
-> > > > > 
-> > > > > kselftest has dependency on "make headers" and tests include
-> > > > > headers from linux/ directory
-> > > > 
-> > > > Right but that assumes you install the kernel headers on the build system,
-> > > > which is quite a painful thing to have to do when you are quickly iterating
-> > > > on a qemu setup.
-> > > > 
-> > > > This is a use case I use all the time so not at all theoretical.
-> > > > 
-> > > 
-> > > This is turning out to be a fairly typical reaction from kernel
-> > > developers, when presented with the "you must first run make headers"
-> > > requirement for kselftests.
-> > > 
-> > > Peter Zijlstra's "NAK NAK NAK" response [1] last year was the most
-> > > colorful, so I'll helpfully cite it here. :)
-> > 
-> > Let me re-try this.
-> > 
-> > This is driving me insane. I've spend the past _TWO_ days trying to
-> > build KVM selftests and I'm still failing.
-> > 
-> > This is absolute atrocious crap and is costing me valuable time.
-> > 
-> > Please fix this fucking selftests shit to just build. This is unusable
-> > garbage.
-> 
-> So after spending more time trying to remember how to debug Makefiles (I
-> hate my life), I found that not only do I need this headers shit, the
-> kvm selftests Makefile is actively broken if you use: make O=foo
-> 
-> -INSTALL_HDR_PATH = $(top_srcdir)/usr
-> +INSTALL_HDR_PATH = $(top_srcdir)/$(O)/usr
-> 
-> 
-> And then finally, I can do:
-> 
-> make O=foo headers_install
-> make O=foo -C tools/testing/selftests/kvm/
-> 
-> So yeah, thank you very much for wasting my time *AGAIN*.
+Hello
 
-And *AGAIN*.. this is still the state of things. Selftests are still
-hopelessly broken and useless.
+This patch series fixes kselftests that fail when the br_nefilter
+module is loaded. The failures occur because the tests generate
+packets that are either modified or encapsulated, but their IP
+headers are not fully correct for sanity checks performed by
+be_netfilter.
 
-Maybe we should just delete the lot?
+Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+
+Changes in v2:
+- Changed the fix for pedit tests from adding 'action csum' to disabling
+  br_netfilter via sytsctl
+- Mentioned in the commit message that the fix vxlan_bridge_1d utilizes
+  helpers available since v6.3 kernel.
+- Updated subject prefix to include 'net'.
+- Added a Fixes: tag to the appropriate commit as requested
+- Link to v1: https://lore.kernel.org/linux-kselftest/20260210185129.480015-1-aleksey.oladko@virtuozzo.com/T/#t
+---
+Aleksei Oladko (3):
+  selftests: forwarding: vxlan_bridge_1d: fix test failure with
+    br_netfilter enabled
+  selftests: forwarding: vxlan_bridge_1d_ipv6: fix test failure with
+    br_netfilter enabled
+  selftests: forwarding: fix pedit tests failure with br_netfilter
+    enabled
+
+ .../selftests/net/forwarding/pedit_dsfield.sh |  8 ++++++
+ .../selftests/net/forwarding/pedit_ip.sh      |  8 ++++++
+ .../net/forwarding/vxlan_bridge_1d.sh         | 26 ++++++++++++-------
+ .../net/forwarding/vxlan_bridge_1d_ipv6.sh    |  2 +-
+ 4 files changed, 33 insertions(+), 11 deletions(-)
+
+-- 
+2.43.0
+
