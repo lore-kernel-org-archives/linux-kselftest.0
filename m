@@ -1,102 +1,59 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42006314A95;
-	Fri, 13 Feb 2026 07:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295393191B5;
+	Fri, 13 Feb 2026 08:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770969417; cv=none; b=YfP3LNX31bFIXm5++057LFujHvak4LILAXDI4vQA+TIAyfFcDQYVH1FH03EiJYVhCJhNifpbcYXLvNTiryRbIPPxwuEV0k/xu68lxTPz/q0UivCNKWpfVCM+M27xC+NckRhizZ/Ms/yFdz0gwYOaAu8rXfEpfmXhGaAQdOmbwag=
+	t=1770969939; cv=none; b=r2RZEi7s6hdetxOp3yvgWxX+6UDzBrf22VVFg4zLi1B5ZlcqzberTLGXK2gfm3fHrSF8i3aSApwHKFkhubnV+vwdDiXQ0sRN2qc8bnf2ll32x0YaqaQZrEs1GqKwXv6OO7OW8xd93rba4+ICLyrSOxrR7l4JyrDC4sS4eiEa/6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770969417; c=relaxed/simple;
-	bh=PpQWvYCrQta7omtcLnAeHaRE+LVjwufS1aP9UvbTMQA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=D1/NkbbX/wme9bh/Oe6sKdRKPvbMkvU8X26nosXLPyBJvPb++Vr94uSc+KsOryN5sphiASjIXAZMtSslDG4jn8//YWZPHcn1G4Phod6iRSUBrkCzC5MspilRv9vsjI4+MlGqzzANuoTZ4quipexF2D+0eKysrP1cQGgbXATov3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dj0ruJXc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770969939; c=relaxed/simple;
+	bh=ngX3JK7vO6xawklzezntRxp9dOrD/CKwjyLntphzJ1Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=o7VZMBhoC8cIvu8/RYe2nwRAD7Dp2TqGXWA01cAMI11N2w4YYLTGKWq2ahaFKaeBieCd98sY3BYcd0qgSqNTWq/riRCkvYFiuBpVsfv5uCqDfeZKjE32vIPkfTx7uHx7dkrCAJfXAs71NlAzkRC9gjhaPtTuGC4Ra6//re4gq2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DIv+POCa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dj0ruJXc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6798C2BC86;
-	Fri, 13 Feb 2026 07:56:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DIv+POCa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB0CC116C6;
+	Fri, 13 Feb 2026 08:05:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770969417;
-	bh=PpQWvYCrQta7omtcLnAeHaRE+LVjwufS1aP9UvbTMQA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Dj0ruJXcAKlcq/8kwv/FD7QRg5vxmqV7VF3eF8+UgOpcVkQXVZU57zwM9H6nqivEG
-	 fUeDyj6+Fi5MrsHqR5qNpy+eK6N2XXvaNTp2DyP3FUl4ewGkX6+2lHwKHzUqR89e0s
-	 bYWQ3DfnyzZstdvVar2Tf8feoi7ySq8bnEQKBUzT8Gj4l2ahDFpyUf1Lm3QLQyfsIu
-	 XGKvpRxaHH3qzh2W7I7NjjQN4AcAezIGkmyh0PF/FXP/U/S8QEKZtOutvZzsXwBaEp
-	 ZYtioZHBCvbOisz0mgJvGwsu6IR/5zWN4L700WmT58qzu9fDkkbkbyu8DqFQcDxnQG
-	 IyFyvuDLLQPvQ==
-Content-Type: multipart/mixed; boundary="===============6972505930256429267=="
+	s=k20201202; t=1770969938;
+	bh=ngX3JK7vO6xawklzezntRxp9dOrD/CKwjyLntphzJ1Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=DIv+POCa0aEy3/UbFKNlCmITwGuOEHyF3Wyp60YTSZIbS2Xwmys9yxY4+DTQIs20b
+	 PrTtxNKP8teUxI+vpTXp8XNgaI/BqCo1i88wBQxDBIlarnGmreeYUuD/rtTbbfqRHx
+	 hOyA8DeHKVJgRl2O7V6AEyzhMwwiNm2Oi0bPjgPaF8cdDYsUacdTbS4BGxDi3v+Edn
+	 HUXfSWjD7jZMaqE0UibvVvSUHdBI+J/8BRg3kfqLmYt3HiuOjJkDWQdAdn/M/tO9BK
+	 SdIYnKlNEOi+V+b1mdS7IrO8XwvKpPqlJbcjB1AcbhQ/LtuSxipk5nW10xht2TTGDl
+	 VcsgIs3IWIuJg==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Nylon Chen <nylon.chen@sifive.com>, mingo@redhat.com, shuah@kernel.org
+Cc: peterz@infradead.org, dvhart@infradead.org, dave@stgolabs.net,
+ andrealmeid@igalia.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, zong.li@sifive.com, Nylon Chen
+ <nylon.chen@sifive.com>
+Subject: Re: [PATCH v2] selftests/futex: conditionally include libnuma support
+In-Reply-To: <20260210-20260128_nylon_chen_sifive_com-v2-1-630bcb707d7a@sifive.com>
+References: <20260210-20260128_nylon_chen_sifive_com-v2-1-630bcb707d7a@sifive.com>
+Date: Fri, 13 Feb 2026 09:05:33 +0100
+Message-ID: <87pl6983w2.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1d048c48e087e02590e6943bdfed93db4202f3c600155483cc38cea21e565f8b@mail.kernel.org>
-In-Reply-To: <ba61b77c71b6285eefa022a84bf80c5913b313de.1770965805.git.zhuhui@kylinos.cn>
-References: <ba61b77c71b6285eefa022a84bf80c5913b313de.1770965805.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Check bpf_mem_cgroup_page_state return value
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,akpm@linux-foundation.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,zhuhui@kylinos.cn,inwardvessel@gmail.com,cgroups@vger.kernel.org,linux-mm@kvack.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 13 Feb 2026 07:56:56 +0000 (UTC)
+Content-Type: text/plain
 
---===============6972505930256429267==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-
-[ ... ]
-
-> @@ -143,6 +151,8 @@ static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
->  	if (!ASSERT_OK(read_stats(link), "read stats"))
->  		goto cleanup;
+On Tue, Feb 10 2026 at 01:50, Nylon Chen wrote:
+> Use LIBNUMA_TEST to conditionally add -lnuma to LDLIBS.
+> Guard numa header includes with #ifdef LIBNUMA_VER_SUFFICIENT
+> to allow compilation without libnuma installed.
 >
-> +	ASSERT_NEQ(memcg_query->memcg_kmem, (unsigned long)-1,
-> +		  "bpf_mem_cgroup_vm_events MEMCG_KMEM");
+> Signed-off-by: Zong Li <zong.li@sifive.com>
+> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
 
-Should this assertion string say "bpf_mem_cgroup_page_state MEMCG_KMEM"
-instead?  The BPF program in progs/cgroup_iter_memcg.c populates
-memcg_kmem using bpf_mem_cgroup_page_state(), not
-bpf_mem_cgroup_vm_events():
+This SOB chain is invalid.
 
-    idx = bpf_core_enum_value(enum memcg_stat_item, MEMCG_KMEM);
-    ...
-    memcg_query.memcg_kmem = bpf_mem_cgroup_page_state(memcg, idx);
-
-> @@ -170,6 +180,8 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
->  	if (!ASSERT_OK(read_stats(link), "read stats"))
->  		goto cleanup;
->
-> +	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
-> +		  "bpf_mem_cgroup_page_state PGFAULT");
-
-Similarly, should this say "bpf_mem_cgroup_vm_events PGFAULT"?  The BPF
-program retrieves pgfault using bpf_mem_cgroup_vm_events():
-
-    idx = bpf_core_enum_value(enum vm_event_item, PGFAULT);
-    ...
-    memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, idx);
-
-It looks like the two assertion description strings for test_kmem and
-test_pgfault were swapped.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21978734425
-
-AI-authorship-score: low
-AI-authorship-explanation: The commit describes a specific back-porting scenario, and the copy-paste error in swapped assertion strings is characteristic of human authorship.
-issues-found: 2
-issue-severity-score: low
-issue-severity-explanation: Two assertion description strings are swapped between test_kmem and test_pgfault, producing misleading diagnostics on test failure but not affecting test correctness or system stability.
-
---===============6972505930256429267==--
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#from-line
