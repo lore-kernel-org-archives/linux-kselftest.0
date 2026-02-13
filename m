@@ -1,141 +1,130 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99101428F4
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 00:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908DD1DB125
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 00:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770942983; cv=none; b=Z+j2skotRegFYUAR7IPK5lhaCOBr6f32AJ/73I2/9YAql6OsHC2oaQq34kcR4jbVU3WYSD6bf3zDNP1a5p9NJUtI2VIoRIUODeh240VnNYJS7RdkklcIaEA3AuCr1Py0zdluUj90e3NP6+0eeNFfu3QE+Z0JHk7az+/IVFtSKtM=
+	t=1770943138; cv=none; b=EXAHQUDEn3VvnUQ9X2XAkYIr+qQigHCuELvVc3N/NcF7wEt9Q9cfk0B0i63Hrn3kF7J9yNDHy6ibLuT4S7LwXglyIXA1l/dhA8gaXD0q0nJ7yZuY8x/fupHNH1NUZlCFYa/xFFK5yA5JTWGYGirL2tGaOxRAL+ekfpNB02UfDKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770942983; c=relaxed/simple;
-	bh=yO0zytHOlL7IzwyCTxK7PnBLlVbzzRZC0lMvbt+GO4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B+lii7zZN/M5P45yf0UtNWTy0fWNzpUB8gfYg5qcJqUuMktacYSeWYLIwUU0nsjDjgE7A32HpBFWwY/hJREQ/THuzD0EAZ8IW9e2KFhrfRyXsuQoDe4lEtDwZhwrcC0gsVfGIEC4BMyA2nCnOHw7TD350tYaRf6PohstI3kMYRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WfQNKnNe; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770943138; c=relaxed/simple;
+	bh=t/+3wyweMkhjwVY2qvSMuKbG8mkGC5i0DHQ0TzmGcNY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=FU3FiVaqQQYm8AG/nlbnFq/pTl6sL0UpZjTiImtib+OmtmloryLgzQZ0I6UGooxRxUWq0bbWzyIjey7eSqU/9yRNP1vCac0Q9lUg7fXLj7xWZvJR5Z28VzDQJwKn0an9cs0BVvEWLzYld/Rv8fOgQU1PYNa0cw8iqQ1vTAXIw1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O4dbM5iM; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WfQNKnNe"
-Date: Fri, 13 Feb 2026 00:36:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770942980;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OsC42DDml1a2fAwZMLJMiopANdzd7MG2cQ1RRCUDwb4=;
-	b=WfQNKnNeQ+D1JsPSGoOGryI/021453zlwxqI0jyOUjQek1lojVruZZlQ3mcemsgSvQ8Iuv
-	j5ywURZ902Q9PTWmjd71qkkkaq78QOQ4ImEY//1eoaSn7Pew3EhA/wPYZwtwsYU8gG9l+H
-	qCLNdLxDXtPYg1/v/9i9lirbTsbhyA0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jim Mattson <jmattson@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 6/8] KVM: x86: nSVM: Save/restore gPAT with
- KVM_{GET,SET}_NESTED_STATE
-Message-ID: <bpb7wp5ktdkpo5pohb5ougugd6itwzpmulpqcnnfut552qpbeb@4ww7ytghrsym>
-References: <20260212155905.3448571-1-jmattson@google.com>
- <20260212155905.3448571-7-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O4dbM5iM"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2ba6aa57d5fso413866eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 16:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770943137; x=1771547937; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Lp9040amXhpFPWQBTbbqsO5bbDZPitD7bxgNCwcTcG0=;
+        b=O4dbM5iMYx+hC473R22ijUI0lZpm6cdrFrNmHh8qiVVi6mMita1w4d2PR6Akbcz9c+
+         1OKTt8BL7xNdmSHjXiWu72amsRryuBbbxDX5MMGjI6Ru7ROn6oemG5LT4pcykRlwTBud
+         pWAwKCv745EF6QABauIPfqbGXz/5fYqyIqWHRabXORb+0VsiAEwnn/pwYGhI3KDwMIFu
+         A9ruoh8X7Cpl9Q8t5G5eXF3PlutUn1oGmOjzadHzAyw2PJ9692Kgi/KlhiSuC8aWuE7X
+         9qFSWNCmr9wymbrJDXFWuzk/aTz9F3agQ1KNu0wZIxEJsnDk0I9kJHbACBfrcO7FU+VC
+         XZmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770943137; x=1771547937;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lp9040amXhpFPWQBTbbqsO5bbDZPitD7bxgNCwcTcG0=;
+        b=gy4sOFdTtyMs9KezppXFN7opt9hSt7laqEgizpnMvpJ7HqfVE96FW7YlvHphYUiBNl
+         luAqEOcNIOxMkZ0aYaBDmFVXh6TNQlJWeZiylXSKrS1SImzyNPxa/tFYz/jYkhflnKIw
+         89sRw3iQQFkv4TUC4PmsUS+Sc1dJoppe5Ff41dBwyIw9hK7QmzAAyo0ls42kF+D0C52l
+         7qjN46S1J7e58ckU0w4QzC+qYnR4AZC9cnRXUwlt4eeVfEAZ18FzK1CKV+xx1IJ/C/L/
+         LuuZB2v2Ap7+U7erH3GafxEzj3nDbRRvk7Li8gIEh8DCFxjK1lRDgjbqeg3gYv8qXEh9
+         WDCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUXIxsFZ7k5yyqXvKvucDjV+vhQWx9ap/5Bu3E6442V4W00/r4ZV4czprpYHKU8262CUGE2DusCTMCiW46BIqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZ458qm7ztbqySELR5a3M8k1tTtoyp1d+pmFSW9da9cpwMVQAC
+	ugQRVEsbxlOMVncEjl6AD3XMhO8N7pTaCC13cVw2UFYBuB/GoiC+tNNz
+X-Gm-Gg: AZuq6aKoM4psOxFGoTdjefizfBSojGJhygK+GtjQaZ55kto/JPF69l0QSu7ztM8SCht
+	71FeJv6GqHvSJ7j3g58au280mGpfDlP0ELG6/rlbkELBlauc0Owu3AjrrzuMz/AISP7TthHjZIU
+	NF+Nzws0L5sFTugaLYBNQVDd2wN8J3q+IlLBM61GooqDtwoKyL1OK7w8ve6NjsBA8hRD7q+dTeb
+	TtvzSVu9HN7B7p7e2YlrthgBs0cinrzDYhT+Hk4aETLx/oWUTK07p0XW/3TF1Cy9ZWNCOC0EYkr
+	vg3moc0bNTub9BwLQbfohbrig4GeQId/K3khvw+WQHdL36UG5jHjmERyEhwHgAir7OMiQ70LKy7
+	Drl9rUDqmvlx1grqUfuLvLiEMdbihtCaZHt6n/CfmqUTyVaa0QOKZMta6n1AgKft4VtyG7czyNA
+	PcQH3TPkTpVfnYC4DVQFv6MluVVS0xSy7vL6brDT/+IFA=
+X-Received: by 2002:a05:693c:2b06:b0:2ba:75f5:72a2 with SMTP id 5a478bee46e88-2babc3a4e2emr44150eec.2.1770943136554;
+        Thu, 12 Feb 2026 16:38:56 -0800 (PST)
+Received: from [192.168.4.196] ([73.222.117.172])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcd00d2sm5059384eec.20.2026.02.12.16.38.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Feb 2026 16:38:56 -0800 (PST)
+Message-ID: <51bbd728-c712-4601-8a4a-7c602c67fe75@gmail.com>
+Date: Thu, 12 Feb 2026 16:38:54 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260212155905.3448571-7-jmattson@google.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/3] mm/memcontrol: Return error when accessing
+ kmem with nokmem
+To: Hui Zhu <hui.zhu@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>,
+ Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Hui Zhu <zhuhui@kylinos.cn>, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1770883926.git.zhuhui@kylinos.cn>
+ <733422f72ccbac94126ae67b9e49f4a3d460b76a.1770883926.git.zhuhui@kylinos.cn>
+Content-Language: en-US
+From: "JP Kobryn (Meta)" <inwardvessel@gmail.com>
+In-Reply-To: <733422f72ccbac94126ae67b9e49f4a3d460b76a.1770883926.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 12, 2026 at 07:58:54AM -0800, Jim Mattson wrote:
-> Add a 'flags' field to the SVM nested state header, and use bit 0 of the
-> flags to indicate that gPAT is stored in the nested state.
+On 2/12/26 12:23 AM, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
 > 
-> If in guest mode with NPT enabled, store the current vmcb->save.g_pat value
-> into the header of the nested state, and set the flag.
+> When running tests on hosts with cgroup.memory=nokmem enabled for
+> performance reasons, test_kmem always gets a value of 0 for kmem
+> statistics.
 > 
-> Note that struct kvm_svm_nested_state_hdr is included in a union padded to
-> 120 bytes, so there is room to add the flags field and the gpat field
-> without changing any offsets.
+> Since BPF programs cannot easily determine whether kmem is enabled,
+> add a check in memcg_stat_item_valid() to return an error when
+> attempting to access MEMCG_KMEM statistics while kmem accounting
+> is disabled via cgroup_memory_nokmem.
 > 
-> Fixes: cc440cdad5b7 ("KVM: nSVM: implement KVM_GET_NESTED_STATE and KVM_SET_NESTED_STATE")
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-
-Reviewed-by: Yosry Ahmed <yosry.ahmed@linux.dev>
-
+> This prevents BPF programs from silently receiving zero values and
+> allows them to properly handle the case where kmem accounting is
+> unavailable.
+> 
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 > ---
->  arch/x86/include/uapi/asm/kvm.h |  5 +++++
->  arch/x86/kvm/svm/nested.c       | 16 ++++++++++++++++
->  2 files changed, 21 insertions(+)
+>   mm/memcontrol.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-> index 846a63215ce1..664d04d1db3f 100644
-> --- a/arch/x86/include/uapi/asm/kvm.h
-> +++ b/arch/x86/include/uapi/asm/kvm.h
-> @@ -495,6 +495,8 @@ struct kvm_sync_regs {
->  
->  #define KVM_STATE_VMX_PREEMPTION_TIMER_DEADLINE	0x00000001
->  
-> +#define KVM_STATE_SVM_VALID_GPAT	0x00000001
-> +
->  /* vendor-independent attributes for system fd (group 0) */
->  #define KVM_X86_GRP_SYSTEM		0
->  #  define KVM_X86_XCOMP_GUEST_SUPP	0
-> @@ -531,6 +533,9 @@ struct kvm_svm_nested_state_data {
->  
->  struct kvm_svm_nested_state_hdr {
->  	__u64 vmcb_pa;
-> +	__u32 flags;
-> +	__u32 reserved;
-> +	__u64 gpat;
->  };
->  
->  /* for KVM_CAP_NESTED_STATE */
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 26f758e294ab..f73f3e586012 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -1893,6 +1893,10 @@ static int svm_get_nested_state(struct kvm_vcpu *vcpu,
->  	/* First fill in the header and copy it out.  */
->  	if (is_guest_mode(vcpu)) {
->  		kvm_state.hdr.svm.vmcb_pa = svm->nested.vmcb12_gpa;
-> +		if (nested_npt_enabled(svm)) {
-> +			kvm_state.hdr.svm.flags |= KVM_STATE_SVM_VALID_GPAT;
-> +			kvm_state.hdr.svm.gpat = svm->nested.save.g_pat;
-> +		}
->  		kvm_state.size += KVM_STATE_NESTED_SVM_VMCB_SIZE;
->  		kvm_state.flags |= KVM_STATE_NESTED_GUEST_MODE;
->  
-> @@ -2022,6 +2026,14 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
->  	    !nested_vmcb_check_save(vcpu, &save_cached, false))
->  		goto out_free;
->  
-> +	/*
-> +	 * Validate gPAT, if provided. This is done separately from the
-> +	 * vmcb_save_area_cached validation above, because gPAT is L2
-> +	 * state, but the vmcb_save_area_cached is populated with L1 state.
-> +	 */
-> +	if ((kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT) &&
-> +	    !kvm_pat_valid(kvm_state->hdr.svm.gpat))
-> +		goto out_free;
->  
->  	/*
->  	 * All checks done, we can enter guest mode. Userspace provides
-> @@ -2061,6 +2073,10 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
->  	if (ret)
->  		goto out_free;
->  
-> +	if (nested_npt_enabled(svm) &&
-> +	    (kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT))
-> +		svm_set_gpat(svm, kvm_state->hdr.svm.gpat);
-> +
->  	svm_switch_vmcb(svm, &svm->nested.vmcb02);
->  	nested_vmcb02_prepare_control(svm, svm->vmcb->save.rip, svm->vmcb->save.cs.base);
->  
-> -- 
-> 2.53.0.239.g8d8fc8a987-goog
-> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 129eed3ff5bb..4d8419623d1c 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -667,7 +667,8 @@ unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
+>   
+>   bool memcg_stat_item_valid(int idx)
+>   {
+> -	if ((u32)idx >= MEMCG_NR_STAT)
+> +	if ((u32)idx >= MEMCG_NR_STAT ||
+> +	    (cgroup_memory_nokmem && (u32)idx == MEMCG_KMEM))
+>   		return false;
+
+It's still a valid stat though, right? When it's disabled the value will
+just remain zero. I don't think this is necessary.
