@@ -1,89 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A7C225788;
-	Fri, 13 Feb 2026 02:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24936221726;
+	Fri, 13 Feb 2026 03:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770951025; cv=none; b=GspzpZ1YbT47jeH/dA1Syk01BHPuF6u/ttQWC3Fl9qguVD4vp0z3P9mx3thNoTP6zmcpVR3qQSUglMUFMb0wvYK+Bq6WY4lD6bEJ2RkN+5i9lBUYgScyVs/eaoFJEbJOiMXI7eddhxUpujgiTkjOWgJhZogZWvM2kru+DlAmqis=
+	t=1770951936; cv=none; b=Ri0n5zgVws0EYqviGbvmqvcscr/H1CtrW6LoJzfDm8Rewtm9LPdXQgiTjh4ggdqS44uvKB9k7bu0FI3n/atgqCsUAy9OzzKYfOEEBuj2HVtkFBQn5JUaKUNDkF5DTKQ+0a0sPkAw97jCkUFs161QEjxiSR8o4xAzoXVBOuQfLrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770951025; c=relaxed/simple;
-	bh=rZ0Enbq7t+02yptP7jGArY+vcNDi/oAZFC1GAMmFMsI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=YdzheGx6rdvez0sgCI8po2yt3hWzZAUrRqrqWu/qEfDCmaRvRAfKIYESUq1KX+kHsFiPDIzvCm4t2cAdo4BHvA9XfZ4IKBKxdt8BVbIAHqySQsD1LTsoyhPncyq+a0G34jQnjjItzCdw6dm873i7orqn1cOMh/neMYY5Hb7xvDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldmmeYzI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770951936; c=relaxed/simple;
+	bh=xy1H1KWisVrqdFCNDf6YZe11NWXWdfjP3WJvVZI50/0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CiYJ8uWzKOIz35M6VVM3NxeItIqGYlos8kK7S9jRSJ/BN8YBx4E1oMgHqlieLDeHU2ysgbVDcxxWHgM+qScVs8iF/eW/t9adAA5NzKfqMc58R+hTTHRiSys8bWkD+zkI5DGoOcpLQiD5c7eqmAptfOi8PeVvq6E/fhiYfoTy9rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AvAYX/Vy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldmmeYzI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A13F0C19421;
-	Fri, 13 Feb 2026 02:50:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AvAYX/Vy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 564E7C19422;
+	Fri, 13 Feb 2026 03:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770951022;
-	bh=rZ0Enbq7t+02yptP7jGArY+vcNDi/oAZFC1GAMmFMsI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ldmmeYzIzKjHedHN4UEM8pVXyBKbZpQIEiYSpSshF8V9xG+A8m7WrXACI31OmuBAU
-	 Fi5k2g8OP9LIrzV1uJ8t7W1IG4XU9e+k+LAnGiup115UGSMYNmaZ8thHuJhnKwTaJg
-	 KXkKiJ2Rpldvmq3LwwpLTcQ53BhoxY8TFB9rRk1uybaqnHcRjr8Qr8nvL3V7EAH+xO
-	 o2vmxBktvTPKmL4jZMV8wPJ8e4r66xeY1xXCj5TWASgSFDptLvTc6ne3zX1mbzGZO8
-	 210tFzTa08d/wsxsJCvRVnshh+V8fPB9kq8aJiFi3ofPt5Z07aIfrSEWvNhnEl5Zdm
-	 1ZIciIKGGXUlQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0B2633931093;
-	Fri, 13 Feb 2026 02:50:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1770951935;
+	bh=xy1H1KWisVrqdFCNDf6YZe11NWXWdfjP3WJvVZI50/0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=AvAYX/VybRQDKfBqGIse30m1sc/96Y1356IAkLiD7lhY0jPB7FHEr0MvpGlHm1yp1
+	 BgRvHGPVyDvKyvLZBMhz86HvpH7PesCSfblXboASu7ZUyrY/zLdc2w5ayBybR/zlrl
+	 PEnSThEpO3tKfFINiWSfueUE/BcGwi9G7tAB8/dgPyVALKUjF/Z3Wr390p4CMPx5gQ
+	 MHSAvP1uQ516t/0nyjh4Fr4Lxu4XARbdKiVEQuOxQe5x/LoyJPoSOgURJiexvqZCLu
+	 Bn5FVIU9ac9QE6F6g8JvGoEFbbKHJjTn7JydhKrnpEuLtIZYCOQD5+MpPoXlvxiGgg
+	 vMuDj9pAA7fIQ==
+Date: Thu, 12 Feb 2026 19:05:34 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Allison Henderson <achender@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ pabeni@redhat.com, edumazet@google.com, rds-devel@oss.oracle.com,
+ horms@kernel.org, linux-rdma@vger.kernel.org, allison.henderson@oracle.com
+Subject: Re: [PATCH net v2] net/rds: rds_sendmsg should not discard
+ payload_len
+Message-ID: <20260212190534.7faf2878@kernel.org>
+In-Reply-To: <20260210170952.1836306-1-achender@kernel.org>
+References: <20260210170952.1836306-1-achender@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: net: lib: Fix jq parsing error
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177095101657.1819996.11130371621799049236.git-patchwork-notify@kernel.org>
-Date: Fri, 13 Feb 2026 02:50:16 +0000
-References: <20260211022146.190948-1-yuehaibing@huawei.com>
-In-Reply-To: <20260211022146.190948-1-yuehaibing@huawei.com>
-To: Yue Haibing <yuehaibing@huawei.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, petrm@nvidia.com,
- razor@blackwall.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Tue, 10 Feb 2026 10:09:52 -0700 Allison Henderson wrote:
+> Commit 3db6e0d172c9 ("rds: use RCU to synchronize work-enqueue with
+> connection teardown") modifies rds_sendmsg to avoid enqueueing work
+> while a tear down is in progress. However, it also changed the return
+> value of rds_sendmsg to that of rds_send_xmit instead of the
+> payload_len. This means the user may incorrectly receive errno values
+> when it should have simply received a payload of 0 while the peer
+> attempts a reconnections.  So this patch corrects the teardown handling
+> code to only use the out error path in that case, thus restoring the
+> original payload_len return value.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 11 Feb 2026 10:21:46 +0800 you wrote:
-> The testcase failed as below:
-> $./vlan_bridge_binding.sh
-> ...
-> + adf_ip_link_set_up d1
-> + local name=d1
-> + shift
-> + ip_link_is_up d1
-> + ip_link_has_flag d1 UP
-> + local name=d1
-> + shift
-> + local flag=UP
-> + shift
-> ++ ip -j link show d1
-> ++ jq --arg flag UP 'any(.[].flags.[]; . == $flag)'
-> jq: error: syntax error, unexpected '[', expecting FORMAT or QQSTRING_START
->  (Unix shell quoting issues?) at <top-level>, line 1:
-> any(.[].flags.[]; . == $flag)
-> jq: 1 compile error
-> 
-> [...]
-
-Here is the summary with links:
-  - [net] selftests: net: lib: Fix jq parsing error
-    https://git.kernel.org/netdev/net/c/10ec0fc0ccc5
-
-You are awesome, thank you!
+net-next now became net so this no longer applies.
+Please rebase?
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
