@@ -1,30 +1,32 @@
 Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCA526ED46
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 07:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2C72D7DDB
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 07:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770967448; cv=none; b=ioILyXd5dao3N9CW/chAOf2Xd53JwjEQTnRDbLTeDfQVwwcRvD+fCQWckHZg3iqA5uR6Q9SzIZzvtb7Nw8k4JaqDP77WRt9zQUuECWZooY3HxQPONC+Oka4iYLJLlpZf12TrKaryIwznf5nZMX54bDiEt79sAzkVqYGHSS/O0ko=
+	t=1770967454; cv=none; b=OZH3CnmQoSEOGClAeF8sg0fIP31tmORlTaiR6FXThkJKhpxBw0EGhmGTYqfH3JrTuQBQiG6TlPq9yb974KXUSYvDMAQfAN65/g+eXYLAiGrweytkWZlgWQ4XuQ6xan9mlzJ3utLwGJ1xOVoJ1GXQFsJ6Cjv9Pk7y/xLVy0Vg8v8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770967448; c=relaxed/simple;
-	bh=uySMJvyft9jtAkrDAcp3YGsuHvDvCEgMDRF46Oa4B0Y=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=sBpOlohLlwTBj+y/Xk9c8Wi+dO+UKTPNPEGmOtx5L2Q2o/o9ucPFfREttON/lRrjbk8Ri4hRviGXmohAxUT4McB9m976EJHZjc6s4Wk73sxvaWz175DPJRiXbgEWyy/lYc7CX5yJg8yMeam6Ok7EgCnbuKMjOiqvnSfpo5RwOg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bLZRB+KC; arc=none smtp.client-ip=95.215.58.182
+	s=arc-20240116; t=1770967454; c=relaxed/simple;
+	bh=2HsD6dslEUHwTb02HytZjoVAdwwYRkGD0QIcC0gqh8E=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qWH5s8+S/de9redbsLUZv6PHnYD7Zhxzlh6BGVqc09gA1JSiyQ1LUVNUzrqi0arRQbMjNlz2TaQGB72a0aDghiWyXW1rnzA90Zh5Q3PiEkGdULUeqw0Hx8uV7F3EZwrf8Rjur2dMKrxoEqLVABNhccYcSL4JQ7wPXJPaeAOcOhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Bwmg6GyB; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bLZRB+KC"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Bwmg6GyB"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770967445;
+	t=1770967450;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VwNvFdIKZszOyx5SX4bymsUV474G0+X1JTSop6CJF0M=;
-	b=bLZRB+KCujV6r+3tDxD/hCqTqrXaKPY5gKNVJCgqvm9HEhbrD39q8vpE7E4wD5kgiOVmdu
-	eq3Sxy4rSM5H+g/vAMMjoAVUXltZTcZ7hYvyfJsPlHilNj02Y6e7JkSl0xQxzUDRmYi4BO
-	fKZGFZsoa+VTnuaiC587gmVcpj4IImo=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nAgB8oFd5RIbhmI0zJ6vnRRfguX9/AUjdmRvUVXFkXc=;
+	b=Bwmg6GyBinlCH54henK1zV60MzTL0l3tu5CSTyFpVvZxpMIPuMmzpLyguS+1lZAgtfxThx
+	ZRYE8Z7/rCz3jQGeSoknWuAxJ+v/PGn0dILItTfznzId6qwBPYUZX05uQ5YyBcDaRfQ8Ss
+	HMBzLtIOGY20FvjryGC6Mjg6pUishBw=
 From: Hui Zhu <hui.zhu@linux.dev>
 To: Johannes Weiner <hannes@cmpxchg.org>,
 	Michal Hocko <mhocko@kernel.org>,
@@ -52,9 +54,11 @@ To: Johannes Weiner <hannes@cmpxchg.org>,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/3] Fix test_cgroup_iter_memcg issues found during back-porting
-Date: Fri, 13 Feb 2026 15:23:38 +0800
-Message-ID: <cover.1770965805.git.zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v2 1/3] bpf: Use bpf_core_enum_value for stats in cgroup_iter_memcg
+Date: Fri, 13 Feb 2026 15:23:39 +0800
+Message-ID: <24ac7bab25d8d2a24a35ab87a5283263eb6a4575.1770965805.git.zhuhui@kylinos.cn>
+In-Reply-To: <cover.1770965805.git.zhuhui@kylinos.cn>
+References: <cover.1770965805.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,33 +70,85 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Hui Zhu <zhuhui@kylinos.cn>
 
-While back-porting "mm: bpf kfuncs to access memcg data", I
-encountered issues with test_cgroup_iter_memcg, specifically
-in test_kmem.
+Replace hardcoded enum values with bpf_core_enum_value() calls in
+cgroup_iter_memcg test to improve portability across different
+kernel versions.
 
-These patches are my fixes for the problems I encountered.
+The change adds runtime enum value resolution for:
+- node_stat_item: NR_ANON_MAPPED, NR_SHMEM, NR_FILE_PAGES,
+  NR_FILE_MAPPED
+- memcg_stat_item: MEMCG_KMEM
+- vm_event_item: PGFAULT
 
-Changelog:
-v2:
-According to the comments of JP Kobryn, added bpf_core_enum_value()
-usage in the BPF program to handle cross-kernel enum value differences
-at load-time instead of compile-time.
-Dropped the mm/memcontrol.c patch.
-Modified test_kmem handling: instead of skipping when nokmem is set,
-verify that kmem value is zero as expected.
-According to the comments of bot, fixed assertion message: changed
-"bpf_mem_cgroup_page_state" to "bpf_mem_cgroup_vm_events" for PGFAULT
-check.
+This ensures the BPF program can adapt to enum value changes
+between kernel versions, returning early if any enum value is
+unavailable (returns 0).
 
-Hui Zhu (3):
-  bpf: Use bpf_core_enum_value for stats in cgroup_iter_memcg
-  selftests/bpf: Check bpf_mem_cgroup_page_state return value
-  bpf: selftests: Skip kmem test when cgroup.memory=nokmem is set
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+---
+ .../selftests/bpf/progs/cgroup_iter_memcg.c   | 41 +++++++++++++++----
+ 1 file changed, 34 insertions(+), 7 deletions(-)
 
- .../bpf/prog_tests/cgroup_iter_memcg.c        | 42 +++++++++++++++++++
- .../selftests/bpf/progs/cgroup_iter_memcg.c   | 41 ++++++++++++++----
- 2 files changed, 76 insertions(+), 7 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
+index 59fb70a3cc50..b020951dd7e6 100644
+--- a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
++++ b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
+@@ -15,6 +15,8 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
+ 	struct cgroup *cgrp = ctx->cgroup;
+ 	struct cgroup_subsys_state *css;
+ 	struct mem_cgroup *memcg;
++	int ret = 1;
++	int idx;
+ 
+ 	if (!cgrp)
+ 		return 1;
+@@ -26,14 +28,39 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
+ 
+ 	bpf_mem_cgroup_flush_stats(memcg);
+ 
+-	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(memcg, NR_ANON_MAPPED);
+-	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
+-	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, NR_FILE_PAGES);
+-	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, NR_FILE_MAPPED);
+-	memcg_query.memcg_kmem = bpf_mem_cgroup_page_state(memcg, MEMCG_KMEM);
+-	memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
++	idx = bpf_core_enum_value(enum node_stat_item, NR_ANON_MAPPED);
++	if (idx == 0)
++		goto out;
++	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(memcg, idx);
+ 
++	idx = bpf_core_enum_value(enum node_stat_item, NR_SHMEM);
++	if (idx == 0)
++		goto out;
++	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, idx);
++
++	idx = bpf_core_enum_value(enum node_stat_item, NR_FILE_PAGES);
++	if (idx == 0)
++		goto out;
++	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, idx);
++
++	idx = bpf_core_enum_value(enum node_stat_item, NR_FILE_MAPPED);
++	if (idx == 0)
++		goto out;
++	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, idx);
++
++	idx = bpf_core_enum_value(enum memcg_stat_item, MEMCG_KMEM);
++	if (idx == 0)
++		goto out;
++	memcg_query.memcg_kmem = bpf_mem_cgroup_page_state(memcg, idx);
++
++	idx = bpf_core_enum_value(enum vm_event_item, PGFAULT);
++	if (idx == 0)
++		goto out;
++	memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, idx);
++
++	ret = 0;
++out:
+ 	bpf_put_mem_cgroup(memcg);
+ 
+-	return 0;
++	return ret;
+ }
 -- 
 2.43.0
 
