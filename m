@@ -1,32 +1,32 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F9A2D73BE
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 07:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EC624E4B4
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 07:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770967458; cv=none; b=MQ0fEgOvUa4sguqT6ariWurjO6JY4AmPV1OnVs3kLMD3wCR8MKLOS0s3h74zEOpDU7fdYbISpQbsQoxTxau58Q/Rw5HLkS1QibiidX/NvEPY895wvEmvKs9xy0KA6UjNz/Tj1jTlZUeIfz4IsW1xirQr8dRO1/HzOUh7xQU9kcg=
+	t=1770967463; cv=none; b=lh/FZ0Ou/FHFp+b4/hZ9Ti8nWYP3zPGoC87hUDqo+GjbJGESVmrSZ8tVLWzE/cXs9XubrvswepNp9l6K2sZ1YklwAmmEdaUzsgIZqteuYm02YB0Ja3kmMuyuvJ75hXzqgxcOpp9fd5an8k6n49HIEKZP1clNH/4tE4mFaGqTlZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770967458; c=relaxed/simple;
-	bh=Iuf/jG1P1xgDjqZYNlxi2enRJMWQkBrEDPdJgXR1x88=;
+	s=arc-20240116; t=1770967463; c=relaxed/simple;
+	bh=/y1+LlZYtoPLhLVI3OIgJxxN7FJlVk5SJJIQ0nJt5eg=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hx3Ewy4Q43C7nwCHEB7BVdutHm02hr/AjezI62z9NU0K4hqPVxfhHFrS9jVoXogIHpCk49fY1BFfAXd+caOrgk0ChZf00e/gKYVEMCrKjCcp8LRPIxTU4Jjo5f8Dhy4bUotrYchYY2Do7+UWt5Pc+DbiwNykNBVhkueUby8kdXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cc3fpTVf; arc=none smtp.client-ip=95.215.58.180
+	 MIME-Version; b=Lxb0EFb8gELCIBZGrJRKY4u5R0KOS96HwSec6P4Pmh0gG53spS+dXHrLiY3d+y4uJM44y8siyajJ3EHMp/PiVkuz/AjGxA0qPTcOlRk3Ig+FZX4LzFfpKvC8NNTpfNUxvzoJGtlxljH4v0G+0IxRa01JIlEfMQ3DEnT4/ZadfpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AxOI7my/; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cc3fpTVf"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AxOI7my/"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770967455;
+	t=1770967460;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HW+lAdpZxdJcNgAcGUXKCZ/ga5dHaGdja+4OcUdB4U4=;
-	b=cc3fpTVfk4UjRwRea3SPdpj0kMzH1jIgL2ZENeZFz4l/ch+kXyBmx4iuQ6GHsvobdljBxm
-	Zjd3mc9KkrGsTIZwIDoqz4fE63dyYV5bc5DJZFI87FljWPb7n7Gza8GpxVzbE3/jZb23Yg
-	ia+RRy9hEvB7mBrPZqh015f4DQ+PNzQ=
+	bh=E55JfgQKp+ZEiIAnBu3r9GQXW9g+xnXnuS4C381ry3Y=;
+	b=AxOI7my/78Mr4e23DAMG8qSm8RywqTJoU/wugb08PyinUbE2c+4BRDnDNkUbmTScXCCZBZ
+	hBlp4yETtJ+NjBdDb+TczClhFhU6q1d8Ub0jqbhpQLyaIC9CxgzlOwAhiaPifXtNr33Zye
+	CeoaKYGftGe+eQ3I9FNd48m6bPHv0Xg=
 From: Hui Zhu <hui.zhu@linux.dev>
 To: Johannes Weiner <hannes@cmpxchg.org>,
 	Michal Hocko <mhocko@kernel.org>,
@@ -54,9 +54,9 @@ To: Johannes Weiner <hannes@cmpxchg.org>,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/3] selftests/bpf: Check bpf_mem_cgroup_page_state return value
-Date: Fri, 13 Feb 2026 15:23:40 +0800
-Message-ID: <ba61b77c71b6285eefa022a84bf80c5913b313de.1770965805.git.zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v2 3/3] bpf: selftests: Skip kmem test when cgroup.memory=nokmem is set
+Date: Fri, 13 Feb 2026 15:23:41 +0800
+Message-ID: <447797edc394ab8a8b2484bb6c92b56115254e27.1770965805.git.zhuhui@kylinos.cn>
 In-Reply-To: <cover.1770965805.git.zhuhui@kylinos.cn>
 References: <cover.1770965805.git.zhuhui@kylinos.cn>
 Precedence: bulk
@@ -70,69 +70,65 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Hui Zhu <zhuhui@kylinos.cn>
 
-When back-porting test_progs to different kernel versions, I encountered
-an issue where the test_cgroup_iter_memcg test would falsely pass even
-when bpf_mem_cgroup_page_state() failed.
+When cgroup.memory=nokmem is set in the kernel command line, kmem
+accounting is disabled. This causes the test_kmem subtest in
+cgroup_iter_memcg to fail because it expects non-zero kmem values.
 
-This patch adds explicit checks to ensure bpf_mem_cgroup_page_state()
-doesn't return -1 before validating the actual statistics values.
+Fix this by checking /proc/cmdline for the nokmem parameter. If
+found, verify that kmem value is zero and return early, skipping
+the pipe creation test that would otherwise fail.
 
 Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 ---
- .../selftests/bpf/prog_tests/cgroup_iter_memcg.c     | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../bpf/prog_tests/cgroup_iter_memcg.c        | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-index a5afd16705f0..897b17b58df3 100644
+index 897b17b58df3..2b9c148cebf0 100644
 --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
 +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-@@ -53,6 +53,8 @@ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
- 	if (!ASSERT_OK(read_stats(link), "read stats"))
- 		goto cleanup;
+@@ -134,11 +134,41 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	shm_unlink("/tmp_shmem");
+ }
  
-+	ASSERT_NEQ(memcg_query->nr_anon_mapped, (unsigned long)-1,
-+		  "bpf_mem_cgroup_page_state NR_ANON_MAPPED");
- 	ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
++static bool cmdline_has(const char *arg)
++{
++	char cmdline[4096];
++	int fd;
++	ssize_t len;
++	bool ret = false;
++
++	fd = open("/proc/cmdline", O_RDONLY);
++	if (fd < 0)
++		return false;
++
++	len = read(fd, cmdline, sizeof(cmdline) - 1);
++	close(fd);
++	if (len < 0)
++		return false;
++
++	cmdline[len] = '\0';
++	if (strstr(cmdline, arg))
++		ret = true;
++
++	return ret;
++}
++
+ #define NR_PIPES 64
+ static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ {
+ 	int fds[NR_PIPES][2], i;
  
- cleanup:
-@@ -88,6 +90,10 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
- 	if (!ASSERT_OK(read_stats(link), "read stats"))
- 		goto cleanup_map;
- 
-+	ASSERT_NEQ(memcg_query->nr_file_pages, (unsigned long)-1,
-+		  "bpf_mem_cgroup_page_state NR_FILE_PAGES");
-+	ASSERT_NEQ(memcg_query->nr_file_mapped, (unsigned long)-1,
-+		  "bpf_mem_cgroup_page_state NR_FILE_MAPPED");
- 	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
- 	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
- 
-@@ -119,6 +125,8 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
- 	if (!ASSERT_OK(read_stats(link), "read stats"))
- 		goto cleanup;
- 
-+	ASSERT_NEQ(memcg_query->nr_shmem, (unsigned long)-1,
-+		  "bpf_mem_cgroup_page_state NR_SHMEM");
- 	ASSERT_GT(memcg_query->nr_shmem, 0, "final shmem value");
- 
- cleanup:
-@@ -143,6 +151,8 @@ static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
- 	if (!ASSERT_OK(read_stats(link), "read stats"))
- 		goto cleanup;
- 
-+	ASSERT_NEQ(memcg_query->memcg_kmem, (unsigned long)-1,
-+		  "bpf_mem_cgroup_vm_events MEMCG_KMEM");
- 	ASSERT_GT(memcg_query->memcg_kmem, 0, "kmem value");
- 
- cleanup:
-@@ -170,6 +180,8 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
- 	if (!ASSERT_OK(read_stats(link), "read stats"))
- 		goto cleanup;
- 
-+	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
-+		  "bpf_mem_cgroup_page_state PGFAULT");
- 	ASSERT_GT(memcg_query->pgfault, 0, "final pgfault val");
- 
- cleanup:
++	if (cmdline_has("cgroup.memory=nokmem")) {
++		if (!ASSERT_OK(read_stats(link), "read stats"))
++			return;
++		ASSERT_EQ(memcg_query->memcg_kmem, 0, "kmem value");
++		return;
++	}
++
+ 	/*
+ 	 * Increase kmem value by creating pipes which will allocate some
+ 	 * kernel buffers.
 -- 
 2.43.0
 
