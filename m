@@ -1,90 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3399329C6C;
-	Fri, 13 Feb 2026 08:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA3B32D7DA
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 08:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770971287; cv=none; b=REVLxivWdMEOsVi9SLTWhcaKpbRxwPW1gb+6RsSP+O9FODFmzXSMKv+FtilKTenPG0XqSdCyGsYzlIcMDnrrC07A7P/5UDKgM2nUBFv7kR/6k+KTtN1Okn7P2uEip3XD+cJjowX34mS0n4ITcrZ+YZsHg/imzZyFf/ddqSmLpXM=
+	t=1770971587; cv=none; b=HzVFA0OeGWrr8UoNGH72xgpynRT3+P4OqXMwFQnxzWSerrG3etHtiaJvfOM4k3/NIWSRlo/LRR8hI/sR10zwd+DkIAABVFK1joSBYHnAF7NaEDMOiOMj2VvGBQPXOnBR+n2B0rUqV2SI0LAvJ5Lnpjxo74EQo9pafNcxiZOz3OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770971287; c=relaxed/simple;
-	bh=a5f9nQfti0Tq2jhHV6xeyiyqksD8zxt8zYDfrv1119w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eZ/2eSaYGf1I89E/jwP/Imifj5nHughZMoa0Zp3XwYKqgUZNbthwPd+BCrnErlq0IimdGpj1Swioh6ehe1cNf8lOJ+1DW0pIMPQgnsFpqN8mcm6zzAByOEVLpohh9TeiVjaaLMCEjypW2COstm55iv6jSe5pg1fvBZBkDN7WErk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K7CPZY4f; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770971587; c=relaxed/simple;
+	bh=nXZoHUWVjEUyII1McfruTyRag9MfWxveBwZ8zh7/etc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OHdsnjZ9JvUp4Nm82xkjLP6s5xzwCEbrpgwLrgTgPN7ZvUe7tXeqH91r9BSy9KV2T+/ycNxEaOtPlKrvA5M0PUl5aDw7Sh7zyll97m4OYIwkSFGCWQVG2iqmkL9TX5VOQzMlnSvjQRxV9WZeRg4NAp3vTTUEsJUF86uuo0YZrw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U17Liall; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7CPZY4f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF88C116C6;
-	Fri, 13 Feb 2026 08:28:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U17Liall"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2932C2BCB0
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 08:33:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770971286;
-	bh=a5f9nQfti0Tq2jhHV6xeyiyqksD8zxt8zYDfrv1119w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K7CPZY4fO8L37RcqMooOZp6M/1J4jq55hCH7xhyO8/eN6Uohf64LOjhAH+pEv9o33
-	 mvRBITdPBpQJ2/mMg500hq9e+j/FW0JAqcGFWvLEgohBG8nvN1K7dO9z4ioV6RZ13C
-	 KQJHJDvKvOGGEDhyMWVpHpwkk8S5r/N9/+zMwW4jKr6qcmTSyApe/jSoQlvce7/CaK
-	 YoX9ipRfxcidgsi4fgRFUr6k0Pr+69INXGnH97FU6scb886xnUNsQroSaGZ1Qmbmh5
-	 s0wx22PEml8b2I+FNqGZ0eH8CsPkUpGU72ppiUaN6B3vlyGYJSSWWMkl29ZKH0mvol
-	 taWWQsP6DC3Ig==
-Received: from johan by rho.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vqoWr-000000008Fr-2BJa;
-	Fri, 13 Feb 2026 09:27:58 +0100
-Date: Fri, 13 Feb 2026 09:27:57 +0100
-From: Johan Hovold <johan@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	linux-kernel@vger.kernel.org, driver-core@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Subject: Re: [PATCH] revocable: hide the implementation details from users
-Message-ID: <aY7gjQEcRq6kvHpn@hovoldconsulting.com>
-References: <20260206103216.38623-1-bartosz.golaszewski@oss.qualcomm.com>
- <fc68da89-7c2b-432b-9a78-6ab55fcb0e9e@paulmck-laptop>
- <CAMRc=MeHWkDCi0GvXFYxDhCeWMydjT9wOw3_d1d+c+VE7y0-7Q@mail.gmail.com>
- <aYvj5h4tEZI-habX@google.com>
- <de233174-795f-4549-abfe-08060016c541@paulmck-laptop>
+	s=k20201202; t=1770971586;
+	bh=nXZoHUWVjEUyII1McfruTyRag9MfWxveBwZ8zh7/etc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=U17LiallLJ8Bl6lQRgXN26cPVo7+fFMUjxSIQmEqUvhYmE6IyrTTMAZ3m64rXyvMR
+	 wTTTSFS9kKr+OeVFFYVFdkLWLIIp3AIXUvbuOmSuzZfJtYEg5f+N8sVzuzLCWUM7t0
+	 ixFMaCoiCMuBTIRWlGp9fB24gqJLDv7Ctmw/sH0xXGLknTZzmalll7N0K0haIjk/7o
+	 OkTKzX4d7I56PjQUgBmmmZDYqhwftfNkByhp+d7OkmKpVPIdlVK+e8PU0m7DMRMGzp
+	 DuoTCdG3Z3dAeYxbtxuJXv6ELgG81PdcnA5QqI9zG8isvy0kmcHc6HZgUT6KwPNqUS
+	 0Do+/iuy9PIxg==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59e4a04f059so812683e87.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 00:33:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXgomhKqW6zj7/GXAZOPDiZpyE824y/V6r+25g1atM42ae/W306eCrzbFMLtzdJgGrjnQueciUeNgcsDf7yNxI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxufYkD7jYxYGD6ve9TSqR2He3X02yct59vACBYf1g60VXAWR9d
+	zdOCP38qTgDbEm0xiNcgPbepbgTpBx9FIFwHuVJ3LVC3P/uMdX104BNOxp9/yymPsh5mx8Cil/k
+	cxUq+nlBSR+6uZ13qiAczmsbFemKuhgmcjZHnKOY8sQ==
+X-Received: by 2002:a05:6512:b85:b0:59e:49f3:657e with SMTP id
+ 2adb3069b0e04-59f69c2f94amr344348e87.21.1770971585033; Fri, 13 Feb 2026
+ 00:33:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de233174-795f-4549-abfe-08060016c541@paulmck-laptop>
+References: <20260204142849.22055-1-johan@kernel.org> <2026020624-buddhism-clavicle-7a90@gregkh>
+In-Reply-To: <2026020624-buddhism-clavicle-7a90@gregkh>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Fri, 13 Feb 2026 09:32:52 +0100
+X-Gmail-Original-Message-ID: <CAMRc=MfV+pWCffgNDfS+9QuuJKBDBJG7qOzxfCHf23jERMv+5g@mail.gmail.com>
+X-Gm-Features: AZwV_Qieg6Mm5EyS0y-cOySf3Nt2-cCWUht_PKgNMLPL7qf18siBiJX1v-dptkI
+Message-ID: <CAMRc=MfV+pWCffgNDfS+9QuuJKBDBJG7qOzxfCHf23jERMv+5g@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Revert "revocable: Revocable resource management"
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Johan Hovold <johan@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Linus Walleij <linusw@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Dan Williams <dan.j.williams@intel.com>, Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 10, 2026 at 08:59:20PM -0800, Paul E. McKenney wrote:
-> On Wed, Feb 11, 2026 at 02:05:26AM +0000, Tzung-Bi Shih wrote:
-> > On Mon, Feb 09, 2026 at 05:13:17AM -0600, Bartosz Golaszewski wrote:
-> > > On Fri, 6 Feb 2026 23:02:44 +0100, "Paul E. McKenney" <paulmck@kernel.org> said:
-> > > > On Fri, Feb 06, 2026 at 11:32:06AM +0100, Bartosz Golaszewski wrote:
+On Fri, Feb 6, 2026 at 4:17=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Feb 04, 2026 at 03:28:46PM +0100, Johan Hovold wrote:
+> > I was surprised to learn that the revocable functionality was merged th=
+e other
+> > week given the community feedback on list and at LPC, but not least sin=
+ce there
+> > are no users of it, which we are supposed to require to be able to eval=
+uate it
+> > properly.
+> >
+> > The chromeos ec driver issue which motivated this work turned out not t=
+o need
+> > it as was found during review. And the example gpiolib conversion was p=
+osted
+> > the very same morning that this was merged which hardly provides enough=
+ time
+> > for evaluation (even if Bartosz quickly reported a performance regressi=
+on).
+> >
+> > Turns out there are correctness issues with both the gpiolib conversion=
+ and
+> > the revocable design itself that can lead to use-after-free and hung ta=
+sks (see
+> > [1] and [2]).
+> >
+> > And as was pointed out repeatedly during review, and again at the day o=
+f the
+> > merge, this does not look like the right interface for the chardev unpl=
+ug
+> > issue.
+> >
+> > Despite the last-minute attempt at addressing the issues mentioned abov=
+e
+> > incrementally, the revocable design is still fundamentally flawed (see =
+patch
+> > 3/3).
+> >
+> > We have processes like requiring a user before merging a new interface =
+so that
+> > issues like these can be identified and the soundness of an API be eval=
+uated.
+> > They also give a sense of when things are expected to happen, which all=
+ows our
+> > scarce reviewers to manage their time (e.g. to not be forced to drop ev=
+erything
+> > else they are doing when things are merged prematurely).
+> >
+> > There really is no reason to exempt any new interface from this regardl=
+ess of
+> > whether one likes the underlying concept or not.
+> >
+> > Revert the revocable implementation until a redesign has been proposed =
+and
+> > evaluated properly.
+>
+> After thinking about this a lot, and talking it over with Danilo a bit,
+> I've applied this series that reverts these changes.
+>
+> Kernel developers / maintainers are only "allowed" one major argument /
+> fight a year, and I really don't want to burn my 2026 usage so early in
+> the year :)
+>
+> Tzung-Bi, can you take the feedback here, and what you have learned from
+> the gpio patch series, and rework this into a "clean" patch series for
+> us to review and comment on for future releases?  That should give us
+> all a baseline on which to work off of, without having to worry about
+> the different versions/fixes floating around at the moment.
+>
 
-> > > >> Could you please take a look and say if the design looks sane to you?
-> > > >> Especially the double SRCU on the revocable_provider.
-> > > >
-> > > > The first patch in the above URL adds SRCU, and the other
-> > > > two add various tests.  I do not see a double SRCU, just an
-> > > > srcu_read_lock() in revocable_try_access() and an srcu_read_unlock()
-> > > > in revocable_withdraw_access().
+I think it's a good decision. I definitely want to see it upstream but
+it needs a serious rework and I think it should go upstream together
+with the first user. I'm fine with it being the GPIO subsystem and
+happy to help with reviewing and development.
 
-> > > This series didn't have it yet, it appeared as a fix to a race reported after
-> > > it was queued, sorry for the confusion. I'm talking about this bit[1] here.
-> > > It returns an __rcu-annotated pointer, forcing the user to keep and manage it.
-
-> > Please hold off on reviewing the patch and the "double SRCU" usage for now.
-> > I'll remove the second RCU in the next version, which should serve as a
-> > better starting point for a clean review.
-
-In case Paul or anyone else reading this wonders, the "revocable" code
-was reverted last Friday so that's why the links Bartosz posted are
-broken:
-
-	https://lore.kernel.org/lkml/20260204142849.22055-1-johan@kernel.org/
-
-Johan
+Bartosz
