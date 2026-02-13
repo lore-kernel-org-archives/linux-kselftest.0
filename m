@@ -1,129 +1,192 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDFD31985C;
-	Fri, 13 Feb 2026 08:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A544E313546;
+	Fri, 13 Feb 2026 08:23:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770970265; cv=none; b=OF9FY//o9/KonTZND/D1drg9WqADM7l4dRl/Jw2mE0W6UV5cy28EdAVyb36T2X2CmTLnFOENuY5kqOJGUAyZevV3/OPobmhOxqEb8q8CrgYItQWOPoEQjgH0E5mRuBoXDaIKy/B3n2gPHGVXr1+YD7vh5y2tZQBrTt0PhuQ7jUU=
+	t=1770970998; cv=none; b=ly191xJJstH24QjzUtrx9PRQSzZw5k91h7RmjOYtEfzBa/TzmV1DDcKb0/h+bOj4+sJHuUIiUvNm2e8+Si2LUOb3ACNug1miE0kWBpy8hAaMMdFjbd/RvjpI3I7DmtAOa2ljbktj0eOVEwDGzf8bIUwPbKisZ0MB3azT9NRQMgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770970265; c=relaxed/simple;
-	bh=ordfYWUZ3NZZnUjwMBrx0IEFVahF4xoRepQLRc515+I=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I9Z17Nfhdhwesao/k/IfWJHX4hHLcEmvFTdg+ptfOxap9WBJU2zOugjirElU+H25bXvAeF5ol+EGxAhj8JjpMIODNFmvDzzejUsCcydwvOIBEKVSa/IcFCetCTHNeLbJwO+JtRShFlRl1AeaPfdGj/nBm6X5Ow8bFisFfGkFJsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZxlezzd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770970998; c=relaxed/simple;
+	bh=RzMbGepYxG/eo4NLHxwWQzWRcqqBEMofawh3VLPpMNs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Q2gzM49nitY2Cc+Zz7+F0bh9AHvSudlM3sMeDtnFWGYih3xl4ScKewPBL/+hzuSWLmNdbcXmMfwTsCoNFnQDp1aKZ+NLkilubfBOsVltZKB3JMTGeyRoOv+OM0wZ4cCG4AJWm0+N+cDMt2aZWpinfakxxH5gVQ9gxkSoFoGJrt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LT7vMU7Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZxlezzd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D42CC116C6;
-	Fri, 13 Feb 2026 08:11:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LT7vMU7Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0DFC116C6;
+	Fri, 13 Feb 2026 08:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770970264;
-	bh=ordfYWUZ3NZZnUjwMBrx0IEFVahF4xoRepQLRc515+I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mZxlezzdNvjH1qxidU7XggLUEDoM/yxCPjvXxNzaIOeH0KjIQE/5lW4YU3ROt4Iep
-	 coZp9FKOS18HwqhltmhVnR/I9UZGq1d1JCklRjWG06sINuOo78HbXvpKBTOmfQKaRj
-	 eIjDXQ2oJhyMZqdJptSC4Y4u9YyBca084S3ZSzWFrtTdMxfR2B/qDhC1uuA2dXVQ9n
-	 n9DLmrIZW7SATj6MK/Oj8VFIrKD22ri1SXZY/se7YJNxuLAxjEQQFX8PHB4uB4VLpy
-	 REMfeXCdKsJx3Sf/DIgeJpUqz7/QsoFghkMcT6hpqqo7Yo1Eo8LmCodQxNDlQGH+rq
-	 pTf2EpwxVJD6g==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vqoGT-0000000Ap2s-3Twx;
-	Fri, 13 Feb 2026 08:11:01 +0000
-Date: Fri, 13 Feb 2026 08:11:01 +0000
-Message-ID: <86h5rlawru.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: kvm@vger.kernel.org,
-	alexandru.elisei@arm.com,
-	pbonzini@redhat.com,
-	corbet@lwn.net,
-	linux@armlinux.org.uk,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	oliver.upton@linux.dev,
-	mizhang@google.com,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	mark.rutland@arm.com,
-	shuah@kernel.org,
-	gankulkarni@os.amperecomputing.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 00/19] ARM64 PMU Partitioning
-In-Reply-To: <gsnt8qcxhdpn.fsf@coltonlewis-kvm.c.googlers.com>
-References: <86v7g5asp4.wl-maz@kernel.org>
-	<gsnt8qcxhdpn.fsf@coltonlewis-kvm.c.googlers.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1770970998;
+	bh=RzMbGepYxG/eo4NLHxwWQzWRcqqBEMofawh3VLPpMNs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=LT7vMU7YsVTaZoajUCQDDE5aJWBXaP6i+1SmZdMOP9LVMtLfIu6mUzTMGAgXe5JXl
+	 UHkuoz11oOnRHzZcWn/FtuMjbS+rjKmDACe6lrGDsapTt7qhguDy8ZaCx+0PS7Xjln
+	 WZXUD2v0fi0vYgLinS/UDRKFoG+Ka/QgAA2tvo1IkTB39ytAV2aA5KmKYd/s2aNsR5
+	 ojonFRSJiFpeMsDkMh5yAOGiyK3WzjfaWQ+XbGWx9+ig2ZPoF5LASEWe8KAGEMMYqo
+	 /qNgID0RLsbfyOiXUhbfDFYqtrCPeSCKn6aukalhJflVOGj42h5490vwKpPyMRFwPN
+	 VPHy36h65yLHQ==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Yuwen Chen <ywen.chen@foxmail.com>, ywen.chen@foxmail.com
+Cc: akpm@linux-foundation.org, andrealmeid@igalia.com,
+ bigeasy@linutronix.de, colin.i.king@gmail.com, dave@stgolabs.net,
+ dvhart@infradead.org, edliaw@google.com, justinstitt@google.com,
+ kernel-team@android.com, licayy@foxmail.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, luto@mit.edu, mingo@redhat.com,
+ morbo@google.com, nathan@kernel.org, ndesaulniers@google.com,
+ peterz@infradead.org, shuah@kernel.org, usama.anjum@collabora.com,
+ wakel@google.com
+Subject: Re: [PATCH v5 1/2] selftests/futex: implement the interfaces
+ related to threads
+In-Reply-To: <tencent_7C6BB90BA288915B621CD975E9FC368FF305@qq.com>
+References: <tencent_35CFB8AE9D4BE7917D95763D15B972638C0A@qq.com>
+ <tencent_7C6BB90BA288915B621CD975E9FC368FF305@qq.com>
+Date: Fri, 13 Feb 2026 09:23:14 +0100
+Message-ID: <87ldgx832l.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, mizhang@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Thu, 12 Feb 2026 21:08:36 +0000,
-Colton Lewis <coltonlewis@google.com> wrote:
-> 
-> Hey Marc, thanks for the review.
-> 
-> Marc Zyngier <maz@kernel.org> writes:
-> 
-> > On Mon, 09 Feb 2026 22:13:55 +0000,
-> > Colton Lewis <coltonlewis@google.com> wrote:
-> 
-> >> This series creates a new PMU scheme on ARM, a partitioned PMU that
-> >> allows reserving a subset of counters for more direct guest access,
-> >> significantly reducing overhead. More details, including performance
-> >> benchmarks, can be read in the v1 cover letter linked below.
-> 
-> >> An overview of what this series accomplishes was presented at KVM
-> >> Forum 2025. Slides [1] and video [2] are linked below.
-> 
-> >> IMPORTANT: This iteration does not yet implement the dynamic counter
-> >> reservation approach suggested by Will Deacon in January [3]. I am
-> >> working on it, but wanted to send this version first to keep momentum
-> >> going and ensure I've addressed all issues besides that.
-> 
-> > [...]
-> 
-> > As I have asked before, this is missing an example of how userspace is
-> > going to use this. Without it, it is impossible to correctly review
-> > this series.
-> 
-> > Please consider this as a blocker.
-> 
-> Understood. I remember you asking for a QEMU patch specifically.
+On Thu, Feb 05 2026 at 10:08, Yuwen Chen wrote:
+> There are timing issues in the use of threads in some unit test cases
+> for futex.
 
-No. *any* VMM. QEMU, kvmtool, crosvm, firecrackpoter, whichever you want.
+This is handwaving and contains zero technical information.
 
-> I had hoped that the use in the selftest was sufficient to show how to
-> use the uAPI.
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
 
-The selftests are absolutely pointless, like 99% of all selftests.
-They don't demonstrate how the userspace API works, now how
-configuring the PMU is ordered with the rest of the save/restore flow.
+> A potentially good solution is to check whether the thread
 
-> If not, I can send out an example QEMU patch to the QEMU ARM mailing
-> list.
+Either it's a solution or not. 
 
-Please do.
+> is in the sleep state after creating it.
 
-	M.
+> This patch adds a file named futex_thread.h, in which several thread
 
--- 
-Without deviation from the norm, progress is not possible.
+# git grep 'This patch' Documentation/process/
+
+> related functions are implemented to facilitate the solution of this
+> problem.
+>
+> Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
+
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
+
+> +#ifndef _FUTEX_THREAD_H
+> +#define _FUTEX_THREAD_H
+> +#include <stdio.h>
+> +#include <string.h>
+> +#include <errno.h>
+> +
+> +#define USEC_PER_SEC 1000000L
+
+#include <linux/time64.h>
+
+> +#define WAIT_THREAD_RETRIES 100
+> +#define WAIT_THREAD_CREATE_TIMEOUT_USECS (USEC_PER_SEC)
+> +
+> +struct futex_thread {
+> +	pthread_t		thread;
+> +	pthread_barrier_t	barrier;
+> +	pid_t			tid;
+> +	int			(*threadfn)(void *arg);
+> +	void			*arg;
+> +	int			retval;
+> +};
+> +
+> +static int __wait_for_thread(FILE *fp)
+> +{
+> +	char buf[80] = "";
+> +
+> +	for (int i = 0; i < WAIT_THREAD_RETRIES; i++) {
+> +		if (!fgets(buf, sizeof(buf), fp))
+> +			return -EIO;
+> +		if (!strncmp(buf, "futex", 5))
+> +			return 0;
+> +		usleep(WAIT_THREAD_CREATE_TIMEOUT_USECS / WAIT_THREAD_RETRIES);
+
+What's wrong with
+
+#define WAIT_THREAD_DELAY	(USEC_PER_SEC / WAIT_THREAD_RETRIES)
+...
+                usleep(WAIT_THREAD_DELAY);
+
+> +		rewind(fp);
+> +	}
+> +	return -ETIMEDOUT;
+> +}
+> +
+> +static void *__futex_thread_fn(void *arg)
+> +{
+> +	struct futex_thread *t = arg;
+> +
+> +	t->tid = gettid();
+> +	pthread_barrier_wait(&t->barrier);
+> +	t->retval = t->threadfn(t->arg);
+> +	return NULL;
+> +}
+> +
+> +/**
+> + * futex_wait_for_thread - Wait for the child thread to sleep in the futex context
+> + * @t: Thread handle.
+> + */
+> +static int futex_wait_for_thread(struct futex_thread *t)
+> +{
+> +	char fname[80];
+> +	FILE *fp;
+> +	int res;
+> +
+> +	snprintf(fname, sizeof(fname), "/proc/%d/wchan", t->tid);
+> +	fp = fopen(fname, "r");
+> +	if (!fp) {
+> +		usleep(USEC_PER_SEC / 10);
+
+What is this usleep for?
+
+> +		return -EIO;
+> +	}
+> +
+> +	res = __wait_for_thread(fp);
+> +	if (res == -EIO)
+> +		usleep(USEC_PER_SEC / 10);
+
+Again. What's this usleep for?
+
+If the file cannot be opened or fgets() fails then this fails hard.
+
+> +	fclose(fp);
+> +	return res;
+> +}
+> +
+> +/**
+> + * futex_thread_create - Create a new thread for testing.
+> + * @t:        The handle of the newly created thread.
+> + * @threadfn: The new thread starts execution by invoking threadfn
+> + * @arg:      The parameters passed to threadfn.
+> + */
+> +static int futex_thread_create(struct futex_thread *t, int (*threadfn)(void *), void *arg)
+> +{
+> +	int ret;
+> +
+> +	pthread_barrier_init(&t->barrier, NULL, 2);
+> +	t->tid = 0;
+> +	t->threadfn = threadfn;
+> +	t->arg = arg;
+> +
+> +	ret = pthread_create(&t->thread, NULL, __futex_thread_fn, t);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pthread_barrier_wait(&t->barrier);
+> +	return 0;
+
+Why aren't you waiting for the thread right here? There is absolutely no
+point in doing that at the call site of futex_thread_create().
+
+Thanks,
+
+        tglx
