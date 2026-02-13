@@ -1,211 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B788A1E32D6;
-	Fri, 13 Feb 2026 15:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45ECD362136
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 15:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770995944; cv=none; b=bTHnURCET5t4PEW+kbUb67hEUgFS1JhbrUaXe21f2ONydgJuvSoMYDENyKQ3wweg3cTVHU+pehj7wzXslrSpsRDSHT6X64CqxcacY+CjYkruM9Ry/yC2HfidQh4MgF2tBA43AHhGQZHhp8lxXMqXifiyUr8HTtSDE+YiH9nX5BQ=
+	t=1770996032; cv=none; b=jXbgX8YAFhnDo5fRkkO/VYDuu/gq9pJaSgVWfbHTQdekrWOU/3kf2ykru4KbWGi5RSBOwFMH+n1zaZwRAiQJI1LEkf95p/Cfrx/+r+hP+b5Xc3wxT6jICHRBMCC8R/ZBrUYiVO0Y31tv9cZduevCLBSMjN7XK1dv0s+EqOr9nsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770995944; c=relaxed/simple;
-	bh=eiw7P98b9Y19G0mrHqahDozgDK96ClCh7LOvVh3Wd/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DPuD0sNfGuMJNN6BddnVC81uCjfniYsxkr2OZGGWLcAPUDDTDD04GLmzUeArjTJMal5uaO2KTytpXzlWyhvmFF/MGMl0P5RtZILo3ruhNaQ8VVccVvpGaGyaz45wGXISwtU/EqgOCryPlBc3hBPGmVjUcUwlIvXK+4PSPOthrPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MnCx3SDc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770996032; c=relaxed/simple;
+	bh=Rttl4d9sGgG3Lhh7v6oLA+vPF2preIIqOyYcVD4IJkw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=fo9MCf7lGmm0YZGLmrjeYI+XVO65Y+qZbOl2jXSnNeDNNQdcmUGpbZHsl4p7jwjltjlWiKkROjGzx0aS3Qd5w2blz3VKzL3yYuIziznEfxxD9OgI+so09hDFSVDp3ca0/yHwJufWULyosabz2oGCYwPAUf351V37tdF1ydxIr5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p6yPUz0K; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MnCx3SDc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7CDC116C6;
-	Fri, 13 Feb 2026 15:19:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770995944;
-	bh=eiw7P98b9Y19G0mrHqahDozgDK96ClCh7LOvVh3Wd/4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MnCx3SDciUicyMSx7uOIbiKMefwb0JIgH3zrqfC6qFxFxnqqcBXWlN+DoROrCcjaP
-	 KfzTRgaMb5mWo9LnAMquz1SDZEiXyIDiQ7T/jGtyAIE0NZ1Z9XP5PSe8K49ZTrnvTN
-	 2E4xn3fG6heTFD9davXyPrRLiotB2fDEbaH1SRGzr0EnU9TiGiYOpAgGUz7RRPdrbq
-	 YXZM6QIjQzlNKlqXr8BwCzb29vx044mnJthpe+cwiiPTX6joUOPip6JluCU/Yuhm4j
-	 KrbFk/Oaga1oshLL8//hTJpbMjZOXyVC/yylilnEQk0pYzAbmbZejQS7ca0vf5X7cC
-	 EG7AvxYceljIQ==
-Date: Fri, 13 Feb 2026 16:19:01 +0100
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC bpf-next v2 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <aY9A5QiTKuu7Kypp@lore-desk>
-References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
- <20250925-bpf-xdp-meta-rxcksum-v2-1-6b3fe987ce91@kernel.org>
- <aNYUqdaIJV1cvFCb@mini-arch>
- <e03d6d69-73ea-46dc-b632-149ef5831f85@kernel.org>
- <aNcZdfCivLR2slFw@mini-arch>
- <aYtqKfv0F0l2-hgy@lore-desk>
- <aY0zd4Esewxa-8hw@mini-arch>
- <aY4FB_Gf31V-VYiF@lore-desk>
- <aY6zxmRcBSt4ju86@mini-arch>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p6yPUz0K"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2aaeafeadbcso12643725ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 07:20:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770996030; x=1771600830; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DXZgws1eGwFodcFEr+AzFaRA44BFbU5sqkzQqm7Vi/g=;
+        b=p6yPUz0KaPYL/rL6Wu8Isz56jaZb5L3X3EcnX+A3LHfm2WpjGdrbwTdaEh9bHv77sd
+         E34ItJt27w8LVnpfGwxUyVvTsZ2reAhyL8Ep0Ja+EusUl1LEPAy0DdYizWx5dKOCDhPW
+         3I/itbDOcHCoHjFA7/FG3Scg+Ej3QCoYzs0vGoY+rM6dlU1IAmNlnkfjs8LoTN/hiTQb
+         AH3RNF4dr62pPAbFH4HFCo90/AJRhvPrRG36b8x5B7v11zPnjmxBkKRfGryZIYkV7RrP
+         vxnUWyzDCChOf3+H1hceMD1U8PnlpBKEbz/51DvjDscS0K2OXtTR3vFhYWOcQ4lI582i
+         e1NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770996030; x=1771600830;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DXZgws1eGwFodcFEr+AzFaRA44BFbU5sqkzQqm7Vi/g=;
+        b=dRLOXc20N+vzBz8WtG7zFhXR72nLb5iPrlocIwleQS97Qr8X2TcUvA0+N809pYI+A2
+         jTHhi5ctXjYSlOp2voCCFaaAqVNuwZToKVw8s2R8Doi8PHoVIlTKwzHIBAPL+EAewUF1
+         TMx5236Gkg+NxY7Qzd9Z4cBIhrLR+VWgfiGjQ5jxhzno7IbBCgvb5a8ZziUh9wx7x8b2
+         Dp8g6EeDtuOMU20vlgdz6WqX4h4ltReTO/cNtYFOwW+4X3JwTpMIvpvT3mQrapYBb9Gd
+         LVGVBUpfv7gc/Ye0Q1PJPbWXPEtRZzgQyOSl8lv9hnwR45zcqsm1ZQOeh/TKPEAiZ0q6
+         nA/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWFUbpoY2XCymxdaWctg46Rf4/HzBICq87thkfOpNqF7PkzVYaMsGHRK/OGuOA0ybFtriZgO338S5oGa5W2BEg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz60VP1IzkkJXtgvnDUpgaEw2TndatUNXjkdb5K3BsuKu3m7Wc3
+	Mld+Uhc4f/vYPVg9EnGrv9Irqj9IgAREDz+ZPoxxru1kXWLwBeMUY4p45kBxxN+H7OlpibFYmrt
+	oboed0Q==
+X-Received: from pjvn19.prod.google.com ([2002:a17:90a:de93:b0:34c:c510:f186])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:486:b0:2bf:183c:ac86
+ with SMTP id adf61e73a8af0-3946c816108mr1883855637.25.1770996030340; Fri, 13
+ Feb 2026 07:20:30 -0800 (PST)
+Date: Fri, 13 Feb 2026 07:20:28 -0800
+In-Reply-To: <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9b/WtXUSgY2WwYsX"
-Content-Disposition: inline
-In-Reply-To: <aY6zxmRcBSt4ju86@mini-arch>
+Mime-Version: 1.0
+References: <20260212155905.3448571-1-jmattson@google.com> <20260212155905.3448571-5-jmattson@google.com>
+ <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
+Message-ID: <aY9BPKhzgxo4UuHB@google.com>
+Subject: Re: [PATCH v4 4/8] KVM: x86: nSVM: Redirect IA32_PAT accesses to
+ either hPAT or gPAT
+From: Sean Christopherson <seanjc@google.com>
+To: Yosry Ahmed <yosry.ahmed@linux.dev>
+Cc: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+
+Please trim your replies.  Scrolling through 100+ lines of quoted text to find
+the ~12 lines of context that actually matter is annoying.
+
+On Fri, Feb 13, 2026, Yosry Ahmed wrote:
+> On Thu, Feb 12, 2026 at 07:58:52AM -0800, Jim Mattson wrote:
+> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> > index a49c48459e0b..88549705133f 100644
+> > --- a/arch/x86/kvm/svm/svm.h
+> > +++ b/arch/x86/kvm/svm/svm.h
+> > @@ -607,6 +607,22 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
+> >  	return svm->nested.ctl.misc_ctl & SVM_MISC_ENABLE_NP;
+> >  }
+> >  
+> > +static inline void svm_set_gpat(struct vcpu_svm *svm, u64 data)
+> > +{
+> > +	svm->nested.save.g_pat = data;
+> > +	vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+> > +}
+> > +
+> > +static inline void svm_set_hpat(struct vcpu_svm *svm, u64 data)
+> > +{
+> > +	svm->vcpu.arch.pat = data;
+> > +	if (npt_enabled) {
+
+Peeking at the future patches, if we make this:
+
+	if (!npt_enabled)
+		return;
+
+then we can end up with this:
+
+	if (npt_enabled)
+		return;
+
+	vmcb_set_gpat(svm->vmcb01.ptr, data);
+	if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm))
+		vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+
+	if (svm->nested.legacy_gpat_semantics)
+		svm_set_l2_pat(svm, data);
+
+Because legacy_gpat_semantics can only be true if npt_enabled is true.  Without
+that guard, KVM _looks_ buggy because it's setting gpat in the VMCB even when
+it shouldn't exist.
+
+Actually, calling svm_set_l2_pat() when !is_guest_mode() is wrong too, no?  E.g.
+shouldn't we end up with this?
+
+  static inline void svm_set_l1_pat(struct vcpu_svm *svm, u64 data)
+  {
+	svm->vcpu.arch.pat = data;
+
+	if (npt_enabled)
+		return;
+
+	vmcb_set_gpat(svm->vmcb01.ptr, data);
+
+	if (is_guest_mode(&svm->vcpu)) {
+		if (svm->nested.legacy_gpat_semantics)
+			svm_set_l2_pat(svm, data);
+		else if (!nested_npt_enabled(svm))
+			vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+	}
+  }
 
 
---9b/WtXUSgY2WwYsX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > +		vmcb_set_gpat(svm->vmcb01.ptr, data);
+> > +		if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm))
+> > +			vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+> > +	}
+> > +}
+> 
+> Is it me, or is it a bit confusing that svm_set_gpat() sets L2's gPAT
+> not L1's, and svm_set_hpat() calls vmcb_set_gpat()?
 
-On Feb 12, Stanislav Fomichev wrote:
-> On 02/12, Lorenzo Bianconi wrote:
-> > > On 02/10, Lorenzo Bianconi wrote:
-> > > > > On 09/26, Jesper Dangaard Brouer wrote:
-> > > > > >=20
-> > > > > >=20
-> > > > > > On 26/09/2025 06.20, Stanislav Fomichev wrote:
-> > > > > > > On 09/25, Lorenzo Bianconi wrote:
-> > > > > > > > Introduce XDP RX checksum capability to XDP metadata specs.=
- XDP RX
-> > > > > > > > checksum will be use by devices capable of exposing receive=
- checksum
-> > > > > > > > result via bpf_xdp_metadata_rx_checksum().
-> > > > > > > > Moreover, introduce xmo_rx_checksum netdev callback in orde=
-r allow the
-> > > > > > > > eBPF program bounded to the device to retrieve the RX check=
-sum result
-> > > > > > > > computed by the hw NIC.
-> > > > > > > >=20
-> > > > > > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > > > > > > ---
-> > > > > > > >   Documentation/netlink/specs/netdev.yaml |  5 +++++
-> > > > > > > >   include/net/xdp.h                       | 14 ++++++++++++=
-++
-> > > > > > > >   net/core/xdp.c                          | 29 ++++++++++++=
-+++++++++++++++++
-> > > > > > > >   3 files changed, 48 insertions(+)
-> > > > > > > >=20
-> > > > > > > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Docu=
-mentation/netlink/specs/netdev.yaml
-> > > > > > > > index e00d3fa1c152d7165e9485d6d383a2cc9cef7cfd..00699bf4a7f=
-db67c6b9ee3548098b0c933fd39a4 100644
-> > > > > > > > --- a/Documentation/netlink/specs/netdev.yaml
-> > > > > > > > +++ b/Documentation/netlink/specs/netdev.yaml
-> > > > > > > > @@ -61,6 +61,11 @@ definitions:
-> > > > > > > >           doc: |
-> > > > > > > >             Device is capable of exposing receive packet VL=
-AN tag via
-> > > > > > > >             bpf_xdp_metadata_rx_vlan_tag().
-> > > > > > > > +      -
-> > > > > > > > +        name: checksum
-> > > > > > > > +        doc: |
-> > > > > > > > +          Device is capable of exposing receive checksum r=
-esult via
-> > > > > > > > +          bpf_xdp_metadata_rx_checksum().
-> > > > > > > >     -
-> > > > > > > >       type: flags
-> > > > > > > >       name: xsk-flags
-> > > > > > > > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > > > > > > > index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2=
-074b70618a9d4f32544d8b9a30b63 100644
-> > > > > > > > --- a/include/net/xdp.h
-> > > > > > > > +++ b/include/net/xdp.h
-> > > > > > > > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_a=
-ttachment_info *info,
-> > > > > > > >   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
-> > > > > > > >   			   bpf_xdp_metadata_rx_vlan_tag, \
-> > > > > > > >   			   xmo_rx_vlan_tag) \
-> > > > > > > > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
-> > > > > > > > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
-> > > > > > > > +			   bpf_xdp_metadata_rx_checksum, \
-> > > > > > > > +			   xmo_rx_checksum)
-> > > > > > > >   enum xdp_rx_metadata {
-> > > > > > > >   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
-> > > > > > > > @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
-> > > > > > > >   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SC=
-TP | XDP_RSS_L3_DYNHDR,
-> > > > > > > >   };
-> > > > > > > > +enum xdp_checksum {
-> > > > > > > > +	XDP_CHECKSUM_NONE		=3D CHECKSUM_NONE,
-> > > > > > > > +	XDP_CHECKSUM_UNNECESSARY	=3D CHECKSUM_UNNECESSARY,
-> > > > > > > > +	XDP_CHECKSUM_COMPLETE		=3D CHECKSUM_COMPLETE,
-> > > > > > > > +	XDP_CHECKSUM_PARTIAL		=3D CHECKSUM_PARTIAL,
-> > > > > > > > +};
-> > > > > > >=20
-> > > > > > > Btw, might be worth mentioning, awhile ago we had settled on =
-a smaller set of
-> > > > > > > exposed types:
-> > > > > > >=20
-> > > > > > > https://lore.kernel.org/netdev/20230811161509.19722-13-larysa=
-=2Ezaremba@intel.com/
-> > > > > > >=20
-> > > > > > > Maybe go through the previous postings and check if the argum=
-ents are
-> > > > > > > still relevant? (or explain why we want more checksum now)
-> > > > > >=20
-> > > > > > IHMO the linked proposal reduced the types too much.
-> > > > >=20
-> > > > > IIRC, PARTIAL was removed because it's mostly (or only) a TX feat=
-ure?
-> > > > > So no real need to expose it as an rx hint. And I think empty xdp=
-_csum_status
-> > > > > in that proposal might have indicated NONE?
-> > > >=20
-> > > > Sorry for the (very) late reply. According to [0] CHECKSUM_PARTIAL =
-can be used
-> > > > even on Rx side, right?
-> > >=20
-> > > So is this for virtio (which I don't think you need)? Or something el=
-se?
-> >=20
-> > I forgot to mention before CHECKSUM_PARTIAL is used for the veth use-ca=
-se
-> > when the packet is coming from the networking stack.
->=20
-> But what do you do with that partial state in BPF? I doubt you're
-> calculating/verifying it? Can we treat/export it as NONE/UNNECESSARY for =
-now?
+It's not just you.  I don't find it confusing per se, more that it's really
+subtle.
 
-actually I guess we can get rid of XDP_CHECKSUM_PARTIAL and threat it as
-XDP_CHECKSUM_NONE for the veth case. I will fix it in v2.
+> "gpat" means different things in the context of the VMCB or otherwise,
+> which kinda makes sense but is also not super clear. Maybe
+> svm_set_l1_gpat() and svm_set_l2_gpat() is more clear?
 
-Regards,
-Lorenzo
-
---9b/WtXUSgY2WwYsX
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaY9A5QAKCRA6cBh0uS2t
-rKh1AP91nCOFfR1O8ToCLIB00RY8q43IM5a8fg8TFjvQVtKNCwEAl1d1VGfd5rN+
-jesX7vIacybDs4i1SG/WmD3CH/hWeAQ=
-=yFYG
------END PGP SIGNATURE-----
-
---9b/WtXUSgY2WwYsX--
+I think just svm_set_l1_pat() and svm_set_l2_pat(), because gpat straight up
+doesn't exist when NPT is disabled/unsupported.
