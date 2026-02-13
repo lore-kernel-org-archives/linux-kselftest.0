@@ -1,324 +1,228 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C955B2222C5;
-	Fri, 13 Feb 2026 04:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770955450; cv=fail; b=J07lxk7urAWDw74Fpy+6gjjy0LfH/4swit2CyHZOvqysFggvz0nWxZooFs22AyXcWyAJ3S7uHzxPRdDixLWT8X8p7Ri47G6Hd+Tr4jycwJxt1U9AiA5qXH1CZSAfV7PybMY5nZMF0qEMeEvLFg1dE4QXX9KHBVjJKKSyGFc4/Bs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770955450; c=relaxed/simple;
-	bh=VZTHcDYPhfJ80IGH8SnP+/6pQSe9o6b+Qo73dvNtXMw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=iIAGkNq882RLY34NWwXSe4GUdlfDpdTQuZmxQPWZX9//XqzsxkI7iyT3OWkCEMNrzahthF07lfvu6L7nmh1riBJY2M2I65nk8KDWSR2O7LCSef9UWC6+uSwO7HE8KdF95Xia+2JsccI+luU/zKkb2iI8Uy10Zvt3Vrzb/zl3dIY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NY9ZgI9w; arc=fail smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3281D435F
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 05:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770959942; cv=none; b=N6qFfxGVaq2zBoca/dKmJ2hiW9csSZEKtlV/F9E8t7dmrXuyjDcJVooQ1zI1K84sAuWWVZVUO3sHF1MJ2V+vwWpboMUuLLh42kM3kz7CEHqvi7/5+dLyD4GOAJ1eCOYy+oz2WSa4oQtaVmfs4KzXOeQjyJWCt4aGASikcC2c9Ck=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770959942; c=relaxed/simple;
+	bh=C79fQuNmsoe1mDgNmWqWlrk1yFpf0tY09o68U+R5SG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RqfVvVY4DbC/eReXOA54NGYmwqwH+ZVVZi7ddI/sGu6Xsw7PI7m8mkZ5G+yf8Kuh4AczUOC5t2PLVO1xWO3FARcF9aqB2uyNwmfmbYjqL041b09Y+92KRPs70v5M3d+5/ecUuZJj8ziujdQK7fH9K+La2JWPXjqUKkF5VdaM+io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UrJjT6C1; arc=none smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NY9ZgI9w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770955447; x=1802491447;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=VZTHcDYPhfJ80IGH8SnP+/6pQSe9o6b+Qo73dvNtXMw=;
-  b=NY9ZgI9wYFJDTCAWaCbV8ik4cUc4Mb9rl28nMYO44j5L0y9nmlV1piGg
-   MXwo6EUHnuctBF4OoKYCkgnzg9j35gBdANz0BjmGMuAdeVCRqd0eIYnv2
-   3dY/JJQ2yF0TBD/dPUcF3pGIUbr8zJIqQ4GDo827HvWXkfb5WQQ+jRHMw
-   HXiVKpoZdXoiB472hD7+/Ka9mvZixntpb0vD3/8gOmyi8fZdL/YzKLzJz
-   bejP9yT2C/PaUx4VNMnkN0rQ8rpY/i49fTp/2S/D/5VDILW/r4rXRMl3u
-   SqyVLZnDbzvVBumSi1Eg0EsLoskokIxvX77mhpUhoLQZRIJ8BRCb9VwIo
-   w==;
-X-CSE-ConnectionGUID: qhPr7rxTQJSDqs5bsuvL6Q==
-X-CSE-MsgGUID: wha1dMORThKYQ1vDXG1wvg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="75983284"
-X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
-   d="scan'208";a="75983284"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 20:04:07 -0800
-X-CSE-ConnectionGUID: 4eEsJz6UTbCemR6oPj/R3Q==
-X-CSE-MsgGUID: 1Mbwd62yQR6h9Yudu9YCGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
-   d="scan'208";a="211549604"
-Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 20:04:07 -0800
-Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
- fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Thu, 12 Feb 2026 20:04:06 -0800
-Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
- FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Thu, 12 Feb 2026 20:04:06 -0800
-Received: from MW6PR02CU001.outbound.protection.outlook.com (52.101.48.54) by
- edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Thu, 12 Feb 2026 20:04:06 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dRxFhwFnk44CEpJXCd88Ag59zqBhNwK+hOP9TboNJ/qOIXTyQ0P220gBVdAbE0VD9fl0gpzplV3Gm+z2roe8iIl8WPmFN3p7IH5hUE7kpl/f/9suqJQpKRcN2uJuC30/9AkrQLJSjhZATeYJAoMY9iql4c+yHNYaCU0/QkyUXu6HsZMRRYu4ixzrvCdaETnhxiWbNUNfP4ojGoI9G1SaYW6gV9FO35EVuj3fNLvQPDF3Qa51p2aePGombDIMkSIiIMs/O5YRdw+Q6n4NC75+OFV5Yy1R7TeEDACGj8/zDZgV5eBS9GGP8lLFjt5gxI0kJeGysKF5jRmlZi7ZJtov4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UkQp7ZXf85LXXo1YHaV9Mu7JiMIoVfdAZJW+sv0K72s=;
- b=tUHNPVs++BajTFIu2OctW7VnaofbCkniXUhNcrFXucCe4xFPdHD8TSLb0GR+feTeUq4XDD34dunf2iYFGhavOzPr8FrBcSj/AkIE/+0grzwbuEX2l1jEzLC/ISYzUcirUJgAdKC1EIx7KzSC2TpQOrfn3Mrf50SbIWPXa/gxTVMbOLMgJQZVu+UCSytIDZgNNRKsaVLgZfr9Nfe5V62QbU5OufdkQIywVqFtq0J8i9IokPlj/x7jiaokGR8jVtpbJdNg2ouqDGUvXii8j+g0dGxohDryWerbTEhcafYiuOgOfpyXKfOJn8hkDPB851SbGxtDJMiajkr0ue1QMhGBow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from IA3PR11MB8986.namprd11.prod.outlook.com (2603:10b6:208:577::21)
- by MW5PR11MB5884.namprd11.prod.outlook.com (2603:10b6:303:1a0::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.13; Fri, 13 Feb
- 2026 04:04:03 +0000
-Received: from IA3PR11MB8986.namprd11.prod.outlook.com
- ([fe80::e6f0:6afb:6ef9:ab5c]) by IA3PR11MB8986.namprd11.prod.outlook.com
- ([fe80::e6f0:6afb:6ef9:ab5c%5]) with mapi id 15.20.9611.008; Fri, 13 Feb 2026
- 04:04:03 +0000
-From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
-To: "Zaremba, Larysa" <larysa.zaremba@intel.com>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>
-CC: Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir Oltean
-	<vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
-	<xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Nguyen,
- Anthony L" <anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
-	<przemyslaw.kitszel@intel.com>, Alexei Starovoitov <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
-	<sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
-	<kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
-	<jolsa@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, "Lobakin, Aleksander" <aleksander.lobakin@intel.com>,
-	"Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>, "Bastien Curutchet
- (eBPF Foundation)" <bastien.curutchet@bootlin.com>, "Vyavahare, Tushar"
-	<tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>,
-	=?iso-8859-1?Q?Ricardo_B=2E_Marli=E8re?= <rbm@suse.com>, Eelco Chaudron
-	<echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, "Toke
- Hoiland-Jorgensen" <toke@redhat.com>, "imx@lists.linux.dev"
-	<imx@lists.linux.dev>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Dragos
- Tatulea" <dtatulea@nvidia.com>
-Subject: RE: [PATCH bpf v2 6/9] i40e: use xdp.frame_sz as XDP RxQ info
- frag_size
-Thread-Topic: [PATCH bpf v2 6/9] i40e: use xdp.frame_sz as XDP RxQ info
- frag_size
-Thread-Index: AQHcnFJZA3I0xkFI6kqIOhLpxrQ8kLWAAcgQ
-Date: Fri, 13 Feb 2026 04:04:03 +0000
-Message-ID: <IA3PR11MB89867A766621F2C6CA2D2960E561A@IA3PR11MB8986.namprd11.prod.outlook.com>
-References: <20260212183328.1883148-2-larysa.zaremba@intel.com>
- <20260212183328.1883148-8-larysa.zaremba@intel.com>
-In-Reply-To: <20260212183328.1883148-8-larysa.zaremba@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA3PR11MB8986:EE_|MW5PR11MB5884:EE_
-x-ms-office365-filtering-correlation-id: afefc934-0e88-475c-5a8d-08de6ab4ece1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016|7053199007|38070700021;
-x-microsoft-antispam-message-info: =?iso-8859-1?Q?VM9VtROrZ5gAe7aYwEnsDaVPHsD++hfHZeNOt51qKbp8WSe9w/jyrhxp/A?=
- =?iso-8859-1?Q?apP8HdrAp3v+9wbHibXjdY5o93uRUnak0YX1Ln6KlzPn/EEOQuuAMpodkp?=
- =?iso-8859-1?Q?quII+gg48aSjQF2ydE/W4awFJTs7+ra+aBQxDIi8VvGVo0Vk6uCL+Hayuq?=
- =?iso-8859-1?Q?gpc3g/95eS4YyqDApZozFYAqZjnIPZvXGMSVLt1vScq/WbLuUHB0+RDUsn?=
- =?iso-8859-1?Q?qN7DQbFJwBH13rNaLM+ZuEVEXxLTbahqwsnRFuvovF8oihhpAklCg40nto?=
- =?iso-8859-1?Q?0CN1eBGrVupaZJ8OMcdj1eAbToP4LoHDdRpRj9/60lk6CTOtJB5zcxgdjG?=
- =?iso-8859-1?Q?GaW8dFuGWRseI/6nM0qPXnPKO5yqO7bT7k1X3pJqUEgmN2Sn1qRYpBYumr?=
- =?iso-8859-1?Q?KS3ajoGUe57BiD2p1mLbSvMSx1nZ4dZEiL/Gjyjx6CqquvEZwYGoKxr/ss?=
- =?iso-8859-1?Q?0+RvqIsIqvz8rioKz8ujJHgn2DtyBx+/BC4kcqAaH4av6SRo3O74hU4EAq?=
- =?iso-8859-1?Q?gw6SlEPih0zyVRimoHCfSeJcUieD09vZPX0e6SQi3tF084hLeHXQhagi2h?=
- =?iso-8859-1?Q?Pm3bBvpvYPSzWrZS5H7bWpklV2Oa/3LsxCz3WgUQwQsdlwHydmkuqEdFkM?=
- =?iso-8859-1?Q?aomGw7pV3Z404T80SMs0YvvqQJ+5cR6/C2SHksAycIzz9HhAGTd75YMMPy?=
- =?iso-8859-1?Q?DExo7n4d2SitH6Ydx4viZUa6zuzCrj5o2VMw1Krifl93JBwv+yxTq6tfn1?=
- =?iso-8859-1?Q?pHoDjHnsHGst4/F4i5t+5uK91pEpOHkhFrl0tdcM9IdtydkkSux8RlJLp5?=
- =?iso-8859-1?Q?hyQLyLbUaI5XQCPfWGyj9FsgaE1xxAtb9j8HQFEIWhsvaxkbqhkNS79qXt?=
- =?iso-8859-1?Q?w6fjMQUZ5os+7KU90FT0KmaKgKXQW5XAuEZW8YIfzeUvMMiq4B8JylllM/?=
- =?iso-8859-1?Q?Xt0TXCYFWCsyB3zggnyBX6/G4YRwg52fGsbXssYn29HQsY30TohQl5AU1v?=
- =?iso-8859-1?Q?zQTgH/k9n+kM468gkRAWSmmg4+7Bbb9RbnG1wTkyPD+YgtvDsTYHtfTt1n?=
- =?iso-8859-1?Q?T08dEAckmW2jyGDLzpUwgUrVkkt9cXWJoafUEPOXhmKFSBR/F/o+Y7Cd7l?=
- =?iso-8859-1?Q?s8fUgdd/JsqXTc7d0w1rVWFKBxolsNmKy4v3kzKouUARmKuL6XThLYvfIK?=
- =?iso-8859-1?Q?CzlGo8goERAkNcjpdbz0dtMAevF7jHeJnxTsH8/zGhduvEl6qJXY5MEzAE?=
- =?iso-8859-1?Q?OyGYFXp6oApoeUi9ZXN6yNzL7krz9IOdG4nzuYL0zv3ciErGwipRHL0Bkj?=
- =?iso-8859-1?Q?uS8KjFJcWn5vy/hEMbj3ReM8sHJ8adO7S1TDyTo3+xzZHy+k82OUqPMq46?=
- =?iso-8859-1?Q?m38xkvS2VZ+WNZl/1mEwI0i8j5CqV0IezATFMSEr/c0RtVGpRQ16I6DrYz?=
- =?iso-8859-1?Q?L8s9NteQqtN+pm/RiZ9uuCEBGyazW/cpA+KUq8V3f0xPiWIA+MrL2N7Zgm?=
- =?iso-8859-1?Q?JJiwazGo4r4p1yJsD5aUU5y97OrF5Kr+5B6vdA1CHG4Eq1WWKe0KyTyCij?=
- =?iso-8859-1?Q?3/PbYtpw1rU46BNTI2BNOWPZSqA2EMCQ7iANp+mfDoS11wKIzRbku4/olh?=
- =?iso-8859-1?Q?T1t/+tsaFIQJUb4P5PGupLwPJqgEkSSVUt?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB8986.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(7053199007)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?VSMi8WF6l68V4wQzuZP6b8m+8neCCNs5fIJm9hyCn9jwvYcosXLIpTvWBZ?=
- =?iso-8859-1?Q?nAx5XX74nAQ0PCofm5LES5dMhv/pKHMUYcp2qCmT/itY4tD1oq1LBAjyt/?=
- =?iso-8859-1?Q?DBXCFgHQkxw1e2r0yOThl6UmXvczxczcf7GZC3sjP4C2rOA7kxfEcYtyF9?=
- =?iso-8859-1?Q?Vi4VlbXB343jBddFPS8wWhz9b5w9tt00NAQGNwrXbHoF3l3wNIT/bEiJLg?=
- =?iso-8859-1?Q?PpBDNn+8W/vUyLDuRzoHgbeGCoPzJQGACo4NXRfGOiF7QBrJQqUHG858AA?=
- =?iso-8859-1?Q?3tyECgJFkDoKbiP8JHd1EXsI4LOwSigJpzbQCtiiyhNzTRA51slJjyX4/K?=
- =?iso-8859-1?Q?XwXdqNr+yRtTqR9BujeBEB5IM9ceZEB09AHjRXaQE0gzix3vIKJ5X01+xf?=
- =?iso-8859-1?Q?W9rR5ogWQyfV+o76xw7Kfe/G06H95yAJGqQbRC9TZJKCYE/kHJ3l+azxkv?=
- =?iso-8859-1?Q?XT2/J+InLqgsPxKzc463F/EZPp28NOPHUy0SMWf6SzisBONMzeonnnx/iY?=
- =?iso-8859-1?Q?HURlmbidtQrTv2KBbXTYzGr/WtXwC7VDMS1/+nLpDY67C1guIZsbQPExNy?=
- =?iso-8859-1?Q?H+m6RLgJPqaDNODz9E367+aiwnGYH4/nCVqnfZkc7XTz6zOIryNPu2vy31?=
- =?iso-8859-1?Q?xydlQpHowntsJei34L2k3xn7FcXIO5L906P0+M4k9UW5YBstj+62YVlCg/?=
- =?iso-8859-1?Q?DUK6qDcXmliDmI7A/l0uZSOnNwTxQTp90GpOURbuN5SMfWbx3UiEjBlh+7?=
- =?iso-8859-1?Q?65wIl53swPBiEYfFDd7O4ZOWTPcz7t2zI/vvJko7URVytKEXl1emd/xGbx?=
- =?iso-8859-1?Q?bJx5O2bRkIPtHV3r0uCqKfbExiLepnH5iaeqTXRBa1T2zTPzHtqZRC+96n?=
- =?iso-8859-1?Q?5lpH5J7eLpSYBn7zw4imxdkvZKzImauxGuT7OfxEAujIy1Wb2+HxJjSSKf?=
- =?iso-8859-1?Q?eOECFVMm6nsowBAwiGIc78FVpIinvsqxwlKte7TneKU3NrhMacRHwhFifQ?=
- =?iso-8859-1?Q?3xM3IyYjq1CPYvPzGly906cg/9gwSu/cHiZcuXVi9mPf7zOtVnM8719GOH?=
- =?iso-8859-1?Q?wCUAOCVd/hWqVwaK84058J0PZUTwZYrpdqEwHRq/LIW9uJqw+f2DnsZR1h?=
- =?iso-8859-1?Q?OW2JnFU+1g0haKqSkaBBIiCSpNV3SpqXGj24cJKe/u0Hjh5ZW3UJ+vklTY?=
- =?iso-8859-1?Q?RTEL58tV53p5FX5Jegg4omWKjzIUeQm6JYknK5NRgNJgK2h0sRUKc3nTRs?=
- =?iso-8859-1?Q?uW6CR8oLRSRewfxQ58is5VTMYs2+auNBcI9NjKn4SbkNvG61LHw2UGhfxK?=
- =?iso-8859-1?Q?qW1ZZKMnBo7hC3CcLDthX1JaUGHsWTs1K/wqfSIfL/Y7WdD188iSd6JeO5?=
- =?iso-8859-1?Q?ZrtHih4ZShu2MN0oyn0cNGCnJ6VVqPiwVjv9Bcb1hob8vi4BzbbAjuPdcm?=
- =?iso-8859-1?Q?XTSq3CLxlg3mWG0kQf/IV+lNd1mrhIA3AnfRzlGid2HMgc0gYfLfwu1Bsw?=
- =?iso-8859-1?Q?8hRC2Bm3YSEBQhmx9mZTTc9wWO7wgcm8AB7Mfy7irjQEnU0ktclBMaCzFd?=
- =?iso-8859-1?Q?BlzApoRBsCO0LVcHOkSnMjChD9tqJO/eME2NiU3usgprV4GfS3DzOOarFn?=
- =?iso-8859-1?Q?bdBLRMfmYy3uvE2LWLuCOqHrp4+MT/ZL+yYommufJI7skv5W7GPugFrksD?=
- =?iso-8859-1?Q?hTMJv353LWw/IWwPh9ozl3DbqaAiF2S/zquyc4I8TtZF1wOkaszHWNNvpp?=
- =?iso-8859-1?Q?DqmSdynnoLeT8VLhYx0pW2apS3jngE4UokTZGW/wYAvX3PrlnScPzMG3U1?=
- =?iso-8859-1?Q?48X8hcuRFg=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UrJjT6C1"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2b4520f6b32so680612eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Feb 2026 21:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770959940; x=1771564740; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JgXT3I4sUDI0oaN+QbxtrFi8HM7j7HM1bT+EMzWKpeQ=;
+        b=UrJjT6C1B3pEiN9bMSkMMOb7eWvdOhOg/cJ0l4qu/fn4PN2OmYw/qNSCXLrBIWUuRu
+         OBOExj9bYJ2GpCtCBRWIVszQulmr3GJfqRLGS6soRjjlqEEBcyvxSpokSSNLblm3W+Tc
+         NIojup5O/8l6xc79IMEkNktyxX04OSpPPIAwFw2905ijz3m8bJHwju+8uPTowZ7aZgkt
+         3ukfODrtj1lmPk00L6Ad6Z/a3HqjqDIoza1GCJusU5w7g2ipzgVtRV87+z9/Own3fJrT
+         EAXSsDS+5hqHxL4pUuErdi+UY4XvDSZYTvlPkino5PW/Z1T9aftjAPI5EwIbuxp7kao/
+         pnDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770959940; x=1771564740;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JgXT3I4sUDI0oaN+QbxtrFi8HM7j7HM1bT+EMzWKpeQ=;
+        b=LfYVSISo6ioUQHyYVlYY/JnlK/y4UbkzuWqYJQOyeQAa1a9QIjc59zGR/b6nXnGyUx
+         mr8zf9b7e5xQXe9cz9LIp7Qy+1zKwGHGV5JDS3UccxI1gpZTI9BxTCmEe+hwha4pk5w1
+         iCRTZc9XCfl+dEaJd+3cjPwPnUUQpctwcMchvL4iGQBIcNfowVAmWBDLcC/0f1cFJ77N
+         E0xh8Hou0GrBX/aH0lmM51GnY+vrKpXIlJ//ZpCT6qUy3iDlgOhZSD3tWBCmpzWDs2NV
+         7bd8Rxyp31futg7KR9Vn4Sfc5+yMZttJyBG6draCvEOhziHVBWroL0QL0t6OhtNv/cYc
+         QZuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWp59/eSm5FAnE1kP5+qSWGXrMcVtTTghQiugnPburPveonR9K1FjQ4sfnwq9y63nrHUxFMvdENy994/0sKSCA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFNe/GPUCMsyiCtTKHIZdsdr8xdmqaDs65uWxNOT+GtVrDTQmt
+	Gc+3cFIR/rRs9Wfo4CshM2YAVeMbC0FnG+m3BeCg5WAVuUXKxhbMzk8=
+X-Gm-Gg: AZuq6aJM1hGkUB5HOLdQHTliuwheoqrlcY1K9ePahfxs2pi/NqM3isKO2PptXfMlLHs
+	t1Fu8472WIwpmNjMRZ/n52rUiNUVoGV0FJy/ogBuiNxa7W5SrKxvShycXGxjMupRP95C5iYLKXK
+	xwwd3p5beFxVyw1GrhfBaT2EV1KY3fUQfnXqJYOnQHk7yzjQyA+UzLF3ssEwq1gh2YJi9iyhe+0
+	TDmjquArGogR5Q7yAlpkhxkZLcO90mKYZ2cd8hxXc0nS+FDaynWNoI7+IZswcTcxsw3Z1DbRPIb
+	D0YUZE0Yf38to/sJuYT8cSrPb7ww50OeQzC4UnidIrWE2G9wWQssOR2ucRvIWm91J0EE82MQ5Is
+	F5z37ez73rgiyZzAgVQNo4/8r/ONlTUV+HF9o4hAOJghQQ+demV54uyReDXjWMUIjoFd0ajYJ66
+	XhnhuAhxUc0fDAmjgzBJUj8ccLNJwHnGPfpS1/S9KzWbEuTBi7h9oPBPxq7nn5jVAv3WxvRAkTT
+	qHw5Ha5PUY8Px1vog==
+X-Received: by 2002:a05:7301:7214:b0:2b7:ee0e:e9bf with SMTP id 5a478bee46e88-2babc4558femr275595eec.27.1770959939783;
+        Thu, 12 Feb 2026 21:18:59 -0800 (PST)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcd0614sm5463343eec.22.2026.02.12.21.18.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Feb 2026 21:18:59 -0800 (PST)
+Date: Thu, 12 Feb 2026 21:18:58 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aY60QrE6DpXVecze@mini-arch>
+References: <20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org>
+ <20260210-bpf-xdp-meta-rxcksum-v1-1-e5d55caa0541@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB8986.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: afefc934-0e88-475c-5a8d-08de6ab4ece1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2026 04:04:03.3399
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7/3jMLRIl/Yaz5gEWlE/qvg9qVq8BV+zbscJGA8dDrkZRzxBb4OGSlahfbsVIMwyYhuO+hsnVl7gYgASv9m6Z0pqmJ4uZR3NfCSjr8UR6w0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5884
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260210-bpf-xdp-meta-rxcksum-v1-1-e5d55caa0541@kernel.org>
 
-
-
-> -----Original Message-----
-> From: Zaremba, Larysa <larysa.zaremba@intel.com>
-> Sent: Thursday, February 12, 2026 7:33 PM
-> To: bpf@vger.kernel.org
-> Cc: Zaremba, Larysa <larysa.zaremba@intel.com>; Claudiu Manoil
-> <claudiu.manoil@nxp.com>; Vladimir Oltean <vladimir.oltean@nxp.com>;
-> Wei Fang <wei.fang@nxp.com>; Clark Wang <xiaoning.wang@nxp.com>;
-> Andrew Lunn <andrew+netdev@lunn.ch>; David S. Miller
-> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub
-> Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Nguyen,
-> Anthony L <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
-> <przemyslaw.kitszel@intel.com>; Alexei Starovoitov <ast@kernel.org>;
-> Daniel Borkmann <daniel@iogearbox.net>; Jesper Dangaard Brouer
-> <hawk@kernel.org>; John Fastabend <john.fastabend@gmail.com>;
-> Stanislav Fomichev <sdf@fomichev.me>; Andrii Nakryiko
-> <andrii@kernel.org>; Martin KaFai Lau <martin.lau@linux.dev>; Eduard
-> Zingerman <eddyz87@gmail.com>; Song Liu <song@kernel.org>; Yonghong
-> Song <yonghong.song@linux.dev>; KP Singh <kpsingh@kernel.org>; Hao
-> Luo <haoluo@google.com>; Jiri Olsa <jolsa@kernel.org>; Simon Horman
-> <horms@kernel.org>; Shuah Khan <shuah@kernel.org>; Lobakin,
-> Aleksander <aleksander.lobakin@intel.com>; Fijalkowski, Maciej
-> <maciej.fijalkowski@intel.com>; Bastien Curutchet (eBPF Foundation)
-> <bastien.curutchet@bootlin.com>; Vyavahare, Tushar
-> <tushar.vyavahare@intel.com>; Jason Xing <kernelxing@tencent.com>;
-> Ricardo B. Marli=E8re <rbm@suse.com>; Eelco Chaudron
-> <echaudro@redhat.com>; Lorenzo Bianconi <lorenzo@kernel.org>; Toke
-> Hoiland-Jorgensen <toke@redhat.com>; imx@lists.linux.dev;
-> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; intel-wired-
-> lan@lists.osuosl.org; linux-kselftest@vger.kernel.org; Loktionov,
-> Aleksandr <aleksandr.loktionov@intel.com>; Dragos Tatulea
-> <dtatulea@nvidia.com>
-> Subject: [PATCH bpf v2 6/9] i40e: use xdp.frame_sz as XDP RxQ info
-> frag_size
->=20
-> The only user of frag_size field in XDP RxQ info is
-> bpf_xdp_frags_increase_tail(). It clearly expects whole buffer size
-> instead of DMA write size. Different assumptions in i40e driver
-> configuration lead to negative tailroom.
->=20
-> Set frag_size to the same value as frame_sz in shared pages mode,
-> use new helper to set frag_size when AF_XDP ZC is active.
->=20
-> Fixes: a045d2f2d03d ("i40e: set xdp_rxq_info::frag_size")
-> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+On 02/10, Lorenzo Bianconi wrote:
+> Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> checksum will be use by devices capable of exposing receive checksum
+> result via bpf_xdp_metadata_rx_checksum().
+> Moreover, introduce xmo_rx_checksum netdev callback in order allow the
+> eBPF program bounded to the device to retrieve the RX checksum result
+> computed by the hw NIC.
+> 
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 > ---
->  drivers/net/ethernet/intel/i40e/i40e_main.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c
-> b/drivers/net/ethernet/intel/i40e/i40e_main.c
-> index eaa5b65e6daf..f91157774f1d 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-> @@ -3563,6 +3563,7 @@ static int i40e_configure_rx_ring(struct
-> i40e_ring *ring)
->  	u16 pf_q =3D vsi->base_queue + ring->queue_index;
->  	struct i40e_hw *hw =3D &vsi->back->hw;
->  	struct i40e_hmc_obj_rxq rx_ctx;
-> +	u32 xdp_frame_sz =3D 0;
->  	int err =3D 0;
->  	bool ok;
->=20
-https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/net/ethernet/inte=
-l/i40e/i40e_main.c#L3577
-All VSIs except main will be skipped, so xdp_init_buff() will be called wit=
-h the default xdp_frame_sz =3D 0;
-Is it ok?
+>  Documentation/netlink/specs/netdev.yaml |  5 +++++
+>  include/net/xdp.h                       | 14 ++++++++++++++
+>  include/uapi/linux/netdev.h             |  3 +++
+>  net/core/xdp.c                          | 29 +++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/netdev.h       |  3 +++
+>  5 files changed, 54 insertions(+)
+> 
+> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+> index 596c306ce52b8303b20680ff0cd34d4fd9db0e48..58eda634668a07860447a65d9fc2284839af6244 100644
+> --- a/Documentation/netlink/specs/netdev.yaml
+> +++ b/Documentation/netlink/specs/netdev.yaml
+> @@ -61,6 +61,11 @@ definitions:
+>          doc: |
+>            Device is capable of exposing receive packet VLAN tag via
+>            bpf_xdp_metadata_rx_vlan_tag().
+> +      -
+> +        name: checksum
+> +        doc: |
+> +          Device is capable of exposing receive checksum result via
+> +          bpf_xdp_metadata_rx_checksum().
+>    -
+>      type: flags
+>      name: xsk-flags
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2074b70618a9d4f32544d8b9a30b63 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+>  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+>  			   bpf_xdp_metadata_rx_vlan_tag, \
+>  			   xmo_rx_vlan_tag) \
+> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> +			   bpf_xdp_metadata_rx_checksum, \
+> +			   xmo_rx_checksum)
+>  
+>  enum xdp_rx_metadata {
+>  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
+>  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
+>  };
+>  
+> +enum xdp_checksum {
+> +	XDP_CHECKSUM_NONE		= CHECKSUM_NONE,
+> +	XDP_CHECKSUM_UNNECESSARY	= CHECKSUM_UNNECESSARY,
+> +	XDP_CHECKSUM_COMPLETE		= CHECKSUM_COMPLETE,
+> +	XDP_CHECKSUM_PARTIAL		= CHECKSUM_PARTIAL,
+> +};
+> +
+>  struct xdp_metadata_ops {
+>  	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
+>  	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
+>  			       enum xdp_rss_hash_type *rss_type);
+>  	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16 *vlan_proto,
+>  				   u16 *vlan_tci);
+> +	int	(*xmo_rx_checksum)(const struct xdp_md *ctx,
+> +				   enum xdp_checksum *ip_summed,
+> +				   u32 *cksum_meta);
+>  };
+>  
+>  #ifdef CONFIG_NET
+> diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+> index e0b579a1df4f2126acec6c44c299e97bbbefe640..d20da430cfd57bc26b5ea2f406c27b48d8a81693 100644
+> --- a/include/uapi/linux/netdev.h
+> +++ b/include/uapi/linux/netdev.h
+> @@ -47,11 +47,14 @@ enum netdev_xdp_act {
+>   *   hash via bpf_xdp_metadata_rx_hash().
+>   * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing receive
+>   *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
+> + * @NETDEV_XDP_RX_METADATA_CHECKSUM: Device is capable of exposing receive
+> + *   checksum result via bpf_xdp_metadata_rx_checksum().
+>   */
+>  enum netdev_xdp_rx_metadata {
+>  	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
+>  	NETDEV_XDP_RX_METADATA_HASH = 2,
+>  	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
+> +	NETDEV_XDP_RX_METADATA_CHECKSUM = 8,
+>  };
+>  
+>  /**
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index fee6d080ee85fc2d278bfdddfd1365633058ec06..e51346ad3031f28d11c11f8205da6cd954da82de 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -961,6 +961,35 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
+>  	return -EOPNOTSUPP;
+>  }
+>  
+> +/**
+> + * bpf_xdp_metadata_rx_checksum - Read XDP frame RX checksum.
+> + * @ctx: XDP context pointer.
+> + * @ip_summed: Return value pointer indicating checksum result.
+> + * @cksum_meta: Return value pointer indicating checksum result metadata.
+> + *
+> + * In case of success, ``ip_summed`` is set to the RX checksum result. Possible
+> + * values are:
+> + * ``XDP_CHECKSUM_NONE``
+> + * ``XDP_CHECKSUM_UNNECESSARY``
+> + * ``XDP_CHECKSUM_COMPLETE``
+> + * ``XDP_CHECKSUM_PARTIAL``
+> + *
+> + * In case of success, ``cksum_meta`` contains the hw computed checksum value
+> + * for ``XDP_CHECKSUM_COMPLETE`` or the ``csum_level`` for
+> + * ``XDP_CHECKSUM_UNNECESSARY``. It is set to 0 for ``XDP_CHECKSUM_NONE`` and
+> + * ``XDP_CHECKSUM_PARTIAL``.
+> + *
+> + * Return:
+> + * * Returns 0 on success or ``-errno`` on error.
+> + * * ``-EOPNOTSUPP`` : means device driver does not implement kfunc
+> + * * ``-ENODATA``    : means no RX-timestamp available for this frame
+> + */
+> +__bpf_kfunc int bpf_xdp_metadata_rx_checksum(const struct xdp_md *ctx,
+> +					     u8 *ip_summed, u32 *cksum_meta)
+> +{
 
-> @@ -3579,11 +3580,12 @@ static int i40e_configure_rx_ring(struct
-> i40e_ring *ring)
->=20
->  	ring->xsk_pool =3D i40e_xsk_pool(ring);
->  	if (ring->xsk_pool) {
-> +		xdp_frame_sz =3D xsk_pool_get_rx_frag_step(ring-
-> >xsk_pool);
->  		ring->rx_buf_len =3D xsk_pool_get_rx_frame_size(ring-
-> >xsk_pool);
->  		err =3D __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
->  					 ring->queue_index,
->  					 ring->q_vector->napi.napi_id,
-> -					 ring->rx_buf_len);
-> +					 xdp_frame_sz);
->  		if (err)
->  			return err;
->  		err =3D xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
-> @@ -3596,10 +3598,11 @@ static int i40e_configure_rx_ring(struct
-> i40e_ring *ring)
->  			 ring->queue_index);
->=20
->  	} else {
-> +		xdp_frame_sz =3D i40e_rx_pg_size(ring) / 2;
->  		err =3D __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
->  					 ring->queue_index,
->  					 ring->q_vector->napi.napi_id,
-> -					 ring->rx_buf_len);
-> +					 xdp_frame_sz);
->  		if (err)
->  			return err;
->  		err =3D xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
-> @@ -3610,7 +3613,7 @@ static int i40e_configure_rx_ring(struct
-> i40e_ring *ring)
->  	}
->=20
->  skip:
-> -	xdp_init_buff(&ring->xdp, i40e_rx_pg_size(ring) / 2, &ring-
-> >xdp_rxq);
-> +	xdp_init_buff(&ring->xdp, xdp_frame_sz, &ring->xdp_rxq);
->=20
->  	rx_ctx.dbuff =3D DIV_ROUND_UP(ring->rx_buf_len,
->  				    BIT_ULL(I40E_RXQ_CTX_DBUFF_SHIFT));
-> --
-> 2.52.0
-
+Any reason not to do enum xdp_checksum *ip_summed here as well?
