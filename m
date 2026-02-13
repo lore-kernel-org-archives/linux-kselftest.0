@@ -1,162 +1,202 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56676266B72
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 22:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771021146; cv=none; b=ZLt59l3cDgjshQLnBaWR0MBUTvGkbEOVJX7JrCll+XttkPbaKUVfHHMal2F7X/TA3JUlcax43baU/b/DnFsRPUTYCogDePFEOOYd316rRH3cTZY29uiwsSS2lYjbB4H3aZN7lddVNqqM2XVm9kY8gytNMct96iMdQPl0+ZBMEu8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771021146; c=relaxed/simple;
-	bh=4SfVeVyOopNUEYpALsPtH/J4tdgq8bQHBnqCt9tGo8k=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=l2HJonhdZpJh7Bp6YOhp20RTA3nISyNsti/YHbsvHmCGQgfCFj6QqKO3rcy9UEqWR5UeAIALTaZsUKpCXlYE8ZGtQvCHIZ6Yrmb0vIsd9GXlxMGBG9XgQ+24exFSE6PuQPDzVnLAhEdfVzFWDGVrL3fAM3WX2T9qAmo3+cUqDV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lp1JxfpW; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A66727B34C
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 23:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771025490; cv=pass; b=imIlt3+Pccp174vhSwC2GwsLynxsZUoKl+ngmDfob4RyIQKCj0xGV7NPBc3q3MspM4eO7JH95hOucE8BlR+D/6OwB8giAioaa1ndNmgA58+OCF7KzKilP1fnUALQbTJtpu7w0UsElIV8A04VFxn9Vz9EooufMtxTQL2sNE2cZAI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771025490; c=relaxed/simple;
+	bh=j7413bRwBOf97LMXeMJ+51aV4XcmAmSqRqIQ7niCkkk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SllbsFB+BTJmAxj+UkboPL6Gqp+nyiT6EvEkTvYhDAoFnnlCspOjyv8HXb/4NHuZ0PBJ+VBoECf6vjYTxT0jE3dsRGAofzn305QsEQrPx3Cl6aCtTCABdzopH/IZ5082yj9ybp1ZbRHaaELJB0mBi8IKsIo59PUweeFb/jTcJt8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lMnucXBH; arc=pass smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lp1JxfpW"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2ad147cdf07so4364525ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 14:19:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lMnucXBH"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-65821afe680so1428a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 15:31:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771025488; cv=none;
+        d=google.com; s=arc-20240605;
+        b=k0s3L431ItdxUNr5mgGxyooxIJVEAI15e+zdDYiRNCSn9EcRckWadzchXJsxSZhKzh
+         PTby3VlpoRHHiqKh0fWvvjagxWWNLDg8oBlgZdxVeWtY5K6ewtEHNyiriFMAojAvXywG
+         QrNF45AHbyF3YeoycD0Ufr06SMF+7gsrMQi9EBzl+N0rwP+6f7z5v1zZkIzN14DCVSd/
+         Rjm38CVfcr0IwdoAvCXxr7Dvwu/+9FUqdouh9Cikdg115hCAu7/mC+IznaUkEGDkGVtj
+         JXoYbBAG5OeSbRm9ZrJLlS9sHYZlXzAdYzyHjkhgxr6rxRWWOFYTYXrZqiiN0+QGN1x4
+         h6/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7st+ny0+WsScz+aFPKKNW8ny3dY5RaMJM5tFlYQQMR8=;
+        fh=BbPmL8fcuZmJ2+UzMcmfmss8pUfC1dIOP317TySBrxE=;
+        b=TEucc3PfvZaTdStD2KxaN6OaWWNSJ9Fa0/ZGup2HahBemrTgFzpFEVIIeS/p6Q6c1X
+         x57ARyQ2ePNcdlwYTLLEvRm1CyxzYChbYTBL0TE/vP53GwAfqHez0Qottzi1UfcPFRwV
+         ZsWeN3OU6VssU1TJibxLhRZE/fp+FcWsS1/fSjjB6U0JGnF9fi/NU4jCBgQEPC5KiKcr
+         3cur2Ik6tg4xXzC2HHo6wf26IDvS5HRWOwxuFE0FH2UgGTCiYtC7frMChPpLAl116+lC
+         Xn5t/AYEu0I073Yva8Tto44phdwqvS7pTLLix9bmohAg60Mpr9X35EvehrjqI2a4oLyz
+         mXuw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771021145; x=1771625945; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zjKURXqU+Zr0HcMfUxCtx2SVToxbcyc0zFBF1VQb9Ag=;
-        b=lp1JxfpWhfKo64z3xcrr73d7ItxzQ3cbS4g+iRbelY9/K5W/lqlEuLHKzRPoh1kwXC
-         m68lShZZqkRFoNhqg0eODPykfNVZhSZaRUac+U22U74avuLy9LwNpiLDMR5gkdfKeXuo
-         qBs0Eo1M7+7WNKiZbvCp9CTeBopKn7T9x+VYBMG8h79nuUoLZlKJk/zNR+3A7Ndfp7Ah
-         R5OzxMVpjhyUxozDLYOLJsEBoyeXzoa3dvP/SLKD2Ne9XdVjY/sWRPzPjiktI4f/Incn
-         1reJvTBad01CcKJeUMhfobFEiIA2YSz+FGj0mud9ZfDJHC11tTF9wXPriWPsZmQd+qiC
-         ez2w==
+        d=google.com; s=20230601; t=1771025488; x=1771630288; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7st+ny0+WsScz+aFPKKNW8ny3dY5RaMJM5tFlYQQMR8=;
+        b=lMnucXBHR6KHDUrlZ4KXcm8p45k6mWpK4hmG1CyCFEKIYpn0js5M9gYLWAnuDrC/K4
+         dUuVgM0HOBJ1RQK+gk5WSunauz3d3xyms/y1xPKnpA7MPM2o6iIS/QvZdeO5dSeHO+YZ
+         CcsP08ilIQ5dv5UqC82tmrZC+Y4SsZJjewA9kIZAWJ19LqQLmPYQXxolWUgfGrt1dFEg
+         kkrVUJlvJdnAbuOYT/5hv7TA8rv2kake4sHfPiBjKW/Dkso3LaY2tCmDpZjeJCk/PLuA
+         rVnNbpCg8ZA2pq9ZnstVD3GcwnA+I2tYEkB2b2AZMTX7VG5zFP6044/mD/AhBqW99JjA
+         62Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771021145; x=1771625945;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zjKURXqU+Zr0HcMfUxCtx2SVToxbcyc0zFBF1VQb9Ag=;
-        b=GKJ0w+FPf4LQDAK/8t0n7H80IVlnze8SNnE2h1WHeZQov6eNOK9alPZGPhfsGpJJ0M
-         r7glFYNjhr7ggGudXw8AxHGq5TP2kFM0NDRhiXoS9UGnGRNg07HwO+ba2i7WvhUpglJc
-         FEc0a9wvYOn8S6Nj6Ya8vrXVPhUOK4xdtuIQWJ4IkH2CsjCig9MhnLK22urpL7sF6cId
-         17Zvgme0AgPL0QddLfxvdr2yUWqAeAeJQpwYt9w/36b2583HVu1gVKm1knBGYUASL8qe
-         A9cCOyBweDVCh0KVefh9YPiLGvIa+hMINxP/Dy8ID9IjHZn8m7owJOzbHYiqePo2EqV1
-         IXog==
-X-Forwarded-Encrypted: i=1; AJvYcCXGEs0r8iNL6KrQ8X4bYrpMP0nCRwTOoWhFCEttnOD5tKl50HjU4HpRcaRBIPEq/ZjZWEvi88wdwWN6R6byBOU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxxk1RyzPJGa9wU/fne3/b8bL8PhXzBaaHfAyfehyoB427bpfSW
-	nCHFWfuX6h10X939O2jhhZQAbkiMh0BYLqux3TKU75+11745NMbuQds8+FosMWvwiTGlXG2dlls
-	flxyFoA==
-X-Received: from pjbsx13.prod.google.com ([2002:a17:90b:2ccd:b0:354:c63c:5ed6])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1c2:b0:2a7:9ded:9b4a
- with SMTP id d9443c01a7336-2ad174dcf04mr9334615ad.36.1771021144404; Fri, 13
- Feb 2026 14:19:04 -0800 (PST)
-Date: Fri, 13 Feb 2026 14:19:02 -0800
-In-Reply-To: <CALMp9eR4ayj_gwsDQVH8pQvzqgEYVB6ExWp3aFgJXRWikLEikw@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1771025488; x=1771630288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7st+ny0+WsScz+aFPKKNW8ny3dY5RaMJM5tFlYQQMR8=;
+        b=bt1olq4XX2i9ERv13Fa808mcvGYaR+GJ/Ip9BY+bWzszTUo1yhasM/IkawOKOws06V
+         yR3tEe9g4aTw83fxjaKOayRFtAAuQXmwhSgUleFbssC3QkKR7PKoPygVRmW53UTmT60r
+         Ff9hT4QjRNdNS83NYPmoFYFpePqjplNgvH5KeKFEWVDdXStBQ++TmcGptAebuhL478JS
+         JDdRLLTFL6oZBX9p7aJI3ptRwX7cX+6eS4R4k6a5/abbzu1Me6eQLhaD7S+GFkQhhMvB
+         uU99L8fcy6CY57zwOY2wTBzmEEh7AEO+lEaG+1h9fHeYe4q+kxRx49moCT5Z+KfO3V3X
+         vz/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUVMwxcbO6WOgdmoUqFaANaXVLySpnFqQx2++IihZiBwc0jIGUXAP6yvxn3g8qeGbYbxrj2ks6TiGVvUe1bQLU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/2vkByU/uwy9ctzQ6Q0xzZPs5So4E2pysFh6WvEiYzVS0hjo3
+	cgnjHJEyy3Jt3mFQ7xKhsCAbDASOq2PP3RnKoszUAf9hzVlGqSAGcO+ckloadxcXxUa7MkBCv8C
+	ibT3Qb1qp17HsYoNoej88BiKtW+S6TB3ruKz4sTwfpI2P0HcY9hkskvlf
+X-Gm-Gg: AZuq6aLP7qbfHJc8oflWHIMagydBGHUbC1cxd2jk3K16/ulpt5DzTuvauYxizNbSCTo
+	foGzfuvbERcyBMgScSpeM5XugQskYMVpwlrGx9kYlvGgbQmP8LX8YihIw+XD8dmIW4kMWEtrEW1
+	CTf4zcVZzeCFz+sBTPYznhjFbJ7OQ7A0ONJ9NoPg+bavMAG/156mLEY7ujmoy5MjhjM2bdiZtlR
+	wwSXn6YorIz0ugF7/Q1l4YmWd2cfxnTn4G2q7l00WZNTp3ecWPL651VuXDatZ3YqCfNSJR5RYxo
+	P7cgThwXX9hP8dIMhg==
+X-Received: by 2002:aa7:ce09:0:b0:659:477f:1b2e with SMTP id
+ 4fb4d7f45d1cf-65bcd818f8fmr2838a12.1.1771025487143; Fri, 13 Feb 2026 15:31:27
+ -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <20260212155905.3448571-1-jmattson@google.com> <20260212155905.3448571-5-jmattson@google.com>
  <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
  <aY9BPKhzgxo4UuHB@google.com> <CALMp9eR4ayj_gwsDQVH8pQvzqgEYVB6ExWp3aFgJXRWikLEikw@mail.gmail.com>
-Message-ID: <aY-jViitsLQm9B83@google.com>
+ <aY-jViitsLQm9B83@google.com>
+In-Reply-To: <aY-jViitsLQm9B83@google.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Fri, 13 Feb 2026 15:31:15 -0800
+X-Gm-Features: AZwV_QiHyVOxh9r0ypnXYUO82O-EfzXPfCouEz0SjFgSJMf4FMafJkFC8Oc2I48
+Message-ID: <CALMp9eTnXW9=0=+RxQjeXfA++UP3MX0LzXo5qwUP-dCCQjOLVQ@mail.gmail.com>
 Subject: Re: [PATCH v4 4/8] KVM: x86: nSVM: Redirect IA32_PAT accesses to
  either hPAT or gPAT
-From: Sean Christopherson <seanjc@google.com>
-To: Jim Mattson <jmattson@google.com>
+To: Sean Christopherson <seanjc@google.com>
 Cc: Yosry Ahmed <yosry.ahmed@linux.dev>, Paolo Bonzini <pbonzini@redhat.com>, 
 	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
 	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 13, 2026, Jim Mattson wrote:
-> On Fri, Feb 13, 2026 at 7:20=E2=80=AFAM Sean Christopherson <seanjc@googl=
-e.com> wrote:
-> > > > +static inline void svm_set_hpat(struct vcpu_svm *svm, u64 data)
-> > > > +{
-> > > > +   svm->vcpu.arch.pat =3D data;
-> > > > +   if (npt_enabled) {
-> >
-> > Peeking at the future patches, if we make this:
-> >
-> >         if (!npt_enabled)
-> >                 return;
-> >
-> > then we can end up with this:
-> >
-> >         if (npt_enabled)
-> >                 return;
-> >
-> >         vmcb_set_gpat(svm->vmcb01.ptr, data);
-> >         if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm))
-> >                 vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
-> >
-> >         if (svm->nested.legacy_gpat_semantics)
-> >                 svm_set_l2_pat(svm, data);
-> >
-> > Because legacy_gpat_semantics can only be true if npt_enabled is true. =
- Without
-> > that guard, KVM _looks_ buggy because it's setting gpat in the VMCB eve=
-n when
-> > it shouldn't exist.
-> >
-> > Actually, calling svm_set_l2_pat() when !is_guest_mode() is wrong too, =
-no?  E.g.
-> > shouldn't we end up with this?
->=20
-> Sigh. legacy_gpat_semantics is supposed to be set only when
-> is_guest_mode() and nested_npt_enabled(). I forgot about back-to-back
-> invocations of KVM_SET_NESTED_STATE. Are there other ways of leaving
-> guest mode or disabling nested NPT before the next KVM_RUN?
-
-KVM_SET_VCPU_EVENTS will do it if userspace forces a change in SMM state:
-
-		if (!!(vcpu->arch.hflags & HF_SMM_MASK) !=3D events->smi.smm) {
-			kvm_leave_nested(vcpu);
-			kvm_smm_changed(vcpu, events->smi.smm);
-		}
-
-I honestly wasn't even thinking of anything in particular, it just looked w=
-eird.
-
-> > > > +           vmcb_set_gpat(svm->vmcb01.ptr, data);
-> > > > +           if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(sv=
-m))
-> > > > +                   vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
-> > > > +   }
-> > > > +}
+On Fri, Feb 13, 2026 at 2:19=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Fri, Feb 13, 2026, Jim Mattson wrote:
+> > On Fri, Feb 13, 2026 at 7:20=E2=80=AFAM Sean Christopherson <seanjc@goo=
+gle.com> wrote:
+> > > > > +static inline void svm_set_hpat(struct vcpu_svm *svm, u64 data)
+> > > > > +{
+> > > > > +   svm->vcpu.arch.pat =3D data;
+> > > > > +   if (npt_enabled) {
 > > >
-> > > Is it me, or is it a bit confusing that svm_set_gpat() sets L2's gPAT
-> > > not L1's, and svm_set_hpat() calls vmcb_set_gpat()?
+> > > Peeking at the future patches, if we make this:
+> > >
+> > >         if (!npt_enabled)
+> > >                 return;
+> > >
+> > > then we can end up with this:
+> > >
+> > >         if (npt_enabled)
+> > >                 return;
+> > >
+> > >         vmcb_set_gpat(svm->vmcb01.ptr, data);
+> > >         if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm))
+> > >                 vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+> > >
+> > >         if (svm->nested.legacy_gpat_semantics)
+> > >                 svm_set_l2_pat(svm, data);
+> > >
+> > > Because legacy_gpat_semantics can only be true if npt_enabled is true=
+.  Without
+> > > that guard, KVM _looks_ buggy because it's setting gpat in the VMCB e=
+ven when
+> > > it shouldn't exist.
+> > >
+> > > Actually, calling svm_set_l2_pat() when !is_guest_mode() is wrong too=
+, no?  E.g.
+> > > shouldn't we end up with this?
 > >
-> > It's not just you.  I don't find it confusing per se, more that it's re=
-ally
-> > subtle.
-> >
-> > > "gpat" means different things in the context of the VMCB or otherwise=
-,
-> > > which kinda makes sense but is also not super clear. Maybe
-> > > svm_set_l1_gpat() and svm_set_l2_gpat() is more clear?
-> >
-> > I think just svm_set_l1_pat() and svm_set_l2_pat(), because gpat straig=
-ht up
-> > doesn't exist when NPT is disabled/unsupported.
->=20
-> My intention was that "gpat" and "hpat" were from the perspective of the =
-vCPU.
->=20
-> I dislike svm_set_l1_pat() and svm_set_l2_pat(). As you point out
-> above, there is no independent L2 PAT when nested NPT is disabled. I
-> think that's less obvious than the fact that there is no gPAT from the
-> vCPU's perspective. My preference is to follow the APM terminology
-> when possible. Making up our own terms just leads to confusion.
+> > Sigh. legacy_gpat_semantics is supposed to be set only when
+> > is_guest_mode() and nested_npt_enabled(). I forgot about back-to-back
+> > invocations of KVM_SET_NESTED_STATE. Are there other ways of leaving
+> > guest mode or disabling nested NPT before the next KVM_RUN?
+>
+> KVM_SET_VCPU_EVENTS will do it if userspace forces a change in SMM state:
+>
+>                 if (!!(vcpu->arch.hflags & HF_SMM_MASK) !=3D events->smi.=
+smm) {
+>                         kvm_leave_nested(vcpu);
+>                         kvm_smm_changed(vcpu, events->smi.smm);
+>                 }
+>
+> I honestly wasn't even thinking of anything in particular, it just looked=
+ weird.
 
-How about svm_set_pat() and svm_get_gpat()?  Because hPAT doesn't exist whe=
-n NPT
-is unsupported/disabled, but KVM still needs to set the vCPU's emulated PAT=
- value.
+At the very least, then, kvm_leave_nested() has to clear
+legacy_gpat_semantics. I will look for other paths.
+
+> > > > > +           vmcb_set_gpat(svm->vmcb01.ptr, data);
+> > > > > +           if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(=
+svm))
+> > > > > +                   vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+> > > > > +   }
+> > > > > +}
+> > > >
+> > > > Is it me, or is it a bit confusing that svm_set_gpat() sets L2's gP=
+AT
+> > > > not L1's, and svm_set_hpat() calls vmcb_set_gpat()?
+> > >
+> > > It's not just you.  I don't find it confusing per se, more that it's =
+really
+> > > subtle.
+> > >
+> > > > "gpat" means different things in the context of the VMCB or otherwi=
+se,
+> > > > which kinda makes sense but is also not super clear. Maybe
+> > > > svm_set_l1_gpat() and svm_set_l2_gpat() is more clear?
+> > >
+> > > I think just svm_set_l1_pat() and svm_set_l2_pat(), because gpat stra=
+ight up
+> > > doesn't exist when NPT is disabled/unsupported.
+> >
+> > My intention was that "gpat" and "hpat" were from the perspective of th=
+e vCPU.
+> >
+> > I dislike svm_set_l1_pat() and svm_set_l2_pat(). As you point out
+> > above, there is no independent L2 PAT when nested NPT is disabled. I
+> > think that's less obvious than the fact that there is no gPAT from the
+> > vCPU's perspective. My preference is to follow the APM terminology
+> > when possible. Making up our own terms just leads to confusion.
+>
+> How about svm_set_pat() and svm_get_gpat()?  Because hPAT doesn't exist w=
+hen NPT
+> is unsupported/disabled, but KVM still needs to set the vCPU's emulated P=
+AT value.
+
+What if we don't break it up this way at all? Instead of distributing
+the logic between svm_[gs]set_msr() and a few helper functions, we
+could just have svm_[gs]et_msr() call svm_[gs]et_pat(), and all of the
+logic can go in these two functions.
