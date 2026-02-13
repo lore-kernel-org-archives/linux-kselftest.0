@@ -1,177 +1,226 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB4B363C4F;
-	Fri, 13 Feb 2026 15:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0501735CB87
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 15:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770996433; cv=none; b=qEArIpVx8NT3/EXtW1VV6MCQHEZ6NXNlVsASkkB+OnBD2Ldw5Wh0S9MSEC0rAlQKWxe2zmYOQrjGJo87QhhGE+x4SzXQO13GFN29Hal78IDcXmNofs3i0g1nnnehcKbVCzg0o+9CVv8wnqdgTGd6smCZvIpFlcn3ungUPcVfm6I=
+	t=1770996497; cv=none; b=hTrXI8GBMVn4+68hT34wGGewkw9lXdxvLCi1imsenyWl0QOK5EUrHBmWyFxvielHpFPtFxRKw/gj4e2dvphHgcDwcCqrGVVXSTzCPoHZf9IKL1F/8MbIK/oFXCZ/9qm/e+Da7rrYzHgMKQMksHOA1m5gyANNE56pFmF5OacgL8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770996433; c=relaxed/simple;
-	bh=acetSvAvAvzBxJaNnQ3tpe8HbAc79uV5aOOQPwduvU8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KFiLBWG0DGU38NFVy8Wznff98wqAOI6cgsGj0imFaYtOQym9t8VNk5twcNTOEPh3Tv1WICaEeupju9xc9oSdLOraSEFwY3efIOp6Z4O6kHLY+bic/oaW0rnJ0bYevHe6rf0uTjKwdMp0CSfieZXrTUmODWZbEkCZjE9YSFVlzPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rhmvs5Hc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770996497; c=relaxed/simple;
+	bh=3M3E4Pv8nQu84Lj5f737cCeSV/g3fnZSngPVN4h20sE=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=JhHoSIjpD/lVy4GHJ1XOjMI2nxCjSXIvGPhWx3YH0oB0JeLrpyMUEANn26tO1kgndQ/Yyg6wMZZPiiMf9PcsxevO26DAHUXL9OFwQHwAoKtbrPKmZGhtdqjOTEeXo/sipNyzYC4Ftzs1C/lv2NuAeRiONiF7EjeSChMZ3ifCGjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZLfPiN6N; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VJT21oC8; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rhmvs5Hc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D90C116C6;
-	Fri, 13 Feb 2026 15:27:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770996433;
-	bh=acetSvAvAvzBxJaNnQ3tpe8HbAc79uV5aOOQPwduvU8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=rhmvs5HcdHRLVvCRXOhvkQzztYVsf1mQ5PV2KmhzNomhd/3o6z+TEALGL5fu668wC
-	 NvHl4r/BwkRZIFTP+BzwD2ueV0xT+rxKYLAuY3K5UzSeHumQ2KSbpRtNW8EbQwgxEE
-	 JXLraf7UJUVbdrdlbQpNrscno0cBIC9/5wDiT5OTbTHc1uwkKon4577hbywiu160sZ
-	 Yfz+5oX1Cnzzwz3ph/8Y/lyF+bpJxk3ZnB77qsMz2iYvgLmibHmwwDvgnP+eBxopDd
-	 JPXS79BfgE8f8RAWJ6WCBIRVAygd8TsGT6OlMKhotVw83hFZhCDOrKPIlI06QvachC
-	 asZLN/ONQXzrQ==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Fri, 13 Feb 2026 16:26:24 +0100
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Add
- bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZLfPiN6N";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VJT21oC8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770996495;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Rfr51n5j+28dMTjZs7Bnjba1XL/y2WrPwNbz10SYRpM=;
+	b=ZLfPiN6NbGxTesiPaS6pq8XHlbNHLtJZDdT8pYR/nR4eV771Yio6pyVVFDT1siAgCkZrnT
+	F8lYp2IOIFnkbLGl/glS0T3Y4nrtxq4oMW3i3oNcM6nYpBVEuKd+aNiMwVN519SbSZVdd8
+	B6zuLcek9PV+vy4QHhhU4uSGNarF/D4=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-315-5yTE47DAPOC2lmkxbnRwZQ-1; Fri, 13 Feb 2026 10:28:13 -0500
+X-MC-Unique: 5yTE47DAPOC2lmkxbnRwZQ-1
+X-Mimecast-MFC-AGG-ID: 5yTE47DAPOC2lmkxbnRwZQ_1770996493
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c70cff1da5so356377285a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 07:28:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770996493; x=1771601293; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Rfr51n5j+28dMTjZs7Bnjba1XL/y2WrPwNbz10SYRpM=;
+        b=VJT21oC8AdSRHXy1xZFuGjA8NT/3WrfHniTDYj8neMoPAV6340aGwdxgpnfJzB+U/T
+         RWQGARw3vKlvAdgMh0dBOt8pJqhKntLnkJ/HQFowBitM1RgJKqvi1aAzsnVo+Yqpmqpj
+         qz7cd4jZWDO7k301hStlpw5+l2bUIZlQAzIWa4HAQkMVP/Tf4LWsqIkOipBDfr/jylGz
+         y1jhz24Mc2lnNSrCC0+MMAQdxk5Sy16jiUB0uWX9GafMVPwsctrngqvhsWXi1eekaP1u
+         mctFd00jJp05/ILghcg9ozBVXOd7MnBNan3LQO/BOFhnTkMugitZeS/2EnILhOagEijR
+         wxaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770996493; x=1771601293;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rfr51n5j+28dMTjZs7Bnjba1XL/y2WrPwNbz10SYRpM=;
+        b=qZtvzIK5SigWIhQmzE6pf8PY5nzgmBzIhA66pseLc9sLj4gSJTc9b7qZmdAvZMfB8a
+         yIi7pDYTYbkMVD/VRlTsHD6tziljf6K+up9thR0WCkSNk7gL8q7ARduhJmoMVFwHiTD/
+         erkMJpoAriy1wZnTGUaEsC0P6f8FeOnJA/pcYfYg49SYeje85iDdLwPcsjpX/n6tUL9N
+         x1LF5HltA+6REV6lwNmg8xVQjgx6rG3QWnZ1BywcuB6+qtgZLitD9Tqjrl4kSfdPE5sy
+         ED9QiFgmU35cvGKWx2b27v8pfvLOaDbFGfGLgFOjqzeRNEiKrZyIVCVdwif+ADeqARFN
+         esIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkp6h0rSwLH3mTBj/LdeH6iJrqSke1fnSLoU5tehNiS7yw7o8U71k0U7s7xicYpzsMNYfzL95RFarTMtIsvLE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlYl52hwJpqubY60VqrtzV8JLR53IEosV5EQd7EXRvvsgFOORl
+	3IiX2leG23Ncsxhx1qRaZiC0vicI3jneEewTyrFS/FckljGtwZ87wpAtkOK5rO+45/n6o3ZPnSq
+	gdDmTABq66M3jDoO3t5HzjHndVyctmARdes8083rfyv4vCMlIhMfWbXwAIsW6x264DW6VLA==
+X-Gm-Gg: AZuq6aJ8M32eCvxK2tOUIx3Is+/oyIuD3+FSIZoKxhanRMuv85CJfIvdCbgpl8loE6G
+	B2PXi73YR7A1Nerp1TWZpoGSWtcSbtqk27rXjc/NPwmgBi57z3Lv3IeH8c4z3LNvrWFrHnbqOkA
+	XMNRRD0ssLmAM4Jgqrowsj7PoV4yktNrHDY28fFRjNvGa9Xsj1VzTarPPP0Xh7lq6qySRaYzpCR
+	WNQq0nDaQjUPgzg3t4EJhtJWJNMEwFSTmNogg2/NKi9hAjYps4eXwMbQquqeJLY1v+1GpzZhtec
+	ciS/rWzSQWC91O14j8Q9qyGmeU0+1q0EHB+W3j8cUqOgd/pWXm5g7vRCCiHKSRjVH/xf1kEGrm2
+	UvLwaRgbZAlAVFzg5WJcTAXhtkI/RSKs8jyupNaGfxn2JlNO7WBzILa7OlDyjvNo70ktI
+X-Received: by 2002:a05:620a:3947:b0:8bb:a960:a6fd with SMTP id af79cd13be357-8cb4081fab2mr354350385a.10.1770996493212;
+        Fri, 13 Feb 2026 07:28:13 -0800 (PST)
+X-Received: by 2002:a05:620a:3947:b0:8bb:a960:a6fd with SMTP id af79cd13be357-8cb4081fab2mr354345985a.10.1770996492739;
+        Fri, 13 Feb 2026 07:28:12 -0800 (PST)
+Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb2b0be6besm617767885a.5.2026.02.13.07.28.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Feb 2026 07:28:11 -0800 (PST)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <dcb4debf-e166-491e-8f7b-5500e5e8a39c@redhat.com>
+Date: Fri, 13 Feb 2026 10:28:09 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/6] cgroup/cpuset: Don't update isolated_cpus from CPU
+ hotplug
+To: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260212164640.2408295-1-longman@redhat.com>
+ <20260212164640.2408295-5-longman@redhat.com>
+ <de1cf3d0-8922-4740-9e4f-501cc38c70b0@huaweicloud.com>
+Content-Language: en-US
+In-Reply-To: <de1cf3d0-8922-4740-9e4f-501cc38c70b0@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260213-bpf-xdp-meta-rxcksum-v2-5-a82c4802afbe@kernel.org>
-References: <20260213-bpf-xdp-meta-rxcksum-v2-0-a82c4802afbe@kernel.org>
-In-Reply-To: <20260213-bpf-xdp-meta-rxcksum-v2-0-a82c4802afbe@kernel.org>
-To: Donald Hunter <donald.hunter@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Tony Nguyen <anthony.l.nguyen@intel.com>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
- linux-kselftest@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.2
 
-Introduce the capability to dump HW rx checksum in xdp_hw_metadata
-program via bpf_xdp_metadata_rx_checksum() kfunc.
+On 2/12/26 10:28 PM, Chen Ridong wrote:
+>
+> On 2026/2/13 0:46, Waiman Long wrote:
+>> As any change to isolated_cpus is going to be propagated to the
+>> HK_TYPE_DOMAIN housekeeping cpumask, it can be problematic if
+>> housekeeping cpumasks are directly being modified from the CPU hotplug
+>> code path. This is especially the case if we are going to enable dynamic
+>> update to the nohz_full housekeeping cpumask (HK_TYPE_KERNEL_NOISE)
+>> in the near future with the help of CPU hotplug.
+>>
+>> Avoid these potential problems by changing the cpuset code to not
+>> updating isolated_cpus when calling from CPU hotplug. A new special
+>> PRS_INVALID_ISOLCPUS is added to indicate the current cpuset is an
+>> invalid partition but its effective_xcpus are still in isolated_cpus.
+>> This special state will be set if an isolated partition becomes invalid
+>> due to the shutdown of the last active CPU in that partition. We also
+>> need to keep the effective_xcpus even if exclusive_cpus isn't set.
+>>
+>> When changes are made to "cpuset.cpus", "cpuset.cpus.exclusive" or
+>> "cpuset.cpus.partition" of a PRS_INVALID_ISOLCPUS cpuset, its state
+>> will be reset back to PRS_INVALID_ISOLATED and its effective_xcpus will
+>> be removed from isolated_cpus before proceeding.
+>>
+>> As CPU hotplug will no longer update isolated_cpus, some of the test
+>> cases in test_cpuset_prs.h will have to be updated to match the new
+>> expected results. Some new test cases are also added to confirm that
+>> "cpuset.cpus.isolated" and HK_TYPE_DOMAIN housekeeping cpumask will
+>> both be updated.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset.c                        | 85 ++++++++++++++++---
+>>   .../selftests/cgroup/test_cpuset_prs.sh       | 21 +++--
+>>   2 files changed, 87 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index c792380f9b60..48b7f275085b 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -159,6 +159,8 @@ static bool force_sd_rebuild;			/* RWCS */
+>>    *   2 - partition root without load balancing (isolated)
+>>    *  -1 - invalid partition root
+>>    *  -2 - invalid isolated partition root
+>> + *  -3 - invalid isolated partition root but with effective xcpus still
+>> + *	 in isolated_cpus (set from CPU hotplug side)
+>>    *
+>>    *  There are 2 types of partitions - local or remote. Local partitions are
+>>    *  those whose parents are partition root themselves. Setting of
+>> @@ -187,6 +189,7 @@ static bool force_sd_rebuild;			/* RWCS */
+>>   #define PRS_ISOLATED		2
+>>   #define PRS_INVALID_ROOT	-1
+>>   #define PRS_INVALID_ISOLATED	-2
+>> +#define PRS_INVALID_ISOLCPUS	-3 /* Effective xcpus still in isolated_cpus */
+>>   
+>>   /*
+>>    * Temporary cpumasks for working with partitions that are passed among
+>> @@ -382,6 +385,30 @@ static inline bool is_in_v2_mode(void)
+>>   	      (cpuset_cgrp_subsys.root->flags & CGRP_ROOT_CPUSET_V2_MODE);
+>>   }
+>>   
+>> +/*
+>> + * If the given cpuset has a partition state of PRS_INVALID_ISOLCPUS,
+>> + * remove its effective_xcpus from isolated_cpus and reset its state to
+>> + * PRS_INVALID_ISOLATED. Also clear effective_xcpus if exclusive_cpus is
+>> + * empty.
+>> + */
+>> +static void fix_invalid_isolcpus(struct cpuset *cs, struct cpuset *trialcs)
+>> +{
+>> +	if (likely(cs->partition_root_state != PRS_INVALID_ISOLCPUS))
+>> +		return;
+>> +	WARN_ON_ONCE(cpumask_empty(cs->effective_xcpus));
+>> +	spin_lock_irq(&callback_lock);
+>> +	cpumask_andnot(isolated_cpus, isolated_cpus, cs->effective_xcpus);
+>> +	if (cpumask_empty(cs->exclusive_cpus))
+>> +		cpumask_clear(cs->effective_xcpus);
+>> +	cs->partition_root_state = PRS_INVALID_ISOLATED;
+>> +	spin_unlock_irq(&callback_lock);
+>> +	isolated_cpus_updating = true;
+>> +	if (trialcs) {
+>> +		trialcs->partition_root_state = PRS_INVALID_ISOLATED;
+>> +		cpumask_copy(trialcs->effective_xcpus, cs->effective_xcpus);
+>> +	}
+>> +}
+> When fix_invalid_isolcpus is called from changing cpus/exclusive cpus, should we
+> copy cs->effective_xcpus to trialcs->effective_xcpus?
+>
+> I tested as follow steps(using the whole series):
+>
+>   # cd /sys/fs/cgroup/
+>   # mkdir test
+>   # echo 1 > cpuset.cpus.
+>   # cd test/
+>   # echo 1 > cpuset.cpus.exclusive
+>   # echo $$ > cgroup.procs
+>   # echo isolated > cpuset.cpus.partition
+>   # cat cpuset.cpus.partition
+> isolated
+>   # echo 0 > /sys/devices/system/cpu/cpu1/online
+>   # cat cpuset.cpus.partition
+> isolated invalid
+>   # echo 2 > cpuset.cpus.exclusive
+>   # cat cpuset.cpus.partition
+> isolated invalid (Parent unable to distribute cpu downstream)
+>
+> After changing cpuset.cpus.exclusive to 2, the test cpuset should
+> become valid again, but it remains invalid.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |  8 +++++++
- tools/testing/selftests/bpf/xdp_hw_metadata.c      | 25 ++++++++++++++++++++++
- tools/testing/selftests/bpf/xdp_metadata.h         | 10 ++++++---
- 3 files changed, 40 insertions(+), 3 deletions(-)
+Right, changes to trialcs->effective_xcpus is unnecessary() as 
+compute_trialcs_excpus() will be called before fix_invalid_isolcpus() is 
+invoked. Will fix that in the next version.
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index 330ece2eabdb454da2bb2cbd297d2b2dd6efddc0..9113288fce54bb39dbb6b38e1f6badd0a8ef4cde 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -110,6 +110,14 @@ int rx(struct xdp_md *ctx)
- 	else
- 		meta->hint_valid |= XDP_META_FIELD_VLAN_TAG;
- 
-+	err = bpf_xdp_metadata_rx_checksum(ctx,
-+			(enum xdp_checksum *)&meta->ip_summed,
-+			&meta->cksum_meta);
-+	if (err)
-+		meta->rx_cksum_err = err;
-+	else
-+		meta->hint_valid |= XDP_META_FIELD_CHECKSUM;
-+
- 	__sync_add_and_fetch(&pkts_redir, 1);
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
- }
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 3d8de0d4c96a7afdf5f60b2fdff73c22b876ce54..f1cf8490cc497b5dd75b8d839918fb85c2a0684d 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -8,6 +8,7 @@
-  * - Metadata verified:
-  *   - rx_timestamp
-  *   - rx_hash
-+ *   - rx_checksum
-  *
-  * TX:
-  * - UDP 9091 packets trigger TX reply
-@@ -219,6 +220,25 @@ static void print_vlan_tci(__u16 tag)
- 	printf("PCP=%u, DEI=%d, VID=0x%X\n", pcp, dei, vlan_id);
- }
- 
-+static void print_rx_cksum(__u8 ip_summed, __u32 cksum_meta)
-+{
-+	const char *cksum = "CHECKSUM_NONE";
-+
-+	switch (ip_summed) {
-+	case XDP_CHECKSUM_UNNECESSARY:
-+		cksum = "CHECKSUM_UNNECESSARY";
-+		break;
-+	case XDP_CHECKSUM_COMPLETE:
-+		cksum = "CHECKSUM_COMPLETE";
-+		break;
-+	case XDP_CHECKSUM_NONE:
-+	default:
-+		break;
-+	}
-+
-+	printf("rx-cksum: %s, csum_meta=0x%x\n", cksum, cksum_meta);
-+}
-+
- static void verify_xdp_metadata(void *data, clockid_t clock_id)
- {
- 	struct xdp_meta *meta;
-@@ -254,6 +274,11 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
- 		printf("No rx_vlan_tci or rx_vlan_proto, err=%d\n",
- 		       meta->rx_vlan_tag_err);
- 	}
-+
-+	if (meta->hint_valid & XDP_META_FIELD_CHECKSUM)
-+		print_rx_cksum(meta->ip_summed, meta->cksum_meta);
-+	else
-+		printf("No rx_cksum, err=%d\n", meta->rx_cksum_err);
- }
- 
- static void verify_skb_metadata(int fd)
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index 837cd1efe6b5aebd0f62bae4c49d5bfd77db64bc..822e34390582b3d3660a25e725c9a622edbf635c 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -28,6 +28,7 @@ enum xdp_meta_field {
- 	XDP_META_FIELD_TS	= BIT(0),
- 	XDP_META_FIELD_RSS	= BIT(1),
- 	XDP_META_FIELD_VLAN_TAG	= BIT(2),
-+	XDP_META_FIELD_CHECKSUM = BIT(3),
- };
- 
- #define XDP_CHECKSUM_NONE		0
-@@ -52,9 +53,12 @@ struct xdp_meta {
- 		};
- 		__s32 rx_vlan_tag_err;
- 	};
--	struct {
--		__u8 ip_summed;
--		__u32 cksum_meta;
-+	union {
-+		struct {
-+			__u8 ip_summed;
-+			__u32 cksum_meta;
-+		};
-+		__s32 rx_cksum_err;
- 	};
- 	enum xdp_meta_field hint_valid;
- };
-
--- 
-2.53.0
+Thanks,
+Longman
 
