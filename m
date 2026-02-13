@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30DB34AAE6;
-	Fri, 13 Feb 2026 09:24:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D5D34D39B;
+	Fri, 13 Feb 2026 09:24:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770974653; cv=none; b=ZU2lceO1w2fgbq4qPFq6PD7X+KFize65kXvQcZRZfnqZBGly2MP/wpLdW1GQ6auspJ64XUbbSMzEKQHtneDsc4fB9xmQoXoiUrw8D47Zb6CJaZzLrvbGPkg2UY0jdRqAzlHhl+2E0Oqf8p7tuVXYAU5J1FwxFyj/TpB137v56qY=
+	t=1770974656; cv=none; b=Myl3+tW+PK1GmIM/zNL6wpaT1FmgBW3Ea8XUpZXUeGYmPoGsPGmPqIc6O7NX2iuDwFv6q0xsJ1YTBPrLMC1Ot/d/lKnM4YWPrIcW7G4AFqdw7/e02CuMZtC679iUQ46pJpfqN1nwKfESWI6PpMssnVOVLqWYg2mHILc/pj0jUL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770974653; c=relaxed/simple;
-	bh=bgUkZPwQ4J6k3G4u/nvOcivOTHTI5sLpMQyEzYOEE28=;
+	s=arc-20240116; t=1770974656; c=relaxed/simple;
+	bh=Ak8hfMOZavwchltTI3TV68o5Ux6Q01OmX029MilE3lk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X15gwi0PHkO45zGirR6nvVsSSbXRmsSEtwzIf/GH++5ymS3MrRC+44G8DdSL3+5ARRMvVpvsd8duudbULmVR1YKo+s5cHFcvsIB7XR0HfOO29/B4Nu0kVCeEcsuQyCgcBLRrCa814XAJHvQBLcOF2FmqwLFUWivMTBwLWedgvMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVDFCi0L; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=buyC1EuKkX3G+xXqydQnKeqVqrXZqBsLXlZgZAB4QhiuipGf+d6NaUF++r0O+obBiyIzSsm/E53NqmffP2PzrMhyKmr+im/uSGFUP93g3x0D+bQjmfjX8JQcrnmWt2eTGz1hRenG6RaWVCyZ60gS6PYP6kJqHgaPWbWRUc5HM40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVndG1kh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVDFCi0L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B1DC116C6;
-	Fri, 13 Feb 2026 09:24:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVndG1kh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B74B4C19421;
+	Fri, 13 Feb 2026 09:24:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770974653;
-	bh=bgUkZPwQ4J6k3G4u/nvOcivOTHTI5sLpMQyEzYOEE28=;
+	s=k20201202; t=1770974656;
+	bh=Ak8hfMOZavwchltTI3TV68o5Ux6Q01OmX029MilE3lk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gVDFCi0LewzNbTVI+9LvTciKC7UP4PSUSvt9pOnJsRmMtQPrDA8329xAEr1lV2kQt
-	 dLb0wY6WykwaDyEconvrxvZ8Lt1i+9YfMsE568V7LgirVjZ5/LWcApC/CaOcSan22O
-	 9/1WbWPn7oZk982PVUXVWG3PFCm8diyjCHW4GS8wJf2Xg9cQtwSXoMXmtlQWyZb1qe
-	 BnVBNMAEzyRdVna2NXen8bqsspwszM/8TVRxF7NjId6bguW+7HHwt/5WNAPVD7fXW1
-	 6diZhZrpubBFjlY9Dm1j2rHt+HZMbecZn9UHIR56IpQ6HxrkBgKFZrzSvB+fNsOJpF
-	 sNbwM3VF8nZhQ==
+	b=tVndG1khWnzR5XFM2oRr5cNmxFjRJiecn2vfHhlCzASAlG5tZmTdSAvkEmUJ7WtR2
+	 eXPopeeNiZhHwW7kQwCetgk7b7LKrITb+VYfKJJkGuPzdZMjHRpzmGDIrki6pU55aG
+	 p3Xt+eII1tF1G0nEpG3MNzOHQgq95tFXwlL3WJnG89eYCIY36OS8emikW1AHdRoD7B
+	 xrDZBTNOa5DEU6NRnbFY7cgLQ84n6fbqWfrMqFFooo6x9EKEiyJyVyr6UZXLWDHl9g
+	 /hSxk60QBnQLiCKx/61hYMO2Naj3qUkQ2PkTrOuEbPT5yWQjPgzKZE9QUJK0lt7zfW
+	 xERKpL6wz8B1w==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -46,9 +46,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v8 2/3] revocable: Add KUnit test cases
-Date: Fri, 13 Feb 2026 09:23:06 +0000
-Message-ID: <20260213092307.858908-3-tzungbi@kernel.org>
+Subject: [PATCH v8 3/3] selftests: revocable: Add kselftest cases
+Date: Fri, 13 Feb 2026 09:23:07 +0000
+Message-ID: <20260213092307.858908-4-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.53.0.310.g728cabbaf7-goog
 In-Reply-To: <20260213092307.858908-1-tzungbi@kernel.org>
 References: <20260213092307.858908-1-tzungbi@kernel.org>
@@ -60,120 +60,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add KUnit test cases for the revocable API.
+Add kselftest cases for the revocable API.
+
+The test consists of three parts:
+- A kernel module (revocable_test.ko) that creates a debugfs file.
+- A user-space C program (revocable_test) that uses the kselftest
+  harness to interact with the debugfs file.
+- An orchestrating shell script (test-revocable.sh) that loads the
+  module, runs the C program, and unloads the module.
 
 The test cases cover the following scenarios:
-
 - Basic: Verifies that a consumer can successfully access the resource.
 - Revocation: Verifies that after the provider revokes the resource,
   the consumer correctly receives a NULL pointer on a subsequent access.
 - Try Access Macro: Same as "Revocation" but uses the macro level
   helpers.
-- Concurrent Access: Verifies multiple threads can access the resource.
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
 v8:
 - Squash:
-  - c259cd7ea3c9 revocable: fix missing module license and description
-  - a243f7fb11fe revocable: Add KUnit test for provider lifetime races
-  - 988357628c2c revocable: Add KUnit test for concurrent access
+  - 4d7dc4d1a62d revocable: Fix races in revocable_alloc() using RCU
+  - 377563ce0653 revocable: fix SRCU index corruption by requiring caller-provided storage
 - Change accordingly due to its dependency "revocable: Revocable resource
   management" changes.
+- Move:
+  - tools/testing/selftests/drivers/base/revocable/ ->
+    tools/testing/selftests/revocable/.
 
-v7: https://lore.kernel.org/all/20260116080235.350305-3-tzungbi@kernel.org
+v7: https://lore.kernel.org/all/20260116080235.350305-4-tzungbi@kernel.org
 - "2025" -> "2026" in copyright.
 - Rename the test name "macro" -> "try_access_macro".
 
-v6: https://lore.kernel.org/chrome-platform/20251106152330.11733-3-tzungbi@kernel.org
+v6: https://lore.kernel.org/chrome-platform/20251106152330.11733-4-tzungbi@kernel.org
 - Rename REVOCABLE_TRY_ACCESS_WITH() -> REVOCABLE_TRY_ACCESS_SCOPED().
 - Add tests for new REVOCABLE_TRY_ACCESS_WITH().
 
-v5: https://lore.kernel.org/chrome-platform/20251016054204.1523139-3-tzungbi@kernel.org
+v5: https://lore.kernel.org/chrome-platform/20251016054204.1523139-4-tzungbi@kernel.org
 - No changes.
 
-v4: https://lore.kernel.org/chrome-platform/20250923075302.591026-3-tzungbi@kernel.org
+v4: https://lore.kernel.org/chrome-platform/20250923075302.591026-4-tzungbi@kernel.org
 - REVOCABLE() -> REVOCABLE_TRY_ACCESS_WITH().
 - revocable_release() -> revocable_withdraw_access().
 
-v3: https://lore.kernel.org/chrome-platform/20250912081718.3827390-3-tzungbi@kernel.org
+v3: https://lore.kernel.org/chrome-platform/20250912081718.3827390-4-tzungbi@kernel.org
 - No changes.
 
-v2: https://lore.kernel.org/chrome-platform/20250820081645.847919-3-tzungbi@kernel.org
+v2: https://lore.kernel.org/chrome-platform/20250820081645.847919-4-tzungbi@kernel.org
 - New in the series.
 
-A way to run the test:
-$ ./tools/testing/kunit/kunit.py run \
-        --kconfig_add CONFIG_REVOCABLE_KUNIT_TEST=y \
-        revocable_test
-Or
-$ ./tools/testing/kunit/kunit.py run \
-        --kconfig_add CONFIG_REVOCABLE_KUNIT_TEST=y \
-        --kconfig_add CONFIG_PROVE_LOCKING=y \
-        --kconfig_add CONFIG_DEBUG_KERNEL=y \
-        --kconfig_add CONFIG_DEBUG_INFO=y \
-        --kconfig_add CONFIG_DEBUG_INFO_DWARF5=y \
-        --kconfig_add CONFIG_KASAN=y \
-        --kconfig_add CONFIG_DETECT_HUNG_TASK=y \
-        --kconfig_add CONFIG_DEFAULT_HUNG_TASK_TIMEOUT="10" \
-        --arch=x86_64 \
-        --make_options="C=1 W=1" \
-        revocable_test
-
- MAINTAINERS                   |   1 +
- drivers/base/Kconfig          |   5 +
- drivers/base/Makefile         |   3 +
- drivers/base/revocable_test.c | 410 ++++++++++++++++++++++++++++++++++
- 4 files changed, 419 insertions(+)
- create mode 100644 drivers/base/revocable_test.c
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/revocable/Makefile    |   7 +
+ .../selftests/revocable/revocable_test.c      | 177 +++++++++++++
+ .../selftests/revocable/revocable_test.h      |  20 ++
+ .../selftests/revocable/test-revocable.sh     |  34 +++
+ .../selftests/revocable/test_modules/Makefile |  10 +
+ .../revocable/test_modules/revocable_test.c   | 234 ++++++++++++++++++
+ 7 files changed, 483 insertions(+)
+ create mode 100644 tools/testing/selftests/revocable/Makefile
+ create mode 100644 tools/testing/selftests/revocable/revocable_test.c
+ create mode 100644 tools/testing/selftests/revocable/revocable_test.h
+ create mode 100755 tools/testing/selftests/revocable/test-revocable.sh
+ create mode 100644 tools/testing/selftests/revocable/test_modules/Makefile
+ create mode 100644 tools/testing/selftests/revocable/test_modules/revocable_test.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 01670bc4db8d..6ce7a5477f25 100644
+index 6ce7a5477f25..76816c741017 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -22414,6 +22414,7 @@ L:	driver-core@lists.linux.dev
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git
+@@ -22416,6 +22416,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git
  F:	drivers/base/revocable.c
-+F:	drivers/base/revocable_test.c
+ F:	drivers/base/revocable_test.c
  F:	include/linux/revocable.h
++F:	tools/testing/selftests/revocable/
  
  RFKILL
-diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-index 1786d87b29e2..5c5dad850380 100644
---- a/drivers/base/Kconfig
-+++ b/drivers/base/Kconfig
-@@ -250,3 +250,8 @@ config FW_DEVLINK_SYNC_STATE_TIMEOUT
- 	  work on.
- 
- endmenu
-+
-+config REVOCABLE_KUNIT_TEST
-+	tristate "KUnit tests for revocable" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-diff --git a/drivers/base/Makefile b/drivers/base/Makefile
-index bdf854694e39..5fd19abbc83e 100644
---- a/drivers/base/Makefile
-+++ b/drivers/base/Makefile
-@@ -35,3 +35,6 @@ ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
- # define_trace.h needs to know how to find our header
- CFLAGS_trace.o		:= -I$(src)
- obj-$(CONFIG_TRACING)	+= trace.o
-+
-+# KUnit test cases
-+obj-$(CONFIG_REVOCABLE_KUNIT_TEST)	+= revocable_test.o
-diff --git a/drivers/base/revocable_test.c b/drivers/base/revocable_test.c
+ M:	Johannes Berg <johannes@sipsolutions.net>
+diff --git a/tools/testing/selftests/revocable/Makefile b/tools/testing/selftests/revocable/Makefile
 new file mode 100644
-index 000000000000..4c097a843342
+index 000000000000..a986ad50200a
 --- /dev/null
-+++ b/drivers/base/revocable_test.c
-@@ -0,0 +1,410 @@
++++ b/tools/testing/selftests/revocable/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++
++TEST_GEN_MODS_DIR := test_modules
++TEST_GEN_PROGS_EXTENDED := revocable_test
++TEST_PROGS := test-revocable.sh
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/revocable/revocable_test.c b/tools/testing/selftests/revocable/revocable_test.c
+new file mode 100644
+index 000000000000..2e90de210d9c
+--- /dev/null
++++ b/tools/testing/selftests/revocable/revocable_test.c
+@@ -0,0 +1,177 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright 2026 Google LLC
 + *
-+ * KUnit tests for the revocable API.
++ * A selftest for the revocable API.
 + *
 + * The test cases cover the following scenarios:
 + *
@@ -184,401 +170,490 @@ index 000000000000..4c097a843342
 + *
 + * - Try Access Macro: Same as "Revocation" but uses the macro level
 + *   helpers.
-+ *
-+ * - Concurrent Access: Verifies multiple threads can access the resource.
 + */
 +
-+#include <kunit/test.h>
-+#include <linux/completion.h>
-+#include <linux/delay.h>
-+#include <linux/kthread.h>
-+#include <linux/refcount.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <unistd.h>
++
++#include "revocable_test.h"
++
++#include "../kselftest_harness.h"
++
++#define DEBUGFS_PATH "/sys/kernel/debug/revocable_test"
++
++FIXTURE(revocable_fixture) {
++	int fd;
++	char data[16];
++};
++
++FIXTURE_SETUP(revocable_fixture) {
++	int ret;
++
++	self->fd = open(DEBUGFS_PATH, O_RDWR);
++	ASSERT_NE(-1, self->fd)
++		TH_LOG("failed to open fd");
++}
++
++FIXTURE_TEARDOWN(revocable_fixture) {
++	close(self->fd);
++}
++
++/*
++ * ASSERT_* is only available in TEST or TEST_F block.  Use
++ * macro for the helper.
++ */
++#define READ_TEST_DATA_MSG(_offset, _msg)				\
++	do {								\
++		int ret;						\
++									\
++		ret = lseek(self->fd, _offset, SEEK_SET);		\
++		ASSERT_NE(-1, ret)					\
++			TH_LOG("failed to lseek");			\
++									\
++		ret = read(self->fd, self->data, sizeof(self->data)-1); \
++		ASSERT_NE(-1, ret)					\
++			TH_LOG("failed to read test data" _msg);	\
++		self->data[ret] = '\0';					\
++	} while (0)
++
++#define READ_TEST_DATA(_offset)						\
++	READ_TEST_DATA_MSG(_offset, "")
++
++#define READ_TEST_DATA_ERR(_offset)					\
++	do {								\
++		int ret;						\
++									\
++		ret = lseek(self->fd, _offset, SEEK_SET);		\
++		ASSERT_NE(-1, ret)					\
++			TH_LOG("failed to lseek");			\
++									\
++		ret = read(self->fd, self->data, sizeof(self->data)-1); \
++		EXPECT_EQ(-1, ret);					\
++	} while (0)
++
++#define SIGNAL_RESOURCE_GONE()						\
++	do {								\
++		int ret;						\
++									\
++		ret = write(self->fd, "", 0);				\
++		ASSERT_NE(-1, ret)					\
++			TH_LOG("failed to signal resource is gone");	\
++	} while (0)
++
++TEST_F(revocable_fixture, basic) {
++	READ_TEST_DATA(TEST_MAGIC_OFFSET_RAW);
++	EXPECT_STREQ(TEST_DATA, self->data);
++}
++
++TEST_F(revocable_fixture, revocation) {
++	const int offset = TEST_MAGIC_OFFSET_RAW;
++
++	READ_TEST_DATA(offset);
++	EXPECT_STREQ(TEST_DATA, self->data);
++
++	SIGNAL_RESOURCE_GONE();
++
++	READ_TEST_DATA_MSG(offset, " after resource gone");
++	EXPECT_STREQ(TEST_DATA_NULL, self->data);
++}
++
++TEST_F(revocable_fixture, try_access_macro1) {
++	const int offset = TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_WITH;
++
++	READ_TEST_DATA(offset);
++	EXPECT_STREQ(TEST_DATA, self->data);
++
++	SIGNAL_RESOURCE_GONE();
++
++	READ_TEST_DATA_MSG(offset, " after resource gone");
++	EXPECT_STREQ(TEST_DATA_NULL, self->data);
++}
++
++TEST_F(revocable_fixture, try_access_macro2) {
++	const int offset = TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_ERR;
++
++	READ_TEST_DATA(offset);
++	EXPECT_STREQ(TEST_DATA, self->data);
++
++	SIGNAL_RESOURCE_GONE();
++
++	READ_TEST_DATA_ERR(offset);
++	EXPECT_EQ(ENXIO, errno);
++}
++
++TEST_F(revocable_fixture, try_access_macro3) {
++	const int offset = TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN;
++
++	READ_TEST_DATA(offset);
++	EXPECT_STREQ(TEST_DATA, self->data);
++
++	SIGNAL_RESOURCE_GONE();
++
++	READ_TEST_DATA_ERR(offset);
++	EXPECT_EQ(ENODEV, errno);
++}
++
++TEST_F(revocable_fixture, try_access_macro4) {
++	const int offset = TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_WITH_SCOPED;
++
++	READ_TEST_DATA(offset);
++	EXPECT_STREQ(TEST_DATA, self->data);
++
++	SIGNAL_RESOURCE_GONE();
++
++	READ_TEST_DATA_MSG(offset, " after resource gone");
++	EXPECT_STREQ(TEST_DATA_NULL, self->data);
++}
++
++TEST_F(revocable_fixture, try_access_macro5) {
++	const int offset =
++		TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_ERR_SCOPED;
++
++	READ_TEST_DATA(offset);
++	EXPECT_STREQ(TEST_DATA, self->data);
++
++	SIGNAL_RESOURCE_GONE();
++
++	READ_TEST_DATA_ERR(offset);
++	EXPECT_EQ(ENXIO, errno);
++}
++
++TEST_F(revocable_fixture, try_access_macro6) {
++	const int offset = TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_SCOPED;
++
++	READ_TEST_DATA(offset);
++	EXPECT_STREQ(TEST_DATA, self->data);
++
++	SIGNAL_RESOURCE_GONE();
++
++	READ_TEST_DATA_ERR(offset);
++	EXPECT_EQ(ENODEV, errno);
++}
++
++TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/revocable/revocable_test.h b/tools/testing/selftests/revocable/revocable_test.h
+new file mode 100644
+index 000000000000..270b456ef7d9
+--- /dev/null
++++ b/tools/testing/selftests/revocable/revocable_test.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright 2026 Google LLC
++ */
++
++#ifndef __REVOCABLE_TEST_H
++#define __REVOCABLE_TEST_H
++
++#define TEST_DATA	"12345678"
++#define TEST_DATA_NULL	"(null)"
++
++#define TEST_MAGIC_OFFSET_RAW					0x0
++#define TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_WITH			0x1
++#define TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_ERR	0x2
++#define TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN		0x3
++#define TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_WITH_SCOPED		0x4
++#define TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_ERR_SCOPED	0x5
++#define TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_SCOPED	0x6
++
++#endif /* __REVOCABLE_TEST_H */
+diff --git a/tools/testing/selftests/revocable/test-revocable.sh b/tools/testing/selftests/revocable/test-revocable.sh
+new file mode 100755
+index 000000000000..0cfc26a1c49a
+--- /dev/null
++++ b/tools/testing/selftests/revocable/test-revocable.sh
+@@ -0,0 +1,34 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++mod_name="revocable_test"
++ksft_fail=1
++ksft_skip=4
++
++if [ "$(id -u)" -ne 0 ]; then
++	echo "$0: Must be run as root"
++	exit "$ksft_skip"
++fi
++
++if ! which insmod > /dev/null 2>&1; then
++	echo "$0: Need insmod"
++	exit "$ksft_skip"
++fi
++
++if ! which rmmod > /dev/null 2>&1; then
++	echo "$0: Need rmmod"
++	exit "$ksft_skip"
++fi
++
++if ! mountpoint -q /sys/kernel/debug; then
++	mount -t debugfs none /sys/kernel/debug
++fi
++
++insmod test_modules/"${mod_name}".ko
++
++./revocable_test
++ret=$?
++
++rmmod "${mod_name}"
++
++exit "${ret}"
+diff --git a/tools/testing/selftests/revocable/test_modules/Makefile b/tools/testing/selftests/revocable/test_modules/Makefile
+new file mode 100644
+index 000000000000..f29e4f909402
+--- /dev/null
++++ b/tools/testing/selftests/revocable/test_modules/Makefile
+@@ -0,0 +1,10 @@
++TESTMODS_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= /lib/modules/$(shell uname -r)/build
++
++obj-m += revocable_test.o
++
++all:
++	$(Q)$(MAKE) -C $(KDIR) M=$(TESTMODS_DIR)
++
++clean:
++	$(Q)$(MAKE) -C $(KDIR) M=$(TESTMODS_DIR) clean
+diff --git a/tools/testing/selftests/revocable/test_modules/revocable_test.c b/tools/testing/selftests/revocable/test_modules/revocable_test.c
+new file mode 100644
+index 000000000000..b2914c7b4ef5
+--- /dev/null
++++ b/tools/testing/selftests/revocable/test_modules/revocable_test.c
+@@ -0,0 +1,234 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2026 Google LLC
++ *
++ * A kernel module for testing the revocable API.
++ */
++
++#include <linux/debugfs.h>
++#include <linux/module.h>
 +#include <linux/revocable.h>
++#include <linux/slab.h>
 +
-+static int get_refcount(struct revocable *rp)
-+{
-+	return refcount_read(&rp->kref.refcount);
-+}
++#include "../revocable_test.h"
 +
-+static void revocable_test_basic(struct kunit *test)
-+{
++struct dentry *test_file;
++
++struct revocable_test_priv {
 +	struct revocable *rp;
-+	struct revocable_consumer rev;
-+	void *real_res = (void *)0x12345678, *res;
++	char res[16];
++};
 +
-+	rp = revocable_alloc(real_res);
-+	KUNIT_ASSERT_NOT_NULL(test, rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
++/*
++ * This creates a revocable provider.
++ */
++static int revocable_test_open(struct inode *inode, struct file *filp)
++{
++	struct revocable_test_priv *priv;
 +
-+	revocable_init(rp, &rev);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 3);
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
 +
-+	res = revocable_try_access(&rev);
-+	KUNIT_EXPECT_PTR_EQ(test, res, real_res);
-+	revocable_withdraw_access(&rev);
++	strscpy(priv->res, TEST_DATA);
++	priv->rp = revocable_alloc(&priv->res);
++	if (!priv->rp)
++		return -ENOMEM;
 +
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 3);
-+	revocable_deinit(&rev);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+	revocable_revoke(rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+	revocable_put(rp);
++	filp->private_data = priv;
++	return 0;
 +}
 +
-+static void revocable_test_revocation(struct kunit *test)
++static int revocable_test_release(struct inode *inode,
++					   struct file *filp)
 +{
-+	struct revocable *rp;
-+	struct revocable_consumer rev;
-+	void *real_res = (void *)0x12345678, *res;
-+
-+	rp = revocable_alloc(real_res);
-+	KUNIT_ASSERT_NOT_NULL(test, rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	revocable_init(rp, &rev);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 3);
-+
-+	res = revocable_try_access(&rev);
-+	KUNIT_EXPECT_PTR_EQ(test, res, real_res);
-+	revocable_withdraw_access(&rev);
-+
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 3);
-+	revocable_revoke(rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	res = revocable_try_access(&rev);
-+	KUNIT_EXPECT_PTR_EQ(test, res, NULL);
-+	revocable_withdraw_access(&rev);
-+
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+	revocable_deinit(&rev);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+	revocable_put(rp);
-+}
-+
-+static void revocable_test_try_access_macro1(struct kunit *test)
-+{
-+	struct revocable *rp;
-+	void *real_res = (void *)0x12345678, *res;
-+
-+	rp = revocable_alloc(real_res);
-+	KUNIT_ASSERT_NOT_NULL(test, rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	{
-+		revocable_try_access_with(rp, res);
-+		KUNIT_EXPECT_PTR_EQ(test, res, real_res);
-+		KUNIT_EXPECT_EQ(test, get_refcount(rp), 3);
-+	}
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	revocable_revoke(rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+
-+	{
-+		revocable_try_access_with(rp, res);
-+		KUNIT_EXPECT_PTR_EQ(test, res, NULL);
-+		KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+	}
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+
-+	revocable_put(rp);
-+}
-+
-+static int call_revocable_try_access_or_return_err(struct revocable *rp)
-+{
++	struct revocable_test_priv *priv = filp->private_data;
++	bool revoked = true;
 +	void *res;
++
++	revocable_try_access_or_skip_scoped(priv->rp, res)
++		revoked = false;
++	if (!revoked)
++		revocable_revoke(priv->rp);
++
++	revocable_put(priv->rp);
++
++	kfree(priv);
++	return 0;
++}
++
++/*
++ * This revokes the resource.  Here is a side command channel.
++ *
++ * The test can't just close the file descriptor for signaling the
++ * resource is gone.  Subsequent file operations on the open file
++ * descriptor of debugfs return -EIO after calling debugfs_remove().
++ * See also debugfs_file_get().
++ */
++static ssize_t revocable_test_write(struct file *filp, const char __user *buf,
++				    size_t count, loff_t *offset)
++{
++	size_t copied;
++	char data[64];
++	struct revocable_test_priv *priv = filp->private_data;
++	bool revoked = true;
++	void *res;
++
++	revocable_try_access_or_skip_scoped(priv->rp, res)
++		revoked = false;
++	if (revoked)
++		return -EINVAL;
++
++	copied = strncpy_from_user(data, buf, sizeof(data));
++	if (copied < 0)
++		return copied;
++
++	revocable_revoke(priv->rp);
++	return copied;
++}
++
++static void copy_resource_data(char *data, size_t len, char *res)
++{
++	if (!res)
++		strscpy(data, TEST_DATA_NULL, len);
++	else
++		strscpy(data, res, len);
++}
++
++static int call_revocable_try_access_or_return_err(struct revocable *rp,
++						   char *data, size_t len)
++{
++	char *res;
 +
 +	revocable_try_access_or_return_err(rp, res, -ENXIO);
++	copy_resource_data(data, len, res);
 +	return 0;
 +}
 +
-+static int call_revocable_try_access_or_return(struct revocable *rp)
++static int call_revocable_try_access_or_return(struct revocable *rp,
++					       char *data, size_t len)
 +{
-+	void *res;
++	char *res;
 +
 +	revocable_try_access_or_return(rp, res);
++	copy_resource_data(data, len, res);
 +	return 0;
 +}
 +
-+static void call_revocable_try_access_or_return_void(struct kunit *test,
-+						     struct revocable *rp)
++static int call_revocable_try_access_or_return_err_scoped(struct revocable *rp,
++							  char *data,
++							  size_t len)
 +{
-+	void *res;
++	char *res;
 +
-+	revocable_try_access_or_return_void(rp, res);
-+	KUNIT_FAIL(test, "unreachable");
++	revocable_try_access_or_return_err_scoped(rp, res, -ENXIO)
++		copy_resource_data(data, len, res);
++	return 0;
 +}
 +
-+static void revocable_test_try_access_macro2(struct kunit *test)
++static int call_revocable_try_access_or_return_scoped(struct revocable *rp,
++						      char *data, size_t len)
 +{
-+	struct revocable *rp;
-+	void *real_res = (void *)0x12345678, *res;
++	char *res;
++
++	revocable_try_access_or_return_scoped(rp, res)
++		copy_resource_data(data, len, res);
++	return 0;
++}
++
++/*
++ * This creates a revocable consumer and returns the resource value.
++ */
++static ssize_t revocable_test_read(struct file *filp, char __user *buf,
++				   size_t count, loff_t *offset)
++{
++	char *res;
++	char data[16];
++	size_t len;
 +	int ret;
++	struct revocable_test_priv *priv = filp->private_data;
 +
-+	rp = revocable_alloc(real_res);
-+	KUNIT_ASSERT_NOT_NULL(test, rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	{
-+		revocable_try_access_with(rp, res);
-+		KUNIT_EXPECT_PTR_EQ(test, res, real_res);
-+		KUNIT_EXPECT_EQ(test, get_refcount(rp), 3);
-+	}
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	revocable_revoke(rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+
-+	ret = call_revocable_try_access_or_return_err(rp);
-+	KUNIT_EXPECT_EQ(test, ret, -ENXIO);
-+
-+	ret = call_revocable_try_access_or_return(rp);
-+	KUNIT_EXPECT_EQ(test, ret, -ENODEV);
-+
-+	call_revocable_try_access_or_return_void(test, rp);
-+
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+	revocable_put(rp);
-+}
-+
-+static void revocable_test_try_access_macro3(struct kunit *test)
-+{
-+	struct revocable *rp;
-+	void *real_res = (void *)0x12345678, *res;
-+	bool accessed;
-+
-+	rp = revocable_alloc(real_res);
-+	KUNIT_ASSERT_NOT_NULL(test, rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	accessed = false;
-+	revocable_try_access_with_scoped(rp, res) {
-+		KUNIT_EXPECT_PTR_EQ(test, res, real_res);
-+		KUNIT_EXPECT_EQ(test, get_refcount(rp), 3);
-+		accessed = true;
-+	}
-+	KUNIT_EXPECT_TRUE(test, accessed);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	revocable_revoke(rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+
-+	accessed = false;
-+	revocable_try_access_with_scoped(rp, res) {
-+		KUNIT_EXPECT_PTR_EQ(test, res, NULL);
-+		KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+		accessed = true;
-+	}
-+	KUNIT_EXPECT_TRUE(test, accessed);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+
-+	revocable_put(rp);
-+}
-+
-+static int call_revocable_try_access_or_return_err_scoped(struct revocable *rp)
-+{
-+	void *res;
-+
-+	revocable_try_access_or_return_err_scoped(rp, res, -ENXIO) {}
-+	return 0;
-+}
-+
-+static int call_revocable_try_access_or_return_scoped(struct revocable *rp)
-+{
-+	void *res;
-+
-+	revocable_try_access_or_return_scoped(rp, res) {}
-+	return 0;
-+}
-+
-+static void call_revocable_try_access_or_return_void_scoped(struct kunit *test,
-+							    struct revocable *rp)
-+{
-+	void *res;
-+
-+	revocable_try_access_or_return_void_scoped(rp, res) {}
-+	KUNIT_FAIL(test, "unreachable");
-+}
-+
-+static void revocable_test_try_access_macro4(struct kunit *test)
-+{
-+	struct revocable *rp;
-+	void *real_res = (void *)0x12345678, *res;
-+	bool accessed;
-+	int ret;
-+
-+	rp = revocable_alloc(real_res);
-+	KUNIT_ASSERT_NOT_NULL(test, rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	accessed = false;
-+	revocable_try_access_with_scoped(rp, res) {
-+		KUNIT_EXPECT_PTR_EQ(test, res, real_res);
-+		KUNIT_EXPECT_EQ(test, get_refcount(rp), 3);
-+		accessed = true;
-+	}
-+	KUNIT_EXPECT_TRUE(test, accessed);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	revocable_revoke(rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+
-+	ret = call_revocable_try_access_or_return_err_scoped(rp);
-+	KUNIT_EXPECT_EQ(test, ret, -ENXIO);
-+
-+	ret = call_revocable_try_access_or_return_scoped(rp);
-+	KUNIT_EXPECT_EQ(test, ret, -ENODEV);
-+
-+	call_revocable_try_access_or_return_void_scoped(test, rp);
-+
-+	accessed = false;
-+	revocable_try_access_or_skip_scoped(rp, res)
-+		accessed = true;
-+	KUNIT_EXPECT_FALSE(test, accessed);
-+
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+	revocable_put(rp);
-+}
-+
-+struct test_concurrent_access_context {
-+	struct completion started, enter;
-+	struct task_struct *thread;
-+
-+	union {
-+		/* Used by test provider. */
-+		struct revocable *rp;
-+
-+		/* Used by test consumer. */
-+		struct {
-+			struct completion exit;
++	switch (*offset) {
++	case TEST_MAGIC_OFFSET_RAW:
++		{
 +			struct revocable_consumer rev;
-+			struct kunit *test;
-+			void *expected_res;
-+		};
-+	};
-+};
 +
-+static int test_concurrent_access_provider(void *data)
-+{
-+	struct test_concurrent_access_context *ctx = data;
-+
-+	complete(&ctx->started);
-+
-+	wait_for_completion(&ctx->enter);
-+	revocable_revoke(ctx->rp);
-+
-+	return 0;
-+}
-+
-+static int test_concurrent_access_consumer(void *data)
-+{
-+	struct test_concurrent_access_context *ctx = data;
-+	void *res;
-+
-+	complete(&ctx->started);
-+
-+	wait_for_completion(&ctx->enter);
-+	res = revocable_try_access(&ctx->rev);
-+	KUNIT_EXPECT_PTR_EQ(ctx->test, res, ctx->expected_res);
-+
-+	wait_for_completion(&ctx->exit);
-+	revocable_withdraw_access(&ctx->rev);
-+
-+	return 0;
-+}
-+
-+static void revocable_test_concurrent_access(struct kunit *test)
-+{
-+	struct revocable *rp;
-+	void *real_res = (void *)0x12345678;
-+	struct test_concurrent_access_context *ctx;
-+	int i;
-+
-+	rp = revocable_alloc(real_res);
-+	KUNIT_ASSERT_NOT_NULL(test, rp);
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 2);
-+
-+	ctx = kunit_kmalloc_array(test, 3, sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, ctx);
-+
-+	for (i = 0; i < 3; ++i) {
-+		ctx[i].test = test;
-+		init_completion(&ctx[i].started);
-+		init_completion(&ctx[i].enter);
-+
-+		if (i == 0) {
-+			/* Transfer the ownership of provider reference too. */
-+			ctx[i].rp = rp;
-+			ctx[i].thread = kthread_run(
-+				test_concurrent_access_provider, ctx + i,
-+				"revocable_%d", i);
-+		} else {
-+			init_completion(&ctx[i].exit);
-+			revocable_init(rp, &ctx[i].rev);
-+			KUNIT_EXPECT_EQ(test, get_refcount(rp), 2 + i);
-+
-+			ctx[i].thread = kthread_run(
-+				test_concurrent_access_consumer, ctx + i,
-+				"revocable_consumer_%d", i);
++			revocable_init(priv->rp, &rev);
++			res = revocable_try_access(&rev);
++			copy_resource_data(data, sizeof(data), res);
++			revocable_withdraw_access(&rev);
++			revocable_deinit(&rev);
 +		}
-+		KUNIT_ASSERT_FALSE(test, IS_ERR(ctx[i].thread));
-+
-+		wait_for_completion(&ctx[i].started);
++		break;
++	case TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_WITH:
++		{
++			revocable_try_access_with(priv->rp, res);
++			copy_resource_data(data, sizeof(data), res);
++		}
++		break;
++	case TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_ERR:
++		ret = call_revocable_try_access_or_return_err(priv->rp, data,
++							      sizeof(data));
++		if (ret)
++			return ret;
++		break;
++	case TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN:
++		ret = call_revocable_try_access_or_return(priv->rp, data,
++							  sizeof(data));
++		if (ret)
++			return ret;
++		break;
++	case TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_WITH_SCOPED:
++		revocable_try_access_with_scoped(priv->rp, res)
++			copy_resource_data(data, sizeof(data), res);
++		break;
++	case TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_ERR_SCOPED:
++		ret = call_revocable_try_access_or_return_err_scoped(
++					priv->rp, data, sizeof(data));
++		if (ret)
++			return ret;
++		break;
++	case TEST_MAGIC_OFFSET_MACRO_TRY_ACCESS_OR_RETURN_SCOPED:
++		ret = call_revocable_try_access_or_return_scoped(
++					priv->rp, data, sizeof(data));
++		if (ret)
++			return ret;
++		break;
++	default:
++		return 0;
 +	}
 +
-+	ctx[1].expected_res = real_res;
-+	/* consumer1 enters read-side critical section. */
-+	complete(&ctx[1].enter);
-+	msleep(100);
++	len = min_t(size_t, strlen(data), count);
++	if (copy_to_user(buf, data, len))
++		return -EFAULT;
 +
-+	/* provider0 revokes the resource. */
-+	complete(&ctx[0].enter);
-+	msleep(100);
-+	/* provider0 can't exit.  It's waiting for the grace period. */
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 4);
-+
-+	ctx[2].expected_res = NULL;
-+	/* consumer2 enters read-side critical section. */
-+	complete(&ctx[2].enter);
-+	msleep(100);
-+
-+	/* consumer{1,2} exit read-side critical section. */
-+	for (i = 1; i < 3; ++i) {
-+		complete(&ctx[i].exit);
-+		kthread_stop(ctx[i].thread);
-+		revocable_deinit(&ctx[i].rev);
-+	}
-+
-+	kthread_stop(ctx[0].thread);
-+	/* provider0 exits as all readers exit their critical section. */
-+	KUNIT_EXPECT_EQ(test, get_refcount(rp), 1);
-+
-+	/* Drop the caller reference. */
-+	revocable_put(rp);
++	*offset = len;
++	return len;
 +}
 +
-+static struct kunit_case revocable_test_cases[] = {
-+	KUNIT_CASE(revocable_test_basic),
-+	KUNIT_CASE(revocable_test_revocation),
-+	KUNIT_CASE(revocable_test_try_access_macro1),
-+	KUNIT_CASE(revocable_test_try_access_macro2),
-+	KUNIT_CASE(revocable_test_try_access_macro3),
-+	KUNIT_CASE(revocable_test_try_access_macro4),
-+	KUNIT_CASE(revocable_test_concurrent_access),
-+	{}
++static const struct file_operations revocable_test_fops = {
++	.open = revocable_test_open,
++	.release = revocable_test_release,
++	.write = revocable_test_write,
++	.read = revocable_test_read,
++	.llseek = default_llseek,
 +};
 +
-+static struct kunit_suite revocable_test_suite = {
-+	.name = "revocable_test",
-+	.test_cases = revocable_test_cases,
-+};
++static int __init revocable_test_init(void)
++{
++	test_file = debugfs_create_file("revocable_test", 0600, NULL, NULL,
++					&revocable_test_fops);
++	return test_file ? 0 : -ENOMEM;
++}
 +
-+kunit_test_suite(revocable_test_suite);
++static void __exit revocable_test_exit(void)
++{
++	debugfs_remove(test_file);
++}
++
++module_init(revocable_test_init);
++module_exit(revocable_test_exit);
 +
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Tzung-Bi Shih <tzungbi@kernel.org>");
-+MODULE_DESCRIPTION("KUnit tests for the revocable API");
++MODULE_DESCRIPTION("Revocable Kselftest");
 -- 
 2.53.0.310.g728cabbaf7-goog
 
