@@ -1,134 +1,211 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B4135E556;
-	Fri, 13 Feb 2026 13:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B788A1E32D6;
+	Fri, 13 Feb 2026 15:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770988774; cv=none; b=tXztPDA5yq9CwElP0yx6W40XG1OReCyRsZxo7Cz1C5/mV6st/I6gBGRjFSXIH3jWIaKoe95YYwQsLPI98gDmhVaZO8lWtHIN0+Aibg97Hf4x2mgXTS7BfkxvbPLUomMzSXxGlBdMG/PcEeoj24yc00UR7d5GyL0V6+54J3A6Mi0=
+	t=1770995944; cv=none; b=bTHnURCET5t4PEW+kbUb67hEUgFS1JhbrUaXe21f2ONydgJuvSoMYDENyKQ3wweg3cTVHU+pehj7wzXslrSpsRDSHT6X64CqxcacY+CjYkruM9Ry/yC2HfidQh4MgF2tBA43AHhGQZHhp8lxXMqXifiyUr8HTtSDE+YiH9nX5BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770988774; c=relaxed/simple;
-	bh=zsFmpWRix+LX588rlGbg6RBUWzdhefraJWHeWfHLV1w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bItmAaG1HWqhyxbuzOGuZyLnvxVd2lodr5MvfGMHaDRGPu2OlAnnB9JSHYEdhkpch1AVbJbwoHKDD7YEA0cQufGYEcGmmh+V8c8p4k9RRhtEetMKeW95eELAOXyMXi2uerxCMjMjPnz0KpSB3t1WvWrEKrG8MeOadDCi9hqheq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=vcx5qEIk; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1770995944; c=relaxed/simple;
+	bh=eiw7P98b9Y19G0mrHqahDozgDK96ClCh7LOvVh3Wd/4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DPuD0sNfGuMJNN6BddnVC81uCjfniYsxkr2OZGGWLcAPUDDTDD04GLmzUeArjTJMal5uaO2KTytpXzlWyhvmFF/MGMl0P5RtZILo3ruhNaQ8VVccVvpGaGyaz45wGXISwtU/EqgOCryPlBc3hBPGmVjUcUwlIvXK+4PSPOthrPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MnCx3SDc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="vcx5qEIk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=piwRbugQuOmQuGtJk8tRpvV4jIE0EEmGxdDcUHa7eBo=; b=vcx5qEIkAXrS
-	YE3sK4gNDRaXMxbJfLFNNfEkcluDoIBYMdiE6TfGKjYkK+CGurjlUPi5rXMbgZrjDo5VD8HNJzaiO
-	9hxNeghRJQejGf2L1uxUinF6jhCRsngM/GOGaYV88m9xZDWota5RDxvQG2UdrPQgX8K07jh4mq0dp
-	1x3oyn9z4RJ+sc3/uHMu933GUyf55MxK13tQeJ0vAg7KD7bbqwdslawPv9FJcV6PhZ+BDkfUufs9c
-	LBXpN2AnLqPv6toGmyfS9Xwlg8RJBsdl+k9MO/YrrSsknuJwBLiR4HdJYeRJouMkcyyW5gF9z2G+Q
-	raDkh1JlNYfIM/DapxaB8Q==;
-Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
-	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vqt3q-0014Lj-0R;
-	Fri, 13 Feb 2026 14:19:18 +0100
-Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 61DDJLDR043380
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Fri, 13 Feb 2026 13:19:21 GMT
-Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 61DDJLRU043379;
-	Fri, 13 Feb 2026 13:19:21 GMT
-From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>, Amit Cohen <amcohen@nvidia.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH net v2 3/3] selftests: forwarding: fix pedit tests failure with br_netfilter enabled
-Date: Fri, 13 Feb 2026 13:19:07 +0000
-Message-ID: <20260213131907.43351-4-aleksey.oladko@virtuozzo.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260213131907.43351-1-aleksey.oladko@virtuozzo.com>
-References: <20260213131907.43351-1-aleksey.oladko@virtuozzo.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MnCx3SDc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7CDC116C6;
+	Fri, 13 Feb 2026 15:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770995944;
+	bh=eiw7P98b9Y19G0mrHqahDozgDK96ClCh7LOvVh3Wd/4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MnCx3SDciUicyMSx7uOIbiKMefwb0JIgH3zrqfC6qFxFxnqqcBXWlN+DoROrCcjaP
+	 KfzTRgaMb5mWo9LnAMquz1SDZEiXyIDiQ7T/jGtyAIE0NZ1Z9XP5PSe8K49ZTrnvTN
+	 2E4xn3fG6heTFD9davXyPrRLiotB2fDEbaH1SRGzr0EnU9TiGiYOpAgGUz7RRPdrbq
+	 YXZM6QIjQzlNKlqXr8BwCzb29vx044mnJthpe+cwiiPTX6joUOPip6JluCU/Yuhm4j
+	 KrbFk/Oaga1oshLL8//hTJpbMjZOXyVC/yylilnEQk0pYzAbmbZejQS7ca0vf5X7cC
+	 EG7AvxYceljIQ==
+Date: Fri, 13 Feb 2026 16:19:01 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next v2 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aY9A5QiTKuu7Kypp@lore-desk>
+References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
+ <20250925-bpf-xdp-meta-rxcksum-v2-1-6b3fe987ce91@kernel.org>
+ <aNYUqdaIJV1cvFCb@mini-arch>
+ <e03d6d69-73ea-46dc-b632-149ef5831f85@kernel.org>
+ <aNcZdfCivLR2slFw@mini-arch>
+ <aYtqKfv0F0l2-hgy@lore-desk>
+ <aY0zd4Esewxa-8hw@mini-arch>
+ <aY4FB_Gf31V-VYiF@lore-desk>
+ <aY6zxmRcBSt4ju86@mini-arch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="9b/WtXUSgY2WwYsX"
+Content-Disposition: inline
+In-Reply-To: <aY6zxmRcBSt4ju86@mini-arch>
 
-The tests use the tc pedit action to modify the IPv4 source address
-("pedit ex munge ip src set"), but the IP header checksum is not
-recalculated after the modification. As a result, the modified packet
-fails sanity checks in br_netfilter after bridging and is dropped,
-which causes the test to fail.
 
-Fix this by ensuring net.bridge.bridge-nf-call-iptables is set to 0
-during the test execution. This prevents the bridge from passing
-L2 traffic to netfilter, bypasing the checksum validation that
-causes the test failure.
+--9b/WtXUSgY2WwYsX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 92ad3828944e ("selftests: forwarding: Add a test for pedit munge SIP and DIP")
-Fixes: 226657ba2389 ("selftests: forwarding: Add a forwarding test for pedit munge dsfield")
-Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
----
- tools/testing/selftests/net/forwarding/pedit_dsfield.sh | 8 ++++++++
- tools/testing/selftests/net/forwarding/pedit_ip.sh      | 8 ++++++++
- 2 files changed, 16 insertions(+)
+On Feb 12, Stanislav Fomichev wrote:
+> On 02/12, Lorenzo Bianconi wrote:
+> > > On 02/10, Lorenzo Bianconi wrote:
+> > > > > On 09/26, Jesper Dangaard Brouer wrote:
+> > > > > >=20
+> > > > > >=20
+> > > > > > On 26/09/2025 06.20, Stanislav Fomichev wrote:
+> > > > > > > On 09/25, Lorenzo Bianconi wrote:
+> > > > > > > > Introduce XDP RX checksum capability to XDP metadata specs.=
+ XDP RX
+> > > > > > > > checksum will be use by devices capable of exposing receive=
+ checksum
+> > > > > > > > result via bpf_xdp_metadata_rx_checksum().
+> > > > > > > > Moreover, introduce xmo_rx_checksum netdev callback in orde=
+r allow the
+> > > > > > > > eBPF program bounded to the device to retrieve the RX check=
+sum result
+> > > > > > > > computed by the hw NIC.
+> > > > > > > >=20
+> > > > > > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > > > > > > ---
+> > > > > > > >   Documentation/netlink/specs/netdev.yaml |  5 +++++
+> > > > > > > >   include/net/xdp.h                       | 14 ++++++++++++=
+++
+> > > > > > > >   net/core/xdp.c                          | 29 ++++++++++++=
++++++++++++++++++
+> > > > > > > >   3 files changed, 48 insertions(+)
+> > > > > > > >=20
+> > > > > > > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Docu=
+mentation/netlink/specs/netdev.yaml
+> > > > > > > > index e00d3fa1c152d7165e9485d6d383a2cc9cef7cfd..00699bf4a7f=
+db67c6b9ee3548098b0c933fd39a4 100644
+> > > > > > > > --- a/Documentation/netlink/specs/netdev.yaml
+> > > > > > > > +++ b/Documentation/netlink/specs/netdev.yaml
+> > > > > > > > @@ -61,6 +61,11 @@ definitions:
+> > > > > > > >           doc: |
+> > > > > > > >             Device is capable of exposing receive packet VL=
+AN tag via
+> > > > > > > >             bpf_xdp_metadata_rx_vlan_tag().
+> > > > > > > > +      -
+> > > > > > > > +        name: checksum
+> > > > > > > > +        doc: |
+> > > > > > > > +          Device is capable of exposing receive checksum r=
+esult via
+> > > > > > > > +          bpf_xdp_metadata_rx_checksum().
+> > > > > > > >     -
+> > > > > > > >       type: flags
+> > > > > > > >       name: xsk-flags
+> > > > > > > > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > > > > > > > index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2=
+074b70618a9d4f32544d8b9a30b63 100644
+> > > > > > > > --- a/include/net/xdp.h
+> > > > > > > > +++ b/include/net/xdp.h
+> > > > > > > > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_a=
+ttachment_info *info,
+> > > > > > > >   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+> > > > > > > >   			   bpf_xdp_metadata_rx_vlan_tag, \
+> > > > > > > >   			   xmo_rx_vlan_tag) \
+> > > > > > > > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> > > > > > > > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> > > > > > > > +			   bpf_xdp_metadata_rx_checksum, \
+> > > > > > > > +			   xmo_rx_checksum)
+> > > > > > > >   enum xdp_rx_metadata {
+> > > > > > > >   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> > > > > > > > @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
+> > > > > > > >   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SC=
+TP | XDP_RSS_L3_DYNHDR,
+> > > > > > > >   };
+> > > > > > > > +enum xdp_checksum {
+> > > > > > > > +	XDP_CHECKSUM_NONE		=3D CHECKSUM_NONE,
+> > > > > > > > +	XDP_CHECKSUM_UNNECESSARY	=3D CHECKSUM_UNNECESSARY,
+> > > > > > > > +	XDP_CHECKSUM_COMPLETE		=3D CHECKSUM_COMPLETE,
+> > > > > > > > +	XDP_CHECKSUM_PARTIAL		=3D CHECKSUM_PARTIAL,
+> > > > > > > > +};
+> > > > > > >=20
+> > > > > > > Btw, might be worth mentioning, awhile ago we had settled on =
+a smaller set of
+> > > > > > > exposed types:
+> > > > > > >=20
+> > > > > > > https://lore.kernel.org/netdev/20230811161509.19722-13-larysa=
+=2Ezaremba@intel.com/
+> > > > > > >=20
+> > > > > > > Maybe go through the previous postings and check if the argum=
+ents are
+> > > > > > > still relevant? (or explain why we want more checksum now)
+> > > > > >=20
+> > > > > > IHMO the linked proposal reduced the types too much.
+> > > > >=20
+> > > > > IIRC, PARTIAL was removed because it's mostly (or only) a TX feat=
+ure?
+> > > > > So no real need to expose it as an rx hint. And I think empty xdp=
+_csum_status
+> > > > > in that proposal might have indicated NONE?
+> > > >=20
+> > > > Sorry for the (very) late reply. According to [0] CHECKSUM_PARTIAL =
+can be used
+> > > > even on Rx side, right?
+> > >=20
+> > > So is this for virtio (which I don't think you need)? Or something el=
+se?
+> >=20
+> > I forgot to mention before CHECKSUM_PARTIAL is used for the veth use-ca=
+se
+> > when the packet is coming from the networking stack.
+>=20
+> But what do you do with that partial state in BPF? I doubt you're
+> calculating/verifying it? Can we treat/export it as NONE/UNNECESSARY for =
+now?
 
-diff --git a/tools/testing/selftests/net/forwarding/pedit_dsfield.sh b/tools/testing/selftests/net/forwarding/pedit_dsfield.sh
-index af008fbf2725..eb2d8034de9c 100755
---- a/tools/testing/selftests/net/forwarding/pedit_dsfield.sh
-+++ b/tools/testing/selftests/net/forwarding/pedit_dsfield.sh
-@@ -98,12 +98,20 @@ setup_prepare()
- 	h1_create
- 	h2_create
- 	switch_create
-+
-+	if [ -f /proc/sys/net/bridge/bridge-nf-call-iptables ]; then
-+		sysctl_set net.bridge.bridge-nf-call-iptables 0
-+	fi
- }
- 
- cleanup()
- {
- 	pre_cleanup
- 
-+	if [ -f /proc/sys/net/bridge/bridge-nf-call-iptables ]; then
-+		sysctl_restore net.bridge.bridge-nf-call-iptables
-+	fi
-+
- 	switch_destroy
- 	h2_destroy
- 	h1_destroy
-diff --git a/tools/testing/selftests/net/forwarding/pedit_ip.sh b/tools/testing/selftests/net/forwarding/pedit_ip.sh
-index d14efb2d23b2..9235674627ab 100755
---- a/tools/testing/selftests/net/forwarding/pedit_ip.sh
-+++ b/tools/testing/selftests/net/forwarding/pedit_ip.sh
-@@ -91,12 +91,20 @@ setup_prepare()
- 	h1_create
- 	h2_create
- 	switch_create
-+
-+	if [ -f /proc/sys/net/bridge/bridge-nf-call-iptables ]; then
-+		sysctl_set net.bridge.bridge-nf-call-iptables 0
-+	fi
- }
- 
- cleanup()
- {
- 	pre_cleanup
- 
-+	if [ -f /proc/sys/net/bridge/bridge-nf-call-iptables ]; then
-+		sysctl_restore net.bridge.bridge-nf-call-iptables
-+	fi
-+
- 	switch_destroy
- 	h2_destroy
- 	h1_destroy
--- 
-2.43.0
+actually I guess we can get rid of XDP_CHECKSUM_PARTIAL and threat it as
+XDP_CHECKSUM_NONE for the veth case. I will fix it in v2.
 
+Regards,
+Lorenzo
+
+--9b/WtXUSgY2WwYsX
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaY9A5QAKCRA6cBh0uS2t
+rKh1AP91nCOFfR1O8ToCLIB00RY8q43IM5a8fg8TFjvQVtKNCwEAl1d1VGfd5rN+
+jesX7vIacybDs4i1SG/WmD3CH/hWeAQ=
+=yFYG
+-----END PGP SIGNATURE-----
+
+--9b/WtXUSgY2WwYsX--
