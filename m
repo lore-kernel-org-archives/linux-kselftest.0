@@ -1,258 +1,128 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908652853F8
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Feb 2026 04:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B091DDC37;
+	Sat, 14 Feb 2026 05:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771044130; cv=none; b=i0tVTBADsaj9KUEC4HmgRQkQL/TqXTyD7gWfRwoqiSuJ9wICnzNq3mzSTfhd1zaFCvzbKmh398fHhoydsxjARK8Gk0Si4ee22v2NpKxip+HlVFOJkKJwwdO3n+Q93Q9nTve0rm/Jkfq3FS7vU1hvbaUOwvR+jX3JdoHMfsuUxzg=
+	t=1771045694; cv=none; b=S3LzLod17RkZ+Jt/LNYwyrf/obSf5g6TRbdw88GVVQFNgSjzk4SmUv2R4cpw47Gukf5uiXPsaBA2KTMw41mlvW8m5jTDo9cQ54WWa7wQkQoiFrK4H6j8TxPaH4s3shhyJ63dNexOxQwvnuAhAErRMGB/zaA0s8avCTlHhdTknJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771044130; c=relaxed/simple;
-	bh=bA50R0bu4pcFiczphQwo0OOSupIpSY/EOYDo7M0jk+U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QftPl4oMA/Lo82v6CbW5EwOqL8sqccNfvSSMz8vX40YmpeJpf4iPkfvpnELUGAVedDEavGIwadBZsoQDCFZNkQev6R++boeC2LFJODr6NROoloJ0hWCdTZ28OBPfy2wNL2Uyiqk3R6bxNFwv0PflMT/+h+je2DKGkeOonm0wGfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KlYxzt+U; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771045694; c=relaxed/simple;
+	bh=cG9lVPnYSpbBWu/gq0zqn+bklzX5Z7JBWWyEOC+3fV4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=XSRXgnxyHqLUPCyBe8Mw1R0qF1uPMgW4mIrZ53E2RSeYZ6pSt/izPL90kFcxz/AVaeB3MCQzUTgLsVHuzSzVmxBypzUxOSvD3j4P6Xu1/d8dmRpL0GnNad7bSiWXdvFDBglWxE4E2tjFzSJNzskLrYl8RZ6mqnFttR4mQ90Nh8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZgwICbvZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KlYxzt+U"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2a7bced39cfso18071955ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 20:42:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771044129; x=1771648929; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eWhBTVQRjsnIct/t3J+DD3t989mrabDRUagk4xQvzMQ=;
-        b=KlYxzt+UUVseC02Op/FqlJ/H48xNCr5CLtss7o5gPlSyWXIvxRJCdcPaF3Ulh9ZX6F
-         7tNN7uyi9N487iGz7usGBTJZe0KdGeDipvJYMAnV1sq4d5G0EH7+8LPNTh0bZDyDXw/u
-         iOJvMue0nAW+uOiFuCg/kjoNSeXHqm+pjrZZlQTHM3fI3Wl0KgTsM5UfJio/lhV7EQ17
-         NTqhq5H7yJZBqWMYl2j7IqNj/Ld+PDAmAgTiuJBmjn9mpIiT6tkEmIJofGReGFRoZWp+
-         1TcKpvRDGKz1yOdbP2v/VSuWQpPGtcjypLimS32SEUwvpyNiQfdKFdNsMq3cWThMZe9S
-         SlVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771044129; x=1771648929;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eWhBTVQRjsnIct/t3J+DD3t989mrabDRUagk4xQvzMQ=;
-        b=Sf3tfUhro4hGH5sQNFZxDSGN+lDWVnIIBliCvpE1tJ8A4r/SHNe1KdfEUe3ENzIx6z
-         MaQvvYE/HnedIj5mtKjIl87yzgL/F8MpeiaV97EuIE+UF0UA4+y3PEClERy3uXjOl0E7
-         Ze3yesfQtmP1sb1bl+d+2WbtlBt5WCJuWuQj6/glm4qumFhs1xSx2CU9DBBCa9EzYYwq
-         gFWnz+QwjyjGvAFUPmHltd8judW4SkX5teXSAwTy/mkEiyEfYXp1fbx/R59gDDYtDQq2
-         L4VYDJ3/78ptIb2ar4oP0wAgqnNZjhDVxCvjv0cl1xrmQtKexwTp1f0vQWEy6mBYErzL
-         Upjg==
-X-Forwarded-Encrypted: i=1; AJvYcCXaE47+AytkZjAnvt0uvCGeo0Je79RMtaIuH4ts7yxfECpyM4rCoGXywpA3MUEGIDfSKLSrUzp72lNOFe4ph5o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyihCWau8AUyRtHuVFol1RilY7xjHHLqYZFP2EoaNn+u2JywGYy
-	0r6wyVoLZKzv4toB7Jb8/xaaic3zHVg6TlokrEAXJBHMHG2JXFNnj+H3
-X-Gm-Gg: AZuq6aKS+BvRGBBsfXgrAPiMx0e4gi2PmKnQHx6WtI+rfIuxGSi/mv1+VIrN83qk+ys
-	L06gV7AjzkqpgJkNgsA+PTmfWs9ioKrgrJerm8HUToVn4Ct1/r6eK5BOm4r5WbFMb8B+Azd3rRb
-	pI3dMmGgUDhm7X9igO2qp+q9dQUoKRSjMp+s5n1c/n3OZXnDnZc+iV5AxUskvTDwc80JufPMj1l
-	R87+IDSuc9N97pd/OsnzHEIEsyEBVtAUGUV2PFDn+zW6dHElAIy65E/MLInpEXT2Im61Aze2C9G
-	Dds5MQFubtc4+mtRTAwZIcm2PJyox6jHYME7yf3kKe2KVzTObZnSUkZVHC72kU8hD6lkY2n49Nf
-	wwt+HCgBm1l1L3YTw1V/vEkGiyENln5gDJa4fTsCV5AvtceiHuAPXXe/8IaP7+MAR4R3oZLYxHu
-	i1PxgwrgNoJHK+4JiURtzqDNsX9k7Y+m7XN+BHzc5XwWR6/hcJir8P
-X-Received: by 2002:a17:903:2444:b0:2aa:ec1b:d3c3 with SMTP id d9443c01a7336-2ab505c34bcmr44046355ad.43.1771044129086;
-        Fri, 13 Feb 2026 20:42:09 -0800 (PST)
-Received: from localhost.localdomain ([113.218.252.61])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1a6fa21dsm7218885ad.12.2026.02.13.20.42.04
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 13 Feb 2026 20:42:08 -0800 (PST)
-From: Chengkaitao <pilgrimtao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	yangfeng@kylinos.cn,
-	alexei.starovoitov@gmail.com
-Cc: linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kaitao Cheng <chengkaitao@kylinos.cn>
-Subject: [PATCH v7 5/5] selftests/bpf: Add test case for rbtree nodes that contain both bpf_refcount and kptr fields.
-Date: Sat, 14 Feb 2026 12:41:55 +0800
-Message-ID: <20260214044155.38820-2-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260214044155.38820-1-pilgrimtao@gmail.com>
-References: <20260214044155.38820-1-pilgrimtao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgwICbvZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1BFC19421;
+	Sat, 14 Feb 2026 05:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771045693;
+	bh=cG9lVPnYSpbBWu/gq0zqn+bklzX5Z7JBWWyEOC+3fV4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=ZgwICbvZ971Uq5lYSKBCoAbYqHWeHohO94elNZqukipVvcdhBTb+L3rnM19LbmTnG
+	 07/eBcVtFfX2AXXb4tMLALUa1Cao10rheXUIfiANTCTtJX9p2xXkyPnH4qUUNRwYY4
+	 AuuDogJg8fyDRR/6ZGBG49fineBSRanhKzi8h6KsEs4JfG/KYcLO/NMbboOjh+IkBf
+	 DYgquEMUFxsvSG3qTsx0F5JOLi7rSHbvRYAC4FnVhv0klu7yCULBIoq2TIgDutzoMj
+	 nZrWIwUrZdEzVWjVBiFpouGfLt5RFANFlwXn6o/LWhydINtqujdUvjPaqvb4eKfFrT
+	 QEkcFcEB+VsBA==
+Content-Type: multipart/mixed; boundary="===============8914052136563185622=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <a0c7639f60a2a769bee6ea3c211ba98515ddec243d7ab97feae8453b2636e299@mail.kernel.org>
+In-Reply-To: <20260214044155.38820-1-pilgrimtao@gmail.com>
+References: <20260214044155.38820-1-pilgrimtao@gmail.com>
+Subject: Re: [PATCH v7 4/5] bpf: allow using bpf_kptr_xchg even if the MEM_RCU flag is set
+From: bot+bpf-ci@kernel.org
+To: pilgrimtao@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,alexei.starovoitov@gmail.com
+Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 14 Feb 2026 05:08:13 +0000 (UTC)
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+--===============8914052136563185622==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Allow bpf_kptr_xchg to directly operate on pointers marked with
-NON_OWN_REF | MEM_RCU.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9300,6 +9300,7 @@
+>  		PTR_TO_BTF_ID | MEM_PERCPU,
+>  		PTR_TO_BTF_ID | MEM_PERCPU | MEM_RCU,
+>  		PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED,
+> +		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU,
+>  	}
+>  };
 
-In the example demonstrated in this patch, as long as "struct
-bpf_refcount ref" exists, the __kptr pointer is guaranteed to
-carry the MEM_RCU flag. The ref member itself does not need to
-be explicitly used.
+Was the new type added to the correct array?  This hunk adds the entry
+to percpu_btf_ptr_types, which backs ARG_PTR_TO_PERCPU_BTF_ID in
+compatible_reg_types[].  That array is used by bpf_per_cpu_ptr and
+bpf_this_cpu_ptr, not by bpf_kptr_xchg.
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+For bpf_kptr_xchg arg1 (ARG_KPTR_XCHG_DEST), the verifier looks up
+kptr_xchg_dest_types instead:
+
+kernel/bpf/verifier.c:check_reg_type() {
+    ...
+    compatible = compatible_reg_types[base_type(arg_type)];
+    ...
+    for (i = 0; i < ARRAY_SIZE(compatible->types); i++) {
+        expected = compatible->types[i];
+        ...
+        if (type == expected)
+            goto found;
+    }
+    ...
+    return -EACCES;
+
+kptr_xchg_dest_types currently contains only:
+
+static const struct bpf_reg_types kptr_xchg_dest_types = {
+    .types = {
+        PTR_TO_MAP_VALUE,
+        PTR_TO_BTF_ID | MEM_ALLOC,
+        PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF,
+    }
+};
+
+A register with PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU will
+not match any of these entries, so check_reg_type() returns -EACCES
+before ever reaching the found: label and the switch statement below.
+
+It looks like the entry should be added to kptr_xchg_dest_types rather
+than percpu_btf_ptr_types.  Alexei made the same suggestion on v6 of
+this series:
+
+https://lore.kernel.org/bpf/CAADnVQJdwqeoqi+mPjQjmNbUqz2RxAjq-dVsGb7c_MCqpqmwhA@mail.gmail.com/
+
+> @@ -9475,6 +9476,7 @@
+>  	case PTR_TO_BTF_ID | MEM_ALLOC:
+>  	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_ALLOC:
+>  	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
+> +	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU:
+>  		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
+>  		    meta->func_id != BPF_FUNC_kptr_xchg) {
+
+This switch case is correct, but it can only be reached via the found:
+label after the type-matching loop succeeds.  Since the first hunk
+adds the type to the wrong array, the loop never matches for
+bpf_kptr_xchg and this case is unreachable for its intended purpose.
+
+
 ---
- .../selftests/bpf/progs/rbtree_search_kptr.c  | 123 ++++++++++++++++++
- 1 file changed, 123 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c b/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-index 069fc64b0167..610aae45e2dc 100644
---- a/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-@@ -18,11 +18,21 @@ struct tree_node {
- 	struct node_data __kptr * node_data;
- };
- 
-+struct tree_node_ref {
-+	struct bpf_refcount ref;
-+	struct bpf_rb_node node;
-+	u64 key;
-+	struct node_data __kptr * node_data;
-+};
-+
- #define private(name) SEC(".data." #name) __hidden __aligned(8)
- 
- private(A) struct bpf_rb_root root __contains(tree_node, node);
- private(A) struct bpf_spin_lock lock;
- 
-+private(B) struct bpf_rb_root root_r __contains(tree_node_ref, node);
-+private(B) struct bpf_spin_lock lock_r;
-+
- static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
- {
- 	struct tree_node *node_a, *node_b;
-@@ -130,6 +140,119 @@ long rbtree_search_kptr(void *ctx)
- 	return ret;
- }
- 
-+static bool less_r(struct bpf_rb_node *a, const struct bpf_rb_node *b)
-+{
-+	struct tree_node_ref *node_a, *node_b;
-+
-+	node_a = container_of(a, struct tree_node_ref, node);
-+	node_b = container_of(b, struct tree_node_ref, node);
-+
-+	return node_a->key < node_b->key;
-+}
-+
-+SEC("syscall")
-+__retval(0)
-+long rbtree_search_kptr_ref(void *ctx)
-+{
-+	struct tree_node_ref *tnode_r, *tnode_m;
-+	struct bpf_rb_node *rb_n;
-+	struct node_data __kptr * node_data;
-+	int lookup_key  = NR_NODES / 2;
-+	int lookup_data = NR_NODES / 2;
-+	int i, data, ret = 0;
-+
-+	for (i = 0; i < NR_NODES && can_loop; i++) {
-+		tnode_r = bpf_obj_new(typeof(*tnode_r));
-+		if (!tnode_r)
-+			return __LINE__;
-+
-+		node_data = bpf_obj_new(typeof(*node_data));
-+		if (!node_data) {
-+			bpf_obj_drop(tnode_r);
-+			return __LINE__;
-+		}
-+
-+		tnode_r->key = i;
-+		node_data->data = i;
-+
-+		node_data = bpf_kptr_xchg(&tnode_r->node_data, node_data);
-+		if (node_data)
-+			bpf_obj_drop(node_data);
-+
-+		/* Unused reference */
-+		tnode_m = bpf_refcount_acquire(tnode_r);
-+		if (!tnode_m)
-+			return __LINE__;
-+
-+		bpf_spin_lock(&lock_r);
-+		bpf_rbtree_add(&root_r, &tnode_r->node, less_r);
-+		bpf_spin_unlock(&lock_r);
-+
-+		bpf_obj_drop(tnode_m);
-+	}
-+
-+	bpf_spin_lock(&lock_r);
-+	rb_n = bpf_rbtree_root(&root_r);
-+	while (rb_n && can_loop) {
-+		tnode_r = container_of(rb_n, struct tree_node_ref, node);
-+		node_data = bpf_kptr_xchg(&tnode_r->node_data, NULL);
-+		if (!node_data) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		data = node_data->data;
-+		node_data = bpf_kptr_xchg(&tnode_r->node_data, node_data);
-+		if (node_data) {
-+			bpf_spin_unlock(&lock_r);
-+			bpf_obj_drop(node_data);
-+			return __LINE__;
-+		}
-+
-+		if (lookup_key == tnode_r->key) {
-+			if (data == lookup_data)
-+				break;
-+
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		if (lookup_key < tnode_r->key)
-+			rb_n = bpf_rbtree_left(&root_r, rb_n);
-+		else
-+			rb_n = bpf_rbtree_right(&root_r, rb_n);
-+	}
-+	bpf_spin_unlock(&lock_r);
-+
-+	while (can_loop) {
-+		bpf_spin_lock(&lock_r);
-+		rb_n = bpf_rbtree_first(&root_r);
-+		if (!rb_n) {
-+			bpf_spin_unlock(&lock_r);
-+			return 0;
-+		}
-+
-+		rb_n = bpf_rbtree_remove(&root_r, rb_n);
-+		if (!rb_n) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+		bpf_spin_unlock(&lock_r);
-+
-+		tnode_r = container_of(rb_n, struct tree_node_ref, node);
-+
-+		node_data = bpf_kptr_xchg(&tnode_r->node_data, NULL);
-+		if (node_data)
-+			bpf_obj_drop(node_data);
-+
-+		bpf_obj_drop(tnode_r);
-+	}
-+
-+	return 0;
-+fail:
-+	bpf_spin_unlock(&lock_r);
-+	return ret;
-+}
- 
- SEC("syscall")
- __failure __msg("R1 type=scalar expected=map_value, ptr_, ptr_")
--- 
-2.50.1 (Apple Git-155)
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22011467184
 
+AI-authorship-score: low
+AI-authorship-explanation: The patch went through 7 revisions on the mailing list with human reviewer interaction, and the type of mistake (adding to the wrong array) is characteristic of human error in a codebase with many similarly structured type arrays.
+issues-found: 1
+issue-severity-score: medium
+issue-severity-explanation: The new type was added to percpu_btf_ptr_types instead of kptr_xchg_dest_types, so the patch does not achieve its stated goal of allowing bpf_kptr_xchg on MEM_RCU pointers; there is no user-visible crash or security issue, but the feature is silently broken.
+
+--===============8914052136563185622==--
