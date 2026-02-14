@@ -1,47 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F48D1A08BC;
-	Sat, 14 Feb 2026 03:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8CDF1E5201
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Feb 2026 04:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771041126; cv=none; b=Y3RD6ZgUc7nJeiDgnemK6CL0S16ErOqTZRkCDi7Phagim/5/J2vrBkl89J8HiLG1+k4ZYfTcR/fRxwj1k9Fo9xeZZ6aWdPqhoBBfTLNIO5chqbBPx8nN4xhy5YxPfdkil6H3LXdo3mkC/sfGZnbcwOmXLSLK16mVbNLOxFVnLrc=
+	t=1771043802; cv=none; b=s6ff4ohFU6dF1QfOuDD7kKa+6imnw76IyRqy1UfF5V3mAPb3eU3Xj6hFIzYUXHP19Ub2d2GlYivuLnoZrLzg+eQkH2rT3oa0RCyxq0MCRInrmT7EPAX81RitVB7u1STkKaFoOFYgWSY1YsPMZbw+YTBqqkDm2SNjNnPjlHhitYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771041126; c=relaxed/simple;
-	bh=NNv76efq6rzab8lAjjuUf6Im5mxt5aPETWbq0bymPIs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SlnBIPNbosRPNe4f6CArazxlttKvmsqAs4S2jUtZxdWsxUeI7EvzWkXzbdGDOqFLQp0LjG0P+V7FSHN32D9Mh9B17EaLxXkQeG1lo2+lIPS+A9SQ5yEsoqrYokt4CuFnRE+xJ2AbLMMLXG3gK4hqLh5eXEUxcCD5x3OZ8q+4LHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GzsV8WOf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771043802; c=relaxed/simple;
+	bh=kUZ3TAp/44GbGN69+FneMpT4zG8HXhDlDcPA1PDxXd8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pOfzW807v5mqEYz3zWn4VtDGgko1Lcv/BjrzGdo/xg74RXvNJ3MmCUDkYTlrUxJoxUTutOoRxXNsjlnIfxQyK7aOA86KXVtIrU/d3fcN6GFYVBDqEwFx23pGSxX3CuB9gCQmrgwLZT+plZbutmxB1JnrBUBauyIUm2UFJWDpLH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IuH+tcKS; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GzsV8WOf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F879C19421;
-	Sat, 14 Feb 2026 03:52:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771041125;
-	bh=NNv76efq6rzab8lAjjuUf6Im5mxt5aPETWbq0bymPIs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GzsV8WOf/oGfVAvV8qb3aYTtiC5E58JnK0RXeiSJLI/8NSRtwd/Zg+1ZgI5kaVBre
-	 //arCNzr5tLMYsIyrtnUDgZBzBGAlzV3qMMbPA/ZrnKkuS4WLVTHVdaZakAQ6q8o7c
-	 dR1S63xJRc1DiFGrPksiTVmXWJKVALNnIWKUzePcAl8iT2dJsqzh07Lp4tEiFz6qAf
-	 cl5d+JaaFr0GY8Dmf4uKDFzRHKuEIt+0Fm4m0NwU7iz0yKwm6o2XMqLAJP9E0tY3JY
-	 nv+5tzi2WGv1gf/UesFrUVokJQdhKEtMj3IcCrovN9oT+2QxjyWmNlVgiqH39jqYhv
-	 SDk4/N9lm7amw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IuH+tcKS"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-82361bcbd8fso821323b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Feb 2026 20:36:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771043801; x=1771648601; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=K4gRHmoXRE/fcFPdbacL9d9KCJ6JNq7p//h36U0/+hs=;
+        b=IuH+tcKS8CDE9WD+0vAlfeeW4jAfjWeqrTEgNdiwuV99TnDrkroGJUkhKF0kFmSbGc
+         C+M4CPYPoPL9gaI6j6Bcwyx785bSnRt4IKJ+4ZtW27LGdvCzrjmpuxTfJK3QBZBPB3q0
+         UWokrKdjiPZ+cN4Dy8CxyA3JE9i0wsCjN3NE/mhBAvShdE9oH39MjuWPmwyFluc4H1Zu
+         apvbB/xuHO2jm8mu5N3v6017l06RB5d502Zch/FddRncd/UhvsjURIc+UvXIFOkK9GvQ
+         7ZxJjB/YNDoM6Hw9UeC57zhuOyMvJAo2spanVYagw3aUtbWrE+8FhNP61+kRvyKuRYHY
+         uX6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771043801; x=1771648601;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K4gRHmoXRE/fcFPdbacL9d9KCJ6JNq7p//h36U0/+hs=;
+        b=JZlj8rY/SU7I5utwoqVbLb5bwQ/MGbzELNAWzOSh+3RCTV5OqcNl3OYY66NL01dxfj
+         fdBTm36TqScmNgAokmcU4GdEDx29CAFDlHc/dIlX2CuuNq73SWpHe8HE1Q4OPKA69bxc
+         noHSz+qeAFW4MY2cZaKKvxTJUEcacbsoTPbex/401h7rl78Av2pI++ApjpUFZrV9uA6C
+         k/TspJls0RUFAuGFOA/Mz34v4gl/gY4uxtzfgKlh5b5WPTy467ni1qqkTCQe8Y06vU7Q
+         7hPE4wqBIV9l/mZh2JaN8RxdYkiJOMLeZS549GnlcpSeoIRj5yZACiLyErDfQNAidpqQ
+         FT8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVmi+p/83Xd7wvclNldcO0IFwyCZb7hwwaGhI+6LnJmPoXmEtXQj42EXKET3lf9RrSNlzQYqRoj1qXndKNXD4U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg92+6u21amXo/8QQCfAyvj6FWIcNow+9fDr+0w78DE+P9QA4s
+	J7NbAAzlaORQfCVqcQ7hP5+bdSIT/f1pK8ftRkaOm9f4kaeTvIPeMtAt
+X-Gm-Gg: AZuq6aLxs/0/8c8FlQO3qlRog5kMjtkj+zHKpuaobogHIxQ6yfMt2TucsgS75DrpdIN
+	LwfXNWyNDcc7yxzOEb+/bdKknUHed4bo/6jjnAWTLfLGg6nGTh+v+QHFylZFhqlfuskufc18DTx
+	2VmHovfUEicmfFW2MFKHmEfRqky6R4FpbQHH3F7XJL63YT4ru2VgYl6sO0B/vKEDn88tTc3ynS4
+	KbdvcgmFTpp15hFcdvmlhnCXGGpZW8udHwD94b8JNv9UfNEHxSafF5D5C+apJoHjTrHunLHKRoK
+	VP7sDoPibci0RBqGGLau3Miio8uzdmzn7ioD4O5JM6vs3rfM0hm1pvLJ1IidJ8Dyyf3q+1i6PRs
+	6XIx/5dBCWGGFJVlMyu/pZCiazG8PceQ483a3UslPxYS3NTwCOryxLMnhLj5AbSHLZk4foChXEe
+	lU6WMzxRha9rD7okuJb8dkwjRkQswHM3c+Lpk1eE4gXZ4cn/xaA+2KMa+uso1zPwU=
+X-Received: by 2002:a05:6a20:6a22:b0:392:e5eb:f04 with SMTP id adf61e73a8af0-39483aa9f62mr1438972637.72.1771043801018;
+        Fri, 13 Feb 2026 20:36:41 -0800 (PST)
+Received: from localhost.localdomain ([113.218.252.61])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35662e53936sm13519815a91.1.2026.02.13.20.36.34
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 13 Feb 2026 20:36:40 -0800 (PST)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
 	shuah@kernel.org,
-	marcelo.leitner@gmail.com,
-	jhs@mojatatu.com,
-	dcaratti@redhat.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: tc_actions: don't dump 2MB of \0 to stdout
-Date: Fri, 13 Feb 2026 19:51:59 -0800
-Message-ID: <20260214035159.2119699-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	yangfeng@kylinos.cn,
+	alexei.starovoitov@gmail.com
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Kaitao Cheng <chengkaitao@kylinos.cn>
+Subject: [PATCH v7 0/5] bpf: Expand the usage scenarios of bpf_kptr_xchg
+Date: Sat, 14 Feb 2026 12:36:25 +0800
+Message-ID: <20260214043630.38644-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,54 +88,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since we started running selftests in NIPA we have been seeing
-tc_actions.sh generate a soft lockup warning on ~20% of the runs.
-On the pre-netdev foundation setup it was actually a missed irq
-splat from the console. Now it's either that or a lockup.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-I initially suspected a socket locking issue since the test
-is exercising local loopback with act_mirred.
-After hours of staring at this I noticed in strace that ncat
-when -o $file is specified _both_ saves the output to the file
-and still prints it to stdout. Because the file being sent
-is constructed with:
+When using bpf_kptr_xchg, we triggered the following error:
+    31: (85) call bpf_kptr_xchg#194
+    function calls are not allowed while holding a lock
+bpf_kptr_xchg can now be used in lock-held contexts, so we extended
+its usage scope in [patch 1/5].
 
-  dd conv=sparse status=none if=/dev/zero bs=1M count=2 of=$mirred
-                                ^^^^^^^^^
+When writing test cases using bpf_kptr_xchg and bpf_rbtree_*, the
+following approach must be followed:
 
-the data printed is all \0. Most terminals don't display nul
-characters (and neither does vng output capture save them).
-But QEMU's serial console still has to poke them thru which
-is very slow and causes the lockup (if the file is >600kB).
+	bpf_spin_lock(&lock);
+	rb_n = bpf_rbtree_root(&root);
+	while (rb_n && can_loop) {
+		rb_n = bpf_rbtree_remove(&root, rb_n);
+		if (!rb_n)
+			goto fail;
 
-Replace the '-o $file' with '> $file'. This speeds the test up
-from 2m20s to 18s on debug kernels, and prevents the warnings.
+		tnode = container_of(rb_n, struct tree_node, node);
+		node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
+		if (!node_data)
+			goto fail;
 
-Fixes: ca22da2fbd69 ("act_mirred: use the backlog for nested calls to mirred ingress")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: marcelo.leitner@gmail.com
-CC: jhs@mojatatu.com
-CC: dcaratti@redhat.com
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/forwarding/tc_actions.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+		data = node_data->data;
+		/* use data to do something */
 
-diff --git a/tools/testing/selftests/net/forwarding/tc_actions.sh b/tools/testing/selftests/net/forwarding/tc_actions.sh
-index ea89e558672d..86edbc7e2489 100755
---- a/tools/testing/selftests/net/forwarding/tc_actions.sh
-+++ b/tools/testing/selftests/net/forwarding/tc_actions.sh
-@@ -223,7 +223,7 @@ mirred_egress_to_ingress_tcp_test()
- 		ip_proto icmp \
- 			action drop
- 
--	ip vrf exec v$h1 ncat --recv-only -w10 -l -p 12345 -o $mirred_e2i_tf2 &
-+	ip vrf exec v$h1 ncat --recv-only -w10 -l -p 12345 > $mirred_e2i_tf2 &
- 	local rpid=$!
- 	ip vrf exec v$h1 ncat -w1 --send-only 192.0.2.2 12345 <$mirred_e2i_tf1
- 	wait -n $rpid
+		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
+		if (node_data)
+			goto fail;
+
+		bpf_rbtree_add(&root, rb_n, less);
+
+		if (lookup_key < tnode->key)
+			rb_n = bpf_rbtree_left(&root, rb_n);
+		else
+			rb_n = bpf_rbtree_right(&root, rb_n);
+	}
+	bpf_spin_unlock(&lock);
+
+The above illustrates a lock-remove-read-add-unlock workflow, which
+exhibits lower performance. To address this, we introduced support
+for a streamlined lock-read-unlock operation in [patch 2/5] and
+[patch 4/5].
+
+Changes in v7:
+- Add a comma to the variable declaration in enum bpf_reg_type
+- Modify the prefixes
+Changes in v6:
+- allow using bpf_kptr_xchg even if the MEM_RCU flag is set
+- Add test case
+Changes in v5:
+- add lastname
+Changes in v4:
+- Fix the dead logic issue in the test case
+Changes in v3:
+- Fix compilation errors
+Changes in v2:
+- Allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
+- Add test case
+
+Link to v6:
+https://lore.kernel.org/all/20260208024846.18653-1-pilgrimtao@gmail.com/
+Link to v5:
+https://lore.kernel.org/all/20260203022712.99347-1-pilgrimtao@gmail.com/
+Link to v4:
+https://lore.kernel.org/all/20260202090051.87802-1-pilgrimtao@gmail.com/
+Link to V3:
+https://lore.kernel.org/all/20260202055818.78231-1-pilgrimtao@gmail.com/
+Link to V2:
+https://lore.kernel.org/all/20260201031607.32940-1-pilgrimtao@gmail.com/
+Link to V1:
+https://lore.kernel.org/all/20260122081426.78472-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (5):
+  bpf: allow calling bpf_kptr_xchg while holding a lock
+  bpf: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
+  selftests/bpf: Add supplementary tests for bpf_kptr_xchg
+  bpf: allow using bpf_kptr_xchg even if the MEM_RCU flag is set
+  selftests/bpf: Add test case for rbtree nodes that contain both
+    bpf_refcount and kptr fields.
+
+ kernel/bpf/verifier.c                         |   9 +-
+ .../testing/selftests/bpf/prog_tests/rbtree.c |   6 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
+ .../selftests/bpf/progs/rbtree_search_kptr.c  | 290 ++++++++++++++++++
+ 4 files changed, 307 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
+
 -- 
-2.53.0
+2.50.1 (Apple Git-155)
 
