@@ -1,132 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C62C13B7A3;
-	Tue, 17 Feb 2026 00:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A801A238C
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 01:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771286656; cv=none; b=ojzDpGn4D0uK/P/AilWivMSnCCFVpxerRBvQNMS6MB0k2qy9AH4bpHBVInoE7+7wb5YWuriahODYQNNUG8Qj1A8OEn8ZsdBbJXkl52Ct9zpiRvBC/wjJVwQ5Q7dwgVLDCEPm74jt3l3Yxpi7s8IH2cl/H7p/aYmhc/+VZaltdBI=
+	t=1771292648; cv=none; b=EEjs8lwzENOmKkuaVNHd+khCr4urSb4DKX5ZCmcbMA8KWs+9H0t2DUQrSujj4AEfhxsEnt/a0BdcH4nYVFxqB9P5KNQt0Zy2Nlk5pARSyuqLrWgcgQzdDlP4tTaZdH+c9M735cgVXH4h1I/g9TUnmlyVuzOlPgX8Rga16DGLuRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771286656; c=relaxed/simple;
-	bh=bCw9hVCbQXONIXZgAbBvfEk2u6XzT2XAiGuqMrqAhNQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HN8ODTE5chNztOffKmEXn7kXc96i+Fe6KiWCQRdlfyXqjHYIS6fSDL5H4JzXPTs48xKHM+yUP+FQDyFXPmxnN4pixNBRj+xqRf7gXBtQMzuswAmtrVHNsLIlyi8REp6csIZaGy3JAgMdN9v+pziAobUDctzvxIE8LXfWi5k1oRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=csbwqWtg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771292648; c=relaxed/simple;
+	bh=9gALOijIBxBkf1lU8Wm58TBO8TUbib6/9i83EJ9Bnvo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Zr05DK34Ktm30YhWLwXhvYEGyFlR4Az/9mM9vxDT95TRmzh7Iykpbjhz3ygifLFND0TXVELRABw+md4KXIXoI8uZ95BhrmnfSztCXmaBguH7du+wITEEMFoJ/Z3g83WUcvHxXguUTc85nqW/dB8b+M9gxG2C2/hrFj8aOlx1oW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lVP+WNez; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="csbwqWtg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03ED1C2BCAF;
-	Tue, 17 Feb 2026 00:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771286656;
-	bh=bCw9hVCbQXONIXZgAbBvfEk2u6XzT2XAiGuqMrqAhNQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=csbwqWtgktX3/5Ys0Xd+IVS3AX2fp0Rfu/Zwwz2X3M+PCCWuq/0yd5BEHiFSH+S8i
-	 WcLOdNS1zwLkWFVmFM/wV66KcW/y7aRLsImRz9uHOa53xGlBpQaYibPfW93Dv0YSjw
-	 u+P7jg5SPhpRfM1XU4MYiGIafXF7YuTJq9zX6IYK8aR3BGJ94z27p7PQSi/9/Y3GjY
-	 ywGwSbECaFRr5BagHAZLskBHLsAm4D3BnJHgTlYlNLPnFnP6Clfcin+1q0+QQfU1Fe
-	 OR4MwUPHlyE7fsuR1+OY7LSPkAumgkGjgdArUiFpmdsjkV1HHEc7d1ntGhRnCRCftZ
-	 X3Fp5MjVIJuIw==
-From: SeongJae Park <sj@kernel.org>
-To: 
-Cc: SeongJae Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH 3/3] mm/damon/test/core-kunit: add damon_apply_min_nr_regions() test
-Date: Mon, 16 Feb 2026 16:03:58 -0800
-Message-ID: <20260217000400.69056-4-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260217000400.69056-1-sj@kernel.org>
-References: <20260217000400.69056-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lVP+WNez"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a784b2234dso207963525ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Feb 2026 17:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771292646; x=1771897446; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y0+U5Pc41BVwnFvqdSoAa/2Rz/ZDywih7O6BgvsAgYk=;
+        b=lVP+WNezuprj2Wl3Oloa6H09VGoHR+xKBXtLWjdizrSnRto7PlYjviwRot733oWtNr
+         0otXc6WLYykTfr/oGVPRYtvnENHJOf6hSUQREX5EnT8w1KC9u8cYzmsY4cgzBjxg3VE6
+         WkaV3X4XDVoh7K4v2Y3xhmxvcqpW3Gl45b/iHPcOwX46hmjFOylgdJkzfdW5ogPw8wK7
+         0IWKhMBoVBUj41nAF8SeiYMQsd7KU2sW6O5kL+qZF7Vghgg4IrHf23fazanXYDiaDJYg
+         iHSWjQJnFokGNcSJC3oysrO81SAKmR2iRofrUfywpY16/WdplNfh3q0Kdf7VZ+Sw5nTB
+         W9Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771292646; x=1771897446;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y0+U5Pc41BVwnFvqdSoAa/2Rz/ZDywih7O6BgvsAgYk=;
+        b=HTgHQllg1fMkdgxUGqZz//DwxArKQ6Bd1cX6ukzm71P13pOCryRez0vG1p7b+Hosp+
+         ShW7inZCfuq3eYKm+PwQNdCiZO2CTrRkCQDqqWLc9m8ju0JQJ4M/RgM99i9pJoeOFphl
+         j4fjKdLTAsgn6z0V7Y7XI2/j3L7hTug2bHzT1po3sj7w3nEZqUftFaUI/isCGCR0WIpZ
+         uEXyi1sfQdn8/D0b4KvMumxhkXct8KBhj/BmuUuNsm7z6fRLT2Xpkzj0M7OlJSKNE8UT
+         +6EJs/0A5wXpcX6gCCcELl1/jJFhZFlsTk3SyMV5BUXWtUMe0Y8fDpfpB/o+E8AoucfM
+         EW7g==
+X-Forwarded-Encrypted: i=1; AJvYcCXnzIAzT9DL9KS+fGclKzuetYfV4qFWv/m5ZPvQWgUr9QOX2L4X7FZUiLk9k/a5HLOw6QPxP/0EjsNaUrqYPeM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjOHMDMjFRJ+kneDySvqrV08dVmRlih+jSgeV3i73O3jqW9BPj
+	KcFpwii2JdKX7iMnq7u9j7pbHMGPAfU9hMxzyHdmJOX3Alg9AREB7yJ5WFX3nkfFJNvqso0s3SE
+	yU9YZrFKI/5/PIBsINK9Ue661Ag==
+X-Received: from plqu18.prod.google.com ([2002:a17:902:a612:b0:2a7:8c71:aa97])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:e943:b0:2ab:2311:e4fc with SMTP id d9443c01a7336-2ab50603a4amr130385745ad.56.1771292645552;
+ Mon, 16 Feb 2026 17:44:05 -0800 (PST)
+Date: Tue, 17 Feb 2026 01:44:02 +0000
+In-Reply-To: <20260214001535.435626-1-kartikey406@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260214001535.435626-1-kartikey406@gmail.com>
+X-Mailer: git-send-email 2.53.0.273.g2a3d683680-goog
+Message-ID: <20260217014402.2554832-1-ackerleytng@google.com>
+Subject: [PATCH] KVM: selftests: Test MADV_COLLAPSE on GUEST_MEMFD
+From: Ackerley Tng <ackerleytng@google.com>
+To: kartikey406@gmail.com, seanjc@google.com, pbonzini@redhat.com, 
+	shuah@kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: vannapurve@google.com, Liam.Howlett@oracle.com, ackerleytng@google.com, 
+	akpm@linux-foundation.org, baohua@kernel.org, baolin.wang@linux.alibaba.com, 
+	david@kernel.org, dev.jain@arm.com, i@maskray.me, lance.yang@linux.dev, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, lorenzo.stoakes@oracle.com, 
+	npache@redhat.com, ryan.roberts@arm.com, shy828301@gmail.com, 
+	stable@vger.kernel.org, syzbot+33a04338019ac7e43a44@syzkaller.appspotmail.com, 
+	ziy@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
 
-Add a kunit test for the functionality of damon_apply_min_nr_regions().
+guest_memfd only supports PAGE_SIZE pages, and khugepaged or MADV_COLLAPSE
+collapsing pages may result in private memory regions being mapped into
+host page tables.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
+Add test to verify that MADV_COLLAPSE fails on guest_memfd folios, and any
+subsequent usage of guest_memfd memory faults in PAGE_SIZE folios. Running
+this test should not result in any memory failure logs or kernel WARNings.
+
+This selftest was added as a result of a syzbot-reported issue where
+khugepaged operating on guest_memfd memory with MADV_HUGEPAGE caused the
+collapse of folios, which then subsequently resulted in a WARNing.
+
+Link: https://syzkaller.appspot.com/bug?extid=33a04338019ac7e43a44
+Suggested-by: David Hildenbrand <david@kernel.org>
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- mm/damon/tests/core-kunit.h | 52 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ .../testing/selftests/kvm/guest_memfd_test.c  | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 92ea25e2dc9e3..4c19ccac5a2ee 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -1241,6 +1241,57 @@ static void damon_test_set_filters_default_reject(struct kunit *test)
- 	damos_free_filter(target_filter);
+diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+index 618c937f3c90f..d16341a4a315d 100644
+--- a/tools/testing/selftests/kvm/guest_memfd_test.c
++++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+@@ -171,6 +171,77 @@ static void test_numa_allocation(int fd, size_t total_size)
+ 	kvm_munmap(mem, total_size);
  }
  
-+static void damon_test_apply_min_nr_regions_for(struct kunit *test,
-+		unsigned long sz_regions, unsigned long min_region_sz,
-+		unsigned long min_nr_regions,
-+		unsigned long max_region_sz_expect,
-+		unsigned long nr_regions_expect)
++static size_t getpmdsize(void)
 +{
-+	struct damon_ctx *ctx;
-+	struct damon_target *t;
-+	struct damon_region *r;
-+	unsigned long max_region_size;
++	const char *path = "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size";
++	static size_t pmd_size = -1;
++	FILE *fp;
 +
-+	ctx = damon_new_ctx();
-+	if (!ctx)
-+		kunit_skip(test, "ctx alloc fail\n");
-+	t = damon_new_target();
-+	if (!t) {
-+		damon_destroy_ctx(ctx);
-+		kunit_skip(test, "target alloc fail\n");
-+	}
-+	damon_add_target(ctx, t);
-+	r = damon_new_region(0, sz_regions);
-+	if (!r) {
-+		damon_destroy_ctx(ctx);
-+		kunit_skip(test, "region alloc fail\n");
-+	}
-+	damon_add_region(r, t);
++	if (pmd_size != -1)
++		return pmd_size;
 +
-+	ctx->min_region_sz = min_region_sz;
-+	ctx->attrs.min_nr_regions = min_nr_regions;
-+	max_region_size = damon_apply_min_nr_regions(ctx);
++	fp = fopen(path, "r");
++	TEST_ASSERT(fp, "Couldn't open %s to read PMD size.", path);
 +
-+	KUNIT_EXPECT_EQ(test, max_region_size, max_region_sz_expect);
-+	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), nr_regions_expect);
++	TEST_ASSERT_EQ(fscanf(fp, "%lu", &pmd_size), 1);
 +
-+	damon_destroy_ctx(ctx);
++	TEST_ASSERT_EQ(fclose(fp), 0);
++
++	return pmd_size;
 +}
 +
-+static void damon_test_apply_min_nr_regions(struct kunit *test)
++static void test_collapse(struct kvm_vm *vm, uint64_t flags)
 +{
-+	/* common, expected setup */
-+	damon_test_apply_min_nr_regions_for(test, 10, 1, 10, 1, 10);
-+	/* no zero size limit */
-+	damon_test_apply_min_nr_regions_for(test, 10, 1, 15, 1, 10);
-+	/* max size should be aligned by min_region_sz */
-+	damon_test_apply_min_nr_regions_for(test, 10, 2, 2, 6, 2);
++	const size_t pmd_size = getpmdsize();
++	char *mem;
++	off_t i;
++	int fd;
++
++	fd = vm_create_guest_memfd(vm, pmd_size * 2,
++				   GUEST_MEMFD_FLAG_MMAP |
++				   GUEST_MEMFD_FLAG_INIT_SHARED);
++
 +	/*
-+	 * when min_nr_regions and min_region_sz conflicts, min_region_sz wins.
++	 * Use aligned address so that MADV_COLLAPSE will not be
++	 * filtered out early in the collapsing routine.
 +	 */
-+	damon_test_apply_min_nr_regions_for(test, 10, 2, 10, 2, 5);
++#define ALIGNED_ADDRESS ((void *)0x4000000000UL)
++	mem = mmap(ALIGNED_ADDRESS, pmd_size, PROT_READ | PROT_WRITE,
++		   MAP_FIXED | MAP_SHARED, fd, 0);
++	TEST_ASSERT_EQ(mem, ALIGNED_ADDRESS);
++
++	/*
++	 * Use reads to populate page table to avoid setting dirty
++	 * flag on page.
++	 */
++	for (i = 0; i < pmd_size; i += getpagesize())
++		READ_ONCE(mem[i]);
++
++	/*
++	 * Advising the use of huge pages in guest_memfd should be
++	 * fine...
++	 */
++	TEST_ASSERT_EQ(madvise(mem, pmd_size, MADV_HUGEPAGE), 0);
++
++	/*
++	 * ... but collapsing folios must not be supported to avoid
++	 * mapping beyond shared ranges into host userspace page
++	 * tables.
++	 */
++	TEST_ASSERT_EQ(madvise(mem, pmd_size, MADV_COLLAPSE), -1);
++	TEST_ASSERT_EQ(errno, EINVAL);
++
++	/*
++	 * Removing from host page tables and re-faulting should be
++	 * fine; should not end up faulting in a collapsed/huge folio.
++	 */
++	TEST_ASSERT_EQ(madvise(mem, pmd_size, MADV_DONTNEED), 0);
++	READ_ONCE(mem[0]);
++
++	kvm_munmap(mem, pmd_size);
++	kvm_close(fd);
 +}
 +
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -1267,6 +1318,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damos_test_filter_out),
- 	KUNIT_CASE(damon_test_feed_loop_next_input),
- 	KUNIT_CASE(damon_test_set_filters_default_reject),
-+	KUNIT_CASE(damon_test_apply_min_nr_regions),
- 	{},
- };
- 
+ static void test_fault_sigbus(int fd, size_t accessible_size, size_t map_size)
+ {
+ 	const char val = 0xaa;
+@@ -370,6 +441,7 @@ static void __test_guest_memfd(struct kvm_vm *vm, uint64_t flags)
+ 			gmem_test(mmap_supported, vm, flags);
+ 			gmem_test(fault_overflow, vm, flags);
+ 			gmem_test(numa_allocation, vm, flags);
++			test_collapse(vm, flags);
+ 		} else {
+ 			gmem_test(fault_private, vm, flags);
+ 		}
 -- 
-2.47.3
+2.53.0.273.g2a3d683680-goog
+
