@@ -1,191 +1,254 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010065.outbound.protection.outlook.com [52.101.84.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551DC254841;
-	Tue, 17 Feb 2026 23:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2269316189
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 23:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771369919; cv=fail; b=Mp78eHsz3VCYjZ04+WNyzUkHEm5QQ83rfElWfbFC8nuphWS62rtY8C3g/uVFsSpxQdcZYUzRcWbZ33Q795w377RpeKtXaJoKgi6BAKbislKSe7gS3+VH1Yo3bJa8yiMB4HLmnJDcU0RBeKNFJwJLxXQPbiHLr+C9A4AM3GR07mU=
+	t=1771370022; cv=pass; b=QJ9x+WWpoY9udSAivgf6ACcwryhj5jehG+UmRIEa12wjefAqyWZZFgB8HVXl2HoVauZ5V6oa95rDC6eCnrGxIG4gjPXAw3hXtYRWVQTQ5rrE3RF0fxeV3YAr4d36vVTp/CBvDOmGPfFr7tf1oZMA684Ll689+ksGxZDjWnnzR2s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771369919; c=relaxed/simple;
-	bh=DH8k1OMAivPNF8qNEXM+V31qrj8ZSpIHhYqE9j+twgY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=cqaDPnI/2UVFuygeYHDsbwsAm4MdstuTtOUPdT6QDEs2KGCgQofwAciMrdBBuG2jKLiLM3E8NPoOTVxPMDWZ25i0svBbfli3DEhQoe4+xthe5oiPysLISnQwNBpY5YHlxAnAiNepckxmKZWlrDA1zy4yBKQMaM6Z+42Y7zI5GkQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=fCYjMwsb; arc=fail smtp.client-ip=52.101.84.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1771370022; c=relaxed/simple;
+	bh=r79iQhNrRyLXah4G9YOSWVaBuc5LQcACm1x/uvKMWos=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CSJ70ExWsGDrNh1QO+VrZvGCTpo8sqf03SjUQD8gcj17H+bTE6Iu/iLewotLJrrxE2glmgpa9hao9sWvyrNVBATkuYLN/KdJCgWTNrHlqzgJsi1Oo4fJq8QdgEtJGfmz54Ye/pT9WwFMWgGe3mf1rsb/3OpxLGpaKKHzlqWNIw4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYwo2P37; arc=pass smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="fCYjMwsb"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tSwMULVrgTDfNsQjUwXCJPJIVDxoS1ASXVDo15aTePM7WElHY1RGjP8/vzc5d3fIFfurDFb65j76ZUPiL1VekSwBRYwZfpDeDPuzpL/lHAofZ9rClPdw7Ti8Fp2vZjlx+xfC41Mjc5bbqCVNA8Tx19UOwAdROk4eTzuwqnJr84qVF5eZlXQU8VTDS77ShK9LgWr3Et/8Lkl6PrVcy8rn6JVySgiauEPoTIpL2ntnHNzDtp73wJd2sNnSSIb9IU/PfoWJtI71mzlCMfVrjFWz3zqTkzsHoke+xgumlACBgKUx6wPstkTw6w6dMSS+syJmSXteoUSQwldM6MQU1JMnLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nFj0ODPyWkaxjC85hk7ze6N+r8A7AqxepacS+bgezwA=;
- b=MyVBqap/9suFFMjmDU06wruNKBmADIz5EjmpRRRnSbwMAbkdFwA9apLNvf2j9XtbMrDY+9OZtO1n/kR0hrJrkXA9OowpYgKLQP/Qz/rrbEcxPLjhwpS2jON9kGdqUkEpWCvuV3GyTQfb0DMwJ7Mp3tyHNMStbgetsozyIHQjN+EUwcX38eI0jpOS8SilKnQprBygLKj3tPptGz29t2qOBY4Jku+mo4PfFnObhgy6IuBJGsqaBM/EcPgacV1Sy5uk8Cx527wWusdbQ/cJjHX0AM8r4SPfT3CimwQZyXrL3bIB0S8ZyGJZCIUdhXJazU3o8uXo9B4WAYrwKo/eKPTkdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nFj0ODPyWkaxjC85hk7ze6N+r8A7AqxepacS+bgezwA=;
- b=fCYjMwsbwYxaNEXhz+aB7X8dDZNg92VJTTY3UXxePK+BCq4ww9M9OtPnWlVC7Qh8p17a46BFa9t9OwLrxaCz6mU9wGvA4cXCzyghz0Smf3Fe7AxZmLp6SSe7ac4W93RqmtEhNlMcVo6EYfl04UeGy6W0i2vmHM7npCtgz0fLTaf6S12M07C9V7ES6Ce/tS6bUC57tfLeLh9prVnwHsjbmujlLMMOdNEWGCzgUqQk1P/KKTE3yrwUbFdtfFggwqTsrQ3b71wLsOBmIlyRkjJM9I611leq9VjyXsydbsIJ5xUHOZdAh1NwzcclkWRmD+cHSKkJ2aJx0/2nsSuug9Xelg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU0PR04MB9372.eurprd04.prod.outlook.com (2603:10a6:10:35b::7)
- by AS5PR04MB9874.eurprd04.prod.outlook.com (2603:10a6:20b:673::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.13; Tue, 17 Feb
- 2026 23:11:55 +0000
-Received: from DU0PR04MB9372.eurprd04.prod.outlook.com
- ([fe80::4f6:1e57:c3b9:62b4]) by DU0PR04MB9372.eurprd04.prod.outlook.com
- ([fe80::4f6:1e57:c3b9:62b4%4]) with mapi id 15.20.9632.010; Tue, 17 Feb 2026
- 23:11:55 +0000
-Date: Tue, 17 Feb 2026 18:11:48 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-	Koichiro Den <den@valinux.co.jp>,
-	Damien Le Moal <dlemoal@kernel.org>, linux-pci@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 9/9] selftests: pci_endpoint: Skip reserved BARs
-Message-ID: <aZT1tHqRXt4TwseW@lizhi-Precision-Tower-5810>
-References: <20260217212707.2450423-11-cassel@kernel.org>
- <20260217212707.2450423-20-cassel@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260217212707.2450423-20-cassel@kernel.org>
-X-ClientProxiedBy: PH7P221CA0026.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:510:32a::21) To PA4PR04MB9366.eurprd04.prod.outlook.com
- (2603:10a6:102:2a9::8)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYwo2P37"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b8850aa5b56so202148366b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 15:13:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771370019; cv=none;
+        d=google.com; s=arc-20240605;
+        b=JaGInF+0KRHXeUBbhnTa2TOi8+OO+b7nem4GGCe3NPLbsw3qy9MXMlOg0wuaK6949M
+         Tox/MX984WXcHXgqfFqvUivveT2Ejh3V0qpzRHCvGKX/U+DjhJ9b9Ao5HYyM9t9pOqih
+         1uMqm8yRJQ5Eir0E25Srm/hSerYCxQAA9eOJr0aCfJQM9VtqtI/p/dmU/iNX2FAjZAHZ
+         f/clWGgqNT+1G11HeG9p2UxNujDdcx5M08XlqhHap+wHTlTj3uEEDxV9dP2Y5mz29w44
+         3fqvNmQ3vVQrw7feHhbe2d80olGvDwtbkRbTPCsJnuvJigfeqEaIWLGolONwLug4Rhhn
+         L39A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lBoiDccagGFr7t/Rdt9JIQl1MV82SoTCGhUB9Q/6K18=;
+        fh=kJlfNVEqAuW9ZHeQmI5wcznlFnU5mAkHpdoy35LAMUw=;
+        b=cFrOgVMlKsviBsiHzliiSbfnFpeEyFyja6dFs18lxduv0JR0MjvngYRUpi4Te0TYPx
+         djACg9gJ5LzePM5A3cuEd8zPE8QuKrwDO6nlOJJkjSW9ZPPv8nKi2NXVwXky35movrXa
+         ZPCBPpOBJy1HWe34j4BV7XoZbbP9RWhIwhCMqWGgmq+Jaa3XV86tcV6kUnZr05xbDNQl
+         Uic0I6rZ3GuZ2/2c3HS4746u2L8sRL6zWhbtAAGxl+vs6auTG/Qetp5lZvpA/KMIimBo
+         +7YxiSpJUzGumyoAK/5o5mflVLzGsVH8I5bhGLhn+jjLgW3I4glWZoJw5SEuE6Uf4u5x
+         lbpA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771370019; x=1771974819; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lBoiDccagGFr7t/Rdt9JIQl1MV82SoTCGhUB9Q/6K18=;
+        b=GYwo2P374OGPIRSL8ahSMr3tYI+GVcmhyuhgf0u92+f4xLJors3KeHbwqFQ1r9DuFt
+         YTqvPWIMAqJUGcOw9TR5h3DDoeV+cMLZJ1NL+I2W9W6XHYGhLRcAgTfUrRqDrXr2v1un
+         S846PICCuLLaZ+SVK6mYuaLt6HFwHrqzc4zlkIoqX/xiuVw24tOu5sJekFQ1N+P247+O
+         KiER96h2knhGogDqNYvdGGSZzUmu0C0AXP5/pml19YKnfejc0kLVHx6YqhvD9cwq3Pa6
+         5YVwB+bGEmmXWS8sJKlRTnCjsT9+71DMGHfqwuzyi+8JPJZ7AgHIkZrNEF6iA7kg0yEx
+         Eq2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771370019; x=1771974819;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lBoiDccagGFr7t/Rdt9JIQl1MV82SoTCGhUB9Q/6K18=;
+        b=iTj7v9biIy+CN51h97oRFDfrvfb/nBGH4v15LTmUknwA5i8TA9+Kr43YVaZ6duNxKe
+         VDk3Kawu2D5G8rZiqtkYaVt0MJEIuS7gzadPx+CwV4zqogcq4JrjzupvXy4/jRk7pWiO
+         gzjnJBZ0Tef3S575qA3A3Rd4fCNDyXwxOxgcOlUyF8vGbpTTZQaeMWIE7eSrz38KQIlK
+         i2CtxX5zeppE0Tk/dSXn9YPPtVbwl1B5ofTEtpIIcdmmpEgM21HAHZcnoMbQu7BusCf1
+         69AEhmhy8rb6kVgmyYAqGdFyhMS1riEZ9K+ImG/2fUP1sMzZuCGakUfo+PmqZbPPxvh9
+         GHsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7IbxGUFbIWMh69p4z4Khoev3rdDkAiix4eZCqLBekgW0aPjkepBo1hNnz6gcgmQjBi2dON47CDGfZSe5pOxE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykqjWpTxvn781eo4xb8qXeTAP6fUPym31zb0pk+ud2ocR6iO/g
+	Jjx1Z6HcEruCgJJ+1LM88BR9mopEmrB3QiOqpHgZRmertfoMk9O7OBP5lietARxCnKB+3Dq831D
+	XV+KFLO5mOKJC7N0a/oteq1tntGCq5t+ulpU3
+X-Gm-Gg: AZuq6aK1LRJPX4VTXiLmQPfkXZTpxF89DgNmwxYF4Cqh7D3N8v0pM4lK2Lt01YfMaR7
+	uiL/o2mFQCqnIY7ukiTuCZ+lOnBt9uFGfs2Aq50FayvxmBJ2YkQEkGvf65j3EBEWf/29l+8pr0f
+	vbLpb4Y8V0VtPtPiVFmv3jA4ib9WFy58YEoCWlnvS/TO3rqtmkhmHPJdLafn+AsuQve314BA0cS
+	zAhM6qkIHM8ZfmB1T7yv4kf6WVbL9/4PinyQ1vF0IrfgpI0mv44mT9khG6sYZKDx1gNklNESAzr
+	KfqQY5wn
+X-Received: by 2002:a17:907:9808:b0:b90:48b:b53c with SMTP id
+ a640c23a62f3a-b90048bb667mr408965466b.32.1771370018919; Tue, 17 Feb 2026
+ 15:13:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9372:EE_|AS5PR04MB9874:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c25f0da-fa19-43d2-98a0-08de6e79f13a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|19092799006|7416014|52116014|376014|366016|38350700014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?nsac9icOTRSwHtqtBbGQ8GZ0+NHtwxhZvElx+JHhT8Ck79N/+jacJEUhV8Or?=
- =?us-ascii?Q?LiTTc8uSPa8PSlvUjnvQ/mJ4gCXB0GGYcfR9FI5CCV/RJ2GHXRrWFFNF/DEU?=
- =?us-ascii?Q?0vRFu/QVPTd42jUrAii7RKVhJbMBY9Dt6SXNYRWIWLiZlxYSE9MySJ7Y0bj2?=
- =?us-ascii?Q?VWi0oznXQHCBs5YUr0ms3ma7JUl9fv6Da03LFpMaWcts4fsFwbsNNbpu0T/d?=
- =?us-ascii?Q?PDWO6llhEYh4OjOuCSXF1r/437sdQ3SSudIKcCCYekPFM/GLOKpos/5zpWgi?=
- =?us-ascii?Q?7SFktOV5MDWmrX/isfN6W1IRk/g0EoJR7lMRBZ2+MwV8//sq+mlGWP0TcGU6?=
- =?us-ascii?Q?uEy6SvBisD7XNj5qC8Trve0B7ZStAIN1hUr7773HkSrUiHNbtiq2R3xHcMVl?=
- =?us-ascii?Q?t3X5xTxOwbDWf4SLLlXGgXUIBHzM0MEOg/gcRXCzKWAxMcCwkaextK1pFQo4?=
- =?us-ascii?Q?hdt9pavUf4gUHHYB2ukdJHkFJ49shbDjtCBL2sB1C4XSpRY0sxRPrH2MdjOa?=
- =?us-ascii?Q?PPDjr1MkWlVxv1IfIckpMK3XmhWMIsZVF7FyaMqslRRW2Wp/v2/MsH1RNHvJ?=
- =?us-ascii?Q?oMZuRvwgpIxNeeRth8HmLkZa/wjXt+dB3xbkFpB2KQFWeqLh3nszrD1ZjxTX?=
- =?us-ascii?Q?8MSm2ID0gHodMRzQGzsF99dpjl9jWisVq87XPd5DC0I/cpIEqg2FanUH+Uf9?=
- =?us-ascii?Q?BOsvrbAYdnsYAODNOfJFkAroXqh8BcYPrr3BBjsO+ya04vu+1oewMv7sW5s7?=
- =?us-ascii?Q?mGlwMsPYBgivDZBPdmjv55bIsADk6INGk8SDAeukorv77V9L/Dqf9FAVDTBL?=
- =?us-ascii?Q?fGybwwjeQDthMYwAqfYHYjWN5vVw+68BclBL7UW1UAQ1EDd2rDQA46LgWyWk?=
- =?us-ascii?Q?z+kP3pYp44Y8/Pwr3gJN8fcQSUAnLntlaqPNQMEiNYh4QPRLXweHqps/kL+O?=
- =?us-ascii?Q?CCCDIcPulQxgbhfZ4CTGi1Ra507uykcfJaLfWFo86I70frZqtCs0QINJ/CNT?=
- =?us-ascii?Q?Tsj199G9meLiNDsYhR2RrMZ/T9aipv4bWwOllTw3VndkbBbWsoNWocKSRO4w?=
- =?us-ascii?Q?Ko8p0VPJqZ+AHDqGZFvCqJe1mna9DypAM885ZgTQbRPyTW4sPzV+s0xBDbT7?=
- =?us-ascii?Q?5w7VFg02MfXQaF+noCH0Ge6EAFtmUxbVRPuee6IdtfTeCUewxnSJjFyacNjj?=
- =?us-ascii?Q?faPU0EACaKxFGjZkznxEqC5lSgC2WH1woD8SN6HK3Rx88O62wVRnTJzET0eq?=
- =?us-ascii?Q?0/ul5AJALAPeicV8bAFGeSY34ZiJLxL567CMNR8i0jmYX2p++IOFTmAnP60C?=
- =?us-ascii?Q?Ae4vMcaRTEztBpKNpDOz9B6jN5TLCcKyFqgEmrBbjlUXZm+rfoNtszKHawZg?=
- =?us-ascii?Q?bfZhikfoePAw1NW2Xd2LwL6wztyeQeOcdnhS8IdDrCWH9V2yWXynLSBuxsdy?=
- =?us-ascii?Q?fZcOmMShAzVmvI85A86WtvI0x9Ivxky34Kuxfw1Qn2bfefrqnJBUuf6wdC8l?=
- =?us-ascii?Q?yH6lq0ECkaCzyiA8yobKgo/ZvLnxTm40WwkhFGGe5gjhv+6LFTMb1GthEe/u?=
- =?us-ascii?Q?TngVIh6Ey2qW2iQBX9jaM9KZq9NYQrZfQR2GLMAcjQrky16JWFwdOaAooexD?=
- =?us-ascii?Q?xxNLgJX86XFeik36T2oIgNU=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9372.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(7416014)(52116014)(376014)(366016)(38350700014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?w0d7a15wQJhDm8YgzFlRB5KmbPSQ/qGPXQxImqiqu3awbDSNBEb1AnHSRtnA?=
- =?us-ascii?Q?BQFo7YYd6QbORbkl5uz7OnODza8dnAblYOQcViviS6fmnia4Zq3QfTVt13nv?=
- =?us-ascii?Q?n40Sowoxp4o4GC+9suuExTk4tXH3gBwxXd2mmmGHpb/ibyrJt05U72rApTuk?=
- =?us-ascii?Q?WvMYNoICZBsGER/oz6aQ2MAFLPrb8CKnhAdmUtqy2kfuX+RSlIOfEXn+9i31?=
- =?us-ascii?Q?ifupfSDbH47rUoIkmFdY5V9hnnyrp+kekQ9Lb0dtCxt+ztvOkiEhDV5woZSv?=
- =?us-ascii?Q?/ZqgbBUL3u5h+YO+6HOyl5f4eRDorzEFX9fju5NUV6+6+wJHAGgbRZuWc1D2?=
- =?us-ascii?Q?4ISozylD2EmTM5/wVlb1HHkwyoCBAH3LPXZ+lbUei8oMQzPISde+353v2ST0?=
- =?us-ascii?Q?MLroP7C41C8cCGgzRY7mAf5U6hIMAbpt/JuI5EbE1evme3rcd1Xrvq1QpkeS?=
- =?us-ascii?Q?ZYam+5iyne/Tw3U75dhpcXhwhTE7Ys0O7au16eIQk91SaSF8dSUnlXdwkl1L?=
- =?us-ascii?Q?IEERnMVkiuESeYnW1q5bOJObUPPn9EVVM0iyiVixwsCxNEMvGGwFbfqk5iET?=
- =?us-ascii?Q?XxepZhP96LrpH6+q4GHjj2Gia/3/bHKXJpfW6UqJJzGTcOx0BRzW6VF3+wSn?=
- =?us-ascii?Q?2knQROwExqYMXky1qa71yRwnkKkMjW+s/Evm6dePs56zNaE+GZ92YlT4zaF0?=
- =?us-ascii?Q?5xUl7M6xjO6A6nfZYMMPIdpMpOk/WkcRVd+2p1ccngIJmIaZ2eHgbjlkaPuj?=
- =?us-ascii?Q?WQ6UMicueqkKdFgpLHi6OMNom9HyvffPiqW5bpF5/+tdibkbU4Xdm/GWwUUC?=
- =?us-ascii?Q?HEOTaoD9Hv5GT89iEc0YXvv1ZdfXqzuB665EUzh4Ieo+eUOswzgRrruSdEJA?=
- =?us-ascii?Q?6N3hD2dzar/XXgpjmtaYORp55VkPBtzAqdc251zrifQvwmo9SIS5EkangMAu?=
- =?us-ascii?Q?ZzLEiRQTjN2/P6SC91dh9NIzjhEyozjyw+3biabB7gi1JRPUz3SWQSwhbBDL?=
- =?us-ascii?Q?dS4oMkYgNt5NK26ZX1/4ysBLWZqXGI+q8Y0rR/1trIpFg2XM0zQFw1OTfiDX?=
- =?us-ascii?Q?ZX09Jqgms77Jk3P5X06KyLup0w33+nI0+t0Rv7OcfUBZd/Ajivy6PZ6Q6rqT?=
- =?us-ascii?Q?7hFr/YZXAUqu/X0xedOAiHEExzQal/xYr6nqyZQ6ki2GbX26ZhtrIH54qwLn?=
- =?us-ascii?Q?lTVghKiPVuD7vCmDXnidQnPuhRI4SiUBUU6At0hhH9NODIECFhfJciEXoiPD?=
- =?us-ascii?Q?ktcns5jof712o7CKq5bQ3Pghp5/1vykt3zNprm7FBPqIWQ1+FpbauD/7afIc?=
- =?us-ascii?Q?rJLfLHw5zaK0F/9aKNNcYZJJdogC8jqq0XXX0FE3CUMF4OgWvtqApJesVfFV?=
- =?us-ascii?Q?YamOZq9//bG6ANDqjuNjf63KSJ/HXNsEWTJnhzh+1qpTYerFZbxcsu52hAoK?=
- =?us-ascii?Q?3EPk2ahmda6IaLaQ8VmON9yerFqPA1v6O889BO+FK8aHuTgbGkSrrVeoitP8?=
- =?us-ascii?Q?QMrE/kghOVmDkCi4nffVyU0/0ZTfG+EDmwWFoH8mp05th/d7DD3R2xdJeKn2?=
- =?us-ascii?Q?UUUoeMsbO6nlrVJbcyMxR3zhY+tbKdq+BjNLEPbjRrHbv4Ega3ytfDy1wZed?=
- =?us-ascii?Q?QqPGMqgMWkoNVBk2EyEXPtZHGIDdP0K24+z+/hTRbSbKW/IJtDs5FDGS2FH9?=
- =?us-ascii?Q?i/6wH6lPJSheh7TexWLBPT8BjZoz03HZJ4vwzXKUa2o2vVn3?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c25f0da-fa19-43d2-98a0-08de6e79f13a
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2026 23:11:55.4462
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hsKEiQ/XLqad7l156Vd2rgAOTXIdkG37DKAD2TY8MNPgLUEM03BSn63LLUYKdzzhakhUtN/1/Xmtm2bq4lNzqw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9874
+References: <20260212215814.629709-1-tjmercier@google.com> <20260212215814.629709-3-tjmercier@google.com>
+ <aZRAkalnJCxSp7ne@amir-ThinkPad-T480> <CABdmKX3wsWphRTDanKwGGiUWoO0xTaC8L_QxjHzhpxfZn256MQ@mail.gmail.com>
+ <CAOQ4uxgrP=VdTKZXKcRE8BeWv6wZy7aFkUF-VoEpRSxVnHZi2w@mail.gmail.com> <CABdmKX1ztzJ6B13uzdDtN-uVWbdWuYJ6PMvjGoAfu40MMHCpaA@mail.gmail.com>
+In-Reply-To: <CABdmKX1ztzJ6B13uzdDtN-uVWbdWuYJ6PMvjGoAfu40MMHCpaA@mail.gmail.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Wed, 18 Feb 2026 00:13:26 +0100
+X-Gm-Features: AaiRm52hU7QfH-Wv9-Iuqet313dBf2qvcHaBiSfPSpB5qXd2EOgSyRj8MoDjcQo
+Message-ID: <CAOQ4uxijd+viTGvQ8Mn1sLMH7dk1cGUmyU_n4HfW5Pg4FLLRPg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, jack@suse.cz, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 17, 2026 at 10:27:15PM +0100, Niklas Cassel wrote:
-> Running a test against a reserved BAR will result in the pci-epf-test
-> driver returning -ENOBUFS.
+On Wed, Feb 18, 2026 at 12:32=E2=80=AFAM T.J. Mercier <tjmercier@google.com=
+> wrote:
 >
-> Make sure that the pci_endpoint_test selftest will return skip instead of
-> failure or success for reserved BARs.
+> On Tue, Feb 17, 2026 at 1:25=E2=80=AFPM Amir Goldstein <amir73il@gmail.co=
+m> wrote:
+> >
+> > On Tue, Feb 17, 2026 at 9:26=E2=80=AFPM T.J. Mercier <tjmercier@google.=
+com> wrote:
+> > >
+> > > On Tue, Feb 17, 2026 at 2:19=E2=80=AFAM Amir Goldstein <amir73il@gmai=
+l.com> wrote:
+> > > >
+> > > > On Thu, Feb 12, 2026 at 01:58:13PM -0800, T.J. Mercier wrote:
+> > > > > Currently some kernfs files (e.g. cgroup.events, memory.events) s=
+upport
+> > > > > inotify watches for IN_MODIFY, but unlike with regular filesystem=
+s, they
+> > > > > do not receive IN_DELETE_SELF or IN_IGNORED events when they are
+> > > > > removed.
+> > > > >
+> > > > > This creates a problem for processes monitoring cgroups. For exam=
+ple, a
+> > > > > service monitoring memory.events for memory.high breaches needs t=
+o know
+> > > > > when a cgroup is removed to clean up its state. Where it's known =
+that a
+> > > > > cgroup is removed when all processes die, without IN_DELETE_SELF =
+the
+> > > > > service must resort to inefficient workarounds such as:
+> > > > > 1.  Periodically scanning procfs to detect process death (wastes =
+CPU and
+> > > > >     is susceptible to PID reuse).
+> > > > > 2.  Placing an additional IN_DELETE watch on the parent directory
+> > > > >     (wastes resources managing double the watches).
+> > > > > 3.  Holding a pidfd for every monitored cgroup (can exhaust file
+> > > > >     descriptors).
+> > > > >
+> > > > > This patch enables kernfs to send IN_DELETE_SELF and IN_IGNORED e=
+vents.
+> > > > > This allows applications to rely on a single existing watch on th=
+e file
+> > > > > of interest (e.g. memory.events) to receive notifications for bot=
+h
+> > > > > modifications and the eventual removal of the file, as well as au=
+tomatic
+> > > > > watch descriptor cleanup, simplifying userspace logic and improvi=
+ng
+> > > > > resource efficiency.
+> > > >
+> > > > This looks very useful,
+> > > > But,
+> > > > How will the application know that ti can rely on IN_DELETE_SELF
+> > > > from cgroups if this is not an opt-in feature?
+> > > >
+> > > > Essentially, this is similar to the discussions on adding "remote"
+> > > > fs notification support (e.g. for smb) and in those discussions
+> > > > I insist that "remote" notification should be opt-in (which is
+> > > > easy to do with an fanotify init flag) and I claim that mixing
+> > > > "remote" events with "local" events on the same group is undesired.
+> > >
+> > > I think this situation is a bit different because this isn't adding
+> > > new features to fsnotify. This is filling a gap that you'd expect to
+> > > work if you only read the cgroups or inotify documentation without
+> > > realizing that kernfs is simply wired up differently for notification
+> > > support than most other filesystems, and only partially supports the
+> > > existing notification events. It's opt-in in the sense that an
+> > > application registers for IN_DELETE_SELF, but other than a runtime
+> > > test like what I added in the selftests I'm not sure if there's a goo=
+d
+> > > way to detect the kernel will actually send the event. Practically
+> > > speaking though, if merged upstream I will backport these patches to
+> > > all the kernels we use so a runtime check shouldn't be necessary for
+> > > our applications.
+> > >
+> >
+> > That's besides the point.
+> > An application does not know if it running on a kernel with the backpor=
+ted
+> > patch or not, so an application needs to either rely on getting the eve=
+nt
+> > or it has to poll. How will the application know if it needs to poll or=
+ not?
 >
-> Signed-off-by: Niklas Cassel <cassel@kernel.org>
-> ---
+> Either by testing for the behavior at runtime like I mentioned, or by
+> depending on certification testing for the platform the application is
+> running on which would verify that the selftests I added pass. We do
+> the former to check for the presence of other features like swappiness
+> support with memory.reclaim, and also the latter for all devices.
+>
+> > > > However, IN_IGNORED is created when an inotify watch is removed
+> > > > and IN_DELETE_SELF is called when a vfs inode is destroyed.
+> > > > When setting an inotify watch for IN_IGNORED|IN_DELETE_SELF there
+> > > > has to be a vfs inode with inotify mark attached, so why are those
+> > > > events not created already? What am I missing?
+> > >
+> > > The difference is vfs isn't involved when kernfs files are unlinked.
+> >
+> > No, but the vfs is involved when the last reference on the kernfs inode
+> > is dropped.
+> >
+> > > When a cgroup removal occurs, we get to kernfs_remove via kernfs'
+> > > inode_operations without calling vfs_unlink. (You can't rm cgroup
+> > > files directly.)
+> > >
+> >
+> > Yes and if there was a vfs inode for this kernfs object, the vfs inode =
+needs to
+> > be dropped.
+>
+> It should be, but it isn't right now.
+>
+> > > > Are you expecting to get IN_IGNORED|IN_DELETE_SELF on an entry
+> > > > while watching the parent? Because this is not how the API works.
+> > >
+> > > No, only on the file being watched. The parent should only get
+> > > IN_DELETE, but I read your feedback below and I'm fine with removing
+> > > that part and just sending the DELETE_SELF and IN_IGNORED events.
+> > >
+> >
+> > So if the file was being watched, some application needed to call
+> > inotify_add_watch() with the user path to the cgroupfs inode
+> > and inotify watch keeps a live reference to this vfs inode.
+> >
+> > When the cgroup is being destroyed something needs to drop
+> > this vfs inode and call __destroy_inode() -> fsnotify_inode_delete()
+> > which should remove the inotify watch and result in IN_IGNORED.
+>
+> Nothing like this exists before this patch.
+>
+> > IN_DELETE_SELF is a different story, because the inode does not
+> > have zero i_nlink.
+> >
+> > I did not try to follow the code path of cgroupfs destroy when an
+> > inotify watch on a cgroup file exists, but this is what I expect.
+> > Please explain - what am I missing?
+>
+> Yes that's the problem here. The inode isn't dropped unless the watch
+> is removed, and the watch isn't removed because kernfs doesn't go
+> through vfs to notify about file removal. There is nothing to trigger
+> dropping the watch and the associated inode reference except this
+> patch calling into fsnotify_inoderemove which both sends
+> IN_DELETE_SELF and calls __fsnotify_inode_delete for the IN_IGNORED
+> and inode cleanup.
+>
+> Without this, the watch and inode persist after file deletion until
+> the process exits and file descriptors are cleaned up, or until
+> inotify_rm_watch gets called manually.
+>
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
+Yeh, that's not good.
+Will be happy to see that fixed.
 
->  tools/testing/selftests/pci_endpoint/pci_endpoint_test.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> index eecb776c33af..e506359cdded 100644
-> --- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> +++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> @@ -67,6 +67,8 @@ TEST_F(pci_ep_bar, BAR_TEST)
->  	pci_ep_ioctl(PCITEST_BAR, variant->barno);
->  	if (ret == -ENODATA)
->  		SKIP(return, "BAR is disabled");
-> +	if (ret == -ENOBUFS)
-> +		SKIP(return, "BAR is reserved");
->  	EXPECT_FALSE(ret) TH_LOG("Test failed for BAR%d", variant->barno);
->  }
->
-> @@ -84,6 +86,8 @@ TEST_F(pci_ep_bar, BAR_SUBRANGE_TEST)
->  		SKIP(return, "BAR is test register space");
->  	if (ret == -EOPNOTSUPP)
->  		SKIP(return, "Subrange map is not supported");
-> +	if (ret == -ENOBUFS)
-> +		SKIP(return, "BAR is reserved");
->  	EXPECT_FALSE(ret) TH_LOG("Test failed for BAR%d", variant->barno);
->  }
->
-> --
-> 2.53.0
->
+Thanks,
+Amir.
