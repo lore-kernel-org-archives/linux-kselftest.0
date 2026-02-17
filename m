@@ -1,58 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7BB2797B5;
-	Tue, 17 Feb 2026 21:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DD8307AF4;
+	Tue, 17 Feb 2026 21:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771364774; cv=none; b=Zp7YEzXIbVhqp3V6b93xO6xXD30t7YO/+1yAZ8qYVsfB4uZpIBUJGHJVI2Wev0DYodpr5j11S5sT2QOThwQ7+xxxLQ1fb0o2Ax0ze+JpN9Ln9oA46lS1qqTRDX4eVEBQu/Y8CVxs/RnwABSnUitwDEEdq0c0zSzaEYC69wJKscc=
+	t=1771365449; cv=none; b=DCO5D0i9+R2K6UPPlo3jXkRPIuMnBIzOWmzktLIJQLbMuaDjnnR6Bi+rTDVw/SpL0jMeGdG45GSs8KPGZVSmzw//VM1RA+QoWiP8icmc+o+WzMJLqNGTTXZEozEn1ZyMxHFag4KNyE6GFdOZm8KZReKKbuMQIEKr/oA5t/eUIoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771364774; c=relaxed/simple;
-	bh=6CLuKS02vxtfsIgKG+naWusfHTGgQQP5ho9Y7sEgdBE=;
+	s=arc-20240116; t=1771365449; c=relaxed/simple;
+	bh=W2ufsggH08gRrzRS8U3a7gxMcAG32wbvfRiJBlb3ok8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZyBxBKJ099DagpnzkR+O7AieOYhqF4Ed4Rqp0OFl+YqYJfwEi4GbsQQlWxPLvLNghGoMhL2O/BHQMbXXz3D1QoUqSI+B3e1SOsVSJWXGZCo/SFE31Qi2/er4x/izpSfcX8ssAb2R+W9TGiZdpSFr/bLog1KcxXTQn47/IaYlvTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NM2L0K0e; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=Qj/Bv2CNC0mFYmU1RaXNl+eBNjYu6HaEfYsPmtAMWNfO7OLKvRjLWGcA5zYqNNfjK/fORAvl2Sn82MDDxLE6APzX+kd4PQwXnaDRp9GlSLG2kvN4kyyoa73GBMf/1IYmTolyE1cB8TH+AamkNKPuJV4kkn0fHJ51156CRK3JA8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z6CpNMAK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NM2L0K0e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33EBC4CEF7;
-	Tue, 17 Feb 2026 21:46:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z6CpNMAK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291E9C4CEF7;
+	Tue, 17 Feb 2026 21:57:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771364774;
-	bh=6CLuKS02vxtfsIgKG+naWusfHTGgQQP5ho9Y7sEgdBE=;
+	s=k20201202; t=1771365448;
+	bh=W2ufsggH08gRrzRS8U3a7gxMcAG32wbvfRiJBlb3ok8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NM2L0K0ezt9SLP/8l3fw3BuzW6wB0MPGfRmJWQBbYi9xMvSECKRrANm0oo5QWloep
-	 Ac5s1jVVU7wv0Aec2SeSPcfwoQFD/sMyQ20eDxqM8QIzVi55GILsVcnGCSggKN2GKK
-	 fKuG4BaRXvpZ4EgbnXgTD6ULHlyWWhWyjV7OClJ/oEofSw3p9AqhE885XnnSHeviBN
-	 dFsQWo2U/p5cYzmaJCm5qQm/IPee9Vrr+FcI0pEupDmiZUP5jOmEocbj+SUNtw3bUM
-	 aJ83wwXd4RyONDystnOFzKq/MF4mUN7Xk39XYskMOEiBarmm1eyp3xozd6r9QM84qQ
-	 gLyGj3PIDxfEg==
-Date: Tue, 17 Feb 2026 13:46:12 -0800
+	b=Z6CpNMAKalMr82UTRBK+jZMkmJehFyxbR6DqneuqV/5ciIqv5gkjXEeZAKIBuMz3S
+	 vNhQLCBln42y7kTFPl7ujqB0gxFxPIs1FG9waFdr/Tr6fzMcbLkX9iLY3Z1g1wimac
+	 6qyDmtXGkw2nwLKnKvMBMwVVtYfF2tSnT9+gBBWxGUEUHxftir2Lf3nvao4lhPWoLE
+	 agSlllEbKVJGozxif+yOl7K89vd/6/i+O1kPSO17JgPG3Tt99kqHzr2SsHmzOJcOK7
+	 4Q3AQiCwASr5XNiE7z+ex1W4InDl7lOeV7CmHBNrihtLTuzjxc3cd0vO91p2qoUl60
+	 LehtYQ/CHS97w==
+Date: Tue, 17 Feb 2026 13:57:27 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Bobby Eshleman <bobbyeshleman@gmail.com>, Paolo Abeni
- <pabeni@redhat.com>, Daan De Meyer <daan.j.demeyer@gmail.com>, "Michael S.
- Tsirkin" <mst@redhat.com>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>, Stefan
- Hajnoczi <stefanha@redhat.com>, Jason Wang <jasowang@redhat.com>, Eugenio
- =?UTF-8?B?UMOpcmV6?= <eperezma@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryan-bt.tan@broadcom.com>,
- Vishnu Dasa <vishnu.dasa@broadcom.com>, Broadcom internal kernel review
- list <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan
- <shuah@kernel.org>, Long Li <longli@microsoft.com>, Jonathan Corbet
- <corbet@lwn.net>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux.dev, netdev@vger.kernel.org,
- kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-kselftest@vger.kernel.org, berrange@redhat.com, Sargun Dhillon
- <sargun@sargun.me>, linux-doc@vger.kernel.org, Bobby Eshleman
- <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v16 01/12] vsock: add netns to vsock core
-Message-ID: <20260217134612.69cfd902@kernel.org>
-In-Reply-To: <aZNNBc390y6V09qO@sgarzare-redhat>
-References: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
-	<20260121-vsock-vmtest-v16-1-2859a7512097@meta.com>
-	<aZNNBc390y6V09qO@sgarzare-redhat>
+To: Tariq Toukan <ttoukan.linux@gmail.com>
+Cc: Yael Chemla <ychemla@nvidia.com>, davem@davemloft.net,
+ netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, Willem de Bruijn
+ <willemb@google.com>, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ Tariq Toukan <tariqt@nvidia.com>, Gal Pressman <gal@nvidia.com>,
+ noren@nvidia.com
+Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: rss: validate min
+ RSS table size
+Message-ID: <20260217135727.292acc4e@kernel.org>
+In-Reply-To: <ba1885cc-57e7-488b-946b-d08c1644dcaa@gmail.com>
+References: <20260131225454.1225151-1-kuba@kernel.org>
+	<9f535014-80eb-4f57-b047-3638579bde9a@nvidia.com>
+	<20260211134319.39710c1d@kernel.org>
+	<dbbe9690-996f-4a63-90a0-baec52c27236@gmail.com>
+	<20260212172215.0a3295a0@kernel.org>
+	<ba1885cc-57e7-488b-946b-d08c1644dcaa@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,8 +54,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 17 Feb 2026 16:08:33 +0100 Stefano Garzarella wrote:
-> If we go for 1, maybe we can do it in 7.0, or not?
+On Mon, 16 Feb 2026 10:28:52 +0200 Tariq Toukan wrote:
+> >> This ignores multiple other considerations:
+> >>
+> >> 1. Existing behavior: In general, mlx5e today implies 2x factor, so it
+> >> would fail this new test.
+> >>
+> >> 2. Device resources: In large scale (high num of channels, or high num
+> >> of netdevs on the same chip, or both), it is not obvious that increasing
+> >> the indirection table size is still desirable, or even possible. To pass
+> >> the selftest, you'll have to limit the max number of channels.
+> >>
+> >> 3. ch_max should win: Related to point #2. Driver should not enforce
+> >> limitations on supported ch_max just to fulfill the recommendation and
+> >> pass the test. I prefer flexibility, give the admin the control. That
+> >> means, driver would use 4x factor (or larger) whenever possible, but
+> >> would not block configurations in which the 4x factor cannot be satisfied.  
+> > 
+> > Oh I see.. I wasn't aware the CX7 has a limitation of the indirection
+> > table size.  
+> 
+> There is a limitation, we read it from FW.
+> It's usually not small, much larger than 256.
+> 
+> But currently it can vary according to FW decisions in scale (resource 
+> management).
+> 
+> > I wrote the test because of a similar limitation in a
+> > different NIC, but that one has been fixed.. I have limited access to
+> > CX7 NICs, the one I tested on maxed out at 63 queues so the test has
+> > passed.
+> > 
+> > Is it not possible to create an indirection table larger than 256
+> > entries?  
+> 
+> It is possible, depending on the exposed FW capability.
+> As of today, there are high-scale configurations (many VFs for example) 
+> where the FW exposed cap is lowered.
 
-Just my preference but changing the behavior ASAP in 7.0 seems better,
-but the code must be ready very soon for that to happen.
+Not entirely sure what you expect the outcome of this discussion to be.
+
+The 2x indirection table has been proven inadequate for real production
+use. I'm not talking about some theory or benchmarks, actual workloads
+reported machines/NICs with such table as unusable (workload starts
+choking way before reaching expected machine capacity).
+
+That said I just checked out of curiosity and the OCP NIC spec also
+states:
+
+  The minimum supported indirection table size MUST be 128. The minimum
+  SHOULD be at least 4 times the number of supported receive queues.
+
+so I guess the 4x isn't exactly a new recommendation.
