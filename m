@@ -1,186 +1,78 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A801A238C
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 01:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C5A298CC4;
+	Tue, 17 Feb 2026 06:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771292648; cv=none; b=EEjs8lwzENOmKkuaVNHd+khCr4urSb4DKX5ZCmcbMA8KWs+9H0t2DUQrSujj4AEfhxsEnt/a0BdcH4nYVFxqB9P5KNQt0Zy2Nlk5pARSyuqLrWgcgQzdDlP4tTaZdH+c9M735cgVXH4h1I/g9TUnmlyVuzOlPgX8Rga16DGLuRw=
+	t=1771310636; cv=none; b=Ovd0gvnnaU6fezg/AVHXYD9AT3v3n3IWpLcDQNYnNoZT6na6VyxdasZel5ElUxpxyIHde4Vt/nKyehALPwLcyBOjml4O/ugiINvbN/Xpe4kxdQfq/epzb3hFhH/Myk9XajYTX+Xi8onnlKqXC4AJJXGFs1ukoieQKfO7L7ecbdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771292648; c=relaxed/simple;
-	bh=9gALOijIBxBkf1lU8Wm58TBO8TUbib6/9i83EJ9Bnvo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Zr05DK34Ktm30YhWLwXhvYEGyFlR4Az/9mM9vxDT95TRmzh7Iykpbjhz3ygifLFND0TXVELRABw+md4KXIXoI8uZ95BhrmnfSztCXmaBguH7du+wITEEMFoJ/Z3g83WUcvHxXguUTc85nqW/dB8b+M9gxG2C2/hrFj8aOlx1oW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lVP+WNez; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+	s=arc-20240116; t=1771310636; c=relaxed/simple;
+	bh=RL8wZb/KGujFWK7DHIooqWJaLqn+f83yP0M7AoFklkQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QLwj8GjVQN2k+K8yzlAoN/CR5ScSaFrVjlh/aDZNUzWIo4fRGKxfUU8pzi4eAKqIWUqt70m3BYO8k9kHZz2UMDfvxCxpxBkwMo2BmiqdPzYaBrl2EPKrMhHyDb9/gBGWXGZM59GqRdSpuRtZ6MRy951T9+pwbjYtroL4qt7dT3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZRQrc7j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lVP+WNez"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a784b2234dso207963525ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Feb 2026 17:44:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771292646; x=1771897446; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y0+U5Pc41BVwnFvqdSoAa/2Rz/ZDywih7O6BgvsAgYk=;
-        b=lVP+WNezuprj2Wl3Oloa6H09VGoHR+xKBXtLWjdizrSnRto7PlYjviwRot733oWtNr
-         0otXc6WLYykTfr/oGVPRYtvnENHJOf6hSUQREX5EnT8w1KC9u8cYzmsY4cgzBjxg3VE6
-         WkaV3X4XDVoh7K4v2Y3xhmxvcqpW3Gl45b/iHPcOwX46hmjFOylgdJkzfdW5ogPw8wK7
-         0IWKhMBoVBUj41nAF8SeiYMQsd7KU2sW6O5kL+qZF7Vghgg4IrHf23fazanXYDiaDJYg
-         iHSWjQJnFokGNcSJC3oysrO81SAKmR2iRofrUfywpY16/WdplNfh3q0Kdf7VZ+Sw5nTB
-         W9Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771292646; x=1771897446;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y0+U5Pc41BVwnFvqdSoAa/2Rz/ZDywih7O6BgvsAgYk=;
-        b=HTgHQllg1fMkdgxUGqZz//DwxArKQ6Bd1cX6ukzm71P13pOCryRez0vG1p7b+Hosp+
-         ShW7inZCfuq3eYKm+PwQNdCiZO2CTrRkCQDqqWLc9m8ju0JQJ4M/RgM99i9pJoeOFphl
-         j4fjKdLTAsgn6z0V7Y7XI2/j3L7hTug2bHzT1po3sj7w3nEZqUftFaUI/isCGCR0WIpZ
-         uEXyi1sfQdn8/D0b4KvMumxhkXct8KBhj/BmuUuNsm7z6fRLT2Xpkzj0M7OlJSKNE8UT
-         +6EJs/0A5wXpcX6gCCcELl1/jJFhZFlsTk3SyMV5BUXWtUMe0Y8fDpfpB/o+E8AoucfM
-         EW7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXnzIAzT9DL9KS+fGclKzuetYfV4qFWv/m5ZPvQWgUr9QOX2L4X7FZUiLk9k/a5HLOw6QPxP/0EjsNaUrqYPeM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjOHMDMjFRJ+kneDySvqrV08dVmRlih+jSgeV3i73O3jqW9BPj
-	KcFpwii2JdKX7iMnq7u9j7pbHMGPAfU9hMxzyHdmJOX3Alg9AREB7yJ5WFX3nkfFJNvqso0s3SE
-	yU9YZrFKI/5/PIBsINK9Ue661Ag==
-X-Received: from plqu18.prod.google.com ([2002:a17:902:a612:b0:2a7:8c71:aa97])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:e943:b0:2ab:2311:e4fc with SMTP id d9443c01a7336-2ab50603a4amr130385745ad.56.1771292645552;
- Mon, 16 Feb 2026 17:44:05 -0800 (PST)
-Date: Tue, 17 Feb 2026 01:44:02 +0000
-In-Reply-To: <20260214001535.435626-1-kartikey406@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZRQrc7j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B997C4CEF7;
+	Tue, 17 Feb 2026 06:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771310636;
+	bh=RL8wZb/KGujFWK7DHIooqWJaLqn+f83yP0M7AoFklkQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JZRQrc7jHpGvHElmGqMAABrS7epNMxGntrnhbm8r/UN3f5kO9iPy8j1LnBdVCISq3
+	 JS8SXUcF9tLztjvp8mg4OHvvwDYn+nSGI1ZLUsTVInmTAC01MYBOwnppnwD8ipXa+r
+	 1a5M12OU7d5yZy+WTTf9aLr30cqx3ssVdvEhyG3SUz18+0rcrUCHn10RMuEo2nE1Qi
+	 kAoWbZ8I7PLJeN6BuzmrvJVignuSnklJ4XXPjDGPtZFpA5I+hy4rOP5T+gUEUhQrDa
+	 dBu6nYyDUeDPWiXO8EkYNTOETe4OFw0HlQXRG5eUVbuf1BnuVYPsf4cio5MJFN0R3e
+	 JDZfSDhjEi/CA==
+Date: Mon, 16 Feb 2026 20:43:55 -1000
+From: Tejun Heo <tj@kernel.org>
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: gregkh@linuxfoundation.org, driver-core@lists.linux.dev,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED
+ support for files
+Message-ID: <aZQOK_xnxQn09qmP@slm.duckdns.org>
+References: <20260212215814.629709-1-tjmercier@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260214001535.435626-1-kartikey406@gmail.com>
-X-Mailer: git-send-email 2.53.0.273.g2a3d683680-goog
-Message-ID: <20260217014402.2554832-1-ackerleytng@google.com>
-Subject: [PATCH] KVM: selftests: Test MADV_COLLAPSE on GUEST_MEMFD
-From: Ackerley Tng <ackerleytng@google.com>
-To: kartikey406@gmail.com, seanjc@google.com, pbonzini@redhat.com, 
-	shuah@kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: vannapurve@google.com, Liam.Howlett@oracle.com, ackerleytng@google.com, 
-	akpm@linux-foundation.org, baohua@kernel.org, baolin.wang@linux.alibaba.com, 
-	david@kernel.org, dev.jain@arm.com, i@maskray.me, lance.yang@linux.dev, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, lorenzo.stoakes@oracle.com, 
-	npache@redhat.com, ryan.roberts@arm.com, shy828301@gmail.com, 
-	stable@vger.kernel.org, syzbot+33a04338019ac7e43a44@syzkaller.appspotmail.com, 
-	ziy@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260212215814.629709-1-tjmercier@google.com>
 
-guest_memfd only supports PAGE_SIZE pages, and khugepaged or MADV_COLLAPSE
-collapsing pages may result in private memory regions being mapped into
-host page tables.
+On Thu, Feb 12, 2026 at 01:58:11PM -0800, T.J. Mercier wrote:
+> This series adds support for IN_DELETE_SELF and IN_IGNORED inotify
+> events to kernfs files.
+> 
+> Currently, kernfs (used by cgroup and others) supports IN_MODIFY events
+> but fails to notify watchers when the file is removed (e.g. during
+> cgroup destruction). This forces userspace monitors to maintain resource
+> intensive side-channels like pidfds, procfs polling, or redundant
+> directory watches to detect when a cgroup dies and a watched file is
+> removed.
+> 
+> By generating IN_DELETE_SELF events on destruction, we allow watchers to
+> rely on a single watch descriptor for the entire lifecycle of the
+> monitored file, reducing resource usage (file descriptors, CPU cycles)
+> and complexity in userspace.
+> 
+> The series is structured as follows:
+> Patch 1 refactors kernfs_elem_attr to support arbitrary event types.
+> Patch 2 implements the logic to generate DELETE_SELF and IGNORED events
+>         on file removal.
+> Patch 3 adds selftests to verify the new behavior.
 
-Add test to verify that MADV_COLLAPSE fails on guest_memfd folios, and any
-subsequent usage of guest_memfd memory faults in PAGE_SIZE folios. Running
-this test should not result in any memory failure logs or kernel WARNings.
+The patchset looks good to me.
 
-This selftest was added as a result of a syzbot-reported issue where
-khugepaged operating on guest_memfd memory with MADV_HUGEPAGE caused the
-collapse of folios, which then subsequently resulted in a WARNing.
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Link: https://syzkaller.appspot.com/bug?extid=33a04338019ac7e43a44
-Suggested-by: David Hildenbrand <david@kernel.org>
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- .../testing/selftests/kvm/guest_memfd_test.c  | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
+Thanks.
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 618c937f3c90f..d16341a4a315d 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -171,6 +171,77 @@ static void test_numa_allocation(int fd, size_t total_size)
- 	kvm_munmap(mem, total_size);
- }
- 
-+static size_t getpmdsize(void)
-+{
-+	const char *path = "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size";
-+	static size_t pmd_size = -1;
-+	FILE *fp;
-+
-+	if (pmd_size != -1)
-+		return pmd_size;
-+
-+	fp = fopen(path, "r");
-+	TEST_ASSERT(fp, "Couldn't open %s to read PMD size.", path);
-+
-+	TEST_ASSERT_EQ(fscanf(fp, "%lu", &pmd_size), 1);
-+
-+	TEST_ASSERT_EQ(fclose(fp), 0);
-+
-+	return pmd_size;
-+}
-+
-+static void test_collapse(struct kvm_vm *vm, uint64_t flags)
-+{
-+	const size_t pmd_size = getpmdsize();
-+	char *mem;
-+	off_t i;
-+	int fd;
-+
-+	fd = vm_create_guest_memfd(vm, pmd_size * 2,
-+				   GUEST_MEMFD_FLAG_MMAP |
-+				   GUEST_MEMFD_FLAG_INIT_SHARED);
-+
-+	/*
-+	 * Use aligned address so that MADV_COLLAPSE will not be
-+	 * filtered out early in the collapsing routine.
-+	 */
-+#define ALIGNED_ADDRESS ((void *)0x4000000000UL)
-+	mem = mmap(ALIGNED_ADDRESS, pmd_size, PROT_READ | PROT_WRITE,
-+		   MAP_FIXED | MAP_SHARED, fd, 0);
-+	TEST_ASSERT_EQ(mem, ALIGNED_ADDRESS);
-+
-+	/*
-+	 * Use reads to populate page table to avoid setting dirty
-+	 * flag on page.
-+	 */
-+	for (i = 0; i < pmd_size; i += getpagesize())
-+		READ_ONCE(mem[i]);
-+
-+	/*
-+	 * Advising the use of huge pages in guest_memfd should be
-+	 * fine...
-+	 */
-+	TEST_ASSERT_EQ(madvise(mem, pmd_size, MADV_HUGEPAGE), 0);
-+
-+	/*
-+	 * ... but collapsing folios must not be supported to avoid
-+	 * mapping beyond shared ranges into host userspace page
-+	 * tables.
-+	 */
-+	TEST_ASSERT_EQ(madvise(mem, pmd_size, MADV_COLLAPSE), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+
-+	/*
-+	 * Removing from host page tables and re-faulting should be
-+	 * fine; should not end up faulting in a collapsed/huge folio.
-+	 */
-+	TEST_ASSERT_EQ(madvise(mem, pmd_size, MADV_DONTNEED), 0);
-+	READ_ONCE(mem[0]);
-+
-+	kvm_munmap(mem, pmd_size);
-+	kvm_close(fd);
-+}
-+
- static void test_fault_sigbus(int fd, size_t accessible_size, size_t map_size)
- {
- 	const char val = 0xaa;
-@@ -370,6 +441,7 @@ static void __test_guest_memfd(struct kvm_vm *vm, uint64_t flags)
- 			gmem_test(mmap_supported, vm, flags);
- 			gmem_test(fault_overflow, vm, flags);
- 			gmem_test(numa_allocation, vm, flags);
-+			test_collapse(vm, flags);
- 		} else {
- 			gmem_test(fault_private, vm, flags);
- 		}
 -- 
-2.53.0.273.g2a3d683680-goog
-
+tejun
