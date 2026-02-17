@@ -1,123 +1,104 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906A9329378
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 23:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B35E32E72C
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 23:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771371617; cv=none; b=KWttD4fs+8CGcud5wmJbx0+IsFXJCRTEXxBkqdMR5K041H6DJaHXa9+T+V4fb5OaMyqe/+unV+uTWP8KRX1nxOs9yy2Lwv11n6HcY0bSbh74N6oyntzhga7EzQq0DmtjhT5bSiUZMFyqYSeRsgaQXFhA92JE32qOw5hhtmK9Ot4=
+	t=1771371845; cv=none; b=okg9+XF3ueXfgvKS0Kf9Csze5xIzbwHmNdJTZr/2HHpM6HYBl1uomunGcT5TTyrp5ZQQi5nXeJfQXXwQ5zI6TFUZmfmBaMPYvJSKULQnrFoAqGI1IvPpsZBI5MdtxLxUM8MWNDT7kJahRQZOcrIkwQP1wuIDGsRsvUGsoVBu+rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771371617; c=relaxed/simple;
-	bh=n3665hyqD+YFxO1qA6277r/JprP6rvjuvnDtF6eHn3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EZpwya4vE6BY6GNOlLx8zW3k77Sjp3xat5zEbibz06J7Cb5q2MJPf6X0v1oRoDlLzXFr+o7FdUVlj4BILjczpEjslva5+CzYY0QfEMEuquzaT6KrpscXRG8DehX6ks5HUfmkjYy6u8Cp6E/dvUkcQ6gQtonBFWQ1UWFUj9YcofA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OAw4KAWG; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771371845; c=relaxed/simple;
+	bh=zgHp0rCJ6ISdDX7RasZjHOO2v40C+WfBpA3AMbfkTow=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=FiVHfRs9ATA/zC3eHpuLYKpn2n0sOPzLQDl6YFs9TvHRRxjf51zrXXKlqGu4eWrhFOmNBxTAL6wL4vvvRnDza3MNrxiyWOqydicnfTA4BGUB2JYcZEZWUsKI7PdzGbdjKXIdWdKIbAuv+zx+ssIN+4pxvYuNNuLdFG/wSu5LAhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VmuYPTsg; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OAw4KAWG"
-Date: Tue, 17 Feb 2026 23:40:03 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771371608;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AcijYy5uG9XsxVduS24EayjI5STy9xec0AclJ9VPUKA=;
-	b=OAw4KAWGWZmktrMYoegg139Gvhyadx2uVmlCTP2ECZKRzXuc+WSo0iRNTKSdC/+1niHpt0
-	SA1cmAAxmeHTRZi0YNjanQfGFeN/Neqv+Kkawd0pGu0KjxZQTV2HUnkn62MNB2XU4QKm5v
-	ynw/oyrAjELwDuw/VQH0NusuASzJEI0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 4/8] KVM: x86: nSVM: Redirect IA32_PAT accesses to
- either hPAT or gPAT
-Message-ID: <tpqwkctcbv47rxd2kutz3wk52klf332nnrf5bgtrpsaysfjpva@sj4blucyaftv>
-References: <20260212155905.3448571-1-jmattson@google.com>
- <20260212155905.3448571-5-jmattson@google.com>
- <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
- <aY9BPKhzgxo4UuHB@google.com>
- <CALMp9eR4ayj_gwsDQVH8pQvzqgEYVB6ExWp3aFgJXRWikLEikw@mail.gmail.com>
- <aY-jViitsLQm9B83@google.com>
- <CALMp9eTnXW9=0=+RxQjeXfA++UP3MX0LzXo5qwUP-dCCQjOLVQ@mail.gmail.com>
- <aZT5eldlkLpRm7OD@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VmuYPTsg"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a7d7b87977so54948735ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 15:44:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771371842; x=1771976642; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/aCNMwBAkSYiwoiX/QbH+a9MRbUxIDZiaFVfDQafN4=;
+        b=VmuYPTsgPoDS86sxPc3UaNVd/ivXr+HUYf1uiRRtMu05iUZOSC+U0O1DEIQSSEX1nb
+         yotX1ihBska6ouMLPewnKkCsY7jafTMI13v516OR+/adrOKEsq1U6Qfz9gZIXy0tOTYb
+         0o4k/ck8SijTHZASzpF9+ZmRudkysYnNafSx2lfMh5PQnQFGkz0h/F6ZhbBJCEvtT8D7
+         W7mgakuDqjNhSj2bPuKscjjJ87+KVDrRbbEfuFT63dL8N5FrvKWyCvtDKh7Ml3yrESKK
+         sTa7F3+gbLv7dJGTwWREgBYQDgJOY2iaonzuD4C8bhUHKUFsNpwXPzyFIjR/OLAzyJRW
+         Zkqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771371842; x=1771976642;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/aCNMwBAkSYiwoiX/QbH+a9MRbUxIDZiaFVfDQafN4=;
+        b=XlGxa1iJ8sEiz9jjIqC++OsMRzUS7Qep7cOq29B5tsK5IEshpRjYHt74eSyExvATB2
+         Am+y4e9jO1omqzMPopHuIuQunoMCm9UFlEst1jvQmPjbJQlpDbavn4EkyBupSNvB3q+S
+         +m40CkWGxHquLfoHE0jvGSECtBJjTcTrKXqFki9KUL9ctM4F1CsdpkWFFk7/RCqk/QSo
+         4x2QsoCmuKJ1Os9fHBYnEq3TzJjHYsrWlozB8ve8gF1uWOALAyIB949pS4+vpZyU7lvm
+         qo8vpI/9bd7foR3N0ZMosYyRC8OLnZUPgrTRj0JhoLTO5kf64SyYL41n2qp4ZjBig35x
+         jtTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKXML0xMzA0QvjOM/FYMc6IF9zrLq8Nk004MB/RogHIZGn2o+uw/yeHf21NXQslWBp6eku1X1vFigKapt1fkI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxA3IvA/4N/kq2Qv83y5jVgGpog4TreK5W+cEK43IrqVcTWpTiF
+	UG/5Zd3tO+eV4LLF7DLE8zKCkO8WVsZ7m+2sU0z3i7rVFCDhv40aI0g42ytUKVTbDkPK8hM4iDx
+	9rRlS6w==
+X-Received: from plsm8.prod.google.com ([2002:a17:902:bb88:b0:2a1:36d4:7f2f])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1ace:b0:2a9:62e6:ab11
+ with SMTP id d9443c01a7336-2ad50ff301fmr202985ad.59.1771371842202; Tue, 17
+ Feb 2026 15:44:02 -0800 (PST)
+Date: Tue, 17 Feb 2026 15:44:01 -0800
+In-Reply-To: <tpqwkctcbv47rxd2kutz3wk52klf332nnrf5bgtrpsaysfjpva@sj4blucyaftv>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aZT5eldlkLpRm7OD@google.com>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20260212155905.3448571-1-jmattson@google.com> <20260212155905.3448571-5-jmattson@google.com>
+ <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
+ <aY9BPKhzgxo4UuHB@google.com> <CALMp9eR4ayj_gwsDQVH8pQvzqgEYVB6ExWp3aFgJXRWikLEikw@mail.gmail.com>
+ <aY-jViitsLQm9B83@google.com> <CALMp9eTnXW9=0=+RxQjeXfA++UP3MX0LzXo5qwUP-dCCQjOLVQ@mail.gmail.com>
+ <aZT5eldlkLpRm7OD@google.com> <tpqwkctcbv47rxd2kutz3wk52klf332nnrf5bgtrpsaysfjpva@sj4blucyaftv>
+Message-ID: <aZT9QaJ6s2sSE3QR@google.com>
+Subject: Re: [PATCH v4 4/8] KVM: x86: nSVM: Redirect IA32_PAT accesses to
+ either hPAT or gPAT
+From: Sean Christopherson <seanjc@google.com>
+To: Yosry Ahmed <yosry.ahmed@linux.dev>
+Cc: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-> I like it.  And AFAICT it largely Just Works, because the calls from
-> svm_set_nested_state() will always be routed to gpat since the calls are already
-> guarded with is_guest_mode() + nested_npt_enabled().
+On Tue, Feb 17, 2026, Yosry Ahmed wrote:
+> > @@ -2838,16 +2876,7 @@ static int svm_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+> >  		msr_info->data = svm->msr_decfg;
+> >  		break;
+> >  	case MSR_IA32_CR_PAT:
+> > -		/*
+> > -		 * When nested NPT is enabled, L2 has a separate PAT from
+> > -		 * L1.  Guest accesses to IA32_PAT while running L2 target
+> > -		 * L2's gPAT; host-initiated accesses always target L1's
+> > -		 * hPAT for backward and forward KVM_GET_MSRS compatibility
+> > -		 * with older kernels.
+> > -		 */
+> > -		WARN_ON_ONCE(msr_info->host_initiated && vcpu->wants_to_run);
+> > -		if (!msr_info->host_initiated && is_guest_mode(vcpu) &&
+> > -		    nested_npt_enabled(svm))
+> > +		if (svm_is_access_to_gpat(vcpu, msr_info->host_initiated))
+> >  			msr_info->data = svm->nested.save.g_pat;
+> >  		else
+> >  			msr_info->data = vcpu->arch.pat;
 > 
-> Side topic, either as a prep patch (to duplicate code) or as a follow-up patch
-> (to move the PAT handling in x86.c to vmx.c), the "common" handling of PAT should
-> be fully forked between VMX and SVM.  As of this patch, it's not just misleading,
-> it's actively dangerous since calling kvm_get_msr_common() for SVM would get the
-> wrong value.
-
-+1 on both points.
-
-> FWIW, this is what I ended up with when hacking on top of your patches to see how
-> this played out.
+> I'd go a step further here and add svm_get_pat(), then this just
+> becomes:
 > 
-> ---
-> @@ -2838,16 +2876,7 @@ static int svm_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		msr_info->data = svm->msr_decfg;
->  		break;
->  	case MSR_IA32_CR_PAT:
-> -		/*
-> -		 * When nested NPT is enabled, L2 has a separate PAT from
-> -		 * L1.  Guest accesses to IA32_PAT while running L2 target
-> -		 * L2's gPAT; host-initiated accesses always target L1's
-> -		 * hPAT for backward and forward KVM_GET_MSRS compatibility
-> -		 * with older kernels.
-> -		 */
-> -		WARN_ON_ONCE(msr_info->host_initiated && vcpu->wants_to_run);
-> -		if (!msr_info->host_initiated && is_guest_mode(vcpu) &&
-> -		    nested_npt_enabled(svm))
-> +		if (svm_is_access_to_gpat(vcpu, msr_info->host_initiated))
->  			msr_info->data = svm->nested.save.g_pat;
->  		else
->  			msr_info->data = vcpu->arch.pat;
+> 	msr_info->data = svm_get_pat(vcpu, msr_info->host_initiated);
+> 
+> It's more consistent with svm_set_msr(), and completely abstracts the L1
+> vs. L2 PAT logic with the helpers.
 
-I'd go a step further here and add svm_get_pat(), then this just
-becomes:
-
-	msr_info->data = svm_get_pat(vcpu, msr_info->host_initiated);
-
-It's more consistent with svm_set_msr(), and completely abstracts the L1
-vs. L2 PAT logic with the helpers.
-
-> @@ -2937,19 +2966,8 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
->  	case MSR_IA32_CR_PAT:
->  		if (!kvm_pat_valid(data))
->  			return 1;
-> -		/*
-> -		 * When nested NPT is enabled, L2 has a separate PAT from
-> -		 * L1.  Guest accesses to IA32_PAT while running L2 target
-> -		 * L2's gPAT; host-initiated accesses always target L1's
-> -		 * hPAT for backward and forward KVM_SET_MSRS compatibility
-> -		 * with older kernels.
-> -		 */
-> -		WARN_ON_ONCE(msr->host_initiated && vcpu->wants_to_run);
-> -		if (!msr->host_initiated && is_guest_mode(vcpu) &&
-> -		    nested_npt_enabled(svm))
-> -			svm_set_gpat(svm, data);
-> -		else
-> -			svm_set_hpat(svm, data);
-> +
-> +		svm_set_pat(vcpu, data, msr->host_initiated);
->  		break;
->  	case MSR_IA32_SPEC_CTRL:
->  		if (!msr->host_initiated &&
+Either way works for me.
