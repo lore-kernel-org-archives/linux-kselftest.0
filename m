@@ -1,104 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D392FE593;
-	Tue, 17 Feb 2026 09:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABF1318EC2;
+	Tue, 17 Feb 2026 09:50:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771319869; cv=none; b=kO6tdpei7RrjjXhy3VvGRzclggZix9NbEW40ACSaNFCCKOQG2LnEshIqVEqwZ3o+f+C1HT68zXyrBELg4ShJ34dAN/xgbUWMbjQetmPLe0xQsWmuT8U9dzrFv0f20RQvGG688IKQ/DnRYnjr/QJMXT4ct9NzD/lH/jzPZnKCqIQ=
+	t=1771321818; cv=none; b=cOrAMxrUa7YuoMHMp/Hhrym1hZzIczPj8O8KEIkunEaR8Acb+qdhi2LuckwMyHcycDzdOIOpBkaAeD7M5Y6fEg9HCxyEhXpknGxBgQSBsBPvzfqUJ8qquim4xhnZTQPGHv/hRL87mXtXM6Mh8+Si0qZwZ9wSPQc+rQATSyYJmsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771319869; c=relaxed/simple;
-	bh=VD1W6Yh8O0HczIuc809B8SdiqAX3gxVye/bDQIHDEYA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=rrdgF31fDSWEUNcPtTgLvq8l0OWBUjrAfLmKVY2jmhSkKBStGVMAVEXtXF1tCqgij9EkS032i1FdR5DKFQI+gzykWFK09FZFITMh8QxtXJkoJEXCBjTXuJ59Iyd7IpTWEp7pRvaNSwkV9vyygjbhJYOwdJxj+8O/pTESaNcEMI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NilVoq0j; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771321818; c=relaxed/simple;
+	bh=QlMcz1jL4ZU1sC8P+L8TWMDIrSGK5yzXJIyjLcaeOfs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=D2FueDkDCux9nOAIeJgPPaCSs+cIc/vNLXrnvy3eO2MdeZbZuvQ9gVEKmOV2pfu6X/6hJCNdxZpVKVf7G2kw3Mt/p+EMvLBsGAyQSgKRA8t0MunEhwZsnfGRgxPVAPtxMaeRpeUl6lz4gqfGeqmHTF2Ev8eMP25Hq6u2PMSLjhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKLoodpg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NilVoq0j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 167F4C4CEF7;
-	Tue, 17 Feb 2026 09:17:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKLoodpg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D855C2BC9E;
+	Tue, 17 Feb 2026 09:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771319868;
-	bh=VD1W6Yh8O0HczIuc809B8SdiqAX3gxVye/bDQIHDEYA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=NilVoq0jUGjdtQEohI0ld8tCcQ66gDq2r5k2x1mVbRJpyBy9oDH6Jc9zv4NhD0KxC
-	 s6kYqYc8OelFCQstpcUQ27bT3Vi7NJNobzFjqX/XOAKNqIdFGr80Q+WucTsiMvuJR8
-	 fe5hSGXxnUZVOCrk3f3cDwPrkpwDLPPeuYPp10PbjGc0/kkn4Zj5d76g/plSpGUJvP
-	 E9/ce1tZeGWhbjOqvUkKISPqRIZgS3vqF3Mudue/KOpkJfZk6JHrRbUt/Jt38If4np
-	 Aumit0zQTm6LwUOxapKsyp+gBoHcP/uHEn9MPYBjTC/tEk9nalkYKiBs0aRjsL+zlQ
-	 zuBpKBRm4bdkw==
-Content-Type: multipart/mixed; boundary="===============2605647824317503671=="
+	s=k20201202; t=1771321818;
+	bh=QlMcz1jL4ZU1sC8P+L8TWMDIrSGK5yzXJIyjLcaeOfs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=IKLoodpgQ1ReA0RVkcZ7fyULqM/gEHkBXhtJNXaSKr4/FRG7PeHHI040UEyBOIvJy
+	 L0De8g7zB/E7mhIZnP7LcQhIyvx8KZ3o+7fuTse4/hWQrQCELYyrqUhz7fnduXaBSh
+	 WvdohStbxffm9VAKh4l6YaFF51qzr+qR305YouIS0NhqcrX2qP84Rll1w/z3XMr/Am
+	 IYeB4+oOgLgnozqXVe+AF0BzS5hrGZTNcFdqlStiK8Hw7Fd4EME24gp50Iid3R7VFA
+	 w48qQZa4KmDBwetJFfp8sDQaUhxLAcCOkrATaN7XdTFOBHR9EDzWrWRz2E8Gt0fBkB
+	 +lFP6BTQ9CUag==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C2191380AACF;
+	Tue, 17 Feb 2026 09:50:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2f8cd0a2da03a180287cb70d1f399cfaf80f8c32983605f1716806bf3fe83e7e@mail.kernel.org>
-In-Reply-To: <20260217-bpf-xdp-meta-rxcksum-v3-4-30024c50ba71@kernel.org>
-References: <20260217-bpf-xdp-meta-rxcksum-v3-4-30024c50ba71@kernel.org>
-Subject: Re: [PATCH bpf-next v3 4/5] selftests/bpf: Add selftest support for bpf_xdp_metadata_rx_checksum
-From: bot+bpf-ci@kernel.org
-To: lorenzo@kernel.org,donald.hunter@gmail.com,kuba@kernel.org,davem@davemloft.net,edumazet@google.com,pabeni@redhat.com,horms@kernel.org,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrew+netdev@lunn.ch,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,aleksander.lobakin@intel.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,maciej.fijalkowski@intel.com
-Cc: jakub@cloudflare.com,netdev@vger.kernel.org,bpf@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,aleksandr.loktionov@intel.com,lorenzo@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 17 Feb 2026 09:17:48 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/4] eth: fbnic: fix and improve header/data split
+ configuration
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177132181061.4191076.11098666008193048812.git-patchwork-notify@kernel.org>
+Date: Tue, 17 Feb 2026 09:50:10 +0000
+References: <20260211-fbnic-tcp-hds-fixes-v1-0-55d050e6f606@meta.com>
+In-Reply-To: <20260211-fbnic-tcp-hds-fixes-v1-0-55d050e6f606@meta.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, mohsin.bashr@gmail.com, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bobbyeshleman@meta.com
 
---===============2605647824317503671==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-> --- a/tools/testing/selftests/bpf/xdp_metadata.h
-> +++ b/tools/testing/selftests/bpf/xdp_metadata.h
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-[ ... ]
+On Wed, 11 Feb 2026 17:00:40 -0800 you wrote:
+> This series fixes TCP HDS configuration in the fbnic driver and adds a
+> devmem selftest for the intended behavior.
+> 
+> The issues fixed include setting the correct CSR for EN_HDR_SPLIT,
+> adjusting the hds threshold clamp to avoid long headers overflowing into
+> the payload page, and configuring the device to use L4/L3/L2 header
+> boundaries when present by programming the DMA hint bit unconditionally
+> for all steering rule types.
+> 
+> [...]
 
-> +	struct {
-> +		__u8 ip_summed;
-> +		__u32 cksum_meta;
-> +	};
+Here is the summary with links:
+  - [net,1/4] eth: fbnic: set FBNIC_QUEUE_RDE_CTL0_EN_HDR_SPLIT on RDE_CTL0
+    https://git.kernel.org/netdev/net/c/bbeb3bfbffe0
+  - [net,2/4] eth: fbnic: increase FBNIC_HDR_BYTES_MIN from 128 to 256 bytes
+    https://git.kernel.org/netdev/net/c/bd254115f38d
+  - [net,3/4] eth: fbnic: set DMA_HINT_L4 for all flows
+    https://git.kernel.org/netdev/net/c/0f30a31b55c4
+  - [net,4/4] selftests: drv-net: add HDS payload sweep test for devmem TCP
+    https://git.kernel.org/netdev/net/c/e7a3c1adc127
 
-The ip_summed field is __u8 (1 byte), but bpf_xdp_metadata_rx_checksum()
-takes an enum xdp_checksum * argument, which is 4 bytes.
-
-In the BPF program:
-
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-> --- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-> +++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-
-[ ... ]
-
-> +	bpf_xdp_metadata_rx_checksum(ctx,
-> +				     (enum xdp_checksum *)&meta->ip_summed,
-> +				     &meta->cksum_meta);
-
-The cast here passes a pointer to a 1-byte field where the kfunc will
-perform a 4-byte store.  On little-endian this happens to work because
-the value lands in the low byte and the remaining 3 bytes go into struct
-padding.
-
-On big-endian, the value would be stored in the high byte, so reading
-back ip_summed as __u8 would yield 0 for any checksum result.
-
-For comparison, the other metadata fields match their kfunc argument
-sizes: rx_hash is __u32 matching u32 *, and rx_hash_type is __u32
-matching enum xdp_rss_hash_type *.
-
-Should ip_summed be __u32 (or enum xdp_checksum) to match the kfunc
-signature and avoid the cast?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22091902298
-
-AI-authorship-score: low
-AI-authorship-explanation: Code and commit message follow established kernel selftest patterns consistent with a known contributor, and the type choice reflects human engineering judgment.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Type size mismatch in selftest code where a __u8 field is cast to enum xdp_checksum * (4 bytes) for a kfunc call, causing incorrect behavior on big-endian architectures.
-
---===============2605647824317503671==--
