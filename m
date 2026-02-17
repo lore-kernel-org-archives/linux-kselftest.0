@@ -1,193 +1,247 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028EE37418F
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 19:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CEFE2EA473
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 21:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771356474; cv=pass; b=Z8qEEkQdTdrMx/GP4BgMepM8soaQutLtu3ix01FJG7lBn4en8/SrQ4JN1KyljckngHsiq84kmJ34B9K0xdp1m/RvsY2gxq03WOISYEZcpgNwfbh0FasYMDxUBDOYSlQoUiSVJsJ62bBs8fJD66OUgtfhJZIpwDVEvMGe3Ds2nqE=
+	t=1771363516; cv=pass; b=jKsrM4aXxNf3xWMS+yWyikxTlvLNIezo9CXwAll43FJr0LFsP2ll8BuVvs4N7Y9UwTOPcMxdUjZBvYFrwgwMWtrXs5b8zS4VcKnB4pPcA7pfjMfaLvsiyjbhAUdDx+SB/uw6bG+CGc40QUc2LFX+rSEclfi4w+q3lvlY6GCodnk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771356474; c=relaxed/simple;
-	bh=2AkZD/xZt0VUvR9sJ0sGJHU4a65qrHn4YVu35A++2Jc=;
+	s=arc-20240116; t=1771363516; c=relaxed/simple;
+	bh=fbhIDMncw2o3OGAnMUfavkAE0+3CvTo4wLCTth3BWak=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CHWcpbKTIRwcp/UMQBBFIbpK5E+ffFwZzbBOAGvnv5+nXdPxl+LVS6vyyoyD8eOaKnoMiD2QvCe24LIoFI1Ima0eT+gqB93tQqcpdcJgCVY+mWj5e2AQYlVXXV9J+pioWzvJiJKsUu7dITTAq3v3nPeZrjk/tPSuonDwyuZMWjo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HvnoZR8z; arc=pass smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=BIZ/PO7+uMVU2Vxap8U8U/IuwtV+U3leWO1KJH70/K5OXkQHeDCWDmcXbgpt3vy1H7naVaKXkEnZm/Xmn8MDy0SQ/rk85SM7w9AeyXs5qr1vY3k7yuhaPhpya/T3mxpAs+tpTQ0t30yQ/gt28VyTh37C7oQoG9P3rXgi8g//0Lo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f49CF+u7; arc=pass smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HvnoZR8z"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48373ad38d2so10405e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 11:27:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771356471; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f49CF+u7"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6581234d208so7878852a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 13:25:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771363513; cv=none;
         d=google.com; s=arc-20240605;
-        b=Cu/GUrv0BTSE2+WLkmUS6+VXGFFguKIxqKavTnJvPktTk1g+sHEnqoNOfN5e9RY338
-         epheBrGQLhiZ4vmZT1IsTP094avrI+3d/o8vUvtaBzS6S/bG6tfrrKpQ4ePyoTQPlaEa
-         u23tsPdORXBDetqAyIIM40tRzuY5+Za/NDLAVJn5u/yt5IpC6m18z8QXZevm89Tak9rS
-         VrPVvDVuEe0s+j6PmtWMOB1ez2376MOHNd/ZMPpS4uS6zWDGXD1+BkJQaF1alHTfOE8t
-         +wF5Le9QRW3jgNasJnJhEogaoklFGLoi0l6yQ5o0MSSFPPRaIejacCo/aWllk62gtszc
-         4aHg==
+        b=eeYVKJ+oZlgmJcl/fCaaciJCjMFTIho8AL9IQDv7+l1hxp0JZocaL8VrCPU3GnSulz
+         x9yP4ybmz7BEN7GtMQokty2ejAdt2cWdfr9QaUXPD9Bjmi0sSM2HyNJIfA6aAvOiUQ78
+         j7vfT1GBmYKi5O/cFA3iuJdc1K0gLwRqCir/hcdtOhsD6cuV+sdcHyXMaB7WG/WO03/e
+         x3Q7RMqzZoS9DrzTMfEa3o5KKVLyMhIA+PfRrdTOfuabfREioNtgrWnCtCsVmD2NnlkO
+         yLj/prOfmvOg+HFTDNk8/u5g8MyQCIruG37L00CnXoGOmkoogYHPgc4AFEAKZkmjvEWv
+         q3IQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=SbtQMFsGPA/6ldfqUOLBsftSiaWAN1XegIGnQQjLLP8=;
-        fh=KiTa5Yoj7GnjwKiJHQUobTmUrcF0kCRaJ3hbJanzag0=;
-        b=WZxz2llFQ2hbPf3A4fftYv8XP2vFTwTlOCXjuztUkGIV2YvES8gyoMWfAXbVsc6T2v
-         u1OPtF3qOMFp4m0ibAAFLSmo+XAZnQpJMHkpThFHJV0J1G8zGr+eoQGQMrHgpkniXHt8
-         gvrvS9KftyDOrrKjlFJzVH2UNcwqinOjgbm2GUcjzg05Eq+2J+46rIuwQ6z/k3jIj5Oa
-         4jV+uQ5Eg+rAxW49usLPJPAsmgNsr6OWfIVaIyHuwQ1BRUhg7QE2v/sQyOldLLo493ZG
-         rgaU65iDM+o6XhtBhho64avf+ByAqGxUnCAiXehGhNKn4I8OlRKhgqh6KSw7no9q9Nna
-         B2pQ==;
+        bh=fw82UQHVg2xZhGg7XycSDFADTgXvBB91CaL/8gvyO6E=;
+        fh=80U9iuVJu0ogE6FVT1ly1ioiWd2tUXqco7BaOaAkceE=;
+        b=NBvEMbmXLubBZHL6dgFP1OaR3tKfUKofD2wYgN4uNvPaf5nLdbPJsj4aX6TAzd37ZX
+         ZTXRF6QWzNxP42+NDClsQSZRzwm/ZkrKVr/GF/rQK9slTMvXuLSjRcL5XWC5N6EsU1rv
+         XdV5HU+eiM7OPCTAhoTKcwGeWQyYBDpVxB47WXya3x/jRKy4VjXoUm6nrsiJowiWOAM+
+         mMRz4aRwlfLDkRiKHJd4XrhZQl5axIcxq4BQxN3FPjST7g26Y2SA/doaFwzaW+iEHbPU
+         vnUlNArjbIprXJ30rmR0HrrNncjwJs5mlwn+jdn6nqUx56r23Ve3GhyII+bn1165v/6u
+         E4GA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771356471; x=1771961271; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771363513; x=1771968313; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SbtQMFsGPA/6ldfqUOLBsftSiaWAN1XegIGnQQjLLP8=;
-        b=HvnoZR8zfyEtT1CmYYfXEd0xZVj6smvvAGDvaTQENlihM6gnmvZajkehm3vadtH7Hp
-         qg0dQLuTPri+dn9JwfsYHYW9Rmbpdxia0Sgny3asuglp0d8zRuMVLdChgN/1W2WPA9Dp
-         Ty/akPoO/mprHf0Vl4gr9gxLNSIqCJT+DzOEXRDeKFET1VJ3vJ69iUKfFSCWqIISsK6r
-         91m29W4YLDaBcOLbgI3SidxtX2pgsQmtjBuDauuRnNkFSWfTm0VE/KqYWHv3VvWrTt8S
-         sUSTRr7pxadlKu/F/e1ud05UJ/o72NKYHWknk9YA53Dm0hhIfwHQPVD1LPS/1AHrY67c
-         jJhg==
+        bh=fw82UQHVg2xZhGg7XycSDFADTgXvBB91CaL/8gvyO6E=;
+        b=f49CF+u7bli/lg89u2KWVg0LvTfCJMOkprhcrZD2dZZq9Zr5cUtDiQAjRKx4wItrwa
+         ftbEI/4kDdDR9QAx8zPtuRTLzCiAX2Ue0UobiIfLOp1bBLWopmjUfYc1kNYw7w3Q4dH8
+         Gpo8ABTt/oHx1wNWjE8e3i+1LxKPV6Tpy9F24as0Cvz+TTTAxQXDhZTEpXSPDo2iG7a9
+         KhDLhwDYaIDuy8Elb4lDBB1mcX+B9/6cHS/bXjsMEmGk/crL+2fYp67PYvXZ7jdcnDRb
+         zv4PY3UIhfmhi8QTjlFgSMR44NmcFOAN/3K+lprpGqbx6KjMQbxRnf14W2Eu9D3hn7f+
+         S9xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771356471; x=1771961271;
+        d=1e100.net; s=20230601; t=1771363513; x=1771968313;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=SbtQMFsGPA/6ldfqUOLBsftSiaWAN1XegIGnQQjLLP8=;
-        b=pFSXYmrHES5uskvPVIvdXolKwt2nAg9fPtif3ugLHsKn+VT19t1o/xC+7rNONdgj+0
-         1HDOUUJt2CarJ3VmSIUl/86z5ghrmJQLtVXOKxDpg4rMbxJDFcL2wKlBCdF3tmWW72gc
-         5PxHqu7ANotcYWjCU1ibXiIB/JDEU/d/DM11eP8FPWLSq9ZmmvdQNaAIuP0fgzxYmC2Z
-         ECtv4NRA4vsIeRhMFOI8MZMtf8BE8dLK0030e09KsRF9c+t0myrM6Nmlpv4TW3Kdj0ta
-         4S7alucc55cvOCkWwcjwLQNtVKJdQR933LN43XM+sUqQdc6w/J3HFOsfcUOhmSXEqpoW
-         zOqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVD/vBCzkpdu60/vhQ0DASG9NdLi06V/aq1HuJ9ulSzpZASq505RzQpD87QrCD9xzxRcD5Ji+fXGMQTK8HaZJ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFP4H6nxLYmjTIdJrmy/uaJw7u5cYgq1NnHBF8s1MWpJ7N6NOI
-	wl1heOh+atq/EYpDl89pN4PVQi1WOFcwAw1ZAx9Bx142MgKPwY40WhuXPAnX6yxA7pv4e6EUb6l
-	AZdqWrV0UsRvk7xtIDu2S9srOdnVIwwzq+z3Qee93
-X-Gm-Gg: AZuq6aJgyKmo4LP1qYPpRqT2LAJE21i7IGrqEmaOwNsawOk1hc5O2gTTtuQzVqrGzpx
-	nVCZoN3tYWsbvq9l4sbbpWXJyxnA6YVCoZlA+A4abacKaeY+pZ4J211RGHnEt9lIpoz/ZdaYIZx
-	zIBTwrx9t0sgGefGmfeM8deENSCe/QxcAUiTT+9sjVWvsWlQQYoPJyZ9l33iw3mvx0VPxffO1Uh
-	tv9euQgeWTgQV7WXGxGp5x6EguDeZIkPm/r+HkcB1p+ZcK3vEhwNqkezIJn0tUMz7dQQZb/5CHz
-	XWS5XLPqKG0hdVPqkJyeKbJMqMTqFOE2OzkzAnzPZdSlUks2RskDALcHw/5tmnOoVwZAAQ==
-X-Received: by 2002:a05:600c:6a0f:b0:477:86fd:fb49 with SMTP id
- 5b1f17b1804b1-48388809dd1mr1315515e9.10.1771356470995; Tue, 17 Feb 2026
- 11:27:50 -0800 (PST)
+        bh=fw82UQHVg2xZhGg7XycSDFADTgXvBB91CaL/8gvyO6E=;
+        b=nNjhHOsojHXEdV2zDAa/nkNOK5z3mvtuh2xMH4ZvSzbOJviZ/rXfjLNCEFdWIPjFE0
+         eGp2/x7Q4aLU1nkQHRclhcsSBvCMXK5ncXK2GJXsm8Q1XTCgw4k+dYiMOZcdNfP6N1oS
+         w7Srx0HFPLmK6JpZaT47bjtxjU+jjPsL0p/JlVb4Is26iWQ4aJrMy865ycVP7BLxXmO4
+         Sc+4wXb9i4CYYElMs8soiLlI0DWDKoOHcJFCYKzspER1emmOZurmmChYP4ie5UR4zgcM
+         bZazyFT4ADxHTE37K05ctZH315yVbl83FUwyl4IKyQJRiZSTJKsbXB6mm6UsOnDmpdxL
+         4NLA==
+X-Forwarded-Encrypted: i=1; AJvYcCXz+5ias5LsvA8UuU4VhtOc83FtmFiXSx+VlCzQaVTrtow4leTh6ZckxElWvXEe0qjiJnctYddBW3uSpbvZpLc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQ+gKXBNfjh00nVjp8aSUhO4MUOW782r6EN7E3SZBVwnrBw7YE
+	FsFhYkcWNG3ZfeOS+jt+4eREz8G9aFqDCXWPyK/oFgCznv7XwNjV6jy7sJWECPXS7hDM+BeXA4H
+	6HGZztRFwfa4d0Iv4njnTMEadUQLXdns=
+X-Gm-Gg: AZuq6aKKmoiECCThnNpcWYQlUGe6LoTLIDxaPYiEis+9I6gXSEi/Z1gF44zZgQV39l3
+	sLyjdKDox4/LEO2NfGBjqMR6qUVCWOyQY9BBMILdGJ7RYXaH2w/mJbRhVeEVM6VSAFgoWjiuS8F
+	2xM/5VA3UPnrLkebqqacNUJWRNrVY9sg5wE+HnMH49M0AToigNvZsh1sTg7U2AKHtTmojO8aUHi
+	/QstGmXLwcSwjfQXKvduVDDRO9B0YC6Wcll8hT1+0uGUYcZqRaetWX/2xv5RUZLbjuZSDHGRY0P
+	yW1S/SCrRUfGXT9s9x8=
+X-Received: by 2002:a05:6402:1470:b0:65c:63f0:a92 with SMTP id
+ 4fb4d7f45d1cf-65c63f00e8bmr1535827a12.23.1771363513152; Tue, 17 Feb 2026
+ 13:25:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260212215814.629709-1-tjmercier@google.com> <20260212215814.629709-2-tjmercier@google.com>
- <aZNFTR_gc6j116rw@amir-ThinkPad-T480>
-In-Reply-To: <aZNFTR_gc6j116rw@amir-ThinkPad-T480>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Tue, 17 Feb 2026 11:27:38 -0800
-X-Gm-Features: AaiRm50lkIkI0vTw0pKWrhRFJ18Z83k0MjgydYcYSeBtbsOtDjpOH99UjI76ZFk
-Message-ID: <CABdmKX2DD4iapAGtdjJyb7CAHiS9RaD3pbuAnd=1tvudxfJkKw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kernfs: allow passing fsnotify event types
-To: Amir Goldstein <amir73il@gmail.com>
+References: <20260212215814.629709-1-tjmercier@google.com> <20260212215814.629709-3-tjmercier@google.com>
+ <aZRAkalnJCxSp7ne@amir-ThinkPad-T480> <CABdmKX3wsWphRTDanKwGGiUWoO0xTaC8L_QxjHzhpxfZn256MQ@mail.gmail.com>
+In-Reply-To: <CABdmKX3wsWphRTDanKwGGiUWoO0xTaC8L_QxjHzhpxfZn256MQ@mail.gmail.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Tue, 17 Feb 2026 22:25:01 +0100
+X-Gm-Features: AaiRm51TQrPoY4M1hB7zomqcMjNss-PCU-arAe40VL9qb1hRq1aV4JYHGiHMROc
+Message-ID: <CAOQ4uxgrP=VdTKZXKcRE8BeWv6wZy7aFkUF-VoEpRSxVnHZi2w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
+To: "T.J. Mercier" <tjmercier@google.com>
 Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
 	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, jack@suse.cz
+	linux-fsdevel@vger.kernel.org, jack@suse.cz, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 16, 2026 at 8:27=E2=80=AFAM Amir Goldstein <amir73il@gmail.com>=
+On Tue, Feb 17, 2026 at 9:26=E2=80=AFPM T.J. Mercier <tjmercier@google.com>=
  wrote:
 >
-> On Thu, Feb 12, 2026 at 01:58:12PM -0800, T.J. Mercier wrote:
-> > The kernfs_notify function is hardcoded to only issue FS_MODIFY events
-> > since that is the only current use case. Allow for supporting other
-> > events by adding a notify_event field to kernfs_elem_attr. The
-> > limitation of only one queued event per kernfs_node continues to exist
-> > as a consequence of the design of the kernfs_notify_list. The new
-> > notify_event field is protected by the same kernfs_notify_lock as the
-> > existing notify_next field.
+> On Tue, Feb 17, 2026 at 2:19=E2=80=AFAM Amir Goldstein <amir73il@gmail.co=
+m> wrote:
 > >
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > On Thu, Feb 12, 2026 at 01:58:13PM -0800, T.J. Mercier wrote:
+> > > Currently some kernfs files (e.g. cgroup.events, memory.events) suppo=
+rt
+> > > inotify watches for IN_MODIFY, but unlike with regular filesystems, t=
+hey
+> > > do not receive IN_DELETE_SELF or IN_IGNORED events when they are
+> > > removed.
+> > >
+> > > This creates a problem for processes monitoring cgroups. For example,=
+ a
+> > > service monitoring memory.events for memory.high breaches needs to kn=
+ow
+> > > when a cgroup is removed to clean up its state. Where it's known that=
+ a
+> > > cgroup is removed when all processes die, without IN_DELETE_SELF the
+> > > service must resort to inefficient workarounds such as:
+> > > 1.  Periodically scanning procfs to detect process death (wastes CPU =
+and
+> > >     is susceptible to PID reuse).
+> > > 2.  Placing an additional IN_DELETE watch on the parent directory
+> > >     (wastes resources managing double the watches).
+> > > 3.  Holding a pidfd for every monitored cgroup (can exhaust file
+> > >     descriptors).
+> > >
+> > > This patch enables kernfs to send IN_DELETE_SELF and IN_IGNORED event=
+s.
+> > > This allows applications to rely on a single existing watch on the fi=
+le
+> > > of interest (e.g. memory.events) to receive notifications for both
+> > > modifications and the eventual removal of the file, as well as automa=
+tic
+> > > watch descriptor cleanup, simplifying userspace logic and improving
+> > > resource efficiency.
+> >
+> > This looks very useful,
+> > But,
+> > How will the application know that ti can rely on IN_DELETE_SELF
+> > from cgroups if this is not an opt-in feature?
+> >
+> > Essentially, this is similar to the discussions on adding "remote"
+> > fs notification support (e.g. for smb) and in those discussions
+> > I insist that "remote" notification should be opt-in (which is
+> > easy to do with an fanotify init flag) and I claim that mixing
+> > "remote" events with "local" events on the same group is undesired.
 >
-> Looks fine
-> Feel free to add
-> Acked-by: Amir Goldstein <amir73il@gmail.com>
-
-Thanks Amir.
-
+> I think this situation is a bit different because this isn't adding
+> new features to fsnotify. This is filling a gap that you'd expect to
+> work if you only read the cgroups or inotify documentation without
+> realizing that kernfs is simply wired up differently for notification
+> support than most other filesystems, and only partially supports the
+> existing notification events. It's opt-in in the sense that an
+> application registers for IN_DELETE_SELF, but other than a runtime
+> test like what I added in the selftests I'm not sure if there's a good
+> way to detect the kernel will actually send the event. Practically
+> speaking though, if merged upstream I will backport these patches to
+> all the kernels we use so a runtime check shouldn't be necessary for
+> our applications.
 >
-> > ---
-> >  fs/kernfs/file.c       | 8 ++++++--
-> >  include/linux/kernfs.h | 1 +
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
+
+That's besides the point.
+An application does not know if it running on a kernel with the backported
+patch or not, so an application needs to either rely on getting the event
+or it has to poll. How will the application know if it needs to poll or not=
+?
+
+> > However, IN_IGNORED is created when an inotify watch is removed
+> > and IN_DELETE_SELF is called when a vfs inode is destroyed.
+> > When setting an inotify watch for IN_IGNORED|IN_DELETE_SELF there
+> > has to be a vfs inode with inotify mark attached, so why are those
+> > events not created already? What am I missing?
+>
+> The difference is vfs isn't involved when kernfs files are unlinked.
+
+No, but the vfs is involved when the last reference on the kernfs inode
+is dropped.
+
+> When a cgroup removal occurs, we get to kernfs_remove via kernfs'
+> inode_operations without calling vfs_unlink. (You can't rm cgroup
+> files directly.)
+>
+
+Yes and if there was a vfs inode for this kernfs object, the vfs inode need=
+s to
+be dropped.
+
+> > Are you expecting to get IN_IGNORED|IN_DELETE_SELF on an entry
+> > while watching the parent? Because this is not how the API works.
+>
+> No, only on the file being watched. The parent should only get
+> IN_DELETE, but I read your feedback below and I'm fine with removing
+> that part and just sending the DELETE_SELF and IN_IGNORED events.
+>
+
+So if the file was being watched, some application needed to call
+inotify_add_watch() with the user path to the cgroupfs inode
+and inotify watch keeps a live reference to this vfs inode.
+
+When the cgroup is being destroyed something needs to drop
+this vfs inode and call __destroy_inode() -> fsnotify_inode_delete()
+which should remove the inotify watch and result in IN_IGNORED.
+IN_DELETE_SELF is a different story, because the inode does not
+have zero i_nlink.
+
+I did not try to follow the code path of cgroupfs destroy when an
+inotify watch on a cgroup file exists, but this is what I expect.
+Please explain - what am I missing?
+
+> > I think it should be possible to set a super block fanotify watch
+> > on cgroupfs and get all the FAN_DELETE_SELF events, but maybe we
+> > do not allow this right now, I did not check - just wanted to give
+> > you another direction to follow.
 > >
-> > diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-> > index 9adf36e6364b..e978284ff983 100644
-> > --- a/fs/kernfs/file.c
-> > +++ b/fs/kernfs/file.c
-> > @@ -914,6 +914,7 @@ static void kernfs_notify_workfn(struct work_struct=
- *work)
-> >       struct kernfs_node *kn;
-> >       struct kernfs_super_info *info;
-> >       struct kernfs_root *root;
-> > +     u32 notify_event;
-> >  repeat:
-> >       /* pop one off the notify_list */
-> >       spin_lock_irq(&kernfs_notify_lock);
-> > @@ -924,6 +925,8 @@ static void kernfs_notify_workfn(struct work_struct=
- *work)
-> >       }
-> >       kernfs_notify_list =3D kn->attr.notify_next;
-> >       kn->attr.notify_next =3D NULL;
-> > +     notify_event =3D kn->attr.notify_event;
-> > +     kn->attr.notify_event =3D 0;
-> >       spin_unlock_irq(&kernfs_notify_lock);
+> > >
+> > > Implementation details:
+> > > The kernfs notification worker is updated to handle file deletion.
+> > > fsnotify handles sending MODIFY events to both a watched file and its
+> > > parent, but it does not handle sending a DELETE event to the parent a=
+nd
+> > > a DELETE_SELF event to the watched file in a single call. Therefore,
+> > > separate fsnotify calls are made: one for the parent (DELETE) and one
+> > > for the child (DELETE_SELF), while retaining the optimized single cal=
+l
 > >
-> >       root =3D kernfs_root(kn);
-> > @@ -954,7 +957,7 @@ static void kernfs_notify_workfn(struct work_struct=
- *work)
-> >               if (parent) {
-> >                       p_inode =3D ilookup(info->sb, kernfs_ino(parent))=
-;
-> >                       if (p_inode) {
-> > -                             fsnotify(FS_MODIFY | FS_EVENT_ON_CHILD,
-> > +                             fsnotify(notify_event | FS_EVENT_ON_CHILD=
-,
-> >                                        inode, FSNOTIFY_EVENT_INODE,
-> >                                        p_inode, &name, inode, 0);
-> >                               iput(p_inode);
-> > @@ -964,7 +967,7 @@ static void kernfs_notify_workfn(struct work_struct=
- *work)
-> >               }
-> >
-> >               if (!p_inode)
-> > -                     fsnotify_inode(inode, FS_MODIFY);
-> > +                     fsnotify_inode(inode, notify_event);
-> >
-> >               iput(inode);
-> >       }
-> > @@ -1005,6 +1008,7 @@ void kernfs_notify(struct kernfs_node *kn)
-> >       if (!kn->attr.notify_next) {
-> >               kernfs_get(kn);
-> >               kn->attr.notify_next =3D kernfs_notify_list;
-> > +             kn->attr.notify_event =3D FS_MODIFY;
-> >               kernfs_notify_list =3D kn;
-> >               schedule_work(&kernfs_notify_work);
-> >       }
-> > diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-> > index b5a5f32fdfd1..1762b32c1a8e 100644
-> > --- a/include/linux/kernfs.h
-> > +++ b/include/linux/kernfs.h
-> > @@ -181,6 +181,7 @@ struct kernfs_elem_attr {
-> >       struct kernfs_open_node __rcu   *open;
-> >       loff_t                  size;
-> >       struct kernfs_node      *notify_next;   /* for kernfs_notify() */
-> > +     u32                     notify_event;   /* for kernfs_notify() */
-> >  };
-> >
-> >  /*
-> > --
-> > 2.53.0.273.g2a3d683680-goog
-> >
+> > IN_DELETE_SELF and IN_IGNORED are special and I don't really mind addin=
+g
+> > them to kernfs seeing that they are very useful, but adding IN_DELETE
+> > without adding IN_CREATE, that is very arbitrary and I don't like it as
+> > much.
+>
+> That's fair, and the IN_DELETE isn't actually needed for my use case,
+> but I figured I would add the parent notification for file deletions
+> since it is already there for MODIFY events, and I was modifying that
+> area of the code anyway. I'll remove the parent notification for
+> DELETE and just send DELETE_SELF and IGNORED with
+> fsnotify_inoderemove() in V3.
+
+I do not object to adding explicit IN_DELETE_SELF, especially
+because that would be usable also in fanotify, but I'd like to
+understand what's the story with IN_IGNORED.
+
+Thanks,
+Amir.
