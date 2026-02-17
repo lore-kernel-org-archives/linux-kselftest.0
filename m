@@ -1,247 +1,186 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CEFE2EA473
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 21:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771363516; cv=pass; b=jKsrM4aXxNf3xWMS+yWyikxTlvLNIezo9CXwAll43FJr0LFsP2ll8BuVvs4N7Y9UwTOPcMxdUjZBvYFrwgwMWtrXs5b8zS4VcKnB4pPcA7pfjMfaLvsiyjbhAUdDx+SB/uw6bG+CGc40QUc2LFX+rSEclfi4w+q3lvlY6GCodnk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771363516; c=relaxed/simple;
-	bh=fbhIDMncw2o3OGAnMUfavkAE0+3CvTo4wLCTth3BWak=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BIZ/PO7+uMVU2Vxap8U8U/IuwtV+U3leWO1KJH70/K5OXkQHeDCWDmcXbgpt3vy1H7naVaKXkEnZm/Xmn8MDy0SQ/rk85SM7w9AeyXs5qr1vY3k7yuhaPhpya/T3mxpAs+tpTQ0t30yQ/gt28VyTh37C7oQoG9P3rXgi8g//0Lo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f49CF+u7; arc=pass smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30612271450;
+	Tue, 17 Feb 2026 21:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771363660; cv=none; b=mQPTpkrlOSZi2zuVGFa8PcDCLUSYtv9aDitTCAPuCqb1CRKlOexhCgrZDK1bFSbLzssSaw7apvwhatIUwnIorZpSDn7qRbBowABC0X+RXUOJINu4es3lH+tEsFDtQluKPOZe+xxYh86rUDQ/O3g+WcjU2snVapZeJ6gSfU0NBFA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771363660; c=relaxed/simple;
+	bh=qNdMPHb96ahPcc/FeBg2GRFGtCGsjvYyDufUCB6E5Ho=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mUlmMdEoq5LZf8EtJS16x30JIQyljvqDeFFX4I/I8OjpeNQJWLHdurtuVo7t5zD/6qe4T8mRRKVW6Ncp61+J5ptMs2hl9AROASv8KBVnhQe5p+w36BbZQh6/VVNi61NQMW0rGr78X7qAU4KrCr4ANgt7soTLOCUKH94ZFvXTbRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZ+UvMiP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f49CF+u7"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6581234d208so7878852a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 13:25:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771363513; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eeYVKJ+oZlgmJcl/fCaaciJCjMFTIho8AL9IQDv7+l1hxp0JZocaL8VrCPU3GnSulz
-         x9yP4ybmz7BEN7GtMQokty2ejAdt2cWdfr9QaUXPD9Bjmi0sSM2HyNJIfA6aAvOiUQ78
-         j7vfT1GBmYKi5O/cFA3iuJdc1K0gLwRqCir/hcdtOhsD6cuV+sdcHyXMaB7WG/WO03/e
-         x3Q7RMqzZoS9DrzTMfEa3o5KKVLyMhIA+PfRrdTOfuabfREioNtgrWnCtCsVmD2NnlkO
-         yLj/prOfmvOg+HFTDNk8/u5g8MyQCIruG37L00CnXoGOmkoogYHPgc4AFEAKZkmjvEWv
-         q3IQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fw82UQHVg2xZhGg7XycSDFADTgXvBB91CaL/8gvyO6E=;
-        fh=80U9iuVJu0ogE6FVT1ly1ioiWd2tUXqco7BaOaAkceE=;
-        b=NBvEMbmXLubBZHL6dgFP1OaR3tKfUKofD2wYgN4uNvPaf5nLdbPJsj4aX6TAzd37ZX
-         ZTXRF6QWzNxP42+NDClsQSZRzwm/ZkrKVr/GF/rQK9slTMvXuLSjRcL5XWC5N6EsU1rv
-         XdV5HU+eiM7OPCTAhoTKcwGeWQyYBDpVxB47WXya3x/jRKy4VjXoUm6nrsiJowiWOAM+
-         mMRz4aRwlfLDkRiKHJd4XrhZQl5axIcxq4BQxN3FPjST7g26Y2SA/doaFwzaW+iEHbPU
-         vnUlNArjbIprXJ30rmR0HrrNncjwJs5mlwn+jdn6nqUx56r23Ve3GhyII+bn1165v/6u
-         E4GA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771363513; x=1771968313; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fw82UQHVg2xZhGg7XycSDFADTgXvBB91CaL/8gvyO6E=;
-        b=f49CF+u7bli/lg89u2KWVg0LvTfCJMOkprhcrZD2dZZq9Zr5cUtDiQAjRKx4wItrwa
-         ftbEI/4kDdDR9QAx8zPtuRTLzCiAX2Ue0UobiIfLOp1bBLWopmjUfYc1kNYw7w3Q4dH8
-         Gpo8ABTt/oHx1wNWjE8e3i+1LxKPV6Tpy9F24as0Cvz+TTTAxQXDhZTEpXSPDo2iG7a9
-         KhDLhwDYaIDuy8Elb4lDBB1mcX+B9/6cHS/bXjsMEmGk/crL+2fYp67PYvXZ7jdcnDRb
-         zv4PY3UIhfmhi8QTjlFgSMR44NmcFOAN/3K+lprpGqbx6KjMQbxRnf14W2Eu9D3hn7f+
-         S9xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771363513; x=1771968313;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fw82UQHVg2xZhGg7XycSDFADTgXvBB91CaL/8gvyO6E=;
-        b=nNjhHOsojHXEdV2zDAa/nkNOK5z3mvtuh2xMH4ZvSzbOJviZ/rXfjLNCEFdWIPjFE0
-         eGp2/x7Q4aLU1nkQHRclhcsSBvCMXK5ncXK2GJXsm8Q1XTCgw4k+dYiMOZcdNfP6N1oS
-         w7Srx0HFPLmK6JpZaT47bjtxjU+jjPsL0p/JlVb4Is26iWQ4aJrMy865ycVP7BLxXmO4
-         Sc+4wXb9i4CYYElMs8soiLlI0DWDKoOHcJFCYKzspER1emmOZurmmChYP4ie5UR4zgcM
-         bZazyFT4ADxHTE37K05ctZH315yVbl83FUwyl4IKyQJRiZSTJKsbXB6mm6UsOnDmpdxL
-         4NLA==
-X-Forwarded-Encrypted: i=1; AJvYcCXz+5ias5LsvA8UuU4VhtOc83FtmFiXSx+VlCzQaVTrtow4leTh6ZckxElWvXEe0qjiJnctYddBW3uSpbvZpLc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQ+gKXBNfjh00nVjp8aSUhO4MUOW782r6EN7E3SZBVwnrBw7YE
-	FsFhYkcWNG3ZfeOS+jt+4eREz8G9aFqDCXWPyK/oFgCznv7XwNjV6jy7sJWECPXS7hDM+BeXA4H
-	6HGZztRFwfa4d0Iv4njnTMEadUQLXdns=
-X-Gm-Gg: AZuq6aKKmoiECCThnNpcWYQlUGe6LoTLIDxaPYiEis+9I6gXSEi/Z1gF44zZgQV39l3
-	sLyjdKDox4/LEO2NfGBjqMR6qUVCWOyQY9BBMILdGJ7RYXaH2w/mJbRhVeEVM6VSAFgoWjiuS8F
-	2xM/5VA3UPnrLkebqqacNUJWRNrVY9sg5wE+HnMH49M0AToigNvZsh1sTg7U2AKHtTmojO8aUHi
-	/QstGmXLwcSwjfQXKvduVDDRO9B0YC6Wcll8hT1+0uGUYcZqRaetWX/2xv5RUZLbjuZSDHGRY0P
-	yW1S/SCrRUfGXT9s9x8=
-X-Received: by 2002:a05:6402:1470:b0:65c:63f0:a92 with SMTP id
- 4fb4d7f45d1cf-65c63f00e8bmr1535827a12.23.1771363513152; Tue, 17 Feb 2026
- 13:25:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZ+UvMiP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434F1C19425;
+	Tue, 17 Feb 2026 21:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771363659;
+	bh=qNdMPHb96ahPcc/FeBg2GRFGtCGsjvYyDufUCB6E5Ho=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HZ+UvMiPz7y6Wfbsg5SRIDmn+CDWDBq3WDUKPIFYPfrmgDfHjQ7tHHZYvBxWMJPsB
+	 c/PD0XktfttvuKxs+WJlENDTRUP8uJUYdvpCSgzgXvAFzPfb1B0rOK7s3NAuWfL7OM
+	 PDp3ZyEtU/CFNB0WzAkeTuWX12cuXeEN250jg2mphb4+0a1UOP9URjezN/AWag41Q0
+	 roA2SWQuJbNqVoB7NWp23sapC1Dm1S393B1Qqcg98UxhXC9rBuSiwP8ArfAEkppYLo
+	 6sj4h5uEjhL1y9XxP5IphJD17zDcGD3gK+k+4gZR6DYzXHK6BRPDR/D2adYfFq7DLA
+	 JcoQPGf6g5NxA==
+From: Niklas Cassel <cassel@kernel.org>
+To: Manivannan Sadhasivam <mani@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Minghuan Lian <minghuan.Lian@nxp.com>,
+	Mingkai Hu <mingkai.hu@nxp.com>,
+	Roy Zang <roy.zang@nxp.com>,
+	Jesper Nilsson <jesper.nilsson@axis.com>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Srikanth Thokala <srikanth.thokala@intel.com>,
+	Marek Vasut <marek.vasut+renesas@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Christian Bruel <christian.bruel@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Manikanta Maddireddy <mmaddireddy@nvidia.com>,
+	Koichiro Den <den@valinux.co.jp>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	linux-pci@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-arm-kernel@axis.com,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/9] PCI: endpoint differentiate between disabled and reserved BARs
+Date: Tue, 17 Feb 2026 22:27:06 +0100
+Message-ID: <20260217212707.2450423-11-cassel@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260212215814.629709-1-tjmercier@google.com> <20260212215814.629709-3-tjmercier@google.com>
- <aZRAkalnJCxSp7ne@amir-ThinkPad-T480> <CABdmKX3wsWphRTDanKwGGiUWoO0xTaC8L_QxjHzhpxfZn256MQ@mail.gmail.com>
-In-Reply-To: <CABdmKX3wsWphRTDanKwGGiUWoO0xTaC8L_QxjHzhpxfZn256MQ@mail.gmail.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 17 Feb 2026 22:25:01 +0100
-X-Gm-Features: AaiRm51TQrPoY4M1hB7zomqcMjNss-PCU-arAe40VL9qb1hRq1aV4JYHGiHMROc
-Message-ID: <CAOQ4uxgrP=VdTKZXKcRE8BeWv6wZy7aFkUF-VoEpRSxVnHZi2w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, jack@suse.cz, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4061; i=cassel@kernel.org; h=from:subject; bh=qNdMPHb96ahPcc/FeBg2GRFGtCGsjvYyDufUCB6E5Ho=; b=owGbwMvMwCV2MsVw8cxjvkWMp9WSGDKn3NV+yyX95M1+T1HDqxGLE9Ks+cRk7p+2exh8+ZCxj pjCijkGHaUsDGJcDLJiiiy+P1z2F3e7TzmueMcGZg4rE8gQBi5OAZhI+E5GhguPHi2/Xb/y3DHB AIf6hAuN+VPmNN0usdy7vDq+avG27bYM/5S3MBlKbLy8vGB/jfcrobctfIebJrjrnqw9slP/atc TAw4A
+X-Developer-Key: i=cassel@kernel.org; a=openpgp; fpr=5ADE635C0E631CBBD5BE065A352FE6582ED9B5DA
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 17, 2026 at 9:26=E2=80=AFPM T.J. Mercier <tjmercier@google.com>=
- wrote:
->
-> On Tue, Feb 17, 2026 at 2:19=E2=80=AFAM Amir Goldstein <amir73il@gmail.co=
-m> wrote:
-> >
-> > On Thu, Feb 12, 2026 at 01:58:13PM -0800, T.J. Mercier wrote:
-> > > Currently some kernfs files (e.g. cgroup.events, memory.events) suppo=
-rt
-> > > inotify watches for IN_MODIFY, but unlike with regular filesystems, t=
-hey
-> > > do not receive IN_DELETE_SELF or IN_IGNORED events when they are
-> > > removed.
-> > >
-> > > This creates a problem for processes monitoring cgroups. For example,=
- a
-> > > service monitoring memory.events for memory.high breaches needs to kn=
-ow
-> > > when a cgroup is removed to clean up its state. Where it's known that=
- a
-> > > cgroup is removed when all processes die, without IN_DELETE_SELF the
-> > > service must resort to inefficient workarounds such as:
-> > > 1.  Periodically scanning procfs to detect process death (wastes CPU =
-and
-> > >     is susceptible to PID reuse).
-> > > 2.  Placing an additional IN_DELETE watch on the parent directory
-> > >     (wastes resources managing double the watches).
-> > > 3.  Holding a pidfd for every monitored cgroup (can exhaust file
-> > >     descriptors).
-> > >
-> > > This patch enables kernfs to send IN_DELETE_SELF and IN_IGNORED event=
-s.
-> > > This allows applications to rely on a single existing watch on the fi=
-le
-> > > of interest (e.g. memory.events) to receive notifications for both
-> > > modifications and the eventual removal of the file, as well as automa=
-tic
-> > > watch descriptor cleanup, simplifying userspace logic and improving
-> > > resource efficiency.
-> >
-> > This looks very useful,
-> > But,
-> > How will the application know that ti can rely on IN_DELETE_SELF
-> > from cgroups if this is not an opt-in feature?
-> >
-> > Essentially, this is similar to the discussions on adding "remote"
-> > fs notification support (e.g. for smb) and in those discussions
-> > I insist that "remote" notification should be opt-in (which is
-> > easy to do with an fanotify init flag) and I claim that mixing
-> > "remote" events with "local" events on the same group is undesired.
->
-> I think this situation is a bit different because this isn't adding
-> new features to fsnotify. This is filling a gap that you'd expect to
-> work if you only read the cgroups or inotify documentation without
-> realizing that kernfs is simply wired up differently for notification
-> support than most other filesystems, and only partially supports the
-> existing notification events. It's opt-in in the sense that an
-> application registers for IN_DELETE_SELF, but other than a runtime
-> test like what I added in the selftests I'm not sure if there's a good
-> way to detect the kernel will actually send the event. Practically
-> speaking though, if merged upstream I will backport these patches to
-> all the kernels we use so a runtime check shouldn't be necessary for
-> our applications.
->
+Hello all,
 
-That's besides the point.
-An application does not know if it running on a kernel with the backported
-patch or not, so an application needs to either rely on getting the event
-or it has to poll. How will the application know if it needs to poll or not=
-?
+This series is written in response to the patch series from
+Manikanta Maddireddy that was posted here:
+https://lore.kernel.org/linux-pci/291dab65-3fa6-4fc8-90a2-4ad608ca015c@nvidia.com/T/#t
 
-> > However, IN_IGNORED is created when an inotify watch is removed
-> > and IN_DELETE_SELF is called when a vfs inode is destroyed.
-> > When setting an inotify watch for IN_IGNORED|IN_DELETE_SELF there
-> > has to be a vfs inode with inotify mark attached, so why are those
-> > events not created already? What am I missing?
->
-> The difference is vfs isn't involved when kernfs files are unlinked.
+The reasons why I decided to post this a new series was because the series
+above:
 
-No, but the vfs is involved when the last reference on the kernfs inode
-is dropped.
+1) Adds PCI device and vendor specific code to
+drivers/misc/pci_endpoint_test.c. We've worked hard to make sure that
+device specific quirks/limitations are communicated via the Capabilities
+register, so let's do the same for reserved BARs.
 
-> When a cgroup removal occurs, we get to kernfs_remove via kernfs'
-> inode_operations without calling vfs_unlink. (You can't rm cgroup
-> files directly.)
->
+2) My review comment which suggested to convert all uses of BAR_RESERVED
+to BAR_DISABLED (except for pci-keystone.c) was ignored.
 
-Yes and if there was a vfs inode for this kernfs object, the vfs inode need=
-s to
-be dropped.
+3) Koichiro has posted a series that allows an EPC driver to define exactly
+which hardware backed resources are provided in a BAR_RESERVED BAR. Yet,
+this nice improvement was not incorporated. (While Mankata was part of the
+discussion, he was not CC:d on the patches that actually implemented this.)
 
-> > Are you expecting to get IN_IGNORED|IN_DELETE_SELF on an entry
-> > while watching the parent? Because this is not how the API works.
->
-> No, only on the file being watched. The parent should only get
-> IN_DELETE, but I read your feedback below and I'm fine with removing
-> that part and just sending the DELETE_SELF and IN_IGNORED events.
->
+4) The selftests should return skip instead of silent success for a
+reserved BAR.
 
-So if the file was being watched, some application needed to call
-inotify_add_watch() with the user path to the cgroupfs inode
-and inotify watch keeps a live reference to this vfs inode.
+5) As Mankata points out, but did not address, BAR_RESERVED is quite
+ambiguous, so it is better to introduce a new BAR_64BIT_UPPER to more
+clearly mark the upper part of a 64-bit BAR as this, rather than reuse
+BAR_RESERVED.
 
-When the cgroup is being destroyed something needs to drop
-this vfs inode and call __destroy_inode() -> fsnotify_inode_delete()
-which should remove the inotify watch and result in IN_IGNORED.
-IN_DELETE_SELF is a different story, because the inode does not
-have zero i_nlink.
+6) It is possible to remove all the dw_pcie_ep_reset_bar() calls in the
+DWC based glue drivers and move it to DWC common code.
 
-I did not try to follow the code path of cgroupfs destroy when an
-inotify watch on a cgroup file exists, but this is what I expect.
-Please explain - what am I missing?
 
-> > I think it should be possible to set a super block fanotify watch
-> > on cgroupfs and get all the FAN_DELETE_SELF events, but maybe we
-> > do not allow this right now, I did not check - just wanted to give
-> > you another direction to follow.
-> >
-> > >
-> > > Implementation details:
-> > > The kernfs notification worker is updated to handle file deletion.
-> > > fsnotify handles sending MODIFY events to both a watched file and its
-> > > parent, but it does not handle sending a DELETE event to the parent a=
-nd
-> > > a DELETE_SELF event to the watched file in a single call. Therefore,
-> > > separate fsnotify calls are made: one for the parent (DELETE) and one
-> > > for the child (DELETE_SELF), while retaining the optimized single cal=
-l
-> >
-> > IN_DELETE_SELF and IN_IGNORED are special and I don't really mind addin=
-g
-> > them to kernfs seeing that they are very useful, but adding IN_DELETE
-> > without adding IN_CREATE, that is very arbitrary and I don't like it as
-> > much.
->
-> That's fair, and the IN_DELETE isn't actually needed for my use case,
-> but I figured I would add the parent notification for file deletions
-> since it is already there for MODIFY events, and I was modifying that
-> area of the code anyway. I'll remove the parent notification for
-> DELETE and just send DELETE_SELF and IGNORED with
-> fsnotify_inoderemove() in V3.
+Because of all of the above, I thought it was just easier to post a series
+with all of the above addressed, as it seemed easier to just show what I
+meant rather than to try to explain things with words.
 
-I do not object to adding explicit IN_DELETE_SELF, especially
-because that would be usable also in fanotify, but I'd like to
-understand what's the story with IN_IGNORED.
+The thing that is missing is to add a patch for pcie-tegra194.c which
+converts the BARs to BAR_RESERVED.
+Please see patch "PCI: dw-rockchip: Describe RK3588 BAR4 DMA ctrl window"
+and do something similar to pcie-tegra194.c.
 
-Thanks,
-Amir.
+If we are missing some resources (right now we only have
+PCI_EPC_BAR_RSVD_DMA_CTRL_MMIO), then I think we should simple add that
+(e.g. PCI_EPC_BAR_RSVD_MSIX).
+
+Mankata, it would be nice if you could test this series, and if you could
+provide a pcie-tegra194.c patch that adds the sizes of the eDMA regs +
+MSI-X table in BAR_2 and BAR_4.
+
+
+Kind regards,
+Niklas
+
+
+Koichiro Den (2):
+  PCI: endpoint: Describe reserved subregions within BARs
+  PCI: dw-rockchip: Describe RK3588 BAR4 DMA ctrl window
+
+Niklas Cassel (7):
+  PCI: endpoint: Introduce pci_epc_bar_type BAR_64BIT_UPPER
+  PCI: endpoint: Introduce pci_epc_bar_type BAR_DISABLED
+  PCI: dwc: Replace BAR_RESERVED with BAR_DISABLED in glue drivers
+  PCI: dwc: Disable BARs in common code instead of in each glue driver
+  PCI: endpoint: pci-epf-test: Advertise reserved BARs
+  misc: pci_endpoint_test: Give reserved BARs a distinct error code
+  selftests: pci_endpoint: Skip reserved BARs
+
+ drivers/misc/pci_endpoint_test.c              | 32 ++++++++++++-
+ drivers/pci/controller/dwc/pci-dra7xx.c       |  4 --
+ drivers/pci/controller/dwc/pci-imx6.c         | 22 +++------
+ .../pci/controller/dwc/pci-layerscape-ep.c    |  8 +---
+ drivers/pci/controller/dwc/pcie-artpec6.c     |  4 --
+ .../pci/controller/dwc/pcie-designware-ep.c   | 24 ++++++++++
+ .../pci/controller/dwc/pcie-designware-plat.c | 10 -----
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c | 19 +++++---
+ drivers/pci/controller/dwc/pcie-keembay.c     |  6 +--
+ drivers/pci/controller/dwc/pcie-qcom-ep.c     | 14 +-----
+ drivers/pci/controller/dwc/pcie-rcar-gen4.c   | 16 ++-----
+ drivers/pci/controller/dwc/pcie-stm32-ep.c    | 10 -----
+ drivers/pci/controller/dwc/pcie-tegra194.c    | 20 +++------
+ drivers/pci/controller/dwc/pcie-uniphier-ep.c | 24 +++-------
+ drivers/pci/controller/pcie-rcar-ep.c         |  6 +--
+ drivers/pci/endpoint/functions/pci-epf-test.c | 24 ++++++++++
+ drivers/pci/endpoint/pci-epc-core.c           |  6 ++-
+ include/linux/pci-epc.h                       | 45 +++++++++++++++++--
+ .../pci_endpoint/pci_endpoint_test.c          |  4 ++
+ 19 files changed, 173 insertions(+), 125 deletions(-)
+
+-- 
+2.53.0
+
