@@ -1,78 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C5A298CC4;
-	Tue, 17 Feb 2026 06:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40262C2346;
+	Tue, 17 Feb 2026 07:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771310636; cv=none; b=Ovd0gvnnaU6fezg/AVHXYD9AT3v3n3IWpLcDQNYnNoZT6na6VyxdasZel5ElUxpxyIHde4Vt/nKyehALPwLcyBOjml4O/ugiINvbN/Xpe4kxdQfq/epzb3hFhH/Myk9XajYTX+Xi8onnlKqXC4AJJXGFs1ukoieQKfO7L7ecbdY=
+	t=1771313396; cv=none; b=HGx9oe+1C7u/mRve2u2haNBRCItO1kNYGW2OHPqHTg/XVX4Han2GH6QE0iU2hty/Xh/3YXFzZtEI/aWo8/o9IjBO/Gs2DOPJWoqpVj6IAYqlQD64/1JWSiUKZlhIRPaws45tOsLMAZ5eqQRDkE51wjqvj53MD4WzDlZZAxsajcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771310636; c=relaxed/simple;
-	bh=RL8wZb/KGujFWK7DHIooqWJaLqn+f83yP0M7AoFklkQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QLwj8GjVQN2k+K8yzlAoN/CR5ScSaFrVjlh/aDZNUzWIo4fRGKxfUU8pzi4eAKqIWUqt70m3BYO8k9kHZz2UMDfvxCxpxBkwMo2BmiqdPzYaBrl2EPKrMhHyDb9/gBGWXGZM59GqRdSpuRtZ6MRy951T9+pwbjYtroL4qt7dT3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZRQrc7j; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771313396; c=relaxed/simple;
+	bh=HbB+SmqgmVUe4WGKjSzEZ3BHd4cEtoT8uqWY3j/lP6k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eR2bXFThdEyxjSouu5oJjNSOOccwBFmDsG0zQKbpH7zo9weIvI5qYp35LtOdebctka9J0gRvdDC2Js80bQbx9eO7n7CPjX20mNRy1qG129D/ecKflTcfbFrTObt9BUxO6ltg4NSI2OOcNgS0lrZDdosVPTuARJEIoJ8PUa08nQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=IQEixDzz; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=Tz7wUOPZ; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZRQrc7j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B997C4CEF7;
-	Tue, 17 Feb 2026 06:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771310636;
-	bh=RL8wZb/KGujFWK7DHIooqWJaLqn+f83yP0M7AoFklkQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JZRQrc7jHpGvHElmGqMAABrS7epNMxGntrnhbm8r/UN3f5kO9iPy8j1LnBdVCISq3
-	 JS8SXUcF9tLztjvp8mg4OHvvwDYn+nSGI1ZLUsTVInmTAC01MYBOwnppnwD8ipXa+r
-	 1a5M12OU7d5yZy+WTTf9aLr30cqx3ssVdvEhyG3SUz18+0rcrUCHn10RMuEo2nE1Qi
-	 kAoWbZ8I7PLJeN6BuzmrvJVignuSnklJ4XXPjDGPtZFpA5I+hy4rOP5T+gUEUhQrDa
-	 dBu6nYyDUeDPWiXO8EkYNTOETe4OFw0HlQXRG5eUVbuf1BnuVYPsf4cio5MJFN0R3e
-	 JDZfSDhjEi/CA==
-Date: Mon, 16 Feb 2026 20:43:55 -1000
-From: Tejun Heo <tj@kernel.org>
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: gregkh@linuxfoundation.org, driver-core@lists.linux.dev,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED
- support for files
-Message-ID: <aZQOK_xnxQn09qmP@slm.duckdns.org>
-References: <20260212215814.629709-1-tjmercier@google.com>
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="IQEixDzz";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="Tz7wUOPZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1771312913;
+	bh=HbB+SmqgmVUe4WGKjSzEZ3BHd4cEtoT8uqWY3j/lP6k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IQEixDzzzgcqeWgyI1vHz0PPWue2u4X/tJSBexVfpE2un1nnpgTA3IaL/9XgGfIw1
+	 HziX8iSN0VNKHUhJ0eTZNcuFUhX6z3pFlYxm7xNVLriXj/OIsRcTHDVOp2PUySHNIu
+	 tILWdTOCSetkhbY/002rUbn7avJ0xo2DUvS2FYryp52y2ZYIb+U5LA2di2pgdL4rAy
+	 ehcbtJO2MLv7tjzY+4oglS5TFEGHRRn/44m0wSnOKQMIq7O+HsDGQ/TwHRND8p437O
+	 Hwgsg7ULPHmGaRKXtWTzxpmRNldUE5O4ThkUUT6qusq9WRaQkwLInk9wE1BVcFPjrP
+	 8ctStz/2HvyV+LZRBHB/t+f9wJKWCfXuf3B3nJK7VG72iblYDE/SPfc1QPca5SzsYJ
+	 gtTs2mt2XWbusVDwt5abIkCQtW9TMGo9cW3G2DBq9DTmDS19cTmyBR3Tb4IyyJD9S/
+	 vlYyPvzXtU4OoArG1T8hbSW2ZRuh1hAXWq+l9XNlOXh10nvUuiQkdMbwk9yERSkzsX
+	 Tax9Eq1uzl3qMBbe+Zc6DZlS3Rv1O0+H5CQE86oWBq85YywUrD2aL7kp+H4Fm090bw
+	 7BoUiinUITEjsEYZM3cWpZhUa2Bp/0cK0ZsjwxyfD+B80Aa/pqOcc68rd/Q7qsxjFw
+	 hWVWz1iS7n6C6AjnumaLXirE=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 6E8DC1E76B3; Tue, 17 Feb 2026 15:21:53 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1771312912;
+	bh=HbB+SmqgmVUe4WGKjSzEZ3BHd4cEtoT8uqWY3j/lP6k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Tz7wUOPZgVERI3Hit40goOByFa89hF7DPczTxsViyHwOEO1ceJUqw1dtVKkbGZmZ0
+	 /ms0/ed4XedyK9D2ps2eE77wY7Cg5LCEbuMByiPZD61/k4qicBRApbw2s0s5EKnzqf
+	 Gbv+lkxHeFOKZOJMkyIf9V1PNOqNIv+6oplSW0X+8qXHbLfai8ln/Eg0lnXHSWh78j
+	 0CU7XLiW1yaHAJl1Q7hctZdbyH7pNDRJ36Xs+fn0XjuMjMAcQkc4uj2WwuQcVfJ30v
+	 s+EDEs2quwtY8vOJq7lsDu5qk6KvuLGdPWMON6WmHNtHZ65fAGb2bC/PvF6N7AOLH7
+	 e2cVosxpyUx5s6eGmmqkmdq7Pkhm2aJEJK9KNo1VI5cpjLzJ5V9YRCl974e6p/pFRj
+	 fDVzvFPxSD8SfYWqy3T4nh/zzshyllzQiAFfZNdOOcEz+dvXLWpm6jsyT93lTDNb8a
+	 WKj8m2LDGsgG29hUJUI3NXNiBsvcFZnu49sbTYPVrzj8iUKb745IHTl0bztpdd3fjl
+	 vbNErMjQJm3lAF6h8weFy+I/3yO+qNeDPScdYQeWKGuLKPEnEXQxK6UcZfnavPJEFn
+	 +h2TCQevIgySeiqQ2fouf8UgDvYBt6Q5ZLw5SrhSQ9QahcqEkZMOiTdFL2gmBc2T7v
+	 3ACA0HOjydt63VyonG8J3eBE=
+Received: from [IPV6:2001:8003:8824:9e00::bec] (unknown [IPv6:2001:8003:8824:9e00::bec])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 5F59F1E76AF;
+	Tue, 17 Feb 2026 15:21:52 +0800 (AWST)
+Message-ID: <1cd01bda-f82e-4e81-91fa-8ccbe4b007db@davidgow.net>
+Date: Tue, 17 Feb 2026 15:21:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260212215814.629709-1-tjmercier@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: Add --list_suites to show suites
+To: Ryota Sakamoto <sakamo.ryota@gmail.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+References: <20260213-kunit-list_suites-v1-1-6e6394faf4c7@gmail.com>
+Content-Language: fr
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20260213-kunit-list_suites-v1-1-6e6394faf4c7@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 12, 2026 at 01:58:11PM -0800, T.J. Mercier wrote:
-> This series adds support for IN_DELETE_SELF and IN_IGNORED inotify
-> events to kernfs files.
+Le 13/02/2026 à 12:37 AM, Ryota Sakamoto a écrit :
+> Currently, kunit.py allows listing all individual tests via --list_tests.
+> However, users often need to see only the available test suites.
 > 
-> Currently, kernfs (used by cgroup and others) supports IN_MODIFY events
-> but fails to notify watchers when the file is removed (e.g. during
-> cgroup destruction). This forces userspace monitors to maintain resource
-> intensive side-channels like pidfds, procfs polling, or redundant
-> directory watches to detect when a cgroup dies and a watched file is
-> removed.
+> Add --list_suites to show suites. This option parses the test list output
+> from the kernel and prints only the suite names.
 > 
-> By generating IN_DELETE_SELF events on destruction, we allow watchers to
-> rely on a single watch descriptor for the entire lifecycle of the
-> monitored file, reducing resource usage (file descriptors, CPU cycles)
-> and complexity in userspace.
+> Example of the output of --list_suites:
+>    example_init
+>    miscdev_init
+>    printk-ringbuffer
 > 
-> The series is structured as follows:
-> Patch 1 refactors kernfs_elem_attr to support arbitrary event types.
-> Patch 2 implements the logic to generate DELETE_SELF and IGNORED events
->         on file removal.
-> Patch 3 adds selftests to verify the new behavior.
+> Signed-off-by: Ryota Sakamoto <sakamo.ryota@gmail.com>
+> ---
 
-The patchset looks good to me.
+Nice: this is very useful.
 
-Acked-by: Tejun Heo <tj@kernel.org>
+Reviewed-by: David Gow <david@davidgow.net>
 
-Thanks.
-
--- 
-tejun
+Thanks,
+-- David
