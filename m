@@ -1,108 +1,240 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DD8307AF4;
-	Tue, 17 Feb 2026 21:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58C23090E4;
+	Tue, 17 Feb 2026 21:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771365449; cv=none; b=DCO5D0i9+R2K6UPPlo3jXkRPIuMnBIzOWmzktLIJQLbMuaDjnnR6Bi+rTDVw/SpL0jMeGdG45GSs8KPGZVSmzw//VM1RA+QoWiP8icmc+o+WzMJLqNGTTXZEozEn1ZyMxHFag4KNyE6GFdOZm8KZReKKbuMQIEKr/oA5t/eUIoE=
+	t=1771365482; cv=none; b=tPJlRO/8y1LuU7ToVi99sdKW/iipTyGffFe4GGFmOqMzmcHRgt4z1cVKeW4T+LY6AAPA6yItmv55RZe/0x+WPG1WoVH9RlC1SqgvvcfQ1cAobxSLjGqfau8JI6NxjHT2C1twiX1lQxBx+uMKKfba9ADiynuVPMZqrFnDPedt4Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771365449; c=relaxed/simple;
-	bh=W2ufsggH08gRrzRS8U3a7gxMcAG32wbvfRiJBlb3ok8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Qj/Bv2CNC0mFYmU1RaXNl+eBNjYu6HaEfYsPmtAMWNfO7OLKvRjLWGcA5zYqNNfjK/fORAvl2Sn82MDDxLE6APzX+kd4PQwXnaDRp9GlSLG2kvN4kyyoa73GBMf/1IYmTolyE1cB8TH+AamkNKPuJV4kkn0fHJ51156CRK3JA8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z6CpNMAK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771365482; c=relaxed/simple;
+	bh=heKb6MrFAu3tIgBtbRbmX+zvHl1ztoqxBVo9HgIEXu8=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=q0tbl3w2mL7+eXSVIlWOdXmhzrNfnzRX3/x0clDetR5QnBC1nYhBJgblj9TELf3L7CWHa+M7aKWMRk3cewW3ZEY4nz+4zfuITgvlpIvffuyY5m9On41uPYPL11UXzPXV5SanxirzAdo9NOpIbUoLAxPXd5zVgzJY/Dz+Hwa6VWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=mLaaq3S/; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z6CpNMAK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291E9C4CEF7;
-	Tue, 17 Feb 2026 21:57:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771365448;
-	bh=W2ufsggH08gRrzRS8U3a7gxMcAG32wbvfRiJBlb3ok8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Z6CpNMAKalMr82UTRBK+jZMkmJehFyxbR6DqneuqV/5ciIqv5gkjXEeZAKIBuMz3S
-	 vNhQLCBln42y7kTFPl7ujqB0gxFxPIs1FG9waFdr/Tr6fzMcbLkX9iLY3Z1g1wimac
-	 6qyDmtXGkw2nwLKnKvMBMwVVtYfF2tSnT9+gBBWxGUEUHxftir2Lf3nvao4lhPWoLE
-	 agSlllEbKVJGozxif+yOl7K89vd/6/i+O1kPSO17JgPG3Tt99kqHzr2SsHmzOJcOK7
-	 4Q3AQiCwASr5XNiE7z+ex1W4InDl7lOeV7CmHBNrihtLTuzjxc3cd0vO91p2qoUl60
-	 LehtYQ/CHS97w==
-Date: Tue, 17 Feb 2026 13:57:27 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Tariq Toukan <ttoukan.linux@gmail.com>
-Cc: Yael Chemla <ychemla@nvidia.com>, davem@davemloft.net,
- netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, Willem de Bruijn
- <willemb@google.com>, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- Tariq Toukan <tariqt@nvidia.com>, Gal Pressman <gal@nvidia.com>,
- noren@nvidia.com
-Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: rss: validate min
- RSS table size
-Message-ID: <20260217135727.292acc4e@kernel.org>
-In-Reply-To: <ba1885cc-57e7-488b-946b-d08c1644dcaa@gmail.com>
-References: <20260131225454.1225151-1-kuba@kernel.org>
-	<9f535014-80eb-4f57-b047-3638579bde9a@nvidia.com>
-	<20260211134319.39710c1d@kernel.org>
-	<dbbe9690-996f-4a63-90a0-baec52c27236@gmail.com>
-	<20260212172215.0a3295a0@kernel.org>
-	<ba1885cc-57e7-488b-946b-d08c1644dcaa@gmail.com>
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="mLaaq3S/"
+Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61HK0ssQ2661410;
+	Tue, 17 Feb 2026 21:45:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=67nrQyy018UcYBfpBBJaDTXp+rfIoPYxntW71kQV9Bg=; b=mLaa
+	q3S/o+8k8yC1L3hY1YZoLMTLt4xUzml9NJsCUl//D8Ml4R9OUyme00XqhxHaHc+l
+	swPC/rnANlY3+C1wrOvR1npYgIENtrnTuOfqRXtHJabPkk7Uur4Y0nTdKbCuuXRB
+	rQp9bdawK4gBbnCXOCgLrAtDLRiIlPfBjs9Dqsfr+CDOGXgxcdi4tgcdsypRzBOQ
+	Dd70X4v+9JTZ3VOV1iLJeFQhgZtEQToIetkDY7KTQgGK7uqfwVO46mVlat+2jQvj
+	qasxGXKUuuEyUaXNdkKPE/vPxwtQH7CBahg6slk+IKWConYE170O1ge+Az0935Zw
+	GdqhoYTEH0hoqZRGdw==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cb6v0hame-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Feb 2026 21:45:55 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 17 Feb 2026 21:45:49 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <sast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
+CC: <sartin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
+        Slava Imameev
+	<slava.imameev@crowdstrike.com>
+Subject: [PATCH bpf-next 1/2] bpf: Support multi-level pointer params via PTR_TO_MEM for trampolines
+Date: Wed, 18 Feb 2026 08:45:32 +1100
+Message-ID: <20260217214533.17776-2-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260217214533.17776-1-slava.imameev@crowdstrike.com>
+References: <20260217214533.17776-1-slava.imameev@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH016.crowdstrike.sys (10.100.11.68) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Proofpoint-ORIG-GUID: cz0KxEb7LKONrF9PvWx6V_ksS6aaONtj
+X-Proofpoint-GUID: cz0KxEb7LKONrF9PvWx6V_ksS6aaONtj
+X-Authority-Analysis: v=2.4 cv=VNPQXtPX c=1 sm=1 tr=0 ts=6994e194 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=pl6vuDidAAAA:8
+ a=YxQJZ6zyij23mKzqByIA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDE3OSBTYWx0ZWRfXyC1fMcfvQJ8+
+ zjWMKSVHiSxYUVACufzXE1SIDFwKZyDxOOEJrxWzCkg+sc7NfPa26xlsjRm5L/qA2lP0HN/YWvP
+ +TdMEJv93F+xvIJ2De/r7S2B98GrktIp+uoZ7vXgXoS72TKyuORhbhS8p1hAhRfpptXi0RHz5p1
+ onWwmlNUQfFqnNcUOml6m1qJhuNmYrOPaOXCjzOhi0PMndVGja91RVEWb8JafDyeVLIfCC5S+RG
+ nMa1m9qJjNd2ETJJnPLhQQAQaOo5+79yHTnc6JBuSUhYnyRHSbITcL41zhhyrjFGyHdwfvYNJFF
+ 4pavJBQ1XK9NtvH9jIw9PwtGpO2W45gYyYVT4uztUz0AzIyY/kVHn/v0YIj3ObAnFJtoff5jtDe
+ 0GJ4eAkw9Er/eya/8sAEvmH2Qtb/JH54u5tZLVLpM96h0rH5epMZ/YKH0Dn7y9QPJS0bm+45EXI
+ aYyVOp04P7K19NMjIpQ==
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11704
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 clxscore=1015 bulkscore=0 suspectscore=0 impostorscore=0
+ adultscore=0 spamscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602170179
 
-On Mon, 16 Feb 2026 10:28:52 +0200 Tariq Toukan wrote:
-> >> This ignores multiple other considerations:
-> >>
-> >> 1. Existing behavior: In general, mlx5e today implies 2x factor, so it
-> >> would fail this new test.
-> >>
-> >> 2. Device resources: In large scale (high num of channels, or high num
-> >> of netdevs on the same chip, or both), it is not obvious that increasing
-> >> the indirection table size is still desirable, or even possible. To pass
-> >> the selftest, you'll have to limit the max number of channels.
-> >>
-> >> 3. ch_max should win: Related to point #2. Driver should not enforce
-> >> limitations on supported ch_max just to fulfill the recommendation and
-> >> pass the test. I prefer flexibility, give the admin the control. That
-> >> means, driver would use 4x factor (or larger) whenever possible, but
-> >> would not block configurations in which the 4x factor cannot be satisfied.  
-> > 
-> > Oh I see.. I wasn't aware the CX7 has a limitation of the indirection
-> > table size.  
-> 
-> There is a limitation, we read it from FW.
-> It's usually not small, much larger than 256.
-> 
-> But currently it can vary according to FW decisions in scale (resource 
-> management).
-> 
-> > I wrote the test because of a similar limitation in a
-> > different NIC, but that one has been fixed.. I have limited access to
-> > CX7 NICs, the one I tested on maxed out at 63 queues so the test has
-> > passed.
-> > 
-> > Is it not possible to create an indirection table larger than 256
-> > entries?  
-> 
-> It is possible, depending on the exposed FW capability.
-> As of today, there are high-scale configurations (many VFs for example) 
-> where the FW exposed cap is lowered.
+Add BPF verifier support for multi-level pointer parameters and return
+values in BPF trampolines. The implementation treats these parameters as
+PTR_TO_MEM with read-only semantics, applying either untrusted or trusted
+access patterns while honoring __nullable annotations. Runtime safety is
+ensured through existing exception handling mechanisms for untrusted
+memory reads, with the verifier enforcing bounds checking and null
+validation.
 
-Not entirely sure what you expect the outcome of this discussion to be.
+Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
+---
+ include/linux/bpf.h   |  3 ++-
+ kernel/bpf/btf.c      | 54 ++++++++++++++++++++++++++++++++++++-------
+ kernel/bpf/verifier.c |  4 +++-
+ 3 files changed, 51 insertions(+), 10 deletions(-)
 
-The 2x indirection table has been proven inadequate for real production
-use. I'm not talking about some theory or benchmarks, actual workloads
-reported machines/NICs with such table as unusable (workload starts
-choking way before reaching expected machine capacity).
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index cd9b96434904..6dd6a85cf13a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1052,7 +1052,8 @@ struct bpf_insn_access_aux {
+ 			struct btf *btf;
+ 			u32 btf_id;
+ 			u32 ref_obj_id;
+-		};
++		}; /* base type PTR_TO_BTF_ID */
++		u32 mem_size; /* base type PTR_TO_MEM */
+ 	};
+ 	struct bpf_verifier_log *log; /* for verbose logs */
+ 	bool is_retval; /* is accessing function return value ? */
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 7708958e3fb8..7b7cb30cdc98 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -760,6 +760,21 @@ const struct btf_type *btf_type_resolve_func_ptr(const struct btf *btf,
+ 	return NULL;
+ }
+ 
++static bool is_multilevel_ptr(const struct btf *btf, const struct btf_type *t)
++{
++	u32 depth = 0;
++
++	if (!btf_type_is_ptr(t))
++		return false;
++
++	do {
++		depth += 1;
++		t = btf_type_skip_modifiers(btf, t->type, NULL);
++	} while (btf_type_is_ptr(t) && depth < 2);
++
++	return depth > 1;
++}
++
+ /* Types that act only as a source, not sink or intermediate
+  * type when resolving.
+  */
+@@ -6790,6 +6805,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 	const char *tag_value;
+ 	u32 nr_args, arg;
+ 	int i, ret;
++	bool trusted, nullable;
+ 
+ 	if (off % 8) {
+ 		bpf_log(log, "func '%s' offset %d is not multiple of 8\n",
+@@ -6927,12 +6943,8 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		}
+ 	}
+ 
+-	info->reg_type = PTR_TO_BTF_ID;
+-	if (prog_args_trusted(prog))
+-		info->reg_type |= PTR_TRUSTED;
+-
+-	if (btf_param_match_suffix(btf, &args[arg], "__nullable"))
+-		info->reg_type |= PTR_MAYBE_NULL;
++	trusted = prog_args_trusted(prog);
++	nullable = btf_param_match_suffix(btf, &args[arg], "__nullable");
+ 
+ 	if (prog->expected_attach_type == BPF_TRACE_RAW_TP) {
+ 		struct btf *btf = prog->aux->attach_btf;
+@@ -6953,7 +6965,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 			if (strcmp(tname, raw_tp_null_args[i].func))
+ 				continue;
+ 			if (raw_tp_null_args[i].mask & (0x1ULL << (arg * 4)))
+-				info->reg_type |= PTR_MAYBE_NULL;
++				nullable = true;
+ 			/* Is the current arg IS_ERR? */
+ 			if (raw_tp_null_args[i].mask & (0x2ULL << (arg * 4)))
+ 				ptr_err_raw_tp = true;
+@@ -6964,9 +6976,35 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		 * argument as PTR_MAYBE_NULL.
+ 		 */
+ 		if (i == ARRAY_SIZE(raw_tp_null_args) && btf_is_module(btf))
+-			info->reg_type |= PTR_MAYBE_NULL;
++			nullable = true;
+ 	}
+ 
++	if (is_multilevel_ptr(btf, t)) {
++		/* If it can be IS_ERR at runtime, mark as scalar. */
++		if (ptr_err_raw_tp) {
++			bpf_log(log, "marking func '%s' pointer arg%d as scalar as it may encode error",
++				tname, arg);
++			info->reg_type = SCALAR_VALUE;
++		} else {
++			info->reg_type = PTR_TO_MEM | MEM_RDONLY;
++			if (!trusted)
++				info->reg_type |= PTR_UNTRUSTED;
++			/* for return value be conservative and mark it nullable */
++			if (nullable || arg == nr_args)
++				info->reg_type |= PTR_MAYBE_NULL;
++			/* this is a pointer to another pointer */
++			info->mem_size = sizeof(void *);
++		}
++		return true;
++	}
++
++	info->reg_type = PTR_TO_BTF_ID;
++	if (trusted)
++		info->reg_type |= PTR_TRUSTED;
++
++	if (nullable)
++		info->reg_type |= PTR_MAYBE_NULL;
++
+ 	if (tgt_prog) {
+ 		enum bpf_prog_type tgt_type;
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0162f946032f..5de56336e169 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6311,7 +6311,7 @@ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, int off,
+ 					off);
+ 				return -EACCES;
+ 			}
+-		} else {
++		} else if (base_type(info->reg_type) != PTR_TO_MEM) {
+ 			env->insn_aux_data[insn_idx].ctx_field_size = info->ctx_field_size;
+ 		}
+ 		/* remember the offset of last byte accessed in ctx */
+@@ -7771,6 +7771,8 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+ 					regs[value_regno].btf = info.btf;
+ 					regs[value_regno].btf_id = info.btf_id;
+ 					regs[value_regno].ref_obj_id = info.ref_obj_id;
++				} else if (base_type(info.reg_type) == PTR_TO_MEM) {
++					regs[value_regno].mem_size = info.mem_size;
+ 				}
+ 			}
+ 			regs[value_regno].type = info.reg_type;
+-- 
+2.50.1 (Apple Git-155)
 
-That said I just checked out of curiosity and the OCP NIC spec also
-states:
-
-  The minimum supported indirection table size MUST be 128. The minimum
-  SHOULD be at least 4 times the number of supported receive queues.
-
-so I guess the 4x isn't exactly a new recommendation.
