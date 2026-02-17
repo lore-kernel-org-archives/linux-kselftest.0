@@ -1,142 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC20260580;
-	Tue, 17 Feb 2026 22:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268412D46CE
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 23:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771368481; cv=none; b=ITFCNUEbk5AO11oeQU538RP2qIa6UmhC+Gow6ZYp51Sz7Z4P4ctt0+jxoK0D7x2o8HS+pOZdrzAmPJb1c6Gyd/AeaeA1Ot9QVDjcFCknyZZS2xKRHite6mzT1ghtySzozv/rWvbDx3P6pXajQY832r0xVlzDLLzQNmZR2bm1qeI=
+	t=1771369502; cv=none; b=u3xl6rCqiniGCDHTMymQ6GeW73b+QCL85tUd5RMYlCvfVKDjsajk3KcXc7WefnSpnADSNmjSuWIXad3UIx5O9Ic+4b772D4vPoCJQsRlYWDhkLI6w0xOYmbkE1Mu8tH0Dgzk+gz/XJZ2ri3XoJjrda610lmLg5MVHTxqj/X0U4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771368481; c=relaxed/simple;
-	bh=/TSbYnClUOGqOMdBA09jRDl19YeOcTbGhgJNn2/YoNM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Q/U+Jtv5Gghg8uLB5zvJHLvoC321aHkZDI/8iPZuRFohNGAqeLFmvJQygdBC9/haWrJcWibOCwHvf8kwZ3MIv8j8pxuB+Ww8rjKi8zEzTfEU/BXQjGlKAPCmc7G4drrwfV4UYiunzvbDSuNsDgMVRx7JzgSqwE6RW0k/tNUDLBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYh+zUQ8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771369502; c=relaxed/simple;
+	bh=Nb9uO6XAB2riMcSXkiGPR3StBCYmptBJJoYo8dSh3k4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ORmbOsapxtsn/sAznVrqOfeocUkktW6B6cKBIBp0N8Kwtgsb3qnaIXnS1FnLv0SD7ISy23yVVQ/cZ3R6iXHrpXRfa4yxn36dFXfZV9ugQaajwS77pvHc6D3FM1Ptxvcov6+aKaQksMj8YOvn+zx7bPvYcy3WTImycfyovxMUl/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FWiOH1KI; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYh+zUQ8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE400C4CEF7;
-	Tue, 17 Feb 2026 22:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771368480;
-	bh=/TSbYnClUOGqOMdBA09jRDl19YeOcTbGhgJNn2/YoNM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gYh+zUQ8kvdOkk1BIxp/8pKWCkdX754d7//jzfPyWIvVBpXNMknJ9GfEJw48Te8d2
-	 e1QmAzpZchsQ4+Mer+SbFq2tp/su7+A9s9T0qs7vor8bc1rMhmBCNOyesNzvhWSxac
-	 9e/9AQ2Ic0Ofngz/UDrQjWwXc7FjIXJAyWxQyCPYXrXFzrM5EoKL6e78e08NMRGaqg
-	 KVd79OXeE0FLrzvcKwIKG+NC8mfNZafjGASIoWbcdaRqmhh9sNuKU6c6cLx9tSKMsx
-	 Ms1MUuepWjuVjPzwbr9w+qozkKd2Rx0TGW28BbNCclG72T2RsvhzCYUCA9HOP2B79K
-	 pe4tQuTYdT/Lw==
-Content-Type: multipart/mixed; boundary="===============8598547615559900769=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FWiOH1KI"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3562171b56dso5095171a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 15:05:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771369500; x=1771974300; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nb9uO6XAB2riMcSXkiGPR3StBCYmptBJJoYo8dSh3k4=;
+        b=FWiOH1KIv/HDNKDK2kDyZ7eTMCtCghzcmD587SyjpT0XwzYQNMFW0uRyVQSo/E5Ohb
+         EjnZfIkgMiOCqyl5rbFPcvyjMs0w/XKVDY/+9jFMhXlsYgcnxFoU/FmNzo810+EE/AuE
+         9ppIJiGgLlDUDFRu/Yr1e4NiJ/cMfMPxnJiliHIf6ZeMCQcYdJrvWicOjS9rn2HsrLyz
+         Dpcp+yoLV65pEptfykKB3/857KdYbMsVvaHvpvMZs5GOe1vHXyFzxEV2ynLXhQk89X9h
+         PDW0V3Ha6PrnLflhd9dD0jJuOAvxAEuB6L7r6h+hyrFGp9JuA1FzslIKF8P73vL85sUX
+         aJrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771369500; x=1771974300;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nb9uO6XAB2riMcSXkiGPR3StBCYmptBJJoYo8dSh3k4=;
+        b=NUCFgA4dWo9aB0JGcHuaLSNKXUvYenKgSwkKUhdUus3T9+sbxHuwO+4dfdbaknCZwd
+         klqyHeS8uLaBlbw4bqePz6URyypCgvQkdSwBEbXZ5eGgSSgmhlStutzBRj6s5lsuQsLU
+         Nf9bW2PhKnjWQPKLYY8EO6TAl0LA8sjAxRV4ao7Ste1UOO3D47zFJVRgkbqOB8imE50v
+         VGNgdh3YJTZQdK+lMMPf6IjXMkT+9aEqRgXSSv8eO8fcI+w8ZCei7o3Sr8VkpflbQql6
+         3HI3M27WLenhBdkhZ7V3ovfWuEMW8kmOWms8SQcbW39700L/umvKCxL9Xw/HAldCXtsD
+         5Yaw==
+X-Forwarded-Encrypted: i=1; AJvYcCXcMIKfcGneUBKs91OM7+5HGy2yGjSRmZ38hLy9gb29OWYZB1yjsLntH6QF55SVjlt3X3/Qr2dVSF+f9O8QuuM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFwNA7l2xSOBD7h2mfiuhU+eLiOH2t60/nc20/0wlQASy3Nebh
+	lhmlbf5h38Pjf6flHkahoANICSapCnTbCe7qjVdMzdZtY6JzjlVqEb83hhtBGNTKAHm9L/CqLta
+	s0F1WWg==
+X-Received: from pjpt8.prod.google.com ([2002:a17:90a:a188:b0:34b:fe89:512c])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2c90:b0:34a:b8e0:dd64
+ with SMTP id 98e67ed59e1d1-356aaa9bb34mr11781376a91.1.1771369500107; Tue, 17
+ Feb 2026 15:05:00 -0800 (PST)
+Date: Tue, 17 Feb 2026 15:04:58 -0800
+In-Reply-To: <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <c0aa6a42eb9fa557fc375b858d91dbadd74bbd6534be1b32fc9e0d05e540ee63@mail.kernel.org>
-In-Reply-To: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
-References: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add trampolines multi-level pointer params test coverage
-From: bot+bpf-ci@kernel.org
-To: slava.imameev@crowdstrike.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-open-source@crowdstrike.com,slava.imameev@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 17 Feb 2026 22:47:59 +0000 (UTC)
-
---===============8598547615559900769==
+Mime-Version: 1.0
+References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
+ <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
+Message-ID: <aZT0GmwJ-pm93ojg@google.com>
+Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de, 
+	brauner@kernel.org, chao.p.peng@intel.com, chao.p.peng@linux.intel.com, 
+	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com, 
+	david@kernel.org, hpa@zytor.com, ira.weiny@intel.com, jgg@nvidia.com, 
+	jmattson@google.com, jroedel@suse.de, jthoughton@google.com, 
+	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
+	mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
+	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
+	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, shivankg@amd.com, shuah@kernel.org, steven.price@arm.com, 
+	tabba@google.com, tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com
 Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 178c4738e63b..19c82ae9bfe6 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
+On Sat, Feb 14, 2026, Ackerley Tng wrote:
+> Sean is against deferring whether to preserve memory to the underlying
+> hardware because that is letting (effectively) micro-architectural
+> behavior to define KVM's ABI. KVM's uAPI cannot let behavior be
+> undefined, or be based on vendor, and maybe even on firmware version.
 
-[ ... ]
-
-> +static void *create_bad_kaddr(void)
-> +{
-> +	/*
-> +	 * Try to get an address that passes kernel range checks but causes
-> +	 * a page fault handler invocation if accessed from a BPF program.
-> +	 */
-> +#if defined(CONFIG_ARCH_HAS_SET_MEMORY) && defined(CONFIG_X86)
-
-The first branch requires both CONFIG_ARCH_HAS_SET_MEMORY and
-CONFIG_X86.  The second branch requires CONFIG_ARCH_HAS_SET_DIRECT_MAP.
-
-PowerPC selects ARCH_HAS_SET_MEMORY (arch/powerpc/Kconfig) but not
-ARCH_HAS_SET_DIRECT_MAP, so neither branch compiles in and the function
-always returns NULL on that architecture.
-
-> +	void *addr = vmalloc(PAGE_SIZE);
-> +
-> +	if (!addr)
-> +		return NULL;
-> +	/* Make it non-present - any access will fault */
-> +	if (set_memory_np((unsigned long)addr, 1)) {
-> +		vfree(addr);
-> +		return NULL;
-> +	}
-> +	return addr;
-> +#elif defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP)
-
-[ ... ]
-
-> +#endif
-> +	return NULL;
-> +}
-
-[ ... ]
-
-> +static void free_bad_kaddr(void *addr)
-> +{
-> +	if (!addr)
-> +		return;
-> +
-> +	/*
-> +	 * Free an invalid test address created by get_invalid_address().
-> +	 * Restores the page to present state before freeing.
-> +	 */
-
-The comment references get_invalid_address() but the function that
-creates the address is create_bad_kaddr().
-
-> +#if defined(CONFIG_ARCH_HAS_SET_MEMORY) && defined(CONFIG_X86)
-
-[ ... ]
-
-> +#endif
-> +}
-
-[ ... ]
-
-> +		} else if (!strcmp(attach_name, "bpf_fentry_test13_pptr")) {
-> +			kaddr = create_bad_kaddr();
-> +			WARN_ON(!kaddr);
-
-Since create_bad_kaddr() returns NULL on PowerPC (which supports BPF
-trampolines via HAVE_DYNAMIC_FTRACE_WITH_ARGS), would this WARN_ON fire
-every time the bpf_fentry_test13_pptr test runs on that architecture?
-
-> +			CONSUME(bpf_fentry_test13_pptr(kaddr));
-> +			CONSUME(bpf_fentry_test13_pptr((void **)19));
-> +			CONSUME(bpf_fentry_test13_pptr(ERR_PTR(-ENOMEM)));
-> +			break;
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22118172993
-
-AI-authorship-score: low
-AI-authorship-explanation: Stale comment referencing a renamed function and an architecture coverage gap with WARN_ON are characteristic of human-authored code that underwent refactoring.
-issues-found: 2
-issue-severity-score: medium
-issue-severity-explanation: WARN_ON(!kaddr) fires unconditionally on PowerPC where create_bad_kaddr() always returns NULL, producing kernel warnings on every test run and potential panics with panic_on_warn.
-
---===============8598547615559900769==--
+Concretely, we'll end up with a giant mess if TDX and/or SNP adds support for
+preserving contents on conversion.
