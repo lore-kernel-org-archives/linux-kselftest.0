@@ -1,254 +1,361 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2269316189
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 23:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771370022; cv=pass; b=QJ9x+WWpoY9udSAivgf6ACcwryhj5jehG+UmRIEa12wjefAqyWZZFgB8HVXl2HoVauZ5V6oa95rDC6eCnrGxIG4gjPXAw3hXtYRWVQTQ5rrE3RF0fxeV3YAr4d36vVTp/CBvDOmGPfFr7tf1oZMA684Ll689+ksGxZDjWnnzR2s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771370022; c=relaxed/simple;
-	bh=r79iQhNrRyLXah4G9YOSWVaBuc5LQcACm1x/uvKMWos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CSJ70ExWsGDrNh1QO+VrZvGCTpo8sqf03SjUQD8gcj17H+bTE6Iu/iLewotLJrrxE2glmgpa9hao9sWvyrNVBATkuYLN/KdJCgWTNrHlqzgJsi1Oo4fJq8QdgEtJGfmz54Ye/pT9WwFMWgGe3mf1rsb/3OpxLGpaKKHzlqWNIw4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYwo2P37; arc=pass smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE692E3360
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 23:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771370878; cv=none; b=ZAAMEn6CnICbIHNbfggNdbOZNnpGnDjmOWJaqRGCgmL8sHPqDSDyQ3Awj7yvSOe93x/wZ4tFfSH3oNmrmBfBMTMR4jQfCuwyATlD3k2A11pj2Odgs+FFMD4+5PM4wURF8iY+qQxac0DfWqle3pGuPk84Le81fdvL965PQ9lPloU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771370878; c=relaxed/simple;
+	bh=j+XzuPdbmTm5dTJykXMljs1HvLFtccXg5tafPS5P3bY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=WmCsitYc2mI46qayXynmCA+8f8nkXVYylMMXpv+uEdASlbZ3ktloOMI+/QQLt0JmnCVfIixacn4MAfXai8DiFuNOZfK/0NISY9fSVjX6OUOPjUuTmNn0rsIx8HDDI8DUxV374QXk3Ui6PAC3nO+aYm6ZYpgDKOZnpJkytnPJmTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UozcoO6g; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYwo2P37"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b8850aa5b56so202148366b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 15:13:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771370019; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JaGInF+0KRHXeUBbhnTa2TOi8+OO+b7nem4GGCe3NPLbsw3qy9MXMlOg0wuaK6949M
-         Tox/MX984WXcHXgqfFqvUivveT2Ejh3V0qpzRHCvGKX/U+DjhJ9b9Ao5HYyM9t9pOqih
-         1uMqm8yRJQ5Eir0E25Srm/hSerYCxQAA9eOJr0aCfJQM9VtqtI/p/dmU/iNX2FAjZAHZ
-         f/clWGgqNT+1G11HeG9p2UxNujDdcx5M08XlqhHap+wHTlTj3uEEDxV9dP2Y5mz29w44
-         3fqvNmQ3vVQrw7feHhbe2d80olGvDwtbkRbTPCsJnuvJigfeqEaIWLGolONwLug4Rhhn
-         L39A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lBoiDccagGFr7t/Rdt9JIQl1MV82SoTCGhUB9Q/6K18=;
-        fh=kJlfNVEqAuW9ZHeQmI5wcznlFnU5mAkHpdoy35LAMUw=;
-        b=cFrOgVMlKsviBsiHzliiSbfnFpeEyFyja6dFs18lxduv0JR0MjvngYRUpi4Te0TYPx
-         djACg9gJ5LzePM5A3cuEd8zPE8QuKrwDO6nlOJJkjSW9ZPPv8nKi2NXVwXky35movrXa
-         ZPCBPpOBJy1HWe34j4BV7XoZbbP9RWhIwhCMqWGgmq+Jaa3XV86tcV6kUnZr05xbDNQl
-         Uic0I6rZ3GuZ2/2c3HS4746u2L8sRL6zWhbtAAGxl+vs6auTG/Qetp5lZvpA/KMIimBo
-         +7YxiSpJUzGumyoAK/5o5mflVLzGsVH8I5bhGLhn+jjLgW3I4glWZoJw5SEuE6Uf4u5x
-         lbpA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UozcoO6g"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c6e194ab2f7so18562563a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 15:27:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771370019; x=1771974819; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lBoiDccagGFr7t/Rdt9JIQl1MV82SoTCGhUB9Q/6K18=;
-        b=GYwo2P374OGPIRSL8ahSMr3tYI+GVcmhyuhgf0u92+f4xLJors3KeHbwqFQ1r9DuFt
-         YTqvPWIMAqJUGcOw9TR5h3DDoeV+cMLZJ1NL+I2W9W6XHYGhLRcAgTfUrRqDrXr2v1un
-         S846PICCuLLaZ+SVK6mYuaLt6HFwHrqzc4zlkIoqX/xiuVw24tOu5sJekFQ1N+P247+O
-         KiER96h2knhGogDqNYvdGGSZzUmu0C0AXP5/pml19YKnfejc0kLVHx6YqhvD9cwq3Pa6
-         5YVwB+bGEmmXWS8sJKlRTnCjsT9+71DMGHfqwuzyi+8JPJZ7AgHIkZrNEF6iA7kg0yEx
-         Eq2w==
+        d=google.com; s=20230601; t=1771370876; x=1771975676; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5X5KS6rCju+8fHQdzpBX7hCsqBgb5Dp642p6kUU+O1c=;
+        b=UozcoO6gVvD2wzqjO9ETcbTgnBgBxdD2FNBcIkOIqh7G4nCnAJWMQmJkNj+IZZnzcL
+         EEOFygbHFPvR9q0vHrqFmN56EQDkWHdaavC5USPXPNBrHTZXbSO09YhCwv+sFRgsowB0
+         aKn5aUyH1AvVXIzroeo4yuMCPk7opyZNU6TLJmbrogoNI4TJWD5Z+nGaTXUactoRvtDP
+         Mz4sN7kMqJLbZhyz3x9H5NN/hw5MYwkPSxTspvDRPpixl81wPX7Qby9VOiKI36XWJaCR
+         gQUxy2KAjwYrLahroCj/QkIgwlBbRgDM1orNW/SsGcoa48ly9/UWmB5a7uxAvodXfks+
+         oqTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771370019; x=1771974819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lBoiDccagGFr7t/Rdt9JIQl1MV82SoTCGhUB9Q/6K18=;
-        b=iTj7v9biIy+CN51h97oRFDfrvfb/nBGH4v15LTmUknwA5i8TA9+Kr43YVaZ6duNxKe
-         VDk3Kawu2D5G8rZiqtkYaVt0MJEIuS7gzadPx+CwV4zqogcq4JrjzupvXy4/jRk7pWiO
-         gzjnJBZ0Tef3S575qA3A3Rd4fCNDyXwxOxgcOlUyF8vGbpTTZQaeMWIE7eSrz38KQIlK
-         i2CtxX5zeppE0Tk/dSXn9YPPtVbwl1B5ofTEtpIIcdmmpEgM21HAHZcnoMbQu7BusCf1
-         69AEhmhy8rb6kVgmyYAqGdFyhMS1riEZ9K+ImG/2fUP1sMzZuCGakUfo+PmqZbPPxvh9
-         GHsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW7IbxGUFbIWMh69p4z4Khoev3rdDkAiix4eZCqLBekgW0aPjkepBo1hNnz6gcgmQjBi2dON47CDGfZSe5pOxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykqjWpTxvn781eo4xb8qXeTAP6fUPym31zb0pk+ud2ocR6iO/g
-	Jjx1Z6HcEruCgJJ+1LM88BR9mopEmrB3QiOqpHgZRmertfoMk9O7OBP5lietARxCnKB+3Dq831D
-	XV+KFLO5mOKJC7N0a/oteq1tntGCq5t+ulpU3
-X-Gm-Gg: AZuq6aK1LRJPX4VTXiLmQPfkXZTpxF89DgNmwxYF4Cqh7D3N8v0pM4lK2Lt01YfMaR7
-	uiL/o2mFQCqnIY7ukiTuCZ+lOnBt9uFGfs2Aq50FayvxmBJ2YkQEkGvf65j3EBEWf/29l+8pr0f
-	vbLpb4Y8V0VtPtPiVFmv3jA4ib9WFy58YEoCWlnvS/TO3rqtmkhmHPJdLafn+AsuQve314BA0cS
-	zAhM6qkIHM8ZfmB1T7yv4kf6WVbL9/4PinyQ1vF0IrfgpI0mv44mT9khG6sYZKDx1gNklNESAzr
-	KfqQY5wn
-X-Received: by 2002:a17:907:9808:b0:b90:48b:b53c with SMTP id
- a640c23a62f3a-b90048bb667mr408965466b.32.1771370018919; Tue, 17 Feb 2026
- 15:13:38 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771370876; x=1771975676;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5X5KS6rCju+8fHQdzpBX7hCsqBgb5Dp642p6kUU+O1c=;
+        b=iKq6ZvtoS3VZqMMNmQLQLD+tWNGJyXRGey4c5P9toS//6jtNq/IsT7LwwJK8Gwftzy
+         peyiIugwZ3PqXk2t8nEmSULREIvErqGxB5TA44LzrIB1kF543iw3VZN2AiPqKysJ4qNr
+         wmJCwUrzvdU8pxqJtIGabx+y/0gz1j+9/yKS+ZKXj2qDNlKxuXSWE1XbHhQldKdSHLjz
+         62drbkR+5Hnr8F2IACQJD/YlChMrLoaLbktf2GGxwAfDXEcBCLCu7H766V4oIt/V9oBy
+         3GqtqTpeOzQJP2H41YKKgtkgRWApOtLDRXUs1KgTiMbH45XY2Dvmoo/w23S7ZpLR0k+0
+         YQcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUgHEs5ZUwHWVnAz/MQCu7wFraqbp6HLDlaKzBPLS70o30E4PJs8CHsLd4qahAIUnEhQ9wGR9B8YGGeefPy/Vg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCh3IxNEpy4gason8MknFWYXeIOxzP2brBmjo2tIiJu5whAqkg
+	scgF0wg81MmwU+6GrNqz9qaKcrqsDAMrLAFAnj5AdURZpliUUJx+Vi4dsVcFiHXa803rYnn2+t4
+	TgY98gQ==
+X-Received: from pgc10.prod.google.com ([2002:a05:6a02:2f8a:b0:c6e:1a85:93a6])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6300:6702:b0:38e:90ca:5a2b
+ with SMTP id adf61e73a8af0-39483940fb7mr11214658637.17.1771370876144; Tue, 17
+ Feb 2026 15:27:56 -0800 (PST)
+Date: Tue, 17 Feb 2026 15:27:54 -0800
+In-Reply-To: <CALMp9eTnXW9=0=+RxQjeXfA++UP3MX0LzXo5qwUP-dCCQjOLVQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260212215814.629709-1-tjmercier@google.com> <20260212215814.629709-3-tjmercier@google.com>
- <aZRAkalnJCxSp7ne@amir-ThinkPad-T480> <CABdmKX3wsWphRTDanKwGGiUWoO0xTaC8L_QxjHzhpxfZn256MQ@mail.gmail.com>
- <CAOQ4uxgrP=VdTKZXKcRE8BeWv6wZy7aFkUF-VoEpRSxVnHZi2w@mail.gmail.com> <CABdmKX1ztzJ6B13uzdDtN-uVWbdWuYJ6PMvjGoAfu40MMHCpaA@mail.gmail.com>
-In-Reply-To: <CABdmKX1ztzJ6B13uzdDtN-uVWbdWuYJ6PMvjGoAfu40MMHCpaA@mail.gmail.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Wed, 18 Feb 2026 00:13:26 +0100
-X-Gm-Features: AaiRm52hU7QfH-Wv9-Iuqet313dBf2qvcHaBiSfPSpB5qXd2EOgSyRj8MoDjcQo
-Message-ID: <CAOQ4uxijd+viTGvQ8Mn1sLMH7dk1cGUmyU_n4HfW5Pg4FLLRPg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, jack@suse.cz, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+References: <20260212155905.3448571-1-jmattson@google.com> <20260212155905.3448571-5-jmattson@google.com>
+ <gqj4y6awen5dfxy32lbskcxw6xdv4xiiouycyftjacndjinhvp@7p4dtgdh6tjw>
+ <aY9BPKhzgxo4UuHB@google.com> <CALMp9eR4ayj_gwsDQVH8pQvzqgEYVB6ExWp3aFgJXRWikLEikw@mail.gmail.com>
+ <aY-jViitsLQm9B83@google.com> <CALMp9eTnXW9=0=+RxQjeXfA++UP3MX0LzXo5qwUP-dCCQjOLVQ@mail.gmail.com>
+Message-ID: <aZT5eldlkLpRm7OD@google.com>
+Subject: Re: [PATCH v4 4/8] KVM: x86: nSVM: Redirect IA32_PAT accesses to
+ either hPAT or gPAT
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Yosry Ahmed <yosry.ahmed@linux.dev>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 18, 2026 at 12:32=E2=80=AFAM T.J. Mercier <tjmercier@google.com=
-> wrote:
->
-> On Tue, Feb 17, 2026 at 1:25=E2=80=AFPM Amir Goldstein <amir73il@gmail.co=
-m> wrote:
-> >
-> > On Tue, Feb 17, 2026 at 9:26=E2=80=AFPM T.J. Mercier <tjmercier@google.=
-com> wrote:
-> > >
-> > > On Tue, Feb 17, 2026 at 2:19=E2=80=AFAM Amir Goldstein <amir73il@gmai=
-l.com> wrote:
-> > > >
-> > > > On Thu, Feb 12, 2026 at 01:58:13PM -0800, T.J. Mercier wrote:
-> > > > > Currently some kernfs files (e.g. cgroup.events, memory.events) s=
-upport
-> > > > > inotify watches for IN_MODIFY, but unlike with regular filesystem=
-s, they
-> > > > > do not receive IN_DELETE_SELF or IN_IGNORED events when they are
-> > > > > removed.
+On Fri, Feb 13, 2026, Jim Mattson wrote:
+> On Fri, Feb 13, 2026 at 2:19=E2=80=AFPM Sean Christopherson <seanjc@googl=
+e.com> wrote:
+> > > > > > +           vmcb_set_gpat(svm->vmcb01.ptr, data);
+> > > > > > +           if (is_guest_mode(&svm->vcpu) && !nested_npt_enable=
+d(svm))
+> > > > > > +                   vmcb_set_gpat(svm->nested.vmcb02.ptr, data)=
+;
+> > > > > > +   }
+> > > > > > +}
 > > > > >
-> > > > > This creates a problem for processes monitoring cgroups. For exam=
-ple, a
-> > > > > service monitoring memory.events for memory.high breaches needs t=
-o know
-> > > > > when a cgroup is removed to clean up its state. Where it's known =
-that a
-> > > > > cgroup is removed when all processes die, without IN_DELETE_SELF =
-the
-> > > > > service must resort to inefficient workarounds such as:
-> > > > > 1.  Periodically scanning procfs to detect process death (wastes =
-CPU and
-> > > > >     is susceptible to PID reuse).
-> > > > > 2.  Placing an additional IN_DELETE watch on the parent directory
-> > > > >     (wastes resources managing double the watches).
-> > > > > 3.  Holding a pidfd for every monitored cgroup (can exhaust file
-> > > > >     descriptors).
-> > > > >
-> > > > > This patch enables kernfs to send IN_DELETE_SELF and IN_IGNORED e=
-vents.
-> > > > > This allows applications to rely on a single existing watch on th=
-e file
-> > > > > of interest (e.g. memory.events) to receive notifications for bot=
-h
-> > > > > modifications and the eventual removal of the file, as well as au=
-tomatic
-> > > > > watch descriptor cleanup, simplifying userspace logic and improvi=
-ng
-> > > > > resource efficiency.
+> > > > > Is it me, or is it a bit confusing that svm_set_gpat() sets L2's =
+gPAT
+> > > > > not L1's, and svm_set_hpat() calls vmcb_set_gpat()?
 > > > >
-> > > > This looks very useful,
-> > > > But,
-> > > > How will the application know that ti can rely on IN_DELETE_SELF
-> > > > from cgroups if this is not an opt-in feature?
+> > > > It's not just you.  I don't find it confusing per se, more that it'=
+s really
+> > > > subtle.
 > > > >
-> > > > Essentially, this is similar to the discussions on adding "remote"
-> > > > fs notification support (e.g. for smb) and in those discussions
-> > > > I insist that "remote" notification should be opt-in (which is
-> > > > easy to do with an fanotify init flag) and I claim that mixing
-> > > > "remote" events with "local" events on the same group is undesired.
+> > > > > "gpat" means different things in the context of the VMCB or other=
+wise,
+> > > > > which kinda makes sense but is also not super clear. Maybe
+> > > > > svm_set_l1_gpat() and svm_set_l2_gpat() is more clear?
+> > > >
+> > > > I think just svm_set_l1_pat() and svm_set_l2_pat(), because gpat st=
+raight up
+> > > > doesn't exist when NPT is disabled/unsupported.
 > > >
-> > > I think this situation is a bit different because this isn't adding
-> > > new features to fsnotify. This is filling a gap that you'd expect to
-> > > work if you only read the cgroups or inotify documentation without
-> > > realizing that kernfs is simply wired up differently for notification
-> > > support than most other filesystems, and only partially supports the
-> > > existing notification events. It's opt-in in the sense that an
-> > > application registers for IN_DELETE_SELF, but other than a runtime
-> > > test like what I added in the selftests I'm not sure if there's a goo=
-d
-> > > way to detect the kernel will actually send the event. Practically
-> > > speaking though, if merged upstream I will backport these patches to
-> > > all the kernels we use so a runtime check shouldn't be necessary for
-> > > our applications.
+> > > My intention was that "gpat" and "hpat" were from the perspective of =
+the vCPU.
 > > >
+> > > I dislike svm_set_l1_pat() and svm_set_l2_pat(). As you point out
+> > > above, there is no independent L2 PAT when nested NPT is disabled. I
+> > > think that's less obvious than the fact that there is no gPAT from th=
+e
+> > > vCPU's perspective. My preference is to follow the APM terminology
+> > > when possible. Making up our own terms just leads to confusion.
 > >
-> > That's besides the point.
-> > An application does not know if it running on a kernel with the backpor=
-ted
-> > patch or not, so an application needs to either rely on getting the eve=
-nt
-> > or it has to poll. How will the application know if it needs to poll or=
- not?
->
-> Either by testing for the behavior at runtime like I mentioned, or by
-> depending on certification testing for the platform the application is
-> running on which would verify that the selftests I added pass. We do
-> the former to check for the presence of other features like swappiness
-> support with memory.reclaim, and also the latter for all devices.
->
-> > > > However, IN_IGNORED is created when an inotify watch is removed
-> > > > and IN_DELETE_SELF is called when a vfs inode is destroyed.
-> > > > When setting an inotify watch for IN_IGNORED|IN_DELETE_SELF there
-> > > > has to be a vfs inode with inotify mark attached, so why are those
-> > > > events not created already? What am I missing?
-> > >
-> > > The difference is vfs isn't involved when kernfs files are unlinked.
-> >
-> > No, but the vfs is involved when the last reference on the kernfs inode
-> > is dropped.
-> >
-> > > When a cgroup removal occurs, we get to kernfs_remove via kernfs'
-> > > inode_operations without calling vfs_unlink. (You can't rm cgroup
-> > > files directly.)
-> > >
-> >
-> > Yes and if there was a vfs inode for this kernfs object, the vfs inode =
-needs to
-> > be dropped.
->
-> It should be, but it isn't right now.
->
-> > > > Are you expecting to get IN_IGNORED|IN_DELETE_SELF on an entry
-> > > > while watching the parent? Because this is not how the API works.
-> > >
-> > > No, only on the file being watched. The parent should only get
-> > > IN_DELETE, but I read your feedback below and I'm fine with removing
-> > > that part and just sending the DELETE_SELF and IN_IGNORED events.
-> > >
-> >
-> > So if the file was being watched, some application needed to call
-> > inotify_add_watch() with the user path to the cgroupfs inode
-> > and inotify watch keeps a live reference to this vfs inode.
-> >
-> > When the cgroup is being destroyed something needs to drop
-> > this vfs inode and call __destroy_inode() -> fsnotify_inode_delete()
-> > which should remove the inotify watch and result in IN_IGNORED.
->
-> Nothing like this exists before this patch.
->
-> > IN_DELETE_SELF is a different story, because the inode does not
-> > have zero i_nlink.
-> >
-> > I did not try to follow the code path of cgroupfs destroy when an
-> > inotify watch on a cgroup file exists, but this is what I expect.
-> > Please explain - what am I missing?
->
-> Yes that's the problem here. The inode isn't dropped unless the watch
-> is removed, and the watch isn't removed because kernfs doesn't go
-> through vfs to notify about file removal. There is nothing to trigger
-> dropping the watch and the associated inode reference except this
-> patch calling into fsnotify_inoderemove which both sends
-> IN_DELETE_SELF and calls __fsnotify_inode_delete for the IN_IGNORED
-> and inode cleanup.
->
-> Without this, the watch and inode persist after file deletion until
-> the process exits and file descriptors are cleaned up, or until
-> inotify_rm_watch gets called manually.
->
+> > How about svm_set_pat() and svm_get_gpat()?  Because hPAT doesn't exist=
+ when NPT
+> > is unsupported/disabled, but KVM still needs to set the vCPU's emulated=
+ PAT value.
+>=20
+> What if we don't break it up this way at all? Instead of distributing
+> the logic between svm_[gs]set_msr() and a few helper functions, we
+> could just have svm_[gs]et_msr() call svm_[gs]et_pat(), and all of the
+> logic can go in these two functions.
 
-Yeh, that's not good.
-Will be happy to see that fixed.
+I like it.  And AFAICT it largely Just Works, because the calls from
+svm_set_nested_state() will always be routed to gpat since the calls are al=
+ready
+guarded with is_guest_mode() + nested_npt_enabled().
 
-Thanks,
-Amir.
+Side topic, either as a prep patch (to duplicate code) or as a follow-up pa=
+tch
+(to move the PAT handling in x86.c to vmx.c), the "common" handling of PAT =
+should
+be fully forked between VMX and SVM.  As of this patch, it's not just misle=
+ading,
+it's actively dangerous since calling kvm_get_msr_common() for SVM would ge=
+t the
+wrong value.
+
+FWIW, this is what I ended up with when hacking on top of your patches to s=
+ee how
+this played out.
+
+---
+ arch/x86/kvm/svm/nested.c |  4 +--
+ arch/x86/kvm/svm/svm.c    | 64 +++++++++++++++++++++++++--------------
+ arch/x86/kvm/svm/svm.h    | 19 +-----------
+ arch/x86/kvm/vmx/vmx.c    | 10 ++++--
+ arch/x86/kvm/x86.c        |  9 ------
+ 5 files changed, 51 insertions(+), 55 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index d854d29b0bd8..361f189d3967 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -2075,9 +2075,9 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu=
+,
+=20
+ 	if (nested_npt_enabled(svm)) {
+ 		if (kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT) {
+-			svm_set_gpat(svm, kvm_state->hdr.svm.gpat);
++			svm_set_pat(vcpu, kvm_state->hdr.svm.gpat, true);
+ 		} else {
+-			svm_set_gpat(svm, vcpu->arch.pat);
++			svm_set_pat(vcpu, vcpu->arch.pat, true);
+ 			svm->nested.legacy_gpat_semantics =3D true;
+ 		}
+ 	}
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 93ce0c3232c6..94c3b3cadd54 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -251,6 +251,44 @@ int svm_set_efer(struct kvm_vcpu *vcpu, u64 efer)
+ 	return 0;
+ }
+=20
++static bool svm_is_access_to_gpat(struct kvm_vcpu *vcpu, bool host_initiat=
+ed)
++{
++	/*
++	 * When nested NPT is enabled, L2 has a separate PAT from L1.  Guest
++	 * accesses to IA32_PAT while running L2 target L2's gPAT;
++	 * host-initiated accesses always target L1's hPAT for backward and
++	 * forward KVM_SET_MSRS compatibility with older kernels.
++	 */
++	WARN_ON_ONCE(host_initiated && vcpu->wants_to_run);
++
++	return !host_initiated && is_guest_mode(vcpu) &&
++	       nested_npt_enabled(to_svm(vcpu));
++}
++
++void svm_set_pat(struct kvm_vcpu *vcpu, u64 pat, bool host_initiated)
++{
++	struct vcpu_svm *svm =3D to_svm(vcpu);
++
++	if (svm_is_access_to_gpat(vcpu, host_initiated)) {
++		vmcb_set_gpat(svm->nested.vmcb02.ptr, pat);
++		return;
++	}
++
++	svm->vcpu.arch.pat =3D pat;
++
++	if (!npt_enabled)
++		return;
++
++	vmcb_set_gpat(svm->vmcb01.ptr, pat);
++
++	if (svm->nested.legacy_gpat_semantics) {
++		svm->nested.save.g_pat =3D pat;
++		vmcb_set_gpat(svm->nested.vmcb02.ptr, pat);
++	} else if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm)) {
++		vmcb_set_gpat(svm->nested.vmcb02.ptr, pat);
++	}
++}
++
+ static u32 svm_get_interrupt_shadow(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm =3D to_svm(vcpu);
+@@ -2838,16 +2876,7 @@ static int svm_get_msr(struct kvm_vcpu *vcpu, struct=
+ msr_data *msr_info)
+ 		msr_info->data =3D svm->msr_decfg;
+ 		break;
+ 	case MSR_IA32_CR_PAT:
+-		/*
+-		 * When nested NPT is enabled, L2 has a separate PAT from
+-		 * L1.  Guest accesses to IA32_PAT while running L2 target
+-		 * L2's gPAT; host-initiated accesses always target L1's
+-		 * hPAT for backward and forward KVM_GET_MSRS compatibility
+-		 * with older kernels.
+-		 */
+-		WARN_ON_ONCE(msr_info->host_initiated && vcpu->wants_to_run);
+-		if (!msr_info->host_initiated && is_guest_mode(vcpu) &&
+-		    nested_npt_enabled(svm))
++		if (svm_is_access_to_gpat(vcpu, msr_info->host_initiated))
+ 			msr_info->data =3D svm->nested.save.g_pat;
+ 		else
+ 			msr_info->data =3D vcpu->arch.pat;
+@@ -2937,19 +2966,8 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct=
+ msr_data *msr)
+ 	case MSR_IA32_CR_PAT:
+ 		if (!kvm_pat_valid(data))
+ 			return 1;
+-		/*
+-		 * When nested NPT is enabled, L2 has a separate PAT from
+-		 * L1.  Guest accesses to IA32_PAT while running L2 target
+-		 * L2's gPAT; host-initiated accesses always target L1's
+-		 * hPAT for backward and forward KVM_SET_MSRS compatibility
+-		 * with older kernels.
+-		 */
+-		WARN_ON_ONCE(msr->host_initiated && vcpu->wants_to_run);
+-		if (!msr->host_initiated && is_guest_mode(vcpu) &&
+-		    nested_npt_enabled(svm))
+-			svm_set_gpat(svm, data);
+-		else
+-			svm_set_hpat(svm, data);
++
++		svm_set_pat(vcpu, data, msr->host_initiated);
+ 		break;
+ 	case MSR_IA32_SPEC_CTRL:
+ 		if (!msr->host_initiated &&
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 0bb9fdcb489d..71502db3f679 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -616,24 +616,6 @@ static inline bool nested_npt_enabled(struct vcpu_svm =
+*svm)
+ 	return svm->nested.ctl.misc_ctl & SVM_MISC_ENABLE_NP;
+ }
+=20
+-static inline void svm_set_gpat(struct vcpu_svm *svm, u64 data)
+-{
+-	svm->nested.save.g_pat =3D data;
+-	vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+-}
+-
+-static inline void svm_set_hpat(struct vcpu_svm *svm, u64 data)
+-{
+-	svm->vcpu.arch.pat =3D data;
+-	if (npt_enabled) {
+-		vmcb_set_gpat(svm->vmcb01.ptr, data);
+-		if (is_guest_mode(&svm->vcpu) && !nested_npt_enabled(svm))
+-			vmcb_set_gpat(svm->nested.vmcb02.ptr, data);
+-	}
+-	if (svm->nested.legacy_gpat_semantics)
+-		svm_set_gpat(svm, data);
+-}
+-
+ static inline bool nested_vnmi_enabled(struct vcpu_svm *svm)
+ {
+ 	return guest_cpu_cap_has(&svm->vcpu, X86_FEATURE_VNMI) &&
+@@ -780,6 +762,7 @@ void svm_enable_lbrv(struct kvm_vcpu *vcpu);
+ void svm_update_lbrv(struct kvm_vcpu *vcpu);
+=20
+ int svm_set_efer(struct kvm_vcpu *vcpu, u64 efer);
++void svm_set_pat(struct kvm_vcpu *vcpu, u64 pat, bool host_initiated);
+ void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0);
+ void svm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4);
+ void disable_nmi_singlestep(struct vcpu_svm *svm);
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 967b58a8ab9d..546056e690eb 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2141,6 +2141,9 @@ int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_dat=
+a *msr_info)
+ #endif
+ 	case MSR_EFER:
+ 		return kvm_get_msr_common(vcpu, msr_info);
++	case MSR_IA32_CR_PAT:
++		msr_info->data =3D vcpu->arch.pat;
++		break;
+ 	case MSR_IA32_TSX_CTRL:
+ 		if (!msr_info->host_initiated &&
+ 		    !(vcpu->arch.arch_capabilities & ARCH_CAP_TSX_CTRL_MSR))
+@@ -2468,9 +2471,10 @@ int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_da=
+ta *msr_info)
+ 			return 1;
+ 		goto find_uret_msr;
+ 	case MSR_IA32_CR_PAT:
+-		ret =3D kvm_set_msr_common(vcpu, msr_info);
+-		if (ret)
+-			break;
++		if (!kvm_pat_valid(data))
++			return 1;
++
++		vcpu->arch.pat =3D data;
+=20
+ 		if (is_guest_mode(vcpu) &&
+ 		    get_vmcs12(vcpu)->vm_exit_controls & VM_EXIT_SAVE_IA32_PAT)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 416899b5dbe4..41936f83a17f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4025,12 +4025,6 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct=
+ msr_data *msr_info)
+ 			return 1;
+ 		}
+ 		break;
+-	case MSR_IA32_CR_PAT:
+-		if (!kvm_pat_valid(data))
+-			return 1;
+-
+-		vcpu->arch.pat =3D data;
+-		break;
+ 	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
+ 	case MSR_MTRRdefType:
+ 		return kvm_mtrr_set_msr(vcpu, msr, data);
+@@ -4436,9 +4430,6 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct =
+msr_data *msr_info)
+ 		msr_info->data =3D kvm_scale_tsc(rdtsc(), ratio) + offset;
+ 		break;
+ 	}
+-	case MSR_IA32_CR_PAT:
+-		msr_info->data =3D vcpu->arch.pat;
+-		break;
+ 	case MSR_MTRRcap:
+ 	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
+ 	case MSR_MTRRdefType:
+
+base-commit: 7539434a6984ba5accfdd8e296fb834558f95df4
+--
