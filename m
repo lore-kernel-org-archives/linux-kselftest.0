@@ -1,299 +1,124 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3585C1DF73C
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 01:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539CB283FC5
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 01:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771379118; cv=none; b=gcfJB0awAGkMGWSzgL4lqGL/qBN2lroPY61AGdibF6cFStMqa3J4UldXp/ytDRxFFHH1dQXYnAOfMcbUXxkblQBUKj3QlSmBmnDGdJhKPwoxgMMgsEKnj+HWFvRxkCBp2GJ7hfXTq7pTUDWIfyDyb3I71kVwEKCNxnqYgr1UFsE=
+	t=1771379338; cv=none; b=k9abq4nX9TJH1Q56z2/kQlkjk1m2cflWpCZ+7T0amGK4brAn1BElorm0QQ1OTbMMRBYJkBgcLqEYplm7xNod7iGsKywQ/rBrDOsMpjTzmN0kfayalTX34DrU9ziIFT94e6yyPgleDQ6DykgNtAhDbV452gGR/ewOM+qsT/Qp8wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771379118; c=relaxed/simple;
-	bh=3AT9Jcju4MsV/M4OfDSUtW23PxNc6ImHVjzXYS6HH4U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=K+kP9eD0y5GlhAC6giU5Z/kdKl7xeHfd3HzF2K1vVZro+rTKTxmSNN4iMT6EVE9fLWMZaN8iF7hOd36q4xaA0UK5rccKpy1Vw03/jYLLlaZ88OkAW1wIwo1DjMeR4VqC0GfKk72a992rjpukvIZqJhmaueFOW8IH6CenVBGnioU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iOn8/iSy; arc=none smtp.client-ip=209.85.128.177
+	s=arc-20240116; t=1771379338; c=relaxed/simple;
+	bh=1YkQ1xknk3HXPo2U6IC2skc9hdqA4WxM02nBDF9vNoM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eZM6/0LAiar+9Wy99doj8XxSyEM/3wDnTaaX8swxlmPfg9Jv2fjlnMe1WRe7webgdtCEs8YT/tJGE99a/12KWGsP+ZZ9ad9++u3cL9lFeqi5vDLoSwpeiZuOos9uyFPrSUvgOy9GYwOn/tidp14shfGYJkpAZY21+YUwrzXhedE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHOMC/8/; arc=none smtp.client-ip=74.125.82.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iOn8/iSy"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-797d6f934e2so20950217b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 17:45:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHOMC/8/"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-1271257ae53so5103236c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 17:48:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771379116; x=1771983916; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJw3RoD55rqXpHAojvOHyDwhmqotW0ZND3DwuoSWa18=;
-        b=iOn8/iSyVCbgKzva3Z2w1//iMGcbnuC5yZ0qWt8X3winpZ9wvrFQn8qsjrpPLw29Eu
-         aFL95n9ZVVGpKoeB3emUJMQ+tYuOGdsRnQgcxyNjIf1C53qL97inW8LziMlFrW0fv8Vz
-         UeQZ0Ag0AznInCpSioNQ0NLBAumPFrpUnOZW2xgUu/NWIWGiN3JHAIQLGPVxQ2DqIVfq
-         Z93ywxACQqphbySqRDBpCuE8QvL++Dr+xeeRW9UsQyzXgN0VxRJc5/F5293YwGAefhJn
-         rY5U8QnikmdVfWcKiAGz6EEaKqmmQmYMuKbICi2WNPE1TMKXHgA3AuUnvaS3bGMSRByn
-         EaoA==
+        d=gmail.com; s=20230601; t=1771379336; x=1771984136; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xs2eo3fi6sWBx7GfJK+0RFL6Et71ppgQ7nK94o1qrG8=;
+        b=NHOMC/8/pmqYNAZceAkWeY9z48c0FFTwTGdqIz6lh/+Akad1+huCUi5RYrsirV3EqC
+         ASoxBe6JD0sMHJhqt6OT3vXkPd9wsnTKJ2r+Bp2FEo+wvk+TXCZQWReMgA2j+6pPmsmr
+         Ik5P/HvegSPUk1YPtt5i7/gENOMvgc7XKlprDUe85RFe/+LuYH9yovcvCDEfS3o4Napf
+         JkcpTyfQJUap1SB/MaTflukQaikuHRFj7OSV7f1bq336KRpCv/33US8Rm+bHom4aDpji
+         upSAxGZs+49bMmiCGCouONQoVjVa2QgYSYSCt1DturZ2KAin6I7gHqZPf16wsHbLZGgu
+         TCyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771379116; x=1771983916;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NJw3RoD55rqXpHAojvOHyDwhmqotW0ZND3DwuoSWa18=;
-        b=X+K+BAiXmf2lMRzlEhrvPwcgPH8+q3ZIHVG+MV6SA+Tw0eAWFFOQ/wa0r1494g/DuN
-         5cqcJ94+0Au0PJNc/pax/ZGXu+/Wzc4LykgGhbadefb+ELVFlQyWBynGd7VlDoAM8g7+
-         ygpbdn0aTYuF0bZFDIgAe0lgfvRGasiFnNAVvEMqGpf/Sq3WfdPrBxQzYl7FN9tAz4sg
-         6HbfVu6KBzoSORyYIyE2XNXL/C5h2cF419r9PJlT++OWCkBguw1XQv4sbVFirRVJ1jFK
-         fpMfC9Ok4Fw4YX3kIeaJuAFZt85BTQUr1EcgHXLXU6ALKq7JrZNu5bxLAzfEJIU8HlsC
-         z8bA==
-X-Forwarded-Encrypted: i=1; AJvYcCVmKyYKO+Q75O2na/U5ZvTCfnQckcu75iRjIK4NcN/SXnA3q9FC5naO3mxuFeyiKThizzeSEvrORrq3YL0qEc0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFyzGV8dIzS/KOBOak+o3PgTQMXavYr6i/RBo6ShrgyI9w9o4Y
-	c5wLmmuARvCjrc8uMEVEDwRugRTX/IPSQd3OQdNfwkMmLmvnbiPE8VSJ
-X-Gm-Gg: AZuq6aKb009n+yZSISV7IRULOIdvn8QgmxFHInIC1KmrWbKme6mdf47PFZULcyEj+dt
-	iTZlX0B+Ifm5G1rYt4yXIfrnRPdvwUVIahtmQd3mSeSDsaIyoD1IJlYPiJBVbdPqDahppAcv1q7
-	ZVTjIr/FuaxKdijxCVcj4pTcp+8jWYdlhdrneWx/b01i0oKFK+EnMrUZvwcjEEsIdrCfk51yy/e
-	MHLHnQf6/vCrqV1LtcuWAFovDP1dajmuEflBHNFlcPo9RUZDiF2cmTl3YwDLO+TTpknSaY+HpWQ
-	IOqIfwcRRFM7e8ks1uuSHUxc0VZCzg2x5XSuGCBUQLLsvE5ut3mDCq10GlWqQLMlVUaUDs8EmcR
-	UjXbpsdjPFPPoG7MDrsqecd5bYoqaE8hUQfEEG7WEKYpsL7TsywN6Ax1v0QxVP3y9+t6NPS3jGJ
-	3HlH6f6tHoMJdT9odM/2zj9g==
-X-Received: by 2002:a05:690c:87:b0:792:7236:9708 with SMTP id 00721157ae682-797f71e85acmr2766167b3.20.1771379116125;
-        Tue, 17 Feb 2026 17:45:16 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:71::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7966c18ffc5sm116481207b3.18.2026.02.17.17.45.15
+        d=1e100.net; s=20230601; t=1771379336; x=1771984136;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xs2eo3fi6sWBx7GfJK+0RFL6Et71ppgQ7nK94o1qrG8=;
+        b=GFOmT2Zqo8LgRpCUEb6YvvPBUzFeg9nt+jZsslnxzKwdpbCODS6wH0MkwT9Q0l0LJj
+         uRH7JXhj7wfQbc3nWyOpRNerVjUo8NLg27MsOGBu1/WB57X3gBL74rzd55qyWGOQEgdh
+         SnhMKU3hAS8JBA2cnRYUChrlpXR0wngV/oyncnwTKXgpio5RqJ9INQa0LgN3w0rYQdK8
+         HphgiZMiymyliWSBkdg5Sad6LKHH/T9uDqeZpHT9q65ggiD5jJ3+vh2/8w0TjtkZrCBK
+         /PyajdroN0TeB6x+QBsLfXu28VD715eHk9Qa/XT7jPNyDAJE2WTkdAZc2aYQbdI7OTjq
+         iMkA==
+X-Forwarded-Encrypted: i=1; AJvYcCVG9WIGVkS9NdiCC+M/JNar7cqVH+GNr8OJdSa132GICayiFOI5mQaQwnk1LS+TcX1CtXzMBJMYp/zwPuMCjHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxF2nqhY41ItCOVrgGHF/yYOFtp9/k3M7luVCJvrVoB1MzZBfV3
+	YjmAZS+u44dIy893TX+xy8rULxbbzesmzaLm7onSW114a4Av0NS4vM2m
+X-Gm-Gg: AZuq6aJKfzsDNPPmiOwFK/tkx/44++uNBW6OoAU7FpmyQjGMwKdq1+ko4W11sjqMQNO
+	PMt9dxjTw+3uo2+/8xaLNno5+xDdQHSkeuFOcGAWvxbNqCojrmHZ9j4QgeeKiATNWo5gG99yqCQ
+	25P3gi/fiy590VKwSxPqValyxuYYBpWpcExZaLeYNMwExDY5DNeL+EV8F7ChTDfKwd6uP6M0zzT
+	tppDrCC5MfeJX/rOoWfroY8DeTGSOxF+fXVkY2Xj6IMQajIpRlY0kaCNYjfrnWUWNYc+O3DCaM6
+	pqcLHDZ3oyLwr4ejMQIrzEQxy6PwzF66S1iAhCbvpIY5WobnDfZVjUM+3Us/s9ezGZGNYrdki2N
+	1SMPAotkF5dhMr4bl6TJrkulxmgfv8vcx3U1lGJMAoZxOsyMFlit47JSwpanolSFfMtHbpRttGk
+	0oAikCzOvlcMn8GmVoR3jlaLlJSqlWP62W1SEKoq6TmMzI2sJhxxb86lGkmaxgcg2vYW+VIMVGy
+	gI9eQM=
+X-Received: by 2002:a05:701a:c94e:b0:127:1b8f:aa02 with SMTP id a92af1059eb24-12759a653f4mr129033c88.28.1771379336298;
+        Tue, 17 Feb 2026 17:48:56 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:ea8a:2651:c8f:99eb? ([2620:10d:c090:500::3:3a6d])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12742cba118sm20594390c88.12.2026.02.17.17.48.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 17:45:15 -0800 (PST)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Tue, 17 Feb 2026 17:45:10 -0800
-Subject: [PATCH net] vsock: lock down child_ns_mode as write-once
+        Tue, 17 Feb 2026 17:48:55 -0800 (PST)
+Message-ID: <bb4bf5fe648ac71c969c6228ac6e72ea85cbc64b.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Add multi-level pointer parameter
+ support for trampolines
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, 	jolsa@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, 	pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
+ linux-open-source@crowdstrike.com
+Date: Tue, 17 Feb 2026 17:48:53 -0800
+In-Reply-To: <20260217221357.18215-1-slava.imameev@crowdstrike.com>
+References: <20260217221357.18215-1-slava.imameev@crowdstrike.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260217-vsock-ns-write-once-v1-1-a1fb30f289a9@meta.com>
-X-B4-Tracking: v=1; b=H4sIAKUZlWkC/x3MUQqDMAwG4KuE/9lA7cSVXmXsQWq2hUE6GtGBe
- HfB7wDfDpem4si0o8mqrtWQqe8I5TPZW1hnZEIMcQyxv/PqtXzZnLemi3C1IpzSbZjHNEiYIjr
- Cr8lL/9f6gMmC53Gcz98HGmoAAAA=
-X-Change-ID: 20260217-vsock-ns-write-once-8834d684e0a2
-To: Stefano Garzarella <sgarzare@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Bobby Eshleman <bobbyeshleman@meta.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>
-Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Daan De Meyer <daan.j.demeyer@gmail.com>
-X-Mailer: b4 0.14.3
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Wed, 2026-02-18 at 09:13 +1100, Slava Imameev wrote:
 
-To improve the security posture of vsock namespacing, this patch locks
-down the vsock child_ns_mode sysctl setting with a write-once policy.
-The user may write to child_ns_mode only once in each namespace, making
-changes to either local or global mode be irreversible.
+[...]
 
-This avoids security breaches where a process in a local namespace may
-attempt to jailbreak into the global vsock ns space by setting
-child_ns_mode to "global", creating a new namespace, and accessing the
-global space through the new namespace.
+> The verifier assigns SCALAR type to single-level pointers (void*, int*).
 
-Additionally, fix the test functions that this change would otherwise
-break by adding "global-parent" and "local-parent" namespaces and using
-them as intermediaries to spawn namespaces in the given modes. This
-avoids the need to change "child_ns_mode" in the init_ns. nsenter must
-be used because ip netns unshares the mount namespace so nested "ip
-netns add" breaks exec calls from the init ns.
+So, the simplest change for pointers to pointers would be as below, right?
 
-Test run:
+  --- a/kernel/bpf/btf.c
+  +++ b/kernel/bpf/btf.c
+  @@ -6906,7 +6906,8 @@ bool btf_ctx_access(int off, int size, enum bpf_acc=
+ess_type type,
+           * If it's a pointer to void, it's the same as scalar from the ve=
+rifier
+           * safety POV. Either way, no futher pointer walking is allowed.
+           */
+  -       if (is_void_or_int_ptr(btf, t))
+  +       if (is_void_or_int_ptr(btf, t) || !is_ptr_to_struct(btf, t))
+                  return true;
 
-1..25
-ok 1 vm_server_host_client
-ok 2 vm_client_host_server
-ok 3 vm_loopback
-ok 4 ns_host_vsock_ns_mode_ok
-ok 5 ns_host_vsock_child_ns_mode_ok
-ok 6 ns_global_same_cid_fails
-ok 7 ns_local_same_cid_ok
-ok 8 ns_global_local_same_cid_ok
-ok 9 ns_local_global_same_cid_ok
-ok 10 ns_diff_global_host_connect_to_global_vm_ok
-ok 11 ns_diff_global_host_connect_to_local_vm_fails
-ok 12 ns_diff_global_vm_connect_to_global_host_ok
-ok 13 ns_diff_global_vm_connect_to_local_host_fails
-ok 14 ns_diff_local_host_connect_to_local_vm_fails
-ok 15 ns_diff_local_vm_connect_to_local_host_fails
-ok 16 ns_diff_global_to_local_loopback_local_fails
-ok 17 ns_diff_local_to_global_loopback_fails
-ok 18 ns_diff_local_to_local_loopback_fails
-ok 19 ns_diff_global_to_global_loopback_ok
-ok 20 ns_same_local_loopback_ok
-ok 21 ns_same_local_host_connect_to_local_vm_ok
-ok 22 ns_same_local_vm_connect_to_local_host_ok
-ok 23 ns_delete_vm_ok
-ok 24 ns_delete_host_ok
-ok 25 ns_delete_both_ok
-SUMMARY: PASS=25 SKIP=0 FAIL=0
+          /* this is a pointer to another type */
 
-Fixes: eafb64f40ca4 ("vsock: add netns to vsock core")
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-Suggested-by: Daan De Meyer <daan.j.demeyer@gmail.com>
-Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
----
- include/net/af_vsock.h                  |  6 +++++-
- include/net/netns/vsock.h               |  1 +
- net/vmw_vsock/af_vsock.c                | 10 ++++++----
- tools/testing/selftests/vsock/vmtest.sh | 35 +++++++++++++++------------------
- 4 files changed, 28 insertions(+), 24 deletions(-)
+Except that loaded value would be marked as scalar() and one would
+need to cast it using e.g. bpf_core_cast() to obtain an untrusted
+pointer.
 
-diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
-index d3ff48a2fbe0..c7de33039907 100644
---- a/include/net/af_vsock.h
-+++ b/include/net/af_vsock.h
-@@ -276,10 +276,14 @@ static inline bool vsock_net_mode_global(struct vsock_sock *vsk)
- 	return vsock_net_mode(sock_net(sk_vsock(vsk))) == VSOCK_NET_MODE_GLOBAL;
- }
- 
--static inline void vsock_net_set_child_mode(struct net *net,
-+static inline bool vsock_net_set_child_mode(struct net *net,
- 					    enum vsock_net_mode mode)
- {
-+	if (xchg(&net->vsock.child_ns_mode_locked, 1))
-+		return false;
-+
- 	WRITE_ONCE(net->vsock.child_ns_mode, mode);
-+	return true;
- }
- 
- static inline enum vsock_net_mode vsock_net_child_mode(struct net *net)
-diff --git a/include/net/netns/vsock.h b/include/net/netns/vsock.h
-index b34d69a22fa8..8c855fff8039 100644
---- a/include/net/netns/vsock.h
-+++ b/include/net/netns/vsock.h
-@@ -17,5 +17,6 @@ struct netns_vsock {
- 
- 	enum vsock_net_mode mode;
- 	enum vsock_net_mode child_ns_mode;
-+	int child_ns_mode_locked;
- };
- #endif /* __NET_NET_NAMESPACE_VSOCK_H */
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 9880756d9eff..35e097f4fde8 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -90,14 +90,15 @@
-  *
-  *   - /proc/sys/net/vsock/ns_mode (read-only) reports the current namespace's
-  *     mode, which is set at namespace creation and immutable thereafter.
-- *   - /proc/sys/net/vsock/child_ns_mode (writable) controls what mode future
-+ *   - /proc/sys/net/vsock/child_ns_mode (write-once) controls what mode future
-  *     child namespaces will inherit when created. The initial value matches
-  *     the namespace's own ns_mode.
-  *
-  *   Changing child_ns_mode only affects newly created namespaces, not the
-  *   current namespace or existing children. A "local" namespace cannot set
-- *   child_ns_mode to "global". At namespace creation, ns_mode is inherited
-- *   from the parent's child_ns_mode.
-+ *   child_ns_mode to "global". child_ns_mode is write-once, so that it may
-+ *   be configured and locked down by a namespace manager. At namespace
-+ *   creation, ns_mode is inherited from the parent's child_ns_mode.
-  *
-  *   The init_net mode is "global" and cannot be modified.
-  *
-@@ -2853,7 +2854,8 @@ static int vsock_net_child_mode_string(const struct ctl_table *table, int write,
- 		    new_mode == VSOCK_NET_MODE_GLOBAL)
- 			return -EPERM;
- 
--		vsock_net_set_child_mode(net, new_mode);
-+		if (!vsock_net_set_child_mode(net, new_mode))
-+			return -EPERM;
- 	}
- 
- 	return 0;
-diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-index dc8dbe74a6d0..e1e78b295e41 100755
---- a/tools/testing/selftests/vsock/vmtest.sh
-+++ b/tools/testing/selftests/vsock/vmtest.sh
-@@ -210,16 +210,17 @@ check_result() {
- }
- 
- add_namespaces() {
--	local orig_mode
--	orig_mode=$(cat /proc/sys/net/vsock/child_ns_mode)
-+	ip netns add "global-parent" 2>/dev/null
-+	echo "global" | ip netns exec "global-parent" \
-+		tee /proc/sys/net/vsock/child_ns_mode &>/dev/null
-+	ip netns add "local-parent" 2>/dev/null
-+	echo "local" | ip netns exec "local-parent" \
-+		tee /proc/sys/net/vsock/child_ns_mode &>/dev/null
- 
--	for mode in "${NS_MODES[@]}"; do
--		echo "${mode}" > /proc/sys/net/vsock/child_ns_mode
--		ip netns add "${mode}0" 2>/dev/null
--		ip netns add "${mode}1" 2>/dev/null
--	done
--
--	echo "${orig_mode}" > /proc/sys/net/vsock/child_ns_mode
-+	nsenter --net=/var/run/netns/global-parent ip netns add "global0" 2>/dev/null
-+	nsenter --net=/var/run/netns/global-parent ip netns add "global1" 2>/dev/null
-+	nsenter --net=/var/run/netns/local-parent ip netns add "local0" 2>/dev/null
-+	nsenter --net=/var/run/netns/local-parent ip netns add "local1" 2>/dev/null
- }
- 
- init_namespaces() {
-@@ -237,6 +238,8 @@ del_namespaces() {
- 		log_host "removed ns ${mode}0"
- 		log_host "removed ns ${mode}1"
- 	done
-+	ip netns del "global-parent" &>/dev/null
-+	ip netns del "local-parent" &>/dev/null
- }
- 
- vm_ssh() {
-@@ -287,7 +290,7 @@ check_args() {
- }
- 
- check_deps() {
--	for dep in vng ${QEMU} busybox pkill ssh ss socat; do
-+	for dep in vng ${QEMU} busybox pkill ssh ss socat nsenter; do
- 		if [[ ! -x $(command -v "${dep}") ]]; then
- 			echo -e "skip:    dependency ${dep} not found!\n"
- 			exit "${KSFT_SKIP}"
-@@ -1231,12 +1234,8 @@ test_ns_local_same_cid_ok() {
- }
- 
- test_ns_host_vsock_child_ns_mode_ok() {
--	local orig_mode
--	local rc
--
--	orig_mode=$(cat /proc/sys/net/vsock/child_ns_mode)
-+	local rc="${KSFT_PASS}"
- 
--	rc="${KSFT_PASS}"
- 	for mode in "${NS_MODES[@]}"; do
- 		local ns="${mode}0"
- 
-@@ -1246,15 +1245,13 @@ test_ns_host_vsock_child_ns_mode_ok() {
- 			continue
- 		fi
- 
--		if ! echo "${mode}" > /proc/sys/net/vsock/child_ns_mode; then
--			log_host "child_ns_mode should be writable to ${mode}"
-+		if ! echo "${mode}" | ip netns exec "${ns}" \
-+			tee /proc/sys/net/vsock/child_ns_mode &>/dev/null; then
- 			rc="${KSFT_FAIL}"
- 			continue
- 		fi
- 	done
- 
--	echo "${orig_mode}" > /proc/sys/net/vsock/child_ns_mode
--
- 	return "${rc}"
- }
- 
+> For multi-level pointers, I selected PTR_TO_MEM to enable memory access
+> through a single load instruction for the first level of dereference,
+> with subsequent dereferences becoming SCALAR. This design eliminates
+> helper call for parameter dereference, replacing it with a load
+> instruction (e.g., void* ptr =3D *pptr).
 
----
-base-commit: 77c5e3fdd2793f478e6fdae55c9ea85b21d06f8f
-change-id: 20260217-vsock-ns-write-once-8834d684e0a2
+If going this route instead, is there a technical reason to limit this
+logic to multi-level pointers? Applying same rules to `int *` and
+alike seem more consistent.
 
-Best regards,
--- 
-Bobby Eshleman <bobbyeshleman@meta.com>
-
+[...]
