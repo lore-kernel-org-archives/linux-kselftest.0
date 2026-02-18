@@ -1,101 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513542FE05B
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 11:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7E12DC323;
+	Wed, 18 Feb 2026 12:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771414382; cv=none; b=V0B6M3fQzTSEwIXfjfqE3KI+RPXeannRvWzFp8iUxyt+OAaH1S7BVmcwIkvvboegVdmr1T9bvzpU43+YJb/FO4eV8Q04Qu8DymCot4sU9JZ/7Jy8td6yl3WlkDpLxdor/qAlrqkPe04UO8B0/Ux5Qbjat43hTdyJO1ay4Q4HlCc=
+	t=1771416115; cv=none; b=cZ5wfGtYnY2p5DnCDXJPgaxAttNU8WfEb7Y0YnQKpkJHjbaKFOWpz7k84DXaNACUn4q7pYmaD6VAKFG066OtoYCbDxPZ4/zoCIX0gRzZvbdbea6OrfSFfgoXrYf+X1HFfm73ICzJC1BI9r6PQ+hJEgDTwa6oCZMVVSzxkJJAAi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771414382; c=relaxed/simple;
-	bh=0CX48F8+5lwU4DMyRC5K4BUusGsP5md54wZcyKDZW5s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uMvXIxv/jvHagWEGgjGnOajWOviDJJ3R/mZPLXwTY9WYPSM6StNZ/8wby1uV1AJe+ELZ+g5fTq2KTitYToaLkLRKomQnCtt7LN8DzS6vYfdEV4cy0IrZCaD2+63jGBuK1XS/C1xgE9rRZr0b5C+0TlN0nFpVBjW08siero1xE/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=maDsT9+Q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771416115; c=relaxed/simple;
+	bh=hwo75hzr9UpfvK2MdDMYdnKzKKS3Lj3XB2mQQM63I1Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RLKIxwks7Kw0FsFHXgRwv9AYSkP21+ZLlu6tCXkg4a9n7Zg61Ij1jrMlzH+7PQCpS6Jaup60USbO6zqd/tL/x5FCcViN2QYvv5bqKhWnUVCGi7fm3idoDEmSp4tByfUKbPNrpS5Y1Ij7xAkzoDLNF5My0DU6PyERspHvGV+5wV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhexMEBE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="maDsT9+Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E77C19425;
-	Wed, 18 Feb 2026 11:33:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhexMEBE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2861EC19421;
+	Wed, 18 Feb 2026 12:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771414382;
-	bh=0CX48F8+5lwU4DMyRC5K4BUusGsP5md54wZcyKDZW5s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=maDsT9+QPK+zGAoe+Un9ExfZiTAvW2IbjuvSvWbO8xtwUvTMPHnSC5wwbhPMpbtQf
-	 wHCu3nNIZJzrM28T7gOQDcZbapcVyn9DUIVRU/7i72Rgo7rIC7oY1RNgKWSv4ddHs8
-	 NSrEq//JYXEouxPQkf2FmuZy5v37UircohPUwNTEsI8l5lYMPUfrHRY8AyxgPRkXeJ
-	 QFa32uyhErG5FyanFSsUJA3Xao6gMN4kCOgBLI1WR7JKrtq9Ojg3QXwwiiYnhNqWpO
-	 0R1rQxBNOIWgxzqTcVWfOEmyYw1dOXpgRHVw+vuDPlomKB6+FXlcyYybO1TY6NUqtW
-	 ODBCDo35J3seg==
-Date: Wed, 18 Feb 2026 11:32:57 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Gow <david@davidgow.net>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: RCU stalls running KUnit on mainline
-Message-ID: <ec319f29-5fc8-4578-8826-26ed29c6fce6@sirena.org.uk>
-References: <b537dc5a-f7e2-4daa-bff1-d07c5852ece5@sirena.org.uk>
- <59e8c352-7bc8-4358-af74-fee8c29280ba@davidgow.net>
+	s=k20201202; t=1771416114;
+	bh=hwo75hzr9UpfvK2MdDMYdnKzKKS3Lj3XB2mQQM63I1Y=;
+	h=From:Date:Subject:To:Cc:From;
+	b=BhexMEBETX9K4JwR/Kz4GKBnhzaZKp0qvmMXUb0dFXpTZU/6Z7iWr4BQcz7azq+zM
+	 /0wGoutno9h6JovA40VG1xz1HYk46/vF9TP7Y2I/CmAfSK8KEUYpQNbCXvT3KLtbdy
+	 0/CaIRyn/cp9Eo9D3JX4RaBnTPHEHiHQ2Y/L4MuVipo5IPvq0V32wyoPdXD4ni2p1x
+	 /zHbyNNBjs5IpLJMNpueUOuTHqBxmwTZl5tRP4UWqNh7UqlsK8RyoIIWAVELq5lxsX
+	 I9QivG27FDDPb31P+2A6dB2uGtqafy3kTa85Nt25kFRjRIMFEsAPOg3v2PrVQD0h3s
+	 PG8RH/AwwNrgQ==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Date: Wed, 18 Feb 2026 13:01:44 +0100
+Subject: [PATCH bpf v2] selftests/bpf: Remove hexdump dependency
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mYFQeGmbEGU2o2/m"
-Content-Disposition: inline
-In-Reply-To: <59e8c352-7bc8-4358-af74-fee8c29280ba@davidgow.net>
-X-Cookie: They just buzzed and buzzed...buzzed.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260218-bpf-sft-hexdump-od-v2-1-2f9b3ee5ab86@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACeqlWkC/32NQQ7CIBREr9L8td8AJrW68h5NF1A+haiFQCU1D
+ XeXcACXM/Nm5oBE0VGCe3dApOyS82sV4tTBbOW6EDpdNQgmeiZ4jyoYTGZDS7v+vAN6jVJpdpU
+ XZSoDtRgiGbe30REqD1M1rUubj992lHmL/m1mjhzNMJPSA6mbZo8nxZVeZx8XmEopP8U+rUO6A
+ AAA
+X-Change-ID: 20260216-bpf-sft-hexdump-od-abd07a3bf026
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Mykyta Yatsenko <yatsenko@meta.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2977; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=hwo75hzr9UpfvK2MdDMYdnKzKKS3Lj3XB2mQQM63I1Y=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKnrtK/s/H5l5N/Qxaf0n8TfH2haqTh3YRFW8La5KSv8
+ ni5Kej0dpSyMIhxMciKKbJIt0Xmz3xexVvi5WcBM4eVCWQIAxenAExkcTcjw259qyg5NZvl7U5F
+ T/tPNknF3mjycuE+fWe3zoTP6ovbWhn+x65v0Fh09GLOsQlf5TZsntIo9inEgiFAIelIt93ivhv
+ 5vAA=
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
+The verification signature header generation requires converting a
+binary certificate to a C array. Previously this only worked with xxd,
+and a switch to hexdump has been done in commit b640d556a2b3
+("selftests/bpf: Remove xxd util dependency").
 
---mYFQeGmbEGU2o2/m
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+hexdump is a more common utility program, yet it might not be installed
+by default. When it is not installed, BPF selftests build without
+errors, but tests_progs is unusable: it exits with the 255 code and
+without any error messages. When manually reproducing the issue, it is
+not too hard to find out that the generated verification_cert.h file is
+incorrect, but that's time consuming. When digging the BPF selftests
+build logs, this line can be seen amongst thousands others, but ignored:
 
-On Wed, Feb 18, 2026 at 04:53:16PM +0800, David Gow wrote:
-> Le 17/02/2026 =C3=A0 10:10 PM, 'Mark Brown' via KUnit Development a =C3=
-=A9crit=C2=A0:
+  /bin/sh: 2: hexdump: not found
 
-> > When running KUnit via qemu on current mailine I'm seeing random
-> > lockups, frequently but not always reporting an RCU stall.
-> > Unfortunately these don't seem to happen in a consistent place which
-> > makes it hard to figure out exactly what's going on, they started in
+Here, od is used instead of hexdump. od is coming from the coreutils
+package, and this new od command produces the same output when using od
+from GNU coreutils, uutils, and even busybox. This is more portable, and
+it produces a similar results to what was done before with hexdump:
+there is an extra comma at the end instead of trailing whitespaces,
+but the C code is not impacted.
 
-> Hmm=E2=80=A6 I haven't seen this yet on x86_64, but looking at arm64 and =
-32-bit
-> i386, I do see a sporadic panic, often with rcu in the stacktrace. Seems =
-to
-> happen more often when the KUnit test kthread is starting/stopping
-> (particularly, at least on i386, if it's due to a trapped fault).
+Fixes: b640d556a2b3 ("selftests/bpf: Remove xxd util dependency")
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Originally, I was going to add a check to stop the build if hexdump was
+not available, but switching to 'od' seems to be a better solution while
+not adding a new dependency.
 
-I did see this on x86_64 FWIW.
+Because test_progs was not reporting why it became unusable, I added a
+Fixes tag to have this backported, to help others. Feel free to remove
+it, or even drop the patch if you prefer to stick with hexdump.
 
-> I've not been able to reproduce it after reverting the kthread affinity
-> series (git revert -m1 d16738a4e79e55b2c3c9ff4fb7b74a4a24723515), but that
-> could just be due to luck. It's flaky enough that my attempt at bisection
-> kept pointing at documentation patches.
+Changes in v2:
+- use a shorter 'sed' command instead of 'awk' (David Laight)
+- I didn't add Mykyta's Tested-by because the code has changed.
+- Link to v1: https://patch.msgid.link/20260216-bpf-sft-hexdump-od-v1-1-f8cebd8eb9d0@kernel.org
+---
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yeah, it's not reliably reproducible though it happens pretty often.  I
-did try things like retrying N times to see if it fails but I have a
-horrible feeling there's some dependency on the specific build somehow.
-Hopefully not.
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index c6bf4dfb1495..6776158f1f3e 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -723,7 +723,7 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
+ # Generates a header with C array declaration, containing test_progs_verification_cert bytes
+ $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+ 	$(Q)(echo "unsigned char test_progs_verification_cert[] = {"; \
+-	 hexdump -v -e '12/1 "  0x%02x," "\n"' $< | sed 's/0x  ,//g; $$s/,$$//'; \
++	 od -v -t 'xC' -w12 $< | sed 's/ \(\S\+\)/ 0x\1,/g;s/^\S\+/ /;$$d'; \
+ 	 echo "};"; \
+ 	 echo "unsigned int test_progs_verification_cert_len = $$(wc -c < $<);") > $@
+ 
 
---mYFQeGmbEGU2o2/m
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+base-commit: 886bf921ecfc30f8f31341bc26560d8bf08b937b
+change-id: 20260216-bpf-sft-hexdump-od-abd07a3bf026
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmVo2kACgkQJNaLcl1U
-h9CAUwf8DPd9xrRlDqTI4nVriXqiGs3zuBi0+VHQirBYEmi1Mxe/ZaAdYyQeRgXV
-xtDWmCFSGm/gTasHpdnNcnD4cYA9ZUvf2MP0FUV+X4Evi2dy+4hUFUn8jzA3YjYb
-jVZh1DRcr06TZbA1oMkMPiyh3GbBNEjmdOq/O2hG5uRNvRs9YhLx/o/CLddvgs3R
-bb1FxYo521SqYcte7effDDxCbvxRHHqfM9KwEYPy2Cia/VGSgKPe70ohQjH01c7Y
-k5PLs17RQJeRLePqIdcIzlnCTI8q31J6fK1F0amnoUtDeSdzjUfwwMvU/rdvnnYd
-vcsM3UNBByQTyfm0uoaGEY4EhsM9tg==
-=3BtB
------END PGP SIGNATURE-----
-
---mYFQeGmbEGU2o2/m--
