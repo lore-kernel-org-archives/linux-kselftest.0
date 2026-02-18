@@ -1,164 +1,100 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463EE346E66
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 18:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258C9346AC3
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 18:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771439874; cv=none; b=MrXRhiSJPd318nO0Ijd8A2v9xni3wyXXIKssU/0qr5b8kSnQsK1biCBakIBek0FunHkKDus4sLiM3DHXYyZ73+3wwpWSU3QiEg4f2bctZb3/r6yb2+sxumucFNWbP3LKmG07OgPQ9PL3XMsOz8565n/iYQx19kAOmXaAyFVomXY=
+	t=1771440145; cv=none; b=i6/ZOpYOeNFAcKGjOLnrRD/mA721+GOzPt4qZ0nksnaEbR9q3RcA7KqwyKUAUUL2a9z+XMmEp4hyXcA6oMGAPX/JkPsaCzqWPgx64TD6oaJ09Ya/Fj2brGOsIpedK39MIUAM8RgYTWCVm3sEWvKiY5wRpudR1HsxmUonLACqOPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771439874; c=relaxed/simple;
-	bh=Hoz9/57FagEVnDWp7H/V5BXnUKfy/zj09aMxPs+0OBM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wqp6F1slI9g3rLsc6swZKtF3/Vp+dBl3QH0ceVdj+PfYpya+XDEOeGAcgv+OJhXzIcM15gPTUssQiMkg+ZVS7Snci/rN9qM+dniio4ed3qdOEdzYQcVuUZEFgdipjTXOROljjwdyqA6atIrm6cPbOasgrQlCGIo9eywf2350X8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OtZTOy/3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mf/PDw2W; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OtZTOy/3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mf/PDw2W; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1771440145; c=relaxed/simple;
+	bh=t16fduAILAy84+1+Q5Ma2Hp0vPt864Kw/8txUqiYJuo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LxyHNI9lno4zmPLNqvDWyKKVRjJjVyhyZm9xTmsK7yR3FUmHW1BDFDAOfAMy59M7wMAjV7zsHkM8WO5HCxvILYk9DVUnOwe1XcLkUBIiSu+Ofr9FRX9Xz1lzYnSHofsPFzpyIPQ7k3MjALqSYVEmYvMYpcnlVtV7kiVn59xDSj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QD04WLjh; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OtZTOy/3";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mf/PDw2W";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OtZTOy/3";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mf/PDw2W"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QD04WLjh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771440143;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=frAMfRqoE2ZGmeGzlkELRXqzdLMkM54op2gu3LYMHtI=;
+	b=QD04WLjhtigfsXh7UUlXrkqK9qlR4l9jmaMn8qZ0lIAZ1fD9Rb+U9UNb7RZYsoQpU8OHKQ
+	iZiMY8v5dhqxwPm6lP0vxaptD4pDtnw3n7AfMQmjmQ2oF1Spfn6fyguTstf3fzg9sya4lq
+	4chq7V3yxN6BRcAt5QKiuwMjHCv1sIs=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-558-c-abKhYvNRmNVmLPT-aNBg-1; Wed,
+ 18 Feb 2026 13:42:16 -0500
+X-MC-Unique: c-abKhYvNRmNVmLPT-aNBg-1
+X-Mimecast-MFC-AGG-ID: c-abKhYvNRmNVmLPT-aNBg_1771440135
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 8703D5BCF1;
-	Wed, 18 Feb 2026 18:37:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1771439871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GfS8AmrSc+X9FbAAoqibWbz6uZy/Jb/EL6+KvzsaBJw=;
-	b=OtZTOy/3X0kNu4KFK4Nc9mB8/KLx8n6x6vxaXxkhhYu/wcNYb0riBlXH4NMqNWbpNOHY2t
-	ZzlPEdOs1sqHCL3Xfku9Eq7yCCDexGg02L1Ya23dq6yz5C5ojrf8htLzLaeXE9j0iPXwDx
-	yJhmTqC1Ty9oLfE0jrDq7X+gQwmsmJo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1771439871;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GfS8AmrSc+X9FbAAoqibWbz6uZy/Jb/EL6+KvzsaBJw=;
-	b=Mf/PDw2Ws4OsG2AsftyfDuSwSwT7vmGCfAvF3NxL0YUVc4XeGCqsV/JzTRyBgTGLDl0Vl/
-	GK+hWgQaY+dMW4Cg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="OtZTOy/3";
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="Mf/PDw2W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1771439871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GfS8AmrSc+X9FbAAoqibWbz6uZy/Jb/EL6+KvzsaBJw=;
-	b=OtZTOy/3X0kNu4KFK4Nc9mB8/KLx8n6x6vxaXxkhhYu/wcNYb0riBlXH4NMqNWbpNOHY2t
-	ZzlPEdOs1sqHCL3Xfku9Eq7yCCDexGg02L1Ya23dq6yz5C5ojrf8htLzLaeXE9j0iPXwDx
-	yJhmTqC1Ty9oLfE0jrDq7X+gQwmsmJo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1771439871;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GfS8AmrSc+X9FbAAoqibWbz6uZy/Jb/EL6+KvzsaBJw=;
-	b=Mf/PDw2Ws4OsG2AsftyfDuSwSwT7vmGCfAvF3NxL0YUVc4XeGCqsV/JzTRyBgTGLDl0Vl/
-	GK+hWgQaY+dMW4Cg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6DF183EA65;
-	Wed, 18 Feb 2026 18:37:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id PR7PGv8GlmlLKAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Wed, 18 Feb 2026 18:37:51 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 13EADA08CF; Wed, 18 Feb 2026 19:37:51 +0100 (CET)
-Date: Wed, 18 Feb 2026 19:37:51 +0100
-From: Jan Kara <jack@suse.cz>
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: Jan Kara <jack@suse.cz>, gregkh@linuxfoundation.org, tj@kernel.org, 
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, amir73il@gmail.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on
- file deletion
-Message-ID: <s4vb5vshejyasdw2tkydhhk4m6p3ybexoi254qjiqexzgcxb5c@ctazolc3nh6f>
-References: <20260218032232.4049467-1-tjmercier@google.com>
- <20260218032232.4049467-3-tjmercier@google.com>
- <e7b4xiqvh76jvqukvcocblq5lrc5hldoiiexjlo5fmagbv3mgn@zhpzm4jwx3kg>
- <CABdmKX1S4wWFdsUOFOQ=_uVbmQVcQk0+VUVQjgAx_yqUcEd60A@mail.gmail.com>
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C47241800465;
+	Wed, 18 Feb 2026 18:42:14 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.22.81.6])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D0DDC30001BF;
+	Wed, 18 Feb 2026 18:42:12 +0000 (UTC)
+From: Audra Mitchell <audra@redhat.com>
+To: linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/mm: Fix soft-dirty kselftest supported check
+Date: Wed, 18 Feb 2026 13:42:10 -0500
+Message-ID: <20260218184210.206466-1-audra@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABdmKX1S4wWFdsUOFOQ=_uVbmQVcQk0+VUVQjgAx_yqUcEd60A@mail.gmail.com>
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	ARC_NA(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	MISSING_XM_UA(0.00)[];
-	FREEMAIL_CC(0.00)[suse.cz,linuxfoundation.org,kernel.org,lists.linux.dev,vger.kernel.org,gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
-X-Rspamd-Queue-Id: 8703D5BCF1
-X-Spam-Flag: NO
-X-Spam-Score: -4.01
-X-Spam-Level: 
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Wed 18-02-26 10:06:35, T.J. Mercier wrote:
-> On Wed, Feb 18, 2026 at 10:01 AM Jan Kara <jack@suse.cz> wrote:
-> >
-> > On Tue 17-02-26 19:22:31, T.J. Mercier wrote:
-> > > Currently some kernfs files (e.g. cgroup.events, memory.events) support
-> > > inotify watches for IN_MODIFY, but unlike with regular filesystems, they
-> > > do not receive IN_DELETE_SELF or IN_IGNORED events when they are
-> > > removed.
-> >
-> > Please see my email:
-> > https://lore.kernel.org/all/lc2jgt3yrvuvtdj2kk7q3rloie2c5mzyhfdy4zvxylx732voet@ol3kl4ackrpb
-> >
-> > I think this is actually a bug in kernfs...
-> >
-> >                                                                 Honza
-> 
-> Thanks, I'm looking at this now. I've tried calling clear_nlink in
-> kernfs_iop_rmdir, but I've found that when we get back to vfs_rmdir
-> and shrink_dcache_parent is called, d_walk doesn't find any entries,
-> so shrink_kill->__dentry_kill is not called. I'm investigating why
-> that is...
+On architectures with separate user address space, such as s390 or
+those without an MMU, the call to __access_ok will return true.
+The soft-dirty test attempts to check if the PAGEMAP_SCAN feature
+is supported by providing an invalid address and expecting
+__access_ok to return false, thus throwing an EFAULT error on return.
+Because of this assumption, this check will always fail for the
+architectures aforementioned. Update the supported check to handle
+the return being zero for these types of cases.
 
-Strange because when I was experimenting with this in my VM I have seen
-__dentry_kill being called (if the dentries were created by someone looking
-up the names).
+Signed-off-by: Audra Mitchell <audra@redhat.com>
+---
+ tools/testing/selftests/mm/vm_util.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-								Honza
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index d954bf91afd5..3bb7d322101c 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -77,10 +77,8 @@ static bool pagemap_scan_supported(int fd, char *start)
+ 
+ 	/* Provide an invalid address in order to trigger EFAULT. */
+ 	ret = __pagemap_scan_get_categories(fd, start, (struct page_region *) ~0UL);
+-	if (ret == 0)
+-		ksft_exit_fail_msg("PAGEMAP_SCAN succeeded unexpectedly\n");
+ 
+-	supported = errno == EFAULT;
++	supported = (ret == 0) || (errno == EFAULT);
+ 
+ 	return supported;
+ }
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.52.0
+
