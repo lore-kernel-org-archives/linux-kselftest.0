@@ -1,128 +1,152 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035AB2C21D8
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 19:46:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771443993; cv=none; b=YmzmuRoLi2I5LEa53PHXYV/lcywEpwm/tK0MZPC+H0CKB+wwqD49wMTML30AABMFnrD1j1orGTTbqMA1QD8kB8ekyGKvjLxVlyjuWHT1qIVFckvMvwNXNg9QonmE0cWSnCf0xT+7o7uOvwIeE2MTy3wrD8aPU+AHd0VSjwFkg9w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771443993; c=relaxed/simple;
-	bh=vBUAyAbacjfaRDxMQvWcGcFT+qxiW9zxnAxYnB8luFk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rQ5I6yfuG5/jYP8j77NWi/ksEgTxaW78a/U+3f3K7pzzOGgK0ryLBr0DvQ1GILEJ30cXR9y6bR+YE6U9Jum0mb6MD8351YmaXAJ75eMOCRM774vp0N7FHUwf8zq+xReY0zQ1yYu5HTe55uT1nCh8aFwiswzxxxXf1eH9DOSZ+vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sx0OPOIa; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EC5346E75
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 19:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771444742; cv=pass; b=ZWT08Oa8qWg8/uivDml5pUCxuOS0PPqVq4mQTSWSKEYXQU66++x4+/9c1GyTpFGLPoddcfCGiBJiORaKvjP38s5gUvYLWAwvkNxwhG+UF3tA14GhQCGo2JYVMlebDdtsy0rUJ6KTU/K0wFND80wd8a7je+NOPbb125tJSa8PpKM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771444742; c=relaxed/simple;
+	bh=fAj9Q1ygswz4E6SrtEFpUTAbwt8zju3u9r/LEpTkE3E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lpkywlX99ZSjzTQC+d5ZeHW6rx0TDuAgknJ/l045CthlRwPEEjzRX77K2/ka88Li+sjDxYOf8Le/vOgYha9WVuOH50QgGBjFWof0DJQLZlp+Jb7wP6w1OHQWlNigGl3adfvG3yod4XtEyO/LETFtp1fCZnXV4pKV4C8w8MljHTw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AgeRmV1R; arc=pass smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sx0OPOIa"
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-896fa834290so2556776d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 11:46:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AgeRmV1R"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-48318d08ec2so11615e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 11:59:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771444739; cv=none;
+        d=google.com; s=arc-20240605;
+        b=bsH2GIACQoB9N+yThVYVKzi19djJVRQigJAqykme0jI0w4A0mHMsOgA2Sk4MkLj5V4
+         mjHy0vV3BsCuWgSlaeCb0d9ecndx+DWlLT+RGI0nmtrJ2IozAHDOHM9jHk97eyWv2zak
+         Cs7SHXNCPKw8ColkIh9NdN4MjIA1+9RqXXrQlAXvHdINwks0CtKe6Yj/sJ9bkT/J1qIk
+         MkLev0tmim3r/T8fjj+vAzi0KBLP5iP7iJAl5QkI8m0LZ6EIkCWVf4OOvqHDJZATVXXh
+         NIb50IPUq+c+Rpvr8AxSyz4ZKgBvqoSGO5FcrlkEXBbI1O+PiNaNVvJVO9+uGEb2L3Gz
+         z3wA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=OylA8EM9epDUNp/ar6ETdvAJBvo4gpIzvj6gp7Iy9D0=;
+        fh=rQKSTtei2pE5bFCFMJYkUetbR5qn2BRg2HCtuhXVjis=;
+        b=KckTrvBOAd4yOshl9MlkkYu16L8/F66+F4YHkSv6VIDDQv1CfKWlUqVyNQeivg8ml2
+         BN+XBx0Akcj5k/+Fu3oTvhHRCs1KYqie3N6vHeVB5TlwQb/OESHdN6OJ9Q/ZgjQuh8cc
+         +1Re+phCSifTniy/9cxWn76On0KTSNgkho57q/fOXVF9tVzMCgr6JAj+Hb1l/OVVmeJT
+         sltQiiIgYC+d0uNh3RS1LTDHEDz+MaFW54eETV6+MrsUS2Ad0pMZIIKrxRTmWAQew6fK
+         j4v9kVaslYuxteh9ot5zzEfNXAUl7Ama9vretkav/WkSMWwQIxvFmae360zJYUj+u8B6
+         zeiQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771443991; x=1772048791; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wD8Ttwe5Tegj8OFrv2Q7m/YBq2wmzpAVQJC0WJWjYy8=;
-        b=Sx0OPOIaWKiPVDqmZ6/1nDkemz2/bnRQk+wq71fMB9aSQC+fSWcVVtf51GmyPIPdf8
-         Cj5NcF67MXUrcBupt+d4vrMB9sPqM5gP/3E4xpcoiiBIfnBaLfSyAmy3uwH9egfcnov8
-         6gwgq9jHhJGfYO4Q5AMnlv7H1ix7sW8q0TvJfh9wxQiR27gCg30oYswyZsb1LJs4Hhka
-         XPjzT9taqY47eGOdDl+H3/GijKWX77wrhg6dvuCtwJs/YYZGkq8WH0EAbGPMTjO6Bmts
-         624vbkG4YrDOFuapSKKIE58XqumLyYgkuYIEIQOR6nIcLvBkKXpEX8SuhtFfk5QlGXLX
-         171Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771443991; x=1772048791;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1771444739; x=1772049539; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wD8Ttwe5Tegj8OFrv2Q7m/YBq2wmzpAVQJC0WJWjYy8=;
-        b=nshWVXx/amozf5u3qg9nyx7u+vo29Opff4b68+xinhFn/e2VlX9W56kW7Q6Bb+KfI6
-         KhlnTnhardsUn0jNRoXxaDSUhTZAm2EsqXXmGTfz/khDEohXehs281hizwQ843r+yQb/
-         P78Kqgx0JWCqPBg9/amAVgkqntY8BRhiXlEoBBswrh91FrxT/n18OzmmFlgj7IqyZCve
-         25QHVoWO9O2YLafYJTJdxc9UpPkLokOCmwQOuQG79lLJDw/ztWeNl6jH/gtCoZorvSD4
-         HKVSY5XYICO7W2hFLSyXR1LsAiAa/K+D/Iliol6rU8yCIDEq1uTGsar7Ur9+1puFdQZn
-         YIWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUuIaCFgjseG7ZNDSJSX+6zV/UUILsg4mNOkZYx+mM38efVVHPQKFG0giD1pZBd9qBy941NHV9qIVu5jilahPU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAiba/HQsqp1Hl2vPv2NO/OYmBCZMXxQXlD4j8ujTfH3IBLEj+
-	O/3Q4mzUGqB4u5wg8J0o/1w6TW6yaCFEPHMyBk25DL+qZALxAhEi9A1T/NGHDg==
-X-Gm-Gg: AZuq6aIbQn+SYPLDoh+kl/F7rxclaqlo2s6+B9D/l/GNXaIdyd4r/hm26wk+1vmPRiH
-	v/cy6/+/g2MsVeP/NYZJjZjkNtXIazmFmY5Vj9yjcW3J5V0C50VHlnB2AyWix1OJ/dKLpM0S6RL
-	2YtbRpwWY/BwOu1w7KAVZwJBHfc5LJgHUfM57qTtEIMDGf4GWMxYMnOEvUb4asu8J3/Z4x7iF1X
-	/jJ9wJ0dZtlJIY6EMlir3FZsEumFlLOvWzF6xhRrgJ7zpf+lc7wi8pMXLQLFlmvoBycKl7LofAY
-	tBYnKenbttZVru2wyGrdP5Tnecjsu4Wv7i6Fzfp68bEvVn97+Y71N4P8YL14eq2wClcQoTNGB5r
-	ZPP1zvKO8dgzqf/wNm5DdzX1+xSahgyxaU0sqevWyHEpSKjP1BlXcD7rdmjzrkTiYJRgMJMeLnl
-	md9j+TrkkTFkfL0FLYVI/GjQ==
-X-Received: by 2002:a53:b118:0:b0:63f:b605:b7f2 with SMTP id 956f58d0204a3-64c557eae43mr2160180d50.10.1771438271298;
-        Wed, 18 Feb 2026 10:11:11 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:49::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64c22fb1d22sm6051799d50.17.2026.02.18.10.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 10:11:11 -0800 (PST)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Subject: [PATCH net v2 0/3] vsock: add write-once semantics to
- child_ns_mode
-Date: Wed, 18 Feb 2026 10:10:35 -0800
-Message-Id: <20260218-vsock-ns-write-once-v2-0-19e4c50d509a@meta.com>
+        bh=OylA8EM9epDUNp/ar6ETdvAJBvo4gpIzvj6gp7Iy9D0=;
+        b=AgeRmV1RhQBAlmnoA3RTul5w2nJ57KLE9ZZS9d2bLICsnWFYZTcAJGpdEciopvVxZd
+         Z7wQVRxI3QX5CmuHlZqv4sE+nONEMSVZnoijJp8+xCi/OZxFk1yQBjZti4TiIVG8P5hn
+         Ol9h//F+Zq/sWL8QbxfxuRIadPeuDnu4Zthz/UpA67xqevmyEUqmbwYfoX3z6aylsdha
+         J09LIjJoQvf6TVKT3u3ayg0QvnOffSJM2dKGVPi1DzbDbGNw2am3ehv99BldvySO4qcG
+         ARyY127U4WHG9UacPBZJ6VpsRlW0VHY1o1ahaA+oHnWlFwiM/enOn6MSLl7fcJEVRntj
+         s/2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771444739; x=1772049539;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OylA8EM9epDUNp/ar6ETdvAJBvo4gpIzvj6gp7Iy9D0=;
+        b=B5ruJLQ4tPHAKouRCzFCVROvipaAToUAmz+XZrZ/l+lW0DpQ5jJK3w67cyXQ5k0YM0
+         b2+Na4/sJrN7poRNKyQvNOs4wgUa66rhiehELFUUWlZCHzKzD2yA28218g5MoIahYBDm
+         Gs0EAZAarttedfDgbhfoqi6NAuh6fZMTFQ7YL+7kwM2n63MK/rtEblGwzmzBLI3Pj43z
+         PJztE7SyX/NLHylBlsaGKw1AVf+GX+e2OEGnldbmn/Z4S2OyyFG24CiQNYY/wBEhQfpx
+         ydw9rPrjQ4mvb69SO58seegD9myIrhdRPHxw0w+OfKRWSCFCr039sOwp0u4D9wxN+MDM
+         iXVw==
+X-Forwarded-Encrypted: i=1; AJvYcCXD177QkR4h/jsFYBOmpTglyf2dEySX323/TIb2Z/iX6P4Tk4DoCU4zK/3l5hRBAYOSc6kbxMtheR1zNFo2UpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN9hfOsMfrLHSWyNN62+aAynx4u/q7A4vIq3al1mxWT7XuSUb5
+	8cFaxDUY71NwGxcU/rQIQ/eiOm3Z3BiDUSV+MZ0JUQjtBsJ+pwEC11x41UQhuBXipIR9MWvTPTy
+	O4MYHF5qzcNfrPXlnXtyI5qZBykSu8l4uFXP+07nr
+X-Gm-Gg: AZuq6aKjoMmtLCUQSeBtaMvttywtqfnHdyZv+Lg/7t6CKreKLKkaMMWnafPJaarCFwg
+	jGD/DNOmXhWulylvX9HDCrNSMvLcvkzHNNpgYrJIiVTATDZWRKWHAk6Qipt1YDKJEggQSmJym7b
+	1Hjhu4eGSw6TWuBZbTSh3zH2dfS9oyvi4brp5GB9JQrFNybVGmuBnsEW6Fg8XpM8UDOkDEh55Tp
+	/6ZZ5XvhoAonytZbfRfgC1UxLVTI3eJ9hgFM7unMAsSUfe6yWrE38pBzUsUfDAPRozPE/2f+jFw
+	l+Hj/pt0zassCB3bKOm2ZaD5sRrgY3nvQtbH1fC60Qzyykt2VR4gwghysRtZFLrhDeIhCg==
+X-Received: by 2002:a05:600c:8b76:b0:475:da0c:38a8 with SMTP id
+ 5b1f17b1804b1-4839e5d9a1dmr138535e9.4.1771444738775; Wed, 18 Feb 2026
+ 11:58:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJwAlmkC/33NQQqDMBBA0auEWTsliWKjq96juEjjWIdiIklIW
- 8S7F3KArj+8f0CiyJRgFAdEKpw4eBiFbgS41fonIc8wCtBS91KrK5YU3At9wnfkTBi8IzSm7eb
- edCSthkbAHmnhT1Xv4CnD1AhYOeUQv/VUVE1/0aJQoVXLo5WLNoMdbhtle3Fhg+k8zx//dlzIu
- gAAAA==
-X-Change-ID: 20260217-vsock-ns-write-once-8834d684e0a2
-To: Stefano Garzarella <sgarzare@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Bobby Eshleman <bobbyeshleman@meta.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- Daan De Meyer <daan.j.demeyer@gmail.com>
-X-Mailer: b4 0.14.3
+References: <20260218032232.4049467-1-tjmercier@google.com>
+ <20260218032232.4049467-3-tjmercier@google.com> <e7b4xiqvh76jvqukvcocblq5lrc5hldoiiexjlo5fmagbv3mgn@zhpzm4jwx3kg>
+ <CABdmKX1S4wWFdsUOFOQ=_uVbmQVcQk0+VUVQjgAx_yqUcEd60A@mail.gmail.com>
+ <s4vb5vshejyasdw2tkydhhk4m6p3ybexoi254qjiqexzgcxb5c@ctazolc3nh6f> <CABdmKX2cQCneFyZhTWmWYz-RTmAOQcEKh5ZQewz25E6Xfok1tQ@mail.gmail.com>
+In-Reply-To: <CABdmKX2cQCneFyZhTWmWYz-RTmAOQcEKh5ZQewz25E6Xfok1tQ@mail.gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Wed, 18 Feb 2026 11:58:46 -0800
+X-Gm-Features: AaiRm52n0lIK2grreFCNiF6qE3JVFwkwj9cGx62TA9xdekMRJsGok-FwMltR-JM
+Message-ID: <CABdmKX0BJcsv0TaPSsGN2a4nkQaKF=cX8rnnoL5kPTHNfuKL7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
+To: Jan Kara <jack@suse.cz>
+Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, amir73il@gmail.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Two administrator processes may race when setting child_ns_mode: one
-sets it to "local" and creates a namespace, but another changes it to
-"global" in between. The first process ends up with a namespace in the
-wrong mode. Make child_ns_mode write-once so that a namespace manager
-can set it once, check the value, and be guaranteed it won't change
-before creating its namespaces. Writing a different value after the
-first write returns -EBUSY.
+On Wed, Feb 18, 2026 at 11:15=E2=80=AFAM T.J. Mercier <tjmercier@google.com=
+> wrote:
+>
+> On Wed, Feb 18, 2026 at 10:37=E2=80=AFAM Jan Kara <jack@suse.cz> wrote:
+> >
+> > On Wed 18-02-26 10:06:35, T.J. Mercier wrote:
+> > > On Wed, Feb 18, 2026 at 10:01=E2=80=AFAM Jan Kara <jack@suse.cz> wrot=
+e:
+> > > >
+> > > > On Tue 17-02-26 19:22:31, T.J. Mercier wrote:
+> > > > > Currently some kernfs files (e.g. cgroup.events, memory.events) s=
+upport
+> > > > > inotify watches for IN_MODIFY, but unlike with regular filesystem=
+s, they
+> > > > > do not receive IN_DELETE_SELF or IN_IGNORED events when they are
+> > > > > removed.
+> > > >
+> > > > Please see my email:
+> > > > https://lore.kernel.org/all/lc2jgt3yrvuvtdj2kk7q3rloie2c5mzyhfdy4zv=
+xylx732voet@ol3kl4ackrpb
+> > > >
+> > > > I think this is actually a bug in kernfs...
+> > > >
+> > > >                                                                 Hon=
+za
+> > >
+> > > Thanks, I'm looking at this now. I've tried calling clear_nlink in
+> > > kernfs_iop_rmdir, but I've found that when we get back to vfs_rmdir
+> > > and shrink_dcache_parent is called, d_walk doesn't find any entries,
+> > > so shrink_kill->__dentry_kill is not called. I'm investigating why
+> > > that is...
+> >
+> > Strange because when I was experimenting with this in my VM I have seen
+> > __dentry_kill being called (if the dentries were created by someone loo=
+king
+> > up the names).
+>
+> Ahh yes, that's the difference. I was just doing mkdir
+> /sys/fs/cgroup/foo immediately followed by rmdir /sys/fs/cgroup/foo.
+> kernfs creates the dentries in kernfs_iop_lookup, so there were none
+> when I did the rmdir because I didn't cause any lookups.
+>
+> If I actually have a program watching
+> /sys/fs/cgroup/foo/memory.events, then I do see the __dentry_kill kill
+> calls, but despite the prior clear_nlink call i_nlink is 1 so
+> fsnotify_inoderemove is skipped. Something must be incrementing it.
 
-One patch for the implementation, one for docs, and one for tests.
-
----
-Changes in v2:
-- break docs, tests, and implementation into separate patches
-- clarify commit message
-- only use child_ns_mode, do not add additional child_ns_mode_locked
-  variable
-- add documentation to Documentation/
-- Link to v1: https://lore.kernel.org/r/20260217-vsock-ns-write-once-v1-1-a1fb30f289a9@meta.com
-
----
-Bobby Eshleman (3):
-      selftests/vsock: change tests to respect write-once child ns mode
-      vsock: lock down child_ns_mode as write-once
-      vsock: document write-once behavior of the child_ns_mode sysctl
-
- Documentation/admin-guide/sysctl/net.rst | 10 ++++++---
- include/net/af_vsock.h                   | 20 +++++++++++++++---
- include/net/netns/vsock.h                |  9 +++++++-
- net/vmw_vsock/af_vsock.c                 | 15 +++++++++-----
- tools/testing/selftests/vsock/vmtest.sh  | 35 +++++++++++++++-----------------
- 5 files changed, 58 insertions(+), 31 deletions(-)
----
-base-commit: ccd8e87748ad083047d6c8544c5809b7f96cc8df
-change-id: 20260217-vsock-ns-write-once-8834d684e0a2
-
-Best regards,
--- 
-Bobby Eshleman <bobbyeshleman@meta.com>
-
+The issue was that kernfs_remove unlinks the kernfs nodes, but doesn't
+clear_nlink when it does so. Adding that seems to work to generate
+IN_DELETE_SELF and IN_IGNORED. I'll do some more testing and get a
+patch ready.
