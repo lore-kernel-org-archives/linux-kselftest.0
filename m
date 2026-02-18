@@ -1,199 +1,101 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285A03081B0
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 11:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513542FE05B
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 11:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771413817; cv=none; b=LkoR+qDPn/wDyf4cCwzWObBemC4qlYWLTM2g/35O4Xd2UQC5C3/tirE90G3j6c9b6003zLAi7lcB6jBv4yX1J+T4RzWzNeyAlxuGxHSocQ+bFVU021PCBF34fDPSTA3IVNvjEtjrL4fa0xCrq55uHKzMZKlgPhoiYoHcepmrBA4=
+	t=1771414382; cv=none; b=V0B6M3fQzTSEwIXfjfqE3KI+RPXeannRvWzFp8iUxyt+OAaH1S7BVmcwIkvvboegVdmr1T9bvzpU43+YJb/FO4eV8Q04Qu8DymCot4sU9JZ/7Jy8td6yl3WlkDpLxdor/qAlrqkPe04UO8B0/Ux5Qbjat43hTdyJO1ay4Q4HlCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771413817; c=relaxed/simple;
-	bh=yFzmeKNc7jZe/g1nyERcuQ8+IviWJtyHr9DjwQGUEAk=;
+	s=arc-20240116; t=1771414382; c=relaxed/simple;
+	bh=0CX48F8+5lwU4DMyRC5K4BUusGsP5md54wZcyKDZW5s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PRU8MrneQqH2zN7cyTWTU2aMV/7/TExqDpbqhROTMkcqg+UKcHqOLoBiSIGV9ie3pANPGr2qi631oCFeWw97Ek3lUV63M2Hut6wQz37nyz1CA8Lm2ETOY3LMAQCvxQ5xueaVSX8oMKJ2EyJpxxyxo0C4LHIRRlgrZLldLA8NA7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=TEf8au3N; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=IEKUNOlE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=YjVaDXeO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=GkEcKhNC; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 Content-Type:Content-Disposition:In-Reply-To; b=uMvXIxv/jvHagWEGgjGnOajWOviDJJ3R/mZPLXwTY9WYPSM6StNZ/8wby1uV1AJe+ELZ+g5fTq2KTitYToaLkLRKomQnCtt7LN8DzS6vYfdEV4cy0IrZCaD2+63jGBuK1XS/C1xgE9rRZr0b5C+0TlN0nFpVBjW08siero1xE/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=maDsT9+Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="TEf8au3N";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="IEKUNOlE";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="YjVaDXeO";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="GkEcKhNC"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 14C715BCC2;
-	Wed, 18 Feb 2026 11:23:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1771413814; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3ZiElcFxYYD1oatQKw1wrqUrp5IBMjHeUNq0WywWxgo=;
-	b=TEf8au3NMnRwYsR5VLtTfIB1DZ+18/4Rt/F1tKfE7C4/yNBLd5Vm5xZCUQkkaTWioKLmvA
-	V0Qpq8BEB0Q9Kb3nJLXnSfdHdT9Hd6uu4PMhNx8owN2P/TSVOKOMEqzO2IfSFWEn0BFvEF
-	LXLfZslfLXmf43hE+T5S10h9gZ4QsvY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1771413814;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3ZiElcFxYYD1oatQKw1wrqUrp5IBMjHeUNq0WywWxgo=;
-	b=IEKUNOlER5U2c3PQj2qeSVKFZBC+6dXuXR33rQI1WFI0VB5BDA2D2mQhrfJ1vBeP334LDz
-	XfhzcvhCDx2FK9AA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=YjVaDXeO;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=GkEcKhNC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1771413813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3ZiElcFxYYD1oatQKw1wrqUrp5IBMjHeUNq0WywWxgo=;
-	b=YjVaDXeO/Lsd9R+YvmCO66ynrx6X05ZBkYJ6nplpf64mkS0CSUw3D9vR/w3CVrza61iNp7
-	/NKfg9fS+YUfofVDV66vtA1hNZxL/rBegeM3a7Rtj8MbSEcgRkGxjSFDIyIKXtm925Wi7X
-	KeTps1vjPVpLWrTQv+CBzQQN24MDkCk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1771413813;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3ZiElcFxYYD1oatQKw1wrqUrp5IBMjHeUNq0WywWxgo=;
-	b=GkEcKhNCHlUvv2oHbiYdczS5bXSsoxmza9fBW2vL9mK0WTurj5f/GKF41y9L26cFnQu1j0
-	TCDXmqdPUO+zHLCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ED05F3EA65;
-	Wed, 18 Feb 2026 11:23:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id aDjGOTShlWlCWQAAD6G6ig
-	(envelope-from <jack@suse.cz>); Wed, 18 Feb 2026 11:23:32 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 92B8AA08CF; Wed, 18 Feb 2026 12:23:32 +0100 (CET)
-Date: Wed, 18 Feb 2026 12:23:32 +0100
-From: Jan Kara <jack@suse.cz>
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: Amir Goldstein <amir73il@gmail.com>, gregkh@linuxfoundation.org, 
-	tj@kernel.org, driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, jack@suse.cz, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on
- file deletion
-Message-ID: <lc2jgt3yrvuvtdj2kk7q3rloie2c5mzyhfdy4zvxylx732voet@ol3kl4ackrpb>
-References: <20260212215814.629709-1-tjmercier@google.com>
- <20260212215814.629709-3-tjmercier@google.com>
- <aZRAkalnJCxSp7ne@amir-ThinkPad-T480>
- <CABdmKX3wsWphRTDanKwGGiUWoO0xTaC8L_QxjHzhpxfZn256MQ@mail.gmail.com>
- <CAOQ4uxgrP=VdTKZXKcRE8BeWv6wZy7aFkUF-VoEpRSxVnHZi2w@mail.gmail.com>
- <CABdmKX1ztzJ6B13uzdDtN-uVWbdWuYJ6PMvjGoAfu40MMHCpaA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="maDsT9+Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E77C19425;
+	Wed, 18 Feb 2026 11:33:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771414382;
+	bh=0CX48F8+5lwU4DMyRC5K4BUusGsP5md54wZcyKDZW5s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=maDsT9+QPK+zGAoe+Un9ExfZiTAvW2IbjuvSvWbO8xtwUvTMPHnSC5wwbhPMpbtQf
+	 wHCu3nNIZJzrM28T7gOQDcZbapcVyn9DUIVRU/7i72Rgo7rIC7oY1RNgKWSv4ddHs8
+	 NSrEq//JYXEouxPQkf2FmuZy5v37UircohPUwNTEsI8l5lYMPUfrHRY8AyxgPRkXeJ
+	 QFa32uyhErG5FyanFSsUJA3Xao6gMN4kCOgBLI1WR7JKrtq9Ojg3QXwwiiYnhNqWpO
+	 0R1rQxBNOIWgxzqTcVWfOEmyYw1dOXpgRHVw+vuDPlomKB6+FXlcyYybO1TY6NUqtW
+	 ODBCDo35J3seg==
+Date: Wed, 18 Feb 2026 11:32:57 +0000
+From: Mark Brown <broonie@kernel.org>
+To: David Gow <david@davidgow.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <raemoar63@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: RCU stalls running KUnit on mainline
+Message-ID: <ec319f29-5fc8-4578-8826-26ed29c6fce6@sirena.org.uk>
+References: <b537dc5a-f7e2-4daa-bff1-d07c5852ece5@sirena.org.uk>
+ <59e8c352-7bc8-4358-af74-fee8c29280ba@davidgow.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mYFQeGmbEGU2o2/m"
+Content-Disposition: inline
+In-Reply-To: <59e8c352-7bc8-4358-af74-fee8c29280ba@davidgow.net>
+X-Cookie: They just buzzed and buzzed...buzzed.
+
+
+--mYFQeGmbEGU2o2/m
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABdmKX1ztzJ6B13uzdDtN-uVWbdWuYJ6PMvjGoAfu40MMHCpaA@mail.gmail.com>
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,linuxfoundation.org,kernel.org,lists.linux.dev,vger.kernel.org,suse.cz];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.com:email]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -4.01
-X-Spam-Level: 
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 14C715BCC2
+Content-Transfer-Encoding: quoted-printable
 
-On Tue 17-02-26 14:32:25, T.J. Mercier wrote:
-> On Tue, Feb 17, 2026 at 1:25 PM Amir Goldstein <amir73il@gmail.com> wrote:
-> > > > Are you expecting to get IN_IGNORED|IN_DELETE_SELF on an entry
-> > > > while watching the parent? Because this is not how the API works.
-> > >
-> > > No, only on the file being watched. The parent should only get
-> > > IN_DELETE, but I read your feedback below and I'm fine with removing
-> > > that part and just sending the DELETE_SELF and IN_IGNORED events.
-> > >
-> >
-> > So if the file was being watched, some application needed to call
-> > inotify_add_watch() with the user path to the cgroupfs inode
-> > and inotify watch keeps a live reference to this vfs inode.
-> >
-> > When the cgroup is being destroyed something needs to drop
-> > this vfs inode and call __destroy_inode() -> fsnotify_inode_delete()
-> > which should remove the inotify watch and result in IN_IGNORED.
-> 
-> Nothing like this exists before this patch.
-> 
-> > IN_DELETE_SELF is a different story, because the inode does not
-> > have zero i_nlink.
-> >
-> > I did not try to follow the code path of cgroupfs destroy when an
-> > inotify watch on a cgroup file exists, but this is what I expect.
-> > Please explain - what am I missing?
-> 
-> Yes that's the problem here. The inode isn't dropped unless the watch
-> is removed, and the watch isn't removed because kernfs doesn't go
-> through vfs to notify about file removal. There is nothing to trigger
-> dropping the watch and the associated inode reference except this
-> patch calling into fsnotify_inoderemove which both sends
-> IN_DELETE_SELF and calls __fsnotify_inode_delete for the IN_IGNORED
-> and inode cleanup.
-> 
-> Without this, the watch and inode persist after file deletion until
-> the process exits and file descriptors are cleaned up, or until
-> inotify_rm_watch gets called manually.
+On Wed, Feb 18, 2026 at 04:53:16PM +0800, David Gow wrote:
+> Le 17/02/2026 =C3=A0 10:10 PM, 'Mark Brown' via KUnit Development a =C3=
+=A9crit=C2=A0:
 
-Hrm. I was scratching my head how it is possible VFS isn't involved for a
-while. So let me share what I found:
+> > When running KUnit via qemu on current mailine I'm seeing random
+> > lockups, frequently but not always reporting an RCU stall.
+> > Unfortunately these don't seem to happen in a consistent place which
+> > makes it hard to figure out exactly what's going on, they started in
 
-Normally fsnotify_inoderemove() is called from dentry_unlink_inode() which
-is called from d_delete() (name unlinked) and __dentry_kill() (last dput()).
-Now it is true that kernfs doesn't bother with pruning child dentries from
-its rmdir implementation. It just marks all corresponding kernfs_nodes
-(inodes) as dead and that's it so d_delete() isn't called. But vfs_rmdir()
-makes up for this by calling shrink_dcache_parent() on the removed
-directory so the child dentries end up going through __dentry_kill(). *But*
-kernfs also doesn't bother to set i_nlink for these child dentries to 0
-when marking them as dead and so __dentry_kill() doesn't call
-fsnotify_inoderemove(). So at this point it seems more like a kernfs bug
-that children inodes aren't properly cleaned up by setting i_nlink to 0 and
-I don't think we should paper over this by calling fsnotify_inoderemove()
-explicitely.
+> Hmm=E2=80=A6 I haven't seen this yet on x86_64, but looking at arm64 and =
+32-bit
+> i386, I do see a sporadic panic, often with rcu in the stacktrace. Seems =
+to
+> happen more often when the KUnit test kthread is starting/stopping
+> (particularly, at least on i386, if it's due to a trapped fault).
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I did see this on x86_64 FWIW.
+
+> I've not been able to reproduce it after reverting the kthread affinity
+> series (git revert -m1 d16738a4e79e55b2c3c9ff4fb7b74a4a24723515), but that
+> could just be due to luck. It's flaky enough that my attempt at bisection
+> kept pointing at documentation patches.
+
+Yeah, it's not reliably reproducible though it happens pretty often.  I
+did try things like retrying N times to see if it fails but I have a
+horrible feeling there's some dependency on the specific build somehow.
+Hopefully not.
+
+--mYFQeGmbEGU2o2/m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmVo2kACgkQJNaLcl1U
+h9CAUwf8DPd9xrRlDqTI4nVriXqiGs3zuBi0+VHQirBYEmi1Mxe/ZaAdYyQeRgXV
+xtDWmCFSGm/gTasHpdnNcnD4cYA9ZUvf2MP0FUV+X4Evi2dy+4hUFUn8jzA3YjYb
+jVZh1DRcr06TZbA1oMkMPiyh3GbBNEjmdOq/O2hG5uRNvRs9YhLx/o/CLddvgs3R
+bb1FxYo521SqYcte7effDDxCbvxRHHqfM9KwEYPy2Cia/VGSgKPe70ohQjH01c7Y
+k5PLs17RQJeRLePqIdcIzlnCTI8q31J6fK1F0amnoUtDeSdzjUfwwMvU/rdvnnYd
+vcsM3UNBByQTyfm0uoaGEY4EhsM9tg==
+=3BtB
+-----END PGP SIGNATURE-----
+
+--mYFQeGmbEGU2o2/m--
