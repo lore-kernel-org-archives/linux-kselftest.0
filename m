@@ -1,159 +1,288 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0D62EDD7E
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 08:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771401727; cv=none; b=bNLSmDJk1PtddGICjGZS1iYb45zMcFJK/HkYwOkIG+7efZzvqpfr4RZrsdJAf5qCowZx1SeXB0pdSGmI5Oqmtg7X3rM+4EVAZeuX2U1GAi9fMj6I3nfDiMsTcYkIhwL6mXPbPOJAAPHBWzAt3X2+ypSHbQNvrMN2wQL6gAtJwO8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771401727; c=relaxed/simple;
-	bh=XI04HMMZxmtmKIt5krwj5AVJKXwc+CwEajC7Ya2hKUU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I1esHILB5FiD1pGvRBxRw9eR14CM2V824vSW2miR3z7Td9exuha1Mmy0VEZbywtRM0qauQBEpg4QCRsuodvbXmJVhHJKRGxy2FnrAvmLFj44ZJ1BwiWEtF7gIBqzP58+6KqOq7BWTjMP1kvWYnsmW7FgkQ62GE5zmdkPWQmr9UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jc5vXaKF; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757142BF3E2
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 08:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771403469; cv=pass; b=FWs4j3IdsFkBx2RCD8/T+owppDG7CruubHRvMdE9dSlwMcxUYVamtvp+BDh29mr0jZ2hX+xRSU4sHnCrY45RsNZYiw8OC/8qUBcMRpttElk//OzAtQEj/MmgqPWqVYX5HJW7IvNE4oLT+lV8Ww3GE9P3InIjz4hev9lMgAfk7fE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771403469; c=relaxed/simple;
+	bh=pOcrR9g/30b877GWLIQEiogDavQ6piFbc5NysJoGEjE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oTbiPLS0bi4KZWPLZXKrFrlkD3E79pdPSHIMUto11pMju/mi9cBFRTwo9ifDo4LF8ggOLpbGeqwVgExu1Pr7Wn83On+lmOZsLDVESOOp5zyIC3vk8kOYOiHaIioNxfVfWxvZf1IRafPKWOs5mU9w/MTRXaHpDQPeEg8pnE5UcoA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W8+nrWs0; arc=pass smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jc5vXaKF"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-483770e0b25so44600995e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 00:02:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W8+nrWs0"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b8845cb580bso908029166b.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 00:31:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771403465; cv=none;
+        d=google.com; s=arc-20240605;
+        b=F911yda4ChEkZgsc8XnZSYxIDfebN2awJoSM+saXOTu2wurekNMvDVparIZbUxIX1H
+         a1jVPo91GHu8M2+8N5Z86U6E32O+R4BL8aLK5NYKHN9IlMIseUVVCl88Y9h/tLUA2nDl
+         erZELrWisDwYq3vM4/ql1DUF6MWfqqPYtf4bAEkpJOCX50Lde/ljCI6+nZt3NjC0WG6r
+         vjXZOP0Q6phsrjpJX972/h0/Dd9ofq6Lnez83dO31Mh+ZrDrcdgm2090OiDJEhQl47tw
+         Qmlum7Fq9dpi+1QGDhEDtSakriw8PwdsbIULKgRRkXCbgbI39nnrZ9wSCTCcOeDbxUTv
+         QrNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Cd+FmpSKeZY657ydPhpXWP28mI30FM0F7sFttu1MBmg=;
+        fh=z8nDcYi3Rm7XzkmupVXgtTkbWcq5ThhIX3Ve6tf5Twk=;
+        b=jh1WG225ik4gisqoH54X+u1wrVxnYXHhVnvM7t4aIq41lQ508HpRA5kzW0jezL7W5c
+         nJ8QdsIlEsMCTCpEeK0lgooQGdkafs4MjXd4dGgdary8+Iy4BXCXvihG39QP4pBnPQeN
+         0+f4mzoYtsWGtltxinMr/glkRM5sTs+EykhKKzc8s0LrKzXyYaMgA+4r6WNu7L5mt3ld
+         FezdtKFW0h+n1CribG2DzsaKhFazGxET1cOFFIUBzwCXWhxmlL8bINE5V7o8Xi/zU1bJ
+         GX3HGw4kiwfwgYLtxoikuym1jwQn787HXBhqpJXJWYySelYsFRc6xZgFArejjCZXFpwT
+         ZwAw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771401725; x=1772006525; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=joXhlMp7nr1yG3GmLEpDKyVgijmZOHHHCsIq8VlzarI=;
-        b=jc5vXaKFXSWX6BK20tk8Dg53nh+psfN+OUbY0CgimlWQ9eVMRAP8JzOQdW16gggm6p
-         pM4qbabxT+WvKcRG5GFOn6N6A7w6ODP7PqP17MqGerm3kcl2EFlJdQbee0gYyT/OMz18
-         FHaIc+YcbD/G2Tqo1GR/ABHLeBHg20gavlf4IrqbRvnyu1v8t9Xn0HD55DInumSLgu9B
-         FM8Zr83qz1kPJuRIAgBM6KIxBoELjBVIa8hqsaVDD6gkqMwaTXIegh32MGEbi9F2HBnf
-         hgQojdQAAjcETkT3cf8BiEc1NbcylLF9zz1tv+zw63Tx5FD51R3sT07A0/uwMXIW0vGg
-         7j/Q==
+        d=gmail.com; s=20230601; t=1771403465; x=1772008265; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cd+FmpSKeZY657ydPhpXWP28mI30FM0F7sFttu1MBmg=;
+        b=W8+nrWs0t3nYly9aQdYDojfd/ojwSO6NGcTkZun3NnlNXxO080HxchVbR6K06rovo5
+         9RJqIvUzAh4QbIKjNo3vm3ktm4ielFDx1LY0HJCimG09ox3gqIyTMo808CbL3YXfNcAA
+         drmAR19cUxBWdTr/SCrddODp2BY2cSsys4KQIKSLedZkKD+JDHWCzxIqZlr4UcbgIbUS
+         0dO6IIHOlPjD/lMhbmkJz3+oj9aUJ2Tboj8V4BMnfb0QdhZcHfp7RUwkPKE8aFrNHchX
+         9ylLt0AtavYtMsY2db7Fc8qYdv4vhs7S6Wrn90WUZ+K8DxbtCPR/Zv7QLoMEAY1h+l5G
+         CEzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771401725; x=1772006525;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=joXhlMp7nr1yG3GmLEpDKyVgijmZOHHHCsIq8VlzarI=;
-        b=miebjbFgac3rXCIEk2t4nBzZiJ5EKYRYM2uSKCk2krB/NK602PokYtvDMqx3DlrQjB
-         kBo32B2RULOoRPZF6J1596+vhdfP4Gkf2tta2lCUkoq+6u9L+TNU5SFfhAWU6z3Vf0IW
-         9ym7DQV3N+v/iOU11DlWldpleLsy71vq/W+l1Ui1NmBNtzVsHRpK3qPMBeQr/xDayiJw
-         /DKoXGAUwLdGDV6BdDBgbwI4eIPotVtpmqNYeyJeylUsw1N4vNdJ5FT323ZDhkM8mz9B
-         446FG6cs0cFKrnnoX7HPAA64yDL3gHNEckY4SKSz/D7Lhlw+queznVQdQVoo6iuUsfet
-         jGYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUmso6jQf0BwI941w8uTkLh/deld3WgeT5m5Cj5D0Ji/QmNR8JwVlILfr3NVZUBwZ8lZxD6aPqjtaJ6ci6qYg4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa0JiP3ezq0h1fuw53XYhW5mrsJVfk6iSSBIacu1hVCMqbHEkD
-	Z+yDEC0ITCEyrUA1AFIkGrok3AOJjbu/Dlwz6ViOqXDSyNEHPXNgT7WM
-X-Gm-Gg: AZuq6aJHLgJUUruchQcXj5WkBEt2jO+SMeQX9uvyPRukqV1zNqRGlF1CS1b/O76FE2P
-	NJmgavJzMiG0jVBwOVMD49FGNn4bRQMJvHfivzro7ZK9+Jgt8pMUwiWtG9tvZdTtj+xZROtvBQV
-	xQoO6DpiLJyJ8CVVs3JT6B5D/lxt6Fsy7a8U9Gn5KMeToW71xA8lfj79Ga0JTgV+TsG0Tg9qqDN
-	XPmqj1AD/Mhp8XU1N3V9q979gKjN6P3/Hm11dXtAP34s051p8bWYQf+vxNuCSxpE3uIzpammRrH
-	gA+aAgyS8ZsbEbqhjH19c3Uw9R8TpCawco6Ql9epkp5ih1GZ8GpKv3pIgQIU8JnqQFwE1SfcOYU
-	yTQE+yFWtMFXku7GI6W9JHx9zFCaCf59nCqtoenv+hidCCD1LIaB1ct7MjR4/z+9nseLVtofmet
-	1HEskMkeJKoyyLlDZaYIcwxpBgxKdN/fIXw0uxkGBBX2bcPTwPKZNLsg==
-X-Received: by 2002:a05:600c:3143:b0:480:53ce:45d3 with SMTP id 5b1f17b1804b1-483710858d3mr294678345e9.18.1771401724343;
-        Wed, 18 Feb 2026 00:02:04 -0800 (PST)
-Received: from [10.158.36.109] ([72.25.96.17])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4835dd0deeasm527592655e9.12.2026.02.18.00.02.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Feb 2026 00:02:03 -0800 (PST)
-Message-ID: <d56f8f9a-7377-4892-8b29-d5be53eed08e@gmail.com>
-Date: Wed, 18 Feb 2026 10:02:01 +0200
+        d=1e100.net; s=20230601; t=1771403465; x=1772008265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Cd+FmpSKeZY657ydPhpXWP28mI30FM0F7sFttu1MBmg=;
+        b=Cyo/3S3lLFvNW96r/2uyVUXlwd8B69GWDjbW4/FBNVu6q4E2Dw4px2lPekzEMx0ear
+         v9gLlNjpvXcwDi9eFATDtxfpUp9K72St2UxduvI53/uU9hgXHUPL1R49dCEFLcb+GhY8
+         qFBAsfoS1jzH6ygecZx3dy/DqYDJIYUEiUXgh1axuTw6S6RPEK7FQ5ZkgmMoI/iIFwbj
+         JRgHvEMHZx6sSgX6wmOvkaOJSWPYwHFeMJVlbKq59J6o9MvYVSaFJVyUTXhFlMysp9iD
+         xPJSxp+6PJAXhTxcKwEh0w/D9d2Jx5ldctmAvNGZ6pbSwY+hDEQJolQhs4O5JyUtJjMg
+         vVwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWmSf842z9Tl89jgHBUwvv8UhjbiiWhKw4rV8bgdGQf+rLtuYGecEydaiyLMAmmuuPcoK7SbmTHHBVo3FkBn04=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMvgJM7n/Yh7dYaK6arlhpKSzJ0krdYSdM6/10P6BYtaTFhn8M
+	/DcvAPz9TcT5b+tBU8bh4N+TX8iG91r6hxseZN21oeixRkVzU/45k0k8AmsnZK7fL3u5Hh0qXBT
+	qVCO6DbEXQhKHvxoq/mpTc+4YA/VWASE=
+X-Gm-Gg: AZuq6aLPd//bwhf0kuOP3fDquPAM+nluCylLdpmNKh/UYE0msWiQfnFKa+ghT9wDkMg
+	HRfwxI5lZ2++xMW/tOLiJqB45XybujUX+Ku/SIYt2kM0gw6TzEM4rmUyCK98gFmFOpZYYJ/xhgb
+	GCRygAtTeskQyQc7mzs+oge/bHBXQWm8WWHe11lMBrcYZLkMQPC92cisFGU1qrG84EFOuu5LxDL
+	oi60N90WTuxKeHMVI1wV1x97iDFv9ME4F0H0B8CtE4m7Ap+rrqPc6UQNhPPmd18C9lUr9pCV2ow
+	dBF2zh0m
+X-Received: by 2002:a17:907:c23:b0:b87:3beb:194a with SMTP id
+ a640c23a62f3a-b8fc3cb90cfmr783252566b.44.1771403464353; Wed, 18 Feb 2026
+ 00:31:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: rss: validate min RSS
- table size
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Yael Chemla <ychemla@nvidia.com>, davem@davemloft.net,
- netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org,
- Willem de Bruijn <willemb@google.com>, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
- Gal Pressman <gal@nvidia.com>, noren@nvidia.com
-References: <20260131225454.1225151-1-kuba@kernel.org>
- <9f535014-80eb-4f57-b047-3638579bde9a@nvidia.com>
- <20260211134319.39710c1d@kernel.org>
- <dbbe9690-996f-4a63-90a0-baec52c27236@gmail.com>
- <20260212172215.0a3295a0@kernel.org>
- <ba1885cc-57e7-488b-946b-d08c1644dcaa@gmail.com>
- <20260217135727.292acc4e@kernel.org>
-Content-Language: en-US
-From: Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20260217135727.292acc4e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260218032232.4049467-1-tjmercier@google.com> <20260218032232.4049467-3-tjmercier@google.com>
+In-Reply-To: <20260218032232.4049467-3-tjmercier@google.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Wed, 18 Feb 2026 09:30:52 +0100
+X-Gm-Features: AaiRm52rcAO1uVM86zLcvkOqxQIDflGCfwWsZ-SPyqDCOtD9nqwyY5fQY1S-rmY
+Message-ID: <CAOQ4uxjwO6JVy5GKJ6k+Rm4Ey1=TD9=gXMiuB=JvwQSA13iXjA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, jack@suse.cz, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Feb 18, 2026 at 5:22=E2=80=AFAM T.J. Mercier <tjmercier@google.com>=
+ wrote:
+>
+> Currently some kernfs files (e.g. cgroup.events, memory.events) support
+> inotify watches for IN_MODIFY, but unlike with regular filesystems, they
+> do not receive IN_DELETE_SELF or IN_IGNORED events when they are
+> removed.
+>
+> This creates a problem for processes monitoring cgroups. For example, a
+> service monitoring memory.events for memory.high breaches needs to know
+> when a cgroup is removed to clean up its state. Where it's known that a
+> cgroup is removed when all processes die, without IN_DELETE_SELF the
+> service must resort to inefficient workarounds such as:
+> 1.  Periodically scanning procfs to detect process death (wastes CPU and
+>     is susceptible to PID reuse).
+> 2.  Placing an additional IN_DELETE watch on the parent directory
+>     (wastes resources managing double the watches).
 
+This sentence is a red flag for me.
+"wastes resources"? What resources are you talking about?
+A single inotify watch? That's nothing.
+This is not a valid argument IMO.
+I fail to see how managing N watches is different than managing 2N watches.
+I have no objection to your patch, but we need to keep our arguments honest=
+.
 
-On 17/02/2026 23:57, Jakub Kicinski wrote:
-> On Mon, 16 Feb 2026 10:28:52 +0200 Tariq Toukan wrote:
->>>> This ignores multiple other considerations:
->>>>
->>>> 1. Existing behavior: In general, mlx5e today implies 2x factor, so it
->>>> would fail this new test.
->>>>
->>>> 2. Device resources: In large scale (high num of channels, or high num
->>>> of netdevs on the same chip, or both), it is not obvious that increasing
->>>> the indirection table size is still desirable, or even possible. To pass
->>>> the selftest, you'll have to limit the max number of channels.
->>>>
->>>> 3. ch_max should win: Related to point #2. Driver should not enforce
->>>> limitations on supported ch_max just to fulfill the recommendation and
->>>> pass the test. I prefer flexibility, give the admin the control. That
->>>> means, driver would use 4x factor (or larger) whenever possible, but
->>>> would not block configurations in which the 4x factor cannot be satisfied.
->>>
->>> Oh I see.. I wasn't aware the CX7 has a limitation of the indirection
->>> table size.
->>
->> There is a limitation, we read it from FW.
->> It's usually not small, much larger than 256.
->>
->> But currently it can vary according to FW decisions in scale (resource
->> management).
->>
->>> I wrote the test because of a similar limitation in a
->>> different NIC, but that one has been fixed.. I have limited access to
->>> CX7 NICs, the one I tested on maxed out at 63 queues so the test has
->>> passed.
->>>
->>> Is it not possible to create an indirection table larger than 256
->>> entries?
->>
->> It is possible, depending on the exposed FW capability.
->> As of today, there are high-scale configurations (many VFs for example)
->> where the FW exposed cap is lowered.
-> 
-> Not entirely sure what you expect the outcome of this discussion to be.
-> 
-> The 2x indirection table has been proven inadequate for real production
-> use. I'm not talking about some theory or benchmarks, actual workloads
-> reported machines/NICs with such table as unusable (workload starts
-> choking way before reaching expected machine capacity).
-> 
-> That said I just checked out of curiosity and the OCP NIC spec also
-> states:
-> 
->    The minimum supported indirection table size MUST be 128.
+> 3.  Holding a pidfd for every monitored cgroup (can exhaust file
+>     descriptors).
+>
+> This patch enables kernfs to send IN_DELETE_SELF and IN_IGNORED events.
+> This allows applications to rely on a single existing watch on the file
+> of interest (e.g. memory.events) to receive notifications for both
+> modifications and the eventual removal of the file, as well as automatic
+> watch descriptor cleanup, simplifying userspace logic and improving
+> resource efficiency.
+>
+> Implementation details:
+> The kernfs notification worker is updated to handle file deletion.
+> The optimized single call for MODIFY events to both the parent and the
+> file is retained, however because CREATE (parent) events remain
+> unsupported for kernfs files, support for DELETE (parent) events is not
 
-That should be fine. Max table size cap is always >= 256.
+Either drop this story about DELETE or expand it.
+inotify does not generate a DELETE event when watching a file,
+because DELETE is an event notifying a change of a directory.
+If you would have kept your DELETE implementation that would have
+broken this rule.
 
-> The minimum
->    SHOULD be at least 4 times the number of supported receive queues.
-> 
-> so I guess the 4x isn't exactly a new recommendation.
+> added here to retain symmetry. Only support for DELETE_SELF events is
+> added.
+>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
+> ---
+>  fs/kernfs/dir.c             | 21 +++++++++++++++++
+>  fs/kernfs/file.c            | 45 ++++++++++++++++++++-----------------
+>  fs/kernfs/kernfs-internal.h |  3 +++
+>  3 files changed, 48 insertions(+), 21 deletions(-)
+>
+> diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+> index 29baeeb97871..e5bda829fcb8 100644
+> --- a/fs/kernfs/dir.c
+> +++ b/fs/kernfs/dir.c
+> @@ -9,6 +9,7 @@
+>
+>  #include <linux/sched.h>
+>  #include <linux/fs.h>
+> +#include <linux/fsnotify_backend.h>
+>  #include <linux/namei.h>
+>  #include <linux/idr.h>
+>  #include <linux/slab.h>
+> @@ -1471,6 +1472,23 @@ void kernfs_show(struct kernfs_node *kn, bool show=
+)
+>         up_write(&root->kernfs_rwsem);
+>  }
+>
+> +static void kernfs_notify_file_deleted(struct kernfs_node *kn)
+> +{
+> +       static DECLARE_WORK(kernfs_notify_deleted_work,
+> +                           kernfs_notify_workfn);
+> +
+> +       guard(spinlock_irqsave)(&kernfs_notify_lock);
+> +       /* may overwite already pending FS_MODIFY events */
 
-My position is as follows:
-Provide the appropriate factor *if possible* (currently it is 2x, and we 
-will likely increase it to 4x).
-However, do not limit the maximum nch if the factor cannot be satisfied 
-- even if that results in the selftest failing.
+Typo: overwite
 
+> +       kn->attr.notify_event =3D FS_DELETE;
 
+FS_DELETE_SELF
+
+> +
+> +       if (!kn->attr.notify_next) {
+> +               kernfs_get(kn);
+> +               kn->attr.notify_next =3D kernfs_notify_list;
+> +               kernfs_notify_list =3D kn;
+> +               schedule_work(&kernfs_notify_deleted_work);
+> +       }
+> +}
+> +
+>  static void __kernfs_remove(struct kernfs_node *kn)
+>  {
+>         struct kernfs_node *pos, *parent;
+> @@ -1520,6 +1538,9 @@ static void __kernfs_remove(struct kernfs_node *kn)
+>                         struct kernfs_iattrs *ps_iattr =3D
+>                                 parent ? parent->iattr : NULL;
+>
+> +                       if (kernfs_type(pos) =3D=3D KERNFS_FILE)
+> +                               kernfs_notify_file_deleted(pos);
+> +
+
+Why are we not notifying a deleted directory?
+If users expect DELETE_SELF on a watched cgroup file
+they would definitely expect DELETE_SELF on a watched cgroup dir
+when the cgroup is destroyed.
+
+I claim that *this* should be the standard way to monitor
+destroyed cgroups.
+
+>                         /* update timestamps on the parent */
+>                         down_write(&kernfs_root(kn)->kernfs_iattr_rwsem);
+>
+> diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
+> index e978284ff983..4be9bbe29378 100644
+> --- a/fs/kernfs/file.c
+> +++ b/fs/kernfs/file.c
+> @@ -37,8 +37,8 @@ struct kernfs_open_node {
+>   */
+>  #define KERNFS_NOTIFY_EOL                      ((void *)&kernfs_notify_l=
+ist)
+>
+> -static DEFINE_SPINLOCK(kernfs_notify_lock);
+> -static struct kernfs_node *kernfs_notify_list =3D KERNFS_NOTIFY_EOL;
+> +DEFINE_SPINLOCK(kernfs_notify_lock);
+> +struct kernfs_node *kernfs_notify_list =3D KERNFS_NOTIFY_EOL;
+>
+>  static inline struct mutex *kernfs_open_file_mutex_ptr(struct kernfs_nod=
+e *kn)
+>  {
+> @@ -909,7 +909,7 @@ static loff_t kernfs_fop_llseek(struct file *file, lo=
+ff_t offset, int whence)
+>         return ret;
+>  }
+>
+> -static void kernfs_notify_workfn(struct work_struct *work)
+> +void kernfs_notify_workfn(struct work_struct *work)
+>  {
+>         struct kernfs_node *kn;
+>         struct kernfs_super_info *info;
+> @@ -935,11 +935,7 @@ static void kernfs_notify_workfn(struct work_struct =
+*work)
+>         down_read(&root->kernfs_supers_rwsem);
+>         down_read(&root->kernfs_rwsem);
+>         list_for_each_entry(info, &kernfs_root(kn)->supers, node) {
+> -               struct kernfs_node *parent;
+> -               struct inode *p_inode =3D NULL;
+> -               const char *kn_name;
+>                 struct inode *inode;
+> -               struct qstr name;
+>
+>                 /*
+>                  * We want fsnotify_modify() on @kn but as the
+> @@ -951,24 +947,31 @@ static void kernfs_notify_workfn(struct work_struct=
+ *work)
+>                 if (!inode)
+>                         continue;
+>
+> -               kn_name =3D kernfs_rcu_name(kn);
+> -               name =3D QSTR(kn_name);
+> -               parent =3D kernfs_get_parent(kn);
+> -               if (parent) {
+> -                       p_inode =3D ilookup(info->sb, kernfs_ino(parent))=
+;
+> -                       if (p_inode) {
+> -                               fsnotify(notify_event | FS_EVENT_ON_CHILD=
+,
+> -                                        inode, FSNOTIFY_EVENT_INODE,
+> -                                        p_inode, &name, inode, 0);
+> -                               iput(p_inode);
+> +               if (notify_event =3D=3D FS_DELETE) {
+FS_DELETE_SELF
+
+> +                       fsnotify_inoderemove(inode);
+                            iput(inode);
+                            continue;
+                    }
+
+Avoids all the churn and unneeded extra indentation that follows.
+
+Thanks,
+Amir.
