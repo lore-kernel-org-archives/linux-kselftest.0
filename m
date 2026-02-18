@@ -1,118 +1,117 @@
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E582A248880
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 16:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771431402; cv=pass; b=ExAXM5X0jwyD3dCMrHxg8XF7LA1suLtbKrCHHU6IT3Xf6Yq1BAAs1H7BTMtO389ZVRRbjEKuEj+esBL2MhN+9zwRlTbNiac03S1/UTQy6i95mOoDHTMVcv2BoLKmNKY/JW5a3t4i3lprOXfy0nj0I/tmD0+dmnAWTelziAFiwqI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771431402; c=relaxed/simple;
-	bh=Rb0aJpPuTZbiX/sAH/Mhd1I0HxysgNuewGPntopAVLs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H4J1unrP1TqL8csDz4N7TU9MBGuD4OLpGZxzAku0OWWL2eQF0HGiGCN3x4FDRhcmTsa+6x51yaKRYrIc7ev1jhCGlbvEQ+FW/BsXcTvC4EzEQhq6suZ9CVv+wPoYLFxRzgbJb+BI277eSyrcIlKMT2PPcAY65d9dK/4A4SpLfqU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aGQ59qt3; arc=pass smtp.client-ip=209.85.222.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6B433E345
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 16:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771432788; cv=none; b=EPyuRulaCierKPYqi6gQqbwikYYv888vhI+7uu21+sPHV3nrRGTZzmM1z+Mx5Bdu9Ll73VFkRaq2G2Hv8Aek+9mr3N7Or3WA+g/BhVKncpkMlEfQZg/skt9nZOMmOrq91zE10DxHOv8HWFMbZiYBML7VS0HCltSpFEk8VhL88QM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771432788; c=relaxed/simple;
+	bh=G5ahE1YG8/6veiWOLrKMcA8+v9Y7YNyYq/qP7R6+8YQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GsuO+JmeeO+ycemmN4QEORETGzDMpHeRF2zfgLcR8Q7tdJ5dc4hcdwrd0mmMr4JDMKN16unB0ymUNjJreH82zEM+2+k8C5rtRgaTe131E/0THjk6beMy/bGRo19vri2OpoFNh/XjcaX7rFTlloWDq/BitUxoeS5x+qVvDc4L5mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fblwAMgR; arc=none smtp.client-ip=209.85.219.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aGQ59qt3"
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-948bf40406bso2561241.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 08:16:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771431400; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fjngaJw4eMfA/YwUz2+Y6Bq1av0D51pi1F6Ksyrq0QqomBVosbJM6ffuBHFbL76IA6
-         sFt0Z8s2c90kJCWXUT7tfmCsrwC/nPyHDtelbDV3CKD93HAGzdCXjz7yiW9Pf4sX/lf4
-         Lhsgr8IyAZF7kP5yz5AKEvffs4FsklaKqLNms8rKV7AbKm+F9GqffwoN9RkLDP5U1Sqo
-         23n5WBDEoLfUWw3fK6jrs3igFPJyjqShQg9npNNMgydynhus/2jjOjZg4/tzdC86HljO
-         hMIHhhQa1snPWxy4dM8pJyMMk7Mkso7IqVR8m3whdldcUGM47cxDvN54L4jDdLvznHn0
-         AmwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Rb0aJpPuTZbiX/sAH/Mhd1I0HxysgNuewGPntopAVLs=;
-        fh=STluDGEYuNcnwLMPiDN4RGbtNi4/jd4rupgXtV53ofc=;
-        b=ekdkDkr/KL5Yy/7z9K1wG5ZIXNw5PtA/2vykw73cPojYA2Ok+gj6oJyoZ66nzWzL6z
-         2t0jw9zjXP8X7fx1bhKOpvf3iX6vn3C63JY05R6OxdZNyGEZh4XABMckFdXd+Atb74xY
-         rJY4I+O4A7BRJ+hgz8z2sSREJklYkEVkBzOLPhADHf0/O6iRC/bxymvj/FGcfulgDR5s
-         EkiK0axXF4aihcNNQF+vyM4z/Lg7pfUUGcDgTktZA+RTJmUKyY3En1vGJbSQSHE9rgrY
-         hyEkPPto4LwCWIIY9cTyje/GnHWJPjiSIybVrfkXWt14nvOcldK2B/eHQpZ5cJpax/t3
-         iuSg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fblwAMgR"
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-895071c5527so12880756d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 08:39:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771431400; x=1772036200; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rb0aJpPuTZbiX/sAH/Mhd1I0HxysgNuewGPntopAVLs=;
-        b=aGQ59qt3lxjvyW5qgAPBjzAhFrLxnsK0pjtDclfrXOH5rLnETDgSltMwNrRzoFYQw4
-         girL7QFOhKBoZpA8/wy0GRDYU1vPshk1rxANkb/5d6oRe0q6oWJLxK1aoqQN7MEiduDg
-         ke+DtyFHtOD7BUyVaa6aXnteqCuAWZsgADWjyW4hXJv2dTQ+NAD12SEM9rlZCWpPGOkZ
-         0CjrRqKKbYt9OsfzjfQPBl7u778hsRx1+frTDWI8lDOBnr7kZx7TvDGBSJo8gp9FN3Q0
-         y5EsaTzap7fLkyiW4PQWtZnTr/gjs5B1r/6U9aGwNR1MTSiUxVZ2KXeVzQpRSnAoy61w
-         jEjw==
+        d=gmail.com; s=20230601; t=1771432785; x=1772037585; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8IaEyL0dKDQs6FVsnUlq2M4sAODAnf58W8FA0XnDWIs=;
+        b=fblwAMgRsOugRdK2X6b46pmEiFdc9lvN4OIHfxLTcEGdfeOR5FAsWecLrykaqEQcZi
+         07kneLKL1LxEaSlcyj+NJa9QKPoOiQXZkxvHPzPEQcGLTr9WUs5wE9XS6gMsrtrLCj/R
+         CZ0dyjnDWwdQ0d9lR1Mo0VRWmXFyVxnhsTFpXGrM/8dA/ObxjM5o0eBZAkBh20DTHPMZ
+         UIbI9Azqtr+FiAaNdXxrfiZswoL1YHQK8jlFKQ45YUkPReQKnwTHYlS5MoFnvgqdx8oq
+         W1SpJ3X5ecoYrOlYYON1x44boJCeiQ86x7wMvUYNzHkaaGQ+3iMUmv+uOxZLyzcvmcUF
+         zUog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771431400; x=1772036200;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1771432785; x=1772037585;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rb0aJpPuTZbiX/sAH/Mhd1I0HxysgNuewGPntopAVLs=;
-        b=pBcQO0OUakXd7ANY81KChZn7sBIhANj1Vgl0eMhqwyhaAw+NMfNsMw1tmi9ERu/IBZ
-         B/bsKPfoq3FN/QNXhuVH2YAXnXQzvpMJJicamdjGqJsGuxLFDBNCfJO/wlrPKr8mmOc8
-         LsR0ay9HrckqZfh52L1rc+Vm8YdgzXpHdz541BaGv83p30pC5dOEBmnQCOwwKfRXjew4
-         8BQATi0fbePocp3WF3ezp286TxrQdUDKhecyjJhNTbLfUTs2lJVpI2VFOOMYRpiBiHUL
-         MunBRHx1JqxTvA4TDQwnh63cT4mRLL3l1gOF9AbtFB7cFaVwVcymIZts7TEqpnwOtaJa
-         v9JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZ6OngZccY02nbDyw/hYvsFae3vOkGbpiJ05RPDh62sWPRF8riWbYAf/VjjuMnfbr3BOOMTuUXVtnoCJny9oU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyfgt6rdujlXJJYpgWWy4/hFqJQpho2X1fo5IE9XwdlM8jqus+J
-	YzP+oX3R4SSwcp0UwWfPUIXH7Qt9r2Tg3tcFrkz3xeksC9EqqM+LA8/SCHKRbXRio+QeWh8Mpo2
-	wY3kTtbDvxx2Gb6G8zC4xGvLVqGzuIG8=
-X-Gm-Gg: AZuq6aIpcNSdZsOOvMUEPKZ4H2gdJG0K5m7GDGm6e7aGds7YtkhFWjEnv/qR1DOXb8h
-	MortkPH3SLlWDoVnMicAWG+ZHVinCtCybOy/QJ8lGbTP3zkhSbNe9bD4xNExMuu25IeRydrtsBO
-	y9ajdMFFYvjYz7nDP1r1r3M5HrjsDQExF4sH+BFRXD/WJ/jwLWp5fr2P8FJiQZI7HgXZoTtEMGe
-	7H0JoHKye/1/LQ0ud9ur/7q/jhVTrMdLqymzYJSd/RqBK0KcwjFMbqoINf9kWmmf6JyFoD4lAbB
-	KCVY2+v11n0DjjNfuSqpnMWvEa6mG5Dikh5SvIhTmJwGr8LMZIVcWFiEboabig==
-X-Received: by 2002:a05:6102:942:b0:5f9:362a:8e61 with SMTP id
- ada2fe7eead31-5fe2b003fe5mr4897521137.39.1771431399417; Wed, 18 Feb 2026
- 08:16:39 -0800 (PST)
+        bh=8IaEyL0dKDQs6FVsnUlq2M4sAODAnf58W8FA0XnDWIs=;
+        b=F34nJE8KBYJdFbqgsifzFN4vRBa2nvU/9YFk6uZi6Sg2vNRwvJ27TdkDCBrxFnvJ1C
+         zQxxfevHOtrDew4/4HlkHKRTbzEegYpz3va58BwYEjElIziXGU7/+SVCPoqLelUppapX
+         vRZBEe07l0A93Og81rz55zLYk2o3lFsjblzoXytxL7wgBrlTVECsABIwcab8ifCzEWsm
+         joIYvl9DWHySVZfuEscom4RCAI/CxMZ2nGmmPd1ex/X2NJ320Azzj/4zXsJQnaz6hR0J
+         6bRqSoI7/2NJ/8zOnH2/MC4bzvIIsafNJBh0HdXGi77p7UjC2nigcV2vqSVVFzeP8Lz8
+         yuHg==
+X-Forwarded-Encrypted: i=1; AJvYcCUXdYNs3hToBpaTfkPy1Birb0cSunyr6FE6yveQcKzX243P3sUeXEtoCBr2NKWMXk3fo/CmwAZC0TDCHTUJjy8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlnTwAjcuuYjZo3iPy1O3q0Zuyy3po8Ux4P/OWv8loOQIjxpMe
+	bkc5cUzngldAsV2gW3mrPGwcfOe5QIP9bFTFKDU8wP1g6ECVmRKnQ+1d
+X-Gm-Gg: AZuq6aJQwLPJLNmeFqPyE9i3zO5DOw3sBilSMBkTw9bbHXdVSi0AEFFMLnQJd3AbcoD
+	Zsaa6VEnNR0/KGWr/n81G0uNqChFiD1SZibdWs8pOzJVx3bvywxgQ83/ET//oUrl+VRxnSjzLc2
+	cok9VYwx8hwb4OwJXyRzL4vuiKIAvbwxEp59pxI68nuK66qD5K8pCG0x8HJwT3GOr5ykeyqBnZr
+	y3eZy3ypxFix3Tvy0ZqAFgbKm/9kEwFF/yPFdwcrKcojf61fGGoQvkn54L/rYGEM64oUscPI/+J
+	f2enBnmrHg4NI7eSUG5XK7FGLIpJL97JTn1wgBZAnaP8ZAK7D/m7YzVslxoF9/v4RzdtoIsnG/s
+	1+SeoHyXu3j5pZ+zJxMx5W2MReX2j44KWlQCmjyUF0OLoDO7QEZUMfH3ytuGKaZhRcezJSKCVCH
+	ATHauyDbFrLaW/R7hbT0GY/dz/
+X-Received: by 2002:a05:6214:4109:b0:896:f50e:b6c4 with SMTP id 6a1803df08f44-897402e07d8mr217890716d6.19.1771432785370;
+        Wed, 18 Feb 2026 08:39:45 -0800 (PST)
+Received: from ubuntu ([76.38.17.53])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb39da3dc6sm1769869585a.51.2026.02.18.08.39.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Feb 2026 08:39:45 -0800 (PST)
+From: AnishMulay <anishm7030@gmail.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	shuah@kernel.org
+Cc: lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	AnishMulay <anishm7030@gmail.com>
+Subject: [PATCH] selftests/mm: skip migration tests if NUMA is unavailable
+Date: Wed, 18 Feb 2026 11:39:41 -0500
+Message-ID: <20260218163941.13499-1-anishm7030@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <bb4bf5fe648ac71c969c6228ac6e72ea85cbc64b.camel@gmail.com> <20260218104328.14341-1-slava.imameev@crowdstrike.com>
-In-Reply-To: <20260218104328.14341-1-slava.imameev@crowdstrike.com>
-From: David Windsor <dwindsor@gmail.com>
-Date: Wed, 18 Feb 2026 11:16:27 -0500
-X-Gm-Features: AaiRm53xQrJ6ikwNR6kkTu1MPp0M2xsnhx4ti2O0jpdoLOolu_Zzsh4x6LDX49E
-Message-ID: <CAEXv5_jU_OvD8abO6YC-sCfcRpTt0xNAyb0zUy9Km-U8TTDdQg@mail.gmail.com>
-Subject: Re: Re: [PATCH bpf-next v2 0/2] bpf: Add multi-level pointer parameter
-To: Slava Imameev <slava.imameev@crowdstrike.com>
-Cc: eddyz87@gmail.com, andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
-	haoluo@google.com, horms@kernel.org, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-open-source@crowdstrike.com, martin.lau@linux.dev, 
-	netdev@vger.kernel.org, pabeni@redhat.com, sdf@fomichev.me, shuah@kernel.org, 
-	song@kernel.org, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-> I decided to address only multilevel pointers as this is what we
-encountered in practice and have to use BPF helper workarounds.
-I think there are no technical restrictions for treating single
-level pointers as PTR_TO_MEM.
+Currently, the migration test asserts that numa_available() returns 0.
+On systems where NUMA is not available (returning -1), such as certain
+ARM64 configurations or single-node systems, this assertion fails and
+crashes the test.
 
-Hi Slava and Eduard,
+Update the test to check the return value of numa_available(). If it
+is less than 0, skip the test gracefully instead of failing.
 
-If we add support for writable single-level int pointers, we could
-trivially implement bpf_inode_set_xattr in the way that Alexei
-originally suggested[1] when it was first attempted to be added.
+This aligns the behavior with other MM selftests (like rmap) that
+skip when NUMA support is missing.
 
-One note, for this particular case, the kfunc would need to be able to
-write to the xattr int* param, as lsm_get_xattr_slot[2] increments the
-LSM-internal xattr_count. Others would be possible as well
-(cred_getsecid).
+Signed-off-by: AnishMulay <anishm7030@gmail.com>
+---
+ tools/testing/selftests/mm/migration.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-[1] https://kernsec.org/pipermail/linux-security-module-archive/2022-October/034878.html
-[2] https://elixir.bootlin.com/linux/v6.19-rc5/source/include/linux/lsm_hooks.h#L215
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index ee24b88c2b248..60e78bbfc0e3e 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -36,7 +36,8 @@ FIXTURE_SETUP(migration)
+ {
+ 	int n;
+ 
+-	ASSERT_EQ(numa_available(), 0);
++	if (numa_available() < 0)
++		SKIP(return, "NUMA not available");
+ 	self->nthreads = numa_num_task_cpus() - 1;
+ 	self->n1 = -1;
+ 	self->n2 = -1;
+-- 
+2.51.0
+
