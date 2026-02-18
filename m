@@ -1,213 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A0C27713;
-	Wed, 18 Feb 2026 10:59:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285A03081B0
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 11:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771412342; cv=none; b=bavKAHo5ekrJ8KkL6STBS+VsJYU8/X1CpAWuvkfGuvA/1amcqHhFpZBoo162HYGMz+xTCiqDUP4hc8KQ/UalyF1qFABfbIB+YdA3y/CuMAGLqlTAaec94JxTcUCd5yMmKKpd7ystFquxvWoiKueHVmO5dY8/4u5vtI9z3/C07Pg=
+	t=1771413817; cv=none; b=LkoR+qDPn/wDyf4cCwzWObBemC4qlYWLTM2g/35O4Xd2UQC5C3/tirE90G3j6c9b6003zLAi7lcB6jBv4yX1J+T4RzWzNeyAlxuGxHSocQ+bFVU021PCBF34fDPSTA3IVNvjEtjrL4fa0xCrq55uHKzMZKlgPhoiYoHcepmrBA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771412342; c=relaxed/simple;
-	bh=ExYM4GllfmADUjEjQoM2UYVUP6BlZRRL6bd+IQoD24U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u+JGL6e1jaZdTGtPLl6e4VJlplG3SPZcq6rgpR0gtHZasbVa005uHGujvuYS3vEyIxhit640SrvLtUTs56eMJ1Nov8wTyg5K62vGWsNje2oyYlWMtMU/cIPeQl6aVRl3KMm6y54Le87JzccgRq8oDAhEMyVlvVGA6+7v/gDLK3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oZpUFL7U; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771413817; c=relaxed/simple;
+	bh=yFzmeKNc7jZe/g1nyERcuQ8+IviWJtyHr9DjwQGUEAk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PRU8MrneQqH2zN7cyTWTU2aMV/7/TExqDpbqhROTMkcqg+UKcHqOLoBiSIGV9ie3pANPGr2qi631oCFeWw97Ek3lUV63M2Hut6wQz37nyz1CA8Lm2ETOY3LMAQCvxQ5xueaVSX8oMKJ2EyJpxxyxo0C4LHIRRlgrZLldLA8NA7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=TEf8au3N; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=IEKUNOlE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=YjVaDXeO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=GkEcKhNC; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oZpUFL7U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7038CC19423;
-	Wed, 18 Feb 2026 10:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771412341;
-	bh=ExYM4GllfmADUjEjQoM2UYVUP6BlZRRL6bd+IQoD24U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oZpUFL7UbeSg9oxx+5ocBW10Hez4rK8Ywn1GTIJvuvO1VAfuPqKCtELpHKDIxBncs
-	 KJ4vtX2edWTa0l5u7iBN93TrkRXf6dVi4M1aAAmJnDiBDDV/QPWh/5YrDIHwGGYx2r
-	 aF5bVrkGvkBprxjVeOIVYmgcqx/6TafGUQPuVHur18V6fBZGyu1f6djmo9C2MlaUfv
-	 oTZQDU1HbZIQ3syH4WHyc+pQHNJIZu0X/gUbwVmj61uun+juAMQcirK2NsKP4R7B16
-	 /BaCu41DMGuoBBTKJk5s3lRe60sThdtIeJJBB1p1XVErSA0FAMGwCIwWqFhihIKxh1
-	 E8R3wRzIaiePg==
-Message-ID: <cd3d6e59-c103-4279-8e01-8792a78981c3@kernel.org>
-Date: Wed, 18 Feb 2026 11:58:52 +0100
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="TEf8au3N";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="IEKUNOlE";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="YjVaDXeO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="GkEcKhNC"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 14C715BCC2;
+	Wed, 18 Feb 2026 11:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1771413814; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3ZiElcFxYYD1oatQKw1wrqUrp5IBMjHeUNq0WywWxgo=;
+	b=TEf8au3NMnRwYsR5VLtTfIB1DZ+18/4Rt/F1tKfE7C4/yNBLd5Vm5xZCUQkkaTWioKLmvA
+	V0Qpq8BEB0Q9Kb3nJLXnSfdHdT9Hd6uu4PMhNx8owN2P/TSVOKOMEqzO2IfSFWEn0BFvEF
+	LXLfZslfLXmf43hE+T5S10h9gZ4QsvY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1771413814;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3ZiElcFxYYD1oatQKw1wrqUrp5IBMjHeUNq0WywWxgo=;
+	b=IEKUNOlER5U2c3PQj2qeSVKFZBC+6dXuXR33rQI1WFI0VB5BDA2D2mQhrfJ1vBeP334LDz
+	XfhzcvhCDx2FK9AA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=YjVaDXeO;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=GkEcKhNC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1771413813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3ZiElcFxYYD1oatQKw1wrqUrp5IBMjHeUNq0WywWxgo=;
+	b=YjVaDXeO/Lsd9R+YvmCO66ynrx6X05ZBkYJ6nplpf64mkS0CSUw3D9vR/w3CVrza61iNp7
+	/NKfg9fS+YUfofVDV66vtA1hNZxL/rBegeM3a7Rtj8MbSEcgRkGxjSFDIyIKXtm925Wi7X
+	KeTps1vjPVpLWrTQv+CBzQQN24MDkCk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1771413813;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3ZiElcFxYYD1oatQKw1wrqUrp5IBMjHeUNq0WywWxgo=;
+	b=GkEcKhNCHlUvv2oHbiYdczS5bXSsoxmza9fBW2vL9mK0WTurj5f/GKF41y9L26cFnQu1j0
+	TCDXmqdPUO+zHLCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ED05F3EA65;
+	Wed, 18 Feb 2026 11:23:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id aDjGOTShlWlCWQAAD6G6ig
+	(envelope-from <jack@suse.cz>); Wed, 18 Feb 2026 11:23:32 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 92B8AA08CF; Wed, 18 Feb 2026 12:23:32 +0100 (CET)
+Date: Wed, 18 Feb 2026 12:23:32 +0100
+From: Jan Kara <jack@suse.cz>
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: Amir Goldstein <amir73il@gmail.com>, gregkh@linuxfoundation.org, 
+	tj@kernel.org, driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, jack@suse.cz, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on
+ file deletion
+Message-ID: <lc2jgt3yrvuvtdj2kk7q3rloie2c5mzyhfdy4zvxylx732voet@ol3kl4ackrpb>
+References: <20260212215814.629709-1-tjmercier@google.com>
+ <20260212215814.629709-3-tjmercier@google.com>
+ <aZRAkalnJCxSp7ne@amir-ThinkPad-T480>
+ <CABdmKX3wsWphRTDanKwGGiUWoO0xTaC8L_QxjHzhpxfZn256MQ@mail.gmail.com>
+ <CAOQ4uxgrP=VdTKZXKcRE8BeWv6wZy7aFkUF-VoEpRSxVnHZi2w@mail.gmail.com>
+ <CABdmKX1ztzJ6B13uzdDtN-uVWbdWuYJ6PMvjGoAfu40MMHCpaA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-To: Stanislav Fomichev <stfomichev@gmail.com>,
- Jesse Brandeburg <jbrandeburg@cloudflare.com>,
- Arthur Fabre <arthur@arthurfabre.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Lorenzo Bianconi
- <lorenzo@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-kselftest@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>,
- Willem Ferguson <wferguson@cloudflare.com>
-References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
- <20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
- <aZUPUwYMRNXSg-eI@mini-arch>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <aZUPUwYMRNXSg-eI@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABdmKX1ztzJ6B13uzdDtN-uVWbdWuYJ6PMvjGoAfu40MMHCpaA@mail.gmail.com>
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,linuxfoundation.org,kernel.org,lists.linux.dev,vger.kernel.org,suse.cz];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.com:email]
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
+X-Spam-Level: 
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 14C715BCC2
 
-
-
-On 18/02/2026 02.01, Stanislav Fomichev wrote:
-> On 02/17, Lorenzo Bianconi wrote:
->> Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
->> checksum will be use by devices capable of exposing receive checksum
->> result via bpf_xdp_metadata_rx_checksum().
->> Moreover, introduce xmo_rx_checksum netdev callback in order to allow
->> the eBPF program bound to the device to retrieve the RX checksum result
->> computed by the hw NIC.
->>
->> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->> ---
->>   Documentation/netlink/specs/netdev.yaml |  5 +++++
->>   include/net/xdp.h                       | 13 +++++++++++++
->>   include/uapi/linux/netdev.h             |  3 +++
->>   net/core/xdp.c                          | 28 ++++++++++++++++++++++++++++
->>   tools/include/uapi/linux/netdev.h       |  3 +++
->>   5 files changed, 52 insertions(+)
->>
->> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
->> index 596c306ce52b8303b20680ff0cd34d4fd9db0e48..58eda634668a07860447a65d9fc2284839af6244 100644
->> --- a/Documentation/netlink/specs/netdev.yaml
->> +++ b/Documentation/netlink/specs/netdev.yaml
->> @@ -61,6 +61,11 @@ definitions:
->>           doc: |
->>             Device is capable of exposing receive packet VLAN tag via
->>             bpf_xdp_metadata_rx_vlan_tag().
->> +      -
->> +        name: checksum
->> +        doc: |
->> +          Device is capable of exposing receive checksum result via
->> +          bpf_xdp_metadata_rx_checksum().
->>     -
->>       type: flags
->>       name: xsk-flags
->> diff --git a/include/net/xdp.h b/include/net/xdp.h
->> index aa742f413c358575396530879af4570dc3fc18de..00abb2e1e85514b4080d0e4e6e3b8f5f67f73b61 100644
->> --- a/include/net/xdp.h
->> +++ b/include/net/xdp.h
->> @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
->>   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
->>   			   bpf_xdp_metadata_rx_vlan_tag, \
->>   			   xmo_rx_vlan_tag) \
->> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
->> +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
->> +			   bpf_xdp_metadata_rx_checksum, \
->> +			   xmo_rx_checksum)
->>   
->>   enum xdp_rx_metadata {
->>   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
->> @@ -643,12 +647,21 @@ enum xdp_rss_hash_type {
->>   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
->>   };
->>   
->> +enum xdp_checksum {
->> +	XDP_CHECKSUM_NONE		= CHECKSUM_NONE,
->> +	XDP_CHECKSUM_UNNECESSARY	= CHECKSUM_UNNECESSARY,
->> +	XDP_CHECKSUM_COMPLETE		= CHECKSUM_COMPLETE,
->> +};
->> +
->>   struct xdp_metadata_ops {
->>   	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
->>   	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
->>   			       enum xdp_rss_hash_type *rss_type);
->>   	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16 *vlan_proto,
->>   				   u16 *vlan_tci);
->> +	int	(*xmo_rx_checksum)(const struct xdp_md *ctx,
->> +				   enum xdp_checksum *ip_summed,
->> +				   u32 *cksum_meta);
->>   };
->>   
->>   #ifdef CONFIG_NET
->> diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
->> index e0b579a1df4f2126acec6c44c299e97bbbefe640..d20da430cfd57bc26b5ea2f406c27b48d8a81693 100644
->> --- a/include/uapi/linux/netdev.h
->> +++ b/include/uapi/linux/netdev.h
->> @@ -47,11 +47,14 @@ enum netdev_xdp_act {
->>    *   hash via bpf_xdp_metadata_rx_hash().
->>    * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing receive
->>    *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
->> + * @NETDEV_XDP_RX_METADATA_CHECKSUM: Device is capable of exposing receive
->> + *   checksum result via bpf_xdp_metadata_rx_checksum().
->>    */
->>   enum netdev_xdp_rx_metadata {
->>   	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
->>   	NETDEV_XDP_RX_METADATA_HASH = 2,
->>   	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
->> +	NETDEV_XDP_RX_METADATA_CHECKSUM = 8,
->>   };
->>   
->>   /**
->> diff --git a/net/core/xdp.c b/net/core/xdp.c
->> index fee6d080ee85fc2d278bfdddfd1365633058ec06..7d1e08d8ab4151ab42c91203def2afafc66d3149 100644
->> --- a/net/core/xdp.c
->> +++ b/net/core/xdp.c
->> @@ -961,6 +961,34 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
->>   	return -EOPNOTSUPP;
->>   }
->>   
->> +/**
->> + * bpf_xdp_metadata_rx_checksum - Read XDP frame RX checksum.
->> + * @ctx: XDP context pointer.
->> + * @ip_summed: Return value pointer indicating checksum result.
->> + * @cksum_meta: Return value pointer indicating checksum result metadata.
->> + *
->> + * In case of success, ``ip_summed`` is set to the RX checksum result. Possible
->> + * values are:
->> + * ``XDP_CHECKSUM_NONE``
->> + * ``XDP_CHECKSUM_UNNECESSARY``
->> + * ``XDP_CHECKSUM_COMPLETE``
->> + *
->> + * In case of success, ``cksum_meta`` contains the hw computed checksum value
->> + * for ``XDP_CHECKSUM_COMPLETE`` or the ``csum_level`` for
->> + * ``XDP_CHECKSUM_UNNECESSARY``. It is set to 0 for ``XDP_CHECKSUM_NONE``
+On Tue 17-02-26 14:32:25, T.J. Mercier wrote:
+> On Tue, Feb 17, 2026 at 1:25 PM Amir Goldstein <amir73il@gmail.com> wrote:
+> > > > Are you expecting to get IN_IGNORED|IN_DELETE_SELF on an entry
+> > > > while watching the parent? Because this is not how the API works.
+> > >
+> > > No, only on the file being watched. The parent should only get
+> > > IN_DELETE, but I read your feedback below and I'm fine with removing
+> > > that part and just sending the DELETE_SELF and IN_IGNORED events.
+> > >
+> >
+> > So if the file was being watched, some application needed to call
+> > inotify_add_watch() with the user path to the cgroupfs inode
+> > and inotify watch keeps a live reference to this vfs inode.
+> >
+> > When the cgroup is being destroyed something needs to drop
+> > this vfs inode and call __destroy_inode() -> fsnotify_inode_delete()
+> > which should remove the inotify watch and result in IN_IGNORED.
 > 
-> The only thing I'm still not sure about is the csum_level and whether
-> we need to export it or just start with csum_level=0 and extend later
-> when needed. The rest looks good.
+> Nothing like this exists before this patch.
 > 
-> Jesper, Lorenzo mentioned that you might need it? Can you clarify?
+> > IN_DELETE_SELF is a different story, because the inode does not
+> > have zero i_nlink.
+> >
+> > I did not try to follow the code path of cgroupfs destroy when an
+> > inotify watch on a cgroup file exists, but this is what I expect.
+> > Please explain - what am I missing?
+> 
+> Yes that's the problem here. The inode isn't dropped unless the watch
+> is removed, and the watch isn't removed because kernfs doesn't go
+> through vfs to notify about file removal. There is nothing to trigger
+> dropping the watch and the associated inode reference except this
+> patch calling into fsnotify_inoderemove which both sends
+> IN_DELETE_SELF and calls __fsnotify_inode_delete for the IN_IGNORED
+> and inode cleanup.
+> 
+> Without this, the watch and inode persist after file deletion until
+> the process exits and file descriptors are cleaned up, or until
+> inotify_rm_watch gets called manually.
 
-At Cloudflare our load-balancer Unimog[1] does GUE (Generic UDP
-Encapsulation) when XDP_TX'ing packets to neighboring servers.
-Thus, I assume we want to know the csum_level, as this is for
-encapsulated packets, right?
+Hrm. I was scratching my head how it is possible VFS isn't involved for a
+while. So let me share what I found:
 
-Cc Jesse, as he knows more about the hardware and csum_level. To Jesse,
-we need to test how hardware handles our GUE packet format (which is
-slightly modified).
+Normally fsnotify_inoderemove() is called from dentry_unlink_inode() which
+is called from d_delete() (name unlinked) and __dentry_kill() (last dput()).
+Now it is true that kernfs doesn't bother with pruning child dentries from
+its rmdir implementation. It just marks all corresponding kernfs_nodes
+(inodes) as dead and that's it so d_delete() isn't called. But vfs_rmdir()
+makes up for this by calling shrink_dcache_parent() on the removed
+directory so the child dentries end up going through __dentry_kill(). *But*
+kernfs also doesn't bother to set i_nlink for these child dentries to 0
+when marking them as dead and so __dentry_kill() doesn't call
+fsnotify_inoderemove(). So at this point it seems more like a kernfs bug
+that children inodes aren't properly cleaned up by setting i_nlink to 0 and
+I don't think we should paper over this by calling fsnotify_inoderemove()
+explicitely.
 
-Cc Arthur + Willem, as they knows the details around how Unimog
-currently have to recalc packet checksums in software.  Hopefully this
-patchset can help us avoid doing this in some cases.
-
---Jesper
-
-  [1] 
-https://blog.cloudflare.com/unimog-cloudflares-edge-load-balancer/#encapsulation
-  [Patch-0/5] 
-https://lore.kernel.org/all/20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org/
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
