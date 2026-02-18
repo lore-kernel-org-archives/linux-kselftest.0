@@ -1,257 +1,332 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D4F2F3C3D;
-	Wed, 18 Feb 2026 17:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771435739; cv=fail; b=uyO2z3wvhzgJpgBq37tKywm+1EOyKXOXZ0SaGaA2EghRERvx1zjL3YCibt63urFrAXpiHUPogALvV8S5mlwN8RaW87WusU4TgLHf1rSHK6s2jkwYT9K/fAHRGoIJlsFMLSzrZ5UF4mRdAcE9Gd8Gk05NpO4lDuNobNfGrQgvTq0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771435739; c=relaxed/simple;
-	bh=gUBfimuZooFP/Ulym3X+r/HYb1NE0OCFgFtlteIgZP4=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=nBVDtdlUF9qG/BhticE+fFnTmnO/QIq7JT32Dj26l8SRfn7tH3wg0J41EavI/2V0CEBwuCvBdGsNi/zInl93milI5vPfiDykWDcUoypCLGDeTnRt6j7/nQcd4FLC6eNbkdiwRBS0Ooj9MP8tbXxwv7MCZ3S3S9V/sCogXZqtJGw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bsvunYhN; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=NPtdYkQo; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BDA343D74
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 18:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771437687; cv=none; b=oh001sbH8ju8MYJc+zLG0nOa96hS1UCxFt70sl75iMhKtY9iEZ1J0CJLp2W8Pttbp5wXLiOy+P+vbRpiH2jlgFRo4xS6s726/8PKbuQGwwnfPJ8oKZkJU2py09JAsI+xq6rGOD/sMg+PIZrPyWuAH48+L6u/nplQU7aKKH4MA0g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771437687; c=relaxed/simple;
+	bh=r5p50fgxeqnRiI3HqOy198KdIobanwWL7ySX9YuA5V0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DAxqWY10ySdT7IPHiLbbha3s70W0lfZ3wzOc0YrCof+KVslW9PoAQbDHpOD/EdsY8rlYa5dXH/fZc3M6dv6ScZOGe08hSsVRXcJcOQ6DJB0nSqaL+PZELp3mTWc7KOa6OhIh91xnPnKmd2SEKw4guGK6AA10eO6EfBVEz4Q/0Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mjpdT6tG; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qCL7wy1T; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=fGMQnK0b; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=XxWWEmeq; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bsvunYhN";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="NPtdYkQo"
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61IGiJ051535448;
-	Wed, 18 Feb 2026 17:28:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=5Gamkyt6Chb6dHmNh1q3V+B3DDwJFqADwsSv0ufgMes=; b=
-	bsvunYhNZ47c4FY4hu4oey1uVk/G1A0ck6HyZI2k28dpZik2o7UVw3BbaQwntPvL
-	4FDse/71WC052QM5iaIiOQnfObcF2FJ/3cg26ZCP5nXtlYKnCaNxGgwl++fHTK4V
-	Hw9MfW9tB8ObPeJbmXBbZWtwyzjHCL40bzY0THIIqzk/6A5YyBwpkGAce3KNwm1b
-	llliMKlkQzXvp0Yfwpq5uSipPLF5vdYgGEZJBf9y943kzKKTbWNIPUwch2u9Yc63
-	MYGfmElt6nxc5fA7Z9KU4LiQihS+xCzwk4RLDEO8OpoQfzytAhgcC+MEU+QfLV1U
-	n1D/qRIeywZyQsfRapmRCA==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4caj3t5yxt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 18 Feb 2026 17:28:30 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61IHSJf2022917;
-	Wed, 18 Feb 2026 17:28:29 GMT
-Received: from dm1pr04cu001.outbound.protection.outlook.com (mail-centralusazon11010052.outbound.protection.outlook.com [52.101.61.52])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ccb2dv4vm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 18 Feb 2026 17:28:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NdUEoOGPbA8xH2laezu22gf5V20L8YJXOMF+erR8HyRGX/iXKc8/hV3HUxQBkL1fK7pRIT0pDEw3nUsVeA1vnFU7xVwRlRRCKlTet6uYypoZsqer3Du9OZHMDO8Elpc/SiPTTzFxm5fGbNPGMOmWbQjgIV0tUsYWSFkhczD6hzLhEvy68WMbdH2gTQQo8dS0dwLJvaNyU3Jz+fs4RbVyzNvy0A5T2iJw6kA28BKFvUqHS318BZUEWj5m4XSDkAdYShEAD4S5ixjZ+VEjU3efZxaqfxMR497vFw/hcIVzzRT9q6PDBWKZGQkeG9/+sRRImQs0jG1uG1eBD3J3tuM6YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5Gamkyt6Chb6dHmNh1q3V+B3DDwJFqADwsSv0ufgMes=;
- b=AdsoYYLYrJTFSnFIlQZY14eYXkB014m1PHznvYm5LiIXw2wy8Q7DezgBH4+vQnqq9Wd73/CY9sGbvoeruM2P3u76KIn21uO+BzQmnnSGZ62RrCf9zjGYuzGfNFphINalM5ihtg8RV2kOyR9TtT9VdaC+Z+jcQZ4Y1t3MECp76FeTIu88b+yYwotWhazvkeu81YFICB+PVrmUlIvyzCVYiJ/BnDcDofOcBbI4lGdDuTjFyPjvbHytxsj0h85nVn7kb4Dn1ZOUqQW7v7VuHnVvv6y6rSt4freCl6xpfaqMnk9DDjP8DT9B1km3v+3TLNP6/kY5QnVxjOb09iL+l5eRdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5Gamkyt6Chb6dHmNh1q3V+B3DDwJFqADwsSv0ufgMes=;
- b=NPtdYkQodbZs435yxBX9v/ZLFaV89A7JabbQcUTaBKvzW/fcTRF4bzPWrJrb8W6uJWwQP5zKmV1uB8JmMjvOWJYy0+VQGryBxcb6E13NKGrJQoSnGgH1DIjNkIsLx4PG4sBHFPEiw970fL2nJ6qgsUQ3m4WGTdCVZwD4pHAtA70=
-Received: from DS0PR10MB6271.namprd10.prod.outlook.com (2603:10b6:8:d1::15) by
- CH0PR10MB5003.namprd10.prod.outlook.com (2603:10b6:610:ca::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9632.13; Wed, 18 Feb 2026 17:28:26 +0000
-Received: from DS0PR10MB6271.namprd10.prod.outlook.com
- ([fe80::3292:21a0:97be:4836]) by DS0PR10MB6271.namprd10.prod.outlook.com
- ([fe80::3292:21a0:97be:4836%4]) with mapi id 15.20.9632.010; Wed, 18 Feb 2026
- 17:28:26 +0000
-Message-ID: <bec4bb53-2161-47f5-8978-1c4282406a02@oracle.com>
-Date: Wed, 18 Feb 2026 17:28:19 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2] selftests/bpf: Remove hexdump dependency
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau
- <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20260218-bpf-sft-hexdump-od-v2-1-2f9b3ee5ab86@kernel.org>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20260218-bpf-sft-hexdump-od-v2-1-2f9b3ee5ab86@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0365.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18e::10) To DS0PR10MB6271.namprd10.prod.outlook.com
- (2603:10b6:8:d1::15)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mjpdT6tG";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qCL7wy1T";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="fGMQnK0b";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="XxWWEmeq"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D41D43E6D8;
+	Wed, 18 Feb 2026 18:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1771437681; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tVTFDTNTc6+RIvbxQ7QRFu31DqKI++gAI+qJn+h3EHc=;
+	b=mjpdT6tGzyYI3XPb6YQjMdE15d9eljLOPVH9P5sqUSV6mp3/hyrpLGWjnTHFSv1+zJzGDD
+	654S8OzTfcI2ybmiqprIpJu8vGy2v/+dz3fvKiD7G7supLr+pIaxe8Oq/gwYwRa3BgBfP/
+	EEx0W66BKBcvZmMX312Z8fHo3GfxSE0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1771437681;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tVTFDTNTc6+RIvbxQ7QRFu31DqKI++gAI+qJn+h3EHc=;
+	b=qCL7wy1ToylRDoC1qsyG0YWxXdWK8M+ywobiCJ9w7Kzr6pt0TMpcPA3WLurCiF0ZGO4RRL
+	aVR5pXWSrb7aYZBQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=fGMQnK0b;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=XxWWEmeq
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1771437676; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tVTFDTNTc6+RIvbxQ7QRFu31DqKI++gAI+qJn+h3EHc=;
+	b=fGMQnK0bvfah91LKcsyLElbOhhK7wU41dNnQ2L/SrUeeqnfS6ss6M8z3a1E8PNNprHX1m9
+	Ed/0ElGLqw/d5YZldE9PA0bD4GV7HtncvtbBbi+UqxIn2Zv4WjM7CB7YS09LxckB9db+CC
+	yaybrZsUuFLyS4MD8+Njic1JquywssY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1771437676;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tVTFDTNTc6+RIvbxQ7QRFu31DqKI++gAI+qJn+h3EHc=;
+	b=XxWWEmeqNddVM4vHWNiY2yayzEvcFE5TKOIpAyzEwmTJbRPXz4tfolTCrvL0sVLNd30DgU
+	NW4QwzJXY7qiK9CA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B59643EA65;
+	Wed, 18 Feb 2026 18:01:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id tyNSLGz+lWnFAgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Wed, 18 Feb 2026 18:01:16 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 55F73A08CF; Wed, 18 Feb 2026 19:01:12 +0100 (CET)
+Date: Wed, 18 Feb 2026 19:01:12 +0100
+From: Jan Kara <jack@suse.cz>
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	jack@suse.cz, amir73il@gmail.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on
+ file deletion
+Message-ID: <e7b4xiqvh76jvqukvcocblq5lrc5hldoiiexjlo5fmagbv3mgn@zhpzm4jwx3kg>
+References: <20260218032232.4049467-1-tjmercier@google.com>
+ <20260218032232.4049467-3-tjmercier@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6271:EE_|CH0PR10MB5003:EE_
-X-MS-Office365-Filtering-Correlation-Id: b32208c7-3829-478b-9352-08de6f131f81
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|921020|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?a2JNOXd0L21xNm1ORXZvWW9zcnBCMEZjK2dnOFYvYVVxTHRucDRKRllscFpQ?=
- =?utf-8?B?ejVlcHJlczgwK3hNMjNRVmNqa0pnZzU0VkZvNVZTVXBoS3l1a0k4NndBRHow?=
- =?utf-8?B?WGFXMmVySTM1dW9sRkRKTENMWFFsQXNiVThJVExmcWJFVzN0MS9Zam42UzRs?=
- =?utf-8?B?VGJMWEl6VkVQYUxGMW81dWZNTmllYjNYU3Z1NHBHNnZUd2c1REs4Z0cxanE5?=
- =?utf-8?B?czBDR0VuMExQNjJITm1jTEFGcTVqVHhRdEhSaGl0NmNXUWo3YVR1WkRCb05n?=
- =?utf-8?B?ODN6WlJ4RHB4dTBCSjRTU1pjSHY0M3FHR2NyaTFKUFhWUlhiWS9kb2xISyt2?=
- =?utf-8?B?aTBtMVdJV2tYNkZsaUpsZGdUdUpicnhxdzVFSlNzOTlmZ2Q2NDR6b3BJYkQ5?=
- =?utf-8?B?MVpmRmJlQnZRTFZwTEtKc3R4U29zSjZQcGZmaGJ4MS9jMlViTE02NEM4aXlr?=
- =?utf-8?B?MzBjSktyazlGSEkvWjVBVEpRNW9zQmxUcWtNampWNitIQmU0dUlIbFRyTlRD?=
- =?utf-8?B?SWNwTFlkUE1zOHBwZDBJNE9mMVM0aHZmWjNDSnE4NVlqSXMreGx1aVR3ZVBR?=
- =?utf-8?B?cnh5cU1acG9vVE05Sy93ZStHZDlSdTVkQTZQM1JOYjdwRWtvMkNTVWRRVEV4?=
- =?utf-8?B?eUVIMWVERm4yZzlsQmxxVmYrd2EvSWpiRHd6RnUwQUVPQXVEVjdrdE1pVEFC?=
- =?utf-8?B?c2RLb1NyN2RVcWJUV2xqZ01qVVBQOW9TVWxnNkg2Tk5XWGFBTFU4Mm5uRVU2?=
- =?utf-8?B?U2xIYzRDekx2WXZ6UEdSTVdsZFNCK0ZudmlGbkVnYlZSQzREV0x0RWlhbXF0?=
- =?utf-8?B?M1pIamREbHllSjBob3pBSHBKUS9tRjlZcDhIbERReGNiR0lBSEFXOVBJSDVk?=
- =?utf-8?B?NWxuMk9lejJYQXpIdm9WbVlkd2RrVXVyc1l5Tm45cVRvc3FTc0tlWmlrOHox?=
- =?utf-8?B?NU5GdGlJMXRnVlpORnhSSWszRjBJZmM1Nk80Qk1BYS9hUGJpWlBFVEVqeEZ1?=
- =?utf-8?B?Q1dhRE1ZRGJGNjI0T0V4WTVQZG41VzFIZ1NuQlRibmVlWlBOd1R0ZnNaMUxa?=
- =?utf-8?B?eVV5NHU3Y1A3T3I5Q0F5WTlYTFR3dDcwTHNmUDU1R0ptaVRZZXVYazRuMzJK?=
- =?utf-8?B?VU40eXJzL01DNnhGMzlCWGVFUVQrNktpK3p0dDZjd01SWU0xZkt3WDlLR3Bm?=
- =?utf-8?B?VGR6Y0ZsUmtQb29DQ2pia25CVEFUSDhFclRoelZaTzJKQkZJRXpzRWxBQThZ?=
- =?utf-8?B?NS9TNnNjdWdNRCt4MUI1SEhtcC95WTRmNE0vWC85cFZ2ZGZTSytkWVQxd0pO?=
- =?utf-8?B?cVdmazhUcmVySzNPNm0rbEQ2WHVyck5uZ2x3NE1NL0J1bWFZVFc0eUdHUy80?=
- =?utf-8?B?N3ZDS3JPQU56LzhQeG8wOURWYjArd3JESldhdWFqeVREUnJiNDZzMmxJdWZi?=
- =?utf-8?B?YnB5MXhnMmFIdnBJT0diUHpHN2pKZzlyWlZIM1AvUytJUnBGY2hwNlc2M3VQ?=
- =?utf-8?B?dWRwY2ZHOUFrZzNCWTZiaUZIQUNKWHR3WkYwcGkxWnUvM3k0Qkl4TEtnd1Zr?=
- =?utf-8?B?ZXEzTjJHNFdTVEtob0NCMGJFUmxYeDBta1h6RXoxditxS3Z4SkpMQjFNWWYy?=
- =?utf-8?B?UHBuRmwzcTBFRi93Q1AvVXN1WmVnTkFCRjA1ZEhKNHlCa3RFOEhlbVpJaUFH?=
- =?utf-8?B?UHNuckRacnZOMWZxOFl5cVJTek92akdZQ3VvKzZvM0NkYmx5Rjlyb3htTEFp?=
- =?utf-8?B?ek1ZWEx0YjhwbzhPOGZhK2lTRm1OMm5RaEJxUWhxOWNvL3pyVzRRSCtkRC9N?=
- =?utf-8?B?WEVHSjY2ZUIxZDJmYjIxWkpHZmxUUW92cUxWNWJoT0dGSXZuTTlwUkZwY3hv?=
- =?utf-8?B?NmxRcGEzRUxLWmhiWWkzTnJNaWNjVVY3MWpvMFY4UjJDczJzQnliR1lxTUw2?=
- =?utf-8?B?RjRBaGpMcXc5QUJpbmthR05KaGdYTzVlUUxqbmk4TzdndHVORFp6M1lDMXRS?=
- =?utf-8?B?SVh4SjVpTWUxNUo1RkpaOHF6L3pRRE9kMlUwZjBGVkE3K1NUZjh0ZytLdWFJ?=
- =?utf-8?B?T0V1dVNUZVE3RnNrM0l0NDEzdFJTb25TaExQeU1LSU9UemZaQ25FNTdoclBo?=
- =?utf-8?B?UGlQRHdSR1BsRkdqb3JrOXgvcTFFN25QY0tjSWhnZjk5OUpyQnk1VURDNmRG?=
- =?utf-8?B?WVE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6271.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Sm52eUxuSDNscUxSS1ZMWEVzVmpoOW9pOE5zSmQvR2kwbEg5OGJOWjFYVkdH?=
- =?utf-8?B?cy9vSzhid2dCNFg3d3FZSjVCblBNVUR1VjcwRzM4ZjFCT0hXVWoxaEQ0cFE1?=
- =?utf-8?B?SFhUQTRLZlA5RkZkTmgxbUpoaVlvVVRlRHBzTDZ5ZzUrWXB6TkthUy9QNzZ3?=
- =?utf-8?B?Wm10S0xoaXRvTUJiNmdmU2dGcFczT0tlVENDT1ZlTWRGSFU4Uk1obnNpUjE5?=
- =?utf-8?B?aE1iaU5EVHMrc3h2RnZZVmt0M1JSTTJLUURsMk00MzZjN2doTkphL0tnNE5t?=
- =?utf-8?B?SW9uemgxSzhMTGtpUFliUXFZYmhYSldWOFBhTmVSSVA2NkI1SVRMbG01aUxi?=
- =?utf-8?B?MmVpUFVqcTl0dUsrMFJVcFJIZXZPZllZMk40eHpNcFU1TCtkaE9McUhNV1Mw?=
- =?utf-8?B?RTdhZGN2S3pKS0ZYcW9DbS9zMGRiYS9VRUdhZ3ZCVzVMT2VsdlJrTlBIc0Zt?=
- =?utf-8?B?T0NnUWxEbW1oSHV5VHJHR2hLMzZocjhUeExyNFZVT01FQTZpalRtbDlSUEhJ?=
- =?utf-8?B?dFhxUUtubDRzUDFhTDdoUFFMRjZQWWhOUWFTdkZFK1kxT3FtT3VJVm5BYmtj?=
- =?utf-8?B?WWpUL3hxWUpQM1AzT1JyVXZlMkRsUGduRy9HWGZMTTZDQnFRZWNjNS90WVJW?=
- =?utf-8?B?MFozOCsyMlUwZm5kcnAzWlVyNldDdnhTUXhidnRaaFVWeUZvSENvbUlNem5T?=
- =?utf-8?B?YytieHpFUnpMZUluRGxWN0lJakpQTlczTHZFMi9NNURmK0hmQ0Y3N0xnU0U2?=
- =?utf-8?B?M3RhN3ZNbzRyWktsM3ltRjdoZHgwbFUvR3pwcnA3c1lNcDRHT1BJcVBWN2l5?=
- =?utf-8?B?NjRpMmFEWWdFcndwd1hSdUxtR2RrVTZCVEZwMUFodVp1M0FZMHhxVEpib1BC?=
- =?utf-8?B?eDhaQXBTMnFJb1d3S21Ia0QxZFMwOVVUS29yblNxSUUzS3FBdC9pWXVGVm9C?=
- =?utf-8?B?bFJ5NVVLQ2NUMTM4aG9RaTkrZlRBRC9vbXlZR01UWmRLVTNyaThWR3BHbWw4?=
- =?utf-8?B?d0t4RG1EVHVzL3ptNFdFQlhkSDBiOFhLdm9aTmw3ZVpjQStKQlRTNmtYclNM?=
- =?utf-8?B?T3FxY0lrVW9OWURFcFlWcG1zbk1IeG1nSkNxYlFrSVhEWU4rVytENnFQUnRu?=
- =?utf-8?B?TFdRaVdENWJjQ3RrQTZnOWNCTitPLzdReUZid0tGbURBVElJaG9jYUowZXFS?=
- =?utf-8?B?WGlzOW9sSXJRVHpsTU5OUEJmVkR3eExZQ2lFWEZkZFdndnlqRExSak5JRW1E?=
- =?utf-8?B?WXVEWmQxZDNsSFlNRDFEL1hiYldxQ3B6Qkx1UGpDZzFnYzN4M0NmV0tMQXNl?=
- =?utf-8?B?Q1UvOVNKMngvOEwrcFZvSURWazNjNFkrQnhNTEdORi9Mc3RVcEZSMUx3UFNX?=
- =?utf-8?B?b1lGeURrRnBmc3ZweGxYbURYei82STJ5RTQ4U0Jnc00vQ3ZrSUY1ZXNPY1h0?=
- =?utf-8?B?aXhNb0dyNUNUQlV3N0dKRVdvbGZxT2ZLTnc1V2pzamhtT1MzaW1BQzVXaDlQ?=
- =?utf-8?B?d2pMQ1ZVcHAwWmxVNDJ1d2ZIdVltU0wyRy9hQzh3a2tyVDJXYm1jQ3RVMTdh?=
- =?utf-8?B?RzZOMGIvd2taU0hQSStHekFIZ0xDeWZ4SkxpTGNWUGRwQkRPSUV6TGttM3g3?=
- =?utf-8?B?c1BpTjJ2NzFmTFJBYWt6ZWdISGZWS3pJUXdZd1J1K1VXdEZibTEwQ3ZwQWl3?=
- =?utf-8?B?WDZ1azQ3eTBibG4yTldRRmxLU1hPUS8zUTZ5UTBGeU1zSGViZHo0aEtJSDU2?=
- =?utf-8?B?RVJScnJXbVlINGU1YUlNWDV4S0xHWGVkWmZkV2lNY3ZGdktkUHFmcWozOFRM?=
- =?utf-8?B?OG54KzJ0SW5GeUs3K28xN2JhWURDUzBRZmpVallhTlZWbjVtcFo0ZDUvNXFm?=
- =?utf-8?B?TCtjRU1pYTB1TEtsRk5YeXkxSTN4Uzd2alFlS3QzR1FDM0RWK29EZ3RhSWsz?=
- =?utf-8?B?aDZwZVJ3azh4SGJYSW8wS05DYWxaYkRyTmpNcC9BdndQcDRyWnpLSnBUdW9y?=
- =?utf-8?B?bkN4a0JIaSt0aHQ0WHpBM3lTUFlPS1hKVmNOQ29KYjU0eFhERnkzMU1YSDkv?=
- =?utf-8?B?Lzg4VmpocW93aGxxR2N2SUhxUFlhL1laaTE3SEcyUjBpcHhoUzArRzUwdTlL?=
- =?utf-8?B?dGxUUGdRWHR3WVpQVHNMSmJrL3pTdXdYRjJYSGxYNWk2cEhkZ1VCUCszZHIx?=
- =?utf-8?B?OFRhMUgyTGE5bnZlSUhuSVkxYjFUVzY3eDY4bjhtOElWdWtZY2FUZTlaWnMz?=
- =?utf-8?B?SGlBalN6dXl2aCtwcDEzRjU0RXozRVJodXM0bFg5aHh2SzR3NWpySkoydi9I?=
- =?utf-8?B?SlBwZUsrTkU2Qng2QWhic3hkbDkyUno2cUZ6WERaRkNkaWlZYzQ5QT09?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	gvSItK0iunGexSyN2zHCd76S9eWKnozq3FOSlsDC5Vx9d1hd/6Mj+2jeL8SyDT0zT8DFzahniofsJxPtWrlZ1ALkL00dY8KpuYlxoKmQapJvZX4ZGwl/lHBaEVrvlvE4037PSlVr8PHDPWPe0Vmhn2YkO9ljvAM0yurcGqj5E7W2YyYKVzNr8WMEs5tDEwG9R4srOzB0Blcu3yJQ6Wd/sEvM0CfZPMElSip73TaW9/oYwMLhkkIzwWrrr0prMgTJS9EEh3IgokmUkm6DwB4+YGw+Ptj1Z1gFLcUHs3FFG8oLr2HnwayAimFuCHGIdrJAxy3hVF0s9xQRi+hHJQAwYHAazJbVEfCzbb/pKxV9cpH+fb6Gdvj+80jQFYsxcOJXP1nPIsCE/S8iBF1Z4uIrpWTfG4n8RSJRNX6vZzcVsfGmgc6W2soxNlb0l2f5GeE1YglzWg7MPz6Puatxzu+ucJiSQqqvPGJWvw/dKvDNlWjgK02LLKT6PEivrts4iyz22s8QXc0fq1v/YH1z7Ft/br9YXJm79HDmebgCdjYISDXpMvaRTktYdIcUaImTQn/kJ0uCvq7N/UZEudx05YFjgImipWwfVy/3s4ubZZ2zZMs=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b32208c7-3829-478b-9352-08de6f131f81
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6271.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2026 17:28:25.9347
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rkXYtfyDWwae6vqumwlmoadP/lzANbqWZXqv8q2H9IHCOVFRSSXP4T/u6unCX0qZT9EdCdZRpd33C/Cl9UsPBg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5003
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-18_03,2026-02-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
- mlxlogscore=999 bulkscore=0 mlxscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
- definitions=main-2602180149
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE4MDE0OSBTYWx0ZWRfX93lGK+Is4LZx
- +yWsRxiMJUxIbi+w7y/dT5YrU7uG04WgZ6uwlmIk0RllpWb13ViuN8hMzjzbRs5vuXd0tiiWRA4
- 1gej6buJsH+njvPeNzu+edicQZkhohnkZmjkB9WC+sICjofzANcF3g2Hu9Zy7m5nWKBE4NydLvS
- qxZ4K7yga326toBv6A08pYYAKPjIiCA3cf+A3t1RYXrHrp7c0I19YN+nhjuYP07rhWYhzDyJRS4
- t/mo3L7SwaKYsAkCaAy6QOd7YFRT1+OnjdTYRnTplaYFkc/NxTTNkD//0cmMtoVSuU11Qfy8ZXW
- JsYXWhd7Dhh7PpRarlVvtEHzw6xU0NZxNyMdvQfCEXswNPhO/3GbACHlYlkI624v1NWSicSEKJR
- CoX6mxXnEV8mB5A4xTlkyfTxhKkXomqGygTGW2CvRbsf0Bx4R2Rim+JJwLOBnhetEaSKmgpIvm+
- LauKC25ntsZufkkNqhWff1idXHg79cbzrAJiW/8M=
-X-Proofpoint-ORIG-GUID: jZWreZdV0XgLzaMgWJfkKgcTb1jFj3fr
-X-Authority-Analysis: v=2.4 cv=b/S/I9Gx c=1 sm=1 tr=0 ts=6995f6be b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=HzLeVaNsDn8A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=yPCof4ZbAAAA:8 a=M3IkDgzDCBaXLh53UZ4A:9 a=QEXdDO2ut3YA:10 cc=ntf
- awl=host:12254
-X-Proofpoint-GUID: jZWreZdV0XgLzaMgWJfkKgcTb1jFj3fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260218032232.4049467-3-tjmercier@google.com>
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,lists.linux.dev,vger.kernel.org,suse.cz,gmail.com];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:dkim,suse.com:email,memory.events:url]
+X-Rspamd-Queue-Id: D41D43E6D8
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
+X-Spam-Level: 
 
-On 18/02/2026 12:01, Matthieu Baerts (NGI0) wrote:
-> The verification signature header generation requires converting a
-> binary certificate to a C array. Previously this only worked with xxd,
-> and a switch to hexdump has been done in commit b640d556a2b3
-> ("selftests/bpf: Remove xxd util dependency").
-> 
-> hexdump is a more common utility program, yet it might not be installed
-> by default. When it is not installed, BPF selftests build without
-> errors, but tests_progs is unusable: it exits with the 255 code and
-> without any error messages. When manually reproducing the issue, it is
-> not too hard to find out that the generated verification_cert.h file is
-> incorrect, but that's time consuming. When digging the BPF selftests
-> build logs, this line can be seen amongst thousands others, but ignored:
-> 
->   /bin/sh: 2: hexdump: not found
-> 
-> Here, od is used instead of hexdump. od is coming from the coreutils
-> package, and this new od command produces the same output when using od
-> from GNU coreutils, uutils, and even busybox. This is more portable, and
-> it produces a similar results to what was done before with hexdump:
-> there is an extra comma at the end instead of trailing whitespaces,
-> but the C code is not impacted.
-> 
-> Fixes: b640d556a2b3 ("selftests/bpf: Remove xxd util dependency")
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+On Tue 17-02-26 19:22:31, T.J. Mercier wrote:
+> Currently some kernfs files (e.g. cgroup.events, memory.events) support
+> inotify watches for IN_MODIFY, but unlike with regular filesystems, they
+> do not receive IN_DELETE_SELF or IN_IGNORED events when they are
+> removed.
 
-looks good to me, and works well.
+Please see my email:
+https://lore.kernel.org/all/lc2jgt3yrvuvtdj2kk7q3rloie2c5mzyhfdy4zvxylx732voet@ol3kl4ackrpb
 
-Tested-by: Alan Maguire <alan.maguire@oracle.com>
+I think this is actually a bug in kernfs...
 
+								Honza
+
+> 
+> This creates a problem for processes monitoring cgroups. For example, a
+> service monitoring memory.events for memory.high breaches needs to know
+> when a cgroup is removed to clean up its state. Where it's known that a
+> cgroup is removed when all processes die, without IN_DELETE_SELF the
+> service must resort to inefficient workarounds such as:
+> 1.  Periodically scanning procfs to detect process death (wastes CPU and
+>     is susceptible to PID reuse).
+> 2.  Placing an additional IN_DELETE watch on the parent directory
+>     (wastes resources managing double the watches).
+> 3.  Holding a pidfd for every monitored cgroup (can exhaust file
+>     descriptors).
+> 
+> This patch enables kernfs to send IN_DELETE_SELF and IN_IGNORED events.
+> This allows applications to rely on a single existing watch on the file
+> of interest (e.g. memory.events) to receive notifications for both
+> modifications and the eventual removal of the file, as well as automatic
+> watch descriptor cleanup, simplifying userspace logic and improving
+> resource efficiency.
+> 
+> Implementation details:
+> The kernfs notification worker is updated to handle file deletion.
+> The optimized single call for MODIFY events to both the parent and the
+> file is retained, however because CREATE (parent) events remain
+> unsupported for kernfs files, support for DELETE (parent) events is not
+> added here to retain symmetry. Only support for DELETE_SELF events is
+> added.
+> 
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
+> ---
+>  fs/kernfs/dir.c             | 21 +++++++++++++++++
+>  fs/kernfs/file.c            | 45 ++++++++++++++++++++-----------------
+>  fs/kernfs/kernfs-internal.h |  3 +++
+>  3 files changed, 48 insertions(+), 21 deletions(-)
+> 
+> diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+> index 29baeeb97871..e5bda829fcb8 100644
+> --- a/fs/kernfs/dir.c
+> +++ b/fs/kernfs/dir.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/sched.h>
+>  #include <linux/fs.h>
+> +#include <linux/fsnotify_backend.h>
+>  #include <linux/namei.h>
+>  #include <linux/idr.h>
+>  #include <linux/slab.h>
+> @@ -1471,6 +1472,23 @@ void kernfs_show(struct kernfs_node *kn, bool show)
+>  	up_write(&root->kernfs_rwsem);
+>  }
+>  
+> +static void kernfs_notify_file_deleted(struct kernfs_node *kn)
+> +{
+> +	static DECLARE_WORK(kernfs_notify_deleted_work,
+> +			    kernfs_notify_workfn);
+> +
+> +	guard(spinlock_irqsave)(&kernfs_notify_lock);
+> +	/* may overwite already pending FS_MODIFY events */
+> +	kn->attr.notify_event = FS_DELETE;
+> +
+> +	if (!kn->attr.notify_next) {
+> +		kernfs_get(kn);
+> +		kn->attr.notify_next = kernfs_notify_list;
+> +		kernfs_notify_list = kn;
+> +		schedule_work(&kernfs_notify_deleted_work);
+> +	}
+> +}
+> +
+>  static void __kernfs_remove(struct kernfs_node *kn)
+>  {
+>  	struct kernfs_node *pos, *parent;
+> @@ -1520,6 +1538,9 @@ static void __kernfs_remove(struct kernfs_node *kn)
+>  			struct kernfs_iattrs *ps_iattr =
+>  				parent ? parent->iattr : NULL;
+>  
+> +			if (kernfs_type(pos) == KERNFS_FILE)
+> +				kernfs_notify_file_deleted(pos);
+> +
+>  			/* update timestamps on the parent */
+>  			down_write(&kernfs_root(kn)->kernfs_iattr_rwsem);
+>  
+> diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
+> index e978284ff983..4be9bbe29378 100644
+> --- a/fs/kernfs/file.c
+> +++ b/fs/kernfs/file.c
+> @@ -37,8 +37,8 @@ struct kernfs_open_node {
+>   */
+>  #define KERNFS_NOTIFY_EOL			((void *)&kernfs_notify_list)
+>  
+> -static DEFINE_SPINLOCK(kernfs_notify_lock);
+> -static struct kernfs_node *kernfs_notify_list = KERNFS_NOTIFY_EOL;
+> +DEFINE_SPINLOCK(kernfs_notify_lock);
+> +struct kernfs_node *kernfs_notify_list = KERNFS_NOTIFY_EOL;
+>  
+>  static inline struct mutex *kernfs_open_file_mutex_ptr(struct kernfs_node *kn)
+>  {
+> @@ -909,7 +909,7 @@ static loff_t kernfs_fop_llseek(struct file *file, loff_t offset, int whence)
+>  	return ret;
+>  }
+>  
+> -static void kernfs_notify_workfn(struct work_struct *work)
+> +void kernfs_notify_workfn(struct work_struct *work)
+>  {
+>  	struct kernfs_node *kn;
+>  	struct kernfs_super_info *info;
+> @@ -935,11 +935,7 @@ static void kernfs_notify_workfn(struct work_struct *work)
+>  	down_read(&root->kernfs_supers_rwsem);
+>  	down_read(&root->kernfs_rwsem);
+>  	list_for_each_entry(info, &kernfs_root(kn)->supers, node) {
+> -		struct kernfs_node *parent;
+> -		struct inode *p_inode = NULL;
+> -		const char *kn_name;
+>  		struct inode *inode;
+> -		struct qstr name;
+>  
+>  		/*
+>  		 * We want fsnotify_modify() on @kn but as the
+> @@ -951,24 +947,31 @@ static void kernfs_notify_workfn(struct work_struct *work)
+>  		if (!inode)
+>  			continue;
+>  
+> -		kn_name = kernfs_rcu_name(kn);
+> -		name = QSTR(kn_name);
+> -		parent = kernfs_get_parent(kn);
+> -		if (parent) {
+> -			p_inode = ilookup(info->sb, kernfs_ino(parent));
+> -			if (p_inode) {
+> -				fsnotify(notify_event | FS_EVENT_ON_CHILD,
+> -					 inode, FSNOTIFY_EVENT_INODE,
+> -					 p_inode, &name, inode, 0);
+> -				iput(p_inode);
+> +		if (notify_event == FS_DELETE) {
+> +			fsnotify_inoderemove(inode);
+> +		} else {
+> +			struct kernfs_node *parent = kernfs_get_parent(kn);
+> +			struct inode *p_inode = NULL;
+> +
+> +			if (parent) {
+> +				p_inode = ilookup(info->sb, kernfs_ino(parent));
+> +				if (p_inode) {
+> +					const char *kn_name = kernfs_rcu_name(kn);
+> +					struct qstr name = QSTR(kn_name);
+> +
+> +					fsnotify(notify_event | FS_EVENT_ON_CHILD,
+> +						 inode, FSNOTIFY_EVENT_INODE,
+> +						 p_inode, &name, inode, 0);
+> +					iput(p_inode);
+> +				}
+> +
+> +				kernfs_put(parent);
+>  			}
+>  
+> -			kernfs_put(parent);
+> +			if (!p_inode)
+> +				fsnotify_inode(inode, notify_event);
+>  		}
+>  
+> -		if (!p_inode)
+> -			fsnotify_inode(inode, notify_event);
+> -
+>  		iput(inode);
+>  	}
+>  
+> diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
+> index 6061b6f70d2a..cf4b21f4f3b6 100644
+> --- a/fs/kernfs/kernfs-internal.h
+> +++ b/fs/kernfs/kernfs-internal.h
+> @@ -199,6 +199,8 @@ struct kernfs_node *kernfs_new_node(struct kernfs_node *parent,
+>   * file.c
+>   */
+>  extern const struct file_operations kernfs_file_fops;
+> +extern struct kernfs_node *kernfs_notify_list;
+> +extern void kernfs_notify_workfn(struct work_struct *work);
+>  
+>  bool kernfs_should_drain_open_files(struct kernfs_node *kn);
+>  void kernfs_drain_open_files(struct kernfs_node *kn);
+> @@ -212,4 +214,5 @@ extern const struct inode_operations kernfs_symlink_iops;
+>   * kernfs locks
+>   */
+>  extern struct kernfs_global_locks *kernfs_locks;
+> +extern spinlock_t kernfs_notify_lock;
+>  #endif	/* __KERNFS_INTERNAL_H */
+> -- 
+> 2.53.0.310.g728cabbaf7-goog
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
