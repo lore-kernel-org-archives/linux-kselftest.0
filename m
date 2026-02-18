@@ -1,130 +1,164 @@
-Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E89346AC5
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 18:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463EE346E66
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 18:37:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771438276; cv=none; b=VeGmX9Dd85tcFnkduYrgwDqFV3+ngKT+9S8nt3bs+OQyaAad5uTydb2VMvq0l50Erha7FDPVeArR/cwVrV1CBq713yRB5ExWgk4Y4agqRAbH8KCIyJEQP9RPjzcXeubUwB3/8cVhlsbuOcwXogXvob4IQbgjGSQ+z1K6VaicukY=
+	t=1771439874; cv=none; b=MrXRhiSJPd318nO0Ijd8A2v9xni3wyXXIKssU/0qr5b8kSnQsK1biCBakIBek0FunHkKDus4sLiM3DHXYyZ73+3wwpWSU3QiEg4f2bctZb3/r6yb2+sxumucFNWbP3LKmG07OgPQ9PL3XMsOz8565n/iYQx19kAOmXaAyFVomXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771438276; c=relaxed/simple;
-	bh=uGK41uj6PP/iNYJl90nhzFCAJOq4jOu74IyB8IEiN9Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HHNDApRDEvI6Azf7duVxkjyTMgqDnxx4Xt7Ye0APMs6PJwBkE/i6IjDs5B8cQjdAgxkfk8gTHan3F5SG+Q8RpTDKh0WUG75DfQXtoRDcP2ElUJBSk4//YvIOJzRuty8S6VmGuQVOImdhYB3SyaYLbV2iiEdl14UcRIYyanhkzyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sxjp1ngr; arc=none smtp.client-ip=209.85.128.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771439874; c=relaxed/simple;
+	bh=Hoz9/57FagEVnDWp7H/V5BXnUKfy/zj09aMxPs+0OBM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wqp6F1slI9g3rLsc6swZKtF3/Vp+dBl3QH0ceVdj+PfYpya+XDEOeGAcgv+OJhXzIcM15gPTUssQiMkg+ZVS7Snci/rN9qM+dniio4ed3qdOEdzYQcVuUZEFgdipjTXOROljjwdyqA6atIrm6cPbOasgrQlCGIo9eywf2350X8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OtZTOy/3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mf/PDw2W; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OtZTOy/3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mf/PDw2W; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sxjp1ngr"
-Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-794911acb04so1754487b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 10:11:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771438273; x=1772043073; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l1wgGIa8//Y21Q1yl9IMhAVoEJrPKjw/0p7B3ammqNo=;
-        b=Sxjp1ngrbm61KM1SssCgtg53oRQ57xddq335xU0Tr5P9gbgY3OvVgSzoHEjupl7Qiz
-         qeShLNItOV+R3zhWkx+a49rTqh4sozGV9SvpO82vAtoBN+Rj7nV8rVpv8Lk92TbpqBcZ
-         bfCZLNXGQubvFMGEUg5p7dAxzqmq5zAWL9tXQmhlx+F1w8Ka8X8lZdHUhRcCus/5dNPS
-         sOYNDLYVwrz+8awLMJhb4QWtGUz1zXTFYwd5lR0zUkRgiPSYjJ/SsGcHqhck9Ihw//ac
-         37aNH6AxotXpF3p2ChXd3VIXZJQMovwbHgWXD9xpsMQAaslXWg2P+pLSz/fzEZAiD8Kd
-         RblQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771438273; x=1772043073;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=l1wgGIa8//Y21Q1yl9IMhAVoEJrPKjw/0p7B3ammqNo=;
-        b=ZEsxhLmldMk6et3VrRkkuWFMfKDlG/lPex+boF7Bdy4PlrURALOTmPLLMxi7Y2Bk+i
-         BeAn5jXdCA+s6e9ITcNsWwAn1DrKtayR0YjuzDbR2cNR3Uaq0YoeqxYy7kOuK9rix7NL
-         OzsThU+fQkrzdRc/oUz73GDJEiSKqj/szvvqRtFiAOzxufaY1Q9a4eQ85RKLg/WGg9oS
-         sje49SQGi2kCqK6mIKXSkuni9tw10dLBDxYaapYSp+MrJrT5bVtIwT8q7P6FjtUksuVO
-         QZr0S3fhiJuWjd/+7pqM8mUejr9Lrxff6CykvObiekXZxPhe72o3jYXpYNbQiHdRFYlo
-         aPKg==
-X-Forwarded-Encrypted: i=1; AJvYcCU/+ylWCwfZwgPtJk18C1sUmmlNywJ47f8CZxJ9EF+rsQFPTG4RmwxEicSkd+OwR5N4nGwFcOyai0+rw5uhV7U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8aGY/SHEIP2lNq4qoLl2/sKqpqekTXzJD45QTV3ldQFvCBVJ/
-	p7pbp+uPM0CIFDPTI3RsTwFDJVayeS2OLbp2ArK02WHvxU9sNCGCi/b3
-X-Gm-Gg: AZuq6aI+QwuVrMvMWInD8XHfrIWKl7e1ZNBRHnzISRiH5U0vDzjoOlrnb8CRkHXIw4i
-	S55UIpfduh+6eXPeVi0EyKAOD5DWh8QVdtc92Igw7Xmi/FQnGj34LpegMO9yZV8vncxQmbqT5YC
-	3GI/nUrciVe8xk9l05Fx6knoYeIhLaFzni/oMcSNWSBFEUWqKtjOCjCA+itQH41U1qQt9HHwf5a
-	l78iM+SRQFZFNpXkoSY0Bn3cHb462D9aUIO//o4iy4xD2ePdzW6Xb1QoEw8DeYgLBb02EVXxgqU
-	gyE3lZUoH5nUSqdKXKtGwz9awHiqPNCD1NFapGMpNd+QjCzXa+eSgYHT+SN0hNBEzImlIO+jEiy
-	sKL/jss8FlUxrZmsmjNlyGY8G02jKgitZ3erzLhFS9Zy06aQ7QPUynjdGi93JhJ11cF0ZZYv89b
-	5WNE7573nyAhsvoCpZw/ZnZQ==
-X-Received: by 2002:a05:690c:dc6:b0:798:3a6:3f4 with SMTP id 00721157ae682-79803a60431mr1995927b3.43.1771438273356;
-        Wed, 18 Feb 2026 10:11:13 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:54::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7966c257ed5sm124246567b3.45.2026.02.18.10.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 10:11:13 -0800 (PST)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Wed, 18 Feb 2026 10:10:38 -0800
-Subject: [PATCH net v2 3/3] vsock: document write-once behavior of the
- child_ns_mode sysctl
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OtZTOy/3";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mf/PDw2W";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OtZTOy/3";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mf/PDw2W"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8703D5BCF1;
+	Wed, 18 Feb 2026 18:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1771439871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GfS8AmrSc+X9FbAAoqibWbz6uZy/Jb/EL6+KvzsaBJw=;
+	b=OtZTOy/3X0kNu4KFK4Nc9mB8/KLx8n6x6vxaXxkhhYu/wcNYb0riBlXH4NMqNWbpNOHY2t
+	ZzlPEdOs1sqHCL3Xfku9Eq7yCCDexGg02L1Ya23dq6yz5C5ojrf8htLzLaeXE9j0iPXwDx
+	yJhmTqC1Ty9oLfE0jrDq7X+gQwmsmJo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1771439871;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GfS8AmrSc+X9FbAAoqibWbz6uZy/Jb/EL6+KvzsaBJw=;
+	b=Mf/PDw2Ws4OsG2AsftyfDuSwSwT7vmGCfAvF3NxL0YUVc4XeGCqsV/JzTRyBgTGLDl0Vl/
+	GK+hWgQaY+dMW4Cg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="OtZTOy/3";
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="Mf/PDw2W"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1771439871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GfS8AmrSc+X9FbAAoqibWbz6uZy/Jb/EL6+KvzsaBJw=;
+	b=OtZTOy/3X0kNu4KFK4Nc9mB8/KLx8n6x6vxaXxkhhYu/wcNYb0riBlXH4NMqNWbpNOHY2t
+	ZzlPEdOs1sqHCL3Xfku9Eq7yCCDexGg02L1Ya23dq6yz5C5ojrf8htLzLaeXE9j0iPXwDx
+	yJhmTqC1Ty9oLfE0jrDq7X+gQwmsmJo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1771439871;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GfS8AmrSc+X9FbAAoqibWbz6uZy/Jb/EL6+KvzsaBJw=;
+	b=Mf/PDw2Ws4OsG2AsftyfDuSwSwT7vmGCfAvF3NxL0YUVc4XeGCqsV/JzTRyBgTGLDl0Vl/
+	GK+hWgQaY+dMW4Cg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6DF183EA65;
+	Wed, 18 Feb 2026 18:37:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id PR7PGv8GlmlLKAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Wed, 18 Feb 2026 18:37:51 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 13EADA08CF; Wed, 18 Feb 2026 19:37:51 +0100 (CET)
+Date: Wed, 18 Feb 2026 19:37:51 +0100
+From: Jan Kara <jack@suse.cz>
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: Jan Kara <jack@suse.cz>, gregkh@linuxfoundation.org, tj@kernel.org, 
+	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, amir73il@gmail.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on
+ file deletion
+Message-ID: <s4vb5vshejyasdw2tkydhhk4m6p3ybexoi254qjiqexzgcxb5c@ctazolc3nh6f>
+References: <20260218032232.4049467-1-tjmercier@google.com>
+ <20260218032232.4049467-3-tjmercier@google.com>
+ <e7b4xiqvh76jvqukvcocblq5lrc5hldoiiexjlo5fmagbv3mgn@zhpzm4jwx3kg>
+ <CABdmKX1S4wWFdsUOFOQ=_uVbmQVcQk0+VUVQjgAx_yqUcEd60A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260218-vsock-ns-write-once-v2-3-19e4c50d509a@meta.com>
-References: <20260218-vsock-ns-write-once-v2-0-19e4c50d509a@meta.com>
-In-Reply-To: <20260218-vsock-ns-write-once-v2-0-19e4c50d509a@meta.com>
-To: Stefano Garzarella <sgarzare@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Bobby Eshleman <bobbyeshleman@meta.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABdmKX1S4wWFdsUOFOQ=_uVbmQVcQk0+VUVQjgAx_yqUcEd60A@mail.gmail.com>
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	MISSING_XM_UA(0.00)[];
+	FREEMAIL_CC(0.00)[suse.cz,linuxfoundation.org,kernel.org,lists.linux.dev,vger.kernel.org,gmail.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
+X-Rspamd-Queue-Id: 8703D5BCF1
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
+X-Spam-Level: 
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Wed 18-02-26 10:06:35, T.J. Mercier wrote:
+> On Wed, Feb 18, 2026 at 10:01 AM Jan Kara <jack@suse.cz> wrote:
+> >
+> > On Tue 17-02-26 19:22:31, T.J. Mercier wrote:
+> > > Currently some kernfs files (e.g. cgroup.events, memory.events) support
+> > > inotify watches for IN_MODIFY, but unlike with regular filesystems, they
+> > > do not receive IN_DELETE_SELF or IN_IGNORED events when they are
+> > > removed.
+> >
+> > Please see my email:
+> > https://lore.kernel.org/all/lc2jgt3yrvuvtdj2kk7q3rloie2c5mzyhfdy4zvxylx732voet@ol3kl4ackrpb
+> >
+> > I think this is actually a bug in kernfs...
+> >
+> >                                                                 Honza
+> 
+> Thanks, I'm looking at this now. I've tried calling clear_nlink in
+> kernfs_iop_rmdir, but I've found that when we get back to vfs_rmdir
+> and shrink_dcache_parent is called, d_walk doesn't find any entries,
+> so shrink_kill->__dentry_kill is not called. I'm investigating why
+> that is...
 
-Update the vsock child_ns_mode documentation to include the new the
-write-once semantics of setting child_ns_mode. The semantics are
-implemented in a different patch in this series.
+Strange because when I was experimenting with this in my VM I have seen
+__dentry_kill being called (if the dentries were created by someone looking
+up the names).
 
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
- Documentation/admin-guide/sysctl/net.rst | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
-index c10530624f1e..976a176fb451 100644
---- a/Documentation/admin-guide/sysctl/net.rst
-+++ b/Documentation/admin-guide/sysctl/net.rst
-@@ -581,9 +581,9 @@ The init_net mode is always ``global``.
- child_ns_mode
- -------------
- 
--Controls what mode newly created child namespaces will inherit. At namespace
--creation, ``ns_mode`` is inherited from the parent's ``child_ns_mode``. The
--initial value matches the namespace's own ``ns_mode``.
-+Write-once. Controls what mode newly created child namespaces will inherit. At
-+namespace creation, ``ns_mode`` is inherited from the parent's
-+``child_ns_mode``. The initial value matches the namespace's own ``ns_mode``.
- 
- Values:
- 
-@@ -594,6 +594,10 @@ Values:
- 	  their sockets will only be able to connect within their own
- 	  namespace.
- 
-+``child_ns_mode`` can only be written once per namespace. Writing the same
-+value that is already set succeeds. Writing a different value after the first
-+write returns ``-EBUSY``.
-+
- Changing ``child_ns_mode`` only affects namespaces created after the change;
- it does not modify the current namespace or any existing children.
- 
-
+								Honza
 -- 
-2.47.3
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
