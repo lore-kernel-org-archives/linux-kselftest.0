@@ -1,230 +1,81 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9272DF128
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 03:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA18926461F;
+	Wed, 18 Feb 2026 06:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771384980; cv=none; b=rl5xHtG0POdiVewPnIzxAbw3LTdb6DMh7vALTfOLvnGRM6/L0sAgYVXbfE4l3j7peGB+XZAvhSEJMwyE61m+DuSLzi0F3ZbmpervW3wsUEmz/eVueVZFWKabZItjkxNzYz3dQSmfv4iwvk2x3gKNadGobuqgLpC2smnExpUr7bA=
+	t=1771396397; cv=none; b=M8AxPHvntxgW2FpU2Wrlfis2C6Ql6tHBP2FQEA391/qBkzR2lH9ztLFtt0ZN2i635AxdDsV2psKUtT1VCpdxbH56Phpk8bU+pY9Ds2E6rrf7MyLgbPFHXHnnIpMaW9k6oQOMd0zdfeMKZDoNLXTXysfn51t+0qPaw3Qn6dSNess=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771384980; c=relaxed/simple;
-	bh=amJ6sTsdRzljNmWNFyyNWbH0+wmhpkN9l7CXsUdsmJY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=t0CCWBq4sK8Y4HUnXlUv9mEqSl+0swy0pOJP1gdb/tImDly3AN5RUOwg6GRkW2l7Oe5SNPkZ3+E9VAqr5zHKocXJZG8EWx6tkAHWRkfT+/TN0EMW8Y0nRNCvOaPcrOpzNeMCaxm4f3WfnrindGEamxt8Wv4e9036LlXMKR5R6u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KwsBFT7J; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+	s=arc-20240116; t=1771396397; c=relaxed/simple;
+	bh=xlq/orPrqkjTO0YNNrdAfmcEntu7UhnfrYHyILgAIWQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=VKt3sZLpsxalPcJ5iq4ELlh0Na129rL6YykQgwPYZ0QARrg8pQfh74qSzxoJWPmvA8zOPZnEaWnlAod72zq+VnoiJruZsfK8TR+pRQnLAirXRaWqe4ju8qPhQekl8E/uGgS3zgF8LL6Zw4yzTDxKcjynsvK0aaCR8qJnTkb3EW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZFAmnbOW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KwsBFT7J"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2aaf2ce5d81so57884965ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Feb 2026 19:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771384979; x=1771989779; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fK/D1opWbvNOOx0YfmI5FNRjOmnqGdMEH8VMO81NrfE=;
-        b=KwsBFT7J4jYlacwY5b6LXwNUxYhroxASeKKBDpzY0RzrPypElBwUwIGQJ/QwymGZs6
-         1s2pVOf4ZhbLymL73iZPExX2c5la+7uM3+8u7XEXT226z4K+PEN8ef6CnjvfHQ7m9/FB
-         WoUFR+8AUVWz668Gi2+zF5M71r2XjvdKFz3ZwqFRWWyNUTBGv5hEJkxkBJtam9mBiBsq
-         Ul7blxHCa1rWPMF3aFfbQNSWD9JhwjX0w1O15f7CJf59JP61L4TF6FFoDz5HUnTd2YP+
-         AMMcU29tcw9fCiFgoOcKlFKP9gvqkyCjReeT9ZOTOHB7x7diTbkbKNynsbRdyyETqLrY
-         95Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771384979; x=1771989779;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fK/D1opWbvNOOx0YfmI5FNRjOmnqGdMEH8VMO81NrfE=;
-        b=HNCx0XdH/iXZ4NcM79LaJVZv+4Xkiie79ZGFUOhZHurLHSn5VKBXn2LjdnOtkPf7AH
-         QCCWMkEGzaJQuJ1FO8AEFWxodeR/Oc5ra69ZY1lMW10/QrnlPUAxUjGdoT72pOQMtGgF
-         vB8tYNU+47pzQQmNgpeg8M5g+apusBAphGlYoY3D5E/LfEzVA7s2ChNmcAwyjs8e8hZR
-         EmrfENMUPwpIS57DrZMQ1Rca3+58B2mziVf2fMDgICQ8vj30jaOSuwCK/C+C7dPDkaZu
-         ZEDArp2CTvpPyJs1viLJlQnKNpyoy1/WGREarmW8i63tazbd6wp+C4OYpK4fTfhng7gp
-         4uIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVQWdNQSznFGxOA84eW4HQlkHhvcIYkB6V5oa5LiIWBhVxg9luxngFivCNcMQ31Vsp4yzoG4eaoJnFWKADgnvY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyG3IirnTnoozrZiRytt/JZE4SzXu/K8oxhc5fKt/rm7y3hmaDi
-	lTTcSHHKFMIUBPFpK3t903Yzxdh3wwMHrPPWfPs22WmOcTsIf0p9iA07wPUZLHHGl9Uv6cFIAju
-	YskrpHqP674rT21wABA==
-X-Received: from pfbhc6.prod.google.com ([2002:a05:6a00:6506:b0:823:c4bd:60eb])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:f8f:b0:81d:a1b1:731b with SMTP id d2e1a72fcca58-824d951b02dmr12246190b3a.19.1771384978430;
- Tue, 17 Feb 2026 19:22:58 -0800 (PST)
-Date: Tue, 17 Feb 2026 19:22:32 -0800
-In-Reply-To: <20260218032232.4049467-1-tjmercier@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZFAmnbOW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A54EC19421;
+	Wed, 18 Feb 2026 06:33:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771396397;
+	bh=xlq/orPrqkjTO0YNNrdAfmcEntu7UhnfrYHyILgAIWQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ZFAmnbOWLZMMgx7JkB2LLkkaf3U2yx3L5uKLKH9g58+COilokSZxj4wpOHZ8umEqm
+	 0cBN0GTFFAywodjg0OMhmjr9IDrSRrYW/KKVBOu78ossK+mupQ/W158DmOh+W9yyWa
+	 n7TUiPXj/Hspf2Vt2WvXrOPkmZivL4CaxXo1LM74Miixyr5w925krGfzJXOb1a54k7
+	 hpCW+LW8SjEHYN5rbtpsv59aipQhZ8nkeDD9g9oB1qPJ2vghlSK1BBRdqCvyV6zWpG
+	 kUW0dVCDUUtoAXW+s5+VSsqY2/+NFvR+Nvj7VnEJzINqzvlN3/hrHYW2n/SL9bAgTm
+	 GMlgaU6cygFWA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0B0473806667;
+	Wed, 18 Feb 2026 06:33:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260218032232.4049467-1-tjmercier@google.com>
-X-Mailer: git-send-email 2.53.0.310.g728cabbaf7-goog
-Message-ID: <20260218032232.4049467-4-tjmercier@google.com>
-Subject: [PATCH v3 3/3] selftests: memcg: Add tests IN_DELETE_SELF and
- IN_IGNORED on memory.events
-From: "T.J. Mercier" <tjmercier@google.com>
-To: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, jack@suse.cz, amir73il@gmail.com, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc: "T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] eth: fbnic: Add validation for MTU changes
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177139638883.824640.16921608412951781877.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Feb 2026 06:33:08 +0000
+References: <20260214171949.772493-1-dimitri.daskalakis1@gmail.com>
+In-Reply-To: <20260214171949.772493-1-dimitri.daskalakis1@gmail.com>
+To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+Cc: davem@davemloft.net, alexanderduyck@fb.com, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, andrew+netdev@lunn.ch,
+ horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, mohsin.bashr@gmail.com,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Add two new tests that verify inotify events are sent when memcg files
-are removed.
+Hello:
 
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
-Acked-by: Tejun Heo <tj@kernel.org>
----
- .../selftests/cgroup/test_memcontrol.c        | 122 ++++++++++++++++++
- 1 file changed, 122 insertions(+)
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 4e1647568c5b..2b065d03b730 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -10,6 +10,7 @@
- #include <sys/stat.h>
- #include <sys/types.h>
- #include <unistd.h>
-+#include <sys/inotify.h>
- #include <sys/socket.h>
- #include <sys/wait.h>
- #include <arpa/inet.h>
-@@ -1625,6 +1626,125 @@ static int test_memcg_oom_group_score_events(const char *root)
- 	return ret;
- }
- 
-+static int read_event(int inotify_fd, int expected_event, int expected_wd)
-+{
-+	struct inotify_event event;
-+	ssize_t len = 0;
-+
-+	len = read(inotify_fd, &event, sizeof(event));
-+	if (len < (ssize_t)sizeof(event))
-+		return -1;
-+
-+	if (event.mask != expected_event || event.wd != expected_wd) {
-+		fprintf(stderr,
-+			"event does not match expected values: mask %d (expected %d) wd %d (expected %d)\n",
-+			event.mask, expected_event, event.wd, expected_wd);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int test_memcg_inotify_delete_file(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *memcg = NULL, *child_memcg = NULL;
-+	int fd, wd;
-+
-+	memcg = cg_name(root, "memcg_test_0");
-+
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	if (cg_write(memcg, "cgroup.subtree_control", "+memory"))
-+		goto cleanup;
-+
-+	child_memcg = cg_name(memcg, "child");
-+	if (!child_memcg)
-+		goto cleanup;
-+
-+	if (cg_create(child_memcg))
-+		goto cleanup;
-+
-+	fd = inotify_init1(0);
-+	if (fd == -1)
-+		goto cleanup;
-+
-+	wd = inotify_add_watch(fd, cg_control(child_memcg, "memory.events"), IN_DELETE_SELF);
-+	if (wd == -1)
-+		goto cleanup;
-+
-+	cg_write(memcg, "cgroup.subtree_control", "-memory");
-+
-+	if (read_event(fd, IN_DELETE_SELF, wd))
-+		goto cleanup;
-+
-+	if (read_event(fd, IN_IGNORED, wd))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	if (child_memcg)
-+		cg_destroy(child_memcg);
-+	free(child_memcg);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
-+static int test_memcg_inotify_delete_rmdir(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *memcg = NULL;
-+	int fd, wd;
-+
-+	memcg = cg_name(root, "memcg_test_0");
-+
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	fd = inotify_init1(0);
-+	if (fd == -1)
-+		goto cleanup;
-+
-+	wd = inotify_add_watch(fd, cg_control(memcg, "memory.events"), IN_DELETE_SELF);
-+	if (wd == -1)
-+		goto cleanup;
-+
-+	if (cg_destroy(memcg))
-+		goto cleanup;
-+	free(memcg);
-+	memcg = NULL;
-+
-+	if (read_event(fd, IN_DELETE_SELF, wd))
-+		goto cleanup;
-+
-+	if (read_event(fd, IN_IGNORED, wd))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct memcg_test {
- 	int (*fn)(const char *root);
-@@ -1644,6 +1764,8 @@ struct memcg_test {
- 	T(test_memcg_oom_group_leaf_events),
- 	T(test_memcg_oom_group_parent_events),
- 	T(test_memcg_oom_group_score_events),
-+	T(test_memcg_inotify_delete_file),
-+	T(test_memcg_inotify_delete_rmdir),
- };
- #undef T
- 
+On Sat, 14 Feb 2026 09:19:49 -0800 you wrote:
+> Increasing the MTU beyond the HDS threshold causes the hardware to
+> fragment packets across multiple buffers. If a single-buffer XDP program
+> is attached, the driver will drop all multi-frag frames. While we can't
+> prevent a remote sender from sending non-TCP packets larger than the MTU,
+> this will prevent users from inadvertently breaking new TCP streams.
+> 
+> Traditionally, drivers supported XDP with MTU less than 4Kb
+> (packet per page). Fbnic currently prevents attaching XDP when MTU is too high.
+> But it does not prevent increasing MTU after XDP is attached.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] eth: fbnic: Add validation for MTU changes
+    https://git.kernel.org/netdev/net/c/ccd8e87748ad
+
+You are awesome, thank you!
 -- 
-2.53.0.310.g728cabbaf7-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
