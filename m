@@ -1,81 +1,81 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66BE2D94BB
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 21:34:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DB12F5487
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 21:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771450493; cv=none; b=a0eu/LNJsNO6UFoE58Z4zkkVjr4GQ3HrIncJI6G908g9f/wh7Q3dwDNKSVuB98N8+0VpWDPj1nxoxHNSqieVuhpqRPSJvyc9qrhxfs8fZ537psZXHj+aixCT6L/gUIY+qbFlw1PzsWgn4nrGGOIej+d+x50Pu6rOBmOC0AFyZaE=
+	t=1771451180; cv=none; b=AeIQhzuqx9bF6Q5NdpMaKclIV+aaR2ObxACIn467bfJ3Ww+tqvfoMHpAubPKwmiuiPVyau90LkcZTjy6p7oNxlPIdeH7KFqeWxmhhYgIpHxzBqMk5XlaBVN3ooeUZoAHW2H06yGFDN2j51yUk6J9xweyvNGxLxWaNZg0c5lWz7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771450493; c=relaxed/simple;
-	bh=d4J2Wwfy4bpwp/Wyy0MXG87xaedJ9FKZnZIYp3QGksk=;
+	s=arc-20240116; t=1771451180; c=relaxed/simple;
+	bh=xmblt6armlTF8R46mNJYp4dI9Ge2TRJhwdNSQ517qBg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SVd79Syflwf87+Mf0FEPD5Evf9K/VmbLyfTf54ePGfmtqG1ljRXfgcLKggUvQIlaZGx0XOuuTyNWWde3PwFxz7Uz07txVCfz4SU6Zr9IguZXbvHJa3UFQw2QaX5jWGxQTcQiPGDDZ0cQvf6BG2FN4EHp445tI/8jRGqgMan5A08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YpYuew+r; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ilA/lGkY; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=cu1ZU3lTDtO/fYjlqqLnog4mnP5oV8w4y6UCkUMjgxbfkfew2TlhfCsE55apBF8mO9KO3Af3mThtjKKPDIxMz5dnbbFgV+LaKfObsMXXDBEtsSgLYFO6k6A9kN3yO7c1leyxsqavEUBJ0Yao5meglh5Q3FyiVhEPtCEUpwet2dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cI1I/25U; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qpOr8LHH; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YpYuew+r";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ilA/lGkY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cI1I/25U";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qpOr8LHH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771450490;
+	s=mimecast20190719; t=1771451178;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UD658ZwKuP2PF9xMpkydfrRh56szUrbMAmGplK3iBZk=;
-	b=YpYuew+rDzq46uW2raPbwug7HFVCU+No6lmG24dlNGbfyGbsJthB/A6Dbt1EsBbKQnlfNw
-	y2B2ThsoP51pGBPqV5AXbxgn/NVeAMgJ13tpSWD9i3GcYtyStSt0ohyk8/+5Eu8kCt0B3T
-	14jCUcfQAcOzbBviWBgyKOQJq92VCQo=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=L7/VoI5q20qGTQoXj49vRdypgNZ/BrCMYvuD6UKnpJI=;
+	b=cI1I/25U4ihis2C/hMR6fY2VLctxQpFVRUuOaAdzZW95obn6BPG3rTGtfvUl3wMM9OvfZa
+	anC9OpQ4YU0sVpEEcciULiY7jItzqttMeAk6dtrG1mcwGBFRjkcCZZ5Sy+R3ROC/4LeKJF
+	o9jCKOduAT1lHwNTA62V5j0zR32Yi/Q=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-219-wIGxZGB3OCSutIsZJ6drFQ-1; Wed, 18 Feb 2026 16:34:49 -0500
-X-MC-Unique: wIGxZGB3OCSutIsZJ6drFQ-1
-X-Mimecast-MFC-AGG-ID: wIGxZGB3OCSutIsZJ6drFQ_1771450489
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c71655aa11so252185185a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 13:34:49 -0800 (PST)
+ us-mta-563-Ds7oKR9jMLupeKHCm9lFVw-1; Wed, 18 Feb 2026 16:46:17 -0500
+X-MC-Unique: Ds7oKR9jMLupeKHCm9lFVw-1
+X-Mimecast-MFC-AGG-ID: Ds7oKR9jMLupeKHCm9lFVw_1771451176
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-506a07740bdso35178931cf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 13:46:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1771450488; x=1772055288; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1771451176; x=1772055976; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UD658ZwKuP2PF9xMpkydfrRh56szUrbMAmGplK3iBZk=;
-        b=ilA/lGkY7PCnCWgGZ+gX+zAm3oKKHDnNYPX0Cx67V+VlZzcN3eVAmVJi/3GVjDBEUJ
-         kumsoaS+SR3XkJGaJC4rqRKOBzrIu+0wYjtqoS21ceMa2yGkNw1JduCciEE2ofq3V6AF
-         7PfNZ0DNC3MRVrNASZ3GNxMKfbpjlzLbCYHZMFrfV+V/8LBXsjlmn9HIug4NT8fF5Ir2
-         RNbzwtmwcAVerpnAVMrJx1If60N46u6brVP7ZJocYiv8NqgCGmhfYC3XBCpWvL6HjQRt
-         hnPtxhqTF37kW/En/HEL/iGtqCD3KzzZBCU3C+5n9pEk99E0MtONGPfLDJtdTEynUQjh
-         fmZA==
+        bh=L7/VoI5q20qGTQoXj49vRdypgNZ/BrCMYvuD6UKnpJI=;
+        b=qpOr8LHHK8sHR7IaDQQ/h/ai5uyQjBYdFe2eg5jqDHi2XzlV1tBedcr7f5fwlaK2W0
+         UoDCVkZ70PsOdUFeUBqM26eK73Vm7Bon2vH8VcN3gvESP0IfM9XXjalLqGMWxTdknqsH
+         6h3o7K+O0ONnevOrCSQcvwHpmRuwmyXz8hXV22mScpdwwXq8VKwpJNvukOsVdoc0uhS2
+         DF70HN1IznmxwkHscgUFNe4yXz3n6f09heL/s75U7ETp3rylHrHWvTTvJdhbLDa9nggd
+         3elUL7NvHLEA+n+Lt0GMCVFpbnYhWkMjDHN1Py2sZaLs9gwYuVgy9txKn/nu+/1gGqOM
+         gScQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771450488; x=1772055288;
+        d=1e100.net; s=20230601; t=1771451176; x=1772055976;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UD658ZwKuP2PF9xMpkydfrRh56szUrbMAmGplK3iBZk=;
-        b=NsyAMvMO/oOV4r/pjR5+id+HyAymA5WSJjdjKFY9xUkZ5KMs0krEXGlzZYXgiDGWEN
-         8Yq3JjGhfCMAi/9G/N5CCuUUtQWyOlYUV8uahPEdrrXtd9nGvtsWQom9a60vmIPK4ofp
-         RY4nAzJ2GmQvZtR76Kb74GhwBgA3XY7lCovGDCE4OIVzLANar3VrMOUZ16zoDYt8ovMQ
-         0oasH8WNbSZcdJjuffQAHpB9swwj0wgrxHwtHjEsd/2AC1uXQrX9E8ZtCCi5ptLTK6g2
-         7slvCAG4jRwgP+hZNOTo1va4fvOuJfA39vv/GqPwR/v7SiEmKtpT8qQDxZSEFJCuw7O/
-         EGsA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGGlwrHbKJi4ccO4WdwQx0ZiAKWuKXcKjDaD/bJHAJvpU1eOxmXu7DYzROVxV/fViU411wrWJaHXSgDjQnMCc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBmhb82pewEGWvmh60I1aCu5axOmQUvkeVn3CXQc0BC/JP4gfx
-	ObxGHgHv+qGvsl7a7ab2vsAepay+OD9LMZpY3trbd29hDAcIFltbMNNj48NsDtIWb42FWAseqjV
-	z0Wl0ZMf1Tnay+ooMN8jKzHQyIIjVvJe2wYr36zFOiE6QDvDlNiRDuRo6/KDleSnIDpFpeg==
-X-Gm-Gg: AZuq6aJwYez09KMOW0OKEAXQ+HMmYOPzJQQirZkLVIBYxO5h814+jah7gm/HVrM+yVW
-	Iq4axG/WY9pbhnG42mFHSJ471PG0jTq9u3suert7LLs5+vXm9fxPySGmxB9e7vo8H9E8b9APuVw
-	AQKNyBm98van3r+AQvg+3XokA/FcYRs1SyqJraI6Ucde2iTwrnPuPHkqahLqy99qWy3kGvRW8qq
-	+Sfxmy1M+MkpVCVYVxk6btGNTBn+A3Oa1kQrxd8eY+5PRUvChap0bRDHgPO2IRPuw5022IV+oaB
-	E4JodbBKcNVEp3Okn9rPF/0x96WybFupjEZpYCNuybMbTfUGcNNjmyxAjNGriHJXvfofLWqBB6n
-	OHR8+jEvdc1xmoA==
-X-Received: by 2002:a05:6214:ccb:b0:896:f588:b2e0 with SMTP id 6a1803df08f44-899580c41a0mr45451396d6.48.1771450488607;
-        Wed, 18 Feb 2026 13:34:48 -0800 (PST)
-X-Received: by 2002:a05:6214:ccb:b0:896:f588:b2e0 with SMTP id 6a1803df08f44-899580c41a0mr45451066d6.48.1771450488156;
-        Wed, 18 Feb 2026 13:34:48 -0800 (PST)
+        bh=L7/VoI5q20qGTQoXj49vRdypgNZ/BrCMYvuD6UKnpJI=;
+        b=XZ90Y/g8h2ClD/XcqDJgvG2svOHAWqXFNWh7j/43CRhsioNZ6g2M+mNDGQWtwVtZx+
+         wieXxBAQRNy9pnRdznMgwRKnZISC0BSAzvr6q+SCo6pns6CMLiSR1GkMaA3mTKaLnNOF
+         /uiSzeilIYsI+k7PowJBbM/6Zf9m0JxcuDJTUSrMileJz5yFqD1muvor9TccwqTH/HEq
+         sGFpmcSBQf4EZ/rFTfCe1FnKKP4Rp6BK+o4ZJEFMOAc24RACuZLGdpxqJJCBlG/mhd+9
+         vT8/511rPY2viaf5mPA2Ocbucm3MK1I/5ivto1uYfIeozdHkZGa+X6Cw0/77gvZa23e1
+         i2eA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7gIiuzasBrqHFqzPD/mmsY78GV16PVjv54h69Jm4fgdfiawwdehH9wUNBn+vcfPf/lVMb2c/+DSaVFmVuiqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEL/bFyz4Wo5p4ET2G3rcWXOyNeqdNhvaw29P543zdOKgFcUEE
+	zC4Ct69zFSbaZ/njLv9nkuDDIigr1rZtHkFoQU1J8uquzca5Is3hY2AyziqFBwD+dqLyBpZeUKK
+	8PyZ/PwNhX4IkVnUICYiFjJruoba5mxhMt3J1NYcS6Ja5NBZMS07jk4Wk9kJLR1kHa335HQ==
+X-Gm-Gg: AZuq6aIYoJeYb5KTTci7aGYQMyXtjD7OCdJt9qJdxdi+HAqPdWgGRPFGbtoJW0TW8G4
+	ncoic9738dOu/VxshcLZrd81/5VzvC6zi2dHpytjKaiMi7OyWqOKsUYIHIgA3rP/yORaZCVPW1l
+	8XN1NK/bHlLteSA73O1LgiMh8g4rxRCv0w6ENCzfRSFjCWwxFf/tkDq+o/kBIse7BIqTjfWPtth
+	Sa9cV+tiU98YicDv+vCviivKwtwn8CH3NbjqL06vSF6TLAr5i7kF3j9pnfne9iUVF02t0Xg0Tca
+	hjKNon6RCuVVzYXAI2jyEwb+5DU4P9yiyXiXuboJhtczWzE2p4BrlkoLzDHJAK7k8m/FOfytIp1
+	zVYMq2XKdSiYdTw==
+X-Received: by 2002:a05:622a:190b:b0:4e8:b446:c01b with SMTP id d75a77b69052e-506b4020625mr201996671cf.61.1771451176370;
+        Wed, 18 Feb 2026 13:46:16 -0800 (PST)
+X-Received: by 2002:a05:622a:190b:b0:4e8:b446:c01b with SMTP id d75a77b69052e-506b4020625mr201996241cf.61.1771451175893;
+        Wed, 18 Feb 2026 13:46:15 -0800 (PST)
 Received: from x1.local ([174.91.117.149])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb2b218258sm1888631685a.47.2026.02.18.13.34.42
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cdbf972sm195151676d6.44.2026.02.18.13.46.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 13:34:47 -0800 (PST)
-Date: Wed, 18 Feb 2026 16:34:22 -0500
+        Wed, 18 Feb 2026 13:46:15 -0800 (PST)
+Date: Wed, 18 Feb 2026 16:45:50 -0500
 From: Peter Xu <peterx@redhat.com>
 To: Mike Rapoport <rppt@kernel.org>
 Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
@@ -96,14 +96,15 @@ Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
 	Suren Baghdasaryan <surenb@google.com>,
 	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 07/17] userfaultfd: introduce vm_uffd_ops
-Message-ID: <aZYwXq-x8vMSPorg@x1.local>
+Subject: Re: [PATCH RFC 10/17] shmem, userfaultfd: implement shmem uffd
+ operations using vm_uffd_ops
+Message-ID: <aZYzDhi7mvgucP9V@x1.local>
 References: <20260127192936.1250096-1-rppt@kernel.org>
- <20260127192936.1250096-8-rppt@kernel.org>
- <aYEY6PC0Qfu0m5gu@x1.local>
- <aYhh2XzyFsJbohll@kernel.org>
- <aYzZ-zBipYQ2OA_n@x1.local>
- <aZIGp0F7uuS9qYVZ@kernel.org>
+ <20260127192936.1250096-11-rppt@kernel.org>
+ <aYIzCuh8cjd09zrP@x1.local>
+ <aYhm_4difwN5XXxe@kernel.org>
+ <aYzf-hS4pUY9ulss@x1.local>
+ <aZIGIH9--qOamaMe@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -112,12 +113,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aZIGp0F7uuS9qYVZ@kernel.org>
+In-Reply-To: <aZIGIH9--qOamaMe@kernel.org>
 
-On Sun, Feb 15, 2026 at 07:47:19PM +0200, Mike Rapoport wrote:
-> I agree. Will move the check for the markers back into userfaultfd.c
+On Sun, Feb 15, 2026 at 07:45:04PM +0200, Mike Rapoport wrote:
+> On Wed, Feb 11, 2026 at 03:00:58PM -0500, Peter Xu wrote:
+> > On Sun, Feb 08, 2026 at 12:35:43PM +0200, Mike Rapoport wrote:
+> > > > > +static void shmem_mfill_filemap_remove(struct folio *folio,
+> > > > > +				       struct vm_area_struct *vma)
+> > > > > +{
+> > > > > +	struct inode *inode = file_inode(vma->vm_file);
+> > > > > +
+> > > > > +	filemap_remove_folio(folio);
+> > > > > +	shmem_recalc_inode(inode, 0, 0);
+> > > > >  	folio_unlock(folio);
+> > > > > -	folio_put(folio);
+> > > > > -out_unacct_blocks:
+> > > > > -	shmem_inode_unacct_blocks(inode, 1);
+> > > > 
+> > > > This looks wrong, or maybe I miss somewhere we did the unacct_blocks()?
+> > > 
+> > > This is handled by shmem_recalc_inode(inode, 0, 0).
+> > 
+> > IIUC shmem_recalc_inode() only does the fixup of shmem_inode_info over
+> > possiblly changing inode->i_mapping->nrpages.  It's not for reverting the
+> > accounting in the failure paths here.
+> > 
+> > OTOH, we still need to maintain accounting for the rest things with
+> > correctly invoke shmem_inode_unacct_blocks().  One thing we can try is
+> > testing this series against either shmem quota support (since 2023, IIUC
+> > it's relevant to "quota" mount option), or max_blocks accountings (IIUC,
+> > "size" mount option), etc.  Any of those should reflect a difference if my
+> > understanding is correct.
+> > 
+> > So IIUC we still need the unacct_blocks(), please kindly help double check.
+> 
+> I followed shmem_get_folio_gfp() error handling, and unless I missed
+> something we should have the same sequence with uffd.
+> 
+> In shmem_mfill_filemap_add() we increment both i_mapping->nrpages and
+> info->alloced in shmem_add_to_page_cache() and 
+> shmem_recalc_inode(inode, 1, 0) respectively.
+> 
+> Then in shmem_filemap_remove() the call to filemap_remove_folio()
+> decrements i_mapping->nrpages and shmem_recalc_inode(inode, 0, 0) will see
+> freed=1 and will call shmem_inode_unacct_blocks().
 
-Thank you!
+You're correct.  I guess I was misleaded by the comments above
+shmem_recalc_inode() when reading this part assuming it's only for the
+cases where nrpages changed behind the hood.. :)
+
+I believe we need shmem_recalc_inode(inode, 0, 0) to make sure
+info->alloced is properly decremented, so shmem_inode_unacct_blocks()
+explicit calls will miss that otherwise due to the reordering of shmem
+accounting in this patch.
+
+It's slightly tricky on using these functions, I wonder if we want to
+mention them in the commit log, but I'm OK either way.
+
+Thanks for double checking!
 
 -- 
 Peter Xu
