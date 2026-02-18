@@ -1,177 +1,175 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DB12F5487
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 21:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771451180; cv=none; b=AeIQhzuqx9bF6Q5NdpMaKclIV+aaR2ObxACIn467bfJ3Ww+tqvfoMHpAubPKwmiuiPVyau90LkcZTjy6p7oNxlPIdeH7KFqeWxmhhYgIpHxzBqMk5XlaBVN3ooeUZoAHW2H06yGFDN2j51yUk6J9xweyvNGxLxWaNZg0c5lWz7Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771451180; c=relaxed/simple;
-	bh=xmblt6armlTF8R46mNJYp4dI9Ge2TRJhwdNSQ517qBg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cu1ZU3lTDtO/fYjlqqLnog4mnP5oV8w4y6UCkUMjgxbfkfew2TlhfCsE55apBF8mO9KO3Af3mThtjKKPDIxMz5dnbbFgV+LaKfObsMXXDBEtsSgLYFO6k6A9kN3yO7c1leyxsqavEUBJ0Yao5meglh5Q3FyiVhEPtCEUpwet2dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cI1I/25U; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qpOr8LHH; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D8F309EE9
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 22:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771452659; cv=pass; b=UStdfTK5svbp9BP3e0G/w70Au7Rdpcg1A5JuV/Ivqvd2uyDrq6zeXWtwojljD+wxvkajuARNdPUgLLLgYqiYRCOSgTwyk9FDq8MoYv7UhpHmT0LUqVZZR4YmzrO1vgHPY5/6evPxiGpx257E2aWrnKqwvdm0RCE/aM21crwCFyE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771452659; c=relaxed/simple;
+	bh=lPYt0pFhbd6M7kXSQtBzYZaVvT2A54L7thEUJD072Aw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VGBRs3Aa3Nz+1PAAOfryIvYzKYzxMfhacDuu+TWha4h6klKiUuXA+HJ2s5V5rW2sQuf+ScjNSvK7l7esLJZmNcuasuICLv1HVSi/W5vlRTt3xxUI88mIIkunfNz8l77O7j2dlzOO+AFxbbwxj0Aa5XzrXWaE8MGuX8uyyPp2IfA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gHXlcvqR; arc=pass smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cI1I/25U";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qpOr8LHH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771451178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L7/VoI5q20qGTQoXj49vRdypgNZ/BrCMYvuD6UKnpJI=;
-	b=cI1I/25U4ihis2C/hMR6fY2VLctxQpFVRUuOaAdzZW95obn6BPG3rTGtfvUl3wMM9OvfZa
-	anC9OpQ4YU0sVpEEcciULiY7jItzqttMeAk6dtrG1mcwGBFRjkcCZZ5Sy+R3ROC/4LeKJF
-	o9jCKOduAT1lHwNTA62V5j0zR32Yi/Q=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-563-Ds7oKR9jMLupeKHCm9lFVw-1; Wed, 18 Feb 2026 16:46:17 -0500
-X-MC-Unique: Ds7oKR9jMLupeKHCm9lFVw-1
-X-Mimecast-MFC-AGG-ID: Ds7oKR9jMLupeKHCm9lFVw_1771451176
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-506a07740bdso35178931cf.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 13:46:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gHXlcvqR"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48373ad38d2so26175e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Feb 2026 14:10:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771452656; cv=none;
+        d=google.com; s=arc-20240605;
+        b=a5uDri3A689ufvlBn7tRbzcHKdxd50gGBjG/26fNoVVd9G0J6BErOiIBU59Va+pm/5
+         A9AeRa9BCDTbsIHfDWdkl+fm9rAJcrRNkuRagrJfeuVoKN6hXwcXOs8amJksA0zn8RQN
+         vpcYEoqxmstlo+YEOjQg7X4HXoW3nkAbC1rTFefhWhZUx36zGOXu4rZm+271KamHjrdh
+         RrQe2Y+itgECmKO+os8pmw5XmXtia+7U4OpSWfrk9Grl1hyln8oPkRVzsMZNVBRcn8QV
+         gi4c5APX8XxByF2QhRO5cWduKo9SPM2VKR3FOXzXHot92s+uGsUglCuI1DC3OTPKbVai
+         uRwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GFceulQD+cH2ZvMG6LJDvnAg6v30pKU0WTiw2QCY5N0=;
+        fh=UXkWSpPXEHEDKSFPBsWCFtT7zluJmCy9y+DVq5gUG7o=;
+        b=ec79gNVuaBkHtERFx4IU3C3B0aBGaqW82y07qsFfuv6c36JOkoM53MpuMmrm6yQNgR
+         APjYEa9lPnI6a56qKyAOa4V2h3jlfOOiZAWwHWzzii2Wnidq5/ZdHMhn7CRDlCVyxD00
+         rR32y3KAS06agxqUhKL8rocZzZlglnP8Qcz6nV3rxn0rmhx2ZkSmS86rJ5RILTZNtyka
+         tRELICVRjJk+5J/sIML/h8Zw03cHO2c36AANE4csqaW6QcnP+Cex9HNvso//Ery/Go8V
+         fW1o7smxPZeNpGKUHQPCdDOPo/yQBcEdKMcJO+HENjnCtwK5DPC604zO4aIyQFK972DH
+         j+lw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1771451176; x=1772055976; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L7/VoI5q20qGTQoXj49vRdypgNZ/BrCMYvuD6UKnpJI=;
-        b=qpOr8LHHK8sHR7IaDQQ/h/ai5uyQjBYdFe2eg5jqDHi2XzlV1tBedcr7f5fwlaK2W0
-         UoDCVkZ70PsOdUFeUBqM26eK73Vm7Bon2vH8VcN3gvESP0IfM9XXjalLqGMWxTdknqsH
-         6h3o7K+O0ONnevOrCSQcvwHpmRuwmyXz8hXV22mScpdwwXq8VKwpJNvukOsVdoc0uhS2
-         DF70HN1IznmxwkHscgUFNe4yXz3n6f09heL/s75U7ETp3rylHrHWvTTvJdhbLDa9nggd
-         3elUL7NvHLEA+n+Lt0GMCVFpbnYhWkMjDHN1Py2sZaLs9gwYuVgy9txKn/nu+/1gGqOM
-         gScQ==
+        d=google.com; s=20230601; t=1771452656; x=1772057456; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GFceulQD+cH2ZvMG6LJDvnAg6v30pKU0WTiw2QCY5N0=;
+        b=gHXlcvqRsCXRFRWgKe2rCQ+pBr2va665XoRPpX94fX/z6KkXa7Eek/zmzIcgqrrMt7
+         2D29ca6OTzPQtkc0XnawaXDloZM2bveVMyzqxPugfnwsquJ9FP+xvG0InyqiwPbgni3e
+         ZktSpe5qmA2gHbik95BElCBIHX8gL9NTrEBeOOec+BZqkN3J0jhUQFJ49+rLFwnTQeUP
+         Qz7fhSkiAWGqyzwRslZ/TDy9iUQtEC7Vr/g8et7rgSs1RVELu4iW5Bvh640XmcCfM71Y
+         bPzzb/m3mUnqsbrHNrW+6eQ78RU8UFE/jo0JTlqDpraGUCgODweN06T8F4/6r1W5p9dp
+         /R2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771451176; x=1772055976;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L7/VoI5q20qGTQoXj49vRdypgNZ/BrCMYvuD6UKnpJI=;
-        b=XZ90Y/g8h2ClD/XcqDJgvG2svOHAWqXFNWh7j/43CRhsioNZ6g2M+mNDGQWtwVtZx+
-         wieXxBAQRNy9pnRdznMgwRKnZISC0BSAzvr6q+SCo6pns6CMLiSR1GkMaA3mTKaLnNOF
-         /uiSzeilIYsI+k7PowJBbM/6Zf9m0JxcuDJTUSrMileJz5yFqD1muvor9TccwqTH/HEq
-         sGFpmcSBQf4EZ/rFTfCe1FnKKP4Rp6BK+o4ZJEFMOAc24RACuZLGdpxqJJCBlG/mhd+9
-         vT8/511rPY2viaf5mPA2Ocbucm3MK1I/5ivto1uYfIeozdHkZGa+X6Cw0/77gvZa23e1
-         i2eA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7gIiuzasBrqHFqzPD/mmsY78GV16PVjv54h69Jm4fgdfiawwdehH9wUNBn+vcfPf/lVMb2c/+DSaVFmVuiqE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEL/bFyz4Wo5p4ET2G3rcWXOyNeqdNhvaw29P543zdOKgFcUEE
-	zC4Ct69zFSbaZ/njLv9nkuDDIigr1rZtHkFoQU1J8uquzca5Is3hY2AyziqFBwD+dqLyBpZeUKK
-	8PyZ/PwNhX4IkVnUICYiFjJruoba5mxhMt3J1NYcS6Ja5NBZMS07jk4Wk9kJLR1kHa335HQ==
-X-Gm-Gg: AZuq6aIYoJeYb5KTTci7aGYQMyXtjD7OCdJt9qJdxdi+HAqPdWgGRPFGbtoJW0TW8G4
-	ncoic9738dOu/VxshcLZrd81/5VzvC6zi2dHpytjKaiMi7OyWqOKsUYIHIgA3rP/yORaZCVPW1l
-	8XN1NK/bHlLteSA73O1LgiMh8g4rxRCv0w6ENCzfRSFjCWwxFf/tkDq+o/kBIse7BIqTjfWPtth
-	Sa9cV+tiU98YicDv+vCviivKwtwn8CH3NbjqL06vSF6TLAr5i7kF3j9pnfne9iUVF02t0Xg0Tca
-	hjKNon6RCuVVzYXAI2jyEwb+5DU4P9yiyXiXuboJhtczWzE2p4BrlkoLzDHJAK7k8m/FOfytIp1
-	zVYMq2XKdSiYdTw==
-X-Received: by 2002:a05:622a:190b:b0:4e8:b446:c01b with SMTP id d75a77b69052e-506b4020625mr201996671cf.61.1771451176370;
-        Wed, 18 Feb 2026 13:46:16 -0800 (PST)
-X-Received: by 2002:a05:622a:190b:b0:4e8:b446:c01b with SMTP id d75a77b69052e-506b4020625mr201996241cf.61.1771451175893;
-        Wed, 18 Feb 2026 13:46:15 -0800 (PST)
-Received: from x1.local ([174.91.117.149])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cdbf972sm195151676d6.44.2026.02.18.13.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 13:46:15 -0800 (PST)
-Date: Wed, 18 Feb 2026 16:45:50 -0500
-From: Peter Xu <peterx@redhat.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 10/17] shmem, userfaultfd: implement shmem uffd
- operations using vm_uffd_ops
-Message-ID: <aZYzDhi7mvgucP9V@x1.local>
-References: <20260127192936.1250096-1-rppt@kernel.org>
- <20260127192936.1250096-11-rppt@kernel.org>
- <aYIzCuh8cjd09zrP@x1.local>
- <aYhm_4difwN5XXxe@kernel.org>
- <aYzf-hS4pUY9ulss@x1.local>
- <aZIGIH9--qOamaMe@kernel.org>
+        d=1e100.net; s=20230601; t=1771452656; x=1772057456;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GFceulQD+cH2ZvMG6LJDvnAg6v30pKU0WTiw2QCY5N0=;
+        b=ftUqGgCeTl3Ml8Yh6Qz96uBdMiiWWfjRRzFNJcPOlR40EWt2mWPuBcMUSHBlBPeRh6
+         bq2D8HdwfqvgSDnfs/QNzHwSv6d8s9kOpHYLpJ24CjZPaVwXUAcEIV+qLPQMzhw5HK5I
+         K6gOapHJUjb1o/j6sHVN1mLDBlbh6JCJj3lHPjqZfMjpc25as3FBANdpYhY29lFLZFqY
+         2aPn1qzTYeDK3J69hyyXfwNKLo1if4aN8fG9dUDo2vi1sICgBDfoEqdH3co3vZIKo31Q
+         Xjl+CBxtvpXstEsp8zOoniVBTwcY1s31VX8cYgwnmzvxK+b3hmrkdxGWFH7tf8hEXPzb
+         55Dw==
+X-Forwarded-Encrypted: i=1; AJvYcCVwrSm12nZpC8fazcNO7wU5Nlud5Y6S0NrJLYvpoTFmpFfD2c1hqVElL/OZmnlMt8zNjjtQ/ps9qQ0jFqm9v4I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjKr6jc+gc6/yut4qY4wD0mHpjuIkB8KzBSuLh9PXuAamCwcRC
+	pvRvHyz/Ofo8rT2cFHK8dHwaEhrG2gg6CrbPwurQgispNuFmsrLYnREFpQ8P7D9fsfj+v7zAS+n
+	S/WrTdNly+sNHJLe2TuiVRQxNKzAGfYBh5fY2w7GR
+X-Gm-Gg: AZuq6aLdmEHQk4xlTEi5c4MnAIplajcFuGDLwMZ89PWMkaxsxxZ4WmcEeYQO4aMNpji
+	Ldv1WIHtqUqKh1gRIeJla+hSfVxXDfCUkXHinw7hb84xLKFGm45/780pa2tnkrHvhynW9BwyMAi
+	Wjz7RU2yUzXgrw6N1WyhCHenblJq07uRAun9ybGCjtzUuRQlj6ii5bDgrFNNrBJDoPRcw9XyY5i
+	OoKC6deTH/UM0iDo4QRC6ssL50N3rOUfv9KyN5IRkrqs85Xo3qAgpnq4gjZhXNpEqcUfey0UwBf
+	1F/a8OhnbOguXwylk9OhSzFNFfzuamnYiUxqJruF8G644ZxtdSApF51TG4orINA8rXqZbg==
+X-Received: by 2002:a05:600c:3e06:b0:45f:2940:d194 with SMTP id
+ 5b1f17b1804b1-4839f8fbec9mr92205e9.2.1771452655867; Wed, 18 Feb 2026 14:10:55
+ -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aZIGIH9--qOamaMe@kernel.org>
+References: <20260218032232.4049467-1-tjmercier@google.com>
+ <20260218032232.4049467-3-tjmercier@google.com> <e7b4xiqvh76jvqukvcocblq5lrc5hldoiiexjlo5fmagbv3mgn@zhpzm4jwx3kg>
+ <CABdmKX1S4wWFdsUOFOQ=_uVbmQVcQk0+VUVQjgAx_yqUcEd60A@mail.gmail.com>
+ <s4vb5vshejyasdw2tkydhhk4m6p3ybexoi254qjiqexzgcxb5c@ctazolc3nh6f>
+ <CABdmKX2cQCneFyZhTWmWYz-RTmAOQcEKh5ZQewz25E6Xfok1tQ@mail.gmail.com> <CABdmKX0BJcsv0TaPSsGN2a4nkQaKF=cX8rnnoL5kPTHNfuKL7Q@mail.gmail.com>
+In-Reply-To: <CABdmKX0BJcsv0TaPSsGN2a4nkQaKF=cX8rnnoL5kPTHNfuKL7Q@mail.gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Wed, 18 Feb 2026 14:10:42 -0800
+X-Gm-Features: AaiRm50oJmkhv3JVc8QRZs9eNQOIt0sVOkSFuyILAnwFvxKBu7Elyj-9uDHYoK8
+Message-ID: <CABdmKX0DGP9=OOPwU8WjqHnmRDfPnxoAjm8Rvy-D2GYQX0GE0A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kernfs: send IN_DELETE_SELF and IN_IGNORED on file deletion
+To: Jan Kara <jack@suse.cz>
+Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, amir73il@gmail.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Feb 15, 2026 at 07:45:04PM +0200, Mike Rapoport wrote:
-> On Wed, Feb 11, 2026 at 03:00:58PM -0500, Peter Xu wrote:
-> > On Sun, Feb 08, 2026 at 12:35:43PM +0200, Mike Rapoport wrote:
-> > > > > +static void shmem_mfill_filemap_remove(struct folio *folio,
-> > > > > +				       struct vm_area_struct *vma)
-> > > > > +{
-> > > > > +	struct inode *inode = file_inode(vma->vm_file);
-> > > > > +
-> > > > > +	filemap_remove_folio(folio);
-> > > > > +	shmem_recalc_inode(inode, 0, 0);
-> > > > >  	folio_unlock(folio);
-> > > > > -	folio_put(folio);
-> > > > > -out_unacct_blocks:
-> > > > > -	shmem_inode_unacct_blocks(inode, 1);
-> > > > 
-> > > > This looks wrong, or maybe I miss somewhere we did the unacct_blocks()?
-> > > 
-> > > This is handled by shmem_recalc_inode(inode, 0, 0).
-> > 
-> > IIUC shmem_recalc_inode() only does the fixup of shmem_inode_info over
-> > possiblly changing inode->i_mapping->nrpages.  It's not for reverting the
-> > accounting in the failure paths here.
-> > 
-> > OTOH, we still need to maintain accounting for the rest things with
-> > correctly invoke shmem_inode_unacct_blocks().  One thing we can try is
-> > testing this series against either shmem quota support (since 2023, IIUC
-> > it's relevant to "quota" mount option), or max_blocks accountings (IIUC,
-> > "size" mount option), etc.  Any of those should reflect a difference if my
-> > understanding is correct.
-> > 
-> > So IIUC we still need the unacct_blocks(), please kindly help double check.
-> 
-> I followed shmem_get_folio_gfp() error handling, and unless I missed
-> something we should have the same sequence with uffd.
-> 
-> In shmem_mfill_filemap_add() we increment both i_mapping->nrpages and
-> info->alloced in shmem_add_to_page_cache() and 
-> shmem_recalc_inode(inode, 1, 0) respectively.
-> 
-> Then in shmem_filemap_remove() the call to filemap_remove_folio()
-> decrements i_mapping->nrpages and shmem_recalc_inode(inode, 0, 0) will see
-> freed=1 and will call shmem_inode_unacct_blocks().
+On Wed, Feb 18, 2026 at 11:58=E2=80=AFAM T.J. Mercier <tjmercier@google.com=
+> wrote:
+>
+> On Wed, Feb 18, 2026 at 11:15=E2=80=AFAM T.J. Mercier <tjmercier@google.c=
+om> wrote:
+> >
+> > On Wed, Feb 18, 2026 at 10:37=E2=80=AFAM Jan Kara <jack@suse.cz> wrote:
+> > >
+> > > On Wed 18-02-26 10:06:35, T.J. Mercier wrote:
+> > > > On Wed, Feb 18, 2026 at 10:01=E2=80=AFAM Jan Kara <jack@suse.cz> wr=
+ote:
+> > > > >
+> > > > > On Tue 17-02-26 19:22:31, T.J. Mercier wrote:
+> > > > > > Currently some kernfs files (e.g. cgroup.events, memory.events)=
+ support
+> > > > > > inotify watches for IN_MODIFY, but unlike with regular filesyst=
+ems, they
+> > > > > > do not receive IN_DELETE_SELF or IN_IGNORED events when they ar=
+e
+> > > > > > removed.
+> > > > >
+> > > > > Please see my email:
+> > > > > https://lore.kernel.org/all/lc2jgt3yrvuvtdj2kk7q3rloie2c5mzyhfdy4=
+zvxylx732voet@ol3kl4ackrpb
+> > > > >
+> > > > > I think this is actually a bug in kernfs...
+> > > > >
+> > > > >                                                                 H=
+onza
+> > > >
+> > > > Thanks, I'm looking at this now. I've tried calling clear_nlink in
+> > > > kernfs_iop_rmdir, but I've found that when we get back to vfs_rmdir
+> > > > and shrink_dcache_parent is called, d_walk doesn't find any entries=
+,
+> > > > so shrink_kill->__dentry_kill is not called. I'm investigating why
+> > > > that is...
+> > >
+> > > Strange because when I was experimenting with this in my VM I have se=
+en
+> > > __dentry_kill being called (if the dentries were created by someone l=
+ooking
+> > > up the names).
+> >
+> > Ahh yes, that's the difference. I was just doing mkdir
+> > /sys/fs/cgroup/foo immediately followed by rmdir /sys/fs/cgroup/foo.
+> > kernfs creates the dentries in kernfs_iop_lookup, so there were none
+> > when I did the rmdir because I didn't cause any lookups.
+> >
+> > If I actually have a program watching
+> > /sys/fs/cgroup/foo/memory.events, then I do see the __dentry_kill kill
+> > calls, but despite the prior clear_nlink call i_nlink is 1 so
+> > fsnotify_inoderemove is skipped. Something must be incrementing it.
+>
+> The issue was that kernfs_remove unlinks the kernfs nodes, but doesn't
+> clear_nlink when it does so. Adding that seems to work to generate
+> IN_DELETE_SELF and IN_IGNORED. I'll do some more testing and get a
+> patch ready.
 
-You're correct.  I guess I was misleaded by the comments above
-shmem_recalc_inode() when reading this part assuming it's only for the
-cases where nrpages changed behind the hood.. :)
+This works for the rmdir case, because
+vfs_rmdir->shrink_dcache_parent->shrink_kill->__dentry_kill is invoked
+when the user runs rmdir.
 
-I believe we need shmem_recalc_inode(inode, 0, 0) to make sure
-info->alloced is properly decremented, so shmem_inode_unacct_blocks()
-explicit calls will miss that otherwise due to the reordering of shmem
-accounting in this patch.
+However the case where a kernfs file is removed because a cgroup
+subsys is deactivated does not work, because it occurs when the user
+writes to cgroup.subtree_control. That is a vfs_write which calls
+fsnotify_modify for cgroup.subtree_control, but (very reasonably)
+there is no attempt made to clean up the dcache in VFS on writes.
 
-It's slightly tricky on using these functions, I wonder if we want to
-mention them in the commit log, but I'm OK either way.
-
-Thanks for double checking!
-
--- 
-Peter Xu
-
+So I think kernfs still needs to generate fsnotify events manually for
+the cgroup_subtree_control_write->cgroup_apply_control_disable case.
+Those removals happen via kernfs_remove_by_name->__kernfs_remove, so
+that would look a lot like what I sent in this v3 patch, even if we
+also add clear_nlink calls for the rmdir case.
