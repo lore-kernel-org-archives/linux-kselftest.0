@@ -1,90 +1,344 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69539334C05;
-	Thu, 19 Feb 2026 11:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771500434; cv=none; b=I3pPX+poWFwZXiCwXhBMw9upR+deRGFP2Pl5HqcAYhNjz3nsvYGy1nZ6WBwZRZBOAWJS6fEtSlcuqwz5gsv1n3xd0tLwJEF20wDkLah/fM+VB40I713cXScrDgoafqyTKkpoVHe5hMIpNK3/zBzE4QSVl2w4ztH9SK1ifo9fGjU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771500434; c=relaxed/simple;
-	bh=xp7Nhv12KAdXXfp+Ld+eGXOH79HOhc/ThXlKFzHRK94=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RcU4KKL/9rn10qsM9rme0MLy88dEw9+Z4F8zIt2FTaWLzcBWhxAVN0E5dW+b/KoN8qtUgrZfQDV1RYx1AwjJkVo9bbrS5AFbADAS2Mag4PbmqwY8LtCbohF+IQdfS/NTbCVwTcv5m/F82EdJ+80xxlQG4U2Aer/et/hW8juWqmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xcT25WD3; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BEAC3EBF10;
+	Thu, 19 Feb 2026 12:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771502491; cv=fail; b=kRo4KNXyYqzEzPy1ucg9agdcvM+R+ezc/eJwm52IXleoPK9vKvF7c+gITnTmXLeogsH3Ff1k7wFwbh9cGYl3tiqFgajlQQoDf+GyrWauG6KrvIZkTIOniHC6QCfPOSNsBI9tswLmuN8nf4hbaD4qReG5JX6Pn75yemjQH6aYgWs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771502491; c=relaxed/simple;
+	bh=Dkg+jBgGdC84eGuSl15d7awjOHER9bWIrquzPKc/UIE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=dBUyypM4NtL49PsJ9kIs54rbes/mrN2aHl2cn/wD9b+sK0P4PhtJRDnu/F8S7ZRt0ZZIsGHUZ/HhK8JU7kM/RYoEsc8WZ91DMyzoDStUJ3XDXeQJhiKE+jN2qwby5V1XKq3xqaXvQDSukdd0SowQuknH0gQbPrDrflGS4yfo0iw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W+avh9iM; arc=fail smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xcT25WD3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D480C4CEF7;
-	Thu, 19 Feb 2026 11:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1771500434;
-	bh=xp7Nhv12KAdXXfp+Ld+eGXOH79HOhc/ThXlKFzHRK94=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=xcT25WD3Yb3DqoQ9SmcTfrBxrZ1JOJ4kMjcnkEUI9YM9HXgPS83snFAGV0Yx4Vea8
-	 gnmD65gXPatcFx1SHTpVNCe/p8s3ZzKXFhak+obNUUpeEDEEal6NfTePiv56Mim+58
-	 sOe+qV2UIE4lk8b6WH2u/H2iUh/K6e6fd6d09ZPA=
-Date: Thu, 19 Feb 2026 12:27:10 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc: stable@vger.kernel.org, kevin.brodsky@arm.com,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 6.12.y 00/14] Address pkey self test failures.
-Message-ID: <2026021904-unclothed-flavored-cdf7@gregkh>
-References: <20260219101318.2442406-1-harshit.m.mogalapalli@oracle.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W+avh9iM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771502490; x=1803038490;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Dkg+jBgGdC84eGuSl15d7awjOHER9bWIrquzPKc/UIE=;
+  b=W+avh9iM3zhVbMjFFWqCyBqqhJR1lQU7hpAC0xW8jBnS3CaEKu2BWVnu
+   CXTxiilGRt2CO/3/p9BT+ITJywc52wyLbgRiZ1XR3wYh82Ta4qzREwEj/
+   kq+LcuqOtd6NhdfC9Xpov9XmVfzjNnJxEJlh7cJP6eBlgF49wr5/AXSuW
+   oDUnj/DjrLMZW9afAyVuUHht5AD0b0VgMbKMSio6cD2nmIUUxHGPQdpgj
+   MPXysq0LYILLG02URqFraFhptUP7WBFzI+Vhw3S0lx329H6jLI8wXnsTR
+   HKTfn38qQ/d29l4psrES3ES4VGd05+RZJwAQ62TExZNptruwCnhps01q+
+   Q==;
+X-CSE-ConnectionGUID: eqvHK32aTeOq2OSKc3A+tQ==
+X-CSE-MsgGUID: eorXEXKVQC2dzfvZcN1iiA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="72682265"
+X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
+   d="scan'208";a="72682265"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 04:01:29 -0800
+X-CSE-ConnectionGUID: tJmlvT2HRJSJE+ti5jhGRw==
+X-CSE-MsgGUID: A3zq4szqQEWwuWtgQ4yaqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
+   d="scan'208";a="219021707"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 04:01:28 -0800
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Thu, 19 Feb 2026 04:00:59 -0800
+Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Thu, 19 Feb 2026 04:00:59 -0800
+Received: from PH7PR06CU001.outbound.protection.outlook.com (52.101.201.21) by
+ edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Thu, 19 Feb 2026 04:00:31 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I/9tzArZiPZV04CFuT90OQN54tzaUHz3iUp8Q1XBQ7XWTAZT8py4JFVQHcnRL4bj7CT1vly3VdMVqitJOeCMLkiB9o4GuaCwhHG39TBHlRAlvwNfCtb052LAk6eu8xNTXsEfpLSDTE5MWM4NMIyFh4acV9hhJb9Z5VA7YDKC8pI9ZnuuHHncKMtHmiAHmaS1mMf6EM57wjbcq9ikC3Wtp6rcqGZgljucxOKNbbEFLugA3FohPAQSxyLlYauv+nhkNTi07C7Q1b9CcepeIngAFn8v5f+i0rfyRiPtsR8uwj+//IBhyh+zUh2KOYU28MoFljoMhfxcoPy/aTx/RjZmTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wp7aHvjVulRpovi+Yq3HXeOcFOjSrE+xJk2DfXMwZ/E=;
+ b=jCqz8Qh/Ftgo5EZSyM4YHTchMxgnsEWo+iMcpRnS9zl6ZOZoSLKpzWafEwkSX3IYGvsVqhcmEPSwbHDIOx+IDmy1pR6kZ58VpTa6ko4clsSIytVeVOr3CfPUNBbF0nmIg4slWmlhJJPiPaCq3KzCBETvcrOqhLhaHzVtLKnQDhWtNrFK1TMi4Dr+GU7QV6REgm+CEXxvyznz6zzu3D9Nkw1z8XPGXaLtEJNZHzepH1CL7QzIkTVa05132TEnGvcjP4MUD6F4oy5vmWCPKKWKZTBpdiiJAL9w5EyWhjk3DA+5oFdM8wPFh4gKDo1uCERaFzQsuSMK+ndyVSfEKXZOtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ IA1PR11MB7776.namprd11.prod.outlook.com (2603:10b6:208:3f9::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.14; Thu, 19 Feb
+ 2026 12:00:28 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9632.010; Thu, 19 Feb 2026
+ 12:00:26 +0000
+Date: Thu, 19 Feb 2026 13:00:05 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Larysa Zaremba <larysa.zaremba@intel.com>
+CC: <bpf@vger.kernel.org>, Claudiu Manoil <claudiu.manoil@nxp.com>, "Vladimir
+ Oltean" <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
+	<xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Tony Nguyen
+	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "Andrii
+ Nakryiko" <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
+ Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
+	<horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexander Lobakin
+	<aleksander.lobakin@intel.com>, "Bastien Curutchet (eBPF Foundation)"
+	<bastien.curutchet@bootlin.com>, Tushar Vyavahare
+	<tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, Ricardo
+ =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>, Eelco Chaudron
+	<echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, "Toke
+ Hoiland-Jorgensen" <toke@redhat.com>, <imx@lists.linux.dev>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<intel-wired-lan@lists.osuosl.org>, <linux-kselftest@vger.kernel.org>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>
+Subject: Re: [PATCH bpf v3 5/9] i40e: fix registering XDP RxQ info
+Message-ID: <aZb7RZMA+7bxcmrL@boxer>
+References: <20260217132450.1936200-1-larysa.zaremba@intel.com>
+ <20260217132450.1936200-6-larysa.zaremba@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260217132450.1936200-6-larysa.zaremba@intel.com>
+X-ClientProxiedBy: TL2P290CA0029.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:3::19) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260219101318.2442406-1-harshit.m.mogalapalli@oracle.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|IA1PR11MB7776:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6204e43a-e1af-469c-1172-08de6fae77d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?a0Ktb0+1qNZLaRQDM9D5j6TrfUdoBKv2TEh4sAKxij/8Qh0MAIF634qw1Rlu?=
+ =?us-ascii?Q?6yldDEhH5cpl1fKi9TQWc2MA8FhEFmocnMx4ZeVFUTqC/bYOMhrYuHSHAokG?=
+ =?us-ascii?Q?SADwb+Jc5cRVMXvzEUNTzNFJsrIyBEj0TEMZJtwMwYeY36bIisE018dn0vdi?=
+ =?us-ascii?Q?+F5gmAYTAKIaOY2CKBGPftJCoBQ8b81uMTGS38KIh/iX0CZ0fRRkRy73nOVG?=
+ =?us-ascii?Q?947kgohcAHR1MfaoJtLSKwszsUyp494LvvKGE/B8xrDN18jkKCl0n6B+u558?=
+ =?us-ascii?Q?952cH3lhvuLiYCUuG14R1mhJgEXJrVgWtIe3qRa9ZgpxcnVIUeNwBBeLF2+C?=
+ =?us-ascii?Q?R/GVctaqsbQpwIveBwS4AorxDd3l5KTYUC3ouLBgZiRqcahadZuaDXqjsmXp?=
+ =?us-ascii?Q?VvGhv/Xg4a51yD1MQEHeQs/bYViBEnWKhuF77KshV9ho1pbblAObfBgh4orQ?=
+ =?us-ascii?Q?fnOwUJWVQVjs+LZAphfSlXsCRl3EawZoq2omyQFtvbzhmgO15LoAlpsRFZ5v?=
+ =?us-ascii?Q?jHOqXdnb9wyVU6YDLX6Mq2GTjUvDDY10NjxLT6siHu4HQdQ8X8BeiRKnhgMe?=
+ =?us-ascii?Q?MNQOuDgsNJobKUkopa1USyCVH9V2Ymk1HBYsgh24/+HnYAawSxfL8+mclurr?=
+ =?us-ascii?Q?Wgpu3huudMNeSKnnE94iUz1NvP1MPJTdAWo4TwhL6uXxhvHx0lyekz+t5FfA?=
+ =?us-ascii?Q?bWDWsv8hCqFj90bHbQ4GZ0ClXBQPqhqRAKyB56n0X57TW9UIrD2OLq52D/9X?=
+ =?us-ascii?Q?3+++/0NFTlIvGipJAsFGBwe4gQXoTO3MFQvOGa5O8q87pVTNce3OHxlGMnc8?=
+ =?us-ascii?Q?lhR0ypn50cmiwiuFXjuqqDbwWga8TvEn4jJEZE4KrXUegeeC3Y0N+ARqGGep?=
+ =?us-ascii?Q?YLup7mJaRJPFBSPXWZA5yrqYOxHX2j8Urpj0d8gC4OZMgU0l/dJIVUPq+Nzc?=
+ =?us-ascii?Q?7Ic/gzQ18D8RWHaLEGr6eFgy2Dt+BUjahXTq9745isb86TCBnWAQFXpeaOiN?=
+ =?us-ascii?Q?ELmjgmkFA26ZLwzDXMXyFiTKHLEbcxvN+DAZVF808inEjfkeG4DYtO1MyFlq?=
+ =?us-ascii?Q?StlJhfrXOgg6P0SSBJe1QqGlVZVvIYAIklKNfxeMDWTfra4hWY2Mtb3rkhr2?=
+ =?us-ascii?Q?YnzBYEeH/1sexC0xidMXZCxKk/2wJwYnqvgHr8YWyK208MrQVpguDxk0NEr9?=
+ =?us-ascii?Q?zlMDwWKRe28LaDpzoUs8CoM2u0n+5OUzrCxSrHwVid6FVkrh4Of3J73twwMY?=
+ =?us-ascii?Q?QI1OCkZ00Pi1mEgYxUF8t020GmzvA5wazrVJHBG97q8letbeMeudC3vAB2mo?=
+ =?us-ascii?Q?8203eQanZzn8g1bSsxrVcxdEUQQ6cjbC35Z3GiZ0OtDE75MFRRnDB8AcAqzj?=
+ =?us-ascii?Q?QLuY4qIvcs3RypZcm2n4soTfVeRP9/4oMlwO4Lshka7Z7/giB4tnSy3Vj0vu?=
+ =?us-ascii?Q?TI3MwLy4UkFuYXZWI7vaXRmV+7yayj6+efuX8y4y8SSqLqOJG6rwcNT+8pBJ?=
+ =?us-ascii?Q?3e9SESE2AFgkS2+qzntiWHEg7T5LYBGOLb9IyblDP7RyNR4BoKTX64DY+fQC?=
+ =?us-ascii?Q?ZSuyc2RyFVvA4f6sHi4=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IU+LgFBRqM1kMC9EETvGTLzsBJZP+kJur78LaPJyRvOEd/q7Ftd3+/lRZJtb?=
+ =?us-ascii?Q?Kz1Y7OgoJtKc/qpP2/7wmKoxBcT9Nb1unEbyjsciknQzAw7TRejhzbWSo8v/?=
+ =?us-ascii?Q?55GYum+O8DR19gWb3k5C3UEM+YyEEzOJN2QnxscN/q6Yq1IofGH+2pMUHXen?=
+ =?us-ascii?Q?Vmaub/8RrBU/sz6tVdRGQRiaRyydSIvwWldhQG6PZgeaIBRQYE8o9jGLYyJE?=
+ =?us-ascii?Q?NAFLBwAz4hRf3zXjaDz/KLXGInZv1hxubEvdZQPMglPWzizeQWkQ7utvhB/j?=
+ =?us-ascii?Q?MOsDRzeLlk6HQg9voRG3UOOo98eeMbFWd9koqpQgkOpjuYMOVZtaKhTCQ+Dn?=
+ =?us-ascii?Q?3MWrg5P78sACiOQFm1V7TvR9/5QmKDI2Dy3pggE86GX5SM00wpocZ5qCM57y?=
+ =?us-ascii?Q?oBXh3EqEXmWMt5imA1NuTNdOUDa2N7Z+gZZNArbi8yJ4epWTZI8QCA/vs8xz?=
+ =?us-ascii?Q?GWRnCICMD6MyF/ggXVfKdmKIff4vvHpI1xzUmr8pdWYecZiOTYRTuEuQ2khQ?=
+ =?us-ascii?Q?zL2JP2jSKSlgnc3ATG9mwU6R94qR4JmPV2Cx9etxQf6JVyRymjbdFb/76AZa?=
+ =?us-ascii?Q?RtH+I14v5eWcImQVJXEOJbCkq1AT3NUMpFH/gljt0KRWzh7MNUKk7zvn7V9n?=
+ =?us-ascii?Q?788/EhGPT1Ic7gHxuB/IwTsWE0ZnmvXXQdY22yUCD8h/8EncW3W61c/3XJo3?=
+ =?us-ascii?Q?L1kqulDnA3vhq3bVwQbLWWPcBfnh4mbaoJszxC6T7KBWCOAs9nTWIfKa5TgU?=
+ =?us-ascii?Q?Pry3ygvRsvjhxJfyqQFWUDHuuMqc2ojYWaurnvy4autW3h0VyizNYV1GiI1w?=
+ =?us-ascii?Q?LKFpm5S0ckRpCbDZ79YnlYOvVkAJJHW+o0grv6Uy1ficgaTnFY0rrbCzE/YI?=
+ =?us-ascii?Q?qehdAut4sl36Ael0forCVRxuHX63/lyqEIK3SmVr/HkRASQCpPdO7HwYT0Fg?=
+ =?us-ascii?Q?gxB8Ahmtbyrwi2CnG2xVkFBU0APd4pZHbE54OaoT+EwlHMUsl2Y67MzsaLf4?=
+ =?us-ascii?Q?lw3GaUNwruIGDf+UgmbKG9KcP1uaSq2KTF2hCFRSb7olboWiQ9DbohKbNIQr?=
+ =?us-ascii?Q?f6KL17o7dpEiVjlwCUth31ncgWYS9HQtMhWKLnm1WoAIvAqFWX9n6jg7vkTH?=
+ =?us-ascii?Q?J9jhvkUHP4MiBO5oDlN8A7X8myATe6hqAgtgfWwTmYIiMyTziLabM83xaQ1M?=
+ =?us-ascii?Q?LEecGe1ktzniTAySQgXNn0e1Qp+B6D+1tYML1lPfZ33tsT67L249BvcTh8WS?=
+ =?us-ascii?Q?zpk8WCjCtR5GyOyupessiw5nJgckPa99cNNuXXVyH1FHT2miL5BqiEkE/9tV?=
+ =?us-ascii?Q?F4K408+jpooFGukdrE93Zu5oE3/Odas1G/Oaid4c8Uj8KxgFw4ujVlGQ7JV7?=
+ =?us-ascii?Q?eyNLEx5ib5V8Pvbv75inXjtKV5YYQJzYbjiJMesJsY6LzBJQPQGzORODFk05?=
+ =?us-ascii?Q?6bXScpK3FnaIhgV0BTKu/7s2LqIIhNnWFZUJJoGq7ZayqwdVfOjBC8Vu65em?=
+ =?us-ascii?Q?yFZGL2Tv/FZ0o9gIsp8uxXSkNNsGcoZMft0dWQ7MjHjl60DlZmUD3N5etgg9?=
+ =?us-ascii?Q?csx+PQRe3BCYT+H1JC75blTjhvv4KydzDy3khSLWXCPY1Px0ZFDKiaYPvSl+?=
+ =?us-ascii?Q?tc/VgfSWMzh4pf+0N0pyEPeShxI2DAjgne8Mucvfu8ELswuUClc2GsAvJX77?=
+ =?us-ascii?Q?jcK6/9bnGJ+5uKd4eMvFEtf2eWgM7fu6yHk2Ga0y3o29JUsB1GJNdWvRRMah?=
+ =?us-ascii?Q?xjOLyjORZJSGADwglqlcbKvw+KHISro=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6204e43a-e1af-469c-1172-08de6fae77d9
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2026 12:00:26.1636
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: us3ojojYXaPVbYOw6ZqfKzOmGAavwu0YD88nsq5HC30v389sCvUhiM2lVGSTSwgf9HyBpzOj8n7+Fni5zMZX00L1jWy0JZCm7bpqle5wQ8M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7776
+X-OriginatorOrg: intel.com
 
-On Thu, Feb 19, 2026 at 02:13:04AM -0800, Harshit Mogalapalli wrote:
-> Hi stable maintainers,
-> 
-> When pkey_sighandler_tests_64 is run on machines with CPUs that don't
-> support pkeys, instead of skipping the tests return SIGILL(illegal
-> instruction).
-> 
-> # gdb  ./pkey_sighandler_tests_64
-> 
-> (gdb) info registers rip
-> rip            0x402779            0x402779 <thread_segv_with_pkey0_disabled+9>
-> (gdb) disassemble /r $rip-8,$rip+8
-> Dump of assembler code from 0x402771 to 0x402781:
->    0x0000000000402771 <thread_segv_with_pkey0_disabled+1>:	c9                 	leave
->    0x0000000000402772 <thread_segv_with_pkey0_disabled+2>:	b8 55 55 55 55     	mov    $0x55555555,%eax
->    0x0000000000402777 <thread_segv_with_pkey0_disabled+7>:	89 ca              	mov    %ecx,%edx
-> => 0x0000000000402779 <thread_segv_with_pkey0_disabled+9>:	0f 01 ef           	wrpkru
->    0x000000000040277c <thread_segv_with_pkey0_disabled+12>:	0f 01 ee           	rdpkru
->    0x000000000040277f <thread_segv_with_pkey0_disabled+15>:	3d 55 55 55 55     	cmp
-> 
-> Tests result in:
-> 
-> ./pkey_sighandler_tests_64
-> TAP version 13
-> 1..5
-> Illegal instruction (core dumped)
-> 
-> This is because 6.12.y commit: 1c6b1d4889d7 ("selftests/mm: skip
-> pkey_sighandler_tests if support is missing") like upstream and
-> backporting that needed few prerequsites, during this process I have
-> seen a few build warnings, so also included patches that help fix these
-> build warnings in the selftests.
-> 
-> All are clean cherry-picks. After patching the selftests the test is
-> correctly skipped. These additional backports cleansup the code and
-> avoids the need for conflict resolution and might help future backports.
+On Tue, Feb 17, 2026 at 02:24:43PM +0100, Larysa Zaremba wrote:
+> Current way of handling XDP RxQ info in i40e has following problems:
+> * when xsk_buff_pool is detached, memory model is not unregistered before
+>   registering a new one, this leads to a dangling xsk_buff_pool in the
+>   memory model table
 
-Shouldn't you be always running the latest selftests on older kernels?
-We don't always keep selftests up to date at all, as you can see here,
-but newer selftests should ALWAYS work with older kernels.
+What is 'memory model table' in this context?
 
-I think trying to keep these all up to date is going to be "a lot", are
-you sure it is going to be worth it?
+I believe you are referring to a case where XDP prog is kept alive on
+interface put you close one socket and then bind the other one?
 
-thanks,
+> * frag_size is not updated when xsk_buff_pool is detached or when MTU is
+>   changed, this leads to growing tail always failing for multi-buffer
+>   packets.
 
-greg k-h
+Good catch, i now see that i40e_change_mtu() only does the link flap and
+i40e_free_rx_resources() is not called in this path.
+
+> 
+> Couple XDP RxQ info registering with buffer allocations and unregistering
+> with cleaning the ring.
+> 
+> Fixes: a045d2f2d03d ("i40e: set xdp_rxq_info::frag_size")
+> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> ---
+>  drivers/net/ethernet/intel/i40e/i40e_main.c | 34 ++++++++++++---------
+>  drivers/net/ethernet/intel/i40e/i40e_txrx.c |  5 +--
+>  2 files changed, 22 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> index d3bc3207054f..eaa5b65e6daf 100644
+> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> @@ -3577,18 +3577,8 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+>  	if (ring->vsi->type != I40E_VSI_MAIN)
+>  		goto skip;
+>  
+> -	if (!xdp_rxq_info_is_reg(&ring->xdp_rxq)) {
+> -		err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+> -					 ring->queue_index,
+> -					 ring->q_vector->napi.napi_id,
+> -					 ring->rx_buf_len);
+> -		if (err)
+> -			return err;
+> -	}
+> -
+>  	ring->xsk_pool = i40e_xsk_pool(ring);
+>  	if (ring->xsk_pool) {
+> -		xdp_rxq_info_unreg(&ring->xdp_rxq);
+>  		ring->rx_buf_len = xsk_pool_get_rx_frame_size(ring->xsk_pool);
+>  		err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+>  					 ring->queue_index,
+> @@ -3600,17 +3590,23 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+>  						 MEM_TYPE_XSK_BUFF_POOL,
+>  						 NULL);
+>  		if (err)
+> -			return err;
+> +			goto unreg_xdp;
+>  		dev_info(&vsi->back->pdev->dev,
+>  			 "Registered XDP mem model MEM_TYPE_XSK_BUFF_POOL on Rx ring %d\n",
+>  			 ring->queue_index);
+>  
+>  	} else {
+> +		err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+> +					 ring->queue_index,
+> +					 ring->q_vector->napi.napi_id,
+> +					 ring->rx_buf_len);
+> +		if (err)
+> +			return err;
+>  		err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
+>  						 MEM_TYPE_PAGE_SHARED,
+>  						 NULL);
+>  		if (err)
+> -			return err;
+> +			goto unreg_xdp;
+>  	}
+>  
+>  skip:
+> @@ -3648,7 +3644,8 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+>  		dev_info(&vsi->back->pdev->dev,
+>  			 "Failed to clear LAN Rx queue context on Rx ring %d (pf_q %d), error: %d\n",
+>  			 ring->queue_index, pf_q, err);
+> -		return -ENOMEM;
+> +		err = -ENOMEM;
+> +		goto unreg_xdp;
+>  	}
+>  
+>  	/* set the context in the HMC */
+> @@ -3657,7 +3654,8 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+>  		dev_info(&vsi->back->pdev->dev,
+>  			 "Failed to set LAN Rx queue context on Rx ring %d (pf_q %d), error: %d\n",
+>  			 ring->queue_index, pf_q, err);
+> -		return -ENOMEM;
+> +		err = -ENOMEM;
+> +		goto unreg_xdp;
+>  	}
+>  
+>  	/* configure Rx buffer alignment */
+> @@ -3665,7 +3663,8 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+>  		if (I40E_2K_TOO_SMALL_WITH_PADDING) {
+>  			dev_info(&vsi->back->pdev->dev,
+>  				 "2k Rx buffer is too small to fit standard MTU and skb_shared_info\n");
+> -			return -EOPNOTSUPP;
+> +			err = -EOPNOTSUPP;
+> +			goto unreg_xdp;
+>  		}
+>  		clear_ring_build_skb_enabled(ring);
+>  	} else {
+> @@ -3695,6 +3694,11 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+>  	}
+>  
+>  	return 0;
+> +unreg_xdp:
+> +	if (ring->vsi->type == I40E_VSI_MAIN)
+> +		xdp_rxq_info_unreg(&ring->xdp_rxq);
+> +
+> +	return err;
+>  }
+>  
+>  /**
+> diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> index cc0b9efc2637..816179c7e271 100644
+> --- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> +++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> @@ -1470,6 +1470,9 @@ void i40e_clean_rx_ring(struct i40e_ring *rx_ring)
+>  	if (!rx_ring->rx_bi)
+>  		return;
+>  
+> +	if (xdp_rxq_info_is_reg(&rx_ring->xdp_rxq))
+> +		xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
+> +
+>  	if (rx_ring->xsk_pool) {
+>  		i40e_xsk_clean_rx_ring(rx_ring);
+>  		goto skip_free;
+> @@ -1527,8 +1530,6 @@ void i40e_clean_rx_ring(struct i40e_ring *rx_ring)
+>  void i40e_free_rx_resources(struct i40e_ring *rx_ring)
+>  {
+>  	i40e_clean_rx_ring(rx_ring);
+> -	if (rx_ring->vsi->type == I40E_VSI_MAIN)
+> -		xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
+>  	rx_ring->xdp_prog = NULL;
+>  	kfree(rx_ring->rx_bi);
+>  	rx_ring->rx_bi = NULL;
+> -- 
+> 2.52.0
+> 
