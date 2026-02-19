@@ -1,79 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909DD230BDB;
-	Thu, 19 Feb 2026 01:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8F341C62;
+	Thu, 19 Feb 2026 01:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771463047; cv=none; b=Yw/WTdLGytaiVOxd8iTyiqb+i43+1A9UfZNC+Nm3V0Dntnr14Xi1ex3XbUXR14AdI98Va/sYyXQG6OuxLlzWiMjCbpSRmzIq4uPaFw8vtz9BkzIGQUKiX7NUjrB00WAwLdFeTzA6ywQ1KhCnfOfX3yBkjTC4PlycRBIMD+kgPt4=
+	t=1771465664; cv=none; b=IQn5hWsphGOXv92lc9mHncz7YRINjdR/fdCdm31J7a51OjnO4H/o6+bK3DVN2dDMPoCtsFOD0zdKN+pu+UBjN/snx9TAbl6lYkNhfkK932gU22Bo0lTWycq5KI1+jdayl05UYS65OoEEpCWoBginvSuUNqb2Az2utiWVMKfiTWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771463047; c=relaxed/simple;
-	bh=ELJFpYBMPW6NyCooS7WYiywWZpTw9pOT/6BVKExWtr8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sLHOw4z8tJgaRYKau8Fpg0IHJmPw6t91bTbuyHzEpyxIVERX9Jz0xRxpdUsfg4bbYPcIFUALfqTyz7g4MK1XawtntXG3otT183C5X485H/zhvYmJyLMX3oDftKkiCfoUIC5nkB/CZ1n53Mx6L7bAZxkg1CG+JKgw10rYKlvrhUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L32xS16g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771465664; c=relaxed/simple;
+	bh=/A9kCnxsZ/wdbZGeHzSUOd56ynX6731f0HRIToRSOjQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Dzxk4Ci8PcT5PbYBSSEHaKm+eq9n9yrpUnhXgnJZjC3tA46ZJnHLlLun7MteT9y4vWVHSvedz6rxsj6Q74Aw29rluL7kGq3YZGfwuIltucoDAlg+EYm1LsN8ZnHR3THPhXXEGOQuyMZh1zf88ID2fmdZAZKObJ/WTBhpvooDtMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sw4vWfpJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L32xS16g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E49EC116D0;
-	Thu, 19 Feb 2026 01:04:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sw4vWfpJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219B4C116D0;
+	Thu, 19 Feb 2026 01:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771463047;
-	bh=ELJFpYBMPW6NyCooS7WYiywWZpTw9pOT/6BVKExWtr8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=L32xS16gl5H8aHk6bLRU9WdpO7TPRkz+GTjha1vrvtR9K5BNc+kPUunqC97DMcOCN
-	 tDc/0IuxFCvs85CvDeUFFtItdH9DqDTpe4pX7uckIF2xkZvZ6ik444VAC7dtsZRRry
-	 xR8yoV9F0uSJDJ9cV+yFXtd7TerdfmXxdzWlWxRSH3DdjZ/Qk10Z/CkacxNuG8Z1ge
-	 3oNLzKibaR3c+roA1iAAYgJnXprrvF019Mo5nqKrw+a4JiQCP+E9Qd8trLmO5QAdhg
-	 wwUMwn61ldeWU69BW6FZ9dzAg0qP02GQiGKUhj+Bl2MieGdpBNe6tayp6TcZrJfvvr
-	 mHCcCdJ0dTFtg==
-From: SeongJae Park <sj@kernel.org>
-To: AnishMulay <anishm7030@gmail.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: skip migration tests if NUMA is unavailable
-Date: Wed, 18 Feb 2026 17:04:03 -0800
-Message-ID: <20260219010404.2939-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260218163941.13499-1-anishm7030@gmail.com>
-References: 
+	s=k20201202; t=1771465664;
+	bh=/A9kCnxsZ/wdbZGeHzSUOd56ynX6731f0HRIToRSOjQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Sw4vWfpJjIO+b/19FsTFw7nUmnEZZ+P9/Rnov5xjkY4iNiEW8gOtqBJTUpfcxW0Ef
+	 Y7v5xO1VpK75Ntgb+GDs8IXp7HfsC3YfkJ6DOqkXA19uRISf00YIKHPErRrQD2q5zW
+	 epdWrTUXkQWTzn82IK2c0skkNMWul8T1w0NjQ2oG8bgWOEIslJhAHZ9n5DP46RdufZ
+	 aCjE+nPLLxa57F1kG3esUpmWK00qrtoO5XigA752N+DbyGrHUffg5mKSiBpE/FNrQ2
+	 sAffqp+HShkEia0hM4L97nys0TAvnrEpoRW8xw6G/9cEPUwV+bYVsTblTlg28LhF0H
+	 1PDqCeBA036WA==
+Date: Wed, 18 Feb 2026 17:47:42 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <20260218174742.62a4074f@kernel.org>
+In-Reply-To: <20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
+References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
+	<20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, 18 Feb 2026 11:39:41 -0500 AnishMulay <anishm7030@gmail.com> wrote:
+On Tue, 17 Feb 2026 09:33:56 +0100 Lorenzo Bianconi wrote:
+> + * In case of success, ``ip_summed`` is set to the RX checksum result. Possible
+> + * values are:
+> + * ``XDP_CHECKSUM_NONE``
+> + * ``XDP_CHECKSUM_UNNECESSARY``
+> + * ``XDP_CHECKSUM_COMPLETE``
+> + *
+> + * In case of success, ``cksum_meta`` contains the hw computed checksum value
+> + * for ``XDP_CHECKSUM_COMPLETE`` or the ``csum_level`` for
+> + * ``XDP_CHECKSUM_UNNECESSARY``. It is set to 0 for ``XDP_CHECKSUM_NONE``
 
-> Currently, the migration test asserts that numa_available() returns 0.
-> On systems where NUMA is not available (returning -1), such as certain
-> ARM64 configurations or single-node systems, this assertion fails and
-> crashes the test.
-> 
-> Update the test to check the return value of numa_available(). If it
-> is less than 0, skip the test gracefully instead of failing.
-> 
-> This aligns the behavior with other MM selftests (like rmap) that
-> skip when NUMA support is missing.
-> 
-> Signed-off-by: AnishMulay <anishm7030@gmail.com>
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
-[...]
+It's fairly common for NICs to report both csum complete and
+unnecessary. Which one should the driver return in that case?
+What if the user prefers the other one?..
