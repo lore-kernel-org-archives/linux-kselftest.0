@@ -1,140 +1,73 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445A634D912
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 17:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771523419; cv=pass; b=Lh73GdTL+FfNuENoXNtmuA0yRxihI54tdR9F7GvFmfjzlrxHpUqi1/BLHzuHxRKAJFC4uMsiy0VaFZ8PyvnAwcarimlzN9t5N5dFsafHbxYCkwKe6+8+iZzgfqkCr0+mVOw5Vy9QSNAR4Jqeeq6nk0EvIT54YcIpeUsPg3WgsKg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771523419; c=relaxed/simple;
-	bh=gHUWgff7WmvTx55hmvJ5HXD9obcxHan7DBI288vZwm0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oeiplBrm5YZLxmvHsOCds8kiM0Q0pbGVeJxztd8teYWsirAdsq6/smjud9gNKrij/YPFiJ6X/NLejFWR6tkeY72ypY35hSPb8eGVfN1EAspp3RAaR5zaoCDfMHQGuAUkuuHB8yHrBetA6JLJ6C6AjMQasQOIlsxl2RfeHc/so4k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gsnIqC/U; arc=pass smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsnIqC/U"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43767807da6so960040f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 09:50:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771523417; cv=none;
-        d=google.com; s=arc-20240605;
-        b=h1otea/eC4syAkZOWDT27fVBVqKpxbybJHGf450+tBF7rQz6nNrvCxEXLrlsQkTYrT
-         YX9neWQqGxPBX3aIyN9P8XFYo+wJvgLc6uNkWzbx/M8nV9DD1e03NusnC0l8izhBbX0k
-         O6ya6tOgqaKJnmdhXdKAssYlVVBg9rqWHo0/8XjvGsRRM0FqDOYdBEgjiy4fTPH7lSIS
-         PdU6aZGTCcZM+uY55tx+Oq6NBMm4XSTGGbg31GxLG3z/e/NAJZG1UF6IbXxir2pg8MCj
-         iVV5kCMyhDjadS9BjcYFd4Q+pSBqnvud/CGVEPGOS6DYvTeIyx7L2elNUbeXWzAduZ5h
-         Z1JQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=J7HYm9xMVGBBywh4oao6tB7DD0AcczRTLXxlLGbI01c=;
-        fh=GHvp8AAu8WLNNTJGX2ez+DwJGNY83ssSeKp4iXUjTJk=;
-        b=daHT2chhCYi9waauVOMzszoQAO7sbDXbSxf4DRIZAuqULY2wZsmTHqDQBMsVTKewdf
-         il67SR595J6ohb1XKzGbgbBBuuX+YEdMommbbi8Ju2G7sAOuit2gRmRI9TI5iLjhTDj1
-         AFy5tt8jsGf4pglkaJsQ5n+XFjtJKHDMDI3b6w7OAWYhMNq4pUhw20Uyx2hECcX14+Y2
-         fe+T3jCBQEPHxI8L7QLpOQploZPNX3etyX/ITuFJVgohBjSP36st+7CR6zC6fTqXYp0T
-         YulZDdA/OXV/erd5NA4ivjursH753B9q0jhE5I7uPQgN7YDAAL58CABIBQJUw2k3xfNd
-         +lTQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771523417; x=1772128217; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J7HYm9xMVGBBywh4oao6tB7DD0AcczRTLXxlLGbI01c=;
-        b=gsnIqC/UE6uQ1p+IPN/UgnXIpnNKwwU79bKqZrHB18g8etnqKiV/lGcnAM2yjkRTfM
-         P95Ec4CENYQWOw2lcasFOWipi6xWZ6+OEVVh90/cY80PzH57NuWM+C+7S/27bFEv0Mt0
-         NEK6bdOdJwec6jyGWSR1NYrTEPX+tmbWzkBz1E/mdID/G9MLEciaQxiJRxgpOSxkWG01
-         qLzT9hGI4SqiERnHy+v0WvHnCTYlnIkSybvX2WXIttkiChuGDqCcuG17H7u/C/nSr42T
-         bqBw7DHZZ2IlPEz0Mrp598eq+G+A3V81jNfmwjZwxr9hrsJzJqLuu65vYwdoO2P2KLan
-         T2Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771523417; x=1772128217;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=J7HYm9xMVGBBywh4oao6tB7DD0AcczRTLXxlLGbI01c=;
-        b=Z7cnupj5L/opVIhMr/JjGulrnqroTqxILFSt5avVt+3w+WQBN6c5ud37gMQZqXAaK7
-         fDP09sidtOGbFxwvVausvlS9IgdZgZRVh1p/rL58OuTU8GItq4IjnsFRCS/O5iBn0uov
-         yG67PPBQYb+sRSp2v1zdM2w7tXEPuDylDg6Y2EBfyCao9+bZNBpYxbHiGPqzzPgIcdbk
-         Q6HaNHcFbfvkkZ8MOdn/ImCp+qaTAXvn7SzC5vsHuIRHwU21clFPl54qx7RwkpJJSRDS
-         jvFpulnEVJw3H22K2NwiNciQtOXwsA4xa4jkOzvLVB25WPjw+zygIw0wPYhrpUj2JbvF
-         8RfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgTPxT9xcgNwjTlxnR2YZeRlTTT1uL8w7bHiv/tEEBTI+DP+HU4YvnHlcwI186mdxdjwLY7tEMEZKpO9Q42kQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3cGXOzgf7pyrSsGgPgxMBiTSvyqg3yaN7QEP9JxQ7dy5QZsDw
-	aoSVy9TQZw27LAZ5yJWudL0sC2NN92sxo+OCkOnsx3oxEbwFJPlsm0NUpIlPhnqX6qy514czJe9
-	hIYSB7vgEdraQ8/n2Spt8p1CmJ794pjk=
-X-Gm-Gg: AZuq6aIqiIJr3Cy/CegVyBPeQIo60p0zrTXZWA0RaiqawVEbEMJKRH3DCnHK4sQKK8L
-	7cVCj2/lcv14Kj1Tt7u8aiey2+GRRee0mlhpq4sym40l9WNRbGSgoytETlFrIXPnkkrCKnpB9Mu
-	HdzDCDqtToUF5zAmn6iHiHKED7nyPw+46/hCcLT9a6AFfBWOLgayClo7h30amSuO6agzDLZ9zqx
-	dsdviykL4pyoDF0gJo+wPQz8z5vr5m8q71UANEDAEe6GAESQivcMQ+o6ynGtxWBbLpg2e0TgHx/
-	TLTnMw/lPa2vjIB8y8wU6pa8G7yJzZPyX9uPzHOw3SsYUZ4RfeFAWla7L2X1pFBTvDkJlR8mdbe
-	q66EEAVF4
-X-Received: by 2002:a05:6000:40db:b0:436:cea:6165 with SMTP id
- ffacd0b85a97d-43958df4415mr9935730f8f.6.1771523416533; Thu, 19 Feb 2026
- 09:50:16 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8B8347BC1;
+	Thu, 19 Feb 2026 17:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771523793; cv=none; b=ETfIJmfjHkG7piVHrJFFuyQXr9KWgZE+H4dOZK1AWiZ4VRtEa6yd7G+0w7rD99MxT4aS56vXsCPFpDMPB6mLUkmwtwZFbwix0aDGxmL4ZUlc2g/DI8aGCtAbfBuLJ14r8Xxkos0JGBTv8ubTS0ntq0N0Oq76rs02em114p+oFtk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771523793; c=relaxed/simple;
+	bh=0YdwDtCs5hMMCWZb6rrOqb6KIxSvrq5h7Ig3nebrWbs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OWmqluX8THgFfdMgU6hNbyAADZKDs/J50mB038ttNTN9V8dIj6MHlBdZ/C71JK6gaQUojZuvP0LqBn3kVvrWESk3R6oJLLm0aJqScb5fgUIInaxtAgakgZB3aWjA/j/tviXVcMGjRS0qnxIb1uSxXHY1a13Sds3Ak5TaSmCcJLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 7B90813B6AC;
+	Thu, 19 Feb 2026 17:56:30 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id A7EC730;
+	Thu, 19 Feb 2026 17:56:26 +0000 (UTC)
+Date: Thu, 19 Feb 2026 12:56:32 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Vincent Donnefort <vdonnefort@google.com>
+Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ linux-trace-kernel@vger.kernel.org, maz@kernel.org, oliver.upton@linux.dev,
+ joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ jstultz@google.com, qperret@google.com, will@kernel.org,
+ aneesh.kumar@kernel.org, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v12 15/30] tracing: selftests: Add trace remote tests
+Message-ID: <20260219125633.61b46621@gandalf.local.home>
+In-Reply-To: <20260219150307.14538-16-vdonnefort@google.com>
+References: <20260219150307.14538-1-vdonnefort@google.com>
+	<20260219150307.14538-16-vdonnefort@google.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260219142933.13904-1-leon.hwang@linux.dev> <20260219142933.13904-2-leon.hwang@linux.dev>
-In-Reply-To: <20260219142933.13904-2-leon.hwang@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 19 Feb 2026 09:50:05 -0800
-X-Gm-Features: AaiRm52i-YIC0PVoZrigOcdI1PlDGl9FQnJThWLdjntzeSoTM5oZkoYI1MwTO7Q
-Message-ID: <CAADnVQK=5Gb3w_QG4Vq32EfvpqAK_DPwCHtzzt7DzRkJ5_h6JQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Introduce 64-bit bitops kfuncs
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>, 
-	Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: A7EC730
+X-Stat-Signature: y5x93jyjbxih3r5a8uoi88tic3k5dzi3
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX191EZ947KRGRihnOgbmtLmncn/2PlnjI/Q=
+X-HE-Tag: 1771523786-358500
+X-HE-Meta: U2FsdGVkX1/3kw1qj0Ocms5uM3wPQ/pREmBbxB19FdKcABvf1PtXK3rGfPO18dwRu14FJsjHM+XaQSE5es9jqaOx11PwyozWKss8/eUet+nh4LBUmysxPUhZmmY7Z90kiWZLVavzF0FrzrNMRJt840+JqnKkMsczxgWiIia06fxKqMbEAAlAcPfiPxyLqzSr2C0Z0kgsTgnEnB5bAwEbvSksfImlMFxIQxroCmGnbquO0JuJF/BevVXhIoeosaCJPq4En8YFIX/Av2UW8yMUwJFvZOkniRqLxKOYexR236nQQDUZyQsPjsCqeZuDgbWkIFxWetl6WwN2sTFsBG7u4x3N85IBIQ+uBL3HItTy2YTICl6KYO28syo4hcr64RDQPG9P6FbCOwLqd0fpnzLupfV62kObR84+iSn/HI2NWxAFUCsnvkuZJNrUAzNU4tzURGyzZUz1kcJ0/22sZbqCdQ+WjGR24KxqF2kU7Ps0fC0=
 
-On Thu, Feb 19, 2026 at 6:30=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
->
-> +static bool bpf_kfunc_is_fastcall(struct bpf_verifier_env *env, u32 func=
-_id, u32 flags)
-> +{
-> +       if (!(flags & KF_FASTCALL))
-> +               return false;
-> +
-> +       if (!env->prog->jit_requested)
-> +               return true;
-> +
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_clz64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_clz64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_ctz64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_ctz64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_ffs64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_ffs64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_fls64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_fls64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_bitrev64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_bitrev64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_popcnt64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_popcnt64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_rol64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_rol64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_ror64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_ror64);
+On Thu, 19 Feb 2026 15:02:52 +0000
+Vincent Donnefort <vdonnefort@google.com> wrote:
 
-This is too ugly. Find a way to do it differently.
+> Exercise the tracefs interface for trace remote with a set of tests to
+> check:
+> 
+>   * loading/unloading (unloading.tc)
+>   * reset (reset.tc)
+>   * size changes (buffer_size.tc)
+>   * consuming read (trace_pipe.tc)
+>   * non-consuming read (trace.tc)
+> 
+> Cc: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
