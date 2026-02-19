@@ -1,161 +1,201 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADC022759C;
-	Thu, 19 Feb 2026 09:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0E231D371;
+	Thu, 19 Feb 2026 10:13:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771492049; cv=none; b=pAU0R3xcMPi/irXh43X2lYT4uYeXgSJ31cj7L+Cz6k6Jcy/qW9iuEjycZfMu4qK6UmM6aqBZVCGFSB2RkABcrkgIoelTPrwCZpXof3UsnBHoDkXf4+PeK1bE1ufR3/rXEkLrS/f6KH75+8oBa3evqBOuOkms9nptf+FXvlT3z/0=
+	t=1771496016; cv=none; b=B/2RN3FplP68tqo120UR7BYboQyec0aYbJEUVP0FrmAmRONqw1+dzlQ4ZT2YxIQ5rRzvAlH8Ej6bwH17Y1zk+AVHgGTAWq74LAm2XumnLVnNu7g/t7luR7osGTAV3IXQIlvYfwCrJ5fhjP8LxhtCyx3W24LQBVJvsmOrfSdEDrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771492049; c=relaxed/simple;
-	bh=xfSbSFMOR5WWZYkD/q8j+zwbninOKJZFgeYouvFQ3AE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O2VU5cybvafRH8JYnGcrTOiia4tie0iCcaKWQrolxgtlZHnO6OFbJnhLMKpi2iFsSsbvAEgiC9MEmqWCvidk88FxSWxzPh+uGoSuQ2yFwZ4imvuVL/as/1aQH/sC8LPr4C/1QEnZCTs5vFvAnV2vIVRcRMtuVKEZQstvMi1HUKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o1GqSZMP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771496016; c=relaxed/simple;
+	bh=j0KfkI2Gqc8zK8JcjklAnpl9d+MMvHQH61JLoJSrofE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WqPwkFNMtC4PaHiTU1B5yOQe/RjE6vPqV0age4d3r3XgX6CMi+/e9FvhEmBJeC6UjE/YebhgzEOoHbEiOmLNxUbjFvya8/VAIszo5oR77vMS5ImXdNl5gNGYXtJNZeoThEFJY+IEY9TCAFpKbEEfNXQpxms/pLC4//54+DwV+qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=KVjyiEKN; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o1GqSZMP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6394AC4CEF7;
-	Thu, 19 Feb 2026 09:07:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771492049;
-	bh=xfSbSFMOR5WWZYkD/q8j+zwbninOKJZFgeYouvFQ3AE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=o1GqSZMPrLBpAUuJqza5bmDUQOVrBe3F6G2X89Q+yFPp6HbKLgeegbzCQMYLF8520
-	 HTrLyJ1UYcreRqV8EClqLPD+9cfzx/nWsT0/8i324e0c267AXaxKAmdh3uFk+70knL
-	 4cb/AkERs8BbCeRxozLoV84DS6jgXQ/32HbrNGyG8eoDAx3g/QlCzxLrxY22CbVE3l
-	 dnYW8BDqZ61K2ort8T2c1Z/luTvGXoItq8BHs+vJdnQBN4xZVSTPuZj4qFV6pCNpAr
-	 BhgwMwQlSP3jDokl3tJEdZZ3oYxd5Aru3ZaR7VIQHBY6/4Afi+kbIOOCNzQjzDvAlD
-	 Hv+PPrP+ihZGA==
-Message-ID: <8a06e724-7def-4c61-b340-ef1b3cd8100b@kernel.org>
-Date: Thu, 19 Feb 2026 10:07:24 +0100
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="KVjyiEKN"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61J593FL1053264;
+	Thu, 19 Feb 2026 10:13:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=WWChY8vwyEgKjbUv
+	ikoOGv1dFjpM7YayBNgQjpy6WyE=; b=KVjyiEKNbQrEvRad9hfC1zL4iHvfLiOs
+	hea52J+k4GHhOavJCeSGrdj1mktXk/Wm5QybNi+wwCJVXTBzZn36aSA1XtjkQwV2
+	9sErJGh+tMlFmgP/qviWtfrm9PLOuoEO6U04tKzkEt/ItN0Ph9KoHt9ZMT89R1zn
+	6m4mDoIhtFW6j9L1f3g58ZAWHyn2nwnejhMoULRGpiSSay2ahKA0oWuI5QlUjVUU
+	OSkzpvjCfdvo4hr9IJeJ4nZyoRTboOct/aMuXqA0zDEFlVL3dOtsPyZr4X2ZEeyb
+	QAtar87KBrp89TuFn2ry8SkXrBUFf58XnGKzURlXcfWxZB0hh4a2nQ==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4caj0473st-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 19 Feb 2026 10:13:32 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61J9wHKg033224;
+	Thu, 19 Feb 2026 10:13:31 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ccb228uet-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 19 Feb 2026 10:13:31 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61JADULi037324;
+	Thu, 19 Feb 2026 10:13:31 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ccb228uem-1;
+	Thu, 19 Feb 2026 10:13:30 +0000
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To: stable@vger.kernel.org
+Cc: kevin.brodsky@arm.com, linux-kselftest@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 6.12.y 00/14] Address pkey self test failures.
+Date: Thu, 19 Feb 2026 02:13:04 -0800
+Message-ID: <20260219101318.2442406-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: skip migration tests if NUMA is unavailable
-To: AnishMulay <anishm7030@gmail.com>, akpm@linux-foundation.org,
- shuah@kernel.org
-Cc: lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260218163941.13499-1-anishm7030@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260218163941.13499-1-anishm7030@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-19_03,2026-02-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
+ definitions=main-2602190094
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE5MDA5NCBTYWx0ZWRfX29KknNIpAby/
+ EzrSTMLakwIZMnv5zumby4YDeLTYBKLhyeCRG3UB4kvuZSg3W0vBnqXfebGmAktkKaTjtNkhzy7
+ 8pagHzXUUwEHtcRy/SMr2ynO9d3wVQbhwKBRg6MsZ8VOjbbXGMJfMjFtWdT8qP2oVCULkPWDS9B
+ OMVELGSNGm9T4HsRwydfRzAtB/YcnHUEpvf+KH+8qEIsFdV1WFi1Re/Kxd6g2Dp4pl861o4ANAT
+ FYjjNrqRUIHi60SieNzJ1JoJX6mvrvEbxEw1CS1VuF2R5xyaN7U/XNFFP/os86juqOoSe8Bhvab
+ w3XaYTkViVEUsEiVouuTTHjGiC5dBtgurrBc+1S3DbYzNk3N2OA+JOt4OFYhjc1SHImmMzbTHOh
+ jChPwTmesktc3W6c+9zXPnc5SWS0XcSvuNQEqnQXAftM2CNWmNtrA7aPskoZMHHhlW1ad20/Acf
+ //fnCbmRqi+FG1GTfeQ==
+X-Authority-Analysis: v=2.4 cv=O+w0fR9W c=1 sm=1 tr=0 ts=6996e24c cx=c_pps
+ a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=V5d1VTPOmP4a1uZCHD0A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: uxAfflSoJH8rDJe1w7MONXPxCqsICCgL
+X-Proofpoint-ORIG-GUID: uxAfflSoJH8rDJe1w7MONXPxCqsICCgL
 
-On 2/18/26 17:39, AnishMulay wrote:
-> Currently, the migration test asserts that numa_available() returns 0.
-> On systems where NUMA is not available (returning -1), such as certain
-> ARM64 configurations or single-node systems, this assertion fails and
-> crashes the test.
+Hi stable maintainers,
 
-Single-node system (my notebook)
+When pkey_sighandler_tests_64 is run on machines with CPUs that don't
+support pkeys, instead of skipping the tests return SIGILL(illegal
+instruction).
 
-$ ./migration
+# gdb  ./pkey_sighandler_tests_64
+
+(gdb) info registers rip
+rip            0x402779            0x402779 <thread_segv_with_pkey0_disabled+9>
+(gdb) disassemble /r $rip-8,$rip+8
+Dump of assembler code from 0x402771 to 0x402781:
+   0x0000000000402771 <thread_segv_with_pkey0_disabled+1>:	c9                 	leave
+   0x0000000000402772 <thread_segv_with_pkey0_disabled+2>:	b8 55 55 55 55     	mov    $0x55555555,%eax
+   0x0000000000402777 <thread_segv_with_pkey0_disabled+7>:	89 ca              	mov    %ecx,%edx
+=> 0x0000000000402779 <thread_segv_with_pkey0_disabled+9>:	0f 01 ef           	wrpkru
+   0x000000000040277c <thread_segv_with_pkey0_disabled+12>:	0f 01 ee           	rdpkru
+   0x000000000040277f <thread_segv_with_pkey0_disabled+15>:	3d 55 55 55 55     	cmp
+
+Tests result in:
+
+./pkey_sighandler_tests_64
 TAP version 13
-1..6
-# Starting 6 tests from 1 test cases.
-#  RUN           migration.private_anon ...
-#      SKIP      Not enough threads or NUMA nodes available
-#            OK  migration.private_anon
-ok 1 migration.private_anon # SKIP Not enough threads or NUMA nodes 
-available
-#  RUN           migration.shared_anon ...
-#      SKIP      Not enough threads or NUMA nodes available
-#            OK  migration.shared_anon
-ok 2 migration.shared_anon # SKIP Not enough threads or NUMA nodes available
-#  RUN           migration.private_anon_thp ...
-#      SKIP      Not enough threads or NUMA nodes available
-#            OK  migration.private_anon_thp
-ok 3 migration.private_anon_thp # SKIP Not enough threads or NUMA nodes 
-available
-#  RUN           migration.shared_anon_thp ...
-#      SKIP      Not enough threads or NUMA nodes available
-#            OK  migration.shared_anon_thp
-ok 4 migration.shared_anon_thp # SKIP Not enough threads or NUMA nodes 
-available
-#  RUN           migration.private_anon_htlb ...
-#      SKIP      Not enough threads or NUMA nodes available
-#            OK  migration.private_anon_htlb
-ok 5 migration.private_anon_htlb # SKIP Not enough threads or NUMA nodes 
-available
-#  RUN           migration.shared_anon_htlb ...
-#      SKIP      Not enough threads or NUMA nodes available
-#            OK  migration.shared_anon_htlb
-ok 6 migration.shared_anon_htlb # SKIP Not enough threads or NUMA nodes 
-available
-# PASSED: 6 / 6 tests passed.
-# 6 skipped test(s) detected. Consider enabling relevant config options 
-to improve coverage.
-# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:6 error:0
+1..5
+Illegal instruction (core dumped)
+
+This is because 6.12.y commit: 1c6b1d4889d7 ("selftests/mm: skip
+pkey_sighandler_tests if support is missing") like upstream and
+backporting that needed few prerequsites, during this process I have
+seen a few build warnings, so also included patches that help fix these
+build warnings in the selftests.
+
+All are clean cherry-picks. After patching the selftests the test is
+correctly skipped. These additional backports cleansup the code and
+avoids the need for conflict resolution and might help future backports.
+
+After these backports.
+
+# ./pkey_sighandler_tests_64
+TAP version 13
+1..5
+ok 2 # SKIP pkeys not supported
+# Planned tests != run tests (5 != 1)
+# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+
+And these build warnings are also cleaned up.
+====
+
+write_to_hugetlbfs.c: In function ‘main’:
+write_to_hugetlbfs.c:92:25: warning: ‘strncpy’ specified bound 256 equals destination size [-Wstringop-truncation]
+   92 |                         strncpy(path, optarg, sizeof(path));
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mremap_test.c: In function ‘run_mremap_test_case.constprop’:
+mremap_test.c:530:50: warning: ‘dest_preamble_addr’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  530 |                 if (((char *) dest_preamble_addr)[d] != rand_addr[d]) {
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+mremap_test.c:387:45: note: ‘dest_preamble_addr’ was declared here
+  387 |         void *addr, *src_addr, *dest_addr, *dest_preamble_addr;
+      |                                             ^~~~~~~~~~~~~~~~~~
+ksm_tests.c: In function ‘main’:
+ksm_tests.c:947:16: warning: ‘ret’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  947 |         return ret;
+      |                ^~~
+uffd-unit-tests.c: In function ‘uffd_move_test_common.constprop’:
+uffd-unit-tests.c:1196:26: warning: ‘orig_area_dst’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+ 1196 |                 area_dst = orig_area_dst;
+      |                 ~~~~~~~~~^~~~~~~~~~~~~~~
+uffd-unit-tests.c:1195:26: warning: ‘orig_area_src’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+ 1195 |                 area_src = orig_area_src;
+      |                 ~~~~~~~~~^~~~~~~~~~~~~~~
+====
 
 
-What numa_available() really checks is if the kernel supports NUMA by 
-trying get_mempolicy(). If that fails with ENOSYS or EPERM.
+All the upstream commits are present in 6.14-rc1+, so 6.12.y stable
+branch only needs these, newer stable branches are already patched.
 
-That should mostly (cases we care about) be the case if the kernel is 
-compiled without CONFIG_NUMA.
+Please review, thanks!
 
-So a better description here would be "On kernels without CONFIG_NUMA, 
-this assertion ..."
+Regards,
+Harshit
 
-Given that tools/testing/selftests/mm/config does not include 
-CONFIG_NUMA, I think we want to add here
+Kevin Brodsky (14):
+  selftests/mm: fix condition in uffd_move_test_common()
+  selftests/mm: fix -Wmaybe-uninitialized warnings
+  selftests/mm: fix strncpy() length
+  selftests/mm: Define PKEY_UNRESTRICTED for pkey_sighandler_tests
+  selftests/mm: Use generic pkey register manipulation
+  selftests/mm: fix -Warray-bounds warnings in pkey_sighandler_tests
+  selftests/mm: remove unused pkey helpers
+  selftests/mm: define types using typedef in pkey-helpers.h
+  selftests/mm: ensure pkey-*.h define inline functions only
+  selftests/mm: remove empty pkey helper definition
+  selftests/mm: ensure non-global pkey symbols are marked static
+  selftests/mm: use sys_pkey helpers consistently
+  selftests/mm: rename pkey register macro
+  selftests/mm: skip pkey_sighandler_tests if support is missing
 
-Fixes: 0c2d08728470b ("mm: add selftests for migration entries")
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+ tools/testing/selftests/mm/Makefile           |   4 +
+ tools/testing/selftests/mm/ksm_tests.c        |   2 +-
+ tools/testing/selftests/mm/mremap_test.c      |   2 +-
+ tools/testing/selftests/mm/pkey-arm64.h       |   7 +-
+ tools/testing/selftests/mm/pkey-helpers.h     |  68 ++----
+ tools/testing/selftests/mm/pkey-powerpc.h     |   4 +-
+ tools/testing/selftests/mm/pkey-x86.h         |   8 +-
+ .../selftests/mm/pkey_sighandler_tests.c      |  81 +++++--
+ tools/testing/selftests/mm/pkey_util.c        |  40 ++++
+ tools/testing/selftests/mm/protection_keys.c  | 212 +++++++-----------
+ tools/testing/selftests/mm/soft-dirty.c       |   2 +-
+ tools/testing/selftests/mm/uffd-unit-tests.c  |   4 +-
+ .../testing/selftests/mm/write_to_hugetlbfs.c |   2 +-
+ 13 files changed, 216 insertions(+), 220 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/pkey_util.c
 
 -- 
-Cheers,
+2.47.3
 
-David
