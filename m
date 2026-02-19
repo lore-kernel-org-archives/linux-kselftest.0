@@ -1,85 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68250338936;
-	Wed, 18 Feb 2026 23:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7831F4611;
+	Thu, 19 Feb 2026 00:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771456821; cv=none; b=Udp5j8r3HOhFV6tfNFuqdgG8RKDh2Cxwy5Rj1i7Jy1qpAM61jfuLcGhDqwWPuUBg0f6l1MHFnOWT+Zy2PLlnJMM4mudu7uajrZh02uma6oVtr01vvAEKrVVZTaTb2LprCRRqhxzM/IBxHGJ2sJ4yU5MLPl44lcb8JgxVcjX3mjI=
+	t=1771461681; cv=none; b=dDX6dZYwKmanJIWRk/yLa6M4tBMXBMo2EMXpZDYQCPIxddYsjQ10KUjaS4N21eyLJw0F4eJLB001vdqkHxkSWe31J2mlTDhqrtCZzB98yU3zXR8OOp5pdsERZno65Ph49/XzeiwEE79vsd5htune5SPXeHBMd5QjBIskSJDm9rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771456821; c=relaxed/simple;
-	bh=fXcdiPdkHdTo10MS9WFhdGIm35nAuVGjC1fUrTMYIjM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=KFP5Wz2Sb7fi9a79BQSJRbsrKugc6p5LWBdJWzJS8Qfii4dE9TqRT/c7Aj1f2azXyj/SMo1lfV7/Dks7OZn2hzH8Q2NmSjvxpZ+5Kt01/WWb7c8gBlbJzMsMtFMU6+02JbDZz0Q72iMxtO7JzGSfoBlacJWR10y/ND2mDxF47E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eboXJwRY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771461681; c=relaxed/simple;
+	bh=1VGZTiHH6lz93ptvC5y3a1UDrS1AgfaABSsTg9z2EJ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=m91icz0dBDgIZyLPoTOMt0cNrXNXRfzh4XaKbYBm1teQTcSdAqJsg/oiNyscgGfJr07Q82j3loh0vZz9oWoulSDlPySKvrLQf7IKcJsbcy0pF0tJBrHXLt4dqN1SgpYdtQPWyHqCCNpO2yPoVIINBHPOdbyGUO6dwtQeSY0vegA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OKypQ9FC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eboXJwRY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456F5C116D0;
-	Wed, 18 Feb 2026 23:20:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OKypQ9FC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37721C116D0;
+	Thu, 19 Feb 2026 00:41:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771456821;
-	bh=fXcdiPdkHdTo10MS9WFhdGIm35nAuVGjC1fUrTMYIjM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=eboXJwRY59wxYiUElBFA5z0MwTIAOFmChtRuLiOdYbfeSfK9cHAR4WtfYY3iBuRK+
-	 pv8Q9U5qrBsSre1m8QSLmFjLDo5r+e6Y1chVMpQtI5AolhQUmSeQh4B4Y4/6Z/Cr8W
-	 Xh3/Wh0b1Ie3+MHMs8aTSlfViy5EQE/LTyWz0lRL/XwrcAnbcSNGfB/gXMsz5D87At
-	 xutEsJqXYH33a30dqFowbSflXkv3qbyq8uhk6xp1WSKyrYh08B6yxsL5S7y1tLU0rc
-	 rBhY8OU691gxoaHSpq7uEDIEW1WIx5CHyecZC9sNic0QgVD9Gzmg8jY0bVscmMQFXb
-	 1BBrvOny2TB5A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C21A7380CEE0;
-	Wed, 18 Feb 2026 23:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1771461681;
+	bh=1VGZTiHH6lz93ptvC5y3a1UDrS1AgfaABSsTg9z2EJ0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OKypQ9FCe5NJdl0PkK/RF5NUIDU2I7XtINI3jrfj6r/81bv0xVOSR3fpDe4QUfZ39
+	 N6W9pq3qrPMxKaAs37uZGv0iwBNO2rarziJrLjITdH/VRLGpGdAJWK19WR2aoBq8qi
+	 AM14IBSge7mnd/uM4fNFNNTGLUAUk79RW/Uo80iHonCPTg3c0/tI5+oS35Yee4VEXa
+	 AtBS0Qa2HBPV4KswbcanaRJdiHu4WDezt9IWyKunHWTCODGGBpUB8dBW7Vi+jn2Rk4
+	 GPxZjRToew1aavNrU9x/cxqCndtV7gkVZ2ULYWYv4jIB6sogQ9dO9S7w99dp1RmUSW
+	 X4V6x/ez6K96A==
+Date: Wed, 18 Feb 2026 16:41:19 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Stefan Hajnoczi
+ <stefanha@redhat.com>, Shuah Khan <shuah@kernel.org>, Bobby Eshleman
+ <bobbyeshleman@meta.com>, "Michael S. Tsirkin" <mst@redhat.com>,
+ virtualization@lists.linux.dev, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Daan De Meyer <daan.j.demeyer@gmail.com>
+Subject: Re: [PATCH net] vsock: lock down child_ns_mode as write-once
+Message-ID: <20260218164119.72368d53@kernel.org>
+In-Reply-To: <aZXlqv5ukWymz/NI@devvm11784.nha0.facebook.com>
+References: <20260217-vsock-ns-write-once-v1-1-a1fb30f289a9@meta.com>
+	<aZV6HRAIsf_rNRM2@sgarzare-redhat>
+	<aZWUmbiH11Eh3Y4v@sgarzare-redhat>
+	<aZXlqv5ukWymz/NI@devvm11784.nha0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2] selftests/bpf: Remove hexdump dependency
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177145681236.1592777.16534879070223816061.git-patchwork-notify@kernel.org>
-Date: Wed, 18 Feb 2026 23:20:12 +0000
-References: <20260218-bpf-sft-hexdump-od-v2-1-2f9b3ee5ab86@kernel.org>
-In-Reply-To: <20260218-bpf-sft-hexdump-od-v2-1-2f9b3ee5ab86@kernel.org>
-To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- yatsenko@meta.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Wed, 18 Feb 2026 13:01:44 +0100 you wrote:
-> The verification signature header generation requires converting a
-> binary certificate to a C array. Previously this only worked with xxd,
-> and a switch to hexdump has been done in commit b640d556a2b3
-> ("selftests/bpf: Remove xxd util dependency").
+On Wed, 18 Feb 2026 08:15:38 -0800 Bobby Eshleman wrote:
+> > > I'm not sure what the policy is in netdev, but I would prefer to have
+> > > selftest changes in another patch (I think earlier in the series so as
+> > > not to break the bisection), in order to simplify backporting (e.g. in
+> > > CentOS Stream, to keep the backport small, I didn't backport the dozens
+> > > of patches for selftest that we did previously).  
 > 
-> hexdump is a more common utility program, yet it might not be installed
-> by default. When it is not installed, BPF selftests build without
-> errors, but tests_progs is unusable: it exits with the 255 code and
-> without any error messages. When manually reproducing the issue, it is
-> not too hard to find out that the generated verification_cert.h file is
-> incorrect, but that's time consuming. When digging the BPF selftests
-> build logs, this line can be seen amongst thousands others, but ignored:
-> 
-> [...]
+> Sounds good! I wasn't sure if breakage so tightly coupled should be in
+> the same patch or not, I'm happy to split it up to ease backporting.
 
-Here is the summary with links:
-  - [bpf,v2] selftests/bpf: Remove hexdump dependency
-    https://git.kernel.org/bpf/bpf/c/1e5c00912695
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+FWIW the netdev recommendation is indeed to split the selftests out.
+Also to bungle selftest patches with the fix into one series targeting
+net, even tho the selftests patches won't have a Fixes tag.
