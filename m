@@ -1,165 +1,210 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDA130F94E;
-	Thu, 19 Feb 2026 10:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A33F30B533
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 10:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771496049; cv=none; b=Thm8fjv7Fa6/8dfuYzYXu+j1j07fNE9XOrBdQuhxrphBOTaKZ+NBQZeUqYMmDsIXxII5wmbUejyXiAL+L9HGUoTVa70UT2pp66wuHXST+Id0w75t8Ace5l9IJaY+PBC56yJepS6BLk3GsIqs5Bzy4esrebaq9dtbvcsMtlLs+30=
+	t=1771497328; cv=none; b=uzSHHFpCasooR9ilED3hiA2fEpTNw4XXgu3eRbu8pTmqhICuWVSNXWJ6uWpZDx0oeJ7r2sJKudCBdCTP6g9x3Fr7zczGZwzH9yZ3yWjXy06uwIp1ozInFcu28N0aWj3M2Y7QBs1EXIPRNj7QuHUwXkphzT+UUpZ/In4uchs8KOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771496049; c=relaxed/simple;
-	bh=VdMVRN0gRuDbQQd7+nAQWeXZX8+mmYxSxDCbnkYF+r4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qdpjcbYN2x9aigIIw/KxqG/2XDVgejWkdck6DB7ws7aDwGghKOfHrf5AIai8mseDL7FXrEHDfoyDrna3vWR5mP0G5/vfJgU4H2OHVPO60/cdbMBexnL0BtFHfIhYSUy2OftwrDpNHr+YG9IBKASLBd5tctQCa6aBFxUnkggSuiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eTwQQrPG; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1771497328; c=relaxed/simple;
+	bh=JzgTJfCZThD8ADnrrzOcTouopRq3PU+mfSlCjHNTIqg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ueT5vjad0i6Drvd2WS917GJ/oIh5UIRpmGBOcsO++Zabrd42boTPRur8H2SkQlg1Trhka/HBdioZTbkVFBcJ1aH+FUQoyWZcA7aAh2empw/299VzXPXJR8fAAob8TYRfQnCed3vnh0ByRpwdhHbDW6OQDtKHn3AHgk3Ji32fFoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OnG8/tQg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=oQV4QSAi; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eTwQQrPG"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61J67INT250938;
-	Thu, 19 Feb 2026 10:14:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=rXfXe
-	6Oa2N1nMzbl7xizi2Xz0AZv3IkrqUhkQkNqCjs=; b=eTwQQrPG86dVG+wjA3t8v
-	AztSADn/TeuVL7I8QDSNDaXng2xj1Wnc1WAxIIv+7CN9BXnUEJKePJdv7KzwYVZc
-	GIDK8POhI08oGBNMsdp2iroZeT32Q6BhWfrjkLCs9TMc+t98dvyPY8f9iHnowSyK
-	DNWy3B34GpaOCfjaFlIkN0yX3jMDTRvtO7OJ6IZdhNpgdSIEyUAI5vblLglNLJKa
-	j4vq7zcq1UXyHh3xMy2yLnw2XWW50qezQYQjFd8H2UMUUCOT/u8hDdr9yczMGrup
-	1JgV4HdGW8XVTBQKssDLopCVJdVfKiCv7WF7wAvg6gnBa/pTBIq2qCJhVTx2mAjN
-	w==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4caj0wq4wq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Feb 2026 10:13:59 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61J81ec9033203;
-	Thu, 19 Feb 2026 10:13:58 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ccb228uur-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Feb 2026 10:13:58 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61JADUMA037324;
-	Thu, 19 Feb 2026 10:13:58 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ccb228uem-14;
-	Thu, 19 Feb 2026 10:13:57 +0000
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To: stable@vger.kernel.org
-Cc: kevin.brodsky@arm.com, linux-kselftest@vger.kernel.org,
-        Aruna Ramakrishna <aruna.ramakrishna@oracle.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joey Gouly <joey.gouly@arm.com>, Keith Lucas <keith.lucas@oracle.com>,
-        Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 6.12.y 13/14] selftests/mm: rename pkey register macro
-Date: Thu, 19 Feb 2026 02:13:17 -0800
-Message-ID: <20260219101318.2442406-14-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260219101318.2442406-1-harshit.m.mogalapalli@oracle.com>
-References: <20260219101318.2442406-1-harshit.m.mogalapalli@oracle.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OnG8/tQg";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="oQV4QSAi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771497326;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3F3zYoVrT9qjM5rAq+b6pbd+/hnAt//GBzSEVJjvXTQ=;
+	b=OnG8/tQggtNY3Lr8AVEqC7zh+Z9YSUah4pY0sWAoRIIuSTRkvgs6IF4gZ0p/eAp0HPkIJl
+	AylTvKx/xPsLLPhd6v+kEDs83ueNQjuD48QiNLTnnCJ5RsSp1alM34hMg5nOA4tXb9SQ5D
+	xXCtUegkUnaM24GQp9g9qfKoIwXmhYk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-318-XKlt0q5wO_S9Kfe6UVeIzA-1; Thu, 19 Feb 2026 05:35:24 -0500
+X-MC-Unique: XKlt0q5wO_S9Kfe6UVeIzA-1
+X-Mimecast-MFC-AGG-ID: XKlt0q5wO_S9Kfe6UVeIzA_1771497324
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-48069a43217so7154615e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 02:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1771497323; x=1772102123; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3F3zYoVrT9qjM5rAq+b6pbd+/hnAt//GBzSEVJjvXTQ=;
+        b=oQV4QSAim8zkAt72BCdWOW/0atkiHhZffjQCtYsgFklc3kS/jwjCiz8u1e7HRW5oTk
+         Wuv9hWwMByh8Msm3JXH3PJoq9LT/SkPDTNWr08vO4/QUVKyZ5Ef6pWjWLG/SGaar/x0S
+         yUNvU0yGNfcEd+sd6IyJwSqnz1lnRE+oqlWP6drNX6iy52JR/THCXp86qo9MMdqmR6HB
+         9aHAbROjJoIxgfIgUhjHChfivheG1D8prFps4MwahKkkiCI/8DqBkdyJIr8ifNVepgJ1
+         EM2rgXoUInohlTguN+Y9HTXjJenj7LRm0Sntz03CRG3ZDhlzaJNpzgqhSrzTdYLCWCgQ
+         vZYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771497323; x=1772102123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3F3zYoVrT9qjM5rAq+b6pbd+/hnAt//GBzSEVJjvXTQ=;
+        b=tbpjyDobVvXYa22xkF8sAmVQlwLmXCmW7ewbSxP0OJ49CxBRgaYKKhIG1tx3rXqHRw
+         OnysD+RgZosE5pOM+7x+eUeLjiTLNfKy4NgKQ5pE+DnqApN/G91tAG6QPyQEghQ/Z4rJ
+         700rRboIcPXK5pRdBzly3ypL/Nikcwh1L+y3jgYlOWFpTu5Wey7hrdHfv+nP/rDv8Vuj
+         tCJ5LBlMSEptNGV+3QimIQH1bE8qeiojOc9iE6jZowF0a3zwrOSxVxWhV2A27oGxHp88
+         5ZsMgfG1ipRY+X3lGOD2NiS3FQDSp59uLDIyiWSf9ey+UwEtsF3d0ro3vwBoigMfoK4D
+         X32A==
+X-Forwarded-Encrypted: i=1; AJvYcCXy4ONrdD5V+AAarFGeXuaunHRPcxtvLm1Hkq9Qu6IPdN+jkRb08I3ZMfRcJCt+k/OKrJ1S3l6AuAEYsP5HT/c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCxOE7N+I3iyXaaNdNPavfIFCN6YUKohoAq/Lm6XrxoOz71JDA
+	V6+foXe/3dN0D0HCxY/vDLa+gUfSoZoOXYk0gKWz/KHwc5uXxdzTmBouRoOKpLC2vd2A58XuCWX
+	1saJYOdt/Liz8GlHUwDgGO0KXBgrH2hxkYbGyhiFU80ZKxfG6UR4wCkusAKezQ/RnTqXbPA==
+X-Gm-Gg: AZuq6aIMfpdKoPlyVjEujT4rH0UBeZaApo+qHT2vK82vO/wZZRdxZupGrJhy6Os7kjA
+	eGklsJetN0P7Nni9VOTrvia1Yra7qJ2oJAgBPi5fow49mxbyRAirj5Xbt1xlEsWjxi8PS52ras8
+	rMmT8ItSgbQw+NEQH9TKm4S6rzrOvny9hajDrstcQxzI7rpA9NCcwjmGjyLATRQ89b6jkSRxDuu
+	VbIREKO8smFTrJ+tZJ1ilA96xIs0EMNFAyMdtpFuorNx/dbCxTpK4LtMmnuLshCmz/6XQgMbb+e
+	mzKChwdJ/1dGwVe8FKZxSI8rjNB44F8qaZbFpm8ij7iF1NaZ1EZlr5Bz6B8DT857kC+hZGanB/f
+	j0AuWQEFM8Zpl5HAm2pgiRq03BBb2umWjVILct5vFFCCUxTA7wdl0yJ92nn9uX9vdoqN9yrg=
+X-Received: by 2002:a05:600c:4eca:b0:483:6d4a:7e6d with SMTP id 5b1f17b1804b1-48379be60camr248733975e9.30.1771497323455;
+        Thu, 19 Feb 2026 02:35:23 -0800 (PST)
+X-Received: by 2002:a05:600c:4eca:b0:483:6d4a:7e6d with SMTP id 5b1f17b1804b1-48379be60camr248733415e9.30.1771497322976;
+        Thu, 19 Feb 2026 02:35:22 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-58.retail.telecomitalia.it. [82.53.134.58])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4839f96967bsm19658265e9.3.2026.02.19.02.35.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Feb 2026 02:35:21 -0800 (PST)
+Date: Thu, 19 Feb 2026 11:35:19 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Bobby Eshleman <bobbyeshleman@meta.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	virtualization@lists.linux.dev, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH net v2 1/3] selftests/vsock: change tests to respect
+ write-once child ns mode
+Message-ID: <aZbNwPMSd6ridmBn@sgarzare-redhat>
+References: <20260218-vsock-ns-write-once-v2-0-19e4c50d509a@meta.com>
+ <20260218-vsock-ns-write-once-v2-1-19e4c50d509a@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-19_03,2026-02-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 mlxscore=0
- suspectscore=0 malwarescore=0 adultscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
- definitions=main-2602190094
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE5MDA5NCBTYWx0ZWRfX7IaVSd6K56wi
- 4/QgCl58LM6EXeeN1RLvH7UyDy/vDpZsKOR768wy6aa+PAoWDBG9nETJyVs237rg8zCFt9j1ZA/
- dOjXUM1wjGgG2dviALsvcZD0dqoQe43CXThQfdpFdjzbkauhGDNB8cd2OLo3vBNCFYZYvlARZXk
- TMhcW3/VSDtuyupz/kueNZpRyKuMbuZeQ7XVlAgGz4ekIuItxRxSNMCuBEv17sxDChx0DUlu6dj
- yhXv4AUUgCyhVdvPkmWtiyQmUW1v5oIn1Rf8mcE3uhqtNO12Q9iCzYQEy6IU/ymhgHiex6fzk2S
- P0VUmEL9R33UmOCs44DmX+xp2p5LM6viD78azPD4FBbrQDt7ARUP3nP9PTUZ3WB1iRUdfvMqiS6
- 7qkdeNLVb/vjWoBU1ppG29qEDP7T7mCngE2dMmS7nedbe5qZP7QMXpxhkNnbTuNSRUxGqa4quhF
- 8ysxSbBpubPJyXb89PA==
-X-Authority-Analysis: v=2.4 cv=ZMfaWH7b c=1 sm=1 tr=0 ts=6996e267 cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=7CQSdrXTAAAA:8 a=yPCof4ZbAAAA:8
- a=QyXUC8HyAAAA:8 a=Z4Rwk6OoAAAA:8 a=AFsvoTy3hIXoo9AhgmUA:9
- a=a-qgeE7W1pNrGK8U0ZQC:22 a=HkZW87K1Qel5hWWM3VKY:22
-X-Proofpoint-ORIG-GUID: jkZm006SWI0QwuMmHNCWo9EFUA7R9fE0
-X-Proofpoint-GUID: jkZm006SWI0QwuMmHNCWo9EFUA7R9fE0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260218-vsock-ns-write-once-v2-1-19e4c50d509a@meta.com>
 
-From: Kevin Brodsky <kevin.brodsky@arm.com>
+On Wed, Feb 18, 2026 at 10:10:36AM -0800, Bobby Eshleman wrote:
+>From: Bobby Eshleman <bobbyeshleman@meta.com>
+>
+>The child_ns_mode sysctl parameter becomes write-once in a future patch
+>in this series, which breaks existing tests. This patch updates the
+>tests to respect this new policy. No additional tests are added.
+>
+>Add "global-parent" and "local-parent" namespaces as intermediaries to
+>spawn namespaces in the given modes. This avoids the need to change
+>"child_ns_mode" in the init_ns. nsenter must be used because ip netns
+>unshares the mount namespace so nested "ip netns add" breaks exec calls
+>from the init ns. Adds nsenter to the deps check.
+>
+>Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+>---
+> tools/testing/selftests/vsock/vmtest.sh | 35 +++++++++++++++------------------
+> 1 file changed, 16 insertions(+), 19 deletions(-)
 
-[ Upstream commit 28501aa13acd8376b09a87dc5e3da02462bb0702 ]
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-PKEY_ALLOW_ALL is meant to represent the pkey register value that allows
-all accesses (enables all pkeys).  However its current naming suggests
-that the value applies to *one* key only (like PKEY_DISABLE_ACCESS for
-instance).
-
-Rename PKEY_ALLOW_ALL to PKEY_REG_ALLOW_ALL to avoid such
-misunderstanding.  This is consistent with the PKEY_REG_ALLOW_NONE macro
-introduced by commit 6e182dc9f268 ("selftests/mm: Use generic pkey
-register manipulation").
-
-Link: https://lkml.kernel.org/r/20241209095019.1732120-13-kevin.brodsky@arm.com
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Joey Gouly <joey.gouly@arm.com>
-Cc: Keith Lucas <keith.lucas@oracle.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-(cherry picked from commit 28501aa13acd8376b09a87dc5e3da02462bb0702)
-[Harshit: clean cherry-pick, backport to 6.12.y]
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
- tools/testing/selftests/mm/pkey-arm64.h      | 2 +-
- tools/testing/selftests/mm/protection_keys.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/pkey-arm64.h b/tools/testing/selftests/mm/pkey-arm64.h
-index 41013065fb5e..588286b25a61 100644
---- a/tools/testing/selftests/mm/pkey-arm64.h
-+++ b/tools/testing/selftests/mm/pkey-arm64.h
-@@ -30,7 +30,7 @@
- #define NR_PKEYS		8
- #define NR_RESERVED_PKEYS	1 /* pkey-0 */
- 
--#define PKEY_ALLOW_ALL		0x77777777
-+#define PKEY_REG_ALLOW_ALL	0x77777777
- #define PKEY_REG_ALLOW_NONE	0x0
- 
- #define PKEY_BITS_PER_PKEY	4
-diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index bb26a07fe206..35565af308af 100644
---- a/tools/testing/selftests/mm/protection_keys.c
-+++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -396,7 +396,7 @@ static void signal_handler(int signum, siginfo_t *si, void *vucontext)
- 	/* restore access and let the faulting instruction continue */
- 	pkey_access_allow(siginfo_pkey);
- #elif defined(__aarch64__)
--	aarch64_write_signal_pkey(uctxt, PKEY_ALLOW_ALL);
-+	aarch64_write_signal_pkey(uctxt, PKEY_REG_ALLOW_ALL);
- #endif /* arch */
- 	pkey_faults++;
- 	dprintf1("<<<<==================================================\n");
-@@ -842,7 +842,7 @@ void expected_pkey_fault(int pkey)
- 	 */
- 	if (__read_pkey_reg() != 0)
- #elif defined(__aarch64__)
--	if (__read_pkey_reg() != PKEY_ALLOW_ALL)
-+	if (__read_pkey_reg() != PKEY_REG_ALLOW_ALL)
- #else
- 	if (__read_pkey_reg() != shadow_pkey_reg)
- #endif /* arch */
--- 
-2.47.3
+>
+>diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
+>index dc8dbe74a6d0..e1e78b295e41 100755
+>--- a/tools/testing/selftests/vsock/vmtest.sh
+>+++ b/tools/testing/selftests/vsock/vmtest.sh
+>@@ -210,16 +210,17 @@ check_result() {
+> }
+>
+> add_namespaces() {
+>-	local orig_mode
+>-	orig_mode=$(cat /proc/sys/net/vsock/child_ns_mode)
+>+	ip netns add "global-parent" 2>/dev/null
+>+	echo "global" | ip netns exec "global-parent" \
+>+		tee /proc/sys/net/vsock/child_ns_mode &>/dev/null
+>+	ip netns add "local-parent" 2>/dev/null
+>+	echo "local" | ip netns exec "local-parent" \
+>+		tee /proc/sys/net/vsock/child_ns_mode &>/dev/null
+>
+>-	for mode in "${NS_MODES[@]}"; do
+>-		echo "${mode}" > /proc/sys/net/vsock/child_ns_mode
+>-		ip netns add "${mode}0" 2>/dev/null
+>-		ip netns add "${mode}1" 2>/dev/null
+>-	done
+>-
+>-	echo "${orig_mode}" > /proc/sys/net/vsock/child_ns_mode
+>+	nsenter --net=/var/run/netns/global-parent ip netns add "global0" 2>/dev/null
+>+	nsenter --net=/var/run/netns/global-parent ip netns add "global1" 2>/dev/null
+>+	nsenter --net=/var/run/netns/local-parent ip netns add "local0" 2>/dev/null
+>+	nsenter --net=/var/run/netns/local-parent ip netns add "local1" 2>/dev/null
+> }
+>
+> init_namespaces() {
+>@@ -237,6 +238,8 @@ del_namespaces() {
+> 		log_host "removed ns ${mode}0"
+> 		log_host "removed ns ${mode}1"
+> 	done
+>+	ip netns del "global-parent" &>/dev/null
+>+	ip netns del "local-parent" &>/dev/null
+> }
+>
+> vm_ssh() {
+>@@ -287,7 +290,7 @@ check_args() {
+> }
+>
+> check_deps() {
+>-	for dep in vng ${QEMU} busybox pkill ssh ss socat; do
+>+	for dep in vng ${QEMU} busybox pkill ssh ss socat nsenter; do
+> 		if [[ ! -x $(command -v "${dep}") ]]; then
+> 			echo -e "skip:    dependency ${dep} not found!\n"
+> 			exit "${KSFT_SKIP}"
+>@@ -1231,12 +1234,8 @@ test_ns_local_same_cid_ok() {
+> }
+>
+> test_ns_host_vsock_child_ns_mode_ok() {
+>-	local orig_mode
+>-	local rc
+>-
+>-	orig_mode=$(cat /proc/sys/net/vsock/child_ns_mode)
+>+	local rc="${KSFT_PASS}"
+>
+>-	rc="${KSFT_PASS}"
+> 	for mode in "${NS_MODES[@]}"; do
+> 		local ns="${mode}0"
+>
+>@@ -1246,15 +1245,13 @@ test_ns_host_vsock_child_ns_mode_ok() {
+> 			continue
+> 		fi
+>
+>-		if ! echo "${mode}" > /proc/sys/net/vsock/child_ns_mode; then
+>-			log_host "child_ns_mode should be writable to ${mode}"
+>+		if ! echo "${mode}" | ip netns exec "${ns}" \
+>+			tee /proc/sys/net/vsock/child_ns_mode &>/dev/null; then
+> 			rc="${KSFT_FAIL}"
+> 			continue
+> 		fi
+> 	done
+>
+>-	echo "${orig_mode}" > /proc/sys/net/vsock/child_ns_mode
+>-
+> 	return "${rc}"
+> }
+>
+>
+>-- 
+>2.47.3
+>
 
