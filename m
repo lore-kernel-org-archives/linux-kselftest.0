@@ -1,79 +1,221 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5498C259CBD;
-	Thu, 19 Feb 2026 15:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6471F33F39C;
+	Thu, 19 Feb 2026 15:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771513816; cv=none; b=fCZLWg+VIS9tp8l+gttLe7nDu9HjslrHdokOC1BNu7vRqmJhCTaLik6yKT4cCeDhbAXDCX/Mq+X2F/vlrUomtQb9PXAtkHyeOZFyFYRkFsP36q1Kr4MzMwg7zAEkDEsB+BDEdGAjiMf8OIQ45ELO0g0MwqAlKrJgvH7YNAv318g=
+	t=1771513855; cv=none; b=e6Ctkr2iRvbmim+TZQpmewu5+4nEZQiSEfpTiFbZ/GgITro/iHitzFYN26b2udRamMy9mjQppOCn764YYqqmJdzwSMrG+PBPqEQQWBaUFDniunIzBGIxS99VfyMAgHWg1Daby0zh6x6FZ188v9jiqwUWfjOE8SO6xR6ofgP6jqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771513816; c=relaxed/simple;
-	bh=bnx2UJT58n90YGkS84Z9IcHcboH7QYnKVdXsqM/bQsU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UFXrIJJ7UI5TaYeXPaROjPd82D81gaWK96Wd9AcgOdBGwdhR8fAOIfF84Gmpgbbb6C3VENCzsYghr76+nJ+ARX0LNJL1Uuj+87au81w3517LG8KsN2zeIoD6YHkVOSgtK9aTv3lg3zgFFd5fJPD5lbskJmpQOoYcgKoNf+7ZE54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pKWnAruE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771513855; c=relaxed/simple;
+	bh=07DWOhOE5gQM6B0UCSGd3a69H29OOZIAhDMZ1+LO25I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=a3iUSfgfRT6A+W1zEZLgTcvAE3ouFHCToioE0A2BHt4pjfSMsS9cMncFqcB4g2arrvFgyeiNBFPFjXXW4purmCQHK3rbC/KgKVH0lKDqbrgtp+nfKVyjMpHe5WYshJ5ddTbzRiraWxTy8htP5unNq+v/tzftpzh39wqzel12IFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j7Xpw3wr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pKWnAruE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9868C4CEF7;
-	Thu, 19 Feb 2026 15:10:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j7Xpw3wr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BFFAC4CEF7;
+	Thu, 19 Feb 2026 15:10:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771513815;
-	bh=bnx2UJT58n90YGkS84Z9IcHcboH7QYnKVdXsqM/bQsU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=pKWnAruEV0Qi0e3N4AyzAkwp99frRmLPxDq6LnohhNozwYxSu7EVANoa+FMzBClps
-	 LV02sIgIGnrb/y4uRzP5UF3Z2w6b5VPjVqLXG3kGfd45ynVNV9gHLVSFeo2covTvtC
-	 V4qlAMgLQ4CiDyj3KA30CVhylkPNkhugi5qv9hiMDMyOAgV/YtaopFEzq0fkpr47pq
-	 kcFFzPy46lwta9JCMR1smrJa1nkoksYPjn+cm76WvETPrArGcyyX7xvNZtxb93qmYu
-	 VPRYTF8k/R02f0ctCYJ016Terrlf7Z7F2Goc5bUdcXVlarD78mWzFChMNiUZPtpCTw
-	 Q/uc+W9vsNnZQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0B26D380CEF3;
-	Thu, 19 Feb 2026 15:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1771513855;
+	bh=07DWOhOE5gQM6B0UCSGd3a69H29OOZIAhDMZ1+LO25I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=j7Xpw3wrHYOOCsQXEfznBjD3kYlM79NuIrLbasjZdQk0uBrsrnOQXM/AbsgRRcb8U
+	 d7R02l1R+GTJlgpiFu6iWKMqQ8aAhx0GdPXZJwOJJ+x37CaRKhQat/8xOhGLKFrbTN
+	 fS5DkYPBGD75JO955oLJODqfK/id9BaTPYO34FKmt0DVeUhPNCHFzSmURan9xoaPQw
+	 kqy20ZZPotf2uYoHqeEOv6kqbjuuS99BnldraRM9vOSwKeuu5pRibw8F2g0mi8pBem
+	 aBbk1ohzDlP1/Tfzf9aApk8XFkcfn0vJ9AYHeSvdUUAfc20NnXNlhe2LKtxr3+d9Z3
+	 eaCNyEUgJlB9w==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Leon
+ Hwang <leon.hwang@linux.dev>, Peilin Ye <yepeilin@google.com>, Luis
+ Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+Subject: Re: [PATCH bpf-next v2 3/6] bpf, arm64: Add 64-bit bitops kfuncs
+ support
+In-Reply-To: <20260219142933.13904-4-leon.hwang@linux.dev>
+References: <20260219142933.13904-1-leon.hwang@linux.dev>
+ <20260219142933.13904-4-leon.hwang@linux.dev>
+Date: Thu, 19 Feb 2026 15:10:27 +0000
+Message-ID: <m2342wpy58.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net/rds: Fix NULL pointer dereference in
- rds_tcp_accept_one
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177151380683.2260009.6858466914416054623.git-patchwork-notify@kernel.org>
-Date: Thu, 19 Feb 2026 15:10:06 +0000
-References: <20260216222643.2391390-1-achender@kernel.org>
-In-Reply-To: <20260216222643.2391390-1-achender@kernel.org>
-To: Allison Henderson <achender@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- pabeni@redhat.com, edumazet@google.com, rds-devel@oss.oracle.com,
- kuba@kernel.org, horms@kernel.org, linux-rdma@vger.kernel.org,
- allison.henderson@oracle.com
-
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Mon, 16 Feb 2026 15:26:43 -0700 you wrote:
-> Save a local pointer to new_sock->sk and hold a reference before
-> installing callbacks in rds_tcp_accept_one. After
-> rds_tcp_set_callbacks() or rds_tcp_reset_callbacks(), tc->t_sock is
-> set to new_sock which may race with the shutdown path.  A concurrent
-> rds_tcp_conn_path_shutdown() may call sock_release(), which sets
-> new_sock->sk = NULL and may eventually free sk when the refcount
-> reaches zero.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net] net/rds: Fix NULL pointer dereference in rds_tcp_accept_one
-    https://git.kernel.org/netdev/net/c/6bf45704a92a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Content-Type: text/plain
 
 
+> Implement JIT inlining of the 64-bit bitops kfuncs on arm64.
+>
+> bpf_clz64(), bpf_ffs64(), bpf_fls64(), and bpf_bitrev64() are always
+> inlined using mandatory ARMv8 CLZ/RBIT instructions. bpf_ctz64() is
+> inlined via RBIT + CLZ, or via the native CTZ instruction when
+> FEAT_CSSC is available. bpf_rol64() and bpf_ror64() are always inlined
+> via RORV.
+>
+> bpf_popcnt64() is not inlined as the native population count instruction
+> requires NEON/SIMD registers, which should not be touched from BPF
+> programs. It therefore falls back to a regular function call.
+>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  arch/arm64/net/bpf_jit_comp.c | 123 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 123 insertions(+)
+>
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 7a530ea4f5ae..f03f732063d9 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -1192,6 +1192,127 @@ static int add_exception_handler(const struct bpf_insn *insn,
+>  	return 0;
+>  }
+>  
+> +static inline u32 a64_clz64(u8 rd, u8 rn)
+> +{
+> +	/*
+> +	 * Arm Architecture Reference Manual for A-profile architecture
+> +	 * (Document number: ARM DDI 0487)
+> +	 *
+> +	 *   A64 Base Instruction Descriptions
+> +	 *   C6.2 Alphabetical list of A64 base instructions
+> +	 *
+> +	 *   C6.2.91 CLZ
+> +	 *
+> +	 *     Count leading zeros
+> +	 *
+> +	 *     This instruction counts the number of consecutive binary zero bits,
+> +	 *     starting from the most significant bit in the source register,
+> +	 *     and places the count in the destination register.
+> +	 */
+> +	/* CLZ Xd, Xn */
+> +	return 0xdac01000 | (rn << 5) | rd;
+> +}
+> +
+> +static inline u32 a64_ctz64(u8 rd, u8 rn)
+> +{
+> +	/*
+> +	 * Arm Architecture Reference Manual for A-profile architecture
+> +	 * (Document number: ARM DDI 0487)
+> +	 *
+> +	 *   A64 Base Instruction Descriptions
+> +	 *   C6.2 Alphabetical list of A64 base instructions
+> +	 *
+> +	 *   C6.2.144 CTZ
+> +	 *
+> +	 *     Count trailing zeros
+> +	 *
+> +	 *     This instruction counts the number of consecutive binary zero bits,
+> +	 *     starting from the least significant bit in the source register,
+> +	 *     and places the count in the destination register.
+> +	 *
+> +	 *     This instruction requires FEAT_CSSC.
+> +	 */
+> +	/* CTZ Xd, Xn */
+> +	return 0xdac01800 | (rn << 5) | rd;
+> +}
+> +
+> +static inline u32 a64_rbit64(u8 rd, u8 rn)
+> +{
+> +	/*
+> +	 * Arm Architecture Reference Manual for A-profile architecture
+> +	 * (Document number: ARM DDI 0487)
+> +	 *
+> +	 *   A64 Base Instruction Descriptions
+> +	 *   C6.2 Alphabetical list of A64 base instructions
+> +	 *
+> +	 *   C6.2.320 RBIT
+> +	 *
+> +	 *     Reverse bits
+> +	 *
+> +	 *     This instruction reverses the bit order in a register.
+> +	 */
+> +	/* RBIT Xd, Xn */
+> +	return 0xdac00000 | (rn << 5) | rd;
+> +}
+
+Instead of hardcoding the instructions with the above functions, do it the
+proper way something like the following patch (not compile tested):
+
+-- >8 --
+
+diff --git a/arch/arm64/include/asm/insn.h b/arch/arm64/include/asm/insn.h
+index 18c7811774d3..b2696af0b817 100644
+--- a/arch/arm64/include/asm/insn.h
++++ b/arch/arm64/include/asm/insn.h
+@@ -221,6 +221,9 @@ enum aarch64_insn_data1_type {
+ 	AARCH64_INSN_DATA1_REVERSE_16,
+ 	AARCH64_INSN_DATA1_REVERSE_32,
+ 	AARCH64_INSN_DATA1_REVERSE_64,
++	AARCH64_INSN_DATA1_RBIT,
++	AARCH64_INSN_DATA1_CLZ,
++	AARCH64_INSN_DATA1_CTZ,
+ };
+
+ enum aarch64_insn_data2_type {
+@@ -389,6 +392,9 @@ __AARCH64_INSN_FUNCS(rorv,	0x7FE0FC00, 0x1AC02C00)
+ __AARCH64_INSN_FUNCS(rev16,	0x7FFFFC00, 0x5AC00400)
+ __AARCH64_INSN_FUNCS(rev32,	0x7FFFFC00, 0x5AC00800)
+ __AARCH64_INSN_FUNCS(rev64,	0x7FFFFC00, 0x5AC00C00)
++__AARCH64_INSN_FUNCS(rbit,	0x7FFFFC00, 0x5AC00000)
++__AARCH64_INSN_FUNCS(clz,      0x7FFFFC00, 0x5AC01000)
++__AARCH64_INSN_FUNCS(ctz,      0x7FFFFC00, 0x5AC01800)
+ __AARCH64_INSN_FUNCS(and,      0x7F200000, 0x0A000000)
+ __AARCH64_INSN_FUNCS(bic,      0x7F200000, 0x0A200000)
+ __AARCH64_INSN_FUNCS(orr,      0x7F200000, 0x2A000000)
+diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
+index 4e298baddc2e..2229ab596cda 100644
+--- a/arch/arm64/lib/insn.c
++++ b/arch/arm64/lib/insn.c
+@@ -1008,6 +1008,15 @@ u32 aarch64_insn_gen_data1(enum aarch64_insn_register dst,
+ 		}
+ 		insn = aarch64_insn_get_rev64_value();
+ 		break;
++	case AARCH64_INSN_DATA1_CLZ:
++		insn = aarch64_insn_get_clz_value();
++		break;
++	case AARCH64_INSN_DATA1_RBIT:
++		insn = aarch64_insn_get_rbit_value();
++		break;
++	case AARCH64_INSN_DATA1_CTZ:
++		insn = aarch64_insn_get_ctz_value();
++		break;
+ 	default:
+ 		pr_err("%s: unknown data1 encoding %d\n", __func__, type);
+ 		return AARCH64_BREAK_FAULT;
+diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+index bbea4f36f9f2..af806c39dadb 100644
+--- a/arch/arm64/net/bpf_jit.h
++++ b/arch/arm64/net/bpf_jit.h
+@@ -248,6 +248,12 @@
+ #define A64_REV16(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, REVERSE_16)
+ #define A64_REV32(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, REVERSE_32)
+ #define A64_REV64(Rd, Rn)     A64_DATA1(1, Rd, Rn, REVERSE_64)
++/* Rd = RBIT(Rn) */
++#define A64_RBIT(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, RBIT)
++/* Rd = CLZ(Rn) */
++#define A64_CLZ(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, CLZ)
++/* Rd = CTZ(Rn) */
++#define A64_CTZ(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, CTZ)
+
+ /* Data-processing (2 source) */
+ /* Rd = Rn OP Rm */
+
+-- 8< --
+
+Thanks,
+Puranjay
