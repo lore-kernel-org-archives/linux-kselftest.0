@@ -1,169 +1,79 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555D234CFD9
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 15:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5498C259CBD;
+	Thu, 19 Feb 2026 15:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771513442; cv=none; b=HzkPGWjditaLbcArZS3rTpthLrKt4IoROfHvSd+nE2NIv/Zxc9p55KgazVREb+yPaX2+o/SGn1NaB4+N8IdTQPFQoW1vo+CKO+4iDre3qrIpKzcZAWaStxM+L9oNnOKnTWoep3CVVbetxTOe4QdN34dGO5awLjIVoNki8EKH+Qw=
+	t=1771513816; cv=none; b=fCZLWg+VIS9tp8l+gttLe7nDu9HjslrHdokOC1BNu7vRqmJhCTaLik6yKT4cCeDhbAXDCX/Mq+X2F/vlrUomtQb9PXAtkHyeOZFyFYRkFsP36q1Kr4MzMwg7zAEkDEsB+BDEdGAjiMf8OIQ45ELO0g0MwqAlKrJgvH7YNAv318g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771513442; c=relaxed/simple;
-	bh=nC5Ozd5peuX3ykhnKdo5Pz3W6ePP4RFYtKgnnVuRb/s=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TJSrl0oJW5QNgISipSnLwN0Vx4bc1Np3QW7sxdYgB9oubZHnxwS88V1cC+3xtQpBUaFVkHP9sDEJgJ1hFLipq0kDMDhD2i33lvjB5AuyFf6Tk8g31RB+a+T2asOk3K1s9xGHJleJv9Ndj1ZPFaEwNY9XvIA/0llAPM8HENJfBbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uZx0QzyX; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
+	s=arc-20240116; t=1771513816; c=relaxed/simple;
+	bh=bnx2UJT58n90YGkS84Z9IcHcboH7QYnKVdXsqM/bQsU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=UFXrIJJ7UI5TaYeXPaROjPd82D81gaWK96Wd9AcgOdBGwdhR8fAOIfF84Gmpgbbb6C3VENCzsYghr76+nJ+ARX0LNJL1Uuj+87au81w3517LG8KsN2zeIoD6YHkVOSgtK9aTv3lg3zgFFd5fJPD5lbskJmpQOoYcgKoNf+7ZE54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pKWnAruE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uZx0QzyX"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4836b7fbf4fso10033875e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 07:04:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771513440; x=1772118240; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B8HAfsDbzjcEm8omLFyotBep6HDlIYV4sfcPciyFXCw=;
-        b=uZx0QzyX4Hbg6s3etEtNSELD3DNj3e54ytP7V4uuu1aJlNYSqsf40ZoGMSGTrEo508
-         YTII67dxCjrN7eRbgZipXbxsjszjrJghzwyVK96CuLdRoxjEdtR6vYOfinzMyuIubifR
-         WSV1jbi7TLDxwH/I2u1ouSBenWRdlDogoC2JrCYil94XQa7RIvRuwDhanHV/e3LcLwTU
-         7BdZbSnQr8XOl0dRXsOsPG4khxLw+Ow2pfZW8Sb621rf5/EJYYve/uzKOsUULnFIFgPz
-         sgQmtXfSKqmb+kG031gdVWWCkPVLqixXF1baLwS+mLc9KVRxUvbQUljmKOQ50hk9oYwK
-         qQ/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771513440; x=1772118240;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B8HAfsDbzjcEm8omLFyotBep6HDlIYV4sfcPciyFXCw=;
-        b=TLjCXXXx47xQTOc3JSUCY+mb/xSLKubRltFhZwnVp/BDih37hxn/Z5ySUlsCi3xc/O
-         u74Z9r645CqVaoDg6O9FO9e/S9xn8uTtRdBp7ePNnvmYzq/xR8ZQEaD3eY+Yn6O6eAJ5
-         3bba82HVryZOmGwZwXik9pir29Ff9dpQgfi7M/irkD/AE5GXbOZ38UC4BS5DMr9wudCb
-         2ANNQzRF4nCfs6CdwAvA4bYfFe/1gS2DJmXsmWChNXTVwXVSODTrxjuQE/YV9JUHIo8I
-         Gsxl4Uc73kNy0Ku7FDrdjlxQS4ob1T+vKdvypjamEtQnlHR+v2q8byrBtkEmCp17/dYI
-         5ybA==
-X-Forwarded-Encrypted: i=1; AJvYcCXphknBDr75FfOLhTimqUnAoqRq+jwrwkmN2T3y405mXfo/zvPlCNimT3d/97b1B5f41o1qF7JbVXkolQY49Rw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMdloeaM+TRUglB7QMYSJWbC3WzK1XgpwqY9hp2DtdIB6eT+L8
-	y3Air9fA+kZnFniJU2VAJnX1t63u7pWEiomdoRaka5Jq40lP/gOd6KdqVcItLUF6kCZ/ojg4HjG
-	Y01BK2Hi+24rea8UtcvyUZg==
-X-Received: from wmjq15.prod.google.com ([2002:a7b:ce8f:0:b0:480:4a03:7b63])
- (user=vdonnefort job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:3485:b0:47e:e9c9:23bc with SMTP id 5b1f17b1804b1-4839e669135mr40605035e9.30.1771513439603;
- Thu, 19 Feb 2026 07:03:59 -0800 (PST)
-Date: Thu, 19 Feb 2026 15:03:07 +0000
-In-Reply-To: <20260219150307.14538-1-vdonnefort@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pKWnAruE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9868C4CEF7;
+	Thu, 19 Feb 2026 15:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771513815;
+	bh=bnx2UJT58n90YGkS84Z9IcHcboH7QYnKVdXsqM/bQsU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=pKWnAruEV0Qi0e3N4AyzAkwp99frRmLPxDq6LnohhNozwYxSu7EVANoa+FMzBClps
+	 LV02sIgIGnrb/y4uRzP5UF3Z2w6b5VPjVqLXG3kGfd45ynVNV9gHLVSFeo2covTvtC
+	 V4qlAMgLQ4CiDyj3KA30CVhylkPNkhugi5qv9hiMDMyOAgV/YtaopFEzq0fkpr47pq
+	 kcFFzPy46lwta9JCMR1smrJa1nkoksYPjn+cm76WvETPrArGcyyX7xvNZtxb93qmYu
+	 VPRYTF8k/R02f0ctCYJ016Terrlf7Z7F2Goc5bUdcXVlarD78mWzFChMNiUZPtpCTw
+	 Q/uc+W9vsNnZQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0B26D380CEF3;
+	Thu, 19 Feb 2026 15:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260219150307.14538-1-vdonnefort@google.com>
-X-Mailer: git-send-email 2.53.0.335.g19a08e0c02-goog
-Message-ID: <20260219150307.14538-31-vdonnefort@google.com>
-Subject: [PATCH v12 30/30] tracing: selftests: Add hypervisor trace remote tests
-From: Vincent Donnefort <vdonnefort@google.com>
-To: rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	linux-trace-kernel@vger.kernel.org, maz@kernel.org, oliver.upton@linux.dev, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com
-Cc: kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	jstultz@google.com, qperret@google.com, will@kernel.org, 
-	aneesh.kumar@kernel.org, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, Vincent Donnefort <vdonnefort@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net/rds: Fix NULL pointer dereference in
+ rds_tcp_accept_one
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177151380683.2260009.6858466914416054623.git-patchwork-notify@kernel.org>
+Date: Thu, 19 Feb 2026 15:10:06 +0000
+References: <20260216222643.2391390-1-achender@kernel.org>
+In-Reply-To: <20260216222643.2391390-1-achender@kernel.org>
+To: Allison Henderson <achender@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ pabeni@redhat.com, edumazet@google.com, rds-devel@oss.oracle.com,
+ kuba@kernel.org, horms@kernel.org, linux-rdma@vger.kernel.org,
+ allison.henderson@oracle.com
 
-Run the trace remote selftests with the trace remote 'hypervisor', This
-trace remote is most likely created when the arm64 KVM nVHE/pKVM
-hypervisor is in use.
+Hello:
 
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc
-new file mode 100644
-index 000000000000..64bf859d6406
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor trace buffer size
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/buffer_size.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_buffer_size
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc
-new file mode 100644
-index 000000000000..7fe3b09b34e3
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor trace buffer reset
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/reset.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_reset
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc
-new file mode 100644
-index 000000000000..b937c19ca7f9
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor non-consuming trace read
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/trace.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_trace
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc
-new file mode 100644
-index 000000000000..66aa1b76c147
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor consuming trace read
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/trace_pipe.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_trace_pipe
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc
-new file mode 100644
-index 000000000000..1dafde3414ab
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Test hypervisor trace buffer unloading
-+# requires: remotes/hypervisor/write_event
-+
-+SOURCE_REMOTE_TEST=1
-+. $TEST_DIR/remotes/unloading.tc
-+
-+set -e
-+setup_remote "hypervisor"
-+test_unloading
+On Mon, 16 Feb 2026 15:26:43 -0700 you wrote:
+> Save a local pointer to new_sock->sk and hold a reference before
+> installing callbacks in rds_tcp_accept_one. After
+> rds_tcp_set_callbacks() or rds_tcp_reset_callbacks(), tc->t_sock is
+> set to new_sock which may race with the shutdown path.  A concurrent
+> rds_tcp_conn_path_shutdown() may call sock_release(), which sets
+> new_sock->sk = NULL and may eventually free sk when the refcount
+> reaches zero.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net/rds: Fix NULL pointer dereference in rds_tcp_accept_one
+    https://git.kernel.org/netdev/net/c/6bf45704a92a
+
+You are awesome, thank you!
 -- 
-2.53.0.335.g19a08e0c02-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
