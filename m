@@ -1,175 +1,257 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A1E2E54B3
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 09:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0282857EE
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 10:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771578547; cv=none; b=cZMAD4ZkaRCePvNVt7f8vOJZuCOAm1rpW30uL+1jE57X3WAbGAu4RiPx/Aojfm3avYyhxy4Cr4s5qol1FR/YuuoateVtCVB/0mqv0uRFOQvU/LU1EcYrSzatcz4d0iX15x7l/UF+Q6fuRvnurHU57tRhq+IVf4IYhaZj5Dmh+Wk=
+	t=1771582463; cv=none; b=QVQ2sDQAgBPg8mso0NADobwm/w4YvJ3GRaQ3rTuDOx9u6GTzNcIwZQMJXfvoQfJP8KEKV06vCOgvuCAj9Q+t6OnN1YFZf75IPbXneczoe1mZuSukUBx4GrEiJLjYsUTJmAMnX633+Yar2RI9EwrovJ1GrnXMlKQKUw8Eg9I2aQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771578547; c=relaxed/simple;
-	bh=W/uz2T87r9U3hpaetbdjaYKd/rLTOIiMqSbbCdADBng=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mlf1IgqWXs78crP2rzbsff8iLfWuRogGYNcM6ngUAaqYhJ4oeQLJQ2AEqOFQpQQtoMVO6nrud3JdnueHuda0XyEHqjXQCVuscNRgfBifj1N8vGI6L/NPOPha6kQQVBruzI1RgiQ5aVvy2CWtxirhHQaSweduZtTzH4UY0vTWPaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hKgbwYs7; arc=none smtp.client-ip=209.85.214.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hKgbwYs7"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2a885af8ee7so46805ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 01:09:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771578546; x=1772183346; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7F8WxQjk8Orm8VMuPYwxSvcxytWiyPGbiUS8y914NAU=;
-        b=hKgbwYs7MM+uFJzdVuXDs+POHN2edZJITtcmrLqYrhASgH55zat3aLJSefUn+b8flK
-         MNWVDa1KwjMkksq6G+AAaq5a+cprpu/SbikcPajEo4UybAtNNtsaSQnpW2QIXgdGOsEA
-         +fsqNj62tUUlQ8PVOM8w+eBP9DNEuuu8TEkJi53QPVCYKx7oozRQPp1NNMvJ497gurs8
-         Rm+00NX5CG2G/EyPj+PdFV65YHF0FV54H/33pyi/5faYD6UaTUmv6SgwFWX4DGOEBQCx
-         K7SeGU73qO8DQEDHs3SOX47cacY4zDzXgHLDYbsbW/+ko6il4FBQ0wIWiu7hcpqCSM0T
-         1Ukg==
+	s=arc-20240116; t=1771582463; c=relaxed/simple;
+	bh=gcsXTMo7iqO4Pg3sVMoOLMSk7eLVL7Ljh8aJq2IakFM=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=LNRvEY8x9Y6QOAzc3QByPel4GpL+a1h+e2B7Yeq4Nuqoz8578YZoV9fgIXFx4ptwYB5kGxNV2QN0BAIxlgUErDYPdEfXrXfOX9biV7u5Wapn4yc9T3pcohSEjL2wkDPWATJeVSZxUFhc5J9r/MO5CPd1Xk91WFUWxkDAsHHCsKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-6798921f07bso27460143eaf.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 02:14:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771578546; x=1772183346;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20230601; t=1771582461; x=1772187261;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7F8WxQjk8Orm8VMuPYwxSvcxytWiyPGbiUS8y914NAU=;
-        b=Np1QinqdpS7L1vVVMy4sJvP239aWxA1urgk7iR5YBcWqSQPFES0Vo88GUx8tmKV/jx
-         i9k3teMb6KqJ+mlIfOXeuPLN7PTvxuus+8ANtIV0AjquQUD7j9FaAQuQ3j2LQbkTz2C3
-         Y/QMi5GJCDLfSqLm9KurOzcR8QGodbMwJfNVjMMerP/2yi/+0KHva38lO/Umi8aetXD8
-         hqjzN1r6hoJPEWtClEbHXFs26aM3ra47shy+0uG9ZolzLcqwt6KbRSGP2nGo4gZREN6R
-         9GctQtVzKCNEQBi3hXjqpBj5qdhWA1g9SMppLxkhr05vLpgMJXqX8LVLzIPmFBM1Sqp6
-         uVXg==
-X-Forwarded-Encrypted: i=1; AJvYcCW++w2S/ZVz9N1TClY7CCukZi85o8BmFDjKKTvcSfigT28RxO2govrXlHUBO7KjocPCNHmhfm29RUhMloK0/Rk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhbP6yUqViXYkEEYoFlihIXfFAaUYak7dbulas+k3dHXPVxZG0
-	cgMPbyFMH85+13fpnwLWMatNNIz6RSIlbcQ1NgYvUiU+JiAgyxzV+1KVJdKoTtkb4g==
-X-Gm-Gg: AZuq6aILjjQdedexCEoktG8/9fkh1DmjeMfNbOx7VEm/R+PdI/VxywGPGjhTOsDtbBr
-	nHnzzKb3ZWqqWSYOH6XughLArXMB0jHqtPxK1X08DCKhjgunOpoUs4ploWzsmlCXuqcurU4tufK
-	M5z94DSiS9drxn4pXvxThpx9AUFIHix1ZMEjBIP2zythBQHlRczBA0Gg3mQEobVOJkovWkzKDUA
-	r2lcSvs1D2d2p3UXTXtw7yB5D38c3EeY6dsuyE/mAud4JKYivPhoTTQDeQVhe6muVSTDe8v5QG6
-	JMXIfH8lJ2k+5VSU4zVcn1iSu4ji/xy1le+DTiYKtofVfMpI74SjXPK/DETtqbDs54T4d7Wdbo+
-	44QAzEgqXF8XW4wyN+DnNaQA1zaKBNof5ZWDMkqO1lLLnROt/sRHtl+AvfXDSp82kJbo6TQkuk7
-	e52MlKHmv2gMVnjkS3NklQKM8J/iMA40rEL85fR+EOe+qH019NFh3olPnCpKU=
-X-Received: by 2002:a17:902:d584:b0:294:d42c:ca0f with SMTP id d9443c01a7336-2ad69e114ddmr1743575ad.2.1771578545548;
-        Fri, 20 Feb 2026 01:09:05 -0800 (PST)
-Received: from google.com (249.53.168.34.bc.googleusercontent.com. [34.168.53.249])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a3e145sm20081108b3a.16.2026.02.20.01.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Feb 2026 01:09:04 -0800 (PST)
-Date: Fri, 20 Feb 2026 09:09:00 +0000
-From: Lisa Wang <wyihan@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com,
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de,
-	brauner@kernel.org, chao.p.peng@intel.com,
-	chao.p.peng@linux.intel.com, chenhuacai@kernel.org, corbet@lwn.net,
-	dave.hansen@linux.intel.com, david@kernel.org, hpa@zytor.com,
-	ira.weiny@intel.com, jgg@nvidia.com, jmattson@google.com,
-	jroedel@suse.de, jthoughton@google.com, maobibo@loongson.cn,
-	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
-	michael.roth@amd.com, mingo@redhat.com, mlevitsk@redhat.com,
-	oupton@kernel.org, pankaj.gupta@amd.com, pbonzini@redhat.com,
-	prsampat@amd.com, qperret@google.com, ricarkol@google.com,
-	rick.p.edgecombe@intel.com, rientjes@google.com,
-	rostedt@goodmis.org, seanjc@google.com, shivankg@amd.com,
-	shuah@kernel.org, steven.price@arm.com, tabba@google.com,
-	tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz,
-	willy@infradead.org, yan.y.zhao@intel.com
-Subject: Re: [RFC PATCH v2 00/37] guest_memfd: In-place conversion support
-Message-ID: <aZgkrJv3FeQCZ2DG@google.com>
-References: <cover.1770071243.git.ackerleytng@google.com>
+        bh=JMNiebd2whpNinmgx82cwNyRYJ5UqFJmTJ6XQA4gK7o=;
+        b=Qjp9CG7r4KdT2iVzNHr/K4pGgQi0UhRPF1B1qXAE3tHn7873GEp+m1tv/6sZ6Trypl
+         cJoYJWZEf4NBihCEs/cF72t7qPQKChCbDKF3/d0TA0z8NSxHc1SgwS8xvDVNiofh2Ztz
+         +nrT9tbif6x7nVhj3eEmBPmKUXrMAb7Azeau7Oy05wgbHzhvJjQwij/Gby13x556nGkM
+         UlrXJgISD6//ssQdMdu01j+CXiWTuzzsrDQzpTaL0RzzgO9lx1P4Kjwvm/44XF51N6Cp
+         74/aStrCx6cacsLtOX04IAoVkxl8LbLLcGODmegi2Qqh0owc+NMS72NM906z6VIFR3U4
+         zF/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVZL/ICOY/hj/T7ZTkm1VpRqz0hZWUh7vF6GOFjpg/xRq/btnvgXuuWHfvN9qteVAVB0URHGYyMHiw8LNtN4us=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIRVeaFT7GPVPb66DGGrkG3UiDER6GXNR0YMIwmyhBYJ2KLDOJ
+	j7O//TDJ5Pyvd/KtYTP1365WLHYEQtVHsraRr4WuHMZ6nd2oAevkJ7n3Rowat9lig8G8n1huO/R
+	IicXOnUo9V5splBAvUE2kqKpNlAl+ZXH+lFcnVeT+5+QI+/ovt46I7lWBEsw=
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1770071243.git.ackerleytng@google.com>
+X-Received: by 2002:a05:6820:2108:b0:66e:66b1:963f with SMTP id
+ 006d021491bc7-679aeec7538mr3091201eaf.18.1771582461010; Fri, 20 Feb 2026
+ 02:14:21 -0800 (PST)
+Date: Fri, 20 Feb 2026 02:14:20 -0800
+In-Reply-To: <20260220055449.3073-1-tjmercier@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <699833fc.050a0220.b01bb.0039.GAE@google.com>
+Subject: [syzbot ci] Re: kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED support
+From: syzbot ci <syzbot+cif2121bcf05a8d84e@syzkaller.appspotmail.com>
+To: amir73il@gmail.com, cgroups@vger.kernel.org, driver-core@lists.linux.dev, 
+	gregkh@linuxfoundation.org, jack@suse.cz, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	shuah@kernel.org, tj@kernel.org, tjmercier@google.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 02, 2026 at 02:36:37PM -0800, Ackerley Tng wrote:
-> (resending to fix Message-ID)
-> 
-> Here's a second revision of guest_memfd In-place conversion support.
-> 
-> In this version, other than addressing comments from RFCv1 [1], the largest
-> change is that guest_memfd now does not avoid participation in LRU; it
-> participates in LRU by joining the unevictable list (no change from before this
-> series).
-> 
-> While checking for elevated refcounts during shared to private conversions,
-> guest_memfd will now do an lru_add_drain_all() if elevated refcounts were found,
-> before concluding that there are true users of the shared folio and erroring
-> out.
-> 
-> I'd still like feedback on these points, if any:
-> 
-> 1. Having private/shared status stored in a maple tree (Thanks Michael for your
->    support of using maple trees over xarrays for performance! [5]).
-> 2. Having a new guest_memfd ioctl (not a vm ioctl) that performs conversions.
-> 3. Using ioctls/structs/input attribute similar to the existing vm ioctl
->    KVM_SET_MEMORY_ATTRIBUTES to perform conversions.
-> 4. Storing requested attributes directly in the maple tree.
-> 5. Using a KVM module-wide param to toggle between setting memory attributes via
->    vm and guest_memfd ioctls (making them mututally exclusive - a single loaded
->    KVM module can only do one of the two.).
-> 
-> [...snip...]
->
-> 
-> --
-> 2.53.0.rc1.225.gd81095ad13-goog
+syzbot ci has tested the following series
 
-I’ve tested memory failure handling after applying this series and here’s what
-memory_failure() does:
+[v4] kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED support
+https://lore.kernel.org/all/20260220055449.3073-1-tjmercier@google.com
+* [PATCH v4 1/3] kernfs: Don't set_nlink for directories being removed
+* [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
+* [PATCH v4 3/3] selftests: memcg: Add tests for IN_DELETE_SELF and IN_IGNORED
 
-Shared memory: In line with other in-memory filesystems, the memory_failure()
-handler unmaps the page if it is currently mapped, and issues a SIGBUS
-  - if memory failure was injected with MF_ACTION_REQUIRED or
-  - if the test process’s memory corruption kill policy is PR_MCE_KILL_EARLY
+and found the following issue:
+possible deadlock in __kernfs_remove
 
-Here’s the above, in table form:
+Full report is available here:
+https://ci.syzbot.org/series/4b44d5c2-c2eb-4425-a19a-f9963b64f74f
 
-| MF_ACTION_REQUIRED | Kill Policy         | Mapped | Dirty | Result: SIGBUS |
-|--------------------|---------------------|--------|-------|----------------|
-| false              | PR_MCE_KILL_EARLY   | true   | true  | true           |
-| false              | PR_MCE_KILL_EARLY   | true   | false | false          |
-| false              | PR_MCE_KILL_EARLY   | false  | true  | false          |
-| false              | PR_MCE_KILL_EARLY   | false  | false | false          |
-| false              | PR_MCE_KILL_LATE    | true   | true  | false          |
-| false              | PR_MCE_KILL_LATE    | true   | false | false          |
-| false              | PR_MCE_KILL_LATE    | false  | true  | false          |
-| false              | PR_MCE_KILL_LATE    | false  | false | false          |
-| true               | Any Policy          | true   | true  | true           |
-| true               | Any Policy          | true   | false | false          |
+***
 
-(I used MADV_HWPOISON to inject memory failures with MF_ACTION_REQUIRED set, and
-there was no way to use MADV_HWPOISON without first mapping the page in. To
-inject memory failures without MF_ACTION_REQUIRED set, I used debugfs’
-hwpoison/corrupt-pfn.)
+possible deadlock in __kernfs_remove
 
-Private memory: The handler unmaps the page for the stage 2 page table and does
-not issue a SIGBUS - the page is never mapped to the host, since it is private
-to the guest.
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      ba268514ea14b44570030e8ed2aef92a38679e85
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/45ab774f-e8d7-4def-8279-888a5cb2d01e/config
+syz repro: https://ci.syzbot.org/findings/b74cbc6a-1cef-4ae9-be46-dd9e8b29b648/syz_repro
 
-| MF_ACTION_REQUIRED | Kill Policy         | Mapped | Dirty | Result: SIGBUS |
-|--------------------|---------------------|--------|-------|----------------|
-| false              | PR_MCE_KILL_EARLY   | false  | true  | false          |
-| false              | PR_MCE_KILL_EARLY   | false  | false | false          |
-| false              | PR_MCE_KILL_LATE    | false  | true  | false          |
-| false              | PR_MCE_KILL_LATE    | false  | false | false          |
+======================================================
+WARNING: possible circular locking dependency detected
+syzkaller #0 Not tainted
+------------------------------------------------------
+kworker/u8:1/13 is trying to acquire lock:
+ffff88816ef2b878 (kn->active#5){++++}-{0:0}, at: __kernfs_remove+0x47e/0x8c0 fs/kernfs/dir.c:1533
 
-(I couldn’t use MADV_HWPOISON since private memory could not be mapped and hence
-will not have a userspace address)
+but task is already holding lock:
+ffff8881012e8ab8 (&root->kernfs_supers_rwsem){++++}-{4:4}, at: kernfs_remove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
 
-I’ll post updated memory failure tests together with the next revision of this
-series [1] to fix MF_DELAYED handling on memory failure.
+which lock already depends on the new lock.
 
-[1] https://lore.kernel.org/all/cover.1760551864.git.wyihan@google.com/T/
 
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&root->kernfs_supers_rwsem){++++}-{4:4}:
+       down_read+0x47/0x2e0 kernel/locking/rwsem.c:1537
+       kernfs_remove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
+       acpi_unbind_one+0x2d8/0x3b0 drivers/acpi/glue.c:337
+       device_platform_notify_remove drivers/base/core.c:2386 [inline]
+       device_del+0x547/0x8f0 drivers/base/core.c:3881
+       serdev_controller_add+0x46f/0x640 drivers/tty/serdev/core.c:785
+       serdev_tty_port_register+0x159/0x260 drivers/tty/serdev/serdev-ttyport.c:291
+       tty_port_register_device_attr_serdev+0xe7/0x170 drivers/tty/tty_port.c:187
+       serial_core_add_one_port drivers/tty/serial/serial_core.c:3107 [inline]
+       serial_core_register_port+0x103a/0x28b0 drivers/tty/serial/serial_core.c:3305
+       serial8250_register_8250_port+0x1658/0x1fd0 drivers/tty/serial/8250/8250_core.c:822
+       serial_pnp_probe+0x568/0x7f0 drivers/tty/serial/8250/8250_pnp.c:480
+       pnp_device_probe+0x30b/0x4c0 drivers/pnp/driver.c:111
+       call_driver_probe drivers/base/dd.c:-1 [inline]
+       really_probe+0x267/0xaf0 drivers/base/dd.c:661
+       __driver_probe_device+0x18c/0x320 drivers/base/dd.c:803
+       driver_probe_device+0x4f/0x240 drivers/base/dd.c:833
+       __driver_attach+0x3e7/0x710 drivers/base/dd.c:1227
+       bus_for_each_dev+0x23b/0x2c0 drivers/base/bus.c:383
+       bus_add_driver+0x345/0x670 drivers/base/bus.c:715
+       driver_register+0x23a/0x320 drivers/base/driver.c:249
+       serial8250_init+0x8f/0x160 drivers/tty/serial/8250/8250_platform.c:317
+       do_one_initcall+0x250/0x840 init/main.c:1378
+       do_initcall_level+0x104/0x190 init/main.c:1440
+       do_initcalls+0x59/0xa0 init/main.c:1456
+       kernel_init_freeable+0x2a6/0x3d0 init/main.c:1688
+       kernel_init+0x1d/0x1d0 init/main.c:1578
+       ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+
+-> #1 (&device->physical_node_lock){+.+.}-{4:4}:
+       __mutex_lock_common kernel/locking/mutex.c:614 [inline]
+       __mutex_lock+0x19f/0x1300 kernel/locking/mutex.c:776
+       acpi_get_first_physical_node drivers/acpi/bus.c:691 [inline]
+       acpi_primary_dev_companion drivers/acpi/bus.c:710 [inline]
+       acpi_companion_match+0x8a/0x120 drivers/acpi/bus.c:764
+       acpi_device_uevent_modalias+0x1a/0x30 drivers/acpi/device_sysfs.c:280
+       platform_uevent+0x3c/0xb0 drivers/base/platform.c:1411
+       dev_uevent+0x446/0x8a0 drivers/base/core.c:2692
+       kobject_uevent_env+0x477/0x9e0 lib/kobject_uevent.c:573
+       kobject_synth_uevent+0x585/0xbd0 lib/kobject_uevent.c:207
+       uevent_store+0x26/0x70 drivers/base/core.c:2773
+       kernfs_fop_write_iter+0x3af/0x540 fs/kernfs/file.c:352
+       new_sync_write fs/read_write.c:593 [inline]
+       vfs_write+0x61d/0xb90 fs/read_write.c:686
+       ksys_write+0x150/0x270 fs/read_write.c:738
+       do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+       do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #0 (kn->active#5){++++}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3165 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3284 [inline]
+       validate_chain kernel/locking/lockdep.c:3908 [inline]
+       __lock_acquire+0x15a5/0x2cf0 kernel/locking/lockdep.c:5237
+       lock_acquire+0x106/0x330 kernel/locking/lockdep.c:5868
+       kernfs_drain+0x27c/0x5f0 fs/kernfs/dir.c:511
+       __kernfs_remove+0x47e/0x8c0 fs/kernfs/dir.c:1533
+       kernfs_remove_by_name_ns+0xc0/0x140 fs/kernfs/dir.c:1751
+       sysfs_remove_file include/linux/sysfs.h:780 [inline]
+       device_remove_file drivers/base/core.c:3071 [inline]
+       device_del+0x506/0x8f0 drivers/base/core.c:3876
+       device_unregister+0x21/0xf0 drivers/base/core.c:3919
+       mac80211_hwsim_del_radio+0x2dc/0x490 drivers/net/wireless/virtual/mac80211_hwsim.c:5918
+       hwsim_exit_net+0xede/0xfa0 drivers/net/wireless/virtual/mac80211_hwsim.c:6807
+       ops_exit_list net/core/net_namespace.c:199 [inline]
+       ops_undo_list+0x49f/0x940 net/core/net_namespace.c:252
+       cleanup_net+0x4df/0x7b0 net/core/net_namespace.c:696
+       process_one_work kernel/workqueue.c:3257 [inline]
+       process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3340
+       worker_thread+0xda6/0x1360 kernel/workqueue.c:3421
+       kthread+0x726/0x8b0 kernel/kthread.c:463
+       ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+
+other info that might help us debug this:
+
+Chain exists of:
+  kn->active#5 --> &device->physical_node_lock --> &root->kernfs_supers_rwsem
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  rlock(&root->kernfs_supers_rwsem);
+                               lock(&device->physical_node_lock);
+                               lock(&root->kernfs_supers_rwsem);
+  lock(kn->active#5);
+
+ *** DEADLOCK ***
+
+4 locks held by kworker/u8:1/13:
+ #0: ffff888100ef7948 ((wq_completion)netns){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3232 [inline]
+ #0: ffff888100ef7948 ((wq_completion)netns){+.+.}-{0:0}, at: process_scheduled_works+0x9d4/0x17a0 kernel/workqueue.c:3340
+ #1: ffffc90000127bc0 (net_cleanup_work){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3233 [inline]
+ #1: ffffc90000127bc0 (net_cleanup_work){+.+.}-{0:0}, at: process_scheduled_works+0xa0f/0x17a0 kernel/workqueue.c:3340
+ #2: ffffffff8f99d2d0 (pernet_ops_rwsem){++++}-{4:4}, at: cleanup_net+0xfe/0x7b0 net/core/net_namespace.c:670
+ #3: ffff8881012e8ab8 (&root->kernfs_supers_rwsem){++++}-{4:4}, at: kernfs_remove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
+
+stack backtrace:
+CPU: 0 UID: 0 PID: 13 Comm: kworker/u8:1 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Workqueue: netns cleanup_net
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_circular_bug+0x2e1/0x300 kernel/locking/lockdep.c:2043
+ check_noncircular+0x12e/0x150 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3165 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3284 [inline]
+ validate_chain kernel/locking/lockdep.c:3908 [inline]
+ __lock_acquire+0x15a5/0x2cf0 kernel/locking/lockdep.c:5237
+ lock_acquire+0x106/0x330 kernel/locking/lockdep.c:5868
+ kernfs_drain+0x27c/0x5f0 fs/kernfs/dir.c:511
+ __kernfs_remove+0x47e/0x8c0 fs/kernfs/dir.c:1533
+ kernfs_remove_by_name_ns+0xc0/0x140 fs/kernfs/dir.c:1751
+ sysfs_remove_file include/linux/sysfs.h:780 [inline]
+ device_remove_file drivers/base/core.c:3071 [inline]
+ device_del+0x506/0x8f0 drivers/base/core.c:3876
+ device_unregister+0x21/0xf0 drivers/base/core.c:3919
+ mac80211_hwsim_del_radio+0x2dc/0x490 drivers/net/wireless/virtual/mac80211_hwsim.c:5918
+ hwsim_exit_net+0xede/0xfa0 drivers/net/wireless/virtual/mac80211_hwsim.c:6807
+ ops_exit_list net/core/net_namespace.c:199 [inline]
+ ops_undo_list+0x49f/0x940 net/core/net_namespace.c:252
+ cleanup_net+0x4df/0x7b0 net/core/net_namespace.c:696
+ process_one_work kernel/workqueue.c:3257 [inline]
+ process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3340
+ worker_thread+0xda6/0x1360 kernel/workqueue.c:3421
+ kthread+0x726/0x8b0 kernel/kthread.c:463
+ ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+hsr_slave_0: left promiscuous mode
+hsr_slave_1: left promiscuous mode
+batman_adv: batadv0: Interface deactivated: batadv_slave_0
+batman_adv: batadv0: Removing interface: batadv_slave_0
+batman_adv: batadv0: Interface deactivated: batadv_slave_1
+batman_adv: batadv0: Removing interface: batadv_slave_1
+veth1_macvtap: left promiscuous mode
+veth0_macvtap: left promiscuous mode
+veth1_vlan: left promiscuous mode
+veth0_vlan: left promiscuous mode
+team0 (unregistering): Port device team_slave_1 removed
+team0 (unregistering): Port device team_slave_0 removed
+netdevsim netdevsim2 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim2 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim2 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim2 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
