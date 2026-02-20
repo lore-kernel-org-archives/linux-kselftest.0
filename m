@@ -1,258 +1,424 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8635423ABBE
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 18:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6961B366817
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 18:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771610502; cv=pass; b=WaiSGl04nhuJ8sykuNvU1AB/XHxiwWsIQoH/CeJiURUbEEWG2iHXS3E7SNHjMNTSEsWlH6SjitkBYTIgWyI+zXoPJFctNKsf6gX9PHw0ca5ODwJJAIs1xnjKvFDR+07vewqs9CYhoK1SESWR0sZse2uPzVKk2l6VNTfCtdluvuM=
+	t=1771612893; cv=pass; b=EJ7rDWtCM5/E35+VdfBDvCKBchVja05VETqc5GOSYd0aljpTkzUsaolavk85xpnL5Ld1gKQY59wyrUtO/efwp7edLAMP9a3y8/ID6k82EeZtSRgeZ5nSaekO9/TSYlXVteFaL7x9xudo9nrMzVwru8SQ2WVgNOiUB8wqVCwd21Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771610502; c=relaxed/simple;
-	bh=/ExTJNGlpE5IqT17n1+JjF2Vry3iY2HGRkuHp4SOpO0=;
+	s=arc-20240116; t=1771612893; c=relaxed/simple;
+	bh=jGWN+2KRz9O+H0665WvpQ52Kq/1J8TPaBwHG/SF4ULQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A/TsiOXHbmYzI8yF4JeAyl7RjfvHOLNqiR0J3J4lLsfXNccoVnkZH73uGjY1ZQ3ozqLHXy5y+8TTYXAUkJ8UYaw0KmB65paiZE/xCgZcRWoJWL30voLpjUwuXahp6e7TLP6EUN0FNLo2jpX65zm2p2xaJ1lrdYjkRPcUGQETI8k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QqeJPybR; arc=pass smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=eQaWAcf4e56ueRf0FAwKMoTFi2hocESn0H/DEZsWtRgw4y6oTFH84qqLOLnpNZWL4+X4rQ5UaprKAKuyVm6bC0FA0lYpXzwyJziwFiyjIVQdHqR8SLbwbQXet6IlNk8QwOJMrgAKljg0FL1Rg4uEE9u2rdRG4MCCciq2KbiFpbY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ee4LIvT7; arc=pass smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QqeJPybR"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-65c4152313fso2700743a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 10:01:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771610500; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ee4LIvT7"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48318d08ec2so4225e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 10:41:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771612888; cv=none;
         d=google.com; s=arc-20240605;
-        b=AH0Y3JCIgKKKdOEepIWetevfh4sY0y2E0ry98eTsNhqO8eTVSodE1ACAQP28RNqj9h
-         iKb4Ojq4uWJubr9UJWrDxoF14TRdBeEsAQsdQItagys+xV7dFRhoCjqUQxQSYExsRV6r
-         L/8+83u2ppGxJkGEloJ9PrwBDlalk7qBSMQWE2hVeLpga1pEjuHuFgJB4+w0tSmaKTmO
-         x/A+pZfR3BCyyWjNkNIN/uEf2VRchcYX84Oqp+B8EciGH0TX2H1aShJOzpmWYUs7Juig
-         nms6znlD/NFJNJbZpf0CWLZ4yVtQKY1TRN6JsgzjoxkrTr/4vTfmvOK/gPLvwbwKKZEd
-         dmQw==
+        b=AU5GvzgwaSzslVLns1PsRSsq4xRNL5tivkK0B9LlEdtC+o2izatqfaY1FxIl6gFmPo
+         mAyHLZ9XZk8sO14lzIGJkSb14wYgqtW7GtPJrAnfSZ9tsRYtQXjWk3AnAe3LqOJlcCt0
+         yn4mdfBa7ULlGtqAh23YbZzhA8IIfMuGXup05kG07mH6mcUVj0k05GQBS7342mILwLtv
+         usNP8Eg5ec5MJRGtehjHKkgOk6XnbKv/wIbiZAlV5hI5Zez716LOrl/w7X1CqfAO+iTo
+         EYqJ3Ec0S3mZi94vLrk43FnR1gXF/pzL3lPtKIF+4fEg6urKBSwNUTyvEYZcg83XmM9R
+         kNEA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=mXWsRVT7W81X5HarW7ujq+K0yQZiRQ3sefS+9HVuiEs=;
-        fh=JZzKudU8zX0D7v9e4kUZt1BTgWHa+EFOSCSWprspz+g=;
-        b=ToLb8wVMzjU1vLfDSDkjOyNZdizvqWKciYDuikOFsZkUybf+MoT2rMxGyhYWm/TeVR
-         pggVvQMDrOtWBK6I5go3COln6b0MOcNSoLyuXRQIwFjlEOEjLNpdGOMBull2wH+0lUC8
-         RRVYgjS6tY1/Httl+oM6IoM8xirRvAXojxi1CHEfMfRNT50daXAAtsdpIgEyW1RTJoHa
-         SvVEEOlFEM5LeRQpjpbY4om/jNjOmqRyaEHVsl8F3X3zNRmSwhXx6gE8sAmr5LjbkHUS
-         i6O8Fwlmhm46AsrwipPUWyWVYCaT/+sEdsy3KGGeWez5FfMb3Gy3Zq5cbQK8iIHejY1e
-         2q5A==;
+        bh=9zD91sZr4vtMf1I/t0ZYhRV7PHrn122EkGjmR8qVtO4=;
+        fh=wn8U7+MoDAjhMbn5aB0RZKef7loQxIlNHIUr0QaGnm4=;
+        b=NNeVTBn/EmFSA1J0IaZ2g2yk+A4zT/hLOVJKlH2ATKmWmtjM3gXS7KwpUkik/a99bx
+         DE3WM7loiTUyzbXpiasrB8uFjZsnvBFoYhOMKtZM0uuKFmqZ1tNQq+apTDB8rljQwhtG
+         v3FrEoICQS3U1jP0ApAHc7MfymUDu06PIO7zdCdjOFM4ICNvSFzOFv8S0MxYZoTHWQ/V
+         6S/0FCUcburbp8CT0qLOn0C99GRfebvZ+qRcKZSDrLPtoffFn4iGHTSuKlx4KHNCwcDO
+         UHNhsrGxJO4hAxfddInVxWCIKQNnzSCSTUiTssiiygRmuyzPsRvE9iT2YRAe447UYjp1
+         P6Fw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771610500; x=1772215300; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771612888; x=1772217688; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mXWsRVT7W81X5HarW7ujq+K0yQZiRQ3sefS+9HVuiEs=;
-        b=QqeJPybRLGSHeMJ/OFsJM09BDSFsYFbQ3t4OkN4vv5GyuFG+FCJoIAHfCYEW9ZcNMx
-         Esb3AwxclKidVoXWhkLwmsGRkqkgJGeMGzPmJtLsaLdk7pnC+a58b7p91+dX8DOuV4pi
-         djMi+T2rX8Egzcf+pncVov8yaCbVXBvdXbfUcQC79mDurp117cjXbRSWY8rZtM1MhEUo
-         bPYU82soriTLtcc3dwJRvsh+1cCI7qtVIJ0+VNZtm+k1FMPp0uoBXxaMDVeDw9LfNJDi
-         thY1ISYHcx5roiKcN5jUqvt4djY2DHtPjuYJUAYJAtsY5eLxoPU+bRmQmVhOMWQHO1hl
-         1fnw==
+        bh=9zD91sZr4vtMf1I/t0ZYhRV7PHrn122EkGjmR8qVtO4=;
+        b=Ee4LIvT70RK3IL0VC7Xg/fpcY+vO7dwu3hNsTLwBiEV8lzX00OGSFKJsMLrgdSC4iJ
+         jkiJ9wCErBPg3oXaA6vpyGAR9oMOadMC0/jXwFU0+arVhn0deqlmNKLodfTfbvwRTChM
+         Oc/SzrShLyj20LxdX3UShdCUw3A+pdr2K2l8kOX3eqd3COZa8gnqrlhDDh5d9359DKYg
+         BsqL4TdK57e1ImHvKeSlY+82nXmBV1CGyKrrc0ppHeb6kwhY6SISP2OkMITl2Iabl4C9
+         BkrCyoXiuBkO3DZp+cf9/1WmbAEFqsg7IM85QbjKjr5kFVfhzlSxBRXyjOeOMdiQyB70
+         LQlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771610500; x=1772215300;
+        d=1e100.net; s=20230601; t=1771612888; x=1772217688;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=mXWsRVT7W81X5HarW7ujq+K0yQZiRQ3sefS+9HVuiEs=;
-        b=vvNgzaQFJiikXwUe3aBXHh0n0iFrJwZ70w1FJpm2JZFamlb79c2rbLevdYkqPs7KZr
-         dU/kb55fdmJgbj/5zOVHkaB71y9NAvqLCkDEg4fKPWETJ6uuJZXL2WzAJ6efHyV5+jDU
-         xCdkmAmnuceIYH0yCy5qyGdT69Q0rLhzs0zxiLMk1abrPHd0W+ifYQMTj0HXY7JGKQyx
-         oh3ZoDehalVFXqoZy29g1/B9WNcrbTB3TfzYL28NC/SHcnCEpXRP8AcEU1sxHqTGHTK8
-         RRAe8wN5ZQSlJWnDbmeEanFznJ1hqpj1USc1cIQQm3ywfyNsCG6BxxBQZQfFL7LzyoUY
-         csbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnrAGV/hB7on5XvBoJwr0I6ZtCKxkAvL1nSU6oZrcsq3Su/j8WoRx7Llpw48RRHqIyM4kwTzmvvB/lbbRQ5HU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzi4d+DHV5ev1gb+PvdCUslIhXQrNg5SGJgt/RYqYFuqchCuYPm
-	JwFLHohAqPIPUrlvFz9hyJ24qtijWHR498FHuxJbANd5KQJsVfTVvlMgKYnL7uvVZN/hEleoQz1
-	jBaCuy0AcUqsyPQ1X+iRojp9S3ynBrvo=
-X-Gm-Gg: AZuq6aJscseAGjpLmujURuCxWNRKtQw8nBmKBZew2v9mHzfGxkrc9vys7STikY/DazU
-	FaUWemKmEDQ88errTQ0fvRsVymjT+Je1YlTjGY00whkehyGV4smCfT4DD5rwwe1HkwHxIN/xi5M
-	9oVweLTXq163/dxskymS6h1svKeBUaMWhincwG1GO2WP7KWYxPWk/wwwn+hAr9lFg65vGYmasBf
-	anix8QJT2oC7c+GCcJ4Xnd+Wnv/OsRtAMe/h2Vv4lvw/lXkNEU4f76jPke0IYwpXgou20Chdl6d
-	2QYqNorj3GAcjTbuNivDmtnN7jZqBJA2iyDP4mXz8g==
-X-Received: by 2002:a17:907:1c89:b0:b88:5182:b869 with SMTP id
- a640c23a62f3a-b9081a490f8mr28173866b.23.1771610499642; Fri, 20 Feb 2026
- 10:01:39 -0800 (PST)
+        bh=9zD91sZr4vtMf1I/t0ZYhRV7PHrn122EkGjmR8qVtO4=;
+        b=WXRU9C5N/AJvf/WigSkARQ6iEVYoCebif/s8FKqYHqsgWbZURKbsZFmo6Vs5i/SePF
+         Q2KuZIDwL7XqbtZteiyIAo5Fz05fdnoX1jkiKRFHJTuz5GQ9FZj0C7KDRthhC+b5AGU/
+         JLzPUaENO50/RqHCFfnxKV82F9SUwstIHG47ohey1pOn0/bjZbR8xsUu1y3Mkv/MsRyc
+         +aEqIUmO3yRZCcT3DnByZgudGAoYvwErzOUv7rGc9mQaPYiRqvLyQcbG/79s7CGMpJ1R
+         23mrUYkF/yiKHPA2+gnNlBncL6Uxj8a4JiXZh1DTSxLTEWtXl+jjm1zlJg55bm9JCN/j
+         9snQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUwoOFzat/I1R80PVLZ+hBedz8ggjGUg3oA5gaUrYkiYd9bprwoGvW/IR1msBnyXpl2ZeTOJHsGTRGC/sNIhwQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbBkLFbolkcd/b4nLcvV6cWPfEfz30UI8Nf33UEmo2/tvKhyqp
+	8bFDZtP+PFZfhRQRIY7sHcXbynGrfcrLuG/MePF/LPwNF10/8jYYI+rp/2HonviArWFpLb3Q0l6
+	W6ownpbfzErjerKnZDCDs69aYrsDgp4buJzuO9Ha3
+X-Gm-Gg: AZuq6aIO5UD03pNPz1U78HsPXEymmCUF9M6a5PfQDPgCEuGSlMVoeV/hioB6fQQcv0X
+	ECjEeeTp8SR6t7gudHifWgOsIRSpM7CHTl8LcH5KUtsJRerEQojf9PgheC57EYHTUEWVFydaHTE
+	maHkU8R+DsHUReDmDZR2dGEUkQCGI57jDTVtHuAU00gsp1yVEByiuraAMRfVGXcxC6cuIRH8eLf
+	2aj4k+Mx3RR6EucQoOqd86JTQURCJ9WPlyx63CHENQAJ0zmkrwY5vI8K9uE1m/GKhno57IUs0Zc
+	b0sMH4m0i9OEOXAK0frUe4OX+BRYXbTwksYVyQ==
+X-Received: by 2002:a7b:ce83:0:b0:47b:e29f:c63f with SMTP id
+ 5b1f17b1804b1-483a9c94b7amr15895e9.11.1771612887389; Fri, 20 Feb 2026
+ 10:41:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220055449.3073-1-tjmercier@google.com> <20260220055449.3073-4-tjmercier@google.com>
- <CAOQ4uxiPqUzBQAk8Tic7aFMsHtajEWENCTg+CQPMy5XtmS4kBQ@mail.gmail.com>
- <CABdmKX3Pd8sJpzuQD0tfKCznOy3=cDoAOEnN-COQa59weUFrqw@mail.gmail.com> <CABdmKX0H5Bx7qsk7JmOEnA2NZBHXd+QSYuwXHQGvaN6ppM38NA@mail.gmail.com>
-In-Reply-To: <CABdmKX0H5Bx7qsk7JmOEnA2NZBHXd+QSYuwXHQGvaN6ppM38NA@mail.gmail.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Fri, 20 Feb 2026 20:01:28 +0200
-X-Gm-Features: AaiRm5108EmSEAIlvJnftlLPzXZCKopsIxjc3etyrxL3lbPc5X0FWzsfY5M1N74
-Message-ID: <CAOQ4uxi8-nc2+b5kjZshaDdfhmt994zUDqJ32B5b+600_Ep48A@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] selftests: memcg: Add tests for IN_DELETE_SELF and IN_IGNORED
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, jack@suse.cz, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260220055449.3073-1-tjmercier@google.com> <699833fc.050a0220.b01bb.0039.GAE@google.com>
+In-Reply-To: <699833fc.050a0220.b01bb.0039.GAE@google.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Fri, 20 Feb 2026 10:41:15 -0800
+X-Gm-Features: AaiRm52d4kAFkoYx2iC9CeE49X0_4sKfZ3IqpWEI6kL-ps7PY6q2ag5O0FgCNOg
+Message-ID: <CABdmKX3jMS5ha2s5FMpnAMW0c9+Wmpmyc+8=D-24KyhVjBJvYg@mail.gmail.com>
+Subject: Re: [syzbot ci] Re: kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED support
+To: syzbot ci <syzbot+cif2121bcf05a8d84e@syzkaller.appspotmail.com>
+Cc: amir73il@gmail.com, cgroups@vger.kernel.org, driver-core@lists.linux.dev, 
+	gregkh@linuxfoundation.org, jack@suse.cz, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	shuah@kernel.org, tj@kernel.org, syzbot@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 20, 2026 at 6:53=E2=80=AFPM T.J. Mercier <tjmercier@google.com>=
- wrote:
+On Fri, Feb 20, 2026 at 2:14=E2=80=AFAM syzbot ci
+<syzbot+cif2121bcf05a8d84e@syzkaller.appspotmail.com> wrote:
 >
-> On Fri, Feb 20, 2026 at 9:46=E2=80=AFAM T.J. Mercier <tjmercier@google.co=
-m> wrote:
-> >
-> > On Fri, Feb 20, 2026 at 9:44=E2=80=AFAM Amir Goldstein <amir73il@gmail.=
-com> wrote:
-> > >
-> > > On Fri, Feb 20, 2026 at 6:55=E2=80=AFAM T.J. Mercier <tjmercier@googl=
-e.com> wrote:
-> > > >
-> > > > Add two new tests that verify inotify events are sent when memcg fi=
-les
-> > > > or directories are removed with rmdir.
-> > > >
-> > > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > > > Acked-by: Tejun Heo <tj@kernel.org>
-> > > > Acked-by: Amir Goldstein <amir73il@gmail.com>
-> > > > ---
-> > > >  .../selftests/cgroup/test_memcontrol.c        | 112 ++++++++++++++=
-++++
-> > > >  1 file changed, 112 insertions(+)
-> > > >
-> > > > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/too=
-ls/testing/selftests/cgroup/test_memcontrol.c
-> > > > index 4e1647568c5b..57726bc82757 100644
-> > > > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> > > > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> > > > @@ -10,6 +10,7 @@
-> > > >  #include <sys/stat.h>
-> > > >  #include <sys/types.h>
-> > > >  #include <unistd.h>
-> > > > +#include <sys/inotify.h>
-> > > >  #include <sys/socket.h>
-> > > >  #include <sys/wait.h>
-> > > >  #include <arpa/inet.h>
-> > > > @@ -1625,6 +1626,115 @@ static int test_memcg_oom_group_score_event=
-s(const char *root)
-> > > >         return ret;
-> > > >  }
-> > > >
-> > > > +static int read_event(int inotify_fd, int expected_event, int expe=
-cted_wd)
-> > > > +{
-> > > > +       struct inotify_event event;
-> > > > +       ssize_t len =3D 0;
-> > > > +
-> > > > +       len =3D read(inotify_fd, &event, sizeof(event));
-> > > > +       if (len < (ssize_t)sizeof(event))
-> > > > +               return -1;
-> > > > +
-> > > > +       if (event.mask !=3D expected_event || event.wd !=3D expecte=
-d_wd) {
-> > > > +               fprintf(stderr,
-> > > > +                       "event does not match expected values: mask=
- %d (expected %d) wd %d (expected %d)\n",
-> > > > +                       event.mask, expected_event, event.wd, expec=
-ted_wd);
-> > > > +               return -1;
-> > > > +       }
-> > > > +
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int test_memcg_inotify_delete_file(const char *root)
-> > > > +{
-> > > > +       int ret =3D KSFT_FAIL;
-> > > > +       char *memcg =3D NULL;
-> > > > +       int fd, wd;
-> > > > +
-> > > > +       memcg =3D cg_name(root, "memcg_test_0");
-> > > > +
-> > > > +       if (!memcg)
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       if (cg_create(memcg))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       fd =3D inotify_init1(0);
-> > > > +       if (fd =3D=3D -1)
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       wd =3D inotify_add_watch(fd, cg_control(memcg, "memory.even=
-ts"), IN_DELETE_SELF);
-> > > > +       if (wd =3D=3D -1)
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       if (cg_destroy(memcg))
-> > > > +               goto cleanup;
-> > > > +       free(memcg);
-> > > > +       memcg =3D NULL;
-> > > > +
-> > > > +       if (read_event(fd, IN_DELETE_SELF, wd))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       if (read_event(fd, IN_IGNORED, wd))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       ret =3D KSFT_PASS;
-> > > > +
-> > > > +cleanup:
-> > > > +       if (fd >=3D 0)
-> > > > +               close(fd);
-> > > > +       if (memcg)
-> > > > +               cg_destroy(memcg);
-> > > > +       free(memcg);
-> > > > +
-> > > > +       return ret;
-> > > > +}
-> > > > +
-> > > > +static int test_memcg_inotify_delete_dir(const char *root)
-> > > > +{
-> > > > +       int ret =3D KSFT_FAIL;
-> > > > +       char *memcg =3D NULL;
-> > > > +       int fd, wd;
-> > > > +
-> > > > +       memcg =3D cg_name(root, "memcg_test_0");
-> > > > +
-> > > > +       if (!memcg)
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       if (cg_create(memcg))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       fd =3D inotify_init1(0);
-> > > > +       if (fd =3D=3D -1)
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       wd =3D inotify_add_watch(fd, memcg, IN_DELETE_SELF);
-> > > > +       if (wd =3D=3D -1)
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       if (cg_destroy(memcg))
-> > > > +               goto cleanup;
-> > > > +       free(memcg);
-> > > > +       memcg =3D NULL;
-> > > > +
-> > > > +       if (read_event(fd, IN_DELETE_SELF, wd))
-> > > > +               goto cleanup;
-> > >
-> > >
-> > > Does this test pass? I expect that listener would get event mask
-> > > IN_DELETE_SELF | IN_ISDIR?
-> >
-> > Yes, I tested on 4 different machines across different filesystems and
-> > none of them set IN_ISDIR with IN_DELETE_SELF. The inotify docs say,
-> > "may be set"... I wonder if that is wishful thinking?
+> syzbot ci has tested the following series
 >
-> Oh, very intentional:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/f=
-s/notify/inotify/inotify_fsnotify.c?h=3Dv6.19#n109
+> [v4] kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED support
+> https://lore.kernel.org/all/20260220055449.3073-1-tjmercier@google.com
+> * [PATCH v4 1/3] kernfs: Don't set_nlink for directories being removed
+> * [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
+> * [PATCH v4 3/3] selftests: memcg: Add tests for IN_DELETE_SELF and IN_IG=
+NORED
+>
+> and found the following issue:
+> possible deadlock in __kernfs_remove
+>
+> Full report is available here:
+> https://ci.syzbot.org/series/4b44d5c2-c2eb-4425-a19a-f9963b64f74f
+>
+> ***
+>
+> possible deadlock in __kernfs_remove
+>
+> tree:      bpf-next
+> URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/b=
+pf-next.git
+> base:      ba268514ea14b44570030e8ed2aef92a38679e85
+> arch:      amd64
+> compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~e=
+xp1~20251221153213.50), Debian LLD 21.1.8
+> config:    https://ci.syzbot.org/builds/45ab774f-e8d7-4def-8279-888a5cb2d=
+01e/config
+> syz repro: https://ci.syzbot.org/findings/b74cbc6a-1cef-4ae9-be46-dd9e8b2=
+9b648/syz_repro
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> WARNING: possible circular locking dependency detected
+> syzkaller #0 Not tainted
+> ------------------------------------------------------
+> kworker/u8:1/13 is trying to acquire lock:
+> ffff88816ef2b878 (kn->active#5){++++}-{0:0}, at: __kernfs_remove+0x47e/0x=
+8c0 fs/kernfs/dir.c:1533
+>
+> but task is already holding lock:
+> ffff8881012e8ab8 (&root->kernfs_supers_rwsem){++++}-{4:4}, at: kernfs_rem=
+ove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
+>
+> which lock already depends on the new lock.
+>
+>
+> the existing dependency chain (in reverse order) is:
+>
+> -> #2 (&root->kernfs_supers_rwsem){++++}-{4:4}:
+>        down_read+0x47/0x2e0 kernel/locking/rwsem.c:1537
+>        kernfs_remove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
+>        acpi_unbind_one+0x2d8/0x3b0 drivers/acpi/glue.c:337
+>        device_platform_notify_remove drivers/base/core.c:2386 [inline]
+>        device_del+0x547/0x8f0 drivers/base/core.c:3881
+>        serdev_controller_add+0x46f/0x640 drivers/tty/serdev/core.c:785
+>        serdev_tty_port_register+0x159/0x260 drivers/tty/serdev/serdev-tty=
+port.c:291
+>        tty_port_register_device_attr_serdev+0xe7/0x170 drivers/tty/tty_po=
+rt.c:187
+>        serial_core_add_one_port drivers/tty/serial/serial_core.c:3107 [in=
+line]
+>        serial_core_register_port+0x103a/0x28b0 drivers/tty/serial/serial_=
+core.c:3305
+>        serial8250_register_8250_port+0x1658/0x1fd0 drivers/tty/serial/825=
+0/8250_core.c:822
+>        serial_pnp_probe+0x568/0x7f0 drivers/tty/serial/8250/8250_pnp.c:48=
+0
+>        pnp_device_probe+0x30b/0x4c0 drivers/pnp/driver.c:111
+>        call_driver_probe drivers/base/dd.c:-1 [inline]
+>        really_probe+0x267/0xaf0 drivers/base/dd.c:661
+>        __driver_probe_device+0x18c/0x320 drivers/base/dd.c:803
+>        driver_probe_device+0x4f/0x240 drivers/base/dd.c:833
+>        __driver_attach+0x3e7/0x710 drivers/base/dd.c:1227
+>        bus_for_each_dev+0x23b/0x2c0 drivers/base/bus.c:383
+>        bus_add_driver+0x345/0x670 drivers/base/bus.c:715
+>        driver_register+0x23a/0x320 drivers/base/driver.c:249
+>        serial8250_init+0x8f/0x160 drivers/tty/serial/8250/8250_platform.c=
+:317
+>        do_one_initcall+0x250/0x840 init/main.c:1378
+>        do_initcall_level+0x104/0x190 init/main.c:1440
+>        do_initcalls+0x59/0xa0 init/main.c:1456
+>        kernel_init_freeable+0x2a6/0x3d0 init/main.c:1688
+>        kernel_init+0x1d/0x1d0 init/main.c:1578
+>        ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+>        ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+>
+> -> #1 (&device->physical_node_lock){+.+.}-{4:4}:
+>        __mutex_lock_common kernel/locking/mutex.c:614 [inline]
+>        __mutex_lock+0x19f/0x1300 kernel/locking/mutex.c:776
+>        acpi_get_first_physical_node drivers/acpi/bus.c:691 [inline]
+>        acpi_primary_dev_companion drivers/acpi/bus.c:710 [inline]
+>        acpi_companion_match+0x8a/0x120 drivers/acpi/bus.c:764
+>        acpi_device_uevent_modalias+0x1a/0x30 drivers/acpi/device_sysfs.c:=
+280
+>        platform_uevent+0x3c/0xb0 drivers/base/platform.c:1411
+>        dev_uevent+0x446/0x8a0 drivers/base/core.c:2692
+>        kobject_uevent_env+0x477/0x9e0 lib/kobject_uevent.c:573
+>        kobject_synth_uevent+0x585/0xbd0 lib/kobject_uevent.c:207
+>        uevent_store+0x26/0x70 drivers/base/core.c:2773
+>        kernfs_fop_write_iter+0x3af/0x540 fs/kernfs/file.c:352
+>        new_sync_write fs/read_write.c:593 [inline]
+>        vfs_write+0x61d/0xb90 fs/read_write.c:686
+>        ksys_write+0x150/0x270 fs/read_write.c:738
+>        do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>        do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+>        entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>
+> -> #0 (kn->active#5){++++}-{0:0}:
+>        check_prev_add kernel/locking/lockdep.c:3165 [inline]
+>        check_prevs_add kernel/locking/lockdep.c:3284 [inline]
+>        validate_chain kernel/locking/lockdep.c:3908 [inline]
+>        __lock_acquire+0x15a5/0x2cf0 kernel/locking/lockdep.c:5237
+>        lock_acquire+0x106/0x330 kernel/locking/lockdep.c:5868
+>        kernfs_drain+0x27c/0x5f0 fs/kernfs/dir.c:511
+>        __kernfs_remove+0x47e/0x8c0 fs/kernfs/dir.c:1533
+>        kernfs_remove_by_name_ns+0xc0/0x140 fs/kernfs/dir.c:1751
+>        sysfs_remove_file include/linux/sysfs.h:780 [inline]
+>        device_remove_file drivers/base/core.c:3071 [inline]
+>        device_del+0x506/0x8f0 drivers/base/core.c:3876
+>        device_unregister+0x21/0xf0 drivers/base/core.c:3919
+>        mac80211_hwsim_del_radio+0x2dc/0x490 drivers/net/wireless/virtual/=
+mac80211_hwsim.c:5918
+>        hwsim_exit_net+0xede/0xfa0 drivers/net/wireless/virtual/mac80211_h=
+wsim.c:6807
+>        ops_exit_list net/core/net_namespace.c:199 [inline]
+>        ops_undo_list+0x49f/0x940 net/core/net_namespace.c:252
+>        cleanup_net+0x4df/0x7b0 net/core/net_namespace.c:696
+>        process_one_work kernel/workqueue.c:3257 [inline]
+>        process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3340
+>        worker_thread+0xda6/0x1360 kernel/workqueue.c:3421
+>        kthread+0x726/0x8b0 kernel/kthread.c:463
+>        ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+>        ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+>
+> other info that might help us debug this:
+>
+> Chain exists of:
+>   kn->active#5 --> &device->physical_node_lock --> &root->kernfs_supers_r=
+wsem
+>
+>  Possible unsafe locking scenario:
+>
+>        CPU0                    CPU1
+>        ----                    ----
+>   rlock(&root->kernfs_supers_rwsem);
+>                                lock(&device->physical_node_lock);
+>                                lock(&root->kernfs_supers_rwsem);
+>   lock(kn->active#5);
+>
+>  *** DEADLOCK ***
+>
+> 4 locks held by kworker/u8:1/13:
+>  #0: ffff888100ef7948 ((wq_completion)netns){+.+.}-{0:0}, at: process_one=
+_work kernel/workqueue.c:3232 [inline]
+>  #0: ffff888100ef7948 ((wq_completion)netns){+.+.}-{0:0}, at: process_sch=
+eduled_works+0x9d4/0x17a0 kernel/workqueue.c:3340
+>  #1: ffffc90000127bc0 (net_cleanup_work){+.+.}-{0:0}, at: process_one_wor=
+k kernel/workqueue.c:3233 [inline]
+>  #1: ffffc90000127bc0 (net_cleanup_work){+.+.}-{0:0}, at: process_schedul=
+ed_works+0xa0f/0x17a0 kernel/workqueue.c:3340
+>  #2: ffffffff8f99d2d0 (pernet_ops_rwsem){++++}-{4:4}, at: cleanup_net+0xf=
+e/0x7b0 net/core/net_namespace.c:670
+>  #3: ffff8881012e8ab8 (&root->kernfs_supers_rwsem){++++}-{4:4}, at: kernf=
+s_remove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
+>
+> stack backtrace:
+> CPU: 0 UID: 0 PID: 13 Comm: kworker/u8:1 Not tainted syzkaller #0 PREEMPT=
+(full)
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.=
+16.2-1 04/01/2014
+> Workqueue: netns cleanup_net
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+>  print_circular_bug+0x2e1/0x300 kernel/locking/lockdep.c:2043
+>  check_noncircular+0x12e/0x150 kernel/locking/lockdep.c:2175
+>  check_prev_add kernel/locking/lockdep.c:3165 [inline]
+>  check_prevs_add kernel/locking/lockdep.c:3284 [inline]
+>  validate_chain kernel/locking/lockdep.c:3908 [inline]
+>  __lock_acquire+0x15a5/0x2cf0 kernel/locking/lockdep.c:5237
+>  lock_acquire+0x106/0x330 kernel/locking/lockdep.c:5868
+>  kernfs_drain+0x27c/0x5f0 fs/kernfs/dir.c:511
+>  __kernfs_remove+0x47e/0x8c0 fs/kernfs/dir.c:1533
+>  kernfs_remove_by_name_ns+0xc0/0x140 fs/kernfs/dir.c:1751
+>  sysfs_remove_file include/linux/sysfs.h:780 [inline]
+>  device_remove_file drivers/base/core.c:3071 [inline]
+>  device_del+0x506/0x8f0 drivers/base/core.c:3876
+>  device_unregister+0x21/0xf0 drivers/base/core.c:3919
+>  mac80211_hwsim_del_radio+0x2dc/0x490 drivers/net/wireless/virtual/mac802=
+11_hwsim.c:5918
+>  hwsim_exit_net+0xede/0xfa0 drivers/net/wireless/virtual/mac80211_hwsim.c=
+:6807
+>  ops_exit_list net/core/net_namespace.c:199 [inline]
+>  ops_undo_list+0x49f/0x940 net/core/net_namespace.c:252
+>  cleanup_net+0x4df/0x7b0 net/core/net_namespace.c:696
+>  process_one_work kernel/workqueue.c:3257 [inline]
+>  process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3340
+>  worker_thread+0xda6/0x1360 kernel/workqueue.c:3421
+>  kthread+0x726/0x8b0 kernel/kthread.c:463
+>  ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+>  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+>  </TASK>
+> hsr_slave_0: left promiscuous mode
+> hsr_slave_1: left promiscuous mode
+> batman_adv: batadv0: Interface deactivated: batadv_slave_0
+> batman_adv: batadv0: Removing interface: batadv_slave_0
+> batman_adv: batadv0: Interface deactivated: batadv_slave_1
+> batman_adv: batadv0: Removing interface: batadv_slave_1
+> veth1_macvtap: left promiscuous mode
+> veth0_macvtap: left promiscuous mode
+> veth1_vlan: left promiscuous mode
+> veth0_vlan: left promiscuous mode
+> team0 (unregistering): Port device team_slave_1 removed
+> team0 (unregistering): Port device team_slave_0 removed
+> netdevsim netdevsim2 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+> netdevsim netdevsim2 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+> netdevsim netdevsim2 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+> netdevsim netdevsim2 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+>
+>
+> ***
+>
+> If these findings have caused you to resend the series or submit a
+> separate fix, please add the following tag to your commit message:
+>   Tested-by: syzbot@syzkaller.appspotmail.com
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
-LOL yeh ok :)
+Hm, I can see two ways to fix this.
 
-Thanks for checking
+The first is to drop the acpi_dev->physical_node_lock mutex in
+acpi_unbind_one before calling sysfs_remove_link. This keeps the node
+ID reserved while the sysfs files are still being removed, so that we
+don't get any sysfs filename collisions (which are based on the node
+ID). This seems like a good optimization to do anyway:
 
-Amir.
++++ b/drivers/acpi/glue.c
+@@ -329,18 +329,22 @@ int acpi_unbind_one(struct device *dev)
+        list_for_each_entry(entry, &acpi_dev->physical_node_list, node)
+                if (entry->dev =3D=3D dev) {
+                        char physnode_name[PHYSICAL_NODE_NAME_SIZE];
+
+-                       list_del(&entry->node);
+-                       acpi_dev->physical_node_count--;
++                       entry->dev =3D NULL;
++                       mutex_unlock(&acpi_dev->physical_node_lock);
+
+                        acpi_physnode_link_name(physnode_name, entry->node_=
+id);
+                        sysfs_remove_link(&acpi_dev->dev.kobj, physnode_nam=
+e);
+                        sysfs_remove_link(&dev->kobj, "firmware_node");
+                        ACPI_COMPANION_SET(dev, NULL);
+                        /* Drop references taken by acpi_bind_one(). */
+                        put_device(dev);
+                        acpi_dev_put(acpi_dev);
++
++                       mutex_lock(&acpi_dev->physical_node_lock);
++                       list_del(&entry->node);
++                       acpi_dev->physical_node_count--;
+                        kfree(entry);
+                        break;
+                }
+
+
+The second is to drop the kernfs_supers_rwsem for the kernfs_drain,
+similar to how the kernfs_rwsem is dropped there. I don't think
+kernfs_supers_rwsem is usually heavily contended, but it's probably a
+good idea to avoid holding it while potentially sleeping in
+kernfs_drain. Since the kernfs_supers_rwsem is only held for
+kernfs_drain in __kernfs_remove (but not kernfs_show) that means:
+
++++ b/fs/kernfs/dir.c
+@@ -486,7 +486,7 @@ void kernfs_put_active(struct kernfs_node *kn)
+  * removers may invoke this function concurrently on @kn and all will
+  * return after draining is complete.
+  */
+-static void kernfs_drain(struct kernfs_node *kn)
++static void kernfs_drain(struct kernfs_node *kn, bool drop_supers)
+        __releases(&kernfs_root(kn)->kernfs_rwsem)
+        __acquires(&kernfs_root(kn)->kernfs_rwsem)
+ {
+@@ -506,6 +506,8 @@ static void kernfs_drain(struct kernfs_node *kn)
+                return;
+
+        up_write(&root->kernfs_rwsem);
++       if (drop_supers)
++               up_read(&root->kernfs_supers_rwsem);
+
+        if (kernfs_lockdep(kn)) {
+                rwsem_acquire(&kn->dep_map, 0, 0, _RET_IP_);
+@@ -524,6 +526,8 @@ static void kernfs_drain(struct kernfs_node *kn)
+        if (kernfs_should_drain_open_files(kn))
+                kernfs_drain_open_files(kn);
+
++       if (drop_supers)
++               down_read(&root->kernfs_supers_rwsem);
+        down_write(&root->kernfs_rwsem);
+ }
+
+@@ -1465,7 +1469,7 @@ void kernfs_show(struct kernfs_node *kn, bool show)
+                kn->flags |=3D KERNFS_HIDDEN;
+                if (kernfs_active(kn))
+                        atomic_add(KN_DEACTIVATED_BIAS, &kn->active);
+-               kernfs_drain(kn);
++               kernfs_drain(kn, false);
+        }
+
+        up_write(&root->kernfs_rwsem);
+@@ -1530,7 +1534,7 @@ static void __kernfs_remove(struct kernfs_node *kn)
+                 */
+                kernfs_get(pos);
+
+-               kernfs_drain(pos);
++               kernfs_drain(pos, true);
+                parent =3D kernfs_parent(pos);
+                /*
+                 * kernfs_unlink_sibling() succeeds once per node.  Use it
