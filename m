@@ -1,86 +1,95 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F22922154B
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 23:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E37A450FE;
+	Fri, 20 Feb 2026 23:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771629927; cv=none; b=MjCz6svbrfDtcmNIUV20a6j1zcD1GfX8dnxH/iWqWNe7I/MKHhCXdLKitiqTH90LA4bWqLgEyvBc9KADOok3plFktm+LIp7pzavuOjolqZvHxLoMGCthKohPeXuIgvwV9qLTe/5TNHKMtihou4GrHvXp3KeUYXwVT3Ljo39qma0=
+	t=1771630329; cv=none; b=SN4sTVF0dB7o/QzeUYYGCVzU0fQ8QX6hJzDgnZ3zMyIBChw0tvEx9z9RJCKJalqBwwR9gPQ+ca3OZBdH7exIGjaVISiNhzczZbl2zk+VY8DqyY15sxT38fY4OAWfXI6FRFqvK0EBjvwA2dgV/P6473/yq5GKjvrRewzuukVcPZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771629927; c=relaxed/simple;
-	bh=eZDELe6eJSLDOKVIBoCOTcDUy23mVxZ3XJ5ZKuFn2GY=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=lGyJjwI3OUlpZfIz8pJ7CfOtnh532wul+92jzSap0Fxl3JKwrDiOhf1yFDZUfMLnKMGahAE0s1M+rsWvzqKepC2yCjm9K7MIbkF/zUp8qpGSbZpTIq5o9/P4CPVzKer4nMdiRFzZrvLkR6RgZiMd4q6IpEDn//FHPnZlrAiJECI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sqqchV1i; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771630329; c=relaxed/simple;
+	bh=/bSsXEdaIKKeFGiASesky/KjEVa6IyrjpIr3goO6XWI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NM4AfdXkvchrFYRtGxGoVViNe2R8tnMaXAf3aVYeYIOSLFSCLnD8HgVSsn/nvCgy7AN5M81nZ9RNvoHwNxnTBf3Ar8Zipt83E9edJJNCDi8JU4deOU/fLqSBcqI7Ovgcgp+rK/fiETZEvo2CnI3YEp/rQ513PqG3HuMxJPjrCAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EAbKHIDQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sqqchV1i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EAbKHIDQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1258AC116C6;
+	Fri, 20 Feb 2026 23:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771630329;
+	bh=/bSsXEdaIKKeFGiASesky/KjEVa6IyrjpIr3goO6XWI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EAbKHIDQi3vLekKzDjHKpJqvvmgaoTdMRRaZcLZ61LLO73si/qTO476lY7fbRrB8b
+	 +dp6bct1/IKE55kmm1exaApfAaP60F8SmPnLh2omFNch7Ou61a/WpFHB5DHHLxqeXk
+	 e44E6Kcs4AXVUa9svtmZ2WCpZT9/tMN2499yKhNrb9ZMuVuu9wcRGXX9w6It2/qpLg
+	 R+KnQb/vCpicLo0bcOFAt74d7kYXD1PAponMy8VmXizG1i+6b2hym459mo4GiSsH4p
+	 Q4TCr7iXt0Gx6c+XEySzkqbArftF6PVBYYye/4V8xkntisHcDBZBRVJbFrl55SfMFq
+	 IrQQNZ7jH4ZDw==
+Date: Fri, 20 Feb 2026 13:32:08 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: "T.J. Mercier" <tjmercier@google.com>, gregkh@linuxfoundation.org,
+	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	jack@suse.cz, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
+Message-ID: <aZju-GFHf8Eez-07@slm.duckdns.org>
+References: <20260220055449.3073-1-tjmercier@google.com>
+ <20260220055449.3073-3-tjmercier@google.com>
+ <aZh-orwoaeAh52Bf@slm.duckdns.org>
+ <CAOQ4uxjgXa1q-8-ajSBwza-Tkv91tFP-_wWzCQPW+PwJMehEWA@mail.gmail.com>
+ <aZi6_K-pSRwAe7F5@slm.duckdns.org>
+ <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771629923;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Df5uKMtIYBunSohID3U5RuNs4nSDHBd9eMc7kofn2fM=;
-	b=sqqchV1iz3qjnMJyyZQ64JtmRzWpwwBnyeiYlfTT1YcTSg1c6NwBPlRWz3oMhOJqXFojwQ
-	0bgRPHdsgqmme1hOLfi4bVif/8OS9acGYoUF8A2/77f5+hC6yP8AUKMv8gRFR3iw9AgQgf
-	iu9K3l05UnBQN2dsEBjWchxa+YYgwMA=
-Date: Fri, 20 Feb 2026 23:25:21 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yosry Ahmed" <yosry.ahmed@linux.dev>
-Message-ID: <f67849d5dc11f19ab5835b6166e56d9a253d5ea2@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH v4 2/8] KVM: x86: nSVM: Cache and validate vmcb12 g_pat
-To: "Jim Mattson" <jmattson@google.com>
-Cc: "Sean Christopherson" <seanjc@google.com>, "Paolo Bonzini"
- <pbonzini@redhat.com>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <CALMp9eTNpSDkEgVBb81n_vQrd63Txg+gMBCGh-DAcN5yOuhLxQ@mail.gmail.com>
-References: <20260212155905.3448571-1-jmattson@google.com>
- <20260212155905.3448571-3-jmattson@google.com>
- <y2c76qtfmwgy4ncypthcm25wedlapwknjnfyptu62qmlbdqa7k@udzmtcddsmwa>
- <CALMp9eTNpSDkEgVBb81n_vQrd63Txg+gMBCGh-DAcN5yOuhLxQ@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
 
-February 21, 2026 at 12:26 AM, "Jim Mattson" <jmattson@google.com> wrote:
->=20
->=20On Thu, Feb 12, 2026 at 4:22 PM Yosry Ahmed <> wrote:
->=20
->=20>=20
->=20> @@ -2006,13 +2012,16 @@ static int svm_set_nested_state(struct kvm_=
-vcpu *vcpu,
-> >=20
->=20>  /*
-> >  * Validate host state saved from before VMRUN (see
-> >  - * nested_svm_check_permissions).
-> >  + * nested_svm_check_permissions). Note that the g_pat field is not
-> >  + * validated, because (a) it may have been clobbered by SMM before
-> >  + * KVM_GET_NESTED_STATE, and (b) it is not loaded at emulated
-> >  + * #VMEXIT.
-> >=20
->=20>  (b) here means that svm_copy_vmrun_state() does not copy it to vmc=
-b01,
-> >  and the value is restored by KVM_SET_MSRS, right?
-> >=20
->=20Actually, (b) refers to the open-coded block of assignments in
-> nested_svm_vmexit() under the comment:
->=20
->=20 /*
->  * Restore processor state that had been saved in vmcb01
->  */
->
+Hello, Amir.
 
-Yeah IIUC it's the same thing, we migrate them and copy them here to vmcb=
-01 so that we can restore them in nested_svm_vmexit().
+On Fri, Feb 20, 2026 at 10:11:15PM +0200, Amir Goldstein wrote:
+> > Yeah, that can be useful. For cgroupfs, there would probably need to be a
+> > way to scope it so that it can be used on delegation boundaries too (which
+> > we can require to coincide with cgroup NS boundaries).
+> 
+> I have no idea what the above means.
+> I could ask Gemini or you and I prefer the latter ;)
+
+Ah, you chose wrong. :)
+
+> What are delegation boundaries and NFS boundaries in this context?
+
+cgroup delegation is giving control of a subtree to someone else:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/Documentation/admin-guide/cgroup-v2.rst#n537
+
+There's an old way of doing it by changing perms on some files and new way
+using cgroup namespace.
+
+> > Would it be possible to make FAN_MNT_ATTACH work for that?
+> 
+> FAN_MNT_ATTACH is an event generated on a mntns object.
+> If "cgroup NS boundaries" is referring to a mntns object and if
+> this object is available in the context of cgroup create/destroy
+> then it should be possible.
+
+Great, yes, cgroup namespace way should work then.
+
+> But FAN_MNT_ATTACH reports a mountid. Is there a mountid
+> to report on cgroup create? Probably not?
+
+Sorry, I thought that was per-mount recursive file event monitoring.
+FAN_MARK_MOUNT looks like the right thing if we want to allow monitoring
+cgroup creations / destructions in a subtree without recursively watching
+each cgroup.
+
+Thanks.
+
+-- 
+tejun
