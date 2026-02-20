@@ -1,187 +1,206 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11020106.outbound.protection.outlook.com [52.101.69.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1B614B977
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 15:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771602889; cv=none; b=gaHz18wfccjjLhrotXxSlQXIvBLyIyJB3MX1bP1TA2nFliX+Tqqdl4cz/Zrxoxi5xv4wDE+mpgzhbU3FUrbfZMRRQqYv+NbMty3Yu3I8SkGxE1fItAzN3tWDna5wzf4G50IK6vvDqCuO6dlBuFaEId3z/S49Yf94IdVhNmjPssg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771602889; c=relaxed/simple;
-	bh=WJ7GcyxMiDDGBEalmDBHPROhdVHWXXkkt0WSAJQJp70=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AZlh3oAgRxPRAQA4o0rDDlUnmaZrV2uHcXODB9DJ5ZTVocQm4GIRzouMi5M/g8ZWhSoDQLX80703c0rZbOiYiBp/t3vqnwTHPeWEIQFatTd7GRdTNVhvp9KHMu9MEZrcyPBsleCQivImewhkXCEmeKzA5ZPKrFmFOE/mh0OMzNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cvWtOHad; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9735207A38;
+	Fri, 20 Feb 2026 16:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.106
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771605972; cv=fail; b=IwnoYTcgv1zOJbDfdT6FN4g8VboZR91DRYmFN91jCcIiNgOYn+P1+Z++1gOx6DHYWka1nbkXK3q6bYoWrtZfMzmG1kqXOpxY16vN+s7wnlJK9lEM5N8hClmtOgP8X4gTb0AdXKdtIaV1Nh8SwpX0UJ9g1H/UyCa8HxIvkWyKhaM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771605972; c=relaxed/simple;
+	bh=E7UMegGk74SdL+D2vAYeRQ/FVYAXWfFmVoVWQP6xAQg=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=baGifG2YGDMHUHiWn+1qJvloaqcFma7WRbM08XG1XU9jsFHVGmewxPI7rdaVI+8RddnlvMIOl5Ng4ZQFGjurnMlqj2mpeTxeKdCwO9iYNlfbWsF2izOv5fAs9yAWUfoQ38dDV5GqpPE2FwOxdPbXQfSdDPPtPAxirFpXlcT+qIc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=cKyh1pYQ; arc=fail smtp.client-ip=52.101.69.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cvWtOHad"
-Message-ID: <c6c2ffcf-acdf-4bda-ad82-dc4cc1a9260e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771602875;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Rr/zI4j/LxpMfSmhNq9RSHA4JWY8TSeiEY4AKzPzxV8=;
-	b=cvWtOHadlIWEz8qFJdCVgzwmKFkahat2gkR/cnqjQJrvCvoXflU8MofpH8wVajEruKSh2w
-	+Bb4Q3/BC2OcXnPR0BXMZqq8faW4/4BvQBVCoSjhkHsUdCZpDC6K4H0/beaNrdx/wc5d54
-	4s5GVkjeLVoLrbhqeie+1H1zN7yLF04=
-Date: Fri, 20 Feb 2026 23:54:16 +0800
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="cKyh1pYQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sPyA5ZdPJSoR1lm9jJ6g1vXSPmvnXet9m9zMKm74YuqB3Unqoy5AkVJJEwxukd5HWmD/moz4OJ//voJ9hulcUXG6h+Vrnh58xaAk/Qtla/nqn2TxYwBzNv4JtL+CkxTFXObVL472wfgegQriQvaAdwtxPpTUq5TYCT+VrFCypjA8eiwO0QHXYu5qFcZWr9Hoifl6hWilLE63CQtRUYJPFmB6IfUc7kZMrbzSvDfVZEP+TUZZ7uFGB2q3pywWeHJDDi5tu45WS4oLE19zvBqLi2xbbQKMdwLbQOcItue/krgJ8WlaiMoIvGekX5dnl6gqbZ/VLCTu9iK5svF6kMaf0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Dac4qF9K+m8wHV+erEPJLYkdtHV+8QX5dqd9M1IqKJ4=;
+ b=TSggUN4O1rYap2s4zXgaFAlFdOCxVchKtRbOLb832H6e3k9Z5GbjoIVYcmrJeZBIGQ10TlgrOV3VUdrZuA2VkNopFt3gplt2UwSILk9iRTqRQYv1of+1JC9TrauZnyMtSB2UQfpSmG779AZvc4IH3CGqI+8cJaAQBTZ6AJJDWB1J8lyqH1hEm4ucO/Mdz89ywBLQt2kVzwq9xdsNetv0nZP4gMrhZjiD9kHUTTB7OJGhjHltXP4vDIzMTgnV7OEwx63bxOjL5TW4MHcAQSRoTFvFOIc1qcNn+5crRsXMn+li8WKt7RY8mQNWQRdD64A2jFHR1NeRRHvdtKRRrp504Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dac4qF9K+m8wHV+erEPJLYkdtHV+8QX5dqd9M1IqKJ4=;
+ b=cKyh1pYQIDL75M/tcWUWkDr2NbvO6kZan+NimrHdOrlc0Gxh42E3wHcIvu+xd5iV7Fo7EO3XHfq2ms+0Ejcdo3FlAE7wDop0g28Fi6ft1+7vJu6WqvtYZyXSuyg58BRskQVUlRgytxP0p+zvJ0zsCnUtUELMWHm0EgrSMTDRd/cN4Q1nRK/SbQop4Flnnzx6OoBQUYl7q6enw6sXgM2kIrSVceI1teKUDkd9AaZYVYyMpsCnFywbQmAtSt/aCwRz9MT8J7kCikb/KG++jpr7so1FaF9C7BQbRpQmHNeTsf0u8bIWkDYkjncqHlkVLpAufqC7+De9+ZXmGM37Wfd0Cw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
+ by GVXPR08MB11132.eurprd08.prod.outlook.com (2603:10a6:150:1fd::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.16; Fri, 20 Feb
+ 2026 16:46:07 +0000
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9632.015; Fri, 20 Feb 2026
+ 16:46:07 +0000
+From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+To: Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Jan Kara <jack@suse.cz>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Andrei Vagin <avagin@google.com>,
+	Kirill Tkhai <tkhai@ya.ru>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Adrian Reber <areber@redhat.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] pid_namespace: make init creation more flexible
+Date: Fri, 20 Feb 2026 17:42:26 +0100
+Message-ID: <20260220164559.2465466-1-ptikhomirov@virtuozzo.com>
+X-Mailer: git-send-email 2.53.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BE1P281CA0456.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:7f::15) To DU0PR08MB9003.eurprd08.prod.outlook.com
+ (2603:10a6:10:471::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/6] bpf, x86: Add 64-bit bitops kfuncs
- support for x86_64
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- X86 ML <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>,
- Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260219142933.13904-1-leon.hwang@linux.dev>
- <20260219142933.13904-3-leon.hwang@linux.dev>
- <CAADnVQLNmQGKf5S5ZNwHYzScYBhnWFmnzLg=5Xxy4SgYKE3EfQ@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQLNmQGKf5S5ZNwHYzScYBhnWFmnzLg=5Xxy4SgYKE3EfQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|GVXPR08MB11132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ae15881-d06f-411e-c577-08de709f8b72
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|7416014|10070799003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?S1RiWG5NS25UdVBacWV6SW5PUWVBbk9OVmZPU2dzMCtHUzlIVEpmVzhmSGVk?=
+ =?utf-8?B?RmxEeUcvaDd0SVNGUHdjaFgrTE90Z0wwd3M1UG1hd294RVVJU1NuL01sdDVU?=
+ =?utf-8?B?QXZ6Rm5qVlpjQ1E1Y21CaExYYkpBcG9ycDM5TGxPWjVnQ2thWFdabmZUQnVv?=
+ =?utf-8?B?WkZra3FnUElRMnRoK2R5R1lHa3FNN1VmSVBZdzBpNGZ5QVV3NmpoQ3I1MnNj?=
+ =?utf-8?B?Y1F1U0FBdzltL2lQWEdVcDBuT3F4Qm1BZ1ZiUmRPS0VsNjFBMlVvTmc2bml6?=
+ =?utf-8?B?cGFUcEV3Q0ozWkpRZ2JBWlgvNlNOYmljODB0bEZNU1Z1MlIrbEFScXFxZkE1?=
+ =?utf-8?B?UWFNMVYyM2VML0hiTkhTZ2xJTndFTmkvZkxiYmptVHNlajF0blhHL2c2MU91?=
+ =?utf-8?B?VnRaSHJEQVMvd1JJYysyZHRzNWpGbXRCUFlIQWtOdFg4a0pJejBRNkt1eDNo?=
+ =?utf-8?B?Qk5DUFdqMk5UNHVUZHRKYy9tM1BvMlMxTjlTTk1XaUVjM29oR3VLdjEwaDl2?=
+ =?utf-8?B?NGZqRjVPS0gvbDMzaGtYQTVRdEVZeFkwZDRiajcrVVJDY29NV2xJOGtJVzho?=
+ =?utf-8?B?R2ZzdjdDN1l5NStIdHFPaTlzcGlBNk1TS1RoRjJNVjVKbEYvTGFHUytzazJ6?=
+ =?utf-8?B?NDA5SkVQYzZzMWJNOEE2YlplMlNtVHk3ekd1OFR5TWs3WjRZdlovdUsydmhI?=
+ =?utf-8?B?N3lvYzk3OTNnSUVoMG5nNE9LY2haZGVHeXFFaEZHaDFGREhkcVVlZCtWNTdt?=
+ =?utf-8?B?N1B4dER6UHMwMG40dUVQOXZjaHJFMnFFSlF6ZDNoQk9NdStZdTJQbHF5NXdw?=
+ =?utf-8?B?N2RSeC9xT2VnVHViY0pOa0VURGt5SHRNclpEL2F5UXRjU0Q4VUZ0R1dBZFF2?=
+ =?utf-8?B?S0Q1NnpnZTVDeWxwNm0yamxYQ3hsOXJOTitQSmkvSEZ2bEtVRWFkN1g5Q3dC?=
+ =?utf-8?B?WVA1UjFTUW12bmlhRVNMK2tlWURDUkJmRENwekpnOXFwaEk5MHByemZsblRP?=
+ =?utf-8?B?aVVNVlNmcWJlL0t2NFd2VElRN29tVXVSZkFpbVZNeDhjS1JUblNQNGpTWFZW?=
+ =?utf-8?B?OUhCRy9OWndORTZSeWxJVmpzQWhSZUxPTEg0M20za0RyNGMwVUJicDJNd0Jh?=
+ =?utf-8?B?WS8zQ3ZWdWNYRm94WFBxc0poRjN4eThiQzE5cnRZYzIzbGJMQzRQV0V4cHlD?=
+ =?utf-8?B?dS82Z3JURHpmeHhEbmZzS1dwdEdlUEM5cmFXQ3RmQ0VuTzNJQnU3WVFEd25D?=
+ =?utf-8?B?cFNwRWJEWnhZOGl2M2trV2l1S01KYUhxVDRlNTJ1bHV6S3ZYSSt3Nlh1cUg4?=
+ =?utf-8?B?aFNHWWtrYW9tYzVEL1NZUzhWS09EZ3VKRUdmTE4zMGcyNXRjK1ZKS2xEU3Rl?=
+ =?utf-8?B?NXl2ZFFBM2FkUlBrbi9ta2NFd2JBTG5XNXlZMHRHbEhBZEZpMEY4MERad1B3?=
+ =?utf-8?B?Mkt6dkhXRUs2T3QvVXFIWGZsYURoWUdERDNBckc2K0c0R0ozZjNvemFqYU85?=
+ =?utf-8?B?R3FwR1pRWjVyOVh1U0VOcHlCa3pJTE9FM1E2M0E5V0JIY1Y5T2xoTTdnQ2lL?=
+ =?utf-8?B?SCtVREs4aHhjWkRJYkpSaUtiMzM4YXlNVTByRnRZRjYvVitUSlZVZmoyakRQ?=
+ =?utf-8?B?WWN0d1lwTnp0RHdaR2IwVy9UdndLNXlPcWtxbnFRTEhiSEZRQWRGV053eHRO?=
+ =?utf-8?B?V3gxSi9JYnhGNXp6K3p4NFZUdTQrdXlNRGgrUHo1WXFVSVA0ZlkvSmZNKzc2?=
+ =?utf-8?B?WDE5b2JkeVF6YUtzeHdxdDBFb21qVFVzRjVTT21FT0VhblVQZXloTUJQM1VC?=
+ =?utf-8?B?eXl1U0loU0ZacVRRb1FFRGtJRXJMcTJnbjhoSUlwS0llcW4zclJpMGpRWFBH?=
+ =?utf-8?B?R2sxTjBBWDlJVVFiMlBwbDJWcENvWW1QSE9ETFFZeWxMVUo2STBiSEFIZVor?=
+ =?utf-8?B?dGlMUmRXdlR5NmpMMlJIeWNvWmoxeWhGSjhUWHBvekg5eFVyY2k1ekcwV1po?=
+ =?utf-8?B?RTl2Vk82czFTbHUwd0NGamFpdUhpQnJZODZWY3prSFF1ZU5OMWJiY1E0VXZ6?=
+ =?utf-8?B?bStWbWtKVUs2cWZBMjdsaDVqUFV4bGJKM1ZpT29kT2N2ZWhqVjQycGY0Q01v?=
+ =?utf-8?Q?8VcU=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(7416014)(10070799003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?azBxU0hRZllCaDdicjFRWVVoRDdua2VIVHZIcEpoV2hDc096cUhNS0QrZDBZ?=
+ =?utf-8?B?dkxySHE2RWhBbUM2S1Q0TitOUnNIVTFmREQ3VEdublNBeEs4aEp5bUpJOFQ0?=
+ =?utf-8?B?L2RuM0RmM1Z2enlJbGJ2Tm9YTjltU1l0VVNvc3NENm92QUdLQytaamRLVmlm?=
+ =?utf-8?B?RU1uaTBOZ3RVSnJ5SVpkWEV2Rm96K2hxWkx4WldidXYvVXpWai9YNVRaZDM1?=
+ =?utf-8?B?cUdmWkNSNllXd2d6by9RT05CazRPVEovUFZyK2V4akpwY3g4V0MweXhoL3Zm?=
+ =?utf-8?B?enRnYnJyMUkzenJEU1ZUZ0NrRVdDejB0cFhEdmNGZHpLS0o1ZjkyRG1WRGdm?=
+ =?utf-8?B?L2x4cWlwVnZNZGg5RFNiaEJkcDk3Q0JTMGd0N1p1WlJzdnZIR3pzR0pxQTQ5?=
+ =?utf-8?B?QmtKZGtiY1NCdHd3dkpBTXgvK2ZoK3Y0Z2M0UTcyNjNKejlsTDFCanVwazRw?=
+ =?utf-8?B?M1hGRGFDWTN1bnRhKzNGdlRFSG1qemlyd2F1TEhhTUQ2Uldxd2RQUGxNaHpJ?=
+ =?utf-8?B?Z1NiMzV1aVZSUUJ4WW9Lc3BOTlJBemZ2OU9WN1pNdUlyeUJmQzl1MGJHbkVo?=
+ =?utf-8?B?MndQZVlDZHc2SmdiZnR3UXhuUzFuSHZFKzduOFBZS3BSSHJvRm1CZ2ZadDFj?=
+ =?utf-8?B?SXk0TGd4d25BdnhDVmlrZ1BWSVRnNXpzSlg0akNkNFFvZDlEbGg3cDlxWnda?=
+ =?utf-8?B?MzlEcGpQdk1xdkZhWCtEUXBXbkhadEJmZHJNbndWRi9POEJjNFRkU2pyeUht?=
+ =?utf-8?B?OXEraFZ0eXh6Q2pBR3plZURXMnRoKzZ4cXowUlZHQ0JDK2l3OGQ1SERCWUl1?=
+ =?utf-8?B?ckN4SU1tOC9reWdPSUNVU3Vsa1FqTTBmRGJrOXB5dENyak15K1M0OE45YThD?=
+ =?utf-8?B?OWRkR1N0MFU3cnFZWklwSEdFOFBrZlVqUjlaZ0NVS296YmxJN3RwUlhab2Fh?=
+ =?utf-8?B?UDlhVVFmMGlQdThBV2ZreUhqK29ROTcvajJlaGxIMTd2czF4VkpiQVdyWlVw?=
+ =?utf-8?B?ODZGUUlYOUoweUh6OUloQzlIR1pRUVJLekd1akJ6aWZodk8yd0x3eENmOVBa?=
+ =?utf-8?B?V05XUk12M2diaCtZU0QrOUFaZzRtL3lQL1BvZzUyZmZXZW5NaXoxalhSTEs4?=
+ =?utf-8?B?a3Vza1Rjb0loSSt0TnpBSVFsQUJZckNxSENFcXRIN0gzN1hsQnV4ZlUxcFV4?=
+ =?utf-8?B?OHJadEJ4YzdXN0lGc0V4NGplRmVIVWVxQjN3blVBMFl0Y1RtdTFaUGZzWjJS?=
+ =?utf-8?B?MGdtSnd0TWlhNjB5NS9jUC94Umc0cDBEckwvOXRGZjQ2bDRGWXQwQ1lqOExq?=
+ =?utf-8?B?OTRldU1meVVWaDlSZ2tDUE42aTJWZFgzNGJtSmdQRVhMNTJ4dGhTN0FhWXFn?=
+ =?utf-8?B?ZWdDMGo0UllSU3hpUDhiem9HWW1vWEFRQ0xLUGhkbUZKSGp0TTROVFF5ZkZq?=
+ =?utf-8?B?NHRLT1FIT0MzOVFKUTFMQjl1M2tKWVUrNlNzZ2JtWEQyMzhoeDZIQ0lRM0JZ?=
+ =?utf-8?B?Y1h2c0EvK29CeFZSZC9GNHhGcnNUeTRRMGlBLzlNS0RIQk40bEJ1ZHRCZUNH?=
+ =?utf-8?B?OEJMWjFnZkZkb3BuV3hySExoYnFLcU5MSWJnaWtiTHBvQnc2eFBhN0t1UW9D?=
+ =?utf-8?B?aFZncjdiWEJEd0tsVXNENkMvbHVqdCtlYlF1SDBBR1dIUkR2aUhkNDdOcVFu?=
+ =?utf-8?B?STZqeUlPdS82SEVQUk5zREVuOWlkRDg3M3h5UEJOQmdwWVBzR25mQzhxeXVH?=
+ =?utf-8?B?Y2djc05uTE9ETGlDc2c1VFJLdVMvbisxTTlsYU05anByYVVxOTVvRmc4Z2tD?=
+ =?utf-8?B?dGYrQ2s3anNOZkZ0RnYzQXVPV2xoQzBVaUFwSWhheUYvUlc1V3lrNmFIWWgz?=
+ =?utf-8?B?RnpQTm5Sc05XZFJNaWNWWE13MUxTUmxTSTkxT1BGejNzc2tmQlJzYmR1aHIy?=
+ =?utf-8?B?bWRvUWo2d0NlQnpPemk0bnorWTR5NG1NSEUxdnpMcFZLd3RJaFBGTW11WFJj?=
+ =?utf-8?B?aEhsbURlRHJFOE1ZZDRKVVBBRHVLd1V1eFhDUmNXQ1NQTC9QczhZdU9WaWcz?=
+ =?utf-8?B?Ri90YjRzN2NSM0VOOXpMVHdaOXNLRHYreGlCSkRtQTVDS1JMaklTdHNzZHJB?=
+ =?utf-8?B?b0EvclZhRXdOeWEvS2ZLL2xGeUVHbHg1a2JhVW55aWJWMVJHOVI3WEhRcEFI?=
+ =?utf-8?B?MXN5Wmc3QnZ2R0x2S0dvMFVndTlySTY1cXVkUFJwSmZGMzBBazZwbklxNDZs?=
+ =?utf-8?B?NnNLSTFDUDlqSTJSdUZvTGp2d2QwUDFxank0cWl5NHZsVTNrQUk5UlNaOFBx?=
+ =?utf-8?B?ZjF0dVFHL0FGTEJlYWtBRml5S3lwbEJkTDAzVys1Vi85T3lGR1I3NjFlazdK?=
+ =?utf-8?Q?HbtUt8DkKNrpbgEHb6L7JajZI0MRu2/DCmVHibOUc0hOM?=
+X-MS-Exchange-AntiSpam-MessageData-1: L3Nc9V6Iht87qsFiSAthmT9aEaRzf/LFGeg=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ae15881-d06f-411e-c577-08de709f8b72
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2026 16:46:07.6730
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cGwlmddCCz6d6fDKQrMJ1QFQtX+DiMpYh7vRCI9otdyyk/cBQanHL64h7qo621J9PHHtudGpuBOM9t/+OEESVnj8sNklrczF6aR3VsawrqM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB11132
 
+The first patch allows to join pid namespace before pid namespace init
+is created, that allows to create pid namespace by one process and then
+create pid namespace init from another process after setns(). Please see
+the detailed description in the patch commit message.
 
+The second patch is a comprehansive test, which tests both basic usecase
+of creating pid namespace and init separately, and a more specific
+usecase which shows how we can improve clone3(set_tid) usability after
+this change.
 
-On 2026/2/20 01:47, Alexei Starovoitov wrote:
-> On Thu, Feb 19, 2026 at 6:30 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> Implement JIT inlining of the 64-bit bitops kfuncs on x86_64.
->>
->> bpf_rol64() and bpf_ror64() are always supported via ROL/ROR.
->>
->> bpf_ctz64() and bpf_ffs64() are supported when the CPU has
->> X86_FEATURE_BMI1 (TZCNT).
->>
->> bpf_clz64() and bpf_fls64() are supported when the CPU has
->> X86_FEATURE_ABM (LZCNT).
->>
->> bpf_popcnt64() is supported when the CPU has X86_FEATURE_POPCNT.
->>
->> bpf_bitrev64() is not inlined as x86_64 has no native bit-reverse
->> instruction, so it falls back to a regular function call.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  arch/x86/net/bpf_jit_comp.c | 141 ++++++++++++++++++++++++++++++++++++
->>  1 file changed, 141 insertions(+)
->>
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 070ba80e39d7..193e1e2d7aa8 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
->> @@ -19,6 +19,7 @@
->>  #include <asm/text-patching.h>
->>  #include <asm/unwind.h>
->>  #include <asm/cfi.h>
->> +#include <asm/cpufeatures.h>
->>
->>  static bool all_callee_regs_used[4] = {true, true, true, true};
->>
->> @@ -1604,6 +1605,127 @@ static void emit_priv_frame_ptr(u8 **pprog, void __percpu *priv_frame_ptr)
->>         *pprog = prog;
->>  }
->>
->> +static bool bpf_inlines_func_call(u8 **pprog, void *func)
->> +{
->> +       bool has_popcnt = boot_cpu_has(X86_FEATURE_POPCNT);
->> +       bool has_bmi1 = boot_cpu_has(X86_FEATURE_BMI1);
->> +       bool has_abm = boot_cpu_has(X86_FEATURE_ABM);
->> +       bool inlined = true;
->> +       u8 *prog = *pprog;
->> +
->> +       /*
->> +        * x86 Bit manipulation instruction set
->> +        * https://en.wikipedia.org/wiki/X86_Bit_manipulation_instruction_set
->> +        */
->> +
->> +       if (func == bpf_clz64 && has_abm) {
->> +               /*
->> +                * Intel® 64 and IA-32 Architectures Software Developer's Manual (June 2023)
->> +                *
->> +                *   LZCNT - Count the Number of Leading Zero Bits
->> +                *
->> +                *     Opcode/Instruction
->> +                *     F3 REX.W 0F BD /r
->> +                *     LZCNT r64, r/m64
->> +                *
->> +                *     Op/En
->> +                *     RVM
->> +                *
->> +                *     64/32-bit Mode
->> +                *     V/N.E.
->> +                *
->> +                *     CPUID Feature Flag
->> +                *     LZCNT
->> +                *
->> +                *     Description
->> +                *     Count the number of leading zero bits in r/m64, return
->> +                *     result in r64.
->> +                */
->> +               /* emit: x ? 64 - fls64(x) : 64 */
->> +               /* lzcnt rax, rdi */
->> +               EMIT5(0xF3, 0x48, 0x0F, 0xBD, 0xC7);
-> 
-> Instead of emitting binary in x86 and arm JITs,
-> let's use in kernel disasm to check that all these kfuncs
-> conform to kf_fastcall (don't use unnecessary registers,
-> don't have calls to other functions) and then copy the binary
-> from code and skip the last 'ret' insn.
-> This way we can inline all kinds of kfuncs.
-> 
+This is generally useful as it makes clone3(set_tid) more universal, and
+work in all the cases evenly. Also is highly useful to CRIU to handle
+nested containers.
 
-Good idea.
+This series is also available here:
+https://github.com/Snorch/linux/commits/allow-creating-pid-namespace-init-after-setns/
 
-Quick question on “in-kernel disasm”: do you mean adding a kernel
-instruction decoder/disassembler to validate a whitelist of kfuncs at
-load time?
+Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
 
-I’m trying to understand the intended scope:
+Pavel Tikhomirov (2):
+  pid_namespace: allow opening pid_for_children before init was created
+  selftests: Add tests for creating pidns init via setns
 
-* Is the expectation that we add an in-kernel disassembler/validator for
-  a small set of supported instructions and patterns (no calls/jumps,
-  only arg/ret regs touched, etc.)?
-* Or is there already infrastructure you had in mind that we can reuse?
+ kernel/pid.c                                  |  10 +-
+ kernel/pid_namespace.c                        |   9 -
+ .../selftests/pid_namespace/.gitignore        |   1 +
+ .../testing/selftests/pid_namespace/Makefile  |   2 +-
+ .../pid_namespace/pidns_init_via_setns.c      | 238 ++++++++++++++++++
+ 5 files changed, 249 insertions(+), 11 deletions(-)
+ create mode 100644 tools/testing/selftests/pid_namespace/pidns_init_via_setns.c
 
-Once I understand that piece, I can rework the series to inline by
-copying validated machine code (minus the final ret), rather than
-emitting raw opcodes in the JITs.
-
-I also noticed you mentioned a similar direction in "bpf/s390: Implement
-get_preempt_count()" [1], so I’ve added Ilya to the thread to discuss
-this approach further.
-
-[1]
-https://lore.kernel.org/bpf/CAADnVQKSMCohZy_HZwzNpFfTSnVu7rfxgmHEDgT9s28XxcDS5g@mail.gmail.com/
-
-Thanks,
-Leon
+-- 
+2.53.0
 
