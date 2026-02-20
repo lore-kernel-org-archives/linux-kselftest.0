@@ -1,220 +1,171 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CB132E141
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 05:55:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0620322A;
+	Fri, 20 Feb 2026 06:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771566923; cv=none; b=Q4cJAQnlde1cQrbsbdsqL+ZHBefrZNffCwzXqkcEZOls7lVsRjFCmjm85vdOtVT0cAAI0ITK46hVPp5kKQsUdqgWH63BzRvGlS5oYHdQfncVxyefD9FgWsimnt0XR8XvNTSkP+aq8Zh631XZFGrH0JNmr1OEYDbZuJA28JV342k=
+	t=1771569299; cv=none; b=I+vDBYvbK/KuUUM4ipG/uMJM8yIIF1TZyxiErSgP0IZZuIniO0jdtJxpuNiss/L+xNdOk8Q30IgVx5n6o/4OvFcDlNM3MSbUUocuq66wvV953UqIcdltDCOmQKDFzNjV04PQLAcnjsyEfUcjvp4IitvpNaRq+FS7M4c872m2M0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771566923; c=relaxed/simple;
-	bh=ymKrZvnn1wXoX3MO7tLDPSCDvegTjqhP4f2VwqTSGPs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=J+IyoDGa4o8UfQAmGh5N2TIa7DgpTgNHIKVJMKaNK3lusKcatZVbcblFJHv8hPt9isiAW2ouMg2ZYOsT0fy0HqBeE8z434TLZ78JtYYEryi402QTsBu7ia5c+1Q5na8EERdA3bez/QFp7u6RJ81WsC5EDtN/oba4GsvOZjoyJks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XvvK9z35; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+	s=arc-20240116; t=1771569299; c=relaxed/simple;
+	bh=jcRFhBKmpxrt8/eYhbeF09z16jzOHC4vUYCwKmlwxbw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aMWrpTVIkE4fh7YyBfuWt5y22WUga/qLjI5UDxa8+oIfGzFq3i2N3jBKGWKd9BsDp3AvCNL2wOnUBOvxWklpY3yWNWVr3jpXB66fcKAsF9dWRpS0D1RyZjir/QLoRiJGZ7aZMTDnIo57IBmHZZCSv+fl/poOa+Br04MRQqcpi6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gn1ferNn; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XvvK9z35"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35621cea097so1068542a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 21:55:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771566922; x=1772171722; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VLezOUj++5KtU+iy76kNFYSHOIOxW3z9n/oglLgyr0s=;
-        b=XvvK9z3505mugn+OFk5vRK0PeXyyHS3SoBc1LZPu+8cqwFxy9MMW+kYvNulm3BBOJ6
-         DiNn37woVS2EsgwigDMLm2kWjN8FF96sEeRnpGRSxKfRX5cl3lH8FeLpcgCzrEx3vmys
-         k5lQ4+OC3W+VO8b0eNBaLHkXB8v3gXR+ASkhQdFB4AXPcljgSr3U8wKo1551VH0kGWhJ
-         0riqvduSIVwYi7le9CrsKhf1mSVsNwUpZVcHLIo8jzqwCmcnSQmYidbwJWxA571zCaAL
-         Ea4kqJag7fOCtinNADc+e45trP6k9bOYUtjJWfVqSbfh9BejsYdEGtJKauCOwlektk3e
-         uLNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771566922; x=1772171722;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VLezOUj++5KtU+iy76kNFYSHOIOxW3z9n/oglLgyr0s=;
-        b=km2GK+Xaztmu1Z+9HqFmYGiRgqMpS5sMILeEZJs5Y9u7tiL0I63kSZVs9uKNRzzcKM
-         ls1tFxupTwiGMDsuqxuKrGsk36u4RiAcA0QHS5VrXBI3QfJ32l5UG8p7s7Pm0vHKO3Yr
-         IMpLeDEzEuABXZLKbMWprRotGLr0oglMkdLhvNd6YaNfCRs57pGICKEUafHvBQ3PkPdp
-         EbSAVLuLt6ZN6Uae1FvM5sVmnmwfVOAiY93+Ahqmcjl8CwZdUTZ6tdyybAm6aEbS6hG/
-         h0qbTSXbmEso/tK3/NMH4COqDxNj8Ak8a79KOcJpt+KRhjJ9M6xh4uWczxpAc9iHTtPk
-         to2w==
-X-Forwarded-Encrypted: i=1; AJvYcCW2UCgJrLEZBaaM++QhtlZsNhz9IhpnV9zO5Rcuh2nHpVVrc6d2uZelwfnYH8dL0QhDDCQb3aeFwQ8ui9t7Rsg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMjHHg1d6XPmKbNPVd8UITvNXLKm9iSo/pQ4QtNGZ8MgNJ6kMa
-	CtSrBF0qqNs9YhTpdbs6lrcRfXUm4UsGAR0rvkI0PasO1oyfrk6Fu3YPgKbinM3I8pPgSGVEobc
-	MawEElyJyp+cOMjOi2w==
-X-Received: from pjmm7.prod.google.com ([2002:a17:90b:5807:b0:349:8a6d:dfd1])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:274c:b0:343:c3d1:8b9b with SMTP id 98e67ed59e1d1-35844f85b15mr17487949a91.19.1771566921614;
- Thu, 19 Feb 2026 21:55:21 -0800 (PST)
-Date: Thu, 19 Feb 2026 21:54:48 -0800
-In-Reply-To: <20260220055449.3073-1-tjmercier@google.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gn1ferNn"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61JKdbi31271172;
+	Fri, 20 Feb 2026 06:34:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=NzL2GO
+	FdTGigo5lRA4Nbr0a7EdpbCkmRbPJyX9DjPig=; b=gn1ferNnsRudTICjFwkpcG
+	m/weMlxHqoc6UWMyPy7er4ufmjhV7sSKg0Ff46OVP0iZ+d+cmUmCo2CiPXsVSW8T
+	qbEq6KZYOhXcxPVWBkXUIQgSReqZsMyxfTpCdAiDhZ5unUFkfsCZCAVGCqOc9H4E
+	i2TERrAIp8mYgF2IichdbkFSbwHFeYm281I0Lm6uH6wgR3VZQXu0cG+nQB0eCihc
+	3P2th9QJOBekeiEJdXLSOawSBFT3h1u8/HLJbk0tvPbg5Q/yJ0CJ1Pm4MCRQPZaW
+	/Tyrs44ErIBf+2Wo0lO3CYBxnzR327UICUstlcP1bqh0euzgrgpFpMWe1yDHGlGA
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4caj4kra16-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Feb 2026 06:34:44 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61K4GbsM030711;
+	Fri, 20 Feb 2026 06:34:43 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ccb45fbt5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Feb 2026 06:34:43 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61K6YgZq51708314
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 20 Feb 2026 06:34:42 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0B88720043;
+	Fri, 20 Feb 2026 06:34:42 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7CA6E20040;
+	Fri, 20 Feb 2026 06:34:40 +0000 (GMT)
+Received: from [9.43.64.63] (unknown [9.43.64.63])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 20 Feb 2026 06:34:40 +0000 (GMT)
+Message-ID: <83243860-4c05-4a16-aeb2-7cc07fa1252e@linux.ibm.com>
+Date: Fri, 20 Feb 2026 12:04:39 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260220055449.3073-1-tjmercier@google.com>
-X-Mailer: git-send-email 2.53.0.414.gf7e9f6c205-goog
-Message-ID: <20260220055449.3073-4-tjmercier@google.com>
-Subject: [PATCH v4 3/3] selftests: memcg: Add tests for IN_DELETE_SELF and IN_IGNORED
-From: "T.J. Mercier" <tjmercier@google.com>
-To: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, jack@suse.cz, amir73il@gmail.com, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc: "T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/bpf: test accounting of tail calls when prog is
+ NULL
+To: Ilya Leoshkevich <iii@linux.ibm.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, linux-kselftest@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>
+References: <20260216090802.1805655-1-hbathini@linux.ibm.com>
+ <4085b3b0-3f3f-4d4c-8b10-78d144ed0883@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <4085b3b0-3f3f-4d4c-8b10-78d144ed0883@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIwMDA1MiBTYWx0ZWRfX1zxgThUJFmuQ
+ y/+QtLX6XIAv1YXcUwljg2z0cdUsQJkEcOjLRdQGSrCu6/r9iynUa8HhShzHZfFZVJMnZW8MgQS
+ 4Uk8oaUa0MrVJ90LyQJnN7lFKnRs8/9tELF+R4k1Wh9vvhv4kucl+cmKvWbseU2oj/d5Ru6ysZL
+ 4lBMuCVaKI0wgsu4qAMtnyy7cSRb+mqjo5e8+gTaq4JbFzHkiKkhe350n1dadbXdLrw4vMci8ej
+ kmGLPUn9EbUeU9ym1EVJ52eAzuWQJehU5JBxwtZZ4Sdw4uihi6pUviXfek1UVeLxZGaUvAGCYRQ
+ c77AtRVkgL/p8jfjheokQfsZqi471lnDGG/pQ2kJAsuJV3NEvrYO4UVojXYiMzp+/z/6PzfYQPO
+ MxGNxEDyOsHgP9ZKyFO+QCnkrSsRn5J4wn2AuSmtB5Z2GmDmhYGCHP10UIGT2E2wQ/NGQA8ZJPD
+ z4XrdW4f2yVbGvtpG3Q==
+X-Proofpoint-ORIG-GUID: 960GySMTQiB8PS3P6cKv-r31fTILX4Kx
+X-Proofpoint-GUID: 960GySMTQiB8PS3P6cKv-r31fTILX4Kx
+X-Authority-Analysis: v=2.4 cv=M7hA6iws c=1 sm=1 tr=0 ts=69980084 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=5pFfz3ocJ-uwvMfrsKAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-19_06,2026-02-20_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 adultscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602200052
 
-Add two new tests that verify inotify events are sent when memcg files
-or directories are removed with rmdir.
 
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Acked-by: Amir Goldstein <amir73il@gmail.com>
----
- .../selftests/cgroup/test_memcontrol.c        | 112 ++++++++++++++++++
- 1 file changed, 112 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 4e1647568c5b..57726bc82757 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -10,6 +10,7 @@
- #include <sys/stat.h>
- #include <sys/types.h>
- #include <unistd.h>
-+#include <sys/inotify.h>
- #include <sys/socket.h>
- #include <sys/wait.h>
- #include <arpa/inet.h>
-@@ -1625,6 +1626,115 @@ static int test_memcg_oom_group_score_events(const char *root)
- 	return ret;
- }
- 
-+static int read_event(int inotify_fd, int expected_event, int expected_wd)
-+{
-+	struct inotify_event event;
-+	ssize_t len = 0;
-+
-+	len = read(inotify_fd, &event, sizeof(event));
-+	if (len < (ssize_t)sizeof(event))
-+		return -1;
-+
-+	if (event.mask != expected_event || event.wd != expected_wd) {
-+		fprintf(stderr,
-+			"event does not match expected values: mask %d (expected %d) wd %d (expected %d)\n",
-+			event.mask, expected_event, event.wd, expected_wd);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int test_memcg_inotify_delete_file(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *memcg = NULL;
-+	int fd, wd;
-+
-+	memcg = cg_name(root, "memcg_test_0");
-+
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	fd = inotify_init1(0);
-+	if (fd == -1)
-+		goto cleanup;
-+
-+	wd = inotify_add_watch(fd, cg_control(memcg, "memory.events"), IN_DELETE_SELF);
-+	if (wd == -1)
-+		goto cleanup;
-+
-+	if (cg_destroy(memcg))
-+		goto cleanup;
-+	free(memcg);
-+	memcg = NULL;
-+
-+	if (read_event(fd, IN_DELETE_SELF, wd))
-+		goto cleanup;
-+
-+	if (read_event(fd, IN_IGNORED, wd))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
-+static int test_memcg_inotify_delete_dir(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *memcg = NULL;
-+	int fd, wd;
-+
-+	memcg = cg_name(root, "memcg_test_0");
-+
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	fd = inotify_init1(0);
-+	if (fd == -1)
-+		goto cleanup;
-+
-+	wd = inotify_add_watch(fd, memcg, IN_DELETE_SELF);
-+	if (wd == -1)
-+		goto cleanup;
-+
-+	if (cg_destroy(memcg))
-+		goto cleanup;
-+	free(memcg);
-+	memcg = NULL;
-+
-+	if (read_event(fd, IN_DELETE_SELF, wd))
-+		goto cleanup;
-+
-+	if (read_event(fd, IN_IGNORED, wd))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (fd >= 0)
-+		close(fd);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct memcg_test {
- 	int (*fn)(const char *root);
-@@ -1644,6 +1754,8 @@ struct memcg_test {
- 	T(test_memcg_oom_group_leaf_events),
- 	T(test_memcg_oom_group_parent_events),
- 	T(test_memcg_oom_group_score_events),
-+	T(test_memcg_inotify_delete_file),
-+	T(test_memcg_inotify_delete_dir),
- };
- #undef T
- 
--- 
-2.53.0.414.gf7e9f6c205-goog
+On 17/02/26 6:23 pm, Ilya Leoshkevich wrote:
+> 
+> On 2/16/26 10:08, Hari Bathini wrote:
+>> Test whether tail call count is incorrectly accounted for, when the
+>> tail call fails due to a missing BPF program.
+>>
+>> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+>> ---
+>>
+>> - powerpc64 BPF JIT has been incorrectly accounting for tailcall count
+>>    even when BPF program to tailcall into is missing. A simple change
+>>    to one of the tailcall selftests could have flagged it earlier.
+>>
+>>      https://lore.kernel.org/all/20260216065639.1750181-2- 
+>> hbathini@linux.ibm.com/
+>>
+>>   tools/testing/selftests/bpf/progs/tailcall3.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/ 
+>> testing/selftests/bpf/progs/tailcall3.c
+>> index f60bcd7b8d4b..204f19c30a3e 100644
+>> --- a/tools/testing/selftests/bpf/progs/tailcall3.c
+>> +++ b/tools/testing/selftests/bpf/progs/tailcall3.c
+>> @@ -5,7 +5,7 @@
+>>   struct {
+>>       __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+>> -    __uint(max_entries, 1);
+>> +    __uint(max_entries, 2);
+>>       __uint(key_size, sizeof(__u32));
+>>       __uint(value_size, sizeof(__u32));
+>>   } jmp_table SEC(".maps");
+>> @@ -23,6 +23,9 @@ int classifier_0(struct __sk_buff *skb)
+>>   SEC("tc")
+>>   int entry(struct __sk_buff *skb)
+>>   {
+>> +    /* prog == NULL case */
+>> +    bpf_tail_call_static(skb, &jmp_table, 1);
+>> +
+>>       bpf_tail_call_static(skb, &jmp_table, 0);
+>>       return 0;
+>>   }
+> 
+> Seems like the x86_64 JIT passes this already, but the interpreter still 
+> has:
+> 
+>          if (unlikely(tail_call_cnt >= MAX_TAIL_CALL_CNT))
+>              goto out;
+> 
+>          tail_call_cnt++;
+> 
+>          prog = READ_ONCE(array->ptrs[index]);
+>          if (!prog)
+>              goto out;
+> 
+> Should it be changed too? Regardless:
 
+Yeah, I guess. Posted 
+https://lore.kernel.org/bpf/20260220062959.195101-1-hbathini@linux.ibm.com/
+
+> 
+> Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
+
+Thanks, Ilya.
+
+- Hari
