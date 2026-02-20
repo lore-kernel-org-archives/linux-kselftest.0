@@ -1,424 +1,187 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6961B366817
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 18:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549893161BE
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 19:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771612893; cv=pass; b=EJ7rDWtCM5/E35+VdfBDvCKBchVja05VETqc5GOSYd0aljpTkzUsaolavk85xpnL5Ld1gKQY59wyrUtO/efwp7edLAMP9a3y8/ID6k82EeZtSRgeZ5nSaekO9/TSYlXVteFaL7x9xudo9nrMzVwru8SQ2WVgNOiUB8wqVCwd21Y=
+	t=1771614230; cv=pass; b=J0qZIHuOqu9/PT5uzpWko10bC3CvV41tNbBp+3g/lBBjtGMeG1iKRj4XxUEDGywz4cwNfsVofaTGhetNugi3NhPJOAqskhtDP9zDRedhNT29BT0OBd+hBgSlRNmrbsCgJxn5iVkOKEzFG86pPaHuuffHtqmqmUTe3s2esT9ooBg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771612893; c=relaxed/simple;
-	bh=jGWN+2KRz9O+H0665WvpQ52Kq/1J8TPaBwHG/SF4ULQ=;
+	s=arc-20240116; t=1771614230; c=relaxed/simple;
+	bh=XUamG8pxMZfQQBQ8tt/1daaovPkkzl+bwqT9M55iAqc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eQaWAcf4e56ueRf0FAwKMoTFi2hocESn0H/DEZsWtRgw4y6oTFH84qqLOLnpNZWL4+X4rQ5UaprKAKuyVm6bC0FA0lYpXzwyJziwFiyjIVQdHqR8SLbwbQXet6IlNk8QwOJMrgAKljg0FL1Rg4uEE9u2rdRG4MCCciq2KbiFpbY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ee4LIvT7; arc=pass smtp.client-ip=209.85.128.42
+	 To:Cc:Content-Type; b=bH95hRXsBAEu2i/4HePP1l6XqZmnPvZfRPD0V3c2hJgLDrmNGyv1ZLuFleLJT2Ha2eXStfPaWBvEYKLLwMj/OTzDp376rygWycMBn7QQRyYaAdZo+T2UJYHrFWfmRFv+l1MGI4w+8fmSfaeEoybHxglKsXyXoqMVmWDLeYSTPp8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FMxVguAz; arc=pass smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ee4LIvT7"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48318d08ec2so4225e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 10:41:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771612888; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FMxVguAz"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-59b672f8ec4so2386948e87.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 11:03:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771614227; cv=none;
         d=google.com; s=arc-20240605;
-        b=AU5GvzgwaSzslVLns1PsRSsq4xRNL5tivkK0B9LlEdtC+o2izatqfaY1FxIl6gFmPo
-         mAyHLZ9XZk8sO14lzIGJkSb14wYgqtW7GtPJrAnfSZ9tsRYtQXjWk3AnAe3LqOJlcCt0
-         yn4mdfBa7ULlGtqAh23YbZzhA8IIfMuGXup05kG07mH6mcUVj0k05GQBS7342mILwLtv
-         usNP8Eg5ec5MJRGtehjHKkgOk6XnbKv/wIbiZAlV5hI5Zez716LOrl/w7X1CqfAO+iTo
-         EYqJ3Ec0S3mZi94vLrk43FnR1gXF/pzL3lPtKIF+4fEg6urKBSwNUTyvEYZcg83XmM9R
-         kNEA==
+        b=GyZwzBuWU3wzPTUUvezNPgf/KlQDz2nBrodyeV/wQo55Qe40Y84uQWTXo5041oIIgf
+         S1FOsj8l7uJC8dBg6OPt95COwWvC3ticITlZVOqWl4W8979+pJOph0bmn9Mvkt2P2uKD
+         JlMsrSWUGC5RpRWKHdDtw6YGOMniXXM5kDwy7KeNl/maXpOWjSjpSMffwP74WeIE8C3R
+         XwdWa9++vMuvJYZzX81SVl1iFaO8kepayu9WiYMWyuTpMI+lqg+Qm8HMRqnMBKcHPUCa
+         5hDjswdXdKpwcOU7r8PK8kkzdIibbDk/3uGwPjmR4nbEN7v1CCI5jagio96NDJe9rbWd
+         XzpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=9zD91sZr4vtMf1I/t0ZYhRV7PHrn122EkGjmR8qVtO4=;
-        fh=wn8U7+MoDAjhMbn5aB0RZKef7loQxIlNHIUr0QaGnm4=;
-        b=NNeVTBn/EmFSA1J0IaZ2g2yk+A4zT/hLOVJKlH2ATKmWmtjM3gXS7KwpUkik/a99bx
-         DE3WM7loiTUyzbXpiasrB8uFjZsnvBFoYhOMKtZM0uuKFmqZ1tNQq+apTDB8rljQwhtG
-         v3FrEoICQS3U1jP0ApAHc7MfymUDu06PIO7zdCdjOFM4ICNvSFzOFv8S0MxYZoTHWQ/V
-         6S/0FCUcburbp8CT0qLOn0C99GRfebvZ+qRcKZSDrLPtoffFn4iGHTSuKlx4KHNCwcDO
-         UHNhsrGxJO4hAxfddInVxWCIKQNnzSCSTUiTssiiygRmuyzPsRvE9iT2YRAe447UYjp1
-         P6Fw==;
+        bh=Nos4S2W/MH7DucXly1ylwYhWrSc0JMSiOmM7eQ5L0v0=;
+        fh=xuut+g9xNw5VAfYMoUj6rEWkmP1NBZ9mUDckB/sYI9M=;
+        b=bnMLFAB5f5DexXerKlm73r9q7jS4+widM8XTfGbkW6rmo0pNobVCOs4tRDCtSSBFwv
+         e8/c+PE0LWOFaWfn4ZPpYlL7xeBQb4WsH7oEylJaGl5f0v5ClE3YGq49dlaBcXaJHuKg
+         ooI/sTpzIsHvOXWfykUyn03JfMpzAwaKF/qcG5Vmz4ZKtG2BctlwosOBOZdr919If17O
+         NLa5le7wFCP3Nt7y8y+nEoEp+xhuX1AgyhSnjxhgbY91bGSDwWCq1EhAU0FbsuQsEu37
+         WX/tU9UC0xoGasGjrEGYz1Vy6yNbFu0uMAFIoTJr0KRj0ukn1bd98Z0wqbnhnY+bjFWG
+         yfBg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771612888; x=1772217688; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771614227; x=1772219027; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9zD91sZr4vtMf1I/t0ZYhRV7PHrn122EkGjmR8qVtO4=;
-        b=Ee4LIvT70RK3IL0VC7Xg/fpcY+vO7dwu3hNsTLwBiEV8lzX00OGSFKJsMLrgdSC4iJ
-         jkiJ9wCErBPg3oXaA6vpyGAR9oMOadMC0/jXwFU0+arVhn0deqlmNKLodfTfbvwRTChM
-         Oc/SzrShLyj20LxdX3UShdCUw3A+pdr2K2l8kOX3eqd3COZa8gnqrlhDDh5d9359DKYg
-         BsqL4TdK57e1ImHvKeSlY+82nXmBV1CGyKrrc0ppHeb6kwhY6SISP2OkMITl2Iabl4C9
-         BkrCyoXiuBkO3DZp+cf9/1WmbAEFqsg7IM85QbjKjr5kFVfhzlSxBRXyjOeOMdiQyB70
-         LQlQ==
+        bh=Nos4S2W/MH7DucXly1ylwYhWrSc0JMSiOmM7eQ5L0v0=;
+        b=FMxVguAz6Q/R1hmgXeSH9QRwrNKbVLRvC+fTcHleXKS+z00fYt4eSpsR5eSdZebl2Q
+         stNtMUUklDPm7LXfZBYfvmbfMH4XSTcw2FaMbs7/rLtm1DVQzKoHoZWDqMIsTB5YoS5L
+         29rvQpnIGVX/9OZjqH27AR+uDyuBE14IFCdBcO9OfwvurN7HwTN4P06RxzAcFSNAOuuZ
+         qWtARLGRmW4OS9MzRAGi7qbYS0uSz1q/JXfGfFaZFFaSyxfK4f6zmDMvnXsmHrwBRa6X
+         k+8p4GbXaEtr68I3ZjPAsHRbpcsb5tVBURaWON2qi1dPvIfLgZxFs1qy1WDCZUSI/1nX
+         h6Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771612888; x=1772217688;
+        d=1e100.net; s=20230601; t=1771614227; x=1772219027;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=9zD91sZr4vtMf1I/t0ZYhRV7PHrn122EkGjmR8qVtO4=;
-        b=WXRU9C5N/AJvf/WigSkARQ6iEVYoCebif/s8FKqYHqsgWbZURKbsZFmo6Vs5i/SePF
-         Q2KuZIDwL7XqbtZteiyIAo5Fz05fdnoX1jkiKRFHJTuz5GQ9FZj0C7KDRthhC+b5AGU/
-         JLzPUaENO50/RqHCFfnxKV82F9SUwstIHG47ohey1pOn0/bjZbR8xsUu1y3Mkv/MsRyc
-         +aEqIUmO3yRZCcT3DnByZgudGAoYvwErzOUv7rGc9mQaPYiRqvLyQcbG/79s7CGMpJ1R
-         23mrUYkF/yiKHPA2+gnNlBncL6Uxj8a4JiXZh1DTSxLTEWtXl+jjm1zlJg55bm9JCN/j
-         9snQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUwoOFzat/I1R80PVLZ+hBedz8ggjGUg3oA5gaUrYkiYd9bprwoGvW/IR1msBnyXpl2ZeTOJHsGTRGC/sNIhwQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbBkLFbolkcd/b4nLcvV6cWPfEfz30UI8Nf33UEmo2/tvKhyqp
-	8bFDZtP+PFZfhRQRIY7sHcXbynGrfcrLuG/MePF/LPwNF10/8jYYI+rp/2HonviArWFpLb3Q0l6
-	W6ownpbfzErjerKnZDCDs69aYrsDgp4buJzuO9Ha3
-X-Gm-Gg: AZuq6aIO5UD03pNPz1U78HsPXEymmCUF9M6a5PfQDPgCEuGSlMVoeV/hioB6fQQcv0X
-	ECjEeeTp8SR6t7gudHifWgOsIRSpM7CHTl8LcH5KUtsJRerEQojf9PgheC57EYHTUEWVFydaHTE
-	maHkU8R+DsHUReDmDZR2dGEUkQCGI57jDTVtHuAU00gsp1yVEByiuraAMRfVGXcxC6cuIRH8eLf
-	2aj4k+Mx3RR6EucQoOqd86JTQURCJ9WPlyx63CHENQAJ0zmkrwY5vI8K9uE1m/GKhno57IUs0Zc
-	b0sMH4m0i9OEOXAK0frUe4OX+BRYXbTwksYVyQ==
-X-Received: by 2002:a7b:ce83:0:b0:47b:e29f:c63f with SMTP id
- 5b1f17b1804b1-483a9c94b7amr15895e9.11.1771612887389; Fri, 20 Feb 2026
- 10:41:27 -0800 (PST)
+        bh=Nos4S2W/MH7DucXly1ylwYhWrSc0JMSiOmM7eQ5L0v0=;
+        b=ETxXC9BYme9SLmL3icBDfur2C5O3kpGPH/pNcci64gF2AubGVDWC/ZA5u2TMBV6ZfL
+         xjSWeXMDa7swEqsGAXkhmS42ummA47HRjNvZdVQb29UN6izCJrLEz4KbqXF1fpwKNd3a
+         Alirqm23jx6HwTJJrYwZekCRQVB8FUd4REM90kOdGTRQrdzDf01GDQPwj/4P9PpTJCsF
+         HbgWvmiNb1aiW86H/myFvf40vRgwlZMcsmB6tSPwGCUlObC8YPJkmBKAJNGrxIgpMNoZ
+         vt7bxxMsyitcQrpv7JBjf/KQwP06xJAETQwxKY/FGgV9MfWrBVgx+bgUnnxMXDVZCo7F
+         LT9A==
+X-Forwarded-Encrypted: i=1; AJvYcCViyo8PxG6pDYFKQYtZw9n00EWrLCLbo8Ahuo1EDye20vAMp0ws+WM4OK9iODfgrvUMpbv5pazTFJ1gjKDZ24o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNZn8M5o3eRbGKf1FkPd6zXzCoWydY/ze5Tzx61pftoyYVjF9Y
+	PQkR/BuTf34aVWHPVnGP+LvVbk7lp54f4pbv2CvdZeG5ZOPVn4y/YdVdXwemzfnSlGLMh6lRjQ3
+	sCk4QrCJ1c2sSjpGVUzAvZ+XW6WVkXS0pHIgMiP8V
+X-Gm-Gg: AZuq6aIHi9UifF50U+yHPP1McQyQqDwoxYiw0d3l6K2SOkBPP2Mt3V1Bu5M9mBylyrH
+	7EHJivY4l7ZtWLdLUzcYd1WupcZ5IGUjQr8mIU6StNfYGTCaMTenitVR1kclNqee1zozf6L+rfM
+	Y7f8KdpXsFi9JqxAIIu05ZdT9bG/RXitP7wKTf7vxikir/3rR73wGKlgyNY85C+rEC8pzY7JJUl
+	yDbJUuKlY46qiSo9JdBxD+EnOmLW4HbnoP3eH9mRbdw77/gUxb3QNJWGk3J1s1PA8+s7QwihFO1
+	eZf5OIuRWvimoy1LRg==
+X-Received: by 2002:ac2:4c56:0:b0:59f:8546:203c with SMTP id
+ 2adb3069b0e04-5a0ed894dd1mr165159e87.12.1771614226924; Fri, 20 Feb 2026
+ 11:03:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220055449.3073-1-tjmercier@google.com> <699833fc.050a0220.b01bb.0039.GAE@google.com>
-In-Reply-To: <699833fc.050a0220.b01bb.0039.GAE@google.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Fri, 20 Feb 2026 10:41:15 -0800
-X-Gm-Features: AaiRm52d4kAFkoYx2iC9CeE49X0_4sKfZ3IqpWEI6kL-ps7PY6q2ag5O0FgCNOg
-Message-ID: <CABdmKX3jMS5ha2s5FMpnAMW0c9+Wmpmyc+8=D-24KyhVjBJvYg@mail.gmail.com>
-Subject: Re: [syzbot ci] Re: kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED support
-To: syzbot ci <syzbot+cif2121bcf05a8d84e@syzkaller.appspotmail.com>
-Cc: amir73il@gmail.com, cgroups@vger.kernel.org, driver-core@lists.linux.dev, 
-	gregkh@linuxfoundation.org, jack@suse.cz, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	shuah@kernel.org, tj@kernel.org, syzbot@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com
+References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-3-dmatlack@google.com>
+ <44484594-5b5d-4237-993c-ac1e173ad62e@linux.dev> <CALzav=d1ZrHrWd-HhZJ8aY6aqxkBcLoet_5+-LL1mOakVTj6Ww@mail.gmail.com>
+ <7e49472c-4bbc-49fe-92c6-621e4675d882@linux.dev>
+In-Reply-To: <7e49472c-4bbc-49fe-92c6-621e4675d882@linux.dev>
+From: David Matlack <dmatlack@google.com>
+Date: Fri, 20 Feb 2026 11:03:18 -0800
+X-Gm-Features: AaiRm528gVDC51Vc6VmuyDJufgtIlxh6fV-eX6614wdRe-TzmLDadtAg2AEPmi8
+Message-ID: <CALzav=dEykMZGsqz35TgvPqqZZFzG0kqojmry1Ya+Xf+zEgyAg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/22] PCI: Add API to track PCI devices preserved
+ across Live Update
+To: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 20, 2026 at 2:14=E2=80=AFAM syzbot ci
-<syzbot+cif2121bcf05a8d84e@syzkaller.appspotmail.com> wrote:
+On Tue, Feb 3, 2026 at 4:10=E2=80=AFPM Yanjun.Zhu <yanjun.zhu@linux.dev> wr=
+ote:
 >
-> syzbot ci has tested the following series
+> On 2/2/26 10:14 AM, David Matlack wrote:
+> > On Sat, Jan 31, 2026 at 10:38=E2=80=AFPM Zhu Yanjun <yanjun.zhu@linux.d=
+ev> wrote:
+> >> =E5=9C=A8 2026/1/29 13:24, David Matlack =E5=86=99=E9=81=93:
+> >>> Add an API to enable the PCI subsystem to track all devices that are
+> >>> preserved across a Live Update, including both incoming devices (pass=
+ed
+> >>> from the previous kernel) and outgoing devices (passed to the next
+> >>> kernel).
+> >>>
+> >>> Use PCI segment number and BDF to keep track of devices across Live
+> >>> Update. This means the kernel must keep both identifiers constant acr=
+oss
+> >>> a Live Update for any preserved device. VFs are not supported for now=
+,
+> >>> since that requires preserving SR-IOV state on the device to ensure t=
+he
+> >>> same number of VFs appear after kexec and with the same BDFs.
+> >>>
+> >>> Drivers that preserve devices across Live Update can now register the=
+ir
+> >>> struct liveupdate_file_handler with the PCI subsystem so that the PCI
+> >>> subsystem can allocate and manage File-Lifecycle-Bound (FLB) global d=
+ata
+> >>> to track the list of incoming and outgoing preserved devices.
+> >>>
+> >>>     pci_liveupdate_register_fh(driver_fh)
+> >>>     pci_liveupdate_unregister_fh(driver_fh)
+> >> Can the above 2 functions support the virtual devices? For example,
+> >> bonding, veth, iSWAP and RXE.
+> >>
+> >> These virtual devices do not have BDF. As such, I am not sure if your
+> >> patches take these virtual devices in to account.
+> > No this patch series only supports PCI devices, since those are the
+> > only devices so far we've needed to support.
+> >
+> > I am not familiar with any of the devices that you mentioned. If they
+> > are virtual then does that mean it's all just software? In that case I
+> > would be curious to know what problem is solved by preserving them in
+> > the kernel, vs. tearing them down and rebuilding them across a Live
+> > Udpate.
 >
-> [v4] kernfs: Add inotify IN_DELETE_SELF, IN_IGNORED support
-> https://lore.kernel.org/all/20260220055449.3073-1-tjmercier@google.com
-> * [PATCH v4 1/3] kernfs: Don't set_nlink for directories being removed
-> * [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
-> * [PATCH v4 3/3] selftests: memcg: Add tests for IN_DELETE_SELF and IN_IG=
-NORED
+> Bonding, veth, rxe, and siw can be used in KVM environments.
 >
-> and found the following issue:
-> possible deadlock in __kernfs_remove
+> Although these are software-only virtual devices with no associated
+> hardware,
 >
-> Full report is available here:
-> https://ci.syzbot.org/series/4b44d5c2-c2eb-4425-a19a-f9963b64f74f
+> they may maintain state that is observable by userspace.
 >
-> ***
->
-> possible deadlock in __kernfs_remove
->
-> tree:      bpf-next
-> URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/b=
-pf-next.git
-> base:      ba268514ea14b44570030e8ed2aef92a38679e85
-> arch:      amd64
-> compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~e=
-xp1~20251221153213.50), Debian LLD 21.1.8
-> config:    https://ci.syzbot.org/builds/45ab774f-e8d7-4def-8279-888a5cb2d=
-01e/config
-> syz repro: https://ci.syzbot.org/findings/b74cbc6a-1cef-4ae9-be46-dd9e8b2=
-9b648/syz_repro
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> WARNING: possible circular locking dependency detected
-> syzkaller #0 Not tainted
-> ------------------------------------------------------
-> kworker/u8:1/13 is trying to acquire lock:
-> ffff88816ef2b878 (kn->active#5){++++}-{0:0}, at: __kernfs_remove+0x47e/0x=
-8c0 fs/kernfs/dir.c:1533
->
-> but task is already holding lock:
-> ffff8881012e8ab8 (&root->kernfs_supers_rwsem){++++}-{4:4}, at: kernfs_rem=
-ove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
->
-> which lock already depends on the new lock.
->
->
-> the existing dependency chain (in reverse order) is:
->
-> -> #2 (&root->kernfs_supers_rwsem){++++}-{4:4}:
->        down_read+0x47/0x2e0 kernel/locking/rwsem.c:1537
->        kernfs_remove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
->        acpi_unbind_one+0x2d8/0x3b0 drivers/acpi/glue.c:337
->        device_platform_notify_remove drivers/base/core.c:2386 [inline]
->        device_del+0x547/0x8f0 drivers/base/core.c:3881
->        serdev_controller_add+0x46f/0x640 drivers/tty/serdev/core.c:785
->        serdev_tty_port_register+0x159/0x260 drivers/tty/serdev/serdev-tty=
-port.c:291
->        tty_port_register_device_attr_serdev+0xe7/0x170 drivers/tty/tty_po=
-rt.c:187
->        serial_core_add_one_port drivers/tty/serial/serial_core.c:3107 [in=
-line]
->        serial_core_register_port+0x103a/0x28b0 drivers/tty/serial/serial_=
-core.c:3305
->        serial8250_register_8250_port+0x1658/0x1fd0 drivers/tty/serial/825=
-0/8250_core.c:822
->        serial_pnp_probe+0x568/0x7f0 drivers/tty/serial/8250/8250_pnp.c:48=
-0
->        pnp_device_probe+0x30b/0x4c0 drivers/pnp/driver.c:111
->        call_driver_probe drivers/base/dd.c:-1 [inline]
->        really_probe+0x267/0xaf0 drivers/base/dd.c:661
->        __driver_probe_device+0x18c/0x320 drivers/base/dd.c:803
->        driver_probe_device+0x4f/0x240 drivers/base/dd.c:833
->        __driver_attach+0x3e7/0x710 drivers/base/dd.c:1227
->        bus_for_each_dev+0x23b/0x2c0 drivers/base/bus.c:383
->        bus_add_driver+0x345/0x670 drivers/base/bus.c:715
->        driver_register+0x23a/0x320 drivers/base/driver.c:249
->        serial8250_init+0x8f/0x160 drivers/tty/serial/8250/8250_platform.c=
-:317
->        do_one_initcall+0x250/0x840 init/main.c:1378
->        do_initcall_level+0x104/0x190 init/main.c:1440
->        do_initcalls+0x59/0xa0 init/main.c:1456
->        kernel_init_freeable+0x2a6/0x3d0 init/main.c:1688
->        kernel_init+0x1d/0x1d0 init/main.c:1578
->        ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
->        ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
->
-> -> #1 (&device->physical_node_lock){+.+.}-{4:4}:
->        __mutex_lock_common kernel/locking/mutex.c:614 [inline]
->        __mutex_lock+0x19f/0x1300 kernel/locking/mutex.c:776
->        acpi_get_first_physical_node drivers/acpi/bus.c:691 [inline]
->        acpi_primary_dev_companion drivers/acpi/bus.c:710 [inline]
->        acpi_companion_match+0x8a/0x120 drivers/acpi/bus.c:764
->        acpi_device_uevent_modalias+0x1a/0x30 drivers/acpi/device_sysfs.c:=
-280
->        platform_uevent+0x3c/0xb0 drivers/base/platform.c:1411
->        dev_uevent+0x446/0x8a0 drivers/base/core.c:2692
->        kobject_uevent_env+0x477/0x9e0 lib/kobject_uevent.c:573
->        kobject_synth_uevent+0x585/0xbd0 lib/kobject_uevent.c:207
->        uevent_store+0x26/0x70 drivers/base/core.c:2773
->        kernfs_fop_write_iter+0x3af/0x540 fs/kernfs/file.c:352
->        new_sync_write fs/read_write.c:593 [inline]
->        vfs_write+0x61d/0xb90 fs/read_write.c:686
->        ksys_write+0x150/0x270 fs/read_write.c:738
->        do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->        do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
->        entry_SYSCALL_64_after_hwframe+0x77/0x7f
->
-> -> #0 (kn->active#5){++++}-{0:0}:
->        check_prev_add kernel/locking/lockdep.c:3165 [inline]
->        check_prevs_add kernel/locking/lockdep.c:3284 [inline]
->        validate_chain kernel/locking/lockdep.c:3908 [inline]
->        __lock_acquire+0x15a5/0x2cf0 kernel/locking/lockdep.c:5237
->        lock_acquire+0x106/0x330 kernel/locking/lockdep.c:5868
->        kernfs_drain+0x27c/0x5f0 fs/kernfs/dir.c:511
->        __kernfs_remove+0x47e/0x8c0 fs/kernfs/dir.c:1533
->        kernfs_remove_by_name_ns+0xc0/0x140 fs/kernfs/dir.c:1751
->        sysfs_remove_file include/linux/sysfs.h:780 [inline]
->        device_remove_file drivers/base/core.c:3071 [inline]
->        device_del+0x506/0x8f0 drivers/base/core.c:3876
->        device_unregister+0x21/0xf0 drivers/base/core.c:3919
->        mac80211_hwsim_del_radio+0x2dc/0x490 drivers/net/wireless/virtual/=
-mac80211_hwsim.c:5918
->        hwsim_exit_net+0xede/0xfa0 drivers/net/wireless/virtual/mac80211_h=
-wsim.c:6807
->        ops_exit_list net/core/net_namespace.c:199 [inline]
->        ops_undo_list+0x49f/0x940 net/core/net_namespace.c:252
->        cleanup_net+0x4df/0x7b0 net/core/net_namespace.c:696
->        process_one_work kernel/workqueue.c:3257 [inline]
->        process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3340
->        worker_thread+0xda6/0x1360 kernel/workqueue.c:3421
->        kthread+0x726/0x8b0 kernel/kthread.c:463
->        ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
->        ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
->
-> other info that might help us debug this:
->
-> Chain exists of:
->   kn->active#5 --> &device->physical_node_lock --> &root->kernfs_supers_r=
-wsem
->
->  Possible unsafe locking scenario:
->
->        CPU0                    CPU1
->        ----                    ----
->   rlock(&root->kernfs_supers_rwsem);
->                                lock(&device->physical_node_lock);
->                                lock(&root->kernfs_supers_rwsem);
->   lock(kn->active#5);
->
->  *** DEADLOCK ***
->
-> 4 locks held by kworker/u8:1/13:
->  #0: ffff888100ef7948 ((wq_completion)netns){+.+.}-{0:0}, at: process_one=
-_work kernel/workqueue.c:3232 [inline]
->  #0: ffff888100ef7948 ((wq_completion)netns){+.+.}-{0:0}, at: process_sch=
-eduled_works+0x9d4/0x17a0 kernel/workqueue.c:3340
->  #1: ffffc90000127bc0 (net_cleanup_work){+.+.}-{0:0}, at: process_one_wor=
-k kernel/workqueue.c:3233 [inline]
->  #1: ffffc90000127bc0 (net_cleanup_work){+.+.}-{0:0}, at: process_schedul=
-ed_works+0xa0f/0x17a0 kernel/workqueue.c:3340
->  #2: ffffffff8f99d2d0 (pernet_ops_rwsem){++++}-{4:4}, at: cleanup_net+0xf=
-e/0x7b0 net/core/net_namespace.c:670
->  #3: ffff8881012e8ab8 (&root->kernfs_supers_rwsem){++++}-{4:4}, at: kernf=
-s_remove_by_name_ns+0x3f/0x140 fs/kernfs/dir.c:1745
->
-> stack backtrace:
-> CPU: 0 UID: 0 PID: 13 Comm: kworker/u8:1 Not tainted syzkaller #0 PREEMPT=
-(full)
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.=
-16.2-1 04/01/2014
-> Workqueue: netns cleanup_net
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
->  print_circular_bug+0x2e1/0x300 kernel/locking/lockdep.c:2043
->  check_noncircular+0x12e/0x150 kernel/locking/lockdep.c:2175
->  check_prev_add kernel/locking/lockdep.c:3165 [inline]
->  check_prevs_add kernel/locking/lockdep.c:3284 [inline]
->  validate_chain kernel/locking/lockdep.c:3908 [inline]
->  __lock_acquire+0x15a5/0x2cf0 kernel/locking/lockdep.c:5237
->  lock_acquire+0x106/0x330 kernel/locking/lockdep.c:5868
->  kernfs_drain+0x27c/0x5f0 fs/kernfs/dir.c:511
->  __kernfs_remove+0x47e/0x8c0 fs/kernfs/dir.c:1533
->  kernfs_remove_by_name_ns+0xc0/0x140 fs/kernfs/dir.c:1751
->  sysfs_remove_file include/linux/sysfs.h:780 [inline]
->  device_remove_file drivers/base/core.c:3071 [inline]
->  device_del+0x506/0x8f0 drivers/base/core.c:3876
->  device_unregister+0x21/0xf0 drivers/base/core.c:3919
->  mac80211_hwsim_del_radio+0x2dc/0x490 drivers/net/wireless/virtual/mac802=
-11_hwsim.c:5918
->  hwsim_exit_net+0xede/0xfa0 drivers/net/wireless/virtual/mac80211_hwsim.c=
-:6807
->  ops_exit_list net/core/net_namespace.c:199 [inline]
->  ops_undo_list+0x49f/0x940 net/core/net_namespace.c:252
->  cleanup_net+0x4df/0x7b0 net/core/net_namespace.c:696
->  process_one_work kernel/workqueue.c:3257 [inline]
->  process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3340
->  worker_thread+0xda6/0x1360 kernel/workqueue.c:3421
->  kthread+0x726/0x8b0 kernel/kthread.c:463
->  ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
->  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
->  </TASK>
-> hsr_slave_0: left promiscuous mode
-> hsr_slave_1: left promiscuous mode
-> batman_adv: batadv0: Interface deactivated: batadv_slave_0
-> batman_adv: batadv0: Removing interface: batadv_slave_0
-> batman_adv: batadv0: Interface deactivated: batadv_slave_1
-> batman_adv: batadv0: Removing interface: batadv_slave_1
-> veth1_macvtap: left promiscuous mode
-> veth0_macvtap: left promiscuous mode
-> veth1_vlan: left promiscuous mode
-> veth0_vlan: left promiscuous mode
-> team0 (unregistering): Port device team_slave_1 removed
-> team0 (unregistering): Port device team_slave_0 removed
-> netdevsim netdevsim2 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
-> netdevsim netdevsim2 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
-> netdevsim netdevsim2 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
-> netdevsim netdevsim2 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
->
->
-> ***
->
-> If these findings have caused you to resend the series or submit a
-> separate fix, please add the following tag to your commit message:
->   Tested-by: syzbot@syzkaller.appspotmail.com
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+> As a result, Live Update should preserve their state across the update.
 
-Hm, I can see two ways to fix this.
+Sorry for taking so long to get back to you.
 
-The first is to drop the acpi_dev->physical_node_lock mutex in
-acpi_unbind_one before calling sysfs_remove_link. This keeps the node
-ID reserved while the sysfs files are still being removed, so that we
-don't get any sysfs filename collisions (which are based on the node
-ID). This seems like a good optimization to do anyway:
+Userspace should serialize the state of those devices out of the
+kernel, persist it in memory or on disk across Live Update, and then
+recreate it after Live Update.
 
-+++ b/drivers/acpi/glue.c
-@@ -329,18 +329,22 @@ int acpi_unbind_one(struct device *dev)
-        list_for_each_entry(entry, &acpi_dev->physical_node_list, node)
-                if (entry->dev =3D=3D dev) {
-                        char physnode_name[PHYSICAL_NODE_NAME_SIZE];
-
--                       list_del(&entry->node);
--                       acpi_dev->physical_node_count--;
-+                       entry->dev =3D NULL;
-+                       mutex_unlock(&acpi_dev->physical_node_lock);
-
-                        acpi_physnode_link_name(physnode_name, entry->node_=
-id);
-                        sysfs_remove_link(&acpi_dev->dev.kobj, physnode_nam=
-e);
-                        sysfs_remove_link(&dev->kobj, "firmware_node");
-                        ACPI_COMPANION_SET(dev, NULL);
-                        /* Drop references taken by acpi_bind_one(). */
-                        put_device(dev);
-                        acpi_dev_put(acpi_dev);
-+
-+                       mutex_lock(&acpi_dev->physical_node_lock);
-+                       list_del(&entry->node);
-+                       acpi_dev->physical_node_count--;
-                        kfree(entry);
-                        break;
-                }
-
-
-The second is to drop the kernfs_supers_rwsem for the kernfs_drain,
-similar to how the kernfs_rwsem is dropped there. I don't think
-kernfs_supers_rwsem is usually heavily contended, but it's probably a
-good idea to avoid holding it while potentially sleeping in
-kernfs_drain. Since the kernfs_supers_rwsem is only held for
-kernfs_drain in __kernfs_remove (but not kernfs_show) that means:
-
-+++ b/fs/kernfs/dir.c
-@@ -486,7 +486,7 @@ void kernfs_put_active(struct kernfs_node *kn)
-  * removers may invoke this function concurrently on @kn and all will
-  * return after draining is complete.
-  */
--static void kernfs_drain(struct kernfs_node *kn)
-+static void kernfs_drain(struct kernfs_node *kn, bool drop_supers)
-        __releases(&kernfs_root(kn)->kernfs_rwsem)
-        __acquires(&kernfs_root(kn)->kernfs_rwsem)
- {
-@@ -506,6 +506,8 @@ static void kernfs_drain(struct kernfs_node *kn)
-                return;
-
-        up_write(&root->kernfs_rwsem);
-+       if (drop_supers)
-+               up_read(&root->kernfs_supers_rwsem);
-
-        if (kernfs_lockdep(kn)) {
-                rwsem_acquire(&kn->dep_map, 0, 0, _RET_IP_);
-@@ -524,6 +526,8 @@ static void kernfs_drain(struct kernfs_node *kn)
-        if (kernfs_should_drain_open_files(kn))
-                kernfs_drain_open_files(kn);
-
-+       if (drop_supers)
-+               down_read(&root->kernfs_supers_rwsem);
-        down_write(&root->kernfs_rwsem);
- }
-
-@@ -1465,7 +1469,7 @@ void kernfs_show(struct kernfs_node *kn, bool show)
-                kn->flags |=3D KERNFS_HIDDEN;
-                if (kernfs_active(kn))
-                        atomic_add(KN_DEACTIVATED_BIAS, &kn->active);
--               kernfs_drain(kn);
-+               kernfs_drain(kn, false);
-        }
-
-        up_write(&root->kernfs_rwsem);
-@@ -1530,7 +1534,7 @@ static void __kernfs_remove(struct kernfs_node *kn)
-                 */
-                kernfs_get(pos);
-
--               kernfs_drain(pos);
-+               kernfs_drain(pos, true);
-                parent =3D kernfs_parent(pos);
-                /*
-                 * kernfs_unlink_sibling() succeeds once per node.  Use it
+This is why, for example, KVM does not need to direclty participate in
+Live Update. The VMM serializes all KVM state from the kernel, saves
+it, and then constructs a completely new KVM VM after the Live Update
+using that state. KVM will only need to participate in Live Update
+once there is hardware requirement. For example, I believe some of the
+Confidential Computing hardware virtualization extensions require
+certain memory structures used by hardware remain in place and cannot
+be reallocated after Live Update. KVM would have to participate to
+preserve those and reassociate them with the right VM after Live
+Update.
