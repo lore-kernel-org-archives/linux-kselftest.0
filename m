@@ -1,103 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A242A20D4FC;
-	Fri, 20 Feb 2026 15:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BED280318
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 15:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771601571; cv=none; b=oXMinaPxJoREmTS2+L2Sv7nfo94deKzMf/jgdMb3jp6FfQFTJbVC7BK0AGLSrdElYXRjrt04kl7CD4YXsjVir32/TEdF9hbCj1lo8xSMBHdtmc37i4g5PXIMFtTRSQOb2sS9f5l3GoUQ+lNsxnY/JrkbOQlZDtQXWeAHsTBx7oc=
+	t=1771601693; cv=none; b=EQxL9WV4YWcWG8OKR+HWknBGvBmVu+o+F0CwACU95P7e6llyqDaOytUDlMbLZ+2wxSiNNHDeTFg0Lbh4sermMz92jwNIiEO7w4MSbvGsiF1+0rwfvAP2jkx/Qr8FjrZEbn6DxDbma9TqV7oxKZpWLzs/ajulcVuQRVN6me6Vsr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771601571; c=relaxed/simple;
-	bh=fDGKx15Hxqu+IAN7+rfHjM/yq650i7Sc39dis0PLF/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ovF74aNiiPSaa4IHMjhQqwyBf0RaxJM9QYADPxmEW1Zr/iJKApB/NfJDBp23a6hxAyvaCWyvl2m7zbZkylVx71bZr0+Oyk3vi9gn7YJqwXx8mUPZ+eSlSzMxLtl6vX5m55/4YaXPO7AJdM0Vl9zBbIkZ7pBRX1cNYhnOE4GheWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NXNhPjGQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771601693; c=relaxed/simple;
+	bh=pI1O8R9NQmElqnZf7f9jqAr1JKxcuC8TjAmVVLVErWE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kkLV6TEhJ/W65VN7MbhrCdKAhoYNBZ0Ykj1hgkBL3w2178s49V9TqljGhAqvLguUYIw2QXKg5ofJSmAA8PIEJTc6ukABVaQg/Sg5W+PQXsDchOjFFxrlfhV29xQqIzF89M2Geg1g37I5ZPN43CcHhcCo2uF84/ouyvOA6PvBCKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pq1jHNkx; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NXNhPjGQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB33C116D0;
-	Fri, 20 Feb 2026 15:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771601571;
-	bh=fDGKx15Hxqu+IAN7+rfHjM/yq650i7Sc39dis0PLF/g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NXNhPjGQ5QYdl2bepA45yrtfCNKVLOylDAjxOF/AapIKqvwIuSWKCdEnAq/ROa/vL
-	 /vAOR/A2XkzziqUbY0+z5TKG5+JuI6+1iEzQj7RPwwmkYsx3ZkExH2hLM1/tD/Opyj
-	 uc9hwq131dSEDzwcPWTODZ9ToJuWyq2eVltFZ2zczZh5yB3+5zYb+iYTBWilhChA/I
-	 cI78u1BZB8rKMcUhhawofYf8MYo0c0b72ZPffmYlGaXjZC4OcXNKiMfQ/3yQDkcSkh
-	 eALixBppGk8Z5U+FBqU7mq5zsnvO/j40psyEG2XLkL4+ejYhXzDpWfXoJ02gSxvsry
-	 Dmd1AA7UlewNA==
-Date: Fri, 20 Feb 2026 05:32:50 -1000
-From: Tejun Heo <tj@kernel.org>
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: gregkh@linuxfoundation.org, driver-core@lists.linux.dev,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, jack@suse.cz, amir73il@gmail.com,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
-Message-ID: <aZh-orwoaeAh52Bf@slm.duckdns.org>
-References: <20260220055449.3073-1-tjmercier@google.com>
- <20260220055449.3073-3-tjmercier@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pq1jHNkx"
+Message-ID: <e617cdaa-049a-453b-8f52-1966d350f907@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771601679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z943trj5fRXyCPYj1ZkF6pjisLAiil83x3fUBjHtWMM=;
+	b=pq1jHNkxADK2dq95ZhyKT83WWsDHhuAU9Tk7GgkqH3T9xhFYuhT/xltBiGx4vnSB6psZG9
+	mIcOrCU5w+8U9+VIJBy/0AT2mJIzS9OqpoZ7YzjSqS+5FgjD7J4hZ7u7S2FD6sYgP4+qEX
+	ir5KmvMrEex2xcOtCALbiOVA35HY59Q=
+Date: Fri, 20 Feb 2026 23:34:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220055449.3073-3-tjmercier@google.com>
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Introduce 64-bit bitops kfuncs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+ Xu Kuohai <xukuohai@huaweicloud.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ X86 ML <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>,
+ Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com
+References: <20260219142933.13904-1-leon.hwang@linux.dev>
+ <20260219142933.13904-2-leon.hwang@linux.dev>
+ <CAADnVQK=5Gb3w_QG4Vq32EfvpqAK_DPwCHtzzt7DzRkJ5_h6JQ@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAADnVQK=5Gb3w_QG4Vq32EfvpqAK_DPwCHtzzt7DzRkJ5_h6JQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello,
 
-On Thu, Feb 19, 2026 at 09:54:47PM -0800, T.J. Mercier wrote:
-> Currently some kernfs files (e.g. cgroup.events, memory.events) support
-> inotify watches for IN_MODIFY, but unlike with regular filesystems, they
-> do not receive IN_DELETE_SELF or IN_IGNORED events when they are
-> removed. This means inotify watches persist after file deletion until
-> the process exits and the inotify file descriptor is cleaned up, or
-> until inotify_rm_watch is called manually.
+
+On 2026/2/20 01:50, Alexei Starovoitov wrote:
+> On Thu, Feb 19, 2026 at 6:30 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>>
+>> +static bool bpf_kfunc_is_fastcall(struct bpf_verifier_env *env, u32 func_id, u32 flags)
+>> +{
+>> +       if (!(flags & KF_FASTCALL))
+>> +               return false;
+>> +
+>> +       if (!env->prog->jit_requested)
+>> +               return true;
+>> +
+>> +       if (func_id == special_kfunc_list[KF_bpf_clz64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_clz64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_ctz64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_ctz64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_ffs64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_ffs64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_fls64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_fls64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_bitrev64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_bitrev64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_popcnt64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_popcnt64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_rol64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_rol64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_ror64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_ror64);
 > 
-> This creates a problem for processes monitoring cgroups. For example, a
-> service monitoring memory.events for memory.high breaches needs to know
-> when a cgroup is removed to clean up its state. Where it's known that a
-> cgroup is removed when all processes die, without IN_DELETE_SELF the
-> service must resort to inefficient workarounds such as:
->   1) Periodically scanning procfs to detect process death (wastes CPU
->      and is susceptible to PID reuse).
->   2) Holding a pidfd for every monitored cgroup (can exhaust file
->      descriptors).
-> 
-> This patch enables IN_DELETE_SELF and IN_IGNORED events for kernfs files
-> and directories by clearing inode i_nlink values during removal. This
-> allows VFS to make the necessary fsnotify calls so that userspace
-> receives the inotify events.
-> 
-> As a result, applications can rely on a single existing watch on a file
-> of interest (e.g. memory.events) to receive notifications for both
-> modifications and the eventual removal of the file, as well as automatic
-> watch descriptor cleanup, simplifying userspace logic and improving
-> efficiency.
-> 
-> There is gap in this implementation for certain file removals due their
-> unique nature in kernfs. Directory removals that trigger file removals
-> occur through vfs_rmdir, which shrinks the dcache and emits fsnotify
-> events after the rmdir operation; there is no issue here. However kernfs
-> writes to particular files (e.g. cgroup.subtree_control) can also cause
-> file removal, but vfs_write does not attempt to emit fsnotify events
-> after the write operation, even if i_nlink counts are 0. As a usecase
-> for monitoring this category of file removals is not known, they are
-> left without having IN_DELETE or IN_DELETE_SELF events generated.
+> This is too ugly. Find a way to do it differently.
 
-Adding a comment with the above content would probably be useful. It also
-might be worthwhile to note that fanotify recursive monitoring wouldn't work
-reliably as cgroups can go away while inodes are not attached.
+Agreed.
 
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+I'd like to introduce a new flag KF_JIT_MAY_INLINE to indicate the kfunc
+will be inlined by JIT backends if possible. As for those kfuncs w/
+KF_FASTCALL w/o KF_JIT_MAY_INLINE, they are fastcall always.
 
-Acked-by: Tejun Heo <tj@kernel.org>
+Thanks,
+Leon
 
-Thanks.
-
--- 
-tejun
