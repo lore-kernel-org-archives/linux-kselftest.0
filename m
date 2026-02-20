@@ -1,117 +1,103 @@
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1362E20D4FC
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 15:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A242A20D4FC;
+	Fri, 20 Feb 2026 15:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771601430; cv=none; b=GLny3hT7P+jXy0eJ2ZDKAalDZNuQYarnhqTHAigg9H2JirKAGYolDK5OOZBuxkYnZdyWm+ly9hKwW+RoyCrmD5iu9rUBVgFt3UUIgSIILgi4KHFMZg5iRhaGVYeBci9sBUIEr35v5tleOFmkbFNL/7QD7Py08Mprlo/4sZ8jzck=
+	t=1771601571; cv=none; b=oXMinaPxJoREmTS2+L2Sv7nfo94deKzMf/jgdMb3jp6FfQFTJbVC7BK0AGLSrdElYXRjrt04kl7CD4YXsjVir32/TEdF9hbCj1lo8xSMBHdtmc37i4g5PXIMFtTRSQOb2sS9f5l3GoUQ+lNsxnY/JrkbOQlZDtQXWeAHsTBx7oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771601430; c=relaxed/simple;
-	bh=aqCX+kTisIz/XXfBEkpgMnNKTadVmMHan1Q+gHIO+mY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SdX7zA3MXDfvFDMUxXiXUwySME9P0zhYJWWwavSUOdk7y+2gn9vC+1C2L4OAvzOmehrj15a2viIwAw+bc+u2HVbIxNT/K9YnP1CL4I81KStyHMO0x9BkRStwtfcUZB5eFbYnzKig05a7NdmY2GbujqxetI824zhKaipp5AkzJ6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=pc646Dk2; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	s=arc-20240116; t=1771601571; c=relaxed/simple;
+	bh=fDGKx15Hxqu+IAN7+rfHjM/yq650i7Sc39dis0PLF/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ovF74aNiiPSaa4IHMjhQqwyBf0RaxJM9QYADPxmEW1Zr/iJKApB/NfJDBp23a6hxAyvaCWyvl2m7zbZkylVx71bZr0+Oyk3vi9gn7YJqwXx8mUPZ+eSlSzMxLtl6vX5m55/4YaXPO7AJdM0Vl9zBbIkZ7pBRX1cNYhnOE4GheWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NXNhPjGQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="pc646Dk2"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 11AED4432F;
-	Fri, 20 Feb 2026 15:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1771601420;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wt/Ullnpfc3ghlaqaB6HpOfbfhVooeAuBr5LmUyzlC4=;
-	b=pc646Dk2w7nd/XIx1QtoZBkJA96LG1lUBF4Nt3+SgTGkMUEqvbH6MQgZZnWk7Fu91Hu7ov
-	MdrEI7GVd7nzivO2kWsXzvgp0I7CemVP7kE7nTTTcxl1Mek6PXKzM8j0TSnfMyrTjOa4c1
-	Op45bRDzWF/ry4N+sDOPAfjmnuEYml8509z20S5cKKAPfVdZtxsnvL2gnZZixAcny9nA4Q
-	IYN4oBmuH7+aS/J7bQ7IuATduDVBZlD3I1DvblRfMffDua9JzbrmWSv8w7nNmAV1HX6lCb
-	El0tIffgPmuUM8nRxsL3NaiMuOK/ouzpQJcNmwaQ/fHQsZDskFBJWu5J9OLAKA==
-Message-ID: <cb63d5d8-d174-4d65-b5a3-877533f6cbd7@gtucker.io>
-Date: Fri, 20 Feb 2026 16:30:19 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NXNhPjGQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB33C116D0;
+	Fri, 20 Feb 2026 15:32:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771601571;
+	bh=fDGKx15Hxqu+IAN7+rfHjM/yq650i7Sc39dis0PLF/g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NXNhPjGQ5QYdl2bepA45yrtfCNKVLOylDAjxOF/AapIKqvwIuSWKCdEnAq/ROa/vL
+	 /vAOR/A2XkzziqUbY0+z5TKG5+JuI6+1iEzQj7RPwwmkYsx3ZkExH2hLM1/tD/Opyj
+	 uc9hwq131dSEDzwcPWTODZ9ToJuWyq2eVltFZ2zczZh5yB3+5zYb+iYTBWilhChA/I
+	 cI78u1BZB8rKMcUhhawofYf8MYo0c0b72ZPffmYlGaXjZC4OcXNKiMfQ/3yQDkcSkh
+	 eALixBppGk8Z5U+FBqU7mq5zsnvO/j40psyEG2XLkL4+ejYhXzDpWfXoJ02gSxvsry
+	 Dmd1AA7UlewNA==
+Date: Fri, 20 Feb 2026 05:32:50 -1000
+From: Tejun Heo <tj@kernel.org>
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: gregkh@linuxfoundation.org, driver-core@lists.linux.dev,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, jack@suse.cz, amir73il@gmail.com,
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
+Message-ID: <aZh-orwoaeAh52Bf@slm.duckdns.org>
+References: <20260220055449.3073-1-tjmercier@google.com>
+ <20260220055449.3073-3-tjmercier@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: RCU stalls running KUnit on mainline
-To: Mark Brown <broonie@kernel.org>, David Gow <david@davidgow.net>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
- Rae Moar <raemoar63@gmail.com>, Frederic Weisbecker <frederic@kernel.org>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <b537dc5a-f7e2-4daa-bff1-d07c5852ece5@sirena.org.uk>
- <59e8c352-7bc8-4358-af74-fee8c29280ba@davidgow.net>
- <8aa71ce7-7c83-4446-b1fa-b0f862bde53f@sirena.org.uk>
-Content-Language: en-GB
-From: Guillaume Tucker <gtucker@gtucker.io>
-Organization: gtucker.io
-In-Reply-To: <8aa71ce7-7c83-4446-b1fa-b0f862bde53f@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: gtucker@gtucker.io
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvvdekkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhohgjtgfgsehtkeertddtvdejnecuhfhrohhmpefiuhhilhhlrghumhgvucfvuhgtkhgvrhcuoehgthhutghkvghrsehgthhutghkvghrrdhioheqnecuggftrfgrthhtvghrnhepudelgeevueetfeffffejfffhjefhjeejvedtleeghfejleeutddtgffgvdeiueevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddttddumeekiedumeegrgegtdemkeeivddtmeeivgehheemrggvrgehmeduuggsleemtghfvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeegrgegtdemkeeivddtmeeivgehheemrggvrgehmeduuggsleemtghfvddtpdhhvghloheplgfkrfggieemvddttddumeekiedumeegrgegtdemkeeivddtmeeivgehheemrggvrgehmeduuggsleemtghfvddtngdpmhgrihhlfhhrohhmpehgthhutghkvghrsehgthhutghkvghrrdhiohdpqhhiugepuddutefgffeggeefvdfhpdhmohguvgepshhmthhpohhuthdpnhgspghrtghpthhtohepjedprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdpr
- hgtphhtthhopegurghvihgusegurghvihgughhofidrnhgvthdprhgtphhtthhopegsrhgvnhgurghnrdhhihhgghhinhhssehlihhnuhigrdguvghvpdhrtghpthhtoheprhgrvghmohgrrheifeesghhmrghilhdrtghomhdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-GND-State: clean
-
-(sorry, resending but not with gmail)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260220055449.3073-3-tjmercier@google.com>
 
 Hello,
 
-On 18/02/2026 20:31, 'Mark Brown' via KUnit Development wrote:
-> On Wed, Feb 18, 2026 at 04:53:16PM +0800, David Gow wrote:
->> Le 17/02/2026 à 10:10 PM, 'Mark Brown' via KUnit Development a écrit :
->>> When running KUnit via qemu on current mailine I'm seeing random
->>> lockups, frequently but not always reporting an RCU stall.
->>> Unfortunately these don't seem to happen in a consistent place which
->>> makes it hard to figure out exactly what's going on, they started in
->>> -next at some point shortly before or early in the merge window but I've
->>> never managed to drill down and investigate them.  I don't imagine
->>> they're due to KUnit specifically, though it seems likely some test is
->>> triggering them.  Has anyone else seen this, or do you have any leads?
+On Thu, Feb 19, 2026 at 09:54:47PM -0800, T.J. Mercier wrote:
+> Currently some kernfs files (e.g. cgroup.events, memory.events) support
+> inotify watches for IN_MODIFY, but unlike with regular filesystems, they
+> do not receive IN_DELETE_SELF or IN_IGNORED events when they are
+> removed. This means inotify watches persist after file deletion until
+> the process exits and the inotify file descriptor is cleaned up, or
+> until inotify_rm_watch is called manually.
 > 
->> I've not been able to reproduce it after reverting the kthread affinity
->> series (git revert -m1 d16738a4e79e55b2c3c9ff4fb7b74a4a24723515), but that
->> could just be due to luck. It's flaky enough that my attempt at bisection
->> kept pointing at documentation patches.
+> This creates a problem for processes monitoring cgroups. For example, a
+> service monitoring memory.events for memory.high breaches needs to know
+> when a cgroup is removed to clean up its state. Where it's known that a
+> cgroup is removed when all processes die, without IN_DELETE_SELF the
+> service must resort to inefficient workarounds such as:
+>   1) Periodically scanning procfs to detect process death (wastes CPU
+>      and is susceptible to PID reuse).
+>   2) Holding a pidfd for every monitored cgroup (can exhaust file
+>      descriptors).
 > 
-> One other data point is that there's some range of commits which
-> generates an actual failure in the runtime PM tests:
+> This patch enables IN_DELETE_SELF and IN_IGNORED events for kernfs files
+> and directories by clearing inode i_nlink values during removal. This
+> allows VFS to make the necessary fsnotify calls so that userspace
+> receives the inotify events.
 > 
-> [19:26:28] [PASSED] pm_runtime_disabled_test
-> [19:26:28] Unable to handle kernel execute from non-executable memory at virtual address fff000000145f358
-> ...
-> [19:26:28] Call trace:
-> [19:26:28]  0xfff000000145f358 (P)
-> [19:26:28]  rpm_callback+0x74/0x80
-> [19:26:28]  rpm_resume+0x3cc/0x6a0
-> [19:26:28]  __pm_runtime_resume+0x50/0x9c
-> [19:26:28]  device_release_driver_internal+0xd0/0x224
-> [19:26:28]  device_release_driver+0x18/0x24
-> [19:26:28]  bus_remove_device+0xd0/0x114
-> [19:26:28]  device_del+0x14c/0x408
-> [19:26:28]  device_unregister+0x18/0x38
-> [19:26:28]  device_unregister_wrapper+0x10/0x20
-> [19:26:28]  __kunit_action_free+0x14/0x20
-> ...
-> [19:26:28] [FAILED] pm_runtime_error_test
+> As a result, applications can rely on a single existing watch on a file
+> of interest (e.g. memory.events) to receive notifications for both
+> modifications and the eventual removal of the file, as well as automatic
+> watch descriptor cleanup, simplifying userspace logic and improving
+> efficiency.
 > 
-> which might upset bisections.
+> There is gap in this implementation for certain file removals due their
+> unique nature in kernfs. Directory removals that trigger file removals
+> occur through vfs_rmdir, which shrinks the dcache and emits fsnotify
+> events after the rmdir operation; there is no issue here. However kernfs
+> writes to particular files (e.g. cgroup.subtree_control) can also cause
+> file removal, but vfs_write does not attempt to emit fsnotify events
+> after the write operation, even if i_nlink counts are 0. As a usecase
+> for monitoring this category of file removals is not known, they are
+> left without having IN_DELETE or IN_DELETE_SELF events generated.
 
-Yes, although I've run some automated VIXI bisections and found one
-reliable panic in rcu.  I had to do it in two steps as the first
-bisection landed on a merge commit.  After a bit more investigation I
-reported what I found here:
+Adding a comment with the above content would probably be useful. It also
+might be worthwhile to note that fanotify recursive monitoring wouldn't work
+reliably as cgroups can go away while inodes are not attached.
 
-    https://lore.kernel.org/all/0150e237-41d2-40ae-a857-4f97ca664468@gtucker.io/
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
 
-I can bisect the other KUnit issues separately too if that helps now
-that I have a quick workaround to avoid this panic (see email).
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Cheers,
-Guillaume
+Thanks.
+
+-- 
+tejun
