@@ -1,150 +1,304 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D142A2F8BEE;
-	Thu, 19 Feb 2026 23:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B9C1F1932
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 00:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771545364; cv=none; b=DbXxaJfkZNP5cIlBZY5Qpyu85DO/ppXFYAeEDFBum4Jam32goq1t7jxHHzhsdx17xXMbc5Wj8EWSht3qyxA2N+x7nfBO6YlGV0Nbjms3Bsu4EEbQkeoYf7P+pIPs70ySVBh96zr/P0N7AJ6QTyvWhotTHIIMYDfdY/V8kZUMOnY=
+	t=1771548156; cv=none; b=GMwh89KMj6BaybgsFgfZJhn8scgd6gtrqGRiS7PStAfSaj41sVZdu3ZXnP2w1OhxdWkeIIYDFjBsh0zP/ODjxY1R5LLyEpTHHw9bMLwmIjo07vvVVr288XDBZNou2uD0S2ngoV6yt4JMaDj3d3XI2XrIt5V9IM0Mfqao36qFJHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771545364; c=relaxed/simple;
-	bh=A4B+KQUKfkALABSV4ypfoM7JWCIo0oQ5oJiT+QXtlgM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mrxmipTmLoCfmXG6MxASrInapV0BHCzevcE+P+tj3gQcJzxGEpGB6wePYAdrn+6LO+tl/HTg8pYCqVYjFMSRELa4JEx2M6sdQMeRh0hCe1klQiptQiDIZmhcvGIU6EYIk1dIFYvF3KEYhVypVWn1yTYQTyYp++uPPVU05dJF/EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+0Iifi5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771548156; c=relaxed/simple;
+	bh=Ud4lqyOYJxLqwMF4L6RwgtA92lV9p1IYKw7lMroz3mw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=rmpSsdMx8XFTLwoRxLYAACvarHXd7PwlIhwARf8hui7J5hOvemR3G+fvm2g5DoBVqLa054rzednFH7gLLP3vNV1KcuBLT7NNSybILYBSzioCNLrCZwjBK2RkW2AmieZLU04Sja92O8KzVJkYGRy4Tl+zztG28Bt3zr7k/XCXq8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Sf3Mv/y0; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+0Iifi5"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F2F0C4CEF7;
-	Thu, 19 Feb 2026 23:56:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771545364;
-	bh=A4B+KQUKfkALABSV4ypfoM7JWCIo0oQ5oJiT+QXtlgM=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=V+0Iifi5+SFjh+Yw/WgiKjgwHjI3opt4dXeXq6KoAbiYr4TQxojGCZMubfHRivQJ+
-	 YGvgCLahfUFOr+UXWEDlgIqRQsOE9iVnbDZ0QrKmV1dzv91pXgd5fWUvK8dXv4rfXv
-	 FRKUAwx8/klPljntVcQ8ZQO1MQU5VbW+w5sgL7VksiE0u/Xjwy/8uXr7bl4mbK4l2M
-	 QnGMahUKy6iY8DIwQ2rGpyXU/HPUwaZc9BwBW6pMtaQW6geqZ3wOIdJZSFsB6Nthvk
-	 W3hmgJEHHHBd8Nv8CC/ncRdHZuQ1hYzmtkEVC5hCiri2fCLOza50nX02rzTw7OW9Ng
-	 dCLW8pYo7fEow==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41A93C531F0;
-	Thu, 19 Feb 2026 23:56:04 +0000 (UTC)
-From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
-Subject: [PATCH RFC net-next 0/4] tcp: RFC 7323-compliant window retraction
- handling
-Date: Fri, 20 Feb 2026 00:55:13 +0100
-Message-Id: <20260220-tcp_rfc7323_retract_wnd_rfc-v1-0-904942561479@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Sf3Mv/y0"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2ad44941ea2so9722815ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 16:42:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771548154; x=1772152954; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dg8JwpDSolSLBMhrmXm5uOOceqMFfere5VVKNjBSeNo=;
+        b=Sf3Mv/y0bzkthFRVzY+IO27t7ytQQhH1hDac9Xuyomd17XSwfyYpq2a5JQM5Waq+sM
+         iLU4vn9I1PXdpapnKjlgZIxMYXuYnUadc+XMlj/9iQX01H8XCfI5pGAuMkHErTq7QSC2
+         SykYGKRi/UKrisNKDfOY/jEyMYaD8pONg7zUXj7QuilLcGbky90kPyo3OHoSLkGpDzJO
+         w0ZP/z15thoB4OkbfoDuqeYIll1vVMtqnEi+Phh1PZclQhAgxyWC7A3rxi8VvDTYFG8j
+         wAEL/v6uxmgX7L1djof/grOAKxO8PWq5lari8iOQ//zstqgk3G5H2SV7tJNO9pWij/S9
+         sYIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771548154; x=1772152954;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dg8JwpDSolSLBMhrmXm5uOOceqMFfere5VVKNjBSeNo=;
+        b=SPKexmxSOyXBrSbGwIxDzfsx1MaoiIERBzNnCI7SOLQ/JkEVGKNPmZRl69/gymuhML
+         8jX59hzk5LusRibQzABXni8u4KJPTCJwGGptSW4qAz4fY6eCB0nC6vKIZ6pRb8HGOb53
+         Qpe0Itndq2sAxI5cs7FYR0XyAnoWDxeAykfgaEyObGxUsdu+yftIVnAA2MC5IlD6MWLy
+         WrLccd5SUM/amzmkoa8DRkumxZ+zM/PB0No/c3BjXTIGpAMKk/llS/sSnX7wjOwC34Bz
+         VLGk7Pnjm5MlbEnC/n5hjiIfgLcBaRJtyD/zhK/l2yp5t7WeSMMZyuzALO1wY/RuFB5g
+         wflg==
+X-Forwarded-Encrypted: i=1; AJvYcCUBAMQq9JcFznb6oxK/pBJuKLdO+lZJ3qILkXB9MQ6Hj45DsXEaNLOV318nHNzJk0f4hez6SOmR/c+Rcr1Iukk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywhhrprv3QSQiPpSnmEXdOxY9FWbW7kjSnEUivvP1+FIAgPXQ6L
+	2qd16purCzgmJdrsz2gQ9Y/mb5eilGe0Khb1b3CllvjZDGEPzfTij+Mh86a26QfH2dwJpZUPTbz
+	5oG1GE6RFpZi2tA==
+X-Received: from pjbsz4.prod.google.com ([2002:a17:90b:2d44:b0:354:aa76:8270])
+ (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:190d:b0:29e:c2de:4ad with SMTP id d9443c01a7336-2ad5b03d9eamr38042765ad.24.1771548154020;
+ Thu, 19 Feb 2026 16:42:34 -0800 (PST)
+Date: Fri, 20 Feb 2026 00:42:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MwQrCMAyA4VcpOVuoGUzxKvgAXoeULs00lzrSo
- IOxd7fz+P2Hf4XKKlzh4lZQ/kiVd2k4HhzQK5Une8nNgAH7gBi80Rx1olOHXVQ2TWTxW/LePJ0
- TZhwTj5mhHWblSZb/fYD77eoKmy+8GDy27QfkRiVoewAAAA==
-X-Change-ID: 20260220-tcp_rfc7323_retract_wnd_rfc-c8a2d2baebde
-To: Eric Dumazet <edumazet@google.com>, 
- Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- David Ahern <dsahern@kernel.org>, Stefano Brivio <sbrivio@redhat.com>, 
- Jon Maloy <jmaloy@redhat.com>, Jason Xing <kerneljasonxing@gmail.com>, 
- mfreemon@cloudflare.com, Shuah Khan <shuah@kernel.org>
-Cc: Christian Ebner <c.ebner@proxmox.com>, netdev@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771545363; l=3411;
- i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
- bh=A4B+KQUKfkALABSV4ypfoM7JWCIo0oQ5oJiT+QXtlgM=;
- b=oNGmNjCqW5WuUBHxUhDcDVp1H6go11aygE11D7Wp0WGZ4sPYxX0QAVXGO6QFSqO1gf443g7kk
- EhnarpSRwfrCr7CdlrCXJ9zQP3PXVeF/8Y8odmcZ1PtJ9Di/MO7qMDy
-X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
- pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
-X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
- auth_id=641
-X-Original-From: Simon Baatz <gmbnomis@gmail.com>
-Reply-To: gmbnomis@gmail.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.414.gf7e9f6c205-goog
+Message-ID: <20260220004223.4168331-1-dmatlack@google.com>
+Subject: [PATCH v2 00/10] KVM: selftests: Use kernel-style integer and
+ g[vp]a_t types
+From: David Matlack <dmatlack@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Andrew Jones <ajones@ventanamicro.com>, 
+	Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
+	Bibo Mao <maobibo@loongson.cn>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Colin Ian King <colin.i.king@gmail.com>, 
+	David Hildenbrand <david@kernel.org>, David Matlack <dmatlack@google.com>, Fuad Tabba <tabba@google.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Joey Gouly <joey.gouly@arm.com>, kvmarm@lists.linux.dev, 
+	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	Lisa Wang <wyihan@google.com>, loongarch@lists.linux.dev, 
+	Marc Zyngier <maz@kernel.org>, Maxim Levitsky <mlevitsk@redhat.com>, Nutty Liu <nutty.liu@hotmail.com>, 
+	Oliver Upton <oupton@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, 
+	"Pratik R. Sampat" <prsampat@amd.com>, Rahul Kumar <rk0006818@gmail.com>, 
+	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Wu Fei <wu.fei9@sanechips.com.cn>, Yosry Ahmed <yosry.ahmed@linux.dev>, 
+	Zenghui Yu <yuzenghui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+This series renames types across all KVM selftests to more align with
+types used in the kernel:
 
-this series implements the receiver-side requirements for TCP window
-retraction as specified in RFC 7323 and adds packetdrill tests to
-cover the new behavior.
+  vm_vaddr_t -> gva_t
+  vm_paddr_t -> gpa_t
 
-It addresses a regression with somewhat complex causes; see my message
-"Re: [regression] [PATCH net-next 7/8] tcp: stronger sk_rcvbuf checks"
-(https://lkml.kernel.org/netdev/aXaHEk_eRJyhYfyM@gandalf.schnuecks.de/).
+  uint64_t -> u64
+  uint32_t -> u32
+  uint16_t -> u16
+  uint8_t  -> u8
 
-Please see the first patch for background and implementation details.
+  int64_t -> s64
+  int32_t -> s32
+  int16_t -> s16
+  int8_t  -> s8
 
-This is an RFC because a few open questions remain:
+The goal of this series is to make the KVM selftests code more concise
+(the new type names are shorter) and more similar to the kernel, since
+selftests are developed by kernel developers.
 
-- Placement of the new rcv_mwnd_seq field in tcp_sock:
+v2:
+ - Reapply the series on top of kvm/queue
 
-  rcv_mwnd_seq is updated together with rcv_wup and rcv_wnd in
-  tcp_select_window. However, rcv_wup is documented as RX read_write
-  only (even though it is updated in tcp_select_window), and rcv_wnd
-  is TX read_write / RX read_mostly.
+v1: https://lore.kernel.org/kvm/20250501183304.2433192-1-dmatlack@google.com/
 
-  rcv_mwnd_seq is only updated in tcp_select_window and, as far as I
-  can tell, is not used on the RX fast path.
+David Matlack (10):
+  KVM: selftests: Use gva_t instead of vm_vaddr_t
+  KVM: selftests: Use gpa_t instead of vm_paddr_t
+  KVM: selftests: Use gpa_t for GPAs in Hyper-V selftests
+  KVM: selftests: Use u64 instead of uint64_t
+  KVM: selftests: Use s64 instead of int64_t
+  KVM: selftests: Use u32 instead of uint32_t
+  KVM: selftests: Use s32 instead of int32_t
+  KVM: selftests: Use u16 instead of uint16_t
+  KVM: selftests: Use s16 instead of int16_t
+  KVM: selftests: Use u8 instead of uint8_t
 
-  If I understand the placement rules correctly, this means that
-  rcv_mwnd_seq, rcv_wup, and rcv_wnd end up in different cacheline
-  groups, which feels odd. Guidance on where rcv_mwnd_seq should live
-  would be appreciated.
+ .../selftests/kvm/access_tracking_perf_test.c |  42 +--
+ tools/testing/selftests/kvm/arch_timer.c      |   6 +-
+ .../selftests/kvm/arm64/aarch32_id_regs.c     |  14 +-
+ .../testing/selftests/kvm/arm64/arch_timer.c  |   8 +-
+ .../kvm/arm64/arch_timer_edge_cases.c         | 161 +++++----
+ .../selftests/kvm/arm64/debug-exceptions.c    |  72 ++--
+ .../testing/selftests/kvm/arm64/hypercalls.c  |  24 +-
+ .../testing/selftests/kvm/arm64/idreg-idst.c  |   4 +-
+ .../testing/selftests/kvm/arm64/no-vgic-v3.c  |   6 +-
+ .../selftests/kvm/arm64/page_fault_test.c     |  82 ++---
+ tools/testing/selftests/kvm/arm64/psci_test.c |  26 +-
+ .../testing/selftests/kvm/arm64/sea_to_user.c |  32 +-
+ .../testing/selftests/kvm/arm64/set_id_regs.c |  66 ++--
+ .../selftests/kvm/arm64/smccc_filter.c        |  10 +-
+ tools/testing/selftests/kvm/arm64/vgic_init.c |  56 +--
+ tools/testing/selftests/kvm/arm64/vgic_irq.c  | 137 ++++----
+ .../selftests/kvm/arm64/vgic_lpi_stress.c     |  20 +-
+ .../selftests/kvm/arm64/vpmu_counter_access.c |  56 +--
+ .../testing/selftests/kvm/coalesced_io_test.c |  38 +-
+ .../selftests/kvm/demand_paging_test.c        |  10 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  14 +-
+ tools/testing/selftests/kvm/dirty_log_test.c  |  82 ++---
+ tools/testing/selftests/kvm/get-reg-list.c    |   2 +-
+ .../testing/selftests/kvm/guest_memfd_test.c  |  16 +-
+ .../testing/selftests/kvm/guest_print_test.c  |  22 +-
+ .../selftests/kvm/hardware_disable_test.c     |   6 +-
+ .../selftests/kvm/include/arm64/arch_timer.h  |  30 +-
+ .../selftests/kvm/include/arm64/delay.h       |   4 +-
+ .../testing/selftests/kvm/include/arm64/gic.h |   8 +-
+ .../selftests/kvm/include/arm64/gic_v3_its.h  |   8 +-
+ .../selftests/kvm/include/arm64/processor.h   |  22 +-
+ .../selftests/kvm/include/arm64/ucall.h       |   4 +-
+ .../selftests/kvm/include/arm64/vgic.h        |  22 +-
+ .../testing/selftests/kvm/include/kvm_util.h  | 328 +++++++++---------
+ .../selftests/kvm/include/kvm_util_types.h    |   4 +-
+ .../kvm/include/loongarch/arch_timer.h        |   4 +-
+ .../selftests/kvm/include/loongarch/ucall.h   |   4 +-
+ .../testing/selftests/kvm/include/memstress.h |  30 +-
+ .../selftests/kvm/include/riscv/arch_timer.h  |  22 +-
+ .../selftests/kvm/include/riscv/processor.h   |   9 +-
+ .../selftests/kvm/include/riscv/ucall.h       |   4 +-
+ .../kvm/include/s390/diag318_test_handler.h   |   2 +-
+ .../selftests/kvm/include/s390/facility.h     |   4 +-
+ .../selftests/kvm/include/s390/ucall.h        |   4 +-
+ .../testing/selftests/kvm/include/sparsebit.h |   6 +-
+ .../testing/selftests/kvm/include/test_util.h |  40 ++-
+ .../selftests/kvm/include/timer_test.h        |  18 +-
+ .../selftests/kvm/include/ucall_common.h      |  22 +-
+ .../selftests/kvm/include/userfaultfd_util.h  |   6 +-
+ .../testing/selftests/kvm/include/x86/apic.h  |  22 +-
+ .../testing/selftests/kvm/include/x86/evmcs.h |  22 +-
+ .../selftests/kvm/include/x86/hyperv.h        |  28 +-
+ .../selftests/kvm/include/x86/kvm_util_arch.h |  36 +-
+ tools/testing/selftests/kvm/include/x86/pmu.h |   9 +-
+ .../selftests/kvm/include/x86/processor.h     | 282 ++++++++-------
+ tools/testing/selftests/kvm/include/x86/sev.h |  20 +-
+ .../selftests/kvm/include/x86/svm_util.h      |  12 +-
+ .../testing/selftests/kvm/include/x86/ucall.h |   2 +-
+ tools/testing/selftests/kvm/include/x86/vmx.h |  70 ++--
+ .../selftests/kvm/kvm_page_table_test.c       |  54 +--
+ tools/testing/selftests/kvm/lib/arm64/gic.c   |   6 +-
+ .../selftests/kvm/lib/arm64/gic_private.h     |  26 +-
+ .../testing/selftests/kvm/lib/arm64/gic_v3.c  |  90 ++---
+ .../selftests/kvm/lib/arm64/gic_v3_its.c      |  12 +-
+ .../selftests/kvm/lib/arm64/processor.c       | 126 +++----
+ tools/testing/selftests/kvm/lib/arm64/ucall.c |  12 +-
+ tools/testing/selftests/kvm/lib/arm64/vgic.c  |  40 +--
+ tools/testing/selftests/kvm/lib/elf.c         |   8 +-
+ tools/testing/selftests/kvm/lib/guest_modes.c |   2 +-
+ .../testing/selftests/kvm/lib/guest_sprintf.c |  18 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 220 ++++++------
+ .../selftests/kvm/lib/loongarch/processor.c   |  79 +++--
+ .../selftests/kvm/lib/loongarch/ucall.c       |  12 +-
+ tools/testing/selftests/kvm/lib/memstress.c   |  38 +-
+ .../selftests/kvm/lib/riscv/processor.c       |  58 ++--
+ .../kvm/lib/s390/diag318_test_handler.c       |  12 +-
+ .../testing/selftests/kvm/lib/s390/facility.c |   2 +-
+ .../selftests/kvm/lib/s390/processor.c        |  42 +--
+ tools/testing/selftests/kvm/lib/sparsebit.c   |  18 +-
+ tools/testing/selftests/kvm/lib/test_util.c   |  30 +-
+ .../testing/selftests/kvm/lib/ucall_common.c  |  30 +-
+ .../selftests/kvm/lib/userfaultfd_util.c      |  14 +-
+ tools/testing/selftests/kvm/lib/x86/apic.c    |   2 +-
+ tools/testing/selftests/kvm/lib/x86/hyperv.c  |  14 +-
+ .../testing/selftests/kvm/lib/x86/memstress.c |  14 +-
+ tools/testing/selftests/kvm/lib/x86/pmu.c     |   8 +-
+ .../testing/selftests/kvm/lib/x86/processor.c | 199 ++++++-----
+ tools/testing/selftests/kvm/lib/x86/sev.c     |  20 +-
+ tools/testing/selftests/kvm/lib/x86/svm.c     |  16 +-
+ tools/testing/selftests/kvm/lib/x86/ucall.c   |   4 +-
+ tools/testing/selftests/kvm/lib/x86/vmx.c     |  44 +--
+ .../selftests/kvm/loongarch/arch_timer.c      |  28 +-
+ .../kvm/memslot_modification_stress_test.c    |  10 +-
+ .../testing/selftests/kvm/memslot_perf_test.c | 164 ++++-----
+ tools/testing/selftests/kvm/mmu_stress_test.c |  28 +-
+ .../selftests/kvm/pre_fault_memory_test.c     |  10 +-
+ .../testing/selftests/kvm/riscv/arch_timer.c  |   8 +-
+ .../testing/selftests/kvm/riscv/ebreak_test.c |   6 +-
+ .../selftests/kvm/riscv/get-reg-list.c        |   4 +-
+ .../selftests/kvm/riscv/sbi_pmu_test.c        |   8 +-
+ tools/testing/selftests/kvm/s390/debug_test.c |   8 +-
+ tools/testing/selftests/kvm/s390/memop.c      |  94 ++---
+ tools/testing/selftests/kvm/s390/resets.c     |   6 +-
+ .../selftests/kvm/s390/shared_zeropage_test.c |   2 +-
+ tools/testing/selftests/kvm/s390/tprot.c      |  24 +-
+ .../selftests/kvm/s390/ucontrol_test.c        |   2 +-
+ .../selftests/kvm/set_memory_region_test.c    |  40 +--
+ tools/testing/selftests/kvm/steal_time.c      |  66 ++--
+ .../kvm/system_counter_offset_test.c          |  12 +-
+ tools/testing/selftests/kvm/x86/amx_test.c    |  14 +-
+ .../selftests/kvm/x86/aperfmperf_test.c       |  16 +-
+ .../selftests/kvm/x86/apic_bus_clock_test.c   |  24 +-
+ tools/testing/selftests/kvm/x86/cpuid_test.c  |   6 +-
+ tools/testing/selftests/kvm/x86/debug_regs.c  |   4 +-
+ .../kvm/x86/dirty_log_page_splitting_test.c   |  16 +-
+ .../testing/selftests/kvm/x86/fastops_test.c  |  52 +--
+ .../selftests/kvm/x86/feature_msrs_test.c     |  12 +-
+ .../selftests/kvm/x86/fix_hypercall_test.c    |  20 +-
+ .../selftests/kvm/x86/flds_emulation.h        |   6 +-
+ .../testing/selftests/kvm/x86/hwcr_msr_test.c |  10 +-
+ .../testing/selftests/kvm/x86/hyperv_clock.c  |   6 +-
+ .../testing/selftests/kvm/x86/hyperv_evmcs.c  |  10 +-
+ .../kvm/x86/hyperv_extended_hypercalls.c      |  20 +-
+ .../selftests/kvm/x86/hyperv_features.c       |  26 +-
+ tools/testing/selftests/kvm/x86/hyperv_ipi.c  |  12 +-
+ .../selftests/kvm/x86/hyperv_svm_test.c       |  10 +-
+ .../selftests/kvm/x86/hyperv_tlb_flush.c      |  36 +-
+ .../selftests/kvm/x86/kvm_buslock_test.c      |   2 +-
+ .../selftests/kvm/x86/kvm_clock_test.c        |  14 +-
+ tools/testing/selftests/kvm/x86/kvm_pv_test.c |  10 +-
+ .../selftests/kvm/x86/monitor_mwait_test.c    |   2 +-
+ .../selftests/kvm/x86/nested_close_kvm_test.c |   2 +-
+ .../selftests/kvm/x86/nested_dirty_log_test.c |  10 +-
+ .../selftests/kvm/x86/nested_emulation_test.c |  20 +-
+ .../kvm/x86/nested_exceptions_test.c          |   6 +-
+ .../kvm/x86/nested_invalid_cr3_test.c         |   2 +-
+ .../selftests/kvm/x86/nested_set_state_test.c |   4 +-
+ .../kvm/x86/nested_tsc_adjust_test.c          |  12 +-
+ .../kvm/x86/nested_tsc_scaling_test.c         |  26 +-
+ .../kvm/x86/nested_vmsave_vmload_test.c       |   2 +-
+ .../selftests/kvm/x86/nx_huge_pages_test.c    |  18 +-
+ .../selftests/kvm/x86/platform_info_test.c    |   6 +-
+ .../selftests/kvm/x86/pmu_counters_test.c     | 110 +++---
+ .../selftests/kvm/x86/pmu_event_filter_test.c | 102 +++---
+ .../kvm/x86/private_mem_conversions_test.c    |  78 ++---
+ .../kvm/x86/private_mem_kvm_exits_test.c      |  14 +-
+ .../selftests/kvm/x86/set_boot_cpu_id.c       |   6 +-
+ .../selftests/kvm/x86/set_sregs_test.c        |   6 +-
+ .../selftests/kvm/x86/sev_init2_tests.c       |   6 +-
+ .../selftests/kvm/x86/sev_smoke_test.c        |  16 +-
+ .../x86/smaller_maxphyaddr_emulation_test.c   |   8 +-
+ tools/testing/selftests/kvm/x86/smm_test.c    |   8 +-
+ tools/testing/selftests/kvm/x86/state_test.c  |  14 +-
+ .../selftests/kvm/x86/svm_int_ctl_test.c      |   2 +-
+ .../kvm/x86/svm_nested_shutdown_test.c        |   2 +-
+ .../kvm/x86/svm_nested_soft_inject_test.c     |  10 +-
+ .../selftests/kvm/x86/svm_vmcall_test.c       |   2 +-
+ .../selftests/kvm/x86/sync_regs_test.c        |   2 +-
+ .../kvm/x86/triple_fault_event_test.c         |   4 +-
+ .../testing/selftests/kvm/x86/tsc_msrs_test.c |   2 +-
+ .../selftests/kvm/x86/tsc_scaling_sync.c      |   4 +-
+ .../selftests/kvm/x86/ucna_injection_test.c   |  45 +--
+ .../selftests/kvm/x86/userspace_io_test.c     |   4 +-
+ .../kvm/x86/userspace_msr_exit_test.c         |  58 ++--
+ .../selftests/kvm/x86/vmx_apic_access_test.c  |   4 +-
+ .../kvm/x86/vmx_apicv_updates_test.c          |   4 +-
+ .../kvm/x86/vmx_invalid_nested_guest_state.c  |   2 +-
+ .../testing/selftests/kvm/x86/vmx_msrs_test.c |  22 +-
+ .../kvm/x86/vmx_nested_la57_state_test.c      |   4 +-
+ .../selftests/kvm/x86/vmx_pmu_caps_test.c     |  12 +-
+ .../kvm/x86/vmx_preemption_timer_test.c       |   2 +-
+ .../selftests/kvm/x86/xapic_ipi_test.c        |  58 ++--
+ .../selftests/kvm/x86/xapic_state_test.c      |  20 +-
+ .../selftests/kvm/x86/xapic_tpr_test.c        |  24 +-
+ .../selftests/kvm/x86/xcr0_cpuid_test.c       |   8 +-
+ .../selftests/kvm/x86/xen_shinfo_test.c       |  22 +-
+ .../testing/selftests/kvm/x86/xss_msr_test.c  |   2 +-
+ 177 files changed, 2514 insertions(+), 2519 deletions(-)
 
-- In tcp_minisocks.c, it is not clear to me whether we should change
-  "tcptw->tw_rcv_wnd = tcp_receive_window(tp)" to
-  "tcptw->tw_rcv_wnd = tcp_max_receive_window(tp)". I could not find a
-  case where this makes a practical difference and have left the
-  existing behavior unchanged.
 
-- Packetdrill tests: Some of these seem rather brittle to me; I
-  included them mostly to document what I have tested. Suggestions
-  for making them more robust are welcome.
-
-- MPTCP seems to modify tp->rcv_wnd of subflows. I haven't looked at
-  this, since I wanted to get feedback on the overall approach first.
-
-- Although this series addresses a regression triggered by commit
-  d2fbaad7cd8 ("tcp: stronger sk_rcvbuf checks") the underlying
-  problem is shrinking the window. Thus I added "Fixes" headers for
-  the commits that introduced window shrinking.
-
-I would appreciate feedback on the overall approach and on these
-questions.
-
-Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
----
-Simon Baatz (4):
-      tcp: implement RFC 7323 window retraction receiver requirements
-      selftests/net: packetdrill: add tcp_rcv_wnd_shrink_nomem.pkt
-      selftests/net: packetdrill: add tcp_rcv_wnd_shrink_allowed.pkt
-      selftests/net: packetdrill: add tcp_rcv_toobig_back_to_back.pkt
-
- .../networking/net_cachelines/tcp_sock.rst         |   1 +
- include/linux/tcp.h                                |   1 +
- include/net/tcp.h                                  |  14 +++
- net/ipv4/tcp_fastopen.c                            |   1 +
- net/ipv4/tcp_input.c                               |   6 +-
- net/ipv4/tcp_minisocks.c                           |   1 +
- net/ipv4/tcp_output.c                              |  12 +++
- .../net/packetdrill/tcp_rcv_big_endseq.pkt         |   2 +-
- .../packetdrill/tcp_rcv_toobig_back_to_back.pkt    |  27 +++++
- .../net/packetdrill/tcp_rcv_wnd_shrink_allowed.pkt |  35 +++++++
- .../net/packetdrill/tcp_rcv_wnd_shrink_nomem.pkt   | 109 +++++++++++++++++++++
- 11 files changed, 206 insertions(+), 3 deletions(-)
----
-base-commit: 8bf22c33e7a172fbc72464f4cc484d23a6b412ba
-change-id: 20260220-tcp_rfc7323_retract_wnd_rfc-c8a2d2baebde
-
-Best regards,
+base-commit: b1195183ed42f1522fae3fe44ebee3af437aa000
 -- 
-Simon Baatz <gmbnomis@gmail.com>
-
+2.53.0.414.gf7e9f6c205-goog
 
