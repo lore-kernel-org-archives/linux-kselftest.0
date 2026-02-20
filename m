@@ -1,119 +1,117 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A71734C14C
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 14:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1362E20D4FC
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 15:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771596772; cv=none; b=BMfoZaBx5Hae++HJgoJ5Hixh4azKNO7oopvcFbkxLAoh/W5+HW/JLXIa5Lb1fbLHVgDfmCvyJ9NqyGC1scLJgTqbxXt9/+U6/W2K+L7bz7Pe/7+Eb0cPpYXHTIZkyrKUB6TByvfLoR4fco7hTgVx3eyoNQn2zbl/EButeGHG9nM=
+	t=1771601430; cv=none; b=GLny3hT7P+jXy0eJ2ZDKAalDZNuQYarnhqTHAigg9H2JirKAGYolDK5OOZBuxkYnZdyWm+ly9hKwW+RoyCrmD5iu9rUBVgFt3UUIgSIILgi4KHFMZg5iRhaGVYeBci9sBUIEr35v5tleOFmkbFNL/7QD7Py08Mprlo/4sZ8jzck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771596772; c=relaxed/simple;
-	bh=2md64ytofqgo4G1D1UhLCcPUCs8ETnPv72SPqDzXeAg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P5t/n6HY3jFRLl2IBEmimmseziyys+OWAcfEJb5/71vzmFYKbw5MxxhDx1reBNf1nOkpjpaa9V7QPEwwvHtpgTkt+HuzvUQ90Z5ugt5PfOJLzcaJP3ph64kMa9FdEQ4rWPKSQL8oXYU/9xYcdhIthgsliyzVl+fqtmtQD7Ps+ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ejbJU1I+; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1771601430; c=relaxed/simple;
+	bh=aqCX+kTisIz/XXfBEkpgMnNKTadVmMHan1Q+gHIO+mY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SdX7zA3MXDfvFDMUxXiXUwySME9P0zhYJWWwavSUOdk7y+2gn9vC+1C2L4OAvzOmehrj15a2viIwAw+bc+u2HVbIxNT/K9YnP1CL4I81KStyHMO0x9BkRStwtfcUZB5eFbYnzKig05a7NdmY2GbujqxetI824zhKaipp5AkzJ6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=pc646Dk2; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ejbJU1I+"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43770c94dfaso2205303f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 06:12:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1771596768; x=1772201568; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jEEkPljREG0e6yeuCAp1Pz6C43CVga8vk+uSTyLXLvk=;
-        b=ejbJU1I+EDffYC4ztHgn2DdZQ3dslZuJXk3xlAx2WewUYHyuC3vVpnIPV74yVnRc6g
-         KFqjPlaSxtWZBN7U9diJ0wSrDssOfPQ6z0/3c3ZbmH1bgAK3BUl4y8oPq6aTHL/PTJYG
-         0ViDY18lySXKlpwYBPhxhCYXfoMEc5NLk9r9+7tKWXG2BPKzONqXp7u6aGeBFNndN6y/
-         vOW+oFa/TUXC9huonzdLDwBScqOhjKwaLzVdi+5jxjlWWx40GlSCFxIKSSz0hB7v8y6b
-         oZ6lTtwLDNGLaDBT0iSUwAV2Wf1mZdbDXn4i+ztE0CD/h2sUVUuVA3sUHBqysYA3f0Mb
-         MHtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771596768; x=1772201568;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jEEkPljREG0e6yeuCAp1Pz6C43CVga8vk+uSTyLXLvk=;
-        b=kPb/gaSKJJ8a2ZU41eDoAf8Po0sNQVP/n8RXlG4PCGqvOyNIEvdUOhFJACwUS3JUB+
-         TzMhk20LLbVK4UmMEF5vr40ykplwKZP8O0YJO+lrQi/jFy3/TBueOPMfFhZi15uTPoNB
-         YQJWbRET09Ykew5txanFKMBpIJJ8Ai/vvApGUVVADhpCnPRiIJ4NNwaDk7aHgk6yLXdA
-         hygnhpewmACiTaPUdUbapBBxFCqE9293n4Gcvyyuvn8GaVUwkCurnK0TDNephbE9G754
-         ZIPwLARtcaH5l+AsdHTNjfJTXLpTVp4P+KZJKtg2+TXUpPrDBObNit0hbGeC8a8QMO28
-         AFOw==
-X-Forwarded-Encrypted: i=1; AJvYcCX8BEVcQA+EnDg8mn0VDbJdYKXjQGJ1Zrlkv5Cge+f/iZNcJbS3JUfN7xZwm/B+d8DmeP6a5i92m5Jl6RXs19c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/JzVZBCvE4lM9lRznnsUxGoE+0i0SHBDgvuptwkfK8uYOoJem
-	jIqOPSg6ccsMUabkjyEbDHh+GA4ge/bnOpjUdOWJJLL4/sTrq1ltIaD5doGv7R+qLSg=
-X-Gm-Gg: AZuq6aLiS0rUNM8NJJ5RosJVUR+juzck1s8nP1Q0XT5yRQ8ApNcq6e8AVgMUcaGtWkp
-	hJTIN2qIuFD1QFaeglzvzuUDkbKiYycArhOosG+0qCM1PvGqhvpmuvoGYUO0C5vCd+1MG78mJJu
-	rAXS6Gi+9GUuKOS2chO3cANt9kpIgz2/P62De2/vhnBypy/0eqNPSw4FOpmLwZ9C5kF8R79Ei99
-	2vhRwUH/XGfyJJaBAd7tHovcb8wcuh/t4roFrToiVNbKdWobanQTp6f8pTbtN83x0FC+Hp8VkRo
-	s1krNgKHLqiqXUW2QluaR7UAxObSHHRUWEwycn/LSPBduatQCno49Co65Pefr/Yw1l2V8JxoaK+
-	JJGqKNnAE6CRC57cll27LegxdqsnqEU5T7EB38WrHoPxbn8nvZ3KDn2VnnQcyVOLA9iw9Ai2FxA
-	0ha5wT+yAv7Hsq/9+rZ2hx
-X-Received: by 2002:a05:6000:2301:b0:437:678b:83c2 with SMTP id ffacd0b85a97d-4396f189eadmr19877f8f.54.1771596767842;
-        Fri, 20 Feb 2026 06:12:47 -0800 (PST)
-Received: from [127.0.0.1] ([2804:5078:822:3100:58f2:fc97:371f:2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796a5b2d1sm60119173f8f.4.2026.02.20.06.12.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Feb 2026 06:12:47 -0800 (PST)
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-Date: Fri, 20 Feb 2026 11:12:34 -0300
-Subject: [PATCH 2/2] selftests: livepatch: functions.sh: Workaround heredoc
- on older bash
+	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="pc646Dk2"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 11AED4432F;
+	Fri, 20 Feb 2026 15:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
+	t=1771601420;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Wt/Ullnpfc3ghlaqaB6HpOfbfhVooeAuBr5LmUyzlC4=;
+	b=pc646Dk2w7nd/XIx1QtoZBkJA96LG1lUBF4Nt3+SgTGkMUEqvbH6MQgZZnWk7Fu91Hu7ov
+	MdrEI7GVd7nzivO2kWsXzvgp0I7CemVP7kE7nTTTcxl1Mek6PXKzM8j0TSnfMyrTjOa4c1
+	Op45bRDzWF/ry4N+sDOPAfjmnuEYml8509z20S5cKKAPfVdZtxsnvL2gnZZixAcny9nA4Q
+	IYN4oBmuH7+aS/J7bQ7IuATduDVBZlD3I1DvblRfMffDua9JzbrmWSv8w7nNmAV1HX6lCb
+	El0tIffgPmuUM8nRxsL3NaiMuOK/ouzpQJcNmwaQ/fHQsZDskFBJWu5J9OLAKA==
+Message-ID: <cb63d5d8-d174-4d65-b5a3-877533f6cbd7@gtucker.io>
+Date: Fri, 20 Feb 2026 16:30:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
-References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
-In-Reply-To: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
- Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771596757; l=1061;
- i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
- bh=2md64ytofqgo4G1D1UhLCcPUCs8ETnPv72SPqDzXeAg=;
- b=HHrucUUJHPEYEpVG0/tc4hROqI0nwjtNy9OQC3i47BR+EGbsZw8+fl0tzRFfiFRTi/PSRtxL0
- YDBcY5AvBogAdMushsXKWxg9JGQjV0TQHeLldsIsgUrJNndK/VXN7dD
-X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
- pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
+User-Agent: Mozilla Thunderbird
+Subject: Re: RCU stalls running KUnit on mainline
+To: Mark Brown <broonie@kernel.org>, David Gow <david@davidgow.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+ Rae Moar <raemoar63@gmail.com>, Frederic Weisbecker <frederic@kernel.org>,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <b537dc5a-f7e2-4daa-bff1-d07c5852ece5@sirena.org.uk>
+ <59e8c352-7bc8-4358-af74-fee8c29280ba@davidgow.net>
+ <8aa71ce7-7c83-4446-b1fa-b0f862bde53f@sirena.org.uk>
+Content-Language: en-GB
+From: Guillaume Tucker <gtucker@gtucker.io>
+Organization: gtucker.io
+In-Reply-To: <8aa71ce7-7c83-4446-b1fa-b0f862bde53f@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: gtucker@gtucker.io
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvvdekkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhohgjtgfgsehtkeertddtvdejnecuhfhrohhmpefiuhhilhhlrghumhgvucfvuhgtkhgvrhcuoehgthhutghkvghrsehgthhutghkvghrrdhioheqnecuggftrfgrthhtvghrnhepudelgeevueetfeffffejfffhjefhjeejvedtleeghfejleeutddtgffgvdeiueevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddttddumeekiedumeegrgegtdemkeeivddtmeeivgehheemrggvrgehmeduuggsleemtghfvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeegrgegtdemkeeivddtmeeivgehheemrggvrgehmeduuggsleemtghfvddtpdhhvghloheplgfkrfggieemvddttddumeekiedumeegrgegtdemkeeivddtmeeivgehheemrggvrgehmeduuggsleemtghfvddtngdpmhgrihhlfhhrohhmpehgthhutghkvghrsehgthhutghkvghrrdhiohdpqhhiugepuddutefgffeggeefvdfhpdhmohguvgepshhmthhpohhuthdpnhgspghrtghpthhtohepjedprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdpr
+ hgtphhtthhopegurghvihgusegurghvihgughhofidrnhgvthdprhgtphhtthhopegsrhgvnhgurghnrdhhihhgghhinhhssehlihhnuhigrdguvghvpdhrtghpthhtoheprhgrvghmohgrrheifeesghhmrghilhdrtghomhdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-State: clean
 
-When running current selftests on older distributions like SLE12-SP5 that
-contains an older bash trips over heredoc. Convert it to plain echo
-calls, which ends up with the same result.
+(sorry, resending but not with gmail)
 
-Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
----
- tools/testing/selftests/livepatch/functions.sh | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 8ec0cb64ad94..45ed04c6296e 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -96,10 +96,8 @@ function pop_config() {
- }
- 
- function set_dynamic_debug() {
--        cat <<-EOF > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
--		file kernel/livepatch/* +p
--		func klp_try_switch_task -p
--		EOF
-+	echo "file kernel/livepatch/* +p" > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
-+	echo "func klp_try_switch_task -p" > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
- }
- 
- function set_ftrace_enabled() {
+On 18/02/2026 20:31, 'Mark Brown' via KUnit Development wrote:
+> On Wed, Feb 18, 2026 at 04:53:16PM +0800, David Gow wrote:
+>> Le 17/02/2026 à 10:10 PM, 'Mark Brown' via KUnit Development a écrit :
+>>> When running KUnit via qemu on current mailine I'm seeing random
+>>> lockups, frequently but not always reporting an RCU stall.
+>>> Unfortunately these don't seem to happen in a consistent place which
+>>> makes it hard to figure out exactly what's going on, they started in
+>>> -next at some point shortly before or early in the merge window but I've
+>>> never managed to drill down and investigate them.  I don't imagine
+>>> they're due to KUnit specifically, though it seems likely some test is
+>>> triggering them.  Has anyone else seen this, or do you have any leads?
+> 
+>> I've not been able to reproduce it after reverting the kthread affinity
+>> series (git revert -m1 d16738a4e79e55b2c3c9ff4fb7b74a4a24723515), but that
+>> could just be due to luck. It's flaky enough that my attempt at bisection
+>> kept pointing at documentation patches.
+> 
+> One other data point is that there's some range of commits which
+> generates an actual failure in the runtime PM tests:
+> 
+> [19:26:28] [PASSED] pm_runtime_disabled_test
+> [19:26:28] Unable to handle kernel execute from non-executable memory at virtual address fff000000145f358
+> ...
+> [19:26:28] Call trace:
+> [19:26:28]  0xfff000000145f358 (P)
+> [19:26:28]  rpm_callback+0x74/0x80
+> [19:26:28]  rpm_resume+0x3cc/0x6a0
+> [19:26:28]  __pm_runtime_resume+0x50/0x9c
+> [19:26:28]  device_release_driver_internal+0xd0/0x224
+> [19:26:28]  device_release_driver+0x18/0x24
+> [19:26:28]  bus_remove_device+0xd0/0x114
+> [19:26:28]  device_del+0x14c/0x408
+> [19:26:28]  device_unregister+0x18/0x38
+> [19:26:28]  device_unregister_wrapper+0x10/0x20
+> [19:26:28]  __kunit_action_free+0x14/0x20
+> ...
+> [19:26:28] [FAILED] pm_runtime_error_test
+> 
+> which might upset bisections.
 
--- 
-2.52.0
+Yes, although I've run some automated VIXI bisections and found one
+reliable panic in rcu.  I had to do it in two steps as the first
+bisection landed on a merge commit.  After a bit more investigation I
+reported what I found here:
 
+    https://lore.kernel.org/all/0150e237-41d2-40ae-a857-4f97ca664468@gtucker.io/
+
+I can bisect the other KUnit issues separately too if that helps now
+that I have a quick workaround to avoid this panic (see email).
+
+Cheers,
+Guillaume
