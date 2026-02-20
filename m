@@ -1,95 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E37A450FE;
-	Fri, 20 Feb 2026 23:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3622D6407
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 23:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771630329; cv=none; b=SN4sTVF0dB7o/QzeUYYGCVzU0fQ8QX6hJzDgnZ3zMyIBChw0tvEx9z9RJCKJalqBwwR9gPQ+ca3OZBdH7exIGjaVISiNhzczZbl2zk+VY8DqyY15sxT38fY4OAWfXI6FRFqvK0EBjvwA2dgV/P6473/yq5GKjvrRewzuukVcPZM=
+	t=1771631685; cv=none; b=eno20vnuN6i/lcXxPo3ny9nGRXbuG+qVTvyl+9zgYYdA2rYTX+aJh9HAbcomVjErnOQ81zxy0kTxeAWc7zSdeOfvqxVjyTBfaSKRFNWWOjJZnNBHm4sg98tqP1vKBXsRx/+a4WTsMACaKYzGEcnnBCjPAFWKhQMsciaKlz88THA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771630329; c=relaxed/simple;
-	bh=/bSsXEdaIKKeFGiASesky/KjEVa6IyrjpIr3goO6XWI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NM4AfdXkvchrFYRtGxGoVViNe2R8tnMaXAf3aVYeYIOSLFSCLnD8HgVSsn/nvCgy7AN5M81nZ9RNvoHwNxnTBf3Ar8Zipt83E9edJJNCDi8JU4deOU/fLqSBcqI7Ovgcgp+rK/fiETZEvo2CnI3YEp/rQ513PqG3HuMxJPjrCAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EAbKHIDQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771631685; c=relaxed/simple;
+	bh=KBfwhptpQ6YGSe6wr80gC840zct4lvhIaLxF5hhTceM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tvxKTJjho/0UYmHjf4I+NGXyDZz6f8RYH+eJo8Kl39z1IZzx1poOVnOucOYC29R1zllsIhrhgPZ3OkOntPio5T751JL02fKCh71tuvMtQRcGy6g3koGP9dDV58PrPPit6E6RoluouCd2RNeQw04iU8N6O/gjwr7koofboE6Gc44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bdj+md96; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EAbKHIDQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1258AC116C6;
-	Fri, 20 Feb 2026 23:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771630329;
-	bh=/bSsXEdaIKKeFGiASesky/KjEVa6IyrjpIr3goO6XWI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EAbKHIDQi3vLekKzDjHKpJqvvmgaoTdMRRaZcLZ61LLO73si/qTO476lY7fbRrB8b
-	 +dp6bct1/IKE55kmm1exaApfAaP60F8SmPnLh2omFNch7Ou61a/WpFHB5DHHLxqeXk
-	 e44E6Kcs4AXVUa9svtmZ2WCpZT9/tMN2499yKhNrb9ZMuVuu9wcRGXX9w6It2/qpLg
-	 R+KnQb/vCpicLo0bcOFAt74d7kYXD1PAponMy8VmXizG1i+6b2hym459mo4GiSsH4p
-	 Q4TCr7iXt0Gx6c+XEySzkqbArftF6PVBYYye/4V8xkntisHcDBZBRVJbFrl55SfMFq
-	 IrQQNZ7jH4ZDw==
-Date: Fri, 20 Feb 2026 13:32:08 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: "T.J. Mercier" <tjmercier@google.com>, gregkh@linuxfoundation.org,
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	jack@suse.cz, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
-Message-ID: <aZju-GFHf8Eez-07@slm.duckdns.org>
-References: <20260220055449.3073-1-tjmercier@google.com>
- <20260220055449.3073-3-tjmercier@google.com>
- <aZh-orwoaeAh52Bf@slm.duckdns.org>
- <CAOQ4uxjgXa1q-8-ajSBwza-Tkv91tFP-_wWzCQPW+PwJMehEWA@mail.gmail.com>
- <aZi6_K-pSRwAe7F5@slm.duckdns.org>
- <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bdj+md96"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-354490889b6so11339009a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 15:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771631683; x=1772236483; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oX6po6OlLhA6TpNB89pe3rdCVjt4izYpIUQkYe/YBf0=;
+        b=Bdj+md96HabxPLZZCFczYk6h/BHaFTx5KvsJeBl1bS5uILmZwZMdUNrOo3cLIbrTcS
+         df+nhy7TdKGHGwQ6Pa1KuhXMjVt20DN8RfKVzjK3n8O0ZPrjWUdaWNRaUCdanYpzshor
+         RKBTjpSdNB6bleD7JJzzXetpSubv+vAA/o08I4m6gbXkkXqhbSWjD8Qq2ne71njmTNZ6
+         k445Mh6MEjlIRD/7NIPduNEtJhnY+on0OVro9CvjPYTqXcs92ewk7iwlo5StDeRgrAPr
+         FmG5v9i/4pDPfl3j3pn0JT/eUY8EmQFYtnDDPwVeR3h4i06ULR26OPcZQLPog7F/NuJC
+         g5+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771631683; x=1772236483;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oX6po6OlLhA6TpNB89pe3rdCVjt4izYpIUQkYe/YBf0=;
+        b=Q29DwLzEOqkCV0YZ1l4h/Kne51Afk5xjLGeoQWAd+SWz/BTSDGllBACUzP7HA0x5q2
+         PDXSI80bGOzOEMMlPHJfEpNwXELI1iJ5PfMiTHcSFkVkl0C7cZ6TbTornw6HILsdiUUp
+         bEoNrhHhQg7hPFLvfib0qSRG4981vC4ffkeOIHWA9oOa6CTZZ867U8baem30AcxOTlus
+         poG9+6ZlDCYbGgmlwfWbuDf/2UAJkHU9xEQX4jeAY9Adek8anZaw8PkkbJzM0PC5+Nf3
+         Md/0fpGSU31w6marSose5LPw5J8VEZcQPyQ7PX496upPRnxIKP2kSqN1MJCD3U1d/ZWZ
+         kqcg==
+X-Forwarded-Encrypted: i=1; AJvYcCVJyTg47xEt+EajuzJ0oK1j76tZEkWUmujtrA7DdSW+VIPYlIr755bp0Xsj23i0cVE9/2tiDQj3GuZh14iY/EU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yztv1pwl1bBcARB66irOzLWBbaQG876GC5HhIk2BibZTizjqcBF
+	u5yzJ1JfdCiUwvhTCsPgw3iEQdBIYdumXNDtXA4ekdFAkqPbTet4Z3ngNRc28BIQP1aHyxZrq7u
+	xUYqXJZk5BZwSKFeXkTKLsEpRVg==
+X-Received: from pjbbx11.prod.google.com ([2002:a17:90a:f48b:b0:356:2fe0:f5b4])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:3147:b0:354:a065:ec3b with SMTP id 98e67ed59e1d1-358ae8d5edbmr1100686a91.27.1771631682655;
+ Fri, 20 Feb 2026 15:54:42 -0800 (PST)
+Date: Fri, 20 Feb 2026 23:54:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.345.g96ddfc5eaa-goog
+Message-ID: <cover.1771630983.git.ackerleytng@google.com>
+Subject: [PATCH v2 0/2] Test MADV_COLLAPSE on guest_memfd
+From: Ackerley Tng <ackerleytng@google.com>
+To: kartikey406@gmail.com, seanjc@google.com, pbonzini@redhat.com, 
+	shuah@kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: vannapurve@google.com, Liam.Howlett@oracle.com, ackerleytng@google.com, 
+	akpm@linux-foundation.org, baohua@kernel.org, baolin.wang@linux.alibaba.com, 
+	david@kernel.org, dev.jain@arm.com, i@maskray.me, lance.yang@linux.dev, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, lorenzo.stoakes@oracle.com, 
+	npache@redhat.com, ryan.roberts@arm.com, shy828301@gmail.com, 
+	stable@vger.kernel.org, syzbot+33a04338019ac7e43a44@syzkaller.appspotmail.com, 
+	ziy@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hello, Amir.
+syzkaller identified that khugepaged, operating on guest_memfd memory,
+could cause guest_memfd folios to get collapsed, leading to a WARNing
+during fault [1].
 
-On Fri, Feb 20, 2026 at 10:11:15PM +0200, Amir Goldstein wrote:
-> > Yeah, that can be useful. For cgroupfs, there would probably need to be a
-> > way to scope it so that it can be used on delegation boundaries too (which
-> > we can require to coincide with cgroup NS boundaries).
-> 
-> I have no idea what the above means.
-> I could ask Gemini or you and I prefer the latter ;)
+Add selftest to guard against similar regressions.
 
-Ah, you chose wrong. :)
+Changes in v2:
 
-> What are delegation boundaries and NFS boundaries in this context?
++ Found get_trans_hugepagesz(), which I should have used instead of
+  adding getpmdsize()
++ Extended tools/testing/selftests/kvm/include/kvm_syscalls.h to add
+  kvm_madvise()
++ Removed the magic constant address and explained alignment requirements in
+  comments
++ Refactored gmem_test() macro to expose __gmem_test(), which allows custom
+  sized guest_memfds for tests. Sean, I didn't add the gmem_test_huge_pmd()
+  since I'm guessing a test requiring a pmd_sized guest_memfd would probably be
+  once-off.
 
-cgroup delegation is giving control of a subtree to someone else:
+PATCH v1 [3] was sent in reply to the fix [2].
 
-https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/Documentation/admin-guide/cgroup-v2.rst#n537
+[1] https://syzkaller.appspot.com/bug?extid=33a04338019ac7e43a44
+[2] https://lore.kernel.org/all/20260214001535.435626-1-kartikey406@gmail.com/
+[3] https://lore.kernel.org/all/20260217014402.2554832-1-ackerleytng@google.com/
 
-There's an old way of doing it by changing perms on some files and new way
-using cgroup namespace.
+Ackerley Tng (2):
+  KVM: selftests: Wrap madvise() to assert success
+  KVM: selftests: Test MADV_COLLAPSE on guest_memfd
 
-> > Would it be possible to make FAN_MNT_ATTACH work for that?
-> 
-> FAN_MNT_ATTACH is an event generated on a mntns object.
-> If "cgroup NS boundaries" is referring to a mntns object and if
-> this object is available in the context of cgroup create/destroy
-> then it should be possible.
+ .../testing/selftests/kvm/guest_memfd_test.c  | 70 ++++++++++++++++++-
+ .../selftests/kvm/include/kvm_syscalls.h      |  1 +
+ 2 files changed, 68 insertions(+), 3 deletions(-)
 
-Great, yes, cgroup namespace way should work then.
 
-> But FAN_MNT_ATTACH reports a mountid. Is there a mountid
-> to report on cgroup create? Probably not?
-
-Sorry, I thought that was per-mount recursive file event monitoring.
-FAN_MARK_MOUNT looks like the right thing if we want to allow monitoring
-cgroup creations / destructions in a subtree without recursively watching
-each cgroup.
-
-Thanks.
-
--- 
-tejun
+base-commit: a95f71ad3e2e224277508e006580c333d0a5fe36
+prerequisite-patch-id: e001eecc9215dc0ed28546936f86a5a09e57141e
+--
+2.53.0.345.g96ddfc5eaa-goog
