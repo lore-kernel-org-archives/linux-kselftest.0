@@ -1,54 +1,54 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E2B32FA29
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 05:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CB132E141
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 05:55:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771566921; cv=none; b=ixTxk7clWUc6IFk+nAAYlYf0mvMHwpSnn46qLc9+XIF+rTSb7IQkQR4MHJ2oaJFgLeUWl5k+sPmYdPy0PKl/WP3pE3aV5LHrEBpx+De3PGmiJ8UOU19W0viwdjnT3Q4nDctSJeDWVUzx8xPt0LShomuo9WVzdsBCWQx4bYxtpEE=
+	t=1771566923; cv=none; b=Q4cJAQnlde1cQrbsbdsqL+ZHBefrZNffCwzXqkcEZOls7lVsRjFCmjm85vdOtVT0cAAI0ITK46hVPp5kKQsUdqgWH63BzRvGlS5oYHdQfncVxyefD9FgWsimnt0XR8XvNTSkP+aq8Zh631XZFGrH0JNmr1OEYDbZuJA28JV342k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771566921; c=relaxed/simple;
-	bh=yUmonH/CIzK5lTEiC0IVbnht7EAF3Vi0dnZPfCMsJ2Q=;
+	s=arc-20240116; t=1771566923; c=relaxed/simple;
+	bh=ymKrZvnn1wXoX3MO7tLDPSCDvegTjqhP4f2VwqTSGPs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=c3kA4vy5oIFAG+jilbeC0bbYHpHVHDbyCm7XbKNRT6m2RG598YseNuRex/KdAIp1v0bUrMvO8+ZdwYsqTLYRhByiy1wG4NaGE1CK4bCI1ragCYN3RtwxkZ9J+kdEeqPVAh57HIsiCi76t99vq+vMFaxU5BJwMMNJdxVdUaFd4oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zR6xDTLP; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=J+IyoDGa4o8UfQAmGh5N2TIa7DgpTgNHIKVJMKaNK3lusKcatZVbcblFJHv8hPt9isiAW2ouMg2ZYOsT0fy0HqBeE8z434TLZ78JtYYEryi402QTsBu7ia5c+1Q5na8EERdA3bez/QFp7u6RJ81WsC5EDtN/oba4GsvOZjoyJks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XvvK9z35; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zR6xDTLP"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35678f99c6eso1159342a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 21:55:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XvvK9z35"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35621cea097so1068542a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Feb 2026 21:55:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771566918; x=1772171718; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771566922; x=1772171722; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZMtE/y1E7pRM+BgrGCWh1tlQyBGUgnD2quexZvuA3I=;
-        b=zR6xDTLPIPyJj2ALo9HaoWuJs6szIUR+nw7pPRGuF1WpLcPk8rr+gjBHszKvgOwDDS
-         5J2thD5hWM+ZTTf4OSQm9HHXsb0VlkjqmId4q83snqdN/xQRaaTwcZshS31qA4eRsrgi
-         wU4B/xGC2OLSknGeix8ezWoR4h7rbKLFShQgQHLoM0T+Wha6tStVyWhXSXsrCvCFsLDi
-         aNM0lHBpHipClhsx4YeeFho7V6/WKMy3V3S9BDX3zrDGarJe8SQXixmSGCQnxv64lJIr
-         VboUZBfNEMKuZKR9spnhZk6zz847djmH3lmWDfxxwVl9qbIr9r/LGt/Q7WoTg8RBkjv2
-         JhQQ==
+        bh=VLezOUj++5KtU+iy76kNFYSHOIOxW3z9n/oglLgyr0s=;
+        b=XvvK9z3505mugn+OFk5vRK0PeXyyHS3SoBc1LZPu+8cqwFxy9MMW+kYvNulm3BBOJ6
+         DiNn37woVS2EsgwigDMLm2kWjN8FF96sEeRnpGRSxKfRX5cl3lH8FeLpcgCzrEx3vmys
+         k5lQ4+OC3W+VO8b0eNBaLHkXB8v3gXR+ASkhQdFB4AXPcljgSr3U8wKo1551VH0kGWhJ
+         0riqvduSIVwYi7le9CrsKhf1mSVsNwUpZVcHLIo8jzqwCmcnSQmYidbwJWxA571zCaAL
+         Ea4kqJag7fOCtinNADc+e45trP6k9bOYUtjJWfVqSbfh9BejsYdEGtJKauCOwlektk3e
+         uLNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771566918; x=1772171718;
+        d=1e100.net; s=20230601; t=1771566922; x=1772171722;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZMtE/y1E7pRM+BgrGCWh1tlQyBGUgnD2quexZvuA3I=;
-        b=L98NJcVzgQEMKh+Mv8KhagTcbcIlxboP8PN5J+tGNyM/VL9Lc5ftbJktepPcg4d4xo
-         p/xAloUryIJS/1mBHeuOdDLD5ni4ZKO2uIH/8vniWZiublkhWi/oVhsHvTmyzqUznCul
-         IQjqUL1Vbhh66SJWseMIWif+1DgmBP+6lcOzICJ6E2I2RDXkpit9fN+/PduOjJ1P7tSi
-         X1mMgaYX+8gdoD1+g1WeItewJVjO/fXatwJWukbcwCeg/pu/lM4zhzl54ol+oYo+5oBt
-         sA8sFZd5z5Jg7+bCD2fIucwsaVt4vHTWE1hQfe4EfDCQ+r1l9rIr2wi2q1u70mveecpd
-         4kMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVV4SIltb8NncloCdny8Vn5dD0gVNv76SGwiisuKdaXsnKtbN1qpuR+4zX48Ia9932CNjdf4jQs67tLiPtwy0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSH/1T5CsCrG7xVLVzoPHAMq+DPhqPLIm6CfUxAjniGO80GciX
-	rvLKv8zEJY3mMZTgaqyKzSg24DvIelRQYBNjOfbH6M1sx2V0SluAjJoLzRXOXAWbPgsHeHvkWbc
-	/Lo3aDpvy+5bXG9m83Q==
-X-Received: from pgac4.prod.google.com ([2002:a05:6a02:2944:b0:c66:4148:f3f6])
+        bh=VLezOUj++5KtU+iy76kNFYSHOIOxW3z9n/oglLgyr0s=;
+        b=km2GK+Xaztmu1Z+9HqFmYGiRgqMpS5sMILeEZJs5Y9u7tiL0I63kSZVs9uKNRzzcKM
+         ls1tFxupTwiGMDsuqxuKrGsk36u4RiAcA0QHS5VrXBI3QfJ32l5UG8p7s7Pm0vHKO3Yr
+         IMpLeDEzEuABXZLKbMWprRotGLr0oglMkdLhvNd6YaNfCRs57pGICKEUafHvBQ3PkPdp
+         EbSAVLuLt6ZN6Uae1FvM5sVmnmwfVOAiY93+Ahqmcjl8CwZdUTZ6tdyybAm6aEbS6hG/
+         h0qbTSXbmEso/tK3/NMH4COqDxNj8Ak8a79KOcJpt+KRhjJ9M6xh4uWczxpAc9iHTtPk
+         to2w==
+X-Forwarded-Encrypted: i=1; AJvYcCW2UCgJrLEZBaaM++QhtlZsNhz9IhpnV9zO5Rcuh2nHpVVrc6d2uZelwfnYH8dL0QhDDCQb3aeFwQ8ui9t7Rsg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMjHHg1d6XPmKbNPVd8UITvNXLKm9iSo/pQ4QtNGZ8MgNJ6kMa
+	CtSrBF0qqNs9YhTpdbs6lrcRfXUm4UsGAR0rvkI0PasO1oyfrk6Fu3YPgKbinM3I8pPgSGVEobc
+	MawEElyJyp+cOMjOi2w==
+X-Received: from pjmm7.prod.google.com ([2002:a17:90b:5807:b0:349:8a6d:dfd1])
  (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:918e:b0:38c:792:56b0 with SMTP id adf61e73a8af0-394839d9911mr18666582637.38.1771566917867;
- Thu, 19 Feb 2026 21:55:17 -0800 (PST)
-Date: Thu, 19 Feb 2026 21:54:47 -0800
+ 2002:a17:90b:274c:b0:343:c3d1:8b9b with SMTP id 98e67ed59e1d1-35844f85b15mr17487949a91.19.1771566921614;
+ Thu, 19 Feb 2026 21:55:21 -0800 (PST)
+Date: Thu, 19 Feb 2026 21:54:48 -0800
 In-Reply-To: <20260220055449.3073-1-tjmercier@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260220055449.3073-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.53.0.414.gf7e9f6c205-goog
-Message-ID: <20260220055449.3073-3-tjmercier@google.com>
-Subject: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
+Message-ID: <20260220055449.3073-4-tjmercier@google.com>
+Subject: [PATCH v4 3/3] selftests: memcg: Add tests for IN_DELETE_SELF and IN_IGNORED
 From: "T.J. Mercier" <tjmercier@google.com>
 To: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev, 
 	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
@@ -68,153 +68,153 @@ To: gregkh@linuxfoundation.org, tj@kernel.org, driver-core@lists.linux.dev,
 Cc: "T.J. Mercier" <tjmercier@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Currently some kernfs files (e.g. cgroup.events, memory.events) support
-inotify watches for IN_MODIFY, but unlike with regular filesystems, they
-do not receive IN_DELETE_SELF or IN_IGNORED events when they are
-removed. This means inotify watches persist after file deletion until
-the process exits and the inotify file descriptor is cleaned up, or
-until inotify_rm_watch is called manually.
+Add two new tests that verify inotify events are sent when memcg files
+or directories are removed with rmdir.
 
-This creates a problem for processes monitoring cgroups. For example, a
-service monitoring memory.events for memory.high breaches needs to know
-when a cgroup is removed to clean up its state. Where it's known that a
-cgroup is removed when all processes die, without IN_DELETE_SELF the
-service must resort to inefficient workarounds such as:
-  1) Periodically scanning procfs to detect process death (wastes CPU
-     and is susceptible to PID reuse).
-  2) Holding a pidfd for every monitored cgroup (can exhaust file
-     descriptors).
-
-This patch enables IN_DELETE_SELF and IN_IGNORED events for kernfs files
-and directories by clearing inode i_nlink values during removal. This
-allows VFS to make the necessary fsnotify calls so that userspace
-receives the inotify events.
-
-As a result, applications can rely on a single existing watch on a file
-of interest (e.g. memory.events) to receive notifications for both
-modifications and the eventual removal of the file, as well as automatic
-watch descriptor cleanup, simplifying userspace logic and improving
-efficiency.
-
-There is gap in this implementation for certain file removals due their
-unique nature in kernfs. Directory removals that trigger file removals
-occur through vfs_rmdir, which shrinks the dcache and emits fsnotify
-events after the rmdir operation; there is no issue here. However kernfs
-writes to particular files (e.g. cgroup.subtree_control) can also cause
-file removal, but vfs_write does not attempt to emit fsnotify events
-after the write operation, even if i_nlink counts are 0. As a usecase
-for monitoring this category of file removals is not known, they are
-left without having IN_DELETE or IN_DELETE_SELF events generated.
-
-Suggested-by: Jan Kara <jack@suse.cz>
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
+Acked-by: Tejun Heo <tj@kernel.org>
+Acked-by: Amir Goldstein <amir73il@gmail.com>
 ---
- fs/kernfs/dir.c | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+ .../selftests/cgroup/test_memcontrol.c        | 112 ++++++++++++++++++
+ 1 file changed, 112 insertions(+)
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 5b6ce2351a53..41541b969fb2 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -1471,6 +1471,23 @@ void kernfs_show(struct kernfs_node *kn, bool show)
- 	up_write(&root->kernfs_rwsem);
- }
- 
-+static void kernfs_clear_inode_nlink(struct kernfs_node *kn)
-+{
-+	struct kernfs_root *root = kernfs_root(kn);
-+	struct kernfs_super_info *info;
-+
-+	lockdep_assert_held_read(&root->kernfs_supers_rwsem);
-+
-+	list_for_each_entry(info, &root->supers, node) {
-+		struct inode *inode = ilookup(info->sb, kernfs_ino(kn));
-+
-+		if (inode) {
-+			clear_nlink(inode);
-+			iput(inode);
-+		}
-+	}
-+}
-+
- static void __kernfs_remove(struct kernfs_node *kn)
- {
- 	struct kernfs_node *pos, *parent;
-@@ -1479,6 +1496,7 @@ static void __kernfs_remove(struct kernfs_node *kn)
- 	if (!kn)
- 		return;
- 
-+	lockdep_assert_held_read(&kernfs_root(kn)->kernfs_supers_rwsem);
- 	lockdep_assert_held_write(&kernfs_root(kn)->kernfs_rwsem);
- 
- 	/*
-@@ -1522,9 +1540,11 @@ static void __kernfs_remove(struct kernfs_node *kn)
- 			struct kernfs_iattrs *ps_iattr =
- 				parent ? parent->iattr : NULL;
- 
--			/* update timestamps on the parent */
- 			down_write(&kernfs_root(kn)->kernfs_iattr_rwsem);
- 
-+			kernfs_clear_inode_nlink(pos);
-+
-+			/* update timestamps on the parent */
- 			if (ps_iattr) {
- 				ktime_get_real_ts64(&ps_iattr->ia_ctime);
- 				ps_iattr->ia_mtime = ps_iattr->ia_ctime;
-@@ -1553,9 +1573,11 @@ void kernfs_remove(struct kernfs_node *kn)
- 
- 	root = kernfs_root(kn);
- 
-+	down_read(&root->kernfs_supers_rwsem);
- 	down_write(&root->kernfs_rwsem);
- 	__kernfs_remove(kn);
- 	up_write(&root->kernfs_rwsem);
-+	up_read(&root->kernfs_supers_rwsem);
- }
- 
- /**
-@@ -1646,6 +1668,7 @@ bool kernfs_remove_self(struct kernfs_node *kn)
- 	bool ret;
- 	struct kernfs_root *root = kernfs_root(kn);
- 
-+	down_read(&root->kernfs_supers_rwsem);
- 	down_write(&root->kernfs_rwsem);
- 	kernfs_break_active_protection(kn);
- 
-@@ -1675,7 +1698,9 @@ bool kernfs_remove_self(struct kernfs_node *kn)
- 				break;
- 
- 			up_write(&root->kernfs_rwsem);
-+			up_read(&root->kernfs_supers_rwsem);
- 			schedule();
-+			down_read(&root->kernfs_supers_rwsem);
- 			down_write(&root->kernfs_rwsem);
- 		}
- 		finish_wait(waitq, &wait);
-@@ -1690,6 +1715,7 @@ bool kernfs_remove_self(struct kernfs_node *kn)
- 	kernfs_unbreak_active_protection(kn);
- 
- 	up_write(&root->kernfs_rwsem);
-+	up_read(&root->kernfs_supers_rwsem);
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 4e1647568c5b..57726bc82757 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -10,6 +10,7 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <unistd.h>
++#include <sys/inotify.h>
+ #include <sys/socket.h>
+ #include <sys/wait.h>
+ #include <arpa/inet.h>
+@@ -1625,6 +1626,115 @@ static int test_memcg_oom_group_score_events(const char *root)
  	return ret;
  }
  
-@@ -1716,6 +1742,7 @@ int kernfs_remove_by_name_ns(struct kernfs_node *parent, const char *name,
- 	}
++static int read_event(int inotify_fd, int expected_event, int expected_wd)
++{
++	struct inotify_event event;
++	ssize_t len = 0;
++
++	len = read(inotify_fd, &event, sizeof(event));
++	if (len < (ssize_t)sizeof(event))
++		return -1;
++
++	if (event.mask != expected_event || event.wd != expected_wd) {
++		fprintf(stderr,
++			"event does not match expected values: mask %d (expected %d) wd %d (expected %d)\n",
++			event.mask, expected_event, event.wd, expected_wd);
++		return -1;
++	}
++
++	return 0;
++}
++
++static int test_memcg_inotify_delete_file(const char *root)
++{
++	int ret = KSFT_FAIL;
++	char *memcg = NULL;
++	int fd, wd;
++
++	memcg = cg_name(root, "memcg_test_0");
++
++	if (!memcg)
++		goto cleanup;
++
++	if (cg_create(memcg))
++		goto cleanup;
++
++	fd = inotify_init1(0);
++	if (fd == -1)
++		goto cleanup;
++
++	wd = inotify_add_watch(fd, cg_control(memcg, "memory.events"), IN_DELETE_SELF);
++	if (wd == -1)
++		goto cleanup;
++
++	if (cg_destroy(memcg))
++		goto cleanup;
++	free(memcg);
++	memcg = NULL;
++
++	if (read_event(fd, IN_DELETE_SELF, wd))
++		goto cleanup;
++
++	if (read_event(fd, IN_IGNORED, wd))
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	if (fd >= 0)
++		close(fd);
++	if (memcg)
++		cg_destroy(memcg);
++	free(memcg);
++
++	return ret;
++}
++
++static int test_memcg_inotify_delete_dir(const char *root)
++{
++	int ret = KSFT_FAIL;
++	char *memcg = NULL;
++	int fd, wd;
++
++	memcg = cg_name(root, "memcg_test_0");
++
++	if (!memcg)
++		goto cleanup;
++
++	if (cg_create(memcg))
++		goto cleanup;
++
++	fd = inotify_init1(0);
++	if (fd == -1)
++		goto cleanup;
++
++	wd = inotify_add_watch(fd, memcg, IN_DELETE_SELF);
++	if (wd == -1)
++		goto cleanup;
++
++	if (cg_destroy(memcg))
++		goto cleanup;
++	free(memcg);
++	memcg = NULL;
++
++	if (read_event(fd, IN_DELETE_SELF, wd))
++		goto cleanup;
++
++	if (read_event(fd, IN_IGNORED, wd))
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	if (fd >= 0)
++		close(fd);
++	if (memcg)
++		cg_destroy(memcg);
++	free(memcg);
++
++	return ret;
++}
++
+ #define T(x) { x, #x }
+ struct memcg_test {
+ 	int (*fn)(const char *root);
+@@ -1644,6 +1754,8 @@ struct memcg_test {
+ 	T(test_memcg_oom_group_leaf_events),
+ 	T(test_memcg_oom_group_parent_events),
+ 	T(test_memcg_oom_group_score_events),
++	T(test_memcg_inotify_delete_file),
++	T(test_memcg_inotify_delete_dir),
+ };
+ #undef T
  
- 	root = kernfs_root(parent);
-+	down_read(&root->kernfs_supers_rwsem);
- 	down_write(&root->kernfs_rwsem);
- 
- 	kn = kernfs_find_ns(parent, name, ns);
-@@ -1726,6 +1753,7 @@ int kernfs_remove_by_name_ns(struct kernfs_node *parent, const char *name,
- 	}
- 
- 	up_write(&root->kernfs_rwsem);
-+	up_read(&root->kernfs_supers_rwsem);
- 
- 	if (kn)
- 		return 0;
 -- 
 2.53.0.414.gf7e9f6c205-goog
 
