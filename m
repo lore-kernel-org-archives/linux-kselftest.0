@@ -1,62 +1,65 @@
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3622D6407
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 23:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B434F2DB79F
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 23:54:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771631685; cv=none; b=eno20vnuN6i/lcXxPo3ny9nGRXbuG+qVTvyl+9zgYYdA2rYTX+aJh9HAbcomVjErnOQ81zxy0kTxeAWc7zSdeOfvqxVjyTBfaSKRFNWWOjJZnNBHm4sg98tqP1vKBXsRx/+a4WTsMACaKYzGEcnnBCjPAFWKhQMsciaKlz88THA=
+	t=1771631685; cv=none; b=Eh/9gA6PwZMGtZanIE7rvakg0VogQMgUSP4/NyPRwLdhnnHnoJD33vEC4RCTImsQi9xT5g+tQa90iergp7shSme6+SrFkVHU6WboHXLAOy/oAtvdK9daSll2LQe2rVg6hH9nHOB9rRdD617maBwuU/g0eKiiR5RzqizeAlOqVIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771631685; c=relaxed/simple;
-	bh=KBfwhptpQ6YGSe6wr80gC840zct4lvhIaLxF5hhTceM=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tvxKTJjho/0UYmHjf4I+NGXyDZz6f8RYH+eJo8Kl39z1IZzx1poOVnOucOYC29R1zllsIhrhgPZ3OkOntPio5T751JL02fKCh71tuvMtQRcGy6g3koGP9dDV58PrPPit6E6RoluouCd2RNeQw04iU8N6O/gjwr7koofboE6Gc44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bdj+md96; arc=none smtp.client-ip=209.85.216.73
+	bh=S95391Nv2N1C7cuTrHJL9ItK4+s15TFj+YAB1tlQ2Dk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=u7NDJZlsooc3gIM/QG9Oxr36P/GcYxVFo5z25OSNefZiknGNtHNqZwno0VKgNE7dWd4c9u2Hp5LwxmKMtdGCCGgAYxOBUrPC3IxGz2yDDLwUVymgmaFDeH4Ol0D83+Di1gzLPCcfz6wtYRuRd9R2KXf3Q3+Uksa7WpEWZNUkFS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zCf0RJby; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bdj+md96"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-354490889b6so11339009a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 15:54:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zCf0RJby"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-354be486779so11322729a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 15:54:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771631683; x=1772236483; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oX6po6OlLhA6TpNB89pe3rdCVjt4izYpIUQkYe/YBf0=;
-        b=Bdj+md96HabxPLZZCFczYk6h/BHaFTx5KvsJeBl1bS5uILmZwZMdUNrOo3cLIbrTcS
-         df+nhy7TdKGHGwQ6Pa1KuhXMjVt20DN8RfKVzjK3n8O0ZPrjWUdaWNRaUCdanYpzshor
-         RKBTjpSdNB6bleD7JJzzXetpSubv+vAA/o08I4m6gbXkkXqhbSWjD8Qq2ne71njmTNZ6
-         k445Mh6MEjlIRD/7NIPduNEtJhnY+on0OVro9CvjPYTqXcs92ewk7iwlo5StDeRgrAPr
-         FmG5v9i/4pDPfl3j3pn0JT/eUY8EmQFYtnDDPwVeR3h4i06ULR26OPcZQLPog7F/NuJC
-         g5+A==
+        d=google.com; s=20230601; t=1771631684; x=1772236484; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AsOcE+q9g9Rn3X6/odlnCkM6qqA9vgkvaxtReZc0KH0=;
+        b=zCf0RJbyXzylbldGAO0LmvXUtgPFL4d6fd/3JGV+0DmqG4usNruldJzFrkMJPhszav
+         qf8Mj5MVln1zlnCQitnMEg+WnMpoV5XlIWPFjYhqqJe9ctJMymAyjpPMiy+gptOn/L/m
+         EEqzJnqAgpNl9VMH7d4n+ZYJ0TcI2XUP8rPdz3L3cihCZk6gyQ1CYsm77qQgUpfjtffa
+         x0hmFQw1eriFwK7rBe0no6zqlw5lxKCXjPqy8XKsk/DvRJccd61E/5qoD2hrvVLGRtV8
+         JkuuAC35jBGKdBdRLbAAYEXg/R5Rt5qRcorpkjm0hRW0zSyCKM7VMWzleoLT7Qpu4j+R
+         LHWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771631683; x=1772236483;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oX6po6OlLhA6TpNB89pe3rdCVjt4izYpIUQkYe/YBf0=;
-        b=Q29DwLzEOqkCV0YZ1l4h/Kne51Afk5xjLGeoQWAd+SWz/BTSDGllBACUzP7HA0x5q2
-         PDXSI80bGOzOEMMlPHJfEpNwXELI1iJ5PfMiTHcSFkVkl0C7cZ6TbTornw6HILsdiUUp
-         bEoNrhHhQg7hPFLvfib0qSRG4981vC4ffkeOIHWA9oOa6CTZZ867U8baem30AcxOTlus
-         poG9+6ZlDCYbGgmlwfWbuDf/2UAJkHU9xEQX4jeAY9Adek8anZaw8PkkbJzM0PC5+Nf3
-         Md/0fpGSU31w6marSose5LPw5J8VEZcQPyQ7PX496upPRnxIKP2kSqN1MJCD3U1d/ZWZ
-         kqcg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJyTg47xEt+EajuzJ0oK1j76tZEkWUmujtrA7DdSW+VIPYlIr755bp0Xsj23i0cVE9/2tiDQj3GuZh14iY/EU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yztv1pwl1bBcARB66irOzLWBbaQG876GC5HhIk2BibZTizjqcBF
-	u5yzJ1JfdCiUwvhTCsPgw3iEQdBIYdumXNDtXA4ekdFAkqPbTet4Z3ngNRc28BIQP1aHyxZrq7u
-	xUYqXJZk5BZwSKFeXkTKLsEpRVg==
-X-Received: from pjbbx11.prod.google.com ([2002:a17:90a:f48b:b0:356:2fe0:f5b4])
+        d=1e100.net; s=20230601; t=1771631684; x=1772236484;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AsOcE+q9g9Rn3X6/odlnCkM6qqA9vgkvaxtReZc0KH0=;
+        b=TKzLBlbacPv+FiMskA6SpahncHPSvjAEZTQOtaiqgvtuYN98yZW+TrlCWafP8DOnPX
+         12po/gg0GpJimfIPVXaK8h39eS88PX5mQE72RP8oWQrb1gMBAAry1I64KuudbRPmHxNU
+         XymSytFfa/vpfRmxZa4X6Ag9ucORM1ML6t8y5pBeIoK/NcXaKabGu/ecgpRNevfxap6m
+         zqfqxVjU9lWbpuL4E66SGz5qeww/SsWGOK1pNccb8ci3PQDgtmEKj7krCG2unuYFcWJ3
+         LWGkDXdr8MgfGvhRDdisFCNj5jT6G64Xvd5mhWD/gQb59O2zLexXJm7XqMBzQIVhI4qi
+         hWWA==
+X-Forwarded-Encrypted: i=1; AJvYcCWRRSADIBbNAAQmRfbF+B3hgw9l8AuWy+ZTQKiBp304StdBDpWfUr18F7rB04kMKW3aJ8JFWSvDRxv+evjaNC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP52ebZsUENYoXNnWgsAhKwFtdpDZ+UgD5TKLxAFPZBeSkkdsv
+	nBhBw7XIlJSiEczbHkza8mpEm5GNxcBIdmzcTyxsqxBNbp+Z/zTWLEf07LjHmDLXUZRCnCxR7NY
+	bFC27zfIxZod9JJFaC9EpXgmy3A==
+X-Received: from pgig4.prod.google.com ([2002:a63:f404:0:b0:c6e:1b27:7693])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3147:b0:354:a065:ec3b with SMTP id 98e67ed59e1d1-358ae8d5edbmr1100686a91.27.1771631682655;
- Fri, 20 Feb 2026 15:54:42 -0800 (PST)
-Date: Fri, 20 Feb 2026 23:54:34 +0000
+ 2002:a05:6a20:734d:b0:38c:792:56af with SMTP id adf61e73a8af0-39545dbf3afmr1066001637.2.1771631684094;
+ Fri, 20 Feb 2026 15:54:44 -0800 (PST)
+Date: Fri, 20 Feb 2026 23:54:35 +0000
+In-Reply-To: <cover.1771630983.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <cover.1771630983.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.53.0.345.g96ddfc5eaa-goog
-Message-ID: <cover.1771630983.git.ackerleytng@google.com>
-Subject: [PATCH v2 0/2] Test MADV_COLLAPSE on guest_memfd
+Message-ID: <455483ca29a3a3042efee0cf3bbd0e2548cbeb1c.1771630983.git.ackerleytng@google.com>
+Subject: [PATCH v2 1/2] KVM: selftests: Wrap madvise() to assert success
 From: Ackerley Tng <ackerleytng@google.com>
 To: kartikey406@gmail.com, seanjc@google.com, pbonzini@redhat.com, 
 	shuah@kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
@@ -69,41 +72,25 @@ Cc: vannapurve@google.com, Liam.Howlett@oracle.com, ackerleytng@google.com,
 	ziy@nvidia.com
 Content-Type: text/plain; charset="UTF-8"
 
-syzkaller identified that khugepaged, operating on guest_memfd memory,
-could cause guest_memfd folios to get collapsed, leading to a WARNing
-during fault [1].
+Extend kvm_syscalls.h to wrap madvise() to assert success. This will be
+used in the next patch.
 
-Add selftest to guard against similar regressions.
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
+ tools/testing/selftests/kvm/include/kvm_syscalls.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes in v2:
-
-+ Found get_trans_hugepagesz(), which I should have used instead of
-  adding getpmdsize()
-+ Extended tools/testing/selftests/kvm/include/kvm_syscalls.h to add
-  kvm_madvise()
-+ Removed the magic constant address and explained alignment requirements in
-  comments
-+ Refactored gmem_test() macro to expose __gmem_test(), which allows custom
-  sized guest_memfds for tests. Sean, I didn't add the gmem_test_huge_pmd()
-  since I'm guessing a test requiring a pmd_sized guest_memfd would probably be
-  once-off.
-
-PATCH v1 [3] was sent in reply to the fix [2].
-
-[1] https://syzkaller.appspot.com/bug?extid=33a04338019ac7e43a44
-[2] https://lore.kernel.org/all/20260214001535.435626-1-kartikey406@gmail.com/
-[3] https://lore.kernel.org/all/20260217014402.2554832-1-ackerleytng@google.com/
-
-Ackerley Tng (2):
-  KVM: selftests: Wrap madvise() to assert success
-  KVM: selftests: Test MADV_COLLAPSE on guest_memfd
-
- .../testing/selftests/kvm/guest_memfd_test.c  | 70 ++++++++++++++++++-
- .../selftests/kvm/include/kvm_syscalls.h      |  1 +
- 2 files changed, 68 insertions(+), 3 deletions(-)
-
-
-base-commit: a95f71ad3e2e224277508e006580c333d0a5fe36
-prerequisite-patch-id: e001eecc9215dc0ed28546936f86a5a09e57141e
---
+diff --git a/tools/testing/selftests/kvm/include/kvm_syscalls.h b/tools/testing/selftests/kvm/include/kvm_syscalls.h
+index d4e613162bba9..843c9904c46f6 100644
+--- a/tools/testing/selftests/kvm/include/kvm_syscalls.h
++++ b/tools/testing/selftests/kvm/include/kvm_syscalls.h
+@@ -77,5 +77,6 @@ __KVM_SYSCALL_DEFINE(munmap, 2, void *, mem, size_t, size);
+ __KVM_SYSCALL_DEFINE(close, 1, int, fd);
+ __KVM_SYSCALL_DEFINE(fallocate, 4, int, fd, int, mode, loff_t, offset, loff_t, len);
+ __KVM_SYSCALL_DEFINE(ftruncate, 2, unsigned int, fd, off_t, length);
++__KVM_SYSCALL_DEFINE(madvise, 3, void *, addr, size_t, length, int, advice);
+ 
+ #endif /* SELFTEST_KVM_SYSCALLS_H */
+-- 
 2.53.0.345.g96ddfc5eaa-goog
+
