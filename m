@@ -1,46 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EE84207A;
-	Sat, 21 Feb 2026 19:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD37325716;
+	Sat, 21 Feb 2026 19:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771702595; cv=none; b=qWuICY3LZwGxVdHSYmnBo7VOalvm5kboyFT31kzhF/+lZ3hefY6bFfqLJtsVdYrV4tLm7XUj24DhmZjAfOO3rqLEIMtr66JyPHOGz5aZP00PtggSPvjITwd6V5qzwxcBN5L4dK29VCU5ck2jPT0oeFZCtwmToIDQcvk97TSQD5E=
+	t=1771702597; cv=none; b=o/amRd2tbDkniJVK8k26rUfmyRQXxLvSYVsCqsd3EBExE4RIecMiWVjzOjkQ9f3YgOS7DYKmPqgxjtlXxSUHnyPf9g8vDP/SXkmLFTZfNSBo82s3Y6BJITNhRD5bTMeS96SZRv9kvFMAtNPrg5fwQ098HHmWc4zXIG0s/wljIG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771702595; c=relaxed/simple;
-	bh=4/cqu6/9bMRWAkiwVUxwwdtCHQE1xsDQhJqSkDquOyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=up2oijSwmbqe96+GHhjv4hi5UyJVMjeaYM/TFwNy02lO/fhhDStTm46LayKDIydHAokJxq0r6nTXczkm3tSuoCxDL2QffMGP0ICM4blKjTLNzBqfV+UXt4tz/8qtT+FrJBzfY0hOiGokoNP43eYNs+5bekE9ZOPZtBipG9BwRTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKdZa4MV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771702597; c=relaxed/simple;
+	bh=BLMf6S2CwC1uRw1Za6T26Ewe+0K+xw3rETEPypk9tzs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NUbR3tBX0qv3K130MByw3439CqjXd0fA5fQT1mbsA7Mlr1YvKT53BeK71KTPPlmSdfjGf2i3fZhQQRECOuGJCtMr/xEg5j+gA0lkFNpM1aqJW4HJzK+uOOLMbTIvylpC5YjOHM1why+DL3jDDw8tNN6XkNMYBNSyx66YKupgRdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C9t+9Jz2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKdZa4MV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51AB5C4CEF7;
-	Sat, 21 Feb 2026 19:36:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C9t+9Jz2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33CC1C2BC86;
+	Sat, 21 Feb 2026 19:36:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771702594;
-	bh=4/cqu6/9bMRWAkiwVUxwwdtCHQE1xsDQhJqSkDquOyM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dKdZa4MVbzSBmai1pABwghOZq1xaPwH4Vm34+d4LyPVpyPqgr41f7niT1RSxfFx0A
-	 BoL3y1DhuuRcB4NnBTCu+1d4XpmDo/+Y9CO1ohjPsR5Bzxb8k7MNtjKGDgu1F0d+Cm
-	 wUickhpNF6LciTPOTcz9M/zAnda92MHgkJQNzXHf90RTofgeLATa/iprkxk+kyWJPV
-	 uIQg3Pu0aarI11cyesYSCHnx/lht7H6fwLDItsoUKCiyfgDFLnm7CnwRslQQAdTQvV
-	 W8uF1whQ+xynG1k8Owbo25RkEW47AdXsnDwYa+nk/zse4a/C54oV8+BJMLti0BNF8+
-	 E3r7/z2lr51Bg==
+	s=k20201202; t=1771702597;
+	bh=BLMf6S2CwC1uRw1Za6T26Ewe+0K+xw3rETEPypk9tzs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=C9t+9Jz2hPriFjK93TVr0kL3267n6+R42N2n8VOHwQv5agnOpvqATVqVnAs6mYeJm
+	 +jZ4j4ch1N3NYgkCQDXyClUwsO7Pc8NzeLulg0ok3FhJmvecX/JCvcbAl10foHRcuB
+	 wLWPSfzEKGFv51WI3SPLtLH1z+U8nZX/2vPST3mDPKjOOAhNB/jBsZhuvJFz3q/4SW
+	 q1fGqkjXmcnDd+yGMIWKed55s7RyH8fKJvHntiEQtHC3L3GrwQG4kQjKAoU5pwvi2a
+	 c3diqLvXjRbg/Cvnp0m79+SFhrEe43XikHTdiz1L516/jdlbYWtmPA93R3Yn77Jg/Q
+	 lCDWB2zdWQ64A==
 From: SeongJae Park <sj@kernel.org>
 To: 
 Cc: SeongJae Park <sj@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@google.com>,
-	Shuah Khan <shuah@kernel.org>,
 	damon@lists.linux.dev,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [RFC PATCH 00/10] mm/damon: add optional debugging-purpose sanity checks
-Date: Sat, 21 Feb 2026 11:36:17 -0800
-Message-ID: <20260221193629.19332-1-sj@kernel.org>
+Subject: [RFC PATCH 09/10] mm/damon/tests/.kunitconifg: enable DAMON_DEBUG_SANITY
+Date: Sat, 21 Feb 2026 11:36:26 -0800
+Message-ID: <20260221193629.19332-10-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260221193629.19332-1-sj@kernel.org>
+References: <20260221193629.19332-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,41 +51,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-DAMON code has a few assumptions that can be critical if violated.
-Validating the assumptions in code can be useful at finding such
-critical bugs.  I was actually adding some such additional sanity checks
-in my personal tree, and those were useful at finding bugs that I made
-during the development of new patches.  We also found [1] sometimes the
-assumptions are misunderstood.  The validation can work as good
-documentation for such cases.
+CONFIG_DAMON_DEBUG_SANITY is recommended for DAMON development and test
+setups.  Enable it on the default configurations for DAMON kunit test
+run.
 
-Add some of such debugging purpose sanity checks.  Because those
-additional checks can impose more overhead, make those only optional via
-new config, CONFIG_DAMON_DEBUG_SANITY, that is recommended for only
-development and test setups.  And as recommended, enable it for DAMON
-kunit tests and selftests.
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/tests/.kunitconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-[1] https://lore.kernel.org/20251231070029.79682-1-sj@kernel.org
-
-SeongJae Park (10):
-  mm/damon: add CONFIG_DAMON_DEBUG_SANITY
-  mm/damon/core: add damon_new_region() debug_sanity check
-  mm/damon/core: add damon_del_region() debug_sanity check
-  mm/damon/core: add damon_nr_regions() debug_sanity check
-  mm/damon/core: add damon_merge_two_regions() debug_sanity check
-  mm/damon/core: add damon_merge_regions_of() debug_sanity check
-  mm/damon/core: add damon_split_region_at() debug_sanity check
-  mm/damon/core: add damon_reset_aggregated() debug_sanity check
-  mm/damon/tests/.kunitconifg: enable DAMON_DEBUG_SANITY
-  tools/testing/selftests/damon/config: enable DAMON_DEBUG_SANITY
-
- mm/damon/Kconfig                     |  11 +++
- mm/damon/core.c                      | 139 +++++++++++++++++++++++++++
- mm/damon/tests/.kunitconfig          |   3 +
- tools/testing/selftests/damon/config |   1 +
- 4 files changed, 154 insertions(+)
-
-
-base-commit: e059221c54896e36c8fc320029648e9013b382ea
+diff --git a/mm/damon/tests/.kunitconfig b/mm/damon/tests/.kunitconfig
+index 36a450f57b581..144d27e6ecc5c 100644
+--- a/mm/damon/tests/.kunitconfig
++++ b/mm/damon/tests/.kunitconfig
+@@ -13,3 +13,6 @@ CONFIG_DAMON_VADDR_KUNIT_TEST=y
+ CONFIG_SYSFS=y
+ CONFIG_DAMON_SYSFS=y
+ CONFIG_DAMON_SYSFS_KUNIT_TEST=y
++
++# enable DAMON_DEBUG_SANITY to catch any bug
++CONFIG_DAMON_DEBUG_SANITY=y
 -- 
 2.47.3
