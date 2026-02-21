@@ -1,203 +1,183 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3EC2F7AB0
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 18:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8130B246BC5
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 19:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771700127; cv=none; b=sFvgo5p86zelDRIO9HAeB19AjhUKlvjJcyrGNo0Qjic03rj+/WlOatRc/Ry+vEyeZE1IzNcoDUq5i0Jv+Q0rJTn/xNslMxCYfG9tlB1HVIiwj0WMhhaqbBs1uhZH1S37yzlRJH8/rMudRGnBY7DYRqfkUIub9vXQGh12ZaVMpz8=
+	t=1771701523; cv=none; b=UA48B7AK6+a3akYTQ8J+woNAf14yovWVzeo76Hk0JxYAWW4kXF/hJtWxVdLbWoxHlB9B29px7GnWIMemK75u8HA3hXThdYh/B+7cBhzsGv8NGOV5+eRgA6hb8eTGtfTNxZJFBlkse7YxPQBASVkODxoBxHyu3wlD919anUXoJh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771700127; c=relaxed/simple;
-	bh=zj1nzFsQKy7G9JLp3bdrBW08Nt2BFrGjPQK/n7+/h8E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gBlFr0i+x42o5oOZMrKVtQFuqSDOXK6SjHl01pyiy5itTHe8jLH8W7VhT78HAiIufsy21VfDjCEXdTQII0LmSMbq7HzXt3gKbTVsTFMaIrSJRDhIndcVTJL9e9Yku2EA5orq7GwAFod79Rb+gYKG1gzi6ifHpdTYf5xgdKIXenk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KsI8ZlDi; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1771701523; c=relaxed/simple;
+	bh=y5yCMd2oa+DT/yk9AJ3rCQZW9RGjNj8Gsp2vP1DzXQI=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=WaO/n1yN+9y3W+xOmTm5ZejO+hijmKcXffbeCoJJm5vLE9gHAmFwPLgxoxguLAHgnfw/VNGZWqdH92IPD8rsstqVa99rrdeluqket1zkZwPPpSjsgkfgnRwRb4F0rw5aNleGxncx5Hkiod5ljPtI/gBWne76r14h/BTD+112c8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ekYvpL4u; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=HML46KRi; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KsI8ZlDi"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ekYvpL4u";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="HML46KRi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771700125;
+	s=mimecast20190719; t=1771701521;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xKg+N2bAOrd2PMcoX6bAcqgeV9uYlmhLKffPR6U/E6o=;
-	b=KsI8ZlDi6NMe6/O9N5qnaFDyYyXV4dC8xFf/bZ8den7KDaN5t2zeIvo6gYxai7XMbxLxRz
-	YevUPHYkS4ro8BdQ+Xb6U6B8OgImFIkxnJqZtILpD1Nm21tqnvi/JiP3HF+JI7Oz2/ku/T
-	dO8VOn7OLxTOh+/ZAM3DuyLbhXmtJ1o=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-316-oGt6ycoXM6Gzk6jQt95DkA-1; Sat,
- 21 Feb 2026 13:55:18 -0500
-X-MC-Unique: oGt6ycoXM6Gzk6jQt95DkA-1
-X-Mimecast-MFC-AGG-ID: oGt6ycoXM6Gzk6jQt95DkA_1771700117
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 42E7A1956052;
-	Sat, 21 Feb 2026 18:55:16 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.15])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id ADF4A1955D85;
-	Sat, 21 Feb 2026 18:55:11 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Chen Ridong <chenridong@huaweicloud.com>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH v6 7/8] cgroup/cpuset: Defer housekeeping_update() calls from CPU hotplug to workqueue
-Date: Sat, 21 Feb 2026 13:54:17 -0500
-Message-ID: <20260221185418.29319-8-longman@redhat.com>
-In-Reply-To: <20260221185418.29319-1-longman@redhat.com>
-References: <20260221185418.29319-1-longman@redhat.com>
+	bh=hx8RfWzWYamghKcrDMA6FiyZYhfTQKUfitsZoNr3bPw=;
+	b=ekYvpL4uMxsXQS+xh40tiXOgrtvjFD5Y19z8s++K0WfIfQthVqXWO8kKC5PIhcw6DQLEtB
+	0NxmM3emx8B5wh9z1no6jLM+C3/Fv/F8IAKspgKu4Tr5boOens7rx/QTdjQjG3eyh8+l1e
+	nny+SM9oTXsu5dJWcXmkldMFBa5WaLY=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-77-MqK1hHrFN-mTvN9lreEN3w-1; Sat, 21 Feb 2026 14:18:39 -0500
+X-MC-Unique: MqK1hHrFN-mTvN9lreEN3w-1
+X-Mimecast-MFC-AGG-ID: MqK1hHrFN-mTvN9lreEN3w_1771701519
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cb4a241582so2658250385a.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 11:18:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1771701519; x=1772306319; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hx8RfWzWYamghKcrDMA6FiyZYhfTQKUfitsZoNr3bPw=;
+        b=HML46KRiydpyEPTTIzyW96oRcppOA6yWAsGRIoVgPm7b3ZU4+whoXz8SKNqK6Q0LdB
+         bm0wFzEFwUfOcLaAWbZsS1sOF/mpQcHItoD7evB/m9FoTiouK6SK8ZU3Ppstz6X6sq9h
+         GULvvTcdjlZZQ1LRel+KWJPvhg7J9Rs3AiXpxqHuNOPQHA9JkcTyIgs6kkGO0+BTZy2Y
+         0ZYOYpDvq/Tv2RUIn2lvKqy5xM/BXNSDShPVBThpU1JhHANUXSV6X2SsXW1ziXHQjYZR
+         qgfip+Jlr4uB2EQFcBexKgxI2MA9rgZT3xDOEyc16GgI0DW1jv2rUHEUiSlq5KdBQw2f
+         YRnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771701519; x=1772306319;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hx8RfWzWYamghKcrDMA6FiyZYhfTQKUfitsZoNr3bPw=;
+        b=Y3p0KnVhUKRb2xM/n3AAUssUhqhik8fULPrfBhvB0a8NUzK5TOcwkmHIm1cyLaGCon
+         Bvl927E+xavty8g2vwmm6WK6ar9Ooc7DsZnTthTDZgctOi6XvJtAkDyzztWL6+KxxL2p
+         RJuYV4WcpxIiCO0f5kWhXpZU2mUzqPMVEF65wawzUgBOXkhSN1X7nsdR5UEBZSwuihio
+         XTXUGqnlIrWV95zcPWj4WGBMWQhqs2X1xL4mz7kaX3WNevod3Ehc5+JGHZiLVf5egGJb
+         qTVXSy1855TmygYO1Rz+mk0mcOleYBXP2qOfJiVuWvdzWWeX63ULnZ+b99Q5x9wpWPsM
+         7i8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXdJgxILGb3l58uK8xh3jM8LKU/pYzuMpamw5WCv4wZ5vc4M37c0//yikayfXuG4cxHRkbH3OUX4ys9tIQdhEk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgK/xphd8i+bbiDmbn/pER8S9WSMk27b42vygLysntxKLrIf5N
+	OFxGfmP/jRd4TmwG8Yd8kR/MGnI/2kdC6y8M+Fo7pgu3sQrpY19T2Qt6Hnml0KOdXUAIm+bDPGx
+	OwMUUBAX9dx98h2spNCHwGaXlskH32dXgl92dbQvlhfDi7IzQ30nmTK4Z2SgPGoN3hBWJm61wKO
+	YLkA==
+X-Gm-Gg: AZuq6aKwJ5pES6uitZ0Bh/G2Yi52fkLrthgtRJTbBWrMN4hZqND7ksgaVzhGmJvimtF
+	12yr/JTvaUzyg7evqF1vonrPYARsUJmBmNCMLgtbEgFLUwWP6La8Z4uzmPtHjCDtGQS65RRwz73
+	hvdNMlxFZ0qw93r345ALm83wBM0vtRoPUm4r22mH4Wg3cPsjRbozvzqpAivmnJL7u3tVwleZBo0
+	LIv3xZJom/KVQVuiBTPMeoOfhmRoVayv1Gim44TFHWQmAv2dTNOrcNVklveW60Fk4Dk/p7j38Xz
+	4sxgQ3FcVLsy4PhePjcbs4h4lUvlvZx8Ns9i1CK4LgcRlG3ENO7LJ7XAsx7B2g/FaB5VWbYMAse
+	bGRyDffUz0ciIARTqDLjZ2FMQneykSUwOW3ee5VanK5zzcu1zdckIo0+KKWO7uJIU3uyL
+X-Received: by 2002:a05:620a:708b:b0:8c3:7f27:a65d with SMTP id af79cd13be357-8cb8c9fd136mr483933485a.28.1771701518686;
+        Sat, 21 Feb 2026 11:18:38 -0800 (PST)
+X-Received: by 2002:a05:620a:708b:b0:8c3:7f27:a65d with SMTP id af79cd13be357-8cb8c9fd136mr483929285a.28.1771701518176;
+        Sat, 21 Feb 2026 11:18:38 -0800 (PST)
+Received: from ?IPV6:2601:600:947f:f020:85dc:d2b2:c5ee:e3c4? ([2601:600:947f:f020:85dc:d2b2:c5ee:e3c4])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb8d0460c9sm287647285a.5.2026.02.21.11.18.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Feb 2026 11:18:37 -0800 (PST)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <359310f9-216a-4f0b-8de5-02d9b0829b3e@redhat.com>
+Date: Sat, 21 Feb 2026 14:18:34 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/6] cgroup/cpuset: Don't update isolated_cpus from CPU
+ hotplug
+To: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260212164640.2408295-1-longman@redhat.com>
+ <20260212164640.2408295-5-longman@redhat.com>
+ <d77ef443-d816-4565-a9bc-e7e46c0a92c4@huaweicloud.com>
+Content-Language: en-US
+In-Reply-To: <d77ef443-d816-4565-a9bc-e7e46c0a92c4@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The cpuset_handle_hotplug() may need to invoke housekeeping_update(),
-for instance, when an isolated partition is invalidated because its
-last active CPU has been put offline.
+On 2/13/26 1:56 AM, Chen Ridong wrote:
+>
+> On 2026/2/13 0:46, Waiman Long wrote:
+>> As any change to isolated_cpus is going to be propagated to the
+>> HK_TYPE_DOMAIN housekeeping cpumask, it can be problematic if
+>> housekeeping cpumasks are directly being modified from the CPU hotplug
+>> code path. This is especially the case if we are going to enable dynamic
+>> update to the nohz_full housekeeping cpumask (HK_TYPE_KERNEL_NOISE)
+>> in the near future with the help of CPU hotplug.
+>>
+>> Avoid these potential problems by changing the cpuset code to not
+>> updating isolated_cpus when calling from CPU hotplug. A new special
+>> PRS_INVALID_ISOLCPUS is added to indicate the current cpuset is an
+>> invalid partition but its effective_xcpus are still in isolated_cpus.
+>> This special state will be set if an isolated partition becomes invalid
+>> due to the shutdown of the last active CPU in that partition. We also
+>> need to keep the effective_xcpus even if exclusive_cpus isn't set.
+>>
+>> When changes are made to "cpuset.cpus", "cpuset.cpus.exclusive" or
+>> "cpuset.cpus.partition" of a PRS_INVALID_ISOLCPUS cpuset, its state
+>> will be reset back to PRS_INVALID_ISOLATED and its effective_xcpus will
+>> be removed from isolated_cpus before proceeding.
+>>
+>> As CPU hotplug will no longer update isolated_cpus, some of the test
+>> cases in test_cpuset_prs.h will have to be updated to match the new
+>> expected results. Some new test cases are also added to confirm that
+>> "cpuset.cpus.isolated" and HK_TYPE_DOMAIN housekeeping cpumask will
+>> both be updated.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset.c                        | 85 ++++++++++++++++---
+>>   .../selftests/cgroup/test_cpuset_prs.sh       | 21 +++--
+>>   2 files changed, 87 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index c792380f9b60..48b7f275085b 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -159,6 +159,8 @@ static bool force_sd_rebuild;			/* RWCS */
+>>    *   2 - partition root without load balancing (isolated)
+>>    *  -1 - invalid partition root
+>>    *  -2 - invalid isolated partition root
+>> + *  -3 - invalid isolated partition root but with effective xcpus still
+>> + *	 in isolated_cpus (set from CPU hotplug side)
+>>    *
+>>    *  There are 2 types of partitions - local or remote. Local partitions are
+>>    *  those whose parents are partition root themselves. Setting of
+>> @@ -187,6 +189,7 @@ static bool force_sd_rebuild;			/* RWCS */
+>>   #define PRS_ISOLATED		2
+>>   #define PRS_INVALID_ROOT	-1
+>>   #define PRS_INVALID_ISOLATED	-2
+>> +#define PRS_INVALID_ISOLCPUS	-3 /* Effective xcpus still in isolated_cpus */
+>>   
+> How about adding a helper?
+>
+> bool hotplug_invalidate_isolate(struct cpuset *cs)
+> {
+> 	if (current->flags & PF_KTHREAD) &&
+>      		(cs->partition_root_state == PRS_INVALID_ISOLATED);
+> }
+>
+I decided to revert back to the v4 way of deferring 
+housekeeping_update() call to a workqueue to make it simple, but do it 
+in a simple and straight forward way.
 
-As we are going to enable dynamic update to the nozh_full housekeeping
-cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
-allowing the CPU hotplug path to call into housekeeping_update() directly
-from update_isolation_cpumasks() will likely cause deadlock. So we
-have to defer any call to housekeeping_update() after the CPU hotplug
-operation has finished. This is now done via the workqueue where
-the update_hk_sched_domains() function will be invoked via the
-hk_sd_workfn().
+Thanks,
+Longman
 
-An concurrent cpuset control file write may have executed the required
-update_hk_sched_domains() function before the work function is called. So
-the work function call may become a no-op when it is invoked.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c                        | 31 ++++++++++++++++---
- .../selftests/cgroup/test_cpuset_prs.sh       | 11 ++++++-
- 2 files changed, 36 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 3d0d18bf182f..2c80bfc30bbc 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1323,6 +1323,16 @@ static void update_hk_sched_domains(void)
- 		rebuild_sched_domains_locked();
- }
- 
-+/*
-+ * Work function to invoke update_hk_sched_domains()
-+ */
-+static void hk_sd_workfn(struct work_struct *work)
-+{
-+	cpuset_full_lock();
-+	update_hk_sched_domains();
-+	cpuset_full_unlock();
-+}
-+
- /**
-  * rm_siblings_excl_cpus - Remove exclusive CPUs that are used by sibling cpusets
-  * @parent: Parent cpuset containing all siblings
-@@ -3795,6 +3805,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
-  */
- static void cpuset_handle_hotplug(void)
- {
-+	static DECLARE_WORK(hk_sd_work, hk_sd_workfn);
- 	static cpumask_t new_cpus;
- 	static nodemask_t new_mems;
- 	bool cpus_updated, mems_updated;
-@@ -3877,11 +3888,21 @@ static void cpuset_handle_hotplug(void)
- 	}
- 
- 
--	if (update_housekeeping || force_sd_rebuild) {
--		mutex_lock(&cpuset_mutex);
--		update_hk_sched_domains();
--		mutex_unlock(&cpuset_mutex);
--	}
-+	/*
-+	 * Queue a work to call housekeeping_update() & rebuild_sched_domains()
-+	 * There will be a slight delay before the HK_TYPE_DOMAIN housekeeping
-+	 * cpumask can correctly reflect what is in isolated_cpus.
-+	 *
-+	 * We rely on WORK_STRUCT_PENDING_BIT to not requeue a work item that
-+	 * is still pending. Before the pending bit is cleared, the work data
-+	 * is copied out and work item dequeued. So it is possible to queue
-+	 * the work again before the hk_sd_workfn() is invoked to process the
-+	 * previously queued work. Since hk_sd_workfn() doesn't use the work
-+	 * item at all, this is not a problem.
-+	 */
-+	if (update_housekeeping || force_sd_rebuild)
-+		queue_work(system_unbound_wq, &hk_sd_work);
-+
- 	free_tmpmasks(ptmp);
- }
- 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 0c5db118f2d1..dc2dff361ec6 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -246,6 +246,9 @@ TEST_MATRIX=(
- 	"  C2-3:P1  C3:P1   .      .     O3=0    .      .      .     0 A1:2|A2: A1:P1|A2:P1"
- 	"  C2-3:P1  C3:P1   .      .    T:O2=0   .      .      .     0 A1:3|A2:3 A1:P1|A2:P-1"
- 	"  C2-3:P1  C3:P1   .      .      .    T:O3=0   .      .     0 A1:2|A2:2 A1:P1|A2:P-1"
-+	"  C2-3:P1  C3:P2   .      .    T:O2=0   .      .      .     0 A1:3|A2:3 A1:P1|A2:P-2"
-+	"  C1-3:P1  C3:P2   .      .      .    T:O3=0   .      .     0 A1:1-2|A2:1-2 A1:P1|A2:P-2 3|"
-+	"  C1-3:P1  C3:P2   .      .      .    T:O3=0  O3=1    .     0 A1:1-2|A2:3 A1:P1|A2:P2  3"
- 	"$SETUP_A123_PARTITIONS    .     O1=0    .      .      .     0 A1:|A2:2|A3:3 A1:P1|A2:P1|A3:P1"
- 	"$SETUP_A123_PARTITIONS    .     O2=0    .      .      .     0 A1:1|A2:|A3:3 A1:P1|A2:P1|A3:P1"
- 	"$SETUP_A123_PARTITIONS    .     O3=0    .      .      .     0 A1:1|A2:2|A3: A1:P1|A2:P1|A3:P1"
-@@ -762,7 +765,7 @@ check_cgroup_states()
- # only CPUs in isolated partitions as well as those that are isolated at
- # boot time.
- #
--# $1 - expected isolated cpu list(s) <isolcpus1>{,<isolcpus2>}
-+# $1 - expected isolated cpu list(s) <isolcpus1>{|<isolcpus2>}
- # <isolcpus1> - expected sched/domains value
- # <isolcpus2> - cpuset.cpus.isolated value = <isolcpus1> if not defined
- #
-@@ -771,6 +774,7 @@ check_isolcpus()
- 	EXPECTED_ISOLCPUS=$1
- 	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
- 	ISOLCPUS=$(cat $ISCPUS)
-+	HKICPUS=$(cat /sys/devices/system/cpu/isolated)
- 	LASTISOLCPU=
- 	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
- 	if [[ $EXPECTED_ISOLCPUS = . ]]
-@@ -808,6 +812,11 @@ check_isolcpus()
- 	ISOLCPUS=
- 	EXPECTED_ISOLCPUS=$EXPECTED_SDOMAIN
- 
-+	#
-+	# The inverse of HK_TYPE_DOMAIN cpumask in $HKICPUS should match $ISOLCPUS
-+	#
-+	[[ "$ISOLCPUS" != "$HKICPUS" ]] && return 1
-+
- 	#
- 	# Use the sched domain in debugfs to check isolated CPUs, if available
- 	#
--- 
-2.53.0
 
