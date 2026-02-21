@@ -1,455 +1,274 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E01E3502B7
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 16:48:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771692541; cv=none; b=Lq/MBblUwfVc7Lm2nq892KxZnyTIglcvldV3tB+rRreLlklF+eSbgtNM8jl6PBtk0FZM2C2NVCsDGoFkQiMiwTMuZ+YCFSS+AUprbSgWldfTYeY4LCig3H5HS4dJBLg86AC3GuW+ByddzsRPohVhm6cJ6YNMu7k364hOpfRl7nk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771692541; c=relaxed/simple;
-	bh=U57Xqi41GmcO0x6P9Zx3BaCcGSfhRtmMSS7Uf1PuLxs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tyr5zAdK9sMii2+UlGYkkdpcHk6JRGon/F+ytrrpob7SBvYxkvjnq1rgxfRzftvaFwnZX/9Wn4XLzlZRCVFuVPAZVWez2bAiWoUeFM+R4mmGJr7+oaZH//OnuuR5tMzMT2BWkKSMFqNKvJ1MHQK1UAHcvKaAnP6tIZApBgxSMRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ICYTDdoA; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27D17352958
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 16:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771692706; cv=pass; b=H4eDWngfnpNV9mRADZVx+p6UeYMkxXpfRaaGKemRlQKWUZO0HpmT7Ik89G4+1uQQHyh0njiix9OziceDecqjoXPGo+cFhLAKrYb1uAeqkiu303P2f5x5VCnaB2h0Qml+YbfurMr8qaRKRZxOWcuQ6JSw0CX2kWCjtYhPD3MMf5U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771692706; c=relaxed/simple;
+	bh=ISMeaFGkM1t/rcoHTy00tzcyFwk6QjXPrYp0XSfWpw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bUKjmUkKfce5wza1FzxYUzuAte9tXBSjke8YQluLEyBC78TWaGRFtlMEQO4sMrX8GhoN+2VaRyYrSgOuQ5bqEhECxtQJdsAm5g8VuW5BU0lkdUWDRbfpKO87JMPnesH/hr1kVUXvE74C5P5WPK8fUaGXOLf1F89ed4jGyG6yO8Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LNvXGSvp; arc=pass smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ICYTDdoA"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-506c02ec1b3so33394931cf.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 08:48:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LNvXGSvp"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-4376c0bffc1so2284313f8f.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 08:51:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771692703; cv=none;
+        d=google.com; s=arc-20240605;
+        b=P9AkvIWMymZL7bcIkrPmDDwlYNgFnxq+Fx48Sv+zfZVxJ/VjI9NzBJISC7cXNDhT+j
+         iJSq1QpLwSHnb6XOdYaVGWIIm8WkuLum5SJZlLQchfUeO0zBqz3bpdQcCHd3DLUG7wVf
+         l6kTW8TtqweE0erxGytexV4mEXNrTVy1rNoB5K1W7Gghc23qFfWKkKL5KXtZ10blREpy
+         f0/I1QgW2iyo70EcUCpZ9ZwItDNEKAQ4pLArGdJGh0XeL2lLmdX6lGS2FsV1og3eF0HS
+         59JUH0DGTYFJWNDqUiioo0CNJKr/M9dmaP1ld5z2qhDUMxFhPylCji8ZA45MUGp9qA5t
+         e51w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
+        fh=Du9+QhVZfLG6bXIv76qpw1ZBvhFxpvWklYnNFy5tU6o=;
+        b=EFX0fNiqafBUzSyhU1B47gm7dX+yn6DjoCUOZYR7nfypQ1ZLI+ycvAYD0vlvrT/mbp
+         tbJTF09FzsnRySS39QmuspVSch8tXwyRY9Y69PU+cIPH1MN08ZDEzwb9A1VQmWxMAPwt
+         RiwIB+eL6llJPhrLd6Ah75c/r9dS8lPUccTdvrW9MsnipTHIst4io3PjjHmlaoHqFE8g
+         grN2PpNXYKecG9A+quCFIjchAiJBRkntk0rAm9JiVppySc6iS5+iHA6GybsTwH6Ah7hd
+         2Yad3z4Kn8dP1GaAMSBAsjeQNGNP0T+P8t5jB7utnSmv3hRMonR4p46F25zWxe0HeJtc
+         HHtA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771692538; x=1772297338; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771692703; x=1772297503; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+im6HE0V+UhU/UpPycv1gj885b94imjLQRZ7n5HPX5c=;
-        b=ICYTDdoA2M1kGzT3uTJwz5VCpszDhuAJLWWusENJRDxQJ13Q1T23BhBbSDiJYIjlVM
-         wGixAQpOk16DvzL0ELshlfQt8ILcPslEf/09B02G8xyHCNnBpaQtxD5BhrXesCNbzymv
-         X4vyGxROcyVseqtKLZAgi5WzXAgOABqKWLwz6/VNXmTgosRvXMwywkCj7kM4xb4cs8pW
-         CZsiNOBD6ltSIcI7Tyhl3CDL523RpzHt6RGBKxnCVChRa46UcaOGNF5w892GLP8u59Q2
-         DRwJSePBBFIUJcWw6OBXQhk1Uz1unMKvGipH5WtBD3E2NeM2EF6cLFuvDaJEhTi4+yET
-         nWUg==
+        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
+        b=LNvXGSvp4GOwg6mfUO74scnJBC/+3xWm+aXloNBxUpptrpV4cGiiQOzLDtZ1y4GTZx
+         9QBWZxZTKnjZpYgjCLZ3gL0/DgpFPwjfHaGv9MNsGItGue262zIWumgw1y8+ffnrqD3s
+         dH5PFsFl35H4voTKs5XIzCBaeL02EZTy3lDbskMTXGZ2ISj+pd45dPE6ep2XJ75qtprq
+         lHjcmp80MlFj7Lc3rmUUrDtO0Trgaw8vhXTiHuXJw4ipVYC3aKeH/Gwvts+yM7Mg7ImL
+         7kOAbJXcGMrfNLuzTRcb795Ol4YT+MuKe+m/uFDykUyifgjL5zrIsevxBwZb8Ej8ewhj
+         eEaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771692538; x=1772297338;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1771692703; x=1772297503;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+im6HE0V+UhU/UpPycv1gj885b94imjLQRZ7n5HPX5c=;
-        b=s6iG0Gpp2Yv82p/mZ0GvFkA1Fkl9DP6zv0jth+fAeMIXgE7v/fneApDbBBxkxN07s2
-         NXOB8HfWZbtZl1TFXSqJftQsp/4IzGGVJCi+yGV1yPBR3jHlHZtZ0Sz0Tig8tpnVdhhP
-         Nnr5JptFgO6Y6kzu81qBHKf7AmcMxTLRMPc7JqR4vBqfxJAVrI2Fl2Bd/ybTLFUCgHMo
-         2CmH2nsTJcqFN8S0X7Ad5PQGKk7oftjcJo8a4tIufjIa4OcfivF7cFNIq+WtDRQu4ftO
-         RP3DCMhK3qRZ11SDpf7J92exkZhmEyi6U9jvbH/xWeWzqGUYQImcFhN1AmQdvs6fATpV
-         BDnA==
-X-Forwarded-Encrypted: i=1; AJvYcCU4dP8TUTUATkTBZAmay6i63GECER9eiCUzDR9A/PnxQye6UB/pNCPs5B20icfoA+Dt0XLlcjhq6BQsQeLzkPI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfYQ3yb7AZhGuTAAltYdtAujqZjllUnkhPj1IEv7ZM5Qlvo6KW
-	IPPpH9+U9AmFm6wBBYpR0sDhbGeOnnUbigSSpp4hPA4AhcPIiLcET4VrC0rhyQ==
-X-Gm-Gg: AZuq6aI+kuv4x/4hlAqYkY4+lSACHTcGBNpKMTpkTMQrj0b/YSCd6FXdcsPrYRsEiM4
-	fcwmHPDULYSQ6k9/uXFvkri0zPi2CXGbk5tONeSylaa6Pm7PscSEWmWnz1kFbUWGnQ+VuNzKUNr
-	pKm+JlnsxtEg4CD1aGg1q4U/70HtucZVs6QwK2Jg0EG4hdWvrpOazMXoM17RHNmjzIda/Cu8t/N
-	Z07iAPNaXWfbRTGdfl/cDVAi3uXbN1HoVZpLxRTruAlB4wtse5myT5QLUYBf/fsoX7njS8C136F
-	TH/eykpIYIO+u0vku9J0ZaByenwA1L7SiovrmxAo2HwZZU75u03IPd0qtsvy+fOMLagc4UmzK3V
-	wDHjzp1OHj+BwHO85C0mc7xxPO33jpO0LmJueJ8WWpVdiNmDe1ThQ7n5KyTMcZZjI9PNxq1bsYl
-	/nA8F6zGQAbc6YWO7RyyDV1S9jAC6FlMLOmY1uDirRkBuFgBxZ4O0J/qw=
-X-Received: by 2002:a17:902:d48c:b0:2aa:f5b4:9a2e with SMTP id d9443c01a7336-2ad5f7349eemr96972465ad.11.1771685998012;
-        Sat, 21 Feb 2026 06:59:58 -0800 (PST)
-Received: from toolbx ([103.230.182.3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7503f4a4sm23730205ad.79.2026.02.21.06.59.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Feb 2026 06:59:57 -0800 (PST)
-From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	ceph-devel@vger.kernel.org,
-	gfs2@lists.linux.dev,
-	linux-nfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org,
-	v9fs@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	jlayton@kernel.org,
-	chuck.lever@oracle.com,
-	alex.aring@gmail.com,
-	arnd@arndb.de,
-	adilger@dilger.ca,
-	mjguzik@gmail.com,
-	smfrench@gmail.com,
-	richard.henderson@linaro.org,
-	mattst88@gmail.com,
-	linmag7@gmail.com,
-	tsbogend@alpha.franken.de,
-	James.Bottomley@HansenPartnership.com,
-	deller@gmx.de,
-	davem@davemloft.net,
-	andreas@gaisler.com,
-	idryomov@gmail.com,
-	amarkuze@redhat.com,
-	slava@dubeyko.com,
-	agruenba@redhat.com,
-	trondmy@kernel.org,
-	anna@kernel.org,
-	sfrench@samba.org,
-	pc@manguebit.org,
-	ronniesahlberg@gmail.com,
-	sprasad@microsoft.com,
-	tom@talpey.com,
-	bharathsm@microsoft.com,
-	shuah@kernel.org,
-	miklos@szeredi.hu,
-	hansg@kernel.org
-Subject: [PATCH v4 1/4] openat2: new OPENAT2_REGULAR flag support
-Date: Sat, 21 Feb 2026 20:45:43 +0600
-Message-ID: <20260221145915.81749-2-dorjoychy111@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260221145915.81749-1-dorjoychy111@gmail.com>
-References: <20260221145915.81749-1-dorjoychy111@gmail.com>
+        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
+        b=xA8fHH5H2YuSpNFcPKUE1hYKS2IjBgZjlAKl2jzDaT+bP8FVLHJwE6/qZBeuvVRgIZ
+         QKTxTWc0DXiISHEOwGB3h6Xwr2OigRZ408X3ZzyJ37+CeVioA9zuuq3soo+I+OBQ6+su
+         uj3PwZ0wbvIeGoQLNXBeJ6qXE2IgkcxNQqG0tNEYPu/ZM5KGI/C1RV/O7ojEEdzuMy9T
+         UT6lGz8Fbdo9hJSLm7BMD/ildBKQsscl9/+biUXKG320FgcaASCcCiNeR3G0+WV8zfgq
+         r867A2mlfdw/zODEQjgGGhBrGWUCLhgF9ZOHw+KeLoBcT9ZXBvozKwrsagXB2ZWss95y
+         U+fA==
+X-Forwarded-Encrypted: i=1; AJvYcCWG4csDNt4EdQNeu9cwK5tCj4szg82qnCP3Cii0c2nUgkTgtGQM6iEh8KrUuUpYqFWCuuzrQIxmVm3bvQg9bCU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHyw3Zr2I5Gavk892lw++pJLjZbvZ4KgyBuraAmj5Q8hMlchG9
+	Ip8yW773zaVoZXBL9V97ZZNoo6x/GmJSlcv25l5oqYz7bPWhdHIUvBOTUNh8JEDyX/wnafruS4i
+	zSw8cxpqsKveXbRXnkJ2DWzm9iWGMnSY=
+X-Gm-Gg: AZuq6aJHkKLFrwIaUv7bgkU5ZuJeDitruEmHJDgen11gGgDdxoigT/DAWN8SDoR1LHA
+	ojDmjEKVvFnlfsGNHCC4EEeNWftDfJqSzECMfe4rDP2q/6sFRRm9hYsNpww96+v9DdytWmaos4P
+	SIiRTKnACHuxJCaQxrshuD19a9a2mjXcM5J3z46YxNYnJ7Wap4HwZ6WKoz8QceFLq51N+hgnTRG
+	KoJEoVoA/lYeJaBqZfH+VJxiLNq1yDxzSTMdnTHiOwnbN72SF8pokxtFJS1G+zaR1g1DGFWn0vs
+	Kag7PIeEMvdFn+MOfrFTnkWkNoT5DgewBcRPSIkAJfLG9JAdHILA7F8oiJ9TZ9Kl71LKZ8Z4dYF
+	8gBvKvLnw/r6BGlaLJR4wQyy7hg==
+X-Received: by 2002:a05:6000:290c:b0:437:7168:af50 with SMTP id
+ ffacd0b85a97d-4396f182e99mr5976364f8f.37.1771692703222; Sat, 21 Feb 2026
+ 08:51:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260219142933.13904-1-leon.hwang@linux.dev> <20260219142933.13904-3-leon.hwang@linux.dev>
+ <CAADnVQLNmQGKf5S5ZNwHYzScYBhnWFmnzLg=5Xxy4SgYKE3EfQ@mail.gmail.com>
+ <c6c2ffcf-acdf-4bda-ad82-dc4cc1a9260e@linux.dev> <CAADnVQ+iQkvb9-wOchuPrUOneqzx9Rrqto88=R7GUOqih6PhZQ@mail.gmail.com>
+ <4c40705a-4e6a-47ea-b420-223318d1ad09@linux.dev>
+In-Reply-To: <4c40705a-4e6a-47ea-b420-223318d1ad09@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 21 Feb 2026 08:51:32 -0800
+X-Gm-Features: AaiRm52nj1X-_nBJIgAQ9NCx4CHzjnra7QF_C1bGfU9ssH2LC_icyswN6XymldQ
+Message-ID: <CAADnVQLsJV8OaLCxznwbnxdLVOQ+t=MmAr2O8Y89iPErCvphFQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/6] bpf, x86: Add 64-bit bitops kfuncs
+ support for x86_64
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>, 
+	Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This flag indicates the path should be opened if it's a regular file.
-This is useful to write secure programs that want to avoid being
-tricked into opening device nodes with special semantics while thinking
-they operate on regular files. This is a requested feature from the
-uapi-group[1].
+On Sat, Feb 21, 2026 at 4:45=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+>
+>
+> On 2026/2/21 01:50, Alexei Starovoitov wrote:
+> > On Fri, Feb 20, 2026 at 7:54=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
+> >>
+> >>
+> >>
+> >> On 2026/2/20 01:47, Alexei Starovoitov wrote:
+> >>> On Thu, Feb 19, 2026 at 6:30=E2=80=AFAM Leon Hwang <leon.hwang@linux.=
+dev> wrote:
+> >>>>
+> >>>> Implement JIT inlining of the 64-bit bitops kfuncs on x86_64.
+> >>>>
+> >>>> bpf_rol64() and bpf_ror64() are always supported via ROL/ROR.
+> >>>>
+> >>>> bpf_ctz64() and bpf_ffs64() are supported when the CPU has
+> >>>> X86_FEATURE_BMI1 (TZCNT).
+> >>>>
+> >>>> bpf_clz64() and bpf_fls64() are supported when the CPU has
+> >>>> X86_FEATURE_ABM (LZCNT).
+> >>>>
+> >>>> bpf_popcnt64() is supported when the CPU has X86_FEATURE_POPCNT.
+> >>>>
+> >>>> bpf_bitrev64() is not inlined as x86_64 has no native bit-reverse
+> >>>> instruction, so it falls back to a regular function call.
+> >>>>
+> >>>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> >>>> ---
+> >>>>  arch/x86/net/bpf_jit_comp.c | 141 +++++++++++++++++++++++++++++++++=
++++
+> >>>>  1 file changed, 141 insertions(+)
+> >>>>
+> >>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp=
+.c
+> >>>> index 070ba80e39d7..193e1e2d7aa8 100644
+> >>>> --- a/arch/x86/net/bpf_jit_comp.c
+> >>>> +++ b/arch/x86/net/bpf_jit_comp.c
+> >>>> @@ -19,6 +19,7 @@
+> >>>>  #include <asm/text-patching.h>
+> >>>>  #include <asm/unwind.h>
+> >>>>  #include <asm/cfi.h>
+> >>>> +#include <asm/cpufeatures.h>
+> >>>>
+> >>>>  static bool all_callee_regs_used[4] =3D {true, true, true, true};
+> >>>>
+> >>>> @@ -1604,6 +1605,127 @@ static void emit_priv_frame_ptr(u8 **pprog, =
+void __percpu *priv_frame_ptr)
+> >>>>         *pprog =3D prog;
+> >>>>  }
+> >>>>
+> >>>> +static bool bpf_inlines_func_call(u8 **pprog, void *func)
+> >>>> +{
+> >>>> +       bool has_popcnt =3D boot_cpu_has(X86_FEATURE_POPCNT);
+> >>>> +       bool has_bmi1 =3D boot_cpu_has(X86_FEATURE_BMI1);
+> >>>> +       bool has_abm =3D boot_cpu_has(X86_FEATURE_ABM);
+> >>>> +       bool inlined =3D true;
+> >>>> +       u8 *prog =3D *pprog;
+> >>>> +
+> >>>> +       /*
+> >>>> +        * x86 Bit manipulation instruction set
+> >>>> +        * https://en.wikipedia.org/wiki/X86_Bit_manipulation_instru=
+ction_set
+> >>>> +        */
+> >>>> +
+> >>>> +       if (func =3D=3D bpf_clz64 && has_abm) {
+> >>>> +               /*
+> >>>> +                * Intel=C2=AE 64 and IA-32 Architectures Software D=
+eveloper's Manual (June 2023)
+> >>>> +                *
+> >>>> +                *   LZCNT - Count the Number of Leading Zero Bits
+> >>>> +                *
+> >>>> +                *     Opcode/Instruction
+> >>>> +                *     F3 REX.W 0F BD /r
+> >>>> +                *     LZCNT r64, r/m64
+> >>>> +                *
+> >>>> +                *     Op/En
+> >>>> +                *     RVM
+> >>>> +                *
+> >>>> +                *     64/32-bit Mode
+> >>>> +                *     V/N.E.
+> >>>> +                *
+> >>>> +                *     CPUID Feature Flag
+> >>>> +                *     LZCNT
+> >>>> +                *
+> >>>> +                *     Description
+> >>>> +                *     Count the number of leading zero bits in r/m6=
+4, return
+> >>>> +                *     result in r64.
+> >>>> +                */
+> >>>> +               /* emit: x ? 64 - fls64(x) : 64 */
+> >>>> +               /* lzcnt rax, rdi */
+> >>>> +               EMIT5(0xF3, 0x48, 0x0F, 0xBD, 0xC7);
+> >>>
+> >>> Instead of emitting binary in x86 and arm JITs,
+> >>> let's use in kernel disasm to check that all these kfuncs
+> >>> conform to kf_fastcall (don't use unnecessary registers,
+> >>> don't have calls to other functions) and then copy the binary
+> >>> from code and skip the last 'ret' insn.
+> >>> This way we can inline all kinds of kfuncs.
+> >>>
+> >>
+> >> Good idea.
+> >>
+> >> Quick question on =E2=80=9Cin-kernel disasm=E2=80=9D: do you mean addi=
+ng a kernel
+> >> instruction decoder/disassembler to validate a whitelist of kfuncs at
+> >> load time?
+> >>
+> >> I=E2=80=99m trying to understand the intended scope:
+> >>
+> >> * Is the expectation that we add an in-kernel disassembler/validator f=
+or
+> >>   a small set of supported instructions and patterns (no calls/jumps,
+> >>   only arg/ret regs touched, etc.)?
+> >> * Or is there already infrastructure you had in mind that we can reuse=
+?
+> >>
+> >> Once I understand that piece, I can rework the series to inline by
+> >> copying validated machine code (minus the final ret), rather than
+> >> emitting raw opcodes in the JITs.
+> >>
+> >> I also noticed you mentioned a similar direction in "bpf/s390: Impleme=
+nt
+> >> get_preempt_count()" [1], so I=E2=80=99ve added Ilya to the thread to =
+discuss
+> >> this approach further.
+> >
+> > You really sound like LLM. Do your homework as a human.
+>
+> Got it.
+>
+> I polished my draft using ChatGPT, which would leave LLM smell in my repl=
+y.
 
-A corresponding error code EFTYPE has been introduced. For example, if
-openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
-param, it will return -EFTYPE.
+... and for anyone reading it the smell is ohh too strong.
 
-When used in combination with O_CREAT, either the regular file is
-created, or if the path already exists, it is opened if it's a regular
-file. Otherwise, -EFTYPE is returned.
+> Here's my original draft:
+>
+> Good idea. But I concern about the "in kernel disasm". Do you mean we
+> will build a disassembler for whitelist kfuncs at starting?
+>
+> I noticed you've mentioned the same direction in "bpf/s390: Implement
+> get_preempt_count()" [1]. So, I added Ilya here to discuss this direction=
+.
 
-When OPENAT2_REGULAR is combined with O_DIRECTORY, -EINVAL is returned
-as it doesn't make sense to open a path that is both a directory and a
-regular file.
+Much better. Keep it human.
 
-[1]: https://uapi-group.org/kernel-features/#ability-to-only-open-regular-files
+"in kernel disasm" already exists for some architectures
+(at least x86 and arm64) since it's being used by kprobes.
+The ask here is to figure out whether they're usable for such
+insn analysis. x86 disasm is likely capable.
 
-Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
----
- arch/alpha/include/uapi/asm/errno.h        |  2 ++
- arch/alpha/include/uapi/asm/fcntl.h        |  1 +
- arch/mips/include/uapi/asm/errno.h         |  2 ++
- arch/parisc/include/uapi/asm/errno.h       |  2 ++
- arch/parisc/include/uapi/asm/fcntl.h       |  1 +
- arch/sparc/include/uapi/asm/errno.h        |  2 ++
- arch/sparc/include/uapi/asm/fcntl.h        |  1 +
- fs/ceph/file.c                             |  4 ++++
- fs/gfs2/inode.c                            |  2 ++
- fs/namei.c                                 |  4 ++++
- fs/nfs/dir.c                               |  4 +++-
- fs/open.c                                  |  4 +++-
- fs/smb/client/dir.c                        | 11 ++++++++++-
- include/linux/fcntl.h                      |  2 ++
- include/uapi/asm-generic/errno.h           |  2 ++
- include/uapi/asm-generic/fcntl.h           |  4 ++++
- tools/arch/alpha/include/uapi/asm/errno.h  |  2 ++
- tools/arch/mips/include/uapi/asm/errno.h   |  2 ++
- tools/arch/parisc/include/uapi/asm/errno.h |  2 ++
- tools/arch/sparc/include/uapi/asm/errno.h  |  2 ++
- tools/include/uapi/asm-generic/errno.h     |  2 ++
- 21 files changed, 55 insertions(+), 3 deletions(-)
-
-diff --git a/arch/alpha/include/uapi/asm/errno.h b/arch/alpha/include/uapi/asm/errno.h
-index 6791f6508632..1a99f38813c7 100644
---- a/arch/alpha/include/uapi/asm/errno.h
-+++ b/arch/alpha/include/uapi/asm/errno.h
-@@ -127,4 +127,6 @@
- 
- #define EHWPOISON	139	/* Memory page has hardware error */
- 
-+#define EFTYPE		140	/* Wrong file type for the intended operation */
-+
- #endif
-diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uapi/asm/fcntl.h
-index 50bdc8e8a271..fe488bf7c18e 100644
---- a/arch/alpha/include/uapi/asm/fcntl.h
-+++ b/arch/alpha/include/uapi/asm/fcntl.h
-@@ -34,6 +34,7 @@
- 
- #define O_PATH		040000000
- #define __O_TMPFILE	0100000000
-+#define OPENAT2_REGULAR	0200000000
- 
- #define F_GETLK		7
- #define F_SETLK		8
-diff --git a/arch/mips/include/uapi/asm/errno.h b/arch/mips/include/uapi/asm/errno.h
-index c01ed91b1ef4..1835a50b69ce 100644
---- a/arch/mips/include/uapi/asm/errno.h
-+++ b/arch/mips/include/uapi/asm/errno.h
-@@ -126,6 +126,8 @@
- 
- #define EHWPOISON	168	/* Memory page has hardware error */
- 
-+#define EFTYPE		169	/* Wrong file type for the intended operation */
-+
- #define EDQUOT		1133	/* Quota exceeded */
- 
- 
-diff --git a/arch/parisc/include/uapi/asm/errno.h b/arch/parisc/include/uapi/asm/errno.h
-index 8cbc07c1903e..93194fbb0a80 100644
---- a/arch/parisc/include/uapi/asm/errno.h
-+++ b/arch/parisc/include/uapi/asm/errno.h
-@@ -124,4 +124,6 @@
- 
- #define EHWPOISON	257	/* Memory page has hardware error */
- 
-+#define EFTYPE		258	/* Wrong file type for the intended operation */
-+
- #endif
-diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include/uapi/asm/fcntl.h
-index 03dee816cb13..d46812f2f0f4 100644
---- a/arch/parisc/include/uapi/asm/fcntl.h
-+++ b/arch/parisc/include/uapi/asm/fcntl.h
-@@ -19,6 +19,7 @@
- 
- #define O_PATH		020000000
- #define __O_TMPFILE	040000000
-+#define OPENAT2_REGULAR	0100000000
- 
- #define F_GETLK64	8
- #define F_SETLK64	9
-diff --git a/arch/sparc/include/uapi/asm/errno.h b/arch/sparc/include/uapi/asm/errno.h
-index 4a41e7835fd5..71940ec9130b 100644
---- a/arch/sparc/include/uapi/asm/errno.h
-+++ b/arch/sparc/include/uapi/asm/errno.h
-@@ -117,4 +117,6 @@
- 
- #define EHWPOISON	135	/* Memory page has hardware error */
- 
-+#define EFTYPE		136	/* Wrong file type for the intended operation */
-+
- #endif
-diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/uapi/asm/fcntl.h
-index 67dae75e5274..bb6e9fa94bc9 100644
---- a/arch/sparc/include/uapi/asm/fcntl.h
-+++ b/arch/sparc/include/uapi/asm/fcntl.h
-@@ -37,6 +37,7 @@
- 
- #define O_PATH		0x1000000
- #define __O_TMPFILE	0x2000000
-+#define OPENAT2_REGULAR	0x4000000
- 
- #define F_GETOWN	5	/*  for sockets. */
- #define F_SETOWN	6	/*  for sockets. */
-diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-index 31b691b2aea2..0a4220f72ada 100644
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -977,6 +977,10 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
- 			ceph_init_inode_acls(newino, &as_ctx);
- 			file->f_mode |= FMODE_CREATED;
- 		}
-+		if ((flags & OPENAT2_REGULAR) && !d_is_reg(dentry)) {
-+			err = -EFTYPE;
-+			goto out_req;
-+		}
- 		err = finish_open(file, dentry, ceph_open);
- 	}
- out_req:
-diff --git a/fs/gfs2/inode.c b/fs/gfs2/inode.c
-index 8344040ecaf7..0dc3e4240d9e 100644
---- a/fs/gfs2/inode.c
-+++ b/fs/gfs2/inode.c
-@@ -749,6 +749,8 @@ static int gfs2_create_inode(struct inode *dir, struct dentry *dentry,
- 		if (file) {
- 			if (S_ISREG(inode->i_mode))
- 				error = finish_open(file, dentry, gfs2_open_common);
-+			else if (file->f_flags & OPENAT2_REGULAR)
-+				error = -EFTYPE;
- 			else
- 				error = finish_no_open(file, NULL);
- 		}
-diff --git a/fs/namei.c b/fs/namei.c
-index 5fe6cac48df8..aa5fb2672881 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -4651,6 +4651,10 @@ static int do_open(struct nameidata *nd,
- 		if (unlikely(error))
- 			return error;
- 	}
-+
-+	if ((open_flag & OPENAT2_REGULAR) && !d_is_reg(nd->path.dentry))
-+		return -EFTYPE;
-+
- 	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
- 		return -ENOTDIR;
- 
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index b3f5c9461204..ef61db67d06e 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -2195,7 +2195,9 @@ int nfs_atomic_open(struct inode *dir, struct dentry *dentry,
- 			break;
- 		case -EISDIR:
- 		case -ENOTDIR:
--			goto no_open;
-+			if (!(open_flags & OPENAT2_REGULAR))
-+				goto no_open;
-+			break;
- 		case -ELOOP:
- 			if (!(open_flags & O_NOFOLLOW))
- 				goto no_open;
-diff --git a/fs/open.c b/fs/open.c
-index 91f1139591ab..1524f52a1773 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1198,7 +1198,7 @@ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
- 	 * values before calling build_open_flags(), but openat2(2) checks all
- 	 * of its arguments.
- 	 */
--	if (flags & ~VALID_OPEN_FLAGS)
-+	if (flags & ~VALID_OPENAT2_FLAGS)
- 		return -EINVAL;
- 	if (how->resolve & ~VALID_RESOLVE_FLAGS)
- 		return -EINVAL;
-@@ -1237,6 +1237,8 @@ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
- 			return -EINVAL;
- 		if (!(acc_mode & MAY_WRITE))
- 			return -EINVAL;
-+	} else if ((flags & O_DIRECTORY) && (flags & OPENAT2_REGULAR)) {
-+		return -EINVAL;
- 	}
- 	if (flags & O_PATH) {
- 		/* O_PATH only permits certain other flags to be set. */
-diff --git a/fs/smb/client/dir.c b/fs/smb/client/dir.c
-index cb10088197d2..d12ed0c87599 100644
---- a/fs/smb/client/dir.c
-+++ b/fs/smb/client/dir.c
-@@ -236,6 +236,11 @@ static int cifs_do_create(struct inode *inode, struct dentry *direntry, unsigned
- 				 * lookup.
- 				 */
- 				CIFSSMBClose(xid, tcon, fid->netfid);
-+				if (oflags & OPENAT2_REGULAR) {
-+					iput(newinode);
-+					rc = -EFTYPE;
-+					goto out;
-+				}
- 				goto cifs_create_get_file_info;
- 			}
- 			/* success, no need to query */
-@@ -433,11 +438,15 @@ static int cifs_do_create(struct inode *inode, struct dentry *direntry, unsigned
- 		goto out_err;
- 	}
- 
--	if (newinode)
-+	if (newinode) {
- 		if (S_ISDIR(newinode->i_mode)) {
- 			rc = -EISDIR;
- 			goto out_err;
-+		} else if ((oflags & OPENAT2_REGULAR) && !S_ISREG(newinode->i_mode)) {
-+			rc = -EFTYPE;
-+			goto out_err;
- 		}
-+	}
- 
- 	d_drop(direntry);
- 	d_add(direntry, newinode);
-diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
-index a332e79b3207..a80026718217 100644
---- a/include/linux/fcntl.h
-+++ b/include/linux/fcntl.h
-@@ -12,6 +12,8 @@
- 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
- 	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
- 
-+#define VALID_OPENAT2_FLAGS (VALID_OPEN_FLAGS | OPENAT2_REGULAR)
-+
- /* List of all valid flags for the how->resolve argument: */
- #define VALID_RESOLVE_FLAGS \
- 	(RESOLVE_NO_XDEV | RESOLVE_NO_MAGICLINKS | RESOLVE_NO_SYMLINKS | \
-diff --git a/include/uapi/asm-generic/errno.h b/include/uapi/asm-generic/errno.h
-index 92e7ae493ee3..bd78e69e0a43 100644
---- a/include/uapi/asm-generic/errno.h
-+++ b/include/uapi/asm-generic/errno.h
-@@ -122,4 +122,6 @@
- 
- #define EHWPOISON	133	/* Memory page has hardware error */
- 
-+#define EFTYPE		134	/* Wrong file type for the intended operation */
-+
- #endif
-diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-index 613475285643..b2c2ddd0edc0 100644
---- a/include/uapi/asm-generic/fcntl.h
-+++ b/include/uapi/asm-generic/fcntl.h
-@@ -88,6 +88,10 @@
- #define __O_TMPFILE	020000000
- #endif
- 
-+#ifndef OPENAT2_REGULAR
-+#define OPENAT2_REGULAR	040000000
-+#endif
-+
- /* a horrid kludge trying to make sure that this will fail on old kernels */
- #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
- 
-diff --git a/tools/arch/alpha/include/uapi/asm/errno.h b/tools/arch/alpha/include/uapi/asm/errno.h
-index 6791f6508632..1a99f38813c7 100644
---- a/tools/arch/alpha/include/uapi/asm/errno.h
-+++ b/tools/arch/alpha/include/uapi/asm/errno.h
-@@ -127,4 +127,6 @@
- 
- #define EHWPOISON	139	/* Memory page has hardware error */
- 
-+#define EFTYPE		140	/* Wrong file type for the intended operation */
-+
- #endif
-diff --git a/tools/arch/mips/include/uapi/asm/errno.h b/tools/arch/mips/include/uapi/asm/errno.h
-index c01ed91b1ef4..1835a50b69ce 100644
---- a/tools/arch/mips/include/uapi/asm/errno.h
-+++ b/tools/arch/mips/include/uapi/asm/errno.h
-@@ -126,6 +126,8 @@
- 
- #define EHWPOISON	168	/* Memory page has hardware error */
- 
-+#define EFTYPE		169	/* Wrong file type for the intended operation */
-+
- #define EDQUOT		1133	/* Quota exceeded */
- 
- 
-diff --git a/tools/arch/parisc/include/uapi/asm/errno.h b/tools/arch/parisc/include/uapi/asm/errno.h
-index 8cbc07c1903e..93194fbb0a80 100644
---- a/tools/arch/parisc/include/uapi/asm/errno.h
-+++ b/tools/arch/parisc/include/uapi/asm/errno.h
-@@ -124,4 +124,6 @@
- 
- #define EHWPOISON	257	/* Memory page has hardware error */
- 
-+#define EFTYPE		258	/* Wrong file type for the intended operation */
-+
- #endif
-diff --git a/tools/arch/sparc/include/uapi/asm/errno.h b/tools/arch/sparc/include/uapi/asm/errno.h
-index 4a41e7835fd5..71940ec9130b 100644
---- a/tools/arch/sparc/include/uapi/asm/errno.h
-+++ b/tools/arch/sparc/include/uapi/asm/errno.h
-@@ -117,4 +117,6 @@
- 
- #define EHWPOISON	135	/* Memory page has hardware error */
- 
-+#define EFTYPE		136	/* Wrong file type for the intended operation */
-+
- #endif
-diff --git a/tools/include/uapi/asm-generic/errno.h b/tools/include/uapi/asm-generic/errno.h
-index 92e7ae493ee3..bd78e69e0a43 100644
---- a/tools/include/uapi/asm-generic/errno.h
-+++ b/tools/include/uapi/asm-generic/errno.h
-@@ -122,4 +122,6 @@
- 
- #define EHWPOISON	133	/* Memory page has hardware error */
- 
-+#define EFTYPE		134	/* Wrong file type for the intended operation */
-+
- #endif
--- 
-2.53.0
-
+re:"whitelist kfunc"
+I suspect an additional list is not necessary.
+kf_fastcall is a good enough signal that such kfunc should
+be inlinable.
