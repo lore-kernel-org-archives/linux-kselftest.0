@@ -1,168 +1,222 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B96819067C
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 15:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771686043; cv=none; b=oZBzS0pBn0261TVDMK2o7QV2StzZH7IO9mzi/d7Jo+BoUydDJEa75JCGxKvrCWGEveF1RkLsofRtqn5zrsSWE//7BxRs14nnPrQtfU70V4Qnays65+Jygh9i4FbMLy+Z8gkp09tWEgE9B5OD/5BTDZFYpmcPctL9tzpzw1wmvVg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771686043; c=relaxed/simple;
-	bh=EKC+gjybz5QCo3/A2SoLkAdJ9dHzP8glwvLLU31BmCA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X3QE5U2HQKUHiLHSYjyyv0h28CI20uAiujzwq7x5N/1g/IJXv/P8VSGl33nTPXH41tKGVU/ZEK1XEbPFQ3bzlOzGgNbh8fRXmzlFTmcoAy7Cymu7CUjrPj6YbkpogJ+cU9LwFAcH9U0ZQgYaRg1JAJ8C0fyMXqslhehk5avfbTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kk2tUUGw; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E21243954
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 15:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771688981; cv=pass; b=oWlrBNRguSB0gjMUy18rgLfaBV/26WYbwUPmEqteS4iPhIAyyQSEM/Pp5dlu1ed0RAj3t16h9do5/tuFry3NptRJL7rszxEsnfkRuzX7aPm2t4JQbxfWxY+1FGLTwWl41hxBH0A+or7zPLQ8coBZ24W/fW5FMC9hjVhqofKGStU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771688981; c=relaxed/simple;
+	bh=23P6V3/EZFsgY+c1DhMXwm+sT4gSINYfgO8QSA/c/N8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=r+EX2TGw/Is/Q14l96xhlvgaBsaUw1MoYdq2jo423qz3Xa81JfibPDD5DM3wmHSyaE0COIEZUR4ZpnxKPYJ122EYZhhkrMXqDFP+svHw4XKOYVCo2YHruY+h8+HIpRhsTtrqtVw70FSmF2cYRi3eyZG5ur+PPOq4mKI/ngfKgxA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gkb4fODz; arc=pass smtp.client-ip=209.85.222.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kk2tUUGw"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a9296b3926so20320165ad.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 07:00:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gkb4fODz"
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-94acd026e45so682140241.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 07:49:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771688979; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TL5fThHZEaGzEVf/NWg3GEdo6b69g7MkOQ2IvDM2mFJtEn8cF3s1RrIjC5uUsgBHnu
+         gKCcUtQXHNsRb5fNQOC6L8Db2rB/VlOclpyZi1oNKl6MM8y7x5WnMYAmbNuklLM2pHmt
+         z/DLQ1/8K2rB4aUTcIT/OW6oJzVVcSGxyFFUvAQ6YyAyL4XXmIE46mWoHFmMy0JyE4+9
+         3ATDUiPM41Y4SrqPrKY3CYjPuYX+BvHAqopzp6HESiYh+qbbRKHjPavzHFFsvZI+CLmf
+         ZZYhD6i1ChdoiHnFWfWVyPq1vhbjX0CqH338gYLMIDRyOkOJlc1CWb+Cl3Ql4n40DhHE
+         Xt+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+CV+mZKQ0tWQcWo2Qtxm/k6mbCGnay44Iva+S/9PlIo=;
+        fh=8LxRxxf7YLnqr2auMQKExFPI2E/tNwTELa1YUoh79oo=;
+        b=F1aaHPqZ6WO4D0VfxnuAcQB4iJeqENpQBB6tATlj46wUVZirl12SqUrT4GD0mCgs5Q
+         p2v1iMCgABjoZ09gAcs2JkUTaxWq+InhmLFN9cel0zq0a7kkpiR915uFwntE3/R1AZaC
+         dESVi3bkbOkQNX2xPOlePwCciTumdvntncZxHniBSnQm5cQPDi3Y8/Z789l+UUcA/crR
+         j3nWNWwRPK9tL1xbZGsKjzKretoMVU6Pt6jrtxnbWiUCRbYB/BtFrEGdoOwPJYOPGZfO
+         yVHRDA26b7WBWb+NRzxVcNe+g/vCKaMgO+uE3CaiyKoaKoOdPgCtJXoonG6XkhMDZAP6
+         DjNg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771686042; x=1772290842; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771688979; x=1772293779; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cE+gTqS6Acm3OjdFoCwcpAog50aFpqNiNU85af164dY=;
-        b=Kk2tUUGwvD9uGvq0ltLEbkA6gi0NU9z4MP00tht7MoU2o6bKhEQ6dueKkPeMGPqu3T
-         r+i2gbnfgZqBNGm9kfrCE7+uSZaWCNdYObcf3IJCxMQxdP8lSS640twG57Zp/TxJBeCH
-         eKkXO17an2qluj9ez+oUTd/Mjhb0d5rImThkDbDzR/Zh2No26sF43Q7+08D7P7ZgelBW
-         ac9A19JzfVstuTVnX1ktYq+qhw9iN5VSre+latY9KomlTbH81/2Sw0Il9oIKwc5VdSJ3
-         cykMuY6M7c07+TCRFacC4SoRR3WRJCkXs+Tao3xNxLET/B8qr42QlE2DCWV09ZTsAoLd
-         g+mw==
+        bh=+CV+mZKQ0tWQcWo2Qtxm/k6mbCGnay44Iva+S/9PlIo=;
+        b=Gkb4fODzMaw1FLWV7mj2nCgQ03v5D6/tPz5gHoVwIGz2lLtM06+6FOW6rnoYecBJL1
+         Uikc2GaVK1cDHI42+uotLOIYJ/g3huSLJtoxuXUDOk7Fr2lCTZn/Rl3MZ9XPCO4HPhD/
+         UtNuy4LArncf6UKt57ejd7jtyhd3w5eBdWMIk4LLIA/cJVAaVdQC/TiWyiW6dNqUSFMX
+         NLeThlFQuWxY0TzxS0mNhI44QpBx+ybld6i7VIXlxb3yPUx73HYZhK/4WK9tRdCVwbAe
+         NMWcuQj+hR4G7Xdg0TAlaJH2OFWMi3S6BboSVmZ4WKVbvgJDdpgdpTfoWJQYQ0VwpgHE
+         HDKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771686042; x=1772290842;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1771688979; x=1772293779;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=cE+gTqS6Acm3OjdFoCwcpAog50aFpqNiNU85af164dY=;
-        b=rqfCkl4HAAnbQ8C4dI4VkOJRnozvdQNdvlpwxpaIt2+R2EZF/ZVCrO4/UUd7KKL7Au
-         C7klvSOXTa5qXZPI1floO8u+nFgcFnvilbNEYN+qQmbJCg1+nCDf9Tt6bOLmdPwx/ocP
-         sqJdBcWfzDMS4hY998ILnNMjpwAkOiOchoxL4GChfmB3JUOGW4mNmYMFKhjhoyui6GBR
-         NzucgJxZtMh2MvwTni16/FM5Hpr32uchupDX623K0LTndkX/ecL14agad7X7EDgwMwuR
-         8Nl2MPMym/mN74LHcT/QkRbnyETTydsrBeBm6RhLFOADh6u2HJNCuEq6/ymBtgplSs+Y
-         WHqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXTScRzpoT55KjrzE21K/0b4bSb8lwKS88/ahNMoKUG9jL7qdd7ikBdSHF+6nCNWX2iX5g2c+p0KjHO4aZ3ER0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmaJ7Gp1001oNiFbox7M5v7Y64tfRJyjYryeEzGCL2SdnMbdB3
-	Di3CE0cPhihz+/82YCNKDes7CTlyhX25EL9VfI48iuK33fLBv/rxKbtm
-X-Gm-Gg: AZuq6aKJUnHm4FM2VkHouFUfYuc3YDQcGjN62urAl3mwKbEqvV5h1DlEhhcp9japB/k
-	LC2k09E2MnhDi6Iiy+0H2GiNRotCSdyTNhqhGGxyeEUkQGHURSvKHWzuJUIgDppj/WTkAGiN2Dd
-	txkF2RFABOClnouPh6AEAGm4s1Vm/zSKOuODbxIr8IcazE9eotc7Rd4cjs1+Yd+pBm0ciVUhBDM
-	iC8PikqI7MprtCC9XbRw0ZepVyxA1A4kWXkxiU5dy3I9O9khvJBMvoSNw7xm9S4yqEzu+net7Bf
-	VQCmUzWz+trB1hHTf9q5cg2Zx1Y0u8KglNlbVuVGC/CFJ8y3AQBIEQ5Qb8FpfOjJQw8by2ntjbq
-	6Ck2Ju+KczdcgCXV+9QJmSDxipp/1QZUzwSeCdwHe8up5gCwcdKqceYD6GKC0slIEk/G4H5Brvh
-	GWSRMLftz8iKJLzPbEgcQf9IEw6n/+oWUJZsI/NFqa7Mg8gGDQs5WPq/A=
-X-Received: by 2002:a17:902:ce90:b0:2a9:5b28:94c0 with SMTP id d9443c01a7336-2ad744e13bemr26077275ad.27.1771686041931;
-        Sat, 21 Feb 2026 07:00:41 -0800 (PST)
-Received: from toolbx ([103.230.182.3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7503f4a4sm23730205ad.79.2026.02.21.07.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Feb 2026 07:00:41 -0800 (PST)
-From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	ceph-devel@vger.kernel.org,
-	gfs2@lists.linux.dev,
-	linux-nfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org,
-	v9fs@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	jlayton@kernel.org,
-	chuck.lever@oracle.com,
-	alex.aring@gmail.com,
-	arnd@arndb.de,
-	adilger@dilger.ca,
-	mjguzik@gmail.com,
-	smfrench@gmail.com,
-	richard.henderson@linaro.org,
-	mattst88@gmail.com,
-	linmag7@gmail.com,
-	tsbogend@alpha.franken.de,
-	James.Bottomley@HansenPartnership.com,
-	deller@gmx.de,
-	davem@davemloft.net,
-	andreas@gaisler.com,
-	idryomov@gmail.com,
-	amarkuze@redhat.com,
-	slava@dubeyko.com,
-	agruenba@redhat.com,
-	trondmy@kernel.org,
-	anna@kernel.org,
-	sfrench@samba.org,
-	pc@manguebit.org,
-	ronniesahlberg@gmail.com,
-	sprasad@microsoft.com,
-	tom@talpey.com,
-	bharathsm@microsoft.com,
-	shuah@kernel.org,
-	miklos@szeredi.hu,
-	hansg@kernel.org
-Subject: [PATCH v4 4/4] mips/fcntl.h: convert O_* flag macros from hex to octal
-Date: Sat, 21 Feb 2026 20:45:46 +0600
-Message-ID: <20260221145915.81749-5-dorjoychy111@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260221145915.81749-1-dorjoychy111@gmail.com>
-References: <20260221145915.81749-1-dorjoychy111@gmail.com>
+        bh=+CV+mZKQ0tWQcWo2Qtxm/k6mbCGnay44Iva+S/9PlIo=;
+        b=wnaGr38Rcb8rz4hEN5As9zWEv2Y3hOART20i2jemkPeXUvsd6rRy4dNOLXadkI3vS/
+         /Mzj3nsTRGT8M6lMA0Xq0MCgXUynJpk86t3I60YlIc26NaMvqgwwuEzgF2tRfQTAe3o6
+         0xfXd0fW15jWDUXvUp9XNd8PYkGSJZ/L6kEaoXI4dOIYASIPi69ABp9bajBiO6oO5COy
+         bkuAy2qqaFfokyigH4qk89YDc+h0/KK4XGhj7MmsruYXSGME/GeVPPVTJRdEtq3N9suM
+         VBeEX+ICnz2xNl3UqgvJRqePfigMh95i7uMbRTdIf84ZeuTXXSWbD55z1oPB1grTH0Nn
+         FRMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXn2Qk5Xhsb0blieNLj/VUMFB8WMeAH0ItIXZHdqzbZhA+3xQGvfb/i+d/FH7udh48+5H5m7gHfxltN5mjnnj0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxQI2/HCJXLF71VvqS2yZ/tV9pXFAlt0B16G4vpoEWuzr+Rjcz
+	aMgUPfa4Kd+yw7qa9LYWof8kPPY40C1+VX529zNHHtYgE5DeBGJN/ZnkvZ/gTp3H51yXcyP3rH8
+	cv+9hQ7/+inS/dMrS9cVAUT9mPkGCRSA=
+X-Gm-Gg: AZuq6aLpNXSe/mwgYZcfvs87h3zZ3kd83jvfpqI88Cce4BcC+xr2JcSqOW6oJYPw0Dk
+	r5IdrWY7RVedUW99a5G+B8PcuM4Pf1Wt/s9dapgov3JVod+QvDopMcaTGvY85TrmNnnU/kytjXI
+	fjJGV75U89rv937g9+chAQjYEGGs2cTVyuO6E/F5SScBFvYA1iHgPBd43bZMREuBn3kodj+abOw
+	dS1gYhVqU6qajHZctPSEm7zK2R7kczNbetlOTe9ggiu3RVQvLse7Y22JegPHKBrMRE4WmZfGz2R
+	Y2OqIOBNqdK7DHKKvLTyyjn1ZDd1NhbCg0owPR5gPgY=
+X-Received: by 2002:a05:6102:6cd:b0:5db:f031:84ce with SMTP id
+ ada2fe7eead31-5feb30aa44cmr1230671137.29.1771688978916; Sat, 21 Feb 2026
+ 07:49:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260221145915.81749-1-dorjoychy111@gmail.com>
+In-Reply-To: <20260221145915.81749-1-dorjoychy111@gmail.com>
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Date: Sat, 21 Feb 2026 21:49:27 +0600
+X-Gm-Features: AaiRm52uxICzwXE4h2cG-NB71vMvoLaBUhNK0X1besn-bhoE2jLckvjHX39jcu4
+Message-ID: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org, 
+	gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	v9fs@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, jlayton@kernel.org, 
+	chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Following the convention in include/uapi/asm-generic/fcntl.h and other
-architecture specific arch/*/include/uapi/asm/fcntl.h files.
+On Sat, Feb 21, 2026 at 8:59=E2=80=AFPM Dorjoy Chowdhury <dorjoychy111@gmai=
+l.com> wrote:
+>
+> Hi,
+>
+> I came upon this "Ability to only open regular files" uapi feature sugges=
+tion
+> from https://uapi-group.org/kernel-features/#ability-to-only-open-regular=
+-files
+> and thought it would be something I could do as a first patch and get to
+> know the kernel code a bit better.
+>
+> I only tested this new flag on my local system (fedora btrfs).
+>
+> Note that I had submitted a v4 previously (that had -EINVAL for the atomi=
+c_open
+> code paths) but did not do a get_maintainers.pl. It didn't get any review=
+ and
+> please ignore that one anyway. In this version, I have tried to properly =
+update
+> the filesystems that provide atomic_open (fs/ceph, fs/nfs, fs/smb, fs/gfs=
+2,
+> fs/fuse, fs/vboxsf, fs/9p) for the new OPENAT2_REGULAR flag. Some of them
+> (fs/fuse, fs/vboxsf, fs/9p) didn't need any changing. As far as I see, mo=
+st of
+> the filesystems do finish_no_open for ~O_CREAT and have file->f_mode |=3D=
+ FMODE_CREATED
+> for the O_CREAT code path which I assume means they always create new fil=
+e which
+> is a regular file. OPENAT2_REGULAR | O_DIRECTORY returns -EINVAL (instead=
+ of working
+> if path is either a directory or regular file) as it was easier to reason=
+ about when
+> making changes in all the filesystems.
+>
+> Changes in v4:
+> - changed O_REGULAR to OPENAT2_REGULAR
+> - OPENAT2_REGULAR does not affect O_PATH
+> - atomic_open codepaths updated to work properly for OPENAT2_REGULAR
+> - commit message includes the uapi-group URL
+> - v3 is at: https://lore.kernel.org/linux-fsdevel/20260127180109.66691-1-=
+dorjoychy111@gmail.com/T/
+>
+> Changes in v3:
+> - included motivation about O_REGULAR flag in commit message e.g., progra=
+ms not wanting to be tricked into opening device nodes
+> - fixed commit message wrongly referencing ENOTREGULAR instead of ENOTREG
+> - fixed the O_REGULAR flag in arch/parisc/include/uapi/asm/fcntl.h from 0=
+60000000 to 0100000000
+> - added 2 commits converting arch/{mips,sparc}/include/uapi/asm/fcntl.h O=
+_* macros from hex to octal
+> - v2 is at: https://lore.kernel.org/linux-fsdevel/20260126154156.55723-1-=
+dorjoychy111@gmail.com/T/
+>
+> Changes in v2:
+> - rename ENOTREGULAR to ENOTREG
+> - define ENOTREG in uapi/asm-generic/errno.h (instead of errno-base.h) an=
+d in arch/*/include/uapi/asm/errno.h files
+> - override O_REGULAR in arch/{alpha,sparc,parisc}/include/uapi/asm/fcntl.=
+h due to clash with include/uapi/asm-generic/fcntl.h
+> - I have kept the kselftest but now that O_REGULAR and ENOTREG can have d=
+ifferent value on different architectures I am not sure if it's right
+> - v1 is at: https://lore.kernel.org/linux-fsdevel/20260125141518.59493-1-=
+dorjoychy111@gmail.com/T/
+>
+> Thanks.
+>
+> Regards,
+> Dorjoy
+>
+> Dorjoy Chowdhury (4):
+>   openat2: new OPENAT2_REGULAR flag support
+>   kselftest/openat2: test for OPENAT2_REGULAR flag
+>   sparc/fcntl.h: convert O_* flag macros from hex to octal
+>   mips/fcntl.h: convert O_* flag macros from hex to octal
+>
+>  arch/alpha/include/uapi/asm/errno.h           |  2 +
+>  arch/alpha/include/uapi/asm/fcntl.h           |  1 +
+>  arch/mips/include/uapi/asm/errno.h            |  2 +
+>  arch/mips/include/uapi/asm/fcntl.h            | 22 +++++------
+>  arch/parisc/include/uapi/asm/errno.h          |  2 +
+>  arch/parisc/include/uapi/asm/fcntl.h          |  1 +
+>  arch/sparc/include/uapi/asm/errno.h           |  2 +
+>  arch/sparc/include/uapi/asm/fcntl.h           | 35 +++++++++---------
+>  fs/ceph/file.c                                |  4 ++
+>  fs/gfs2/inode.c                               |  2 +
+>  fs/namei.c                                    |  4 ++
+>  fs/nfs/dir.c                                  |  4 +-
+>  fs/open.c                                     |  4 +-
+>  fs/smb/client/dir.c                           | 11 +++++-
+>  include/linux/fcntl.h                         |  2 +
+>  include/uapi/asm-generic/errno.h              |  2 +
+>  include/uapi/asm-generic/fcntl.h              |  4 ++
+>  tools/arch/alpha/include/uapi/asm/errno.h     |  2 +
+>  tools/arch/mips/include/uapi/asm/errno.h      |  2 +
+>  tools/arch/parisc/include/uapi/asm/errno.h    |  2 +
+>  tools/arch/sparc/include/uapi/asm/errno.h     |  2 +
+>  tools/include/uapi/asm-generic/errno.h        |  2 +
+>  .../testing/selftests/openat2/openat2_test.c  | 37 ++++++++++++++++++-
+>  23 files changed, 119 insertions(+), 32 deletions(-)
+>
+> --
+> 2.53.0
+>
 
-Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
----
- arch/mips/include/uapi/asm/fcntl.h | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/arch/mips/include/uapi/asm/fcntl.h b/arch/mips/include/uapi/asm/fcntl.h
-index 0369a38e3d4f..6aa3f49df17e 100644
---- a/arch/mips/include/uapi/asm/fcntl.h
-+++ b/arch/mips/include/uapi/asm/fcntl.h
-@@ -11,15 +11,15 @@
- 
- #include <asm/sgidefs.h>
- 
--#define O_APPEND	0x0008
--#define O_DSYNC		0x0010	/* used to be O_SYNC, see below */
--#define O_NONBLOCK	0x0080
--#define O_CREAT		0x0100	/* not fcntl */
--#define O_TRUNC		0x0200	/* not fcntl */
--#define O_EXCL		0x0400	/* not fcntl */
--#define O_NOCTTY	0x0800	/* not fcntl */
--#define FASYNC		0x1000	/* fcntl, for BSD compatibility */
--#define O_LARGEFILE	0x2000	/* allow large file opens */
-+#define O_APPEND	0000010
-+#define O_DSYNC		0000020	/* used to be O_SYNC, see below */
-+#define O_NONBLOCK	0000200
-+#define O_CREAT		0000400	/* not fcntl */
-+#define O_TRUNC		0001000	/* not fcntl */
-+#define O_EXCL		0002000	/* not fcntl */
-+#define O_NOCTTY	0004000	/* not fcntl */
-+#define FASYNC		0010000	/* fcntl, for BSD compatibility */
-+#define O_LARGEFILE	0020000	/* allow large file opens */
- /*
-  * Before Linux 2.6.33 only O_DSYNC semantics were implemented, but using
-  * the O_SYNC flag.  We continue to use the existing numerical value
-@@ -33,9 +33,9 @@
-  *
-  * Note: __O_SYNC must never be used directly.
-  */
--#define __O_SYNC	0x4000
-+#define __O_SYNC	0040000
- #define O_SYNC		(__O_SYNC|O_DSYNC)
--#define O_DIRECT	0x8000	/* direct disk access hint */
-+#define O_DIRECT	0100000	/* direct disk access hint */
- 
- #define F_GETLK		14
- #define F_SETLK		6
--- 
-2.53.0
-
+I am not sure if my patch series made it properly to the mailing
+lists. https://lore.kernel.org/linux-fsdevel/  is showing a broken
+series, only the 2/4, 3/4, 4/4 and I don't see cover-letter or 1/4.
+The patch series does have a big cc list (what I got from
+get_maintainers.pl excluding commit-signers) and I used git send-email
+to send to everyone. It's also showing properly in my gmail inbox. Is
+it just the website that's not showing it properly? Should I prune the
+cc list and resend? is there any limitations to sending patches to
+mailing lists with many cc-s via gmail?
