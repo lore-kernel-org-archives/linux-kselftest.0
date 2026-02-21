@@ -1,49 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26092F6560;
-	Sat, 21 Feb 2026 18:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF872F7AB0
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 18:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771697032; cv=none; b=uRtbbAtwgtc1cfVCNio7Gy0UgJdLla2wl20rLmbrb7rF/NwCRf7z84IJLxMPckilq68IeaGik5tfp7dFPCZf2fHOpl+wkdvgMKidIBsPGZnY66TAtwE6AWthfjyVDU33B1qm4apF4On6kczz5LTZ+5uKuex7nK4cQ+VXL2MFq4M=
+	t=1771700089; cv=none; b=Rc/nNSFG8IgLyx0MWa7oH/ft+0/YObFYWxE+AJKv8dzTQlfB4orD+127zCL4c6hR+rGT0pCzKRY4WeurnpmTJQaiSIWBgivJnPsK1uOmaSi5Vbws5/J5K3yiBd77FAPkhxWhi6INk1EfmgDKCfAsF1+mHeSaJns5B3qVG8BIVto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771697032; c=relaxed/simple;
-	bh=bCw9hVCbQXONIXZgAbBvfEk2u6XzT2XAiGuqMrqAhNQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ojIHl3aP/GA+wHTx9EvvpWKVpKtpJEab3pq1b5SmsRvqRm/8GKaps9uqn3vk0cWifxHfgyocr2BCJmORKooMC1iABbvMmIFsJP5DHGwGeOXVLZv4zUJMR/rFiz0XHE6rfPMkkO22q4ElAplCudy/3VadZG2ieGcKNkSEpFLp1ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQ+JXmDf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771700089; c=relaxed/simple;
+	bh=VHhS8fm7kDxQvXABgihMOlacvQHX9vGIUNwB2e7Zxjk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QNxXJDgE1d4c9N/lGdSHWX9CdqA5+7yob+DrtxGhxXfZriZvePda+QRzKqBpi9h3baAifKaWEpzQEG280lIi7/gArs90VeveMaw4X3aPfpxWOr99x1e+dpxsmAsqtcrccjcKvRcVx1sFj1/CZCDAjXBBZLKkhM/CZnBblGgRkps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b8fXLHP8; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQ+JXmDf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F54C2BCB1;
-	Sat, 21 Feb 2026 18:03:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771697032;
-	bh=bCw9hVCbQXONIXZgAbBvfEk2u6XzT2XAiGuqMrqAhNQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eQ+JXmDf6pJAEXnAMg/rBeh4QMAJ96ToBwrJSC3xu3M04NBGmadJ927JiIw4nGUjO
-	 0OH2PQ/k+48lrdmKTXz1acmV6OU8VYOebosJba8HVzXawMOeqPQlkiPUQDTfsffSOG
-	 X86AgXLcw2by4bsWmjLG7lUhq1r+hfIUXUmQc4mH9e8i03S0268tw6mcLcoLjn1C8h
-	 oaxeiYMeKEiiCULy1/ml8nETzJH9kCpNrIs0xRQcxVHT72V4GQV1cK8RFCykqmlZxS
-	 8Qa9pHyYYwB3DOE41AxRiVrtX6nPqEZwrEf40RvAO2ZDg/agHUdUyV4kDEjJSLKzDU
-	 mX0aaykirReog==
-From: SeongJae Park <sj@kernel.org>
-To: 
-Cc: SeongJae Park <sj@kernel.org>,
-	Akinobu Mita <akinobu.mita@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b8fXLHP8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771700086;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1iNJTDv12E46ZvUAk+QwQH33JvtwYkmz3TRiSZZMbEM=;
+	b=b8fXLHP8d5cKHcQCisMrO9rUGyWTMrzUvvuvnkcPB/P/DKokEWT5z4ZCnbLEmffwTO/RDJ
+	dTSRYlGAKUG1rFXwdWPvq7eD9eZZpA0iXuqzKpbtJ2aLJsVgRjTVU0rWbOYIsN9EmWSlFr
+	uhAT0wjqZRJHihDO2cA/75+O55BUWro=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-592-Cq4xwRISN1eF4eNzsePtzw-1; Sat,
+ 21 Feb 2026 13:54:42 -0500
+X-MC-Unique: Cq4xwRISN1eF4eNzsePtzw-1
+X-Mimecast-MFC-AGG-ID: Cq4xwRISN1eF4eNzsePtzw_1771700080
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D04861956088;
+	Sat, 21 Feb 2026 18:54:39 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.15])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 947161955F22;
+	Sat, 21 Feb 2026 18:54:34 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Chen Ridong <chenridong@huaweicloud.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH v2 3/3] mm/damon/test/core-kunit: add damon_apply_min_nr_regions() test
-Date: Sat, 21 Feb 2026 10:03:40 -0800
-Message-ID: <20260221180341.10313-4-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260221180341.10313-1-sj@kernel.org>
-References: <20260221180341.10313-1-sj@kernel.org>
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v6 0/8] cgroup/cpuset: Fix partition related locking issues
+Date: Sat, 21 Feb 2026 13:54:10 -0500
+Message-ID: <20260221185418.29319-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,83 +70,57 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Add a kunit test for the functionality of damon_apply_min_nr_regions().
+ v6:
+  - Rebase on top of the latest v7.0 pre-RC linux tree.
+  - Add another fix patch to fix found during code inspection.
+  - Revert back to the v4 idea of just deferring the housekeeping_update()
+    call to workqueue to make it simple as v5 change will add quite a
+    bit more complexity to the cpuset code.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- mm/damon/tests/core-kunit.h | 52 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ v5:
+  - https://lore.kernel.org/lkml/20260212164640.2408295-1-longman@redhat.com/
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 92ea25e2dc9e3..4c19ccac5a2ee 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -1241,6 +1241,57 @@ static void damon_test_set_filters_default_reject(struct kunit *test)
- 	damos_free_filter(target_filter);
- }
- 
-+static void damon_test_apply_min_nr_regions_for(struct kunit *test,
-+		unsigned long sz_regions, unsigned long min_region_sz,
-+		unsigned long min_nr_regions,
-+		unsigned long max_region_sz_expect,
-+		unsigned long nr_regions_expect)
-+{
-+	struct damon_ctx *ctx;
-+	struct damon_target *t;
-+	struct damon_region *r;
-+	unsigned long max_region_size;
-+
-+	ctx = damon_new_ctx();
-+	if (!ctx)
-+		kunit_skip(test, "ctx alloc fail\n");
-+	t = damon_new_target();
-+	if (!t) {
-+		damon_destroy_ctx(ctx);
-+		kunit_skip(test, "target alloc fail\n");
-+	}
-+	damon_add_target(ctx, t);
-+	r = damon_new_region(0, sz_regions);
-+	if (!r) {
-+		damon_destroy_ctx(ctx);
-+		kunit_skip(test, "region alloc fail\n");
-+	}
-+	damon_add_region(r, t);
-+
-+	ctx->min_region_sz = min_region_sz;
-+	ctx->attrs.min_nr_regions = min_nr_regions;
-+	max_region_size = damon_apply_min_nr_regions(ctx);
-+
-+	KUNIT_EXPECT_EQ(test, max_region_size, max_region_sz_expect);
-+	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), nr_regions_expect);
-+
-+	damon_destroy_ctx(ctx);
-+}
-+
-+static void damon_test_apply_min_nr_regions(struct kunit *test)
-+{
-+	/* common, expected setup */
-+	damon_test_apply_min_nr_regions_for(test, 10, 1, 10, 1, 10);
-+	/* no zero size limit */
-+	damon_test_apply_min_nr_regions_for(test, 10, 1, 15, 1, 10);
-+	/* max size should be aligned by min_region_sz */
-+	damon_test_apply_min_nr_regions_for(test, 10, 2, 2, 6, 2);
-+	/*
-+	 * when min_nr_regions and min_region_sz conflicts, min_region_sz wins.
-+	 */
-+	damon_test_apply_min_nr_regions_for(test, 10, 2, 10, 2, 5);
-+}
-+
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -1267,6 +1318,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damos_test_filter_out),
- 	KUNIT_CASE(damon_test_feed_loop_next_input),
- 	KUNIT_CASE(damon_test_set_filters_default_reject),
-+	KUNIT_CASE(damon_test_apply_min_nr_regions),
- 	{},
- };
- 
+After booting the latest linux debug kernel with the latest cgroup
+changes as well as Federic's "cpuset/isolation: Honour kthreads
+preferred affinity" patch series [1] merged on top and running the
+test-cpuset-prs.sh test, a circular locking dependency lockdep splat
+was reported. See patch 5 for details.
+
+To fix this issue, the cpuset code is modified to not call
+housekeeping_update() with cpu_hotplug_lock held.  The cpuset hotplug
+code is also modified to defer the housekeeping_update() call, if needed,
+to workqueue.  A new top level cpuset_top_mutex is added to have more
+exclusion control.
+
+With these changes in place, the cpuset test ran to completion with no
+failure and no lockdep splat.
+
+[1] https://lore.kernel.org/lkml/20260125224541.50226-1-frederic@kernel.org/
+
+Waiman Long (8):
+  cgroup/cpuset: Fix incorrect change to effective_xcpus in
+    partition_xcpus_del()
+  cgroup/cpuset: Fix incorrect use of cpuset_update_tasks_cpumask() in
+    update_cpumasks_hier()
+  cgroup/cpuset: Clarify exclusion rules for cpuset internal variables
+  cgroup/cpuset: Set isolated_cpus_updating only if isolated_cpus is
+    changed
+  kselftest/cgroup: Simplify test_cpuset_prs.sh by removing "S+" command
+  cgroup/cpuset: Move housekeeping_update()/rebuild_sched_domains()
+    together
+  cgroup/cpuset: Defer housekeeping_update() calls from CPU hotplug to
+    workqueue
+  cgroup/cpuset: Call housekeeping_update() without holding
+    cpus_read_lock
+
+ kernel/cgroup/cpuset.c                        | 220 +++++++++++------
+ kernel/sched/isolation.c                      |   4 +-
+ kernel/time/timer_migration.c                 |   4 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       | 225 +++++++++---------
+ 4 files changed, 265 insertions(+), 188 deletions(-)
+
 -- 
-2.47.3
+2.53.0
+
