@@ -1,208 +1,94 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC75219EB
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 12:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A351156F20
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 14:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771677951; cv=none; b=gdwy7YdPYbvlVmds2MjVR7I3hGOJdxeMuVHLUP8fUhz3TXwpMiFOHiendcTF849yvar8oUJzCU0HY1dYdFdGpwmR+ytzMPiWxXUJytOJotWe2zY/7EzDiy8kqXlvy4yZ0FGk+V7fmTleB0nY7m2m8Q67C7iH43BbkgmOuIz62o0=
+	t=1771683028; cv=none; b=bQGNguzKlF4wLrj9LnhuEnAkDAjsiIO+jon8AJCj9Q8J8rc/W296VwgPL4leFEZjvdcVHrRSBFenpSMPpsicl47m9dZV769w39SIU5Bs6MXTf1DF67259Dqrchs7QwBIahDhrVcTBZOYkvho5tErVhEKHGLpv7DMO1kSnYNdioE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771677951; c=relaxed/simple;
-	bh=WsTXGR95QMDQIDKcSeiKcsv6uqyY7BgPMQj5G+jyeaw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nmN4kUp61I2ncqqlUZamTlUjEs3FjpUeTlgFV2dYgzGZP5ks8Ix5KCD/VUyEaPYMP6boGGsvkyc1qu8SUGcUn9GcpNI9gyDyjT3A2mOCQPSZJveon8JtOmQlnMJVByKiXFsn+s3iQnj1PwnLqLPi8hGxD2MCIzRy9rKkeRwcHDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v4UNHe7m; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771683028; c=relaxed/simple;
+	bh=rqthq+rpUAvYKUCj0k+7wtcGyILtP3Zgjjxo6LRxS7Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PB0Luq14O1KlyyA2v6rHdS6fKimBxoA7zQvXnp8A7VGOEEdElhzK7W2GonstfxcNfUtdj/9tzZceWDyUoNxlsDVdjFgwR4ILGXrD17V+YfzOsSw9jtqtQ20zaVzS+bvpTefMyrNStA7wwtoo6hQhukR8W0DHHs7KpY6tQBfZka0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvr6LS0t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v4UNHe7m"
-Message-ID: <4c40705a-4e6a-47ea-b420-223318d1ad09@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771677937;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2QdP2BW6MkJBcHCw2LF48pz76iAYyIKzOB0N/QTayGk=;
-	b=v4UNHe7m4wdtR3fobdkJjSqgSGryknFDYRYiIcR+EwhlwvBbD04oPPTQGpQcyWU9kpWSBg
-	7FP0Rr7fd7aZeoLk4Lzu/PlKTlntsNzlpAhsfeaLFUZLR5Sk5qzm65hbYBeS5qCM54TRmx
-	9Ar15FvoTW2zcEgHfzbJU+8H81Xot8k=
-Date: Sat, 21 Feb 2026 20:45:15 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvr6LS0t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEE8BC4CEF7;
+	Sat, 21 Feb 2026 14:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771683027;
+	bh=rqthq+rpUAvYKUCj0k+7wtcGyILtP3Zgjjxo6LRxS7Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kvr6LS0te74pnwW1/12VgNqs3EeprC2k1X2Mt32vPuL5QRwoKcMUH03jWVf1H1HPC
+	 NRrzm37BQFTKANGXQYqPEho4pJGIbK4mqQ4W5atmqlZHdGbL5OGoQdcVNsEET+KbK6
+	 D6ACmrR7mfZFs0/sMI9UE8o6X64fXDbpFrlOdUW+WgmjepBQv/Vmo0O+hrwSMRZXVD
+	 F451Pj3/CdFrMf4Ps2DyJTj2F863hyyHE/xwTA4XxItj72LnPdWSXG/C9VHs1iNB7o
+	 eJNWtDV1rnHTiTJo2tLR9lUY+jbgo+L/CgjbTv7RcPcZGGxhpx1zidqKhYdfuBdfq/
+	 Ya9ghLFoeQn9Q==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id 5DFFC1AC5849; Sat, 21 Feb 2026 14:10:25 +0000 (GMT)
+Date: Sat, 21 Feb 2026 14:10:25 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Guillaume Tucker <gtucker@gtucker.io>
+Cc: David Gow <david@davidgow.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <raemoar63@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: RCU stalls running KUnit on mainline
+Message-ID: <aZm80VLT0ob8im-d@sirena.co.uk>
+References: <b537dc5a-f7e2-4daa-bff1-d07c5852ece5@sirena.org.uk>
+ <59e8c352-7bc8-4358-af74-fee8c29280ba@davidgow.net>
+ <8aa71ce7-7c83-4446-b1fa-b0f862bde53f@sirena.org.uk>
+ <cb63d5d8-d174-4d65-b5a3-877533f6cbd7@gtucker.io>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/6] bpf, x86: Add 64-bit bitops kfuncs
- support for x86_64
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- X86 ML <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>,
- Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260219142933.13904-1-leon.hwang@linux.dev>
- <20260219142933.13904-3-leon.hwang@linux.dev>
- <CAADnVQLNmQGKf5S5ZNwHYzScYBhnWFmnzLg=5Xxy4SgYKE3EfQ@mail.gmail.com>
- <c6c2ffcf-acdf-4bda-ad82-dc4cc1a9260e@linux.dev>
- <CAADnVQ+iQkvb9-wOchuPrUOneqzx9Rrqto88=R7GUOqih6PhZQ@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQ+iQkvb9-wOchuPrUOneqzx9Rrqto88=R7GUOqih6PhZQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="NxBSfSXpDRB4O7Us"
+Content-Disposition: inline
+In-Reply-To: <cb63d5d8-d174-4d65-b5a3-877533f6cbd7@gtucker.io>
+X-Cookie: Think big.  Pollute the Mississippi.
 
 
+--NxBSfSXpDRB4O7Us
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2026/2/21 01:50, Alexei Starovoitov wrote:
-> On Fri, Feb 20, 2026 at 7:54 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->>
->>
->> On 2026/2/20 01:47, Alexei Starovoitov wrote:
->>> On Thu, Feb 19, 2026 at 6:30 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>>>
->>>> Implement JIT inlining of the 64-bit bitops kfuncs on x86_64.
->>>>
->>>> bpf_rol64() and bpf_ror64() are always supported via ROL/ROR.
->>>>
->>>> bpf_ctz64() and bpf_ffs64() are supported when the CPU has
->>>> X86_FEATURE_BMI1 (TZCNT).
->>>>
->>>> bpf_clz64() and bpf_fls64() are supported when the CPU has
->>>> X86_FEATURE_ABM (LZCNT).
->>>>
->>>> bpf_popcnt64() is supported when the CPU has X86_FEATURE_POPCNT.
->>>>
->>>> bpf_bitrev64() is not inlined as x86_64 has no native bit-reverse
->>>> instruction, so it falls back to a regular function call.
->>>>
->>>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->>>> ---
->>>>  arch/x86/net/bpf_jit_comp.c | 141 ++++++++++++++++++++++++++++++++++++
->>>>  1 file changed, 141 insertions(+)
->>>>
->>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->>>> index 070ba80e39d7..193e1e2d7aa8 100644
->>>> --- a/arch/x86/net/bpf_jit_comp.c
->>>> +++ b/arch/x86/net/bpf_jit_comp.c
->>>> @@ -19,6 +19,7 @@
->>>>  #include <asm/text-patching.h>
->>>>  #include <asm/unwind.h>
->>>>  #include <asm/cfi.h>
->>>> +#include <asm/cpufeatures.h>
->>>>
->>>>  static bool all_callee_regs_used[4] = {true, true, true, true};
->>>>
->>>> @@ -1604,6 +1605,127 @@ static void emit_priv_frame_ptr(u8 **pprog, void __percpu *priv_frame_ptr)
->>>>         *pprog = prog;
->>>>  }
->>>>
->>>> +static bool bpf_inlines_func_call(u8 **pprog, void *func)
->>>> +{
->>>> +       bool has_popcnt = boot_cpu_has(X86_FEATURE_POPCNT);
->>>> +       bool has_bmi1 = boot_cpu_has(X86_FEATURE_BMI1);
->>>> +       bool has_abm = boot_cpu_has(X86_FEATURE_ABM);
->>>> +       bool inlined = true;
->>>> +       u8 *prog = *pprog;
->>>> +
->>>> +       /*
->>>> +        * x86 Bit manipulation instruction set
->>>> +        * https://en.wikipedia.org/wiki/X86_Bit_manipulation_instruction_set
->>>> +        */
->>>> +
->>>> +       if (func == bpf_clz64 && has_abm) {
->>>> +               /*
->>>> +                * Intel® 64 and IA-32 Architectures Software Developer's Manual (June 2023)
->>>> +                *
->>>> +                *   LZCNT - Count the Number of Leading Zero Bits
->>>> +                *
->>>> +                *     Opcode/Instruction
->>>> +                *     F3 REX.W 0F BD /r
->>>> +                *     LZCNT r64, r/m64
->>>> +                *
->>>> +                *     Op/En
->>>> +                *     RVM
->>>> +                *
->>>> +                *     64/32-bit Mode
->>>> +                *     V/N.E.
->>>> +                *
->>>> +                *     CPUID Feature Flag
->>>> +                *     LZCNT
->>>> +                *
->>>> +                *     Description
->>>> +                *     Count the number of leading zero bits in r/m64, return
->>>> +                *     result in r64.
->>>> +                */
->>>> +               /* emit: x ? 64 - fls64(x) : 64 */
->>>> +               /* lzcnt rax, rdi */
->>>> +               EMIT5(0xF3, 0x48, 0x0F, 0xBD, 0xC7);
->>>
->>> Instead of emitting binary in x86 and arm JITs,
->>> let's use in kernel disasm to check that all these kfuncs
->>> conform to kf_fastcall (don't use unnecessary registers,
->>> don't have calls to other functions) and then copy the binary
->>> from code and skip the last 'ret' insn.
->>> This way we can inline all kinds of kfuncs.
->>>
->>
->> Good idea.
->>
->> Quick question on “in-kernel disasm”: do you mean adding a kernel
->> instruction decoder/disassembler to validate a whitelist of kfuncs at
->> load time?
->>
->> I’m trying to understand the intended scope:
->>
->> * Is the expectation that we add an in-kernel disassembler/validator for
->>   a small set of supported instructions and patterns (no calls/jumps,
->>   only arg/ret regs touched, etc.)?
->> * Or is there already infrastructure you had in mind that we can reuse?
->>
->> Once I understand that piece, I can rework the series to inline by
->> copying validated machine code (minus the final ret), rather than
->> emitting raw opcodes in the JITs.
->>
->> I also noticed you mentioned a similar direction in "bpf/s390: Implement
->> get_preempt_count()" [1], so I’ve added Ilya to the thread to discuss
->> this approach further.
-> 
-> You really sound like LLM. Do your homework as a human.
+On Fri, Feb 20, 2026 at 04:30:19PM +0100, Guillaume Tucker wrote:
 
-Got it.
+> Yes, although I've run some automated VIXI bisections and found one
+> reliable panic in rcu.  I had to do it in two steps as the first
+> bisection landed on a merge commit.  After a bit more investigation I
+> reported what I found here:
 
-I polished my draft using ChatGPT, which would leave LLM smell in my reply.
+>     https://lore.kernel.org/all/0150e237-41d2-40ae-a857-4f97ca664468@gtucker.io/
 
-Here's my original draft:
+> I can bisect the other KUnit issues separately too if that helps now
+> that I have a quick workaround to avoid this panic (see email).
 
-Good idea. But I concern about the "in kernel disasm". Do you mean we
-will build a disassembler for whitelist kfuncs at starting?
+Thanks for tracking that down and reporting!  Hopefully it gets fixed
+soon and we can turn KUnit testing back on for -next, one flaw with that
+check for intermittent bugs is that it's not so easy to hold back the
+tree introducing the problem.
 
-I noticed you've mentioned the same direction in "bpf/s390: Implement
-get_preempt_count()" [1]. So, I added Ilya here to discuss this direction.
+--NxBSfSXpDRB4O7Us
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[1]
-https://lore.kernel.org/bpf/CAADnVQKSMCohZy_HZwzNpFfTSnVu7rfxgmHEDgT9s28XxcDS5g@mail.gmail.com/
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Leon
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmZvNAACgkQJNaLcl1U
+h9ABXwf/RiN1GOQ6hCInR+HUHqKVscjkWTaiJC5DeRrZx1sUH7EXG718wgxjVNsZ
+TgWtRrl1P+RlYpbr9/128EXUXVF/yH4jJQvpnIlnLPEP27nZHNESAc5Fz/zB9/Ym
+7hv85SE6SjnCHGvREFlZFXEToqfPAuogFEDvOnvsG/U9W037S5H/NqVw1GyRL0Wv
+C1HYWU01zQoaeyI/3MIyN/LGA3j/BpQQooQcxrUa7KD6rho405qwTmwuZ3BofpxC
+rRirwlqR7zLpG+ZhfFZfNoSd6pu5xZBNeOJOQ4ydhZ4vav9sCwy/JC2RWUm1dU8k
+3EeAWU6iWlmGDd9bgdck1sJjd6GOYQ==
+=7rN2
+-----END PGP SIGNATURE-----
 
-
+--NxBSfSXpDRB4O7Us--
