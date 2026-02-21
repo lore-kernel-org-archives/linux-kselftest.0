@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7FD30F540
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 18:55:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3EC2F7AB0
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 18:55:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771700127; cv=none; b=oKIVXnw2/8RBh9M+EdQrqgw33rRFwy36ebNAX2vrP98LMPrdRMjyT5Vi86LrmjTavHu0QhpO2gq7McwSWHPTZyWZl/uCPBqHXkTsCOvCHgnBOXLWRA31ZcR4GziE3lt7zLZJv4YA3H5Wo4pRyWnIWTcN0JiirvcIqAF1Z8hC8KI=
+	t=1771700127; cv=none; b=sFvgo5p86zelDRIO9HAeB19AjhUKlvjJcyrGNo0Qjic03rj+/WlOatRc/Ry+vEyeZE1IzNcoDUq5i0Jv+Q0rJTn/xNslMxCYfG9tlB1HVIiwj0WMhhaqbBs1uhZH1S37yzlRJH8/rMudRGnBY7DYRqfkUIub9vXQGh12ZaVMpz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771700127; c=relaxed/simple;
-	bh=sCsHRcyKcERjUNKeUpJE7elYWPVKzxonGlxyHXoVLTA=;
+	bh=zj1nzFsQKy7G9JLp3bdrBW08Nt2BFrGjPQK/n7+/h8E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nqFavTwN9cD6fjeo1lhMCXxbZUC1tYHno9wMNDyPc5sOGC1O5lrvZwUg/yVWNAFdbBF+d4WElXNbyASYe3njF7MNA/AtwGg0MkUtH7enWG8Sb2UhMy18d6gyWZQvBE/DtfXwtTAUWWGLywBWslNNEMhY/ayg3kXm+VxI7pL6/FM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h+igarHa; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=gBlFr0i+x42o5oOZMrKVtQFuqSDOXK6SjHl01pyiy5itTHe8jLH8W7VhT78HAiIufsy21VfDjCEXdTQII0LmSMbq7HzXt3gKbTVsTFMaIrSJRDhIndcVTJL9e9Yku2EA5orq7GwAFod79Rb+gYKG1gzi6ifHpdTYf5xgdKIXenk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KsI8ZlDi; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h+igarHa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KsI8ZlDi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771700124;
+	s=mimecast20190719; t=1771700125;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=k4vR+Shf01bTPXjClL10ebMyrEpjUBxnF56CNK7mE1M=;
-	b=h+igarHawDzvF8kIcagfgOQOsTe1O+DIGsSzbcCI1TTBmfKbM0AuljtyJ1DIoTMt6sNEtQ
-	1rkoGm1TjKEnH3WxrvuyVU65fLiX4iYN8gv+9uwQ+CNLUKHpXNxllPXSoHUk+Sujt1RSLS
-	x9yUc2bjZ/u+BWYF7qzx3v3QOhW70BU=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=xKg+N2bAOrd2PMcoX6bAcqgeV9uYlmhLKffPR6U/E6o=;
+	b=KsI8ZlDi6NMe6/O9N5qnaFDyYyXV4dC8xFf/bZ8den7KDaN5t2zeIvo6gYxai7XMbxLxRz
+	YevUPHYkS4ro8BdQ+Xb6U6B8OgImFIkxnJqZtILpD1Nm21tqnvi/JiP3HF+JI7Oz2/ku/T
+	dO8VOn7OLxTOh+/ZAM3DuyLbhXmtJ1o=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-460-9Of_0gChN2a-XvmWHzG-ig-1; Sat,
- 21 Feb 2026 13:55:23 -0500
-X-MC-Unique: 9Of_0gChN2a-XvmWHzG-ig-1
-X-Mimecast-MFC-AGG-ID: 9Of_0gChN2a-XvmWHzG-ig_1771700121
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-316-oGt6ycoXM6Gzk6jQt95DkA-1; Sat,
+ 21 Feb 2026 13:55:18 -0500
+X-MC-Unique: oGt6ycoXM6Gzk6jQt95DkA-1
+X-Mimecast-MFC-AGG-ID: oGt6ycoXM6Gzk6jQt95DkA_1771700117
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EFCB31956088;
-	Sat, 21 Feb 2026 18:55:20 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.15])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9FE18195419E;
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 42E7A1956052;
 	Sat, 21 Feb 2026 18:55:16 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.2.16.15])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id ADF4A1955D85;
+	Sat, 21 Feb 2026 18:55:11 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Chen Ridong <chenridong@huaweicloud.com>,
 	Tejun Heo <tj@kernel.org>,
@@ -62,9 +62,9 @@ Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH v6 8/8] cgroup/cpuset: Call housekeeping_update() without holding cpus_read_lock
-Date: Sat, 21 Feb 2026 13:54:18 -0500
-Message-ID: <20260221185418.29319-9-longman@redhat.com>
+Subject: [PATCH v6 7/8] cgroup/cpuset: Defer housekeeping_update() calls from CPU hotplug to workqueue
+Date: Sat, 21 Feb 2026 13:54:17 -0500
+Message-ID: <20260221185418.29319-8-longman@redhat.com>
 In-Reply-To: <20260221185418.29319-1-longman@redhat.com>
 References: <20260221185418.29319-1-longman@redhat.com>
 Precedence: bulk
@@ -76,266 +76,128 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-The current cpuset partition code is able to dynamically update
-the sched domains of a running system and the corresponding
-HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
-"isolcpus=domain,..." boot command line feature at run time.
+The cpuset_handle_hotplug() may need to invoke housekeeping_update(),
+for instance, when an isolated partition is invalidated because its
+last active CPU has been put offline.
 
-The housekeeping cpumask update requires flushing a number of different
-workqueues which may not be safe with cpus_read_lock() held as the
-workqueue flushing code may acquire cpus_read_lock() or acquiring locks
-which have locking dependency with cpus_read_lock() down the chain. Below
-is an example of such circular locking problem.
+As we are going to enable dynamic update to the nozh_full housekeeping
+cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
+allowing the CPU hotplug path to call into housekeeping_update() directly
+from update_isolation_cpumasks() will likely cause deadlock. So we
+have to defer any call to housekeeping_update() after the CPU hotplug
+operation has finished. This is now done via the workqueue where
+the update_hk_sched_domains() function will be invoked via the
+hk_sd_workfn().
 
-  ======================================================
-  WARNING: possible circular locking dependency detected
-  6.18.0-test+ #2 Tainted: G S
-  ------------------------------------------------------
-  test_cpuset_prs/10971 is trying to acquire lock:
-  ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at: touch_wq_lockdep_map+0x7a/0x180
+An concurrent cpuset control file write may have executed the required
+update_hk_sched_domains() function before the work function is called. So
+the work function call may become a no-op when it is invoked.
 
-  but task is already holding lock:
-  ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
-
-  which lock already depends on the new lock.
-
-  the existing dependency chain (in reverse order) is:
-  -> #4 (cpuset_mutex){+.+.}-{4:4}:
-  -> #3 (cpu_hotplug_lock){++++}-{0:0}:
-  -> #2 (rtnl_mutex){+.+.}-{4:4}:
-  -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
-  -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
-
-  Chain exists of:
-    (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
-
-  5 locks held by test_cpuset_prs/10971:
-   #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
-   #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x260/0x5f0
-   #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b6/0x5f0
-   #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at: cpuset_partition_write+0x77/0x130
-   #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
-
-  Call Trace:
-   <TASK>
-     :
-   touch_wq_lockdep_map+0x93/0x180
-   __flush_workqueue+0x111/0x10b0
-   housekeeping_update+0x12d/0x2d0
-   update_parent_effective_cpumask+0x595/0x2440
-   update_prstate+0x89d/0xce0
-   cpuset_partition_write+0xc5/0x130
-   cgroup_file_write+0x1a5/0x680
-   kernfs_fop_write_iter+0x3df/0x5f0
-   vfs_write+0x525/0xfd0
-   ksys_write+0xf9/0x1d0
-   do_syscall_64+0x95/0x520
-   entry_SYSCALL_64_after_hwframe+0x76/0x7e
-
-To avoid such a circular locking dependency problem, we have to
-call housekeeping_update() without holding the cpus_read_lock() and
-cpuset_mutex. The current set of wq's flushed by housekeeping_update()
-may not have work functions that call cpus_read_lock() directly,
-but we are likely to extend the list of wq's that are flushed in the
-future. Moreover, the current set of work functions may hold locks that
-may have cpu_hotplug_lock down the dependency chain.
-
-So housekeeping_update() is now called after releasing cpus_read_lock
-and cpuset_mutex at the end of a cpuset operation. These two locks are
-then re-acquired later beforce calling rebuild_sched_domains_locked().
-
-To enable mutual exclusion between the housekeeping_update() call and
-other cpuset control file write actions, a new top level cpuset_top_mutex
-is introduced. This new mutex will be acquired first to allow sharing
-variables used by both code paths. However, cpuset update from CPU
-hotplug can still happen in parallel with the housekeeping_update()
-call, though that should be rare in production environment.
-
-As cpus_read_lock() is now no longer held when
-tmigr_isolated_exclude_cpumask() is called, it needs to acquire it
-directly.
-
-The lockdep_is_cpuset_held() is also updated to return true if either
-cpuset_top_mutex or cpuset_mutex is held.
-
-Fixes: 03ff73510169 ("cpuset: Update HK_TYPE_DOMAIN cpumask from cpuset")
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c        | 47 +++++++++++++++++++++++++++++++----
- kernel/sched/isolation.c      |  4 +--
- kernel/time/timer_migration.c |  4 +--
- 3 files changed, 44 insertions(+), 11 deletions(-)
+ kernel/cgroup/cpuset.c                        | 31 ++++++++++++++++---
+ .../selftests/cgroup/test_cpuset_prs.sh       | 11 ++++++-
+ 2 files changed, 36 insertions(+), 6 deletions(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 2c80bfc30bbc..dbda09391b19 100644
+index 3d0d18bf182f..2c80bfc30bbc 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -65,14 +65,28 @@ static const char * const perr_strings[] = {
-  * CPUSET Locking Convention
-  * -------------------------
-  *
-- * Below are the three global locks guarding cpuset structures in lock
-+ * Below are the four global/local locks guarding cpuset structures in lock
-  * acquisition order:
-+ *  - cpuset_top_mutex
-  *  - cpu_hotplug_lock (cpus_read_lock/cpus_write_lock)
-  *  - cpuset_mutex
-  *  - callback_lock (raw spinlock)
-  *
-- * A task must hold all the three locks to modify externally visible or
-- * used fields of cpusets, though some of the internally used cpuset fields
-+ * As cpuset will now indirectly flush a number of different workqueues in
-+ * housekeeping_update() to update housekeeping cpumasks when the set of
-+ * isolated CPUs is going to be changed, it may be vulnerable to deadlock
-+ * if we hold cpus_read_lock while calling into housekeeping_update().
-+ *
-+ * The first cpuset_top_mutex will be held except when calling into
-+ * cpuset_handle_hotplug() from the CPU hotplug code where cpus_write_lock
-+ * and cpuset_mutex will be held instead. The main purpose of this mutex
-+ * is to prevent regular cpuset control file write actions from interfering
-+ * with the call to housekeeping_update(), though CPU hotplug operation can
-+ * still happen in parallel. This mutex also provides protection for some
-+ * internal variables.
-+ *
-+ * A task must hold all the remaining three locks to modify externally visible
-+ * or used fields of cpusets, though some of the internally used cpuset fields
-  * and internal variables can be modified without holding callback_lock. If only
-  * reliable read access of the externally used fields are needed, a task can
-  * hold either cpuset_mutex or callback_lock which are exposed to other
-@@ -100,6 +114,7 @@ static const char * const perr_strings[] = {
-  * cpumasks and nodemasks.
-  */
- 
-+static DEFINE_MUTEX(cpuset_top_mutex);
- static DEFINE_MUTEX(cpuset_mutex);
- 
- /*
-@@ -111,6 +126,8 @@ static DEFINE_MUTEX(cpuset_mutex);
-  *
-  * CSCB: Readable by holding either cpuset_mutex or callback_lock. Writable
-  *	 by holding both cpuset_mutex and callback_lock.
-+ *
-+ * T:	 Read/write-able by holding the cpuset_top_mutex.
-  */
- 
- /*
-@@ -134,6 +151,11 @@ static cpumask_var_t	isolated_cpus;		/* CSCB */
-  */
- static bool		update_housekeeping;	/* RWCS */
+@@ -1323,6 +1323,16 @@ static void update_hk_sched_domains(void)
+ 		rebuild_sched_domains_locked();
+ }
  
 +/*
-+ * Copy of isolated_cpus to be passed to housekeeping_update()
++ * Work function to invoke update_hk_sched_domains()
 + */
-+static cpumask_var_t	isolated_hk_cpus;	/* T */
++static void hk_sd_workfn(struct work_struct *work)
++{
++	cpuset_full_lock();
++	update_hk_sched_domains();
++	cpuset_full_unlock();
++}
 +
- /*
-  * A flag to force sched domain rebuild at the end of an operation.
-  * It can be set in
-@@ -297,6 +319,7 @@ void lockdep_assert_cpuset_lock_held(void)
+ /**
+  * rm_siblings_excl_cpus - Remove exclusive CPUs that are used by sibling cpusets
+  * @parent: Parent cpuset containing all siblings
+@@ -3795,6 +3805,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
   */
- void cpuset_full_lock(void)
+ static void cpuset_handle_hotplug(void)
  {
-+	mutex_lock(&cpuset_top_mutex);
- 	cpus_read_lock();
- 	mutex_lock(&cpuset_mutex);
- }
-@@ -305,12 +328,14 @@ void cpuset_full_unlock(void)
- {
- 	mutex_unlock(&cpuset_mutex);
- 	cpus_read_unlock();
-+	mutex_unlock(&cpuset_top_mutex);
- }
++	static DECLARE_WORK(hk_sd_work, hk_sd_workfn);
+ 	static cpumask_t new_cpus;
+ 	static nodemask_t new_mems;
+ 	bool cpus_updated, mems_updated;
+@@ -3877,11 +3888,21 @@ static void cpuset_handle_hotplug(void)
+ 	}
  
- #ifdef CONFIG_LOCKDEP
- bool lockdep_is_cpuset_held(void)
- {
--	return lockdep_is_held(&cpuset_mutex);
-+	return lockdep_is_held(&cpuset_mutex) ||
-+	       lockdep_is_held(&cpuset_top_mutex);
- }
- #endif
  
-@@ -1314,9 +1339,20 @@ static void update_hk_sched_domains(void)
- {
- 	if (update_housekeeping) {
- 		/* Updating HK cpumasks implies rebuild sched domains */
--		WARN_ON_ONCE(housekeeping_update(isolated_cpus));
- 		update_housekeeping = false;
- 		force_sd_rebuild = true;
-+		cpumask_copy(isolated_hk_cpus, isolated_cpus);
+-	if (update_housekeeping || force_sd_rebuild) {
+-		mutex_lock(&cpuset_mutex);
+-		update_hk_sched_domains();
+-		mutex_unlock(&cpuset_mutex);
+-	}
++	/*
++	 * Queue a work to call housekeeping_update() & rebuild_sched_domains()
++	 * There will be a slight delay before the HK_TYPE_DOMAIN housekeeping
++	 * cpumask can correctly reflect what is in isolated_cpus.
++	 *
++	 * We rely on WORK_STRUCT_PENDING_BIT to not requeue a work item that
++	 * is still pending. Before the pending bit is cleared, the work data
++	 * is copied out and work item dequeued. So it is possible to queue
++	 * the work again before the hk_sd_workfn() is invoked to process the
++	 * previously queued work. Since hk_sd_workfn() doesn't use the work
++	 * item at all, this is not a problem.
++	 */
++	if (update_housekeeping || force_sd_rebuild)
++		queue_work(system_unbound_wq, &hk_sd_work);
 +
-+		/*
-+		 * housekeeping_update() is now called without holding
-+		 * cpus_read_lock and cpuset_mutex. Only top_cpuset_mutex
-+		 * is still being held for mutual exclusion.
-+		 */
-+		mutex_unlock(&cpuset_mutex);
-+		cpus_read_unlock();
-+		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus));
-+		cpus_read_lock();
-+		mutex_lock(&cpuset_mutex);
- 	}
- 	/* force_sd_rebuild will be cleared in rebuild_sched_domains_locked() */
- 	if (force_sd_rebuild)
-@@ -3634,6 +3670,7 @@ int __init cpuset_init(void)
- 	BUG_ON(!alloc_cpumask_var(&top_cpuset.exclusive_cpus, GFP_KERNEL));
- 	BUG_ON(!zalloc_cpumask_var(&subpartitions_cpus, GFP_KERNEL));
- 	BUG_ON(!zalloc_cpumask_var(&isolated_cpus, GFP_KERNEL));
-+	BUG_ON(!zalloc_cpumask_var(&isolated_hk_cpus, GFP_KERNEL));
- 
- 	cpumask_setall(top_cpuset.cpus_allowed);
- 	nodes_setall(top_cpuset.mems_allowed);
-diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
-index 3b725d39c06e..ef152d401fe2 100644
---- a/kernel/sched/isolation.c
-+++ b/kernel/sched/isolation.c
-@@ -123,8 +123,6 @@ int housekeeping_update(struct cpumask *isol_mask)
- 	struct cpumask *trial, *old = NULL;
- 	int err;
- 
--	lockdep_assert_cpus_held();
--
- 	trial = kmalloc(cpumask_size(), GFP_KERNEL);
- 	if (!trial)
- 		return -ENOMEM;
-@@ -136,7 +134,7 @@ int housekeeping_update(struct cpumask *isol_mask)
- 	}
- 
- 	if (!housekeeping.flags)
--		static_branch_enable_cpuslocked(&housekeeping_overridden);
-+		static_branch_enable(&housekeeping_overridden);
- 
- 	if (housekeeping.flags & HK_FLAG_DOMAIN)
- 		old = housekeeping_cpumask_dereference(HK_TYPE_DOMAIN);
-diff --git a/kernel/time/timer_migration.c b/kernel/time/timer_migration.c
-index 6da9cd562b20..83428aa03aef 100644
---- a/kernel/time/timer_migration.c
-+++ b/kernel/time/timer_migration.c
-@@ -1559,8 +1559,6 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
- 	cpumask_var_t cpumask __free(free_cpumask_var) = CPUMASK_VAR_NULL;
- 	int cpu;
- 
--	lockdep_assert_cpus_held();
--
- 	if (!works)
- 		return -ENOMEM;
- 	if (!alloc_cpumask_var(&cpumask, GFP_KERNEL))
-@@ -1570,6 +1568,7 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
- 	 * First set previously isolated CPUs as available (unisolate).
- 	 * This cpumask contains only CPUs that switched to available now.
- 	 */
-+	guard(cpus_read_lock)();
- 	cpumask_andnot(cpumask, cpu_online_mask, exclude_cpumask);
- 	cpumask_andnot(cpumask, cpumask, tmigr_available_cpumask);
- 
-@@ -1626,7 +1625,6 @@ static int __init tmigr_init_isolation(void)
- 	cpumask_andnot(cpumask, cpu_possible_mask, housekeeping_cpumask(HK_TYPE_DOMAIN));
- 
- 	/* Protect against RCU torture hotplug testing */
--	guard(cpus_read_lock)();
- 	return tmigr_isolated_exclude_cpumask(cpumask);
+ 	free_tmpmasks(ptmp);
  }
- late_initcall(tmigr_init_isolation);
+ 
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 0c5db118f2d1..dc2dff361ec6 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -246,6 +246,9 @@ TEST_MATRIX=(
+ 	"  C2-3:P1  C3:P1   .      .     O3=0    .      .      .     0 A1:2|A2: A1:P1|A2:P1"
+ 	"  C2-3:P1  C3:P1   .      .    T:O2=0   .      .      .     0 A1:3|A2:3 A1:P1|A2:P-1"
+ 	"  C2-3:P1  C3:P1   .      .      .    T:O3=0   .      .     0 A1:2|A2:2 A1:P1|A2:P-1"
++	"  C2-3:P1  C3:P2   .      .    T:O2=0   .      .      .     0 A1:3|A2:3 A1:P1|A2:P-2"
++	"  C1-3:P1  C3:P2   .      .      .    T:O3=0   .      .     0 A1:1-2|A2:1-2 A1:P1|A2:P-2 3|"
++	"  C1-3:P1  C3:P2   .      .      .    T:O3=0  O3=1    .     0 A1:1-2|A2:3 A1:P1|A2:P2  3"
+ 	"$SETUP_A123_PARTITIONS    .     O1=0    .      .      .     0 A1:|A2:2|A3:3 A1:P1|A2:P1|A3:P1"
+ 	"$SETUP_A123_PARTITIONS    .     O2=0    .      .      .     0 A1:1|A2:|A3:3 A1:P1|A2:P1|A3:P1"
+ 	"$SETUP_A123_PARTITIONS    .     O3=0    .      .      .     0 A1:1|A2:2|A3: A1:P1|A2:P1|A3:P1"
+@@ -762,7 +765,7 @@ check_cgroup_states()
+ # only CPUs in isolated partitions as well as those that are isolated at
+ # boot time.
+ #
+-# $1 - expected isolated cpu list(s) <isolcpus1>{,<isolcpus2>}
++# $1 - expected isolated cpu list(s) <isolcpus1>{|<isolcpus2>}
+ # <isolcpus1> - expected sched/domains value
+ # <isolcpus2> - cpuset.cpus.isolated value = <isolcpus1> if not defined
+ #
+@@ -771,6 +774,7 @@ check_isolcpus()
+ 	EXPECTED_ISOLCPUS=$1
+ 	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
+ 	ISOLCPUS=$(cat $ISCPUS)
++	HKICPUS=$(cat /sys/devices/system/cpu/isolated)
+ 	LASTISOLCPU=
+ 	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
+ 	if [[ $EXPECTED_ISOLCPUS = . ]]
+@@ -808,6 +812,11 @@ check_isolcpus()
+ 	ISOLCPUS=
+ 	EXPECTED_ISOLCPUS=$EXPECTED_SDOMAIN
+ 
++	#
++	# The inverse of HK_TYPE_DOMAIN cpumask in $HKICPUS should match $ISOLCPUS
++	#
++	[[ "$ISOLCPUS" != "$HKICPUS" ]] && return 1
++
+ 	#
+ 	# Use the sched domain in debugfs to check isolated CPUs, if available
+ 	#
 -- 
 2.53.0
 
