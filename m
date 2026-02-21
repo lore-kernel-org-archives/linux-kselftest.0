@@ -1,168 +1,455 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CEF2DFA54
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 16:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771690303; cv=pass; b=HJBV32tn9ml4Lwi+83bxqgg3HXo6Ogupd5rlUxsp4WfMDDT/5Wuc5qRQJS2OzCxvBk8WR84yMEsswLR8VmYw1nwDMoKbIiTlwTspCLU8gDP2OEIVkfnCFZ8NGCBfG+RH6HCCA0N5fz2gAUPYP2PTVxhiT7TGvbxs9UbtRO1Eu7o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771690303; c=relaxed/simple;
-	bh=WFk2dMGDXodWdBOsas5Wh8VEIYFRodTYZpiky7YPwy4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z6ji4E5FGj04iJ0OMegusKCeh7fz/pAmin9tfDMKsSDlor8NFnI7J12ycVaNI0G/YklY6kmVOGqw0UH0NYLHW0A9R5P1ArpfKhxm404BODmrPogL676mFpNucBzWChbKJsaT0g7O8oe+8sC1+L9fR5yfJPaArnMmsu/nWT5LYdo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mUq9u3+l; arc=pass smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E01E3502B7
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 16:48:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771692541; cv=none; b=Lq/MBblUwfVc7Lm2nq892KxZnyTIglcvldV3tB+rRreLlklF+eSbgtNM8jl6PBtk0FZM2C2NVCsDGoFkQiMiwTMuZ+YCFSS+AUprbSgWldfTYeY4LCig3H5HS4dJBLg86AC3GuW+ByddzsRPohVhm6cJ6YNMu7k364hOpfRl7nk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771692541; c=relaxed/simple;
+	bh=U57Xqi41GmcO0x6P9Zx3BaCcGSfhRtmMSS7Uf1PuLxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Tyr5zAdK9sMii2+UlGYkkdpcHk6JRGon/F+ytrrpob7SBvYxkvjnq1rgxfRzftvaFwnZX/9Wn4XLzlZRCVFuVPAZVWez2bAiWoUeFM+R4mmGJr7+oaZH//OnuuR5tMzMT2BWkKSMFqNKvJ1MHQK1UAHcvKaAnP6tIZApBgxSMRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ICYTDdoA; arc=none smtp.client-ip=209.85.160.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mUq9u3+l"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b8f8f2106f1so423801666b.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 08:11:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771690301; cv=none;
-        d=google.com; s=arc-20240605;
-        b=XydW9gAD5rR/yOja2UySj+vpqODhaxF3+DTftZWHm4zzvvhgmBGHR2bnJFf2KyapX3
-         rYHnsyBhi34dqKA2AkfUSYUZfdR7hX6aC7J9vTTKI04yEtd5FO9HAAGAEhoPoWWLA3rZ
-         hzX80CKQDt90hjiI0OujDXOieSXeR3N+VTxrb6RbCvqLNur1emt2yo0PpYXFkOI3ViAy
-         Nm29f/9yDm/h2V4wGJpgovyVmZT4KAbJI8j+VVT9nB69iUZa0lyGEzVw2hWF8DgbQ/SB
-         s5NaoZWer2sxCFx6fDCTnVA0B5kj9xZmTi5Ccd6WWXWcOOtn7WiB4WNhf6ztt/ORTjBQ
-         qpHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WFk2dMGDXodWdBOsas5Wh8VEIYFRodTYZpiky7YPwy4=;
-        fh=oEs2gndQICwZo04dW83bI1cHdioE8Q6aKlwKioM6YIg=;
-        b=SXsUqN2wMI51YrRuKHP6CSUdXERbjlxOEqrZ5d2vNVosNj0c5Lfh+o/yLHl4uzDPgG
-         oOms/qkDNDYo+7E1KCUx8IDlzMd0a/xby9dkOZ7+hqhHG0g5c4ZtCTHdvf+o3OfVKHXs
-         GxgdJPjKsBwXknJrI9JVc2K0/HzJqs5jHrRm09v4+pQcokVndK/KDDiUMw0sxf7Tdo4u
-         HC130RqMilB1lsNZVN8wucpJZRtP9BaSXSJmQ3izqUtnFbPWt/Ty4OL9ZwB+HRuPcqFh
-         aF1BCT/CmUnWvSuog80u4KCuRLGWLVe8Xyfq6c101Dj56B7pQXMjxdprHgdxpA5jHWyJ
-         AcSA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ICYTDdoA"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-506c02ec1b3so33394931cf.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 08:48:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771690301; x=1772295101; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771692538; x=1772297338; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WFk2dMGDXodWdBOsas5Wh8VEIYFRodTYZpiky7YPwy4=;
-        b=mUq9u3+llNJriYI2iwd1k/lQn3+8PEXC+MxxmLdX0Vc+O7L2bRz6K6Vg2tqRQK0zTP
-         xSIO3mrf4GBmMe+1tX76JdAyziIp1yvfGsfTbbnP11I6HREYNrbrtWeF6ZmurwzUFMla
-         RKnzD6D8LboyPVC5h6EJE+QZOI/yOpXWZDJQKCPyO1YFzqJ7Uu10iwSSQgKdtS1UmA/9
-         wj5g4w7bzma9fUx1ocFMwjUouGaUi4gN4uskGBC0e9Wt0uA1bSYORgn8Y6iJuOJJ7vAL
-         unam2Y5dvjZUsDfOIbju6Br2uv4rOQvBrTBqQ5nCLsuIUoS8zK9fKuv6N7zJYah6ag6/
-         7+Kw==
+        bh=+im6HE0V+UhU/UpPycv1gj885b94imjLQRZ7n5HPX5c=;
+        b=ICYTDdoA2M1kGzT3uTJwz5VCpszDhuAJLWWusENJRDxQJ13Q1T23BhBbSDiJYIjlVM
+         wGixAQpOk16DvzL0ELshlfQt8ILcPslEf/09B02G8xyHCNnBpaQtxD5BhrXesCNbzymv
+         X4vyGxROcyVseqtKLZAgi5WzXAgOABqKWLwz6/VNXmTgosRvXMwywkCj7kM4xb4cs8pW
+         CZsiNOBD6ltSIcI7Tyhl3CDL523RpzHt6RGBKxnCVChRa46UcaOGNF5w892GLP8u59Q2
+         DRwJSePBBFIUJcWw6OBXQhk1Uz1unMKvGipH5WtBD3E2NeM2EF6cLFuvDaJEhTi4+yET
+         nWUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771690301; x=1772295101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1771692538; x=1772297338;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WFk2dMGDXodWdBOsas5Wh8VEIYFRodTYZpiky7YPwy4=;
-        b=Ip0KYUaSUmA5ox68T85KKEVZEXd9VmRYa2tpDXL/nJaP/ZI/Nzw8m86k3FiWl7FJDF
-         u5eCZ4fc6O/2Vrocm9mgUQkuWQcqOB/Fh++4ZT/4ETfi/YGoLtBfNbtTSBeVt5ikv4sN
-         9VFVF9hbNKnzmjFLzNcx/LDLJWza2RiuI5N2VYRix6NsvC+BEKHUGVlshs2niCoSCnPy
-         PX5AuVXXXJxX1Bed8v+bm00Iyj+cTyOarx/yCSHt2EntyKB4na1K5K86LswzAHpq3tjZ
-         zErZscA5BgNxvRHy3ZP+Y3Zo2n2NRAOeySX2iY77I7KwQWhHFK1w1WgyMZQLpJN7FaR4
-         F3/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXZweMeX2OOwOTYazbNuy0B/x+GY/Kh+K/qmbAg7ZvBwjAHqAhmg/8kOYY/kFQUMcsSkvSK3VnlKdF9MfRCltg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzi8WsVFulC2xyeZdh1Lndsg3EZpO3W3i6aPQKp4EorKEQXo3w0
-	wtu/Q/2x2VEyGKnXgSgQL3LA8/3HX9uno/f7oUCz1wIeSKRAMhzZyQsjDP2J8NjdK9FatwCJO9P
-	im4uegXSIF/+9BOh0T50XVEKp2nYnwQ4GrkTnEWc=
-X-Gm-Gg: AZuq6aIhmGES+Y20BirOScjAg2ubGSG7/CxIbtv0SD4vMbAblv9Cq5b88vWqmj8fqLj
-	H4U32ag7aAHRFL6uFw0J0s0P22Vtqzl5Ip6xPyVpeOTbgoxUdiz477wTamapPPjZshuya9XsnrX
-	iU+m5XylY+3RFx84IqRqIprb0JjYcEaAtE4EORPZBLx1154G7hcfj+BD20MZs4N3JRydO8r3cWF
-	qUFTDuIMafV3iJjwScvwBRAgvvr/KA8x8Rx+IkDP1Pm/tf9ERxmeziMRowiR1ighJ4CsULeszS3
-	29Z3uD6V/o0jNsqsd6hNESh2BWEVLHW3bl51hVEN
-X-Received: by 2002:a17:906:474a:b0:b87:7938:7b77 with SMTP id
- a640c23a62f3a-b9081b4adbfmr135784766b.30.1771690300450; Sat, 21 Feb 2026
- 08:11:40 -0800 (PST)
+        bh=+im6HE0V+UhU/UpPycv1gj885b94imjLQRZ7n5HPX5c=;
+        b=s6iG0Gpp2Yv82p/mZ0GvFkA1Fkl9DP6zv0jth+fAeMIXgE7v/fneApDbBBxkxN07s2
+         NXOB8HfWZbtZl1TFXSqJftQsp/4IzGGVJCi+yGV1yPBR3jHlHZtZ0Sz0Tig8tpnVdhhP
+         Nnr5JptFgO6Y6kzu81qBHKf7AmcMxTLRMPc7JqR4vBqfxJAVrI2Fl2Bd/ybTLFUCgHMo
+         2CmH2nsTJcqFN8S0X7Ad5PQGKk7oftjcJo8a4tIufjIa4OcfivF7cFNIq+WtDRQu4ftO
+         RP3DCMhK3qRZ11SDpf7J92exkZhmEyi6U9jvbH/xWeWzqGUYQImcFhN1AmQdvs6fATpV
+         BDnA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4dP8TUTUATkTBZAmay6i63GECER9eiCUzDR9A/PnxQye6UB/pNCPs5B20icfoA+Dt0XLlcjhq6BQsQeLzkPI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfYQ3yb7AZhGuTAAltYdtAujqZjllUnkhPj1IEv7ZM5Qlvo6KW
+	IPPpH9+U9AmFm6wBBYpR0sDhbGeOnnUbigSSpp4hPA4AhcPIiLcET4VrC0rhyQ==
+X-Gm-Gg: AZuq6aI+kuv4x/4hlAqYkY4+lSACHTcGBNpKMTpkTMQrj0b/YSCd6FXdcsPrYRsEiM4
+	fcwmHPDULYSQ6k9/uXFvkri0zPi2CXGbk5tONeSylaa6Pm7PscSEWmWnz1kFbUWGnQ+VuNzKUNr
+	pKm+JlnsxtEg4CD1aGg1q4U/70HtucZVs6QwK2Jg0EG4hdWvrpOazMXoM17RHNmjzIda/Cu8t/N
+	Z07iAPNaXWfbRTGdfl/cDVAi3uXbN1HoVZpLxRTruAlB4wtse5myT5QLUYBf/fsoX7njS8C136F
+	TH/eykpIYIO+u0vku9J0ZaByenwA1L7SiovrmxAo2HwZZU75u03IPd0qtsvy+fOMLagc4UmzK3V
+	wDHjzp1OHj+BwHO85C0mc7xxPO33jpO0LmJueJ8WWpVdiNmDe1ThQ7n5KyTMcZZjI9PNxq1bsYl
+	/nA8F6zGQAbc6YWO7RyyDV1S9jAC6FlMLOmY1uDirRkBuFgBxZ4O0J/qw=
+X-Received: by 2002:a17:902:d48c:b0:2aa:f5b4:9a2e with SMTP id d9443c01a7336-2ad5f7349eemr96972465ad.11.1771685998012;
+        Sat, 21 Feb 2026 06:59:58 -0800 (PST)
+Received: from toolbx ([103.230.182.3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7503f4a4sm23730205ad.79.2026.02.21.06.59.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Feb 2026 06:59:57 -0800 (PST)
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	ceph-devel@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-nfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	v9fs@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	jlayton@kernel.org,
+	chuck.lever@oracle.com,
+	alex.aring@gmail.com,
+	arnd@arndb.de,
+	adilger@dilger.ca,
+	mjguzik@gmail.com,
+	smfrench@gmail.com,
+	richard.henderson@linaro.org,
+	mattst88@gmail.com,
+	linmag7@gmail.com,
+	tsbogend@alpha.franken.de,
+	James.Bottomley@HansenPartnership.com,
+	deller@gmx.de,
+	davem@davemloft.net,
+	andreas@gaisler.com,
+	idryomov@gmail.com,
+	amarkuze@redhat.com,
+	slava@dubeyko.com,
+	agruenba@redhat.com,
+	trondmy@kernel.org,
+	anna@kernel.org,
+	sfrench@samba.org,
+	pc@manguebit.org,
+	ronniesahlberg@gmail.com,
+	sprasad@microsoft.com,
+	tom@talpey.com,
+	bharathsm@microsoft.com,
+	shuah@kernel.org,
+	miklos@szeredi.hu,
+	hansg@kernel.org
+Subject: [PATCH v4 1/4] openat2: new OPENAT2_REGULAR flag support
+Date: Sat, 21 Feb 2026 20:45:43 +0600
+Message-ID: <20260221145915.81749-2-dorjoychy111@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260221145915.81749-1-dorjoychy111@gmail.com>
+References: <20260221145915.81749-1-dorjoychy111@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220055449.3073-1-tjmercier@google.com> <20260220055449.3073-3-tjmercier@google.com>
- <aZh-orwoaeAh52Bf@slm.duckdns.org> <CAOQ4uxjgXa1q-8-ajSBwza-Tkv91tFP-_wWzCQPW+PwJMehEWA@mail.gmail.com>
- <aZi6_K-pSRwAe7F5@slm.duckdns.org> <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
- <aZju-GFHf8Eez-07@slm.duckdns.org>
-In-Reply-To: <aZju-GFHf8Eez-07@slm.duckdns.org>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Sat, 21 Feb 2026 18:11:28 +0200
-X-Gm-Features: AaiRm50siD9H0RcvpiyV5fyHjGmjcm9TLE2lBYwftlepNHL-uvxe1pX7UaXUvqc
-Message-ID: <CAOQ4uxgzuxaLt2xs5a5snu9CBA_4esQ_+t0Wb6CX4M5OqM5AOA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
-To: Tejun Heo <tj@kernel.org>
-Cc: "T.J. Mercier" <tjmercier@google.com>, gregkh@linuxfoundation.org, 
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, jack@suse.cz, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Feb 21, 2026 at 12:32=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello, Amir.
->
-> On Fri, Feb 20, 2026 at 10:11:15PM +0200, Amir Goldstein wrote:
-> > > Yeah, that can be useful. For cgroupfs, there would probably need to =
-be a
-> > > way to scope it so that it can be used on delegation boundaries too (=
-which
-> > > we can require to coincide with cgroup NS boundaries).
-> >
-> > I have no idea what the above means.
-> > I could ask Gemini or you and I prefer the latter ;)
->
-> Ah, you chose wrong. :)
->
-> > What are delegation boundaries and NFS boundaries in this context?
->
-> cgroup delegation is giving control of a subtree to someone else:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/Docume=
-ntation/admin-guide/cgroup-v2.rst#n537
->
-> There's an old way of doing it by changing perms on some files and new wa=
-y
-> using cgroup namespace.
->
-> > > Would it be possible to make FAN_MNT_ATTACH work for that?
-> >
-> > FAN_MNT_ATTACH is an event generated on a mntns object.
-> > If "cgroup NS boundaries" is referring to a mntns object and if
-> > this object is available in the context of cgroup create/destroy
-> > then it should be possible.
->
-> Great, yes, cgroup namespace way should work then.
->
-> > But FAN_MNT_ATTACH reports a mountid. Is there a mountid
-> > to report on cgroup create? Probably not?
->
-> Sorry, I thought that was per-mount recursive file event monitoring.
-> FAN_MARK_MOUNT looks like the right thing if we want to allow monitoring
-> cgroup creations / destructions in a subtree without recursively watching
-> each cgroup.
+This flag indicates the path should be opened if it's a regular file.
+This is useful to write secure programs that want to avoid being
+tricked into opening device nodes with special semantics while thinking
+they operate on regular files. This is a requested feature from the
+uapi-group[1].
 
-The problem sounds very similar to subtree monitoring for mkdir/rmdir on
-a filesystem, which is a problem that we have not yet solved.
+A corresponding error code EFTYPE has been introduced. For example, if
+openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
+param, it will return -EFTYPE.
 
-The problem with FAN_MARK_MOUNT is that it does not support the
-events CREATE/DELETE, because those events are currently
-monitored in context where the mount is not available and anyway
-what users want to get notified on a deleted file/dir in a subtree
-regardless of the mount through which the create/delete was done.
+When used in combination with O_CREAT, either the regular file is
+created, or if the path already exists, it is opened if it's a regular
+file. Otherwise, -EFTYPE is returned.
 
-Since commit 58f5fbeb367ff ("fanotify: support watching filesystems
-and mounts inside userns") and fnaotify groups can be associated
-with a userns.
+When OPENAT2_REGULAR is combined with O_DIRECTORY, -EINVAL is returned
+as it doesn't make sense to open a path that is both a directory and a
+regular file.
 
-I was thinking that we can have a model where events are delivered
-to a listener based on whether or not the uid/gid of the object are
-mappable to the userns of the group.
+[1]: https://uapi-group.org/kernel-features/#ability-to-only-open-regular-files
 
-In a filesystem, this criteria cannot guarantee the subtree isolation.
-I imagine that for delegated cgroups this criteria could match what
-you need, but I am basing this on pure speculation.
+Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+---
+ arch/alpha/include/uapi/asm/errno.h        |  2 ++
+ arch/alpha/include/uapi/asm/fcntl.h        |  1 +
+ arch/mips/include/uapi/asm/errno.h         |  2 ++
+ arch/parisc/include/uapi/asm/errno.h       |  2 ++
+ arch/parisc/include/uapi/asm/fcntl.h       |  1 +
+ arch/sparc/include/uapi/asm/errno.h        |  2 ++
+ arch/sparc/include/uapi/asm/fcntl.h        |  1 +
+ fs/ceph/file.c                             |  4 ++++
+ fs/gfs2/inode.c                            |  2 ++
+ fs/namei.c                                 |  4 ++++
+ fs/nfs/dir.c                               |  4 +++-
+ fs/open.c                                  |  4 +++-
+ fs/smb/client/dir.c                        | 11 ++++++++++-
+ include/linux/fcntl.h                      |  2 ++
+ include/uapi/asm-generic/errno.h           |  2 ++
+ include/uapi/asm-generic/fcntl.h           |  4 ++++
+ tools/arch/alpha/include/uapi/asm/errno.h  |  2 ++
+ tools/arch/mips/include/uapi/asm/errno.h   |  2 ++
+ tools/arch/parisc/include/uapi/asm/errno.h |  2 ++
+ tools/arch/sparc/include/uapi/asm/errno.h  |  2 ++
+ tools/include/uapi/asm-generic/errno.h     |  2 ++
+ 21 files changed, 55 insertions(+), 3 deletions(-)
 
-Thanks,
-Amir.
+diff --git a/arch/alpha/include/uapi/asm/errno.h b/arch/alpha/include/uapi/asm/errno.h
+index 6791f6508632..1a99f38813c7 100644
+--- a/arch/alpha/include/uapi/asm/errno.h
++++ b/arch/alpha/include/uapi/asm/errno.h
+@@ -127,4 +127,6 @@
+ 
+ #define EHWPOISON	139	/* Memory page has hardware error */
+ 
++#define EFTYPE		140	/* Wrong file type for the intended operation */
++
+ #endif
+diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uapi/asm/fcntl.h
+index 50bdc8e8a271..fe488bf7c18e 100644
+--- a/arch/alpha/include/uapi/asm/fcntl.h
++++ b/arch/alpha/include/uapi/asm/fcntl.h
+@@ -34,6 +34,7 @@
+ 
+ #define O_PATH		040000000
+ #define __O_TMPFILE	0100000000
++#define OPENAT2_REGULAR	0200000000
+ 
+ #define F_GETLK		7
+ #define F_SETLK		8
+diff --git a/arch/mips/include/uapi/asm/errno.h b/arch/mips/include/uapi/asm/errno.h
+index c01ed91b1ef4..1835a50b69ce 100644
+--- a/arch/mips/include/uapi/asm/errno.h
++++ b/arch/mips/include/uapi/asm/errno.h
+@@ -126,6 +126,8 @@
+ 
+ #define EHWPOISON	168	/* Memory page has hardware error */
+ 
++#define EFTYPE		169	/* Wrong file type for the intended operation */
++
+ #define EDQUOT		1133	/* Quota exceeded */
+ 
+ 
+diff --git a/arch/parisc/include/uapi/asm/errno.h b/arch/parisc/include/uapi/asm/errno.h
+index 8cbc07c1903e..93194fbb0a80 100644
+--- a/arch/parisc/include/uapi/asm/errno.h
++++ b/arch/parisc/include/uapi/asm/errno.h
+@@ -124,4 +124,6 @@
+ 
+ #define EHWPOISON	257	/* Memory page has hardware error */
+ 
++#define EFTYPE		258	/* Wrong file type for the intended operation */
++
+ #endif
+diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include/uapi/asm/fcntl.h
+index 03dee816cb13..d46812f2f0f4 100644
+--- a/arch/parisc/include/uapi/asm/fcntl.h
++++ b/arch/parisc/include/uapi/asm/fcntl.h
+@@ -19,6 +19,7 @@
+ 
+ #define O_PATH		020000000
+ #define __O_TMPFILE	040000000
++#define OPENAT2_REGULAR	0100000000
+ 
+ #define F_GETLK64	8
+ #define F_SETLK64	9
+diff --git a/arch/sparc/include/uapi/asm/errno.h b/arch/sparc/include/uapi/asm/errno.h
+index 4a41e7835fd5..71940ec9130b 100644
+--- a/arch/sparc/include/uapi/asm/errno.h
++++ b/arch/sparc/include/uapi/asm/errno.h
+@@ -117,4 +117,6 @@
+ 
+ #define EHWPOISON	135	/* Memory page has hardware error */
+ 
++#define EFTYPE		136	/* Wrong file type for the intended operation */
++
+ #endif
+diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/uapi/asm/fcntl.h
+index 67dae75e5274..bb6e9fa94bc9 100644
+--- a/arch/sparc/include/uapi/asm/fcntl.h
++++ b/arch/sparc/include/uapi/asm/fcntl.h
+@@ -37,6 +37,7 @@
+ 
+ #define O_PATH		0x1000000
+ #define __O_TMPFILE	0x2000000
++#define OPENAT2_REGULAR	0x4000000
+ 
+ #define F_GETOWN	5	/*  for sockets. */
+ #define F_SETOWN	6	/*  for sockets. */
+diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+index 31b691b2aea2..0a4220f72ada 100644
+--- a/fs/ceph/file.c
++++ b/fs/ceph/file.c
+@@ -977,6 +977,10 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
+ 			ceph_init_inode_acls(newino, &as_ctx);
+ 			file->f_mode |= FMODE_CREATED;
+ 		}
++		if ((flags & OPENAT2_REGULAR) && !d_is_reg(dentry)) {
++			err = -EFTYPE;
++			goto out_req;
++		}
+ 		err = finish_open(file, dentry, ceph_open);
+ 	}
+ out_req:
+diff --git a/fs/gfs2/inode.c b/fs/gfs2/inode.c
+index 8344040ecaf7..0dc3e4240d9e 100644
+--- a/fs/gfs2/inode.c
++++ b/fs/gfs2/inode.c
+@@ -749,6 +749,8 @@ static int gfs2_create_inode(struct inode *dir, struct dentry *dentry,
+ 		if (file) {
+ 			if (S_ISREG(inode->i_mode))
+ 				error = finish_open(file, dentry, gfs2_open_common);
++			else if (file->f_flags & OPENAT2_REGULAR)
++				error = -EFTYPE;
+ 			else
+ 				error = finish_no_open(file, NULL);
+ 		}
+diff --git a/fs/namei.c b/fs/namei.c
+index 5fe6cac48df8..aa5fb2672881 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -4651,6 +4651,10 @@ static int do_open(struct nameidata *nd,
+ 		if (unlikely(error))
+ 			return error;
+ 	}
++
++	if ((open_flag & OPENAT2_REGULAR) && !d_is_reg(nd->path.dentry))
++		return -EFTYPE;
++
+ 	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
+ 		return -ENOTDIR;
+ 
+diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+index b3f5c9461204..ef61db67d06e 100644
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -2195,7 +2195,9 @@ int nfs_atomic_open(struct inode *dir, struct dentry *dentry,
+ 			break;
+ 		case -EISDIR:
+ 		case -ENOTDIR:
+-			goto no_open;
++			if (!(open_flags & OPENAT2_REGULAR))
++				goto no_open;
++			break;
+ 		case -ELOOP:
+ 			if (!(open_flags & O_NOFOLLOW))
+ 				goto no_open;
+diff --git a/fs/open.c b/fs/open.c
+index 91f1139591ab..1524f52a1773 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1198,7 +1198,7 @@ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
+ 	 * values before calling build_open_flags(), but openat2(2) checks all
+ 	 * of its arguments.
+ 	 */
+-	if (flags & ~VALID_OPEN_FLAGS)
++	if (flags & ~VALID_OPENAT2_FLAGS)
+ 		return -EINVAL;
+ 	if (how->resolve & ~VALID_RESOLVE_FLAGS)
+ 		return -EINVAL;
+@@ -1237,6 +1237,8 @@ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
+ 			return -EINVAL;
+ 		if (!(acc_mode & MAY_WRITE))
+ 			return -EINVAL;
++	} else if ((flags & O_DIRECTORY) && (flags & OPENAT2_REGULAR)) {
++		return -EINVAL;
+ 	}
+ 	if (flags & O_PATH) {
+ 		/* O_PATH only permits certain other flags to be set. */
+diff --git a/fs/smb/client/dir.c b/fs/smb/client/dir.c
+index cb10088197d2..d12ed0c87599 100644
+--- a/fs/smb/client/dir.c
++++ b/fs/smb/client/dir.c
+@@ -236,6 +236,11 @@ static int cifs_do_create(struct inode *inode, struct dentry *direntry, unsigned
+ 				 * lookup.
+ 				 */
+ 				CIFSSMBClose(xid, tcon, fid->netfid);
++				if (oflags & OPENAT2_REGULAR) {
++					iput(newinode);
++					rc = -EFTYPE;
++					goto out;
++				}
+ 				goto cifs_create_get_file_info;
+ 			}
+ 			/* success, no need to query */
+@@ -433,11 +438,15 @@ static int cifs_do_create(struct inode *inode, struct dentry *direntry, unsigned
+ 		goto out_err;
+ 	}
+ 
+-	if (newinode)
++	if (newinode) {
+ 		if (S_ISDIR(newinode->i_mode)) {
+ 			rc = -EISDIR;
+ 			goto out_err;
++		} else if ((oflags & OPENAT2_REGULAR) && !S_ISREG(newinode->i_mode)) {
++			rc = -EFTYPE;
++			goto out_err;
+ 		}
++	}
+ 
+ 	d_drop(direntry);
+ 	d_add(direntry, newinode);
+diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+index a332e79b3207..a80026718217 100644
+--- a/include/linux/fcntl.h
++++ b/include/linux/fcntl.h
+@@ -12,6 +12,8 @@
+ 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+ 	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
+ 
++#define VALID_OPENAT2_FLAGS (VALID_OPEN_FLAGS | OPENAT2_REGULAR)
++
+ /* List of all valid flags for the how->resolve argument: */
+ #define VALID_RESOLVE_FLAGS \
+ 	(RESOLVE_NO_XDEV | RESOLVE_NO_MAGICLINKS | RESOLVE_NO_SYMLINKS | \
+diff --git a/include/uapi/asm-generic/errno.h b/include/uapi/asm-generic/errno.h
+index 92e7ae493ee3..bd78e69e0a43 100644
+--- a/include/uapi/asm-generic/errno.h
++++ b/include/uapi/asm-generic/errno.h
+@@ -122,4 +122,6 @@
+ 
+ #define EHWPOISON	133	/* Memory page has hardware error */
+ 
++#define EFTYPE		134	/* Wrong file type for the intended operation */
++
+ #endif
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 613475285643..b2c2ddd0edc0 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -88,6 +88,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef OPENAT2_REGULAR
++#define OPENAT2_REGULAR	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ 
+diff --git a/tools/arch/alpha/include/uapi/asm/errno.h b/tools/arch/alpha/include/uapi/asm/errno.h
+index 6791f6508632..1a99f38813c7 100644
+--- a/tools/arch/alpha/include/uapi/asm/errno.h
++++ b/tools/arch/alpha/include/uapi/asm/errno.h
+@@ -127,4 +127,6 @@
+ 
+ #define EHWPOISON	139	/* Memory page has hardware error */
+ 
++#define EFTYPE		140	/* Wrong file type for the intended operation */
++
+ #endif
+diff --git a/tools/arch/mips/include/uapi/asm/errno.h b/tools/arch/mips/include/uapi/asm/errno.h
+index c01ed91b1ef4..1835a50b69ce 100644
+--- a/tools/arch/mips/include/uapi/asm/errno.h
++++ b/tools/arch/mips/include/uapi/asm/errno.h
+@@ -126,6 +126,8 @@
+ 
+ #define EHWPOISON	168	/* Memory page has hardware error */
+ 
++#define EFTYPE		169	/* Wrong file type for the intended operation */
++
+ #define EDQUOT		1133	/* Quota exceeded */
+ 
+ 
+diff --git a/tools/arch/parisc/include/uapi/asm/errno.h b/tools/arch/parisc/include/uapi/asm/errno.h
+index 8cbc07c1903e..93194fbb0a80 100644
+--- a/tools/arch/parisc/include/uapi/asm/errno.h
++++ b/tools/arch/parisc/include/uapi/asm/errno.h
+@@ -124,4 +124,6 @@
+ 
+ #define EHWPOISON	257	/* Memory page has hardware error */
+ 
++#define EFTYPE		258	/* Wrong file type for the intended operation */
++
+ #endif
+diff --git a/tools/arch/sparc/include/uapi/asm/errno.h b/tools/arch/sparc/include/uapi/asm/errno.h
+index 4a41e7835fd5..71940ec9130b 100644
+--- a/tools/arch/sparc/include/uapi/asm/errno.h
++++ b/tools/arch/sparc/include/uapi/asm/errno.h
+@@ -117,4 +117,6 @@
+ 
+ #define EHWPOISON	135	/* Memory page has hardware error */
+ 
++#define EFTYPE		136	/* Wrong file type for the intended operation */
++
+ #endif
+diff --git a/tools/include/uapi/asm-generic/errno.h b/tools/include/uapi/asm-generic/errno.h
+index 92e7ae493ee3..bd78e69e0a43 100644
+--- a/tools/include/uapi/asm-generic/errno.h
++++ b/tools/include/uapi/asm-generic/errno.h
+@@ -122,4 +122,6 @@
+ 
+ #define EHWPOISON	133	/* Memory page has hardware error */
+ 
++#define EFTYPE		134	/* Wrong file type for the intended operation */
++
+ #endif
+-- 
+2.53.0
+
