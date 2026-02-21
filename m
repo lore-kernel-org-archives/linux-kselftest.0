@@ -1,121 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDC12EC09B;
-	Sat, 21 Feb 2026 20:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350F21C5F13
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 23:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771704951; cv=none; b=TYv4SDy/krFHbS3xgScO8yIkzb7Sy4d542eOr52wdFUraD9ArIDK4whIhzWD8Ps0xGg8Ea2v/PpxNx70Yl65ZBLGDia4+PpXj1Sn+I0868zgJ/FLHEgqqfAJL5VAtOUiopgGylY6yYKlVuVKzH5jYMYJ/tCuJCl39J04kCelcWM=
+	t=1771717567; cv=none; b=OxQZEsd2kAVBEUu1x/oSz39jKKpqotp35jogGLADUha5y3ZSmNnKcJKP3pfjYCNgp6M3UiDmSeRDefs6rIMNpsRHE3uiuc291Vf9I01a6Vb+2YbQuObJUM9phrusOJHFoaDAfk4jMUIXe1XJKu4YSFsBuiNU4bSOZdw/qnknAvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771704951; c=relaxed/simple;
-	bh=u2lzxOaYu+TQWqH/uMkeTj5YiPDYlTP3c0J6MrqedxI=;
+	s=arc-20240116; t=1771717567; c=relaxed/simple;
+	bh=D8wEA4P1R/wLC0WQ2gaxmvJV8Zid0j4uMfM8HtVxkhE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bKc0fyxiC10zPdTpaiiV3XgwH+ivTQT7/nR+IKIq2gLZLOG/Gv5Xphdd+QbOgRil0z97yKV355OFBZ/NCqHbgHN/OFrhjZ8vV0022CSmS5/epDMQRVCHJJ1hFlTjXZU9vLfoZckz3ENEu+y1KEKy/flaKD6goYe0Yn7dD375GXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rCo9fZp7; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Txbe4BPIYiY4rEd06Io32cWgN/EVyCaGGpD2ehqwM4f2y2YBg7Etaw19yfLUeBIEkABybdgRNGURiHEwupLsNkUZ7liTPQih9sXzlRfs2/gGjFBFVLQ9xhCtxsFwhOkn2KMP4/bxuz05/9O+yH7moQkERCW7OsyK6kSDz96SDg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hxWuCmMl; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rCo9fZp7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9048AC4CEF7;
-	Sat, 21 Feb 2026 20:15:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771704950;
-	bh=u2lzxOaYu+TQWqH/uMkeTj5YiPDYlTP3c0J6MrqedxI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rCo9fZp7C062sLKYnb7OW4C65uQt6vV7Su9amxqp2y7NcpX+SyTXVpfozk1KgWegU
-	 vT5Fe75M1tJ1r/ok/yqcLxI03o6uWH646I8Y9U80iRIU54YLnzYDLIk0Bq70FwuUAE
-	 P5laELfTfIeCqXu41bRPZcwZQ2Q0tVg0Vz1B4DfkOX8UA+rCuX5sT8ZhG96Y5klgRK
-	 PHeXXaXQrinXAHLypUo64nJTtBLvJVTsw2JmnEmwBAqPkpyIbC3NTyFsJua6WLX2jz
-	 s+d9W4ReAiCDFe4J/3p4GuU0eYLzEoankF9Uc4XkVkbwSqloEDPC5xh1Ao51A6mP8N
-	 4SLvhdPfDO4Cg==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hxWuCmMl"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso24009395e9.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 15:46:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771717564; x=1772322364; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a6c+2c5A4IdcQR95bgfQZwtsMpRnSCzmv5kOunEAmnw=;
+        b=hxWuCmMlxuj3d20al60XWs0jh2KLvmk0/jpM7jG8sjLtUj+ARfwmScdZLER6DpfOAs
+         J8nWVO9IM04A+Qm71FNtsxpTM5ftoWYuG5CoE6iS+dCZ9RSZYYoP+pmhOyAgz70sC2iv
+         LDvuveFZpQZy2/IC/wLc5I7ZkcufMPCm48xDHV18rMz3EllbndGCICEYY+zKzP925M1P
+         L1j7TU5F2mxburUB6vGNMZfdQFHuZXWbh2ZEHD6D3l3MvO7SPXGiDAny7QDzYV1siVBQ
+         FXjjbYA1cLCF3c7I92iQNDo0U9X7Emu0pfWIOGTBeLkAV5YK+VPmQv02ynK/DYnajvGz
+         T9UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771717564; x=1772322364;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=a6c+2c5A4IdcQR95bgfQZwtsMpRnSCzmv5kOunEAmnw=;
+        b=Ve9pYH2Xo3I/ldSgbgRTnJtktaQ4KsUdIx21QVnQXrcSudW+feMqNyNSH8Z+Y6CCs8
+         SR8LIN/4g+aiGv6FtWDiBRmt4EedePJCNiePMNCuLxn5i6k++ooOG0VXLD7QDyOasH6y
+         tkEvzbRch2cWYLF83mrHcKPldLlQrT8ZSGzgNwy0aygc48UoiHcSOjhlLmYGAQHdSEUe
+         Pzk6T6r4zxJQtPBeln6tN22QWc+ZLBsUBiuyAT128/1IEGbDzBIpdNOwgMJEX7tz4ruy
+         9N8+T3Qp8NaOnOlop4834fQfYyPD818lShcf79mO5nHkj8Fl4O/9bWwzOGBx1M8CXF7Q
+         sr6w==
+X-Forwarded-Encrypted: i=1; AJvYcCWBkXTkNXry8+Ce1WptJcAWc3sDAX0EdM8P/NHdmvmnLegIFB8+8qfYhRRBNuGUVn8xZQc/yQRCBmWwI4m9RQ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwazAwTFuU3lSqxRjRcF3mi9xi+YPoy6NIa6b1v1RTwBHJ8TFbB
+	6U5TRPJBSHLcWtoaJPGunxzFyk5x635VSFLozUscOlLr88HKqg7lMdYt
+X-Gm-Gg: AZuq6aIHVJ9v9tE84PQkfUFQsmf31d68Tie1kMk5SsuG/OKL3MfuSod6EF4LZfwfqS6
+	vSQh4vvOkStT8RpDPZcTu5tQO3WZ8/x6x5Qj0EGy7tkipv9lJ9/7tg4gRkw6dcrvsM7wTpi8QjA
+	xVAS4jeiZfLJTTb+N7HINr5ZM2xRCx5QDPTtNJze/yTH92/Pyvzkku7COMPzkj8Hl50bWYKVp9a
+	elAqC/AdWiYEPckgTCieyLZsHn+yWZ56BQrqZ+Ah3HZNI8nldnl/c46ZuySSKZDvTtUXtQWcKBl
+	zuHgPI5JwDjIJflM3ocMwsuXhlKe66DEkPD0TGRoyq3nK5jXZM6Y9X233DQZkmfb4Mmpov3PKgQ
+	NtsbTK+V0adAvbFcQRj+oI5Q2rmPaYLm+mfgCjsS+EomPO7rROHOKrreAVeNB7MJ/kCBweUiR5I
+	D19ust5M6VFenXQyyMfeXHn8utXYlZ+A==
+X-Received: by 2002:a05:600c:4749:b0:480:69b6:dfed with SMTP id 5b1f17b1804b1-483a95e5ab8mr72338125e9.24.1771717564334;
+        Sat, 21 Feb 2026 15:46:04 -0800 (PST)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-483a31c56d8sm251620925e9.8.2026.02.21.15.46.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Feb 2026 15:46:03 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: dorjoychy111@gmail.com
+Cc: ceph-devel@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-cifs@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [RFC PATCH 09/10] mm/damon/tests/.kunitconifg: enable DAMON_DEBUG_SANITY
-Date: Sat, 21 Feb 2026 12:15:41 -0800
-Message-ID: <20260221201543.99335-1-sj@kernel.org>
+	linux-nfs@vger.kernel.org,
+	v9fs@lists.linux.dev
+Subject: Re: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
+Date: Sun, 22 Feb 2026 02:45:53 +0300
+Message-ID: <20260221234553.2024832-1-safinaskar@gmail.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260221193629.19332-10-sj@kernel.org>
-References: 
+In-Reply-To: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
+References: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Sat, 21 Feb 2026 11:36:26 -0800 SeongJae Park <sj@kernel.org> wrote:
+Dorjoy Chowdhury <dorjoychy111@gmail.com>:
+> I am not sure if my patch series made it properly to the mailing
+> lists. https://lore.kernel.org/linux-fsdevel/  is showing a broken
+> series, only the 2/4, 3/4, 4/4 and I don't see cover-letter or 1/4.
+> The patch series does have a big cc list (what I got from
+> get_maintainers.pl excluding commit-signers) and I used git send-email
+> to send to everyone. It's also showing properly in my gmail inbox. Is
+> it just the website that's not showing it properly? Should I prune the
+> cc list and resend? is there any limitations to sending patches to
+> mailing lists with many cc-s via gmail?
 
-> CONFIG_DAMON_DEBUG_SANITY is recommended for DAMON development and test
-> setups.  Enable it on the default configurations for DAMON kunit test
-> run.
-> 
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->  mm/damon/tests/.kunitconfig | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/mm/damon/tests/.kunitconfig b/mm/damon/tests/.kunitconfig
-> index 36a450f57b581..144d27e6ecc5c 100644
-> --- a/mm/damon/tests/.kunitconfig
-> +++ b/mm/damon/tests/.kunitconfig
-> @@ -13,3 +13,6 @@ CONFIG_DAMON_VADDR_KUNIT_TEST=y
->  CONFIG_SYSFS=y
->  CONFIG_DAMON_SYSFS=y
->  CONFIG_DAMON_SYSFS_KUNIT_TEST=y
-> +
-> +# enable DAMON_DEBUG_SANITY to catch any bug
-> +CONFIG_DAMON_DEBUG_SANITY=y
+I see all 5 emails on
+https://lore.kernel.org/linux-fsdevel/CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com/T/#t .
 
-And this makes kunit for DAMON fails, like below.
+So this was some temporary problem on lore.kernel.org .
 
-'''
-$ ./tools/testing/kunit/kunit.py run --kunitconfig mm/damon/tests/
-[11:57:20] Configuring KUnit Kernel ...
-Regenerating .config ...
-Populating config with:
-$ make ARCH=um O=.kunit olddefconfig
-[11:57:24] Building KUnit Kernel ...
-Populating config with:
-$ make ARCH=um O=.kunit olddefconfig
-Building with:
-$ make all compile_commands.json scripts_gdb ARCH=um O=.kunit --jobs=8
-ERROR:root:In file included from ../include/asm-generic/bug.h:7,
-                 from ./arch/um/include/generated/asm/bug.h:1,
-                 from ../arch/x86/include/asm/alternative.h:9,
-                 from ../arch/x86/um/asm/barrier.h:6,
-                 from ../include/linux/list.h:11,
-                 from ../arch/um/include/linux/time-internal.h:9,
-                 from ../arch/x86/um/asm/processor.h:4,
-                 from ../include/linux/sched.h:13,
-                 from ../include/linux/cgroup.h:12,
-                 from ../include/linux/memcontrol.h:13,
-                 from ../include/linux/damon.h:11,
-                 from ../mm/damon/core.c:10:
-../mm/damon/core.c: In function ‘damon_verify_new_region’:
-../include/linux/once_lite.h:28:50: error: expected expression before ‘)’ token
-   28 |                 bool __ret_do_once = !!(condition);                     \
-      |                                                  ^
-../include/asm-generic/bug.h:185:9: note: in expansion of macro ‘DO_ONCE_LITE_IF’
-  185 |         DO_ONCE_LITE_IF(condition, WARN, 1, format)
-      |         ^~~~~~~~~~~~~~~
-../mm/damon/core.c:127:9: note: in expansion of macro ‘WARN_ONCE’
-  127 |         WARN_ONCE();
-      |         ^~~~~~~~~
-'''
+Sometimes gmail indeed rejects mails if you try to send too many emails
+to too many people. So I suggest adding "--batch-size=1 --relogin-delay=20"
+to your send-email invocation. I hope this will make probability of
+rejection by gmail less. I usually add these flags.
 
-I changed BUG() to WARN_ONCE() on the last moment of this patch posting, so I
-missed this failure.  I will fix this on the next revision.
+If you still expirence some problems with gmail, then you may apply
+for linux.dev email (go to linux.dev). They are free for Linux contributors.
 
-
-Thanks,
-SJ
-
-[...]
+-- 
+Askar Safin
