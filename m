@@ -1,152 +1,107 @@
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680542FCC04
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 23:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771631995; cv=pass; b=p3/HBGcoun90fNTx6Z0kVRxeeLMWeqioiNw3DhjtDCjSxyIjIyjrdWLXt/4EYYyTyv+dvbIifMgguwEdO5VNvL6oleklooVsG08sO/Koyj/fPqh2yJGqnSRJeanWV5wCf4lMMEf8W8+miI01SEKu8OThRQcSUcqTuS+YDg6fMkM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771631995; c=relaxed/simple;
-	bh=VyJ51nvldcOjba54gfvYaCWLkwe2rVqmswtI06TBvPs=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Oshl7AN+E81k1VF2GO4gR7ZWQgGq1zq01aIfF5juWtzE23s6rAuUvVyfo/DzbGrLmZ3TuRAEUk8YwJzkyJTxToJl4yltgebtKez03T0NzRZX0/aMJSuUI9NPsvV5Fp11DdCcy7ncVSwrN0+8ThWn3eeGYrdFsU6tcqcRGMVoUvk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XR4LKg6D; arc=pass smtp.client-ip=209.85.221.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1700526E71E
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 00:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771633148; cv=none; b=hlapPVf5A66+l2Kj3zFuuLbvHtGhgXm8XBTUKXMfSVi6GTMUKC7+QJznxdi+1/cPrz45EG7kSUCbiSSMxPvohR+KUHKk54qx3uorUs04NX+I1P+Dea/IJhwL1ice11EdKsN2640CQ3Mmdqc6QJd5Jm+K8NAele4ktSxIwMHgImo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771633148; c=relaxed/simple;
+	bh=lDMgTBjr6jA7ry6Xm5A7oyBFF0gSzW20pw31ngDNXA8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=t0rb97UxMDGZhEobt4HtvA/TEEnIN375wbPpkL/dpetwqy9zqPna6g2x43kCPd7c+HXQCBAyivScxyes8/mMDsnhtOqcKMrvXeF3sE9sHvvMfUdwxOl7PjWR92h2ZG/UDchynRFOPzYrv8B1CdEVq5iVfuuJzYctozMgAYis5pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bcTQSc34; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XR4LKg6D"
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-56753dc51baso1160218e0c.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 15:59:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771631993; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Kp0r0Qp24f9xCAGgMUmp9AGpLD5Hi00CUy5tqwixJIee5Mv56AuR0ahCavF9Ck8XYJ
-         25A3n15RcqKyfSQQLVAU9ONF1HsoTMjW11tpjsCGC6B2HsXVJ3LqgPZ7OUhcUOT3KJUW
-         Bxm8yGYTsvEnYsY44iaFAmM6LZwlhg8hxZMpT0d3D0D9XyFL+5f/WRQ7fgBF1tslOZBC
-         hdZ/rDhRzhBnyz0V66B3xG+Z6bmTrGFc8VDR9D61oQNO82Hlsbg5kpYghioWCjk/jE6g
-         S7Cc7xLG4YmBz8z6SCgrOhrn2ySyY5F00XmEr0YzJTuySg/XaaLGpiIJNkv7G4U9Bx1e
-         S4lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=+f0CcQxmI0koMDUEbyqFOb1QILsoY/SYqmL6D7Q+4cE=;
-        fh=Z9k7RRoGNoqNzYkWgsCFTp4jGquhOaD9XURX2bjHckA=;
-        b=K98uO2sOaoMW0+tnoa7jalHIi4eF19FgM5k3ydaxGqZUB9tsk9l0cv0pyDeo4PitH/
-         m/zOOwoayJ3URJMi1GQZP8h7wL93PH8+mxFDdgHndmqBFLjN3HnKoh/VVZDzzKKaBSxm
-         rSUwxAagwZBv9aDWWX5GhnTLDtWHwNDu40ddRBWZmdJiE02UScXV4K1Y8rlLDNcED6on
-         V/F3ae56x14VZdmSHYER9G/+DST0YomZrjQwSha9R1a4u9dbuSeZ9HxJZTzSdAKSAEan
-         oGv82tcO+dsHyCrTVE3uFN+eFwUL7PFXq0BmtC8XHIFplXtsWyJdnn4BBU0yOKF3H/37
-         v9cw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bcTQSc34"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7d19bfe1190so2227624a34.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Feb 2026 16:19:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771631993; x=1772236793; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+f0CcQxmI0koMDUEbyqFOb1QILsoY/SYqmL6D7Q+4cE=;
-        b=XR4LKg6D/gGGvzXgOsfsIBAJrDcsMcXhjNtNNwfnEr6i9g0J1AyDZn6AVkqSvxQXhS
-         fJAOqO3YTEXr4q9yR1463W4EfqKu3j5WDxPGhQ9ICKL/tKbWXWpea3htap0LOBnXvz1N
-         Mz9PsmXPPIzL2iTCAGXb4v4zl/WTMnbg8l+RQzmrbzQLeNsCGxGWSWlqhkSckiBIHS43
-         NGNWbAuPfgb/e5NspKFzZZCh8sF2hopWh+ygjitdJ9YRGBdJEjrvdgwpweg4rvFDHm3R
-         X2gSmBBllt4lRx2cuLyEQZDKXGUzTG9sV+nWu1mc43p2XKGi1jyd3LbrQCEsEQ9Gsxno
-         YyqA==
+        d=linuxfoundation.org; s=google; t=1771633146; x=1772237946; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HEkkf0xp3RHWH1cDZYXUxoDJ7Fv9qjiBqyJI7rOFU/M=;
+        b=bcTQSc34cToTEpGu7CTBysRyFXi8EHfkV80AIqtmz1CirCGQtWnLCOSAUARoqJwWHH
+         CihJNmBTQejr2UKtf3dAtwsvPeamshE4Y1G82wP7IeoAM6Ef3YjiqZ5XlYu6L3guS/xn
+         kz5g8yfEXL8j2qVuoeJUO3UJpdemk7KINx5s4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771631993; x=1772236793;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1771633146; x=1772237946;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+f0CcQxmI0koMDUEbyqFOb1QILsoY/SYqmL6D7Q+4cE=;
-        b=V9Vq20nwzfBay6fcZKo/sGaORjk3MkonjHVKF5jiNP5XQFSTB+u27YJ2IhXoigzMpe
-         bZAFs0WvaGIPY6MkxaTmEdJlS9XkO+rXPLQ/mZVY/zA4tIRg9wMgODXvAHPsRWDy5YHf
-         dqjRDouCcfaxqghxe7GpMBUeYeEd0LcbgmNjK9uKQcN9g1ACAS8tmlotMFd/bj424EEB
-         81+9hlU74eMmcbVYuuMR8uHeeI/dRiaEsSh1xqry8ndm3ak37Fc4lGLxBU5Gnm1QeLzB
-         7tDMx5bO6ttYhAolzLcFDpgDwxCcfhgzLK0KQRSRd5/1xud2PM/5oUsB5rbsmS902E+3
-         DbvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLQCLm35lQZ9i1I0C3Mb5ppHjusEUtqxWLp4rpZ8Lotgptbc8o+zSnOz+ioY74vuLI3mLtoAzmPzv8LudMz88=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUzA/nH8EBHUBCQobNPWWMZzpB0NBzqX7G89vopG9yAtCio6er
-	Xlb4bcpzOJrhjzOdrz/8iduplml7eF7S2jWQ96Tf6vjZubBI7P25WkfAqSeuwSzHJwtVOWyirm0
-	227MuTpOdGhMfRvpg3i0WBcv7pH/4FPPp4vW96SHn
-X-Gm-Gg: AZuq6aLO1hcaYSLqfykNb7LGL8Og3+J0cKMxBN53P31bQPWocaG8gbcHJP/CwqjNiNa
-	HiVttQvAQeKw467zJRpGrvMHr0K46Zzlv2CwK/N6a0ypV5O3qC+oKQOlES3VAs2BHvePo+I49/X
-	jgYe2Ju3NRiiWVjB5jJ6cDfUc151VB7YN56GMi/34dFpD8DIfgslffMYBed5EMaZo/bQTy9DviY
-	kC7O3XV5DPyNgjOTnqjhwEoT+DSX0x2yncKqklKrSg9I+4Umxdz3da9tPBifAUOi417Wr1XChJ8
-	iGOLfNvZVlQWHqQNzXubyz/PBcWY1gXj5hWtSaA/zA==
-X-Received: by 2002:a05:6102:358d:b0:5db:3bbf:8e62 with SMTP id
- ada2fe7eead31-5feb2e60d7dmr725313137.1.1771631992819; Fri, 20 Feb 2026
- 15:59:52 -0800 (PST)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 Feb 2026 15:59:51 -0800
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 20 Feb 2026 15:59:51 -0800
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <aZSGD-EGSR3Z5Qyi@google.com>
-References: <20260214001535.435626-1-kartikey406@gmail.com>
- <20260217014402.2554832-1-ackerleytng@google.com> <aZSGD-EGSR3Z5Qyi@google.com>
+        bh=HEkkf0xp3RHWH1cDZYXUxoDJ7Fv9qjiBqyJI7rOFU/M=;
+        b=OvsdmrjBPxQPBMj9E4cYEe45SCicRsluZRxLnj9/ZD4hWfPK1CilsCxmxejALqqrPL
+         qNbbw5fJErekChRh4DQkR87NCi3hlGDBQAJhomTKwLxIp9KdxWqp6lLtlUteP4VeBiHt
+         ryFIKHdUesLjBNnTLyKFRvzxIxO1DOOHH9WwJVdurFk/3Wyo5VksMXdz2CDWOVs+3xty
+         hSrPec7MtwtYAytAElweJGHS4QzoMDCnErn/nTXJaVfrngBpncFNV+fSfbhpenoamTg9
+         D8Lpo4eG1X0UwmBnrV1yDMqKnrmmjWYvy4cuR21wU09jvL87Kn2xUBvvHEEFvNSIrLUV
+         SgZw==
+X-Forwarded-Encrypted: i=1; AJvYcCW8nzkIv8wfCmMMUqpFtMr4jpN3r70I5hmD1CC9l9lctoU6Gf2nkWJ2tWjLwENZcG6ymqzLxV6UgoD8q8tjFdg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbqDpvJwyJ9fIzILQaIaoKMbZh+7ALnHRw+1dVXa+FniqMROMe
+	jRWLeIUpwYN7I5Phnkxl0MoH5TOJmGYurFVeX+5JayK9bcaASRJ9Pc0y0NIiU0vTpDw=
+X-Gm-Gg: AZuq6aJMvQeeawydnzzv3qIGWYoiqwCWTcgRNC2/CZVBiMjWI7z+CsVfzSih1i+aWlH
+	gcnomYlywMX8hA9SU75PPXwhyeK0/REUxS7oaeGcSHAw44p9DU0vktsyq9SDM0V5qIPL6abrWkT
+	9TTxugsSFnFbdEGfWgIxfiT7OTuFTCKVDrxuEuI8kgXT+btV7szFi5xYdfGqb90lHg++bdo7HgT
+	3/l7KWsnkTWrZ5TopwwNJj9J1AB2wwaJNczUVybOziR6dn6RxaGTnZaes8w5oNvI1RW25jDJGMv
+	CE1S8+7hId4W2boL1A7yDLWLGVEGYJ15mRYpB3oScsXngBah7Y9BvtMWupGGxz1bLJ7sQNxtQfZ
+	Gp7PeRfrVnZPMQJWKGWyo2cNtxNxc8pZR3rjXZij4/tZXq0CxmXd18Wdl4GVxm9sIXQqHcUVVkI
+	zm+ubuvr1wXqueGe0iguCkCgVnKkng+LLJiIM=
+X-Received: by 2002:a05:6830:6c07:b0:7cf:e4a1:8b6b with SMTP id 46e09a7af769-7d52bdf6e7fmr966627a34.4.1771633145775;
+        Fri, 20 Feb 2026 16:19:05 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d52d0386d2sm1050954a34.15.2026.02.20.16.19.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Feb 2026 16:19:05 -0800 (PST)
+Message-ID: <a45eaddb-9e17-4e82-8a78-a1d1f6e3d735@linuxfoundation.org>
+Date: Fri, 20 Feb 2026 17:19:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 20 Feb 2026 15:59:51 -0800
-X-Gm-Features: AaiRm50KSzR4QWeR2pY6q56NWZqd8e8f9tXSjFga3oRJAj_7AZ0rMRT-3FKVTjc
-Message-ID: <CAEvNRgHQZzdy8+rbsH2EibpCo8ddinXMSSef5h1_r3mK74q-xg@mail.gmail.com>
-Subject: Re: [PATCH] KVM: selftests: Test MADV_COLLAPSE on GUEST_MEMFD
-To: Sean Christopherson <seanjc@google.com>
-Cc: kartikey406@gmail.com, pbonzini@redhat.com, shuah@kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, vannapurve@google.com, 
-	Liam.Howlett@oracle.com, akpm@linux-foundation.org, baohua@kernel.org, 
-	baolin.wang@linux.alibaba.com, david@kernel.org, dev.jain@arm.com, 
-	i@maskray.me, lance.yang@linux.dev, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, lorenzo.stoakes@oracle.com, npache@redhat.com, 
-	ryan.roberts@arm.com, shy828301@gmail.com, stable@vger.kernel.org, 
-	syzbot+33a04338019ac7e43a44@syzkaller.appspotmail.com, ziy@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6.12.y 00/14] Address pkey self test failures.
+To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+ Greg KH <gregkh@linuxfoundation.org>, "shuah@kernel.org" <shuah@kernel.org>
+Cc: stable@vger.kernel.org, kevin.brodsky@arm.com,
+ Ramanan Govindarajan <ramanan.govindarajan@oracle.com>,
+ linux-kselftest@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260219101318.2442406-1-harshit.m.mogalapalli@oracle.com>
+ <2026021904-unclothed-flavored-cdf7@gregkh>
+ <e1cb6b3f-ab40-46a8-a338-70e4a18f687b@oracle.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <e1cb6b3f-ab40-46a8-a338-70e4a18f687b@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Sean Christopherson <seanjc@google.com> writes:
+On 2/20/26 16:08, Harshit Mogalapalli wrote:
+> Hi Greg and Shuah,
+> 
+> On 19/02/26 16:57, Greg KH wrote:
+>>> All are clean cherry-picks. After patching the selftests the test is
+>>> correctly skipped. These additional backports cleansup the code and
+>>> avoids the need for conflict resolution and might help future backports.
+>> Shouldn't you be always running the latest selftests on older kernels?
+>> We don't always keep selftests up to date at all, as you can see here,
+>> but newer selftests should ALWAYS work with older kernels.
+>>
+> 
+> Thanks for sharing your insights on this.
+> 
+> Couple of problems around this, would really appreciate your guidance on this.
+> 
+> 1. Not all new selftests written might be correctly skipping if the feature is not supported in older kernels.
 
-> On Tue, Feb 17, 2026, Ackerley Tng wrote:
->>
->> [...snip...]
->>
->> +
->> +	/*
->> +	 * Use aligned address so that MADV_COLLAPSE will not be
->> +	 * filtered out early in the collapsing routine.
->
-> Please elaborate, the value below is way more magical than just being aligned.
->
->> +	 */
->> +#define ALIGNED_ADDRESS ((void *)0x4000000000UL)
->
-> Use a "const void *" instead of #define inside a function.  And use one of the
-> appropriate size macros, e.g.
->
-> 	const void *ALIGNED_ADDRESS = (void *)(SZ_1G * <some magic value>);
->
-> But why hardcode a virtual address in the first place?  If you a specific
-> alignment, just allocate enough virtual memory to be able to meet those alignment
-> requirements.
->
->> +	mem = mmap(ALIGNED_ADDRESS, pmd_size, PROT_READ | PROT_WRITE,
->> +		   MAP_FIXED | MAP_SHARED, fd, 0);
->>
->> [...snip...]
->>
->> @@ -370,6 +441,7 @@ static void __test_guest_memfd(struct kvm_vm *vm, uint64_t flags)
->>  			gmem_test(mmap_supported, vm, flags);
->>  			gmem_test(fault_overflow, vm, flags);
->>  			gmem_test(numa_allocation, vm, flags);
->> +			test_collapse(vm, flags);
->
-> Why diverge from everything else?  Yeah, the size is different, but that's easy
-> enough to handle.  And presumably the THP query needs to be able to fail gracefully,
-> so something like this?
->
->
-> [...snip...]
->
+They should be skipping if a feature/configuration isn't supported.
+The right approach is to fix the test to skip.
 
-Addressed your comments in a v2 [*], thanks for reviewing!
+thanks,
+-- Shuah
 
-[*] https://lore.kernel.org/all/cover.1771630983.git.ackerleytng@google.com/T/
