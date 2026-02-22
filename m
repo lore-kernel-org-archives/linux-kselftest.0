@@ -1,142 +1,114 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0928D22370A
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 11:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB45918AE3;
+	Sun, 22 Feb 2026 12:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771759159; cv=none; b=p7Vo9pmM/7QW/OC8ENiv2GVnY3Azq99hFUfK5+KkNw8t76yplLbhVqVA5yw7ctH4uZ6zUOrbWa37mxiVfv6xA+NSrCj9JBVDOScSuJufNPzuBVz05g/M8XvagGWYuwT0ciabDvfrq7afv/FjednXyMZZ6p7YbhKm6Oowtoy5RXc=
+	t=1771763719; cv=none; b=HgEFs+f4UMGODnEKlceYCUgUQPEONai5nt3UhT1sD7UHhky0DvX/jluxxUTaGrTEOliHW2wGSPnlEviQTnb4dwksHmbgooRrZ8xVI1W1y4UFOugMeIQaIY0XXT/WBmVJjQ2XNZG9u8viK1FpD0pstzlfPYliyqMVQH5U6q4apwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771759159; c=relaxed/simple;
-	bh=z9U3voXKAW1dQW4AvalaDk7/sRwNuHWW6nH2z8AUJ3U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NyY0/Q2ZYdkDY9ezFsG3zMMPWRsMTqT/styrgHV6hUsjh3IjNO3U7DydVAhU9Gl2zX6Kw6izJjYOs17fiSOppJ9OjYwDdlpG2JKwGkYPeM/7id6w9FeKfGR157JTQ8ouz3W5+LhhU8MugqBvcdTRBtJzKZJXHmvgT4ldu1UcQ68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JTM9j4+/; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771763719; c=relaxed/simple;
+	bh=fOTXusaZK56AmcS2R8m8YPN9h42bESspa46XGl1Ik3k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=H9C3T/HB40nO9gVQmuhzAGkTf+sdwFJ7Qf4qP5+leCwuyCQSE6ZIo+D4vqrHikQbkkIUii35BSe1xbyb1lcQio6NDjaf8qUXcL/ACnqsKR4mQFdrSluM1/6ewe7eFUaVrq47E9LeYyrhl7AWF3AEbRXg1VGPcP9HNEBYu+WH/bE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t9SlU2zK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JTM9j4+/"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2ba68df3687so5133592eec.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 03:19:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771759156; x=1772363956; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=amTmzSl8ryBjjcQX/dMxltL1tsvRdkBfJuWHJ8vklYI=;
-        b=JTM9j4+/uceArCOKGlwraCSSjj6FMBe3ErNHERVQmrMUQ/MJSlhfpr1TDisQ4VBHfn
-         zm77Y66Ydv1v02qtxXHsCvmkdb6b4N8Yn+6793AkBLdlEeZTiUZt3CGA/7dTT54UpGWc
-         Qrgc7mBSPZZ20l3v8/eVDJiD73Ytx75AtOQlXbBuV++ot2Vm79xoCWG5vjB53+R/ESzu
-         J2ZmTeJNVayGkDMZV6Mgs6nabFpEDgYikCtU0ssSYxuDfNxhq7ociKtxZLW4fLAsx7f0
-         XuPohsCvLg6zfm8JKXZOW1lZNzL+1YF4+VbmlI2kOdu7f2WZg0NT3gJhV/AmHSrhTx4U
-         qOAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771759156; x=1772363956;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=amTmzSl8ryBjjcQX/dMxltL1tsvRdkBfJuWHJ8vklYI=;
-        b=NF1tNPN8pJNvD5eQwQ7v1DLDoEV91IeSgOprzJ6wI60MYouFoybiPJDqsZKonM7REx
-         p8eFAzaiRdV3ovtq1ujjowpBE5Btj/kQGyU5haYPKwA1X/kdyjmINrRCBfYEZ2NHHEpE
-         t6pnW64hkar7d4J+aeLlOI2Dxv9OL1na2itK35CBHsl73KTxpFow/mt6LywKzV/UlTAK
-         8UQyWNxfJEbSeCr/GHWdyBqeFdQd0BzrXcWLasVDbZZ5bRtEKsQp1wi4KXET8ZTlPz3V
-         yUy6JOP/NayimscIqOu85jKOEac67R3kGe9x5FfL0vLOhmSMRM+OmZvNG0UoXI1VZIu2
-         0RbA==
-X-Forwarded-Encrypted: i=1; AJvYcCXN2/KNlOVAbsQ0wQSGiMWaxQE5Ljhz6YGf0bLZ+JsZGXJgYkwH0jw4FoufMVaIKyM20KYeXxdTn2uslLEUugQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6PVp4rdk01RGnKSx7TY+zeQQJbK44LdDKs/D4rF+dIYkxBnEb
-	moBtUmXh+kRSqQOvSoXk91D7OWgZGndf6exAlcVR8pye1bq2opBqkpm1
-X-Gm-Gg: AZuq6aJ8gomyTGftHfsMQWpY50V31bjbmdXdnzHCnN55qeR9j+lS/C/nTKgg3lJwfm3
-	5CfUDTs1/zXh/KxDCowCuB8VDYU3Z4xVXzPII7hWLDsW8kczbhNVFNGDXQ+FxS4q28UTGJfd+fC
-	mQxPikytNgdayuZjMJPgoIVpXceTGDhrdJFg1AXOebxRbFFqcPyF2D4VqLdM/9okVR68lhqal14
-	vjdKZhn16ykqDiYXwI3X65+hYx1lB5lZHPfDP25SWegrN63OufvNRxb5XxZAuvQkVcoLHUEbSqI
-	5V5GIpPRfT/ZPKnIf2V9XdEgogzSnRIiBZMl2gkH/szgtyGbA3ETl86Ze7tsWItlRdVPw0XJhA1
-	zn36bDn9bw1c4ZTDBhXADzltGLIuVS84AxOvLio1okNKD07bTuUWTgWOD8S2E8ynKFNWcuvggYe
-	8FWv6+DBa+5cflS2782lrRexmPxdLHFHcqTXZ9YvkntMjH1z1i0Kw6R+pUBQEkSTQ6NRJk1Z3va
-	NyGP9mGVkmi61dAZtInHDw=
-X-Received: by 2002:a05:7300:2308:b0:2ba:8543:c91a with SMTP id 5a478bee46e88-2bd7bb51d87mr2389557eec.2.1771759156106;
-        Sun, 22 Feb 2026 03:19:16 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1276af9f74bsm4437200c88.15.2026.02.22.03.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Feb 2026 03:19:15 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	kees@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH 2/2] selftests: net: tun: don't abort XFAIL cases
-Date: Sun, 22 Feb 2026 19:18:47 +0800
-Message-ID: <20260222111847.692325-2-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260222111847.692325-1-sun.jian.kdev@gmail.com>
-References: <20260222111847.692325-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t9SlU2zK"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C563C19425;
+	Sun, 22 Feb 2026 12:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771763719;
+	bh=fOTXusaZK56AmcS2R8m8YPN9h42bESspa46XGl1Ik3k=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=t9SlU2zKGHFQAV9YRY1KwEiq4WSp8eLek3In79jkbQIVp++prEj9+L4aNNzbuitU6
+	 vrv927J9O3+zOZ5HBzv6u8qxKDJApWTRWLW43B8aMLFjyIVi1eOLMO6aLmQnhmtgG1
+	 ZxfOAozuRP/5ZDWJnzvvza+bKP1r9dq8TjJqEJA4PmCJyFNB+RE/PpV3vC9tvGMEdv
+	 CK3tTTnyKtXXx+Y/NyRkVptSA/CXBDkjAsjlNcgfl+17rOcprLtzuS5Ekncyi8se4s
+	 ZcK3WDFvuB6ndNKV8eAvEhCgx9ZZjLHyH7VkfimrQSGDkIkbsTuTrsX7BI+3PKw9fg
+	 5BKPfy0wPyM4g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CFA1C624D8;
+	Sun, 22 Feb 2026 12:35:19 +0000 (UTC)
+From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
+Date: Sun, 22 Feb 2026 13:35:08 +0100
+Subject: [PATCH net 1/2] tcp: re-enable acceptance of FIN packets when RWIN
+ is 0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260222-fix_zero_wnd_fin-v1-1-5f4034952f3c@gmail.com>
+References: <20260222-fix_zero_wnd_fin-v1-0-5f4034952f3c@gmail.com>
+In-Reply-To: <20260222-fix_zero_wnd_fin-v1-0-5f4034952f3c@gmail.com>
+To: Eric Dumazet <edumazet@google.com>, 
+ Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771763718; l=1892;
+ i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
+ bh=2+1eVacnxOmDaohxIY6qSWPXriJ79AYLQ+Cp0PfC4TQ=;
+ b=FMKB20bLolhb6Ew2dUc7wN+ml4Zx0IowwF58ximgA7YMljwawroVdSvf7uKR48Oaj7Ils8STb
+ AWJH4jK6KHCApogu6LqmYbpU3AlqPD5t8qn/Krg3HBpdGG1qgaNVayk
+X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
+ pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
+X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
+ auth_id=641
+X-Original-From: Simon Baatz <gmbnomis@gmail.com>
+Reply-To: gmbnomis@gmail.com
 
-The tun UDP tunnel GSO fixture contains XFAIL-marked variants intended to
-exercise failure paths (e.g. EMSGSIZE / "Message too long").
-Using ASSERT_EQ() in these tests aborts the subtest, which prevents the
-harness from classifying them as XFAIL and can make the overall net: tun
-test fail.
+From: Simon Baatz <gmbnomis@gmail.com>
 
-Switch the relevant ASSERT_EQ() checks to EXPECT_EQ() so the subtests
-continue running and the failures are correctly reported and accounted
-as XFAIL where applicable.
+Commit 2bd99aef1b19 ("tcp: accept bare FIN packets under memory
+pressure") allowed accepting FIN packets in tcp_data_queue() even when
+the receive window was closed, to prevent ACK/FIN loops with broken
+clients.
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Such a FIN packet is in sequence, but because the FIN consumes a
+sequence number, it extends beyond the window. Before commit
+9ca48d616ed7 ("tcp: do not accept packets beyond window"),
+tcp_sequence() only required the seq to be within the window. After
+that change, the entire packet (including the FIN) must fit within the
+window. As a result, such FIN packets are now dropped and the handling
+path is no longer reached.
+
+Be more lenient by not counting the sequence number consumed by the
+FIN when calling tcp_sequence(), restoring the previous behavior for
+cases where only the FIN extends beyond the window.
+
+Fixes: 9ca48d616ed7 ("tcp: do not accept packets beyond window")
+Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
 ---
- tools/testing/selftests/net/tun.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ net/ipv4/tcp_input.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
-index 8a5cd5cb5472..cf106a49b55e 100644
---- a/tools/testing/selftests/net/tun.c
-+++ b/tools/testing/selftests/net/tun.c
-@@ -944,8 +944,8 @@ TEST_F(tun_vnet_udptnl, send_gso_packet)
- 	ASSERT_EQ(ret, off);
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index e7b41abb82aad33d8cab4fcfa989cc4771149b41..fde612f12d3625000081958d13cec8779684a642 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -6379,7 +6379,12 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
  
- 	ret = receive_gso_packet_from_tunnel(self, variant, &r_num_mss);
--	ASSERT_EQ(ret, variant->data_size);
--	ASSERT_EQ(r_num_mss, variant->r_num_mss);
-+	EXPECT_EQ(ret, variant->data_size);
-+	EXPECT_EQ(r_num_mss, variant->r_num_mss);
- }
- 
- TEST_F(tun_vnet_udptnl, recv_gso_packet)
-@@ -955,18 +955,18 @@ TEST_F(tun_vnet_udptnl, recv_gso_packet)
- 	int ret, gso_type = VIRTIO_NET_HDR_GSO_UDP_L4;
- 
- 	ret = send_gso_packet_into_tunnel(self, variant);
--	ASSERT_EQ(ret, variant->data_size);
-+	EXPECT_EQ(ret, variant->data_size);
- 
- 	memset(&vnet_hdr, 0, sizeof(vnet_hdr));
- 	ret = receive_gso_packet_from_tun(self, variant, &vnet_hdr);
--	ASSERT_EQ(ret, variant->data_size);
-+	EXPECT_EQ(ret, variant->data_size);
- 
- 	if (!variant->no_gso) {
--		ASSERT_EQ(vh->gso_size, variant->gso_size);
-+		EXPECT_EQ(vh->gso_size, variant->gso_size);
- 		gso_type |= (variant->tunnel_type & UDP_TUNNEL_OUTER_IPV4) ?
- 				    (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV4) :
- 				    (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV6);
--		ASSERT_EQ(vh->gso_type, gso_type);
-+		EXPECT_EQ(vh->gso_type, gso_type);
- 	}
- }
- 
+ step1:
+ 	/* Step 1: check sequence number */
+-	reason = tcp_sequence(sk, TCP_SKB_CB(skb)->seq, TCP_SKB_CB(skb)->end_seq);
++
++	/* Some stacks are known to handle FIN incorrectly; allow the FIN
++	 * to extend beyond the window and check it in detail later.
++	 */
++	reason = tcp_sequence(sk, TCP_SKB_CB(skb)->seq,
++			      TCP_SKB_CB(skb)->end_seq - th->fin);
+ 	if (reason) {
+ 		/* RFC793, page 37: "In all states except SYN-SENT, all reset
+ 		 * (RST) segments are validated by checking their SEQ-fields."
+
 -- 
-2.43.0
+2.53.0
+
 
