@@ -1,63 +1,63 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C500E350D4D
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 16:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E663A353EDF
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 16:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771778177; cv=none; b=BQQItaMzdqYTqU0Mp8ZijM5GRFnrJBF0v+WgGEOF9mGT/w8qOm45LEFu/gRfiEopEY/mshfZ1UcIca+6BEqNIN/oLRJ0Py1wPBiG5PXOtkOv40MtCIJL3NKaZ4qrakJDXQVWnnR3QcfSN4CL6O6IQB6yvuOgGxm9JBI+5fjtfGs=
+	t=1771778206; cv=none; b=VpJjbiztaXh9mI/JOTP5S0zqR5FqfsqJ0Fz6NofDWN+GckG3uVIR4scDlKnp6j69AYCShZV1qNzBV4Rh3yItJKAHhgj/PKe7Ln/fhKiryRBo6eLCXVuIMkGRmK20HSbRgT/V8fNnXu1m7d0DmiKWkROzgiBaty+whh7492JGzUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771778177; c=relaxed/simple;
-	bh=j/hNrN8yCx2c4pErAxcUpIOPgDMVep0Bk1BF9TT9jNM=;
+	s=arc-20240116; t=1771778206; c=relaxed/simple;
+	bh=rnbek1Iwi7qlHWqEfo8ESEvJKxQUEY5jbcHUe6OKjvo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GsfolJ+HsiX65YUFDo1zYVvt5TnqLMio6y8wvjwk5nYKrJUxxev7Ik4LAV6J8g9js2MpUVmC4gjNDPN9wIGCbxArO9U/FvOa8sMwm1H4JxDu7blFjbW6Y49zI+JRNTlXzdS/JOJs/eOP9ZRyQRl6llNT7EJm5ke2jw1M4T+6Zj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=kNOGYwJM; arc=none smtp.client-ip=209.85.128.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=TQC6e8mhnjvCe2NLy2hgD+rknNJo1i53Gi4kvmHkjudR3fXHtK4fVDkcIerz3kDgbJfiQCkKqh4Sd8RvcGxW3sx85hiUEKNwQwXT4k0fkerPznQ7MpO3XHOBZTSYmYL6vRmx1IJH95fDoELugd2xLt7UepuoTP34oEPSZCln1GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=JFn9f5z9; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="kNOGYwJM"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4837f27cf2dso30178995e9.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 08:36:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="JFn9f5z9"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43767807da6so2599747f8f.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 08:36:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1771778174; x=1772382974; darn=vger.kernel.org;
+        d=blackwall.org; s=google; t=1771778203; x=1772383003; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7xS9l5mc+XFl+nwoapUNzADH+s1Zoh0SwLY8LpTEI3o=;
-        b=kNOGYwJMAtMS26+X9ILfgpi0iEKPjK3lQX2VgC1oQGaKhUw2i7J9m7P1JVzdwBJFPh
-         qC6hr/sOQOcgpWkEwErni8nJbtjE7eG/uO9JvSSa1Af3a1Zo1gRjehvQa9AEuhio5b9u
-         oo57NTvyc+gpVKYuzPjoYbEnnSaBRm35R6LkEc3kQImTkZxZBFWWX7/jJ5jeIzJwtlE3
-         fva2PL96LXuZ7ae3anAAS89GujtdwBu4HFEkemWsw/0v6UQmq0Pj1CJuN1nuCdxCU9Bq
-         Tbm8tenil6jAOOHvFWYdB7N474E2GJNIPW5iBhZFH80RYv46UgRYRS6psCzk+zM4I6OY
-         4K4w==
+        bh=yzpxqNPGSFGHysEvY3gxBQ/Fl4mK8lzti20PHekkHDw=;
+        b=JFn9f5z91fQ5h8DlRAhEI0rxvDPX6UjH8DiJXzH/Y6ddwrkFVuYqtbnKu8d8IDSybA
+         rirOghWZ7k9TjzbVl/WQsR820RdZOjrA4QwN3KMXA5K/Hr+eX6kJmyoru2/ds5B+Y5+G
+         sGmLsaEaY4rGm2W5ZiJOoqCFNE68Palhbgfy1qReEV+N382ctrfYSReT/8I9ypsEl0Ps
+         Yvlcdm+HnREpDE7p3QERtTAb9aISY5b/lR/lEhVFlNZuf+SdB/C7BI4CZSo3/FWSWRNY
+         rEENx1rpyxA04zZOhCNM63H5mNJK4cE0c2U+qyEmDMb7JdJI1nIU778dSXBcZCTyYUqM
+         xPOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771778174; x=1772382974;
+        d=1e100.net; s=20230601; t=1771778203; x=1772383003;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7xS9l5mc+XFl+nwoapUNzADH+s1Zoh0SwLY8LpTEI3o=;
-        b=o49Co59SfmIvtYpR+AbS3gFGBZBqvhlQQdKVIGXV/7cmJl8DiFhKI7rPI+Z8Oe0yTa
-         V6rngx5/IBlvvIAPod1Uhdn54hf7H8FJ1OCiKP3A3OZrCe+34T7hDqVaVVKhe3ET96nC
-         kU8BzDIbxX8oVTCaQXWNGb9xVvTKUE2w5REX+soYbdXGb2y/JZwyvMIy2zMfkJ4sN2UR
-         r6h/lHLRa80kpZ6HHvxfdOwS+Yjp2/HnIaQaJ/o62za+H1LK8oCv1Zh3IWAl0PM7imny
-         FrGM3Nm0gaRy/GOYmjFZu9CBTBO3YJsGXwZOp+OhpyIu1TUDkdkKv2FzCw4CJXTwEyTf
-         B0cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXPnodBJ8MDe2CoKFJlADnFwSrJHQl22TJnH5xmtU8wh1qWY2x+qN3Gp8YmMSwn9Yyrfp6ePSkQtaSh6Kpj20U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxinSV5LoemDEpLLR6Wyg9STju5InwCqX5+kyQqENIMployKSQA
-	Jw4ik6f+gub9LghVblu5zRzQ993cI93itZntizdPiuoN13Mdiv/ji7uuu+3HjHhytLo=
-X-Gm-Gg: AZuq6aKM3rGqModn9MxfzjcEqdbWb1g/r1YKlC6wbnRGcq03yXqZnOtWuSK+B1eRbCh
-	Ivfg1BLlkKYjcTDyVClXwEVXouUgc4hgu87FoJVVAf4sZnTfdl2ZKlticoSg9BjQy3rzqSf25Ry
-	fBZmliMaE24JPWxBlNMV0npuIOTQGHlbctOnWotXaavL04pfy3KSiWCRECPhoVBUzm3tmY1m5DT
-	T8VlirNFmZqf0O0R4fY1d2L2aYN9QhJCRQhrUrhPHbuAehG8/sVkuacHVe+p0ZW1Lycm6fyRYzt
-	5As52XQeG1UJobFXpMRehToA7Q2WqgYPKANgJIasC1BPPORiyIwMefyHswM8+d4l1yC+FhXmFRi
-	zBfbFJj3qsWw2qXTM+CUJlgLnuR7BErSDs6YP22Zcx0ePxmWmF0QHUvUyc3CgrnJZ7lhggxy+YZ
-	/S3W7TkjUQueSELudY3MdWwJMWTelpQo0fkguDj4KRFSjifBbyPTcJ5OdJoA==
-X-Received: by 2002:a05:600c:1e85:b0:482:eec4:772 with SMTP id 5b1f17b1804b1-483a963de9amr85845895e9.32.1771778173648;
-        Sun, 22 Feb 2026 08:36:13 -0800 (PST)
+        bh=yzpxqNPGSFGHysEvY3gxBQ/Fl4mK8lzti20PHekkHDw=;
+        b=MXbSzI4uZ5a6HtMLPpT89VHcPC/uU8XGTOB7zoghC/pgi2hi1UwJ+9zd76zXPkAD8v
+         lAcP2z147JqUoTmh65z07LlPuQ9/4wI+GfS2UEbWv7r2P04qeL9psQLYj5p/gZj022+h
+         hWznqDTxG7ai9XI8bQ65YcMd8+JHiYlJU1rvpzqC0wHKGQ/wMed3UF3V36qel+Vd73Wh
+         TxtNEgTbJjbHzlx9b0LAGkc15i6fy+NvTOg7xe9CQckjpy2Xyed56ZV6r6pldFdRbsEF
+         NUMJDBMYiUQBGh+MlZVbg08PXRP9OJxJL7QrYp0LHs/RREr9v7QCvcttQWnyT0GGBeFN
+         +FJg==
+X-Forwarded-Encrypted: i=1; AJvYcCUrjW/ii1a+qN3a9tdVi52lns6PX6ISYYwwccBteYn3CgNKXdqTBxCYqPLLCHcLIk0zSWxw5yL+9KzHqs+lAjY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySybtIAA8dRs64lc0kqy55qwcVB0FNnNBCY49gG95K039UH5Jj
+	SeklnQ0O5/t1mMo3Y4oSznzb7QB4w+6q8qF+i6Q1/oo/lQPbeY8CmIT03RLUvZ1FeyM=
+X-Gm-Gg: AZuq6aI/+Hml8yz6QvGqcdPtn2YNJHScU5Hv/4Uw2X5wZNuGB+GgecjxVvOJoSJGOKb
+	ETnZjl3yBiC4657isrG3IRtcYObypdU502rvwOJbulMMf0zeh/gqWLW4QnJ4Mm7+mgnA7B1sp94
+	QSPoThyvRT+3Kuo9345k6jztuTzq1ZnE4VAPQuTsva/183yMBwDGpRdt3oTGqWXO+KLRdCs3Lby
+	+uqU24BBl4/I2FelmhP56y0ixkPJEP+JklOTROZBbGx2TB6+suS2BstCvmkcqm0TwWz28I7hOQr
+	4kOS+PHdnHjkrBIVKqj+fsed9wzBB1Kd2viwJHcAqApArdx399RPryek+6Lry8ITLyyVQMU0P67
+	C43li47uZxKYPcgaA/VJieQks+gf8nWxhZXE/oxhX0y5DHB3tWm2jvb87c1dYZX+2pLKTeZajiL
+	QCkht6wI0Jj6uTZYGtiL9p3WmpRyUs+w5DrdrqkMfVDyRcdB0tMqjOQ6uGvUv3+GkMWA55
+X-Received: by 2002:a5d:64e5:0:b0:435:e47b:e746 with SMTP id ffacd0b85a97d-4396f17a9c6mr10832074f8f.36.1771778203092;
+        Sun, 22 Feb 2026 08:36:43 -0800 (PST)
 Received: from localhost (176.111.181.192.kyiv.nat.volia.net. [176.111.181.192])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970c00e8bsm10865692f8f.15.2026.02.22.08.36.13
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970d3fff9sm13229307f8f.18.2026.02.22.08.36.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Feb 2026 08:36:13 -0800 (PST)
-Date: Sun, 22 Feb 2026 18:36:11 +0200
+        Sun, 22 Feb 2026 08:36:42 -0800 (PST)
+Date: Sun, 22 Feb 2026 18:36:41 +0200
 From: Nikolay Aleksandrov <razor@blackwall.org>
 To: Danielle Ratson <danieller@nvidia.com>
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
@@ -65,11 +65,11 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
 	shuah@kernel.org, linux-kernel@vger.kernel.org,
 	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org,
 	idosch@nvidia.com, petrm@nvidia.com
-Subject: Re: [PATCH net 2/2] selftests: net: Add bridge VLAN range grouping
- tests
-Message-ID: <aZsvj1Zo7msYRRCJ@penguin>
+Subject: Re: [PATCH net 1/2] bridge: Check relevant per-VLAN options in VLAN
+ range grouping
+Message-ID: <aZswmWqzeZTkEFmO@penguin>
 References: <20260222085338.3143823-1-danieller@nvidia.com>
- <20260222085338.3143823-3-danieller@nvidia.com>
+ <20260222085338.3143823-2-danieller@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,36 +78,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260222085338.3143823-3-danieller@nvidia.com>
+In-Reply-To: <20260222085338.3143823-2-danieller@nvidia.com>
 
-On Sun, Feb 22, 2026 at 10:53:38AM +0200, Danielle Ratson wrote:
-> Add a new test file bridge_vlan_dump.sh with four test cases that verify
-> VLANs with different per-VLAN options are not incorrectly grouped into
-> ranges in the dump output.
+On Sun, Feb 22, 2026 at 10:53:37AM +0200, Danielle Ratson wrote:
+> The br_vlan_opts_eq_range() function determines if consecutive VLANs can
+> be grouped together in a range for compact netlink notifications. It
+> currently checks state, tunnel info, and multicast router configuration,
+> but misses two categories of per-VLAN options that affect the output:
+> 1. User-visible priv_flags (neigh_suppress, mcast_enabled)
+> 2. Port multicast context (mcast_max_groups, mcast_n_groups)
 > 
-> The tests verify the kernel's br_vlan_opts_eq_range() function correctly
-> prevents VLAN range grouping when neigh_suppress, mcast_max_groups,
-> mcast_n_groups, or mcast_enabled options differ.
+> When VLANs have different settings for these options, they are incorrectly
+> grouped into ranges, causing netlink notifications to report only one
+> VLAN's settings for the entire range.
 > 
-> Each test verifies that VLANs with different option values appear as
-> individual entries rather than ranges, and that VLANs with matching
-> values are properly grouped together.
+> Fix by checking priv_flags equality, but only for flags that affect netlink
+> output (BR_VLFLAG_NEIGH_SUPPRESS_ENABLED and BR_VLFLAG_MCAST_ENABLED),
+> and comparing multicast context (mcast_max_groups and mcast_n_groups).
 > 
-> Example output:
+> Example showing the bugs before the fix:
 > 
-> $ ./bridge_vlan_dump.sh
-> TEST: VLAN range grouping with neigh_suppress                       [ OK ]
-> TEST: VLAN range grouping with mcast_max_groups                     [ OK ]
-> TEST: VLAN range grouping with mcast_n_groups                       [ OK ]
-> TEST: VLAN range grouping with mcast_enabled                        [ OK ]
+> $ bridge vlan set vid 10 dev dummy1 neigh_suppress on
+> $ bridge vlan set vid 11 dev dummy1 neigh_suppress off
+> $ bridge -d vlan show dev dummy1
+>   port             vlan-id
+>   dummy1           10-11
+>                       ... neigh_suppress on
 > 
+> $ bridge vlan set vid 10 dev dummy1 mcast_max_groups 100
+> $ bridge vlan set vid 11 dev dummy1 mcast_max_groups 200
+> $ bridge -d vlan show dev dummy1
+>   port             vlan-id
+>   dummy1           10-11
+>                       ... mcast_max_groups 100
+> 
+> After the fix, VLANs 10 and 11 are shown as separate entries with their
+> correct individual settings.
+> 
+> Fixes: a1aee20d5db2 ("net: bridge: Add netlink knobs for number / maximum MDB entries")
+> Fixes: 83f6d600796c ("bridge: vlan: Allow setting VLAN neighbor suppression state")
 > Signed-off-by: Danielle Ratson <danieller@nvidia.com>
-> Reviewed-by: Petr Machata <petrm@nvidia.com>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 > ---
->  tools/testing/selftests/net/Makefile          |   1 +
->  .../testing/selftests/net/bridge_vlan_dump.sh | 203 ++++++++++++++++++
->  2 files changed, 204 insertions(+)
->  create mode 100755 tools/testing/selftests/net/bridge_vlan_dump.sh
+>  net/bridge/br_private.h      | 10 ++++++++++
+>  net/bridge/br_vlan_options.c | 26 +++++++++++++++++++++++---
+>  2 files changed, 33 insertions(+), 3 deletions(-)
 > 
-
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org> 
+ 
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
