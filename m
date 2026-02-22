@@ -1,110 +1,142 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350F21C5F13
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 23:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771717567; cv=none; b=OxQZEsd2kAVBEUu1x/oSz39jKKpqotp35jogGLADUha5y3ZSmNnKcJKP3pfjYCNgp6M3UiDmSeRDefs6rIMNpsRHE3uiuc291Vf9I01a6Vb+2YbQuObJUM9phrusOJHFoaDAfk4jMUIXe1XJKu4YSFsBuiNU4bSOZdw/qnknAvU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771717567; c=relaxed/simple;
-	bh=D8wEA4P1R/wLC0WQ2gaxmvJV8Zid0j4uMfM8HtVxkhE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Txbe4BPIYiY4rEd06Io32cWgN/EVyCaGGpD2ehqwM4f2y2YBg7Etaw19yfLUeBIEkABybdgRNGURiHEwupLsNkUZ7liTPQih9sXzlRfs2/gGjFBFVLQ9xhCtxsFwhOkn2KMP4/bxuz05/9O+yH7moQkERCW7OsyK6kSDz96SDg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hxWuCmMl; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B931C84D7
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 07:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771744796; cv=pass; b=uj2kAR4+rt0+o0yggU9IUSbmfWmDYXhG4a2aiP+tSjZFYYQsJ6SpEgiPczmffChgt7d8wawTWHq0Qvfjvz59siIodAFUX3b2NNejRHmo5VDl5W/obbZB009Rt3X/nqmnyP96BSXQ9htHzgvvfHSX5ZVcd6QwrVO5XIxuphG6dYo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771744796; c=relaxed/simple;
+	bh=0lDfK3AuaNxxPB1Mx5JPD44YULX91cix/sE9XtEee8o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OdobE2f49SmPRRSGPjrUB2uGZU9+5EIYVxLPKfWcrPZtcBO93acWtv9mUcbr4owAudTUvK4e0utsD8lppXfDmsoMOYJk8xkQTgeVBxFnlFCruAj1e2aKIZkaXKX88sUUuJvANJjBuxguomLZbuwgoTGpWBdOFJ0/lKFdRqdHpSg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iwtvKFVx; arc=pass smtp.client-ip=209.85.221.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hxWuCmMl"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso24009395e9.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 15:46:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iwtvKFVx"
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-56739adfa1aso2531001e0c.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 23:19:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771744794; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BPxDz7reVrnRkdj+cNxypE+mL31F0akCmPf0FDhNAQgl9saFgMXlXslssuVAkJbBV/
+         zMgNIzwD6CbNx0Lv9L2pJwf8Ap0d5JW3fL9j5TJi1VFhY6wVZ09iooLJbOY6KdqeBuva
+         mbup1Y5KiBuCgZTeWhSTBpzjiVvUUHUS/AqE6Y+e+RIStr9nI2G8HAvbMvBZSDbQsY/h
+         fsOV8qAvTN/TaHPc6DZhls3nqw8n5wsLwe9rpGzVDR6btel3H8LYmlSuJ9F63fvoEvBT
+         U25but8gsyhZ0OFj7KenSvTAGa3k++b8JXcAfNRJpCy16/eOeMtnw0paZWN5TO14S9/a
+         jdfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=OILCq3HcP44ucOZfdh81GCluvZoTsk6wk990N+3C0dA=;
+        fh=/AyWXPvfE2lRMc6t0vnmpnj83Nk17qluprKPu528Qpk=;
+        b=i6275cbznTHEXXtGfR5kmBDO0cL+fzXS0lyw89m0lUm6+jC3wSwRplbGKzQVItl7zc
+         BqX1Q6bpYX/rYtbaHewbQsyyV9F8eTbmh+NJWd+3jVra0jCYJXt7KZ8NP9Jk3D9CSIEm
+         K8Gtnk4ZqChZSgP77ATpQ1baKraieV3YBQYnf5AZ0rsKxyJTHGzh50+0fXA8gy0sKb7y
+         PcgAnwui8PunOc+s1G7Trp0rybcOPO/yYt8urcUKSIXwN1T9yckQOgM1GnLpBh2ikXgP
+         t/kZDo2MUvLtR8tMM+sR5cTKpKCCYeHB3T2yQd88XnN0pEnzLZGiJ3kdZOJQSj0IDttB
+         DsSw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771717564; x=1772322364; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771744794; x=1772349594; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a6c+2c5A4IdcQR95bgfQZwtsMpRnSCzmv5kOunEAmnw=;
-        b=hxWuCmMlxuj3d20al60XWs0jh2KLvmk0/jpM7jG8sjLtUj+ARfwmScdZLER6DpfOAs
-         J8nWVO9IM04A+Qm71FNtsxpTM5ftoWYuG5CoE6iS+dCZ9RSZYYoP+pmhOyAgz70sC2iv
-         LDvuveFZpQZy2/IC/wLc5I7ZkcufMPCm48xDHV18rMz3EllbndGCICEYY+zKzP925M1P
-         L1j7TU5F2mxburUB6vGNMZfdQFHuZXWbh2ZEHD6D3l3MvO7SPXGiDAny7QDzYV1siVBQ
-         FXjjbYA1cLCF3c7I92iQNDo0U9X7Emu0pfWIOGTBeLkAV5YK+VPmQv02ynK/DYnajvGz
-         T9UA==
+        bh=OILCq3HcP44ucOZfdh81GCluvZoTsk6wk990N+3C0dA=;
+        b=iwtvKFVxJY411/9ogEeNuKuIL+swHngOLh4yrtBI6Td3Zvrhz9GAxS6djLXc2BeeOf
+         nwptn4OPwALolDkNO4yfUKWVGz6BTUQ/ZjsrhDkQelUcEp3u211ABAUwyaGfWUa3xyIl
+         8TncN5e/ul82aK3psRyH0mTUkoioWE7HxKEG5Tl+V4ZPPo1duell20yNXLiz/uGQbSYH
+         7yGlXL3++eZgdVawMupcKZlupPjYixQ8Rl23W+szYf64S6Jow0ieM/ciHxBMW07CFwOu
+         mPqgTy21kVuM+pHA2DPgrWsLpiGUpwbZYMi/pXNbvGHP1UIGZhLEeFn1TM96mjwZUN8t
+         bpvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771717564; x=1772322364;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1771744794; x=1772349594;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=a6c+2c5A4IdcQR95bgfQZwtsMpRnSCzmv5kOunEAmnw=;
-        b=Ve9pYH2Xo3I/ldSgbgRTnJtktaQ4KsUdIx21QVnQXrcSudW+feMqNyNSH8Z+Y6CCs8
-         SR8LIN/4g+aiGv6FtWDiBRmt4EedePJCNiePMNCuLxn5i6k++ooOG0VXLD7QDyOasH6y
-         tkEvzbRch2cWYLF83mrHcKPldLlQrT8ZSGzgNwy0aygc48UoiHcSOjhlLmYGAQHdSEUe
-         Pzk6T6r4zxJQtPBeln6tN22QWc+ZLBsUBiuyAT128/1IEGbDzBIpdNOwgMJEX7tz4ruy
-         9N8+T3Qp8NaOnOlop4834fQfYyPD818lShcf79mO5nHkj8Fl4O/9bWwzOGBx1M8CXF7Q
-         sr6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWBkXTkNXry8+Ce1WptJcAWc3sDAX0EdM8P/NHdmvmnLegIFB8+8qfYhRRBNuGUVn8xZQc/yQRCBmWwI4m9RQ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwazAwTFuU3lSqxRjRcF3mi9xi+YPoy6NIa6b1v1RTwBHJ8TFbB
-	6U5TRPJBSHLcWtoaJPGunxzFyk5x635VSFLozUscOlLr88HKqg7lMdYt
-X-Gm-Gg: AZuq6aIHVJ9v9tE84PQkfUFQsmf31d68Tie1kMk5SsuG/OKL3MfuSod6EF4LZfwfqS6
-	vSQh4vvOkStT8RpDPZcTu5tQO3WZ8/x6x5Qj0EGy7tkipv9lJ9/7tg4gRkw6dcrvsM7wTpi8QjA
-	xVAS4jeiZfLJTTb+N7HINr5ZM2xRCx5QDPTtNJze/yTH92/Pyvzkku7COMPzkj8Hl50bWYKVp9a
-	elAqC/AdWiYEPckgTCieyLZsHn+yWZ56BQrqZ+Ah3HZNI8nldnl/c46ZuySSKZDvTtUXtQWcKBl
-	zuHgPI5JwDjIJflM3ocMwsuXhlKe66DEkPD0TGRoyq3nK5jXZM6Y9X233DQZkmfb4Mmpov3PKgQ
-	NtsbTK+V0adAvbFcQRj+oI5Q2rmPaYLm+mfgCjsS+EomPO7rROHOKrreAVeNB7MJ/kCBweUiR5I
-	D19ust5M6VFenXQyyMfeXHn8utXYlZ+A==
-X-Received: by 2002:a05:600c:4749:b0:480:69b6:dfed with SMTP id 5b1f17b1804b1-483a95e5ab8mr72338125e9.24.1771717564334;
-        Sat, 21 Feb 2026 15:46:04 -0800 (PST)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-483a31c56d8sm251620925e9.8.2026.02.21.15.46.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Feb 2026 15:46:03 -0800 (PST)
-From: Askar Safin <safinaskar@gmail.com>
-To: dorjoychy111@gmail.com
-Cc: ceph-devel@vger.kernel.org,
-	gfs2@lists.linux.dev,
-	linux-cifs@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	v9fs@lists.linux.dev
-Subject: Re: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
-Date: Sun, 22 Feb 2026 02:45:53 +0300
-Message-ID: <20260221234553.2024832-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
-References: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
+        bh=OILCq3HcP44ucOZfdh81GCluvZoTsk6wk990N+3C0dA=;
+        b=LLDRDrGX/Owtf03/ju4ycrQYdjv1Gq7ukNoutkyF8uJe8sJDBprucKNgZq8crWFg+m
+         6XLyP/iZ/grEKy/rzmod3w3iRVHnetzkYGjfkcpYSa17diz9xee+tsiXya3aZUtK1382
+         1526cnuHiNK5gpH3I+b42V3qCOpcb9Y6mcdJ76EZ9VqtXTmrHlsQNJ/RYaKJX8emLO5l
+         LknT7YxlzctO/X2arqkTAYrVI/jWOiSVt4iAG9R9IfnRm3h++Kufh4PPvLC1ocpouQ1Q
+         NeSx2j9igMoB1YxxEOmhZQtPcxMPMcfpkGW4I7IaNZ4nEybbSqniWOakjb0bR4+xAxzM
+         5ZFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUSdDridJVE0+HGFFD8tFc06pSuF8yaRYFHvGew2zsEsHS5kmxpPItMszZYp5MOKCwR291xpyZJLzxkb9HDwjw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxuoj+PLee/D9PpjqBEl1C0nCtxkuBcq6g9stNlz6N59ARgjy4l
+	cLIxse2vNYJivX7WBi+2wKUG1W8LGxZDKoxGjVd7Id6PcGXB8YRdGlk+K9cK8wE0TWd33q/Suld
+	fcbqway7z2/uvdZ7Mviz/YxvoillIIBZVQw==
+X-Gm-Gg: AZuq6aJVSI9YHltQeKCg6gYZO44s/UGAa7OFPd9EBPoYdUK0S6gU4TRaMOPqqu4bOpW
+	mt6P1UEoDwFjv5++YBlEcSUD/ab5hMGvG/5PsqAeaAt3nmUiqut0s8DyCweIRUJuWfJASOaOw5i
+	ApiZhhzgfvbdjB42TR4NQAmG5X8yJKFoaEop1GrTcPWUMN/d8OqKi3a4v5HGeJ0psUJOjumcRNi
+	ACTmZToWNBdGeJwggrkYySgcfwIX7IapHed77t14BZdjNq7rUUpmSI2LltiFeVWavMa/KYzCjE/
+	zi5XkiLnbglavCQnNSIGbFzgxgVp0UTF3CqvTIyjrGdw40IfJlahxA==
+X-Received: by 2002:a05:6123:2c6:b0:55a:ab0d:bf74 with SMTP id
+ 71dfb90a1353d-568e489e04bmr2702083e0c.13.1771744793575; Sat, 21 Feb 2026
+ 23:19:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
+ <20260221234553.2024832-1-safinaskar@gmail.com>
+In-Reply-To: <20260221234553.2024832-1-safinaskar@gmail.com>
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Date: Sun, 22 Feb 2026 13:19:42 +0600
+X-Gm-Features: AaiRm51yAd7WZH0JTtET-y37usKeLDtT6X5Vgs22uOg_jqenzkdmMaQOnOQPf2k
+Message-ID: <CAFfO_h4dNydbmKSTP8uD9X6ouEZTyJUGoTBXrEHWeHtD1B=p5w@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
+To: Askar Safin <safinaskar@gmail.com>
+Cc: ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, v9fs@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Dorjoy Chowdhury <dorjoychy111@gmail.com>:
-> I am not sure if my patch series made it properly to the mailing
-> lists. https://lore.kernel.org/linux-fsdevel/  is showing a broken
-> series, only the 2/4, 3/4, 4/4 and I don't see cover-letter or 1/4.
-> The patch series does have a big cc list (what I got from
-> get_maintainers.pl excluding commit-signers) and I used git send-email
-> to send to everyone. It's also showing properly in my gmail inbox. Is
-> it just the website that's not showing it properly? Should I prune the
-> cc list and resend? is there any limitations to sending patches to
-> mailing lists with many cc-s via gmail?
+On Sun, Feb 22, 2026 at 5:46=E2=80=AFAM Askar Safin <safinaskar@gmail.com> =
+wrote:
+>
+> Dorjoy Chowdhury <dorjoychy111@gmail.com>:
+> > I am not sure if my patch series made it properly to the mailing
+> > lists. https://lore.kernel.org/linux-fsdevel/  is showing a broken
+> > series, only the 2/4, 3/4, 4/4 and I don't see cover-letter or 1/4.
+> > The patch series does have a big cc list (what I got from
+> > get_maintainers.pl excluding commit-signers) and I used git send-email
+> > to send to everyone. It's also showing properly in my gmail inbox. Is
+> > it just the website that's not showing it properly? Should I prune the
+> > cc list and resend? is there any limitations to sending patches to
+> > mailing lists with many cc-s via gmail?
+>
+> I see all 5 emails on
+> https://lore.kernel.org/linux-fsdevel/CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-=
+sb5Mpk3ts1oVUHtg@mail.gmail.com/T/#t .
+>
 
-I see all 5 emails on
-https://lore.kernel.org/linux-fsdevel/CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com/T/#t .
+Yes, indeed. They showed up after a while.
 
-So this was some temporary problem on lore.kernel.org .
+> So this was some temporary problem on lore.kernel.org .
+>
+> Sometimes gmail indeed rejects mails if you try to send too many emails
+> to too many people. So I suggest adding "--batch-size=3D1 --relogin-delay=
+=3D20"
+> to your send-email invocation. I hope this will make probability of
+> rejection by gmail less. I usually add these flags.
+>
 
-Sometimes gmail indeed rejects mails if you try to send too many emails
-to too many people. So I suggest adding "--batch-size=1 --relogin-delay=20"
-to your send-email invocation. I hope this will make probability of
-rejection by gmail less. I usually add these flags.
+Understood. I did not know about these flags.
 
-If you still expirence some problems with gmail, then you may apply
-for linux.dev email (go to linux.dev). They are free for Linux contributors.
+> If you still expirence some problems with gmail, then you may apply
+> for linux.dev email (go to linux.dev). They are free for Linux contributo=
+rs.
+>
 
--- 
-Askar Safin
+Alright.
+
+Thank you!
+
+Regards,
+Dorjoy
