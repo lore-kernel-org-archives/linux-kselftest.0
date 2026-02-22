@@ -1,91 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4D638F9C;
-	Sun, 22 Feb 2026 12:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA42534F259
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 15:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771763719; cv=none; b=lMStdfN8YDztbWWXeCW3DHzmZwpEAGgxjmc7LvKfEQL8NejPE7CHhphKS8IqQDWSYjJrqa8wD5t0Y2N9ERnS1KAndr26zNh7ix2DW7ZkFxQgjb1uJ23nds7v3jqxGnC1N8Rm6pUqEspYJpLsoZKvrp62pT2kv5TvAxBzfrQUmrA=
+	t=1771774719; cv=none; b=SGlWSTpuGiF6YHytXDhBlP+yt2QmhsTWYEYkLMLXIjrIOCRid+PhNQjh1UXcY5qWFgwrRS8wzKT9tLBjJOzfq8Vz1itlApvW3tFEv3YRfhnNCLd9LvPmW8umkcY8poU/FXcReBeSuNQkvtfPByuFaUDUUx65YTbsxOXIcPLTvH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771763719; c=relaxed/simple;
-	bh=Ad3HcaJiaO0xhdi6BjPXye6filJoTMtnWzaj36dECf4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VhltvCbFDcYVCLs2K/NFKt1ue7KKibWnyJE4FWQ0GxcmLSFb4DJQzDuUmjnYqBLer58W+6StEwrPMVFz/nWy9bDCMadubqXJQ3LL+8wXEoZn5LV+Qz/UEhPkoybJCJKzmbNFjyrPWonggvE6CFWqlhAzyMMVIZi2tu4+9PX0+Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BGNiuGST; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771774719; c=relaxed/simple;
+	bh=gokw9VKswMNmDkG640UqNZUw5Y4isY0FCdwYm44ip2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NSQU4Z+ALX0KbmkGtHf1CfsGpXqIuab+SDmd+sUE2utSyVxvDmit5KfsQBL+NXGXE7jsDdzRxxEVPwbQncgoduEKAyGAsq+F82IzuJp+zCFZLEQvQwQe6O2sUKb+D0kmanicpdzjciUbhLMDT1Oq9A01muCwxEw+Vb+Bd8wLAno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HDuFPeOP; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BGNiuGST"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7643BC116D0;
-	Sun, 22 Feb 2026 12:35:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771763719;
-	bh=Ad3HcaJiaO0xhdi6BjPXye6filJoTMtnWzaj36dECf4=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=BGNiuGSTA1hfBqXw+BWSDd0nb5DvJwtyfISIm3AUT82mH/d27ffZwADfWg4GWzAih
-	 vK3D9+WVyBuwf2rf0YuzrS36E5HRXboO5/is+qFZXTeZCxvqHzc103TELM7+m7txKD
-	 Icg9ZwgfVUaU2noVu5z4t+5PtKchYW/2J2nR4i2SepxliyBCGNbpme0VfsZn/gtKs0
-	 7ueYwJfWQjX9XVsiiREpNM84eE2F9wrhppTdEdVrbsm4h6vPG5iCQl1ZrlMMZrAkzL
-	 KcKhHmtQ7/P49R0qiIiF1MeGsyP5BsZi+/qUTBoV1CeMDyk7yVM5piyr8RCsIragro
-	 QXwghH6xtlhsg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C83AC61DFD;
-	Sun, 22 Feb 2026 12:35:19 +0000 (UTC)
-From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
-Subject: [PATCH net 0/2] tcp: re-enable acceptance of FIN packets when RWIN
- is 0
-Date: Sun, 22 Feb 2026 13:35:07 +0100
-Message-Id: <20260222-fix_zero_wnd_fin-v1-0-5f4034952f3c@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HDuFPeOP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771774716;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JVwf0mUY9YEcprI5Bl/Pa4G3ZzYnRp/WR44iIwoXjv4=;
+	b=HDuFPeOPgKpRTAZFCAj8xjMGIss69U85hFyexRrJn2KlQiffd41/CpmpyFVKNvzAdHBBNR
+	3NN/iqDNTkle07J7TIrCgAU+dsOgkQyKsAmBebin9xX7KcKk78Yh2ocCExumDihSZr8oa+
+	fe+8hrwDkHzpKBI3i5Xxf8vvYJm4XLI=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-267-Kbx0EiyrN9SalzJk7UU-Jg-1; Sun,
+ 22 Feb 2026 10:38:33 -0500
+X-MC-Unique: Kbx0EiyrN9SalzJk7UU-Jg-1
+X-Mimecast-MFC-AGG-ID: Kbx0EiyrN9SalzJk7UU-Jg_1771774711
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6E99C19560B7;
+	Sun, 22 Feb 2026 15:38:31 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.38])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 3C68219560A7;
+	Sun, 22 Feb 2026 15:38:26 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sun, 22 Feb 2026 16:38:31 +0100 (CET)
+Date: Sun, 22 Feb 2026 16:38:25 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jan Kara <jack@suse.cz>, Aleksa Sarai <cyphar@cyphar.com>,
+	Andrei Vagin <avagin@google.com>, Kirill Tkhai <tkhai@ya.ru>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] pid_namespace: allow opening pid_for_children before
+ init was created
+Message-ID: <aZsi8Z4Y2qqpdZGH@redhat.com>
+References: <20260220164559.2465466-1-ptikhomirov@virtuozzo.com>
+ <20260220164559.2465466-2-ptikhomirov@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBAAvxJ7TnANCvpKhJRutZctNCoS/550H
- JiZBJECU4S+ShDo4si7FMC6ArdNspJiXxiMNq02BtXCj30p7PYWbxcW5XGeEJ1vZt1ByY5Axfm
- XAwidMOb8AWG+m55nAAAA
-X-Change-ID: 20260221-fix_zero_wnd_fin-d1ba11cd3b07
-To: Eric Dumazet <edumazet@google.com>, 
- Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771763718; l=767;
- i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
- bh=Ad3HcaJiaO0xhdi6BjPXye6filJoTMtnWzaj36dECf4=;
- b=a4wxL2o8dJnNrLbg12N86bR+YJDyDe+zCosqzLSxm28QtxkJzW+Bo1FrcyO6/PiwAXsHp0+OL
- 6gYnbe9lCz7C8nbCQSPVf/kBkJ3JZtcsvrGfYFyj1xdBx4zcmeekK1T
-X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
- pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
-X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
- auth_id=641
-X-Original-From: Simon Baatz <gmbnomis@gmail.com>
-Reply-To: gmbnomis@gmail.com
+In-Reply-To: <20260220164559.2465466-2-ptikhomirov@virtuozzo.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Hi,
+Pavel,
 
-this series restores the ability to accept in‑sequence FIN packets 
-even when the advertised receive window is zero, and adds a 
-packetdrill test to guard the behavior.
+Your patch doesn't apply to Linus's tree.
 
-Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
----
-Simon Baatz (2):
-      tcp: re-enable acceptance of FIN packets when RWIN is 0
-      selftests/net: packetdrill: Verify acceptance of FIN packets when RWIN is 0
+and in any case... can you avoid read_lock(tasklist) in alloc_pid() ?
+This is really not good.
 
- net/ipv4/tcp_input.c                               |  7 +++++-
- .../net/packetdrill/tcp_rcv_zero_wnd_fin.pkt       | 27 ++++++++++++++++++++++
- 2 files changed, 33 insertions(+), 1 deletion(-)
----
-base-commit: d4f687fbbce45b5e88438e89b5e26c0c15847992
-change-id: 20260221-fix_zero_wnd_fin-d1ba11cd3b07
+Oleg.
 
-Best regards,
--- 
-Simon Baatz <gmbnomis@gmail.com>
-
+On 02/20, Pavel Tikhomirov wrote:
+>
+> This effectively gives us an ability to create the pid namespace init as
+> a child of the process (setns-ed to the pid namespace) different to the
+> process which created the pid namespace itself.
+> 
+> Original problem:
+> 
+> There is a cool set_tid feature in clone3() syscall, it allows you to
+> create process with desired pids on multiple pid namespace levels. Which
+> is useful to restore processes in CRIU for nested pid namespace case.
+> 
+> In nested container case we can potentially see this kind of pid/user
+> namespace tree:
+> 
+>                             Process
+>                           ┌─────────┐
+>     User NS0 ──▶ Pid NS0 ──▶ Pid p0 │
+>         │           │     │         │
+>         ▼           ▼     │         │
+>     User NS1 ──▶ Pid NS1 ──▶ Pid p1 │
+>         │           │     │         │
+>        ...         ...    │   ...   │
+>         │           │     │         │
+>         ▼           ▼     │         │
+>     User NSn ──▶ Pid NSn ──▶ Pid pn │
+>                           └─────────┘
+> 
+> So to create the "Process" and set pids {p0, p1, ... pn} for it on all
+> pid namespace levels we can use clone3() syscall set_tid feature, BUT
+> the syscall does not allow you to set pid on pid namespace levels you
+> don't have permission to. So basically you have to be in "User NS0" when
+> creating the "Process" to actually be able to set pids on all levels.
+> 
+> It is ok for almost any process, but with pid namespace init this does
+> not work, as currently we can only create pid namespace init and the pid
+> namespace itself simultaneously, so to make "Pid NSn" owned by "User
+> NSn" we have to be in the "User NSn".
+> 
+> We can't possibly be in "User NS0" and "User NSn" at the same time,
+> hence the problem.
+> 
+> Alternative solution:
+> 
+> Yes, for the case of pid namespace init we can use old and gold
+> /proc/sys/kernel/ns_last_pid interface on the levels lower than n. But
+> it is much more complicated and introduces tons of extra code to do. It
+> would be nice to make clone3() set_tid interface also aplicable to this
+> corner case.
+> 
+> Implementation:
+> 
+> Now when anyone can setns to the pid namespace before the creation of
+> init, and thus multiple processes can fork children to the pid
+> namespace, we enforce that the first process created is always the init,
+> and only allow other processes after the init passed the same steps as
+> were previously required to allow to do setns.
+> 
+> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> ---
+>  kernel/pid.c           | 10 +++++++++-
+>  kernel/pid_namespace.c |  9 ---------
+>  2 files changed, 9 insertions(+), 10 deletions(-)
+> 
+> diff --git a/kernel/pid.c b/kernel/pid.c
+> index a31771bc89c1..d549f08036ab 100644
+> --- a/kernel/pid.c
+> +++ b/kernel/pid.c
+> @@ -188,9 +188,15 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>  	pid->level = ns->level;
+>  
+>  	for (i = ns->level; i >= 0; i--) {
+> +		bool pidns_ready = true;
+>  		int tid = 0;
+>  		int pid_max = READ_ONCE(tmp->pid_max);
+>  
+> +		read_lock(&tasklist_lock);
+> +		if (!tmp->child_reaper)
+> +			pidns_ready = false;
+> +		read_unlock(&tasklist_lock);
+> +
+>  		if (set_tid_size) {
+>  			tid = set_tid[ns->level - i];
+>  
+> @@ -201,7 +207,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>  			 * Also fail if a PID != 1 is requested and
+>  			 * no PID 1 exists.
+>  			 */
+> -			if (tid != 1 && !tmp->child_reaper)
+> +			if (tid != 1 && !pidns_ready)
+>  				goto out_free;
+>  			retval = -EPERM;
+>  			if (!checkpoint_restore_ns_capable(tmp->user_ns))
+> @@ -221,6 +227,8 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>  			 */
+>  			if (nr == -ENOSPC)
+>  				nr = -EEXIST;
+> +		} else if (!pidns_ready && idr_get_cursor(&tmp->idr) != 0) {
+> +			nr = -EINVAL;
+>  		} else {
+>  			int pid_min = 1;
+>  			/*
+> diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+> index e48f5de41361..d36afc58ee1d 100644
+> --- a/kernel/pid_namespace.c
+> +++ b/kernel/pid_namespace.c
+> @@ -369,15 +369,6 @@ static struct ns_common *pidns_for_children_get(struct task_struct *task)
+>  	}
+>  	task_unlock(task);
+>  
+> -	if (ns) {
+> -		read_lock(&tasklist_lock);
+> -		if (!ns->child_reaper) {
+> -			put_pid_ns(ns);
+> -			ns = NULL;
+> -		}
+> -		read_unlock(&tasklist_lock);
+> -	}
+> -
+>  	return ns ? &ns->ns : NULL;
+>  }
+>  
+> -- 
+> 2.53.0
+> 
 
