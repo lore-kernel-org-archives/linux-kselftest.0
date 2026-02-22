@@ -1,142 +1,174 @@
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010023.outbound.protection.outlook.com [52.101.56.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B931C84D7
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 07:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE791D47B4;
+	Sun, 22 Feb 2026 08:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.23
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771744796; cv=pass; b=uj2kAR4+rt0+o0yggU9IUSbmfWmDYXhG4a2aiP+tSjZFYYQsJ6SpEgiPczmffChgt7d8wawTWHq0Qvfjvz59siIodAFUX3b2NNejRHmo5VDl5W/obbZB009Rt3X/nqmnyP96BSXQ9htHzgvvfHSX5ZVcd6QwrVO5XIxuphG6dYo=
+	t=1771750466; cv=fail; b=Fm1qUg5a+ut1kvFDy9Dj277BywwujP/qpvf0yMu+HCQS05HenmF3crOIQO0+uh+vPAMU+wixqj2cdcdekl2c56h8Nu3kgeFXpvNFGdcNzyNahq58Yjs3Vfj5MTQ8pbkV0UycY4nxxX6PU4OUQGu/Yt1t/5nOLcWe0GiOrii9Yws=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771744796; c=relaxed/simple;
-	bh=0lDfK3AuaNxxPB1Mx5JPD44YULX91cix/sE9XtEee8o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OdobE2f49SmPRRSGPjrUB2uGZU9+5EIYVxLPKfWcrPZtcBO93acWtv9mUcbr4owAudTUvK4e0utsD8lppXfDmsoMOYJk8xkQTgeVBxFnlFCruAj1e2aKIZkaXKX88sUUuJvANJjBuxguomLZbuwgoTGpWBdOFJ0/lKFdRqdHpSg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iwtvKFVx; arc=pass smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771750466; c=relaxed/simple;
+	bh=cK4GEciBCZUS6d6UZSWwthhyp349XW9rZsBHJYz5xq8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Sc6nKVHnBIJBwgQITMfaU5yMlEhEH3ITZQS6IaQvIU8wb5O+2WCo5KAQEtPUov27aD2A5h2hgntREXhUCD6ISJFv5hMsOLuSlsGf1ewWdsIbsBiWNyzOxqQydwZV/xCA3DASneZ2u/44G2sfI/WnXLWgfwzbTZYDgi5Eo604Nyg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=kIPCxwwZ; arc=fail smtp.client-ip=52.101.56.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iwtvKFVx"
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-56739adfa1aso2531001e0c.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Feb 2026 23:19:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771744794; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BPxDz7reVrnRkdj+cNxypE+mL31F0akCmPf0FDhNAQgl9saFgMXlXslssuVAkJbBV/
-         zMgNIzwD6CbNx0Lv9L2pJwf8Ap0d5JW3fL9j5TJi1VFhY6wVZ09iooLJbOY6KdqeBuva
-         mbup1Y5KiBuCgZTeWhSTBpzjiVvUUHUS/AqE6Y+e+RIStr9nI2G8HAvbMvBZSDbQsY/h
-         fsOV8qAvTN/TaHPc6DZhls3nqw8n5wsLwe9rpGzVDR6btel3H8LYmlSuJ9F63fvoEvBT
-         U25but8gsyhZ0OFj7KenSvTAGa3k++b8JXcAfNRJpCy16/eOeMtnw0paZWN5TO14S9/a
-         jdfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OILCq3HcP44ucOZfdh81GCluvZoTsk6wk990N+3C0dA=;
-        fh=/AyWXPvfE2lRMc6t0vnmpnj83Nk17qluprKPu528Qpk=;
-        b=i6275cbznTHEXXtGfR5kmBDO0cL+fzXS0lyw89m0lUm6+jC3wSwRplbGKzQVItl7zc
-         BqX1Q6bpYX/rYtbaHewbQsyyV9F8eTbmh+NJWd+3jVra0jCYJXt7KZ8NP9Jk3D9CSIEm
-         K8Gtnk4ZqChZSgP77ATpQ1baKraieV3YBQYnf5AZ0rsKxyJTHGzh50+0fXA8gy0sKb7y
-         PcgAnwui8PunOc+s1G7Trp0rybcOPO/yYt8urcUKSIXwN1T9yckQOgM1GnLpBh2ikXgP
-         t/kZDo2MUvLtR8tMM+sR5cTKpKCCYeHB3T2yQd88XnN0pEnzLZGiJ3kdZOJQSj0IDttB
-         DsSw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771744794; x=1772349594; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OILCq3HcP44ucOZfdh81GCluvZoTsk6wk990N+3C0dA=;
-        b=iwtvKFVxJY411/9ogEeNuKuIL+swHngOLh4yrtBI6Td3Zvrhz9GAxS6djLXc2BeeOf
-         nwptn4OPwALolDkNO4yfUKWVGz6BTUQ/ZjsrhDkQelUcEp3u211ABAUwyaGfWUa3xyIl
-         8TncN5e/ul82aK3psRyH0mTUkoioWE7HxKEG5Tl+V4ZPPo1duell20yNXLiz/uGQbSYH
-         7yGlXL3++eZgdVawMupcKZlupPjYixQ8Rl23W+szYf64S6Jow0ieM/ciHxBMW07CFwOu
-         mPqgTy21kVuM+pHA2DPgrWsLpiGUpwbZYMi/pXNbvGHP1UIGZhLEeFn1TM96mjwZUN8t
-         bpvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771744794; x=1772349594;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OILCq3HcP44ucOZfdh81GCluvZoTsk6wk990N+3C0dA=;
-        b=LLDRDrGX/Owtf03/ju4ycrQYdjv1Gq7ukNoutkyF8uJe8sJDBprucKNgZq8crWFg+m
-         6XLyP/iZ/grEKy/rzmod3w3iRVHnetzkYGjfkcpYSa17diz9xee+tsiXya3aZUtK1382
-         1526cnuHiNK5gpH3I+b42V3qCOpcb9Y6mcdJ76EZ9VqtXTmrHlsQNJ/RYaKJX8emLO5l
-         LknT7YxlzctO/X2arqkTAYrVI/jWOiSVt4iAG9R9IfnRm3h++Kufh4PPvLC1ocpouQ1Q
-         NeSx2j9igMoB1YxxEOmhZQtPcxMPMcfpkGW4I7IaNZ4nEybbSqniWOakjb0bR4+xAxzM
-         5ZFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUSdDridJVE0+HGFFD8tFc06pSuF8yaRYFHvGew2zsEsHS5kmxpPItMszZYp5MOKCwR291xpyZJLzxkb9HDwjw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxuoj+PLee/D9PpjqBEl1C0nCtxkuBcq6g9stNlz6N59ARgjy4l
-	cLIxse2vNYJivX7WBi+2wKUG1W8LGxZDKoxGjVd7Id6PcGXB8YRdGlk+K9cK8wE0TWd33q/Suld
-	fcbqway7z2/uvdZ7Mviz/YxvoillIIBZVQw==
-X-Gm-Gg: AZuq6aJVSI9YHltQeKCg6gYZO44s/UGAa7OFPd9EBPoYdUK0S6gU4TRaMOPqqu4bOpW
-	mt6P1UEoDwFjv5++YBlEcSUD/ab5hMGvG/5PsqAeaAt3nmUiqut0s8DyCweIRUJuWfJASOaOw5i
-	ApiZhhzgfvbdjB42TR4NQAmG5X8yJKFoaEop1GrTcPWUMN/d8OqKi3a4v5HGeJ0psUJOjumcRNi
-	ACTmZToWNBdGeJwggrkYySgcfwIX7IapHed77t14BZdjNq7rUUpmSI2LltiFeVWavMa/KYzCjE/
-	zi5XkiLnbglavCQnNSIGbFzgxgVp0UTF3CqvTIyjrGdw40IfJlahxA==
-X-Received: by 2002:a05:6123:2c6:b0:55a:ab0d:bf74 with SMTP id
- 71dfb90a1353d-568e489e04bmr2702083e0c.13.1771744793575; Sat, 21 Feb 2026
- 23:19:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kIPCxwwZ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LrP7EoZbnU1S+gcXlR7fOdhUJouvgm1EQ2Eb3oJiAAuqxeNo7ZFGn/PxCq7KYThWg+3IHteSopIl4BIuHHwHM8UtwXRbcLir0OvEL0VVyq99matGdqCs0sg7xTVSMOPZXemK7cC7qS8ZjwiqYGcZjtWB13VSKJ04tNmAUUokB5YA1zjBmTTap6CakXx+EnknLfpAEe7Vq9siUQXpIK/xwUZvB65JspNq24WxDgHUenaIn3uDVQKzKc+2yWmg0ccc99svw1m/VNjvuBTATIPcdYcfTTGFkawo8g+lnMj/PBksqufd7+NtQd0X9zJJh7iyjJ4zgye3SiZIsQgUGD1vdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vuhh1rcfB7jYeB4M5lKj19ebBUQtHyTzumtIMpivkbI=;
+ b=Qg9NfTxisdjHvqM3C4km9XwNg6FOwnc/ONeJZ1glEcBKhgNpCqgeP2bSL84HkCEkNg6cHLwXY6wFvjV10PyJe1iEKdCD9vqtGD1kf9h2zPhmP3OrorOcrZj3cdnm2HkCKgchtMAjTit4ly7CcaVBS7P0FLJ4QsC2xGxkNbLqWWlblVRGGvsV7Ki0deUm3S/GNZRgG09pfimDMl/TArs+2eHpSz13Fo4W+rx6f2X/hmXenvA0sBIrRVqJicukY1PTOmJ3NJp4yGlHAqy/JRKhrwNr5PK+o0+VEwYv2OgTg6UE+7NHa06JioP9uaV8gHSjkSdJi6cI58ESoK/YajBSKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vuhh1rcfB7jYeB4M5lKj19ebBUQtHyTzumtIMpivkbI=;
+ b=kIPCxwwZUaRWR0TRTI0MCs5U+Z7aknTy+FYPXpAZtGtQZ7eKk3q02yAg/RJUh5AvcoHmQyTdkZBvC7bqIOi1tQPnd38ledLCh80Vu3Bv3uHeGDdTdJlIyxEJbymRTNG+THx1+wHEiRrsIERoWO6b0RB5Zz8yreB34ky25fJVOmKnqFhIH15DK19wqj7wLHvLcJd+xWhjXVZH50II5ghGFiK+4pHYqCHVzPeMK6bkxb4sYhYhHdWM6uH6Rd1AOuBrERmS/qkki/MzaFeI4ev7LREseJUw0cs+aSMPcQFCraVCRdNQmnS+SusQAQoQpmE2t+C1kGeNVJIJEeFy/wh+8w==
+Received: from BYAPR06CA0049.namprd06.prod.outlook.com (2603:10b6:a03:14b::26)
+ by DS5PPF1ADAD2878.namprd12.prod.outlook.com (2603:10b6:f:fc00::646) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.13; Sun, 22 Feb
+ 2026 08:54:20 +0000
+Received: from SJ1PEPF00001CE4.namprd03.prod.outlook.com
+ (2603:10b6:a03:14b:cafe::f1) by BYAPR06CA0049.outlook.office365.com
+ (2603:10b6:a03:14b::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.17 via Frontend Transport; Sun,
+ 22 Feb 2026 08:54:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF00001CE4.mail.protection.outlook.com (10.167.242.20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9632.12 via Frontend Transport; Sun, 22 Feb 2026 08:54:18 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 22 Feb
+ 2026 00:54:09 -0800
+Received: from dev-r-vrt-155.mtr.labs.mlnx (10.126.231.35) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Sun, 22 Feb 2026 00:54:05 -0800
+From: Danielle Ratson <danieller@nvidia.com>
+To: <netdev@vger.kernel.org>
+CC: <razor@blackwall.org>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <bridge@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, <idosch@nvidia.com>, <petrm@nvidia.com>,
+	Danielle Ratson <danieller@nvidia.com>
+Subject: [PATCH net 0/2] bridge: Check relevant options in VLAN range grouping
+Date: Sun, 22 Feb 2026 10:53:36 +0200
+Message-ID: <20260222085338.3143823-1-danieller@nvidia.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-sb5Mpk3ts1oVUHtg@mail.gmail.com>
- <20260221234553.2024832-1-safinaskar@gmail.com>
-In-Reply-To: <20260221234553.2024832-1-safinaskar@gmail.com>
-From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
-Date: Sun, 22 Feb 2026 13:19:42 +0600
-X-Gm-Features: AaiRm51yAd7WZH0JTtET-y37usKeLDtT6X5Vgs22uOg_jqenzkdmMaQOnOQPf2k
-Message-ID: <CAFfO_h4dNydbmKSTP8uD9X6ouEZTyJUGoTBXrEHWeHtD1B=p5w@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
-To: Askar Safin <safinaskar@gmail.com>
-Cc: ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
-	linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, v9fs@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE4:EE_|DS5PPF1ADAD2878:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1db30aeb-c86d-4a4c-895a-08de71eff6ce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?4HyMJifun8CVHUYqUJDEPYQxtjqQYtz1IO4q6hr0YM0SzWMKTN3Belm+ZbWA?=
+ =?us-ascii?Q?TiUy++S6bhNZzeWiFch/yDuWSWz2ComtqhFPHBLx/CMeLqVnY9T3xynWCA/D?=
+ =?us-ascii?Q?MIC7XrIB9ND/7Uxwvz1zlh66V7u6DU2Cgp17Q6gcjIK0qzwws7RUTkL+LfRS?=
+ =?us-ascii?Q?teniYN3N0AkNhWJ+4kklihkm6SIs0G98m35vgegzCRMAT6xvrNZqGivQrkTs?=
+ =?us-ascii?Q?6Eo7b/Xb1y4+O21fFmNwJhUUeO4w7KXjahcaePtu0Qs/Fjr0HDNJcV9s/+5i?=
+ =?us-ascii?Q?oWgWxNJQbE8UrieflEo5URBKzQYNlu6rB5pf2ROkAMSzVK8zYYEr5pp/vRWc?=
+ =?us-ascii?Q?vyoB7cBkfHIa/Leyl22vc+3UO2e7buVie8JXS4uT2v7nN5+XSJONWrNU6GhG?=
+ =?us-ascii?Q?GZ0piIVuocSB45Khl0AI3wl8OF9tQiA++6Aqu9bpoEru3Yq9sg0a6yzkoTke?=
+ =?us-ascii?Q?YRybVcca1/HeMEa2Jkg5zUn1y1Zd1ETjNHPCgDf77U9dcA2Z2tnc3X+jpf63?=
+ =?us-ascii?Q?A9EwszJh7bhTI8/xYWqQke7mGv9BBDWGTAU9PO3dsp60P64Lq0ZThjvkbww/?=
+ =?us-ascii?Q?QLBTQH7joVEaGxtMt4VDKzhNf3QS7iNVfo+I/ZP2PyLypkjsBinI5fER2+r2?=
+ =?us-ascii?Q?w76na0J/YZBXGV8/7qB01rsz0gNvgaRIsLIeRvYfLYEUDYxlc2l0M1JH6Lev?=
+ =?us-ascii?Q?/yrCUPLLIG/sVkwLQTROLo3FVBE4EYBX2NBfNsTN0N9rhVcmYEfUazsh7QyG?=
+ =?us-ascii?Q?4vK4m7/KhOlFP87jrHFPNOnvP/yBRC9KvsKuxWEcNX7JqzZ7r8nL1ETxPFJa?=
+ =?us-ascii?Q?6V9tMcq1BSzsDgZcOlWUrwztCxAzdPg9i9GhL8Gz2TBWioTVpF9uDIkTxJpU?=
+ =?us-ascii?Q?V0B0/GW+xMKs3k/uMRKMtB5spcmpcXRDsFwGXlLXe9aZNzvhKn0/pdYmR4MB?=
+ =?us-ascii?Q?ZwF0E+B78HyPhzfmY5NDa7YwF6+fjfkvbVoIJvsV1+bRYm3qNZty/FdnRxvK?=
+ =?us-ascii?Q?iuyVH05lA2F6RBb0hrqSRGiXW6Bn0OLvxAFs3qkK9u2slmVJKVr4zaxN6uFV?=
+ =?us-ascii?Q?7eZvtV+9gHUidGPHV2qPAk6mrZjyMwfGnSQ+UQK/hCn4o/9xkpq7UEAb7aOp?=
+ =?us-ascii?Q?nTNQRU5SVtMvutPfduGKP2C6q5bgIM1aR3xGZT3c9wfrNNx/GNWpe0TPXt+7?=
+ =?us-ascii?Q?kz3nWePm1oCTdBZhebBvUC925jkFW9MB4Zcg8wRYvus8XKCD7a5+/JOQUGMD?=
+ =?us-ascii?Q?TfpjEB3NdxbkeDJP8Hi3dWvrLUG82GF00G+v9caPTMUG12fGVx2GBSlvoFFp?=
+ =?us-ascii?Q?2Q+zvzxLSOjB65JxWjbftgESH4IqUmTHyeGDqqxznxhdLUNrUs8CWqWUbixN?=
+ =?us-ascii?Q?eKSyRZAkyHfxhooIeeMqSl5jK/NtcCk0Xbzib1ZMjH0dyt3OPYvspcMMj4jk?=
+ =?us-ascii?Q?akCaN+T81orwg5H6aDpDNJ1dTh+lo0WWncOjzSKMCLvPfOE2QMxcGvBzLB9b?=
+ =?us-ascii?Q?eA5SWGF7pfJo2rsoEDW5PBkp0AwVyYM91EO0RZFXlpSNOSU7li4AuLqlfWaR?=
+ =?us-ascii?Q?FbGOJpAWTkMIc+P+qkezdTazKd3qrxbtDQxcsla/tG3XPLDAlV2pDy6UdSDR?=
+ =?us-ascii?Q?asBpTenIIOkvFEvERs5xpgNaDUnOqvotQycewigGLgWWC24cbmIaPt2AvOhQ?=
+ =?us-ascii?Q?yI4gdw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	D2ZBP2qawOgQvPVf0FA38dWZuKPqOS99MmVGa/+pcyCRDSrdx/ZHMpJGxYt1ndXQ0qkKIGbeAnPVzcm47LApJvJIsZ7Yv0sZA4GCOTFjprSsF4WopRKTxw2kAnA1r/i50/JNdPpVgFbevYtDFuzQwrukvt3z3ImbSGaQ8N7BU4aAy+rkfpr5f/n+H4vMgbdVSeJtzfNe7hq7afpCE5wJIDVYSYFmxojDSsBqCqjoSfAfe55NgknXaEMsXBOEtjNOrurCPsE2kGsjiiOxwuIxxK3HV7or/PJ74oTSqTe9fshew1QJw8fkDeX/zDlMy+uw2y7m/PiucLkX26Ao6ggsi92Uxos43k3kjLu4XCqNtV7hA1eJyZhob5E1+KQ9259k1D5e2au2FTkSWvLSH7MDCiNxQfESoUqag3JmKA/HgS8myaMpIun2jS1k9v0E8Rf7
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2026 08:54:18.4783
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1db30aeb-c86d-4a4c-895a-08de71eff6ce
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE4.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPF1ADAD2878
 
-On Sun, Feb 22, 2026 at 5:46=E2=80=AFAM Askar Safin <safinaskar@gmail.com> =
-wrote:
->
-> Dorjoy Chowdhury <dorjoychy111@gmail.com>:
-> > I am not sure if my patch series made it properly to the mailing
-> > lists. https://lore.kernel.org/linux-fsdevel/  is showing a broken
-> > series, only the 2/4, 3/4, 4/4 and I don't see cover-letter or 1/4.
-> > The patch series does have a big cc list (what I got from
-> > get_maintainers.pl excluding commit-signers) and I used git send-email
-> > to send to everyone. It's also showing properly in my gmail inbox. Is
-> > it just the website that's not showing it properly? Should I prune the
-> > cc list and resend? is there any limitations to sending patches to
-> > mailing lists with many cc-s via gmail?
->
-> I see all 5 emails on
-> https://lore.kernel.org/linux-fsdevel/CAFfO_h7TJbB_170eoeobuanDKa2A+64o7-=
-sb5Mpk3ts1oVUHtg@mail.gmail.com/T/#t .
->
+The br_vlan_opts_eq_range() function determines if consecutive VLANs can
+be grouped together in a range for compact netlink notifications. It
+currently checks state, tunnel info, and multicast router configuration,
+but misses two categories of per-VLAN options that affect the output:
+1. User-visible priv_flags (neigh_suppress, mcast_enabled)
+2. Port multicast context options (mcast_max_groups, mcast_n_groups)
 
-Yes, indeed. They showed up after a while.
+When VLANs have different settings for these options, they are incorrectly
+grouped into ranges, causing netlink notifications to report only one
+VLAN's settings for the entire range.
 
-> So this was some temporary problem on lore.kernel.org .
->
-> Sometimes gmail indeed rejects mails if you try to send too many emails
-> to too many people. So I suggest adding "--batch-size=3D1 --relogin-delay=
-=3D20"
-> to your send-email invocation. I hope this will make probability of
-> rejection by gmail less. I usually add these flags.
->
+Fix by checking priv_flags equality, but only for flags that affect netlink
+output (BR_VLFLAG_NEIGH_SUPPRESS_ENABLED and BR_VLFLAG_MCAST_ENABLED),
+and comparing multicast context options (mcast_max_groups, mcast_n_groups).
 
-Understood. I did not know about these flags.
+Add a test with four test cases for each option, to ensure that VLANs with
+different values are not grouped into ranges and VLANs with matching
+values are properly grouped together.
 
-> If you still expirence some problems with gmail, then you may apply
-> for linux.dev email (go to linux.dev). They are free for Linux contributo=
-rs.
->
+Patchset overview:
+Patch #1: fix
+Patch #2: test
 
-Alright.
+Danielle Ratson (2):
+  bridge: Check relevant per-VLAN options in VLAN range grouping
+  selftests: net: Add bridge VLAN range grouping tests
 
-Thank you!
+ net/bridge/br_private.h                       |  10 +
+ net/bridge/br_vlan_options.c                  |  26 ++-
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../testing/selftests/net/bridge_vlan_dump.sh | 203 ++++++++++++++++++
+ 4 files changed, 237 insertions(+), 3 deletions(-)
+ create mode 100755 tools/testing/selftests/net/bridge_vlan_dump.sh
 
-Regards,
-Dorjoy
+-- 
+2.51.0
+
