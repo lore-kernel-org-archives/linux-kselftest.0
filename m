@@ -1,110 +1,201 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C9E330317
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 17:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65D3330B32
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 17:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771866917; cv=none; b=df9F2ox8CYiNt0OSxSKe2MVLj6rX86DIbN37If1yybfjjZ30ZM9IMU+A1R/sB7cfGsV5zgVKPkM0gRH4HZYA6Hs6kOP0/AsbymERV++ljxvcWDKTJnPcEuxnkbp8SQV4tXEW6Y1Gbv7uaJtAlPOB+uOUjke/RDjQa+mI5853hoo=
+	t=1771867002; cv=none; b=ScRd+3rMyQPNj8NbMTMk4jIIQHBc+NkjsVjQIqz/eWZ6uuoJJd+d3y70xyMEEzVs9S5QtJ2rHavn3UgSO5n3qA5vEuJpeduip1LoqmXDofVewGy8ql6KfrrFY+FAkpJlZ07gE06UejCTf6kFHS9p2dQF+hnTF8Y0CiHRr4rQV9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771866917; c=relaxed/simple;
-	bh=HKwLbvFmJGYEGnpPr7MOM6oLTlNTOu8bfAhYYTRO13E=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jSpHCfQbwzrobqar9zaOP0qRN70cEx7ZH7nbsUVZO388KRNOdnZ+5sD6FLkmF3S8jhJb41w4FCJqgfNc+MSIgA8S0fTLZj6OHAcuYAkj+Lk3g4Wk5gz5Q00SRsW6oSHX27AtgfxndAJz7Jt9EO2035zB8vOKCe9DVj5JEQy0APY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WgAGk0Bk; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1771867002; c=relaxed/simple;
+	bh=BzKwdlyoAEssFRnM96qoS8PG4Ad9xyev/bf3EqhCekU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KBOYa3nbT49A6RyhBgGGK0QtK94Td/FqCiz7VYVg2VF0WvDulMfu3VlOC5V755iVTzgnvzT+A8ki0yFEr7KRktyF1pAm9ft/I4gR0VJ8zUXdJlwmIQKiVBRWoXx0FlwHHZ4cHf9SQbAAUZVriv8/DoatvVvGHF7eJwLDs8pUVvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L2RRAXOP; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WgAGk0Bk"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2aadeb3dee4so378338725ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 09:15:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L2RRAXOP"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4806f3fc50bso52259375e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 09:16:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771866915; x=1772471715; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qB/D8oykiAjYH+aojy11MUffmbGAGIdMwqBS+z3LBGk=;
-        b=WgAGk0Bk55uiejxu96L2NKrxY/yQztTYJ8SjfeOjAsYB7UT2PY82EebeMu4INfNuQ8
-         24F1frhdW0Vr57JI/tAe/cCk0U/dEit9Va6WGmeKLxVZAR3pdx3cBZK3r0NM4VJGwqJJ
-         Szq3x6FoggeTgB5m33sAm3rxMwMY+ODR9AMGY+KcITBlHxqT5m0w0O2VGEdEmn179oRm
-         HADjm7dAr5CwfxOTRwl9izLomLx+v68xPhWio0rzKwRLP1UGNWLMxmJRsnfJESaj7yor
-         6DXxIHFxKS+jZ8c3r45dt/NP0itUtxwefT4XNaLp+WqGmprewC88ZCM4mSbtIAzNJCnf
-         DyOA==
+        d=gmail.com; s=20230601; t=1771866999; x=1772471799; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jblqPpeSoB/tKv9xpHVL5Qn7LqWC4JDIrbkAXoIweZ4=;
+        b=L2RRAXOPg0Z6gKj6fpDDFKPt7Pguj0GyLAHd1t8SOGIzaQIdJqebPfRqrwjL9M42iu
+         psliNGDQdS9R1IQFlB8hdr6b66I5hWSVkH8zNak7ojXt84mHFv0FPqABVQn6TaIlpfVK
+         vbWmRyv86u2GTkU80YDNylVAU+AQlwSJg/NaocSLzmDD4eUIDcODOvPW/F4dvQdrbXUo
+         Ho+3w/jIg+97Oc3+AgblNg9me0HShQoHzHNbDPRlZgoy4eohMjKE1KK9RsLnN/r51GBa
+         ZfwKCi49jgQAD5mv+cKdIsWInjjUxl6cNxVZihXw8rsuvdcHvNDD0xLHaYv4ytOYRfHB
+         F+Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771866915; x=1772471715;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qB/D8oykiAjYH+aojy11MUffmbGAGIdMwqBS+z3LBGk=;
-        b=Xp51QGEg/tWzOkFFMSIX4/6fZuarR4HEcLBLxKBjjCvoUfH9RCPVbm1kUDm/Ce870N
-         teC5VzNtJ8HFdoBH38SJlJUbXK6ggSmipplW9JQQwbUh0sSJgOCjbTnGrq+Hjg/c1o4Y
-         hnNm7neqyc8Aps0NSmpmaSCNSrDRyv0kSIselcrKziEgkPxh6mTCfHy27ynzepsbAsK1
-         8HcxiASCP1Kty1cc7YN6D+LwRo6Ce5+VE0sh1XGwMOoxAKCmOgfB8NkM0l1J4QckhwMK
-         SOJpjRGJ8VeyCcAZJDy6IaOgZji+FzK6L4UMu+E6XPPdMHvG2/MrDs4jeTn0mOeuH6jW
-         2sMA==
-X-Forwarded-Encrypted: i=1; AJvYcCUYRVjDb+lTM9dT8YOJqr/ER8K0W0EecacRGjZWNV7/NFSWe+FGCQ5P/+sdPq0C8Bvo9te+uZJNg544JWKEa5I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsDJSCg2esvQEK580JDAi890df97kCwoJ+vCVxt0DMEaYna+nh
-	RFfxAmJw8Tn74JpZsqvtiq4jvHZMlO2nN6HsCL78KcrfdTNF2kBBRTz78Dvt54NEhbD/KaA0LPB
-	qcdnXCA==
-X-Received: from plpw17.prod.google.com ([2002:a17:902:9a91:b0:2a0:c485:7eed])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:b90:b0:2a9:411a:c5c6
- with SMTP id d9443c01a7336-2ad74511698mr75532445ad.39.1771866915160; Mon, 23
- Feb 2026 09:15:15 -0800 (PST)
-Date: Mon, 23 Feb 2026 09:15:13 -0800
-In-Reply-To: <aZyE4zvPtujZ4-6X@tycho.pizza>
+        d=1e100.net; s=20230601; t=1771866999; x=1772471799;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jblqPpeSoB/tKv9xpHVL5Qn7LqWC4JDIrbkAXoIweZ4=;
+        b=nQXo841xG2B+LHzoZVcdzQDYX3jXMWcaNaPtSUw3tbXBwRrNOSTqWXIY7/UMDWQ+6u
+         ly1tJxyJXJRgrwiUtCYwKTQtwTKDQIZEg/cEkZy7OUZ1s38BtaMg3PX56CGuIN26MLCt
+         XzuuN8M32DSZ4pjHzcNlxCbgfthvWdKZLuV+o5NGVMoxu1m2z1eV5n4TRKE8F+Q5PJ4o
+         vTmxhoEauYURxVzxplaC10qh/7dELo5EVqnl3T3S5R5i6mpYBHZnClPFTMhn8SiYZF64
+         kO+ikgyhcubjkJBAybRYbm9JqWTnyiut+ftWqUc64Ij0Agdq/iUHAxIUqcWw/BvNFE9O
+         Rf9g==
+X-Forwarded-Encrypted: i=1; AJvYcCXEVWRU7HNWCSWsUjaJMQ8uEAQFHmkJ8cOb4KApPWgdqaypwkBZ2LEVI0YQHJBe0O1E/ZlzWDy7ZU2Tuz4/93I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yznyyfg7wHk2ixlDYEAKlMSYpKl1NxxPfw+xkN1nL8v8DlBvV5t
+	S5UhxdY1zjONBmYiLz5YrRj4VQgpnHVanxatHUZGMrZ9EjeH+2r6v+L9eXDOkg==
+X-Gm-Gg: AZuq6aIQIB3fkEUyAbIsQwEiC70LgFxFbk/4cSHiBghoQIflDptsqk0AYMiRXnkKPMk
+	0Qt81ofX16cWBilZydIrTNEl0fRFPQHBfepeN4Dqkzapkhm52uge/aDQOzOtuIrxI8exFsH9p+I
+	tkY305aWaP5zf4Ham2EIgZ3NxSB39JHk6hnN1TpCyKiFQO6WbvxJf5bJt3GXNROybygSaDJMUFs
+	MnJvk/R2582j56UdaA0oxGY85qgmIW7V4aC//M1Wgy8mk0C1t0Lc7CgKQDThbY5Ty+WfOmv6jjg
+	+4CmhFgimKxcjcUPfp+4Ekq1lma3zEObOKRjQWQS9aWfbAomlK863tUkqatv6z7iMVBwNJa+BKF
+	P00yKXhE9KqnZ2Wq6xg8VLWJ6Voi+pd02KMOsTUg/nkf4R4hOF4cH3bGzPQAw3yYzu2OOLtki7v
+	HtXz4tFMhhhovbLtjKZL0vggHpBwYfl3CPBXVXI11inUm5bYsj+2Mup2Y0HETQQQ==
+X-Received: by 2002:a05:600c:848e:b0:483:71f7:2797 with SMTP id 5b1f17b1804b1-483a9608834mr171406645e9.14.1771866998812;
+        Mon, 23 Feb 2026 09:16:38 -0800 (PST)
+Received: from gandalf.schnuecks.de (p5b2e2ef5.dip0.t-ipconnect.de. [91.46.46.245])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a4e8d392sm248277725e9.2.2026.02.23.09.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Feb 2026 09:16:38 -0800 (PST)
+Received: by gandalf.schnuecks.de (Postfix, from userid 500)
+	id 844232FD9CF7; Mon, 23 Feb 2026 18:16:37 +0100 (CET)
+Date: Mon, 23 Feb 2026 18:16:37 +0100
+From: Simon Baatz <gmbnomis@gmail.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 1/2] tcp: re-enable acceptance of FIN packets when
+ RWIN is 0
+Message-ID: <aZyLdQCaib1d4qDU@gandalf.schnuecks.de>
+References: <20260222-fix_zero_wnd_fin-v1-0-5f4034952f3c@gmail.com>
+ <20260222-fix_zero_wnd_fin-v1-1-5f4034952f3c@gmail.com>
+ <CANn89iK5Kk2D-zMiw_2syb9OdmkKdgAA7aGfi8QNZ9XR4=CfvA@mail.gmail.com>
+ <CANn89iKBjfaoWaUh6Ar2Lj-MJODywLpHzbQif=aa8q387qutZA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260223162900.772669-1-tycho@kernel.org> <20260223162900.772669-3-tycho@kernel.org>
- <aZyCEBo07EHw2Prk@google.com> <aZyE4zvPtujZ4-6X@tycho.pizza>
-Message-ID: <aZyLIWtffvEnmtYh@google.com>
-Subject: Re: [PATCH 2/4] selftests/kvm: check that SEV-ES VMs are allowed in
- SEV-SNP mode
-From: Sean Christopherson <seanjc@google.com>
-To: Tycho Andersen <tycho@kernel.org>
-Cc: Ashish Kalra <ashish.kalra@amd.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, linux-crypto@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89iKBjfaoWaUh6Ar2Lj-MJODywLpHzbQif=aa8q387qutZA@mail.gmail.com>
 
-On Mon, Feb 23, 2026, Tycho Andersen wrote:
-> > > +	/*
-> > > +	 * In some cases when SEV-SNP is enabled, firmware disallows starting
-> > > +	 * an SEV-ES VM. When SEV-SNP is enabled try to launch an SEV-ES, and
-> > > +	 * check the underlying firmware error for this case.
-> > > +	 */
-> > > +	vm = vm_sev_create_with_one_vcpu(KVM_X86_SEV_ES_VM, guest_sev_es_code,
-> > > +					 &vcpu);
-> > 
-> > If there's a legimate reason why an SEV-ES VM can't be created, then that needs
-> > to be explicitly enumerated in some way by the kernel.  E.g. is this due to lack
-> > of ASIDs due to CipherTextHiding or something?
-> 
-> Newer firmware that fixes CVE-2025-48514 won't allow SEV-ES VMs to be
-> started with SNP enabled, there is a footnote (2) about it here:
-> 
-> https://www.amd.com/en/resources/product-security/bulletin/amd-sb-3023.html
-> 
-> Probably should have included this in the patch, sorry.
-> 
-> > Throwing a noodle to see if it sticks is not an option.
-> 
-> Sure, we could do some firmware version test to see if it's fixed
-> instead? Or do this same test in the kernel and export that as an
-> ioctl?
+Hi Eric,
 
-Uh, no idea what would be ideal, but there absolutely needs to be some way to
-communicate lack of effective SEV-ES support to userspace, and in a way that
-doesn't break userspace.
+On Mon, Feb 23, 2026 at 09:36:38AM +0100, Eric Dumazet wrote:
+> On Mon, Feb 23, 2026 at 9:01???AM Eric Dumazet <edumazet@google.com> wrote:
+> ...
+> > >
+> > > Fixes: 9ca48d616ed7 ("tcp: do not accept packets beyond window")
+> >
+> > OK, but this commit is fine ? It seems the issue is coming from buggy peers ?
 
-Hrm, I think we also neglected to communicate when SEV and SEV-ES are effectively
-unusable, e.g. due to CipherTextHiding, so maybe we can kill two birds with one
-stone?  IIRC, we didn't bother enumerating the limitation with CipherTextHiding
-because making SEV-ES unusable would require a deliberate act from the admin.
+That "Fixes" tag is a technicality, I did not want to imply that the
+commit is broken: 9ca48d616ed7 (which is RFC compliant) turns the
+workaround (which isn't RFC compliant) 2bd99aef1b19 ("tcp:
+accept bare FIN packets under memory pressure") into dead code.
 
-"Update firmware" is also an deliberate act, but the side effect of SEV-ES being
-disabled, not so much.
+If we still need that workaround, technically, this is a regression
+caused by 9ca48d616ed7.  If not, I am perfectly happy to propose a
+commit that removes the dead code.
+
+> > Eventually the receive queue would be drained by the application, the
+> > peer would retransmit
+> > this FIN, and it would be accepted.
+
+If I understand the problem correctly, the workaround was introduced
+to break a FIN/ACK loop because the broken peer (macOS) did not use
+exponential backoff in that scenario.  So yes, it would be accepted,
+but until then we and the peer would ping-pong FIN/ACKs.
+
+But as said, if we don't need the workaround I can submit a patch to
+remove it.
+
+> ...
+> > > +       reason = tcp_sequence(sk, TCP_SKB_CB(skb)->seq,
+> > > +                             TCP_SKB_CB(skb)->end_seq - th->fin);
+> >
+> > I don't think this is the right fix. Basically it says that FIN do not
+> > count, but TCP RFC says otherwise.
+
+We can be more specific and only allow that if we have a zero window. 
+(I thought I would not hurt much to accept that FIN which does not
+take up real space)
+
+> > It also adds code in TCP fast path.
+
+Hmm, the call site for tcp_validate_incoming() in
+tcp_rcv_established() is:
+
+	/*
+	 *	Standard slow path.
+	 */
+validate:
+	if (!tcp_validate_incoming(sk, skb, th, 1))
+		return;
+
+
+Am I missing something?
+
+ 
+> We can keep fast path unchanged with this variant.
+> 
+> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> index e7b41abb82aad33d8cab4fcfa989cc4771149b41..156c92450f3ed00357aff2ef3e586b83f3cecb5e
+> 100644
+> --- a/net/ipv4/tcp_input.c
+> +++ b/net/ipv4/tcp_input.c
+> @@ -4858,15 +4858,24 @@ static enum skb_drop_reason
+> tcp_disordered_ack_check(const struct sock *sk,
+>   */
+> 
+>  static enum skb_drop_reason tcp_sequence(const struct sock *sk,
+> -                                        u32 seq, u32 end_seq)
+> +                                        u32 seq, u32 end_seq,
+> +                                        const struct tcphdr *th)
+>  {
+>         const struct tcp_sock *tp = tcp_sk(sk);
+> +       u32 seq_limit;
+> 
+>         if (before(end_seq, tp->rcv_wup))
+>                 return SKB_DROP_REASON_TCP_OLD_SEQUENCE;
+> 
+> -       if (after(end_seq, tp->rcv_nxt + tcp_receive_window(tp))) {
+> -               if (after(seq, tp->rcv_nxt + tcp_receive_window(tp)))
+> +       seq_limit = tp->rcv_nxt + tcp_receive_window(tp);
+> +       if (unlikely(after(end_seq, seq_limit))) {
+> +               /* Some stacks are known to handle FIN incorrectly;
+> allow the FIN
+> +                * to extend beyond the window and check it in detail later.
+> +                */
+> +               if (!after(end_seq - th->fin, seq_limit))
+> +                       return SKB_NOT_DROPPED_YET;
+> +
+> +               if (after(seq, seq_limit))
+>                         return SKB_DROP_REASON_TCP_INVALID_SEQUENCE;
+> 
+>                 /* Only accept this packet if receive queue is empty. */
+> @@ -6379,7 +6388,8 @@ static bool tcp_validate_incoming(struct sock
+> *sk, struct sk_buff *skb,
+> 
+>  step1:
+>         /* Step 1: check sequence number */
+> -       reason = tcp_sequence(sk, TCP_SKB_CB(skb)->seq,
+> TCP_SKB_CB(skb)->end_seq);
+> +       reason = tcp_sequence(sk, TCP_SKB_CB(skb)->seq,
+> +                             TCP_SKB_CB(skb)->end_seq, th);
+>         if (reason) {
+>                 /* RFC793, page 37: "In all states except SYN-SENT, all reset
+>                  * (RST) segments are validated by checking their SEQ-fields."
+
+Sure, I can do that.  Do you want me to add the
+tcp_receive_window(tp) == 0 check to narrow it down further?
+
+(And a dumb question: As you are the author of that code, how do I
+attribute that commit when submitting a v2?)
