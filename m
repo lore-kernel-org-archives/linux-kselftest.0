@@ -1,125 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9596378804;
-	Mon, 23 Feb 2026 20:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAF3369984;
+	Mon, 23 Feb 2026 20:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771879245; cv=none; b=smXjcGRrfCE9tvDIQhgiyPepmFb98E/A0BoFylcqZPor4eZp0Z/fQg6r7TPfugor010b81/rEOAu0RQDfepoZ1UZDYJeAH38wHpqhvWY736y2c8oCZXZ7U7ccAkOfeUWyK7Vjgl6zDR1bnHhTq5iW97NwWKMW/fCVFARQFNbPDk=
+	t=1771880246; cv=none; b=pXnCwP1cxOWes78M4Bta9vcvCu61EAG13bWBPEUH4ytz/zbOD/pW0stV+4+PgGDqK2Qz0zJbWepY/S92za0SdPUNV+Dhgr+GrHm6eoznUXIkDHwkx1bnI9b4Ia52xYWaL2DhXIMc+vJDwR0e3DOvM7Bo4N/g3/oj6hMNJgflCCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771879245; c=relaxed/simple;
-	bh=MVnOxWTQG0Z8CMBLByoE6zsM36mF94qlYGChCgeQW7Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PzesovM8ve6NzJRlbtLk41tYIvfg0A7l/Q8vb6314LImeI1mMGaEZH4EsiAkmwo0ghd6sfbB07Xs86aiQsZ2lFdhMAcIIt1cyc/QVYrj6Yezm4O+fL4tRqdB86TvagYU4/EQOTkLZ2cktQ1SabHfCR96xlKUMvfVXUl9T0NogLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ShJtXQmP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771880246; c=relaxed/simple;
+	bh=inoIZdNuHbSRzVDVc72NG8TR/m8kk/DIfYd0g1QefBo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=m7cb2bV7JnhkFaFwqfJe+78RP+4fZiyJaeIBnNyKNhA6eJPhAIKfhN9CnAVKSAdyD5h5nqZGc6OgCC0xSyMhBPX3iynfjn+WT+62Si5JFaAuFCxKjEubuBlFpXXyzXySqcELKC/vbxpK7UcZFggn54psj4KlOvIMm/znoAHiz1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vDuURTdR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ShJtXQmP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03666C4AF0C;
-	Mon, 23 Feb 2026 20:40:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vDuURTdR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CAD0C116C6;
+	Mon, 23 Feb 2026 20:57:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771879245;
-	bh=MVnOxWTQG0Z8CMBLByoE6zsM36mF94qlYGChCgeQW7Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ShJtXQmP2xFVu3V+rePHScFda3k6E33LbO9W/ldUocT0HVqdj51FF0xEDebpaRm7u
-	 Ap/3Oif7zbmUljgNfpyWWUZjcbnajTIIdOgLiDPX3BTFvUQIs9RVGuy6VQUOtjiFKL
-	 mvI1DyXSH0OJh6EDSndx0kMcuC7f7m1rNk960VlLvn8cGD+cEC5XabMBAegU5jYUBa
-	 4Wx2CxlMiNjvr/5ay6WW7e212CN5tcnKqgvTDLR/0lzTX48p6ugEx+vUGx/3Bc6r23
-	 UzGJPU8ku9qVikRQDdE7GJhFln43v7jex/veDBeUE/oxyTmxokXFmDuGv8T+8MOL/N
-	 zqBG2B58Fu4BA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	shuah@kernel.org,
-	daniel.zahka@gmail.com,
-	willemb@google.com,
-	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next] selftests: hw-net: tso: set a TCP window clamp to avoid spurious drops
-Date: Mon, 23 Feb 2026 12:40:30 -0800
-Message-ID: <20260223204030.4142884-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20201202; t=1771880245;
+	bh=inoIZdNuHbSRzVDVc72NG8TR/m8kk/DIfYd0g1QefBo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=vDuURTdRjQyGkuH0p6oGKtGuaURt1B7N47SUWSriuMf8N3+UYhGlb42k5SrTUdfRa
+	 Z6RUc0YDPKpcgZYSW337efDuzCeEJ5k4nQSCKdofZeyJA5cbeJylvY6L4WUxcqOUph
+	 z06F+j/DMkWLQhzXN+nY8G5LTru6SrvZPdVTdmWo2qpSfEXOmxhLbTEKzKy5/LXuCw
+	 QvQZ3U9MLaVS/U2BXX0itG3VrFg0AoWL0MtTzg5nYvyPdRsXngNBvRNDqVlCKNag99
+	 PnuwzY8S9jXMEOAx59LFt3NU2LcUXAsZxBGaOrPoB4Vtdv8aXYZdXIxtpz5buGm6R6
+	 31cjkBJxllakg==
+Date: Mon, 23 Feb 2026 10:57:24 -1000
+Message-ID: <9cc7401e7137e27cd2f02625aab23330@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Waiman Long <longman@redhat.com>
+Cc: Chen Ridong <chenridong@huaweicloud.com>,
+ Johannes Weiner <hannes@cmpxchg.org>,
+ Michal Koutny <mkoutny@suse.com>,
+ Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 0/8] cgroup/cpuset: Fix partition related locking
+ issues
+In-Reply-To: <20260221185418.29319-1-longman@redhat.com>
+References: <20260221185418.29319-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The TSO test wants to make sure that there isn't a lot of retransmits,
-because that could indicate that device has a buggy TSO implementation.
-On debug kernels, however, we're likely to see significant packet loss
-because we simply overwhelm the receiver.
+Hello,
 
-In a QEMU loop with virtio devices we see ~10% false positive rate
-with occasional run hitting the threshold of 25% packet loss.
+> Waiman Long (8):
+>   cgroup/cpuset: Fix incorrect change to effective_xcpus in partition_xcpus_del()
+>   cgroup/cpuset: Fix incorrect use of cpuset_update_tasks_cpumask() in update_cpumasks_hier()
+>   cgroup/cpuset: Clarify exclusion rules for cpuset internal variables
+>   cgroup/cpuset: Set isolated_cpus_updating only if isolated_cpus is changed
+>   kselftest/cgroup: Simplify test_cpuset_prs.sh by removing "S+" command
+>   cgroup/cpuset: Move housekeeping_update()/rebuild_sched_domains() together
+>   cgroup/cpuset: Defer housekeeping_update() calls from CPU hotplug to workqueue
+>   cgroup/cpuset: Call housekeeping_update() without holding cpus_read_lock
 
-Since we're only sending 4MB of data, set a TCP_WINDOW_CLAMP to 200k.
-This seems to make virtio happy while having little impact since we're
-primarily interested in testing the sender, and the test doesn't
-currently enable BIG TCP.
+Applied 1-8 to cgroup/for-7.0-fixes with the following minor fixups:
 
-Running socat over virtio loop for 2 sec on a debug kernel shows:
+- 5/8: Removed a duplicate test entry that resulted from the "S+"
+  removal (two previously-different lines becoming identical).
 
-  TcpOutSegs                      27327              0.0
-  TcpRetransSegs                  83                 0.0
+- 8/8: Fixed typos in commit message ("essentally" -> "essentially",
+  "beforce" -> "before") and code comment ("top_cpuset_mutex" ->
+  "cpuset_top_mutex").
 
-  TcpOutSegs                      30012              0.0
-  TcpRetransSegs                  80                 0.0
+This has gone through more than enough iterations. We can resolve further
+issues if there's any incrementally.
 
-  TcpOutSegs                      28767              0.0
-  TcpRetransSegs                  77                 0.0
+Thanks.
 
-But with the clamp the 3 attemps show no retransmit:
-
-  TcpOutSegs                      31537              0.0
-  TcpRetransSegs                  0                  0.0
-
-  TcpOutSegs                      30323              0.0
-  TcpRetransSegs                  0                  0.0
-
-  TcpOutSegs                      28700              0.0
-  TcpRetransSegs                  0                  0.0
-
-Since we expect no receiver-related drops now we can significantly
-increase test's sensitivity to drops.
-
-All the testing we do in NIPA uses cubic.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/drivers/net/hw/tso.py | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
-index 0998e68ebaf0..bb675e3dac88 100755
---- a/tools/testing/selftests/drivers/net/hw/tso.py
-+++ b/tools/testing/selftests/drivers/net/hw/tso.py
-@@ -36,8 +36,11 @@ from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
- def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
-     cfg.require_cmd("socat", local=False, remote=True)
- 
-+    # Set recv window clamp to avoid overwhelming receiver on debug kernels
-+    # the 200k clamp should still let use reach > 15Gbps on real HW
-     port = rand_port()
--    listen_cmd = f"socat -{ipver} -t 2 -u TCP-LISTEN:{port},reuseport /dev/null,ignoreeof"
-+    listen_opts = f"{port},reuseport,tcp-window-clamp=200000"
-+    listen_cmd = f"socat -{ipver} -t 2 -u TCP-LISTEN:{listen_opts} /dev/null,ignoreeof"
- 
-     with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as nc:
-         wait_port_listen(port, host=cfg.remote)
-@@ -68,7 +71,7 @@ from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
- 
-         # Make sure we have order of magnitude more LSO packets than
-         # retransmits, in case TCP retransmitted all the LSO packets.
--        ksft_lt(tcp_sock_get_retrans(sock), total_lso_wire / 4)
-+        ksft_lt(tcp_sock_get_retrans(sock), total_lso_wire / 16)
-         sock.close()
- 
-         if should_lso:
--- 
-2.53.0
-
+--
+tejun
