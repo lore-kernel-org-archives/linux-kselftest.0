@@ -1,31 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35D73783BA;
-	Mon, 23 Feb 2026 20:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9596378804;
+	Mon, 23 Feb 2026 20:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771878422; cv=none; b=i5ZK03DSO4RX8ak2Z9TwQXKfzIwicd6nVK/yZ4zvOLn36EPItaZP6NWbjU4SjtvXddtZkj8XvmgzkjjuRuC2l2XjHHJERIuNjO3wQrIgglseJ2q2khKSMlkKlZikTm6AENZA6NzbAXZMbAE2WmrpfGhQ7LFtIvRsSR+LFoRTI34=
+	t=1771879245; cv=none; b=smXjcGRrfCE9tvDIQhgiyPepmFb98E/A0BoFylcqZPor4eZp0Z/fQg6r7TPfugor010b81/rEOAu0RQDfepoZ1UZDYJeAH38wHpqhvWY736y2c8oCZXZ7U7ccAkOfeUWyK7Vjgl6zDR1bnHhTq5iW97NwWKMW/fCVFARQFNbPDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771878422; c=relaxed/simple;
-	bh=UYklwZVvuM6udDdH9S1yNhNfIpxnMpKzYh+yplrS8VE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ut0wQti63F637YbByfSilEJkorjPvga+15HFWdS4iaNo/zhVEOz2kGwz+qZuPrnjKKLQBSk5+0MliFHRsHp9ZizU3dcG7LB6RxXniDFf3D1YKtlbaN3aSH+XAIFISeRdyJWORSuNiaL4pQncwN8dOFGkConQEfK4uxAwIlgQUSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5y7a3Lj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771879245; c=relaxed/simple;
+	bh=MVnOxWTQG0Z8CMBLByoE6zsM36mF94qlYGChCgeQW7Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PzesovM8ve6NzJRlbtLk41tYIvfg0A7l/Q8vb6314LImeI1mMGaEZH4EsiAkmwo0ghd6sfbB07Xs86aiQsZ2lFdhMAcIIt1cyc/QVYrj6Yezm4O+fL4tRqdB86TvagYU4/EQOTkLZ2cktQ1SabHfCR96xlKUMvfVXUl9T0NogLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ShJtXQmP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5y7a3Lj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C099C19423;
-	Mon, 23 Feb 2026 20:27:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ShJtXQmP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03666C4AF0C;
+	Mon, 23 Feb 2026 20:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771878421;
-	bh=UYklwZVvuM6udDdH9S1yNhNfIpxnMpKzYh+yplrS8VE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U5y7a3LjHMYOGwSAs+MEot9FWuGvAJgkkmXgA/zYze1YH9JbpwPJGLYQ3b4JA9Uxg
-	 ebnDfRUAFbJNA1PSg+Cmw+ZN/G2YLJvhZ3/D1S3VN+0V4eljprwqkzHjTvezayS7wy
-	 JbTQRIEty6MssyjFwsmoeGtMEekxDYRTEVSY4UoNuLCm9hStNqwZyEtoAjTG8D0YGV
-	 mTaJW4aogf1jRxTRssgj9AnggYbUlYI1EtuCWShurAj9ucxRy4Imbogzkukflyg0DW
-	 0JCAS0GeQgnJL/INhun/GwIvD1GBjZmhJnIbUirEf4YvA7rbHj8DRge0MWixHMNNjM
-	 P+u7mR5Gb4RIA==
+	s=k20201202; t=1771879245;
+	bh=MVnOxWTQG0Z8CMBLByoE6zsM36mF94qlYGChCgeQW7Y=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ShJtXQmP2xFVu3V+rePHScFda3k6E33LbO9W/ldUocT0HVqdj51FF0xEDebpaRm7u
+	 Ap/3Oif7zbmUljgNfpyWWUZjcbnajTIIdOgLiDPX3BTFvUQIs9RVGuy6VQUOtjiFKL
+	 mvI1DyXSH0OJh6EDSndx0kMcuC7f7m1rNk960VlLvn8cGD+cEC5XabMBAegU5jYUBa
+	 4Wx2CxlMiNjvr/5ay6WW7e212CN5tcnKqgvTDLR/0lzTX48p6ugEx+vUGx/3Bc6r23
+	 UzGJPU8ku9qVikRQDdE7GJhFln43v7jex/veDBeUE/oxyTmxokXFmDuGv8T+8MOL/N
+	 zqBG2B58Fu4BA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -34,17 +33,14 @@ Cc: netdev@vger.kernel.org,
 	andrew+netdev@lunn.ch,
 	horms@kernel.org,
 	shuah@kernel.org,
-	petrm@nvidia.com,
-	gal@nvidia.com,
-	leitao@debian.org,
+	daniel.zahka@gmail.com,
+	willemb@google.com,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 3/3] selftests: net: py: add cmd info for ksft_wait failure
-Date: Mon, 23 Feb 2026 12:26:33 -0800
-Message-ID: <20260223202633.4126087-4-kuba@kernel.org>
+Subject: [PATCH net-next] selftests: hw-net: tso: set a TCP window clamp to avoid spurious drops
+Date: Mon, 23 Feb 2026 12:40:30 -0800
+Message-ID: <20260223204030.4142884-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260223202633.4126087-1-kuba@kernel.org>
-References: <20260223202633.4126087-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,86 +49,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Gal recently complained:
+The TSO test wants to make sure that there isn't a lot of retransmits,
+because that could indicate that device has a buggy TSO implementation.
+On debug kernels, however, we're likely to see significant packet loss
+because we simply overwhelm the receiver.
 
-  When [ksft_wait failure] happens, the test fails with a cryptic
-  message:
-    # Exception| Exception: Did not receive ready message
+In a QEMU loop with virtio devices we see ~10% false positive rate
+with occasional run hitting the threshold of 25% packet loss.
 
-Let's try to include the stdout/stderr of the command we tried
-to start. E.g. for cmd("false", ksft_wait=True):
+Since we're only sending 4MB of data, set a TCP_WINDOW_CLAMP to 200k.
+This seems to make virtio happy while having little impact since we're
+primarily interested in testing the sender, and the test doesn't
+currently enable BIG TCP.
 
-    # Exception| lib.py.utils.CmdInitFailure: Did not receive ready message
-    # Exception| CMD: false
-    # Exception|   EXIT: 1
+Running socat over virtio loop for 2 sec on a debug kernel shows:
 
-We need to factor out _process_terminate() otherwise the exit
-path may try to write to already disconnected self.ksft_term_fd.
+  TcpOutSegs                      27327              0.0
+  TcpRetransSegs                  83                 0.0
+
+  TcpOutSegs                      30012              0.0
+  TcpRetransSegs                  80                 0.0
+
+  TcpOutSegs                      28767              0.0
+  TcpRetransSegs                  77                 0.0
+
+But with the clamp the 3 attemps show no retransmit:
+
+  TcpOutSegs                      31537              0.0
+  TcpRetransSegs                  0                  0.0
+
+  TcpOutSegs                      30323              0.0
+  TcpRetransSegs                  0                  0.0
+
+  TcpOutSegs                      28700              0.0
+  TcpRetransSegs                  0                  0.0
+
+Since we expect no receiver-related drops now we can significantly
+increase test's sensitivity to drops.
+
+All the testing we do in NIPA uses cubic.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/net/lib/py/utils.py | 30 ++++++++++++++++-----
- 1 file changed, 23 insertions(+), 7 deletions(-)
+ tools/testing/selftests/drivers/net/hw/tso.py | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index 52d98ca139ff..09535346c13d 100644
---- a/tools/testing/selftests/net/lib/py/utils.py
-+++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -9,7 +9,15 @@ import subprocess
- import time
+diff --git a/tools/testing/selftests/drivers/net/hw/tso.py b/tools/testing/selftests/drivers/net/hw/tso.py
+index 0998e68ebaf0..bb675e3dac88 100755
+--- a/tools/testing/selftests/drivers/net/hw/tso.py
++++ b/tools/testing/selftests/drivers/net/hw/tso.py
+@@ -36,8 +36,11 @@ from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
+ def run_one_stream(cfg, ipver, remote_v4, remote_v6, should_lso):
+     cfg.require_cmd("socat", local=False, remote=True)
  
++    # Set recv window clamp to avoid overwhelming receiver on debug kernels
++    # the 200k clamp should still let use reach > 15Gbps on real HW
+     port = rand_port()
+-    listen_cmd = f"socat -{ipver} -t 2 -u TCP-LISTEN:{port},reuseport /dev/null,ignoreeof"
++    listen_opts = f"{port},reuseport,tcp-window-clamp=200000"
++    listen_cmd = f"socat -{ipver} -t 2 -u TCP-LISTEN:{listen_opts} /dev/null,ignoreeof"
  
-+class CmdInitFailure(Exception):
-+    """ Command failed to start. Only raised by bkg(). """
-+    def __init__(self, msg, cmd_obj):
-+        super().__init__(msg + "\n" + repr(cmd_obj))
-+        self.cmd = cmd_obj
-+
-+
- class CmdExitFailure(Exception):
-+    """ Command failed (returned non-zero exit code). """
-     def __init__(self, msg, cmd_obj):
-         super().__init__(msg + "\n" + repr(cmd_obj))
-         self.cmd = cmd_obj
-@@ -76,16 +84,13 @@ import time
-                 msg = fd_read_timeout(rfd, ksft_wait)
-                 os.close(rfd)
-                 if not msg:
--                    raise Exception("Did not receive ready message")
-+                    terminate = self.proc.poll() is None
-+                    self._process_terminate(terminate=terminate, timeout=1)
-+                    raise CmdInitFailure("Did not receive ready message", self)
-         if not background:
-             self.process(terminate=False, fail=fail, timeout=timeout)
+     with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as nc:
+         wait_port_listen(port, host=cfg.remote)
+@@ -68,7 +71,7 @@ from lib.py import bkg, cmd, defer, ethtool, ip, rand_port, wait_port_listen
  
--    def process(self, terminate=True, fail=None, timeout=5):
--        if fail is None:
--            fail = not terminate
--
--        if self.ksft_term_fd:
--            os.write(self.ksft_term_fd, b"1")
-+    def _process_terminate(self, terminate, timeout):
-         if terminate:
-             self.proc.terminate()
-         stdout, stderr = self.proc.communicate(timeout)
-@@ -95,6 +100,17 @@ import time
-         self.proc.stderr.close()
-         self.ret = self.proc.returncode
+         # Make sure we have order of magnitude more LSO packets than
+         # retransmits, in case TCP retransmitted all the LSO packets.
+-        ksft_lt(tcp_sock_get_retrans(sock), total_lso_wire / 4)
++        ksft_lt(tcp_sock_get_retrans(sock), total_lso_wire / 16)
+         sock.close()
  
-+        return stdout, stderr
-+
-+    def process(self, terminate=True, fail=None, timeout=5):
-+        if fail is None:
-+            fail = not terminate
-+
-+        if self.ksft_term_fd:
-+            os.write(self.ksft_term_fd, b"1")
-+
-+        stdout, stderr = self._process_terminate(terminate=terminate,
-+                                                 timeout=timeout)
-         if self.proc.returncode != 0 and fail:
-             if len(stderr) > 0 and stderr[-1] == "\n":
-                 stderr = stderr[:-1]
+         if should_lso:
 -- 
 2.53.0
 
