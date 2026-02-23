@@ -1,58 +1,58 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE522ECE91
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 15:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DA62EBBA4
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 15:42:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771861173; cv=none; b=udg6eBJPgsyprhoD9Z3V5xVB7HuDo/LPdS5xr6dTHP6SfQm1aFzp2y7hKDKTSJ/s9mtMVYbCC9oLCrTVqpS0uS7nyrzkB93XDrusScnGbDh9T4E2Re2vlCc80tClrkYan6MSwXuwGSb2SwLbFMSee+qRgl32QaFpwNbeTLSZHuc=
+	t=1771861347; cv=none; b=dq22g2ixoi9xFQ8KFcHHXEfrVV9w7WKhBMF/fUr/01D7xZ/EnopBGWmZ4R/PDsFPuQ59ptgwAXWse1TQbqzmmCR6efDUdYi174ohbeWgF9h8SMHlfIaoTuXSf3cyVKry9fP393TkdigHuo5XI/Bd8cNVjyjoqjXys0qhPMNos2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771861173; c=relaxed/simple;
-	bh=xHx2QtvuMMl81kLfh/pk5/YvM5YCK9SV6YTcKdH9I+4=;
+	s=arc-20240116; t=1771861347; c=relaxed/simple;
+	bh=LSiNPNXzwLpKVChiksX2grMZtsK+JQp+/bIkEQB55zY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=do3nO7+GZn0ksq0/oDiaxw+X+wfYZ1evXojPpxWQyLWubdzpU40hMqVFTgSBlOLcHbSgKFiu6WBsBLmvq01ZCqyPRB8IGSyKKN+DkiGj/bYvZi0V/owOGbhq6mG8q7YZ9O9THxMCXuBwFVGgPmDnmzimilmePmnqMaLDIBHrAh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JVfX0B9+; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=SBz6gii0G875cqLTuDyjLkoVYxocZSnnYrtqobG3QD5lavi4/xOlzl9274779SOLZfvGbubHJ2RiC1pzee1Knz+7BYVRLQ7QK56L5ubpWctzbjwnqpLy8wu3np6YHOc7dXdRezHM4o1dU6gdxfSho77UmjkEA6iTJnw8wy+15vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Up0jvo8n; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JVfX0B9+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Up0jvo8n"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771861171;
+	s=mimecast20190719; t=1771861345;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=I+qb2ND/P043jlrQlSxeHzqgiER2H6JlqtQO37r8Vuc=;
-	b=JVfX0B9+nChIcaIbPyXEo6xRUnUuY5W7ic37oDQgCf60NkHfw+aAHL5LDocqnPVRJh1vxI
-	6tdOVleKNoM1kyTDnqcDaa05Rv/fMP+0aBAFX4PAqyQjjpU3XBlhKjr0PV8bdDdvEVe5n5
-	vRz2+JqGgWu7lW2Uda2v/K8DSeaLr0o=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=RqTYJnHoyg+L5RYQf85B8+7ExBu3bBAqANmRbn/MAEY=;
+	b=Up0jvo8nqz2+ly0koSXnCjpvMkWAJ5KSy2Q3QHRwHzf+vMvr+Ga71ecDrNmgaTyKTPZoaQ
+	E32d1/2lDdhOT4GP831IdcSPMkhz1xNkVfVH/3MNkiHTGmivjUIbFwVd8Q8W1iy6Ylnxjf
+	M7UAaOwcXrqx7g1AZQaPiF7Uomnp27Y=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-686-xLAfiAiJM2C0ypSdoTObxg-1; Mon,
- 23 Feb 2026 10:39:28 -0500
-X-MC-Unique: xLAfiAiJM2C0ypSdoTObxg-1
-X-Mimecast-MFC-AGG-ID: xLAfiAiJM2C0ypSdoTObxg_1771861159
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-675-eBENWJGnPNKyrM5tdU6kgQ-1; Mon,
+ 23 Feb 2026 10:42:21 -0500
+X-MC-Unique: eBENWJGnPNKyrM5tdU6kgQ-1
+X-Mimecast-MFC-AGG-ID: eBENWJGnPNKyrM5tdU6kgQ_1771861340
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7D17E1800451;
-	Mon, 23 Feb 2026 15:39:19 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D292F1956094;
+	Mon, 23 Feb 2026 15:42:19 +0000 (UTC)
 Received: from redhat.com (unknown [10.22.65.108])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6B5F119560A2;
-	Mon, 23 Feb 2026 15:39:17 +0000 (UTC)
-Date: Mon, 23 Feb 2026 10:39:14 -0500
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8B8C61800465;
+	Mon, 23 Feb 2026 15:42:17 +0000 (UTC)
+Date: Mon, 23 Feb 2026 10:42:14 -0500
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: Marcos Paulo de Souza <mpdesouza@suse.com>
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
 	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests: livepatch: test-ftrace: livepatch a
- traced function
-Message-ID: <aZx0ouPn_erDrFD4@redhat.com>
+Subject: Re: [PATCH 2/2] selftests: livepatch: functions.sh: Workaround
+ heredoc on older bash
+Message-ID: <aZx1ViTc7NJws-rf@redhat.com>
 References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
- <20260220-lp-test-trace-v1-1-4b6703cd01a6@suse.com>
+ <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,36 +61,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260220-lp-test-trace-v1-1-4b6703cd01a6@suse.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+In-Reply-To: <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Fri, Feb 20, 2026 at 11:12:33AM -0300, Marcos Paulo de Souza wrote:
-> This is basically the inverse case of commit 474eecc882ae
-> ("selftests: livepatch: test if ftrace can trace a livepatched function")
-> but ensuring that livepatch would work on a traced function.
+On Fri, Feb 20, 2026 at 11:12:34AM -0300, Marcos Paulo de Souza wrote:
+> When running current selftests on older distributions like SLE12-SP5 that
+> contains an older bash trips over heredoc. Convert it to plain echo
+> calls, which ends up with the same result.
 > 
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> ---
->  tools/testing/selftests/livepatch/test-ftrace.sh | 36 ++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
-> index 094176f1a46a..c6222cc037c5 100755
-> --- a/tools/testing/selftests/livepatch/test-ftrace.sh
-> +++ b/tools/testing/selftests/livepatch/test-ftrace.sh
-> @@ -95,4 +95,40 @@ livepatch: '$MOD_LIVEPATCH': completing unpatching transition
->  livepatch: '$MOD_LIVEPATCH': unpatching complete
->  % rmmod $MOD_LIVEPATCH"
->  
-> +
-> +# - trace a function
-> +# - verify livepatch can load targgeting no the same traced function
 
-nitpick: s/targgeting no/targeting on/ ?
-
-Otherwise LGTM,
 Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+
+Just curious, what's the bash/heredoc issue?  All I could find via
+google search was perhaps something to do with the temporary file
+implementation under the hood.
 
 --
 Joe
+
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> ---
+>  tools/testing/selftests/livepatch/functions.sh | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 8ec0cb64ad94..45ed04c6296e 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -96,10 +96,8 @@ function pop_config() {
+>  }
+>  
+>  function set_dynamic_debug() {
+> -        cat <<-EOF > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
+> -		file kernel/livepatch/* +p
+> -		func klp_try_switch_task -p
+> -		EOF
+> +	echo "file kernel/livepatch/* +p" > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
+> +	echo "func klp_try_switch_task -p" > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
+>  }
+>  
+>  function set_ftrace_enabled() {
+> 
+> -- 
+> 2.52.0
+> 
 
