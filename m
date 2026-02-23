@@ -1,54 +1,54 @@
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5B9346E64
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 07:04:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA9734AB06
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 07:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771830293; cv=none; b=FVRVUT+uIuMV5hPQPElWTAkblQ4RT9Cz/GXCsKNA1NhqI9AbOhCS3cqn2R/HGBKjOmBErYObYMhV2FSGYcRytV71YuWN0SRfj2hqaLZvMKtfb8mgcse2CdNoQ8qOiznsTsBKHQeRomPOd719qUkpvqjhjEDVf82eIFuKRjg4XFY=
+	t=1771830295; cv=none; b=p4E6+gb6VLp8Wc64nd+3lLK2dgrchMxOkk6RCxCu1nVOUiP9u3yVheOx66EODebC0oOcvljVldXfltZFEtU8jzX9uzdcphyi5x+kcS7ynu+TkUm+/qgHpque/hrnQS8z4ZUlyJ+6fs+PMGQzkGYZFo5dbAqjoFllWsn3rLjQ6sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771830293; c=relaxed/simple;
-	bh=w37966m1o0RmX0vyIvS+1AaWr3RY1h7nrLYdurJIUkk=;
+	s=arc-20240116; t=1771830295; c=relaxed/simple;
+	bh=jh3ZPt1ZHay6YAxI3Ut5XTGeyxbcY4vqjvfPdGHfjT0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=S+pyYV2qd8YR/6vBW8dmN1MMpC4nw8hq5sCLqmNF2eb5pyFBRBwUcZtQxsfzrRCVwrbGum92mqSBydd4+L4OfbdhhPzg/TtwxREw2+DKLFOPikNCPaO3USEOMyvy0pRy0byuXJnMDhk/yYzSSJxmyqCS6/gVik5u6RlmrZKc5Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ssJgzKJf; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=PLpp3u4BrBcdE/jRAlD5jDssTG9oLWGmpyMzlB0XJBePMTlW7U5reRXoFIYXNfbx2S0IfJ0RREZZrqqfI6F87eluKUdACTR1NOnIEJb0yomJNGXcC6iIxU0AUuyqX7epGRSaGDCMbL3Gi3A85liulGPydUvnhtZupWjbUFx9PdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fGeXqjTn; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ssJgzKJf"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35658758045so2873324a91.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 23:04:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fGeXqjTn"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3586e7cf42aso22156445a91.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 23:04:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771830292; x=1772435092; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771830293; x=1772435093; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5lJdfKFYNuLjR953Ng0mcH/dDhHLbnTZ2j5PCnoQPSQ=;
-        b=ssJgzKJfjj3StHv2ZNgcIrJITDH1qRhsBjABDL1pZsmdjr89/dkTfFYKjERlzUkppJ
-         GJv+STOgjzvG5GSB7S7NeOFh+fvwOevbtMNiqOacM/VA0pYCFFhnWy2PJpD0FmT6BNy/
-         cA6bHCiBgelkvCwVs16xLJ443A1NVjgBUYC7HPP/iK4KcW+A0YbgvzLw4dezj0LOq8pD
-         P990bWgdp3siKnitspKpEFtxfXnkKh66mK9c1xu1bn2MmHAFahcEvAR4HxBt+N37fOpI
-         EVlfZd7auyZCn3vFY4FacY7wHhsb4zWrWktI1lgbTegYroNq/eMOJFJLTxeencdEWMHS
-         jiUQ==
+        bh=MlhRSEkvP3hGcg7973jpELqHCKZWjzo4VY3xzNikZZA=;
+        b=fGeXqjTnG/p6rTgKq+0NXmRzXAVLOG+COq+HX6nJpElAssSG8Bg0N4Ljgi3QMfyM77
+         mjTMrxCUGs9CBC4QhUUfuZpF2cUlhiL5Z8Ow+8Jxg4SfcgKHQwzsE8EmJTRz7uGJe0Wy
+         UT22IN64pPaqzo7YoRH7Wgatsz3nFV6XN7zz9IECFkyNK5j6fr5id13DJsqZGZugCYuV
+         m/obNMpoL4qFbeQ0Pfk9hegYXoaVDMjnLiXu0FTASF2V9Jtg1Wv11R1gHfpW0NPKq6mO
+         3wu7fMrYjhdWY/HfhyCi4dZwwUa54olkRf8evWVVsYbqQZMGw5YsAvgOlepPlyDAPbbX
+         lidQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771830292; x=1772435092;
+        d=1e100.net; s=20230601; t=1771830293; x=1772435093;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5lJdfKFYNuLjR953Ng0mcH/dDhHLbnTZ2j5PCnoQPSQ=;
-        b=d1uDnvx/zjqEqCjlUfqy/8f/tFLK3ZqRl0MDJHFK2rpUeFAkp6Q7rFd+4KjCwC54NQ
-         rY4poQVAOP170aoMUpQOw4X+aZ0h6IjFafLIJfD+6+0I32eAOWd/hzAuA/5N1yQENwdz
-         pJ08PLSx6EL+LPFfwW0KWsn+GSo75HSEEhdobER89TFRORZMMhgyD8feV+f2vHGMibHQ
-         2B+TYI2B74/fzdhUIvUbcfpAm3CBNlXW00JG9gxgyRfnDEwQi9/D254sgWZdecjcTiuY
-         b/gBjwX6MBaBdKL5CSE4YWwQ2w6lx3B2DFqqP3OHxYCUPzpul/ijwO/OOzfbvbtkWgEC
-         8cmw==
-X-Forwarded-Encrypted: i=1; AJvYcCX0LMBUEClh0NQVEoKDp6lon45FFdZ8tjZFxhpOT1uLL+SgKfy4Ff6+74KXRl1XpeO/TYfgaB3/OnK3flFsUyo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY9KfhMfjIgUrkeTjxhlBbP1Ziea52QRYdEPW4tBXiDXMSc99q
-	/C5YFyDYVRVZTn1/YmvIsYfS18249gvRlro1LyjCbhGqTN02z9Pj4BD77j8wb/27VRIdJOe1GRM
-	aINQMXfE74e8Dhe6+s8vAR0Qn2A==
-X-Received: from pjup4.prod.google.com ([2002:a17:90a:d304:b0:34c:2778:11c5])
+        bh=MlhRSEkvP3hGcg7973jpELqHCKZWjzo4VY3xzNikZZA=;
+        b=s9ivs9tk6PmTEQBoLoXJFneBsitZpgJjHcx1b5Ba3hO9xl3bJ0cyH7NJQgsXcf9Agf
+         3q5TDuPfBIGqALgWqpQzNLeP1coyIBsvTZAlmZjw/0ENBkaADqkK5ep5znByW8iblfb3
+         ut1FotDcZtKCPxLo3zwZN5FLFNSpXqafEuQIJmnBq9PH5GFSDVwKuODLtHiCh207WeMN
+         hIhWwbKXnxKqCgXK+0sBsWPfEo7D7llE+mbB4xVtkVFa8yHkPIAPUB7rh7N7pLR4fXoe
+         tWzjuO+k9ll2hqZCXyc7mcWOR0NGZCP5FL/DjTk6JtM2KJbVmXtwE1Bv5sUmXhT5J5K4
+         VL7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVRLwJ4tuJ4RWJpsbclZLBormln8mDE4QxsY+FNfZ3CIWCscBsR9Xl8N9HebeGU+oK3cidU5y+EU20GBcVnXS0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmVRhS/XaromXSEB41Bs7s1Js80JGTw118QOzxspl1g7axs7Cl
+	2z2D5awdkf4I87sn5iupErkvD93vutpBVDSVAFqlhEHK/K83cWDTofeVuDjMLy4yx6r+xm83KhB
+	gmI5NWbQhvNXQyV8MkSDRdJxncg==
+X-Received: from pjbjz17.prod.google.com ([2002:a17:90b:14d1:b0:354:7c70:1a9])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3d46:b0:354:ad98:7d1c with SMTP id 98e67ed59e1d1-358ae7fd556mr7480246a91.11.1771830291734;
- Sun, 22 Feb 2026 23:04:51 -0800 (PST)
-Date: Mon, 23 Feb 2026 07:04:34 +0000
+ 2002:a05:6a21:e0a4:b0:393:f002:ff59 with SMTP id adf61e73a8af0-39545e91cd1mr6474154637.19.1771830293252;
+ Sun, 22 Feb 2026 23:04:53 -0800 (PST)
+Date: Mon, 23 Feb 2026 07:04:35 +0000
 In-Reply-To: <cover.1771826352.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,9 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1771826352.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.53.0.345.g96ddfc5eaa-goog
-Message-ID: <108d4e27b72480a20e4490d839acadd0b0a2dcea.1771826352.git.ackerleytng@google.com>
-Subject: [RFC PATCH v1 01/10] KVM: guest_memfd: Don't set FGP_ACCESSED when
- getting folios
+Message-ID: <3e363901b177d8c2ae5088cfaeb3862621bbce9b.1771826352.git.ackerleytng@google.com>
+Subject: [RFC PATCH v1 02/10] KVM: guest_memfd: Directly allocate folios with filemap_alloc_folio()
 From: Ackerley Tng <ackerleytng@google.com>
 To: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -75,39 +74,92 @@ Cc: akpm@linux-foundation.org, david@kernel.org, lorenzo.stoakes@oracle.com,
 	tabba@google.com, michael.roth@amd.com
 Content-Type: text/plain; charset="UTF-8"
 
-guest_memfd folios don't care about accessed flags since the memory is
-unevictable and there is no storage to write back to, hence, cleanup the
-allocation path by not setting FGP_ACCESSED.
+__filemap_get_folio_mpol() is parametrized by a bunch of GFP flags, which
+adds complexity for the reader. Since guest_memfd doesn't meaningfully use
+any of the other FGP flags, undo that complexity by directly calling
+filemap_alloc_folio().
+
+Directly calling filemap_alloc_folio() also allows the order of 0 to be
+explicitly specified, which is the only order guest_memfd supports. This is
+easier to understand, and removes the chance of anything else being able to
+unintentionally influence allocated folio size.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Acked-by: David Hildenbrand (arm) <david@kernel.org>
 ---
- virt/kvm/guest_memfd.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ virt/kvm/guest_memfd.c | 51 +++++++++++++++++++++++++++++-------------
+ 1 file changed, 36 insertions(+), 15 deletions(-)
 
 diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index 923c51a3a5256..2df27b6443115 100644
+index 2df27b6443115..2488d7b8f2b0d 100644
 --- a/virt/kvm/guest_memfd.c
 +++ b/virt/kvm/guest_memfd.c
-@@ -126,14 +126,13 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
- 	 * Fast-path: See if folio is already present in mapping to avoid
- 	 * policy_lookup.
- 	 */
--	folio = __filemap_get_folio(inode->i_mapping, index,
--				    FGP_LOCK | FGP_ACCESSED, 0);
+@@ -107,6 +107,39 @@ static int kvm_gmem_prepare_folio(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 	return __kvm_gmem_prepare_folio(kvm, slot, index, folio);
+ }
+ 
++static struct folio *__kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
++{
++	/* TODO: Support huge pages. */
++	struct mempolicy *policy;
++	struct folio *folio;
++	gfp_t gfp;
++	int ret;
++
++	/*
++	 * Fast-path: See if folio is already present in mapping to avoid
++	 * policy_lookup.
++	 */
 +	folio = filemap_lock_folio(inode->i_mapping, index);
- 	if (!IS_ERR(folio))
- 		return folio;
++	if (!IS_ERR(folio))
++		return folio;
++
++	gfp = mapping_gfp_mask(inode->i_mapping);
++
++	policy = mpol_shared_policy_lookup(&GMEM_I(inode)->policy, index);
++	folio = filemap_alloc_folio(gfp, 0, policy);
++	mpol_cond_put(policy);
++	if (!folio)
++		return ERR_PTR(-ENOMEM);
++
++	ret = filemap_add_folio(inode->i_mapping, folio, index, gfp);
++	if (ret) {
++		folio_put(folio);
++		return ERR_PTR(ret);
++	}
++
++	return folio;
++}
++
+ /*
+  * Returns a locked folio on success.  The caller is responsible for
+  * setting the up-to-date flag before the memory is mapped into the guest.
+@@ -118,23 +151,11 @@ static int kvm_gmem_prepare_folio(struct kvm *kvm, struct kvm_memory_slot *slot,
+  */
+ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+ {
+-	/* TODO: Support huge pages. */
+-	struct mempolicy *policy;
+ 	struct folio *folio;
  
- 	policy = mpol_shared_policy_lookup(&GMEM_I(inode)->policy, index);
- 	folio = __filemap_get_folio_mpol(inode->i_mapping, index,
--					 FGP_LOCK | FGP_ACCESSED | FGP_CREAT,
-+					 FGP_LOCK | FGP_CREAT,
- 					 mapping_gfp_mask(inode->i_mapping), policy);
- 	mpol_cond_put(policy);
+-	/*
+-	 * Fast-path: See if folio is already present in mapping to avoid
+-	 * policy_lookup.
+-	 */
+-	folio = filemap_lock_folio(inode->i_mapping, index);
+-	if (!IS_ERR(folio))
+-		return folio;
+-
+-	policy = mpol_shared_policy_lookup(&GMEM_I(inode)->policy, index);
+-	folio = __filemap_get_folio_mpol(inode->i_mapping, index,
+-					 FGP_LOCK | FGP_CREAT,
+-					 mapping_gfp_mask(inode->i_mapping), policy);
+-	mpol_cond_put(policy);
++	do {
++		folio = __kvm_gmem_get_folio(inode, index);
++	} while (PTR_ERR(folio) == -EEXIST);
  
+ 	/*
+ 	 * External interfaces like kvm_gmem_get_pfn() support dealing
 -- 
 2.53.0.345.g96ddfc5eaa-goog
 
