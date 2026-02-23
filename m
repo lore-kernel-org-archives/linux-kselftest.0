@@ -1,97 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7C8191F91;
-	Mon, 23 Feb 2026 09:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2A034F47E;
+	Mon, 23 Feb 2026 09:38:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771837568; cv=none; b=EI3GWT21j/pXed7uwXrmBxVZd6s93L+SuDeumgh7qBJVuFWEpt5WYg75IkrlPwZ2c1gMWThz6t4Gy5vkiZL3f7iHv+ni1tQJTdwzShdV8Y9HVe19nVYs76vg10ndDqBRcFSaLoxcm9ieeZANdBjzwVvDYhL1VG7mBZr0jabQKUg=
+	t=1771839536; cv=none; b=CtpiTxUqdKqiEOMxX9ytbQFk51kJbvbbOUSvONnrc07chZfAuauMugJLDf1it586bpRZlJNf1ScSGehzdSf53sQXQtx+i1l9w2IbRPw7CF05rwsuJJcapCQw0nCCxQC0IXZPWPCVZ1ZdtlAeKMM0qfx859+wNGBGnK5COuxVz0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771837568; c=relaxed/simple;
-	bh=xOsTC6p+MZdRupfWd0cYah+vrpOiRsAEOKfEuNIROxU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ei7qAoDawgDH9yWhSanYupkPud7zQF7Qrzscs+0bqNQlxIyvY/5CGTTs7jpY7Hked40m6BlNJT48pNeKwSJQI6q0i92wNeEFj8to2NdFWP9AdOjWhMxhxf8wCW+Iz1vw7pm8LWfnZo7rTvh+CmEFt+MEqraG4ZzYDvAj7B9kajk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ni6DRbZW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771839536; c=relaxed/simple;
+	bh=5WaSHOyxf8o8JIkYIHNkBbYYfMUiu9f8Sn5n8UMdebE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iz0010vfHHRi2+tmUsyz+mTp8HounZcwIFpIUHB15xBDxA/treqDgPZ+OcyzTK6YP86FnfoA0tztLDh1MLLUb6PWyg4643Tc1wLFEesL+n7M1qPHRBM1Yt9eK65S22omONdZjfWzYoP/0kp1UMyhAwek8k04N9SVd5VJuQBXmAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCIbS6Uo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ni6DRbZW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F331BC116C6;
-	Mon, 23 Feb 2026 09:06:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCIbS6Uo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8289CC116C6;
+	Mon, 23 Feb 2026 09:38:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771837568;
-	bh=xOsTC6p+MZdRupfWd0cYah+vrpOiRsAEOKfEuNIROxU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Ni6DRbZWw7O3Ajema5W/7c2V5ft+xDgZ0hJBVWtbIzUJilt//KGkSvW/u8VVGQVGf
-	 GNio2KsiE7wJMZSM3rY+lz2R/a03E4nv3lsutoGVLnKojzHTZV1h306fzn7Eomw/3j
-	 FLdn2qJqtJv87dx/mX3fgFuO6vhUXwbkVz9kfROF15v5V1yMaT/MtBuSBlAeJTQzc4
-	 M+Er6YUw1eXf7H/ADh3IZMzE6kO4i+6Q0K35r+MCimkpqRGtwOq0kq8lfhV93b1RrC
-	 KA4hgy2goD61sLjaOszePy+K3QFwITmor7cqgRweWep4cMm672PtwGgRQFYBSBUEie
-	 Rague4aOPHaIw==
-Content-Type: multipart/mixed; boundary="===============2711244271401940436=="
+	s=k20201202; t=1771839535;
+	bh=5WaSHOyxf8o8JIkYIHNkBbYYfMUiu9f8Sn5n8UMdebE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WCIbS6UofZDuAMyv34cd6s4hI/RdQvV9x7WgYKKNb2dhDS11pnMvTdGdZZd/I5m30
+	 Ny6CRUBEmG8iMK2Vg0sJPGpScgn6H7zOrODdBRQlMAGNm4KpETpibYDV7nP3ROin/1
+	 ZOONuE15dArk4LlkVFm3aiYdLlLc9+eyoCtqGIbuo8NWESXwFhztcHP3truTOoJIht
+	 Y2jKwsgtLGI0G+T/9KyZFrPcLEqwr3dHG1rY2Gp/1fnxUcTmtIl7WxXGLwo2KVHAvs
+	 p3Ns2RhXSYWLxI4nmB7dCTWuzIzbkRbHYTEwLqxS2ZuEcLEvSSPp7kvndFFAt95L6/
+	 H1JqsLdMXuCFQ==
+Message-ID: <efddf2e4-15b0-4fa0-b9eb-99b72c9b014f@kernel.org>
+Date: Mon, 23 Feb 2026 10:38:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
-In-Reply-To: <20260223083120.23776-2-slava.imameev@crowdstrike.com>
-References: <20260223083120.23776-2-slava.imameev@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Support multi-level pointer params via SCALAR_VALUE for trampolines
-From: bot+bpf-ci@kernel.org
-To: slava.imameev@crowdstrike.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-open-source@crowdstrike.com,slava.imameev@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 23 Feb 2026 09:06:05 +0000 (UTC)
-
---===============2711244271401940436==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] KVM: selftests: Wrap madvise() to assert success
+To: Ackerley Tng <ackerleytng@google.com>, kartikey406@gmail.com,
+ seanjc@google.com, pbonzini@redhat.com, shuah@kernel.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: vannapurve@google.com, Liam.Howlett@oracle.com,
+ akpm@linux-foundation.org, baohua@kernel.org, baolin.wang@linux.alibaba.com,
+ dev.jain@arm.com, i@maskray.me, lance.yang@linux.dev,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ lorenzo.stoakes@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
+ shy828301@gmail.com, stable@vger.kernel.org,
+ syzbot+33a04338019ac7e43a44@syzkaller.appspotmail.com, ziy@nvidia.com
+References: <cover.1771630983.git.ackerleytng@google.com>
+ <455483ca29a3a3042efee0cf3bbd0e2548cbeb1c.1771630983.git.ackerleytng@google.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <455483ca29a3a3042efee0cf3bbd0e2548cbeb1c.1771630983.git.ackerleytng@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 7708958e3fb8..ebb1b0c3f993 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+On 2/21/26 00:54, Ackerley Tng wrote:
+> Extend kvm_syscalls.h to wrap madvise() to assert success. This will be
+> used in the next patch.
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
 
-[ ... ]
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
-> @@ -6905,8 +6920,11 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
->  	/*
->  	 * If it's a pointer to void, it's the same as scalar from the verifier
->  	 * safety POV. Either way, no futher pointer walking is allowed.
-> +	 * Multilevel pointers (e.g., int**, struct foo**, char***) of any type
-> +	 * are treated as scalars because the verifier lacks the context to infer
-> +	 * the size of their target memory regions.
->  	 */
-> -	if (is_void_or_int_ptr(btf, t))
-> +	if (is_void_or_int_ptr(btf, t) || is_multilevel_ptr(btf, t))
->  		return true;
+-- 
+Cheers,
 
-In the v2 review thread, Alexei Starovoitov wrote:
-
-  "I'm less certain about 'char **'. If we make it scalar too
-   it will be harder to make it a pointer to nul terminated
-   string later.
-
-   So I would do 'void **' -> scalar for now only."
-
-https://lore.kernel.org/bpf/CAADnVQ+xwC+J1hZcHPEUjBoKcUKmnucG4AFQ-kkDmqx+C-GcoA@mail.gmail.com/
-
-The comment says "of any type" and is_multilevel_ptr() matches all
-multi-level pointers (int**, struct foo**, char***), which is broader
-than the requested scope. Was the decision to treat all multi-level
-pointer types as scalar discussed with Alexei after the v2 feedback?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22298698870
-
-AI-authorship-score: low
-AI-authorship-explanation: Code exhibits human-authored characteristics including idiomatic kernel C patterns, iterative revision based on reviewer feedback across three versions, and deep domain knowledge of BPF verifier internals.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Unaddressed maintainer feedback about limiting scope to void** pointers only; the broader approach is functionally safe but contradicts the requested design direction.
-
---===============2711244271401940436==--
+David
