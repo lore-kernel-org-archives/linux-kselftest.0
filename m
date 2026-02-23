@@ -1,136 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419F7287510;
-	Mon, 23 Feb 2026 15:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE522ECE91
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 15:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771860211; cv=none; b=HrDuEC16G2Lz+o85etXnttckRL2ffzIz5LEZXuV6WXXhf3bt6KiNnv+AqQDcxaIeZLqH11qexoR56tbvLhUoEu2jz4ZFSzJXhQqzu4FN9ixszfjOkM845yWSQqCLttGV/n5KxxPFfTHnvTro5cs03RZqiErzGGt9KKpcnZTHwD4=
+	t=1771861173; cv=none; b=udg6eBJPgsyprhoD9Z3V5xVB7HuDo/LPdS5xr6dTHP6SfQm1aFzp2y7hKDKTSJ/s9mtMVYbCC9oLCrTVqpS0uS7nyrzkB93XDrusScnGbDh9T4E2Re2vlCc80tClrkYan6MSwXuwGSb2SwLbFMSee+qRgl32QaFpwNbeTLSZHuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771860211; c=relaxed/simple;
-	bh=bALHuEZfqz05Bg8MqVkjA0pxJVc6K09SZOdZ92Wgj68=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iw93cgTdSYXUZkjVQDuqijFy8stEgv9vaSu19O2pxFTbAkRgjCHt0NkUfi/wCZhf6vfS/eDUsu2ZvtJrY1iBBUY5HGK0zar9grAVz4fb+EeceN+Nmg6dbWdlix1RnNW6VZRsxpm2pThGJ/ZDm43ugT9qVrsADixlInfGrcnC6U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V7+HQvRw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771861173; c=relaxed/simple;
+	bh=xHx2QtvuMMl81kLfh/pk5/YvM5YCK9SV6YTcKdH9I+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=do3nO7+GZn0ksq0/oDiaxw+X+wfYZ1evXojPpxWQyLWubdzpU40hMqVFTgSBlOLcHbSgKFiu6WBsBLmvq01ZCqyPRB8IGSyKKN+DkiGj/bYvZi0V/owOGbhq6mG8q7YZ9O9THxMCXuBwFVGgPmDnmzimilmePmnqMaLDIBHrAh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JVfX0B9+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V7+HQvRw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B05C116C6;
-	Mon, 23 Feb 2026 15:23:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771860210;
-	bh=bALHuEZfqz05Bg8MqVkjA0pxJVc6K09SZOdZ92Wgj68=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=V7+HQvRwM9bPb0Rxkkv5aHO99w3TUgqWDsppu0UG6MQTNDMsPwzNKNIG2rQPEJ6LX
-	 1tVgVAI/NI6k2O3UX6ZxwITvnJwIN794QtGOMz6rSEu6I4kSc68W+gn1B9MzhmSUjK
-	 lxUbOGRzV0jEHIwzfhiCpwaV4slLgVJYSJeE7Rqygrv0lA8tEw7Rk6Vt4ZQH7cgKP7
-	 yYXhPFFickcwkFwVw9Omcj7Ze/yFW1kNeeVLq8WuQN/NfkM55kr9v7Bveup3cyx/il
-	 cX6zxqy072LUeqbhFrMk72NeBYauAgvZVTdERArq2xQcocEJ4gheOB475fPltfsFzH
-	 v6g3P8mdHQibg==
-Message-ID: <a97045a9-8866-40fe-aa15-d319cafa6f2c@kernel.org>
-Date: Mon, 23 Feb 2026 16:23:21 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JVfX0B9+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771861171;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I+qb2ND/P043jlrQlSxeHzqgiER2H6JlqtQO37r8Vuc=;
+	b=JVfX0B9+nChIcaIbPyXEo6xRUnUuY5W7ic37oDQgCf60NkHfw+aAHL5LDocqnPVRJh1vxI
+	6tdOVleKNoM1kyTDnqcDaa05Rv/fMP+0aBAFX4PAqyQjjpU3XBlhKjr0PV8bdDdvEVe5n5
+	vRz2+JqGgWu7lW2Uda2v/K8DSeaLr0o=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-686-xLAfiAiJM2C0ypSdoTObxg-1; Mon,
+ 23 Feb 2026 10:39:28 -0500
+X-MC-Unique: xLAfiAiJM2C0ypSdoTObxg-1
+X-Mimecast-MFC-AGG-ID: xLAfiAiJM2C0ypSdoTObxg_1771861159
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7D17E1800451;
+	Mon, 23 Feb 2026 15:39:19 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.65.108])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6B5F119560A2;
+	Mon, 23 Feb 2026 15:39:17 +0000 (UTC)
+Date: Mon, 23 Feb 2026 10:39:14 -0500
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
+	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests: livepatch: test-ftrace: livepatch a
+ traced function
+Message-ID: <aZx0ouPn_erDrFD4@redhat.com>
+References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
+ <20260220-lp-test-trace-v1-1-4b6703cd01a6@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 00/10] guest_memfd: Track amount of memory
- allocated on inode
-To: Ackerley Tng <ackerleytng@google.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, willy@infradead.org, pbonzini@redhat.com, shuah@kernel.org,
- seanjc@google.com, shivankg@amd.com, rick.p.edgecombe@intel.com,
- yan.y.zhao@intel.com, rientjes@google.com, fvdl@google.com,
- jthoughton@google.com, vannapurve@google.com, pratyush@kernel.org,
- pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com,
- michael.roth@amd.com
-References: <cover.1771826352.git.ackerleytng@google.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <cover.1771826352.git.ackerleytng@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260220-lp-test-trace-v1-1-4b6703cd01a6@suse.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 2/23/26 08:04, Ackerley Tng wrote:
-> Hi,
+On Fri, Feb 20, 2026 at 11:12:33AM -0300, Marcos Paulo de Souza wrote:
+> This is basically the inverse case of commit 474eecc882ae
+> ("selftests: livepatch: test if ftrace can trace a livepatched function")
+> but ensuring that livepatch would work on a traced function.
 > 
-> Currently, guest_memfd doesn't update inode's i_blocks or i_bytes at
-> all. Hence, st_blocks in the struct populated by a userspace fstat()
-> call on a guest_memfd will always be 0. This patch series makes
-> guest_memfd track the amount of memory allocated on an inode, which
-> allows fstat() to accurately report that on requests from userspace.
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> ---
+>  tools/testing/selftests/livepatch/test-ftrace.sh | 36 ++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
 > 
-> The inode's i_blocks and i_bytes fields are updated when the folio is
-> associated or disassociated from the guest_memfd inode, which are at
-> allocation and truncation times respectively.
-> 
-> To update inode fields at truncation time, this series implements a
-> custom truncation function for guest_memfd. An alternative would be to
-> update truncate_inode_pages_range() to return the number of bytes
-> truncated or add/use some hook.
-> 
-> Implementing a custom truncation function was chosen to provide
-> flexibility for handling truncations in future when guest_memfd
-> supports sources of pages other than the buddy allocator. This
-> approach of a custom truncation function also aligns with shmem, which
-> has a custom shmem_truncate_range().
+> diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+> index 094176f1a46a..c6222cc037c5 100755
+> --- a/tools/testing/selftests/livepatch/test-ftrace.sh
+> +++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+> @@ -95,4 +95,40 @@ livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+>  livepatch: '$MOD_LIVEPATCH': unpatching complete
+>  % rmmod $MOD_LIVEPATCH"
+>  
+> +
+> +# - trace a function
+> +# - verify livepatch can load targgeting no the same traced function
 
-Just wondered how shmem does it: it's through 
-dquot_alloc_block_nodirty() / dquot_free_block_nodirty().
+nitpick: s/targgeting no/targeting on/ ?
 
-It's a shame we can't just use folio_free(). Could we maybe have a 
-different callback (when the mapping is still guaranteed to be around) 
-from where we could update i_blocks on the freeing path?
+Otherwise LGTM,
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
 
--- 
-Cheers,
+--
+Joe
 
-David
