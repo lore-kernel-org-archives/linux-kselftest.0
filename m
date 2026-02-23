@@ -1,119 +1,177 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8444A35CB60;
-	Mon, 23 Feb 2026 10:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2C8366050
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 12:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771843711; cv=none; b=YQGZPuum7Dfvr2KxmPHFqCIdkPgTuzBNIwA5UZJP3PuAFGEYPlqrL3EqF4Tmlktl1ywezwQoxpW47OfzJNiHiVE3n3qHYP6hxhw8hqbhuRvglJN1dsytSMPhC9Mlxl885clad0HoH9+sczGZRQoUGzg68mf9/7ksc4fgMTqRBDU=
+	t=1771850407; cv=none; b=H82mElcDH4MbriYLJXEc/Zl49eopbjprApSnK7I7svHt9ByrAjmM//OODiq7IsiXsI2+FqnqvSmIQ42AfagfchgL3vMdKtu/zcd4jkTnSYVWNvvSLpF/42mk1ujOOhsKY7+VKZNTIqDfo4U875ARENcQ0H3lUgIabIhP1GrgOo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771843711; c=relaxed/simple;
-	bh=B4k9gRkg71PnsXufZ2xYa5mMfTFkRd2QdwpI5OBgPQk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rpD7bPA3C8ednsvs2GvG9PmuUDc9IFH93wwHKh77qXyhK5TtkKBTMKYWhRjtFPeNFwIJtRjaYMpWe/r2zg1Hwl++2JEIhaJQ5ky+Kxf4Tm+O47QEyQFSJ86FZ3ngVepNZgCUoYISAsPx1qRbFZbnVcK1hRFFOIJNpmXumkJK3EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=r7i4Wj3i; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1771850407; c=relaxed/simple;
+	bh=zLP9DBt5ACqyKp8zyP1I6et5L1V4brYDFyjTSlJe5AE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=G4jNy6Rire2qPUQR3jWt+R7d2rmyaoPK6OGjxYpcITnzthnDaNwDrIjYW43VTPKu9JFFj7Nw5PlnnjaeSMDe87tu2vdHS3M+YAeb/gwLyB68OSZ+L87RnYKybdwuH3UwoiBwotHCX40UwEiXR0So4UAoIyoCdcYdY2YmZCSl5ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MhhFQ5n+; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="r7i4Wj3i"
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61N9Ogk0853227;
-	Mon, 23 Feb 2026 10:47:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=UVyLOI3z8vWqmLKu0cEzyVJ9p5zsfe+0kMQ3yPY7dlo=; b=r7i4
-	Wj3iJztaMll+kb1E3oDWnRm6MlurDnIZeuQ9qX84fMc598gS6ZEU1w7dMGZoZqVJ
-	sOsG3kNY4m2O6Lh5n88gURdRUr3qiEV5wnTZuDU/JQVln8DpB1IXRRoYlrdjTwQC
-	FCnkV4XNtzA/KBdx4C6IRhLKA9eoKC+aNc0yT5dUDOcaBrEEFK150AgfTjARttgk
-	GiLRWH0lbZQ/4ceeS5EoXp3FmPfLIA/bOowbxevpRI8/RK2Sxd4S5xMzr/0RIo/I
-	DvaSxCmKv4YL+PdN8uI2awQDpROYhWnYpiPJ3fG/tip/6bFoXvxFQSEp+GVbvssL
-	kV2AvfBM9LD1bTVayg==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cfqxwcake-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 10:47:52 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 23 Feb 2026 10:47:45 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <bot+bpf-ci@kernel.org>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <clm@meta.com>, <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <eddyz87@gmail.com>, <edumazet@google.com>, <haoluo@google.com>,
-        <horms@kernel.org>, <ihor.solodrai@linux.dev>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
-        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
-        <martin.lau@kernel.org>, <martin.lau@linux.dev>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
-        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>
-Subject: Re: Re: [PATCH bpf-next v3 1/2] bpf: Support multi-level pointer params via SCALAR_VALUE for trampolines
-Date: Mon, 23 Feb 2026 21:47:43 +1100
-Message-ID: <20260223104743.37713-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
-References: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MhhFQ5n+"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48372facfedso45454975e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 04:40:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771850404; x=1772455204; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H9UVo+Ch5cqNfZ/7JsfHkoD1JYgkJQPxukS4MObThec=;
+        b=MhhFQ5n+PzDSPKzBRtwe18lbIdpDDdJ8T2UM7Z68MUfaA8vva/U/vYQGy371uSH/xK
+         HURYzbBhCJrQsMfIXdbTz5VEHPeBUomjVKvWNTU5g9shcFqZSVcebFhGYPUOihJczlQO
+         d9h68IRBguf9E0KRTLjFQ5g/UnBioix9RwFJm9+3Hvsegxp6zNuYN0ostrxzkRVhYoyj
+         p+LezSlbU3wuwv/Y6HA90R/ynwaSYcCeNAaGHvsNsbZj+yo22lp5JnoSPRC5emNU9J/j
+         23ydVbt9Hj+ZM3D2q04tmC/DtE/NEzD1CZU3nWNQX1YcIp+AcojKNCL2SKRB/Y78wS6W
+         O+9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771850404; x=1772455204;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=H9UVo+Ch5cqNfZ/7JsfHkoD1JYgkJQPxukS4MObThec=;
+        b=FeQR8U53hkEaFDVI6kRMSIPyZ3kRmUnVvaROwIkCC76GzcvrDQRTCEiZj2C2UsEi6D
+         kH357PH8o7SOJ7WWdkGFjFsuw6LJiMjOYcf2Z1TBJOmp19R6H4anfiOPAPtFzB+KPxem
+         hPqTPPmgZp9l3kVlM3JvGdqDfMRF5xdauJcrOtdD05bB9w5eUJpJZC7esmCtuBlByH5+
+         eH6VlC33A8rKJ3Ri3rBvhMUHlX019RoAlK94qxCFe0d+65YoS47foZfG3Gaatx4YRWMG
+         4hlhF1q7F7awXEMW1LdIcIyx/xFwpg3yrhOemNLZepkZTBOX79DIarv7Ndr4gLNiFQmK
+         E0IQ==
+X-Gm-Message-State: AOJu0YxRmFMf2na55rn2dTWUWu2acLdrSwiNtGKYL+JwIGZvNhFuYEbw
+	w4aBXlfeWdSaIaxWr9jdjhn71mmTH25IQT1h0DhU+GdxyuIGuMPjzQRtrkiFqQaCt4mj3ZuzCWc
+	k7WuM1I7UaUulmQ==
+X-Received: from wmnv12.prod.google.com ([2002:a05:600c:444c:b0:477:a181:1919])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:a204:b0:483:fbe:23dd with SMTP id 5b1f17b1804b1-483a00a52bdmr187554465e9.12.1771850403661;
+ Mon, 23 Feb 2026 04:40:03 -0800 (PST)
+Date: Mon, 23 Feb 2026 12:40:03 +0000
+In-Reply-To: <aYX8dot4fTh3FJFI@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH008.crowdstrike.sys (10.100.11.75) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: u83RgyQRo6YQuztzaIMjK3jEhrRMTO4m
-X-Authority-Analysis: v=2.4 cv=TJhIilla c=1 sm=1 tr=0 ts=699c3058 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=6Gbh3OEyIFFArXis12EA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDA5MyBTYWx0ZWRfXwY+XXO95NKDb
- 5upXSOhNQb8bSY8jYzonOWR8axJ09OYOOGLPBYJJWbP4Wf9PdosW0k2nUnKi2sRY7ihnjVASwdI
- PgGjkbQ9yMXdfyZi8VXugsB3AfoMG4pgt015ly7ZTFF8ccmlSa4NJeu1PrU9qng03H6zNGlnyZm
- sTGVbTVig2NpzmDxH4DwSDit0Ty7Jk/whDFshWZIjpfR4U71if0C3i9mXZAlzF1UMRpGx1NJnyf
- 2PXzSR0CeYq3SVDKO7+K14boa5QLzAHvcRIYuAwvPZT+Uwvn9gg3eL3brHk1ZZI0MZGS1wfq/O+
- CRsnLVnSbCgBIbNe5YRQ0E87k2f2pqEaWKbiRfZpkkgVzDw5VSfUT3fwkNyKVU4y7s6QK97gU95
- UOl3FQZiQ6SuahY/shSOHoPFK/vvkeHM33Qxb5ArcsmhpYTfgpHCv8Zp+lfxyD8D/LB+LCGzSat
- GXMAuYCQzQ9OYvOIfhA==
-X-Proofpoint-GUID: u83RgyQRo6YQuztzaIMjK3jEhrRMTO4m
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11709
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 adultscore=0 clxscore=1011 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602230093
+Mime-Version: 1.0
+References: <20260206081704.53215-1-liuhangbin@gmail.com> <DG7TJFKZNG1J.19BZF87IWD3UG@google.com>
+ <aYX8dot4fTh3FJFI@fedora>
+X-Mailer: aerc 0.21.0
+Message-ID: <DGMCJQ2TKZ1O.Q2C502GV1GSL@google.com>
+Subject: Re: [PATCH selftests] selftests: Use ktap helpers for runner.sh
+From: Brendan Jackman <jackmanb@google.com>
+To: Hangbin Liu <liuhangbin@gmail.com>, Brendan Jackman <jackmanb@google.com>
+Cc: <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	<netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I think support for broader types can be provided in a compatible way
-with future annotated support, as I explained in my reply to the v2
-review:
+On Fri Feb 6, 2026 at 2:36 PM UTC, Hangbin Liu wrote:
+> Hi Brendan,
+> On Fri, Feb 06, 2026 at 10:48:59AM +0000, Brendan Jackman wrote:
+>> On Fri Feb 6, 2026 at 8:17 AM UTC, Hangbin Liu wrote:
+>> > This has been on my todo list for a long time. We should use ktap
+>> > helpers in runner.sh. I saw Brendan did some work in d9e6269e3303
+>> > ("selftests/run_kselftest.sh: exit with error if tests fail") to make
+>> > run_kselftest.sh exit with the correct return value. But we still use =
+a
+>> > custom solution in runner.sh. Let's convert all the print messages to =
+use
+>> > formal ktap helpers. Here=E2=80=99s what I changed:
+>> >
+>> >   1. Move TAP header from runner.sh to run_kselftest.sh, since run_kse=
+lftest.sh
+>> >      is the only caller of run_many().
+>> >   2. In run_kselftest.sh, call run_many() in main process to count the
+>> >      pass/fail numbers.
+>> >   3. In run_kselftest.sh, do not generate kselftest_failures_file; jus=
+t
+>> >      use ktap_print_totals to report the result.
+>> >   4. In runner.sh run_one(), get the return value and use ktap helpers=
+ for
+>> >      all pass/fail reporting. This allows counting pass/fail numbers i=
+n the
+>> >      main process.
+>> >   5. In runner.sh run_in_netns(), also return the correct rc, so we ca=
+n
+>> >      count results during wait.
+>> >
+>> > After the change, the printed result looks like:
+>> >
+>> >   not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=
+=3D1
+>> >   # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+>> >
+>> >   ]# echo $?
+>> >   1
+>>=20
+>> Sorry I'm being a bit lazy by not investigating this myself but the
+>> current intended behaviour is for runner.sh to output correct KTAP,
+>> right? Could you describe what behavioural changes this is expected to
+>
+> For runner.sh, I just want to make it using the formal helper in
+> ktap_helpers.sh other than manually echo.
+>
+>> bring - does it fix/change the KTAP output? (Or if it's just a cleanup
+>> with no intended change then please note that in the commit message).
+>
+> It changes the run_kselftest.sh's output, with a total result. e.g.
+>
+> # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
 
-"
-  > so I suggest treating 'void **' as a scalar as Eduard suggested.
-  > This particular sb_eat_lsm_opts() hook
-  > doesn't have a useful type behind it anyway.
-  > I'm less certain about 'char **'. If we make it scalar too
-  > it will be harder to make it a pointer to nul terminated string later.
+Cool thanks, then please just clarify the commit message to say this.
 
-  > So I would do 'void **' -> scalar for now only.
+>> I have not reviewed the code properly yet (I just read enough to check
+>> that it still does the thing I care about i.e. return an error code when
+>> something fails). I can do a proper review next week if you add a bit
+>> more context re the question above though.
+>
+> Yes, I also care about the return code. This patch doesn't break it.
+>
+>>=20
+>> > -	wait
+>> > +	# Handle the return values when running in netns.
+>> > +	for pid in "${pids[@]}"; do
+>> > +		wait "$pid"
+>> > +		rc=3D$?
+>> > +		[ "$rc" -eq "$KSFT_PASS" ] && KTAP_CNT_PASS=3D$((KTAP_CNT_PASS+1))
+>> > +		[ "$rc" -eq "$KSFT_FAIL" ] && KTAP_CNT_FAIL=3D$((KTAP_CNT_FAIL+1))
+>> > +		[ "$rc" -eq "$KSFT_SKIP" ] && KTAP_CNT_SKIP=3D$((KTAP_CNT_SKIP+1))
+>> > +		[ "$rc" -eq "$KSFT_XFAIL" ] && KTAP_CNT_XFAIL=3D$((KTAP_CNT_XFAIL+1=
+))
+>>=20
+>> These variables don't seeem to have anything to do with KTAP so I think
+>> they should have a different name prefix. I guess KSFT_*? Or maybe
+>> RUNNER_* or something.
+>>=20
+>> Also I guess we should initialise them to 0 so they are still set if no
+>> tests actually get run?
+>>=20
+>> Also I think it's probably time to start documenting the
+>> interface of runner.sh - sorry I probably should have done this when I
+>> created kselftest_failures_file. Can you add a comment at the top to
+>> show that these variables are part of the "API"?
+>
+> These variables are defined in ktap_helpers.sh and used by the ktap helpe=
+rs.
 
-  I changed to scalar in v3, keeping broader scope for pointer types.
+Hm, I see. Then it seems pretty hacky to mutate them directly here, and
+is it correct to always increment them by 1?
 
-  We encountered double pointers of various types that required
-  workarounds, such as:
+I think the "correct" thing to do here is to parse the KTAP from the
+child process's stdout, but I assume that's not actually practical with
+the current tools we have available. (I could be wrong though, let me
+know if that's the case).
 
-  int __posix_acl_chmod(struct posix_acl **acl, gfp_t gfp, umode_t mode)
+Or maybe we can dump the values of the variables at the end of the child
+and then add them into the parent process' values...=20
 
-  Adding support for void** alone doesn't address the broader issue
-  with other double pointer types.
-
-  When annotated array support (including char**) is added in the
-  future, it should remain compatible with the scalar approach for
-  legacy (unannotated) parameters. Unannotated parameters will
-  continue using scalar handling.
-"
+Or, if we just keep the current approach I think just having some
+commentary to explain why we are doing this would help. I.e. "these
+variables are outputs of ktap_helpers.sh but since we've run the test in
+a subprocess we need to update them manually" (the current comment talks
+about the netns which I think is confusing, I don't think the netns is
+relevant at all).
