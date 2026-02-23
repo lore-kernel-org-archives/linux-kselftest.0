@@ -1,54 +1,54 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2439B34D4EB
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 07:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B06E34BA33
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 07:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771830301; cv=none; b=NpBK4UkONBAVa1ZBfQmdC3FGLfYHpddifuTw9snH9nm0haK8teY501Vyp10Q5WAgJs57up+LFUi/j2B4MA7Hup0YyyKCIRCiGd3xM70VQimALcBoukAKFfRsPkvL5sgKVrjXvUecWylmChUPPDU/XduqTiySzH37K2x4f1nkaqs=
+	t=1771830303; cv=none; b=azn/TWCtI52JI6eQ+xMFLmRuiDrBJef+8ovFTeClXn5TIrKQSjXpePnkMyp4y6wBcfrpNLpTFjd4KWwab0xhNJV4uqDLWkkWjjNibRCoIKkUG9e8FOxHxTuRpC3PJAgRJ788ZQITO3Y5AyaSc6YlD9bixBgHRHHvwK6PAmNyd9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771830301; c=relaxed/simple;
-	bh=d3UwQnzpg88aX6gn7ACJy409YivRzc8RbQqNjcTrFfw=;
+	s=arc-20240116; t=1771830303; c=relaxed/simple;
+	bh=4AzPo53RW7z1u/HbYb3WJwZj9BjSBVUkolJYB1GMnjw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fk8v5G+wfxdm/NNaulo0MjqZcUpwyh4uQeDL2R1q3qC6enIqS22XC7SKYv4QeyBP0LDW6jhwhZ/qYMcWP+tvz6M0CX7x2v2ocF++U+0TxyX9PqI29on4p6O2Y6AqVy6skAYU/ADXjMXn/x/G9DC8jdMK5DnlIqUhPYWm/7Fq6Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B6J0k94Y; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=NMUhb5dWaQPaKiyqdS4UerVj3BpMCTEndO97JYmXLYYE4/bUTeRSTxu7Dbr2pn3YzafOXUqZq5i/QXrNMPg+MCQ9ftshCw7liHcLb5EexPVqjSumIO9hY1ZEl94S48s0tXxRGZQ80DOiy69WdOWUMPST66JTZhrXk4fkGi0JsYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OdYFkPBf; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B6J0k94Y"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2a946c0e441so37711315ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 23:05:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OdYFkPBf"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82436a49592so1674849b3a.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 23:05:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771830299; x=1772435099; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771830301; x=1772435101; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W8EPkBYTIogg/WcIy2FNnZriREPEXUqsGjhG96y07ko=;
-        b=B6J0k94YQxKXI/ATg+nnFkMegMK0+AC3JXFPYcwdbPpJQI6PB8F1FKAxK5PeGupwMD
-         dQJiUUDatgLKphe4YPs2kJyg4BVq8njg69WHA9tn1ejUCn40awFihwD4+fcLibNP/Uj6
-         tb9oa8JlrGzeqcUhc/n+1Q3oxnmEdSCiQvj+lYLuqUem6hLo0pechZbbnDqqhMnh/QBZ
-         ivocdVkfelgivR5MVabH5RikvqZO4Zlsw38O4Bv6QXxI7oLDATsARVJEK+lA1eIME57O
-         /OiaeQf5FaexRoN2Dx+l9fekkDYwz7TjsM7SK0rThrs8nviZtP4Vliz75osEJNYEittI
-         l9LQ==
+        bh=LofWqILwJgF/mJhvsOWfJxePDPZCogY694ZgccXLsPg=;
+        b=OdYFkPBfQH4Od8qHGMA/2NYywEzCZPCaiMbzPeT2P1O4bPQO6lgX37BBuYJgY+uVdl
+         uZFSi6I89L0ezxGImCQizgqr/u/jSdeaNky8s1uFmNRwaEEkk6Ghfex10g+KS5SigmMu
+         VF/w1xhRRhxa5hEf6Zf7vhTkJa/1xMNFy7II99r8u99fnZXh0nwgHbwz5b3Bc4DOqfwP
+         4EIPp+IFB3T8ePLrruXguj1Z0+zMU7iUrie/K2wI5LllZLxzrx5AwuZnQxb6BxTKTBMZ
+         BCe+uXR5qX25sl0+edj5NbA6pgXnSA4hjDlcA1hvzp/pUkbAEC+tTmY4gyoswRqnUETK
+         Nehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771830299; x=1772435099;
+        d=1e100.net; s=20230601; t=1771830301; x=1772435101;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W8EPkBYTIogg/WcIy2FNnZriREPEXUqsGjhG96y07ko=;
-        b=WPGgF1LDJoe3Ry58+k7k+T63kyLOrAVgfwlX4cfWCvUHbPTylUzW59LQfsPdQu7HiQ
-         +LrS5KjgcyDv6Mvi8F2uyX5MKqNQwQsPuvMnRqjGD9yqEQt8e3pth2ZXw3pbn5KyQTbL
-         gzAfW9a9++U4dCfE6E/zHZnVrdOdym9SdnqfW2Klydb/HjoktAdDEM3Gj5tM9PcdZGqP
-         CMyFwl74L7nlXlWLe47g2zl8oZIyPAEpwa9oM+LSKCBz2Zf5FcA4Crjw3LPSbT47wUU0
-         dFPfUyZreO2hCDjFAn1Fj7wTTYGhT1k4eVrmLZdvqOtdKQXkpeMYBOp7JpMfdDPt4HvV
-         M63w==
-X-Forwarded-Encrypted: i=1; AJvYcCUlaLbxCGzCRdriicRVTOsCv0V5WuqeLyyCol405nNIfhLZdadlDsiM2EG1oEwCikD+kRtNM4OFN1m/e8EGmZM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzrlXCLpHfyKKPlhf44NiTZ2DibKokDjoX970pwayjK6X/bNRX
-	Z+gELbwh+VEmpFRjCAOLPzswwEzRoI9n6jKT2C1Cof9PZZm4bA0meg6DXSqTrh7iqnVHbXBg0hf
-	3Nvt1EXsAA7AZDGxQMOyXPRlqoA==
-X-Received: from pjbx30.prod.google.com ([2002:a17:90a:38a1:b0:356:3562:569c])
+        bh=LofWqILwJgF/mJhvsOWfJxePDPZCogY694ZgccXLsPg=;
+        b=F4aXDqkea0eHJYWxKhCdttJWmGApnretcMZGTcgKzgrYO9SmfUxPdqmkx6m9iopOj4
+         /ankHIJB/jk5kbzf7ks1coOkt2T0ipNmGDLov0nmtoxXga0vrzxzfzPyqKbTLKv0nBKO
+         /gJrBW19gkxKxJEUkhX+IUWh67yCaN4zqdTx15NafbBMjm7DoSyVlPDJieUFiEs4R50T
+         zXHpUme9363arb7ZDiIVpkUb4e9RkiPTPOfKZblEbUw2GabK7Ugtd0tTGMwBX3czNakR
+         z/wYB3dVDkRXovpZR0T4CMLDOXBCV7ivM+ZZYYOkdFE7Dt1QZlTanNeOL8I53GCXqRvb
+         FSCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdnrM7fppSz3tUUlXKlX4sOliPlOOPnlAMgrlsSl2SSwKZ0jZ4R1UmyFeiorJ7L9Sizinm6kyePwC5hZtXSfY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4NY9ghC/UnDPQZgHaoSz54bACh827Dz7O9mcn2x/l9cMuVU73
+	Zct+LUy2SYJMQ9ArQQ12a0aokfzb5t+m11dNLVbJTFR4oZ6mtDw7smqHgqfS7afyGRG64sfdvZE
+	UmwuYP/A9aofpw42utprAWNvG+Q==
+X-Received: from pfwz14.prod.google.com ([2002:a05:6a00:1d8e:b0:7cf:2dad:ff87])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:248:b0:2a0:a33f:3049 with SMTP id d9443c01a7336-2ad743fe006mr64180505ad.4.1771830299282;
- Sun, 22 Feb 2026 23:04:59 -0800 (PST)
-Date: Mon, 23 Feb 2026 07:04:39 +0000
+ 2002:a05:6a00:438e:b0:823:3056:78c6 with SMTP id d2e1a72fcca58-826da9f10bfmr6260281b3a.41.1771830300774;
+ Sun, 22 Feb 2026 23:05:00 -0800 (PST)
+Date: Mon, 23 Feb 2026 07:04:40 +0000
 In-Reply-To: <cover.1771826352.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1771826352.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.53.0.345.g96ddfc5eaa-goog
-Message-ID: <e08ed6869b9f555169476d220d7e8112e7163cee.1771826352.git.ackerleytng@google.com>
-Subject: [RFC PATCH v1 06/10] mm: filemap: Export filemap_remove_folio()
+Message-ID: <976ac2117ed9be6339e898cd80daed8f32b5044e.1771826352.git.ackerleytng@google.com>
+Subject: [RFC PATCH v1 07/10] KVM: guest_memfd: Implement custom truncation function
 From: Ackerley Tng <ackerleytng@google.com>
 To: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -74,40 +74,91 @@ Cc: akpm@linux-foundation.org, david@kernel.org, lorenzo.stoakes@oracle.com,
 	tabba@google.com, michael.roth@amd.com
 Content-Type: text/plain; charset="UTF-8"
 
-Export filemap_remove_folio() for use by KVM.
+Implement custom truncation function for guest_memfd, and replace calls to
+truncate_inode_pages_range() with calls to this custom truncation function.
 
-KVM requires this function to remove folios from guest_memfd's filemap.
+The custom truncation function removes a lot of the generality supported by
+truncate_inode_pages_range() not required by guest_memfd, such as
 
-guest_memfd used to rely on higher-level, exported truncation functions. To
-track memory that is actually allocated (i.e. i_blocks, st_blocks),
-guest_memfd will need a custom truncation function to do accounting cleanup
-and will be using filemap_remove_folio() for truncation.
++ sub-PAGE_SIZE truncations
++ Support for writeback
+
+In a later patch, guest_memfd use this custom truncation function to handle
+updating of i_blocks and i_bytes in the inode during truncation.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- mm/filemap.c | 2 ++
- 1 file changed, 2 insertions(+)
+ virt/kvm/guest_memfd.c | 43 ++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 41 insertions(+), 2 deletions(-)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index ebd75684cb0a7..379d62239fc5f 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -49,6 +49,7 @@
- #include <linux/sched/mm.h>
- #include <linux/sysctl.h>
- #include <linux/pgalloc.h>
-+#include <linux/kvm_types.h>
- 
- #include <asm/tlbflush.h>
- #include "internal.h"
-@@ -262,6 +263,7 @@ void filemap_remove_folio(struct folio *folio)
- 
- 	filemap_free_folio(mapping, folio);
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index 57dec458bfa77..e6c66ab7062b3 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -247,6 +247,45 @@ static void kvm_gmem_invalidate_end(struct inode *inode, pgoff_t start,
+ 		__kvm_gmem_invalidate_end(f, start, end);
  }
-+EXPORT_SYMBOL_FOR_KVM(filemap_remove_folio);
  
- /*
-  * page_cache_delete_batch - delete several folios from page cache
++static void kvm_gmem_truncate_folio(struct folio *folio)
++{
++	folio_lock(folio);
++
++	if (folio_mapped(folio))
++		unmap_mapping_folio(folio);
++
++	/*
++	 * guest_memfd doesn't need writeback, skip anything to do with
++	 * writeback and just clear the dirty flag.
++	 */
++	folio_clear_dirty(folio);
++	filemap_remove_folio(folio);
++
++	folio_unlock(folio);
++}
++
++static void kvm_gmem_truncate_range(struct inode *inode, pgoff_t start,
++				    size_t nr_pages)
++
++{
++	struct folio_batch fbatch;
++	pgoff_t next;
++	pgoff_t last;
++	int i;
++
++	last = start + nr_pages - 1;
++
++	folio_batch_init(&fbatch);
++	next = start;
++	while (filemap_get_folios(inode->i_mapping, &next, last, &fbatch)) {
++		for (i = 0; i < folio_batch_count(&fbatch); ++i)
++			kvm_gmem_truncate_folio(fbatch.folios[i]);
++
++		folio_batch_release(&fbatch);
++		cond_resched();
++	}
++}
++
+ static long kvm_gmem_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ {
+ 	pgoff_t start = offset >> PAGE_SHIFT;
+@@ -260,7 +299,7 @@ static long kvm_gmem_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ 
+ 	kvm_gmem_invalidate_begin(inode, start, end);
+ 
+-	truncate_inode_pages_range(inode->i_mapping, offset, offset + len - 1);
++	kvm_gmem_truncate_range(inode, offset, len >> PAGE_SHIFT);
+ 
+ 	kvm_gmem_invalidate_end(inode, start, end);
+ 
+@@ -984,7 +1023,7 @@ static void kvm_gmem_evict_inode(struct inode *inode)
+ 
+ 	truncate_inode_pages_final_prepare(mapping);
+ 
+-	truncate_inode_pages_range(mapping, 0, inode->i_size);
++	kvm_gmem_truncate_range(inode, 0, inode->i_size >> PAGE_SHIFT);
+ 
+ 	clear_inode(inode);
+ }
 -- 
 2.53.0.345.g96ddfc5eaa-goog
 
