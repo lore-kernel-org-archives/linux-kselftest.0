@@ -1,153 +1,183 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6A934EEE5
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 07:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771830310; cv=none; b=mdfi/mbuwjSws+rKfiTdHBQlg2wV+G1C0j8apf9XzYgIKSNgl4MVaC0al1EeLY5hEJDPkNjg6dwlhkzWm9Sk3ZrJeIJVz1Wj+dnMQj4QTt49WDmImK8nS7vDvHTDIwe+zFR1f3L4Fa9FrdRXdBTDRP6y6mnOeasTeIeO3IXK+cY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771830310; c=relaxed/simple;
-	bh=ea4iA5nlwgN+CFTzjyIou+eBChaZJ3B2VNlr77gxrsY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PQsYoXuzK76EWoIJqBEoCQSykBm3oorVnUAdp+xYanzkcjZYejwmZ9J1AGEwsNqDx0GA9mF9eNIqCYZT4OoAZrDdOM6OStop0n1+ZL6VygFq8Qtxo+5LpDKqQ8z9MO1AOF3sf1QouDf+S1aKeF2khq9zlDSevXQBp12SqRK8hvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=je3w3GSQ; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE8A137750
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 08:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771833688; cv=pass; b=NG0h4EaLmcr0+elhTt4/l++g9I/HXaYEVyGCQDVAhRsOtO3gIxaOjTxKYERtp7MwCEOwtAuD+uf0cHCn+Exlc9Uoz1dHC6GBG/GjOpnaTN7sqwjsUp8/bK6Ma9exBeHvszdS+KtF75PYsxhP4Vl/J3FtG/+8GwBynBJM/87I6ao=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771833688; c=relaxed/simple;
+	bh=K/6q6RkAywcpwdXEYmgKespAU22TbYrWPBmXAoPVm+A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rgearr3mGr+DpH0EBD0iu41jbohxHK7+8mSqOYap2Ce6urCMhKr5S6oPGL37d2Up2/cCTgtnSSoV/AGWkMjRDzG1LW+JD0G+qVSFBqv7QGx93ss2QSM0P7SbG5WzJU0B7iOyOajBl9v8dD1oHFG44hpz+Rt80G2YnrwVTAZdvik=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QdK9FwaV; arc=pass smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="je3w3GSQ"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-354bc535546so4314566a91.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 23:05:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QdK9FwaV"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-506c02ec1b3so43628321cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 00:01:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771833686; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Bs5TKFbzdyHk5/w7rcNP5N6XKyM6wxnrwwps/hWgQCglXCNKPIGjBC47gHXTCZolt0
+         6mRlukqKF+RUUtgb7wxKXyqA5Y5CmQ1vjPjlr/X37Y5T4MDPTehe5ahYU5L0zvr2KDQD
+         udhin5mR+sR3S3BW0aD9nUMPpHQIhJdVvErmYbO/6rxgPs6mH36IHO7CHZcRNyqF2pbl
+         lblyJdwSL1Al4KGAmKElAxmHcWt9e6U3innm18pN83aPSj1k4zRE7C/WpeNLFlImmGyi
+         Tilr1buJ48f5EfwWlWLG3Tm1SUONsfVOZtsK+jCXQrxf202CzJbhZWDH+9thUBTLAbW3
+         cyfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZHeMGjNoyVss0xbi9Q87Th7AGf/k8UCazyBAOVdMvks=;
+        fh=g4YuzRzpp2ClbatT47DEfthKyS7g8s9TgF5VQ9o8mr4=;
+        b=BHPrC7yGVh21fdAV00bhrzFdLFTJAjBL8HCgPbRhz7FJ9ddw0KQ+h5OdkuCnSljNx2
+         nlKkc9W81iQc0gAbYrjfA/tjd9MG8hft6IipAKPemrQ+aRBCepG3Rm+YSzqV9SqPEhAv
+         pFP4tKT52OdHwRtPCO5Lsvhmh908JpwjAcM+BByBCFQthIGNE6fX5yUx+RhDV1S0RTju
+         2y3yimwdFdtgHYiIJfft781iK62pxrdQTsAWF1DnEb9Z8GcjM6g2zEPe8l7NpOZVMnmX
+         WRZCyxmIX/4LW8IqWx5b4VSvVcfJHzXVbn/X03BNPYQptGiVKL+v599IpgiXyaj1lFZK
+         9NkA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771830304; x=1772435104; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=29bxp0SrERjlT2nttg/iVluHBRhM/KYKZg8jrRhN0Y0=;
-        b=je3w3GSQoCU+0acbqtQWtBrzOqtRPaSjXu1hWW8XIk9qkdODHGWfe0WpZOjhsYHAL+
-         k5ahNSwIOQrm+lJH/nmA7bOEjtYYLuLluijZd2Yr0jmd1l1j3kxNAjKqab2Z1123jjY+
-         wA/n52FEfu/geyjv+Tr1Bm9H5gYf2bjqMWgs9ZU0MU+2144dIJECaBvgp4duskBby2bE
-         QzCZq4SVgq3fusFu1Fpov0//XzkVqNjBQbJgJjYX2DvefE4DC/lPJeoy0HcNWVNi3kje
-         +T3KHXxZprkzY62UH3EboFg2CpXshkaYsaYQU+BKSjrm/OYmy0hZxXbL40lZ/4wEW9Pt
-         khOw==
+        d=google.com; s=20230601; t=1771833686; x=1772438486; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZHeMGjNoyVss0xbi9Q87Th7AGf/k8UCazyBAOVdMvks=;
+        b=QdK9FwaVhnzFMU6phiq69IYWiUe6H2Cv/lLVizsub4gFEpSQGK3k/KNKj8JnzX+Nh5
+         9UvPxhVtjpdAsDitwJcHr7PIa+Y/iTTQQAd+w+AYruVsZ2J1cmKRTCmN1yhXnxE18MrS
+         o2qzRTV00zQBFt5w8uJzDahEDaLD59DpjN/P2cFo7+Cdg3BRs2NmeiMcHm0T1NfF7DK5
+         icWWCsis52EynRC3yZ45ZJqmlR4V5FEbuhp4VOHZScNJ+PrIcCkfpXqIJ+li/jKQXdU4
+         cgzkKQpHSnI2BJJx1KRSl15frFB5OXrNj4l2RmrrHvfTLQz4hIaFwfXc6VJouZueEh9E
+         QPTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771830304; x=1772435104;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=29bxp0SrERjlT2nttg/iVluHBRhM/KYKZg8jrRhN0Y0=;
-        b=hVc4/vx1yBPmdpkE6QO7IcSeHV9qZ2S6AUdfMO3mKojru636aME1OOb6rtioqRDfhu
-         kY33zqosJqdM6+Kl5iXbg1BaMo4iANh8BThO9pZzV9tA/JCbYSg9wziQBwNjeQLcg+wo
-         56BPX4aAhIICoibtsuXCh3pUOCNZojHRjzXpU0f07ghAZIUq7t7SJ8mJwFMvd0abzmTs
-         zDXoJZdDVaAsawedZMdKHYDTvrhaPbChOmcwiS6Ze6YdWfHJ336xuMtpkv/SHH+rUrcU
-         uuFP1HXX3rBobd4Mc8AE/+PnBrvL2Yo/bZpLkwYbsoz78UHMAES9bGFdgjkEURWQAjoS
-         TTaA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWpJCOs52VxnRf2CXJ2JNfSq8h8U1yvChuDcK1KCaKZVMBl3N6Lze4D1iIMRjBB3FUMZyHRvIRz543XcPo220=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuGndmMs4cfTTBZkdLjG3BUz5Pe7dvnNPyEWh0oeVtXYomW1bg
-	OoFA6HtnXvnbogvt6IxpMs1fxnHQeasJ0ZznmPuzzrtDLFitzlstTzMlaLgQoDleDac1Up6WM0E
-	hkDOB22KKZEU7AxU4dGdGSE79MQ==
-X-Received: from pjbtb14.prod.google.com ([2002:a17:90b:53ce:b0:353:3526:238b])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:2b8c:b0:356:2c7b:c010 with SMTP id 98e67ed59e1d1-358ae812409mr8015127a91.11.1771830303714;
- Sun, 22 Feb 2026 23:05:03 -0800 (PST)
-Date: Mon, 23 Feb 2026 07:04:42 +0000
-In-Reply-To: <cover.1771826352.git.ackerleytng@google.com>
+        d=1e100.net; s=20230601; t=1771833686; x=1772438486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZHeMGjNoyVss0xbi9Q87Th7AGf/k8UCazyBAOVdMvks=;
+        b=q1BHPsNt1ODWROUE6h7EknBKOLI1laAnUUkEx7TUXUh1TrLAd0F3irdVk0oHp8FXBL
+         61eRqf2W2mkiblDcuMBAfmRM/UTtmcU7e43O9lKbbF/KYJMpOU3zVfSUsm0EiCOG3hRm
+         MvP01gixE2W9z3T8IEtdUAGf86n/DUffKa5W4qtGsf9OGc+Bzi34/PoiaSCa2lud+Xc6
+         7RItXP6M3sk6SpkAaVjbL3OpXDdbWIFW8SdqgjU4YTSVv7xPeol+V+ntJVZbKp3o8Fsx
+         SZGzdz2hT2pyPiXvCINdrGf+tD5R+fTNYDL/30VFsGfDNcP+8G4i5fIjsFCfm7fPiiY5
+         aTsw==
+X-Forwarded-Encrypted: i=1; AJvYcCWYEZpqm8L2CxO6PTgcuH2PteYvvsqzrnxSlFIsdPgRK/BF451SZYHI5xOKZjHDmKnaPiXW84R8lhCaACDq2Tg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzcpkq9gGrNKQQmIBiW6B+m9/+uSUvjJq3SCOnrBCv1nWeKe4Pc
+	QnHuY2m8QJlBbyR3RaxOdOSE/1KOZVAg+io3Gc+sbirQkiZjff1VGJDBgIH3pqNbA0m3Yyz2xdU
+	nTlGDUWcAb9COzRlZbNVhVxWAW3zvGN3Rl8vJW3rM
+X-Gm-Gg: AZuq6aI/8m5Hvatfy1bqjr+N+JU5a129xfRs+u8RedaDO/7moUqt52AnjQD8tYfdh91
+	fDdP7jM4+tDWNjdo0FtQwqk9yDVPe3Nl0EuTfBQTrkBDvFB/7o9/nP4uWCCZWCzdBL63IrrKkym
+	CRnOFPDW+XaAJ/iuXhYl3wZY5XDaltfPVinCLGH3ENh7vG4Fu/zvXvILHmK5+VVva97QSw6rhNn
+	pSsR9k7hIYMCpyfyiUgsknWC5G2Q7tsPEaxVLFkYRKfolYqPfEFeHMQIBSuZqxKG0hUS3GGunIZ
+	2qG7x1E=
+X-Received: by 2002:ac8:7f8f:0:b0:4ee:1f69:fdeb with SMTP id
+ d75a77b69052e-506f30ad7fdmr174135491cf.11.1771833685719; Mon, 23 Feb 2026
+ 00:01:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1771826352.git.ackerleytng@google.com>
-X-Mailer: git-send-email 2.53.0.345.g96ddfc5eaa-goog
-Message-ID: <3525199b4a04f0054566abe90eb99cdd5b9939e4.1771826352.git.ackerleytng@google.com>
-Subject: [RFC PATCH v1 09/10] KVM: selftests: Wrap fstat() to assert success
-From: Ackerley Tng <ackerleytng@google.com>
-To: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+MIME-Version: 1.0
+References: <20260222-fix_zero_wnd_fin-v1-0-5f4034952f3c@gmail.com> <20260222-fix_zero_wnd_fin-v1-1-5f4034952f3c@gmail.com>
+In-Reply-To: <20260222-fix_zero_wnd_fin-v1-1-5f4034952f3c@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 23 Feb 2026 09:01:13 +0100
+X-Gm-Features: AaiRm51s6F5nJUNwqq5YLxG7UGRRbTM5Nc5rtJlp4nPZ5LnqHN7N58OnUco-aUs
+Message-ID: <CANn89iK5Kk2D-zMiw_2syb9OdmkKdgAA7aGfi8QNZ9XR4=CfvA@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] tcp: re-enable acceptance of FIN packets when
+ RWIN is 0
+To: gmbnomis@gmail.com
+Cc: Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
-Cc: akpm@linux-foundation.org, david@kernel.org, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, willy@infradead.org, pbonzini@redhat.com, shuah@kernel.org, 
-	ackerleytng@google.com, seanjc@google.com, shivankg@amd.com, 
-	rick.p.edgecombe@intel.com, yan.y.zhao@intel.com, rientjes@google.com, 
-	fvdl@google.com, jthoughton@google.com, vannapurve@google.com, 
-	pratyush@kernel.org, pasha.tatashin@soleen.com, kalyazin@amazon.com, 
-	tabba@google.com, michael.roth@amd.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Extend kvm_syscalls.h to wrap fstat() to assert success. This will be used
-in the next patch.
+On Sun, Feb 22, 2026 at 1:35=E2=80=AFPM Simon Baatz via B4 Relay
+<devnull+gmbnomis.gmail.com@kernel.org> wrote:
+>
+> From: Simon Baatz <gmbnomis@gmail.com>
+>
+> Commit 2bd99aef1b19 ("tcp: accept bare FIN packets under memory
+> pressure") allowed accepting FIN packets in tcp_data_queue() even when
+> the receive window was closed, to prevent ACK/FIN loops with broken
+> clients.
+>
+> Such a FIN packet is in sequence, but because the FIN consumes a
+> sequence number, it extends beyond the window. Before commit
+> 9ca48d616ed7 ("tcp: do not accept packets beyond window"),
+> tcp_sequence() only required the seq to be within the window. After
+> that change, the entire packet (including the FIN) must fit within the
+> window. As a result, such FIN packets are now dropped and the handling
+> path is no longer reached.
+>
+> Be more lenient by not counting the sequence number consumed by the
+> FIN when calling tcp_sequence(), restoring the previous behavior for
+> cases where only the FIN extends beyond the window.
+>
+> Fixes: 9ca48d616ed7 ("tcp: do not accept packets beyond window")
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- tools/testing/selftests/kvm/guest_memfd_test.c    | 15 +++++----------
- .../testing/selftests/kvm/include/kvm_syscalls.h  |  2 ++
- 2 files changed, 7 insertions(+), 10 deletions(-)
+OK, but this commit is fine ? It seems the issue is coming from buggy peers=
+ ?
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 618c937f3c90f..81387f06e770a 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -212,10 +212,8 @@ static void test_mmap_not_supported(int fd, size_t total_size)
- static void test_file_size(int fd, size_t total_size)
- {
- 	struct stat sb;
--	int ret;
- 
--	ret = fstat(fd, &sb);
--	TEST_ASSERT(!ret, "fstat should succeed");
-+	kvm_fstat(fd, &sb);
- 	TEST_ASSERT_EQ(sb.st_size, total_size);
- 	TEST_ASSERT_EQ(sb.st_blksize, page_size);
- }
-@@ -303,25 +301,22 @@ static void test_create_guest_memfd_invalid_sizes(struct kvm_vm *vm,
- 
- static void test_create_guest_memfd_multiple(struct kvm_vm *vm)
- {
--	int fd1, fd2, ret;
-+	int fd1, fd2;
- 	struct stat st1, st2;
- 
- 	fd1 = __vm_create_guest_memfd(vm, page_size, 0);
- 	TEST_ASSERT(fd1 != -1, "memfd creation should succeed");
- 
--	ret = fstat(fd1, &st1);
--	TEST_ASSERT(ret != -1, "memfd fstat should succeed");
-+	kvm_fstat(fd1, &st1);
- 	TEST_ASSERT(st1.st_size == page_size, "memfd st_size should match requested size");
- 
- 	fd2 = __vm_create_guest_memfd(vm, page_size * 2, 0);
- 	TEST_ASSERT(fd2 != -1, "memfd creation should succeed");
- 
--	ret = fstat(fd2, &st2);
--	TEST_ASSERT(ret != -1, "memfd fstat should succeed");
-+	kvm_fstat(fd2, &st2);
- 	TEST_ASSERT(st2.st_size == page_size * 2, "second memfd st_size should match requested size");
- 
--	ret = fstat(fd1, &st1);
--	TEST_ASSERT(ret != -1, "memfd fstat should succeed");
-+	kvm_fstat(fd1, &st1);
- 	TEST_ASSERT(st1.st_size == page_size, "first memfd st_size should still match requested size");
- 	TEST_ASSERT(st1.st_ino != st2.st_ino, "different memfd should have different inode numbers");
- 
-diff --git a/tools/testing/selftests/kvm/include/kvm_syscalls.h b/tools/testing/selftests/kvm/include/kvm_syscalls.h
-index d4e613162bba9..3f039c34e12e0 100644
---- a/tools/testing/selftests/kvm/include/kvm_syscalls.h
-+++ b/tools/testing/selftests/kvm/include/kvm_syscalls.h
-@@ -2,6 +2,7 @@
- #ifndef SELFTEST_KVM_SYSCALLS_H
- #define SELFTEST_KVM_SYSCALLS_H
- 
-+#include <sys/stat.h>
- #include <sys/syscall.h>
- 
- #define MAP_ARGS0(m,...)
-@@ -77,5 +78,6 @@ __KVM_SYSCALL_DEFINE(munmap, 2, void *, mem, size_t, size);
- __KVM_SYSCALL_DEFINE(close, 1, int, fd);
- __KVM_SYSCALL_DEFINE(fallocate, 4, int, fd, int, mode, loff_t, offset, loff_t, len);
- __KVM_SYSCALL_DEFINE(ftruncate, 2, unsigned int, fd, off_t, length);
-+__KVM_SYSCALL_DEFINE(fstat, 2, int, fd, struct stat *, buf);
- 
- #endif /* SELFTEST_KVM_SYSCALLS_H */
--- 
-2.53.0.345.g96ddfc5eaa-goog
+Eventually the receive queue would be drained by the application, the
+peer would retransmit
+this FIN, and it would be accepted.
 
+> Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
+> ---
+>  net/ipv4/tcp_input.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> index e7b41abb82aad33d8cab4fcfa989cc4771149b41..fde612f12d3625000081958d1=
+3cec8779684a642 100644
+> --- a/net/ipv4/tcp_input.c
+> +++ b/net/ipv4/tcp_input.c
+> @@ -6379,7 +6379,12 @@ static bool tcp_validate_incoming(struct sock *sk,=
+ struct sk_buff *skb,
+>
+>  step1:
+>         /* Step 1: check sequence number */
+> -       reason =3D tcp_sequence(sk, TCP_SKB_CB(skb)->seq, TCP_SKB_CB(skb)=
+->end_seq);
+> +
+> +       /* Some stacks are known to handle FIN incorrectly; allow the FIN
+> +        * to extend beyond the window and check it in detail later.
+> +        */
+> +       reason =3D tcp_sequence(sk, TCP_SKB_CB(skb)->seq,
+> +                             TCP_SKB_CB(skb)->end_seq - th->fin);
+
+I don't think this is the right fix. Basically it says that FIN do not
+count, but TCP RFC says otherwise.
+
+It also adds code in TCP fast path.
+
+See for reference
+
+commit 22555032c513e62fe744d4cdd553539897e8e922
+Author: Eric Dumazet <edumazet@google.com>
+Date:   Thu Apr 18 21:45:58 2024 +0000
+
+    tcp: remove dubious FIN exception from tcp_cwnd_test()
+
+    tcp_cwnd_test() has a special handing for the last packet in
+    the write queue if it is smaller than one MSS and has the FIN flag.
+
+    This is in violation of TCP RFC, and seems quite dubious.
+
+    This packet can be sent only if the current CWND is bigger
+    than the number of packets in flight.
+
+    Making tcp_cwnd_test() result independent of the first skb
+    in the write queue is needed for the last patch of the series.
+
+    Signed-off-by: Eric Dumazet <edumazet@google.com>
+    Link: https://lore.kernel.org/r/20240418214600.1291486-2-edumazet@googl=
+e.com
+    Signed-off-by: Jakub Kicinski <kuba@kernel.org>
