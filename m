@@ -1,310 +1,166 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A505A37F8AF
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 23:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771889263; cv=none; b=o+GPUKlqQhAoftmDXYkdkNFs6H2CTQa/OVifl2dcc2SvF4RhP9relTYBkcZogVUZgqmzjzKDu0s1Z/F/m11IC5oUlVc5KyG9NZx6MU01PXU09fJZo/vs/nIa9yK213wg2boIc52pRX6yBCsNyaBU0arECeyH8hWdyK0xwhHaiPQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771889263; c=relaxed/simple;
-	bh=xEee9cxbr7GG38D2/dBLujjBWCXTmk4ZStmSNh98uT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=shtYr5be1DD74C64o85ovBGwjvdD2w2XkDjWCCLfqbFNG+5CCp9a6+zZHunzvd/l2Y3lhOJ7ILKMfv++fYf2JhePqbYPjxAbZUUO+mLodhrmEsLHjTk1WFHwZHGkNiqbL/5fmLXVKhfg7CqOdN9/APvrGnCD/+3S/1UDj7WOAVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tlTa2Pl7; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D2D36922A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 23:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771890148; cv=pass; b=Buw65WKAP46wh5qXZC4nnJroyxNJy/OGBBW69/eOlc1E1sjBMta2W9rJVezydMqqiHbXWpgtX+MjUyuNfbDDOuXDbumXi2W1Sxds8fse+K1npMGJa5Tji7B2gFrCSenJxi/o6qQooGdt614+g+99lW/984vHKf/WexP9FZbAMVs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771890148; c=relaxed/simple;
+	bh=G1G7Co3UGLp29oZTzIMMy89dawTZvG8ZKLFe9M3O6sY=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CP+o6fxG/vDg1G7537i+oaKhc+6oewVTcpKAIKkJyUL4UWnWBCvjJYSJsfkbxG/cEFbDV+ITneFrmn6JtuEUU9lZYt8RxDo9it+KyLDvuqNSXO0i/aWwZKjMvIupc3adeztPq+J0/gl+ZYGzUoeFYJlXnko3v3hATaGlF09r8Lg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4npmqqkZ; arc=pass smtp.client-ip=209.85.221.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tlTa2Pl7"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2aad8123335so12205ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 15:27:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4npmqqkZ"
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-5674689e507so2112382e0c.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 15:42:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771890146; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kXwB/6ZEJkhoI117JRVQL3VdHrLwobqGB3GrZbo7yqLRaUeveAnUGeayRiRuHnbpgp
+         z+InNBm6bhfg485U07xcuXgNP/BRW3i01EIIaH0QDWdJkHFpdtgzeZvQD5juoq5L6Jc4
+         j2Q9jo5sGT/qO7pEJscXZVAHgf1CSXDfERhMB8tPMQrG4J5W7P8xkwEMw5BJNRrfAguG
+         MRqn6eOmeYa6XRpIYlEVMfuUXkOa3nqp8Hq/zAwh64R5xF9LK9o5zwfbxSrSmoEkahy3
+         cm6WGktPGvD9B/sHxkTYd2EK1z8BfMupdbeqeBaqBnBy8K4HQMl2xJMur5G/V5mFe5TG
+         xReQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=G1G7Co3UGLp29oZTzIMMy89dawTZvG8ZKLFe9M3O6sY=;
+        fh=I4mxr1083NI0AfQ6fHjffvaPaRKcsV4e8yyb6SX0nQU=;
+        b=bgQ4t3QBfbJ0qAE0wKYyeOi7SZ1OAuDLxr0OFNbMXO3di3Yz/plVH3GZJdsLaRIwHU
+         Im2Ru0cnEsHC8Pdulz5LyaGw2k0yyyozEo+Pb8+qKzKKDVMkMvJFCYqdH88Kn2ekZCv8
+         cumjZNjq8ODxAo66ANXvZY5y9tv2IBaQoLQOC3w6SjQoAXuZZ7kDu29zp7l2/IsGukdg
+         wyPvs4IksKlnb3K+qA/kjPLCyF11qu5OipqNsTB8O1yf31CVUl+h63FmFBRHv4z1XNAl
+         gdIOgXkf/ZS33FBcFrmL+INT1iff72SaatiSZs2VvosJTQY3M1A3dOFHF+fCY/kMz/Yz
+         V2JQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771889261; x=1772494061; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+9xRDS+GbzpVTn5dJQsaYxoqI8Nli76XDWLyH8tQ4yc=;
-        b=tlTa2Pl7yC8vFqnCUdHPSyXCbNU1emA/dEGUWJC/oKyPsaajyUG4UwEKed4XzIYF+w
-         +g9tcjoJRBapjLzSfCp93HZkgqeb2WoHR4bEPXMkS8CTV1ak7YDFYwMs6WLSf9dC1QOF
-         1D/gjmzWawCjI1PRJduJSxx6s7Xams/1mwVfjs8jwsNfx8I/fzPrZl88VkdcHR1/LX86
-         oNOYWTy0MLFOCBrgjqCPqEOYw3HwFHF/fVAsSPQJflTFyQvMoOS/uVzJCWq1AwYYSSj/
-         oi3bxrNsPpzr1+JlZgQv4vbnMYNor9fu3mkaY50XOg83Bp30zq5eiUPG0G7seIEI7/Cl
-         X85Q==
+        d=google.com; s=20230601; t=1771890146; x=1772494946; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G1G7Co3UGLp29oZTzIMMy89dawTZvG8ZKLFe9M3O6sY=;
+        b=4npmqqkZVD4RdxyIRdLVN3GJ7fxWuMZCnqv7lxvXKBLGnYLdgHySwMxoi65MgG7ZHj
+         q/mQv62NpefnTqLd5SVDhmDhjWjQs0eTdLhx0WK/S+dpkS6YzqJjbeGoLxj8en304v9P
+         WjJ2xHvxEejgELw1MUKyU+IGjKcCUEP8bHGCB+O1WkB+bIxrm1Jm0LJp4ZXaMTq/Yjyw
+         Aq1yTR4H6M+iZsZEIPqRNGjLmWUAxBEk/m3nKtxVTxufNpwaweCPnVtKKJvHPHnx85x5
+         hcfTk2fuxe/ilc3cu/6XP5AlNVlhu4IkSHLUt2xOYN2xfWvB0+yB1nQhxnQ3gd84iVka
+         Nmgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771889261; x=1772494061;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+9xRDS+GbzpVTn5dJQsaYxoqI8Nli76XDWLyH8tQ4yc=;
-        b=wa9hW/L6QjT7c98s5os0GFzUMLqF75IMX9Q+8y7LUANCZP5eEfoLAV+NMlJ71lAhwo
-         EAhRFk29X5XyAyQzauKjETib18JilNPjk5ftHrINHD9RKQUHvsx5ser+qeral0p5PRtg
-         DFVQX/jZjGVuQNmDSxUY8v5MY6uGOZFEeLS/PM2H1Jmx2ciCbpBO+c/EFwU++AzshK4+
-         ZB1kZB/BH8C93IPgQdBN/cuY31agxoFtziGCqSR6bKrxKMM1Mba61FjMj1tAExBs/9d1
-         nHtW03uIqvedwlt5+4crseuuah4DIoyN33X3/pm2Hl8WHXp+aLTdwDWqAm7Sp5kDg/fx
-         1F9A==
-X-Forwarded-Encrypted: i=1; AJvYcCVgi5zt8Npk7YLpnP7mK+eSDH4w7Bkiexka+cGSpP+/Id1IiVW/K267d+RIUcg16McZsQGRvCe09q+s6q0MzHc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuGzspcYvlwfSvPzXWnwvtQ7GcPNj574GgyUrPcmu9IzbnW/32
-	71DGhgesRos27Q4XOH9npJflUKcQAB2V3oSCWv60X5BKAnS6W34dlCPALPCn/gLUtg==
-X-Gm-Gg: ATEYQzxcHSsFtWZhWoz/XLRzYUdW0nuFZQ3SSX29BhAQxwCOy5BRoIjRJ9I8s2J7QEP
-	uK2nwg4+TYwgMR3IE319MKC0xbURWaJVmle+aSQP8in9a5/zwsMlVlTS9sfsiNDWHQHocXGhxYj
-	nxyxKxhNaas+Lw71mWKdedsqOcWEkaZE9O8AwPkUJCBZ2esB8Iepyh6G22TULCbpn8oWWsCUKD1
-	0oAv33FSm2KcsdtkCOZ5LB2gON4BjjmTishOBZaBXaO6G+hrb9vmobYnDUjkjSNgqsnvdekkunu
-	BZvbSZTHLgC7H/HdZkceRe+QbkBmcbyNZXF0tvvW6j8+dGLj+8KR6C3DuDIL7R8PFHOjT1eS+yN
-	vMNyLLHvA51RV1K12djTfwnQO1xAaIyErvZlw0VxnRj5NSlqzC0+OWC0rC9HRUVZdg8/DuZ9C2l
-	SXS7M33RIg0b6HTZklet711pBuGlWwOJGTK364T10Gta9Q3LwxB+lr19FwnvTb6g==
-X-Received: by 2002:a17:903:1968:b0:2a0:89b0:71d6 with SMTP id d9443c01a7336-2ada34bcd22mr245115ad.17.1771889260189;
-        Mon, 23 Feb 2026 15:27:40 -0800 (PST)
-Received: from google.com (168.136.83.34.bc.googleusercontent.com. [34.83.136.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7500e318sm81858705ad.43.2026.02.23.15.27.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 15:27:39 -0800 (PST)
-Date: Mon, 23 Feb 2026 23:27:35 +0000
-From: Samiullah Khawaja <skhawaja@google.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
-	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
-	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, kvm@vger.kernel.org, 
-	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
-	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, 
-	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>, 
-	Vipin Sharma <vipinsh@google.com>, Vivek Kasireddy <vivek.kasireddy@intel.com>, 
-	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: Re: [PATCH v2 06/22] vfio/pci: Retrieve preserved device files after
- Live Update
-Message-ID: <bz7mhzvgawf4loxbv74iodj6aaf4e2snlb7szgjk2lia2uxnhr@dcp3m3jl3i63>
-References: <20260129212510.967611-1-dmatlack@google.com>
- <20260129212510.967611-7-dmatlack@google.com>
+        d=1e100.net; s=20230601; t=1771890146; x=1772494946;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G1G7Co3UGLp29oZTzIMMy89dawTZvG8ZKLFe9M3O6sY=;
+        b=nNO412b2A/4h7ZKUKPs/bpyTVumR6UzTYsj/MZJlQCQ4OrUDHFxX0GrnGlHEI5haYw
+         nuARzICzVAO7npU/2nn6ypjVKuI+wvlO1eARWLpCYdRaZDqFB7fg4a6DPe2sAhL5SRZO
+         Jc680DI3xeFHJ/ptrwGbgKKpCfjMHlCAcwO4+O0rmg+CFlcSypR+BxPhgq+dqJYBVJqB
+         jSW/1d8D3O7gnhDqeSburB8yYc7Cgh88gFjZB8e6RY/BBVyE2Yefpm+/bPzIfy/d8DRV
+         ebSIsGRMNoJS44pX56iwncnAHU4j+7pXBlkxYpt9CSZYh5G0mz+GCAy3HC9InoSJRmiq
+         492Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVgBIbYKXRz/nwIi3RF+nljc2F5p3MyGUHuYdtZJuprY6YlorvI5np4Ghtjb7wt95Mopied1tF0kgQNCQWsZ90=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrRRmzUfwK+8AqJHoFUn2whGLpw3gDU7bCes+nJco2K0RU7GPO
+	njcOw6V2mL78PH1tzoNpGrfoJtpfggnaxD9tlqtMoEw1BR0uKemSqbbPK2TdY0YbxFg0mxuMO27
+	7Ou8dDXYUDJG1R5LkxPLXB7C3QMrOcWqGeaQbgLDA
+X-Gm-Gg: ATEYQzxWAGP1s34ozxhc9tJqKzHttyygA6R2H/eFkmhkqL4wrZ/XzjSekKOfZ9MXvfF
+	QnXc2JSKl22TtawYous7h5Qef+QCiTbNchRWqWAO5HGNGpwH5V97q3AJf9cs17gFb1MGnEQol1V
+	dhDmi8rjAdmvi/m1MEIZaQmXMLESA1kqRN79XRH2e833zjBD6wOkzoyGfUZ4B3XsGWUcL2WPj86
+	wlPKas5SCEt88jaWEr9gfx44bHGuWRg0P7UkuzIOPP0/eRe0edkNYxpZvaOj1JakA0eYjW6JXrq
+	C+Q2KZFfLqkMpYrUtPnl2Y+G0xdUsrqec8zv+IK+0w==
+X-Received: by 2002:a05:6102:3053:b0:5f5:32e2:5ea2 with SMTP id
+ ada2fe7eead31-5feb30fc3a8mr3035084137.37.1771890145956; Mon, 23 Feb 2026
+ 15:42:25 -0800 (PST)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 23 Feb 2026 15:42:25 -0800
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 23 Feb 2026 15:42:25 -0800
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <a97045a9-8866-40fe-aa15-d319cafa6f2c@kernel.org>
+References: <cover.1771826352.git.ackerleytng@google.com> <a97045a9-8866-40fe-aa15-d319cafa6f2c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260129212510.967611-7-dmatlack@google.com>
+Date: Mon, 23 Feb 2026 15:42:25 -0800
+X-Gm-Features: AaiRm52aDnZI9CEbv5M2DeAz_Eaea7Sv4JJPWItwl1wMCqksqqJ4XC4LTodyGY8
+Message-ID: <CAEvNRgFF0+g9pmp1yitX48ebK=fDpYKSOQDmRfOjzSHxM5UpeQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 00/10] guest_memfd: Track amount of memory
+ allocated on inode
+To: "David Hildenbrand (Arm)" <david@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, lorenzo.stoakes@oracle.com, 
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, willy@infradead.org, pbonzini@redhat.com, shuah@kernel.org, 
+	seanjc@google.com, shivankg@amd.com, rick.p.edgecombe@intel.com, 
+	yan.y.zhao@intel.com, rientjes@google.com, fvdl@google.com, 
+	jthoughton@google.com, vannapurve@google.com, pratyush@kernel.org, 
+	pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com, 
+	michael.roth@amd.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jan 29, 2026 at 09:24:53PM +0000, David Matlack wrote:
->From: Vipin Sharma <vipinsh@google.com>
->
->Enable userspace to retrieve preserved VFIO device files from VFIO after
->a Live Update by implementing the retrieve() and finish() file handler
->callbacks.
->
->Use an anonymous inode when creating the file, since the retrieved
->device file is not opened through any particular cdev inode, and the
->cdev inode does not matter in practice.
->
->For now the retrieved file is functionally equivalent a opening the
->corresponding VFIO cdev file. Subsequent commits will leverage the
->preserved state associated with the retrieved file to preserve bits of
->the device across Live Update.
->
->Signed-off-by: Vipin Sharma <vipinsh@google.com>
->Co-developed-by: David Matlack <dmatlack@google.com>
->Signed-off-by: David Matlack <dmatlack@google.com>
->---
-> drivers/vfio/device_cdev.c             | 21 ++++++---
-> drivers/vfio/pci/vfio_pci_liveupdate.c | 60 +++++++++++++++++++++++++-
-> drivers/vfio/vfio_main.c               | 13 ++++++
-> include/linux/vfio.h                   | 12 ++++++
-> 4 files changed, 98 insertions(+), 8 deletions(-)
->
->diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
->index 8ceca24ac136..935f84a35875 100644
->--- a/drivers/vfio/device_cdev.c
->+++ b/drivers/vfio/device_cdev.c
->@@ -16,14 +16,8 @@ void vfio_init_device_cdev(struct vfio_device *device)
-> 	device->cdev.owner = THIS_MODULE;
-> }
->
->-/*
->- * device access via the fd opened by this function is blocked until
->- * .open_device() is called successfully during BIND_IOMMUFD.
->- */
->-int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
->+int __vfio_device_fops_cdev_open(struct vfio_device *device, struct file *filep)
-> {
->-	struct vfio_device *device = container_of(inode->i_cdev,
->-						  struct vfio_device, cdev);
-> 	struct vfio_device_file *df;
-> 	int ret;
->
->@@ -52,6 +46,19 @@ int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
-> 	vfio_device_put_registration(device);
-> 	return ret;
-> }
->+EXPORT_SYMBOL_GPL(__vfio_device_fops_cdev_open);
->+
->+/*
->+ * device access via the fd opened by this function is blocked until
->+ * .open_device() is called successfully during BIND_IOMMUFD.
->+ */
->+int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
->+{
->+	struct vfio_device *device = container_of(inode->i_cdev,
->+						  struct vfio_device, cdev);
->+
->+	return __vfio_device_fops_cdev_open(device, filep);
->+}
->
-> static void vfio_df_get_kvm_safe(struct vfio_device_file *df)
-> {
->diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
->index f01de98f1b75..7f4117181fd0 100644
->--- a/drivers/vfio/pci/vfio_pci_liveupdate.c
->+++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
->@@ -8,6 +8,8 @@
->
-> #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->
->+#include <linux/anon_inodes.h>
->+#include <linux/file.h>
-> #include <linux/kexec_handover.h>
-> #include <linux/kho/abi/vfio_pci.h>
-> #include <linux/liveupdate.h>
->@@ -108,13 +110,68 @@ static int vfio_pci_liveupdate_freeze(struct liveupdate_file_op_args *args)
-> 	return ret;
-> }
->
->+static int match_device(struct device *dev, const void *arg)
->+{
->+	struct vfio_device *device = container_of(dev, struct vfio_device, device);
->+	const struct vfio_pci_core_device_ser *ser = arg;
->+	struct pci_dev *pdev;
->+
->+	pdev = dev_is_pci(device->dev) ? to_pci_dev(device->dev) : NULL;
->+	if (!pdev)
->+		return false;
->+
->+	return ser->bdf == pci_dev_id(pdev) && ser->domain == pci_domain_nr(pdev->bus);
->+}
->+
-> static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
-> {
->-	return -EOPNOTSUPP;
->+	struct vfio_pci_core_device_ser *ser;
->+	struct vfio_device *device;
->+	struct file *file;
->+	int ret;
->+
->+	ser = phys_to_virt(args->serialized_data);
->+
->+	device = vfio_find_device(ser, match_device);
->+	if (!device)
->+		return -ENODEV;
->+
->+	/*
->+	 * Simulate opening the character device using an anonymous inode. The
->+	 * returned file has the same properties as a cdev file (e.g. operations
->+	 * are blocked until BIND_IOMMUFD is called).
->+	 */
->+	file = anon_inode_getfile_fmode("[vfio-device-liveupdate]",
->+					&vfio_device_fops, NULL,
->+					O_RDWR, FMODE_PREAD | FMODE_PWRITE);
->+	if (IS_ERR(file)) {
->+		ret = PTR_ERR(file);
->+		goto out;
->+	}
->+
->+	ret = __vfio_device_fops_cdev_open(device, file);
->+	if (ret) {
->+		fput(file);
->+		goto out;
->+	}
->+
->+	args->file = file;
->+
->+out:
->+	/* Drop the reference from vfio_find_device() */
->+	put_device(&device->device);
->+
->+	return ret;
->+}
->+
->+static bool vfio_pci_liveupdate_can_finish(struct liveupdate_file_op_args *args)
->+{
->+	return args->retrieved;
-> }
->
-> static void vfio_pci_liveupdate_finish(struct liveupdate_file_op_args *args)
-> {
->+	kho_restore_free(phys_to_virt(args->serialized_data));
-> }
->
-> static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
->@@ -123,6 +180,7 @@ static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
-> 	.unpreserve = vfio_pci_liveupdate_unpreserve,
-> 	.freeze = vfio_pci_liveupdate_freeze,
-> 	.retrieve = vfio_pci_liveupdate_retrieve,
->+	.can_finish = vfio_pci_liveupdate_can_finish,
-> 	.finish = vfio_pci_liveupdate_finish,
-> 	.owner = THIS_MODULE,
-> };
->diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
->index 276f615f0c28..89c5feef75d5 100644
->--- a/drivers/vfio/vfio_main.c
->+++ b/drivers/vfio/vfio_main.c
->@@ -13,6 +13,7 @@
-> #include <linux/cdev.h>
-> #include <linux/compat.h>
-> #include <linux/device.h>
->+#include <linux/device/class.h>
-> #include <linux/fs.h>
-> #include <linux/idr.h>
-> #include <linux/iommu.h>
->@@ -1758,6 +1759,18 @@ int vfio_dma_rw(struct vfio_device *device, dma_addr_t iova, void *data,
-> }
-> EXPORT_SYMBOL(vfio_dma_rw);
->
->+struct vfio_device *vfio_find_device(const void *data, device_match_t match)
->+{
->+	struct device *device;
->+
->+	device = class_find_device(vfio.device_class, NULL, data, match);
->+	if (!device)
->+		return NULL;
->+
->+	return container_of(device, struct vfio_device, device);
->+}
->+EXPORT_SYMBOL_GPL(vfio_find_device);
->+
-> /*
->  * Module/class support
->  */
->diff --git a/include/linux/vfio.h b/include/linux/vfio.h
->index 9aa1587fea19..dc592dc00f89 100644
->--- a/include/linux/vfio.h
->+++ b/include/linux/vfio.h
->@@ -419,4 +419,16 @@ int vfio_virqfd_enable(void *opaque, int (*handler)(void *, void *),
-> void vfio_virqfd_disable(struct virqfd **pvirqfd);
-> void vfio_virqfd_flush_thread(struct virqfd **pvirqfd);
->
->+#if IS_ENABLED(CONFIG_VFIO_DEVICE_CDEV)
->+int __vfio_device_fops_cdev_open(struct vfio_device *device, struct file *filep);
->+#else
->+static inline int __vfio_device_fops_cdev_open(struct vfio_device *device,
->+					       struct file *filep)
->+{
->+	return -EOPNOTSUPP;
->+}
->+#endif /* IS_ENABLED(CONFIG_VFIO_DEVICE_CDEV) */
->+
->+struct vfio_device *vfio_find_device(const void *data, device_match_t match);
->+
-> #endif /* VFIO_H */
->-- 
->2.53.0.rc1.225.gd81095ad13-goog
->
+"David Hildenbrand (Arm)" <david@kernel.org> writes:
 
-Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
+> On 2/23/26 08:04, Ackerley Tng wrote:
+>> Hi,
+>>
+>> Currently, guest_memfd doesn't update inode's i_blocks or i_bytes at
+>> all. Hence, st_blocks in the struct populated by a userspace fstat()
+>> call on a guest_memfd will always be 0. This patch series makes
+>> guest_memfd track the amount of memory allocated on an inode, which
+>> allows fstat() to accurately report that on requests from userspace.
+>>
+>> The inode's i_blocks and i_bytes fields are updated when the folio is
+>> associated or disassociated from the guest_memfd inode, which are at
+>> allocation and truncation times respectively.
+>>
+>> To update inode fields at truncation time, this series implements a
+>> custom truncation function for guest_memfd. An alternative would be to
+>> update truncate_inode_pages_range() to return the number of bytes
+>> truncated or add/use some hook.
+>>
+>> Implementing a custom truncation function was chosen to provide
+>> flexibility for handling truncations in future when guest_memfd
+>> supports sources of pages other than the buddy allocator. This
+>> approach of a custom truncation function also aligns with shmem, which
+>> has a custom shmem_truncate_range().
+>
+> Just wondered how shmem does it: it's through
+> dquot_alloc_block_nodirty() / dquot_free_block_nodirty().
+>
+> It's a shame we can't just use folio_free().
+
+Yup, Hugh pointed out that struct address_space *mapping (and inode) may already
+have been freed by the time .free_folio() is called [1].
+
+[1] https://lore.kernel.org/all/7c2677e1-daf7-3b49-0a04-1efdf451379a@google.com/
+
+> Could we maybe have a
+> different callback (when the mapping is still guaranteed to be around)
+> from where we could update i_blocks on the freeing path?
+
+Do you mean that we should add a new callback to struct
+address_space_operations?
+
+.invalidate_folio semantically seems suitable. This is called from
+truncate_cleanup_folio() and is conditioned on
+folio_needs_release(). guest_memfd could make itself need release, but
+IIUC that would cause a NULL pointer dereference in
+filemap_release_folio() since try_to_free_buffers() -> drop_buffers()
+will dereference folio->private.
+
+From the name, .release_folio sounds eligible, but this is meant for
+releasing data attached to a folio, not quite the same as updating inode
+fields. This is also not called in the truncation path.
+
+>
+> --
+> Cheers,
+>
+> David
