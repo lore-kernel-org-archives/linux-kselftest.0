@@ -1,151 +1,156 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3B430BBA9
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 16:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771865909; cv=pass; b=pvqmg1g1HovZ96PJMDjD3WuYxJvkNafAuIZAVNKElcI+Pkc2YQm67lZ1r6H2FBiHuWSeUZrEaX7hQtp54Y3Lb4Rk+CheaKF+PuqOpRXIEBWchXiWOIV4mej8aCfOkJtl7KBC1QdWAYqTI+maZ3X89krrCoiiMSnPJ3XWxvBB1n8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771865909; c=relaxed/simple;
-	bh=8O35ywf3frONs/mR3sh+Q3y4PGU/DxQ4aRR+Ww+VwB8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R8NcL3VTVC/NYgOgfBvXnevon5D+O4P6bvRmLMGnwvvZm7RNGn1hgpw6juaBS3TsNiDOxfchL4SjsxgHn+oD2HgGkw5eHInD+VK0KhNqKTiJWYJjbX1nA1v2ZWQfiQDNok4428M6L4waXhGTwRm3wu9zeUwJ9Dc3RgQqNXlcB9U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ReOT2Foh; arc=pass smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CB0329E46;
+	Mon, 23 Feb 2026 17:11:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771866717; cv=none; b=mMudwG/iQOszZJxtKZTBLrcXMSpsfl4lVUFyAgcDq6PfzujUyqOsP/myoxvxJ+ZK5bSy3RpVq//pUCmahXdpahhlOwg3hHr0BeJRymsnhdyTExTNAfTJU6wgGVn7pX/uKur98Ydi0iQ/MqVDT49v0pEgqtVFfyFG8l6Sy8aUGpo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771866717; c=relaxed/simple;
+	bh=yjmlAKXLz9VGGwKtdqReHY7E2dURU/svgnzBRJY8ND0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jv1iP6XqVqH9U7XcDRu+eaSzuWdird6O04weK8g+5w29WeGDfwC8d78l8xhoSm6DM3H2tUdHsPfCDueZulIra8TVm8GKxeNfD0ewaxbeC8O9E0LBjEOjEJSsCpcBCJq67dOZCENzHd6loBxiuyXC4d0F9A3O5P2bUDdu2Gpn2sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rNqVJA9a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ReOT2Foh"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48373a4bca3so27397375e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 08:58:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771865907; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RPoU0HQOztTbhdWXZQCXYdDfyI5i4lvE7jW/jmxry0iI/99UQRFeuVQZbgtV15MIes
-         JWDgzlbjliMY64DhOPAFI3tYht9pG2KzwldADHGSTjg5E++JQ+vz0xGZDoWWYJkOomDd
-         kKcUPc5j2wRs9vp6zS76dTs08GWEvsPvnYXgs6NvAtqL63CLxakooUs6jnfXTMJoFovL
-         GdBUppFRZp7akJuck4g/w7q9tNrCey3W55RfYGoura3egqSm8InM/7j+vDUexyA5d8x3
-         6NjCqt037F7vNXJ0u5qDF1wnAcfkvGMyJNNfpzEh0UACpPegGMUS5JlrqviDNaj76V7k
-         rFtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2/TWRW3byuvHDEl1Ok9W0sAe5kheK+6oFHQAV5r5ghw=;
-        fh=//NTNGpEC+T9Cv0PmOjju462iakXnceoqHrX17eyy7U=;
-        b=cvnpxf37m2onU7IlIXcLdL6FHfqMJmRg+PEYNQpfs64suneNES7Op2WLz3041FMIyg
-         /kCOnIzVvXOnM4p522r8zmR3cYhTT4ykUl6rfh1dKgORzS4SVwqXK4QzK9U/5fHA610H
-         3pkIx7MEYbUBwId+ufz2HaMF0UXZtIY4AsQmJfC7I1slVN3Sa97mohV+cfFWOCq32/7p
-         wDi22lGOHrHk8Qrz+sgHa4o6LafWcB6DP6GecnFcbXvNe/fZCu3SnblB/KVQGGQsLAIE
-         W5QC2MfBnXIIbAFd3UWhaEpLAzfmCYnpPtganIhOctJMIIHv5fEMzZQSGgNeARhxQ8nr
-         0eVw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771865907; x=1772470707; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2/TWRW3byuvHDEl1Ok9W0sAe5kheK+6oFHQAV5r5ghw=;
-        b=ReOT2Fohn+NNBBbUJpNuYk384nuMXyiNFHVPkouNela1ImQm4WI0vsXiu/VNIdP6kD
-         J7zbFeV4UpXHLousND1iqZaEXqe2OhDCBiKP2hwdHCwglau583RVveXojmoNacSCTSgg
-         ZO94CAlMcp5+NTKBV46d1C7X0HXfTisdBfXxhXbmsz2f6J56rMF41e0IBOw3uio2OqDs
-         Y7lh77oFr7d9wjKEiiren2rJNRHlWDpzGIxplX76MbVhCIwSxuXXXVI62qJg103EPqDG
-         aEboVMp0zMDHAPCj4Zefd6zEJ6AWFRPjMVdc8LREdbMEmcphSQEHPfJvAkQk1LmVgffc
-         LrUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771865907; x=1772470707;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2/TWRW3byuvHDEl1Ok9W0sAe5kheK+6oFHQAV5r5ghw=;
-        b=N/T0Yj7hPEYGwe29hCX28x0nan8FSEP/scwenoRTGLW03Uy8QddvaTPHXCUpvNhc13
-         Aw7XgiYOcBkJI/U2CuELaaSnW7Eyh+mwDYhPGbQbS3Y9580OaNS8qlkIKj8ITijkWvXI
-         /WUBo4zB/MDSmUqj9ZykM9qMxDnnoWOx2GyRplCchqo14+AqmO6fje2k5rnR/zlCt/iu
-         1AW3XtMva4im0/Oh7wcdg0FaHVqk5cPlmggEiOd3ejzilhfcd4Gejjv4WK1t/P8Mf56K
-         l+AoYwbNdXQKYAm/RfXDuoCRrU0+hYoZAi0ZcIkMPP62hIbvepUVGDa2DdlgmgeQw2gP
-         E9tA==
-X-Forwarded-Encrypted: i=1; AJvYcCXrAwB5UHKri3QPUJPnAeZHFQBywY6h1Fjh8yB0h48/om+5uFriw2rg0DUCpGddfPuMITYyuLiZQnxsZtSTEtc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpFUQ8BSG1pjlv7iqyqLRve7ipYBnkZUNgdPSaEE0HYVKXHR8T
-	jGGALrITQJtN7w/MrOoWnntJ+zo5mL6IExyIBfIcaJxKN51wfX6PTIuJ6ZB61V5VlexhusiKrmu
-	NdNJ41SzVW5LNsMCX9x3UcHX4rkVX/EU=
-X-Gm-Gg: AZuq6aK17/wx2kPEaSB4n3wzfSbdYHT5RH9jspwjHPh/bZrBaFaotVz2J5YqrJyNAd8
-	0F8TNt+MEhL3RNYGADRuXagqwzfnqfkxvBRslxSc9933oiSK16LLtAPaUYZbxJACYA9+dqMn6+S
-	jd1eiLRUW2lxUk7dYTIj7w6FLgAG0vOcbuEW/cCEqC9C1JH4w4NLZ9Bww9OBFi2MxRjFgerkcIq
-	bISIVaIamUQGP2p8D63lG2v0T26mkxrWsIea51tjUcfGNxqAtBGafQDOVWlHYZIRRddDko1JD8G
-	XX4YiDq68WNtmq9M8qoy2xbcSVjFD9roPRs2j8VhaDUQa1QbddL5ap+5zRFw1UBNxAjlAUAb7T5
-	OOAW6faLzslK9ascTAfU=
-X-Received: by 2002:a05:600c:3484:b0:483:7f4e:fef6 with SMTP id
- 5b1f17b1804b1-483a95fa4e7mr119430205e9.26.1771865906614; Mon, 23 Feb 2026
- 08:58:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rNqVJA9a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 709F9C116C6;
+	Mon, 23 Feb 2026 17:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771866716;
+	bh=yjmlAKXLz9VGGwKtdqReHY7E2dURU/svgnzBRJY8ND0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rNqVJA9aXljg/05FnhqGrVfPGaGndVN//YG8WZxBi8WmGQxJnQULX3r4n2ksAZk5t
+	 uva9rbjs52C9aMeXl3oWjrIiOTHSQ7ZgQbVvhaimr6KGOTtB1/U2No+HrPcq9ucTlu
+	 2SqeCSo4N4y9c7THlT0QKsFhw4KaT+0tr0ZyNNdsCQM6tSCRCPB96ZM17B4bMesqHw
+	 lOL327QqPw2kt6UupK1wALVSug+DySLfoDfVktoUMzi7LDdqFWv2qs8ANDVXGgn8HW
+	 wSB50W3Lg3zh2sPs9s2FrI6I840BMu+jFpEqnxr343X1Ot5MRVg0OOEO5amK/9WBdx
+	 sVNC4cMmLy18A==
+Date: Mon, 23 Feb 2026 18:11:54 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aZyKWoxnywXKWth9@lore-desk>
+References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
+ <20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
+ <20260218174742.62a4074f@kernel.org>
+ <aZbuWBnmh_SQJyVf@lore-desk>
+ <20260219091344.1d8517f3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
- <20260223104743.37713-1-slava.imameev@crowdstrike.com>
-In-Reply-To: <20260223104743.37713-1-slava.imameev@crowdstrike.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 23 Feb 2026 08:58:14 -0800
-X-Gm-Features: AaiRm53gF6QRXkPAEJJjxdjdGlfFi_H0IJde1Ne6TGCB64Ct4fuwj2XfM2Yoyyg
-Message-ID: <CAADnVQ+okfKHvKzCy9vLQkpevhvHMFXhincqmFOQX9zN_vtQyA@mail.gmail.com>
-Subject: Re: Re: [PATCH bpf-next v3 1/2] bpf: Support multi-level pointer
- params via SCALAR_VALUE for trampolines
-To: Slava Imameev <slava.imameev@crowdstrike.com>
-Cc: bot+bpf-ci@kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, Chris Mason <clm@meta.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, Eduard <eddyz87@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Hao Luo <haoluo@google.com>, Simon Horman <horms@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	DL Linux Open Source Team <linux-open-source@crowdstrike.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Network Development <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lh4l9TWd5fblWGcQ"
+Content-Disposition: inline
+In-Reply-To: <20260219091344.1d8517f3@kernel.org>
+
+
+--lh4l9TWd5fblWGcQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 23, 2026 at 2:48=E2=80=AFAM Slava Imameev
-<slava.imameev@crowdstrike.com> wrote:
->
-> I think support for broader types can be provided in a compatible way
-> with future annotated support, as I explained in my reply to the v2
-> review:
->
-> "
->   > so I suggest treating 'void **' as a scalar as Eduard suggested.
->   > This particular sb_eat_lsm_opts() hook
->   > doesn't have a useful type behind it anyway.
->   > I'm less certain about 'char **'. If we make it scalar too
->   > it will be harder to make it a pointer to nul terminated string later=
-.
->
->   > So I would do 'void **' -> scalar for now only.
->
->   I changed to scalar in v3, keeping broader scope for pointer types.
->
->   We encountered double pointers of various types that required
->   workarounds, such as:
->
->   int __posix_acl_chmod(struct posix_acl **acl, gfp_t gfp, umode_t mode)
->
->   Adding support for void** alone doesn't address the broader issue
->   with other double pointer types.
->
->   When annotated array support (including char**) is added in the
->   future, it should remain compatible with the scalar approach for
->   legacy (unannotated) parameters. Unannotated parameters will
->   continue using scalar handling.
-> "
+> On Thu, 19 Feb 2026 12:04:56 +0100 Lorenzo Bianconi wrote:
+> > > On Tue, 17 Feb 2026 09:33:56 +0100 Lorenzo Bianconi wrote: =20
+> > > > + * In case of success, ``ip_summed`` is set to the RX checksum res=
+ult. Possible
+> > > > + * values are:
+> > > > + * ``XDP_CHECKSUM_NONE``
+> > > > + * ``XDP_CHECKSUM_UNNECESSARY``
+> > > > + * ``XDP_CHECKSUM_COMPLETE``
+> > > > + *
+> > > > + * In case of success, ``cksum_meta`` contains the hw computed che=
+cksum value
+> > > > + * for ``XDP_CHECKSUM_COMPLETE`` or the ``csum_level`` for
+> > > > + * ``XDP_CHECKSUM_UNNECESSARY``. It is set to 0 for ``XDP_CHECKSUM=
+_NONE`` =20
+> > >=20
+> > > It's fairly common for NICs to report both csum complete and
+> > > unnecessary. Which one should the driver return in that case? =20
+> >=20
+> > Do you mean what is value for cksum_meta if we do not report csum_level=
+ for
+> > XDP_CHECKSUM_UNNECESSARY/CHECKSUM_UNNECESSARY use-case? (as suggested by
+> > Stanislav).
+>=20
+> More fundamentally whether the API is right.
+>=20
+> > My original idea is:
+> > - if the hw reports CHECKSUM_COMPLETE:
+> >   - ip_summed =3D XDP_CHECKSUM_COMPLETE
+> >   - cksum_meta contains the checksum computed by the hw
+> > - if the hw reports CHECKSUM_UNNECESSARY
+> >   - ip_summed =3D XDP_CHECKSUM_UNNECESSARY
+> >   - cksum_meta =3D csum_level <-- Stanislav suggests to drop this one
+> > - if the hw reports CHECKSUM_NONE
+> >   - ip_summed =3D XDP_CHECKSUM_NONE
+> >   - cksum_meta =3D 0
+>=20
+> Off the top of my head drivers prefer reporting UNNECESSARY when they
+> have both, and reserve COMPLETE for cases where L4 could not be found
+> or is incorrect. Why don't we report both? We're using 3 args, we still
+> have 3 to go. We could turn ip_summed into a bitmap and have explicit
+> output args for both level and csum complete value?
 
-but then there is no need to relax it for double pointers only.
+Ack, thx for the explanation. Just for sake of understanding, is there
+any NIC capable of reporting both csum_value and csum for the same packet
+in the DMA descriptor? Or is this change needed to be future-proof?
 
--       if (is_void_or_int_ptr(btf, t))
-+       if (is_void_or_int_ptr(btf, t) || !btf_type_is_struct_ptr(btf, t))
+>=20
+> One more thing I'd like us to at least have a plan for at this stage
+> is how to deal with COMPLETE + modified packet + XDP_PASS.
+> Right now some drivers discard COMPLETE when XDP is attached since
+> they can't be sure if XDP modifies the packet. Other drivers don't
+> and we end up with bad csum splat. Do we have a recommendation on
+> the correct behavior? If not - should we have a kfunc to adjust /
+> discard csum complete explicitly?
 
-would make 'scalar' a fallback for anything unrecognized,
-and we can argue that making it smarter in the future
-maybe hopefully won't break progs.
+At the moment there is no way to store the csum value we got running
+bpf_xdp_metadata_rx_checksum() in order to be consumed during
+xdp_buff/xdp_frame to skb conversion (this info can just be consumed in the
+ebpf program bound to the NIC) but I guess the issue you pointed out can be
+solved in the verifier during program load time. What do you think?
+
+Regards,
+Lorenzo
+
+
+--lh4l9TWd5fblWGcQ
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaZyKWgAKCRA6cBh0uS2t
+rHNBAP9ouJdti/YCdFjO7itL0UdmYksYWGbYroEEhW17p936FAEAlB7ZtUPKoY/y
+NW9uhOZQbwVMVAX/rQD+HOzSllyTogw=
+=F4hR
+-----END PGP SIGNATURE-----
+
+--lh4l9TWd5fblWGcQ--
