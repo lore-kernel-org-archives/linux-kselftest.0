@@ -1,93 +1,145 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33642146588
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 16:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5276E2110
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 00:07:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771779319; cv=none; b=VVDko1F9m3aKYt0/W4VKTLnzBzhWFnxcjejAZMVCK3hzA7JSTr1l+964P/Zp44hVxBnSjqnfF7kWn4tak4M8ZZHnSsON0m92NFhhBAUqr2IQSEZHlcH28vKJENCM1ICAy7tyBTN83fjVlhsakxBqhNxA7oAEH0xB6ETidlAcKzU=
+	t=1771805253; cv=none; b=M0E8jbl3/s7H2vFXUAnZwX/frlGcwoREm6FbFHfhYu65FnKLdkaVb+sgKViwCWEXiCQ5/IDp9ZkwxjqeqUPzSmUhaB/8HWhzTDH9vY59u+JdCTKsIRHTFb5PkOMFEHgenbfc8eT2HX9OZNaMhosBlYGqi6xIjudleWpG1hxJAP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771779319; c=relaxed/simple;
-	bh=Sa11091frtdB7X7+J4H+SzAKyN2hdw6VhNJdlFVuCVU=;
+	s=arc-20240116; t=1771805253; c=relaxed/simple;
+	bh=XL3GK1srBYNctAMCr4LIXYb0AmtCQmrv6sjvkBGn/ug=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l4eKUFG80t1GwmednFFLKKU4vr4uTSmrdTuWESRIw4E9AOSqe5AxwJiep8YdCYE6pqRAzQOhw0MOsaF/odReK3k8ZJyRa5ES4+J03lQWqD1H+Jpn4COBk09gOFTxbmbvbigRYVg1DmmizNEjaUdUbq9vQ+Ey2Qs/fiCx4yCJfhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AFJfDmh3; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=XRAz2pEv6k3GSYsaJWu26Ep8zft8sfLvCbmjup3eF/SG7faMmNGwNPaJ6hAYb3ymLgyaoh3iXBYFZBsI6R1wcg6PE96FaTbNkbdgo/nxNO5lgoXyW/4EqtTCjyTI4GpPvbbpsg0j8bQ3kJs9CdFsjTVvdzCWue/S2+pK15yf2SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I6+/6xFa; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AFJfDmh3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771779317;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Sa11091frtdB7X7+J4H+SzAKyN2hdw6VhNJdlFVuCVU=;
-	b=AFJfDmh3oQ2MOpTy2MDwbOMSghUpBxiQi5SEzk2Bp/p71ipfeOCwhL/ltmsgUfuT5WK2Dd
-	TBjOGS/pToeJBJ6WD6meundrbpq16CEGY7XJTdEToQ+4oMDlDcrZV4GYjZmK69rR4R/5mk
-	TPo2zTXCcg4D3JVFB9gyMSrxAMyJ9XA=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-283-R6vyK2cQPtuq2PRdmIf5pQ-1; Sun,
- 22 Feb 2026 11:55:13 -0500
-X-MC-Unique: R6vyK2cQPtuq2PRdmIf5pQ-1
-X-Mimecast-MFC-AGG-ID: R6vyK2cQPtuq2PRdmIf5pQ_1771779312
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E03BB1956089;
-	Sun, 22 Feb 2026 16:55:11 +0000 (UTC)
-Received: from fedora (unknown [10.44.32.38])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id AA1BD19560A3;
-	Sun, 22 Feb 2026 16:55:07 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Sun, 22 Feb 2026 17:55:11 +0100 (CET)
-Date: Sun, 22 Feb 2026 17:55:05 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Jan Kara <jack@suse.cz>, Aleksa Sarai <cyphar@cyphar.com>,
-	Andrei Vagin <avagin@google.com>, Kirill Tkhai <tkhai@ya.ru>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I6+/6xFa"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso31974675e9.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 16:07:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771805251; x=1772410051; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WOqNCHYi5/n2sZSN3I12xrG8kdOz0JTtrUngqbnvPM4=;
+        b=I6+/6xFabuflN1j6IDRGaaAVtNwTj4IWYSrFztIldfykNe7DpIrLOeAVVsws+Pmx1X
+         u6Wnw2MNoDH5HH9gK3vXJaDkva5sJVirUn5ZpiGm9E9hrE1imDiDudpv8BkKU2hqVjgc
+         iTNysnOheIjIRlJHFkywNC+0PH9RRVL2JV9qTXf9QzG1BAcNIQ6r9Kp1947b0Emh46Cu
+         WRcvIUJQKC61ZRxAZR44E9V5Cbg4XBYHfU/Uudkwb7tGPWmqV/EiCZtnpMNSk8DVyJek
+         pVKZGzFFqFlUeuhOjyDXec7SAzIlI04xxI8h3G5AX97QS5NjcnAyxbdnjc2vuYq+yxX0
+         8b+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771805251; x=1772410051;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WOqNCHYi5/n2sZSN3I12xrG8kdOz0JTtrUngqbnvPM4=;
+        b=YpuARCmsRG0EpmaOvg20tTlKOrJirfk1+rgWyOEwZDDk+6mtNGsIRa9f0VIG/hoZ5O
+         WbumT38taROxwpadnrlu/qyyVJis5+qFaR6/P2hqxqZV+A0RytOxSXzEvKoOW4cI59DO
+         m/bjKca8eGu2Qp9P3Syq2pI3PJjaztKNn9/Tm5tbfR4y/cVi1TieWfFYhM7e8BelxcP7
+         UzmK5O5oL/E/2KvxfwbO8smrl1Ou/o7nfZ2gUQleOAUcOPvCVhNeJKAhNmAvaM8NCDkO
+         nkxe732iiA9ArAhbzQO/YdULpDDaz/mSHfc6Qv7PZDUoOYV3PPsxgFJHb0zp7Hl9mJl7
+         DSSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUcRCEjWqiE1CWzQU1lysWHnYaziVJ05DLvwaJ+wEIMjG/nQVn4fsTgLtCxoiVh3HW1HF6mWAMSWEpZo2Uz9mA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwvOwfoszgkUoWVYwOB9V1KuEf3lP/7Tn8J/sQo9VUHN/1xOy8
+	dSLWwSsM4yNq/Mmdz4IyQp084DJAERhuL3aMn0wq4XJ3PsDnqfMc61KK
+X-Gm-Gg: AZuq6aL3TGwtyrWCOHa+6JcYwAIY1ZrKPfM40/RmDIEjcFVQCf1TtMjE8cIIfeZMDQZ
+	gq0+ZXh5n3i1xch328/PXIeWOX4JhoIIVsbqALEFGuhliub3lglgQrpOCJmzxzuEhpLQDRF3ifQ
+	hpDHfSmzgQ+u0oobzWx62tppMFRDM9uPd3J+aEGnactC3lrnrGFmxZrqfBJWHjaBIsM+4dhNwdM
+	4dlKEB8yUQiQtJb+cqGnZlt5BemHSpFjQOSdr7gFv2msFvZBtqNCof/Su0vlqHI2CbRpwHSCtwP
+	6ZJHDuE7AR3D/XMLzd5Dzdz6cMoOo6oO1/QnfYUQnrPZcdzMpm9TJNnwO6dS9PmJMwY0em7A5K1
+	7RtY2oFeUcQLrFag6J0AGYMxLG68Uba7sNHXTxUxU6BrMUOA89nPc1T7avvc+QxJQZMTraKRgOl
+	sqxWFAGO0HFSTMQCNFgzyk6HR1ju4KU/ZYiLER1W3pLjEuTg5RH9aIxD/sOZFHuw==
+X-Received: by 2002:a05:600c:450c:b0:480:4be7:4f53 with SMTP id 5b1f17b1804b1-483a963d656mr119551865e9.31.1771805250470;
+        Sun, 22 Feb 2026 16:07:30 -0800 (PST)
+Received: from gandalf.schnuecks.de (p5b2e2ef5.dip0.t-ipconnect.de. [91.46.46.245])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a3deb73bsm71630745e9.3.2026.02.22.16.07.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Feb 2026 16:07:29 -0800 (PST)
+Received: by gandalf.schnuecks.de (Postfix, from userid 500)
+	id 451FC2FD757A; Mon, 23 Feb 2026 01:07:29 +0100 (CET)
+Date: Mon, 23 Feb 2026 01:07:29 +0100
+From: Simon Baatz <gmbnomis@gmail.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	David Ahern <dsahern@kernel.org>,
+	Stefano Brivio <sbrivio@redhat.com>, Jon Maloy <jmaloy@redhat.com>,
+	Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Ebner <c.ebner@proxmox.com>, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] pid_namespace: allow opening pid_for_children before
- init was created
-Message-ID: <aZs06UgTFYg_ctlN@redhat.com>
-References: <20260220164559.2465466-1-ptikhomirov@virtuozzo.com>
- <20260220164559.2465466-2-ptikhomirov@virtuozzo.com>
- <aZsi8Z4Y2qqpdZGH@redhat.com>
+Subject: Re: [PATCH RFC net-next 0/4] tcp: RFC 7323-compliant window
+ retraction handling
+Message-ID: <aZuaQSdsuWaAZza8@gandalf.schnuecks.de>
+References: <20260220-tcp_rfc7323_retract_wnd_rfc-v1-0-904942561479@gmail.com>
+ <CANn89iLd=P2nftdMReVkc+d-8+0PGi1ACxhrhnVCxFVxNOhvJg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <aZsi8Z4Y2qqpdZGH@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANn89iLd=P2nftdMReVkc+d-8+0PGi1ACxhrhnVCxFVxNOhvJg@mail.gmail.com>
 
-On 02/22, Oleg Nesterov wrote:
->
-> Pavel,
->
-> Your patch doesn't apply to Linus's tree.
->
-> and in any case... can you avoid read_lock(tasklist) in alloc_pid() ?
-> This is really not good.
+Hi Eric,
 
-I'm afraid I am totally confused, but it looks unnecessary.
+On Fri, Feb 20, 2026 at 09:58:00AM +0100, Eric Dumazet wrote:
+> Hi Simon, thanks for the clean series.
+> 
+> I would guess you use some AI ? This is fine, just curious.
 
-Once ->child_reaper is set, it can be changed but not cleared.
-This means that pidns_for_children_get() doesn't need tasklist too.
+Thank you!  Yes, I’ve found AI helpful for getting familiar with a
+new code base.  I also use it to refine or clean up the wording of
+bigger commit messages.  Code generation works quite well for quick,
+throw‑away code (like reproducers).
+ 
+> Can you add more tests, in memory stress situations ?
+> 
+> Like :
+> 
+> A receiver grew the RWIN over time up to 8 MB.
+> 
+> Then the application (or the kernel under stress) used SO_RCVBUF to 16K.
+> 
+> I want to make sure the socket wont accept packets to fill the prior
+> window and consume 8MB
 
-However. With or without this patch, we probably need WRITE_ONCE()
-in find_child_reaper() and copy_process() + READ_ONCE() in alloc_pid()
-to avoid the possible warnings from KCSAN.
+I suspect generating 8 MB worth of RX data in packetdrill won't be
+fun (unless there’s a trick I’m missing).  And using regular TCP
+sockets on both ends would probably be rather uninteresting (no
+packets sent once RWIN = 0)
 
-No?
+It might be more practical to extend one of the tests to create two
+situations in packetdrill:
 
-Oleg.
+1. Zero window:  0 == RWIN < 2 * squeezed SO_RCVBUF < tracked max. RWIN < 2 * original SO_RCVBUF
+2. Small window: 0  < RWIN < 2 * squeezed SO_RCVBUF < tracked max. RWIN < 2 * original SO_RCVBUF
 
+If these limits are sufficiently distinct, we could probe tcp_sequence() and
+tcp_data_queue() paths in detail using:
+  
+* pure ACK or data packet
+* in-order or out-of order
+* within, partially within, or beyond (max) window
+
+If we can show that we can't use more memory than expected for the
+squeezed buffer, then the original max window size shouldn’t really
+matter.
+
+wdyt?
+
+- Simon
+
+-- 
+Simon Baatz <gmbnomis@gmail.com>
