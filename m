@@ -1,54 +1,54 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B095F34CFC6
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 07:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2439B34D4EB
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 07:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771830300; cv=none; b=QP+ZHsvWQ029dmivQJSe1qreUNGMsziTGojWs9jApHIHTP9eSelGrNgUeTv/lOj+m39L6Tpu59QemDf265yzoNjKyUAH/cD+3iPcQwAFGu2CIWZyFOPVRLiqyRmQpVKl0mDwDcLbA9ZaYBaOJStRjVJbKRF01TPv8puq5kMp3mg=
+	t=1771830301; cv=none; b=NpBK4UkONBAVa1ZBfQmdC3FGLfYHpddifuTw9snH9nm0haK8teY501Vyp10Q5WAgJs57up+LFUi/j2B4MA7Hup0YyyKCIRCiGd3xM70VQimALcBoukAKFfRsPkvL5sgKVrjXvUecWylmChUPPDU/XduqTiySzH37K2x4f1nkaqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771830300; c=relaxed/simple;
-	bh=jE9SWcy5OcAaB03+1AxluJ85cRuAv6Q4+ACJtj/hcCM=;
+	s=arc-20240116; t=1771830301; c=relaxed/simple;
+	bh=d3UwQnzpg88aX6gn7ACJy409YivRzc8RbQqNjcTrFfw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VnetOcvN8DHjM5Un5ZIk4+Nj3yiHRlopglpjzBRVfz7oNAT7tXbLH0EkAVYcd3nzCeRICOi9AFye/8E/JSuZ+2GsEK5kW/wpDjbFPbYROJMnqua/P7nqFK/Opt7CsuCL1cKt4F/YiH42S+25b2Lydbg0LgaohDF+AAwLGQ6nBC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d3osSZSX; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=fk8v5G+wfxdm/NNaulo0MjqZcUpwyh4uQeDL2R1q3qC6enIqS22XC7SKYv4QeyBP0LDW6jhwhZ/qYMcWP+tvz6M0CX7x2v2ocF++U+0TxyX9PqI29on4p6O2Y6AqVy6skAYU/ADXjMXn/x/G9DC8jdMK5DnlIqUhPYWm/7Fq6Z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B6J0k94Y; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d3osSZSX"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b630b4d8d52so2842063a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 23:04:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B6J0k94Y"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2a946c0e441so37711315ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Feb 2026 23:05:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771830298; x=1772435098; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771830299; x=1772435099; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tZVo84a8gYXfxb6fQudIUthBz+u2OhxnqcpBYF66SVE=;
-        b=d3osSZSXLUzwXIA1idTDrF+7M6NOyz6EO9RGsDR1p1iDWHQ23giSAoW5Aq9FrWYY+F
-         f8fU7E5k3+zaTuOzRtSZiqiAGiLudiOHhAKWTf4tEyxbc2EXpK2J7iY3XSpvJSSxEU5H
-         2RHt0a0zcwu+TbxmE9ownCbigw1TKukbKwpuosidUt5chrMcnEI8KsYLcXAnHOZwA6UV
-         ogaZTYkIFHMGSgVJcLUZx8kTVFphXVy08ezXR+/I5k7O8W57+13InZqcZZ+tzxGgTgtT
-         aC22sclknyrG+jd/U9P7l0TqGNN2N9H/5/4fHSSV8XMLLreyxxlnAYoCTtgg5qAm2NKV
-         DDXw==
+        bh=W8EPkBYTIogg/WcIy2FNnZriREPEXUqsGjhG96y07ko=;
+        b=B6J0k94YQxKXI/ATg+nnFkMegMK0+AC3JXFPYcwdbPpJQI6PB8F1FKAxK5PeGupwMD
+         dQJiUUDatgLKphe4YPs2kJyg4BVq8njg69WHA9tn1ejUCn40awFihwD4+fcLibNP/Uj6
+         tb9oa8JlrGzeqcUhc/n+1Q3oxnmEdSCiQvj+lYLuqUem6hLo0pechZbbnDqqhMnh/QBZ
+         ivocdVkfelgivR5MVabH5RikvqZO4Zlsw38O4Bv6QXxI7oLDATsARVJEK+lA1eIME57O
+         /OiaeQf5FaexRoN2Dx+l9fekkDYwz7TjsM7SK0rThrs8nviZtP4Vliz75osEJNYEittI
+         l9LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771830298; x=1772435098;
+        d=1e100.net; s=20230601; t=1771830299; x=1772435099;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tZVo84a8gYXfxb6fQudIUthBz+u2OhxnqcpBYF66SVE=;
-        b=PwLimcLGIQy0ODfHWyK+a+qRGW5skTbJJZ0OvcPEfAL/5bopreT/qmSAx2WKqFZqVi
-         TmSDCB8Ta8TiW8gW3okxa1xz3ATWcsuXcC+mlloyqgpA7JYe2WvX3qX/yU6j/so0uam3
-         BuQANWHk3aaQmvLcPTtE142+ynH4lXsp05gddulCO35HsH0EB+OW396P6BUytM/WhZqK
-         ToiyDhFIAZZWCOteYkClR6a2Wl8FHEh8gGeCR2M8PKVRo5M5BQARgzp0xSh5fxwnDd5z
-         88qCMlDcZ56XL8x1TojVJ/0nugsqTlaDrgKHkmqM3uNKfksDKXz6m8rJMvshwvgOWkmr
-         pqrw==
-X-Forwarded-Encrypted: i=1; AJvYcCVO+hRLP2nzUi4ItpcZh7rZqtMpNbDuN7GKw4Iut2EZjMtgcQFRBX104m8KrVSxrHv80lSAQkZHrk3U5IOpVx4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXIzC2mDTkMlNf2pAilN1m+AmjQTxGyblCeLWS/pWtnrtjB4dG
-	4U4wZ1p3MhgRjkOxXRPDng3UQHe4fxzwnGcq3qtWX3aNSh0qwAlaExIk9OfssSqfzraE4zutp+k
-	ykbnv/XgfuElrg3cZNAMaSYbBxA==
-X-Received: from pfbdf2.prod.google.com ([2002:a05:6a00:4702:b0:824:b56e:1181])
+        bh=W8EPkBYTIogg/WcIy2FNnZriREPEXUqsGjhG96y07ko=;
+        b=WPGgF1LDJoe3Ry58+k7k+T63kyLOrAVgfwlX4cfWCvUHbPTylUzW59LQfsPdQu7HiQ
+         +LrS5KjgcyDv6Mvi8F2uyX5MKqNQwQsPuvMnRqjGD9yqEQt8e3pth2ZXw3pbn5KyQTbL
+         gzAfW9a9++U4dCfE6E/zHZnVrdOdym9SdnqfW2Klydb/HjoktAdDEM3Gj5tM9PcdZGqP
+         CMyFwl74L7nlXlWLe47g2zl8oZIyPAEpwa9oM+LSKCBz2Zf5FcA4Crjw3LPSbT47wUU0
+         dFPfUyZreO2hCDjFAn1Fj7wTTYGhT1k4eVrmLZdvqOtdKQXkpeMYBOp7JpMfdDPt4HvV
+         M63w==
+X-Forwarded-Encrypted: i=1; AJvYcCUlaLbxCGzCRdriicRVTOsCv0V5WuqeLyyCol405nNIfhLZdadlDsiM2EG1oEwCikD+kRtNM4OFN1m/e8EGmZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzrlXCLpHfyKKPlhf44NiTZ2DibKokDjoX970pwayjK6X/bNRX
+	Z+gELbwh+VEmpFRjCAOLPzswwEzRoI9n6jKT2C1Cof9PZZm4bA0meg6DXSqTrh7iqnVHbXBg0hf
+	3Nvt1EXsAA7AZDGxQMOyXPRlqoA==
+X-Received: from pjbx30.prod.google.com ([2002:a17:90a:38a1:b0:356:3562:569c])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:4ac1:b0:823:ad3:4ff4 with SMTP id d2e1a72fcca58-826daa0521bmr4935965b3a.37.1771830297745;
- Sun, 22 Feb 2026 23:04:57 -0800 (PST)
-Date: Mon, 23 Feb 2026 07:04:38 +0000
+ 2002:a17:903:248:b0:2a0:a33f:3049 with SMTP id d9443c01a7336-2ad743fe006mr64180505ad.4.1771830299282;
+ Sun, 22 Feb 2026 23:04:59 -0800 (PST)
+Date: Mon, 23 Feb 2026 07:04:39 +0000
 In-Reply-To: <cover.1771826352.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1771826352.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.53.0.345.g96ddfc5eaa-goog
-Message-ID: <45a3e4c00f4494c5f91aa1ccd9c400525a55ed45.1771826352.git.ackerleytng@google.com>
-Subject: [RFC PATCH v1 05/10] mm: Export unmap_mapping_folio() for KVM
+Message-ID: <e08ed6869b9f555169476d220d7e8112e7163cee.1771826352.git.ackerleytng@google.com>
+Subject: [RFC PATCH v1 06/10] mm: filemap: Export filemap_remove_folio()
 From: Ackerley Tng <ackerleytng@google.com>
 To: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -74,85 +74,40 @@ Cc: akpm@linux-foundation.org, david@kernel.org, lorenzo.stoakes@oracle.com,
 	tabba@google.com, michael.roth@amd.com
 Content-Type: text/plain; charset="UTF-8"
 
-guest_memfd needs a way to unmap a folio from all userspace processes. This
-is required as part of a folio's truncation process. The function
-unmap_mapping_folio() provides exactly this functionality.
+Export filemap_remove_folio() for use by KVM.
 
-Move its declaration from the internal mm/internal.h to the public
-include/linux/mm.h and export the symbol.
+KVM requires this function to remove folios from guest_memfd's filemap.
 
-unmap_mapping_folio() will be used by guest_memfd in a later patch to
-implement a custom truncation function.
-
-No functional change intended.
+guest_memfd used to rely on higher-level, exported truncation functions. To
+track memory that is actually allocated (i.e. i_blocks, st_blocks),
+guest_memfd will need a custom truncation function to do accounting cleanup
+and will be using filemap_remove_folio() for truncation.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- include/linux/mm.h | 2 ++
- mm/internal.h      | 2 --
- mm/memory.c        | 2 ++
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ mm/filemap.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7f04f1eaab15a..97fa861364590 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2690,6 +2690,7 @@ extern vm_fault_t handle_mm_fault(struct vm_area_struct *vma,
- extern int fixup_user_fault(struct mm_struct *mm,
- 			    unsigned long address, unsigned int fault_flags,
- 			    bool *unlocked);
-+void unmap_mapping_folio(struct folio *folio);
- void unmap_mapping_pages(struct address_space *mapping,
- 		pgoff_t start, pgoff_t nr, bool even_cows);
- void unmap_mapping_range(struct address_space *mapping,
-@@ -2710,6 +2711,7 @@ static inline int fixup_user_fault(struct mm_struct *mm, unsigned long address,
- 	BUG();
- 	return -EFAULT;
- }
-+static inline void unmap_mapping_folio(struct folio *folio) { }
- static inline void unmap_mapping_pages(struct address_space *mapping,
- 		pgoff_t start, pgoff_t nr, bool even_cows) { }
- static inline void unmap_mapping_range(struct address_space *mapping,
-diff --git a/mm/internal.h b/mm/internal.h
-index f35dbcf99a86b..98351be76238b 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -953,7 +953,6 @@ static inline bool free_area_empty(struct free_area *area, int migratetype)
- struct anon_vma *folio_anon_vma(const struct folio *folio);
- 
- #ifdef CONFIG_MMU
--void unmap_mapping_folio(struct folio *folio);
- extern long populate_vma_page_range(struct vm_area_struct *vma,
- 		unsigned long start, unsigned long end, int *locked);
- extern long faultin_page_range(struct mm_struct *mm, unsigned long start,
-@@ -1131,7 +1130,6 @@ static inline struct file *maybe_unlock_mmap_for_io(struct vm_fault *vmf,
- 	return fpin;
- }
- #else /* !CONFIG_MMU */
--static inline void unmap_mapping_folio(struct folio *folio) { }
- static inline void mlock_new_folio(struct folio *folio) { }
- static inline bool need_mlock_drain(int cpu) { return false; }
- static inline void mlock_drain_local(void) { }
-diff --git a/mm/memory.c b/mm/memory.c
-index da360a6eb8a48..983bb25517cb7 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -78,6 +78,7 @@
- #include <linux/sched/sysctl.h>
+diff --git a/mm/filemap.c b/mm/filemap.c
+index ebd75684cb0a7..379d62239fc5f 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -49,6 +49,7 @@
+ #include <linux/sched/mm.h>
+ #include <linux/sysctl.h>
  #include <linux/pgalloc.h>
- #include <linux/uaccess.h>
 +#include <linux/kvm_types.h>
  
- #include <trace/events/kmem.h>
+ #include <asm/tlbflush.h>
+ #include "internal.h"
+@@ -262,6 +263,7 @@ void filemap_remove_folio(struct folio *folio)
  
-@@ -4244,6 +4245,7 @@ void unmap_mapping_folio(struct folio *folio)
- 					 last_index, &details);
- 	i_mmap_unlock_read(mapping);
+ 	filemap_free_folio(mapping, folio);
  }
-+EXPORT_SYMBOL_FOR_KVM(unmap_mapping_folio);
++EXPORT_SYMBOL_FOR_KVM(filemap_remove_folio);
  
- /**
-  * unmap_mapping_pages() - Unmap pages from processes.
+ /*
+  * page_cache_delete_batch - delete several folios from page cache
 -- 
 2.53.0.345.g96ddfc5eaa-goog
 
