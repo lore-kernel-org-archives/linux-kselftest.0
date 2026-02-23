@@ -1,177 +1,165 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2C8366050
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 12:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC67366548
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 15:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771850407; cv=none; b=H82mElcDH4MbriYLJXEc/Zl49eopbjprApSnK7I7svHt9ByrAjmM//OODiq7IsiXsI2+FqnqvSmIQ42AfagfchgL3vMdKtu/zcd4jkTnSYVWNvvSLpF/42mk1ujOOhsKY7+VKZNTIqDfo4U875ARENcQ0H3lUgIabIhP1GrgOo0=
+	t=1771859400; cv=none; b=WVWcKkA9o7P8hbIwtPz1F362QxG1LRm4dG7V7k0iRwRVrublR0XL5e0UJtDth3tiY/laNpHhjisBGkVToJcpnIk2dGnPGgFzUcslli+5ERRbFkQUkT3rM/0cSe991kP1/BwUZvtBtS51mAK9SaIv9d0SRdSUu4m6/ovz83luL3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771850407; c=relaxed/simple;
-	bh=zLP9DBt5ACqyKp8zyP1I6et5L1V4brYDFyjTSlJe5AE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=G4jNy6Rire2qPUQR3jWt+R7d2rmyaoPK6OGjxYpcITnzthnDaNwDrIjYW43VTPKu9JFFj7Nw5PlnnjaeSMDe87tu2vdHS3M+YAeb/gwLyB68OSZ+L87RnYKybdwuH3UwoiBwotHCX40UwEiXR0So4UAoIyoCdcYdY2YmZCSl5ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MhhFQ5n+; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1771859400; c=relaxed/simple;
+	bh=kiLW3oO45MtI5F1zY0Fb4LUn/46tAgkIa8tZOFWq52c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rreBvC99WPn00EYzAfY/ceNAKrST/NYBkysfjdbCnXPh/30mwlEO5UDsVg8swj9gmo3Vr0gPxmLclQRsEip2iIf81RvbRBCvDrYGFCOREHagE4n2ykeWuA8w8+223v3HJyv6ww3GnVw/jRoLs2yNtBBuyFqAwkCegG/hWkO1zqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LBX/hzJq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=QZfrgC0O; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LBX/hzJq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=QZfrgC0O; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MhhFQ5n+"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48372facfedso45454975e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 04:40:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771850404; x=1772455204; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H9UVo+Ch5cqNfZ/7JsfHkoD1JYgkJQPxukS4MObThec=;
-        b=MhhFQ5n+PzDSPKzBRtwe18lbIdpDDdJ8T2UM7Z68MUfaA8vva/U/vYQGy371uSH/xK
-         HURYzbBhCJrQsMfIXdbTz5VEHPeBUomjVKvWNTU5g9shcFqZSVcebFhGYPUOihJczlQO
-         d9h68IRBguf9E0KRTLjFQ5g/UnBioix9RwFJm9+3Hvsegxp6zNuYN0ostrxzkRVhYoyj
-         p+LezSlbU3wuwv/Y6HA90R/ynwaSYcCeNAaGHvsNsbZj+yo22lp5JnoSPRC5emNU9J/j
-         23ydVbt9Hj+ZM3D2q04tmC/DtE/NEzD1CZU3nWNQX1YcIp+AcojKNCL2SKRB/Y78wS6W
-         O+9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771850404; x=1772455204;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=H9UVo+Ch5cqNfZ/7JsfHkoD1JYgkJQPxukS4MObThec=;
-        b=FeQR8U53hkEaFDVI6kRMSIPyZ3kRmUnVvaROwIkCC76GzcvrDQRTCEiZj2C2UsEi6D
-         kH357PH8o7SOJ7WWdkGFjFsuw6LJiMjOYcf2Z1TBJOmp19R6H4anfiOPAPtFzB+KPxem
-         hPqTPPmgZp9l3kVlM3JvGdqDfMRF5xdauJcrOtdD05bB9w5eUJpJZC7esmCtuBlByH5+
-         eH6VlC33A8rKJ3Ri3rBvhMUHlX019RoAlK94qxCFe0d+65YoS47foZfG3Gaatx4YRWMG
-         4hlhF1q7F7awXEMW1LdIcIyx/xFwpg3yrhOemNLZepkZTBOX79DIarv7Ndr4gLNiFQmK
-         E0IQ==
-X-Gm-Message-State: AOJu0YxRmFMf2na55rn2dTWUWu2acLdrSwiNtGKYL+JwIGZvNhFuYEbw
-	w4aBXlfeWdSaIaxWr9jdjhn71mmTH25IQT1h0DhU+GdxyuIGuMPjzQRtrkiFqQaCt4mj3ZuzCWc
-	k7WuM1I7UaUulmQ==
-X-Received: from wmnv12.prod.google.com ([2002:a05:600c:444c:b0:477:a181:1919])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:a204:b0:483:fbe:23dd with SMTP id 5b1f17b1804b1-483a00a52bdmr187554465e9.12.1771850403661;
- Mon, 23 Feb 2026 04:40:03 -0800 (PST)
-Date: Mon, 23 Feb 2026 12:40:03 +0000
-In-Reply-To: <aYX8dot4fTh3FJFI@fedora>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LBX/hzJq";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="QZfrgC0O";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LBX/hzJq";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="QZfrgC0O"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 2058F5BD92;
+	Mon, 23 Feb 2026 15:09:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1771859397; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=u0qEcCAl2t4On+48oQcJ99yv/5KLDR8ZXvKbMpP4oZY=;
+	b=LBX/hzJq+cLC/wEhwIItlHW/8pooDHKPdBHE2yCT7xEbxeOwNy0dfWyufn/mowKgwWFuP6
+	wf48/5Sj3Qy6J+R9HovWc385O6BegI8+2aji6cALV8qRxjssJ2KNHGc2V01Rpwo0Zm1GQZ
+	UydBNhdICwPZgKg9qg3v7pKOSt91Ruo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1771859397;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=u0qEcCAl2t4On+48oQcJ99yv/5KLDR8ZXvKbMpP4oZY=;
+	b=QZfrgC0Ow0lS/UdzaJGmeHfdbGgoMQIw3gcuQIKVx8AbQuiQfrmY9XEg314h+bkxmNmhnx
+	hvI8e033LRaqdYCA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="LBX/hzJq";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=QZfrgC0O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1771859397; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=u0qEcCAl2t4On+48oQcJ99yv/5KLDR8ZXvKbMpP4oZY=;
+	b=LBX/hzJq+cLC/wEhwIItlHW/8pooDHKPdBHE2yCT7xEbxeOwNy0dfWyufn/mowKgwWFuP6
+	wf48/5Sj3Qy6J+R9HovWc385O6BegI8+2aji6cALV8qRxjssJ2KNHGc2V01Rpwo0Zm1GQZ
+	UydBNhdICwPZgKg9qg3v7pKOSt91Ruo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1771859397;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=u0qEcCAl2t4On+48oQcJ99yv/5KLDR8ZXvKbMpP4oZY=;
+	b=QZfrgC0Ow0lS/UdzaJGmeHfdbGgoMQIw3gcuQIKVx8AbQuiQfrmY9XEg314h+bkxmNmhnx
+	hvI8e033LRaqdYCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7909B3EA68;
+	Mon, 23 Feb 2026 15:09:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 2d1oGsRtnGmtHgAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Mon, 23 Feb 2026 15:09:56 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	Fernando Fernandez Mancera <fmancera@suse.de>
+Subject: [PATCH net-next] selftests: net: add ipv6 RA route to ECMP merge test
+Date: Mon, 23 Feb 2026 16:09:50 +0100
+Message-ID: <20260223150950.31904-1-fmancera@suse.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260206081704.53215-1-liuhangbin@gmail.com> <DG7TJFKZNG1J.19BZF87IWD3UG@google.com>
- <aYX8dot4fTh3FJFI@fedora>
-X-Mailer: aerc 0.21.0
-Message-ID: <DGMCJQ2TKZ1O.Q2C502GV1GSL@google.com>
-Subject: Re: [PATCH selftests] selftests: Use ktap helpers for runner.sh
-From: Brendan Jackman <jackmanb@google.com>
-To: Hangbin Liu <liuhangbin@gmail.com>, Brendan Jackman <jackmanb@google.com>
-Cc: <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	<netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	URIBL_BLOCKED(0.00)[suse.de:mid,suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:mid,suse.de:dkim,suse.de:email]
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Spam-Level: 
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 2058F5BD92
 
-On Fri Feb 6, 2026 at 2:36 PM UTC, Hangbin Liu wrote:
-> Hi Brendan,
-> On Fri, Feb 06, 2026 at 10:48:59AM +0000, Brendan Jackman wrote:
->> On Fri Feb 6, 2026 at 8:17 AM UTC, Hangbin Liu wrote:
->> > This has been on my todo list for a long time. We should use ktap
->> > helpers in runner.sh. I saw Brendan did some work in d9e6269e3303
->> > ("selftests/run_kselftest.sh: exit with error if tests fail") to make
->> > run_kselftest.sh exit with the correct return value. But we still use =
-a
->> > custom solution in runner.sh. Let's convert all the print messages to =
-use
->> > formal ktap helpers. Here=E2=80=99s what I changed:
->> >
->> >   1. Move TAP header from runner.sh to run_kselftest.sh, since run_kse=
-lftest.sh
->> >      is the only caller of run_many().
->> >   2. In run_kselftest.sh, call run_many() in main process to count the
->> >      pass/fail numbers.
->> >   3. In run_kselftest.sh, do not generate kselftest_failures_file; jus=
-t
->> >      use ktap_print_totals to report the result.
->> >   4. In runner.sh run_one(), get the return value and use ktap helpers=
- for
->> >      all pass/fail reporting. This allows counting pass/fail numbers i=
-n the
->> >      main process.
->> >   5. In runner.sh run_in_netns(), also return the correct rc, so we ca=
-n
->> >      count results during wait.
->> >
->> > After the change, the printed result looks like:
->> >
->> >   not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=
-=3D1
->> >   # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
->> >
->> >   ]# echo $?
->> >   1
->>=20
->> Sorry I'm being a bit lazy by not investigating this myself but the
->> current intended behaviour is for runner.sh to output correct KTAP,
->> right? Could you describe what behavioural changes this is expected to
->
-> For runner.sh, I just want to make it using the formal helper in
-> ktap_helpers.sh other than manually echo.
->
->> bring - does it fix/change the KTAP output? (Or if it's just a cleanup
->> with no intended change then please note that in the commit message).
->
-> It changes the run_kselftest.sh's output, with a total result. e.g.
->
-> # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+As commit bbf4a17ad9ff ("ipv6: Fix ECMP sibling count mismatch when
+clearing RTF_ADDRCONF") pointed out, RA routes are not elegible for ECMP
+merging.
 
-Cool thanks, then please just clarify the commit message to say this.
+Add a test scenario mixing RA and static routes with gateway to check
+that they are not getting merged.
 
->> I have not reviewed the code properly yet (I just read enough to check
->> that it still does the thing I care about i.e. return an error code when
->> something fails). I can do a proper review next week if you add a bit
->> more context re the question above though.
->
-> Yes, I also care about the return code. This patch doesn't break it.
->
->>=20
->> > -	wait
->> > +	# Handle the return values when running in netns.
->> > +	for pid in "${pids[@]}"; do
->> > +		wait "$pid"
->> > +		rc=3D$?
->> > +		[ "$rc" -eq "$KSFT_PASS" ] && KTAP_CNT_PASS=3D$((KTAP_CNT_PASS+1))
->> > +		[ "$rc" -eq "$KSFT_FAIL" ] && KTAP_CNT_FAIL=3D$((KTAP_CNT_FAIL+1))
->> > +		[ "$rc" -eq "$KSFT_SKIP" ] && KTAP_CNT_SKIP=3D$((KTAP_CNT_SKIP+1))
->> > +		[ "$rc" -eq "$KSFT_XFAIL" ] && KTAP_CNT_XFAIL=3D$((KTAP_CNT_XFAIL+1=
-))
->>=20
->> These variables don't seeem to have anything to do with KTAP so I think
->> they should have a different name prefix. I guess KSFT_*? Or maybe
->> RUNNER_* or something.
->>=20
->> Also I guess we should initialise them to 0 so they are still set if no
->> tests actually get run?
->>=20
->> Also I think it's probably time to start documenting the
->> interface of runner.sh - sorry I probably should have done this when I
->> created kselftest_failures_file. Can you add a comment at the top to
->> show that these variables are part of the "API"?
->
-> These variables are defined in ktap_helpers.sh and used by the ktap helpe=
-rs.
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+---
+ tools/testing/selftests/net/fib_tests.sh | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Hm, I see. Then it seems pretty hacky to mutate them directly here, and
-is it correct to always increment them by 1?
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index c5694cc4ddd2..1262ee1ea09b 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -1534,6 +1534,23 @@ fib6_ra_to_static()
+ 
+ 	log_test $ret 0 "ipv6 promote RA route to static"
+ 
++	# Prepare for RA route with gateway
++	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.accept_ra_rt_info_max_plen=64
++
++	# Add initial route to cause ECMP merging
++	$IP -6 route add 2001:12::/64 via fe80::dead:beef dev veth1
++
++	$NS_EXEC ra6 -i veth2 -d 2001:10::1 -R 2001:12::/64#1#120
++
++	# Routes are not merged as RA routes are not elegible for ECMP
++	check_rt_num 2 "$($IP -6 route list | grep -c "2001:12::/64 via")"
++
++	$IP -6 route append 2001:12::/64 via fe80::dead:feeb dev veth1
++
++	check_rt_num 2 "$($IP -6 route list | grep -c "nexthop via")"
++
++	log_test "$ret" 0 "ipv6 RA route with nexthop do not merge into ECMP with static"
++
+ 	set +e
+ 
+ 	cleanup &> /dev/null
+-- 
+2.53.0
 
-I think the "correct" thing to do here is to parse the KTAP from the
-child process's stdout, but I assume that's not actually practical with
-the current tools we have available. (I could be wrong though, let me
-know if that's the case).
-
-Or maybe we can dump the values of the variables at the end of the child
-and then add them into the parent process' values...=20
-
-Or, if we just keep the current approach I think just having some
-commentary to explain why we are doing this would help. I.e. "these
-variables are outputs of ktap_helpers.sh but since we've run the test in
-a subprocess we need to update them manually" (the current comment talks
-about the netns which I think is confusing, I don't think the netns is
-relevant at all).
