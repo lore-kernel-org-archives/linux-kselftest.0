@@ -1,155 +1,138 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7098B3093BC
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 16:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D93C30FC2E;
+	Mon, 23 Feb 2026 16:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771863712; cv=none; b=ddmyMNOL3SEBCSmzGQ9G+O8jwWvk3vYIhRI0LENfKswroF/WR3K1aTAWyAVKWlVcrDOgb7E0LHValFreR7+0963pxhWgp1d+hNpLdmTogL2+JXdxsIVyyXzPU4WmyNPLIEwmk4xhdQdBeNYczsx3wB07PFLwS5Nthrh0RlxAIoY=
+	t=1771864052; cv=none; b=JqOgCqmYyjX8/w7Sjg0Z+6iMQgnZa/1Fb5RSHDDh4cZFxovGSodxonTrFxaQY83HjYHKG1ty6mBGdlI5jbV3zvzyTzWnswfx5FLCIgdvtAIhwwFJGSeMuWJWNo1ZCk/+2b2V6EJuz2Sgd3AhBDUil2qyToszR6MfAZgUO1wztmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771863712; c=relaxed/simple;
-	bh=cZdjdaZOcsXK6GsQf/mEIq7Qdmf7HWSKukscx0FcygU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eb1OwrpdGfgMmG6ReoDHirHxjtCc7anqSJuwzRmW8FdE82K3rRDYqz0unfaMievzSeT/pfdS2hKY51lk8VOf1jQV5o6PSmKh0vj8lT3oSiWeIFb2N/1vXWUnNxfa8fZHJX8pMKxTo7yjjxJVMoh12+6PJytKmGd0Bymtq8WGKgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AdjPnyqv; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1771864052; c=relaxed/simple;
+	bh=lE9B6+H9HeJSppu/EN5YwZOLzN80IR/3aJG1alsniHY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eyn3OoiwG54VbnSI601CZaGT7LNghRs5la9bBaD62f9GZaNMX2G1QHj1rceViIKgDJwwl+2tlRVch/O3eVYJJl8Iw4Y19EbXV2WFGxPrbwsEucHi8B9Hy9EDKby42RKiuSeJPwkK+Ic7QuunZZ3RM7iJKRvqG6zVu8PoLJL/R+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZTtXnrul; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AdjPnyqv"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-43621bf67ceso3020895f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 08:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1771863710; x=1772468510; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=E12DLppc9zEwEUJULEgbOPg9LHuCkYx1Y+7qBt2BKRc=;
-        b=AdjPnyqv0QCL36Ta+bRjeVvowMl5s9TcXCppQhECzdRxr9lx5R4RSUI1lebk/lc1rj
-         sVUFf0sQegOvTqrirJZYRqIEVDvPIineIT+3OC7mdxrO7I6EDdKb1qgQt0nJl1NobAo1
-         xfjkKqIcV64S4FRlWdnTaBa7248Wi53ssF0xGgtXY+IwtQNbarcQFTxzRPfWJFkUq2Rn
-         U0kFzy7eVLd612fGUbiyXXSrrjxupHSECEQYA5z+vFs/COu2AO/lwh6ZVs0nXVgT7ysV
-         VedDkWY80HnnGF7N4kvGosnL9t3q4ebnKV39lPmH/DCRIcom2SGwHQGHaRYl/nzvVLfN
-         Igrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771863710; x=1772468510;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E12DLppc9zEwEUJULEgbOPg9LHuCkYx1Y+7qBt2BKRc=;
-        b=LHTEwZjM00aFEw+m36gtog3RJLhmd6jpCg2KtHDyqRALKe/i1z1FAHs4+rhOM/xrrZ
-         F+etKE2HOel2f7vp34bucezfL5feOj/5LOtfZf4hBmGE4sRYLpYy+uj7pHTsoTr5e8kB
-         +TuFkFKcexTJFBbubiCD9+ZuQDotMj+a/ccNBCOZP3AjtTAvEuKfs5iIeMvy7z5ZRLTd
-         LigHkGVVwUElfCYGnVLQV6HWP2CHGdcQpNqjiySM/DEDrl1VCstwhuuZZwVANehQCR5Z
-         JmcVrnz8Wj3i1HFjzcYxPB8ClqxPu1RCUK5jrvIsUvZn9fp918fgKPzVwQhlrBruqGx1
-         VeYg==
-X-Forwarded-Encrypted: i=1; AJvYcCVitZ9NYLJra1m5StUiTUhCnqphVEEceT8VQOZh+4RVR5cwlRi8fdVoW7Y/gCDgjhjddgonYt9ynnjJboo2HpM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyz0Phy0IzU844uS/zAx88xAiZw96rylY6uEFe3wjgMBL1qovfX
-	/tEvpKa7cdALzDCfixdplziELdnMWrT9oYGKEPQC5Xvau5aMsRG5LVMhJbH561ppFHQ=
-X-Gm-Gg: ATEYQzyL36iupujd5j5b1/up76xsO7b7o9z5TDK0jalHIEvFYamnX4p71yS6OrahQGp
-	zJ96UpP+pQIFV5Ncki+lzswgLeziCZjDsqD3lLPsMF22LlS58nD52Ws6eDza1zw3wJq0wnM7yUf
-	nOdDA0yNqWt40rRbfgLTVKeD+4gA5YkQAFOGRbqZfhjjFEACkKpbEIEHrjmM+y/jFUUnFh3cpmj
-	VkQ1VoZRFLkRwmbJ2RgTLHSFP98ZszFKjIvNMYfmff+YQiNboUkCAxqYFs0vbxK6IFhg1XG48sA
-	DegeAuMw1JgPEKn8896p3ZH/xGeF73KdNTVwuAJzc+oSwjGwMNS2JatgRVSaIA/1zugjPFjwzGj
-	Z4vJlvx1JKoo0z8pbhcJwDro1wHVfh58l9lQcbTcNA1zwOyRqvRpGysuU9a6lM4Wbxw/1GzneX5
-	ONFtGQYMkZWriiQL5/ZAGFVppi64BqVH5Hvq+GMEy+OUM7izjwfL7JBulrF/smBQ==
-X-Received: by 2002:a05:6000:230b:b0:437:71cc:a246 with SMTP id ffacd0b85a97d-4396f153cd2mr18596170f8f.10.1771863709655;
-        Mon, 23 Feb 2026 08:21:49 -0800 (PST)
-Received: from ?IPv6:2804:5078:822:3100:58f2:fc97:371f:2? ([2804:5078:822:3100:58f2:fc97:371f:2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970c00e8bsm16973432f8f.15.2026.02.23.08.21.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 08:21:49 -0800 (PST)
-Message-ID: <5ca16692b304185df695e517434b16e59cb15a42.camel@suse.com>
-Subject: Re: [PATCH 2/2] selftests: livepatch: functions.sh: Workaround
- heredoc on older bash
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes	 <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Shuah
- Khan <shuah@kernel.org>, 	live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
-Date: Mon, 23 Feb 2026 13:21:43 -0300
-In-Reply-To: <aZx1ViTc7NJws-rf@redhat.com>
-References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
-	 <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
-	 <aZx1ViTc7NJws-rf@redhat.com>
-Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
- keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
- Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
- gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
- GO8seNG8sYiP6JfRjl7Hyqca6YsE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (by Flathub.org) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZTtXnrul"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15EBAC116C6;
+	Mon, 23 Feb 2026 16:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771864052;
+	bh=lE9B6+H9HeJSppu/EN5YwZOLzN80IR/3aJG1alsniHY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZTtXnrulLOI8zAjoZ46Ozt1xST1Zn9e5Pu0lemviHRUGhPwJBJBDsdLaZG0Drf9ry
+	 oaNXof1lbmtSzHF/0UdVFKILUr4xtPeJnAh0VmRfPaJrFPQDJIuFIUmLC/xrJdzAZ5
+	 TDkN77sp8+8kdnF6qAjh/1hLiT0pTn3s5QamaK0uX/XZi+ClkhpPjEbMZtgxAGSh3Z
+	 3oZQl1xN0vI0mxUbxevg/g6lqzMKtSC8zGUtpi2JM+tm0VuHspdH8vi/dFXL75HBny
+	 vqCmbhCYblIPptQdi4ZsEJ8x/GyVPXFRZz/IuXNOFdHtc0s5VC0Kqafn9XiU62q7W2
+	 XEQaCNDir2iIA==
+Date: Mon, 23 Feb 2026 06:27:31 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: "T.J. Mercier" <tjmercier@google.com>, gregkh@linuxfoundation.org,
+	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	jack@suse.cz, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+	Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
+Message-ID: <aZx_8_rJNPF2EYgn@slm.duckdns.org>
+References: <20260220055449.3073-1-tjmercier@google.com>
+ <20260220055449.3073-3-tjmercier@google.com>
+ <aZh-orwoaeAh52Bf@slm.duckdns.org>
+ <CAOQ4uxjgXa1q-8-ajSBwza-Tkv91tFP-_wWzCQPW+PwJMehEWA@mail.gmail.com>
+ <aZi6_K-pSRwAe7F5@slm.duckdns.org>
+ <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
+ <aZju-GFHf8Eez-07@slm.duckdns.org>
+ <CAOQ4uxgzuxaLt2xs5a5snu9CBA_4esQ_+t0Wb6CX4M5OqM5AOA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxgzuxaLt2xs5a5snu9CBA_4esQ_+t0Wb6CX4M5OqM5AOA@mail.gmail.com>
 
-On Mon, 2026-02-23 at 10:42 -0500, Joe Lawrence wrote:
-> On Fri, Feb 20, 2026 at 11:12:34AM -0300, Marcos Paulo de Souza
-> wrote:
-> > When running current selftests on older distributions like SLE12-
-> > SP5 that
-> > contains an older bash trips over heredoc. Convert it to plain echo
-> > calls, which ends up with the same result.
-> >=20
->=20
-> Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+(cc'ing Christian Brauner)
 
-Thanks for the review Joe!
+On Sat, Feb 21, 2026 at 06:11:28PM +0200, Amir Goldstein wrote:
+> On Sat, Feb 21, 2026 at 12:32 AM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > Hello, Amir.
+> >
+> > On Fri, Feb 20, 2026 at 10:11:15PM +0200, Amir Goldstein wrote:
+> > > > Yeah, that can be useful. For cgroupfs, there would probably need to be a
+> > > > way to scope it so that it can be used on delegation boundaries too (which
+> > > > we can require to coincide with cgroup NS boundaries).
+> > >
+> > > I have no idea what the above means.
+> > > I could ask Gemini or you and I prefer the latter ;)
+> >
+> > Ah, you chose wrong. :)
+> >
+> > > What are delegation boundaries and NFS boundaries in this context?
+> >
+> > cgroup delegation is giving control of a subtree to someone else:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/Documentation/admin-guide/cgroup-v2.rst#n537
+> >
+> > There's an old way of doing it by changing perms on some files and new way
+> > using cgroup namespace.
+> >
+> > > > Would it be possible to make FAN_MNT_ATTACH work for that?
+> > >
+> > > FAN_MNT_ATTACH is an event generated on a mntns object.
+> > > If "cgroup NS boundaries" is referring to a mntns object and if
+> > > this object is available in the context of cgroup create/destroy
+> > > then it should be possible.
+> >
+> > Great, yes, cgroup namespace way should work then.
+> >
+> > > But FAN_MNT_ATTACH reports a mountid. Is there a mountid
+> > > to report on cgroup create? Probably not?
+> >
+> > Sorry, I thought that was per-mount recursive file event monitoring.
+> > FAN_MARK_MOUNT looks like the right thing if we want to allow monitoring
+> > cgroup creations / destructions in a subtree without recursively watching
+> > each cgroup.
+> 
+> The problem sounds very similar to subtree monitoring for mkdir/rmdir on
+> a filesystem, which is a problem that we have not yet solved.
+> 
+> The problem with FAN_MARK_MOUNT is that it does not support the
+> events CREATE/DELETE, because those events are currently
 
->=20
-> Just curious, what's the bash/heredoc issue?=C2=A0 All I could find via
-> google search was perhaps something to do with the temporary file
-> implementation under the hood.
+Ah, bummer.
 
-# ./test-ftrace.sh=20
-cat: -: No such file or directory
-TEST: livepatch interaction with ftrace_enabled sysctl ... ^CQEMU:
-Terminated
+> monitored in context where the mount is not available and anyway
+> what users want to get notified on a deleted file/dir in a subtree
+> regardless of the mount through which the create/delete was done.
+> 
+> Since commit 58f5fbeb367ff ("fanotify: support watching filesystems
+> and mounts inside userns") and fnaotify groups can be associated
+> with a userns.
+> 
+> I was thinking that we can have a model where events are delivered
+> to a listener based on whether or not the uid/gid of the object are
+> mappable to the userns of the group.
 
-Somehow it doesn't understand the heredoc, but maybe I'm wrong...
-either way, the change has the same outcome, so I believe that it
-wasn't bad if we could change the cat for two echoes :)
+Given how different NSes can be used independently of each other, it'd
+probably be cleaner if it doesn't have to depend on another NS.
 
-Either way, if Petr or you think that this should be left as it is,
-it's fine by me as well, I was just testing the change with an older
-rootfs/kernels.
+> In a filesystem, this criteria cannot guarantee the subtree isolation.
+> I imagine that for delegated cgroups this criteria could match what
+> you need, but I am basing this on pure speculation.
 
->=20
-> --
-> Joe
->=20
-> > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > ---
-> > =C2=A0tools/testing/selftests/livepatch/functions.sh | 6 ++----
-> > =C2=A01 file changed, 2 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/tools/testing/selftests/livepatch/functions.sh
-> > b/tools/testing/selftests/livepatch/functions.sh
-> > index 8ec0cb64ad94..45ed04c6296e 100644
-> > --- a/tools/testing/selftests/livepatch/functions.sh
-> > +++ b/tools/testing/selftests/livepatch/functions.sh
-> > @@ -96,10 +96,8 @@ function pop_config() {
-> > =C2=A0}
-> > =C2=A0
-> > =C2=A0function set_dynamic_debug() {
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cat <<-EOF > "$SYSFS_DEBUG_=
-DIR/dynamic_debug/control"
-> > -		file kernel/livepatch/* +p
-> > -		func klp_try_switch_task -p
-> > -		EOF
-> > +	echo "file kernel/livepatch/* +p" >
-> > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
-> > +	echo "func klp_try_switch_task -p" >
-> > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
-> > =C2=A0}
-> > =C2=A0
-> > =C2=A0function set_ftrace_enabled() {
-> >=20
-> > --=20
-> > 2.52.0
-> >=20
+There's a lot of flexibility in the mechanism, so it's difficult to tell.
+e.g. There's nothing preventing somebody from creating two separate subtrees
+delegated to the same user.
+
+Christian was mentioning allowing separate super for different cgroup mounts
+in another thread. cc'ing him for context.
+
+Thanks.
+
+-- 
+tejun
