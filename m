@@ -1,117 +1,136 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5169E326D73
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 16:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DC8285C88
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 16:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771864559; cv=none; b=Wqoaht1xIgATLDEzd9gFd7ANVNv64EFxbl7zdmwp3h/dYeOXSLdQijHGMyrrmijwfhUN5D0r4yBYAjcdpzTtnp3fbUfXx4g9m8+azHBXKEc7k650kycHVha5PObMT1o/h2p0wTw4V8+pGKjY+pqCs6wmNRV3drB++HDiozNyKiA=
+	t=1771864596; cv=none; b=i0hzw7LGoT3F2NLGpn+XJrfRjuxsuPoWv0oVYY0AtE2tjpO3umPYGlh7whTXP4enSeyN2dArXixFGFatQ1vrHSdA09JEGZnPFnOTbOmh5qE30M+OeXdiLDqAie2pGtX+JPYwt1VgDzV+Ap4vT4odZWzW+mV+YM+hnbe7fKvsiRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771864559; c=relaxed/simple;
-	bh=hpBxMDhkOBo0fWTc1IIu73vXXw50TUIIFKRJti8sr7g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ET2SlKLbhH8AxxYLMMwlJ1rXDjqsy4MFlakVkmq5k2Iw1spThVKf8E4l3YU3kFQ6luUjNTTMnN4H94LaW8GLQTI5i8dDH+fNvia5jdV4sGpbw0oxwQ27/i7GXVmhk2Biku6cEobsnRBS8HmEtq5KeHE1zMugEnPdntxKsyqloy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tmh6wjtI; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771864596; c=relaxed/simple;
+	bh=mvK24oTTBqZrxHHEFPq3cG7IWQTbAHw8+UO0+UuviSM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=qFceGHvit+USeqEd9seMIQfet6U7abmkp+S0z5FLhZr+uVhfMcvpSALOFKUB3Ljpw74wIMekzg056GMR8z57B1GOSfyCJnPbSS0sWgxOm+v/1VTMdsSxn7gYNxXD53nR7/oVlcQpVT9muowTSEzOlzgiKlgceWTRbyUSIl+/bQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tSV7Rhb+; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tmh6wjtI"
-Message-ID: <65ac70d2-72ed-40ee-8e0d-bbaee525f8a1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771864543;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=K+razHazSB6EJhbfIAGNdwccjEdK/vcc1wfb8MmG0YE=;
-	b=tmh6wjtIywNxkHKRBJAhS4doKKdeL3a44CN226i+NgqHydHrGgBJsjGIaRXU8YaK+xDYGC
-	hM6cad76VXZasfQACGf6WkzThDrAJiZWqEFBPFdKh9xJpVmvjfOfE43jDGsNknHqJML291
-	lSrc1losEwMIwdvG5KgiSkjpVJkvbqQ=
-Date: Tue, 24 Feb 2026 00:35:30 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tSV7Rhb+"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2aaf2ce5d81so61259545ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 08:36:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771864594; x=1772469394; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJpQri3B7GVcHe+2iM9Lc81Jg6gKvTThd70NiS5YIcI=;
+        b=tSV7Rhb+7trl5vs8l4TFzfSJye7k4hyc0gCT1pm0iQ7KfsqwWQVcAn1resESG+u9js
+         4SWk9sZZv+zAZWYD49R4rHPjWPldh+5Vv5Z0EepVHLQzKWhYXiXnmRDNrXyGLl+Qgtz3
+         tYxiC/4J/tSTlccy2cHefCI4oAnl36mRyACR32WTnOwc6htQwg3WgTYHXsJO+lNG0Cgl
+         272osN5UDbJKzI3zhl9Y9izUNbqA9bgr7QW2aLVPmDNdccPlRvSXuSQeth8jPnQNqfch
+         4zbIqpMpBd/29LcnfiBQkNrdj2ngGOX79myuOoBcDbHYafNbMsAAwR8Rr75Gk+1IW/ai
+         baEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771864594; x=1772469394;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJpQri3B7GVcHe+2iM9Lc81Jg6gKvTThd70NiS5YIcI=;
+        b=SWb6lYhEgxmiI7AzZ2ydKvg7yl3+WxtjtcLD6SgD8bdvoeXJRU82WzKuvUGV5v/Bez
+         ovz2aXl7hws5DqxsEcqCNh3qhb0mJDEMVMQ9X5BzCYhbUFG+VKkW7c0upKVPpEp5XJIR
+         5ynAxoASWJZTozw+541SlYDu59bnOUrbElXj+R3XK7enICvICcuUBC23J9zQi5moNDzJ
+         aKRGjIuNLZ5wllCiqC3mgFYUyfuKBnyR9zlwB48FAESydtnsNA1BOcfn/BtseddEQel7
+         KilbcWg8tLMFjlvReaM8/XnAWsGbetceFJWa0KLUMFhg5yf9G7FZ1JlgZCDcnIjPQ4aN
+         qVMw==
+X-Forwarded-Encrypted: i=1; AJvYcCXaVAiKqdawK4C59iU2IAcy0UYK70fE+6U8zFXVTQEiSWNFBR3fM2QCATJ4rK0WvAOuOENURHfa9/50ivYiLPQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzcw0HoePcbLwsju1d94oEMLx/evREzo5tDL3pJgf2dAk4PpCTV
+	gDD3BkgYG+jiZYOLdw9l2gNM6wxvFTxcheYr76Ux0GBgFZ/p4kNQQSYd6sQPT7a/pEIrG7ZCXmX
+	tizpQKQ==
+X-Received: from plrs10.prod.google.com ([2002:a17:902:b18a:b0:2a8:ea98:5b88])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ef0f:b0:2aa:d506:d189
+ with SMTP id d9443c01a7336-2ad74515d1dmr84078595ad.34.1771864593795; Mon, 23
+ Feb 2026 08:36:33 -0800 (PST)
+Date: Mon, 23 Feb 2026 08:36:32 -0800
+In-Reply-To: <20260223162900.772669-3-tycho@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/6] bpf, x86: Add 64-bit bitops kfuncs
- support for x86_64
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- X86 ML <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>,
- Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260219142933.13904-1-leon.hwang@linux.dev>
- <20260219142933.13904-3-leon.hwang@linux.dev>
- <CAADnVQLNmQGKf5S5ZNwHYzScYBhnWFmnzLg=5Xxy4SgYKE3EfQ@mail.gmail.com>
- <c6c2ffcf-acdf-4bda-ad82-dc4cc1a9260e@linux.dev>
- <CAADnVQ+iQkvb9-wOchuPrUOneqzx9Rrqto88=R7GUOqih6PhZQ@mail.gmail.com>
- <4c40705a-4e6a-47ea-b420-223318d1ad09@linux.dev>
- <CAADnVQLsJV8OaLCxznwbnxdLVOQ+t=MmAr2O8Y89iPErCvphFQ@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQLsJV8OaLCxznwbnxdLVOQ+t=MmAr2O8Y89iPErCvphFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20260223162900.772669-1-tycho@kernel.org> <20260223162900.772669-3-tycho@kernel.org>
+Message-ID: <aZyCEBo07EHw2Prk@google.com>
+Subject: Re: [PATCH 2/4] selftests/kvm: check that SEV-ES VMs are allowed in
+ SEV-SNP mode
+From: Sean Christopherson <seanjc@google.com>
+To: Tycho Andersen <tycho@kernel.org>
+Cc: Ashish Kalra <ashish.kalra@amd.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, linux-crypto@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
+On Mon, Feb 23, 2026, Tycho Andersen wrote:
+> diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+> index 86ad1c7d068f..c7fda9fc324b 100644
+> --- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+> +++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+> @@ -213,13 +213,48 @@ static void test_sev_smoke(void *guest, uint32_t type, uint64_t policy)
+>  	}
+>  }
+>  
+> +static bool sev_es_allowed(void)
+> +{
+> +	struct kvm_sev_launch_start launch_start = {
+> +		.policy = SEV_POLICY_ES,
+> +	};
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_vm *vm;
+> +	int firmware_error, ret;
+> +	bool supported = true;
+> +
+> +	if (!kvm_cpu_has(X86_FEATURE_SEV_ES))
+> +		return false;
+> +
+> +	if (!kvm_cpu_has(X86_FEATURE_SEV_SNP))
+> +		return true;
+> +
+> +	/*
+> +	 * In some cases when SEV-SNP is enabled, firmware disallows starting
+> +	 * an SEV-ES VM. When SEV-SNP is enabled try to launch an SEV-ES, and
+> +	 * check the underlying firmware error for this case.
+> +	 */
+> +	vm = vm_sev_create_with_one_vcpu(KVM_X86_SEV_ES_VM, guest_sev_es_code,
+> +					 &vcpu);
 
+If there's a legimate reason why an SEV-ES VM can't be created, then that needs
+to be explicitly enumerated in some way by the kernel.  E.g. is this due to lack
+of ASIDs due to CipherTextHiding or something?  Throwing a noodle to see if it
+sticks is not an option.
 
-On 2026/2/22 00:51, Alexei Starovoitov wrote:
-> On Sat, Feb 21, 2026 at 4:45 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
-
-[...]
-
->>
->> Good idea. But I concern about the "in kernel disasm". Do you mean we
->> will build a disassembler for whitelist kfuncs at starting?
->>
->> I noticed you've mentioned the same direction in "bpf/s390: Implement
->> get_preempt_count()" [1]. So, I added Ilya here to discuss this direction.
+> +
+> +	ret = __vm_sev_ioctl(vm, KVM_SEV_LAUNCH_START, &launch_start,
+> +			     &firmware_error);
+> +	if (ret == -1 && firmware_error == SEV_RET_UNSUPPORTED) {
+> +		pr_info("SEV-ES not supported with SNP\n");
+> +		supported = false;
+> +	}
+> +
+> +	kvm_vm_free(vm);
+> +	return supported;
+> +}
+> +
+>  int main(int argc, char *argv[])
+>  {
+>  	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SEV));
+>  
+>  	test_sev_smoke(guest_sev_code, KVM_X86_SEV_VM, 0);
+>  
+> -	if (kvm_cpu_has(X86_FEATURE_SEV_ES))
+> +	if (sev_es_allowed())
+>  		test_sev_smoke(guest_sev_es_code, KVM_X86_SEV_ES_VM, SEV_POLICY_ES);
+>  
+>  	if (kvm_cpu_has(X86_FEATURE_SEV_SNP))
+> -- 
+> 2.53.0
 > 
-> Much better. Keep it human.
-> 
-> "in kernel disasm" already exists for some architectures
-> (at least x86 and arm64) since it's being used by kprobes.
-> The ask here is to figure out whether they're usable for such
-> insn analysis. x86 disasm is likely capable.
-> 
-
-After looking into x86&arm insn decoder, they are able to do insn analysis.
-
-> re:"whitelist kfunc"
-> I suspect an additional list is not necessary.
-> kf_fastcall is a good enough signal that such kfunc should
-> be inlinable.
-
-I thought it was to build a light-weight custom disassembler, which
-would only support limited machine codes (whitelist kfunc).
-
-Obviously, I was wrong.
-
-We can reuse the in-kernel insn decoding ability to validate fastcall
-function by checking the registers use.
-
-I'll post RFC after finishing poc, on both x86_64 and arm64 of course.
-
-Thanks,
-Leon
-
