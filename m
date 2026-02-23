@@ -1,59 +1,61 @@
 Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3FC145348;
-	Mon, 23 Feb 2026 09:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8444A35CB60;
+	Mon, 23 Feb 2026 10:48:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771839972; cv=none; b=Ch7Sh7cBWlutgXTsWBZDYVea5oFWNjVsRLKa2dMQIgTHrTeJrIIQ6dXIwHK79Sp1JQbTVuuJln4x18DI8RauvbaDFDl9AN55ayuQgJ/9yED+Wj66GNdpTOE61YVB3OmM+bteNc0xWbdzjJ46/GKv5F3uoYuOo/qFeTBbHydinac=
+	t=1771843711; cv=none; b=YQGZPuum7Dfvr2KxmPHFqCIdkPgTuzBNIwA5UZJP3PuAFGEYPlqrL3EqF4Tmlktl1ywezwQoxpW47OfzJNiHiVE3n3qHYP6hxhw8hqbhuRvglJN1dsytSMPhC9Mlxl885clad0HoH9+sczGZRQoUGzg68mf9/7ksc4fgMTqRBDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771839972; c=relaxed/simple;
-	bh=yPRkaRS6xCl+Ba/XYQOMFWH+i0o393KmfiXvx+ReNoY=;
+	s=arc-20240116; t=1771843711; c=relaxed/simple;
+	bh=B4k9gRkg71PnsXufZ2xYa5mMfTFkRd2QdwpI5OBgPQk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tUNYhV05h97TA1L2Xb7cozaiGXv9/w+7/0Wv5h2GujE+NznGVT7wiRMrN6rzas9LHVtTOGCasoE+nT06ZxxTHq2ZOG9OGumdYg5tyDloBJT67qxCn+NTh15u0qm5wuOjskksUYTL9Vfs2gej6b9wIiiOL57oiAffObyrf0x+zLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=HmII/pEq; arc=none smtp.client-ip=148.163.148.77
+	 MIME-Version:Content-Type; b=rpD7bPA3C8ednsvs2GvG9PmuUDc9IFH93wwHKh77qXyhK5TtkKBTMKYWhRjtFPeNFwIJtRjaYMpWe/r2zg1Hwl++2JEIhaJQ5ky+Kxf4Tm+O47QEyQFSJ86FZ3ngVepNZgCUoYISAsPx1qRbFZbnVcK1hRFFOIJNpmXumkJK3EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=r7i4Wj3i; arc=none smtp.client-ip=148.163.148.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="HmII/pEq"
-Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61N9FaWo912091;
-	Mon, 23 Feb 2026 09:45:34 GMT
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="r7i4Wj3i"
+Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61N9Ogk0853227;
+	Mon, 23 Feb 2026 10:47:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
 	 h=cc:content-transfer-encoding:content-type:date:from
 	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=yPRkaRS6xCl+Ba/XYQOMFWH+i0o393KmfiXvx+ReNoY=; b=HmII
-	/pEqFkzPRukv7r2n3dB2AAqdw40A39IhgYy92ZW7jG8NStQjza9P2QKuatZmWIpc
-	5U0NxvBz5XL3eBkki+CebhjdSZuTSBtyaK4RMjDOzS0v0aKC1gZdAAFgpGZQot1e
-	byYuiWJkNrzT9RNXy9x11ME00kqJ524D4jSjUIvIcJC0pQEgNc7isFv9S6iQC7Vf
-	Q9Kyk2+7uxzJwEmzq2ywwWT/l6M7Z6BAKo96mKR8N2Jya4+qOAhfll4w6JC8Zdjm
-	RLlxgKRe3IWXhBmeqjtpbE43sMlPYEgcA8j6BUa064xGq7BM3kswJLmhR8+PYsYG
-	O7zZlTwXWhnWkiyWDg==
+	default; bh=UVyLOI3z8vWqmLKu0cEzyVJ9p5zsfe+0kMQ3yPY7dlo=; b=r7i4
+	Wj3iJztaMll+kb1E3oDWnRm6MlurDnIZeuQ9qX84fMc598gS6ZEU1w7dMGZoZqVJ
+	sOsG3kNY4m2O6Lh5n88gURdRUr3qiEV5wnTZuDU/JQVln8DpB1IXRRoYlrdjTwQC
+	FCnkV4XNtzA/KBdx4C6IRhLKA9eoKC+aNc0yT5dUDOcaBrEEFK150AgfTjARttgk
+	GiLRWH0lbZQ/4ceeS5EoXp3FmPfLIA/bOowbxevpRI8/RK2Sxd4S5xMzr/0RIo/I
+	DvaSxCmKv4YL+PdN8uI2awQDpROYhWnYpiPJ3fG/tip/6bFoXvxFQSEp+GVbvssL
+	kV2AvfBM9LD1bTVayg==
 Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cftgxbrp2-1
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cfqxwcake-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 09:45:33 +0000 (GMT)
+	Mon, 23 Feb 2026 10:47:52 +0000 (GMT)
 Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
  04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 23 Feb 2026 09:45:11 +0000
+ 15.2.2562.35; Mon, 23 Feb 2026 10:47:45 +0000
 From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <alexei.starovoitov@gmail.com>
+To: <bot+bpf-ci@kernel.org>
 CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <eddyz87@gmail.com>,
-        <edumazet@google.com>, <haoluo@google.com>, <horms@kernel.org>,
+        <clm@meta.com>, <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <eddyz87@gmail.com>, <edumazet@google.com>, <haoluo@google.com>,
+        <horms@kernel.org>, <ihor.solodrai@linux.dev>,
         <john.fastabend@gmail.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
         <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
-        <martin.lau@linux.dev>, <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <sdf@fomichev.me>, <shuah@kernel.org>, <slava.imameev@crowdstrike.com>,
-        <song@kernel.org>, <yonghong.song@linux.dev>
-Subject: Re: Re: Re: [PATCH bpf-next v2 0/2] bpf: Add multi-level pointer parameter
-Date: Mon, 23 Feb 2026 20:44:23 +1100
-Message-ID: <20260223094423.26551-1-slava.imameev@crowdstrike.com>
+        <martin.lau@kernel.org>, <martin.lau@linux.dev>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
+        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>
+Subject: Re: Re: [PATCH bpf-next v3 1/2] bpf: Support multi-level pointer params via SCALAR_VALUE for trampolines
+Date: Mon, 23 Feb 2026 21:47:43 +1100
+Message-ID: <20260223104743.37713-1-slava.imameev@crowdstrike.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <CAADnVQ+xwC+J1hZcHPEUjBoKcUKmnucG4AFQ-kkDmqx+C-GcoA@mail.gmail.com>
-References: <CAADnVQ+xwC+J1hZcHPEUjBoKcUKmnucG4AFQ-kkDmqx+C-GcoA@mail.gmail.com>
+In-Reply-To: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
+References: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,52 +67,53 @@ Content-Type: text/plain
 X-ClientProxiedBy: 04WPEXCH008.crowdstrike.sys (10.100.11.75) To
  04WPEXCH006.crowdstrike.sys (10.100.11.70)
 X-Disclaimer: USA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDA4NCBTYWx0ZWRfXxKMhC26uW/sS
- VQhBnpPk/dLzBnOC0sWN4wR8pIttZ4R/qnnBuviPXEEbaEN0SCHqLdMw7rRunGIlNT29/HAJeDn
- 0NfrNWJR43xo/hWkfnD9szVANc3WFIP69v8FZkp0SkYcb2Yv7GL69nGBQrXv2xxGSWEA/BBxPVP
- rc0tWUSc6S8kXZ9ni+/W8oN2nAd4rkv6ZZDAHwqNtrJGmB4BBb5hBVcaQBe57SK5HdYoajxLP5A
- 40KC/BdDkgBhDv2u1ccopWfqXNi29+GPZsmufnWlU7Gmfs4rumASl9y9ghycEFlbum4h0gvaBrR
- /yGlmUHfJuXVYUDKJatq8nqzqz1YYipnYqcr2kvvxOrfYRghMcNJZe6Itj1oYw2Y6qyEyD3KkW/
- AyzAV+Pl6btm3X8ShR9JhCdG4FbeIYa11ENmvYcgsM0DiPIV01GBSZGGb4QW++89tC5Nf1CG2o2
- nN6M0iZBh/D5z2VZ/XQ==
-X-Proofpoint-ORIG-GUID: -TQ0QlKj59_ApXtzOc_qSSDtCQL_w70e
-X-Authority-Analysis: v=2.4 cv=S+XUAYsP c=1 sm=1 tr=0 ts=699c21bd cx=c_pps
+X-Proofpoint-ORIG-GUID: u83RgyQRo6YQuztzaIMjK3jEhrRMTO4m
+X-Authority-Analysis: v=2.4 cv=TJhIilla c=1 sm=1 tr=0 ts=699c3058 cx=c_pps
  a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
  a=EjBHVkixTFsA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=2KvRFfd_T_-xjmS8C1aD:22 a=pGLkceISAAAA:8
- a=fhEmHalCemDr9p1Y7F8A:9
-X-Proofpoint-GUID: -TQ0QlKj59_ApXtzOc_qSSDtCQL_w70e
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=6Gbh3OEyIFFArXis12EA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDA5MyBTYWx0ZWRfXwY+XXO95NKDb
+ 5upXSOhNQb8bSY8jYzonOWR8axJ09OYOOGLPBYJJWbP4Wf9PdosW0k2nUnKi2sRY7ihnjVASwdI
+ PgGjkbQ9yMXdfyZi8VXugsB3AfoMG4pgt015ly7ZTFF8ccmlSa4NJeu1PrU9qng03H6zNGlnyZm
+ sTGVbTVig2NpzmDxH4DwSDit0Ty7Jk/whDFshWZIjpfR4U71if0C3i9mXZAlzF1UMRpGx1NJnyf
+ 2PXzSR0CeYq3SVDKO7+K14boa5QLzAHvcRIYuAwvPZT+Uwvn9gg3eL3brHk1ZZI0MZGS1wfq/O+
+ CRsnLVnSbCgBIbNe5YRQ0E87k2f2pqEaWKbiRfZpkkgVzDw5VSfUT3fwkNyKVU4y7s6QK97gU95
+ UOl3FQZiQ6SuahY/shSOHoPFK/vvkeHM33Qxb5ArcsmhpYTfgpHCv8Zp+lfxyD8D/LB+LCGzSat
+ GXMAuYCQzQ9OYvOIfhA==
+X-Proofpoint-GUID: u83RgyQRo6YQuztzaIMjK3jEhrRMTO4m
 X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11709
  signatures=596818
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 bulkscore=0 suspectscore=0 clxscore=1011
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2602230084
+ phishscore=0 malwarescore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 clxscore=1011 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602230093
 
-On Wed, 18 Feb 2026 19:15:47 Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote
+I think support for broader types can be provided in a compatible way
+with future annotated support, as I explained in my reply to the v2
+review:
 
-> so I suggest treating 'void **' as a scalar as Eduard suggested.
-> This particular sb_eat_lsm_opts() hook
-> doesn't have a useful type behind it anyway.
-> I'm less certain about 'char **'. If we make it scalar too
-> it will be harder to make it a pointer to nul terminated string later.
+"
+  > so I suggest treating 'void **' as a scalar as Eduard suggested.
+  > This particular sb_eat_lsm_opts() hook
+  > doesn't have a useful type behind it anyway.
+  > I'm less certain about 'char **'. If we make it scalar too
+  > it will be harder to make it a pointer to nul terminated string later.
 
-> So I would do 'void **' -> scalar for now only.
+  > So I would do 'void **' -> scalar for now only.
 
-I changed to scalar in v3, keeping broader scope for pointer types.
+  I changed to scalar in v3, keeping broader scope for pointer types.
 
-We encountered double pointers of various types that required
-workarounds, such as:
+  We encountered double pointers of various types that required
+  workarounds, such as:
 
-int __posix_acl_chmod(struct posix_acl **acl, gfp_t gfp, umode_t mode)
+  int __posix_acl_chmod(struct posix_acl **acl, gfp_t gfp, umode_t mode)
 
-Adding support for void** alone doesn't address the broader issue
-with other double pointer types.
+  Adding support for void** alone doesn't address the broader issue
+  with other double pointer types.
 
-When annotated array support (including char**) is added in the
-future, it should remain compatible with the scalar approach for
-legacy (unannotated) parameters. Unannotated parameters will
-continue using scalar handling.
+  When annotated array support (including char**) is added in the
+  future, it should remain compatible with the scalar approach for
+  legacy (unannotated) parameters. Unannotated parameters will
+  continue using scalar handling.
+"
