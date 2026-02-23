@@ -1,118 +1,310 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7323934D4D8;
-	Mon, 23 Feb 2026 23:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A505A37F8AF
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 23:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771888728; cv=none; b=I6QTFIwSzbgE0C8hoSSY+/oW2+1Cx077EQOC9lQLMTDztjnGJNqh3VAzJ8Q7qPnLBFET3+xtLI/tHcnKYKR+Gb39moaQc5vCEsChJlmxyA62sU2Sr7tkgrsHx2ytn6GHiK1CVS9csd4gTCmLQSFQMWVvOMnGvjwezQjYwBQy0Bk=
+	t=1771889263; cv=none; b=o+GPUKlqQhAoftmDXYkdkNFs6H2CTQa/OVifl2dcc2SvF4RhP9relTYBkcZogVUZgqmzjzKDu0s1Z/F/m11IC5oUlVc5KyG9NZx6MU01PXU09fJZo/vs/nIa9yK213wg2boIc52pRX6yBCsNyaBU0arECeyH8hWdyK0xwhHaiPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771888728; c=relaxed/simple;
-	bh=CYLrkQbplhVLWpLwYQI2kVgix50aUPHsmv7SwhslwTg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZxrXQRdZZ/Dkz2PYtlz0/7z/SAJHXIC7TdbA9ijhYsxfjKQzWFmOwlSC2Q/DiQ3zkfoFIQO11RlzTXyPzOO1R4g9xkCrADxTk/D+B+axkvef1skBjk3OQ3zKx1VrEhSNfVBwYNfo4lkBCr7r31g4JDAqWiYEHhEIA/qlcPQuLw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TlZbVIG0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771889263; c=relaxed/simple;
+	bh=xEee9cxbr7GG38D2/dBLujjBWCXTmk4ZStmSNh98uT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=shtYr5be1DD74C64o85ovBGwjvdD2w2XkDjWCCLfqbFNG+5CCp9a6+zZHunzvd/l2Y3lhOJ7ILKMfv++fYf2JhePqbYPjxAbZUUO+mLodhrmEsLHjTk1WFHwZHGkNiqbL/5fmLXVKhfg7CqOdN9/APvrGnCD/+3S/1UDj7WOAVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tlTa2Pl7; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TlZbVIG0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC4EC116C6;
-	Mon, 23 Feb 2026 23:18:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771888727;
-	bh=CYLrkQbplhVLWpLwYQI2kVgix50aUPHsmv7SwhslwTg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TlZbVIG0zfxSp01GgD2+JrWlDWhpRYIi9iTBhCrYsyrhBEvafKGrz2Sy10Zr/MQkO
-	 X1SL7F61crQZeQWRjiwxV8hbfegSYseFSQVFEm3T0eSv7L1gLYAWcFx88Chz+qnBzR
-	 qxzUVv9nXlsD5qoFeVw2MpDIz2ZJBws9y/8zBWThrTv1CUFXmms+yQKrqAfBJe58Rj
-	 wzoFidKhPfAGKJtuWuzd3CSqX6uLhqXhwQPvDkLXHlNpf/7Xie1DnA9YPLi/1rPJUG
-	 2Uvl9A1L5WmKRP7FY64FUyfKI4LTjN9DyLsOPBIVeTR5NmcYTzMkfxsK50Z4nHKidf
-	 m7ZoZ1PlpHIWg==
-Date: Mon, 23 Feb 2026 15:18:45 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
- KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
- Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jakub Sitnicki <jakub@cloudflare.com>,
- netdev@vger.kernel.org, bpf@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <20260223151845.06db43b0@kernel.org>
-In-Reply-To: <aZyKWoxnywXKWth9@lore-desk>
-References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
-	<20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
-	<20260218174742.62a4074f@kernel.org>
-	<aZbuWBnmh_SQJyVf@lore-desk>
-	<20260219091344.1d8517f3@kernel.org>
-	<aZyKWoxnywXKWth9@lore-desk>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tlTa2Pl7"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2aad8123335so12205ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 15:27:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771889261; x=1772494061; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+9xRDS+GbzpVTn5dJQsaYxoqI8Nli76XDWLyH8tQ4yc=;
+        b=tlTa2Pl7yC8vFqnCUdHPSyXCbNU1emA/dEGUWJC/oKyPsaajyUG4UwEKed4XzIYF+w
+         +g9tcjoJRBapjLzSfCp93HZkgqeb2WoHR4bEPXMkS8CTV1ak7YDFYwMs6WLSf9dC1QOF
+         1D/gjmzWawCjI1PRJduJSxx6s7Xams/1mwVfjs8jwsNfx8I/fzPrZl88VkdcHR1/LX86
+         oNOYWTy0MLFOCBrgjqCPqEOYw3HwFHF/fVAsSPQJflTFyQvMoOS/uVzJCWq1AwYYSSj/
+         oi3bxrNsPpzr1+JlZgQv4vbnMYNor9fu3mkaY50XOg83Bp30zq5eiUPG0G7seIEI7/Cl
+         X85Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771889261; x=1772494061;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+9xRDS+GbzpVTn5dJQsaYxoqI8Nli76XDWLyH8tQ4yc=;
+        b=wa9hW/L6QjT7c98s5os0GFzUMLqF75IMX9Q+8y7LUANCZP5eEfoLAV+NMlJ71lAhwo
+         EAhRFk29X5XyAyQzauKjETib18JilNPjk5ftHrINHD9RKQUHvsx5ser+qeral0p5PRtg
+         DFVQX/jZjGVuQNmDSxUY8v5MY6uGOZFEeLS/PM2H1Jmx2ciCbpBO+c/EFwU++AzshK4+
+         ZB1kZB/BH8C93IPgQdBN/cuY31agxoFtziGCqSR6bKrxKMM1Mba61FjMj1tAExBs/9d1
+         nHtW03uIqvedwlt5+4crseuuah4DIoyN33X3/pm2Hl8WHXp+aLTdwDWqAm7Sp5kDg/fx
+         1F9A==
+X-Forwarded-Encrypted: i=1; AJvYcCVgi5zt8Npk7YLpnP7mK+eSDH4w7Bkiexka+cGSpP+/Id1IiVW/K267d+RIUcg16McZsQGRvCe09q+s6q0MzHc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuGzspcYvlwfSvPzXWnwvtQ7GcPNj574GgyUrPcmu9IzbnW/32
+	71DGhgesRos27Q4XOH9npJflUKcQAB2V3oSCWv60X5BKAnS6W34dlCPALPCn/gLUtg==
+X-Gm-Gg: ATEYQzxcHSsFtWZhWoz/XLRzYUdW0nuFZQ3SSX29BhAQxwCOy5BRoIjRJ9I8s2J7QEP
+	uK2nwg4+TYwgMR3IE319MKC0xbURWaJVmle+aSQP8in9a5/zwsMlVlTS9sfsiNDWHQHocXGhxYj
+	nxyxKxhNaas+Lw71mWKdedsqOcWEkaZE9O8AwPkUJCBZ2esB8Iepyh6G22TULCbpn8oWWsCUKD1
+	0oAv33FSm2KcsdtkCOZ5LB2gON4BjjmTishOBZaBXaO6G+hrb9vmobYnDUjkjSNgqsnvdekkunu
+	BZvbSZTHLgC7H/HdZkceRe+QbkBmcbyNZXF0tvvW6j8+dGLj+8KR6C3DuDIL7R8PFHOjT1eS+yN
+	vMNyLLHvA51RV1K12djTfwnQO1xAaIyErvZlw0VxnRj5NSlqzC0+OWC0rC9HRUVZdg8/DuZ9C2l
+	SXS7M33RIg0b6HTZklet711pBuGlWwOJGTK364T10Gta9Q3LwxB+lr19FwnvTb6g==
+X-Received: by 2002:a17:903:1968:b0:2a0:89b0:71d6 with SMTP id d9443c01a7336-2ada34bcd22mr245115ad.17.1771889260189;
+        Mon, 23 Feb 2026 15:27:40 -0800 (PST)
+Received: from google.com (168.136.83.34.bc.googleusercontent.com. [34.83.136.168])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7500e318sm81858705ad.43.2026.02.23.15.27.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Feb 2026 15:27:39 -0800 (PST)
+Date: Mon, 23 Feb 2026 23:27:35 +0000
+From: Samiullah Khawaja <skhawaja@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
+	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, 
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>, 
+	Vipin Sharma <vipinsh@google.com>, Vivek Kasireddy <vivek.kasireddy@intel.com>, 
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 06/22] vfio/pci: Retrieve preserved device files after
+ Live Update
+Message-ID: <bz7mhzvgawf4loxbv74iodj6aaf4e2snlb7szgjk2lia2uxnhr@dcp3m3jl3i63>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-7-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260129212510.967611-7-dmatlack@google.com>
 
-On Mon, 23 Feb 2026 18:11:54 +0100 Lorenzo Bianconi wrote:
-> > Off the top of my head drivers prefer reporting UNNECESSARY when they
-> > have both, and reserve COMPLETE for cases where L4 could not be found
-> > or is incorrect. Why don't we report both? We're using 3 args, we still
-> > have 3 to go. We could turn ip_summed into a bitmap and have explicit
-> > output args for both level and csum complete value?  
-> 
-> Ack, thx for the explanation. Just for sake of understanding, is there
-> any NIC capable of reporting both csum_value and csum for the same packet
-> in the DMA descriptor? Or is this change needed to be future-proof?
+On Thu, Jan 29, 2026 at 09:24:53PM +0000, David Matlack wrote:
+>From: Vipin Sharma <vipinsh@google.com>
+>
+>Enable userspace to retrieve preserved VFIO device files from VFIO after
+>a Live Update by implementing the retrieve() and finish() file handler
+>callbacks.
+>
+>Use an anonymous inode when creating the file, since the retrieved
+>device file is not opened through any particular cdev inode, and the
+>cdev inode does not matter in practice.
+>
+>For now the retrieved file is functionally equivalent a opening the
+>corresponding VFIO cdev file. Subsequent commits will leverage the
+>preserved state associated with the retrieved file to preserve bits of
+>the device across Live Update.
+>
+>Signed-off-by: Vipin Sharma <vipinsh@google.com>
+>Co-developed-by: David Matlack <dmatlack@google.com>
+>Signed-off-by: David Matlack <dmatlack@google.com>
+>---
+> drivers/vfio/device_cdev.c             | 21 ++++++---
+> drivers/vfio/pci/vfio_pci_liveupdate.c | 60 +++++++++++++++++++++++++-
+> drivers/vfio/vfio_main.c               | 13 ++++++
+> include/linux/vfio.h                   | 12 ++++++
+> 4 files changed, 98 insertions(+), 8 deletions(-)
+>
+>diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
+>index 8ceca24ac136..935f84a35875 100644
+>--- a/drivers/vfio/device_cdev.c
+>+++ b/drivers/vfio/device_cdev.c
+>@@ -16,14 +16,8 @@ void vfio_init_device_cdev(struct vfio_device *device)
+> 	device->cdev.owner = THIS_MODULE;
+> }
+>
+>-/*
+>- * device access via the fd opened by this function is blocked until
+>- * .open_device() is called successfully during BIND_IOMMUFD.
+>- */
+>-int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
+>+int __vfio_device_fops_cdev_open(struct vfio_device *device, struct file *filep)
+> {
+>-	struct vfio_device *device = container_of(inode->i_cdev,
+>-						  struct vfio_device, cdev);
+> 	struct vfio_device_file *df;
+> 	int ret;
+>
+>@@ -52,6 +46,19 @@ int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
+> 	vfio_device_put_registration(device);
+> 	return ret;
+> }
+>+EXPORT_SYMBOL_GPL(__vfio_device_fops_cdev_open);
+>+
+>+/*
+>+ * device access via the fd opened by this function is blocked until
+>+ * .open_device() is called successfully during BIND_IOMMUFD.
+>+ */
+>+int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
+>+{
+>+	struct vfio_device *device = container_of(inode->i_cdev,
+>+						  struct vfio_device, cdev);
+>+
+>+	return __vfio_device_fops_cdev_open(device, filep);
+>+}
+>
+> static void vfio_df_get_kvm_safe(struct vfio_device_file *df)
+> {
+>diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
+>index f01de98f1b75..7f4117181fd0 100644
+>--- a/drivers/vfio/pci/vfio_pci_liveupdate.c
+>+++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
+>@@ -8,6 +8,8 @@
+>
+> #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>
+>+#include <linux/anon_inodes.h>
+>+#include <linux/file.h>
+> #include <linux/kexec_handover.h>
+> #include <linux/kho/abi/vfio_pci.h>
+> #include <linux/liveupdate.h>
+>@@ -108,13 +110,68 @@ static int vfio_pci_liveupdate_freeze(struct liveupdate_file_op_args *args)
+> 	return ret;
+> }
+>
+>+static int match_device(struct device *dev, const void *arg)
+>+{
+>+	struct vfio_device *device = container_of(dev, struct vfio_device, device);
+>+	const struct vfio_pci_core_device_ser *ser = arg;
+>+	struct pci_dev *pdev;
+>+
+>+	pdev = dev_is_pci(device->dev) ? to_pci_dev(device->dev) : NULL;
+>+	if (!pdev)
+>+		return false;
+>+
+>+	return ser->bdf == pci_dev_id(pdev) && ser->domain == pci_domain_nr(pdev->bus);
+>+}
+>+
+> static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
+> {
+>-	return -EOPNOTSUPP;
+>+	struct vfio_pci_core_device_ser *ser;
+>+	struct vfio_device *device;
+>+	struct file *file;
+>+	int ret;
+>+
+>+	ser = phys_to_virt(args->serialized_data);
+>+
+>+	device = vfio_find_device(ser, match_device);
+>+	if (!device)
+>+		return -ENODEV;
+>+
+>+	/*
+>+	 * Simulate opening the character device using an anonymous inode. The
+>+	 * returned file has the same properties as a cdev file (e.g. operations
+>+	 * are blocked until BIND_IOMMUFD is called).
+>+	 */
+>+	file = anon_inode_getfile_fmode("[vfio-device-liveupdate]",
+>+					&vfio_device_fops, NULL,
+>+					O_RDWR, FMODE_PREAD | FMODE_PWRITE);
+>+	if (IS_ERR(file)) {
+>+		ret = PTR_ERR(file);
+>+		goto out;
+>+	}
+>+
+>+	ret = __vfio_device_fops_cdev_open(device, file);
+>+	if (ret) {
+>+		fput(file);
+>+		goto out;
+>+	}
+>+
+>+	args->file = file;
+>+
+>+out:
+>+	/* Drop the reference from vfio_find_device() */
+>+	put_device(&device->device);
+>+
+>+	return ret;
+>+}
+>+
+>+static bool vfio_pci_liveupdate_can_finish(struct liveupdate_file_op_args *args)
+>+{
+>+	return args->retrieved;
+> }
+>
+> static void vfio_pci_liveupdate_finish(struct liveupdate_file_op_args *args)
+> {
+>+	kho_restore_free(phys_to_virt(args->serialized_data));
+> }
+>
+> static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
+>@@ -123,6 +180,7 @@ static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
+> 	.unpreserve = vfio_pci_liveupdate_unpreserve,
+> 	.freeze = vfio_pci_liveupdate_freeze,
+> 	.retrieve = vfio_pci_liveupdate_retrieve,
+>+	.can_finish = vfio_pci_liveupdate_can_finish,
+> 	.finish = vfio_pci_liveupdate_finish,
+> 	.owner = THIS_MODULE,
+> };
+>diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+>index 276f615f0c28..89c5feef75d5 100644
+>--- a/drivers/vfio/vfio_main.c
+>+++ b/drivers/vfio/vfio_main.c
+>@@ -13,6 +13,7 @@
+> #include <linux/cdev.h>
+> #include <linux/compat.h>
+> #include <linux/device.h>
+>+#include <linux/device/class.h>
+> #include <linux/fs.h>
+> #include <linux/idr.h>
+> #include <linux/iommu.h>
+>@@ -1758,6 +1759,18 @@ int vfio_dma_rw(struct vfio_device *device, dma_addr_t iova, void *data,
+> }
+> EXPORT_SYMBOL(vfio_dma_rw);
+>
+>+struct vfio_device *vfio_find_device(const void *data, device_match_t match)
+>+{
+>+	struct device *device;
+>+
+>+	device = class_find_device(vfio.device_class, NULL, data, match);
+>+	if (!device)
+>+		return NULL;
+>+
+>+	return container_of(device, struct vfio_device, device);
+>+}
+>+EXPORT_SYMBOL_GPL(vfio_find_device);
+>+
+> /*
+>  * Module/class support
+>  */
+>diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+>index 9aa1587fea19..dc592dc00f89 100644
+>--- a/include/linux/vfio.h
+>+++ b/include/linux/vfio.h
+>@@ -419,4 +419,16 @@ int vfio_virqfd_enable(void *opaque, int (*handler)(void *, void *),
+> void vfio_virqfd_disable(struct virqfd **pvirqfd);
+> void vfio_virqfd_flush_thread(struct virqfd **pvirqfd);
+>
+>+#if IS_ENABLED(CONFIG_VFIO_DEVICE_CDEV)
+>+int __vfio_device_fops_cdev_open(struct vfio_device *device, struct file *filep);
+>+#else
+>+static inline int __vfio_device_fops_cdev_open(struct vfio_device *device,
+>+					       struct file *filep)
+>+{
+>+	return -EOPNOTSUPP;
+>+}
+>+#endif /* IS_ENABLED(CONFIG_VFIO_DEVICE_CDEV) */
+>+
+>+struct vfio_device *vfio_find_device(const void *data, device_match_t match);
+>+
+> #endif /* VFIO_H */
+>-- 
+>2.53.0.rc1.225.gd81095ad13-goog
+>
 
-Both nfp and fbnic definitely can. Off the top of my head - mlx5 also
-can, but I haven't double checked.
-
-> > One more thing I'd like us to at least have a plan for at this stage
-> > is how to deal with COMPLETE + modified packet + XDP_PASS.
-> > Right now some drivers discard COMPLETE when XDP is attached since
-> > they can't be sure if XDP modifies the packet. Other drivers don't
-> > and we end up with bad csum splat. Do we have a recommendation on
-> > the correct behavior? If not - should we have a kfunc to adjust /
-> > discard csum complete explicitly?  
-> 
-> At the moment there is no way to store the csum value we got running
-> bpf_xdp_metadata_rx_checksum() in order to be consumed during
-> xdp_buff/xdp_frame to skb conversion (this info can just be consumed in the
-> ebpf program bound to the NIC) but
-
-I think the scope here is much narrower than the xdp_buf to xdp_frame
-to skb conversion. We are just pass information between the program and
-driver which owns xdp_buff. Very similar to your new xmo.
-
-We could either tell the driver to discard the csum complete or even
-add a helper to "adjust" the the csum value. Similar to the helper
-we have to adjust the csum in TC / skb context.
-
-> I guess the issue you pointed out can be solved in the verifier
-> during program load time. What do you think?
-
-It could, but at the verifier level we'd probably have to be fairly
-coarse-grained. Any write to the packet data would mean csum complete
-cannot be trusted, that's not too hard. But also any tail call / fentry?
-I'm not really up to date on the latest in program chaining in BPF but
-I think a lot of real-life deployments would use either chaining or
-fentry. So in practice it may be a lot of complexity for having csum
-complete always disabled w/ XDP, in practice.
-
-Up to you. I'm totally okay to just say** that drivers should never
-report csum complete with XDP (until appropriate API is built).
-Perhaps this will force those who care about XDP+csum_complete to
-tell us what their requirements are?
-
-[**] "just say" == document and add driver kselftest that validates it
+Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
