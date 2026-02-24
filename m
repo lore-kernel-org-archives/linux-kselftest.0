@@ -1,143 +1,64 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F0A25A64C
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 00:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F28222D4C8;
+	Tue, 24 Feb 2026 01:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771894527; cv=none; b=uwzyz+bePWIkKrpg8sq5hD9661O6T7IyiPmLJai6flou29F6Ytav+uHKYdmykMHxiC3syjkOrhy/HN+CoDGRv1xPHerUa0OGD5o1+vRPuhpDEzB2UB9iVo6blgRk0czs2Z8/zqRQ6i5L6JQbNPQZW0WAJlOMA5ZuWNHf0mmetnE=
+	t=1771896136; cv=none; b=bHwGpAFZLOBY0w0vsF7Xwbdn72OVE5TTEB4Nzmcb2sv4BtlDSQJj2f+ShLenJl7CatA6CwiZjRpXumv+/C3f6RADHUd8tLHjsugvFz23mqElAbH+HpIT+XErFRFnMkN3gfhq+oNHigG5jpvo3HmN8t1mgIrAJb1erc0qIn32OA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771894527; c=relaxed/simple;
-	bh=cN5NunlFvoGOAe6HoYHTXV75STvfy1Ko7x7rssTBKYM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=sp1FueAQAEF0vbOs2VV0EV+9tfT0I471rTi4dtt04EaZ2c50zOgCvasOnsgz9TqikbIkGn4HemyFS5q0nWURWBxH0/TE01LUYFiY2Ybb6LqtNrfJnEvvlfNHEAyoUiu0h/jtw9FLIIt9MrNtYQIKWIPUGS65gRM8mqZ0450VFwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0gQxFBfT; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+	s=arc-20240116; t=1771896136; c=relaxed/simple;
+	bh=IcyFI9ljFMLaZ7L6auBlDV7YTiPLEAx0QauZHXRSQpg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sVtOWd266W/H0Q+ZucsRMViOO/2Ono4RTLoHCKnH3PKCASTTZxpWsWIx4G+3U494sJfEPevnLe23kVznzsF+DUaN4SLzhsjsdXUwmCZmHry9d4VHHz5iwWduBnC175R49bWZvoEKkYeJHeecfOXEVHpn1wO1U1VlxoWTMcnKGrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTdUSTrY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0gQxFBfT"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a7b7f04a11so348796365ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 16:55:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771894518; x=1772499318; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wFzHPQE8L/64zORmW1YjNFU61I5i8m5XPko55YlqUjg=;
-        b=0gQxFBfTrhUpLUMtIZlx0iylDB4SQ4bJ/LejYfp9peUwgXo5brzz5mBOAlK1LyxkUQ
-         a4YFhBlS87AUDctkxOHUbN1XFpRiWjo75mNfnG484aC4Q8eNopiKCANv6pvvHffbG/Vh
-         H0q0id78A+LTew2r1X8MZ9pSvjAwsxeyhSCxV9SrLSEYCoOl9n7P+7194Y0Yxa67L4t7
-         DGI6Jw5kZKa5QjenCllnh8dqEshoG1PfCI2TcswwFkca09+BoCcxmhp58BiIi9WvhoMc
-         mZhO/9udhkMucbrRaKWzoi/GunucukAqnwXZAKaig0GLrA6Oupch12vDBBhNmFszf/Ps
-         nKsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771894518; x=1772499318;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wFzHPQE8L/64zORmW1YjNFU61I5i8m5XPko55YlqUjg=;
-        b=anQlqdyy76UaLgJvFo5qAo3mfpd8FQu9N4LzF5jArkjik8p16Thm1W4Cg+zvmKDSul
-         l9MAHbSycBmCZumCVY1MKgs/qs0RIFUxSKO2FSAXZw2bn5g2o5zsPamP9eLYQGVkDB1k
-         LkyhnacHoY6Eum0rNgmzv4/i1ZP0dNL0ReP3O+s8Pz7cQajQ8SG7oDSiQlrhm4t1cfmb
-         7N4fUiYQoAkvyGTFRmc0CKT4u5Jg415VS77quDzOco7bAEfOezVj8mhM2MEUXkdUEgNx
-         9XUbC7jIMfUx8Kl1j3GYC0ELvD/7XmrW7aNkurZZQKiGeqBKiUL6EWMGycIyoFUO5Ha1
-         t9iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUUThDjPbQg/WwaormRIrtsczxQIleOTqVlHLgfgjQjeu/6dZPDOWTGGVMaCoIwYtNDqev/WSd2bev+3moiUhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzakYD6ttdQ1XDsVQsdvRFR11RO7QjBAaRzZX0DsP4/2DhGgV26
-	NalE9HyRVcjLVhDmsSLo3L7RIhOoRBNa1TmQnAL8iqY+4S5eihmh//T1Vot2dZyQ4dW3j2nMono
-	iJQdlwZnW61Lhmw==
-X-Received: from pgkm14.prod.google.com ([2002:a63:ed4e:0:b0:c63:55bd:18f0])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:94cf:b0:393:7575:a8c7 with SMTP id adf61e73a8af0-39545e3994fmr10015601637.19.1771894517673;
- Mon, 23 Feb 2026 16:55:17 -0800 (PST)
-Date: Mon, 23 Feb 2026 16:54:44 -0800
-In-Reply-To: <20260224005500.1471972-1-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTdUSTrY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE0DFC116C6;
+	Tue, 24 Feb 2026 01:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771896136;
+	bh=IcyFI9ljFMLaZ7L6auBlDV7YTiPLEAx0QauZHXRSQpg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=XTdUSTrY2eJ/NmIDIEnFSQYhXq/FtkYnW6go51ytCmJ9mRwlR3UZI/68AZEuaMjAG
+	 erQt+wRsdC+N+OlcNWLs4dnCF6XQyHQFKJ5yVxnwFJSeTiNooKK6HzQ7tYzu0jMBmm
+	 jN+ltuxDSen6QbF7VzRR4cEDpSD0I1eqNuNSfnNfaUfWjMIvph94lxBH4vXeeBuuv+
+	 RAaHIrzGufKBmnriyMRLbNN9i/wisYJyo3VTqdqJYw+DvlAkFmVwJKCxtzPovmPU+V
+	 mXUeathl4Sa5lz1fVjUiuJGtrw6c2+tuLHdqO9kMIhMSxCFnRRaJ+4X2MmyDcte+gY
+	 QMyT1fPfksODg==
+Date: Mon, 23 Feb 2026 17:22:14 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com,
+ horms@kernel.org, kees@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/harness: fix XFAIL_ADD matching when test
+ metadata is not initialized
+Message-ID: <20260223172214.5d8ddaa1@kernel.org>
+In-Reply-To: <20260222111847.692325-1-sun.jian.kdev@gmail.com>
+References: <20260222111847.692325-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260224005500.1471972-1-jmattson@google.com>
-X-Mailer: git-send-email 2.53.0.371.g1d285c8824-goog
-Message-ID: <20260224005500.1471972-7-jmattson@google.com>
-Subject: [PATCH v5 06/10] KVM: x86: Remove common handling of MSR_IA32_CR_PAT
-From: Jim Mattson <jmattson@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Yosry Ahmed <yosry@kernel.org>
-Cc: Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-SVM now has completely independent handling of MSR_IA32_CR_PAT in
-svm_get_msr() and svm_set_msr().
+On Sun, 22 Feb 2026 19:18:46 +0800 Sun Jian wrote:
+> XFAIL_ADD() registers expected failures using constructor order, but the
+> associated struct __test_metadata pointer may not be initialized yet.
+> As a result, xfail entries can end up with a NULL test pointer and never
+> match at runtime, causing expected failures to be reported as FAIL.
+> 
+> Store the test case name in the xfail entry and fall back to name-based
+> matching when the test pointer is unavailable, while keeping the original
+> pointer-based matching for compatibility.
 
-To avoid any confusion, move the logic for MSR_IA32_CR_PAT from
-kvm_get_msr_common() and kvm_set_msr_common() into vmx_get_msr() and
-vmx_set_msr().
+This looks a bit inelegant, what compiler is this failing on for you?
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 9 ++++++---
- arch/x86/kvm/x86.c     | 9 ---------
- 2 files changed, 6 insertions(+), 12 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 967b58a8ab9d..f5127dbd9104 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2146,6 +2146,9 @@ int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		    !(vcpu->arch.arch_capabilities & ARCH_CAP_TSX_CTRL_MSR))
- 			return 1;
- 		goto find_uret_msr;
-+	case MSR_IA32_CR_PAT:
-+		msr_info->data = vcpu->arch.pat;
-+		break;
- 	case MSR_IA32_UMWAIT_CONTROL:
- 		if (!msr_info->host_initiated && !vmx_has_waitpkg(vmx))
- 			return 1;
-@@ -2468,10 +2471,10 @@ int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			return 1;
- 		goto find_uret_msr;
- 	case MSR_IA32_CR_PAT:
--		ret = kvm_set_msr_common(vcpu, msr_info);
--		if (ret)
--			break;
-+		if (!kvm_pat_valid(data))
-+			return 1;
- 
-+		vcpu->arch.pat = data;
- 		if (is_guest_mode(vcpu) &&
- 		    get_vmcs12(vcpu)->vm_exit_controls & VM_EXIT_SAVE_IA32_PAT)
- 			get_vmcs12(vcpu)->guest_ia32_pat = data;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 416899b5dbe4..41936f83a17f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4025,12 +4025,6 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			return 1;
- 		}
- 		break;
--	case MSR_IA32_CR_PAT:
--		if (!kvm_pat_valid(data))
--			return 1;
--
--		vcpu->arch.pat = data;
--		break;
- 	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
- 	case MSR_MTRRdefType:
- 		return kvm_mtrr_set_msr(vcpu, msr, data);
-@@ -4436,9 +4430,6 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		msr_info->data = kvm_scale_tsc(rdtsc(), ratio) + offset;
- 		break;
- 	}
--	case MSR_IA32_CR_PAT:
--		msr_info->data = vcpu->arch.pat;
--		break;
- 	case MSR_MTRRcap:
- 	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
- 	case MSR_MTRRdefType:
+Constructors seem to have a concept of priority so if we have to,
+we should probably used those for the fix.
 -- 
-2.53.0.371.g1d285c8824-goog
-
+pw-bot: cr
