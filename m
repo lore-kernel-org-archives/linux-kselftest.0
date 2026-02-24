@@ -1,448 +1,158 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11023080.outbound.protection.outlook.com [52.101.72.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD173A9D90;
-	Tue, 24 Feb 2026 16:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C192B3A9616
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 16:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771951757; cv=fail; b=KVW4vjydW+SJoXD8OMQrXjyWB1RcOP6TfbPcFgJsy3hJW/0UP57h204x+Z8EsDGsnpiHQV7zwoYSBAGeAvG6KOmuKXMxQSBvX4e2tnQmriH3KyXj7dT1Dzd/UEW5AsTc3sBgMq9o19MAO0rm4VmjUvbwGZ5FtBs1xPkU1mXTYe4=
+	t=1771952271; cv=pass; b=OoOwggY79gkVycHRybYuxW8Ks5hPexN3rHptaAq4loE/HKaRWm7Rthdk4gWjcyO6fEdDigljWmtISlrM2miq10z2LwEvqsdLdOwe4WkhGkHc/ssJ4NQnOhja3YqmoUKIHsVHVcJnkVe44ovtEj730WM2VE7Gpdo475G6YPhJ5q8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771951757; c=relaxed/simple;
-	bh=30gJNMxnv/gyy67CLL+KWGnyQSCiXSd6y21Mj7jH9X0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Hz3MbGBevIuoVABZiDOesfwNo+pNo3ZRGmneIbFEug/8RSaN227HUzGnnBJp0Mbr8HP3AsptrzBzTB3O1qud8i0eleGQvkaVKOJe8i+7PokPr3M61FnalnJ+1u+iJKXqYsmOqpvGu98YOfUUw7l1olWlZS7wU0NfJEzsHtXdNro=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=R7aJ7tit; arc=fail smtp.client-ip=52.101.72.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1771952271; c=relaxed/simple;
+	bh=LFeQAmfI2jWzGO6ITz55S3PHrzjDrm/EzGFx3B4VgN8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Tb1P1l8z3rqDL+I7sVSSPirmEKILSvmr8CRJM4PQOOkcKy08nac2hlx8gne2HPWL1D8OiWNE6+KCBoCe/93daM5hkuluNwQu3YHQIOj7OWHxdpWYt18p5ewIPePD9RbUTMLDYLY7jDxG7bs9rhGMnefkuiSC6I+zJwA9c71D9OU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFWQhHH0; arc=pass smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="R7aJ7tit"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ouhd7eRKEWjtI3nbdP8HmlcPBp2xd9FYDgSyaCPcm1TksmNct8Gw3Qryfu3PR4jcSxZLixSGTddNFx1supXw63PRqNMyGLEWittu1VPLtHK7NvevLbXWpyogS05NnytG3lxrW6MscsbHeVPYZIRaZ/6B5o3VyIr2DWNJrdSKwVSLR29x4MC4jCXYmMcsYu0Me41UrWK4hbVKMd0coe0lLX3KVfuSI9rp0JFxP3vgSDTDD5XWjbiueuDdaPItpcenz6Dv3xvTnlrWmvZ2D55PUlTuIwVTiZD9jA5ygYx6FzpYzKhBGufWriUVF39qvcZ21FRVCStvfOW29EaC21QVMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Db4jRs/EFk7zsEF/qDorpLvIMXChA5tbTmpkO6HO7w=;
- b=D6+OMQziib36xSucI5Yw8MhZu3mmmbin0fKSCmiukm6M5PyzF71i36X6oGSYhiO2pa3jWR+2vkZCCAtDlGt//l06tu8EzrWtf/DLZVyWhc/C9paN53Paf3wNFmLiRqa2UreLn9OpL6RyoDA6jWCnWUYD9Cb+xddklcrhaodz7FX4HWGZ7Zr+Gx0WMiN6HVTTHwO29oJzVYKk/DlEzpSHWguoFS93DnMteqWvZavMVnE7E4JoKNQ+yVaHV46WSynwVjKuQOudiXw13GATtlZt0vIVkGf792YaJGRN1fVPOLFUD77YpVo5BQQAECtYKMyhAYQ+I3dfaQWcGBiWk4t6zQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Db4jRs/EFk7zsEF/qDorpLvIMXChA5tbTmpkO6HO7w=;
- b=R7aJ7titj2u+mhvL693wZi+3Sm7L+ZQqjCMVrdhX4fzeTXG54gqi1kuK1T3dfqJkZfbfFmBJI0/WoIrkERB+cbu522sPn+317CFaWIaFR0N+/wjmaeb7CPO8Pdjdp5Q52r7WUelx6WYDGvgYcAbVMdV071zBRceFazEcRzGNJDPhSd7PkiMx5kY7Z6p5xAzF9LWFz8QDH5JVKZU2VZzzpPcJFMLmW71SVIuKvcI77y5NtpC2E0Zdg8fGg2lr+RdahIaE6XmaqebcLrkH+TBEeh4hVe2TyovJKs522WhPXjIb8sISvXUdWXTtiRGDZRa+yCKhVjSIgQIPb3OUNZnPmg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
- by DU0PR08MB7763.eurprd08.prod.outlook.com (2603:10a6:10:3b9::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.22; Tue, 24 Feb
- 2026 16:49:09 +0000
-Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
- ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
- ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9632.017; Tue, 24 Feb 2026
- 16:49:09 +0000
-From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-To: Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Jan Kara <jack@suse.cz>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Andrei Vagin <avagin@google.com>,
-	Kirill Tkhai <tkhai@ya.ru>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Adrian Reber <areber@redhat.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 4/4] selftests: Add tests for creating pidns init via setns
-Date: Tue, 24 Feb 2026 17:47:55 +0100
-Message-ID: <20260224164852.306583-5-ptikhomirov@virtuozzo.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260224164852.306583-1-ptikhomirov@virtuozzo.com>
-References: <20260224164852.306583-1-ptikhomirov@virtuozzo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BE1P281CA0147.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:7c::14) To DU0PR08MB9003.eurprd08.prod.outlook.com
- (2603:10a6:10:471::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFWQhHH0"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4398dd671daso146282f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 08:57:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771952268; cv=none;
+        d=google.com; s=arc-20240605;
+        b=HtPWfOHbxh3BV1cuU1f0Wl466qEJi6xqDiaueCDyyGscT9CcLGexpbvexk2zEdtar1
+         bBzNP/6Z/Pj+6P5PgNwRMQeF3R6VlYxeb7+Tv1vvG6J/IdQEyFB9HiAydvzwCr7Nu8A1
+         Kkv1SHg9Nj7xiXgS01mBAKM15c8DYKgbxvPqQUiaWG0ENqNYFFrumm7Tl+bmta6wEnhe
+         DJ8k29urxrLGoj7iyp96EqRr2Sw34Ptcx9rOOIviIzPlQcVzo+ufNMK3nxz/OAmIoQ22
+         iNEC95H3qRt94YpNO2vOFIE85I9GIYPx0iz+s90QZLmhwhgo8r98QO80lnKWBWqczhMR
+         iRYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Q/LZ5/ET/z0VwePFl8rmo2+n6v10vbg5EI+OLa8kbxI=;
+        fh=stK5+AOtLZq5RrYeJPIj4AB0lI8VftngWZhXKbClfIY=;
+        b=aecdh2Ti+/tAnBq1lMJA2QNp7p1BZjc8S+RFXZdsKF+eKoqPwGAOobMOz0iWnhNIYA
+         BfvxbPx8SBu38WSv3pWPTJ8j3JGiiS3bFNhxRcrZdhwBHILFcuh7O8JOJZEuw11qPNSB
+         bnIR+xhMEWHP90tyCPg0LSHrY/5RXDculywhrexjXvAb+dMpG29kKcBGvNT+bV8+uu+X
+         LZcaFzaKvpMpgM13eBV/GkQihCJB9h3ReT0ZqJdZ01JA14Hir1cfcX9ssuPOP78bVn63
+         a+vY/jnTHAVF4WRbuwsu4fTN5ibcqPBc0G0ZiK6nfwWcIpL0BJNN198QUllvl9JX7Nrc
+         dfkQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771952268; x=1772557068; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q/LZ5/ET/z0VwePFl8rmo2+n6v10vbg5EI+OLa8kbxI=;
+        b=eFWQhHH0tXrcLKY/l/h63HjEN4E5cgnjyg/bZkhOlXYfKPyjIZkb78Oh+FyxIfkTFi
+         7fCWJ9wUePTGSYEymzuljKO+kK4YZV2/G6TGaCAeribNY/zxMIMsRqnUq2830SDTHe1V
+         BVw8721IvYqBpvRvCRyAENNID9X9SECoy2QUBZLvjMt3s802aD6WlAe+RAEjXlyPJyX9
+         3sFlpWc177VtO6PEqk+BEXjirVByVhRu55obFAvNPJaZmchRmZ3E2MbLoPHTq5Y9TYg1
+         6S8Zp7Jg5AteW2VqXdkcnkJmWLxRuHT3pxOv111WI+15N1T2GvoFUK5XUe/6G5ogzmTI
+         Wu/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771952268; x=1772557068;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q/LZ5/ET/z0VwePFl8rmo2+n6v10vbg5EI+OLa8kbxI=;
+        b=FOQGWMOb42cEkU9Hx+0pMqAS5GkuHLtRxAY3F1iGGQnL21pt0X5YdW24nuLJ5MWVk1
+         WMaQP0KVBM5cGY1jTd5Zx4sb29mBO2vZ0cr/wKABAjNcorVNIV2o7K4f7P6TbLDQEGQW
+         bDm4488SQWaO8FlsSUV+BSSt6tZ4MQTEO1nUksqqeu4A1UrwMYDRw2aL3J3mAZ5QMBtX
+         Rp1KCIwgQZZiM5EyV7x30G1prbxj+HS5atuyBRS2uLqF5Nar0mXaS2QyQmKzA+JE4TsP
+         3kS0Z9AhwUSR7hUp3h94iTenOaKhJ0HY8LgIzAP/b8f/XmB7HNhJGcLsh3HIBO5Tzgg1
+         /XLA==
+X-Forwarded-Encrypted: i=1; AJvYcCWoyrlwojyeHef5GN9T/OF9edb64fcFbI1ucMg3YuxYrZGY6OCqAGDdOUuj0zGqpMc6D8i5n8twS1dFJ+kdI9c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHj3qsQPsSKhxKduBzpzv9Xzy3r7bvbwzBJpGOxSDdGpWl5aDU
+	sWO2gs0yhJVxS7+mOWfhVJPywrANnCi3o6tL4zcM4pbAAAC2Au9fxrILIiGilnJ/HjSWJNNxZ7m
+	jD8aOHPixGyC6hLbCeHnS4kUFwk7ArS8=
+X-Gm-Gg: ATEYQzwM06yJZI5ikMl3yRM9qy3tNaHlKlijzyOeSIkz5uhYctzGU6eRTIabEniKfbX
+	paQ+fpslBwZDJmBZPuRw9z+OIxIPjIOMAEZcK5z+67EiUA7MekuFEG7vInE5fegX0/AO9M0iQTj
+	PymZrVtwABuF7PrMER0omfuvcbRZifaTLDveFpyUJGjFoolptDYoG10ITHafCl5R6dikfALBWdZ
+	7SW9mJ6nmNSATtxuf6CJCONf7jTa04beEZngm1oHSS3Jl28PtNKkyI/ti0Q2pqghGEpR/JgtxL4
+	DyPxnjEno/u1uUNzmunbm415l8E5PngIFNkhlsMipKfX1q7PPUJ1P5bwjrRSmLmdixKpOHT1hl6
+	OZae/coHk
+X-Received: by 2002:a05:6000:2407:b0:435:bd00:cb4 with SMTP id
+ ffacd0b85a97d-4396f15b2a4mr21141471f8f.23.1771952267940; Tue, 24 Feb 2026
+ 08:57:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|DU0PR08MB7763:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c64d73c-a2ba-4d4a-f41d-08de73c4a1af
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|7416014|366016|10070799003|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tO7WQZkzq7qSNmCMCEYVK1kX4bDbgr1bJiWBKR2S8ZYRiFTXb8nGerYuGSsY?=
- =?us-ascii?Q?lZQ951Y1Y6NQ/xpYwH1XmqRP2eJxLlkUJmYufAzYG2iAMF3mCsqgpsxQYSVr?=
- =?us-ascii?Q?sahVEEwxwC4lSg3g8ZJiVRnnxiKOMB+jMtvaQ6grifsTkRzGco8YTpfq1Uj0?=
- =?us-ascii?Q?nWKBLVnbMjDiXV6SelT+NVczCwmEEQ/t5hg5qgNAFJw/tTD0W+Iy4tHVlV84?=
- =?us-ascii?Q?qPoEWlmUXErUaezpurTMgJb78BxvmuQBvKaqBBL3pKCXj2s33YkMw90CnIQu?=
- =?us-ascii?Q?8KD59/OnBysL9C7BUUKusd+oMOJlsFXA3YnF+WLxbE8dFYViRWPBVSO6AuyZ?=
- =?us-ascii?Q?lcZjmtxfAaPnRus7Op3uDn8D4IKPcI5kdIVDrSzOc0B38hX+EGvB43wJssIF?=
- =?us-ascii?Q?D5glKQaRKOhIpdwN15NAvMz7o7NpTGHrrlTEdj6+c1mwYgkraSobNWDmuspQ?=
- =?us-ascii?Q?sz5DG2v+mMk1xliAJXu4YDc1/xTzTLsSkeie87LYfK299Z3cZCwU42pUdbtz?=
- =?us-ascii?Q?aaGJm5QtQ/pU6zgM7CU5mFSmt/Ml3m9k1rza1jlw3W/7GkcU8avtczsTwU2+?=
- =?us-ascii?Q?ZgpJZ8x9bQR8RbqqPTx56zWWwgOTvZTK67rIflFWMT8i31TuYMOb23S5KfLZ?=
- =?us-ascii?Q?eynJNKXiV9bDvl2Tn2yWKxvOPoU4VT+0HIMYa5YKF/QZNQDFS2chQeDLWqsX?=
- =?us-ascii?Q?mQMwDi09yzfXL1rOO+jL9maqADPHVhgLmM+EX8oFRfn7PMOIYiRKslofA0TD?=
- =?us-ascii?Q?u/HmRtL+PVd5Mu/XB5B7lJWXXAMh++It5h0ehDApJNBHc+sBGlB/ToDAYS2A?=
- =?us-ascii?Q?4o/3Mf3Ula0D4NU3PAk2bisYi5Cg5SvSjzffA1SCGsBQnZpVo9DR1VTKUR/Z?=
- =?us-ascii?Q?iEL8VSp5dolJH4wkseFR584MZ3OZiDbRWnv8Tw6GawEyaRf/F0aQzD6WTC0Y?=
- =?us-ascii?Q?3ab6ddZGUvHGFxfvB9kLBBkgWSL8c4lbKszvUmgOo0GiaqEkbzgppSAMXnU8?=
- =?us-ascii?Q?fnzDw+eUBt1B11Nx1vFWi7dOS8WZUMGLcQ/ZigA/cU5f8wnjYG0K+TtrA8CJ?=
- =?us-ascii?Q?3kzWmL0xZDbk4q/kL5ldsnDFo2cZlXWuT+9ZGhgBBIG1PIdT2a5Gk2+Z61dX?=
- =?us-ascii?Q?wHvwW2sSyfdWIbzxr7bpbYD7IxBaujSTymcb8VLPXIpopvSk7w1oV784yukw?=
- =?us-ascii?Q?1t7ngcvNTe+Dsqo20rxOdIQk2RjCg+iKv8UVm93xKr9N6qCk90x5HdvhWsxs?=
- =?us-ascii?Q?OfPQE/rVbwBgnH2M1b3/zC2dHheFqDzuUlLVd5Fmb6iB0JiK4k/Mj0L/M4T/?=
- =?us-ascii?Q?wU8rvchdOdW5OkkQT7FszjWSP6Bk0dvNlhh+wT1h3FkpwR87CjZ1W+FjidMv?=
- =?us-ascii?Q?jlGbHwymGlvpuMbiRN9a4K6yMU4gmurKWvUYB5ZVjvdtoHZAPyrVwTSC9mgy?=
- =?us-ascii?Q?uPzhVgIwj7YZBcXDHd53JvdoKI9SpWOf3cHZmdiEYw6GD/+8ldxPm9ObVllk?=
- =?us-ascii?Q?o2cLubzZUVkWf0XH6ngExGhdfin7M6R+uaNjVk3mtE3vWKTywHZ+h91GcV4l?=
- =?us-ascii?Q?daKiCZ0kv4a7E+P7CdY=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(366016)(10070799003)(1800799024);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?7Kf9r3W2pho10yIor9hbmiyrbWAJ3FdHnWFk7UUKXNdF7KYdYsvIxfGbMePh?=
- =?us-ascii?Q?01W+32ZoXKuGNqVqZ6OirUxX6/1IlxEHJGu0ucjX6Ym64eBzWTI0dljxhhJZ?=
- =?us-ascii?Q?S7/7etlyVLrJiY35nG+EeG0EDlt0Og1RSxc2uEBW8NJ6/pd9IIaGGoiak5Q2?=
- =?us-ascii?Q?0PPYUYgOHtzPbx96RZXVfktfIXi209fKdiwAtJnUi66MzDkdDZ1Yxf2cCPCx?=
- =?us-ascii?Q?BW0kcg3yIbOgyIo3peRZs54eDZbTqAhbRv9TeLlNy73NmFOLN1Ra2TrKAZv3?=
- =?us-ascii?Q?F/jhFgDqSPt1lamS2DncZqmAoMQjDmmmptK83q70vaADNPwrodpZ2sAQgajZ?=
- =?us-ascii?Q?JIgHZWgs4ewzO2Lql+8tIu2ctr6YtcRgJC480qqG2X2IPZ66l8Fn2HScZpd5?=
- =?us-ascii?Q?Lgk6ZmLru8HWgIU67reuoC/UvNW3MwGUzyffdh6WZ86977FRZ34jy1MZ+okw?=
- =?us-ascii?Q?dMJ5e1386qZnWn7H9udFxpiCdXNhgfo0dOnRn7x6ogxQgUEDbfTekgKrhr1B?=
- =?us-ascii?Q?nHaIR1AZXamGCS3NZnFQV7p1DRzl9j+/cckw5Ae0xHVH8DxJznqUfefT1/5g?=
- =?us-ascii?Q?f/QtxnqQpMJlLwqgBcaRCuApf0cPlhO+gnzg7vDLZ2ES2kZPjywsx3nEOaRp?=
- =?us-ascii?Q?KUQWBxEoGZXPue9po1b+dPNh1d7PZG3IxkK8r/5/+TPLwrnfjicAmoBkGjV6?=
- =?us-ascii?Q?cPTNDUcU70EL7uPhWnoDKWI61xZ46z0BmlnbCaN/pnjdi1k4Tj87LF4EAQpY?=
- =?us-ascii?Q?l92/AOWmH0TT7VniFKb6IEkCo2ctu/ZrI5TvhDLrZMarLgNteIhlcy0149DG?=
- =?us-ascii?Q?TIriPRWv7gI6wxgtEaCFPfTm48EezTrNAm2lerDe1l262hzrh0eUswGD9rNB?=
- =?us-ascii?Q?XND8c97AQtuQaB0m4SB51VtWwZEy/IbJSyCf7lQ+m5FE6x+OJOyvokKz4vZ1?=
- =?us-ascii?Q?NroRLaxpBXEKGVUF8R/wr55UA3eY/guFXkVsp/rPVPaWp1gWJvn0m1m6qMH8?=
- =?us-ascii?Q?/KSzmru2Fhgj+UnqAAGq0WNqMFemqMjXWBuasAPlxVsLrrv8oXPN7Yr5mTsU?=
- =?us-ascii?Q?3aNtjPZ5NhHsx7xuSm0pzwLcGI6255J7hA/FQKoOhB9J/aa0j0YwNpl9s4Gi?=
- =?us-ascii?Q?gWRBB/TuTeZVA+2DaPmI6ZWycNvEGjYS/EGnzkT7bghE6zYP8hrRhJ4IBSjT?=
- =?us-ascii?Q?7dYhzB0FaYBis3O0IooIvr3DV+E0KYq5GbZblI2N0bgRUHh7q/fKjaoqXk2c?=
- =?us-ascii?Q?R05bEge1aqVz6p9+j8deb3eT+sGxLUGGePA3WY2/lElUdA9yhWgpvJFp7yEr?=
- =?us-ascii?Q?R1qfpHE/01qjee1Vig/u7aMar8vRpgRoj7AtypwVQ3+Buswbjn6XohCKwloi?=
- =?us-ascii?Q?Nz9zYlTFOqdEDy7NQYVU3cjvPxkj2ddyuZm/SfasuAawPGpO2f1IFkLIxC3K?=
- =?us-ascii?Q?lKtH1OMpJa3Rk9jxepEVyOeaZNmqIC3HM8T5j3teMhxeA6OqE+wgg2k3Qdbq?=
- =?us-ascii?Q?fSEmhhQamakjGrH5Cz/4Lhjky+W7HcLoi+l4TDVHATKKjK+qdjdOYlbUX9xW?=
- =?us-ascii?Q?2m7/kiub5TXg72L6z75swsN4c/PQxK8YVEiVC9WKSZdptfF/9QEQ0pkkspKs?=
- =?us-ascii?Q?03veGjaXAbGfmPOTBk+L1bKaMhlzlQYpsX6wNkwkAQLIOIolK6pjQk3oOQNx?=
- =?us-ascii?Q?6FJLvWAmBfy19UNq2j+DtYLQh5rmmXL3cT73BYTfql36IMRY8uHWjIy0iJOc?=
- =?us-ascii?Q?bp5397hho+IoTtUGtz/OX9Npf1kxMMtwgi5AOvGbg1dIkDO56s+UTPqUs8jZ?=
-X-MS-Exchange-AntiSpam-MessageData-1: ratr3z1EF3+MebwfLqgdy8qFV0j7sUgtTKU=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c64d73c-a2ba-4d4a-f41d-08de73c4a1af
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2026 16:49:09.7853
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kAGLjWGEQZrYtn2aEJTXRs1TdTy44VLDyll1iHFAQRurb5NcuNOyyRc7NRev4IDZOLHcqzhxo6svLycvZBLOzjdO8syfTKo5XhFA0zcOUqE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB7763
+References: <20260224154024.12504-1-leon.hwang@linux.dev> <20260224154024.12504-3-leon.hwang@linux.dev>
+In-Reply-To: <20260224154024.12504-3-leon.hwang@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 24 Feb 2026 08:57:37 -0800
+X-Gm-Features: AaiRm53rqopHuRGSK2_nQdOAXTbOuxaGhPPN68Nah4CqapKdrc7UpjUZrDEx1NA
+Message-ID: <CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/8] bpf: Disallow !kprobe_write_ctx progs
+ tail-calling kprobe_write_ctx progs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
+	Menglong Dong <menglong8.dong@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Pu Lehui <pulehui@huawei.com>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-First testcase "pidns_init_via_setns" checks that a process can become
-Pid 1 (init) in a new Pid namespace created via unshare() and joined via
-setns().
+On Tue, Feb 24, 2026 at 7:41=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> uprobe programs that can modify pt_regs require different runtime
+> assumptions than pt_regs-read-only uprobe programs. Mixing both in
+> one prog_array can make owner expectations diverge from callee behavior.
+>
+> Reject the combination of !kprobe_write_ctx progs with kprobe_write_ctx
+> progs in __bpf_prog_map_compatible() to address the issue.
+>
+> Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registe=
+rs")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  include/linux/bpf.h | 7 ++++---
+>  kernel/bpf/core.c   | 3 +++
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index b78b53198a2e..2a2f6448a5fb 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -285,9 +285,10 @@ struct bpf_list_node_kern {
+>   */
+>  struct bpf_map_owner {
+>         enum bpf_prog_type type;
+> -       bool jited;
+> -       bool xdp_has_frags;
+> -       bool sleepable;
+> +       u32 jited:1,
+> +           xdp_has_frags:1,
+> +           sleepable:1,
+> +           kprobe_write_ctx:1;
 
-Second testcase "pidns_init_via_setns_set_tid" checks that during this
-process we can use clone3() + set_tid and set the pid in both the new
-and old pid namespaces (owned by different user namespaces).
+Don't you see how much churn you're adding this way?
+Every patch has to touch two lines instead of one.
+Use
+u32 jited:1;
+u32 xdp_has_frags:1;
 
-Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
----
- .../selftests/pid_namespace/.gitignore        |   1 +
- .../testing/selftests/pid_namespace/Makefile  |   2 +-
- .../pid_namespace/pidns_init_via_setns.c      | 238 ++++++++++++++++++
- 3 files changed, 240 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/pid_namespace/pidns_init_via_setns.c
+also the bot is correct on patch 2 and 3.
+Don't be fancy. Require strict conformance both ways in *all* patches.
 
-diff --git a/tools/testing/selftests/pid_namespace/.gitignore b/tools/testing/selftests/pid_namespace/.gitignore
-index 5118f0f3edf4..c647c6eb3367 100644
---- a/tools/testing/selftests/pid_namespace/.gitignore
-+++ b/tools/testing/selftests/pid_namespace/.gitignore
-@@ -1,2 +1,3 @@
- pid_max
-+pidns_init_via_setns
- regression_enomem
-diff --git a/tools/testing/selftests/pid_namespace/Makefile b/tools/testing/selftests/pid_namespace/Makefile
-index b972f55d07ae..b01a924ac04b 100644
---- a/tools/testing/selftests/pid_namespace/Makefile
-+++ b/tools/testing/selftests/pid_namespace/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -g $(KHDR_INCLUDES)
- 
--TEST_GEN_PROGS = regression_enomem pid_max
-+TEST_GEN_PROGS = regression_enomem pid_max pidns_init_via_setns
- 
- LOCAL_HDRS += $(selfdir)/pidfd/pidfd.h
- 
-diff --git a/tools/testing/selftests/pid_namespace/pidns_init_via_setns.c b/tools/testing/selftests/pid_namespace/pidns_init_via_setns.c
-new file mode 100644
-index 000000000000..7e4c610291d3
---- /dev/null
-+++ b/tools/testing/selftests/pid_namespace/pidns_init_via_setns.c
-@@ -0,0 +1,238 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdio.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+
-+#include "kselftest_harness.h"
-+#include "../pidfd/pidfd.h"
-+
-+/*
-+ * Test that a process can become PID 1 (init) in a new PID namespace
-+ * created via unshare() and joined via setns().
-+ *
-+ * Flow:
-+ *  1. Parent creates a pipe for synchronization.
-+ *  2. Parent forks a child.
-+ *  3. Parent calls unshare(CLONE_NEWPID) to create a new PID namespace.
-+ *  4. Parent signals the child via the pipe.
-+ *  5. Child opens parent's /proc/<ppid>/ns/pid_for_children and calls
-+ *     setns(fd, CLONE_NEWPID) to join the new namespace.
-+ *  6. Child forks a grandchild.
-+ *  7. Grandchild verifies getpid() == 1.
-+ */
-+TEST(pidns_init_via_setns)
-+{
-+	pid_t child, parent_pid;
-+	int pipe_fd[2];
-+	char buf;
-+
-+	parent_pid = getpid();
-+
-+	ASSERT_EQ(0, pipe(pipe_fd));
-+
-+	child = fork();
-+	ASSERT_GE(child, 0);
-+
-+	if (child == 0) {
-+		char path[256];
-+		int nsfd;
-+		pid_t grandchild;
-+
-+		close(pipe_fd[1]);
-+
-+		/* Wait for parent to complete unshare */
-+		ASSERT_EQ(1, read_nointr(pipe_fd[0], &buf, 1));
-+		close(pipe_fd[0]);
-+
-+		snprintf(path, sizeof(path),
-+			 "/proc/%d/ns/pid_for_children", parent_pid);
-+		nsfd = open(path, O_RDONLY);
-+		ASSERT_GE(nsfd, 0);
-+
-+		ASSERT_EQ(0, setns(nsfd, CLONE_NEWPID));
-+		close(nsfd);
-+
-+		grandchild = fork();
-+		ASSERT_GE(grandchild, 0);
-+
-+		if (grandchild == 0) {
-+			/* Should be init (PID 1) in the new namespace */
-+			if (getpid() != 1)
-+				_exit(1);
-+			_exit(0);
-+		}
-+
-+		ASSERT_EQ(0, wait_for_pid(grandchild));
-+		_exit(0);
-+	}
-+
-+	close(pipe_fd[0]);
-+
-+	if (geteuid())
-+		ASSERT_EQ(0, unshare(CLONE_NEWUSER));
-+
-+	ASSERT_EQ(0, unshare(CLONE_NEWPID));
-+
-+	/* Signal child that the new PID namespace is ready */
-+	buf = 0;
-+	ASSERT_EQ(1, write_nointr(pipe_fd[1], &buf, 1));
-+	close(pipe_fd[1]);
-+
-+	ASSERT_EQ(0, wait_for_pid(child));
-+}
-+
-+/*
-+ * Similar to pidns_init_via_setns, but:
-+ *  1. Parent enters a new PID namespace right from the start to be able to
-+ *     later freely use pid 1001 in it.
-+ *  2. After forking child, parent also calls unshare(CLONE_NEWUSER)
-+ *     before unshare(CLONE_NEWPID) so that new old and new pid namespaces have
-+ *     different user namespace owners.
-+ *  3. Child uses clone3() with set_tid={1, 1001} instead of fork() and
-+ *     grandchild checks that it gets desired pids .
-+ *
-+ * Flow:
-+ *  1. Test process creates a new PID namespace and forks a wrapper
-+ *     (PID 1 in the outer namespace).
-+ *  2. Wrapper forks a child.
-+ *  3. Wrapper calls unshare(CLONE_NEWUSER) + unshare(CLONE_NEWPID)
-+ *     to create an inner PID namespace.
-+ *  4. Wrapper signals the child via pipe.
-+ *  5. Child opens wrapper's /proc/<pid>/ns/pid_for_children and calls
-+ *     setns(fd, CLONE_NEWPID) to join the inner namespace.
-+ *  6. Child calls clone3() with set_tid={1, 1001}.
-+ *  7. Grandchild verifies its NSpid ends with "1001 1".
-+ */
-+
-+pid_t set_tid[] = {1, 1001};
-+
-+static int pidns_init_via_setns_set_tid_grandchild(struct __test_metadata *_metadata)
-+{
-+	char *line = NULL;
-+	size_t len = 0;
-+	int found = 0;
-+	FILE *gf;
-+
-+	gf = fopen("/proc/self/status", "r");
-+	ASSERT_NE(gf, NULL);
-+
-+	while (getline(&line, &len, gf) != -1) {
-+		if (strncmp(line, "NSpid:", 6) != 0)
-+			continue;
-+
-+		for (int i = 0; i < 2; i++) {
-+			char *last = strrchr(line, '\t');
-+			pid_t pid;
-+
-+			ASSERT_NE(last, NULL);
-+			ASSERT_EQ(sscanf(last, "%d", &pid), 1);
-+			ASSERT_EQ(pid, set_tid[i]);
-+			*last = '\0';
-+		}
-+
-+		found = true;
-+		break;
-+	}
-+
-+	free(line);
-+	fclose(gf);
-+	ASSERT_TRUE(found);
-+	return 0;
-+}
-+
-+static int pidns_init_via_setns_set_tid_child(struct __test_metadata *_metadata,
-+					      pid_t parent_pid, int pipe_fd[2])
-+{
-+	struct __clone_args args = {
-+		.exit_signal	= SIGCHLD,
-+		.set_tid	= ptr_to_u64(set_tid),
-+		.set_tid_size	= 2,
-+	};
-+	pid_t grandchild;
-+	char path[256];
-+	char buf;
-+	int nsfd;
-+
-+	close(pipe_fd[1]);
-+
-+	ASSERT_EQ(1, read_nointr(pipe_fd[0], &buf, 1));
-+	close(pipe_fd[0]);
-+
-+	snprintf(path, sizeof(path),
-+		 "/proc/%d/ns/pid_for_children", parent_pid);
-+	nsfd = open(path, O_RDONLY);
-+	ASSERT_GE(nsfd, 0);
-+
-+	ASSERT_EQ(0, setns(nsfd, CLONE_NEWPID));
-+	close(nsfd);
-+
-+	grandchild = sys_clone3(&args, sizeof(args));
-+	ASSERT_GE(grandchild, 0);
-+
-+	if (grandchild == 0)
-+		_exit(pidns_init_via_setns_set_tid_grandchild(_metadata));
-+
-+	ASSERT_EQ(0, wait_for_pid(grandchild));
-+	return 0;
-+}
-+
-+static int pidns_init_via_setns_set_tid_wrapper(struct __test_metadata *_metadata)
-+{
-+	int pipe_fd[2];
-+	pid_t child, parent_pid;
-+	char buf;
-+	FILE *f;
-+
-+	/*
-+	 * We are PID 1 inside the new namespace, but /proc is
-+	 * mounted from the host.  Read our host-visible PID so
-+	 * the child can reach our pid_for_children via /proc.
-+	 */
-+	f = fopen("/proc/self/stat", "r");
-+	ASSERT_NE(f, NULL);
-+	ASSERT_EQ(fscanf(f, "%d", &parent_pid), 1);
-+	ASSERT_EQ(0, pipe(pipe_fd));
-+
-+	child = fork();
-+	ASSERT_GE(child, 0);
-+
-+	if (child == 0)
-+		_exit(pidns_init_via_setns_set_tid_child(_metadata, parent_pid, pipe_fd));
-+
-+	close(pipe_fd[0]);
-+
-+	ASSERT_EQ(0, unshare(CLONE_NEWUSER));
-+	ASSERT_EQ(0, unshare(CLONE_NEWPID));
-+
-+	buf = 0;
-+	ASSERT_EQ(1, write_nointr(pipe_fd[1], &buf, 1));
-+	close(pipe_fd[1]);
-+
-+	ASSERT_EQ(0, wait_for_pid(child));
-+
-+	fclose(f);
-+	return 0;
-+}
-+
-+TEST(pidns_init_via_setns_set_tid)
-+{
-+	pid_t wrapper;
-+
-+	if (geteuid())
-+		ASSERT_EQ(0, unshare(CLONE_NEWUSER));
-+
-+	ASSERT_EQ(0, unshare(CLONE_NEWPID));
-+
-+	wrapper = fork();
-+	ASSERT_GE(wrapper, 0);
-+
-+	if (wrapper == 0)
-+		_exit(pidns_init_via_setns_set_tid_wrapper(_metadata));
-+
-+	ASSERT_EQ(0, wait_for_pid(wrapper));
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.53.0
+And your codex selftests are garbage. I don't have other words
+to describe it. They are not testing the actual bug that
+your patches are fixing. Think of what you're doing.
+Asking LLM to write a test for your other patch is not what you
+should be asking it to do. The selftest should be such that
+it proves the unsafety/crash before the fix.
 
+pw-bot: cr
