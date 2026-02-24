@@ -1,161 +1,135 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D213A6412;
-	Tue, 24 Feb 2026 15:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65343806B7
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 16:03:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771947781; cv=none; b=gHUvIn+a8BnvzZHc0GPh5+cvzEuDlwPNqqBeyYFwfxwEV5dVfQPABBZWLVHW4QymgCzYyP6WCpiQLTJu2Z76r/bSs5TRcya+tgnL7H/4OtDgB/K4sPzFhPg52PpGzfVIK06dzBt7/Gkui4YzY0KpHOOykWWlPa/iyWVlm0xR0f4=
+	t=1771949039; cv=none; b=C8sSSjzudkk/YQSy83BGkFk7S0MfwyC0MuOi3wcPyXI1qMx+wA8Z7rBR26iop9PIo/6n//YRa1qlOQQlp9FfonRWmoTnr4YkDHJOKX2Aopsfq7HH85XFsoDfUuhSo4L9YHnySXhaBrFQpI7j0wyxickNX2RLNVmrNf7zm4+aXgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771947781; c=relaxed/simple;
-	bh=uuVhZPMLQTKvEryzY971QiuVD2Q5biMcf6jIeRvmjdY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qTeLT5rVYs/P6UPMDKsJp+QAanZmDq+7BjIjulTV4+Ou7SxZgGfRhNTbeADirl43l/E0rzi2XM6UVLRUPkkcHfFkOiWOD3U0p9cIkAcCLcOPZXYYhQufGBxFF8B4i6pW6pX3rpi5Hgi9v7zJntogrCznvK8NxmKaPYb3ElC0Lrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uZEM5850; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771949039; c=relaxed/simple;
+	bh=MllAX/uC1cUFlTXyRj7i2qo3BKoHFClirIAI0wCreL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NIb6aOkdOhsWTYegnConfDJsB5LxoWJxEIWszUsScIoOOkyHWw9W4HMvC9CMDGX4FG/kNbnx3r0P3G01kYI65Z3gh2DX+ECmumztCYqwqhiiRUMb7LOEpcJwH9ikyNx4/SXH5H3Sf2hNnsp12gC0iWY+Ib+Qu9HEuG65XMWj+/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CYMm8kzX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uZEM5850"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771947777;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CYMm8kzX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771949036;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ajSl2pdKTk9QEmR1MISxYniJhjrbh949cm//bffiNdc=;
-	b=uZEM5850Y3+L8n2F0E2j8gvf1S+N/9cpVe6vGsjsonYOWoAP+wN70FqWvPpNA7+gBckmtT
-	HOu+F0hkzQan8fKFArHhGjZLnnjnOCPgEOIAtOhLsGSO4rVauNeoxJaaQNWNnK4H5uqgjU
-	hFEvDwCEjejr491rTRD/pxQDq4bn4CQ=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 8/8] selftests/bpf: Add a test to verify session-kfunc compatibility enforcement
-Date: Tue, 24 Feb 2026 23:40:24 +0800
-Message-ID: <20260224154024.12504-9-leon.hwang@linux.dev>
-In-Reply-To: <20260224154024.12504-1-leon.hwang@linux.dev>
-References: <20260224154024.12504-1-leon.hwang@linux.dev>
+	bh=MllAX/uC1cUFlTXyRj7i2qo3BKoHFClirIAI0wCreL4=;
+	b=CYMm8kzXsNBjuOV4BFFPrD4YYpGzATqZt7vLumGtfw61oGdYQp0bNZjpC0xZlpJeEbrmAZ
+	7Df3/I4XUZqXfk4D9wFudkXc+WqPg6XO5c5fmQ37NzdmnRWI+1TFS5L3nt2/ubV71Imnds
+	r2IyU8tj1D26mT+cUHM7EGs7B3u5/Yc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-209-Qn2jdw52M4qKQ7iYyUymJw-1; Tue,
+ 24 Feb 2026 11:03:53 -0500
+X-MC-Unique: Qn2jdw52M4qKQ7iYyUymJw-1
+X-Mimecast-MFC-AGG-ID: Qn2jdw52M4qKQ7iYyUymJw_1771949031
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C4B891800367;
+	Tue, 24 Feb 2026 16:03:49 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.38])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id AF11319560A2;
+	Tue, 24 Feb 2026 16:03:42 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Tue, 24 Feb 2026 17:03:49 +0100 (CET)
+Date: Tue, 24 Feb 2026 17:03:41 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Jan Kara <jack@suse.cz>, Aleksa Sarai <cyphar@cyphar.com>,
+	Andrei Vagin <avagin@google.com>, Kirill Tkhai <tkhai@ya.ru>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	Mateusz Guzik <mjguzik@gmail.com>
+Subject: Re: [PATCH v2 1/2] pid_namespace: allow opening pid_for_children
+ before init was created
+Message-ID: <aZ3L3cRL8AEmfQpP@redhat.com>
+References: <20260223200254.4104651-1-ptikhomirov@virtuozzo.com>
+ <20260223200254.4104651-2-ptikhomirov@virtuozzo.com>
+ <aZ2U6TwK7rQtkTvT@redhat.com>
+ <3f095a91-f052-4f38-a8e4-2e6dbc9a0c6a@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f095a91-f052-4f38-a8e4-2e6dbc9a0c6a@virtuozzo.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Add prog_array coverage for tracing programs that differ in
-bpf_session_cookie() / bpf_session_is_return() usage.
+On 02/24, Pavel Tikhomirov wrote:
+>
+> On 2/24/26 13:09, Oleg Nesterov wrote:
+> > On 02/23, Pavel Tikhomirov wrote:
+> >>
+> >> To avoid possible problems related to cpu/compiler optimizations around
+> >> ->child_reaper, let's use WRITE_ONCE (additional to task_list lock)
+> >> everywhere we write it and use READ_ONCE everywhere we read it without
+> >> explicit lock.
+> >
+> > Yes, this is what I meant... but I can never recall if READ_ONCE() alone
+> > is enough to make KCSAN happy...
+>
+> AFAICS this should be fine for memory safety of accesses to ->child_reaper.
+> I would love if someone more experienced in this area would confirm.
 
-The test verifies one-way enforcement: !call_session_* programs
-cannot tail-call call_session_* programs.
+__READ_ONCE() uses volatile cast, DEFINE_TSAN_VOLATILE_READ_WRITE()
+will pass KCSAN_ACCESS_ATOMIC to check_access(), so it seems that
+READ_ONCE() should be enough...
 
-Assisted-by: Codex:gpt-5.3-codex
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/fsession_test.c  | 47 +++++++++++++++++++
- .../selftests/bpf/progs/fsession_test.c       |  6 +++
- 2 files changed, 53 insertions(+)
+But I am not sure, I don't really understand this code.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fsession_test.c b/tools/testing/selftests/bpf/prog_tests/fsession_test.c
-index a299aeb8cc2e..304986544a8d 100644
---- a/tools/testing/selftests/bpf/prog_tests/fsession_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fsession_test.c
-@@ -129,6 +129,51 @@ static void test_fsession_cookie(void)
- 	fsession_test__destroy(skel);
- }
- 
-+static void test_fsession_prog_array_session_kfunc_compat(void)
-+{
-+	struct fsession_test *skel = NULL;
-+	__u32 key = 0, session_kfunc_prog_fd, no_session_kfunc_prog_fd;
-+	int map_fd = -1, err;
-+
-+	skel = fsession_test__open();
-+	if (!ASSERT_OK_PTR(skel, "fsession_test__open"))
-+		goto cleanup;
-+
-+	err = fsession_test__load(skel);
-+	if (err == -EOPNOTSUPP) {
-+		test__skip();
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(err, "fsession_test__load"))
-+		goto cleanup;
-+
-+	session_kfunc_prog_fd = bpf_program__fd(skel->progs.test9);
-+	no_session_kfunc_prog_fd = bpf_program__fd(skel->progs.test12);
-+	if (!ASSERT_GE(session_kfunc_prog_fd, 0, "session_kfunc_prog_fd"))
-+		goto cleanup;
-+	if (!ASSERT_GE(no_session_kfunc_prog_fd, 0, "no_session_kfunc_prog_fd"))
-+		goto cleanup;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_PROG_ARRAY, NULL, sizeof(key),
-+				sizeof(__u32), 1, NULL);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-+		goto cleanup;
-+
-+	err = bpf_map_update_elem(map_fd, &key, &no_session_kfunc_prog_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem success"))
-+		goto cleanup;
-+
-+	err = bpf_map_update_elem(map_fd, &key, &session_kfunc_prog_fd, BPF_ANY);
-+	if (!ASSERT_ERR(err, "bpf_map_update_elem failure"))
-+		goto cleanup;
-+	ASSERT_EQ(errno, EINVAL, "bpf_map_update_elem errno");
-+
-+cleanup:
-+	if (map_fd >= 0)
-+		close(map_fd);
-+	fsession_test__destroy(skel);
-+}
-+
- void test_fsession_test(void)
- {
- 	if (test__start_subtest("fsession_test"))
-@@ -137,4 +182,6 @@ void test_fsession_test(void)
- 		test_fsession_reattach();
- 	if (test__start_subtest("fsession_cookie"))
- 		test_fsession_cookie();
-+	if (test__start_subtest("fsession_prog_array_session_kfunc_compat"))
-+		test_fsession_prog_array_session_kfunc_compat();
- }
-diff --git a/tools/testing/selftests/bpf/progs/fsession_test.c b/tools/testing/selftests/bpf/progs/fsession_test.c
-index 86e8a2fe467e..1e6be28bcc3d 100644
---- a/tools/testing/selftests/bpf/progs/fsession_test.c
-+++ b/tools/testing/selftests/bpf/progs/fsession_test.c
-@@ -177,3 +177,9 @@ int BPF_PROG(test11, int a)
- 	test11_result = a == 1;
- 	return 0;
- }
-+
-+SEC("fsession/bpf_fentry_test1")
-+int BPF_PROG(test12, int a, int ret)
-+{
-+	return 0;
-+}
--- 
-2.52.0
+> > I won't insist, but I think it would be better to do this in a separate
+> > change for documenation purposes and for discussion.
+>
+> Ok, will do. It will be a bit ugly as I will first add READ_ONCE to the
+> pidns_for_children_get() and then remove the hunk with it in the next patch.
+
+Agreed, this is ugly. I almost regret I mentioned _ONCE() in the previous
+discussions, I only tried to "nack" another read_lock(tasklist).
+
+So lets avoid a separate change and WRITE_ONCE()'s in copy_process/find_child_reaper,
+we can add them later if KCSAN complains, they are not needed for correctness.
+
+But up to you, I am fine either way.
+
+> > Perhaps something like the preparational patch below makes sense ? Not
+> > sure this is actually better...
+>
+> This looks more universal at least, as instead of two checks we have one in one
+> place. My only concern of putting the check where I put it was to avoid extra
+> idr_alloc_cyclic() + idr_remove(), if we already know we don't need it. But it's
+> only in last pid_namespace we can have ->child_reaper unset so we do alloc/remove
+> for all other namespaces anyway in error case, should not be a big deal.
+
+Yes...
+
+> I will add the preparation patches: for below patch and related to _ONCE.
+
+Again, up to you. But either way it would be nice to have a comment or at
+least a note in the changelog to explain that this is also needed to avoid
+the race between alloc_pid() + fail and another alloc_pid(). This is subtle.
+
+Oleg.
 
