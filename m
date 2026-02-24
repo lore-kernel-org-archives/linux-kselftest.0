@@ -1,148 +1,206 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21ED3A7859;
-	Tue, 24 Feb 2026 16:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0AD24DCF9;
+	Tue, 24 Feb 2026 16:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771949721; cv=none; b=UDRsa5V3sQwvU4GJ+mCpAsXZwg4SekKL8XwACnwpeC7pSsJ1Gshp97SowNKy1SRZHJqJhFdl2igeQ12NJGCuH/EbexZFA2XPM37QiyLGgfSe6Bi/v1Z6e8pGDizDVBHixJLLArSbNRZDDTPLh7V7rExeozIKdhMKRAyLwKKDfBQ=
+	t=1771949782; cv=none; b=u+v+QAJwZAihoAdiiY9oEpHsKELzcwmPNfJVh5iq7jL5GeT3oWeJ+xlGNsmwi7lII2aVSu99gHMw2LcXSAgbW0z0DE9yPdoe1p/r6MUw1vksQBs5KRpTu7SHI6vw8pUucfsXDzAd0jalrE6fvl+btEwjrTs01udBr3LnqHaRHbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771949721; c=relaxed/simple;
-	bh=e8ui64+5y6ni0ao76yPSNCWiKuk4eYNlPnlFLGkLqgY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rtI28Bl6+cOtyb1KeqD0kAUjoZXL7hfXikw9my01QN8G70I3/LkabeTGGyRUd4Z2lFYxjUk6gJQO2hZJEQUIIrWQyp2sqSn1pS//tL6kjzGhAYc2alepNsnqNLnwCdn/iefjzFdi7cnZkmx6cfFOBrBqRh5KLr/PktbF/jIV3vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=azNAiacH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771949782; c=relaxed/simple;
+	bh=Jpzg3XcQH9T6/RZ4fN6CUybReuS0zIKiZ1EQ8AI4wBo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fXQguiYv2+utYM4WYrBn/fIG4EsQZWDo7bnGY9pf1uJ0k/89/x50hkTv0CMe0ASnkVP47QSgM2bRuy6dS64d8ot6dJQjureWjYyfPodnpXPvVIbJdeFtAbI2QrVdT6CZt/5njxakEcqPIm3Bm8MsWAVlOH6do7z+xdMNT2ZeuL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mc1wlA8h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="azNAiacH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F13C19422;
-	Tue, 24 Feb 2026 16:15:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mc1wlA8h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46236C116D0;
+	Tue, 24 Feb 2026 16:16:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771949720;
-	bh=e8ui64+5y6ni0ao76yPSNCWiKuk4eYNlPnlFLGkLqgY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=azNAiacH9BhxTQimtBeqHMlpeQUoZsEpZLXn1YICn7l1qNRc0bXw5ZNXNvZEkNaKF
-	 ed6DxGSDyfjlPR3zJDNbyYWTqNxfL18tLHVtVEwFI+P1lW7mbE9iTt7JX7bFvBfEzw
-	 u4yubE0NpU2te77jLFp8tJVkbnaaXq8PNNgc7izpO8wCyMVZ3pvs56y/OYpGPU9P6i
-	 C8isb7MYNNEhb3OLQrorD5VSHPFCAkawZ54RMSFH4HrLVON5NqY985UkHrhwBc88iC
-	 Hzj3ZK1tDD/AZIC4D17+0ABtjvdTgSfaTCrwm5aSTiP/6VdqN0O5CEhEPCrLM2LLIw
-	 dO3fnO0y4xC3g==
-Message-ID: <c1b6f8eb-602b-4306-ad60-7a181fd94a45@kernel.org>
-Date: Tue, 24 Feb 2026 17:15:14 +0100
+	s=k20201202; t=1771949782;
+	bh=Jpzg3XcQH9T6/RZ4fN6CUybReuS0zIKiZ1EQ8AI4wBo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Mc1wlA8hy64hMUNU9Jqm8OcTRs+u83cX+Lkgu74ig9i1lNFMtTdiZmZxGPNo0MVvt
+	 vJ9foNO3ZA45GT9+8jOQECWUBo3+p1sxztzVYDTi+PBss6QWIrE0Pb7Ftpy/0kxX3A
+	 qJmxHR0mNb7M66B+oJ3bxKr+RcyVHIR6us0RQqV8CwA0nX/o86OKyrmUPhLufXkMYO
+	 MKUHoE6MyH2FVJRJNxdXjQFs84SwFgJlxVgvjQxuQdjFbyfQMmciOosAsX1w3Hn6Cw
+	 AsjdkHO73p1QlHq3UXTvq31/vOV6+HE4NUpHrC5JL/reDp+fJ8Qc/2Yoa2jpKXKcx0
+	 v8r5t44DBHiuA==
+From: Simon Horman <horms@kernel.org>
+To: achender@kernel.org
+Cc: Simon Horman <horms@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	kuba@kernel.org,
+	linux-rdma@vger.kernel.org,
+	allison.henderson@oracle.com,
+	edumazet@google.com,
+	netdev@vger.kernel.org,
+	rds-devel@oss.oracle.com,
+	pabeni@redhat.com
+Subject: Re: [net-next,v5,1/2] net/rds: Refactor __rds_conn_create for blocking transport cleanup
+Date: Tue, 24 Feb 2026 16:16:07 +0000
+Message-ID: <20260224161607.143920-1-horms@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260223221918.2750209-2-achender@kernel.org>
+References: <20260223221918.2750209-2-achender@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Fix soft-dirty kselftest supported check
-To: Audra Mitchell <audra@redhat.com>, linux-kselftest@vger.kernel.org
-Cc: akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org
-References: <20260218184210.206466-1-audra@redhat.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260218184210.206466-1-audra@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/18/26 19:42, Audra Mitchell wrote:
-> On architectures with separate user address space, such as s390 or
-> those without an MMU, the call to __access_ok will return true.
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
 
-Where is this __access_ok() you mention here? Somewhere in
-fs/proc/task_mmu.c?
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+net/rds: Refactor __rds_conn_create for blocking transport cleanup
 
-> The soft-dirty test attempts to check if the PAGEMAP_SCAN feature
-> is supported by providing an invalid address and expecting
-> __access_ok to return false, thus throwing an EFAULT error on return.
+The next patch will delegate fanout operations to a background worker,
+which adds cancel_work_sync() to rds_tcp_conn_free(). This is called
+during a connection cleanup and requires an operations to be blocking.
+However, the error path of __rds_conn_create() currently calls
+trans->conn_free() while holding rds_conn_lock (spinlock) and
+rcu_read_lock, which creates an atomic context where cancel_work_sync()
+cannot sleep.
 
-Where in the soft-dirty test is that triggered?
+Link: https://ci.syzbot.org/series/1a5ef180-c02c-401d-9df7-670b18570a55
 
-I'm wondering whether the soft-dirty test should be adjusted, but I did
-not yet understand from where this behavior is triggered.
+> diff --git a/net/rds/connection.c b/net/rds/connection.c
+> --- a/net/rds/connection.c
+> +++ b/net/rds/connection.c
+> @@ -170,6 +170,7 @@ static struct rds_connection *__rds_conn_create(struct net *net,
+>  	struct hlist_head *head = rds_conn_bucket(laddr, faddr);
+>  	struct rds_transport *loop_trans;
+>  	struct rds_conn_path *free_cp = NULL;
+> +	struct rds_transport *free_trans = NULL;
+>  	unsigned long flags;
+>  	int ret, i;
+>  	int npaths = (trans->t_mp_capable ? RDS_MPATH_WORKERS : 1);
+> @@ -305,7 +306,7 @@
+>  	if (parent) {
+>  		/* Creating passive conn */
+>  		if (parent->c_passive) {
+> -			trans->conn_free(conn->c_path[0].cp_transport_data);
+> +			free_trans = trans;
+>  			free_cp = conn->c_path;
+>  			kmem_cache_free(rds_conn_slab, conn);
+>  			conn = parent->c_passive;
 
-> Because of this assumption, this check will always fail for the
-> architectures aforementioned. Update the supported check to handle
-> the return being zero for these types of cases.
+[ ... ]
 
-It would be great to include the output of an actual test case
-(soft-dirty?) that is affected by this before/after your change (likely
-on s390x where it seems to trigger).
+> @@ -321,18 +322,7 @@
+>  		found = rds_conn_lookup(net, head, laddr, faddr, trans,
+>  					tos, dev_if);
+>  		if (found) {
+> -			struct rds_conn_path *cp;
+> -			int i;
+> -
+> -			for (i = 0; i < npaths; i++) {
+> -				cp = &conn->c_path[i];
+> -				/* The ->conn_alloc invocation may have
+> -				 * allocated resource for all paths, so all
+> -				 * of them may have to be freed here.
+> -				 */
+> -				if (cp->cp_transport_data)
+> -					trans->conn_free(cp->cp_transport_data);
+> -			}
+> +			free_trans = trans;
+>  			free_cp = conn->c_path;
+>  			kmem_cache_free(rds_conn_slab, conn);
+>  			conn = found;
 
-Do we have a Fixes: tag?
+Does this create a use-after-free in other threads that iterate the
+transport list?
 
-> 
-> Signed-off-by: Audra Mitchell <audra@redhat.com>
-> ---
->  tools/testing/selftests/mm/vm_util.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index d954bf91afd5..3bb7d322101c 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -77,10 +77,8 @@ static bool pagemap_scan_supported(int fd, char *start)
->  
->  	/* Provide an invalid address in order to trigger EFAULT. */
->  	ret = __pagemap_scan_get_categories(fd, start, (struct page_region *) ~0UL);
-> -	if (ret == 0)
-> -		ksft_exit_fail_msg("PAGEMAP_SCAN succeeded unexpectedly\n");
->  
-> -	supported = errno == EFAULT;
-> +	supported = (ret == 0) || (errno == EFAULT);
->  
->  	return supported;
->  }
+Looking at the race-loss path when rds_conn_lookup() finds an existing
+connection, the old code called trans->conn_free() before
+kmem_cache_free(conn). Now the patch defers conn_free() to after
+locks are released at the out: label, but kmem_cache_free(conn) still
+executes inside the critical section (line 327 after this change).
 
+This creates a window where rds_tcp_connection objects remain on
+rds_tcp_conn_list with tc->t_cpath->cp_conn pointing to the
+already-freed conn object.
 
--- 
-Cheers,
+The timeline would be:
 
-David
+CPU 0 (__rds_conn_create race-loss)
+  spin_lock_irqsave(&rds_conn_lock)
+  found = rds_conn_lookup()  // finds existing conn
+  free_trans = trans
+  free_cp = conn->c_path
+  kmem_cache_free(rds_conn_slab, conn)  // conn freed
+  conn = found
+  spin_unlock_irqrestore(&rds_conn_lock)
+  rcu_read_unlock()
+  // ... later at out: label
+  free_trans->conn_free(...)  // removes tc from list, but too late
+
+CPU 1 (rds_tcp_kill_sock)
+  spin_lock_irq(&rds_tcp_conn_lock)
+  list_for_each_entry_safe(tc, _tc, &rds_tcp_conn_list, t_tcp_node)
+    c_net = read_pnet(&tc->t_cpath->cp_conn->c_net)  // UAF here!
+
+The commit message states "connections that 'lose' the race are safe to
+clean up outside the critical section since they were never added to
+the hashtable, and therefore are inaccessible to other threads."
+
+However, while the rds_connection was never added to the RDS hashtable,
+the transport data (tc) WAS added to rds_tcp_conn_list during
+rds_tcp_conn_alloc(). Looking at that function in net/rds/tcp.c:
+
+rds_tcp_conn_alloc() {
+    // ... allocate tc structures ...
+    spin_lock_irq(&rds_tcp_conn_lock);
+    for (i = 0; i < RDS_MPATH_WORKERS; i++) {
+        tc = conn->c_path[i].cp_transport_data;
+        tc->t_tcp_node_detached = false;
+        list_add_tail(&tc->t_tcp_node, &rds_tcp_conn_list);
+    }
+    spin_unlock_irq(&rds_tcp_conn_lock);
+}
+
+So the tc objects are accessible to other threads via the transport
+list, even though the conn itself never made it into the RDS hashtable.
+
+Functions that iterate rds_tcp_conn_list include:
+- rds_tcp_kill_sock() at net/rds/tcp.c:610
+- rds_tcp_destroy_conns()
+- rds_tcp_sysctl_reset()
+
+All of these dereference tc->t_cpath->cp_conn during iteration.
+
+In the old code, conn_free() ran BEFORE kmem_cache_free(conn), so the tc
+was removed from the list before conn was freed. No UAF window existed.
+
+Could the kmem_cache_free(rds_conn_slab, conn) be moved to after
+conn_free() at the out: label, or should conn_free() be called before
+kmem_cache_free() inside the critical section for the race-loss paths?
+
+> @@ -349,9 +339,23 @@
+>
+>  out:
+>  	if (free_cp) {
+> -		for (i = 0; i < npaths; i++)
+> +		for (i = 0; i < npaths; i++) {
+> +			/*
+> +			 * The trans->conn_alloc call may have allocated
+> +			 * resources for the cp paths, which will need to
+> +			 * be freed before freeing cp itself.  We do this here
+> +			 * after the out: label so it runs outside the
+> +			 * rds_conn_lock spinlock and rcu_read_lock section,
+> +			 * since both destroy_workqueue() and conn_free can
+> +			 * block. The local free_trans pointer is only set in
+> +			 * the race-loss paths where conn_alloc() succeeded.
+> +			 */
+> +			if (free_trans && free_cp[i].cp_transport_data)
+> +				free_trans->conn_free
+> +					(free_cp[i].cp_transport_data);
+>  			if (free_cp[i].cp_wq != rds_wq)
+>  				destroy_workqueue(free_cp[i].cp_wq);
+> +		}
+>  		kfree(free_cp);
+>  	}
