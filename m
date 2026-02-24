@@ -1,119 +1,131 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365851D45E8
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 00:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6D9DF59
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 00:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771892653; cv=none; b=YwzsWU1vYsEuIDe8l2V8qUcAhUj9ifR3ddze8pRAWjMWoRs01VcpUiuDK/PSjqbPssAsUvKl+12JPnwOBimw/c2x2VOxwFwjLG93CNFhluRwWMxQtamXK5dL4HLke8a1oWV+u8i23J4tZQ2ZGOWKVmkPSKbH51ADvWLFio9N2js=
+	t=1771894509; cv=none; b=KBvNCjDOfW1PrIwqF0fe98DNQD5csYXQRz+R99qqf6k7g5dMfkPnfzKEHijuPdXS2fwZbyCy6Co48Ils7ruxKwbf/kuXhqym64tMbTQ9lut/FHDv7zu2oyZzxMuUkw2l/A0a/yarbI29rkUqLpIprawxV9SBy3bDFlCIFcNbcaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771892653; c=relaxed/simple;
-	bh=jKHWyDAu0xJvzI3WO6+meQgDEHUikzp88qy14INmcPk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sj3f1MQ0BQFxc83pyinSHOOVEV2AORNvFOACs3J2b52ZKJnBuH5p6WnLhX5QIAEQBlH/nFi2L+RADBXorNgR4UFb1+0vA21e9uGoH7h7ABl/OyTiXa9AMe8xSccd0SK4DDxMhVAY43C4TwKssW98W/tJIQXWmAhywk7DM8xAZtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GpogB9XA; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771894509; c=relaxed/simple;
+	bh=yzHGZZ2ewLti5LjEpsu8YoWspgLFHukV4Dkns5nW6fo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=QbPMFDdif8m7F8lLA0KXH3pVFY29LYUdKQVGOZyeEeGoO142qPWo0cnkIuIlkiDf2t+V5baYD1NmVsL0Z8JDZvXgFYzLgbnjNIkAQGRMhHiCK1vkOYdnStOmPUVljRSRGjS4wzfrtohPuZ7u6T6qLAkeY9MULXM3sYhNOJwPiKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E+DgHxW0; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GpogB9XA"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7984d31b895so11978647b3.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 16:24:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E+DgHxW0"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-354490889b6so23243396a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 16:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771892650; x=1772497450; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u1akxnV01TuuqkqVdn8oJReBwARp0bMrNePNSdt98A4=;
-        b=GpogB9XAYZVLqYAmNIO3FrVFQhmoujs+FpP+4b4mJiQxMSpUhpo8OwTsalI1EAz5ur
-         FDKD6SSIPbopYVEceVSXKj3gzfrTiKdP0+3Ub6uiMB1ddrs1Fu+cK0zFxTWqfA1p8xWC
-         txJfEn33rZ6JzxMxxuA6/QrDQqfcZRaNXpgcgCSmInhIkhcmYhgtfgA8Gid0msMlNcXz
-         JKBczHy9aVSGRKZKrxwgLCBLNbVUrbZHlQHqRTPyxUdV3UJi+dkZe8fwFoAsw3Jk/4Oz
-         UTt8OAJtk/+0IWTu2oGeGp+fgfSqocrq5h519eM/4FaHGro3RfgStDuRzcEsOwR0S3oc
-         hl+Q==
+        d=google.com; s=20230601; t=1771894507; x=1772499307; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Qk5qzRrV4XbbKnkQ2PaR5i8agEGx80lRKWSK1C2rXwg=;
+        b=E+DgHxW0xZK41VGQCxO7ThCjjwz1GcT8Zi1sO1UWgIb5p+svhhFir4NB/jeqb+RmVE
+         YcfBEcHITD/fZ0Gaotk6k/XPN7yyji6tC8zQ7QjI7PYwRx6avBbjnWHTxy34xTkG7VFi
+         eQQFUQ7XyCGMMDK/Xta32BoPZRYoYw6ePpgLVEHrVGTPSXQcN9Vd/+/IyJhW6GmPSqAV
+         sQXJoi36EUoH83CSQRIB44gvT8kSXtCERvWdMegUTg9bjKQhq7LZAnPsqKee7X/MD2nQ
+         h8T0yP0qxUcgRiVknBg+CB4odT3HljEOrf6bCGFW+uaoGlq7lzOCX7gNkwnEZPro8qvQ
+         55VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771892650; x=1772497450;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u1akxnV01TuuqkqVdn8oJReBwARp0bMrNePNSdt98A4=;
-        b=EdQaZ71XOwbOeLR2UTVX8Oq7eipmKqKKdm8sI8RSkFBDyAXClrNdFFlK83hMby0uyG
-         /M2iB2o3GxBklGNjAfw0vUWBnehhEL50pk4gUckM/5oCiW78c/hbCOycq50ftXSx8g8D
-         Ggf0XxfIc33cwG+AQGFMDLV/wXz3PLUieVS2KPcceZ5nufSHgKzT+gdhbVmz8uokSy6u
-         0mMUHnV+BYtUXgbrGHqyxDtNHXnwZ0+RBd7DDrMmjsny3SUGn0Uk/UHNOlgmC5ziOsrv
-         KGNbY9y2regMJ0btpIohZ3CLZ1ro0QFsKB/2tGho55jDSDzw7LG9n120UNoL1Rg+c/o5
-         glCg==
-X-Forwarded-Encrypted: i=1; AJvYcCWlNeDG5liy5h8ZyLfW/27rm9QG2/aJaxXEUHnXkwb8xL2QXRPomO0mEt2k80rze5mQxxpXlXtnu8msHJzWUyY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFz4ym7MRLKgYJkTfbJ1fK7GDG7mjWPtyEaDvyW6M3Lqj52mCb
-	FBdRw4WipAgaeC+28fVnfUOunbgbtnvxaJyrVOp5+AD/NQkGlWlRY9ig
-X-Gm-Gg: ATEYQzyvmJ8J8HrMeklNUdi8hgTlur3mUGzA7mz91lZ5a5Q5kDyE6S9gplXUkd26Fnx
-	rNWQn73w9kp9HJtogoVCA2kU1JH+dKvSBlnCfnm4UJMYotij3/RMLZUXU0YN2Z/YzyIaX4SHHVz
-	8L04aHTbnD54ZVgu5giN7MAd6Gn1kymGdPI92eNXWvpia7dn6ofelX/dMFWgaJgTfmFb0WJa8v/
-	70qU2oHFRimbsVxcUDOtGLQzOyO6pg5/pVvMjXTAQxuM4CX/gYU75EyrotoOwtBREnKu3YHbzGn
-	BZdIU9qTjtfHivXtEh3OXh47yUXUaer2+V+NhHxlPCJpKrdp/g6WNsehhynhRf9J45/OsEuyjXh
-	W5MuII5Ipt97tn8SYgJV8hXvjbw7xRW4+QQlcFKm93olRLARL9y8OUtz2wPvzx4XYiljWjJnrE0
-	KDsIz0wJ1jNWvIJFDi55BXWmDL9mSCGt+7joDkTtj6GO7VSqM=
-X-Received: by 2002:a05:690e:4149:b0:649:4906:770a with SMTP id 956f58d0204a3-64c788d2821mr7812527d50.8.1771892650119;
-        Mon, 23 Feb 2026 16:24:10 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:41::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64c7a35d839sm3891935d50.13.2026.02.23.16.24.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 16:24:09 -0800 (PST)
-Date: Mon, 23 Feb 2026 16:24:07 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Bobby Eshleman <bobbyeshleman@meta.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	kuniyu@google.com, ncardwell@google.com,
-	Daan De Meyer <daan.j.demeyer@gmail.com>
-Subject: Re: [PATCH net v3 2/3] vsock: lock down child_ns_mode as write-once
-Message-ID: <aZzvp52L4smGF7cM@devvm11784.nha0.facebook.com>
-References: <20260223-vsock-ns-write-once-v3-0-c0cde6959923@meta.com>
- <20260223-vsock-ns-write-once-v3-2-c0cde6959923@meta.com>
+        d=1e100.net; s=20230601; t=1771894507; x=1772499307;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qk5qzRrV4XbbKnkQ2PaR5i8agEGx80lRKWSK1C2rXwg=;
+        b=nDGcAGlKJR11y8ZnBcL/dvxdnNU5t/28O9A1yLJQfQCAQqVeOtpvfQugV/t2G0ztuP
+         A8KGQSGxIKD46QTZLaTXPg5H5MnoFumqxR9zlhngBZTur6mLb0sjUDQmVMvaUlgzFI5n
+         w3SrfCOflnOE4NxfM6sk0Zcuv8yYUgKS5K7YE6aVe56PybU0kI6CkV7d/Qug5vXrWaQ5
+         /YrrTtnDL6FaRp/edGlxKAFGFOS/NYa5B8y/Kb+95SRwscIeF4XSqqnO2HKVph23K6KS
+         uUWftL2DFrbLPKTGRzRGbg8xoG98PzH0qTtvySqVQXD3R6M0VqN1dJmG3SJZ+KK+5hRC
+         OTJA==
+X-Forwarded-Encrypted: i=1; AJvYcCXj0jdgzqLpkXPXoJD/u9TtKhtp9sHgK1sEzRXGx84Hz7CAuWaCjKl8AixLmhOhBta4XJvr8UlmIcexU5qb8Y8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWzCRW8bKJrBb5WAwzyNlhyqstkH5PRFqcsRTCqxbO65MB9/QD
+	4yJ8X5/m8gBvtO8h8kJ6/ISLeMJuXJMgDuxg2WR26NbKZD+5B3bOAb4BB8QB2ToXk0hzXHaDefO
+	JHS/tB3K6rnBJmA==
+X-Received: from pjbsz4.prod.google.com ([2002:a17:90b:2d44:b0:354:aa76:8270])
+ (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:548d:b0:353:e91:9b38 with SMTP id 98e67ed59e1d1-358aea06d44mr7524548a91.34.1771894507380;
+ Mon, 23 Feb 2026 16:55:07 -0800 (PST)
+Date: Mon, 23 Feb 2026 16:54:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260223-vsock-ns-write-once-v3-2-c0cde6959923@meta.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.371.g1d285c8824-goog
+Message-ID: <20260224005500.1471972-1-jmattson@google.com>
+Subject: [PATCH v5 00/10] KVM: x86: nSVM: Improve PAT virtualization
+From: Jim Mattson <jmattson@google.com>
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yosry Ahmed <yosry@kernel.org>
+Cc: Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 23, 2026 at 02:38:33PM -0800, Bobby Eshleman wrote:
-> From: Bobby Eshleman <bobbyeshleman@meta.com>
-> 
-> Two administrator processes may race when setting child_ns_mode as one
-> process sets child_ns_mode to "local" and then creates a namespace, but
-> another process changes child_ns_mode to "global" between the write and
-> the namespace creation. The first process ends up with a namespace in
-> "global" mode instead of "local". While this can be detected after the
-> fact by reading ns_mode and retrying, it is fragile and error-prone.
-> 
-> Make child_ns_mode write-once so that a namespace manager can set it
-> once and be sure it won't change. Writing a different value after the
-> first write returns -EBUSY. This applies to all namespaces, including
-> init_net, where an init process can write "local" to lock all future
-> namespaces into local mode.
-> 
-> Fixes: eafb64f40ca4 ("vsock: add netns to vsock core")
-> Suggested-by: Daan De Meyer <daan.j.demeyer@gmail.com>
-> Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
-> Co-developed-by: Stefano Garzarella <sgarzare@redhat.com>
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Currently, KVM's implementation of nested SVM treats the PAT MSR the same
+way whether or not nested NPT is enabled: L1 and L2 share a single
+PAT. However, the APM specifies that when nested NPT is enabled, the host
+(L1) and the guest (L2) should have independent PATs: hPAT for L1 and gPAT
+for L2. This patch series implements the architectural specification in
+KVM.
 
-Stefano, I wasn't sure if you wanted the Co-developed-by and S-o-b on
-this iteration, but I added it just in case. Please let me know, if that
-wasn't what you intended.
+Use the existing PAT MSR (vcpu->arch.pat) for hPAT. Add a new field,
+svm->nested.gpat, for gPAT. With nested NPT enabled, redirect guest
+accesses to the IA32_PAT MSR to gPAT. All other accesses, including
+userspace accesses via KVM_{GET,SET}_MSRS, continue to reference hPAT.  The
+special handling of userspace accesses ensures save/restore forward
+compatibility (i.e. resuming a new checkpoint on an older kernel). When an
+old kernel restores a checkpoint from a new kernel, the gPAT will be lost,
+and L2 will simply use L1's PAT, which is the existing behavior of the old
+kernel anyway.
 
-Best,
-Bobby
+v1: https://lore.kernel.org/kvm/20260113003016.3511895-1-jmattson@google.com/
+v2: https://lore.kernel.org/kvm/20260115232154.3021475-1-jmattson@google.com/
+v3: https://lore.kernel.org/kvm/20260205214326.1029278-1-jmattson@google.com/
+v4: https://lore.kernel.org/kvm/20260212155905.3448571-1-jmattson@google.com/
+
+  v4 -> v5:
+  * Separate commit to remove vmcb_is_dirty() from first v4 commit [Yosry, Sean]
+  * Introduce svm_get_pat and svm_set_pat to keep all hPAT vs gPAT logic
+    together in one place.
+  * Remove the no longer common logic for get/set IA32_PAT. [Sean]
+  * Make vmcb02's g_pat authoritative for gPAT.
+  * Clear legacy_gpat_semantics when forcing the vCPU out of guest mode and
+    when processing a second KVM_SET_NESTED_STATE that doesn't have legacy
+    semantics. [Sean]
+
+Note that this series should be applied after Yosry's v5 "Nested SVM fixes,
+cleanups, and hardening."
+
+Jim Mattson (10):
+  KVM: SVM: Remove vmcb_is_dirty()
+  KVM: x86: nSVM: Clear VMCB_NPT clean bit when updating hPAT from guest
+    mode
+  KVM: x86: nSVM: Cache and validate vmcb12 g_pat
+  KVM: x86: nSVM: Set vmcb02.g_pat correctly for nested NPT
+  KVM: x86: nSVM: Redirect IA32_PAT accesses to either hPAT or gPAT
+  KVM: x86: Remove common handling of MSR_IA32_CR_PAT
+  KVM: x86: nSVM: Save gPAT to vmcb12.g_pat on VMEXIT
+  KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
+  KVM: x86: nSVM: Handle restore of legacy nested state
+  KVM: selftests: nSVM: Add svm_nested_pat test
+
+ arch/x86/include/uapi/asm/kvm.h               |   5 +
+ arch/x86/kvm/svm/nested.c                     |  63 +++-
+ arch/x86/kvm/svm/svm.c                        |  57 +++-
+ arch/x86/kvm/svm/svm.h                        |  20 +-
+ arch/x86/kvm/vmx/vmx.c                        |   9 +-
+ arch/x86/kvm/x86.c                            |   9 -
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/x86/svm_nested_pat_test.c   | 298 ++++++++++++++++++
+ 8 files changed, 422 insertions(+), 40 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/svm_nested_pat_test.c
+
+-- 
+2.53.0.371.g1d285c8824-goog
+
