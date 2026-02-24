@@ -1,192 +1,326 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D1E1A9FAB
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 03:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333A434CDD
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 04:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771904544; cv=none; b=Ja3DEPKxP2p4/9f2PaXuViEVeQfhFNylYx+bz22p3jtFAo94TC3QUJR5YxMNetVCghY65bsaucry13FLn0PNdFcHSPbo63KfmVDbuS4FNSaCJAafkw4yJjL8kwl0INTjvNzoEounaXtq/1+kiKN5pSVBDtP4BB5nUyuBKsJovmU=
+	t=1771906258; cv=none; b=oiw7FGpb0yUobuF3OiwECZVpO5pvw+IMnc1SdZcWdd7kH7bqXWqDTS2OS32M82yeHvPWNjbFkUdMxXEaJiFgwg7ym9VorvAF4TNt4ptzIu6+pdkMFpbZITXPmKbs1ceOKQy6lm9EA+KIVhl80/YdI9QQQX1jQF2EgnIFyoxfe6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771904544; c=relaxed/simple;
-	bh=grj7oAq8M05dLBP9Pn8aecJgNHhYgCfmJMPq4xGHvYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S6jA4fxjWmmzBsI+uUvLf2jAwGFosVamHGCAODPL6nLrIWSw+hIWqQQdvq1TuW7kQMFQOcpRqbHrgAPEP1GD/EzsDL2hDBcKhHEL7bxsOW7vVAtcZ/xE20AK9BKgpCVeg+WzG37ZBehMr+Wsj68dFs79//EZXqONUjxDSSCxN9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kZhstHCt; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1771906258; c=relaxed/simple;
+	bh=zr/bcPLe9uouP9PwhEMP3/FpLnN/SDUM8I/Wgd6JTyE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gvtAEXV9uFQ0Ile6DprPcKwlPnkPwHwFVHt/hrjEv7RSaeew1kqy1pvNX+2/YoWK3gNHpul2XcoEHLxKyugfIVor4HYauxdYo0wDNoOyeQ1Fv0ZyikboH5OyHEGFkOc2R8R55KtGO1oHjoIbcWVjIDrKyocc6aXqJUDDC3Fsuww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bxzOOOpZ; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kZhstHCt"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a7bced39cfso51946425ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 19:42:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bxzOOOpZ"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-82418b0178cso2989319b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 20:10:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771904543; x=1772509343; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=64EJpKRfWnzFU2K9X8IcO3CvffVFjRlETcroVM/6Pf4=;
-        b=kZhstHCtnRU02ldqJ8HdjYN70GpAZ8pFxD80UMdWqyt/u7xI4MiIL3z6CZO49c4crT
-         ACVYdcjq0e9/N3UfxzDp41h6HSlwV2qjZkSYPEa/D9TAEdMivE5xGPl7XEulrZyyPlRz
-         QpuYbIi4FHaYKbjVI+T4EUQ/fQ6QIWEUMOkqgDMXii6o8ooSJBJH+9arsNpDr4AueT6t
-         OwKl/be9D3rTMEqPNJq4IttASC/ZjwJ8zrBwWYtM3PeoZaBaMQ4VFOUMk7q8sKZfQlYl
-         /B6Vsf4itOquJ3TU5crUqjr9WX1wAWutFZlzsG9uurBVMVLzPQ98FsMiSOsW2dqKUegS
-         Ytlg==
+        d=gmail.com; s=20230601; t=1771906255; x=1772511055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UqIkKFYUe31rOenAwyRKOQnlZ80WMkRSpxM9YLiUBz4=;
+        b=bxzOOOpZz9OV6PHI1npCzI57IpoYZ7tcV+6S4kDcDj//dtb0foO+878lWdzbjYi/BL
+         PGtfcJLL2WyeBgpC/eGxA8uPd6uENzQ2hRP9t63FJzwdoq6CkS8eqhTxW6D6xSqJfDEi
+         AfNV/SPo33Mg0BpP1Ntrvk/X2bpsTgIRp0BaK9j70CMNH2zoVJZANJXGItobLlqUMh+E
+         wQ8dg5B1E6GhgMTwcrF77NQGdIA7haHAPDTINnUIS6+k9tWlAgq2D+v/Ehbj4Sc4NrgM
+         Gb4uZNpPr1igE6zEftWMGUK0J9oAiJ3lbwF/4wcv39ghUGKzcGy7UroTIs624yFwaKu2
+         S6dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771904543; x=1772509343;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=64EJpKRfWnzFU2K9X8IcO3CvffVFjRlETcroVM/6Pf4=;
-        b=URp3M1+fV4La3Rs4gL8/waT9n1w4xhUYho9m9arIvckwEKsZU2hUU7/4Zw6/HVkdYv
-         YXHu/M1N1EGsEQuD/3dh+A0iNC9X9dXHi0gbXIlVVSC4atfRA91Dkh2rrU8nH1jYqMY0
-         ZwVcPREiyjUtxeg6D5BAYVuA3uOa93p5OpkyAMLSrfQBg8VLGRtXLSBp/pNZYrJ7hKqI
-         UsuePrMCzqSwETZiXYzRfH14hXTsQGYm8di1TbnoV8ShZUsi4fDdLz109LFiFIt8H3+E
-         7E4URxUQc5YCEGSf10UlZUoGiJOGIkivMV6zHVrqdsH/kpdqpHwoPcL3bui46PosvfoN
-         Q/JQ==
-X-Gm-Message-State: AOJu0YxMQJINWsmMwrwJhSdFD1ZOfT2I7kX9dGUZxT97CngbyKDRSmXV
-	mYw4saGQIQFj6PncKo+5kunEuw9iGf9UkUZ3aGRtnHt+PZ12rJLajXHe2JnZsQ4s
-X-Gm-Gg: ATEYQzyjZ6CVE98O3WJdL/iNqrp4k3602Oyn/R5GAY3Sy8MBmgKL1F8DgIWsRyyu9qm
-	NeBzauzZj+eoPejjbin7QHmiIbtGzmD7sXCJWfkMIsb9JF3w3MWhnZwN31z0iDnS5DX89UZtIEZ
-	mbX6eAVMJu+MnKJX9hHsylHvfndIX+GUGqf+mBhPLYa2/nUkkL44Dm+/EGeS2LncGva/8ziLW/3
-	ZUQHOogGLPjJ4JiMEaR8Giu0N2KaRGg4icCRaqaVtnOo9B3DqlzMCCgJQsKJi6gsxwaH01ejioA
-	tHsqSfF0ODAUorTjpEVJAWepe8I/GrJqanAvkR6txjAvLHzs6KXsRBStAyPbrV15NPTusjsZpYT
-	L4BSVrifZzsQJ0biHdQgfAVPfVJnpzlFt4FEesxqsr6aj8Ln+j9JbQA7B4z9vMQoa/6eWk/nKH3
-	gDflmQMCnnKZ/woj0nRR3PLgEFUPo=
-X-Received: by 2002:a17:903:1a8f:b0:2aa:e6c8:2c73 with SMTP id d9443c01a7336-2ad744ec57amr120059075ad.37.1771904542790;
-        Mon, 23 Feb 2026 19:42:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771906255; x=1772511055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UqIkKFYUe31rOenAwyRKOQnlZ80WMkRSpxM9YLiUBz4=;
+        b=ZPUHAk6fa7757x3gDhCnxxN86g0iRMOejlrSGlHNo+ux6L4WvvZPH8ayLWGXA/xZCi
+         J9NG4Eqf5TQPhpGt4UoQpXd+JqINL++0glBfcMO+RkoxV5BTStGJ4AHGGCN0GIViGzp9
+         UmE+AAr4ib3dC+bk6tLt6JZRoAwdbGqRSeWhPN+L06iV/62+VwN9bHcjqR+HnY9VRVmi
+         oMhR2ebeLdOVj0UBUCwzvVMa8IGfLYpQWbtGHnQKn3mVx+8Q7TfabT7JqMaZCtlW2crm
+         SLk5iI1/MOQ0wBTgLqZQNAyxWPYOzBg9GHgvnt98fqRQJqCXC9oGwu8BD32ZLb9wBTaP
+         xy9g==
+X-Gm-Message-State: AOJu0YzSc/UPIwDo6zhbS5YWiYpBLwbZtWQfKHLPstTo5YwatYe2GnaW
+	JdWRpJT2QUx0GQqyuR/ZH/IeIinRMQU+kf3eFCP0zTz7k4FETTrk/nU4kzqfC2oQ
+X-Gm-Gg: ATEYQzwzVdMcWFMwD3tpbMcJ0evw115GZ7KAkXT2DSwXp+oFXMnkliAjZ+iNdP5J9Qp
+	wXfNe1i+NJ7uFYskpdIU+kfF6uNxHk4Hi0Y1MmWpN6yZ71YYu147kKpBeC7LX2FN29HDTTEHh+i
+	ff00F3xXlR26j10ciwczf461atsIaPn9w7WgOC7lyLrIqmWUUQpVOMWTlqbgjpIyZZ4TcjIhTnZ
+	VEnl/xCn8/L2VDwRX48pp3olg1JN87TlzNnFaf/2jaCPCUnJtyqfA0e69yuBh9mqFmbxRfHglgd
+	VLvN1xfvzdjL7FRAKBW1g8W0GHDTGnPa9dbTl9LCCMDNWk1UfLdM4KTEJ3+TqSHZj7u5N+xJVLz
+	E09uw2xI6u7D21ME7Unl0ZMRX68D/rCZhjh+Y25y9WRbUN5hm8AhAuCvTPEAb+FY1J9QIYyx8tZ
+	FZTOsnfJbjCVbf5IF1gM4GaIL0bTw=
+X-Received: by 2002:a05:6a00:1f04:b0:824:a1c9:8a30 with SMTP id d2e1a72fcca58-826da907819mr8290551b3a.23.1771906255350;
+        Mon, 23 Feb 2026 20:10:55 -0800 (PST)
 Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adaa3b2b9csm2575145ad.1.2026.02.23.19.42.20
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-826dd63f1b3sm8805002b3a.3.2026.02.23.20.10.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 19:42:21 -0800 (PST)
-Date: Tue, 24 Feb 2026 03:42:17 +0000
+        Mon, 23 Feb 2026 20:10:54 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH selftests] selftests: Use ktap helpers for runner.sh
-Message-ID: <aZ0eGa-fj6LKSIXq@fedora>
-References: <20260206081704.53215-1-liuhangbin@gmail.com>
- <DG7TJFKZNG1J.19BZF87IWD3UG@google.com>
- <aYX8dot4fTh3FJFI@fedora>
- <DGMCJQ2TKZ1O.Q2C502GV1GSL@google.com>
+To: linux-kselftest@vger.kernel.org
+Cc: Shuah Khan <shuah@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	netdev@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv2] selftests: Use ktap helpers for runner.sh
+Date: Tue, 24 Feb 2026 04:10:48 +0000
+Message-ID: <20260224041048.6570-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DGMCJQ2TKZ1O.Q2C502GV1GSL@google.com>
 
-On Mon, Feb 23, 2026 at 12:40:03PM +0000, Brendan Jackman wrote:
-> On Fri Feb 6, 2026 at 2:36 PM UTC, Hangbin Liu wrote:
-> > Hi Brendan,
-> > On Fri, Feb 06, 2026 at 10:48:59AM +0000, Brendan Jackman wrote:
-> >> On Fri Feb 6, 2026 at 8:17 AM UTC, Hangbin Liu wrote:
-> >> > This has been on my todo list for a long time. We should use ktap
-> >> > helpers in runner.sh. I saw Brendan did some work in d9e6269e3303
-> >> > ("selftests/run_kselftest.sh: exit with error if tests fail") to make
-> >> > run_kselftest.sh exit with the correct return value. But we still use a
-> >> > custom solution in runner.sh. Let's convert all the print messages to use
-> >> > formal ktap helpers. Here’s what I changed:
-> >> >
-> >> >   1. Move TAP header from runner.sh to run_kselftest.sh, since run_kselftest.sh
-> >> >      is the only caller of run_many().
-> >> >   2. In run_kselftest.sh, call run_many() in main process to count the
-> >> >      pass/fail numbers.
-> >> >   3. In run_kselftest.sh, do not generate kselftest_failures_file; just
-> >> >      use ktap_print_totals to report the result.
-> >> >   4. In runner.sh run_one(), get the return value and use ktap helpers for
-> >> >      all pass/fail reporting. This allows counting pass/fail numbers in the
-> >> >      main process.
-> >> >   5. In runner.sh run_in_netns(), also return the correct rc, so we can
-> >> >      count results during wait.
-> >> >
-> >> > After the change, the printed result looks like:
-> >> >
-> >> >   not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=1
-> >> >   # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
-> >> >
-> >> >   ]# echo $?
-> >> >   1
-> >> 
-> > It changes the run_kselftest.sh's output, with a total result. e.g.
-> >
-> > # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
-> 
-> Cool thanks, then please just clarify the commit message to say this.
+Instead of manually writing ktap messages, we should use the formal
+ktap helpers in runner.sh. Brendan did some work in d9e6269e3303
+("selftests/run_kselftest.sh: exit with error if tests fail") to make
+run_kselftest.sh exit with the correct return value. However, the output
+does not include the total results, such as how many tests passed or
+failed.
 
-Yes, I have added this with 3. use ktap_print_totals to report the result.
+Let’s convert all manually printed messages in runner.sh to use the
+formal ktap helpers. Here are what I changed:
 
-> 
-> >> I have not reviewed the code properly yet (I just read enough to check
-> >> that it still does the thing I care about i.e. return an error code when
-> >> something fails). I can do a proper review next week if you add a bit
-> >> more context re the question above though.
-> >
-> > Yes, I also care about the return code. This patch doesn't break it.
-> >
-> >> 
-> >> > -	wait
-> >> > +	# Handle the return values when running in netns.
-> >> > +	for pid in "${pids[@]}"; do
-> >> > +		wait "$pid"
-> >> > +		rc=$?
-> >> > +		[ "$rc" -eq "$KSFT_PASS" ] && KTAP_CNT_PASS=$((KTAP_CNT_PASS+1))
-> >> > +		[ "$rc" -eq "$KSFT_FAIL" ] && KTAP_CNT_FAIL=$((KTAP_CNT_FAIL+1))
-> >> > +		[ "$rc" -eq "$KSFT_SKIP" ] && KTAP_CNT_SKIP=$((KTAP_CNT_SKIP+1))
-> >> > +		[ "$rc" -eq "$KSFT_XFAIL" ] && KTAP_CNT_XFAIL=$((KTAP_CNT_XFAIL+1))
-> >> 
-> > These variables are defined in ktap_helpers.sh and used by the ktap helpers.
-> 
-> Hm, I see. Then it seems pretty hacky to mutate them directly here, and
-> is it correct to always increment them by 1?
-> 
-> I think the "correct" thing to do here is to parse the KTAP from the
-> child process's stdout, but I assume that's not actually practical with
-> the current tools we have available. (I could be wrong though, let me
-> know if that's the case).
-> 
-> Or maybe we can dump the values of the variables at the end of the child
-> and then add them into the parent process' values... 
+  1. Move TAP header from runner.sh to run_kselftest.sh, since run_kselftest.sh
+     is the only caller of run_many().
+  2. In run_kselftest.sh, call run_many() in main process to count the
+     pass/fail numbers.
+  3. In run_kselftest.sh, do not generate kselftest_failures_file. Just
+     use ktap_print_totals to report the result.
+  4. In runner.sh run_one(), get the return value and use ktap helpers for
+     all pass/fail reporting. This allows counting pass/fail numbers in the
+     main process.
+  5. In runner.sh run_in_netns(), also return the correct rc, so we can
+     count results during wait.
 
-Based on code
+After the change, the printed result looks like:
 
-        for TEST in "$@"; do
-                if [ -n "$RUN_IN_NETNS" ]; then
-                        run_in_netns &
-                        pids+=($!)
-                else
-                        run_one "$DIR" "$TEST" "$test_num"
-                fi
-        done
+  not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=1
+  # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
 
-        # Handle the return values when running in netns.
-        for pid in "${pids[@]}"; do
-		...
-	done
+  ]# echo $?
+  1
 
-This hack only affects when we run tests in netns.
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
 
-If we dump the values for each child process. It do make the result more
-accurate. But the process is complex (maybe force dump the result to a file and
-analyse it? But some tests doesn't have ktap helper and only return $rc), and
-some tests may also have sub-process that use KTAP numbers but not count in
-main process.
+v2: Update commit description and comments in code. (Brendan Jackman)
 
-Since the purpose is to count the test pass/failed number. I think it's enough
-to only count the return value when run tests in netns.
+---
+ tools/testing/selftests/kselftest/runner.sh | 84 ++++++++++++---------
+ tools/testing/selftests/run_kselftest.sh    | 21 ++++--
+ 2 files changed, 63 insertions(+), 42 deletions(-)
 
-> 
-> Or, if we just keep the current approach I think just having some
-> commentary to explain why we are doing this would help. I.e. "these
-> variables are outputs of ktap_helpers.sh but since we've run the test in
-> a subprocess we need to update them manually" (the current comment talks
-> about the netns which I think is confusing, I don't think the netns is
-> relevant at all).
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 3a62039fa621..dfd6fedf8911 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -1,8 +1,8 @@
+-#!/bin/sh
++#!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ #
+ # Runs a set of tests in a given subdirectory.
+-export skip_rc=4
++. $(dirname "$(readlink -e "${BASH_SOURCE[0]}")")/ktap_helpers.sh
+ export timeout_rc=124
+ export logfile=/dev/stdout
+ export per_test_logging=
+@@ -44,17 +44,11 @@ tap_timeout()
+ 	fi
+ }
+ 
+-report_failure()
+-{
+-	echo "not ok $*"
+-	echo "$*" >> "$kselftest_failures_file"
+-}
+-
+ run_one()
+ {
+ 	DIR="$1"
+ 	TEST="$2"
+-	local test_num="$3"
++	local rc test_num="$3"
+ 
+ 	BASENAME_TEST=$(basename $TEST)
+ 
+@@ -102,16 +96,17 @@ run_one()
+ 	# Command line timeout overrides the settings file
+ 	if [ -n "$kselftest_override_timeout" ]; then
+ 		kselftest_timeout="$kselftest_override_timeout"
+-		echo "# overriding timeout to $kselftest_timeout" >> "$logfile"
++		ktap_print_msg "overriding timeout to $kselftest_timeout" >> "$logfile"
+ 	else
+-		echo "# timeout set to $kselftest_timeout" >> "$logfile"
++		ktap_print_msg "timeout set to $kselftest_timeout" >> "$logfile"
+ 	fi
+ 
+ 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
+ 	echo "# $TEST_HDR_MSG"
+ 	if [ ! -e "$TEST" ]; then
+-		echo "# Warning: file $TEST is missing!"
+-		report_failure "$test_num $TEST_HDR_MSG"
++		ktap_print_msg "Warning: file $TEST is missing!"
++		ktap_test_fail "$test_num $TEST_HDR_MSG"
++		rc=$KSFT_FAIL
+ 	else
+ 		if [ -x /usr/bin/stdbuf ]; then
+ 			stdbuf="/usr/bin/stdbuf --output=L "
+@@ -122,33 +117,37 @@ run_one()
+ 		elif [ -x "./ksft_runner.sh" ]; then
+ 			cmd="$stdbuf ./ksft_runner.sh ./$BASENAME_TEST"
+ 		else
+-			echo "# Warning: file $TEST is not executable"
++			ktap_print_msg "Warning: file $TEST is not executable"
+ 
+ 			if [ $(head -n 1 "$TEST" | cut -c -2) = "#!" ]
+ 			then
+ 				interpreter=$(head -n 1 "$TEST" | cut -c 3-)
+ 				cmd="$stdbuf $interpreter ./$BASENAME_TEST"
+ 			else
+-				report_failure "$test_num $TEST_HDR_MSG"
+-				return
++				ktap_test_fail "$test_num $TEST_HDR_MSG"
++				return $KSFT_FAIL
+ 			fi
+ 		fi
+ 		cd `dirname $TEST` > /dev/null
+-		((((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
++		(((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
+ 			tap_prefix >&4) 3>&1) |
+-			(read xs; exit $xs)) 4>>"$logfile" &&
+-		echo "ok $test_num $TEST_HDR_MSG") ||
+-		(rc=$?;	\
+-		if [ $rc -eq $skip_rc ]; then	\
+-			echo "ok $test_num $TEST_HDR_MSG # SKIP"
+-		elif [ $rc -eq $timeout_rc ]; then \
+-			echo "#"
+-			report_failure "$test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
++			(read xs; exit $xs)) 4>>"$logfile"
++		rc=$?
++		if [ "$rc" -eq "$KSFT_PASS" ]; then
++			ktap_test_pass "$test_num $TEST_HDR_MSG"
++		elif [ "$rc" -eq "$KSFT_SKIP" ]; then
++			ktap_test_skip "$test_num $TEST_HDR_MSG"
++		elif [ "$rc" -eq "$KSFT_XFAIL" ]; then
++			ktap_test_xfail "$test_num $TEST_HDR_MSG"
++		elif [ "$rc" -eq "$timeout_rc" ]; then
++			ktap_test_fail "$test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
+ 		else
+-			report_failure "$test_num $TEST_HDR_MSG # exit=$rc"
+-		fi)
++			ktap_test_fail "$test_num $TEST_HDR_MSG # exit=$rc"
++		fi
+ 		cd - >/dev/null
+ 	fi
++
++	return $rc
+ }
+ 
+ in_netns()
+@@ -164,27 +163,34 @@ in_netns()
+ 
+ run_in_netns()
+ {
+-	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
+ 	local tmplog="/tmp/$(mktemp -u ${BASENAME_TEST}-XXXXXX)"
++	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
++	local rc
++
+ 	ip netns add $netns
+ 	if [ $? -ne 0 ]; then
+-		echo "# Warning: Create namespace failed for $BASENAME_TEST"
+-		echo "not ok $test_num selftests: $DIR: $BASENAME_TEST # Create NS failed"
++		ktap_print_msg "Warning: Create namespace failed for $BASENAME_TEST"
++		ktap_test_fail "$test_num selftests: $DIR: $BASENAME_TEST # Create NS failed"
+ 	fi
+ 	ip -n $netns link set lo up
++
+ 	in_netns $netns &> $tmplog
++	rc=$?
++
+ 	ip netns del $netns &> /dev/null
++	# Cat the log at once to avoid parallel netns logs.
+ 	cat $tmplog
+ 	rm -f $tmplog
++	return $rc
+ }
+ 
+ run_many()
+ {
+-	echo "TAP version 13"
+ 	DIR="${PWD#${BASE_DIR}/}"
+ 	test_num=0
+-	total=$(echo "$@" | wc -w)
+-	echo "1..$total"
++	local rc
++	pids=()
++
+ 	for TEST in "$@"; do
+ 		BASENAME_TEST=$(basename $TEST)
+ 		test_num=$(( test_num + 1 ))
+@@ -194,10 +200,20 @@ run_many()
+ 		fi
+ 		if [ -n "$RUN_IN_NETNS" ]; then
+ 			run_in_netns &
++			pids+=($!)
+ 		else
+ 			run_one "$DIR" "$TEST" "$test_num"
+ 		fi
+ 	done
+ 
+-	wait
++	# These variables are outputs of ktap_helpers.sh but since we've
++	# run the test in a subprocess we need to update them manually
++	for pid in "${pids[@]}"; do
++		wait "$pid"
++		rc=$?
++		[ "$rc" -eq "$KSFT_PASS" ] && KTAP_CNT_PASS=$((KTAP_CNT_PASS+1))
++		[ "$rc" -eq "$KSFT_FAIL" ] && KTAP_CNT_FAIL=$((KTAP_CNT_FAIL+1))
++		[ "$rc" -eq "$KSFT_SKIP" ] && KTAP_CNT_SKIP=$((KTAP_CNT_SKIP+1))
++		[ "$rc" -eq "$KSFT_XFAIL" ] && KTAP_CNT_XFAIL=$((KTAP_CNT_XFAIL+1))
++	done
+ }
+diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+index 84d45254675c..3ffd03f1334d 100755
+--- a/tools/testing/selftests/run_kselftest.sh
++++ b/tools/testing/selftests/run_kselftest.sh
+@@ -121,18 +121,23 @@ if [ -n "$SKIP" ]; then
+ 	done
+ fi
+ 
+-kselftest_failures_file="$(mktemp --tmpdir kselftest-failures-XXXXXX)"
+-export kselftest_failures_file
+-
++curdir=$(pwd)
++total=$(echo "$available" | wc -w)
+ collections=$(echo "$available" | cut -d: -f1 | sort | uniq)
++
++ktap_print_header
++ktap_set_plan "$total"
++
+ for collection in $collections ; do
+ 	[ -w /dev/kmsg ] && echo "kselftest: Running tests in $collection" >> /dev/kmsg
+ 	tests=$(echo "$available" | grep "^$collection:" | cut -d: -f2)
+-	($dryrun cd "$collection" && $dryrun run_many $tests)
++	$dryrun cd "$collection" && $dryrun run_many $tests
++	$dryrun cd "$curdir"
+ done
+ 
+-failures="$(cat "$kselftest_failures_file")"
+-rm "$kselftest_failures_file"
+-if "$ERROR_ON_FAIL" && [ "$failures" ]; then
+-	exit 1
++ktap_print_totals
++if "$ERROR_ON_FAIL" && [ "$KTAP_CNT_FAIL" -ne 0 ]; then
++	exit "$KSFT_FAIL"
++else
++	exit "$KSFT_PASS"
+ fi
+-- 
+2.50.1
 
-Thanks, I will update the commit description.
-
-Regards
-Hangbin
