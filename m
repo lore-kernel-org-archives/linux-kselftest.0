@@ -1,180 +1,116 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012031.outbound.protection.outlook.com [52.101.53.31])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F7E39E18E;
-	Tue, 24 Feb 2026 13:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.31
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771939728; cv=fail; b=Q3VZNK6FmuSPrFg3GoFoeFYOOzEVKllXrggislVaOOfA8yER2a2aPHBsaGMjXpj9i1EU4OPih606fnuXywDdWVvANgnekHvdMF7ZNczRllumPfCmvyCYMkvR+D7oAKzrWQGn9/g6Vo4lnAPRTLX0b/ZavWAdB7axnNtRrIgmHTY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771939728; c=relaxed/simple;
-	bh=3H41KOEVj2Ry/HQNxW/a/xNyFxoySs1FMslaAkXJRw4=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=ghi+h0zuAt4tpJen3gyNxvRCi04M9Ohj/Fokxo3Y2E+pkJWSe6wunSW+vgcw6MBuOJ1VCMvvh+RY/Td8bUseRjM+xHEjyCIHa2ik2IZefxTnphMgzE63RMmQbFfaCpubgtnIDpsPRFdXOkOJkAEDyVUYP6mw0Zy7mWebKzMc+9I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=iJUl8Z/m; arc=fail smtp.client-ip=52.101.53.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C6C37B3F7;
+	Tue, 24 Feb 2026 13:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771941388; cv=none; b=dgmKbIowEN17VmGQt5Z7I+DSQSgPVlnEvs/Q22V203BnDNNeH+42nOO/3lrLMky6T02SJLCmw1we9YWJgLhCAMIcl89tnRniSn9f35TovS6IIuuBTz+hlQ/FfBqFrGdEi5ShLVq880Z4ovpK/eTnYzi9TC35hcsl26regVtge7s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771941388; c=relaxed/simple;
+	bh=mNy92i4Lu2QBHhYsqWdF/9bIsNdbvuudixt5qGKT17s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mGnYWvv5n7rOT+S2pE3CAA1f7dGkNj10vo96MbIiX7iV6wRkk+dFcEG8SqqqF73HhIySPBJLMyv3Dkq/p/4P35OJO2WiDngH5ikb24mhWtG44y7hLE0Zj3Ve/kYS8vXo4HD0Qs99HfBUBGCax3xznnwUeGrgjeC1laNm4R81YxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=kPkdRrc0; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=Visk5TUT; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="iJUl8Z/m"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=b/WGIa6D6+h/Nzb3JswWUtnS65x3j3Oq6/fMB2gIyagsFY3cv2d+QRISrQpLpqC6Jq3aDL2Zef25n3LEJPcq8aW9ZVFQxTMYAoXb/TvGYOSlNW+FL3TB4KAGpHTmpXA9v1Ahl/3BGWunYlOH2s+5i0Jg47ulBfwwjmvbu2V4AFLhRF8wg7D4Nn3oZluXEjOLPlVnpMCU8bAq1MN5K83ekTfGly77ZTGFVKtlkiFK/vGbo1JdxRhjCBa7iFSzENU7OyekbuQtD3rfcW/tWlUouuK9FhOkRd499OVWkSw8RyBaNAvf3RPSFY5P8Yn31uareBmHdAFiC8EyoBA4bAzbWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DVPM+8YpxPHkLbsliO8wNrSKN0UQCXvrMxSvTrE/Ix4=;
- b=b4JHqzRVnkSq3Xeb4mKthBuQYEnxwlzTxyfwO+QvBHzsvNO7JKFsrDpGCyiClZCYRid/v94FlDdYI4AaDohY0SmjXF9sMwgwLuTVSZQT3uDecxrPLBFy8np86Sx+zjYNVj4yLMMsua43ZpG0nBa1xXOlgzDRhDGzxzykjWDxnHTOYGEa4bounin0sw+SaBIJ9X+ksUYD5xqgC4wPXKRQ0SZz+9gKeq6sGvSFPTBBjiHfWc3G+EB0pP8KtKDwPY39mTU/+qm3V8B4tJRqroJJXv/2Ulax2RxlMh7QA98f2m36U4dTZwossv9taQy822wsNDZ626WCUrKfvkK3Enf5ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DVPM+8YpxPHkLbsliO8wNrSKN0UQCXvrMxSvTrE/Ix4=;
- b=iJUl8Z/mX6fJTQrtm9AMp48CM5qlTGSLqH7vu/4tXjMpH0D9jQIbJgUpz7E5A1oaskI+yRVI48b46xjMEoedVOdb0nbGn7m3MQLLG1im4chpHd9F12ND65VrwXkdfSdTKBXRVp+01KIj2Tswjr9CBkAj9/obR9F2Mnhf1cBJ++HaGfAJxy9gIYj07Kbsm5kSmyvNuQxfFrU4yaUamV+NZDvpDjcYupGpk4Bi8jvphuP1r3WtOSjAf/ebxNBfJtm6uVnupX3uOX07ZIpS12XXhYLlHf9EWTOQwSQkx/nzTHVf1Q8lTHXoE0DpRjmPCxM1m2Bz3PMpGT1iTQ0vTi8BAw==
-Received: from BN0PR04CA0204.namprd04.prod.outlook.com (2603:10b6:408:e9::29)
- by MN0PR12MB5882.namprd12.prod.outlook.com (2603:10b6:208:37a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.22; Tue, 24 Feb
- 2026 13:28:43 +0000
-Received: from BN3PEPF0000B071.namprd04.prod.outlook.com
- (2603:10b6:408:e9:cafe::4a) by BN0PR04CA0204.outlook.office365.com
- (2603:10b6:408:e9::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.22 via Frontend Transport; Tue,
- 24 Feb 2026 13:28:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN3PEPF0000B071.mail.protection.outlook.com (10.167.243.116) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9632.12 via Frontend Transport; Tue, 24 Feb 2026 13:28:43 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Feb
- 2026 05:28:27 -0800
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Feb
- 2026 05:28:22 -0800
-References: <20260223202633.4126087-1-kuba@kernel.org>
- <20260223202633.4126087-2-kuba@kernel.org>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
-	<shuah@kernel.org>, <petrm@nvidia.com>, <gal@nvidia.com>,
-	<leitao@debian.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 1/3] selftests: net: py: avoid masking
- exceptions in bkg() failures
-Date: Tue, 24 Feb 2026 14:28:01 +0100
-In-Reply-To: <20260223202633.4126087-2-kuba@kernel.org>
-Message-ID: <877bs2gtjl.fsf@nvidia.com>
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="kPkdRrc0";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="Visk5TUT"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1771941383;
+	bh=mNy92i4Lu2QBHhYsqWdF/9bIsNdbvuudixt5qGKT17s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kPkdRrc0VMoJ9IX3vIrdFaoqQIn+Hd4rc6rsMCCY3uHmTyYH/7YQZbNDkXA+bkePF
+	 MOwYxPrVf+AnuOLMST3kqEBzijO3r9ceeg1dAli4qgkTGxOFXMwfwoSt1pnUP+9kfw
+	 rBpz4WLpT+z7TLyxWPqbm3R/BXeGvpSglEzyIV2eRdsP2giDVSTPK9yDz+09OiV5d0
+	 mbcvGKkcbHVrnHqYJSnyWbA/BnX0x6KTjDYV8TCN2+tBX0oNlb8RbJp1Qwj52e6UjB
+	 FS3a/4KeraPLMTLuPrAfUtt3+oumXFyYzORn8j8defMZoFcd6/mGpA5mnoNTcYqKAH
+	 N7zbDIfmkRqA0m+tTPGB2hdGoORHv8cUuOXHxfwMCuSxNPwLmBcMh+hHTPcGoayymS
+	 Og7mSPIodDzFwZWKMfENrj0yuxlSkU18QsPnngslsxg5S44xVg4q6sCEF20b6GqYdx
+	 oPRzPdEXRMHpFHpBZxSeCMB1e+cXXqy26rOk9cyEe28GR4isWrx2p3mhUBY+InC/hD
+	 lzvn0Pa74Tu5G0kKJmsqJ2mkUh0JWUy2EXoZjZRDmNEGFdpwgT0Kek28VdvdJvMws0
+	 1qAqKkE689Olt7N8ymVork/x82FgsVmKgQE8csKbFjBlksdeLoduPEoq/4XXyM1XB7
+	 EwQ0stijP9mpPtCN1jDl+ndk=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id EA09F1E78D0; Tue, 24 Feb 2026 21:56:23 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1771941381;
+	bh=mNy92i4Lu2QBHhYsqWdF/9bIsNdbvuudixt5qGKT17s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Visk5TUTJU+yQ5evVK1Y0bi0ipYaNUE5lbkgoUcbq0awUYJ7xdnhw5R0j3qLoLBXm
+	 c2MJxp5W75eATmJc7dzsv+8XwIBo5tl0Ym8jnrwsP2HgxYTvncjjI7ScAZ8N2P3asL
+	 vslJIhTAtiEJi2FHw+J1WgPVgYSV9QmBXYlgSjnT0gb1/YTzUhZTrcmBJlGRh0/r7P
+	 l4UNZBWwhL0F+P1je+bmDBVJE0ujwaCkLixuoOWSz2Cw/40P+VU6wvu/Aayf+8xcrm
+	 aiaHwZ+p85edNC7JCCBtnWMzqS1z7Q2XFmcKcE6UP02VH0XNe7LKHb7ADBQlbWDoAt
+	 hCsO41oSEiow/iTbuaNaD8CKHjSpsTUxm4yGuBZM//FOZ8PoY/OmI9gBSk6Nb+b7fk
+	 9MFrJlNFl6RJrgouHVMpoPS0b0q4UfikdVMJ+mr6ZOZM82r5urwe9u+i97p/V/Itzu
+	 RgQ8Qed+BPhDsm32ZZpNOsyYgh68MYjahtSPcQo/t51iScu+eFc87r/t99vYwQeFNO
+	 9aJl5xFXEKdfy1KeedbQkmk4+FlcLSmVjvbIYgwxgBtfIH4tVusseBDfV4fFzBGqA9
+	 yXFiDvNeivXih6Ji3E0j39x11ap0eyXeaep7dha6e3KIwNKsM8yRgcPYy+InnfIrVh
+	 vbNHDhE3OR3Z9RKGJbT7smMA=
+Received: from [IPV6:2001:8003:8824:9e00::bec] (unknown [IPv6:2001:8003:8824:9e00::bec])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id B25FC1E78C4;
+	Tue, 24 Feb 2026 21:56:21 +0800 (AWST)
+Message-ID: <98a8f99b-35c1-4de3-ae06-e5c1ac8c0adf@davidgow.net>
+Date: Tue, 24 Feb 2026 21:56:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B071:EE_|MN0PR12MB5882:EE_
-X-MS-Office365-Filtering-Correlation-Id: da4752c4-fa6e-4128-e36d-08de73a8a195
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|7416014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?j240lZkMSoJzwgpV6L4LBNonxFswn3KkfBj+fR600TESR84XUPvQm40KwPqn?=
- =?us-ascii?Q?R/JDxqYlgg7EDEdqjuZWPX8xkOE7/nAgYPUGYA03jXrw5sKqm0aoSZsCOauL?=
- =?us-ascii?Q?z9wEq5UjYeLo65ySoIM9gS4TAvXI3s8/u9dYKfr71B3kjorCcdxA9UfINTGI?=
- =?us-ascii?Q?Y0tH0YXInf/cjVEsPwgXGBdGo7NYg1Jp1Zfaq9QBBOPDCLKw9JRQM4+PypFC?=
- =?us-ascii?Q?YDRHM4BkeK1LM3Nl93O5ATF0yQwxytSNNd38tw9ng1UAWH1MRvBx2lVH8c3s?=
- =?us-ascii?Q?eaDmefxuPKzpgWQW5d7d8wbxUu5+pHUfKcRJ2dsG7GqUFNvTGCamDJSnkx4o?=
- =?us-ascii?Q?f2qaWU0lwrypwLurqu5gpaES37H7od1wFlacjMwDoF0/y9FqY48MX5oVRj+p?=
- =?us-ascii?Q?lCViI3bbFZgUb4Grgng8S/r7+fkbpD+E+WoQgwR1gojV2H1F+Ar89796i6Ks?=
- =?us-ascii?Q?jGrSvayqoYp9zcFGFqhUwCJ8eQf+3D39TQPIPYMC+p2vNmPi7fxhpvbpezR0?=
- =?us-ascii?Q?UHV6nAbhK8ipuibTVWUnccM8gmRiQrrnj6E35ZtcDNaPX52xLInJzIwQRzH2?=
- =?us-ascii?Q?R07yLodsc+gBt9QgAtU8sMKh6YvXpYt9yCu293ykswd0ML7vDV82xSRu9loL?=
- =?us-ascii?Q?Tp5oDex3Ie5GBXFYRkwNmBLKxJlBSrobdNMtsFn2GK4IksK2N3lBuMmKgek8?=
- =?us-ascii?Q?VP5nbi08/PVqI6wfzOFmoXjlShfFrnliwe6kD2P5LmCyrpzenJpzDmJQjw9T?=
- =?us-ascii?Q?XGpVYbdZsQ2dQoXynv+MF2vlRkBvgb2RWlH++N7Gb+2Ak6HkY/XIjtciF9IU?=
- =?us-ascii?Q?uaKJIimj798NNIBbCra3+WTHj0SCcvASHf7AEg1cUMoOdAWC+o91wuYkAVSS?=
- =?us-ascii?Q?UdV/U446bLEJtq6M+JasebeFJA3GIjDPWewUP2DsoE9mhvu/2gEFPgjAS5bF?=
- =?us-ascii?Q?MGpN1bSSxr/fegq9+8aDu2DWkF4Eh+jBmkehbt0jmhGl8eRub4JcqUDCCk8i?=
- =?us-ascii?Q?DU7CxvgMuzTTLsAV5JAP6WWshWCO134Qrsou1ileUbdwAjevNtWRnbOmVb83?=
- =?us-ascii?Q?UAFQyqT0Gfxf4b9lYiIXVINNsqCcagJCsGYzH56OBm27vGoSzvaqqCZsnwyK?=
- =?us-ascii?Q?HvAbJttavK+P5vXUQ8XYSCDKjys+OqeQCISBvDXh2jnGeSqkwnq73cnrS1kQ?=
- =?us-ascii?Q?gZo0rbhRoreRb1Ye2LRiKdeCE6s2sEe6gzbFeoEgcfBUQlw8OeyIrJWS9EGq?=
- =?us-ascii?Q?9rz9MVMYkMSrepG69CN0q0HEAlyjS0C6Tnx6slC3ob3Dpy8+BwBKDdDIyWDy?=
- =?us-ascii?Q?jevCcpY/P7i0n7+Uc0/hK/egg9P/K2kugDyUbJckE6h6/JcZk/mWgcz4nxng?=
- =?us-ascii?Q?Up4rmPNbuWCbzw9Ybw5hMZOhzMp9218yQ2i7CIpCIUAYbt7Py2kLU4CaCqBm?=
- =?us-ascii?Q?6ULZYtAznIGjdAjNj1kkAEyalHrzimL0Wg9u70Z2WM1z3xDUuawAzxRAuVpP?=
- =?us-ascii?Q?la8vNd0nm/3tSNnBAemvBpD9NycfIoSeZtiNxU04Tlw4u97xya1oioHQZEcm?=
- =?us-ascii?Q?InXyHaxaQlmVKSw+pwrpvoYa8BqrUfjs3ppAGV78jZjP/D9h9bMv0M8A1HN/?=
- =?us-ascii?Q?pE4jquKVfy5bhcySZGNnkQjQZJwSCjojaEOaCu3YPP+IvOKZTroqveJdJbPi?=
- =?us-ascii?Q?vNp22A=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(7416014)(82310400026);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	2oUSJqtJQVwgbcju6Xd6BADA9QXqVgmJWrBbdpkG/slnxn5ahqnkEJTvdlD4SBAUTqUYE+Szowmcizl5mkbyA6xP+vFiO+zj0feiHuuQ4iIQzRpHLY792huuw8UL9ecNVvyg7BxZvm7yrnnCurLpRufRJZiJpum62zL9l//Aj4hkuy5aTqzsvuK5NIkaGuub0ZH6iIdaPEnGzAcPbW+xmCsHIw1mSAgvm2MBgTqyLhidddDqS8NIOzYBkIt+ceZWfPUZ4ECz0TTd8ajZAE2RCbbN8Yg8oiU9HKUkZUshirDaEJdGZ4JtHMP/P1ATnOBJotFcBpOWpBmhIOc0DGI+LAvXgXO2MWKuS3ptv2cymugJLZ4oD2Wfd6mCibF21hsX5Pm6Q0gt/e5fHrqSBV6e4G9YGkhjLu8BDTlK4//+SluLsj/O4liyrJGDsOaO8zTj
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2026 13:28:43.3920
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: da4752c4-fa6e-4128-e36d-08de73a8a195
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B071.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5882
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] rust: kunit: fix warning when !CONFIG_PRINTK
+To: Alexandre Courbot <acourbot@nvidia.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260224-unused_var_err-v2-1-337f9359d98e@nvidia.com>
+Content-Language: fr
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20260224-unused_var_err-v2-1-337f9359d98e@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+Le 24/02/2026 à 6:37 PM, 'Alexandre Courbot' via KUnit Development a écrit :
+> If `CONFIG_PRINTK` is not set, then the following warnings are issued
+> during build:
+> 
+>    warning: unused variable: `args`
+>      --> ../rust/kernel/kunit.rs:16:12
+>      |
+>    16 | pub fn err(args: fmt::Arguments<'_>) {
+>      |            ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+>      |
+>      = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+> 
+>    warning: unused variable: `args`
+>      --> ../rust/kernel/kunit.rs:32:13
+>      |
+>    32 | pub fn info(args: fmt::Arguments<'_>) {
+>      |             ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+> 
+> Fix this by adding a no-op assignment using `args` when `CONFIG_PRINTK`
+> is not set.
+> 
+> Fixes: a66d733da801 ("rust: support running Rust documentation tests as KUnit ones")
+> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+> ---
+> Changes in v2:
+> - Use a no-op assignment instead of the wider `#[allow(unused_variables)]`.
+> - Link to v1: https://patch.msgid.link/20260224-unused_var_err-v1-1-c51d805eceb5@nvidia.com
+> ---
 
-Jakub Kicinski <kuba@kernel.org> writes:
+Reviewed-by: David Gow <david@davidgow.net>
 
-> bkg() failures are currently quite hard to debug and spot.
-> Often we have code along the lines of:
->
->   with bkg("./cmd_rx_something -p PORT"):
->        wait_port_listen(PORT)
->        cmd("./cmd_tx_something", host=remote)
->
-> When wait_port_listen() fails we don't get to see the exit status
-> of bkg(). Even tho very often it's a failure in the bkg() command
-> that's actually to blame. Try not to interfere with the bkg()
-> command error checking.
->
-> With:
->
->    with bkg("false", exit_wait=True):
->         time.sleep(0.01)  # let the 'false' cmd run
->         raise Exception("bla")
->
-> Before:
->
->   .. stack trace ..
->   # Exception| Exception: bla
->
-> After:
->
->   .. stack trace ..
->   # Exception| Exception: bla
->   # Exception|
->   # Exception| During handling of the above exception, another exception occurred:
->   .. stack trace ..
->   # Exception| lib.py.utils.CmdExitFailure: Command failed: false
->   # Exception| STDOUT: b''
->   # Exception| STDERR: b''
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+Cheers,
+-- David
