@@ -1,49 +1,78 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010019.outbound.protection.outlook.com [52.101.61.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113473806AA;
-	Tue, 24 Feb 2026 12:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771937888; cv=none; b=E56yAfxqNfX50As8earXXi1zcxZ6Y26q+r16VFKz350m0LIhzascWXqP8swcQnnvyeLUf7S7FuZ0gib5XbaY/wtAS0M+f4A6ufHvS2uEgv3gUMAO83gR6f3SHC0spIRMyJp4ryeinCvCACMO4rWtFvE/sQtD4qe+MXargvRQsZU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771937888; c=relaxed/simple;
-	bh=86FnrYKHdeocxKk93hobvbgEgEi4mUoQF15f2RvWs/c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SYZxjNbssXKNQO55Zp1GEF2pnix9wa7EkiPf8PxPIQsCNrFYRKDyhox3+ft0wJROQ648ogruTUdQC7MNcg/1mRNMtuJblciXETW0+E1LSrhppU8CR6MvLg0M8plvqrJfS+m4wOf2tdKWKmj3LdjeoVir69gfiNAWUbqoOsZFsQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rInvn+Dr; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F132222A9;
+	Tue, 24 Feb 2026 13:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771938307; cv=fail; b=FgkIbZFthCsSWwPBq7IO17OhmjbygqqkPZkTOobpwrZNe4aIEh1y2W5Bs+M4YOs7LxmRlM02jbZDJUFuxE0Jtfrz6su5EroL0+g1nVufxQunKHVdXb8K83s8jjil42vv43r25mapOR07SjSGuSsljbcut0D7k8gaXnbu11+msYA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771938307; c=relaxed/simple;
+	bh=BBnMjQILzZadnsvx4OOa7iLLfgFhZxVvgX9AU9kGjs4=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=kfS38CwOKIXD7yrALQgV7ob4RUDTzXMhpNawMNxiKERYeZlgmXoWmRlmO31mk/MfdViwMPB8VbR25Z5oshYT33rCwWUdbT+t9yJmLbcgqUIp3aW7K+7SWfw2zNLxUjeFrcc1WOQImzoYRwg2B9a73t2roQNrHm2LvTrxPuDcCrI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=gGjj2AUw; arc=fail smtp.client-ip=52.101.61.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rInvn+Dr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4ED3C116D0;
-	Tue, 24 Feb 2026 12:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771937887;
-	bh=86FnrYKHdeocxKk93hobvbgEgEi4mUoQF15f2RvWs/c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=rInvn+DrFJeU8uqSclSegei0JMwXxt7isJiFpaFjpGG6APBzxZJm0bUavYe7FTNHf
-	 jnNYWCvoryAoaOThUSJAN7M24+9sQkIZoWo3JaXcwkt9Vas83e3iB3jJf8k+jxnR1R
-	 Z1dQt9oGkZG+p5nsIQoQ344ZqMzItjsIThOPlZCnDc/geRYdQIq1CWta8PiNCyEZeI
-	 z9pepfA+MKFQfImnRBcsOjX3jATS3+QdMJQBHhkS+07rlbdG7LYW9l26LLA2dak2J3
-	 2SwKfkDQaESAVLX7cxWcoyz4x0hKekGxkypcdFtucGdAiqMjJBDvdhpcTyAuFWZ1lp
-	 Xv+FDz2drktkg==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Alice Ryhl <aliceryhl@google.com>, Alexandre Courbot <acourbot@nvidia.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, Miguel Ojeda
- <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo
- <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno
- Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, Danilo
- Krummrich <dakr@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rust: kunit: fix warning when !CONFIG_PRINTK
-In-Reply-To: <aZ1YGceMIEwdke96@google.com>
-References: <20260224-unused_var_err-v1-1-c51d805eceb5@nvidia.com>
- <6zxySe5lMPDEmEzFi__FJK_SD3KY1H4GlXGotOfYHSILrz3Q05rKNDLrU6LEfQ1Z0hom7wDIOoCx0dV6qPaTxA==@protonmail.internalid>
- <aZ1YGceMIEwdke96@google.com>
-Date: Tue, 24 Feb 2026 13:57:55 +0100
-Message-ID: <87y0ki1ep8.fsf@t14s.mail-host-address-is-not-set>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="gGjj2AUw"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LT8cxSeuXaGe3lJ+hsoDxrdNLtWG+g36sHD+BvP49YHLW05tczT4RlIIHrpC9XlU5nxqZpakWy1ll7jZK7jIKTPB+jS9glTfOaJ/nNYh3V4C/xjnQaXI6cKuGDRc9JHBdYuSZNeCMX4/3omuSZSRsCBzuExqGBUvtNAEWtbKNgIbVm628DecZu5DYt7K5cYfhaaBjl7IpD5IPRfCfwh5XAeMI1LeSM+9pbBPvORMZIzN/tTfng3x0OgKL58ECpvsEBedauBX/rTl8OhBT8/QFMtmXx6Gs1JIvAhwTy/jp5135f4Y935ilf6S2HTQkCI3QDuIeuCZ8dBF6TysmRxE2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EvoHLpu4dkpaeGrg5F6V993JVko/51rnWkAGyC3+HVs=;
+ b=w/jrVmwxG5Oob/3vnMfm/yNSeiIEYojGfDif9qz+gq7ibFr4eDJS34TR2/mgnCNLttlvuQFNb3ox+rRdU3xEaW8OI2QsM7GeAWPfyi57QWPnz54K5WhmftIc9khbmdGP/0KV6/lpO1dn7qRb+iXY/+QN1XLzzV0U7ujIiD7vqea6Y2ugl0r1G0ngV+7dZpND/11gV2ov3o2P4UFvvNDzg3JaLwuvx2TvgIQ2MPD7QPXu2AfC3sF/2973ilYxNPBO0rEZNS2Q+7061PLm6rV9qo5ku6jTQnJ9EGh4clsyO21teaxaG+AUWZURUTpVfHEQBR5h5rp+y/U1sAhse9/34g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EvoHLpu4dkpaeGrg5F6V993JVko/51rnWkAGyC3+HVs=;
+ b=gGjj2AUwbFLbCjIiaA08CQkUK04eOujTCRVXEHxBvXzr+kTOuaoLSoeEHuTemG34NCxUVJ4QPRVQhHbIJUkH+J6TZu8upnnzZzWGvpFoJaXNENh00M/10CI8v4mqQSH3CC4y41J6qEgSDnuPLkQ5g1d3G2qFN3CdKqx+sRxOEF+zDL8iLaDXdbm67z95c/qW6j/W7AZ/fijLWJsUISjlBuXxDfVR5GWyPIeGDiwoe7Ncptc8i+rFrulWsaSA8eQwWbaDypQANY7UwNg/s9KJw1wXw1UY+w0ckTHu7BMCIyOEoJJM+DKfPZXx8hr3+KcGoD+rk5GLeuoAJwIKlV1BLw==
+Received: from PH5P222CA0006.NAMP222.PROD.OUTLOOK.COM (2603:10b6:510:34b::6)
+ by DS7PR12MB8230.namprd12.prod.outlook.com (2603:10b6:8:ed::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9632.22; Tue, 24 Feb 2026 13:05:01 +0000
+Received: from SA2PEPF000015CD.namprd03.prod.outlook.com
+ (2603:10b6:510:34b:cafe::b8) by PH5P222CA0006.outlook.office365.com
+ (2603:10b6:510:34b::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.22 via Frontend Transport; Tue,
+ 24 Feb 2026 13:05:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SA2PEPF000015CD.mail.protection.outlook.com (10.167.241.203) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9632.12 via Frontend Transport; Tue, 24 Feb 2026 13:05:01 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Feb
+ 2026 05:04:46 -0800
+Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Feb
+ 2026 05:04:41 -0800
+References: <20260223202633.4126087-1-kuba@kernel.org>
+ <20260223202633.4126087-3-kuba@kernel.org>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
+	<shuah@kernel.org>, <petrm@nvidia.com>, <gal@nvidia.com>,
+	<leitao@debian.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next 2/3] selftests: net: py: use repr(cmd) for
+ failure exceptions
+Date: Tue, 24 Feb 2026 14:03:13 +0100
+In-Reply-To: <20260223202633.4126087-3-kuba@kernel.org>
+Message-ID: <87fr6qgumy.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,64 +80,81 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015CD:EE_|DS7PR12MB8230:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3644e569-bfa3-4d97-1ec0-08de73a551df
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?YODC2gzisEuDOv4IgzHZlm+HC6WbfAacWCawYzDeNLv2BMtXchLIAvaCQevs?=
+ =?us-ascii?Q?YIIum7yex5K26zryyEdXmjkQx3HdCjVFy/uqr8hw7CrwgacpLwjUEY14zhqF?=
+ =?us-ascii?Q?9QatWkR4KygCb3LM6qamzGfppQLc9iv4/fOH48F8OuzGfHjdRuPNTH/5B6rT?=
+ =?us-ascii?Q?NBxTtrGjqNOWWDZK6NoolIwWYvbmaGbLW99ivxfPuL4Jx5VGLWvpYBy3f2Oz?=
+ =?us-ascii?Q?qWJC7zY3TfQMge+MIl7uthQBR7BZTIEk24NYLDPYeNTQo5q1L+3UCtI6jGxO?=
+ =?us-ascii?Q?fKLlEIsyGAK26ufBaOgrAmx08nu2OZKbaKItsYKjn1Jkt+6xqwblxdgHpnhQ?=
+ =?us-ascii?Q?phaeXL2LqxgoANPAlJ6Zo2cfrlgd8qHbp6MLsGCuGi40DFEsPx64SAHiptfK?=
+ =?us-ascii?Q?JcIvILZ7mLKCcBQ5HCd0/MPY7vCC6pWSAbZ2I5OZT3Xfgu1Qb00ouMuubYuW?=
+ =?us-ascii?Q?vQFw2Oeawxkddqanin5BtJZ/SpNiB+gHR1Iwsg+nhFitVHUoMj3xHtW6YxLi?=
+ =?us-ascii?Q?r/xVbBdVpR/NInD2lQkUZkGbykElAj6LIbfWwiDO+U9ViJs8wwntPeH0j4GF?=
+ =?us-ascii?Q?jFY4Lmepy1tjOFVxOqpDsiRRKAUA07Vp1q36JNcJjN74zUG+ntQV0emgIsCc?=
+ =?us-ascii?Q?ZBtm3iuhWyeBb11eGBJY4StyB0dRCTKjmWN+x/Id+Fwk6zdCpNimL/y97OCm?=
+ =?us-ascii?Q?eryvO8O6HtntPxoAMeNUjbOGT7BFY1yLBvvOuNOPM8SHxicoNh92S0+OU5+T?=
+ =?us-ascii?Q?X7gfwZsE8IiO8/0h2YGD7KJLNZ4Eufmu0YqnLJ9Prg+hhueInbQiwzyWxB1D?=
+ =?us-ascii?Q?cTSOnxL1hbjhTwNVNY055ZEY6/bNvN9g1PAXJ3ueWmHXuoYNDOco8wKSwy74?=
+ =?us-ascii?Q?vNmDNTVPWZVACJsTN19ra6KaSTyJSQR4pYFK6ImKRRLWzOUOgn1+KjRUythB?=
+ =?us-ascii?Q?e9FSp9eW1E8SOfULYlIP+r34Zsy15FZMuXZYi/lG32Nbc8LdLBr14GJTDfw6?=
+ =?us-ascii?Q?fnC+RdsRF3cINAGssh756II3PLkY7h926TZItCycJkbWH3NCbqTh+sxxJdKX?=
+ =?us-ascii?Q?NxDJudCpbejwfXrk/ND4vpLtocSrpuTd3rfoklYwsXg3YVfw2eV1Nu401ra6?=
+ =?us-ascii?Q?tfE9RKKtrY/7ZZXfg6c8TCx+7A375V1/6aNnnKbKV+PZ/FYGVqW93bQg/bB6?=
+ =?us-ascii?Q?leXJJCOdcoA+bpsr2UePYsnqeFd1PSbbggnjVBWLc9pmVsqYRITkwd4PcG13?=
+ =?us-ascii?Q?7nYpezF2k6f7NN62pVgI81hn0HqaLIq1+FtLM6zyxdaFduQ6VxVEy3VNXbix?=
+ =?us-ascii?Q?yFEotgtv90rGkR/omQQDcUOWn/PggIM/3ufioc6WCTcuu5etsocNc+ARcpfs?=
+ =?us-ascii?Q?akF3/YrpeJ2gL0ycSAd6bQU6XyNXX7Bkrui6YmZi0JU9DUowp+mTAyYkVnkn?=
+ =?us-ascii?Q?6ihS/lF/xd+plGlFsww0CFt4pSVF+R/5FNwiRG+leTk+usN7rDIM5OI5RTlU?=
+ =?us-ascii?Q?ynje50wB9aMlpyrRLk7PkhP9EbIZYleTjKx5/F5B633H2RU+IVP76OoN8cXf?=
+ =?us-ascii?Q?1RSofW5jDWikv96iJ5GsljTERSYTrqJdjppwjpc4bptRrxx53AmKkHtxrboA?=
+ =?us-ascii?Q?M/7k+Thqk9n/54AaxLpz9MexgZ2tA+q42QVz9bjKadg/kmVRehMZ8dq4NRma?=
+ =?us-ascii?Q?mQPYgw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	qxNaEjXNKAOUcEpbvMwDfkepqaLIqSyrXQo9xunO0FZ9vzMiWCQ6I85gktKpxtV86FJgvqJdqFy8sG/YLDKfp6ENP3kY6R0oijUMCWxP1ZNHniCkSlNDu1hke1uByl6JAsPV1xhCgdHlKDLOzkXSue/+pEztcke8Eok/oZsc4tU+UxY/8pLxbp70Amc5GLsR014BWB1iDoT9xHJp1Mq0jZJpvXyqGTl7NvNCpqDNqLnKIWeJw3BipUgf9UKK9I6pJZdPwB/JoHLCVsiyPz7r6HtW0jHEG6dqyYxV4sw2lRGC5nXoZHb4PuU4Q+Kp/Uta88MqM8ar//p64xIJDgL8T7ymF0GCUuZbN9u1LUEpnTVoknuqOsnOqzuP/uJ/QTYpV8B5EwpMAeKKeZ2oQRpGJFUifUHjX/NbYia7NW0whWjzQlPkIV/DbhKyfvk0F4pT
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2026 13:05:01.2070
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3644e569-bfa3-4d97-1ec0-08de73a551df
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF000015CD.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8230
 
-"Alice Ryhl" <aliceryhl@google.com> writes:
 
-> On Tue, Feb 24, 2026 at 04:45:30PM +0900, Alexandre Courbot wrote:
->> If `CONFIG_PRINTK` is not set, then the following warnings are issued
->> during build:
->>
->>   warning: unused variable: `args`
->>     --> ../rust/kernel/kunit.rs:16:12
->>     |
->>   16 | pub fn err(args: fmt::Arguments<'_>) {
->>     |            ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
->>     |
->>     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
->>
->>   warning: unused variable: `args`
->>     --> ../rust/kernel/kunit.rs:32:13
->>     |
->>   32 | pub fn info(args: fmt::Arguments<'_>) {
->>     |             ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
->>
->> Fix this by allowing unused variables on these methods for this
->> (arguably rare) case.
->>
->> Fixes: a66d733da801 ("rust: support running Rust documentation tests as KUnit ones")
->> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+Jakub Kicinski <kuba@kernel.org> writes:
+
+> Reuse repr(cmd) instead of manually formatting a similar string.
 >
-> I think this would be a better fix:
+> Before:
+>   # Exception| lib.py.utils.CmdExitFailure: Command failed: false
+>   # Exception| STDOUT: b''
+>   # Exception| STDERR: b''
 >
-> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> index f93f24a60bdd..dbf3c62ffa09 100644
-> --- a/rust/kernel/kunit.rs
-> +++ b/rust/kernel/kunit.rs
-> @@ -23,6 +23,9 @@ pub fn err(args: fmt::Arguments<'_>) {
->              core::ptr::from_ref(&args).cast::<c_void>(),
->          );
->      }
-> +
-> +    #[cfg(not(CONFIG_PRINTK))]
-> +    let _ = args;
->  }
->
->  /// Prints a KUnit info-level message.
-> @@ -39,6 +42,9 @@ pub fn info(args: fmt::Arguments<'_>) {
->              core::ptr::from_ref(&args).cast::<c_void>(),
->          );
->      }
-> +
-> +    #[cfg(not(CONFIG_PRINTK))]
-> +    let _ = args;
->  }
->
->  /// Asserts that a boolean expression is `true` at runtime.
+> After:
+>   # Exception| lib.py.utils.CmdExitFailure: Command failed
+>   # Exception| CMD: false
+>   # Exception|   EXIT: 1
 
-Why not a conditional attribute on the argument?
+(This seemingly omits STDOUT and STDERR, but cmd.__repr__ includes these
+if they are truthy.)
 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Best regards,
-Andreas Hindborg
-
-
+Reviewed-by: Petr Machata <petrm@nvidia.com>
