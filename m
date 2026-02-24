@@ -1,118 +1,119 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30CB2BEC43
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 08:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771920336; cv=pass; b=Y6qnXZacmxMgjONIcfNwSphP4On6fUiEbNsV5x7nZYmAfvx3HqFKRvaZSEaFymsUWU0boyeeAU43VWTG4BC/tyzlZrZ0sE3x9yyYPJBMrwRP5tsB8v4ahysgZoFWSy3ltpTr4K67D7cgDZbHSovqx/q+Il1yIHXF+5UAmcac5GY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771920336; c=relaxed/simple;
-	bh=RiLvPWVE0XGnkXkU6LVU6jQZopUhaTIiyl6ToVdk6m0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fqMpVipG/Y5AGJlc6vh3It4iNYMPSZKQ/1BVjX3vjaYeq68HIYxWOZInkZpX2mM0QeGYakcUN+alOBarJ2E8as6RV38u2kgQ0TBce8x62q+9Yxdnf+Ml+PE16nkmN3VyCv5wE6PX1woM2VGPTxlDA6H076yFMbRpuBWhycJl3ZA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HUdFB2nP; arc=pass smtp.client-ip=74.125.224.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HUdFB2nP"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-64c9f7576d4so265621d50.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 00:05:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771920334; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bicqBGYkpJuqnQVd5+SlJ4jsKLuOtLIldFcPXD8rrGzY18lt/MXWnmM9biITZfhwIV
-         lHajgXLLhFRIp8m6pN0OpYDE2AJo1sW0z/LbJmR0ZxNr5X1L9oGEbF0KGqeBUG3hvH4r
-         kJW1FPNas+6cFUgZL4vepDXqGwZnrVu834LJwLzDB3rPNuH7MRORTQN7Wcbvs8fMawIv
-         2BeU3DmaeCkigdjgGPMtPfTDqmiWjhnMBX1JE8N5QB7hpFHRpVnzL5yyfFz6VMJlIWEW
-         1eJa24CxTOiVODfs4tcFpTSvWkzdtSIuIYYQDunrKbHwXcV9Nr3nZthEX6wNXM2dhFQX
-         B6OQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=RiLvPWVE0XGnkXkU6LVU6jQZopUhaTIiyl6ToVdk6m0=;
-        fh=cPwzveLuJAafnPTt6yLSECV56dZQ0mY9eE0/kK8+e0A=;
-        b=NNw6tkjwKC0GIIXvl6PdQYSHlGJgeZ5irDv+87N7MQ3ClUD7Kn5x9YH3ML/ZhNarIT
-         98Ue2qypYL7wUMxialO8aediodzCHXi4xyWaqNG/9FkqXuJDFAS0jXXFMjDClPqqHivY
-         l25OVfOEJNFAVPAwpZ58B4PgZwBA1mxGXKP0S6D/pZlw5wzP5BgEb8SKL5Rg3NkwPxHh
-         4MVf0xnAh8BA/VYK6jxQ8UVc0GgIl+8spBlTo1u88I2vH/yp7kiJRXfj1rZP3sX/gIDk
-         2tJzOg5CTnoWL9U+BCVhEpSuGsC1Z57DoWlHYWCT9LVBPmMt2DLvNhEo+sGLmJBLW4A3
-         fbmw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771920334; x=1772525134; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RiLvPWVE0XGnkXkU6LVU6jQZopUhaTIiyl6ToVdk6m0=;
-        b=HUdFB2nPPiCS4Q4c2ztYcqHxSvL3NzRiBC0i41G1m1e80eWO58uobcDzNRF23RYpMo
-         DypDxIIIdTHJEUahGhoDC99e0Tj619n2Oq4Tr7zwNCk4LTdKUoRVmm9dBPL4Ni6suAen
-         OEX/LUFTCRdvEniu0+zsji3yvyrgryYEA3Z1wF9mFDBLhBtUJwDTwP3UzuAa4AP6Dheq
-         8YiQbS7C7/bQKBJglxbjEKnCMp1Mt4zKlwSalFZHXW1Amlaxh0ZSCx8oPi9ANO29E3dc
-         1vNDIGMDXZ4bEDLKDPviAs6P2Acpd6SK70HKV2+qyVyLgTX0IOQCIxjBBq51ttGssMqP
-         gDBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771920334; x=1772525134;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RiLvPWVE0XGnkXkU6LVU6jQZopUhaTIiyl6ToVdk6m0=;
-        b=w3pIRarlnR9dNqsZJ9mbpmqCxO0Dzku56qfZkZl6QNdg+40B2hNkRp9riOfKg0jFNY
-         UVqfcXZkzNnpvy0Mk+qAiMqY3G4B07WAv6BCO3vy+tMWoX7ubFMGGy5mKc3tcPocWR37
-         MZpsSj5VJzSiS5/b6CA0NGaoRYTzoYA4KgTjZb7dRxUZht3l7CJRvmWdHdZpOf6Km21B
-         /Zih6Y/p8AsuyotIHs5UTX+ZWxIUu8jwnBO49qxfH1qKOsAJHCOCFPa+l4ekefHpvrFU
-         tNKBX0qdMKR02Qrw69DP/1UuukvEW4f/09ApyWXV4cfv5XMEpavfJ56MOPkfEnhHTKHR
-         YCWw==
-X-Forwarded-Encrypted: i=1; AJvYcCWmWYQpAtKaLwAVKcHUAM3D03sN4aHmZ7COv37wQxCDqcH4mpbzv6rguIOlmXnhN6fiLy7pykAHtEOonvyHsgM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrlmCsS85ah+WX49d9R7UeMq1zV27wjxlEQD/Wgkqbyf/WYS5R
-	SPYr0vP10CQvK3FHZrl+E+OgPO3FnUSsqSn9ztW3+r0Ea1NX5ucff1/dyKDQNa6rVzbnjnHhnGF
-	VTMBMfZiDuydTzOaU4qnHQfR+uQlLyGI=
-X-Gm-Gg: ATEYQzwcfnD0Uh3R1RQKyNEk/OrpTmOtUMd4oFyaLVtRqPvW22v2K84j7+uLZuTJFQJ
-	KRtPtVTqZ2eW12BVXk2NZSnDkLpfnglwXN4H8iDvUiatDRce0vw7FYm79YPTHEHzMAM13R2Tqrv
-	T7Vas/x3tUYAx55CJHwlPnvXMQvYJ2kbrOv9WCQf3mPJErPaJ/bNoTRHYwTn6ecwhy4mk/hquR1
-	K5GbyC6irISXXH5nDyfYjXSI+3pRUeaq61eJNWhMggkucM3LU0w0xcNwuoKdVFTiSnVVLs7vEDB
-	c6OhMIFIZ46qsX0=
-X-Received: by 2002:a05:690e:c49:b0:64a:e61f:a6f4 with SMTP id
- 956f58d0204a3-64c78acccd2mr9210920d50.19.1771920333731; Tue, 24 Feb 2026
- 00:05:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E37633EB13;
+	Tue, 24 Feb 2026 08:09:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771920578; cv=none; b=QDKF8Eo1ycySdSWIOculUi6V3DTZr9Iex18RFIN16K4x5bp+sWMrdm/ulC7H+pU+C3IsP4K/VgcxZoAhWN7X8Yb2IBx0nZxlogw7Ciq3HGegAQFrAq1egURxGxjzO3RYWfFyPwfDzLZCpNMQ/e5E+nGJLLgP4oXUzuQ3WX53gnU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771920578; c=relaxed/simple;
+	bh=/rff5WuuETbz3+BdREVdFqh43GqqchT9R+JQhxQA66Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h+2kCq9Q9LaN2NcI4u8ZNCQGDX8ef73afQsWB0sNHR8oX1nE+o7So2/fFEp9PN5L/R94krqYmoUQ91Y6yT6bZHKvLcmFtiRpuMVvNjciqAZ+WdyndVJThV1lFDG73ds9bskXit7KARufBoltnEbx6mqDhYQ/0dY3yl16OR/s5/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fKqdl5vFKzKHLyV;
+	Tue, 24 Feb 2026 15:50:35 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id AE58E40573;
+	Tue, 24 Feb 2026 15:51:29 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgC3Y_R_WJ1pWTFIIg--.8099S2;
+	Tue, 24 Feb 2026 15:51:29 +0800 (CST)
+Message-ID: <0d339d59-5208-4a41-8931-12aff1874edb@huaweicloud.com>
+Date: Tue, 24 Feb 2026 15:51:27 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260222111847.692325-1-sun.jian.kdev@gmail.com>
- <20260223172214.5d8ddaa1@kernel.org> <CABFUUZEuMCYYfi-SapTLT1BhYOWBk1e-OYh+h9fOZcfoSP06fg@mail.gmail.com>
- <20260223185321.0f0581e6@kernel.org> <CABFUUZHb2R_SiiE_K-ixhjPVkvG4WWTjcOygAM-YBGtZ6Cnq_Q@mail.gmail.com>
-In-Reply-To: <CABFUUZHb2R_SiiE_K-ixhjPVkvG4WWTjcOygAM-YBGtZ6Cnq_Q@mail.gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Tue, 24 Feb 2026 16:05:22 +0800
-X-Gm-Features: AaiRm518d9zdfiuzmBcE_5_BGm-KYKoZRLq-k7VGJtmRRuohi9TP0r8z4vJYsc0
-Message-ID: <CABFUUZGj5=DNsiv__8Tp8WFS8sZ7fTva_bxZ14RrTndsjuQFQg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests/harness: fix XFAIL_ADD matching when test
- metadata is not initialized
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	pabeni@redhat.com, edumazet@google.com, horms@kernel.org, kees@kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/8] cgroup/cpuset: Fix partition related locking
+ issues
+To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny <mkoutny@suse.com>,
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260221185418.29319-1-longman@redhat.com>
+ <9cc7401e7137e27cd2f02625aab23330@kernel.org>
+ <3a3548ae-c5e1-4ef0-86dd-f66bcd2c6d78@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <3a3548ae-c5e1-4ef0-86dd-f66bcd2c6d78@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgC3Y_R_WJ1pWTFIIg--.8099S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw4UuFW5ArWfKrW7Ar1fZwb_yoW8XF4DpF
+	WqgFy5tw4YkrsYk3Wqy342gr18t3ykCF1Dtr1qg3s5JFW3tF1rur4j9rn8Cr1kWFs3CryU
+	Zrya9ay3WFnFywUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-On Tue, 24 Feb 2026 10:43:15 +0800 Jakub Kicinski wrote:
-> I thought constructor priorities were specifically created to avoid the
-> problem you are seeing. What it is the point of constructor priorities
-> if not to order constructors??
 
-Hi Jakub,
 
-You're right. Looking closer at the harness ctor ordering, the NULL comes
-from TEST_F() setting _##fixture##_##test##_object inside its constructor
-(after the mmap() allocation), while XFAIL_ADD() reads that pointer in its
-constructor. If XFAIL_ADD runs first, xfail->test can be NULL.
+On 2026/2/24 5:11, Waiman Long wrote:
+> 
+> On 2/23/26 3:57 PM, Tejun Heo wrote:
+>> Hello,
+>>
+>>> Waiman Long (8):
+>>>    cgroup/cpuset: Fix incorrect change to effective_xcpus in
+>>> partition_xcpus_del()
+>>>    cgroup/cpuset: Fix incorrect use of cpuset_update_tasks_cpumask() in
+>>> update_cpumasks_hier()
+>>>    cgroup/cpuset: Clarify exclusion rules for cpuset internal variables
+>>>    cgroup/cpuset: Set isolated_cpus_updating only if isolated_cpus is changed
+>>>    kselftest/cgroup: Simplify test_cpuset_prs.sh by removing "S+" command
+>>>    cgroup/cpuset: Move housekeeping_update()/rebuild_sched_domains() together
+>>>    cgroup/cpuset: Defer housekeeping_update() calls from CPU hotplug to
+>>> workqueue
+>>>    cgroup/cpuset: Call housekeeping_update() without holding cpus_read_lock
+>> Applied 1-8 to cgroup/for-7.0-fixes with the following minor fixups:
+>>
+>> - 5/8: Removed a duplicate test entry that resulted from the "S+"
+>>    removal (two previously-different lines becoming identical).
+>>
+>> - 8/8: Fixed typos in commit message ("essentally" -> "essentially",
+>>    "beforce" -> "before") and code comment ("top_cpuset_mutex" ->
+>>    "cpuset_top_mutex").
+>>
+>> This has gone through more than enough iterations. We can resolve further
+>> issues if there's any incrementally.
+> 
+> Thanks for fixing the errors.
+> 
+> Cheers,
+> Longman
+> 
 
-Using constructor priorities should fix this cleanly by ordering the TEST_F
-registration ctor before XFAIL_ADD, without adding new fields or runtime
-lookups.
+This series looks good to me, it's much clearer now.
 
-I'll respin a v2 along those lines and drop the fallback approach.
+Thanks.
 
-Thanks,
-sun jian
+-- 
+Best regards,
+Ridong
+
