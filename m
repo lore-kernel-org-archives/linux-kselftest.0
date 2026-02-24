@@ -1,176 +1,162 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012061.outbound.protection.outlook.com [40.107.200.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643EB39C638
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 13:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9360D39C634;
+	Tue, 24 Feb 2026 13:15:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.61
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771938932; cv=pass; b=H0Ei+Pu5cauyB9N28715wztigKG0JtVhONYu2/SBkpFb4E8kuadhTej3J2Q7mhrku3+JQkRdmfmSxdBIAe7e8zPkocBkA9mZWvhGG/f3P8g9dnJ8TjCUWqia5PNRIz1tUPGvXEuiF4ELJ5JKW2T6qcQTHg4zqudHZ97zK3acP24=
+	t=1771938958; cv=fail; b=EDIGJRgS90QU4MF0z/wTsEmNp7ikhdasLpgKKDZchDjiqj2wEH+FDgM0EjYHh7Qh4q2E782fxPCyJ1jp3WoMW+BFub/lJwwXRumLzR4K/vre6PBWZa+q01q0VYQA4PtVuWVTtbR854KE8KOXDPzBLqUIZVOHHlYEhnKVN0pOOGU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771938932; c=relaxed/simple;
-	bh=sPMsIShW6+JzdEs6DF3qKrshI97G8GP0myyovWnwiSs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sGWOMXkUdgc9XRn7gnW9s6yVGxsljceoXlScgr2EJGmfnR7J9j56GS3mVsCd9vu6v/YFCuoNDVwQZtSO+SgLJWlDaBPV4MiVFJH/g0Gotoj2wZmi2mxAts2JMfdX8msAmTGhihEHkpy60DCDS50s3HfksaBEEodjspA0WgaWVKw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E2Yo4hFB; arc=pass smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1771938958; c=relaxed/simple;
+	bh=v/beRU/0BYjF4uw/S9mnVk1imN/F3nbsRPc1w5hjUKA=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=Pucte3SI3dh/kJGY44/glnfyg5hlR6KulGzz9kl0y8AkiVKZlyqR4+Labisb9Vu7hfL6fyvQJIqYjuifpWPoI2lZZLa83ZTY/D3Px/hOMO84QqZk6lDoki46CPJ2ybfJFoR5FHis/hPYD4SPeiW3RHLWxgixfbdfCXNS0LD/jxE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=m9oXuu9W; arc=fail smtp.client-ip=40.107.200.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E2Yo4hFB"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4398913af88so421130f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 05:15:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771938930; cv=none;
-        d=google.com; s=arc-20240605;
-        b=h8o7bCw5Zod0+wnxichhSKSBmdCTxnfNnBZ3ya2FltpCgAxUArVdiOXaGZsr9BY6Tu
-         1kfy+p+MO3n0388F1qINmS5s60uafUsOX6KTGfmxTL7KeQuZdv1hN0+mlbpzAeuKKY1s
-         C7qD1MRVRMOQsL4WyV9Xa9b9kHaTIWdnSPiaxKMd/hh4VyGOEzEM2muvLOllvhQyyZpk
-         e7rRQQJHhY9vIXxY4eUH4wr73ZnasoHRY7areOvm3U05s2ZAouITbV/uq7No3OGulDzv
-         zuRsjt1DnzKizUnuYGDzpXlU/lz9m/MME8t8F29D3nqn8zHGA56ef6mH9s3A9TNwqv2T
-         LLhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gWMlp1ruVrvPjA0cNiKtCr+diAV+Slyjy18uMqXnndQ=;
-        fh=UZbqQu/rGLnWIH6Hi/+Lg7FDcbrGGC0+jcnV+65ycpY=;
-        b=LNZ42vxvzo1mrfxvOS0Q0rCcCoIhZfQ1ruYnSKy5UJaqEQIuuCTcPRL9AqSEXMcTfb
-         ydhcAKn6IZnovHJYrVzf8Y/LyRCa3hBIqeXq08JZuTm6Hk/85gEEQy4NpaWck7iLSIHv
-         ssscr+WRac9fOlOfepwg30xve37nSRb18RJyLqDVlHspbzsoG1w/xH3hY2Ga9ZSoXzN8
-         QA6wNQ3yvPYrqk8Ky5oA3ev+ERMaHn7H8lVOZIkyZmr3i5kuI1hC6wWsMhpi75y1SsLr
-         h7+KfdIvCAZfdln/rrUb0XTBg59oH188bIC0XG2tmLH1uiWfZXkn7h/bZjiLwIY1dOEf
-         PIdg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771938930; x=1772543730; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gWMlp1ruVrvPjA0cNiKtCr+diAV+Slyjy18uMqXnndQ=;
-        b=E2Yo4hFBetSWe5UGiLMiA8/3CaSH3nfxGdUXh46YhTg12+mbeQHdCFB6EMhU5mgXgN
-         G2BgeC/bc7quuodKWaorjMh6p79znwrktOFyBqtNfKConY7k3qEofOd+RHc0qevaC3Lk
-         gShCfR8m7tDs03Xjnpv8BQ+9aJok/n03pV1j/yJLVfTUYVedoXv3NJHO4Y5wJ77BFxNZ
-         1IU1iJoo9Wntji4bwRtWKRgjzSXBHbRIfscQ7KB5eEvxA1wBla61Xp3LCCR02C7maoqd
-         Z72o/vY5HkVjsRZuFY27rY+RO1CcinQ4biSzuZPj65gdX8h/9/+sp3RaDrM0yvxenRej
-         Q5Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771938930; x=1772543730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gWMlp1ruVrvPjA0cNiKtCr+diAV+Slyjy18uMqXnndQ=;
-        b=Qczxby8Yw09FxIM7D467e2GyC0bkYlWpywsEtveMX4tfLmhsLyh+C+caL9qZnbMDgs
-         ltE2ChCUvoqDZuBZ9fgqIXwViUYxcysvC9Dl1sgY6iHA3ByQdLSQEKzhWYCGG4JOI5kE
-         FihN1lEcKI7nNJhOBPGOWaiC6rbb7t8FUrkJwY6gkqmqRxF6PvCYC5rqp0jcSf/dsow3
-         8xBP6Jx9J/kodsVi9I3cT83jVxzgnMKHl1j8Fs5Ie6c/i9jFeUmhUGjCJRzV5rUdKi3/
-         PMO17Ni2ESjgX8nVC+W2tjx9rbv2TXxZJQSu/p5mZ87uvtFI0elwxanyOR0T8XFIjeLH
-         FFeA==
-X-Forwarded-Encrypted: i=1; AJvYcCX4CBlqU7fagkpu6DdPUqrhEAhSSrca1nIs+6o5PdOPNggKc08aqRYYBpbWXA6B8PJtKiQiOn9moJwLnB7BJYM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCK4LYhQ+Gk5LY+6HFr3ryHGNHE3WUllRXsM/Usja36iej6Rq8
-	/AWVvwPH4XTC78L+MBhCk0lq5ZZJimDEjpaIXxIaTwEj1TVrSro3QjwKKVa+9cQykib8sSPj8FE
-	OXhiS+tNtXbfnRejaOs0KLuVblS/HxDX/KOT1ZQkx
-X-Gm-Gg: ATEYQzyvF7IqMkjfbfu6CynLOYsZKaBSUK0/dR55XiH3955b8qAoXEGZaaFmSnHAGF2
-	jKbsTECkMDZ3S4rV/2UfvaB6a468OBcVcIpBN/82+YN1gDqyukBlXr26epEMS5RanfOjR+HsqIO
-	BzXrhqio0EAav/HsESSVleOf3Iq9jGpzLpM2gerMM0ELzjnBKf4SijLZK9O/rECf8K+OYBN2btX
-	cROYk0Q1NAU4epmd5nQYiFzH20wzYygHIhRwt4CXWYcjU+Ie7IvrzjE5p0vAJjJWh6ccNgVPJZJ
-	u56NHyEDgGMNv9XW0iCYzzqD8o0TR1jqXDuaTNKuqDcpFC1y
-X-Received: by 2002:a05:6000:1448:b0:430:f7c9:94c3 with SMTP id
- ffacd0b85a97d-4396f16fa74mr22881313f8f.25.1771938929192; Tue, 24 Feb 2026
- 05:15:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="m9oXuu9W"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Mt/RQ5e9a+ZF4+ZhozIWXCK7xrP+Pzfye8lBDxuP177bIjNb2gUn9RN6EBwV69O3S8o3ppB6SZWDR7IbGOnWe3nTjaLtOTchD3l6LPQTPf6/N5wfZ0UjqCxb4QoolKA/YV1JATK1mCWXjZf0h7CvNC8cxyiBRyGRru6OsaKILUaXoNJ2oE8akZPhNkjCE2n6DJ1gODtgYcxI+JqjECyskKJiSTWWOSUlGZqoXHIv56qrg/96Xm4QAVNN/anjGTVd+yPRch4MoldaUsNg4v9/ewg5frTA/wb5KJTTpmW0DUWj6yy0LVnyL4foaJVbZfPSdVifBhZFS8yN5W6GyTWG6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GMSaYfthfLzTltjbH7KeKdSmafJhZs0YJxyWMYcx39w=;
+ b=EVrWoDwbPCBH4biMkdutObGkSnKgRP5iSzaJOAWY7OdS5R4lmBibp7QRzdgJPRqskgLGKM7Z6jPuPUTi6TL5oQikK3JyOyqPf5PvyXC5OI1wLIDktVi0oljScfsG4CdmZf9axZNBnZBzzOqYXBpzDvswWBExvHfTt3+LEM+kemn6V7o5Ge8bGvYK4fDe1AOvSTxK6QG5TAOYeiF52isY1Rzf5ONMlQnht/bXVHGGDCtNM1XU+fVc6A9tRcSdLzFlhaTxjplBCq7GzAcblTedRzBOO/7jVBVijIS7Hh1vu7ka6QZjkc98E8b7uwVfv2YCpdR3eBcxco1NNQx6e7YP/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GMSaYfthfLzTltjbH7KeKdSmafJhZs0YJxyWMYcx39w=;
+ b=m9oXuu9WK3LZQSP5oQCF2jISljb5Hk++wctJVdKKbzHEBeO4csU0KKOGVwp4BTTl4mqABwsP+LTKj0dnCwmEaGT7NgyvLWlUjQZykpcgiY18MEYxdhGGqFrykhGpvK/BEH4fXPPH75eh8v9cXO6FEYGPgOtQQ1JNPkuvGU43XF+KpNtQqI+kKKN/IVPlAAl/XWMDwXhomLVctNxp2h+YNWpFWNUSDsix+TFrkNuB4FcC4hzi62SaN2ZYbEfectErACVudtaiKie4kFjwYCJvxqrGnN6LOy6QZJxjxgzQIgNgHfnKnV4JhzzsM+BFDxXBYHzGthv3EbJEIjCt0i1bhg==
+Received: from MW4PR04CA0260.namprd04.prod.outlook.com (2603:10b6:303:88::25)
+ by DM4PR12MB7502.namprd12.prod.outlook.com (2603:10b6:8:112::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.22; Tue, 24 Feb
+ 2026 13:15:53 +0000
+Received: from CO1PEPF00012E62.namprd05.prod.outlook.com
+ (2603:10b6:303:88:cafe::4e) by MW4PR04CA0260.outlook.office365.com
+ (2603:10b6:303:88::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.22 via Frontend Transport; Tue,
+ 24 Feb 2026 13:15:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1PEPF00012E62.mail.protection.outlook.com (10.167.249.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9632.12 via Frontend Transport; Tue, 24 Feb 2026 13:15:52 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Feb
+ 2026 05:15:30 -0800
+Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Feb
+ 2026 05:15:25 -0800
+References: <20260223202633.4126087-1-kuba@kernel.org>
+ <20260223202633.4126087-4-kuba@kernel.org>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
+	<shuah@kernel.org>, <petrm@nvidia.com>, <gal@nvidia.com>,
+	<leitao@debian.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next 3/3] selftests: net: py: add cmd info for
+ ksft_wait failure
+Date: Tue, 24 Feb 2026 14:05:04 +0100
+In-Reply-To: <20260223202633.4126087-4-kuba@kernel.org>
+Message-ID: <87bjhegu51.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <Qrs5fItWst004EC_jGHvnTB2s8QuVM9cnRKIhUuImhaSV8qhL9DmqifhAqLFPSEf1JYNS9J-1hWqvptIARahvQ==@protonmail.internalid>
- <20260224-unused_var_err-v2-1-337f9359d98e@nvidia.com> <871pia2wcp.fsf@t14s.mail-host-address-is-not-set>
- <DGN7R1LIMMXA.PAEGCW35B6EY@nvidia.com>
-In-Reply-To: <DGN7R1LIMMXA.PAEGCW35B6EY@nvidia.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Tue, 24 Feb 2026 14:15:18 +0100
-X-Gm-Features: AaiRm53j0jWe76VxFKuxCY6gDGFxEl8Y-H3mzmvgtlc7JiyapeCcfXycaAcT4_o
-Message-ID: <CAH5fLgj_=N1S9_YNmmpKYsC13j_E9JPRLCUha=eUEbzmvkDQCg@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: kunit: fix warning when !CONFIG_PRINTK
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00012E62:EE_|DM4PR12MB7502:EE_
+X-MS-Office365-Filtering-Correlation-Id: 18d0f807-0f64-43d2-b6bc-08de73a6d63e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|7416014|376014|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?8Yrw1JXiQB0MzHXot3cFwh8TzOLui+rs533HjI0297fIdX1m1pUCJzw5flwd?=
+ =?us-ascii?Q?tPZhc+4QisvUo+nbUe+AWD36EcKpx3Xx8ZzJ3pFALKjByiSsLUpGnpwUzGks?=
+ =?us-ascii?Q?dJSA+LbVAPdHoQJ7+md6UwwTJXidu/hPoxZqBAlYBn8T0aIw9hRiNeC51yKT?=
+ =?us-ascii?Q?dYOQRvv7OeDq1rp6fGDm13ueXTM8yORaEPNrQoJ7No26OI8p3HNXTNUVF62T?=
+ =?us-ascii?Q?gJKZCQNxIp8zqlLS0yO/dejC3P3dK0TVpvDczqjWCQgcdpSkV3h3sGWV4Kel?=
+ =?us-ascii?Q?qbRDXiu2YrH7l4+7JjCtJ3jTts6NxTe19WMlI9OWPZQzQf5r81MIJrnHNtnd?=
+ =?us-ascii?Q?gt0iiTZUJswaM/koBE9YajoBPMidmPEm8pjzLXu6ZFIR/G7cC/VcLtemweS1?=
+ =?us-ascii?Q?wdGHTkgSvvWfA3VbLcxDV15427ICTpMhR4/GaiqXgtZHk6QOUFMJ8fpJ/CsX?=
+ =?us-ascii?Q?i4ppeUwBkw3E7xemT2I2OozI6+qCADszLpM9s5hNWEi9yhMv8Q4mdlfb0bWV?=
+ =?us-ascii?Q?MtXkPx7u+wWxiuMttcjdl5EgZAqdsjMl0P2NdL3a1984LGGJs3QcoaDiKF3s?=
+ =?us-ascii?Q?NZoE3OX7zUK0XW/URDTFhOroDRPMpDaCrBDWCYv9D2xJzEZEHMUVpuAvzKgg?=
+ =?us-ascii?Q?c+Np/yR7F7VNCtv1svkIdKcAwF1Vq2EtbkC84fhIZ1xa6/dvrGEs3HUKFtkC?=
+ =?us-ascii?Q?QsUyekwoHivZZRyGDMeu/ZEss5oKqtt3m1+aNBQ5ZI4Q3xoTxSSjLne2a7pt?=
+ =?us-ascii?Q?A5aU/a1IYhO8965/0pVNiV+Y1HZJP+TNNUQWIgFu4e+Y5Be/luhYG9V9ZAIZ?=
+ =?us-ascii?Q?qCzhmDXNBEiYvq/d2xpVg+kbWRfBo0igVwcLEK2xws4/sozZsSg8nI14ps0T?=
+ =?us-ascii?Q?jjq4kjLDH5AkXgGA39qzPvz5UZ4yXSIsdJ9/OXepR/xisLTKJE9dULt+N+Sk?=
+ =?us-ascii?Q?ASoN+XGqqWBIQIJqsiU7naLeR2OgbJzm/8DNAwClZGakwCPXyJoTPQdf+5Vz?=
+ =?us-ascii?Q?YsRzUOLKl4DB7yS4VxfO8AxVVPLhiwo8trF3J/x+XgYU4ulj8zGGQ19pR2Fy?=
+ =?us-ascii?Q?VQOWrAXUBJ58C4UgppXmt3LQ+4UgCLhcKiL0x3932ur9B+8uSQokmMo+P8K+?=
+ =?us-ascii?Q?p4NioMyaSwA50T15Odjo4aM/PhZ0gPdqaxaT8ggA+J50ky7Uk/OS3w6rOu2e?=
+ =?us-ascii?Q?QSw6yX+7TRx2jAOPzt6yWxFWKwtDv4m7HALsL9thDCoAS3q301sfMzMQjsB1?=
+ =?us-ascii?Q?kx5XXXfWmtmauKiogY3DS2dSi/JQD6EgqJurwkMgo8qR/3zB2hPzd4WcKWso?=
+ =?us-ascii?Q?inG46lfCyMU3XfRqRfqkzodAhAzL6GHQ86Ar3GJMS3e70TQ7mBSKVJjdkaG4?=
+ =?us-ascii?Q?rAiZuPcmq3SOPrAthLfDxe/ilZQZxTYLKxcdGFm1zOfG6PY2CIIsDmdUGgbo?=
+ =?us-ascii?Q?uOABrcOBz6fop1Sy3VVOzEmsxSJ560SmCAzUWiUe+HeW52Yna2P8hStoCs8z?=
+ =?us-ascii?Q?RwV9FkuFEsHttx1AUcv5CaOcqvuphxsAYVRLd0S59xyNMiW+NCTz5sKblycw?=
+ =?us-ascii?Q?7uxx4J3McotZHzehZkstt/8BkEBk/J0Nb8qqLQUUvuoaF9CuSvpThZ2TfEiV?=
+ =?us-ascii?Q?TOnRDdD96jGkDXOWLKSLSjICNEKWP45Yu9E1uqUcPjNbxdkLHWTRgFj/qzsa?=
+ =?us-ascii?Q?vHZVDQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	yiSsmCrTz2tPNnHQbsOmpjuTZImpDSRhbXf2/SLb9G5pG69BK5JyZsvncvzOhp28ssrr6SIgE+K5EkAgbb3Kz3gq05o5DBXMlitBTPKHsAelalZgz5FEj9+v/4OinAB3zjaZmHzWYjA8TbxAXOctFs3KS46WhLka7dXX+Uv0xH4YoVDf6tAox7eukLp7TMawR95b1FILNnzqQY/19sShf4zK7Tpo/uIN+/5+IepW7ugrp2HpIB2Cp4dKSI1hHLL+QS0uUV5KwDW9TMkY4pA+IIRkkgj21oPQcZjs9026Jy1vRXOGKfALk2MrCZOzLKxF1/XQELRiaXWSnFAxfcIay+Mpife0Jsl5poR2AIbdWz2qi5kZtt67Nb7avihXag5/+kF03uqh4nAGdom2qqvge3eIIW57ChO3FVr7hFc5HAWcpvX5OWEJ/72dEhFqw9vk
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2026 13:15:52.8374
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18d0f807-0f64-43d2-b6bc-08de73a6d63e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF00012E62.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7502
 
-On Tue, Feb 24, 2026 at 2:07=E2=80=AFPM Alexandre Courbot <acourbot@nvidia.=
-com> wrote:
+
+Jakub Kicinski <kuba@kernel.org> writes:
+
+> Gal recently complained:
 >
-> On Tue Feb 24, 2026 at 8:51 PM JST, Andreas Hindborg wrote:
-> > "Alexandre Courbot" <acourbot@nvidia.com> writes:
-> >
-> >> If `CONFIG_PRINTK` is not set, then the following warnings are issued
-> >> during build:
-> >>
-> >>   warning: unused variable: `args`
-> >>     --> ../rust/kernel/kunit.rs:16:12
-> >>     |
-> >>   16 | pub fn err(args: fmt::Arguments<'_>) {
-> >>     |            ^^^^ help: if this is intentional, prefix it with an =
-underscore: `_args`
-> >>     |
-> >>     =3D note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) =
-on by default
-> >>
-> >>   warning: unused variable: `args`
-> >>     --> ../rust/kernel/kunit.rs:32:13
-> >>     |
-> >>   32 | pub fn info(args: fmt::Arguments<'_>) {
-> >>     |             ^^^^ help: if this is intentional, prefix it with an=
- underscore: `_args`
-> >>
-> >> Fix this by adding a no-op assignment using `args` when `CONFIG_PRINTK=
-`
-> >> is not set.
-> >>
-> >> Fixes: a66d733da801 ("rust: support running Rust documentation tests a=
-s KUnit ones")
-> >> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
-> >> ---
-> >> Changes in v2:
-> >> - Use a no-op assignment instead of the wider `#[allow(unused_variable=
-s)]`.
-> >> - Link to v1: https://patch.msgid.link/20260224-unused_var_err-v1-1-c5=
-1d805eceb5@nvidia.com
-> >> ---
-> >>  rust/kernel/kunit.rs | 8 ++++++++
-> >>  1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> >> index f93f24a60bdd..a1edf7491579 100644
-> >> --- a/rust/kernel/kunit.rs
-> >> +++ b/rust/kernel/kunit.rs
-> >> @@ -14,6 +14,10 @@
-> >>  /// Public but hidden since it should only be used from KUnit generat=
-ed code.
-> >>  #[doc(hidden)]
-> >>  pub fn err(args: fmt::Arguments<'_>) {
-> >> +    // `args` is unused if `CONFIG_PRINTK` is not set - this avoids a=
- build-time warning.
-> >> +    #[cfg(not(CONFIG_PRINTK))]
-> >> +    let _ =3D args;
-> >
-> > I think (didn't test) that you can use a conditional attribute [1] inst=
-ead:
-> >
-> >  pub fn err(
-> >      #[cfg_attr(not(CONFIG_PRINTK), expect(unused))]
-> >      args: fmt::Arguments<'_>
-> >  ) {
+>   When [ksft_wait failure] happens, the test fails with a cryptic
+>   message:
+>     # Exception| Exception: Did not receive ready message
 >
-> Yup, that works as well, and I think I like it better as it is more
-> localized. Alice, WDYT?
+> Let's try to include the stdout/stderr of the command we tried
+> to start. E.g. for cmd("false", ksft_wait=True):
+>
+>     # Exception| lib.py.utils.CmdInitFailure: Did not receive ready message
+>     # Exception| CMD: false
+>     # Exception|   EXIT: 1
+>
+> We need to factor out _process_terminate() otherwise the exit
+> path may try to write to already disconnected self.ksft_term_fd.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
- I think the other options is also quite localised. It's per function
-argument too. shrug
-
-Alice
+Reviewed-by: Petr Machata <petrm@nvidia.com>
