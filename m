@@ -1,206 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0AD24DCF9;
-	Tue, 24 Feb 2026 16:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9061F1304;
+	Tue, 24 Feb 2026 16:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771949782; cv=none; b=u+v+QAJwZAihoAdiiY9oEpHsKELzcwmPNfJVh5iq7jL5GeT3oWeJ+xlGNsmwi7lII2aVSu99gHMw2LcXSAgbW0z0DE9yPdoe1p/r6MUw1vksQBs5KRpTu7SHI6vw8pUucfsXDzAd0jalrE6fvl+btEwjrTs01udBr3LnqHaRHbo=
+	t=1771950144; cv=none; b=WOiXff2SL5TWa2imWeWiBqrnZ0XxqptizKoySXA5mukvSzobEk8gWvohnkJIn0zN//B2bUmeK+nH38HCipEbg+tmI+zFjiuIpQxAdfu+E/ZmljrJZp5X8JmjLK554ETt+QUv+glF4GiDBx39DkJrAAHXMuluyRoRK4N7G0E5wkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771949782; c=relaxed/simple;
-	bh=Jpzg3XcQH9T6/RZ4fN6CUybReuS0zIKiZ1EQ8AI4wBo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fXQguiYv2+utYM4WYrBn/fIG4EsQZWDo7bnGY9pf1uJ0k/89/x50hkTv0CMe0ASnkVP47QSgM2bRuy6dS64d8ot6dJQjureWjYyfPodnpXPvVIbJdeFtAbI2QrVdT6CZt/5njxakEcqPIm3Bm8MsWAVlOH6do7z+xdMNT2ZeuL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mc1wlA8h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771950144; c=relaxed/simple;
+	bh=i0yBSYNQVXqQLHf+QKtAovioFrDUL3+0JKsF71qQBPU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=JyjDDQcvonysQ+f2osfeY0QyrmCBERAm+s1SdAoDsuMiotlw6JX1zUzlHqWNClTSeDSvgrT4eKWJh19B6wd2sZVVHCb+/W/3C+lggbUHG66Q8dq1FDR4PDg6N42Fuch42+vgZGYSqqQUj8+YPDqu9p2wVrcJx+lYv/12WM5Lv6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ICp0Ma/m; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mc1wlA8h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46236C116D0;
-	Tue, 24 Feb 2026 16:16:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ICp0Ma/m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC42AC116D0;
+	Tue, 24 Feb 2026 16:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771949782;
-	bh=Jpzg3XcQH9T6/RZ4fN6CUybReuS0zIKiZ1EQ8AI4wBo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Mc1wlA8hy64hMUNU9Jqm8OcTRs+u83cX+Lkgu74ig9i1lNFMtTdiZmZxGPNo0MVvt
-	 vJ9foNO3ZA45GT9+8jOQECWUBo3+p1sxztzVYDTi+PBss6QWIrE0Pb7Ftpy/0kxX3A
-	 qJmxHR0mNb7M66B+oJ3bxKr+RcyVHIR6us0RQqV8CwA0nX/o86OKyrmUPhLufXkMYO
-	 MKUHoE6MyH2FVJRJNxdXjQFs84SwFgJlxVgvjQxuQdjFbyfQMmciOosAsX1w3Hn6Cw
-	 AsjdkHO73p1QlHq3UXTvq31/vOV6+HE4NUpHrC5JL/reDp+fJ8Qc/2Yoa2jpKXKcx0
-	 v8r5t44DBHiuA==
-From: Simon Horman <horms@kernel.org>
-To: achender@kernel.org
-Cc: Simon Horman <horms@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	kuba@kernel.org,
-	linux-rdma@vger.kernel.org,
-	allison.henderson@oracle.com,
-	edumazet@google.com,
-	netdev@vger.kernel.org,
-	rds-devel@oss.oracle.com,
-	pabeni@redhat.com
-Subject: Re: [net-next,v5,1/2] net/rds: Refactor __rds_conn_create for blocking transport cleanup
-Date: Tue, 24 Feb 2026 16:16:07 +0000
-Message-ID: <20260224161607.143920-1-horms@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260223221918.2750209-2-achender@kernel.org>
-References: <20260223221918.2750209-2-achender@kernel.org>
+	s=k20201202; t=1771950144;
+	bh=i0yBSYNQVXqQLHf+QKtAovioFrDUL3+0JKsF71qQBPU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=ICp0Ma/mN0PtXb/NGRS/I16spVEa4xQ083N9N/N77en1BRpheeTPzEit+UqYvq5Gs
+	 D3Jlbu9f4qqP2QM4BM+OQRXoFc2gkGF28OP8bbWdTDHFOIi4EaplvLHACL/a1YunLN
+	 qsF7GAXofXdy/49g/ETIDiu9sPAPCM4bPVDxlFB47jXQT+rV15GdDCF+6H5MRSSXyi
+	 NclIsvkF9Isee8COIzRKCpDay/bNBx8x9oxRs53W8PV2k74a21mz6er/kD2/SpArh+
+	 0b3XbpS1RKk5XbmKbh5OoDFQAoT9XPn+ssr33xsbX4MBQDutEzOthQxotsP+dbE46p
+	 MGxau+VlJrL7A==
+Content-Type: multipart/mixed; boundary="===============1426995775684406543=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <71126da53c4e4779c8509e8c5da0873f2e1c51528f8c49dde82336201703c69f@mail.kernel.org>
+In-Reply-To: <20260224154024.12504-3-leon.hwang@linux.dev>
+References: <20260224154024.12504-3-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 2/8] bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,leon.hwang@linux.dev,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 24 Feb 2026 16:22:21 +0000 (UTC)
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+--===============1426995775684406543==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-net/rds: Refactor __rds_conn_create for blocking transport cleanup
-
-The next patch will delegate fanout operations to a background worker,
-which adds cancel_work_sync() to rds_tcp_conn_free(). This is called
-during a connection cleanup and requires an operations to be blocking.
-However, the error path of __rds_conn_create() currently calls
-trans->conn_free() while holding rds_conn_lock (spinlock) and
-rcu_read_lock, which creates an atomic context where cancel_work_sync()
-cannot sleep.
-
-Link: https://ci.syzbot.org/series/1a5ef180-c02c-401d-9df7-670b18570a55
-
-> diff --git a/net/rds/connection.c b/net/rds/connection.c
-> --- a/net/rds/connection.c
-> +++ b/net/rds/connection.c
-> @@ -170,6 +170,7 @@ static struct rds_connection *__rds_conn_create(struct net *net,
->  	struct hlist_head *head = rds_conn_bucket(laddr, faddr);
->  	struct rds_transport *loop_trans;
->  	struct rds_conn_path *free_cp = NULL;
-> +	struct rds_transport *free_trans = NULL;
->  	unsigned long flags;
->  	int ret, i;
->  	int npaths = (trans->t_mp_capable ? RDS_MPATH_WORKERS : 1);
-> @@ -305,7 +306,7 @@
->  	if (parent) {
->  		/* Creating passive conn */
->  		if (parent->c_passive) {
-> -			trans->conn_free(conn->c_path[0].cp_transport_data);
-> +			free_trans = trans;
->  			free_cp = conn->c_path;
->  			kmem_cache_free(rds_conn_slab, conn);
->  			conn = parent->c_passive;
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 
 [ ... ]
 
-> @@ -321,18 +322,7 @@
->  		found = rds_conn_lookup(net, head, laddr, faddr, trans,
->  					tos, dev_if);
->  		if (found) {
-> -			struct rds_conn_path *cp;
-> -			int i;
-> -
-> -			for (i = 0; i < npaths; i++) {
-> -				cp = &conn->c_path[i];
-> -				/* The ->conn_alloc invocation may have
-> -				 * allocated resource for all paths, so all
-> -				 * of them may have to be freed here.
-> -				 */
-> -				if (cp->cp_transport_data)
-> -					trans->conn_free(cp->cp_transport_data);
-> -			}
-> +			free_trans = trans;
->  			free_cp = conn->c_path;
->  			kmem_cache_free(rds_conn_slab, conn);
->  			conn = found;
+> @@ -2415,6 +2416,8 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>  		      map->owner->jited == fp->jited &&
+>  		      map->owner->xdp_has_frags == aux->xdp_has_frags &&
+>  		      map->owner->sleepable == fp->sleepable;
+> +		if (ret && (!map->owner->kprobe_write_ctx && aux->kprobe_write_ctx))
+> +			ret = false;
 
-Does this create a use-after-free in other threads that iterate the
-transport list?
+Is this check one-directional on purpose? It rejects the case
+where the map owner is !kprobe_write_ctx and the incoming program
+has kprobe_write_ctx, but it allows the reverse: a !kprobe_write_ctx
+program passing the compatibility check against a kprobe_write_ctx-
+owning map.
 
-Looking at the race-loss path when rds_conn_lookup() finds an existing
-connection, the old code called trans->conn_free() before
-kmem_cache_free(conn). Now the patch defers conn_free() to after
-locks are released at the out: label, but kmem_cache_free(conn) still
-executes inside the critical section (line 327 after this change).
+This means the following sequence is possible:
 
-This creates a window where rds_tcp_connection objects remain on
-rds_tcp_conn_list with tc->t_cpath->cp_conn pointing to the
-already-freed conn object.
+  1. Program A (kprobe_write_ctx=true) is stored first in a
+     prog_array, becoming the map owner.
 
-The timeline would be:
+  2. Program B (kprobe_write_ctx=false) passes the compatibility
+     check because (!true && false) evaluates to false, so ret
+     stays true.
 
-CPU 0 (__rds_conn_create race-loss)
-  spin_lock_irqsave(&rds_conn_lock)
-  found = rds_conn_lookup()  // finds existing conn
-  free_trans = trans
-  free_cp = conn->c_path
-  kmem_cache_free(rds_conn_slab, conn)  // conn freed
-  conn = found
-  spin_unlock_irqrestore(&rds_conn_lock)
-  rcu_read_unlock()
-  // ... later at out: label
-  free_trans->conn_free(...)  // removes tc from list, but too late
+  3. Program B is attached to a kprobe via __perf_event_set_bpf_prog(),
+     which only rejects (kprobe_write_ctx && !is_uprobe) -- B passes
+     because its kprobe_write_ctx is false.
 
-CPU 1 (rds_tcp_kill_sock)
-  spin_lock_irq(&rds_tcp_conn_lock)
-  list_for_each_entry_safe(tc, _tc, &rds_tcp_conn_list, t_tcp_node)
-    c_net = read_pnet(&tc->t_cpath->cp_conn->c_net)  // UAF here!
+  4. At runtime B tail-calls into A. Program A's instructions now
+     execute in kprobe context and write to kernel pt_regs.
 
-The commit message states "connections that 'lose' the race are safe to
-clean up outside the critical section since they were never added to
-the hashtable, and therefore are inaccessible to other threads."
+The same path applies when B merely uses the map for bpf_tail_call()
+without being stored -- bpf_check_tail_call() runs the same
+__bpf_prog_map_compatible() check and allows B through.
 
-However, while the rds_connection was never added to the RDS hashtable,
-the transport data (tc) WAS added to rds_tcp_conn_list during
-rds_tcp_conn_alloc(). Looking at that function in net/rds/tcp.c:
+The commit message says "Reject the combination of !kprobe_write_ctx
+progs with kprobe_write_ctx progs" which suggests both directions
+should be blocked. Would a symmetric check be more appropriate here?
 
-rds_tcp_conn_alloc() {
-    // ... allocate tc structures ...
-    spin_lock_irq(&rds_tcp_conn_lock);
-    for (i = 0; i < RDS_MPATH_WORKERS; i++) {
-        tc = conn->c_path[i].cp_transport_data;
-        tc->t_tcp_node_detached = false;
-        list_add_tail(&tc->t_tcp_node, &rds_tcp_conn_list);
-    }
-    spin_unlock_irq(&rds_tcp_conn_lock);
-}
+>  		if (ret &&
+>  		    map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
+>  		    map->owner->expected_attach_type != fp->expected_attach_type)
 
-So the tc objects are accessible to other threads via the transport
-list, even though the conn itself never made it into the RDS hashtable.
 
-Functions that iterate rds_tcp_conn_list include:
-- rds_tcp_kill_sock() at net/rds/tcp.c:610
-- rds_tcp_destroy_conns()
-- rds_tcp_sysctl_reset()
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-All of these dereference tc->t_cpath->cp_conn during iteration.
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22358832658
 
-In the old code, conn_free() ran BEFORE kmem_cache_free(conn), so the tc
-was removed from the list before conn was freed. No UAF window existed.
+AI-authorship-score: low
+AI-authorship-explanation: The commit message is concise and uses standard kernel terminology; the code changes follow established BPF patterns with no signs of AI-generated phrasing or structure.
+issues-found: 1
+issue-severity-score: high
+issue-severity-explanation: The asymmetric compatibility check allows a !kprobe_write_ctx program attached to a kprobe to tail-call a kprobe_write_ctx program, enabling writes to kernel pt_regs in kprobe context and defeating the security enforcement the patch is meant to provide.
 
-Could the kmem_cache_free(rds_conn_slab, conn) be moved to after
-conn_free() at the out: label, or should conn_free() be called before
-kmem_cache_free() inside the critical section for the race-loss paths?
-
-> @@ -349,9 +339,23 @@
->
->  out:
->  	if (free_cp) {
-> -		for (i = 0; i < npaths; i++)
-> +		for (i = 0; i < npaths; i++) {
-> +			/*
-> +			 * The trans->conn_alloc call may have allocated
-> +			 * resources for the cp paths, which will need to
-> +			 * be freed before freeing cp itself.  We do this here
-> +			 * after the out: label so it runs outside the
-> +			 * rds_conn_lock spinlock and rcu_read_lock section,
-> +			 * since both destroy_workqueue() and conn_free can
-> +			 * block. The local free_trans pointer is only set in
-> +			 * the race-loss paths where conn_alloc() succeeded.
-> +			 */
-> +			if (free_trans && free_cp[i].cp_transport_data)
-> +				free_trans->conn_free
-> +					(free_cp[i].cp_transport_data);
->  			if (free_cp[i].cp_wq != rds_wq)
->  				destroy_workqueue(free_cp[i].cp_wq);
-> +		}
->  		kfree(free_cp);
->  	}
+--===============1426995775684406543==--
