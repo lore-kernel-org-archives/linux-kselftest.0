@@ -1,63 +1,63 @@
-Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F552C3256
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 07:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DCA309DDB
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 07:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771919390; cv=none; b=q21JUTRAX9r1Yi7e80QvNyr3pPLQZdc75CodEEMB/kXSajS08PGfH5iCX+5QJ0xUtN+Ki5Nr8XLdkIKgjQosr/NTtSAyCM9IVKPaFCXKJsczWGdvDv3ivQtSVSCWYIssCYwKFwS/NlhAOvi91LT3gzKLjm4mS3PWwd1RVuE1cmE=
+	t=1771919557; cv=none; b=jLAcbA3iDbrBaUL5DO7xyEhx53T2EUJV2BCLzLCpHsl5GcbHu4d8IeYGThOmCOfdxlDhK5BtlWZcX5Lqq/iJlZhsT1YtQYebEB53jqM2LXGy6zqzFwHLqWnsS7NrLTCwwSvKTC7A0X/Tof1TIgQtny86uJ6uehKIvyeTd9LtA6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771919390; c=relaxed/simple;
-	bh=S1AMswh1lQbv6HKMYTWuP/EFtpAZzTkpPRr5/NqjPXM=;
+	s=arc-20240116; t=1771919557; c=relaxed/simple;
+	bh=xQguQBqpXuNz6Zc/MmIr7wUyo3jaXnQQF0pTh/QAaYQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=eiQrJpLRiCY8E7AZN+LpX0bw3RXYUO1STQxUvjiL0cO9Tls8SKYgsOGHfGelI3uQViaJJnqU0Pg1TfOzykP9b6OrpMNX8NnqDldUas4jzhjeYyhTQr0fCYGBE0/NTaYsusCgx6fo0p4oDnyHHmdl1EVBo4p1ldOb6ZGaaY4iabc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KdSDC853; arc=none smtp.client-ip=209.85.218.73
+	 To:Cc:Content-Type; b=GoCZS4sJ9h85f5JQoSxBUE3CQW5EeJATT4bQ83go212rzy+TIFDcOXbd0Ki28BO+OSJYnLK+XBaPGyU7tIOKPgqinUXwEmECgccHOp4JTAlsfmjbtrHGAfIbZN49TtFsu9vZ3hoqn4ck/MqI0lC2Bvq9k7H01vWBg6YusttBrgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IXcSeBB7; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KdSDC853"
-Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b8fa51ade75so554435566b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 23:49:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IXcSeBB7"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4830e7c6131so48263065e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 23:52:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771919386; x=1772524186; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771919553; x=1772524353; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7Hi1B2QR1arEGlsvfgWO32ZZtaRVb/wfgOh/rBlJpc=;
-        b=KdSDC85304TK6a9uNt0lP330VpGlHf9ippEhIqB8zcRp3ML6BcNHHOXcmPtX0mazT0
-         lhihb2lHBbLmX3QK3GsNaF1KzizJHegBpnRkgOrgZFfkOKn5sKN7qhr6iBlcnUA2s8el
-         FMgw8wckw9TLJsovHIHYiUCxeZ26mmXkXa4pmAAeVUUR4BMNgUQqJH4fhzNMemwh4SOZ
-         lOoKHc+7ypRCBPsJ9HnmcR2xissbSLlUXENe++xPNRlk9+fTeUmbXst2L6nQVmPW0QLi
-         2HDb4IScXukKyXmZJwQCsAV5mMLKTs7pdxcc8jyJxZJ9L9VgHmrQGxT5ydytd9GwPE5s
-         QUgA==
+        bh=ysZsryEdYA3piRDg9AIWpP8ob8aRO8hLKfBRBDFELYo=;
+        b=IXcSeBB71KsZtXR1X3o5/sORfu+/9mXnUCq91K093hDBBkFvaPJslTtXx0hO4c0JsQ
+         FBPQhlt/90y017krJEMM+wsz78wK3khBAdIx+kmGDy8liwKdh8SzkNUhNW8AzW2XLL5I
+         zETJV5EA3Wj4lBUzp4/jx5IBxtlh+ST+0/8c+ke8/t7wtXNz8c5xiTKfBkkdraXGyz1E
+         lu1wv00O4hxJpMPeC86cTvC43aXaM873MnzT772qOzJlA+bj2v01ITRdu91fB6gf6ONi
+         HGrN2beeQEP/K4P5rxHaY+HeBP6PSZLaWc5GfxvZ7seRbzobWPiBpNWAVo1DCKV46j0B
+         D6Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771919386; x=1772524186;
+        d=1e100.net; s=20230601; t=1771919553; x=1772524353;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7Hi1B2QR1arEGlsvfgWO32ZZtaRVb/wfgOh/rBlJpc=;
-        b=Uq43AHmSPXVVaYlw2K/lD60YnnVOgypQmI7Q1aQHTeuEvt8e3jM+x0xowvO0iLABSg
-         b3ziZVsojHM46wRX1bF2GdtnQUobKNuXTk9Mrb9vsM+lpcibwx88KxxIpJpPrxYQYe3b
-         NJxQHxLBqLk/99MOdwrm0cx7WjthwfXSRrz00z4I8ZsO7mqf0O+GPjBqJg3cSZGF5vlN
-         wh+Rtdf/dTyWxBd4Q7r19XKumXGFoNyavXHWTMyMJEGQqzUrPa4/K9MjVQcH6FXPh4Hx
-         knE1HpV9zW/CuBsKM7w9C4kOIbKyUCcn/kr1eun6UtEfjKxcJuaOtP+VHgxXrPHUSfBt
-         U3DQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWx5ZwjbYOPFI8Ie30aVY7FIlfDBnW0S7QTo2PI9q5JTsw3AFffvGSI3HT8M9RhQppzjwTWmFWNnDlYti6oGe8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiDF4gi9cK421r7vOqusymiNTS0jbqNWvVGALVf7IRIIiumcoh
-	1/upI22/L/t5uERiAO78dCHwMBzM9AR6aQj0y8o+QRCtH0gX35+CGzdjtorAqjnWnKFdG/p+5h/
-	9+ay8/EUwgEsBtnqjsg==
-X-Received: from ejdce12.prod.google.com ([2002:a17:907:d2cc:b0:b8f:8b56:4a97])
+        bh=ysZsryEdYA3piRDg9AIWpP8ob8aRO8hLKfBRBDFELYo=;
+        b=Nn+qj8rLkCwxwR5w18opHFJdSbcg+ORLzkAIkh6v7Rz5qvmrYW0+lGQbWJYnbBeszL
+         R5EYsxyUkBgT0I25GVy+2Tg5RFMl0uYucJQSVO1+4Dk1B3neNoLCpDpsdayCVToj9Alu
+         gZ/XPT5cHSrEF7bhNukRag6jcIyiezHV8j/inVXqjfLv/vKWXiGIo7GTg88FM+loDnqN
+         N7F7tdLPxdDJ/BhLP8I376MINIP3UsYH5zmaU8WjSoHJHFa7UD3neFwbIhRzWxkKKTUa
+         526CYSwbOVJy3JS6JlOHPE0MvWQU8Ffu+nVwMLSXe/PR7NRTfMIpefwz4ipt+GGj0DHa
+         U5MA==
+X-Forwarded-Encrypted: i=1; AJvYcCU8eWrpaRVHEtT+M7TudAB/TFGJTJ7Ox9JNDzfburnT4AFUjvj4i8oYofMCK1BfBX2xiMvZ1yVtvm9Y2kwnezw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3RvMdzBQrB9R98mQNWp0Q2oHoFa+dJMaVC20i03ER9VjRCZai
+	Ixq1yqO//nL6Xl0TLVzim2bUV1NkgAv4bQpctwOXKgUEWJT5raxaaP+M5h1noPfFuqmPpdSHzMU
+	/oB4Bdzt4Nc6+Iszlxg==
+X-Received: from wmxa13-n2.prod.google.com ([2002:a05:600d:644d:20b0:483:6fe1:c054])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:9301:b0:b87:2abc:4a32 with SMTP id a640c23a62f3a-b9081a2cd50mr766450566b.18.1771919385883;
- Mon, 23 Feb 2026 23:49:45 -0800 (PST)
-Date: Tue, 24 Feb 2026 07:49:45 +0000
-In-Reply-To: <20260224-unused_var_err-v1-1-c51d805eceb5@nvidia.com>
+ 2002:a05:600c:6986:b0:483:703e:4ad9 with SMTP id 5b1f17b1804b1-483a962e00emr161528485e9.19.1771919553135;
+ Mon, 23 Feb 2026 23:52:33 -0800 (PST)
+Date: Tue, 24 Feb 2026 07:52:32 +0000
+In-Reply-To: <aZ1YGceMIEwdke96@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260224-unused_var_err-v1-1-c51d805eceb5@nvidia.com>
-Message-ID: <aZ1YGceMIEwdke96@google.com>
+References: <20260224-unused_var_err-v1-1-c51d805eceb5@nvidia.com> <aZ1YGceMIEwdke96@google.com>
+Message-ID: <aZ1YwCziiM3gfJYH@google.com>
 Subject: Re: [PATCH] rust: kunit: fix warning when !CONFIG_PRINTK
 From: Alice Ryhl <aliceryhl@google.com>
 To: Alexandre Courbot <acourbot@nvidia.com>
@@ -71,54 +71,49 @@ Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>
 	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Tue, Feb 24, 2026 at 04:45:30PM +0900, Alexandre Courbot wrote:
-> If `CONFIG_PRINTK` is not set, then the following warnings are issued
-> during build:
+On Tue, Feb 24, 2026 at 07:49:45AM +0000, Alice Ryhl wrote:
+> On Tue, Feb 24, 2026 at 04:45:30PM +0900, Alexandre Courbot wrote:
+> > If `CONFIG_PRINTK` is not set, then the following warnings are issued
+> > during build:
+> > 
+> >   warning: unused variable: `args`
+> >     --> ../rust/kernel/kunit.rs:16:12
+> >     |
+> >   16 | pub fn err(args: fmt::Arguments<'_>) {
+> >     |            ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+> >     |
+> >     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+> > 
+> >   warning: unused variable: `args`
+> >     --> ../rust/kernel/kunit.rs:32:13
+> >     |
+> >   32 | pub fn info(args: fmt::Arguments<'_>) {
+> >     |             ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+> > 
+> > Fix this by allowing unused variables on these methods for this
+> > (arguably rare) case.
+> > 
+> > Fixes: a66d733da801 ("rust: support running Rust documentation tests as KUnit ones")
+> > Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
 > 
->   warning: unused variable: `args`
->     --> ../rust/kernel/kunit.rs:16:12
->     |
->   16 | pub fn err(args: fmt::Arguments<'_>) {
->     |            ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
->     |
->     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+> I think this would be a better fix:
 > 
->   warning: unused variable: `args`
->     --> ../rust/kernel/kunit.rs:32:13
->     |
->   32 | pub fn info(args: fmt::Arguments<'_>) {
->     |             ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
-> 
-> Fix this by allowing unused variables on these methods for this
-> (arguably rare) case.
-> 
-> Fixes: a66d733da801 ("rust: support running Rust documentation tests as KUnit ones")
-> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+> index f93f24a60bdd..dbf3c62ffa09 100644
+> --- a/rust/kernel/kunit.rs
+> +++ b/rust/kernel/kunit.rs
+> @@ -23,6 +23,9 @@ pub fn err(args: fmt::Arguments<'_>) {
+>              core::ptr::from_ref(&args).cast::<c_void>(),
+>          );
+>      }
+> +
+> +    #[cfg(not(CONFIG_PRINTK))]
+> +    let _ = args;
 
-I think this would be a better fix:
+Or if a bare _ doesn't work, then:
 
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index f93f24a60bdd..dbf3c62ffa09 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -23,6 +23,9 @@ pub fn err(args: fmt::Arguments<'_>) {
-             core::ptr::from_ref(&args).cast::<c_void>(),
-         );
-     }
-+
-+    #[cfg(not(CONFIG_PRINTK))]
-+    let _ = args;
- }
- 
- /// Prints a KUnit info-level message.
-@@ -39,6 +42,9 @@ pub fn info(args: fmt::Arguments<'_>) {
-             core::ptr::from_ref(&args).cast::<c_void>(),
-         );
-     }
-+
-+    #[cfg(not(CONFIG_PRINTK))]
-+    let _ = args;
- }
- 
- /// Asserts that a boolean expression is `true` at runtime.
+	let _unused = args;
 
+matching tracepoint.rs
+
+Alice
