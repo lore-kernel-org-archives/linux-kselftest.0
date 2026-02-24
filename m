@@ -1,119 +1,89 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DCA309DDB
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 07:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D0534BA24;
+	Tue, 24 Feb 2026 08:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771919557; cv=none; b=jLAcbA3iDbrBaUL5DO7xyEhx53T2EUJV2BCLzLCpHsl5GcbHu4d8IeYGThOmCOfdxlDhK5BtlWZcX5Lqq/iJlZhsT1YtQYebEB53jqM2LXGy6zqzFwHLqWnsS7NrLTCwwSvKTC7A0X/Tof1TIgQtny86uJ6uehKIvyeTd9LtA6s=
+	t=1771920008; cv=none; b=dCcR9vN4uERnMwHiDyf5+EaNnxEKWcXEkI/JOB7m3LS3GxeXSeZh1481yBzW0/ZnOVCcjdaOt8lMgFK/h/IfngV7gt5iSG98OiZ73rURZKP9jGVjWXarNwTPRhneZFqRgog2MiZt4MMOtW7qpy7vbIQMWNZqM5vH25OUTYJx9xE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771919557; c=relaxed/simple;
-	bh=xQguQBqpXuNz6Zc/MmIr7wUyo3jaXnQQF0pTh/QAaYQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=GoCZS4sJ9h85f5JQoSxBUE3CQW5EeJATT4bQ83go212rzy+TIFDcOXbd0Ki28BO+OSJYnLK+XBaPGyU7tIOKPgqinUXwEmECgccHOp4JTAlsfmjbtrHGAfIbZN49TtFsu9vZ3hoqn4ck/MqI0lC2Bvq9k7H01vWBg6YusttBrgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IXcSeBB7; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1771920008; c=relaxed/simple;
+	bh=sgme3bQ0nUoKfcm0X8HOtYXNAj8w6y8lQPgGsjjU5/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qLJIXL3/gtwIyOFU0jLUUXpTH73AEKnPRdqYlimfxye9r92q++xd4zSZifJ0mDfBPzpeeB89QwJJ+0NO03jqN87sbSmgh3uJCtkun+Inm0CETYxdtqsDCVwOkxE8CESacDX3iOpjCZEMcS8upiVp0gnMD7YwF3ffQjhONaoCQjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mDRoFjJ7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IXcSeBB7"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4830e7c6131so48263065e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Feb 2026 23:52:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771919553; x=1772524353; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ysZsryEdYA3piRDg9AIWpP8ob8aRO8hLKfBRBDFELYo=;
-        b=IXcSeBB71KsZtXR1X3o5/sORfu+/9mXnUCq91K093hDBBkFvaPJslTtXx0hO4c0JsQ
-         FBPQhlt/90y017krJEMM+wsz78wK3khBAdIx+kmGDy8liwKdh8SzkNUhNW8AzW2XLL5I
-         zETJV5EA3Wj4lBUzp4/jx5IBxtlh+ST+0/8c+ke8/t7wtXNz8c5xiTKfBkkdraXGyz1E
-         lu1wv00O4hxJpMPeC86cTvC43aXaM873MnzT772qOzJlA+bj2v01ITRdu91fB6gf6ONi
-         HGrN2beeQEP/K4P5rxHaY+HeBP6PSZLaWc5GfxvZ7seRbzobWPiBpNWAVo1DCKV46j0B
-         D6Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771919553; x=1772524353;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ysZsryEdYA3piRDg9AIWpP8ob8aRO8hLKfBRBDFELYo=;
-        b=Nn+qj8rLkCwxwR5w18opHFJdSbcg+ORLzkAIkh6v7Rz5qvmrYW0+lGQbWJYnbBeszL
-         R5EYsxyUkBgT0I25GVy+2Tg5RFMl0uYucJQSVO1+4Dk1B3neNoLCpDpsdayCVToj9Alu
-         gZ/XPT5cHSrEF7bhNukRag6jcIyiezHV8j/inVXqjfLv/vKWXiGIo7GTg88FM+loDnqN
-         N7F7tdLPxdDJ/BhLP8I376MINIP3UsYH5zmaU8WjSoHJHFa7UD3neFwbIhRzWxkKKTUa
-         526CYSwbOVJy3JS6JlOHPE0MvWQU8Ffu+nVwMLSXe/PR7NRTfMIpefwz4ipt+GGj0DHa
-         U5MA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8eWrpaRVHEtT+M7TudAB/TFGJTJ7Ox9JNDzfburnT4AFUjvj4i8oYofMCK1BfBX2xiMvZ1yVtvm9Y2kwnezw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3RvMdzBQrB9R98mQNWp0Q2oHoFa+dJMaVC20i03ER9VjRCZai
-	Ixq1yqO//nL6Xl0TLVzim2bUV1NkgAv4bQpctwOXKgUEWJT5raxaaP+M5h1noPfFuqmPpdSHzMU
-	/oB4Bdzt4Nc6+Iszlxg==
-X-Received: from wmxa13-n2.prod.google.com ([2002:a05:600d:644d:20b0:483:6fe1:c054])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:6986:b0:483:703e:4ad9 with SMTP id 5b1f17b1804b1-483a962e00emr161528485e9.19.1771919553135;
- Mon, 23 Feb 2026 23:52:33 -0800 (PST)
-Date: Tue, 24 Feb 2026 07:52:32 +0000
-In-Reply-To: <aZ1YGceMIEwdke96@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mDRoFjJ7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3549C116D0;
+	Tue, 24 Feb 2026 08:00:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771920008;
+	bh=sgme3bQ0nUoKfcm0X8HOtYXNAj8w6y8lQPgGsjjU5/8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mDRoFjJ7gxjhAUyYUItdUGy6Y/Oj2uidONpOGTLCqdxVLLHCpTm3kVzrMLs/pJQUN
+	 e7ITrBIpxqaiXtHP+vHchj8MgIbNLwvUgH7TnISPHXzOReSQt6ZVUaGsVDr/Vl53cj
+	 nckKs0Or1YgsahidqkeuNW+jL1davzXQvKsgj2nBjxwfafcLfd+fknoqStj7ZVFo2G
+	 7/9LTwH3EUuNDu06l8oU1huWT5e0AS69BVpCAlIqCg5/B3mUqFCn4NoBGN5TmAqont
+	 8mx6r7aQBakPxmGsPoNNqI650bab5bMpkJpxg6jQiNLfIYzjxvNjo4L5RlsRbI9n0I
+	 o+bkx0LgY6Fyw==
+Date: Tue, 24 Feb 2026 08:00:03 +0000
+From: Simon Horman <horms@kernel.org>
+To: Danielle Ratson <danieller@nvidia.com>
+Cc: netdev@vger.kernel.org, razor@blackwall.org, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	shuah@kernel.org, linux-kernel@vger.kernel.org,
+	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	idosch@nvidia.com, petrm@nvidia.com
+Subject: Re: [PATCH net 2/2] selftests: net: Add bridge VLAN range grouping
+ tests
+Message-ID: <aZ1agwUGRt2Qqzv3@horms.kernel.org>
+References: <20260222085338.3143823-1-danieller@nvidia.com>
+ <20260222085338.3143823-3-danieller@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260224-unused_var_err-v1-1-c51d805eceb5@nvidia.com> <aZ1YGceMIEwdke96@google.com>
-Message-ID: <aZ1YwCziiM3gfJYH@google.com>
-Subject: Re: [PATCH] rust: kunit: fix warning when !CONFIG_PRINTK
-From: Alice Ryhl <aliceryhl@google.com>
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260222085338.3143823-3-danieller@nvidia.com>
 
-On Tue, Feb 24, 2026 at 07:49:45AM +0000, Alice Ryhl wrote:
-> On Tue, Feb 24, 2026 at 04:45:30PM +0900, Alexandre Courbot wrote:
-> > If `CONFIG_PRINTK` is not set, then the following warnings are issued
-> > during build:
-> > 
-> >   warning: unused variable: `args`
-> >     --> ../rust/kernel/kunit.rs:16:12
-> >     |
-> >   16 | pub fn err(args: fmt::Arguments<'_>) {
-> >     |            ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
-> >     |
-> >     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
-> > 
-> >   warning: unused variable: `args`
-> >     --> ../rust/kernel/kunit.rs:32:13
-> >     |
-> >   32 | pub fn info(args: fmt::Arguments<'_>) {
-> >     |             ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
-> > 
-> > Fix this by allowing unused variables on these methods for this
-> > (arguably rare) case.
-> > 
-> > Fixes: a66d733da801 ("rust: support running Rust documentation tests as KUnit ones")
-> > Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+On Sun, Feb 22, 2026 at 10:53:38AM +0200, Danielle Ratson wrote:
+> Add a new test file bridge_vlan_dump.sh with four test cases that verify
+> VLANs with different per-VLAN options are not incorrectly grouped into
+> ranges in the dump output.
 > 
-> I think this would be a better fix:
+> The tests verify the kernel's br_vlan_opts_eq_range() function correctly
+> prevents VLAN range grouping when neigh_suppress, mcast_max_groups,
+> mcast_n_groups, or mcast_enabled options differ.
 > 
-> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> index f93f24a60bdd..dbf3c62ffa09 100644
-> --- a/rust/kernel/kunit.rs
-> +++ b/rust/kernel/kunit.rs
-> @@ -23,6 +23,9 @@ pub fn err(args: fmt::Arguments<'_>) {
->              core::ptr::from_ref(&args).cast::<c_void>(),
->          );
->      }
-> +
-> +    #[cfg(not(CONFIG_PRINTK))]
-> +    let _ = args;
+> Each test verifies that VLANs with different option values appear as
+> individual entries rather than ranges, and that VLANs with matching
+> values are properly grouped together.
+> 
+> Example output:
+> 
+> $ ./bridge_vlan_dump.sh
+> TEST: VLAN range grouping with neigh_suppress                       [ OK ]
+> TEST: VLAN range grouping with mcast_max_groups                     [ OK ]
+> TEST: VLAN range grouping with mcast_n_groups                       [ OK ]
+> TEST: VLAN range grouping with mcast_enabled                        [ OK ]
+> 
+> Signed-off-by: Danielle Ratson <danieller@nvidia.com>
+> Reviewed-by: Petr Machata <petrm@nvidia.com>
+> ---
+>  tools/testing/selftests/net/Makefile          |   1 +
+>  .../testing/selftests/net/bridge_vlan_dump.sh | 203 ++++++++++++++++++
+>  2 files changed, 204 insertions(+)
+>  create mode 100755 tools/testing/selftests/net/bridge_vlan_dump.sh
 
-Or if a bare _ doesn't work, then:
+Hi Danielle,
 
-	let _unused = args;
+I'm wondering if you could consider running running shellcheck over this
+and cleaning  things up a little.
 
-matching tracepoint.rs
+I see SC2086 which I think can be trivially addressed.
+And SC2329, which I think would be best ignored using #shellcheck disable=SC2086
 
-Alice
+Thanks!
