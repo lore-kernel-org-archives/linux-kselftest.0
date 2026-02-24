@@ -1,73 +1,71 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11021143.outbound.protection.outlook.com [40.107.130.143])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011030.outbound.protection.outlook.com [40.107.208.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC95A22A4EE;
-	Tue, 24 Feb 2026 10:38:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.143
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC926366579;
+	Tue, 24 Feb 2026 10:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.30
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771929483; cv=fail; b=nPsyuJ9sQYNP95wdkT/Eii4pYs5Pk2Nhg6O3n1TYFlZN8YTwwOGWK4Fxq3sXBZA75BvpAEhiUolagCRVmKab4DG8oRqzTgFwpvdRGuCNn2Q66mEp6+mc/Gcn3vHY9XYmgp7UiBB+WxawZKfDQaVDG2gGF4HEu3Dia9DDZfbqqzA=
+	t=1771929490; cv=fail; b=FHbMnio0K/VW9UOKxnrwjQjMjDSYYHiDUGySUIoxG7STgFTDY2hBqJxnkRTJYdojIF/s5vpXtBWG3L7tyxWYOVf0ADZO+BOT64yL//y4edAt6o7ZOln2nyKkmxAi++ay9x/EzhaBfRtv5sntofYZTjOXENvjHDgwZMUrLLMfc0E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771929483; c=relaxed/simple;
-	bh=BxNTBxnnaO6WKA6Y43qqQxtO1ULi4TOPWOKE4fwHC7g=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=F7VjKF4PNLMAVrqR3Ahy5XKJlhoMeelZDmnuDpKLn7+M9/3R+JQR1qahBzQT5VE0SvKZG+VdsjxudQqmRHWQhd+3T4h4kTld7uT1e9eyaHx/ZZvI+Vm4ORarNXEB+mrZrYbTo+KT8ZZvVvzrtQkGt8MbG/nZDeYL8sOtZ+bvAr0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=Im+rD9dA; arc=fail smtp.client-ip=40.107.130.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1771929490; c=relaxed/simple;
+	bh=v/9TMLwkPQlfiWoC8GkEDau7z8dCGQPwUjePzqLNPas=;
+	h=From:Date:Subject:Content-Type:Message-Id:To:Cc:MIME-Version; b=BnKnNXVH6Jt/J5x+/FKkkz8fYWJkA0KAwzF3Vb2QJxf9zVnbhaK229EtyovZWSsVoMWuEUlCZ6Om3EvXb0YmSiYPNegoKYzJ5FYm0st5PF9dLzqUobIu4zzdbz/NA6KRnuuA2hHGpwXIIaeOdOXR05kOb58JdcSIs6gdo+aorL8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=elVsGDFK; arc=fail smtp.client-ip=40.107.208.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="Im+rD9dA"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="elVsGDFK"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bRYPPlSCoPLzZ55amJK8n7RECdpOkGL8WDta+hFLLbk363BH1cKzIdQ/pgl+2BQ+ejuF8glQ0/wkVZT+ndsxORx1xh76rgbptN22xTyoU0wetSzYJaeeL4PcEE8lyDq82wibvsu621VZykf4RVe8mOZtvPrtwjxozpgXoblXyiE+KM/4l/kfs7uLj7mNzB7lFXhFByuOw0nhC7PbiwPVs26YYxn7QBix+PNGO8ui34PZbtFtUb8tXQgA5U52ARIPuhQ/X8lO9vfpTln3HImtGKn9sayeDvwnJsNpfoavvHoh+SV3EhxsDahsBtvwzeCmLFv2+NhCvgtqm2Hu+MkNnA==
+ b=vX6MsVxtpJeAWl8yQK+XCKIAcqSgSA4TZeM3SzmgmBviRW+UuvV11m+CE8nbPphxU9spyas0FaElQTUD1R8O1t2gb5NWEX02Rg60aNYemN3S7fZ8NqJLKhH1FjzntVmDXU3SbHXRqTk89bf21l/OD9J28GYkWfFj+o7yi29QoEOvxIaN3DUuFWAq+coz3rhHnFbcdGK0MwAMM2sgMPrYOwq/DmR12zr4DgHF+xYbOTVk83mN3Bue0YfhCzvRj0UrYEKSRgO7JhabYDjXtajOx2aqH1kRnZQ6C2YkXPL3i7cejTrFTx9f+XQyPB3onQ15kWdXnzIfJsNY6u4jMM+QcQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=43DjbiYj2NuaHikNngdHiT2Hgn4A/psYKLkYn5WUkT0=;
- b=e7ZFKbQrCJ7Ey0+nXBoFq3MQermGZ8U84xrc+BrRU76CrbetUq8jv36k/HT6A1NJ8A5XHJQnCX1CgDxGrq0yNw5+dHcM2fWfpsB3cfFLK1Oy1/LZiiRmHb0AOj3jSwenAWeM+1nznI2buVJT2ZrXCEfocvfQN295LPHj7KGvNiQYrQ2Aov1lBCvwLwoRk8YO8QZ7+T9fmZyLV/HYxLXEu6wvV5RkV8vBpjAPuNS66eQfU+6dTL3hx0GNJS8tW/3e6CMFT5L71EiHZUI1Sd8IiOj3xnntrv7ycqriwzxyScc/1iDos02BkDpql8apLFVE9vJ8O8a1NndQWAexmiad+A==
+ bh=weL9m9MOiTxfnKqsoq2byGzgisox2tTknSIz03/5RwM=;
+ b=AJKuCBjL6thtidotKyDx00xIUb0/5oK+e5Q/luPgasqqmJCgD92njsM/kt5A/fg53gto66/nX7jeQW3FINcVAa9R3cr62N4caJj7nkMrq+9SN87jT4gfYWmEu+trgFcSLUFaGaxFMTrCLgkmhkEwglxuLOtdgFmFtPoQTxzo1gOQue6+PYGt0D7ZJlfpGOJBhV5blmW8MKMwttQtjs+vCV7DwP+elRdIt6Ikj1DniiTtKN+0LFYWvbxg46zpXHq0EAxg1wkhhH5amc/P5KCwIc/GtEeY2S/g4zV9uVvLq1Aaxef2CUS+skuOelAgAAROLWq4OO/2ilLZrYdDF2br5w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=43DjbiYj2NuaHikNngdHiT2Hgn4A/psYKLkYn5WUkT0=;
- b=Im+rD9dAfkYxxYP8a/gCJ6IZerhwA6IzUiASOBA0E0Bj15I7P/Xz7MQ9ur6FFK6i7Wqw6PonzDLsBfNrxu/FjelEvj7/jI0f7EFtUmJDACr65EcVWl8Lgp7VKdUh6+RWddK5R/vFG2quANiD2JCozJ/aC9G83jysA2rpiw1nAATcrz7RapGJxWBxfWAci8YkIf7WfwpArPiOPlfc/bkmoWxRktpxsQzW4tpPA0eb0FfZ3fXGQXbZmrwBUQyWLVSJApXMptqGx5/rQFOy5ud+22XBfMo4hskKpTWC5MNYfLe7O5wjoKDX55wH9dYSIC7Ggl6ROgpwYLC/LI0CfrzP4w==
+ bh=weL9m9MOiTxfnKqsoq2byGzgisox2tTknSIz03/5RwM=;
+ b=elVsGDFKGS4BIi0rFydusQ6tlj1Nh06jAIB+w5Kot9MgujrZr2ka1LNRKf2SB/Sfffx/aWE36p1ekKTRT6HX2WjOaqw1e2DQQLsyomX/qg/8bIbykoSx40oV/odM7B+ccymTirbN/vAwZDnFgWYOP8qdNvZH2Mnc2It/QsxobfgN9QnRIt0yjekRAwXVzx+EQ+URY6IWZFy2kfoXyZtQBOaqIpF18agYvInMG0TRs4LdY33I4g9BW6Ey4Dt0CMNQNi2CNBdOvQTTg7ncuWI+WJl/kPbBCr5OUHVRMUmI9wzYgwuXm0vykuKQ1M4Pw8jjO5C8vNEaMzKfiM4OW2zW3w==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
- by VI1PR08MB10007.eurprd08.prod.outlook.com (2603:10a6:800:1cc::15) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH2PR12MB3990.namprd12.prod.outlook.com (2603:10b6:610:28::18)
+ by SJ0PR12MB6878.namprd12.prod.outlook.com (2603:10b6:a03:483::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.22; Tue, 24 Feb
- 2026 10:37:55 +0000
-Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
- ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
- ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9632.017; Tue, 24 Feb 2026
- 10:37:55 +0000
-Message-ID: <4de06792-d8ea-4f2e-848d-0dfccdb64253@virtuozzo.com>
-Date: Tue, 24 Feb 2026 11:37:30 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] pid_namespace: allow opening pid_for_children
- before init was created
-To: Andrei Vagin <avagin@google.com>
-Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>, Jan Kara <jack@suse.cz>,
- Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <cyphar@cyphar.com>,
- Kirill Tkhai <tkhai@ya.ru>, Alexander Mikhalitsyn <alexander@mihalicyn.com>,
- Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260223200254.4104651-1-ptikhomirov@virtuozzo.com>
- <20260223200254.4104651-2-ptikhomirov@virtuozzo.com>
- <CAEWA0a63QxMRqCwpCUqb5iKih31LY-2zX+--SkMGcP-Y19PqpQ@mail.gmail.com>
-Content-Language: en-US
-From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-In-Reply-To: <CAEWA0a63QxMRqCwpCUqb5iKih31LY-2zX+--SkMGcP-Y19PqpQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BE1P281CA0486.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:7e::29) To DU0PR08MB9003.eurprd08.prod.outlook.com
- (2603:10a6:10:471::13)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.21; Tue, 24 Feb
+ 2026 10:38:04 +0000
+Received: from CH2PR12MB3990.namprd12.prod.outlook.com
+ ([fe80::7de1:4fe5:8ead:5989]) by CH2PR12MB3990.namprd12.prod.outlook.com
+ ([fe80::7de1:4fe5:8ead:5989%6]) with mapi id 15.20.9632.017; Tue, 24 Feb 2026
+ 10:38:04 +0000
+From: Alexandre Courbot <acourbot@nvidia.com>
+Date: Tue, 24 Feb 2026 19:37:56 +0900
+Subject: [PATCH v2] rust: kunit: fix warning when !CONFIG_PRINTK
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260224-unused_var_err-v2-1-337f9359d98e@nvidia.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XMQQ7CIBCF4as0sxYDRFrrynuYpkEY7CykzWCJp
+ uHuYvcu/5e8b4OETJjg0mzAmCnRHGvoQwNusvGBgnxt0FK3UuuTWOOa0I/Z8ojMou9b34Vgdec
+ M1NPCGOi9g7eh9kTpNfNn97P6rX+prIQSzih/lgYd3s01ZvJkj25+wlBK+QLc6LqErQAAAA==
+X-Change-ID: 20260224-unused_var_err-996d7ffa27c5
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Alexandre Courbot <acourbot@nvidia.com>
+X-Mailer: b4 0.14.3
+X-ClientProxiedBy: TY4PR01CA0079.jpnprd01.prod.outlook.com
+ (2603:1096:405:36c::14) To CH2PR12MB3990.namprd12.prod.outlook.com
+ (2603:10b6:610:28::18)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,267 +73,169 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|VI1PR08MB10007:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca31c4a4-22cc-47ab-3894-08de7390c538
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3990:EE_|SJ0PR12MB6878:EE_
+X-MS-Office365-Filtering-Correlation-Id: bf36f2b4-28bb-4e08-d127-08de7390ca97
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|10070799003|7416014|376014;
+	BCL:0;ARA:13230040|366016|7416014|376014|10070799003|1800799024|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cG9KR2UrL2xEMjIvZWJ3UEdWUDNzSUt0RERMWEVPNW5ncWYvNmoxRHR0RDhu?=
- =?utf-8?B?eENTbS8xd214MDlCRzB1dzRrZUZCamVSTkEvWE1uTVNjQm43anZ3R0lqaVRn?=
- =?utf-8?B?NVRmTnQ3M3VVVHcvNTQzWGhvY2pRTWZtQ1lHeTF6WFhIS0k4RTRHZlJ6QTZT?=
- =?utf-8?B?MXkycUQrem1YZzk4YnUwNTZCZnZVZlpaWjBaWjMrc2dXNCtPbHFaK01BOTFM?=
- =?utf-8?B?TmlTTXlzWnJhMzdBTVJKR2NUQ1lFQWZ0cER5QkJ3eGpGdHBTbkZubjQ2ZHRu?=
- =?utf-8?B?Q01CQnNuc2pSWDloYTVvNFdWK1dDbk93a2lDMU5Kd1RYQ295Z3Y4UUhTTGxE?=
- =?utf-8?B?TWM1YkNTM3psbXFrOXVvSGVoZlJjWW5tZzRBVzFrakUrVjRFd1J1MEhZWk8x?=
- =?utf-8?B?ZUxGZTdZaVpBQTN4aXB3OGNQNHZJVWw5WUF6Zy82S21sN3hUaGVyQzVJY3Ay?=
- =?utf-8?B?U09DUGtabVRNZ0ZJMUlKRWhMMU1ORzN2d2pNQ0VoMmtqdFVEV01xM3ZTQ1Ro?=
- =?utf-8?B?S3g4cHRYaHkwaVNzRTNFbnFIOWd2c1FKWkt5VWhNdElmVW94WUVLQUZWU2dE?=
- =?utf-8?B?UXNkK0ZxWHdWdzFDS2tFVW1GSEhBbnZLY2NoNzJsVEZvMk5YN0NVVXNTei9r?=
- =?utf-8?B?OG5pQjZBVVExUXlCK1VNcTVtNXZialZzRjdlWEhVVjR3WDBKeGZYOEkzcVlW?=
- =?utf-8?B?VVVyVjZFa2lSMkdWK3VQR1hCZEdsamROaEthZ1paazNQa0lIeEJ4L1RseGsx?=
- =?utf-8?B?dXdXbnN5ZGN0K3BCNHZMRGZhL2dOeVg1bEttZ2QvS2Vic1NiWnduK1VQOTZ6?=
- =?utf-8?B?SmV5MnpUaXVVYkRFbUUyK0V5akt4TG1TMDlqTFdmWnl4aUI2ZUJJdXMrai91?=
- =?utf-8?B?OG9vQ1pzTnc5VVY5eTVyaDNDbHI3YWtSd040cGVOeXdMQm1nVWYya3ZnQUpC?=
- =?utf-8?B?SWlKSlM4UDZhQjJ5Ymt2Wk4wMjVhaWIyZGJrWmRZclgyVitFYzNJOWpNc3R5?=
- =?utf-8?B?YS81UXFtS2V1QVg4dTVIc21hK0Q3dG54WjF0RGxpS1ZqZVBHOXowZG50ZDkv?=
- =?utf-8?B?ZTdaUW4rdXRYQ2IxcGNLc2VMRnhReW1YQVRKSHBjMExPVXV2UFdkcktmVDlW?=
- =?utf-8?B?U0ExdEkyREFOS2xCOFRZV3FueVlpdjhQcklxTERkbEhxZkd0VmZCUFFyZHJw?=
- =?utf-8?B?QWYrVGsveDdPNmUzVWlwVklpUTdFaXpLMlhDU1ZXK3Mzb2lQYytDQkRQL2M5?=
- =?utf-8?B?cU9kR29tKzU5bHhCelc0WTZENFRtK1pudmRhMTdIREllekQvTmkwZExJc2x0?=
- =?utf-8?B?d0p0ZHptcXptSFB5Y1A2aUQyN1ZmUVZZdnhzeU5wb1F0NDVVc25JZGxiUEYw?=
- =?utf-8?B?R0dIeDlXNTdKQlpyVW1mNDI2TWttUjRHSFhhb09BL2h1NHo5K1pDS2Jtd1A1?=
- =?utf-8?B?cUZEVW5xMG5HMnY3RW54WjNjYlhhbDFhOEg0RStIUzBVL0liSkF0OURua2JN?=
- =?utf-8?B?WVhJSTJiMVlVYjJ5QjZZZHU2SGxVTlQ4QVdXcTEyWG1jSXdkcE1GU2piZW4y?=
- =?utf-8?B?dlFMTVV2YTAyNHYxWGQ0MmFrN1Q5WnNpSXZ3d25uanRDdzBRSENqUFRyOTZU?=
- =?utf-8?B?aTIyQVNXd1JhV2JFZFNrcDBBZjFzWU5UZkdkaVd3YU4rMWxTeGxNZ2ZobHM0?=
- =?utf-8?B?Y0RyaU5PdUJ1Vk5YN3piWmF4Vm5EMUhZYnJXTHBqSGZIRzJjVVprOURMY0pF?=
- =?utf-8?B?eGRiRXplY3ZmVWhuQ25aVTNpRUl3N2ZkVGYyZVhRR1dLSWtzTEVlNFFKd0tR?=
- =?utf-8?B?M3BIdzRibERLSit2MFpNcXc3cm9NTmJjaStIYy9IeWhwNkR5QnN5b1IvQzVC?=
- =?utf-8?B?TjI4MUFWc3pJQU5Vakp1UWVvMzFVb0VXVERaamQzWWI2K3JGMXBiU1hLL296?=
- =?utf-8?B?NUNlWFhwbUJWWGhzWlFBdFB1NVFmRFFHVnM1UWV3VlV2UStUWG1QdlNxTjlG?=
- =?utf-8?B?VFdpNDlrYk9nZ3JmR2RBOU5lU2R1bkNqV2tPenhwVHJZMnlQN053VmhUUTZG?=
- =?utf-8?B?S1M3MThMVlM3bjhPazl0TUJaMXIxNVlhL01ua29reHpORkJNdXZ2MzVMbmwx?=
- =?utf-8?Q?JNC4=3D?=
+	=?utf-8?B?UDk3d1BwZEVnRXJMejFZa1Q3WkViQTFrOCt5dy9DWmJwUXpMYTdtWFNsUHFG?=
+ =?utf-8?B?ck5LL0Nabm5keE9UeDAyUkF5OFJqZXYvQWxYbFVmZzM5WjdiQ0sxcGVMc0dE?=
+ =?utf-8?B?d3RHNDVleTh5V05MUGsrWVEyMHhKRGo4ZUszMmJoMkhIY2NMckxIVGY3Rmg1?=
+ =?utf-8?B?alhQcENhSnE4bWJvMkNScTNOSjlxdXVqcjdNcW5xQzNxaUR6VC92eU12WjFC?=
+ =?utf-8?B?eUQyL25Sc1ZjSDdqSGZaeXczMXNQallvakg1bm1ONG9DVTNTd0k2cjdkVnNX?=
+ =?utf-8?B?cm9oY3ZsNXA3WVAxYXhFY09wSE9LT0lHNmJUK3MwU3BZQnRaQTlBZDR6TlNC?=
+ =?utf-8?B?UkcrdS9ES2QxRmNaN01HZ1JUbmxPQ2NoZTYvbW45UEhjYmlGQjdvSnV3SHdt?=
+ =?utf-8?B?cEU5d3JkMVA1K21zUEpXUXlKSXEvd1NhMWthdzBNUHZ5OFFJR1pnK3FWbzdL?=
+ =?utf-8?B?TGIyb0pzbWFhSSt0THQwZXVtdStoa2dxWDdiVEVRWkFSSk1Dbkw0b3hCb09O?=
+ =?utf-8?B?cEI4L3pJQnkxVy91a2JDQ2JxaVdPTHkrTEJHeU8vbStOR0libVhTdjdORjJr?=
+ =?utf-8?B?U3VSTEhJWU1FZ1hQandhdzRNQzhpRlhERFB2RHdnU09hTmd0c2FlUHI1aTZv?=
+ =?utf-8?B?YnoxM1kzRkxodDJ0aE9HUVdpUEdHOG10cEJKTEFyZnEyMXJsNWxhbFFpLzAy?=
+ =?utf-8?B?NHNKVmxkMzdVaTZFbldxQ3k3a2s0TWw3eHNGeDU4RDRKaGFzdVNZbUVTQkRJ?=
+ =?utf-8?B?R2lrTWFDNjBRSFBTZkxaeTZKL2JaTERJTXFZUk1IWXJGeFpSQUY3elluRVN4?=
+ =?utf-8?B?T3ZWSGVZNit2ZW5uNSsyekdud09ZVldoZEtFRTdiS0RhNjBxMERMZlZxRW9O?=
+ =?utf-8?B?TFV4T0ZsaG9RZGw2OWhQL0ZrYi9DSm5GWXZNN0JubHN6M3R3ZWd3NHp4YURW?=
+ =?utf-8?B?ZUJEbVZtN2NUTHFGOHNhSmFWekJNc3pWNjZsb05oOGpEWWVQOFc4VDlDaEtu?=
+ =?utf-8?B?a2FHZVhnK1FKWXlScXpCbkdzQ0w0eVFiODJINUtHTzVhOXEzUXArZ2FWSE5G?=
+ =?utf-8?B?YnRsYWI4cFZCbWR3ajd1Ulc1SUJEbUpob1ZsZEdmRjJPMU1QdEhlVFdpbDB2?=
+ =?utf-8?B?MXBpbXU5dFZzNzRSSERNNFF4NHk1TkJHVmxCWGpFM2Zrc2lwOWhzV1JnVHlI?=
+ =?utf-8?B?OVd6VStMOEtSWnlHTGVIUzRSaEdHTjJmTCs2R2luNkpUb1hTZWoyYVcxb0F3?=
+ =?utf-8?B?Z3NmbklhZlBmSUVwMElEbC9kNEpIRTZ2VGk0NnNVMTIrb2N0NFVRQmlERVBJ?=
+ =?utf-8?B?czlpUGQvNDRmNzZSZU54MDJoWHBNVDFCUVI4dTJmRTBjOERuM1YvRjlCTVZW?=
+ =?utf-8?B?QW5zTlpsMWFDOTdaNkcvRkQ1L0lJZmI3Q3dUQjZiSU9zMzZlZ2pOa3NVZWNa?=
+ =?utf-8?B?TXExdytGd0xpSk1jU2xPbWRUNUlJQnNVSVNleGpBVlBKNHFGV3Y5NFM5dzlw?=
+ =?utf-8?B?WjJDT09iVjFZeTB1MXIwdHhCbCtNaTBnQWN6RXVEZTMyUGVtcWpabFVEeHFT?=
+ =?utf-8?B?UjlMKzlSWlRLT0VtcmFWUzBPR2R2WGhkNzIyRkMzRkZpZy9QMmdBR2FYQzR2?=
+ =?utf-8?B?WEJDSCs2aGo4dkJ3ZjhQRDQrTzF4TnZiWCtIUmJBalFPWXFJU3NISDk3VXdy?=
+ =?utf-8?B?RHZWRE14L0o0NUpVTnNieUdmeXhOTDRtRGtKZzFteThqWno2Sm5YUVJXVUVF?=
+ =?utf-8?B?Nk14djlORWd3OTB4QThzS2Y3WnAwUHdoMWRqdndiKy91SisxVkNXNUk4aEtt?=
+ =?utf-8?B?L2xBWUFyckhaK213RlgvbzBYd3JtWThFSnNtTHU0dHVVZDZCT3I3YWs4Q0Qw?=
+ =?utf-8?B?S3dxTVZtV1dJNXdic2VBR3grc0Vvc3B4MGJ4UDFET0hnQ0x6N0w5ZUVLbEdW?=
+ =?utf-8?B?eWdzekREdzVJRlpQeG5WQ0Y0dnREa3NLQ08vZFhiOUhzaGp1dm5BSzErUGND?=
+ =?utf-8?B?RFA5NWpraS84ZjloT0J3VkdWajE1a2Nqb2k0Qit0SHcrWUpxVmZTZ0lJRE5n?=
+ =?utf-8?B?YnVzZ3pSamNjZ3p0L2JCWmFuY3hvUXpsNmphRmtJa3pTR1VWYWRVV2xhWUN2?=
+ =?utf-8?B?YTBib3VjY3VLaTZaeStvZ3hDeWVlbVRpaG5VbStMOG0vOGovSkMySmlvRThF?=
+ =?utf-8?Q?2ZtfTVNq7+b9Wl06tTc/LFs=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(10070799003)(7416014)(376014);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(10070799003)(1800799024)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Uk93a0VLTHB3VklBZWY0K3I2MXQwMVEwMW1Fd1NqRzVSNUsvSkVmYkFJNGhE?=
- =?utf-8?B?OUp6eEF4TWQ0eElDRGZ1MFNvQTVlUFJSTTZmYjJEL3AwM1U5b2MrbU4yZ3pi?=
- =?utf-8?B?cW1mamw2WWZ0ZTd6R0l5TEY1YThRWWRqOS9CQ0xkT2FrYXZtdmFaMFIzdldZ?=
- =?utf-8?B?R1Z0N0FBZVhDMmtPRG9jelBKMFNENUozT2drb21GaGEveVVNeGs0ZTJ0amlr?=
- =?utf-8?B?a3dWVWt5M1N4dTdFZXM5OU5FdTRNUEowK0tUZEJvbnBVaWJ1VmNZYVNMNDBH?=
- =?utf-8?B?VFF1b0FzMk95N0cvTlBWQXRoV3VkVnBsN0dzYTAwbC9TWStSeVFxaWppTlFE?=
- =?utf-8?B?aytlbVhLeVpjaGhWS1hkdjdveDZMV1A4eUQ2WEFIN3d5R2pJWXByVS83akJw?=
- =?utf-8?B?ZXcxN2JlRC9tck15SytLbm1MditUTy9ZOUlCbjhZNlliOTdiMUFYTXNucjUz?=
- =?utf-8?B?eGd3aGZPazR3cTdkajVTSXQzeHFacGJzTFlBWjhKcWlSSWlhdmhLWTdoN2Ev?=
- =?utf-8?B?VGEySjhMdnVxaE9CeVhadlh1Tm4yYm1qQllINEIvNXZwZmRWNktUbS8rT2Nn?=
- =?utf-8?B?M1NOTXdERTZoQy9WY2crZW9DUVQ1Y2M5ZUJkZTZEemZZdzkxYVQrK0hicmtH?=
- =?utf-8?B?azZ3OG9MdGxrdVI4NEsvb05JZnFqZ2szcFNJL2x5clMrUElCYlF4MjFnRGQ4?=
- =?utf-8?B?dmkwNDFVZmd1eHgxWHhMNy8yb0RQZEtNVDRWVWhzdUlmSm1EblJMNzRWOUM5?=
- =?utf-8?B?K1pSNVN0QjZuTE5wV3FreGlWeVBEMlN0Q2RsNzZLbjRpV1VNMENzekIxUzlC?=
- =?utf-8?B?OGpaR1U0RGlJb1BNU3pGb29sUXlVVnp3bk9WOXNyZHlUOG91VW5ZWWVuK3Ra?=
- =?utf-8?B?QnJHcThVNndrdWlteTZkZ3VZNmZJWFp2VXBkd01IS2pQc0tGanpyczM0Zlp4?=
- =?utf-8?B?K1JpT3dsMVUwSklDVGxwQnRXT2hZMzdodU9TK25iTTJrVXh3N0RaK3E5bDBa?=
- =?utf-8?B?cDJVZGtMcldWS2g0Tmlia3R2dzFuSDd0YXpUQk9taExiZXhnT1BvejBXZzBy?=
- =?utf-8?B?ZXEzanUydVlFaU12UklyRWFsWW5ySHRnM1dIZUJDaVd0aldmYitsNVNkQXBs?=
- =?utf-8?B?aXEybEhMeTM3OGVvM0QvcjJCckVWWjljVkFDdGdiSFlpSk91bHBUYUVzdnhi?=
- =?utf-8?B?L3owNWdmcDkxU1ZvNS9GL3FEMHJJMFVhSlVWc2hMRzZORkUvci9xS2d2enk0?=
- =?utf-8?B?Nlp6clEwTWQxVk0ydUtVMThnY2xpb0sxZ0dCRXJnc2hNRTRtY3hhVzJ6cWxD?=
- =?utf-8?B?V0Rzbjh3dW8yeUxqcjFMMUEwa3hGQzNMclhpbDZaWjdVNklZM3lMV0FVcHpq?=
- =?utf-8?B?anVxcDgzTjhJM0hwSDRGVGVyR3lEQ1MrUS82TUZTTW1zTWVMZmFNcEdvamt4?=
- =?utf-8?B?eFIzNzVYeDZMVzJSblQza0Q2RnNqMDFWN3pRM2hlckd3U2l4bjEwMzJ1Wkpv?=
- =?utf-8?B?cUxWNkorUFVRMEZ2VWpjYjNKbGdjc1MvdVJnL1ppbS85NEFkNCthWnVTY21E?=
- =?utf-8?B?Nk5jeG9nbkJrY2FDemxvWlRGa1NscnIvV2pza0Ztc2pGSGNRSDRNTE1FNldR?=
- =?utf-8?B?Y1M3U0h1bHJRd1JZV1Z5NC9rNzZ0NkRJczFZS0FtNXlpaDNqaFpQQTB4QUNC?=
- =?utf-8?B?YjFPY2I1L0hnYXdnZWNQMXlSWGt1Tk9uZ21zcmg2bXA3U0NWREpSZlI3M3gr?=
- =?utf-8?B?K1lOdEo5RDJDOWltOXg4d2dtMTlORVA5bWZON1RJa2FPY1V3VVhMM0l5YTkr?=
- =?utf-8?B?U2NsZXF3K3NFWUVuLy9PTFNDS3NxUUlOVS9HZC9QZU8wK1dUdkxsNVZES0hH?=
- =?utf-8?B?L0sxVkV0Rm9mZ3lEc0JrMmU2QjUybUd2Y2pIQW9FeWNDOHpsSWphekN2TVlR?=
- =?utf-8?B?UUZ0QmRpMERJaTBtcnEzc1lMSUJkRzhwSDB5RlM0cXkrMWFCbHljcXlrSXFi?=
- =?utf-8?B?KzM0dGJhYW1JZHZVVTNsRzZwTU9FTllwM1pxK2x6MldXZ3RHOGg5Wm10TnJP?=
- =?utf-8?B?eDNjaXRyVElIazVFUnF0amRNTmxkZ3VOSk5vTklraThFenIzc1JnSVcyemY0?=
- =?utf-8?B?b2FJalZEQytmREhZZDVpazRzZFh5TU84MXRCdENPZW1VNEcvbUIrNndERTNz?=
- =?utf-8?B?RGE2bkVXTkg5d0FoODJKbEs1VHpwS3ViMEZJR3c4akVESC9JajFuaDJFeUph?=
- =?utf-8?B?cmp5SUVHclhjb1YveXF6OTBIVFl4WkMwc0doNk56QU5ScTc5aHc4alN1Sjd3?=
- =?utf-8?B?QVpObXdYWXhOeG9TS1RLY0h1cURBcm5jOC93ZElrcHdOdWtxWVBvTDY3N1lB?=
- =?utf-8?Q?8EwGlNQpPmvpAiaFLH+mbhqntjtQvV6u0A2G6b7u/Fl2W?=
-X-MS-Exchange-AntiSpam-MessageData-1: stBc9JqybZjJ9B87AG4/YPVQEa6o5YL9nYU=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca31c4a4-22cc-47ab-3894-08de7390c538
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
+	=?utf-8?B?MzhxN2RkRElVeVBhVU41bENoVy82cno2R0FPR0RVank1YkdXYmI5VlY3OWlw?=
+ =?utf-8?B?VGRwT1pQbmlHWG0wbGNnaWs5NHNPclFKblg5aEdGZThSdmRKNkw3N3B2T1BO?=
+ =?utf-8?B?b3FXQkFJeDBtNjArSDg1Y1Fvb0xaSlZYYnZ6cmo4WUJydHBpeEErRzFxUmVq?=
+ =?utf-8?B?LzdTd3UzT1VtUWlEVWcwcUV6YUFlZHdmV1RoSjYya01GbDFVbVdndGhRY3Bo?=
+ =?utf-8?B?eWNBMTZRUmFkZ3FrU3VybGNNbDVBK3FoVWlpMmhqRlhJR0daNnZUNUxqV1B0?=
+ =?utf-8?B?Qk45OGNydjhaR1FjYkgrU1hSVVRaMHk5QWluL0EwYTBTbzJOYlg5b1ZjRkxv?=
+ =?utf-8?B?VEtLVE9Jb2tKK1pianVJS3c1KzJRTVJ4T0JGVUR1QnRLSFVINi9WOUdLT2Zr?=
+ =?utf-8?B?M0hackRPN3FTNEN0M2QwaHkxZGVZaDhOYjBqNGtabGNqa0RXSHd2OTQrczhp?=
+ =?utf-8?B?Vjk5YmFDQitsVTBLeHA0U2tJUGZWZDZTZm5ZTVRhdllLeG9aS2hjMUczLy9T?=
+ =?utf-8?B?cFM2UVpUSVFvU0JsYlNnSlk1SXlPbWJQYXBsNy9PNmdBQUo3b3h2WXo3TUJW?=
+ =?utf-8?B?OUJIU1k1bGFtSWNSZEx3NFphcDJxNmRaeVNtWGJqZmVFUGk0Y1lkbXB3YkdV?=
+ =?utf-8?B?UG9JbVl4UHpEVExJWXpaNFIrcW0vSVlkbjRXTFlIK2x0b3A4TjVGdmdkMzdL?=
+ =?utf-8?B?aTFESlg4a2VxeFZ1OWZpNEhYdk43bFdNTU5LSnVzS1p4ZEMyRm5hZ3RKci9r?=
+ =?utf-8?B?YndCWEVXZWYxSzFuVFRtOXgzR056R28zMXNSeHF0SGJ0eTRIWTBObk1kTVEv?=
+ =?utf-8?B?a2VlSDJZZ0JkVXNTT29aU2lWVjJCNzVUcTZjTGlaOU05SWc5S1pHVGlzSHUw?=
+ =?utf-8?B?VFgwemZwWnUrRVdydFUvNWtIQURNY3krdWZ2NXRYaGl0RnA0cHI4N1dRQ1J4?=
+ =?utf-8?B?ckpFUnVEZ2Y4ek1IWFdmVk1TM2Z3RmcxZmJCK0pPYVVic0F1M0NJNFdDclhs?=
+ =?utf-8?B?MmNFRmpnNGRrWUtOVzdIbUhWVXhxM1dkbWt6K3hVUzZsRkVpSXhWa0ZmbXdk?=
+ =?utf-8?B?LzZpQ0tvZWtMOEtUc3ZYSS9RWHdFV3QxSVdjVE9tSjZIdWc4MlZRSWN0V3pt?=
+ =?utf-8?B?OFdkYUtuZ2FIaDhERDlmcmhPTG95ZmFlQURIWitOaXl5QTB5Ym52RUk0M3pZ?=
+ =?utf-8?B?eTEwWVdDT1drZzJIb1hZQWg2cjIxTnFjL2ZCYmVKNFBuRG8xRGpBWGh6THU1?=
+ =?utf-8?B?SmMrR0lGY2hRM1ZpSVFyMzROWFhZMlVJcVlDVEZsMzFTV2RiUWh3WU5YNWQw?=
+ =?utf-8?B?RlpNb0dQaDBZcTFnWEZWMXBSNXN6dXdSM01WVGtEbU5qWkxHek8ydXJ5cFhI?=
+ =?utf-8?B?N20vN3NlczNIdEVPeC92V0tpQ2xJd0o2RUV4NGRZMk50L2l3SmFQNzB1Y1NR?=
+ =?utf-8?B?ZFoycnozNGR5bnpXUDluSC9DU3gwb25sa0RFN3Rma0RjV0JKWWsrUzNqZjdE?=
+ =?utf-8?B?MHVDNkFQeDMxenM1alVoVUlKZnkrVldFK0FvTlIvOG1KMzVUbHVJSi9EM3R1?=
+ =?utf-8?B?WFB3cmg4cWtldkg4Y0ZSTDl5RUVKQXIwTGg2dzhqS2hPUXdXY2xSdEdRa3NK?=
+ =?utf-8?B?VmcyVFBvdFdodmMvaWU3c2dzd3BCMXNRZndXeDhjYUhKSnBPMTIwR2xCLzJQ?=
+ =?utf-8?B?WlZjN2oyWlRJb0k1SkZneGZMSTlFWU14cHZvUjFQZnQyTU5kTlpRRzcvYnBB?=
+ =?utf-8?B?c2I5bWVPbHJkcFNkS0N0N3Y2SHpRZWxiandmS2hBbUU2UERUMm85SlpnZ3NN?=
+ =?utf-8?B?ZkVaQk9QYnhsaXdlaVI5SGpRcEVUS1lMUHRYb1g5SldPMmptK0xSbXk4aWxo?=
+ =?utf-8?B?R3ZnS3RnMU93UmUyZEFYek53Zys4OCswdFd6aHZnVGlGM09MblQrNXVNdndL?=
+ =?utf-8?B?WlpMaXZtemRIVGZ1NWlucHd5a1JVNGVENEt4ZjRjR3FweFNhN2t1VWRhN3J3?=
+ =?utf-8?B?clZPc3ZITGF4OUNlODhzZ1B5VTg5RFpmN1ZoZ1E0Q0cvWmp3ME9hTXVHREFC?=
+ =?utf-8?B?ejlQS2U3VXRDeWJtWjNVTDlLZGVETVg1VEhmTWw4dzJMdVB0MTVYb2ZUNGl4?=
+ =?utf-8?B?TTZMVCtWbUh0dWd6MXM4TFpEbXRscGpvNGZ2L2ttK3JGK1BsZS9Ic0YycmQ5?=
+ =?utf-8?B?bjgrSWdVdUVhV2RKb3JUallGM0t1WE15RjFMQ1JpYmFtT3hjY0wxbW1pbmdq?=
+ =?utf-8?B?V3dmOUt3Mk9pQ200NXdNV25aWU1ZK0NBUWhFRk96YzRiY1U4ZEoxZUV2bzQ2?=
+ =?utf-8?B?UHgxYTBlQTJyLzcyT2NacUt3THAzNXNQbi9YQkJlUytYb2w1OTB4SGNHWDJM?=
+ =?utf-8?Q?EjxOrgzgkjp2GQoz5ma8goCZQoR6dl8O88yoGEk44CXY1?=
+X-MS-Exchange-AntiSpam-MessageData-1: f/CjK5c8R70rcw==
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf36f2b4-28bb-4e08-d127-08de7390ca97
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3990.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2026 10:37:55.6207
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2026 10:38:04.6362
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WPtCvISDmR/64NNfS327psDw3+TEo/Wa/NZpwZpRg1JGwsTObbM7+Ug112QeRmuDyr4kaghjTiUad+cH24nci/U0AZwTT7x6MoogsRUJvOo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB10007
+X-MS-Exchange-CrossTenant-UserPrincipalName: qJre5Fao1lKTqwR0HsHuyoUlXqFU1xSMY9BxEaDyNeUeA26Y9SBaEHUAaiNaDBpw7On9XvqGgPgaFWwAoyr1JA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6878
 
+If `CONFIG_PRINTK` is not set, then the following warnings are issued
+during build:
 
+  warning: unused variable: `args`
+    --> ../rust/kernel/kunit.rs:16:12
+    |
+  16 | pub fn err(args: fmt::Arguments<'_>) {
+    |            ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
 
-On 2/24/26 08:02, Andrei Vagin wrote:
-> On Mon, Feb 23, 2026 at 3:03 PM Pavel Tikhomirov
-> <ptikhomirov@virtuozzo.com> wrote:
->>
->> This effectively gives us an ability to create the pid namespace init as
->> a child of the process (setns-ed to the pid namespace) different to the
->> process which created the pid namespace itself.
->>
->> Original problem:
->>
->> There is a cool set_tid feature in clone3() syscall, it allows you to
->> create process with desired pids on multiple pid namespace levels. Which
->> is useful to restore processes in CRIU for nested pid namespace case.
->>
->> In nested container case we can potentially see this kind of pid/user
->> namespace tree:
->>
->>                             Process
->>                           ┌─────────┐
->>     User NS0 ──▶ Pid NS0 ──▶ Pid p0 │
->>         │           │     │         │
->>         ▼           ▼     │         │
->>     User NS1 ──▶ Pid NS1 ──▶ Pid p1 │
->>         │           │     │         │
->>        ...         ...    │   ...   │
->>         │           │     │         │
->>         ▼           ▼     │         │
->>     User NSn ──▶ Pid NSn ──▶ Pid pn │
->>                           └─────────┘
->>
->> So to create the "Process" and set pids {p0, p1, ... pn} for it on all
->> pid namespace levels we can use clone3() syscall set_tid feature, BUT
->> the syscall does not allow you to set pid on pid namespace levels you
->> don't have permission to. So basically you have to be in "User NS0" when
->> creating the "Process" to actually be able to set pids on all levels.
->>
->> It is ok for almost any process, but with pid namespace init this does
->> not work, as currently we can only create pid namespace init and the pid
->> namespace itself simultaneously, so to make "Pid NSn" owned by "User
->> NSn" we have to be in the "User NSn".
->>
->> We can't possibly be in "User NS0" and "User NSn" at the same time,
->> hence the problem.
->>
->> Alternative solution:
->>
->> Yes, for the case of pid namespace init we can use old and gold
->> /proc/sys/kernel/ns_last_pid interface on the levels lower than n. But
->> it is much more complicated and introduces tons of extra code to do. It
->> would be nice to make clone3() set_tid interface also aplicable to this
->> corner case.
->>
->> Implementation:
->>
->> Now when anyone can setns to the pid namespace before the creation of
->> init, and thus multiple processes can fork children to the pid
->> namespace, we enforce that the first process created is always the init,
->> and only allow other processes after the init sets
->> pid_namespace->child_reaper.
->>
->> To avoid possible problems related to cpu/compiler optimizations around
->> ->child_reaper, let's use WRITE_ONCE (additional to task_list lock)
->> everywhere we write it and use READ_ONCE everywhere we read it without
->> explicit lock. Note: we already had READ_ONCE in nsfs_fh_to_dentry().
->>
->> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
->>
->> --
->> v2: Use *_ONCE for ->child_reaper accesses atomicity, and avoid taking
->> task_list lock for reading it. Rebase to master, and thus remove
->> now excess pidns_ready variable.
->>
->> Note: I didn't find anything in copy_process() around setting the
->> ->child_reaper which can influence the pid namespace, so it looks like
->> the pid namespace is fully setup at the point when init sets
->> ->child_reaper to receive more processes. Thus tasklist lock looks
->> excess in pidns_for_children_get()'s ->child_reaper check and it should
->> be safe not to have it in the corresponding checks in alloc_pid().
->> ---
->>  kernel/exit.c          | 2 +-
->>  kernel/fork.c          | 2 +-
->>  kernel/pid.c           | 5 +++--
->>  kernel/pid_namespace.c | 9 ---------
->>  4 files changed, 5 insertions(+), 13 deletions(-)
->>
->> diff --git a/kernel/exit.c b/kernel/exit.c
->> index 8a87021211ae..567fc3b7b0f9 100644
->> --- a/kernel/exit.c
->> +++ b/kernel/exit.c
->> @@ -608,7 +608,7 @@ static struct task_struct *find_child_reaper(struct task_struct *father,
->>
->>         reaper = find_alive_thread(father);
->>         if (reaper) {
->> -               pid_ns->child_reaper = reaper;
->> +               WRITE_ONCE(pid_ns->child_reaper, reaper);
->>                 return reaper;
->>         }
->>
->> diff --git a/kernel/fork.c b/kernel/fork.c
->> index e832da9d15a4..27d0cdbca67e 100644
->> --- a/kernel/fork.c
->> +++ b/kernel/fork.c
->> @@ -2423,7 +2423,7 @@ __latent_entropy struct task_struct *copy_process(
->>                         init_task_pid(p, PIDTYPE_SID, task_session(current));
->>
->>                         if (is_child_reaper(pid)) {
->> -                               ns_of_pid(pid)->child_reaper = p;
->> +                               WRITE_ONCE(ns_of_pid(pid)->child_reaper, p);
->>                                 p->signal->flags |= SIGNAL_UNKILLABLE;
->>                         }
->>                         p->signal->shared_pending.signal = delayed.signal;
->> diff --git a/kernel/pid.c b/kernel/pid.c
->> index 3b96571d0fe6..e6116e131d8d 100644
->> --- a/kernel/pid.c
->> +++ b/kernel/pid.c
->> @@ -219,7 +219,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *arg_set_tid,
->>                          * Also fail if a PID != 1 is requested and
->>                          * no PID 1 exists.
->>                          */
->> -                       if (tid != 1 && !tmp->child_reaper)
->> +                       if (tid != 1 && !READ_ONCE(tmp->child_reaper))
->>                                 goto out_abort;
->>                         retval = -EPERM;
->>                         if (!checkpoint_restore_ns_capable(tmp->user_ns))
->> @@ -247,8 +247,9 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *arg_set_tid,
->>                          * alreay in use. Return EEXIST in that case.
->>                          */
->>                         if (nr == -ENOSPC)
->> -
->>                                 nr = -EEXIST;
->> +               } else if (!READ_ONCE(tmp->child_reaper) && idr_get_cursor(&tmp->idr) != 0) {
-> 
-> I think it is better to update pid_ns_ctl_handler to prevent setting
-> ns_last_pid in a pidns
-> without init. Otherwise, figuring out why fork returns EINVAL can be tricky.
+  warning: unused variable: `args`
+    --> ../rust/kernel/kunit.rs:32:13
+    |
+  32 | pub fn info(args: fmt::Arguments<'_>) {
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_args`
 
-Hm, I think pid_ns_ctl_handler(), as it uses current active pid namespace can 
-only work if current is already fully (ns/pid) in the pid namespace, and thus
-the init is also already there. So it's implicitly protected from change
-before init creation.
+Fix this by adding a no-op assignment using `args` when `CONFIG_PRINTK`
+is not set.
 
-This check here is more for the concurrent alloc_pid() case. When one process 
-in alloc_pid() successfully allocated the pid and than, for instance, hit the
-pidfs_add_pid() error and is going to free_pid(), but the pid 1 is remains yet
-allocated from idr and the cursor is on 2 at the moment. At the same time the
-concurrent process may get to alloc_pid(), and will see cursor on 2, it should 
-not be able to create a process as this process will get pid 2 and will be 
-created before init.
+Fixes: a66d733da801 ("rust: support running Rust documentation tests as KUnit ones")
+Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+---
+Changes in v2:
+- Use a no-op assignment instead of the wider `#[allow(unused_variables)]`.
+- Link to v1: https://patch.msgid.link/20260224-unused_var_err-v1-1-c51d805eceb5@nvidia.com
+---
+ rust/kernel/kunit.rs | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-And in general (non concurrent case) it makes sense to only allow allocating 1,
-for the first process.
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index f93f24a60bdd..a1edf7491579 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -14,6 +14,10 @@
+ /// Public but hidden since it should only be used from KUnit generated code.
+ #[doc(hidden)]
+ pub fn err(args: fmt::Arguments<'_>) {
++    // `args` is unused if `CONFIG_PRINTK` is not set - this avoids a build-time warning.
++    #[cfg(not(CONFIG_PRINTK))]
++    let _ = args;
++
+     // SAFETY: The format string is null-terminated and the `%pA` specifier matches the argument we
+     // are passing.
+     #[cfg(CONFIG_PRINTK)]
+@@ -30,6 +34,10 @@ pub fn err(args: fmt::Arguments<'_>) {
+ /// Public but hidden since it should only be used from KUnit generated code.
+ #[doc(hidden)]
+ pub fn info(args: fmt::Arguments<'_>) {
++    // `args` is unused if `CONFIG_PRINTK` is not set - this avoids a build-time warning.
++    #[cfg(not(CONFIG_PRINTK))]
++    let _ = args;
++
+     // SAFETY: The format string is null-terminated and the `%pA` specifier matches the argument we
+     // are passing.
+     #[cfg(CONFIG_PRINTK)]
 
-> 
->> +                       nr = -EINVAL;
->>                 } else {
->>                         int pid_min = 1;
->>                         /*
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260224-unused_var_err-996d7ffa27c5
 
+Best regards,
 -- 
-Best regards, Pavel Tikhomirov
-Senior Software Developer, Virtuozzo.
+Alexandre Courbot <acourbot@nvidia.com>
 
