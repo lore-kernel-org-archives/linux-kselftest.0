@@ -1,93 +1,180 @@
-Received: from mail-10628.protonmail.ch (mail-10628.protonmail.ch [79.135.106.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C2F21FF2A
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 13:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 004CB395DB6
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 13:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771939288; cv=none; b=gFISsu+0D9mw2reoEwBrvg2Wq2lnftVOzzs+1O7iLuNO6YyevOJp53zDH26Q6MTLIg/X3rKqFY9y0fiXhTtjvHJGs+0fhvnOH7qwlNOQIBi+tWQbSJA+TGLifzCLTaPBEymb00u21a9fGhSThnuJ+iHwvKt8uVQhHRO1Lmv0IZ8=
+	t=1771939312; cv=none; b=AJ97WvJWEz5l9OtDUxn1CfMcnzQMCHjcXN1Nq+gRPGI0hQUmgHDZcfSIwq/2kA1orp18fVZ6mAT/u9kMpNUAE4Kwn0x6EVpLcg2wFT1R374mG09oiF/mCtlJk1lma1KWAQQ2LRbEtO0POhps2pEVjhCJqG7OK8zqVcEWXp/Yy7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771939288; c=relaxed/simple;
-	bh=rZrB3YzmXgRlShnWMhW2ZyLjV1gOyCpqIMcq7EbxZRg=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qfHseJkJVaQDQxVO+sujN6L6EyBqKIL6tJ9GTfabcP2XqUUAwsdn1/QsYE+1BwvaTgBueLfqPs1Kcpcp/80kQj/si13HNNE99M5Q6rMOhdr2y6t7TunpqjV5xm8me527hTIMNeUrKCLR7g4Pu9ttMDKJHi5pR+Xs9hUmx/yjRgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=blwgopTT; arc=none smtp.client-ip=79.135.106.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1771939312; c=relaxed/simple;
+	bh=KdFMNqHQC0OZGucm4zJmZCgBBYcLdHV0SzSRNUCwqN4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gkefjv1k3+FdIc2aC8ac9kCeyegATYoYinVbripMqwaNXK+jUXxc9Sah+61BR5bO6WwRRyn3HKzDm5/FkdvLVGbPGBmF/HiDCnAdVW5QdhVmTP1N1jFIuf8xIkzTO+01qQx7t934bGbKAiNBS1AAx5vawvKXHBxqHV1f8xdAaG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eaPIvB6Y; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="blwgopTT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1771939285; x=1772198485;
-	bh=xDhpaxOLFGG7DNHKvY0+tTAuCqm+nHQA10/X+HHagfQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=blwgopTTtTEg8ABV0gQ1EjIwcPdTv4bvIQEqf59hKT4a8IG+ObTU0pDpCUzE4DiN9
-	 xQ3laK4L5QVus8tpkTem0RjYhAQz9ZQHxJyJj2SZomtbgxO0kY5DBzBZ4W7EC5/Lfm
-	 kVg7wPvoG+vTl+Q9j0x11kCWkIcp/htA2IerBhS8PMaZ4WQXZpaiCq0ZikRf4qluBY
-	 lZu1b3QpfCHEl62cOT/jVbfituq9RUmIfhL5J+07BpiE3IGw2QCNvuFmfoC8XAw3P2
-	 y3fgtpZKvIOYbf/bf2erTuXosUhSYG9F22giSfxhWs5cZwxkiQq7DTj2W+rhIzFydW
-	 agWiG9eGy28yw==
-Date: Tue, 24 Feb 2026 13:21:18 +0000
-To: maciej.wieczor-retman@intel.com, xin@zytor.com, bp@alien8.de, ryan.roberts@arm.com, dave.hansen@linux.intel.com, oleg@redhat.com, riel@surriel.com, jgross@suse.com, peterz@infradead.org, mingo@redhat.com, tglx@kernel.org, baohua@kernel.org, ubizjak@gmail.com, brgerst@gmail.com, hpa@zytor.com, will@kernel.org, houwenlong.hwl@antgroup.com, shuah@kernel.org, luto@kernel.org, seanjc@google.com, akpm@linux-foundation.org
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: linux-kselftest@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org, m.wieczorretman@pm.me
-Subject: [PATCH v2 0/4] x86: Simplifying LAM
-Message-ID: <cover.1771938156.git.m.wieczorretman@pm.me>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 70dd38cd595a8970bedff92c7e45265ae2be8eff
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eaPIvB6Y"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8220bd582ddso2513235b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 05:21:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771939310; x=1772544110; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4DBQxTCdml7S+itQTZYwXfqu7v90m5fsL9enZcs6YS8=;
+        b=eaPIvB6YkP39abDnLKdEavBvegdKPDFge4lbX5NUsvE2eOLIjcJrz1WoauILO8FXTM
+         arVUDuORiqB5jRkigAyJq9+MenGqERBgRk61KNInHeKLpBKt7pVfdiMbj/B7wktL68PU
+         8dVB8/ozgC0SNrv60jwqPq3ypxKtyjU3Bn9uCbRmL1Cd0/P+hKVkGthm3Vg35qql3GYO
+         ridB0gZcWCdfKsuTQrjU7RGLvtw+D6e3sQ585Oz1rRkGZ3Bb9LHLvTUt31DkzwInbO48
+         EsNMBjFpfetMZxryknmoWEKMmSdQuSuT+ltcoXxg0XqWMAJqML5y9IqDbNYwOUAoN/u4
+         xnuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771939310; x=1772544110;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4DBQxTCdml7S+itQTZYwXfqu7v90m5fsL9enZcs6YS8=;
+        b=RNg1vPUhh3s5PV/lNawrUCHntkoYDCmUO/tCeWfB4AMoQ3QPzWe4faiD361Mt+9yJS
+         r6fylTiuVZ+3/a6Zghks7O7IKtC8cMMMFxJYzHdHLwm3x1Pvlx62PWWy1amm0XcM9/yq
+         P/5UaD5m5IJpgaTjoFDHLI3LJjzpGmhhG05yFLTFcLjGlXOjpN2AhcaPe2kiqBaUvHs7
+         xohv1AYnq0LMfXxfLXLk11sas/PeJ/UjokKcrABuDC9UbT3cqsZp3sbt+gHFgptSkocG
+         Q2B48G+ag/Rbo9VZ8R8ZSdYzAiEst5cUVubY4ufz7ZHFRaq2q8VqJ66l7wfMeW1heIri
+         /ZEg==
+X-Gm-Message-State: AOJu0Yy3dvJm8X3CQuzn6dTOCxATBMNZYr0sTOu//0r5MuHW7qdFdI8z
+	JEaVhCAXuYPSs8fhHzaYNByLWJ5WhOoVEJTF92pJFJPTEcK3Yu5LIn9WE5248kCy
+X-Gm-Gg: AZuq6aJLmmKG9jAZwffZTpH23JD7RnV3d2Na/AxjGTbzhfPkcdRdUGBvfqjZ2qWGEKS
+	5IP7Gi8Ou2qdOYErC5c8uTEtikKb6RxDmlIdyYmUjsvP1+EvZL6FSeWNGY1UHKo4+0xfn4rr3WE
+	Sxb1YRuBSqyJqcG1PWW77q7GR3BqJP3iOmVFci6Jd0mpTfRPRfOuNGK2xkJLNJhk+hkkVdtRoKU
+	bPxlaYh4qJw0kRKj3XrcfLA7cfZc6Or3eXyR2i5gF/8EU4OV9d6N1Ee+IBiW4nM9LhRosGeWaX2
+	TqWSiiaV3MM+MjnnJBEYRpE1V0kbdKMdfZ2eKxOyKvm6Hov6z+1srCfkbHaqCZbvw9MuDuUVMg+
+	l2nqDxmofZxa8nfBLhQIPszAXmpud2p/p4O2pE2JlCD1TR9x9ogd/s3nLpJ6WA5t7Q/qQpdpoUk
+	o4H2oSPIzYlKJkr0qt7/Z9R/5xN8g=
+X-Received: by 2002:a05:6a21:a03:b0:38b:d95e:69a9 with SMTP id adf61e73a8af0-39545ebb962mr10908349637.16.1771939310267;
+        Tue, 24 Feb 2026 05:21:50 -0800 (PST)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-358f5f7457csm883925a91.16.2026.02.24.05.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 05:21:49 -0800 (PST)
+Date: Tue, 24 Feb 2026 13:21:45 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Brendan Jackman <jackmanb@google.com>
+Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCHv2] selftests: Use ktap helpers for runner.sh
+Message-ID: <aZ2l6dN2fZapf4eP@fedora>
+References: <20260224041048.6570-1-liuhangbin@gmail.com>
+ <DGN5V6ZKYQ3A.1F5DK46XY82YB@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DGN5V6ZKYQ3A.1F5DK46XY82YB@google.com>
 
-After ChkTag [1] announcement, it's worth preparing a stable x86 linear
-address masking (lam) user interface. One important aspect of lam is the
-tag width, and aligning it with other industry solutions can provide a
-more popular, generalized interface that other technologies could
-utilize.
+On Tue, Feb 24, 2026 at 11:38:34AM +0000, Brendan Jackman wrote:
+> Cool thanks sorry I did not really review the code before but now I'm
+> taking a closer look.
+> 
+> I don't parse KTAP but I did check that this doesn't break my usecase
+> [0] so:
+> 
+> Tested-By: Brendan Jackman <jackmanb@google.com>
+> 
+> [0]: https://github.com/bjackman/limmat-kernel-nix/blob/master/ktests.nix
 
-ChkTag will use 4-bit tags and since that's the direction other memory
-tagging implementations seem to be taking too (for example Arm's MTE)
-it's reasonable to converge lam in linux to the same specification. Even
-though x86's LAM supports 6-bit tags it is beneficial to default lam to
-4 bits as ChkTag will likely be the main user of the interface and such
-connection should simplify things in the future.
+Thanks for the testing.
 
-6-bit tags should still be available as a debug feature and possible to
-enable through debugfs. Tag width can be system wide whether it's the
-default 4 bits or debug 6 bits and when a process requests a specific tag
-width it should get the max amount enabled globally.
+> >  run_in_netns()
+> >  {
+> > -	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
+> >  	local tmplog="/tmp/$(mktemp -u ${BASENAME_TEST}-XXXXXX)"
+> > +	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
+> 
+> Nit (no need to respin just for this, but if you're already respinning):
+> Diff noise here.
 
-Series also cleans up some comments referencing LAM_U48 which was not
-implemented in the kernel and the comments shouldn't imply it can be
-enabled.
+This is to make the variables in reverse Christmas tree based on kernel code
+style.
 
-Patches are based on v7.01-rc1
+> 
+> > +	local rc
+> > +
+> >  	ip netns add $netns
+> >  	if [ $? -ne 0 ]; then
+> > -		echo "# Warning: Create namespace failed for $BASENAME_TEST"
+> > -		echo "not ok $test_num selftests: $DIR: $BASENAME_TEST # Create NS failed"
+> > +		ktap_print_msg "Warning: Create namespace failed for $BASENAME_TEST"
+> > +		ktap_test_fail "$test_num selftests: $DIR: $BASENAME_TEST # Create NS failed"
+> >  	fi
+> >  	ip -n $netns link set lo up
+> > +
+> >  	in_netns $netns &> $tmplog
+> > +	rc=$?
+> > +
+> >  	ip netns del $netns &> /dev/null
+> > +	# Cat the log at once to avoid parallel netns logs.
+> >  	cat $tmplog
+> >  	rm -f $tmplog
+> > +	return $rc
+> >  }
+> >  
+> >  run_many()
+> >  {
+> > -	echo "TAP version 13"
+> >  	DIR="${PWD#${BASE_DIR}/}"
+> >  	test_num=0
+> > -	total=$(echo "$@" | wc -w)
+> > -	echo "1..$total"
+> > +	local rc
+> > +	pids=()
+> > +
+> >  	for TEST in "$@"; do
+> >  		BASENAME_TEST=$(basename $TEST)
+> >  		test_num=$(( test_num + 1 ))
+> > @@ -194,10 +200,20 @@ run_many()
+> >  		fi
+> >  		if [ -n "$RUN_IN_NETNS" ]; then
+> >  			run_in_netns &
+> > +			pids+=($!)
+> >  		else
+> >  			run_one "$DIR" "$TEST" "$test_num"
+> >  		fi
+> >  	done
+> >  
+> > -	wait
+> > +	# These variables are outputs of ktap_helpers.sh but since we've
+> > +	# run the test in a subprocess we need to update them manually
+> > +	for pid in "${pids[@]}"; do
+> > +		wait "$pid"
+> > +		rc=$?
+> > +		[ "$rc" -eq "$KSFT_PASS" ] && KTAP_CNT_PASS=$((KTAP_CNT_PASS+1))
+> > +		[ "$rc" -eq "$KSFT_FAIL" ] && KTAP_CNT_FAIL=$((KTAP_CNT_FAIL+1))
+> > +		[ "$rc" -eq "$KSFT_SKIP" ] && KTAP_CNT_SKIP=$((KTAP_CNT_SKIP+1))
+> > +		[ "$rc" -eq "$KSFT_XFAIL" ] && KTAP_CNT_XFAIL=$((KTAP_CNT_XFAIL+1))
+> > +	done
+> 
+> Can we please be consistent about how we do these two big conditional
+> blocks? Also should they use `case`? Also please add something to not
 
-Changelog v2:
-- Extend a char buffer in debugfs read callback to fit the format
-  string.
+Ah, yes, we can use case here. Let me update the patch.
 
-[1] https://community.intel.com/t5/Blogs/Tech-Innovation/open-intel/ChkTag-=
-x86-Memory-Safety/post/1721490
+> fail silently if $rc has a garbage value (I guess just log a warning).
 
-Maciej Wieczor-Retman (4):
-  x86/process: Shorten the default LAM tag width
-  x86/process: Add a debug interface to change LAM tag width
-  x86/mm: Cleanup comments where LAM_U48 is mentioned
-  selftests/lam: Add test cases for different LAM tag widths
+A log here may break the KTAP output. While run_in_netns() calls run_one()
+in the end, which will print the exit value if it's a garbage value. i.e.
 
- arch/x86/include/asm/mmu.h         |  2 +-
- arch/x86/include/asm/mmu_context.h |  3 ++
- arch/x86/include/asm/tlbflush.h    |  2 +-
- arch/x86/kernel/process_64.c       | 70 +++++++++++++++++++++---
- tools/testing/selftests/x86/lam.c  | 87 +++++++++++++++++++++++++-----
- 5 files changed, 143 insertions(+), 21 deletions(-)
+    ktap_test_fail "$test_num $TEST_HDR_MSG # exit=$rc"
 
---=20
-2.53.0
+> 
+> FWIW I still think this is very yucky but, it seems switching to the
+> helper library is a worthwhile cleanup (plus, this patch drops a level
+> of subshell nesting in the tap_timeout pipeline, which seems like a step
+> in the right direction!) so I think it would be irrational to block that
+> cleanup just coz of this yuckiness.
 
-
+Thanks
+Hangbin
