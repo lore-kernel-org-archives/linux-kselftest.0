@@ -1,177 +1,195 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6658B34AB19
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 22:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771973225; cv=none; b=jNBaR6TI4QZiLO7Skor/DIOFqTw6Lh7CZ/QHMOCqahGBk8hTiHOXaMlOto/5RweHVO1ZoUURPSpbKDOIigg4siLoNJ+rnNkmrtaDp0QTEosgi3Ydvr5L0My2DG1GTDpWM5gTrakGG6CWr7CtUhpmJJ9xFAZjrsaom0Yekslzc38=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771973225; c=relaxed/simple;
-	bh=/tw21Vut8zaBzWz0mRW54oOqpRQBfU4CqKnZ0Ydz0t4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L7mJa4GGFBF8I3oMioZL+jHyEvNdEPcGXSKqf6lkykl9+NAZwy3UTF0chY6eON3YlhlKmkVl+vpmQyZzqQ1wWovlgtnlUWjgSwys9eSQaSvd/T7WlhpOheTxvnTfn6sWsoVp0UpvTI3y9WJgoWUUvq6LlngwMyp6zlUsQA+lORA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D8FMCWox; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC18634321C
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 23:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771974514; cv=pass; b=fMWUshpMPU5jqQ4hdzyEUqCh6E1dbK9X5bdHHRJpFYPQMfu8uF9Jkp/9uwlmxbZY0Ptprm9hbE6A/4TK4LqEe+mwmOnVXPIDdt5nhytgaZosu8nSwQ9rWYCx8ivLH/j3nBmVt/qxawdGA0z1u5re/vXl4BFENoNFPfFmceucZOE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771974514; c=relaxed/simple;
+	bh=28oWEEZoiQk0c8pFXW4FAksDMsn5TOYNsg+K52E7d0I=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hNzRUhYeEF4/vhRmIcB7iWTguRwWDudiEj9240Cnjo27yKCnO2xbc1GrPZjWOrHluwbysM9d3nkGXxeYjW0eExu/rm5NhBPnHEWKAuOxOvc7vD3UD9GdrbOozz7wJCgIQxXYzUNBEps8aoqPqkd6duxc1lLtpeC6KOB/QXG5LoU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qjaI4wnc; arc=pass smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D8FMCWox"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-66f3e7d9eccso3446243eaf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 14:47:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qjaI4wnc"
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-948029fb1f2so1683731241.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 15:08:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771974512; cv=none;
+        d=google.com; s=arc-20240605;
+        b=B0OqBOvGLQjc1jUGWAxEABCeBW01+qz+xb080l0HtZTtcMUZ4R0d75yzaRXCnXaF+v
+         5tJCJ8vqq1k+O/RkrLTIOgenot2GkCejbkDCT0orYjIqAaY55ybRCHVqcLPSuEZOjy8p
+         UxRYHst0fpnzGrIR+dUmHcv+kxULBi2JPCbdzvQ9hvZO2pFzO3UNNe5Psi57h8PSvnms
+         eJ5vOS9fgDgTVreSZBPYlsUgH5zTs2HxJupzKzAkIVJkIrNK8rU+IrjzaGMtLOeezGRQ
+         rULAq7h9N0bYvXyyvCQ9v/M39qdgx+AbXZ8xs3QWiH1fLg2DcqCnblf+wx4AR5nOtkXl
+         bcdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=Xux2sJMsRceAq4Wg5BBVEZwRPNSVyPqjLyJ8Turb9tM=;
+        fh=Bg29ftJ8MqGGiIbpkBTuvxgW/6TkVSCegVFykDq6ZT8=;
+        b=Qpp5w81C6bvXwPxPkEkTWBq2azYSrK6YDNxQ1bgcbfqUjTzG76zRxWZPw2D2yRxSQ0
+         Ky/Y6rFBhlShlFTycgk0gzL19ht70wk8hy9c/icUbKJaNleO8jh2+su6VEuSSui6RXW5
+         YVW0OINMiSBZ29zNKztXY0Hmn7c+3p4Mwf8xhUukC5m/anrqMUGPxRySMwaU5UTThWsd
+         u9xJrYB9ScQmU/5IhinxMySxHqwMD4gceU9umvgUVNgg4pX0yyFhn5Ia444Pf0SHz78T
+         kOVANmMjFm+iydT3Dw8rH1z4wxwRksgbZgwYxLC8fB6jbJUEv9Ll3eh8mpMMo2JdfyhN
+         AI8w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771973223; x=1772578023; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aKkhc4BD4XEPfl/FTpjBpxdNdc/bH+oIOhQJYr5AIbA=;
-        b=D8FMCWoxcryrvvJzpoCeZbaEtJR5ixd2I2vUWiWPiFQ5d/aCWPrYYwrAsFdRQv9pQl
-         +f4GIsmwPjG+c9bGpabOEzXx93816Jsh1uAIQKnfoeqiTKO/y6RtYJUwRwhGak1/5IkA
-         BFdFLmgcaPDezKkqprGdJWyvE59MMfXD0dFgsMaa47XCLsxiCOVuvarfiGd4aEXzBK2k
-         PMKkHliaJJHsoYc1Huf9lKk42W+lgi7EnbNS3z+B3q7JkKiUTX6E269bmQjKUvQ2pfrw
-         yVh/gwSRD8eyfV1hPmVOwVQSjNlJAZpnf8A7jk46YejXs7Iq5JjusmmYZDdh0P5W0uGe
-         jlBg==
+        d=google.com; s=20230601; t=1771974512; x=1772579312; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xux2sJMsRceAq4Wg5BBVEZwRPNSVyPqjLyJ8Turb9tM=;
+        b=qjaI4wncSBISX6RMiyYjW6b7vhKOb7K3rRqhHpgcw3cBMa34/9D2b2LhVwiUzcW1NM
+         LM+e+JbVTdBdYV7oed9NR0e/npN6N4IN20/kvexzf1JHzwICpOSVhckPKqMtuf8nRj/i
+         umt4eOPj1p+CJFBwhmI2biJxADyS2yKAfVaMY5Ckdvqv4iJlcnSFDr/k7BkuWU7XvKnD
+         6xjMcoGQj9BlCV/x0mN7J7wtQmwhDvaesWdeyhqEl2FlQVUrn2KCKkbNeZCq6Lf311Kc
+         GsyMNFVKNifRzFGjtjZernenD9waEcL8F8qVWnsijoga03aHMcDjwbFWIHzgURP4uHv0
+         DsZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771973223; x=1772578023;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aKkhc4BD4XEPfl/FTpjBpxdNdc/bH+oIOhQJYr5AIbA=;
-        b=Sk+wh4/aruJzkYqzaUXGuo3ntJ2VUmKSiwGI8+rqTC/gGnard3i+PUrrA5N4xkcjbk
-         gYDtF7cmWpdKyvmYPzitwVAYCkzyS20g4hrERtdmql4a3kh4NYaN2SXYehGFg0Y7AObc
-         vZzjqncPyLpmx5NkUdIl2DkaXdbMRz6wIUiNuHwaMLQV4zxp+XH08dgCUQIsx1FS7HUd
-         LjmVWyced/eXidf7MSKouhOVHNaiEXDsXznVBEc0J1+uAGJnaWSAT98MHXOzYoJkG1hH
-         VdHtMwJdtgdgQGP1UHnD1jsmRnVdCQbj5JTxaAb/XqBLOivsQSvlkdBrg5EcdKX4v80y
-         +0kw==
-X-Forwarded-Encrypted: i=1; AJvYcCWWIanErNFw29xjSY/z5bVwyUOoHAw8KRbUoViyl2yd07ygATIMxPoTwNNw0r+2sBm0heBR3Xi+TlqG3Knhexk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnFq/zTfPWOER9dHl9S58ZD3xu7IyNYtrh3qQlmWYKGct31mzI
-	5Uu7bouZ7E5Fh80U6OHsLA1A524QvaGjSJk5lVMLhZWstxGu/1qmao06
-X-Gm-Gg: AZuq6aIvWuPak5Vu8TQipDMEbvmnU0ok2dgqGbXn9rFxzed1pEv79+i1gV9GuTaNDe4
-	p9vEDk7hzXHmeias0xpncWXqSaxDbbwUT/LjtLvENbsREFZXDBiMlxh3Q6YhSkTdaGZuBSwGkjV
-	znKOPcDQbhIc+lEsx+KYfJxyWaVj5lXU8L/PuNIV0MbqetpS5ee/kR5PBDSwGEwYeh2F03S+pkh
-	tVuaZtdWPCakO5zr9sPyK30SCZntI5x1jHDmPsayLGldwdBD9vwMnStfBuPK2Gn2BlOVPiGemnO
-	1udb/B1dCtnYf8rKfWSRnzN1fKQSWRMULC9y3nUdUFZIqPEgdwDS4c00a5tzbKKszHgtsZ8jM7h
-	bIOygTppqSgVsBxeP12Osi0DLi0jfiOmaiHxgnA0tYm85XnJdY1dsLaqDzBQFjA==
-X-Received: by 2002:a05:6820:828:b0:677:a19a:55f with SMTP id 006d021491bc7-679c46432f3mr6818336eaf.63.1771973223411;
-        Tue, 24 Feb 2026 14:47:03 -0800 (PST)
-Received: from localhost ([2a03:2880:12ff:4::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-679c56dbde9sm9532514eaf.11.2026.02.24.14.47.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 14:47:02 -0800 (PST)
-From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-To: "David S . Miller" <davem@davemloft.net>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Daniel Zahka <daniel.zahka@gmail.com>,
-	Carolina Jubran <cjubran@nvidia.com>,
-	Gal Pressman <gal@nvidia.com>,
-	David Wei <dw@davidwei.uk>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	Nimrod Oren <noren@nvidia.com>,
-	Breno Leitao <leitao@debian.org>,
-	Petr Machata <petrm@nvidia.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 2/2] selftests: drv-net: rss: Generate unique ports for RSS context tests
-Date: Tue, 24 Feb 2026 14:46:59 -0800
-Message-ID: <20260224224659.1507082-3-dimitri.daskalakis1@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260224224659.1507082-1-dimitri.daskalakis1@gmail.com>
-References: <20260224224659.1507082-1-dimitri.daskalakis1@gmail.com>
+        d=1e100.net; s=20230601; t=1771974512; x=1772579312;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xux2sJMsRceAq4Wg5BBVEZwRPNSVyPqjLyJ8Turb9tM=;
+        b=fS12YoPcoks1x6aUG5BNt/yE2B87FUXmwd3KS0U7DZkQ2PJI6zbuLo7XiCC8oWCWvE
+         V058HXRWd6PU3kXpNaUyhgJfOxcfLN6UwSGDVcnl0kwIVVpL5WSGpaFfvuJSCaFln1fB
+         /IkJvU0UtE1pOtrATztu626nkeV1JWA/9YAUyhc/pCNYm2N0DKy0/Ew5axkK2RVMLBQg
+         nAgyLjMCUzbncf+99e/Bp+5zsWy///jo0H8MuLPszt80xBd2LuVTA9S3OSLITaDwfJ+4
+         Qzu0sYTdUEyYLhc5ILpPIf5YUJN4sdolxNVeqjzz8E7JbFaD7S/KrGE5o2Umwqr34RAx
+         Oqnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVitGRQmYaFQ6VqDzKJxIcs1SKzqNTPZgkjbuWAJJo+3jItehIf990YO7a8F4eojXgK+pN25Xa42hVhEdNaSdw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVTGl0Fgr0YgOCXT0P4haa50AWCaJHxbC8j4IAAdUlqaYcAccH
+	E5hwAZiiSkAUSYPeSfJtlkGjfYbPAhI9bIw/BEvb+RqJK8fw0hWR/BaJAScLsY8SJYV3mbLbe69
+	XhzCWQ1wUNjMLXG+IV+fqkV9tZ6ZUMLhmSqJoB8MG
+X-Gm-Gg: ATEYQzxZewchCR7Thvt9G0D1AL+JDQe9A+ldHfW1kIavS80/nEqpBoiO7gWK2J4KfZ1
+	t930q3JunKm2YQphVLwpoDGu6fPXOea0i4VkSDJXi5IxT/3RK9SQ/uhPd8WGi41Q0RAU9pEpyj5
+	HT1E9vr3sUdO410Dz0PrDYJYdna4fsFSsXtm1h2/NPgtygJue5ULX7S1cq9d+zl9MFXs1r4zKhS
+	JiPDhjIxlra+glzOeJ76brVJcHliq+FjjrZThH4qbjSVY5yBoTI64K1R4PsiyzWavXmOgy0YHsG
+	G2uUwFFcb51ILiLWxODp9LcDC4QVtrMtW6TV8YltoA==
+X-Received: by 2002:a05:6102:3591:b0:5f1:c4d3:5b37 with SMTP id
+ ada2fe7eead31-5feb2f08b48mr5246678137.16.1771974511231; Tue, 24 Feb 2026
+ 15:08:31 -0800 (PST)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 24 Feb 2026 15:08:30 -0800
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 24 Feb 2026 15:08:30 -0800
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <9ef9a0bd-4cff-4518-b7fb-e65c9b761a5a@kernel.org>
+References: <cover.1771826352.git.ackerleytng@google.com> <a97045a9-8866-40fe-aa15-d319cafa6f2c@kernel.org>
+ <CAEvNRgFF0+g9pmp1yitX48ebK=fDpYKSOQDmRfOjzSHxM5UpeQ@mail.gmail.com> <9ef9a0bd-4cff-4518-b7fb-e65c9b761a5a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Tue, 24 Feb 2026 15:08:30 -0800
+X-Gm-Features: AaiRm50613GkBCc5TY4oG7cVnbM-cLi0tM-0c-2O0j598MHU_6zRLimq98-hNZ8
+Message-ID: <CAEvNRgESctVm9CcEyK36hY8Ta=DEDOS1oW5w0qRDoNfdd=470g@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 00/10] guest_memfd: Track amount of memory
+ allocated on inode
+To: "David Hildenbrand (Arm)" <david@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org, lorenzo.stoakes@oracle.com, 
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, willy@infradead.org, pbonzini@redhat.com, shuah@kernel.org, 
+	seanjc@google.com, shivankg@amd.com, rick.p.edgecombe@intel.com, 
+	yan.y.zhao@intel.com, rientjes@google.com, fvdl@google.com, 
+	jthoughton@google.com, vannapurve@google.com, pratyush@kernel.org, 
+	pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com, 
+	michael.roth@amd.com
+Content-Type: text/plain; charset="UTF-8"
 
-The RSS ctx tests rely on NFC rules with unique ports to steer packets
-to the correct ctx. This updates the test to use the new rand_ports()
-helper to guarantee the ports are unique.
+"David Hildenbrand (Arm)" <david@kernel.org> writes:
 
-Manual testing shows that generating 32 ports with the existing method
-would result in at least one duplicate 4% of the time.
+>
+> [...snip...]
+>
+>>> Could we maybe have a
+>>> different callback (when the mapping is still guaranteed to be around)
+>>> from where we could update i_blocks on the freeing path?
+>>
+>> Do you mean that we should add a new callback to struct
+>> address_space_operations?
+>
+> If that avoids having to implement truncation completely ourselves, that might be one
+> option we could discuss, yes.
+>
+> Something like:
+>
+> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
+> index 7c753148af88..94f8bb81f017 100644
+> --- a/Documentation/filesystems/vfs.rst
+> +++ b/Documentation/filesystems/vfs.rst
+> @@ -764,6 +764,7 @@ cache in your filesystem.  The following members are defined:
+>                 sector_t (*bmap)(struct address_space *, sector_t);
+>                 void (*invalidate_folio) (struct folio *, size_t start, size_t len);
+>                 bool (*release_folio)(struct folio *, gfp_t);
+> +               void (*remove_folio)(struct folio *folio);
+>                 void (*free_folio)(struct folio *);
+>                 ssize_t (*direct_IO)(struct kiocb *, struct iov_iter *iter);
+>                 int (*migrate_folio)(struct mapping *, struct folio *dst,
+> @@ -922,6 +923,11 @@ cache in your filesystem.  The following members are defined:
+>         its release_folio will need to ensure this.  Possibly it can
+>         clear the uptodate flag if it cannot free private data yet.
+>
+> +``remove_folio``
+> +       remove_folio is called just before the folio is removed from the
+> +       page cache in order to allow the cleanup of properties (e.g.,
+> +       accounting) that needs the address_space mapping.
+> +
+>  ``free_folio``
+>         free_folio is called once the folio is no longer visible in the
+>         page cache in order to allow the cleanup of any private data.
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 8b3dd145b25e..f7f6930977a1 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -422,6 +422,7 @@ struct address_space_operations {
+>         sector_t (*bmap)(struct address_space *, sector_t);
+>         void (*invalidate_folio) (struct folio *, size_t offset, size_t len);
+>         bool (*release_folio)(struct folio *, gfp_t);
+> +       void (*remove_folio)(struct folio *folio);
+>         void (*free_folio)(struct folio *folio);
+>         ssize_t (*direct_IO)(struct kiocb *, struct iov_iter *iter);
+>         /*
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 6cd7974d4ada..5a810eaacab2 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -250,8 +250,14 @@ void filemap_free_folio(struct address_space *mapping, struct folio *folio)
+>  void filemap_remove_folio(struct folio *folio)
+>  {
+>         struct address_space *mapping = folio->mapping;
+> +       void (*remove_folio)(struct folio *);
+>
+>         BUG_ON(!folio_test_locked(folio));
+> +
+> +       remove_folio = mapping->a_ops->remove_folio;
+> +       if (unlikely(remove_folio))
+> +               remove_folio(folio);
+> +
+>         spin_lock(&mapping->host->i_lock);
+>         xa_lock_irq(&mapping->i_pages);
+>         __filemap_remove_folio(folio, NULL);
+>
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
----
- tools/testing/selftests/drivers/net/hw/rss_ctx.py | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+Thanks for this suggestion, I'll try this out and send another revision.
 
-diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-index ed7e405682f0..cbeb3a38fdfe 100755
---- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-+++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-@@ -9,7 +9,7 @@ from lib.py import ksft_eq, ksft_ne, ksft_ge, ksft_in, ksft_lt, ksft_true, ksft_
- from lib.py import NetDrvEpEnv
- from lib.py import EthtoolFamily, NetdevFamily
- from lib.py import KsftSkipEx, KsftFailEx
--from lib.py import rand_port
-+from lib.py import rand_port, rand_ports
- from lib.py import ethtool, ip, defer, GenerateTraffic, CmdExitFailure
- 
- 
-@@ -452,7 +452,7 @@ def test_rss_context(cfg, ctx_cnt=1, create_with_cfg=None):
-         except:
-             raise KsftSkipEx("Not enough queues for the test")
- 
--    ports = []
-+    ports = rand_ports(ctx_cnt)
- 
-     # Use queues 0 and 1 for normal traffic
-     ethtool(f"-X {cfg.ifname} equal 2")
-@@ -486,7 +486,6 @@ def test_rss_context(cfg, ctx_cnt=1, create_with_cfg=None):
-         ksft_eq(min(data['rss-indirection-table']), 2 + i * 2, "Unexpected context cfg: " + str(data))
-         ksft_eq(max(data['rss-indirection-table']), 2 + i * 2 + 1, "Unexpected context cfg: " + str(data))
- 
--        ports.append(rand_port())
-         flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {ports[i]} context {ctx_id}"
-         ntuple = ethtool_create(cfg, "-N", flow)
-         defer(ethtool, f"-N {cfg.ifname} delete {ntuple}")
-@@ -542,7 +541,7 @@ def test_rss_context_out_of_order(cfg, ctx_cnt=4):
- 
-     ntuple = []
-     ctx = []
--    ports = []
-+    ports = rand_ports(ctx_cnt)
- 
-     def remove_ctx(idx):
-         ntuple[idx].exec()
-@@ -574,7 +573,6 @@ def test_rss_context_out_of_order(cfg, ctx_cnt=4):
-         ctx_id = ethtool_create(cfg, "-X", f"context new start {2 + i * 2} equal 2")
-         ctx.append(defer(ethtool, f"-X {cfg.ifname} context {ctx_id} delete"))
- 
--        ports.append(rand_port())
-         flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {ports[i]} context {ctx_id}"
-         ntuple_id = ethtool_create(cfg, "-N", flow)
-         ntuple.append(defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}"))
-@@ -788,9 +786,10 @@ def test_rss_default_context_rule(cfg):
-     ethtool(f"-N {cfg.ifname} {flow_generic}")
-     defer(ethtool, f"-N {cfg.ifname} delete 1")
- 
-+    ports = rand_ports(2)
-     # Specific high-priority rule for a random port that should stay on context 0.
-     # Assign loc 0 so it is evaluated before the generic rule.
--    port_main = rand_port()
-+    port_main = ports[0]
-     flow_main = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port_main} context 0 loc 0"
-     ethtool(f"-N {cfg.ifname} {flow_main}")
-     defer(ethtool, f"-N {cfg.ifname} delete 0")
-@@ -803,7 +802,7 @@ def test_rss_default_context_rule(cfg):
-                           'empty' : (2, 3) })
- 
-     # And that traffic for any other port is steered to the new context
--    port_other = rand_port()
-+    port_other = ports[1]
-     _send_traffic_check(cfg, port_other, f"context {ctx_id}",
-                         { 'target': (2, 3),
-                           'noise' : (0, 1) })
--- 
-2.47.3
-
+>
+> Ideally we'd perform it under the lock just after clearing folio->mapping, but I guess that
+> might be more controversial.
+>
+> For accounting you need the above might be good enough, but I am not sure for how many
+> other use cases there might be.
+>
+> --
+> Cheers,
+>
+> David
