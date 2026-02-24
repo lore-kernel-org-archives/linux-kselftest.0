@@ -1,116 +1,282 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F3A2DB791
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 19:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B6F2ECD32
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 19:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771959864; cv=none; b=LhcGT9UzejMULPRBVbRpVOtkR1r8qYPw4gTYcoWzB4fJ5QTNx6MIhpGTZ9WdOXXliZtAMsMg3R27Ztuv1+3UPikhNSpjGMhKbFuvd1qPC6Y9MI1HjeO2uSYTF9JhO59jOX9pZhRp04l7qNbjnZwYwQMGjC4zTbghNjFSNm9EzhM=
+	t=1771959953; cv=none; b=DywWofupILzAYJ24ghLBr2Q+aQpUFirXP+61eDRl9OUgFgxxaLmPzjw0RsKx6qezyjHMvsEOG+Lz0apUhlna9M+J+qQ+5tH3/t627kiGkHHsFkr90uDGw5gy5ujy+81K/6GZfENx+bYpMSsvpzegdFiRBlwL1hMxahO+erT+l+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771959864; c=relaxed/simple;
-	bh=yuxubmrUGrDAA0A4bfXgAusOW3sdaXsTd2mR/9EuHgE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DrZTgyb9hagPE/rm7NK8lpqEohq2uMm/3WN88dF1I6pZmhnqHfkuvuGrwNoGZlfwtp51HVODK4VRmYQdHv0eNlEI8AGp9pI7ZZjJ2kax+33KPERJp24PIXHoFCX4kqcaJt4jXRRnUTBh6Hs9JC93EIi4iJqYfQuFGhibG0LjbIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r73x5M1M; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771959953; c=relaxed/simple;
+	bh=zLqgOJeQ8HcmcMPj/D6Uk1/9jsKVA5Yl6xqHM2G/ipc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oigzd+oUc17DpjGQzaS7iFBOSGxcNSlKu9wNceX1lr/MxKZsLcGCAxNz3ywtRmgoK6NoVKz/a5IR643BNrw9CkBMBxHfu2Y/IFDZudPCVuO57R4U0xrUvb65BaD4cxZ1XFka5z2IQf4yrVjJsq8UemTCBrjk3LcWNuqmneQ7GVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XjJ57PV6; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r73x5M1M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7454C2BCB0
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 19:04:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771959864;
-	bh=yuxubmrUGrDAA0A4bfXgAusOW3sdaXsTd2mR/9EuHgE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=r73x5M1MgfMcZ1OUvpqE4t64C2dgGemb5mbqHXlUAdwTP0O89tjZFrpPakaILmSxR
-	 QO2rl6XGllSx2y0Af7XJ0ZEfS0iXNsd+8sTrAF/hnZGXi+IVLIgzy5TRa3WFAcqxRq
-	 ORNxvf/kRIe52p02frNyebvy72QtjwFbIh4XMrz6YmPI4XubcEZUqxGHMXchezheO3
-	 4Pq2eBoen5gkOCbkS2kKUzDdF2V7wdhq6TEpU4ehqFVFniE0n00DslF551yME3Q9cq
-	 xRPXLOXOZfW2fKSwwYszxaFWWxXBKmFj7Sbv8QG4GXB8rpIyYHzcDWFZ8WF6r7Kn/B
-	 oEjpv0Tz/6LCw==
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-65f73d68faeso1030243a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 11:04:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWWWPGvGGdwNOfYj38QahqpbFlVXgox3nVRwo+f5rA8QlDZSJSVV5h61nRchI2wQ2/7Uaglxn5CswsXvF6/BnI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAAnGAyApMLQRL+Pz9NmXXUB0CLqBdlPIcy9PKp2gDlPU3xguR
-	hcIrahkI+7aUwElHDM7XZFwJg014lgz1O7wvSPXiLEOe7oHRwLHSf3S2LB/5ZZWBMN228FmFw7K
-	sRsGrD+zuiFgliu52k7hVMA04bNpxI50=
-X-Received: by 2002:a17:906:9f85:b0:b8e:d4ed:5eeb with SMTP id
- a640c23a62f3a-b9081a45252mr899102566b.26.1771959863435; Tue, 24 Feb 2026
- 11:04:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XjJ57PV6"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2adb1c1f9d4so12225ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 11:05:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771959952; x=1772564752; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=y+nxktJgrzlaK8SQflM75E9Ffs6HGnnvzkBNJC6O+O8=;
+        b=XjJ57PV6eCuG03bEGDsZ1mTTjXgW7DqNA+G3Le3UkilUzXAv/s2ILGXnncw7uhLBON
+         6H4jE55Vnvcs8sMeNPgYXGftRYR1zsLUreXAjpXUvr94HRn8C4cJB7h0tUiQ4kyFRtp2
+         C59fePh3kba907GAjgNdxlBxVtaxXJ+H6mySqd4tp6OWS9K/TUMoqL0hCiOLW48HmDIn
+         WN72WF1QNt3QnJyHC7/kNKUgdjY5uJRsFkbIH2brkdsogt/KTVWXN5vExTvt7jHCBoro
+         aD6c0fZdh6rpnWV4vqLZTCa5um8CwPMjpuLzBdpWhc8kI0VbcXzKDr5vWjnNkusM1txX
+         jVTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771959952; x=1772564752;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y+nxktJgrzlaK8SQflM75E9Ffs6HGnnvzkBNJC6O+O8=;
+        b=h1cLBVSArenMphv2bsHNUjDiBEIgQHmBkUnL5Td+ZI14EEpBjhH5zDD5mrjOWEtonP
+         hzvzxcr0ox4Vct0LA1lUco+Pg6JvSe6ffGBUqy/mJ+0W5tvHN2pBkXVfrv+dKYYSSdpn
+         DSiPV/B8we6mUXDrI03HGrYpfWbiHG4LEtjonPtVGmqvluOjZLZWiYlbYwjZU9Ov0sqq
+         Xiuito0OTf05eavN8roc6MVVuY+FFz3+cbOm6RgUTE4RUGMMtvho3zdseNDycAMDajCr
+         d0eddOazYgEfhJdEdJ7f5C9pcxE6xygYcV/Hw4FHaV8yStFBJus32adkWsIXuuzxQyhQ
+         eHWA==
+X-Forwarded-Encrypted: i=1; AJvYcCX2luk4+1Ho3lgH3DQqsPEDk4HWboZIyn+ZOonYumXE+Zj/5ZMBtpZ2BsRNvQBEj2yfk6EMdlju1rjTfMcd5fA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzhri1ll76CrC2RwjewQycPzj0z400tKnh4AwiJc7mA80RVw7r1
+	/7rNH7OLjwjyo7bJF2/0l6T03sgrjkGON4bbll2ii4wVtvBwh3gbT7iFwwVk7RlEzw==
+X-Gm-Gg: ATEYQzz92eWTEU2pD2niGET36LZ0Y2xZhWoti+cWgecUJMc3i4e+UfTVlJZ8mFe35AJ
+	HVGRJJxTurIXWVJHJTmywai8SgA7f7vgTvVAI1HdLiJC/HKBruVyq2nQ5wzjFhZBzaVQqne8Crk
+	8gtW8nXG8NyFOw7I3fKBwi4FO0jcWOr6joCC38FNhCIMf2Qnl0eiKBPjnGVg/uWPYxuzahgTJrZ
+	3LMkHTvaGG7fjedVVgSHQsWUJkmn2TI8JP7qz4oyagFUyrSTVelLgVt4sabvRYJIkyuAVOO3mkK
+	SrMP02wo16+QLSaKrUjL9ngA1fQCyK1/RGEIvmA3u7fwq98zPI7cQjLlNYBWbNHRpATXhfWm1SV
+	MFgDBtD/6H0m743hmtSnZX/E6tR+UnskXvSLVTWSGwMLe6mrFCfz1dZ3Ob7TZNqpOMC4BXjL0dA
+	7L/9IucJob7gd498bJGPBMXJwJjLtsyzkBLmuOxUnAz98fBWO6Tv34p7CgljRl
+X-Received: by 2002:a17:903:3d0c:b0:297:f2a0:e564 with SMTP id d9443c01a7336-2adca83b652mr139205ad.11.1771959951330;
+        Tue, 24 Feb 2026 11:05:51 -0800 (PST)
+Received: from google.com (222.245.187.35.bc.googleusercontent.com. [35.187.245.222])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3590241e8a2sm595715a91.12.2026.02.24.11.05.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 11:05:50 -0800 (PST)
+Date: Tue, 24 Feb 2026 19:05:41 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 02/22] PCI: Add API to track PCI devices preserved
+ across Live Update
+Message-ID: <aZ32hf3dHibfb4B5@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-3-dmatlack@google.com>
+ <aZ1svGur9IxQ7Td2@google.com>
+ <CALzav=fSpd6H5pQNtJoFHdNtWVO11vffhWQFsMFkM+osGuE0wQ@mail.gmail.com>
+ <aZ314HSRnYtGinTU@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260224005500.1471972-1-jmattson@google.com> <20260224005500.1471972-6-jmattson@google.com>
- <aZ3jQ1prL4dgG0-H@google.com>
-In-Reply-To: <aZ3jQ1prL4dgG0-H@google.com>
-From: Yosry Ahmed <yosry@kernel.org>
-Date: Tue, 24 Feb 2026 11:04:12 -0800
-X-Gmail-Original-Message-ID: <CAO9r8zMq87ORsuox7XGQqBeaN0+1x=thxCe6zZC19Sfnbigwfg@mail.gmail.com>
-X-Gm-Features: AaiRm51TIU5UJc1DXSmBDRvNKSJlug6l8rc2QmCzMSvRd-bpELQ-JURuMybv_qs
-Message-ID: <CAO9r8zMq87ORsuox7XGQqBeaN0+1x=thxCe6zZC19Sfnbigwfg@mail.gmail.com>
-Subject: Re: [PATCH v5 05/10] KVM: x86: nSVM: Redirect IA32_PAT accesses to
- either hPAT or gPAT
-To: Sean Christopherson <seanjc@google.com>
-Cc: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aZ314HSRnYtGinTU@google.com>
 
-On Tue, Feb 24, 2026 at 9:43=E2=80=AFAM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Mon, Feb 23, 2026, Jim Mattson wrote:
-> > +static void svm_set_pat(struct kvm_vcpu *vcpu, bool from_host, u64 dat=
-a)
-> > +{
-> > +     struct vcpu_svm *svm =3D to_svm(vcpu);
-> > +
-> > +     if (svm_pat_accesses_gpat(vcpu, from_host)) {
-> > +             vmcb_set_gpat(svm->vmcb, data);
-> > +     } else {
-> > +             svm->vcpu.arch.pat =3D data;
-> > +             if (npt_enabled) {
-> > +                     vmcb_set_gpat(svm->vmcb01.ptr, data);
-> > +                     if (is_guest_mode(&svm->vcpu) &&
-> > +                         !nested_npt_enabled(svm))
-> > +                             vmcb_set_gpat(svm->vmcb, data);
-> > +             }
-> > +     }
->
-> Overall, this LGTM.  For this particular code, any objection to using ear=
-ly
-> returns to reduce indentation?  The else branch above is a bit gnarly, es=
-pecially
-> when legacy_gpat_semantics comes along.
->
-> I.e. end up with this
->
->   static void svm_set_pat(struct kvm_vcpu *vcpu, bool from_host, u64 data=
-)
->   {
->         struct vcpu_svm *svm =3D to_svm(vcpu);
->
->         if (svm_pat_accesses_gpat(vcpu, from_host)) {
->                 vmcb_set_gpat(svm->vmcb, data);
->                 return;
->         }
->
->         svm->vcpu.arch.pat =3D data;
->
->         if (!npt_enabled)
->                 return;
->
->         vmcb_set_gpat(svm->vmcb01.ptr, data);
->         if (is_guest_mode(&svm->vcpu) &&
->             (svm->nested.legacy_gpat_semantics || !nested_npt_enabled(svm=
-)))
->                 vmcb_set_gpat(svm->vmcb, data);
->   }
->
-> I can fixup when applying (unless you and/or Yosry object).
+On Tue, Feb 24, 2026 at 07:02:56PM +0000, Pranjal Shrivastava wrote:
+> On Tue, Feb 24, 2026 at 09:33:28AM -0800, David Matlack wrote:
+> > On Tue, Feb 24, 2026 at 1:18 AM Pranjal Shrivastava <praan@google.com> wrote:
+> > > On Thu, Jan 29, 2026 at 09:24:49PM +0000, David Matlack wrote:
+> > > > + * Copyright (c) 2025, Google LLC.
+> > >
+> > > Nit: Should these be 2026 now?
+> > 
+> > Yes! Thanks for catching that.
+> > 
+> > > > +int pci_liveupdate_outgoing_preserve(struct pci_dev *dev)
+> > > > +{
+> > > > +     struct pci_dev_ser new = INIT_PCI_DEV_SER(dev);
+> > > > +     struct pci_ser *ser;
+> > > > +     int i, ret;
+> > > > +
+> > > > +     /* Preserving VFs is not supported yet. */
+> > > > +     if (dev->is_virtfn)
+> > > > +             return -EINVAL;
+> > > > +
+> > > > +     guard(mutex)(&pci_flb_outgoing_lock);
+> > > > +
+> > > > +     if (dev->liveupdate_outgoing)
+> > > > +             return -EBUSY;
+> > > > +
+> > > > +     ret = liveupdate_flb_get_outgoing(&pci_liveupdate_flb, (void **)&ser);
+> > > > +     if (ret)
+> > > > +             return ret;
+> > > > +
+> > > > +     if (ser->nr_devices == ser->max_nr_devices)
+> > > > +             return -E2BIG;
+> > >
+> > > I'm wondering how (or if) this handles hot-plugged devices?
+> > > max_nr_devices is calculated based on for_each_pci_dev at the time of
+> > > the first preservation.. what happens if a device is hotplugged after
+> > > the first device is preserved but before the second one is, does
+> > > max_nr_devices become stale? Since ser->max_nr_devices will not reflect
+> > > the actual possible device count, potentially leading to an unnecessary
+> > > -E2BIG failure?
+> > 
+> > Yes, it's possible to run out space to preserve devices if devices are
+> > hot-plugged and then preserved. But I think it's better to defer
+> > handling such a use-case exists (unless you see an obvious simple
+> > solution). So far I am not seeing preserving hot-plugged devices
+> > across Live Update as a high priority use-case to support.
+> > 
+> 
+> Ack. If we aren't supporting preservation for hot-plug at this point.
+> Let's mention that somewhere? Maybe just a little comment or the kdoc?
+> 
+> > > > +u32 pci_liveupdate_incoming_nr_devices(void)
+> > > > +{
+> > > > +     struct pci_ser *ser;
+> > > > +     int ret;
+> > > > +
+> > > > +     ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)&ser);
+> > > > +     if (ret)
+> > > > +             return 0;
+> > >
+> > > Masking this error looks troubled, in the following patch, I see that
+> > > the retval 0 is treated as a fresh boot, but the IOMMU mappings for that
+> > > BDF might still be preserved? Which could lead to DMA aliasing issues,
+> > > without a hint of what happened since we don't even log anything.
+> > 
+> > All fo the non-0 errors indicate there are 0 incoming devices at the
+> > time of the call, so I think returning 0 is appropriate.
+> > 
+> >  - EOPNOTSUPP: Live Update is not enabled.
+> >  - ENODATA: Live Update is finished (all incoming devices have been restored).
+> >  - ENOTENT: No PCI data was preserved across the Live Update.
+> > 
 
-LGTM.
+The flb_retrive_one seems to call:
+
+ err = flb->ops->retrieve(&args);
+
+which could be anything honestly.. since the luo_core doesn't scream
+about it, maybe the caller should?
+
+Thanks,
+Praan
+
+> > None of these cover the case where an IOMMU mapping for BDF X is
+> > preserved, but device X is not preserved. This is a case we should
+> > handle in some way... but here is not that place.
+> > 
+> > >
+> > > Maybe we could have something like the following:
+> > >
+> > > int pci_liveupdate_incoming_nr_devices(void)
+> > > {
+> > >         struct pci_ser *ser;
+> > >         int ret;
+> > >
+> > >         ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)&ser);
+> > >         if (ret) {
+> > >                 if (ret != -ENOENT)
+> > >                         pr_warn("PCI: Failed to retrieve preservation list: %d\n", ret);
+> > 
+> > This would cause this warning to get printed if Live Update was
+> > disabled, or if no PCI devices were preserved. But both of those are
+> > not error scenarios.
+> > 
+> 
+> I agree, the snippet was just an example. What I'm trying to say here
+> is, what if the retval is -ENOMEM / -ENODATA, the existing code will
+> treat it as a fresh boot because it believes there are no incoming 
+> devices. However, since this was an incoming device which failed to be
+> retrieved, there's a chance that it's IOMMU mapping was preserved too.
+> By returning 0, the PCI core will feel free to rebalance bus numbers or
+> reassign BARs. For instance, if the IOMMU already inherited mappings for
+> BDF 02:00.0, but the PCI core (due to this masked error) reassigns a 
+> different device to that BDF, we face DMA aliasing or IOMMU faults.
+> Am I missing some context here?
+> 
+> > > > +void pci_liveupdate_setup_device(struct pci_dev *dev)
+> > > > +{
+> > > > +     struct pci_ser *ser;
+> > > > +     int ret;
+> > > > +
+> > > > +     ret = liveupdate_flb_get_incoming(&pci_liveupdate_flb, (void **)&ser);
+> > > > +     if (ret)
+> > > > +             return;
+> > >
+> > > We should log something here either at info / debug level since the
+> > > error isn't bubbled up and the luo_core doesn't scream about it either.
+> > 
+> > Any error from liveupdate_flb_get_incoming() simply means there are no
+> > incoming devices. So I don't think there's any error to report in
+> > dmesg.
+> > 
+> > > > +     dev->liveupdate_incoming = !!pci_ser_find(ser, dev);
+> > >
+> > > This feels a little hacky, shall we go for something like:
+> > >
+> > > dev->liveupdate_incoming = (pci_ser_find(ser, dev) != NULL); ?
+> > 
+> > In my experience in the kernel (mostly from KVM), explicity comparison
+> > to NULL is less preferred to treating a pointer as a boolean. But I'm
+> > ok with following whatever is the locally preferred style for this
+> > kind of check.
+> > 
+> 
+> No strong feelings there, I see both being used in drivers/pci.
+> 
+> > > > @@ -582,6 +583,10 @@ struct pci_dev {
+> > > >       u8              tph_mode;       /* TPH mode */
+> > > >       u8              tph_req_type;   /* TPH requester type */
+> > > >  #endif
+> > > > +#ifdef CONFIG_LIVEUPDATE
+> > > > +     unsigned int    liveupdate_incoming:1;  /* Preserved by previous kernel */
+> > > > +     unsigned int    liveupdate_outgoing:1;  /* Preserved for next kernel */
+> > > > +#endif
+> > > >  };
+> > >
+> > > This would start another anon bitfield container, should we move this
+> > > above within the existing bitfield? If we've run pahole and found this
+> > > to be better, then this should be fine.
+> > 
+> > Yeah I simply appended these new fields to the very end of the struct.
+> > If we care about optimizing the packing of struct pci_dev I can find a
+> > better place to put it.
+> 
+> If you have pahole handy, it would be great to see if these can slide 
+> into an existing hole. If not, no big deal for v3.. we can keep it as is
+> 
+> Thanks,
+> Praan
