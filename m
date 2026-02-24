@@ -1,63 +1,63 @@
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0084379990
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 10:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C51829B233
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 10:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771929910; cv=none; b=dj7vbMYLEeMoJaRuwj1mny7x8n3JAq7DZ2XagYFwWyuaA38VV9upKKv91KrBl46SnnHwkvXhH5Kks3Vl/CFgcY7KkfmGTo2xqVh1bltBg6gLuu0xqGlGmwIQzbE+GsFC+s/jBCRr0cT0MJyS4Mv3YT71JVzdu35a9/5qq6W7Xv4=
+	t=1771929926; cv=none; b=Fy+IP8QHtROfWkEkB99+y5ur1Rcb/J6U89H66/rdP6byZuRBKZe0lOjdVU5TSCZBWPU2iSWIND1pkmHCq4z2oJdFJtS5nrJRrU/pvvUVJkVIzxwRodVnjiqRj6mbx0S1Ohi0shieYvLydInNDR/meZ6c6sjokQSxwj9etYpQsbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771929910; c=relaxed/simple;
-	bh=4sWOiOmov7pXHesk/kMClarPFFoDVRWZZWw5FqizKLU=;
+	s=arc-20240116; t=1771929926; c=relaxed/simple;
+	bh=z9U3voXKAW1dQW4AvalaDk7/sRwNuHWW6nH2z8AUJ3U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aU5nQRsLvkdtlX7SDOcjYUT6ILNZlPFgfB1iT9u7sS2s4YczidAulglV7YYtMJ8uU7CtuzuSL5zl/MByjlbOV4dV9FtKqaDpBc+n6kxv70Mgz/Svv38OQ2KV/6nChEGX2NCbxy/944mCK+0QVDaXVfwaV2xI3sUWTHznWLHB5Qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fTMyVgJ3; arc=none smtp.client-ip=209.85.167.172
+	 MIME-Version; b=qDRe43LhZg9BAhyFTSmCajKH9x7+BQV7L7+HQxxmdnMjJTvKUJZemOGvsxQlxxXIAnVGm4wWMx6ac+HGVwK+/VL/Ta5mV0FgTATWFarUg4oniC8K9JsVyVDbMkADX/YkomdYB9f6K+mD1eBK0i8L1RyAhtnDUIOX087CglqZJx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KnZ4JUTX; arc=none smtp.client-ip=209.85.167.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fTMyVgJ3"
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-45effa36240so3503665b6e.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 02:45:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KnZ4JUTX"
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-463b3697846so4255398b6e.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 02:45:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771929907; x=1772534707; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771929924; x=1772534724; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s0osYvSfuq+cEJNXKz69BQQO4P3x6o0j/TaGapvJ+PU=;
-        b=fTMyVgJ3IrxPZmEE+If2O3VRFfJ1hT4FIMcjIJaSO8qqOVljRX5mFl/D0HP/7KxNoA
-         XkhdUWhlIFvE2x5MRqyLa4/5mg47Hu02W9Z5HPe4UfZJjxnkH2ePNsCq5N46RJHLxd6j
-         PUi0UsjGn3zr/UFIrdy77z1xkyr3hdk2Ploev4j7dhJ6rXHI9VHjybkZRR+K0lOuRaS+
-         J3Q/fO/WfDBiBuU7srADiMX6L4nzOOV5Qqf4YfTosP+ZSApqMz7gyW5ve5fKNBsDtrCW
-         yHYjPPAEyQ9x88dSKv6WYZYaPJpqrp9OsL11IQfSKsYQm9xR1a/eLCfN8/9OJZm2fDWi
-         WBfQ==
+        bh=amTmzSl8ryBjjcQX/dMxltL1tsvRdkBfJuWHJ8vklYI=;
+        b=KnZ4JUTXg1hfGvSPEUFW3Z6BHaWQo/FtX4yruy5fBEkWTQEynqbY7+BzLPaZSIkpxO
+         GnKqYP+q6r3Pq9euwXo9ssBivyt7cd2L6TYljY6HP/C7vIgQHm06jcVw70YX5virfvmv
+         4EcsVSy6IV/4/Tp7zPQgCDK49BKuURPVXXdd9UonA8AkedRHPiptJOHDuQjVKFwHdZW5
+         BOhaksMBR62RkKKYIzk1SDLc987cQ/KHaXb/lmrtjXmJmHGV800ZN2UJ7JVPd5FCu27M
+         A5OZwPuh0NTQplxh9X++0eDT+QSu6pq5jGjF7AL1uceK8CmX5hNtaoDbymhJ2VBnypA4
+         2HWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771929907; x=1772534707;
+        d=1e100.net; s=20230601; t=1771929924; x=1772534724;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=s0osYvSfuq+cEJNXKz69BQQO4P3x6o0j/TaGapvJ+PU=;
-        b=bUxxLz61HHjAv4Yk0F1JkfFzoyASMgXTSR/yz9qkCFWzCI2ddWOAuBv0Zn8au0cwqz
-         BmRwqpHj6An7jNY0EhoxonWtIKJ7PljWgyRP4/DGqoNqu/4jPaG91M7597jLXOT95BdZ
-         t9FaNfYpTVQ51B7lqbVNd8X1uo0Fr5suAxfuSJgubUUfn6xL5v7oWOCq1JaZN5W1oJ3h
-         /IRT0STZzU+S96u0nLitT1kJirObqb6uUmQ3BPl6lXPhCu8uirqiSs5wnrfzOuvbrE3O
-         +4Fg+gjimSU318pdqGTvfRUoiVle105m4m4OENSozGGNKPAvxPIqRD9ErAJQhTEPNzOh
-         Rt2A==
-X-Gm-Message-State: AOJu0Yz/h+RSVqdUkgVaVYCjyfG7EsyYeyzejsiHVw46MEfIkDsZC7LC
-	qvg0EgxjyarUPNuavDUoRo6mChVfvgepXPT/WI9GNSqrRKsveawTt78e
-X-Gm-Gg: ATEYQzw/P3xL+xrC9+WWmh9/FrJSZ2LKZb6p85kkwPvC1Ctk5eqmeDDIcuwpCGgMxbG
-	aaggoUN7v/DgmTRnU+wE8jO+At1nNaPn/IRj9j/Atip3J95dbUxrvlOUfQMQ6EDXjwk6onJdPj4
-	260rwTU4uFbyPvnsKZuXilEzG8KbPXFDXuL3VezfUyj9ckGQEKTUwJ1Q1p3ZR091REuXSOe9TpI
-	K3RthI9ZoLDjj/exUcpUroNfneKbR7EHt9CLJ4bgQCx3JOwr7cVwMGDGGWkbSBIeze/gRYry928
-	UjpGXM9CK2qE4+x//I/NhluAFp0Amj8+ofvnqdeG2TP8gP4+VLxqrTJA6CpdC1Ay+6Rhb58LQu7
-	VLMpXR3VMFyJGmA2WFPFD/isEFlb++FjKZ/DboyksSuGj3w0TzKZAh/wwFnLOfSnbGY2pZ4jCTQ
-	3xmxmr9hzOUAXZni1vsbmmbH6t/93gfMo4NV1eW8YHc3VhviFkFbUGoYZmaJ9LhQQpMKSYYKQ+K
-	VaR1qA1UKKxv+9lw7HO/Ec=
-X-Received: by 2002:a05:6871:4724:b0:409:5ade:7063 with SMTP id 586e51a60fabf-4157b103319mr7212812fac.32.1771929906635;
-        Tue, 24 Feb 2026 02:45:06 -0800 (PST)
+        bh=amTmzSl8ryBjjcQX/dMxltL1tsvRdkBfJuWHJ8vklYI=;
+        b=SQ++MywAUJ037ghr8y7/p/aAEsMQgsxeAPwiRqohRkD0lrD0VFThdAZcd5xrXgpLTu
+         Hr4YvHUEbI603mgJAcHgnOb+eMnsaDSFYJyM1xIWVnZ7Aml65/Sbsa9AYLbVUwYZBZD3
+         CSPKWqFJKQFhpGSPkLNQeI5fVEc34QvjhwnDdKoX2LzpUvH9JFtk+aD5aDmCR3/mFEis
+         0p/DwHB0ZEOK2MZpeEcZj0gS2cJccn6HtlD7BXWOxVIFlqnB58XNzcR3Ax3vjpq7gxoP
+         2c0JNyz7K44UfQL18peIDkHO42No1cYLw+b0L1HGlh3UXzkDXQKoynhVQIfJfW5SPVTl
+         C4qQ==
+X-Gm-Message-State: AOJu0Yx8Gn++nrWhuNj/XytNDoWfbLs4OEwwSQ/vEwos1ojGqlNDvN+/
+	WfcNSWZrKKywns0JFrBrpGctJExBUBoq+tFsPsKRFxBqMBd3YbXPs5cO7OD1o8zNMgLkPA==
+X-Gm-Gg: AZuq6aJ/GLaO+kp59l3u5MXGPOdu3PN8xEySjdVghAxFqF/gi4MUE7m+hcCM1LBJk74
+	Xmoofu8dTcfESY4NYVN20l1ENem5wf80Vfnon9/cv1jw/KLvRAwMQOPZOLCktAxv9PFeE+ZWXke
+	/xFSiWLoa1j59G5gjI2pv1jGxCeGyz/Qf8O7vhfRHbnGNULmVBoLSxHwNzfuo/mJkKg1Ma5xT1A
+	9p+g/JacZoLjTFbVzjQuboaY5WagFgq3UmcfFRRh9FoJoXWZ+59YpYuuvh+ywQkGuRNr9V1a1Zy
+	4DWF0iTnm4V8PHSbolI0XZzVnaApzwJUeMc3HNNreQqhI7Aayrt4vnRDPUe7pBjF8fLEejhjNGd
+	X5TD5OY/91d4knXJj7CqCJI4Pzn05gbLawtAYOeO/C+jZmQ6T6qmBQ7GxFSK9QDDRwA/nC35dxe
+	TnRgZqlyBDYb755Zywt4KWuG8PwNkRJk8o+9OeF3adT0or1ahDbH3NqLUDz9X+e5NHCL46+zEXH
+	/z8fnHCbJE16OTtQ9ETXis=
+X-Received: by 2002:a05:6808:508a:b0:45f:103c:2478 with SMTP id 5614622812f47-46427678333mr8896045b6e.30.1771929924057;
+        Tue, 24 Feb 2026 02:45:24 -0800 (PST)
 Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4157cfa6624sm11210270fac.8.2026.02.24.02.44.58
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4157cfa6624sm11210270fac.8.2026.02.24.02.45.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 02:45:05 -0800 (PST)
+        Tue, 24 Feb 2026 02:45:23 -0800 (PST)
 From: Sun Jian <sun.jian.kdev@gmail.com>
 To: netdev@vger.kernel.org
 Cc: linux-kselftest@vger.kernel.org,
@@ -72,12 +72,13 @@ Cc: linux-kselftest@vger.kernel.org,
 	luto@amacapital.net,
 	wad@chromium.org,
 	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH 1/2] selftests/harness: order TEST_F and XFAIL_ADD constructors
-Date: Tue, 24 Feb 2026 18:44:33 +0800
-Message-ID: <20260224104434.14912-1-sun.jian.kdev@gmail.com>
+Subject: [PATCH 2/2] selftests: net: tun: don't abort XFAIL cases
+Date: Tue, 24 Feb 2026 18:44:34 +0800
+Message-ID: <20260224104434.14912-2-sun.jian.kdev@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260222111847.692325-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <20260224104434.14912-1-sun.jian.kdev@gmail.com>
 References: <20260222111847.692325-1-sun.jian.kdev@gmail.com>
+ <20260224104434.14912-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,62 +87,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-TEST_F() allocates and registers its struct __test_metadata via mmap()
-inside its constructor, and only then assigns the
-_##fixture_##test##_object pointer.
+The tun UDP tunnel GSO fixture contains XFAIL-marked variants intended to
+exercise failure paths (e.g. EMSGSIZE / "Message too long").
+Using ASSERT_EQ() in these tests aborts the subtest, which prevents the
+harness from classifying them as XFAIL and can make the overall net: tun
+test fail.
 
-XFAIL_ADD() runs in a constructor too and reads
-_##fixture_##test##_object to initialize xfail->test. If XFAIL_ADD runs
-first, xfail->test can be NULL and the expected failure will be reported
-as FAIL.
+Switch the relevant ASSERT_EQ() checks to EXPECT_EQ() so the subtests
+continue running and the failures are correctly reported and accounted
+as XFAIL where applicable.
 
-Use constructor priorities to ensure TEST_F registration runs before
-XFAIL_ADD, without adding extra state or runtime lookups.
-
-Fixes: 2709473c9386 ("selftests: kselftest_harness: support using xfail")
 Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
-v2:
-  - Switch from name-based fallback matching to ctor priorities.
-  - Drop the extra xfail state and runtime matching.
----
- tools/testing/selftests/kselftest_harness.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/tun.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 16a119a4656c..afcba0c4e98d 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -175,6 +175,9 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
-  *
-  * EXPECT_* and ASSERT_* are valid in a TEST() { } context.
-  */
-+#define KSELFTEST_PRIO_TEST_F  20000
-+#define KSELFTEST_PRIO_XFAIL   20001
-+
- #define TEST_SIGNAL(test_name, signal) __TEST_IMPL(test_name, signal)
+diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
+index 8a5cd5cb5472..cf106a49b55e 100644
+--- a/tools/testing/selftests/net/tun.c
++++ b/tools/testing/selftests/net/tun.c
+@@ -944,8 +944,8 @@ TEST_F(tun_vnet_udptnl, send_gso_packet)
+ 	ASSERT_EQ(ret, off);
  
- #define __TEST_IMPL(test_name, _signal) \
-@@ -465,7 +468,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
- 			fixture_name##_teardown(_metadata, self, variant); \
- 	} \
- 	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
--	static void __attribute__((constructor)) \
-+	static void __attribute__((constructor(KSELFTEST_PRIO_TEST_F))) \
- 			_register_##fixture_name##_##test_name(void) \
- 	{ \
- 		struct __test_metadata *object = mmap(NULL, sizeof(*object), \
-@@ -880,7 +883,7 @@ struct __test_xfail {
- 		.fixture = &_##fixture_name##_fixture_object, \
- 		.variant = &_##fixture_name##_##variant_name##_object, \
- 	}; \
--	static void __attribute__((constructor)) \
-+	static void __attribute__((constructor(KSELFTEST_PRIO_XFAIL))) \
- 		_register_##fixture_name##_##variant_name##_##test_name##_xfail(void) \
- 	{ \
- 		_##fixture_name##_##variant_name##_##test_name##_xfail.test = \
-
-base-commit: 7dff99b354601dd01829e1511711846e04340a69
+ 	ret = receive_gso_packet_from_tunnel(self, variant, &r_num_mss);
+-	ASSERT_EQ(ret, variant->data_size);
+-	ASSERT_EQ(r_num_mss, variant->r_num_mss);
++	EXPECT_EQ(ret, variant->data_size);
++	EXPECT_EQ(r_num_mss, variant->r_num_mss);
+ }
+ 
+ TEST_F(tun_vnet_udptnl, recv_gso_packet)
+@@ -955,18 +955,18 @@ TEST_F(tun_vnet_udptnl, recv_gso_packet)
+ 	int ret, gso_type = VIRTIO_NET_HDR_GSO_UDP_L4;
+ 
+ 	ret = send_gso_packet_into_tunnel(self, variant);
+-	ASSERT_EQ(ret, variant->data_size);
++	EXPECT_EQ(ret, variant->data_size);
+ 
+ 	memset(&vnet_hdr, 0, sizeof(vnet_hdr));
+ 	ret = receive_gso_packet_from_tun(self, variant, &vnet_hdr);
+-	ASSERT_EQ(ret, variant->data_size);
++	EXPECT_EQ(ret, variant->data_size);
+ 
+ 	if (!variant->no_gso) {
+-		ASSERT_EQ(vh->gso_size, variant->gso_size);
++		EXPECT_EQ(vh->gso_size, variant->gso_size);
+ 		gso_type |= (variant->tunnel_type & UDP_TUNNEL_OUTER_IPV4) ?
+ 				    (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV4) :
+ 				    (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV6);
+-		ASSERT_EQ(vh->gso_type, gso_type);
++		EXPECT_EQ(vh->gso_type, gso_type);
+ 	}
+ }
+ 
 -- 
 2.43.0
 
