@@ -1,48 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9061F1304;
-	Tue, 24 Feb 2026 16:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93793A8FE1;
+	Tue, 24 Feb 2026 16:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771950144; cv=none; b=WOiXff2SL5TWa2imWeWiBqrnZ0XxqptizKoySXA5mukvSzobEk8gWvohnkJIn0zN//B2bUmeK+nH38HCipEbg+tmI+zFjiuIpQxAdfu+E/ZmljrJZp5X8JmjLK554ETt+QUv+glF4GiDBx39DkJrAAHXMuluyRoRK4N7G0E5wkM=
+	t=1771950957; cv=none; b=P5ZKS4yqzf6jUYSM6IuGZZr5YmJHEJVvGIuobE1A4ojTld6l8D8Ljx73niyqx9e/4AmCJ0XmglXf8dh5V5QkPBr9wm809PKsZnYHPH07GlyfjZM5ALZBQpKvkaAlMBZGwDHfc+QpsbtwDu102VIn4CM9u6mWUM6wZZldrZZGdJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771950144; c=relaxed/simple;
-	bh=i0yBSYNQVXqQLHf+QKtAovioFrDUL3+0JKsF71qQBPU=;
+	s=arc-20240116; t=1771950957; c=relaxed/simple;
+	bh=kSBTLlMV6zLNU1mablt3JM4TXckztaxwmFihI53ir5c=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JyjDDQcvonysQ+f2osfeY0QyrmCBERAm+s1SdAoDsuMiotlw6JX1zUzlHqWNClTSeDSvgrT4eKWJh19B6wd2sZVVHCb+/W/3C+lggbUHG66Q8dq1FDR4PDg6N42Fuch42+vgZGYSqqQUj8+YPDqu9p2wVrcJx+lYv/12WM5Lv6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ICp0Ma/m; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=LqIMNtMryN+6Z65gMIWhBI7O6ZQEhMyC+iqxLewJ9+tXAdaXZIOyuYvCFl+NizJR5i8UYfROC8FaRiVsNZ3m1r6Ldt2I6gBWqsOQhnQUNAoesgPzxDMLhivfC+Tmt4vBP3AZLPNbW9TYCpX9alIY+LLylnKwJdHmQ/ZsZwSJCjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i4rLs0cs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ICp0Ma/m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC42AC116D0;
-	Tue, 24 Feb 2026 16:22:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i4rLs0cs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78998C116D0;
+	Tue, 24 Feb 2026 16:35:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771950144;
-	bh=i0yBSYNQVXqQLHf+QKtAovioFrDUL3+0JKsF71qQBPU=;
+	s=k20201202; t=1771950957;
+	bh=kSBTLlMV6zLNU1mablt3JM4TXckztaxwmFihI53ir5c=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=ICp0Ma/mN0PtXb/NGRS/I16spVEa4xQ083N9N/N77en1BRpheeTPzEit+UqYvq5Gs
-	 D3Jlbu9f4qqP2QM4BM+OQRXoFc2gkGF28OP8bbWdTDHFOIi4EaplvLHACL/a1YunLN
-	 qsF7GAXofXdy/49g/ETIDiu9sPAPCM4bPVDxlFB47jXQT+rV15GdDCF+6H5MRSSXyi
-	 NclIsvkF9Isee8COIzRKCpDay/bNBx8x9oxRs53W8PV2k74a21mz6er/kD2/SpArh+
-	 0b3XbpS1RKk5XbmKbh5OoDFQAoT9XPn+ssr33xsbX4MBQDutEzOthQxotsP+dbE46p
-	 MGxau+VlJrL7A==
-Content-Type: multipart/mixed; boundary="===============1426995775684406543=="
+	b=i4rLs0csiXnuR3pQFC5fXouZ1CReKzLw6IUjP808CNpyIwZrwZXI5OqP88MimOpEd
+	 Q9a2zmzCsapZ81C9RdbcHl7iyDs+brduReKHn8O66+VoRTH124+ssuxz9x2bKFPHjg
+	 c+HcMbS9wnRS3FvW0QdPCwi6M7vXJw9BPjDc25RukpZmZZdBsdON2JeEP8IcGmSBl0
+	 MKyYGoP3m+EdHpEppMi8aB/3aWdhZnahQjYGTOjkRvyGnE62HpjZEg39QijS3K/Jm+
+	 V0sSHKSeCt9z+ovrJaB7MibHy0CIHOrAOeKmaS0Wq3K45QtHkFTr12tlQ+jmYMXj0f
+	 aqDeNjEVH7ZsQ==
+Content-Type: multipart/mixed; boundary="===============1231585818442456678=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <71126da53c4e4779c8509e8c5da0873f2e1c51528f8c49dde82336201703c69f@mail.kernel.org>
-In-Reply-To: <20260224154024.12504-3-leon.hwang@linux.dev>
-References: <20260224154024.12504-3-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next 2/8] bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs
+Message-Id: <eee0df40aa8e7d4bba027682244ea59e86105b677510525f2ddd8b87b88f194e@mail.kernel.org>
+In-Reply-To: <20260224154024.12504-4-leon.hwang@linux.dev>
+References: <20260224154024.12504-4-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 3/8] bpf: Disallow !call_get_func_ip progs tail-calling call_get_func_ip progs
 From: bot+bpf-ci@kernel.org
 To: leon.hwang@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,leon.hwang@linux.dev,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 24 Feb 2026 16:22:21 +0000 (UTC)
+Date: Tue, 24 Feb 2026 16:35:55 +0000 (UTC)
 
---===============1426995775684406543==
+--===============1231585818442456678==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -53,46 +53,51 @@ Content-Transfer-Encoding: 7bit
 
 [ ... ]
 
-> @@ -2415,6 +2416,8 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
->  		      map->owner->jited == fp->jited &&
->  		      map->owner->xdp_has_frags == aux->xdp_has_frags &&
+> @@ -2418,6 +2419,9 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
 >  		      map->owner->sleepable == fp->sleepable;
-> +		if (ret && (!map->owner->kprobe_write_ctx && aux->kprobe_write_ctx))
+>  		if (ret && (!map->owner->kprobe_write_ctx && aux->kprobe_write_ctx))
+>  			ret = false;
+> +		if (ret && (!map->owner->call_get_func_ip && fp->call_get_func_ip &&
+> +			    prog_type == BPF_PROG_TYPE_TRACING))
 > +			ret = false;
 
-Is this check one-directional on purpose? It rejects the case
-where the map owner is !kprobe_write_ctx and the incoming program
-has kprobe_write_ctx, but it allows the reverse: a !kprobe_write_ctx
-program passing the compatibility check against a kprobe_write_ctx-
-owning map.
+This check catches the case where owner->call_get_func_ip is 0 and
+the new program has call_get_func_ip set. However, does the reverse
+ordering also need to be handled?
 
-This means the following sequence is possible:
+Consider:
 
-  1. Program A (kprobe_write_ctx=true) is stored first in a
-     prog_array, becoming the map owner.
+  1. Program H (call_get_func_ip=1) is added to the prog_array first
+     and becomes the owner with owner->call_get_func_ip=1.
 
-  2. Program B (kprobe_write_ctx=false) passes the compatibility
-     check because (!true && false) evaluates to false, so ret
-     stays true.
+  2. Program M (call_get_func_ip=0) is loaded and references this
+     prog_array for tail calls. bpf_check_tail_call() calls
+     __bpf_prog_map_compatible(PA, M), and the check evaluates:
 
-  3. Program B is attached to a kprobe via __perf_event_set_bpf_prog(),
-     which only rejects (kprobe_write_ctx && !is_uprobe) -- B passes
-     because its kprobe_write_ctx is false.
+       (!owner->call_get_func_ip && fp->call_get_func_ip)
+       (!1 && 0) = false
 
-  4. At runtime B tail-calls into A. Program A's instructions now
-     execute in kprobe context and write to kernel pt_regs.
+     so M passes the compatibility check.
 
-The same path applies when B merely uses the map for bpf_tail_call()
-without being stored -- bpf_check_tail_call() runs the same
-__bpf_prog_map_compatible() check and allows B through.
+  3. M is attached to a trampoline where no program needs func_ip,
+     so ip_arg is false and func_ip is not pushed on the stack.
 
-The commit message says "Reject the combination of !kprobe_write_ctx
-progs with kprobe_write_ctx progs" which suggests both directions
-should be blocked. Would a symmetric check be more appropriate here?
+  4. M tail-calls H. H calls bpf_get_func_ip(), which reads from
+     the expected stack offset, but that slot was never written by
+     the trampoline, so it returns stale stack data.
+
+Would it be safer to reject any mismatch on call_get_func_ip for
+tracing programs, regardless of which program was added first?
+Something like:
+
+  if (ret && (map->owner->call_get_func_ip != fp->call_get_func_ip) &&
+      prog_type == BPF_PROG_TYPE_TRACING)
+          ret = false;
 
 >  		if (ret &&
 >  		    map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
 >  		    map->owner->expected_attach_type != fp->expected_attach_type)
+>  			ret = false;
 
 
 ---
@@ -101,10 +106,10 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22358832658
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit message is concise and uses standard kernel terminology; the code changes follow established BPF patterns with no signs of AI-generated phrasing or structure.
+AI-authorship-score: medium
+AI-authorship-explanation: Selftests in the series carry Assisted-by Codex tags, and the kernel code change is formulaic pattern replication across all commits, consistent with AI-assisted development.
 issues-found: 1
-issue-severity-score: high
-issue-severity-explanation: The asymmetric compatibility check allows a !kprobe_write_ctx program attached to a kprobe to tail-call a kprobe_write_ctx program, enabling writes to kernel pt_regs in kprobe context and defeating the security enforcement the patch is meant to provide.
+issue-severity-score: medium
+issue-severity-explanation: One-directional compatibility check allows a non-call_get_func_ip tail-caller to bypass the check when the call_get_func_ip program is added to the prog_array first, potentially causing bpf_get_func_ip to return stale stack data.
 
---===============1426995775684406543==--
+--===============1231585818442456678==--
