@@ -1,115 +1,98 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D2F3A9DB9
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 17:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F713A4F37
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 17:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771955014; cv=none; b=aqEGmUAfdO/MTm4Pc8UlzhTKYneJkLdy19Mfj67+sDtcyH+ipABciB4MsQ7oVEfn9AiZpzJ6Vjztbu8vdIEFgs/wajivZL9iZiovJ1Hg9OUEdC9cZOosg7z6ptOh6kN1L7ul/4MDqaweOgUec5YM3Tca+DRNofwIYAqoPibdU8Y=
+	t=1771955414; cv=none; b=TGmGvX5hQRfU5o9dJ4oQD0fxzlVF4MdCnDrFUR7iN0tuY5DgMpFelLbNDwhlScepsncsBPBv1Wa7pGwlj7LvG/LOMqRIifR0JqavGplf+FBEeE4+qMCtSM4SjZ0Z8d0ASXgPlMwce0IlQfFE7tjaGK5KFbjCe9FNT7mcilpxs8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771955014; c=relaxed/simple;
-	bh=CzXhE6NIlz4EonhiaZ5X2vjm+voehRbxgQYJDKg7pfY=;
+	s=arc-20240116; t=1771955414; c=relaxed/simple;
+	bh=Rqe+DV0JGKG3N5xInoIymTuwjlGQzgFPyP40I1T9dtw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=F5EtVpgE1hgb0oA59ryeUDN+kKajp5SAFqGEFIjN02eurYenLsyrNxVMOqdQ1S6MOfIcBPmGx+Gy0sTPJbYOogGOc3HTb32dxanMkso9Gd0DtYZ9zwzH02xdoyRGvKgX04XiJWiYX1uBcuxWGedFF8OmybuwJtbaIERcwtD3760=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xylueOVz; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=JTfUhXmHguwIG6hoiLwX3DFe414xCz9qtDBefjDSRiDCNqxYcIME3tUJH5an2k17tLR1XXDiV2JB394lX8n4Jik9bNFEDjZm6SUcdnRdZSeAkd3HIpfBFUAv2bLuljpXg0drQ3pIJGxG9jn1x0t1BRdr3VZCB2p0htN0QzNkwG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U1RhcQ5x; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xylueOVz"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3562370038dso5148573a91.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 09:43:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U1RhcQ5x"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35641c14663so6217895a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 09:50:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771955012; x=1772559812; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771955413; x=1772560213; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EJ6jDZkcc54+WfMFP83ReJ+Vv39B7Cq+a8KWyoH30M=;
-        b=xylueOVzD3NHwth8hX+kofCnh4QGm1w6LBpFpTOTc0f2m8Mh77Kct3OBXyWoj2zN0X
-         A4d6d8HzHwoFT/4gxQ3Ky1HBcjaBgXwwzTMzuX+mrj9ZFRFBTC0JMKH3ZKj86pF35ssP
-         fWoTzA7qkTwTf3QsxNAjiVKjwfgVq4ijw2bXdtupgzUq0oabjhgJDG5xlPXSrEqfvHBQ
-         S4KwfzQ0mUvAzpxIeqz48Df9pugb36b47rhhaWjLTR769eDpUuMTTRcgGIfg0viyavlp
-         +r8iRa0plO7YpdcAHbsmm1GAb9+Ia4drPeZAlUSZ1H9L4+3Y4GKuIL9CpILxY6HkZh0x
-         b5LA==
+        bh=xP2Yvk9LjV+314PihNF72RJZub6L9XofR0CT5YjYokY=;
+        b=U1RhcQ5x55v9QNuYquBGsCyq67CDbyHxGb7lkVIeCOebYHaTUDSW8El+oH6qMb/l+C
+         1Yb3rALrVIUwq8w5/KeO4qMLzcdflqSdoX8mn42Xk8MhmWjc2/e7hy+4kbXy60nPo1Q8
+         us3F3rdQVRBwNHcvLoQHkF9MaEG2IxDSiYFN2fNDzzTdLE0J8UhlZdFa1JXbUpgZ+SUY
+         YG+zHgqXzP61y5dcExGnruMlZuDOc8QUY0KOnnUtnswRrWV4IMhKL2tzlTZz4jPwXl/Q
+         zEv42As3513ephlZflJyHtRnswgX0YnbC1o1iW+9o1p82cqyF+7L1NzR3u5dKc3sg0gA
+         39NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771955012; x=1772559812;
+        d=1e100.net; s=20230601; t=1771955413; x=1772560213;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EJ6jDZkcc54+WfMFP83ReJ+Vv39B7Cq+a8KWyoH30M=;
-        b=mCqkX5hvkgVwsMbOjwDSepIQNbFcLoLKEfdOrXAnkdj9xbV2fpcfuZ7w9YVIN7mP8F
-         NP4+FbA3SBvqDOVzbT8pi2Fo1vk8GPqc8qOX/bQCmrhumuhsAwOkTeoG1N88rYz1Lg3F
-         sOx1qMXlwW9eNp6tTSBDOUEvE0Mi+dXtBqNQvmLo6qDjJueZO/G0DxC2/agDPTlb4r7S
-         jcG33QdRsMdbAh0darfYj3QvG0MmpK5kFn65C5ezFEM1Yzqh66pYquSTlOS0ihcxXdG4
-         CdV6vRfkGBzqRybgv2QtCyfy5YBy32VqK1St2/PdDXR3x8Brw/Hpg3QUPKPEiunoRMTy
-         khJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUg8jSwnhFkkbukWwZIR0V2raJKh4q811+1gNeixERoADQ2ot+/oLndpyndeOAxV2TT+68eS5piT3D6QDQ2qUY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDf3Ci5PTjXDBy7Evh+KFraBUI5vo8KgBQ+NcoceiIcS3W2DDZ
-	xTHUqYnSq7+gGoJTPqvx66eJa5X9dzPO/ASmjywhH9fe9bmQI3AxIGRjB/mWw1iAHTCsB9v1v0M
-	vLVKfOQ==
-X-Received: from pjqs3.prod.google.com ([2002:a17:90a:ad83:b0:358:eb53:2d1a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4b10:b0:356:2db3:1206
- with SMTP id 98e67ed59e1d1-358ae80a6a3mr10275503a91.13.1771955012397; Tue, 24
- Feb 2026 09:43:32 -0800 (PST)
-Date: Tue, 24 Feb 2026 09:43:31 -0800
-In-Reply-To: <20260224005500.1471972-6-jmattson@google.com>
+        bh=xP2Yvk9LjV+314PihNF72RJZub6L9XofR0CT5YjYokY=;
+        b=RkqaVDUFzbJQjoJAYXZs9bnDXjO/jjeZZWiKK4MHAJ9ZU5wa3VCT1vMApw1y+E1dPZ
+         XqjiN3f4X504l3HVDV26Pn0V2gP/4b7dcX/dzKovhLlsmjl4FC0JVxtldf0VfYpc2iho
+         UBNdlpruKCQdyi/W3sMrsBKGrF+daIpbxrRwd8De3cVzHFz1DMyXlQU+pjBcnVaa/xMD
+         F2m6tmCc8oAge0y8GBPj3CRIyocCkz0Ef7smI35E5MRxsdJ7stQhq/AbYc9XyCz8ugme
+         wqseIqQKzyWOJ3AjP/ibrtHOTkvqTe7UhppHNHdPXv8+RVrTmyjSUaURk648BQakAv2T
+         R3GA==
+X-Forwarded-Encrypted: i=1; AJvYcCW3rVItV9L3uw9Tmm83Vqrbx3qHzHadW82vxYsI+sk1aDUvIsPIfxnKuIjH25W8manxevdGCs+rlQRBDucP2Sg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSZSUN0rSZO61sdgRM5Nz/r1riWTTHRRZWu4Itt+XySlmqN5d4
+	lZU5DOahA/zyTTysWfupkpUvFH+shV2im6vu/MI7tjWupz5tMt3zHymRQWVhB0Mo25/ZEWRQ++h
+	bJRX3Yg==
+X-Received: from pjbgi15.prod.google.com ([2002:a17:90b:110f:b0:358:f878:1918])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:56c5:b0:356:79eb:5b42
+ with SMTP id 98e67ed59e1d1-358ae8dc012mr11249203a91.32.1771955412533; Tue, 24
+ Feb 2026 09:50:12 -0800 (PST)
+Date: Tue, 24 Feb 2026 09:50:11 -0800
+In-Reply-To: <aZzRVXp_E3cMcgtX@tycho.pizza>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260224005500.1471972-1-jmattson@google.com> <20260224005500.1471972-6-jmattson@google.com>
-Message-ID: <aZ3jQ1prL4dgG0-H@google.com>
-Subject: Re: [PATCH v5 05/10] KVM: x86: nSVM: Redirect IA32_PAT accesses to
- either hPAT or gPAT
+References: <20260223162900.772669-1-tycho@kernel.org> <20260223162900.772669-4-tycho@kernel.org>
+ <aZyC89v9JAVEPeLt@google.com> <aZzRVXp_E3cMcgtX@tycho.pizza>
+Message-ID: <aZ3k01UObX03Sv-n@google.com>
+Subject: Re: [PATCH 3/4] crypto/ccp: support setting RAPL_DIS in SNP_INIT_EX
 From: Sean Christopherson <seanjc@google.com>
-To: Jim Mattson <jmattson@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Yosry Ahmed <yosry@kernel.org>
+To: Tycho Andersen <tycho@kernel.org>
+Cc: Ashish Kalra <ashish.kalra@amd.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, linux-crypto@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Feb 23, 2026, Jim Mattson wrote:
-> +static void svm_set_pat(struct kvm_vcpu *vcpu, bool from_host, u64 data)
-> +{
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +
-> +	if (svm_pat_accesses_gpat(vcpu, from_host)) {
-> +		vmcb_set_gpat(svm->vmcb, data);
-> +	} else {
-> +		svm->vcpu.arch.pat = data;
-> +		if (npt_enabled) {
-> +			vmcb_set_gpat(svm->vmcb01.ptr, data);
-> +			if (is_guest_mode(&svm->vcpu) &&
-> +			    !nested_npt_enabled(svm))
-> +				vmcb_set_gpat(svm->vmcb, data);
-> +		}
-> +	}
+On Mon, Feb 23, 2026, Tycho Andersen wrote:
+> On Mon, Feb 23, 2026 at 08:40:19AM -0800, Sean Christopherson wrote:
+> > On Mon, Feb 23, 2026, Tycho Andersen wrote:
+> > > From: "Tycho Andersen (AMD)" <tycho@kernel.org>
+> > > 
+> > > The kernel allows setting the RAPL_DIS policy bit, but had no way to set
+> > 
+> > Please actually say what RAPL_DIS is and does, and explain why this is the
+> > correct approach.  I genuinely have no idea what the impact of this patch is,
+> > (beyond disabling something, obviously).
+> 
+> Sure, the easiest thing is probably to quote the firmware PDF:
+> 
+>     Some processors support the Running Average Power Limit (RAPL)
+>     feature which provides information about power utilization of
+>     software. RAPL can be disabled using the RAPL_DIS flag in
+>     SNP_INIT_EX to disable RAPL while SNP firmware is in the INIT
+>     state. Guests may require that RAPL is disabled by using the
+>     POLICY.RAPL_DIS guest policy flag.
 
-Overall, this LGTM.  For this particular code, any objection to using early
-returns to reduce indentation?  The else branch above is a bit gnarly, especially
-when legacy_gpat_semantics comes along.
+Ah, I assume this about disabling RAPL to mitigate a potential side channel?  If
+so, please call that out in the changelog.
 
-I.e. end up with this
-
-  static void svm_set_pat(struct kvm_vcpu *vcpu, bool from_host, u64 data)
-  {
-	struct vcpu_svm *svm = to_svm(vcpu);
-
-	if (svm_pat_accesses_gpat(vcpu, from_host)) {
-		vmcb_set_gpat(svm->vmcb, data);
-		return;
-	}
-
-	svm->vcpu.arch.pat = data;
-
-	if (!npt_enabled)
-		return;
-
-	vmcb_set_gpat(svm->vmcb01.ptr, data);
-	if (is_guest_mode(&svm->vcpu) &&
-	    (svm->nested.legacy_gpat_semantics || !nested_npt_enabled(svm)))
-		vmcb_set_gpat(svm->vmcb, data);
-  }
-
-I can fixup when applying (unless you and/or Yosry object).
+And does this disable RAPL for _everything_?  Or does it just disable RAPL for
+SNP VMs?  If it's the former, then burying this in drivers/crypto/ccp/sev-dev.c
+feels wrong.
