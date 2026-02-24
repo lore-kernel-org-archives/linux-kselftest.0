@@ -1,237 +1,269 @@
-Received: from mail-24417.protonmail.ch (mail-24417.protonmail.ch [109.224.244.17])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11021131.outbound.protection.outlook.com [52.101.65.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC2A39C653
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 13:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771939347; cv=none; b=fQ/t1HdSoa2+vxu6hc5jmLUAR23BS9xWxEGsjDTsW58cR7D+jQJnBp3RR10CD9GWDr4Y1AZD3ZMRPgHsw3zcLGw6MUJ+Ju+V6ezkxPI6ZJgAyRP6rQXjN72wlW1boVsP/EtFjmN/JdBo2EqCTXlVmKAlVG9z+K4xvb7e2dg1T30=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771939347; c=relaxed/simple;
-	bh=Key36d9CQNDC2jdXVq+xiTTel29uUeOXeIWgO+AuEUM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LDKyYKTLpe5C0xK5U2kf/Y9TT0/Sa1KrBRsI59l0HM3qbdVt3ai1CAsXNze2pg2rhsXvV6q2TdubGlq88X39634319MPGo8m63PYvFfb956xpyzm4gze/9bd3g0gPsWVPQoxwWmG6l3+gpM7G8qqu3CGj9r4r069WVlt6/6iOJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Loh2wZd2; arc=none smtp.client-ip=109.224.244.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A87639C629;
+	Tue, 24 Feb 2026 13:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.131
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771939441; cv=fail; b=YUjRGBrG98pWDVpANxUXNzvyOEXVkakgpPYY72j75rQXelilDkJ4hJYs/6h9AvW3R+xZ6WuKpzoZ47TV0gHCMxSIBq14JFYG7cOV9+aZ11AE/nkBMlnDytbvsLIdShwWB1nbIPiO/ZbwFx4awl/XHPT7TB4IVr/zIy45t0cKZZo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771939441; c=relaxed/simple;
+	bh=W/L/yaCrpF75G5Bi7f3CRZZWrZHQsXfdEYcmoSnUehI=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=nYyv+3FuN18SuVXCrpvYauwJLZQdIyoOGBos4C+AOQbzlC04+mtO8VtBH2PGONKzpljsZhM7sJf9fPqrPgisaEFhcasxmUbW/u6LbZGfE9WjYEDesAQVSqcYFcJKT+wbLS3iluwoOt857gwg848T6Qfo0MCy0LjS6tWGndiuO/M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=TmiykoYs; arc=fail smtp.client-ip=52.101.65.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Loh2wZd2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1771939342; x=1772198542;
-	bh=TOcZfslwyOLnqfStp7w1Zf0CKilK3beX2XrqjjIDxw4=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=Loh2wZd2Px79WDDWt/s/kLAGTAk2Gbtv8Bztx2T1qO7tW4kpnwKLJ+L7SBcT1J/Zu
-	 lvqUvWtS6bwcLDk9CL3rJRGV1xwiQiNj6rteZ0zABJpaE5B5PJdXcWe6wE50L4cmyA
-	 Z7TAsCd+sjKJRPa3qSgzh51sieyu1rPv+5OkN9rXXxFm6YJ4bW8DDtnCxtA8nVw4w5
-	 pcTtXrzdUa14YwvBQ2LjI0LjZaRpbGlRPYTa9QP+arqk6r0oAVbGGWDh8Fx5wz/tO0
-	 p44DI0FvvRnunXlKE2xuJb0y6KeEuvuZfli+7KWRYEjDNFM+Rqiu4FCKBU24xmf2+8
-	 h5Hzqb2hxo8BA==
-Date: Tue, 24 Feb 2026 13:22:18 +0000
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: m.wieczorretman@pm.me, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 4/4] selftests/lam: Add test cases for different LAM tag widths
-Message-ID: <94a499c384d0e8dca0792b04471a6e9146d3e149.1771938156.git.m.wieczorretman@pm.me>
-In-Reply-To: <cover.1771938156.git.m.wieczorretman@pm.me>
-References: <cover.1771938156.git.m.wieczorretman@pm.me>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: f1f76192fc166356818ce0b678cecfcee7cc2cae
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="TmiykoYs"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IuMRjecfCAIA4TEjDEAacTpKcXcFGTGfKXsmfAYIOpebBQajRYPbAcVba/ywb1TR2Rm3F/+5Tlreecop2kWFEK5wkBJZjCNEROWcsxVsz9N9dEBbVfCjZ//6gGn1Clc9/PI9PElNpMzirf7hAFJC5pEY+GB4jZXlfKTbGowiI5giI0Yh4HM1n5Jxomd38Q2WTvB+U/MH6PX4By/NFmFSFpCl1W5R3gMFfa4bzTGezOCnhDpZb3yRcmN/UT/NO/bfcJ17y/7WnhL6CJMPH1Fs1muD2BtQCsGUMLtS3mUz+/cfu+fKcTpalLDHtJBr7RBBxfL3+c7DSA8/vz9v7FbS4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CAhnpusAyPEbLzfo/BfVLb5p1RUFtQjwwJvZ7LUWprE=;
+ b=HDUspcrn6pZwfBcNtfNH/qqbnTcR9Tgc6L8OYjwOpZKWG6BACyT9Iqs/zT5PtD11JfsFxgS+/HHhPYJA1LBmOx3JvTEK6PJzVEAP3PwdiSiRbd0lkZkWvX6iLwlnLp2qgnx1G9ozvQMw+o9j4CL4ZrBvV353DG7GpWEmCns00SKV6zpZoipliyl5NMYvh22NGzvwNbEiw4pAfdk/2p6NjUWnFq9jvmnnrvDSUsnOMUGM0/It9P15sVJoa9An9/JPa1mA0c63ZTBSafXWlyGqqYExEccNf3Zgnkc6E6GgC/uxx3Q7xpHSzzhEgUoToGEM7VEEM9ee0hTCrlSuYxOJWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CAhnpusAyPEbLzfo/BfVLb5p1RUFtQjwwJvZ7LUWprE=;
+ b=TmiykoYsxL64Wq52mDyLGMveJnWyJt+O+xviAFOK06yW308YYiW1J2csBUKeW1Na4XC6WcwLMCGjsN6o1kTa0wjUPkD1iMoDGuL44THPuc9/Sv8pMzksZtvrekbo63qQ/nCsQpMHOw7hwiDQfRg5XRbGRzwPmU58F2Dboi6X1VZ+AT9UQUwbES9NXUf+WRgIjIj6zNR7qMVVc4yiZsxFZD8JrNimPmKXp0mHUxzffIyvdtMeBCuf39U8aH6jl0YgpeSxrd0WeBpSgQACbfIm2SupnAQ/nnRW8HI3G/u1YUZ+2W1rQzIlxpl84VQvbbrOAlDaNCmEDAtqTP/PzZ5+8w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
+ by AS8PR08MB6086.eurprd08.prod.outlook.com (2603:10a6:20b:29d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.22; Tue, 24 Feb
+ 2026 13:23:56 +0000
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9632.017; Tue, 24 Feb 2026
+ 13:23:55 +0000
+Message-ID: <3f095a91-f052-4f38-a8e4-2e6dbc9a0c6a@virtuozzo.com>
+Date: Tue, 24 Feb 2026 14:23:19 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] pid_namespace: allow opening pid_for_children
+ before init was created
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Jan Kara <jack@suse.cz>,
+ Aleksa Sarai <cyphar@cyphar.com>, Andrei Vagin <avagin@google.com>,
+ Kirill Tkhai <tkhai@ya.ru>, Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ Mateusz Guzik <mjguzik@gmail.com>
+References: <20260223200254.4104651-1-ptikhomirov@virtuozzo.com>
+ <20260223200254.4104651-2-ptikhomirov@virtuozzo.com>
+ <aZ2U6TwK7rQtkTvT@redhat.com>
+Content-Language: en-US
+From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+In-Reply-To: <aZ2U6TwK7rQtkTvT@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BE1P281CA0143.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:7c::17) To DU0PR08MB9003.eurprd08.prod.outlook.com
+ (2603:10a6:10:471::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|AS8PR08MB6086:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1400d628-33b5-4c7b-7cd7-08de73a7f5f4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Z3cwSGJpdXd3bUlPakIreTdycDljN1loSmp5bTdoRHlyMDU0Nm4xRlMvTW9s?=
+ =?utf-8?B?bnE3SXlqSXpqVnQ0L1EvUFVnT3l5ZkRYbk1IazZGYk5xQTIwd2Z3Q0VVWFRv?=
+ =?utf-8?B?SFh1cXpQbXU4bnZjSHRLK21rZzNha2g1dU8yM1pMbFB5b09wUTZ3OHhIYUVW?=
+ =?utf-8?B?VG1GdWY5VjVGbGM1TUxhZlNrUml3N0V6RVdhVjRadUNhRklEb2Vya3JBZFNY?=
+ =?utf-8?B?UVFqblIvdnNabE1JeGlTUjVqWGlTeXFmb1piOFFOdnoyaitrYmh3UTNXTlVo?=
+ =?utf-8?B?Mk93eFp3M2xTTE9iOGVaY0lKRnBnZUU2OUdwM2FTV3dScUtyM21GQkFsYmR6?=
+ =?utf-8?B?TWRPNXppK2RlTkNkaG1CWXZiMVA5Rlp3M2xHUVVIUU1RRzNYVWFGeEVKdVgy?=
+ =?utf-8?B?bGpYZGtFWVFsZ2tBZGpkSzkra2lFYmpwT3JkTW5PODlzVkh1ZUdrcVI2cU9X?=
+ =?utf-8?B?ZWpONHNpRkUxZUR0UXpZZnJ3QlpZc2hqa3kwNlJTZXNLOWNzWjFEVUFmYUlt?=
+ =?utf-8?B?MkcyTmtjNTN3VUNJQ1NzS2FxVHhSVlNzcU5Gb3lsbys4UEYzYXF1OVJaMlVx?=
+ =?utf-8?B?U1p0TGhnUlh1N1lnbXczQ0VxaEhXQ1NqZzQ2Q2d5b0hLY2RHejdlRlhvOEI4?=
+ =?utf-8?B?c0F5WDhCNG9Ld015YW1GbkpGK2QxbnlXK1NqSWthODlrVHdVcnFnM1ZETVho?=
+ =?utf-8?B?ZEZzRlpUbHd0R053VGx2V3RYY3pxbmVTRHNKOERJSFlPU08xTEtmOCthYTk2?=
+ =?utf-8?B?SHZyd2MvQnJ3dGlYZG9Zd0k5MUZYcVdaSFZ4Yks5aE84UENpeWJteUVLbnNH?=
+ =?utf-8?B?MnBSWGdPWUQwcEQvYnRNWVBYRXBndVJNUTZhUE42WUV0MlgwaFIrQzdoOTl3?=
+ =?utf-8?B?ZFVPd0dXUVhMOUtGVW1ldG1hMzk2YXk0VElLZEJaTFNmUHMwNVF0SVhicWhW?=
+ =?utf-8?B?eEZYc3pSUG1vWUl1Q3JKZ2d4SllRVlpMYVBad3pUMmZjcDZTQk5tclI2Nzcr?=
+ =?utf-8?B?cjZXWmllMDVUL0taRnkrRm9uQnBEUUx0WjkzSVovUk5yeWxTOWZ6TmVlM1JY?=
+ =?utf-8?B?NkZScnFqcmtBQ0JMd1Bud3U5TWtyTXIrUTVienpMQlp0NTFZbjJnYUFMeUt0?=
+ =?utf-8?B?OHF2ZHFBZXhzVUZJYWtJYmZodzN3UGFBcUZzejA1dE00M2twQmIxdjc4Zy9D?=
+ =?utf-8?B?R0FxREhyZHF1MTBGZHloc21za3NwQVJIY1dPNXM3YXRGMUdrQStEblhETmJ4?=
+ =?utf-8?B?WkJhQ3JsV25PcHdFTVJ5NEI5NGhiUnZNazg1eTdRZHE2YWoxTVVoTlhoVUMz?=
+ =?utf-8?B?a08rMHY2aFhndjR3U0NKR2FKZXVXR3JNRlNSVmk2bjdBaWpXcFlnRFJyWlFM?=
+ =?utf-8?B?U1pISGN5N0ZreHZyVXBjQVdJbklSZHBvR2U2aThOU1RyaU5VVlJzRC8zaVBr?=
+ =?utf-8?B?WmhyS2x3d3dJR3VneE5QRE1qZCsvM0RrQ2VSaTM0QUYvaVdYc245ZS9GenZU?=
+ =?utf-8?B?a1NRODlrbkpEZittUVJPaGRXdDc4TVZEbTVXa2NRSmY5cFpkTFZYdndxMzk1?=
+ =?utf-8?B?QXVZU0p6UDVrS0w2Q29Ba2RDVHNrY2NtWFFhbUF5dzhVaUNCV1hiSlF0eVBx?=
+ =?utf-8?B?aWJNVTBLaHJlaERzQjhua3VSenE3ZDd4Zk1Xbi9zYzh6emFjQWkvK2FidjRX?=
+ =?utf-8?B?cUY4aGZQTi9PQ0l6NlVxOUVQelI3WHZhN2tIRjVHOWE3YXFLVGVTSmRtaTBX?=
+ =?utf-8?B?YWFtckN2RmdXNXhsWTRKUkNpUGVtZTg0bHNRY2hSTll6bGQ2cjRkbk1WWDF3?=
+ =?utf-8?B?TTZtTlV4ajQ1WDlEYWxEQjhvNXQvTWp2KzlVbjN5OVNkaXM2ait2dTRpTEV3?=
+ =?utf-8?B?NjVWK25Rc3RDUHJRQm5Relc0eHlQTFJXR29iMmNCd3pIOXloMEN6NnFLRm9u?=
+ =?utf-8?B?RlJsMnFNeWFEQm9hMUxRTzl2NDI1bXhNb3ZiMi9jWTFTMHREdGsyU0lEbW9u?=
+ =?utf-8?B?WUFjb3RFenlNSlRvSmowbXRuUk5ORHVKSnl1TS9PUUVORldzMlRRdVh1dzFl?=
+ =?utf-8?B?QnNMRFJDRjdpc0tIOEdaeWxFYTlweUdtTFpEb2JxMDFDQlZFQklkR3B2RzBZ?=
+ =?utf-8?Q?BdUA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TDU5OUdSL3lOei9UczVobXJRY2hidGRjYks2RG1zVGlPeFpZb3RZZmxOTy9W?=
+ =?utf-8?B?alhZMjRpMzJvRzdIdXNmNTFTbm5iUTRnMllRTHNVMENjRU1tYU1WLzdMZFZT?=
+ =?utf-8?B?azh5NU12VUFsbGVGdEFtZW1xK2FxM0M3YVlXbmszZEoyWC9kNVZ3RlJoaURB?=
+ =?utf-8?B?eDFqdDc3ci9hWkppcHZNVHgwTkNyUEdSRnc5NnNTSXRsMlhlZzBlWUdKU2Yv?=
+ =?utf-8?B?QTdFa2swblNZVzgwTXFKeHdYWCtZRThZUHVBUkhLUWxEcThZcEtQZDJySCtP?=
+ =?utf-8?B?a1BXbVp3NlFROWk5bWJ0WEF6WnNpTGNzTUJqb0tZV0FDTHZ3eDF2S3ExRU5k?=
+ =?utf-8?B?aDRSdFFkazNZakJXQXBIVFVHVGdHZ2NTWStjdDdqSEZSYWVxWnZ0Y0hoVWNW?=
+ =?utf-8?B?Sm9PbmdrSUlieVRqTXBlZ1ZqL05rMFJ3WngxdjNIb2U4NDl2YS9MVnNkT21M?=
+ =?utf-8?B?ZUZmcWQ5emVkRzlOa3RPVlFiK21Sb2xLRkI5cFU3WGF6ekRWNElrSFZuY2NB?=
+ =?utf-8?B?VWpQS1hvOWZkS1cvSnNIdGE3Q29xR0dHQ25aVmIrQmZKTnhSditsUGRjUkNv?=
+ =?utf-8?B?U0M2OFZlVW9JUXY5dm5pMllJVDAyazdGY1dtenhmYkE2ZGhiTzYwOCtNS1ZB?=
+ =?utf-8?B?dkhlY21ZbGgvM3ZNVW5keTVWQ3RoTWtvV2hCUTdvd0piN25qTTZXWFlDTmI1?=
+ =?utf-8?B?cGdseTlMWFp4SWZVUmdWZHlkQnUrSmFDa2lYdEx6T29SSE9ueHpHL20rNFVN?=
+ =?utf-8?B?cFpxYVZIWk9WYytZS2d0MXNrNlBqeVIwVEhubE1naUlDVnhXeUZ1TFdHdHF5?=
+ =?utf-8?B?aitaYnk0M3FUeGQ2ZHBZU0xrS210aERCbXcrdWh4YnZrQ2ZUTHFIa3RoN09q?=
+ =?utf-8?B?eTZpaFcxWi9RS2Zud1dqWC9lempZWUxCZ1BKS0VlWEJ1Tk5mWTNtN2xBVFpW?=
+ =?utf-8?B?WjNGLzErKzdTbVR6TzZWbHpqdGZVTGhHS2dqbkx6VmF0dkhpelpxVERBYjdx?=
+ =?utf-8?B?YS9SRW12d2F1WDBVaktUWTJkQkFWdi9YajluZFRuKzVjcW9BQ1c2bWFGR1cv?=
+ =?utf-8?B?TzZvdGhuOWE1TFB4SFh0NllQVi9HZ0lZR0wzR3oxQXhRd0Nkem5UVlhyMzBj?=
+ =?utf-8?B?NllpSjJlYVpOQlJ6dUZ0elBUSGpST3F2KzlhUlRXYUVMTkxNTXhUZGxmREI2?=
+ =?utf-8?B?MEc1aHNPajlRNk9vKzFBQ2VtUlVkekZndDBzcjArUVRRaEJrQklSUHloQzNN?=
+ =?utf-8?B?bWdTTmI4ck5pVEtZbGtWRXBzRjZmd3BuYmdGeW9hbFozU1NUUEpQT1ozQmFq?=
+ =?utf-8?B?T09rZW80anFhaWsxUjZRRGMzU2RzYjZPank1bWNOTkovWTdST0xLOHVuOXlR?=
+ =?utf-8?B?U1h0QXNDTWNyZzlpZzRkM0hEVDExMS9hUDVVaEUwUTM4ajdPODVlM2J1YStR?=
+ =?utf-8?B?cnZKSGE5bWFJRTVER3UyQlJjM3lkUEV5TjlqUHVtbTkrdW9HQjk4WUdBZXh0?=
+ =?utf-8?B?WVB5V2pVTXdKaGlIS1MrVjVuelJnUmxJYVdSZW1SQVJwRk1ncjQ2Z1lldEFo?=
+ =?utf-8?B?Wm8wb2VndFZSUVFpaERZWUhteG5KMmVzVXU1SzZFWUR6a2IrMG0vUTFSZXVG?=
+ =?utf-8?B?TUtIYmdZTGdJMGJXSys1cGhUUEk2MTlVaDBjZUpIZzIzN2V5S2RIRXlkdXhL?=
+ =?utf-8?B?Y0Z3OWNDdmlGay8wcjZSaURnNm96L3dsampWOWhLQ2tMWjdMSjZiYUFra0ll?=
+ =?utf-8?B?YUE1YlFLMnBwb3J2T1pGOVFISm1aQmhhMzVuVzE3SkJDV0lIdGloT2orTEx3?=
+ =?utf-8?B?MDRDdjYwbnl4d29GSWpLWExMTnRpWVhzTC9WWVd0azNCb2Myem01cUVkTnpW?=
+ =?utf-8?B?Z00xRWFVM3ZvQitDM0VYVEJmN3VJYnpjK3J0VG9HbDBMRmhmMHdGcHBiUmdV?=
+ =?utf-8?B?ZkFuaHRUajRKdGNhSnlMSTRLYVlBck5hNVFjaDl4L2lNQmIrY1dNbUJQZXlH?=
+ =?utf-8?B?OFpJRTYvSVBxbTVWMWQvUTZIdVVzTW03SDYxeUNLcGdGZFJZaXVIdzZKVmk0?=
+ =?utf-8?B?MzR5bDlyOG9lSW5yMTZpaU5kOWsvaFF4bnhEeCtKSW9sSGFQeUxhK3IzWmJS?=
+ =?utf-8?B?ZExDQldaQmFMSGpiZmpzK2VxdlFOc2ZZZ3FvdXhsam9qSnFUbHA0MlVjK0tw?=
+ =?utf-8?B?VkVDY29TbzFSMUY5VDEwUVV2WU92aGh1TTFBejRlb2hnZFVzdXQySUtDTmVZ?=
+ =?utf-8?B?amo1VkxielVKeWhVbnpSSys1V1EvK1cwdzhSWC9qWEhZVy9xZVdLRWcxcFJx?=
+ =?utf-8?B?ZUZhTVZyQU5ETElYc3laQVc3a2dEQVY3OFAyMHJxbHErMHV4NWlhdGpWLytX?=
+ =?utf-8?Q?xdGych8cIWTdycevFfxOkNfoIYZrAYvwzqKXn1iihFUre?=
+X-MS-Exchange-AntiSpam-MessageData-1: UYxeM0P06tYbmmxkmhep4wE/LcS9TF6sgKA=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1400d628-33b5-4c7b-7cd7-08de73a7f5f4
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2026 13:23:55.7744
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SltkP3F4bNCHdw0RmISHwujVZPGv5FFnwNpt/7cvBTrfiMrezP3XliSMQ/gfjcf1lM2HfDZ+dRTNuhl+JvvFZfWp9mQxfHm8HeLWnx+prbs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6086
 
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 
-After the default tag width in LAM (Linear Address Masking) is set to 4
-bits, it's still possible to enable 6 bit wide tags for debug purposes
-through debugfs.
 
-When a program enables LAM, it should be able to, through a syscall,
-request a number of tag bits equal or smaller to the one used system
-wide. If it requests a smaller one it should receive the system wide
-setting anyway.
+On 2/24/26 13:09, Oleg Nesterov wrote:
+> On 02/23, Pavel Tikhomirov wrote:
+>>
+>> To avoid possible problems related to cpu/compiler optimizations around
+>> ->child_reaper, let's use WRITE_ONCE (additional to task_list lock)
+>> everywhere we write it and use READ_ONCE everywhere we read it without
+>> explicit lock.
+> 
+> Yes, this is what I meant... but I can never recall if READ_ONCE() alone
+> is enough to make KCSAN happy...
 
-Change the default tag width. Add four tests to check all combinations
-of tag width requests. Modify the existing test infrastructure to check
-with a syscall what the needed tag width actually is.
+AFAICS this should be fine for memory safety of accesses to ->child_reaper.
+I would love if someone more experienced in this area would confirm.
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
- tools/testing/selftests/x86/lam.c | 87 ++++++++++++++++++++++++++-----
- 1 file changed, 74 insertions(+), 13 deletions(-)
+> 
+> I won't insist, but I think it would be better to do this in a separate
+> change for documenation purposes and for discussion.
 
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x8=
-6/lam.c
-index 1919fa6daec0..9ed2964082eb 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -26,9 +26,11 @@
-=20
- /* LAM modes, these definitions were copied from kernel code */
- #define LAM_NONE                0
--#define LAM_U57_BITS            6
-+#define LAM_U57_BITS            4
-+#define LAM_MAX_BITS            6
-=20
--#define LAM_U57_MASK            (0x3fULL << 57)
-+#define LAM_U57_MASK            (0xfULL << 57)
-+#define LAM_MAX_MASK            (0x3fULL << 57)
- /* arch prctl for LAM */
- #define ARCH_GET_UNTAG_MASK     0x4001
- #define ARCH_ENABLE_TAGGED_ADDR 0x4002
-@@ -175,7 +177,7 @@ static int set_lam(unsigned long lam)
- =09int ret =3D 0;
- =09uint64_t ptr =3D 0;
-=20
--=09if (lam !=3D LAM_U57_BITS && lam !=3D LAM_NONE)
-+=09if (lam !=3D LAM_U57_BITS && lam !=3D LAM_MAX_BITS && lam !=3D LAM_NONE=
-)
- =09=09return -1;
-=20
- =09/* Skip check return */
-@@ -184,16 +186,21 @@ static int set_lam(unsigned long lam)
- =09/* Get untagged mask */
- =09syscall(SYS_arch_prctl, ARCH_GET_UNTAG_MASK, &ptr);
-=20
-+=09/* Update lam in case lam6 is enabled */
-+=09syscall(SYS_arch_prctl, ARCH_GET_MAX_TAG_BITS, &lam);
-+
- =09/* Check mask returned is expected */
- =09if (lam =3D=3D LAM_U57_BITS)
- =09=09ret =3D (ptr !=3D ~(LAM_U57_MASK));
-+=09else if (lam =3D=3D LAM_MAX_BITS)
-+=09=09ret =3D (ptr !=3D ~(LAM_MAX_MASK));
- =09else if (lam =3D=3D LAM_NONE)
- =09=09ret =3D (ptr !=3D -1ULL);
-=20
- =09return ret;
- }
-=20
--static unsigned long get_default_tag_bits(void)
-+static unsigned long get_default_tag_bits(int bits)
- {
- =09pid_t pid;
- =09int lam =3D LAM_NONE;
-@@ -204,8 +211,8 @@ static unsigned long get_default_tag_bits(void)
- =09=09perror("Fork failed.");
- =09} else if (pid =3D=3D 0) {
- =09=09/* Set LAM mode in child process */
--=09=09if (set_lam(LAM_U57_BITS) =3D=3D 0)
--=09=09=09lam =3D LAM_U57_BITS;
-+=09=09if (set_lam(bits) =3D=3D 0)
-+=09=09=09syscall(SYS_arch_prctl, ARCH_GET_MAX_TAG_BITS, &lam);
- =09=09else
- =09=09=09lam =3D LAM_NONE;
- =09=09exit(lam);
-@@ -217,6 +224,27 @@ static unsigned long get_default_tag_bits(void)
- =09return lam;
- }
-=20
-+static int change_lam_width(unsigned char width)
-+{
-+=09char buf[2];
-+=09int ret, fd;
-+
-+=09snprintf(buf, sizeof(buf), "%u", width);
-+=09fd =3D open("/sys/kernel/debug/x86/lam_available_bits", O_WRONLY);
-+=09if (fd < 0) {
-+=09=09ksft_print_msg("lam_available_bits debug file not found!\n");
-+=09=09return fd;
-+=09}
-+
-+=09ret =3D write(fd, buf, sizeof(buf));
-+=09if (ret < 0)
-+=09=09return ret;
-+
-+=09close(fd);
-+
-+=09return 0;
-+}
-+
- /*
-  * Set tagged address and read back untag mask.
-  * check if the untag mask is expected.
-@@ -284,20 +312,32 @@ static int handle_lam_test(void *src, unsigned int la=
-m)
- =09return (!!strcmp((char *)src, (char *)ptr));
- }
-=20
--
- int handle_max_bits(struct testcases *test)
- {
--=09unsigned long exp_bits =3D get_default_tag_bits();
--=09unsigned long bits =3D 0;
-+=09unsigned long exp_bits, bits =3D 0;
-+=09int ret =3D 1;
-=20
--=09if (exp_bits !=3D LAM_NONE)
--=09=09exp_bits =3D LAM_U57_BITS;
-+=09if (test->later) {
-+=09=09ret =3D change_lam_width(LAM_MAX_BITS);
-+=09=09if (ret)
-+=09=09=09return ret;
-+=09}
-+
-+=09exp_bits =3D get_default_tag_bits(test->lam);
-=20
- =09/* Get LAM max tag bits */
- =09if (syscall(SYS_arch_prctl, ARCH_GET_MAX_TAG_BITS, &bits) =3D=3D -1)
--=09=09return 1;
-+=09=09goto out;
-=20
--=09return (exp_bits !=3D bits);
-+=09ret =3D exp_bits !=3D bits;
-+out:
-+=09if (test->later) {
-+=09=09ret =3D change_lam_width(LAM_U57_BITS);
-+=09=09if (ret)
-+=09=09=09return ret;
-+=09}
-+
-+=09return ret;
- }
-=20
- /*
-@@ -968,9 +1008,30 @@ static struct testcases malloc_cases[] =3D {
-=20
- static struct testcases bits_cases[] =3D {
- =09{
-+=09=09.later =3D 0,
-+=09=09.lam =3D LAM_U57_BITS,
- =09=09.test_func =3D handle_max_bits,
- =09=09.msg =3D "BITS: Check default tag bits\n",
- =09},
-+=09{
-+=09=09.later =3D 1,
-+=09=09.lam =3D LAM_U57_BITS,
-+=09=09.test_func =3D handle_max_bits,
-+=09=09.msg =3D "BITS: Check if 4 bits can be requested in 6 bit mode.\n",
-+=09},
-+=09{
-+=09=09.later =3D 0,
-+=09=09.expected =3D 1,
-+=09=09.lam =3D LAM_MAX_BITS,
-+=09=09.test_func =3D handle_max_bits,
-+=09=09.msg =3D "BITS:[Negative] Check if 6 bits can be requested in 4 bit =
-mode.\n",
-+=09},
-+=09{
-+=09=09.later =3D 1,
-+=09=09.lam =3D LAM_MAX_BITS,
-+=09=09.test_func =3D handle_max_bits,
-+=09=09.msg =3D "BITS: Check if 6 bits can be requested in 6 bit mode.\n",
-+=09},
- };
-=20
- static struct testcases syscall_cases[] =3D {
---=20
-2.53.0
+Ok, will do. It will be a bit ugly as I will first add READ_ONCE to the
+pidns_for_children_get() and then remove the hunk with it in the next patch.
 
+> 
+>> @@ -247,8 +247,9 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *arg_set_tid,
+>>  			 * alreay in use. Return EEXIST in that case.
+>>  			 */
+>>  			if (nr == -ENOSPC)
+>> -
+>>  				nr = -EEXIST;
+>> +		} else if (!READ_ONCE(tmp->child_reaper) && idr_get_cursor(&tmp->idr) != 0) {
+>> +			nr = -EINVAL;
+>>  		} else {
+> 
+> Oh, this doesn't look clear/clean... This even looks racy even if it is not.
+> Can you move this check into the "else" branch which does another get_cursor
+> and unify this check with the RESERVED_PIDS check?
+> 
+> Either way, I don't like the fact we check ->child_reaper != NULL twice.
+
+Notice that we don't really read it twice, it is only twice in code but any real
+execution either passes the first check or the second one, not both at the same
+time as they are in tid set/unset branches correspondingly.
+
+> Perhaps something like the preparational patch below makes sense ? Not
+> sure this is actually better...
+
+This looks more universal at least, as instead of two checks we have one in one
+place. My only concern of putting the check where I put it was to avoid extra
+idr_alloc_cyclic() + idr_remove(), if we already know we don't need it. But it's
+only in last pid_namespace we can have ->child_reaper unset so we do alloc/remove
+for all other namespaces anyway in error case, should not be a big deal.
+
+I will add the preparation patches: for below patch and related to _ONCE.
+
+> 
+> Oleg.
+> 
+> --- x/kernel/pid.c
+> +++ x/kernel/pid.c
+> @@ -215,12 +215,6 @@ struct pid *alloc_pid(struct pid_namespa
+>  			retval = -EINVAL;
+>  			if (tid < 1 || tid >= pid_max[ns->level - i])
+>  				goto out_abort;
+> -			/*
+> -			 * Also fail if a PID != 1 is requested and
+> -			 * no PID 1 exists.
+> -			 */
+> -			if (tid != 1 && !tmp->child_reaper)
+> -				goto out_abort;
+>  			retval = -EPERM;
+>  			if (!checkpoint_restore_ns_capable(tmp->user_ns))
+>  				goto out_abort;
+> @@ -299,6 +293,11 @@ struct pid *alloc_pid(struct pid_namespa
+>  		tmp = tmp->parent;
+>  		i--;
+>  		retried_preload = false;
+> +
+> +		if (!READ_ONCE(tmp->child_reaper) && nr != 1) {
+> +			retval = -EINVAL;
+> +			goto out_free;
+> +		}
+>  	}
+>  
+>  	/*
+> 
+
+-- 
+Best regards, Pavel Tikhomirov
+Senior Software Developer, Virtuozzo.
 
