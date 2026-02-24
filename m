@@ -1,114 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF039366558;
-	Tue, 24 Feb 2026 08:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448A3364EBB
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 08:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771921225; cv=none; b=PSi3EUnvs4BzJftiIICRbOWHJ8IEcUwPzv4yoD47fpBaD//uLUdISMLFrmQNhAWM3FA7Eja9/qgxXAF7MesVSr0mD63KdLD6ULMfEVhxNDPuaMd/BbL4DFdeChdPpPxtLeRB/WK0wJB6gTy/K7rXHwZQ+1oEmxuIkjLFHjANav4=
+	t=1771921581; cv=none; b=fF6ChatxbQoqDPmhEozk8l3nysjJwtzu41TDLUOEf45mc/h2lQ+othv1ToszjQuzbLeq92C2dsWZ0RrefXWjjgAV+ibqcHaya7Aiy3bqSIgPmvXz4YpOXpmhPWXr/MOtLaMHp4kcUyD1odBPTqm2Usirc1Vogr1LW34l3OPjJ50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771921225; c=relaxed/simple;
-	bh=Yho54yKeF0+pYUwHDqezl+RQxQv9QgV7ZpFQWc0NSEQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Kqy2ZJ6NAWkBVGffMsinKezUe4jzGHzIryoJLT/cudpnrR2ycqCPX+cIYoa1eGVfuI9tYETT1jA6i95JyRmq+2utd9WqAZhI9clCoIsLHy1Sts1iCIxVb5u9SdhWZRtFiLI7rJ1IPm1gQLxWdKzXF/YW3rjJu3pCnOrzUwXbBCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfQAJmHJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771921581; c=relaxed/simple;
+	bh=FtVWnKmSAhQscaTbVknx7Fz3wyNfwC/jGqjGpMz7VS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g7K1iWsRj+/vDUAt4jvUqUwRAIxutbDPVQPfv3ESCr6fX5A+v45wTYkGNywjBTMoPWd+qTjxQ9BGr7rQCfn03JVg+SpwhCDOz9rUMWMWcTLRpM9eQZrPeN9d4akHGyZpINdCUNVTwPC20wmMlXeq4VlnriMVOWnpDN7m/BsW8Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BzspBYjl; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfQAJmHJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A4C7DC19424;
-	Tue, 24 Feb 2026 08:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771921225;
-	bh=Yho54yKeF0+pYUwHDqezl+RQxQv9QgV7ZpFQWc0NSEQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=EfQAJmHJGNbiIGcEZN4GeBg1JKjQJ59o/LZTIRkyaJtM3/RL57Ei6duYcvWqRCi9I
-	 FMhV8nlpe2rebGrnrekA5i/yAhfxGj6vyPRoUIlt20Nl3bfVVtCbjWSkhDvytNAHol
-	 ubUrEYtgHJJoces84gnGyOzO0ixg8FqMO16C94OIOJBeKMeb2kb05rCcqc0qtepGHn
-	 p2+kSclE8T1WMf1b8OfQLiECzUFWjuRWPaHkedqtnzPoJ3GnbZCDuaIT5T7JOIGFz8
-	 rI7Xmkz4y9qqHiAe81z3xJAiECeTMEwjn+mGMiQCN3i2GPQn8/nhF4tUpt8+K32bmL
-	 qjSaP+XCOejig==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C89EFB814;
-	Tue, 24 Feb 2026 08:20:25 +0000 (UTC)
-From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
-Date: Tue, 24 Feb 2026 09:20:13 +0100
-Subject: [PATCH net v2 2/2] selftests/net: packetdrill: Verify acceptance
- of FIN packets when RWIN is 0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BzspBYjl"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a964077671so69585ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 00:26:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771921580; x=1772526380; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iUKKSXBfGZuIEKcFLX2f8iJcwGvlTC3YM5y4lXwVnQE=;
+        b=BzspBYjlzJho/96OyJYC3/gHlaMUuKjiw/QoS90zqVUIVPaB1+4cmFktKshaEN64oN
+         zPGDaxiy7uah8Ty1NTrZSA56zwLNViSRrvAhU3CzYvYqHVtdE1JxUltMvAbg2Y0Z7iZ7
+         oodAGSR30NSP8Spay1Qb9whhfK0FcfkaU68AU8wkjBFuJMQz/F2SQYIo/+QfFR2sVJgc
+         55BgOqCT3TICyhtcjz0RFUkIHBBDi+vRzXiN0GVSzVMH8I297zVcjKCPk8KICUw9+P8T
+         Dl94M4PzFks+1ul9h2UtYgullQAUdTVuz+swCqQpFZEs+fBWJDQD+bx+OeZfxxLBLV8v
+         VNrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771921580; x=1772526380;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iUKKSXBfGZuIEKcFLX2f8iJcwGvlTC3YM5y4lXwVnQE=;
+        b=WUx08oTnT7WObFQy8ptfsRKPmZf4muUPTt/csGwYtf13WGb+ji9NGaz5zNV85ZBoWS
+         FZIUqL5VE7+kgqjfO2JleiSKTxRS5OM/94LT6gfszwUVFyA2weuX0C7DAUUYa59DqJ7C
+         Dx4zmVgLjzdHHojORNeF9CqtloZ2uc8mLrV40CjkgWaDBpIUiTlUS9IHgC432pXaMJWu
+         P2xPYUJnou2Bb/BDJCECztzPFjLDaA+oRG2Cu1LVQW0stZCZBn+GwVityJV9q981v+sA
+         k0wxFukbKxJIeAxJ2MtjAggMIsKRwmX/N3xb3BtU03za18WB/vmfDnMtW0u2p8t+xlWo
+         B5eg==
+X-Forwarded-Encrypted: i=1; AJvYcCXHp2yDD6tSStJ+EN5xp1FrwbwoNaxbYn73NFAfjLzo/bSMV80nDMby/wXwc7ReJghSCsjjpe/QJzK///X2ROo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvNIC6ram8mm0tI6W5lsPtw8ttGc+sWmWLvmtSVYCMhmCJr/fi
+	V5HQddgOhVovz79xpYuPZFV6BDw6Jd22gz0zMkCess2s0/iKEa+O4RMBKGzBMpBmyw==
+X-Gm-Gg: ATEYQzzKkiln/ZjAdi7K0L9TY2bnZbrPZeywz01m6l8y8rmzsPNeG87J+M1aqYGI42t
+	fP2ysKRHozHG+GxhGTwyR/hb/VluHSv4vLnlY6lWsUWIkwxcXcQQ6tjDSw5kxRZY+b/EZVfC1/s
+	0XN2vWLIIm6WFt+ndrZ2OSZ2k0JM/4w5LULbXKamHspEGr8PhXyP53vnupY58KzWxcKHlx7nAFa
+	onjXaUPvsBgiUbexKecwmuSXxusr7iu8jnY4XJyQ4TnLfzgMNCqLURDnWE2tDQjWeb88KbG1AvY
+	/W1LycD0Yd3feE/uEJDd9SxTeGWecSZWIFpVYTrHxkCH3Fj2wskkwWK6sUMATG/3mOXdD2Yw6/V
+	EJxWAvcWOn9ucR497vhzVnWxbBvyTNZxi2kSukGJsN/f21Z/f+a46JZboDgj59J6600W9plsvjR
+	H4MwfESDrtpUuwRABEQyYIsw6nK+ilZ7gTKlqqMXsPrJRXntvmX5f8xkkiCyNT3xfzQtJOZeo=
+X-Received: by 2002:a17:903:2f04:b0:2a0:7fac:c031 with SMTP id d9443c01a7336-2ad997f5113mr1474945ad.14.1771921579006;
+        Tue, 24 Feb 2026 00:26:19 -0800 (PST)
+Received: from google.com (222.245.187.35.bc.googleusercontent.com. [35.187.245.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ada77cc13bsm13228715ad.47.2026.02.24.00.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 00:26:18 -0800 (PST)
+Date: Tue, 24 Feb 2026 08:26:08 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 01/22] liveupdate: Export symbols needed by modules
+Message-ID: <aZ1goNCgY8xz9n6K@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-2-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260224-fix_zero_wnd_fin-v2-2-a16677ea7cea@gmail.com>
-References: <20260224-fix_zero_wnd_fin-v2-0-a16677ea7cea@gmail.com>
-In-Reply-To: <20260224-fix_zero_wnd_fin-v2-0-a16677ea7cea@gmail.com>
-To: Eric Dumazet <edumazet@google.com>, 
- Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771921224; l=1458;
- i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
- bh=H8ZjJQB2JKY6JAi2lxsgvvCVKMl7+c9eEHI+rYT/o+E=;
- b=U+Im8KLHDGvfSdGH6ZJ4Pbo/TI6ozyHEDdYtHgVRn3+rZ6VnvnSOwiAc7vyyHHaWdGEccskrB
- odip6I5gtU9C8FskMM09BSTFIdrChX/Pp9M8cWuXODj5aTITgZuuUfj
-X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
- pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
-X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
- auth_id=641
-X-Original-From: Simon Baatz <gmbnomis@gmail.com>
-Reply-To: gmbnomis@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260129212510.967611-2-dmatlack@google.com>
 
-From: Simon Baatz <gmbnomis@gmail.com>
+On Thu, Jan 29, 2026 at 09:24:48PM +0000, David Matlack wrote:
+> Export liveupdate_enabled(), liveupdate_register_file_handler(), and
+> liveupdate_unregister_file_handler(). All of these will be used by
+> vfio-pci in a subsequent commit, which can be built as a module.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  kernel/liveupdate/luo_core.c | 1 +
+>  kernel/liveupdate/luo_file.c | 2 ++
+>  2 files changed, 3 insertions(+)
+> 
 
-Add a packetdrill test that verifies we accept bare FIN packets when
-the advertised receive window is zero.
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
 
-Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
----
- .../net/packetdrill/tcp_rcv_zero_wnd_fin.pkt       | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_zero_wnd_fin.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_zero_wnd_fin.pkt
-new file mode 100644
-index 0000000000000000000000000000000000000000..e245359a1a91d4b6d7ef64496681cea57792cb71
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_zero_wnd_fin.pkt
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+// Some TCP stacks send FINs even though the window is closed. We break
-+// a possible FIN/ACK loop by accepting the FIN.
-+
-+--mss=1000
-+
-+`./defaults.sh`
-+
-+// Establish a connection.
-+   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_RCVBUF, [20000], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,wscale 0>
-+   +0 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 < P. 1:60001(60000) ack 1 win 257
-+    * > .  1:1(0) ack 60001 win 0
-+
-+   +0 < F. 60001:60001(0) ack 1 win 257
-+   +0 > . 1:1(0) ack 60002 win 0
-
--- 
-2.53.0
-
-
+> diff --git a/kernel/liveupdate/luo_core.c b/kernel/liveupdate/luo_core.c
+> index dda7bb57d421..59d7793d9444 100644
+> --- a/kernel/liveupdate/luo_core.c
+> +++ b/kernel/liveupdate/luo_core.c
+> @@ -255,6 +255,7 @@ bool liveupdate_enabled(void)
+>  {
+>  	return luo_global.enabled;
+>  }
+> +EXPORT_SYMBOL_GPL(liveupdate_enabled);
+>  
+>  /**
+>   * DOC: LUO ioctl Interface
+> diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+> index 35d2a8b1a0df..32759e846bc9 100644
+> --- a/kernel/liveupdate/luo_file.c
+> +++ b/kernel/liveupdate/luo_file.c
+> @@ -872,6 +872,7 @@ int liveupdate_register_file_handler(struct liveupdate_file_handler *fh)
+>  	luo_session_resume();
+>  	return err;
+>  }
+> +EXPORT_SYMBOL_GPL(liveupdate_register_file_handler);
+>  
+>  /**
+>   * liveupdate_unregister_file_handler - Unregister a liveupdate file handler
+> @@ -917,3 +918,4 @@ int liveupdate_unregister_file_handler(struct liveupdate_file_handler *fh)
+>  	liveupdate_test_register(fh);
+>  	return err;
+>  }
+> +EXPORT_SYMBOL_GPL(liveupdate_unregister_file_handler);
+> -- 
+> 2.53.0.rc1.225.gd81095ad13-goog
+> 
