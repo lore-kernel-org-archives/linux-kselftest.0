@@ -1,119 +1,138 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E37633EB13;
-	Tue, 24 Feb 2026 08:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D072C21EC;
+	Tue, 24 Feb 2026 08:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771920578; cv=none; b=QDKF8Eo1ycySdSWIOculUi6V3DTZr9Iex18RFIN16K4x5bp+sWMrdm/ulC7H+pU+C3IsP4K/VgcxZoAhWN7X8Yb2IBx0nZxlogw7Ciq3HGegAQFrAq1egURxGxjzO3RYWfFyPwfDzLZCpNMQ/e5E+nGJLLgP4oXUzuQ3WX53gnU=
+	t=1771921225; cv=none; b=gFPy5/ywOftjwl09Yq0t9lliF9NGWiwqDvyk9zvMh4g9jLbpK1a901HLPeAWil4gniaQ83gIyqO0z6AXD+1Qcciz3kKbbe3z+cG1Dwn2Y27YwjbjIsyPTLIwiIjoRCVYHp288UTbOi8zidP7e8umR+8j10dYZgvkMxAeuOderR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771920578; c=relaxed/simple;
-	bh=/rff5WuuETbz3+BdREVdFqh43GqqchT9R+JQhxQA66Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h+2kCq9Q9LaN2NcI4u8ZNCQGDX8ef73afQsWB0sNHR8oX1nE+o7So2/fFEp9PN5L/R94krqYmoUQ91Y6yT6bZHKvLcmFtiRpuMVvNjciqAZ+WdyndVJThV1lFDG73ds9bskXit7KARufBoltnEbx6mqDhYQ/0dY3yl16OR/s5/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fKqdl5vFKzKHLyV;
-	Tue, 24 Feb 2026 15:50:35 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id AE58E40573;
-	Tue, 24 Feb 2026 15:51:29 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP4 (Coremail) with SMTP id gCh0CgC3Y_R_WJ1pWTFIIg--.8099S2;
-	Tue, 24 Feb 2026 15:51:29 +0800 (CST)
-Message-ID: <0d339d59-5208-4a41-8931-12aff1874edb@huaweicloud.com>
-Date: Tue, 24 Feb 2026 15:51:27 +0800
+	s=arc-20240116; t=1771921225; c=relaxed/simple;
+	bh=GY4T7YOF1wGjPvsU2gCiSTseuH4IU1M7ZVYcttKfaY8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=lMRv5avG6GJfZd445Z7XRcDLVvfZJ4luZ8P7N2D+kCzsv5aXT4sB0cu8PvLyU6XORKXjA36n0Lt1zx+uAb3sKuC8ePfxZJwEQwrqvfDIaIKYN3RCj0dMbXDP63KoczyVM9h53M5LaYdKMJKh3exwDNH2+97ecHR4vWkDScLcOzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r74EtFWR; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r74EtFWR"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93C8FC116D0;
+	Tue, 24 Feb 2026 08:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771921225;
+	bh=GY4T7YOF1wGjPvsU2gCiSTseuH4IU1M7ZVYcttKfaY8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=r74EtFWRUuz///QTfXqDOUJFA3y1YuVt6nI3lRHxm4Mp1O4FG2Bo9KZTHJiqA65/X
+	 4kSDS0i3Xpow7nFzKuIFta/3hkO2FdnQ61+zb/ws6UHBGwqNgEh9P7EQfdJalorzw5
+	 zfWv/rNFuvhObf65tCmJwhUxvw0UTQQmzaCGjYRzFNvTroP5SFSoKqfG9fa9U3+BTW
+	 d0x4Ta4yMB8kx59fZnCdid1P4y2TY8OjN6xM5nDOoITkvp+xPcbS7H27j58i7qaLPd
+	 7w0BA9M5a+4Aoygh/LREqOt0NMnExJTFlVe8/0WyL6y660xDEqxMfColPDg9Bhmk8i
+	 fDXy/F+MxrZbw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82974EFB811;
+	Tue, 24 Feb 2026 08:20:25 +0000 (UTC)
+From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
+Date: Tue, 24 Feb 2026 09:20:12 +0100
+Subject: [PATCH net v2 1/2] tcp: re-enable acceptance of FIN packets when
+ RWIN is 0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/8] cgroup/cpuset: Fix partition related locking
- issues
-To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny <mkoutny@suse.com>,
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260221185418.29319-1-longman@redhat.com>
- <9cc7401e7137e27cd2f02625aab23330@kernel.org>
- <3a3548ae-c5e1-4ef0-86dd-f66bcd2c6d78@redhat.com>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <3a3548ae-c5e1-4ef0-86dd-f66bcd2c6d78@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgC3Y_R_WJ1pWTFIIg--.8099S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw4UuFW5ArWfKrW7Ar1fZwb_yoW8XF4DpF
-	WqgFy5tw4YkrsYk3Wqy342gr18t3ykCF1Dtr1qg3s5JFW3tF1rur4j9rn8Cr1kWFs3CryU
-	Zrya9ay3WFnFywUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260224-fix_zero_wnd_fin-v2-1-a16677ea7cea@gmail.com>
+References: <20260224-fix_zero_wnd_fin-v2-0-a16677ea7cea@gmail.com>
+In-Reply-To: <20260224-fix_zero_wnd_fin-v2-0-a16677ea7cea@gmail.com>
+To: Eric Dumazet <edumazet@google.com>, 
+ Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771921224; l=2768;
+ i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
+ bh=HHIXStnLVKh9nRSiL0fqF20SR1yAgQfpvvEWrJlCWHg=;
+ b=nyp516r2MWrT4RExFJWSkDMLTTh4TPV2g5Mnfe8RVOVlfBOSy2QdPDlGednpb1bS8K67vybjd
+ BjPhAsuIhG7BV/ZjzPUp56ThuXrbvOx8bgWZ/P2oxSKWd+lOoEC7Zwx
+X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
+ pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
+X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
+ auth_id=641
+X-Original-From: Simon Baatz <gmbnomis@gmail.com>
+Reply-To: gmbnomis@gmail.com
 
+From: Simon Baatz <gmbnomis@gmail.com>
 
+Commit 2bd99aef1b19 ("tcp: accept bare FIN packets under memory
+pressure") allowed accepting FIN packets in tcp_data_queue() even when
+the receive window was closed, to prevent ACK/FIN loops with broken
+clients.
 
-On 2026/2/24 5:11, Waiman Long wrote:
-> 
-> On 2/23/26 3:57 PM, Tejun Heo wrote:
->> Hello,
->>
->>> Waiman Long (8):
->>>    cgroup/cpuset: Fix incorrect change to effective_xcpus in
->>> partition_xcpus_del()
->>>    cgroup/cpuset: Fix incorrect use of cpuset_update_tasks_cpumask() in
->>> update_cpumasks_hier()
->>>    cgroup/cpuset: Clarify exclusion rules for cpuset internal variables
->>>    cgroup/cpuset: Set isolated_cpus_updating only if isolated_cpus is changed
->>>    kselftest/cgroup: Simplify test_cpuset_prs.sh by removing "S+" command
->>>    cgroup/cpuset: Move housekeeping_update()/rebuild_sched_domains() together
->>>    cgroup/cpuset: Defer housekeeping_update() calls from CPU hotplug to
->>> workqueue
->>>    cgroup/cpuset: Call housekeeping_update() without holding cpus_read_lock
->> Applied 1-8 to cgroup/for-7.0-fixes with the following minor fixups:
->>
->> - 5/8: Removed a duplicate test entry that resulted from the "S+"
->>    removal (two previously-different lines becoming identical).
->>
->> - 8/8: Fixed typos in commit message ("essentally" -> "essentially",
->>    "beforce" -> "before") and code comment ("top_cpuset_mutex" ->
->>    "cpuset_top_mutex").
->>
->> This has gone through more than enough iterations. We can resolve further
->> issues if there's any incrementally.
-> 
-> Thanks for fixing the errors.
-> 
-> Cheers,
-> Longman
-> 
+Such a FIN packet is in sequence, but because the FIN consumes a
+sequence number, it extends beyond the window. Before commit
+9ca48d616ed7 ("tcp: do not accept packets beyond window"),
+tcp_sequence() only required the seq to be within the window. After
+that change, the entire packet (including the FIN) must fit within the
+window. As a result, such FIN packets are now dropped and the handling
+path is no longer reached.
 
-This series looks good to me, it's much clearer now.
+Be more lenient by not counting the sequence number consumed by the
+FIN when calling tcp_sequence(), restoring the previous behavior for
+cases where only the FIN extends beyond the window.
 
-Thanks.
+Fixes: 9ca48d616ed7 ("tcp: do not accept packets beyond window")
+Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
+---
+ net/ipv4/tcp_input.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index e7b41abb82aad33d8cab4fcfa989cc4771149b41..1c6b8ca67918f0601b9b3e8ef884c5fef0a7ab65 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -4858,15 +4858,24 @@ static enum skb_drop_reason tcp_disordered_ack_check(const struct sock *sk,
+  */
+ 
+ static enum skb_drop_reason tcp_sequence(const struct sock *sk,
+-					 u32 seq, u32 end_seq)
++					 u32 seq, u32 end_seq,
++					 const struct tcphdr *th)
+ {
+ 	const struct tcp_sock *tp = tcp_sk(sk);
++	u32 seq_limit;
+ 
+ 	if (before(end_seq, tp->rcv_wup))
+ 		return SKB_DROP_REASON_TCP_OLD_SEQUENCE;
+ 
+-	if (after(end_seq, tp->rcv_nxt + tcp_receive_window(tp))) {
+-		if (after(seq, tp->rcv_nxt + tcp_receive_window(tp)))
++	seq_limit = tp->rcv_nxt + tcp_receive_window(tp);
++	if (unlikely(after(end_seq, seq_limit))) {
++		/* Some stacks are known to handle FIN incorrectly; allow the
++		 * FIN to extend beyond the window and check it in detail later.
++		 */
++		if (!after(end_seq - th->fin, seq_limit))
++			return SKB_NOT_DROPPED_YET;
++
++		if (after(seq, seq_limit))
+ 			return SKB_DROP_REASON_TCP_INVALID_SEQUENCE;
+ 
+ 		/* Only accept this packet if receive queue is empty. */
+@@ -6379,7 +6388,8 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
+ 
+ step1:
+ 	/* Step 1: check sequence number */
+-	reason = tcp_sequence(sk, TCP_SKB_CB(skb)->seq, TCP_SKB_CB(skb)->end_seq);
++	reason = tcp_sequence(sk, TCP_SKB_CB(skb)->seq,
++			      TCP_SKB_CB(skb)->end_seq, th);
+ 	if (reason) {
+ 		/* RFC793, page 37: "In all states except SYN-SENT, all reset
+ 		 * (RST) segments are validated by checking their SEQ-fields."
 
 -- 
-Best regards,
-Ridong
+2.53.0
+
 
