@@ -1,158 +1,140 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C192B3A9616
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 16:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771952271; cv=pass; b=OoOwggY79gkVycHRybYuxW8Ks5hPexN3rHptaAq4loE/HKaRWm7Rthdk4gWjcyO6fEdDigljWmtISlrM2miq10z2LwEvqsdLdOwe4WkhGkHc/ssJ4NQnOhja3YqmoUKIHsVHVcJnkVe44ovtEj730WM2VE7Gpdo475G6YPhJ5q8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771952271; c=relaxed/simple;
-	bh=LFeQAmfI2jWzGO6ITz55S3PHrzjDrm/EzGFx3B4VgN8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tb1P1l8z3rqDL+I7sVSSPirmEKILSvmr8CRJM4PQOOkcKy08nac2hlx8gne2HPWL1D8OiWNE6+KCBoCe/93daM5hkuluNwQu3YHQIOj7OWHxdpWYt18p5ewIPePD9RbUTMLDYLY7jDxG7bs9rhGMnefkuiSC6I+zJwA9c71D9OU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFWQhHH0; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8F93A7848
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 17:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771952899; cv=none; b=F/CTIKTthfEzngY/fNT+Tmn4SWq68ehDjwQSCp8KLqOfteug4fpSYOBX9ZqBT6we0JAmAPHOEDmse+qwnYD5zs4sV9J0XTr7TSFcTi2tszw2bSJ8JehKUh9ntuF5rkCxwgP9HQfqX8HbBCWsKX3lY5xBKVY9yFmqx3tJP//KKUc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771952899; c=relaxed/simple;
+	bh=U6OeKTFflZEsOwAbudBFuNdKmsclm262M3wZ2aA4UMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hjEHbi73hXv59GKPAJRuz49SOs8cMfaMzAOlmNy4kJrYIPWvPPXDHaUCT4JgOCIwF3ovSwd4Mykde2kw23un9Admpigrkb8qfInzQEEQI7EdnfUAHA9cG90uCabgO9yZ4ofy7dhh3f99NrE65qGpo9wa+M3W1cFP5DzoD7PElLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cnrMBM1h; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFWQhHH0"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4398dd671daso146282f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 08:57:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771952268; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HtPWfOHbxh3BV1cuU1f0Wl466qEJi6xqDiaueCDyyGscT9CcLGexpbvexk2zEdtar1
-         bBzNP/6Z/Pj+6P5PgNwRMQeF3R6VlYxeb7+Tv1vvG6J/IdQEyFB9HiAydvzwCr7Nu8A1
-         Kkv1SHg9Nj7xiXgS01mBAKM15c8DYKgbxvPqQUiaWG0ENqNYFFrumm7Tl+bmta6wEnhe
-         DJ8k29urxrLGoj7iyp96EqRr2Sw34Ptcx9rOOIviIzPlQcVzo+ufNMK3nxz/OAmIoQ22
-         iNEC95H3qRt94YpNO2vOFIE85I9GIYPx0iz+s90QZLmhwhgo8r98QO80lnKWBWqczhMR
-         iRYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Q/LZ5/ET/z0VwePFl8rmo2+n6v10vbg5EI+OLa8kbxI=;
-        fh=stK5+AOtLZq5RrYeJPIj4AB0lI8VftngWZhXKbClfIY=;
-        b=aecdh2Ti+/tAnBq1lMJA2QNp7p1BZjc8S+RFXZdsKF+eKoqPwGAOobMOz0iWnhNIYA
-         BfvxbPx8SBu38WSv3pWPTJ8j3JGiiS3bFNhxRcrZdhwBHILFcuh7O8JOJZEuw11qPNSB
-         bnIR+xhMEWHP90tyCPg0LSHrY/5RXDculywhrexjXvAb+dMpG29kKcBGvNT+bV8+uu+X
-         LZcaFzaKvpMpgM13eBV/GkQihCJB9h3ReT0ZqJdZ01JA14Hir1cfcX9ssuPOP78bVn63
-         a+vY/jnTHAVF4WRbuwsu4fTN5ibcqPBc0G0ZiK6nfwWcIpL0BJNN198QUllvl9JX7Nrc
-         dfkQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cnrMBM1h"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2adb1c1f9d4so13435ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 09:08:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771952268; x=1772557068; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q/LZ5/ET/z0VwePFl8rmo2+n6v10vbg5EI+OLa8kbxI=;
-        b=eFWQhHH0tXrcLKY/l/h63HjEN4E5cgnjyg/bZkhOlXYfKPyjIZkb78Oh+FyxIfkTFi
-         7fCWJ9wUePTGSYEymzuljKO+kK4YZV2/G6TGaCAeribNY/zxMIMsRqnUq2830SDTHe1V
-         BVw8721IvYqBpvRvCRyAENNID9X9SECoy2QUBZLvjMt3s802aD6WlAe+RAEjXlyPJyX9
-         3sFlpWc177VtO6PEqk+BEXjirVByVhRu55obFAvNPJaZmchRmZ3E2MbLoPHTq5Y9TYg1
-         6S8Zp7Jg5AteW2VqXdkcnkJmWLxRuHT3pxOv111WI+15N1T2GvoFUK5XUe/6G5ogzmTI
-         Wu/Q==
+        d=google.com; s=20230601; t=1771952897; x=1772557697; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xJz4QDTcumvz9JVrQMb51pWWatd7LKwHk5h8C7Rf46E=;
+        b=cnrMBM1hieWtTBHXZV0gag7wLK8HvLxY28h/SBDTCUIy6KPFOgIem9w8RNsm0u42jv
+         NtW5HOeVPUIIi0C0GZAXq0mZc+shIo1MsC2vucGY4BEcRYIobcf6+VnGX9kWz5Sd33xM
+         Qc9/scTuCIwMZboy3D0dv4n5vVIvAQrbTBPQnsghsjzUwJu4I3XVFoo1dQb0JJeAYF53
+         zfZlw59RVfhClDrz2sMZKWRjsM/VqsY9uqVbbuCPQpEy22Sq/Mwb39yTmzWoXxbNFfx4
+         337KTEAs+MfsoWA6UkjlZyPE03Vhr2alGa8K4p1lQYJrgLZiuDggmP/DMrMTHtJoM5Y0
+         bwcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771952268; x=1772557068;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Q/LZ5/ET/z0VwePFl8rmo2+n6v10vbg5EI+OLa8kbxI=;
-        b=FOQGWMOb42cEkU9Hx+0pMqAS5GkuHLtRxAY3F1iGGQnL21pt0X5YdW24nuLJ5MWVk1
-         WMaQP0KVBM5cGY1jTd5Zx4sb29mBO2vZ0cr/wKABAjNcorVNIV2o7K4f7P6TbLDQEGQW
-         bDm4488SQWaO8FlsSUV+BSSt6tZ4MQTEO1nUksqqeu4A1UrwMYDRw2aL3J3mAZ5QMBtX
-         Rp1KCIwgQZZiM5EyV7x30G1prbxj+HS5atuyBRS2uLqF5Nar0mXaS2QyQmKzA+JE4TsP
-         3kS0Z9AhwUSR7hUp3h94iTenOaKhJ0HY8LgIzAP/b8f/XmB7HNhJGcLsh3HIBO5Tzgg1
-         /XLA==
-X-Forwarded-Encrypted: i=1; AJvYcCWoyrlwojyeHef5GN9T/OF9edb64fcFbI1ucMg3YuxYrZGY6OCqAGDdOUuj0zGqpMc6D8i5n8twS1dFJ+kdI9c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHj3qsQPsSKhxKduBzpzv9Xzy3r7bvbwzBJpGOxSDdGpWl5aDU
-	sWO2gs0yhJVxS7+mOWfhVJPywrANnCi3o6tL4zcM4pbAAAC2Au9fxrILIiGilnJ/HjSWJNNxZ7m
-	jD8aOHPixGyC6hLbCeHnS4kUFwk7ArS8=
-X-Gm-Gg: ATEYQzwM06yJZI5ikMl3yRM9qy3tNaHlKlijzyOeSIkz5uhYctzGU6eRTIabEniKfbX
-	paQ+fpslBwZDJmBZPuRw9z+OIxIPjIOMAEZcK5z+67EiUA7MekuFEG7vInE5fegX0/AO9M0iQTj
-	PymZrVtwABuF7PrMER0omfuvcbRZifaTLDveFpyUJGjFoolptDYoG10ITHafCl5R6dikfALBWdZ
-	7SW9mJ6nmNSATtxuf6CJCONf7jTa04beEZngm1oHSS3Jl28PtNKkyI/ti0Q2pqghGEpR/JgtxL4
-	DyPxnjEno/u1uUNzmunbm415l8E5PngIFNkhlsMipKfX1q7PPUJ1P5bwjrRSmLmdixKpOHT1hl6
-	OZae/coHk
-X-Received: by 2002:a05:6000:2407:b0:435:bd00:cb4 with SMTP id
- ffacd0b85a97d-4396f15b2a4mr21141471f8f.23.1771952267940; Tue, 24 Feb 2026
- 08:57:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771952897; x=1772557697;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xJz4QDTcumvz9JVrQMb51pWWatd7LKwHk5h8C7Rf46E=;
+        b=viI9VzUbg4QBR3wl85b28HWWdBOHSpyKfPzvYd858BnRjdnr+DX/DBo0hPOV19CG4j
+         FwI1Pp+6MT+qVeltaz3B9SjeOec1PfCbhXeMVu1EPP5khZGk2FA9c7C1KJXs+/aRJws9
+         O+jUmY/FqZlup5hRhWGCHOpje202AqvI2jF6H7zG9d8EH5pvty2e6q9c8VoncxM59UKF
+         nIMBF3wk/G7ykRW2m210HsI4DEprjDnPAx2dTVDQMjZ/gRYVkzDIsdxeeLPWNnTYLtYz
+         Ica0yC3Hom/GNKy2bq0hBhKogXOwfIs/sIB0X4G6rQreOQfkM5tP6z5mizM01tvXMzl1
+         b9lA==
+X-Forwarded-Encrypted: i=1; AJvYcCXH3RUvji3AygIfM+P5lEf8zTgOe7fbi2EFZF/9+f/ApdchxeSZPZJKbfbgGJ8kwn0HV7eudn9bWtKS9W2kMGE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywc6kLwV+rweQ7lUa9eTKpYgvutrWPk6PjW8ZMEAQcECsKUu/yu
+	rBq4uPbA6OA4a+obUKchXG36RvI0X204Ds1cfGA/XsosgQEM/tyKZPhRJsoJLT2ybw==
+X-Gm-Gg: ATEYQzx1yiSKYCnSqyS4f1v9QbTHP80sV8b9LFMOJcu7KOuBThWPqQtgiddrJ6xFsZS
+	Hq2RrR1Ag4DkNoJZbO1AMgKIlBQE8vflEGkSsboT8CdOjdZ+3TQgCpvkgLyRK+CS2Uf8IATtET8
+	8jMwbydZMdf/FWIrcv9SEkItKsDHnPKNrrreMA9I6MqK83I0ybDKDwfalyaTJOsa+2DdP6H+KwQ
+	MrNRSfFYFzZGoL+g0yD7nhpW+eDhH+qDXxXXv1PrzSQIBHUEabqW2FE5KMcOP+pEin0jNg8h5rz
+	rL5uluAsgO1wdhFl5wAlkkqJ60xJAJSy6Mt9O11h/uErMj/0d8R4ZL24GriUYSLCgpKjkNxUOFw
+	qg/F9Mtncz8l+RIlpTEGEVraxSm0uVjJY5B013EqTiHj5kXamXM8yo+E4Ar4kvZDS/fnlQsHF5A
+	qY/dP5xiB3sBpE+ZZTd1cNJviE9RM7aLv1W2RszLNUOzaXP3+TvSBE/w6KjUIpUw==
+X-Received: by 2002:a17:903:b87:b0:297:f2a0:e564 with SMTP id d9443c01a7336-2ada346b6c2mr1775335ad.11.1771952896593;
+        Tue, 24 Feb 2026 09:08:16 -0800 (PST)
+Received: from google.com (168.136.83.34.bc.googleusercontent.com. [34.83.136.168])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82719e7ed8asm1521995b3a.5.2026.02.24.09.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 09:08:15 -0800 (PST)
+Date: Tue, 24 Feb 2026 17:08:11 +0000
+From: Samiullah Khawaja <skhawaja@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
+	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, 
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Tomita Moeko <tomitamoeko@gmail.com>, 
+	Vipin Sharma <vipinsh@google.com>, Vivek Kasireddy <vivek.kasireddy@intel.com>, 
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 01/22] liveupdate: Export symbols needed by modules
+Message-ID: <rlftyyae4w4frzcpvyecda32vxod6uambsb7cja274lugs4nhy@3yk3oki2kwo5>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-2-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260224154024.12504-1-leon.hwang@linux.dev> <20260224154024.12504-3-leon.hwang@linux.dev>
-In-Reply-To: <20260224154024.12504-3-leon.hwang@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Feb 2026 08:57:37 -0800
-X-Gm-Features: AaiRm53rqopHuRGSK2_nQdOAXTbOuxaGhPPN68Nah4CqapKdrc7UpjUZrDEx1NA
-Message-ID: <CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/8] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
-	Menglong Dong <menglong8.dong@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Pu Lehui <pulehui@huawei.com>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260129212510.967611-2-dmatlack@google.com>
 
-On Tue, Feb 24, 2026 at 7:41=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
+On Thu, Jan 29, 2026 at 09:24:48PM +0000, David Matlack wrote:
+>Export liveupdate_enabled(), liveupdate_register_file_handler(), and
+>liveupdate_unregister_file_handler(). All of these will be used by
+>vfio-pci in a subsequent commit, which can be built as a module.
 >
-> uprobe programs that can modify pt_regs require different runtime
-> assumptions than pt_regs-read-only uprobe programs. Mixing both in
-> one prog_array can make owner expectations diverge from callee behavior.
+>Signed-off-by: David Matlack <dmatlack@google.com>
+>---
+> kernel/liveupdate/luo_core.c | 1 +
+> kernel/liveupdate/luo_file.c | 2 ++
+> 2 files changed, 3 insertions(+)
 >
-> Reject the combination of !kprobe_write_ctx progs with kprobe_write_ctx
-> progs in __bpf_prog_map_compatible() to address the issue.
+>diff --git a/kernel/liveupdate/luo_core.c b/kernel/liveupdate/luo_core.c
+>index dda7bb57d421..59d7793d9444 100644
+>--- a/kernel/liveupdate/luo_core.c
+>+++ b/kernel/liveupdate/luo_core.c
+>@@ -255,6 +255,7 @@ bool liveupdate_enabled(void)
+> {
+> 	return luo_global.enabled;
+> }
+>+EXPORT_SYMBOL_GPL(liveupdate_enabled);
 >
-> Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registe=
-rs")
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  include/linux/bpf.h | 7 ++++---
->  kernel/bpf/core.c   | 3 +++
->  2 files changed, 7 insertions(+), 3 deletions(-)
+> /**
+>  * DOC: LUO ioctl Interface
+>diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+>index 35d2a8b1a0df..32759e846bc9 100644
+>--- a/kernel/liveupdate/luo_file.c
+>+++ b/kernel/liveupdate/luo_file.c
+>@@ -872,6 +872,7 @@ int liveupdate_register_file_handler(struct liveupdate_file_handler *fh)
+> 	luo_session_resume();
+> 	return err;
+> }
+>+EXPORT_SYMBOL_GPL(liveupdate_register_file_handler);
 >
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index b78b53198a2e..2a2f6448a5fb 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -285,9 +285,10 @@ struct bpf_list_node_kern {
->   */
->  struct bpf_map_owner {
->         enum bpf_prog_type type;
-> -       bool jited;
-> -       bool xdp_has_frags;
-> -       bool sleepable;
-> +       u32 jited:1,
-> +           xdp_has_frags:1,
-> +           sleepable:1,
-> +           kprobe_write_ctx:1;
+> /**
+>  * liveupdate_unregister_file_handler - Unregister a liveupdate file handler
+>@@ -917,3 +918,4 @@ int liveupdate_unregister_file_handler(struct liveupdate_file_handler *fh)
+> 	liveupdate_test_register(fh);
+> 	return err;
+> }
+>+EXPORT_SYMBOL_GPL(liveupdate_unregister_file_handler);
+>-- 
+>2.53.0.rc1.225.gd81095ad13-goog
+>
 
-Don't you see how much churn you're adding this way?
-Every patch has to touch two lines instead of one.
-Use
-u32 jited:1;
-u32 xdp_has_frags:1;
-
-also the bot is correct on patch 2 and 3.
-Don't be fancy. Require strict conformance both ways in *all* patches.
-
-And your codex selftests are garbage. I don't have other words
-to describe it. They are not testing the actual bug that
-your patches are fixing. Think of what you're doing.
-Asking LLM to write a test for your other patch is not what you
-should be asking it to do. The selftest should be such that
-it proves the unsafety/crash before the fix.
-
-pw-bot: cr
+Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
