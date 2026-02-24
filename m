@@ -1,209 +1,127 @@
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E318376496
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 10:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF1E37755D
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 10:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771928049; cv=pass; b=NNA0PzEkcNdD5A47dBjdn7IlgVAUN6bOyVhPKmKb159yiEmj7uDZwfK8xeDBeiT6DIid6EIo5rXAn6UNUjS5DRBS/wF1+9OcXX1apXjhxeUbDhdZna+bRo+FrJUirCbnTVXob8Gg2xSTELvbsWw99v0GKuOQjRht3M25n2ZhC3Q=
+	t=1771928541; cv=pass; b=O5tBcdS0oirefgHtoz4Y+zmLZQnIBS73VXpsM29X2/+lyljfy6xGp4hfy867bg11tgQKNnfCsOyJwptqRiML5L7sQEvhBLR2ApK54p7OJ3UJoBrSyfrqk8A1oIbkqwhJcUZuQd/tQVQQFBLhwXi3ImAbJQMujBFPu0QB2DjKrts=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771928049; c=relaxed/simple;
-	bh=IyKhJiJuQRzoX6JzUZnwApPT0auX0X1bnVL6krBBBGY=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nlFuly0+WAHRzk2LL2DGZy0Vjm9v2nRBxmqZBwRbpNTtwBpWWb7lDnfqQrsoZOnTc+A7o+9C8/k5XRcUKUueqAJ9ErDBB2/eGQvnOzV3s9fsPm7zeQaMqrijQdniQFcxrYu3AHqsL8uc7ssjCOaqscyyBaa4azZ2g6xTdJZQEts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xutZiDmS; arc=pass smtp.client-ip=209.85.217.47
+	s=arc-20240116; t=1771928541; c=relaxed/simple;
+	bh=LoA0gd3Q7D0WIQQHGz6q931aQElRYL18j9ESlnOGh2I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bkppe0uxNtmSmB627vo09gC8Hc0IndKEm4Qg7CZkuhmWkwlch1lIidR56y8ZBnulXu0B4r2TMCpd2qoWjHfDvbMSQL0pVY4+iuPYrSEmSUAl7vS9boTJykXCGhpIqivIiWYe/Xkrq5HRzJvv96JdK+ajbi/IPlhE5z+eKmDtChI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Risea3hd; arc=pass smtp.client-ip=209.85.160.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xutZiDmS"
-Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-5faddf6db62so3524195137.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 02:14:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771928047; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Risea3hd"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-506e287dd53so43826551cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 02:22:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771928538; cv=none;
         d=google.com; s=arc-20240605;
-        b=h1lBUcA/EqxyEz+mg43QSON8MNGnjb3CKph6NJO69Qnyq5Y6pJPTSt/8LhqzbySDjp
-         1omnUkWJOcGEOD0b+xoGCH7Hx98vnJ36ihZZjgwNx/F0J8LQKKX/kqDd5+iP6hMmIDsv
-         kGSVfYWQrQBcWfQF/dnHeYkPVsKzKdRaF2HNgSQV6jrkwSctQzKj7qGFvYUF3h+XHB4P
-         nmk8g4MEs9HbC/PQ69NhDxotckn5ugqjXVp8Y3icFaBQhv3jwVAubMskQ+wRCWYqpaC/
-         BSVDJQDi4Rl/8aojpfNGfa459syMEnMctIxXBCjJ1CDD5YpB53MiUgcRGhPF+bxIanY+
-         qo6Q==
+        b=TzLgltEnB1L6LsbVRuSwNgh85+hiUKChmGQN0xh2/uNFXbI0Qd0XpuHSF4evb+mtqT
+         HyA576sCiDTVFGGst5WrjGYpU/KQcXgB5iiEzhJOhNMrR++3rVR+0zP747Oze1CCtPg9
+         jSKr6hoQ1udH9oFvTLXRBalbAykIfHBXCBoRoqPnbnWsdAA0hVF7TXjmmUTGLikjcqFW
+         aKuDLeKl/PTZMotXqLtTCD0eaUYjVlHfvccotLwvpSBBAycXmCk65MindVwk54a8Se1D
+         0lu6EtVMdd/+sLMBE9AE673F2TKgltwy8aLW0vBxydJ3YP2XQ0RHZ+XIXsIh938vTJc1
+         TZmQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=LuhKBmL9p2A6pZ7W4MZ0PQ69Fw1Xjb7zt9bmn80iyFA=;
-        fh=Z6MGcquDuUbtQp77iQHoeZfEEkQYTHT7mvNH0YyuelE=;
-        b=h0DK7CHMvpEZMrn+x99zyDlwtIz20bYXjfqDojhQEyXCJNwxMfaPeI9FVABLrNXMqs
-         GT2on66lo97AAZvuhIp5+evwo6AqAgVLrp8gzXN8TonH4MzJrC4kb0XHUZZudQuzKRdR
-         d4HQ5SQYLzUxt3WEAjYRS/81b6QTRm/7xyavJ1bs8WuVM+zntQEbA+S3I0sufeZliAhq
-         77o55/hs3fo0vZYiPGQj+j6JtkIwbzCX2gAn8eYRd3TLQzUBpWXzQOB1XfZZnGy4yfVm
-         t2Xe9oHbLUKt4QbmpjH66pibqzNFWe1l15O7xcy/TQHcpVViYfI7JMmoObImPdAQjIoA
-         wS/w==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LoA0gd3Q7D0WIQQHGz6q931aQElRYL18j9ESlnOGh2I=;
+        fh=9yK6W+gcsrB9Xkp9omEhSfJRrlL2MA4MhLZNjpn4y1c=;
+        b=R2YiZ9VN8rbn3eC0iA16Mv/OyxBQMA/2KMvqIgcWJ9YqnPTxqPn9yh2hoAP1bnHnad
+         DdFPzRkl68fbtTZaUXgvyqGlKJMcNiqgRID79OJxYUWaiW9jWb9AMnjM16Nl3lWqIshR
+         OvFvMo23UEGdWy/xCe/q8C0nIFJZ+/Wb61dmyl5R6/1lifOyrehyUpsvdZc+ic1wEqX8
+         ljNEyeh1viYm+Ec5dMxj3/qdK05Bc3o/NycEp3uKXTky9af/+1tHrwuemsbnEELhqnL1
+         m0gmJ5NdFN41D1QjPRuSOhycCTiup48R8aGHkssJ8jgSN88Awwg0l/chOajHRFsiT2K/
+         xemw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771928047; x=1772532847; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LuhKBmL9p2A6pZ7W4MZ0PQ69Fw1Xjb7zt9bmn80iyFA=;
-        b=xutZiDmSUlD/DMw9tfRVwQ9hAjtus32ia4wnAOb4AbBw7jr2Pm/Xeyu4VTDbCOhraH
-         MrgT5sQiAEgdjnlWVSDG2WKes5jO3DXmb/YOByUrMxO3MXnvVegtgdeaA9+2fF3Wq1Om
-         u9Sv0YWyLXsQQd+5xV6tfBcgSbDj2yKpD5aCdSGwyMZACC0ZPvJX6Q39jfIp8NrTgJjw
-         kyq5c4qxILldKJznLZvhwWn3nF/DgY5oMxa84BvNp7Jnaejlif8GJxMO6NswQUUEHtsQ
-         DMl5rPYwO77Zq/dJ/jbcRSeY2UsVNhd2Nte7ea3TQgG/BmmYWAzBsySDJUuwnLu+KX14
-         Nv3w==
+        d=google.com; s=20230601; t=1771928538; x=1772533338; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LoA0gd3Q7D0WIQQHGz6q931aQElRYL18j9ESlnOGh2I=;
+        b=Risea3hdvRndcNXUmwoxm966SVXACAgPOQemk9FtkrPmc5FVfoORNDS30x5rB231nZ
+         Zcx8rTDLAfvvOtqZh19qErQvtRnGAZCcoexgo9fcG2GNzjxGGplW0Eq/+0OjaU9M/Dxt
+         8ErkvjkPwUSy8jq4ynAjEbqosHzc0I/WFSB8+ONll0pF7H6Y4wZyuCskTy3f/E612NYX
+         mdYJv6zd4xienQXHqCQLOd84vZ9UABR4jlNvB0/K+ZWguZN/AnWoeoVNWL9SMxoNjiJZ
+         +NyUygWS6DUe3CpuWskZ7qr92bV7j/IaPS11HKU/6naL0vMrbo4WRmOKV9NoWzkeHEdn
+         O+7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771928047; x=1772532847;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LuhKBmL9p2A6pZ7W4MZ0PQ69Fw1Xjb7zt9bmn80iyFA=;
-        b=pj2fobW66OyW3/ZtZLkNgaV7B36P8qtmuO2ChhGVcNY1LFPYZsk3yyilUMu7Yg6nrv
-         Y7AjHnCZLy+BNhGY8U7gEJVtOvl/pLr0ncR0SELL4gmfYYtspdOpclzi3HC6xz+ju69x
-         2WMPddef40Io+ppOoAKaew4prldUlE+PkX5G8bjvM+5Tiq3hqsKSkOlPREoFErO+X2uT
-         gl9dbzuna6Alvu0k52tMUif3/JOoUQG7s83Y48h7zp+/twWUDCOerhWPhI0XvFvTYBAB
-         1G3/yt+40T9djns7ZXnMVmlxv2izj2xJ7q3icownALz83D4sFZWgbP6aW+5E/DaJpjeX
-         Sd2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUhmgyL+sg9Mw9+4AGstD9H5v+QAPHcCk0CSG4tZxAUNZ9fA7Vv+zORAB/oyyWnChsbiaVcS2tmSwlyuo3qsb8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yys2EssAW2J0CMO2+j4/2xNdhDjDNKC6mK5azSicmfrFuorlEpu
-	lUaDYgHnMFPDDU2PuGEzSjSYCFlwV/EXL/jBaLmnGXT0k1nr6ZzShWSfDxZe3em0LtOX0W0rVGf
-	6fQCbeiJXoiqFOmXjvruPFADcl2Gen7esDvZnBe2B
-X-Gm-Gg: ATEYQzwF7p4am3TCCsVLDzE6jSAs8cyWujsfvhXmyDR1Xn2jPUeyuMuVnXZzchsAD6b
-	zBi6Qi0lVt3hctNyeQm2sh8AN1GkdWh+lWuUqLhC1fmPa0mrZMcdPmJQkvsqlk504avsqapYFVa
-	938bD+RYwfzBK6LLsLom5ulJ0zk1QYX7OKBRHnGNANyxNstCBZ4zpF0SzdeALn/rEzlG0sdEiwM
-	AVseXBD54a9M5lg+aMZ7rpNVc25hQ/VvImihxPmE93RNMpNUPtv6Rinbw94S0e3Y7Mx5ZyWdNE5
-	SqCTDg0bwXZcyOB4WCdQgUZKUOyXabLbqW35S+n8
-X-Received: by 2002:a05:6102:e11:b0:5f8:d3b4:9517 with SMTP id
- ada2fe7eead31-5feb2c4ea4amr5648164137.0.1771928046467; Tue, 24 Feb 2026
- 02:14:06 -0800 (PST)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 24 Feb 2026 02:14:05 -0800
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 24 Feb 2026 02:14:05 -0800
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
-References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
- <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1771928538; x=1772533338;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LoA0gd3Q7D0WIQQHGz6q931aQElRYL18j9ESlnOGh2I=;
+        b=fcdw+ngTeM/CFErvRY3VaS/uiHrP3Eb9Z/u9iuALk7oLroJuH331xZS1Q8y+DDMPRo
+         uZ/sejam5l597n1g/dhSS+VjCQ8GwOLgF7WRkSWuuD/0RNw5sZYgf1bCBGWBdzUqO38B
+         AtZDmAtV3d4v0ZXzzaPSrkozZpC5LfEr6erEf3ifQmM8lqRwkfyMlcWJfbuJ/jaivmQF
+         MHdVid8PX/R+TlfbTcxwPn26ec6B3ImR/uAhd8aXjLuTIW0DORBv+Ir++QDGd+y/tcv2
+         Et5eD+BIVqesU5HGjzPDojlfiJvH1RJf+xw3gIX7FXXO9okVbsz85eiLbHvMhSf2te/L
+         QpEA==
+X-Forwarded-Encrypted: i=1; AJvYcCVk/ubq5oEk7ODjdD2RMJ2VT6ie8cWvoW43TcmLxn66O3ev/V0ZhMAlioo9XJ3uEZNkwyEJVM1XkdGZ7RycRn4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyM0WBKPZZWqeOLgNUg35ybp3//FQFzCCI3bpTR7PuYJO+kDClm
+	egSTZ+PoNgjPfzOHUu1i63hTydZMDA+F0ZMRdTJURmpZGJzn0+slEhXi7zOrrazmsU4jRSPIJIT
+	n8NDID8wzdJHZ1xm0gswsDie/ot9yQvGPyu99Iwi6
+X-Gm-Gg: AZuq6aLQMFp403wEvorXNp9VwcjPULSl7NthPvCbLJN8//vK5REQCKnUNc5Ahm9DArH
+	Zt0KNFI0QQJmwjS7oF4YAEYmFdC5Bwn566kwcb5Gm4Fnd7J5G8UVRta/sAeZ4Z7dYUW7fxtnI3y
+	PB1q4UB05zIg+NdWzm2rKetVX8vqgHJk+eqyE1I1jfZ6kyOZfU0EkD7v0JiFhhgIht5aygYwrdg
+	FPET/M5IJjIi/EqGJUJsbc+RapePUsCSb/bK+08CA0deA+zn8va5EUGPGZrqe50+Xn4qex8Sjq1
+	utV0O9FHNvOMBjA3osfqFMKC1qQtSai6Jo7bGBNApmMfUFHMOPsy
+X-Received: by 2002:a05:622a:2d4:b0:506:b77e:5431 with SMTP id
+ d75a77b69052e-5070bcb52c8mr160299231cf.55.1771928537721; Tue, 24 Feb 2026
+ 02:22:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 24 Feb 2026 02:14:05 -0800
-X-Gm-Features: AaiRm51EKOaIOw7Xa64Dg1IqVEZq_6qI_aDRRZTOYQVamaSRRKhT7UeHK_oqjfM
-Message-ID: <CAEvNRgFBLgvYoR_XTH-LiN1Q00R9u1HGC5URbstLPxYtedS0MA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
-To: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	bp@alien8.de, brauner@kernel.org, chao.p.peng@intel.com, 
-	chao.p.peng@linux.intel.com, chenhuacai@kernel.org, corbet@lwn.net, 
-	dave.hansen@linux.intel.com, david@kernel.org, hpa@zytor.com, 
-	ira.weiny@intel.com, jgg@nvidia.com, jmattson@google.com, jroedel@suse.de, 
-	jthoughton@google.com, maobibo@loongson.cn, mathieu.desnoyers@efficios.com, 
-	maz@kernel.org, mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
-	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, seanjc@google.com, shivankg@amd.com, shuah@kernel.org, 
-	steven.price@arm.com, tabba@google.com, tglx@linutronix.de, 
-	vannapurve@google.com, vbabka@suse.cz, willy@infradead.org, wyihan@google.com, 
-	yan.y.zhao@intel.com
+References: <20260224-fix_zero_wnd_fin-v2-0-a16677ea7cea@gmail.com> <20260224-fix_zero_wnd_fin-v2-1-a16677ea7cea@gmail.com>
+In-Reply-To: <20260224-fix_zero_wnd_fin-v2-1-a16677ea7cea@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 24 Feb 2026 11:22:06 +0100
+X-Gm-Features: AaiRm51TafJQC2hYO4iQ2Oifkc5ftCbKvt2gFRRO9OSQG8DdaeCe6QkzNpscBHg
+Message-ID: <CANn89i+iqQWy2QcKi_wFS2nRKcygwBUPWmSTtr2dp9Ey+jORHQ@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/2] tcp: re-enable acceptance of FIN packets when
+ RWIN is 0
+To: gmbnomis@gmail.com
+Cc: Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ackerley Tng <ackerleytng@google.com> writes:
-
-> Ackerley Tng <ackerleytng@google.com> writes:
+On Tue, Feb 24, 2026 at 9:20=E2=80=AFAM Simon Baatz via B4 Relay
+<devnull+gmbnomis.gmail.com@kernel.org> wrote:
 >
->>
->> [...snip...]
->>
-> Before this lands, Sean wants, at the very minimum, an in-principle
-> agreement on guest_memfd behavior with respect to whether or not memory
-> should be preserved on conversion.
->>
->> [...snip...]
->>
+> From: Simon Baatz <gmbnomis@gmail.com>
+>
+> Commit 2bd99aef1b19 ("tcp: accept bare FIN packets under memory
+> pressure") allowed accepting FIN packets in tcp_data_queue() even when
+> the receive window was closed, to prevent ACK/FIN loops with broken
+> clients.
+>
+> Such a FIN packet is in sequence, but because the FIN consumes a
+> sequence number, it extends beyond the window. Before commit
+> 9ca48d616ed7 ("tcp: do not accept packets beyond window"),
+> tcp_sequence() only required the seq to be within the window. After
+> that change, the entire packet (including the FIN) must fit within the
+> window. As a result, such FIN packets are now dropped and the handling
+> path is no longer reached.
+>
+> Be more lenient by not counting the sequence number consumed by the
+> FIN when calling tcp_sequence(), restoring the previous behavior for
+> cases where only the FIN extends beyond the window.
+>
+> Fixes: 9ca48d616ed7 ("tcp: do not accept packets beyond window")
+> Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
+> ---
 
-Here's what I've come up with, following up from last guest_memfd
-biweekly.
-
-Every KVM_SET_MEMORY_ATTRIBUTES2 request will be accompanied by an
-enum set_memory_attributes_content_policy:
-
-    enum set_memory_attributes_content_policy {
-    	SET_MEMORY_ATTRIBUTES_CONTENT_ZERO,
-    	SET_MEMORY_ATTRIBUTES_CONTENT_READABLE,
-    	SET_MEMORY_ATTRIBUTES_CONTENT_ENCRYPTED,
-    }
-
-Within guest_memfd's KVM_SET_MEMORY_ATTRIBUTES2 handler, guest_memfd
-will make an arch call
-
-    kvm_gmem_arch_content_policy_supported(kvm, policy, gfn, nr_pages)
-
-where every arch will get to return some error if the requested policy
-is not supported for the given range.
-
-ZERO is the simplest of the above, it means that after the conversion
-the memory will be zeroed for the next reader.
-
-+ TDX and SNP today will support ZERO since the firmware handles
-  zeroing.
-+ pKVM and SW_PROTECTED_VM will apply software zeroing.
-+ Purpose: having this policy in the API allows userspace to be sure
-  that the memory is zeroed after the conversion - there is no need to
-  zero again in userspace (addresses concern that Sean pointed out)
-
-READABLE means that after the conversion, the memory is readable by
-userspace (if converting to shared) or readable by the guest (if
-converting to private).
-
-+ TDX and SNP (today) can't support this, so return -EOPNOTSUPP
-+ SW_PROTECTED_VM will support this and do nothing extra on
-  conversion, since there is no encryption anyway and all content
-  remains readable.
-+ pKVM will make use of the arch function above.
-
-Here's where I need input: (David's questions during the call about
-the full flow beginning with the guest prompted this).
-
-Since pKVM doesn't encrypt the memory contents, there must be some way
-that pKVM can say no when userspace requests to convert and retain
-READABLE contents? I think pKVM's arch function can be used to check
-if the guest previously made a conversion request. Fuad, to check that
-the guest made a conversion request, what's other parameters are
-needed other than gfn and nr_pages?
-
-ENCRYPTED means that after the conversion, the memory contents are
-retained as-is, with no decryption.
-
-+ TDX and SNP (today) can't support this, so return -EOPNOTSUPP
-+ pKVM and SW_PROTECTED_VM can do nothing, but doing nothing retains
-  READABLE content, not ENCRYPTED content, hence SW_PROTECTED_VM
-  should return -EOPNOTSUPP.
-+ Michael, you mentioned during the call that SNP is planning to
-  introduce a policy that retains the ENCRYPTED version for a special
-  GHCB call. ENCRYPTED is meant for that use case. Does it work? I'm
-  assuming that SNP should only support this policy given some
-  conditions, so would the arch call as described above work?
-+ If this policy is specified on conversion from shared to private,
-  always return -EOPNOTSUPP.
-+ When this first lands, ENCRYPTED will not be a valid option, but I'm
-  listing it here so we have line of sight to having this support.
-
-READABLE and ENCRYPTED defines the state after conversion clearly
-(instead of DONT_CARE or similar).
-
-DESTROY could be another policy, which means that after the
-conversion, the memory is unreadable. This is the option to address
-what David brought up during the call, for cases where userspace knows
-it is going to free the memory already and doesn't care about the
-state as long as nobody gets to read it. This will not implemented
-when feature first lands, but is presented here just to show how this
-can be extended in future.
-
-Right now, I'm thinking that one of the above policies MUST be
-specified (not specifying a policy will result in -EINVAL).
-
-How does this sound?
+Reviewed-by: Eric Dumazet <edumazet@google.com>
