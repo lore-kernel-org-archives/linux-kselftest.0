@@ -1,81 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC833A0B0C
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 15:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F82B3A0EA5
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 15:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771945841; cv=none; b=QJXEuEBmju5z9K7gdzG9ha5C2aVn2uJfEeHAWXUsds66LNEnaxGbk7/z9sgnSR/XI/3CLgOuHaw+rlFWUzTDOP1+eubk1pKcj5H3wUkHL7hr2zMlMDlNbXDdrihG3siAumcIThsOfTsvWS/JXoQyrBwInZDgtO65leLlyS0T62g=
+	t=1771945859; cv=none; b=Y8Cfl1pGZ00fAAVkXRxE03ZD9wzCiwcyd1ZSQD20XVgvV6duPOl/JhqzZR4uRqiigWxSmQdY9O9Onatq+zgh5YqJ2QAc98kwHnnAaMiYVR7F9ckDptw8PJCcaAfpMavli/fuK0MU2CvNaRtK6F803P9ld7luPog+MGUkokTiSw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771945841; c=relaxed/simple;
-	bh=BSd3E9HvM832bf2kO/myULtnTWMJZqXPY/uCr6QDO2g=;
+	s=arc-20240116; t=1771945859; c=relaxed/simple;
+	bh=Yw++ySpwmZARZwDkHxFtsIMZXrLfykb7FK8NOCCtc9o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QrH6Zpl/wsu30YCYb76jMpxBCD1YyDEeDPbYZ1cjJQvpHGl9KBNqVSM9DW3uIBsR4WwBtG8DEM46tA/18hesc0sjXWDnx4XdYTUwNpoHxUZaytZk1RXL8kSi1V0KIOkGbm6mn21dCliD6YDUSrw3S59h0Mw+u9RRYTIdF6+rN4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H8BZBiEA; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ctx/NHPY; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=oOjaLBeMZ4ccP4fWhYHctc/gmFG2tG51dWuwhLXB9SbEOaJWr1zjqYfKGJMeuJKYEtmM2TVsHg8ei3cqe5x6TBO+ksCypA9IrTlhfZOFoAq2vk/e5ZHolJ6U8Yk7yL4gWoTIE2/sYttYJwc8VvnPxBokySsk1dDDxojoFeF1H1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AjLrD5cK; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=btAvDqr7; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H8BZBiEA";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ctx/NHPY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AjLrD5cK";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="btAvDqr7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771945838;
+	s=mimecast20190719; t=1771945857;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=BSd3E9HvM832bf2kO/myULtnTWMJZqXPY/uCr6QDO2g=;
-	b=H8BZBiEAK/gaF4kW89vzvCvJwvv5kjeLfj4rs7Lsg7KMZIGSFZDbx+7T3MikezmaHsyHjV
-	0fSZUOcvTyfKltIrzPgrm1uGJb1140gl2DO5ZK7vP4xSCgrpygTDxoIQnHMd8bjmtQCCWr
-	4p9XSGfOaN8wf3tptK7V1iO7pFvK4OI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=CWBmRFKI0tFktXtE/HuJ4+L1Im2+ihdnnfM72IEIXjQ=;
+	b=AjLrD5cK6Cu9GyGjueSPh3z5gnylFPABS6/aQi9cguk462QlG2GdNrZGxdAjiI9ohF8iSc
+	NQ2N7Y3DqYCOtPAokc54A+OAPgkuNiUE1lX0geA+nj2ixixsy6LSpdpbFoNoUE6da11omk
+	1TDhhyMJLnL54hG3XQ8saLX+oMebsiY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-678-Ns3_jHIrMeuI6U2r3P3FFQ-1; Tue, 24 Feb 2026 10:10:36 -0500
-X-MC-Unique: Ns3_jHIrMeuI6U2r3P3FFQ-1
-X-Mimecast-MFC-AGG-ID: Ns3_jHIrMeuI6U2r3P3FFQ_1771945835
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-48378df3469so40176155e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 07:10:36 -0800 (PST)
+ us-mta-511-WCha4tnUNriLKfjfe7CQBg-1; Tue, 24 Feb 2026 10:10:54 -0500
+X-MC-Unique: WCha4tnUNriLKfjfe7CQBg-1
+X-Mimecast-MFC-AGG-ID: WCha4tnUNriLKfjfe7CQBg_1771945853
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-483101623e9so49170945e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 07:10:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1771945835; x=1772550635; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1771945853; x=1772550653; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSd3E9HvM832bf2kO/myULtnTWMJZqXPY/uCr6QDO2g=;
-        b=Ctx/NHPYh/VlIhSL+ainpWSuiJKnfGC3Usql9ihCvxFiUp2vlmta+HpKLeDjm3AI/w
-         fOgG0S/LDwYrkqy2mOAODcmzvgS3YJwb+NLg3KFKE5b37Mui7bekLVT7aIq7MV9wT3X5
-         6IBPf2e1Bz72DRpBqb30IZweq1lDFj/Tg/HFUMp70asxmsNcszkQTpyp25yGs1qFw0D+
-         kjyPZkTd3sXijGeXIMOOL8PxAV4Ta4CuTcKxQZUuOaTqNfeM8Pl44eFRnZArqycjzIqx
-         NrBxURzteGK9i2yZ1L21G7GciE+EQ2cVH4NBTIabyQzCjX/IsNkyE44zGtF78ryIE0b+
-         cL2Q==
+        bh=CWBmRFKI0tFktXtE/HuJ4+L1Im2+ihdnnfM72IEIXjQ=;
+        b=btAvDqr7vvNnFS4194jqRw4VC3ROpgBO6TygWYlhe6ZG9pJOhGvuaAIxz6x/RIaFM4
+         vfNUYADX7F4j+MDVdCRlXREZacwsIs5eeHNvPyRJtaoo/3h9U8pEFBU7rhjHsH2p/bDG
+         1swDCn9xmuN5nk4W19vrnQLSnQK9mJweJXsQwmj2kgltLdR2zoBvRI/qGy25NabkkUcP
+         GsCJWJz/GMgqtphXCbaFuJhoq1vKao9HOwXcuqCIoPTERYrlXArwZPgRAnlJfp9arWg6
+         wWhMkLwalVmuhL3Q8MBjP2VpNLkx1mSR6LSqlkddtGLGKOzTqMvTlarl7YcgRUox6o8K
+         h3rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771945835; x=1772550635;
+        d=1e100.net; s=20230601; t=1771945853; x=1772550653;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BSd3E9HvM832bf2kO/myULtnTWMJZqXPY/uCr6QDO2g=;
-        b=e22kM18G1ogvPVl8w6scypfxkZJoyUXiVis7UaRRkRsOQYqvyzZV3QrM4Mf05/0GZi
-         evvWHE9pW0BfDkVadMcGsZlfT49VYlE6a5dXDfLXipL65HH1pIc39fC+hbY4D3oTLXjC
-         7OEgByX/VIHFVDvzq9Qhd53HFZdpI7Pi5Zc47X/iaDbNRVbhTHn1WI0OJ9zq8EWkmpca
-         Bki6D5lTV5qt1b2W4JROUWApVNnFMai3iVc94f496T8h7vbYHshY11PyJoW7CZbmpUNa
-         MtdxttR2PkLmnh3aBPz1JcR8tCnGmJc2O43Z11OcR0NYhZ1bzHKuJe+n9haa2xI5+sdi
-         o84w==
-X-Forwarded-Encrypted: i=1; AJvYcCUR0MCk3lJiaq+UY1grc19AkgvniUA68TAOymGBaaWpQydf7SuI63hZa/pSsDmHz823g42VL7sa3N1FRVMlUl0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwD8fAC4a7bTtfOvz5nTdoaVbTCDhFBUsTLYcqqGOLxc3yBvtye
-	EIv0kLJvYPs3k/cQFmauFHO14c2Bjj/npBffHUQ5CheORm+hUefV9F+6wuB0wyz3RukBCYbUTN5
-	3Qx+ncUHoZB+BvRygmBP/5NGYP+nMqJi5iADhPCv66AMOyxG7bGdBT/5pM1zQYpYIYFRs1A==
-X-Gm-Gg: AZuq6aJkKzJ9YMVGIdW65PM9w+/yWYpDYR3JP/gPhlrNmDw5M+XBR675S0Q/I5bNgBc
-	PMVzrT24IU4AZJ4Bic4bO5hgCyEFawKiRBYaHjlgpfwtJlreRZvRNMtLstlVYt9pprzYAJ6a9QU
-	L1kOlyk6ru8nvvhGBGaIJAqM6YaYvJ0YG8MVvGDKEw2lPGjuSqVoyjYWI6LVwylz3gce16twPpJ
-	6Vhb6ZMhedpH7+W1d+OYieXZ5Qfi853/BfdkDy/S4NMvqtynKmqYFAT0/1wHfQ24xttNHcBIl6n
-	GDxCl4AXx8LPqEhKs20AbccXw7KQgOZuu60hzzLXb40ptbtCHq25VDjIaWey4wGjXJDdXp6G53y
-	phqvzWUvBXokXdvxw+AAfppRW+k5BQYID6scm7XXdwy6ob8iSJhEtLHpbvzSQKDesU7H07Pw=
-X-Received: by 2002:a05:600c:c113:b0:483:4b37:8620 with SMTP id 5b1f17b1804b1-483bd742cddmr3686725e9.10.1771945835277;
-        Tue, 24 Feb 2026 07:10:35 -0800 (PST)
-X-Received: by 2002:a05:600c:c113:b0:483:4b37:8620 with SMTP id 5b1f17b1804b1-483bd742cddmr3686325e9.10.1771945834815;
-        Tue, 24 Feb 2026 07:10:34 -0800 (PST)
+        bh=CWBmRFKI0tFktXtE/HuJ4+L1Im2+ihdnnfM72IEIXjQ=;
+        b=vnmkQASEYLPU7G6ZQRSEOGhBN92ErBrAepe//geCt/V5wkCAW8EUjPJ0vNHguKJG2K
+         8Q9Z9IsaJ/Fmlgfu3mhzoTywcS0s+dhPD40dJQTrTH0DxR6xs7R+JTxmOcdrNe0pU5+0
+         hOIlg/EW12sE2i99H1Wbl0J9J1FPOjlCFJ3BDdmjhmdSz8O1IhQiqXZpkz+souSjto7K
+         F7Q3mGy3Gebq2/x2TYLVACdMRDyimEG1CE6HtPlfn9PlHd3SRKCoWc5ychhEI9fJrxBa
+         KJxFhGy/H7TJCeMG2GDHvLS5g7kNzftnC0z9nqDWQ9VKVtxPIouJLpadleel7ygvhH8c
+         +HdA==
+X-Forwarded-Encrypted: i=1; AJvYcCXR0vrlPPf7vdfgQYj0j36aLOKz2ysGrhwRcoeknTuctfyot5eMuF+SfNDdauDbyPbikiyxU9LQPWey6jxdCsc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFvrM/pOcBzQ+TNbX4K7ER0jGWB4NxC6jJdW3zq4YwnhbjwIay
+	vlApOg2OigSmDK0ohWoPU+x9CA1wRU2GoFxKAXff865Wz/vwVCpvpBJfEhlm+ca2VDNgGX6jaW7
+	5PBlsRgQWpIzkys0V7ynwQHOjNyQjXiYRYnlMs2tLmx1GDwEK1HGUJsnwQv+co/I9/6TVrw==
+X-Gm-Gg: AZuq6aKt8yyZ+yYpzD7DNLQz9C16FIy/H6aMfDlbNF+kTzdCb2Z5OssROLPFrTHaeT9
+	dfUyVPp5xG8DtEyUe7MZe16dpzCv2wQqRveKSC+RAWvuk4V08MOye2ApY9L1mf/iKkrMlrYjaQR
+	hnKFDkvkHZf+3YvyNmwqyuZgLMdWFeVIXJnap0r6AbEj3f0sxw9fkUGoxItq8PAwWA8XZnBWpow
+	rn7LKcTaU749JlF5f9gJ5oJ9S0OXiwVSvBhkTiIOHZlu7+1pmtKt/mPJsvwm60Z7V0Sw1wrOJTZ
+	lyWoZWe3FdKhdboed7tcDUlT+6yRXscw8W3wLzZRGOs6Zhm5pNvc6Fsk2imKcrycQYPqy5kW22l
+	0p8z+Dm1F9ypbVH0C2BuGEJOnauIHD6fW+5IMfgs538OaWZUqgD1RaKawzE/ayWmR/dQqrog=
+X-Received: by 2002:a05:600c:1e1d:b0:480:f27c:6335 with SMTP id 5b1f17b1804b1-483a9637a55mr225647055e9.25.1771945853016;
+        Tue, 24 Feb 2026 07:10:53 -0800 (PST)
+X-Received: by 2002:a05:600c:1e1d:b0:480:f27c:6335 with SMTP id 5b1f17b1804b1-483a9637a55mr225646485e9.25.1771945852482;
+        Tue, 24 Feb 2026 07:10:52 -0800 (PST)
 Received: from sgarzare-redhat (host-82-53-134-58.retail.telecomitalia.it. [82.53.134.58])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483b8791a0esm73910215e9.0.2026.02.24.07.10.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd68826asm9484475e9.0.2026.02.24.07.10.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 07:10:34 -0800 (PST)
-Date: Tue, 24 Feb 2026 16:10:31 +0100
+        Tue, 24 Feb 2026 07:10:51 -0800 (PST)
+Date: Tue, 24 Feb 2026 16:10:49 +0100
 From: Stefano Garzarella <sgarzare@redhat.com>
 To: Bobby Eshleman <bobbyeshleman@gmail.com>
 Cc: "David S. Miller" <davem@davemloft.net>, 
@@ -86,12 +86,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	virtualization@lists.linux.dev, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
-	kuniyu@google.com, ncardwell@google.com, Daan De Meyer <daan.j.demeyer@gmail.com>
-Subject: Re: [PATCH net v3 2/3] vsock: lock down child_ns_mode as write-once
-Message-ID: <aZ2_WfJ5NVuyZJSS@sgarzare-redhat>
+	kuniyu@google.com, ncardwell@google.com
+Subject: Re: [PATCH net v3 3/3] vsock: document write-once behavior of the
+ child_ns_mode sysctl
+Message-ID: <aZ2_cPL2zCYQznBI@sgarzare-redhat>
 References: <20260223-vsock-ns-write-once-v3-0-c0cde6959923@meta.com>
- <20260223-vsock-ns-write-once-v3-2-c0cde6959923@meta.com>
- <aZzvp52L4smGF7cM@devvm11784.nha0.facebook.com>
+ <20260223-vsock-ns-write-once-v3-3-c0cde6959923@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -100,36 +100,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <aZzvp52L4smGF7cM@devvm11784.nha0.facebook.com>
+In-Reply-To: <20260223-vsock-ns-write-once-v3-3-c0cde6959923@meta.com>
 
-On Mon, Feb 23, 2026 at 04:24:07PM -0800, Bobby Eshleman wrote:
->On Mon, Feb 23, 2026 at 02:38:33PM -0800, Bobby Eshleman wrote:
->> From: Bobby Eshleman <bobbyeshleman@meta.com>
->>
->> Two administrator processes may race when setting child_ns_mode as one
->> process sets child_ns_mode to "local" and then creates a namespace, but
->> another process changes child_ns_mode to "global" between the write and
->> the namespace creation. The first process ends up with a namespace in
->> "global" mode instead of "local". While this can be detected after the
->> fact by reading ns_mode and retrying, it is fragile and error-prone.
->>
->> Make child_ns_mode write-once so that a namespace manager can set it
->> once and be sure it won't change. Writing a different value after the
->> first write returns -EBUSY. This applies to all namespaces, including
->> init_net, where an init process can write "local" to lock all future
->> namespaces into local mode.
->>
->> Fixes: eafb64f40ca4 ("vsock: add netns to vsock core")
->> Suggested-by: Daan De Meyer <daan.j.demeyer@gmail.com>
->> Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
->> Co-developed-by: Stefano Garzarella <sgarzare@redhat.com>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+On Mon, Feb 23, 2026 at 02:38:34PM -0800, Bobby Eshleman wrote:
+>From: Bobby Eshleman <bobbyeshleman@meta.com>
 >
->Stefano, I wasn't sure if you wanted the Co-developed-by and S-o-b on
->this iteration, but I added it just in case. Please let me know, if that
->wasn't what you intended.
+>Update the vsock child_ns_mode documentation to include the new
+>write-once semantics of setting child_ns_mode. The semantics are
+>implemented in a preceding patch in this series.
+>
+>Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+>---
+>Changes in v3:
+>- update language to clarify language that first value is locked, but subsequent
+>  writes succeed.
+>---
+> Documentation/admin-guide/sysctl/net.rst | 3 +++
+> 1 file changed, 3 insertions(+)
 
-It's fine, thanks for that!
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Stefano
+>
+>diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
+>index c10530624f1e..3b2ad61995d4 100644
+>--- a/Documentation/admin-guide/sysctl/net.rst
+>+++ b/Documentation/admin-guide/sysctl/net.rst
+>@@ -594,6 +594,9 @@ Values:
+> 	  their sockets will only be able to connect within their own
+> 	  namespace.
+>
+>+The first write to ``child_ns_mode`` locks its value. Subsequent writes of the
+>+same value succeed, but writing a different value returns ``-EBUSY``.
+>+
+> Changing ``child_ns_mode`` only affects namespaces created after the change;
+> it does not modify the current namespace or any existing children.
+>
+>
+>-- 
+>2.47.3
+>
 
