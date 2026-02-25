@@ -1,120 +1,211 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1042222590;
-	Wed, 25 Feb 2026 22:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F06314A65
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 22:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772057001; cv=none; b=ehvdr/lRbXymXQ4nbS7NM1nWJEn0BGUeLeytwpdfPktSk3WF/FBhVTG6A+Kmu54QhL++7UsLHtkao6W0w8qee5DLukAoCubgVaYr4bkjdEWYNfY7gOv8hQ27c1XSh2bFxIaoLYFK87w55HuTev/smu+T93Dwaoa/N6gs7DMTzBg=
+	t=1772057191; cv=none; b=YebWvbqqtAThlJeKIhgeyi9L+Jopqn08vD4N1nPP43OHEpq9UPDhmCT6MjhSq+HQRhYQLobOosZPwSUyYf9g69JzAKKNtplL9uuVMFsmeXUD2N5v6VgixXQ13VhUICsOS63T6DG259XxK3Tcqs/JM1mds2CcOksZ+o81v/6GfLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772057001; c=relaxed/simple;
-	bh=/U7ShKSWPDF2v3z+5V3cMDbR1yeyB3pvxejkJDSj6lM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WR42Snhx7WOtXRFQV5SmgqT/JdLylpBaH7VqemDhgKp9dE4P3Z2EuXXTaruQ172H8dPWaKIYEx2VofXmen+5vftlKkg0hUddws5DvB3oESPlREjDBIpGIF8OsFdBhXbDqKFnokoUmHMDdguuhYDnlYkC1qgRn+0FLYopqUuEInk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dCvvb7zA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772057191; c=relaxed/simple;
+	bh=LJWtxfMSbjaR7UL7hdep9H/YDcNXa8SN1R3pQvw0+Fc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pHdUj1kaStF6/iMUYijRnetVs5+V3LGU/IXiU0msUuwrkQwVojV+DHsGD/cFCFYf061bPhPt+kPSYCI4tVtwol5YawUdnvdBd6N/qetqUQTwcnx9eXGrxAWOB/rIga0Be8cMOqDf21nAaCYlIbU/kk8FMTMAmUEwAjlp9PSpumw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tA+Pbm0Y; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dCvvb7zA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D192EC116D0;
-	Wed, 25 Feb 2026 22:03:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772057000;
-	bh=/U7ShKSWPDF2v3z+5V3cMDbR1yeyB3pvxejkJDSj6lM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=dCvvb7zAydzm4xYhfBnKClngUPdK8Ug6YsI2k/LvdJ4OaSWlY6pYy/xu0S7jnHQtd
-	 i7lk2LTT6N+dkgYCrR+x8n+FhU/u32qFwHuzv6eBSii7aVSAxUfkhLUCnnPAMcSR1/
-	 IEuV5tnmXGSWS1dTNwSSooDcfUVF6Wp3LJ5R74mhMEMbpBr4vVEDhnbqHXAs4As7ui
-	 An15nMpgKOcrfpbJwYe7q84bMPvHmAXyRqF5qmQAplI9jvBeKsUbxr4Bu7fUPS4yNF
-	 D2/gFJziM7GW0sE3X/r1PYkvbrjn0m4bxWbeWKz8gjE7JU6vbx9FbNBVRkbEetqWyc
-	 KYk2EpJQ6BU0A==
-Content-Type: multipart/mixed; boundary="===============4038024577889962429=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tA+Pbm0Y"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ada9e4ea32so11285ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 14:06:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772057189; x=1772661989; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yKxFO5jbcj0n3yx3uCDHTRhkwPsNZ/ADjqKpvoexazc=;
+        b=tA+Pbm0YWZZbEJBWS4Tr4W7PpkLvYJdLDNIcSF8/87i9oDVFj+Oz+s3bBv0r6W7PlG
+         NEcFRl6QB/YdLaxiel9L3DCwLztCmQrSXxaUxtdkefuFoWFIHG3VgRMJv0nj0eSkW2AI
+         /G3DvLZmmXsW7d1ZDWanlu+GBMsmI3FhtUrnRlW9tgPwglg1jugdpYuUjdwZbuj7aHK1
+         CbBmH2tQ70fyIVwV+ZJtG1FEJ/z3vmGea+A/4TMAJ3ZHCx6TrHQtCxC+YVbWui3pWRu0
+         jHvSqojoeLrA7wPutUbnsggmp2BfW13G/svB/7nm7sLAoLTHZsCb+8kGv34V2nIapyAp
+         eF5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772057189; x=1772661989;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yKxFO5jbcj0n3yx3uCDHTRhkwPsNZ/ADjqKpvoexazc=;
+        b=mtTXT9QqVQC+DLqEgGBSP7lD5CtEMjEvwd2n9YdmGMXeWI0HMqZHIE0Ja8Ykj8FFpQ
+         niLXff79VzMH8kr2G7CfKVqhk5JcuQk/0fb9wFF4jRfh0awC9mXVH6qf0/cJr6kBr2Oy
+         vS4Pd94Y97Pknp1wuxScItUDGyP8S1fg/Nfha4kBGdAhGPnXQYtgFPRkV53EUfb0s9MK
+         b8sDUvKx7z42NQkl1qmLWkTADHxVUk+m+Ii6kM1tIJfnTqo/SrfvyzHvccarsh5KSvM1
+         O5dBXTrirwXcJ3jwnbFF6gywfV6WmHJT8E2F5+i7hAmk8PCbXdjVH4ml79MI0YVYnBjw
+         voCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUIyvjWfupUtyo224xc6KAIHix1F+9STrdM3/vIKsVclZz0uIDivFrkVPkIMqDXLFvUQ1xpaytnYC/4m5va1/Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyykQH7SQoA4g1XPzUSYJhN1vLKVW2lF3w2lc5C0I6SOiWhBN3
+	iVjJn1NlRQwWyv70ziehYVVUPmp17SUa2dOqs9t9C2DFtMAHMcKYA0RDF5iXyN24MQ==
+X-Gm-Gg: ATEYQzwcWZpdL+0zZ9OHvrnhnkFRonY0a1D7vWqCM1gxvGDJ1aehl+HBDqqxBaxIDTD
+	HC8E2GCAWQbkFyASEpgFlmPodiiKvKATiTrh7eCXZcD2VUt7dIr9hR6Qb+extnnxs6AD2/GV7IB
+	g/2HUyUcqzPE7taLfubpHTsv7HYISP961XWglx+EWXMaBe4NGUUAy/UZAey/da9gCee/9jTQi2c
+	9FVHlZu09uLkrLMdCFvraxb831rmj76OJ3N6tJ6UULMX9QKUq6tsuI0VELeVsJDjUHSZjRDvAew
+	kZaR8KpYc7x1Rqn/ZFJqHbe6348AFkOkZgORWqrtUh9B8u452E9Kt9p5yo69GJCIDXpoDozS9dl
+	ZOd1JudXDmVm+TezJnt+q9zO51DAPnA+O38khPRZwqbuubfmbaA4OkhGPSujWFMGNF8dI66BbsL
+	R4XlpDBFFs0s6Ttq4OVGgh0GrnJKLNjZnf4vWFgzRSqkImR2OX7ZEFnr5JkDmckZt1vY1DiVI=
+X-Received: by 2002:a17:903:2a86:b0:29e:27f4:bac0 with SMTP id d9443c01a7336-2adf77c692amr672495ad.16.1772057188344;
+        Wed, 25 Feb 2026 14:06:28 -0800 (PST)
+Received: from google.com (222.245.187.35.bc.googleusercontent.com. [35.187.245.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8273a05e831sm236247b3a.58.2026.02.25.14.06.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Feb 2026 14:06:27 -0800 (PST)
+Date: Wed, 25 Feb 2026 22:06:18 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Alex Williamson <alex@shazbot.org>
+Cc: David Matlack <dmatlack@google.com>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	 =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 04/22] vfio/pci: Register a file handler with Live
+ Update Orchestrator
+Message-ID: <aZ9yWlcqs2b6FLxy@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-5-dmatlack@google.com>
+ <20260225143328.35be89f6@shazbot.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <757bc1b31d0a6aa67c687c05fea88d97a7568fad0a3c2a880c28b931906fe315@mail.kernel.org>
-In-Reply-To: <20260225210820.177674-2-wusamuel@google.com>
-References: <20260225210820.177674-2-wusamuel@google.com>
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: Add wakeup_source iterator
-From: bot+bpf-ci@kernel.org
-To: wusamuel@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org
-Cc: wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 25 Feb 2026 22:03:18 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260225143328.35be89f6@shazbot.org>
 
---===============4038024577889962429==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Feb 25, 2026 at 02:33:28PM -0700, Alex Williamson wrote:
+> On Thu, 29 Jan 2026 21:24:51 +0000
+> David Matlack <dmatlack@google.com> wrote:
+> > diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
+> > index 0c771064c0b8..19e88322af2c 100644
+> > --- a/drivers/vfio/pci/vfio_pci.c
+> > +++ b/drivers/vfio/pci/vfio_pci.c
+> > @@ -258,6 +258,10 @@ static int __init vfio_pci_init(void)
+> >  	int ret;
+> >  	bool is_disable_vga = true;
+> >  
+> > +	ret = vfio_pci_liveupdate_init();
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  #ifdef CONFIG_VFIO_PCI_VGA
+> >  	is_disable_vga = disable_vga;
+> >  #endif
+> > @@ -266,8 +270,10 @@ static int __init vfio_pci_init(void)
+> >  
+> >  	/* Register and scan for devices */
+> >  	ret = pci_register_driver(&vfio_pci_driver);
+> > -	if (ret)
+> > +	if (ret) {
+> > +		vfio_pci_liveupdate_cleanup();
+> >  		return ret;
+> > +	}
+> >  
+> >  	vfio_pci_fill_ids();
+> >  
+> > @@ -281,6 +287,7 @@ module_init(vfio_pci_init);
+> >  static void __exit vfio_pci_cleanup(void)
+> >  {
+> >  	pci_unregister_driver(&vfio_pci_driver);
+> > +	vfio_pci_liveupdate_cleanup();
+> >  }
+> >  module_exit(vfio_pci_cleanup);
+> >  
+> > diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
+> > new file mode 100644
+> > index 000000000000..b84e63c0357b
+> > --- /dev/null
+> > +++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
+> > @@ -0,0 +1,69 @@
+> ...
+> > +static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
+> > +	.can_preserve = vfio_pci_liveupdate_can_preserve,
+> > +	.preserve = vfio_pci_liveupdate_preserve,
+> > +	.unpreserve = vfio_pci_liveupdate_unpreserve,
+> > +	.retrieve = vfio_pci_liveupdate_retrieve,
+> > +	.finish = vfio_pci_liveupdate_finish,
+> > +	.owner = THIS_MODULE,
+> > +};
+> > +
+> > +static struct liveupdate_file_handler vfio_pci_liveupdate_fh = {
+> > +	.ops = &vfio_pci_liveupdate_file_ops,
+> > +	.compatible = VFIO_PCI_LUO_FH_COMPATIBLE,
+> > +};
+> > +
+> > +int __init vfio_pci_liveupdate_init(void)
+> > +{
+> > +	if (!liveupdate_enabled())
+> > +		return 0;
+> > +
+> > +	return liveupdate_register_file_handler(&vfio_pci_liveupdate_fh);
+> > +}
+> 
+> liveupdate_register_file_handler() "pins" vfio-pci with a
+> try_module_get().  Since this is done in our module_init function and
+> unregister occurs in our module_exit function, rather than relative
+> to any actual device binding or usage, this means vfio-pci CANNOT be
+> unloaded.  That seems bad.  Thanks,
 
-> diff --git a/kernel/bpf/wakeup_source_iter.c b/kernel/bpf/wakeup_source_iter.c
-> --- /dev/null
-> +++ b/kernel/bpf/wakeup_source_iter.c
+Hmm... IIUC the concern here is about liveupdate policy if the user 
+wants to unload a module which was previously marked for preservation?
 
-[ ... ]
+AFAICT, In such a case, the user is expected to close the LUO session FD,
+which "unpreserves" the FD. Finally, when rmmod is executed, the __exit 
+(vfio_pci_cleanup) calls vfio_pci_liveupdate_cleanup() which ends up 
+calling liveupdate_unregister_file_handler(), thereby dropping the ref
+held by the liveupdate orchestrator which allows the module to be
+unloaded.
 
-> +static void wakeup_source_iter_seq_stop(struct seq_file *seq, void *v)
-> +{
-> +	int *srcuidx = seq->private;
-> +
-> +	if (*srcuidx >= 0)
-> +		wakeup_sources_read_unlock(*srcuidx);
-> +	*srcuidx = -1;
-> +}
+I think we should document this policy somewhere or have a dev_warn to
+scream at the users when they try unloading the module without closing
+the session FD.
 
-Should wakeup_source_iter_seq_stop() call
-__wakeup_source_seq_show(seq, v, true) when v is NULL, before
-releasing the SRCU lock?
+Thanks,
+Praan
 
-bpf_seq_read() in kernel/bpf/bpf_iter.c has this at the stop
-label:
-
-    /* bpf program called if !p */
-    seq->op->stop(seq, p);
-
-The other BPF iterators follow this contract:
-
-    bpf_map_seq_stop():
-        if (!v)
-            (void)__bpf_map_seq_show(seq, v, true);
-
-    task_seq_stop():
-        if (!v)
-            (void)__task_seq_show(seq, v, true);
-
-The same pattern appears in bpf_prog_seq_stop(),
-bpf_link_seq_stop(), task_file_seq_stop(), and
-task_vma_seq_stop().
-
-Without the in_stop callback, BPF programs attached to this
-iterator cannot detect when iteration has finished, which
-prevents finalization such as outputting aggregated results.
-
-The __wakeup_source_seq_show() function already accepts the
-in_stop parameter but is never called with true:
-
-> +static int __wakeup_source_seq_show(struct seq_file *seq, void *v, bool in_stop)
-> +{
-
-[ ... ]
-
-> +	struct bpf_prog *prog = bpf_iter_get_info(&meta, in_stop);
-
-[ ... ]
-
-> +}
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22416722500
-
-AI-authorship-score: low
-AI-authorship-explanation: The code follows standard kernel BPF iterator patterns with no unusual characteristics suggesting AI generation.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Missing end-of-iteration callback is an API consistency issue that prevents BPF programs from detecting iteration completion, but does not cause crashes or data corruption.
-
---===============4038024577889962429==--
+> 
+> Alex
+> 
+> > +
+> > +void vfio_pci_liveupdate_cleanup(void)
+> > +{
+> > +	if (!liveupdate_enabled())
+> > +		return;
+> > +
+> > +	liveupdate_unregister_file_handler(&vfio_pci_liveupdate_fh);
+> > +}
