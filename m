@@ -1,110 +1,106 @@
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEBF3A7827
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 13:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BE83ACF10
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 13:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772024812; cv=none; b=NCgWjSoQm+vt/fXecaKNo7ehsz9VFA0ZM2rt2hC0a9kvUUQoDki4Nk4PQajKAa9K75o1E7m8xh4O741r0viZj0PTW7UrnkGezak+gIJ9mpzom9D3pmoawJkUrQlo/2G5P4aTrIvjdXultmvspdAzspFaepvcRJ5XKR2zJdWWM4s=
+	t=1772024852; cv=none; b=IyvBsHEx+gndyJhQXIv2xknvZH6+5/CBrqu4pmB2vCojMKRkc9vUBNwDBYQaPQ+AKacRAUrWLwg4+AoLGORxmaPuIROfroES9t6qpbY3w146FsQBLTmR5OZmH5O1pIqikRjDnqU2zfrbhCw/wImGEninZRiQtCQ0t73MbqhZpyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772024812; c=relaxed/simple;
-	bh=P1KUZVcv71vqEO+U/iRcLVykTw0aayw2sEqdbMiSuHM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Ob8PE1KmIrhjp5mWJBRrTXCAxW3Ja6or/D9ypXnnkwxYk4VpaEZPBKyNwKlEn3UQaeeFUrZwMrJfZe4y10j8J7ULQ2Zsqeg9oOjaW+RdL250dQ2eI4y5JH/bhvGZ4QOvFCAZZLaQgpHf5ZY2ElLKNsXDG79mzdMyuGds9KywfMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wKbItb+S; arc=none smtp.client-ip=209.85.221.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1772024852; c=relaxed/simple;
+	bh=Q2F0a1/I0evjMEXLNGJ/pUIJHGD/TW2VAOAzXXV180I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kJ3aYdMWLCPR0t27l1P3/yo8dNVsXV0ChIx2XXtAzykh74GGH2PZ7JfS3FznNAb45GNnF20zjpDHxFFUe+w3tkHyQx0oyNaZlsrFn9c/8PxkW7oxcoPxoVw2O5Aw2BtQ8N/fug03z2+acWP03IjH9nJ03ccxMm9vgch2gB8/QxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TvzHi2h5; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wKbItb+S"
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-43637c70876so3180047f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 05:06:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772024809; x=1772629609; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VhfcOamQNKKUszfBefT5UFzLpGObxUPREg/uXcwiU6s=;
-        b=wKbItb+SASsSk2PqCVZueNG3n6FSIKjkVtqW4XIz9uy8tx4VWLjnd/X5zv1TmNc1YI
-         LhKQCIgrrELkbbljqGeKMyshEI5UTCHmS8tMopW+t8gjL4g1Bl6yZ+ufem3fJmIJMh8i
-         lsUbsGz3bKNodEMadIskEqTsMvDxgRM8KsXZk5HapVMj5TCuTuMCJTOzyHQAvlltcHth
-         G5QvyV9iexDYS11f8vWX/YsHUXa046I0FVA/tgoG/VNsGJtoR6I9fGPXhx1dKJSLk0aC
-         05FD4vqhIEwncyuBI9GpDsWL8cGWClxBpiXtE9IhNxFXAoiwcuPR82EI+dSLUFa9m/iZ
-         Qo7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772024809; x=1772629609;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VhfcOamQNKKUszfBefT5UFzLpGObxUPREg/uXcwiU6s=;
-        b=pFY+Ssg8w2id8qaAYz4Pcg5zL1wp+Reowr87f12Kr+IzaI88ArGo4xXOvn6o3Kgbhe
-         Uqk3dNcYAav9/QB//KrtnjnI0QlEkyv7MU2rk4vOwqAZ1f+HcYqANOghnNhvdD5cq7sU
-         an7Y9UBwulc7RwLbqttLkxWZ5qn9IQRVkoSeoLlTeUrKPm0FmYLCrfaZ1SHsAYH/z4Yo
-         BAj9QwLoa5Kz8H9AnRKJhRTqS1ZGpG/3FQgP6URgXCy3PkWCNucbLKg8V5byxurCnvUG
-         x7SUd5bONxdWgj2/xcs5yFZb+rlOq+G7nV07xr7zRdcLbHzql3/ed4IfwNjC086HaWrv
-         L55Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX43D8coUJ8j6uRib1eO5GFlb5UMQgqOw5Obb/5zEvjQHZJt9N8eVyo9NL02wkfdzGZnAlNCSyF+eJKfx7pdZo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9IJWeiIL/RZzkyPT1fVdjVx/bn6eT2VWg0aBAG/r1VHgx18ek
-	mScbEApbte+P4tqnlZz8973KMxZzWOZDUszTcJXbQArvQzLp5bLtrY4IaoGRfcn3WMbP5RmQ4J7
-	FU7XQsZPzEKehqg==
-X-Received: from wro14.prod.google.com ([2002:a05:6000:41ce:b0:436:d0e9:837c])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a5d:5f86:0:b0:431:808:2d58 with SMTP id ffacd0b85a97d-43994304901mr728417f8f.51.1772024808739;
- Wed, 25 Feb 2026 05:06:48 -0800 (PST)
-Date: Wed, 25 Feb 2026 13:06:47 +0000
-In-Reply-To: <20260225010833.11301-1-liuhangbin@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TvzHi2h5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772024851;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q2F0a1/I0evjMEXLNGJ/pUIJHGD/TW2VAOAzXXV180I=;
+	b=TvzHi2h5Tzy/3D9sYir6BpnCZ0x9dDOtwVztXRb0fREehx/mvMO2fxCkEJeiKGR1yyT9Qk
+	F+i10JlSth+pKs1X/6J1KruJ41C/nUXMp9ehUFO+Jv3g7939pv/Vwj1eWla45B2qtQGtqC
+	GSjuh5ERcZ+th/oQ33GZ4XaT8frzMs8=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-197-YmllfxCaPq-Bt1xXjL4iBQ-1; Wed,
+ 25 Feb 2026 08:07:19 -0500
+X-MC-Unique: YmllfxCaPq-Bt1xXjL4iBQ-1
+X-Mimecast-MFC-AGG-ID: YmllfxCaPq-Bt1xXjL4iBQ_1772024836
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AF37D184543F;
+	Wed, 25 Feb 2026 13:06:54 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.38])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 097EF1800666;
+	Wed, 25 Feb 2026 13:06:46 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 25 Feb 2026 14:06:54 +0100 (CET)
+Date: Wed, 25 Feb 2026 14:06:45 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Andrei Vagin <avagin@gmail.com>, Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Jan Kara <jack@suse.cz>, Aleksa Sarai <cyphar@cyphar.com>,
+	Andrei Vagin <avagin@google.com>, Kirill Tkhai <tkhai@ya.ru>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] pid: check init is created first after idr alloc
+Message-ID: <aZ7z5XPAtptQVoW0@redhat.com>
+References: <20260224164852.306583-1-ptikhomirov@virtuozzo.com>
+ <20260224164852.306583-3-ptikhomirov@virtuozzo.com>
+ <CANaxB-znXjfh5s9ro127TGONsu6PieuaJ1vB3PMVFeV4Eo8pkQ@mail.gmail.com>
+ <aZ67mwBEbRtdaWp2@redhat.com>
+ <6269de34-203d-47b5-922b-342671573b7f@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260225010833.11301-1-liuhangbin@gmail.com>
-X-Mailer: aerc 0.21.0
-Message-ID: <DGO2DAIFY07Y.367VMZA7XGT4U@google.com>
-Subject: Re: [PATCHv3] selftests: Use ktap helpers for runner.sh
-From: Brendan Jackman <jackmanb@google.com>
-To: Hangbin Liu <liuhangbin@gmail.com>, <linux-kselftest@vger.kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Brendan Jackman <jackmanb@google.com>, <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6269de34-203d-47b5-922b-342671573b7f@virtuozzo.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Wed Feb 25, 2026 at 1:08 AM UTC, Hangbin Liu wrote:
-> Instead of manually writing ktap messages, we should use the formal
-> ktap helpers in runner.sh. Brendan did some work in d9e6269e3303
-> ("selftests/run_kselftest.sh: exit with error if tests fail") to make
-> run_kselftest.sh exit with the correct return value. However, the output
-> does not include the total results, such as how many tests passed or fail=
-ed.
+On 02/25, Pavel Tikhomirov wrote:
 >
-> Let=E2=80=99s convert all manually printed messages in runner.sh to use t=
-he
-> formal ktap helpers. Here are what I changed:
+> On 2/25/26 10:06, Oleg Nesterov wrote:
+> > On 02/24, Andrei Vagin wrote:
+> >>
+> >> I don't think this is an issue right now, as we only allow one attempt
+> >> to create the init. If that first attempt fails, free_pid will disable
+> >> further PID allocations in the target namespace.
+> >
+> > Thanks, you are right!
 >
->   1. Move TAP header from runner.sh to run_kselftest.sh, since run_kselft=
-est.sh
->      is the only caller of run_many().
->   2. In run_kselftest.sh, call run_many() in main process to count the
->      pass/fail numbers.
->   3. In run_kselftest.sh, do not generate kselftest_failures_file. Just
->      use ktap_print_totals to report the result.
->   4. In runner.sh run_one(), get the return value and use ktap helpers fo=
-r
->      all pass/fail reporting. This allows counting pass/fail numbers in t=
-he
->      main process.
->   5. In runner.sh run_in_netns(), also return the correct rc, so we can
->      count results during wait.
->
-> After the change, the printed result looks like:
->
->   not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=3D1
->   # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
->
->   ]# echo $?
->   1
->
-> Tested-by: Brendan Jackman <jackmanb@google.com>
+> I guess it means that we should change the commit message a bit, e.g.: replace
+> "Effectively leading ..." to "Though thanks to PIDNS_ADDING logic, free_pid()
+> disables further pid allocation in this case and it does not lead to any real
+> problem.".
 
-Thanks,
+Agreed,
 
-Reviewed-by: Brendan Jackman <jackmanb@google.com>
+> Please advise if I should resend the whole series (v4) for that?
+
+This is a question for Andrew ;)
+
+I guess you can just send a single [PATCH v4 2/4] in reply to v3, but it won't
+hurt if you resend the whole series.
+
+Oleg.
+
