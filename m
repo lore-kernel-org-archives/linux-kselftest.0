@@ -1,97 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11021127.outbound.protection.outlook.com [40.107.130.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C2B38F249;
-	Wed, 25 Feb 2026 10:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772014210; cv=none; b=t5Fo6A0GpdmdG6psgYl5hLyQErsKm0BE1UZjuImXzAoHXzj+5sw+pdCBx3piWOqNsj20bRcK0Or8VjEuMuvUJUxyf+xPDV8bLjcz9X8y9UyAhKM2MlQh67oW3HRCFKIS+aR3dI9IB14JfAVm4+cdmgfSoRLYTRbYHRqk4+XyqHg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772014210; c=relaxed/simple;
-	bh=SUaaK6XzvzmyS1weeb2OkubB+G+5jkhXcoy21xTtFgw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=I8Utd7CGHRfE+kZ16M1kHnRs+kRowrlhCjokFazwHbGDsq4azfCFNuL2DkLqjA61bkmVMeJSq0TxECLyPrg2I+WYNiFxCQyLpu6iY8pEEO38x+/5s9rjyE4mT2Q/JvU/F5cFYQ9vcW4sEdEWX0G/pHhK/dC1T14IuxZKavUIMRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Twa7tu6T; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E773015A86D;
+	Wed, 25 Feb 2026 10:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.127
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772014815; cv=fail; b=iHLAzOWqfdtBb7t2u+jvWTu5N9QOtmBtvv4oPWkq/PC7T8IyUxpjd/j9yJ/dSMlVdGfr46we8h4TV15nweAzjnOIWwq41LY+H0xYgs8sfw6CaI7l522qt6vcjiytaZqup32+7qp7kVjkW7oTVCewWAKgWQL9uCe8NXuouRaodlE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772014815; c=relaxed/simple;
+	bh=RHi6bm9Cqrbx1uxCYQECM3bwXs5DhB63A1E1lUzW0kk=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=OLuFeH4o1WUmpbcAawlaV19oKPMVFePZsFprp+yiwlSg6VZ3bf6o0SPzquNqO1z4LghyunJ3OVitZrZ2W05UyY+kOyZ6kKJMbSseDsqAHBh8SAtuVBOVCW1U1WMojVzHF85a6Kcv7Jct4ulY8Zd7Yhx2pcG+qoMWwygl90P1maU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=DNYIemqv; arc=fail smtp.client-ip=40.107.130.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Twa7tu6T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7813CC116D0;
-	Wed, 25 Feb 2026 10:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772014210;
-	bh=SUaaK6XzvzmyS1weeb2OkubB+G+5jkhXcoy21xTtFgw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Twa7tu6THq1J14Y+kC+Buchpk691W66o1zkIpEMqLJRVFAbGxLVOhx3OZX/4OxtX6
-	 PWwHGvK2xWGFKhEZHHLjM9NWcxF6ukTSGIxY0GzJ8M0OIozOuuL//AMlSoeVSRjVZz
-	 sfvwiLzsZwIhE4txoCpDks+ZvXcE2FgQrceO00jmYE1+rgPKdc9H8lFRU5fPdiudxT
-	 r5jAvHnRBPCOcEQqjqUF/sZ8VJCnaQHdpluvelbPWsAQ3Zvd7wZFwbRVepj6FG7qgu
-	 i8A4dvdazlI5psdFqOtE6Wab8Fe/fVqzlAmS7NMDpW682kqCG0WJb2Ha10yEFuCdrc
-	 Jza2YsJJjDJTA==
-Content-Type: multipart/mixed; boundary="===============6033642110113408588=="
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="DNYIemqv"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MKGwbxqVOMw5xwaZLbVNnNsmlbAOUwoYxeF9DN8h+uEdz0QAQNb94nuhWrV7UCiAmEQWvcuHwzDC82A12s6eEEgZ36jPx9qF3YalrzZ8o1XZCh1OepulHm7lfMR2gb8HDctIJaztxYYGBSB0W6gpX41jxkBKspTPpugaL2Yv2Kbsc8cfq0xENszuhvx4WlBtbmmgY9VLFFtMEJN+2G6is/s7w8Ad0kf87ENvVvGHlAR/HFS3aunf+23ucD04w+p+b6y1e/nW7fMWYe8rgoFysjVgD6gkxP4XOgUzfkXrS3Clte8jtuvWg/9f2gntun2hIYFowZE8YW/iqH42xwwVaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kp8UuoW01GFoR1QZ4+Zd9S/T7KW6QEoRSHA/AnVdU3E=;
+ b=BYAIrNCAQ0tGnmFWKer6IReyPAL/rHjREd4AuTaf9UAggun3HixSRRWpeX33YyiaOcJuB6d268FFSaGa9IUdpHgBbhZCplPQLfKIIYO05TVT8QofvAB70KDYOYTkhc0709QsPxHukUjEptig8zAcTSB+TKVskOoIO3MQtgSpY6QUQeduZ+cLv0Eqy5eoTZ+lltU8EfbkYKuWAj8F1u1JrSkAykYlpGSVS8pnQdlhN+eHnsoeoSqfajNyI6kx34/pXNs7IozWYSDHd8k4A9+up3U+vWyPN97MEA9bulNgZ2SG9GjgSHIf3giw3TUwwtpNJpSp3viLVYox8MNgtyp57g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kp8UuoW01GFoR1QZ4+Zd9S/T7KW6QEoRSHA/AnVdU3E=;
+ b=DNYIemqvM5zPqRhKQj0uOWpjFRorwDzJwgFFXajUYhR4bKnDshAN2RWt5qOwN359Kot/0sX9iycI7su0n8Mssc/NCn4Z6El/PGpYiHJ/SlLZY2CMgz77Euu4sbkM27eUBem+HrlajeakQJdKBFEprlXtBC6b5UFejNMjrOyHXRRdXx+0z3p2yE0/AvIJyuA8BWRhI5LcfjXYvAyAyYuZY9bMAcEuQp0LiTPT7H1S0NqkmGSW7sC8eqY/9djutkHr2JmJVuUUUOSqn+XrM71AVKapwEd8/GIzY00CpG3cMBtaXtwX38dpYMR2Sa5gx605kfaVdx2sAn9Lh6zvUdALzQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
+ by AS8PR08MB6421.eurprd08.prod.outlook.com (2603:10a6:20b:31c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.23; Wed, 25 Feb
+ 2026 10:20:05 +0000
+Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
+ ([fe80::3470:51d7:36e4:36d2%4]) with mapi id 15.20.9632.017; Wed, 25 Feb 2026
+ 10:20:05 +0000
+Message-ID: <6269de34-203d-47b5-922b-342671573b7f@virtuozzo.com>
+Date: Wed, 25 Feb 2026 11:20:02 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] pid: check init is created first after idr alloc
+To: Oleg Nesterov <oleg@redhat.com>, Andrei Vagin <avagin@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Jan Kara <jack@suse.cz>,
+ Aleksa Sarai <cyphar@cyphar.com>, Andrei Vagin <avagin@google.com>,
+ Kirill Tkhai <tkhai@ya.ru>, Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260224164852.306583-1-ptikhomirov@virtuozzo.com>
+ <20260224164852.306583-3-ptikhomirov@virtuozzo.com>
+ <CANaxB-znXjfh5s9ro127TGONsu6PieuaJ1vB3PMVFeV4Eo8pkQ@mail.gmail.com>
+ <aZ67mwBEbRtdaWp2@redhat.com>
+Content-Language: en-US
+From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+In-Reply-To: <aZ67mwBEbRtdaWp2@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BE1P281CA0235.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:8c::10) To DU0PR08MB9003.eurprd08.prod.outlook.com
+ (2603:10a6:10:471::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8ac82d904dceaaf8bd1bd13859d6f89bf1d630c9d8912731413c5f6e9dc2a553@mail.kernel.org>
-In-Reply-To: <20260225092651.94689-5-pilgrimtao@gmail.com>
-References: <20260225092651.94689-5-pilgrimtao@gmail.com>
-Subject: Re: [PATCH v2 4/6] selftests/bpf: Add test case for bpf_list_add_impl
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,leon.hwang@linux.dev,linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 25 Feb 2026 10:10:08 +0000 (UTC)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|AS8PR08MB6421:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2dae5041-50ba-4a24-64c9-08de74577187
+X-LD-Processed: 0bc7f26d-0264-416e-a6fc-8352af79c58f,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|10070799003;
+X-Microsoft-Antispam-Message-Info:
+	CICxItfC3DO3VpqXj/TDmcY7rqNEt4tpQyxeSfEB6y8rlfQeuGOiku2hVSEX6FeQcSxtNuBmd+55ToNPkWqof2CYw52qPQDlsGWr/+z23olm3P2UbM5jfRAX9cPHx5wMVsOsxx6ENjB6tcd1F3T/h1vYbrUOqumL+MObJ6hsarZ1e/ocB9xTMexuAb+Q1BliK8pQk05WSiyj2UBpd2mmAL2g2PL3O9hs3oJwHseFVRVNDpzEdhRKKJJZ08Q4B8Kb4lDnZy5hHcCjWW8yZF7mve+t1BUKp7q+ZMpRUYVsScLw/RWMNdN9dUYv3OjuLHP9imlRvispEpP4Nl8nhfOH3SsSCPNu1IoITpBgxaLJt6UBNBIdi1cYwsJxlJ8H8uST4DIBmR8szz9h7jBaEA604pK/+3K5Nrd5rEoTZ9EiKzBA4DTah3jSaKLVe/LjFZW7XBQ8LBqcKvLbncK+9MIxDAK3x0nyrw+Sin+gKa2ujytsXLbdt0rHENGdqufZPesFi36yK68upA1axgn+vaJ3gHW9HYCtyPME3Dy5X4oIi2tTHhJ+ClRBWwLHKZ1al6HmgLS6r6gNld89z9zfKtn2jztJ9QLNmQWzBANXXih3gjOSXSnTMhogCs0hWZcRvWn2zW0B214V/pn3APxZmonwYq2VD6f0BsMbHkbyZmCKbuQvfeauhQiTC61h42VC7p5ETiOGyC8SDP0vzcu8GxEdn6SnDpmR3VbC8fh+HGDRdCY=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(10070799003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?V3lmQU1VV2J2TWxJSVlxc1Z0YjlSb3oxZS9ReGNycmZwUEx4dmpBRy8zdmdD?=
+ =?utf-8?B?RXR0dlE1WXlUMS9oenRoRzUweDF3U3dickIyYld0RkVnQWZxVXFjY3djUWR4?=
+ =?utf-8?B?UjdGbmY2dVl5RHgxUHh1TE5WUnJlbDg1bzJsZVVMSXRiUU5lb0hIaWdsYzI4?=
+ =?utf-8?B?eVo5cTg0TWNOUm1wQVRlU21kQm95R3FFNk5iSFhLMnY5TVYzd0QzOTdBOFcr?=
+ =?utf-8?B?MHZEUDdBN0tCNjJGR2JBYXVsaWtHYUlKTGhJMjQ4U0RsOENKYVp1d2Y4VXFL?=
+ =?utf-8?B?SnR1OXVyUW00WFcyYUxmL1RmV0l2UGh3dll1Qy84bzIvS2dWanBPUThGT3Z4?=
+ =?utf-8?B?cVZjdk8ycWl6eFEzUEZOVG5jbGZhTWdSUThFSEhTR2RYdTJoRzMvRHo2ZUkr?=
+ =?utf-8?B?TEFscnpZeEtvMFlkVmJRR1RTYlBUczhaL2pkUmZkOVJMMEoxS1QvcThlTnY4?=
+ =?utf-8?B?S0JZVm1mMndUM3gyaWc3eHY1d0lHbHh4WGlDSjFUeUhZUVNUemRhcnYyMjlK?=
+ =?utf-8?B?VlBKdkpKcGtsalVvOTZyZVJvcE9TQkF6MVBLamU5L25HY0paNXdSRzMxcmF1?=
+ =?utf-8?B?RlcwOHVpS1dSclJpTS9yaVdhNkQvcVZ3Y1JtMzVEclVuMHozUWV5US81N0RQ?=
+ =?utf-8?B?eFAzT3N0RmlFV1B4RXlBZmRjNVFTaHYwVXhqWktLSDVhdU45QnpDdWlMb1M0?=
+ =?utf-8?B?WWhLN0U0Q20vVGdhdS96OWRYMEkydlhybDBGT1lBczhWWlRaN0I4Z0RMd2tz?=
+ =?utf-8?B?K2phdG9hR0lkUSs2QUVFSWZxa1MxQ2NFeEw1OU1taWhYK05ZOENQb3FOejJU?=
+ =?utf-8?B?Q3d0dHlwaWRncHF6ZGx0Z0JKVlp6NE50Z0Q3Mk9GMmtUZ3M4N1pqaFlDMEFm?=
+ =?utf-8?B?eXh5VlI4Vm1nZDlGYnh6bTBRdDFrdGZqdG11SlZtb1NxVGFDb0p4VU1IWVlG?=
+ =?utf-8?B?dTBGTlVIN0p0bDk4WVFJN2pqY0tYRnRyQ2dySEwvSCswbXBkdnJwQnRwMTRX?=
+ =?utf-8?B?UlhVc2t0ZisvcmtJbGZGOU9oakwvOGxVeldMZXJUbC81a1B6WlhFRmk3NE9B?=
+ =?utf-8?B?RmpSMVhmYWZqRy8rZW1oYnJuQ2RYTWJsOGdzZCs3THZSNStOeWZPMzVRUCtX?=
+ =?utf-8?B?cWZlbDdwWk94WnZVL1dueGdKRmVhaVpSMXdQM3Uwc2dlVm10SnViU0JHR2s1?=
+ =?utf-8?B?Y3dsNlV1NklqNVlvTEliYmdMZDk1dlp6L3NnM3VTUWlxRmdETjRJTGVZNHhs?=
+ =?utf-8?B?ZTlaVmdwQXVqMlJIb002SWtKcFk2WTZWaXBIUVpPdDQ3WllLd0Y5QXloKzJK?=
+ =?utf-8?B?RmtLekdvcGwyOXpDUHd0QlRjUzFobUpEK0ovcXlOUGpMdGhmYktTSSt5bnRh?=
+ =?utf-8?B?SGtqY0J0TUVFM0Y4K1lmYXA2NnBDMlMzNnNDZDhuTUZMdFJEVW96bWVtSVFv?=
+ =?utf-8?B?Z3dUWm1ENHNLZFZySmNkUjFzaDVkN0JQWlZ3ays4Q3NMb01hRDJVY0RNK0ts?=
+ =?utf-8?B?RkNOUDNWOTRmaEUrbnVhYUtJcjVLY2lzT1VzWjJPbUZ1ZkJYOWE2MHBMcnBY?=
+ =?utf-8?B?STh2YUVSVHdLRkFxQ2hoYlgxbXVuUjJZVnNYKzVuYk8xUWRhR0xFejNPOTdC?=
+ =?utf-8?B?WHl2OUhkSDJrMnZJUUo3TDludTFXVmJRWnlscFpxMVAzNWhaMDBjWlpSWmZN?=
+ =?utf-8?B?c2piK2pXdUVKTTByTEoxL2JJK0V5dTltSGZ2a09ETUEyRzY5R0lMNUNrd0h3?=
+ =?utf-8?B?bGVtaHA1Zkp1RFQ0ZDRxUlpPVjFHM09HckZhMUxCa3lwc21VbTdHT2RTZ0FM?=
+ =?utf-8?B?SXh3cG5EWTV4LzdDaWNxTjhwMlN2Z0h5L2RiaHB6YTQwM2NNZURkNW40Z0g2?=
+ =?utf-8?B?VCt6M3hvOWpWZDZPTWp5MDQvRElxUzNMajBCVEhYZFJJcFRSYlN0SWVNYnFW?=
+ =?utf-8?B?aDhuMmw0aGdlMVBmMjN4bko1ZmhJL0lleFZSd1JudlJ2ZTdxU3JZZlY5OE43?=
+ =?utf-8?B?bVR0MmJQWVZuUXMzTFhTWGtkWUJvamRNMVNIcUExRWxpUlB4QytFVnJwdXRY?=
+ =?utf-8?B?NVFrN1p2WUcxTU1NWVZ2LzNCcUhJcHZrNHF3VFJ0T3dKOWtrem1OL2FNUmhL?=
+ =?utf-8?B?emRGNFNubisyUHVRUkllR1NHaC8yUjJ0Q3NvL01oWXMrMTI4WkxEOVNjMDZJ?=
+ =?utf-8?B?Z0tyeDNSTVF5cXJwYXNMOWwzVGhoWm1rcE5ZSlBmQWl0T3U3Q2dna3Z0cmlo?=
+ =?utf-8?B?NmVkWlQzTGdneEZnbHRXcWhyM1UyeXdFaWpXSkV6eG11MTVjelVVeDNQcEo0?=
+ =?utf-8?B?Vk1LUHB2Sk4ybFpTdWJidzJibHV2VzNYL1Y0YURHTXZSZS9pL3prZWpUQW56?=
+ =?utf-8?Q?du44PaSumeW2Bo3qhhReBDK+rL50JDRKqVqZlEKp3kfdw?=
+X-MS-Exchange-AntiSpam-MessageData-1: iKpstG3OeDshoPpraEsCvsL+mfodrfCLE+M=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2dae5041-50ba-4a24-64c9-08de74577187
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2026 10:20:05.0340
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +VNzw1GltW6sV5Mt+F/YzvZJwjyK2CevVGxfU+B7unkI5MYV/nvclOGwgm9hqF6TSU+yEihoFNXUCQvsGN9+lIg8roFHwbeQW67qUqQLsms=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6421
 
---===============6033642110113408588==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-
-[ ... ]
-
-> +/* Description
-> + *	Insert 'node' after 'prev' in the BPF linked list. Both must be in the
-> + *	same list; 'prev' must be in the list. The 'meta' and 'off' parameters
-                   ^^^^
-
-The description says "Both must be in the same list" but looking at
-__bpf_list_add_after() in kernel/bpf/helpers.c, the implementation
-requires node->owner to be NULL via cmpxchg:
-
-    if (cmpxchg(&node->owner, NULL, BPF_PTR_POISON))
-        goto fail;
-
-This means 'node' must not already be in any list.  The Returns
-section below correctly says "-EINVAL if ... node is already in a
-list," which contradicts the Description.
-
-Should this instead say something like "'prev' must already be in a
-list; 'node' must not be in any list"?
-
-> + *	are rewritten by the verifier, no need for BPF programs to set them.
-> + * Returns
-> + *	0 on success, -EINVAL if prev is not in a list or node is already in a list.
-> + */
-> +extern int bpf_list_add_impl(struct bpf_list_node *prev, struct bpf_list_node *node,
-> +			     void *meta, __u64 off) __ksym;
-
-[ ... ]
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+On 2/25/26 10:06, Oleg Nesterov wrote:
+> On 02/24, Andrei Vagin wrote:
+>>
+>> On Tue, Feb 24, 2026 at 9:02 AM Pavel Tikhomirov
+>> <ptikhomirov@virtuozzo.com> wrote:
+>>>
+>>> This moves the condition (tid != 1 && !tmp->child_reaper) to after idr
+>>> alloc, so it not only covers that first process in pid namespace has pid
+>>> 1 in case of clone3(set_tid) requesting wrong pid, but also if idr
+>>> itself gives wrong pid for some reason.
+>>>
+>>> This could've been the case before this patch, when creating first
+>>> process the alloc_pid()->pidfs_add_pid() code path fails, so that the
+>>> idr->idr_next is non zero anymore and next process calling to
+>>> alloc_pid(), will get 2 as a pid from idr_alloc_cyclic(). Effectively
+>>> leading to init-less pid namespace, which is a bug.
+>>
+>> I don't think this is an issue right now, as we only allow one attempt
+>> to create the init. If that first attempt fails, free_pid will disable
+>> further PID allocations in the target namespace.
+> 
+> Thanks, you are right!
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22391130139
+I guess it means that we should change the commit message a bit, e.g.: replace
+"Effectively leading ..." to "Though thanks to PIDNS_ADDING logic, free_pid()
+disables further pid allocation in this case and it does not lead to any real 
+problem.".
 
-AI-authorship-score: low
-AI-authorship-explanation: Code follows established BPF selftest patterns and the doc comment error is characteristic of human imprecision rather than AI generation.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Inaccurate API doc comment in selftest header contradicts implementation semantics but does not cause runtime failures.
+Please advise if I should resend the whole series (v4) for that?
 
---===============6033642110113408588==--
+> 
+>> This isn't directly related to this patch, but why do we check
+>> "ns->pid_allocated & PIDNS_ADDING" after allocating all pids?  Wouldn't
+>> it be more reasonable to do that right after taking the pidmap_lock?
+> 
+> Perhaps, but alloc_pid() can drop pidmap_lock and retry, so we will
+> need to re-check PIDNS_ADDING.
+
+Maybe it was this way to consolidate the (->pid_allocated & PIDNS_ADDING)
+check and the (->pid_allocated++) change in one place for readability.
+Code reads like: we don't want the increment if the flag is unset.
+
+> 
+> Oleg.
+> 
+
+-- 
+Best regards, Pavel Tikhomirov
+Senior Software Developer, Virtuozzo.
+
