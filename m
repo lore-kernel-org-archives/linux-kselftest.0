@@ -1,107 +1,260 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E619392812
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 10:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772015181; cv=none; b=noBJAtg/2Su4nmCAaZcJMf1mv0xcf8WnB6bBLo5w1gSuPx5p58G6k3DYHKsURGx5P9B1Gnv1Nd6OuA/6/EP286g/95h6kJnYqJrsL2PjEBH+n5l+vQdZR+Yq63dRJqpmflcPDlWPhs5uoR0zi99kHwEHPKv6GYcOg8OcKxa0m60=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772015181; c=relaxed/simple;
-	bh=CMcZhRDb5VOnXy66PGfmdCcOS/a9q8FuFZftmaW7Kuk=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F+JV97k2EM5lfqZUudmSNBCCzrVswho3fveWDmRP9IY9AmnoVIS9hAyTTbi63ZjB0guOoil6lqPicqsHTAONrNrHtuX5pzjn81VKwRy9OYGdVX/Ix7GIRGYbUWVfFRIul/xxBgy/EWCYhTIbIOqtggKgjsLafT8Q8MbDr0dxUfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DvgGPHN5; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEAF3939AA
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 11:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772017261; cv=pass; b=if0ieZwit2gOz/BSn+fIvk7OeOQi7N0BItP0HrQ4+r7VHCCsEx71GegoW31mjUoQIiwr1na78uEPJZHJHI6VnByy8ryxFIQYJMNO0p1Lz15Bglk3yOVnwrnhh09BHkzZ0FtoMyvnoFHhwIwnQ/tHXf8g0KNZCfGoUfGaoiLp3Yk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772017261; c=relaxed/simple;
+	bh=rFIoBbCtPAaUUxXQN/i55hNZCBkKJS12wFLo9V6DMr8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uVH+JQ6TpOiHeeat4y/NzLOdI1KaVmKBGfIWwRBJU1YPBYOvXfEcCcph79wGEB3+XUjBnV+p90woW/pNrVKlazVuYc2a4wG/Gmo2q/VWWHYKmwTXigKPmRrA/XG/M+T3tjcShQm6I9f8IlW51p/pNE3Q8Iax51Mv0BB8thuEgG0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T2oGZ0n2; arc=pass smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DvgGPHN5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 721AFC4AF09
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 10:26:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772015181;
-	bh=CMcZhRDb5VOnXy66PGfmdCcOS/a9q8FuFZftmaW7Kuk=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=DvgGPHN5iDR79u63/ax1vj1osvgCUVe86KgjxTQmdhtWt0modtNhheCLWyTKHpbDV
-	 ksY70m9H3y6p2f14YIinKBWUeFJm4aeKAzycCu7Mnj8foyrG8ToUIJoFr1NFHAPEEF
-	 /ITYPbkIZT809P6HLTyK+36gxO/AEZMN+o3VcCxRnS1bEuXfE3VjIxZ5Tl2FpIDXg3
-	 HpUJma+rG6BNY3PcmBtUj5MZuqpvmRmFGh5Yn31ox3i+2ZufZrsthM9kKNOcCZEqlp
-	 OPZlAgyGtA+ASONsTLus596FfqytcN6MZ/B72ZN58IBqyhE0VIdYEjBrq2adHpIzMg
-	 UmtpwSmOG9kFA==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-389e2950f54so4666241fa.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 02:26:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXJjkCarLi1BfyQKrYFmWSpWqPZsluZSSus4PqcEg8yXQscqxKQfrbmMD4WYmxJOdBp6pOact5qFOQP45iRxyQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyfv6Ff35DzIqDGpx6qSsFGgrJRKLmESYf6Pn6L46i4+4hls6Yn
-	eLyV6YuM3zT+/jqUybqHvcvRQZ6jr3yDLV/dY05HZkR3yx+g/TZ+qfP0QkGDicPQmn47VTe2OoZ
-	tKWj8eEDKfB6qUercAvfLetBxWygpdjIZOVxT1XvP4A==
-X-Received: by 2002:a2e:b88c:0:b0:385:f547:183f with SMTP id
- 38308e7fff4ca-389ddc502dfmr10752701fa.3.1772015180076; Wed, 25 Feb 2026
- 02:26:20 -0800 (PST)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 25 Feb 2026 02:26:19 -0800
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 25 Feb 2026 02:26:19 -0800
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260223061726.82161-1-tzungbi@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T2oGZ0n2"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5033b64256dso514151cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 03:00:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772017259; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NHzeAu3Fori+lSI7LxIzTVu7uZlhW0nyD2xd9T2bO0EnU4LDmZVhrBzm8HTGOzCnm2
+         D2xUB8X4SCiZRwztPgYXGauzv1lKTGB0/q6gwGKeLw/4GWWnQtpgGHvBmx5lqQuyH7tu
+         7DhA0ryEskbFxziiUzofv+0ASyiGoUtppvELvh45tL8AHpOPulPz54cvFY9N9+uoo/+4
+         k2x0gilpFnDTD0q6XAJMS4T3yCT4TOgGnX21+NblAojXjPqTaI3+DTN79N1rC12H8o8O
+         qnNfdebTVCPAh9/oJJP/afv0Hw+O+j+EqG2hbJjV9+iLUwYPcJybWrU2tsE9k50ptBJc
+         yF0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=aWkoDd2c7adv4SsXtWJWrFlb9EmJVdv0DDRUAC9G+VM=;
+        fh=+IWVGPxNAQt/ovRVE5TIFMcwBN2flCKuEU0Lzrr47Rw=;
+        b=k9EGy8MGVs9qRhy8KQjjWG2jiC4u7vRRQKv2wuFv/SY1YFlpp9rCeDmlynsk+ebfwP
+         8C62XY44pp1Yl2rYNEztnpsbHbFezSgqNXmawv4TDAXnbt1Qzcam+yEocwNtHSQLL9Xt
+         hiYM7KlKEAXPX/wFDh1ZCwPHh/BEjTGid4AAwGTkRp4ABqH2aGQmYJAKvTJAjur64cTM
+         Cy/2OM71YjAsR5M6G5RNHfy800boSv5Z44a2Yluimwmv3xTWRuiEDMNI14cOEz60HKvT
+         DpTsaLCf9MQWvm+BJaGPZcpDC4dndmHKpq3u1K3YEx/uQ2rFrFfvoJPPsctTvVE6Galm
+         s7gQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772017259; x=1772622059; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aWkoDd2c7adv4SsXtWJWrFlb9EmJVdv0DDRUAC9G+VM=;
+        b=T2oGZ0n2r1stSk2XfcVdVJkpqgcbmN0fziB1D/5ce1tGB5qM0fsgvPbOOEDTcfS8BG
+         52gBbuwlZmASU67EobymLLNUDPBrHpguolSyQIs7UDKK68C0HYEPSj9mXYfKMDJUIPpw
+         hGLX1Ht7TA7KQ6bfphjgIfGY5pPqB8QRCBdHgT6mgDK4SAW3a6vPEkl5t7VOMxVdJ5Je
+         tjgOsMC5dSJS8TIAfD6WoHW6VsWrcAWLAxOqHmbHmq5iMPkc+uR7VSmz3LVcywWBSUEu
+         OKox80NEGeLyC+3xWi0Hx1Noj5QL1+DBFt1gU0LHCJCn33z9fjvvIX1kKEhOkmLHMoLv
+         sXYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772017259; x=1772622059;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aWkoDd2c7adv4SsXtWJWrFlb9EmJVdv0DDRUAC9G+VM=;
+        b=D1fAVNmyo/OSSX3KSqc/F5DpyhOiKXiazbnlRnsaBwR2mRyLSd88pbCKBOIwAX1Qp/
+         2JHjuoJMUqA2jMnl0pKQ/oIBgK5Zy9MYcf5KIeVQIXj79utZHfTgRgOuKIwpXPqX8g4N
+         wKVEqGQq4Imlcqm/DOp3TA4oEhhH8u7kq0ggj1vucoj1ONYBL6dmt6Aghd9NdkDQtul3
+         5ySlAmW9Hx4qbHtfhva3cdGwkVfal+zxQdJdIHZm5PDeWOJoi3nf1h+h1jL8UxJiQ4gr
+         I3na0e6sz57MF5cjmhC7pg0mj3bFPT3tP0FBvZvTG5lOQTPWxNIM0FlDziirL4qbpTgU
+         U3OQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW3rvfNBACCzJVFmGmEf5OrQcRkd4LHezvsk6W5aEhqawRprhOnP9a5THw16MjvNKAiQJEeciJ5EEyTbIFPGus=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyk5D4ItTT1Aw4ckyr86r4vh+vPe1yoWBrioeIFdhmJvcGWecpj
+	psGLuNEULUusfgQynxiGbPl9K+mDHa9s4OZrUBDmbsRZgoyCgHH0xb75zzJSBWztoVfASZzNHT6
+	cjUKoy2aRUVXesltfx8N/GgAMcoxElzv1D68XMbINRPSBTo2h4KCOBesCTv8=
+X-Gm-Gg: ATEYQzw3GDGA63RmRCHhv/m9xPDwIEEHNZqevF2wV9lzmvy84sp8dbL3uTN0UwBI1oi
+	K1q6DLY08/cgyzAZutXCusIUbnAmM8aGIdPekQlDMLxZXt55Z3Fd8ZyjR9u9twTGqbp/PTlgvu8
+	B2AFFcLaHAice8HJPoas1JoBPT+vahXUYcAjNrfEigQUQrkzvTSWUcKZrjDaaUDL6U36juH/rnr
+	0QQ7ds0EER66z4qwibJUa8X5PFQN61M/0D4/tWNcfJJVt/oAG2Pq7l2qjLnkOvytl1RTNXRpsOJ
+	+CPU6Kzv
+X-Received: by 2002:ac8:584c:0:b0:4f0:2e33:81aa with SMTP id
+ d75a77b69052e-5073a3356a2mr846691cf.11.1772017258079; Wed, 25 Feb 2026
+ 03:00:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260223061726.82161-1-tzungbi@kernel.org>
-Date: Wed, 25 Feb 2026 02:26:19 -0800
-X-Gmail-Original-Message-ID: <CAMRc=MdU_1WW82imNHPFVktn0HVSdY7kkGScEXmi+JaKRNTMuQ@mail.gmail.com>
-X-Gm-Features: AaiRm50JAWvgk0sFbwLWuBgEoDZ8qh5nlozP1AB4khnBwkCkwQM3s7Ik9ULJO-I
-Message-ID: <CAMRc=MdU_1WW82imNHPFVktn0HVSdY7kkGScEXmi+JaKRNTMuQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] gpio: Refactor and add selftest
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Bartosz Golaszewski <brgl@kernel.org>, Linus Walleij <linusw@kernel.org>
+References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
+ <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com> <CAEvNRgFBLgvYoR_XTH-LiN1Q00R9u1HGC5URbstLPxYtedS0MA@mail.gmail.com>
+In-Reply-To: <CAEvNRgFBLgvYoR_XTH-LiN1Q00R9u1HGC5URbstLPxYtedS0MA@mail.gmail.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Wed, 25 Feb 2026 11:00:20 +0000
+X-Gm-Features: AaiRm50WQiuIi1kbMajZ1ibI5GcJzILcOFsYF84COJs9arnL6chtYw6R9I20_qA
+Message-ID: <CA+EHjTxDSW=y=sPRwW70Bz9RVYM3kSCLSbWc_X4v9hz6zj=mcg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de, 
+	brauner@kernel.org, chao.p.peng@intel.com, chao.p.peng@linux.intel.com, 
+	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com, 
+	david@kernel.org, hpa@zytor.com, ira.weiny@intel.com, jgg@nvidia.com, 
+	jmattson@google.com, jroedel@suse.de, jthoughton@google.com, 
+	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
+	mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
+	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
+	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, seanjc@google.com, shivankg@amd.com, shuah@kernel.org, 
+	steven.price@arm.com, tglx@linutronix.de, vannapurve@google.com, 
+	vbabka@suse.cz, willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 23 Feb 2026 07:17:20 +0100, Tzung-Bi Shih <tzungbi@kernel.org> said:
-> The series is separated from v3 to lessen the burden on the subsequent
-> revocable work per suggestion in
-> https://lore.kernel.org/all/CAMRc=MfQumD1ULx7yU4W2sx=35wyQf7-v4tSf44OqEu3JDBUAg@mail.gmail.com/.
->
-> The series is based on v7.0-rc1 and applies after
-> https://lore.kernel.org/all/20260205092840.2574840-1-tzungbi@kernel.org.
->
-> ---
-> v4:
-> - Separate the first 6 patches from v3.
->
-> v3: https://lore.kernel.org/all/20260213092958.864411-1-tzungbi@kernel.org
->
-> Tzung-Bi Shih (6):
->   gpio: Access `gpio_bus_type` in gpiochip_setup_dev()
->   gpio: Remove redundant check for struct gpio_chip
->   gpio: sysfs: Remove redundant check for struct gpio_chip
->   gpio: Ensure struct gpio_chip for gpiochip_setup_dev()
->   gpio: cdev: Don't check struct gpio_chip in gpio_chrdev_open()
->   selftests: gpio: Add gpio-cdev-uaf tests
->
->  drivers/gpio/gpiolib-cdev.c                   |  20 +-
->  drivers/gpio/gpiolib-cdev.h                   |   2 +-
->  drivers/gpio/gpiolib-sysfs.c                  |  32 +-
->  drivers/gpio/gpiolib-sysfs.h                  |   8 +-
->  drivers/gpio/gpiolib.c                        |  46 +--
->  tools/testing/selftests/gpio/Makefile         |   5 +-
->  tools/testing/selftests/gpio/gpio-cdev-uaf.c  | 292 ++++++++++++++++++
->  tools/testing/selftests/gpio/gpio-cdev-uaf.sh |  63 ++++
->  8 files changed, 402 insertions(+), 66 deletions(-)
->  create mode 100644 tools/testing/selftests/gpio/gpio-cdev-uaf.c
->  create mode 100755 tools/testing/selftests/gpio/gpio-cdev-uaf.sh
->
-> --
-> 2.51.0
->
->
+Hi Ackerley,
 
-Hi Tzung-Bi!
+Here are my thoughts, at least when it comes to pKVM.
 
-This no longer applies on top of current linux-next. Could you please rabase
-and resend?
 
-Thanks!
-Bart
+On Tue, 24 Feb 2026 at 10:14, Ackerley Tng <ackerleytng@google.com> wrote:
+>
+> Ackerley Tng <ackerleytng@google.com> writes:
+>
+> > Ackerley Tng <ackerleytng@google.com> writes:
+> >
+> >>
+> >> [...snip...]
+> >>
+> > Before this lands, Sean wants, at the very minimum, an in-principle
+> > agreement on guest_memfd behavior with respect to whether or not memory
+> > should be preserved on conversion.
+> >>
+> >> [...snip...]
+> >>
+>
+> Here's what I've come up with, following up from last guest_memfd
+> biweekly.
+>
+> Every KVM_SET_MEMORY_ATTRIBUTES2 request will be accompanied by an
+> enum set_memory_attributes_content_policy:
+>
+>     enum set_memory_attributes_content_policy {
+>         SET_MEMORY_ATTRIBUTES_CONTENT_ZERO,
+>         SET_MEMORY_ATTRIBUTES_CONTENT_READABLE,
+>         SET_MEMORY_ATTRIBUTES_CONTENT_ENCRYPTED,
+>     }
+>
+> Within guest_memfd's KVM_SET_MEMORY_ATTRIBUTES2 handler, guest_memfd
+> will make an arch call
+>
+>     kvm_gmem_arch_content_policy_supported(kvm, policy, gfn, nr_pages)
+>
+> where every arch will get to return some error if the requested policy
+> is not supported for the given range.
+
+This hook provides the validation mechanism pKVM requires.
+
+> ZERO is the simplest of the above, it means that after the conversion
+> the memory will be zeroed for the next reader.
+>
+> + TDX and SNP today will support ZERO since the firmware handles
+>   zeroing.
+> + pKVM and SW_PROTECTED_VM will apply software zeroing.
+> + Purpose: having this policy in the API allows userspace to be sure
+>   that the memory is zeroed after the conversion - there is no need to
+>   zero again in userspace (addresses concern that Sean pointed out)
+>
+> READABLE means that after the conversion, the memory is readable by
+> userspace (if converting to shared) or readable by the guest (if
+> converting to private).
+>
+> + TDX and SNP (today) can't support this, so return -EOPNOTSUPP
+> + SW_PROTECTED_VM will support this and do nothing extra on
+>   conversion, since there is no encryption anyway and all content
+>   remains readable.
+> + pKVM will make use of the arch function above.
+>
+> Here's where I need input: (David's questions during the call about
+> the full flow beginning with the guest prompted this).
+>
+> Since pKVM doesn't encrypt the memory contents, there must be some way
+> that pKVM can say no when userspace requests to convert and retain
+> READABLE contents? I think pKVM's arch function can be used to check
+> if the guest previously made a conversion request. Fuad, to check that
+> the guest made a conversion request, what's other parameters are
+> needed other than gfn and nr_pages?
+
+The gfn and nr_pages parameters are enough I think.
+
+To clarify how pKVM would use this hook: all memory sharing and
+unsharing must be initiated by the guest via a hypercall. When the
+guest issues this hypercall, the pKVM hypervisor (EL2) exits to the
+host kernel (EL1). The host kernel records the exit reason (share or
+unshare) along with the specific memory address in the kvm_run
+structure before exiting to userspace.
+
+We do not track this pending conversion state in the hypervisor. If a
+compromised host kernel wants to lie and corrupt the state, it can
+crash the system or the guest (which is an accepted DOS risk), but it
+cannot compromise guest confidentiality because EL2 still strictly
+enforces Stage-2 permissions. Our primary goal here is to prevent a
+malicious or buggy userspace VMM from crashing the system.
+
+When the VMM subsequently issues the KVM_SET_MEMORY_ATTRIBUTES2 ioctl
+with the READABLE policy, we will use the
+kvm_gmem_arch_content_policy_supported() hook in EL1 to validate the
+ioctl. We will cross-reference the requested gfn and nr_pages against
+the pending exit reason stored in kvm_run.
+
+If the VMM attempts an unsolicited conversion (i.e., there is no
+matching exit request in kvm_run, or the addresses do not match), our
+current plan is to reject the request and return an error. In the
+future, rather than outright rejecting an unsolicited conversion, we
+might evolve this to treat it as a host-initiated destructive reclaim,
+forcing an unshare and zeroing the memory. For the time being,
+explicit rejection is the simplest and safest path.
+
+> ENCRYPTED means that after the conversion, the memory contents are
+> retained as-is, with no decryption.
+>
+> + TDX and SNP (today) can't support this, so return -EOPNOTSUPP
+> + pKVM and SW_PROTECTED_VM can do nothing, but doing nothing retains
+>   READABLE content, not ENCRYPTED content, hence SW_PROTECTED_VM
+>   should return -EOPNOTSUPP.
+> + Michael, you mentioned during the call that SNP is planning to
+>   introduce a policy that retains the ENCRYPTED version for a special
+>   GHCB call. ENCRYPTED is meant for that use case. Does it work? I'm
+>   assuming that SNP should only support this policy given some
+>   conditions, so would the arch call as described above work?
+> + If this policy is specified on conversion from shared to private,
+>   always return -EOPNOTSUPP.
+> + When this first lands, ENCRYPTED will not be a valid option, but I'm
+>   listing it here so we have line of sight to having this support.
+>
+> READABLE and ENCRYPTED defines the state after conversion clearly
+> (instead of DONT_CARE or similar).
+>
+> DESTROY could be another policy, which means that after the
+> conversion, the memory is unreadable. This is the option to address
+> what David brought up during the call, for cases where userspace knows
+> it is going to free the memory already and doesn't care about the
+> state as long as nobody gets to read it. This will not implemented
+> when feature first lands, but is presented here just to show how this
+> can be extended in future.
+>
+> Right now, I'm thinking that one of the above policies MUST be
+> specified (not specifying a policy will result in -EINVAL).
+>
+> How does this sound?
+
+I don't think that returning -EINVAL is the right thing to do here. If
+userspace omits the policy, the API should default to
+SET_MEMORY_ATTRIBUTES_CONTENT_ZERO and proceed with the conversion. I
+believe that, in Linux APIs in general, omitting an optional behavior
+flag results in the safest, most standard default action.
+
+Also, returning -EINVAL when no policy is specified makes the policy
+parameter strictly mandatory. This makes it difficult for userspace's
+to seamlessly request clean-slate, destructive conversions. Software
+zeroing ensures deterministic behavior across pKVM, TDX, and SNP,
+isolating the KVM uAPI from micro-architectural data destruction
+nuances.
+
+Cheers,
+/fuad
