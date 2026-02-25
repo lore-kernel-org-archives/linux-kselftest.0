@@ -1,371 +1,436 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012055.outbound.protection.outlook.com [52.101.48.55])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010018.outbound.protection.outlook.com [52.101.84.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CA5396D2A;
-	Wed, 25 Feb 2026 14:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865453921D3;
+	Wed, 25 Feb 2026 15:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772030455; cv=fail; b=T5oJxLQ+/xZ3c5XWpLOnBGDzDIB793ePCwmUkubalsGfmyy/gnGFWfrkkMw6AIWpvLVopnfbn3/F0IbzPr7GLCCH7CRo9MPp8dlYUnkU3xVAJWBvkK8/rdsFwGkJRk4pp5OTa0wDoEgmb7oIqJZVL+vE3wj2DT3NumYyMWuJqzA=
+	t=1772032057; cv=fail; b=H6ZgQJEn2odnenmaVdoDVM7Mjer10yrrE9oNfOQWJ8g8f5Nmg10Rb/xiuSS+WS2zmXAlP1+07Q7Kl0FnQtWGiwNqOAK8spAHpm/3zmhIdpW8T+fC/XYYnYp+mxTL6xS2m60WEqS2fGd7OtmrIN798LrerqR1ZVeN7VSpz1XzWAM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772030455; c=relaxed/simple;
-	bh=2vdEuW65FxHeyUQ3z0Wgi+Kvm7AX4Zros52VWtF8rm4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PB8qLiGIiYamgjQ0d+RWaIgSQRM3KGz9OpEmeY9EkGu9hr8j1pAKoHey28GiJA62jpB5WgiuFI/6JXOW3dvLbjGjWC5g/TUurs4PI3zZftMkm/XpM5Fby0b0KPpBus6MZKQH0WWNShRVVAdYyX0b8yXF6tTBpjzLv6dgOnH1SDI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JLs7g9SC; arc=fail smtp.client-ip=52.101.48.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1772032057; c=relaxed/simple;
+	bh=Nku+LfVRT3lkpWN15Ap1JLbhRdNNh+qEoHk53IVYhPI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gbEzzizGBe7R8jy8G7W0ViFyHSXUN6HoZyUDcURNwcNy84Z33OwRVsXMFTCpEPD+KhDZmz70CKvRQT5ZJUwZdmXBflQTS9OWUGB4nw7jwmeuCMCvJesGAsQFBoRLk/5AvP0GEvuQ7R0LR2BtLEv3TmdNHeKxtuQWVO1j9InpubM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=JxL/gGPe; arc=fail smtp.client-ip=52.101.84.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JLs7g9SC"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="JxL/gGPe"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Rnn94A155RHkdN//uA9n5PcMvOcEvN+MXtIjclUB8VeElRKg+1XVtDcrd8sGOvaHRjB0UvYxqiM576SrPtZZNIpGMO+RY/ZngO7QXIMXxvGbpkAK570J0YRTwYxwZ1rGpO0kTTDz4AeUkC6AdJUMTTCF8kv6bn5ek3oe/KyqVyVnr/ZfykbOy7prkInQCFjr81uCbXT0A2yb4/bMsrrLcMJziA0cbLVF1k2z4VbfvuNMyKQkcnGQHKZzNcjv78s+eq4Cp0lw2EjY94ZFtOiT+vJdgwD9DQCeK/K0qxqRriaztkGj3pLSvzFqn0S7PXZY12y6Fp/nlnXpdgQXnPDWKA==
+ b=YctFQ+W0Y7AOrsPHMDd4vNuR3026gDNzEvKcVRxfUNQCUkKwZ+QoHgd0z1Sl7OXmZAH5TooZHQ3Qx865y/cl/vgyuw2SCSeus/npaP1cUS346t9md7jc8CcCZQpxPr7+lEo4Pk5mitOfKpz6y0wo+bgVCbxT4n0Dykpk15Q2jWAYsW4WDSmCdl21szNDN0yNHGrdm/NKpV26nnhUQyZ3RSSMgUxinCwcgLLtpVvNiUWzutED2w04FEpislg5mI9O7YoqEsc0L5c1QxXC8TkJPla4FpiFfk78H7wI2lRvT27R3AZaD6AjbpiRrrI5N4phrp0M//owMZRY8o4XuE4FZg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sUa+RbNoHp7r8f/nYXTWjygZ+DnBbJvzhpJ07gNVj2c=;
- b=HTeQDYt/Oaq6zoSecxLolvtxx9hD6UYksI/ddJZfqElSd7l1xzdrS8o0yPeu+qBcI5n7EI5kevX97zmvRcqmEvaWPjH0w/ZyCcBT5LEc/Q61rCzoN7u8SSEMIf7hiSzMsk8/FpgmavtPNDvRkM8y7u/oUcweuZwhlkRK2zZd28MYQCL2AzfMLdEtEJKtyyO+61JTElH+mdt+vU8Rruwo6us25Y57122+l9KHGcGs86sQECKKbnluFsMfbyT0auMzwDp42s7K5EjrBIVet3O4WwLnyYEA5IlV5jmBrhfMPTjsXIkGtS8iskzObs52fJuhWbmEA2E4CjKC96LW2njdtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=AH8DrDa24YCtsChSfG14xHFO8slrd8Sjz3kfnLPi6eM=;
+ b=N3X7fHDGLebjMlwZTbA1hqgTD2BybhP3t9lsJqYvswvpj3UvP1sSsVMmU4e674BCQlP0R+TsPY41Tz3PqUjxuYczu+YU6UCqqhzY+taoEjIMemoCYYQZoiDJ9SGJeuh10Fx0M5xG/hoHEOj2lFuKeoNegzkfDakm+MzD4CzOXTQxcmJAqKxdBMx39ZVe8xHsrSXFbZdz16dwZvm3CvvPcyg/TczSqqI+171unfIcSZc4YI7cqfIzkBPuDUWGSWSLFkb+upPzBxXk+92Xn0HDb8gEJaPZTAHkI+VtfjvL5rC3pX910OPdB0Z0AzfFB8JEcxmxw2vfRzNv1BTm/5nHrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sUa+RbNoHp7r8f/nYXTWjygZ+DnBbJvzhpJ07gNVj2c=;
- b=JLs7g9SC+mgkEiWwlgU5bQI+Zu193KjkJgbgfEUzmqvtDkZncv9ppa6DaYhtfaw+DlxxcskMlnClktR2sU9OgPf9kQUMV/1YYTGN790ze8b7a+1hgSs5F7Jb8DzOU+D9F9Gl/tezwgm3rhhrdaEHNFdOBsUqLvh3YHroFqcMVxnl15X2wcpKtqATtNz+vSRluINfi2/7ZWOyfMLAa9IJAStIu4JQDk0vRjp/dDtyI9KcvXnfUbNxOo2Qm/U7Dt/PTer3w+zlVicGUzxyNAWB0l2I9Oluu9jcwH40pOUb7GGm6JohbOiiXYaVCzflGp33IbQzvgtAMFVQSufznkwb6Q==
-Received: from SJ0P220CA0028.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:41b::11)
- by IA1PR12MB9467.namprd12.prod.outlook.com (2603:10b6:208:594::5) with
+ bh=AH8DrDa24YCtsChSfG14xHFO8slrd8Sjz3kfnLPi6eM=;
+ b=JxL/gGPeS02XPmfPrZtC2bjTUu1Q+Hs1UwazbNu5fo8kdZBTTxsgVa8R9B2wD4KQJ/c8jEjhSRKL4DzBkXlYkgYJk20fuW1xW3tmWWcXIxvx1DdRf0zGaY2APlNzbRtIlPyVBa49B7BWB16Ec8Q4dEWHx5lH+gqfyCIRpTNP5Qf0QJE8f+4b5zH6KEVoADg1og0EV/aqAhdZQCkFNj8S2W1ciV9ZMmh4xbWSkVeYXQ80OvWIj+4r4ksAPiKvE1cpLPCYVYAEHIhNtjzB3r/nW5mS5VH37aa8W0c7KuYu2e3KXrdeRO6nEM5H+OXXb+XxWq2QY/J9jsv3Y/BpOBLowg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
+ by DBBPR04MB7914.eurprd04.prod.outlook.com (2603:10a6:10:1f0::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.11; Wed, 25 Feb
- 2026 14:40:44 +0000
-Received: from SJ5PEPF00000209.namprd05.prod.outlook.com
- (2603:10b6:a03:41b:cafe::e0) by SJ0P220CA0028.outlook.office365.com
- (2603:10b6:a03:41b::11) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.23 via Frontend Transport; Wed,
- 25 Feb 2026 14:40:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ5PEPF00000209.mail.protection.outlook.com (10.167.244.42) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9632.12 via Frontend Transport; Wed, 25 Feb 2026 14:40:43 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 25 Feb
- 2026 06:40:20 -0800
-Received: from dev-r-vrt-155.mtr.labs.mlnx (10.126.231.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Wed, 25 Feb 2026 06:40:17 -0800
-From: Danielle Ratson <danieller@nvidia.com>
-To: <netdev@vger.kernel.org>
-CC: <razor@blackwall.org>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
-	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <bridge@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, <idosch@nvidia.com>, <petrm@nvidia.com>,
-	Danielle Ratson <danieller@nvidia.com>
-Subject: [PATCH net v2 2/2] selftests: net: Add bridge VLAN range grouping tests
-Date: Wed, 25 Feb 2026 16:39:56 +0200
-Message-ID: <20260225143956.3995415-3-danieller@nvidia.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260225143956.3995415-1-danieller@nvidia.com>
-References: <20260225143956.3995415-1-danieller@nvidia.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.23; Wed, 25 Feb
+ 2026 15:07:32 +0000
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9632.017; Wed, 25 Feb 2026
+ 15:07:31 +0000
+From: Ioana Ciornei <ioana.ciornei@nxp.com>
+To: netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 2/5] net: dpaa2-mac: retrieve MAC statistics in one firmware command
+Date: Wed, 25 Feb 2026 17:06:45 +0200
+Message-Id: <20260225150648.1542206-3-ioana.ciornei@nxp.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
+References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AS4P250CA0028.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e3::16) To PAXPR04MB8253.eurprd04.prod.outlook.com
+ (2603:10a6:102:1bf::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF00000209:EE_|IA1PR12MB9467:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71da2e7d-1282-47ef-293c-08de747bdb39
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|DBBPR04MB7914:EE_
+X-MS-Office365-Filtering-Correlation-Id: da18cf75-c05c-43b2-efaf-08de747f996f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|7416014|82310400026;
+	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|19092799006;
 X-Microsoft-Antispam-Message-Info:
-	Aa+hqAkW2oroBRyEbUDCbJGkpnZ5oo2TAWiEkl7Pebm9b25xk5DRTA35pNjzP6IGgNcuPkA6M27Ll/PvOfa95NK3L8GhxtywErTM3sWYCaaSXLvRv5szGRP02jeewqCo8iKQgnPWqMtSirEgukere5JV0jdhPgGyA54eY7BFF+JG/9TctEVa8OTY6VVyy17eZU3HIh2lWKx+oP1ccA697RVGYmhZmMbwvT/SNi4mO4OtHz0XmwFBBGCqDdiybOYpbfTpGoCXxPpculMKNNMxwKhDlLiudobys1h7N3NF3tb4RQqwkGE+7ENej1OWZwbARtPMPWtXnqu91Z6APyV9BLfx4wFtbbpoFH3jdx+Veowtuq9K0yPTJ9vtVIxU+AAh6VU4VtsyZPACAIUs2kwPhpFO/nLEojNLOs67jrKM6LZRtmlyOtQeeBMb9kHklU1eZ+EJe+7rvE28WTJgj1Fl6l6a3NroXmF2WNs5E+A6QTRxzl+Tmryi0taALNMR3vEFv70keuA2Yb052QJyCKRhndzSHjkZzNiMfMWcUuxk4bIcHvDcfOd1/ma/3vtyrTsQpYLRBZCA2TeIuZLCTMCMOsFClbArSUVNPZwMt2kCmUTKDmJUFCCpwE2o3y1F9it9MqkcBej+GTG6csde2wahXGcqbvkadJzAHLj7kUsKNaXDv8Sktww5PqsVogKB3egUFDqhYpOYlXeyCOw3tG6fskVoqNuzUrP4Lkqb2mphkXHb3ND8MpS6k1JaZCXsSaoowly1zmO/Av/XFpP/Ko8n8wJ8HfcOxZYgHIwhb0PE2Pw0SeASTDXGt/l20q5osaOVtnCfWDxE6jb1MnatCp7CeA==
+	pED2xdSLrEA2FeXuCFsqqCJmHOA4iPOm+eTyiuf3vm6MFOaXMV6mGbJE7gyDTjutz8+Ix+EKJx+N98ObUbfEh52z+a/dLu4hctWGQCwnSHEhvGVX2xNl1WA7lkMzkEaJzTcJJ08tVkK4/V7ZZeS7sqom5RP0K/pXpDcVa3Q6T8Y0BpBiIaLl7xQzpXPzzWb00PtACk/3vDQNgsMR7RsGJjXVV0zi0qgxgsjsiCx+8rTaoTvWDix9iG3RG5Y66NeNATuzuQQkRdVRI+wbpVooPhnuReh/yndO0yGvbHJMdeKx/pXcU/c0M+zTw64tA79dGKjEXzF5/DXSIO9gAJZ1yRBJaZfqX3OUsFs4rInsQj3OhKH/XMTEbTU8K2pylq1uiYhm81c1Esj6vtww1akYtpxXpzMe4hJnSAZTCSeZ0cmJLnUGrrglmuROXAzqW6xGCaLX2F6eBhfVHx3tCsYFyspO7RdzpSFR1Bn2jo/4ldEGFME5XTDXmgcdd7M8hkrd88QmnF+awvv7uDjWZu5QPyf1bgb/qtjuAkMOAho1i/btZmIt7b3LuMvtb1rLstS0NodXoih1TbJBC+SpxjrLvsjUH16QK8CbSBNT+rYx7vTr81eyZ3UmvfQTynnonu6mWQlGk0wri0Ug0cBtvtgo8Kls90dNpZL5iOPaaPjkoVlkBSppI6lXYTMteOSL/lBaPIHKR4J6JR7InAw6RHw5+nkzp4Qo8olbzvrIPOEIzno=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(7416014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(19092799006);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	q2poM7u7Imk+7ixzmpBaA+kDtuTSEtabJ8yWCxUYcWPAlZ8srpYTXK3U7NN9HsPCpr7T6z9CMfaJ5O18REwTkoAlQpfRCkZylzPl+Gji72nyf+vZzpTsR+lYIjSipQQcaKBWhBU+317x72BmKfX3PJ4iCCOVsvtRYz1pRK9zXRGHU77vGoFBq+jEHV+sGk6VhWE+yVPkcCb/gbidzU7Lu9nbRhnoaCDY95SWkTu91+GLI7355pqzbXBx53rEzUZCTu1Ui9fcQSFmlzX+pfsG1R2/ejaxcK5rm4vYqRZJkWYgCLTHj7Em95u60cGKs1mqm/HcMzk9bfmjUUbidyPNZ/qYViF2RmZ0LFbA3vtfUQvvjpKu+QS2IW6m3UrKi+2Yro89+TepyCi+5VdbWeCbGoIWD2cwlVJBfyeJeBQTqRxIbX7stR4RFDO9Di3lLZKO
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2026 14:40:43.9908
+	=?us-ascii?Q?WOwGVbwb7NDa+SgLxCapYNk+CmnNp+yXf/KkoUNvfxk6iEnEiJ3Ai3xG2eHy?=
+ =?us-ascii?Q?AYvPhkWGyVxdQHChcYET0K2xSeyJ0wnAFMZCWq8VLnIb60OOV2csx7I4/5nJ?=
+ =?us-ascii?Q?e3SiOgAMl3ZMLkbWaLP2z7qfTP+cwbzCIyEDlpMnrNP2GP48Re64nOZkH5zB?=
+ =?us-ascii?Q?1W6rcz5wdpku7/zUM+6HgvLvCBtQeUm3rvvKRbbNcHA0WyITORw8uYEqazsP?=
+ =?us-ascii?Q?qP55s8BeGlbL+ZS9QBYED6fI1j5/CxVln74WyCly7xl+oM72CxBK9BHHWYxY?=
+ =?us-ascii?Q?RZTHtvdSwt/k0cFfMG+HoCTaBSQcHtM2fzkyAroDWbDiopx80+0k/ESggrpY?=
+ =?us-ascii?Q?cVTFjWKm1JSU3VpT9girHvqzSY8TOPJqyLYeXLIg4fkX0FsCt+45bSr7Y6ai?=
+ =?us-ascii?Q?gXBUt9zYgEu8CipvUk8ZD+HPfVPESOruy6ga6h2qSoQ1BF/8g7gkqEhbXX93?=
+ =?us-ascii?Q?4e/ex914joLQDVtmJrgspi+fs8kBMdY3MZ8tygspoedIrJrdtXxJk4e16p94?=
+ =?us-ascii?Q?YO801u5Jgw3m/0aBvH0sYKr1VOIN02Spy5xxQEkMXpu2tVtGQ58M9IDI0YZG?=
+ =?us-ascii?Q?DOUwVhHIT6szW2D5NTicf4/I+GnjtDySgpsLpfwZSZ4UknScvaU1fbLsX8mu?=
+ =?us-ascii?Q?OUkiXY99nGqOapSB30V5oAJx5acUJn9IbbEjkgPkhO+FOVWgzK0LR2LyUakv?=
+ =?us-ascii?Q?pDdti1Q1gQc5FByBdushSNCDSNMDbC8GQFG/5s/38D9NwAKF4W++gHBPJsgf?=
+ =?us-ascii?Q?ZI2Ss0ysybDnL957ZNRtGjNouXXflHFGiroYOYK9n7Jz06cUq6zIvYRHRXql?=
+ =?us-ascii?Q?3HFCgBcRmOt7Z2MpHAwO82gNv8PxfmlplRGSPihrvKcbMZEwwxTpM/9+FHC0?=
+ =?us-ascii?Q?o9K0GdMVUheiE+7a/yx4ANhxXtIDrUk5khFr+wPjEVOLHj3E+IO0KkPx821n?=
+ =?us-ascii?Q?BRq014YD7jteuwezdZvbIuCme2mOa1VZuyGuMmieTgbn5c5ItTsVCV5E9KEb?=
+ =?us-ascii?Q?Ey7r+BeM+DkLl0agDDVPYfKm+Gc6aMoHYbGewQwIcBvgh3AAh+NJP2GIyRV9?=
+ =?us-ascii?Q?Ijn8O9wqa/Lh5mOccWe8SdVzSAbVqLH8hOGvCXtuiV8z0gWxgDiJxzft0lkB?=
+ =?us-ascii?Q?nZgJIF+1pfULVBx5YiSOYCZlbeuoZJJy5jxnRVcHL9ns0DNGO6DIyysm4ygx?=
+ =?us-ascii?Q?bXYTLA3yc8YLtKGglchhSE8d2kIIUQBR3wA89L+B5Hyr9RbHmmfbdNnU/0uK?=
+ =?us-ascii?Q?4F6ZcmFLrGY6fMXsqv+Smq6F2fmYMwAU803Np9ioW/38OOZzeYi219PAZ/Yx?=
+ =?us-ascii?Q?hvH2LqcA37wZyxXXZF5ghPUYLflS/KehZWXaKC1EiDYAh8KrB5Nz1Itz7Uk5?=
+ =?us-ascii?Q?HBv5L1mASrkquLq+ZDUPLK/VRdh79U8dw8d0FhlPOgprg/0Q9GqaChmuHc4o?=
+ =?us-ascii?Q?YdPKcp5Xx1uUGwzm4MW/OAu3svHeWaru+U3pX0oF5fM9wWSkAd3Q7Np89bnI?=
+ =?us-ascii?Q?SsIpv63edygwNMdrLgTBRpOltpT+k95Q89FGDKVfr6RBWCiFdMb+TtEBupmR?=
+ =?us-ascii?Q?8O26IlxHeqI0QsfLLGGP0f1b7RAgJpQJLhuHHaEsptaJiKtCFVypo/kZp04v?=
+ =?us-ascii?Q?5joUCTEh4vUuQThfnTqf5D2m6oVdGALuBKC4STj32CCIT2Aepll/UEIXXx5l?=
+ =?us-ascii?Q?sfwaNOZW21ojIAPJhe/xGl5r7fxy7tVyI9aY9gA8wbNRz+x6CpmBM0lSUlpi?=
+ =?us-ascii?Q?Q3x5aKIBpw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da18cf75-c05c-43b2-efaf-08de747f996f
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2026 15:07:31.8574
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71da2e7d-1282-47ef-293c-08de747bdb39
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF00000209.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9467
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hONBF2xw0olC/is40Em6AZGhmoScRHJySbxMW/Aq9T507UhBdIzCUp/cQHACconLoEb+V8J+pxYLMVUzCm52lA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7914
 
-Add a new test file bridge_vlan_dump.sh with four test cases that verify
-VLANs with different per-VLAN options are not incorrectly grouped into
-ranges in the dump output.
+The latest MC firmware version added a new command to retrieve all DPMAC
+counters in a single firmware call. Use this new command, when possible,
+in dpaa2-mac as well.
 
-The tests verify the kernel's br_vlan_opts_eq_range() function correctly
-prevents VLAN range grouping when neigh_suppress, mcast_max_groups,
-mcast_n_groups, or mcast_enabled options differ.
+In order to use the dpmac_get_statistics() API, two DMA memory areas are
+used: one to transmit what counters the driver is requesting and one to
+receive the values of those counters. These memory areas are allocated
+and DMA mapped at probe time so that we don't waste time at runtime.
 
-Each test verifies that VLANs with different option values appear as
-individual entries rather than ranges, and that VLANs with matching
-values are properly grouped together.
+And since we are planning to add rmon, eth-ctrl and other standard
+statistics using the same infrastructure, make the setup and cleanup
+processes as generic as possibile through the dpaa2_mac_setup_stats()
+and dpaa2_mac_clear_stats() functions.
 
-Example output:
-
-$ ./bridge_vlan_dump.sh
-TEST: VLAN range grouping with neigh_suppress                       [ OK ]
-TEST: VLAN range grouping with mcast_max_groups                     [ OK ]
-TEST: VLAN range grouping with mcast_n_groups                       [ OK ]
-TEST: VLAN range grouping with mcast_enabled                        [ OK ]
-
-Signed-off-by: Danielle Ratson <danieller@nvidia.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
 ---
+ .../net/ethernet/freescale/dpaa2/dpaa2-mac.c  | 195 ++++++++++++++----
+ .../net/ethernet/freescale/dpaa2/dpaa2-mac.h  |  10 +-
+ 2 files changed, 166 insertions(+), 39 deletions(-)
 
-Notes:
-    v2:
-    	* Address SC issues by adding double-quoting to relevant places,
-    	  and adding ignore tags to irrelevant issues.
-
- tools/testing/selftests/net/Makefile          |   1 +
- .../testing/selftests/net/bridge_vlan_dump.sh | 204 ++++++++++++++++++
- 2 files changed, 205 insertions(+)
- create mode 100755 tools/testing/selftests/net/bridge_vlan_dump.sh
-
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index afdea6d95bde..605c54c0e8a3 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -15,6 +15,7 @@ TEST_PROGS := \
- 	big_tcp.sh \
- 	bind_bhash.sh \
- 	bpf_offload.py \
-+	bridge_vlan_dump.sh \
- 	broadcast_ether_dst.sh \
- 	broadcast_pmtu.sh \
- 	busy_poll_test.sh \
-diff --git a/tools/testing/selftests/net/bridge_vlan_dump.sh b/tools/testing/selftests/net/bridge_vlan_dump.sh
-new file mode 100755
-index 000000000000..ad66731d2a6f
---- /dev/null
-+++ b/tools/testing/selftests/net/bridge_vlan_dump.sh
-@@ -0,0 +1,204 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test bridge VLAN range grouping. VLANs are collapsed into a range entry in
-+# the dump if they have the same per-VLAN options. These tests verify that
-+# VLANs with different per-VLAN option values are not grouped together.
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+index 422ce13a7c94..63dc597dbd7c 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+-/* Copyright 2019 NXP */
++/* Copyright 2019, 2024-2026 NXP */
+ 
+ #include <linux/acpi.h>
+ #include <linux/pcs-lynx.h>
+@@ -15,7 +15,121 @@
+ #define DPMAC_PROTOCOL_CHANGE_VER_MAJOR		4
+ #define DPMAC_PROTOCOL_CHANGE_VER_MINOR		8
+ 
++#define DPMAC_STATS_BUNDLE_VER_MAJOR		4
++#define DPMAC_STATS_BUNDLE_VER_MINOR		10
 +
-+# shellcheck disable=SC1091,SC2034,SC2154,SC2317
-+source lib.sh
+ #define DPAA2_MAC_FEATURE_PROTOCOL_CHANGE	BIT(0)
++#define DPAA2_MAC_FEATURE_STATS_BUNDLE		BIT(1)
 +
-+ALL_TESTS="
-+	vlan_range_neigh_suppress
-+	vlan_range_mcast_max_groups
-+	vlan_range_mcast_n_groups
-+	vlan_range_mcast_enabled
-+"
++struct dpmac_counter {
++	enum dpmac_counter_id id;
++	const char *name;
++};
 +
-+setup_prepare()
++#define DPMAC_UNSTRUCTURED_COUNTER(counter_id, counter_name)	\
++	{							\
++		.id = counter_id,				\
++		.name = counter_name,				\
++	}
++
++static const struct dpmac_counter dpaa2_mac_ethtool_stats[] = {
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_ALL_FRAME,  "[mac] rx all frames"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_GOOD_FRAME,  "[mac] rx frames ok"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_ERR_FRAME, "[mac] rx frame errors"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_DISCARD, "[mac] rx frame discards"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_UCAST_FRAME, "[mac] rx u-cast"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_BCAST_FRAME, "[mac] rx b-cast"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_MCAST_FRAME, "[mac] rx m-cast"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_64, "[mac] rx 64 bytes"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_127, "[mac] rx 65-127 bytes"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_255, "[mac] rx 128-255 bytes"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_511, "[mac] rx 256-511 bytes"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_1023, "[mac] rx 512-1023 bytes"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_1518, "[mac] rx 1024-1518 bytes"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_1519_MAX, "[mac] rx 1519-max bytes"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAG, "[mac] rx frags"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_JABBER, "[mac] rx jabber"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_ALIGN_ERR, "[mac] rx align errors"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_OVERSIZED, "[mac] rx oversized"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_VALID_PAUSE_FRAME, "[mac] rx pause"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_BYTE, "[mac] rx bytes"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_GOOD_FRAME, "[mac] tx frames ok"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_UCAST_FRAME, "[mac] tx u-cast"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_MCAST_FRAME, "[mac] tx m-cast"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_BCAST_FRAME, "[mac] tx b-cast"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_ERR_FRAME, "[mac] tx frame errors"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_UNDERSIZED, "[mac] tx undersized"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_VALID_PAUSE_FRAME, "[mac] tx b-pause"),
++	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_BYTE, "[mac] tx bytes"),
++};
++
++#define DPAA2_MAC_NUM_ETHTOOL_STATS	ARRAY_SIZE(dpaa2_mac_ethtool_stats)
++
++static void dpaa2_mac_setup_stats(struct dpaa2_mac *mac, struct dpaa2_mac_stats *stats,
++				  size_t num_stats, const struct dpmac_counter *counters)
 +{
-+	setup_ns NS
-+	defer cleanup_all_ns
++	struct device *dev = mac->net_dev->dev.parent;
++	u32 *cnt_idx;
 +
-+	ip -n "$NS" link add name br0 type bridge vlan_filtering 1 \
-+		vlan_default_pvid 0 mcast_snooping 1 mcast_vlan_snooping 1
-+	ip -n "$NS" link set dev br0 up
++	stats->idx_dma_mem = kcalloc(num_stats, sizeof(u32), GFP_KERNEL);
++	if (!stats->idx_dma_mem)
++		goto out;
 +
-+	ip -n "$NS" link add name dummy0 type dummy
-+	ip -n "$NS" link set dev dummy0 master br0
-+	ip -n "$NS" link set dev dummy0 up
++	stats->values_dma_mem = kcalloc(num_stats, sizeof(u64), GFP_KERNEL);
++	if (!stats->values_dma_mem)
++		goto err_alloc_values;
++
++	cnt_idx = stats->idx_dma_mem;
++	for (size_t i = 0; i < num_stats; i++)
++		*cnt_idx++ = cpu_to_le32((u32)(counters[i].id));
++
++	stats->idx_iova = dma_map_single(dev, stats->idx_dma_mem,
++					 num_stats * sizeof(u32),
++					 DMA_TO_DEVICE);
++	if (dma_mapping_error(dev, stats->idx_iova))
++		goto err_dma_map_idx;
++
++	stats->values_iova = dma_map_single(dev, stats->values_dma_mem,
++					    num_stats * sizeof(u64),
++					    DMA_FROM_DEVICE);
++	if (dma_mapping_error(dev, stats->values_iova))
++		goto err_dma_map_values;
++
++	return;
++
++err_dma_map_values:
++	dma_unmap_single(dev, stats->idx_iova, num_stats * sizeof(u32),
++			 DMA_TO_DEVICE);
++err_dma_map_idx:
++	kfree(stats->values_dma_mem);
++err_alloc_values:
++	kfree(stats->idx_dma_mem);
++out:
++	stats->idx_dma_mem = NULL;
++	stats->values_dma_mem = NULL;
 +}
 +
-+vlan_range_neigh_suppress()
++static void dpaa2_mac_clear_stats(struct dpaa2_mac *mac, struct dpaa2_mac_stats *stats,
++				  size_t num_stats)
 +{
-+	RET=0
++	struct device *dev = mac->net_dev->dev.parent;
 +
-+	# Add two new consecutive VLANs for range grouping test
-+	bridge -n "$NS" vlan add vid 10 dev dummy0
-+	defer bridge -n "$NS" vlan del vid 10 dev dummy0
++	if (stats->idx_dma_mem) {
++		dma_unmap_single(dev, stats->idx_iova,
++				 num_stats * sizeof(u32),
++				 DMA_TO_DEVICE);
++		kfree(stats->idx_dma_mem);
++		stats->idx_dma_mem = NULL;
++	}
 +
-+	bridge -n "$NS" vlan add vid 11 dev dummy0
-+	defer bridge -n "$NS" vlan del vid 11 dev dummy0
-+
-+	# Configure different neigh_suppress values and verify no range grouping
-+	bridge -n "$NS" vlan set vid 10 dev dummy0 neigh_suppress on
-+	check_err $? "Failed to set neigh_suppress for VLAN 10"
-+
-+	bridge -n "$NS" vlan set vid 11 dev dummy0 neigh_suppress off
-+	check_err $? "Failed to set neigh_suppress for VLAN 11"
-+
-+	# Verify VLANs are not shown as a range, but individual entries exist
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -q "10-11"
-+	check_fail $? "VLANs with different neigh_suppress incorrectly grouped"
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -Eq "^\S+\s+10$|^\s+10$"
-+	check_err $? "VLAN 10 individual entry not found"
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -Eq "^\S+\s+11$|^\s+11$"
-+	check_err $? "VLAN 11 individual entry not found"
-+
-+	# Configure same neigh_suppress value and verify range grouping
-+	bridge -n "$NS" vlan set vid 11 dev dummy0 neigh_suppress on
-+	check_err $? "Failed to set neigh_suppress for VLAN 11"
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -q "10-11"
-+	check_err $? "VLANs with same neigh_suppress not grouped"
-+
-+	log_test "VLAN range grouping with neigh_suppress"
++	if (stats->values_dma_mem) {
++		dma_unmap_single(dev, stats->values_iova,
++				 num_stats * sizeof(u64),
++				 DMA_FROM_DEVICE);
++		kfree(stats->values_dma_mem);
++		stats->values_dma_mem = NULL;
++	}
 +}
+ 
+ static int dpaa2_mac_cmp_ver(struct dpaa2_mac *mac,
+ 			     u16 ver_major, u16 ver_minor)
+@@ -32,6 +146,10 @@ static void dpaa2_mac_detect_features(struct dpaa2_mac *mac)
+ 	if (dpaa2_mac_cmp_ver(mac, DPMAC_PROTOCOL_CHANGE_VER_MAJOR,
+ 			      DPMAC_PROTOCOL_CHANGE_VER_MINOR) >= 0)
+ 		mac->features |= DPAA2_MAC_FEATURE_PROTOCOL_CHANGE;
 +
-+vlan_range_mcast_max_groups()
-+{
-+	RET=0
++	if (dpaa2_mac_cmp_ver(mac, DPMAC_STATS_BUNDLE_VER_MAJOR,
++			      DPMAC_STATS_BUNDLE_VER_MINOR) >= 0)
++		mac->features |= DPAA2_MAC_FEATURE_STATS_BUNDLE;
+ }
+ 
+ static int phy_mode(enum dpmac_eth_if eth_if, phy_interface_t *if_mode)
+@@ -504,6 +622,10 @@ int dpaa2_mac_open(struct dpaa2_mac *mac)
+ 	mac->fw_node = fw_node;
+ 	net_dev->dev.of_node = to_of_node(mac->fw_node);
+ 
++	if (mac->features & DPAA2_MAC_FEATURE_STATS_BUNDLE)
++		dpaa2_mac_setup_stats(mac, &mac->ethtool_stats,
++				      DPAA2_MAC_NUM_ETHTOOL_STATS, dpaa2_mac_ethtool_stats);
 +
-+	# Add two new consecutive VLANs for range grouping test
-+	bridge -n "$NS" vlan add vid 10 dev dummy0
-+	defer bridge -n "$NS" vlan del vid 10 dev dummy0
+ 	return 0;
+ 
+ err_close_dpmac:
+@@ -515,64 +637,61 @@ void dpaa2_mac_close(struct dpaa2_mac *mac)
+ {
+ 	struct fsl_mc_device *dpmac_dev = mac->mc_dev;
+ 
++	if (mac->features & DPAA2_MAC_FEATURE_STATS_BUNDLE)
++		dpaa2_mac_clear_stats(mac, &mac->ethtool_stats, DPAA2_MAC_NUM_ETHTOOL_STATS);
 +
-+	bridge -n "$NS" vlan add vid 11 dev dummy0
-+	defer bridge -n "$NS" vlan del vid 11 dev dummy0
+ 	dpmac_close(mac->mc_io, 0, dpmac_dev->mc_handle);
+ 	if (mac->fw_node)
+ 		fwnode_handle_put(mac->fw_node);
+ }
+ 
+-static char dpaa2_mac_ethtool_stats[][ETH_GSTRING_LEN] = {
+-	[DPMAC_CNT_ING_ALL_FRAME]		= "[mac] rx all frames",
+-	[DPMAC_CNT_ING_GOOD_FRAME]		= "[mac] rx frames ok",
+-	[DPMAC_CNT_ING_ERR_FRAME]		= "[mac] rx frame errors",
+-	[DPMAC_CNT_ING_FRAME_DISCARD]		= "[mac] rx frame discards",
+-	[DPMAC_CNT_ING_UCAST_FRAME]		= "[mac] rx u-cast",
+-	[DPMAC_CNT_ING_BCAST_FRAME]		= "[mac] rx b-cast",
+-	[DPMAC_CNT_ING_MCAST_FRAME]		= "[mac] rx m-cast",
+-	[DPMAC_CNT_ING_FRAME_64]		= "[mac] rx 64 bytes",
+-	[DPMAC_CNT_ING_FRAME_127]		= "[mac] rx 65-127 bytes",
+-	[DPMAC_CNT_ING_FRAME_255]		= "[mac] rx 128-255 bytes",
+-	[DPMAC_CNT_ING_FRAME_511]		= "[mac] rx 256-511 bytes",
+-	[DPMAC_CNT_ING_FRAME_1023]		= "[mac] rx 512-1023 bytes",
+-	[DPMAC_CNT_ING_FRAME_1518]		= "[mac] rx 1024-1518 bytes",
+-	[DPMAC_CNT_ING_FRAME_1519_MAX]		= "[mac] rx 1519-max bytes",
+-	[DPMAC_CNT_ING_FRAG]			= "[mac] rx frags",
+-	[DPMAC_CNT_ING_JABBER]			= "[mac] rx jabber",
+-	[DPMAC_CNT_ING_ALIGN_ERR]		= "[mac] rx align errors",
+-	[DPMAC_CNT_ING_OVERSIZED]		= "[mac] rx oversized",
+-	[DPMAC_CNT_ING_VALID_PAUSE_FRAME]	= "[mac] rx pause",
+-	[DPMAC_CNT_ING_BYTE]			= "[mac] rx bytes",
+-	[DPMAC_CNT_EGR_GOOD_FRAME]		= "[mac] tx frames ok",
+-	[DPMAC_CNT_EGR_UCAST_FRAME]		= "[mac] tx u-cast",
+-	[DPMAC_CNT_EGR_MCAST_FRAME]		= "[mac] tx m-cast",
+-	[DPMAC_CNT_EGR_BCAST_FRAME]		= "[mac] tx b-cast",
+-	[DPMAC_CNT_EGR_ERR_FRAME]		= "[mac] tx frame errors",
+-	[DPMAC_CNT_EGR_UNDERSIZED]		= "[mac] tx undersized",
+-	[DPMAC_CNT_EGR_VALID_PAUSE_FRAME]	= "[mac] tx b-pause",
+-	[DPMAC_CNT_EGR_BYTE]			= "[mac] tx bytes",
+-};
+-
+-#define DPAA2_MAC_NUM_STATS	ARRAY_SIZE(dpaa2_mac_ethtool_stats)
+-
+ int dpaa2_mac_get_sset_count(void)
+ {
+-	return DPAA2_MAC_NUM_STATS;
++	return DPAA2_MAC_NUM_ETHTOOL_STATS;
+ }
+ 
+ void dpaa2_mac_get_strings(u8 **data)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < DPAA2_MAC_NUM_STATS; i++)
+-		ethtool_puts(data, dpaa2_mac_ethtool_stats[i]);
++	for (i = 0; i < DPAA2_MAC_NUM_ETHTOOL_STATS; i++)
++		ethtool_puts(data, dpaa2_mac_ethtool_stats[i].name);
+ }
+ 
+ void dpaa2_mac_get_ethtool_stats(struct dpaa2_mac *mac, u64 *data)
+ {
++	struct device *dev = mac->net_dev->dev.parent;
+ 	struct fsl_mc_device *dpmac_dev = mac->mc_dev;
++	u64 *cnt_values;
+ 	int i, err;
+ 	u64 value;
+ 
+-	for (i = 0; i < DPAA2_MAC_NUM_STATS; i++) {
++	if (!(mac->features & DPAA2_MAC_FEATURE_STATS_BUNDLE))
++		goto fallback;
 +
-+	# Configure different mcast_max_groups values and verify no range grouping
-+	bridge -n "$NS" vlan set vid 10 dev dummy0 mcast_max_groups 100
-+	check_err $? "Failed to set mcast_max_groups for VLAN 10"
++	if (!mac->ethtool_stats.idx_dma_mem || !mac->ethtool_stats.values_dma_mem)
++		goto fallback;
 +
-+	bridge -n "$NS" vlan set vid 11 dev dummy0 mcast_max_groups 200
-+	check_err $? "Failed to set mcast_max_groups for VLAN 11"
++	err = dpmac_get_statistics(mac->mc_io, 0, dpmac_dev->mc_handle,
++				   mac->ethtool_stats.idx_iova, mac->ethtool_stats.values_iova,
++				   DPAA2_MAC_NUM_ETHTOOL_STATS);
++	if (err)
++		goto fallback;
 +
-+	# Verify VLANs are not shown as a range, but individual entries exist
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -q "10-11"
-+	check_fail $? "VLANs with different mcast_max_groups incorrectly grouped"
++	dma_sync_single_for_cpu(dev, mac->ethtool_stats.values_iova,
++				DPAA2_MAC_NUM_ETHTOOL_STATS * sizeof(u64),
++				DMA_FROM_DEVICE);
 +
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -Eq "^\S+\s+10$|^\s+10$"
-+	check_err $? "VLAN 10 individual entry not found"
++	cnt_values = mac->ethtool_stats.values_dma_mem;
++	for (i = 0; i < DPAA2_MAC_NUM_ETHTOOL_STATS; i++)
++		*(data + i) = le64_to_cpu(*cnt_values++);
 +
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -Eq "^\S+\s+11$|^\s+11$"
-+	check_err $? "VLAN 11 individual entry not found"
++	return;
 +
-+	# Configure same mcast_max_groups value and verify range grouping
-+	bridge -n "$NS" vlan set vid 11 dev dummy0 mcast_max_groups 100
-+	check_err $? "Failed to set mcast_max_groups for VLAN 11"
++fallback:
 +
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -q "10-11"
-+	check_err $? "VLANs with same mcast_max_groups not grouped"
++	/* Fallback and retrieve each counter one by one */
++	for (i = 0; i < DPAA2_MAC_NUM_ETHTOOL_STATS; i++) {
+ 		err = dpmac_get_counter(mac->mc_io, 0, dpmac_dev->mc_handle,
+ 					i, &value);
+ 		if (err) {
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.h b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.h
+index 53f8d106d11e..386286209606 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.h
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
+-/* Copyright 2019 NXP */
++/* Copyright 2019, 2024-2026 NXP */
+ #ifndef DPAA2_MAC_H
+ #define DPAA2_MAC_H
+ 
+@@ -11,6 +11,12 @@
+ #include "dpmac.h"
+ #include "dpmac-cmd.h"
+ 
++struct dpaa2_mac_stats {
++	u32 *idx_dma_mem;
++	u64 *values_dma_mem;
++	dma_addr_t idx_iova, values_iova;
++};
 +
-+	log_test "VLAN range grouping with mcast_max_groups"
-+}
+ struct dpaa2_mac {
+ 	struct fsl_mc_device *mc_dev;
+ 	struct dpmac_link_state state;
+@@ -28,6 +34,8 @@ struct dpaa2_mac {
+ 	struct fwnode_handle *fw_node;
+ 
+ 	struct phy *serdes_phy;
 +
-+vlan_range_mcast_n_groups()
-+{
-+	RET=0
-+
-+	# Add two new consecutive VLANs for range grouping test
-+	bridge -n "$NS" vlan add vid 10 dev dummy0
-+	defer bridge -n "$NS" vlan del vid 10 dev dummy0
-+
-+	bridge -n "$NS" vlan add vid 11 dev dummy0
-+	defer bridge -n "$NS" vlan del vid 11 dev dummy0
-+
-+	# Add different numbers of multicast groups to each VLAN
-+	bridge -n "$NS" mdb add dev br0 port dummy0 grp 239.1.1.1 vid 10
-+	check_err $? "Failed to add mdb entry to VLAN 10"
-+	defer bridge -n "$NS" mdb del dev br0 port dummy0 grp 239.1.1.1 vid 10
-+
-+	bridge -n "$NS" mdb add dev br0 port dummy0 grp 239.1.1.2 vid 10
-+	check_err $? "Failed to add second mdb entry to VLAN 10"
-+	defer bridge -n "$NS" mdb del dev br0 port dummy0 grp 239.1.1.2 vid 10
-+
-+	bridge -n "$NS" mdb add dev br0 port dummy0 grp 239.1.1.1 vid 11
-+	check_err $? "Failed to add mdb entry to VLAN 11"
-+	defer bridge -n "$NS" mdb del dev br0 port dummy0 grp 239.1.1.1 vid 11
-+
-+	# Verify VLANs are not shown as a range due to different mcast_n_groups
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -q "10-11"
-+	check_fail $? "VLANs with different mcast_n_groups incorrectly grouped"
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -Eq "^\S+\s+10$|^\s+10$"
-+	check_err $? "VLAN 10 individual entry not found"
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -Eq "^\S+\s+11$|^\s+11$"
-+	check_err $? "VLAN 11 individual entry not found"
-+
-+	# Add another group to VLAN 11 to match VLAN 10's count
-+	bridge -n "$NS" mdb add dev br0 port dummy0 grp 239.1.1.2 vid 11
-+	check_err $? "Failed to add second mdb entry to VLAN 11"
-+	defer bridge -n "$NS" mdb del dev br0 port dummy0 grp 239.1.1.2 vid 11
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -q "10-11"
-+	check_err $? "VLANs with same mcast_n_groups not grouped"
-+
-+	log_test "VLAN range grouping with mcast_n_groups"
-+}
-+
-+vlan_range_mcast_enabled()
-+{
-+	RET=0
-+
-+	# Add two new consecutive VLANs for range grouping test
-+	bridge -n "$NS" vlan add vid 10 dev br0 self
-+	defer bridge -n "$NS" vlan del vid 10 dev br0 self
-+
-+	bridge -n "$NS" vlan add vid 11 dev br0 self
-+	defer bridge -n "$NS" vlan del vid 11 dev br0 self
-+
-+	bridge -n "$NS" vlan add vid 10 dev dummy0
-+	defer bridge -n "$NS" vlan del vid 10 dev dummy0
-+
-+	bridge -n "$NS" vlan add vid 11 dev dummy0
-+	defer bridge -n "$NS" vlan del vid 11 dev dummy0
-+
-+	# Configure different mcast_snooping for bridge VLANs
-+	# Port VLANs inherit BR_VLFLAG_MCAST_ENABLED from bridge VLANs
-+	bridge -n "$NS" vlan global set dev br0 vid 10 mcast_snooping 1
-+	bridge -n "$NS" vlan global set dev br0 vid 11 mcast_snooping 0
-+
-+	# Verify port VLANs are not grouped due to different mcast_enabled
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -q "10-11"
-+	check_fail $? "VLANs with different mcast_enabled incorrectly grouped"
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -Eq "^\S+\s+10$|^\s+10$"
-+	check_err $? "VLAN 10 individual entry not found"
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -Eq "^\S+\s+11$|^\s+11$"
-+	check_err $? "VLAN 11 individual entry not found"
-+
-+	# Configure same mcast_snooping and verify range grouping
-+	bridge -n "$NS" vlan global set dev br0 vid 11 mcast_snooping 1
-+
-+	bridge -n "$NS" -d vlan show dev dummy0 | grep -q "10-11"
-+	check_err $? "VLANs with same mcast_enabled not grouped"
-+
-+	log_test "VLAN range grouping with mcast_enabled"
-+}
-+
-+# Verify the newest tested option is supported
-+if ! bridge vlan help 2>&1 | grep -q "neigh_suppress"; then
-+	echo "SKIP: iproute2 too old, missing per-VLAN neighbor suppression support"
-+	exit "$ksft_skip"
-+fi
-+
-+trap defer_scopes_cleanup EXIT
-+setup_prepare
-+tests_run
-+
-+exit "$EXIT_STATUS"
++	struct dpaa2_mac_stats ethtool_stats;
+ };
+ 
+ static inline bool dpaa2_mac_is_type_phy(struct dpaa2_mac *mac)
 -- 
-2.51.0
+2.25.1
 
