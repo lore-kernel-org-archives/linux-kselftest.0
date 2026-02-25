@@ -1,111 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012048.outbound.protection.outlook.com [40.93.195.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC2927991E;
-	Wed, 25 Feb 2026 14:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772029968; cv=none; b=OG+T4QnftMoLPp8N+X6yc9dogBRScdzu1kJKZk6w0MvZPWu4RzYFYnSInKJUYYt3v81Mz6xFJoja3ouqj+IH6RXiudntgrId4VLPQshSkp2omvI+1pqHX8vt/XSTBSAjVB3760dWZ3fKorpV+09QV3rwVdMhtpepQ4pUp76RLi8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772029968; c=relaxed/simple;
-	bh=gdf8pBnOXBOpOoKt0PEusZ3Be9PkpcMHkXIHvimakX0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F62Pex1b+qpX7jxlqifa+jbYow7aYFEOkXFYCap9xoUMSjQhPU9tHBW9LCnhKoShVGainqoojztJQ1tOpvrFFDkHFevvPGGMlf6eVFrD1XWy21Ii1zb6T7x5EZBfJTWnKVJcs1G7tOohM7MkYTYF6He37NrhWjkGy1c5CIGfsZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WzNRPSlb; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62C4271471;
+	Wed, 25 Feb 2026 14:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772030442; cv=fail; b=oIt42zm7WTyQz/3j8PflR/2eWRDrqUwV3aFws/Xl9l8JwIq1O5QhwlzO4h28RpgmrPO3uY08hIbwzfveH2qYOgbtvlzKSDb2b7YnqK0Qe45FaIx+2JpLMUUGMUZYJnMK5L/g1JND804eINb0ytbjNlgF3H3J/zqDH3a6IzcwLpM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772030442; c=relaxed/simple;
+	bh=A3Jfy4g3Wtn8KQRa1WUE9bw7w4Vu92r2AVQ8iaRwUOQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hHEPDVWoQlMSE/W5uk8uATn3O2s2LeGrpQG4hEXHdMEbcJhT58bqGbAsHB8OeRaV4vKrureD7FgTLvpjopRjwv5vWzg+IpVsTml2+XMRI4c9Rq7u4Kbtft9r9apYQUQncgRajtoRtXZRqMotP04IUOZcrkbCLn1nxj9b7j4g66E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BeLf20Rz; arc=fail smtp.client-ip=40.93.195.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WzNRPSlb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F7A8C116D0;
-	Wed, 25 Feb 2026 14:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1772029967;
-	bh=gdf8pBnOXBOpOoKt0PEusZ3Be9PkpcMHkXIHvimakX0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WzNRPSlbtwEYeX+MNyA/mE9OD29JpppNgF8GAcAfmsLH1BGZjR/yffWOV6dj+YjAR
-	 bZW/q0bigJwSk2cdUa37QHt7fbHGQ6XXtZvkXIEXnEeUvWTUmyFy0GfZN93/zsLRQi
-	 AEb9QNIlbbj4f3YV2TH/z/LdH1EUSRb2vVKbQrQU=
-Date: Wed, 25 Feb 2026 06:32:40 -0800
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-	Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>,
-	stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
-Subject: Re: Latest BPF selftests on stable kernels (was 'Re: [PATCH stable
- 6.12 0/5] Backport selftest for "bpf: Check skb->transport_header is set in
- bpf_skb_check_mtu"')
-Message-ID: <2026022557-synapse-schilling-e88b@gregkh>
-References: <20260224073810.85945-1-shung-hsi.yu@suse.com>
- <bd0277b7-4a19-46a4-9f06-96d48cbc89d8@oracle.com>
- <DGN6PFT94YHU.3S3UXTP82975E@suse.com>
- <crki45lsdj4yjmz3ix4k5scjuovjr56oexmwhhwbqeejdxh3j2@kgve6uooitce>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BeLf20Rz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LPIAphv/3y0FJM3l51ETQnTINiCco7+zIxZ8P4f028TF+cZrrZujuCoWjli9ScF1QB0657+8aFiTLvdE3LK/fOuKx0KeatQpcKPkPaxhLgPsphzi9NM7dSjIpmlV7Xk/lC1iS6GZyvjPoY+hxGFkZi6P5+7P9xv+toCOk7oU+mPgZ0DxGB1pVNQR7/EUvJXDbHTnxgd6EGXbgz8GgoUDk3kRK8I8+emMxMNPqEd+rGCZSGoqyMM3/8Odv+e6Y05gUQA7gLiJeaa/A3HNolgR7r03zDKNq59v8sWUk724cNHsIitiJeB5jgIw35obkxzPahc5UkmijA0bf5Hc65W/0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KK3E6/9FySDP2i73YDmGWNhZ1lJAkcT2YB+GufFO37Q=;
+ b=nEi7tk656Qfk/LycSdRlyvMQ+g1bYpNgpYcmVWXYw9qX0aNpPCW5enaxTEz9P5sscdbENiI5SB2OnDvQp5Eassntf6b3Z5BCgM6MhrqPPWnbP4/v+UDg7RJLPp9B/jR/fKpqa1tZujczLrQzoioc3W3vlXa6+oZZNLKn4nmP+l0knSajXlDjTgoXpXgjnF2Ax8ZNBVseBDvaz+8aTEl9hXL8E1Es2q59pDlHX+0TO9Oe6HJWzn/e4mNkQjuZ32NVqJiYr6Zm3qqJamCmOv1m5pL7mUmaz40OEXk2Gn+pbtD+NAzpi8objQxCkOCaoiNOV9VFiPsV2/nd4bvgjhdYQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KK3E6/9FySDP2i73YDmGWNhZ1lJAkcT2YB+GufFO37Q=;
+ b=BeLf20RzXXUFfAIiI1lIRckEuKoqpcJuklgucPgPin8VEiKoIYc6rwd9eBrxcSvuQuwoUTKgkUFlDH/lse1lFZiGvmiA5fMVZZUF+lx0y4VIpEpjNpFHRUTJJa0AwrxL2lN4/6UodsdkGvsMauidSnKeSSwfe1FMKbSQaiHeX6WXQyvSZq0uNW5UeE4hb0K3a/bUnO0zAns7o53tanM+0kh4ww2U3tJP6HusnSEk8XVEhzNsOmuGdJjzKWkWAyZJjhDAnjT0hr64928vOfWLiWiRtVUbDGhMFDSMFEO3/exo6724Dp+7uaWHvkuQjR+a2ED8JRsfCJ4OTTuJzKrWoA==
+Received: from MN2PR05CA0015.namprd05.prod.outlook.com (2603:10b6:208:c0::28)
+ by IA0PPFD78AA37BB.namprd12.prod.outlook.com (2603:10b6:20f:fc04::be6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.19; Wed, 25 Feb
+ 2026 14:40:37 +0000
+Received: from BL02EPF0001A103.namprd05.prod.outlook.com
+ (2603:10b6:208:c0:cafe::6) by MN2PR05CA0015.outlook.office365.com
+ (2603:10b6:208:c0::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.22 via Frontend Transport; Wed,
+ 25 Feb 2026 14:40:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL02EPF0001A103.mail.protection.outlook.com (10.167.241.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9632.12 via Frontend Transport; Wed, 25 Feb 2026 14:40:36 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 25 Feb
+ 2026 06:40:13 -0800
+Received: from dev-r-vrt-155.mtr.labs.mlnx (10.126.231.35) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Wed, 25 Feb 2026 06:40:09 -0800
+From: Danielle Ratson <danieller@nvidia.com>
+To: <netdev@vger.kernel.org>
+CC: <razor@blackwall.org>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <bridge@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, <idosch@nvidia.com>, <petrm@nvidia.com>,
+	Danielle Ratson <danieller@nvidia.com>
+Subject: [PATCH net v2 0/2] bridge: Check relevant options in VLAN range grouping
+Date: Wed, 25 Feb 2026 16:39:54 +0200
+Message-ID: <20260225143956.3995415-1-danieller@nvidia.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <crki45lsdj4yjmz3ix4k5scjuovjr56oexmwhhwbqeejdxh3j2@kgve6uooitce>
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A103:EE_|IA0PPFD78AA37BB:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3b931b96-b8a4-478e-d9a1-08de747bd6f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	Pyey/jr6ioG4xYvVhyHC++fhQt+DQIxSxH4oHQXPuBWsSeRTmgn/zcD6HUqNRgo9cogs1g/5HPadvtOIDsSjSocE0s254ijam45//giwyDXyBFxdikoZT1O6SPFaQHDVIHIxcg5ubiqz7ZcYYYMcqEXW6dlx91tvN1E8yklpZqeVTW/2fHuujY5jREA6kL52ySuKkXbjbhA1DvJ6n6ujBCqplP7UUwFdh2ughSlIAidP3GNTmp1UgtNfkL5lKWfMgPTQQidp022vVOzOeJOMtjW5Q4bSFBuuEM5jWBlNkhOxc/UAGXaPFx6IWjRvZX6EglkLkuVp1+S+ltL0Ooqmc8wtFdC3k2cOnofc3GGJ6cYHm+fzd4YGI2ei3p3jphqRik+NZGzSpFPKIEMHGnIuOwqyBN799lu5Ny0T6BKEK4F2OuowgReuvG+Zg/N9TWBX0Lw8R+yxNuYqqhAWZrKihEYtRJ44U3ENws/a6mKifVhWMZR5Rt2Ruf6O6qR+tEEEmyx5ya4V1pGurXVT4EN7vV+dRZI5JAkzdZu8b8ha+EMEQH81tYJIxIYP6gLp+uRxQKMQQxaCykM2auW3eDXZwyAR0WlKrUyIVvtki7gfNA6sbdB9wFlQNd+aNCgMTvgH3MHrsCi8VBJo418IQqt1UJIlSXMSXY8PF0EHdMlImImmOuxyrZ8T9afCxZ1LcEA6+LWbQa+Cw/n7xY4ZnL7+jz6ZlBHIOLG2XoCiFl3EkFEgwtcImZcGYHC5pUfhP+O5L9HfEuo5g4hsv/WGyikuag2aKUZln2GBRWTLSN+G4uX+ZZNaExKasSogt6jgKgmrPkULVbN3zt5DPrt8XB71ow==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	gXbbmq5fdyyRj6yn1+7dVwTpIKnairebEO5C8KddNwdUfuGFhMS/LP2kHuDIEbwVQIqYYt8Nr/imwaqy7DPlqGYpV4+PDkOcj/ArwGtNbZmCNsj2kN6IsMbWsRnpzhsrDr8ATJlZg0SDIgpQmhV6Zyg48NM1Ko2oyRiHoVV9tVN+/1H2EGUUJNUxVH2h5++HPSl2n1vUI8VJtvP4mbvzA5YqX68MNUhF9N6grendV28KbgnyD7pOY0GAeARjlWJ9nScqHlCqWGVjZ/oDLKfeFVlpyiLS2zRAM7xpJIkOfb7Ss60Ob+u4GkyGNx/TW4LT74CRuHNJtNcZnK8MqGq7hpeHncjVUiCx7PQ20QJYJNOKBDY8o2Bt6TDIJ6Kb6no1AxXAX/fEb6WozU+ZSe9iao2h/8ejgZPX8kDiW7kz5W1id3+BxnxBA2gOlon8AYeC
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2026 14:40:36.6261
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b931b96-b8a4-478e-d9a1-08de747bd6f6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A103.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PPFD78AA37BB
 
-On Wed, Feb 25, 2026 at 10:35:06AM +0800, Shung-Hsi Yu wrote:
-> Cc BPF mailing list and maintainers. Plus other in the referenced
-> thread.
-> 
-> Hi Harshit,
-> 
-> On Tue, Feb 24, 2026 at 09:18:04AM -0300, Ricardo B. Marlière wrote:
-> > On Tue Feb 24, 2026 at 4:53 AM -03, Harshit Mogalapalli wrote:
-> > > On 24/02/26 13:08, Shung-Hsi Yu wrote:
-> > >> This patchset backport the corresponding BPF selftests for commit
-> > >> d946f3c98328 ("bpf: Check skb->transport_header is set in
-> > >> bpf_skb_check_mtu"), which has already been included since 6.12.63.
-> > >> 
-> > >> The BPF selftest added in commit 6cc73f35406c ("selftests/bpf: Test
-> > >> bpf_skb_check_mtu(BPF_MTU_CHK_SEGS) when transport_header is not set")
-> > >> additionally depends on network namespace support for BPF selftests
-> > >> added by Bastien, otherwise the MTU in root networking namespace will be
-> > >> set to 10, causing other BPF selftests to fail. Credit goes to Ricardo
-> > >> Marlière for figuring out the dependency.
-> > >
-> > > Note:
-> > > I have recently learnt that ideally we are supposed to run upstream 
-> > > latest kselftests on stable kernels as well. If a feature is not 
-> > > supported the kselftests are meant to be skipped.
-> 
-> Thanks you for the bringing this up! This was also mentioned by Daniel
-> (Borkmann), but my experience aligns with Ricardo's.
-> 
-> > That is not true for BPF, from my (limited) experience.
-> 
-> I do want running latest BPF selftests to work on stable thought, made
-> some half-hearted attempts last April on trying bpf-next's BPF selftests
-> (during 6.15 phase) run on stable/linux-6.14.y, but wasn't able to get
-> pass the building phase.
-> 
-> As far as I remember I ran into issue building bpf_testmod.ko (kernel
-> module) of bpf-next against 6.14, and other similar issues related data
-> structure or API changes. Pretty much the same set of problems we get
-> when trying to build any driver in the latest kernel against stable
-> kernels.
-> 
-> Maybe it can work if BPF selftests that does not depends on
-> bpf_testmod.ko, and build failures of BPF programs are simply ignored
-> (not sure how feasible that is, probably would make Makefile much
-> complicated), so for now I'm sticking with backporting BPF selftests to
-> stable kernels.
+The br_vlan_opts_eq_range() function determines if consecutive VLANs can
+be grouped together in a range for compact netlink notifications. It
+currently checks state, tunnel info, and multicast router configuration,
+but misses two categories of per-VLAN options that affect the output:
+1. User-visible priv_flags (neigh_suppress, mcast_enabled)
+2. Port multicast context options (mcast_max_groups, mcast_n_groups)
 
-If a kernel test module is involved, then yes, you are right, those
-changes do need to be backported as mix/match of kernel modules to other
-trees is not something that we support.
+When VLANs have different settings for these options, they are incorrectly
+grouped into ranges, causing netlink notifications to report only one
+VLAN's settings for the entire range.
 
-We only want this to be the rule for when we have purely userspace test
-cases/code.
+Fix by checking priv_flags equality, but only for flags that affect netlink
+output (BR_VLFLAG_NEIGH_SUPPRESS_ENABLED and BR_VLFLAG_MCAST_ENABLED),
+and comparing multicast context options (mcast_max_groups, mcast_n_groups).
 
-thanks,
+Add a test with four test cases for each option, to ensure that VLANs with
+different values are not grouped into ranges and VLANs with matching
+values are properly grouped together.
 
-greg k-h
+Patchset overview:
+Patch #1: fix
+Patch #2: test
+
+v2:
+	* Address shellcheck-reported issues.
+
+Danielle Ratson (2):
+  bridge: Check relevant per-VLAN options in VLAN range grouping
+  selftests: net: Add bridge VLAN range grouping tests
+
+ net/bridge/br_private.h                       |  10 +
+ net/bridge/br_vlan_options.c                  |  26 ++-
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../testing/selftests/net/bridge_vlan_dump.sh | 204 ++++++++++++++++++
+ 4 files changed, 238 insertions(+), 3 deletions(-)
+ create mode 100755 tools/testing/selftests/net/bridge_vlan_dump.sh
+
+-- 
+2.51.0
+
