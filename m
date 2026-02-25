@@ -1,164 +1,126 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AFD2E7179
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 05:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C05F2BEC52
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 06:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771999192; cv=pass; b=LR5PfAOrwxVJFSq9k/kJONJIBKbEGwprsBT3DJqxRgOzl5vS/jGDFdxUqyNXa4okFXJJ42vE97JQOwzWy6IIX0KSrX3/y/S0eSbWe+swf7YU9VGCOnkLOC4VMOtLoc/etPIcdmDE4r8iekQTqcx3TJsb5To8hmyTaROZQ0U54Eg=
+	t=1772000986; cv=pass; b=b4m5DZTnRvahPtxcpvIZdi3jZZ6VHa1u1PkVaqDfgTkNjaJ3aImJ1Y6alY4NUMaC2l2OxcwCJB1tvBHc9b2b2PLWCWMjdLNAWN6HXvYgV6REo3HS2V5GyGTWE4YbgQEh5vOhCB5DHOwZ1au9JiVLReRTPJz3jqJwpSPWlq5a0e4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771999192; c=relaxed/simple;
-	bh=0187+HJXbxbDqoLndFtsYeQmB5bITMCie3MJcozAX/8=;
+	s=arc-20240116; t=1772000986; c=relaxed/simple;
+	bh=1H7ASAjpXSVpzxeNA58qJZFYrDFjKuuqkVSdPHj5ugw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QMUFDhwr8VUV/De/q/w4mjdATsrrHJMy2O5/VsfW9AaK2pV+jaC2pF0wnxPD5RStFzXXbe4uKJ5mtvMak7f0jneGqLn4Elq9cxWV7Evvv34lwsR6nG4AqP/4Vdb9KQbgPPpCXJcKLInGq8f5neVQvlTOBl6hz7pmgwKB6Kr/lzE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zmd8nkhY; arc=pass smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=DZVxiNT6yCBDRo/rPXaZ2Mqa3QbX5HVvmqIprzCEcbhdP5YxPT6lav//eaZu0TGVROG5qzt4qPVJFdjeq+FL7jXNYHW6H+/eSR+e6mXSB705fETJwFsJZQkb8cG5/WAzTS+GLIzMCvZ2u++sK6j/ldscBKtjzxoOmjBq6SAdCA4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r8mV8kiu; arc=pass smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zmd8nkhY"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-79427f739b0so59395317b3.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 21:59:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771999190; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r8mV8kiu"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2bdbdbc6b46so300588eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 22:29:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772000985; cv=none;
         d=google.com; s=arc-20240605;
-        b=kIaJgyxG1ZoLlDWjA8j+92FJ3XsvESbNY1lBqARXUsaTZPkWKscuOQhHBMVu8EnI07
-         dl4TH/5B6Ew7Kp5ApphIq7exOMi8A2a+n6xBcpITyCbuBCndpZxKsp6UZvs8oQyALgxh
-         2NpzNiSe518csmKdByw2xcDcKDGnjcRKnnFin7K0rbSBobfhhNyoKAG5F5uwkYrSKckr
-         9TivnxdqzsTsw0FIoMdTrzCxKym5Q0UDRugr1xuXqE6CROqnUQwpYu/0adztFpNBJagH
-         GXJ7B5JLGRInSCC5H8L/YO/sytBjpOD197KJWG22OZ+nal2FuBkxU4/EFk5Ptxk8YcRl
-         wsZg==
+        b=Y5SS7UxpcLYfoFpnyulElFIc3odd3teEe5Y1ruIjVp9R36Z7Q1Y3diQIzENIoGudTV
+         V5LQ1lJuW4Vco02VYtEvuRnqyEeSHcp5vYau7e6f5snXTDCPuJAcLAd8AwUvu1nkVL8I
+         SPJMOjCnVTRlhM4ZeCQrF2V/NCLhE37bYuZ+H4n9OZagewqJcIMJE/VXN1gTEHDBP2bg
+         WM46mC3ooM0icqSXnVDnvShchpug/R0Paky4he9Nk5PVK5HOL7dxkkxcB4FPF5rXoM8j
+         RId9XOK/C5F42MilU1LbBoo3ab5IbuyGPVNQkA+yqn9DmypQTIAoki9/rhHRkJVjq2C0
+         kTww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=sTIOS1OA768nNXxxFVbpB4ZHw3BFrbFTz2tgbv5jMPk=;
-        fh=c6an7M6PQ4ArcflNe3T6T+dSZ61mk06l39A2s8MC2ls=;
-        b=hIOsbQXx3OcANWXPnPShmDX9dZL0OxLYDC1ODtROYIbjqLksgTG3SMHZs+NxDQhACn
-         Nr7huPbcUySwuC0gfmlLp1lMEhm33LTyO0HKG7Vjq/XmubBZdJ1/mTPPHKtsjj+IB3Ev
-         uTQXvlUm08pgPvmT/LALhCyEPN7qpDivl4C4lhk887fZxAJOW0XPkJSCwdmXdXTBJKk4
-         bpUtjBTTFtf55TQW7KFvUjvbUBhCsMSBY2p6EbQT1XOZFeAbvybj+metb5w8eOTETnvQ
-         5WOVnh018ovdpsGmgwmCj6nDknU+ItDj6V34gISsBhb5M7DwZlxj/VBhIJiXxsAeHtjY
-         fx8w==;
+        bh=1H7ASAjpXSVpzxeNA58qJZFYrDFjKuuqkVSdPHj5ugw=;
+        fh=YmJgepGPs0BXo+Cjr0YCz/SsDIHRBSLpup6Gxr/yOxY=;
+        b=VKEs9V/LnWQaNUBPf99vy7XTJc/BgBh/NgAcaLndxzqjdKU5pF9ToEYfRBxMFCgfPH
+         o2bHZW9Hrfk+h4Pqu88Ft9+FEGF2+ntZ4kjcO0HLXH3tdN02YZ7ERnheDcM2NgXefhaV
+         aBhxDxohF/mZ7hjjRSP5Xnp7mzWD91VL+b8Ti45tVR6JenhYt4L6/gWqGpWQ8kAT9xJz
+         fWdkc1fXYz8lYDZkUasXMTprT/X33z+FHSkmzK0/DCB75JNWmqU4W21Gs5vV0R0D3HgV
+         uobZRqWPn+mOQj2yOaedHmaOhLHIu2+NsMGP9YvPlb3Zi9Q1aEEjqRqoYNTrHVF0nKA4
+         9EvQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771999190; x=1772603990; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772000985; x=1772605785; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sTIOS1OA768nNXxxFVbpB4ZHw3BFrbFTz2tgbv5jMPk=;
-        b=Zmd8nkhYOuPr3EEgo+NbAUzEvq8xZ/n0WVOYGtx+/65YvvUo6ke+vTHOc6C7rW0ldm
-         2+n+AcVW2aZZMQdKNq+XIwzs3d6ktE6AQoxSPJbAGqZ2IThAm05ysU63tUo8sXyyyL7l
-         fBXg4E0joW83zQDcvEB5+806ohIYajT0mOwngX3E7TN+u+yEEVmLswvSPyUXjFkuuIOi
-         fbE90U9NfE/+VbV1xCWPP7fjD8sWkM3qpUkYgA7HaRy+KWTcvl+mxSBpPWItxfzYms4n
-         sDnPFOH02NCImS3oDq9WKePZ7OSKMkQLJ8MZ9EJ0dRFpBus21J3eHxdwoTOV+f7jZoZ4
-         QnWg==
+        bh=1H7ASAjpXSVpzxeNA58qJZFYrDFjKuuqkVSdPHj5ugw=;
+        b=r8mV8kiuczfO/B9vtIAeYNPNvsUP1ko3nihJsUafJPo6lsM+BtgaZ4Q9fRc4GXsQsB
+         6PzB2X91CQiTdQvo0lrYJlQaF+QC2dlUlSLv7e7q9YZyFWgWLIdpljvC7b7JRRqxHViH
+         ioqaqsLMHNq7iAZs6FaH6Hbhoqgw8eTHipAJvn0QMQxktpToHCMQOgcWb9prRknpiHbW
+         MaJEiC0oDKFrIzzTkno0uNoUPWM88urbxHLRwyfzIsh6m7zrdl0AVZ0ndHjfB08Vs87Q
+         bj/hJ30vg41FpZOagpiatWCcGpIPjg7Pw7UsR8zPuVG65b5nCtM55c8IwrzT4PLYZ3j4
+         Ppew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771999190; x=1772603990;
+        d=1e100.net; s=20230601; t=1772000985; x=1772605785;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=sTIOS1OA768nNXxxFVbpB4ZHw3BFrbFTz2tgbv5jMPk=;
-        b=aiatWAMx6cgs2eoEJxCRDF4vGGEo8fOEb6CEtA/CV3XajVifCUTl+2aLjChoCJrVmh
-         PsR+aSUo1J4rsZYrTRAcohqiNCK36TLQCM6TNsxN3cpq03Xlu21d8UgGxV+jZvr8omZE
-         O8G071EHSl4lSs8sa0mKefFpK1q50BZRnTRCIo1flWdeHC8ZQjax/KMnz4JAkJYmfDjQ
-         B/edTmGOxnHHWiB4o68qb28Dhl5j4jr8xEJdh9dCpslfvTnSiXnkSjTsSk9Mf8LYAWla
-         0al4zSzZaMesJhiiCpBs+h/YQo5SPJ9lRmY7K3Ismbolb5l7cQVH6FF6YcJdJ9SRJMMP
-         Tq7w==
-X-Forwarded-Encrypted: i=1; AJvYcCVoK1tF8QWWdkkB51bNKqk8pHzrugYb3gxVJi08tpZvJuEYvVJtiWDvAdbzQtJxFmzWDtcfdnlY9BM13x67QCk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yza4b4AIe78+5XFlEMFDFw8/220Xn/VtjSiNAb0mVjmuloOhICz
-	dyC5B711jWuZiq2T4kVYB1EyJLDoQjX/vw/thcIi/Br3wpfhrSaAmxNY4RyElpJl9Nmuiq98tUB
-	TsxUo8iKAudY4OML2Qp9UadQXpaNtrXc=
-X-Gm-Gg: ATEYQzwweN45F3DjVFSpXyMH+0DV6nqXk/bEeOW1UQ4U0SazjTPuIyn21hL0xBzyP/b
-	+hnUZ/cyKKOZpc0/GmmOEC0A8yAqKy+aFOdF4hSkoFMFStdHopMrv4jXxPvn13cDd3y3jFGD3Jn
-	0XyLkTSu/7bdr3/Nh5YAlBOTog6QLBC7seaXUMeyWR6CEPMKkry53Tg7k+1h5eeR5EtxjKgpdbb
-	Dq00c65R09h+RKSSM6T9z5M7Oj4xo41yu0hNiwMLrmcvKsr5ERTIgYtGvpk4XCX8e81NF3GPDDO
-	l9dPfhqu
-X-Received: by 2002:a05:690c:9d:b0:798:25d:9b1 with SMTP id
- 00721157ae682-79828cd049emr129572897b3.12.1771999189729; Tue, 24 Feb 2026
- 21:59:49 -0800 (PST)
+        bh=1H7ASAjpXSVpzxeNA58qJZFYrDFjKuuqkVSdPHj5ugw=;
+        b=YTDQsJ0/QFAtMpbB+SZbjiNUoxbiF+xgjvszBHIILml9WwYaVGJyIReOUrazQEcvw6
+         8zd0g40p8bWVSJfaXUn/vpvUm9vp/OAg6iRMod5TKLicgye07XhP2dWnO9842V9O1PYN
+         IBXoBXby0s3q3p7otUCRAFSL19o/MJYnH8f6xT7toDrUPw098j0lxVZ4wEweYZNr8DkK
+         kWE7XsbKIY5kg6uBjKNJaUGoN0Za8n1mQuBOhJKMIrylY55py+F74BhKysf7JXvfgyYg
+         oeFxwabHKt/CU0d3VlSmPfzyguFt4mvvdaC+YUWkyESiu6MHWUK8tx6Hg1B8UO+aCGoX
+         8xMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgHbcmxVPDzNE2j2an8adOUMiHafOE1QkHN7/tLd2Ci12w5+uV40Nf7Y7dNsBuySDKYdI1GUtOe/JGF0LQXww=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywnt+amt+CRmCYjB9+HbELXAiOwQ9JEGCgSCQj5atyNG5zVYJgw
+	pw0pqTjf5ShddDhszC2rVUGIDKqWLitFyl70Dxn3G07umRhj1f09xXIqWfMlsdtF/tvvHnoeUWG
+	iVN4m50Bt2XpTc8D2uRr4DNZA9kg3kMhLtcPiURcg
+X-Gm-Gg: ATEYQzwqlHBgaxYQzfnGLeBmUtrt3Ga0uvclkyuyVIOB+7qABlLHdBiy90Ui5FzeFNX
+	dXEJ3z+AAGUDOKIwCi9yArKg9dE7xazLmB/dN9WKzkahjeKcSKU772nNuOm3jeYxyWOzSW9Wewn
+	+rngJbexJO+O8EjrQ/ydaLMT8jIWF12Yaf0i8NxWOmBndp7Inr/gA1Xum2AoglX9MBpGOvVAoVp
+	iiXz7BNy966DtwjjEKGvtYcKZq5LjlhzpB0ry8iuDQHZxvD/de98E09DDhcf6+djx3RONJitVvC
+	rXVfTh7SQ3FK1xqNWxq0sma1s2Jwbe6fpNDzQ65BzvtdNF1zcFJbFkQg8dsrAenMuo3xyNsf
+X-Received: by 2002:a05:7300:ed0a:b0:2bd:ab6e:5d3c with SMTP id
+ 5a478bee46e88-2bdbc508971mr901962eec.12.1772000984188; Tue, 24 Feb 2026
+ 22:29:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260218092002.147306-1-mahdifrmz@gmail.com> <CAADnVQJdQ5PpHRvYahuSk0=cYBXnf5Z9tkdBLs1tcnasigrntQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJdQ5PpHRvYahuSk0=cYBXnf5Z9tkdBLs1tcnasigrntQ@mail.gmail.com>
-From: Mahdi Faramarzpour <mahdifrmx@gmail.com>
-Date: Wed, 25 Feb 2026 09:29:40 +0330
-X-Gm-Features: AaiRm50Jnc1hdfMZrcEoHjnxIA7SWXi5yLlX7fypqKNkoMiU9nlIjTPDz2hqS3I
-Message-ID: <CA+KdSGMxO5C=nFVFbauS2DTRzSvoj14pAMwmbWpj_c50JgOroA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: fix selftest/xsk single test selection
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20260224-fix_zero_wnd_fin-v2-0-a16677ea7cea@gmail.com> <20260224-fix_zero_wnd_fin-v2-1-a16677ea7cea@gmail.com>
+In-Reply-To: <20260224-fix_zero_wnd_fin-v2-1-a16677ea7cea@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Tue, 24 Feb 2026 22:29:33 -0800
+X-Gm-Features: AaiRm50BS8IRmaByvMXoPdLT4KNzqIZ4frqt43YdVqbn5w-X7rkkO6gZU6lK_6U
+Message-ID: <CAAVpQUC-7hWiefYDsubJTMJP0hAc1pYFQM+p1LA3NJeG7=ebVw@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/2] tcp: re-enable acceptance of FIN packets when
+ RWIN is 0
+To: gmbnomis@gmail.com
+Cc: Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 25, 2026 at 7:35=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Tue, Feb 24, 2026 at 12:20=E2=80=AFAM Simon Baatz via B4 Relay
+<devnull+gmbnomis.gmail.com@kernel.org> wrote:
 >
-> On Wed, Feb 18, 2026 at 1:20=E2=80=AFAM Mahdi Faramarzpour <mahdifrmx@gma=
-il.com> wrote:
-> >
-> > From: Mahdi Faramarzpour <mahdifrmx@gmail.com>
-> >
-> > This commit fixes the integer parsing of -t option. The cli parser
-> > only relies on errno to detect parsing errors. The manpage for
-> > strtol (https://man7.org/linux/man-pages/man3/strtol.3.html)
-> > states that the said function "MAY" set errno to EINVAL in case the
-> > conversion fails. Currently on some systems, this leads to a silent
-> > failure with return value not being exactly documented in the
-> > manpages (probably zero). The reliable way to validate the input is
-> > to check whether the endptr has been bumped all the way to the end
-> > of the string or not.
-> >
-> > Fixes: 146e30554a53 ("selftests/xsk: add option to run single test")
-> > Signed-off-by: Mahdi Faramarzpour <mahdifrmx@gmail.com>
-> > ---
-> > v2:
-> >   - fix style issues
-> > v1: https://lore.kernel.org/all/20260217080326.50564-1-mahdifrmz@gmail.=
-com/
-> > ---
-> >  tools/testing/selftests/bpf/xskxceiver.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/s=
-elftests/bpf/xskxceiver.c
-> > index 05b3cebc5..5e4095fd1 100644
-> > --- a/tools/testing/selftests/bpf/xskxceiver.c
-> > +++ b/tools/testing/selftests/bpf/xskxceiver.c
-> > @@ -200,6 +200,7 @@ static void parse_command_line(struct ifobject *ifo=
-bj_tx, struct ifobject *ifobj
-> >         struct ifobject *ifobj;
-> >         u32 interface_nb =3D 0;
-> >         int option_index, c;
-> > +       char *eptr;
-> >
-> >         opterr =3D 0;
-> >
-> > @@ -248,8 +249,8 @@ static void parse_command_line(struct ifobject *ifo=
-bj_tx, struct ifobject *ifobj
-> >                         break;
-> >                 case 't':
-> >                         errno =3D 0;
-> > -                       opt_run_test =3D strtol(optarg, NULL, 0);
-> > -                       if (errno)
-> > +                       opt_run_test =3D strtol(optarg, &eptr, 0);
-> > +                       if (errno || *eptr)
+> From: Simon Baatz <gmbnomis@gmail.com>
 >
-> This is unnecessary. It was required we would have hit segfaults by now.
-This patch does not prevent segfaults; it prevents silent misparsing.
-On systems where strtol() does not set
-errno for non-numeric input, passing -t abc results in opt_run_test
-being 0 without triggering usage().
-Checking endptr is the documented way to validate full-string conversion.
+> Commit 2bd99aef1b19 ("tcp: accept bare FIN packets under memory
+> pressure") allowed accepting FIN packets in tcp_data_queue() even when
+> the receive window was closed, to prevent ACK/FIN loops with broken
+> clients.
 >
-> pw-bot: cr
+> Such a FIN packet is in sequence, but because the FIN consumes a
+> sequence number, it extends beyond the window. Before commit
+> 9ca48d616ed7 ("tcp: do not accept packets beyond window"),
+> tcp_sequence() only required the seq to be within the window. After
+> that change, the entire packet (including the FIN) must fit within the
+> window. As a result, such FIN packets are now dropped and the handling
+> path is no longer reached.
+>
+> Be more lenient by not counting the sequence number consumed by the
+> FIN when calling tcp_sequence(), restoring the previous behavior for
+> cases where only the FIN extends beyond the window.
+>
+> Fixes: 9ca48d616ed7 ("tcp: do not accept packets beyond window")
+> Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
+
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
