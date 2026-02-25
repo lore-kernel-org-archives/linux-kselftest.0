@@ -1,85 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C971ACEDF;
-	Wed, 25 Feb 2026 04:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0849A2701B6
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 04:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771992587; cv=none; b=U95sm7MtDKWOUmqJ9hItAt2krIj2XJ5le6xlwKwEEKomdmcGq8gISty4u9aDNEXtm8+tHU+NPucsSLWjBigSOdfkaYwW6LszHU9QR5AYq2VNDf6alsSz/N5liMC7LghecJ3fwufYkkCquVMCJjNrCH97EAVBDj4/afamTh6U+G0=
+	t=1771993889; cv=none; b=W+rTT1gA2A5H9/CH/FGpXUIdV+cmaQhzqMG9bUEQjbGhWRy+2jHxaQkfe0JkB8zI6hPJwklBkSXTAHZx9u6RDoWRHJdAJS6+/ndq2g9gQ2Dp+QceNX38wZaTkXj6YUYxiF4RFNwImdkRIWYQY1gD09duPtXCjgldJ3sexkQvjtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771992587; c=relaxed/simple;
-	bh=amBYYcNYoxZBtRFJeYOYnIs8UOcXEBTJrLIKwlbwpA0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=okGmeByjpk4f1H8a6fcEvn9R8qTD0wxE8MWd3c8cSABESanx6GQR3PjdJME160QuJuT2sVsAE2kWeyLhV/eSxTq4UFlFC3ZtDRebA3+3sTA5QqAeV3aA7ibxzvf3SrwsV7YxKFGl9DT6ECWblf6/DUmzsjmqGc4YUowdHUbr6/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FPB5NxPQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771993889; c=relaxed/simple;
+	bh=5XtVwyeXgb+yTy5ksSKN/Zir4fuzN7Do5I/MI3EfCZY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T+P3/d/WuFpkKJdAI50rLOPnu0GTj4IpIpXo4FTBfZFYuuZZdWMcvWahciy/QqHRp307ONftB5VFzvMllBMHRIWv6PsvqwjWTiqRa+dHLfzg8FiR3W3EF0pf15vYFqmh7ZcV7gPTRFA+9xYeyhdwcOg6WPE0XOBhauzI/5NKank=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=s3K51MkF reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FPB5NxPQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323DEC116D0;
-	Wed, 25 Feb 2026 04:09:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771992587;
-	bh=amBYYcNYoxZBtRFJeYOYnIs8UOcXEBTJrLIKwlbwpA0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FPB5NxPQ7E4H93gjeBNIVWPlxFeb/Ln2OgOAVYctYCxLdHouG4PZkxdCAuoYoB3AS
-	 1fQWP965VBgaJ/uJg8ECW8agpFN8ayunKI4Y/c95f8KiY1bj/7ihvYQI1kJ7IlkSz2
-	 U2bGDYoxg4byxSGNLSrvsRxRCPwugFw0NkVneklla3TBDIGeSWVOgOFjflmtqLZIKc
-	 gGZlolCZj2Z7Vf+3Fo4nx0g92hxf9D3kAgHQE7+jMXjvbVvYBVDmNKEGSBJ9V+d47a
-	 o2IlgA2GFRteDwa9vGqp5ttNc5LbJ6EacrfqO/unY8DpjaOJlSb6frysr6hlmW9ZAD
-	 PlDAreQXLqXbQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9EE6380820E;
-	Wed, 25 Feb 2026 04:09:53 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="s3K51MkF"
+Received: from h205.csg.ci.i.u-tokyo.ac.jp (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 61P4VKpP082120
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Wed, 25 Feb 2026 13:31:24 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=MYO+XchwOpRTBTIhxbmQzhbl8T24Bkei/zh10k9CJ4U=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-Id:To:Subject:Date;
+        s=rs20250326; t=1771993884; v=1;
+        b=s3K51MkFc/3//s1kyweOLqGgEpf6nlXdoRUL1yRvznAIaVnT2Ytnh7XjWWRxxM49
+         R8i5A/xP7HU9X9/zINgMcMsb7wmCZN0NPfyXqZywQeqCfboTohQXtHtZv2nbhVNM
+         Q7E8dEuq/sLiXkZteOvPonOCeOxdhT5gnI2d32wNFWDJ+rYgssiy3X0oGx1pznHH
+         wAQ3ClS/ZnxV7/UC9oWIMi9cPoCkJY3VZQmSTdeEJVASaFI3HWu5pIpfAr3RazRK
+         8A+mx0t3ontSTAiCiOixdRshouRjSQMLWzZ8NxeBFvp1y4zXI4OGevx47aPfgIEz
+         bwvXtHfycRaHiK+Du7vA5A==
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Subject: [PATCH v3 0/2] KVM: arm64: PMU: Use multiple host PMUs
+Date: Wed, 25 Feb 2026 13:31:14 +0900
+Message-Id: <20260225-hybrid-v3-0-46e8fe220880@rsg.ci.i.u-tokyo.ac.jp>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/3] selftests: net: py: improve bkg() error
- reporting
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177199259254.36698.9217423862791376479.git-patchwork-notify@kernel.org>
-Date: Wed, 25 Feb 2026 04:09:52 +0000
-References: <20260223202633.4126087-1-kuba@kernel.org>
-In-Reply-To: <20260223202633.4126087-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- petrm@nvidia.com, gal@nvidia.com, leitao@debian.org,
- linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABN7nmkC/0WOS47CMBBErxJ5TVtu50NgxT1GLIzdIQ0iBjtYR
+ Ch3H4/RzCyr9epVv0WkwBTFvnqLQIkj+ymHelMJO5rpTMAuZ6GVbpXWDYzLKbADha4dhmZLzmm
+ R4XuggV9F9HX85ECPZ/bNn6M4mUhg/e3G875KncReohI/7Mhx9mEpPyQscJmrcfc7lxAQGofGG
+ VS0Ve3BmWXil8zC4kj6v9er7q+nQYHqOjRkazP09hDiWVqWLJ8w++vipbHychfHdV2/AVPJoR8
+ NAQAA
+X-Change-ID: 20250224-hybrid-01d5ff47edd2
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+X-Mailer: b4 0.15-dev-5ab4c
 
-Hello:
+On a heterogeneous arm64 system, KVM's PMU emulation is based on the
+features of a single host PMU instance. When a vCPU is migrated to a
+pCPU with an incompatible PMU, counters such as PMCCNTR_EL0 stop
+incrementing.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Although this behavior is permitted by the architecture, Windows does
+not handle it gracefully and may crash with a division-by-zero error.
 
-On Mon, 23 Feb 2026 12:26:30 -0800 you wrote:
-> bkg() is a helper for running commands in the background.
-> When init or body of a with() block fails check if the bkg()
-> process already exited and report its status (including stdout/
-> /stderr). This significantly improves debugability.
-> 
-> Jakub Kicinski (3):
->   selftests: net: py: avoid masking exceptions in bkg() failures
->   selftests: net: py: use repr(cmd) for failure exceptions
->   selftests: net: py: add cmd info for ksft_wait failure
-> 
-> [...]
+The current workaround requires VMMs to pin vCPUs to a set of pCPUs
+that share a compatible PMU. This is difficult to implement correctly in
+QEMU/libvirt, where pinning occurs after vCPU initialization, and it
+also restricts the guest to a subset of available pCPUs.
 
-Here is the summary with links:
-  - [net-next,1/3] selftests: net: py: avoid masking exceptions in bkg() failures
-    https://git.kernel.org/netdev/net-next/c/d99aa5912c3a
-  - [net-next,2/3] selftests: net: py: use repr(cmd) for failure exceptions
-    https://git.kernel.org/netdev/net-next/c/04abab18e120
-  - [net-next,3/3] selftests: net: py: add cmd info for ksft_wait failure
-    https://git.kernel.org/netdev/net-next/c/6e4dff20021a
+This patch introduces the KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
+attribute. If set, PMUv3 will be emulated without programmable event
+counters. KVM will be able to run VCPUs on any physical CPUs with a
+compatible hardware PMU.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+This allows Windows guests to run reliably on heterogeneous systems
+without crashing, even without vCPU pinning, and enables VMMs to
+schedule vCPUs across all available pCPUs, making full use of the host
+hardware.
 
+A QEMU patch that demonstrates the usage of the new attribute is
+available at:
+https://lore.kernel.org/qemu-devel/20260225-kvm-v2-1-b8d743db0f73@rsg.ci.i.u-tokyo.ac.jp/
+("[PATCH RFC v2] target/arm/kvm: Choose PMU backend")
+
+Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+---
+Changes in v3:
+- Renamed the attribute to KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY.
+- Changed to request the creation of perf counters when loading vCPU.
+- Link to v2: https://lore.kernel.org/r/20250806-hybrid-v2-0-0661aec3af8c@rsg.ci.i.u-tokyo.ac.jp
+
+Changes in v2:
+- Added the KVM_ARM_VCPU_PMU_V3_COMPOSITION attribute to opt in the
+  feature.
+- Added code to handle overflow.
+- Link to v1: https://lore.kernel.org/r/20250319-hybrid-v1-1-4d1ada10e705@daynix.com
+
+---
+Akihiko Odaki (2):
+      KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
+      KVM: arm64: selftests: Test PMU_V3_FIXED_COUNTERS_ONLY
+
+ Documentation/virt/kvm/devices/vcpu.rst            |  29 ++++
+ arch/arm64/include/asm/kvm_host.h                  |   3 +
+ arch/arm64/include/uapi/asm/kvm.h                  |   1 +
+ arch/arm64/kvm/arm.c                               |   8 +-
+ arch/arm64/kvm/pmu-emul.c                          | 155 ++++++++++++++-------
+ include/kvm/arm_pmu.h                              |   1 +
+ .../selftests/kvm/arm64/vpmu_counter_access.c      | 148 ++++++++++++++++----
+ 7 files changed, 268 insertions(+), 77 deletions(-)
+---
+base-commit: ef87500dc466ef424e4fc344b5063d345e18bf73
+change-id: 20250224-hybrid-01d5ff47edd2
+
+Best regards,
+--  
+Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 
