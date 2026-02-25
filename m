@@ -1,112 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f73.google.com (mail-oo1-f73.google.com [209.85.161.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EAD127A45C;
-	Wed, 25 Feb 2026 17:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC2F3ED115
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 17:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772040592; cv=none; b=jo1SnG/nmFJGKX/8OOFuXQsNG6r2ZigX+CPlSjB2eJc8BIO4NRGfuWVYJH4NPzHj4/h+hyaesBcFURu1R8noIU2f+dcBDZZNFU6GxVXA/FeT89pLOWP1ZURdIDixnzhVsOtlaYVGFPDF7JC3Q5CbMZyQDPtl0G2xKxqngbAkYqM=
+	t=1772041261; cv=none; b=kdSS01Xa+/j0bQkaajFPCmuXyMBuigtik1CfDyXD4EfZJqjMgb6zD0giZHP4+ey6xcEc9HEtbk1JnL+Y/FgBXeXCvf43AOiVkiPVtu+uaflqZ39a2+naO6CK1N2LFcTuZ+aFteBT73U4WZ8glt2G/XxZKIB3I9CUvHfMFfN9B1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772040592; c=relaxed/simple;
-	bh=0NznGpQd9koR+NDgSzpNiwtG/d8wl3ltVnSIMUxgvZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kYEPPc/b2KPVxvlTvZrzTK4aBa/sOTeCl1zy5gA7pHd1SZQNSh3bA1c45Z+Nt4nzHzgdx9otrGQ61PfmRgBIx1tMTNJV45pi+h6/D9mX4n59nt/5n239qHF0gD9wyQ3qerqRLj6AADbLIoJHLv+lb0HFiecf0h4af6zk0Pp6Fe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wtg4b+wD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772041261; c=relaxed/simple;
+	bh=vfPVzGsOpxFMqLnHbeOt97S7ASvz/dPPsmfURT55c2c=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=qLQDwv81N8XVWzwxqbxe1fnPP6Ny/2An9pkUweBLISNZLMJQ5fAyI0s8RLuGK2EtT//4n/aTqpHtbXwsl3vcF1adICUT6WczSsFSOtS6udchtnSiLV/MrXhhrMc0owHC3gfGXkr5Ogm8yuaLR7Bou2MFMwBE3A4MxEQFvFrKQLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RFGlMuG+; arc=none smtp.client-ip=209.85.161.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wtg4b+wD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A7EC116D0;
-	Wed, 25 Feb 2026 17:29:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772040592;
-	bh=0NznGpQd9koR+NDgSzpNiwtG/d8wl3ltVnSIMUxgvZI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wtg4b+wDK4NGNGRmiAdPyJA/KjY9qWR/MOfihY1W6FP3CfdL3KaVHc80z2ccuYCjr
-	 BFlE3OhYPFV3+rFqBGW5jnSZUkiHGWOPPOYbH7RBivQFbDvwe7t8S1Zd0Q+CoOFQUE
-	 oIJXZTDifenMlGnyaURNp7wue6ka05mCmRPLe2nsgfjyPPj688AlipKTTrGzLKLbEY
-	 gyCYwq1z8xL3B062m/y+O2Q7t/CFqNVuQ4aSCci9y8mfAavTbNH/43Jt/MUvSHLTlF
-	 z5jK51B1mKBxva8gtaAvcWhzMLHlWMn8hQnUi08WKiePqDfq2pyDAX0kbzGrY7iYdH
-	 8IIa1hQR72WzQ==
-Date: Wed, 25 Feb 2026 10:29:49 -0700
-From: Tycho Andersen <tycho@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Ashish Kalra <ashish.kalra@amd.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	John Allen <john.allen@amd.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] selftests/kvm: check that SEV-ES VMs are allowed in
- SEV-SNP mode
-Message-ID: <aZ8xje-iM0_9ACie@tycho.pizza>
-References: <20260223162900.772669-1-tycho@kernel.org>
- <20260223162900.772669-3-tycho@kernel.org>
- <aZyCEBo07EHw2Prk@google.com>
- <aZyE4zvPtujZ4-6X@tycho.pizza>
- <aZyLIWtffvEnmtYh@google.com>
- <aZzQy7c8VqCaZ_fE@tycho.pizza>
- <aZ3ntHUPXNTNoyx2@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RFGlMuG+"
+Received: by mail-oo1-f73.google.com with SMTP id 006d021491bc7-679c52164f5so269494eaf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 09:40:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772041257; x=1772646057; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vfPVzGsOpxFMqLnHbeOt97S7ASvz/dPPsmfURT55c2c=;
+        b=RFGlMuG+RlBMZrbOsRHSvqyhEwvpeQcTEJJ6pxS/L1GkYKdprHSLNvn0+CqMjCdmq8
+         GJqB7lFXU3ZEixmIuTAQTT5v14RH9CUEiJ1bUNpeAJc8R4ox6Mz8r0qJAkicg4UvpHjJ
+         G8+VYutk2uWcIi4Z1R1Bo/M3ZoEBT0G7lNZ1MD+z4DDKpuM56Hm+Oirty558xOYgWXPp
+         BwbcJmqAS3hXfLbOKsMkUqMzhv7vY1tUBtG+hnKULyozp6sk+8LO6rnsPs6uDFAHZ2Ev
+         fqCcQkAHOMuFB4zx9KQkzYAJ+K5uFnNvV7M/Rom9vHhyv796wUcfJZDb9xWBfwo1hZd8
+         M4/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772041257; x=1772646057;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vfPVzGsOpxFMqLnHbeOt97S7ASvz/dPPsmfURT55c2c=;
+        b=YPOKLuRwBDUc2krOE5l8MZ+t0uujeQJ5QloQQQfdXNeZX8RvrLfDgCyE7Jkj3NtTlX
+         btdRcoiBuVrIPOOFgbmL/nBTKiSvEO2fIZQdduT3iiIfHoYqRD2izjkjTchZiF2B2KUq
+         00Hxh+PPv0GyllrM42UxmoRx0R2cLBEQu1l8gTnlUxzeEh2b/60QRbFND5shoOzcLGNL
+         jJcKIRjqYcenhuIfEJT5cc+J7TQeqny5A1OwTuTIpN6IS2/WGqs/GMrhoZqIFc4GlM6k
+         Znt6FEE1nu3rtvDVVZR8jdq84EtpTk8XXRnRyffkNvqkthha5LTwi8vMZAENLAuD1xBn
+         jLCA==
+X-Forwarded-Encrypted: i=1; AJvYcCX1WEEGOkMjaA4/iO3+iyslhgUUy7Dow/tja/L8hQZqnOVvarbJDLKExp/Yluzu43T5jC4AnTGCUnqmiCMkHq0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNm46nIZgmYwlNxexqOzJ5Ts9+ur17mvlcB8KjiPOA4k8Qwd3a
+	H7yFOkQpUgWtd1rBzYGc3PlQyOvXSQlf29b/zmqD7dtK9PIdFlGVy+eG3iJAKZB/zjpRQCTaJWG
+	fu4XgHan1k7aV6iCA24DDNZ8quA==
+X-Received: from iluj15.prod.google.com ([2002:a05:6e02:154f:b0:4d2:8640:5d64])
+ (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6820:2019:b0:672:e67a:96cf with SMTP id 006d021491bc7-679c4684cbcmr8062877eaf.16.1772041256681;
+ Wed, 25 Feb 2026 09:40:56 -0800 (PST)
+Date: Wed, 25 Feb 2026 17:40:55 +0000
+In-Reply-To: <86h5rlawru.wl-maz@kernel.org> (message from Marc Zyngier on Fri,
+ 13 Feb 2026 08:11:01 +0000)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aZ3ntHUPXNTNoyx2@google.com>
+Mime-Version: 1.0
+Message-ID: <gsnty0kgoh5k.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH v6 00/19] ARM64 PMU Partitioning
+From: Colton Lewis <coltonlewis@google.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, 
+	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
+	will@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
+	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On Tue, Feb 24, 2026 at 10:02:28AM -0800, Sean Christopherson wrote:
-> Hmm, I like the idea of clearing supported_vm_types.  The wrinkle is that "legacy"
-> deployments that use KVM_SEV_INIT instead of KVM_SEV_INIT2 will use
-> KVM_X86_DEFAULT_VM, and probably won't check for SEV and SEV_ES VM types.
+Marc Zyngier <maz@kernel.org> writes:
 
-Does that matter? If in the case of CiphertextHiding we would revoke
-KVM_X86_SEV_VM, users already couldn't start a VM anyway in the
-configuration.
+> On Thu, 12 Feb 2026 21:08:36 +0000,
+> Colton Lewis <coltonlewis@google.com> wrote:
 
-The firmware update is more tricky, but I don't think you can blame
-the kernel there...
+>> Hey Marc, thanks for the review.
 
-> Alternatively, or in addition to, we could clear X86_FEATURE_SEV_ES.  But clearing
-> SEV_ES while leaving X86_FEATURE_SEV_SNP makes me nervous.  KVM doesn't *currently*
-> check for any of those in kvm_cpu_caps, but that could change in the future.  And
-> it's somewhat misleading, e.g. because sev_snp_guest() expects sev_es_guest() to
-> be true.
-> 
-> Given that it doesn't make sense for KVM to actively prevent the admin from upgrading
-> the firmware, I think it's ok if KVM can't "gracefully" handle *every* case.  E.g.
-> even if KVM clears X86_FEATURE_SEV_ES, userspace could have cached that information
-> at system boot. 
-> 
-> > > Hrm, I think we also neglected to communicate when SEV and SEV-ES are effectively
-> > > unusable, e.g. due to CipherTextHiding, so maybe we can kill two birds with one
-> > > stone?  IIRC, we didn't bother enumerating the limitation with CipherTextHiding
-> > > because making SEV-ES unusable would require a deliberate act from the admin.
-> > 
-> > We know these parameters at module load time so we could unset the
-> > supported bit, but...
-> > 
-> > > "Update firmware" is also an deliberate act, but the side effect of SEV-ES being
-> > > disabled, not so much.
-> > 
-> > since this could be a runtime thing via DOWNLOAD_FIRMWARE_EX at some
-> > point, I guess we need a new RUNTIME_STATUS ioctl or similar. Then the
-> > question is: does it live in /dev/sev, or /dev/kvm?
-> 
-> Ugh.  Yeah, updating supported_vm_types definitely seems like the least-awful
-> option.
+>> Marc Zyngier <maz@kernel.org> writes:
 
-Since firmware update only happens on init right now, I think we can
-add a:
+>> > On Mon, 09 Feb 2026 22:13:55 +0000,
+>> > Colton Lewis <coltonlewis@google.com> wrote:
 
-    int sev_firmware_supported_vm_types();
+>> >> This series creates a new PMU scheme on ARM, a partitioned PMU that
+>> >> allows reserving a subset of counters for more direct guest access,
+>> >> significantly reducing overhead. More details, including performance
+>> >> benchmarks, can be read in the v1 cover letter linked below.
 
-that will do the feature detection from the ccp, and merge that with
-the results based on asid assignments during module init.
+>> >> An overview of what this series accomplishes was presented at KVM
+>> >> Forum 2025. Slides [1] and video [2] are linked below.
 
-We'll eventually need some callback into KVM to say say "hey the
-firmware got updated here's a new list of vm types".
+>> >> IMPORTANT: This iteration does not yet implement the dynamic counter
+>> >> reservation approach suggested by Will Deacon in January [3]. I am
+>> >> working on it, but wanted to send this version first to keep momentum
+>> >> going and ensure I've addressed all issues besides that.
 
-Tycho
+>> > [...]
+
+>> > As I have asked before, this is missing an example of how userspace is
+>> > going to use this. Without it, it is impossible to correctly review
+>> > this series.
+
+>> > Please consider this as a blocker.
+
+>> Understood. I remember you asking for a QEMU patch specifically.
+
+> No. *any* VMM. QEMU, kvmtool, crosvm, firecrackpoter, whichever you want.
+
+>> I had hoped that the use in the selftest was sufficient to show how to
+>> use the uAPI.
+
+> The selftests are absolutely pointless, like 99% of all selftests.
+> They don't demonstrate how the userspace API works, now how
+> configuring the PMU is ordered with the rest of the save/restore flow.
+
+>> If not, I can send out an example QEMU patch to the QEMU ARM mailing
+>> list.
+
+Okay I sent one to you, qemu-arm, and everyone else I asked to review
+this series.
