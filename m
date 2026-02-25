@@ -1,242 +1,224 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012053.outbound.protection.outlook.com [40.107.200.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DE536604D
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 22:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7292C21DF;
+	Wed, 25 Feb 2026 23:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772059861; cv=pass; b=E/G6FdzH/EYpFdZfbgGhoYgNZwGahR4u2ckzaUt7RAnKLeDHaS2sE3W2Qs7gePvf83SZXH+x3HQcu/91C8d5B98Tk6AiU8dNEfqoWlKvo2dko7V5O1uKznPKzQTCloMdvG+74XOTo8fTzACEuMPK3klzXBkeEB75jjGZ6tuwK2Y=
+	t=1772061153; cv=fail; b=hotBNG9Rn/mJTBC1pBrVebLRsfFPk0MkCykiSDdpp9Hxr2xINQxR5FJC1zAGhW9dqSuBpQxfRPnh8evLuNvwDfcQEitIZjCexVuF+T7FwJm71VFKOwwR2ydU2CCr3fxQjua9aX9gZBbez6RnzLO36y010W5P99R3mvKHp1I8xZc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772059861; c=relaxed/simple;
-	bh=7OqNOR2pf3cTOCHBcFY4ktMJJpHonFJgCAwij4qDwtE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vk+LDlTxkhCEzNuOCu3FFQgNmfAtAj5Q4ViJ0hTmbwMGZLjEl/6QFQ43PFglt4dFIZ2fsTQ/jVypRwOpMryKTz5lT+npT72GLGOBgZdSbd9ctWecTdlQfMuzjopXFNkxnB7aNF8JL1Tos1a98M3wDv4CmVsabP835MCI/0sLf3I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WVRV/1XX; arc=pass smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1772061153; c=relaxed/simple;
+	bh=SfT0n56mgysygEiqA+zeOD7SrQ0fEWGQPJfOwoC7eps=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ZcMv9dTdiqitPteG6XnZv6UKHS6PBwNhitTLmnYLrXxR0bMVO7y/MLtIZKCDUtOahEQdDQIpCsniamkHlX3syGXZjdpXJRxlaeWQ6l913kERRHAQcZrFiDzoWJ8QEUhjGMYQ3LKJ6f96Jgh0cZ648Ej++1aB/TRNn4Vzj1jUwQA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ijhWvnV0; arc=fail smtp.client-ip=40.107.200.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WVRV/1XX"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-5033b64256dso193351cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 14:51:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772059859; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IE/oB/aF2RgNj0s3Y9CodZuksfPNtkgKC2p35hPmJg+o6wPg7UAmuKwZ/+rZWv5xCY
-         3Ac1nF0UY+mY4S0Auxqk3AIL6HcudcC/fs4gWbaCoJnnDExYe5tP1lNGa1w2UljO4yIx
-         y0yowmk0ETkLQY4KtwowKQGoczZlb/WaKeiHGZzkehMsUHhhg9B+nUh3j4BLq4siDreV
-         lNnvW5NOu3+xmMA+yArbCA4E8U0BjZx/xycuRFWZ7wPSNruKLT510hUy6Br46bc9lprD
-         N61M/Wn4NSioqK2Q+NSIg9xuHFeZNK9CgEkRa5WpBRR1LHKrbrnGJzjUkTviagCAzfKj
-         4bRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=MsOXiL/6Qn9m7Yd1SU2mFbssuofZOBkFUGv1WIDmPB0=;
-        fh=hRGO6b+5qBFOB8mL+Q6RqPi7tQ8M0FKFzVpXle+I+HA=;
-        b=HlL/5d/QiQgzH1bJhnGfEnvlCmERJFOo01hD0o0bxukxDzOz+c0SJCPUsk7/3OLuSP
-         Qe10MJAKEGEUlNuAj/ypVaMk+KTCbTo1QJ1HP5Q3C5QGCelLo8qALWUdH/h6yn5RE2DC
-         pQz4GUmt3sjemo4YUwUqXZYsVQJqtHOZBB69F7SageZpwFPuDIAjYKS2p/ItQkxLoUK1
-         47aMYk9mGjBYRFm1XpL4cubAfXBkZrwAunuqRlCoV67V1S0pteuBjRXbJDhkcXJS5wJ0
-         4ltojeCVTMmGCtCLhs1N5Chze2aWHUrLb2UGWrcg+XYaxklvOF32aeZT1X6vj5wE2RFi
-         PkFw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772059859; x=1772664659; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MsOXiL/6Qn9m7Yd1SU2mFbssuofZOBkFUGv1WIDmPB0=;
-        b=WVRV/1XXo2nnw8gzHzdS8IksP9JKJvN3r6Llnl75OoENUwU5YDeA9MYBGEFJ9nBAd9
-         J2IyxpI+5I8/f8KlhHspyQxqjMQqFVdGuyY15FT88FsCEbh0Gnrx3OQwF8uAVf+Y/wXH
-         udcDYJpAudc8TDhtI10nVAMJgFuFYzKKqOotF1h3fiM5+i+rswqgvv605CkgnyXgjh22
-         2P/0AfOQoYmBaoOiaIPsQAcgXxM7WW3G21sByw1cq3WvPBd/UgRbG0bRapKQlaDnnpxF
-         1/N3w/nSBohJrJPVpdytsvq1ReNEffews0/3EuPaAR4TVp4MH1SO5aTam8noYyp7wwfb
-         Nc8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772059859; x=1772664659;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MsOXiL/6Qn9m7Yd1SU2mFbssuofZOBkFUGv1WIDmPB0=;
-        b=a5UtCJ+m4ImbTUl37+fKm0gwkvMWgrlFKEHUnDE9ktGrHhaXRvIaJ3NpRxoY4d84sU
-         9RbZC15U74OPBv9zrHy8t+adzKaDLSXHcmqcC4OTzxs90lYzdgnkfDt05dqnkaGdjsUJ
-         1JGMeOMn0+fXzIER8zs9LYTVVFpVTDDtl8QUVLjFeMEcaAr9xxlATdO+Sn+kavvKlRm1
-         1zX9YRkQFnxuhYOIsF8qXA/9XtWWO+Apczv0QGk/tB9oHBTikWeeUizCzjrd+a3+W2rM
-         pGEMzuLIvWAbe5UiMAlBU4iEBBPImSWdE1AOvHzoDTi1M4FaMUe9Gh2LGEUGIS50cTAl
-         2WXg==
-X-Forwarded-Encrypted: i=1; AJvYcCW1RYRREdkXAOyGGMdpcc5tMtW10dS+LzJ/sca57wv5rkBtlyDrmgjXJn1Qaw1O03lRIh+o334j1Re00WpDGUk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz75/gjcE6zNXOiQGkjtCHfr5RFGD2Lj3Occ8DD50Uusy6+qB/L
-	Vi/+Wq2uQXfw+ALgSA9YgbRqNhSWI0mSP/Lr9q6RvGm0ibOCyQkEtCPCnif4Dnzlct3YBeZH4oz
-	FImhkps1HMjlNyf+m7j/BhZRRAQCw2ssflU1H0S1r
-X-Gm-Gg: ATEYQzwZbT0IU+nDMv7YDAnLqHFn/dwR1OKUz3mHeCtdP4cQZW7z96pJVOK6w05NmJD
-	BkjaXYtb25/fKVvEKeIl4s8rNu3mP3MXWFI3W8Ky6oqplndS+BVHugYOmT4OwNm7FyhojCA0KZC
-	0h0xNAdvxqqiQizPcECRy7lLHXYTzd+2rpI/OmjklHlWLXz7+RuggR9WzzvJb0fLtEEiisno2kA
-	RO2uSK+B4o3n/hqGaV7QVKGxDhbJ3ZH02vc1lKHb4ZIQYq02UkKbEJGuU94KvwbDcfMDrj8Ag4f
-	ZM4kHVfFBq4oCyTw1w3yI3ef+Z3A0n7H/WdmDoxIzQNhoocVIM+r
-X-Received: by 2002:a05:622a:10c:b0:4f3:5475:6b10 with SMTP id
- d75a77b69052e-507441cb73fmr3920551cf.8.1772059858971; Wed, 25 Feb 2026
- 14:50:58 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ijhWvnV0"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SdEFM0PdcFvKnk+7wcHsDhvYp1z7iv+DAsviLHd5pClkmk381dkDmaiX2yuC7xbDcmlLOnX1MBM7sv6HYEH/Cp8UdL8kMFutOFaUL6CsCaaq/kijyTcppxhZehP+f6UqCulmBWOApIiF+6AqJBL3c7OGk0B0i62/J6rc6jDIaedef+UhTXggXy8vdg34ENf7NcnA0frFInwSXooYbQ8ikd8/qCi4oubnKOpI2HCfyRGKkYAnfw2veWZy+4eXXWV8Td7ncNGBZuTgutk3ByKffTHslGoTrFC2Ebk96I/U389tgmDSCrrxIYW4l+/kH+PKyX+R0kjHR3fa2p+AmEDHpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0aRLbep1mAoy/9FlVi1wIcO/l+Ji5XgfNPxwedWZCHs=;
+ b=fmKyXgdWaBUENeBggy1yxAtAXq4jeXBKsFApKwz5DUZmmpqJCvNs6cMesygR73k7/PBSjx9KYyDtl2iYjInyCrzcdyg+hLYnk3nPgL78rP5S9ATPUNjPXnVPynqT/ZAlNYZUMJbzcNkgBAtGXvg7sryf/uYLLOcF6Rmyf9cJYgM2TkKEerqXlXQSgYKVy7UY2pDTiT/CLUy0OCMp9gNT8u+qgiMyVkOKWA67s+wKULg3dKpjzjvd/cei88cjg54kS41OOd3sRe146Ce3Dg9INEWOYCjw4Uwz7IT5mOPVchGYSK+MyqH+i9ORnRJnPyKyGjVHK3LOSLLVn1DuHJJr4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0aRLbep1mAoy/9FlVi1wIcO/l+Ji5XgfNPxwedWZCHs=;
+ b=ijhWvnV0eYPBRqrqmflkuNhu9Lev5ahJHSlor78tIbS6uVa2dJHqQ03it2zZHJzAQNmHdvl4Mds4dNozTzgRaqaiq3YMOzzPCOP662fwmpzMYliQj82IDhG7QEbCa65q4+kC7ghDhZCcQ0ST0tqdKTGZv87Z7kcPX8L9jgkDjG0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
+ by SJ2PR12MB7868.namprd12.prod.outlook.com (2603:10b6:a03:4cd::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.21; Wed, 25 Feb
+ 2026 23:12:28 +0000
+Received: from CH3PR12MB9194.namprd12.prod.outlook.com
+ ([fe80::1e6b:ca8b:7715:6fee]) by CH3PR12MB9194.namprd12.prod.outlook.com
+ ([fe80::1e6b:ca8b:7715:6fee%4]) with mapi id 15.20.9654.007; Wed, 25 Feb 2026
+ 23:12:27 +0000
+Message-ID: <bc6817bd-4aa5-4033-b89d-88fef637de65@amd.com>
+Date: Thu, 26 Feb 2026 10:11:56 +1100
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v8 07/15] iommupt: Add map_pages op
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
+ Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
+ iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+ llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Will Deacon <will@kernel.org>,
+ Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+ James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>,
+ Michael Roth <michael.roth@amd.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+ Samiullah Khawaja <skhawaja@google.com>, Vasant Hegde <vasant.hegde@amd.com>
+References: <7-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+ <fc4f0354-4e6d-452d-abfb-fe24e53253a2@amd.com>
+ <20260117154347.GF1134360@nvidia.com>
+From: Alexey Kardashevskiy <aik@amd.com>
+Content-Language: en-US
+In-Reply-To: <20260117154347.GF1134360@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SY5PR01CA0095.ausprd01.prod.outlook.com
+ (2603:10c6:10:207::20) To CH3PR12MB9194.namprd12.prod.outlook.com
+ (2603:10b6:610:19f::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-5-dmatlack@google.com>
- <20260225143328.35be89f6@shazbot.org> <aZ9yWlcqs2b6FLxy@google.com> <aZ931bYILhhkhW-Y@google.com>
-In-Reply-To: <aZ931bYILhhkhW-Y@google.com>
-From: Samiullah Khawaja <skhawaja@google.com>
-Date: Wed, 25 Feb 2026 14:50:47 -0800
-X-Gm-Features: AaiRm51aoTymXymwCHLQ9gcq3ldQPi6BvUrjqTLQO_zSuAjigNCnBqzqKSIxD-4
-Message-ID: <CAAywjhShWTQbkwhDYB=9a_PZjGHnJ-=HTLAzDBvnDsmtvP=Auw@mail.gmail.com>
-Subject: Re: [PATCH v2 04/22] vfio/pci: Register a file handler with Live
- Update Orchestrator
-To: Pranjal Shrivastava <praan@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
-	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
-	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
-	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
-	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <skhan@linuxfoundation.org>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB9194:EE_|SJ2PR12MB7868:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a3b594b-c6f6-4184-9bbb-08de74c357f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|7416014;
+X-Microsoft-Antispam-Message-Info:
+	Gt7jCSRSzNJRrVJS4u+8xYQw9hEXJrFqpdYH+FURSkZonbmXBt29QsUXShVX7a/TyP/iiJzOt0gxrg9N4P4Q6T6NlXmKmAwt63GvKiA5YgSNcqqxPfdMHdCli0oj1esZXqVCgR2mi7Ts4R6isc2wK6duZFzcf8RqnYTE4bcsnT3cRCG0aGkhVGH02t6J8fdRH6bJacB2MEAbbq7KJOpOipMbHb9Jqhj5pO2yYS6capi6f7+GX4dZN2XWQGB2P3uzfKjiiI5BHh7d6LrGWLhudQdohD8NYUEWqSm5ZkP839PLF2M8rQe3nTBEAXgT81iDcTHfhswbqr77Z2YJDoHz88ys9J9nIuaqSrnBr9tIL55SO8v/grKOd+FWV0gutovZ7+7Z9ekqBPrqsZEcdw+CFxMbAtmk3hfOlxKVcOrLE0ZsA6uwpciczCDkk6DT4ofCgYbcXp4sYiYaEP5LUHXHXUcBzl0Xncf8NkevpamUdU53W2jCJpbAnFQbt5jczZvM1Xs2t0zKBHEadgIAEye3/uLHbphtUohvIwVewArhTCkwIJgo/JSMNCraSwWtIwuLDhRxpKwQwgpl03z+3nivTXmcDb8iixcLR13juIpRgM4dl0qr1jR3zEfOh2dY59o/Hv8VNj9Z2GyVcm4hR086Wq+AJKkGPHR7agtotXuNFEugs6YzcREJkF32quY3cW/jmN8nZa/xJUIRwRDzP0LH7aUZqhtis7Id+jGyc7aCXOA=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9194.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NmdsV0NIZmFORVBKUjZBVHVoV21oenRxSS9lMEcwbzlyc3NQa1l3bExKdVBa?=
+ =?utf-8?B?bWJmMlUzT0M3RTVac2diZkJXZ1VyNTFWSWJIeWVYay9UeW43Uk1nQ29BY2pS?=
+ =?utf-8?B?Nk5vYVlJYy9mNmVJRkx2Wmc0ZXl3MENFRlV4UlNLaUlZVzVBWjBjY0x3Ris5?=
+ =?utf-8?B?SzFZY1JpRlp4WDNRZHE0eXQ1OXE5eTJvY0FGYW1YeTMxM0JxVG1OL3pWYm9i?=
+ =?utf-8?B?MzFmck5zRkZtdklNeHZYK3F0eXlhSjd2S0pZWGx2ZVhPNnBIZHVVcVAwSHRl?=
+ =?utf-8?B?azZkcXBvc0lMNzVVMkRBRldYVlJHYTN4S3NKZ1VLSGVJaE1hQm5aRS91WTJV?=
+ =?utf-8?B?czBPbFh6Wm5tLytpQlZ6UWJPQ0l4N3JEQTliR0ljRFc3RlE5V3MxNUFvMHFG?=
+ =?utf-8?B?U3J5M0RrU2pvb3RBejN3WlJpbEpodXRReTE2RTQwNUF0ZFRFci82WmlGNmdD?=
+ =?utf-8?B?VWlQb2JjTzNDL2Y0WVU5QTIxcG9MdkpLaEJ4UFhUK2JKY2lqbHlqd3hvR1Nq?=
+ =?utf-8?B?RXZLclJvd0JUNDJFRERSZTZySjhCY1JuNjcrMk9SMncxekJjZjBUU3BHVmRN?=
+ =?utf-8?B?V241YWRGaXV0WC92b0cvZ05XNUpOUHRsMmg1c21xNHVuNER0dDVyV1J3aG9R?=
+ =?utf-8?B?RXlOM3hsdHgrVTJlL1pUTHBqUlZLY0cwVmF4MS9ra0xabVVSREM1Q0ZsSE5k?=
+ =?utf-8?B?TWF2ZWhIUFcxTWU5dWJEemZEYWMzVDVpdktXaFVwWDFpdU1uRnBQRkxTQVRY?=
+ =?utf-8?B?NVpyNVpRVFZPYkg1WVh6Mm81UUZvMnZwNTNqdG9jc0YxRTBaSWQ3cmtBOE1z?=
+ =?utf-8?B?ZVI0VWg1SFJoMmpLQUw5cXQrTVJGS1VuTXBDeHlpZC9lM3pmeC9aS3JYUVZ1?=
+ =?utf-8?B?dHJhZW1kZEYzMmkrelpDeDlocTh3QTNDejdleUVOa0gwdDZvNS8vdWF5VkU3?=
+ =?utf-8?B?di9KS3RJMUhZSUdUQzV0dkxjb3N5dkF0czh4bWRodEJTUUovUGNzOVNGYUIz?=
+ =?utf-8?B?eVRuS1lnQTBCdWwvcGRUZ2J3N0ZWOUxBSTl1MExGdFBUM3RwWG1UL0NvZnVL?=
+ =?utf-8?B?cFJVbVJYczlyYzRaR2FhZGRMWEhBNks1Y1d2eWd1eXNCTHFmSmdDdVA4TDZp?=
+ =?utf-8?B?SW5DUGM1cWJmdU9EbGlwVmlDcTVQN0hCV2xNWHlUT29qZXpLZ3paUjIwWDJT?=
+ =?utf-8?B?empYUldrYnhURkNmbXBKb0JQVnlNWXlUbFlMdFhzQzBnRXBRTzFxRHo0TE5a?=
+ =?utf-8?B?VHBEVnA0NGdCRlFqYSs5dncyYWtBMWE1bXpmVllhamlJMkl1blNjNXhPYVNr?=
+ =?utf-8?B?WVVpMFU1TUNjRitDVVY3SDdzR0w4UzNROTVFaTlXTHp3Z2RXVEFsdGpqR1Vz?=
+ =?utf-8?B?REhCWjV4cHlleVBxdzc2ZnNQVGx0VnpJVXBFZVdYb3Rrdy9OK1pRK1pSMVFC?=
+ =?utf-8?B?b2xscnpWdlVxeG9KdklycXp6bERyVW40MVFDT2wrOHoyMnVJREpaRmpTMTlC?=
+ =?utf-8?B?VXJTWFdRa1lyaFllWWxBeXpLS21ERE9zT2VoTTlpQVBTR05pa2xTUzB4V1V3?=
+ =?utf-8?B?cmg2aFFKVHM0THVtTy9McGdybERsZTBubmFac1FGTDNkNEFlNXV6V05QSDMw?=
+ =?utf-8?B?TzA2bENrQjQ5OXZYemgrQ2NvU2hjMnA2cFZrSDltSy8vdkVRck9PdUFTOGZq?=
+ =?utf-8?B?S3dJYTdrWHcxZWZTNnArZUFmaVZYZllIamZKS1lWT3BjTDNiY28zVVpRUlVI?=
+ =?utf-8?B?dGxVaXlVcEVWZE9lYkZ6SUc5MzJuVG9NMjE3amVGNzNmYlV1dEtibmNZd21D?=
+ =?utf-8?B?TWozY2hVclZvblFZb1ZWTzR5UjZZczQ5eStvakJKQ2s2RmRzLzR2M2NmdFM1?=
+ =?utf-8?B?WmV3V3dTRm0wcFptc0YwcmszaGpmSFBLdGUwT1dFd0QrSlBVOVNnM3N3d2Ix?=
+ =?utf-8?B?WTgxN3A2UnhVeCtMSlYvdzFKcXFMT28wN3dObjlRdWFkRHNtT0xldld4TGlR?=
+ =?utf-8?B?S1VyUFA4Wkh2OE1GVFNXTld2VDZvaENYNmJDZUxqMHJVbUJwbFZ6dGlNdm5J?=
+ =?utf-8?B?clVsMURvb2VlbHY1QXpKb3c3blBscEh1OGNwbklud1BySWQ0NkZML0lta1h3?=
+ =?utf-8?B?K0lSSmlSalNFOTRjdGdSSTFDaE9kZTgxWm01dW8yZlVickVyUTdoTVVOT2RZ?=
+ =?utf-8?B?d3pSeXJjWDhNMTRhWUxmTnNhbkNTb3FxWHhiRnVsRW1HdmpSMXh4SThWbjln?=
+ =?utf-8?B?eVRjWHNpbnRFR0p6amI5WUdLUVdoQy81aGlhaS8va3hSdXNJUWNqSUVkcVpR?=
+ =?utf-8?B?eHRRRHk0ak1TdHhzT3N4c1pwajV3MnFZY3FYOHZIU3NCQVVJTk5mdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a3b594b-c6f6-4184-9bbb-08de74c357f6
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB9194.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2026 23:12:27.7939
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UhK9gQBr9H0gJWCy0W9DyLayz/cE0two//r4REsLZ54Ak8fqK94csR9eSNuK+hGlI7TBkSQPN16mXmrEKalCug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7868
 
-On Wed, Feb 25, 2026 at 2:29=E2=80=AFPM Pranjal Shrivastava <praan@google.c=
-om> wrote:
->
-> On Wed, Feb 25, 2026 at 10:06:18PM +0000, Pranjal Shrivastava wrote:
-> > On Wed, Feb 25, 2026 at 02:33:28PM -0700, Alex Williamson wrote:
-> > > On Thu, 29 Jan 2026 21:24:51 +0000
-> > > David Matlack <dmatlack@google.com> wrote:
-> > > > diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pc=
-i.c
-> > > > index 0c771064c0b8..19e88322af2c 100644
-> > > > --- a/drivers/vfio/pci/vfio_pci.c
-> > > > +++ b/drivers/vfio/pci/vfio_pci.c
-> > > > @@ -258,6 +258,10 @@ static int __init vfio_pci_init(void)
-> > > >   int ret;
-> > > >   bool is_disable_vga =3D true;
-> > > >
-> > > > + ret =3D vfio_pci_liveupdate_init();
-> > > > + if (ret)
-> > > > +         return ret;
-> > > > +
-> > > >  #ifdef CONFIG_VFIO_PCI_VGA
-> > > >   is_disable_vga =3D disable_vga;
-> > > >  #endif
-> > > > @@ -266,8 +270,10 @@ static int __init vfio_pci_init(void)
-> > > >
-> > > >   /* Register and scan for devices */
-> > > >   ret =3D pci_register_driver(&vfio_pci_driver);
-> > > > - if (ret)
-> > > > + if (ret) {
-> > > > +         vfio_pci_liveupdate_cleanup();
-> > > >           return ret;
-> > > > + }
-> > > >
-> > > >   vfio_pci_fill_ids();
-> > > >
-> > > > @@ -281,6 +287,7 @@ module_init(vfio_pci_init);
-> > > >  static void __exit vfio_pci_cleanup(void)
-> > > >  {
-> > > >   pci_unregister_driver(&vfio_pci_driver);
-> > > > + vfio_pci_liveupdate_cleanup();
-> > > >  }
-> > > >  module_exit(vfio_pci_cleanup);
-> > > >
-> > > > diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/=
-pci/vfio_pci_liveupdate.c
-> > > > new file mode 100644
-> > > > index 000000000000..b84e63c0357b
-> > > > --- /dev/null
-> > > > +++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
-> > > > @@ -0,0 +1,69 @@
-> > > ...
-> > > > +static const struct liveupdate_file_ops vfio_pci_liveupdate_file_o=
-ps =3D {
-> > > > + .can_preserve =3D vfio_pci_liveupdate_can_preserve,
-> > > > + .preserve =3D vfio_pci_liveupdate_preserve,
-> > > > + .unpreserve =3D vfio_pci_liveupdate_unpreserve,
-> > > > + .retrieve =3D vfio_pci_liveupdate_retrieve,
-> > > > + .finish =3D vfio_pci_liveupdate_finish,
-> > > > + .owner =3D THIS_MODULE,
-> > > > +};
-> > > > +
-> > > > +static struct liveupdate_file_handler vfio_pci_liveupdate_fh =3D {
-> > > > + .ops =3D &vfio_pci_liveupdate_file_ops,
-> > > > + .compatible =3D VFIO_PCI_LUO_FH_COMPATIBLE,
-> > > > +};
-> > > > +
-> > > > +int __init vfio_pci_liveupdate_init(void)
-> > > > +{
-> > > > + if (!liveupdate_enabled())
-> > > > +         return 0;
-> > > > +
-> > > > + return liveupdate_register_file_handler(&vfio_pci_liveupdate_fh);
-> > > > +}
-> > >
-> > > liveupdate_register_file_handler() "pins" vfio-pci with a
-> > > try_module_get().  Since this is done in our module_init function and
-> > > unregister occurs in our module_exit function, rather than relative
-> > > to any actual device binding or usage, this means vfio-pci CANNOT be
-> > > unloaded.  That seems bad.  Thanks,
-> >
-> > Hmm... IIUC the concern here is about liveupdate policy if the user
-> > wants to unload a module which was previously marked for preservation?
-> >
-> > AFAICT, In such a case, the user is expected to close the LUO session F=
-D,
-> > which "unpreserves" the FD. Finally, when rmmod is executed, the __exit
-> > (vfio_pci_cleanup) calls vfio_pci_liveupdate_cleanup() which ends up
-> > calling liveupdate_unregister_file_handler(), thereby dropping the ref
-> > held by the liveupdate orchestrator which allows the module to be
-> > unloaded.
-> >
->
-> Ohh wait, You're right, Alex. I just realized the __exit won't even be
-> reached because of the internal pin. The current implementation creates
-> a catch-22 where the module pins itself during init and can't reach the
-> unregister call in exit. I believe we should drop the ref when the user
-> closes the session FD? Additionally, should we move try_module_get out of
-> the global liveupdate_register_file_handler() and instead take the ref
-> only when a file is actually marked for preservation?
 
-If we don't do try_module_get during registration, the registered file
-handler can go away on module unload while LUO is using the handler
-during FD preservation. This makes it racy. Maybe register/unregister
-need to move outside the module_init/exit.
->
-> Thanks,
-> Praan
->
-> > I think we should document this policy somewhere or have a dev_warn to
-> > scream at the users when they try unloading the module without closing
-> > the session FD.
-> >
-> > Thanks,
-> > Praan
-> >
-> > >
-> > > Alex
-> > >
-> > > > +
-> > > > +void vfio_pci_liveupdate_cleanup(void)
-> > > > +{
-> > > > + if (!liveupdate_enabled())
-> > > > +         return;
-> > > > +
-> > > > + liveupdate_unregister_file_handler(&vfio_pci_liveupdate_fh);
-> > > > +}
+
+On 18/1/26 02:43, Jason Gunthorpe wrote:
+> On Sat, Jan 17, 2026 at 03:54:52PM +1100, Alexey Kardashevskiy wrote:
+> 
+>> I am trying this with TEE-IO on AMD SEV and hitting problems.
+> 
+> My understanding is that if you want to use SEV today you also have to
+> use the kernel command line parameter to force 4k IOMMU pages?
+> 
+> So, I think your questions are about trying to enhance this to get
+> larger pages in the IOMMU when possible?
+> 
+>> Now, from time to time the guest will share 4K pages which makes the
+>> host OS smash NPT's 2MB PDEs to 4K PTEs, and 2M RMP entries to 4K
+>> RMP entries, and since the IOMMU performs RMP checks - IOMMU PDEs
+>> have to use the same granularity as NPT and RMP.
+> 
+> IMHO this is a bad hardware choice, it is going to make some very
+> troublesome software, so sigh.
+> 
+>> So I end up in a situation when QEMU asks to map, for example, 2GB
+>> of guest RAM and I want most of it to be 2MB mappings, and only
+>> handful of 2MB pages to be split into 4K pages. But it appears so
+>> that the above enforces the same page size for entire range.
+> 
+>> In the old IOMMU code, I handled it like this:
+>>
+>> https://github.com/AMDESE/linux-kvm/commit/0a40130987b7b65c367390d23821cc4ecaeb94bd#diff-f22bea128ddb136c3adc56bc09de9822a53ba1ca60c8be662a48c3143c511963L341
+>>
+>> tl;dr: I constantly re-calculate the page size while mapping.
+> 
+> Doing it at mapping time doesn't seem right to me, AFAICT the RMP can
+> change dynamically whenever the guest decides to change the
+> private/shared status of memory?
+> 
+> My expectation for AMD was that the VMM would be monitoring the RMP
+> granularity and use cut or "increase/decrease page size" through
+> iommupt to adjust the S2 mapping so it works with these RMP
+> limitations.
+> 
+> Those don't fully exist yet, but they are in the plans.
+> 
+> It assumes that the VMM is continually aware of what all the RMP PTEs
+> look like and when they are changing so it can make the required
+> adjustments.
+> 
+> The flow would be some thing like..
+>   1) Create an IOAS
+>   2) Create a HWPT. If there is some known upper bound on RMP/etc page
+>      size then limit the HWPT page size to the upper bound
+>   3) Map stuff into the ioas
+>   4) Build the RMP/etc and map ranges of page granularity
+>   5) Call iommufd to adjust the page size within ranges
+
+
+I am about to try this approach now. 5) means splitting bigger pages to smaller and I remember you working on that hitless IO PDEs smashing, do you have something to play with? I could not spot anything on github but do not want to reinvent. Thanks,
+
+
+
+>   6) Guest changes encrypted state so RMP changes
+>   7) VMM adjusts the ranges of page granularity and calls iommufd with
+>      the updates
+>   8) iommput code increases/decreases page size as required.
+> 
+> Does this seem reasonable?
+> 
+>> I know, ideally we would only share memory in 2MB chunks but we are
+>> not there yet as I do not know the early boot stage on x86 enough to
+> 
+> Even 2M is too small, I'd expect realy scenarios to want to get up to
+> 1GB ??
+> 
+> Jason
+
+-- 
+Alexey
+
