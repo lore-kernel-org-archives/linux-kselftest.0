@@ -1,102 +1,68 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F60431CA4A
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 08:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5803033E7
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 08:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772008695; cv=none; b=IIjwoErqs9KP4mlXXEpr4oZzDaQ4rmBDP7yBItgK8EYU7/yiYHCbHCNhvKBKnD8wvtnDPGqg/Sf3helnuAMweFA/F7esuO5J22ArwbtgexPp9O09Wu+Ax9UbbFYbfU6gXn5of9B7HW17S8sRDQ2gJFKIQL0yK9NBJLdLVtEnrRU=
+	t=1772009258; cv=none; b=GGa8uEHxuOn1MvJhemR+r/b+17pQDi+04MC8gD22JAwg8tNAGbRSZCR0efXT9mbUCLpz34w0q7M6oTk7u6IfpIC3xIDJB5qbmvmIyyLk21Tv6+cox2OzWO5TJi0uI2a1UGxif3y/tmBwf2c8g8ZmffUTkF4JoN05VLBzpktUoxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772008695; c=relaxed/simple;
-	bh=uun3Vk7JQyHZ6aF3HcHlMyo2Xah/fKCgQ3PDPCYVA6w=;
+	s=arc-20240116; t=1772009258; c=relaxed/simple;
+	bh=xt8ohtKb1M9f1I8jGhd11DN2horJLMay+iP4kCP07Us=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F4NRvyMy76s1xVR+nuapdTsGAzM8SGYlNrYKUHMDwbf+EIl7DJvN/zV+PGnXiVuQBgrbPwr5qpF1EgRYK0REKUwymc8l/a+hEZSVRQch2ufpHrIUrBI+aNL3TKrt/OgMpCYacHSo7Mfm7pCQP+9dF9hRS7hwOIZr86mGO44hdYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0d5FCoRU; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=STr9AVgXZ98aIybY8+YIgjRpJ1+jqIb2MRExKKq1AwItEjPERi/8uggV82bu8Npnllhm5cIIBoc2GieqFgj0v2EFZf1yrnQSRlf6WF/FRwnTN8xsLdhOZ2inLlscokPc7eUskErZ4KV+8bd3gX2kXW1ysqa+gbt2G/yZMsA54S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c9gv31vo; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0d5FCoRU"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a964077671so74325ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 00:38:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772008694; x=1772613494; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=euz76pxATmJYev+UEaMjSj8YYGXQ5aYbA3uegrgN/Es=;
-        b=0d5FCoRUjPdyGC+3ksFgWishHadW5IYorl8tK66VBPAKn65KnWAsC3NPOrquJQkA81
-         AmYi7hY9aounpoXHRaBlwCPDfCmKfSaSVVsvYPqD2UDk9Q+f2FOEHEXhw/y3C7NgDpZT
-         ehjNGj2mO+fmCkRyjd2uwFq5vMDmzU5taYk/yEsG6Rm6insqmfMw/LdXhnjnPNzSipRh
-         8iATFyj2niKIRoRNz3lBjsw9KddROojWASSL8+sqsolFSBw4Y/Z/eEZya8Jv38nrKDLD
-         sOTnLmK/Mn5mIH1XKu40CWQDRiNqtV983z8rMk1QkMKeeTMamQCIW7hOlr+QqWYsz0Qz
-         zp0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772008694; x=1772613494;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=euz76pxATmJYev+UEaMjSj8YYGXQ5aYbA3uegrgN/Es=;
-        b=REqDWomKInd/1nV8P8H+aTxREl6uGlgMyaabjFeBhnnSNyovgJs/iPOnkndl6NH/fT
-         DGFU+TGxw/dzO5TpBUR0GOqXWRFDVimDUIQAO57sF9eqpwzacWQKFZPu1ppIHJ9hLnCf
-         C2u2MvyFBR7Q1XnBOf01JhAbf4k6X7ZltmxZUsEcoXrE7NE+L/FEmOhKkp7f53CuC/fS
-         BXNlojYoOGElbnqhlY0t+zP5xbdnvgPr6faB5j1wcGLGRzErOx/9nCRVt1uv8ooOFNqB
-         +ipw5/V1ZDJOP1ilvv0hZS5zipyDL90gMiJ6CFMG6N7HnMOrwvCBkQz7Ff/lzYhVXvdJ
-         9jMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVbmUPTxVY+9OUixdvdcJt8nw8W+LNWJHdqMGQaHa1XRNuVbbhJPejs1OB5ixa1OZ4eOyGikXP7UgolfTxVp4A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpCATUkB3JQS8iGMULhgZk0PIq+G0O36fHhqQSX/UqV5w+mHir
-	vo410+FDOxMhZalj/KwbBOe6qyFQBJ3x/076iUSE2XvsEj/WuaNin+i4sLHE4M2Adw==
-X-Gm-Gg: ATEYQzxPqdNaG4vdiL/4KFvv25PkBzdjlw3OtfyDKCZXLfUFLQk7fsrBgm0Cqt9QQpN
-	hj2b90b/LmvN8d5xgY4HRP4dhAsjPDDEz6GhILDX3Dybdp02DUX3zY4c7+1tTGngJupaUjhMaKZ
-	F/TBNdm++vkgecRlVWCWSm4sJeQdl2gTInysiAWUDgABJEDZXOoLOor8bvrM5Xxli4ZXqNcSfpq
-	eiAS5VGOgewIBNqMZSNMRpdixIN2L78+1g61U1MmMkLXMWouPn+giDEfCo2FkaW79kC+FmWNhpZ
-	v3edSGvTtik15SqUpZeVSzgljRU+E/E3z8u9hOnTNpjBkA84UyxFTEQyLBDt20waQx0lQFo7Cdz
-	iBPJ6enabaAg/8I4LYGzVMbWRjeG+ZIy7yyW/rW7+E2an/15RuaSSA09PdVG509aehw0sblOypi
-	rKDl2gYFHjpKMFReYhP2Xdtm0bllL59Yl7O1Sbl1/ptPiZjz3nvbq7YN9+v25g
-X-Received: by 2002:a17:902:ea02:b0:291:6858:ee60 with SMTP id d9443c01a7336-2adca6c8a9fmr1402215ad.4.1772008693092;
-        Wed, 25 Feb 2026 00:38:13 -0800 (PST)
-Received: from google.com (222.245.187.35.bc.googleusercontent.com. [35.187.245.222])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-826dd6c30dfsm13034861b3a.27.2026.02.25.00.38.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 00:38:12 -0800 (PST)
-Date: Wed, 25 Feb 2026 08:38:02 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>,
-	Adithya Jayachandran <ajayachandra@nvidia.com>,
-	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
-	Alistair Popple <apopple@nvidia.com>,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c9gv31vo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772009256;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d04OwuAx5S3mZfnINvJ//qURUEObB9dXr+1t12EiSts=;
+	b=c9gv31vofQPEV5F5meEuHcuH+tKkPAmnw+xI9+h3ruK6wmUzUCzOWjEamaUekWGI4RKCcf
+	pD1Eo0U8ncJNl+l99iNi/9l4JA0lRXPqehrqToyE4qK7Ri0uFzsa5+QBQ2Hz/W1ParjKs9
+	4tcUsh9oaGj5eMiOUoPYrncdl6w0u4g=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-683-4-4FFrYcPSmYzIZuxXg9Uw-1; Wed,
+ 25 Feb 2026 03:47:31 -0500
+X-MC-Unique: 4-4FFrYcPSmYzIZuxXg9Uw-1
+X-Mimecast-MFC-AGG-ID: 4-4FFrYcPSmYzIZuxXg9Uw_1772009249
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DB49C195608F;
+	Wed, 25 Feb 2026 08:47:28 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.38])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id BE0E0180066B;
+	Wed, 25 Feb 2026 08:47:21 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 25 Feb 2026 09:47:28 +0100 (CET)
+Date: Wed, 25 Feb 2026 09:47:19 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Kees Cook <kees@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Ankit Agrawal <ankita@nvidia.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
-	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
-	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
-	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-pci@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>,
-	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Tomita Moeko <tomitamoeko@gmail.com>,
-	Vipin Sharma <vipinsh@google.com>,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: Re: [PATCH v2 09/22] vfio/pci: Store incoming Live Update state in
- struct vfio_pci_core_device
-Message-ID: <aZ606sDJxtfNF6qW@google.com>
-References: <20260129212510.967611-1-dmatlack@google.com>
- <20260129212510.967611-10-dmatlack@google.com>
+	David Hildenbrand <david@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Jan Kara <jack@suse.cz>, Aleksa Sarai <cyphar@cyphar.com>,
+	Andrei Vagin <avagin@google.com>, Kirill Tkhai <tkhai@ya.ru>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] pid: check init is created first after idr alloc
+Message-ID: <aZ63F7vHRKw9qZw9@redhat.com>
+References: <20260224164852.306583-1-ptikhomirov@virtuozzo.com>
+ <20260224164852.306583-3-ptikhomirov@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,88 +71,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260129212510.967611-10-dmatlack@google.com>
+In-Reply-To: <20260224164852.306583-3-ptikhomirov@virtuozzo.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Thu, Jan 29, 2026 at 09:24:56PM +0000, David Matlack wrote:
-> Stash a pointer to a device's incoming Live Updated state in struct
-> vfio_pci_core_device. This will enable subsequent commits to use the
-> preserved state when initializing the device.
-> 
-> To enable VFIO to safely access this pointer during device enablement,
-> require that the device is fully enabled before returning true from
-> can_finish(). This is synchronized by vfio_pci_core.c setting
-> vdev->liveupdate_incoming_state to NULL under dev_set lock once it's
-> done using it.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
->  drivers/vfio/pci/vfio_pci_core.c       |  2 +-
->  drivers/vfio/pci/vfio_pci_liveupdate.c | 17 ++++++++++++++++-
->  include/linux/vfio_pci_core.h          |  1 +
->  3 files changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> index 3a11e6f450f7..b01b94d81e28 100644
-> --- a/drivers/vfio/pci/vfio_pci_core.c
-> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> @@ -569,7 +569,7 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
->  	if (!vfio_vga_disabled() && vfio_pci_is_vga(pdev))
->  		vdev->has_vga = true;
->  
-> -
-> +	vdev->liveupdate_incoming_state = NULL;
->  	return 0;
->  
->  out_free_zdev:
-> diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
-> index ad915352303f..1ad7379c70c4 100644
-> --- a/drivers/vfio/pci/vfio_pci_liveupdate.c
-> +++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
-> @@ -131,6 +131,7 @@ static int match_device(struct device *dev, const void *arg)
->  static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
->  {
->  	struct vfio_pci_core_device_ser *ser;
-> +	struct vfio_pci_core_device *vdev;
->  	struct vfio_device *device;
->  	struct file *file;
->  	int ret;
-> @@ -160,6 +161,9 @@ static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
->  		goto out;
+On 02/24, Pavel Tikhomirov wrote:
+>
+> This moves the condition (tid != 1 && !tmp->child_reaper) to after idr
+> alloc, so it not only covers that first process in pid namespace has pid
+> 1 in case of clone3(set_tid) requesting wrong pid, but also if idr
+> itself gives wrong pid for some reason.
+>
+> This could've been the case before this patch, when creating first
+> process the alloc_pid()->pidfs_add_pid() code path fails, so that the
+> idr->idr_next is non zero anymore and next process calling to
+> alloc_pid(), will get 2 as a pid from idr_alloc_cyclic(). Effectively
+> leading to init-less pid namespace, which is a bug.
+
+Yes.
+
+alloc_pid() does:
+
+	/* On failure to allocate the first pid, reset the state */
+	if (ns->pid_allocated == PIDNS_ADDING)
+		idr_set_cursor(&ns->idr, 0);
+
+but this logic is broken.
+
+Suppose that a task P does sys_unshare(CLONE_NEWPID). Then it does
+fork(), and fork() fails for any reason after alloc_pid() succeeds.
+If P does another fork() to retry, we have a bug.
+
+So with this patch we can either remove the code above, or (better)
+improve this logic.
+
+> Note: This is also a preparation for the next patch in the series, which
+> will introduce an ability of creating init from the task different to
+> the task which had created the pid namespace. Needed to make sure that
+> init is always first, even in this new case.
+>
+> Suggested-by: Oleg Nesterov <oleg@redhat.com>
+> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+
+Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+
+
+> @@ -296,9 +290,18 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *arg_set_tid,
+>
+>  		pid->numbers[i].nr = nr;
+>  		pid->numbers[i].ns = tmp;
+> -		tmp = tmp->parent;
+>  		i--;
+>  		retried_preload = false;
+> +
+> +		/*
+> +		 * PID 1 (init) must be created first.
+> +		 */
+> +		if (!READ_ONCE(tmp->child_reaper) && nr != 1) {
+> +			retval = -EINVAL;
+> +			goto out_free;
+> +		}
+> +
+> +		tmp = tmp->parent;
 >  	}
->  
-> +	vdev = container_of(device, struct vfio_pci_core_device, vdev);
-> +	vdev->liveupdate_incoming_state = ser;
-> +
->  	args->file = file;
->  
->  out:
-> @@ -171,7 +175,18 @@ static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
->  
->  static bool vfio_pci_liveupdate_can_finish(struct liveupdate_file_op_args *args)
->  {
-> -	return args->retrieved;
-> +	struct vfio_pci_core_device *vdev;
-> +	struct vfio_device *device;
-> +
-> +	if (!args->retrieved)
-> +		return false;
-> +
-> +	device = vfio_device_from_file(args->file);
-> +	vdev = container_of(device, struct vfio_pci_core_device, vdev);
-> +
-> +	/* Check that vdev->liveupdate_incoming_state is no longer in use. */
-> +	guard(mutex)(&device->dev_set->lock);
-> +	return !vdev->liveupdate_incoming_state;
 
-Since we set this to NULL in the success path of vfio_pci_core_enable()
-I'm wondering if a failure in vfio_pci_core_enable could cause a
-resource leak? Because vfio_pci_liveupdate_can_finish() returns false
-as long as that pointer is valid, a single device failure will 
-perpetually block the LIVEUPDATE_SESSION_FINISH IOCTL for the entire 
-session preventing the LUO from reclaiming KHO memory.
+Cosmetic, but why did you move "tmp = tmp->parent;" down? This is fine
+but not strictly necessary. OTOH, if you do this, perhaps it makes sense
+to move "retried_preload = false;" as well?
 
-Shall we also set vdev->liveupdate_incoming_state = NULL on the error
-paths of vfio_pci_core_enable() ?
+Oleg.
 
-Thanks,
-Praan
