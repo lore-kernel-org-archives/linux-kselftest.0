@@ -1,174 +1,153 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B471D3D647A
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 16:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F60B274B3B;
+	Wed, 25 Feb 2026 17:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772037233; cv=none; b=kdnRJZ3pcGtJ/8l+6NdWZPAgkHRNCjf1GBaTyTcGrtDMk+fDFboFvLm4zzAFnP7f9RYjo+cfW0yt4Z1DIEFKoV1fxE4Mf/CLii9HbKyX1KbE8XwvWRnkaBmp2RzZNv0iQMHiS/epDq7DQdhYgCEWWbjKWMN0E1jHmA2b/wiOGtw=
+	t=1772039033; cv=none; b=DOf+92TNjOe7oSLUuEL1uRcBBoq6b3yOwf4DOjyC7X05Eij6yBSwVuQWPcziOOJQe2FaaeLuKcxmZCTXZ8GttYKAsJ/dHePlB8KGf+ukHRymECBNMmbq21HfaRjc753Q3nThqpmLZeDvJ2VzCb68CH5i/AzQsMTtH2IGNt26HPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772037233; c=relaxed/simple;
-	bh=K/NDXBr0zyL7RRiunPhYVhKshSa7Kn0DNOK99ojQV/Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KRfj/N3j+aIbMT+fRB6VEWfVE2Twg0dbEDIZleL2goo1GQiECCPsVGsVAPGHir5Z/7j833KhvfpevJLHOsSQgqdwiB0ohygM+YV8AH8Ag7RC+jnH6eYI1QanxsYFliRFqBUcFiYTLbvGg9ywMBjeUa6PLfoH3lCfR7edR3dDhqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GB3MmvVo; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CSSh2uNR; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vyz4qXr3; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zqzFWHgG; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1772039033; c=relaxed/simple;
+	bh=dHsr+tHFlCnPRl24N4jA2w27y8fJLi3JtyQervzLoTQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uQpwtsWkrSMiJx7UEZ7rMvMKVpHwkJKSqM1i11jsWDcWzZFqEujZHx9UExFCQrWnmYq/ScMwrQ7/d5sIxDt/J11yAJj39yludIDwBZaI98sQ9s9tvd4U6cGJEm9u6B3XOMFaxWpC1NTXFhesfRa8YWJFEps29L3LZBdpDV4OyG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XD1ozh1S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GB3MmvVo";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CSSh2uNR";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vyz4qXr3";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zqzFWHgG"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D90895CDF3;
-	Wed, 25 Feb 2026 16:33:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772037230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NTH9hBUsopkauaPajBrrc51TTiXKw9PQsBJjj5DxNcI=;
-	b=GB3MmvVo3BfdFkj6pD8Jmk9Irryhla28tfGuDLTm7eVLb0vkOR0JOLpeuonjqBo5hOcByC
-	ThwwBpmZRBA+Pmi2iJqsjUcKbf4pB5WSWKA/Gz8wHhkHorsR6kJDIfNmdjv0HY64bIWhbj
-	srUC6FtO/s/XFTlsFWafmwx8C5LJwxk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772037230;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NTH9hBUsopkauaPajBrrc51TTiXKw9PQsBJjj5DxNcI=;
-	b=CSSh2uNRFlSF9DHxbpPB0APSAo1WfAEmwvqDueN8dlGo8A/gQLtplfawdxHC40Wdb6O75u
-	KbNQyM5EifYZlAAA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=vyz4qXr3;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=zqzFWHgG
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772037229; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NTH9hBUsopkauaPajBrrc51TTiXKw9PQsBJjj5DxNcI=;
-	b=vyz4qXr3c1714pOOtpJOUiXG+wdSly3SOo/gYD57WsQj1HdTgFUJuym6ywnlkzkEW46SI9
-	xsfPWa1SelzVUmQZ4YC7SrRDbfrHwSTI90watYSxV6VPu+qfzW2UdcnBu/UA3KjYys9dXW
-	rgi7L1PnVMh9OZD0YvKFVuY0bBTyGY4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772037229;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NTH9hBUsopkauaPajBrrc51TTiXKw9PQsBJjj5DxNcI=;
-	b=zqzFWHgGPEQr92F4WJMG32qYDgv465LiSmj20pawT6hLQ1QmWguJeT5agzgG9C6stXB3Uy
-	03Tekkr7WNV9CSAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3987A3EA65;
-	Wed, 25 Feb 2026 16:33:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 6IvhCm0kn2l3XQAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Wed, 25 Feb 2026 16:33:49 +0000
-Message-ID: <7604bbac-f0d4-4143-bb08-261042ad89a7@suse.de>
-Date: Wed, 25 Feb 2026 17:33:37 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XD1ozh1S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A24FBC116D0;
+	Wed, 25 Feb 2026 17:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772039033;
+	bh=dHsr+tHFlCnPRl24N4jA2w27y8fJLi3JtyQervzLoTQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XD1ozh1SBNkGjQqCe22FFfFv2+gNvPm+I1u1m6ZhzTUDqGpLTv2Fu/wbGHD02fBVU
+	 XkGSy7vfsi+9gp45XYK/2MWbz2etIJ3aW9cGxmnam+HNf8z2+fKZZ4Hg9JNPDy5uVo
+	 JZ9vqgsKdRVcR25jm3QOkTrCPkI9hWJJM7XsXuHn+jgBRHqMHwwM/7qr3DfGocYGQH
+	 +U3BcG/S1rHQFbyzH87U+PYRVhhEGLykjSr8HQP3gB3P2XN1LKuVukI9YFIf8qR4jF
+	 5+TJYcjly/VB9//ZEWQQaFRsDdUNfXknBSm4FMQa7BYhhKYVEGeb4rEo0LrJY+cYjc
+	 LpH7w9lZea3SA==
+From: Niklas Cassel <cassel@kernel.org>
+To: Manivannan Sadhasivam <mani@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Minghuan Lian <minghuan.Lian@nxp.com>,
+	Mingkai Hu <mingkai.hu@nxp.com>,
+	Roy Zang <roy.zang@nxp.com>,
+	Jesper Nilsson <jesper.nilsson@axis.com>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Srikanth Thokala <srikanth.thokala@intel.com>,
+	Marek Vasut <marek.vasut+renesas@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Christian Bruel <christian.bruel@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Manikanta Maddireddy <mmaddireddy@nvidia.com>,
+	Koichiro Den <den@valinux.co.jp>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	linux-pci@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-arm-kernel@axis.com,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/9] PCI: endpoint: Differentiate between disabled and reserved BARs
+Date: Wed, 25 Feb 2026 18:03:23 +0100
+Message-ID: <20260225170324.4033466-11-cassel@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 2/2] net/rds: Delegate fan-out to a background
- worker
-To: Allison Henderson <achender@kernel.org>, netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, pabeni@redhat.com, edumazet@google.com,
- rds-devel@oss.oracle.com, kuba@kernel.org, horms@kernel.org,
- linux-rdma@vger.kernel.org, allison.henderson@oracle.com
-References: <20260223221918.2750209-1-achender@kernel.org>
- <20260223221918.2750209-3-achender@kernel.org>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <20260223221918.2750209-3-achender@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MID_RHS_MATCH_FROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:mid,oracle.com:email];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
-X-Spam-Level: 
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: D90895CDF3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2520; i=cassel@kernel.org; h=from:subject; bh=dHsr+tHFlCnPRl24N4jA2w27y8fJLi3JtyQervzLoTQ=; b=owGbwMvMwCV2MsVw8cxjvkWMp9WSGDLna8dsbxV8dXNj3bUlHarWmRVfz39m+h2yu0tNyOvyR u3tYde8OkpZGMS4GGTFFFl8f7jsL+52n3Jc8Y4NzBxWJpAhDFycAjCRlpkM/xSbLh6yCFXUrWnR 0Tsc9j7zY5+nwJY/i2tKpgqqhDyxmMvwv8g/WuGMyGxLHe6jOaotEnufVLNGPAhjSJpx4oKM2/8 sfgA=
+X-Developer-Key: i=cassel@kernel.org; a=openpgp; fpr=5ADE635C0E631CBBD5BE065A352FE6582ED9B5DA
+Content-Transfer-Encoding: 8bit
 
-On 2/23/26 11:19 PM, Allison Henderson wrote:
-> From: Gerd Rausch <gerd.rausch@oracle.com>
-> 
-> Delegate fan-out to a background worker in order to allow
-> kernel_getpeername() to acquire a lock on the socket.
-> 
-> This has become necessary since the introduction of
-> commit "9dfc685e0262d ("inet: remove races in inet{6}_getname()")
-> 
-> The socket is already locked in the context that
-> "kernel_getpeername" used to get called by either
-> rds_tcp_recv_path" or "tcp_v{4,6}_rcv",
-> and therefore causing a deadlock.
-> 
-> Luckily, the fan-out need not happen in-context nor fast,
-> so we can easily just do the same in a background worker.
-> 
-> Also, while we're doing this, we get rid of the unused
-> struct members "t_conn_w", "t_send_w", "t_down_w" & "t_recv_w".
-> 
-> The fan-out work and the shutdown worker (cp_down_w) are both
-> queued on the same ordered workqueue (cp0->cp_wq), so they
-> cannot execute concurrently.  We only need cancel_work_sync()
-> in rds_tcp_conn_free() and rds_tcp_conn_path_connect() because
-> those run from outside the ordered workqueue.
-> 
-> Signed-off-by: Gerd Rausch <gerd.rausch@oracle.com>
-> Signed-off-by: Allison Henderson <achender@kernel.org>
-> ---
->   net/rds/tcp.c         |  3 +++
->   net/rds/tcp.h         |  7 ++----
->   net/rds/tcp_connect.c |  2 ++
->   net/rds/tcp_listen.c  | 54 +++++++++++++++++++++++++++++++------------
->   4 files changed, 46 insertions(+), 20 deletions(-)
-> 
+Hello all,
 
-Isn't this change kind of dangerous since 021fd0f87004 ("net/rds: fix 
-recursive lock in rds_tcp_conn_slots_available") [1]?. Why is 
-kernel_getpeername() needed as only the peer source port is required for 
-the operation?
+This series was originally written in response to the patch series from
+Manikanta Maddireddy that was posted here:
+https://lore.kernel.org/linux-pci/291dab65-3fa6-4fc8-90a2-4ad608ca015c@nvidia.com/T/#t
 
-Thanks,
-Fernando.
+Manikanta has reviewed V1 and will send a small series on top of this one.
+
+
+Changes since v1:
+-Rebased on latest pci/endpoint branch
+-Picked up tags
+-Fixed review comments from Frank and Manikanta (thank you)
+-Simplified function bar_is_reserved()
+
+Link to v1:
+https://lore.kernel.org/linux-pci/20260217212707.2450423-11-cassel@kernel.org/
+
+
+Koichiro Den (2):
+  PCI: endpoint: Describe reserved subregions within BARs
+  PCI: dw-rockchip: Describe RK3588 BAR4 DMA ctrl window
+
+Niklas Cassel (7):
+  PCI: endpoint: Introduce pci_epc_bar_type BAR_64BIT_UPPER
+  PCI: endpoint: Introduce pci_epc_bar_type BAR_DISABLED
+  PCI: dwc: Replace certain BAR_RESERVED with BAR_DISABLED in glue
+    drivers
+  PCI: dwc: Disable BARs in common code instead of in each glue driver
+  PCI: endpoint: pci-epf-test: Advertise reserved BARs
+  misc: pci_endpoint_test: Give reserved BARs a distinct error code
+  selftests: pci_endpoint: Skip reserved BARs
+
+ drivers/misc/pci_endpoint_test.c              | 21 ++++++++-
+ drivers/pci/controller/dwc/pci-dra7xx.c       |  4 --
+ drivers/pci/controller/dwc/pci-imx6.c         | 22 +++------
+ drivers/pci/controller/dwc/pci-keystone.c     | 12 +++++
+ .../pci/controller/dwc/pci-layerscape-ep.c    |  8 +---
+ drivers/pci/controller/dwc/pcie-artpec6.c     |  4 --
+ .../pci/controller/dwc/pcie-designware-ep.c   | 24 ++++++++++
+ .../pci/controller/dwc/pcie-designware-plat.c | 10 -----
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c | 19 +++++---
+ drivers/pci/controller/dwc/pcie-keembay.c     |  6 +--
+ drivers/pci/controller/dwc/pcie-qcom-ep.c     | 14 +-----
+ drivers/pci/controller/dwc/pcie-rcar-gen4.c   | 16 ++-----
+ drivers/pci/controller/dwc/pcie-stm32-ep.c    | 10 -----
+ drivers/pci/controller/dwc/pcie-tegra194.c    | 20 +++------
+ drivers/pci/controller/dwc/pcie-uniphier-ep.c | 24 +++-------
+ drivers/pci/controller/pcie-rcar-ep.c         |  6 +--
+ drivers/pci/endpoint/functions/pci-epf-test.c | 24 ++++++++++
+ drivers/pci/endpoint/pci-epc-core.c           |  6 ++-
+ include/linux/pci-epc.h                       | 45 +++++++++++++++++--
+ .../pci_endpoint/pci_endpoint_test.c          |  4 ++
+ 20 files changed, 174 insertions(+), 125 deletions(-)
+
+
+base-commit: 8eaff52fc101c1f6b3215db93bba02c815155806
+-- 
+2.53.0
+
