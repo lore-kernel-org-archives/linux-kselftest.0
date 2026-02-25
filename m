@@ -1,179 +1,170 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998D525A655
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 15:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772032589; cv=none; b=UNGbMlokrChYJErFhAbxajFcMP+ENi5ckfNQ0sivrrmGrFeVr4XTap2yMtfuck7GbAZRFNVy7Ip8ee7N/n8VAJYP8S5cmWUPA497VXtYlksLXtKcEXQBjoxTiGVKD+JwjpVY6Psends/HVsqfHH9baSpeSFqQcW/uQYtL4gjQRs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772032589; c=relaxed/simple;
-	bh=2v4+h7fONrljMow2c+RVTQnuVYSvEGGP7MQ7qIyqGpc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hdUqdqXFifr7BRMWxtZ+yVpNEHoAHgCTHpIPPFtKXrXnxtxoc+jLYmH/S60/dfYVI5whe7m1tqCsXXmrGvChb5BAwkaBXljq+KSn3X/rs6x4jRG8ixMDHJU7yWR+Jff424nAU0BRQnLTUSj8HDymocWBv5fEpX9ld3gP7mtULOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wtFB3V3h; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0D33D524F
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 15:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772033525; cv=pass; b=ekeeXXzE/vz+ZGWaFNSuYoh4QfsyPzhDaiQsWBApBhqeMH3sDWEgTEXFLXbchJVKUtYwuvF8GAFyJcrMRgTIM4B36rvZWUbJqt7yIXnWmSM9UEy8Q3lJaApErbF7IviSYbsZZNPhiN6DgG6uQAU3G6qaMWBoPQWD86sK3SG8Kk8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772033525; c=relaxed/simple;
+	bh=bjupSToOrAI0DDwjT7STEKsEGqrDSWoZgas6vdq8Ts4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PV24WDTquB6TN8OZShCv2fDJ0wsXM8OMlaLEkEcGRuPkYKfep29d2KRuDD5U5jLALp4QW9cwFNqXV34ozwvvgTZP07o4Z2rUV6XL8bnJ45W3oeXlduHF2BYFBBU7jDCHnCaaSUBjF0Nc9SicFjy6GEDBj3FvRlWBAYWVuXXGRkA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dyGSCSO2; arc=pass smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wtFB3V3h"
-Message-ID: <0383ff36-df20-4376-9374-99ff32a527f4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772032575;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+ht1IsfkuNiCWNDQxQQ9oeNsmgvwISL3gSGHhQ9b5ks=;
-	b=wtFB3V3hJzoIj/6NCuu3CNIh/Ni0VeK128IyhG0t+3YpgSOC3/IIplpDBSjrRLxQ6uFU0E
-	OOT9IHx1+YFteW01mvPoNroI5jrz/FoIOqnIUUeLVf1zFZQyfPr/axPf9h3HUj1g1i7JCN
-	dmNqcRNbf5fp3U4Vq8kXZ1O+wL5qpXg=
-Date: Wed, 25 Feb 2026 23:15:52 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dyGSCSO2"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48373a4bca3so42359355e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 07:32:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772033521; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Eofg6CCdhnDoUELXXk+tDSL44UieqP5YWODq/q8S8M60FDTI+sgkdU3Ss4nScahWFn
+         bvqZmv3yEXSqxVTPLJo2yf3peJNwnFN/6GqmijRXPYCVxTLGMN1iIrjyvv6Uj6nVJ9GS
+         9obIhUcHOycONQeAaeZHJkEP7cgTbQxNksbrQA1XFEnyEGnf06bb/vYqySj1l0f7OUC2
+         Oc7jL78qauMEOVQ1GdMjxp1rwd0wkja9q658bfT5CPABd3sBT3fJujslzXy0B4zBY4p6
+         W4DoUNEWpIyDdDDEvW7Lxdu4YAc1KVUGXTk+hyHY5MgVvMUzHWTcQ45UhcrJEJN638iP
+         tkAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JgxTPby1B2Gu/ejHxpJhTk6zFGYoh4BW/4cOBUn1anA=;
+        fh=HiVtoqAfOjVoWkm8pzgyZnLUmSVbroOdgDv1X1HiCmI=;
+        b=C7ydqpVuqpyGqlFxWJaEhGoDKiSiReIw1JIzHc0EuBtf2lfWJvhSdo1hL8AJFnsURA
+         BMF8OVoXKIIcrpcz7WZ9djuJvHpNTIEjiu/kSUF7LosBBjPdFSm+IXUE54rm+LvQwth9
+         9z7RKkISHgIGYr6vNnty90i7qE912vT9QIYgVMmWKA9krm06GL72WuKpAs4a0mN7upBX
+         ZVNMJ6k7lsE5NIp+dTKlfzVRB0XT0NGs7bsIBaPl+1e5j3s7nSivACFmocmmsxT2iDsU
+         ByU99UDeXkoJL4s553H12z5yiHQl6bA4+bR7JMKBS1mq4719ZNmfyijch6sf+tfBO1Y4
+         wR4g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772033521; x=1772638321; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JgxTPby1B2Gu/ejHxpJhTk6zFGYoh4BW/4cOBUn1anA=;
+        b=dyGSCSO2uFZ3XjRKUlBYi5DA0DRMbuNpVnPifvFYenMG1nCBJSQvtRc1VrI2lESDXF
+         Wn2psPpywm2DFoyL5YBQ1K3uHK6wmbeGKGaP9v+QZGNuYzFS3zgKTBI2hKC4xi2SvdMP
+         oDeOeMDUsx/wI4kb08ywtvxYg8k1Al/Pf9RQlGyWGTHxohqEjPpmZwxXa3c63r5oGENx
+         fjudeYM8I7rUeaVnLD+eH+6+2W3sWwjB9PZoYe/5sy8b3JclO6RiI8s7PuXXvIJHCNej
+         RYMxXDQjkcCVRkZXDtlZmCymVXXInvZ8zdAXnn1PXLNjPGhc4sItegHKMEwIRQQtU0o8
+         xGJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772033521; x=1772638321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JgxTPby1B2Gu/ejHxpJhTk6zFGYoh4BW/4cOBUn1anA=;
+        b=Bww1aqrE7//JBzp4sTUEk7kkoJsoB2NLjPfBj6oaXUoYQK3BLvTGmUvWGtZU8Lnwmg
+         hZwd47ziUlQzfzOAiIDULL1dy4w/7S1WuCsc+t8Dk6skEg/1JgxJDPQnBA/6zCmcbGkn
+         jqod/eRzllyuTMDG6bsntC4iM+KhcuzTzsaDVizJ4nk0XUtiPfO2lzGitvLqLpIspPWE
+         cDKoeBH0fb/DU+thslzgBgFZtilA5NDXRLOJcgvPd4+GK7v6tcECNDHkZhjxSr2FWd/Q
+         IBww3qnZOnnGWJATTPY+eqtZO0ysDebR9Q+oYHBhFeq3KgPdgStNdfEmPXcVgn/+NENE
+         vXqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAGQdyamJ33l2OM0+Mvg5rRWZzEfr/mSG1LXdKsiDhRXvktOEhPbK8OPSHQ2lG3vOmXdKHIh9LRwCju09zGKk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyq1F2Lx51w4Qe0OPiJsZteIV0c0CVJHyXi1cVmwE8fMcQweFc8
+	F06kEgv1IEQLpTHnvj2aqv41pSjoxHEFmFZAhDZ0QQxkME/DGFf5DCUTpSbOrOywZ/73PZgZkjQ
+	zntIM5dvZ+AYwzCbS/qjXR98+jwXJbfY=
+X-Gm-Gg: ATEYQzyRjCfWa8mYWj3jpoA9iYywpjh/W3yudPkAhza6ftgujrWWeIQO1+AyDHV1y53
+	rngd6K1LqGWbmG4quPwBadLTdqCxlbGst6Xr/ZW4RRfJykYs7kUdvMlRZNnokKBa3JDgmyYf0mk
+	zYGEXIr3wpBwhm9EccujKPWuMEpNgmcQVh9nWfdSO7L3W6a6qUFFIKc83tdp4sHWHUwepXXu5Eo
+	rSi8x3XVo2D6R4hi0RJBUyYUeCygw6Y1CnpSC+WJUAOsIPNo05ffxxA5BAJ0V52INCKJ1aJTfsd
+	wXMFCbPMZKIDxgiFFhN396Qs09aOgc7G+fRgC54osirTeIl2xl934M6wAOcq96+tFGe1nCLgnqz
+	Ssc7NOaaYc4SURjKNDNGCLc4rFpstyBOB+rYd
+X-Received: by 2002:a05:600c:5253:b0:483:1403:c47f with SMTP id
+ 5b1f17b1804b1-483c21691e0mr12465775e9.6.1772033520933; Wed, 25 Feb 2026
+ 07:32:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/8] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Feng Yang <yangfeng@kylinos.cn>, Menglong Dong <menglong8.dong@gmail.com>,
- Puranjay Mohan <puranjay@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>,
- LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>, kernel-patches-bot@fb.com
-References: <20260224154024.12504-1-leon.hwang@linux.dev>
- <20260224154024.12504-3-leon.hwang@linux.dev>
- <CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260218092002.147306-1-mahdifrmz@gmail.com> <CAADnVQJdQ5PpHRvYahuSk0=cYBXnf5Z9tkdBLs1tcnasigrntQ@mail.gmail.com>
+ <CA+KdSGMxO5C=nFVFbauS2DTRzSvoj14pAMwmbWpj_c50JgOroA@mail.gmail.com>
+In-Reply-To: <CA+KdSGMxO5C=nFVFbauS2DTRzSvoj14pAMwmbWpj_c50JgOroA@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 25 Feb 2026 07:31:49 -0800
+X-Gm-Features: AaiRm50uUxf6w6Nm2mJwbIUWIWYnVWO71EBV1G4XR43xAenu_Z1PpkZg1sv6ayE
+Message-ID: <CAADnVQKE-ULKsArGdHs=_xakhMJ7-hiYrQ1X2eLpXFyJyY_ORA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: fix selftest/xsk single test selection
+To: Mahdi Faramarzpour <mahdifrmx@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Feb 24, 2026 at 9:59=E2=80=AFPM Mahdi Faramarzpour <mahdifrmx@gmail=
+.com> wrote:
+>
+> On Wed, Feb 25, 2026 at 7:35=E2=80=AFAM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Feb 18, 2026 at 1:20=E2=80=AFAM Mahdi Faramarzpour <mahdifrmx@g=
+mail.com> wrote:
+> > >
+> > > From: Mahdi Faramarzpour <mahdifrmx@gmail.com>
+> > >
+> > > This commit fixes the integer parsing of -t option. The cli parser
+> > > only relies on errno to detect parsing errors. The manpage for
+> > > strtol (https://man7.org/linux/man-pages/man3/strtol.3.html)
+> > > states that the said function "MAY" set errno to EINVAL in case the
+> > > conversion fails. Currently on some systems, this leads to a silent
+> > > failure with return value not being exactly documented in the
+> > > manpages (probably zero). The reliable way to validate the input is
+> > > to check whether the endptr has been bumped all the way to the end
+> > > of the string or not.
+> > >
+> > > Fixes: 146e30554a53 ("selftests/xsk: add option to run single test")
+> > > Signed-off-by: Mahdi Faramarzpour <mahdifrmx@gmail.com>
+> > > ---
+> > > v2:
+> > >   - fix style issues
+> > > v1: https://lore.kernel.org/all/20260217080326.50564-1-mahdifrmz@gmai=
+l.com/
+> > > ---
+> > >  tools/testing/selftests/bpf/xskxceiver.c | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing=
+/selftests/bpf/xskxceiver.c
+> > > index 05b3cebc5..5e4095fd1 100644
+> > > --- a/tools/testing/selftests/bpf/xskxceiver.c
+> > > +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> > > @@ -200,6 +200,7 @@ static void parse_command_line(struct ifobject *i=
+fobj_tx, struct ifobject *ifobj
+> > >         struct ifobject *ifobj;
+> > >         u32 interface_nb =3D 0;
+> > >         int option_index, c;
+> > > +       char *eptr;
+> > >
+> > >         opterr =3D 0;
+> > >
+> > > @@ -248,8 +249,8 @@ static void parse_command_line(struct ifobject *i=
+fobj_tx, struct ifobject *ifobj
+> > >                         break;
+> > >                 case 't':
+> > >                         errno =3D 0;
+> > > -                       opt_run_test =3D strtol(optarg, NULL, 0);
+> > > -                       if (errno)
+> > > +                       opt_run_test =3D strtol(optarg, &eptr, 0);
+> > > +                       if (errno || *eptr)
+> >
+> > This is unnecessary. It was required we would have hit segfaults by now=
+.
+> This patch does not prevent segfaults; it prevents silent misparsing.
+> On systems where strtol() does not set
+> errno for non-numeric input, passing -t abc results in opt_run_test
+> being 0 without triggering usage().
+> Checking endptr is the documented way to validate full-string conversion.
 
-
-On 2026/2/25 00:57, Alexei Starovoitov wrote:
-> On Tue, Feb 24, 2026 at 7:41 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> uprobe programs that can modify pt_regs require different runtime
->> assumptions than pt_regs-read-only uprobe programs. Mixing both in
->> one prog_array can make owner expectations diverge from callee behavior.
->>
->> Reject the combination of !kprobe_write_ctx progs with kprobe_write_ctx
->> progs in __bpf_prog_map_compatible() to address the issue.
->>
->> Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  include/linux/bpf.h | 7 ++++---
->>  kernel/bpf/core.c   | 3 +++
->>  2 files changed, 7 insertions(+), 3 deletions(-)
->>
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index b78b53198a2e..2a2f6448a5fb 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -285,9 +285,10 @@ struct bpf_list_node_kern {
->>   */
->>  struct bpf_map_owner {
->>         enum bpf_prog_type type;
->> -       bool jited;
->> -       bool xdp_has_frags;
->> -       bool sleepable;
->> +       u32 jited:1,
->> +           xdp_has_frags:1,
->> +           sleepable:1,
->> +           kprobe_write_ctx:1;
-> 
-> Don't you see how much churn you're adding this way?
-> Every patch has to touch two lines instead of one.
-> Use
-> u32 jited:1;
-> u32 xdp_has_frags:1;
-> 
-
-Ack.
-
-> also the bot is correct on patch 2 and 3.
-
-Agreed.
-
-Here's a concrete example that breaks the constraint:
-
-struct {
-	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-	__uint(max_entries, 1);
-	__uint(key_size, sizeof(__u32));
-	__uint(value_size, sizeof(__u32));
-} jmp_table SEC(".maps");
-
-SEC("?kprobe")
-int prog_a(struct pt_regs *regs)
-{
-	regs->ax = 0;
-	bpf_tail_call_static(regs, &jmp_table, 0);
-	return 0;
-}
-
-SEC("?kprobe")
-int prog_b(struct pt_regs *regs)
-{
-	bpf_tail_call_static(regs, &jmp_table, 0);
-	return 0;
-}
-
-The jmp_table is shared between prog_a and prog_b.
-
-The constraint can be broken by:
-
-* Load prog_a first.
-  At this point, owner->kprobe_write_ctx=true.
-* Load prog_b next.
-  At this point, prog_b passes the prog map compatibility validation.
-* Add prog_a to jmp_table.
-* Attach prog_b to a kernel function.
-
-When the kernel function runs, the regs will be updated via prog_a.
-
-> Don't be fancy. Require strict conformance both ways in *all* patches.
-> 
-
-It was to avoid awkward UX.
-
-For example, the tail call from prog_a (kprobe_write_ctx=true) to prog_b
-(kprobe_write_ctx=false) should be allowed. If prog_b is required to be
-kprobe_write_ctx=true, prog_b will break user's expectation that prog_b
-should not always update ctx.
-
-The same awkward UX applies to call_get_func_ip, call_session_cookie,
-and call_session_is_return.
-
-I'll find a way to avoid such awkward UX by keeping the one-directional
-validation, and to avoid the aforementioned constraint-broken issue at
-the same time.
-
-> And your codex selftests are garbage. I don't have other words
-> to describe it. They are not testing the actual bug that
-> your patches are fixing. Think of what you're doing.
-> Asking LLM to write a test for your other patch is not what you
-> should be asking it to do. The selftest should be such that
-> it proves the unsafety/crash before the fix.
-> 
-
-OK. I'll reimplement the selftests by myself in the next revision.
-
-Thanks,
-Leon
-
+Prove me wrong with a selftest.
