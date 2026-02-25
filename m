@@ -1,138 +1,90 @@
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD78393DE4
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 11:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE293ACEEF
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 12:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772018155; cv=none; b=gFrTNf0ztQxVntgfh8Z6YA/0MlkVUhhSusM6DL2eAuX+bY0cSh1CmzIP8Nn0sgHZ0kC0H/1zOCfriZCHQxcqCHe0j85R09gcuy6048ecXlT6QrYdhaGjJuim0KSWWYPIEaV5G9tZp0oP6D9LE0FQsJc9eUekoGny1mMjoqVpctI=
+	t=1772022293; cv=none; b=N44QNFoGbIQ6jBulPIa/yW2fG6y8agzmIdr2xwuAVYuwlEEfri1PCMXi/rh7xCktf2z2IMTKnHHbeSfn86uwBGoCo5mbW8LdTmVxnaw9nftVrdR+PBfgSZ0YnPijLUR/oaEqQDQxrg8il/9kTk3qqBllg7xqHfYmUxCJBikNsFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772018155; c=relaxed/simple;
-	bh=z9U3voXKAW1dQW4AvalaDk7/sRwNuHWW6nH2z8AUJ3U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OYokz9C1ZzsHVweQrXA11/WeVCMjalHrmrTUFmSKKfF5YTiesEvuahqLQBC6weGf7uSwK+ZJ/EFZYC1F1lRyz+/36djHfhPVptagRCt8a95YFaginsGdod1p2b8icfCvd0oMcTt140aXfLfWgkCX6hXEsywngqDQAIQ2f0VUT/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FY5+aEiN; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772022293; c=relaxed/simple;
+	bh=U257YdxdwDD5/SgQz18TMn2ak9cgpijlpsO3hFbhA88=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YR9Lovy/uc6IPK963W0wp/oo2hfnm0h+QmBKR9chhvzrhAgeByu+BEQGN+TGA0AE4fBPNT2kzOMWRmRP8cEgN42uEvKuS8JEssYOcoUqmSQLOFMCBOXe2NNNPel3j7Qa2sCqCBzi9dU0d2sua5ANjyscxPEMLzI0bcVHbHXVdV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RkSZ4nu9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FY5+aEiN"
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-45f18e8f2f5so4686247b6e.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 03:15:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772018152; x=1772622952; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=amTmzSl8ryBjjcQX/dMxltL1tsvRdkBfJuWHJ8vklYI=;
-        b=FY5+aEiNLYtcVcEvpFjqs0KrYjN7m6rWAP8vDbSmTe4afI7cOjcSsGST9+4uObu+QA
-         SvpyFA+ywSIJpnJ4tBSd1Q7qV86sxb0Z9mJ47AF0mlNpDzSVj+bm/s+3kTI2qNzzmZuM
-         Fcno5b68VobhOHEcjeVeZA4ZGKB4yrp+va+XEajKUi2MIDKkhDtqtWy/63DbA2kPrKwT
-         h9d55NtV76F3nmUI4TMMkaDce3B/qvYkVqfPBvwjQ9tGWS/HvG0l8SeBWghn77oMflF3
-         oRZxgm6Fj/IL7a6wO39XQ3XF+6OxZlh13J9+/9MFxaV4wPwREKDDigAY4ATzTPnTTvVM
-         SXfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772018152; x=1772622952;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=amTmzSl8ryBjjcQX/dMxltL1tsvRdkBfJuWHJ8vklYI=;
-        b=guM/viR3O28GrYF5jij4UfU4+Xt0v8mAzibRulJ5M7baw2tPbDClqYq1RIbtok5RNQ
-         DFP0tDGJrKv5yzsXxj+wI6JvWocqK2m4H/JAtZ+8PNwzZn/vhfkRwkltlDac/he8Ulb/
-         d9IGd3XgbcaQuXezAHCpWeH4+0ovnJGiErG0Ff+Nt3PPb1Xk1epRKIpMnS4v7AMHPFBu
-         tRZgi/VqjFvBRlZ0OoFFuht31iHF9v9ORVWuwxqHp0EwybH0WFw72SozK0uqyKiRxNLX
-         l+0M5nmIQ+qTHpjruz1SlRPTH957JBe0mtm3SS/GqbxzXl+3x3i0hhhrAVopGlp8C+3A
-         jk7w==
-X-Gm-Message-State: AOJu0Yy4JJDpXasjMt+lntAFI2FAOEG52GtwGeGylyklinNIKnmQ5vT1
-	FXnIfC25JAJLF7rCoNwy+sayHXRrZu20fTlrI7QIPXMhZLKnzbvuyOC8
-X-Gm-Gg: ATEYQzwBBMZPV9VPUyYfUiEJudZtxWiKhuLv4syG8x/u6SM6zCzUqHitaEx00WCvMj9
-	cewPRXfZ5oZzoTwVujXI6FK4ZhAsyVJ8imEuheixMtstOvnLtnfhaS7xq/sWqwMLSusQF1JD/k8
-	hx+iguXz6dD1gOSAq94oqPRsa/V2kIEcLG7vdxw6FhfexNhVF2fvPUIzIFzk4F30AdOx2XzIZel
-	Sj9JhUeliQa7LnaKsowqE6ypJJhsbJ7rzRD9l+yFDKLH06IzUrSVymExUbHTaTT3BNGVzkqiV9a
-	ejsqsN8aHukCRGEPwWjij1oufFZ3Fyy/HaCauxzit2iPFVN65BrqUkztW3RRdUdgvVzhHZ3GV/7
-	zk5VUwrfzSuTE2u4Pl6uITEjz5BqmhpEmDTxjuCpkYmzouYDFjYxrrwko9C1v90K6oQMgHoVaNH
-	pfgpk1vRLIM02wvNYuzqMVVtib70hoVHyBhA+tCh1K7T94MxRll0poRELUzPxSLyZ71frgRFCDg
-	Y1MhCxWg7VxhHbTMtLbY/3FBJY/vUupjA==
-X-Received: by 2002:a05:6870:c1cc:b0:40e:98cf:e01d with SMTP id 586e51a60fabf-4157ac6d17dmr8762285fac.20.1772018152330;
-        Wed, 25 Feb 2026 03:15:52 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4157d34a224sm13053927fac.17.2026.02.25.03.15.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 03:15:51 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>
-Cc: linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RkSZ4nu9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772022290;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=U257YdxdwDD5/SgQz18TMn2ak9cgpijlpsO3hFbhA88=;
+	b=RkSZ4nu9iwjUGhjIyUmTT40jC31FVaUEPNewDyTjv1jh/JWHC+XO8mFbjU29tvGqkkFIch
+	nUTd4g9297mFAEIIqA9ipx51/8yXHAVCZCSJYi36Zh/uiuTiGEn4ilVOGkhEYDodt6+xrn
+	4tNniQ+Bpb/3kmEsK9MWy13lCZ3Gc+U=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-522-N0jqdGwYP0SRQhDomDtz2A-1; Wed,
+ 25 Feb 2026 07:24:46 -0500
+X-MC-Unique: N0jqdGwYP0SRQhDomDtz2A-1
+X-Mimecast-MFC-AGG-ID: N0jqdGwYP0SRQhDomDtz2A_1772022284
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D83A1800464;
+	Wed, 25 Feb 2026 12:24:43 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.38])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 2B60319560A2;
+	Wed, 25 Feb 2026 12:24:35 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 25 Feb 2026 13:24:43 +0100 (CET)
+Date: Wed, 25 Feb 2026 13:24:34 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
 	Kees Cook <kees@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v3 v3 2/2] selftests: net: tun: don't abort XFAIL cases
-Date: Wed, 25 Feb 2026 19:14:51 +0800
-Message-ID: <20260225111451.347923-2-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Jan Kara <jack@suse.cz>, Aleksa Sarai <cyphar@cyphar.com>,
+	Andrei Vagin <avagin@google.com>, Kirill Tkhai <tkhai@ya.ru>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] pid_namespace: avoid optimization of accesses to
+ ->child_reaper
+Message-ID: <aZ7qAl6XCweViRY5@redhat.com>
+References: <20260224164852.306583-1-ptikhomirov@virtuozzo.com>
+ <20260224164852.306583-2-ptikhomirov@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260224164852.306583-2-ptikhomirov@virtuozzo.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-The tun UDP tunnel GSO fixture contains XFAIL-marked variants intended to
-exercise failure paths (e.g. EMSGSIZE / "Message too long").
-Using ASSERT_EQ() in these tests aborts the subtest, which prevents the
-harness from classifying them as XFAIL and can make the overall net: tun
-test fail.
+On 02/24, Pavel Tikhomirov wrote:
+>
+> Also let's add ASSERT_EXCLUSIVE_WRITER before write to identify to KCSAN
+> that we don't expect any concurrent ->child_reaper modifications, and
+> those must be detected.
 
-Switch the relevant ASSERT_EQ() checks to EXPECT_EQ() so the subtests
-continue running and the failures are correctly reported and accounted
-as XFAIL where applicable.
+Not sure this makes a lot of sense in this case, but I won't argue.
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- tools/testing/selftests/net/tun.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> Suggested-by: Oleg Nesterov <oleg@redhat.com>
+> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
 
-diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
-index 8a5cd5cb5472..cf106a49b55e 100644
---- a/tools/testing/selftests/net/tun.c
-+++ b/tools/testing/selftests/net/tun.c
-@@ -944,8 +944,8 @@ TEST_F(tun_vnet_udptnl, send_gso_packet)
- 	ASSERT_EQ(ret, off);
- 
- 	ret = receive_gso_packet_from_tunnel(self, variant, &r_num_mss);
--	ASSERT_EQ(ret, variant->data_size);
--	ASSERT_EQ(r_num_mss, variant->r_num_mss);
-+	EXPECT_EQ(ret, variant->data_size);
-+	EXPECT_EQ(r_num_mss, variant->r_num_mss);
- }
- 
- TEST_F(tun_vnet_udptnl, recv_gso_packet)
-@@ -955,18 +955,18 @@ TEST_F(tun_vnet_udptnl, recv_gso_packet)
- 	int ret, gso_type = VIRTIO_NET_HDR_GSO_UDP_L4;
- 
- 	ret = send_gso_packet_into_tunnel(self, variant);
--	ASSERT_EQ(ret, variant->data_size);
-+	EXPECT_EQ(ret, variant->data_size);
- 
- 	memset(&vnet_hdr, 0, sizeof(vnet_hdr));
- 	ret = receive_gso_packet_from_tun(self, variant, &vnet_hdr);
--	ASSERT_EQ(ret, variant->data_size);
-+	EXPECT_EQ(ret, variant->data_size);
- 
- 	if (!variant->no_gso) {
--		ASSERT_EQ(vh->gso_size, variant->gso_size);
-+		EXPECT_EQ(vh->gso_size, variant->gso_size);
- 		gso_type |= (variant->tunnel_type & UDP_TUNNEL_OUTER_IPV4) ?
- 				    (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV4) :
- 				    (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV6);
--		ASSERT_EQ(vh->gso_type, gso_type);
-+		EXPECT_EQ(vh->gso_type, gso_type);
- 	}
- }
- 
--- 
-2.43.0
+Acked-by: Oleg Nesterov <oleg@redhat.com>
 
