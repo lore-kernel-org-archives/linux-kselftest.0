@@ -1,211 +1,206 @@
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC522877CF
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 07:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772004687; cv=pass; b=DpPg5FjV5bSYD0YhBj44RRHgIy08KoSU72GLxxDLMARQ1ieliFF6tzB3DYSJgLfYi32CTpV4ttSYRR+mcBZok9bb5qE/zn5nshjYcpS934ziips0olnbBDF9EqxnYwTDfpEz7N9VvBNGgP4ou1sPXmaAF4UFcKMEUBWIL9TU/fM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772004687; c=relaxed/simple;
-	bh=iGYGT1zAvQhLDodw/8tlbySDHlXg49Ntp6LeHdpPLsE=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jCwOt+7zPoj8OGXRYmndbbYKOQyC7qWOe7m9FkwajJ6IL18plld1sAewlESpe8IwIE5MEuhBbw+Cf0xCKB55FKtvy2fjpNshwOu6v2t9bcCxXNegn9zv4hh5G1R/TOG7D1LAkZtv2cIEJs0fjXoYoJ+jW9BUGz+inq2SVKZA+bY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bWgpGrog; arc=pass smtp.client-ip=209.85.221.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8DF30CDA9
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 07:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772006164; cv=none; b=T1HMz7F5UPrm9iCJrLIcgJTgvo4LFJVxycS7rVBLQIoFV7e+BGuzI4sJ/hDpAeyv39jypiGIudwJmycsD+P7IdmtFNoPaF1bJb/eFeV+H/bXAN/aRP7gVplpK+uzXIhIviEj8Lf1h6sWuE/oxlxEYCR6c3si2RWbA9zRO+0ik7c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772006164; c=relaxed/simple;
+	bh=/phNhW5Uy8/CpWeGcbySlurAcomYqpo/e8d49tUgN+Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fG0R674fKpUxyXYb6v2Sm/bhZ5WvJa4sxHs82deRXsBZn/QUtVTp8hhH+jKkdoykGDzIkb5lfHVb3ydP8uhDbiHw2NKBpEbUixfaMRaVbRe+W02LRSZL2yFsUjKeylZDAn+TOZoVIiL9rLVcxaFH9sElhAHI2RBIfmNL9M4cGb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cMr5HWXx; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bWgpGrog"
-Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-56a857578a8so54711e0c.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 23:31:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772004685; cv=none;
-        d=google.com; s=arc-20240605;
-        b=iSz46D6rXYpjh6MLiOll7q0ZWU508TIyGZ9SgVzDoJf9A/xe1NzTm1c+6bhSXJP5FE
-         a97Vx59LOyzW9jFImYGIwmIVAs2kCz7pNXEDuotLExZntlHt3xd9Tr8zwldeoa5d/ynR
-         Gn1NK46QtKk+a16XXzAvH7z5VNgj/cTDfS9aVjN0AGVaroKhI7RAid02DSMG0j1EM6wn
-         rqQqaU1uG1MxEvkDiDfDEsDXuAMln3chHsArujO/2200ftiRYViKirumlAS8fBrMq+xF
-         23P7Y9I5UMZ6RpjajAqisj7dQ8nxJ07K//Qe/U2M320Evz83tW+0SciUSB0u6K9mCaZo
-         WSQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=XX8b+rtVnqMMtNp/ESqgVDIfe5eqIi9YcNK6m86bxSc=;
-        fh=dK6FnD0lk1AAUEj3wqGqeoLhHTiH+9XCN7zv2Xr/lVo=;
-        b=gmKmC3U9JvGLmsOcV9moKiJEL/5JqfUTuM47cE9eqVO+hDxtVrslkQ3toG4QqTgCjs
-         DBgvJh29POPl/n0aRllRZ4x7ejVDFGsFv2+FlqNmHId742CqSH9gHsC0OAsBRJ4gJK+/
-         Tj27aPXTOh9lPicwgF1WOtB2D77MG1JnUc5IqZlMg9586DervtMGcaydXGQo3U0Cyx98
-         CvTWhwWjwSL0Gu2bIQGfbJZMCd8aHmpYEYJbyUiwfXQgYGwZemiAIB1zGZkhOBZCOQNC
-         nk/NdYsXtKRNFgQDdY6dz3AsiBWOjY3oVPqgUxLzAa8nWLFrxqumoPHLSua7JPrKyXan
-         +5Xw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cMr5HWXx"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2aad8123335so58385ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 23:56:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772004685; x=1772609485; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XX8b+rtVnqMMtNp/ESqgVDIfe5eqIi9YcNK6m86bxSc=;
-        b=bWgpGrog6nsW6EOEHynnZAPGvkBcMVg/s1vfSpuzTZLe7e6t4gBUDAZXvOPcNuoT4S
-         pnzbstWM4T9iS1znGoiSjyIWvaDbKYN6o/o71Es5cgPT9w/4NB07oc6aITDq8PiOly4F
-         xok/UzWtqKvu4yXXY5lZ21DFx1gn5ouSN5c+mmA0GjPF7rDP6w2UD0Xsq70es5uw7quI
-         UQLR1wMKm2YWMNw/euHnkLXp0S93RtVNzISXX9HRBvcewdSLvPd+vkMQsjLDO4JrxF4L
-         t2XvIzRh00K4MwpOdL4+M+23Z7HHsUKzVeggTvCwSIHQqe9424kPa8W5KMBq5qWfogcF
-         7VbQ==
+        d=google.com; s=20230601; t=1772006163; x=1772610963; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sT2VtKh2V5oEus0jIgTdEjDE+//UyVLRT7BohuHzzWw=;
+        b=cMr5HWXxsinnyXoEwMHazVNRF3kOv/wkVKQxR+M98tFKdRWHFYT8B06/GW9yfsBqAW
+         j5fFyDjk/0eKSa7ZENGTrj1QKZkZ75EZZYioyJhoS34pkZFhd3iC3jGQldklBdUtr90D
+         ox8GgTpNMyc5aFO8FWk/RCKCyXYWDJ5Iqe2S1AVAbuiYtc54b7/YCL5SkVCCXzLcow+s
+         2FpsosqfcxYfpLVjeGADRu3H4JO0TBCamAHtADHIVnFtQh98APl2+mvxIAJR5+qrI1XZ
+         QPCVl26UKxp+e6jQQ+SOE1Q4WxjNLJYKkT4sCVAvh3byNDLO4broTTmZ4rO3wlC5jvso
+         3PxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772004685; x=1772609485;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XX8b+rtVnqMMtNp/ESqgVDIfe5eqIi9YcNK6m86bxSc=;
-        b=ZIfjqahx3J8gKS82gJX6aqKTrd0Id3C/cd9gKybqiJuCOpbeboEEcLteBjfzHtG1op
-         oxZ9MhIiMZaEPCHzxRaVVu0SoFg7M3I9fV1qsJyJ6Qfqsg5myqu4Z/ZTv/DOK2KHyQDD
-         +N892z/nKhd4dSVET0d9JjGxiVtMFh6qfm86j5S+RbKBJAgYfyC9PZtoBpHd7TML1ct3
-         nKtc0GfWLT5w2L1Pv2Vkaao2lPsr1IKYBymsAh5AhAQXPDwV1+4xZ7mttX7TEvlUIvJc
-         xmP4mXWsXklgil/y658nYkqFsOe4v6uUfJZWtrcLOni+IIuq2Bihf9YTc72cvb/sZ1GM
-         UH9g==
-X-Forwarded-Encrypted: i=1; AJvYcCVHjvBwsx7nQkquzcmfRp1F1w5VEWi86Cki1W7iFrUIsT861cKbGSCLyoSzVJJ5VsocNGRqyJn22Q/AJIlPHNM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSBH4gCc5V+egxOlnotWG0KOr7EneSIifiId6Fugmawra657GY
-	LJf5QmVnq9nIEO5IVopdTwRsJNrPA/Pj6T3Bb60N0ur+d1+c0Er6oVAj8YcLXWakMtYB1edmZHb
-	wAs5DbVE5IPFyn9Gn6Cfv7ZfzDViNqsupcv6Po7rZQ3fJMU0FrItLf/EPXv2Vbw==
-X-Gm-Gg: ATEYQzxjFtw6rB9WWiCZYpMv1lYsqy+cicvpqq78eblT9EhoD02vk7rHT0NBQBIoOMs
-	CriltU76Eandol0NrHMiHXvdF0nttmZRlKc106rwlMivIOe03q1KzdG7g4FiFCRPcmkNvn0EicV
-	gV5dAjxeGVForDmU8MfMCY1+QawGdMxNzwNe5mEu/1cvnWmZZ2E0yJBE9dON+M7VSavbyv8Yx3e
-	8RAKnpB5sM96x6dwBD5+ohdQg9z2CCX+85G8x5kGyM+NOroCTJRrL4Ls0JmTCs3O+7HEYdPSL52
-	QuWVjXce1QS5sISEzLM5RMEZsg7Ifsrl+BmUHfeH77xbiCL7RSqiqzZqUt/hnwUlDavlNw==
-X-Received: by 2002:a05:6102:3e84:b0:5dd:89af:459b with SMTP id
- ada2fe7eead31-5ff05d62336mr520728137.7.1772004684941; Tue, 24 Feb 2026
- 23:31:24 -0800 (PST)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 24 Feb 2026 23:31:24 -0800
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 24 Feb 2026 23:31:23 -0800
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <CAEvNRgESctVm9CcEyK36hY8Ta=DEDOS1oW5w0qRDoNfdd=470g@mail.gmail.com>
-References: <cover.1771826352.git.ackerleytng@google.com> <a97045a9-8866-40fe-aa15-d319cafa6f2c@kernel.org>
- <CAEvNRgFF0+g9pmp1yitX48ebK=fDpYKSOQDmRfOjzSHxM5UpeQ@mail.gmail.com>
- <9ef9a0bd-4cff-4518-b7fb-e65c9b761a5a@kernel.org> <CAEvNRgESctVm9CcEyK36hY8Ta=DEDOS1oW5w0qRDoNfdd=470g@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1772006163; x=1772610963;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sT2VtKh2V5oEus0jIgTdEjDE+//UyVLRT7BohuHzzWw=;
+        b=VF5EgtAUFnZzBQMCzJtrHnZuyoAE1oJbH/y1v7QyQ1Zu7MOOTfYZGet+xzoi4NXj/x
+         4pjbRM+WYx4LeJ4EsY3r9y6VGVQOmPHa93NLlclIeMMa73i96MxA0LZAJqwILVD1RAUe
+         Gg4Qz3ZEdAeAG2W8KLgQFtOZqqRDIlfWPM+h6mHNtUywS/FGHS/6P9KYvtPP6anpSvwj
+         nJt78gWOBh3Rb/1UFexVB9ZnzBGqz+HuMhnAxgoNSYXoM99MvQr5EduPlHJ+rZA69a8s
+         eeU9CXOUEspSif5KEdE5DzvX83hHReket1hFZg+ahX0IYJ9qMrumCr+9pSGk31ZrO0bS
+         1JDg==
+X-Forwarded-Encrypted: i=1; AJvYcCWwQFs39dg1/pspyLaTYLot35qhgLH6AqxKnB0LNC+VkUy3bvzNiYNZCNjuNkeLoHmhC9aczxcC++5WhDROLSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL4HIvzlzouyNUyuZckKyezGGvOqqfkaGb6O3rAsEfzb+lSewC
+	8BOO60usquSyS+cwHRAdpRqNDUBBvNnVvlXG6A5uky4IZ+y6VjiIJktYMnDheAKG2g==
+X-Gm-Gg: ATEYQzz7BD0TTIDsssTNiqcLdwinKp7O6VqJQoSbYvRnwfPzl4HosaQVlXUoycbnX5l
+	FRi+vIBL05LxpaiSkOXMavLo0PfgcAfMPPPKV2+1T+uZfOB7p8Zo6U+eQAQXGpi+wQg+B0PDeZF
+	PfOc6HjtYlFx296HEMNbZcofz/8TLpKvCpXHQj+YM4OaMJY+1uXJ2HcHHzFk25rSsFqtZlYhp7e
+	ggH94LVFjlngG1johBCgWTBzqUYZkdI3sy/lfuyVE7oQRtvfXSbleQON4zbZXwPf5AcT2gpdyk2
+	UZvnCVRrJMgLcU9oyxw+tCJ5anl90ymvKhagXdWdJMzjxsEjXukzGrpMIDbWnAcm1uQ21l9b6Sx
+	XDsv1IyzX0xKSHkI7BH2Jqm1DVM7IGetMGxyMUHFclDJzcDWJwb9+iAOXWBvu8xTAA81OLGynha
+	Cqn91KZ2PaJdzsNlmkYlamxaXDd5UwgDWZsDhEee8sRx02JKNFIuPNuRSTZDzy
+X-Received: by 2002:a17:902:d592:b0:2a7:6c4e:5924 with SMTP id d9443c01a7336-2adca6e950fmr1322615ad.12.1772006162194;
+        Tue, 24 Feb 2026 23:56:02 -0800 (PST)
+Received: from google.com (222.245.187.35.bc.googleusercontent.com. [35.187.245.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7500e2b2sm124024035ad.52.2026.02.24.23.55.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 23:56:01 -0800 (PST)
+Date: Wed, 25 Feb 2026 07:55:51 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 07/22] vfio/pci: Notify PCI subsystem about devices
+ preserved across Live Update
+Message-ID: <aZ6rB-zmpaR3RLB_@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-8-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 24 Feb 2026 23:31:23 -0800
-X-Gm-Features: AaiRm51zoZaexsL8AgLT-NSu-LX5kDXX-7Kv8iZiX_RuOJxbA-22InSuIouRjL8
-Message-ID: <CAEvNRgFyRsqhv7CuuDARHTFSanzOHaudM6JMBLwxDwsrjTNCGQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 00/10] guest_memfd: Track amount of memory
- allocated on inode
-To: "David Hildenbrand (Arm)" <david@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: akpm@linux-foundation.org, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, willy@infradead.org, pbonzini@redhat.com, shuah@kernel.org, 
-	seanjc@google.com, shivankg@amd.com, rick.p.edgecombe@intel.com, 
-	yan.y.zhao@intel.com, rientjes@google.com, fvdl@google.com, 
-	jthoughton@google.com, vannapurve@google.com, pratyush@kernel.org, 
-	pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com, 
-	michael.roth@amd.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260129212510.967611-8-dmatlack@google.com>
 
-Ackerley Tng <ackerleytng@google.com> writes:
+On Thu, Jan 29, 2026 at 09:24:54PM +0000, David Matlack wrote:
+> Notify the PCI subsystem about devices vfio-pci is preserving across
+> Live Update by registering the vfio-pci liveupdate file handler with the
+> PCI subsystem's FLB handler.
+> 
+> Notably this will ensure that devices preserved through vfio-pci will
+> have their PCI bus numbers preserved across Live Update, allowing VFIO
+> to use BDF as a key to identify the device across the Live Update and
+> (in the future) allow the device to continue DMA operations across
+> the Live Update.
+> 
+> This also enables VFIO to detect that a device was preserved before
+> userspace first retrieves the file from it, which will be used in
+> subsequent commits.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  drivers/vfio/pci/vfio_pci_liveupdate.c | 25 ++++++++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
+> index 7f4117181fd0..ad915352303f 100644
+> --- a/drivers/vfio/pci/vfio_pci_liveupdate.c
+> +++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
+> @@ -53,6 +53,8 @@ static int vfio_pci_liveupdate_preserve(struct liveupdate_file_op_args *args)
+>  	if (IS_ERR(ser))
+>  		return PTR_ERR(ser);
+>  
+> +	pci_liveupdate_outgoing_preserve(pdev);
+> +
+>  	ser->bdf = pci_dev_id(pdev);
+>  	ser->domain = pci_domain_nr(pdev->bus);
+>  
+> @@ -62,6 +64,9 @@ static int vfio_pci_liveupdate_preserve(struct liveupdate_file_op_args *args)
+>  
+>  static void vfio_pci_liveupdate_unpreserve(struct liveupdate_file_op_args *args)
+>  {
+> +	struct vfio_device *device = vfio_device_from_file(args->file);
+> +
+> +	pci_liveupdate_outgoing_unpreserve(to_pci_dev(device->dev));
+>  	kho_unpreserve_free(phys_to_virt(args->serialized_data));
+>  }
+>  
+> @@ -171,6 +176,9 @@ static bool vfio_pci_liveupdate_can_finish(struct liveupdate_file_op_args *args)
+>  
+>  static void vfio_pci_liveupdate_finish(struct liveupdate_file_op_args *args)
+>  {
+> +	struct vfio_device *device = vfio_device_from_file(args->file);
+> +
+> +	pci_liveupdate_incoming_finish(to_pci_dev(device->dev));
+>  	kho_restore_free(phys_to_virt(args->serialized_data));
+>  }
+>  
+> @@ -192,10 +200,24 @@ static struct liveupdate_file_handler vfio_pci_liveupdate_fh = {
+>  
+>  int __init vfio_pci_liveupdate_init(void)
+>  {
+> +	int ret;
+> +
+>  	if (!liveupdate_enabled())
+>  		return 0;
+> 
+> -	return liveupdate_register_file_handler(&vfio_pci_liveupdate_fh);
+> +	ret = liveupdate_register_file_handler(&vfio_pci_liveupdate_fh);
+> +	if (ret)
+> +		return ret;
 
-> "David Hildenbrand (Arm)" <david@kernel.org> writes:
->
->>
->> [...snip...]
->>
->>>> Could we maybe have a
->>>> different callback (when the mapping is still guaranteed to be around)
->>>> from where we could update i_blocks on the freeing path?
->>>
->>> Do you mean that we should add a new callback to struct
->>> address_space_operations?
->>
->> If that avoids having to implement truncation completely ourselves, that might be one
->> option we could discuss, yes.
->>
->> Something like:
->>
->> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
->> index 7c753148af88..94f8bb81f017 100644
->> --- a/Documentation/filesystems/vfs.rst
->> +++ b/Documentation/filesystems/vfs.rst
->> @@ -764,6 +764,7 @@ cache in your filesystem.  The following members are defined:
->>                 sector_t (*bmap)(struct address_space *, sector_t);
->>                 void (*invalidate_folio) (struct folio *, size_t start, size_t len);
->>                 bool (*release_folio)(struct folio *, gfp_t);
->> +               void (*remove_folio)(struct folio *folio);
->>                 void (*free_folio)(struct folio *);
->>                 ssize_t (*direct_IO)(struct kiocb *, struct iov_iter *iter);
->>                 int (*migrate_folio)(struct mapping *, struct folio *dst,
->> @@ -922,6 +923,11 @@ cache in your filesystem.  The following members are defined:
->>         its release_folio will need to ensure this.  Possibly it can
->>         clear the uptodate flag if it cannot free private data yet.
->>
->> +``remove_folio``
->> +       remove_folio is called just before the folio is removed from the
->> +       page cache in order to allow the cleanup of properties (e.g.,
->> +       accounting) that needs the address_space mapping.
->> +
->>  ``free_folio``
->>         free_folio is called once the folio is no longer visible in the
->>         page cache in order to allow the cleanup of any private data.
->> diff --git a/include/linux/fs.h b/include/linux/fs.h
->> index 8b3dd145b25e..f7f6930977a1 100644
->> --- a/include/linux/fs.h
->> +++ b/include/linux/fs.h
->> @@ -422,6 +422,7 @@ struct address_space_operations {
->>         sector_t (*bmap)(struct address_space *, sector_t);
->>         void (*invalidate_folio) (struct folio *, size_t offset, size_t len);
->>         bool (*release_folio)(struct folio *, gfp_t);
->> +       void (*remove_folio)(struct folio *folio);
->>         void (*free_folio)(struct folio *folio);
->>         ssize_t (*direct_IO)(struct kiocb *, struct iov_iter *iter);
->>         /*
->> diff --git a/mm/filemap.c b/mm/filemap.c
->> index 6cd7974d4ada..5a810eaacab2 100644
->> --- a/mm/filemap.c
->> +++ b/mm/filemap.c
->> @@ -250,8 +250,14 @@ void filemap_free_folio(struct address_space *mapping, struct folio *folio)
->>  void filemap_remove_folio(struct folio *folio)
->>  {
->>         struct address_space *mapping = folio->mapping;
->> +       void (*remove_folio)(struct folio *);
->>
->>         BUG_ON(!folio_test_locked(folio));
->> +
->> +       remove_folio = mapping->a_ops->remove_folio;
->> +       if (unlikely(remove_folio))
->> +               remove_folio(folio);
->> +
->>         spin_lock(&mapping->host->i_lock);
->>         xa_lock_irq(&mapping->i_pages);
->>         __filemap_remove_folio(folio, NULL);
->>
->
-> Thanks for this suggestion, I'll try this out and send another revision.
->
->>
->> Ideally we'd perform it under the lock just after clearing folio->mapping, but I guess that
->> might be more controversial.
->>
+Nit: We might need to handle the retval here if we remove the
+liveupdate_enabled() check above (as discussed in patch 2).
 
-I'm not sure which lock you were referring to, I hope it's not the
-inode's i_lock? Why is calling the callback under lock frowned upon?
+> +
+> +	ret = pci_liveupdate_register_fh(&vfio_pci_liveupdate_fh);
+> +	if (ret)
+> +		goto error;
+> +
+> +	return 0;
+> +
+> +error:
+> +	liveupdate_unregister_file_handler(&vfio_pci_liveupdate_fh);
+> +	return ret;
+>  }
+>  
+>  void vfio_pci_liveupdate_cleanup(void)
+> @@ -203,5 +225,6 @@ void vfio_pci_liveupdate_cleanup(void)
+>  	if (!liveupdate_enabled())
+>  		return;
+>  
+> +	WARN_ON_ONCE(pci_liveupdate_unregister_fh(&vfio_pci_liveupdate_fh));
 
-I found .remove_folio also had to be called from
-delete_from_page_cache_batch() for it to work. Then I saw that both of
-those functions already use filemap_unaccount_folio(), and after all,
-like you said, guest_memfd will be using this callback for accounting,
-so in RFC v2 [1] I used .unaccount_folio instead, and it is called under
-the inode's i_lock from filemap_unaccount_folio().
+same here.
 
-[1] https://lore.kernel.org/all/20260225-gmem-st-blocks-v2-0-87d7098119a9@google.com/T/
+>  	liveupdate_unregister_file_handler(&vfio_pci_liveupdate_fh);
+>  }
 
->> For accounting you need the above might be good enough, but I am not sure for how many
->> other use cases there might be.
->>
->> --
->> Cheers,
->>
->> David
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
+Thanks,
+Praan
