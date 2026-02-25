@@ -1,130 +1,125 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C866D2DC336
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 18:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772045211; cv=pass; b=kr6T4+9POX4ohVwTqPvnJM7RXGA8+S5tpMVT9SJAmcSGi62122ou7jl0Hs90Ab5J9UH/7V344fJpJGxfZ9AOyzXmaL8TfQlR+yjNWis/2cWxsrWO5U1lW+wVDtq5JC0uEpwkY9bgBLNnjpy7bxsj3w0dGAM9Rk27ISHusJEOXmc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772045211; c=relaxed/simple;
-	bh=0N6PIEQkF9K4Mf3+vZgb/e0cIuHyJAzBkOn2Am3gQxw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CbiTLr+RE9z0Py1WuI78EeFI8A5ovCO1e6gtcDrR5i74jVdGrbV64CZGDj9ulqbE3n6KfmZbI2Ze5hlv5FjsQZz2nV06pkKnAVLdXfJD18RGOTMbPZJXVgSbMYmHjWqQ6n2d5rYX3xQtVKodVnO3AdUAoTMUa4rAE2FAwcSo9Vc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=faK3toue; arc=pass smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFDE265621
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 19:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772048757; cv=none; b=rj44Ws3/vUtSHbYdl5zCBEdeWbGncfdfbdIgijT3LwiuKW5hX0MqZnuderNPbeAB+yUrgQIrevue+Sm0mhNqX0X1cB33wetsW+Dge92O1VVjUbj5tuOXr52m6R8KYB3duP+mfkazd49Km0JUZmH2EilXga5WTGryV9LDZ4O/d1U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772048757; c=relaxed/simple;
+	bh=foRzQxT8CkgOXWqmcR/feMK9MJqjzyf7PRMHFJtRYSY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LmT43fUnBYFZgielxA560vnqLQdh51rHjdukmYMVYth/cT6FU7/ud8B6XuBWFi+ulI/erxvD6y77OBWudimnBy1tnfzxDVPuBW34FNGMs0ACf0dD6HQ7jDLn07fveeFFUy/IMnicHxl5rPKKRxQsuUbh7xdr8zSfd4g8wyXYNss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TBFb6Cis; arc=none smtp.client-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="faK3toue"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-506a355aedfso52461cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 10:46:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772045209; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NyIA/aN3X/0YuJ7cojCAShAujDdzStmkvXveHfKaPWNjdi1O2yo50hmUOThsG9ZCOV
-         A5ArnP8KJU4u7fDoc8S971nq+vfTxjFvY9zK52WNdkHM6Nh1P9LWprf1b+e10ILCzEmf
-         gMCJkqhkoxd/0ZHEMv2nm8rT0juVnLfR+AmC1fhlhDZICCYOwwLCZ+kWNvX3W04yGuI7
-         nJBPH0zEuq8wXXt/9a6TS/gLZTjq43ytkrJNQigIi2AoQlXf/QO1OZrmdMg1Pap7PdTl
-         iqBEY27x/6lpyQnZtosQ+x0kis29OX16hFm3KSccrThpf6FqhvYST3EvB0PjzxGNfKrs
-         yrkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0N6PIEQkF9K4Mf3+vZgb/e0cIuHyJAzBkOn2Am3gQxw=;
-        fh=JZQSG/B/WME0x98cVW8e/hQFtSgo4I+BfrLo4G7Jsf4=;
-        b=F6Id1LRtCuCh1dkkbjXxHfz+SoiHD2M2NG7WjtGjiN3W5uo6Ac6YgkdloaS9mcszwi
-         bshMYq+RSZc3EGB56n3Nt8bY2LUssMBAnHP7cyP57gffoqlkd08AaEIlyoSOmHLsszhc
-         0st4I2j3GGvtONHWcWf1sG+FwXas9ydfzXQ2JNsfH0MrzDx+dVlMsLwrTHeozJ4S8l2U
-         BQNAmo+URI5GtWP7it8FA4NtCikL2yNOMgQ1WI7e6TNQwE+P6ZLKMSeW/PRHOrOHq26k
-         9gIDjps9nIkHln7ulUOxjoWtEPNf7jf6oiN7jGLoKQV8gFAHqGOrmWj517Nv30fKTsO+
-         zErw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TBFb6Cis"
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-56a87098868so45645e0c.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 11:45:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772045209; x=1772650009; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0N6PIEQkF9K4Mf3+vZgb/e0cIuHyJAzBkOn2Am3gQxw=;
-        b=faK3toue7YG1cKBnh0C6nVWtV0aQLPqryqY7zjW96oEYiiSieWgVf8zjqD3mmuFrKs
-         yLzouk9iqHr2ir6dgAiuj7Y2+yJt/IvuCP2X3BO2TlncBL4W1AS39Bqro9QToBLldeCl
-         /07oqvTf5drpQ8qY5db/at7Den5Fe7lLjhdncgmmvhSduUmMF2htjHxilKOifI+enJbY
-         UzdqPuw4BttsbwSO8kItt0UCfTbVo2XG/GxfHWcLDPjo62I3eRYf1fDVDtfMzf/124Mb
-         P4IzUAYvJDkWWMqOVSTqR9B+nvgDfaNMZiDZONZ+CPEVHcBd1FcwYkFLWn1N80G5Pih6
-         vtMA==
+        d=gmail.com; s=20230601; t=1772048755; x=1772653555; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sFGINhiINX8MAdKqo1ZviH2yexjx3PwIBTKhQwKzVYw=;
+        b=TBFb6Cis5L0AHOTcvxrW/esgvqp3FGgBWiFmv+GIt59uOhpDFFZd8Aivf7MeSMl4s8
+         +W2Xw4WNKqPiJHVVlJT8WM1VkZAAjaX2JmAv7iiVo63Tw8E14Y7YrPlIJrixcg6bWHM6
+         Gou6eqkgP+AKoB6sfhpZnR7i5m36KvrXqUXE7JpPpMrLvVBkgICPGcwcSmJYM1sRktJw
+         FGtKCjZXICgrpAk5gkRGAflSNPfk7K/wekfP3yHmHfusvUeHT3RWTe+7lLjfBZbV48k9
+         xHBW6jhpFQPyjODZVppt7suRYx5A3Q17b2iLwgHOGdO1zB9Mgx+nG0XgR7VczcZWoOQ3
+         DmyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772045209; x=1772650009;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0N6PIEQkF9K4Mf3+vZgb/e0cIuHyJAzBkOn2Am3gQxw=;
-        b=BU+hlpISxQquhOAjqHuGiBgTOkiuM7zGra+BMgOtDfmW/cGiYqntXqOLets+T/NPpx
-         qxfmnKIb9AV5c3NWlRSMgq5TR8AkJzpCiEouuhhcfZIhfScyuFy4Lv/U6ehBVXe/aolN
-         KLhVBJOjfC4hPg0EL7dXCEMSa4m/8MEsTrFn6K3APaYbeZ/Yzlxrr1VVDxSJvck1Rlgp
-         JjVfCWPMivB9qgOoDz+7t6c0qAM7+lLhT4pAMIZBL9rd0WR7jbaMGYDJ6T4Cb3AInj4Q
-         SfsAgM2yWkN5wM6q1iFYw7IweXDb/+7g+tFtzRWq04aPuA9np8Wls25urbzdKUafHjuZ
-         p8RA==
-X-Forwarded-Encrypted: i=1; AJvYcCVonVCGF0Occe99rtejpjIbaH4EGMZoxFogrHjQHp5pVAd+FxtIGdPdQemgPMk1iuZB4l+Ep/o5glR0tEkESB8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNAE9WNFVzCUX6V/8v1i/30oQyETKcEt2juVu0EAb8mfrUqfEL
-	FC0O8zGK5VmUEHAMH2X3DWXbzdH1q4wVfKM9AkzzM4827jjcBwbGD43iCkTvxmrNKrO+RQ0NqHX
-	RSz4GHLZ9AQ47phbP0fBK3RAjurkYxrgJg9zPwOYy
-X-Gm-Gg: ATEYQzwtAddjByMij8bojN3b/wjlC4UkCc570+XKDYZJehTlHYj1e2IhHgwofYz8p6y
-	12yCUd+GCybPR7hepU19T4geMCs094G5+jJhEG/VGQqVuZVjrpz1nyxGbVRyE0X36GLByN19xof
-	o8KJyoKqbgVJkghfPNzt20Xxy/acADkATuGbzLXI1B5uWMkc4zRyHuRCgIXkf6t99XPaG62qYfn
-	SYZPiFA5HjmVsCF8rJ/hVTgfaq6ZzNRiihMir7twusYM8WxhmG+BkEGbXQPHCYEiFZTh0WwnDr2
-	A8PAYq3+isSbrEcqA29Wjp4GUPmSZRXhrbX5hA==
-X-Received: by 2002:ac8:58c4:0:b0:506:a1b1:422d with SMTP id
- d75a77b69052e-507441e2f1dmr647121cf.14.1772045208089; Wed, 25 Feb 2026
- 10:46:48 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772048755; x=1772653555;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sFGINhiINX8MAdKqo1ZviH2yexjx3PwIBTKhQwKzVYw=;
+        b=YQiatLeJppEhSZK1WY38YiqGg0dF8/Sy9CECtzO0XXPDzinc730akbhPyPE8g0UpEp
+         KU0SIgPmD7CDN0SImISYtRWJ6p4h+w3PNjwn5JN7aaqhQFclCn3duxcJ9sqVgSXFg9mJ
+         clmtLzmA7ZQWNE8m7xwLArD3tNR2n0F1oaL2tykIHtlYHpR6Lgg25sTMnxlH4MOdSvYW
+         hVRJcaQ1aHpkrGNAHfY9Miln6eFWblVeq9AdXUljd99WJXy1hF4w7NT63wUkhtwqM9b9
+         zRTmfo0d+0IxzpWsNRfaVM+d1Qye5+jCPNSEluWpbOnrDyl9s3hTkhmahx5NWi1yMn+n
+         tY+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWAF875gZPEP1d8xbJX11oqKY97zpw4Ds9QHH8VIPC6CHKh7YUs/6F+mSkIst+ZxK9H7IvE56baH6lfG4ILCzg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk3VF6MwCcJg1N6u7kA4XeQu22hJeB0+IjtJnXj/Uy5HhlbJmS
+	4uX+WgLgISTpvDwyIXYzE3WKIq6vSang4kpZ3tzBCgzGA6e6QoUDLvmP
+X-Gm-Gg: ATEYQzzKmz+iVRbjYOGvh4GOtmfycil4aKy/4dl05fNvhvmOH+y7cCcRjm7201cPIVq
+	9xBOgg0qUAcEUzsLlstVtxUBtOmofyCUj/gYsvQPWXbNiO9Iq93zjpa93hNah/bDBsQ89EHpJ0G
+	TfdRYEo50yd/ox+hhTTuWlREcSNtNPaMAjCodLcunF9JIe6T6DDx0xOrP9td2c8hbu5mXU30soh
+	6+ZHS72uwi0Pu8mD6ZI7fi+alDmrCfY2iCNMGGAGidWVOwx9wcUDgY/ABY8c2tH2fDcpuWfeFYr
+	GwqjXYcJ1VeJGd0LAJSYME2FGf8YtMVmcOoZim3AbhhjdUg0RCBdFlGSrpL8N2ZNXYSJV29Q3Rd
+	jZQzC4Ys6f6LsObrAYbEghc+qbLHXDx+PU1Xbyr7Cf3QkDDSE54g5UWUL5a85YviYqcoo+vm+Rg
+	UeD39yWUorXl8UC80EyluhcBXwbD4PEF/mspg77D2IxFrc+MzXkPEf7jbqw8J76/zAmAf7Jl8=
+X-Received: by 2002:a05:6122:e448:b0:567:4aec:a27c with SMTP id 71dfb90a1353d-568e48f3255mr7001990e0c.17.1772048755348;
+        Wed, 25 Feb 2026 11:45:55 -0800 (PST)
+Received: from fedora ([190.142.206.42])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-568e591c266sm18023919e0c.15.2026.02.25.11.45.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Feb 2026 11:45:54 -0800 (PST)
+From: Elsanti <santiagojoseleal27@gmail.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com,
+	ojeda@kernel.org
+Cc: raemoar63@gmail.com,
+	boqun@kernel.org,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	dakr@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Elsanti <santiagojoseleal27@gmail.com>
+Subject: [PATCH] rust: kunit: implement test attr filtering without extract_if
+Date: Wed, 25 Feb 2026 15:45:43 -0400
+Message-ID: <20260225194543.1542668-1-santiagojoseleal27@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260225133229.550302-1-ptikhomirov@virtuozzo.com> <20260225133229.550302-3-ptikhomirov@virtuozzo.com>
-In-Reply-To: <20260225133229.550302-3-ptikhomirov@virtuozzo.com>
-From: Andrei Vagin <avagin@google.com>
-Date: Wed, 25 Feb 2026 10:46:35 -0800
-X-Gm-Features: AaiRm50yP7U5Mblj8nExlDPbtbQY6Smjt4Ct49GvH3x6Zklgi4smtXG6r6gKV_U
-Message-ID: <CAEWA0a5s5fvERdrk1mUAqo+VYimGty9=BU1DEmPHDugLcgPevQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] pid: check init is created first after idr alloc
-To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Jan Kara <jack@suse.cz>, Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Kirill Tkhai <tkhai@ya.ru>, Alexander Mikhalitsyn <alexander@mihalicyn.com>, Adrian Reber <areber@redhat.com>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 25, 2026 at 5:33=E2=80=AFAM Pavel Tikhomirov
-<ptikhomirov@virtuozzo.com> wrote:
->
-> This moves the condition (tid !=3D 1 && !tmp->child_reaper) to after idr
-> alloc, so it not only covers that first process in pid namespace has pid
-> 1 in case of clone3(set_tid) requesting wrong pid, but also if idr
-> itself gives wrong pid for some reason.
->
-> This could've been the case before this patch, when creating first
-> process the alloc_pid()->pidfs_add_pid() code path fails, so that the
-> idr->idr_next is non zero anymore and next process calling to
-> alloc_pid(), will get 2 as a pid from idr_alloc_cyclic(). Though thanks
-> to PIDNS_ADDING logic, free_pid() disables further pid allocation in
-> this case and it does not lead to any real problem.
->
-> Note: This is also a preparation for the next patch in the series, which
-> will introduce an ability of creating init from the task different to
-> the task which had created the pid namespace. Needed to make sure that
-> init is always first, even in this new case.
->
-> Suggested-by: Oleg Nesterov <oleg@redhat.com>
-> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
-> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Replace the TODO-only removal of #[test] attributes with a
+retain_mut-based filter that works with the current MSRV.
+This preserves test detection without depending on
+Vec::extract_if and keeps the generated KUnit wrappers correct.
 
-Acked-by: Andrei Vagin <avagin@google.com>
+Signed-off-by: Elsanti <santiagojoseleal27@gmail.com>
+---
+ rust/macros/kunit.rs | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Thanks,
-Andrei
+diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
+index 6be880d634e2..e064419bfc10 100644
+--- a/rust/macros/kunit.rs
++++ b/rust/macros/kunit.rs
+@@ -87,10 +87,15 @@ pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<Toke
+             continue;
+         };
+ 
+-        // TODO: Replace below with `extract_if` when MSRV is bumped above 1.85.
+-        let before_len = f.attrs.len();
+-        f.attrs.retain(|attr| !attr.path().is_ident("test"));
+-        if f.attrs.len() == before_len {
++        let mut had_test_attr = false;
++        f.attrs.retain_mut(|attr| {
++            let is_test = attr.path().is_ident("test");
++            if is_test {
++                had_test_attr = true;
++            }
++            !is_test
++        });
++        if !had_test_attr {
+             processed_items.push(Item::Fn(f));
+             continue;
+         }
+-- 
+2.53.0
+
