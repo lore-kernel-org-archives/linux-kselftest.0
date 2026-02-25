@@ -1,116 +1,140 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458CA256C6C
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 02:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771985446; cv=pass; b=EfX1DLBisPThN4kHrSMnky5ABAdc7KVbtd9ON3bmL3Yu7eISVNcscgoAchOXXeW7gNuaw+aBqk337ROawgEhIQsu0WQPM+tNvsCUVD8mujYd8D9eZZC8NMaci2tSWdq5UYgE+9mzTpfWSxBOiiJxBgMS7pqYkFIsqW3j+hRvUu4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771985446; c=relaxed/simple;
-	bh=2Ia4JQRYF0+vu5ltlafPtPyaUjJd82F6ErOYljpmSaA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qqlYT9fqgBAkgGJA7ImbFKEGPGwsJgAprEEWwYXIQCWT+7bXRGdySh5JloiNg+dVsA7WDD8KxQAlpsdtfETMdq/CG2EALzYzFNX7E4AxJqk0V4iMLSspKknCePI5BkQHGsPmjyMzle9WeW6u+xUvV2KUmcaA93bQuKorbcdq33o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sg9duFII; arc=pass smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5488D2882DE
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 02:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771986919; cv=none; b=Cg2j2V+Vjix6KNyfJOFWbIKGKWqYNwNbZ8bSSoKe8GTuYF/M/W8eCeLFTvSVzPtlw4h2vFyzRUC9BnDT/nyUtxMfQLWRqzc3OaflvXPMBWNwj/Ym5l9c4VU7YX2q3wE1Lh08twnrVrnnge7hKwUsKX+de4UgH7GhrCfLnU+O/Ns=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771986919; c=relaxed/simple;
+	bh=3KsyrKI8a8WuOUPKHlBrtGyhseDhoopScvHffu8IHUw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eTUMlWz3HLQrBNNjFO7kXMG8enK8kks4PXuIAsmYjN0yXJRlRcRryUuGK1/eSLP0d6g7m8zRpMYECkr591eI0j4VmaCOpfL1802VBvOu6++rij5gRh7Oofp5eWfvFEp93fR/4zvI9b5+ohk19q7xY2ZlV+OemXbnByntR3QJg+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TKrWrN5Y; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sg9duFII"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79495b1aaa7so56749907b3.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 18:10:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771985444; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kc5pu3jOEm8Y087bGqfvL6MEhVwcJhL3C6GqY4oF5hDh2XggSJUxC6OVBXnpCBPG9z
-         QHRR+iFQYRdp08BsoaKFJl3ytGXwLy2zoUq9o0gkPGW+Kw3E69/HOUKqJa6CYnxcEzee
-         6gBG6zLXJNDpSTWb3giY457rU86B1Y4AvJNOUNeDQUUFyoxdo2gVxN+Eh209++5/+hpy
-         1niABqLr093J6nZFZ/36tVWC1yr0dHLhhvMTVuoPSOpckogjW2MyloSHaosNA1NhaxZ1
-         Wki7JlvsAtgo7oFUKGMMjLKzAtXTNNHpNoUBry9leCuKy0yk5J1+p6ddVcyHXq1QLH+G
-         NC6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=RewW6RsQuKBcy+FVC2qZgDOi7JEc3XkGCwTSJ1lCkm8=;
-        fh=0RLqHBMUoI4xg8xpaT9zKJhzSQdP7dxsYr3/Gb4xwUw=;
-        b=SssRNaGuBWEG75Lk9sPr4TraRk1mAE8g4Ko8UCC1NmrEp/n8qZWVB8C6mOatE3zqf6
-         pWIyqqYlosGIKeVWUNQkPC2CFmPNvyE7TnWj+V1IT+8yz2K4jvvScGzgTIBI9KMBMUO6
-         83B58k+nXXPjCbbsTVa2GFgfFvYlLuF+xWkkyk9dmN+KnJ/l2squaWftpeGjJtbTKazk
-         0Tfoua97wumpR1XdBEY/hQrX1g0/H54SmMk6vg+k4ms4oijKoemQTei6OlCEdZ5pbKRu
-         XY88fkZcanF/z22ID2YD4S71h4Wsr1wNkQ6xxylMt6skagzfHFjaOEdIkGgJ/9O6Ai63
-         fe0w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TKrWrN5Y"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4807068eacbso48092125e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Feb 2026 18:35:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771985444; x=1772590244; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RewW6RsQuKBcy+FVC2qZgDOi7JEc3XkGCwTSJ1lCkm8=;
-        b=Sg9duFIIBzNagLlrMQ/BKm0QzaAlTtKU1nuhkjG19YHOYFhDSvh5jKrZIc6JJPZNj1
-         kGlq2pr00+a3Top2Vp86O1ehWkxCuoHLdcOye4Rb1I6Jtb/OIAZIeXsavqLZp7XtQhfW
-         lkpTb5LRqZc4NZ8xTCm1VfA4W7Z2wolTpGR5QiljmJ1c4ho2nQUWg0FhpNz7Tn5uBeVu
-         nsZJmYOVZO3CUeynXG14ZPIf+7OBuUDg87D+i8mRlEIypuhLH6ab6g6B+hWwil+plSkC
-         av0CtBdpG+Y35pkIr/mK7eiZAGPnATZYGUtvHgAQp/Zy8iPb4gvRunKk92erjR2Vgi0E
-         kuIQ==
+        d=suse.com; s=google; t=1771986917; x=1772591717; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BZGXshXHvJclcEjfMwGDZc/q9vZTX8b4lXQsjlQbCew=;
+        b=TKrWrN5YNtYPsF5PHq2uYQ/UnRKcyCqlrTS6ECQmnNPFwL/ekxFEH0MATp0F0N6hDo
+         aW5iou+mmYswDSBixQ6Yi5cPNWq7DxSSNXZqABJFDIIkzLKHvsV+fyZ20M5sWgj+jjCC
+         ptQuXNmCJWsg2qu6y4gW3SOILyXBP9Uokih2pWVdxE2ImzMJiBEVMrEbYCRqLCs3XJiX
+         xX/FANsOu+j9ZOrWdUkKZoyDzLM9pKJYEtmU8hQMO6LaSE2s3piBGHyWrbEm9/u9DbQ5
+         up8OV9T3CCiSmdR35GdOPfSr7Yijaf2iIeQCmFYxpbtyCcfQzNhyUBEcjFAk588bo0nG
+         6i5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771985444; x=1772590244;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RewW6RsQuKBcy+FVC2qZgDOi7JEc3XkGCwTSJ1lCkm8=;
-        b=FUU3zAmRLQ1qBv4PR+LG4llx0+hiaQ2178MiyTEMDkuesFjqfOzipYyHnErR2tWKYJ
-         dgNdSOBOM8tpe2WJZsR8OdI/1MLvWZ8tT/6QW2GGZP8laHHGdvgLchhc6DgzQC26/5iL
-         uDsPUqcR23GJjM9K86p09v7+l1KaHFZYJdzUXm1MAOb/fQvz7hxjApOegOtCV+ZO8+Yp
-         Y5Y4Zuq8UneK49KFEhy5BaCh3gj2XVUDGb//Xv6MmWcjFGzsgGu2x7ciHg0H/J1Nwerl
-         Hey12BJKaEFdcK+W0UI1ESfqarJiZmIwQ9PU6Q3hsDnbhstyg48123RnWx2akqZCcja5
-         svVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZ6zDvNqmreAlSa4pGEDcxrwWNwI/dUveG/5uTPDIonMpikIVfz9UVV/4Mtq6JoA5JdZGKhni6ZJWmbr9tuMU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo0sBHdTo058Ps7dcBNYf3jIv+GUMIX8I0PgpjQN3yRj8JUa5L
-	MXeiNtRdo7QU4QEeuPWAh446Wvo6SsZPTbKwdGhDvxyPCAiQkA+/mvF0GiBn4oY0KEyus8ejee/
-	YGEyX8R4MreJRESU9CNJu4YarcZdL45M=
-X-Gm-Gg: ATEYQzy9gbTjzeb0F+rVBP0fQCLi3xoAM6fGo1H4BhL7VTCxulMwrFDposMLBfVV8iz
-	THdU/mhazLkhbmB/H3PT4g2VO+qGcolOyQriHgmgFY4BHKhSRcCc9ARBiKTtSa+Lplk2sXzkmkh
-	Lr9qtaej9XqXB5l8NuGxUMTRyRfdwptuiNUFQ2Vp2CTTBeKi1ItGT/z5WujnRvd5VWLIiuSfFF/
-	s6UGxCyfYRPq0WLm+HJAoVPzdgDquhsPI52NsbPmyk0yuAnrDzT06DzNu4NMKoJNKrlGqxILjtJ
-	dBrBBrm1sMTn7gEARli4V0ryKQ==
-X-Received: by 2002:a05:690c:a92:b0:797:df7c:3e1b with SMTP id
- 00721157ae682-79828ef29afmr127790467b3.4.1771985444319; Tue, 24 Feb 2026
- 18:10:44 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771986917; x=1772591717;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BZGXshXHvJclcEjfMwGDZc/q9vZTX8b4lXQsjlQbCew=;
+        b=fqkih15DZsfoYahkNxh6SNqq2JABmFTdMR06NMh59aGqYhj3uB18FBGZ7Q8yYWPTPm
+         MgcMNd6pV0ZMVa4dDumT1QGLkgQPIV4B9eeb2gcQmCwX9VWmGKIgiBIc6eGY71qEwoZx
+         rpB3L/EUC2jJfWPF3D11rs7sPDLU2Zr7wDBFmBqLEt9atYwNQ7Q3cQ21dJteaowD+S5R
+         bB747TTWcDMqEsiZoF3y0QHJP+4J3sscICsJ1dLF/PdNg+iF/2MhnJI+cmoO/JBu7jUb
+         CUUoZIORqGpmCQ9cpD5nVuRe+7zKUfxy8Ku7P8t9S9wNQmRAFx6GeWxniQBerh1vl2Vl
+         b9Aw==
+X-Forwarded-Encrypted: i=1; AJvYcCXZEYEVqjVJn/KIK+djxvTEIu78hiOa5J/uOMBpaIgyU1OOe+5bplvcDPgGMHETInU1QDi11mZ1u1Juy1VLWw4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMvz4+GvDJsl4j8JtkH8ZKADXZLyY3ARpJmN55zznAQPob4OE5
+	yBsiY9eTDNz8Q5MNttXDKAYpmHnMDEZKfcWFJUglc8Y6YsC0bzR61mHxXcRrNBdk9Uk=
+X-Gm-Gg: ATEYQzwmTKTLoPsDf2pGRdU0+NBBDXFahimJDnwoK/QadNqPRXbBb+G0xqN5yJ+YHSB
+	dXxKenZpcKGgR04Zz1GPokKf8MufaVMsFwFvziY2uVntM47iX5MqJzLI61CVFyoBgcSTwLE3EjD
+	bAlursNmc31Px4nkLiwp029vgsy8MIgYv5FnLcfuMxMK1RpTHXIiFo6waEtYHIajpd5lxhWBhmA
+	oDq8+3mowbY7mJZp70mcRWHLFLcMDKF1Tfn2EVQ0EYilbGlAXsxaY0wTXnpU2OG/3E1AGdTB41w
+	Z7PPUE2gSii5iZSR9eYRA/A3XKXEvMZODpDNnRV6f4J2TIsqRWkhzxr9l0tUVZea9mYrnod2kjU
+	d/sl6boSgrZXqmRNoQUGMyP99dX/oCuRzWlOqwlGsY52Sb87Veh5WFB762c4Z4uMHDjE+XJPWzu
+	WIvbaDigT4KZyVXtMwbYw=
+X-Received: by 2002:a05:600c:4f95:b0:483:8e43:6def with SMTP id 5b1f17b1804b1-483a95e5a97mr217123395e9.28.1771986916668;
+        Tue, 24 Feb 2026 18:35:16 -0800 (PST)
+Received: from u94a ([2401:e180:8d80:eebd:d098:7649:31a9:9ad7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70b7244dadsm12268836a12.20.2026.02.24.18.35.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 18:35:16 -0800 (PST)
+Date: Wed, 25 Feb 2026 10:35:06 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc: Ricardo =?utf-8?B?Qi4gTWFybGnDqHJl?= <rbm@suse.com>, 
+	stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
+	Greg KH <gregkh@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
+Subject: Latest BPF selftests on stable kernels (was 'Re: [PATCH stable 6.12
+ 0/5] Backport selftest for "bpf: Check skb->transport_header is set in
+ bpf_skb_check_mtu"')
+Message-ID: <crki45lsdj4yjmz3ix4k5scjuovjr56oexmwhhwbqeejdxh3j2@kgve6uooitce>
+References: <20260224073810.85945-1-shung-hsi.yu@suse.com>
+ <bd0277b7-4a19-46a4-9f06-96d48cbc89d8@oracle.com>
+ <DGN6PFT94YHU.3S3UXTP82975E@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260222111847.692325-1-sun.jian.kdev@gmail.com>
- <20260224113900.3331-1-sun.jian.kdev@gmail.com> <20260224154447.61be24de@kernel.org>
-In-Reply-To: <20260224154447.61be24de@kernel.org>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Wed, 25 Feb 2026 10:10:32 +0800
-X-Gm-Features: AaiRm50L-4FmoPTjMiSIpbVZQBpkITknQo3RkybcQdVthWClKqiATz6dSZ5LrwA
-Message-ID: <CABFUUZFK6jr7Bf9W009vo1LhAnAgvrB1RhmGtYw4viku0+L+nQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] selftests/harness: order TEST_F and XFAIL_ADD constructors
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, pabeni@redhat.com, edumazet@google.com, 
-	davem@davemloft.net, horms@kernel.org, shuah@kernel.org, kees@kernel.org, 
-	luto@amacapital.net, wad@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DGN6PFT94YHU.3S3UXTP82975E@suse.com>
 
-On Tue, Feb 24, 2026 at 07:38:59PM +0800, Sun Jian wrote:
-> You inserted these defines between the kdoc for TEST_SIGNAL() and its
-> definition.
+Cc BPF mailing list and maintainers. Plus other in the referenced
+thread.
 
-Ack. I'll move the KSELFTEST_PRIO_* defines out of the TEST_SIGNAL() KDoc
-block so the comment stays adjacent to the macro it documents.
+Hi Harshit,
 
-> When you respin, two notes:
->  - please wait 24h after the previous version before sending a new one,
->    to allow people in all timezones to comment and avoid splintering
->    the discussion
->  - please start a new thread for each submission, and refer to the
->    previous one with a link in the changelog:
+On Tue, Feb 24, 2026 at 09:18:04AM -0300, Ricardo B. Marlière wrote:
+> On Tue Feb 24, 2026 at 4:53 AM -03, Harshit Mogalapalli wrote:
+> > On 24/02/26 13:08, Shung-Hsi Yu wrote:
+> >> This patchset backport the corresponding BPF selftests for commit
+> >> d946f3c98328 ("bpf: Check skb->transport_header is set in
+> >> bpf_skb_check_mtu"), which has already been included since 6.12.63.
+> >> 
+> >> The BPF selftest added in commit 6cc73f35406c ("selftests/bpf: Test
+> >> bpf_skb_check_mtu(BPF_MTU_CHK_SEGS) when transport_header is not set")
+> >> additionally depends on network namespace support for BPF selftests
+> >> added by Bastien, otherwise the MTU in root networking namespace will be
+> >> set to 10, causing other BPF selftests to fail. Credit goes to Ricardo
+> >> Marlière for figuring out the dependency.
+> >
+> > Note:
+> > I have recently learnt that ideally we are supposed to run upstream 
+> > latest kselftests on stable kernels as well. If a feature is not 
+> > supported the kselftests are meant to be skipped.
 
-Ack as well. I'll wait at least 24h before respinning, and I'll send v3
-as a new thread with lore links to v1/v2 in the changelog.
+Thanks you for the bringing this up! This was also mentioned by Daniel
+(Borkmann), but my experience aligns with Ricardo's.
+
+> That is not true for BPF, from my (limited) experience.
+
+I do want running latest BPF selftests to work on stable thought, made
+some half-hearted attempts last April on trying bpf-next's BPF selftests
+(during 6.15 phase) run on stable/linux-6.14.y, but wasn't able to get
+pass the building phase.
+
+As far as I remember I ran into issue building bpf_testmod.ko (kernel
+module) of bpf-next against 6.14, and other similar issues related data
+structure or API changes. Pretty much the same set of problems we get
+when trying to build any driver in the latest kernel against stable
+kernels.
+
+Maybe it can work if BPF selftests that does not depends on
+bpf_testmod.ko, and build failures of BPF programs are simply ignored
+(not sure how feasible that is, probably would make Makefile much
+complicated), so for now I'm sticking with backporting BPF selftests to
+stable kernels.
 
 Thanks,
-Sun Jian
+Shung-Hsi
+
+> > https://lore.kernel.org/all/a45eaddb-9e17-4e82-8a78-a1d1f6e3d735@linuxfoundation.org/
+> >
+> > Thanks,
+> > Harshit
+[...]
