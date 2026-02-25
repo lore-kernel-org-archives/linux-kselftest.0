@@ -1,505 +1,207 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606483126D3
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 21:08:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D622BF3F4;
+	Wed, 25 Feb 2026 21:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772053735; cv=none; b=CWLKglfqbTKnSLAthj8hJlk/EVJ2Tou4TM/x8r7ljAetc+ZaWv71h2bkFdprQqNpo+WoK9lIl4JyNnEMUhJzs40p8bVBdGzOBh/gqqkX5otnWidoMcCRskbO7AHe83TuTBchznvnri+xJP0tnMGsYlGG3I3bO9n5YuFOTCBMnLE=
+	t=1772055218; cv=none; b=Ip/a31IWkI3YpHRzm2MW/hhttSoh1P7bjlW3GSa3mJLvfLbbMu5k0D7PnVP+T8p1H4H6jWdwZefdAEGuCAW2TEzk66x/THVi8suMNMwzvEKJd+seCbPkH0BPxMHM/YzxC2mLTirESMD7Ls6ImiFPHefzzGwLuUQwERCcwLiVkWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772053735; c=relaxed/simple;
-	bh=FYzWglH3Sum+8390Wy0gRg8Q06ZKbw+gn0wI9rmzZg4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=d1VBA4xEiCOqKSvGfr7b0Opk4UEc9IpBl1wbRz/2/2VSuocaD4tp8PlAYt2TNbO7hB6l5V+PLk3DunCJPtKNLgYG6DvxyjMqk2OuVwaV707unWAqkT71hOx24x45uwRMhLQRY/Qh8lALkEtXm4WR1AH/f/nUAqxMzZ/diGKdLRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LVpA5EQv; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+	s=arc-20240116; t=1772055218; c=relaxed/simple;
+	bh=qVLxIfPa28DabIzJ3J/4UZE3fpMldIr2+vdAvFygbUw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A5eaiKprEGEhwRVR0lGNAOLxAj6o34lOo0rdjiBh4UglxLjIMKgx+2D3nf1kANpRBuLyh67YZxmR1R5M3tbQUTT2LGlXqTamzVp7B/RaM5DQD/iV2ahsMuI0Ok2Z09oLXGXSE4tz1pgnfw5Ic8uE2gRX7nVWADsbfXXXxB+E5GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=Fe/KFBw9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=t4JQiMyb; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LVpA5EQv"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2bdc42265a2so92682eec.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 13:08:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772053731; x=1772658531; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dMHmqKHxrwFZmYF6YxbRzL2nzys8T1WazGuJ7IEz3lg=;
-        b=LVpA5EQvynFGG+17oobkMnplj0zSgT8jdHVeK5UAkGmYUu09Ni0a3/F6W5svIFl8Xh
-         I5e4tkgZimHErh7SIH8Y6dhGXrUo2VJWuR4Q6GMitDO/hF8l/0gKnabuDPj27JtxeYI1
-         r5r46DvKbKGG17sO2fZX1HwYmxVqnvtAIMRcLzDS7VbALHhOCxUm2aDbt2SnBJanNCJN
-         pJKaD08Pn4ihm6o/eNktluwKtLyQpshmZYl7gkRbAQaqWv1eoLbbpZ1ZoeGdhgGojhh+
-         p/eoUzozVuWrGblPRlPzu3yX277dEz5FibEm0Ee5pZtKSxVsGVRu5161L64Qtf48T1sR
-         4mrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772053731; x=1772658531;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dMHmqKHxrwFZmYF6YxbRzL2nzys8T1WazGuJ7IEz3lg=;
-        b=q9/fHRwlKGgzNYosqtQ08SE6x8mQM1+EJNC0CLWwWTYz013NCc6Zc0/BNii4dCgLII
-         hSmxg37Eyxol/w1ShieTMqj8QfU3SpSY1tOkY4NDPuiayk4XQ72mKy1PJ7rsJoUdH1mj
-         /DjTq/ZLRJZob2v658QEeftGtp4ZEQxxzQM+iEpmhcd8A5FIq5KB9bBPeSvHVJGPI1AC
-         uof7Iw7jhz7+QLNqLE3gqDqwzNdhrEAsrB5lyJrBv4uIzpWNByd5MV2LqePkKANxZzAU
-         0vd891LENOwm11pUAZLWsFrf4uhm4CyMhOPcynM0BDTy8sp2oJ6EZvSAnRp1AAnPo+2D
-         Uc7w==
-X-Forwarded-Encrypted: i=1; AJvYcCX4svCuT5xYeadEETtg0DxbY2MyHrrBc9Sh6OAmT5/EkAPsw/wv8Ym48HYB4PcVa+kqyb5s48jeqhkuTGV2INI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOKrn87PU5NbOtG4G8pWe6UCWWZRbC5/UJaGnS7VyxepyTVkRf
-	JpSHR0x8E0Z4qg3jTZNbonuclghf6M2y51rKTKmLufrdULv5MaFpSsQVTuqN27wtrusjhEItZuB
-	/1EtVbqrCD5dWRw==
-X-Received: from dyaa9.prod.google.com ([2002:a05:693c:40c9:b0:2ba:9c5e:b1a2])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:4586:b0:2b0:5306:1770 with SMTP id 5a478bee46e88-2bd7bd24250mr8264899eec.22.1772053731102;
- Wed, 25 Feb 2026 13:08:51 -0800 (PST)
-Date: Wed, 25 Feb 2026 13:08:18 -0800
-In-Reply-To: <20260225210820.177674-1-wusamuel@google.com>
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="Fe/KFBw9";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="t4JQiMyb"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.phl.internal (Postfix) with ESMTP id B25A31380AF9;
+	Wed, 25 Feb 2026 16:33:34 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Wed, 25 Feb 2026 16:33:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1772055214;
+	 x=1772062414; bh=uOyGcfhW1LI1T0+ImDiYL1uiY49EgY0HI4HEklJbETo=; b=
+	Fe/KFBw9AhdA4JIPEFA6oKZMPb3jkSYj07O1VtDSsj+hw5ueMPGI4TP6AlPnPNgU
+	uZlkZcKu8F1V6CdaKQ5F8rawNot0JXhub7A7i8kZ2a6Irzgqdj7ZQAljrKUPo+WN
+	ckUH2mfIMPrAO9ug3Y04JmgN0axE2/mLsE8on37v3AnY9UigCsYwl8fMzaZ92Kqq
+	ZrMc2qH8gqaY/MnjtK/Xg04fIJ932Mkf7qP0Jlo8hmNEEll1xyQnNz1fVs3kNUB0
+	Znrc1HsroIGXMMsicDgklPEh6/3RiMSEQcqGJ7mtvo8Q5V7ly3+egJRP/D/91qrN
+	yhTgY2R+oZbaVMmtg7slSA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1772055214; x=
+	1772062414; bh=uOyGcfhW1LI1T0+ImDiYL1uiY49EgY0HI4HEklJbETo=; b=t
+	4JQiMybd8my/Q8yahj2kZiHYVHPzFYw0ah1C6Tkdx+JRzb9lwDbPteJ70dqqsSH6
+	kadwUwL5Gk5PBfLYFgya2G4juOjsnxGCVT0+aoOKuK73XIt/Iq0+WpPFp5XsMxK+
+	DZBp/DPLYUIoB6yitemqtAqz1guul+U7JWiurf6Vb0EjbLYJEalun1XNPphPOTLV
+	VMvgLUWk+8R7ppxGFGoKLuKkEUXEo06Hji/3KL0bb92rRQw43cXEpsVQQctrKVIg
+	dhMZgQyNNbsV9wf1seVJLxybZb5ljarp4SDjvTDq6G1ich04JP9tkvPNdadt8H8t
+	D6yk0yc7cuZz9C+OPZyZg==
+X-ME-Sender: <xms:rWqfabg6hBv-eIfPU45VVg_kTi1XiEwGHCOLtJKZTjFoS1vqERTeZw>
+    <xme:rWqfaYPVV_7brDFcjHNXpI-JiFYTDmsC4vAhdZGQdFLO-xAQYewBtL7EIwbF0UqsN
+    AC8flZI8dVseXF2purGoWJL7MkKi1NyUgatg72tdlNAJGpBX0RhIw>
+X-ME-Received: <xmr:rWqfaUkEndAraLfwnPYcRWzYlSIKrjBMwBcae6DD4LZUkyH1CzTVOelnKSc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgeegvddtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
+    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvkeefjeekvdduhfduhfetkedugfduieettedvueekvdehtedvkefgudeg
+    veeuueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepgeehpdhmohguvgep
+    shhmthhpohhuthdprhgtphhtthhopegumhgrthhlrggtkhesghhoohhglhgvrdgtohhmpd
+    hrtghpthhtoheprghjrgihrggthhgrnhgurhgrsehnvhhiughirgdrtghomhdprhgtphht
+    thhopehgrhgrfhesrghmrgiiohhnrdgtohhmpdhrtghpthhtoheprghmrghsthhrohesfh
+    gsrdgtohhmpdhrtghpthhtoheprghpohhpphhlvgesnhhvihguihgrrdgtohhmpdhrtghp
+    thhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtth
+    hopegrnhhkihhtrgesnhhvihguihgrrdgtohhmpdhrtghpthhtohepsghhvghlghgrrghs
+    sehgohhoghhlvgdrtghomhdprhgtphhtthhopegthhhrihhslheskhgvrhhnvghlrdhorh
+    hg
+X-ME-Proxy: <xmx:rWqfaXUe2FtA3DswIFB60ExhxZFyF4WTpDXQ_5K0uJb6A_pjD1-zHw>
+    <xmx:rWqfaZbwjR4qhyLCBUtS6HbozOQLTb8Da7JXbzPAfHRRsnRclDkjxQ>
+    <xmx:rWqfae0woTolOhs7n0PnNGy8Qymd6xqUPJqv3NBoAD2YEx6TloCDlQ>
+    <xmx:rWqfaetNyIWQCnkMaOKDOZ3yWit9rXv9QiQwVJWAzIF4HXj2RH6MkQ>
+    <xmx:rmqfaUCfyiFWNX-EYiIXFm3n4u8-Ftbqh0sezsK1WkYGRbGtK7SN5TSD>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 Feb 2026 16:33:30 -0500 (EST)
+Date: Wed, 25 Feb 2026 14:33:28 -0700
+From: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+ Alistair Popple <apopple@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
+ Jacob Pan <jacob.pan@linux.microsoft.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+ Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+ kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+ Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, linux-pci@vger.kernel.org,
+ Lukas Wunner <lukas@wunner.de>,
+ " =?UTF-8?B?TWljaGHFgg==?= Winiarski" <michal.winiarski@intel.com>,
+ Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Pranjal Shrivastava <praan@google.com>,
+ Pratyush Yadav <pratyush@kernel.org>,
+ Raghavendra Rao Ananta <rananta@google.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Saeed Mahameed <saeedm@nvidia.com>,
+ Samiullah Khawaja <skhawaja@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ "Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?=" <thomas.hellstrom@linux.intel.com>,
+ Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>,
+ William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+ Zhu Yanjun <yanjun.zhu@linux.dev>, alex@shazbot.org
+Subject: Re: [PATCH v2 04/22] vfio/pci: Register a file handler with Live
+ Update Orchestrator
+Message-ID: <20260225143328.35be89f6@shazbot.org>
+In-Reply-To: <20260129212510.967611-5-dmatlack@google.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+	<20260129212510.967611-5-dmatlack@google.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260225210820.177674-1-wusamuel@google.com>
-X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260225210820.177674-3-wusamuel@google.com>
-Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Add tests for wakeup_sources
-From: Samuel Wu <wusamuel@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Sets up the framework to test wakeup_sources iterators using BPF, and
-adds a few basic tests.
+On Thu, 29 Jan 2026 21:24:51 +0000
+David Matlack <dmatlack@google.com> wrote:
+> diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
+> index 0c771064c0b8..19e88322af2c 100644
+> --- a/drivers/vfio/pci/vfio_pci.c
+> +++ b/drivers/vfio/pci/vfio_pci.c
+> @@ -258,6 +258,10 @@ static int __init vfio_pci_init(void)
+>  	int ret;
+>  	bool is_disable_vga = true;
+>  
+> +	ret = vfio_pci_liveupdate_init();
+> +	if (ret)
+> +		return ret;
+> +
+>  #ifdef CONFIG_VFIO_PCI_VGA
+>  	is_disable_vga = disable_vga;
+>  #endif
+> @@ -266,8 +270,10 @@ static int __init vfio_pci_init(void)
+>  
+>  	/* Register and scan for devices */
+>  	ret = pci_register_driver(&vfio_pci_driver);
+> -	if (ret)
+> +	if (ret) {
+> +		vfio_pci_liveupdate_cleanup();
+>  		return ret;
+> +	}
+>  
+>  	vfio_pci_fill_ids();
+>  
+> @@ -281,6 +287,7 @@ module_init(vfio_pci_init);
+>  static void __exit vfio_pci_cleanup(void)
+>  {
+>  	pci_unregister_driver(&vfio_pci_driver);
+> +	vfio_pci_liveupdate_cleanup();
+>  }
+>  module_exit(vfio_pci_cleanup);
+>  
+> diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
+> new file mode 100644
+> index 000000000000..b84e63c0357b
+> --- /dev/null
+> +++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
+> @@ -0,0 +1,69 @@
+...
+> +static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
+> +	.can_preserve = vfio_pci_liveupdate_can_preserve,
+> +	.preserve = vfio_pci_liveupdate_preserve,
+> +	.unpreserve = vfio_pci_liveupdate_unpreserve,
+> +	.retrieve = vfio_pci_liveupdate_retrieve,
+> +	.finish = vfio_pci_liveupdate_finish,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+> +static struct liveupdate_file_handler vfio_pci_liveupdate_fh = {
+> +	.ops = &vfio_pci_liveupdate_file_ops,
+> +	.compatible = VFIO_PCI_LUO_FH_COMPATIBLE,
+> +};
+> +
+> +int __init vfio_pci_liveupdate_init(void)
+> +{
+> +	if (!liveupdate_enabled())
+> +		return 0;
+> +
+> +	return liveupdate_register_file_handler(&vfio_pci_liveupdate_fh);
+> +}
 
-Adds several helper functions that for grabbing and releasing a
-wakelock, abstracting out key functions to setup a framework for testing
-wakeup_sources.
+liveupdate_register_file_handler() "pins" vfio-pci with a
+try_module_get().  Since this is done in our module_init function and
+unregister occurs in our module_exit function, rather than relative
+to any actual device binding or usage, this means vfio-pci CANNOT be
+unloaded.  That seems bad.  Thanks,
 
-Additionally, adds 3 tests:
-1. check_active_count: Checks that stats related to active_count are
-   properly set after several lock/unlock cycles
-2. check_sleep_times: Checks that time accounting related to sleep are
-   properly calculated
-3. check_no_infinite_reads: Checks that the iterator traversal returns
-   NULL at the end
+Alex
 
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
- tools/testing/selftests/bpf/config            |   1 +
- .../bpf/prog_tests/wakeup_source_iter.c       | 300 ++++++++++++++++++
- .../selftests/bpf/progs/wakeup_source_iter.c  |  80 +++++
- 3 files changed, 381 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
- create mode 100644 tools/testing/selftests/bpf/progs/wakeup_source_iter.c
-
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 24855381290d..75e8542ef111 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -111,6 +111,7 @@ CONFIG_IP6_NF_IPTABLES=y
- CONFIG_IP6_NF_FILTER=y
- CONFIG_NF_NAT=y
- CONFIG_PACKET=y
-+CONFIG_PM_WAKELOCKS=y
- CONFIG_RC_CORE=y
- CONFIG_SAMPLES=y
- CONFIG_SAMPLE_LIVEPATCH=m
-diff --git a/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c b/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
-new file mode 100644
-index 000000000000..40e47157a6a0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
-@@ -0,0 +1,300 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Google LLC */
-+
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include <bpf/libbpf.h>
-+#include "wakeup_source_iter.skel.h"
-+
-+#include <fcntl.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+
-+/* Sleep for 10ms to ensure active time is > 0 after converting ns to ms*/
-+#define TEST_SLEEP_US 10000
-+#define TEST_SLEEP_MS (TEST_SLEEP_US / 1000)
-+#define WAKEUP_SOURCE_NAME_LEN 32
-+
-+static const char test_ws_name[] = "bpf_selftest_ws";
-+static bool test_ws_created;
-+
-+/*
-+ * Creates a new wakeup source by writing to /sys/power/wake_lock.
-+ * This lock persists until explicitly unlocked.
-+ */
-+static int lock_ws(const char *name)
-+{
-+	int fd;
-+	ssize_t bytes;
-+
-+	fd = open("/sys/power/wake_lock", O_WRONLY);
-+	if (!ASSERT_OK_FD(fd, "open /sys/power/wake_lock"))
-+		return -1;
-+
-+	bytes = write(fd, name, strlen(name));
-+	close(fd);
-+	if (!ASSERT_EQ(bytes, strlen(name), "write to wake_lock"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Destroys the ws by writing the same name to /sys/power/wake_unlock.
-+ */
-+static void unlock_ws(const char *name)
-+{
-+	int fd;
-+
-+	fd = open("/sys/power/wake_unlock", O_WRONLY);
-+	if (!ASSERT_OK_FD(fd, "open /sys/power/wake_unlock"))
-+		goto cleanup;
-+
-+	write(fd, name, strlen(name));
-+
-+cleanup:
-+	if (fd)
-+		close(fd);
-+}
-+
-+/*
-+ * Setups for testing ws iterators. Will run once prior to suite of tests.
-+ */
-+static int setup_test_ws(void)
-+{
-+	if (lock_ws(test_ws_name))
-+		return -1;
-+	test_ws_created = true;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Tears down and cleanups testing ws iterators. WIll run once after the suite
-+ * of tests.
-+ */
-+static void teardown_test_ws(void)
-+{
-+	if (!test_ws_created)
-+		return;
-+	unlock_ws(test_ws_name);
-+	test_ws_created = false;
-+}
-+
-+struct WakeupSourceInfo {
-+	char name[WAKEUP_SOURCE_NAME_LEN];
-+	unsigned long active_count;
-+	long active_time_ms;
-+	unsigned long event_count;
-+	unsigned long expire_count;
-+	long last_change_ms;
-+	long max_time_ms;
-+	long prevent_sleep_time_ms;
-+	long total_time_ms;
-+	unsigned long wakeup_count;
-+};
-+
-+/*
-+ * Reads and parses one wakeup_source record from the iterator file.
-+ * A record is a single space-delimited line.
-+ * Returns true on success, false on EOF. Asserts internally on errors.
-+ */
-+static bool read_ws_info(FILE *iter_file, struct WakeupSourceInfo *ws_info,
-+			 char **line)
-+{
-+	size_t linesize;
-+	int items;
-+
-+	if (getline(line, &linesize, iter_file) == -1)
-+		return false;
-+
-+	(*line)[strcspn(*line, "\n")] = 0;
-+
-+	items = sscanf(*line, "%s %lu %ld %lu %lu %ld %ld %ld %ld %lu",
-+		       ws_info->name, &ws_info->active_count,
-+		       &ws_info->active_time_ms, &ws_info->event_count,
-+		       &ws_info->expire_count, &ws_info->last_change_ms,
-+		       &ws_info->max_time_ms, &ws_info->prevent_sleep_time_ms,
-+		       &ws_info->total_time_ms, &ws_info->wakeup_count);
-+
-+	if (!ASSERT_EQ(items, 10, "read wakeup source info"))
-+		return false;
-+
-+	if (!ASSERT_LT(strlen(ws_info->name), WAKEUP_SOURCE_NAME_LEN,
-+		       "name length"))
-+		return false;
-+
-+	return true;
-+}
-+
-+static int get_ws_iter_stream(struct wakeup_source_iter *skel, int *iter_fd,
-+			      FILE **iter_file)
-+{
-+	*iter_fd = bpf_iter_create(
-+			bpf_link__fd(skel->links.wakeup_source_collector));
-+	if (!ASSERT_OK_FD(*iter_fd, "iter_create"))
-+		return -1;
-+
-+	*iter_file = fdopen(*iter_fd, "r");
-+	if (!ASSERT_OK_PTR(*iter_file, "fdopen"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static void subtest_ws_iter_check_active_count(struct wakeup_source_iter *skel)
-+{
-+	static const char subtest_ws_name[] = "bpf_selftest_ws_active_count";
-+	const int lock_unlock_cycles = 5;
-+	struct WakeupSourceInfo ws_info;
-+	char *line = NULL;
-+	bool found_ws = false;
-+	FILE *iter_file = NULL;
-+	int iter_fd = -1;
-+	int i;
-+
-+	for (i = 0; i < lock_unlock_cycles; i++) {
-+		if (!ASSERT_OK(lock_ws(subtest_ws_name), "lock_ws"))
-+			goto cleanup;
-+		unlock_ws(subtest_ws_name);
-+	}
-+
-+	if (get_ws_iter_stream(skel, &iter_fd, &iter_file))
-+		goto cleanup;
-+
-+	while (read_ws_info(iter_file, &ws_info, &line)) {
-+		if (strcmp(ws_info.name, subtest_ws_name) == 0) {
-+			found_ws = true;
-+			ASSERT_EQ(ws_info.active_count, lock_unlock_cycles,
-+				  "active_count check");
-+			ASSERT_EQ(ws_info.event_count, lock_unlock_cycles,
-+				  "event_count check");
-+			break;
-+		}
-+	}
-+
-+	ASSERT_TRUE(found_ws, "found active_count test ws");
-+
-+	free(line);
-+cleanup:
-+	if (iter_file)
-+		fclose(iter_file);
-+	else if (iter_fd >= 0)
-+		close(iter_fd);
-+}
-+
-+static void subtest_ws_iter_check_sleep_times(struct wakeup_source_iter *skel)
-+{
-+	bool found_test_ws = false;
-+	struct WakeupSourceInfo ws_info;
-+	char *line = NULL;
-+	FILE *iter_file = NULL;
-+	int iter_fd = -1;
-+
-+	if (get_ws_iter_stream(skel, &iter_fd, &iter_file))
-+		goto cleanup;
-+
-+	while (read_ws_info(iter_file, &ws_info, &line)) {
-+		if (strcmp(ws_info.name, test_ws_name) == 0) {
-+			found_test_ws = true;
-+			ASSERT_GT(ws_info.last_change_ms, 0,
-+				  "Expected non-zero last change");
-+			ASSERT_GE(ws_info.active_time_ms, TEST_SLEEP_MS,
-+				  "Expected active time >= TEST_SLEEP_MS");
-+			ASSERT_GE(ws_info.max_time_ms, TEST_SLEEP_MS,
-+				  "Expected max time >= TEST_SLEEP_MS");
-+			ASSERT_GE(ws_info.total_time_ms, TEST_SLEEP_MS,
-+				  "Expected total time >= TEST_SLEEP_MS");
-+			break;
-+		}
-+	}
-+
-+	ASSERT_TRUE(found_test_ws, "found_test_ws");
-+
-+	free(line);
-+cleanup:
-+	if (iter_file)
-+		fclose(iter_file);
-+	else if (iter_fd >= 0)
-+		close(iter_fd);
-+}
-+
-+static void subtest_ws_iter_check_no_infinite_reads(
-+		struct wakeup_source_iter *skel)
-+{
-+	int iter_fd;
-+	char buf[256];
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(skel->links.wakeup_source_collector));
-+	if (!ASSERT_OK_FD(iter_fd, "iter_create"))
-+		return;
-+
-+	while (read(iter_fd, buf, sizeof(buf)) > 0)
-+		;
-+
-+	/* Final read should return 0 */
-+	ASSERT_EQ(read(iter_fd, buf, sizeof(buf)), 0, "read");
-+
-+	close(iter_fd);
-+}
-+
-+void test_wakeup_source_iter(void)
-+{
-+	struct wakeup_source_iter *skel = NULL;
-+	struct btf *vmlinux_btf;
-+	int btf_id;
-+
-+	if (geteuid() != 0) {
-+		fprintf(stderr,
-+			"Skipping wakeup_source_iter test, requires root\n");
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = wakeup_source_iter__open();
-+	if (!ASSERT_OK_PTR(skel, "wakeup_source_iter__open"))
-+		return;
-+
-+	vmlinux_btf = btf__load_vmlinux_btf();
-+	if (!vmlinux_btf)
-+		return;
-+
-+	btf_id = btf__find_by_name_kind(vmlinux_btf, "bpf_iter__wakeup_source", BTF_KIND_STRUCT);
-+	btf__free(vmlinux_btf);
-+
-+	if (btf_id <= 0) {
-+		test__skip();
-+		goto destroy;
-+	}
-+
-+	if (!ASSERT_OK(wakeup_source_iter__load(skel), "iter__load"))
-+		goto destroy;
-+
-+	if (!ASSERT_OK(setup_test_ws(), "setup_test_ws"))
-+		goto teardown;
-+
-+	if (!ASSERT_OK(wakeup_source_iter__attach(skel), "skel_attach"))
-+		goto teardown;
-+
-+	/*
-+	 * Sleep on O(ms) to ensure that time stats' resolution isn't lost when
-+	 * converting from ns to ms
-+	 */
-+	usleep(TEST_SLEEP_US);
-+
-+	if (test__start_subtest("active_count"))
-+		subtest_ws_iter_check_active_count(skel);
-+	if (test__start_subtest("sleep_times"))
-+		subtest_ws_iter_check_sleep_times(skel);
-+	if (test__start_subtest("no_infinite_reads"))
-+		subtest_ws_iter_check_no_infinite_reads(skel);
-+
-+teardown:
-+	teardown_test_ws();
-+destroy:
-+	wakeup_source_iter__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/wakeup_source_iter.c b/tools/testing/selftests/bpf/progs/wakeup_source_iter.c
-new file mode 100644
-index 000000000000..d770efc3bd0d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/wakeup_source_iter.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Google LLC */
-+#include <vmlinux.h>
-+#include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define NSEC_PER_MS 1000000UL
-+#define WAKEUP_SOURCE_NAME_LEN 32
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct wakeup_source___local {
-+	const char *name;
-+	unsigned long active_count;
-+	unsigned long event_count;
-+	unsigned long wakeup_count;
-+	unsigned long expire_count;
-+	ktime_t last_time;
-+	ktime_t max_time;
-+	ktime_t total_time;
-+	ktime_t start_prevent_time;
-+	ktime_t prevent_sleep_time;
-+	bool active:1;
-+	bool autosleep_enabled:1;
-+} __attribute__((preserve_access_index));
-+
-+struct bpf_iter__wakeup_source___local {
-+	struct bpf_iter_meta *meta;
-+	struct wakeup_source___local *wakeup_source;
-+} __attribute__((preserve_access_index));
-+
-+SEC("iter/wakeup_source")
-+int wakeup_source_collector(struct bpf_iter__wakeup_source___local *ctx)
-+{
-+	const struct wakeup_source___local *ws = ctx->wakeup_source;
-+	struct seq_file *seq = ctx->meta->seq;
-+	char name[WAKEUP_SOURCE_NAME_LEN] = {'\0'};
-+	const char *pname;
-+	bool active, autosleep_enable;
-+	s64 active_time, curr_time, max_time, prevent_sleep_time, total_time;
-+
-+	if (!ws)
-+		return 0;
-+
-+	active = BPF_CORE_READ_BITFIELD_PROBED(ws, active);
-+	autosleep_enable = BPF_CORE_READ_BITFIELD_PROBED(ws, autosleep_enabled);
-+	if (bpf_core_read(&pname, sizeof(pname), &ws->name) ||
-+	    bpf_probe_read_kernel_str(name, sizeof(name), pname) < 0)
-+		return 0;
-+
-+	active_time = 0;
-+	curr_time = bpf_ktime_get_ns();
-+	max_time = ws->max_time;
-+	prevent_sleep_time = ws->prevent_sleep_time;
-+	total_time = ws->total_time;
-+
-+	if (active) {
-+		active_time = curr_time - ws->last_time;
-+		total_time += active_time;
-+		if (active_time > max_time)
-+			max_time = active_time;
-+		if (autosleep_enable)
-+			prevent_sleep_time +=
-+				curr_time - ws->start_prevent_time;
-+	}
-+
-+	BPF_SEQ_PRINTF(seq,
-+		       "%s %lu %ld %lu %lu %ld %ld %ld %ld %lu\n",
-+		       name,
-+		       ws->active_count,
-+		       active_time / NSEC_PER_MS,
-+		       ws->event_count,
-+		       ws->expire_count,
-+		       ws->last_time / NSEC_PER_MS,
-+		       max_time / NSEC_PER_MS,
-+		       prevent_sleep_time / NSEC_PER_MS,
-+		       total_time / NSEC_PER_MS,
-+		       ws->wakeup_count);
-+	return 0;
-+}
--- 
-2.53.0.473.g4a7958ca14-goog
-
+> +
+> +void vfio_pci_liveupdate_cleanup(void)
+> +{
+> +	if (!liveupdate_enabled())
+> +		return;
+> +
+> +	liveupdate_unregister_file_handler(&vfio_pci_liveupdate_fh);
+> +}
