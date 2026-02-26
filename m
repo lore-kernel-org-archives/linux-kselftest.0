@@ -1,80 +1,53 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FA7313E2F
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 09:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC4D3A0B21;
+	Thu, 26 Feb 2026 09:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772098317; cv=none; b=d5Zvv/IjdkubpdDCZmPiI8npUQAbjTM0Bld3PqzXdlFo0eDUl580kdDB+TA3yVxxuvyqTaAAFVqw7pBdJI4jpU2EJxGRWXvzDdITvngYOy6gKfrU6BAOuIpB3CUb5L/MaGp8/dCAhP1igslOPFFyoInE0dybwgx8N2Qu5AB/rH8=
+	t=1772099602; cv=none; b=JLCe5MmyA65Shj5J0SOTis2pyRWccPzfdviY1VB5owDnZgp1C4MxUM0T6kd7PZ0ER7UOUgGB+gedPEt+XDQ/5LlSNal/6Vcmblbt1MFK/7c36KjqUOwREZBqxElmkMVSBCHmT1kidpZWwNWKOORLqu4J/pE0pSWi5/CPRww8dt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772098317; c=relaxed/simple;
-	bh=7hlfsR+NxVR84wDC2V+k6SQPH/xZi5y8H+6CYmBY5BQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GlK7FQ3FSEc0ug8eOKI4KP+GJHHRb82GA57RumbQSRUWSN3DrQ+UHfKzCEYMHRtCbUnGwCTiwCatU7FOLv8JvP5NftSzBK3Ahlv6cFmAtcBek689qFyZB9/W/2cLDxlTfUqD9Mskw4JSaGk8j1MNicy6cXEKGSROmPv/lzNQDN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pp/73ine; arc=none smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772099602; c=relaxed/simple;
+	bh=eDjgoQckfBk/1LqsvZlpMrdjYiSff2kJicrYxPnu+Yc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=qX7GPDoRYQsYRUrvRPu59x+/r+yRd/oeWKNTh+E812JW3KQ4PzWrf5VJyNJntgSn9byY+q2KOen0v3Utnc/oNKUaiJvYztZGgJ5hDCeEMI+zXeg9cw4XcMPdrn8459w+DDWdHXelf7oHh1Pz+KPvY0zPK0tuQT+K2qH/FHQlofM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=l1o3uSn4; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pp/73ine"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-12732e6a123so165165c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 01:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772098315; x=1772703115; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VTO52UAvVAs4B92EPIjRgjAEaywnmDEV4QBGIv74ZP0=;
-        b=Pp/73inevdIICPttkoXbYjTFkamREKn3uSp7qVa4M0hDGAuOJbJc3OrDfqLz9znFyB
-         vAX4jWbJR6Cjt6K4Qnw294Yh8FqpmPvHlZ1HU5knZlFm1ZkdJSgb7zRmpEQO67tsa5RH
-         41DjmqNdTZkUXzYxAaz3gEgtRv5LHfnZyK677ZeFV+EtLkSSjsDUMYHCQC9I/RhBuMLL
-         oR2xjL62KRP3AEI32FbjkdfqEfI7DZoR+Ry6SVsy4J3grXj+Y9w7u7ozESHTCMU/dJYF
-         JHIpap+EMGuQlWtaQwTjURmlqPdriseRfpSMUHt3svgIueCQfsBeMHRpY4y+lGDEGxvP
-         ijNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772098315; x=1772703115;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VTO52UAvVAs4B92EPIjRgjAEaywnmDEV4QBGIv74ZP0=;
-        b=eTB+nov4aMLCLPo6i5zGL3cgVmxcZkUY6xbcajhZ5Vi/OlRZfWP1z6jpp2YRI/pPyy
-         s0ZgOioJ4rjSrilzjw2gnOY2rHS7QTDGLFKdjmIpWQMpvwgqYORY2O/1WqtsrSQBGGR4
-         oAh4zO0BqH0s9VdEgURhFmulaf7n+psitnpu/zm9OvJbPLYNLcRS0zre7hGNlAVXVoav
-         fMkyjOeCnUbcWY5kXSF4+zY+HIXHKsNjvOdmlO+8lH7o8ymcVgjdCbCcfSEstpmHvr0P
-         5ouFnMAotsUvx2pbdVAh74EGrANzmgY9w8+hMnU90Q+xQMC2tf0spk7iCqWtc4jr0JYL
-         vqIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5NEshvQW3efIycRg92LZW575nqt9aiomqmEOSssQgswMe5V9qepnTLtvq9NJpbLKYimViMAWv8wfllEziZqw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDGPyJYG1HdaZSgsBJnS69DO5uL/D+SABfhRKKF7FP4YMrRzD3
-	LN2mjj+adgg/iPAnvkmzZz9iTb6jR9jhrdZeKupZgt2oaevWU5LG4neT
-X-Gm-Gg: ATEYQzy6jzipiXqkJRyT2JUBv80erhzjzQlDaRzHFEOhnvwgrjOIlETHVpBFYZlgMOj
-	JA1MKJaDazEXWFISOKEzwnzP1Q4d399H2iJU8n/vrjtwF4kJjjsuWYHrykWmU00t2jD+UeMrp6W
-	ojsgYFJF3QgNFyGPL+LZ9nKxB5+Ef+Irk0fwvh2XSbkhgUEmesyNOPTA8XqbIjpfliwK5eDDbdZ
-	R3vyXprNg0htNIx++ftLusGilWsq04JtzjR1a01jcF9uaj3sidRvQiKuYwLzssIwCHJCIzPSGWF
-	FLPxXb6zySdSTWT974ZS3VBUaLnHr/IDK+2IW/F/NoHS6UkLkyu+Qdvzkfe9T4KHZ3kvdL1Uh3h
-	NKG9cQT7AuP/cxxrmsE8A3ovweR7yBYBrHWiJB6teXdK9IXtMoSF+OXCv39yxFaYPQ+L0WLUpzo
-	uxeA3/we3SQIwoAvdgrznTjgkrgvIEFur62pVqsNPQ9JzFd6dTfwnquTRdgn/Jx0d/SAjadqJGc
-	xNaMSssIE7PDc/1PQgoYRY=
-X-Received: by 2002:a05:7022:238d:b0:123:331d:bdbb with SMTP id a92af1059eb24-1276ad6277emr8587660c88.22.1772098315212;
-        Thu, 26 Feb 2026 01:31:55 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12789a43c12sm1771904c88.14.2026.02.26.01.31.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 01:31:54 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="l1o3uSn4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=nj
+	pI2OhELvS/FVob2kMirqE/3cNZpdVyGbqW92Wuwjg=; b=l1o3uSn4nb5Hdc4dzQ
+	tkX5yAJEIg2dhigeSEQPQwbxKVY/up+waz45n78Wg+lXd+G//Hbz1AxqYHNbk291
+	Z3Dq/ZwKknZkQjgycxnjB2wTpts2I5qS9z8RV5jOUtG+jGHpKnxOa2N1Hf6P5b/P
+	YxdLM6SM2+if7FZm4lSNg4OcU=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wDHcY68F6Bpat7wMg--.59449S4;
+	Thu, 26 Feb 2026 17:51:59 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	posk@google.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v2 2/2] selftests/bpf: probe_user: drop serial restriction
-Date: Thu, 26 Feb 2026 17:31:32 +0800
-Message-ID: <20260226093132.437206-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260226093132.437206-1-sun.jian.kdev@gmail.com>
-References: <20260226093132.437206-1-sun.jian.kdev@gmail.com>
+	linux-kselftest@vger.kernel.org,
+	yangfeng59949@163.com
+Subject: [PATCH v7 bpf-next 2/2] selftests/bpf: Add selftests for the invocation of bpf_lwt_xmit_push_encap
+Date: Thu, 26 Feb 2026 17:51:56 +0800
+Message-Id: <20260226095156.117996-3-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260226095156.117996-1-yangfeng59949@163.com>
+References: <20260226095156.117996-1-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,36 +55,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDHcY68F6Bpat7wMg--.59449S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XF4kCFWxXF4rWw13ur43GFg_yoWkXFc_tr
+	sYga4kCrWxGFsIyayjkryUuryak39xWrZrGFZrJrn7C3yUX3Z8GFs7Gr1DJas2ga1fKr9x
+	Za909FyIyr42qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRCrWFDUUUUU==
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8R9372mgF78GtAAA3l
 
-Patch 1/2 added PID filtering to the probe_user BPF program to avoid
-cross-test interference from the global connect() hooks.
+From: Feng Yang <yangfeng@kylinos.cn>
 
-With the interference removed, drop the serial_ prefix and remove the
-stale TODO comment so the test can run in parallel.
+Calling bpf_lwt_xmit_push_encap will not cause a crash when dst is missing.
 
-Tested:
-  ./test_progs -t probe_user -v
-  ./test_progs -j$(nproc) -t probe_user
-
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/probe_user.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../selftests/bpf/progs/verifier_lwt.c        | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/probe_user.c b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-index 280dcdb5ddef..930cded1602f 100644
---- a/tools/testing/selftests/bpf/prog_tests/probe_user.c
-+++ b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-@@ -1,8 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
+diff --git a/tools/testing/selftests/bpf/progs/verifier_lwt.c b/tools/testing/selftests/bpf/progs/verifier_lwt.c
+index 5ab746307309..a2b45e3e1542 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_lwt.c
++++ b/tools/testing/selftests/bpf/progs/verifier_lwt.c
+@@ -231,4 +231,23 @@ __naked void not_permitted_for_lwt_prog(void)
+ 	: __clobber_all);
+ }
  
--/* TODO: corrupts other tests uses connect() */
--void serial_test_probe_user(void)
-+void test_probe_user(void)
- {
- 	static const char *const prog_names[] = {
- 		"handle_sys_connect",
++SEC("lwt_xmit")
++__description("missing dst when calling bpf_lwt_xmit_push_encap")
++__success __retval(0)
++__naked void missing_dst_call_bpf_lwt_xmit_push_encap(void)
++{
++	asm volatile ("					\
++	r9 = 69;					\
++	r3 = r10;					\
++	r3 += -32;					\
++	*(u64 *)(r3 + 0) = r9;				\
++	r2 = 2;						\
++	r4 = 20;					\
++	call %[bpf_lwt_push_encap];			\
++	exit;						\
++"	:
++	: __imm(bpf_lwt_push_encap)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
