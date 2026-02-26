@@ -1,153 +1,136 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from jpms-ob02.noc.sony.co.jp (jpms-ob02.noc.sony.co.jp [211.125.140.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573513195F0
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 07:33:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D420038F921;
+	Thu, 26 Feb 2026 07:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.140.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772091225; cv=none; b=oPGbDl72X4CLRHM3Y+1vFkN9XHEdH4vsMtIDqKawNacLKkae6nOjHfXrKHrbYKAb+D/sdzaNwrj/CxvuwJEmlt13aotgWxEPPEVbuqPsCeVDXcawFUMeYYnIlqpXztCj1aVVAqg1a11n2IIeSvt/HnS5sG+SG25gxLErjwHE53M=
+	t=1772091329; cv=none; b=hsfyvzXsnhQ4mW4/OiyhEFnqpryhqatM/i0BMyzPGCGVSFH9f9FcNETt3cwlditFQJaZzs16ujIjqLjFzAWgvNeuSb7yaMQCnPgoUNta5pWHs+II/SmGvVOEUDq9YeQalrBxzRBbNzfzLAxwhrvZVkB1ukkcnpIhGNANpXlYgNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772091225; c=relaxed/simple;
-	bh=eAD1ZESzfzygQ1Mv5iwydAGldrYIsIgWQRnqB+EGTpM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EbLC61t0lAYlByGTp+7TYY6VILf4W/O2H40J+RQaDPyDiADQMJjcafsctiO0YRtI/12IRb8O1MimswzejcKhlj6ZSPgBLld7aI1zmy8142XntyWCNj9RMorxYEFiGvPIZuRQ29HNTc5EsISDMSJKSt1QF67d5blE4LaDBvHX6mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XRw1Xcs9; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1772091329; c=relaxed/simple;
+	bh=P8+TGDnvkg7gufbIf6sOV2gE+oWXesLj+BT+qqAjWd0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KxR2AFQyMuRrBLtIOpT/44wZfXkX+yBQ+an49vxHABjkBaXA5fm6hbryBLy3AECSnAvwRT400reFxduWPZTnJC/+PhUj+kmjaMN4qGJZf7VUt0aEhEknH/u6RgxpcHsAkRfl2OWyKUprQHgPuvFF8OQbFCtZkVd7/5xoRvRflIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=KcYHtes9; arc=none smtp.client-ip=211.125.140.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XRw1Xcs9"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-480706554beso7093945e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 23:33:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="KcYHtes9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772091223; x=1772696023; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kEbv/r6Z5V121fpgI9RtZaGhloVZMWh2/Wjp0l5cuNo=;
-        b=XRw1Xcs96Z3Il2/XS0QHMaEPvgd3VCxniTWKZIk2KO3E0WBaJtA/pC0yOKf1nBV8eo
-         xHNPNYiMQgsDXZKt3V22Ep7ObJ71RURO5vLXlDsGMSNDMMklPmQVonEOPYw42OWHvEL8
-         /sM1SXOcbg/ezGaXZJzz0U+ek+CNJOiSlrpI8kzazJfsA0eiBcOwnZZMg/BSk+VunSKv
-         44UAfir56UJucuAhe9knwDOPJBJp/P4CmqdRp/AD/yT25KgNDVudmXTqepQfaNqNCo9u
-         L4NaM98Q2nUFSNdUWFYddZz8SelGmJZaUOWXv/HYtkfJhdsjUxm/8//TmOhRROrxbyd0
-         CYag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772091223; x=1772696023;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kEbv/r6Z5V121fpgI9RtZaGhloVZMWh2/Wjp0l5cuNo=;
-        b=PQ9jUZcbNmlnKUkxsztwquje/kbA5DmsBNxadjRkeXnnuBhcGQALkpd4g0rnbee4FD
-         I/lw00/ZPmBGHHXvGN620UdNssZ6K5LGyGGpSBFKGgz+XXCNSBzyg4C0Osbn1a34nl8j
-         o35O5Gk3Q2QIdjyR2gpIxBq5UWH3wgJfLvUBqhD6Yod1UOomEdhSJ52OxDM+EDmEpW5x
-         BzUqaHoKYFAYABenq2LRkwWGv3CkjbOkMrS5vBVvD1wbCKLYFA7NHZ5dY/3Fu1L11ZoX
-         7jVH7uSkwLUvCJ3p3qLEVrD+Z0AsRl/jlz/6JMTeEg5VozwlVJ2Qq3Vz3fmMOujvDc8X
-         dO9w==
-X-Forwarded-Encrypted: i=1; AJvYcCW4Kq9R+/mqQkzLy0xkn+hkEmzECzJrGgEH8HlALX6teM3wus/cPrOJ/eD8gWyti3U9mLoX4cAGNmXWoedTAqA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDPz9VOSqX7q0gLpE1kjGqrK7EnFs55LmfIZy03PRsOWJiefzY
-	fz2W/kao3Je+QZjvGeZtQVTAg9d9n2pCeZYYC2xp2f2dCvrEa3pPDN0K301ELxjJwtM=
-X-Gm-Gg: ATEYQzwkZNkPyNcS3MThUmNtMkGssMsHRefd7L+yO2Dbwdq0Zj3XS5tiMhjaYWQJrBM
-	N7y7Kg/2ZdmQzN9PJk93SVnLeyr79miWl5Gxcnivw2aMDXCC3AQQsw1fmvqj/UQfqZAmL+KYZAs
-	qeKKaJtDXbv28RxQVkGgOBrvmsu5rua3PST/7UR/Metbt7B/jRyJMrPK6Lexap9aP6yqOCwoX+F
-	hnTnvudulba3BL7UmyyGU+VrlO5WeKscF1f69TgMLQzBuH4wlBlTsjFbtcoaqG/InjwemIyWygU
-	Hwvk9cznHhgY0oc58R+achVCDExls1ZN+rtFzdGQ+dm0aZsk4VDdIUnBITOdmX+qIbmKvVFoDdo
-	/gaNmMc7ktE02kcgWrU+dxrG4+3jQAWF/SYGmna0r4RPyjJhe2phAzClB9y5/j6/bmXoJBEt7od
-	wOmpKSY48FTwdbMCiH9MI=
-X-Received: by 2002:a05:600c:198b:b0:483:ad56:8d16 with SMTP id 5b1f17b1804b1-483c216ae22mr47028305e9.6.1772091222734;
-        Wed, 25 Feb 2026 23:33:42 -0800 (PST)
-Received: from u94a ([2401:e180:8d80:eebd:d098:7649:31a9:9ad7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5b03ffsm20566365ad.1.2026.02.25.23.33.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 23:33:42 -0800 (PST)
-Date: Thu, 26 Feb 2026 15:33:34 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Greg KH <gregkh@linuxfoundation.org>, 
-	Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc: Ricardo =?utf-8?B?Qi4gTWFybGnDqHJl?= <rbm@suse.com>, 
-	stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
-Subject: Re: Latest BPF selftests on stable kernels (was 'Re: [PATCH stable
- 6.12 0/5] Backport selftest for "bpf: Check skb->transport_header is set in
- bpf_skb_check_mtu"')
-Message-ID: <f7n6fetxwo5agf5rn56my2tkepieh6lacg4cnkgt3z7vb7q2gu@jvn4l5uzgxuw>
-References: <20260224073810.85945-1-shung-hsi.yu@suse.com>
- <bd0277b7-4a19-46a4-9f06-96d48cbc89d8@oracle.com>
- <DGN6PFT94YHU.3S3UXTP82975E@suse.com>
- <crki45lsdj4yjmz3ix4k5scjuovjr56oexmwhhwbqeejdxh3j2@kgve6uooitce>
- <2026022557-synapse-schilling-e88b@gregkh>
+  d=sony.com; s=s1jp; t=1772091326; x=1803627326;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=okgIaffSuE7iTDSP0gw48/bn86X3WVAG8sCQHMc54fQ=;
+  b=KcYHtes9avrkA27FxmBskqP1CAajtqUObEK+T86A2EN7bhIZiqcDj+Iv
+   /FQ+Zl7eFu0aL/NCf4FPv9IJsMG/pSHvEcNpnaPZUBHkhG7ye7CGQpFmT
+   HNEU740zbTws79IFkZdYNkfS4goNN80PAmmkFwaepmIDjJOMZuWvPesog
+   o933GmG+9/iWpx2+MTc8djPU7/7QWNHYbsF51RUxSqLv5fWPSegXoQKui
+   4E41Q//nTrbKknDif1nRH34HZxFSEfYd7+2j9nY7tWYeU4pUEbGIJmD5U
+   0rL8ORX/PPetVQ/9CQsptgB62s+JjFccF0mtQ32c/u3SQwfYF12KmyFxN
+   Q==;
+Received: from unknown (HELO jpmta-ob1.noc.sony.co.jp) ([IPv6:2001:cf8:0:6e7::6])
+  by jpms-ob02.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 16:35:24 +0900
+X-IronPort-AV: E=Sophos;i="6.21,311,1763391600"; 
+   d="scan'208";a="616141560"
+Received: from unknown (HELO asagi..) ([43.11.56.84])
+  by jpmta-ob1.noc.sony.co.jp with ESMTP; 26 Feb 2026 16:35:23 +0900
+From: Yohei Kojima <yohei.kojima@sony.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Yohei Kojima <yohei.kojima@sony.com>,
+	Daniel Palmer <daniel.palmer@sony.com>,
+	Tim Bird <tim.bird@sony.com>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] KVM: selftests: Extract memslot setup code from spawn_vm()
+Date: Thu, 26 Feb 2026 16:37:14 +0900
+Message-ID: <57c05d4d7db845be9250b7a4f6537e98636d70ca.1772090306.git.yohei.kojima@sony.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1772090306.git.yohei.kojima@sony.com>
+References: <cover.1772090306.git.yohei.kojima@sony.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2026022557-synapse-schilling-e88b@gregkh>
 
-On Wed, Feb 25, 2026 at 06:32:40AM -0800, Greg KH wrote:
-> On Wed, Feb 25, 2026 at 10:35:06AM +0800, Shung-Hsi Yu wrote:
-> > Cc BPF mailing list and maintainers. Plus other in the referenced
-> > thread.
-> > 
-> > Hi Harshit,
-> > 
-> > On Tue, Feb 24, 2026 at 09:18:04AM -0300, Ricardo B. Marlière wrote:
-> > > On Tue Feb 24, 2026 at 4:53 AM -03, Harshit Mogalapalli wrote:
-> > > > On 24/02/26 13:08, Shung-Hsi Yu wrote:
-> > > >> This patchset backport the corresponding BPF selftests for commit
-> > > >> d946f3c98328 ("bpf: Check skb->transport_header is set in
-> > > >> bpf_skb_check_mtu"), which has already been included since 6.12.63.
-> > > >> 
-> > > >> The BPF selftest added in commit 6cc73f35406c ("selftests/bpf: Test
-> > > >> bpf_skb_check_mtu(BPF_MTU_CHK_SEGS) when transport_header is not set")
-> > > >> additionally depends on network namespace support for BPF selftests
-> > > >> added by Bastien, otherwise the MTU in root networking namespace will be
-> > > >> set to 10, causing other BPF selftests to fail. Credit goes to Ricardo
-> > > >> Marlière for figuring out the dependency.
-> > > >
-> > > > Note:
-> > > > I have recently learnt that ideally we are supposed to run upstream 
-> > > > latest kselftests on stable kernels as well. If a feature is not 
-> > > > supported the kselftests are meant to be skipped.
-> > 
-> > Thanks you for the bringing this up! This was also mentioned by Daniel
-> > (Borkmann), but my experience aligns with Ricardo's.
-> > 
-> > > That is not true for BPF, from my (limited) experience.
-> > 
-> > I do want running latest BPF selftests to work on stable thought, made
-> > some half-hearted attempts last April on trying bpf-next's BPF selftests
-> > (during 6.15 phase) run on stable/linux-6.14.y, but wasn't able to get
-> > pass the building phase.
-> > 
-> > As far as I remember I ran into issue building bpf_testmod.ko (kernel
-> > module) of bpf-next against 6.14, and other similar issues related data
-> > structure or API changes. Pretty much the same set of problems we get
-> > when trying to build any driver in the latest kernel against stable
-> > kernels.
-> > 
-> > Maybe it can work if BPF selftests that does not depends on
-> > bpf_testmod.ko, and build failures of BPF programs are simply ignored
-> > (not sure how feasible that is, probably would make Makefile much
-> > complicated), so for now I'm sticking with backporting BPF selftests to
-> > stable kernels.
-> 
-> If a kernel test module is involved, then yes, you are right, those
-> changes do need to be backported as mix/match of kernel modules to other
-> trees is not something that we support.
-> 
-> We only want this to be the rule for when we have purely userspace test
-> cases/code.
+Add vm_userspace_mem_region_add_map() function to set up memslot, and
+update spawn_vm() to use it. This helps the test cases to create
+additional memslots easily.
 
-Thanks for the confirmation regarding kernel test module.
+Signed-off-by: Yohei Kojima <yohei.kojima@sony.com>
+---
+ .../selftests/kvm/set_memory_region_test.c    | 47 ++++++++++++-------
+ 1 file changed, 29 insertions(+), 18 deletions(-)
 
-For the record most BPF selftests probably doesn't depends on
-bpf_testmod.ko, I don't think I have state that clear enough in the
-exchange. So with some work running a subset of latest BPF selftest on
-stable kernel may be possible, just that I have no idea the effort
-required. 
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index 7fe427ff9b38..8d4fd713347c 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -107,31 +107,42 @@ static void wait_for_vcpu(void)
+ 	usleep(100000);
+ }
+ 
++static void vm_userspace_mem_region_add_map(struct kvm_vm *vm,
++		uint64_t addr, uint32_t slot, size_t size, uint32_t flags)
++{
++	uint64_t *hva;
++	uint64_t gpa;
++
++	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_THP,
++				    addr, slot,
++				    size / getpagesize(), flags);
++
++	/*
++	 * Allocate and map two pages so that the GPA accessed by guest_code()
++	 * stays valid across the memslot move.
++	 */
++	gpa = vm_phy_pages_alloc(vm, 2, addr, slot);
++	TEST_ASSERT(gpa == addr, "Failed vm_phy_pages_alloc\n");
++
++	virt_map(vm, addr, addr, 2);
++
++	/* Ditto for the host mapping so that both pages can be zeroed. */
++	hva = addr_gpa2hva(vm, MEM_REGION_GPA);
++	memset(hva, 0, 2 * 4096);
++}
++
+ static struct kvm_vm *spawn_vm(struct kvm_vcpu **vcpu, pthread_t *vcpu_thread,
+ 			       void *guest_code)
+ {
+ 	struct kvm_vm *vm;
+-	uint64_t *hva;
+-	uint64_t gpa;
+ 
+ 	vm = vm_create_with_one_vcpu(vcpu, guest_code);
+ 
+-	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_THP,
+-				    MEM_REGION_GPA, MEM_REGION_SLOT,
+-				    MEM_REGION_SIZE / getpagesize(), 0);
+-
+-	/*
+-	 * Allocate and map two pages so that the GPA accessed by guest_code()
+-	 * stays valid across the memslot move.
+-	 */
+-	gpa = vm_phy_pages_alloc(vm, 2, MEM_REGION_GPA, MEM_REGION_SLOT);
+-	TEST_ASSERT(gpa == MEM_REGION_GPA, "Failed vm_phy_pages_alloc\n");
+-
+-	virt_map(vm, MEM_REGION_GPA, MEM_REGION_GPA, 2);
+-
+-	/* Ditto for the host mapping so that both pages can be zeroed. */
+-	hva = addr_gpa2hva(vm, MEM_REGION_GPA);
+-	memset(hva, 0, 2 * 4096);
++	vm_userspace_mem_region_add_map(vm,
++					MEM_REGION_GPA,
++					MEM_REGION_SLOT,
++					MEM_REGION_SIZE,
++					0);
+ 
+ 	pthread_create(vcpu_thread, NULL, vcpu_worker, *vcpu);
+ 
+-- 
+2.43.0
 
-Thanks,
-Shung-Hsi
