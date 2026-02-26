@@ -1,235 +1,72 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91603242D98;
-	Thu, 26 Feb 2026 14:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7AC3E95AD;
+	Thu, 26 Feb 2026 15:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772117573; cv=none; b=kihBBE3NbbNqAgRU3nj/qf1Ru5S8q8kGDcKNkY9/mfzXq9UcuYNQejDJ0pPOGwaEvE7ICwWmekuQNrMmuUKWHbMKSya++9jjidGGHK4kRp1ZSL4/Dk+uPD7Be52OJe0AI5eJD+5XuBRV0wXQ08sUCamxPCoWnjGsmtzuINjl/Mo=
+	t=1772118026; cv=none; b=NS7VYDqyEZqxCJi6nT0z+7Z77cxaePy84YIj/C6u76O/PlcVQLmNZKjY4e/6WPH50OQesKRP8qS+gAfXJNKut47FnOmI34hF1lyasPUC1yaPsMPWwnNHuFanYjxkdxE+xbRVWuYQfiRndk6wxWXZ27mzWIAk63XvMkX9uBGhZiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772117573; c=relaxed/simple;
-	bh=22FZM+HRfWrKd5081W115uEyqByOD2yn3rfZTSk65I8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CxhHE9oR0DrbL1E47yE7Ml7djMCl8ahjpvAShApgNHPZY1Q23aITLAenjoD8woAimItXMkNXUvNyx0MMTkjqnifFKf+G+hUqnvqfsUwsbWxbGnkpdHVigblhKh0pjszX49pyqApS21YEdNkEzqjXaotFPbglKUcOCSDkQd5MVWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B8BA497;
-	Thu, 26 Feb 2026 06:52:44 -0800 (PST)
-Received: from [10.57.73.122] (unknown [10.57.73.122])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8A003F73B;
-	Thu, 26 Feb 2026 06:52:48 -0800 (PST)
-Message-ID: <ec3fc327-042a-4672-ab39-88cd1ce41065@arm.com>
-Date: Thu, 26 Feb 2026 14:52:47 +0000
+	s=arc-20240116; t=1772118026; c=relaxed/simple;
+	bh=bqZ8WWSZ5a3pZP4a60mik9GRowf40NscT6UmzsMmrCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ndtbSGmZXzPePOosrgNL7jeHai5qznD0zMatvkh4w101Y7nU3FCEYx8FDrzZTMc6xrg0A8bOLdq6aH7Podu6GEii9voI28YPFzWvVLeRXnoJJZC6pDqLxWh20LJ9kVb48Id5eNf7VWS/xIwrZ6VnW2RsoCakFztALbFe1ypFyjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QhQRaUjH; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QhQRaUjH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E64C19422;
+	Thu, 26 Feb 2026 15:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772118025;
+	bh=bqZ8WWSZ5a3pZP4a60mik9GRowf40NscT6UmzsMmrCU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QhQRaUjHkExtpzjzcZJmhHfkYb6aPxi80dQ+PgUWOr6qhuFFTuVsQglEAmn7eble8
+	 A1v4vrN2N1P0rBToaS7Y1FgodO6VFqRzpLwsIFuBxDZ5sZCsd/InLppdTx9pSBqfMu
+	 vPhgO/KlfqVyoe1OO1G5WROG+8WN9UcPIt9SJd92eBcsAyo1hsjBXKM1LZ8beYA0F3
+	 RJLellNuv8YHZTJN0wLfQH7Mffb9MXWKzXCHNrIVRK95KJOYX9I5kLnF5hZuhdAXJc
+	 drtrbIpfuckKTTOKIdi47uTaUrbL9OeRZrXT792kjgZ9yaxf/KndlvKz3AEvmpzzaR
+	 3pw+VTv91wniA==
+Date: Thu, 26 Feb 2026 16:00:22 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Waiman Long <longman@redhat.com>
+Cc: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 3/8] cgroup/cpuset: Clarify exclusion rules for cpuset
+ internal variables
+Message-ID: <aaBgBistmO3XpqF_@localhost.localdomain>
+References: <20260221185418.29319-1-longman@redhat.com>
+ <20260221185418.29319-4-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 7/8] KVM: arm64: use CASLT instruction for swapping
- guest descriptor
-Content-Language: en-GB
-To: Yeoreum Yun <yeoreum.yun@arm.com>, Marc Zyngier <maz@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvmarm@lists.linux.dev, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org,
- oupton@kernel.org, miko.lenczewski@arm.com, kevin.brodsky@arm.com,
- broonie@kernel.org, ardb@kernel.org, lpieralisi@kernel.org,
- joey.gouly@arm.com, yuzenghui@huawei.com
-References: <20260225182708.3225211-1-yeoreum.yun@arm.com>
- <20260225182708.3225211-8-yeoreum.yun@arm.com> <867brzah6g.wl-maz@kernel.org>
- <aaBTM3C2MbIvtUn8@e129823.arm.com>
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <aaBTM3C2MbIvtUn8@e129823.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260221185418.29319-4-longman@redhat.com>
 
-On 26/02/2026 14:05, Yeoreum Yun wrote:
-> Hi Marc,
+Le Sat, Feb 21, 2026 at 01:54:13PM -0500, Waiman Long a écrit :
+> Clarify the locking rules associated with file level internal variables
+> inside the cpuset code. There is no functional change.
 > 
->> On Wed, 25 Feb 2026 18:27:07 +0000,
->> Yeoreum Yun <yeoreum.yun@arm.com> wrote:
->>>
->>> Use the CASLT instruction to swap the guest descriptor when FEAT_LSUI
->>> is enabled, avoiding the need to clear the PAN bit.
->>>
->>> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
->>> ---
->>>   arch/arm64/include/asm/cpucaps.h |  2 ++
->>>   arch/arm64/include/asm/futex.h   | 17 +----------------
->>>   arch/arm64/include/asm/lsui.h    | 27 +++++++++++++++++++++++++++
->>>   arch/arm64/kvm/at.c              | 30 +++++++++++++++++++++++++++++-
->>>   4 files changed, 59 insertions(+), 17 deletions(-)
->>>   create mode 100644 arch/arm64/include/asm/lsui.h
->>>
->>> diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
->>> index 177c691914f8..6e3da333442e 100644
->>> --- a/arch/arm64/include/asm/cpucaps.h
->>> +++ b/arch/arm64/include/asm/cpucaps.h
->>> @@ -71,6 +71,8 @@ cpucap_is_possible(const unsigned int cap)
->>>   		return true;
->>>   	case ARM64_HAS_PMUV3:
->>>   		return IS_ENABLED(CONFIG_HW_PERF_EVENTS);
->>> +	case ARM64_HAS_LSUI:
->>> +		return IS_ENABLED(CONFIG_ARM64_LSUI);
->>>   	}
->>>
->>>   	return true;
->>
->> It would make more sense to move this hunk to the first patch, where
->> you deal with features and capabilities, instead of having this in a
->> random KVM-specific patch.
-> 
-> Okay. But as Suzuki mention, I think it seems to be redundant.
-> I'll remove it.
-> 
+> Reviewed-by: Chen Ridong <chenridong@huaweicloud.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-No, this is required and Marc is right. This hunk should be part of the
-original patch that adds the cap. What I am saying is that you don't
-need to explicitly call the cpucap_is_poissible() down, but it is
-implicitly called by cpus_have_final_cap().
+Acked-by: Frederic Weisbecker <frederic@kernel.org>
 
-Kind regards
-Suzuki
-
-
->>
->>> diff --git a/arch/arm64/include/asm/futex.h b/arch/arm64/include/asm/futex.h
->>> index b579e9d0964d..6779c4ad927f 100644
->>> --- a/arch/arm64/include/asm/futex.h
->>> +++ b/arch/arm64/include/asm/futex.h
->>> @@ -7,11 +7,9 @@
->>>
->>>   #include <linux/futex.h>
->>>   #include <linux/uaccess.h>
->>> -#include <linux/stringify.h>
->>>
->>> -#include <asm/alternative.h>
->>> -#include <asm/alternative-macros.h>
->>>   #include <asm/errno.h>
->>> +#include <asm/lsui.h>
->>>
->>>   #define FUTEX_MAX_LOOPS	128 /* What's the largest number you can think of? */
->>>
->>> @@ -91,8 +89,6 @@ __llsc_futex_cmpxchg(u32 __user *uaddr, u32 oldval, u32 newval, u32 *oval)
->>>
->>>   #ifdef CONFIG_ARM64_LSUI
->>>
->>> -#define __LSUI_PREAMBLE	".arch_extension lsui\n"
->>> -
->>>   #define LSUI_FUTEX_ATOMIC_OP(op, asm_op)				\
->>>   static __always_inline int						\
->>>   __lsui_futex_atomic_##op(int oparg, u32 __user *uaddr, int *oval)	\
->>> @@ -235,17 +231,6 @@ __lsui_futex_cmpxchg(u32 __user *uaddr, u32 oldval, u32 newval, u32 *oval)
->>>   {
->>>   	return __lsui_cmpxchg32(uaddr, oldval, newval, oval);
->>>   }
->>> -
->>> -#define __lsui_llsc_body(op, ...)					\
->>> -({									\
->>> -	alternative_has_cap_unlikely(ARM64_HAS_LSUI) ?			\
->>> -		__lsui_##op(__VA_ARGS__) : __llsc_##op(__VA_ARGS__);	\
->>> -})
->>> -
->>> -#else	/* CONFIG_ARM64_LSUI */
->>> -
->>> -#define __lsui_llsc_body(op, ...)	__llsc_##op(__VA_ARGS__)
->>> -
->>>   #endif	/* CONFIG_ARM64_LSUI */
->>>
->>>
->>> diff --git a/arch/arm64/include/asm/lsui.h b/arch/arm64/include/asm/lsui.h
->>> new file mode 100644
->>> index 000000000000..8f0d81953eb6
->>> --- /dev/null
->>> +++ b/arch/arm64/include/asm/lsui.h
->>> @@ -0,0 +1,27 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 */
->>> +#ifndef __ASM_LSUI_H
->>> +#define __ASM_LSUI_H
->>> +
->>> +#include <linux/compiler_types.h>
->>> +#include <linux/stringify.h>
->>> +#include <asm/alternative.h>
->>> +#include <asm/alternative-macros.h>
->>> +#include <asm/cpucaps.h>
->>> +
->>> +#define __LSUI_PREAMBLE	".arch_extension lsui\n"
->>> +
->>> +#ifdef CONFIG_ARM64_LSUI
->>> +
->>> +#define __lsui_llsc_body(op, ...)					\
->>> +({									\
->>> +	alternative_has_cap_unlikely(ARM64_HAS_LSUI) ?			\
->>> +		__lsui_##op(__VA_ARGS__) : __llsc_##op(__VA_ARGS__);	\
->>> +})
->>> +
->>> +#else	/* CONFIG_ARM64_LSUI */
->>> +
->>> +#define __lsui_llsc_body(op, ...)	__llsc_##op(__VA_ARGS__)
->>> +
->>> +#endif	/* CONFIG_ARM64_LSUI */
->>> +
->>> +#endif	/* __ASM_LSUI_H */
->>
->> Similarly, fold this into the patch that introduces FEAT_LSUI support
->> for futexes (#5) so that the code is in its final position from the
->> beginning. This will avoid churn that makes the patches pointlessly
->> hard to follow, since this change is unrelated to KVM.
-> 
-> Okay. I'll fold it into #5.
-> 
->>
->>> diff --git a/arch/arm64/kvm/at.c b/arch/arm64/kvm/at.c
->>> index 885bd5bb2f41..fd3c5749e853 100644
->>> --- a/arch/arm64/kvm/at.c
->>> +++ b/arch/arm64/kvm/at.c
->>> @@ -9,6 +9,7 @@
->>>   #include <asm/esr.h>
->>>   #include <asm/kvm_hyp.h>
->>>   #include <asm/kvm_mmu.h>
->>> +#include <asm/lsui.h>
->>>
->>>   static void fail_s1_walk(struct s1_walk_result *wr, u8 fst, bool s1ptw)
->>>   {
->>> @@ -1704,6 +1705,31 @@ int __kvm_find_s1_desc_level(struct kvm_vcpu *vcpu, u64 va, u64 ipa, int *level)
->>>   	}
->>>   }
->>>
->>> +static int __lsui_swap_desc(u64 __user *ptep, u64 old, u64 new)
->>> +{
->>> +	u64 tmp = old;
->>> +	int ret = 0;
->>> +
->>> +	uaccess_ttbr0_enable();
->>
->> Why do we need this? If FEAT_LSUI is present, than FEAT_PAN is also
->> present. And since PAN support not a compilation option anymore, we
->> should be able to rely on PAN being enabled.
->>
->> Or am I missing something? If so, please document why we require it.
-> 
-> That was my origin thought but there was relevant discussion about this:
->    - https://lore.kernel.org/all/aW5dzb0ldp8u8Rdm@willie-the-truck/
->    - https://lore.kernel.org/all/aYtZfpWjRJ1r23nw@arm.com/
-> 
-> In summary, I couldn't make that assumption --
-> PAN always presents when LSUI presents for :
-> 
->     - CPU bugs happen all the time
->     - Virtualisation and idreg overrides mean illegal feature combinations
->      can show up
-> 
-> So, uaccess_ttbr0_enable() is for when SW_PAN is enabled.
-> 
-> I'll make a comment for this.
-> 
-> [...]
-> 
-> Thanks!
-> 
-> --
-> Sincerely,
-> Yeoreum Yun
-
+-- 
+Frederic Weisbecker
+SUSE Labs
