@@ -1,160 +1,179 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013012.outbound.protection.outlook.com [40.93.196.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADBF315D23
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 14:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772116479; cv=none; b=NCp4enprXSjoyc2Pm3jq0SUq1YwAtTIxVFh8HDkMhVw9mXnqd6+3/gCqNTW9j12GepP57B4W1wfbsR3SuP6AR9QhnqzqE7P2HCsYUjYHT0WxfLyVnHG8mI1r3pAmwUBPYCE5GNatgg14jleEeGLhiq/5I3luEGN9uJAy+0TB4/I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772116479; c=relaxed/simple;
-	bh=gtA+H2X6ew7j0WLGn1Fvyy2afI0h2OIZDUA1JcW9sJo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eqMbgvtPYDsRHYNQn+iCg5st/V9SeV1BUDKicQYYuhD2VgYtcVaJ57JsvS9vZ1ptTJSCZmXEdZQoTZRHndr3wRC/eYiRskP0knoYyxkMSaukWXAhDGSFu3HguubIWNcmI/9MPpJsn+qaU6Lrrt/cqd7VkaHoUbgXIhWcCobKw0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EC3u1Hvr; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1605C37BE63;
+	Thu, 26 Feb 2026 14:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772116866; cv=fail; b=J393AjpPXkdc59TsxMqsWmn8suwjkwCHl4Zo4p6oeVQQoDXxHWqB+dpOVVbbP1WfeVpY2JkUruM1SAXvIrZRdcBP97BFmUP4/wVo42wpdwoyKPlzi2p7O5QeAR4HqI/CMk5/9MkKJBqB2kLICUSzMVibneiI9xdMdLeAjKffgFw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772116866; c=relaxed/simple;
+	bh=n7JJP9LAmBaFHz2S0pqqYj1X75d8QxceqVLssqZtHco=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=VyvI6ORe7BtTh5sEuQQkugqqAbZZCSwd3eaNOXJZ0fpzSqkoN0nMV6snUd8arLYR4HvoM+LZFK7zgI5iJskB/1VFW5OqdhfF+gkg4fDuwjqVxkGFPhny3mteJsHtVmxpksaA9rXJXtwmRTH9+ixC9vGUdbGnuM08Ebg3dYYJ7hA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=J3sjUNcO; arc=fail smtp.client-ip=40.93.196.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EC3u1Hvr"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43990ea3fbcso646423f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 06:34:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772116475; x=1772721275; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iB4u+09YhtcRl39ds1n5VvgzC6lBCx1avlF+QWd52Eo=;
-        b=EC3u1HvrNOvh7/iEf4qwMT/+SLnOiKQLcuECOh/B6Fr/jki7zzaNFrK9aq/XG5u/YI
-         zf++IY+le5jSBJgE1t3XUASOSmlePcWur41QjqlvWoN9LULci2RaebMYrAvJ8z84yxsb
-         h6ell9yRfrZn5GVXmfAJry26tDvtyAQ0QrCMTrdWWhAMD3kRyy55HVaZR9v0hJT+Sh5R
-         VdzYBcpK2j0Qlvzp73DAjKqmVmnURuBzlr6AtfXt9ZU8DT5nGJwf8MotPNwgCKf7/HWK
-         WUw+riR/gFpyQopdYje/s/7aR2zbsPTLkF9GFGCNuj2MNUV8Uc/Euv4XV1bIHHGbwUXv
-         meSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772116475; x=1772721275;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iB4u+09YhtcRl39ds1n5VvgzC6lBCx1avlF+QWd52Eo=;
-        b=Fclfte5ogEuaG9PyuBx0X7nU6g7NcDHi2bBbqcVhevGFoo9GD45hXgn3M33Vkl9PY5
-         kuDqGfDWYZS7m0z4n6YSq9tAHV6fEEHWvXq3TMt+OqvszWuyFanmBcR7sOtW8LAfVDEl
-         7iHpsq9SJMzBEUxJS9VnywrIcp9l6RkGlPy93KRdgP6UTwoi5xFW9BdzsV/rAldDCARR
-         0xXnhN4/pi/xg4zTlN7vGr4iu3+JJGsYIAOkoNLArc1lWcoHjhY3CfNvSZ6fpvrNAGIS
-         Xyh/FN0q8/w3TfChudB0KhtNv2aMRIgp8aOL78kwYUtSeD73IFCibcS+Z3KqYx5tydG9
-         X7Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCUdk8ZJgmiWOBCci1Esxnj7tuO98SU/W34RktJ4PYGv/0fwEH/UHa3EXcGRFwa/5nxzwvsV22Atn24jnLolam8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw79d+KyBGN0Nkszha/EoIyijVhW1fHki47zjhVzL+IOzemnsze
-	XSwZZ8A1jY4ftJyQrOaINlof6HnN6xguB2cL6qwxoRSDbtH2iq7fqjaD1vW23PNDZ3A=
-X-Gm-Gg: ATEYQzyRo/mFqMG9Xpdtdoiu9miD071hfM4FbJKhtseqSjzFZUhIUWBZKJ7BGvCSOwz
-	fNAPql3fsZI3k9FoYyvLkePU3QGO6CEd2iF42r6NJFw24AVdnOLx+qnN2uCzc+87V8CHhYtvwuS
-	/TDQuKzU2j+8bl9/85mPvenmXRj3lSiml4jwwb3DflA7n7ZEAFV6VL4oDNJwTRFpRkVJyyk+5Pa
-	UydDpUMPvsaNDabdnghmRZ2mpx06Gox3tvJ+m3X+R+uhCg05KHvsbT9Dww1VU4znxiP9/8t82Bu
-	+nevEKOo+wXAOBaMWD17ADVp2rpcOFMNwf7oRuCKtFXaG1l2CSlUJvydWHrylsf8lKT53bKfMUz
-	xWHjZDyu1s62nrI2wBH9j5hWFndJJP6qCdWk0S7ce38Y/pO/Usx1UenuXdUEea/4KM5DmDwQ4Y4
-	WwwPR4UV5ZwEVlTtSQMOfn9XNp3a1ZuQcG8T4qFr2WgWYa8dbDHovhavM94J4Ak5qKzMMzKLyI
-X-Received: by 2002:a05:6000:2f84:b0:437:6c0c:346c with SMTP id ffacd0b85a97d-439972045b9mr5398962f8f.28.1772116474640;
-        Thu, 26 Feb 2026 06:34:34 -0800 (PST)
-Received: from ?IPv6:2804:5078:822:3100:58f2:fc97:371f:2? ([2804:5078:822:3100:58f2:fc97:371f:2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43995056115sm7530873f8f.14.2026.02.26.06.34.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 06:34:34 -0800 (PST)
-Message-ID: <3a4a2d27c241bda76a0b5cf812f7921088d5cbd8.camel@suse.com>
-Subject: Re: [PATCH 2/2] selftests: livepatch: functions.sh: Workaround
- heredoc on older bash
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>, Josh Poimboeuf
- <jpoimboe@kernel.org>,  Jiri Kosina <jikos@kernel.org>, Petr Mladek
- <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Thu, 26 Feb 2026 11:34:28 -0300
-In-Reply-To: <alpine.LSU.2.21.2602261337170.5739@pobox.suse.cz>
-References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
-	  <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
-	  <aZx1ViTc7NJws-rf@redhat.com>
-	 <5ca16692b304185df695e517434b16e59cb15a42.camel@suse.com>
-	 <alpine.LSU.2.21.2602261337170.5739@pobox.suse.cz>
-Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
- keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
- Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
- gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
- GO8seNG8sYiP6JfRjl7Hyqca6YsE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (by Flathub.org) 
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="J3sjUNcO"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uweKwx4cKX+jH/bYcB8gJRHfY9KzV4FY3tTUvV4pJaA3Bw4uy6HXBaabKln0+jewXKuqd9h0gVot1TskQGRsOYsWhvAV3cgmON0Jesv+BUPyLmN+5UB36x3Nu/y5+tQyLG8XTwkmuyIHosBwU+EUOXwc6nGYY9fWMpxVuJQBysmQ0qmWSz4bLyevci6WCvcrCrRiLni8OOHya5uuH7vjsP/ilordG+vAXFhWPVa2EGRVFQHUKqXISpYZK5mTSBY2GQrxw0gKRmLdqIHpzQqctYPBnfwrKraXyFRgqiKT799mi33DP9Dt9qAFKdIhmyPUodvhNQUtEcps1b3ZbErS3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sdDaeAAnU4gV1IKk4nGwD8n8YGh6K4MhxiDfPH6h48w=;
+ b=pOsGHXBqrKhDUIMZO8zvggBt0DTlQkQZgJq5aSGBiX+ZiQTgT/kqe1RGrzLN9lli4wfbNF2znctub7MhyUYcUpP2vpiO8jpJ3i7zZ7J0JCjSEdY7QlDTZp7U/yAr5kUwRovLsNyCYducSEcrL4rqxmSIxeIMsulSX28q++l511UwQwvq1I2QP1hIY7+qmo5rlHUJGrcXGRfcqkNoplShR9+dzR/aN2nR8NQwgT5tni7gWqCpqYzQHS2c27yFWY4Pey0CS+8Da7Gy25li2iWulnPvCVthrUFdKT4/bWLDHVIA6RqLN2NCJDhRx3uucF7hyqICq7UxNyEDf/V29Rk0yQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sdDaeAAnU4gV1IKk4nGwD8n8YGh6K4MhxiDfPH6h48w=;
+ b=J3sjUNcO7wLKIqgSQaTUIWW9SvXrynrdCbwivfvklomJlNdYjfIyNLfag/Cfo6htd+VJLxknLU3x36kNguOyz/l5rNS1pWvjrXYxH+KDdshOxl6C9HRlqH/nU51RFoBNhJQ3zp10Ezf9MSdpBfHf/L4STaX0hVDAFrxYzDSCpEaWB3MvH0doaiUc0mprzePHqvuiQm8gzsCoIdTO0OM+Kg/tjaK0PyWYc9deEMbezWTu7HHurOWcIyce0JsVhzK6XmyK2f1IyTE5JTOqyKD4qhh1atgEXYivzuItMlucH6L0ZgyxlNGXR6YPIlhA97m5SEA8oAlm+SDATfpZlhVtEw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by SA1PR12MB8144.namprd12.prod.outlook.com (2603:10b6:806:337::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.16; Thu, 26 Feb
+ 2026 14:40:58 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.014; Thu, 26 Feb 2026
+ 14:40:58 +0000
+Date: Thu, 26 Feb 2026 10:40:57 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, Alex Williamson <alex@shazbot.org>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+	Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-pci@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pranjal Shrivastava <praan@google.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH v2 03/22] PCI: Inherit bus numbers from previous kernel
+ during Live Update
+Message-ID: <20260226144057.GA5933@nvidia.com>
+References: <20260129212510.967611-4-dmatlack@google.com>
+ <20260225224746.GA3714478@bhelgaas>
+ <aZ-Dqi782aafiE_-@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aZ-Dqi782aafiE_-@google.com>
+X-ClientProxiedBy: MN0PR03CA0002.namprd03.prod.outlook.com
+ (2603:10b6:208:52f::31) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|SA1PR12MB8144:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3dd7efbd-26d5-4f61-af6a-08de75450e25
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	MYDgBcvoHSdQy4KevnnNKjXu2GT4RvW0p5g5YBpPcZmkoa0EtZw5rv0Jfp4tPTRi5C+8VltNOv61f9tKSp89XwGxeP/vzkoZdubCuMug9F1U2I/8f6iUFfG0jstm/5s1LomO2YD9ZLodsdogCQzSejIO4+75papRHlwU2CTKmePxO6tWZMRzhYJFij7YizxUrYrgirRnhdezLywgC11Rhv6uXBkedX7MPkJUvVMQ72C7tTnUDhXv1mveLONIdAIDM8ssvE7HydCGt7V9LYd7XVX9EJHRoEo8LliyHjMdq3pS9UBVe9XLGQbt4WWdfXdT/d5FXxPbxvOfHnjYxjk4qFi3JT/ljFKW1oaSmW5GwRQanmiXS8XaxwCZ0JthUyug3Eeu8X3z9sons/0b02ANvvX35IZU1aWWA+uNUQ//08KC3SFlAuhDKM+miDdx/1ZAm9lQes7lfdPSQhqIBNgoGO7h3X3ShZSkhz1S4nkzJVPBFbXr4cvyaPnSw4QQPZuxZ5quFIiXBNa1NkKxuDYjtvlugDyYJzViXQ0NDvac7oxB7XisHRo8hSAlmyjWthhJgUKiN7lFqT17PkZQl8/h0lV27qix2Vh33q2HyJ2Ww1jribGg51LeI8HByNVBxBURPRw2IdignP1aeSPaiekDh3NaNTSEorlgpf4ppbMsd69QmGb+HgD/iulqGKLv7BiqErHVxjhbFpLJUcaGyyLJ369MjPvqDfHgQO2lWGAxI6Y=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xT/Bl07T7SXDuKOVB3WYIw46aKsxtbJY1u1aT4xqeMnbrGUVvmeJSaTEzzNJ?=
+ =?us-ascii?Q?hggD0ab8NfU9Ev8TCU2soYP2kwL9P8SrfFbzAjuIyfFU4x88nw30WZxTiPeX?=
+ =?us-ascii?Q?shioe3j77r/0jI15a41UY4tPrpJN9yIzcGlQDD9tCE2d5DIA34zTGw4raem+?=
+ =?us-ascii?Q?HmTZ2M8KLmNH87ZTeLBTGPxOBkIROSqbdw09Wwh3B1XgXObTlHQN83aUS69M?=
+ =?us-ascii?Q?OKlxHbbQmJ1yTTf1J5VKffhkVv8b0KzkbFNerUk/YFTRyNxp6czk9SjYUnnY?=
+ =?us-ascii?Q?Cy0OZDAkNNAL5J0KBLP8awG5NB4Rh8wYuhjQvZt5sdklSryJmUFNITSJpUNM?=
+ =?us-ascii?Q?HO6kS2RVHQlF2D7PgkHI36d9GQzgbPweyr2SuU5dJwi7ANkGiHSlpZf4YaEF?=
+ =?us-ascii?Q?fhPTOJEiQRZ54oXPEPh42DeL2oI/tbmpuxDBtvZmGKId2ucOy36jTbHNQyV+?=
+ =?us-ascii?Q?gmDqfBsz7lcBzHFbhh2MFDVlHYlmXvFktDB5a/beVh803sZ+tqqwvOYKCyG1?=
+ =?us-ascii?Q?f4oEFDTck+8OZ5ytx2lGxNHcpP0vt96r6RheJ+b18ob1fNYg4n3KcNeGd1JI?=
+ =?us-ascii?Q?yEbpYgCeqxyyma4+GYQHQ2WvfyIsSQnoSaz2W5Npxb6Euta2bvxmhCfRiwQV?=
+ =?us-ascii?Q?wO08gvvogIBSwCNdOkLvBvFA27ZhX6jnlSdbsIFuEBneyS1EMMLbcShsGT+J?=
+ =?us-ascii?Q?2ff1bOzKP+0Fa9/R8mLP7HAk3Ro8+UnPoyY/uLhT4NOF5uTNcnccyCws7KVp?=
+ =?us-ascii?Q?tORi8JzcGyVy9IytHrk87CdYPyFetHiQZBy50F34TLQv60siRVFkxfVh9rTA?=
+ =?us-ascii?Q?0TcZPvXaytvC0Qx4ylON3V4i4MOh71MGcWy1ivHq9aHsuBGC4NN+wKzAFJ5f?=
+ =?us-ascii?Q?+uVxyEAaSXfFH8JYRrFqXN3VhdvMF7PTGpFfMEgkupaUe85iQcgx1L2nInq+?=
+ =?us-ascii?Q?o7k2Vju8OxcW2WdZwWMhxr1Hmg8v6helmcUrsDR0TJMUkRdGqkos9ehs3FBd?=
+ =?us-ascii?Q?ZXW+LcfEqTYIx8veDwA1EGmzXu4awULSNqM8QF97gxQ8IiN82X9FTJ40rP4m?=
+ =?us-ascii?Q?v2tgts+tiJ4l0qvBWjsoWzjDZbwn5DyTOA2Sd/K8Aa3Ne1ogrVJ8qsQNa2fa?=
+ =?us-ascii?Q?dTXjgLNHSVPcF8GcX3i+CLQnmSO4Flv0xeB1QmrJpPdOb/gI4yRFkHt6gVUi?=
+ =?us-ascii?Q?EzAM/jbyFFx53PYMkM2hOtXend7io0ROONFCjWbaDHoMaantk6rViz7f8m3/?=
+ =?us-ascii?Q?QYg9R+9UtMEE9emjlaW9DqeFTHJDhqhFTf+fGJKxuojjeZ8JK4thAf+QGyyJ?=
+ =?us-ascii?Q?G6symLvNwTlgJMTXf38uDz8OHYrPdDJVQQV1T/3Tofz2vf55ArEwptUnVCq5?=
+ =?us-ascii?Q?hMZK1UycUZTp2ACGpfzom4glWsPDlJO3xgojsJ/cCbMZSFA1KVWtPUyHwXV3?=
+ =?us-ascii?Q?9coh40+0zcF5bPmxY9Mho96wpZcAXbPnmQ/Fq26jw6g+ocQvUMbWJhkruRLp?=
+ =?us-ascii?Q?FEQ1lU6787G/ur6KqtDu8keSGlYqBGUqlRYxvR8qEz4u7YTk0Do6v0QGirhU?=
+ =?us-ascii?Q?/O4YpACFXRTSoeMu1qm6s/HDJzBl0xL1L7pzP+rlK5bH8H5TIbfTyGIJbSpD?=
+ =?us-ascii?Q?+PsMWlpPJprlUV6K84H/RFfSbeU7VZSowCE2ZA1AHhV5D2sxSex3GDcXaHpj?=
+ =?us-ascii?Q?u7VRaR/5u4lzDJd8UK3tFNNoK4y4uql2uMzWsYflz16BkujtiUKrvfb6iWT7?=
+ =?us-ascii?Q?BJ9VhNXBnw=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3dd7efbd-26d5-4f61-af6a-08de75450e25
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2026 14:40:58.6401
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: n9wsfqh3xf69O1SbnL8BWHhxD36Zz4brIEx4QlOAIr+5GRyznCAEqBtTXbWY+xYK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8144
 
-On Thu, 2026-02-26 at 13:40 +0100, Miroslav Benes wrote:
-> Hi,
->=20
-> On Mon, 23 Feb 2026, Marcos Paulo de Souza wrote:
->=20
-> > On Mon, 2026-02-23 at 10:42 -0500, Joe Lawrence wrote:
-> > > On Fri, Feb 20, 2026 at 11:12:34AM -0300, Marcos Paulo de Souza
-> > > wrote:
-> > > > When running current selftests on older distributions like
-> > > > SLE12-
-> > > > SP5 that
-> > > > contains an older bash trips over heredoc. Convert it to plain
-> > > > echo
-> > > > calls, which ends up with the same result.
-> > > >=20
-> > >=20
-> > > Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
-> >=20
-> > Thanks for the review Joe!
-> >=20
-> > >=20
-> > > Just curious, what's the bash/heredoc issue?=C2=A0 All I could find
-> > > via
-> > > google search was perhaps something to do with the temporary file
-> > > implementation under the hood.
-> >=20
-> > # ./test-ftrace.sh=20
-> > cat: -: No such file or directory
-> > TEST: livepatch interaction with ftrace_enabled sysctl ... ^CQEMU:
-> > Terminated
->=20
-> I cannot reproduce it locally on SLE12-SP5. The patched test-
-> ftrace.sh=20
-> runs smoothly without 2/2.
->=20
-> linux:~/linux/tools/testing/selftests/livepatch # ./test-ftrace.sh=20
-> TEST: livepatch interaction with ftrace_enabled sysctl ... ok
-> TEST: trace livepatched function and check that the live patch
-> remains in effect ... ok
-> TEST: livepatch a traced function and check that the live patch
-> remains in effect ... ok
->=20
-> GNU bash, version 4.3.48(1)-release (x86_64-suse-linux-gnu)
->=20
-> Does "set -x" in the script give you anything interesting?
+On Wed, Feb 25, 2026 at 11:20:10PM +0000, David Matlack wrote:
+> On 2026-02-25 04:47 PM, Bjorn Helgaas wrote:
+> > On Thu, Jan 29, 2026 at 09:24:50PM +0000, David Matlack wrote:
+> > > Inherit bus numbers from the previous kernel during a Live Update when
+> > > one or more PCI devices are being preserved. This is necessary so that
+> > > preserved devices can DMA through the IOMMU during a Live Update
+> > > (changing bus numbers would break IOMMU translation).
+> > 
+> > I think changing bus numbers would break DMA regardless of whether an
+> > IOMMU is involved.  Completions carrying the data for DMA reads are
+> > routed back to the Requester ID of the read.
+> 
+> Ahh, makes sense. I'll clarify the commit message in the next
+> version.
 
-Nope:
+More broadly you can't shouldn't the fabric topology while Memory
+Enable is active.
 
-boot_livepatch:/mnt/tools/testing/selftests/livepatch # ./test-trace.sh
-+ cat    =20
-cat: -: No such file or directory           =20
-+ set_ftrace_enabled 1                                    =20
-+ local can_fail=3D0
+Renumbering or readdressing the fabric requires disabling and flushing
+any memory transactions.
 
+From that reasoning it is clearer that you can't do that if the device
+is expected to hitlesslly continue performing memory operations.
 
-Same version here:
-GNU bash, version 4.3.48(1)-release (x86_64-suse-linux-gnu)
+That may be a clearer long term basis for describing the requirements
+here.
 
-I'm using virtme-ng, so I'm not sure if this is related. At the same
-time it works on SLE15-SP4, using the same virtme-ng, but with a
-different bash:
-GNU bash, version 4.4.23(1)-release (x86_64-suse-linux-gnu)
-
-So I was blaming bash for this issue...
-
->=20
-> Miroslav
+Jason
