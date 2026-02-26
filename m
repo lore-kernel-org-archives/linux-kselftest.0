@@ -1,152 +1,150 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D67221FDE
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 12:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3281C1F02
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 12:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772109109; cv=none; b=kMNIyCvMaezEUZ51IjQq5Hmoe59ScDjzvUshVYBXbNY6vTaIZwm4i2nztWoI4Igxi730hgcz3jGvasR01fEp4UZ6iE/ZkOl2plR3UdHBIbCnRdiynhe+F94XjdMf8/UyyPNt8LOmW9HrPrw2G8sp/IbPtjuBuzmFH3uu/CgLczA=
+	t=1772109611; cv=none; b=SzW4J8pGhT3Cb058eraAPtLQdqzTDIRx0vOl/WsR7apoDTGlBwDbH9WedpMVvOMf6Kl2GoRkmEhvSMXbbZillJdpyou+Gkg3f1DQmWtC5010W8Cy65GuuYOTkHmn9KUCrmXDxUrM7FJw6ynmYOLO37BsTHwhxRV3bG2QozXTuHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772109109; c=relaxed/simple;
-	bh=YKaeuaDYeNuOykIoWYqQiy4RBmNAjGUyUtnfcUBcqZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QpKudhOf4Vi0XS3mcAqHJFvchAAl3EILSqCgSdw/qI6zieAtfI/PEh6te8TpasvSkgnd2trokcG1RdHTaH7JoaKpJHCyq0jlJbKZ05ri/3hl2oUhW/gjEl8d1tMED7OvVGL674jvSF0fFMSApIspbTaj5tGVME8ILdK1w7tJc0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vSIQtv1E; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5N5MjjgV; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vSIQtv1E; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5N5MjjgV; arc=none smtp.client-ip=195.135.223.131
+	s=arc-20240116; t=1772109611; c=relaxed/simple;
+	bh=8EYnWjXzgNnzpHIGK2gx/dJeOkHpwQX8gDUqMSm3nDM=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Pz4ZeTKbFBSGYGDxWcmWS2N1aF4O/fKIdXtXzPJkUgFfQEgOTtZ5wkJDIvs1U4hyFJKBuffUxwi5a6Wp1kr9lZceaSt3RCXxX+OBxrijzBE+S1H21jIrtE5r3psOT/wzjCYAPoWZhc0lJ3aFrw1XtIvV7Zoqdvc/3VLuCcJkiVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BkoaZEoD; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=RELR8lJr; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BkoaZEoD; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=RELR8lJr; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vSIQtv1E";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5N5MjjgV";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vSIQtv1E";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5N5MjjgV"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BkoaZEoD";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="RELR8lJr";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BkoaZEoD";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="RELR8lJr"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 76C801FA8E;
-	Thu, 26 Feb 2026 12:31:44 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 835DF40369;
+	Thu, 26 Feb 2026 12:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1772109104; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1772109607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=f5WEnpROlC9fgWu+KGiqZFKe3oMMY1tyFav7WdEwLBc=;
-	b=vSIQtv1E7WnqPn0ENIfIOEmaSpvOt9Q0fMqP2kUhYl09j9A20zwA4LTFWE8UHxDzOkQuxs
-	5B2qs3tj1TPz7CPUGMBtl06RQNtZ92ZkC6lFLSfnUuiYnk4ZSzLIOa3jWTasYwcfhJW6/b
-	w4lg49Z+os+DhYIqbt6kXcOHCIGau80=
+	bh=Jh1hfCe3yjHCvLdTZnowOydEEx+CtconMBd+C/55U/U=;
+	b=BkoaZEoDhy3m2kK8AhnqwRUHbNtbClJG6ZLEQXpo4C8aToHXlo8PRLRj76yOjCKDgcB5jM
+	Lr076GGqdIeE60BrSNOUS8Ri8qGW7VJ7mXYzy8Ebki/pg7ZQl8lvK0e9qFt2T3yXErbmmN
+	W1XHDL8V4xhB2G4P+FAF5zyXo16p1is=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1772109104;
+	s=susede2_ed25519; t=1772109607;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=f5WEnpROlC9fgWu+KGiqZFKe3oMMY1tyFav7WdEwLBc=;
-	b=5N5MjjgVLaDn8W3omolC50q8cwfMNo9NPN0KBHCWuKhhRO4JrhUZVuXf1uFNS1Jr0BgPqz
-	c5zrlc4TlDcKfIAg==
-Authentication-Results: smtp-out2.suse.de;
+	bh=Jh1hfCe3yjHCvLdTZnowOydEEx+CtconMBd+C/55U/U=;
+	b=RELR8lJrJAW5S9rQG4eFhy9xCZBEnS2JgjTCs3Ic8EDhjpwPsSY14c5Fu/Z2/iGXz42X20
+	6nYlUQi4tQz74AAQ==
+Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1772109104; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1772109607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=f5WEnpROlC9fgWu+KGiqZFKe3oMMY1tyFav7WdEwLBc=;
-	b=vSIQtv1E7WnqPn0ENIfIOEmaSpvOt9Q0fMqP2kUhYl09j9A20zwA4LTFWE8UHxDzOkQuxs
-	5B2qs3tj1TPz7CPUGMBtl06RQNtZ92ZkC6lFLSfnUuiYnk4ZSzLIOa3jWTasYwcfhJW6/b
-	w4lg49Z+os+DhYIqbt6kXcOHCIGau80=
+	bh=Jh1hfCe3yjHCvLdTZnowOydEEx+CtconMBd+C/55U/U=;
+	b=BkoaZEoDhy3m2kK8AhnqwRUHbNtbClJG6ZLEQXpo4C8aToHXlo8PRLRj76yOjCKDgcB5jM
+	Lr076GGqdIeE60BrSNOUS8Ri8qGW7VJ7mXYzy8Ebki/pg7ZQl8lvK0e9qFt2T3yXErbmmN
+	W1XHDL8V4xhB2G4P+FAF5zyXo16p1is=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1772109104;
+	s=susede2_ed25519; t=1772109607;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=f5WEnpROlC9fgWu+KGiqZFKe3oMMY1tyFav7WdEwLBc=;
-	b=5N5MjjgVLaDn8W3omolC50q8cwfMNo9NPN0KBHCWuKhhRO4JrhUZVuXf1uFNS1Jr0BgPqz
-	c5zrlc4TlDcKfIAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6912F3EA62;
-	Thu, 26 Feb 2026 12:31:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id /mugGTA9oGlzHQAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 26 Feb 2026 12:31:44 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 2B3A0A0A27; Thu, 26 Feb 2026 13:31:40 +0100 (CET)
-Date: Thu, 26 Feb 2026 13:31:40 +0100
-From: Jan Kara <jack@suse.cz>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	seanjc@google.com, rientjes@google.com, rick.p.edgecombe@intel.com, 
-	yan.y.zhao@intel.com, fvdl@google.com, jthoughton@google.com, vannapurve@google.com, 
-	shivankg@amd.com, michael.roth@amd.com, pratyush@kernel.org, 
-	pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH RFC v2 3/6] fs: Add .unaccount_folio callback
-Message-ID: <2s33j7wg6ehizvdoz5fggc6kfa5byrs4yg2hk4fvwvfjp7nigo@se7fhyaknqqm>
-References: <20260225-gmem-st-blocks-v2-0-87d7098119a9@google.com>
- <20260225-gmem-st-blocks-v2-3-87d7098119a9@google.com>
+	bh=Jh1hfCe3yjHCvLdTZnowOydEEx+CtconMBd+C/55U/U=;
+	b=RELR8lJrJAW5S9rQG4eFhy9xCZBEnS2JgjTCs3Ic8EDhjpwPsSY14c5Fu/Z2/iGXz42X20
+	6nYlUQi4tQz74AAQ==
+Date: Thu, 26 Feb 2026 13:40:07 +0100 (CET)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+cc: Joe Lawrence <joe.lawrence@redhat.com>, 
+    Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
+    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests: livepatch: functions.sh: Workaround
+ heredoc on older bash
+In-Reply-To: <5ca16692b304185df695e517434b16e59cb15a42.camel@suse.com>
+Message-ID: <alpine.LSU.2.21.2602261337170.5739@pobox.suse.cz>
+References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>  <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>  <aZx1ViTc7NJws-rf@redhat.com> <5ca16692b304185df695e517434b16e59cb15a42.camel@suse.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260225-gmem-st-blocks-v2-3-87d7098119a9@google.com>
-X-Spam-Score: -3.80
+Content-Type: multipart/mixed; boundary="-2146828000-1974840087-1772109607=:5739"
+X-Spam-Score: -3.30
 X-Spam-Level: 
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	CTYPE_MIXED_BOGUS(1.00)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	R_RATELIMIT(0.00)[to_ip_from(RLkt8wp3x8qpcm6dn39p5ieksq)];
-	FROM_EQ_ENVFROM(0.00)[];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
+	MIME_TRACE(0.00)[0:+,1:+];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo]
+	FROM_HAS_DN(0.00)[]
 X-Spam-Flag: NO
 
-On Wed 25-02-26 07:20:38, Ackerley Tng wrote:
-> Add .unaccount_folio callback to allow filesystems to do accounting-related
-> updates to the inode or struct address_space mapping, when the folio is
-> about to be removed from the filemap/page_cache.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+---2146828000-1974840087-1772109607=:5739
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+Hi,
+
+On Mon, 23 Feb 2026, Marcos Paulo de Souza wrote:
+
+> On Mon, 2026-02-23 at 10:42 -0500, Joe Lawrence wrote:
+> > On Fri, Feb 20, 2026 at 11:12:34AM -0300, Marcos Paulo de Souza
+> > wrote:
+> > > When running current selftests on older distributions like SLE12-
+> > > SP5 that
+> > > contains an older bash trips over heredoc. Convert it to plain echo
+> > > calls, which ends up with the same result.
+> > > 
+> > 
+> > Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
 > 
-> .free_folio cannot be used since .free_folio cannot assume that struct
-> address_space mapping still exists.
+> Thanks for the review Joe!
+> 
+> > 
+> > Just curious, what's the bash/heredoc issue?  All I could find via
+> > google search was perhaps something to do with the temporary file
+> > implementation under the hood.
+> 
+> # ./test-ftrace.sh 
+> cat: -: No such file or directory
+> TEST: livepatch interaction with ftrace_enabled sysctl ... ^CQEMU:
+> Terminated
 
-I agree .free_folio isn't the right place.
+I cannot reproduce it locally on SLE12-SP5. The patched test-ftrace.sh 
+runs smoothly without 2/2.
 
-> From the name, .invalidate_folio and .release_folio seem suitable, but
-> those are meant only to handle freeing of a folio's private
-> data. .release_folio is also not called in the truncation path.
- 
-But this I don't quite understand. .invalidate_folio is called when
-the file is truncated (or when the whole inode is being evicted from
-memory). Filesystem can do whatever it wishes there, not just free folio
-private data. Are you pointing at folio_needs_release() check? But you can
-mark your mappings with mapping_release_always() - it's there exactly for
-such usecases... Am I missing something?
+linux:~/linux/tools/testing/selftests/livepatch # ./test-ftrace.sh 
+TEST: livepatch interaction with ftrace_enabled sysctl ... ok
+TEST: trace livepatched function and check that the live patch remains in effect ... ok
+TEST: livepatch a traced function and check that the live patch remains in effect ... ok
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+GNU bash, version 4.3.48(1)-release (x86_64-suse-linux-gnu)
+
+Does "set -x" in the script give you anything interesting?
+
+Miroslav
+---2146828000-1974840087-1772109607=:5739--
