@@ -1,116 +1,169 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6912437C108
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 11:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACA737FF5A
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 12:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772106961; cv=none; b=qP2L37FmLzY3HjCEt4dCBjcoaM9zNo6SBevK7EwvYyyvg3wEJLCMZRBGr//OXoUYXRbPEBJHRmeEHX64uLgPvrQU5o1WL6yemVqCaSIxzSIYt7YuhNekCtUPhTampotxdCp+4iLYS79wPENx0Rj1vmdJGO4LVgk2wVwvkrdm5JM=
+	t=1772107382; cv=none; b=nTCSzElsqFz49DsAyUN6qEPgyuS2HNIbaylosHd8Hp7Wp29Z0ddmFAt/jhKYGm21ls3n9b93ptTOupdHKTvK7fuK6ZlZ9OeXZ785Ei1Qx1oNkxX5MogQpMe38J8Wm1/65yjjSW4ji6ef5jxrF7+RKivoJ067wM85w1S4Nt1VxFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772106961; c=relaxed/simple;
-	bh=ZEIFoitANPtwulIbNXF/2yg+hzs1jJsGnxSrJ2pHJVw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nrzTaa5E4L9B29Dth8Sh9sG/6luw/fpW9KiQaiDnBnllhnZ7vmaFwxHOK95MhyozkO/YybmCnpgCwyoupX0jbvsJ13sMkQwP2xmkSsCgj18ChNRBgib67x3cSWTeYIIQKXCyFDyauJugQvbYn7X7JwiXZj62LArSOLaiE1PzBJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f54+23AY; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=shpmifPT; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772107382; c=relaxed/simple;
+	bh=BsB+oEPzvEnbOuwAtJ69eebytdrFzUZWsWhC2mPRS30=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W81UbfiQakbP5rYp/m7/ka6FK77L/t6Sz3fskFb6owHSuG2L3HjODU0hRY48ouE6Q8N1gsEn/xdsQvwWL3EOVXX95ix1G/PyByYydsJIfP1kxyvbiolvILFZw+9LGNZQcAgHmuBY3S+jHPZShooSaGKw3XvlrG+PI+WfpbSMC7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Q7Y8D6AY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rlGKHnkK; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Q7Y8D6AY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rlGKHnkK; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f54+23AY";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="shpmifPT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772106955;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sMPGt0J++KNAhRXBcWxcdK49BwEppu2ya9w3VAKm/mg=;
-	b=f54+23AYSfYCM3yNXvVjZAySO619oyO3/kJa4wNnybPCoDdFMV3zbbdPAzliqsSpvPO7sT
-	r0sOo79IQ7q+d4wZ5wZ03Lewv1jUEl7/C2xkjLhSgIJjRDEaMiVGqnbVFrhap/0Mrzy71F
-	xBwqjgW+1E/9GkusedFz9mcw0aHGmCQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-433-29yRYmyuMlqECSYgkcHMSw-1; Thu, 26 Feb 2026 06:55:53 -0500
-X-MC-Unique: 29yRYmyuMlqECSYgkcHMSw-1
-X-Mimecast-MFC-AGG-ID: 29yRYmyuMlqECSYgkcHMSw_1772106951
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-483a2db68caso5886975e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 03:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1772106951; x=1772711751; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sMPGt0J++KNAhRXBcWxcdK49BwEppu2ya9w3VAKm/mg=;
-        b=shpmifPToUG29nZKqBKmEBVphlt6mesOyCoX4UaukpdSs2EdIOfJfJ4pPrk4foy0L4
-         QQHRb9QA42FW2bzLUIenvnlnfYl6/XEUvv0oJlU1x9P5PDxLmunPr7xwrV9a2a4b3b3X
-         g6Fy1x44OyG6M2FwTbJ7sXIfbVCOyjl+TQnp8pD+5trXk820yhEfs12xM+WyimYdzv6B
-         jh6iY6x4w6DHv+dX2fVcdp8WTT5+9QqBtgV4J5+oPn2ABT+EAM2Ta5TkGXYQJtGWSv8a
-         Yc6W63G7GCYoG8jr7poxEePsMr2lKKWg7BJ37hS6IOk6lMb41/TbT29nWLFh0WVNAdYl
-         ERcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772106951; x=1772711751;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sMPGt0J++KNAhRXBcWxcdK49BwEppu2ya9w3VAKm/mg=;
-        b=fKgaCaQ4LxbuPA9TqijJoMXJVpGWgNi0fufUvAwcWsf44yNQPdasFY+U9J26yI+Q6i
-         nFyZlNFDGmkFGPQY+k9kMm0FlMu9OjctIXfePXKCwucDFP9nTlAIL0s6Psi0xfbHmJFZ
-         lmQprTDv32Kn4ySSQ3xdzjPuW/uWWDfHURtXPEiNhucc+WZN5irj1rz4v2qKZZSmOu36
-         l+gCf11pQqHViae69/WzqHv/1kJ9xz8it9e2lFvA5yajwL0aVctVTWQjjcfh4Hnpdb2U
-         QTE2PX3eWNEDKoWSVLhcTdjhbIglCev1E6xJgVZoVOs5YSUv7r8Lckb2EcB/UGm4zEPy
-         EWLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2oxzs7vhDReTL3jtm73W2usmFIR7gWzXQqj9cV6ZEUpvTp3VFwM8hTcME32edCT7PLwhx+mPpeRBsaymVmZo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxteVSnAfCsA/b77AJSjNMCf5S2YpUPLVlO/O2wcZnLNmEB1XAy
-	QQ9gOsgIOEXaR6unxm1LHjiZo8UkYNf9jWZa2A7am36O6/uA3Uvj5JVkw2S1RCAVwGMSaVIeZph
-	MayuhjZSeAXX8d4e1acX44PO8uwiYtidfFCR0AVeY4iUfZBdGRxL4W5vOYVTqm72f5r0kiQ==
-X-Gm-Gg: ATEYQzxQ+n00QVzSMWD1cjZQeZlXlzB36EN8sUsc0Y7jgJE5D5z6ViAQfzNXwHon6Xw
-	Smhs/9NdYmsp/eT+ehV0Z3avhfCwF3NlWJjh2YbtlmeK0Jdse1V+pTTVEaiK5SAIeWqUkI1Oy3M
-	pB6cdIpvWxRDHBggjbXocr6CTYRrMg9uqCp/PB+qlxt1a+kEJUKEV3f1TiNDYNAaWCTHBqJNw2Z
-	oTim37vYsng1oyHgtp4ogdaDVxE2L8dxvrD5F0Bh2LodRi0lX+H8gq6pYYPLy+CodIendTouMXr
-	egmQmjWbCXnUM6ALvMZWBdA/Nl/KQ4fdGCkkZ/mnVIzESH4ZGZo+lNuKw2XcTp0K9pk81DSflJ2
-	N/cqhH9XJpD/5bsofccCFx8WeWg==
-X-Received: by 2002:a05:600c:6296:b0:483:3380:ca11 with SMTP id 5b1f17b1804b1-483c3df7964mr30951275e9.33.1772106951082;
-        Thu, 26 Feb 2026 03:55:51 -0800 (PST)
-X-Received: by 2002:a05:600c:6296:b0:483:3380:ca11 with SMTP id 5b1f17b1804b1-483c3df7964mr30950955e9.33.1772106950671;
-        Thu, 26 Feb 2026 03:55:50 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.149.227])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bfcb9b97sm57567165e9.7.2026.02.26.03.55.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Feb 2026 03:55:50 -0800 (PST)
-Message-ID: <4f497c2f-d086-46ae-bad7-44285bc34a2a@redhat.com>
-Date: Thu, 26 Feb 2026 12:55:48 +0100
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Q7Y8D6AY";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rlGKHnkK";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Q7Y8D6AY";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rlGKHnkK"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DF5201F43B;
+	Thu, 26 Feb 2026 12:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1772107379; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=lKApDUyIFUIzliUqleBEaoniXopBT8Tn71tpN6GHZTc=;
+	b=Q7Y8D6AYioQe/Q+SHsI57k2dXfbMtSTyskyVEwf91C76t/RrZ7IlJ/PCS8hVxhxb171QFh
+	N7meD+y+Z143zELHzXVxF8xewVjAxYCBFWymhA6ONLhCt9TJL/iOvcv7tnkKN4D2D528G2
+	XUiUBponmxcfTJVVBGQpPIAHBpkp51E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1772107379;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=lKApDUyIFUIzliUqleBEaoniXopBT8Tn71tpN6GHZTc=;
+	b=rlGKHnkK5aRxOwb+DwcEaJ6BTVUgK1ota7rJSiMPq2QnKMvxZGjHydUS7Ik1Zm2cPJLg7r
+	gx6boKJDsJYdwBDw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1772107379; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=lKApDUyIFUIzliUqleBEaoniXopBT8Tn71tpN6GHZTc=;
+	b=Q7Y8D6AYioQe/Q+SHsI57k2dXfbMtSTyskyVEwf91C76t/RrZ7IlJ/PCS8hVxhxb171QFh
+	N7meD+y+Z143zELHzXVxF8xewVjAxYCBFWymhA6ONLhCt9TJL/iOvcv7tnkKN4D2D528G2
+	XUiUBponmxcfTJVVBGQpPIAHBpkp51E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1772107379;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=lKApDUyIFUIzliUqleBEaoniXopBT8Tn71tpN6GHZTc=;
+	b=rlGKHnkK5aRxOwb+DwcEaJ6BTVUgK1ota7rJSiMPq2QnKMvxZGjHydUS7Ik1Zm2cPJLg7r
+	gx6boKJDsJYdwBDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 510053EA62;
+	Thu, 26 Feb 2026 12:02:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id uPPKEHM2oGktfQAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Thu, 26 Feb 2026 12:02:59 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	horms@kernel.org,
+	pabeni@redhat.com,
+	kuba@kernel.org,
+	edumazet@google.com,
+	davem@davemloft.net,
+	Fernando Fernandez Mancera <fmancera@suse.de>
+Subject: [PATCH net-next v2] selftests: net: add ipv6 RA route to ECMP merge test
+Date: Thu, 26 Feb 2026 13:02:37 +0100
+Message-ID: <20260226120237.5352-1-fmancera@suse.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv2 net-next 0/3] bonding: fix 802.3ad churn machine and
- port state issues
-To: Hangbin Liu <liuhangbin@gmail.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
- Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
- Mahesh Bandewar <maheshb@google.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-References: <20260114064921.57686-1-liuhangbin@gmail.com>
- <aX_6jyAQaDoqsR3G@fedora> <39c1b386-e6ee-46fc-a653-f86fa21e9e9e@redhat.com>
- <aZuzn-6vFrcoD9RW@fedora>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <aZuzn-6vFrcoD9RW@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -2.80
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
 
-On 2/23/26 2:55 AM, Hangbin Liu wrote:
-> I'm not sure what I should do for this patch set. Should I re-post to net-next or net?
+As commit bbf4a17ad9ff ("ipv6: Fix ECMP sibling count mismatch when
+clearing RTF_ADDRCONF") pointed out, RA routes are not elegible for ECMP
+merging.
 
-Jakub and me discussed the topic off-list and the current agreement is
-repost for  'net', with fixes tag.
+Add a test scenario mixing RA and static routes with gateway to check
+that they are not getting merged.
 
-Thanks for your patience.
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+---
+v2: added CONFIG_IPV6_ROUTE_INFO to the config
+---
+ tools/testing/selftests/net/config       |  1 +
+ tools/testing/selftests/net/fib_tests.sh | 17 +++++++++++++++++
+ 2 files changed, 18 insertions(+)
 
-/P
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index cd49b7dfe216..69e22bde0fdb 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -43,6 +43,7 @@ CONFIG_IPV6_ILA=m
+ CONFIG_IPV6_IOAM6_LWTUNNEL=y
+ CONFIG_IPV6_MROUTE=y
+ CONFIG_IPV6_MULTIPLE_TABLES=y
++CONFIG_IPV6_ROUTE_INFO=y
+ CONFIG_IPV6_RPL_LWTUNNEL=y
+ CONFIG_IPV6_SEG6_LWTUNNEL=y
+ CONFIG_IPV6_SIT=y
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index c5694cc4ddd2..1262ee1ea09b 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -1534,6 +1534,23 @@ fib6_ra_to_static()
+ 
+ 	log_test $ret 0 "ipv6 promote RA route to static"
+ 
++	# Prepare for RA route with gateway
++	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.accept_ra_rt_info_max_plen=64
++
++	# Add initial route to cause ECMP merging
++	$IP -6 route add 2001:12::/64 via fe80::dead:beef dev veth1
++
++	$NS_EXEC ra6 -i veth2 -d 2001:10::1 -R 2001:12::/64#1#120
++
++	# Routes are not merged as RA routes are not elegible for ECMP
++	check_rt_num 2 "$($IP -6 route list | grep -c "2001:12::/64 via")"
++
++	$IP -6 route append 2001:12::/64 via fe80::dead:feeb dev veth1
++
++	check_rt_num 2 "$($IP -6 route list | grep -c "nexthop via")"
++
++	log_test "$ret" 0 "ipv6 RA route with nexthop do not merge into ECMP with static"
++
+ 	set +e
+ 
+ 	cleanup &> /dev/null
+-- 
+2.53.0
 
