@@ -1,87 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008F4396B82;
-	Thu, 26 Feb 2026 22:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2293B39C654
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 22:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772144693; cv=none; b=Hz4f1Bzvf2WSltnRX/YC04rBZg1iOGUwpUuw0FSwZyHvBvuEl06JccNJRlmc+RtNlJENyer9m/i+JEVbgE/7sA2LfAiwZfHSrUjyhp/xGVm9WL14rnNUNFnAPxMY5lUwHpHNn9OqSysfDayevoIlcBkA+1POxQSNxIfVN3tBJpw=
+	t=1772144887; cv=none; b=IhysqWO+TuKM60x4wVUql/dHO/oDqPYwdh7cYjFvKmAHguH6J2pDk5NpEHJpBX20Mi2ZPkIOmtl35LFx9c8gJWy1ZJpDY0gEyHg2oR97mIieyUxSUDlajmcft4ohJwEQ8uLsM36VnVXX4RASwQkJWCozhR2HWpJV/JS2CGB3fa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772144693; c=relaxed/simple;
-	bh=Ed5ZeeMeyy/vi/c75SL51tBox+lgE4FzfZW5alEE0rM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j8GtOguCkiFwSJkPz6cPnCfVYP0ILiQAbVtKM8z67/8tWCCa4/OaOHKkGSFDJgiTPFG/erLPgVA+B4rzllRC8cbVABGZa6Z+YC4zGWSUt7e/o8YUpFcSXx164XjYO10x/h/+UgaZ5/qfGnfml+hZI2bbsx/njpDBAoiF+vWL100=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hek8RmB1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772144887; c=relaxed/simple;
+	bh=IgrG23jXKGivVbn7AQPcC0OLGqaf1C8vOPdQER9mxQs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ZRGV2kgw16DDs3C+SopDdhdykYfaZASVkuHYIaBrg+9MpQIeCwerUeybUMhYtZanU9SKARFJ3EmuPhUprwNHID9nD3j6iJfB9nBITslRUTJTzghGIKEt/QfgJSjfuP5D1Mp4a87RBmHunKHg2wE4cz6mTTOWZxf5w78sbI96awY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Q6iM5Woa; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hek8RmB1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72AC9C19422;
-	Thu, 26 Feb 2026 22:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772144692;
-	bh=Ed5ZeeMeyy/vi/c75SL51tBox+lgE4FzfZW5alEE0rM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=hek8RmB1SnlhSv+QZfaPfou3Ro1FV7X513m+drgZ4FBv/KNaLT/BwspIT/QO3+Nh3
-	 tOePmrzzOqYustF/MnbHM94CfumA2CjkN89RFDYRX+Mt+fuVBcJLzoxSKT4Jcw/LyB
-	 G+S4j7PyjZF2a8/WwlPt86nM5a/GDe/CE4RiTAyu+0pPr1835agTXn2OH/+nbRpf0j
-	 gke3ndaV3StLYPkYaaQPNTcTy6nY2MtzB446XkGMNJyyBtgtUsSfN+VCOCDWo1TcNO
-	 KcvBruVF70FjYqBUe6DSA/wWXUtdOEIjc/vU5wZIATI8/itZyYVz+wfScCeN2WT8iI
-	 DjJsmbH4Wh2Rw==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 26 Feb 2026 22:24:43 +0000
-Subject: [PATCH v4 2/2] selftests/fchmodat2: Use ksft_finished()
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Q6iM5Woa"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2aad5fec175so50133765ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 14:28:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772144885; x=1772749685; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W/j2ZyC9rj9YMlhwf1A/TlVZORUXpPQxiBPhNIX130A=;
+        b=Q6iM5WoaqSfDo5nilkSNnoNT7gxxET93zuUc4YVBmogTH6uxzjP3Gt7n/OLC5178PN
+         I93pbBrLMPUIjwJITpWv+E99f6lDOJXYAeKl1zreex5URAROSvSEHFKYlHUL8PuIEQ+A
+         Dgi+23KCkZOcm9XLkkVK0i0fvSXhZ/usjn9hJhTmq99YQKIvRT06YfwBHB3yQzX/A/+5
+         y8X3XI2YF1LllLWAOT1GC08wGuxTkqj4x8n5omsEYcWLHjpyCoB0srTyuFBMcvAB0t9J
+         L7qZRP0zIbmOovygpcNILvSYkGs++qIPmXsWuBXGTXgNZUT8A7lCI2T2lGjWMhINF6nD
+         isEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772144885; x=1772749685;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W/j2ZyC9rj9YMlhwf1A/TlVZORUXpPQxiBPhNIX130A=;
+        b=Po39GI6UR91MU+V7CneR6IMBFFJFhWXK2vVY0JB8uyhocQILpDS+kNxK1aQMZiJEuq
+         DsloH0wZRvmB5NiFkF9YnFeSZSJhFadwvP5sJV5DZJf59J7F9Zr3/kSv+7cyLaf6EWNU
+         oYFSDYmHsaDrBTOD7K8fhbJGZGp/lmYIYrIChIhoBQyj0zj8s9OKDJxzdFskZz6H1SI2
+         fpeWvmLRfdDvqRzkNDyhrRrJEuONj3gv448gcRtjWL3IazzPpn7mjMszMCCgoKGKi4ue
+         TVOjFInvwwDwnEYsmXr6gyX7875F6p8cUxLz28u5YrLcDXJGRKhNHOp78ivlX0kxgPMH
+         TIPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQzmlgVHARCsePZPdn7JWKAoau6MS1v3mZI6JZ8fbOtznj5lmzikbcML6vG/56Oc4SM2cu3qresgHr6ZTC/C4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy3ZcIlie4kA0ND/dnrcFV63OsHk/dnOnkN0C8UgnBCaziPKkX
+	+v3pSgk0dWVeF0DHQ9+JK836ARQzbBevjGrVCFYc2e/Tg6w/Bey6CprRDjNWUw8KTKGHb/WvjUd
+	CpHsbAw==
+X-Received: from plbkb4.prod.google.com ([2002:a17:903:3384:b0:2a0:9439:b25b])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3bac:b0:2aa:e6fa:2f6c
+ with SMTP id d9443c01a7336-2ae2e41a277mr4596915ad.24.1772144885217; Thu, 26
+ Feb 2026 14:28:05 -0800 (PST)
+Date: Thu, 26 Feb 2026 14:28:03 -0800
+In-Reply-To: <aaC0KGXmfhOMOrJ9@tycho.pizza>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260226-selftests-fchmodat2-v4-2-a6419435f2e8@kernel.org>
-References: <20260226-selftests-fchmodat2-v4-0-a6419435f2e8@kernel.org>
-In-Reply-To: <20260226-selftests-fchmodat2-v4-0-a6419435f2e8@kernel.org>
-To: Shuah Khan <shuah@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
- Christian Brauner <brauner@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=826; i=broonie@kernel.org;
- h=from:subject:message-id; bh=Ed5ZeeMeyy/vi/c75SL51tBox+lgE4FzfZW5alEE0rM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpoMgvRrb/oVJBzn8/20fV0mQVvsAibPK/RUYdG
- ZBdSACr/MaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaaDILwAKCRAk1otyXVSH
- 0E6RB/9cXpHug8Pi+Lz1LvO0yVqnrk1K2Pbak8EXSBiHw4ukAA6vKfC2I5/U4bRWGdlrVMkwURO
- RC6G7Or0Z2WA1yMLGNz9gkcAl/0AwQ78Tsa3xkAm6OMBlESXeETR8F1zq4qlvEvaR2fszLmJO1p
- ogkvqdnp29SdfrUHwDvZIFXSynyIV0Ap6PkNCnklbmjj3WRi7UF48+HAgdV2fdvj9iMSkWIsZob
- 1dQrhK87GtbuBv3zv83aQkpqMDNUTWZyH/bg3Yg4oIStaclWFESZ+cs7CnFrczvAlXMRmqohrcM
- JzBK7Pdu62h9dh2RmS4S8plrYATD6pD/pPCmakqAStjUSEO7
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Mime-Version: 1.0
+References: <20260223162900.772669-1-tycho@kernel.org> <20260223162900.772669-3-tycho@kernel.org>
+ <aZyCEBo07EHw2Prk@google.com> <aZyE4zvPtujZ4-6X@tycho.pizza>
+ <aZyLIWtffvEnmtYh@google.com> <aZzQy7c8VqCaZ_fE@tycho.pizza>
+ <aZ3ntHUPXNTNoyx2@google.com> <aZ8xje-iM0_9ACie@tycho.pizza>
+ <aZ8077EfpxRGmT-O@google.com> <aaC0KGXmfhOMOrJ9@tycho.pizza>
+Message-ID: <aaDI83LDFj9Be-sH@google.com>
+Subject: Re: [PATCH 2/4] selftests/kvm: check that SEV-ES VMs are allowed in
+ SEV-SNP mode
+From: Sean Christopherson <seanjc@google.com>
+To: Tycho Andersen <tycho@kernel.org>
+Cc: Ashish Kalra <ashish.kalra@amd.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, linux-crypto@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-The fchmodat2 test program open codes a version of ksft_finished(), use the
-standard version.
+On Thu, Feb 26, 2026, Tycho Andersen wrote:
+> On Wed, Feb 25, 2026 at 09:44:15AM -0800, Sean Christopherson wrote:
+> > Ya, I don't have a better idea.  Bleeding VM types into the CCP driver might be
+> > a bit wonky, though I guess it is uAPI so it's certainly not a KVM-internal detail.
+> 
+> Turns out this approach breaks the selftests, which is at least one
+> userspace:
+> 
+> # ./sev_init2_tests
+> Random seed: 0x6b8b4567
+> ==== Test Assertion Failure ====
+>   x86/sev_init2_tests.c:141: have_sev_es == !!(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SEV_ES_VM))
+>   pid=12498 tid=12498 errno=0 - Success
+>      1	0x0000000000402747: main at sev_init2_tests.c:141 (discriminator 2)
+>      2	0x00007f9adae2a1c9: ?? ??:0
+>      3	0x00007f9adae2a28a: ?? ??:0
+>      4	0x0000000000402934: _start at ??:?
+>   sev-es: KVM_CAP_VM_TYPES (15) does not match cpuid (checking 8)
+> 
+> As near as I can tell qemu doesn't do the same anywhere. SNP guests
+> run fine, and SEV-ES says something reasonable:
+> 
+> qemu-system-x86_64: sev_launch_start: LAUNCH_START ret=1 fw_error=21 'Feature not supported'
+> qemu-system-x86_64: sev_common_kvm_init: failed to create encryption context
+> qemu-system-x86_64: failed to initialize kvm: Operation not permitted
+> 
+> Thoughts?
 
-Acked-by: Alexey Gladkov <legion@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/fchmodat2/fchmodat2_test.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Breaking selftests is totally fine, they don't count as real users (the whole
+point is to validate KVM behavior; if we weren't allowed to break selftests, we
+literally couldn't fix a huge pile of KVM bugs).
 
-diff --git a/tools/testing/selftests/fchmodat2/fchmodat2_test.c b/tools/testing/selftests/fchmodat2/fchmodat2_test.c
-index e03430c4675c..8e1b6384b319 100644
---- a/tools/testing/selftests/fchmodat2/fchmodat2_test.c
-+++ b/tools/testing/selftests/fchmodat2/fchmodat2_test.c
-@@ -196,8 +196,5 @@ int main(int argc, char **argv)
- 	test_regfile();
- 	test_symlink();
- 
--	if (ksft_get_fail_cnt() + ksft_get_error_cnt() > 0)
--		ksft_exit_fail();
--	else
--		ksft_exit_pass();
-+	ksft_finished();
- }
+Even if a real VMM has a similar sanity check, I wouldn't consider an assertion
+firing to be a breaking flaw.  No matter what, the VMM won't be able to launch an
+SEV-ES guest.
 
--- 
-2.47.3
+For selftests, something like this?
+
+	have_sev_es = kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SEV_ES_VM);
+	TEST_ASSERT(!have_sev_es || kvm_cpu_has(X86_FEATURE_SEV_ES),
+		    "sev-es: SEV_ES_VM supported without SEV_ES in CPUID");
+
+	have_snp = kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SNP_VM);
+	TEST_ASSERT(!have_snp || kvm_cpu_has(X86_FEATURE_SEV_SNP),
+		    "sev-snp: SNP_VM supported with SEV_SNP in CPUID");
 
