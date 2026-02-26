@@ -1,174 +1,160 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011008.outbound.protection.outlook.com [52.101.65.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA32D37417F;
-	Thu, 26 Feb 2026 14:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772115514; cv=fail; b=n+5wDzJox/lmKv30+VLgEXXTTxUA4qveyQIUcRf5tkkVl+FjJQOOVNPao3T7ZnO+qAGVCyvBhI5oU8TmoCDcolAViTqIjAvfif5sL7lIPfFDCptOlvR/Cz3E74B8TxYelyLAym5WPqeqI5nL161IoPnThTRC1yIqpN3hf0Eo72w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772115514; c=relaxed/simple;
-	bh=bwmmL7u6RneMIao/14UfAhqnLhIweSCzCAOX48UdxWo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=XZ5g2t3+SMj9xnileWv+K59po5WEHcopEnMPIjr0uAHJQF/rBiM73Ssvm/J4hUmX1VQ/KWecXKW5w1rM22YR6dQdJVTykPTJ4OL9Msja8PGrXRDHhCBlqtGX8IbZJir/qQMF3d0ZpeJwL4QkqcMOLyS9V0//mu/vCNJW5yww1VQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=PKHHh8Fu; arc=fail smtp.client-ip=52.101.65.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADBF315D23
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 14:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772116479; cv=none; b=NCp4enprXSjoyc2Pm3jq0SUq1YwAtTIxVFh8HDkMhVw9mXnqd6+3/gCqNTW9j12GepP57B4W1wfbsR3SuP6AR9QhnqzqE7P2HCsYUjYHT0WxfLyVnHG8mI1r3pAmwUBPYCE5GNatgg14jleEeGLhiq/5I3luEGN9uJAy+0TB4/I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772116479; c=relaxed/simple;
+	bh=gtA+H2X6ew7j0WLGn1Fvyy2afI0h2OIZDUA1JcW9sJo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eqMbgvtPYDsRHYNQn+iCg5st/V9SeV1BUDKicQYYuhD2VgYtcVaJ57JsvS9vZ1ptTJSCZmXEdZQoTZRHndr3wRC/eYiRskP0knoYyxkMSaukWXAhDGSFu3HguubIWNcmI/9MPpJsn+qaU6Lrrt/cqd7VkaHoUbgXIhWcCobKw0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EC3u1Hvr; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="PKHHh8Fu"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HBqrC7IecP4wpS+4Batpg0aguzAiT+U4evRZJt6omJ4yCeAfXdVjeu7/zFYeWrg4+IM9JW218mL9T89hRSBC3b0vF2e2pIasC58QyjTEm7V7lIXCDn5FbcQAnIsc2QbBE/QYTCn2erFEYcEZX5dANdsRkYSewyQPm8FY/iToUNV0rd6JPeo1kbSxB/biMhEosi14PkLsJElxs7H4hq2gQJX5z/NDKjLK6k/R1k4CunHIbEaGvLxC7V4z+e1UOz9R1yC72RPwfI0GjOLWr0zLqJgGb/iibQtQ2aTszUBpCvtCAMQmrh7LSRDuR5vYLbMFwABiWf3hC9JmskiZ+PgPlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=162g34PkRBU0Y7mSUEB98y0UD9rIv4cGpU+OO7Qbw9w=;
- b=NDVJKZjZyly2fU+0fkqPj1/ZV/8QXM3TMpriFsPxylUdT3ajvThxTp7j47cWBFw0e2Vy8MJCGrRpr2dEzHYu9w3gMPmJ+Q7JdK9TfoENGMItpXTKiRb+DdjoA1gD+iKCZHOikGjW085BGeUosR+9mdcM4zuI3shP2kWN3DjiLJg1a7IiR6TPJtwsl8seZJ9b/k/Ml/ibBOyyyugwEBpYvaF5TyTnjcGLKwanaZJwyZu81BXDBkyHkOfYHgdi64hzhvVrfd6E2pEi249d701VOEYTPLVG/vdBzI5EVYwgeJufrG5pL75nPVu1jS6pGgPqzKxkOUrycyCK2EbboK42+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=162g34PkRBU0Y7mSUEB98y0UD9rIv4cGpU+OO7Qbw9w=;
- b=PKHHh8FuqPwdUMXiIZHFBmO0eOnaBFxPKYboOUvBK8qFPpBkP1NfkuiRZxowfL0GHLiXEToH3xiOCP+dcDjjvQu6Q/iaMgJRDVspxwVVJTypeLFzNzS1ytsR0O42hZTwbQOdfZxfBsTpcU8V+KEI77YXi637Mh2x8WbAVb0JxpZs1pFjyLxTX2cZrFkXwhv5cIrAxnP5glAAbvYYtnCYfsz4EiGddaK2MK0lfOCd+HjOgyG/DUxKCUx3VkxakJ2i4A7H3rkqL6yRwktLnocOJsRnri3gDzga03M0y+RLLKHT3NJ3CQqkGGZe3RdwU963V8ojVmZWHukfWFTyeSLh6A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by AS8PR04MB8915.eurprd04.prod.outlook.com (2603:10a6:20b:42e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.13; Thu, 26 Feb
- 2026 14:18:25 +0000
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9654.013; Thu, 26 Feb 2026
- 14:18:25 +0000
-Date: Thu, 26 Feb 2026 16:18:21 +0200
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
- ethtool standard counters
-Message-ID: <vcphjyyj3jezenqfgieqac7ayxhslupgeu6kh2ywfukaat3rtf@tsqaz33v4o7c>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
- <20260225150648.1542206-6-ioana.ciornei@nxp.com>
- <77f3e4e8-430e-4ae1-aa1f-8f70b4d8d3da@lunn.ch>
- <osswnpbiyy35ycs7ha2ufugj7dzmvpeq3x7vjq4j53qtwamkuw@ihwl5qjuydnv>
- <ph7vs3fsxti3nlypmmvm6wqvsnnsn76wct3qpi5omphggcjqrt@3any2dqzlgsr>
- <031c7375-0407-476a-92eb-0f894ec820f1@lunn.ch>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <031c7375-0407-476a-92eb-0f894ec820f1@lunn.ch>
-X-ClientProxiedBy: AS4P195CA0052.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:65a::12) To PAXPR04MB8253.eurprd04.prod.outlook.com
- (2603:10a6:102:1bf::7)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EC3u1Hvr"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43990ea3fbcso646423f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 06:34:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1772116475; x=1772721275; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iB4u+09YhtcRl39ds1n5VvgzC6lBCx1avlF+QWd52Eo=;
+        b=EC3u1HvrNOvh7/iEf4qwMT/+SLnOiKQLcuECOh/B6Fr/jki7zzaNFrK9aq/XG5u/YI
+         zf++IY+le5jSBJgE1t3XUASOSmlePcWur41QjqlvWoN9LULci2RaebMYrAvJ8z84yxsb
+         h6ell9yRfrZn5GVXmfAJry26tDvtyAQ0QrCMTrdWWhAMD3kRyy55HVaZR9v0hJT+Sh5R
+         VdzYBcpK2j0Qlvzp73DAjKqmVmnURuBzlr6AtfXt9ZU8DT5nGJwf8MotPNwgCKf7/HWK
+         WUw+riR/gFpyQopdYje/s/7aR2zbsPTLkF9GFGCNuj2MNUV8Uc/Euv4XV1bIHHGbwUXv
+         meSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772116475; x=1772721275;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iB4u+09YhtcRl39ds1n5VvgzC6lBCx1avlF+QWd52Eo=;
+        b=Fclfte5ogEuaG9PyuBx0X7nU6g7NcDHi2bBbqcVhevGFoo9GD45hXgn3M33Vkl9PY5
+         kuDqGfDWYZS7m0z4n6YSq9tAHV6fEEHWvXq3TMt+OqvszWuyFanmBcR7sOtW8LAfVDEl
+         7iHpsq9SJMzBEUxJS9VnywrIcp9l6RkGlPy93KRdgP6UTwoi5xFW9BdzsV/rAldDCARR
+         0xXnhN4/pi/xg4zTlN7vGr4iu3+JJGsYIAOkoNLArc1lWcoHjhY3CfNvSZ6fpvrNAGIS
+         Xyh/FN0q8/w3TfChudB0KhtNv2aMRIgp8aOL78kwYUtSeD73IFCibcS+Z3KqYx5tydG9
+         X7Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCUdk8ZJgmiWOBCci1Esxnj7tuO98SU/W34RktJ4PYGv/0fwEH/UHa3EXcGRFwa/5nxzwvsV22Atn24jnLolam8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw79d+KyBGN0Nkszha/EoIyijVhW1fHki47zjhVzL+IOzemnsze
+	XSwZZ8A1jY4ftJyQrOaINlof6HnN6xguB2cL6qwxoRSDbtH2iq7fqjaD1vW23PNDZ3A=
+X-Gm-Gg: ATEYQzyRo/mFqMG9Xpdtdoiu9miD071hfM4FbJKhtseqSjzFZUhIUWBZKJ7BGvCSOwz
+	fNAPql3fsZI3k9FoYyvLkePU3QGO6CEd2iF42r6NJFw24AVdnOLx+qnN2uCzc+87V8CHhYtvwuS
+	/TDQuKzU2j+8bl9/85mPvenmXRj3lSiml4jwwb3DflA7n7ZEAFV6VL4oDNJwTRFpRkVJyyk+5Pa
+	UydDpUMPvsaNDabdnghmRZ2mpx06Gox3tvJ+m3X+R+uhCg05KHvsbT9Dww1VU4znxiP9/8t82Bu
+	+nevEKOo+wXAOBaMWD17ADVp2rpcOFMNwf7oRuCKtFXaG1l2CSlUJvydWHrylsf8lKT53bKfMUz
+	xWHjZDyu1s62nrI2wBH9j5hWFndJJP6qCdWk0S7ce38Y/pO/Usx1UenuXdUEea/4KM5DmDwQ4Y4
+	WwwPR4UV5ZwEVlTtSQMOfn9XNp3a1ZuQcG8T4qFr2WgWYa8dbDHovhavM94J4Ak5qKzMMzKLyI
+X-Received: by 2002:a05:6000:2f84:b0:437:6c0c:346c with SMTP id ffacd0b85a97d-439972045b9mr5398962f8f.28.1772116474640;
+        Thu, 26 Feb 2026 06:34:34 -0800 (PST)
+Received: from ?IPv6:2804:5078:822:3100:58f2:fc97:371f:2? ([2804:5078:822:3100:58f2:fc97:371f:2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43995056115sm7530873f8f.14.2026.02.26.06.34.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Feb 2026 06:34:34 -0800 (PST)
+Message-ID: <3a4a2d27c241bda76a0b5cf812f7921088d5cbd8.camel@suse.com>
+Subject: Re: [PATCH 2/2] selftests: livepatch: functions.sh: Workaround
+ heredoc on older bash
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Miroslav Benes <mbenes@suse.cz>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>,  Jiri Kosina <jikos@kernel.org>, Petr Mladek
+ <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Thu, 26 Feb 2026 11:34:28 -0300
+In-Reply-To: <alpine.LSU.2.21.2602261337170.5739@pobox.suse.cz>
+References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
+	  <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
+	  <aZx1ViTc7NJws-rf@redhat.com>
+	 <5ca16692b304185df695e517434b16e59cb15a42.camel@suse.com>
+	 <alpine.LSU.2.21.2602261337170.5739@pobox.suse.cz>
+Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
+ keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
+ Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
+ gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
+ GO8seNG8sYiP6JfRjl7Hyqca6YsE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|AS8PR04MB8915:EE_
-X-MS-Office365-Filtering-Correlation-Id: e16d6b83-6067-491b-44d8-08de7541e79d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|19092799006|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	oCkGOaZE8TphL5J14WFK5PBSZBX4f5MldogSRf3yTVC3YMmxV0kz37g0jpug7qFL4tZjh6hgy0de/xU9tJdFn+clnYRstesJqcvKDFNx7yUQO4snfMi4ksB9KehwV0YO7C0lxdR9I4sYanFgqHwYtiv47hE6a0juWgAkSfpKel63pFkOEmoseKZKJS5ol9+fnezj7+jQdP0yRvLKxQKAiVJS2HsEH62XuSa4l4h9nRr3r58N2E1F2WBI0rBTRyMVC81rGETbz6N0fDBgjvFNTGyUwHdt5avmMOx2kHlAB7qey49Wp23sAsPs64NJ67QAG5C/jUC6WckMd7tuZHGkIAgIwKLVIMs4bakLE9QDIG//HitjxTfgqbeBOcu67qtbcoJjHWbT7HKtIa59XXttIl8APaDK/HgPWMj4jgsUdixzSZwGq4NnPendUHkgrXJMubU7RgJHaU4chKYBLbXkaRpR4ZlWE0IjbsxNuitBlhOuT9jPfhkv1mNiYohqo02JCm95UlXGxEDtbGnOIY767L/6EML/j1OUmkZwia4MpwhpXbTjol1lVrbdm1aeaVymLnp9Y43yp3OKvFyEDkMk6Kav/z6Bs7dhLvtDJcO4hNQCa0xsVSvK0AMTNj/DpQCRkm6ci98JfpxTZo4wHe+D/JQ8E0YCUGm9CxqiUdmzPUtGiaNND/PhlJgy54lyt8qV7xyiE9p1qlQB/WwvCFTwZYUVp0Fh5jhq4vEKzJYwx9w=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?PRidVQKc16B9BK6E38vTSkkzP26vQ+7oEj0BH7ue7hOdlXrbwVcEFZqcLBET?=
- =?us-ascii?Q?+akpCanfpynIDWltHWWJzhgtWNLSLhwgIqOa6QxRQT5XE9wh7dDFkD/tTbJB?=
- =?us-ascii?Q?srWhFwtKQ0HLYBHDtvDMOT/SUJI+okLVU/Hlw0fQ1tbo1kppvldK4HFh8yO0?=
- =?us-ascii?Q?BBG9Smnh2mgVbY1Zi8CA1qV/5YDUI7EhwqvvLhER7flmyIPgov/IitlLFZxX?=
- =?us-ascii?Q?I9VaRGEuuP4vPC8RERwcDo2b0RV/uff2SpXsRrW2gJr85uy7Gr370U474fvX?=
- =?us-ascii?Q?wfNYA4xd7kiQ6DSETN2kH7wkT4d99xaKdVSAZlvZRu9GAfbQt9P925pz6YLm?=
- =?us-ascii?Q?+8r/XfgJu2a8pEX1tMbPIui9njKeXgIaX9nEg7pORFLOopUKhHGhtcgptwKz?=
- =?us-ascii?Q?l2qewrhRaRuL/HpcaHEaALT75HwTucmsyaFwOAj/v223jDiePOF27DUedq0V?=
- =?us-ascii?Q?g9Ac1Vo/iU4mS1v432wIg5o2YmSZnuTV5J0VlOxXcdQ5xLm1RGFf/oQCMnVm?=
- =?us-ascii?Q?BwKCKhRa1oHlAFDeytbB7ljHrFLwvS1Hy/kdcWQnWDURfM6tSeY4Bz+oJo0u?=
- =?us-ascii?Q?LbGpnGIifDL63zY4byH9RiwUcUZFDLCDoOVYvDYBtzKR1q6X5yokijd8cex+?=
- =?us-ascii?Q?kwivzZNd3PJLL89TLVeHW79BPgvrgJUfZKzMi9rHHT5T2LnkezGlgPfN9W4S?=
- =?us-ascii?Q?j9pJSXK0G2QwAC+ZBES2UtRNjXyGJTIDTrp5PAvOuQM46yn/aqLNm23r7KIE?=
- =?us-ascii?Q?MIqXJoTI95d4ZNWUIGXtVCxWkVtTD5CRQM5YfxbyfXTvnpEMCVNYOMsqPj0K?=
- =?us-ascii?Q?yoORdwJlLeRHXyZ279u2Zd12PAOthhlOh0G5ct5p4AuoYJFseYvclqz9Hajz?=
- =?us-ascii?Q?zm7sDJd7X7if5taeFQKpPWpilz39CAjDa+h9l3TJGSdgKTnuXR9eoaJc2MPN?=
- =?us-ascii?Q?p/LloLDnNuhchDfQs+jlPNB/3FUnEZuMT9kYWH6GMCr2fNQjUaKerBXmej+h?=
- =?us-ascii?Q?UpLVN52CTg7DOzXebaw8VB4D7hW3xp/2y9I51450UCUWH4lw57CvXp9ISdqZ?=
- =?us-ascii?Q?07O4JtqHlis5+28chQR2FrsFrc1DnwiSds8mIZwD7itT43+2P6/4jYUcYlS4?=
- =?us-ascii?Q?QMj2DTodP/MeFjIpfxHtE7yokHJeu0cZwveN/M2ETB2fBl2FtNJU98J5P0KO?=
- =?us-ascii?Q?mOM4pqthSUqhS/KgztiyR9gMUFqB0ZvMaCawG7asD2SphMXQXT9Tkoy0ZzpI?=
- =?us-ascii?Q?BT7PQcV0RsYnV724CpO+B2s8UwU74mlGKUBs4XTX0OcMOFF/gZ0ZwOmvZpcz?=
- =?us-ascii?Q?hkfAJK6udlVvoU2+wCBeFnX/j+Aoo6F3TzgDRPjfk7CMboSi1EoKAK7KwiEq?=
- =?us-ascii?Q?pDDizlBsGXaZDYsU4ZVl2u1i+qwxCraRKhogp/U2wVDnHRrDWQnbxiwf6Xua?=
- =?us-ascii?Q?sXkINAAkTSc0740zAPxujX7GCw/auHyvKciZzMx2epetOGUeYRrv5I8ht/ZG?=
- =?us-ascii?Q?oBpFkI4X+y1fNJIqpEL/oA7kILXROP+9ocTIN7e9oXfYEgYf3wcUUiZ9aRuC?=
- =?us-ascii?Q?3FQNQvQdEAzIQKWiwXmElMkWaCez08KHEaU77pAbtMZuzwl6o92sj460thl1?=
- =?us-ascii?Q?MZF+n6tOv8rRtYQvrbB7dXBGKtF75Jkv0yHCNany3fFwN/yxtKz+tR3d8eOr?=
- =?us-ascii?Q?kH3Hf51D5sj34r3wTyrO6vVuW8H+P63o7pjmbQLPIz3Tuek19Nqf4/JJqodM?=
- =?us-ascii?Q?qLwCvcGWAg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e16d6b83-6067-491b-44d8-08de7541e79d
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2026 14:18:25.3967
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9wVFPIvbDAiQ72eU6lbwp1Ykn9tdAF4pfMWSw9fk552S6hJrqHudUfN5U/Jh2rPBC2odTTGsTSvwWnEc3IP58A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8915
 
-On Thu, Feb 26, 2026 at 02:31:26PM +0100, Andrew Lunn wrote:
-> > I am back with a bit more information. The counters which were not
-> > checked in this version can be grouped in two categories:
-> > 
-> > - Error counters such as:
-> > 
-> > 	u64 FrameCheckSequenceErrors;
-> > 	u64 AlignmentErrors;
-> > 	u64 FramesLostDueToIntMACXmitError;
-> > 	u64 CarrierSenseErrors;
-> > 	u64 FramesLostDueToIntMACRcvError;
-> > 	u64 InRangeLengthErrors;
-> > 	u64 OutOfRangeLengthField;
-> > 	u64 FrameTooLongErrors;
-> > 	u64 FramesAbortedDueToXSColls;
-> > 
-> >   I did extend the selftest with these ones so that we check them
-> >   against zero. I ran the test hundreds of times and I did not see any
-> >   problems.
-> 
-> Great.
-> 
-> > 
-> > - Collision related counters (not really errors):
-> > 
-> > 	u64 SingleCollisionFrames;
-> > 	u64 MultipleCollisionFrames;
-> > 	u64 FramesWithDeferredXmissions;
-> > 	u64 LateCollisions;
-> > 	u64 FramesWithExcessiveDeferral;
-> > 
-> >   With these I don't know what to do. Theoretically, they could be
-> >   non-zero in half-duplex circumstances which means that checking for
-> >   zero would not be entirely accurate.
-> 
-> How about, fail the test if any are greater than 1% of the number of
-> packets transmitted/received? My _guess_ is, if you have 1% packet
-> loss, networking is not going to be happy anyway. It probably means
-> you have one end doing Half duplex and the other Full. That is a
-> typical configuration error you see causing collisions. Not that i've
-> actually seen this for maybe a decade!
-> 
-> Failing the test, with a comment about checking duplex configuration,
-> seems sensible.
+On Thu, 2026-02-26 at 13:40 +0100, Miroslav Benes wrote:
+> Hi,
+>=20
+> On Mon, 23 Feb 2026, Marcos Paulo de Souza wrote:
+>=20
+> > On Mon, 2026-02-23 at 10:42 -0500, Joe Lawrence wrote:
+> > > On Fri, Feb 20, 2026 at 11:12:34AM -0300, Marcos Paulo de Souza
+> > > wrote:
+> > > > When running current selftests on older distributions like
+> > > > SLE12-
+> > > > SP5 that
+> > > > contains an older bash trips over heredoc. Convert it to plain
+> > > > echo
+> > > > calls, which ends up with the same result.
+> > > >=20
+> > >=20
+> > > Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+> >=20
+> > Thanks for the review Joe!
+> >=20
+> > >=20
+> > > Just curious, what's the bash/heredoc issue?=C2=A0 All I could find
+> > > via
+> > > google search was perhaps something to do with the temporary file
+> > > implementation under the hood.
+> >=20
+> > # ./test-ftrace.sh=20
+> > cat: -: No such file or directory
+> > TEST: livepatch interaction with ftrace_enabled sysctl ... ^CQEMU:
+> > Terminated
+>=20
+> I cannot reproduce it locally on SLE12-SP5. The patched test-
+> ftrace.sh=20
+> runs smoothly without 2/2.
+>=20
+> linux:~/linux/tools/testing/selftests/livepatch # ./test-ftrace.sh=20
+> TEST: livepatch interaction with ftrace_enabled sysctl ... ok
+> TEST: trace livepatched function and check that the live patch
+> remains in effect ... ok
+> TEST: livepatch a traced function and check that the live patch
+> remains in effect ... ok
+>=20
+> GNU bash, version 4.3.48(1)-release (x86_64-suse-linux-gnu)
+>=20
+> Does "set -x" in the script give you anything interesting?
 
-Seems reasonable. Thanks for the help!
+Nope:
+
+boot_livepatch:/mnt/tools/testing/selftests/livepatch # ./test-trace.sh
++ cat    =20
+cat: -: No such file or directory           =20
++ set_ftrace_enabled 1                                    =20
++ local can_fail=3D0
 
 
+Same version here:
+GNU bash, version 4.3.48(1)-release (x86_64-suse-linux-gnu)
+
+I'm using virtme-ng, so I'm not sure if this is related. At the same
+time it works on SLE15-SP4, using the same virtme-ng, but with a
+different bash:
+GNU bash, version 4.4.23(1)-release (x86_64-suse-linux-gnu)
+
+So I was blaming bash for this issue...
+
+>=20
+> Miroslav
