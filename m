@@ -1,196 +1,191 @@
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013062.outbound.protection.outlook.com [40.107.162.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CB3275AE8;
-	Thu, 26 Feb 2026 15:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772118644; cv=fail; b=nCu+bzUz0U/xH3IpPVEY4SfD0oGwRfmOMrzXUc55sWIJh4STuiUEUQvVGWSW+O7JJ3AhTqRaixcLK0CfehCz69mmMwcT55hs/U7Bq4t076rSIwSvvLBESdEG3UpO92VGzJDTOlm7GMIpLPuso3B/mr6uj3ab8docvjQBD5+DU8Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772118644; c=relaxed/simple;
-	bh=vr56DpbClWGB5KLNpbW34XiB2nx6rFy52VcOmngQIGM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=eR+0oJSf/dsslxiGwHPN2U2XjiWsQRI8gj0GoQ6GPtOwZeQitaLcGfKq5lW0mOKCale+fuHVLpTMtffewOajDvhWu/PrnCCE6SbiZTK5qNFNJYjw+0KOqTALvrY+V2QVnQj4AXjrczmmqFJqfHqImgh63OyYW5GYeFgS8vHGBLs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Mf4hKO0J; arc=fail smtp.client-ip=40.107.162.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCB140B6EE
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 15:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772119094; cv=none; b=V6Nj8D/I37luUKv1kQU8a+Lr3GFSBfykkUbTTVVR6B18MVob5FMjK6HK1ehzr8UlfN/qurcJV7TmGARr7s+5XBxj9QtxS1bVfpaCgLBWC5hdmghMJBPcO4Xf1A8fYbsuiSS8O4RZpq4FsuudlRbX5WYqz98tpkweo8vFOLhpZP8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772119094; c=relaxed/simple;
+	bh=UtOhj8tACoqtlw1hMQBUUKvYaf1dX1kM+5j0nTLO5r4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=f/CIrOb2BvGY5UZicTgatk+MuqGrJIJ/mgVZ7+ytnAhW4N7tbFBsmPH9BjXffwiwniQ/BpocnG7mLC8O60wny/5taQXCOE+sFZmvjUdI0dICZxzFcn64aY9bRgrX4c2oLoX9WXbNSnTlgPSnariCpE1keQGByM/mOXccAcBJfwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JuXU6Kbl; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Mf4hKO0J"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XEvfEw5h4Uunc9xu2icnAXctbbCdMjyt7ixHAbuRUnXVq0SGyNQ0ylm4z9SMe8JlD99xyXB7sbMzl8s3cEMkoDokoYKSxppvulcgNh2oNH2rLWINycOc+5Vo22Kz+R30RiUXHOOx65UBMzhppt9iY4azZlu3iL9kuasorppdOIICc3UF7KDJX+SkvI13EDMSiOHqIr7LnDngkgn9pWmziHfB83w6fs5b+FSLruo4cUmCm9DPCEVr8dfI+ydGStZC/K2zAbfdbcmhrIT4aOvPOzt7fSLQSfr8jMxHPuGz1Zd7w5rTbWzZhZmzBbAdDlvBVW6X7BjKfMQ+g9EZt3Z5sA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4nONTDWkgchCtFH0DK+TEo2OO7Tk2Ldh3zyG9EuOoyM=;
- b=jGmj+vzwVDRK3hN9anzCWdyvtL5wFaBpX6joHpXVfjSztI8iBqS06KQ4w8NcdkvQkXSkRptnvhURmleY5yLyCdo2l+mQdUW8hrjZuM5ci/lsELO0z4l228hU0X1JqFaS5ZbWmD7efTT0N80wh0vuAQB7DBgAAcOrf6DcXdkAgNw2PZr7Boi5804YCHdAoANqFgDbBmL3k5/M0ngAJ5wbRl+nt2a3z+Z3Cg/3v023zXUQgyqoa2myt+NZPq4CzCiqy8kM5pX6yHyDVKd8uVJAuCuQ/pLRvsY8NvNVgI6GbFg4tBTZ6NDcpXmOlMsufLDhjWg9O54jldYBIiFgGwlC8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4nONTDWkgchCtFH0DK+TEo2OO7Tk2Ldh3zyG9EuOoyM=;
- b=Mf4hKO0JvHRRHM5iJ9lZPqRfxUqYEzjpmwR6AEg06XOPaTszFGbgnHWG0fGno80WGZrkoHeuKkAN2d0o3Kj+Idxzjbhb1Z1LE766QDq18F0Dx1E/gTTLkVYZPVquJP7gt3azI+c7pqh6Q9JgB+DjmWONOWCVqVCtQCRG5rmet9Et9KZyZXrUJbb7ClU/OWWHBI51DfJTsHA7CROReK7XpOgsNBYeQjkuAv/Cv8rOUDPGvdjo/9P2Lp3UytTJYPjo3twHeJSsDI2IqM95yi5aHCxnZX4vho1pd5fM6LgSNOwX0g6X4fYOMTGsWlSBhs6jmLZz3NDZ5LdKA8kEnTpChg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by PA1PR04MB10119.eurprd04.prod.outlook.com (2603:10a6:102:45d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.11; Thu, 26 Feb
- 2026 15:10:40 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9632.017; Thu, 26 Feb 2026
- 15:10:40 +0000
-Date: Thu, 26 Feb 2026 17:10:36 +0200
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Daniel Golle <daniel@makrotopia.org>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	=?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Eric Woudstra <ericwouds@gmail.com>,
-	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	KUnit Development <kunit-dev@googlegroups.com>
-Subject: Re: [PATCH v3 net-next 05/10] phy: add phy_get_rx_polarity() and
- phy_get_tx_polarity()
-Message-ID: <20260226151036.x4z4bdlxwgsqlkhs@skbuf>
-References: <20260111093940.975359-1-vladimir.oltean@nxp.com>
- <20260111093940.975359-6-vladimir.oltean@nxp.com>
- <CAMuHMdUBaoYKNj52gn8DQeZFZ42Cvm6xT6fvo0-_twNv1k3Jhg@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUBaoYKNj52gn8DQeZFZ42Cvm6xT6fvo0-_twNv1k3Jhg@mail.gmail.com>
-X-ClientProxiedBy: VIYP296CA0002.AUTP296.PROD.OUTLOOK.COM
- (2603:10a6:800:29d::7) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JuXU6Kbl"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48372efa020so8449485e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 07:18:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772119090; x=1772723890; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hXMv97b9KNqAU0cNnpTqpEvgdSSxZvM5f/4DMEg70Dk=;
+        b=JuXU6Kbl6tU+d/b4+DTt1+J3xPCTEDSaGo5UBHdD+R/fWLWO9+G9Yzxn3q7owIdON/
+         uNKFykF/JfkFiAf/VJsoKH04vdwVQZAO0HlLQ60bQZPI1Wa5wHGQ0Wji7LkOOZIxnW0+
+         YEvKPJt/dZjAKPitMpvkmBxL93y+RJr6MbJv9XFa/K0usHYpphbGm4dCaO//ful6R4sg
+         GsSHHncBsSztba1jRNOUTI9DP9y0pb63uHBRhVrXCcEUuzXziT/jNaGV18wKx/EB9oiY
+         Q65VBPCjJ9G6pv+tyyvcw7QJeZ0tUGI4Nrf+YOTZ0GrKBYLtiOo3R4bftG+bN+PsEnH9
+         v53g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772119090; x=1772723890;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hXMv97b9KNqAU0cNnpTqpEvgdSSxZvM5f/4DMEg70Dk=;
+        b=QwQaPI15ml2DSL1f1+yxysQn4LRYWR55TQLQohVjcSiSVmMBFOEIYMlB82vbGINXTC
+         Dik8ioQHv15ZViKHGrhznIpcbGBkZ2sc/Hs/PjXI5Af9fr/XfEngVw4LyYqBAHKjC9oy
+         XD4YfV7Htl50Xnslak17TwFoB0EJSQvIw1z3nLaz5F/k6JGqa1ofRpDWjW7AzCqB3Zr1
+         Dxa2SCcrs1uqhqlwUzIGzo9GgGyMXxkUce4h/QxAhv6273WHhaUTKPtflCPp/BcGdPek
+         7qBg1mkEbrdSIsKVjSEav/kamgezlTcN+cc96A2SDoAJyYJQwdreF96l7RbIh/jYTIeo
+         kQoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWrJb+Nh8Y12DMDh850fJDZVTfJk/9iSevM442wir8hmCRd73/pGxNAK8Kbj397i8nE91NZ0hOxej8TfdB+rvY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWt805/cESU6tsFPtloxQisTbtF+PGHETAeWCDh34WMu98mwZO
+	PuuLxEnlqWa3YODIqqC/UqDZuiE1V8zqtMEy9MpUJKeIarhZI7fL3/im
+X-Gm-Gg: ATEYQzzp8KK8vWfPVmegOEiu0dxhKXDmuY5iXo6akj2Q9ubLn9Dqb6EoLdWnefn0Yro
+	189mjLiRWUiDfGp2KeQGRqOnMB7z3RyB+oYWDX03+JOxqm30B98YAAmy8Km55HycHYL52mvfpLf
+	tInLsCWBDusL0bF+gAW0DbiI7rsudVxtDiiHEk96cetXzzPw1IzVJMJnqOxM7oMZ94EoSRSTWxx
+	79s/b8sEYc0ysfgUNhb/1Y6ZVnkePHlmQiH2AdakFptMjkmnphhkTTong0sS2YcMcYOn1XP2KN1
+	w4VsjV4+AZpMxYyKQzhK6vZ4Mmt55NWEKj2Cbs9qS7ZadERAliBNFLlGPksmbgt2BMSmgvRICm/
+	QzyCcWT/xDegZZGPdAOpxLsCIvElIpnha6O+BGijSON/4Fjx1P/XScZS0U5dEbqt1I+uiu0Gu1h
+	VwTolOsXIHFj32AAGrdK4=
+X-Received: by 2002:a05:600c:628d:b0:483:7020:864 with SMTP id 5b1f17b1804b1-483c21a59aemr62238595e9.25.1772119089813;
+        Thu, 26 Feb 2026 07:18:09 -0800 (PST)
+Received: from localhost ([2620:10d:c092:500::5:5405])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd75df9fsm162765655e9.13.2026.02.26.07.18.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Feb 2026 07:18:09 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Shuah Khan <shuah@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Sun Jian <sun.jian.kdev@gmail.com>
+Subject: Re: [PATCH v2 1/2] selftests/bpf: probe_user: filter by pid to
+ avoid cross-test interference
+In-Reply-To: <20260226093132.437206-2-sun.jian.kdev@gmail.com>
+References: <20260226093132.437206-1-sun.jian.kdev@gmail.com>
+ <20260226093132.437206-2-sun.jian.kdev@gmail.com>
+Date: Thu, 26 Feb 2026 15:18:08 +0000
+Message-ID: <87ikbjpm8f.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|PA1PR04MB10119:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d513477-067e-41ba-c0e1-08de754933e7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|1800799024|366016|19092799006|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	qS70icsTNhbhgDokLJN5HHBj01Ol/q7jzHbR797oCpS6NG0acpXssdNptcJ0JD6WqksVNeyXmzWLLnGXd6LL+inPkYf7QXP3uGyT8jU98bMYweZD6oyPdE4orzK4Zp5acbJTjB1FTZ8wQbC7jWbgKo5LjMH9cQ1l17CDvRInZfqecGKdLvab58kMArjV4UiipKMzwJapxuJz6qOFLgiNOAQPQkv2A+8Vm4hCqemPKAihPqfBIjKSV+4XWiMfRE1PdJ2lZEcEnGrAFhxlBCj7pyzRm+0Aqj2tr+OlMF8TDogNRFlV4AQH9InotS0rlKbm28MtoW2YEB9Dmyp0ch6NKiZS7X3f/i59+5wMacsq9BhuF98lfMbT8FIs7FncLPfh0s7NvHHuxVc5FHb0Owwq/0i3Zm9sxoZeafg3hFzGqtutUKV8NErcGnz9Z+dg4thcAlZU5jBWIikZp6QH2+IrgSQC+W7z36vT/xttN3p0aK5VScXw8rOMSv5E6FGZPgsed/pTi0z1jh0Fxp5rTjz2EuO/nSz+XdLluku/liIO2/YLnxkbzh3vIOeb3SHNx5Je7TgfB8J8UzIuMhFm6yqMv8EEsTvA0/M1pM32tYRQQLyWgPIgEsJAKKD6Nl3BgMs9oEwQynWsQCy65UxJv238Sk1PW+FztQUYRaP1Sg+S6JKHPVl4EI5rnHedigkOyXMpMZGWD64GrLsM90LRTO+gFynevHVGNcCHXCDN9w6sLCo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(366016)(19092799006)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?cuvQTPKvFv4PxIpRPaHpzxhg8hxe/CixpDxwMAVCW3+BvJLs9dWuxfCN/YNT?=
- =?us-ascii?Q?2pfyY6Z9S0G0oSzoAa3LUdJvCETGGeNAri+RIMMv5OW3D7jfQ8zgM5dnAMHm?=
- =?us-ascii?Q?6+CHFzod7HGaOFO7MZ7O7LsF2Tn9E6nUHqTN8QPJpZZzu1/1LMr2LHRNNZ/B?=
- =?us-ascii?Q?sjnKpQ1XyRwiccLe5RJgKQLmd8JmbNQc3GOrlGcmFB81fMgpyZzMK0w1utXe?=
- =?us-ascii?Q?DIjlx+GFFJzOxm4rsB7evotW6qbZAOq4YoreiNcNJP31A/+TeYRCpk1OEElm?=
- =?us-ascii?Q?ayidT07zhy/O3wTfIaa1et4vKtikpjkAXlVxoSPAabNBg+7qbXVEQwmAGiRY?=
- =?us-ascii?Q?EBhr9abye5EsI8eraCvozGyCUFLE/eIHLOjGiV+JXNuzghuJEDpZ/d/6mSYB?=
- =?us-ascii?Q?VRNI0cyvupopxvZM3o6s4ZoYMj294g4R7zXChmsXVNUMnv8DnunuXm6IJpAK?=
- =?us-ascii?Q?CyICL3h65VnCUkhQFeBtSNRfgCVpcs3fEognU4uonD1n8GD8U0rN3JdC3VME?=
- =?us-ascii?Q?a05hu1gqPFRkbhQoboIBpiWCsmXekLrm6A1K6gBmDc9M88h2/v0yDccYU66F?=
- =?us-ascii?Q?ZoRu6+Ucup8XHYkqvi+ljWCGSceAaZ7jY+RTWnT4tQNqRC8l4CmF2DQYwg2J?=
- =?us-ascii?Q?wFaJPaB7pvKxCBREj67wmS5ZUMC3Q/0EzWSYcLnAOxuBv7TT3q7IakwYsrB3?=
- =?us-ascii?Q?NHQwqhsJC7tOV5T46ZRuCAV9mrl7YMsEsB0zfb2sKk3H8c9kEZfaI4rI+84b?=
- =?us-ascii?Q?ynKqL0OSIqJ0nziY6XpeUxNReRI8TbsT/xHeEq1qJkq8lq/tHSWP8QPdVofs?=
- =?us-ascii?Q?lU6R3Qn6mvTGbD6w8uc+IOqMTmaDFZRqRqYVEtpybxlsymLptDssmDJLDJsG?=
- =?us-ascii?Q?PSX57Zbvi7Kts8F04SUL5JmmVwjnKJhKM/Om13kbgktXJ6V3W5J8qlGO2SaV?=
- =?us-ascii?Q?pn4MjfxkDHPE0dNjhhJ5iber4zhY2lhvuKfP4+Y6PPF+eBFSpVbc2qrazr/f?=
- =?us-ascii?Q?n6XOhUrUSxTsl1duQPhkMqs21CPdFvYknLmrISZ6IQN9Z++RFd4XbQXLLE2R?=
- =?us-ascii?Q?h+17WWYK+ms5wZgoZu1eOs4qdMw271coZMgUl2K9Cr7KQ7Vns+hnbIc64rWp?=
- =?us-ascii?Q?4Blj6sR9n383zG86+bspouhrRiUdgfmLITrnaskFqEGVJeVB4Dg2bagTNOht?=
- =?us-ascii?Q?L3GTozJm97S1HwiDU3mFG3oIprXjlXnVXkT3ZnE5K8UI1Y+6OGYOLAIPNS7Y?=
- =?us-ascii?Q?mXDB6ztfbp3FO46LvRMIMfI8Z/b3w6/oTsbnQUp67ApGs0ABiYTh/ZsW8Ac0?=
- =?us-ascii?Q?9Yjyu9K+iH53qEji1SEfEihoyklYbhTcSOn3oHk5pTKFkyzKKjPP/6CIbljQ?=
- =?us-ascii?Q?bbvlmuD5Re8yyXHE+cM5tCv95hNeKIJlXuE7Wysr5w89KtwifmkThE5wWGXx?=
- =?us-ascii?Q?LzV0aLCZ40nuVTJWCZtsZ5Uu5YyIoj81SNC8Y8OPuqr6wzoGO1ACJR65vkGn?=
- =?us-ascii?Q?TdmqtawB67ZKbYdILwK1ssYjSwicbXhpZ0bpvgbdmmLLTC6ryzXIDjZ3GEOW?=
- =?us-ascii?Q?lRLdKrKKw0dKL9+EKeM3vb38sQQJmclDBRJUl34K+OSC1IJiAmvcj36tIaod?=
- =?us-ascii?Q?3zY9wicHwhtY7Q3JE1R6I4J9WRx3zNebNhzWVlqhjzF2QPDTdzgDy9rwN6TY?=
- =?us-ascii?Q?O7rHpUGxumdbqwRx54GhE4WhSJNPionuAhYRBWwfPdgUFqJG9RhT/V8jpNWH?=
- =?us-ascii?Q?pESC3P2iJ3Z4bgb8ipHW9ehRX3zUNbLMhrhwhW1KwIzNffLHN/5Mn7Egwh9S?=
-X-MS-Exchange-AntiSpam-MessageData-1: bfb1JofLkcM1XSZxKYvlEG/kuNCKHuNLSg0=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d513477-067e-41ba-c0e1-08de754933e7
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2026 15:10:39.9219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kzIwM/b233988glJu+0mQAbNrpPMNSw8SI1bjMPRt1dxxgN3eBvXhW7Fw4EK8JDB3yk+GZz3o9cyq8qdTkIIDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10119
+Content-Type: text/plain
 
-Hi Geert,
+Sun Jian <sun.jian.kdev@gmail.com> writes:
 
-On Thu, Feb 26, 2026 at 02:22:29PM +0100, Geert Uytterhoeven wrote:
-> > +config PHY_COMMON_PROPS
-> > +       bool
-> > +       help
-> > +         This parses properties common between generic PHYs and Ethernet PHYs.
-> > +
-> > +         Select this from consumer drivers to gain access to helpers for
-> > +         parsing properties from the
-> > +         Documentation/devicetree/bindings/phy/phy-common-props.yaml schema.
-> > +
-> > +config PHY_COMMON_PROPS_TEST
-> > +       tristate "KUnit tests for PHY common props" if !KUNIT_ALL_TESTS
-> > +       select PHY_COMMON_PROPS
-> 
-> This select means that enabling KUNIT_ALL_TESTS also enables extra
-> functionality, which may not be desirable in a production system.
-> As PHY_COMMON_PROPS is bool, this extra functionality is even part of
-> the base kernel if KUNIT_ALL_TESTS=m.  Unfortunately PHY_COMMON_PROPS is
-> invisible, so this cannot just be changed from "select" to "depends on".
-> But perhaps PHY_COMMON_PROPS can be made visible if KUNIT_ALL_TESTS,
-> so the select can be turned into a dependency?
-
-Is this what you're asking for?
-
--- >8 --
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 02467dfd4fb0..1875d5b784f6 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -6,7 +6,7 @@
- menu "PHY Subsystem"
- 
- config PHY_COMMON_PROPS
--	bool
-+	bool "PHY common properties" if KUNIT_ALL_TESTS
- 	help
- 	  This parses properties common between generic PHYs and Ethernet PHYs.
- 
-@@ -16,8 +16,7 @@ config PHY_COMMON_PROPS
- 
- config PHY_COMMON_PROPS_TEST
- 	tristate "KUnit tests for PHY common props" if !KUNIT_ALL_TESTS
--	select PHY_COMMON_PROPS
--	depends on KUNIT
-+	depends on KUNIT && PHY_COMMON_PROPS
- 	default KUNIT_ALL_TESTS
- 	help
- 	  This builds KUnit tests for the PHY common property API.
--- >8 --
+> The test installs a kprobe on __sys_connect and checks that
+> bpf_probe_write_user() can modify the syscall argument. However, any
+> concurrent thread in any other test that calls connect() will also
+> trigger the kprobe and have its sockaddr silently overwritten, causing
+> flaky failures in unrelated tests.
+>
+> Constrain the hook to the current test process by filtering on a PID
+> stored as a global variable in .bss. Initialize the .bss value from
+> user space before bpf_object__load() using bpf_map__set_initial_value(),
+> and validate the bss map value size to catch layout mismatches.
+>
+> No new map is introduced and the test keeps the existing non-skeleton
+> flow.
+>
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  .../selftests/bpf/prog_tests/probe_user.c     | 27 ++++++++++++++++++-
+>  .../selftests/bpf/progs/test_probe_user.c     | 13 +++++++--
+>  2 files changed, 37 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/probe_user.c b/tools/testing/selftests/bpf/prog_tests/probe_user.c
+> index 8721671321de..280dcdb5ddef 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/probe_user.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/probe_user.c
+> @@ -20,6 +20,11 @@ void serial_test_probe_user(void)
+>  	struct bpf_program *kprobe_progs[prog_count];
+>  	struct bpf_object *obj;
+>  	static const int zero = 0;
+> +	struct test_pro_bss {
+> +		struct sockaddr_in old;
+> +		__u32 test_pid;
+> +	};
+> +	struct test_pro_bss results = {};
+>  	size_t i;
+>  
+>  	obj = bpf_object__open_file(obj_file, &opts);
+> @@ -34,6 +39,24 @@ void serial_test_probe_user(void)
+>  			goto cleanup;
+>  	}
+>  
+> +	{
+> +		struct bpf_map *bss_map;
+> +		struct test_pro_bss bss_init = {};
+> +
+> +		bss_init.test_pid = getpid();
+> +		bss_map = bpf_object__find_map_by_name(obj, "test_pro.bss");
+> +		if (CHECK(!bss_map, "find_bss_map", "no bss map\n"))
+> +			goto cleanup;
+> +		if (CHECK(bpf_map__value_size(bss_map) != sizeof(bss_init),
+> +			  "bss_size", "bss value_size %u != %zu\n",
+> +			  bpf_map__value_size(bss_map), sizeof(bss_init)))
+> +			goto cleanup;
+> +		err = bpf_map__set_initial_value(bss_map, &bss_init,
+> +						 sizeof(bss_init));
+> +		if (CHECK(err, "set_bss_init", "err %d\n", err))
+> +			goto cleanup;
+> +	}
+> +
+>  	err = bpf_object__load(obj);
+>  	if (CHECK(err, "obj_load", "err %d\n", err))
+>  		goto cleanup;
+> @@ -62,11 +85,13 @@ void serial_test_probe_user(void)
+>  	connect(sock_fd, &curr, sizeof(curr));
+>  	close(sock_fd);
+>  
+> -	err = bpf_map_lookup_elem(results_map_fd, &zero, &tmp);
+> +	err = bpf_map_lookup_elem(results_map_fd, &zero, &results);
+>  	if (CHECK(err, "get_kprobe_res",
+>  		  "failed to get kprobe res: %d\n", err))
+>  		goto cleanup;
+>  
+> +	memcpy(&tmp, &results.old, sizeof(tmp));
+> +
+>  	in = (struct sockaddr_in *)&tmp;
+>  	if (CHECK(memcmp(&tmp, &orig, sizeof(orig)), "check_kprobe_res",
+>  		  "wrong kprobe res from probe read: %s:%u\n",
+> diff --git a/tools/testing/selftests/bpf/progs/test_probe_user.c b/tools/testing/selftests/bpf/progs/test_probe_user.c
+> index a8e501af9604..4bc86c7654b1 100644
+> --- a/tools/testing/selftests/bpf/progs/test_probe_user.c
+> +++ b/tools/testing/selftests/bpf/progs/test_probe_user.c
+> @@ -5,13 +5,22 @@
+>  #include <bpf/bpf_core_read.h>
+>  #include "bpf_misc.h"
+>  
+> -static struct sockaddr_in old;
+> +struct test_pro_bss {
+> +	struct sockaddr_in old;
+> +	__u32 test_pid;
+> +};
+> +
+> +struct test_pro_bss bss;
+>  
+>  static int handle_sys_connect_common(struct sockaddr_in *uservaddr)
+>  {
+>  	struct sockaddr_in new;
+> +	__u32 cur = bpf_get_current_pid_tgid() >> 32;
+> +
+> +	if (bss.test_pid && cur != bss.test_pid)
+> +		return 0;
+>  
+> -	bpf_probe_read_user(&old, sizeof(old), uservaddr);
+> +	bpf_probe_read_user(&bss.old, sizeof(bss.old), uservaddr);
+>  	__builtin_memset(&new, 0xab, sizeof(new));
+>  	bpf_probe_write_user(uservaddr, &new, sizeof(new));
+>  
+> -- 
+> 2.43.0
