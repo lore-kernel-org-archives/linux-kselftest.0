@@ -1,217 +1,186 @@
-Received: from flow-b7-smtp.messagingengine.com (flow-b7-smtp.messagingengine.com [202.12.124.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3C724E4A8;
-	Thu, 26 Feb 2026 23:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.142
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772147723; cv=none; b=BT2MEeHGtZt2TIfJRgdFW+YkWTlAaMH7JAfwrijDot55FqJ8noz3iLnA+LdPCccSKpY5VAIb/k1qU0/cLMe5beK0PQoUN7O5BOk9zHOutIpR5ldbbvvZESRIo/x55PkBYSU4O2y9hwxY3LwKUiamkYszqb9PHWj0l78zmDyl9HE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772147723; c=relaxed/simple;
-	bh=xoQ+8FizHIoR331h2dUG2sUBkZkq/IFhkR0HUVL42SE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NjmJshvBg0FCiLcIXiGeqSxdRxCCSKNR6Am9/7Xqr3puxOq81HRSrptWLtDa1fuO6uvXkGYjt3UwmwTZAtMW6XJy11jkKKGmLoK3jhfX4J3/rEEdiAF3LRVGcJW/uoyKY1l6lCz9hkegVkV9Pye+6iW/ni99TcLloGZE+1pG6P8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=gVXvAPiI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JgC6lC5v; arc=none smtp.client-ip=202.12.124.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B9B2DECB2
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 23:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772148345; cv=pass; b=uRQTyHnTOWsv89L0mFtZ0z+M3WUocSKJ3KVKEmwoDmsT42Zq42NAEJgkoxDuLUGB1DZvgfoG4gYzdEPuV/RSuYaeiO60q8x7ljN19UTqglRGPLuV+9n5AM4T4+l8nseBVNCxHm/DTnRn7vIS+AJY3BaDCenEt3R2dYGKd8UkLag=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772148345; c=relaxed/simple;
+	bh=fKEN7m274g2FOvgWDmD5sdNxcW6bHpUV80grnqbWDQU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ee9P0HtWkDaU0GswCBmQIC0njVKqapW+KpnJF/Zq150Saw+VchjLfsJzlKIPXkBj/wthN3StP0zxqZCTVXz4t0P688ft6d9S96W5p7AB0QrQlnKv2lX3oF/YFXydnX4sfKlmXwK6NveCAqg0tqFqWMbJqVck3N6+Dn15lSYtAx4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eGEm9YrP; arc=pass smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="gVXvAPiI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JgC6lC5v"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.stl.internal (Postfix) with ESMTP id 8F7561300FF1;
-	Thu, 26 Feb 2026 18:15:18 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Thu, 26 Feb 2026 18:15:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1772147718;
-	 x=1772154918; bh=yr+JJ9YtD7fwvp/AM3VRdjXUZyKz3WadH0Ul1izy0Z0=; b=
-	gVXvAPiIdt7JQHCG4TOy7SMG+5ql/toI+tvIZ+D4ZaWDiyRdMAQd/1KZyuxAtUzt
-	hlzCnMbNtPNy8ufmzc6m6AWzKO7yp6VXXmkQhx6H62452wB7LtgjW8L56vilmyYU
-	WILdSXDRUyk0L2K+OCYAvjn3kaFdVLwV0KvrHxGJXnJO93b6jF81uQGlVbEllWrz
-	0j6fXXSRa74mG0ktKv12Xcgcs4zAv/2q4LlfcBwFoHAMWlyRmIq04c99KYkgRqej
-	4K0IyixSiJ7JrkyoyBbj1TxyoTrmj3bZik1TT94WuYSIh7iqTuZq0KWaDkIacTk7
-	JfkWg7Y3Q3B0a73/khWDNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1772147718; x=
-	1772154918; bh=yr+JJ9YtD7fwvp/AM3VRdjXUZyKz3WadH0Ul1izy0Z0=; b=J
-	gC6lC5vVC3gTJr1nCXt15HaLHDwk1aDrvyLUae67J4THeyPePTlSb7Do3ZsKZyns
-	991HwVvfggEf+EaP/DL+O/nt3U6xHIrsa3e9Lyw0AnjdwChPGbbfzX6vB4PrYfE6
-	UcXqmeDaAqxhds4eCgitvxgHDxHuwg6VpNOwUEZYE3URL4gcyGo3oynuEUeePwuc
-	xuL3zs5Zx/Iv628XmCXiRlKNkVxs6WdQXzZyPzGl6eZ9+nL2RvcTt/i4gt4RuBe6
-	n0ZXbMXki7yADbt8Ht4iQR4b4sQvDVpw5W4cvaAmEb98XepC6/BP5k6bNjPXMvic
-	NRTmZhx6sl82fET4Pm7/w==
-X-ME-Sender: <xms:BdSgaevBS-DP0E4PhF3SquCgA8u8bMx79QdHt-Vjk3m_hxwfIAJbCA>
-    <xme:BdSgaQTDzIFDQe1gPvHOw9yHE4rE_oDxrvCrkjQ2qkM5VG5_HgMGBJT_dstvuGGEi
-    GvhyqsFvZiERYQTpESNKdtPuXb0TlJSRYKrsev-NlUF20Z3SoM5BQ>
-X-ME-Received: <xmr:BdSgad8lvkPNqEfr4rQXnoahwH0W1hQor4jiORwyCDcQBz72kZJkh_IX66A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgeejfeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
-    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
-    htthgvrhhnpedvkeefjeekvdduhfduhfetkedugfduieettedvueekvdehtedvkefgudeg
-    veeuueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepgeehpdhmohguvgep
-    shhmthhpohhuthdprhgtphhtthhopegumhgrthhlrggtkhesghhoohhglhgvrdgtohhmpd
-    hrtghpthhtoheprghjrgihrggthhgrnhgurhgrsehnvhhiughirgdrtghomhdprhgtphht
-    thhopehgrhgrfhesrghmrgiiohhnrdgtohhmpdhrtghpthhtoheprghmrghsthhrohesfh
-    gsrdgtohhmpdhrtghpthhtoheprghpohhpphhlvgesnhhvihguihgrrdgtohhmpdhrtghp
-    thhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtth
-    hopegrnhhkihhtrgesnhhvihguihgrrdgtohhmpdhrtghpthhtohepsghhvghlghgrrghs
-    sehgohhoghhlvgdrtghomhdprhgtphhtthhopegthhhrihhslheskhgvrhhnvghlrdhorh
-    hg
-X-ME-Proxy: <xmx:BdSgaXXjLybHbzutmuhIRci-8jpP40Xadl469qn5-4LoLe3S2Wb6cA>
-    <xmx:BdSgaTGscqQPoDKst3DW8n1f1L054xbRkQYM5nsXRgP6lM_pPySt-g>
-    <xmx:BdSgaaIxA5UEkBwT4LITTYN9WAf2Xehxe7ABZ29EHJuN-_uzDIhtMw>
-    <xmx:BdSgaQmrDmIe8VjUAllvJFp9dMnIhHtKyOV3nfzNMEfOEE4pPVy9gQ>
-    <xmx:BtSgaWy6imTK0zo4upPI5vovhFFHOcrzJtk4VSYMJJddYDd92-Nd46Y9>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 Feb 2026 18:15:14 -0500 (EST)
-Date: Thu, 26 Feb 2026 16:15:12 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: David Matlack <dmatlack@google.com>
-Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
- Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
- Alistair Popple <apopple@nvidia.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
- Jacob Pan <jacob.pan@linux.microsoft.com>,
- Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
- Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
- kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
- Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-pci@vger.kernel.org,
- Lukas Wunner <lukas@wunner.de>,
- " =?UTF-8?B?TWljaGHFgg==?= Winiarski" <michal.winiarski@intel.com>,
- Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>,
- Pranjal Shrivastava <praan@google.com>,
- Pratyush Yadav <pratyush@kernel.org>,
- Raghavendra Rao Ananta <rananta@google.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Saeed Mahameed <saeedm@nvidia.com>,
- Samiullah Khawaja <skhawaja@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>,
- "Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?=" <thomas.hellstrom@linux.intel.com>,
- Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>,
- William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
- Zhu Yanjun <yanjun.zhu@linux.dev>, alex@shazbot.org
-Subject: Re: [PATCH v2 08/22] vfio: Enforce preserved devices are retrieved
- via LIVEUPDATE_SESSION_RETRIEVE_FD
-Message-ID: <20260226161512.532609ec@shazbot.org>
-In-Reply-To: <20260129212510.967611-9-dmatlack@google.com>
-References: <20260129212510.967611-1-dmatlack@google.com>
-	<20260129212510.967611-9-dmatlack@google.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eGEm9YrP"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-79881805788so8095487b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 15:25:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772148342; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OCRhFnYmkZ9ysnvsk9OFwXQmzPxCf9gebANfyb/HBJXoPoOZ5lxdlS9ZlwOByQuFva
+         BxMEsZcw8XFy9C4H3s+lAzyeJcuFIpEY7isz0p6QXCvgg1eHyeo6qyhB6kARrOhpvfsd
+         yiek5TkFvs4RyB0Q+G738DcYyfyK9QRTlTTNd3Wy4+v/Wj8MvJ5KxMku0+eKhfVlKgAb
+         GLNEzOQZfpTGtEqj5bTrBujWCu0MiCYyz5GQQCdnySYN8RKn7ssw41Kf6O8FU3Pd62Gp
+         ihqN+8Kr31r201ZAZAkXpVw1FXnwK6O7j/rs3AzzqeiflDr41GCE6VgCIBTpnbkmgTh9
+         8yIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RA9ZhPtteEti8GBIEl7r2i+X0yhHEMSgTXlmvWuYNUM=;
+        fh=7ipEnKjpRJ1alzwPN/0mVBhkKhHncvnwDcJJuUEPUos=;
+        b=eqg3RRPe2z9bMf2ikJff8p8WCJNBY6JPuSuC8I/IDVSXTckrdjiu32Ds0cSTXtwnCO
+         i0jnRKqvCWt512hrnGXmWGfo/q3PTZoNxsZ11TWcOfmm8x5lISTAZaA4xdeUtyIGcDej
+         TAgOYgrAm1Pux2iKsm4On5o6vViaVgqwlvoOa1x7naB4mri6Rg7FTG0d4/WVQMwoFxMG
+         +xeRYE049xWIDVkVUW4Qj9jUOY/qMJQqzrsCzddK6ThoISdhfeLqU6cElSmz5g7D8mM+
+         +CtbJW2qmVeFOpdADp8/HcZsnoSy+IWvVFyaGnM/JqmsjowZRlBaEt6UjtB6oAstIPfc
+         p/Ng==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772148342; x=1772753142; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RA9ZhPtteEti8GBIEl7r2i+X0yhHEMSgTXlmvWuYNUM=;
+        b=eGEm9YrPBH9UT4gKVrl8GfB7soAVA24EhWRqFQg1ow68GFbn2OlEBY5+KOHucUWCFj
+         cQU4teBNyVmFMOT+8H7ks0D7d633c340hjFp4+VllwfWBNlAKvru1vW7iOFa9F5M6L4W
+         /AG4jtWaWnCeT0cU/qiFfuRezO8z3MOaL/MnBKi8u4bsmDKqTqTZgrlfIdNWU2OBN0dF
+         iuEB+1efiA8MHJDKxhxRJfpBFYxrjNVBP2oKjsxljnvETCehl4RbD381mVBZVnrdUpXw
+         lM5+FQAkcSO1qylSco/t4OAEHGFxKNzd+OxNYkIeJ389Sg6Wo3sN6R3SPltJc9cRxazu
+         CflA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772148342; x=1772753142;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RA9ZhPtteEti8GBIEl7r2i+X0yhHEMSgTXlmvWuYNUM=;
+        b=uszwpcHTGUsN+TC/PAs01rdk7htjwJdoiMPFlXzerpFg6g2t9FL1MQaff955T8xdx6
+         m29OjowCD5ZRN4Zu2li0dHq/6vijDy59ZnWt9lSK3HEJBCjHjZMMGUy8QFrh2VkDtImL
+         gWc0xLc38wDgi2ftPOsSk2jiBdI7EWGZlNiAGAbar/JS8XqSGLIywHuWVZwimALV3b7B
+         AiJBD4uRz64d36aCSl1XbOwD7JjEJxkGRVADhse2MAz4yjrQAiBwR0mDPD9eOQgFccdP
+         vIthKcW4G2ZBXM/S9ps+ZIipawU56ji0h/MdZ/gut0mwgcx2m6H/qQWIsrY4LpI4BcdS
+         VH2g==
+X-Forwarded-Encrypted: i=1; AJvYcCW0rSjx14cwBdcOQyV8rjE86VlyaPBFNs0FoBPrGWXPl5bS22E3EyojyQxCIDGU3DKil+QLlcqDAwyitj67QVs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQVf/X2zX7VJEUqOl/HPpzNpHfFNA8cuh+mg4+iQp830GrRvcU
+	Xk4/FlvU5iYf4Hj4Q4ZzhU9YNA2+MaiIYrkDvRWqy79z9LPmDos2fygMEt6zydfDrIAfJNZ2Was
+	EtuWSYtPDq9dj58r0Zezez8fEQasMQ31KvVujVSIY
+X-Gm-Gg: ATEYQzwAkvWzW3bereKm6DGqlnsU8roRBQTUQe+WEk8JWonkoaBwKPGk0PLSLA1n4EM
+	VpNY9okaCsSd7rjiWAADX2GFqGWzrhxNd2OUoTTCS7mCoZ9mBod2Zidn99tebssoW7Slk7KbO70
+	EfQOJV/n1mEbidPu9Hxd8E5AZHyNtpJHO3lMZVdk98z2oE9Q6VnnygQi/Z+WtwQeieGmklQsih8
+	qP7K/ZIMxbpnhHGbzWcIyoZuN6ODgrzDJqki/9IiwsYrLv6rwPGEZR66a9V76Rbz+MIFDPwFAv2
+	55y0gBN4FWbhEMhyDrXs3uo82Bm7EIsCa/ChzPbv
+X-Received: by 2002:a05:690c:d83:b0:796:3977:9f28 with SMTP id
+ 00721157ae682-798855da97bmr10368887b3.51.1772148341487; Thu, 26 Feb 2026
+ 15:25:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260226213454.85586-1-achender@kernel.org>
+In-Reply-To: <20260226213454.85586-1-achender@kernel.org>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 27 Feb 2026 00:25:29 +0100
+X-Gm-Features: AaiRm503t44yYtqzVG2hHOZcr0Eczfg-LoG2ToaT51Z1g1hmiCtsxqgH8nuFLs4
+Message-ID: <CANn89iLGtL+Mka4dww-y+vZpqggMhsNzp5XJbo3RB6RG7=Tgbw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net/rds: Fix circular locking dependency in rds_tcp_tune
+To: Allison Henderson <achender@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, pabeni@redhat.com, 
+	rds-devel@oss.oracle.com, kuba@kernel.org, horms@kernel.org, 
+	linux-rdma@vger.kernel.org, allison.henderson@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 29 Jan 2026 21:24:55 +0000
-David Matlack <dmatlack@google.com> wrote:
+On Thu, Feb 26, 2026 at 10:34=E2=80=AFPM Allison Henderson <achender@kernel=
+.org> wrote:
+>
+> syzbot reported a circular locking dependency in rds_tcp_tune() where
+> sk_net_refcnt_upgrade() is called while holding the socket lock:
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> WARNING: possible circular locking dependency detected
+> ------------------------------------------------------
+> kworker/u10:8/15040 is trying to acquire lock:
+> ffffffff8e9aaf80 (fs_reclaim){+.+.}-{0:0}, at: __kmalloc_cache_noprof+0x4=
+b/0x6f0
+>
+> but task is already holding lock:
+> ffff88805a3c1ce0 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at: rds_tcp_tune+0xd7/=
+0x930
+>
+> The issue occurs because sk_net_refcnt_upgrade() performs memory allocati=
+on
+> (via get_net_track() -> ref_tracker_alloc()) while the socket lock is hel=
+d,
+> creating a circular dependency with fs_reclaim.
+>
+> Fix this by moving sk_net_refcnt_upgrade() outside the socket lock critic=
+al
+> section. Since the fresh socket is not yet exposed to other threads, no
+> locks are needed at this time.
+>
+> Reported-by: syzbot+2e2cf5331207053b8106@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3D2e2cf5331207053b8106
+> Fixes: 5c70eb5c593d ("net: better track kernel sockets lifetime")
 
-> Enforce that files for incoming (preserved by previous kernel) VFIO
-> devices are retrieved via LIVEUPDATE_SESSION_RETRIEVE_FD rather than by
-> opening the corresponding VFIO character device or via
-> VFIO_GROUP_GET_DEVICE_FD.
-> 
-> Both of these methods would result in VFIO initializing the device
-> without access to the preserved state of the device passed by the
-> previous kernel.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
+Are you sure this is the right Fixes: tag ?
+
+Before this patch we had a GFP_KERNEL allocation already ?
+
+This might instead come from
+
+commit 3a58f13a881ed351198ffab4cf9953cf19d2ab3a
+    net: rds: acquire refcount on TCP sockets
+
+> Signed-off-by: Allison Henderson <achender@kernel.org>
 > ---
->  drivers/vfio/device_cdev.c |  4 ++++
->  drivers/vfio/group.c       |  9 +++++++++
->  include/linux/vfio.h       | 18 ++++++++++++++++++
->  3 files changed, 31 insertions(+)
-> 
-> diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
-> index 935f84a35875..355447e2add3 100644
-> --- a/drivers/vfio/device_cdev.c
-> +++ b/drivers/vfio/device_cdev.c
-> @@ -57,6 +57,10 @@ int vfio_device_fops_cdev_open(struct inode *inode, struct file *filep)
->  	struct vfio_device *device = container_of(inode->i_cdev,
->  						  struct vfio_device, cdev);
->  
-> +	/* Device file must be retrieved via LIVEUPDATE_SESSION_RETRIEVE_FD */
-> +	if (vfio_liveupdate_incoming_is_preserved(device))
-> +		return -EBUSY;
-> +
->  	return __vfio_device_fops_cdev_open(device, filep);
->  }
->  
-> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
-> index d47ffada6912..63fc4d656215 100644
-> --- a/drivers/vfio/group.c
-> +++ b/drivers/vfio/group.c
-> @@ -311,6 +311,15 @@ static int vfio_group_ioctl_get_device_fd(struct vfio_group *group,
->  	if (IS_ERR(device))
->  		return PTR_ERR(device);
->  
-> +	/*
-> +	 * This device was preserved across a Live Update. Accessing it via
-> +	 * VFIO_GROUP_GET_DEVICE_FD is not allowed.
-> +	 */
-> +	if (vfio_liveupdate_incoming_is_preserved(device)) {
-> +		vfio_device_put_registration(device);
-> +		return -EBUSY;
-
-Is this an EPERM issue then?
-
-> +	}
-> +
->  	fd = FD_ADD(O_CLOEXEC, vfio_device_open_file(device));
->  	if (fd < 0)
->  		vfio_device_put_registration(device);
-> diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-> index dc592dc00f89..0921847b18b5 100644
-> --- a/include/linux/vfio.h
-> +++ b/include/linux/vfio.h
-> @@ -16,6 +16,7 @@
->  #include <linux/cdev.h>
->  #include <uapi/linux/vfio.h>
->  #include <linux/iova_bitmap.h>
-> +#include <linux/pci.h>
->  
->  struct kvm;
->  struct iommufd_ctx;
-> @@ -431,4 +432,21 @@ static inline int __vfio_device_fops_cdev_open(struct vfio_device *device,
->  
->  struct vfio_device *vfio_find_device(const void *data, device_match_t match);
->  
-> +#ifdef CONFIG_LIVEUPDATE
-> +static inline bool vfio_liveupdate_incoming_is_preserved(struct vfio_device *device)
-> +{
-> +	struct device *d = device->dev;
-> +
-> +	if (dev_is_pci(d))
-> +		return to_pci_dev(d)->liveupdate_incoming;
-> +
-> +	return false;
-> +}
-> +#else
-> +static inline bool vfio_liveupdate_incoming_is_preserved(struct vfio_device *device)
-> +{
-> +	return false;
-> +}
-> +#endif
-
-Why does this need to be in the public header versus
-drivers/vfio/vfio.h?
+>  net/rds/tcp.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+>
+> diff --git a/net/rds/tcp.c b/net/rds/tcp.c
+> index 04f310255692..da22b3dfdbf0 100644
+> --- a/net/rds/tcp.c
+> +++ b/net/rds/tcp.c
+> @@ -490,18 +490,24 @@ bool rds_tcp_tune(struct socket *sock)
+>         struct rds_tcp_net *rtn;
+>
+>         tcp_sock_set_nodelay(sock->sk);
+> -       lock_sock(sk);
+>         /* TCP timer functions might access net namespace even after
+>          * a process which created this net namespace terminated.
+>          */
+>         if (!sk->sk_net_refcnt) {
+> -               if (!maybe_get_net(net)) {
+> -                       release_sock(sk);
+> +               if (!maybe_get_net(net))
+>                         return false;
+> -               }
+> +               /*
+> +                * We call sk_net_refcnt_upgrade before the lock_sock sin=
+ce it is
+> +                * not yet shared, no lock is needed at this time.  Furth=
+er,
+> +                * because sk_net_refcnt_upgrade does a GFP_KERNEL alloca=
+tion,
+> +                * this can trigger an fs_reclaim in other systems which =
+creates
+> +                * a circular lock dependancy.  Avoid this by upgrading t=
+he
+> +                * refcnt before the locking the socket.
+> +                */
+>                 sk_net_refcnt_upgrade(sk);
+>                 put_net(net);
+>         }
+> +       lock_sock(sk);
+>         rtn =3D net_generic(net, rds_tcp_netid);
+>         if (rtn->sndbuf_size > 0) {
+>                 sk->sk_sndbuf =3D rtn->sndbuf_size;
+> --
+> 2.43.0
+>
