@@ -1,161 +1,157 @@
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB7017D6
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 00:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772067139; cv=pass; b=sg+B62PvsAl5bDktGrF+nDf6cAYRhWCnk2NEZqEJITLfsgxP/uPx262OdKLQR8CZfOGacuWpso8RmKImD2bw7wtpuHcFT/pSnSL1aBCs703UY7IUUqm90bRyLsKzR5SF6oOoRH9rx5kQvN0NGGsE/ilZOz3nL2vVSbFXPfcZotQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772067139; c=relaxed/simple;
-	bh=5UM3OPrEzy38BQ/z8lTr67s9jTiNGfLCQhFUKKuIZuE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ne8t0KZphlUtf2bX56nEN0Khvkp3SLwctyWJSqMISbd+DpMH2rlLr6kUMNYoYCI30HTFAPCFvh2wFQmZL4Xtej4sL8u2qyk1PEEQ4F0VxZ5SOL+GYeLzQJFz2JwihfrO5neCNFXrYZu4N2TtXz8pp0Jh7iuNwf7bQUnPFltzTyY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Isym9Zp4; arc=pass smtp.client-ip=209.85.221.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C942BE056
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 01:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772068230; cv=none; b=rhNXbu3ZuEq6youIXfgH3tKxEjOWB9AcbGMLy2GxKWyd9mkdXlbjVJSP02mRc6iDspeMTvyifOnIvEhmkdA1qeBpfUB+4gKiGT/peWl0l1QWoasy7xIsp4xTa7DEX57I/r9UzFjqDW2M1aJx9ROvu9xCJLkKeDLjsAyg7IPWv3M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772068230; c=relaxed/simple;
+	bh=bVKeetAWpDWtNFOjR1cupYE2E+MK02JGDxKWHamheRQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cBbxwk69SK5KwT9Il5KIvIGSRmVYqb6E+c6eS7Lu3R9jVi6JOsz2PZRuQtSPaqeXUSIV332pi57WUZA48ztH+NivJuOwjmD7BTcU0LDJ4aW126MAJVcjgS7wDlNso4dKbwgqHj4CbLs143wrOHOb0eQ9z8Oj81sVkZHr+vyV5fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OoRU3j2j; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Isym9Zp4"
-Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-5688b639a19so153011e0c.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 16:52:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772067137; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Lc74awhWKIMR33OdWPhokoZSlFIUri3gcy4NOfAI/eRaHPTPeKcJ26ZlA5Yb1NXAv6
-         8Ev5huKEl7BMuQ4j96JkbOrsz5W3yN4c61PMWIxLhqOC1p83s2sxiDwYkn9xrf/vmWw/
-         S9aaQK2Z3jkzcFvpMI3TIywOprhtE8mr9KUhm+mPbxuONG3deVudbJFI30uNCAT5Fsb/
-         661rUx4eDtnSimNXt0FS9kSXH5y+CS1SLab5c47BvT8ii68hGu6cNVicFyG4s0glM8qv
-         A9LqFo/kb/nowHinHJzgkXPUBDi5G97cfJnqOami3b2YqpWJqSqTVAmOQgIvNO40tdQb
-         h3nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tit/ZfajxqvE3xISUpVUeXJRv5DgJC6ZdqyR1I2SKAc=;
-        fh=l8GOa6KHi4bfLeSTg+X9UULpq6HWj4ID3S6bx1JkAZc=;
-        b=d5NIS/Y8rYTAT5DkwOnX1OcbCmncXajAnd937ZD3000fGiwTG+7wbGYWYTwd6pp1Zu
-         JujqIWdJ6ymYYOFODe35nDk52SIxWSlJXVUyeJX/pC8FekpSQKBScPi+b/2VOmKIqq33
-         sXuT8/DIKaTK/6Mpb5kdYhxLWOIbiWkIKInI92bBzxOKTih2uay5x4ToRhq2qndHSh2d
-         v9540bcgZjRcP1kh5KyE03fP+H4GWmKPPUFLiZJ3NAMHXIAkBGKU9cOS9smsiqnzNglU
-         KVoqjhKRwchgV2fHmfFrXN7HfNWyBXnfxTzOfXIEpCjaJZNGXt9t4b6Ezjw5X/gROuyO
-         +mCA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OoRU3j2j"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48378136adcso1859435e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 17:10:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772067137; x=1772671937; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tit/ZfajxqvE3xISUpVUeXJRv5DgJC6ZdqyR1I2SKAc=;
-        b=Isym9Zp4jjzR+PC3c/BniSDPSxJbrLU8884r+rart9fG1ueJm/2EFzUZ54EEDwayeH
-         4TElbvJ6sEuwu2Q91jPlhwmiNC15kR69yqOPhVJPvW2wHKUiI3ZQuEvDaubPPR5D993m
-         Hnp/o4nbcJCA4D1/8p1P4oraDX5owxN0FTeHHx1eObgCadot88UiLgxyonvldRh4c++g
-         zxEIpMNtWGmkw4Kjsp4F1Pk6APFcQZ8azzng1d+4eZdwvQfMelhgLDii/TcG/monS+0f
-         1Zte2TRT8ls6qpt0pJKTAa4dnhta0PRjvHW754pcnzj+v1EdXGsgPbefOu4Ncl8P2vbY
-         cZMw==
+        d=gmail.com; s=20230601; t=1772068227; x=1772673027; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mydpigOQEThp2HKi5IwwcPNGNIjpCFrRJAibYsBFDc=;
+        b=OoRU3j2joHuRNxjXiBw9TlLN6FNUwyb4IsMIEixDj8kIjimU3r3Feisx3Kv2RTRK6q
+         oxIy4H6cX6ke4fgxcTtUnhu52aDniXmMGPFobYfhoIhE55b1tSsCue/yNThCX7QP4lAH
+         TI9ya+iSVvJydbYSFS+IDr3/wl7oHestaCKu9lfHQDyuHo9aAIzuLkf1G2DH7PwumvNm
+         SvlFSCWQChDF3obDYf+DBbqyN/gkbCbrHsh1bZi4AJb9elMhnduqqs6h8aOzF9+QyB8K
+         u2eJ+9igjwCSEFLQvyKCbbR1mojxJNUCMtpBGdzuK378TtxpLR7RyKBBFa2n+xqmQKFv
+         7DpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772067137; x=1772671937;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tit/ZfajxqvE3xISUpVUeXJRv5DgJC6ZdqyR1I2SKAc=;
-        b=RhlrJD6Pt2mq7XQpgc+Uobpd5mO2PTc1iLbVFmW/NmGU8l1syq9GUhPi64YbOt+ZQb
-         ZwS/+k2/UiTswjhbw7RoGv1LdL3555YnVLtPbWo2OdpIpWTjLb2JKZ4fofqVpAIlRjw3
-         WqwiQklOgkUveZHCm/KQSaxUU+t5L0cUrddJgjyVdFOQ1i9M1MXL8a49Llu06icGjHwx
-         GGgyrzoktbnepoUGW9ew9iMtTkX9xLc5fqJdOIC3Q9qyxWlP0fYqJ+4sepzHmWlZkBAl
-         tooymMFHGayzicAYTdQWf6DwTezh+Ghb2uyln+eX1uDD6VdD6vN+UgVYnhWEApq/oITP
-         Ewug==
-X-Forwarded-Encrypted: i=1; AJvYcCUY3PPzQvP7bp8mziM2wkZa06tggr2IaP7cJ6z2x7ASFOAiuOdSBciRrKzUzle2ZxrwM6W0iXPZXKZROYB3o1U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxKp2cl3PzxjVuaH+ep0ROHtgJeBf7xPtLXmh53+LPpLH6QgKd
-	94u46zToXEomjb7nc8hbCYJ1IulHIoREfZviBKBYCJlssuBu4iM11TSYWoWujXfGIFcLmqs+OtH
-	CQglPk0jxZpp3nlzc5tnKx/75Y+qNIonkbit9ZyHa
-X-Gm-Gg: ATEYQzx5rC6ryWkVMXlXX1h0ue6/eJy20yO/6ctta4Ix62oV8KCEZFhgDub2MYhVc2G
-	KawaUm6c+bJwTS1s96W5KGMHZVmFg9bI+QKyFmJefN+aSu2L+RpEUYwDS764B84UMivZEG/KxP6
-	dKNIuS1MwjTfeTsGwl0+DRwyf0jHbTNDwNtGFOfbc3Xx7bjJVlI7/Shp9p8Iyu355t7i3PwacvF
-	DggVspp3vKKpx324KuuvQ5Tgthb2ArLB0HpH0WLei4nTElok7DF9ZjEOTizowMkw5ZOO4XCHyLb
-	8DiuRqA=
-X-Received: by 2002:a05:6102:3f0d:b0:5ed:f13:e58a with SMTP id
- ada2fe7eead31-5ff1419f7b6mr1037473137.37.1772067136513; Wed, 25 Feb 2026
- 16:52:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772068227; x=1772673027;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0mydpigOQEThp2HKi5IwwcPNGNIjpCFrRJAibYsBFDc=;
+        b=uoW5dzWTe9geUOe9pRK5iCkaWDkptMwhsh/rxi+4fSe89cOut79l/LWFJmDFjdpPDn
+         9oTaDzX40thouL0s4c/LG6pyNbPzi9pts7PkypYua/IxMsb87BkugCFtPJhrBEwNRrgz
+         r0W4v0UQQDuyaaelKXnIANlb9G8XT09L7qefIb+b8pCEyRRxx/kU6KmvbbTAuEma7cPg
+         i8wdFiFltzwsVYEhIoqyELZhbNhbV768NFo68YnYxsIlRzRpJPVRKewzrp0dE9Qr9NT+
+         urgHxAvm7YCa/WSo6JUscWa4x1ujIcDF/Ckj9PbsOO9xom3hdlixRFILncvP/IoDt+Qc
+         cARQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyfQ0vACgy350o4Jx/2ru3TuaGAeoeVyifXGV8w+rZeKUjBGZYoHqMuJiK06dKFXpdb0eW4JEUtCsytF2eiqM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0v3dQkhRUROxmyuQEOYvf+PxCsJ8udouMWlDJS5hvUYfngkvc
+	s9UBZY3Gs/cgYx7jSK8wQVfu4QDBCXtqytZMdX0/s17PPnN0BzeePerZ
+X-Gm-Gg: ATEYQzyVPX2+BqDuXg25QPw/ht73nqweDwZLSTFx00BoH34yB4IVnhmYqcyRwI01r6N
+	Xi4jl25YshjQktuYTzSAvRZ3dCvwvg/eJMuVdsf7mDI0ndBIScGYk6Quh5La3K6FhSjj4ndfhoH
+	QkgtKgqT+izsbgklXWM3THEx6zVeMBJX7JFec461ZYIQCSh7H6+G+rHuD1KERiAz1oEMMjOsb8D
+	JMHad94vN1+gmDmcvZlvFyBCuBcSJJ8Nt4JaVnU3w2VNaw3sn1ii9TC9QwnGD1QO4rFFUjchaOO
+	7Qlodm+xn25I10O0xWu+7nAqmlONcw+DkdpnTiLkrMUC/2EdybMaxwcAHlEcm1yrQHJRT8IqBru
+	PQC6lWbf9oUfh7LkQlDOik+plM23/Gcv3il70X3BIdfXP1lDmG2Pxudwl9VRKD2lsbIFk8nvPyt
+	YXTbceOKCAPpWtr1D6VfDS6bVFnWgEt2ul4spYYM0oH4SL3J0/ESs6aXYy3BWeHw==
+X-Received: by 2002:a05:600c:621b:b0:477:63a4:88fe with SMTP id 5b1f17b1804b1-483c216bdbfmr40257915e9.2.1772068227170;
+        Wed, 25 Feb 2026 17:10:27 -0800 (PST)
+Received: from gandalf.schnuecks.de (p5b2e2ef5.dip0.t-ipconnect.de. [91.46.46.245])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bfbb465bsm57533635e9.3.2026.02.25.17.10.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Feb 2026 17:10:26 -0800 (PST)
+Received: by gandalf.schnuecks.de (Postfix, from userid 500)
+	id E52372FE1F55; Thu, 26 Feb 2026 02:10:25 +0100 (CET)
+Date: Thu, 26 Feb 2026 02:10:25 +0100
+From: Simon Baatz <gmbnomis@gmail.com>
+To: Stefano Brivio <sbrivio@redhat.com>
+Cc: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	David Ahern <dsahern@kernel.org>, Jon Maloy <jmaloy@redhat.com>,
+	Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Ebner <c.ebner@proxmox.com>, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 1/4] tcp: implement RFC 7323 window
+ retraction receiver requirements
+Message-ID: <aZ-dgdUFe0a7F6YE@gandalf.schnuecks.de>
+References: <20260220-tcp_rfc7323_retract_wnd_rfc-v1-0-904942561479@gmail.com>
+ <20260220-tcp_rfc7323_retract_wnd_rfc-v1-1-904942561479@gmail.com>
+ <20260223232636.1ead2b3e@elisabeth>
+ <aZ3o8RQehJDK_rcl@gandalf.schnuecks.de>
+ <20260225223325.34468327@elisabeth>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-10-dmatlack@google.com>
- <aZ606sDJxtfNF6qW@google.com>
-In-Reply-To: <aZ606sDJxtfNF6qW@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Wed, 25 Feb 2026 16:51:47 -0800
-X-Gm-Features: AaiRm51I1tTdJRO5CbbBFYwdOmR4S6VSPvkujC59eyupuwvOv4iLZLnGYRmW3DQ
-Message-ID: <CALzav=cH0-qqQJTOjDD7pHzsFeZOir5DoC3f1hhDg=jqK7vdgw@mail.gmail.com>
-Subject: Re: [PATCH v2 09/22] vfio/pci: Store incoming Live Update state in
- struct vfio_pci_core_device
-To: Pranjal Shrivastava <praan@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Adithya Jayachandran <ajayachandra@nvidia.com>, 
-	Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
-	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
-	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
-	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260225223325.34468327@elisabeth>
 
-On Wed, Feb 25, 2026 at 12:38=E2=80=AFAM Pranjal Shrivastava <praan@google.=
-com> wrote:
-> On Thu, Jan 29, 2026 at 09:24:56PM +0000, David Matlack wrote:
+On Wed, Feb 25, 2026 at 10:33:34PM +0100, Stefano Brivio wrote:
+> On Tue, 24 Feb 2026 19:07:45 +0100
+> Simon Baatz <gmbnomis@gmail.com> wrote:
+> 
+> > Hi Stefano,
+> > 
+> > On Mon, Feb 23, 2026 at 11:26:40PM +0100, Stefano Brivio wrote:
+> > > Hi Simon,
+> > > 
+> > > It all makes sense to me at a quick look, I have just some nits and one
+> > > more substantial worry, below:
+> > > 
+> > > On Fri, 20 Feb 2026 00:55:14 +0100
+> > > Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org> wrote:
+> > >   
+> > > > From: Simon Baatz <gmbnomis@gmail.com>
+> > > > 
+> > > > By default, the Linux TCP implementation does not shrink the
+> > > > advertised window (RFC 7323 calls this "window retraction") with the
+> > > > following exceptions:
+> > > > 
+> > > > - When an incoming segment cannot be added due to the receive buffer
+> > > >   running out of memory. Since commit 8c670bdfa58e ("tcp: correct
+> > > >   handling of extreme memory squeeze") a zero window will be
+> > > >   advertised in this case. It turns out that reaching the required
+> > > >   "memory pressure" is very easy when window scaling is in use. In the
+> > > >   simplest case, sending a sufficient number of segments smaller than
+> > > >   the scale factor to a receiver that does not read data is enough.
+> > > > 
+> > > >   Since commit 1d2fbaad7cd8 ("tcp: stronger sk_rcvbuf checks") this
+> > > >   happens much earlier than before, leading to regressions (the test
+> > > >   suite of the Valkey project does not pass because of a TCP
+> > > >   connection that is no longer bi-directional).  
+> > > 
+> > > Ouch. By the way, that same commit helped us unveil an issue (at least
+> > > in the sense of RFC 9293, 3.8.6) we fixed in passt:
+> > > 
+> > >   https://passt.top/passt/commit/?id=8d2f8c4d0fb58d6b2011e614bc7d7ff9dab406b3  
+> > 
+> > This looks concerning: It seems as if just filling the advertised
+> > window triggered the out of memory condition(?).
+> 
+> Right, even if it's not so much a general "out of memory" condition:
+> it's just that the socket might simply refuse to queue more data at
+> that point (we run out of window space, rather than memory).
+> 
+> Together with commit e2142825c120 ("net: tcp: send zero-window ACK when
+> no memory"), we will even get zero-window updates in that case. Jon
+> raised the issue here:
+> 
+>   https://lore.kernel.org/r/20240406182107.261472-3-jmaloy@redhat.com/
+> 
+> but it was not really fixed. Anyway:
 
-> >  static bool vfio_pci_liveupdate_can_finish(struct liveupdate_file_op_a=
-rgs *args)
-> >  {
-> > -     return args->retrieved;
-> > +     struct vfio_pci_core_device *vdev;
-> > +     struct vfio_device *device;
-> > +
-> > +     if (!args->retrieved)
-> > +             return false;
-> > +
-> > +     device =3D vfio_device_from_file(args->file);
-> > +     vdev =3D container_of(device, struct vfio_pci_core_device, vdev);
-> > +
-> > +     /* Check that vdev->liveupdate_incoming_state is no longer in use=
-. */
-> > +     guard(mutex)(&device->dev_set->lock);
-> > +     return !vdev->liveupdate_incoming_state;
->
-> Since we set this to NULL in the success path of vfio_pci_core_enable()
-> I'm wondering if a failure in vfio_pci_core_enable could cause a
-> resource leak? Because vfio_pci_liveupdate_can_finish() returns false
-> as long as that pointer is valid, a single device failure will
-> perpetually block the LIVEUPDATE_SESSION_FINISH IOCTL for the entire
-> session preventing the LUO from reclaiming KHO memory.
->
-> Shall we also set vdev->liveupdate_incoming_state =3D NULL on the error
-> paths of vfio_pci_core_enable() ?
+Didn't that result in 8c670bdfa58e ("tcp: correct handling of extreme
+memory squeeze")?
 
-LIVEUPDATE_SESSION_FINISH will also perpetually fail if userspace
-never calls ioctl(VFIO_DEVICE_BIND_IOMMUFD) (which is what triggers
-vfio_pci_core_enable()). Or if that ioctl fails before it gets to
-vfio_pci_core_enable().
+> [...] 
 
-It's not a great situation to be in, but this is why can_finish()
-exists as a callback. Userspace must properly and correctly restore
-all of the state in the session before the session can be cleaned up.
-And the kernel is not going to handle every possible edge case (some
-files in a session are restored but some are not), at least not
-initially. If userspace gets stuck and cannot recover a resource then
-userspace will have to reboot the host to get back to a healthy state.
+-- 
+Simon Baatz <gmbnomis@gmail.com>
