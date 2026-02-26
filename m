@@ -1,89 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377CE44CAED;
-	Thu, 26 Feb 2026 20:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D772389E14;
+	Thu, 26 Feb 2026 21:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772139564; cv=none; b=FsylgrEv5C1Ehhf8PmfjWFdruICluaQ+ZUzXhobbKrnXku7miZxhmRCsNONx/4VlNUSbSh2vTJ4kVO0mrjlmJHydH8liMye/qKZXPzE9S/u+xI2MVlMv5Ez2gIugtZVCFMmzEafg8Lba8TXsJjtrNzdP2Zt0FWsduA1poiOMpfk=
+	t=1772141696; cv=none; b=POvIRo63851neaeSmQatzVBW6vvvQyd9SidQ4xjzG/XTqG68gV1bFzKxGaGKmGvxJmZXAagRk6K5Q1sFuwotRRfr/SMvM4D3dlrjbiXapPIBhykOGhF/ZwJRwezobqMuhyu7xxdwtBbY9tQ34RJUezWmEVez8xvKvJbUGFEGqtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772139564; c=relaxed/simple;
-	bh=qWBjnKxweipSLzAbTf4M/P9qFFraSj8HuEvZL4idUcU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ck1Qk9MCHzemEzVROkZCzaxtdtgVb6+5yc5E5avl1m5Atz+qvMqnWJuCiLYQMQ4qM0Lb8cRgZ8cgGFi19+WtTZk7VZqHFq1+UgJTTXRtpjjfqAMBvT3Yu0Pt99cUEOt4wVMuWsAe1tUANnlXxMlqzFsPtjbw0FlfgfRY/FWEMvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D+lZWLBM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772141696; c=relaxed/simple;
+	bh=9nUUaoM3WbzkeWzo1yrHWw8wUwpA8/X0UVvQxvXVE60=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gjV47vpzwdEa7WVzeyfJd75eemHcUvWifAEuwWHp0nt9pak4CwG27Kjy7rVLrFkEKjVLOfLxzhXJ/eEQQ5JXwSk+JsM8E5eB+AKSEoOpq4u/16ot1Qly1dlFOHVf/cRpci+AtPPr/4rwG6zb2k3TkcG+GqFmI7ZW/HGvewlpDNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BzXk8lea; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D+lZWLBM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D38C19425;
-	Thu, 26 Feb 2026 20:59:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BzXk8lea"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230CBC19423;
+	Thu, 26 Feb 2026 21:34:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772139563;
-	bh=qWBjnKxweipSLzAbTf4M/P9qFFraSj8HuEvZL4idUcU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D+lZWLBM7gwe7s3XKtau6bIucSKnJVNqG9MJAmoOrDoelvSi2qQDK04i97S3vT8RM
-	 j3Px6vTrnh0aizTfll9s/sbZ7gfjqLyND/GZ9SUbDkdVR4CFvUYU1oxuNGzQpV+ZPZ
-	 ClC0nm+ZYaHHwHPFSssfN09y1cxah8Notl4S6lWpDVRsVWzoWIFptiitA2g8YIGS3Z
-	 Ic45V6/uw0fsdsclo7PlQGyg4iDtdav+6LCV2rrcaPOHKCoHfX1Dxo/XUqU0r/yQBu
-	 N+cFNBSHh16nmm4r86pwNYSxaA16wcQa5wiLclskp2TLyxQomgIq96RuBysWbvJvLK
-	 0xEQfxYTA6sGw==
-Date: Thu, 26 Feb 2026 13:59:20 -0700
-From: Tycho Andersen <tycho@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Ashish Kalra <ashish.kalra@amd.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	John Allen <john.allen@amd.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] selftests/kvm: check that SEV-ES VMs are allowed in
- SEV-SNP mode
-Message-ID: <aaC0KGXmfhOMOrJ9@tycho.pizza>
-References: <20260223162900.772669-1-tycho@kernel.org>
- <20260223162900.772669-3-tycho@kernel.org>
- <aZyCEBo07EHw2Prk@google.com>
- <aZyE4zvPtujZ4-6X@tycho.pizza>
- <aZyLIWtffvEnmtYh@google.com>
- <aZzQy7c8VqCaZ_fE@tycho.pizza>
- <aZ3ntHUPXNTNoyx2@google.com>
- <aZ8xje-iM0_9ACie@tycho.pizza>
- <aZ8077EfpxRGmT-O@google.com>
+	s=k20201202; t=1772141695;
+	bh=9nUUaoM3WbzkeWzo1yrHWw8wUwpA8/X0UVvQxvXVE60=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BzXk8lea11EjSe2Ca8CztMeOaCs8VlYfJo+r0Ex6gJ9j/m5/3mF12YwzcQ95CCsFz
+	 bD1wLeYHdc04+SyJmhInvl9cgduChYxvdADojI9g8V+ENwrebOeEhnYnJddv6y4hNy
+	 OAoSDe37XKXXAGjd8Wv0VGxuyHMbL6Ebtr9OuhLOeRk9iGlTnXG/Df1pDk7hzaIywR
+	 93s9x/QcjtWE/dMUklO0PbTfdm2k4/EybdbATy5Dy0dU55BvCkw5vk7SQpHbeE9rEz
+	 DoTFd6D+exQevPdVgeHIGeB2nyuAdd3Dk3i9AWxRSFf2BBWSyeHOqRqxSBZx9li15M
+	 m3bsMYjP37vEQ==
+From: Allison Henderson <achender@kernel.org>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	rds-devel@oss.oracle.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	allison.henderson@oracle.com
+Subject: [PATCH net-next] net/rds: Fix circular locking dependency in rds_tcp_tune
+Date: Thu, 26 Feb 2026 14:34:54 -0700
+Message-ID: <20260226213454.85586-1-achender@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aZ8077EfpxRGmT-O@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 25, 2026 at 09:44:15AM -0800, Sean Christopherson wrote:
-> Ya, I don't have a better idea.  Bleeding VM types into the CCP driver might be
-> a bit wonky, though I guess it is uAPI so it's certainly not a KVM-internal detail.
+syzbot reported a circular locking dependency in rds_tcp_tune() where
+sk_net_refcnt_upgrade() is called while holding the socket lock:
 
-Turns out this approach breaks the selftests, which is at least one
-userspace:
+======================================================
+WARNING: possible circular locking dependency detected
+------------------------------------------------------
+kworker/u10:8/15040 is trying to acquire lock:
+ffffffff8e9aaf80 (fs_reclaim){+.+.}-{0:0}, at: __kmalloc_cache_noprof+0x4b/0x6f0
 
-# ./sev_init2_tests
-Random seed: 0x6b8b4567
-==== Test Assertion Failure ====
-  x86/sev_init2_tests.c:141: have_sev_es == !!(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SEV_ES_VM))
-  pid=12498 tid=12498 errno=0 - Success
-     1	0x0000000000402747: main at sev_init2_tests.c:141 (discriminator 2)
-     2	0x00007f9adae2a1c9: ?? ??:0
-     3	0x00007f9adae2a28a: ?? ??:0
-     4	0x0000000000402934: _start at ??:?
-  sev-es: KVM_CAP_VM_TYPES (15) does not match cpuid (checking 8)
+but task is already holding lock:
+ffff88805a3c1ce0 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at: rds_tcp_tune+0xd7/0x930
 
-As near as I can tell qemu doesn't do the same anywhere. SNP guests
-run fine, and SEV-ES says something reasonable:
+The issue occurs because sk_net_refcnt_upgrade() performs memory allocation
+(via get_net_track() -> ref_tracker_alloc()) while the socket lock is held,
+creating a circular dependency with fs_reclaim.
 
-qemu-system-x86_64: sev_launch_start: LAUNCH_START ret=1 fw_error=21 'Feature not supported'
-qemu-system-x86_64: sev_common_kvm_init: failed to create encryption context
-qemu-system-x86_64: failed to initialize kvm: Operation not permitted
+Fix this by moving sk_net_refcnt_upgrade() outside the socket lock critical
+section. Since the fresh socket is not yet exposed to other threads, no
+locks are needed at this time.
 
-Thoughts?
+Reported-by: syzbot+2e2cf5331207053b8106@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=2e2cf5331207053b8106
+Fixes: 5c70eb5c593d ("net: better track kernel sockets lifetime")
+Signed-off-by: Allison Henderson <achender@kernel.org>
+---
+ net/rds/tcp.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-Tycho
+diff --git a/net/rds/tcp.c b/net/rds/tcp.c
+index 04f310255692..da22b3dfdbf0 100644
+--- a/net/rds/tcp.c
++++ b/net/rds/tcp.c
+@@ -490,18 +490,24 @@ bool rds_tcp_tune(struct socket *sock)
+ 	struct rds_tcp_net *rtn;
+ 
+ 	tcp_sock_set_nodelay(sock->sk);
+-	lock_sock(sk);
+ 	/* TCP timer functions might access net namespace even after
+ 	 * a process which created this net namespace terminated.
+ 	 */
+ 	if (!sk->sk_net_refcnt) {
+-		if (!maybe_get_net(net)) {
+-			release_sock(sk);
++		if (!maybe_get_net(net))
+ 			return false;
+-		}
++		/*
++		 * We call sk_net_refcnt_upgrade before the lock_sock since it is
++		 * not yet shared, no lock is needed at this time.  Further,
++		 * because sk_net_refcnt_upgrade does a GFP_KERNEL allocation,
++		 * this can trigger an fs_reclaim in other systems which creates
++		 * a circular lock dependancy.  Avoid this by upgrading the
++		 * refcnt before the locking the socket.
++		 */
+ 		sk_net_refcnt_upgrade(sk);
+ 		put_net(net);
+ 	}
++	lock_sock(sk);
+ 	rtn = net_generic(net, rds_tcp_netid);
+ 	if (rtn->sndbuf_size > 0) {
+ 		sk->sk_sndbuf = rtn->sndbuf_size;
+-- 
+2.43.0
+
