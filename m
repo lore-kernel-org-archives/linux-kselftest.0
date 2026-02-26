@@ -1,54 +1,63 @@
-Received: from jpms-ob01.noc.sony.co.jp (jpms-ob01.noc.sony.co.jp [211.125.140.164])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD5F18DF9D;
-	Thu, 26 Feb 2026 07:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.140.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6EE3939AF
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 08:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772091944; cv=none; b=vE/eKxJsGXwcE3di6I0RdTTE3lINQBk3IKonQe5tP/NwdzQ82IGNxE1F5tK7s+1jxHFjx/pOb8bosZA5omYa2/nhZs9IJ2syRPcXsrwTIGfTUg3/lNZuKO54O1rJr8UeCMSR6OQCu9Cr272zEHOgkYQATsMyv3FqqU1eymVk4Nw=
+	t=1772093022; cv=none; b=Z1kqpkgBmULwDUS5NIzc/PNWufiafQe8R4Vpqo0ii3aYZcXG90ADNA32JWD0+T5VRzHySKN9UN1Xmynd8CGEltUhGLwe9PveVFNLn6/WzUijIY67VfYNDwF91j4ByocgcggHuo4gFE4XCBLRwL7/pqmwHjgNoCapjoTBGbIWdWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772091944; c=relaxed/simple;
-	bh=XlyfTKQvT+attS79aJv44qTZ3vo2uGVzMyVcldJbDmk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aUC6+P5AEXP7qNJZMsXWBLzqOSK6z7lwB4VHKWcAop3WJDkMSyZAxD3s+h9GQeK4PQ6XAynB1s4hMauREq2usH5Q72vfYrJ6rxI64essZxM5L+kPp9KGL+PqAA9t6dKD8ODKT+ciJ5Y2EJfdOJ/wMZyeU6am2bs08EKaPiT2oZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=BL1V1/0k; arc=none smtp.client-ip=211.125.140.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
+	s=arc-20240116; t=1772093022; c=relaxed/simple;
+	bh=pPm1NQz/awEqft25cau5tHZU/n5KX7QXvnMptYjLpO0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tPGbVSx9AjJQBvz7A+/md6hgq3PTVnjGwzVLqbRVutAFwFL7uf2RI4nSrO12S3Efcuk3oQkYJrVgw4QV1Czy+FEs00SSgKV/8iSHl4v2/5pWvXnKwwMaUTXF5SL7WgY7OCiSr71NWkPYNP22k5ru6zj9L5kI0MLspfxOPOjSTzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iI/lRdQ2; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="BL1V1/0k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=sony.com; s=s1jp; t=1772091943; x=1803627943;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PmAhxaglJ4zsFHlpniPU1qeRT9pDBq4QRgL4uv1x7B0=;
-  b=BL1V1/0k7ie0QEns3iHWFd4tkRfrVCoQ7QGI/yh40m2DwH9NbxXbA38S
-   pvBU2aMEUnUy4LQww46glPRJkOJG57TzDLYw5kII7iJNA5+CYftqeJevT
-   w6jTQKpvUpb5mAfDJp7CvZ2Dk54vIxNWittuC1iT63IwSDJhCNpwK7olV
-   4KxVmtXAIeH5iOZ3e0L11m+YhS+mj5I7OZm8Cd5GG1aWWLaFMuxvYcYlj
-   wCrkqAIu5jRgBfL6oC8hVQv+Fa5FEYS83PM4NU4k0Vs9AGBLxL26a85wo
-   8v/jh/P2FdMjM2Pn5IGOfcjtb5J/rRqI/6BIWLJVMnUPEwnZF17gEIaFS
-   g==;
-Received: from unknown (HELO jpmta-ob1.noc.sony.co.jp) ([IPv6:2001:cf8:0:6e7::6])
-  by jpms-ob01.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2026 16:35:33 +0900
-X-IronPort-AV: E=Sophos;i="6.21,311,1763391600"; 
-   d="scan'208";a="616141614"
-Received: from unknown (HELO asagi..) ([43.11.56.84])
-  by jpmta-ob1.noc.sony.co.jp with ESMTP; 26 Feb 2026 16:35:32 +0900
-From: Yohei Kojima <yohei.kojima@sony.com>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Yohei Kojima <yohei.kojima@sony.com>,
-	Daniel Palmer <daniel.palmer@sony.com>,
-	Tim Bird <tim.bird@sony.com>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] KVM: selftests: Add test case for readonly memslots on x86
-Date: Thu, 26 Feb 2026 16:37:15 +0900
-Message-ID: <26c1ddd4c80498bfba17ade1f9c88a04cf77779e.1772090306.git.yohei.kojima@sony.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1772090306.git.yohei.kojima@sony.com>
-References: <cover.1772090306.git.yohei.kojima@sony.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iI/lRdQ2"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772093013;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LFrUacmVzVoIS6rMkKRo1xTKd0v7vZ9gwEve89bhung=;
+	b=iI/lRdQ2SWmjXq2Hr1/U+VqOq9KdMyadXmMHD7m+CFEEQ92yrtzDKXAfPjMpvfWMCJ4OaL
+	LupU75VXMrM6btpHTBCgZ6UOS3pkFZDh3ha6LcaA1pzospddQOLeU4bEOsEx64TzpzdwXD
+	IAeHJdUTHHGhwwPSG8RH5ItE3JYW7hM=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,
+	jiayuan.chen@shopee.com,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jonathan Toppins <jon.toppins+linux@gmail.com>,
+	Jussi Maki <joamaki@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v1 0/2] bonding: fix missing XDP compat check on xmit_hash_policy change
+Date: Thu, 26 Feb 2026 16:03:00 +0800
+Message-ID: <20260226080306.98766-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,158 +65,91 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Extend set_memory_region_test to verify the following properties:
+syzkaller reported a bug https://syzkaller.appspot.com/bug?extid=5a287bcdc08104bc3132
 
-* read on RO-memslot succeeds,
-* execute on RO-memslot backed by executable memory succeeds, and
-* write on RO-memslot fails with mmio fault.
+When a bond device is in 802.3ad or balance-xor mode, XDP is supported
+only when xmit_hash_policy != vlan+srcmac.  This constraint is enforced
+in bond_option_mode_set() via bond_xdp_check(), which prevents switching
+to an XDP-incompatible mode while a program is loaded.  However, the
+symmetric path -- changing xmit_hash_policy while XDP is loaded -- had
+no such guard in bond_option_xmit_hash_policy_set().
 
-Signed-off-by: Yohei Kojima <yohei.kojima@sony.com>
----
- .../selftests/kvm/set_memory_region_test.c    | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
+This means the following sequence silently creates an inconsistent state:
 
-diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-index 8d4fd713347c..2f21bfcbc821 100644
---- a/tools/testing/selftests/kvm/set_memory_region_test.c
-+++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-@@ -28,7 +28,10 @@
-  * Somewhat arbitrary location and slot, intended to not overlap anything.
-  */
- #define MEM_REGION_GPA		0xc0000000
-+#define MEM_REGION_RO_GPA	0xd0000000
-+
- #define MEM_REGION_SLOT		10
-+#define MEM_REGION_RO_SLOT	11
- 
- static const uint64_t MMIO_VAL = 0xbeefull;
- 
-@@ -49,6 +52,8 @@ static inline uint64_t guest_spin_on_val(uint64_t spin_val)
- 	return val;
- }
- 
-+static int allow_mmio_fault;
-+
- static void *vcpu_worker(void *data)
- {
- 	struct kvm_vcpu *vcpu = data;
-@@ -76,6 +81,13 @@ static void *vcpu_worker(void *data)
- 		if (run->exit_reason != KVM_EXIT_MMIO)
- 			break;
- 
-+		if (allow_mmio_fault && run->mmio.is_write)
-+			/*
-+			 * in this case, skip checking mmio-related assertions
-+			 * and exit status
-+			 */
-+			return NULL;
-+
- 		TEST_ASSERT(!run->mmio.is_write, "Unexpected exit mmio write");
- 		TEST_ASSERT(run->mmio.len == 8,
- 			    "Unexpected exit mmio size = %u", run->mmio.len);
-@@ -336,6 +348,92 @@ static void test_delete_memory_region(bool disable_slot_zap_quirk)
- 	kvm_vm_free(vm);
- }
- 
-+static void guest_code_ro_memory_region(void)
-+{
-+	uint64_t val;
-+	unsigned char c;
-+	void *instruction_addr;
-+
-+	GUEST_SYNC(0);
-+
-+	val = guest_spin_on_val(0);
-+	__GUEST_ASSERT(val == 1, "Expected '1', got '%lx'", val);
-+
-+	/* RO memory read; should succeed if the backing memory is readable */
-+	c = *(unsigned char *)MEM_REGION_RO_GPA;
-+	__GUEST_ASSERT(c == 0xab, "Expected '0xab', got '0x%x'", c);
-+
-+	/* RO memory exec; should succeed if the backing memory is executable */
-+	instruction_addr = ((unsigned char *)MEM_REGION_RO_GPA) + 8;
-+	val = ((uint32_t (*)(void))instruction_addr)();
-+	__GUEST_ASSERT(val == 0xbeef,
-+			"Expected 0xbeef, but got '%lx'", val);
-+
-+	/* Spin until the mmio fault is allowed for RO-memslot write */
-+	val = guest_spin_on_val(1);
-+	__GUEST_ASSERT(val == 2, "Expected '2', got '%lx'", val);
-+
-+	/* RO memory write; should fail */
-+	WRITE_ONCE(*((uint64_t *)MEM_REGION_RO_GPA), 0x12);
-+	__GUEST_ASSERT(0, "RO memory write is expected to fail, but it didn't");
-+}
-+
-+/*
-+ * On x86 environment, write access to the readonly memslots are trapped as
-+ * a special MMIO fault. This test verifies that write access on the readonly
-+ * memslot is blocked, and read/exec access isn't.
-+ */
-+static void test_ro_memory_region(void)
-+{
-+	pthread_t vcpu_thread;
-+	uint64_t *hva, *hva_ro;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+
-+	/*
-+	 * Equivalent C function (assuming SysV ABI):
-+	 * uint32_t some_function(void) {
-+	 * 	return 0xbeef;
-+	 * }
-+	 */
-+	unsigned char inst_bytes[] = {
-+		0x48, 0xc7, 0xc0, 0xef, 0xbe, 0x00, 0x00,	// mov %eax, $0xbeef
-+		0xc3,						// ret
-+	};
-+
-+	pr_info("Testing write on RO memslot\n");
-+
-+	vm = spawn_vm(&vcpu, &vcpu_thread, guest_code_ro_memory_region);
-+
-+	vm_userspace_mem_region_add_map(vm,
-+					MEM_REGION_RO_GPA,
-+					MEM_REGION_RO_SLOT,
-+					MEM_REGION_SIZE,
-+					KVM_MEM_READONLY);
-+
-+	hva = addr_gpa2hva(vm, MEM_REGION_GPA);
-+	hva_ro = addr_gpa2hva(vm, MEM_REGION_RO_GPA);
-+
-+	memset(hva_ro, 0xcccccccc, 0x2000);
-+	WRITE_ONCE(*hva_ro, 0xab);
-+	memcpy(((unsigned char *)hva_ro) + 8, inst_bytes, sizeof(inst_bytes));
-+
-+	WRITE_ONCE(*hva, 1);
-+
-+	/* Wait the vcpu thread to complete read/exec on ro memory */
-+	usleep(100000);
-+
-+	allow_mmio_fault = true;
-+	WRITE_ONCE(*hva, 2);
-+
-+	wait_for_vcpu();
-+
-+	pthread_join(vcpu_thread, NULL);
-+
-+	kvm_vm_free(vm);
-+	allow_mmio_fault = false;
-+}
-+
- static void test_zero_memory_regions(void)
- {
- 	struct kvm_vcpu *vcpu;
-@@ -629,6 +727,8 @@ int main(int argc, char *argv[])
- 	 */
- 	test_zero_memory_regions();
- 	test_mmio_during_vectoring();
-+
-+	test_ro_memory_region();
- #endif
- 
- 	test_invalid_memory_region_flags();
+  1. Create a bond in 802.3ad mode with xmit_hash_policy=layer2+3.
+  2. Attach a native XDP program to the bond.
+  3. Change xmit_hash_policy to vlan+srcmac (no error, not checked).
+
+Now bond->xdp_prog is set but bond_xdp_check() returns false for the
+same device.  When the bond is later torn down (e.g. netns deletion),
+dev_xdp_uninstall() calls bond_xdp_set(dev, NULL) to remove the
+program, which hits the bond_xdp_check() guard and returns -EOPNOTSUPP,
+triggering a kernel WARNING:
+
+  bond1 (unregistering): Error: No native XDP support for the current bonding mode
+  ------------[ cut here ]------------
+  dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL)
+  WARNING: net/core/dev.c:10361 at dev_xdp_uninstall net/core/dev.c:10361 [inline], CPU#0: kworker/u8:22/11031
+  Modules linked in:
+  CPU: 0 UID: 0 PID: 11031 Comm: kworker/u8:22 Not tainted syzkaller #0 PREEMPT(full)
+  Workqueue: netns cleanup_net
+  RIP: 0010:dev_xdp_uninstall net/core/dev.c:10361 [inline]
+  RIP: 0010:unregister_netdevice_many_notify+0x1efd/0x2370 net/core/dev.c:12393
+  RSP: 0018:ffffc90003b2f7c0 EFLAGS: 00010293
+  RAX: ffffffff8971e99c RBX: ffff888052f84c40 RCX: ffff88807896bc80
+  RDX: 0000000000000000 RSI: 00000000ffffffa1 RDI: 0000000000000000
+  RBP: ffffc90003b2f930 R08: ffffc90003b2f207 R09: 1ffff92000765e40
+  R10: dffffc0000000000 R11: fffff52000765e41 R12: 00000000ffffffa1
+  R13: ffff888052f84c38 R14: 1ffff1100a5f0988 R15: ffffc9000df67000
+  FS:  0000000000000000(0000) GS:ffff8881254ae000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00007f60871d5d58 CR3: 000000006c41c000 CR4: 00000000003526f0
+  Call Trace:
+   <TASK>
+   ops_exit_rtnl_list net/core/net_namespace.c:187 [inline]
+   ops_undo_list+0x3d3/0x940 net/core/net_namespace.c:248
+   cleanup_net+0x56b/0x800 net/core/net_namespace.c:704
+   process_one_work kernel/workqueue.c:3275 [inline]
+   process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3358
+   worker_thread+0xa50/0xfc0 kernel/workqueue.c:3439
+   kthread+0x388/0x470 kernel/kthread.c:467
+   ret_from_fork+0x51e/0xb90 arch/x86/kernel/process.c:158
+   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+   </TASK>
+
+Beyond the WARNING itself, when dev_xdp_install() fails during
+dev_xdp_uninstall(), bond_xdp_set() returns early without calling
+bpf_prog_put() on the old program.  dev_xdp_uninstall() then releases
+only the reference held by dev->xdp_state[], while the reference held
+by bond->xdp_prog is never dropped, leaking the struct bpf_prog.
+
+The fix refactors the core logic of bond_xdp_check() into a new helper
+__bond_xdp_check_mode(mode, xmit_policy) that takes both parameters
+explicitly, avoiding the need to read them from the bond struct.
+bond_xdp_check() becomes a thin wrapper around it.
+bond_option_xmit_hash_policy_set() then uses __bond_xdp_check_mode()
+directly, passing the candidate xmit_policy before it is committed,
+mirroring exactly what bond_option_mode_set() already does for mode
+changes.
+
+Patch 1 adds the kernel fix.
+Patch 2 adds a selftest that reproduces the WARNING by attaching native
+XDP to a bond in 802.3ad mode, then attempting to change xmit_hash_policy
+to vlan+srcmac -- verifying the change is rejected with the fix applied.
+
+Jiayuan Chen (2):
+  bpf/bonding: reject vlan+srcmac xmit_hash_policy change when XDP is
+    loaded
+  selftests/bpf: add test for xdp_bonding xmit_hash_policy compat
+
+ drivers/net/bonding/bond_main.c               |  9 ++-
+ drivers/net/bonding/bond_options.c            |  2 +
+ include/net/bonding.h                         |  1 +
+ .../selftests/bpf/prog_tests/xdp_bonding.c    | 58 +++++++++++++++++++
+ 4 files changed, 68 insertions(+), 2 deletions(-)
+
 -- 
 2.43.0
 
