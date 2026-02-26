@@ -1,104 +1,127 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AB62D73A1
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 12:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D1B2D8797
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 12:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772110001; cv=none; b=lx3lwW71r3mGHTKhIN9qpU3zzn0FpFWi9euoUxGnrxFfBzGE650U3nk4gKDD8N9dqNoo//fi2zBQzu0LTYPwKbrB/EHD2/skK0VtVAOpZ9M9emUOIxSZtNXfXEdP0b2JufEF1U2x+6S8qH6YztJeoA82juQgIyG6pkt/Bz/zfb0=
+	t=1772110429; cv=none; b=kf1uIaSn9Pag3QNC0R/P1qQhqFAH4r9/MhDUQtMJTt1fipJylHtTcGsfVh1UACGYasOlCeKST33c6jHpR2E7jDnlMXcwHdf2lVewXmBbqxU+DJ4Upxmv+qAk4bbUyUK8hETzt2OPwvo69lIxqfhW9eB83mfW0JfQtqacGXcSiJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772110001; c=relaxed/simple;
-	bh=seXsmfnMZNDGmNdk2vBCcSLMIeHdG+faWBeJUj9rB/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nXFQ6jwoqzNe4PgL9gUUCPUWD/DnDanU8DoEH4REE8VZjMu52/c5/KCAACAYO0DfMGNQNKH4Qrwmz2/Xj8uqQlOsn1KIhwW9pW9eQwnX7GHUaNJFbAX2v9DrkJ8jHdUywPNtkfWhBOYqe8j6Dvqivga5CPZom2yGtxUNCmJYrLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h+0GHvO6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772110429; c=relaxed/simple;
+	bh=dwiStO/chK1OLFBK71wNHFWP6SlMqftxFvbc+vvnPhU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dvlIMKtfub2KwyppO4XIClql92EYWvUu7xjI4kI59H7hL3xvzn8J3pCpSeQUw9XV41eYtyya3akJgb4qw4BPwhJbLwiksTgRtmuBEB0w7iNO2PP4vpwMc+vPNvGW8fqWWcfEDjam8cArOBJbRTJl/c6ZNHA3iCgTYXlM+Jeycx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d4Fy2gX+; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h+0GHvO6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772109999;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=REu4C5gEnD9lCrQ0u+aojk+enYm0J/YBvFh4w0Tt6ow=;
-	b=h+0GHvO6zzeVQTeTCyXfTePu2xR8ZxAbLsjHxYBHFg6u3eA7+gBguY8zd0N47wcSRJt5sA
-	uUq++jcn3dOXzC76b6OG+3Xv5F9yUlLGlEPaRMToZDbynT7q8AfN4MGui10iGnWJY35pqW
-	1nuXGwOSd8tq3G6y3J62AmZBbvNybYs=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-575-KHvnGr7SPuCRykxddpXmIg-1; Thu,
- 26 Feb 2026 07:46:35 -0500
-X-MC-Unique: KHvnGr7SPuCRykxddpXmIg-1
-X-Mimecast-MFC-AGG-ID: KHvnGr7SPuCRykxddpXmIg_1772109992
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D73DF19560A3;
-	Thu, 26 Feb 2026 12:46:31 +0000 (UTC)
-Received: from fedora (unknown [10.44.32.38])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 5E75419560B8;
-	Thu, 26 Feb 2026 12:46:25 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Thu, 26 Feb 2026 13:46:31 +0100 (CET)
-Date: Thu, 26 Feb 2026 13:46:23 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Andrei Vagin <avagin@gmail.com>
-Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Jan Kara <jack@suse.cz>, Aleksa Sarai <cyphar@cyphar.com>,
-	Andrei Vagin <avagin@google.com>, Kirill Tkhai <tkhai@ya.ru>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Adrian Reber <areber@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] pid: check init is created first after idr alloc
-Message-ID: <aaBAn-r7A65f2ubP@redhat.com>
-References: <20260224164852.306583-1-ptikhomirov@virtuozzo.com>
- <20260224164852.306583-3-ptikhomirov@virtuozzo.com>
- <CANaxB-znXjfh5s9ro127TGONsu6PieuaJ1vB3PMVFeV4Eo8pkQ@mail.gmail.com>
- <aZ67mwBEbRtdaWp2@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d4Fy2gX+"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ad21f437eeso5691085ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 04:53:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772110428; x=1772715228; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pU3Nlc8ltUu4dkb2Y0/KvgT3i+9qT+K1/h3U6dSw2Oc=;
+        b=d4Fy2gX+XQ4X9Hnh9IH86jGWxpldlwGJQZwJgM/fyA2arJQcp3NSkJFUtHNbWSZjVY
+         mqmgdovi+ztArNPF70hMQbuJpPcJ4nI5hsUJfx6oW0euYK9hY5qWRgtYN1vq04wfr59n
+         pwpXxwmbc6Z/7qXDgKWhdaSf8ZL3V7X3UYdeZ+56t15UiRU4RxEzaZ73FeddH684RCwr
+         K1vPmmEggsiKp+z+2XnpGlQJ4WNDi12zbUhzPLLbRfKJXthRRS7QZ11hMeZKlNNnXBa0
+         ivX7zkAYzrXHilb83NYqD+WNM0RQvX7ScuXPg/fcbpDAKdB38iXnSZZnXvxWe/KuWl4k
+         7VMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772110428; x=1772715228;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pU3Nlc8ltUu4dkb2Y0/KvgT3i+9qT+K1/h3U6dSw2Oc=;
+        b=iFkIh2j1SZjixG7E9d48YljXZFwgbs2bXDGGjDhDQgVT355uqNCw6PRxcLDBUVaV2B
+         R9+4SUjZZ5g0eOZ+topH3tbghXHifaq0T2p2htZz9rg67Ci1jR7/arAzqh9sF8Li7Kzw
+         eVXnlzPfe52wj6uCGLonqX4NT+FFOk0cLIXdjv3kZTZHiAwMCal1SraweubVASKVTeHm
+         NtT7BRCgqFriZ+Z1Cvl9iDax0fZVL2IwPwbfXVnGgUlIQXfrqCjfifEBpgBIvY0ZVsV7
+         ott0w5ZStrut3P0dLWgOvtX7fofSJGqIzRgECRgTsLVXjYIgHHGYEE5TPm1cIkhxv0P/
+         SfUw==
+X-Forwarded-Encrypted: i=1; AJvYcCViB/GeYBi2XlR6aYG5WzbNWupcl6+zD465AXLnZerciGAEllsj/CzqMzjC6UImKqCz8T8cEwJbTsyHHHxajRo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza0Rk03D1+Spt2FX8ldayHGqvzYSLDWPDuJew++z8s3fW2Qcgw
+	VthgfryDIKp9Osng+wa0nSUxEMchp/TbjC9iRMGZq3pk6hbjF0hUrP19
+X-Gm-Gg: ATEYQzwXObHQIE2fgOOzmWScAkcwari7zbew8SwXavGR7/FhWGKHK+dXr231ocIjpPq
+	t5eJhNfTUKZHEzST4jZu3Di3lU+C6saYszlr2FuYty3GblHBMj3pt0GlouPPoxKUsGN1SJWfFDb
+	gmwVE5++sIZbVEBWowTNYSSezTtZHOQYhOdV8h4GR0hjivNC+ZHjiYQD7dq7l+XhBXOSkTDLqBm
+	2+qW43EO1WVJmkhDEGgQnNxLtwIjudMJc5NOxiPWCwo8YHgyvE035F3xrxpncGZ19N+d7WAX/4w
+	ewsy22/jSxqCa61Vd9IJzc1NEZLLCmvRwmuhcu5OUqL5u/FCfRwBQ82tGHwVGp1hZy9uc327Vos
+	eYk4mYV2GWHXY7bfyTRZqcgeErcpPkCpOgOMRPRaC1vVp0wNlODqVBJD643EOdA+OH7YBpHYNWr
+	3D56bkF8ijGkYnsc5FMdlmxzys7/4=
+X-Received: by 2002:a17:903:2307:b0:2a9:320d:285e with SMTP id d9443c01a7336-2adf79c86ecmr24944385ad.27.1772110427685;
+        Thu, 26 Feb 2026 04:53:47 -0800 (PST)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb705b53sm25276715ad.92.2026.02.26.04.53.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Feb 2026 04:53:46 -0800 (PST)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Mahesh Bandewar <maheshb@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv3 net 0/3] bonding: fix 802.3ad churn machine and port state issues
+Date: Thu, 26 Feb 2026 12:53:27 +0000
+Message-ID: <20260226125331.28147-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aZ67mwBEbRtdaWp2@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 02/25, Oleg Nesterov wrote:
->
-> On 02/24, Andrei Vagin wrote:
-> >
-> > This isn't directly related to this patch, but why do we check
-> > "ns->pid_allocated & PIDNS_ADDING" after allocating all pids?  Wouldn't
-> > it be more reasonable to do that right after taking the pidmap_lock?
->
-> Perhaps, but alloc_pid() can drop pidmap_lock and retry, so we will
-> need to re-check PIDNS_ADDING.
+This series fixes two issues in the bonding 802.3ad implementation
+related to port state management and churn detection:
 
-Now that I look at this code again... Why do we bother to check
-"pid_allocated & PIDNS_ADDING" at all? copy_process() does
+1. When disabling a port, we need to set AD_RX_PORT_DISABLED to ensure
+   proper state machine transitions, preventing ports from getting stuck
+   in AD_RX_CURRENT state.
 
-	/* Don't start children in a dying pid namespace */
-	if (unlikely(!(ns_of_pid(pid)->pid_allocated & PIDNS_ADDING))) {
-		retval = -ENOMEM;
-		goto bad_fork_core_free;
-	}
+2. The ad_churn_machine implementation is restructured to follow IEEE
+   802.1AX-2014 specifications correctly. The current implementation has
+   several issues: it doesn't transition to "none" state immediately when
+   synchronization is achieved, and can get stuck in churned state in
+   multi-aggregator scenarios.
 
-I am going to send the patch which removes this check from alloc_pid...
-Need to recheck.
+3. Selftests are enhanced to validate both mux state machine and churn
+   state logic under aggregator selection and failover scenarios.
 
-Oleg.
+These changes ensure proper LACP state machine behavior and fix issues
+where ports could remain in incorrect states during aggregator failover.
+
+v3: re-post to net, no code change (Jakub)
+v2:
+  * set AD_RX_PORT_DISABLED only in ad_agg_selection_logic to avoid side effect. (Paolo Abeni)
+  * remove actor_churn as it can only be true when the state is ACTOR_CHURN (Paolo Abeni)
+  * remove AD_PORT_CHURNED since we don't need it anywhere (Paolo Abeni)
+  * I didn't add new helper for ad_churn_machine() as it looks not help much.
+  * https://lore.kernel.org/netdev/20260114064921.57686-1-liuhangbin@gmail.com
+v1: https://lore.kernel.org/netdev/20251124043310.34073-1-liuhangbin@gmail.com
+
+Hangbin Liu (3):
+  bonding: set AD_RX_PORT_DISABLED when disabling a port
+  bonding: restructure ad_churn_machine
+  selftests: bonding: add mux and churn state testing
+
+ drivers/net/bonding/bond_3ad.c                | 97 ++++++++++++++-----
+ .../selftests/drivers/net/bonding/Makefile    |  2 +-
+ ...nd_lacp_prio.sh => bond_lacp_ad_select.sh} | 73 ++++++++++++++
+ 3 files changed, 146 insertions(+), 26 deletions(-)
+ rename tools/testing/selftests/drivers/net/bonding/{bond_lacp_prio.sh => bond_lacp_ad_select.sh} (64%)
+
+-- 
+2.50.1
 
