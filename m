@@ -1,124 +1,167 @@
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E4B3128AF
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 13:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E1932E122
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 13:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772111572; cv=none; b=t12ywOj0QbWPhocNr+UH2VIAUstBenTpF7RY8d0rslCP+wIwhPTRGYPii+S13bp4pFG7UMfV2pvUHMLpHp69q23iswM5KdfQasBbotIW9fU7jsDxjbNwBSl8FAio36EArh2+Thm9gE+QJBT2lgsSWn3FJYXVhu/FJHt4Xov+ozo=
+	t=1772112524; cv=none; b=HMGV/lZVY1C7aPcG0ExFdB7TziG4GqyygxeHXrGA1lyWpUQ/ZBM+gJcBm9Vswp6BU4Pjrv1fJ947ufjT0LmB/33SaEPRIjRTUW4TWtFA7TcnYy1x8d70YYZljEL4QO3yZnTaaJ3VvUgfAFYA9c6wrtaz+NPwaGJQxAbI14tEMjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772111572; c=relaxed/simple;
-	bh=bUKajU34nTbnmdhjV4E0C/FDXuYDhztUhWs9BNHOR80=;
+	s=arc-20240116; t=1772112524; c=relaxed/simple;
+	bh=4R7hF+71pg82oS066LoRVZURzYUxKCGCri0Dd7HK3lc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=REICTVaKiPXHm45J4jHlYgk2STHBqsCpAP2U6sNBGcJZHVxD0mvfBBheM63N93+HNuFeSlQP9xdf5BpdOOkWRvGB532Di7mhdg+ODohgAgFGeDtuKsDSrrWtzikZCFZJ4oVRCmtpzv6fzM72iwRWbZqVA5iWe53tK05vUD/Rae8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.45
+	 To:Cc:Content-Type; b=IOA6jhVbgpIVIVVrrh6gsam8vVYBBh/CLD1hPH8qy+8w4XUgy1a4siKvpIrP2Lx9drjd3PBx7AWKMby+rhCL3sgFpJEcT1LyEMkT+312JSYCAjAAwjbjD5Ufru6OEE1XYzDMNxOicjtAdAbo7q+aEx52QNcd0j5KuXTxOdejeSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-94dea0e029fso214364241.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 05:12:51 -0800 (PST)
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8cb38e6d164so104434085a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 05:28:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772111571; x=1772716371;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0hKnjbv3BL565dFjMkZ/BcbOnxBMvs6z5ncDkkB7tgA=;
-        b=r3WI6kjlL8RKq3kB3DpeBnv4MDnzVwS5RsMEWpGJnudp4muFyZOx9GcRvPkhXvIfNM
-         zsV7dqpB2J8LcJueGaptifNJ+rWlgP+8K1MrEPzd7TuKOVwWYEU4LINSvb7gJGBmEIJE
-         xmBy+DO60+hKtp8lNyxjNB7C/9auZjxF8KvPV1k2xN3ghWBVoQuCINZlxKADaWPva/QQ
-         7qcyU50q2qCYmPnuAYgD62cB91F6gXqZLIm/Sj5IqDCF7F6i2NBurjwtxFSLTv52F8l8
-         TDM/ucovVNbQcs2NQ/SN+CsM2DEcB00UqP/IOK8hvIXWJMjBirNnqJxoPqyS7/9oGDN/
-         rXwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWInLq0Uqk2wGBZN43/1oaMw4WEGPIE5D4D2sfpFpZLdvZsI88I6Vh8OaFFRyKTQcddElao+VwJcOPrhFvJDpc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEGX3HxACCB1d1QUceAyAdkWFmQdFLAXVw/ldLAJ0AtKmCV1hu
-	+UTF1fUd7cnBwvK7O0TOleI7roqbjGPPp7NZzYVcMpeS9orGAoiYKGSAt1csVZ5F
-X-Gm-Gg: ATEYQzyqJ/nNQ3VN+uc3WSPRb3wWEk2taHXm412qyfMgYkNARXTptxs3dNVu35Ry4Vh
-	ykpXcWuFJdgLKiE8E7Y/ONt/LB8g72jJIiwPMjCTVaI2DYbCGqZksppqTXe6RVDwqF2zCi3ZT5G
-	PP/iUj1P9Gpu88BIKcWEIArm6lY26PsqoHbhhrvKiQr/jz04dl8injnblI2+WTWaTldXDub1+3K
-	/yi5kU1pnFnGzsCMutFcF97899Ly9W5pmLVVy188NkUWl8Bg3OM7KJ4IkN9bW14OD0wQJMhAuYT
-	ylB3OGMvlgfNyzRo8PTgCM9JbwZbrXjDh0eVY6xRs80E7Iy9ihS3dvDQVXMDMoTRjuc7BfCofCj
-	YV3tu6sxsd7brXncGLVrNy8F1si37TgTiiKvaoYkrRP3Y8qBPCU00gbgefmK4Gx9UoWnXOWh8bI
-	ysA7iiDFYcHKGH8x4cPBFNMKmoNt2MyrWvP7WREaIuh+7lTHxhEJqU9pghHuV/ybrB
-X-Received: by 2002:a05:6102:54aa:b0:5ff:1914:6d9d with SMTP id ada2fe7eead31-5ff1914710emr1827986137.33.1772111570666;
-        Thu, 26 Feb 2026 05:12:50 -0800 (PST)
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94df61672ddsm1658918241.0.2026.02.26.05.12.49
+        d=1e100.net; s=20230601; t=1772112520; x=1772717320;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5twdPm6qtk6BxBBh6eqwsmb5sfIcorWjwwVPoxGI8zc=;
+        b=TfEBx0CXAikOHssZZipopCZPOWCoOrajhAvZq8Nasly3XS2uyGmz6IgxRZ0TBQGg67
+         lFdBRDT0H177coF+JBMeJHd7kPnZA2WdCDHqyYamlhJEJ+4WdbWZ7om+z75o22+YZpvy
+         +HlH40bMVe5XEejGwbdz+3q+6wDUH8+yJ97tx6yS2qnHcx8IHs9RKMSCrZCqXVhHKlIf
+         j+kan57MHsjMMrnWKBcpMACYRYfRELa2cERQLvmi9zVYdWo32WWgWv06G+fz1BiqD5uH
+         fdDX/LWCeVg6REP8L6p6eVK+y60TEwWAu6EPJRO1LoVAzmlzs13INoA48B91HK7IQtQg
+         aATg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3TzQSizxWr9mJtVzMq3gLUv/Q52DK2Qn+bam73vmMi4x16u7mi+k/8JToOxDQVV7q8SA5pdYFccnZWelTUYE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJVUJUaXPQw8UohzZw3jsMDz6XFfmH0Nc3yI9nJq2HIvrFvpM1
+	EBsbHxvAqvqWVQPggshB/8Ew3XAi1YbDxbRSIqD/E5j/BFW/OqmYQWMwEhG0fw63
+X-Gm-Gg: ATEYQzzXB+1+3lREFl4f/peI1XjEz5IVEc2jORtbrKOSysX5zjytU+NuSdT17UERcmo
+	eM3XZxByptWJmQOBxYyhKekxZVc04/AvKMlnsSSwvKtO0Z0TFgJWMyrULYqF7ZHRKHlgUvD42ME
+	zW1/5B6l0LQ/Cg2qr50xMVGKYEv6jFQObgKAZ6hlvj03RSWVJlzeJMhcIgqnN75FpPXM9bpEHy2
+	8IHsZdz8lDMo0WlxpdnZ1Y3CjCivmWVvVBmGXqUgPx0WvgCaA1u/r8+ycg8pdhjZjkWmhvSWvEV
+	t3UYd1KYh44kWxpqpTSXXoIyX3IHtoUojK89jtXWDPJmi0CcR7JQISfRnUjxqYfeayvw+BgyHoC
+	OGHC+rAnUH1ys3iR9GY4a+ONXOxacrERe4/xf7JSRbWJsJSSpU1sbLdDYbsAjbTmOmvbRu/MqhA
+	RyHgmH1ZDtwe56s0SwsSoou0YLDyWSRVdR/BiDYduMd2fTmvR4I2pIFIkAgAWMxsImNCn1XHbo8
+	oc=
+X-Received: by 2002:a05:620a:1a1c:b0:8ca:3fb7:2570 with SMTP id af79cd13be357-8cbbd01048fmr504271085a.42.1772112520453;
+        Thu, 26 Feb 2026 05:28:40 -0800 (PST)
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com. [209.85.222.171])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf658f70sm198969385a.7.2026.02.26.05.28.40
         for <linux-kselftest@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Feb 2026 05:12:49 -0800 (PST)
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-56a91a5e64eso292543e0c.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 05:12:49 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXaodYDGd0OlM6MShczSFiZ2kCaOspwzc2qBJlLnT0cPEMZiWH0UCXEsIBw649exJynUKzu/DGTsCdKnJOXMB4=@vger.kernel.org
-X-Received: by 2002:a05:6102:c4b:b0:5f1:4fc3:855d with SMTP id
- ada2fe7eead31-5feb311d364mr7291638137.38.1772111569094; Thu, 26 Feb 2026
- 05:12:49 -0800 (PST)
+        Thu, 26 Feb 2026 05:28:40 -0800 (PST)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8c9f6b78ca4so102904285a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 05:28:40 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX/jZzl/MoOhKAusyusqETGTuQBtqsJZS/mToT0mqvpvXKAGnZMcydEhvaTkMHhW3hFjFG31hvuBacmGqOv0T4=@vger.kernel.org
+X-Received: by 2002:a05:6102:ccf:b0:5fd:ed98:cf0f with SMTP id
+ ada2fe7eead31-5ff14157fafmr2006779137.34.1772112160689; Thu, 26 Feb 2026
+ 05:22:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251211011846.8179-1-ebiggers@kernel.org> <20251211011846.8179-3-ebiggers@kernel.org>
-In-Reply-To: <20251211011846.8179-3-ebiggers@kernel.org>
+References: <20260111093940.975359-1-vladimir.oltean@nxp.com> <20260111093940.975359-6-vladimir.oltean@nxp.com>
+In-Reply-To: <20260111093940.975359-6-vladimir.oltean@nxp.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 26 Feb 2026 14:12:38 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVFRQZXCKJBOBDJtpENvpVO39AxGMUFWVQdM6xKTpnYYw@mail.gmail.com>
-X-Gm-Features: AaiRm52VYzvaWsbmGKoOT8WKSlc9iNIE8yX77bG4Rzm2pI7VadASzUVGgBSmV4w
-Message-ID: <CAMuHMdVFRQZXCKJBOBDJtpENvpVO39AxGMUFWVQdM6xKTpnYYw@mail.gmail.com>
-Subject: Re: [PATCH 02/12] lib/crypto: tests: Add KUnit tests for NH
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ard Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, linux-arm-kernel@lists.infradead.org, 
-	x86@kernel.org, 
+Date: Thu, 26 Feb 2026 14:22:29 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUBaoYKNj52gn8DQeZFZ42Cvm6xT6fvo0-_twNv1k3Jhg@mail.gmail.com>
+X-Gm-Features: AaiRm523jRWdOCfOPJhqksDewbEoHD_GTMJ0xjyZsvboq3n-XWtXIhj4iGm1B4M
+Message-ID: <CAMuHMdUBaoYKNj52gn8DQeZFZ42Cvm6xT6fvo0-_twNv1k3Jhg@mail.gmail.com>
+Subject: Re: [PATCH v3 net-next 05/10] phy: add phy_get_rx_polarity() and phy_get_tx_polarity()
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	Daniel Golle <daniel@makrotopia.org>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	=?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Eric Woudstra <ericwouds@gmail.com>, =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>, 
+	Lee Jones <lee@kernel.org>, Patrice Chotard <patrice.chotard@foss.st.com>, 
 	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
 	KUnit Development <kunit-dev@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Eric,
+Hi Vladimir,
 
-On Thu, 11 Dec 2025 at 02:25, Eric Biggers <ebiggers@kernel.org> wrote:
-> Add some simple KUnit tests for the nh() function.
+CC kunit
+
+On Sun, 11 Jan 2026 at 10:44, Vladimir Oltean <vladimir.oltean@nxp.com> wro=
+te:
+> Add helpers in the generic PHY folder which can be used using 'select
+> GENERIC_PHY_COMMON_PROPS' from Kconfig, without otherwise needing to
+> enable GENERIC_PHY.
 >
-> These replace the test coverage which will be lost by removing the
-> nhpoly1305 crypto_shash.
+> These helpers need to deal with the slight messiness of the fact that
+> the polarity properties are arrays per protocol, and with the fact that
+> there is no default value mandated by the standard properties, all
+> default values depend on driver and protocol (PHY_POL_NORMAL may be a
+> good default for SGMII, whereas PHY_POL_AUTO may be a good default for
+> PCIe).
 >
-> Note that the NH code also continues to be tested indirectly as well,
-> via the tests for the "adiantum(xchacha12,aes)" crypto_skcipher.
+> Push the supported mask of polarities to these helpers, to simplify
+> drivers such that they don't need to validate what's in the device tree
+> (or other firmware description).
 >
-> Signed-off-by: Eric Biggers <ebiggers@kernel.org>
-
-Thanks for your patch, which is now commit 7246fe6cd64475d8
-("lib/crypto: tests: Add KUnit tests for NH") in v7.0-rc1.
-
-> --- a/lib/crypto/tests/Kconfig
-> +++ b/lib/crypto/tests/Kconfig
-> @@ -45,10 +45,18 @@ config CRYPTO_LIB_MLDSA_KUNIT_TEST
->         select CRYPTO_LIB_BENCHMARK_VISIBLE
->         select CRYPTO_LIB_MLDSA
->         help
->           KUnit tests for the ML-DSA digital signature algorithm.
+> Add a KUnit test suite to make sure that the API produces the expected
+> results. The fact that we use fwnode structures means we can validate
+> with software nodes, and as opposed to the device_property API, we can
+> bypass the need to have a device structure.
 >
-> +config CRYPTO_LIB_NH_KUNIT_TEST
-> +       tristate "KUnit tests for NH" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS || CRYPTO_SELFTESTS
-> +       select CRYPTO_LIB_NH
+> Co-developed-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+> Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-This select means that enabling KUNIT_ALL_TESTS also enables
-extra functionality, which may not be desirable in a production system.
-Fortunately CRYPTO_LIB_NH is tristate, so in the modular case the
-extra functionality is a module, too, and not part of the running
-system by default.  Unfortunately CRYPTO_LIB_NH is invisible, so this
-cannot just be changed from "select" to "depends on".
+Thanks for your patch, which is now commit e7556b59ba651796
+("phy: add phy_get_rx_polarity() and phy_get_tx_polarity()") in
+v7.0-rc1.
 
+> --- a/drivers/phy/Kconfig
+> +++ b/drivers/phy/Kconfig
+> @@ -5,6 +5,28 @@
+>
+>  menu "PHY Subsystem"
+>
+> +config PHY_COMMON_PROPS
+> +       bool
 > +       help
-> +         KUnit tests for the NH almost-universal hash function.
+> +         This parses properties common between generic PHYs and Ethernet=
+ PHYs.
 > +
->  config CRYPTO_LIB_POLY1305_KUNIT_TEST
->         tristate "KUnit tests for Poly1305" if !KUNIT_ALL_TESTS
->         depends on KUNIT
->         default KUNIT_ALL_TESTS || CRYPTO_SELFTESTS
->         select CRYPTO_LIB_BENCHMARK_VISIBLE
+> +         Select this from consumer drivers to gain access to helpers for
+> +         parsing properties from the
+> +         Documentation/devicetree/bindings/phy/phy-common-props.yaml sch=
+ema.
+> +
+> +config PHY_COMMON_PROPS_TEST
+> +       tristate "KUnit tests for PHY common props" if !KUNIT_ALL_TESTS
+> +       select PHY_COMMON_PROPS
+
+This select means that enabling KUNIT_ALL_TESTS also enables extra
+functionality, which may not be desirable in a production system.
+As PHY_COMMON_PROPS is bool, this extra functionality is even part of
+the base kernel if KUNIT_ALL_TESTS=3Dm.  Unfortunately PHY_COMMON_PROPS is
+invisible, so this cannot just be changed from "select" to "depends on".
+But perhaps PHY_COMMON_PROPS can be made visible if KUNIT_ALL_TESTS,
+so the select can be turned into a dependency?
+
+> +       depends on KUNIT
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         This builds KUnit tests for the PHY common property API.
+> +
+> +         For more information on KUnit and unit tests in general,
+> +         please refer to the KUnit documentation in Documentation/dev-to=
+ols/kunit/.
+> +
+> +         When in doubt, say N.
+> +
+>  config GENERIC_PHY
+>         bool "PHY Core"
+>         help
 
 Gr{oetje,eeting}s,
 
@@ -126,8 +169,11 @@ Gr{oetje,eeting}s,
 
 
 --
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
                                 -- Linus Torvalds
