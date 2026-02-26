@@ -1,167 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F11823DD;
-	Thu, 26 Feb 2026 07:23:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573513195F0
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 07:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772090612; cv=none; b=PbHOdkqpcbg1Dvt2CyUswheiLnX55BqC2tWgzltDXRKRcmK/JOKR5w/SoOrmBHxmDznW0LMY1VKCHm2wFs42ulF1sROKPV3SavXWQSahINwFdaCpEwlk5JSzmVqzGox0uIYTzLD8DET/b1InQziBXJghfLEEiLRl530AJpo+qwI=
+	t=1772091225; cv=none; b=oPGbDl72X4CLRHM3Y+1vFkN9XHEdH4vsMtIDqKawNacLKkae6nOjHfXrKHrbYKAb+D/sdzaNwrj/CxvuwJEmlt13aotgWxEPPEVbuqPsCeVDXcawFUMeYYnIlqpXztCj1aVVAqg1a11n2IIeSvt/HnS5sG+SG25gxLErjwHE53M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772090612; c=relaxed/simple;
-	bh=GCPuXk8MuiUtk6Jf+apT8eJklqsp4FrEkzQCLhHjJzA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u25HQkc/vaeK5Btkhk8Son3AUq11jLGeEPzqhE2SXVwNCyS9yf1hEuwepGLGGvOSpK1z+LbtICxidD/FC9boR6U30pxLHYU7UroZfzBqWkJITJYZ4nvYsdcwRf3KH3DGcdLOyzMELCLpZGyTREOnT1gpLcyP/Fok4DdTiBSr540=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W6OUiFpf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772091225; c=relaxed/simple;
+	bh=eAD1ZESzfzygQ1Mv5iwydAGldrYIsIgWQRnqB+EGTpM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EbLC61t0lAYlByGTp+7TYY6VILf4W/O2H40J+RQaDPyDiADQMJjcafsctiO0YRtI/12IRb8O1MimswzejcKhlj6ZSPgBLld7aI1zmy8142XntyWCNj9RMorxYEFiGvPIZuRQ29HNTc5EsISDMSJKSt1QF67d5blE4LaDBvHX6mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XRw1Xcs9; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W6OUiFpf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196F8C19422;
-	Thu, 26 Feb 2026 07:23:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772090612;
-	bh=GCPuXk8MuiUtk6Jf+apT8eJklqsp4FrEkzQCLhHjJzA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=W6OUiFpfAJHJOfeUHzXkGt0sQWDLMLXxHhTfm3DuKlrM0/dxA2DC1pvO5kYbPGRPY
-	 ZKxMfIsB60L2EkntNk5xEzwZUTdOZjcPEYRvIOyJEVrR6h0Qdtpj9dvb545jIsKaIf
-	 sHLQ4eRE+E/awQbe2GKPK+XGaldnXP5IFVyhEKooj1TuDrz5PEGKlcZneB5poOeQjK
-	 /7sDPvUtu6P/ezaEVLmVYFEvMzMs4WSuCJ3tTbT8Kkb7baXcECCktjwRJ3k5t0M3px
-	 2xudCbXvFPE6PihONxc13xt9Jeqml+ZIiSD4mLcnt40AATgv5phXvsoaGeEoZfmop7
-	 7wVoSRn4cwi+A==
-Message-ID: <ccaf0b4a-ba1e-4443-89d3-8fecdcfd3a14@kernel.org>
-Date: Thu, 26 Feb 2026 08:23:23 +0100
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XRw1Xcs9"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-480706554beso7093945e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Feb 2026 23:33:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1772091223; x=1772696023; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kEbv/r6Z5V121fpgI9RtZaGhloVZMWh2/Wjp0l5cuNo=;
+        b=XRw1Xcs96Z3Il2/XS0QHMaEPvgd3VCxniTWKZIk2KO3E0WBaJtA/pC0yOKf1nBV8eo
+         xHNPNYiMQgsDXZKt3V22Ep7ObJ71RURO5vLXlDsGMSNDMMklPmQVonEOPYw42OWHvEL8
+         /sM1SXOcbg/ezGaXZJzz0U+ek+CNJOiSlrpI8kzazJfsA0eiBcOwnZZMg/BSk+VunSKv
+         44UAfir56UJucuAhe9knwDOPJBJp/P4CmqdRp/AD/yT25KgNDVudmXTqepQfaNqNCo9u
+         L4NaM98Q2nUFSNdUWFYddZz8SelGmJZaUOWXv/HYtkfJhdsjUxm/8//TmOhRROrxbyd0
+         CYag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772091223; x=1772696023;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kEbv/r6Z5V121fpgI9RtZaGhloVZMWh2/Wjp0l5cuNo=;
+        b=PQ9jUZcbNmlnKUkxsztwquje/kbA5DmsBNxadjRkeXnnuBhcGQALkpd4g0rnbee4FD
+         I/lw00/ZPmBGHHXvGN620UdNssZ6K5LGyGGpSBFKGgz+XXCNSBzyg4C0Osbn1a34nl8j
+         o35O5Gk3Q2QIdjyR2gpIxBq5UWH3wgJfLvUBqhD6Yod1UOomEdhSJ52OxDM+EDmEpW5x
+         BzUqaHoKYFAYABenq2LRkwWGv3CkjbOkMrS5vBVvD1wbCKLYFA7NHZ5dY/3Fu1L11ZoX
+         7jVH7uSkwLUvCJ3p3qLEVrD+Z0AsRl/jlz/6JMTeEg5VozwlVJ2Qq3Vz3fmMOujvDc8X
+         dO9w==
+X-Forwarded-Encrypted: i=1; AJvYcCW4Kq9R+/mqQkzLy0xkn+hkEmzECzJrGgEH8HlALX6teM3wus/cPrOJ/eD8gWyti3U9mLoX4cAGNmXWoedTAqA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDPz9VOSqX7q0gLpE1kjGqrK7EnFs55LmfIZy03PRsOWJiefzY
+	fz2W/kao3Je+QZjvGeZtQVTAg9d9n2pCeZYYC2xp2f2dCvrEa3pPDN0K301ELxjJwtM=
+X-Gm-Gg: ATEYQzwkZNkPyNcS3MThUmNtMkGssMsHRefd7L+yO2Dbwdq0Zj3XS5tiMhjaYWQJrBM
+	N7y7Kg/2ZdmQzN9PJk93SVnLeyr79miWl5Gxcnivw2aMDXCC3AQQsw1fmvqj/UQfqZAmL+KYZAs
+	qeKKaJtDXbv28RxQVkGgOBrvmsu5rua3PST/7UR/Metbt7B/jRyJMrPK6Lexap9aP6yqOCwoX+F
+	hnTnvudulba3BL7UmyyGU+VrlO5WeKscF1f69TgMLQzBuH4wlBlTsjFbtcoaqG/InjwemIyWygU
+	Hwvk9cznHhgY0oc58R+achVCDExls1ZN+rtFzdGQ+dm0aZsk4VDdIUnBITOdmX+qIbmKvVFoDdo
+	/gaNmMc7ktE02kcgWrU+dxrG4+3jQAWF/SYGmna0r4RPyjJhe2phAzClB9y5/j6/bmXoJBEt7od
+	wOmpKSY48FTwdbMCiH9MI=
+X-Received: by 2002:a05:600c:198b:b0:483:ad56:8d16 with SMTP id 5b1f17b1804b1-483c216ae22mr47028305e9.6.1772091222734;
+        Wed, 25 Feb 2026 23:33:42 -0800 (PST)
+Received: from u94a ([2401:e180:8d80:eebd:d098:7649:31a9:9ad7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5b03ffsm20566365ad.1.2026.02.25.23.33.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Feb 2026 23:33:42 -0800 (PST)
+Date: Thu, 26 Feb 2026 15:33:34 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Greg KH <gregkh@linuxfoundation.org>, 
+	Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc: Ricardo =?utf-8?B?Qi4gTWFybGnDqHJl?= <rbm@suse.com>, 
+	stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
+Subject: Re: Latest BPF selftests on stable kernels (was 'Re: [PATCH stable
+ 6.12 0/5] Backport selftest for "bpf: Check skb->transport_header is set in
+ bpf_skb_check_mtu"')
+Message-ID: <f7n6fetxwo5agf5rn56my2tkepieh6lacg4cnkgt3z7vb7q2gu@jvn4l5uzgxuw>
+References: <20260224073810.85945-1-shung-hsi.yu@suse.com>
+ <bd0277b7-4a19-46a4-9f06-96d48cbc89d8@oracle.com>
+ <DGN6PFT94YHU.3S3UXTP82975E@suse.com>
+ <crki45lsdj4yjmz3ix4k5scjuovjr56oexmwhhwbqeejdxh3j2@kgve6uooitce>
+ <2026022557-synapse-schilling-e88b@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/2] selftests: drv-net: rss: Generate unique
- ports for RSS context tests: manual merge
-Content-Language: en-GB, fr-BE
-To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
- Willem de Bruijn <willemb@google.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Daniel Zahka <daniel.zahka@gmail.com>, Carolina Jubran <cjubran@nvidia.com>,
- Gal Pressman <gal@nvidia.com>, David Wei <dw@davidwei.uk>,
- Mohsin Bashir <mohsin.bashr@gmail.com>, Nimrod Oren <noren@nvidia.com>,
- Breno Leitao <leitao@debian.org>, Petr Machata <petrm@nvidia.com>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- "David S . Miller" <davem@davemloft.net>, Mark Brown <broonie@kernel.org>,
- linux-next@vger.kernel.org
-References: <20260224224659.1507082-1-dimitri.daskalakis1@gmail.com>
- <20260224224659.1507082-3-dimitri.daskalakis1@gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
- YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
- c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
- WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
- CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
- nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
- TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
- nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
- VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
- 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
- YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
- AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
- EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
- /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
- MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
- cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
- iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
- jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
- 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
- VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
- BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
- ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
- 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
- 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
- 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
- mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
- Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
- Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
- Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
- x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
- V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
- Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
- HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
- 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
- Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
- voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
- KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
- UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
- vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
- mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
- JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260224224659.1507082-3-dimitri.daskalakis1@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2026022557-synapse-schilling-e88b@gregkh>
 
-Hello,
-
-On 24/02/2026 23:46, Dimitri Daskalakis wrote:
-> The RSS ctx tests rely on NFC rules with unique ports to steer packets
-> to the correct ctx. This updates the test to use the new rand_ports()
-> helper to guarantee the ports are unique.
+On Wed, Feb 25, 2026 at 06:32:40AM -0800, Greg KH wrote:
+> On Wed, Feb 25, 2026 at 10:35:06AM +0800, Shung-Hsi Yu wrote:
+> > Cc BPF mailing list and maintainers. Plus other in the referenced
+> > thread.
+> > 
+> > Hi Harshit,
+> > 
+> > On Tue, Feb 24, 2026 at 09:18:04AM -0300, Ricardo B. Marlière wrote:
+> > > On Tue Feb 24, 2026 at 4:53 AM -03, Harshit Mogalapalli wrote:
+> > > > On 24/02/26 13:08, Shung-Hsi Yu wrote:
+> > > >> This patchset backport the corresponding BPF selftests for commit
+> > > >> d946f3c98328 ("bpf: Check skb->transport_header is set in
+> > > >> bpf_skb_check_mtu"), which has already been included since 6.12.63.
+> > > >> 
+> > > >> The BPF selftest added in commit 6cc73f35406c ("selftests/bpf: Test
+> > > >> bpf_skb_check_mtu(BPF_MTU_CHK_SEGS) when transport_header is not set")
+> > > >> additionally depends on network namespace support for BPF selftests
+> > > >> added by Bastien, otherwise the MTU in root networking namespace will be
+> > > >> set to 10, causing other BPF selftests to fail. Credit goes to Ricardo
+> > > >> Marlière for figuring out the dependency.
+> > > >
+> > > > Note:
+> > > > I have recently learnt that ideally we are supposed to run upstream 
+> > > > latest kselftests on stable kernels as well. If a feature is not 
+> > > > supported the kselftests are meant to be skipped.
+> > 
+> > Thanks you for the bringing this up! This was also mentioned by Daniel
+> > (Borkmann), but my experience aligns with Ricardo's.
+> > 
+> > > That is not true for BPF, from my (limited) experience.
+> > 
+> > I do want running latest BPF selftests to work on stable thought, made
+> > some half-hearted attempts last April on trying bpf-next's BPF selftests
+> > (during 6.15 phase) run on stable/linux-6.14.y, but wasn't able to get
+> > pass the building phase.
+> > 
+> > As far as I remember I ran into issue building bpf_testmod.ko (kernel
+> > module) of bpf-next against 6.14, and other similar issues related data
+> > structure or API changes. Pretty much the same set of problems we get
+> > when trying to build any driver in the latest kernel against stable
+> > kernels.
+> > 
+> > Maybe it can work if BPF selftests that does not depends on
+> > bpf_testmod.ko, and build failures of BPF programs are simply ignored
+> > (not sure how feasible that is, probably would make Makefile much
+> > complicated), so for now I'm sticking with backporting BPF selftests to
+> > stable kernels.
 > 
-> Manual testing shows that generating 32 ports with the existing method
-> would result in at least one duplicate 4% of the time.
-FYI, we got a small conflict when merging 'net' in 'net-next' in the
-MPTCP tree due to this patch applied in 'net':
+> If a kernel test module is involved, then yes, you are right, those
+> changes do need to be backported as mix/match of kernel modules to other
+> trees is not something that we support.
+> 
+> We only want this to be the rule for when we have purely userspace test
+> cases/code.
 
-  ce5a0f4612db ("selftests: drv-net: rss_ctx: test RSS contexts persist after ifdown/up")
+Thanks for the confirmation regarding kernel test module.
 
-and this one from 'net-next':
+For the record most BPF selftests probably doesn't depends on
+bpf_testmod.ko, I don't think I have state that clear enough in the
+exchange. So with some work running a subset of latest BPF selftest on
+stable kernel may be possible, just that I have no idea the effort
+required. 
 
-  19c3a2a81d2b ("selftests: drv-net: rss: Generate unique ports for RSS context tests")
-
------ Generic Message -----
-The best is to avoid conflicts between 'net' and 'net-next' trees but if
-they cannot be avoided when preparing patches, a note about how to fix
-them is much appreciated.
-
-The conflict has been resolved on our side [1] and the resolution we
-suggest is attached to this email. Please report any issues linked to
-this conflict resolution as it might be used by others. If you worked on
-the mentioned patches, don't hesitate to ACK this conflict resolution.
----------------------------
-
-This conflict was in the context: modifying one line here in 'net-next',
-and the ones around in 'net'
-
-Rerere cache is available:
-
- https://github.com/multipath-tcp/mptcp-upstream-rr-cache/commit/8e4747e
-
-Cheers,
-Matt
-
-1: https://github.com/multipath-tcp/mptcp_net-next/commit/098b2437f100
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
---------------------- 8< ---------------------
-diff --cc tools/testing/selftests/drivers/net/hw/rss_ctx.py
-index b9b7527c2c6b,cbeb3a38fdfe..9a1fba247708
---- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-+++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-@@@ -10,9 -9,8 +10,9 @@@ from lib.py import ksft_eq, ksft_ne, ks
-  from lib.py import NetDrvEpEnv
-  from lib.py import EthtoolFamily, NetdevFamily
-  from lib.py import KsftSkipEx, KsftFailEx
- +from lib.py import ksft_disruptive
-- from lib.py import rand_port
-+ from lib.py import rand_port, rand_ports
- -from lib.py import ethtool, ip, defer, GenerateTraffic, CmdExitFailure
- +from lib.py import cmd, ethtool, ip, defer, GenerateTraffic, CmdExitFailure, wait_file
-  
-  
-  def _rss_key_str(key):
---------------------- 8< ---------------------
+Thanks,
+Shung-Hsi
