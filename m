@@ -1,107 +1,86 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3CF22157B;
-	Thu, 26 Feb 2026 09:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF33C2F7478;
+	Thu, 26 Feb 2026 10:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772099945; cv=none; b=uN7Zf3Fr7Z1I89I421HflX/Yz/A/ak8EPTpDGsHhEpgKtjAjxzqy/JxAyRtQTp5/yoODYdhiddESVEcT6RVkSMazdwtKBFGyckn0H1kqf70k0T4pWG8Q3+7j77ZtVY2Qjup5BmlwhqkzG+5D6RgigSb3l12vJsoHKSaI2WWQL4U=
+	t=1772101205; cv=none; b=YVlKsTNKVKTTewOdguGgb0BT/mCoavnIRULs3y4sKiUvsJsN/pQL6bgLgNr79tsIcwnUoP/621Z1qVela2JRkvHyBFBuyayhRANPAX/tmJnxeCgMk9eNTOgeEhbFNKYx+lLUwcP7MQXIuUy7+zfam6qK5lDlYraCrFgCrYDq5Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772099945; c=relaxed/simple;
-	bh=xnsgGhCAvA/FGKQrDFk3LFrWwe8fzOofaCQtVEYGFDU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oF5NG6r3FQevOrLf2PYGUfBA7NQsR4xgkLyg6TByB8sJHgX+g33DAiAXY9pwZ4XHUmBy0EVxzHKXR8vmayYB/fRMmITkrFVzbQkoX9MzrmcadKaKYqNLrpD6NaQv6bKsDmQuT23zlpz6TI3SbvHO9er5qG9MJwJDR+GSvY3phog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JbtKeFL9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oafF1Wkj; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1772101205; c=relaxed/simple;
+	bh=iDz13LP7DM09M9k+zfKiRb2KkCIRF1a2FJtg0xagvGA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Qdwlrwc0FU5jFo4l7Y6Y9LvGLTF3B5TBdTJBFvVkH8dcrD2ZLB5cDcj97iEb1LIPkHxWNp6je4qLwkzM17rjXoEoenzri6T07WzQh3mjlIgHWmRoawI9hFjXhcYTQMIKBlKP1yVvT2bXVcao1/XXcbG6PG3bk3ubI+OcabKLQYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CNRIJI30; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JbtKeFL9";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oafF1Wkj"
-Date: Thu, 26 Feb 2026 10:58:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772099941;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UYam34fvx910nzxtv0zP2ACsjNjwt7ARQIEtWYy7sKs=;
-	b=JbtKeFL9cdPIQli9XdfpGHUlRUhvSy+1UoKZzpP0A9RjaDuvQSBpI/FcQFO7M3HwIEo/Qi
-	+fINqS1y0o+Gxpsl6HE7D4xJXs8KThO4Ax5qSptIIZBqHgFlEnN5Q+kerK2rKB/iTW3UUZ
-	e0u80Pba6Ui8GYwmD5dTu9iY5l5m++QdlQABHNMneyWjteRR+awZBcmBp/xHxxS7GkAwzW
-	GNvEE3Dcdw6ObilXCI/l4H/a6IHaRIyyaJ9IW/szfgIA61IzY07Aj/SiYJY91qZ6YKHfes
-	iJ1DHMyktHU2auItiyBDVWnv1eywVFGTPznBK4bRsPsX8ox8Q9MqDNXhssdHfw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772099941;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UYam34fvx910nzxtv0zP2ACsjNjwt7ARQIEtWYy7sKs=;
-	b=oafF1WkjPRpOKkopI+HDb9u5sBu0wwK2Ap8/pDQ+prBNMQeVYA7gJpG20EVBS2zRviStRL
-	Dtld4x/xhOoDb3Cw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, jiayuan.chen@shopee.com,
-	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jussi Maki <joamaki@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf v1 1/2] net/bpf: fix null-ptr-deref in
- xdp_master_redirect() for bonding
-Message-ID: <20260226095859.hLxDgGdn@linutronix.de>
-References: <20260224112545.37888-1-jiayuan.chen@linux.dev>
- <20260224112545.37888-2-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CNRIJI30"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC3AC19422;
+	Thu, 26 Feb 2026 10:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772101205;
+	bh=iDz13LP7DM09M9k+zfKiRb2KkCIRF1a2FJtg0xagvGA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=CNRIJI30lsQB4xeaSUvGaxr4KLIjfIZVtplWLfcxFOVhjPtfTRWHI5hu9LSX0XCv3
+	 s3oZykZpuNo01/g48sqS3KcifW+TYhuVr7RNHCiKg6oIVcFD0RxMN+sq0CorBxeunJ
+	 /AAJyuj0w1x0OobhFl5RnUAj2kWG5vg5wD5aq/isXVtgR5DmrXpcsMZT0H+yoHzB1g
+	 n+/kEjtjnpyDrR9bgxxzG5XLi+BGh80yKhYkSiutldWvwAWnnmgqCiT6Im8LoZPeTA
+	 Qh/LOc2Wtv05dziIF6hdLl2uCMC+yg1a2onwitoOS7aj0ZcQLJHhuoeAaWFjXyfbpf
+	 bspmJ/T1tFkdQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D60380A977;
+	Thu, 26 Feb 2026 10:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260224112545.37888-2-jiayuan.chen@linux.dev>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3 0/3] vsock: add write-once semantics to
+ child_ns_mode
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177210120979.1146836.15985214642756769564.git-patchwork-notify@kernel.org>
+Date: Thu, 26 Feb 2026 10:20:09 +0000
+References: <20260223-vsock-ns-write-once-v3-0-c0cde6959923@meta.com>
+In-Reply-To: <20260223-vsock-ns-write-once-v3-0-c0cde6959923@meta.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: sgarzare@redhat.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, stefanha@redhat.com,
+ shuah@kernel.org, bobbyeshleman@meta.com, mst@redhat.com, corbet@lwn.net,
+ skhan@linuxfoundation.org, virtualization@lists.linux.dev,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ kuniyu@google.com, ncardwell@google.com, daan.j.demeyer@gmail.com
 
-On 2026-02-24 19:25:41 [+0800], Jiayuan Chen wrote:
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4387,6 +4387,9 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
->  	struct net_device *master, *slave;
->  
->  	master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
-> +	if (unlikely(!master || !netif_running(master)))
-> +		return XDP_TX;
-> +
+Hello:
 
-I'm not sure this check belongs here as this is not bond specific, is
-it? Also nothing stops the admin to put the device right after the
-netif_running() check so it fails later but the race window is not as
-wide as it is now.
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-The per-CPU memory could be allocated while the bond device is created.
-I don't think delaying it until "device up" brings any advantages.
-One creates the device with the intention to use it so the "up" is
-inevitable.
-The bond_xmit_get_slave() callback has the same logic. Couldn't this
-scenario also occur to the ->ndo_get_xmit_slave() user?
+On Mon, 23 Feb 2026 14:38:31 -0800 you wrote:
+> Two administrator processes may race when setting child_ns_mode: one
+> sets it to "local" and creates a namespace, but another changes it to
+> "global" in between. The first process ends up with a namespace in the
+> wrong mode. Make child_ns_mode write-once so that a namespace manager
+> can set it once, check the value, and be guaranteed it won't change
+> before creating its namespaces. Writing a different value after the
+> first write returns -EBUSY.
+> 
+> [...]
 
->  	slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
->  	if (slave && slave != xdp->rxq->dev) {
->  		/* The target device is different from the receiving device, so
+Here is the summary with links:
+  - [net,v3,1/3] selftests/vsock: change tests to respect write-once child ns mode
+    https://git.kernel.org/netdev/net/c/a382a34276cb
+  - [net,v3,2/3] vsock: lock down child_ns_mode as write-once
+    https://git.kernel.org/netdev/net/c/102eab95f025
+  - [net,v3,3/3] vsock: document write-once behavior of the child_ns_mode sysctl
+    https://git.kernel.org/netdev/net/c/b6302e057fdc
 
-Sebastian
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
