@@ -1,157 +1,217 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61009372B37
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 18:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772216303; cv=pass; b=LU9/KYUsUC+evaNrVbsjf34SUvMJhQAVXxeDunTLZNBGLKLy2dfdPMDhE8HrUfRd+tyxx6bSW8jvkQzfM4IMQtY/98USiLIHG6JdDpGbwGGhMzOWmqOPJ/6OG++trPYhzlsCggVk8uqyVv2mfMxyQ2IH6MFCvO/WM1iaDPDoT28=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772216303; c=relaxed/simple;
-	bh=go9pLsoIXwHeWsSg2SF7qlsw3Et1NlKlu6WwpsdWHTs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OLOuA3WUpnh/ASshmX7mdYtvyuy42m5d4WZy0prjWAhgDBDsSQtUzVZFBx3VWsGlEWSg7vVfjY/3A4VSk7WCeBfHHgAOl96XnUhEi8NZI/BvT/Sy/CRDr2gEIAmGZlFVpmzHw2bxDAD9NAZ1Tungt7VhTIRiN5ULQgWRpvmOQGM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bbU1E1A2; arc=pass smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80310348445;
+	Fri, 27 Feb 2026 18:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772216714; cv=none; b=o5/rOFKBETLNfEKtUA2y2tleeMIcY3tQBX98/F4C4tRsa7eZyvt/JY665JKA2RnuchjikW8e4psSeLA8G27JRAtTEROVKYa8Wgv5L3Sblzfrw0Cy1mi0u/olQKWdPkDhjYmmk2JsCAU1fRP++tWQ8V3oisPZOGdc+TbW5zcks6o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772216714; c=relaxed/simple;
+	bh=ij3/uuF1IJxXf2afJj9FRKZNyAbuS7zCH04NXX5F1y8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=g1dSxeDlqSmgkJQmpJDltnQE1GIvlbGMgu0J8rSlKJ16C2OhGUrwzlHvDGgIVSx/KZPvEIaEXm5TvxqR6CmVzKcRgk/YQKmcIOXV5/eQoZheLB4C/2Sg1HY3mwXwYy9Ded5h+5pS1ZVcAfexHYWM7SvYo5ep7xVa7MWivN8W8VI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=M5HcbGYu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Gqh9tuzf; arc=none smtp.client-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bbU1E1A2"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43638a33157so2129200f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 10:18:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772216301; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YzGnVOYYxGD7c2OWZWApdRwIeew/RenFw6iXB4gmacx1mKc0PVMAcVpR2AoXeZjs9D
-         BJDDXQwEA/ggw3ikF9cOvaI81UYzMzGVLMYjcoYc7Hm7G5azbwMsGCVqc487tkomHBHn
-         Iw4AGmZX41iuSZxVmvFnFtIgm4N5d24DcQ/wLSmD3DNRc/4OoPCyaJrqkSc6SKe1bIqg
-         bW8eI8lxcLT349G8qc0pPch9J2FfC5EqyRh640UVCipaGlHuauBMd4SLSAJ0Vo3y5mm9
-         0DJJ9BkN17/4mFHKoEBU2yRiBC0R07QhyRppxNLIDeZGtmMwlkpe1ZfcKisTM0l/Wn/k
-         a5mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NMNuhM7y4Z7hySCCP9bwoDUIKI63MvNsZrVoSU50SCE=;
-        fh=PpM+TpND34yXz1pK/CqLG3i2RUd+nIotuKt1Xn7NMsM=;
-        b=T6MripPcMqF98kVMj4m71BkURpNutDMLtsP8mymbEBufZkL1IByY9H7qn0kQgxzJRE
-         /blyM/S5ovQLRd5zDXzffu80AWY04vu26+6phX4vKVzWfHJ5S2f8Gi11+SxDUs+V3/qV
-         t2GajH7JJEvSeM19ErvFLCivp3UHpb1THcYj+s0IdTJz8t0vkH9wKuvljiELlnnI1LF6
-         OmxiCbIf9cNcipOBgCSnKs0RayPOCy212Lhe3auWQzIBro3br+z2SimYHBUlPhGaQ4PQ
-         1SAPW6GcJn2wx378hP21yqLGtcOV9FvlbFWyrumrUQJ/iX4cfyKCb3wDhBZeP4QP6srD
-         weXg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772216301; x=1772821101; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NMNuhM7y4Z7hySCCP9bwoDUIKI63MvNsZrVoSU50SCE=;
-        b=bbU1E1A23P/oST1tC/htWbZ4WoQ+mus/9Gk8oyyXehy5IZm3ouYVjeMM6J7bkZ5xqF
-         nrZvddteNx1LlNmd/sNGBaCf/H4cXtLKsXJKCE6kWxphmaYRQxkMreFJYcLlR0PEGFIM
-         xfwWzTZDkts1OdCjFT04/OCJUcF5wZJthcsEY11KA/NR+1fdjucAOlwUiNtz64xdOqAj
-         KQ6gwatR4fOVwz7IeOPUf81sVVwSuGOg9ZtPSLzFX/bAFkZ+HO6nFbT83A8VgJjbho9o
-         n1zfWllg7EqzoE2zngHTn9vp6vBzbSBVx+L111TJl0zgmiPehJqRhkT3IrN9oKfQS6dX
-         cIBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772216301; x=1772821101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NMNuhM7y4Z7hySCCP9bwoDUIKI63MvNsZrVoSU50SCE=;
-        b=lhmvlB1GA7V5oJFtlj7PsHacH5QakBCrKsWf2p/dTNNExg2XqqHXf3MF8TxOrj9j6L
-         y3abqi4FL5x55OPU9iInhcUOp76EAg2Es6wMEoUYzOObuCQfcBAHFQgDBeHO1fReseQL
-         Mb+N7t0AjBD8mL5yObMB8zy/K9B2VKV0sMbNbu9LKOUzbNBARqhKx1FGOb25pcS+aMlI
-         lAa7rfKDrQ1TbibYhx3gS4bWtSm9dI34CkVYgS9zgURa5d+Qu0htKAjSG4aFnetJrNPP
-         xtSv2syjIgMbuSs3yuKrzUGPWDGy/mXtyHx2Wi90ifQR63k7aRAvRSV92kPBnSMS6L7x
-         kJgg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0/6on/2Hbk3EPaJRTaeC6AEMMn5d82foMDr3salVmlmdvW3mf/f91ZQNXsEQcfTRwSHuc5Iv0ahqkZ2iUqWc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqzOaVfmpn38dJdH6TYvre/oX+EUUbW93P5AV5CD7xkf0xU47r
-	MUa+TTd+uryaSge4uly4yHpVvUBYx8qxgX5G5oIYbumFgWhqdM73YlolOZWvTZqmCRmVbi3zsAV
-	OgzK+BtzK8LJqv4iUr22y1TW2k2wYA7M=
-X-Gm-Gg: ATEYQzwX2d8Kuc+5NFtDNQwdqWgeFw9+5HfW2dGilh988Samfg/2C8xN7064Q+sYGs2
-	60b4X4irhxPs28DexAnQgNBAPg3OCL9GfQAsXzFa58ky0h0g3dB1+IscgAwck2Pp6wRNt00EUlI
-	65tLXL1EUg4dGiteEkqECW8peBIYVYGRtOsBu91dbEym2iHnIHlf21wbIMQ5vhPofwNQWjCzXvp
-	6nPoLNeqXuuaa1h2O7vhKqYCSCsaCz5CQDTCmsd1hUmLIw445uQh998Fkb1bN71F1Gu3LSzVRyr
-	ZVwCviSt9Lv62mn7BoNQN7b7dWPxPVGVIYm9Lo62gGnmMg2Di4oDY04Jt78aP7HEJlW47uEKkKj
-	3TqIwRRIyHFG/nF+FZGOybUoI4A==
-X-Received: by 2002:a5d:584f:0:b0:437:7268:8e1e with SMTP id
- ffacd0b85a97d-4399de2cba3mr6429787f8f.51.1772216300720; Fri, 27 Feb 2026
- 10:18:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="M5HcbGYu";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Gqh9tuzf"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id E683C13014A3;
+	Fri, 27 Feb 2026 13:25:08 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Fri, 27 Feb 2026 13:25:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1772216708;
+	 x=1772223908; bh=h2MIetHNFq+qTvq+cXYYK0YgcuU2lcFpP3MOKL3SGt4=; b=
+	M5HcbGYuV2I6ExGXjWjOd4SeeCigxt2cqKKirjhfZh06/QH5jWk5Z0JXXsThF4Fa
+	7RNYoPp8Q5eAqiRc4MvFU9TfVLtKQF2soXn5Oi+wy5mVV02Y9V6al1nzNE0dM4Kf
+	WM/D1Xyoo09YEP+zJELM7kvTK/Ul5KUP+3qr1TPLZTPStNtbStFcdz+hWfflEMCR
+	eQDCZ0Ft8O0kf3j2MmhqyBxK+mhdOncmKEF4Dp4ercNY5ApAahSRV2An/RJEd4i7
+	BdyHODrQLIwkBu6mJDWJbQjY2nSQJaubJmCsA0WpqDsoj1gNpOHZWdqR9igUU03x
+	BT+8ghQY6qxqc1r0rOqLpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1772216708; x=
+	1772223908; bh=h2MIetHNFq+qTvq+cXYYK0YgcuU2lcFpP3MOKL3SGt4=; b=G
+	qh9tuzfCH3lGFGrRjjXpdIFarDbZ9CPj/YT4lwdF5h6EzJZsS7JvnCF0Ks8Fnt0K
+	LLfTOS7cdqhASypxTn6RzcsJBbGS38oM2wwz7RMuVfeRK5coZnlcRuACt2MXtpC7
+	oHxISpVXtMqtiuv/OOXKhaJEtt7KniH7T4QEfK6G5L7z1cX/ZSU5pv5LbVF42vgh
+	Zas7Cla0p33GtwfHxAEvLwtGrQiXgWNPpsRDMpMBUt041aDFgywssveH5+UbFKfk
+	+EdQzATJOuDsuK2NDYiJdTUMuhVhgtTwQOO6Zr5EeJ3shSuZkI0NQLDWzZr01fnv
+	3H57jQf4QaTibPhvtFDqQ==
+X-ME-Sender: <xms:g-GhafZtSzmZsd9mg_1JeAf4a7CBH5YscM2LP9OxDN6vYBmrOT2RjQ>
+    <xme:g-GhacBgZvn3vllUUZAduJus40XYnJCARLd5Qn2lpnCZ3hm5LcKmaH3_ifCdg8nRc
+    bhfW2epKwLgco9PQY9RMjvB-8ySVXhjHa2szTFK4d0BoXgBo_sTQA>
+X-ME-Received: <xmr:g-GhaXh3-jN2zQNLkCxS_aGmExZJC3QTxFCBwgyNzGHK4F5uOcX9ANZcPzI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgeeljedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfofggtgfgsehtqhertdertdejnecuhfhrohhmpeetlhgvgicu
+    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeetuefgleefhfdvueegffdtffevhfffgfffiedutdetgffhheejtdekfeek
+    ieehgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghlvgigsehshhgriigsohhtrdhorhhg
+    pdhnsggprhgtphhtthhopeegiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepug
+    hmrghtlhgrtghksehgohhoghhlvgdrtghomhdprhgtphhtthhopehhvghlghgrrghssehk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopegrjhgrhigrtghhrghnughrrgesnhhvihguih
+    grrdgtohhmpdhrtghpthhtohepghhrrghfsegrmhgriihonhdrtghomhdprhgtphhtthho
+    pegrmhgrshhtrhhosehfsgdrtghomhdprhgtphhtthhopegrphhophhplhgvsehnvhhiug
+    hirgdrtghomhdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhn
+    rdhorhhgpdhrtghpthhtoheprghnkhhithgrsehnvhhiughirgdrtghomhdprhgtphhtth
+    hopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhm
+X-ME-Proxy: <xmx:g-GhaZTBdxISglkYbGFG0qQfvpfCG4WwcCrRmOzReyBOsLRaTibMXA>
+    <xmx:g-GhaZuzpGX7ZWhZ_xeqPZZfg5xHy96idHFhKwVKbQXv6_voPSqgXg>
+    <xmx:g-GhaT_XKP-XkGzZ4qGYqUFyPdICEwLE_1eo3ZKj2dbSLvmaUQ6GRw>
+    <xmx:g-GhaVbO8hrlbCn4XT7ZfiNIekMI1_uwVcu6rbUJGDu-1KeSuemYKg>
+    <xmx:hOGhaZd0C4q89F5ZU_31WMqce-tyc-ZrNJ3uFW7ijN5Nq5kVoD4bQVYy>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Feb 2026 13:25:03 -0500 (EST)
+Date: Fri, 27 Feb 2026 11:25:01 -0700
+From: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>,
+ Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+ Alistair Popple <apopple@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
+ Jacob Pan <jacob.pan@linux.microsoft.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+ Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+ kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+ Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, linux-pci@vger.kernel.org,
+ Lukas Wunner <lukas@wunner.de>,
+ =?UTF-8?B?TWlj?= =?UTF-8?B?aGHFgg==?= Winiarski
+ <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>,
+ Parav Pandit <parav@nvidia.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Pranjal Shrivastava <praan@google.com>,
+ Pratyush Yadav <pratyush@kernel.org>,
+ Raghavendra Rao Ananta <rananta@google.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Saeed Mahameed <saeedm@nvidia.com>,
+ Samiullah Khawaja <skhawaja@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= <thomas.hellstrom@linux.intel.com>,
+ Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>,
+ William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+ Zhu Yanjun <yanjun.zhu@linux.dev>, alex@shazbot.org
+Subject: Re: [PATCH v2 02/22] PCI: Add API to track PCI devices preserved
+ across Live Update
+Message-ID: <20260227112501.465e2a86@shazbot.org>
+In-Reply-To: <CALzav=dxthSXYo13rOjY710uNbu=6UjzD-OJKm-Xt=wR7oc0mg@mail.gmail.com>
+References: <20260129212510.967611-3-dmatlack@google.com>
+	<20260225224651.GA3711085@bhelgaas>
+	<aZ-TrC8P0tLYhxXO@google.com>
+	<20260227093233.45891424@shazbot.org>
+	<CALzav=dxthSXYo13rOjY710uNbu=6UjzD-OJKm-Xt=wR7oc0mg@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260227164037.84110-1-sun.jian.kdev@gmail.com> <20260227164037.84110-2-sun.jian.kdev@gmail.com>
-In-Reply-To: <20260227164037.84110-2-sun.jian.kdev@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 27 Feb 2026 10:18:09 -0800
-X-Gm-Features: AaiRm52de5u7x-J2odVvUITF-GfaCVyn22iVXIPZ6Isfcnmemi_EZqJdoVNJLME
-Message-ID: <CAADnVQLT8nEetXYDB1rFOqwgyBvowbafUzuz=7EBWUyVQw5G6Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests/bpf: bpf_cookie: skip kprobe_multi tests
- without bpf_testmod
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 27, 2026 at 8:40=E2=80=AFAM Sun Jian <sun.jian.kdev@gmail.com> =
-wrote:
->
-> The kprobe_multi subtests rely on bpf_testmod fentry ksyms.
->
-> When bpf_testmod isn't available, libbpf fails to resolve
-> bpf_testmod_fentry_test* and skeleton load fails with -ESRCH, causing
-> false failures.
->
-> Skip these subtests when env.has_testmod is false.
->
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/bpf_cookie.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/=
-testing/selftests/bpf/prog_tests/bpf_cookie.c
-> index 75f4dff7d042..50f5e11e6e65 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> @@ -105,6 +105,11 @@ static void kprobe_multi_link_api_subtest(void)
->         unsigned long long addrs[8];
->         __u64 cookies[8];
->
-> +       if (!env.has_testmod) {
-> +               test__skip();
-> +               return;
-> +       }
-> +
->         if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
->                 goto cleanup;
->
-> @@ -192,6 +197,11 @@ static void kprobe_multi_attach_api_subtest(void)
->         };
->         __u64 cookies[8];
->
-> +       if (!env.has_testmod) {
-> +               test__skip();
-> +               return;
-> +       }
-> +
->         skel =3D kprobe_multi__open_and_load();
->         if (!ASSERT_OK_PTR(skel, "fentry_raw_skel_load"))
->                 goto cleanup;
-> @@ -451,7 +461,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
->         attr.type =3D PERF_TYPE_SOFTWARE;
->         attr.config =3D PERF_COUNT_SW_CPU_CLOCK;
->         attr.sample_period =3D 100000;
-> -       pfd =3D syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG=
-_FD_CLOEXEC);
-> +       pfd =3D syscall(__NR_perf_event_open, &attr, 0, -1, -1, PERF_FLAG=
-_FD_CLOEXEC);
+On Fri, 27 Feb 2026 09:19:28 -0800
+David Matlack <dmatlack@google.com> wrote:
 
-This part is not explained in the commit log.
+> On Fri, Feb 27, 2026 at 8:32=E2=80=AFAM Alex Williamson <alex@shazbot.org=
+> wrote:
+> >
+> > On Thu, 26 Feb 2026 00:28:28 +0000
+> > David Matlack <dmatlack@google.com> wrote: =20
+> > > > > +static int pci_flb_preserve(struct liveupdate_flb_op_args *args)
+> > > > > +{
+> > > > > + struct pci_dev *dev =3D NULL;
+> > > > > + int max_nr_devices =3D 0;
+> > > > > + struct pci_ser *ser;
+> > > > > + unsigned long size;
+> > > > > +
+> > > > > + for_each_pci_dev(dev)
+> > > > > +         max_nr_devices++; =20
+> > > >
+> > > > How is this protected against hotplug? =20
+> > >
+> > > Pranjal raised this as well. Here was my reply:
+> > >
+> > > .  Yes, it's possible to run out space to preserve devices if devices=
+ are
+> > > .  hot-plugged and then preserved. But I think it's better to defer
+> > > .  handling such a use-case exists (unless you see an obvious simple
+> > > .  solution). So far I am not seeing preserving hot-plugged devices
+> > > .  across Live Update as a high priority use-case to support.
+> > >
+> > > I am going to add a comment here in the next revision to clarify that.
+> > > I will also add a comment clarifying why this code doesn't bother to
+> > > account for VFs created after this call (preserving VFs are explicitly
+> > > disallowed to be preserved in this patch since they require additional
+> > > support). =20
+> >
+> > TBH, without SR-IOV support and some examples of in-kernel PF
+> > preservation in support of vfio-pci VFs, it seems like this only
+> > supports a very niche use case. =20
+>=20
+> The intent is to start by supporting a simple use-case and expand to
+> more complex scenarios over time, including preserving VFs. Full GPU
+> passthrough is common at cloud providers so even non-VF preservation
+> support is valuable.
+>=20
+> > I expect the majority of vfio-pci
+> > devices are VFs and I don't think we want to present a solution where
+> > the requirement is to move the PF driver to userspace. =20
+>=20
+> JasonG recommended the upstream support for VF preservation be limited
+> to cases where the PF is also bound to VFIO:
+>=20
+>   https://lore.kernel.org/lkml/20251003120358.GL3195829@ziepe.ca/
+>=20
+> Within Google we have a way to support in-kernel PF drivers but we are
+> trying to focus on simpler use-cases first upstream.
+>=20
+> > It's not clear,
+> > for example, how we can have vfio-pci variant drivers relying on
+> > in-kernel channels to PF drivers to support migration in this model. =20
+>=20
+> Agree this still needs to be fleshed out and designed. I think the
+> roadmap will be something like:
+>=20
+>  1. Get non-VF preservation working end-to-end (device fully preserved
+> and doing DMA continuously during Live Update).
+>  2. Extend to support VF preservation where the PF is also bound to vfio-=
+pci.
+>  3. (Maybe) Extend to support in-kernel PF drivers.
+>=20
+> This series is the first step of #1. I have line of sight to how #2
+> could work since it's all VFIO.
 
-pw-bot: cr
+Without 3, does this become a mainstream feature?
+
+There's obviously a knee jerk reaction that moving PF drivers into
+userspace is a means to circumvent the GPL that was evident at LPC,
+even if the real reason is "in-kernel is hard".
+
+Related to that, there's also not much difference between a userspace
+driver and an out-of-tree driver when it comes to adding in-kernel code
+for their specific support requirements.  Therefore, unless migration is
+entirely accomplished via a shared dmabuf between PF and VF,
+orchestrated through userspace, I'm not sure how we get to migration,
+making KHO vs migration a binary choice.  I have trouble seeing how
+that's a viable intermediate step.  Thanks,
+
+Alex
