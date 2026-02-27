@@ -1,89 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955173B9605
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 09:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E385CCA4E;
+	Fri, 27 Feb 2026 09:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772183424; cv=none; b=l82duU4cu8XQyL/6nt9XF4IQ/DG2EpmrnruwdY5x0OlsIrGjlIdHCPUn2uxFD9P46fNSbSLy1J4kkVIxNrZfo/Fh7Y99htJdOREk5UG94lY1I3htu6+4VY9Fvb8AukJP1pFR/sXOimsIQAKxWvGXxdHkmgn2KSWbrzNiFg0oIAw=
+	t=1772183648; cv=none; b=j7n4WEqmu6hzUbaH9YeqB1PFJ0xCuD6rVhOEJkoSFN04HjC+XTHrtPxOqONXnYqcZ4tnS7tdIa0AqMIwRtHOAIW4vm3kHM3d8mvVvrGtt3fqVmy/7yUPvUsZxS8ulLDlJBcJ08fhMHpKTIcPoJPD8B2Fw7QclwX/ewp1LqVDEZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772183424; c=relaxed/simple;
-	bh=bjBai5VMBRxINe2gSxt0OFxPY+LNhi/qFeai/omC4rU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ps3AYg/hZFxB19ptAneSwE6W+sU8RVeKqtljR6pqsj4aV+d5hVoezLjUC+mtWfZPGYVk6ICgwv75KXZgsQMVbGCelWIh7MdwiKBe/C18stu3zsapDxuKkGsmbZ5OLxvXJayjEAQWT4c4reKXnQv1+zNh0v+ZV6pZpo0ZzFI4Vng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTLQOjgF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772183648; c=relaxed/simple;
+	bh=KEtIErQMHsU3HYVNgTieOZ1CyBhqo4GEqS1JOYo5cZA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WlFph7j5okilPQRhRcPNpwtUYV+9XgUo4jwczv3cboyNthd18dqV9HBoiFicAHvAWE/bDW/o7946MmabnlBO8OlhGEQ2m8W1E/i+V7Qy4Oc34Kt1CBoCCHWWMzKJiCRyV26Unf2DFOdEXL3DVRnxKQJfpbxhPJ7lOBgP4neExy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=ajzZriaX; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=PclzBmZ/; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTLQOjgF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 400C2C116C6
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 09:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772183424;
-	bh=bjBai5VMBRxINe2gSxt0OFxPY+LNhi/qFeai/omC4rU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aTLQOjgF+Izt58NrMO8+3KvJInX5pEKucIn/DhuFgt2iPOTbslM3BzxiMcO9nrbA7
-	 g2XuAt5Dfbz3Bamcrz7OvvmY1EhVYxp+OI84VaVYz6JMzzDy+H+TpaqA3XgqHr/GJK
-	 OEr5XJT6VpMFSpPJSvrtbmK+rgnhcZsfWtGNx7apLJbomalaroHg8F6ZeeqGmbJi05
-	 Q747vTmBajhZcAMuj22G9WR+l0i3q3IW5f9RoxQfusCFTRRY/hmPT3TEdTqDu2irrr
-	 GXdDU9u9HBlGj6ttwpuO4N0OzW9kh5jAw/buC8wf3H02JtsSTWRVzaAaebY5zkhsOj
-	 ptkf6iktJPAjg==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-389ee8efedeso18443641fa.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 01:10:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCULYbFnCLGkrfBfibapcEimR3eYeuIIs3WqjtVcfNX0tDtYpEpVuFYE0XhkOkihx3vWnt8zPScrWU2PKyI87eM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoiR9BtY37e3Hse1zk3m/rSl6mq8adgOKzicqD8KQ//bjxuQ7L
-	9yKw8PsL5WqKYo/945Fjv0F7X2RPqyj6+RrF6olqZgtWfeH9xkHY7N6MHIutGCLRIRFzGmm30XU
-	DqYl9uxiUFZUEE6DYs/HMCeKGSaedLB5su/beDq0UFw==
-X-Received: by 2002:a2e:9b19:0:b0:385:9b50:91a8 with SMTP id
- 38308e7fff4ca-389ff13b8a2mr8360891fa.15.1772183422910; Fri, 27 Feb 2026
- 01:10:22 -0800 (PST)
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="ajzZriaX";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="PclzBmZ/"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1772183638;
+	bh=KEtIErQMHsU3HYVNgTieOZ1CyBhqo4GEqS1JOYo5cZA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ajzZriaX1kUxt5eDQQPJnxO2UsJLTC4rH0YWlbGm0QKPx7Wx9nR5iqxbQWM+/dugs
+	 tfANEcS7iEL+gQi9MLYAmvI6Swa5Y4DiOnXeyzmojjfdEWgNFvjygRVKACVcS5RqNW
+	 lcZ4c0AFvkggDHDF2EWPr8WsCEGUw7oICbhq8WdgIR2riZUkGvnRHM8gfpZLYvgJSQ
+	 v9aX9xkC8dY/rWpmfSyJqBhRXD4QNqJp19sTnzjbq7xYb7IDfvFH/EJf+fDowAcoXz
+	 OSMep7UHJJKgfUyVWQISoxqec1Gsw48f72qeYdqIBVHOaviYubwGbdI6M17bQINRqf
+	 si89Wn8o1J0VUBDgNfCk9ddtWUHsfRdSDNAnkGY0pXQwQ45c4pq/7jgL+E42fqdJMP
+	 xW3Ofj4gSmKUptnFWueVri3fkmLMUSV9XW9fNsJDk4f+jmwPa3KCH0Sl0sZp+sktKn
+	 r41yOMvf/Qh7hQP3LR/xIMi06E9zg8A2c3ZM13I4YHD9tK1QlOQ1Nc3edpRmsMVbGE
+	 EtzNwRZBuI+99rzO3Hc4FgNS1ECUZW6cdbni6EYu3fuG1czB/GB5iJrlDWKJcqwSvz
+	 4NedANEw4u6FiOIDPPhRYv4Chz2fK4RgQ6bT71Y5wSSM7FVWRYkfgtCO0u1WG84tLC
+	 PQTnWSpB46GENpMVC9JDrQpg=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 22FC91E7A2D; Fri, 27 Feb 2026 17:13:58 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1772183636;
+	bh=KEtIErQMHsU3HYVNgTieOZ1CyBhqo4GEqS1JOYo5cZA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PclzBmZ/LXrh24R7m9HLvK0HXsmruOIYA9QmcA8CdqKONBTNDjfF8SHj9mEeX4hxm
+	 C+X25+keWQifM/hsX0IfA35jL3w9jeSwkpqOklkova4Zp1t/dHSRjlEt7ncO9J+MFu
+	 4rkgaAJi1UnAe2NinQCQtCE6Ufqrt5rDlFXruG5f1AvfR2Mj4Lv6dLhw4gpkqh+4qL
+	 /GvyYRI7xGqk+mRPe+OKl9JTlBTqETtgGspTc4YRYfrPYGzigBANcK1wO5MlyAmN66
+	 SwiPKWTZpPZTWnZBONajtZ7lYlqxMcjYD3sGGPWo41R3FbNWPGbovYjkjEZwTT1CaP
+	 lvdwWasxK7fGixImhnFfhgqdA+17M4YQ1grezHpHe/Pnh1eAtAHHy8QetdRl62a65y
+	 gkqYSLYC7jkDq9AwCJqr6omQbCdFNd/y1brlz9SerYvlDyx5wqHjv5f++GH4nbgQ6j
+	 3i9X15eo4Xe9PcZuLSmpMjmvNBAHRafuGjfpx2hVxlxYBQRhnUsnfwOJ84ySEssehz
+	 mmE+bXQ0UFT4osprOW8qq0csPqTMKiivYMXwWrFjJ0AOQz7YqaddfLbrkLKOEPaq/K
+	 2N7zjEzUg4GslVH9IZazroSmoXsZFdoSy+vYNrQGWW7MqhargvS0k6lhXB7bEBHnsR
+	 QIf5IRGDR1eFdObw6aa3OKGU=
+Received: from [IPV6:2001:8003:8824:9e00:6d16:7ef9:c827:387c] (unknown [IPv6:2001:8003:8824:9e00:6d16:7ef9:c827:387c])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id C44921E7A28;
+	Fri, 27 Feb 2026 17:13:56 +0800 (AWST)
+Message-ID: <55be6364-ba3f-4b26-b2de-924ef49639fe@davidgow.net>
+Date: Fri, 27 Feb 2026 17:13:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260223061726.82161-1-tzungbi@kernel.org> <CAMRc=MdU_1WW82imNHPFVktn0HVSdY7kkGScEXmi+JaKRNTMuQ@mail.gmail.com>
- <aaBAN7OOFNIpb6Wl@tzungbi-laptop>
-In-Reply-To: <aaBAN7OOFNIpb6Wl@tzungbi-laptop>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Fri, 27 Feb 2026 10:10:08 +0100
-X-Gmail-Original-Message-ID: <CAMRc=MfDR4G9pLgfMOP6MeAS5aOZbuueQXZ3q8-cd0a769MCeQ@mail.gmail.com>
-X-Gm-Features: AaiRm527EpsJXo-EefYHuwf7JrfrkmJAWlDHFNjnFafq_knYOjBbLmBLM9lPAOk
-Message-ID: <CAMRc=MfDR4G9pLgfMOP6MeAS5aOZbuueQXZ3q8-cd0a769MCeQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] gpio: Refactor and add selftest
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Linus Walleij <linusw@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: tool: copy caller args in run_kernel to prevent
+ mutation
+To: Shuvam Pandey <shuvampandey1@gmail.com>, brendan.higgins@linux.dev
+Cc: raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+References: <20260226152910.34530-1-shuvampandey1@gmail.com>
+Content-Language: fr
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20260226152910.34530-1-shuvampandey1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 26, 2026 at 1:44=E2=80=AFPM Tzung-Bi Shih <tzungbi@kernel.org> =
-wrote:
->
-> On Wed, Feb 25, 2026 at 02:26:19AM -0800, Bartosz Golaszewski wrote:
-> > On Mon, 23 Feb 2026 07:17:20 +0100, Tzung-Bi Shih <tzungbi@kernel.org> =
-said:
-> > > The series is separated from v3 to lessen the burden on the subsequen=
-t
-> > > revocable work per suggestion in
-> > > https://lore.kernel.org/all/CAMRc=3DMfQumD1ULx7yU4W2sx=3D35wyQf7-v4tS=
-f44OqEu3JDBUAg@mail.gmail.com/.
-> > >
-> > > The series is based on v7.0-rc1 and applies after
-> > > https://lore.kernel.org/all/20260205092840.2574840-1-tzungbi@kernel.o=
-rg.
-> [...]
-> >
-> > This no longer applies on top of current linux-next. Could you please r=
-abase
-> > and resend?
->
-> Did you try to apply the series after applying "[PATCH v3] gpio: Fix reso=
-urce
-> leaks on errors in gpiochip_add_data_with_key()" (link above)?
->
-> Tried on next-20260225; the 1+6 patches apply.
+Le 26/02/2026 à 11:29 PM, Shuvam Pandey a écrit :
+> run_kernel() appended KUnit flags directly to the caller-provided args
+> list. When exec_tests() calls run_kernel() repeatedly (e.g. with
+> --run_isolated), each call mutated the same list, causing later runs
+> to inherit stale filter_glob values and duplicate kunit.enable flags.
+> 
+> Fix this by copying args at the start of run_kernel(). Add a regression
+> test that calls run_kernel() twice with the same list and verifies the
+> original remains unchanged.
+> 
+> Fixes: ff9e09a3762f ("kunit: tool: support running each suite/test separately")
+> Signed-off-by: Shuvam Pandey <shuvampandey1@gmail.com>
+> ---
 
-Sorry for the noise, I should have reread the cover letter.
+Nice catch!
 
-Bart
+Reviewed-by: David Gow <david@davidgow.net>
+
+Thanks,
+-- David
+
+>   tools/testing/kunit/kunit_kernel.py    |  6 ++++--
+>   tools/testing/kunit/kunit_tool_test.py | 26 ++++++++++++++++++++++++++
+>   2 files changed, 30 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 260d8d9aa1db..2998e1bc088b 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -346,8 +346,10 @@ class LinuxSourceTree:
+>   		return self.validate_config(build_dir)
+>   
+>   	def run_kernel(self, args: Optional[List[str]]=None, build_dir: str='', filter_glob: str='', filter: str='', filter_action: Optional[str]=None, timeout: Optional[int]=None) -> Iterator[str]:
+> -		if not args:
+> -			args = []
+> +		# Copy to avoid mutating the caller-supplied list. exec_tests() reuses
+> +		# the same args across repeated run_kernel() calls (e.g. --run_isolated),
+> +		# so appending to the original would accumulate stale flags on each call.
+> +		args = list(args) if args else []
+>   		if filter_glob:
+>   			args.append('kunit.filter_glob=' + filter_glob)
+>   		if filter:
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index b67408147c1f..f6383884c599 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -503,6 +503,32 @@ class LinuxSourceTreeTest(unittest.TestCase):
+>   			with open(kunit_kernel.get_outfile_path(build_dir), 'rt') as outfile:
+>   				self.assertEqual(outfile.read(), 'hi\nbye\n', msg='Missing some output')
+>   
+> +	def test_run_kernel_args_not_mutated(self):
+> +		"""Verify run_kernel() copies args so callers can reuse them."""
+> +		start_calls = []
+> +
+> +		def fake_start(start_args, unused_build_dir):
+> +			start_calls.append(list(start_args))
+> +			return subprocess.Popen(['printf', 'KTAP version 1\n'],
+> +						text=True, stdout=subprocess.PIPE)
+> +
+> +		with tempfile.TemporaryDirectory('') as build_dir:
+> +			tree = kunit_kernel.LinuxSourceTree(build_dir,
+> +					kunitconfig_paths=[os.devnull])
+> +			with mock.patch.object(tree._ops, 'start', side_effect=fake_start), \
+> +			     mock.patch.object(kunit_kernel.subprocess, 'call'):
+> +				kernel_args = ['mem=1G']
+> +				for _ in tree.run_kernel(args=kernel_args, build_dir=build_dir,
+> +							 filter_glob='suite.test1'):
+> +					pass
+> +				for _ in tree.run_kernel(args=kernel_args, build_dir=build_dir,
+> +							 filter_glob='suite.test2'):
+> +					pass
+> +				self.assertEqual(kernel_args, ['mem=1G'],
+> +					'run_kernel() should not modify caller args')
+> +				self.assertIn('kunit.filter_glob=suite.test1', start_calls[0])
+> +				self.assertIn('kunit.filter_glob=suite.test2', start_calls[1])
+> +
+>   	def test_build_reconfig_no_config(self):
+>   		with tempfile.TemporaryDirectory('') as build_dir:
+>   			with open(kunit_kernel.get_kunitconfig_path(build_dir), 'w') as f:
+> 
+> base-commit: f4d0ec0aa20d49f09dc01d82894ce80d72de0560
+
