@@ -1,181 +1,180 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997C912E1DC
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 12:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BD3217F27;
+	Fri, 27 Feb 2026 13:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772195505; cv=none; b=DTjKx6KnSdiBcLRYVFqoM/IWvC5+zbTn7rDFO4jS4ioU1KQVhfQCL1xLEl/fGcz7pMiHfxoLLcldSVcQHqVicQdfD5EGfKvPkQhb2Tnc8DNWieyvXsTK4Jnb0pCgr0CauXjGZkELyV6GQuGob7Lz59KriWG9q7VV0n0aToIsxQM=
+	t=1772198507; cv=none; b=RMthDo6i2J+U6PmtP/ZCgCdTsRh7kvbR/ssqthAh9Fv4XMEHTgsp+PoV4Gw1IHzICkweA3urv6NIxjWfo9I8+CPCTElqDZfbhgEMCDUUdmZzMYSzVtTxZ535Vf4KlfllbXqR4SGOvAJkNk733qvWh9ZIMidracIhoriZhS93XYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772195505; c=relaxed/simple;
-	bh=v2/57WwF8w7iACHfTCkO5W9+hM3Krg3WvgtT0li001I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=POhuScTRFqHfx0FjAzeSrJP9CXrxAEvrLnhpR9CoNMLXijN5LhMzTI37z5E5Lq6EcK+pb1PsZCmROpt0A1TwL7VJahLXYT70gbFIuCopNJiwI88bcABBeuVjzzS4xOCmzRGPvo0sb3LwMLiPfx/elcyNQG4dKZBadVkfyFdXdYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5SLup0z; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772198507; c=relaxed/simple;
+	bh=RxKqxEY0Xu8EuSp7+bKFB2HeqvW76FbZw8P16BHa8oU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m4WtxIBd1EBy6ZGZwANpvId9btCkUEC/wmezmFF8+1FR6/1LGWoSN5CJHtbUPyKZmgaW4tv+/vukPyO6pphtsqDAWrLOx6EvD17vvzGQeR/oMDT1sCB4DbxHLhCkyKe2WK8zxzk1my7RNVvscfEHB0/LSsWSNCYgHIezepbS5yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eA4Idsw1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5SLup0z"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8273eb7798eso814877b3a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 04:31:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772195503; x=1772800303; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ajshf8l6anZvHOKZ2eAGK/RXqDyQYxeDuW8fo/WYnWI=;
-        b=G5SLup0zCW7uYyKPE3yGlJpcOgJzAEZI4Xcx2+Bvy8Ob4cu8Xyb1uqhP3MVe5SAdYZ
-         yPppYIMADWFC/FqgUsdB2hj1vQreNl19YZT23y9fIpVHM4Aa/qtSqxOQDrDKRFYmjoql
-         ugG9RHf9UTcYPQio7Zx1BJg3sMTPyAQjRperUY1FxPnwRFBUTD9DnRX6E6LVuc4iWRP5
-         2eEFzzNi0FAebPRpFwRSLB+tfrEpU4AWFbKCT4lJzvON5hRdpjH8/J3Ow7vUIXHpSqqW
-         zHLdJatZl5JJ5K3O1r4XLkRTxjJYx5QpWKAlIfzfnjlbLMNMToPTr1cmtOpiUKT9xvbM
-         VQTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772195503; x=1772800303;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ajshf8l6anZvHOKZ2eAGK/RXqDyQYxeDuW8fo/WYnWI=;
-        b=Qqf90KSh2Zf6teurMUoeHZHpWsg25KfLwp2yrWN2gzErjju6oGmBbZvtRssRBVN+nF
-         vJPKY8y0iw9eVLZrFuSuh8QUEiRHdjKSQS1BOqFvl5xt0UwF2N0TwOJBcJaA1Ir3ggb5
-         8cQmgMW4MpVvSnBElRrDN/sVm9qglYqzVEUObdHS2EmZXhvfAtpRaNDPNoeyx7wjFjl+
-         4G/29vgZxgwTMWgNw+a+MXxbonFbYvQny+EJfQPN8TY2yE/VFaiRWmra76Nwm9+v3DM/
-         /Eyn7t7pfJmyQaTf63qH3tIZf5bNtpbDrwI997zy7ieluER9CT5NiIii4HkIkKZnQBXV
-         1YhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVrw2hLRY7VmXWNBPonGcDDYNCswApofcrPC6XkIXJQE01gx4vjHpKuw54rAFOzE45mSb41eN9RoWsXuTdr0lU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTKlh9HoL3r2WXd3sSBzI+CE3PkxqTmF7BRwHxLtwAEGndJfA/
-	PXZsTTMPlCpLP09+pmCgRC6DNn4CQGMQiXtwv0r6Y3+F+M6+AZAPl7sb
-X-Gm-Gg: ATEYQzyx2NsaX2o9TjiurUQFH2e0ActuNdnLHB8xhCsFCyKNzAZ6kQGT7ZAvlBfnKUA
-	ydxOsfabyUbYK/aCiVspiz8qfvF5Nu2sVqZh2aGB8GVrk4RkdxzHfbqCIsKc+E3IOL3MS47jxSA
-	qN+JWOJbaE94XxXvVZ1jiiozuXbthIrIABl1wDNY593b6FMXPq7FjlafF50J7ULroj3941LMGcU
-	25SIr6+vkd8ebSIqsZWbjrN5he4OsMmuX8Cpi8jSo54jTLy1fP639jABmetXKHWGfkWm/3eQlWu
-	6Sbgx+2pv8kvkTn1h8SnrdKZJhjDtzUaG2d4204uWMi9YSgsoPYf4VZfuNWTL/JUe3SzyMJ1W6O
-	XBecyxU/A0U5SUo21TYW1Gakv1nIUbADb6tbsMCE9qzRjrSd/d0zefYZ28M1lzITczLVNbunnaR
-	+ouPXY4azhl/yZP0retny7yhQ1QVSsjm8ZJ7Iq8StVdTMQJzoj3nn3RB6ovJ2mNA==
-X-Received: by 2002:a05:6a20:938b:b0:394:6646:d3eb with SMTP id adf61e73a8af0-395c3b3abf9mr2842434637.64.1772195502633;
-        Fri, 27 Feb 2026 04:31:42 -0800 (PST)
-Received: from mac ([49.244.49.25])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3593dcad63esm6380432a91.2.2026.02.27.04.31.39
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 27 Feb 2026 04:31:42 -0800 (PST)
-From: Shuvam Pandey <shuvampandey1@gmail.com>
-To: brendan.higgins@linux.dev,
-	davidgow@google.com
-Cc: raemoar63@gmail.com,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	Shuvam Pandey <shuvampandey1@gmail.com>
-Subject: [PATCH] kunit: tool: skip stty when stdin is not a tty
-Date: Fri, 27 Feb 2026 18:16:36 +0545
-Message-ID: <20260227123136.91086-1-shuvampandey1@gmail.com>
-X-Mailer: git-send-email 2.50.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eA4Idsw1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4354BC116C6;
+	Fri, 27 Feb 2026 13:21:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772198506;
+	bh=RxKqxEY0Xu8EuSp7+bKFB2HeqvW76FbZw8P16BHa8oU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eA4Idsw1g4sl/MtQ/mfXzuFUUwt6ojhVGvS8BJ7642ce6l4mCGyqq7peIYz210mjA
+	 JGBIqKUalyg4EgBes27actsgQoPNUhFCqA5qXEJBt+0+saaNaB0gEaxIQoPIfuTAtd
+	 8EYZPxVB8QctXCRh+pukcmgcI5ykwBdqTjSlcgvLNW/kh0o7i/1AYo3Ux2aAzLjEqo
+	 wp9qhfx3uvEgvuKtsIM1Ke8TGFtxrQqcN0eVbneaon0BD+zyrdfwy7Y7t500W23oo0
+	 QJvfKIhB0EdYrtIzQf7Bz6Tl9mYswQ0vMYYDbNrG2vYO/MOcucodVFjLYyBPVvjKD5
+	 LCpNRGUNFDb8g==
+Date: Fri, 27 Feb 2026 14:21:44 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aaGaaExy63bGa7Or@lore-desk>
+References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
+ <20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
+ <20260218174742.62a4074f@kernel.org>
+ <aZbuWBnmh_SQJyVf@lore-desk>
+ <20260219091344.1d8517f3@kernel.org>
+ <aZyKWoxnywXKWth9@lore-desk>
+ <20260223151845.06db43b0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="X5UIePTG9Ua3mURR"
+Content-Disposition: inline
+In-Reply-To: <20260223151845.06db43b0@kernel.org>
 
-run_kernel() cleanup and signal_handler() invoke stty unconditionally.
-When stdin is not a tty (for example in CI or unit tests), this writes
-noise to stderr.
 
-Call stty only when stdin is a tty.
+--X5UIePTG9Ua3mURR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Add regression tests for these paths:
-- run_kernel() with non-tty stdin
-- signal_handler() with non-tty stdin
-- signal_handler() with tty stdin
+> On Mon, 23 Feb 2026 18:11:54 +0100 Lorenzo Bianconi wrote:
+> > > Off the top of my head drivers prefer reporting UNNECESSARY when they
+> > > have both, and reserve COMPLETE for cases where L4 could not be found
+> > > or is incorrect. Why don't we report both? We're using 3 args, we sti=
+ll
+> > > have 3 to go. We could turn ip_summed into a bitmap and have explicit
+> > > output args for both level and csum complete value? =20
+> >=20
+> > Ack, thx for the explanation. Just for sake of understanding, is there
+> > any NIC capable of reporting both csum_value and csum for the same pack=
+et
+> > in the DMA descriptor? Or is this change needed to be future-proof?
+>=20
+> Both nfp and fbnic definitely can. Off the top of my head - mlx5 also
+> can, but I haven't double checked.
 
-Signed-off-by: Shuvam Pandey <shuvampandey1@gmail.com>
----
- tools/testing/kunit/kunit_kernel.py    | 10 ++++--
- tools/testing/kunit/kunit_tool_test.py | 42 ++++++++++++++++++++++++++
- 2 files changed, 50 insertions(+), 2 deletions(-)
+ack, thx for pointing this out, I was not aware of it. I will modify the AP=
+Is
+in order to add the capability to report both cksum and csum_level for a gi=
+ven
+packet.
 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 260d8d9aa1db..6f49b184a6fb 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -345,6 +345,12 @@ class LinuxSourceTree:
- 			return False
- 		return self.validate_config(build_dir)
- 
-+	def _restore_terminal_if_tty(self) -> None:
-+		# stty requires a controlling terminal; skip headless runs.
-+		if sys.stdin is None or not sys.stdin.isatty():
-+			return
-+		subprocess.call(['stty', 'sane'])
-+
- 	def run_kernel(self, args: Optional[List[str]]=None, build_dir: str='', filter_glob: str='', filter: str='', filter_action: Optional[str]=None, timeout: Optional[int]=None) -> Iterator[str]:
- 		if not args:
- 			args = []
-@@ -384,8 +390,8 @@ class LinuxSourceTree:
- 			process.stdout.close()
- 
- 			waiter.join()
--			subprocess.call(['stty', 'sane'])
-+			self._restore_terminal_if_tty()
- 
- 	def signal_handler(self, unused_sig: int, unused_frame: Optional[FrameType]) -> None:
- 		logging.error('Build interruption occurred. Cleaning console.')
--		subprocess.call(['stty', 'sane'])
-+		self._restore_terminal_if_tty()
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index b67408147c1f..201d5245a9f4 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -503,6 +503,48 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 			with open(kunit_kernel.get_outfile_path(build_dir), 'rt') as outfile:
- 				self.assertEqual(outfile.read(), 'hi\nbye\n', msg='Missing some output')
- 
-+	def test_run_kernel_skips_terminal_reset_without_tty(self):
-+		def fake_start(unused_args, unused_build_dir):
-+			return subprocess.Popen(['printf', 'KTAP version 1\n'],
-+						text=True, stdout=subprocess.PIPE)
-+
-+		non_tty_stdin = mock.Mock()
-+		non_tty_stdin.isatty.return_value = False
-+
-+		with tempfile.TemporaryDirectory('') as build_dir:
-+			tree = kunit_kernel.LinuxSourceTree(build_dir, kunitconfig_paths=[os.devnull])
-+			with mock.patch.object(tree._ops, 'start', side_effect=fake_start), \
-+			     mock.patch.object(kunit_kernel.sys, 'stdin', non_tty_stdin), \
-+			     mock.patch.object(kunit_kernel.subprocess, 'call') as mock_call:
-+				for _ in tree.run_kernel(build_dir=build_dir):
-+					pass
-+
-+				mock_call.assert_not_called()
-+
-+	def test_signal_handler_skips_terminal_reset_without_tty(self):
-+		non_tty_stdin = mock.Mock()
-+		non_tty_stdin.isatty.return_value = False
-+		tree = kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[os.devnull])
-+
-+		with mock.patch.object(kunit_kernel.sys, 'stdin', non_tty_stdin), \
-+		     mock.patch.object(kunit_kernel.subprocess, 'call') as mock_call, \
-+		     mock.patch.object(kunit_kernel.logging, 'error') as mock_error:
-+			tree.signal_handler(signal.SIGINT, None)
-+			mock_error.assert_called_once()
-+			mock_call.assert_not_called()
-+
-+	def test_signal_handler_resets_terminal_with_tty(self):
-+		tty_stdin = mock.Mock()
-+		tty_stdin.isatty.return_value = True
-+		tree = kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[os.devnull])
-+
-+		with mock.patch.object(kunit_kernel.sys, 'stdin', tty_stdin), \
-+		     mock.patch.object(kunit_kernel.subprocess, 'call') as mock_call, \
-+		     mock.patch.object(kunit_kernel.logging, 'error') as mock_error:
-+			tree.signal_handler(signal.SIGINT, None)
-+			mock_error.assert_called_once()
-+			mock_call.assert_called_once_with(['stty', 'sane'])
-+
- 	def test_build_reconfig_no_config(self):
- 		with tempfile.TemporaryDirectory('') as build_dir:
- 			with open(kunit_kernel.get_kunitconfig_path(build_dir), 'w') as f:
+>=20
+> > > One more thing I'd like us to at least have a plan for at this stage
+> > > is how to deal with COMPLETE + modified packet + XDP_PASS.
+> > > Right now some drivers discard COMPLETE when XDP is attached since
+> > > they can't be sure if XDP modifies the packet. Other drivers don't
+> > > and we end up with bad csum splat. Do we have a recommendation on
+> > > the correct behavior? If not - should we have a kfunc to adjust /
+> > > discard csum complete explicitly? =20
+> >=20
+> > At the moment there is no way to store the csum value we got running
+> > bpf_xdp_metadata_rx_checksum() in order to be consumed during
+> > xdp_buff/xdp_frame to skb conversion (this info can just be consumed in=
+ the
+> > ebpf program bound to the NIC) but
+>=20
+> I think the scope here is much narrower than the xdp_buf to xdp_frame
+> to skb conversion. We are just pass information between the program and
+> driver which owns xdp_buff. Very similar to your new xmo.
+>=20
+> We could either tell the driver to discard the csum complete or even
+> add a helper to "adjust" the the csum value. Similar to the helper
+> we have to adjust the csum in TC / skb context.
 
-base-commit: a75cb869a8ccc88b0bc7a44e1597d9c7995c56e5
--- 
-2.50.0
+IIUC, for the CSUM_COMPLETE case, we want to add a kfunc used to update (or
+invalidate) the checksum value (if the packet has been modified by the eBPF
+program bounded to the NIC) and report the updated checksum to the driver if
+the XDP verdict is XDP_PASS. Correct?
 
+I guess we could have two approaches here:
+- Write the new checksum value into the xdp_metadata area (if available)
+  where the driver can load it and update the checksum value before
+  allocating the skb.
+  The main downside of this approach is we need modify each driver.
+- Add a new xmo callback used to set the checksum value and report it
+  from the eBPF program into a specific memory area provided by the driver
+  (e.g. DMA descriptor) that is used to build the skb.
+=20
+What do you think?
+
+Moreover, since we already have this issue upstream, do you think this new =
+feature must
+be part this series or can we do it with a follow-up patch/series?
+
+Regards,
+Lorenzo
+
+>=20
+> > I guess the issue you pointed out can be solved in the verifier
+> > during program load time. What do you think?
+>=20
+> It could, but at the verifier level we'd probably have to be fairly
+> coarse-grained. Any write to the packet data would mean csum complete
+> cannot be trusted, that's not too hard. But also any tail call / fentry?
+> I'm not really up to date on the latest in program chaining in BPF but
+> I think a lot of real-life deployments would use either chaining or
+> fentry. So in practice it may be a lot of complexity for having csum
+> complete always disabled w/ XDP, in practice.
+>=20
+> Up to you. I'm totally okay to just say** that drivers should never
+> report csum complete with XDP (until appropriate API is built).
+> Perhaps this will force those who care about XDP+csum_complete to
+> tell us what their requirements are?
+>=20
+> [**] "just say" =3D=3D document and add driver kselftest that validates it
+
+--X5UIePTG9Ua3mURR
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaaGaaAAKCRA6cBh0uS2t
+rKZWAQCkjxOiPEXrSTZT3qkJeVaUw7n0juwuC4GXrIPIsv9pgwD/QH7+ttDrkbKB
+iSiyRZHPZpFfG0J6K+i2c23A6SEVsws=
+=6+Zv
+-----END PGP SIGNATURE-----
+
+--X5UIePTG9Ua3mURR--
