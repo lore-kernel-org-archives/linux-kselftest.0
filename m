@@ -1,188 +1,95 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCA02749E6
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 09:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246F21F92E;
+	Fri, 27 Feb 2026 09:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772185230; cv=none; b=sSa4Lqh+fUkddiJhl1HulrsuLBiK/fDMwPNlRYQH/mJ/x7RM5SFMTZKqvHHEhU4XwtB29yQ5mP5BCK1JMx5VF5IwB21Mm/LmitLuE2sCn8rem4rJeeqF1QD8lq68P6OStfLYaWnpMF0Fr3oBYQx5I3dlduCiijxmswKmVVQiJlQ=
+	t=1772185563; cv=none; b=P/WyO3/hUIXsJSykDyeANbozHEuA6nzrSP7krPovtuyDm4qA9hONQwgWzELaVMnXs2ridq76NKVv0/gUCxNJYtJ8n1kOfjj4iP02+lPA/VXneoSI53SXChgV2Tb+hPxR2p9OrC7bXpfROOkALwX3w31XTfB351YtUN4bhvMYRGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772185230; c=relaxed/simple;
-	bh=QkBWiooC1iGMjVCCrdVa2VHFvlpy1PhZI8x/Z4bbZQ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bbBcb84D3D0G7V38bBqhCpFj5EzdPcRtlyBQHQeQXm1tTnDOt2Knu05Uls0M9f+S1lxzvFTQZE4gISbNV7W6R4TVYZP6r5oE3DA2fewTedIxI9JoxT/oFZtFSQstve1ESmxKoLxMAQ7plcYIOkL4+8hq3Tx/0JJqiHoSrj1PX8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gZrkkiOZ; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772185563; c=relaxed/simple;
+	bh=VYFg5k7FKX+uIcQK8lWyAtUT/QcKiHuyfaKksYCk2iU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XlYQ0nL1i6k6XC6nhPbi9bJBwyS7gU73Tlro+1r2Zyz351U2wOe61SqNZSvPXaFdAUa0QYcDMw6Snw2RcOLkTKRDXkEpPM2cxSk0Y45f8Roovo1U0Aj70IpoaKMUo4QHOT4r5QJPKmMmwIcaPpHOkP2omya4Fj7G4HFTd0WzA0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YPLwCRBu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=flkODPDn; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gZrkkiOZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772185229; x=1803721229;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QkBWiooC1iGMjVCCrdVa2VHFvlpy1PhZI8x/Z4bbZQ4=;
-  b=gZrkkiOZxYNstlYEqm6U0Q1LWE7zxBL5jiGNhmsDzHE2u6rso99mAmVF
-   hpQovV415RKDNzP492Y16BEbScPyDJum0vpnh7UaHo8Oo5U2R4LVJyTbh
-   xzH4wnWEOn92duB1Wjafz32BCz+BFGJj/IBn072YKUKwrPDNYDT153KMX
-   SgWZ2R8epUgkIQW9PmR0CAMWlAKbaui13Rbc1xhK68s0O9GKjlVCRDaEj
-   Fs5cFCAmAdy0e2ROJ1qDxiPwYGirtQwrDEjV2qFjKvd5mfT5RkKmgaDEO
-   WYgP5dBfLpw1vPJ5Msp4MUXW+AyGX9NEMZI/ml0UrBmzKB6V47vj33Lh5
-   A==;
-X-CSE-ConnectionGUID: oU/hjF4OSSCbYRLxHDCr3w==
-X-CSE-MsgGUID: TdP5SpBeSRmIR8gY87wBCQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="73137413"
-X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
-   d="scan'208";a="73137413"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 01:40:28 -0800
-X-CSE-ConnectionGUID: g2g9AMkqS2+fJS1ngQ0r8w==
-X-CSE-MsgGUID: kNU/WvnEQr+7vOkjeaBYUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,313,1763452800"; 
-   d="scan'208";a="213735592"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO localhost) ([10.245.245.65])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 01:40:26 -0800
-Date: Fri, 27 Feb 2026 11:40:24 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: David Gow <davidgow@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: serious bugs in KUnit framework makes test completely useless
-Message-ID: <aaFmiAmg9S18EANA@smile.fi.intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YPLwCRBu";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="flkODPDn"
+Date: Fri, 27 Feb 2026 10:45:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1772185560;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WADBw/49RgqeVitdv+2eYLg7uk6Rv8a9V1F/vtC1LSE=;
+	b=YPLwCRBuVscCHETXF8Fq24RERTaNwAELr6KN71SwyUy5aULW0SFmZREtwjnOn3HX2j5g5/
+	eqRhvivi2cz42k3YBJbkmTslvVQk5i9B2aiPapOHqAp5LLTE02TlFRWKhKyCTEKwVfjznu
+	qc4I9vlpZ7G4LLAjUGRfLi/l6C+zGxR+w8bRAKZ0kzFMtGYkPtAMYMxRgfkF2MQUBWjPre
+	hFZPCGGTendy03km4ixm1TioPPAaMHU72U1DQzu5miJXvfAVW1RfTWmTeC2eu9wf9QFhZ3
+	MY8xTsDjSMCtWWkGpMtOCCLjnPuFJ9oJKMDzsMoy2L+AFw/ixIA9ahF28YMDXg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1772185560;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WADBw/49RgqeVitdv+2eYLg7uk6Rv8a9V1F/vtC1LSE=;
+	b=flkODPDnw98wP4j8ocKt4w1Bhv+PAmdeHurV2WTwlhsKIBjUZtqZ7ZMWcHU3T3E35BiL+7
+	tIB8hz7mzhsrIzCw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: netdev@vger.kernel.org, jiayuna.chen@linux.dev, jiayuna.chen@shopee.com,
+	Jiayuan Chen <jiayuan.chen@shopee.com>,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v2 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+Message-ID: <20260227094558._Fna2iSe@linutronix.de>
+References: <20260227092254.272603-1-jiayuan.chen@linux.dev>
+ <20260227092254.272603-2-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20260227092254.272603-2-jiayuan.chen@linux.dev>
 
+On 2026-02-27 17:22:49 [+0800], Jiayuan Chen wrote:
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+> @@ -6458,6 +6458,12 @@ int bond_create(struct net *net, const char *name)
+>  	dev_net_set(bond_dev, net);
+>  	bond_dev->rtnl_link_ops = &bond_link_ops;
+>  
+> +	res = bond_create_init(bond);
 
-Hi!
+Wouldn't it be better to put into bond_init()?
 
-I have stumbled over the kunit framework issues that make the respective test
-cases useless.
+I haven't look into it but when can the bond_mode be changed?
 
-Now to the details.
-Consider having today's Linux Next.
-
-Scenario 1 (good):
-
-I run
-
-	./tools/testing/kunit/kunit.py config
-	./tools/testing/kunit/kunit.py run printf
-
-Everything works as expected:
-
-  [10:19:36] Testing complete. Ran 28 tests: passed: 28
-  [10:19:36] Elapsed time: 15.929s total, 0.001s configuring, 15.761s building, 0.114s running
-
-
-Scenario 2 (BAD):
-
-I applied the following change:
-
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -18,6 +18,7 @@
-  */
- 
- #include <linux/stdarg.h>
-+#include <linux/bitops.h>
- #include <linux/build_bug.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
-@@ -2904,12 +2889,17 @@ int vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
- 
- 		case FORMAT_STATE_NUM: {
- 			unsigned long long num;
-+			u8 shift = fmt.size * 8 - 1;
- 
- 			if (fmt.size > sizeof(int))
- 				num = va_arg(args, long long);
- 			else
--				num = convert_num_spec(va_arg(args, int), fmt.size, spec);
--			str = number(str, end, num, spec);
-+				num = va_arg(args, int);
-+			num = sign_extend64(num, shift);
-+			if (spec.flags & SIGN)
-+				str = number(str, end, num, spec);
-+			else
-+				str = number(str, end, -(long long)num, spec);
- 			continue;
- 		}
- 
-
-Tests went into cosmos (I waited a few minutes and has to interrupt that):
-
-  ^CERROR:root:Build interruption occurred. Cleaning console.
-  ^CERROR:root:Build interruption occurred. Cleaning console.
-  ^CERROR:root:Build interruption occurred. Cleaning console.
-  Command '['.kunit/linux', 'kunit.filter_glob=printf', 'kunit.enable=1', 'mem=1G', 'console=tty', 'kunit_shutdown=halt']' timed out after 300 seconds
-  [10:29:52] [ERROR] Test: <missing>: Could not find any KTAP output. Did any KUnit tests run?
-  [10:29:52] ============================================================
-  [10:29:52] Testing complete. Ran 0 tests: errors: 1
-  [10:29:52] Elapsed time: 305.676s total, 0.001s configuring, 5.669s building, 300.006s running
-
-NOTE!
-Independently on how long I waited the Elapsed time is about 5 minutes
-(Seems 300 seconds limit as stated in the output).
-
-
-Scenario 3 (BAD):
-
-Now I took again a clean tree and applied this change:
-
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -18,6 +18,7 @@
-  */
- 
- #include <linux/stdarg.h>
-+#include <linux/bitops.h>
- #include <linux/build_bug.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
-@@ -2904,11 +2889,17 @@ int vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
- 
- 		case FORMAT_STATE_NUM: {
- 			unsigned long long num;
-+			u8 shift = fmt.size * 8 - 1;
- 
- 			if (fmt.size > sizeof(int))
- 				num = va_arg(args, long long);
-+			else {
-+				num = va_arg(args, int);
-+			if ((spec.flags & SIGN))
-+				num = sign_extend64(num, shift);
- 			else
--				num = convert_num_spec(va_arg(args, int), fmt.size, spec);
-+				num &= ~(BIT_ULL(shift) - 1);
-+			}
- 			str = number(str, end, num, spec);
- 			continue;
- 		}
-
-and run tests again.
-
-  [10:39:16] [ERROR] Test: <missing>: Could not find any KTAP output. Did any KUnit tests run?
-  [10:39:16] ============================================================
-  [10:39:16] Testing complete. Ran 0 tests: errors: 1
-  [10:39:16] Elapsed time: 5.762s total, 0.001s configuring, 5.694s building, 0.067s running
-
-it runs fast and completely useless. (There is no build error)
-
-...
-
-Please, fix this as it is a serious issue and really makes kunit useless.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Sebastian
