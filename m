@@ -1,183 +1,187 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013049.outbound.protection.outlook.com [40.93.196.49])
+Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2653368971;
-	Fri, 27 Feb 2026 01:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772156401; cv=fail; b=H4SLNiQn2N7XYx4DvtII9mBjF8Qxe5KsZJWnHtyXad0J7rsyRuMtZMMIfm7BR2o4lvqfb2pwxVusiWMWsBUiHrF6aI6swLn976+h6LxHbFiLMKZnWZqbY6Km7tmBBgd3WU0W/qJqFPBJ+7tBN6D2i+HIyMet+m2FNhDBbkypZH8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772156401; c=relaxed/simple;
-	bh=inyR8nDqeqqaKNBpMcHOg1eo7zb/JrdjPRhnUpA0FkM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=NVPXKxMMwPjPDbR4tYR8ytytSFXWj4/SXHJON28Pk2z4EkTr9+IWSGyywVYBbvjdL8srXoU8FCZ2LA+ZeXX0JXyV4MaO8OXmeu0rcazn0YWjGZjBENizNM4DvJg3lBSAMj2xP7mqVbSalavvX4Nt8WXG4Tn+Bl2DPfS2u/uREhI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XOTHE1bL; arc=fail smtp.client-ip=40.93.196.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CCE27E07E;
+	Fri, 27 Feb 2026 01:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772156540; cv=none; b=FDq68RXm9gLvt7bRxlehfgFGVi+z8amvoprHUDOr//7efvqbHxG4sMJf9W8aPuLvKEFXoLb6VKLB7FYnLLxJ7TXRGhpVqaDoBHswliFp2Ubof3l6RUXdNwtiwJfpN8aDB+1VpUHFT+2TNuNrJhnmlWlQM4vtNgYN5UZRm9TS1qE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772156540; c=relaxed/simple;
+	bh=MH1JbKo8U096w/4SFfWy4iZNR02/r/hu8EgOy22BlKk=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=FcrhLCon2UPneUquLAgjhgwZ3//1wZgvXTLJSE1q0V2Bt2//MS7Q+wFD3MH4Ph3N4f8i1ieAKQg/S6cWQ8YpDjshIT+73wfj16+YsEM9NaR5ivTGtgkCrbVLoeOmTQMpNRKZNgKBlpEMFqRNaQBruqNmAaYoep6RMq7Zcm1dSJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=idR/M650; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qsLyARwu; arc=none smtp.client-ip=202.12.124.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XOTHE1bL"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ygBWG0xMN66E/S0/Voct5d+rIgrHmpGf9fKiP2OkYTgfYHXXLMWDpkugaCbGCVBNU8YJX1PRRbb5Hly7WK4eBvQgiT9gASfN9DaKOUh/dbC9mOsB3yx1Kbh34SrNiqZQKhqRdQ+n4ULNP3BZd+Ve1xfAgxL7yyBywrUsTUnDo3Pt+lJl642e1Epc8+U8L4FiRVptJoTsMc5/gP7ArvYoCJ11oq3lxy29q03fYpm7UK0CJanjW6ZRcZ3L6zsZmI+ezB44QyYSjWQVG8MnWfHO3YqnBaNcWCRmmxjz24S6d1D5r59YA7kPEpYxUHro83Fp3DoeL4HtC2C/yBlNI2nEpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QG3KPo2Zi7zpNxDyimrJHl1x2mFjafcrqYjxpOuhn/Q=;
- b=LjsDLG9WOhiFfQ5qyaipRJNi44Dyc7RBYms90AVw5BFAuoOgcl+Ca12n0x+K4+N1JqzVPwt++3pRLs1kNMkqFezbVhxBrIMaz5NhbB7pEiYb2My9OhkK4HCp6kI+EweK+vNx4l376+0lXkkaECuIh5KZCRfbuRgmAU6v1QKp7Z7PldfZ+IPK1VRC+uGQrAVOwCTLAmh9FT6k82JwGMi8+TFIOUhgZOAUCCJgKTdsfjJKjym1gtQ3hMxNN4GFCOS/QbxgaUZsgWFk6AilIIDdquqxOwnemes/8Ollvq4TP5ldDxCpSPK+zLkUSKYLQfbpdTlIKjTxFdV4U64fnFE3ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QG3KPo2Zi7zpNxDyimrJHl1x2mFjafcrqYjxpOuhn/Q=;
- b=XOTHE1bLSdQS8+zAhREyEFpkfv2midUsRY/+7qv4Iptu2cw2Uhz2kJcVlDAjGtu37C99XhN2pcXGgXopk9aicWOj2NeBHR5QpsYIDhJjaGHN4Cwge/S4/r/pCoOu2+PvrCkm1mep94CJdD5Wr9QpTVZbkWKUZPe+JuSIJxzc4+A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
- by SJ0PR12MB8168.namprd12.prod.outlook.com (2603:10b6:a03:4e7::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.15; Fri, 27 Feb
- 2026 01:39:49 +0000
-Received: from CH3PR12MB9194.namprd12.prod.outlook.com
- ([fe80::1e6b:ca8b:7715:6fee]) by CH3PR12MB9194.namprd12.prod.outlook.com
- ([fe80::1e6b:ca8b:7715:6fee%4]) with mapi id 15.20.9654.014; Fri, 27 Feb 2026
- 01:39:49 +0000
-Message-ID: <c6ac32f2-2531-4bd0-abaf-ff76e9cc864e@amd.com>
-Date: Fri, 27 Feb 2026 12:39:28 +1100
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v8 07/15] iommupt: Add map_pages op
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
- Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
- iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
- llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
- Shuah Khan <shuah@kernel.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Will Deacon <will@kernel.org>,
- Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
- James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>,
- Michael Roth <michael.roth@amd.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
- Samiullah Khawaja <skhawaja@google.com>, Vasant Hegde <vasant.hegde@amd.com>
-References: <7-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
- <fc4f0354-4e6d-452d-abfb-fe24e53253a2@amd.com>
- <20260117154347.GF1134360@nvidia.com>
- <bc6817bd-4aa5-4033-b89d-88fef637de65@amd.com>
- <20260226150440.GB5933@nvidia.com>
-From: Alexey Kardashevskiy <aik@amd.com>
-Content-Language: en-US
-In-Reply-To: <20260226150440.GB5933@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SY5PR01CA0087.ausprd01.prod.outlook.com
- (2603:10c6:10:1f5::9) To LV3PR12MB9213.namprd12.prod.outlook.com
- (2603:10b6:408:1a6::20)
+	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="idR/M650";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qsLyARwu"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 719A87A0099;
+	Thu, 26 Feb 2026 20:42:15 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Thu, 26 Feb 2026 20:42:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1772156535; x=1772242935; bh=S/8T4N0Phog8PIfQ8l0W0QujJkGhGj3J
+	ItKbBB/XGc8=; b=idR/M650cmCb/Acd4RmNsTvOv3qnPVsI/GVTq8P812r2Es0h
+	GWEqxFWLIIb6GjQx5d4hBkWHcHy4ib7Gq44qwvf0gADs67PWwKFh4g/djg3qGPo2
+	MVc7S9fRM6yY6101dQu4Hyp7XleXtIApkuX3QHxmC1lmXSK+3Yo1N7sdOzvHnzuJ
+	n97i5UAcm8JAv1Kx2duaVh4tuIHP78RY2ZsmzXqRmqSCxKRoRiUDWCS6rs9SPHJr
+	uI+hwP623TspAw2UUpVRBR5/g5fx/NZx94yUO3z2G9CwiEmTH453FLw0OwKZ2TO3
+	YI1qFE5x9noO2Lo176jwyD/2Vxy4jeLXgYfvhg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1772156535; x=
+	1772242935; bh=S/8T4N0Phog8PIfQ8l0W0QujJkGhGj3JItKbBB/XGc8=; b=q
+	sLyARwu1vOdFk/bbX3XRdtCG+hui5jIBf5SyKWOS1VMP8TINKrXhS/DdxqCvmlKg
+	j2JWcNibba+T/KY2LWdO5Q1dVXLUoEYVEJOgVUinorwIgKLSlyYewl22ey9VxmLt
+	tvWjqqMD7RX+oBJ0SfSHy8UUHafi4QrDENzq1yUpbSOKpXN7bDw59tnIanKBIpMb
+	y2S7m2e100HboX9/cs3HbMdWI7YH0TdoP4mX21eEjoqpSALeZ5hSbJK/MX0VkOQ+
+	dSubL4asiMpScAZyB8yinwPjavjk0mCR7IkqV3urKBPoSwlzMjWl5ACx3jBwScxu
+	POiUO5kT2zCQ2a5hnbQIw==
+X-ME-Sender: <xms:dvagaXq7UM6RSv7pYlFJ0yIB48WX6qt2IeKDiYE6-RwLX8w9swKrAQ>
+    <xme:dvagaeW68Q5I82egxXZzlKbWsi7Aw0-NyLYX05YoxKxEJQpMtV7xRDCtXdDpZu9Ez
+    r2a1k8asrpawA7uxFPyjRKEe1-ZZIeEDHAQpIap0mpcihHWAI1k0ZM>
+X-ME-Received: <xmr:dvagaYE04OUvt4fR23K6pVlK1TVmJjMrUCgjPSh2x4jnQtm1Y39aLUBy5GJoUx2kQzqiaw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgeejieekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefujghfofggtgfgfffksehtqhertdertdejnecuhfhrohhmpeflrgihucgg
+    ohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnhgvtheqnecuggftrfgrthhtvg
+    hrnhepgeefgffhgffhhfejgfevkefhueekvefftefhgfdtuddtfeffueehleegleeiuefh
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhvse
+    hjvhhoshgsuhhrghhhrdhnvghtpdhnsggprhgtphhtthhopedufedpmhhouggvpehsmhht
+    phhouhhtpdhrtghpthhtoheprhgriihorhessghlrggtkhifrghllhdrohhrghdprhgtph
+    htthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoheplhhiuhhh
+    rghnghgsihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgoh
+    hoghhlvgdrtghomhdprhgtphhtthhopehmrghhvghshhgssehgohhoghhlvgdrtghomhdp
+    rhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhh
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrvgifodhnvghtuggvvheslhhu
+    nhhnrdgthhdprhgtphhtthhopehlihgrlhhisehrvgguhhgrthdrtghomh
+X-ME-Proxy: <xmx:dvagaVA0VDIfNxUiRLPPFugt6870usuUHILOvxZA2VufL0G0JHTVcw>
+    <xmx:dvagaaxzEXYBTnuaWrYbONWrzdZYTvcyBPjFbzrNouOwMyRCQm4H2w>
+    <xmx:dvagabcPa-4YVtTKlA9KsJBTvFlsIeb-X8WA6wPO90nzpVsRA8f4Rg>
+    <xmx:dvagafui0gFQdijlSAfUxBcevUrIC6brhzEVPE-N0c4r5R7rXVzHcw>
+    <xmx:d_agaXSoz4SZuQdj4RKJqRmQIVVxCbQQqCNx1Alybdo5niG3fEMLw2Cg>
+Feedback-ID: i53714940:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 26 Feb 2026 20:42:14 -0500 (EST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+	id 99F159FCB1; Thu, 26 Feb 2026 17:42:13 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+	by famine.localdomain (Postfix) with ESMTP id 98F5E9FC39;
+	Thu, 26 Feb 2026 17:42:13 -0800 (PST)
+From: Jay Vosburgh <jv@jvosburgh.net>
+To: Hangbin Liu <liuhangbin@gmail.com>
+cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+    "David S. Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+    Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+    Nikolay Aleksandrov <razor@blackwall.org>,
+    Mahesh Bandewar <maheshb@google.com>, linux-kernel@vger.kernel.org,
+    linux-kselftest@vger.kernel.org, Liang Li <liali@redhat.com>
+Subject: Re: [PATCHv3 net 2/3] bonding: restructure ad_churn_machine
+In-reply-to: <aaDq5vTsk8SW4bIA@fedora>
+References: <20260226125331.28147-1-liuhangbin@gmail.com> <20260226125331.28147-3-liuhangbin@gmail.com> <941081.1772152606@famine> <aaDq5vTsk8SW4bIA@fedora>
+Comments: In-reply-to Hangbin Liu <liuhangbin@gmail.com>
+   message dated "Fri, 27 Feb 2026 00:52:54 +0000."
+X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB9194:EE_|SJ0PR12MB8168:EE_
-X-MS-Office365-Filtering-Correlation-Id: 81792bcf-b0fc-473b-3328-08de75a117f3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	esGhj8Tfq90sFgzjoGS5/uNvt4KCgTcfGVja7tyt3DOAoNrSz+nOuGrp7UPDGxXhfhGm/FqdgzPa6Gh+XEgmk/N+sUxXjPpPa7miHY+WW7Dxlqn5aQRnVnrqijm3giMOzwdko7Rsqa7uBy7/ASQ4r2668nZ5v2XzSmL3ePX50a/zNjda38DkGt0HrQeLb9e88C5AHpMoP4F899HJma2TwoURyR7CNkXFczpiUaarZWD8gH04eeb52VXxNwsym5dlU+9xHfTdrNe9Cvxik8vX4Toez24LslDgWwi9Ve82nrVXmYwxqJBTWTMTQEVQQNlY6VqrVWZDDDznhsyGEK2y9uGoPob2OP+OKoKFv7HJPTXCbCnGswyxc06EZ7049FTe9M1P8HLTrvWC0ZcWz1552PbjMD0x3gJLHiitdenSpRiIq/eUsiavcGP/P//s0OfZU+KDN7mst3lqS71WFiLq4bSACRfrDWbupK7zo9D4IF4w6yFUFLv1U7Ui+IDCt3dDP1dLDI1MPcb1rcZYCVVDdttS0AvV6A58c2P4b1D+qR2FoCE9umCcNTqLwxL0K5ZPgvCr3fMYHocwYSTxep8OA/1sr53EHlk2hq92skrcwWhbv4k50pLT3+ww1xx6GLY+oh7AzsYwsLmPlaFavQJ93N1I2TAXS//MvZFa6QjGj2CdhFTOwqDfuD1uA2BEj1ZX
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9194.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Tzc5MmZqalVCRWRzVEcrNmV5Y0l6Sk9Wb1V6T2txWS9STE45RUJibXM1VThn?=
- =?utf-8?B?TTRzNGJYelJaU3JzV3FZOWhTRDI2Uk8xckNXYnZDS1hXRElXMHlwYVJMcEJ6?=
- =?utf-8?B?OUpQc3hNVWFnWHdpQnIzWlZGSDhvSVVDRFdpNzhvSGVWTGlNdEo0WmhiWVh3?=
- =?utf-8?B?eTF4aDRrOEZoS2JCTmF1OGw4MCtMcHloODc3eFROZktzZDk3Q2ZMSVNkdXI2?=
- =?utf-8?B?dHFFbzRTd0pMbXJZNm91QjBmOW5EWThISFV3Qk9ONGJjYlpwZFI2am92UGhN?=
- =?utf-8?B?MWl4cklYT2lPOGtLMlNiZzNVa04rZjlXZlNsdXBCeTdRU3dPQTRUeXFjQnht?=
- =?utf-8?B?ZHZwYWJSUW5sZXAyYlRnc0pzQUxiWHYxNjdkWExuRTNGMU9HT1BqOE56MGp6?=
- =?utf-8?B?YjZoUXMvNStpMjU0NXdsWnBXRUNVbUFiZm5Oc0Rxdk80YmZWSFNBLzlvS2lu?=
- =?utf-8?B?L29XTlRxS3lTVmhZUjNWT05rZ2FvNTVRckF6dkYzcW03KzBSSnZQMEZtNUgz?=
- =?utf-8?B?NDlvWVVybXlSZm1xeUkzdVU0ZEpQbzFPTnFSMGZFekdWT2tJVzF0TFBHeEty?=
- =?utf-8?B?WEhRNXp6TDZDY1E3N2JVbVpVSkx2K2h2c09HTVQvR3pKSkVHa1BSQ2VDeE9p?=
- =?utf-8?B?VDhnbVVNUFJ2ZnNQRjlqMkFYUjkxdEZpNHJQMTltc3dmOXR6RWdIVUdtUEsz?=
- =?utf-8?B?WHRoZDZUeWlCbkJvVWVyLzNqTGptS3Nia2wzMThxQldxUU0wT3RwZHZVS2dw?=
- =?utf-8?B?VTZRSk03SU1ZR3NHVmNtdE5tZ2pZdVFRTnZlV2l1ZnNaUzM2RHBYMXZXSWhW?=
- =?utf-8?B?T09zNDNCN0tXRXk0UGQyaHdjcWRWdFJ4MW5SNmpZMDlKOTlmbXRjdXlCNm9R?=
- =?utf-8?B?TFFqRUxNanVveUswSmZpYlFZamVkNUVHOXdUU1pqM0dqc3NteUlnZ1J2dnox?=
- =?utf-8?B?QTNpeG1kWjBPbDhiZlRwdnZjUEp1aHlEUk1NMjR2eE10QlFUZ09ibEdRVFFP?=
- =?utf-8?B?RE55QXpYLzdIckhCZEpVUUovWDlNRFJoK1kyZmZFSjlpOUI3R3lFdDFPbHpF?=
- =?utf-8?B?dnJtN3lmZFhBcVptblBWSU5WT2JwQmp2NVh0YlowQ1dyQmk0ZTd3MjNLZmkv?=
- =?utf-8?B?VWF4b1BwY0tySFFSbEtOL2ZvZTlpL2tYOEc4Z0l3ZUU1ci9sM0VMNHNzMGZK?=
- =?utf-8?B?R3NKWXluODlsaXlXL3RadzFvVktvME5zRDV1NmlRZGV5ZEZVSDN5K2syZ0w0?=
- =?utf-8?B?d2QvM1I0Q3duVHlyVkJ1cFpXcTJWNHBFUkxFMlZkaS9CUUlZYXYxNHlmRFZo?=
- =?utf-8?B?eFBLd1lGM2Q1d0QvUXhLZ3dSVjA4RDNWYXV5a3ZqZmdEbE96ZHpyRUR0WE5t?=
- =?utf-8?B?UEpNV3NIbFdyeDYyYmx2MGlFOHJQMkp0MGlob0lmYmxuSzNUeExvdzQzNnN6?=
- =?utf-8?B?TFJFL08xbXFGd3FiNUNvaGF2ZWcySHhNY0xVVlZleGxiNTdHQXV5ckhZRnNN?=
- =?utf-8?B?MnhzS3BEbzA0dXc1czAwUktjeTRHQmxWcGN2UU14cWdXRHpVdnRabGtkWjRz?=
- =?utf-8?B?NjRGRUg3c0JBb2lSanV4Y3hobDRmV3hGdlMzTWxNTXA3UkxuOC9SeVdKcUpl?=
- =?utf-8?B?ek1CM01YcUtIZWd1WisyNlRwMTVYSWQvSDY5V1hPSFoxV2wvMEFxekUzeWo3?=
- =?utf-8?B?VWhDSHMwY2NtaWRVU2diQW1LQ1NEN0Q0OE91R2ZJU0JPa2txM2Rwdml6cmJM?=
- =?utf-8?B?YUYrdytJMU8ya2JUM0Y0ZnYwcGpQdnZ3VlpROWdvelNPV09KajdJY3VwbUxW?=
- =?utf-8?B?NFoyeGxYSFZQOXM2Q2Q1eE5BZXVWMFZrWVRSSUw3QjA1ZWpRcUJwdXF1cnJO?=
- =?utf-8?B?Mm42TENkdTdIblc2WmRFYmljUDZ6SDdFYktjSFNpTXhsTURsaDRRZ1ZpQ1lo?=
- =?utf-8?B?Z0k3aU1sTkt0Z0Yyamg0a2RMdDlhWUVuQXlzT3Vqa1BFVGprdDM3OGVZNGRX?=
- =?utf-8?B?cVE5M2szNERVdjFidjhUMWdsdHZIN1FYQXNDc3B6WXA2VE5vRitZTUthTVhT?=
- =?utf-8?B?cjB0S0duK05OelVremN3UFF2RS84bFR1ZWFwS1M0WUs4bEY2b3FFL21NWDU2?=
- =?utf-8?B?MS93Y1VRK3lFa0Jnd09QRHllQUJmOHhPSlAreDA0b016MmYva0lUS21xMnEx?=
- =?utf-8?B?VCtPeWhraFJRZDJNYU04YmNHZHhOZHpwck0yRlJGcjlUQTIrSUhqRVdnNU1H?=
- =?utf-8?B?Q0FJZDVyOW9ZaGI5OFpFUFNYcmpPMUhKY2FWUmg3YmJNZXlvQzYwWXVvUVpV?=
- =?utf-8?B?SWV1WEtZL2laYUdBVC9TakdoY29GRTNVNEtOazBZTEJmbU1nZUpyZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81792bcf-b0fc-473b-3328-08de75a117f3
-X-MS-Exchange-CrossTenant-AuthSource: LV3PR12MB9213.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2026 01:39:49.0069
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lSeYLy/78UNwtW1c2Zk2ZEFTbjSE+wqOFi9RBeqC9HdHnaii28ow63WFN9mI7dZasTgaCs4V0SnirfqFzSOs1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8168
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 26 Feb 2026 17:42:13 -0800
+Message-ID: <943602.1772156533@famine>
 
+Hangbin Liu <liuhangbin@gmail.com> wrote:
 
+>On Thu, Feb 26, 2026 at 04:36:46PM -0800, Jay Vosburgh wrote:
+>> Hangbin Liu <liuhangbin@gmail.com> wrote:
+>>=20
+>> >The current ad_churn_machine implementation only transitions the
+>> >actor/partner churn state to churned or none after the churn timer expi=
+res.
+>> >However, IEEE 802.1AX-2014 specifies that a port should enter the none
+>> >state immediately once the actor=E2=80=99s port state enters synchroniz=
+ation.
+>> >
+>> >Another issue is that if the churn timer expires while the churn machin=
+e is
+>> >not in the monitor state (e.g. already in churn), the state may remain
+>> >stuck indefinitely with no further transitions. This becomes visible in
+>> >multi-aggregator scenarios. For example:
+>> >
+>> >Ports 1 and 2 are in aggregator 1 (active)
+>> >Ports 3 and 4 are in aggregator 2 (backup)
+>> >
+>> >Ports 1 and 2 should be in none
+>> >Ports 3 and 4 should be in churned
+>> >
+>> >If a failover occurs due to port 2 link down/up, aggregator 2 becomes a=
+ctive.
+>> >Under the current implementation, the resulting states may look like:
+>> >
+>> >agg 1 (backup): port 1 -> none, port 2 -> churned
+>> >agg 2 (active): ports 3,4 keep in churned.
+>> >
+>> >The root cause is that ad_churn_machine() only clears the
+>> >AD_PORT_CHURNED flag and starts a timer. When a churned port becomes ac=
+tive,
+>> >its RX state becomes AD_RX_CURRENT, preventing the churn flag from bein=
+g set
+>> >again, leaving no way to retrigger the timer. Fixing this solely in
+>> >ad_rx_machine() is insufficient.
+>> >
+>> >This patch rewrites ad_churn_machine according to IEEE 802.1AX-2014
+>> >(Figures 6-23 and 6-24), ensuring correct churn detection, state transi=
+tions,
+>> >and timer behavior. With new implementation, there is no need to set
+>> >AD_PORT_CHURNED in ad_rx_machine().
+>> >
+>> >Fixes: 14c9551a32eb ("bonding: Implement port churn-machine (AD standar=
+d 43.4.17).")
+>> >Reported-by: Liang Li <liali@redhat.com>
+>> >Tested-by: Liang Li <liali@redhat.com>
+>> >Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+>>=20
+>> 	I missed this last time it was posted, but reading it now I
+>> think the functional change looks good, but I question the usefulness of
+>> including the 25 line ASCII art version of the state diagram.
+>>=20
+>> 	The standard is publicly available, so a comment saying that the
+>> state machine logic conforms to IEEE 802.1AX-2014 figures 6-23 and 6-24
+>> should be sufficient.  Anyone seriously checking the code against the
+>> standard will need to read the relevant text, so they'll be looking it
+>> up anyway.
+>
+>I added it here to help new readers and reviewers understand the logic
+>quickly. If you think there=E2=80=99s no need to include it in the code, m=
+aybe
+>we can move it to the commit description?
 
-On 27/2/26 02:04, Jason Gunthorpe wrote:
-> On Thu, Feb 26, 2026 at 10:11:56AM +1100, Alexey Kardashevskiy wrote:
->>> The flow would be some thing like..
->>>    1) Create an IOAS
->>>    2) Create a HWPT. If there is some known upper bound on RMP/etc page
->>>       size then limit the HWPT page size to the upper bound
->>>    3) Map stuff into the ioas
->>>    4) Build the RMP/etc and map ranges of page granularity
->>>    5) Call iommufd to adjust the page size within ranges
->>
->> I am about to try this approach now. 5) means splitting bigger pages
->> to smaller and I remember you working on that hitless IO PDEs
->> smashing, do you have something to play with? I could not spot
->> anything on github but do not want to reinvent. Thanks,
-> 
-> I thought this thread had concluded you needed to use the HW engines
+	Personally, I'd leave it out, and just put a reference.
 
-The HW engine has to be used for smashing while DMAing to 2M page being smashed. It is not needed when the insecure->trusted switch happens and IOMMU now needs to match already configured RMP.
-> for this and if so then KVM should maintain the IOMMU S2 where it can
-> synchronize things and access the HW engines?
+	The churn machine isn't that critical, even the standards
+committee didn't like it and removed it from the 2020 edition of
+802.1AX.
 
-I want to explore the idea of using the gmemfd->iommufd notification mechanism for smashing too (as these smashes are always the result of page state changes and this requires a notification on its own as we figured out) and plumb that HW engine to the IOMMU side, somewhere in the AMD IOMMU driver. Hard to imagine KVM learning about IOMMU.
+	Still, whatever we provide should work in accordance with the
+2014 standard we're nominally conforming to, so functionally the patch
+looks fine to me.
 
-> My draft for cut is here:
-> 
-> https://github.com/jgunthorpe/linux/commits/iommu_pt_all/
-> iommupt: Add cut_mapping op
+	-J
 
-Thanks!
-
--- 
-Alexey
+---
+	-Jay Vosburgh, jv@jvosburgh.net
 
