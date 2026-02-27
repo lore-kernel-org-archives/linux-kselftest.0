@@ -1,95 +1,111 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246F21F92E;
-	Fri, 27 Feb 2026 09:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B225436AB6E;
+	Fri, 27 Feb 2026 10:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772185563; cv=none; b=P/WyO3/hUIXsJSykDyeANbozHEuA6nzrSP7krPovtuyDm4qA9hONQwgWzELaVMnXs2ridq76NKVv0/gUCxNJYtJ8n1kOfjj4iP02+lPA/VXneoSI53SXChgV2Tb+hPxR2p9OrC7bXpfROOkALwX3w31XTfB351YtUN4bhvMYRGA=
+	t=1772187296; cv=none; b=iCk9U2dwVybazogcknBE8+ETLnG+Iq72g/bK0N+9GP8XHQ+lfgVpI+p4/5Zf/GTDrWMlyFBz0SAtK3PbLKU2e9oS28bMsIO0pZVmelJVtd9Pn8r/7ex2gx6hKEQRdMV9gpMIFBop56VcY90J+jA3/ZxUZdLYaRCz02yFj6e3+6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772185563; c=relaxed/simple;
-	bh=VYFg5k7FKX+uIcQK8lWyAtUT/QcKiHuyfaKksYCk2iU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XlYQ0nL1i6k6XC6nhPbi9bJBwyS7gU73Tlro+1r2Zyz351U2wOe61SqNZSvPXaFdAUa0QYcDMw6Snw2RcOLkTKRDXkEpPM2cxSk0Y45f8Roovo1U0Aj70IpoaKMUo4QHOT4r5QJPKmMmwIcaPpHOkP2omya4Fj7G4HFTd0WzA0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YPLwCRBu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=flkODPDn; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1772187296; c=relaxed/simple;
+	bh=SQ1B0cDL3jgSEBlNsMPFbuc2xYLONjjxJBSisxmjRvk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=KbOSKEF04r666m3oANhz96/HBG3yJNWxLyaEaT3vueRdffL2q97rLZCmm5PwJj5p/BwUYZn/EGjfVCxHD2mhM/KnghBegWkorBBTJw85oZzYnaottORI5v05zHes3tShkQJXvVmIMowjXreZAg3z1ch6XhdWKUV/CbehVdWG96A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fCM8Pfa/; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YPLwCRBu";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="flkODPDn"
-Date: Fri, 27 Feb 2026 10:45:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772185560;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WADBw/49RgqeVitdv+2eYLg7uk6Rv8a9V1F/vtC1LSE=;
-	b=YPLwCRBuVscCHETXF8Fq24RERTaNwAELr6KN71SwyUy5aULW0SFmZREtwjnOn3HX2j5g5/
-	eqRhvivi2cz42k3YBJbkmTslvVQk5i9B2aiPapOHqAp5LLTE02TlFRWKhKyCTEKwVfjznu
-	qc4I9vlpZ7G4LLAjUGRfLi/l6C+zGxR+w8bRAKZ0kzFMtGYkPtAMYMxRgfkF2MQUBWjPre
-	hFZPCGGTendy03km4ixm1TioPPAaMHU72U1DQzu5miJXvfAVW1RfTWmTeC2eu9wf9QFhZ3
-	MY8xTsDjSMCtWWkGpMtOCCLjnPuFJ9oJKMDzsMoy2L+AFw/ixIA9ahF28YMDXg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772185560;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WADBw/49RgqeVitdv+2eYLg7uk6Rv8a9V1F/vtC1LSE=;
-	b=flkODPDnw98wP4j8ocKt4w1Bhv+PAmdeHurV2WTwlhsKIBjUZtqZ7ZMWcHU3T3E35BiL+7
-	tIB8hz7mzhsrIzCw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, jiayuna.chen@linux.dev, jiayuna.chen@shopee.com,
-	Jiayuan Chen <jiayuan.chen@shopee.com>,
-	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH net v2 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-Message-ID: <20260227094558._Fna2iSe@linutronix.de>
-References: <20260227092254.272603-1-jiayuan.chen@linux.dev>
- <20260227092254.272603-2-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fCM8Pfa/"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id C6BE4C406A5;
+	Fri, 27 Feb 2026 10:15:07 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E4E9B5FE46;
+	Fri, 27 Feb 2026 10:14:51 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 89AD3103685B4;
+	Fri, 27 Feb 2026 11:14:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1772187290; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=SQ1B0cDL3jgSEBlNsMPFbuc2xYLONjjxJBSisxmjRvk=;
+	b=fCM8Pfa/5tkgyAM+PFMLrfnxJARIz59cbghHchjx+GEHAyMgjll8xjHzmdUhxmPOUdPIzb
+	BW6hCbJ5re5wMcKP9HFIvK1RwXaLx1xiZ3SIDOlHeuiiUTee/iHrkroS3yF7yZig1GUgEF
+	j7roB1TwlJmbY49PNfhkM/wv2O8UUsEcjZag6csOCuytop5pSdFITuDdeR1SNuRV3lCdUo
+	kb/s3IhqAHeD4//cm9SLy0eR2fWt6RfuILZzzYe83zCNyCNIqg+4PS9Pvz+gJpKbhjQvy2
+	lZEq6RVhyP59EXKRspVwvL54FLUGtXGkZR2tFHy9pA1/+OrIKwoFJJIxvIARLQ==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260227092254.272603-2-jiayuan.chen@linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 27 Feb 2026 11:14:44 +0100
+Message-Id: <DGPNYNB5YCQJ.J5LKKGGGTB83@bootlin.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: drop test_bpftool.sh
+Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Quentin Monnet" <qmo@kernel.org>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin KaFai
+ Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>, "KP
+ Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
+ Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260227-bpftool_feature-v1-1-a25860fd52fb@bootlin.com>
+ <8610334b-aa82-4fef-a9cf-41c0bfca4dbe@kernel.org>
+In-Reply-To: <8610334b-aa82-4fef-a9cf-41c0bfca4dbe@kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 2026-02-27 17:22:49 [+0800], Jiayuan Chen wrote:
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -6458,6 +6458,12 @@ int bond_create(struct net *net, const char *name)
->  	dev_net_set(bond_dev, net);
->  	bond_dev->rtnl_link_ops = &bond_link_ops;
->  
-> +	res = bond_create_init(bond);
+Hello Quentin,
 
-Wouldn't it be better to put into bond_init()?
+On Fri Feb 27, 2026 at 10:31 AM CET, Quentin Monnet wrote:
+> 2026-02-27 09:08 UTC+0100 ~ "Alexis Lothor=C3=A9 (eBPF Foundation)"
+> <alexis.lothore@bootlin.com>
+>> The test_bpftool.sh script runs a python unittest script checking
+>> bpftool json output on different commands. As part of the ongoing effort
+>> to get rid of any standalone test, this script should either be
+>> converted to test_progs or removed.
+>>=20
+>> As validating bpftool json output does not bring much value to the test
+>> base (and because it would need test_progs to bring in a json parser),
+>> remove the standalone test script.
+>>=20
+>> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boo=
+tlin.com>
+>
+>
+> Acked-by: Quentin Monnet <qmo@kernel.org>
+>
+> Regarding the discussion on JSON: If you need to check bpftool's output
+> in other tests, it's probably OK to simply look at the plain output.
+> We've been discouraging people to parse the plain output because it's
+> not considered stable, but given that the tests and bpftool itself are
+> in the same repo we could always adjust any test that would break if we
+> changed something in the output.
 
-I haven't look into it but when can the bond_mode be changed?
+ACK, thanks for your input, I'll keep that in mind for the next tests to
+convert (I still have some test_bpftool_synctypes that I did not check
+yet).
 
-Sebastian
+Alexis
+>
+> Thanks for your work on this!
+> Quentin
+
+
+
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
