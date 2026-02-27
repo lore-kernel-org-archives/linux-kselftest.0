@@ -1,105 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011050.outbound.protection.outlook.com [40.93.194.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9334B43C056;
-	Fri, 27 Feb 2026 15:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772205644; cv=none; b=dH9lIvOxGkf9+oSLDODA7cKxlfXuBUIYbtrOY/bKF1G7LJNa5mJ5g+Ias8mppikU4QxhPggSNgfeeHFxJsYtRWNvGmlRHZpBnm/XcZM2L8YroEdQBLb0pW4MW5Zl+4MVmNXP5Udiuh9gzxtxA8QPTEXhG1qgu3HuiyiWFyBjMNg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772205644; c=relaxed/simple;
-	bh=zjmsx5oq16zysg8L8WJOCU1HqD9oMxXD4LVv5E0RhVs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WaG1rrW/OGZue/PXdBP2hbuJ9nEDeIDuD+WgtDpbPOOIE3kNvy5aHm1l+b0JaSwFMdMJU/Kx79c5l6fmZqEmDzDUxkslHzxbUs3+4hmkg9K7PPqeNmzsU+YHg9mXfUr4ms8s0nQXITQPjKE87GpzX3gOEQx/ywJ7+V09ACZ7U3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMY0rTOk; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384633271EA;
+	Fri, 27 Feb 2026 15:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772205718; cv=fail; b=DvaT3oy3TlfVMuC5F4RutccL+Z1/M0N9Qb9h9R4BGZkYS53wdjtuBVdzoATdKRkQ8qEp1vkgeVaPGMKTtLWq32rKyFtkNpnqtovl0NA9aISp4iV8yn3n21+7PKvXIYM6DdDnQml1MgZgI4KimEV9ivYunJH2M1ZannYlbqtBhCU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772205718; c=relaxed/simple;
+	bh=JiutV3UHwO72khaD4bAX/jR/hJu6sW2z18WKSrAeVbQ=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=SFeH3g5HIbDrD9+35GSzTRqgkLqehFvOSdlRERERyRuhHxLOzejBlUgV2dhs6P9uNusLhdnCGrJbZskZAKV1UtUFRwKN8DGvZW5EPBtSReqEnccXDilkBMHNietbIfKJ+luwwgnUbncZz7GeSv1opqz7LmJR2n+i3F/y9SFlr3g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=E/U3XnQr; arc=fail smtp.client-ip=40.93.194.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMY0rTOk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C12C19422;
-	Fri, 27 Feb 2026 15:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772205644;
-	bh=zjmsx5oq16zysg8L8WJOCU1HqD9oMxXD4LVv5E0RhVs=;
-	h=From:Date:Subject:To:Cc:From;
-	b=BMY0rTOk+ymiw8JyvlaMBxBJvkLronYSxySGlluGWWAC4K+mAVveBozSi697R518x
-	 uunsQqREDm1CE8Ncip6NUmztFaP6RPTdsrIK7wp7nqG5ksaYsE2jLJXIDXSbN4cPey
-	 8VBY5kY1GoFLhUef10+yvv2HyK0vDTPxnjrOb558SMUbOpuxUehiC91os1Nd1wgkCA
-	 gmzz5oMyotcSoMmcN1MZZoMMqKdqmIO0Vu6y8WsoZrCrK/yiUJAbz86Q0DL8/UbAs9
-	 iYQHFY7k7M/43vH8doWFdnnSvzRer09tFIb90Wp1bdHXoQ6ipYnwd+M9DYjShaa+DG
-	 j8qNaPe32Tlfg==
-From: Mark Brown <broonie@kernel.org>
-Date: Fri, 27 Feb 2026 15:20:35 +0000
-Subject: [PATCH v3] selftests/filesystems: Assume that TIOCGPTPEER is
- defined
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="E/U3XnQr"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YP1peUDWITSMWFnvH+P5a6HQvl4OJEFD+k85Tc1yeU1CA/bL2fWfhLm7+63KT+QPM7cYQwUe8S0RGvjvph4WXHvN208HVJpB/mMk9Uayd/hah6XnHQDFYC26x9dks4rlGfb9Sdrj8q4EkGvXfpbJiHH05sZ4m93VPoQFMf4Cgk9NsVgB8QKmIN8ifpOJd7GGCuhQGCJ2VatMuMiEY5lXZQE1QOkabHqmQGWjw6PZGZsVP5ruhYspJ2vKn+KYrZSn+zdHTRNVhCuejLEdHtWHdGKC8pihZNjew0gngCjudWNJSFrLp3wSpiZJkzbkCOC9f14I+Bfh+humr3JotnblvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GeOOZg4wK1CrnDE2ZVe5Nhy28oZpvsckyx9rGp2ty2E=;
+ b=jqEVUmtTJu5LiSbxMglWmu1VtesGAk1f8B3P4EJEX+7Q5B9QmB8ph3dE46GndKO0dwIcjc95bWJFtaUqB4qt8HH2umoT40/1BBvqIW+t2v0+TONzK8HP2CY7JWCOfLtZeQbsCpfkhDZadB9OuMJaKg+q3gVd+lBb0Ku4ju52vhstJRcVIRP6vfMmPRqA98QXkyGnBrqADLtm1gy+RdNko1M/saLh9v1uTuDwJ/bMCD3VrTPbG590wrz18cCEZ2uq9i5Y1wpOOiHynICgbg/YWq0jiPGS6mlNmWSnC8I2plxPGxLrh9k/2xog9bgDh/eE6UsNwYyuA250z6uztSeKkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GeOOZg4wK1CrnDE2ZVe5Nhy28oZpvsckyx9rGp2ty2E=;
+ b=E/U3XnQrosTGSy9b7eTUTm4nsR2WmShbisY00Mj1KYI2ONaalCOc6ef/nsdJLLU6ue9hapC1eS/E6q2uYfxbsYed+zR7lcBImZd7mZulO3WGjnR8oKAgXLl5uSIGuT1Kn1af+hmR/yWdGdrloWQ2C+zBP3gYx/PpemNYm9rLjWvSn5tPNGT0R3YPavBE8fOFLflrkdjjPz5fQTrfhAwYDGcFnx+ZlJI5vPjKVDoz64N/mpuojdE1dle7aMYxkTxG4XBcc7WiSpLdUWIF9KAN4tXy4y3QemYjsiTtUIP1qk6BSuW1zf8Y1GoqLIfyyWhg05kRaOcbCG5EKZFcd9Nq2w==
+Received: from SJ0PR05CA0087.namprd05.prod.outlook.com (2603:10b6:a03:332::32)
+ by DS0PR12MB7849.namprd12.prod.outlook.com (2603:10b6:8:141::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.14; Fri, 27 Feb
+ 2026 15:21:45 +0000
+Received: from SJ1PEPF00001CE7.namprd03.prod.outlook.com
+ (2603:10b6:a03:332:cafe::ae) by SJ0PR05CA0087.outlook.office365.com
+ (2603:10b6:a03:332::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.14 via Frontend Transport; Fri,
+ 27 Feb 2026 15:21:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF00001CE7.mail.protection.outlook.com (10.167.242.23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Fri, 27 Feb 2026 15:21:44 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 27 Feb
+ 2026 07:21:18 -0800
+Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 27 Feb
+ 2026 07:21:14 -0800
+References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
+ <20260225150648.1542206-6-ioana.ciornei@nxp.com>
+ <20260226182223.5eb1b10f@kernel.org>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: Ioana Ciornei <ioana.ciornei@nxp.com>, <netdev@vger.kernel.org>, "Andrew
+ Lunn" <andrew+netdev@lunn.ch>, "David S.  Miller" <davem@davemloft.net>,
+	"Eric Dumazet" <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah
+ Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, "Petr
+ Machata" <petrm@nvidia.com>
+Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
+ ethtool standard counters
+Date: Fri, 27 Feb 2026 14:53:06 +0100
+In-Reply-To: <20260226182223.5eb1b10f@kernel.org>
+Message-ID: <87ms0ufc0p.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260227-selftests-filesystems-devpts-tiocgptpeer-v3-1-07db4d85d5aa@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAEK2oWkC/52NsQ6DIBQAf6VhLo1gUejU/2g6qDyU1ArhEVJj/
- PeiS9OxHe+Gu4UgBAtILoeFBEgWrZsylMcD6YZm6oFanZnwggvGeEURRhMBI1JjR8AZIzyRakg
- +q2hd1/voAQI1rS4LELWSQpGc8wGMfe2r2z3zYDG6MO/nxDb7xyQxyqjira6ELriS7PqAMMF4c
- qEn2yXxT5kz+UOZ53IjTCvkuTYg5Fd5Xdc3NHoiDzsBAAA=
-X-Change-ID: 20251126-selftests-filesystems-devpts-tiocgptpeer-fbd30e579859
-To: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1627; i=broonie@kernel.org;
- h=from:subject:message-id; bh=zjmsx5oq16zysg8L8WJOCU1HqD9oMxXD4LVv5E0RhVs=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpobZJ5ekNHznEW5s/NuBTABpDBWVZVBUe6c/4k
- UTlLh3D4A2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaaG2SQAKCRAk1otyXVSH
- 0NdJB/9C9ZyAjlme8dJSu2hjuAsCd65gzpOSfFl3U6UY7b7mNVxPfR/hMeMHqcQiJeaHMEykuni
- +EqgIkyDKM3dRbaY5sOztbrRDe8pSy++89KUt9ZmAisyZSlC27rf3UH5a2t46Pt3eWsM/zXaVze
- 0ek7vLJgkJKY43dOHkQ5w5qtnGsH1vcsDDWzwg1tXw/UNZB5sey0KBPKhPc3U3DW1IdL/SMAJWh
- aVXpysp2SRtxEAV2L09jI28l/QtxJWsDWXlSj29GiYoNOXy4G/JMLpm07X/B99q7MjVU4mjLXil
- gqmc0phCcNvyOg6V9SnnTFBWY6UaHhUbRfaU80Mit77l8GQ5
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE7:EE_|DS0PR12MB7849:EE_
+X-MS-Office365-Filtering-Correlation-Id: cba2866c-cfd2-456f-aaf8-08de7613eabe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|7416014|376014|36860700013|3122999024;
+X-Microsoft-Antispam-Message-Info:
+	K/HIOu7FlWCVIC+GJFhftLHTAfQFzc4hhNSB+1IqzDDE5RcZfGys4fnu4URaH0gTIrk4BOw2WpcmqOi8b3KHUewe0IUBwv1mvttSc35hYnmnlppjUw0eYqRVza2uagnyR/rg6yGsvtAbXEu6kO8Re2VChXUFq6RFdGfhd3t+RgjCjqJCDP4kjzKfKPGP8Cgrs5LNX2OxoEBvzVP5SSgfTbw4RjbbPQWytBQfXXLi275vp6+AP0XFMbqYiBsTfCUU31sEOYMir/2IPgrSz+gmpyxw1vEXAEGpj4ioj3U8tEI0wzJMFsSe+JF0e2L3gMqmHRhBJz5zIZ+cFzNNXCS/A4hBHTOTSXre+MU0GBgZDlnYKz6Wq7Pfh4d+mORjI3Zbj/WxOtLpkothJqqpEL80+0RrqYarjEpMSnqszhmQI8RAO+fZmrTVXiGfdurvB5c4IXzIDImngBYHdlLdCRHuTumiabLiurFPZ0Ic5mfV2gAQ5oWjGd7WYNZ+lBlwThS0vZWFavuvL3WviQYeXkxz2LlHw5f9rBX9Q4Uic/JksXWEtN424vpcCECUZPrPt9AvJ3Ttwqz3g7pY4NjD3GLOrTRTKQGOE+xNtVN4wH0CnQuEFeACCzPlc2Zm+IzZgkEosR0CE8gMbaxY9Bb6sssZxB8cTwIIGc9luOwEi/GsdCMeO+XZdYA3Exsw/qA9pvGTwd93bLRhoborqhq05V8XTZ0S8yqqz/HTQFZGTSv8NdUwVGO+FLgXfdLjfrjcwe+RXchf4njfaEFmHp8QJ3GAADdQI81b7UIo5wwMoXv3+o4weqiMSHlTPhmdPCysr17ky5IJ3vjcsfN2HeeMbDgG1A==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(7416014)(376014)(36860700013)(3122999024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	lr2Xu6UhATEP39O3SZ6whsSgO61Gu6v5Tz5dMnBjhxeWtjnmde1iJpPPPeyH2uKbSdylSNA9PubvwAkCIvPiIhzMxL2XXo6DZ2xioE1EutrGaRXaxbytZp57SCtMDXxx6dLKxltu+4WVZfj6xAHZ5BY4uGqBQrlslpvQ/aV+nW8pK+Bd7LfWaavjrnNpWXlL65S+S5MtyKWkt00rR7bLs1BHnk1HYB1FaOwJ0pbvg26T9u/Zky7KcFpFdf2NOVWtP9i/oys+h8wrK9vth35Ute4CASBz2vdz/n4gRzJtFCTb1dIAfTicuSQLrKzp3IISQWHr3EJbKIDTO2f6BwwjQOtfoKxA6cSImAh23pCczqlzIbOCOszQrfGY0o/iRlzQptYwITE5C1iQ6zBuS5zafAIwXL92RIfz5s5/2E/X051j3NSseCaSg4OhX6zjGooD
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2026 15:21:44.7702
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cba2866c-cfd2-456f-aaf8-08de7613eabe
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE7.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7849
 
-The devpts_pts selftest has an ifdef in case an architecture does not
-define TIOCGPTPEER, but the handling for this is broken since we need
-errno to be set to EINVAL in order to skip the test as we should. Given
-that this ioctl() has been defined since v4.15 we may as well just assume
-it's there rather than write handling code which will probably never get
-used.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
-Changes in v3:
-- Rebase onto v7.0-rc1
-- Link to v2: https://patch.msgid.link/20251218-selftests-filesystems-devpts-tiocgptpeer-v2-1-a5fb5847fe58@kernel.org
+Jakub Kicinski <kuba@kernel.org> writes:
 
-Changes in v2:
-- Rebase onto v6.19-rc1.
-- Link to v1: https://patch.msgid.link/20251126-selftests-filesystems-devpts-tiocgptpeer-v1-1-92bd65d02981@kernel.org
----
- tools/testing/selftests/filesystems/devpts_pts.c | 2 --
- 1 file changed, 2 deletions(-)
+> On Wed, 25 Feb 2026 17:06:48 +0200 Ioana Ciornei wrote:
+>> +ALL_TESTS="
+>> +	test_eth_ctrl_stats
+>> +	test_eth_mac_stats
+>> +	test_pause_stats
+>> +"
+>> +STABLE_MAC_ADDRS=yes
+>> +NUM_NETIFS=2
+>> +lib_dir=$(dirname "$0")
+>> +# shellcheck source=./../../../net/forwarding/lib.sh
+>> +source "$lib_dir"/../../../net/forwarding/lib.sh
+>
+> Argh, at some point we should probably decide whether we have 
+> a preference on which "library" / set of env vars we use under 
+> drivers/net/hw. Adding Petr to CC.
 
-diff --git a/tools/testing/selftests/filesystems/devpts_pts.c b/tools/testing/selftests/filesystems/devpts_pts.c
-index 54fea349204e..aa8d5324f2a6 100644
---- a/tools/testing/selftests/filesystems/devpts_pts.c
-+++ b/tools/testing/selftests/filesystems/devpts_pts.c
-@@ -119,9 +119,7 @@ static int do_tiocgptpeer(char *ptmx, char *expected_procfd_contents)
- 		goto do_cleanup;
- 	}
- 
--#ifdef TIOCGPTPEER
- 	slave = ioctl(master, TIOCGPTPEER, O_RDWR | O_NOCTTY | O_CLOEXEC);
--#endif
- 	if (slave < 0) {
- 		if (errno == EINVAL) {
- 			fprintf(stderr, "TIOCGPTPEER is not supported. "
+I think the expectation is that by default, tests written in Bash are
+run on one machine without remotes.
 
----
-base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-change-id: 20251126-selftests-filesystems-devpts-tiocgptpeer-fbd30e579859
+I think this fundamentally stems from the fact that running processes in
+Python is a bit unwieldy, so it makes sense to have helpers, so
+everybody uses them, so you can have helpers grow brains to do things
+like over-the-ssh configuration. In Bash, running a traffic generator is
+easier than working with arrays. So the helpers tend not to be as useful
+and we don't generally have them. At least not in any consistent way.
 
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+Eyeing the file, the requirement for the remote interface to be up and
+configured with an IP address is a bit surprising to me. I would think a
+down state is the most natural, and have the test bring it up and
+configure it in a way that it needs. I'm thinking maybe this is to allow
+testing a sole interface on like an embedded device?
 
+Anyway, that's a fairly strong differency between how Bash tests are
+typically written and the NIC setup. I think basically all existing
+tests assume the devices are theirs to tamper with.
+
+> The existing tests under drivers/net/hw which source forwarding/lib.sh
+> pre-date the "NIC setup" described in 
+> tools/testing/selftests/drivers/net/README.rst
+>
+> Should we ask "NIC setup" to be used for all tests which only need
+> NUM_NETIFS=2 ? These are basically simple tests where one netif is 
+> a traffic generator and the other is the DUT. And IIUC the "forwarding
+> setup" can't be used when the traffic generator is controlled over SSH?
+
+In principle nothing prevents lib.sh from growing brains to support
+these remote shenanigans. I think it's just that so far nobody cared
+enough to actually do it.
+
+I think that a helper that in effect does "run this on a machine where
+$swp1 is" is mostly what is needed. That and "make sure $swp1 and $swp2
+are on the same machine". It's going to be annoying to work with though,
+because you need to annotate every single command. I bet there's a nice
+syntax to make it not activelly annoying.
+
+If we have this, it might make sense to require tests to make use of it.
+(With an explicit opt-out for special cases.) But I do not want every
+test to have to reinvent this wheel and cargo-cult snippets from other
+tests.
+
+BTW, my guess is that even many multi-port tests that I wrote boil down
+to just a bunch of fairly independent loopbacks whose far ends could be
+on remote machines. It's not a priori nonsense to me that one would run
+a test like this, or whatever magic we'd use:
+
+    ./test.sh ssh://petr@10.1.2.3:eth1 swp1 veth1 ns://foo:veth2
+
+And it just works, because only swp1 and swp2 need to be bridged, the
+rest can be remote, and the traffic generation helper knows that to pump
+traffic to ssh://10.1.2.3:eth1, obviously you need to ssh there first.
+But the library would need to have helpers for this, and the tests would
+need to use them.
+
+At least ethtool counters would cause problems obviously.
