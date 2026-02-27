@@ -1,79 +1,98 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A735B283FE6
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 00:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2701AAE28;
+	Fri, 27 Feb 2026 01:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772153584; cv=none; b=tt/p+KoESdQrniEe0Rb4yyeu04FW2uurLS9xZ2Q3o4itswbsnWIJF5Y9RSGv0KFoMz2RFwonio1F7SH/MOVEACbnzxlc/dhSA8S6vTY0DhZgXPqW0ztdxvabH6/lWiMD16Zrm/u67wDxtTD56lfwstQNLkndGNn5TCWgSndOLFM=
+	t=1772155020; cv=none; b=goww+ooFLQ6JM7gMM799nyECHSqGQyoxGKB4Sl4OdFOQuOC49cshc3O5BGTkaA+0VMgZ4XCZeyvb78om695ynjJarbV/B4EzlSBYmSM5P+fS75au/MooprZhFNURE+zT0HcSNcX5Z54nbL0YlJQXWJuv4CoHDGy8z2mdNiNQJcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772153584; c=relaxed/simple;
-	bh=V58AsEXtDlXDbNdeDBd1zzEWI/NozXCvECRYKv0veUM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NjnS6HplfLA5wLexbODW3LeyUEz0tw83d/q9XxBlL24wPOW6x/bVUxmHKn3ueJTU+JJ/YM0QLtYzDkGPspzUtNyRrVX2vpGgJ5D6TwmHuNlGsFQSiF1Jh9Afm+uUnLBMcUD+BjlMVGGXZPamQzjHwDgxXkx+EAvFHow+ruwn9dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YMBJobID; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772155020; c=relaxed/simple;
+	bh=MOrSwXY88w7HsmkbJG76/DT3xMJe01+L4j5heQQ/GLQ=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=WiUTzztwaejC45/iiIUjEzSfEnbTB6EpalX/xYbHGkwwt81dHPN6OtCxW4+iXfaBxKTthaiIN27/LGSWuWBM5RrWEALyBWI8MHjRgWZFJaquQVc7mjzD5pkDFJDhiEQ7jWuig8ukIx1rb9Q4u0yo+VhqiZADTVAU08YH7iroh6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=G1DsVA4p; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XDChppER; arc=none smtp.client-ip=202.12.124.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YMBJobID"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2add623cb27so9647175ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 16:53:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772153583; x=1772758383; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9gbpHB3N8fWBNDFn5ovPsYhngGHkPr0G2QGOAHfoIKs=;
-        b=YMBJobIDBmh570RCF1WW+1QFR6izNsYPEATR801y2qMr0DFqBi8cu1OZQOqa+ViNnM
-         J28EloQ+m8/8Tx93S3qPD3b0fdFfuSDAXdtPyLLYA354KRtoTMeWewnyE61lZYoFOg/y
-         iX+COvhxI9VG0+AbSk40LQZXQDazOO+Eq+tpBuQrOlB2pn4VG2jExZF9iOj+tx32ldfg
-         QfwK7yxxpkaAtEWzszcluFrM7eL+RTotwo6Jt7vAABxVwAsraLrwBdetHzWNWbWLFzAJ
-         989HNfjN5I1nuOw8WspmHdMiWHr1dfz5B0JLseLeSUssJfs4zgHtl0KVjRW7be/CInvR
-         lmCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772153583; x=1772758383;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9gbpHB3N8fWBNDFn5ovPsYhngGHkPr0G2QGOAHfoIKs=;
-        b=Nm50n+CALZi+LRoyQYO2bJC4NxhqudLUdaqPKjUhfmdJh0KQDagBKaq2dA0MjOyORU
-         7uED5bp/u2gDcb0IaYg5uNZOoA/byS5ds4aqCHxx2E7LeajAWIbMVHa8eGqJUMoTM4AO
-         gSKoOVaO3cb/u+lm+K/4tV/du73NoOd5S5jsc8dU90gwERsSMlEILPLu8v3nFiRKgmhq
-         W7mjc4B+RINu8lcgKzc8V1JwMY+5etp8CADlgRszjcP5/sr9OqY77n2WXHyyRVQ1MBgD
-         4CuqCj1TFujM7Q7InxruBPKyYjdfAsGXhhgC7zjZba+guJGsNNngQOou5W0Zsninfpcw
-         sS3w==
-X-Forwarded-Encrypted: i=1; AJvYcCU43dyXqx36VBlDWbISe1Y+2cu8TfNCxAlbuCQuYrgXKViTeEhcU4KMuvnXBCOmKLZYICSJRVi5NEgq58pKlGU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJJR17uu+4Q67OvyqBLUK3xrY+wn7K5aar1miufv3LGAw69JI7
-	sxxOpgtq7kTFtdBEmMMcIJmgtXwHBKJS3nBomHZOo+gQsZOcRzJ2B8bj
-X-Gm-Gg: ATEYQzxGq3JIO2GpQq+4z/3A/OwgfdZSB8zgHG+rdzOsXfgrqFn3oMgRZUr7ehMr60T
-	SBs9Ma/D9o/4F3qAz3rUSyL6Dy7bfLG1un/HaVXpSG8q78Cx6kxhBKTHMLl8niHgiI8RiEc5D4X
-	meZ42xtmFhChTgOZkzwJxF37lb5SSjIvl4GxHRf6vt9DaM6xyaBLvCSOhQgvttm/ofqClzm4oXK
-	KpmOIRaw2O/Nv/V+rHq2EH09SHiWUxFDFLK0+rrHRuGXHqBNyMKw0mluWyr5Wa0W3EnWyOV2ju8
-	nj0GTVwdXFExaEvT+CUSIEY9YIAl1yQFTP/bjriUrLyIDkSKATTpZId7oy0bN6EPYAMIB7lIXed
-	wS7aZ9DwAK/Ro304q9bc0rmV8tQ7B8QKNUAhm1GB7fjEj+eqaeGxrnh/nODpczJAnoZYS1IkrmQ
-	ER1WJ37bSlcogVuyCccF7J7w2uk4g=
-X-Received: by 2002:a17:903:2312:b0:2a9:cb10:42b with SMTP id d9443c01a7336-2ae2e3f7cc2mr8443145ad.44.1772153582912;
-        Thu, 26 Feb 2026 16:53:02 -0800 (PST)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5b22fesm51253065ad.2.2026.02.26.16.52.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 16:53:02 -0800 (PST)
-Date: Fri, 27 Feb 2026 00:52:54 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jay Vosburgh <jv@jvosburgh.net>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Mahesh Bandewar <maheshb@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Liang Li <liali@redhat.com>
-Subject: Re: [PATCHv3 net 2/3] bonding: restructure ad_churn_machine
-Message-ID: <aaDq5vTsk8SW4bIA@fedora>
-References: <20260226125331.28147-1-liuhangbin@gmail.com>
- <20260226125331.28147-3-liuhangbin@gmail.com>
- <941081.1772152606@famine>
+	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="G1DsVA4p";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XDChppER"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id B634A7A0070;
+	Thu, 26 Feb 2026 20:16:56 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Thu, 26 Feb 2026 20:16:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1772155016; x=1772241416; bh=HluBTWjtB4nmJ7Kmo16jb0iyeLaGJM0+
+	1nOjnZpZpEQ=; b=G1DsVA4ptRSRG01CUrPCRR64z+JzQsrqXoGOwMpQNnax5UJ5
+	oACot6DT32ZmQXkAve3srpwGnefZU9zK0+dkTkIFn8i0Y63xwOPhvqFiR+0s8SfH
+	PbsWoW6DirUDdi846nHwC2VWIZoHm+o25cypHIN3+eYcgnZvQczYyhp5Ilfsa7ff
+	qTKApGLmIXBIA0ROCQHdyp3sohupRURleQhylTupQY35t6Jl5a3iz7LR6XHfze3P
+	VvuzeQS36WrMVac/JLu3WI4hV8GVQRAB4dJRCQeTMU2JBvaDFr4sxASdZ4JJ/q23
+	n5neIf5J5rsj5aI4NaXFGZR2lnxR1H/uao4qQw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1772155016; x=
+	1772241416; bh=HluBTWjtB4nmJ7Kmo16jb0iyeLaGJM0+1nOjnZpZpEQ=; b=X
+	DChppER+/DubT2TjYZrmnJWbeLZiXcZpYeqxXzXt/zmFQbQniIYIsejMCkG6cobH
+	mxhxCVazyE6xYBEgNV29+C62OBP8xUzBrZS4flVq5Vhh0l/Hz+Wfqvu5IWvErcVo
+	eHp6PiceevPaLTIUCGj1gc6MHXH6GWwLsp3CH3N7Ka1/B2hWGPaeQ4uwAuIscSuL
+	iKLYHSZRpY8GuTfM54FJ4BMmC55q7ld3q5swhztLVtS18ud4mjh5Xxl32UnsLLNV
+	KibWRMeUpIW3GHkETQkT1F56JnwkNeeYl3LVJ4uFTcqDfgN/tNjuGKAidm0kNUCx
+	RZglt3A2KQ08H/V57J+jQ==
+X-ME-Sender: <xms:iPCgaaOJdrRvCn0J2yAgQgVZGjsqX_2hQPzTjrm-I4nV-emT9uXJqg>
+    <xme:iPCgaTYa_lvVqgRa4pQ36WXVuq05Kr3ObtXgDgNDPULNCzYidHGuC3fRmGr_QaU6q
+    2_7WvWSip9LED6AzQzufJ4fedB1CKCsPQD5tF4xXGSVvjATNt9vih0E>
+X-ME-Received: <xmr:iPCgaYwr8MY2aDVSomwXQNdChXAtgriFE4s6eFT_pns2bCFkPJxUSE2wgiuQIGhGx0bAuA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgeejieefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefujghfofggtgfgfffksehtqhertdertdejnecuhfhrohhmpeflrgihucgg
+    ohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnhgvtheqnecuggftrfgrthhtvg
+    hrnhepgeefgffhgffhhfejgfevkefhueekvefftefhgfdtuddtfeffueehleegleeiuefh
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhvse
+    hjvhhoshgsuhhrghhhrdhnvghtpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhht
+    phhouhhtpdhrtghpthhtoheprhgriihorhessghlrggtkhifrghllhdrohhrghdprhgtph
+    htthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoheplhhiuhhh
+    rghnghgsihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgoh
+    hoghhlvgdrtghomhdprhgtphhtthhopehmrghhvghshhgssehgohhoghhlvgdrtghomhdp
+    rhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhh
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrvgifodhnvghtuggvvheslhhu
+    nhhnrdgthhdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhm
+X-ME-Proxy: <xmx:iPCgaSN0YoWMGdcOBaVhSwgSLWM_OajI7PxA_MtaMU0rQPpbx4oRGg>
+    <xmx:iPCgaXeE9A54mzoltxAj8YP9956rIjCiKl2IQgE9kx6QJv9zo7JN0w>
+    <xmx:iPCgaXRbvfUxdw_JzywZi_QSQMAq5mZh4hMTyk1xMdKvJSK7ueNrKw>
+    <xmx:iPCgaVd0ZLZ9QeCQ3YOBb0G4B4uKa4p7WI56_e5PX7euDVemZLNRbg>
+    <xmx:iPCgafDGSm0Tl2OeSyKES_EtTNkU0philyLI0eKVch6Q6PJYkeMLsfP5>
+Feedback-ID: i53714940:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 26 Feb 2026 20:16:55 -0500 (EST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+	id 0E2919FCB1; Thu, 26 Feb 2026 17:16:55 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+	by famine.localdomain (Postfix) with ESMTP id 0AC1D9FC39;
+	Thu, 26 Feb 2026 17:16:55 -0800 (PST)
+From: Jay Vosburgh <jv@jvosburgh.net>
+To: Hangbin Liu <liuhangbin@gmail.com>
+cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+    "David S. Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+    Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+    Nikolay Aleksandrov <razor@blackwall.org>,
+    Mahesh Bandewar <maheshb@google.com>, linux-kernel@vger.kernel.org,
+    linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv3 net 1/3] bonding: set AD_RX_PORT_DISABLED when disabling a port
+In-reply-to: <20260226125331.28147-2-liuhangbin@gmail.com>
+References: <20260226125331.28147-1-liuhangbin@gmail.com> <20260226125331.28147-2-liuhangbin@gmail.com>
+Comments: In-reply-to Hangbin Liu <liuhangbin@gmail.com>
+   message dated "Thu, 26 Feb 2026 12:53:28 +0000."
+X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,64 +100,81 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <941081.1772152606@famine>
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 26 Feb 2026 17:16:55 -0800
+Message-ID: <942584.1772155015@famine>
 
-On Thu, Feb 26, 2026 at 04:36:46PM -0800, Jay Vosburgh wrote:
-> Hangbin Liu <liuhangbin@gmail.com> wrote:
-> 
-> >The current ad_churn_machine implementation only transitions the
-> >actor/partner churn state to churned or none after the churn timer expires.
-> >However, IEEE 802.1AX-2014 specifies that a port should enter the none
-> >state immediately once the actor’s port state enters synchronization.
-> >
-> >Another issue is that if the churn timer expires while the churn machine is
-> >not in the monitor state (e.g. already in churn), the state may remain
-> >stuck indefinitely with no further transitions. This becomes visible in
-> >multi-aggregator scenarios. For example:
-> >
-> >Ports 1 and 2 are in aggregator 1 (active)
-> >Ports 3 and 4 are in aggregator 2 (backup)
-> >
-> >Ports 1 and 2 should be in none
-> >Ports 3 and 4 should be in churned
-> >
-> >If a failover occurs due to port 2 link down/up, aggregator 2 becomes active.
-> >Under the current implementation, the resulting states may look like:
-> >
-> >agg 1 (backup): port 1 -> none, port 2 -> churned
-> >agg 2 (active): ports 3,4 keep in churned.
-> >
-> >The root cause is that ad_churn_machine() only clears the
-> >AD_PORT_CHURNED flag and starts a timer. When a churned port becomes active,
-> >its RX state becomes AD_RX_CURRENT, preventing the churn flag from being set
-> >again, leaving no way to retrigger the timer. Fixing this solely in
-> >ad_rx_machine() is insufficient.
-> >
-> >This patch rewrites ad_churn_machine according to IEEE 802.1AX-2014
-> >(Figures 6-23 and 6-24), ensuring correct churn detection, state transitions,
-> >and timer behavior. With new implementation, there is no need to set
-> >AD_PORT_CHURNED in ad_rx_machine().
-> >
-> >Fixes: 14c9551a32eb ("bonding: Implement port churn-machine (AD standard 43.4.17).")
-> >Reported-by: Liang Li <liali@redhat.com>
-> >Tested-by: Liang Li <liali@redhat.com>
-> >Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> 
-> 	I missed this last time it was posted, but reading it now I
-> think the functional change looks good, but I question the usefulness of
-> including the 25 line ASCII art version of the state diagram.
-> 
-> 	The standard is publicly available, so a comment saying that the
-> state machine logic conforms to IEEE 802.1AX-2014 figures 6-23 and 6-24
-> should be sufficient.  Anyone seriously checking the code against the
-> standard will need to read the relevant text, so they'll be looking it
-> up anyway.
+Hangbin Liu <liuhangbin@gmail.com> wrote:
 
-I added it here to help new readers and reviewers understand the logic
-quickly. If you think there’s no need to include it in the code, maybe
-we can move it to the commit description?
+>When disabling a port=E2=80=99s collecting and distributing states, updati=
+ng only
+>rx_disabled is not sufficient. We also need to set AD_RX_PORT_DISABLED
+>so that the rx_machine transitions into the AD_RX_EXPIRED state.
+>
+>One example is in ad_agg_selection_logic(): when a new aggregator is
+>selected and old active aggregator is disabled, if AD_RX_PORT_DISABLED is
+>not set, the disabled port may remain stuck in AD_RX_CURRENT due to
+>continuing to receive partner LACP messages.
 
-Thanks
-Hangbin
+	I'm not sure I'm seeing the problem here, is there an actual
+misbehavior being fixed here?  The port is receiving LACPDUs, and from
+the receive state machine point of view (Figure 6-18) there's no issue.
+The "port_enabled" variable (6.4.7) also informs the state machine
+behavior, but that's not the same as what's changed by bonding's
+__disable_port function.
+
+	Where I'm going with this is that, when multiple aggregator
+support was originally implemented, the theory was to keep aggregators
+other than the active agg in a state such that they could be put into
+service immediately, without having to do LACPDU exchanges in order to
+transition into the appropriate state.  A hot standby, basically,
+analogous to an active-backup mode backup interface with link state up.
+
+	I haven't tested this in some time, though, so my question is
+whether this change affects the failover time when an active aggregator
+is de-selected in favor of another aggregator.  By "failover time," I
+mean how long transmission and/or reception are interrupted when
+changing from one aggregator to another.  I presume that if aggregator
+failover ater this change requires LACPDU exchanges, etc, it will take
+longer to fail over.
+
+	-J
+
+
+>The __disable_port() called by ad_disable_collecting_distributing()
+>does not have this issue, since its caller also clears the
+>collecting/distributing bits.
+>
+>The __disable_port() called by bond_3ad_bind_slave() should also be fine,
+>as the RX state machine is re-initialized to AD_RX_INITIALIZE.
+>
+>Let's fix this only in ad_agg_selection_logic() to reduce the chances of
+>unintended side effects.
+>
+>Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+>---
+> drivers/net/bonding/bond_3ad.c | 1 +
+> 1 file changed, 1 insertion(+)
+>
+>diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad=
+.c
+>index af7f74cfdc08..c47f6a69fd2a 100644
+>--- a/drivers/net/bonding/bond_3ad.c
+>+++ b/drivers/net/bonding/bond_3ad.c
+>@@ -1932,6 +1932,7 @@ static void ad_agg_selection_logic(struct aggregator=
+ *agg,
+> 		if (active) {
+> 			for (port =3D active->lag_ports; port;
+> 			     port =3D port->next_port_in_aggregator) {
+>+				port->sm_rx_state =3D AD_RX_PORT_DISABLED;
+> 				__disable_port(port);
+> 			}
+> 		}
+>--=20
+>2.50.1
+>
+
+---
+	-Jay Vosburgh, jv@jvosburgh.net
+
