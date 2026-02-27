@@ -1,99 +1,178 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC68B265623;
-	Fri, 27 Feb 2026 14:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13FF2C158D
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 14:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772201832; cv=none; b=LZlUFeHJbqa2Yfb4I4o9822nTELKmMoVJu8d9wCNNkNL9+LkBRtWeJhJef1Oj+yn3vnZN2jPUBJ17+1i302KC79bc/TEzlE9iJZ4mMNpFFFd24VUJ4RHKT/YNJJWPoCakUBxPyr/MVMH4WmLNyjCJpHgUCqO9bajzvOFRZAOCjs=
+	t=1772202525; cv=none; b=MModVKuiZZkOoUmEbH0Pdv1peOHiZWMMWb2cndhNnaJysuCoocsX6AUfTaOIxQqLb5n4SqJBuXOdDRWMrV0GPYfx7FxYuZxpILqfePbok2hZyX4LQ0T8WWQddbWmAnHv4wAX930vYsW0SuQ7oKeOIpkH+0HZ03byo6EWy2HW4xI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772201832; c=relaxed/simple;
-	bh=l4iTRL0B1/6NXgplljCXFTOsoRttrq9bH3OZlZif2UE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NT0IzbM9fjI3aXaRixVO+O3Pi+LprK80hRPAyQK/81tIpKv5GKMwROO90bc+//KiNJw0kQZ9DVVPeo0q9OrC3cJ0HAk4GZFmPeeiGfSYxVIm0VYYYm9/4sprq534D7stPk7ItGt/La/tWxrNRSC/Rvd7kR9PjRzDGVXBflV//TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=GUyuFa6T; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1772202525; c=relaxed/simple;
+	bh=i6cBFMHUsx0EJf2CjWn4sCmkc35R9btH0euWmqlbYsk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hf38sHwD+QBlRenePJZb1Zs2cn6+FGpNjnT/rvuIx9lHDwweKAZAHx57IzcfqApTNBCowXWU4Rab515D40gTDSQYC6liQNGzcA+GVVciijiei6XWpCf2dTdovCDNMZtEUT4bI56vSu/z4mLFUk+JqJtI7/ZZJmNZcCxM8WxvcCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gJk1XxQ/; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="GUyuFa6T"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=+VXHYlpTEJaJKmEUYBOB/ugE90OvhmmhEimVZCgztBQ=; b=GUyuFa6T9x8R8R++iMYyskPPbK
-	avmfBm3A6AIQBz2mk8hQ5xDVi7tpZOlGYAWN2T7K188ugL/It3vo26zU7qL98dtUuNJE17udwFBf3
-	RXAz2Sx1E3jYOeRD+/AGbGpHbpwrhtuPbmAkOusO8lytulnl16FsTCKZ9GTEFowuIqcY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1vvyeM-0094iP-P5; Fri, 27 Feb 2026 15:17:02 +0100
-Date: Fri, 27 Feb 2026 15:17:02 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Ioana Ciornei <ioana.ciornei@nxp.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
- ethtool standard counters
-Message-ID: <ef25c2c2-b50b-4288-8b09-00f7dfc88e63@lunn.ch>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
- <20260225150648.1542206-6-ioana.ciornei@nxp.com>
- <77f3e4e8-430e-4ae1-aa1f-8f70b4d8d3da@lunn.ch>
- <osswnpbiyy35ycs7ha2ufugj7dzmvpeq3x7vjq4j53qtwamkuw@ihwl5qjuydnv>
- <ph7vs3fsxti3nlypmmvm6wqvsnnsn76wct3qpi5omphggcjqrt@3any2dqzlgsr>
- <031c7375-0407-476a-92eb-0f894ec820f1@lunn.ch>
- <vcphjyyj3jezenqfgieqac7ayxhslupgeu6kh2ywfukaat3rtf@tsqaz33v4o7c>
- <20260226182511.0d33f9d1@kernel.org>
- <a6qhvs4vaxk33iryntrvybaesbr23v7hcrfn37p53viydd3zhs@6zquhlssfthz>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gJk1XxQ/"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4807068eacbso17428005e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 06:28:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1772202522; x=1772807322; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=i6cBFMHUsx0EJf2CjWn4sCmkc35R9btH0euWmqlbYsk=;
+        b=gJk1XxQ/D3JcPOla8s1C33DQ/wDdlxRIWCZoj/ews5RSQwIIk6UlLtGFiGUFLSeouH
+         XdJUve0YN591X3z/dH49gM+Qh9KzN5ftOpXJZRZskelZ3XQhLIlHMEwXUkXELbjPDlq7
+         jU+MdpSlfo3+OuasNsYzHSsrNMx4gXh8qiX078Ard4OL/bWqhARyvO+hD2V+rxtA44yt
+         eStZBw58j2y0FdrzM7wOEYCt65E+EZftUGPQ66La6t2/430Dr6skxdAw282EIq/OkQf8
+         YpafWujcuLm6oWQ7EmXx7AooynmRme4+iiEGJvr25r/i4kYS04CmwP34GUHbp8ik21O1
+         nF3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772202522; x=1772807322;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i6cBFMHUsx0EJf2CjWn4sCmkc35R9btH0euWmqlbYsk=;
+        b=E5Ti4JqpHpuhXZDlbrbWV/KmvpjCJBRrUn78uwwl75sniFMRsUQDlkc8JUf7qiyYf8
+         sG/jRO9hUQLLGMI0aAQ3Zt2AM/wqi3IFc7n4+juYuswn3S6A63fxb3blGwCnCLulH9Gs
+         tvH8ZhzC2u2p9EsCodDguKdU0u3qR1hNpA/ra9ZpfpJelwAehmZAnIRg3g68cDN2jc1L
+         X9XMHDfPcD5M1Ophqga0XhxMC/U2n9w3pFGKrV0Ycg/ukfCQakOxw6uySEuClTFy/lbV
+         cfEclTjD65UexG/BlzXSV3owVAyuTgx1JPoApOkiubdkWuEWxnYmH9IfOn/2Kuy9ZIz5
+         hV1A==
+X-Forwarded-Encrypted: i=1; AJvYcCWz0MNE42PmtLozmOkgbGv3O7U8D615O2+8QudHlAeRV742DkrEV2P5ql1ze7BbBBPsBIY35YBrmsYMOVWIPII=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4KkxjeqFlLYmELsF+6MHQ+o5WYXJwPo3INWiu6Zb+RAP6sZjE
+	kzlBH+vJUNAsmESSYvXxjg500+CsJOrezeXL+XDefwBkNIXiuhfOkWoE/mOwGlZECAM=
+X-Gm-Gg: ATEYQzzmAycs/VZQ1Ks6wwpKb8KdRNy3yg+grZ1RN9aWElG1C1FNAfMy1QtVe2CnZ+F
+	t94Bs4Zn20YU2mulEl0eqqiQjylR64KDYFR6ijk+hDEm0OZz4gp7HzyXOPRhNednDHoKdrAAzuT
+	5WFmzmE7ZyWK8gF2zbIux3o29Y2aQyDo9DcmODn8t6g90zFa8AcC+T+m1lOi7zFT3eqh94jtcAe
+	5iF36UhiXu40yeEZ9gDUmK6OGIo2T4lQyM3jvkrtNyg9vLVXGSXm0S33Erds3UP6dqjLTlRMmDo
+	CJcmR3I9yZephXSPtiuaVWiDQE1WihgkbcYLw45c9SgQOSKOQQoe5Ef+hXphCOe2+RP4K8zgb68
+	IDij87vOoNb0TX0Kp6o0EzH8oyTE4D/doFXZ9i40yZtoLnW9L+UMGtIu6ciZeUQeLRPVY9gcghp
+	b8a//StfYUbpWN3tcRKt5y2WDiDLWECb0JV+eflOeL5TEkrOlA2vQGGCXXlP5D0GcUOnzB3Iit
+X-Received: by 2002:a05:600c:470a:b0:477:abea:9028 with SMTP id 5b1f17b1804b1-483c9ba68eemr42134715e9.6.1772202522131;
+        Fri, 27 Feb 2026 06:28:42 -0800 (PST)
+Received: from ?IPv6:2804:5078:81a:8e00:58f2:fc97:371f:3? ([2804:5078:81a:8e00:58f2:fc97:371f:3])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56a9215ac92sm6872333e0c.14.2026.02.27.06.28.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Feb 2026 06:28:41 -0800 (PST)
+Message-ID: <42ab207746352197bc11fc9c2eafcb8663cd1362.camel@suse.com>
+Subject: Re: [PATCH 2/2] selftests: livepatch: functions.sh: Workaround
+ heredoc on older bash
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Miroslav Benes <mbenes@suse.cz>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>,  Jiri Kosina <jikos@kernel.org>, Petr Mladek
+ <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Fri, 27 Feb 2026 11:28:37 -0300
+In-Reply-To: <3a4a2d27c241bda76a0b5cf812f7921088d5cbd8.camel@suse.com>
+References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
+		  <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
+		  <aZx1ViTc7NJws-rf@redhat.com>
+		 <5ca16692b304185df695e517434b16e59cb15a42.camel@suse.com>
+		 <alpine.LSU.2.21.2602261337170.5739@pobox.suse.cz>
+	 <3a4a2d27c241bda76a0b5cf812f7921088d5cbd8.camel@suse.com>
+Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
+ keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
+ Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
+ gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
+ GO8seNG8sYiP6JfRjl7Hyqca6YsE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a6qhvs4vaxk33iryntrvybaesbr23v7hcrfn37p53viydd3zhs@6zquhlssfthz>
 
-On Fri, Feb 27, 2026 at 09:34:28AM +0200, Ioana Ciornei wrote:
-> On Thu, Feb 26, 2026 at 06:25:11PM -0800, Jakub Kicinski wrote:
-> > On Thu, 26 Feb 2026 16:18:21 +0200 Ioana Ciornei wrote:
-> > > > How about, fail the test if any are greater than 1% of the number of
-> > > > packets transmitted/received? My _guess_ is, if you have 1% packet
-> > > > loss, networking is not going to be happy anyway. It probably means
-> > > > you have one end doing Half duplex and the other Full. That is a
-> > > > typical configuration error you see causing collisions. Not that i've
-> > > > actually seen this for maybe a decade!
-> > > > 
-> > > > Failing the test, with a comment about checking duplex configuration,
-> > > > seems sensible.  
-> > > 
-> > > Seems reasonable. Thanks for the help!
-> > 
-> > FWIW the expectation is that the test should be able to run even on
-> > systems / boards with a single interface. So the control traffic
-> > (communicating with the traffic generator) will run over the same
-> > interface as the test. 1% error is unachievable. I'd only check the
-> > lower bound, and use some sanity value for the upper bound (2^30 ?)
-> > if at all
-> 
-> Really? I didn't know of that expectation at all.
-> 
-> I did take ethtool_rmon.sh as an example and that selftest as well
-> takes NUM_NETIFS=2 and does check for both a lower bound and upper bound
-> that takes into account a 1% deviance from the target.
-> 
-> How would the test even work with only a single interface?
+On Thu, 2026-02-26 at 11:34 -0300, Marcos Paulo de Souza wrote:
+> On Thu, 2026-02-26 at 13:40 +0100, Miroslav Benes wrote:
+> > Hi,
+> >=20
+> > On Mon, 23 Feb 2026, Marcos Paulo de Souza wrote:
+> >=20
+> > > On Mon, 2026-02-23 at 10:42 -0500, Joe Lawrence wrote:
+> > > > On Fri, Feb 20, 2026 at 11:12:34AM -0300, Marcos Paulo de Souza
+> > > > wrote:
+> > > > > When running current selftests on older distributions like
+> > > > > SLE12-
+> > > > > SP5 that
+> > > > > contains an older bash trips over heredoc. Convert it to
+> > > > > plain
+> > > > > echo
+> > > > > calls, which ends up with the same result.
+> > > > >=20
+> > > >=20
+> > > > Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+> > >=20
+> > > Thanks for the review Joe!
+> > >=20
+> > > >=20
+> > > > Just curious, what's the bash/heredoc issue?=C2=A0 All I could find
+> > > > via
+> > > > google search was perhaps something to do with the temporary
+> > > > file
+> > > > implementation under the hood.
+> > >=20
+> > > # ./test-ftrace.sh=20
+> > > cat: -: No such file or directory
+> > > TEST: livepatch interaction with ftrace_enabled sysctl ...
+> > > ^CQEMU:
+> > > Terminated
+> >=20
+> > I cannot reproduce it locally on SLE12-SP5. The patched test-
+> > ftrace.sh=20
+> > runs smoothly without 2/2.
+> >=20
+> > linux:~/linux/tools/testing/selftests/livepatch # ./test-ftrace.sh=20
+> > TEST: livepatch interaction with ftrace_enabled sysctl ... ok
+> > TEST: trace livepatched function and check that the live patch
+> > remains in effect ... ok
+> > TEST: livepatch a traced function and check that the live patch
+> > remains in effect ... ok
+> >=20
+> > GNU bash, version 4.3.48(1)-release (x86_64-suse-linux-gnu)
+> >=20
+> > Does "set -x" in the script give you anything interesting?
+>=20
+> Nope:
+>=20
+> boot_livepatch:/mnt/tools/testing/selftests/livepatch # ./test-
+> trace.sh
+> + cat=C2=A0=C2=A0=C2=A0=C2=A0=20
+> cat: -: No such file or directory=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=20
+> + set_ftrace_enabled 1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=20
+> + local can_fail=3D0
+>=20
+>=20
+> Same version here:
+> GNU bash, version 4.3.48(1)-release (x86_64-suse-linux-gnu)
+>=20
+> I'm using virtme-ng, so I'm not sure if this is related. At the same
+> time it works on SLE15-SP4, using the same virtme-ng, but with a
+> different bash:
+> GNU bash, version 4.4.23(1)-release (x86_64-suse-linux-gnu)
+>=20
+> So I was blaming bash for this issue...
 
-Just to add to this, for the 1% i was referring to counters for
-collisions. If the control traffic is causing collisions the system it
-just as wrongly configured as generated traffic causing collisions.
+This patch can be skipped. For the record, I discovered that it only
+happens when vng is called using --rw, making it to fail on older bash
+since it doesn't create overlays for /tmp. If the overlay is added the
+issue is gone.
 
-For 'everyday' systems, i doubt Half Duplex is ever used, but
-automotive with a T1 PHY might. So we might need to review this 1%
-once somebody runs this test on such a system.
+So, this patch can be skipped. Thanks Miroslav for testing!
 
-     Andrew
+>=20
+> >=20
+> > Miroslav
