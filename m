@@ -1,82 +1,83 @@
 Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CDE220F2D;
-	Fri, 27 Feb 2026 16:04:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB44D26560A;
+	Fri, 27 Feb 2026 16:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772208300; cv=none; b=PHLCkQZDlnZ+s5E8b8ByZ+nsWVIS9VJQfTQ45cUF2B1UCDBfsnohkHYc9f0n7G0APke03NamkneRlvnhd69Y0BI5F1Wa4eTqD5zcJ5vxDfqYUXjub02pLrwvpVQAJuo6dMi7w0Im4u/dZa1vYwYg8zxlv2/GSseBqlvxIdUOmVs=
+	t=1772209964; cv=none; b=WO1zOp5U/V5COJd5rR/ZSDoocbuGrjtG5VtNSwTqbTf1+EYOkjjGp1VrXPB/VbRIGIp92ITv1VdcxETsCfgc6ZLYZMV0wxDkBRoXZ3455wYqwCIVal7wiajfvrnAOikNdvLUAk3gpr5Wl45SGoRhkW9wvZmz6cVmrCvj2CE2V1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772208300; c=relaxed/simple;
-	bh=6xT3Dztb8MKL9P9vHsdzESwQNyYayz+saDCeiG7j2O0=;
+	s=arc-20240116; t=1772209964; c=relaxed/simple;
+	bh=wrC11vtLTokHCycbkNFYy91o4ea5t4/SpwDnFVAceAw=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GP/cj+RfjBfkv1o6k3OmWclIxzwqq8TuI7TkuAyH9QL2+uzHuLQn5k6Kc5yDPWG/0tsaqA0fnLKs/3PtIBMLrRDbTPOPinCzacCuMv5RAMImNb0cY2U3NuxYq6LmJZ7osAnmmSqHtL7n08pFsXUt9rQy/kcoMCyeInv+NokYwyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=jr3vgegU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tvscZopf; arc=none smtp.client-ip=202.12.124.136
+	 MIME-Version:Content-Type; b=OJC+Hm7Zrb6phev24i00avJQh2sw8+6PGiNKp3oS2pqQx7Tyu9WRanUQzeQ45vyr2p5kXaGQspEligMgvrEp09z2bSRTIT9RlwOMyXPqYgLxd3ah7IgdNH8GvWpKb/6ZGPJ58IKQQWjmhXqJnyWuCF6qylO+Qp3ArJokdL1FgNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=UvJQORvM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hDQJW6C9; arc=none smtp.client-ip=202.12.124.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="jr3vgegU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tvscZopf"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailflow.stl.internal (Postfix) with ESMTP id 43E3B1301495;
-	Fri, 27 Feb 2026 11:04:56 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Fri, 27 Feb 2026 11:04:57 -0500
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="UvJQORvM";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hDQJW6C9"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailflow.stl.internal (Postfix) with ESMTP id 471F51300DDC;
+	Fri, 27 Feb 2026 11:32:40 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Fri, 27 Feb 2026 11:32:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1772208296;
-	 x=1772215496; bh=9iPiw6U5zQK+rw2Kav/sKN2Hf6ijXsHI7/gXVV2UUoE=; b=
-	jr3vgegUcdiHcY8N3v9Ti9WcEJ5nINZ1LAG8Tq0MP7dsOTevP5c791I1/P/v4BsQ
-	7iHi6zv1sNVSXsUMC/t5FLaK2xSmrbpAOfmmZb18i1xzVnDp580eWMO6P/vu8J3V
-	vwZdKbbp158lxye+S/hdnWtDfgurN6NArNK1wHg5kvh2T7k9D3Dl5AgSBo/Oh063
-	rgZYEdUC4Z0rqwhPIHKhe/hnwRs9kCtNTpjS0BXScOr88+CNoLHwIpSo9mo5OTMx
-	Ry2YwDsNycGr97KOYjlMny2hy9bIhPG3Yt5lw1qqv/D2fwpmZLUn6Ho2FM7GyIHc
-	aGqnwznkm0tYuPiEISOBZg==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1772209960;
+	 x=1772217160; bh=U8o0TeKupqWBpq050X2z2KjPSahNrCwyfHa+2hao158=; b=
+	UvJQORvM3WSu1z7xDhvqaxf9hC6sa76YjMz/scZXjdy/L6YljiwPnaTuJ30TFex8
+	PNntGEmwaqA+vIv0O+jRj4gyQ4JqJiAsTjaCPr1D9eoxzBb0MdI4dA9c8o/Z5v2S
+	Q7gv4UM6c872LJRvs3yM96dYLdxOWYtX0T8q8F/WO51S2yri1/DKv0Rsi/6k4StV
+	SJOkAcVzvRHWFuj8vjnWS4vJHiStYc2ycYxTaeRSSSYtEoMXjoX8B8uPGH7gahuN
+	Wlz80WBR9iQTvIHWdFYAGZGJtbk21w+DNatLmEZw1qds3V2G/xe8GUqfcxC3fgKg
+	fXkztxWj7Y0GgGnzi73A1A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1772208296; x=
-	1772215496; bh=9iPiw6U5zQK+rw2Kav/sKN2Hf6ijXsHI7/gXVV2UUoE=; b=t
-	vscZopf+ZIEohHyAEDRhsH6FvskiqkAmDpcbJ929YOc16kdoaID3AUqA/A2BuUaN
-	T3NQnehlYy2NHaHOZTy905uPUXQvza+V1dfuXki/6uhpvSoc2L0RtungWGT1jrO7
-	ZwCT4v71GqF8Lb2j9Wa5pO6iFsAT82AWVVzzfP6i5qBkN/NLD16OpXnsU9Um2Yit
-	tqax0ePNsklBpO7D28r+WHWyEsyEB3dBdPzILFtuFeTep/W/txwnLoEbTm6byCiM
-	ZyFo3GtCDe1fofD17VNEpSy38yMrZStnH4Y7exMTr87u2ozA0C9IAtaYmIuUOHGo
-	++gnE/qKKaOXz+R9EfRlQ==
-X-ME-Sender: <xms:psChaT2sM4Kvl-4-ynL2eVnQMEX39TidibWISnlH_elJUGQErX3wTA>
-    <xme:psChae4zqe00s2rW3dmgGMuGnyWrupYFD0bGCo76dIRjuimHTSYe2q3WCJjvWTKjx
-    4PzQz43jg2I0fHfbjnTERQhWe1Q9ptrfVZgA1EPP6ANrtJPb8-JHw>
-X-ME-Received: <xmr:psChaYF1xEFxlqB1AHJOkAbJUOmtbZjtLf3IJgp5hsYNQFhKllAj9SiL1qw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgeelgeefucetufdoteggodetrf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1772209960; x=
+	1772217160; bh=U8o0TeKupqWBpq050X2z2KjPSahNrCwyfHa+2hao158=; b=h
+	DQJW6C9ZQsl+cSxSNqXEkYgt1MeeXA/LF+V/Q0vonxd/ZtKg+svWyiVt8Z0aQ9Gb
+	oG0Z/DkH/k6F1SsBn4/xRb6V4mz8s20F0k0/F37P0D3aX3UnJAmUZGWONhKWbGHr
+	QWgpqzs4CKH2WOJGvtuwZ5MDZGVF0YFNKXQtuIGYlbYDYu5u+xbmjDrbHTQOpYZ+
+	JjbPTUa78tPkuJUWrdp9YRAKRCZXuL57/vIzkXCJbPky9cyeiKEwz6BQfcyR5LPy
+	ns6iQ0WzaR1UssEeqJpnlymBANVKyhfpBExBaSeb0L6E8p7sLgfPncAbGLZ6auM0
+	bwTM1Qb4qg6OGApznwbPw==
+X-ME-Sender: <xms:J8ehafZlsZOjc3_GLRFi4h5tWZ_j39o91QnUDyRJrItDzcwi7KraSA>
+    <xme:J8ehacD4oLMaXgiufHOx7RuNmUZ2KcT58IQXmnadBxkzX7loWOuT_Faz9z10-R47c
+    s_mMj9iSe2a56NsAIHTwW5eXMvsyKiSrrmFI4cRQULuNzzQFJSrFQ>
+X-ME-Received: <xmr:J8ehaXgvfUMoIDFx1-N0_S2LZI5xIUBVR4hia4g9tz0jTB1PQar5sxgb1Zw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgeelgeelucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
+    gurhepfffhvfevuffkjghfofggtgfgsehtjeeftdertddvnecuhfhrohhmpeetlhgvgicu
     hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
-    htthgvrhhnpedvkeefjeekvdduhfduhfetkedugfduieettedvueekvdehtedvkefgudeg
-    veeuueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepgeehpdhmohguvgep
-    shhmthhpohhuthdprhgtphhtthhopehjghhgsehnvhhiughirgdrtghomhdprhgtphhtth
-    hopegumhgrthhlrggtkhesghhoohhglhgvrdgtohhmpdhrtghpthhtohephhgvlhhgrggr
-    sheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghjrgihrggthhgrnhgurhgrsehnvh
-    hiughirgdrtghomhdprhgtphhtthhopehgrhgrfhesrghmrgiiohhnrdgtohhmpdhrtghp
-    thhtoheprghmrghsthhrohesfhgsrdgtohhmpdhrtghpthhtoheprghpohhpphhlvgesnh
-    hvihguihgrrdgtohhmpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurght
-    ihhonhdrohhrghdprhgtphhtthhopegrnhhkihhtrgesnhhvihguihgrrdgtohhm
-X-ME-Proxy: <xmx:psChaW9Xw982ojlJdwBELBg5nUtIzvooVbtsR4EkEMCm_xurJFXzrg>
-    <xmx:psChaaOp5diDrMTGhRQmY7BQEtexZqnvTbnjvKx4-4ezrSFwxx9F2Q>
-    <xmx:psChaSyHxbqDw7kNVUBcF1TzS8IrpR_G2LRBbhhRg_GGFr9lHV0HNg>
-    <xmx:psChacsS35VypjDMtowdC17AE2t6OJySB2L9fCOTFIyvV5HWrXnqKQ>
-    <xmx:qMChac02xKCLa1txMJHJVVZiONFn_n7mbt_yHes_8ALNfR1pvZwQrzfN>
+    htthgvrhhnpeegkeejhedvtdelledvvdekuefgieelgeeuleevhffghffggffhjefhfeeh
+    ueffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepgeeipdhmohguvgep
+    shhmthhpohhuthdprhgtphhtthhopegumhgrthhlrggtkhesghhoohhglhgvrdgtohhmpd
+    hrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghj
+    rgihrggthhgrnhgurhgrsehnvhhiughirgdrtghomhdprhgtphhtthhopehgrhgrfhesrg
+    hmrgiiohhnrdgtohhmpdhrtghpthhtoheprghmrghsthhrohesfhgsrdgtohhmpdhrtghp
+    thhtoheprghpohhpphhlvgesnhhvihguihgrrdgtohhmpdhrtghpthhtoheprghkphhmse
+    hlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopegrnhhkihhtrges
+    nhhvihguihgrrdgtohhmpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtg
+    homh
+X-ME-Proxy: <xmx:J8ehaZQZcL6lZPF1tlS2vXNQrO4J8CAoDaz7yWMPTyzWglyUwjBO5g>
+    <xmx:J8ehaZsrct2tN8zKyTrWREhB4jzHQ_Fv2oAmSJc4BikE_AF4Xj42xg>
+    <xmx:J8ehaT_vdDuQ_DgLxEW0346_iNl-iCv0_xBOZodxKDVm2Tf1CiGErw>
+    <xmx:J8ehaVYG6UTWYipiljkmMYLzXh80DAKiM45iJealDLXXbTVMK8PklA>
+    <xmx:KMehaZfMe4KUyMFYKfHfXG7vObZA_yiAuEBY2xndXJSajNdx2KREBiW2>
 Feedback-ID: i03f14258:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Feb 2026 11:04:50 -0500 (EST)
-Date: Fri, 27 Feb 2026 09:04:49 -0700
+ 27 Feb 2026 11:32:35 -0500 (EST)
+Date: Fri, 27 Feb 2026 09:32:33 -0700
 From: Alex Williamson <alex@shazbot.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: David Matlack <dmatlack@google.com>, Bjorn Helgaas <helgaas@kernel.org>,
+To: David Matlack <dmatlack@google.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>,
  Adithya Jayachandran <ajayachandra@nvidia.com>,
  Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
  Alistair Popple <apopple@nvidia.com>,
@@ -84,6 +85,7 @@ Cc: David Matlack <dmatlack@google.com>, Bjorn Helgaas <helgaas@kernel.org>,
  Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
  Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
  Jacob Pan <jacob.pan@linux.microsoft.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
  Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
  Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
  kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
@@ -107,14 +109,13 @@ Cc: David Matlack <dmatlack@google.com>, Bjorn Helgaas <helgaas@kernel.org>,
  Vivek Kasireddy <vivek.kasireddy@intel.com>,
  William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
  Zhu Yanjun <yanjun.zhu@linux.dev>, alex@shazbot.org
-Subject: Re: [PATCH v2 03/22] PCI: Inherit bus numbers from previous kernel
- during Live Update
-Message-ID: <20260227090449.2a23d06d@shazbot.org>
-In-Reply-To: <20260226144057.GA5933@nvidia.com>
-References: <20260129212510.967611-4-dmatlack@google.com>
-	<20260225224746.GA3714478@bhelgaas>
-	<aZ-Dqi782aafiE_-@google.com>
-	<20260226144057.GA5933@nvidia.com>
+Subject: Re: [PATCH v2 02/22] PCI: Add API to track PCI devices preserved
+ across Live Update
+Message-ID: <20260227093233.45891424@shazbot.org>
+In-Reply-To: <aZ-TrC8P0tLYhxXO@google.com>
+References: <20260129212510.967611-3-dmatlack@google.com>
+	<20260225224651.GA3711085@bhelgaas>
+	<aZ-TrC8P0tLYhxXO@google.com>
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -125,38 +126,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 26 Feb 2026 10:40:57 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Wed, Feb 25, 2026 at 11:20:10PM +0000, David Matlack wrote:
-> > On 2026-02-25 04:47 PM, Bjorn Helgaas wrote:  
-> > > On Thu, Jan 29, 2026 at 09:24:50PM +0000, David Matlack wrote:  
-> > > > Inherit bus numbers from the previous kernel during a Live Update when
-> > > > one or more PCI devices are being preserved. This is necessary so that
-> > > > preserved devices can DMA through the IOMMU during a Live Update
-> > > > (changing bus numbers would break IOMMU translation).  
-> > > 
-> > > I think changing bus numbers would break DMA regardless of whether an
-> > > IOMMU is involved.  Completions carrying the data for DMA reads are
-> > > routed back to the Requester ID of the read.  
+On Thu, 26 Feb 2026 00:28:28 +0000
+David Matlack <dmatlack@google.com> wrote:
+> > > +static int pci_flb_preserve(struct liveupdate_flb_op_args *args)
+> > > +{
+> > > +	struct pci_dev *dev = NULL;
+> > > +	int max_nr_devices = 0;
+> > > +	struct pci_ser *ser;
+> > > +	unsigned long size;
+> > > +
+> > > +	for_each_pci_dev(dev)
+> > > +		max_nr_devices++;  
 > > 
-> > Ahh, makes sense. I'll clarify the commit message in the next
-> > version.  
+> > How is this protected against hotplug?  
 > 
-> More broadly you can't shouldn't the fabric topology while Memory
-> Enable is active.
+> Pranjal raised this as well. Here was my reply:
 > 
-> Renumbering or readdressing the fabric requires disabling and flushing
-> any memory transactions.
+> .  Yes, it's possible to run out space to preserve devices if devices are
+> .  hot-plugged and then preserved. But I think it's better to defer
+> .  handling such a use-case exists (unless you see an obvious simple
+> .  solution). So far I am not seeing preserving hot-plugged devices
+> .  across Live Update as a high priority use-case to support.
 > 
-> From that reasoning it is clearer that you can't do that if the device
-> is expected to hitlesslly continue performing memory operations.
-> 
-> That may be a clearer long term basis for describing the requirements
-> here.
+> I am going to add a comment here in the next revision to clarify that.
+> I will also add a comment clarifying why this code doesn't bother to
+> account for VFs created after this call (preserving VFs are explicitly
+> disallowed to be preserved in this patch since they require additional
+> support).
 
-Not only fabric topology, but also routing.  ACS overrides on the
-command line would need to be enforced between the original and kexec
-kernel such that IOMMU groups are deterministic.  Thanks,
+TBH, without SR-IOV support and some examples of in-kernel PF
+preservation in support of vfio-pci VFs, it seems like this only
+supports a very niche use case.  I expect the majority of vfio-pci
+devices are VFs and I don't think we want to present a solution where
+the requirement is to move the PF driver to userspace.  It's not clear,
+for example, how we can have vfio-pci variant drivers relying on
+in-kernel channels to PF drivers to support migration in this model.
+Thanks,
 
 Alex
