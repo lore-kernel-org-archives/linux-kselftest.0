@@ -1,127 +1,108 @@
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E693B35A3B9
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 08:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EFD36AB77;
+	Fri, 27 Feb 2026 08:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772181186; cv=none; b=SENAn1gcYKKKHHsQQZkzK177VFL2aQtmn3sQi1h53YpaNMIUhMARTsgUsdhZHl4IadfUjF83AzLnMn0X0K6NsmdLkwl/9shyghAlfrDzV33dl2ZvvNuXPdU+JqoEM0Rcd55WAXCjMVdjHRSlwkXCobKl36aIhX5TqS6zLkOkH2M=
+	t=1772182634; cv=none; b=KQOCe4rV0D0wECbPGYpspajDYXxPwNsDaJBsyhbhYdBaipbqr7mfVXT+T4va5N0tRTACBDiVjfEOwU2SSuqqelVuvbvCzM6OvU886ckhLenDDH6TVwZvFXkpTX6397GnWulI55c767Au1ErbgLWwqkzn+5fUmm92hUfQ3voCXvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772181186; c=relaxed/simple;
-	bh=3RupPG3bVf8o1iXp3/mZ55D1C9CIdFksOYT0HhrFzOM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VuHNd2xdYiYHyvQLKSA4NRQs9xntoJh61s1R9rC5or/Fg9yxfcdLvkvrX0fVfSjHd5u7N0Bx2QGnuqceLbSl9wAer1NmoXMRPNzOmb5KG2Mw5oQJjqCJ6TqdKDda0SoSJNftWDDots+9yuAzVwQFEBLDOBzJqOAn1rnFPwWmmgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-56a973a7bdfso1737984e0c.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 00:33:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772181184; x=1772785984;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2dEzLMMeMCHGMsmtD9q5xZQbfso5OBJS8UWwuF8jf68=;
-        b=uJ2obMHdscrgodTsORzEci67Y4FNrLzsbvJ44jMaRTr9EbXausMwE7aQp9cDIPupYP
-         GhLuZfvaH2uhGw7dGXl8Px7DyLAOoG4hRwxVKCTi0j8TzjmXwIlHhs4b5yrTauTEq1Qs
-         YvoC/aBbkdQt5NJNYM7jC6nS6PiD0fyuNOvi1/WONheznqOX1K7XSXkW2Gjefr/0vzei
-         2TNgJxh6Xh/835czy7CXz3Ls8srrZdksN0CgFh+fyaG+5zi1uvrKcIovDCGk7LNXeoft
-         kyo4yAyyWlT+fSb346QUQW3MKsMp8Al0TqMQJnAwmj4E+Qd7CSx9E062r/kf6mxtX8+7
-         7UMw==
-X-Forwarded-Encrypted: i=1; AJvYcCWSVHSbhyb1cNuHOEackFVx+kiU22ZMRTAhhrbmHDun2HEvujb2FRcc0YKxk2tUdgLA9F/N7S14NCrZprAkolY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw193gZiPN831Lfm5tACVRtOq7X4UDn+5yJcsDzZONC5LrVdSUP
-	L1sjBDi/2xr6tDytLZ0V/fJNU1R18x2ufM+QDBFZLD1wrvVpudSXSft80MnSbiB48y8=
-X-Gm-Gg: ATEYQzw9/CrX1p7va9Gt5dcIb3I0P05Yb1WQ/Ner3C2sZcwIMAi8kzCrKpBFTX32LMu
-	975axT8/tIcgaP+0IR9XGhkI1ZQ7qcO6QAovkdCB2cQvQe2tb/l4/56GCF23IIS0CfgIxkJJCQY
-	1KAXUd67sMo+yesTQpoxXD4i82aqOhXFkINxIslf1wF5/xXzQAAQ5WEBljG8vNYc9y73TNeyP1e
-	0OTIk0wiPyJa583mG6GPz/7APvO/AtF4Ej3GehnLvJfNVr/B4wXqGhhDVQbvLngLSf5ODyqtCYR
-	gezrTULeekOwwlFV10ODk8wNhu9e8a/M3+JZ84X9c1RgO5qGBpcsTbEgQp9jvxjq8wsKMSzJKJu
-	zQ50Ki94CEpj1SvwvIHfm5unOWHpxI5EE6nqsPEIjmVIfwVE/EFpvEm1Gt+L31ezahJTotY1RMC
-	3vcjCFyvwy1PXJIYYmpHoQcOBgLUlfUA2XHhvK9UZh37Yk/WMyBLfcNDmMhzQS
-X-Received: by 2002:a05:6102:3e95:b0:5ff:172c:2d92 with SMTP id ada2fe7eead31-5ff322d9081mr1307256137.8.1772181183624;
-        Fri, 27 Feb 2026 00:33:03 -0800 (PST)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94df6577693sm3912758241.9.2026.02.27.00.33.01
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Feb 2026 00:33:02 -0800 (PST)
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-94acf9ce1b7so1355518241.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 00:33:01 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXv5PTwFHQ2Mh4VQbXA3JHdaGWBnlIkdWLMie86wwGsvKZ/BXPPA+tHFGcnif2fziRF3a7feSlBqIFrIgLuvGY=@vger.kernel.org
-X-Received: by 2002:a05:6102:c47:b0:5f5:487c:83d2 with SMTP id
- ada2fe7eead31-5ff325d53c9mr1297367137.38.1772181181577; Fri, 27 Feb 2026
- 00:33:01 -0800 (PST)
+	s=arc-20240116; t=1772182634; c=relaxed/simple;
+	bh=t5Eu44EohAKtdn6jXoj24OL4Oxeey1xbO6OgpNiojOU=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=RuJMuRYEBjV/+fkPtF/xJr0PkToAeZpwxCV12bAqSzuYrCiKmzm/F1r1or994aHSebGJpopmZkpyg6EJKNnjFUq0Xs4733eo5lOo/f6XZCedJ8gZg5aXDze6KwD76SwH43FG97lkkAxhQdJQlOke2apNGa8e7xn7dI684rLOaoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=PcjwctEq; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="PcjwctEq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1772182620;
+	bh=SrZdSJRdoAckbO5q82rdgzfQsNrTNPnCGAAFgAwtkIA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=PcjwctEqe2HezWFYSiow3Nv1o+ZkhN0cgj+vRkBYd5VynQVznhZZGK+8eeMda911m
+	 7P5lcirUvHliZ2MLAUe0P8VmnfwauCprMat4GqixshMRgEbuWMimEAoHWksLJcQOVw
+	 HhM2fNMQhj3jKyZBW034hlzoER2bTaHz5CFxsfOE=
+Received: from meizu-Precision-3660.meizu.com ([112.91.84.72])
+	by newxmesmtplogicsvrszc41-0.qq.com (NewEsmtp) with SMTP
+	id D5A8BC1F; Fri, 27 Feb 2026 16:53:26 +0800
+X-QQ-mid: xmsmtpt1772182406tn7cyviuk
+Message-ID: <tencent_CFAEC9223E6E96F14FD78573C5BC9C2FBE07@qq.com>
+X-QQ-XMAILINFO: Mm8VRyTxzGuAXmNvXmUU2LbOBnvZelHi8jspZbz0yuR7wYRbbFaDo/Vf3iDZBF
+	 LfxR9XalMhSq+VnWrGw10xvaOXSvgtB2bqQmWdvR2ndiF2ydH0zlpJFtbGknWtipdSAHuI8D+emn
+	 GAxws519MvLFf6b3GiMPrN0MyfahWkdN9/leTqtS3BQUMVkDeEjegrCvnOpRkPQq43eC+o1XgonQ
+	 1S66Zx8eijlllEyCoJNQlIPDCtvek6Y0H6wlRXzoGgTdfwZh1G+U5Y/l6ENObr+fe3hVWAD9xBkQ
+	 g4J1qOsGjsu2ym1m979LAg9TxoFN3zLQ5Hpigz+mpuMlskakeuo1f+BEZsBbvQLZ+uPE93DDYu8u
+	 FZKBbwl8gV07ddJcWSeVklxmFNhqJmgeDcPbQbCTamreYlhr3eLeKGXD95uUphTnBm8swxTvFQjS
+	 4GJ665uH3vPPrEdM5ewpwt+fA+GP3RP7du/Wfwvz9rdWWht0BUwRRrbz98MzPyC2Q7EvwZ+DljZa
+	 8UFjubRG50V5hbaiC1e/Yy7CA2jmshouvODRjxvFvxc64+14fwreWvsdhw+/zgIiNszQSV1PRamy
+	 y5tyJRO7q/rMOsmUMwX4XzuZ/9ydAQE2nK/u6PlXV9l4rGrfycPqrWBETyRQV9hGoaZNFDU+HEXP
+	 2f2BFn5PrbWvTa5iaVxUu44zKKabhOF5iE6RlaUfu4wXEOx48Dlaur4F5+zhwaUaDp8GT5oKY5Ez
+	 AkYGiQFYvl3CcB03c8WgZdO486jrsyd0QCe+7H5e07NvP7NtjjIRT4ItEQ5mtuzrAce9XICOoVPG
+	 l4pFR5erIlZbABLr/eFln56SkszTegFMXRxbi71sqH7xJLdp5T7SiahMgs+IRXgrVmIANzR9akWj
+	 kt718WKzhjjlXg4B53K1TGiUCK17gykXbIcksty3ufpANCoyTJ3SNaKXeUzG+A3zRTW9flnJ0ksQ
+	 b9hppSVQnah61LF6JXr1qMi1h5y0XOcmL6h11FCG1NFwLxnMpcpOmrn9g69S3B04TtqvN8ZJLBdj
+	 YkSrL85Rp0mw2PaTgksNkqRfiSl1DZ93FPnEPDJsyr9Ww4Nl8vC2AtE4F/jgKRNMiY5SHtI2LTL2
+	 HlPYIN
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+From: Yuwen Chen <ywen.chen@foxmail.com>
+To: tglx@kernel.org
+Cc: akpm@linux-foundation.org,
+	andrealmeid@igalia.com,
+	bigeasy@linutronix.de,
+	colin.i.king@gmail.com,
+	dave@stgolabs.net,
+	dvhart@infradead.org,
+	edliaw@google.com,
+	justinstitt@google.com,
+	kernel-team@android.com,
+	licayy@foxmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	luto@mit.edu,
+	mingo@redhat.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	peterz@infradead.org,
+	shuah@kernel.org,
+	usama.anjum@collabora.com,
+	wakel@google.com,
+	ywen.chen@foxmail.com
+Subject: Re: [PATCH v5 1/2] selftests/futex: implement the interfaces related to threads
+Date: Fri, 27 Feb 2026 16:53:26 +0800
+X-OQ-MSGID: <20260227085326.47482-1-ywen.chen@foxmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <87ldgx832l.ffs@tglx>
+References: <87ldgx832l.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260226191749.39397-1-ebiggers@kernel.org>
-In-Reply-To: <20260226191749.39397-1-ebiggers@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 27 Feb 2026 09:32:50 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXH94DvcDKN1zTzTBOrcn_zAfZZZJCyGbxjfs8DBya5_Q@mail.gmail.com>
-X-Gm-Features: AaiRm52H2NMgOqKerYwyHCRsXF_5j9O_JAbJk1Fw4Sl8AnR8WmXboXf1vEA3uZA
-Message-ID: <CAMuHMdXH94DvcDKN1zTzTBOrcn_zAfZZZJCyGbxjfs8DBya5_Q@mail.gmail.com>
-Subject: Re: [PATCH] lib/crypto: tests: Depend on library options rather than
- selecting them
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ard Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Eric,
+On Fri, 13 Feb 2026 09:23:14 +0100, Thomas Gleixner wrote:
 
-Thanks for your patch!
+> Again. What's this usleep for?
+> 
+> If the file cannot be opened or fgets() fails then this fails hard.
 
-On Thu, 26 Feb 2026 at 20:20, Eric Biggers <ebiggers@kernel.org> wrote:
-> The convention for KUnit tests is to have the test kconfig options
-> visible only when the code they depend on is already enabled.  This way
-> only the tests that are relevant to the particular kernel build can be
-> enabled, either manually or via KUNIT_ALL_TESTS.
->
-> Update lib/crypto/tests/Kconfig to follow that convention, i.e. depend
-> on the corresponding library options rather than selecting them.  This
-> fixes an issue where enabling KUNIT_ALL_TESTS enabled non-test code.
->
-> This does mean that it becomes more difficult to enable *all* the crypto
-> library tests (which is what I do as a maintainer of the code), since
-> doing so will now require enabling other options that select the
-> libraries.  Regardless, we should follow the standard KUnit convention.
->
-> Note: currently most of the crypto library options are selected by
-> visible options in crypto/Kconfig, which can be used to enable them
-> without too much trouble.  If in the future we end up with more cases
-> like CRYPTO_LIB_CURVE25519 which is selected only by WIREGUARD (thus
-> making CRYPTO_LIB_CURVE25519_KUNIT_TEST effectively depend on WIREGUARD
-> after this commit), we could consider adding a new kconfig option that
-> enables all the library code specifically for testing.
+On embedded platforms, the CONFIG_KALLSYMS compilation option may not
+be enabled due to reasons such as reducing the size. This will cause
+the test item to fail. Do you still insist on returning a test failure
+when the opening fails?
 
-You can make those library symbols visible if KUNIT_ALL_TESTS, like
-I suggested (after I sent my earlier reports to you) in [1], and like
-Vladimir already did in [2].
+> Why aren't you waiting for the thread right here? There is absolutely no
+> point in doing that at the call site of futex_thread_create().
 
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Closes: https://lore.kernel.org/r/CAMuHMdVFRQZXCKJBOBDJtpENvpVO39AxGMUFWVQdM6xKTpnYYw@mail.gmail.com
+Also for the reasons mentioned above, my idea is to ensure that the test
+item can pass with a high probability even if the CONFIG_KALLSYMS option
+is not enabled.
 
-[1] "Re: [PATCH v3 net-next 05/10] phy: add phy_get_rx_polarity()
-    and phy_get_tx_polarity()"
-    https://lore.kernel.org/CAMuHMdUBaoYKNj52gn8DQeZFZ42Cvm6xT6fvo0-_twNv1k3Jhg@mail.gmail.com/
-[2] "[PATCH phy-fixes] phy: make PHY_COMMON_PROPS Kconfig symbol
-    conditionally user-selectable"
-    https://lore.kernel.org/20260226153315.3530378-1-vladimir.oltean@nxp.com/
+Thank you very much for your patient guidance. I was quite busy some
+time ago, so I'm replying to you now. I'm really sorry.
 
-Gr{oetje,eeting}s,
+Thanks
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
