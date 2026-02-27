@@ -1,164 +1,158 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011013.outbound.protection.outlook.com [40.107.208.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986E33491C2
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 16:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772210457; cv=none; b=rkK6o+AErx4L82AxhITzEiz7RButCUOEbA6PXzVICdW9O6KwnwfMxymcUDEFix5TWcnPMyhAbqDo3mj+gb+z2o6dQn480+xGmN8bTkJNW6DNPbW8HXQ2qonndfRlV9x+D2+vWuus3zYKv7G3MJuwAtVL6LJzpCR/Aokc3LQ1Un4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772210457; c=relaxed/simple;
-	bh=C9rvgcLgCnl2H3Sg4HwQ69JNuoVVfZdko+mTO0riISE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ju33yiiCQmhUoNVZRpZWwXkAQOsiazHotZqlzWs02ooyxCqcom9tTykPE+AiNMP+ZWNv0C9+y3pv/GSRn0hmoGljjhxk6VYQvJ7+/TmYAklho/LaUZAsdE61+WrhIUcQbMHHk8fYlgNqthQyLPmkd9sWIWT7Lq8tpY/yh6WA0ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LSiZX+Kg; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFEC356A2B;
+	Fri, 27 Feb 2026 17:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772211743; cv=fail; b=WoBwOs8lASj6nbmxivJoivlBovtwmfSH1woADTxtftDfO7BjHCVJzwvLXgGdHSVC7NyPPrZUI1Kkq3LHa/KmIlNDFGhXOOdxk9ij2oHgmplXlyIm9fv4w4V+GcseSf6h2vP783ap7rHRgSZ8j8/iG/XmDW4bbVo8QfgBiCHdzq4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772211743; c=relaxed/simple;
+	bh=Hp6agnXHnIeIw6Vjn63dYvCL2IAEf5T+xNnZmcY9884=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=sY2K2SHdK7XFxRPmwoFFdN6tiZ/6sftpaCiX17T6SUtHjZmBa68kgISFZR0LFXG/f3kDNXwPVUEY2R6nyTQ4Y1x6dZBYNPSYhJsaRmG4vtGZbmxZAJgY+UuynPJ1yeZVAjgh7SbznktnIXHY8vucZ+urDW8bewgyww6eU6T2jlE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=a9YZslkj; arc=fail smtp.client-ip=40.107.208.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LSiZX+Kg"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2b4520f6b32so2800547eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 08:40:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772210456; x=1772815256; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jdhIwXbtzriV4OW5ztdIybKDlCas+wm2/e72G4CdWfk=;
-        b=LSiZX+KgqPM8gkkTRYnQF4QKo15oV/QXh/m7oyDGR/x8wN6SnXBpLAmnYll49dVxlj
-         DRj1bLoxgrYoIa4yr4OEaRWkDNGMlvqysGwi5RFoB3AwHtP8pHgK+nhGHDV54zBeW0kM
-         BiVkQpBFmTTY+w0NHfT0CycYlTAjNr2jrCl2Y1cZFjbDkHH2UxL15/1crmX7Fuv11zAa
-         fU36fxIwBEAwoDDovUDirPw7I+Ls50qNfknKYMevaYiHWEiJ3G+wW3iCx6piL/4BnNuG
-         CTg27Ri7Oc1UpQHvQguFO70RsXV+dvmDqa329MDSLWvCaCwSjyrikupRfykFHEEJn6Uu
-         npPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772210456; x=1772815256;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jdhIwXbtzriV4OW5ztdIybKDlCas+wm2/e72G4CdWfk=;
-        b=fja2YG8vazDvHPhRtJ41mb/Bb/yZuNX2hmwP43HBmqp2ctGhzsoOJJGBm3121t5uex
-         QyBHN8wma8GwJNeJ7JQLpWBEQfK84DKjW9j/HIb1N8GVetw1dsslSnnQ2A64rrVZZgRm
-         DcCbDxlsXsmC0k0NlArL9MNatxUuqiKxK6oBCfAtq+HU5mka2d7YLlj7ERQfYTIwnp1o
-         DxRJj/O7kgTNLDBYXe1i5pWYVBExgQudCKxsJ/+uOVvXclU1nSuKaVTF20tJgvdk3/PQ
-         le8VCQegEULF3RGIbyg+JgomKC+86+M6WfKirfgITNBEj3cRrdIIXx2fZLZoI1cGnN6O
-         yEOg==
-X-Forwarded-Encrypted: i=1; AJvYcCV+/Kq0MT/5SLjB7faO+bE8H20vk9kLGkw0kMQ4CN5qbm032joKsdUozeMtZnuC4xHDLfoyyjdKJWoPghzU5i4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV77TuIG3MzS+wFBdFbmLphQYrn3R6FBNIk9Y9Tm6XIGrigBLJ
-	91pCXn5RBv16oKr/3uFqHGZVHGxJFEYKB/xa0v9tjMou10w5PHnfE2je
-X-Gm-Gg: ATEYQzwEJaXqBzlXoH+3Ye7vS9HGHoi7IuyrGoz9aSoxpiKk8abnv2R8bg/c7BdSdJ5
-	zoWN2qu7GSo2tqlcMv++Z087DEBjCqh3n5QrB4wPECTz6lI3oywFtzOQSnkTSadXP/1xDewidTV
-	NiNhxP8i3TPXK/5zD0PMJgJ6FzeL6cnteMJwFg2yXKRNmbo+y0II5t4Oi3KtdpMHzwFkiSltp98
-	moy9MO42oQh3sb9ZUxWjKM0nr3afrJgOgxIBtkb+ntWFxdJlWPBMGCXrGsB/FUSwcxg9/AtJfyv
-	nny+m6FtrfE73lIlYAml2WegDS6Flo2YSOiD97ozJZQD2/PDSg5BBM3W0+kjTuvSJ+tKTcbwW5Q
-	rfMVuBLqQGMrEvC1QuR3h/Pl9RqqDMj59FMU5jXvZ7rh6zUpx7r2qKDOphkrweW3wvaj4tiQ7ml
-	hRiLI4gyTsM+/z22X8IWU5OsmpiqsreKyIUlK+0o/EVyb+fmRIGdQ8cFVP+LNAQpH6OE6lPy5Mz
-	kEJ4Tlg9bLjaCcZ2HwH7IsRJA8=
-X-Received: by 2002:a05:693c:2c97:b0:2ba:8961:e1a1 with SMTP id 5a478bee46e88-2bde1d31e56mr1547097eec.22.1772210455641;
-        Fri, 27 Feb 2026 08:40:55 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdef9700ffsm220707eec.28.2026.02.27.08.40.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Feb 2026 08:40:55 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH 2/2] selftests/bpf: bpf_cookie: make perf_event subtest trigger reliably
-Date: Sat, 28 Feb 2026 00:40:37 +0800
-Message-ID: <20260227164037.84110-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260227164037.84110-1-sun.jian.kdev@gmail.com>
-References: <20260227164037.84110-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="a9YZslkj"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RycbQ9XKMZ19qwa1sp8MD3+EmvfBvZrAmpRi8dhXPdvpI4HSeJ6p/oPgTDYiAHCxrs1rZvBBEJ6bYtpu79s3G0lXg18nmMA0yuhd5510L5TioyCo7RbuP0/Xr/QWMo+yTOV4RGvAyer2f33DsWzL5cmOY9irmN0dDWRrk/a9eDVevKNAVPIq9cFgIAaUcFw5Zw3GG9TqVOLh9Of7R2GjsE05+34UIZr0PQvDhyg9zSAy4fzpbCt1XIQPRwz4AHFO6YCPE0yXbgbzdKIpK/gNF2CYbBZ+7cQN+nOQDcaxoC6qZjjpRxITjOCcVvlYtMGEGaKe5/HculheY+tDBAxUVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TQghgffv5iJebj1pfqn8u9d8tizwe2OXraV7xngOARo=;
+ b=FXDhvnotGwGFkqQ3G4kIsAeHUTo/kI+wDr6fTipP/r2/gjjX4jFbQcMinKbE5Qk1K4KRoUTqGV7350amcaoiFobSUEeG4LChTcIwqFkKRiG9YL/mIyeViq9RFd7gCuyf7yj6AP7SHMYRCckx1YKjKc8T7yo9KeUDrYiwsx11JEXrNGbw+mXsflAEoEgTtG18RHjyIiNrk8x3yDWP5LhSFPwucZ4+kxiaPrtW6mONjhH6DfJ9x3OMd/RWqLIucGcUTqft/uTQ8F8fxGWsXPfAu5WDngjYh4j68XbjcQBVytGLHuyS6v6T0tMRKggThO6t40w1eud3Fxc1tfPEan1bvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TQghgffv5iJebj1pfqn8u9d8tizwe2OXraV7xngOARo=;
+ b=a9YZslkjEbQ10NDbClq92nARztf0T0OMTBL7koZepQiydbbN0zLMGhbIktBgy9C4RtUClL4LTp/5ZNBdfXACDRE5M1LjthfPqO6EZN7WtCazl2EnRlnpOnPpB7CFgCWAzQvUJJatzquDyEswRB0//5rKiEOM9bYKSW+Lk78VWiRG+zgAEFavkPL0t17vYf2fBykljhepVa+/vkYbcHO3z1/xPIEsGydAWlruPt5iD/n91acf/1W4F+/Wuy6e6y85DaXYBsbBtCqWXFhmbyd62A6q6ZVqQXkYLkmWsBa4RE4pkLzYUkASIUQNdiCn1K9swCwZV93yaPeMIN1Er4JjSw==
+Received: from BY3PR03CA0021.namprd03.prod.outlook.com (2603:10b6:a03:39a::26)
+ by MW4PR12MB7168.namprd12.prod.outlook.com (2603:10b6:303:22d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.16; Fri, 27 Feb
+ 2026 17:02:17 +0000
+Received: from CO1PEPF00012E61.namprd05.prod.outlook.com
+ (2603:10b6:a03:39a:cafe::4b) by BY3PR03CA0021.outlook.office365.com
+ (2603:10b6:a03:39a::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.26 via Frontend Transport; Fri,
+ 27 Feb 2026 17:02:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1PEPF00012E61.mail.protection.outlook.com (10.167.249.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Fri, 27 Feb 2026 17:02:16 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 27 Feb
+ 2026 09:01:49 -0800
+Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 27 Feb
+ 2026 09:01:45 -0800
+References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
+ <20260225150648.1542206-5-ioana.ciornei@nxp.com>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Ioana Ciornei <ioana.ciornei@nxp.com>
+CC: <netdev@vger.kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next 4/5] selftests: forwarding: extend
+ ethtool_std_stats_get with pause statistics
+Date: Fri, 27 Feb 2026 17:38:40 +0100
+In-Reply-To: <20260225150648.1542206-5-ioana.ciornei@nxp.com>
+Message-ID: <87bjhaf7d6.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00012E61:EE_|MW4PR12MB7168:EE_
+X-MS-Office365-Filtering-Correlation-Id: 148438d1-a100-4550-0a4d-08de7621f62f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	7KnvAJJQO+VUOyOswAqFuUDz4yhHMdBx0z7ACmIGw8ha3Y05sPU9rdw08+Q9TUwvoznmfW5duJpeTBQfQqIpwKptlRPSZncV2z2mo9i2xXlvxjPvn+bW5jJ/CNTzsrvvcUQDGxRBWy3vyZnt4IyL34ZJaZMf+dtfNMuszu4S8calvjM3T4cgdBpV/rnkBf+4Tj/D0HsQY0WDhPHM6l1ADCIou9H5j+d/AngUTKaU+05uUbgu4HHMayeAKY6paY+0y1Tq5S9VBkmN5sQmsAuSWkpQ9sXqiHYqMcslJnHg1nx6C50+2GpJWAsEG24nGF7zWq149EwzJMHARKuYEy9vPGpm/QGnrJaBGf2KyTEzoKOcgN4tUqBhilX9UAGpnGVi/SNFKuzHQMfUb+Xef/wb8WfshPsjiaeD1jVkH/17N6ywiYcvehurCumMRgYU511mF1mj17GeS2VP7uROdVh5cltTbjUvdgzsLBWZ66T50VMW5NVdGG46LM9eworD6T5gggnjm+j1oC7iuKCQnYQXLQHBrGCPfcQjCTEtle09AitRF6SZ8qG8Aikrs8+IozAFQy3Qh3/3inc8EhC1I4yPdKzDCvE1TjKZccV5YQjeWJTs1xTptRlMlFdlOFcGyeFoo7RVMynIy1+H3/QpxzMQGn8Qhou0Q7w8G4DaWgsJPCWCf68S+7NKylXkPwkSSgjUN5DB8VFIDzSeJnU2r6Lr30kFAL/GIomq7f8xHzJHdzmTZa3GbfeZnVbN9fFvB7QHBQEVN3P4moar4KOMdcoR7dn5knt7lxXIhLuOVOYhyFTRKOj5UH4LjY5fTKuWNDgkFH/p0QWVk/cnSEo97da46A==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	zfFx8h7nyF2Xi61RpYxixIhseiCLNUNxfMCFnA3lU/ymV/gTL2gIdUkG4Ns1UziVb6rSug2GDtL56ZmkgLn1bXPJlW9HbzMyPGYD5MZRKivhicTSrlJa2ZATaSxL5QURNiNKgyZR6QOhnS1UQP9hzqd7hkq/+HvdjW2lFBBKOixvBlquhVRRdbYXd5gkI4M6WSwOfcmJ8HkP0Rlji+1lpTHw5//bHESSNxhdUcwQlfv2gJ/Eqcmz8T1Z0QLdwaBYxSviaaPhWNM6QlrGFCvgpdwCR6aSzgsa9ICJIE/5rHUtwV6B2u/jFNmn4Rg3Rm1sqvwciUGLe+RF+ohf0iuXFmX+MuRsclTboBaC0BFPNrdd2RQjxusLaCbwSQIHVeQukp9CZ4w1ws9jFklmYOI1r1UetPeA0FkfjgUijphUz+MPZ5/MRBfdqrFgDZoE3Jno
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2026 17:02:16.7952
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 148438d1-a100-4550-0a4d-08de7621f62f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF00012E61.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7168
 
-The perf_event subtest relies on SW_CPU_CLOCK sampling to trigger the BPF
-program, but the current CPU burn loop can be too short on slower systems
-and may fail to generate any overflow sample. This leaves pe_res unchanged
-and makes the test flaky.
 
-Make burn_cpu() take a loop count and use a longer burn only for the
-perf_event subtest. Also scope perf_event_open() to the current task to
-avoid wasting samples on unrelated activity.
+Ioana Ciornei <ioana.ciornei@nxp.com> writes:
 
-Tested:
-  ./test_progs -t bpf_cookie/perf_event -vv (30 runs): 0 failures
+> Even though pause frame statistics are not exported through the same
+> ethtool command, there is no point in adding another helper just for
+> them. Extent the ethtool_std_stats_get() function so that we are able to
+> interrogate using the same helper all the standard statistics.
+>
+> Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+> ---
+>  tools/testing/selftests/net/forwarding/lib.sh | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+> index a9034f0bb58b..efd236ae1c28 100644
+> --- a/tools/testing/selftests/net/forwarding/lib.sh
+> +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> @@ -831,8 +831,12 @@ ethtool_std_stats_get()
+>  	local name=$1; shift
+>  	local src=$1; shift
+>  
+> -	ethtool --json -S $dev --groups $grp -- --src $src | \
+> -		jq '.[]."'"$grp"'"."'$name'"'
+> +	if [[ "$grp" == "pause" ]]; then
+> +		ethtool -I --json -a $dev | jq '.[].statistics.'$name
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../selftests/bpf/prog_tests/bpf_cookie.c       | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+I think name needs to be quoted here? In fact, unless the pause group is
+highly unlikely to ever get a key that contains a dash, it should either
+be quoted in the horrible way the else branch does it, or do this much
+more readable thing instead:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index 50f5e11e6e65..35adc3f6d443 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -6,6 +6,7 @@
- #include <sys/syscall.h>
- #include <sys/mman.h>
- #include <unistd.h>
-+#include <linux/compiler.h>
- #include <test_progs.h>
- #include <network_helpers.h>
- #include <bpf/btf.h>
-@@ -431,11 +432,12 @@ static void tp_subtest(struct test_bpf_cookie *skel)
- 	bpf_link__destroy(link3);
- }
- 
--static void burn_cpu(void)
-+static void burn_cpu(long loops)
- {
--	volatile int j = 0;
-+	long j = 0;
- 	cpu_set_t cpu_set;
--	int i, err;
-+	long i;
-+	int err;
- 
- 	/* generate some branches on cpu 0 */
- 	CPU_ZERO(&cpu_set);
-@@ -443,9 +445,10 @@ static void burn_cpu(void)
- 	err = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
- 	ASSERT_OK(err, "set_thread_affinity");
- 
--	/* spin the loop for a while (random high number) */
--	for (i = 0; i < 1000000; ++i)
-+	for (i = 0; i < loops; ++i) {
- 		++j;
-+		barrier();
-+	}
- }
- 
- static void pe_subtest(struct test_bpf_cookie *skel)
-@@ -470,7 +473,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 	if (!ASSERT_OK_PTR(link, "link1"))
- 		goto cleanup;
- 
--	burn_cpu(); /* trigger BPF prog */
-+	burn_cpu(100000000L); /* trigger BPF prog */
- 
- 	ASSERT_EQ(skel->bss->pe_res, 0x100000, "pe_res1");
- 
-@@ -489,7 +492,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 	if (!ASSERT_OK_PTR(link, "link2"))
- 		goto cleanup;
- 
--	burn_cpu(); /* trigger BPF prog */
-+	burn_cpu(100000000L); /* trigger BPF prog */
- 
- 	ASSERT_EQ(skel->bss->pe_res, 0x200000, "pe_res2");
- 
--- 
-2.43.0
+        jq --arg name "$name" '.[].statistics[$name]'
+
+> +	else
+> +		ethtool --json -S $dev --groups $grp -- --src $src | \
+
+Since you are touching this line -- can you fix the missing quoting,
+please?
+
+> +			jq '.[]."'"$grp"'"."'$name'"'
+> +	fi
+>  }
+>  
+>  qdisc_stats_get()
 
