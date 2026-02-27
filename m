@@ -1,114 +1,92 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD692EDD50
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 02:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7402F6928
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 03:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772159802; cv=none; b=fPpcQMfve7eCUZ1AOKCMQtC94l3Mn89yLit9Zj13wwQTZVSZ0WlnQ5zdVM7fsUwe6DG7Qlj48DA/NZSX2vB8cILdN0kDBRzNVnZPyGrNSPnRGjcBVV0HvoDJqizEArtEWIfteQQ/WzleUTG8VfrR86JgKtg5R9NYVE+Mm/p7hRA=
+	t=1772162381; cv=none; b=gFQ3uMyYAIHiMM3tfXFtoDfEz1GtsyZ8S6c3zyCLrs0leUGvAZXAFIpO2vy2PXsB8YJGfwTblLPkgl3xf5Q9k7SNJpIdn+/3aRj785qr0konduALKSTN+D1ARDKdQ5LvNYY5XqDk3J2nzg2lVRIf8JsOTEzdc4FF3awapXh//3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772159802; c=relaxed/simple;
-	bh=l+nEv2Y6FEb2oVcBaKlzWxtlJ3m0mj77GVOFIJR4dlU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PFanl7SSBzWByToaUjdz1ZP8QhM3U2xL8bth7BDSxQ4N9RMGHS4nGr3IchlrTVo+7Pwp30TXo+PrOMr2vPEdIlgt5nEJQRetBoJ+UpuB3Ohj/1Fck7ccT4dHcXV/GAFN8PQD74VhOBsvswkyv8/nVHw1p0ILCxN5f5/fyKyh/Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VLOmXgkb; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772162381; c=relaxed/simple;
+	bh=RVnntmTzXs+hvPfRA7NOqmTQfpxW4HA+H04KqFGYqYo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ox9n7pU3zLuguvAlh0cYlRiK9IBpsgHBHPozEGAkLPNb9H5ryB8IqCUv5NfmrzU1uCrBzIDUW+MQXgui41WkfdvU/RB5/scJAy6D0i+EpGrczX6/xbjU2AGCon9Gbw+ON7kSn8pV+RhoCC1uPaRU+UixK+iR/RWfPDrlNCnxaGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=e7fARSYa; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VLOmXgkb"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c70378ddaafso1007625a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 18:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772159799; x=1772764599; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cTaHWVqVPPHKKO9lr97zROxv1lwqPfLhEfsjJzvUNbY=;
-        b=VLOmXgkbVw22+QEGE+XkSX6KJWiPeDt+PEYtUsEeAaUllBPgJVp9ceuCEUCuPWn1A8
-         YCpiUleE7ooUWvDU0ELG7NMAwYiJF4JCWwIs42hG8Qaxl2UCO4KY6rC4wQ0cWZ6lOMXw
-         t140K5rgRwxWMW/j6tokXbzObhTzv/M872i9ujz+B8nw5fl57U+GSe7mcfciLXA6QhNt
-         ylF6uBrGOuiMWmdWOyIfUgFcblpUudccoh9XMLrD9/jtnOfmN8ZN/lv68dLI2BOUc8g8
-         JKD1nIaF4chwU4lTlUNo0UThzf4JVhQy8x1MgQGyQF1MqaAsndqiq3Ha9FfjZ0NUB9zI
-         v36g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772159799; x=1772764599;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cTaHWVqVPPHKKO9lr97zROxv1lwqPfLhEfsjJzvUNbY=;
-        b=nyPyyCLbSpg7id4rc4R+5+G1DO4HHFnDdsn27JVEVheNZqlhwPYkxN5Sp/5KEtEWoq
-         KEPePRnUqjQegQK2yxUpzwOfBZ+LgXGW63wDGzvW+nWggI4PncUAXzPCGUlKr/0PonxP
-         ehHXnO4ZY87ziobm2z7WSxT45rQL393WBe2hOOWtUM23t3eg1PnObxOuvUWMtL3xbRLd
-         1zvzzzo/AbU1axZGxC7l41UxFAXzF8pJsmeT2/ndnYe7k00oA9hQdyXLf18zVf92yyfH
-         g+5WitmqTbwQBt9OEYDAlO5YnXhkmpOei3edDzwT7s7rWY15ycMD1UDsCKiljl6Kvb+u
-         5daA==
-X-Forwarded-Encrypted: i=1; AJvYcCUBhsVSyQ2ruUwT2lmDyVYm+bXAeQI0EnQJEHTu6s8z5warONx/9gYGeSS509FFCFL9yVgJ+m5ZpVcre7Eu6HQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztLvTARi//d8P5wJA+yUVXBay1P2tTK4VXQ7k1r9nDOCPeD/HE
-	j1RM25gyGaEyyq3AacELr99m5pth0Vw/u/qdQoIDhA/cyMCHGvNFHrpc
-X-Gm-Gg: ATEYQzy9x+m4IskoQPZgamVuvC0R3qf+4qb3Z4lNyDvwYY9FgkU0K3LCqFbX59WewTH
-	0qUZ4LEcenoTZZw8zkyJZR2md2fp/i1gmdwBNcrBOZnJTYDym/MevzDD8osPMGZimBQQ7HK4N8W
-	DuUZZHJci2bn5XooIp5/GTcsgwPBMpRfZmvDz54+QlG9qTWD6g/zZOxbXFT8pqECjYjjOe8Mils
-	NzdkbxrMvjmDR/YyfS4BB3F9cFbI4eO4e4654/nt80tiE7iKRL/NK/wE3IqBBc+8eGpuS99Nasp
-	Sv9U9H+4SuyK5BCIb1AWtsHGa9XuPTfNxXSKWSAeysCGPhOB1e4Sy+GOKkTzPnU3hweBSgS6js6
-	Ht9r6y5vt6s/O7bwJ3jomLaHzHvxeE52BaPDRgQVm2eK4PQ129zGmnONSSRidgISCsgaJsuLXsU
-	2tjsQbEI5/JsHMI07XCcwEYUsTkx0=
-X-Received: by 2002:a17:902:ccc7:b0:2a9:db7:446a with SMTP id d9443c01a7336-2ae2e3ce5a1mr11578285ad.9.1772159799125;
-        Thu, 26 Feb 2026 18:36:39 -0800 (PST)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5b257esm38646095ad.4.2026.02.26.18.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 18:36:38 -0800 (PST)
-Date: Fri, 27 Feb 2026 02:36:31 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jay Vosburgh <jv@jvosburgh.net>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Mahesh Bandewar <maheshb@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Liang Li <liali@redhat.com>
-Subject: Re: [PATCHv3 net 2/3] bonding: restructure ad_churn_machine
-Message-ID: <aaEDL09GtkQnlE8X@fedora>
-References: <20260226125331.28147-1-liuhangbin@gmail.com>
- <20260226125331.28147-3-liuhangbin@gmail.com>
- <941081.1772152606@famine>
- <aaDq5vTsk8SW4bIA@fedora>
- <943602.1772156533@famine>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="e7fARSYa"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=rPGb2TyziU/dFBTeP5RkyLgux5odcZyBVzlNY4Qr1LU=;
+	b=e7fARSYa0gdt+SsWCzmzPUHlRZsLyb9i/tsKWQjus+9yiNH901v1LAcYIUXt3f4+6VynEk/fK
+	9QESlMdenpqs8MYl1GaKrVt0Dka3AvsbLn55WnJHAet9SJWwKcl2e0YdiorTv912fdCeeN0kXv4
+	JnMaHCdtswyVdhqOG2bgnpM=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fMYNJ4gd2znTXc;
+	Fri, 27 Feb 2026 11:14:56 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5483640539;
+	Fri, 27 Feb 2026 11:19:36 +0800 (CST)
+Received: from huawei.com (10.50.163.32) by kwepemk500005.china.huawei.com
+ (7.202.194.90) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 27 Feb
+ 2026 11:19:35 +0800
+From: Yifan Wu <wuyifan50@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
+	<broonie@kernel.org>, <yeoreum.yun@arm.com>, <jonathan.cameron@huawei.com>,
+	<wuyifan50@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>
+CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
+	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
+	<wangzhou1@hisilicon.com>
+Subject: [PATCH 2/2] selftest/arm64: Fix sve2p1_sigill() to hwcap test
+Date: Fri, 27 Feb 2026 11:19:33 +0800
+Message-ID: <20260227031933.4103333-3-wuyifan50@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20260227031933.4103333-1-wuyifan50@huawei.com>
+References: <20260227031933.4103333-1-wuyifan50@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <943602.1772156533@famine>
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
-On Thu, Feb 26, 2026 at 05:42:13PM -0800, Jay Vosburgh wrote:
-> >I added it here to help new readers and reviewers understand the logic
-> >quickly. If you think there’s no need to include it in the code, maybe
-> >we can move it to the commit description?
-> 
-> 	Personally, I'd leave it out, and just put a reference.
-> 
-> 	The churn machine isn't that critical, even the standards
-> committee didn't like it and removed it from the 2020 edition of
-> 802.1AX.
+The FEAT_SVE2p1 is indicated by ID_AA64ZFR0_EL1.SVEver. However,
+the BFADD requires the FEAT_SVE_B16B16, which is indicated by
+ID_AA64ZFR0_EL1.B16B16. This could cause the test to incorrectly
+fail on a CPU that supports FEAT_SVE2.1 but not FEAT_SVE_B16B16.
 
-Oh, I didn't notice this. I posted a patch[1] to net-next to export the
-churn state via netlink recently. Should I revert this patch?
+LD1Q Gather load quadwords which is decoded from SVE encodings and
+implied by FEAT_SVE2p1.
 
-> 
-> 	Still, whatever we provide should work in accordance with the
-> 2014 standard we're nominally conforming to, so functionally the patch
-> looks fine to me.
+Fixes: c5195b027d29 ("kselftest/arm64: Add SVE 2.1 to hwcap test")
+Signed-off-by: Yifan Wu <wuyifan50@huawei.com>
+---
+ tools/testing/selftests/arm64/abi/hwcap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Got it, I will remove it.
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index 0d229804a857..e8b22a60326c 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -478,8 +478,8 @@ static void sve2_sigill(void)
+ 
+ static void sve2p1_sigill(void)
+ {
+-	/* BFADD Z0.H, Z0.H, Z0.H */
+-	asm volatile(".inst 0x65000000" : : : "z0");
++	/* LD1Q Z0.Q, P0/Z, Z0.D, X0 */
++	asm volatile(".inst 0xC400A000" : : : "z0");
+ }
+ 
+ static void sve2p2_sigill(void)
+-- 
+2.33.0
 
-[1] http://lore.kernel.org/netdev/20260224020215.6012-1-liuhangbin@gmail.com
-
-Thanks
-Hangbin
