@@ -1,452 +1,181 @@
-Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com [209.85.210.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6742944BCB7
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 17:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F417F36E46D;
+	Fri, 27 Feb 2026 17:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772214144; cv=none; b=mMSpgaFU70eOcsA3RCvrbmo+NckF6QASfFzXFQrJg4tIQI0N3c/CfFJsmBNs+/Jkki/feRwZUJ4xMswXWA6c76IIqW0zy7LCTawWLAd7rR0DjhU9ANtPc3Khr+uzJp5CVZKpxPDWhTaJFj+XsnQBmq6+P1Kfc9MYW9pk8B/7+eM=
+	t=1772215053; cv=none; b=BlAd+/fKVrt1GNCRMITffY3iUqSSFSowNFDnqPa+nBKEF95AbXr4QN2h1K6KKXmiJL1//TJaMZx3mLqlE9xGJ92+cEIAlKAZRNNj6eVmYp8D6F1UpcI07GomIfouJMIZno3Q6CdnEj23sp9kNvKHDbHzfyMgF4q7DQGFPy6n9XI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772214144; c=relaxed/simple;
-	bh=8rOZ+tcz92iZfnLYzZlxJbEVocSTu0CogNkErHUmH7U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aTg7+kAI5/SHTPEnU8WC3OzdeWByfZuhqTtxb6Vds/KRUH4hBhMgxWXsGye4DUNaPjUdlk2LZWC+Pj+w9QTjX5rXssS+Lv/TsyMSF9by8U0gas5/p7g+Kcm2eQ7GGNWVJP5/99HnsAU+KmIKpVrGJ0CcCnc5+xVzSN6Jac4ud+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=HLYLc25n; arc=none smtp.client-ip=209.85.210.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1772215053; c=relaxed/simple;
+	bh=S6KawJbtcVXw3+duC5lB0oRS2LBKKrK2JTZCmWJ4tlw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=n8zaMWsNC3JLgh/tx3+GopSZ2E8mO3hu9/w4SHQpBo7px9p/Z2sgWUZ3R8j+fRDrwxD361+emvQIgDZhg/s1Lprp1kXn5/Gd61BdcReQnFBj5w1Yp15ZcTRpvz+BynJxIWINmBNTW4qPb3bmQEJWfQp/YJaXxTebcVO15Or5nmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=aat5WdRO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WxqmtJcO; arc=none smtp.client-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="HLYLc25n"
-Received: by mail-ot1-f65.google.com with SMTP id 46e09a7af769-7d18d0e6d71so1805844a34.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 09:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1772214139; x=1772818939; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EyMpLHKzc9IHBWU2hZy73Xs0ZZK4TMATc0/iCm8bjws=;
-        b=HLYLc25nP2RbxXHRWoDhLNzze/Uzr0ifJyEd1Nz2TMgLtNlhMjAwMwgJisFsvo4L1d
-         jgeb5Ev2aoAzTLpAFjscbw4B85Ruu7pNd+lxW9ELRYvllYpbgUfQtauCpJQvKHn0L2Jq
-         5zMv4eX3xY1i+kjAiun4TFt36ROv3o7u3coFp+dXUIk/p9mteWyAOWPu0/wff8oMDImU
-         UXZrtxxQh6Qeg7Y6FJzf8cpHzZBFazZoJUJd7HMwF86SDNoU+ut0BvPxxIrqjt0rP4hJ
-         PIjWIq5HS7m3ik4xhI16EmTlQzmXiTR9PEUvV3gaVl/PhhFHkOMEWcEOw6ZcdGbjIU8F
-         szZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772214139; x=1772818939;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EyMpLHKzc9IHBWU2hZy73Xs0ZZK4TMATc0/iCm8bjws=;
-        b=d16il9TIL52OX9z2JJzf4Sv4js/eqM6Cgz//XB7e4iUChcsfdg2Xo28HgOSJyIZShO
-         8ICPKkQy2W6mubglv62fk02z0lK5MbWkOy3gg3tYUYs052uQlF5sh4MKFo/O5SIXVrji
-         bfE9ieYbfoyH9sHAxmAHFHc7FzNfBOh/WvKhAEzcI+xeSqmtN6U9MrRhyvymQkw4FxoC
-         fWN6TcuzXrfRX2sT+z/5VuBx+ivMQHYes1aZAOh+P0Q8HMlZDir0DPE2j+aA6m4H/i2z
-         vE+QNcBuY9yMIOJePVqTKUMWK6ICo7wdZE5Dz/S56Pp2sq9dzhcWCcHnmajM6lQh4yy6
-         ICug==
-X-Forwarded-Encrypted: i=1; AJvYcCX+EKSGZ+1/YaQi5WcWxys/ymcDH+zFvWvOPHqM3ajDUkSP7hEo4ZvyeRK4T7hO1gsa04pyH6U7hYwPnRs2zCc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMgaBFvEUCExz/YVXyn85MzaJfHvPA7mIPKlshCIsfXyDW1SE3
-	kXxbevnhBGrHUDX2dLvaygNGl5lby1mSaar71LWWh6H8uAomzRtKXAVgb0ZcCqwdSB4=
-X-Gm-Gg: ATEYQzx+UMQXZSCPSF3FP+wapHnAdgMqvhK5ljzrsHBDfuxdErEKwyJ0J+2IVshyNNR
-	httUt7ZbLQJHA4RfbzZjGyv8Ju13z5kf4PDOSAVIUKD3eIUW+7JvOU9sqJnGOGCvZtjV5UMEZjA
-	FVCR7id9fdsrlWykMcpY0eVIl0P6mCu1fGZowYQX/qU3SHFBwT6h51u7K6dWPYaa9QHjwf1Da/X
-	XQc8byyu3ApVEkBUB9DQXVkZJGX6aNAO3RUgs37b/nT+MHI4IadjUDkwBgGg3uTwfgrz9lwnj35
-	EDNnx+R4TDT/dPSqIyp04FF/a7cMWRU+g9tLlhkQZkCj8meoSHTE2d+X2OaOPVrha/xxa6k0pZ8
-	O/uU4JjN85P6w0O1Pn9h/3yKzqG4i0/uyfIG0ImAp44yWOIYyq7lN38crI8eISoclew9XayhmUh
-	zSbVKg684=
-X-Received: by 2002:a05:6830:6609:b0:7d1:66e2:44ce with SMTP id 46e09a7af769-7d591b23859mr2333784a34.1.1772214139176;
-        Fri, 27 Feb 2026 09:42:19 -0800 (PST)
-Received: from 20HS2G4.. ([2a09:bac1:76c0:540::f:3cb])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d58644edf0sm4723385a34.2.2026.02.27.09.42.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Feb 2026 09:42:18 -0800 (PST)
-From: Chris J Arges <carges@cloudflare.com>
-To: michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: kernel-team@cloudflare.com,
-	Chris J Arges <carges@cloudflare.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next 4/4] selftests: drv-net: xdp: Add rss_hash metadata tests
-Date: Fri, 27 Feb 2026 11:40:20 -0600
-Message-ID: <4cf6b0ddf92fa8b9bc2107a20be08ea0a232e4ca.1772211065.git.carges@cloudflare.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1772211065.git.carges@cloudflare.com>
-References: <cover.1772211065.git.carges@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="aat5WdRO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WxqmtJcO"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id 3F62C1300E62;
+	Fri, 27 Feb 2026 12:57:27 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Fri, 27 Feb 2026 12:57:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1772215047;
+	 x=1772222247; bh=K2yQm0oOGTcRJfhcrEhEmD0poePPSAOAfmgoK4/aZLQ=; b=
+	aat5WdROMFK4MIAhDBYWwdq0MIcDck8De3aplVKiAQDST6EhMB5PcW5tdYpMASS+
+	Lwzt8PZ2t/Vks2Gz4X5ZD6pdN26+IdzlXQZqudjRIN25E+9WKMhgqSWnxhjoWCuU
+	Vvy+OwWxDo/e5yr0fnLuFRHymkkXqvE8y6wWzNE3Ojj+EoITsFc3+feRRhqKx7uw
+	QCtWIHCyzSB2nG8tHB3q5wtWzmKHRV3bhThUKDX8lSL5eLjDzt9Ltx1XWwPicyHc
+	gBFcO+3nfj61Pc3XM1/KVRAyL71hj680c6ci4mtUugl5CjPxlzT1d41uQ+cB3Kjw
+	/SxMAZO1OqzqUyUmadPSPw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1772215047; x=
+	1772222247; bh=K2yQm0oOGTcRJfhcrEhEmD0poePPSAOAfmgoK4/aZLQ=; b=W
+	xqmtJcO9/vYtHkLC8ry/T0H4riRZtlEP84tsZsbvOF7uyDV2DhRDT9EFxWz8XiZ3
+	5YimAM/blxiy5DiQdzLbwfFBeoCdw5gLmTW9CVQOea7C3zb0AyB1sf1XS+wmfv3Q
+	Ds3c8w7JL5YsaMfC5Al7JyE92WwHtRZLH8a0uMk94qa9MVsfoP6yhSuvimDw6m7/
+	0Vz8KIDNfDn+zdyVaa/tMTWGIwc8UccFyxqFQglgrsg4CseIls3XRYZIDO4ePIei
+	HCyVzy589uVArJ51VYsNvO/jUSHwDM0rW/z2eNUHdq2EX5myg0+WDdo9RdMlxi0o
+	IsS6cWHKbOS2VNTCGTGUw==
+X-ME-Sender: <xms:BtuhaeIZ2jS2UzpJd553k8XHA1Sp13wdZhBu7QQZtWIcByVOCp_UKg>
+    <xme:BtuhaS8hJK-hkPnFru1C9zc1y9z6dwFIhx7qBKUOL3_IP1aZ0UeNjHLjD_ZPtaIJb
+    Ap74DRRikSk2ywtNYvGEudDqP4xYKNin3E1E33BFNp5CKHwOsAWgQ>
+X-ME-Received: <xmr:BtuhaS7gLyrUe-l3rxzVCz0cLdnzfbW-UmoTkvJBStG9ul5e7o1ztrntfSw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgeelieeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfofggtgfgsehtqhertdertdejnecuhfhrohhmpeetlhgvgicu
+    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeegudevhfejueefveduieeuueeifeettdekveekhffgvdetfeelueehgfdt
+    heffhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepgeehpdhmohguvgep
+    shhmthhpohhuthdprhgtphhtthhopegumhgrthhlrggtkhesghhoohhglhgvrdgtohhmpd
+    hrtghpthhtoheprghjrgihrggthhgrnhgurhgrsehnvhhiughirgdrtghomhdprhgtphht
+    thhopehgrhgrfhesrghmrgiiohhnrdgtohhmpdhrtghpthhtoheprghmrghsthhrohesfh
+    gsrdgtohhmpdhrtghpthhtoheprghpohhpphhlvgesnhhvihguihgrrdgtohhmpdhrtghp
+    thhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtth
+    hopegrnhhkihhtrgesnhhvihguihgrrdgtohhmpdhrtghpthhtohepsghhvghlghgrrghs
+    sehgohhoghhlvgdrtghomhdprhgtphhtthhopegthhhrihhslheskhgvrhhnvghlrdhorh
+    hg
+X-ME-Proxy: <xmx:BtuhaRgx07S3OQW05vQUdMULcKyIxw-lTak2T16g5_r3LQCchEXMMw>
+    <xmx:BtuhaZgs_wOwuGV3uCTzdlPxPYWSRXfna-r2yxAr8x8ogV-5YZqCiQ>
+    <xmx:BtuhaX1nJjDQ-xPKXDYD3-xh--mPBEI78fmknqtRndSlh83yiY3kdg>
+    <xmx:BtuhaUhbU6JSFEpTI_Y42gSPmoFE2aI-6lqMPTHvgr6MwH-vurp96w>
+    <xmx:B9uhaXpqlDvWlnCcYlLipLPhEwUJg3Efvxe_E5IjWKRMOlvzQntJDuNL>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Feb 2026 12:57:22 -0500 (EST)
+Date: Fri, 27 Feb 2026 10:57:20 -0700
+From: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+ Alistair Popple <apopple@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
+ Jacob Pan <jacob.pan@linux.microsoft.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>,
+ Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org,
+ kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>,
+ Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, linux-pci@vger.kernel.org,
+ Lukas Wunner <lukas@wunner.de>,
+ =?UTF-8?B?TWlj?= =?UTF-8?B?aGHFgg==?= Winiarski
+ <michal.winiarski@intel.com>, Mike Rapoport <rppt@kernel.org>,
+ Parav Pandit <parav@nvidia.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Pranjal Shrivastava <praan@google.com>,
+ Pratyush Yadav <pratyush@kernel.org>,
+ Raghavendra Rao Ananta <rananta@google.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Saeed Mahameed <saeedm@nvidia.com>,
+ Samiullah Khawaja <skhawaja@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= <thomas.hellstrom@linux.intel.com>,
+ Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>,
+ William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+ Zhu Yanjun <yanjun.zhu@linux.dev>, alex@shazbot.org
+Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
+ Live Update
+Message-ID: <20260227105720.522ca97f@shazbot.org>
+In-Reply-To: <CALzav=fHy23RAzhgkdaL+JA5T2tL9FT6aPgRfXUh7i9zvYCGPA@mail.gmail.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+	<20260129212510.967611-11-dmatlack@google.com>
+	<20260226170030.5a938c74@shazbot.org>
+	<aaDqhjdLyf1qSTSh@google.com>
+	<20260227084658.3767d801@shazbot.org>
+	<CALzav=fHy23RAzhgkdaL+JA5T2tL9FT6aPgRfXUh7i9zvYCGPA@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-This test loads xdp_metadata.bpf which calls bpf_xdp_metadata_rx_hash() on
-incoming packets. The metadata from that packet is then sent to a BPF
-map for validation. It borrows structure from xdp.py, reusing common
-functions.
+On Fri, 27 Feb 2026 09:07:48 -0800
+David Matlack <dmatlack@google.com> wrote:
 
-The test checks the device's xdp-rx-metadata-features via netlink
-before running and skips on devices that do not advertise hash support.
-This allows the tests to pass, but one can override the device and test on
-HW or veth devices.
+> On Fri, Feb 27, 2026 at 7:47=E2=80=AFAM Alex Williamson <alex@shazbot.org=
+> wrote:
+> >
+> > On Fri, 27 Feb 2026 00:51:18 +0000
+> > David Matlack <dmatlack@google.com> wrote:
+> > =20
+> > > On 2026-02-26 05:00 PM, Alex Williamson wrote: =20
+> > > > On Thu, 29 Jan 2026 21:24:57 +0000
+> > > > David Matlack <dmatlack@google.com> wrote: =20
+> > > > >
+> > > > > - vdev->reset_works =3D !ret;
+> > > > >   pci_save_state(pdev);
+> > > > >   vdev->pci_saved_state =3D pci_store_saved_state(pdev); =20
+> > > >
+> > > > Isn't this a problem too?  In the first kernel we store the initial,
+> > > > post reset state of the device, now we're storing some arbitrary st=
+ate.
+> > > > This is the state we're restore when the device is closed. =20
+> > >
+> > > The previous kernel resets the device and restores it back to its
+> > > post reset state in vfio_pci_liveupdate_freeze() before handing off
+> > > control to the next kernel. So my intention here is that VFIO will
+> > > receive the device in that state, allowing it to call
+> > > pci_store_saved_state() here to capture the post reset state of the
+> > > device again.
+> > >
+> > > Eventually we want to drop the reset in vfio_pci_liveupdate_freeze() =
+and
+> > > preserve vdev->pci_saved_state across the Live Update. But I was hopi=
+ng
+> > > to add that in a follow up series to avoid this one getting too long.=
+ =20
+> >
+> > I appreciate reviewing this in smaller chunks, but how does userspace
+> > know whether the kernel contains a stub implementation of liveupdate or
+> > behaves according to the end goal? =20
+>=20
+> Would a new VFIO_DEVICE_INFO_CAP be a good way to communicate this
+> information to userspace?
 
-The test is fairly simple and just verifies that a TCP or UDP packet can be
-identified as an L4 flow. This minimal test also passes if run on a veth
-device.
+Sorry if I don't have the whole model in my head yet, but is exposing
+the restriction to the vfio user of the device sufficient to manage the
+liveupdate orchestration?  For example, a VFIO_DEVICE_INFO_CAP pushes
+the knowledge to QEMU... what does QEMU do with that knowledge?  Who
+imposes the policy decision to decide what support is sufficient?
+Thanks,
 
-Signed-off-by: Chris J Arges <carges@cloudflare.com>
----
- tools/testing/selftests/drivers/net/Makefile  |   1 +
- .../selftests/drivers/net/xdp_metadata.py     | 144 ++++++++++++++++
- .../selftests/net/lib/xdp_metadata.bpf.c      | 163 ++++++++++++++++++
- 3 files changed, 308 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/net/xdp_metadata.py
- create mode 100644 tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 8154d6d429d3..6f9708e8d05a 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -23,6 +23,7 @@ TEST_PROGS := \
- 	shaper.py \
- 	stats.py \
- 	xdp.py \
-+	xdp_metadata.py \
- # end of TEST_PROGS
- 
- # YNL files, must be before "include ..lib.mk"
-diff --git a/tools/testing/selftests/drivers/net/xdp_metadata.py b/tools/testing/selftests/drivers/net/xdp_metadata.py
-new file mode 100644
-index 000000000000..7b8a3d00b0ac
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/xdp_metadata.py
-@@ -0,0 +1,144 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+Tests for XDP metadata kfuncs (e.g. bpf_xdp_metadata_rx_hash).
-+
-+These tests load device-bound XDP programs from xdp_metadata.bpf.o
-+that call metadata kfuncs, send traffic, and verify the extracted
-+metadata via BPF maps.
-+"""
-+from lib.py import ksft_run, ksft_exit, ksft_ge, ksft_ne, ksft_pr
-+from lib.py import KsftNamedVariant, ksft_variants
-+from lib.py import CmdExitFailure, KsftSkipEx, NetDrvEpEnv
-+from lib.py import NetdevFamily
-+from lib.py import bkg, cmd, rand_port, wait_port_listen
-+from lib.py import ip, bpftool, defer
-+from lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
-+
-+
-+def _load_xdp_metadata_prog(cfg, prog_name, bpf_file="xdp_metadata.bpf.o"):
-+    """Load a device-bound XDP metadata program and return prog/map info.
-+
-+    Returns:
-+        dict with 'id', 'name', and 'maps' (name -> map_id).
-+    """
-+    abs_path = cfg.net_lib_dir / bpf_file
-+    pin_dir = "/sys/fs/bpf/xdp_metadata_test"
-+
-+    cmd(f"rm -rf {pin_dir}", shell=True, fail=False)
-+    cmd(f"mkdir -p {pin_dir}", shell=True)
-+
-+    try:
-+        bpftool(f"prog loadall {abs_path} {pin_dir} type xdp "
-+                f"xdpmeta_dev {cfg.ifname}")
-+    except CmdExitFailure as e:
-+        cmd(f"rm -rf {pin_dir}", shell=True, fail=False)
-+        raise KsftSkipEx(
-+            f"Failed to load device-bound XDP program '{prog_name}'"
-+        ) from e
-+    defer(cmd, f"rm -rf {pin_dir}", shell=True, fail=False)
-+
-+    pin_path = f"{pin_dir}/{prog_name}"
-+    ip(f"link set dev {cfg.ifname} xdpdrv pinned {pin_path}")
-+    defer(ip, f"link set dev {cfg.ifname} xdpdrv off")
-+
-+    xdp_info = ip(f"-d link show dev {cfg.ifname}", json=True)[0]
-+    prog_id = xdp_info["xdp"]["prog"]["id"]
-+
-+    return {"id": prog_id,
-+            "name": xdp_info["xdp"]["prog"]["name"],
-+            "maps": bpf_prog_map_ids(prog_id)}
-+
-+
-+def _send_probe(cfg, port, proto="tcp"):
-+    """Send a single payload from the remote end using socat.
-+
-+    Args:
-+        cfg: Configuration object containing network settings.
-+        port: Port number for the exchange.
-+        proto: Protocol to use, either "tcp" or "udp".
-+    """
-+    cfg.require_cmd("socat", remote=True)
-+
-+    if proto == "tcp":
-+        rx_cmd = f"socat -{cfg.addr_ipver} -T 2 TCP-LISTEN:{port},reuseport STDOUT"
-+        tx_cmd = f"echo -n rss_hash_test | socat -t 2 -u STDIN TCP:{cfg.baddr}:{port}"
-+    else:
-+        rx_cmd = f"socat -{cfg.addr_ipver} -T 2 -u UDP-RECV:{port},reuseport STDOUT"
-+        tx_cmd = f"echo -n rss_hash_test | socat -t 2 -u STDIN UDP:{cfg.baddr}:{port}"
-+
-+    with bkg(rx_cmd, exit_wait=True):
-+        wait_port_listen(port, proto=proto)
-+        cmd(tx_cmd, host=cfg.remote, shell=True)
-+
-+
-+# BPF map keys matching the enums in xdp_metadata.bpf.c
-+_SETUP_KEY_PORT = 1
-+
-+_RSS_KEY_HASH = 0
-+_RSS_KEY_TYPE = 1
-+_RSS_KEY_PKT_CNT = 2
-+_RSS_KEY_ERR_CNT = 3
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("tcp", "tcp"),
-+    KsftNamedVariant("udp", "udp"),
-+])
-+def test_xdp_rss_hash(cfg, proto):
-+    """Test RSS hash metadata extraction via bpf_xdp_metadata_rx_hash().
-+
-+    This test will only run on devices that support xdp-rx-metadata-features.
-+
-+    Loads the xdp_rss_hash program from xdp_metadata, sends a packet using
-+    the specified protocol, and verifies that the program extracted a non-zero
-+    hash with an L4 hash type.
-+    """
-+    dev_info = cfg.netnl.dev_get({"ifindex": cfg.ifindex})
-+    rx_meta = dev_info.get("xdp-rx-metadata-features", [])
-+    if "hash" not in rx_meta:
-+        raise KsftSkipEx("device does not support XDP rx hash metadata")
-+
-+    prog_info = _load_xdp_metadata_prog(cfg, "xdp_rss_hash")
-+
-+    port = rand_port()
-+    bpf_map_set("map_xdp_setup", _SETUP_KEY_PORT, port)
-+
-+    rss_map_id = prog_info["maps"]["map_rss"]
-+
-+    _send_probe(cfg, port, proto=proto)
-+
-+    rss = bpf_map_dump(rss_map_id)
-+
-+    pkt_cnt = rss.get(_RSS_KEY_PKT_CNT, 0)
-+    err_cnt = rss.get(_RSS_KEY_ERR_CNT, 0)
-+    hash_val = rss.get(_RSS_KEY_HASH, 0)
-+    hash_type = rss.get(_RSS_KEY_TYPE, 0)
-+
-+    ksft_ge(pkt_cnt, 1, "should have received at least one packet")
-+    ksft_pr(f"  RSS hash error count: {err_cnt}")
-+
-+    ksft_ne(hash_val, 0,
-+            f"RSS hash should be non-zero for {proto.upper()} traffic")
-+    ksft_pr(f"  RSS hash: {hash_val:#010x}")
-+
-+    ksft_pr(f"  RSS hash type: {hash_type:#06x}")
-+    XDP_RSS_L4 = 0x8  # BIT(3) from enum xdp_rss_hash_type
-+    ksft_ne(hash_type & XDP_RSS_L4, 0,
-+            f"RSS hash type should include L4 for {proto.upper()} traffic")
-+
-+
-+def main():
-+    with NetDrvEpEnv(__file__) as cfg:
-+        cfg.netnl = NetdevFamily()
-+        ksft_run(
-+            [
-+                test_xdp_rss_hash,
-+            ],
-+            args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/net/lib/xdp_metadata.bpf.c b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-new file mode 100644
-index 000000000000..f71f59215239
---- /dev/null
-+++ b/tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <stddef.h>
-+#include <linux/bpf.h>
-+#include <linux/in.h>
-+#include <linux/if_ether.h>
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
-+#include <linux/udp.h>
-+#include <linux/tcp.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_helpers.h>
-+
-+enum {
-+	XDP_PORT = 1,
-+	XDP_PROTO = 4,
-+} xdp_map_setup_keys;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 5);
-+	__type(key, __u32);
-+	__type(value, __s32);
-+} map_xdp_setup SEC(".maps");
-+
-+/* RSS hash results: key 0 = hash, key 1 = hash type,
-+ * key 2 = packet count, key 3 = error count.
-+ */
-+enum {
-+	RSS_KEY_HASH = 0,
-+	RSS_KEY_TYPE = 1,
-+	RSS_KEY_PKT_CNT = 2,
-+	RSS_KEY_ERR_CNT = 3,
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, 4);
-+} map_rss SEC(".maps");
-+
-+/* Mirror of enum xdp_rss_hash_type from include/net/xdp.h.
-+ * Needed because the enum is not part of UAPI headers.
-+ */
-+enum xdp_rss_hash_type {
-+	XDP_RSS_L3_IPV4 = 1U << 0,
-+	XDP_RSS_L3_IPV6 = 1U << 1,
-+	XDP_RSS_L3_DYNHDR = 1U << 2,
-+	XDP_RSS_L4 = 1U << 3,
-+	XDP_RSS_L4_TCP = 1U << 4,
-+	XDP_RSS_L4_UDP = 1U << 5,
-+	XDP_RSS_L4_SCTP = 1U << 6,
-+	XDP_RSS_L4_IPSEC = 1U << 7,
-+	XDP_RSS_L4_ICMP = 1U << 8,
-+};
-+
-+extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
-+				    enum xdp_rss_hash_type *rss_type) __ksym;
-+
-+static __always_inline __u16 get_dest_port(void *l4, void *data_end,
-+					   __u8 protocol)
-+{
-+	if (protocol == IPPROTO_UDP) {
-+		struct udphdr *udp = l4;
-+
-+		if ((void *)(udp + 1) > data_end)
-+			return 0;
-+		return udp->dest;
-+	} else if (protocol == IPPROTO_TCP) {
-+		struct tcphdr *tcp = l4;
-+
-+		if ((void *)(tcp + 1) > data_end)
-+			return 0;
-+		return tcp->dest;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("xdp")
-+int xdp_rss_hash(struct xdp_md *ctx)
-+{
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	enum xdp_rss_hash_type rss_type = 0;
-+	struct ethhdr *eth = data;
-+	__u8 l4_proto = 0;
-+	__u32 hash = 0;
-+	__u32 key, val;
-+	void *l4 = NULL;
-+	__u32 *cnt;
-+	int ret;
-+
-+	if ((void *)(eth + 1) > data_end)
-+		return XDP_PASS;
-+
-+	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
-+		struct iphdr *iph = (void *)(eth + 1);
-+
-+		if ((void *)(iph + 1) > data_end)
-+			return XDP_PASS;
-+		l4_proto = iph->protocol;
-+		l4 = (void *)(iph + 1);
-+	} else if (eth->h_proto == bpf_htons(ETH_P_IPV6)) {
-+		struct ipv6hdr *ip6h = (void *)(eth + 1);
-+
-+		if ((void *)(ip6h + 1) > data_end)
-+			return XDP_PASS;
-+		l4_proto = ip6h->nexthdr;
-+		l4 = (void *)(ip6h + 1);
-+	}
-+
-+	if (!l4)
-+		return XDP_PASS;
-+
-+	/* Filter on the configured protocol (map_xdp_setup key XDP_PROTO).
-+	 * When set, only process packets matching the requested L4 protocol.
-+	 */
-+	key = XDP_PROTO;
-+	__s32 *proto_cfg = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+
-+	if (proto_cfg && *proto_cfg != 0 && l4_proto != (__u8)*proto_cfg)
-+		return XDP_PASS;
-+
-+	/* Filter on the configured port (map_xdp_setup key XDP_PORT).
-+	 * Only applies to protocols with ports (UDP, TCP).
-+	 */
-+	key = XDP_PORT;
-+	__s32 *port_cfg = bpf_map_lookup_elem(&map_xdp_setup, &key);
-+
-+	if (port_cfg && *port_cfg != 0) {
-+		__u16 dest = get_dest_port(l4, data_end, l4_proto);
-+
-+		if (!dest || bpf_ntohs(dest) != (__u16)*port_cfg)
-+			return XDP_PASS;
-+	}
-+
-+	ret = bpf_xdp_metadata_rx_hash(ctx, &hash, &rss_type);
-+	if (ret < 0) {
-+		key = RSS_KEY_ERR_CNT;
-+		cnt = bpf_map_lookup_elem(&map_rss, &key);
-+		if (cnt)
-+			__sync_fetch_and_add(cnt, 1);
-+		return XDP_PASS;
-+	}
-+
-+	key = RSS_KEY_HASH;
-+	bpf_map_update_elem(&map_rss, &key, &hash, BPF_ANY);
-+
-+	key = RSS_KEY_TYPE;
-+	val = (__u32)rss_type;
-+	bpf_map_update_elem(&map_rss, &key, &val, BPF_ANY);
-+
-+	key = RSS_KEY_PKT_CNT;
-+	cnt = bpf_map_lookup_elem(&map_rss, &key);
-+	if (cnt)
-+		__sync_fetch_and_add(cnt, 1);
-+
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
-
+Alex
