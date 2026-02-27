@@ -1,60 +1,60 @@
 Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E385CCA4E;
-	Fri, 27 Feb 2026 09:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAD538A721;
+	Fri, 27 Feb 2026 09:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772183648; cv=none; b=j7n4WEqmu6hzUbaH9YeqB1PFJ0xCuD6rVhOEJkoSFN04HjC+XTHrtPxOqONXnYqcZ4tnS7tdIa0AqMIwRtHOAIW4vm3kHM3d8mvVvrGtt3fqVmy/7yUPvUsZxS8ulLDlJBcJ08fhMHpKTIcPoJPD8B2Fw7QclwX/ewp1LqVDEZY=
+	t=1772184002; cv=none; b=i5wcTP2YQGufsw+8LduCiYwC7/rlOzlImMHQNm6u/2NdZYyQaqvsw5KtrIxYVEfBrCm92tHk8taNDQH3jsEUH3v3aGPo71ZjQnerefF95z4dRHJ/OygMXdF6kJCADHsZwXDczdhsKmlHw3DoS6pt2AtmnDk2uu+bvybSI04Hfls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772183648; c=relaxed/simple;
-	bh=KEtIErQMHsU3HYVNgTieOZ1CyBhqo4GEqS1JOYo5cZA=;
+	s=arc-20240116; t=1772184002; c=relaxed/simple;
+	bh=52FSEcDd5oAKtEs/Gkr465MLhbFHmP5Omk7jgrGcxAg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WlFph7j5okilPQRhRcPNpwtUYV+9XgUo4jwczv3cboyNthd18dqV9HBoiFicAHvAWE/bDW/o7946MmabnlBO8OlhGEQ2m8W1E/i+V7Qy4Oc34Kt1CBoCCHWWMzKJiCRyV26Unf2DFOdEXL3DVRnxKQJfpbxhPJ7lOBgP4neExy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=ajzZriaX; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=PclzBmZ/; arc=none smtp.client-ip=203.29.242.92
+	 In-Reply-To:Content-Type; b=tf/vhhvu2PpC5n/qBIR4foUQiP7yD0CNuKnJvO1CLPhuNuXp7qBM9Ang5C3k2PC1PWKrgVN8nVVXr9qwBnlNVHwO6liNzrCbOJon6ydPv52B6aeRSNb8fon/CG/zQhK4rVp5yaV7IOAbw+xyg8XC3LZR4dmj0ht4OYX3t1qBD+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=a19n42Vv; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=E4B7JXH6; arc=none smtp.client-ip=203.29.242.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="ajzZriaX";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="PclzBmZ/"
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="a19n42Vv";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="E4B7JXH6"
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1772183638;
-	bh=KEtIErQMHsU3HYVNgTieOZ1CyBhqo4GEqS1JOYo5cZA=;
+	s=201606; t=1772183998;
+	bh=52FSEcDd5oAKtEs/Gkr465MLhbFHmP5Omk7jgrGcxAg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ajzZriaX1kUxt5eDQQPJnxO2UsJLTC4rH0YWlbGm0QKPx7Wx9nR5iqxbQWM+/dugs
-	 tfANEcS7iEL+gQi9MLYAmvI6Swa5Y4DiOnXeyzmojjfdEWgNFvjygRVKACVcS5RqNW
-	 lcZ4c0AFvkggDHDF2EWPr8WsCEGUw7oICbhq8WdgIR2riZUkGvnRHM8gfpZLYvgJSQ
-	 v9aX9xkC8dY/rWpmfSyJqBhRXD4QNqJp19sTnzjbq7xYb7IDfvFH/EJf+fDowAcoXz
-	 OSMep7UHJJKgfUyVWQISoxqec1Gsw48f72qeYdqIBVHOaviYubwGbdI6M17bQINRqf
-	 si89Wn8o1J0VUBDgNfCk9ddtWUHsfRdSDNAnkGY0pXQwQ45c4pq/7jgL+E42fqdJMP
-	 xW3Ofj4gSmKUptnFWueVri3fkmLMUSV9XW9fNsJDk4f+jmwPa3KCH0Sl0sZp+sktKn
-	 r41yOMvf/Qh7hQP3LR/xIMi06E9zg8A2c3ZM13I4YHD9tK1QlOQ1Nc3edpRmsMVbGE
-	 EtzNwRZBuI+99rzO3Hc4FgNS1ECUZW6cdbni6EYu3fuG1czB/GB5iJrlDWKJcqwSvz
-	 4NedANEw4u6FiOIDPPhRYv4Chz2fK4RgQ6bT71Y5wSSM7FVWRYkfgtCO0u1WG84tLC
-	 PQTnWSpB46GENpMVC9JDrQpg=
+	b=a19n42VveTPnmO1MOwHm+PlM5HNs7HhoKaM5Pf4SJGoNYN7YlnXsAuTgX8LyMLoYM
+	 Yq0pQ1ycZHdB5vJIfEC4C7dk1F8w4h79n/2jgNgd0SXib5CVyh4dHP8RNI+U895WKA
+	 VU7+s0chN6hY7rg1MkK78cG2aRTe1jyVZPOBgJwhzKAPEHAxJdxm0icaxnEYwXezxY
+	 Kyya9q/fxAHae93MTCkdL3z6vBAtzzQ8G8YZXOTDehkqMw9pQ3fG5fV23ia8FVp3Bh
+	 HXmtfxwnEOYpAqByEgGqa57TdgNvEBjcYFmCf/ez6UylvJLbEhT7TOR4jen1o4hCsc
+	 Xod6K+owczj1g0MJ12YDeOdaW8fW3nWPx09yAyAdngFaBjUaVkM4htHH+sqxXKeO1y
+	 prkblPOuREiMM9xIqQfdAETxpLiJP0wFeAODAUWjXeVTmf7jffuvHUlpI2tdIe4RYG
+	 aTEkBL4r8Ntc9wsvzCpugQhcbfPsDjZ1QZTyS1HujwA3zm68vqi5SE/KNraTSbmsdT
+	 7NQKXz6ZnDndRSCeqHyIaB5MZFb7W2n8JSmNKn/FQTTKttPHvgGbQXJIb/LBBU8nL8
+	 pWEmHIiQQTPfnC/VRPGcU8R9IOS9bSOFZRMCsDqAxSSJTfitX7fFQNa0zCKzP4UB5s
+	 NFBeL1q2mwFFHXHYEc3ohM1s=
 Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 22FC91E7A2D; Fri, 27 Feb 2026 17:13:58 +0800 (AWST)
+	id BE4551E7A31; Fri, 27 Feb 2026 17:19:58 +0800 (AWST)
 X-Spam-Level: 
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1772183636;
-	bh=KEtIErQMHsU3HYVNgTieOZ1CyBhqo4GEqS1JOYo5cZA=;
+	s=201606; t=1772183996;
+	bh=52FSEcDd5oAKtEs/Gkr465MLhbFHmP5Omk7jgrGcxAg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PclzBmZ/LXrh24R7m9HLvK0HXsmruOIYA9QmcA8CdqKONBTNDjfF8SHj9mEeX4hxm
-	 C+X25+keWQifM/hsX0IfA35jL3w9jeSwkpqOklkova4Zp1t/dHSRjlEt7ncO9J+MFu
-	 4rkgaAJi1UnAe2NinQCQtCE6Ufqrt5rDlFXruG5f1AvfR2Mj4Lv6dLhw4gpkqh+4qL
-	 /GvyYRI7xGqk+mRPe+OKl9JTlBTqETtgGspTc4YRYfrPYGzigBANcK1wO5MlyAmN66
-	 SwiPKWTZpPZTWnZBONajtZ7lYlqxMcjYD3sGGPWo41R3FbNWPGbovYjkjEZwTT1CaP
-	 lvdwWasxK7fGixImhnFfhgqdA+17M4YQ1grezHpHe/Pnh1eAtAHHy8QetdRl62a65y
-	 gkqYSLYC7jkDq9AwCJqr6omQbCdFNd/y1brlz9SerYvlDyx5wqHjv5f++GH4nbgQ6j
-	 3i9X15eo4Xe9PcZuLSmpMjmvNBAHRafuGjfpx2hVxlxYBQRhnUsnfwOJ84ySEssehz
-	 mmE+bXQ0UFT4osprOW8qq0csPqTMKiivYMXwWrFjJ0AOQz7YqaddfLbrkLKOEPaq/K
-	 2N7zjEzUg4GslVH9IZazroSmoXsZFdoSy+vYNrQGWW7MqhargvS0k6lhXB7bEBHnsR
-	 QIf5IRGDR1eFdObw6aa3OKGU=
+	b=E4B7JXH6gAxvwzrFixGhE33glyDyT/NJH3pWbK85bP3X4edIjLby+jI3IUKtvhzrC
+	 iabKpbXT5qnVoEm1nKru7gJRZDizg6vzKkSRUpkZ+yMVHqUh5Grrv+pz2xUKS3EIbB
+	 AH1rJCRBZe8235kzrun3ay9ow2zOdUqRV5OXDIa8KQ9hWtsRA8fQGGBA5pRfhcsrPE
+	 YlMqsjd4nSATK3EAo42Ek5uNhToYO3D8V2gs4vCAKgKTeqomacXHsKJ4cKcKbTYVoV
+	 xpwQMd6BsrDUTRhh8upr5/n7MDJKphm6gLFCeZzQvFE2tISOBZ+Gwh9+H8oT1AmMPh
+	 Qw3hbvOdL1GBVsS0XcHQrIl1pTmqZ104n6OV0UC5zJuQcDHd5nr6zsSm7g+LRmQxQi
+	 STuMP11yWEYHrQ8hVAP8H2BA7JtRqjrxpD5+eev1mQvbB56IsfXt71CTjgKEtvcPNN
+	 ympswz9BaTSiuRNwXZ72z9baCFOdQr6m63OjEItBP36NJaL1nmE3al7g+u10BCDQzl
+	 XUlwoWyt9qJ51ZIUfAizggc2APOeaA1B6vSzEij53bLdAk0lQFCXsEwiBgwrA6M6Vr
+	 L7Bd89jzsH/gKYaxajwrslpwk6NfMCBzq6QaTUePhRBAurlATgrw/L+BgvJkaHjJcz
+	 niPZIkoD2T6JSUzCJnSOlj54=
 Received: from [IPV6:2001:8003:8824:9e00:6d16:7ef9:c827:387c] (unknown [IPv6:2001:8003:8824:9e00:6d16:7ef9:c827:387c])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id C44921E7A28;
-	Fri, 27 Feb 2026 17:13:56 +0800 (AWST)
-Message-ID: <55be6364-ba3f-4b26-b2de-924ef49639fe@davidgow.net>
-Date: Fri, 27 Feb 2026 17:13:53 +0800
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id D66781E7A28;
+	Fri, 27 Feb 2026 17:19:56 +0800 (AWST)
+Message-ID: <e7885b51-3481-4499-a3d2-88087d8b5200@davidgow.net>
+Date: Fri, 27 Feb 2026 17:19:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,97 +62,71 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: tool: copy caller args in run_kernel to prevent
- mutation
-To: Shuvam Pandey <shuvampandey1@gmail.com>, brendan.higgins@linux.dev
-Cc: raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-References: <20260226152910.34530-1-shuvampandey1@gmail.com>
+Subject: Re: [PATCH] lib/crypto: tests: Depend on library options rather than
+ selecting them
+To: Eric Biggers <ebiggers@kernel.org>, linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, kunit-dev@googlegroups.com,
+ linux-kselftest@vger.kernel.org, Brendan Higgins
+ <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, stable@vger.kernel.org
+References: <20260226191749.39397-1-ebiggers@kernel.org>
 Content-Language: fr
 From: David Gow <david@davidgow.net>
-In-Reply-To: <20260226152910.34530-1-shuvampandey1@gmail.com>
+In-Reply-To: <20260226191749.39397-1-ebiggers@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 26/02/2026 à 11:29 PM, Shuvam Pandey a écrit :
-> run_kernel() appended KUnit flags directly to the caller-provided args
-> list. When exec_tests() calls run_kernel() repeatedly (e.g. with
-> --run_isolated), each call mutated the same list, causing later runs
-> to inherit stale filter_glob values and duplicate kunit.enable flags.
+Le 27/02/2026 à 3:17 AM, 'Eric Biggers' via KUnit Development a écrit :
+> The convention for KUnit tests is to have the test kconfig options
+> visible only when the code they depend on is already enabled.  This way
+> only the tests that are relevant to the particular kernel build can be
+> enabled, either manually or via KUNIT_ALL_TESTS.
 > 
-> Fix this by copying args at the start of run_kernel(). Add a regression
-> test that calls run_kernel() twice with the same list and verifies the
-> original remains unchanged.
+> Update lib/crypto/tests/Kconfig to follow that convention, i.e. depend
+> on the corresponding library options rather than selecting them.  This
+> fixes an issue where enabling KUNIT_ALL_TESTS enabled non-test code.
 > 
-> Fixes: ff9e09a3762f ("kunit: tool: support running each suite/test separately")
-> Signed-off-by: Shuvam Pandey <shuvampandey1@gmail.com>
+> This does mean that it becomes more difficult to enable *all* the crypto
+> library tests (which is what I do as a maintainer of the code), since
+> doing so will now require enabling other options that select the
+> libraries.  Regardless, we should follow the standard KUnit convention.
+> 
+> Note: currently most of the crypto library options are selected by
+> visible options in crypto/Kconfig, which can be used to enable them
+> without too much trouble.  If in the future we end up with more cases
+> like CRYPTO_LIB_CURVE25519 which is selected only by WIREGUARD (thus
+> making CRYPTO_LIB_CURVE25519_KUNIT_TEST effectively depend on WIREGUARD
+> after this commit), we could consider adding a new kconfig option that
+> enables all the library code specifically for testing.
+> 
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Closes: https://lore.kernel.org/r/CAMuHMdVFRQZXCKJBOBDJtpENvpVO39AxGMUFWVQdM6xKTpnYYw@mail.gmail.com
+> Fixes: 4dcf6caddaa0 ("lib/crypto: tests: Add KUnit tests for SHA-224 and SHA-256")
+> Fixes: 571eaeddb67d ("lib/crypto: tests: Add KUnit tests for SHA-384 and SHA-512")
+> Fixes: 6dd4d9f7919e ("lib/crypto: tests: Add KUnit tests for Poly1305")
+> Fixes: 66b130607908 ("lib/crypto: tests: Add KUnit tests for SHA-1 and HMAC-SHA1")
+> Fixes: d6b6aac0cdb4 ("lib/crypto: tests: Add KUnit tests for MD5 and HMAC-MD5")
+> Fixes: afc4e4a5f122 ("lib/crypto: tests: Migrate Curve25519 self-test to KUnit")
+> Fixes: 6401fd334ddf ("lib/crypto: tests: Add KUnit tests for BLAKE2b")
+> Fixes: 15c64c47e484 ("lib/crypto: tests: Add SHA3 kunit tests")
+> Fixes: b3aed551b3fc ("lib/crypto: tests: Add KUnit tests for POLYVAL")
+> Fixes: ed894faccb8d ("lib/crypto: tests: Add KUnit tests for ML-DSA verification")
+> Fixes: 7246fe6cd644 ("lib/crypto: tests: Add KUnit tests for NH")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 > ---
 
-Nice catch!
+Thanks -- I do think this is better, as we do run KUnit tests on pretty 
+minimal configurations.
+
+One suggestion would be to have a crypto/.kunitconfig file which enables 
+all of these: you could then run the crypto tests with:
+./tools/testing/kunit/kunit.py run --kunitconfig crypto/
 
 Reviewed-by: David Gow <david@davidgow.net>
 
-Thanks,
+Cheers,
 -- David
-
->   tools/testing/kunit/kunit_kernel.py    |  6 ++++--
->   tools/testing/kunit/kunit_tool_test.py | 26 ++++++++++++++++++++++++++
->   2 files changed, 30 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 260d8d9aa1db..2998e1bc088b 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -346,8 +346,10 @@ class LinuxSourceTree:
->   		return self.validate_config(build_dir)
->   
->   	def run_kernel(self, args: Optional[List[str]]=None, build_dir: str='', filter_glob: str='', filter: str='', filter_action: Optional[str]=None, timeout: Optional[int]=None) -> Iterator[str]:
-> -		if not args:
-> -			args = []
-> +		# Copy to avoid mutating the caller-supplied list. exec_tests() reuses
-> +		# the same args across repeated run_kernel() calls (e.g. --run_isolated),
-> +		# so appending to the original would accumulate stale flags on each call.
-> +		args = list(args) if args else []
->   		if filter_glob:
->   			args.append('kunit.filter_glob=' + filter_glob)
->   		if filter:
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index b67408147c1f..f6383884c599 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -503,6 +503,32 @@ class LinuxSourceTreeTest(unittest.TestCase):
->   			with open(kunit_kernel.get_outfile_path(build_dir), 'rt') as outfile:
->   				self.assertEqual(outfile.read(), 'hi\nbye\n', msg='Missing some output')
->   
-> +	def test_run_kernel_args_not_mutated(self):
-> +		"""Verify run_kernel() copies args so callers can reuse them."""
-> +		start_calls = []
-> +
-> +		def fake_start(start_args, unused_build_dir):
-> +			start_calls.append(list(start_args))
-> +			return subprocess.Popen(['printf', 'KTAP version 1\n'],
-> +						text=True, stdout=subprocess.PIPE)
-> +
-> +		with tempfile.TemporaryDirectory('') as build_dir:
-> +			tree = kunit_kernel.LinuxSourceTree(build_dir,
-> +					kunitconfig_paths=[os.devnull])
-> +			with mock.patch.object(tree._ops, 'start', side_effect=fake_start), \
-> +			     mock.patch.object(kunit_kernel.subprocess, 'call'):
-> +				kernel_args = ['mem=1G']
-> +				for _ in tree.run_kernel(args=kernel_args, build_dir=build_dir,
-> +							 filter_glob='suite.test1'):
-> +					pass
-> +				for _ in tree.run_kernel(args=kernel_args, build_dir=build_dir,
-> +							 filter_glob='suite.test2'):
-> +					pass
-> +				self.assertEqual(kernel_args, ['mem=1G'],
-> +					'run_kernel() should not modify caller args')
-> +				self.assertIn('kunit.filter_glob=suite.test1', start_calls[0])
-> +				self.assertIn('kunit.filter_glob=suite.test2', start_calls[1])
-> +
->   	def test_build_reconfig_no_config(self):
->   		with tempfile.TemporaryDirectory('') as build_dir:
->   			with open(kunit_kernel.get_kunitconfig_path(build_dir), 'w') as f:
-> 
-> base-commit: f4d0ec0aa20d49f09dc01d82894ce80d72de0560
 
