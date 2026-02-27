@@ -1,258 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8352D1D8E01;
-	Fri, 27 Feb 2026 02:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CEE2C0298
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 02:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772159175; cv=none; b=MDINLv/Gfv1QgoxvqAzIBfOrmHz1Lz8BwNPbN7/uI4FztjX3GS0lvuESijoPlwgkdHqUQxr9Wg00QIIPHZvWG7MrIshk6McMrTwRouZALQcrGksLmL3zE5Dko0l+lWXlYTQN6dzSnYIhxF0LYh7VqyeEBCtK2045zR3gwLLbDZ4=
+	t=1772159475; cv=none; b=rGSUGiTW6tkmcTiTtC8e5hWXmln3fMMxVpm7n6tHIB2Rz1+i8PtjYXtzTw58vmmtdHR8xCT7f7hgcJdHk3w59YyGTSfzpS2xn19L88et2RqNZL3XI6/KZeSfrWtxj/njnP7cLeP5jwkFCMMZGhe5RS/znJsIXBoV6OHw/u2gEG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772159175; c=relaxed/simple;
-	bh=0IYP4GX5VXqbYmfFB40wFF4sTxRzfD79ZHXy7meu0qc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g1uD5Oc7bFngfMMaJpi/59iA9sobTUoqwUXVBOnkLsYaQt3M1ftw0DK+++Io6ksx/TVasyH4sLC3Z5XmrSiOtxUAn8hNhc0VVw8ZM1L39XEQXKJqthgcE7Hqrxf+0fJm8CBl7t9xl4atZv345wSZcCBEl3B2iNhMO3SGbr2zgUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ATvHhXBl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772159475; c=relaxed/simple;
+	bh=4JHlwT/Yu7ajcqtEUyhud7CE8o2J493+1Itcav9ilXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LJEZAZrFeCBFLAjyIw+YVdaBmxQYpfmmMkvzlpAsfTOlcUd2H9fG79hqt5raQGfy9XDeBhfManHkrkFoMW/z809Y7rTyWh2sxDKpa8fypaGxqWohWCU5L8LVbXCeMCHbVNcU2SviZhkHA6GRaXRqrKlXhF7IB2HgFbMIM7JalDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dGHRCG76; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ATvHhXBl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB786C116C6;
-	Fri, 27 Feb 2026 02:26:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772159175;
-	bh=0IYP4GX5VXqbYmfFB40wFF4sTxRzfD79ZHXy7meu0qc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ATvHhXBlxaCETEaAEyBXPrVRj0CZqqHgZ8raKZXFm2l8LY6P5bf45foFu3YVokYuF
-	 xto+pEP/aG+/FpDB6LRUUBg1/QUubZ+MzlGl5+l5oPJ7hZXlLGJvZHLTYC7QpaR0bU
-	 6GSdQb2QJp64+mOYwA8bgHj1sMJSG3LRH8H7QaNY2hXjcyFPimeLK/jw1hErbKlpCS
-	 nUXuhZ1L/aUjixTI5Nj4nuCjkIEn/AlENmDeq9hm93FYySedaeWaG4ywgqRERxO8en
-	 5l0q9JNg9+7/CLVrq1alUCecCshjdLM7x1Bw9swADB7IvrDBFncNSxPCQQn4PDudEO
-	 FWM5rS+n8CRhQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: ioana.ciornei@nxp.com
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	andrew+netdev@lunn.ch,
-	linux-kernel@vger.kernel.org,
-	horms@kernel.org,
-	edumazet@google.com,
-	davem@davemloft.net,
-	linux-kselftest@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [net-next,2/5] net: dpaa2-mac: retrieve MAC statistics in one firmware command
-Date: Thu, 26 Feb 2026 18:26:13 -0800
-Message-ID: <20260227022613.2519224-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260225150648.1542206-3-ioana.ciornei@nxp.com>
-References: <20260225150648.1542206-3-ioana.ciornei@nxp.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dGHRCG76"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82746ed8cb1so539459b3a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Feb 2026 18:31:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772159473; x=1772764273; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QWTjg9cfCivxy21OkK4YMlplEZZRzQTGceSoJr86ceY=;
+        b=dGHRCG76hRvK7Wrlw0HNSvnJ4sFueIKDAQKc511NJZMqyIgdfvBrzjm3RsAl8G9AyQ
+         Pjv2Siu6wqTmSpWesahJBdshr2VzRQ4iWjAkPvh+OpB4Kzqq05bRBoP3YMUSNhg7WaQk
+         Vjt5t9KpFZtFL5ee7noyv8xwyk2QCs4KWsLjJTxKqQLreKE0hJXby1H5DsbHgJavBPvS
+         cfanH8W713uyQAKFCP1UxU86Am3N7FlAZ35wEKGseXwy/rKvRv4Cr8sKVnfGCsyVMTjR
+         W4J90lKtlbkYLpzlUJNMywPOziQfK0aZLF2o5vDsj+LulSjLIAGZouM4lppUwhMEjW10
+         nPzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772159473; x=1772764273;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QWTjg9cfCivxy21OkK4YMlplEZZRzQTGceSoJr86ceY=;
+        b=qqjcxE7qjQtkZRw56O7/hfYmgTmP8sVmPUQZyTA2VuCQ30M44u6ysoX+pLAyZuCN8K
+         LNyUXAeULGeRsA583nnoIPitAYyU0WLgIKEJdVwl/LFjNw84JkFaco7HEM0XjdVKHuh0
+         9GtCGz6RsV8DyvHEhDT6qlu85Kk6u3rerdJJdlfjqQxQIrJHrMuxHzV0ijfhtUr21xgS
+         ZGTezRca3BDfYL4axwvmJDubO6Io/1HiYDAClyqdOsPI8to7NKk166n31RzIgV8FpGuP
+         vmqobkVx6OGGbU6B8aRVDqNAE1s3gowojWfydSBpOdHeEgVxo9Z2K4hC1BDaW04BEm4G
+         ACoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXydDD9v4iqCmua1Q3K68YFwdWSfVEvwogPOWXEaxqiPn0YkGxQ+GZmjHoETRmBjDEElXtnhO3A2rG+RHNf7FY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzrdnn0Xdkrx3GY9gDSr+AXDLnYrfA9wF4wWXhntq5ZTczQenNx
+	9r8K+xfKyXgk/FH+kvZGuS/bm4vv94bGNvKpBf+HzBX5ODmtVU/rypIi
+X-Gm-Gg: ATEYQzw/5jcQb/PcwMfDoxzWtkZ+9eunxq/Zg6UWlhZjXUaxwji2z2jcDi5hcHukUHw
+	jEXNhDPwt4dVxa5677GaDY7HOUUGnLC/ghBiRrFl98rkLUAY+rjLeaz/+tc+Y/M85+EoAuUk9Ol
+	Ju8nuOziRD8LZOS6GhZfBDw/1q7OyEndeLZ3MCPpTCGwij5j69Dz7eLgxcgv4ZlGXdEXeE4dHEh
+	nhTAEGM+vnzZqziW78w+DkVPH9/5n6Gd9Rz8DNE9SSwme6GNlv6MCQnZsu0n9rPAKrG+kw+Liwy
+	xd9vMMfZV5f8RlUtqHpS7aYPzJsF/PWyvYZ4HhsVf25aETOkt1NwNX6JRYqzQ6zMrBhHBjcuUCO
+	TN/SfA+5r5lSv9TsYiNQjy3O305dt5rAlkTGV9Sz9AQPZ83/jenecys3oA8gcNGblEh8OavFuWD
+	adXYGTqJaYuQWzkOlFpiYBjhZbdOQ=
+X-Received: by 2002:a05:6a20:a12c:b0:38b:e68f:4648 with SMTP id adf61e73a8af0-395c39e0edfmr1273869637.14.1772159473315;
+        Thu, 26 Feb 2026 18:31:13 -0800 (PST)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa5e4abcsm2970390a12.5.2026.02.26.18.31.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Feb 2026 18:31:12 -0800 (PST)
+Date: Fri, 27 Feb 2026 02:31:05 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Mahesh Bandewar <maheshb@google.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv3 net 1/3] bonding: set AD_RX_PORT_DISABLED when
+ disabling a port
+Message-ID: <aaEB6X6WPs7EBM33@fedora>
+References: <20260226125331.28147-1-liuhangbin@gmail.com>
+ <20260226125331.28147-2-liuhangbin@gmail.com>
+ <942584.1772155015@famine>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <942584.1772155015@famine>
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+On Thu, Feb 26, 2026 at 05:16:55PM -0800, Jay Vosburgh wrote:
+> Hangbin Liu <liuhangbin@gmail.com> wrote:
+> 
+> >When disabling a port’s collecting and distributing states, updating only
+> >rx_disabled is not sufficient. We also need to set AD_RX_PORT_DISABLED
+> >so that the rx_machine transitions into the AD_RX_EXPIRED state.
+> >
+> >One example is in ad_agg_selection_logic(): when a new aggregator is
+> >selected and old active aggregator is disabled, if AD_RX_PORT_DISABLED is
+> >not set, the disabled port may remain stuck in AD_RX_CURRENT due to
+> >continuing to receive partner LACP messages.
+> 
+> 	I'm not sure I'm seeing the problem here, is there an actual
+> misbehavior being fixed here?  The port is receiving LACPDUs, and from
+> the receive state machine point of view (Figure 6-18) there's no issue.
+> The "port_enabled" variable (6.4.7) also informs the state machine
+> behavior, but that's not the same as what's changed by bonding's
+> __disable_port function.
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-net: dpaa2-mac: retrieve MAC statistics in one firmware command
+Yes, the reason I do it here is we select another aggregator and called
+__disable_port() for the old one. If we don't update sm_rx_state, the port
+will be keep in collecting/distributing state, and the partner will also
+keep in the c/d state.
 
-The latest MC firmware version added a new command to retrieve all DPMAC
-counters in a single firmware call. Use this new command, when possible,
-in dpaa2-mac as well. In order to use the dpmac_get_statistics() API,
-two DMA memory areas are used: one to transmit what counters the driver
-is requesting and one to receive the values of those counters. These
-memory areas are allocated and DMA mapped at probe time so that we don't
-waste time at runtime.
+Here we entered a logical paradox, on one hand we want to disable the port,
+on the other hand we keep the port in collecting/distributing state.
 
-> diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
-> index 422ce13a7c94..63dc597dbd7c 100644
-> --- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
-> +++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+> 
+> 	Where I'm going with this is that, when multiple aggregator
+> support was originally implemented, the theory was to keep aggregators
+> other than the active agg in a state such that they could be put into
+> service immediately, without having to do LACPDU exchanges in order to
+> transition into the appropriate state.  A hot standby, basically,
+> analogous to an active-backup mode backup interface with link state up.
 
-[ ... ]
+This sounds good. But without LACPDU exchange, the hot standby actor and
+partner should be in collecting/distributing state. What should we do when
+partner start send packets to us?
+> 
+> 	I haven't tested this in some time, though, so my question is
+> whether this change affects the failover time when an active aggregator
+> is de-selected in favor of another aggregator.  By "failover time," I
+> mean how long transmission and/or reception are interrupted when
+> changing from one aggregator to another.  I presume that if aggregator
+> failover ater this change requires LACPDU exchanges, etc, it will take
+> longer to fail over.
 
-> @@ -15,7 +15,121 @@
->  #define DPMAC_PROTOCOL_CHANGE_VER_MAJOR		4
->  #define DPMAC_PROTOCOL_CHANGE_VER_MINOR		8
->
-> +#define DPMAC_STATS_BUNDLE_VER_MAJOR		4
-> +#define DPMAC_STATS_BUNDLE_VER_MINOR		10
-> +
->  #define DPAA2_MAC_FEATURE_PROTOCOL_CHANGE	BIT(0)
-> +#define DPAA2_MAC_FEATURE_STATS_BUNDLE		BIT(1)
-> +
-> +struct dpmac_counter {
-> +	enum dpmac_counter_id id;
-> +	const char *name;
-> +};
-> +
-> +#define DPMAC_UNSTRUCTURED_COUNTER(counter_id, counter_name)	\
-> +	{							\
-> +		.id = counter_id,				\
-> +		.name = counter_name,				\
-> +	}
-> +
-> +static const struct dpmac_counter dpaa2_mac_ethtool_stats[] = {
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_ALL_FRAME,  "[mac] rx all frames"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_GOOD_FRAME,  "[mac] rx frames ok"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_ERR_FRAME, "[mac] rx frame errors"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_DISCARD, "[mac] rx frame discards"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_UCAST_FRAME, "[mac] rx u-cast"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_BCAST_FRAME, "[mac] rx b-cast"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_MCAST_FRAME, "[mac] rx m-cast"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_64, "[mac] rx 64 bytes"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_127, "[mac] rx 65-127 bytes"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_255, "[mac] rx 128-255 bytes"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_511, "[mac] rx 256-511 bytes"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_1023, "[mac] rx 512-1023 bytes"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_1518, "[mac] rx 1024-1518 bytes"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAME_1519_MAX, "[mac] rx 1519-max bytes"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_FRAG, "[mac] rx frags"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_JABBER, "[mac] rx jabber"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_ALIGN_ERR, "[mac] rx align errors"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_OVERSIZED, "[mac] rx oversized"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_VALID_PAUSE_FRAME, "[mac] rx pause"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_ING_BYTE, "[mac] rx bytes"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_GOOD_FRAME, "[mac] tx frames ok"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_UCAST_FRAME, "[mac] tx u-cast"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_MCAST_FRAME, "[mac] tx m-cast"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_BCAST_FRAME, "[mac] tx b-cast"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_ERR_FRAME, "[mac] tx frame errors"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_UNDERSIZED, "[mac] tx undersized"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_VALID_PAUSE_FRAME, "[mac] tx b-pause"),
-> +	DPMAC_UNSTRUCTURED_COUNTER(DPMAC_CNT_EGR_BYTE, "[mac] tx bytes"),
-> +};
-> +
-> +#define DPAA2_MAC_NUM_ETHTOOL_STATS	ARRAY_SIZE(dpaa2_mac_ethtool_stats)
+I haven't tested it yet. I think the failover time should be in 1 second.
+Let me do some testing today.
 
-[ ... ]
-
->  void dpaa2_mac_close(struct dpaa2_mac *mac)
->  {
->  	struct fsl_mc_device *dpmac_dev = mac->mc_dev;
->
-> +	if (mac->features & DPAA2_MAC_FEATURE_STATS_BUNDLE)
-> +		dpaa2_mac_clear_stats(mac, &mac->ethtool_stats, DPAA2_MAC_NUM_ETHTOOL_STATS);
-> +
->  	dpmac_close(mac->mc_io, 0, dpmac_dev->mc_handle);
->  	if (mac->fw_node)
->  		fwnode_handle_put(mac->fw_node);
->  }
->
-> -static char dpaa2_mac_ethtool_stats[][ETH_GSTRING_LEN] = {
-> -	[DPMAC_CNT_ING_ALL_FRAME]		= "[mac] rx all frames",
-> -	[DPMAC_CNT_ING_GOOD_FRAME]		= "[mac] rx frames ok",
-> -	[DPMAC_CNT_ING_ERR_FRAME]		= "[mac] rx frame errors",
-> -	[DPMAC_CNT_ING_FRAME_DISCARD]		= "[mac] rx frame discards",
-> -	[DPMAC_CNT_ING_UCAST_FRAME]		= "[mac] rx u-cast",
-> -	[DPMAC_CNT_ING_BCAST_FRAME]		= "[mac] rx b-cast",
-> -	[DPMAC_CNT_ING_MCAST_FRAME]		= "[mac] rx m-cast",
-> -	[DPMAC_CNT_ING_FRAME_64]		= "[mac] rx 64 bytes",
-> -	[DPMAC_CNT_ING_FRAME_127]		= "[mac] rx 65-127 bytes",
-> -	[DPMAC_CNT_ING_FRAME_255]		= "[mac] rx 128-255 bytes",
-> -	[DPMAC_CNT_ING_FRAME_511]		= "[mac] rx 256-511 bytes",
-> -	[DPMAC_CNT_ING_FRAME_1023]		= "[mac] rx 512-1023 bytes",
-> -	[DPMAC_CNT_ING_FRAME_1518]		= "[mac] rx 1024-1518 bytes",
-> -	[DPMAC_CNT_ING_FRAME_1519_MAX]		= "[mac] rx 1519-max bytes",
-> -	[DPMAC_CNT_ING_FRAG]			= "[mac] rx frags",
-> -	[DPMAC_CNT_ING_JABBER]			= "[mac] rx jabber",
-> -	[DPMAC_CNT_ING_ALIGN_ERR]		= "[mac] rx align errors",
-> -	[DPMAC_CNT_ING_OVERSIZED]		= "[mac] rx oversized",
-> -	[DPMAC_CNT_ING_VALID_PAUSE_FRAME]	= "[mac] rx pause",
-> -	[DPMAC_CNT_ING_BYTE]			= "[mac] rx bytes",
-> -	[DPMAC_CNT_EGR_GOOD_FRAME]		= "[mac] tx frames ok",
-> -	[DPMAC_CNT_EGR_UCAST_FRAME]		= "[mac] tx u-cast",
-> -	[DPMAC_CNT_EGR_MCAST_FRAME]		= "[mac] tx m-cast",
-> -	[DPMAC_CNT_EGR_BCAST_FRAME]		= "[mac] tx b-cast",
-> -	[DPMAC_CNT_EGR_ERR_FRAME]		= "[mac] tx frame errors",
-> -	[DPMAC_CNT_EGR_UNDERSIZED]		= "[mac] tx undersized",
-> -	[DPMAC_CNT_EGR_VALID_PAUSE_FRAME]	= "[mac] tx b-pause",
-> -	[DPMAC_CNT_EGR_BYTE]			= "[mac] tx bytes",
-> -};
-> -
-> -#define DPAA2_MAC_NUM_STATS	ARRAY_SIZE(dpaa2_mac_ethtool_stats)
-> -
->  int dpaa2_mac_get_sset_count(void)
->  {
-> -	return DPAA2_MAC_NUM_STATS;
-> +	return DPAA2_MAC_NUM_ETHTOOL_STATS;
->  }
->
->  void dpaa2_mac_get_strings(u8 **data)
->  {
->  	int i;
->
-> -	for (i = 0; i < DPAA2_MAC_NUM_STATS; i++)
-> -		ethtool_puts(data, dpaa2_mac_ethtool_stats[i]);
-> +	for (i = 0; i < DPAA2_MAC_NUM_ETHTOOL_STATS; i++)
-> +		ethtool_puts(data, dpaa2_mac_ethtool_stats[i].name);
->  }
->
->  void dpaa2_mac_get_ethtool_stats(struct dpaa2_mac *mac, u64 *data)
->  {
-> +	struct device *dev = mac->net_dev->dev.parent;
->  	struct fsl_mc_device *dpmac_dev = mac->mc_dev;
-> +	u64 *cnt_values;
->  	int i, err;
->  	u64 value;
->
-> -	for (i = 0; i < DPAA2_MAC_NUM_STATS; i++) {
-> +	if (!(mac->features & DPAA2_MAC_FEATURE_STATS_BUNDLE))
-> +		goto fallback;
-> +
-> +	if (!mac->ethtool_stats.idx_dma_mem || !mac->ethtool_stats.values_dma_mem)
-> +		goto fallback;
-> +
-> +	err = dpmac_get_statistics(mac->mc_io, 0, dpmac_dev->mc_handle,
-> +				   mac->ethtool_stats.idx_iova, mac->ethtool_stats.values_iova,
-> +				   DPAA2_MAC_NUM_ETHTOOL_STATS);
-> +	if (err)
-> +		goto fallback;
-> +
-> +	dma_sync_single_for_cpu(dev, mac->ethtool_stats.values_iova,
-> +				DPAA2_MAC_NUM_ETHTOOL_STATS * sizeof(u64),
-> +				DMA_FROM_DEVICE);
-> +
-> +	cnt_values = mac->ethtool_stats.values_dma_mem;
-> +	for (i = 0; i < DPAA2_MAC_NUM_ETHTOOL_STATS; i++)
-> +		*(data + i) = le64_to_cpu(*cnt_values++);
-> +
-> +	return;
-> +
-> +fallback:
-> +
-> +	/* Fallback and retrieve each counter one by one */
-> +	for (i = 0; i < DPAA2_MAC_NUM_ETHTOOL_STATS; i++) {
->  		err = dpmac_get_counter(mac->mc_io, 0, dpmac_dev->mc_handle,
->  					i, &value);
-                                        ^
-
-Does the fallback path need to pass dpaa2_mac_ethtool_stats[i].id instead
-of i here?
-
-The old code used a sparse array indexed by enum dpmac_counter_id values:
-
-    static char dpaa2_mac_ethtool_stats[][ETH_GSTRING_LEN] = {
-        [DPMAC_CNT_ING_ALL_FRAME] = "[mac] rx all frames",
-        ...
-    };
-
-where the loop index i directly corresponded to the enum value passed to
-dpmac_get_counter(). The new code uses a compact array where array index 0
-contains DPMAC_CNT_ING_ALL_FRAME (enum value 18), but the fallback code
-still passes i (sequential 0, 1, 2...) instead of the stored enum value.
-
-When i=0, the code requests counter 0 (DPMAC_CNT_ING_FRAME_64) but the
-name is "[mac] rx all frames" (DPMAC_CNT_ING_ALL_FRAME). This would cause
-all statistics to report wrong values for their labels.
-
->  		if (err) {
->  			netdev_err(mac->net_dev,
->  				   "dpmac_get_counter(%d) failed\n", i);
-
-[ ... ]
--- 
-pw-bot: cr
+Thanks
+Hangbin
