@@ -1,158 +1,160 @@
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011013.outbound.protection.outlook.com [40.107.208.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFEC356A2B;
-	Fri, 27 Feb 2026 17:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1245336074D
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 17:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.179
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772211743; cv=fail; b=WoBwOs8lASj6nbmxivJoivlBovtwmfSH1woADTxtftDfO7BjHCVJzwvLXgGdHSVC7NyPPrZUI1Kkq3LHa/KmIlNDFGhXOOdxk9ij2oHgmplXlyIm9fv4w4V+GcseSf6h2vP783ap7rHRgSZ8j8/iG/XmDW4bbVo8QfgBiCHdzq4=
+	t=1772212100; cv=pass; b=GqbmpRbA8VK3FKU/Mrf6mhJZFC9EKs2sWCiRFovzsrNy04xVz6QBGc+Dgrt35RB7t3R0AWGgG7qud+8rbN9/ri5BcVS8E4xLzUztGdUq1carxVWMSStFQfZ7Q212ZDFb+ERq3UcAvlcR1HxoPrImiAjuYl8otX5Nti+m9/767oA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772211743; c=relaxed/simple;
-	bh=Hp6agnXHnIeIw6Vjn63dYvCL2IAEf5T+xNnZmcY9884=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=sY2K2SHdK7XFxRPmwoFFdN6tiZ/6sftpaCiX17T6SUtHjZmBa68kgISFZR0LFXG/f3kDNXwPVUEY2R6nyTQ4Y1x6dZBYNPSYhJsaRmG4vtGZbmxZAJgY+UuynPJ1yeZVAjgh7SbznktnIXHY8vucZ+urDW8bewgyww6eU6T2jlE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=a9YZslkj; arc=fail smtp.client-ip=40.107.208.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1772212100; c=relaxed/simple;
+	bh=hgtMP8VUtY9P76ez7WKUM8aE1sgvg9AP+19rjG+g6HA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EKcMMW92lSEfB96jV7Fds29kafD+jg+zzdft937YZZTArRTP/BczCA2MLq553xqjomAoocXUwW+oTHk3gpuP2VPLdAMahxdm5/NZbhGxaPuxHCj1RfYDHmcXqzJKIRTVsLPaeemaGjnaaEIhhYpdlGsV5qyM1KzhjW5opjGTWn0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PgPiHSvB; arc=pass smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="a9YZslkj"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RycbQ9XKMZ19qwa1sp8MD3+EmvfBvZrAmpRi8dhXPdvpI4HSeJ6p/oPgTDYiAHCxrs1rZvBBEJ6bYtpu79s3G0lXg18nmMA0yuhd5510L5TioyCo7RbuP0/Xr/QWMo+yTOV4RGvAyer2f33DsWzL5cmOY9irmN0dDWRrk/a9eDVevKNAVPIq9cFgIAaUcFw5Zw3GG9TqVOLh9Of7R2GjsE05+34UIZr0PQvDhyg9zSAy4fzpbCt1XIQPRwz4AHFO6YCPE0yXbgbzdKIpK/gNF2CYbBZ+7cQN+nOQDcaxoC6qZjjpRxITjOCcVvlYtMGEGaKe5/HculheY+tDBAxUVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TQghgffv5iJebj1pfqn8u9d8tizwe2OXraV7xngOARo=;
- b=FXDhvnotGwGFkqQ3G4kIsAeHUTo/kI+wDr6fTipP/r2/gjjX4jFbQcMinKbE5Qk1K4KRoUTqGV7350amcaoiFobSUEeG4LChTcIwqFkKRiG9YL/mIyeViq9RFd7gCuyf7yj6AP7SHMYRCckx1YKjKc8T7yo9KeUDrYiwsx11JEXrNGbw+mXsflAEoEgTtG18RHjyIiNrk8x3yDWP5LhSFPwucZ4+kxiaPrtW6mONjhH6DfJ9x3OMd/RWqLIucGcUTqft/uTQ8F8fxGWsXPfAu5WDngjYh4j68XbjcQBVytGLHuyS6v6T0tMRKggThO6t40w1eud3Fxc1tfPEan1bvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TQghgffv5iJebj1pfqn8u9d8tizwe2OXraV7xngOARo=;
- b=a9YZslkjEbQ10NDbClq92nARztf0T0OMTBL7koZepQiydbbN0zLMGhbIktBgy9C4RtUClL4LTp/5ZNBdfXACDRE5M1LjthfPqO6EZN7WtCazl2EnRlnpOnPpB7CFgCWAzQvUJJatzquDyEswRB0//5rKiEOM9bYKSW+Lk78VWiRG+zgAEFavkPL0t17vYf2fBykljhepVa+/vkYbcHO3z1/xPIEsGydAWlruPt5iD/n91acf/1W4F+/Wuy6e6y85DaXYBsbBtCqWXFhmbyd62A6q6ZVqQXkYLkmWsBa4RE4pkLzYUkASIUQNdiCn1K9swCwZV93yaPeMIN1Er4JjSw==
-Received: from BY3PR03CA0021.namprd03.prod.outlook.com (2603:10b6:a03:39a::26)
- by MW4PR12MB7168.namprd12.prod.outlook.com (2603:10b6:303:22d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.16; Fri, 27 Feb
- 2026 17:02:17 +0000
-Received: from CO1PEPF00012E61.namprd05.prod.outlook.com
- (2603:10b6:a03:39a:cafe::4b) by BY3PR03CA0021.outlook.office365.com
- (2603:10b6:a03:39a::26) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.26 via Frontend Transport; Fri,
- 27 Feb 2026 17:02:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1PEPF00012E61.mail.protection.outlook.com (10.167.249.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9654.16 via Frontend Transport; Fri, 27 Feb 2026 17:02:16 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 27 Feb
- 2026 09:01:49 -0800
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 27 Feb
- 2026 09:01:45 -0800
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
- <20260225150648.1542206-5-ioana.ciornei@nxp.com>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Ioana Ciornei <ioana.ciornei@nxp.com>
-CC: <netdev@vger.kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
-	<shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 4/5] selftests: forwarding: extend
- ethtool_std_stats_get with pause statistics
-Date: Fri, 27 Feb 2026 17:38:40 +0100
-In-Reply-To: <20260225150648.1542206-5-ioana.ciornei@nxp.com>
-Message-ID: <87bjhaf7d6.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PgPiHSvB"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-389f200c26eso25857261fa.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 09:08:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772212097; cv=none;
+        d=google.com; s=arc-20240605;
+        b=a2tWxG/80WnCPZBtjiOs6DzUv0nG5GopnIqlt1/3QYg24+MaaglqVtKc7ZdAqeOEMD
+         gc/htgqnh+NPbqCpgsGT469xrjLLTGGGz+C0JxmGX89W/DZuQ6lE+PlNH54z4aZ1TUhf
+         vI6T7uP/otpw78hbQBeQdDcVTYrissb6WtR7AAq5yqNrY889Nbkd5ZzGTimPZ36baZAl
+         vgqdOEaXhHV8USLehjR3gvljbAzT1kmgFvr++uedfdry3SkkqBx6suxrt4dhFEXjQzUb
+         4uOxHFlhVi5F8af1Fvbz5wymKv1KrhaQMbwiTFekPR6VP6JE+Zbmr1yrTcbo1Bxxc5BF
+         zS6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Y7MEfERrDZZYp0c3EO05mpNNZJ5XP1zAqLXvGoyft2Y=;
+        fh=bRGS/QHSO+EB6q91v8fO1ZkpURjTsr4o+DMLNpZBZW4=;
+        b=gZe45QVYUSSHrbFLVCBfIBvjg/p2va0ZxekMJFsZVLrLgbsALgBiwoBu9lv5kAwtXv
+         y57a0MGw51A2SGVZfKuQIHSy0kSKqgYG1eVwm6YpXPXiFhkYGacGBM0F3bB6CMUmGNga
+         wXB0sgFuXhqvuMfPUZXVsYbY+351Ng+4+RAMHmCWLAg3ZOGd18c5Gg8JDU0I2QpG6Xq0
+         trz5Chm7DF45AKr33v4R7U2AsEYEzYR/BAumf6ulythkfZ3wKuc+n/3ccohWcOFYDcXb
+         egXC8uZ94f+pIRTVfIa7kExyiR71bWCoav8UBVnALqt3u4MWiAPtdL1e5mqPtO7EKSTD
+         Vphg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772212097; x=1772816897; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y7MEfERrDZZYp0c3EO05mpNNZJ5XP1zAqLXvGoyft2Y=;
+        b=PgPiHSvBUI+6gG4LIWdV1P8tP+hFkKXk+TFFDvSHQY50WokDZVU56YMWiqXkadzDvF
+         dmtlcfNCGrEBiqCje044yvDu+SRSRfiletzn5UHk6aDk5+045qCqDx9KZIhw/o27OQyt
+         UCKQGipmAhUvcb93PWkufu6jfbdDWWfD7jV0cQTUEWeMstaBqGManjqzjqQYtybdqa4L
+         pEO1bYIczqigj3PY5FSg2rMiDk5C7w1QRrnXsEnaAKPLDJTj6pp3XYC4Ydv2DCasxQxQ
+         uDX642xnkksbRVZwr1quu0e2bw6oAYru6aoEG0ikwUHlNxPLSG690KLg3C8rSaGWmiey
+         vDTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772212097; x=1772816897;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Y7MEfERrDZZYp0c3EO05mpNNZJ5XP1zAqLXvGoyft2Y=;
+        b=hnNbfe2W1Dz6JIQL7xYv1IsSyf3b/hu3kq37xGsnLz2aECY8OuMyzRqpgsFOF+8/la
+         Gqcq08vCbO+2ItIpXDPO48tSYAkLZtM/bjJg5lIimqeZTMfLXpb4XpvyBsN+4cOm97Oa
+         ByBe6X95kXPhqXFR9Bl1mZcrmRlQsAmQFoCnOIY60kGGGpUGBqUODf3qlPZi0M1+z4eT
+         p/UDWnaQTwA4HtWRRhoaKWQGD1J9CK9X/s9uzqJoFZJyGclUnWfvSRQ1RYdiuc+ZUXoP
+         I30k0qRVHzcsNiATimK6kencilcbNS98bp4TH7Z/sjesPjePvSa+cwPgeDoxtsGoCgsV
+         PA3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWALJyTIO5HWfFXBguPQL6Mbtp7Qe3Ja8PIbcQrfiPux++i+n9tOIPshswuQebLWCL+9foPEp+ZIqqqFVfg9Go=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAn1P4kmbhKzVNWo3YrmsJ+mksH5yj2TK90NddhuXocjzJB/LJ
+	wbXdxcRnYkKpJIfJ68WRwW641T0iJPY1guZdbhLrZvTLUEV4URQZ1SLuif+B+G3k8AwRRdLCAAH
+	51k02am8U62vGZJqet6YjD0XJWvZIwtFHv4Cbgkzp
+X-Gm-Gg: ATEYQzwSdrvTxWOCZfm5v+KJBtM8z/eFsbbJHqakTZ9XNoiRCSrVe7/W3z2kXv8NGi3
+	QKyzhFYIV4XZPWbvRMglynaemAxbj/d43pWaX5J86gXzDicnc5/jg59qDvi64k0j7adIVPgeG3q
+	gZVkIqNLKVLG5RNgd8YC7Dh96MoE8GK36k0FwUGkKQk0shfAThX2dsEfpda6QeN94PBZD3HJLeR
+	yH27vi09JSNlizoSriYCkoHQHpXOWp4qUKX5jEDgx9tS16PzDA2S66z/6XtOOd1NU0AACGRF0Lp
+	6VhV65TxZNl/LybhAg==
+X-Received: by 2002:a05:651c:50f:b0:385:f7ce:f321 with SMTP id
+ 38308e7fff4ca-389ff15f271mr19911451fa.26.1772212096622; Fri, 27 Feb 2026
+ 09:08:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF00012E61:EE_|MW4PR12MB7168:EE_
-X-MS-Office365-Filtering-Correlation-Id: 148438d1-a100-4550-0a4d-08de7621f62f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	7KnvAJJQO+VUOyOswAqFuUDz4yhHMdBx0z7ACmIGw8ha3Y05sPU9rdw08+Q9TUwvoznmfW5duJpeTBQfQqIpwKptlRPSZncV2z2mo9i2xXlvxjPvn+bW5jJ/CNTzsrvvcUQDGxRBWy3vyZnt4IyL34ZJaZMf+dtfNMuszu4S8calvjM3T4cgdBpV/rnkBf+4Tj/D0HsQY0WDhPHM6l1ADCIou9H5j+d/AngUTKaU+05uUbgu4HHMayeAKY6paY+0y1Tq5S9VBkmN5sQmsAuSWkpQ9sXqiHYqMcslJnHg1nx6C50+2GpJWAsEG24nGF7zWq149EwzJMHARKuYEy9vPGpm/QGnrJaBGf2KyTEzoKOcgN4tUqBhilX9UAGpnGVi/SNFKuzHQMfUb+Xef/wb8WfshPsjiaeD1jVkH/17N6ywiYcvehurCumMRgYU511mF1mj17GeS2VP7uROdVh5cltTbjUvdgzsLBWZ66T50VMW5NVdGG46LM9eworD6T5gggnjm+j1oC7iuKCQnYQXLQHBrGCPfcQjCTEtle09AitRF6SZ8qG8Aikrs8+IozAFQy3Qh3/3inc8EhC1I4yPdKzDCvE1TjKZccV5YQjeWJTs1xTptRlMlFdlOFcGyeFoo7RVMynIy1+H3/QpxzMQGn8Qhou0Q7w8G4DaWgsJPCWCf68S+7NKylXkPwkSSgjUN5DB8VFIDzSeJnU2r6Lr30kFAL/GIomq7f8xHzJHdzmTZa3GbfeZnVbN9fFvB7QHBQEVN3P4moar4KOMdcoR7dn5knt7lxXIhLuOVOYhyFTRKOj5UH4LjY5fTKuWNDgkFH/p0QWVk/cnSEo97da46A==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	zfFx8h7nyF2Xi61RpYxixIhseiCLNUNxfMCFnA3lU/ymV/gTL2gIdUkG4Ns1UziVb6rSug2GDtL56ZmkgLn1bXPJlW9HbzMyPGYD5MZRKivhicTSrlJa2ZATaSxL5QURNiNKgyZR6QOhnS1UQP9hzqd7hkq/+HvdjW2lFBBKOixvBlquhVRRdbYXd5gkI4M6WSwOfcmJ8HkP0Rlji+1lpTHw5//bHESSNxhdUcwQlfv2gJ/Eqcmz8T1Z0QLdwaBYxSviaaPhWNM6QlrGFCvgpdwCR6aSzgsa9ICJIE/5rHUtwV6B2u/jFNmn4Rg3Rm1sqvwciUGLe+RF+ohf0iuXFmX+MuRsclTboBaC0BFPNrdd2RQjxusLaCbwSQIHVeQukp9CZ4w1ws9jFklmYOI1r1UetPeA0FkfjgUijphUz+MPZ5/MRBfdqrFgDZoE3Jno
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2026 17:02:16.7952
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 148438d1-a100-4550-0a4d-08de7621f62f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF00012E61.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7168
+References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-11-dmatlack@google.com>
+ <20260226170030.5a938c74@shazbot.org> <aaDqhjdLyf1qSTSh@google.com> <20260227084658.3767d801@shazbot.org>
+In-Reply-To: <20260227084658.3767d801@shazbot.org>
+From: David Matlack <dmatlack@google.com>
+Date: Fri, 27 Feb 2026 09:07:48 -0800
+X-Gm-Features: AaiRm519T9RurPcNiWyO80VEVhcFvT0_H9lBfATMd1KVW4QtGFBpubzCvVI4oqQ
+Message-ID: <CALzav=fHy23RAzhgkdaL+JA5T2tL9FT6aPgRfXUh7i9zvYCGPA@mail.gmail.com>
+Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
+ Live Update
+To: Alex Williamson <alex@shazbot.org>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, 
+	Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-Ioana Ciornei <ioana.ciornei@nxp.com> writes:
-
-> Even though pause frame statistics are not exported through the same
-> ethtool command, there is no point in adding another helper just for
-> them. Extent the ethtool_std_stats_get() function so that we are able to
-> interrogate using the same helper all the standard statistics.
+On Fri, Feb 27, 2026 at 7:47=E2=80=AFAM Alex Williamson <alex@shazbot.org> =
+wrote:
 >
-> Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-> ---
->  tools/testing/selftests/net/forwarding/lib.sh | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> On Fri, 27 Feb 2026 00:51:18 +0000
+> David Matlack <dmatlack@google.com> wrote:
 >
-> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-> index a9034f0bb58b..efd236ae1c28 100644
-> --- a/tools/testing/selftests/net/forwarding/lib.sh
-> +++ b/tools/testing/selftests/net/forwarding/lib.sh
-> @@ -831,8 +831,12 @@ ethtool_std_stats_get()
->  	local name=$1; shift
->  	local src=$1; shift
->  
-> -	ethtool --json -S $dev --groups $grp -- --src $src | \
-> -		jq '.[]."'"$grp"'"."'$name'"'
-> +	if [[ "$grp" == "pause" ]]; then
-> +		ethtool -I --json -a $dev | jq '.[].statistics.'$name
+> > On 2026-02-26 05:00 PM, Alex Williamson wrote:
+> > > On Thu, 29 Jan 2026 21:24:57 +0000
+> > > David Matlack <dmatlack@google.com> wrote:
+> > > >
+> > > > - vdev->reset_works =3D !ret;
+> > > >   pci_save_state(pdev);
+> > > >   vdev->pci_saved_state =3D pci_store_saved_state(pdev);
+> > >
+> > > Isn't this a problem too?  In the first kernel we store the initial,
+> > > post reset state of the device, now we're storing some arbitrary stat=
+e.
+> > > This is the state we're restore when the device is closed.
+> >
+> > The previous kernel resets the device and restores it back to its
+> > post reset state in vfio_pci_liveupdate_freeze() before handing off
+> > control to the next kernel. So my intention here is that VFIO will
+> > receive the device in that state, allowing it to call
+> > pci_store_saved_state() here to capture the post reset state of the
+> > device again.
+> >
+> > Eventually we want to drop the reset in vfio_pci_liveupdate_freeze() an=
+d
+> > preserve vdev->pci_saved_state across the Live Update. But I was hoping
+> > to add that in a follow up series to avoid this one getting too long.
+>
+> I appreciate reviewing this in smaller chunks, but how does userspace
+> know whether the kernel contains a stub implementation of liveupdate or
+> behaves according to the end goal?
 
-I think name needs to be quoted here? In fact, unless the pause group is
-highly unlikely to ever get a key that contains a dash, it should either
-be quoted in the horrible way the else branch does it, or do this much
-more readable thing instead:
+Would a new VFIO_DEVICE_INFO_CAP be a good way to communicate this
+information to userspace?
 
-        jq --arg name "$name" '.[].statistics[$name]'
+> Also, didn't we violate our own contract in this patch by adding the
+> reset_works field to the serialization data without updating the
+> compatibility string?  Thanks,
 
-> +	else
-> +		ethtool --json -S $dev --groups $grp -- --src $src | \
-
-Since you are touching this line -- can you fix the missing quoting,
-please?
-
-> +			jq '.[]."'"$grp"'"."'$name'"'
-> +	fi
->  }
->  
->  qdisc_stats_get()
-
+Yes, I will fix that in v3.
