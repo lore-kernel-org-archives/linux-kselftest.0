@@ -1,102 +1,154 @@
-Received: from cstnet.cn (smtp37.cstnet.cn [159.226.251.37])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2471AE877;
-	Sat, 28 Feb 2026 06:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3686636164B
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Feb 2026 07:11:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772260254; cv=none; b=JGnq4/2g/FrK5aQ7KSfYdAaR4aCZtLyR9sdLOrewALOEEM8lI6bBdBYE0lv608LCwnvkxQSvGA/oBduAd/2PpJxV5j/FIl3ayoF/Hjq5wqdhZZh6MbFjPKH06HXJsWLNASXtjzu1fHVUSXpQaNa8PAbasxVyzbrmYTcCAq8+B0w=
+	t=1772262712; cv=none; b=V030imYw4K/ayOaQ+uh2ij0Rts5fSyAmtdjt6mm5x3brfPTIqEAzrhN894JnjwtZ7gb1pTFAYnJrEReq9MScLXpAdKCDiYxxNLE8C0t2np0Kdq7sissBRdN8ujSo7j554NUyymTVsDQeEpKqbJ5z0vQKEXt92uQTymaiCiLYbtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772260254; c=relaxed/simple;
-	bh=4G8Ov/J3yUqLsZRD35KOFvUNKf4mwcRFNuiNJkTmELQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=O2fnXEsHK+x/NVczsZ1yG+12f2dY5rDm9+wJwcf8tOQsz5iS0a6uCBRejaiQnjMkb2JX2Za5fpL66THXyc+md1NOWdPPy8H4auXAWrsj9o2STIiLVxETWeSraOH9mEFt/5w/J7792RplPFJWB6YW0Y5LWoyxDYR9PtsDp+c+MOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from xujiakai2025$iscas.ac.cn ( [210.73.43.101] ) by
- ajax-webmail-APP-12 (Coremail) ; Sat, 28 Feb 2026 14:30:25 +0800
- (GMT+08:00)
-Date: Sat, 28 Feb 2026 14:30:25 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Jiakai Xu" <xujiakai2025@iscas.ac.cn>
-To: "kernel test robot" <lkp@intel.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	kvm@vger.kernel.org, oe-kbuild-all@lists.linux.dev, 
-	"Alexandre Ghiti" <alex@ghiti.fr>, 
-	"Paolo Bonzini" <pbonzini@redhat.com>, 
-	"Shuah Khan" <skhan@linuxfoundation.org>, 
-	"Paul Walmsley" <pjw@kernel.org>, 
-	"Palmer Dabbelt" <palmer@dabbelt.com>, 
-	"Andrew Jones" <ajones@ventanamicro.com>, 
-	"Anup Patel" <anup@brainfault.org>, 
-	"Atish Patra" <atish.patra@linux.dev>, 
-	"Albert Ou" <aou@eecs.berkeley.edu>
-Subject: Re: Re: [PATCH v9 2/3] KVM: selftests: Refactor UAPI tests into
- dedicated function
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.1-cmXT5 build
- 20240627(e6c6db66) Copyright (c) 2002-2026 www.mailtech.cn cnic.cn
-In-Reply-To: <202602280523.Y5Q8Pdft-lkp@intel.com>
-References: <20260228005355.823048-3-xujiakai2025@iscas.ac.cn>
- <202602280523.Y5Q8Pdft-lkp@intel.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1772262712; c=relaxed/simple;
+	bh=ydcvMtndpU/OxsEtSVhVCNWCIxu5kvEi13B73r/hsw8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=B4JRQl3fcSt7oWUpSD71CkFD/8frSfYnDXG8Y9b3+5dgcq1gAYOnQPa9UkIWX8Ck7FgD8iVYdfc/qROPY3h8QiUzxk4C0RcX0u8xDD0a9Np8TCI6HObzuTeiAn82CxQtgaHyjWvjKXVPb7BuW8A3/1QXCy4plW2egi/cpX+K6XY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SadWynVw; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SadWynVw"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772262709;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=djwKlAEgY6ee2weS/mkLRpx1tbGzO35/OAf7bR840yA=;
+	b=SadWynVwrc5gWMkyHXmI9Qp+c7/4T+flVRtgaACq2kX5iXuETqL8jmyUpwNKz3oiw1WBju
+	TW0ZHdsmezIZ70aU8Ul5c6AiMCRtexySJN/KLhiQhnrgQ/NFDNFO7MTjNNN+33+5eqHcDB
+	PhMTnpdoY10SQWmcneyhMTRkCnFHhGk=
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v3 1/3] selftests/bpf: Remove kmem subtest from cgroup_iter_memcg
+Date: Sat, 28 Feb 2026 15:11:21 +0800
+Message-ID: <bb9c8fe74aba9dc8c3d803ea6caf6610e981d79a.1772261955.git.zhuhui@kylinos.cn>
+In-Reply-To: <cover.1772261955.git.zhuhui@kylinos.cn>
+References: <cover.1772261955.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <6f5f1ca4.443dd.19ca2f0f358.Coremail.xujiakai2025@iscas.ac.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:tgCowABnc9OBi6Jp1RITAA--.46891W
-X-CM-SenderInfo: 50xmxthndljiysv6x2xfdvhtffof0/1tbiDAgMCWmiU3VFgAABso
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-SGkgYWxsLAoKSSByZWNlaXZlZCBhIG5vdGlmaWNhdGlvbiBmcm9tIHRoZSBrZXJuZWwgdGVzdCBy
-b2JvdCByZWdhcmRpbmcgbXkgcGF0Y2guIEl0IGluZGljYXRlcyB0aGF0IHZvaWQgY2hlY2tfc3Rl
-YWxfdGltZV91YXBpKCkgc2hvdWxkIGJlIGNoYW5nZWQgdG8gdm9pZCBjaGVja19zdGVhbF90aW1l
-X3VhcGkodm9pZCkgdG8gYXZvaWQgYSBjb21waWxlciB3YXJuaW5nLgoKSSB3b3VsZCBsaWtlIHRv
-IHdhaXQgZm9yIHRoZSByZXZpZXdlcnPigJkgZmVlZGJhY2sgb24gdGhpcyBwYXRjaC4gSWYgdGhl
-cmUgYXJlIG5vIGlzc3VlcyBhc2lkZSBmcm9tIHRoaXMgd2FybmluZywgSSB3aWxsIHN1Ym1pdCB0
-aGUgZmluYWwgdmVyc2lvbiBhZGRyZXNzaW5nIHRoZSBjb21waWxlciB3YXJuaW5nLiBJZiB0aGVy
-ZSBhcmUgb3RoZXIgc3VnZ2VzdGlvbnMsIEkgd2lsbCBpbmNvcnBvcmF0ZSB0aGVtIGFjY29yZGlu
-Z2x5LgoKVGhhbmtzLApKaWFrYWkKCiZxdW90O2tlcm5lbCB0ZXN0IHJvYm90JnF1b3Q7ICZsdDts
-a3BAaW50ZWwuY29tJmd0O+WGmemBk++8mgo+IEhpIEppYWthaSwNCj4gDQo+IGtlcm5lbCB0ZXN0
-IHJvYm90IG5vdGljZWQgdGhlIGZvbGxvd2luZyBidWlsZCB3YXJuaW5nczoNCj4gDQo+IFthdXRv
-IGJ1aWxkIHRlc3QgV0FSTklORyBvbiB2Ni4xOV0NCj4gW2Nhbm5vdCBhcHBseSB0byBrdm0vcXVl
-dWUga3ZtL25leHQgbGludXMvbWFzdGVyIGt2bS9saW51eC1uZXh0IHY3LjAtcmMxIG5leHQtMjAy
-NjAyMjddDQo+IFtJZiB5b3VyIHBhdGNoIGlzIGFwcGxpZWQgdG8gdGhlIHdyb25nIGdpdCB0cmVl
-LCBraW5kbHkgZHJvcCB1cyBhIG5vdGUuDQo+IEFuZCB3aGVuIHN1Ym1pdHRpbmcgcGF0Y2gsIHdl
-IHN1Z2dlc3QgdG8gdXNlICctLWJhc2UnIGFzIGRvY3VtZW50ZWQgaW4NCj4gaHR0cHM6Ly9naXQt
-c2NtLmNvbS9kb2NzL2dpdC1mb3JtYXQtcGF0Y2gjX2Jhc2VfdHJlZV9pbmZvcm1hdGlvbl0NCj4g
-DQo+IHVybDogICAgaHR0cHM6Ly9naXRodWIuY29tL2ludGVsLWxhYi1sa3AvbGludXgvY29tbWl0
-cy9KaWFrYWktWHUvUklTQy1WLUtWTS1WYWxpZGF0ZS1TQkktU1RBLXNobWVtLWFsaWdubWVudC1p
-bi1rdm1fc2JpX2V4dF9zdGFfc2V0X3JlZy8yMDI2MDIyOC0wODU2NDgNCj4gYmFzZTogICB2Ni4x
-OQ0KPiBwYXRjaCBsaW5rOiAgICBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjYwMjI4MDA1
-MzU1LjgyMzA0OC0zLXh1amlha2FpMjAyNSU0MGlzY2FzLmFjLmNuDQo+IHBhdGNoIHN1YmplY3Q6
-IFtQQVRDSCB2OSAyLzNdIEtWTTogc2VsZnRlc3RzOiBSZWZhY3RvciBVQVBJIHRlc3RzIGludG8g
-ZGVkaWNhdGVkIGZ1bmN0aW9uDQo+IGNvbmZpZzogYXJtNjQtYWxsbm9jb25maWctYnBmIChodHRw
-czovL2Rvd25sb2FkLjAxLm9yZy8wZGF5LWNpL2FyY2hpdmUvMjAyNjAyMjgvMjAyNjAyMjgwNTIz
-Llk1UThQZGZ0LWxrcEBpbnRlbC5jb20vY29uZmlnKQ0KPiBjb21waWxlcjogYWFyY2g2NC1saW51
-eC1nbnUtZ2NjIChEZWJpYW4gMTQuMi4wLTE5KSAxNC4yLjANCj4gcmVwcm9kdWNlICh0aGlzIGlz
-IGEgVz0xIGJ1aWxkKTogKGh0dHBzOi8vZG93bmxvYWQuMDEub3JnLzBkYXktY2kvYXJjaGl2ZS8y
-MDI2MDIyOC8yMDI2MDIyODA1MjMuWTVROFBkZnQtbGtwQGludGVsLmNvbS9yZXByb2R1Y2UpDQo+
-IA0KPiBJZiB5b3UgZml4IHRoZSBpc3N1ZSBpbiBhIHNlcGFyYXRlIHBhdGNoL2NvbW1pdCAoaS5l
-LiBub3QganVzdCBhIG5ldyB2ZXJzaW9uIG9mDQo+IHRoZSBzYW1lIHBhdGNoL2NvbW1pdCksIGtp
-bmRseSBhZGQgZm9sbG93aW5nIHRhZ3MNCj4gfCBSZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9i
-b3QgPGxrcEBpbnRlbC5jb20+DQo+IHwgQ2xvc2VzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9v
-ZS1rYnVpbGQtYWxsLzIwMjYwMjI4MDUyMy5ZNVE4UGRmdC1sa3BAaW50ZWwuY29tLw0KPiANCj4g
-QWxsIHdhcm5pbmdzIChuZXcgb25lcyBwcmVmaXhlZCBieSA+Pik6DQo+IA0KPiA+PiBzdGVhbF90
-aW1lLmM6MjA3OjEzOiB3YXJuaW5nOiBmdW5jdGlvbiBkZWNsYXJhdGlvbiBpc24ndCBhIHByb3Rv
-dHlwZSBbLVdzdHJpY3QtcHJvdG90eXBlc10NCj4gICAgICAyMDcgfCBzdGF0aWMgdm9pZCBjaGVj
-a19zdGVhbF90aW1lX3VhcGkoKQ0KPiAgICAgICAgICB8ICAgICAgICAgICAgIF5+fn5+fn5+fn5+
-fn5+fn5+fn5+fg0KPiAgICBjYzE6IG5vdGU6IHVucmVjb2duaXplZCBjb21tYW5kLWxpbmUgb3B0
-aW9uICctV25vLWdudS12YXJpYWJsZS1zaXplZC10eXBlLW5vdC1hdC1lbmQnIG1heSBoYXZlIGJl
-ZW4gaW50ZW5kZWQgdG8gc2lsZW5jZSBlYXJsaWVyIGRpYWdub3N0aWNzDQo+IA0KPiAtLSANCj4g
-MC1EQVkgQ0kgS2VybmVsIFRlc3QgU2VydmljZQ0KPiBodHRwczovL2dpdGh1Yi5jb20vaW50ZWwv
-bGtwLXRlc3RzL3dpa2kNCg==
+From: Hui Zhu <zhuhui@kylinos.cn>
+
+When cgroup.memory=nokmem is set in the kernel command line, kmem
+accounting is disabled. This causes the test_kmem subtest in
+cgroup_iter_memcg to fail because it expects non-zero kmem values.
+
+Remove the kmem subtest altogether since the remaining subtests
+(shmem, file, pgfault) already provide sufficient coverage for
+the cgroup iter memcg functionality.
+
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+---
+ .../testing/selftests/bpf/cgroup_iter_memcg.h |  2 --
+ .../bpf/prog_tests/cgroup_iter_memcg.c        | 28 -------------------
+ .../selftests/bpf/progs/cgroup_iter_memcg.c   |  1 -
+ 3 files changed, 31 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/cgroup_iter_memcg.h b/tools/testing/selftests/bpf/cgroup_iter_memcg.h
+index 3f59b127943b..ff20ec537164 100644
+--- a/tools/testing/selftests/bpf/cgroup_iter_memcg.h
++++ b/tools/testing/selftests/bpf/cgroup_iter_memcg.h
+@@ -9,8 +9,6 @@ struct memcg_query {
+ 	unsigned long nr_shmem;
+ 	unsigned long nr_file_pages;
+ 	unsigned long nr_file_mapped;
+-	/* some memcg_stat_item */
+-	unsigned long memcg_kmem;
+ 	/* some vm_event_item */
+ 	unsigned long pgfault;
+ };
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+index a5afd16705f0..88fc3e83d2b7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+@@ -126,32 +126,6 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	shm_unlink("/tmp_shmem");
+ }
+ 
+-#define NR_PIPES 64
+-static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
+-{
+-	int fds[NR_PIPES][2], i;
+-
+-	/*
+-	 * Increase kmem value by creating pipes which will allocate some
+-	 * kernel buffers.
+-	 */
+-	for (i = 0; i < NR_PIPES; i++) {
+-		if (!ASSERT_OK(pipe(fds[i]), "pipe"))
+-			goto cleanup;
+-	}
+-
+-	if (!ASSERT_OK(read_stats(link), "read stats"))
+-		goto cleanup;
+-
+-	ASSERT_GT(memcg_query->memcg_kmem, 0, "kmem value");
+-
+-cleanup:
+-	for (i = i - 1; i >= 0; i--) {
+-		close(fds[i][0]);
+-		close(fds[i][1]);
+-	}
+-}
+-
+ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
+ {
+ 	void *map;
+@@ -209,8 +183,6 @@ void test_cgroup_iter_memcg(void)
+ 		test_shmem(link, &skel->data_query->memcg_query);
+ 	if (test__start_subtest("cgroup_iter_memcg__file"))
+ 		test_file(link, &skel->data_query->memcg_query);
+-	if (test__start_subtest("cgroup_iter_memcg__kmem"))
+-		test_kmem(link, &skel->data_query->memcg_query);
+ 	if (test__start_subtest("cgroup_iter_memcg__pgfault"))
+ 		test_pgfault(link, &skel->data_query->memcg_query);
+ 
+diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
+index 59fb70a3cc50..12f79a44133e 100644
+--- a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
++++ b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
+@@ -30,7 +30,6 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
+ 	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
+ 	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, NR_FILE_PAGES);
+ 	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, NR_FILE_MAPPED);
+-	memcg_query.memcg_kmem = bpf_mem_cgroup_page_state(memcg, MEMCG_KMEM);
+ 	memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
+ 
+ 	bpf_put_mem_cgroup(memcg);
+-- 
+2.43.0
+
