@@ -1,148 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D40262D0B;
-	Sat, 28 Feb 2026 00:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD79324468B;
+	Sat, 28 Feb 2026 00:54:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772239430; cv=none; b=ZaTJ/hjE2CsV1rajxOS6hc/qqay/xX/7vnce1Nmr83y/bo2f5Mk5Y5sTfgH7f1yb4tBIETnPfibUp/IQfH9VBMXCsKZ/7lJ8PzRh4QOknUcYaU87ZUCcwrz7vs84tTVvuMaaCIpwj4zOveOKObHz1JHuaX7vMPQ16x87MdXXXc4=
+	t=1772240067; cv=none; b=sD55wlJbUXYERV13Gt+Nacuzu1wu3zbdDz8VlwPH3rxnWpQb/78RX2RPqkAgWQWsc1FwtyMESKhU1s001ny4etTGbRVXHanpY63mAEbo/giQa6gzj3ymDtr77qp6s6r+UVhpT6uGIi0gElnDQ8I3zg6Hw/w+uUPpeJ0SKAnmSnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772239430; c=relaxed/simple;
-	bh=BpYrG8pxRKmKebGZQHmsmbPXtrrDZFkM5FRO8KV2e28=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A1JfhQvvqy7FX4hp644ySRotRqSy4OZWEAn6Uoe1NobmEZ7WVD2MbETIfrer7PT6fwQy17YHDQgUnc2LOsggEgpEID2G/SCf7oDC+hAXMY11tkYor8p86fIouA7gPhDebE/VGX5viBlgW6ERxjjKSgi6t3mMd2UjUrJZIq9fL4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mEykySR1; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEykySR1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F321C116C6;
-	Sat, 28 Feb 2026 00:43:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772239429;
-	bh=BpYrG8pxRKmKebGZQHmsmbPXtrrDZFkM5FRO8KV2e28=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mEykySR1UIGEflLjYgCjTIVtiMReRZnjHuN87wogViPVKn6R3z28M0eyjzfw0tz/6
-	 q0K/tBuWugTznZNvXph1R9caI5lN/yXs+zJxeK49hxC1iz4ULEiW5e9j8rMCYXkbR1
-	 MersJUb2qO+pv7bfWQkNs/rYlaD+dqrk8/+veYO+FVwYSARYfy7dJP0AHKuC/tCpZR
-	 Xx5aZ1GMPcGQwevXbpypxL4122A27p2GoUb4lv6CKtWYIZjHGnZGtD3Byx0Bb0lkbN
-	 CJWxBKYvrmQvz/OSMU8C8Zr9zF3ADcxaEX3KTCgFTeoSVW7glgMkp1puJorZQKQVOL
-	 QLWZEOB/wj32A==
-Date: Fri, 27 Feb 2026 16:43:48 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Petr Machata <petrm@nvidia.com>
-Cc: Ioana Ciornei <ioana.ciornei@nxp.com>, <netdev@vger.kernel.org>, "Andrew
- Lunn" <andrew+netdev@lunn.ch>, "David S.  Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
- ethtool standard counters
-Message-ID: <20260227164348.63afcc43@kernel.org>
-In-Reply-To: <87ms0ufc0p.fsf@nvidia.com>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
-	<20260225150648.1542206-6-ioana.ciornei@nxp.com>
-	<20260226182223.5eb1b10f@kernel.org>
-	<87ms0ufc0p.fsf@nvidia.com>
+	s=arc-20240116; t=1772240067; c=relaxed/simple;
+	bh=QIzrJqeMZz5zzLBAczS6NuGVz5oGpBmBJ8IpygPKlpw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N3JkG7EkmrjT0Nlq0hp27z8EeKXdH9IN/UnjgQ0mYnqWMO0QvIMP3+xxMB64Y+TFOS73r5n+ngU5JbFAViuuC8J4hOxMEkkcnDfy5JChblKrHUzGLbnVAdjI2urayqujx3Y5pDB2J+6Cbo81FNLMXxatnUPsv1m98pMQz39okN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from fric.. (unknown [210.73.43.101])
+	by APP-03 (Coremail) with SMTP id rQCowABXO+KkPKJpPMJ2CQ--.12049S2;
+	Sat, 28 Feb 2026 08:53:57 +0800 (CST)
+From: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+To: linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	kvm@vger.kernel.org
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jiakai Xu <xujiakai2025@iscas.ac.cn>
+Subject: [PATCH v9 0/3] RISC-V: KVM: Validate SBI STA shmem alignment
+Date: Sat, 28 Feb 2026 00:53:52 +0000
+Message-Id: <20260228005355.823048-1-xujiakai2025@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowABXO+KkPKJpPMJ2CQ--.12049S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Gw4DZFW8ZFyDCr4UJFy5Jwb_yoW8Jr45pa
+	9xCa4FqFy8JayxA3Z3Aw4ktryfWw48CrsFyw17J342yay8KFy8tr47KFWUAasxGF1kXF1Y
+	va4xK3WruF98ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+	1j6rxdM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
+	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28Icx
+	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
+	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+	CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbQVy7UUUUU==
+X-CM-SenderInfo: 50xmxthndljiysv6x2xfdvhtffof0/1tbiBgoKCWmgYKJ+jgADs3
 
-On Fri, 27 Feb 2026 14:53:06 +0100 Petr Machata wrote:
-> Jakub Kicinski <kuba@kernel.org> writes:
-> > On Wed, 25 Feb 2026 17:06:48 +0200 Ioana Ciornei wrote:  
-> >> +ALL_TESTS="
-> >> +	test_eth_ctrl_stats
-> >> +	test_eth_mac_stats
-> >> +	test_pause_stats
-> >> +"
-> >> +STABLE_MAC_ADDRS=yes
-> >> +NUM_NETIFS=2
-> >> +lib_dir=$(dirname "$0")
-> >> +# shellcheck source=./../../../net/forwarding/lib.sh
-> >> +source "$lib_dir"/../../../net/forwarding/lib.sh  
-> >
-> > Argh, at some point we should probably decide whether we have 
-> > a preference on which "library" / set of env vars we use under 
-> > drivers/net/hw. Adding Petr to CC.  
-> 
-> I think the expectation is that by default, tests written in Bash are
-> run on one machine without remotes.
+This series fixes a missing validation in the RISC-V KVM SBI
+steal-time accounting (STA) register handling.
 
-I think we need to define the guidance by properties of the test, not
-the machine? Of course _tests_ which don't need a traffic source can
-simply consume the NETIF evn variable, so its trivial to write them in
-any language without much library support. But for tests which need
-traffic input we need a different distinction than "does the author
-care about single-interface machines", so to speak?
+Patch 1 validates the configured SBI STA shared memory GPA at
+KVM_SET_ONE_REG, enforcing the 64-byte alignment requirement
+defined by the SBI specification or allowing INVALID_GPA to explicitly
+disable steal-time accounting. This prevents invalid userspace state
+from reaching runtime code paths and avoids WARN_ON() triggers during
+KVM_RUN.
 
-> I think this fundamentally stems from the fact that running processes in
-> Python is a bit unwieldy, so it makes sense to have helpers, so
-> everybody uses them, so you can have helpers grow brains to do things
-> like over-the-ssh configuration. In Bash, running a traffic generator is
-> easier than working with arrays. So the helpers tend not to be as useful
-> and we don't generally have them. At least not in any consistent way.
-> 
-> Eyeing the file, the requirement for the remote interface to be up and
-> configured with an IP address is a bit surprising to me. I would think a
-> down state is the most natural, and have the test bring it up and
-> configure it in a way that it needs. I'm thinking maybe this is to allow
-> testing a sole interface on like an embedded device?
-> 
-> Anyway, that's a fairly strong differency between how Bash tests are
-> typically written and the NIC setup. I think basically all existing
-> tests assume the devices are theirs to tamper with.
-> 
-> > The existing tests under drivers/net/hw which source forwarding/lib.sh
-> > pre-date the "NIC setup" described in 
-> > tools/testing/selftests/drivers/net/README.rst
-> >
-> > Should we ask "NIC setup" to be used for all tests which only need
-> > NUM_NETIFS=2 ? These are basically simple tests where one netif is 
-> > a traffic generator and the other is the DUT. And IIUC the "forwarding
-> > setup" can't be used when the traffic generator is controlled over SSH?  
-> 
-> In principle nothing prevents lib.sh from growing brains to support
-> these remote shenanigans. I think it's just that so far nobody cared
-> enough to actually do it.
-> 
-> I think that a helper that in effect does "run this on a machine where
-> $swp1 is" is mostly what is needed. That and "make sure $swp1 and $swp2
-> are on the same machine". It's going to be annoying to work with though,
-> because you need to annotate every single command. I bet there's a nice
-> syntax to make it not activelly annoying.
-> 
-> If we have this, it might make sense to require tests to make use of it.
-> (With an explicit opt-out for special cases.) But I do not want every
-> test to have to reinvent this wheel and cargo-cult snippets from other
-> tests.
-> 
-> BTW, my guess is that even many multi-port tests that I wrote boil down
-> to just a bunch of fairly independent loopbacks whose far ends could be
-> on remote machines. It's not a priori nonsense to me that one would run
-> a test like this, or whatever magic we'd use:
-> 
->     ./test.sh ssh://petr@10.1.2.3:eth1 swp1 veth1 ns://foo:veth2
-> 
-> And it just works, because only swp1 and swp2 need to be bridged, the
-> rest can be remote, and the traffic generation helper knows that to pump
-> traffic to ssh://10.1.2.3:eth1, obviously you need to ssh there first.
-> But the library would need to have helpers for this, and the tests would
-> need to use them.
+Patch 2 refactors existing UAPI tests from steal_time_init() into
+a dedicated check_steal_time_uapi() function for better code organization,
+and adds an empty stub for RISC-V.
 
-Right, to be clear I primarily care about being able to run these tests
-with traffic generator on a remote system. Otherwise someone who cares
-about single-port systems will have to add a separate test I guess?
-And we will have to maintain two tests? :S
+Patch 3 fills in the RISC-V stub with tests that verify KVM correctly
+enforces the STA alignment requirements.
 
-A nice to have is for all drivers/net/hw tests to use the "NIC" env
-variables (move tests which really only make sense on multi-port
-devices to drivers/net/forwarding?) But I think "translating"
-forwarding variables to NIC if NUMIF=2 could easily be done
-automatically by the test / lib so that's lower priority.
+Jiakai Xu (3):
+  RISC-V: KVM: Validate SBI STA shmem alignment in 
+    kvm_sbi_ext_sta_set_reg()
+  KVM: selftests: Refactor UAPI tests into dedicated function
+  RISC-V: KVM: selftests: Add RISC-V SBI STA shmem alignment tests
 
-> At least ethtool counters would cause problems obviously.
+ arch/riscv/kvm/vcpu_sbi_sta.c                 | 16 ++-
+ .../selftests/kvm/include/kvm_util_types.h    |  2 +
+ tools/testing/selftests/kvm/steal_time.c      | 98 ++++++++++++++++---
+ 3 files changed, 95 insertions(+), 21 deletions(-)
+
+-- 
+2.34.1
 
