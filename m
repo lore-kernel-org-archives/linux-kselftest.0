@@ -1,108 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E29222590
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Feb 2026 13:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D56F33A03F;
+	Sat, 28 Feb 2026 18:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772285952; cv=none; b=BUoP+oCuexWZ0P3wc/xmX4xI+IxFtk9eRtgPla+Ju0DqM8NuUTd/sSld+rVHxwrW9QKbhYTWG0ZpjF01BVgP2DP8UjklbmQjKxBf8ArDN9cLrRd3CLAdfm1I1hhSXK3g5n+0Nct613MJkvnb3EfckshB67jsbWFMxIT55tkHIvo=
+	t=1772301891; cv=none; b=d6fq5YOCmxWcwN8XKYqSLLYsRvq/abGPTZG/v0luau2iceFypHjryAMgvfM1f1J6Cct4c2bZaqS1T1/5m/i2R+3+saltDNy8DRW8T2YvTb3gX0YC7eH8PEHwHAZ32SOuN7LhtkNvJdYrPrLqdOMjAE9CqdleKHLCImXxRerCr+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772285952; c=relaxed/simple;
-	bh=A+jgu3UIsJ6M/4OKomoCN0p7y+V5ItH79wf3WXnQeC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j+Vc28AFLOzsBwii+T/W5cgWaL/euzUhDQkxnMVJkD9j1GKfSdF4S7zyfYuDsDxN1/W99AwUjmqm+lamu8PTpea72OHnUa+kgYbR/i0bpjF+0er3H0680+5g39LKaXO5zAUsU1OGuV9ZqFT1+0KOp23WxDM0Hi+1G4ZS8fVRg+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ITRiTv4C; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772301891; c=relaxed/simple;
+	bh=IyZ03u1C71sNfZ4iXYae0FRb/6Tl8yj5/uTpy5toIyE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LLQBbcwf+zjehRa5WBEEI+XYUanuWgf+OLJgmUR2fCQW9m5MCoSpwIZotRjZmlBkw/N6lyQ33N2AmFAFKTdWZ0Q8dkPHi1LKZRSakiQuA8jE+3/fQ4hc9SpWApKkltn11Nlr/fpNzEL+kmGc/Qjomg9B94ho+Olslqd8I23lHQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mIwXg469; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ITRiTv4C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB101C116D0;
-	Sat, 28 Feb 2026 13:39:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mIwXg469"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B69AC116D0;
+	Sat, 28 Feb 2026 18:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772285951;
-	bh=A+jgu3UIsJ6M/4OKomoCN0p7y+V5ItH79wf3WXnQeC8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ITRiTv4CidtEFRpHIIPQD5Pni6Af5N7tgWhl1qZYUeSjKi7YoYDGCy1Xso2S6C5B8
-	 Z6jqm8/mFhvJleeJoy59EIhOsbcg2lSniTPFzZ73Y9awZPxl7TPLT1i46XWdRvTi6u
-	 et6n4iUwe36LuFg74xDOjbtm+FrcDI1jNYrgXGF2WeUXfheCeC/YfyFEoIPs/PMXTf
-	 PQcpu+ozcLFBS/lqda6P9PQgQ7Fn/FwRjZqO1A3E2kgX9b1iPOfX2wLsQdDX4b2Kod
-	 yiMsSTuViekA/wkH0uta+IFPVH9vA/ozGy5KB1mYEFJxj4F+jVa4IxOevqJCVl2dFo
-	 K8nfrDImB2q2Q==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 1311C1AC58E4; Sat, 28 Feb 2026 13:39:09 +0000 (GMT)
-Date: Sat, 28 Feb 2026 13:39:09 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Yifan Wu <wuyifan50@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-	yeoreum.yun@arm.com, jonathan.cameron@huawei.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linuxarm@huawei.com,
-	xiaqinxin@huawei.com, prime.zeng@hisilicon.com,
-	wangyushan12@huawei.com, xuwei5@huawei.com, fanghao11@huawei.com,
-	wangzhou1@hisilicon.com
-Subject: Re: [PATCH 2/2] selftest/arm64: Fix sve2p1_sigill() to hwcap test
-Message-ID: <aaLv_X7SihBUX5c_@sirena.co.uk>
-References: <20260227031933.4103333-1-wuyifan50@huawei.com>
- <20260227031933.4103333-3-wuyifan50@huawei.com>
+	s=k20201202; t=1772301891;
+	bh=IyZ03u1C71sNfZ4iXYae0FRb/6Tl8yj5/uTpy5toIyE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mIwXg469l3LWltd1cE+Y5xaNRTGGrNzbjZDtIcbJamwSBIrY3nwx4bjgkLcFzGQMk
+	 HdSSn8Wzasg9oBu5KLzbVxiQQ5At9BxCJ+bqaZQxXrwQHCuvPvD0WuAJQ8qP+hJkL1
+	 EWNLi0BuE6Zlk+v/L8zJNUN8irbSA+xR5Vy378WgToKiqP9F/syWLdj81kANdf9vun
+	 6AT36sXE4LtZnVzi5I1AYATeApyY4jlF/m+Sfzt5gOFI0WXFvQ1+kJXy5MZCfx6bGv
+	 m39K5zL3vxQVgmfY84JB/R5nUbBiSE1yP/sscOc6hyrMLvV4y8L9ZwbmpP8MGvc96m
+	 5bqNbKargBh1Q==
+Date: Sat, 28 Feb 2026 10:04:49 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Kiran Kella <kiran.kella@broadcom.com>, willemb@google.com
+Cc: davem@davemloft.net, edumazet@google.com, daniel.zahka@gmail.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, jayakrishnan.udayavarma@broadcom.com,
+ ajit.khaparde@broadcom.com, akhilesh.samineni@broadcom.com
+Subject: Re: [net-next, v3 1/2] psp: Support for transmit on logical device
+ when the underlying transport device supports PSP.
+Message-ID: <20260228100449.19f6ef13@kernel.org>
+In-Reply-To: <20260226184654.3180648-2-kiran.kella@broadcom.com>
+References: <20260226184654.3180648-1-kiran.kella@broadcom.com>
+	<20260226184654.3180648-2-kiran.kella@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Ww5PzAmBeP3CClFP"
-Content-Disposition: inline
-In-Reply-To: <20260227031933.4103333-3-wuyifan50@huawei.com>
-X-Cookie: Think big.  Pollute the Mississippi.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Thu, 26 Feb 2026 10:46:53 -0800 Kiran Kella wrote:
+> This is achieved by propagating the psp_dev from the lower device
+> to the upper devices in the device stack via a netdevice notifier.
+> The lowest device owns the psp_dev pointer while the upper devices
+> just borrow the pointer. When the lower device is unlinked, the
+> borrowed pointer is cleared in the upper device.
+> Assumption being that psp_dev is set on the lowest device before
+> any upper devices are stacked on that lowest device.
 
---Ww5PzAmBeP3CClFP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As I mentioned in the other thread I'd like to establish some clear
+expectation on where psd propagates automatically and where it doesn't.
+I don't want to see a stream of patches that say "fix propagating PSP
+onto X upper". And conversely report saying "PSP got propagated but
+it doesn't actually work" (macvlan in bridge mode etc).
 
-On Fri, Feb 27, 2026 at 11:19:33AM +0800, Yifan Wu wrote:
-> The FEAT_SVE2p1 is indicated by ID_AA64ZFR0_EL1.SVEver. However,
-> the BFADD requires the FEAT_SVE_B16B16, which is indicated by
-> ID_AA64ZFR0_EL1.B16B16. This could cause the test to incorrectly
-> fail on a CPU that supports FEAT_SVE2.1 but not FEAT_SVE_B16B16.
->=20
-> LD1Q Gather load quadwords which is decoded from SVE encodings and
-> implied by FEAT_SVE2p1.
+Hence my preference was to require the user who created the device
+to propagate PSP. Willem, WDYT?
 
-Ah, good spot - I think my search for instructions to use got confused
-by them mention of SVE2 in the description of BFADD.  Since this is a
-fix it should really be patch 1.
+> +/**
+> + * psp_clear_upper_dev_psp_dev() - Clear borrowed psp_dev pointer on upper
+> + *				   device
+> + * @upper_dev:	Upper device that may have borrowed psp_dev pointer
+> + * @priv:	netdev_nested_priv containing the psp_dev being unregistered
+> + *
+> + * Callback for netdev_walk_all_upper_dev_rcu() to clear borrowed psp_dev
+> + * pointers on upper devices when the underlying psp_dev is being unregistered.
+> + *
+> + * Return: 0 to continue walking, non-zero to stop.
 
-> -	/* BFADD Z0.H, Z0.H, Z0.H */
-> -	asm volatile(".inst 0x65000000" : : : "z0");
-> +	/* LD1Q Z0.Q, P0/Z, Z0.D, X0 */
+Please (tell your LLM) to avoid adding kdoc which restates what the
+code does. For static function really kdoc is only useful if there's
+something not-obvious to say.
 
-That should be:
+> +static int psp_clear_upper_dev_psp_dev(struct net_device *upper_dev,
+> +				       struct netdev_nested_priv *priv)
 
-	LD1Q {Z0.Q}, P0/Z, [Z0.D, X0]
+Please (tell your LLM) that the action goes after the object / noun.
+psp_upper_psp_dev_clear() or some such.
 
-(the existing asm has some issues which we ought to get round fixing but
-may as well keep the new stuff good.)
+> +{
+> +	struct psp_dev *psd = priv->data;
+> +	struct psp_dev *upper_psd;
+> +
+> +	upper_psd = rcu_dereference(upper_dev->psp_dev);
+> +	if (upper_psd == psd)
+> +		rcu_assign_pointer(upper_dev->psp_dev, NULL);
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * psp_dev_unregister() - unregister PSP device
+>   * @psd:	PSP device structure
+> + *
+> + * Unregisters a PSP device and clears all borrowed psp_dev pointers on
+> + * upper devices (e.g., VLAN subinterfaces) that reference this device.
+> + * This prevents use-after-free if upper devices still have borrowed
+> + * pointers when the psp_dev structure is freed.
+>   */
+>  void psp_dev_unregister(struct psp_dev *psd)
+>  {
+>  	struct psp_assoc *pas, *next;
+> +	struct netdev_nested_priv priv = {
+> +		.data = psd,
+> +	};
 
-> +	asm volatile(".inst 0xC400A000" : : : "z0");
-
-Verified the decode with objdump.  With the above change to the comment:
-
-Reviewed-by: Mark Brown <broonie@kernel.org>=20
-
---Ww5PzAmBeP3CClFP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmi7/wACgkQJNaLcl1U
-h9DVZgf/eYoxaImZMJFJqdQF0wT+T+ig4eiur8/tZT3g5gsg+VfHYUPi6NXyzs9p
-stxVJ0eQrzEgJ/Gz65Y8scnRHIDaBZrrqKZ68Ud1meP01/gi4ThKoS7Oe9VfsfPn
-unqStwMAVFnA5dzBDpz89lZD3+PmP6rRHasvcnbWZMpJTyU2SnlGT1mupvoJMttr
-BXBQ/LO0bRqlarGr8MSiqWcuYXtG1cd7pgMx5dLW+4RRZB1EzC//U4unNoJ9//bB
-4lMoIgZeYh8zBZxEE36oIzuQCdW61IhwKDZlrxPL/QC+/Zwy92nT9/1YuQqsxQLe
-XpPwMp612+RAj5kbds1NyUvxMddXTA==
-=Z7yh
------END PGP SIGNATURE-----
-
---Ww5PzAmBeP3CClFP--
+reverse xmas tree
+-- 
+pw-bot: cr
