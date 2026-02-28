@@ -1,178 +1,107 @@
 Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA30C36BCDE;
-	Sat, 28 Feb 2026 10:07:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A723ED13D;
+	Sat, 28 Feb 2026 10:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772273268; cv=none; b=EHBUXE/lTpAvE3SbZduDenW7DlN+L+f3pDGoLqQJi7FUdxOUI0Pgmamf2oWGDQn5CSALeHV+2qPCAZXOMBfvItBx3WHPnrmDN5g7LElZ0V8ghMsy6aburL83SxvVEk+VC33Y+5tDYYxpEhd4HQMdhXwbWmDUuMNcQGWQ+DoG6nI=
+	t=1772273472; cv=none; b=cz2zu5uaKvtxZr5KHKxF+Q+mmfjlowWHGJCbsiZRbejaLk2e1bFr7OVVfMaWKU69MJmZA4JYtH2LA+nPxEMq7D5xECtSZfv2TA8M6BydR9S8FgqUOJ3t2fHQrGTKwbZbZocixh/+qg903NoMsmVG4S4MfAJx1pdZeicFPfHKEd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772273268; c=relaxed/simple;
-	bh=mVBAYvlcFJN+S+i3QvPmlel8NHaxvGvieZ23tVS+zVA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ph+g+5hJmzH2fuC3zxX/GF0p4Xkjl5v+Zsa/wWgoMLyQlKNb7BUxDrK4lJ1QFCnid2NkSc4mluaImRutUu3k0QNZ0xyJSp7xtdCh9y0G2nKgcR5xMZTRPvhTo+WTQCIwDdePLqP6MM/8AxzftjzCWXfcVrJ/5f1PEzpp6IPKLGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=gqWT56tB; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=dWtBVyfT; arc=none smtp.client-ip=203.29.242.92
+	s=arc-20240116; t=1772273472; c=relaxed/simple;
+	bh=IecPjBOcvnuSTdGdSzbAou0btV/HJAPJfrav+btyvvU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ex0QU754X7hqBaBNeZ05Hiz8ymEqOtJcuOyKk0/JrBzA5LMYy6yzb1PTnYjMTECGeTagP6xlL3FgxpRcvJ73shw4CG+oNU9d2VGY+B7jz3wHnoGQsOBpRtBTRDUF/c2Hcgo3t47SBc2T/thhc4bxTr3idLXTWun/eV8N/OkuXLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=UOpIGs6X; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=Wy8e0c47; arc=none smtp.client-ip=203.29.242.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="gqWT56tB";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="dWtBVyfT"
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="UOpIGs6X";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="Wy8e0c47"
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1772273259;
-	bh=mVBAYvlcFJN+S+i3QvPmlel8NHaxvGvieZ23tVS+zVA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gqWT56tB5BN22dFdit9efRKHwgfQ3IDQXA4b9EVUl2Tk1kzc/JNGB+5YyUw1m4CQ6
-	 GwGX8s50CDLVHgoyH2hNVLmBbcyaMZeHEDhct2lPyf45snOv3N96IkgGG+h7D2e2bK
-	 jn8PHPj2wOt/kbr++nV+CxDTs/1XPV8WzZtP3kyQecDjSamaZkj1hWGFdnJUh6mhY2
-	 VkwNELHhDjl0URnqKakKl5gKXp8gFvJj3iK4fhLLTremFHUQrf0iLeV9Q6o5sW6sGa
-	 7k1yYygR/ap68PrfaanDPWEIl1HIRo9CNkjzMEbMJtb0jIzPzIH266fafechPC12iW
-	 g1TV5joA5rAFcQek94b5OetBfrUU1wh9XXmkh7pxqIAeAeQITirIstSPdMWd5wbm4F
-	 Pd37z9fUGrjF1oDW04kfqelXedyWwv2AyYXNP72tnZrcbNXDjLVH2ky4xBIYqcVLiF
-	 TGwwCnOIMY9W1ayQvGtUPhv4slxGrt7LADf1E0akrc0q/1AgmIoU6/EO0XiUgO7Vom
-	 /b7/VweN7AkAgJMAKw1pUSCMXvVuB6I31oA3u3HU7sAjkJuJKAhq39pBum4LRS+z4i
-	 KMuWyA0ifj475tgGuO3kVsr/EiY8g3r2DBlwLiqxbUHAT6WLSworRbDB2ICuQPx3Ry
-	 iJssKQqGbRmSpnP59U8TRgsw=
+	s=201606; t=1772273469;
+	bh=IecPjBOcvnuSTdGdSzbAou0btV/HJAPJfrav+btyvvU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UOpIGs6XXHDBdGY/ccVGuhgaDuFHr7QIgn8WwEzjh1QWkGRFzvfZ5tbU/Eg1JCX6O
+	 T2Ea72WKo75FVvcT0MSNu5Bw1Qrs0L1ZFmdc9QPo16fr9kjFIInoBzxfJOSgme77zZ
+	 cEFY0Dg5lUX2izqPMg6q81Z/+BvUiUczZP1FvyeZPTi4Jkk3B/3LbifLVDIwJ5umCu
+	 JyjJl/UL5kNR64er/FD39jh7hvrItTGM8KvmUa4Y3bMqq5nVs4FF8n2+Sy9JrWxK+f
+	 brssHYrE7QkwWZupdKCKw0XbLh2cqNhtDfcET1inQWdZimvXmapOLQDe1Ql8J30Aty
+	 LUj1hS5tovVvR6FL35v13bKJRnASaoQhmAlpH5TPfgy6iGsqfGiAGuVYevig7Rtnd2
+	 oST2PlwB5R6714/DxRYJ/muQIJTzH+nozqp6fycPBK6HQ0T5NPoOqj6gykLCV6AuhZ
+	 y2pMBZBMfx+HSfwXGXmyA9L9PKtrFt6K57eobunL3kPhe/+YIadurdUed7o/wEU264
+	 7o+3LTyY9QNVUS8KHXiT6H+SuJGkVCqLkpnBdFBoRLYPciEFlKTKxuRTndwaSE2WBO
+	 xYokCR4P76oi/4pRlfL0FGWkuemJPrF61de+Uy2Gptme0MUCR/V03x5zksAkLmH+ON
+	 cX8nJ+HwYFMLu0Z2wdB9d/4o=
 Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 3A03C1E7A94; Sat, 28 Feb 2026 18:07:39 +0800 (AWST)
+	id 120D91E7A88; Sat, 28 Feb 2026 18:11:09 +0800 (AWST)
 X-Spam-Level: 
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1772273257;
-	bh=mVBAYvlcFJN+S+i3QvPmlel8NHaxvGvieZ23tVS+zVA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dWtBVyfTZnkH2nhuCtrQGnAbDjv7YMQAxKuq7lgmNipVCqchnezPS5GoGRI2VYYB2
-	 tvWcVSLD4Nj8DMmpcbfh2+O0t+tQ3KvtS2TybmSDrl9skggzJzcXaT2Ca0sMIDQ0HA
-	 JJxErOKVaC6AbayxFdMvfYSFtax7HiaQOg5yNbKn53q2yc6ZGNasFckO5Y9EKKkvf8
-	 KCc8KoIo7rsyYksizvbn60v+cin0GuHOKbDZxet0st2pGI/BFDlGh8FbkzJzwQ0rQQ
-	 jK7unGyXBbgDP7HArzRIxRLh1MlNRqvm3TzDhN8ZHEU+n89mHScLOyOuGdTw/fjQZ6
-	 4vfOBC/cbZxVmXsPWQoebp621GSYSG8S8lx4pKnSl1xNAHEF6M3c7Da4y1FJcDKwNu
-	 8tC9YMdBsbztAE52mzAHYPmix3OhifB/MzumurYzj84iGhB0/dLTouK2EgC1etjoB7
-	 ubTP9Qx6QPGCIiyIu5ekZguVf5RufHPT0ngAfKGpeD/1XhO6RzxJfKel23Wc5TlpEV
-	 wUkB+Wxc+IG4LkKIIvgwlP/V68xhCTP2yd4k54JzLC5uzWaiVfDwnnvk8OnaWpH61c
-	 fLacBGUwxRnHRok0GJkq6VoWWB9wgExvzxcSaETRadrjavaL2wRJ3PtjEX9TMyYGFp
-	 6Iofpsiv+hRzGUcWfwflLRkg=
-Received: from sparky.lan (unknown [IPv6:2001:8003:8824:9e00:6d16:7ef9:c827:387c])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 3E2201E7A8D;
-	Sat, 28 Feb 2026 18:07:37 +0800 (AWST)
-From: David Gow <david@davidgow.net>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: David Gow <david@davidgow.net>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] kunit: tool: Terminate kernel under test on SIGINT
-Date: Sat, 28 Feb 2026 18:07:22 +0800
-Message-ID: <20260228100727.208896-1-david@davidgow.net>
-X-Mailer: git-send-email 2.53.0
+	s=201606; t=1772273467;
+	bh=IecPjBOcvnuSTdGdSzbAou0btV/HJAPJfrav+btyvvU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Wy8e0c47MDmUbP0bhGKM30mx2mo5M16tGoj3Hhbbq7ltxyat2ZVr2nZpSup18fpzG
+	 Kc8y2w352fRArio3qnZbNaIV47ShIFQJdPWI2C24ZB13bkwK7jjxTwkUTGyQ4sVJph
+	 Hh7/3xQD8JiStMovz0p8ZVmUfMErop0EoRaLyzU2XzenjGgOLJ9ozrqoyB0UEymEwM
+	 iRwcYfQiBJqi+aB7p9MyCUVdIp34x+jD0LaBFgo44Zg5pJSBnuMlhma0QWi573+2B7
+	 6U8qXKksw4Ianz9yzJXJONXDkmUInnrM1BHGHEg1C13euEefadRsWg7JtcqHw0g3CD
+	 j+3r9SrHW7QLeOwH9Bml9UZx4/9T7SqTTCn+zr3sDyAwOxaMilA9XIbY+1tovZyFMC
+	 zYU7DK3H/mE4vXxp8X9acO7rgAsoRf8XKxH2GSMBkTX+1R5qA2/MiwBEQkDLTDrp1/
+	 uOfyldn7VBFTbzgWScasfs029Nq/h0/IaXj3s3+bX5heocKIL5bTSkaGHDT9O+awop
+	 39g/X/HLwkhvE1LyNVQbQ4mctMbiBsor9Za6l2dPlkOiVJVWoPrrf2u9HdbCrjl24/
+	 971OoOJ56PS8fUGxxwu+Kw3STkDRx9381a01xn1MnS0/sw653UyqURTqbP08d7FUJW
+	 Nqyff0vGAQRg4TgVz1yDaOiQ=
+Received: from [IPV6:2001:8003:8824:9e00:6d16:7ef9:c827:387c] (unknown [IPv6:2001:8003:8824:9e00:6d16:7ef9:c827:387c])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id BA5421E7A8F;
+	Sat, 28 Feb 2026 18:11:07 +0800 (AWST)
+Message-ID: <49a87105-4503-4cf9-a967-e64ffe7fbad4@davidgow.net>
+Date: Sat, 28 Feb 2026 18:11:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: tool: Recommend --raw_output=all if no KTAP found
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+ Rae Moar <raemoar63@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+References: <20260227105650.307845-1-david@davidgow.net>
+ <aaGuVA4q5BXSxBWX@ashevche-desk.local>
+Content-Language: fr
+From: David Gow <david@davidgow.net>
+In-Reply-To: <aaGuVA4q5BXSxBWX@ashevche-desk.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-kunit.py will attempt to catch SIGINT / ^C in order to ensure the TTY isn't
-messed up, but never actually attempts to terminate the running kernel (be
-it UML or QEMU). This can lead to a bit of frustration if the kernel has
-crashed or hung.
+Le 27/02/2026 à 10:46 PM, Andy Shevchenko a écrit :
+> On Fri, Feb 27, 2026 at 06:56:49PM +0800, David Gow wrote:
+>> If no KTAP header is found in the kernel output (e.g., because the kernel
+>> crashed before the KUnit executor was run), it's very useful to re-run the
+>> test with --raw_output=all, as that will show any error output (such as a
+>> stacktrace, log message, BUG, etc). This is not particularly intuitive,
+>> however, as --raw_output=all is not well known.
+>>
+>> Add an extra log line to advertise --raw_output=all in this case, as it's
+>> a terrible user experience to just get "Did any KUnit tests run?"
+> 
+> What's the difference to "full"?
+> 
+> Thanks for adding this, btw!
+> 
 
-Terminate the kernel process in the signal handler, if it's running. This
-requires plumbing through the process handle in a few more places (and
-having some checks to see if the kernel is still running in places where it
-may have already been killed).
+Normally, the --raw_output option will just pass through the actual test 
+results (or, rather, any kernel output from when the tests are running), 
+by skipping everything prior to the "KTAP version 1" line.
 
-Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Closes: https://lore.kernel.org/all/aaFmiAmg9S18EANA@smile.fi.intel.com/
-Signed-off-by: David Gow <david@davidgow.net>
----
+--raw_output=full is a synonym for --raw_output=all, which just passes 
+through all of the kernel output, so is useful if we never get as far as 
+printing that KTAP version line.
 
-This was long overdue, and is much nicer to work with now.
+(I kept forgetting whether it was "full" or "all", which is why both are 
+supported.)
 
-Note that it's likely to conflict with some of the other changes to the
-stty sane stuff, such as:
-https://lore.kernel.org/all/20260227123136.91086-1-shuvampandey1@gmail.com/
-
----
- tools/testing/kunit/kunit_kernel.py | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 6f49b184a6fb..c3ebb0ac1116 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -16,7 +16,7 @@ import shutil
- import signal
- import sys
- import threading
--from typing import Iterator, List, Optional, Tuple
-+from typing import Iterator, List, Optional, Tuple, Any
- from types import FrameType
- 
- import kunit_config
-@@ -265,6 +265,7 @@ class LinuxSourceTree:
- 		if kconfig_add:
- 			kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
- 			self._kconfig.merge_in_entries(kconfig)
-+		self._process : Optional[subprocess.Popen[Any]] = None
- 
- 	def arch(self) -> str:
- 		return self._arch
-@@ -362,36 +363,45 @@ class LinuxSourceTree:
- 			args.append('kunit.filter_action=' + filter_action)
- 		args.append('kunit.enable=1')
- 
--		process = self._ops.start(args, build_dir)
--		assert process.stdout is not None  # tell mypy it's set
-+		self._process = self._ops.start(args, build_dir)
-+		assert self._process is not None # tell mypy it's set
-+		assert self._process.stdout is not None  # tell mypy it's set
- 
- 		# Enforce the timeout in a background thread.
- 		def _wait_proc() -> None:
- 			try:
--				process.wait(timeout=timeout)
-+				if self._process:
-+					self._process.wait(timeout=timeout)
- 			except Exception as e:
- 				print(e)
--				process.terminate()
--				process.wait()
-+				if self._process:
-+					self._process.terminate()
-+					self._process.wait()
- 		waiter = threading.Thread(target=_wait_proc)
- 		waiter.start()
- 
- 		output = open(get_outfile_path(build_dir), 'w')
- 		try:
- 			# Tee the output to the file and to our caller in real time.
--			for line in process.stdout:
-+			for line in self._process.stdout:
- 				output.write(line)
- 				yield line
- 		# This runs even if our caller doesn't consume every line.
- 		finally:
- 			# Flush any leftover output to the file
--			output.write(process.stdout.read())
-+			if self._process:
-+				if self._process.stdout:
-+					output.write(self._process.stdout.read())
-+					self._process.stdout.close()
-+				self._process = None
- 			output.close()
--			process.stdout.close()
- 
- 			waiter.join()
- 			self._restore_terminal_if_tty()
- 
- 	def signal_handler(self, unused_sig: int, unused_frame: Optional[FrameType]) -> None:
- 		logging.error('Build interruption occurred. Cleaning console.')
-+		if self._process:
-+				self._process.terminate()
-+				self._process.wait()
- 		self._restore_terminal_if_tty()
--- 
-2.53.0
-
+Cheers,
+-- David
