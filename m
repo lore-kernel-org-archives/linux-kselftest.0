@@ -1,60 +1,60 @@
 Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A723ED13D;
-	Sat, 28 Feb 2026 10:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275B6410D3C
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Feb 2026 10:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772273472; cv=none; b=cz2zu5uaKvtxZr5KHKxF+Q+mmfjlowWHGJCbsiZRbejaLk2e1bFr7OVVfMaWKU69MJmZA4JYtH2LA+nPxEMq7D5xECtSZfv2TA8M6BydR9S8FgqUOJ3t2fHQrGTKwbZbZocixh/+qg903NoMsmVG4S4MfAJx1pdZeicFPfHKEd4=
+	t=1772273500; cv=none; b=rh8YECm6iCUBTS7AJUy0j0vBKXYVojiyXn8d8ybLMa2kxeLQ4yi2VOIqtOo8V2HWWHh4nh6zwW0A5sDUzkZBofI5OqOA1Uh4GiT3lxz0V46A4jeB839RejtF45saWGOx9ob3rM5EkC7V658TABDwuK5qyPbCx8n6Yos1FnKjMGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772273472; c=relaxed/simple;
-	bh=IecPjBOcvnuSTdGdSzbAou0btV/HJAPJfrav+btyvvU=;
+	s=arc-20240116; t=1772273500; c=relaxed/simple;
+	bh=kUktvuDhyHrdooqCaBVr64eF/5L9hw6vZzx5trO1pR0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ex0QU754X7hqBaBNeZ05Hiz8ymEqOtJcuOyKk0/JrBzA5LMYy6yzb1PTnYjMTECGeTagP6xlL3FgxpRcvJ73shw4CG+oNU9d2VGY+B7jz3wHnoGQsOBpRtBTRDUF/c2Hcgo3t47SBc2T/thhc4bxTr3idLXTWun/eV8N/OkuXLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=UOpIGs6X; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=Wy8e0c47; arc=none smtp.client-ip=203.29.242.92
+	 In-Reply-To:Content-Type; b=Lv52jMuS1FuCbIQU7wu0/QvYKKkrD55XydSbHkcC9WRVIx0Tzcl/WVAqSajHOXtQH1INv+XxyEgWky1BPIp265tgi9ZeM7o1BKmE7P0VgriTHdDBMuqPoDySGX8AQNdMBJZkEwoYzHI5V787/NWb5ZXoQZaK5XfZxUgWgOXYOvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=dGetjwGH; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=Ft6LmlaL; arc=none smtp.client-ip=203.29.242.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="UOpIGs6X";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="Wy8e0c47"
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="dGetjwGH";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="Ft6LmlaL"
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1772273469;
-	bh=IecPjBOcvnuSTdGdSzbAou0btV/HJAPJfrav+btyvvU=;
+	s=201606; t=1772273497;
+	bh=kUktvuDhyHrdooqCaBVr64eF/5L9hw6vZzx5trO1pR0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UOpIGs6XXHDBdGY/ccVGuhgaDuFHr7QIgn8WwEzjh1QWkGRFzvfZ5tbU/Eg1JCX6O
-	 T2Ea72WKo75FVvcT0MSNu5Bw1Qrs0L1ZFmdc9QPo16fr9kjFIInoBzxfJOSgme77zZ
-	 cEFY0Dg5lUX2izqPMg6q81Z/+BvUiUczZP1FvyeZPTi4Jkk3B/3LbifLVDIwJ5umCu
-	 JyjJl/UL5kNR64er/FD39jh7hvrItTGM8KvmUa4Y3bMqq5nVs4FF8n2+Sy9JrWxK+f
-	 brssHYrE7QkwWZupdKCKw0XbLh2cqNhtDfcET1inQWdZimvXmapOLQDe1Ql8J30Aty
-	 LUj1hS5tovVvR6FL35v13bKJRnASaoQhmAlpH5TPfgy6iGsqfGiAGuVYevig7Rtnd2
-	 oST2PlwB5R6714/DxRYJ/muQIJTzH+nozqp6fycPBK6HQ0T5NPoOqj6gykLCV6AuhZ
-	 y2pMBZBMfx+HSfwXGXmyA9L9PKtrFt6K57eobunL3kPhe/+YIadurdUed7o/wEU264
-	 7o+3LTyY9QNVUS8KHXiT6H+SuJGkVCqLkpnBdFBoRLYPciEFlKTKxuRTndwaSE2WBO
-	 xYokCR4P76oi/4pRlfL0FGWkuemJPrF61de+Uy2Gptme0MUCR/V03x5zksAkLmH+ON
-	 cX8nJ+HwYFMLu0Z2wdB9d/4o=
+	b=dGetjwGHwE4taDUbMxLMj7TxxcKb90KHRxhRTXCYNHlMHT2Iho7lBxjiB6h7Myd15
+	 e0MVLWzsCXjRBaAcMFVerYeU0wnV4dJFON1gb1SINzo3p0ybQXd7ZlS3pfL5NzAvLj
+	 lZqPdNKKDorAnOsD7GhHk8G5nkY938xcACUP1aQRIz02+tSBxl9e3UKjVgwRRZ7z/j
+	 lFqh2aWQaQ5UMmnLje2+VuhaQHfc9dqh8ceXNpRJ8rA8klub4AyZU8eEtkxUb9zJqj
+	 8M1En1cTdsCCIgbSpSPO/l6PqZh7YTr0ot4zgY/ljlVEqB+0aHIP25Po1rgoLlyceN
+	 WbDf2EpUbVN1uyQmZJVIgaAPbtwGwLaBv/p+ni/ngHb1r+nXvYNka8IR0RLp2JukcI
+	 CjFMtvzbzLF/F4ooTJOBzU6tJxFD3Vqe5HqcFy/OGoQNJaG9K3e7fZeJeSCos0NJaX
+	 yMd6QlDsppJO47PQ75M61RbP8ibhoR++5n416Tg+rFIBM4aJzXq3RFIdrZ4yAZfPbH
+	 qiDWNwUCrju7c+QWTyQVeKF8gv34rdQMBQIel7pqEJpb5GjYpw44dBbG38Qh7wwK9m
+	 d3fGOwV/dVhz16fRd6TnziSUTTO9NVnFt2Fbhb9iKzHiRXzsY4HdzTsAan9UlG6EVj
+	 BAwtgfg96RtPrKLrJmuiOWRc=
 Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 120D91E7A88; Sat, 28 Feb 2026 18:11:09 +0800 (AWST)
+	id 35FE71E7A92; Sat, 28 Feb 2026 18:11:37 +0800 (AWST)
 X-Spam-Level: 
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1772273467;
-	bh=IecPjBOcvnuSTdGdSzbAou0btV/HJAPJfrav+btyvvU=;
+	s=201606; t=1772273493;
+	bh=kUktvuDhyHrdooqCaBVr64eF/5L9hw6vZzx5trO1pR0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Wy8e0c47MDmUbP0bhGKM30mx2mo5M16tGoj3Hhbbq7ltxyat2ZVr2nZpSup18fpzG
-	 Kc8y2w352fRArio3qnZbNaIV47ShIFQJdPWI2C24ZB13bkwK7jjxTwkUTGyQ4sVJph
-	 Hh7/3xQD8JiStMovz0p8ZVmUfMErop0EoRaLyzU2XzenjGgOLJ9ozrqoyB0UEymEwM
-	 iRwcYfQiBJqi+aB7p9MyCUVdIp34x+jD0LaBFgo44Zg5pJSBnuMlhma0QWi573+2B7
-	 6U8qXKksw4Ianz9yzJXJONXDkmUInnrM1BHGHEg1C13euEefadRsWg7JtcqHw0g3CD
-	 j+3r9SrHW7QLeOwH9Bml9UZx4/9T7SqTTCn+zr3sDyAwOxaMilA9XIbY+1tovZyFMC
-	 zYU7DK3H/mE4vXxp8X9acO7rgAsoRf8XKxH2GSMBkTX+1R5qA2/MiwBEQkDLTDrp1/
-	 uOfyldn7VBFTbzgWScasfs029Nq/h0/IaXj3s3+bX5heocKIL5bTSkaGHDT9O+awop
-	 39g/X/HLwkhvE1LyNVQbQ4mctMbiBsor9Za6l2dPlkOiVJVWoPrrf2u9HdbCrjl24/
-	 971OoOJ56PS8fUGxxwu+Kw3STkDRx9381a01xn1MnS0/sw653UyqURTqbP08d7FUJW
-	 Nqyff0vGAQRg4TgVz1yDaOiQ=
+	b=Ft6LmlaLIc6JHILD+8VrLtFK9m7FUTO0UQZJGydEh5oKWjOHCdgxURvAQ4B8F1kSV
+	 EZfzldZkVqSqBhx/i57eJAfT1pmbslIqjt2ptHRBVAZlOEZbM4YASBePwxoe4RntcW
+	 1tRl+9x1JscGi8aqZzlxp3H+0ncMWGFtVYpxqOW0myFHbdqAsi1H4w4D3eeq8/8Qw6
+	 78tg4/PkrdmRrcsE4NH0LuEnGP5594d0IkLgFwvE31wHeKJL6s+FqxbFv2BAxxL7Ok
+	 K6fyP+EwoKPu72VJ6TeoJTm7Wsu1hnAPYGlyJ+TWVzGKIhM26ko79MpSdZqA9niIX/
+	 v+69O1YZOSs4O+JrvpT4RNeH5CWCqfFOCK1HOS6qqpea8/68tefBAOlv/+Dr1XZjrR
+	 jeQ8FB8zZAq33zFqXmvpEIBjklMn6uiINkPWlhxM6dIPNvs4ia3WaBXrtuP3GkXD0w
+	 LrIBrfxRBJqJnjTX5ctHBfaJWUo8WuSw8sCBMWvHUr6NqLVtS1Wah/lL2/XXLQRjsG
+	 ZUM9SlGQQVTfe6cKB9KG8+3jszYNO40gqHR1JF4VCUb0pePQIhLFpUksV1vVt64et5
+	 JBB2CDQILEpe3+cq1zrTrVE0QAq24ImWqAl34wX1J7tYlRMEpRMPNJQCSClejqJjzi
+	 nIJ7VwEyhhcoSMTS/iERMD1o=
 Received: from [IPV6:2001:8003:8824:9e00:6d16:7ef9:c827:387c] (unknown [IPv6:2001:8003:8824:9e00:6d16:7ef9:c827:387c])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id BA5421E7A8F;
-	Sat, 28 Feb 2026 18:11:07 +0800 (AWST)
-Message-ID: <49a87105-4503-4cf9-a967-e64ffe7fbad4@davidgow.net>
-Date: Sat, 28 Feb 2026 18:11:04 +0800
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id B5D9C1E7A8F;
+	Sat, 28 Feb 2026 18:11:33 +0800 (AWST)
+Message-ID: <17c90a44-c62c-41d7-bf11-73c7e2a32cc0@davidgow.net>
+Date: Sat, 28 Feb 2026 18:11:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,46 +62,259 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: tool: Recommend --raw_output=all if no KTAP found
+Subject: Re: serious bugs in KUnit framework makes test completely useless
 To: Andy Shevchenko <andriy.shevchenko@intel.com>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>,
- Rae Moar <raemoar63@gmail.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-References: <20260227105650.307845-1-david@davidgow.net>
- <aaGuVA4q5BXSxBWX@ashevche-desk.local>
+ Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com
+References: <aaFmiAmg9S18EANA@smile.fi.intel.com>
+ <fb02bcc8-3773-41f6-969d-b5f483a32629@davidgow.net>
+ <aaGtnUB2Rt2H9vhB@ashevche-desk.local>
 Content-Language: fr
 From: David Gow <david@davidgow.net>
-In-Reply-To: <aaGuVA4q5BXSxBWX@ashevche-desk.local>
+In-Reply-To: <aaGtnUB2Rt2H9vhB@ashevche-desk.local>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 27/02/2026 à 10:46 PM, Andy Shevchenko a écrit :
-> On Fri, Feb 27, 2026 at 06:56:49PM +0800, David Gow wrote:
->> If no KTAP header is found in the kernel output (e.g., because the kernel
->> crashed before the KUnit executor was run), it's very useful to re-run the
->> test with --raw_output=all, as that will show any error output (such as a
->> stacktrace, log message, BUG, etc). This is not particularly intuitive,
->> however, as --raw_output=all is not well known.
+Le 27/02/2026 à 10:43 PM, Andy Shevchenko a écrit :
+> On Fri, Feb 27, 2026 at 06:42:12PM +0800, David Gow wrote:
+>> Le 27/02/2026 à 5:40 PM, Andy Shevchenko a écrit :
+>>>
+>>> I have stumbled over the kunit framework issues that make the respective test
+>>> cases useless.
+>>>
+>>> Now to the details.
+>>> Consider having today's Linux Next.
 >>
->> Add an extra log line to advertise --raw_output=all in this case, as it's
->> a terrible user experience to just get "Did any KUnit tests run?"
+>> Sorry to hear that KUnit is causing trouble. It looks like this is due to
+>> those patches crashing the kernel before KUnit gets to run: by using the
+>> --raw_output=full argument to kunit.py run, the corresponding logs are
+>> shown.
+>>
+>>>
+>>> Scenario 1 (good):
+>>>
+>>> I run
+>>>
+>>> 	./tools/testing/kunit/kunit.py config
+>>> 	./tools/testing/kunit/kunit.py run printf
+>>>
+>>> Everything works as expected:
+>>>
+>>>     [10:19:36] Testing complete. Ran 28 tests: passed: 28
+>>>     [10:19:36] Elapsed time: 15.929s total, 0.001s configuring, 15.761s building, 0.114s running
+>>
+>> This works fine for me, too. :-)
+>>
+>>
+>>> Scenario 2 (BAD):
+>>>
+>>> I applied the following change:
+>>>
+>>> --- a/lib/vsprintf.c
+>>> +++ b/lib/vsprintf.c
+>>> @@ -18,6 +18,7 @@
+>>>     */
+>>>    #include <linux/stdarg.h>
+>>> +#include <linux/bitops.h>
+>>>    #include <linux/build_bug.h>
+>>>    #include <linux/clk.h>
+>>>    #include <linux/clk-provider.h>
+>>> @@ -2904,12 +2889,17 @@ int vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
+>>>    		case FORMAT_STATE_NUM: {
+>>>    			unsigned long long num;
+>>> +			u8 shift = fmt.size * 8 - 1;
+>>>    			if (fmt.size > sizeof(int))
+>>>    				num = va_arg(args, long long);
+>>>    			else
+>>> -				num = convert_num_spec(va_arg(args, int), fmt.size, spec);
+>>> -			str = number(str, end, num, spec);
+>>> +				num = va_arg(args, int);
+>>> +			num = sign_extend64(num, shift);
+>>> +			if (spec.flags & SIGN)
+>>> +				str = number(str, end, num, spec);
+>>> +			else
+>>> +				str = number(str, end, -(long long)num, spec);
+>>>    			continue;
+>>>    		}
+>>>
+>>> Tests went into cosmos (I waited a few minutes and has to interrupt that):
+>>>
+>>>     ^CERROR:root:Build interruption occurred. Cleaning console.
+>>>     ^CERROR:root:Build interruption occurred. Cleaning console.
+>>>     ^CERROR:root:Build interruption occurred. Cleaning console.
+>>>     Command '['.kunit/linux', 'kunit.filter_glob=printf', 'kunit.enable=1', 'mem=1G', 'console=tty', 'kunit_shutdown=halt']' timed out after 300 seconds
+>>>     [10:29:52] [ERROR] Test: <missing>: Could not find any KTAP output. Did any KUnit tests run?
+>>>     [10:29:52] ============================================================
+>>>     [10:29:52] Testing complete. Ran 0 tests: errors: 1
+>>>     [10:29:52] Elapsed time: 305.676s total, 0.001s configuring, 5.669s building, 300.006s running
+>>>
+>>> NOTE!
+>>> Independently on how long I waited the Elapsed time is about 5 minutes
+>>> (Seems 300 seconds limit as stated in the output).
+>>
+>> Interesting: this crashed immediately on my machine. During building, I see
+>> a (harmless) warning:
+>> ../lib/vsprintf.c:2827:27: warning: ‘convert_num_spec’ defined but not used
+>> [-Wunused-function]
 > 
-> What's the difference to "full"?
-> 
-> Thanks for adding this, btw!
+> You need to enable binary printf() in the configuration, or comment out that function.
+> I have no such warning as I dropped the function (haven't used it in the above change
+> for the sake of simplicity.
 > 
 
-Normally, the --raw_output option will just pass through the actual test 
-results (or, rather, any kernel output from when the tests are running), 
-by skipping everything prior to the "KTAP version 1" line.
+Yeah, I assumed it was just an in-progress patch or something, but it 
+did confirm that at least some build output was making it through kunit.py.
 
---raw_output=full is a synonym for --raw_output=all, which just passes 
-through all of the kernel output, so is useful if we never get as far as 
-printing that KTAP version line.
+>> By running KUnit with the --raw_output=full option, I can see a segfault
+>> (though, as you can see, the numbers throughout the stacktrace a wrong):
+>> <18446744073709551610>Pid: 1, comm: swapper/0 Not tainted
+>> 7.0.0-rc1-gff0627514551-dirty
+>> <18446744073709551610>RIP: ffffffffffffffcd:0xffffffff9fac7320
+>> <18446744073709551610>RSP: ffffffff5f7fc098  EFLAGS: fffffffffffefdf9
+>> <18446744073709551610>RAX: fffffffffffc0000 RBX: ffffffff9ff1ad4c RCX:
+>> ffffffff9f7b6440
+>> <18446744073709551610>RDX: 0000000000000000 RSI: ffffffff9f7b6388 RDI:
+>> ffffffffc6cfc8cc
+>> <18446744073709551610>RBP: 0000000000000000 R08: ffffffffffffffff R09:
+>> ffffffffffffffd0
+>> <18446744073709551610>R10: fffffffffffffff8 R11: fffffffffffffdba R12:
+>> ffffffff9fac7320
+>> <18446744073709551610>R13: ffffffff9ff1b0d0 R14: 0000000000000000 R15:
+>> ffffffff9f963fe8
+>> <0>Kernel panic - not syncing: Segfault with no mm
+>> <18446744073709551612>CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted
+>> 7.0.0-rc1-gff0627514551-dirty #35 VOLUNTARY
+>> <18446744073709551612>Stack:
+>> <18446744073709551612> ffffffff9fbe2fd0 00000000 ffffffff9fffdaec
+>> ffffffff5f7fc080
+>> <18446744073709551612> ffffffff5f7fc080 ffffffff9ff95050 ffffffff9fab1be0
+>> ffffffff9ff95050
+>> <18446744073709551612> ffffffff9fbe2fd0 00000000 00000000 00000000
+>> <18446744073709551612>Call Trace:
+>> <18446744073709551612> [<ffffffff9fbe2fd0>] ?
+>> kernel_init+0x0/0xfffffffffffffe20
+>> <18446744073709551612> [<ffffffff9fffdaec>] ?
+>> kernel_init_freeable+0xfffffffffffffe8b/0xfffffffffffffc82
+>> <18446744073709551612> [<ffffffff9ff95050>] ?
+>> uml_curr_cpu+0x0/0xfffffffffffffff0
+>> <18446744073709551612> [<ffffffff9ff95050>] ?
+>> uml_curr_cpu+0x0/0xfffffffffffffff0
+>> <18446744073709551612> [<ffffffff9fbe2fd0>] ?
+>> kernel_init+0x0/0xfffffffffffffe20
+>> <18446744073709551612> [<ffffffff9fbe2faa>] ?
+>> kernel_init+0xffffffffffffffda/0xfffffffffffffe20
+>> <18446744073709551612> [<ffffffff9ff95050>] ?
+>> uml_curr_cpu+0x0/0xfffffffffffffff0
+>> <18446744073709551612> [<ffffffff9ffa5c27>] ?
+>> new_thread_handler+0xffffffffffffff87/0xffffffffffffff60
+>>
+>> (Trying the same thing with --arch x86_64 suggested that some stack
+>> corruption is occurring.)
+> 
+> Got it!
+> 
+>>> Scenario 3 (BAD):
+>>>
+>>> Now I took again a clean tree and applied this change:
+>>>
+>>> --- a/lib/vsprintf.c
+>>> +++ b/lib/vsprintf.c
+>>> @@ -18,6 +18,7 @@
+>>>     */
+>>>    #include <linux/stdarg.h>
+>>> +#include <linux/bitops.h>
+>>>    #include <linux/build_bug.h>
+>>>    #include <linux/clk.h>
+>>>    #include <linux/clk-provider.h>
+>>> @@ -2904,11 +2889,17 @@ int vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
+>>>    		case FORMAT_STATE_NUM: {
+>>>    			unsigned long long num;
+>>> +			u8 shift = fmt.size * 8 - 1;
+>>>    			if (fmt.size > sizeof(int))
+>>>    				num = va_arg(args, long long);
+>>> +			else {
+>>> +				num = va_arg(args, int);
+>>> +			if ((spec.flags & SIGN))
+>>> +				num = sign_extend64(num, shift);
+>>>    			else
+>>> -				num = convert_num_spec(va_arg(args, int), fmt.size, spec);
+>>> +				num &= ~(BIT_ULL(shift) - 1);
+>>> +			}
+>>>    			str = number(str, end, num, spec);
+>>>    			continue;
+>>>    		}
+>>>
+>>> and run tests again.
+>>>
+>>>     [10:39:16] [ERROR] Test: <missing>: Could not find any KTAP output. Did any KUnit tests run?
+>>>     [10:39:16] ============================================================
+>>>     [10:39:16] Testing complete. Ran 0 tests: errors: 1
+>>>     [10:39:16] Elapsed time: 5.762s total, 0.001s configuring, 5.694s building, 0.067s running
+>>>
+>>> it runs fast and completely useless. (There is no build error)
+>>
+>> This one also kernel panics, and when run with --raw_output=full, we can see
+>> that it's due to all of the character devices' sysfs entries being
+>> duplicates, because the minor/major are being formatted as '/dev/char/0:0':
+>>
+>> <0>sysfs: cannot create duplicate filename '/dev/char/0:0'
+>> (...)
+>> <0>Kernel panic - not syncing: Couldn't register pty driver
+>> <0>CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Tainted: G        W
+>> 7.0.0-rc1-gff0627514551-dirty #34 VOLUNTARY
+> 
+> Thanks for trying it and explaining me what's going on. At the bottom line I missed
+> --raw_output=full which should be enough for me.
+> 
+> ...
+> 
 
-(I kept forgetting whether it was "full" or "all", which is why both are 
-supported.)
+Yeah, --raw_output=full (or its synonym --raw_output=all) are very 
+useful for debugging this sort of thing.
+
+Basically, --raw_output or --raw_output=kunit will give only the kernel 
+logs from after the tests have started running (i.e., the KTAP header 
+line has been printed), and --raw_output=all will pass through all 
+kernel output, which is required if the KUnit tests never get run.
+
+>>> Please, fix this as it is a serious issue and really makes kunit useless.
+>>
+>> There's not much KUnit can do if the kernel panics before any tests can be
+>> run -- and unfortunately, vsprintf() seems able to cause lots of trouble
+>> early in the boot process.
+>>
+>> One idea is to support building tests as independent userspace executables,
+>> which wouldn't depend on all of those parts of the kernel which break (and
+>> would be easier to debug). I discussed this a bit at Plumbers a couple of
+>> years ago[1], but haven't had a chance to work on it since. Even then, it'd
+>> require a little bit of test-specific work to get an isolated version of the
+>> kernel vsprintf to build and be testable.
+>>
+>> In the short term, maybe we can improve the interface of kunit.py in cases
+>> where the kernel crashes. At the moment, we simply report that no tests had
+>> run (as you've noticed), but maybe we should check more actively for panics
+>> and/or make a more explicit difference between "no tests were run" and "the
+>> KUnit framework never exectuted". At the very least, we should suggest that
+>> --raw_output=full is a good way to debug this issue if the user wasn't
+>> expecting it in the error message. (I'll send a patch out to do this now.)
+> 
+> Most annoying part is hanging the console, and then after Ctrl+C pressed,
+> +300 seconds (unneeded!) timeout occurs.
+> 
+
+Yes, that's been annoying for a while. I've sent a patch out [1] trying 
+to fix it -- at least we won't go out of our way to eat SIGINT any more 
+-- but I'm sure there are still some cases where UML or QEMU could hang 
+more nastily.
+
+>> I hope that helps (at least a little bit), and thanks for sticking with
+>> KUnit despite these issues!
+>>
+>> [1]: https://lpc.events/event/18/contributions/1790/
+> 
 
 Cheers,
 -- David
+
+[1]: https://lore.kernel.org/all/20260228100727.208896-1-david@davidgow.net/
