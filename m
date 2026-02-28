@@ -1,53 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C231217F31;
-	Sat, 28 Feb 2026 00:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D40262D0B;
+	Sat, 28 Feb 2026 00:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772238297; cv=none; b=nMs3Nmmma1FyAHuLUQGfg1jurVlZ+H6+xPert37fi7TVZWQnDl/iq/yierZ3Y7WKfYKka+pTDwydJ5b/iJLJ6SIFtJZ7jaRKIZ2YMABBgP0bbqyFctFqSjrfJaioMWGQWdwmFlWnrzqhUKpmiYbgAA5K/YLIe0Z7I/DG86rp6Ic=
+	t=1772239430; cv=none; b=ZaTJ/hjE2CsV1rajxOS6hc/qqay/xX/7vnce1Nmr83y/bo2f5Mk5Y5sTfgH7f1yb4tBIETnPfibUp/IQfH9VBMXCsKZ/7lJ8PzRh4QOknUcYaU87ZUCcwrz7vs84tTVvuMaaCIpwj4zOveOKObHz1JHuaX7vMPQ16x87MdXXXc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772238297; c=relaxed/simple;
-	bh=NRLEQogbdfMsW/1W581hPUAygif/9fq5x4hpso8U3bg=;
+	s=arc-20240116; t=1772239430; c=relaxed/simple;
+	bh=BpYrG8pxRKmKebGZQHmsmbPXtrrDZFkM5FRO8KV2e28=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=K4OU8hEMpg2wZolQiwIRFmWyvdLe1rBLsuGY+vpbo+HXomhkV84uqLVGXB0iI7CdAt6lkSKjxZJ8hvJfPBThjp6luuGM8uSyHtvbmfrqMOtRm9QX/mj+5+IPtf4RI2Jqm2NyVsZAI1LbOENN9HdhZaecRgnIG3HG/tWxdzcHymY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hou5AiKf; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=A1JfhQvvqy7FX4hp644ySRotRqSy4OZWEAn6Uoe1NobmEZ7WVD2MbETIfrer7PT6fwQy17YHDQgUnc2LOsggEgpEID2G/SCf7oDC+hAXMY11tkYor8p86fIouA7gPhDebE/VGX5viBlgW6ERxjjKSgi6t3mMd2UjUrJZIq9fL4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mEykySR1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hou5AiKf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390D5C116C6;
-	Sat, 28 Feb 2026 00:24:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEykySR1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F321C116C6;
+	Sat, 28 Feb 2026 00:43:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772238296;
-	bh=NRLEQogbdfMsW/1W581hPUAygif/9fq5x4hpso8U3bg=;
+	s=k20201202; t=1772239429;
+	bh=BpYrG8pxRKmKebGZQHmsmbPXtrrDZFkM5FRO8KV2e28=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Hou5AiKfFwR/PPaHk73nZmnePlvIzv65arTZ4gwVJDQhNttR1rM8bsxiFPbfsJuZT
-	 cKGi6p5+ofabg9dKQELP0e4CEL2mJAAXUoWErEje2kTIUIhG/S9R5h5GHn0UktP+wK
-	 pQGHF2U5V4RVKtkyrY5l2Qb80hsxjeS5ENEF0yU6pEI6gefUHmf6SNLQzR6fmxFSe+
-	 +F7prqkC0rqvBMudx/vaBSpTyg7S/IYczYOrE/Sdk6B/7UetSdcfV7fNkWLv5l/4a8
-	 9Xan6BFfq8FWs1vdmEZW6Rln4j/Fy8o3o8Ahq8evusGC0IEWAudrZ/ZouelDFT91c5
-	 MN8atYr8TmXdQ==
-Date: Fri, 27 Feb 2026 16:24:55 -0800
+	b=mEykySR1UIGEflLjYgCjTIVtiMReRZnjHuN87wogViPVKn6R3z28M0eyjzfw0tz/6
+	 q0K/tBuWugTznZNvXph1R9caI5lN/yXs+zJxeK49hxC1iz4ULEiW5e9j8rMCYXkbR1
+	 MersJUb2qO+pv7bfWQkNs/rYlaD+dqrk8/+veYO+FVwYSARYfy7dJP0AHKuC/tCpZR
+	 Xx5aZ1GMPcGQwevXbpypxL4122A27p2GoUb4lv6CKtWYIZjHGnZGtD3Byx0Bb0lkbN
+	 CJWxBKYvrmQvz/OSMU8C8Zr9zF3ADcxaEX3KTCgFTeoSVW7glgMkp1puJorZQKQVOL
+	 QLWZEOB/wj32A==
+Date: Fri, 27 Feb 2026 16:43:48 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Ioana Ciornei <ioana.ciornei@nxp.com>, netdev@vger.kernel.org, Andrew
- Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+To: Petr Machata <petrm@nvidia.com>
+Cc: Ioana Ciornei <ioana.ciornei@nxp.com>, <netdev@vger.kernel.org>, "Andrew
+ Lunn" <andrew+netdev@lunn.ch>, "David S.  Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
  ethtool standard counters
-Message-ID: <20260227162455.6272f87a@kernel.org>
-In-Reply-To: <ef25c2c2-b50b-4288-8b09-00f7dfc88e63@lunn.ch>
+Message-ID: <20260227164348.63afcc43@kernel.org>
+In-Reply-To: <87ms0ufc0p.fsf@nvidia.com>
 References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
 	<20260225150648.1542206-6-ioana.ciornei@nxp.com>
-	<77f3e4e8-430e-4ae1-aa1f-8f70b4d8d3da@lunn.ch>
-	<osswnpbiyy35ycs7ha2ufugj7dzmvpeq3x7vjq4j53qtwamkuw@ihwl5qjuydnv>
-	<ph7vs3fsxti3nlypmmvm6wqvsnnsn76wct3qpi5omphggcjqrt@3any2dqzlgsr>
-	<031c7375-0407-476a-92eb-0f894ec820f1@lunn.ch>
-	<vcphjyyj3jezenqfgieqac7ayxhslupgeu6kh2ywfukaat3rtf@tsqaz33v4o7c>
-	<20260226182511.0d33f9d1@kernel.org>
-	<a6qhvs4vaxk33iryntrvybaesbr23v7hcrfn37p53viydd3zhs@6zquhlssfthz>
-	<ef25c2c2-b50b-4288-8b09-00f7dfc88e63@lunn.ch>
+	<20260226182223.5eb1b10f@kernel.org>
+	<87ms0ufc0p.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,32 +51,98 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 27 Feb 2026 15:17:02 +0100 Andrew Lunn wrote:
-> On Fri, Feb 27, 2026 at 09:34:28AM +0200, Ioana Ciornei wrote:
-> > On Thu, Feb 26, 2026 at 06:25:11PM -0800, Jakub Kicinski wrote:  
-> > > FWIW the expectation is that the test should be able to run even on
-> > > systems / boards with a single interface. So the control traffic
-> > > (communicating with the traffic generator) will run over the same
-> > > interface as the test. 1% error is unachievable. I'd only check the
-> > > lower bound, and use some sanity value for the upper bound (2^30 ?)
-> > > if at all  
-> > 
-> > Really? I didn't know of that expectation at all.
-> > 
-> > I did take ethtool_rmon.sh as an example and that selftest as well
-> > takes NUM_NETIFS=2 and does check for both a lower bound and upper bound
-> > that takes into account a 1% deviance from the target.
-> > 
-> > How would the test even work with only a single interface?  
+On Fri, 27 Feb 2026 14:53:06 +0100 Petr Machata wrote:
+> Jakub Kicinski <kuba@kernel.org> writes:
+> > On Wed, 25 Feb 2026 17:06:48 +0200 Ioana Ciornei wrote:  
+> >> +ALL_TESTS="
+> >> +	test_eth_ctrl_stats
+> >> +	test_eth_mac_stats
+> >> +	test_pause_stats
+> >> +"
+> >> +STABLE_MAC_ADDRS=yes
+> >> +NUM_NETIFS=2
+> >> +lib_dir=$(dirname "$0")
+> >> +# shellcheck source=./../../../net/forwarding/lib.sh
+> >> +source "$lib_dir"/../../../net/forwarding/lib.sh  
+> >
+> > Argh, at some point we should probably decide whether we have 
+> > a preference on which "library" / set of env vars we use under 
+> > drivers/net/hw. Adding Petr to CC.  
 > 
-> Just to add to this, for the 1% i was referring to counters for
-> collisions. If the control traffic is causing collisions the system it
-> just as wrongly configured as generated traffic causing collisions.
-> 
-> For 'everyday' systems, i doubt Half Duplex is ever used, but
-> automotive with a T1 PHY might. So we might need to review this 1%
-> once somebody runs this test on such a system.
+> I think the expectation is that by default, tests written in Bash are
+> run on one machine without remotes.
 
-Right, right, errors and exceptions are probably fine.
-I was referring to checking overall byte / packet counters with 1%
-tolerance. Sorry if I misread the discussion or the patch.
+I think we need to define the guidance by properties of the test, not
+the machine? Of course _tests_ which don't need a traffic source can
+simply consume the NETIF evn variable, so its trivial to write them in
+any language without much library support. But for tests which need
+traffic input we need a different distinction than "does the author
+care about single-interface machines", so to speak?
+
+> I think this fundamentally stems from the fact that running processes in
+> Python is a bit unwieldy, so it makes sense to have helpers, so
+> everybody uses them, so you can have helpers grow brains to do things
+> like over-the-ssh configuration. In Bash, running a traffic generator is
+> easier than working with arrays. So the helpers tend not to be as useful
+> and we don't generally have them. At least not in any consistent way.
+> 
+> Eyeing the file, the requirement for the remote interface to be up and
+> configured with an IP address is a bit surprising to me. I would think a
+> down state is the most natural, and have the test bring it up and
+> configure it in a way that it needs. I'm thinking maybe this is to allow
+> testing a sole interface on like an embedded device?
+> 
+> Anyway, that's a fairly strong differency between how Bash tests are
+> typically written and the NIC setup. I think basically all existing
+> tests assume the devices are theirs to tamper with.
+> 
+> > The existing tests under drivers/net/hw which source forwarding/lib.sh
+> > pre-date the "NIC setup" described in 
+> > tools/testing/selftests/drivers/net/README.rst
+> >
+> > Should we ask "NIC setup" to be used for all tests which only need
+> > NUM_NETIFS=2 ? These are basically simple tests where one netif is 
+> > a traffic generator and the other is the DUT. And IIUC the "forwarding
+> > setup" can't be used when the traffic generator is controlled over SSH?  
+> 
+> In principle nothing prevents lib.sh from growing brains to support
+> these remote shenanigans. I think it's just that so far nobody cared
+> enough to actually do it.
+> 
+> I think that a helper that in effect does "run this on a machine where
+> $swp1 is" is mostly what is needed. That and "make sure $swp1 and $swp2
+> are on the same machine". It's going to be annoying to work with though,
+> because you need to annotate every single command. I bet there's a nice
+> syntax to make it not activelly annoying.
+> 
+> If we have this, it might make sense to require tests to make use of it.
+> (With an explicit opt-out for special cases.) But I do not want every
+> test to have to reinvent this wheel and cargo-cult snippets from other
+> tests.
+> 
+> BTW, my guess is that even many multi-port tests that I wrote boil down
+> to just a bunch of fairly independent loopbacks whose far ends could be
+> on remote machines. It's not a priori nonsense to me that one would run
+> a test like this, or whatever magic we'd use:
+> 
+>     ./test.sh ssh://petr@10.1.2.3:eth1 swp1 veth1 ns://foo:veth2
+> 
+> And it just works, because only swp1 and swp2 need to be bridged, the
+> rest can be remote, and the traffic generation helper knows that to pump
+> traffic to ssh://10.1.2.3:eth1, obviously you need to ssh there first.
+> But the library would need to have helpers for this, and the tests would
+> need to use them.
+
+Right, to be clear I primarily care about being able to run these tests
+with traffic generator on a remote system. Otherwise someone who cares
+about single-port systems will have to add a separate test I guess?
+And we will have to maintain two tests? :S
+
+A nice to have is for all drivers/net/hw tests to use the "NIC" env
+variables (move tests which really only make sense on multi-port
+devices to drivers/net/forwarding?) But I think "translating"
+forwarding variables to NIC if NUMIF=2 could easily be done
+automatically by the test / lib so that's lower priority.
+
+> At least ethtool counters would cause problems obviously.
+
