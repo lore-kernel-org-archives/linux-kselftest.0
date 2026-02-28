@@ -1,80 +1,73 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA761E8342
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Feb 2026 07:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7285C22D7A1
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Feb 2026 07:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772264785; cv=none; b=oftNVJt2oNQxjXH0riNV1XKjH8s+AT28ipHDP050IwUOH0G98EfuPStFP74MBIOximSvzm+BaQv+uQHU3ahOFltGxZW6z0Gwhj3Y1WvYtmgiBb2Xo5ZnCBoQjc51DHOOdxz2CG57zCC22JU1MQLfhU3/hEC4m1GB1Jya+0x4org=
+	t=1772264976; cv=none; b=n4P6WwMBzolLp/+RJSoFdtJHLoOTt1Z+zlNvDoc26p8ko5ncqv3SqSGihogC7m8DhegLgorjorvro8v1k8jHPulvAFkRcC9DeNTmkJT2ERKcppU+o3dPQUeLcQbDz/UcOHdnuio8xxD7tTDjOOUDcPky/sZLVQzmZ7hCUULpotA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772264785; c=relaxed/simple;
-	bh=heJM+PRvqvvK4uhbidwwxuK028a5HlfOSxuMoE/I4JE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rJSFsbqvaLKsW5usw/Nd8iEHQ8LhgZNMbZPROTA1xBXLx090vF19jsM0uLq9gEPHhONStnQINiRJpF28JyG8QiZeiv7yUTGPdhS9YUPqeTdeeCTZL1E0AgKxgIOwoNMVwAVgRTOWUmZM/IuHjItN3KyNi2chg5UI1GTgpeAEi4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E7rQ3K9I; arc=none smtp.client-ip=74.125.82.177
+	s=arc-20240116; t=1772264976; c=relaxed/simple;
+	bh=wjYc9+A467gBJ1MBHXbnsqfQmtNcq2uWJM5XXcSSdj8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p1ejGGjvIC5sQ+eO+q6ho5ohoYfCjrqZxf6RQFOlYRX+R1pdmy6wU693dQ5NGabVyNkugZyahyNtwc3yfXi11SfO7wTOQot6ywOe+hT1eSOD+F1ppyl2t1OGLolipabinJxpotPqQg6aJj0u/lajWLfYlgNyAsBFWzJvprEvfAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D6SCd5gN; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E7rQ3K9I"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2bdcd7f0222so3984555eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 23:46:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D6SCd5gN"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c7350fd4efdso20820a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Feb 2026 23:49:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772264784; x=1772869584; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T94amDN1jD/1WCsiOX6E39ApqIsgBUSoK8r+edFETp0=;
-        b=E7rQ3K9IOkDDdYtuqL0Au51CjpbXIo+rnOzEsVZ0htzyvZy6RQLTK63E4/UABgFAEf
-         XWJaubqPqb7T3icOd/qmLe32z79dDzAxzlkrtsrKtYzQFeZyt9YaehKbzA37LV6M4lUD
-         rj0wFlviCroVCgYsA6jbAEyq8em++ynbChQa5sn9Rzpgg1LP1OmN368qhie36f9q5Psd
-         52D4Yw3ABnqJZs8S7aSDLX+RxbmB42S++Z+anLnrivLK+Iy4Bp34S4ROrf+O0GiyFU8c
-         gFRP8xYOtWB1jc6dSzIGP7cXNvQqCBPieyAyUwGp0OPxUXun5+pD5nqTuVKN71oXFK++
-         65YA==
+        d=gmail.com; s=20230601; t=1772264975; x=1772869775; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uQsyceTj+Q/vii9FVOmBz/AIAH+opjiNSPLbnguOkJI=;
+        b=D6SCd5gNc4m1mjYd0Jiwxr5lpolUyIYgzhmWftF8p3EJdEo/3BNDTjCoozZgwZTrT7
+         B0m/DPgrpgI3pV9RKTqMguvm7+ffkYy++FpJdfxmamJocK+vQi2XVznP+jPkvtvvyMMC
+         E7jB+pQJWTNqbuijjioFKB4PoS0RrDdfNnDFMstpDakQsry2ZnNhQiDokTSWbGKOtdMM
+         hCzbsEjLbkfxOVaEqjqA0I6fKDC4nfik8kxCLyof4idPwFdGM+tKsurGdx5qfoKvmQEP
+         RcjFhONH1fmL15wzKwFr7wj9ePN5QCmliQ4S7XXLMNdNtOJ9g3ApuMsoa3ShDGGVbSHo
+         wGVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772264784; x=1772869584;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=T94amDN1jD/1WCsiOX6E39ApqIsgBUSoK8r+edFETp0=;
-        b=Qj5VyBiha5bGT74Nuke7JwPGMoZq4oFWHOVlaOKyla6RV7g/XflUPNHd2NvMzrWS1Z
-         8oG/Q5WqielLBiRIO2OJnqhuPheWpDZgAAguWasqhWO/aXTEB7pmFazXPIEfl/YCS3jn
-         HA3OIimBE1pVPbJSY5kT6LGU38ktxWEPy3uR/L+3WasxJZu3VbPtaM6IFRrkL45BPFU8
-         x52ND2q4xPGRyl8sMKMqibRqIGklUjygAuWP683MtYfIbYjbxm2oHMKEWDF2aJoRFfUL
-         Z4sRYuMVwe3bO8cCBMnzkNNFZGyvKVOKSSlIIDLqKpvFfs+y9E0J6IEmPZRdsqBrffQR
-         7A8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVTsvp4UEZ1qQdGcBrIwq1FF30mdNm6yb9SdGNb9lnNbu39T9sGA4JzWGVhsIT7IaIeuGqXqHrE/MozQR46kVk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhZEObMGFwlXBx1DF5rtZ7Ju+yalGlQzfigegJX5wgeMpA3vGP
-	UCQ2EW1JptYt7TflUcT656rbPVgTQ4WD1P+1qUMAqZGfp+ONHBC7arNM
-X-Gm-Gg: ATEYQzxPCXmiN6XxvxAnQMHOuWywW34VQBd6YuIhHtyTaQC+C24UjIpQV1ak+o5VCU2
-	5BseOcZ4iKQZw28gHFpqLz6vdkEJTYsUsu/mSSIracgIIXI093neWQCizkw9TsfSIHs/DtqQymm
-	1VXC2DPdS/u0I4wndxY6QPEsfe+LJF4UhXUZBnXsqFgfmt4W2q2uZCB2d+km+seLmZ2knmK7IJ3
-	Ni3jzDXC79zQLIOavSAsPYnzUoW74ovYzDfcCNQC6Oizd/NaEqhfVMONv9gboJfa9UYLMTKIrIs
-	cL46ULEZj6xA555FTDckSBqQHxa9pt9nMBUltdi1meoPO8fPFybNNSCz5eI2UfQx6NiJAuzeNd6
-	zMCLPuVt8Y2hzD1ls8aYkO8BcQKplnUl6xBdKV3/1yzdxpN8Cpw+6MGD6iUZ7h54Q6OOGQH7DUN
-	hbLIq4mrYEtdv3Tf4E7XKy7h0T8dDhdEwPn1adXooY7+X8KLA/gRBva3JxXNLu4sr95EEDCyjOg
-	lHQcz+OpD6jGT3LCbSmFOeJGaw=
-X-Received: by 2002:a05:693c:2c97:b0:2bd:d3f3:b0be with SMTP id 5a478bee46e88-2bde1d49fa5mr2551896eec.20.1772264783909;
-        Fri, 27 Feb 2026 23:46:23 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bded67bd05sm1874926eec.1.2026.02.27.23.46.18
+        d=1e100.net; s=20230601; t=1772264975; x=1772869775;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uQsyceTj+Q/vii9FVOmBz/AIAH+opjiNSPLbnguOkJI=;
+        b=R+hnEFLKYBsTebOAQwTWTaxJ9xb8zLHF1h8dPAAfRX8dhw4uSJmtn6pvf4iefZhbZI
+         grI6I3ykX86YKVYxnmhk3bDyef2PtJkFLln+6t++t0ep4RfLrhCBYuot0h9rSwouAqy6
+         t9BxKCA2P1GP9uwCqAszc0reQMjUQUQSESRfhEh+U5OiRwA3NjfFbgtF9htvskYg1gnR
+         mErYUGKuydgVhnmBmb1DiAthTXQD4aQ7+ejeDnk5moWfduxUt6WAs3e5oxzkRNOd0j/8
+         l/mf44AgfUft+QliBINlh33sNmRbKNLtFzXTkuP82Vzp3AmP/7geoMrkdiH1fF4EOMiz
+         HpVw==
+X-Forwarded-Encrypted: i=1; AJvYcCVtcQN+AYW3DD0PfK3sMEaMyopXCpVPG3ZIzDb9ZHzydrHaapa9eTGeMGN5+bkhA8QGQa4a2AnwGw33eY7YS2E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIY+MqvtUhtqERHfeLL5q+qlnvcHSMWH03XFtxSbSNcI6ozg4k
+	Er0VVjzT379+b0/iCy+BpLgy/tAM5NceTjqpT5dCaxnpCiSJgKhVREzn
+X-Gm-Gg: ATEYQzyaZT7AOxVGxvRwWCLX7qzW62GFNzLYL06wbaKy0iFU2Bby4Mi1AXiljhOz8lk
+	2g7ovS/0fejgWCcr8+Yp0OxjgjF8IYoFOZa4enxtyXWW3BJehMWp9jSRqmBj8wPbWFB/YFfcoJ0
+	m7ft7+Jf79PnrcbI7VNKBJ+WjGiZlRhcdoa4lNgqIj8Mj3uvfLq1dTRScgTlcnsDOVIMOKCBWaa
+	ugjgiPqHrnpq2qqNKN+Qy3N6foVCErxImd+TPdfJdmfk855UvCRnfufPa1O2Yjg+MXzecbCRIbU
+	Sur29cuztkXJzsivcd9AaHs/mij+sz8M1Lobx9Uncf5qOZCIEHh7p9QSzf567xny+7C5ozxyY9k
+	vtr18OR0Km1yjTiplJMWJNIhv8n30ek/aeSQ2O7UKU/ZJRbEL9D0/XdIJzYylyQBgrdSwzOz4iQ
+	OjKpJ3WLzPNFfLaAIrqlbLHmTcXctHijPgSdoJLapUHByxua07dydjAO4zZoM9ZMI1m4K/
+X-Received: by 2002:a17:903:3c25:b0:29e:9387:f2b0 with SMTP id d9443c01a7336-2ae2e4bb1fdmr59084675ad.39.1772264974773;
+        Fri, 27 Feb 2026 23:49:34 -0800 (PST)
+Received: from strange.. ([2405:201:e066:f03e:b47a:832e:ca46:7937])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5db596sm81457605ad.35.2026.02.27.23.49.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Feb 2026 23:46:23 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+        Fri, 27 Feb 2026 23:49:34 -0800 (PST)
+From: mr.navi8680@gmail.com
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: jhs@mojatatu.com,
+	jiri@resnulli.us,
+	shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v2 2/2] selftests/bpf: bpf_cookie: make perf_event subtest trigger reliably
-Date: Sat, 28 Feb 2026 15:45:55 +0800
-Message-ID: <20260228074555.122950-3-sun.jian.kdev@gmail.com>
+	Naveen Anandhan <mr.navi8680@gmail.com>
+Subject: [PATCH] selftests: tc-testing: fix list_categories() crash on list type
+Date: Sat, 28 Feb 2026 13:17:35 +0530
+Message-ID: <20260228074735.10438-1-mr.navi8680@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260228074555.122950-1-sun.jian.kdev@gmail.com>
-References: <20260228074555.122950-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,94 +76,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The perf_event subtest relies on SW_CPU_CLOCK sampling to trigger the BPF
-program, but the current CPU burn loop can be too short on slower systems
-and may fail to generate any overflow sample. This leaves pe_res unchanged
-and makes the test flaky.
+From: Naveen Anandhan <mr.navi8680@gmail.com>
 
-Make burn_cpu() take a loop count and use a longer burn only for the
-perf_event subtest. Also scope perf_event_open() to the current task to
-avoid wasting samples on unrelated activity.
+list_categories() builds a set directly from the 'category'
+field of each test case. Since 'category' is a list,
+set(map(...)) attempts to insert lists into a set, which
+raises:
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+  TypeError: unhashable type: 'list'
 
+Flatten category lists and collect unique category names
+using set.update() instead.
+
+Signed-off-by: Naveen Anandhan <mr.navi8680@gmail.com>
 ---
-Changes in v2:
+ tools/testing/selftests/tc-testing/tdc_helper.py | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Move the perf_event_open() argument change here from patch 1/2.
-
-v1: <https://lore.kernel.org/lkml/20260227164037.84110-1-sun.jian.kdev@gmail.com/>
----
- .../selftests/bpf/prog_tests/bpf_cookie.c     | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index b7643a5bf7ad..35adc3f6d443 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -6,6 +6,7 @@
- #include <sys/syscall.h>
- #include <sys/mman.h>
- #include <unistd.h>
-+#include <linux/compiler.h>
- #include <test_progs.h>
- #include <network_helpers.h>
- #include <bpf/btf.h>
-@@ -431,11 +432,12 @@ static void tp_subtest(struct test_bpf_cookie *skel)
- 	bpf_link__destroy(link3);
- }
+diff --git a/tools/testing/selftests/tc-testing/tdc_helper.py b/tools/testing/selftests/tc-testing/tdc_helper.py
+index e06f03c0fb5d..adb52fe3acc1 100644
+--- a/tools/testing/selftests/tc-testing/tdc_helper.py
++++ b/tools/testing/selftests/tc-testing/tdc_helper.py
+@@ -38,10 +38,14 @@ def list_test_cases(testlist):
  
--static void burn_cpu(void)
-+static void burn_cpu(long loops)
- {
--	volatile int j = 0;
-+	long j = 0;
- 	cpu_set_t cpu_set;
--	int i, err;
-+	long i;
-+	int err;
  
- 	/* generate some branches on cpu 0 */
- 	CPU_ZERO(&cpu_set);
-@@ -443,9 +445,10 @@ static void burn_cpu(void)
- 	err = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
- 	ASSERT_OK(err, "set_thread_affinity");
+ def list_categories(testlist):
+-    """ Show all categories that are present in a test case file. """
+-    categories = set(map(lambda x: x['category'], testlist))
++    """Show all unique categories present in the test cases."""
++    categories = set()
++    for t in testlist:
++        if 'category' in t:
++            categories.update(t['category'])
++
+     print("Available categories:")
+-    print(", ".join(str(s) for s in categories))
++    print(", ".join(sorted(categories)))
+     print("")
  
--	/* spin the loop for a while (random high number) */
--	for (i = 0; i < 1000000; ++i)
-+	for (i = 0; i < loops; ++i) {
- 		++j;
-+		barrier();
-+	}
- }
- 
- static void pe_subtest(struct test_bpf_cookie *skel)
-@@ -461,7 +464,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 	attr.type = PERF_TYPE_SOFTWARE;
- 	attr.config = PERF_COUNT_SW_CPU_CLOCK;
- 	attr.sample_period = 100000;
--	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
-+	pfd = syscall(__NR_perf_event_open, &attr, 0, -1, -1, PERF_FLAG_FD_CLOEXEC);
- 	if (!ASSERT_GE(pfd, 0, "perf_fd"))
- 		goto cleanup;
- 
-@@ -470,7 +473,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 	if (!ASSERT_OK_PTR(link, "link1"))
- 		goto cleanup;
- 
--	burn_cpu(); /* trigger BPF prog */
-+	burn_cpu(100000000L); /* trigger BPF prog */
- 
- 	ASSERT_EQ(skel->bss->pe_res, 0x100000, "pe_res1");
- 
-@@ -489,7 +492,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 	if (!ASSERT_OK_PTR(link, "link2"))
- 		goto cleanup;
- 
--	burn_cpu(); /* trigger BPF prog */
-+	burn_cpu(100000000L); /* trigger BPF prog */
- 
- 	ASSERT_EQ(skel->bss->pe_res, 0x200000, "pe_res2");
  
 -- 
 2.43.0
