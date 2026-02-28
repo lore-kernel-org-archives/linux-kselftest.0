@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88D3368978;
-	Sat, 28 Feb 2026 00:23:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C231217F31;
+	Sat, 28 Feb 2026 00:24:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772238222; cv=none; b=PZCVe8xbd3Yl7H5KWOcGlxVoNnAUR8+7rf4fyqZ15v/162HNJBo93ojkzE2cWleNvX4//wFxjUVHaVF8k1Fg5LvJ2OgA+wS/yElFSBgnExeAB4oYOSoHcGHwSFC8TOUG7dzxv+vJ4vR007ixMlB+Ag/CKinQRbr0/T6hn+ImgWU=
+	t=1772238297; cv=none; b=nMs3Nmmma1FyAHuLUQGfg1jurVlZ+H6+xPert37fi7TVZWQnDl/iq/yierZ3Y7WKfYKka+pTDwydJ5b/iJLJ6SIFtJZ7jaRKIZ2YMABBgP0bbqyFctFqSjrfJaioMWGQWdwmFlWnrzqhUKpmiYbgAA5K/YLIe0Z7I/DG86rp6Ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772238222; c=relaxed/simple;
-	bh=xY9TM+CCy8Kd9PVvEASGuE0lYodI/nasizjdzDWCuIM=;
+	s=arc-20240116; t=1772238297; c=relaxed/simple;
+	bh=NRLEQogbdfMsW/1W581hPUAygif/9fq5x4hpso8U3bg=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b3RVzfu3OmveM+CRunfttKu9JhCZQWuUnRhYmrDOOU3Kng/z3Ea6TYFlOCyV7nO96DQ4uunypcvheqmlKj892Jk/klX4O1vpmXsqZEuRaaCXtlm1s+AyWfKH6ya6SnNQuN8GrJIWcvwm/fuSSZp43LmmKp+MFU2dJYTfa0yuZ3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5UMkxGr; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=K4OU8hEMpg2wZolQiwIRFmWyvdLe1rBLsuGY+vpbo+HXomhkV84uqLVGXB0iI7CdAt6lkSKjxZJ8hvJfPBThjp6luuGM8uSyHtvbmfrqMOtRm9QX/mj+5+IPtf4RI2Jqm2NyVsZAI1LbOENN9HdhZaecRgnIG3HG/tWxdzcHymY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hou5AiKf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5UMkxGr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1CCC116C6;
-	Sat, 28 Feb 2026 00:23:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hou5AiKf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390D5C116C6;
+	Sat, 28 Feb 2026 00:24:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772238222;
-	bh=xY9TM+CCy8Kd9PVvEASGuE0lYodI/nasizjdzDWCuIM=;
+	s=k20201202; t=1772238296;
+	bh=NRLEQogbdfMsW/1W581hPUAygif/9fq5x4hpso8U3bg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=h5UMkxGrRunHXPy2Bh+b32fvht5LIB1Ppcwv/BXgtzdgP0h57ru6qJhCAPk6ntY1G
-	 kejOcbu9qhP8LULA9VE5OrSQZXvAoZ6WHDrEIipGRkUO8ubJwRxdYLeJNChGB1kbG8
-	 fo4A7/vgrUqWGSDLtXydFVhjFLb1bDP6v9LCRT+kGAjP8UqtjVnsI0+IOnPR87yxXy
-	 nTfGfkfMPFhJlx6TvPrfRU3nQFBVQzY1I5UzSmFlIXb1PTYyYhz/bkQS1kCUyChBkY
-	 v4pZcB5cgnWieXpDdrM48qYRDGdxbgKOzXPDo2aaO+CdSGAK/Uxh2tUwzuf4kiXphe
-	 miC3YhkpOnbgQ==
-Date: Fri, 27 Feb 2026 16:23:40 -0800
+	b=Hou5AiKfFwR/PPaHk73nZmnePlvIzv65arTZ4gwVJDQhNttR1rM8bsxiFPbfsJuZT
+	 cKGi6p5+ofabg9dKQELP0e4CEL2mJAAXUoWErEje2kTIUIhG/S9R5h5GHn0UktP+wK
+	 pQGHF2U5V4RVKtkyrY5l2Qb80hsxjeS5ENEF0yU6pEI6gefUHmf6SNLQzR6fmxFSe+
+	 +F7prqkC0rqvBMudx/vaBSpTyg7S/IYczYOrE/Sdk6B/7UetSdcfV7fNkWLv5l/4a8
+	 9Xan6BFfq8FWs1vdmEZW6Rln4j/Fy8o3o8Ahq8evusGC0IEWAudrZ/ZouelDFT91c5
+	 MN8atYr8TmXdQ==
+Date: Fri, 27 Feb 2026 16:24:55 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Ioana Ciornei <ioana.ciornei@nxp.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Ioana Ciornei <ioana.ciornei@nxp.com>, netdev@vger.kernel.org, Andrew
+ Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
  Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
  <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
  ethtool standard counters
-Message-ID: <20260227162340.4675e766@kernel.org>
-In-Reply-To: <a6qhvs4vaxk33iryntrvybaesbr23v7hcrfn37p53viydd3zhs@6zquhlssfthz>
+Message-ID: <20260227162455.6272f87a@kernel.org>
+In-Reply-To: <ef25c2c2-b50b-4288-8b09-00f7dfc88e63@lunn.ch>
 References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
 	<20260225150648.1542206-6-ioana.ciornei@nxp.com>
 	<77f3e4e8-430e-4ae1-aa1f-8f70b4d8d3da@lunn.ch>
@@ -47,6 +47,7 @@ References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
 	<vcphjyyj3jezenqfgieqac7ayxhslupgeu6kh2ywfukaat3rtf@tsqaz33v4o7c>
 	<20260226182511.0d33f9d1@kernel.org>
 	<a6qhvs4vaxk33iryntrvybaesbr23v7hcrfn37p53viydd3zhs@6zquhlssfthz>
+	<ef25c2c2-b50b-4288-8b09-00f7dfc88e63@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,38 +57,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 27 Feb 2026 09:34:28 +0200 Ioana Ciornei wrote:
-> On Thu, Feb 26, 2026 at 06:25:11PM -0800, Jakub Kicinski wrote:
-> > On Thu, 26 Feb 2026 16:18:21 +0200 Ioana Ciornei wrote:  
-> > > > How about, fail the test if any are greater than 1% of the number of
-> > > > packets transmitted/received? My _guess_ is, if you have 1% packet
-> > > > loss, networking is not going to be happy anyway. It probably means
-> > > > you have one end doing Half duplex and the other Full. That is a
-> > > > typical configuration error you see causing collisions. Not that i've
-> > > > actually seen this for maybe a decade!
-> > > > 
-> > > > Failing the test, with a comment about checking duplex configuration,
-> > > > seems sensible.    
-> > > 
-> > > Seems reasonable. Thanks for the help!  
+On Fri, 27 Feb 2026 15:17:02 +0100 Andrew Lunn wrote:
+> On Fri, Feb 27, 2026 at 09:34:28AM +0200, Ioana Ciornei wrote:
+> > On Thu, Feb 26, 2026 at 06:25:11PM -0800, Jakub Kicinski wrote:  
+> > > FWIW the expectation is that the test should be able to run even on
+> > > systems / boards with a single interface. So the control traffic
+> > > (communicating with the traffic generator) will run over the same
+> > > interface as the test. 1% error is unachievable. I'd only check the
+> > > lower bound, and use some sanity value for the upper bound (2^30 ?)
+> > > if at all  
 > > 
-> > FWIW the expectation is that the test should be able to run even on
-> > systems / boards with a single interface. So the control traffic
-> > (communicating with the traffic generator) will run over the same
-> > interface as the test. 1% error is unachievable. I'd only check the
-> > lower bound, and use some sanity value for the upper bound (2^30 ?)
-> > if at all  
+> > Really? I didn't know of that expectation at all.
+> > 
+> > I did take ethtool_rmon.sh as an example and that selftest as well
+> > takes NUM_NETIFS=2 and does check for both a lower bound and upper bound
+> > that takes into account a 1% deviance from the target.
+> > 
+> > How would the test even work with only a single interface?  
 > 
-> Really? I didn't know of that expectation at all.
+> Just to add to this, for the 1% i was referring to counters for
+> collisions. If the control traffic is causing collisions the system it
+> just as wrongly configured as generated traffic causing collisions.
 > 
-> I did take ethtool_rmon.sh as an example and that selftest as well
-> takes NUM_NETIFS=2 and does check for both a lower bound and upper bound
-> that takes into account a 1% deviance from the target.
+> For 'everyday' systems, i doubt Half Duplex is ever used, but
+> automotive with a T1 PHY might. So we might need to review this 1%
+> once somebody runs this test on such a system.
 
-I called out in the other thread that the bash scripts in this dir
-pre-date any serious CI use. They are only there to get them out of 
-the way of SW-only CI testing.
-
-> How would the test even work with only a single interface?
-
-Hopefully the readme mentioned in my other reply clarifies.
+Right, right, errors and exceptions are probably fine.
+I was referring to checking overall byte / packet counters with 1%
+tolerance. Sorry if I misread the discussion or the patch.
