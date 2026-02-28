@@ -1,62 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B607736CE01;
-	Fri, 27 Feb 2026 23:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88D3368978;
+	Sat, 28 Feb 2026 00:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772235153; cv=none; b=Ak/y6hSAy5/En6pa5t9qlbonfxTksNk617OKk/Q/ZFYve+nE0T6RUWP9x8x5C3x5X5zsQeyQoXNp2dhXjbxyRCCZ3iPr1g/wa9w1iIuhN6UemLdglQovurOu9/fc0WNIkzXGEzMxjz3h2khL34eKrUSlFjjBKMCs8MHfP+sOtqs=
+	t=1772238222; cv=none; b=PZCVe8xbd3Yl7H5KWOcGlxVoNnAUR8+7rf4fyqZ15v/162HNJBo93ojkzE2cWleNvX4//wFxjUVHaVF8k1Fg5LvJ2OgA+wS/yElFSBgnExeAB4oYOSoHcGHwSFC8TOUG7dzxv+vJ4vR007ixMlB+Ag/CKinQRbr0/T6hn+ImgWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772235153; c=relaxed/simple;
-	bh=Gl9pmWCL2mZ3Wj2qs5uUBK7sBEzBWHxCsN6KpmSpLyE=;
+	s=arc-20240116; t=1772238222; c=relaxed/simple;
+	bh=xY9TM+CCy8Kd9PVvEASGuE0lYodI/nasizjdzDWCuIM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PKrRrh5ltLp1Q6BPjmrJpsb6Sjs8idjMHK97WDPDtWynHQUebpW1ryDyvn0hNdMU+j6N8BnDxVR4tUq3gsl4EH91hO2EeHtrblINWK0g+u2wXJDoBXbzCm/EnjXRuTW23VGTrokEZagRc/lQ0lB7aC4q2MGYa0Y+LMx8ycSeAUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bYtorbVy; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=b3RVzfu3OmveM+CRunfttKu9JhCZQWuUnRhYmrDOOU3Kng/z3Ea6TYFlOCyV7nO96DQ4uunypcvheqmlKj892Jk/klX4O1vpmXsqZEuRaaCXtlm1s+AyWfKH6ya6SnNQuN8GrJIWcvwm/fuSSZp43LmmKp+MFU2dJYTfa0yuZ3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5UMkxGr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bYtorbVy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECDFC116C6;
-	Fri, 27 Feb 2026 23:32:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5UMkxGr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1CCC116C6;
+	Sat, 28 Feb 2026 00:23:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772235153;
-	bh=Gl9pmWCL2mZ3Wj2qs5uUBK7sBEzBWHxCsN6KpmSpLyE=;
+	s=k20201202; t=1772238222;
+	bh=xY9TM+CCy8Kd9PVvEASGuE0lYodI/nasizjdzDWCuIM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bYtorbVy8qSlQjd7l1kWdzABNB9LzHi1Yio+QUGF124fthAQR4f7N7zIWocCokrSH
-	 6HaBhcp86x89uxkTA+TomGUmaAKGghBTTfUj6NahDiwWzUslVXL08VjcFnQDBOg/Io
-	 jyBIrRLIllBPatXEVoiFJHXpmt5KhzPtf+D0Re3hGlhYRxI1cD5E/n8MIHPmo6nQnx
-	 lTGii9JUO/lCUBoJsSz3jzYhokGuvhV8Zl6U5EpX+Z9QTXz7gvLD+4IP0br6nhQbR5
-	 k932/+YF5E7zJZSNex52AGGP6IAizHjxsVGjkKr7/ZWJWRMQfK/pYEtaLaZqXXc5tK
-	 K/alACU4cz6Ng==
-Date: Fri, 27 Feb 2026 15:32:31 -0800
+	b=h5UMkxGrRunHXPy2Bh+b32fvht5LIB1Ppcwv/BXgtzdgP0h57ru6qJhCAPk6ntY1G
+	 kejOcbu9qhP8LULA9VE5OrSQZXvAoZ6WHDrEIipGRkUO8ubJwRxdYLeJNChGB1kbG8
+	 fo4A7/vgrUqWGSDLtXydFVhjFLb1bDP6v9LCRT+kGAjP8UqtjVnsI0+IOnPR87yxXy
+	 nTfGfkfMPFhJlx6TvPrfRU3nQFBVQzY1I5UzSmFlIXb1PTYyYhz/bkQS1kCUyChBkY
+	 v4pZcB5cgnWieXpDdrM48qYRDGdxbgKOzXPDo2aaO+CdSGAK/Uxh2tUwzuf4kiXphe
+	 miC3YhkpOnbgQ==
+Date: Fri, 27 Feb 2026 16:23:40 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
- KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
- Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jakub Sitnicki <jakub@cloudflare.com>,
- netdev@vger.kernel.org, bpf@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <20260227153231.78d16b69@kernel.org>
-In-Reply-To: <aaGaaExy63bGa7Or@lore-desk>
-References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
-	<20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
-	<20260218174742.62a4074f@kernel.org>
-	<aZbuWBnmh_SQJyVf@lore-desk>
-	<20260219091344.1d8517f3@kernel.org>
-	<aZyKWoxnywXKWth9@lore-desk>
-	<20260223151845.06db43b0@kernel.org>
-	<aaGaaExy63bGa7Or@lore-desk>
+To: Ioana Ciornei <ioana.ciornei@nxp.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
+ ethtool standard counters
+Message-ID: <20260227162340.4675e766@kernel.org>
+In-Reply-To: <a6qhvs4vaxk33iryntrvybaesbr23v7hcrfn37p53viydd3zhs@6zquhlssfthz>
+References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
+	<20260225150648.1542206-6-ioana.ciornei@nxp.com>
+	<77f3e4e8-430e-4ae1-aa1f-8f70b4d8d3da@lunn.ch>
+	<osswnpbiyy35ycs7ha2ufugj7dzmvpeq3x7vjq4j53qtwamkuw@ihwl5qjuydnv>
+	<ph7vs3fsxti3nlypmmvm6wqvsnnsn76wct3qpi5omphggcjqrt@3any2dqzlgsr>
+	<031c7375-0407-476a-92eb-0f894ec820f1@lunn.ch>
+	<vcphjyyj3jezenqfgieqac7ayxhslupgeu6kh2ywfukaat3rtf@tsqaz33v4o7c>
+	<20260226182511.0d33f9d1@kernel.org>
+	<a6qhvs4vaxk33iryntrvybaesbr23v7hcrfn37p53viydd3zhs@6zquhlssfthz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,54 +56,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 27 Feb 2026 14:21:44 +0100 Lorenzo Bianconi wrote:
-> > > At the moment there is no way to store the csum value we got running
-> > > bpf_xdp_metadata_rx_checksum() in order to be consumed during
-> > > xdp_buff/xdp_frame to skb conversion (this info can just be consumed in the
-> > > ebpf program bound to the NIC) but  
+On Fri, 27 Feb 2026 09:34:28 +0200 Ioana Ciornei wrote:
+> On Thu, Feb 26, 2026 at 06:25:11PM -0800, Jakub Kicinski wrote:
+> > On Thu, 26 Feb 2026 16:18:21 +0200 Ioana Ciornei wrote:  
+> > > > How about, fail the test if any are greater than 1% of the number of
+> > > > packets transmitted/received? My _guess_ is, if you have 1% packet
+> > > > loss, networking is not going to be happy anyway. It probably means
+> > > > you have one end doing Half duplex and the other Full. That is a
+> > > > typical configuration error you see causing collisions. Not that i've
+> > > > actually seen this for maybe a decade!
+> > > > 
+> > > > Failing the test, with a comment about checking duplex configuration,
+> > > > seems sensible.    
+> > > 
+> > > Seems reasonable. Thanks for the help!  
 > > 
-> > I think the scope here is much narrower than the xdp_buf to xdp_frame
-> > to skb conversion. We are just pass information between the program and
-> > driver which owns xdp_buff. Very similar to your new xmo.
-> > 
-> > We could either tell the driver to discard the csum complete or even
-> > add a helper to "adjust" the the csum value. Similar to the helper
-> > we have to adjust the csum in TC / skb context.  
+> > FWIW the expectation is that the test should be able to run even on
+> > systems / boards with a single interface. So the control traffic
+> > (communicating with the traffic generator) will run over the same
+> > interface as the test. 1% error is unachievable. I'd only check the
+> > lower bound, and use some sanity value for the upper bound (2^30 ?)
+> > if at all  
 > 
-> IIUC, for the CSUM_COMPLETE case, we want to add a kfunc used to update (or
-> invalidate) the checksum value (if the packet has been modified by the eBPF
-> program bounded to the NIC) and report the updated checksum to the driver if
-> the XDP verdict is XDP_PASS. Correct?
+> Really? I didn't know of that expectation at all.
 > 
-> I guess we could have two approaches here:
-> - Write the new checksum value into the xdp_metadata area (if available)
->   where the driver can load it and update the checksum value before
->   allocating the skb.
->   The main downside of this approach is we need modify each driver.
-> - Add a new xmo callback used to set the checksum value and report it
->   from the eBPF program into a specific memory area provided by the driver
->   (e.g. DMA descriptor) that is used to build the skb.
->  
-> What do you think?
+> I did take ethtool_rmon.sh as an example and that selftest as well
+> takes NUM_NETIFS=2 and does check for both a lower bound and upper bound
+> that takes into account a 1% deviance from the target.
 
-Exactly. The invalidation is easier 'cause using a single bit in the
-flags should be uncontroversial. If we want to be able to repair /
-provide the csum complete then we have to pick one of the two options
-you outlined. As you may suspect from previous discussions I favor 
-the latter. But we'd probably have to have a PoC with either one and
-see where the consensus falls.
+I called out in the other thread that the bash scripts in this dir
+pre-date any serious CI use. They are only there to get them out of 
+the way of SW-only CI testing.
 
-Actually, thinking about it more, I guess this is not just a
-CSUM_COMPLETE issue. XDP_PASS will also risk reporting invalid
-UNNECESSARY to the stack (e.g. when XDP stripped a UDP tunnel
-which which the NIC compute the UNNECESSARY but the packet inside
-the tunnel has an invalid csum).
+> How would the test even work with only a single interface?
 
-> Moreover, since we already have this issue upstream, do you think
-> this new feature must be part this series or can we do it with a
-> follow-up patch/series?
-
-We don't have to add the kfunc to adjust / invalidate the csum.
-But we should document how the drivers are expected to behave until
-such kfunc exists and we should add a selftest that checks the
-documented expectation.
+Hopefully the readme mentioned in my other reply clarifies.
