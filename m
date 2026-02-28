@@ -1,103 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6A3423A71;
-	Sat, 28 Feb 2026 10:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEFE1E98E3;
+	Sat, 28 Feb 2026 11:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772275455; cv=none; b=rF7wrDnnGcsagju5vnLDI0k2yY5nMs1dO5pQ1XV8Uq3PZ8KQ4R9byeDIv4j0RSQsshCCz6WeU1ZGmoz+FelGSvN+g9sug5GnoclaLhWFWGjHf2Z5ZM0JisWVsOUQOHy7u/YVA8uj36qIuW8d2jHsR8pMeyTfA0Cm51OeZUKSVTY=
+	t=1772279936; cv=none; b=ZQB/9OWDgLe/nh0hHx6tEcxMhnJHpJyUMxISxlziDo1pxuITGQrfX2nWR2N0xBYXufKdlUthHtzWNTzKasnJ0vlxbVY93NZOodY6giwQmFFWloHF82gRb6PQ+L3ptFL1Ns0xCp9zz6dUlukqkuFbAwkyT1ypl48ttD73FQkekhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772275455; c=relaxed/simple;
-	bh=ikytCIWUmhX3m6xcF5YWoGBuLdnUUDVfexdZDqFbpe4=;
+	s=arc-20240116; t=1772279936; c=relaxed/simple;
+	bh=SA4eviJ/yZpyCZ7RPvowxWRJiO91Y0GTqAPs96rzHJg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dWzfVUebOVoGc/4b8fYliIVTpTWllDy3XyRpRzmaqiE+VyR0K8woTmQVFMUKrDkHBcSc99IPD0BPOZZNYwA6CVU34IjsL9Ligw4Ah9jPRuGLrEyyQ8i5jMnt+pAdkL1gFwv32SSfCYqX0HQOhvMHpnK+yqlaKRhLHNIuhhx++A4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GnyrAFLc; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ujo2MJRPz4fCzC542bPAypthZHlNQEtBZ7zAickwP61uc3dHg/2Bx0JP2yuI2Xw7c2F3a8V7/ELcDFql6emkVVdLdtwZZrnskMNEoQ1Pb575uvuz7iqVejqkCLAvtha3ntcMwM0UFQNyVnOTWCnAcGryEvsG9ReIzhqgwXG7k7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fz3ojnSE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GnyrAFLc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772275453; x=1803811453;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ikytCIWUmhX3m6xcF5YWoGBuLdnUUDVfexdZDqFbpe4=;
-  b=GnyrAFLcfHgVMFniWqjb0YrpJPv5geShT4x0NBqOpN6tYO6/n6Qf72ki
-   W9f3DHoviQQou7J3MAETforzoJjW3wsMGn5gxxNuuDBXohYCE2D45i02Z
-   UX12vqizBZeVb1OdREJ/WtlV9qV8Q0RiBzE4PMeGLGEJJgttV1E8TgNaI
-   SyuwRC4OFJtYkGaiH+eqYRQ9oorWBbcEbmOWZMvnn1F4sdkZ7xKEkdjaW
-   M9hUvkM4/bAtVr1YFtCxXo40lzyGhhB0kHHP9cPFih3n2vNIkWqH0TdeF
-   kNsYJAcdVj9ZwIsucY68sMWUnd2WZQu5l6f0jxFE6CSW80LRPRzKmm9Pk
-   A==;
-X-CSE-ConnectionGUID: 951KxgtNTqmA6MXTdIw80Q==
-X-CSE-MsgGUID: gZG4T0PAQLOF/F3xTm3CGA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="84700438"
-X-IronPort-AV: E=Sophos;i="6.21,315,1763452800"; 
-   d="scan'208";a="84700438"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 02:44:13 -0800
-X-CSE-ConnectionGUID: I1VF2WH+QAuvdQMKgwseww==
-X-CSE-MsgGUID: LiIZEzI6RsOMerkb+uOxMw==
-X-ExtLoop1: 1
-Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.224])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 02:44:11 -0800
-Date: Sat, 28 Feb 2026 12:44:09 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: David Gow <david@davidgow.net>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: tool: Recommend --raw_output=all if no KTAP found
-Message-ID: <aaLG-Rb63k2Tiyd_@ashevche-desk.local>
-References: <20260227105650.307845-1-david@davidgow.net>
- <aaGuVA4q5BXSxBWX@ashevche-desk.local>
- <49a87105-4503-4cf9-a967-e64ffe7fbad4@davidgow.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fz3ojnSE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19DAC116D0;
+	Sat, 28 Feb 2026 11:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772279936;
+	bh=SA4eviJ/yZpyCZ7RPvowxWRJiO91Y0GTqAPs96rzHJg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fz3ojnSEYFMcEgZJjq4mQUrWrDU3Tq7qRuMBtK0kB6Rt/zxOJel2Gu9YaosO6Ug6F
+	 8C8YvGmh+ZSlAKQb2mILbGWXAUW4ufmFh+fOsdtbbo5yStug7IZ6K3Yb1EKcPEYmEw
+	 FNFeGHA0YghHdjL48ZxJ7A8rk9Wk471f7TxTMEsiS7IwtvHtDN95LVNIpc5sx7258p
+	 5CD8U8wHZK+CFn7wViJEB/MA7QvNxhfBAdhA4cp1zY3rl4LY5mYmOXgOHnj0V8ZxoB
+	 CQ7Qkh3Lmfw81RRL6gVP4oSHtB2WR33hCgei/6GU08EPMPY9PFkvpyLNLGC1O3BAYe
+	 A2r8i7UILNcxw==
+Date: Sat, 28 Feb 2026 12:58:53 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aaLYfWnuuf_ne72u@lore-desk>
+References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
+ <20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
+ <20260218174742.62a4074f@kernel.org>
+ <aZbuWBnmh_SQJyVf@lore-desk>
+ <20260219091344.1d8517f3@kernel.org>
+ <aZyKWoxnywXKWth9@lore-desk>
+ <20260223151845.06db43b0@kernel.org>
+ <aaGaaExy63bGa7Or@lore-desk>
+ <20260227153231.78d16b69@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zJe+viDHT4x8TgXE"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <49a87105-4503-4cf9-a967-e64ffe7fbad4@davidgow.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
-
-On Sat, Feb 28, 2026 at 06:11:04PM +0800, David Gow wrote:
-> Le 27/02/2026 à 10:46 PM, Andy Shevchenko a écrit :
-> > On Fri, Feb 27, 2026 at 06:56:49PM +0800, David Gow wrote:
-> > > If no KTAP header is found in the kernel output (e.g., because the kernel
-> > > crashed before the KUnit executor was run), it's very useful to re-run the
-> > > test with --raw_output=all, as that will show any error output (such as a
-> > > stacktrace, log message, BUG, etc). This is not particularly intuitive,
-> > > however, as --raw_output=all is not well known.
-> > > 
-> > > Add an extra log line to advertise --raw_output=all in this case, as it's
-> > > a terrible user experience to just get "Did any KUnit tests run?"
-> > 
-> > What's the difference to "full"?
-> > 
-> > Thanks for adding this, btw!
-> 
-> Normally, the --raw_output option will just pass through the actual test
-> results (or, rather, any kernel output from when the tests are running), by
-> skipping everything prior to the "KTAP version 1" line.
-> 
-> --raw_output=full is a synonym for --raw_output=all, which just passes
-> through all of the kernel output, so is useful if we never get as far as
-> printing that KTAP version line.
-> 
-> (I kept forgetting whether it was "full" or "all", which is why both are
-> supported.)
-
-Okay, thanks for elaboration:
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
+In-Reply-To: <20260227153231.78d16b69@kernel.org>
 
 
+--zJe+viDHT4x8TgXE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+> On Fri, 27 Feb 2026 14:21:44 +0100 Lorenzo Bianconi wrote:
+> > > > At the moment there is no way to store the csum value we got running
+> > > > bpf_xdp_metadata_rx_checksum() in order to be consumed during
+> > > > xdp_buff/xdp_frame to skb conversion (this info can just be consume=
+d in the
+> > > > ebpf program bound to the NIC) but =20
+> > >=20
+> > > I think the scope here is much narrower than the xdp_buf to xdp_frame
+> > > to skb conversion. We are just pass information between the program a=
+nd
+> > > driver which owns xdp_buff. Very similar to your new xmo.
+> > >=20
+> > > We could either tell the driver to discard the csum complete or even
+> > > add a helper to "adjust" the the csum value. Similar to the helper
+> > > we have to adjust the csum in TC / skb context. =20
+> >=20
+> > IIUC, for the CSUM_COMPLETE case, we want to add a kfunc used to update=
+ (or
+> > invalidate) the checksum value (if the packet has been modified by the =
+eBPF
+> > program bounded to the NIC) and report the updated checksum to the driv=
+er if
+> > the XDP verdict is XDP_PASS. Correct?
+> >=20
+> > I guess we could have two approaches here:
+> > - Write the new checksum value into the xdp_metadata area (if available)
+> >   where the driver can load it and update the checksum value before
+> >   allocating the skb.
+> >   The main downside of this approach is we need modify each driver.
+> > - Add a new xmo callback used to set the checksum value and report it
+> >   from the eBPF program into a specific memory area provided by the dri=
+ver
+> >   (e.g. DMA descriptor) that is used to build the skb.
+> > =20
+> > What do you think?
+>=20
+> Exactly. The invalidation is easier 'cause using a single bit in the
+> flags should be uncontroversial. If we want to be able to repair /
+> provide the csum complete then we have to pick one of the two options
+> you outlined. As you may suspect from previous discussions I favor=20
+> the latter. But we'd probably have to have a PoC with either one and
+> see where the consensus falls.
+
+ack, I will work on a PoC.
+
+>=20
+> Actually, thinking about it more, I guess this is not just a
+> CSUM_COMPLETE issue. XDP_PASS will also risk reporting invalid
+> UNNECESSARY to the stack (e.g. when XDP stripped a UDP tunnel
+> which which the NIC compute the UNNECESSARY but the packet inside
+> the tunnel has an invalid csum).
+>=20
+> > Moreover, since we already have this issue upstream, do you think
+> > this new feature must be part this series or can we do it with a
+> > follow-up patch/series?
+>=20
+> We don't have to add the kfunc to adjust / invalidate the csum.
+> But we should document how the drivers are expected to behave until
+> such kfunc exists and we should add a selftest that checks the
+> documented expectation.
+
+I will add the required documentation and kselftest in the next iteration.
+
+Regards,
+Lorenzo
+
+
+--zJe+viDHT4x8TgXE
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaaLYfQAKCRA6cBh0uS2t
+rK8NAQCa3BtPt0r6O4Rd1WSKMud4jYbuc+yFGRH5iD2pYIy4DQEAjp1slS4Z4kQg
+Efic0WsT4AYh9Xf0lUF6VupLvRIrWAE=
+=4fhS
+-----END PGP SIGNATURE-----
+
+--zJe+viDHT4x8TgXE--
