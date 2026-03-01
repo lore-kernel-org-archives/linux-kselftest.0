@@ -1,141 +1,218 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CA9A932;
-	Sun,  1 Mar 2026 08:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772354503; cv=none; b=ZS/F8bffZElABzeB2AnDzuZoTt3hwmXp/xpNSmOQK+7ExGeCJbtK9SbFLJ5rZGM1LkR8Xxa9ooYXYpPKfS/ucgjc6rRrod+cdrcWhdDOUkLs8OG9pkWlSeWNJ7tQyLkniV6jtH9VMjsTxazXZAAPXWy7zX5P/UrXwUhgjQiDIp0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772354503; c=relaxed/simple;
-	bh=lCipjIFtZ7gKyzq5btTB15yO0keo4NhyPRosOJ2MUIQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=m+7s1dCXivdWwyJC0fFcuIRsZq1ogLdGyA6PbHCmYP1fjWBfLyJvtI71TDNnaYmALmZYoNb62w41rkFWLzBstmPNM/2gfMtoqxsfp/B4BOBP9+ZB6Tv1fGrXswaMlDoBZPauTxkvokX7RwEOFqQn8Hvvofm08WUT6kUbh4e4HmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fdjJ3l8Y; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406EF430BA6
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Mar 2026 10:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772360186; cv=pass; b=OaCK3jOHNC4rOTq+XyYe+t05fG8rqrYDe38ttzo/g+B/EC9Te9ZgP4II8YRP+bo1E5DLNL/xSIFRHBl+raen574zC2jGaoh+AzfaiMWzTW1EOI0tHUbw1HXCVcQWhkoCDY1YINJ9Hcx4JUfrkF/Ih/C+mIRa7I1MctltxxAhA2Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772360186; c=relaxed/simple;
+	bh=s7rfjnPtFd6SU6xoPH3SYe9hNrVk5+6PWUoUYgGCnIM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KQniZ0UHdc0Yizy9PmPTEGDp2OFhJKPCRjfPV77k/T8NkaKK0CYx4j4zfGA5VcMkTwo+u5cw5fnZth1nOiTaprVbahdfzXNqT7JIe/4JZ3QxORvLoWArORPsJUlqNitaMaFUbYxJ6pFnwY0h2lbZgVbGApa2k7Cxz2NrjD++9pU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N04lOntM; arc=pass smtp.client-ip=209.85.222.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fdjJ3l8Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 94AF8C116C6;
-	Sun,  1 Mar 2026 08:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772354502;
-	bh=lCipjIFtZ7gKyzq5btTB15yO0keo4NhyPRosOJ2MUIQ=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=fdjJ3l8YzX7SQ6atzcxngUN3M93TwVYTJIEYOyVXFRPKDU6Pee1OaKx/kYUtxHuyo
-	 d6/18pUY5CMR7VLMPdZ0Z2jWXZNJ6bsPN+cy7nNDedV6lloOv4xT17yUEbmzc7gqN2
-	 WPfVBGfyfyV1dTveq+vv6RYgJYC/3KKQW66PqH0n/NzHw5JGTzhfIDtZ+Rbs2uCxZb
-	 eiz65KwamZ+9gmE4PfYPKAxvtlAV1uGam/l6CwUwog5MjgMjZQUkTa7E2LYpk2k8X9
-	 VrzgguYnBjl006UCiIbjBgWoKUQUvsShsLBC7eLAD1QUc82c63ol3DOkUuQT+1HNoO
-	 R6JD/MNP6RyoA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FFCDFD0040;
-	Sun,  1 Mar 2026 08:41:42 +0000 (UTC)
-From: Simon Baatz via B4 Relay <devnull+gmbnomis.gmail.com@kernel.org>
-Date: Sun, 01 Mar 2026 09:41:33 +0100
-Subject: [PATCH] selftests/net: packetdrill: restore tcp_rcv_big_endseq.pkt
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N04lOntM"
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-948029fb1f2so1043458241.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Mar 2026 02:16:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772360184; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fgthZ6b/Zq254QbJfFDlDNMANwAmRtmVwbs+WRMV9M1QytX3vHfHmexxULL0stpcLi
+         NJPVFbYXDK6cd5Y7OckOsoUUI7RypMZD9sM7bAqc1rs+hZaPYBFHezLa7D20ZmtExlXN
+         IBRJRLvevf9UlxJ5slNI26/yvTaTZl+4FEb55GBQth+DMciyLJSid8QJbxwoXDt4TIDX
+         AWEhxcQU1xtS51dGvuky3/K5mu6UDoqAxoKawxPi9m9ArI2/4t5RTsgFiNjA3IwDC8jF
+         EgR2nD8zZHHpSNsZUcawiO4GO/O8lYHyEbboyub1eMxRvuBoswI7OVC/pMUB4kQbi9nD
+         peqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZrlN72XdG30IkaSiOSU/cpdfc/g67VmbA5qDRZerWc4=;
+        fh=izqipoP0Qx7AP5Q2disnCzKZRKtJImnpRzCgEZqq9RU=;
+        b=ifeWO6wqqE8UePlQ6rioxzB60Lxv1ozNDjdWEqvkZrQn6cQnmy6Qql2S5KhH6WOTvv
+         PCGsOM2mApXjIeE2O7+8OD0S1f1g/G1JEcPhOHXbykEDtxRr9IUhV2ApwZX47u2MY+YM
+         N6PtYO08QMRTY54NOWw57B9kwLo7TYmr4h5pKqN8NUMdpPAsihLVZvyLHecJExOViwws
+         4/BUtVWd+xGjL3xK44b8xTlEHwZNG7QtsKch+KTWZHj+YJeCN8KgTrUmlS1hD+TfmYFZ
+         WWVq9HOKpMajsYy8qq5ObP/EPbGcCJTKyhbSj5OMl+jzHq2/3VrlGs5nc1V/ykGXEnK7
+         7M7w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772360184; x=1772964984; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZrlN72XdG30IkaSiOSU/cpdfc/g67VmbA5qDRZerWc4=;
+        b=N04lOntMi64Tm+WqmzZhhWbQVrZnkQBqb/MlNznFDsXrPLPhUMz2dw+9bZmRLd62x6
+         gIZip+2v7bDGN3YmJtyk4HJAS4UVN1WG1U0Aqu+faG+/IK+3n9PscrvR3J8Hc2r3L5vD
+         A5uXJoMIZWCHG9gWgha3KPr9hJU5Pwao6gkNx9B+qbzu5kCnHRCJ5NXOFZVE81rWZMuy
+         oNEWxKfvREP7ll/7g5gPcPb1e+5IBkH+hqPqacUdRkaFalxafjYraKIm9CEePams18fe
+         kE2Ybd6TdGJv+3qXBbPDTeW23hLy3ZGb08T1SoziBB2S3B18vq2kSbBKkP1SUMhuR+Hw
+         L1zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772360184; x=1772964984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZrlN72XdG30IkaSiOSU/cpdfc/g67VmbA5qDRZerWc4=;
+        b=FMLQ1erStf6PllKXilu2kHxRgJZMKaj6ZcQijHxpm0P4UUZL+tT4oS4WhsG13djjb2
+         Dsa1Z5MVlzLV0iaVQtT8XvFI4McQPODUFRUCdKZ+wSQkdIAr1cpY7Hqqy3udEWzNpVhX
+         vAaqJ6A1QNLsJ1klM4k6GAcAo7a/8he4Qv6OTH0pKEBfnZtWFcOW8KeSDYDYVxLQdE6C
+         f8KqQp2BE6COy36DSZYlOLzPHtYdgXma6iyVKhqgTTxPFH8aBdzPiAF6+0ZbvEGH53D5
+         2KCTIVA9xTjsAmKe/1jKNULCv7ivrNpEE0qJaKOqknqUc1Mj70JeF/YNr8Uq6I2gPFfy
+         sSZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUlaQ+DQ/Lae1yZM7XC05vSrdHM/oeXHOFPV7ulnSlYroCoDSmwx6NLCrIivY1MbdGygU1FgpxcfiqfJ3jALCI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiNu7+nRV4LokRRva6GW9JikCY0bbswl2d+z1/cYsSFR/vevdX
+	m1KR3O47tJbW/GhLHIHkPG0/igs2gQuGk6RjJoblB+aEjAdYs+XLgA1Htdi5idVwXFj0b7fH9JF
+	6sJ/R15JlCG+v3v0SDBRs45V1DRxLNg0=
+X-Gm-Gg: ATEYQzw4vMjYCX6rbxIl6RMW8IKNa7f+iUcly4ksxhXb7aSQhOIzBAmbp1ksWRqOWtK
+	x/ZQTJL35APLu8PF2Fq1yDVOrDaviDTHgGtkumpLfcZ1kqE/AfHpvPYXGWX6+HaV23JG7SPV1tb
+	KBeRVcV74VJbFy6gDPrBZSn2z3wDuk18tIMXftGc6UGWYfQAPu+2tYkqM5LLgc8r2SeYt6KKfZz
+	qvGOUKQT0pnj3a2ZW6cpv1lKmmL+E/ZdEACOnojGEo4cOp75SwTfnpK0dZfw8bVfVN+FQpR1xop
+	7KXQYZz50PzmAKBzaetYpeqqw9WtDZvubTgDCmNgEw==
+X-Received: by 2002:a05:6102:5091:b0:5f7:24dc:3ac3 with SMTP id
+ ada2fe7eead31-5ff322bf4bdmr2863289137.7.1772360184080; Sun, 01 Mar 2026
+ 02:16:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260301-tcp_rcv_big_endseq-v1-1-86ab7415ab58@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MTQqAIBBA4avIrBNSor+rRIjpaLMx05AgunvS8
- lu890DGRJhhZg8kLJTpCBWiYWB2HTxystUgW9m3Uo78MlElU9RGXmGwGU9uRidwmESnBws1jAk
- d3f90Wd/3AzlIkn9kAAAA
-X-Change-ID: 20260228-tcp_rcv_big_endseq-c8f1e7914a7d
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Simon Baatz <gmbnomis@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772354501; l=2571;
- i=gmbnomis@gmail.com; s=20260220; h=from:subject:message-id;
- bh=y5Qga6QOLux9usDOxXwZ0c1UWnBSsfdcWFsVJAvrhHI=;
- b=o5FudX9jHGh+XH4xjuB9TRyfPib3PPUV14pl2IJlNizXNWR68+AE0ZA5cQNh2KDpZiUPNUAj7
- hISaYNu4DUhDqv4NtAg/77TOI+mb7VHW+0Ra/aVGtPHIWTTmk3GALw2
-X-Developer-Key: i=gmbnomis@gmail.com; a=ed25519;
- pk=T/JIz/6F5bf1uQJr69lmyi7czVG+F9TVZ/8x5z9Wtqw=
-X-Endpoint-Received: by B4 Relay for gmbnomis@gmail.com/20260220 with
- auth_id=641
-X-Original-From: Simon Baatz <gmbnomis@gmail.com>
-Reply-To: gmbnomis@gmail.com
+References: <20260221145915.81749-1-dorjoychy111@gmail.com>
+In-Reply-To: <20260221145915.81749-1-dorjoychy111@gmail.com>
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Date: Sun, 1 Mar 2026 16:16:13 +0600
+X-Gm-Features: AaiRm52S_i7uxGvz2GvDZgmu6T0jp37pcUwvZrAaDhnW-l9lgBlZerFtvlbrSME
+Message-ID: <CAFfO_h6Y1QcW7mNGdCuY-_J6zrF_F8aW+Q8O9SvoBbXTxteFjQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org, 
+	gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	v9fs@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, jlayton@kernel.org, 
+	chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Simon Baatz <gmbnomis@gmail.com>
+Ping...
+Requesting for review on this patch series please.
 
-Commit 1cc93c48b5d7 ("selftests/net: packetdrill: remove tests for
-tcp_rcv_*big") removed the test for the reverted commit 1d2fbaad7cd8
-("tcp: stronger sk_rcvbuf checks") but also the one for commit
-9ca48d616ed7 ("tcp: do not accept packets beyond window").
+Regards,
+Dorjoy
 
-Restore the test with the necessary adaptation: expect a delayed ACK
-instead of an immediate one, since tcp_can_ingest() does not fail
-anymore for the last data packet.
-
-Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
----
- .../net/packetdrill/tcp_rcv_big_endseq.pkt         | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_big_endseq.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_big_endseq.pkt
-new file mode 100644
-index 0000000000000000000000000000000000000000..6c0f32c40f19be2a750fc9d69bbf64250cd7b525
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_big_endseq.pkt
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+--mss=1000
-+
-+`./defaults.sh`
-+
-+    0 `nstat -n`
-+
-+// Establish a connection.
-+   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_RCVBUF, [10000], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,wscale 0>
-+  +.1 < . 1:1(0) ack 1 win 257
-+
-+  +0 accept(3, ..., ...) = 4
-+
-+  +0 < P. 1:4001(4000) ack 1 win 257
-+  +0 > .  1:1(0) ack 4001 win 5000
-+
-+// packet in sequence : SKB_DROP_REASON_TCP_INVALID_END_SEQUENCE / LINUX_MIB_BEYOND_WINDOW
-+  +0 < P. 4001:54001(50000) ack 1 win 257
-+  +0 > .  1:1(0) ack 4001 win 5000
-+
-+// ooo packet. : SKB_DROP_REASON_TCP_INVALID_END_SEQUENCE / LINUX_MIB_BEYOND_WINDOW
-+  +1 < P. 5001:55001(50000) ack 1 win 257
-+  +0 > .  1:1(0) ack 4001 win 5000
-+
-+// SKB_DROP_REASON_TCP_INVALID_SEQUENCE / LINUX_MIB_BEYOND_WINDOW
-+  +0 < P. 70001:80001(10000) ack 1 win 257
-+  +0 > .  1:1(0) ack 4001 win 5000
-+
-+  +0 read(4, ..., 100000) = 4000
-+
-+// If queue is empty, accept a packet even if its end_seq is above wup + rcv_wnd
-+  +0 < P. 4001:54001(50000) ack 1 win 257
-+   * > .  1:1(0) ack 54001 win 0
-+
-+// Check LINUX_MIB_BEYOND_WINDOW has been incremented 3 times.
-++0 `nstat | grep TcpExtBeyondWindow | grep -q " 3 "`
-
----
-base-commit: 9439a661c2e80485406ce2c90b107ca17858382d
-change-id: 20260228-tcp_rcv_big_endseq-c8f1e7914a7d
-
-Best regards,
--- 
-Simon Baatz <gmbnomis@gmail.com>
-
-
+On Sat, Feb 21, 2026 at 8:59=E2=80=AFPM Dorjoy Chowdhury <dorjoychy111@gmai=
+l.com> wrote:
+>
+> Hi,
+>
+> I came upon this "Ability to only open regular files" uapi feature sugges=
+tion
+> from https://uapi-group.org/kernel-features/#ability-to-only-open-regular=
+-files
+> and thought it would be something I could do as a first patch and get to
+> know the kernel code a bit better.
+>
+> I only tested this new flag on my local system (fedora btrfs).
+>
+> Note that I had submitted a v4 previously (that had -EINVAL for the atomi=
+c_open
+> code paths) but did not do a get_maintainers.pl. It didn't get any review=
+ and
+> please ignore that one anyway. In this version, I have tried to properly =
+update
+> the filesystems that provide atomic_open (fs/ceph, fs/nfs, fs/smb, fs/gfs=
+2,
+> fs/fuse, fs/vboxsf, fs/9p) for the new OPENAT2_REGULAR flag. Some of them
+> (fs/fuse, fs/vboxsf, fs/9p) didn't need any changing. As far as I see, mo=
+st of
+> the filesystems do finish_no_open for ~O_CREAT and have file->f_mode |=3D=
+ FMODE_CREATED
+> for the O_CREAT code path which I assume means they always create new fil=
+e which
+> is a regular file. OPENAT2_REGULAR | O_DIRECTORY returns -EINVAL (instead=
+ of working
+> if path is either a directory or regular file) as it was easier to reason=
+ about when
+> making changes in all the filesystems.
+>
+> Changes in v4:
+> - changed O_REGULAR to OPENAT2_REGULAR
+> - OPENAT2_REGULAR does not affect O_PATH
+> - atomic_open codepaths updated to work properly for OPENAT2_REGULAR
+> - commit message includes the uapi-group URL
+> - v3 is at: https://lore.kernel.org/linux-fsdevel/20260127180109.66691-1-=
+dorjoychy111@gmail.com/T/
+>
+> Changes in v3:
+> - included motivation about O_REGULAR flag in commit message e.g., progra=
+ms not wanting to be tricked into opening device nodes
+> - fixed commit message wrongly referencing ENOTREGULAR instead of ENOTREG
+> - fixed the O_REGULAR flag in arch/parisc/include/uapi/asm/fcntl.h from 0=
+60000000 to 0100000000
+> - added 2 commits converting arch/{mips,sparc}/include/uapi/asm/fcntl.h O=
+_* macros from hex to octal
+> - v2 is at: https://lore.kernel.org/linux-fsdevel/20260126154156.55723-1-=
+dorjoychy111@gmail.com/T/
+>
+> Changes in v2:
+> - rename ENOTREGULAR to ENOTREG
+> - define ENOTREG in uapi/asm-generic/errno.h (instead of errno-base.h) an=
+d in arch/*/include/uapi/asm/errno.h files
+> - override O_REGULAR in arch/{alpha,sparc,parisc}/include/uapi/asm/fcntl.=
+h due to clash with include/uapi/asm-generic/fcntl.h
+> - I have kept the kselftest but now that O_REGULAR and ENOTREG can have d=
+ifferent value on different architectures I am not sure if it's right
+> - v1 is at: https://lore.kernel.org/linux-fsdevel/20260125141518.59493-1-=
+dorjoychy111@gmail.com/T/
+>
+> Thanks.
+>
+> Regards,
+> Dorjoy
+>
+> Dorjoy Chowdhury (4):
+>   openat2: new OPENAT2_REGULAR flag support
+>   kselftest/openat2: test for OPENAT2_REGULAR flag
+>   sparc/fcntl.h: convert O_* flag macros from hex to octal
+>   mips/fcntl.h: convert O_* flag macros from hex to octal
+>
+>  arch/alpha/include/uapi/asm/errno.h           |  2 +
+>  arch/alpha/include/uapi/asm/fcntl.h           |  1 +
+>  arch/mips/include/uapi/asm/errno.h            |  2 +
+>  arch/mips/include/uapi/asm/fcntl.h            | 22 +++++------
+>  arch/parisc/include/uapi/asm/errno.h          |  2 +
+>  arch/parisc/include/uapi/asm/fcntl.h          |  1 +
+>  arch/sparc/include/uapi/asm/errno.h           |  2 +
+>  arch/sparc/include/uapi/asm/fcntl.h           | 35 +++++++++---------
+>  fs/ceph/file.c                                |  4 ++
+>  fs/gfs2/inode.c                               |  2 +
+>  fs/namei.c                                    |  4 ++
+>  fs/nfs/dir.c                                  |  4 +-
+>  fs/open.c                                     |  4 +-
+>  fs/smb/client/dir.c                           | 11 +++++-
+>  include/linux/fcntl.h                         |  2 +
+>  include/uapi/asm-generic/errno.h              |  2 +
+>  include/uapi/asm-generic/fcntl.h              |  4 ++
+>  tools/arch/alpha/include/uapi/asm/errno.h     |  2 +
+>  tools/arch/mips/include/uapi/asm/errno.h      |  2 +
+>  tools/arch/parisc/include/uapi/asm/errno.h    |  2 +
+>  tools/arch/sparc/include/uapi/asm/errno.h     |  2 +
+>  tools/include/uapi/asm-generic/errno.h        |  2 +
+>  .../testing/selftests/openat2/openat2_test.c  | 37 ++++++++++++++++++-
+>  23 files changed, 119 insertions(+), 32 deletions(-)
+>
+> --
+> 2.53.0
+>
