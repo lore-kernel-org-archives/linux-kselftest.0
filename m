@@ -1,152 +1,149 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269382BD0B;
-	Sun,  1 Mar 2026 01:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223BC28726E;
+	Sun,  1 Mar 2026 01:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772329725; cv=none; b=Ao459drYM6UISYfm+sEwDiWA5Y03irp6yzUadD/mUwrJcfcDJQ4BeiMf7MyWR4p+YtA6wrzPjGKcWoIxdPS6O58ISnRYURhZXVfbxuFOU5XrqEz7OwBM27Hs2ziEV+zF4bDkM4iZHTqD1HTnPfDnp6ktIm7nVZo7Rutwuxp2zJ8=
+	t=1772329882; cv=none; b=IzVJHpadBq0AFetJ/9hKHV1kyXr5Y0+llD7hHQ4X5FGaFe0TDlKlkVXs/MA5Ud2CDcoAeAcvjHK+C9vyfpYLCdO32KVFXRcrvBB+SZpXBDZqKC3uRN420p5MBJKSlylY9V5pdwNpfSJ517eCpLnNeTZ7LHUWPmYZL+Z0HW7Gl6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772329725; c=relaxed/simple;
-	bh=Kdg7Xf8W1Cmbmj0cjpTRVWbmr3wrfz0FHa1eGLUS4zQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uekbZ04RC4Karqu99RL0hsD0o2EMsqQ0XpZ+IoWSad1sgJddYh8cNYieEXyJ8uEu9mDOGDcd9noNa3w3F7znqvm3nGX25JTPDv8DDW7UeRnu93LCGiGgzw2WVhRP2O0Ky8Q0lA4cDRbAExstaZ/rv69umDlz2xBWBi6ga1drPAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=A4g0gTbk; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1772329882; c=relaxed/simple;
+	bh=mOv9TmzW4EzgZxb7ueMc9wjwZ3QQD5/AONsSGNpFwdk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Tt9gloD7BUeaIgmi0o1KVwiwkTYdjvFdYDrMDOyjYTa4xTKGn+VSGr73SDwmCwFvgoFLmB6m1l49PkvF+gQqd7yq1ahpRAxqfDGY9pFk7BIYaONqC3NnJf6vHMdztBUO5pOSo2ZoEuUTFDM56p83M8PMG55diPxB9lJ4lWkNNyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TsbMkB0/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="A4g0gTbk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=01eX58DYYoF4zbyQXiM2CCggLRdSBFTsTJlkXC7cPSE=; b=A4g0gTbk5dlo
-	f0nmr/r6zigMNmvllTv5gUilTp+A2zf7veiNjUtKJUATngEfEcY/Rn0khrUcYOCL93j33FVBQEEDq
-	NJTDNIevIEpTTkVzs1Rm52AcixSdC6CPU3HLasew9raoucMipU1YIjZNSvfWCOdqtsx81vEy8V/en
-	MS/pPH3YwknoUJDrbqsUUBdRzr+wMhnyM1EMJ3LJ+pHAuavuBa8gr1zMlyvzTufgHWBrqR7BCIS1t
-	P0Z+WvS3axeK3e9BeAjbtE/uSgcTDPl7SCLgUUy0BENOCxgZvUH+cL7RCUj6c0UEjSQU5Z+dIdlcl
-	qw/K7RGGdYeU35GfQblqhQ==;
-Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
-	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vwVsS-00CZeA-01;
-	Sun, 01 Mar 2026 02:47:09 +0100
-Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 6211lDgb454254
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Sun, 1 Mar 2026 01:47:13 GMT
-Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 6211lB0i454253;
-	Sun, 1 Mar 2026 01:47:11 GMT
-From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>, Nir Dotan <nird@mellanox.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH net] selftests: net: forwarding: fix IPv6 address leak in cleanup
-Date: Sun,  1 Mar 2026 01:47:06 +0000
-Message-ID: <20260301014706.454243-1-aleksey.oladko@virtuozzo.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TsbMkB0/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1714DC19421;
+	Sun,  1 Mar 2026 01:51:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772329882;
+	bh=mOv9TmzW4EzgZxb7ueMc9wjwZ3QQD5/AONsSGNpFwdk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TsbMkB0/I4ehqS9VvETUbluDIw/2VgyRpwEWjyWVu4AV+5z7sCMJM5Hif4PlE5yp8
+	 af88wp3NQtj+0hCWZpetaALNQPlR6Gt4eAPjFvl8L70UwFH3HjnDr3eaQKS3+vcLw0
+	 wmRiPd/QTc4zB7EdbxWPSToBwH2L/jwaxklY8sfycXb4W3Fz02ESbZVGMhYaQUoH/y
+	 hA1+4z/Pg1rBV/IT8oZCm1Y0RkfGIpj/A2Y6+X7YfCGGmi50YFMl+cbEumexKpf3kX
+	 5LYgXxkaEqIwqilSaRnp9XmlsQQjaF+0pm8HO6Hzm2640LZUqw334aUwFYNXTX/YDp
+	 R7Q61vaAQ+3aA==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	liwang@redhat.com
+Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: FAILED: Patch "selftests/mm/charge_reserved_hugetlb: drop mount size for hugetlbfs" failed to apply to 5.15-stable tree
+Date: Sat, 28 Feb 2026 20:51:19 -0500
+Message-ID: <20260301015119.1717595-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Patchwork-Hint: ignore
+X-stable: review
 Content-Transfer-Encoding: 8bit
 
-Several forwarding tests (e.g., gre_multipath.sh) initialize both IPv4
-and IPv6 addresses using simple_if_init, but only clean up IPv4
-in simple_if_fini. This leaves stale IPv6 addresses on the interfaces,
-which causes subsequent tests to fail when they encounter unexpected
-address configuration.
+The patch below does not apply to the 5.15-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
 
-The issue can be reproduced by running tests in sequence:
-  # run_kselftest.sh -t net/forwarding:ipip_hier_gre.sh
-  # run_kselftest.sh -t net/forwarding:min_max_mtu.sh
-  TAP version 13
-  1..1
-  # timeout set to 0
-  # selftests: net/forwarding: min_max_mtu.sh
-  # TEST: ping                                                          [ OK ]
-  # TEST: ping6                                                         [ OK ]
-  # TEST: Test maximum MTU configuration                                [ OK ]
-  # TEST: Test traffic, packet size is maximum MTU                      [FAIL]
-  #       Ping6, packet size: 65487 succeeded, but should have failed
-  # TEST: Test minimum MTU configuration                                [ OK ]
-  # TEST: Test traffic, packet size is minimum MTU                      [ OK ]
-  not ok 1 selftests: net/forwarding: min_max_mtu.sh # exit=1
+Thanks,
+Sasha
 
-Fix this by adding the missing IPv6 argument to simple_if_fini in
-all affected tests.
+------------------ original commit in Linus's tree ------------------
 
-Fixes: fed926d4f64c ("selftests: forwarding: Add IP tunneling lib")
-Fixes: 902280cacc03 ("selftests: forwarding: Add resilient multipath tunneling nexthop test")
-Fixes: 54818c4c4b93 ("selftests: forwarding: Test multipath tunneling")
-Fixes: e035146d6560 ("selftests: forwarding: Add multipath tunneling nexthop test")
+From 1aa1dd9cc595917882fb6db67725442956f79607 Mon Sep 17 00:00:00 2001
+From: Li Wang <liwang@redhat.com>
+Date: Sun, 21 Dec 2025 20:26:38 +0800
+Subject: [PATCH] selftests/mm/charge_reserved_hugetlb: drop mount size for
+ hugetlbfs
 
-Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+charge_reserved_hugetlb.sh mounts a hugetlbfs instance at /mnt/huge with a
+fixed size of 256M.  On systems with large base hugepages (e.g.  512MB),
+this is smaller than a single hugepage, so the hugetlbfs mount ends up
+with zero capacity (often visible as size=0 in mount output).
+
+As a result, write_to_hugetlbfs fails with ENOMEM and the test can hang
+waiting for progress.
+
+=== Error log ===
+  # uname -r
+  6.12.0-xxx.el10.aarch64+64k
+
+  #./charge_reserved_hugetlb.sh -cgroup-v2
+  # -----------------------------------------
+  ...
+  # nr hugepages = 10
+  # writing cgroup limit: 5368709120
+  # writing reseravation limit: 5368709120
+  ...
+  # write_to_hugetlbfs: Error mapping the file: Cannot allocate memory
+  # Waiting for hugetlb memory reservation to reach size 2684354560.
+  # 0
+  # Waiting for hugetlb memory reservation to reach size 2684354560.
+  # 0
+  ...
+
+  # mount |grep /mnt/huge
+  none on /mnt/huge type hugetlbfs (rw,relatime,seclabel,pagesize=512M,size=0)
+
+  # grep -i huge /proc/meminfo
+  ...
+  HugePages_Total:      10
+  HugePages_Free:       10
+  HugePages_Rsvd:        0
+  HugePages_Surp:        0
+  Hugepagesize:     524288 kB
+  Hugetlb:         5242880 kB
+
+Drop the mount args with 'size=256M', so the filesystem capacity is sufficient
+regardless of HugeTLB page size.
+
+Link: https://lkml.kernel.org/r/20251221122639.3168038-3-liwang@redhat.com
+Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
+Signed-off-by: Li Wang <liwang@redhat.com>
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+Acked-by: Waiman Long <longman@redhat.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- tools/testing/selftests/net/forwarding/gre_multipath.sh        | 2 +-
- tools/testing/selftests/net/forwarding/gre_multipath_nh.sh     | 2 +-
- tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh | 2 +-
- tools/testing/selftests/net/forwarding/ipip_lib.sh             | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/mm/charge_reserved_hugetlb.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/gre_multipath.sh b/tools/testing/selftests/net/forwarding/gre_multipath.sh
-index 57531c1d884d..397422cd5aea 100755
---- a/tools/testing/selftests/net/forwarding/gre_multipath.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_multipath.sh
-@@ -72,7 +72,7 @@ h1_create()
- h1_destroy()
- {
- 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
--	simple_if_fini $h1 192.0.2.1/28
-+	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
- }
+diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+index e1fe16bcbbe88..fa6713892d82d 100755
+--- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
++++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+@@ -290,7 +290,7 @@ function run_test() {
+   setup_cgroup "hugetlb_cgroup_test" "$cgroup_limit" "$reservation_limit"
  
- sw1_create()
-diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-index 7d5b2b9cc133..c667b81da37f 100755
---- a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-@@ -80,7 +80,7 @@ h1_destroy()
- {
- 	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
- 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
--	simple_if_fini $h1 192.0.2.1/28
-+	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
- }
+   mkdir -p /mnt/huge
+-  mount -t hugetlbfs -o pagesize=${MB}M,size=256M none /mnt/huge
++  mount -t hugetlbfs -o pagesize=${MB}M none /mnt/huge
  
- sw1_create()
-diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-index 370f9925302d..d04bad58a96a 100755
---- a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-@@ -80,7 +80,7 @@ h1_destroy()
- {
- 	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
- 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
--	simple_if_fini $h1 192.0.2.1/28
-+	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
- }
+   write_hugetlbfs_and_get_usage "hugetlb_cgroup_test" "$size" "$populate" \
+     "$write" "/mnt/huge/test" "$method" "$private" "$expect_failure" \
+@@ -344,7 +344,7 @@ function run_multiple_cgroup_test() {
+   setup_cgroup "hugetlb_cgroup_test2" "$cgroup_limit2" "$reservation_limit2"
  
- sw1_create()
-diff --git a/tools/testing/selftests/net/forwarding/ipip_lib.sh b/tools/testing/selftests/net/forwarding/ipip_lib.sh
-index 01e62c4ac94d..a5c23a28d50e 100644
---- a/tools/testing/selftests/net/forwarding/ipip_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/ipip_lib.sh
-@@ -151,7 +151,7 @@ h1_create()
- h1_destroy()
- {
- 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
--	simple_if_fini $h1 192.0.2.1/28
-+	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
- }
+   mkdir -p /mnt/huge
+-  mount -t hugetlbfs -o pagesize=${MB}M,size=256M none /mnt/huge
++  mount -t hugetlbfs -o pagesize=${MB}M none /mnt/huge
  
- h2_create()
+   write_hugetlbfs_and_get_usage "hugetlb_cgroup_test1" "$size1" \
+     "$populate1" "$write1" "/mnt/huge/test1" "$method" "$private" \
 -- 
-2.43.0
+2.51.0
+
+
+
 
