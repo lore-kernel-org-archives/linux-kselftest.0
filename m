@@ -1,211 +1,433 @@
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11021129.outbound.protection.outlook.com [40.107.74.129])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A734328635;
-	Sun,  1 Mar 2026 13:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8035932D43C
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Mar 2026 14:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772372288; cv=fail; b=kTrx6gMD0Q/lYrkHQb2fkMz/inr2Qi8blELaS6D0HWyrnV109W4uKizyCkzUPGILYtQM/sn6iqX60BJPMD6CQBC8SplS7nmjrJRE5AR+XE/6+qwIIH80Sn78FarJe5RErHaCjNfwr15l53o01eW6rBKato3N/PpyzSuJoOwMxd4=
+	t=1772374634; cv=pass; b=biEseydNNeb6rh6cehAaC0fsHfA8/oI2ku5517KFMTvjhnSegm0jB7CmxunfhaUGrG1eP20bSHVctNB/kVtOUUliHyZgECU1cyvL++IkMP5yVnhYiNjCVFxQ8nXeQlybUBV1+k6cQ+sqErgu8wD0XWdJtW+yFWCiejWYxZAVJC8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772372288; c=relaxed/simple;
-	bh=/tOwpXSbaMmgldEEnbgYSvHFP9Ekb4GYKOVp7gHkUtQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=HNMt2Mm62JYybC/ytyXhKO3koChbADiLzBNt3ekNO554G2doFYKEB8inxADVTH71l8tO7eeek9CFnyj+FRWWYt3wbtfOkHzddURMYVwHEX5BA/NAkoHKkYXkN9cjFDZt+Br7wz2YP1FdHpZIGoREnq4KpkHfvCBq84FgHobVgA0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=XDz+ksVB; arc=fail smtp.client-ip=40.107.74.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
+	s=arc-20240116; t=1772374634; c=relaxed/simple;
+	bh=SMxg0/OH4xIlvKgwlrN+FwO3idaXn0crhP3eBKT/aqU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=etUcgMqTgb3Ugp8aByaEjkjNnty7OCRNUhD60lYwjt1E4aQ6sUZXWh3OTRRTUE9LhdF08DXwEgBQqSeEwwOqT0hBhuzTn1naq0MbNSaPssD5DJUFX/p1t+RA/ABMrXmN6u6kfhixIYyXGeBUjn+4xYZEeRbNXFtuVaGK78coqh0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NZS8Mugp; arc=pass smtp.client-ip=209.85.217.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="XDz+ksVB"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nNmduesqti6koRRkH8e40e5MHIlaOzmKLAYG6AaodYB19B8BnEjvcxbEY3qKxBvxXMY6p9J1mzTKnFyd+8Rh5+DcY63dPYVFCDysMFuwwHaWLowEfeIv50qhTiMRShetz9PaheXHW/ARqT2o4YKRj5maj/zljOHOusRMv4GFJnH1KpwAf71geWBu/Q40XYROcZkaF+MvAWlh2oQqcIyjRbZAqmMui/neDZnZoWp7Z6XPKlyz9wrqPddKU5lVhvJ6+XaFUNZ5Wc3Z9oD5/C+5smONDC4L1PMblIah8ZwZYU8LRT21UH0zoPPZhN3nes/WfrH0zIjimbqSWlBDtAX9gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+Zh1YWQefFEIXTG4YMjcBJSXaRmW0Hpy+qI+xzoRWSI=;
- b=lkd0dfcxtfi7C9hNvHRe1QiHvjdGauk+UEjjoEemzZw2JVCpyoqMT1AvCryIvM4B4DHonjZocC336A8u7LusRMHr0uMm6Z2wvHamFjnGRaJaZkDhRdtHmAQ2Fd/bK+jAZMml6VrMBt0NgxAmGqZz9z0lrBK5ez0+e23KhM/uogmPY8lsQYsMEEHjkzbawC75y0gsHs4Di/MO7NlIuVO7Wu/YPnzNQYUb2xEVA58KabrsNgp9f3ZH71RmHnA6/SPDjPFsfeo0YdmX830aeVllmVxz+eZSgNaQ5ag1BvZn6760smK4O8eYmzAgcpbSLAIob4l4bPNmi6NdXc0n5HAMEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
- header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+Zh1YWQefFEIXTG4YMjcBJSXaRmW0Hpy+qI+xzoRWSI=;
- b=XDz+ksVBIUCRisdqMzqzfJF7TC6aMxbBJRjWT7KIOY4lgNbpZc6Lqnm1N8R5QyilKmAWlQlW6Ye1GLkPMDxK71NWpUlwRmWTwkk1zP/3I+ZRLlg3e2chKmIgW2jKeQ+QleoCusH65t174kvWKv4xV/HXmGvjQRt7IVfVgNcLXZU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=valinux.co.jp;
-Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
- by TY4P286MB7053.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:343::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.20; Sun, 1 Mar
- 2026 13:38:04 +0000
-Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9654.015; Sun, 1 Mar 2026
- 13:38:04 +0000
-Date: Sun, 1 Mar 2026 22:38:03 +0900
-From: Koichiro Den <den@valinux.co.jp>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: Manivannan Sadhasivam <mani@kernel.org>, 
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Siddharth Vadapalli <s-vadapalli@ti.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Richard Zhu <hongxing.zhu@nxp.com>, 
-	Lucas Stach <l.stach@pengutronix.de>, Frank Li <Frank.Li@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Minghuan Lian <minghuan.Lian@nxp.com>, 
-	Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>, 
-	Jesper Nilsson <jesper.nilsson@axis.com>, Jingoo Han <jingoohan1@gmail.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Srikanth Thokala <srikanth.thokala@intel.com>, 
-	Marek Vasut <marek.vasut+renesas@gmail.com>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Christian Bruel <christian.bruel@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Manikanta Maddireddy <mmaddireddy@nvidia.com>, Damien Le Moal <dlemoal@kernel.org>, linux-pci@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, 
-	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@axis.com, linux-rockchip@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/9] PCI: endpoint: Differentiate between disabled and
- reserved BARs
-Message-ID: <sutj7pvizlofyr3pcbv2wgc6lned4s33du3g3tkqveaofj4g5a@adfxekkfxeqc>
-References: <20260225170324.4033466-11-cassel@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260225170324.4033466-11-cassel@kernel.org>
-X-ClientProxiedBy: TYWPR01CA0037.jpnprd01.prod.outlook.com
- (2603:1096:400:17f::6) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:405:38f::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NZS8Mugp"
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-5ff196450feso2156867137.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Mar 2026 06:17:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772374630; cv=none;
+        d=google.com; s=arc-20240605;
+        b=D2r3eG8n5MGiH23BnFCYb0iUosgNdu6HenceN6bLkW5UJ3z6yHqowiIvVzAX0NhxX3
+         aUfxHfMmKbYmpJls8KsWevwn6W3uxY2s+dCnTQgBXCcvAc6UcKaB3XlGLjJemVIEmjNB
+         TDMsZn7a0orAOFOEsOoUIaejrALkyFZgVarKq02fh980QslMD09+iEIUbXyWdxbkJMA5
+         s8zl+zV5yrdneBQxRAX8mlXTp23An7SQPoQi6JHO/x5f63IPQKalH8UwY4PmWDcnXEIq
+         ppxX1NMEUlkguqFHa8HtLMFmlEtk/uB3RNHv9JLmhtFkdjzTAEPjcH7ZlRsLHkGbDOH+
+         3rlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=k8DjN1Dp2Dm3QRgl9BDPBcYHbhPl37cA0CZoGf3m+KA=;
+        fh=FRrJoFbOt2qy6zx6YD92ct0am7PNcNL2Ksw0cGWmRcs=;
+        b=BPcqH/w0al+vdpEEN9E4TYZTmiuh6kkbcTeRuVsjNlOMXvaFzSbKGNHuFeBSRU5VTD
+         WbbLQCgkP2lXOGvb3E86SGGCbfcFiwTvI5Rgt0LAUI/dlQRgWfjXCxRwyoABYPcCACj/
+         Je0f29O9PZ+tTgIpvNe0JRrSbis/JOiga37HdSG6f6Q2L+QXmoLm/D5T97IFpGiMTYKi
+         TGCF2+vDRowR1tmXOSWHdyslXR34TZDDFG4Wpd3q0qFMSHQ0e1YzP1JY1CLzkWAAvqMa
+         79P2pz1TaqElnNUZrvWFLgJtp6rSZXYds9f6nZ4QuYcI03kUSnxIOquVsqBZbfAeCsZ3
+         A2oQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772374630; x=1772979430; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k8DjN1Dp2Dm3QRgl9BDPBcYHbhPl37cA0CZoGf3m+KA=;
+        b=NZS8MugptPFY9pO1nC6vPdiCxnLR7X0KD2n7NPVC938SYVkNo9O4dCaGISthfTXLto
+         vXCro1BpNzhK4PKm68y65oktTFzEJehIbFroTyFb751ACYDTY9La6HqRJFG547RtxM4K
+         Ig/I8594Fy32eS1WgRe6cnyppA9kixLymPKg9ys+phq4qOflKDmPlsPQ2OcLrW3pz1Vj
+         kIdp41RMHSEADS/yf7UsH11nDpqZJZN91BMIP9TDULiDgUufwzSQ1L1BrAjK6d5bn/j5
+         f1JMXjBw+USqnXbbSF5LclySd4yIoPs0LbGZaPDF8B7uQfp78JVrKzbzZjrtlMbh+qgC
+         2ozw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772374630; x=1772979430;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=k8DjN1Dp2Dm3QRgl9BDPBcYHbhPl37cA0CZoGf3m+KA=;
+        b=lfnprspZglNRhevCFPrxjxUighQMDF2ufM1CitfZ857gtz/WPlwGrLF9f/cjvl/dk0
+         tb9Bx5YEezkZgUVvAkGXWoyzNBhWh4dD/y1N5QjTeLLzZRjpFLhwTttEGW+Dv52ySFDZ
+         vp9X7PsCSS3KwQW79bvTOLE0hR6KQFX2EZ8+Skx/CLU78qdKA7sBRg0NBL3WIG7a5lyx
+         BuoDfy8ngh3Hvmacj1BiFjwZnHqvsKZ92aPLaF0vk5ombZKKsq5n5H9d0QWFccvW9Mdh
+         4j4zgwKuw9iIzQ8FSFn8h9Uzz41+t43DtBgEBRtPZmusNf+oMT0ry/NBzVm8bIkwMFIu
+         aJhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW9fqlwqpDFNgrQmc/Wz/enTHhytj9jv3op0ykWh1fde3oabMrUcV1P0hKdPnNJu/7vqUd2Mtv4RNr1g+xGM34=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQNsfBUt0OpyjoLDziXkzEigouMX6FFv1ujwoRPwKMZREhhUBm
+	AvlmlDqnSNPQM9RHnM7h6CpPfyjWfRo05YF9D7+s4Wfrt8I5scgXT9tJ8Q1f/6IkGTzzHEIqOfx
+	nobwqYDtGaewpCrb4QALHhZH023MtN9o=
+X-Gm-Gg: ATEYQzwmbesw6s58GB4NnsPMgSXKwnZXeBjGFg+Q+W48wO+rWQ+fNxkEF6zGl5cqkHh
+	NZbK0I7uiChoOkBmBHcDKZAxs1ZfkkohAhYnSs7bObWR1T6Z2CYkw4zLS17B3YNg9zWcsr0jN+D
+	MErQ3fGcZ5OW8xhmwbMMPw/XIiZKkZWo+53E1uP0evwxhoQXLNhYdLV3xqp3kb1k8mNM6rd7pgz
+	Ni80I7snpqjIEIYEb1oxFLlLlr1YpE4tdynvxD84ajRNVLpoJW91cgNuuSCCPL20dO0gUjEOU87
+	SiiCT8GJ+SDkW8a2MxggRcHpOtIW41qII+1b70onusAanoxoWeNb
+X-Received: by 2002:a05:6102:2ad0:b0:5db:d36c:89d4 with SMTP id
+ ada2fe7eead31-5ff33481927mr4431039137.3.1772374630288; Sun, 01 Mar 2026
+ 06:17:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|TY4P286MB7053:EE_
-X-MS-Office365-Filtering-Correlation-Id: c333a983-3151-4b74-6382-08de7797c410
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|10070799003|1800799024|366016|7053199007|27256017;
-X-Microsoft-Antispam-Message-Info:
-	tQrPIpxmMfwcEE+L+teDjVUBO74c5nClUH7517Isb8JzqM+WmDwOZ+0L2ZriwYqXyaa+ibDIl7mraV4mAlVw2DbU/XvkyYU/hJo+AQJued8/2uAVnDIehU0JmmL5nheOng6uLQ3xJsVModYihwTsyNI1Zjk1bD6Jh+p7iM5+QHVDCkx5uCK+Zo5QM5hrvpzcla0BAfZBJo5gJkYSUZgMOTD+mLs6MJp4ySg4xGitOxXloaS3eN3q2+L/zifr9ZAE3EogtfcgVvlelhYjxHH67WmVo8pyEe26cS3b4F8b1Ilovi1huIyVHnFKjARg3fZUvougPPF7H7niUZvPTdsbRdUWz41oQeVwwiyWLuMkYfq2LBWabUDAfoKQpW+ATw8zopL26rQg9tqB4ep8kjpLVeS7QOCVr52VAQRjRmRJwqlrvxd3Mxr3FcBAedr/s6Xk8Afhac9jTWnjTjhY61omOLyRR8XAp1pFkFA8RWVOS4VAueym3vDTJvm89rEfpTXwAC6KWS9IQpVy4CnuT8UI3untRkxMDkUsMgSld+6SR8ToemNlCJRAuBoqnK8sA/Pdsj6X8KmNmYJt4CfSL/GGbKLT6A9DopFYfVbnXIFCoZ6PKtS1u68AzSyT/bi78ufWdwz0xHsrkaEOsWMQ8fWYSpKrBflnfX4880zfDYsrb2u+SsVP8Vj6Q562F8/1DXeZtSsZAsCn7jIB/JoVNOBfjSTK87W638wMPbzL1MO6I155xe1ffHgp+9tQyvw1NUJ46ek6hpkXPYv36cp0gJw8ha7PleDkCi8RLeDIVVwgn3Q=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(1800799024)(366016)(7053199007)(27256017);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?7OhTa5t6m1kmN2sju/zf7/4quwAvRwtc0ezu6NQgaulFgOlDzNmUJAsVKP70?=
- =?us-ascii?Q?jzB9nw/qWOmKEpT66Gn9e4DwHi6Cy58X2ueczpVQPBXdnH/eLBTj/4m3J21j?=
- =?us-ascii?Q?X7hFNc+4JHDRC4SIcm5PvdYq/TlwHHUEIHa2VlWJiFDyZ/KEFywescvLLNdf?=
- =?us-ascii?Q?co/SfkdvfnRlutm+OO46SjOH4etKCJn74XZBWBvKs5W0XJnmTo+a4t2O/UMj?=
- =?us-ascii?Q?om6pMY/x/PJ65xN4Xk3yWkUN5QO52CykGRCK4i1rSiUaL3TzMAfkR7fWNQt6?=
- =?us-ascii?Q?GEA61wpPYEhZXpIKMPKCc+urid9VXrMUlPk/aLk2DYyZI8YHvCMGOu8U4Cmz?=
- =?us-ascii?Q?C348/rt0UMUoH9nlK/+3u7eV29RoRsCxeASrSIEBuz5NWlameMEXTdbNV5z6?=
- =?us-ascii?Q?IuBM2MOSmMm3ts5U9E+Lon4sMLYKG7BkA0uFUDu5bALGpfR+/y+3OPGxkMUd?=
- =?us-ascii?Q?kZrNAbq15sE2hYjOO5/nDeoEhBQwW05eZGyPCVUuQAMlgQo8jOPgO3ckCLF1?=
- =?us-ascii?Q?wPC8oOYuUv8gnrowq6fUlNUskkPXVSqeaLoxrfyyVnEi2tfkLb57pkMk75T9?=
- =?us-ascii?Q?P9nqT080YSxARUUJxzSS61dKFe8QsIuaBLWSrB1EUTrmFmc5hZ4QoISe67Zp?=
- =?us-ascii?Q?d+3mvf9GHdOOmB3PgKRAKkSvhzYgWkFndd17VYl0e8+MvvPbjav5HhsHEWe3?=
- =?us-ascii?Q?9VGh1BILA2Gk9fv65OBWYlExC/666Up2/EL3G/kj8dTFguuPL/cHsIZUP7n8?=
- =?us-ascii?Q?HUAQSw5rKnooECtKHlQJaab4T01MTIWfp/LfONmMYgUnTKhVRswSMrE/cZpg?=
- =?us-ascii?Q?lWNJ/0fScQVYxABXeAhKvP8OCWhHfWAecpJbJCSHfTTxfKPogGawq592lPqs?=
- =?us-ascii?Q?HebL/Sro9GTQtjTTZFr9MEVil5uD5Sq38vLlyJCw90sNg7aMxPtYTgjezRi+?=
- =?us-ascii?Q?rFc3YH5kwl5HFAolMrk6XwAyfxNJTlEFYZUQ6+UC4GYO2q6SRsSW6ON06E3J?=
- =?us-ascii?Q?D9DlYH20vCGwCdvvtGKLfKJtjkw3EflRszVY510J2QQR9MtJsArZlkItgcMj?=
- =?us-ascii?Q?S3dggTAieWJljD1EFXnfohR/G80VWPUklh76ZxnQMz2cYbIztkn6xW/NpsMR?=
- =?us-ascii?Q?MsBebyEtkkhkc5FjZyjoEWaRqtzMKwTviwl0gysdfQVnxB4Mcqldmu452mDD?=
- =?us-ascii?Q?/pnHzCBz1/dCHTUwNwpFtuZn+PfmNqKNdXkrUhpBgmp1uWvpzLtAXlV4HSdL?=
- =?us-ascii?Q?DGu/EuHE7b4iZ1eMHfm39BPgwqwMb4Zz69RZ0x1wAdHMoHKdMy8imciTwOnn?=
- =?us-ascii?Q?EzmmEXHRvZhfauMewHdcSW7aDkrsAZzdgpxzcgkZDQALIL5TpOAjdY93FvdN?=
- =?us-ascii?Q?48MDo3IFy/hHiQaVDZroLBCVFT4mvbM7h71mmk3W8Jen78bJI8I8mP+n90tu?=
- =?us-ascii?Q?F7GNDqGNrDgSVDhwS5Qf7kKhek3D5ia0OKXSPl7lRRi8J2aN1cgSMf8IPQRR?=
- =?us-ascii?Q?cEPBB7CUL5lc/pYHtBU5REX++gn0p86LJBuOumKWeqs1L67bJlqXGI6e1O/W?=
- =?us-ascii?Q?KgA1ZZbWaMTPzyGC25OaXIlYzzPMNGExWgDQe7rj58pg3UeRlaN4Ww/2qmaR?=
- =?us-ascii?Q?+EDUs9WpzpOjwJpYrpOVodxE2gm5MHZYBWaG73IWS+SSR3tTMAC1/SqjFW51?=
- =?us-ascii?Q?FI9JPPp5YNiSjdDvsA86jcqb6I09KXHaI82cr3T8LbmirbdyV/CBnl8XeEvB?=
- =?us-ascii?Q?V/PthTOUMUWCw0S4z7H3f6ROd2LlEdPYIfaXF/pK6z/c91TIWEII?=
-X-OriginatorOrg: valinux.co.jp
-X-MS-Exchange-CrossTenant-Network-Message-Id: c333a983-3151-4b74-6382-08de7797c410
-X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2026 13:38:04.7281
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Lbzo/w4j2oLrOzAxOJ51/onmXlSYGb5B0UKNKwcMbY5evR5ePgQv+8C1+PV2q8I0vdxXm/vnY2Squ0JyoWKzgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY4P286MB7053
+References: <20260221145915.81749-1-dorjoychy111@gmail.com>
+ <20260221145915.81749-2-dorjoychy111@gmail.com> <2f430eb613d4f6f6564f83d06f802ff47adea230.camel@kernel.org>
+In-Reply-To: <2f430eb613d4f6f6564f83d06f802ff47adea230.camel@kernel.org>
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Date: Sun, 1 Mar 2026 20:16:59 +0600
+X-Gm-Features: AaiRm523Vu6ZFdfEO8O_fCfURMW-nzweMn1jJ9AAv3XTYzZCngEPlvc0eYJc-g0
+Message-ID: <CAFfO_h7i86qdKZObdFpWd8Mh+8VXVMFYoGgYBgzomzhGJJFnEQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] openat2: new OPENAT2_REGULAR flag support
+To: Jeff Layton <jlayton@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	jack@suse.cz, chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 25, 2026 at 06:03:23PM +0100, Niklas Cassel wrote:
-> Hello all,
-> 
-> This series was originally written in response to the patch series from
-> Manikanta Maddireddy that was posted here:
-> https://lore.kernel.org/linux-pci/291dab65-3fa6-4fc8-90a2-4ad608ca015c@nvidia.com/T/#t
-> 
-> Manikanta has reviewed V1 and will send a small series on top of this one.
-> 
-> 
-> Changes since v1:
-> -Rebased on latest pci/endpoint branch
-> -Picked up tags
-> -Fixed review comments from Frank and Manikanta (thank you)
-> -Simplified function bar_is_reserved()
-> 
-> Link to v1:
-> https://lore.kernel.org/linux-pci/20260217212707.2450423-11-cassel@kernel.org/
-> 
-> 
-> Koichiro Den (2):
->   PCI: endpoint: Describe reserved subregions within BARs
->   PCI: dw-rockchip: Describe RK3588 BAR4 DMA ctrl window
-> 
-> Niklas Cassel (7):
->   PCI: endpoint: Introduce pci_epc_bar_type BAR_64BIT_UPPER
->   PCI: endpoint: Introduce pci_epc_bar_type BAR_DISABLED
->   PCI: dwc: Replace certain BAR_RESERVED with BAR_DISABLED in glue
->     drivers
->   PCI: dwc: Disable BARs in common code instead of in each glue driver
->   PCI: endpoint: pci-epf-test: Advertise reserved BARs
->   misc: pci_endpoint_test: Give reserved BARs a distinct error code
->   selftests: pci_endpoint: Skip reserved BARs
-> 
->  drivers/misc/pci_endpoint_test.c              | 21 ++++++++-
->  drivers/pci/controller/dwc/pci-dra7xx.c       |  4 --
->  drivers/pci/controller/dwc/pci-imx6.c         | 22 +++------
->  drivers/pci/controller/dwc/pci-keystone.c     | 12 +++++
->  .../pci/controller/dwc/pci-layerscape-ep.c    |  8 +---
->  drivers/pci/controller/dwc/pcie-artpec6.c     |  4 --
->  .../pci/controller/dwc/pcie-designware-ep.c   | 24 ++++++++++
->  .../pci/controller/dwc/pcie-designware-plat.c | 10 -----
->  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 19 +++++---
->  drivers/pci/controller/dwc/pcie-keembay.c     |  6 +--
->  drivers/pci/controller/dwc/pcie-qcom-ep.c     | 14 +-----
->  drivers/pci/controller/dwc/pcie-rcar-gen4.c   | 16 ++-----
->  drivers/pci/controller/dwc/pcie-stm32-ep.c    | 10 -----
->  drivers/pci/controller/dwc/pcie-tegra194.c    | 20 +++------
->  drivers/pci/controller/dwc/pcie-uniphier-ep.c | 24 +++-------
->  drivers/pci/controller/pcie-rcar-ep.c         |  6 +--
->  drivers/pci/endpoint/functions/pci-epf-test.c | 24 ++++++++++
->  drivers/pci/endpoint/pci-epc-core.c           |  6 ++-
->  include/linux/pci-epc.h                       | 45 +++++++++++++++++--
->  .../pci_endpoint/pci_endpoint_test.c          |  4 ++
->  20 files changed, 174 insertions(+), 125 deletions(-)
-> 
-> 
-> base-commit: 8eaff52fc101c1f6b3215db93bba02c815155806
+On Sun, Mar 1, 2026 at 6:44=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wro=
+te:
+>
+> On Sat, 2026-02-21 at 20:45 +0600, Dorjoy Chowdhury wrote:
+> > This flag indicates the path should be opened if it's a regular file.
+> > This is useful to write secure programs that want to avoid being
+> > tricked into opening device nodes with special semantics while thinking
+> > they operate on regular files. This is a requested feature from the
+> > uapi-group[1].
+> >
+> > A corresponding error code EFTYPE has been introduced. For example, if
+> > openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
+> > param, it will return -EFTYPE.
+> >
+> > When used in combination with O_CREAT, either the regular file is
+> > created, or if the path already exists, it is opened if it's a regular
+> > file. Otherwise, -EFTYPE is returned.
+> >
+>
+> It would be good to mention that EFTYPE has precedent in BSD/Darwin.
+> When an error code is already supported in another UNIX-y OS, then it
+> bolsters the case for adding it here.
+>
 
-For the series:
+Good suggestion. Yes, I can include this information in the commit
+message during the next posting.
 
-Tested-by: Koichiro Den <den@valinux.co.jp>
+> Your cover letter mentions that you only tested this on btrfs. At the
+> very least, you should test NFS and SMB. It should be fairly easy to
+> set up mounts over loopback for those cases.
+>
 
-Tested on 2x R-Car S4 Spider boards.
-No change in pci_endpoint_test results compared to base-commit.
-Thanks for working on this.
+I used virtme-ng (which I think reuses the host's filesystem) to run
+the compiled bzImage and ran the openat2 kselftests there to verify
+it's working. Is there a similar way I can test NFS/SMB by adding
+kselftests? Or would I need to setup NFS/SMB inside a full VM distro
+with a modified kernel to test this? I would appreciate any suggestion
+on this.
 
-> -- 
-> 2.53.0
-> 
+> There are some places where it doesn't seem like -EFTYPE will be
+> returned. It looks like it can send back -EISDIR and -ENOTDIR in some
+> cases as well. With a new API like this, I think we ought to strive for
+> consistency.
+>
+
+Good point. There was a comment in a previous posting of this patch
+series "The most useful behavior would indicate what was found (e.g.,
+a pipe)."
+(ref: https://lore.kernel.org/linux-fsdevel/vhq3osjqs3nn764wrp2lxp66b4dxpb3=
+n5x3dijhe2yr53qfgy3@tfswbjskc3y6/
+)
+So I thought maybe it would be useful to return -EISDIR where it was
+already doing that. But it is a good point about consistency that we
+won't be doing this for other different types so I guess it's better
+to return -EFTYPE for all the cases anyway as you mention. Any
+thoughts?
+
+
+> Should this API return -EFTYPE for all cases where it's not S_IFREG? If
+> not, then what other errors are allowed? Bear in mind that you'll need
+> to document this in the manpages too.
+>
+
+Are the manpages in the kernel git repository or in a separate
+repository? Do I make separate patch series for that? Sorry I don't
+know about this in detail.
+
+> > When OPENAT2_REGULAR is combined with O_DIRECTORY, -EINVAL is returned
+> > as it doesn't make sense to open a path that is both a directory and a
+> > regular file.
+> >
+> > [1]: https://uapi-group.org/kernel-features/#ability-to-only-open-regul=
+ar-files
+> >
+> > Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+> > ---
+> >  arch/alpha/include/uapi/asm/errno.h        |  2 ++
+> >  arch/alpha/include/uapi/asm/fcntl.h        |  1 +
+> >  arch/mips/include/uapi/asm/errno.h         |  2 ++
+> >  arch/parisc/include/uapi/asm/errno.h       |  2 ++
+> >  arch/parisc/include/uapi/asm/fcntl.h       |  1 +
+> >  arch/sparc/include/uapi/asm/errno.h        |  2 ++
+> >  arch/sparc/include/uapi/asm/fcntl.h        |  1 +
+> >  fs/ceph/file.c                             |  4 ++++
+> >  fs/gfs2/inode.c                            |  2 ++
+> >  fs/namei.c                                 |  4 ++++
+> >  fs/nfs/dir.c                               |  4 +++-
+> >  fs/open.c                                  |  4 +++-
+> >  fs/smb/client/dir.c                        | 11 ++++++++++-
+> >  include/linux/fcntl.h                      |  2 ++
+> >  include/uapi/asm-generic/errno.h           |  2 ++
+> >  include/uapi/asm-generic/fcntl.h           |  4 ++++
+> >  tools/arch/alpha/include/uapi/asm/errno.h  |  2 ++
+> >  tools/arch/mips/include/uapi/asm/errno.h   |  2 ++
+> >  tools/arch/parisc/include/uapi/asm/errno.h |  2 ++
+> >  tools/arch/sparc/include/uapi/asm/errno.h  |  2 ++
+> >  tools/include/uapi/asm-generic/errno.h     |  2 ++
+> >  21 files changed, 55 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/alpha/include/uapi/asm/errno.h b/arch/alpha/include/u=
+api/asm/errno.h
+> > index 6791f6508632..1a99f38813c7 100644
+> > --- a/arch/alpha/include/uapi/asm/errno.h
+> > +++ b/arch/alpha/include/uapi/asm/errno.h
+> > @@ -127,4 +127,6 @@
+> >
+> >  #define EHWPOISON    139     /* Memory page has hardware error */
+> >
+> > +#define EFTYPE               140     /* Wrong file type for the intend=
+ed operation */
+> > +
+> >  #endif
+> > diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/u=
+api/asm/fcntl.h
+> > index 50bdc8e8a271..fe488bf7c18e 100644
+> > --- a/arch/alpha/include/uapi/asm/fcntl.h
+> > +++ b/arch/alpha/include/uapi/asm/fcntl.h
+> > @@ -34,6 +34,7 @@
+> >
+> >  #define O_PATH               040000000
+> >  #define __O_TMPFILE  0100000000
+> > +#define OPENAT2_REGULAR      0200000000
+> >
+> >  #define F_GETLK              7
+> >  #define F_SETLK              8
+> > diff --git a/arch/mips/include/uapi/asm/errno.h b/arch/mips/include/uap=
+i/asm/errno.h
+> > index c01ed91b1ef4..1835a50b69ce 100644
+> > --- a/arch/mips/include/uapi/asm/errno.h
+> > +++ b/arch/mips/include/uapi/asm/errno.h
+> > @@ -126,6 +126,8 @@
+> >
+> >  #define EHWPOISON    168     /* Memory page has hardware error */
+> >
+> > +#define EFTYPE               169     /* Wrong file type for the intend=
+ed operation */
+> > +
+> >  #define EDQUOT               1133    /* Quota exceeded */
+> >
+> >
+> > diff --git a/arch/parisc/include/uapi/asm/errno.h b/arch/parisc/include=
+/uapi/asm/errno.h
+> > index 8cbc07c1903e..93194fbb0a80 100644
+> > --- a/arch/parisc/include/uapi/asm/errno.h
+> > +++ b/arch/parisc/include/uapi/asm/errno.h
+> > @@ -124,4 +124,6 @@
+> >
+> >  #define EHWPOISON    257     /* Memory page has hardware error */
+> >
+> > +#define EFTYPE               258     /* Wrong file type for the intend=
+ed operation */
+> > +
+> >  #endif
+> > diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include=
+/uapi/asm/fcntl.h
+> > index 03dee816cb13..d46812f2f0f4 100644
+> > --- a/arch/parisc/include/uapi/asm/fcntl.h
+> > +++ b/arch/parisc/include/uapi/asm/fcntl.h
+> > @@ -19,6 +19,7 @@
+> >
+> >  #define O_PATH               020000000
+> >  #define __O_TMPFILE  040000000
+> > +#define OPENAT2_REGULAR      0100000000
+> >
+> >  #define F_GETLK64    8
+> >  #define F_SETLK64    9
+> > diff --git a/arch/sparc/include/uapi/asm/errno.h b/arch/sparc/include/u=
+api/asm/errno.h
+> > index 4a41e7835fd5..71940ec9130b 100644
+> > --- a/arch/sparc/include/uapi/asm/errno.h
+> > +++ b/arch/sparc/include/uapi/asm/errno.h
+> > @@ -117,4 +117,6 @@
+> >
+> >  #define EHWPOISON    135     /* Memory page has hardware error */
+> >
+> > +#define EFTYPE               136     /* Wrong file type for the intend=
+ed operation */
+> > +
+> >  #endif
+> > diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/u=
+api/asm/fcntl.h
+> > index 67dae75e5274..bb6e9fa94bc9 100644
+> > --- a/arch/sparc/include/uapi/asm/fcntl.h
+> > +++ b/arch/sparc/include/uapi/asm/fcntl.h
+> > @@ -37,6 +37,7 @@
+> >
+> >  #define O_PATH               0x1000000
+> >  #define __O_TMPFILE  0x2000000
+> > +#define OPENAT2_REGULAR      0x4000000
+> >
+> >  #define F_GETOWN     5       /*  for sockets. */
+> >  #define F_SETOWN     6       /*  for sockets. */
+> > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> > index 31b691b2aea2..0a4220f72ada 100644
+> > --- a/fs/ceph/file.c
+> > +++ b/fs/ceph/file.c
+> > @@ -977,6 +977,10 @@ int ceph_atomic_open(struct inode *dir, struct den=
+try *dentry,
+> >                       ceph_init_inode_acls(newino, &as_ctx);
+> >                       file->f_mode |=3D FMODE_CREATED;
+> >               }
+> > +             if ((flags & OPENAT2_REGULAR) && !d_is_reg(dentry)) {
+> > +                     err =3D -EFTYPE;
+> > +                     goto out_req;
+> > +             }
+> >               err =3D finish_open(file, dentry, ceph_open);
+> >       }
+> >  out_req:
+> > diff --git a/fs/gfs2/inode.c b/fs/gfs2/inode.c
+> > index 8344040ecaf7..0dc3e4240d9e 100644
+> > --- a/fs/gfs2/inode.c
+> > +++ b/fs/gfs2/inode.c
+> > @@ -749,6 +749,8 @@ static int gfs2_create_inode(struct inode *dir, str=
+uct dentry *dentry,
+> >               if (file) {
+> >                       if (S_ISREG(inode->i_mode))
+> >                               error =3D finish_open(file, dentry, gfs2_=
+open_common);
+> > +                     else if (file->f_flags & OPENAT2_REGULAR)
+> > +                             error =3D -EFTYPE;
+> >                       else
+> >                               error =3D finish_no_open(file, NULL);
+> >               }
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index 5fe6cac48df8..aa5fb2672881 100644
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -4651,6 +4651,10 @@ static int do_open(struct nameidata *nd,
+> >               if (unlikely(error))
+> >                       return error;
+> >       }
+> > +
+> > +     if ((open_flag & OPENAT2_REGULAR) && !d_is_reg(nd->path.dentry))
+> > +             return -EFTYPE;
+> > +
+> >       if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dent=
+ry))
+> >               return -ENOTDIR;
+> >
+> > diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+> > index b3f5c9461204..ef61db67d06e 100644
+> > --- a/fs/nfs/dir.c
+> > +++ b/fs/nfs/dir.c
+> > @@ -2195,7 +2195,9 @@ int nfs_atomic_open(struct inode *dir, struct den=
+try *dentry,
+> >                       break;
+> >               case -EISDIR:
+> >               case -ENOTDIR:
+> > -                     goto no_open;
+> > +                     if (!(open_flags & OPENAT2_REGULAR))
+> > +                             goto no_open;
+> > +                     break;
+>
+> Shouldn't this also set the error to -EFTYPE?
+>
+> >               case -ELOOP:
+> >                       if (!(open_flags & O_NOFOLLOW))
+> >                               goto no_open;
+> > diff --git a/fs/open.c b/fs/open.c
+> > index 91f1139591ab..1524f52a1773 100644
+> > --- a/fs/open.c
+> > +++ b/fs/open.c
+> > @@ -1198,7 +1198,7 @@ inline int build_open_flags(const struct open_how=
+ *how, struct open_flags *op)
+> >        * values before calling build_open_flags(), but openat2(2) check=
+s all
+> >        * of its arguments.
+> >        */
+> > -     if (flags & ~VALID_OPEN_FLAGS)
+> > +     if (flags & ~VALID_OPENAT2_FLAGS)
+> >               return -EINVAL;
+> >       if (how->resolve & ~VALID_RESOLVE_FLAGS)
+> >               return -EINVAL;
+> > @@ -1237,6 +1237,8 @@ inline int build_open_flags(const struct open_how=
+ *how, struct open_flags *op)
+> >                       return -EINVAL;
+> >               if (!(acc_mode & MAY_WRITE))
+> >                       return -EINVAL;
+> > +     } else if ((flags & O_DIRECTORY) && (flags & OPENAT2_REGULAR)) {
+> > +             return -EINVAL;
+> >       }
+> >       if (flags & O_PATH) {
+> >               /* O_PATH only permits certain other flags to be set. */
+> > diff --git a/fs/smb/client/dir.c b/fs/smb/client/dir.c
+> > index cb10088197d2..d12ed0c87599 100644
+> > --- a/fs/smb/client/dir.c
+> > +++ b/fs/smb/client/dir.c
+> > @@ -236,6 +236,11 @@ static int cifs_do_create(struct inode *inode, str=
+uct dentry *direntry, unsigned
+> >                                * lookup.
+> >                                */
+> >                               CIFSSMBClose(xid, tcon, fid->netfid);
+> > +                             if (oflags & OPENAT2_REGULAR) {
+> > +                                     iput(newinode);
+> > +                                     rc =3D -EFTYPE;
+> > +                                     goto out;
+> > +                             }
+> >                               goto cifs_create_get_file_info;
+> >                       }
+> >                       /* success, no need to query */
+> > @@ -433,11 +438,15 @@ static int cifs_do_create(struct inode *inode, st=
+ruct dentry *direntry, unsigned
+> >               goto out_err;
+> >       }
+> >
+> > -     if (newinode)
+> > +     if (newinode) {
+> >               if (S_ISDIR(newinode->i_mode)) {
+> >                       rc =3D -EISDIR;
+> >                       goto out_err;
+>
+> This logic doesn't look quite right. If you do a create and race with a
+> directory create, then it looks like you'll send back -EISDIR here
+> instead of -EFTYPE?
+>
+
+Yes, I thought it would be useful for the caller to know what type of
+file it actually is so I had kept this the same. Let me know if it is
+preferable to return -EFTYPE always.
+
+Thanks for reviewing!
+
+Regards,
+Dorjoy
