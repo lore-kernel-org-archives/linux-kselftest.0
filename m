@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150F02594B9;
-	Sun,  1 Mar 2026 01:22:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40141E0B86;
+	Sun,  1 Mar 2026 01:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772328154; cv=none; b=EICrEPQSJmv/0ckAgCm/EHAXYV5IAygXKaYioWsJdRS1I+/KEREP93Cgx9egrlOjJ0f5VeLY6g94jxgx8MFGrxNKgYSgviOM8lTJUSz+XvHarDsVJGvs49/b6VCa0VStvV5EBLKT1hLMxNfVQfBduk8Yg0GBil5vTksfZ3ucBxc=
+	t=1772328832; cv=none; b=HMY+C7euS7OdFf+dGbKM6Ppze9Meeh8BN/I4e7FX0t1ahdhYzsMSpxtjUPMXFBgjn/u7dlLkN/cNxCGLOfEAHGTe9ky5z2dn/FnqxfFE3kfcFJiITHrfb81yAth35DP4RMMZH7WabuyTOTbeqpaVCcuPvuQeMkW3GV+YBDX4jlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772328154; c=relaxed/simple;
-	bh=8nmf1XPoQwDkOgcMfdXNuncBF8STkmFSbCPHKAsrm0g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K93FtIilHkk/H7iVct7m44LOeOivWo8c96p+eeg0VMc2k5HnCyPin2PUZJxQUxTm1gRscyaHFFfGsFa3fPRjvvNNgo3sRAAe61FA04QWa0iKft9T1mfLsGMT2pbKoryFViUHkNEhup23vdywdYx7hMfiAOG+r2xWz2Pa2x+Jn3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oCEOz5Ln; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772328832; c=relaxed/simple;
+	bh=xCgUwPogV42OkBJoUqReJ5nIgdvO6C+Voz98jiui1AI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h8e1CwJRmXIDMAwf1QzMRmESmiDz+/EYhvGVbZWkGS8iqgIBHtSSZdziRvUcxuGwcs81L6wdViykrHfkPOcLQVwT1G2NppfLlMUFOv45L0EDvIlbeq0BKRntMOYDtGDBeoUOhY1FKLqyg5NyfWdL8/v2Wf7aPQv1UK8IjBOj0J0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLMt2QnN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oCEOz5Ln"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04150C19421;
-	Sun,  1 Mar 2026 01:22:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLMt2QnN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1368C19421;
+	Sun,  1 Mar 2026 01:33:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772328153;
-	bh=8nmf1XPoQwDkOgcMfdXNuncBF8STkmFSbCPHKAsrm0g=;
+	s=k20201202; t=1772328831;
+	bh=xCgUwPogV42OkBJoUqReJ5nIgdvO6C+Voz98jiui1AI=;
 	h=From:To:Cc:Subject:Date:From;
-	b=oCEOz5LnHCrXZCNrcbNGzg7UgPh7o5pImKWwL7M/xHanbBv6HDOcrNFUjik/+e9jv
-	 n5EpuVbMDl+OLORgS0iQ9Jr/0EHhMciW71JVQPgYsjQ8wr53hNoTr6b6WQWJHKZOFW
-	 J3uAp3N+KQ/EN4iLn9bCkzmaMHQbZP8GDVrexvkV3qPjOmOcfWN4eNAOxDUOLVCE/4
-	 nbve//lhmVzsTAMjAV6YLanW81vsq8F/YbbyMPE6QrY1CX4KgDXvg0BUMVzjJeIwIa
-	 ydNaUXz9TR5U3aBR/SpB2lBg1ds7p0jo/Q5Tsz50+2IwsAYuWLomoCJFy+NtQtE6J6
-	 HhmHLRxVogzkw==
+	b=fLMt2QnNSnJMiKHYBeAjaM5al+awyjRu0DQCvnyjURPsRNrw1cDayFOHe5w4U/z2W
+	 o44N0/QN8wikZvUYt8e0KTcwB1ZKpy1DFpLdmSc7eS8P3JM1gcyhwkD7xPEJBLg6ZU
+	 U8PvUsI0mbnvAh7OeCpQMEf/NBSzt1axNmbfMAs5P+G0ooIGbLJVkGzVvbVgRFncTY
+	 Tk9sidPRjebKOD5d9R0q814g0B7+KwpnItAhWvziOECwejs5nGx+g5Oyal10BRgmIL
+	 HxaTQFbaUylscPr+0jfrhTwHKG6sIBwdJk11FdxJNMQbjZGFJIJmMYis7kZc0ZgCpm
+	 MIb/Ojv0aLNMg==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	liwang@redhat.com
@@ -35,9 +35,9 @@ Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: FAILED: Patch "selftests/mm/charge_reserved_hugetlb: drop mount size for hugetlbfs" failed to apply to 6.12-stable tree
-Date: Sat, 28 Feb 2026 20:22:31 -0500
-Message-ID: <20260301012231.1678949-1-sashal@kernel.org>
+Subject: FAILED: Patch "selftests/mm/charge_reserved_hugetlb: drop mount size for hugetlbfs" failed to apply to 6.6-stable tree
+Date: Sat, 28 Feb 2026 20:33:49 -0500
+Message-ID: <20260301013349.1693131-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -49,7 +49,7 @@ X-Patchwork-Hint: ignore
 X-stable: review
 Content-Transfer-Encoding: 8bit
 
-The patch below does not apply to the 6.12-stable tree.
+The patch below does not apply to the 6.6-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.
