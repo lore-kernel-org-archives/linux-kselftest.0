@@ -1,70 +1,71 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFC220E702
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Mar 2026 01:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FBE20E702
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Mar 2026 01:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772327496; cv=none; b=KS7fmPwyg56NFtf9XUNXZkNnhhQeNQmHQFurPE3FpEQhCDMfxuP//yEgpKqsz8KEpd0bcU+IzQA6QsC3PWKHQtL1/+XND6r680mTY8Z7XjjrH+2Pnm75epDGmcnGtuvz5kBuY6n71hC9NHJfJr7VWu/d/stkekV8u38LCgdQU74=
+	t=1772327536; cv=none; b=ThYbwiNyPXbQiHQxB9hnrt8ZYAm8CDXS+lSuNeeiLGLdkl9WA/uSH44vgWpyoounXxQee8qm2A9sePElo06ujHsTUICVgDIewAPevJ/uc1DwP8fCuJn50s40ytibGZO714dEqkSE+ouhf+iGE1Wt4doILjk6pfx1LcNyekaZVTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772327496; c=relaxed/simple;
-	bh=I37K6vSoJERYXnT+zTKVGt662nzK8Pm5XmgxcapLyLw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZOxCrz+azOjLPGulNoUN1wrtKfl2r5MYVA8OYJJNvWGB+cVkgqPY1AOBevJ0baH0jaBHGJTcOJ+mJzQvpvYOlniFs8+QV6cDQeHtjp2P8KOouwzEHkG8KKO4+T09bZjpFX8m82d5vtRfjTKOMhTxOHxARq1eV9aqimm9jRtugBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XCt6npax; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1772327536; c=relaxed/simple;
+	bh=w4eclj6kdzdNsnSdB+1o3tuF5GnVygFxn6neXhOQL8Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MP0af1s0+Exrb3EESG5+H9zB/BR40pQqy2xY7F73lheiBVl7+IPtHKkOMdlyXnkd5GrqZ/nkQNDnlPE4c6xq5JwvDvmRiREna+JsVxCeqzmJn+Ux0LtWKrIiM8gvrmLCri7ziqT7V6CuFyp9zAmX7un6to6PmsgG6HWG9/+ZkZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MMjqIjww; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XCt6npax"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-439a89b6fd0so642396f8f.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 28 Feb 2026 17:11:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MMjqIjww"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48375f10628so21559035e9.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 28 Feb 2026 17:12:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772327494; x=1772932294; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772327532; x=1772932332; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a4odJx43LrmvpL4m1aLM5dJUeCLCM6s/fspImaJFweQ=;
-        b=XCt6npaxWzgC2so8vme0ot0aLDI/37EVNYfE2dgB9ouu1AW/sfNOt4ivYg5b7E+Y0w
-         Hh3clZajCGS+IwXBTSsDC1TTCLkaTnYMgn2PErdmHRkFcvojD+lNrtbWThI+lL9MpWZu
-         ZvnXV+4EFhQRC5uwACHpGEvhvqSSCc8BJYrSh4rkT6rPOSetfxF3AatCQZx0kEdkugeX
-         do9m/8bn1/3jrgjk8PDfk40mhuXWZnBpdIS1pZmXczIko3iLE2dYoHc9Nflu6VZZhCdj
-         rYMxBjjGOh9jzOfbV46AWXyR+MQ+q9XYYIsWdftBazqyaB0MM3yobX5jlJZF7ys8xVjg
-         WaIw==
+        bh=ihdUIJ7l2jZWLbyOPaTctCE8ugQZGI6BqGQqEl0kh7w=;
+        b=MMjqIjww586ZOQpFjO+CKu0bwSKyxvyR0rzeOUDegzXkvJcIvexl0nljugApXZiDVd
+         MSJa887m68K2uRBF0S+69gP20ZMW5lfNl5Vhpfy2jNRydtT6xjHtt+CyKplTE3+vYAyr
+         6wzuzMdP8PvcbK7VnOgUqEaF4yYqFT+eA3vHy5JgsYmh95J15Lk4ox4PGeQQBDCyQ62f
+         uUJj10g/Jhs4rpIwbrZKsCYYq1GQuxoa/0JADhBuT4hGbFcIWSxIpn7+YNcZzaK/w7D7
+         vfLbIbCGZ/ca4T5qBfaNdieIAuweo2dhpK6ns8BUaX0pEheOWm/4gyNS+hpn5TO0PDZ8
+         QKLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772327494; x=1772932294;
+        d=1e100.net; s=20230601; t=1772327532; x=1772932332;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a4odJx43LrmvpL4m1aLM5dJUeCLCM6s/fspImaJFweQ=;
-        b=Qz4XePVT4I5GDwiPKbvVOSPLUrNK/Nx8ns28zw2dHWd0Q+wEBPNe23O3GOiv9XBLYy
-         pvelBb3PVg9wYeKyl9/YtxXTo5pVIHMBHrWrch/3PF6RekHqDsmHReFQ61Lxu4G0JJmf
-         nTHFQpmLZDm6n9/z/djSbZ85JB65YGnvy/21u2TUN4VXvbl5MbVEIuvnJaTU6BxMw7WA
-         xqxyn3nC46IFx634rfsRl3BeC8gbyB32xjHYy66fmqKpoOx6MDVB2qZXyPWotqzn9aEp
-         9VOQmQ4vHBsPMeG1qj/kF1DqUmjY1+JvUecJ60Zr5knyKIzR0dSXAOg0Yy6dO+jU7hWU
-         4tow==
-X-Gm-Message-State: AOJu0Yyp2LtczHjO3SvskqBsixlqbRndRamC2nJaUTNF5iHLPC4nsAeJ
-	vqmR1UtYsY7lMdCAj6aUb+KAm8sGnAUbYrOESzgFCWc8299Qb9U67ibd
-X-Gm-Gg: ATEYQzzVY2jYwLpyNVKwcenh9yVTiPAMWLgiC7IdLyAiRzie1fCb3P5ORwvzoH+PLQL
-	sL0/fAg4F2QbCbDqjitXYIJi0FCy693GaBZyGi1TltaUNf+kTB8LFlzGxnA/7VWwrfYJr4IDM4Y
-	QQb4HmhTBDdkhCZs2U0c66QgLx1hY+CD601OLD41GV1cTrkr60gp66ABxijh7tqG8zx0DtWuY4t
-	WKwEagGGPk7RWoR4t9fkg3h5AoyZ1jMvf9pFjfE7T4qaJCrv7mbShD8Rrpr0K9mHW0dMPv0qDES
-	LbrbVy06XZ0qdCgLSUe3A/EoyuV8wVuBrJs7Glk+iHuwTP07B1vG3L0cSmqd/HU2Kw2TO3a3Qw9
-	H/g1jvPwz6/5fKzaWnfuC495ZQ10El9nTRaCiXWCI3Zr9dj1hW0lpFPVkwvHyE4orChWGVEwmUA
-	gBhbrv1YWI49Fa5EpmsEmmKLKSuAqUoNFN36NVbqDtuHmVBCFxsjref6bWnEIMbK5R9Fo2dFvO
-X-Received: by 2002:a05:6000:1a8f:b0:436:369f:3a00 with SMTP id ffacd0b85a97d-4399de4a881mr14575502f8f.50.1772327493600;
-        Sat, 28 Feb 2026 17:11:33 -0800 (PST)
+        bh=ihdUIJ7l2jZWLbyOPaTctCE8ugQZGI6BqGQqEl0kh7w=;
+        b=NgWil/+CBkV2Joivi+R8DLv2UpQXnr8AgKjsi7gUrUDwA3zyHamSGkPYX7R0Y+tsqg
+         U3MbsYVUJn8zvg5oDMzGz6JMc0qeab7E4ENMukHrZRnsFylTotr1wjOih9TM54C/m1sn
+         tIs1f87ChsqydSO5GDR9zk96jBI9VJdsdg9yLG3fLxEKj5xCqkEAVDeDyzRP5QN++3MS
+         YBIeQLRliICTwcD6GjY9ZiHKbtqtw5eJL3zAyli1yUjb5+r/6QBF7dkXQegKjROnMdZn
+         FBWbLbb1TKRU92T1RbYPup/1HU5KGp7LPpbn9bDUbURu5KS93iBrOjJMvR6lSykF7mZz
+         QnoQ==
+X-Gm-Message-State: AOJu0Yynzel3foCO7S550VUxbbvzYSK18cPJTh09JWXTKHqI9My4MHNg
+	AhtXp+njHY8cmajhgfGixHLWqR8AMO8q4BbNJWU5asGLH+WN5E3awfMb
+X-Gm-Gg: ATEYQzzldZTsbzYzQkbQpIHJD0bOHRRUN6d8veP2LGzhTTELvRibPzTvPtOz0aYxT+d
+	HBM17/4BbJ1RFgNyxE3Ub7A8rKGu9zA76RZF16gflyXK/c+0YGSWJwpRPJ+naK5rTPWzw6sdpek
+	Of/cNwEfSBcQ7ItEsGxZC4KW+qrTfJGtDhZOWobJazPSR28BnaRAnGOrQYWGEvESQPq2T5XnF4+
+	wZhNZzECLgit9UEZ2LYy4DioxVUr473it3Pcu5lLnqCuOXpml2L8dinag9nzcwTsuWZU3h2MQY/
+	JlXPY65cl1UWtZmiP7bWocz8qxpqYx92BL+ZvRiT/4S7y2owdX/i1PG1C1Tsi5Wia0KdwWt5hqx
+	2SQYjgL8CH4gETXkdfL0QtSJramKlDvkD0QkysHs6bsFWDhEA6BJML9YM1nHx1DYYUhQc8Xr6G8
+	mujFBX1Di+gELQazzFYh2wekjlABP9HLMnSjjNMQ44GxIadtrYbbIwaAo+76YdphtYZQB6Vvtd
+X-Received: by 2002:a05:600c:5392:b0:480:4a4f:c36f with SMTP id 5b1f17b1804b1-483c9bde3famr123763355e9.21.1772327531839;
+        Sat, 28 Feb 2026 17:12:11 -0800 (PST)
 Received: from turbo.teknoraver.net (net-5-95-156-124.cust.vodafonedsl.it. [5.95.156.124])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4399c7645b9sm15853401f8f.27.2026.02.28.17.11.32
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4399c764546sm18825859f8f.29.2026.02.28.17.12.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Feb 2026 17:11:33 -0800 (PST)
+        Sat, 28 Feb 2026 17:12:11 -0800 (PST)
 From: Matteo Croce <technoboy85@gmail.com>
 X-Google-Original-From: Matteo Croce <teknoraver@meta.com>
-To: Joe Perches <joe@perches.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Laight <david.laight.linux@gmail.com>
 Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] get_maintainer: add KUnit maintainers for KUnit test files
-Date: Sun,  1 Mar 2026 02:11:31 +0100
-Message-ID: <20260301011131.4057-1-teknoraver@meta.com>
+Subject: [PATCH v5] KUnit: memcpy: add benchmark
+Date: Sun,  1 Mar 2026 02:12:09 +0100
+Message-ID: <20260301011209.4160-1-teknoraver@meta.com>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,43 +75,194 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-KUnit test files are scattered across the tree and don't always match
-the F: patterns in the KERNEL UNIT TESTING FRAMEWORK MAINTAINERS entry.
-Add the KUnit maintainers automatically when the file path matches
-common KUnit naming conventions: _kunit.c, -kunit.c, _kunit_test.c,
-and -kunit-tests.c.
+Add optional benchmarks for memcpy() and memmove() functions.
+Each benchmark is run with different size and both aligned and unaligned
+buffers, to spot unaligned issues on platforms where they have a noticeable
+performance impact.
+
+Sample output on a RISC-V machine:
+	# modprobe memcpy_kunit
+	KTAP version 1
+	1..1
+	    KTAP version 1
+	    # Subtest: memcpy
+	    # module: memcpy_kunit
+	    1..8
+	    [...]
+	    # memcpy_bench_test: memcpy: aligned copy of len 2: 6 MB/s
+	    # memcpy_bench_test: memcpy: unaligned copy of len 2: 6 MB/s
+	    # memcpy_bench_test: memcpy: aligned copy of len 64: 179 MB/s
+	    # memcpy_bench_test: memcpy: unaligned copy of len 64: 170 MB/s
+	    # memcpy_bench_test: memcpy: aligned copy of len 256: 697 MB/s
+	    # memcpy_bench_test: memcpy: unaligned copy of len 256: 421 MB/s
+	    # memcpy_bench_test: memcpy: aligned copy of len 4194304: 935 MB/s
+	    # memcpy_bench_test: memcpy: unaligned copy of len 4194304: 333 MB/s
+	    # memcpy_bench_test.speed: slow
+	    ok 7 memcpy_bench_test
+	    # memmove_bench_test: memmove: aligned move of len 64: 162 MB/s
+	    # memmove_bench_test: memmove: unaligned move of len 64: 162 MB/s
+	    # memmove_bench_test: memmove: aligned move of len 256: 647 MB/s
+	    # memmove_bench_test: memmove: unaligned move of len 256: 647 MB/s
+	    # memmove_bench_test: memmove: aligned move of len 4194304: 1540 MB/s
+	    # memmove_bench_test: memmove: unaligned move of len 4194304: 1557 MB/s
+	    # memmove_bench_test.speed: slow
+	    ok 8 memmove_bench_test
+	# memcpy: pass:8 fail:0 skip:0 total:8
+	# Totals: pass:8 fail:0 skip:0 total:8
+	ok 1 memcpy
 
 Signed-off-by: Matteo Croce <teknoraver@meta.com>
 ---
-v2: added missing SOB
+v5: rebase to fix a conflict with recent changes
 
- scripts/get_maintainer.pl | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ lib/Kconfig.debug        |   9 ++++
+ lib/tests/memcpy_kunit.c | 107 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 116 insertions(+)
 
-diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
-index 4414194bedcf..c07723af4132 100755
---- a/scripts/get_maintainer.pl
-+++ b/scripts/get_maintainer.pl
-@@ -966,6 +966,20 @@ sub get_maintainers {
- 	    }
- 	}
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 318df4c75454..a61774690362 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2986,6 +2986,15 @@ config MIN_HEAP_KUNIT_TEST
  
-+	## Add KUnit maintainers for KUnit test files
-+	if ($file =~ m/[_-]kunit[_-]?.*\.c$/) {
-+	    my $kunit_tvi = find_first_section();
-+	    while ($kunit_tvi < @typevalue) {
-+		my $kunit_start = find_starting_index($kunit_tvi);
-+		if ($typevalue[$kunit_start] =~ m/^KERNEL UNIT TESTING FRAMEWORK/) {
-+		    $hash{$kunit_tvi} = 0;
-+		    add_categories($kunit_tvi, "");
-+		    last;
-+		}
-+		$kunit_tvi = find_ending_index($kunit_tvi) + 1;
-+	    }
+ 	  If unsure, say N
+ 
++config MEMCPY_KUNIT_BENCHMARK
++	bool "Benchmark string functions"
++	depends on MEMCPY_KUNIT_TEST
++	help
++	  A benchmark for memcpy() and memmove() functions,
++	  with both aligned and unaligned buffers.
++
++	  If unsure, say N.
++
+ config IS_SIGNED_TYPE_KUNIT_TEST
+ 	tristate "Test is_signed_type() macro" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+diff --git a/lib/tests/memcpy_kunit.c b/lib/tests/memcpy_kunit.c
+index d36933554e46..e7588b868125 100644
+--- a/lib/tests/memcpy_kunit.c
++++ b/lib/tests/memcpy_kunit.c
+@@ -493,6 +493,109 @@ static void memmove_overlap_test(struct kunit *test)
+ 	}
+ }
+ 
++#ifdef CONFIG_MEMCPY_KUNIT_BENCHMARK
++
++#define COPIES_NUM	100
++
++static void memcpy_bench_size_align(struct kunit *test, int size, bool unalign)
++{
++	u64 start, end, total_ns = 0;
++	char *dst, *src;
++	int ret = 0;
++
++	dst = kzalloc(size, GFP_KERNEL);
++	if (!dst) {
++		ret = -ENOMEM;
++		goto out;
 +	}
 +
- 	maintainers_in_file($file);
-     }
++	src = kzalloc(size, GFP_KERNEL);
++	if (!src) {
++		ret = -ENOMEM;
++		goto out_free;
++	}
++
++	for (int i = 0; i < COPIES_NUM; i++) {
++		local_irq_disable();
++		start = ktime_get_ns();
++		memcpy(dst + unalign, src, size - unalign);
++		end = ktime_get_ns();
++		local_irq_enable();
++		total_ns += end - start;
++	}
++
++	/* Avoid division by zero */
++	if (!total_ns)
++		total_ns = 1;
++
++	kunit_info(test, "memcpy: %saligned copy of len %d: %lld MB/s\n",
++		   unalign ? "un" : "", size,
++		   (COPIES_NUM * size * 1000000000ULL / total_ns) / (1024 * 1024));
++
++	kfree(src);
++
++out_free:
++	kfree(dst);
++
++out:
++	KUNIT_ASSERT_EQ(test, ret, 0);
++}
++
++static void memcpy_bench_size(struct kunit *test, int size)
++{
++	memcpy_bench_size_align(test, size, false);
++	memcpy_bench_size_align(test, size, true);
++}
++
++static void memcpy_bench_test(struct kunit *test)
++{
++	memcpy_bench_size(test, 2);
++	memcpy_bench_size(test, 64);
++	memcpy_bench_size(test, 256);
++	memcpy_bench_size(test, PAGE_SIZE << MAX_PAGE_ORDER);
++}
++
++static void memmove_bench_size_align(struct kunit *test, int size, bool unalign)
++{
++	u64 start, end, total_ns = 0;
++	char *buf;
++	const int shift = size / 10;
++
++	buf = kzalloc(size, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, buf);
++
++	for (int i = 0; i < COPIES_NUM; i++) {
++		local_irq_disable();
++		start = ktime_get_ns();
++		memmove(buf + shift + unalign, buf, size - shift - unalign);
++		end = ktime_get_ns();
++		local_irq_enable();
++		total_ns += end - start;
++	}
++
++	if (!total_ns)
++		total_ns = 1;
++
++	kunit_info(test, "memmove: %saligned move of len %d: %lld MB/s\n",
++		   unalign ? "un" : "", size,
++		   (COPIES_NUM * (size - shift) * 1000000000ULL / total_ns) / (1024 * 1024));
++	kfree(buf);
++}
++
++static void memmove_bench_size(struct kunit *test, int size)
++{
++	memmove_bench_size_align(test, size, false);
++	memmove_bench_size_align(test, size, true);
++}
++
++static void memmove_bench_test(struct kunit *test)
++{
++	memmove_bench_size(test, 64);
++	memmove_bench_size(test, 256);
++	memmove_bench_size(test, PAGE_SIZE << MAX_PAGE_ORDER);
++}
++#endif
++
+ static struct kunit_case memcpy_test_cases[] = {
+ 	KUNIT_CASE(memset_test),
+ 	KUNIT_CASE(memcpy_test),
+@@ -500,6 +603,10 @@ static struct kunit_case memcpy_test_cases[] = {
+ 	KUNIT_CASE_SLOW(memmove_test),
+ 	KUNIT_CASE_SLOW(memmove_large_test),
+ 	KUNIT_CASE_SLOW(memmove_overlap_test),
++#ifdef CONFIG_MEMCPY_KUNIT_BENCHMARK
++	KUNIT_CASE_SLOW(memcpy_bench_test),
++	KUNIT_CASE_SLOW(memmove_bench_test),
++#endif
+ 	{}
+ };
  
 -- 
 2.53.0
