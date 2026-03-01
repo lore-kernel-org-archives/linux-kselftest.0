@@ -1,218 +1,137 @@
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406EF430BA6
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Mar 2026 10:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12FD82D738A
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Mar 2026 11:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772360186; cv=pass; b=OaCK3jOHNC4rOTq+XyYe+t05fG8rqrYDe38ttzo/g+B/EC9Te9ZgP4II8YRP+bo1E5DLNL/xSIFRHBl+raen574zC2jGaoh+AzfaiMWzTW1EOI0tHUbw1HXCVcQWhkoCDY1YINJ9Hcx4JUfrkF/Ih/C+mIRa7I1MctltxxAhA2Q=
+	t=1772363877; cv=pass; b=iXwVCtD2cSuKBZtTo5KQrNwSV/j46A94DUaJYrkuFcCCOTlfV/sgQ5r0E524FeaVvv+OuOPu7q6DR71hjDyM+kLCJki5k9AGtig6ZdDVbWo4lcaeRDiQXuighPmrMQblAkFHwT1OI76ZjUnYHjLRqT271MNiyRpPG7clEySro3s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772360186; c=relaxed/simple;
-	bh=s7rfjnPtFd6SU6xoPH3SYe9hNrVk5+6PWUoUYgGCnIM=;
+	s=arc-20240116; t=1772363877; c=relaxed/simple;
+	bh=k159yElqE8C6mjZznt1K9GndbHTozt7Zqms9bAr3ZZo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KQniZ0UHdc0Yizy9PmPTEGDp2OFhJKPCRjfPV77k/T8NkaKK0CYx4j4zfGA5VcMkTwo+u5cw5fnZth1nOiTaprVbahdfzXNqT7JIe/4JZ3QxORvLoWArORPsJUlqNitaMaFUbYxJ6pFnwY0h2lbZgVbGApa2k7Cxz2NrjD++9pU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N04lOntM; arc=pass smtp.client-ip=209.85.222.48
+	 To:Cc:Content-Type; b=rm2trAHe9MOyF0a2LSUXIlzYnabEe4GUq0C46w9Wd1Zu7SvlMunqPDZXAjG0g2M3ZVFsiIzaUo2OucHbM7pBVBmTcesC1MOhf50em7ncsrDgQ50MjfWyALbJC4uH8MBaPkYHyQquE+13MZyJvPn2Z29iC8mgGvWkqqL1sf3H8Jk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=llp6vOsf; arc=pass smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N04lOntM"
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-948029fb1f2so1043458241.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Mar 2026 02:16:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772360184; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="llp6vOsf"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b935ff845c8so426829166b.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Mar 2026 03:17:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772363874; cv=none;
         d=google.com; s=arc-20240605;
-        b=fgthZ6b/Zq254QbJfFDlDNMANwAmRtmVwbs+WRMV9M1QytX3vHfHmexxULL0stpcLi
-         NJPVFbYXDK6cd5Y7OckOsoUUI7RypMZD9sM7bAqc1rs+hZaPYBFHezLa7D20ZmtExlXN
-         IBRJRLvevf9UlxJ5slNI26/yvTaTZl+4FEb55GBQth+DMciyLJSid8QJbxwoXDt4TIDX
-         AWEhxcQU1xtS51dGvuky3/K5mu6UDoqAxoKawxPi9m9ArI2/4t5RTsgFiNjA3IwDC8jF
-         EgR2nD8zZHHpSNsZUcawiO4GO/O8lYHyEbboyub1eMxRvuBoswI7OVC/pMUB4kQbi9nD
-         peqw==
+        b=Gx0kxjZ8Ikxr6ARi82sSG8hj1kTNfpnDUNxwhirOySvoHYOR7GQHmAXGnGIL06yF13
+         gL8UPacw8oVgJmqhpKmCkBGHdYvB1oASJMxqX5S7B8AgLIvkS8QcT823dSQs/V/5k+zv
+         NmGnQGL6YDz0Oj5ZC7fLgGnRIoX7jXlSnVKtIELTZfreORcQR0Z4u8cm6Mv8APb+34Q5
+         I+yIhPOPX/DwsavABraRMK2tumKminJmMukp16lGPUdN/oUi7fWokLXMMUjRNJdK54Wm
+         WIvUsXqE6Fg0xBVejwLzYklY9qW2YTFfyNe9MrVJAPE2qyCFeFP7RfwIKdi4+VSg8RDC
+         sd2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZrlN72XdG30IkaSiOSU/cpdfc/g67VmbA5qDRZerWc4=;
-        fh=izqipoP0Qx7AP5Q2disnCzKZRKtJImnpRzCgEZqq9RU=;
-        b=ifeWO6wqqE8UePlQ6rioxzB60Lxv1ozNDjdWEqvkZrQn6cQnmy6Qql2S5KhH6WOTvv
-         PCGsOM2mApXjIeE2O7+8OD0S1f1g/G1JEcPhOHXbykEDtxRr9IUhV2ApwZX47u2MY+YM
-         N6PtYO08QMRTY54NOWw57B9kwLo7TYmr4h5pKqN8NUMdpPAsihLVZvyLHecJExOViwws
-         4/BUtVWd+xGjL3xK44b8xTlEHwZNG7QtsKch+KTWZHj+YJeCN8KgTrUmlS1hD+TfmYFZ
-         WWVq9HOKpMajsYy8qq5ObP/EPbGcCJTKyhbSj5OMl+jzHq2/3VrlGs5nc1V/ykGXEnK7
-         7M7w==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=cd6Hcun1yPAmB6g69o/sJHqtZVSQSHNWzd5WHtcyUqw=;
+        fh=1Bt2zoGDqze+fOiW6nlsoEI1U7ti4lUH1MonvkIbhWE=;
+        b=OAqXk15a2rbPwjZxvX3viMkXPsTlmwbOoOfoJ3Smy9dDJBxv74UhmzVWRfSCu9LKpK
+         MxmQbpwOvWZ8QpKzFFhp1t1EsE+Duq2olZcE3VWSbnlQqyqaRIMGpUTk1QLFbAlucr4K
+         dhu9s4Bj04vnvqu/j9wXHbxpN7Fg6WmKSqqNXiBKZrY1Z2xiXESwBwKEshG4ikRMYTIa
+         dxZv7KGN23xTal+XmQk75jO8MK7U03GefrWldpVw+w0+D0dbt8F3q+feAl9gyvYi25qQ
+         Trol0PrOv8nsCDASAAfww9ATblKtEv2revYdnl6URfPVOAfIASqk/4tXU52ZD1gwWlSZ
+         874A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772360184; x=1772964984; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZrlN72XdG30IkaSiOSU/cpdfc/g67VmbA5qDRZerWc4=;
-        b=N04lOntMi64Tm+WqmzZhhWbQVrZnkQBqb/MlNznFDsXrPLPhUMz2dw+9bZmRLd62x6
-         gIZip+2v7bDGN3YmJtyk4HJAS4UVN1WG1U0Aqu+faG+/IK+3n9PscrvR3J8Hc2r3L5vD
-         A5uXJoMIZWCHG9gWgha3KPr9hJU5Pwao6gkNx9B+qbzu5kCnHRCJ5NXOFZVE81rWZMuy
-         oNEWxKfvREP7ll/7g5gPcPb1e+5IBkH+hqPqacUdRkaFalxafjYraKIm9CEePams18fe
-         kE2Ybd6TdGJv+3qXBbPDTeW23hLy3ZGb08T1SoziBB2S3B18vq2kSbBKkP1SUMhuR+Hw
-         L1zw==
+        d=gmail.com; s=20230601; t=1772363874; x=1772968674; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cd6Hcun1yPAmB6g69o/sJHqtZVSQSHNWzd5WHtcyUqw=;
+        b=llp6vOsfaAukID78dJspJuDWygH3nQNBgi4345UAz3mm3fT9/T3WdevkJq2z2OCq2+
+         cior0uqSoP9rIYxIdYy15iKYivL4gDaADJu8DUcXT3HmPb4fcGyyfJ16Aw9+u7iEhLDM
+         t19cqj6CFRTbFuE3aCdL7ZODTB3J62ko/4LUqx2FphC9Cwbhxx556g8r/Wbcfw9t9nlp
+         A4o8/RyOa3FwFzqRMIIvmtaFnBNmB8EaxQaaFV2oUjO26b05QBtwXzZWZ8seTW9d1NC/
+         +9gndbkYAAiB3WO5Wdax+JPhZ4laP1lVfbTcMWWVjZ2NLdceemykbtJoQdVm/Kz+7jRn
+         ysrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772360184; x=1772964984;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZrlN72XdG30IkaSiOSU/cpdfc/g67VmbA5qDRZerWc4=;
-        b=FMLQ1erStf6PllKXilu2kHxRgJZMKaj6ZcQijHxpm0P4UUZL+tT4oS4WhsG13djjb2
-         Dsa1Z5MVlzLV0iaVQtT8XvFI4McQPODUFRUCdKZ+wSQkdIAr1cpY7Hqqy3udEWzNpVhX
-         vAaqJ6A1QNLsJ1klM4k6GAcAo7a/8he4Qv6OTH0pKEBfnZtWFcOW8KeSDYDYVxLQdE6C
-         f8KqQp2BE6COy36DSZYlOLzPHtYdgXma6iyVKhqgTTxPFH8aBdzPiAF6+0ZbvEGH53D5
-         2KCTIVA9xTjsAmKe/1jKNULCv7ivrNpEE0qJaKOqknqUc1Mj70JeF/YNr8Uq6I2gPFfy
-         sSZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUlaQ+DQ/Lae1yZM7XC05vSrdHM/oeXHOFPV7ulnSlYroCoDSmwx6NLCrIivY1MbdGygU1FgpxcfiqfJ3jALCI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiNu7+nRV4LokRRva6GW9JikCY0bbswl2d+z1/cYsSFR/vevdX
-	m1KR3O47tJbW/GhLHIHkPG0/igs2gQuGk6RjJoblB+aEjAdYs+XLgA1Htdi5idVwXFj0b7fH9JF
-	6sJ/R15JlCG+v3v0SDBRs45V1DRxLNg0=
-X-Gm-Gg: ATEYQzw4vMjYCX6rbxIl6RMW8IKNa7f+iUcly4ksxhXb7aSQhOIzBAmbp1ksWRqOWtK
-	x/ZQTJL35APLu8PF2Fq1yDVOrDaviDTHgGtkumpLfcZ1kqE/AfHpvPYXGWX6+HaV23JG7SPV1tb
-	KBeRVcV74VJbFy6gDPrBZSn2z3wDuk18tIMXftGc6UGWYfQAPu+2tYkqM5LLgc8r2SeYt6KKfZz
-	qvGOUKQT0pnj3a2ZW6cpv1lKmmL+E/ZdEACOnojGEo4cOp75SwTfnpK0dZfw8bVfVN+FQpR1xop
-	7KXQYZz50PzmAKBzaetYpeqqw9WtDZvubTgDCmNgEw==
-X-Received: by 2002:a05:6102:5091:b0:5f7:24dc:3ac3 with SMTP id
- ada2fe7eead31-5ff322bf4bdmr2863289137.7.1772360184080; Sun, 01 Mar 2026
- 02:16:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772363874; x=1772968674;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cd6Hcun1yPAmB6g69o/sJHqtZVSQSHNWzd5WHtcyUqw=;
+        b=o22VbCo5J6L7uyBr4XdbxEdRlJZeBVC0FR6dTOWmCnDszfwMMzNJcrkeDwyz+QmEVG
+         BotBPSITFg4wX3i7gtH3kr4tc37vLb9jtpJPNWhfna4hdNeZAvh57fN/tkrTvL+YQ1oz
+         tuoK/HjrGzbukMbWV0pDnrlAL6VaTxsDwvh4Yx8wWIRnO+oeVSUU51sbZUmSOM16EWKQ
+         UBOl0LGiA7DBsZbJtastkbEJqm5rxyLOf+j7PYB9wSNKb3HSnb4kI8dgsM08s3Be2BMy
+         qAq6ui50x3SbFudxA9jAT6Cs0nlDyhzE3TMAE3z25raxxIAbM78VOGJ0krxYDghFSvWg
+         r/Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCWoZhsvMFtVu4pMhLojB6c7MkrncRyPNeYqEJx68rpXojXiP+RcI55ifTuGrJeC3lsnZZupXsfCscNBnahy9bk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywpo9UlN7zW41u0ij/Au15ZStKXRDPmNnzVRt7TbSZF8hpapwMp
+	5BzwvQIN4iDOSOAR5pV3PnNyJb19WcauqFJn9cgb+7jjc31ZEKgH2vTCSd6rTkGxRqykqfFwoJw
+	32O22AeBpz3fYAlu7yXWBDmtG4cTnvU0=
+X-Gm-Gg: ATEYQzybLihR8f59mWd2/6fyJt8M9/lkYngBUnDzrmNKpPNqckF8Fg8fr+/ncZ+ieeQ
+	BvKC5GI+ATmplnqyO7SCjFmCaPCtGD6TbCXxqJAHsYuciBREtVpxXiz35zFfWEVeFlZjbYVQPzM
+	xkbmuImmeXnfiysjmOUWg9bTHDIUpzVqCs4FSJYky4pww3YlwOTkEhJGEohhla3mFurKwMdzMtw
+	vLcZoqxp+IeQHTg/rL0H1VhUS2q9NGAzTaQAuZSS2ZIRu6rvqPdi35+rzfQrpQCtR5qLDnaQeiu
+	9BT1rQ==
+X-Received: by 2002:a17:906:8410:b0:b89:fb0b:65e3 with SMTP id
+ a640c23a62f3a-b937654ff2emr381712766b.47.1772363873608; Sun, 01 Mar 2026
+ 03:17:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260221145915.81749-1-dorjoychy111@gmail.com>
-In-Reply-To: <20260221145915.81749-1-dorjoychy111@gmail.com>
-From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
-Date: Sun, 1 Mar 2026 16:16:13 +0600
-X-Gm-Features: AaiRm52S_i7uxGvz2GvDZgmu6T0jp37pcUwvZrAaDhnW-l9lgBlZerFtvlbrSME
-Message-ID: <CAFfO_h6Y1QcW7mNGdCuY-_J6zrF_F8aW+Q8O9SvoBbXTxteFjQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] OPENAT2_REGULAR flag support in openat2
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org, 
-	gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	v9fs@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, jlayton@kernel.org, 
-	chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
-	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
-	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
-	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
-	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
-	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
-	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
-	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
-	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
-	hansg@kernel.org
+References: <20260301011131.4057-1-teknoraver@meta.com> <8eb8c51eeb87f178e92e68bcfffd02701845c48d.camel@perches.com>
+In-Reply-To: <8eb8c51eeb87f178e92e68bcfffd02701845c48d.camel@perches.com>
+From: Matteo Croce <technoboy85@gmail.com>
+Date: Sun, 1 Mar 2026 12:17:17 +0100
+X-Gm-Features: AaiRm50-LNjx9Ny8V3e5yzdxhecUzh5cT2pFlVSJ5v9VDlJ7yq5lmvjH6894s3s
+Message-ID: <CAFnufp0rQ=p2qGcpDdJB-SjW=qNOaxFRTrO1TprhKLtds96bJg@mail.gmail.com>
+Subject: Re: [PATCH v2] get_maintainer: add KUnit maintainers for KUnit test files
+To: Joe Perches <joe@perches.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Ping...
-Requesting for review on this patch series please.
+Il giorno dom 1 mar 2026 alle ore 03:36 Joe Perches <joe@perches.com>
+ha scritto:
+>
+> On Sun, 2026-03-01 at 02:11 +0100, Matteo Croce wrote:
+> > ```
+> > KUnit test files are scattered across the tree and don't always match
+> > the F: patterns in the KERNEL UNIT TESTING FRAMEWORK MAINTAINERS entry.
+> > Add the KUnit maintainers automatically when the file path matches
+> > common KUnit naming conventions: _kunit.c, -kunit.c, _kunit_test.c,
+> > and -kunit-tests.c.
+>
+> nack.  There's no need to modify get_maintainer.
+>
+> Use F: patterns instead.
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 96e97d25e1c2..9796e184b9d5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13956,6 +13956,11 @@ F:     rust/kernel/kunit.rs
+>  F:     rust/macros/kunit.rs
+>  F:     scripts/rustdoc_test_*
+>  F:     tools/testing/kunit/
+> +F:     */*[_-]kunit*.c
+> +F:     */*/*[_-]kunit*.c
+> +F:     */*/*/*[_-]kunit*.c
+> +F:     */*/*/*/*[_-]kunit*.c
+> +F:     */*/*/*/*/*[_-]kunit*.c
+>
+>  KERNEL USERMODE HELPER
+>  M:     Luis Chamberlain <mcgrof@kernel.org>
+
+So many rules covering all possible depths?
+Sounds good.
+
+BTW at this point it would be useful to implement the ** glob operator,
+but maybe it's not worth it.
 
 Regards,
-Dorjoy
+-- 
+Matteo Croce
 
-On Sat, Feb 21, 2026 at 8:59=E2=80=AFPM Dorjoy Chowdhury <dorjoychy111@gmai=
-l.com> wrote:
->
-> Hi,
->
-> I came upon this "Ability to only open regular files" uapi feature sugges=
-tion
-> from https://uapi-group.org/kernel-features/#ability-to-only-open-regular=
--files
-> and thought it would be something I could do as a first patch and get to
-> know the kernel code a bit better.
->
-> I only tested this new flag on my local system (fedora btrfs).
->
-> Note that I had submitted a v4 previously (that had -EINVAL for the atomi=
-c_open
-> code paths) but did not do a get_maintainers.pl. It didn't get any review=
- and
-> please ignore that one anyway. In this version, I have tried to properly =
-update
-> the filesystems that provide atomic_open (fs/ceph, fs/nfs, fs/smb, fs/gfs=
-2,
-> fs/fuse, fs/vboxsf, fs/9p) for the new OPENAT2_REGULAR flag. Some of them
-> (fs/fuse, fs/vboxsf, fs/9p) didn't need any changing. As far as I see, mo=
-st of
-> the filesystems do finish_no_open for ~O_CREAT and have file->f_mode |=3D=
- FMODE_CREATED
-> for the O_CREAT code path which I assume means they always create new fil=
-e which
-> is a regular file. OPENAT2_REGULAR | O_DIRECTORY returns -EINVAL (instead=
- of working
-> if path is either a directory or regular file) as it was easier to reason=
- about when
-> making changes in all the filesystems.
->
-> Changes in v4:
-> - changed O_REGULAR to OPENAT2_REGULAR
-> - OPENAT2_REGULAR does not affect O_PATH
-> - atomic_open codepaths updated to work properly for OPENAT2_REGULAR
-> - commit message includes the uapi-group URL
-> - v3 is at: https://lore.kernel.org/linux-fsdevel/20260127180109.66691-1-=
-dorjoychy111@gmail.com/T/
->
-> Changes in v3:
-> - included motivation about O_REGULAR flag in commit message e.g., progra=
-ms not wanting to be tricked into opening device nodes
-> - fixed commit message wrongly referencing ENOTREGULAR instead of ENOTREG
-> - fixed the O_REGULAR flag in arch/parisc/include/uapi/asm/fcntl.h from 0=
-60000000 to 0100000000
-> - added 2 commits converting arch/{mips,sparc}/include/uapi/asm/fcntl.h O=
-_* macros from hex to octal
-> - v2 is at: https://lore.kernel.org/linux-fsdevel/20260126154156.55723-1-=
-dorjoychy111@gmail.com/T/
->
-> Changes in v2:
-> - rename ENOTREGULAR to ENOTREG
-> - define ENOTREG in uapi/asm-generic/errno.h (instead of errno-base.h) an=
-d in arch/*/include/uapi/asm/errno.h files
-> - override O_REGULAR in arch/{alpha,sparc,parisc}/include/uapi/asm/fcntl.=
-h due to clash with include/uapi/asm-generic/fcntl.h
-> - I have kept the kselftest but now that O_REGULAR and ENOTREG can have d=
-ifferent value on different architectures I am not sure if it's right
-> - v1 is at: https://lore.kernel.org/linux-fsdevel/20260125141518.59493-1-=
-dorjoychy111@gmail.com/T/
->
-> Thanks.
->
-> Regards,
-> Dorjoy
->
-> Dorjoy Chowdhury (4):
->   openat2: new OPENAT2_REGULAR flag support
->   kselftest/openat2: test for OPENAT2_REGULAR flag
->   sparc/fcntl.h: convert O_* flag macros from hex to octal
->   mips/fcntl.h: convert O_* flag macros from hex to octal
->
->  arch/alpha/include/uapi/asm/errno.h           |  2 +
->  arch/alpha/include/uapi/asm/fcntl.h           |  1 +
->  arch/mips/include/uapi/asm/errno.h            |  2 +
->  arch/mips/include/uapi/asm/fcntl.h            | 22 +++++------
->  arch/parisc/include/uapi/asm/errno.h          |  2 +
->  arch/parisc/include/uapi/asm/fcntl.h          |  1 +
->  arch/sparc/include/uapi/asm/errno.h           |  2 +
->  arch/sparc/include/uapi/asm/fcntl.h           | 35 +++++++++---------
->  fs/ceph/file.c                                |  4 ++
->  fs/gfs2/inode.c                               |  2 +
->  fs/namei.c                                    |  4 ++
->  fs/nfs/dir.c                                  |  4 +-
->  fs/open.c                                     |  4 +-
->  fs/smb/client/dir.c                           | 11 +++++-
->  include/linux/fcntl.h                         |  2 +
->  include/uapi/asm-generic/errno.h              |  2 +
->  include/uapi/asm-generic/fcntl.h              |  4 ++
->  tools/arch/alpha/include/uapi/asm/errno.h     |  2 +
->  tools/arch/mips/include/uapi/asm/errno.h      |  2 +
->  tools/arch/parisc/include/uapi/asm/errno.h    |  2 +
->  tools/arch/sparc/include/uapi/asm/errno.h     |  2 +
->  tools/include/uapi/asm-generic/errno.h        |  2 +
->  .../testing/selftests/openat2/openat2_test.c  | 37 ++++++++++++++++++-
->  23 files changed, 119 insertions(+), 32 deletions(-)
->
-> --
-> 2.53.0
->
+perl -e 'for($t=0;;$t++){print chr($t*($t>>8|$t>>13)&255)}' |aplay
