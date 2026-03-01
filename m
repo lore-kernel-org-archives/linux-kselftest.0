@@ -1,60 +1,105 @@
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D863233507A;
-	Sun,  1 Mar 2026 16:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA132C0F6F;
+	Sun,  1 Mar 2026 17:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772383374; cv=none; b=l4R6mLRgGsdi17vqR27VDZrUk/jdrwfhn+2RDHjuas7fEvcOzditrHAiF5oehGt/GD88fAAFxVKuqVbYamCGmeq/NvhdVnQT+beTvtoTU2PG9cwB2iQnG1YFbRDySpHLnBeNvEvp1WFMPsVW8nhJL/0zB47yNh9mvsw4IL5YwE4=
+	t=1772387011; cv=none; b=Lz2YEJcoT/Mhmi0FC5EXO9OP3jEalCEUqM5J8OcuT6OpsBpXxC3P0w8IUVcSqZQxWRGqvXPQZKKoALt/rHFwFXq+FRmuGIQC65VoOEztTBRfFwtzBTfOcDsUKRooW2d33BH69RYw6KxtytwyJ/dSewIR0O7guhDmIMmR6P9SnVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772383374; c=relaxed/simple;
-	bh=880SwnxrLhukGqrGS1Bj45Q8KRwNJEn0FLoFllxHg5w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PI+c1Ca1yzWuGkke9g58eSP761hQNX24JVKw+WEbb6j8OUcS6lMm0wTEV+VVCCRZuj1euDZAGXDWF75UTjPAMmXgTziOCkfDuqQIh/8MUNyJRh/jXp8iGRpqLB2HQ0v3D+voSxUlNlsy55fg23xxS8bOi4oJ7FG3QzebXX1lMBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 457AB14021A;
-	Sun,  1 Mar 2026 16:42:46 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 3CB386000D;
-	Sun,  1 Mar 2026 16:42:44 +0000 (UTC)
-Message-ID: <b7d028a084ddda66058504aab72032cb9beaf771.camel@perches.com>
-Subject: Re: [PATCH v2] get_maintainer: add KUnit maintainers for KUnit test
- files
-From: Joe Perches <joe@perches.com>
-To: Matteo Croce <technoboy85@gmail.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, 	linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Sun, 01 Mar 2026 08:42:43 -0800
-In-Reply-To: <CAFnufp0rQ=p2qGcpDdJB-SjW=qNOaxFRTrO1TprhKLtds96bJg@mail.gmail.com>
-References: <20260301011131.4057-1-teknoraver@meta.com>
-		 <8eb8c51eeb87f178e92e68bcfffd02701845c48d.camel@perches.com>
-	 <CAFnufp0rQ=p2qGcpDdJB-SjW=qNOaxFRTrO1TprhKLtds96bJg@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	s=arc-20240116; t=1772387011; c=relaxed/simple;
+	bh=+CwkXbOh/Fg6OBVe8JUapRvY8ZYQMp73JI7BMgt63xE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D4J3kKF64AmKyGqHqf7qp1aINbdN7d9ipJH2pA9hwBmRIqDauVKQQAegYygnT3lF7epITVzo+tqjRGBIL9yqQsRyyWG0RcgPo34pYHYXxdWCg5OPvt6qbku71fjzu3qU7IR+avxHFjA9B3NJkg0j6UhpHNnA+d7DgJgHgjTTJ/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMQeBh/5; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMQeBh/5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F4AC116C6;
+	Sun,  1 Mar 2026 17:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772387011;
+	bh=+CwkXbOh/Fg6OBVe8JUapRvY8ZYQMp73JI7BMgt63xE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HMQeBh/5DjKrwDG2HtHsTqzr3oTuh45Xn+J8cyc9lI0TmzjP/N1s9r/nywlh347yi
+	 h4lgUeq8iGAUN8KILGk3q8JeiFVMJvw3CoLHKwLh3M67Ozwhites3cKQRJhuqbciyR
+	 oz8VJ+LY0XSpTl+9LoxSPCjOS6Hk6a+/aaGiNqk4d760PDAI0fBOnm2ta4hcYLCW8S
+	 sK6Wmcsv5kXDzGefzFlR+tl5H61dsAna9Cv76OjegaRMdTCJnSGTcqK6Pc8QYApWSJ
+	 vsBGFlnwDmGFpy02IyztVzOK47cx5aTJgA34hARbxROOvjMzf61urrTP2WCHvhwOV/
+	 5pAlC4YTWud2A==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v2 00/10] mm/damon: add optional debugging-purpose sanity checks
+Date: Sun,  1 Mar 2026 09:43:15 -0800
+Message-ID: <20260301174327.76849-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 3CB386000D
-X-Stat-Signature: k1ptbb9pnw59g7nenzt3u6rr5mm1wnzo
-X-Rspamd-Server: rspamout03
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+gGSX/yNE9t6Bv9ZlNaA3sWfMgAttT6Wc=
-X-HE-Tag: 1772383364-269765
-X-HE-Meta: U2FsdGVkX1/wVq20QsIivsFTXAs/Y2/9f35gd4Bf3jEZaoxZ2j9Vb7ixgAPlZYj0Jg2sIOJaK8b+QQzWpTox2dC4yabCJMkq6KWQR4DqQnq4n5oC4rfVswu+ITj0mI3P+LjiTUOfz+AVyx5QoSrK+e9jgpzX18nNDnfzkr02u2gtbu3o6T4WU1rhbi7iCGtP/MtTlAYH0OmfctKvnvRYayWbfDP+bH01h9XjJ6bLACmyc8IXhvHdzpZ7oHbB7HfQvtPbvlpkHQmBXFNmjHWfM0W5bgP5WpjfmB7iVHDV76zgx6d3PnJq73XRxt9nAODR
+Content-Transfer-Encoding: 8bit
 
-On Sun, 2026-03-01 at 12:17 +0100, Matteo Croce wrote:
-> BTW at this point it would be useful to implement the ** glob operator,
-> but maybe it's not worth it.
+DAMON code has a few assumptions that can be critical if violated.
+Validating the assumptions in code can be useful at finding such
+critical bugs.  I was actually adding some such additional sanity checks
+in my personal tree, and those were useful at finding bugs that I made
+during the development of new patches.  We also found [1] sometimes the
+assumptions are misunderstood.  The validation can work as good
+documentation for such cases.
 
-Hi Matteo.
+Add some of such debugging purpose sanity checks.  Because those
+additional checks can impose more overhead, make those only optional via
+new config, CONFIG_DAMON_DEBUG_SANITY, that is recommended for only
+development and test setups.  And as recommended, enable it for DAMON
+kunit tests and selftests.
 
-Given you've now touched get_maintainer, you are welcome to do it.
-Maybe change "sub file_match_pattern {".
-But I believe this is the first actual use case so I will not.
+Note that the verification only WARN_ON() for each of the insanity.  The
+developer or tester may better to set panic_on_oops together, like
+damon-tests/corr did [2].
+
+[1] https://lore.kernel.org/20251231070029.79682-1-sj@kernel.org
+[2] https://github.com/damonitor/damon-tests/commit/a80fbee55e272f151b4e5809ee85898aea33e6ff
+
+Changes from RFC v1
+(https://lore.kernel.org/20260221193629.19332-1-sj@kernel.org)
+- Fix WARN_ON() failure on kunit UML build
+- Fix Wformat-zero-length issue
+  (https://lore.kernel.org/oe-kbuild-all/202602221352.odZW8x1R-lkp@intel.com/)
+- Rebase to latest mm-new
+- Make warning message less verbose
+- Use WARN_ONCE() condition
+- Do the verification asap
+- Minor cleanups
+
+SeongJae Park (10):
+  mm/damon: add CONFIG_DAMON_DEBUG_SANITY
+  mm/damon/core: add damon_new_region() debug_sanity check
+  mm/damon/core: add damon_del_region() debug_sanity check
+  mm/damon/core: add damon_nr_regions() debug_sanity check
+  mm/damon/core: add damon_merge_two_regions() debug_sanity check
+  mm/damon/core: add damon_merge_regions_of() debug_sanity check
+  mm/damon/core: add damon_split_region_at() debug_sanity check
+  mm/damon/core: add damon_reset_aggregated() debug_sanity check
+  mm/damon/tests/.kunitconifg: enable DAMON_DEBUG_SANITY
+  selftests/damon/config: enable DAMON_DEBUG_SANITY
+
+ mm/damon/Kconfig                     |  11 +++
+ mm/damon/core.c                      | 109 +++++++++++++++++++++++++++
+ mm/damon/tests/.kunitconfig          |   3 +
+ tools/testing/selftests/damon/config |   1 +
+ 4 files changed, 124 insertions(+)
+
+
+base-commit: b511f483f5fc7e85ad60679181503f16937feb6e
+-- 
+2.47.3
