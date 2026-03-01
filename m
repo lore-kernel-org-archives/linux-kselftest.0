@@ -1,255 +1,524 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011027.outbound.protection.outlook.com [52.101.62.27])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9021B175A83;
-	Sun,  1 Mar 2026 12:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772368869; cv=fail; b=ISfkncp+sfiYaKRE6Q4abPzpJPcjayYOONKJgN0TbEHVlSHA1dXbi3/40N7J/CAfulSOegdjH10STWTPMLoes7ZphLc31VhV2YiO3c0iAXutzJgvrygAZX7bW/R8kC9fwe3CKLquaHCR3uYrzETp8xCGcmlosOcS7rUY5Rp5z9A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772368869; c=relaxed/simple;
-	bh=vzeQuRolMjEg3YjiOVHg29uD/FTPn+C8lK7gEtyKmkw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=CPTdVvzDcPDuntNbZaeAHKRESmHhdQ25AXx1WAwlWNXwSLlHyQKn4MyqfAJw8AWGIrY0i+o5U0wtNiOP2BEHlO4s7V6rrsru5NpiMmBsG2CWfJ2ZrOmUyqyavOP4dBcpEZ9r4le7mqnldQb3hX81kLJZSEcizigVLbyXfvjGwoA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=i8yK4nOM; arc=fail smtp.client-ip=52.101.62.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055592773EE;
+	Sun,  1 Mar 2026 12:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772369085; cv=none; b=qD6+eWLqo0CLm+RobUckoAdyftZ/MEy6sJj6+mp6ISIqnaWHGlYQtaflRkCehZI/DEWYVds9eSjwQZJtsHykKCFKvTwF3yJ5X+pGG58hnMmrdFAxYfdadrh5HsyOlgrjG/tt6iJ3ucIIqDEA8iW4JFADFjjb94CFhrJNlJSjNUU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772369085; c=relaxed/simple;
+	bh=YFXbyDuGu+lMcj0X0HvXFwBfz8rYM0ojfkKa4wsRy2E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Qy33AqdbP/4BmzhQFHURm0szHDcfbIV/6M3Hl5JDpX68o3/DJZWdd+S+8ZhSd58y4Ixpcn9H63FYG/D24mj7tH0KgysuvMEysx2/kIWS8IUCzQDLMeNXeyKuZkgjHXMgc75uAs8JBxE8HllzNF8TPAjvLa6JAvCI79vRR6/Ylyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDsJpZck; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="i8yK4nOM"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RtXFkJCtjNHvsAYf3yG101uJQcDHJmKNOsgAYtDQxIDZSelM70Od9OwJmkrzpf74JD3WhsFKIy5mhyeWqJMupIXotehPPDzdeJ8xCf6o8hg+hlRRMR2CLG82C1x4qJBW7sGgBpyeMJVJ9+jO25ScXluql4gg9u3wr6BFVzMcBRpt5P7ku8LN8WKL/LPLi59zGZwKwKWCM+4UfPQKMspZ6zB2b/s4k7d4sHCymIRPK3yVgU36k78QARRaDE9CwYnMOwRbZhsOBxaCeB0eivYMOfZHkyY0pChpUCYXTLi1eXjxsS3Xn5VdBlW0yOEOdbCSMGBFwLsHu6xsET4Y69+dag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QT1oco0lUNN9DH/tSjfI2vGj/FB1AMEJ6iT0zBvQ4AE=;
- b=FHRBsSeXcR6G7Bc1ibu0bTMIzL1d6gnDprRrv+WSIlgQu9BFO7UQ2l1jyNGEONkNRDNx26gSfqJ6AwNySO910uUwP/23x4rtoDw0FOexBHxhqdzw4eS9q5zhgWmy7B5FA22eZVLFiN6NpOczbIY9dQ0OEJs+WvJ9ABkffgLQTcLT2YoBDCPyg2XsS1cDi9k+nq/eqrzeIHJZaiRm1Rmfd3hgANKaolEApWhPxBCFaUqz9xjoYfY6lWcV2dkqKbmB031rK4x+tTJCpXCoB/NgSjJ0Kj5CYkOYKl2QSeKMaHjn9gmr/9YRkmEsEjNqvDy2lK7NjoojRzhqsc16OCRWKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QT1oco0lUNN9DH/tSjfI2vGj/FB1AMEJ6iT0zBvQ4AE=;
- b=i8yK4nOMORjfgkUBebXAsnZue8dcQJPgKI/Ew/rdkovzc+YYAEynYcZAGQBox3u7lRVlZzVmyJ3rUfKkBGb9EFUL9p9yaGZYCPreP90sGdnskR5TzHDVQLvPopPbxgURWzk4ppac3JiwzQ+VkG9N/4SLc/UBx3Qe0T+j/CWMID/9veCSf4a8X/xi4TnLd+CZ1OYG+3AWBZ1cwXZvjFn8oboIlWGQbvqQdzqk2o5Vw6NdSxX0IS7c3BE4vmOMF/YJiJVnMsfVvTewdzgGcscEU3Dn6devkla01/z8WFk5U6ZCnqRaGmAuejVs0xPDBceRKE5kBfAdzLgcGPXbZYhaPQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3SPRMB0009.namprd12.prod.outlook.com (2603:10b6:806:31a::8)
- by DS7PR12MB5910.namprd12.prod.outlook.com (2603:10b6:8:7b::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9654.15; Sun, 1 Mar 2026 12:41:02 +0000
-Received: from SA3SPRMB0009.namprd12.prod.outlook.com
- ([fe80::ff04:ba7f:5bdc:4f89]) by SA3SPRMB0009.namprd12.prod.outlook.com
- ([fe80::ff04:ba7f:5bdc:4f89%6]) with mapi id 15.20.9632.017; Sun, 1 Mar 2026
- 12:41:01 +0000
-Date: Sun, 1 Mar 2026 14:40:52 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Petr Machata <petrm@nvidia.com>, Nir Dotan <nird@mellanox.com>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] selftests: net: forwarding: fix IPv6 address leak in
- cleanup
-Message-ID: <20260301124052.GA713428@shredder>
-References: <20260301014706.454243-1-aleksey.oladko@virtuozzo.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260301014706.454243-1-aleksey.oladko@virtuozzo.com>
-X-ClientProxiedBy: TL0P290CA0004.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:5::17) To SA3SPRMB0009.namprd12.prod.outlook.com
- (2603:10b6:806:31a::8)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDsJpZck"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A88FC116C6;
+	Sun,  1 Mar 2026 12:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772369084;
+	bh=YFXbyDuGu+lMcj0X0HvXFwBfz8rYM0ojfkKa4wsRy2E=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=nDsJpZckQKwCwiBNpiRHfrOxN4/tuBXjynAZFFrhV3PFyb9BhNnqAIXT9uh9LlY4m
+	 knQpj8u3vCib7c1UdzSHMWtE2l14XepARDIpi2sbeD0aCVR9FNteA6V7jB+EI9UJKA
+	 uIfaNwwqGcA1Mlsy2qSCVwK9bbj5Xt6XjEq5VhrmO3Ht4fMsH/qxxiSAyJmBzsKcBE
+	 3iB+hMamG5hCh/yWm49qwsp4D/IRrvKUeIP+eAGd8Mb6JoW8ND8H8wIq+yU4v5424o
+	 Y8vc8SexINQMisBkUExD7VLoBNHU3AKEjbqRN5Lv7LJF2G0qAF6kgUl7Ub/BZxAUni
+	 fpjNcF6CGYaAA==
+Message-ID: <2f430eb613d4f6f6564f83d06f802ff47adea230.camel@kernel.org>
+Subject: Re: [PATCH v4 1/4] openat2: new OPENAT2_REGULAR flag support
+From: Jeff Layton <jlayton@kernel.org>
+To: Dorjoy Chowdhury <dorjoychy111@gmail.com>, linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org, 
+	gfs2@lists.linux.dev, linux-nfs@vger.kernel.org,
+ linux-cifs@vger.kernel.org, 	v9fs@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, jack@suse.cz, chuck.lever@oracle.com,
+ alex.aring@gmail.com, 	arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com,
+ smfrench@gmail.com, 	richard.henderson@linaro.org, mattst88@gmail.com,
+ linmag7@gmail.com, 	tsbogend@alpha.franken.de,
+ James.Bottomley@HansenPartnership.com, deller@gmx.de, 	davem@davemloft.net,
+ andreas@gaisler.com, idryomov@gmail.com, amarkuze@redhat.com, 
+	slava@dubeyko.com, agruenba@redhat.com, trondmy@kernel.org,
+ anna@kernel.org, 	sfrench@samba.org, pc@manguebit.org,
+ ronniesahlberg@gmail.com, 	sprasad@microsoft.com, tom@talpey.com,
+ bharathsm@microsoft.com, shuah@kernel.org, 	miklos@szeredi.hu,
+ hansg@kernel.org
+Date: Sun, 01 Mar 2026 07:44:28 -0500
+In-Reply-To: <20260221145915.81749-2-dorjoychy111@gmail.com>
+References: <20260221145915.81749-1-dorjoychy111@gmail.com>
+	 <20260221145915.81749-2-dorjoychy111@gmail.com>
+Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
+ keydata=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
+ QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3SPRMB0009:EE_|DS7PR12MB5910:EE_
-X-MS-Office365-Filtering-Correlation-Id: 16318a5f-1301-4252-f61f-08de778fcbd0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	6cbsX1mSVzNJ35gJhNufDuYhVCF9vccvQZxxmkRH0zC0njZYqazdF5IVmDzMmiRs5yZpaBNcxh+XqV8ESe2+AUd8SCdDXzpE+lRuSg0F4Avtvl0ybpI7yGfz4uXcoiHcFJdrE/YOMs/ypOcPUR2C6ztJChm0TqYtqdv0MB5i1xmZO/+BKr8Me2c3wuaSRVhUCKbFFqygmhBhJFXZaX3q7Yf/NZD/JNtWuH/c5tgXOzebLplGFcdCjj/XNmCgw0eFyt2h5VdvQ09bpAe/bi6/CvMcLlTWryAqGLC7yzvP0T/OJwHkxFMoyoywQSF4dfkqZzR6RX+UDAuz+d0mFaiYo0wWp6MtlNvNrnpv5/n9j+xwyjouu/UGklPle/p/2o/9LltuoFZXeRHugNjuW7FXoOsfZ7V0UPiLomklL432ZPcI974+nsCui0axSr3cwysaa3DdCdInmFx0TP4L33vzF1UzkGxgB5fBdz7u+75yj31oV/iWTFJNwmsgrBoQFJnLeYdMBffEhRG6hxwIFG2nv4bMxBi9NXoZOdMbNKHjJI+6klIm86DzRZPIB3+c6/n1GO+bhJHTMlhkQrFNMjUiZqD6RZAHwIyVZymtUuXUjkA8gQYWLCGxuqvy/eqqHFi3raCcUssQVwQPgsEWvJaVgAqfZlxFJ76uEyiQItQaZzmYSWdaIogdFxxCEIhfJzXL+rEnD/Tfl7Q5+I4CG1rGEAot9DU3ryEkUOiLz7Y6LHA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3SPRMB0009.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?MHMTLL1DCWua74IVd2DRVA2jBGzI12hYn0711I7WwBtEzbFj70uSgvKySDbX?=
- =?us-ascii?Q?P+MBvabb/Cz+jjvk8LUjud54uo26sTKQwxfmJ3QceKdL31riWTWqb462sdR3?=
- =?us-ascii?Q?kqbDSDeuZikUhOec/rDo8+9Y4qIhsBpYC7XaS+TUKU+8ADBUNDzHyJSy/ApO?=
- =?us-ascii?Q?04wRt/KPf2zPOL3xVgRXBgrr+QSwD7q50sUBh8ezGdX09qZnSy5SMeOZIhu4?=
- =?us-ascii?Q?zPHO0Mx84DVCr+h6vFNlNBMPEMzPi/rw5yg/aqLBjaPPugO5V3oqjeRz+2yy?=
- =?us-ascii?Q?yPDbCDoazMTSEHx1IKVG38ZG72h4mvxeEwfeYDCPXtlRVfTnHBGxO+rtBK/H?=
- =?us-ascii?Q?dZaSicvOfTS6PxeaOvOgR60CQEHYPmHmPpP4D1MB70UEvH/EgsUgkpBjeWeK?=
- =?us-ascii?Q?uUDvz1U7DFAcQNv/feaFi6qJbIADoV27e1q+vifo3rmST0SCAcqLYXX2J33Y?=
- =?us-ascii?Q?2I3LxpK2xdZhLS9mh2FrZwWG3SDdTOlJR1KXXr8tc1oCTuFBGbnXSebPoEhm?=
- =?us-ascii?Q?GpTEdAG2UUwVdaO7RHS9YK2tAHwHe1+7LpdssAgGigVIOs3Qu/gpYQCanTie?=
- =?us-ascii?Q?HcAmnsRIXwZDPMATs7A80u9KRV01K5xmtoAO12haAnJh1vH52oXGDR7DFERv?=
- =?us-ascii?Q?COIM1oFn51K+94bujPAfXBsicrn4qumwa+l22C3K2dYimxX6ITXc1Czr7Mxd?=
- =?us-ascii?Q?oSXTZ5Lc4/QJPjrPe0eA34o4mVYMcnRxyznVvrbUJuxXJ3InYludlCqAPEIF?=
- =?us-ascii?Q?7cKWpXg0fmNPuciCz7cZwiFLIIgFJIFqsn2JpClytxI9cBQLaKkUR5guRXtv?=
- =?us-ascii?Q?bSmZ9dRD1eG6F676Suop9+NJioyZuwXp2NLaNTwbflfbR/aQ7dv9PDyLr25N?=
- =?us-ascii?Q?2YDnjlsSC4ibiO1TOxSoiw9Mny8yo/T7QRPk1rEQolhkC5WOoYoNZf4utT30?=
- =?us-ascii?Q?cVj/h5NZP3412INlQszZ90Y3EMH5UTD0aL3cLTMZ0SUPZIOQ+G87+kp0Sxrz?=
- =?us-ascii?Q?tz/55DnabvsXNWRvswwNQpTawbbTWm6muoUpYd+Gtu/jlGQ0zMNhMwKj2AZb?=
- =?us-ascii?Q?oli4ecGHM9yyi1weGg6DtnL0Q8cqGFdI32/SdJwA6ovJ0Ud739QjbmIg++rL?=
- =?us-ascii?Q?7BDTW9GMBrcEyuNLckhEcsHOGBQanSagduEQRpNyf45xrmeNTab1avRZUBMM?=
- =?us-ascii?Q?MPNnkKlQL7CWUlU80hB2BLDJDf3mK8wvA7aP20K8wsOuTPTa6kmjXk3+mw2e?=
- =?us-ascii?Q?vfBaaowcyte9CjBnB4b+JBQDNMqNvv5dQl22YPmNz6JTN2kx6EXq5lkYr/gv?=
- =?us-ascii?Q?M3LWx5s9KOkhEmFoKdX4a++4nmwZ6hSWXA1KLg4O5yydBXRJ27vPElmxLwVm?=
- =?us-ascii?Q?DUE4s51uMqBn7tuHGoGa2g4tphgCnfwyQqKGBWFRd1Aakr7G2OLeOfiL8ymF?=
- =?us-ascii?Q?7maNnM9OYAT+dN7t+q9NiDb4C0AQn5BYQPI0hUZzmanAywG0ndPGM6T+KZ/N?=
- =?us-ascii?Q?+EfRQ+dyax4VGlBZ+CfciGOP3ILCZuTH75rlAcSQWlJ476fdB6gUhkRo9OT3?=
- =?us-ascii?Q?P5AFO7Q5Gx3QRnt8O3UyBv9lsjSGHd/C4CYJfEN/8No92mufnfJSaPacgnHI?=
- =?us-ascii?Q?UgiStodGL3fQfPjwNapyW+viOuqbCZHRxGpnppAU2kVLNEsiLlpi8LyhdUm/?=
- =?us-ascii?Q?SmjKdkjgE3D94yi92V4nQ7PDQvogRioC6o3AgJRGOQeAXm+eYWLGF6M7hJMD?=
- =?us-ascii?Q?nn0hn8sBSw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16318a5f-1301-4252-f61f-08de778fcbd0
-X-MS-Exchange-CrossTenant-AuthSource: SA3SPRMB0009.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2026 12:41:01.7801
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZPtYvjarOzO3AcAdynM+86Qa3pp4p2tgl/Jo6Q9Alxv6e2XpO3gYZ8jR4n3C+DHrv9dcI5DUCM2X68J+IMjSKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5910
 
-On Sun, Mar 01, 2026 at 01:47:06AM +0000, Aleksei Oladko wrote:
-> Several forwarding tests (e.g., gre_multipath.sh) initialize both IPv4
-> and IPv6 addresses using simple_if_init, but only clean up IPv4
-> in simple_if_fini. This leaves stale IPv6 addresses on the interfaces,
-> which causes subsequent tests to fail when they encounter unexpected
-> address configuration.
-> 
-> The issue can be reproduced by running tests in sequence:
->   # run_kselftest.sh -t net/forwarding:ipip_hier_gre.sh
->   # run_kselftest.sh -t net/forwarding:min_max_mtu.sh
->   TAP version 13
->   1..1
->   # timeout set to 0
->   # selftests: net/forwarding: min_max_mtu.sh
->   # TEST: ping                                                          [ OK ]
->   # TEST: ping6                                                         [ OK ]
->   # TEST: Test maximum MTU configuration                                [ OK ]
->   # TEST: Test traffic, packet size is maximum MTU                      [FAIL]
->   #       Ping6, packet size: 65487 succeeded, but should have failed
->   # TEST: Test minimum MTU configuration                                [ OK ]
->   # TEST: Test traffic, packet size is minimum MTU                      [ OK ]
->   not ok 1 selftests: net/forwarding: min_max_mtu.sh # exit=1
-> 
-> Fix this by adding the missing IPv6 argument to simple_if_fini in
-> all affected tests.
-> 
-> Fixes: fed926d4f64c ("selftests: forwarding: Add IP tunneling lib")
-> Fixes: 902280cacc03 ("selftests: forwarding: Add resilient multipath tunneling nexthop test")
-> Fixes: 54818c4c4b93 ("selftests: forwarding: Test multipath tunneling")
-> Fixes: e035146d6560 ("selftests: forwarding: Add multipath tunneling nexthop test")
-> 
+On Sat, 2026-02-21 at 20:45 +0600, Dorjoy Chowdhury wrote:
+> This flag indicates the path should be opened if it's a regular file.
+> This is useful to write secure programs that want to avoid being
+> tricked into opening device nodes with special semantics while thinking
+> they operate on regular files. This is a requested feature from the
+> uapi-group[1].
+>=20
+> A corresponding error code EFTYPE has been introduced. For example, if
+> openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
+> param, it will return -EFTYPE.
+>=20
+> When used in combination with O_CREAT, either the regular file is
+> created, or if the path already exists, it is opened if it's a regular
+> file. Otherwise, -EFTYPE is returned.
+>=20
 
-Please remove the blank line
+It would be good to mention that EFTYPE has precedent in BSD/Darwin.
+When an error code is already supported in another UNIX-y OS, then it
+bolsters the case for adding it here.
 
-> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Your cover letter mentions that you only tested this on btrfs. At the
+very least, you should test NFS and SMB. It should be fairly easy to
+set up mounts over loopback for those cases.
+
+There are some places where it doesn't seem like -EFTYPE will be
+returned. It looks like it can send back -EISDIR and -ENOTDIR in some
+cases as well. With a new API like this, I think we ought to strive for
+consistency.
+
+Should this API return -EFTYPE for all cases where it's not S_IFREG? If
+not, then what other errors are allowed? Bear in mind that you'll need
+to document this in the manpages too.
+
+> When OPENAT2_REGULAR is combined with O_DIRECTORY, -EINVAL is returned
+> as it doesn't make sense to open a path that is both a directory and a
+> regular file.
+>=20
+> [1]: https://uapi-group.org/kernel-features/#ability-to-only-open-regular=
+-files
+>=20
+> Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
 > ---
->  tools/testing/selftests/net/forwarding/gre_multipath.sh        | 2 +-
->  tools/testing/selftests/net/forwarding/gre_multipath_nh.sh     | 2 +-
->  tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh | 2 +-
->  tools/testing/selftests/net/forwarding/ipip_lib.sh             | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/gre_multipath.sh b/tools/testing/selftests/net/forwarding/gre_multipath.sh
-> index 57531c1d884d..397422cd5aea 100755
-> --- a/tools/testing/selftests/net/forwarding/gre_multipath.sh
-> +++ b/tools/testing/selftests/net/forwarding/gre_multipath.sh
-> @@ -72,7 +72,7 @@ h1_create()
->  h1_destroy()
->  {
->  	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
-> -	simple_if_fini $h1 192.0.2.1/28
-> +	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
+>  arch/alpha/include/uapi/asm/errno.h        |  2 ++
+>  arch/alpha/include/uapi/asm/fcntl.h        |  1 +
+>  arch/mips/include/uapi/asm/errno.h         |  2 ++
+>  arch/parisc/include/uapi/asm/errno.h       |  2 ++
+>  arch/parisc/include/uapi/asm/fcntl.h       |  1 +
+>  arch/sparc/include/uapi/asm/errno.h        |  2 ++
+>  arch/sparc/include/uapi/asm/fcntl.h        |  1 +
+>  fs/ceph/file.c                             |  4 ++++
+>  fs/gfs2/inode.c                            |  2 ++
+>  fs/namei.c                                 |  4 ++++
+>  fs/nfs/dir.c                               |  4 +++-
+>  fs/open.c                                  |  4 +++-
+>  fs/smb/client/dir.c                        | 11 ++++++++++-
+>  include/linux/fcntl.h                      |  2 ++
+>  include/uapi/asm-generic/errno.h           |  2 ++
+>  include/uapi/asm-generic/fcntl.h           |  4 ++++
+>  tools/arch/alpha/include/uapi/asm/errno.h  |  2 ++
+>  tools/arch/mips/include/uapi/asm/errno.h   |  2 ++
+>  tools/arch/parisc/include/uapi/asm/errno.h |  2 ++
+>  tools/arch/sparc/include/uapi/asm/errno.h  |  2 ++
+>  tools/include/uapi/asm-generic/errno.h     |  2 ++
+>  21 files changed, 55 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/arch/alpha/include/uapi/asm/errno.h b/arch/alpha/include/uap=
+i/asm/errno.h
+> index 6791f6508632..1a99f38813c7 100644
+> --- a/arch/alpha/include/uapi/asm/errno.h
+> +++ b/arch/alpha/include/uapi/asm/errno.h
+> @@ -127,4 +127,6 @@
+> =20
+>  #define EHWPOISON	139	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		140	/* Wrong file type for the intended operation */
+> +
+>  #endif
+> diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uap=
+i/asm/fcntl.h
+> index 50bdc8e8a271..fe488bf7c18e 100644
+> --- a/arch/alpha/include/uapi/asm/fcntl.h
+> +++ b/arch/alpha/include/uapi/asm/fcntl.h
+> @@ -34,6 +34,7 @@
+> =20
+>  #define O_PATH		040000000
+>  #define __O_TMPFILE	0100000000
+> +#define OPENAT2_REGULAR	0200000000
+> =20
+>  #define F_GETLK		7
+>  #define F_SETLK		8
+> diff --git a/arch/mips/include/uapi/asm/errno.h b/arch/mips/include/uapi/=
+asm/errno.h
+> index c01ed91b1ef4..1835a50b69ce 100644
+> --- a/arch/mips/include/uapi/asm/errno.h
+> +++ b/arch/mips/include/uapi/asm/errno.h
+> @@ -126,6 +126,8 @@
+> =20
+>  #define EHWPOISON	168	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		169	/* Wrong file type for the intended operation */
+> +
+>  #define EDQUOT		1133	/* Quota exceeded */
+> =20
+> =20
+> diff --git a/arch/parisc/include/uapi/asm/errno.h b/arch/parisc/include/u=
+api/asm/errno.h
+> index 8cbc07c1903e..93194fbb0a80 100644
+> --- a/arch/parisc/include/uapi/asm/errno.h
+> +++ b/arch/parisc/include/uapi/asm/errno.h
+> @@ -124,4 +124,6 @@
+> =20
+>  #define EHWPOISON	257	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		258	/* Wrong file type for the intended operation */
+> +
+>  #endif
+> diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include/u=
+api/asm/fcntl.h
+> index 03dee816cb13..d46812f2f0f4 100644
+> --- a/arch/parisc/include/uapi/asm/fcntl.h
+> +++ b/arch/parisc/include/uapi/asm/fcntl.h
+> @@ -19,6 +19,7 @@
+> =20
+>  #define O_PATH		020000000
+>  #define __O_TMPFILE	040000000
+> +#define OPENAT2_REGULAR	0100000000
+> =20
+>  #define F_GETLK64	8
+>  #define F_SETLK64	9
+> diff --git a/arch/sparc/include/uapi/asm/errno.h b/arch/sparc/include/uap=
+i/asm/errno.h
+> index 4a41e7835fd5..71940ec9130b 100644
+> --- a/arch/sparc/include/uapi/asm/errno.h
+> +++ b/arch/sparc/include/uapi/asm/errno.h
+> @@ -117,4 +117,6 @@
+> =20
+>  #define EHWPOISON	135	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		136	/* Wrong file type for the intended operation */
+> +
+>  #endif
+> diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/uap=
+i/asm/fcntl.h
+> index 67dae75e5274..bb6e9fa94bc9 100644
+> --- a/arch/sparc/include/uapi/asm/fcntl.h
+> +++ b/arch/sparc/include/uapi/asm/fcntl.h
+> @@ -37,6 +37,7 @@
+> =20
+>  #define O_PATH		0x1000000
+>  #define __O_TMPFILE	0x2000000
+> +#define OPENAT2_REGULAR	0x4000000
+> =20
+>  #define F_GETOWN	5	/*  for sockets. */
+>  #define F_SETOWN	6	/*  for sockets. */
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index 31b691b2aea2..0a4220f72ada 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -977,6 +977,10 @@ int ceph_atomic_open(struct inode *dir, struct dentr=
+y *dentry,
+>  			ceph_init_inode_acls(newino, &as_ctx);
+>  			file->f_mode |=3D FMODE_CREATED;
+>  		}
+> +		if ((flags & OPENAT2_REGULAR) && !d_is_reg(dentry)) {
+> +			err =3D -EFTYPE;
+> +			goto out_req;
+> +		}
+>  		err =3D finish_open(file, dentry, ceph_open);
+>  	}
+>  out_req:
+> diff --git a/fs/gfs2/inode.c b/fs/gfs2/inode.c
+> index 8344040ecaf7..0dc3e4240d9e 100644
+> --- a/fs/gfs2/inode.c
+> +++ b/fs/gfs2/inode.c
+> @@ -749,6 +749,8 @@ static int gfs2_create_inode(struct inode *dir, struc=
+t dentry *dentry,
+>  		if (file) {
+>  			if (S_ISREG(inode->i_mode))
+>  				error =3D finish_open(file, dentry, gfs2_open_common);
+> +			else if (file->f_flags & OPENAT2_REGULAR)
+> +				error =3D -EFTYPE;
+>  			else
+>  				error =3D finish_no_open(file, NULL);
+>  		}
+> diff --git a/fs/namei.c b/fs/namei.c
+> index 5fe6cac48df8..aa5fb2672881 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -4651,6 +4651,10 @@ static int do_open(struct nameidata *nd,
+>  		if (unlikely(error))
+>  			return error;
+>  	}
+> +
+> +	if ((open_flag & OPENAT2_REGULAR) && !d_is_reg(nd->path.dentry))
+> +		return -EFTYPE;
+> +
+>  	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
+>  		return -ENOTDIR;
+> =20
+> diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+> index b3f5c9461204..ef61db67d06e 100644
+> --- a/fs/nfs/dir.c
+> +++ b/fs/nfs/dir.c
+> @@ -2195,7 +2195,9 @@ int nfs_atomic_open(struct inode *dir, struct dentr=
+y *dentry,
+>  			break;
+>  		case -EISDIR:
+>  		case -ENOTDIR:
+> -			goto no_open;
+> +			if (!(open_flags & OPENAT2_REGULAR))
+> +				goto no_open;
+> +			break;
 
-The test only runs IPv4 traffic in the overlay, so I believe the IPv6
-address can be removed from h1 (h2 doesn't have one as well):
+Shouldn't this also set the error to -EFTYPE?
 
-diff --git a/tools/testing/selftests/net/forwarding/gre_multipath.sh b/tools/testing/selftests/net/forwarding/gre_multipath.sh
-index 57531c1d884d..ce4ae74843d9 100755
---- a/tools/testing/selftests/net/forwarding/gre_multipath.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_multipath.sh
-@@ -65,7 +65,7 @@ source lib.sh
- 
- h1_create()
- {
--	simple_if_init $h1 192.0.2.1/28 2001:db8:1::1/64
-+	simple_if_init $h1 192.0.2.1/28
- 	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
- }
+>  		case -ELOOP:
+>  			if (!(open_flags & O_NOFOLLOW))
+>  				goto no_open;
+> diff --git a/fs/open.c b/fs/open.c
+> index 91f1139591ab..1524f52a1773 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -1198,7 +1198,7 @@ inline int build_open_flags(const struct open_how *=
+how, struct open_flags *op)
+>  	 * values before calling build_open_flags(), but openat2(2) checks all
+>  	 * of its arguments.
+>  	 */
+> -	if (flags & ~VALID_OPEN_FLAGS)
+> +	if (flags & ~VALID_OPENAT2_FLAGS)
+>  		return -EINVAL;
+>  	if (how->resolve & ~VALID_RESOLVE_FLAGS)
+>  		return -EINVAL;
+> @@ -1237,6 +1237,8 @@ inline int build_open_flags(const struct open_how *=
+how, struct open_flags *op)
+>  			return -EINVAL;
+>  		if (!(acc_mode & MAY_WRITE))
+>  			return -EINVAL;
+> +	} else if ((flags & O_DIRECTORY) && (flags & OPENAT2_REGULAR)) {
+> +		return -EINVAL;
+>  	}
+>  	if (flags & O_PATH) {
+>  		/* O_PATH only permits certain other flags to be set. */
+> diff --git a/fs/smb/client/dir.c b/fs/smb/client/dir.c
+> index cb10088197d2..d12ed0c87599 100644
+> --- a/fs/smb/client/dir.c
+> +++ b/fs/smb/client/dir.c
+> @@ -236,6 +236,11 @@ static int cifs_do_create(struct inode *inode, struc=
+t dentry *direntry, unsigned
+>  				 * lookup.
+>  				 */
+>  				CIFSSMBClose(xid, tcon, fid->netfid);
+> +				if (oflags & OPENAT2_REGULAR) {
+> +					iput(newinode);
+> +					rc =3D -EFTYPE;
+> +					goto out;
+> +				}
+>  				goto cifs_create_get_file_info;
+>  			}
+>  			/* success, no need to query */
+> @@ -433,11 +438,15 @@ static int cifs_do_create(struct inode *inode, stru=
+ct dentry *direntry, unsigned
+>  		goto out_err;
+>  	}
+> =20
+> -	if (newinode)
+> +	if (newinode) {
+>  		if (S_ISDIR(newinode->i_mode)) {
+>  			rc =3D -EISDIR;
+>  			goto out_err;
 
->  }
->  
->  sw1_create()
-> diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-> index 7d5b2b9cc133..c667b81da37f 100755
-> --- a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-> +++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-> @@ -80,7 +80,7 @@ h1_destroy()
->  {
->  	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
->  	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
-> -	simple_if_fini $h1 192.0.2.1/28
-> +	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
->  }
->  
->  sw1_create()
-> diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-> index 370f9925302d..d04bad58a96a 100755
-> --- a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-> +++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-> @@ -80,7 +80,7 @@ h1_destroy()
->  {
->  	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
->  	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
-> -	simple_if_fini $h1 192.0.2.1/28
-> +	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
->  }
->  
->  sw1_create()
-> diff --git a/tools/testing/selftests/net/forwarding/ipip_lib.sh b/tools/testing/selftests/net/forwarding/ipip_lib.sh
-> index 01e62c4ac94d..a5c23a28d50e 100644
-> --- a/tools/testing/selftests/net/forwarding/ipip_lib.sh
-> +++ b/tools/testing/selftests/net/forwarding/ipip_lib.sh
-> @@ -151,7 +151,7 @@ h1_create()
->  h1_destroy()
->  {
->  	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
-> -	simple_if_fini $h1 192.0.2.1/28
-> +	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
+This logic doesn't look quite right. If you do a create and race with a
+directory create, then it looks like you'll send back -EISDIR here
+instead of -EFTYPE?
 
-Let's remove the IPv6 address in this case as well. Looks like it was
-added by mistake:
+> +		} else if ((oflags & OPENAT2_REGULAR) && !S_ISREG(newinode->i_mode)) {
+> +			rc =3D -EFTYPE;
+> +			goto out_err;
+>  		}
+> +	}
+> =20
+>  	d_drop(direntry);
+>  	d_add(direntry, newinode);
+> diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+> index a332e79b3207..a80026718217 100644
+> --- a/include/linux/fcntl.h
+> +++ b/include/linux/fcntl.h
+> @@ -12,6 +12,8 @@
+>  	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+>  	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
+> =20
+> +#define VALID_OPENAT2_FLAGS (VALID_OPEN_FLAGS | OPENAT2_REGULAR)
+> +
+>  /* List of all valid flags for the how->resolve argument: */
+>  #define VALID_RESOLVE_FLAGS \
+>  	(RESOLVE_NO_XDEV | RESOLVE_NO_MAGICLINKS | RESOLVE_NO_SYMLINKS | \
+> diff --git a/include/uapi/asm-generic/errno.h b/include/uapi/asm-generic/=
+errno.h
+> index 92e7ae493ee3..bd78e69e0a43 100644
+> --- a/include/uapi/asm-generic/errno.h
+> +++ b/include/uapi/asm-generic/errno.h
+> @@ -122,4 +122,6 @@
+> =20
+>  #define EHWPOISON	133	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		134	/* Wrong file type for the intended operation */
+> +
+>  #endif
+> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/=
+fcntl.h
+> index 613475285643..b2c2ddd0edc0 100644
+> --- a/include/uapi/asm-generic/fcntl.h
+> +++ b/include/uapi/asm-generic/fcntl.h
+> @@ -88,6 +88,10 @@
+>  #define __O_TMPFILE	020000000
+>  #endif
+> =20
+> +#ifndef OPENAT2_REGULAR
+> +#define OPENAT2_REGULAR	040000000
+> +#endif
+> +
+>  /* a horrid kludge trying to make sure that this will fail on old kernel=
+s */
+>  #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+> =20
+> diff --git a/tools/arch/alpha/include/uapi/asm/errno.h b/tools/arch/alpha=
+/include/uapi/asm/errno.h
+> index 6791f6508632..1a99f38813c7 100644
+> --- a/tools/arch/alpha/include/uapi/asm/errno.h
+> +++ b/tools/arch/alpha/include/uapi/asm/errno.h
+> @@ -127,4 +127,6 @@
+> =20
+>  #define EHWPOISON	139	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		140	/* Wrong file type for the intended operation */
+> +
+>  #endif
+> diff --git a/tools/arch/mips/include/uapi/asm/errno.h b/tools/arch/mips/i=
+nclude/uapi/asm/errno.h
+> index c01ed91b1ef4..1835a50b69ce 100644
+> --- a/tools/arch/mips/include/uapi/asm/errno.h
+> +++ b/tools/arch/mips/include/uapi/asm/errno.h
+> @@ -126,6 +126,8 @@
+> =20
+>  #define EHWPOISON	168	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		169	/* Wrong file type for the intended operation */
+> +
+>  #define EDQUOT		1133	/* Quota exceeded */
+> =20
+> =20
+> diff --git a/tools/arch/parisc/include/uapi/asm/errno.h b/tools/arch/pari=
+sc/include/uapi/asm/errno.h
+> index 8cbc07c1903e..93194fbb0a80 100644
+> --- a/tools/arch/parisc/include/uapi/asm/errno.h
+> +++ b/tools/arch/parisc/include/uapi/asm/errno.h
+> @@ -124,4 +124,6 @@
+> =20
+>  #define EHWPOISON	257	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		258	/* Wrong file type for the intended operation */
+> +
+>  #endif
+> diff --git a/tools/arch/sparc/include/uapi/asm/errno.h b/tools/arch/sparc=
+/include/uapi/asm/errno.h
+> index 4a41e7835fd5..71940ec9130b 100644
+> --- a/tools/arch/sparc/include/uapi/asm/errno.h
+> +++ b/tools/arch/sparc/include/uapi/asm/errno.h
+> @@ -117,4 +117,6 @@
+> =20
+>  #define EHWPOISON	135	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		136	/* Wrong file type for the intended operation */
+> +
+>  #endif
+> diff --git a/tools/include/uapi/asm-generic/errno.h b/tools/include/uapi/=
+asm-generic/errno.h
+> index 92e7ae493ee3..bd78e69e0a43 100644
+> --- a/tools/include/uapi/asm-generic/errno.h
+> +++ b/tools/include/uapi/asm-generic/errno.h
+> @@ -122,4 +122,6 @@
+> =20
+>  #define EHWPOISON	133	/* Memory page has hardware error */
+> =20
+> +#define EFTYPE		134	/* Wrong file type for the intended operation */
+> +
+>  #endif
 
-diff --git a/tools/testing/selftests/net/forwarding/ipip_lib.sh b/tools/testing/selftests/net/forwarding/ipip_lib.sh
-index 01e62c4ac94d..b255646b737a 100644
---- a/tools/testing/selftests/net/forwarding/ipip_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/ipip_lib.sh
-@@ -144,7 +144,7 @@
- 
- h1_create()
- {
--	simple_if_init $h1 192.0.2.1/28 2001:db8:1::1/64
-+	simple_if_init $h1 192.0.2.1/28
- 	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
- }
-
->  }
->  
->  h2_create()
-> -- 
-> 2.43.0
-> 
+--=20
+Jeff Layton <jlayton@kernel.org>
