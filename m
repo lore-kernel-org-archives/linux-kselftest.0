@@ -1,51 +1,53 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BF82ECE9B;
-	Sun,  1 Mar 2026 01:47:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269382BD0B;
+	Sun,  1 Mar 2026 01:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772329676; cv=none; b=XiRX9iMTqZQPgumJwkWzzmvyW+SXoFa3+vd3g8wzW7JCAxKGpVf9E+ZJ6MlzH4YGWtRWQMXoSh3UVfZKkdX+txUV/9eM0yKmf5yA6kw5NI30GVCN0NuMUU9J0MMz46PkvD9ld83jdw07q/VrjolJh4X+X9Jv1n3pAQcc/Z+RTzc=
+	t=1772329725; cv=none; b=Ao459drYM6UISYfm+sEwDiWA5Y03irp6yzUadD/mUwrJcfcDJQ4BeiMf7MyWR4p+YtA6wrzPjGKcWoIxdPS6O58ISnRYURhZXVfbxuFOU5XrqEz7OwBM27Hs2ziEV+zF4bDkM4iZHTqD1HTnPfDnp6ktIm7nVZo7Rutwuxp2zJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772329676; c=relaxed/simple;
-	bh=qCr7+LBlG4A+YvgRKNFsG3TL5b+R2l8bVbhYzIFg9hA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RH5FaQmfPURTURbVFA9DkztCf//9NbYI+FAuhUmX1rZAnsoYVHRyT51PPE0f9TLu3I2EutZ9jexb7IjO2ZFiSa3JeapwBrte7NCPVW6wSGoPfRgMqfrY789rlFD4CclUnr+2nFUFfGZbB1qbk7ApJLm5x0DDMqFBzTd2xsFlnBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=WCv0NBHv; arc=none smtp.client-ip=130.117.225.111
+	s=arc-20240116; t=1772329725; c=relaxed/simple;
+	bh=Kdg7Xf8W1Cmbmj0cjpTRVWbmr3wrfz0FHa1eGLUS4zQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uekbZ04RC4Karqu99RL0hsD0o2EMsqQ0XpZ+IoWSad1sgJddYh8cNYieEXyJ8uEu9mDOGDcd9noNa3w3F7znqvm3nGX25JTPDv8DDW7UeRnu93LCGiGgzw2WVhRP2O0Ky8Q0lA4cDRbAExstaZ/rv69umDlz2xBWBi6ga1drPAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=A4g0gTbk; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="WCv0NBHv"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="A4g0gTbk"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=k/Lj5i3hsvVfDGVhRK3+YKT9QvZIKPXBH/Z/ZtzqLvY=; b=WCv0NBHv82Ld
-	t7JDCUn44GJRogZKreuDTaAB1XXDcrFNEi6pwl4kZ9gJUX9okDTksmJ1LHiJwes1MJ7lJb1J0FzHp
-	lbH9TXqV2U0qgPSnFXhYSKNSzedGznlfHWNMJphZIIgZp38ce/FCr0Koq7okUDbvbrPHWA9Zauy1c
-	mSdv6LSdS++xnkw8gOzO74366ZIVUvMEShV3uptFbooIPHDRP/x54N+6hCNRJdfe5tT5RY8TgpaJZ
-	D4VoO0unnHr8mPySTR1UEGHoAmYiNMDajz5a0DHq74fy70z+v7V/QP8QauMmxx4u7dMncCgK09J+P
-	FDFlYKEfi59ddaCbMoHtvg==;
+	Content-Type; bh=01eX58DYYoF4zbyQXiM2CCggLRdSBFTsTJlkXC7cPSE=; b=A4g0gTbk5dlo
+	f0nmr/r6zigMNmvllTv5gUilTp+A2zf7veiNjUtKJUATngEfEcY/Rn0khrUcYOCL93j33FVBQEEDq
+	NJTDNIevIEpTTkVzs1Rm52AcixSdC6CPU3HLasew9raoucMipU1YIjZNSvfWCOdqtsx81vEy8V/en
+	MS/pPH3YwknoUJDrbqsUUBdRzr+wMhnyM1EMJ3LJ+pHAuavuBa8gr1zMlyvzTufgHWBrqR7BCIS1t
+	P0Z+WvS3axeK3e9BeAjbtE/uSgcTDPl7SCLgUUy0BENOCxgZvUH+cL7RCUj6c0UEjSQU5Z+dIdlcl
+	qw/K7RGGdYeU35GfQblqhQ==;
 Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
 	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vwVsq-00Cd8g-0k;
-	Sun, 01 Mar 2026 02:47:33 +0100
+	id 1vwVsS-00CZeA-01;
+	Sun, 01 Mar 2026 02:47:09 +0100
 Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 6211lcni454271
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 6211lDgb454254
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Sun, 1 Mar 2026 01:47:38 GMT
+	Sun, 1 Mar 2026 01:47:13 GMT
 Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 6211laAW454270;
-	Sun, 1 Mar 2026 01:47:36 GMT
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 6211lB0i454253;
+	Sun, 1 Mar 2026 01:47:11 GMT
 From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>, Nir Dotan <nird@mellanox.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH] selftests: x86: test_shadow_stack: return KSFT_SKIP when test is skipped
-Date: Sun,  1 Mar 2026 01:47:33 +0000
-Message-ID: <20260301014733.454260-1-aleksey.oladko@virtuozzo.com>
+Subject: [PATCH net] selftests: net: forwarding: fix IPv6 address leak in cleanup
+Date: Sun,  1 Mar 2026 01:47:06 +0000
+Message-ID: <20260301014706.454243-1-aleksey.oladko@virtuozzo.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -55,54 +57,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-test_shadow_stack prints a message indicating that the test is
-skipped in some cases, but still returns 1. This causes the test
-to be reported as failed instead of skipped.
+Several forwarding tests (e.g., gre_multipath.sh) initialize both IPv4
+and IPv6 addresses using simple_if_init, but only clean up IPv4
+in simple_if_fini. This leaves stale IPv6 addresses on the interfaces,
+which causes subsequent tests to fail when they encounter unexpected
+address configuration.
 
-Return KSFT_SKIP in the skip path so the result is reported
-correctly.
+The issue can be reproduced by running tests in sequence:
+  # run_kselftest.sh -t net/forwarding:ipip_hier_gre.sh
+  # run_kselftest.sh -t net/forwarding:min_max_mtu.sh
+  TAP version 13
+  1..1
+  # timeout set to 0
+  # selftests: net/forwarding: min_max_mtu.sh
+  # TEST: ping                                                          [ OK ]
+  # TEST: ping6                                                         [ OK ]
+  # TEST: Test maximum MTU configuration                                [ OK ]
+  # TEST: Test traffic, packet size is maximum MTU                      [FAIL]
+  #       Ping6, packet size: 65487 succeeded, but should have failed
+  # TEST: Test minimum MTU configuration                                [ OK ]
+  # TEST: Test traffic, packet size is minimum MTU                      [ OK ]
+  not ok 1 selftests: net/forwarding: min_max_mtu.sh # exit=1
+
+Fix this by adding the missing IPv6 argument to simple_if_fini in
+all affected tests.
+
+Fixes: fed926d4f64c ("selftests: forwarding: Add IP tunneling lib")
+Fixes: 902280cacc03 ("selftests: forwarding: Add resilient multipath tunneling nexthop test")
+Fixes: 54818c4c4b93 ("selftests: forwarding: Test multipath tunneling")
+Fixes: e035146d6560 ("selftests: forwarding: Add multipath tunneling nexthop test")
 
 Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
 ---
- tools/testing/selftests/x86/test_shadow_stack.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/forwarding/gre_multipath.sh        | 2 +-
+ tools/testing/selftests/net/forwarding/gre_multipath_nh.sh     | 2 +-
+ tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh | 2 +-
+ tools/testing/selftests/net/forwarding/ipip_lib.sh             | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-index 21af54d5f4ea..1747ea4cb725 100644
---- a/tools/testing/selftests/x86/test_shadow_stack.c
-+++ b/tools/testing/selftests/x86/test_shadow_stack.c
-@@ -35,6 +35,7 @@
- #include <sys/signal.h>
- #include <linux/elf.h>
- #include <linux/perf_event.h>
-+#include "kselftest.h"
+diff --git a/tools/testing/selftests/net/forwarding/gre_multipath.sh b/tools/testing/selftests/net/forwarding/gre_multipath.sh
+index 57531c1d884d..397422cd5aea 100755
+--- a/tools/testing/selftests/net/forwarding/gre_multipath.sh
++++ b/tools/testing/selftests/net/forwarding/gre_multipath.sh
+@@ -72,7 +72,7 @@ h1_create()
+ h1_destroy()
+ {
+ 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
+-	simple_if_fini $h1 192.0.2.1/28
++	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
+ }
  
- /*
-  * Define the ABI defines if needed, so people can run the tests
-@@ -981,7 +982,7 @@ int main(int argc, char *argv[])
+ sw1_create()
+diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
+index 7d5b2b9cc133..c667b81da37f 100755
+--- a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
++++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
+@@ -80,7 +80,7 @@ h1_destroy()
+ {
+ 	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
+ 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
+-	simple_if_fini $h1 192.0.2.1/28
++	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
+ }
  
- 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
- 		printf("[SKIP]\tCould not enable Shadow stack\n");
--		return 1;
-+		return KSFT_SKIP;
- 	}
+ sw1_create()
+diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
+index 370f9925302d..d04bad58a96a 100755
+--- a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
++++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
+@@ -80,7 +80,7 @@ h1_destroy()
+ {
+ 	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
+ 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
+-	simple_if_fini $h1 192.0.2.1/28
++	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
+ }
  
- 	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
-@@ -991,12 +992,12 @@ int main(int argc, char *argv[])
+ sw1_create()
+diff --git a/tools/testing/selftests/net/forwarding/ipip_lib.sh b/tools/testing/selftests/net/forwarding/ipip_lib.sh
+index 01e62c4ac94d..a5c23a28d50e 100644
+--- a/tools/testing/selftests/net/forwarding/ipip_lib.sh
++++ b/tools/testing/selftests/net/forwarding/ipip_lib.sh
+@@ -151,7 +151,7 @@ h1_create()
+ h1_destroy()
+ {
+ 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
+-	simple_if_fini $h1 192.0.2.1/28
++	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
+ }
  
- 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
- 		printf("[SKIP]\tCould not re-enable Shadow stack\n");
--		return 1;
-+		return KSFT_SKIP;
- 	}
- 
- 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
- 		printf("[SKIP]\tCould not enable WRSS\n");
--		ret = 1;
-+		ret = KSFT_SKIP;
- 		goto out;
- 	}
- 
+ h2_create()
 -- 
 2.43.0
 
