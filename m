@@ -1,110 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB83B42188D;
-	Mon,  2 Mar 2026 15:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A6F413231
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 15:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772466793; cv=none; b=PWVBqwRefeF2Y0cRyCBEZ1eH8wt7nd4a6/f2USLe9ArMcXEBs9JCISZXgfI58nU5MX2S9jWDQ0wxlD1MF+OExb+ERlbMy989dP5hSJZM1d6upRNPJ0mqkUHouYiTLJml/PHdCRv/iifQTUmG6/8F7vxxhx6RdtTKxJ6G4O5/JFc=
+	t=1772466875; cv=none; b=jyQULztTJTu2Vc1UxLWdKSa+OF8e82ZmWpgyTWQAf/eg/a07Z2Tqvi5QDohdfy4TwNdunyLiZtIDFMYJn071HH0/l4zIZ5ZwtzvKAas3VhuA5Wz8OL0VLyEcYNJV87AR2Oc9Pfj4brkE6omu43DyC1qYc0feu61WsxQC21mccUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772466793; c=relaxed/simple;
-	bh=Ke8jQXU3J+29aY5FbS509phyVwX7VpZYTaFtOaKVIbU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bDZmip+Mdl7ho9KDSwy6pl+vABb5Z1s7zXPzlUOQPykxHFkLLNqarJcJOTySPv3zy4NmsphaTqpFhRmoBpScMzz42yKniPu6On1OSZPdG0PdtQ8qvn5w6Fp4vysU/z8dT7d0n5qEnjzald9nxT20f1VWdpu7YBpopRpMAwVsxpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSemX7Mh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772466875; c=relaxed/simple;
+	bh=dDpcbfDi0yi7fEFTxd12xIV5BQ3X3OV+mFeaeykwVCM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A+hhvU7FiWLGRjrEIvgLcmADf54h4cucdCjwWCVzs5lv0+PwTgnCul/qiqWqEoqawbnj7bwDsOzl6s5VUZvJq5GYDUpTJNeO1ZfbJTusPiaI5JHanyMjBgBq+gKEw4BbIHfLQyYraeI3BdUf73DnpWDb+OUgohqgXYrdvEf0+P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=zHZDllC4; arc=none smtp.client-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSemX7Mh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0594C2BCAF;
-	Mon,  2 Mar 2026 15:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772466793;
-	bh=Ke8jQXU3J+29aY5FbS509phyVwX7VpZYTaFtOaKVIbU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=lSemX7Mhwb7tWRnQ2XXqo4XH2ao/oQqPIKL7j72M0w9j0lV+/9TRuYXvdq9hjpUM8
-	 +bfji9dg+m7yPW16SaNpvUlT4UQInJa0Ms0IXJJSJnECRMQfMJEDa0D+JiPnwaVx12
-	 uAekXOg0iNiEu6yFlA937cWsf605ThboZiBYwus73KkXXYKMITxxQjN49lBpOhyijs
-	 WRI12WH8WP5rq/bccIEPAZFv8STqO3KfXZ2TUssMYhQP4Bty1/8Sn82f+0kY9nH7Vw
-	 jhx6aS4ipbPWs/wA552qwVTYFk9tRrvS1RUeKtrLKbV/+9aHL7UZzxRZw6pwrlLFk6
-	 Ky/cQ/UQ28SfQ==
-Content-Type: multipart/mixed; boundary="===============8515939307212125773=="
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="zHZDllC4"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-12758ce1e8dso5527365c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 07:54:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1772466870; x=1773071670; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vYKX84PLbw1ik011AtUFY/JoiQVlKtt+8d30XwsrbyA=;
+        b=zHZDllC4F8vhmIye6X0hKfi9I2znFzlhAdHfhUzK/9PJ1wSMBFVNUcRV2K/Q0E6FbO
+         dGSLu/ViHr6mZbr+JxW8NvqoUglssyBfP4LnrZ1BmfutjquEOmST1/7G3ZETOXSA3Z0y
+         A4Jidrl15Ex/tcF6Vn2k/gjER8+zmvFhkeNhvoIwCZTIa5GZc16Qbo7QHNFDudOqu7CE
+         0ZfH7KVe56T242mitHDwKgrCsLFynQRTJ0MY5TI7EIBEEYNUhAsh6l/UPSPfsESPvRzM
+         kdXFOVjBgWDRvAm1jA4hweX9x96FI8oH3LchAe6U58mnQkFtCsbUjkHTdL3Iee3u5Blt
+         5C9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772466870; x=1773071670;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vYKX84PLbw1ik011AtUFY/JoiQVlKtt+8d30XwsrbyA=;
+        b=LsCDoGlIqhtXJ+5+RI07YFeJAy0YADxX17Q1OTyHzNZKKf7XWBVWzcB7a6gctGQEVt
+         8mjy4wNrgFMxdeA/SJKHDkZQ4BLmAwOOhVMH2rHozuOTYNP7Kngi0STRJa7iNiterZiK
+         X1VXiKOtNfK9VmymCuDRnIBTBXR97obr6IBzeqkrfY3n22TKbNBkit3OZNDSOTQl2d1b
+         xgK4Yc5i6szx+P0GqhUjbXZzyOQ2QoVkZjefTEQsK6dEax+yFG8a61apxTaNDhyAZZCy
+         UNP/Ce5UDU6vuLvVHU9geu5oYXsmmiCZHbImVqC1r0vvu2u1ZlTu4pLgC39e9EJ22IZI
+         JSWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXENo1I8uoWJwA58P0DrljO12xEgirOZ0okBrFL0Sw3+KUR7bGBgcZ1t/NG6qktTvXx8EOYYId2eHEkC71zK+Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ0dopDHPHjkqCAuf6lHtUTN6XSefF2rddek8Frg/uoDJnCFvK
+	NyC7SECD2JRjJBQFDpubSQzaOZWxhqX87xLcM0ggAPYnR3j6mn5M8W6Nl54x5EaJiNgmArflmft
+	xGd5lB+k=
+X-Gm-Gg: ATEYQzz2cCyKVxdtqy7fzQsNYJMWdUMrUMYykinkvZxk5essbxQtVRKMJx95FRFO1YP
+	ecCVlnIBfqq/rV5ANxvKdXPSyIsGM4UKWpBvD+XS0Vtvj/lRcJVZVfV/h6D26vpJbKr+FYxEvgA
+	bfnB3N7kZVXaoJcpsb99hyllMl/Q3dzjmLY1KNwH20FpP492Wjw661hZOxo+/jR6u2k4oMd0Sr5
+	uI2TmYZQJByUceF0cLxwsNwTKUJNEN6FAQ0qGxf+YX30qBAbfnaC0W+rYyGSN9v0jw4qBg9srPD
+	0c5Xuot58b4uLrNBNxBSiG+9tZwxLP2ijTa3AiwPrh+PgUS4XuaClOzYOt0fFwLlvZUQ8dn5hWc
+	ISuC7yWSqseWFpmqnYgu/CK7mgi4sXsLLSqQHSEa8DZWeHlaYJwAkO9wJQPzNF+jyrV2mY80CTA
+	1YYGMJx+/x67kHGWfGBZyFTuGXAdwnuP2RmVfQ/k3itL1CWNkh3946CoMTRfLbMC0CQZ13nUCHP
+	ir/JnigDsvBuSfX6dR3wOkrMgGchtZH
+X-Received: by 2002:a05:7301:fa0b:b0:2be:617:2ddf with SMTP id 5a478bee46e88-2be06173268mr2046986eec.16.1772466870425;
+        Mon, 02 Mar 2026 07:54:30 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::badb])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1a45a58sm10660215eec.0.2026.03.02.07.54.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Mar 2026 07:54:30 -0800 (PST)
+Message-ID: <90cfcf06-e987-4817-acba-2037a436a744@davidwei.uk>
+Date: Mon, 2 Mar 2026 07:54:28 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d1728faa022db83c9e5ab0245579eb1b1d176495744953f9ab66e0864ed31025@mail.kernel.org>
-In-Reply-To: <20260302150342.55709-4-leon.hwang@linux.dev>
-References: <20260302150342.55709-4-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v2 3/6] bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,leon.hwang@linux.dev,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Mar 2026 15:53:12 +0000 (UTC)
-
---===============8515939307212125773==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 2/3] selftests: drv-net: iou-zcrx: rework large
+ chunks test to use common setup
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, jdamato@fastly.com,
+ asml.silence@gmail.com, io-uring@vger.kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260227171305.2848240-1-kuba@kernel.org>
+ <20260227171305.2848240-3-kuba@kernel.org>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20260227171305.2848240-3-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
+On 2026-02-27 09:13, Jakub Kicinski wrote:
+> Commit a32bb32d0193 ("selftests: iou-zcrx: test large chunk sizes")
+> and commit de7c600e2d5b ("selftests/net: parametrise iou-zcrx.py with
+> ksft_variants") landed at similar time. The large chunks test was
+> actually not included in the list of tests, so it never run.
+> We haven't noticed that it uses the old-style helpers
+> (_get_combined_channels, _get_current_settings, _set_flow_rule)
+> that were removed by the other commit.
+> 
+> Rework test_zcrx_large_chunks to reuse the single() setup function
+> and add it to the ksft_run cases list so it actually gets executed.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: shuah@kernel.org
+> CC: dw@davidwei.uk
+> CC: jdamato@fastly.com
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>   .../selftests/drivers/net/hw/iou-zcrx.py      | 31 ++++---------------
+>   1 file changed, 6 insertions(+), 25 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+> index c27c2064701d..1649c23e05e2 100755
+> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+> @@ -135,36 +135,16 @@ SKIP_CODE = 42
+>   
+>       cfg.require_ipver('6')
+>   
+> -    combined_chans = _get_combined_channels(cfg)
+> -    if combined_chans < 2:
+> -        raise KsftSkipEx('at least 2 combined channels required')
+> -    (rx_ring, hds_thresh) = _get_current_settings(cfg)
+> -    port = rand_port()
+> -
+> -    ethtool(f"-G {cfg.ifname} tcp-data-split on")
+> -    defer(ethtool, f"-G {cfg.ifname} tcp-data-split auto")
+> -
+> -    ethtool(f"-G {cfg.ifname} hds-thresh 0")
+> -    defer(ethtool, f"-G {cfg.ifname} hds-thresh {hds_thresh}")
+> -
+> -    ethtool(f"-G {cfg.ifname} rx 64")
+> -    defer(ethtool, f"-G {cfg.ifname} rx {rx_ring}")
+> -
+> -    ethtool(f"-X {cfg.ifname} equal {combined_chans - 1}")
+> -    defer(ethtool, f"-X {cfg.ifname} default")
+> -
+> -    flow_rule_id = _set_flow_rule(cfg, port, combined_chans - 1)
+> -    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
+> -
+> -    rx_cmd = f"{cfg.bin_local} -s -p {port} -i {cfg.ifname} -q {combined_chans - 1} -x 2"
+> -    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {port} -l 12840"
+> +    single(cfg)
 
-[ ... ]
-
-> +enum bpf_map_owner_match_type {
-> +	BPF_MAP_OWNER_MATCH_FOR_INIT,
-> +	BPF_MAP_OWNER_MATCH_FOR_UPDATE,
-> +};
-> +
->  static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
-> -				  enum bpf_prog_type prog_type)
-> +				  enum bpf_prog_type prog_type,
-> +				  enum bpf_map_owner_match_type match)
->  {
-
-[ ... ]
-
-> +	switch (match) {
-> +	case BPF_MAP_OWNER_MATCH_FOR_INIT:
-> +		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
-> +			return false;
-> +		break;
-> +
-> +	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
-> +		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
-> +			return false;
-> +		break;
-> +	}
-
-In the v1 review, Alexei Starovoitov asked for strict conformance
-both ways rather than one-directional validation:
-
-    "Don't be fancy. Require strict conformance both ways
-    in *all* patches."
-
-https://lore.kernel.org/bpf/CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com/
-
-The BPF_MAP_OWNER_MATCH_FOR_UPDATE case still uses one-directional
-matching, rejecting only !owner->kprobe_write_ctx && aux->kprobe_write_ctx
-but allowing the reverse. The v2 changelog lists other Alexei comments
-as addressed but does not mention this one.
-
-Was this an intentional design choice, and if so, should the changelog
-note the disagreement?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22582690876
-
-AI-authorship-score: medium
-AI-authorship-explanation: Confirmed LLM involvement in v1 development process (selftests called out by reviewer), but core code changes and v2 revisions appear human-authored with genuine design engagement.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Unaddressed maintainer review comment requesting symmetric matching in the UPDATE path; not a code bug or security concern.
-
---===============8515939307212125773==--
+Let's use ksft_variants() with both single() and rss()?
