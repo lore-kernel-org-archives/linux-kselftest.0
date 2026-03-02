@@ -1,228 +1,244 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21A34301DA;
-	Mon,  2 Mar 2026 16:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0849229BD8C;
+	Mon,  2 Mar 2026 17:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772470205; cv=none; b=WJ3CP75dgTv1Pj+RVQAvwLOAAIZltN0Q+xqai1VxPO6K7X5iwOZTrikWYxC3XRabJAY+vW2LstWg9GtZYvwhvg7jU68qAD32Mn+DQ0yTAZrnhfzpNK/4sXgwz5aXarUV51cChjX+w1/xzDoNWTUQy3UbMM/QdiDn3cTn6fOHdAE=
+	t=1772472039; cv=none; b=GQuMYOraJLW2tKUe8TY6sR2jzXTysq/QEeVQl/7zswdttRK5RZEwSVTgXA4Y4IhQxVCKKdZ3uQzfuBdqIRDtglpm3QoyechFa4TxcHk6cd1sB9IaqJ+uYfOO+s7Qu8DckbQImqwhxSZj9IMXdabAFHN+jHE51jS5Dh30D0DjJlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772470205; c=relaxed/simple;
-	bh=PXmSMkqkwrVUT5CWT6Z0DwoFzUVtklcyfpBugDs8vX8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rC5Y/yjaRUljLpp6sArOlMQWewh0AKS5vxaT1PtIkEW60/jqHHp2Jw9609KIAjMVMGg850/al75XcJzkD8p+P97NF2+b6Y2aahZ7t7o0oYMyiKkREFcJiiFetWlmlts/O/7lBq3RN4CfHGiBYIVbbjrLIAWpjKAqK+DTPSV5yZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bpWl2izV; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772472039; c=relaxed/simple;
+	bh=G0tbNLTu0S+3NlNqEOJKZh3E1i+PNvPaCT+xkj3RuA4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ik/iKBdgQayC56G64iPtsqaLh8ZoKWpRzTTQFgIQukVnt5YPbM99Lt2AQlZO31Ad2r8fyq510eaAHBIjvgNdFkQ7VSnrrbm+yY14+3DOu+mCaLHN5GVzGMciSBEZv3CLHjMsJ9YtHGMhypDwsq8R2pdx0wEpqunttUV2FarLwyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P4TZfXyi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpWl2izV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772470203; x=1804006203;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PXmSMkqkwrVUT5CWT6Z0DwoFzUVtklcyfpBugDs8vX8=;
-  b=bpWl2izVqVp4emYYloOKGRd1cgLlHreOccY4Jjsmat0zA0U9crqeeizB
-   zsp4ycZR6dP8rphbSmE6nks3RjDb1Fj0OWiwXsF+0aRLrA/XN4xM1lrUS
-   VxKhQmAUzL526DZiYr1B/G7/uVHlWfDU1vKndv3Kjexj+wahZCzDuZgFy
-   GAk6dho0wwxH/VPSFmoBPxhCuyu1bjFWCP89fddokTUZQTJpnjDz3KKLC
-   /QK2k4Vi70edtTcOtpt9v57UHtInW9Yj7w0/0zj2WphrFkxDEZg4iJBtC
-   N23Y/fwtBcbHyvI+qJBb7SCOHWjWoMdPm33XlElfDu8D1kwy1vmiFvlwO
-   Q==;
-X-CSE-ConnectionGUID: 4gPwjKVETBKYKtrQKuzVlw==
-X-CSE-MsgGUID: m6k6Reo0QbCoe1eIlzDF/Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="76087737"
-X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
-   d="scan'208";a="76087737"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 08:50:02 -0800
-X-CSE-ConnectionGUID: J7rvuV8UQ8GQ9dm8unOUlg==
-X-CSE-MsgGUID: +8k5wQNnQ2adGIhuTQ1uIw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
-   d="scan'208";a="216947209"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa010.jf.intel.com with ESMTP; 02 Mar 2026 08:49:52 -0800
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id B1CD4312CC;
-	Mon,  2 Mar 2026 16:49:49 +0000 (GMT)
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: bpf@vger.kernel.org
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>,
-	Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
-	Tushar Vyavahare <tushar.vyavahare@intel.com>,
-	Jason Xing <kernelxing@tencent.com>,
-	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>,
-	imx@lists.linux.dev,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-kselftest@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf v4 9/9] xdp: produce a warning when calculated tailroom is negative
-Date: Mon,  2 Mar 2026 17:17:22 +0100
-Message-ID: <20260302161723.858616-10-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260302161723.858616-1-larysa.zaremba@intel.com>
-References: <20260302161723.858616-1-larysa.zaremba@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P4TZfXyi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84477C19423;
+	Mon,  2 Mar 2026 17:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772472038;
+	bh=G0tbNLTu0S+3NlNqEOJKZh3E1i+PNvPaCT+xkj3RuA4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=P4TZfXyiPbOZRK39v1oQOIZyHQghPqrj4G84BeHW7Uk181NPqVbeyqDkhmdINCL81
+	 qNAQXSTfe/ID4vpXl3jTEKy3rN/ZLpSVjUedezyuB1riG6mtQxqlsGHqDioPMPh74d
+	 Yqj2OjRsxKxDkuJqnBhPc7LBZtundWOmDQpyC2oU8jsIadjeAblMH7FAZ8Po9qe3JI
+	 eiTMVrwOPiPg5Nu8jZyRH3myP0rL9/Qdgjd1qMNv0i9F+cLZoaG80z1ZLDUS30wDfJ
+	 v4LcLiTDo6XpU4REgwHP+HjJ9HcuCz3Efpo9aaWoAniP/BiD3rEuby+kXszwkQMyEt
+	 6rR8WIMtcJGYw==
+From: Tamir Duberstein <tamird@kernel.org>
+Date: Mon, 02 Mar 2026 12:20:35 -0500
+Subject: [PATCH] rust: rename `kernel::c_str!` to `str_to_cstr!`
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260302-cstr-rename-macro-v1-1-a269fe4dc3f0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQrCQAxG4auUrA1MpzJQryIupumvRuhUklaE0
+ rs76vJbvLeRwxROp2Yjw0td51LRHhqSey43sI7VFENMoQuRxRdjQ8kTeMpiM6djDO2AJH3qqXZ
+ Pw1Xfv+f58revwwOyfEe07x/+7+gTdQAAAA==
+X-Change-ID: 20260302-cstr-rename-macro-64201be6c969
+To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Breno Leitao <leitao@debian.org>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Tamir Duberstein <tamird@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7334; i=tamird@kernel.org;
+ h=from:subject:message-id; bh=G0tbNLTu0S+3NlNqEOJKZh3E1i+PNvPaCT+xkj3RuA4=;
+ b=owGbwMvMwCV2wYdPVfy60HTG02pJDJlLjz0pTNdQj0zSYhfhuf+h1Gxx3t7Z735LXXNaeIl1p
+ /iH753JHaUsDGJcDLJiiiyJoof2pqfe3iOb+e44zBxWJpAhDFycAjCRjAaG/5Xx5/ZrBC9Mm/7H
+ rPeWnbgvZ/mvs23iXVO2VS6ZpveEo4vhf6qpiEiMqJqMa0mizoKsB7nxc4RLFcqf3XtWHfZv1Wl
+ jdgA=
+X-Developer-Key: i=tamird@kernel.org; a=openpgp;
+ fpr=5A6714204D41EC844C50273C19D6FF6092365380
 
-Many ethernet drivers report xdp Rx queue frag size as being the same as
-DMA write size. However, the only user of this field, namely
-bpf_xdp_frags_increase_tail(), clearly expects a truesize.
+Now that all literals are C-Strings, rename and update the documentation
+of this macro to clarify its intended purpose.
 
-Such difference leads to unspecific memory corruption issues under certain
-circumstances, e.g. in ixgbevf maximum DMA write size is 3 KB, so when
-running xskxceiver's XDP_ADJUST_TAIL_GROW_MULTI_BUFF, 6K packet fully uses
-all DMA-writable space in 2 buffers. This would be fine, if only
-rxq->frag_size was properly set to 4K, but value of 3K results in a
-negative tailroom, because there is a non-zero page offset.
-
-We are supposed to return -EINVAL and be done with it in such case, but due
-to tailroom being stored as an unsigned int, it is reported to be somewhere
-near UINT_MAX, resulting in a tail being grown, even if the requested
-offset is too much (it is around 2K in the abovementioned test). This later
-leads to all kinds of unspecific calltraces.
-
-[ 7340.337579] xskxceiver[1440]: segfault at 1da718 ip 00007f4161aeac9d sp 00007f41615a6a00 error 6
-[ 7340.338040] xskxceiver[1441]: segfault at 7f410000000b ip 00000000004042b5 sp 00007f415bffecf0 error 4
-[ 7340.338179]  in libc.so.6[61c9d,7f4161aaf000+160000]
-[ 7340.339230]  in xskxceiver[42b5,400000+69000]
-[ 7340.340300]  likely on CPU 6 (core 0, socket 6)
-[ 7340.340302] Code: ff ff 01 e9 f4 fe ff ff 0f 1f 44 00 00 4c 39 f0 74 73 31 c0 ba 01 00 00 00 f0 0f b1 17 0f 85 ba 00 00 00 49 8b 87 88 00 00 00 <4c> 89 70 08 eb cc 0f 1f 44 00 00 48 8d bd f0 fe ff ff 89 85 ec fe
-[ 7340.340888]  likely on CPU 3 (core 0, socket 3)
-[ 7340.345088] Code: 00 00 00 ba 00 00 00 00 be 00 00 00 00 89 c7 e8 31 ca ff ff 89 45 ec 8b 45 ec 85 c0 78 07 b8 00 00 00 00 eb 46 e8 0b c8 ff ff <8b> 00 83 f8 69 74 24 e8 ff c7 ff ff 8b 00 83 f8 0b 74 18 e8 f3 c7
-[ 7340.404334] Oops: general protection fault, probably for non-canonical address 0x6d255010bdffc: 0000 [#1] SMP NOPTI
-[ 7340.405972] CPU: 7 UID: 0 PID: 1439 Comm: xskxceiver Not tainted 6.19.0-rc1+ #21 PREEMPT(lazy)
-[ 7340.408006] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.17.0-5.fc42 04/01/2014
-[ 7340.409716] RIP: 0010:lookup_swap_cgroup_id+0x44/0x80
-[ 7340.410455] Code: 83 f8 1c 73 39 48 ba ff ff ff ff ff ff ff 03 48 8b 04 c5 20 55 fa bd 48 21 d1 48 89 ca 83 e1 01 48 d1 ea c1 e1 04 48 8d 04 90 <8b> 00 48 83 c4 10 d3 e8 c3 cc cc cc cc 31 c0 e9 98 b7 dd 00 48 89
-[ 7340.412787] RSP: 0018:ffffcc5c04f7f6d0 EFLAGS: 00010202
-[ 7340.413494] RAX: 0006d255010bdffc RBX: ffff891f477895a8 RCX: 0000000000000010
-[ 7340.414431] RDX: 0001c17e3fffffff RSI: 00fa070000000000 RDI: 000382fc7fffffff
-[ 7340.415354] RBP: 00fa070000000000 R08: ffffcc5c04f7f8f8 R09: ffffcc5c04f7f7d0
-[ 7340.416283] R10: ffff891f4c1a7000 R11: ffffcc5c04f7f9c8 R12: ffffcc5c04f7f7d0
-[ 7340.417218] R13: 03ffffffffffffff R14: 00fa06fffffffe00 R15: ffff891f47789500
-[ 7340.418229] FS:  0000000000000000(0000) GS:ffff891ffdfaa000(0000) knlGS:0000000000000000
-[ 7340.419489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 7340.420286] CR2: 00007f415bfffd58 CR3: 0000000103f03002 CR4: 0000000000772ef0
-[ 7340.421237] PKRU: 55555554
-[ 7340.421623] Call Trace:
-[ 7340.421987]  <TASK>
-[ 7340.422309]  ? softleaf_from_pte+0x77/0xa0
-[ 7340.422855]  swap_pte_batch+0xa7/0x290
-[ 7340.423363]  zap_nonpresent_ptes.constprop.0.isra.0+0xd1/0x270
-[ 7340.424102]  zap_pte_range+0x281/0x580
-[ 7340.424607]  zap_pmd_range.isra.0+0xc9/0x240
-[ 7340.425177]  unmap_page_range+0x24d/0x420
-[ 7340.425714]  unmap_vmas+0xa1/0x180
-[ 7340.426185]  exit_mmap+0xe1/0x3b0
-[ 7340.426644]  __mmput+0x41/0x150
-[ 7340.427098]  exit_mm+0xb1/0x110
-[ 7340.427539]  do_exit+0x1b2/0x460
-[ 7340.427992]  do_group_exit+0x2d/0xc0
-[ 7340.428477]  get_signal+0x79d/0x7e0
-[ 7340.428957]  arch_do_signal_or_restart+0x34/0x100
-[ 7340.429571]  exit_to_user_mode_loop+0x8e/0x4c0
-[ 7340.430159]  do_syscall_64+0x188/0x6b0
-[ 7340.430672]  ? __do_sys_clone3+0xd9/0x120
-[ 7340.431212]  ? switch_fpu_return+0x4e/0xd0
-[ 7340.431761]  ? arch_exit_to_user_mode_prepare.isra.0+0xa1/0xc0
-[ 7340.432498]  ? do_syscall_64+0xbb/0x6b0
-[ 7340.433015]  ? __handle_mm_fault+0x445/0x690
-[ 7340.433582]  ? count_memcg_events+0xd6/0x210
-[ 7340.434151]  ? handle_mm_fault+0x212/0x340
-[ 7340.434697]  ? do_user_addr_fault+0x2b4/0x7b0
-[ 7340.435271]  ? clear_bhb_loop+0x30/0x80
-[ 7340.435788]  ? clear_bhb_loop+0x30/0x80
-[ 7340.436299]  ? clear_bhb_loop+0x30/0x80
-[ 7340.436812]  ? clear_bhb_loop+0x30/0x80
-[ 7340.437323]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[ 7340.437973] RIP: 0033:0x7f4161b14169
-[ 7340.438468] Code: Unable to access opcode bytes at 0x7f4161b1413f.
-[ 7340.439242] RSP: 002b:00007ffc6ebfa770 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-[ 7340.440173] RAX: fffffffffffffe00 RBX: 00000000000005a1 RCX: 00007f4161b14169
-[ 7340.441061] RDX: 00000000000005a1 RSI: 0000000000000109 RDI: 00007f415bfff990
-[ 7340.441943] RBP: 00007ffc6ebfa7a0 R08: 0000000000000000 R09: 00000000ffffffff
-[ 7340.442824] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-[ 7340.443707] R13: 0000000000000000 R14: 00007f415bfff990 R15: 00007f415bfff6c0
-[ 7340.444586]  </TASK>
-[ 7340.444922] Modules linked in: rfkill intel_rapl_msr intel_rapl_common intel_uncore_frequency_common skx_edac_common nfit libnvdimm kvm_intel vfat fat kvm snd_pcm irqbypass rapl iTCO_wdt snd_timer intel_pmc_bxt iTCO_vendor_support snd ixgbevf virtio_net soundcore i2c_i801 pcspkr libeth_xdp net_failover i2c_smbus lpc_ich failover libeth virtio_balloon joydev 9p fuse loop zram lz4hc_compress lz4_compress 9pnet_virtio 9pnet netfs ghash_clmulni_intel serio_raw qemu_fw_cfg
-[ 7340.449650] ---[ end trace 0000000000000000 ]---
-
-The issue can be fixed in all in-tree drivers, but we cannot just trust OOT
-drivers to not do this. Therefore, make tailroom a signed int and produce a
-warning when it is negative to prevent such mistakes in the future.
-
-Fixes: bf25146a5595 ("bpf: add frags support to the bpf_xdp_adjust_tail() API")
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+Link: https://github.com/Rust-for-Linux/linux/issues/1075
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Signed-off-by: Tamir Duberstein <tamird@kernel.org>
 ---
- net/core/filter.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This patch completes the work of replacing our custom `CStr` with
+upstream's.
+---
+ rust/kernel/bug.rs              |  2 +-
+ rust/kernel/configfs.rs         |  2 +-
+ rust/kernel/drm/ioctl.rs        |  2 +-
+ rust/kernel/kunit.rs            |  3 ++-
+ rust/kernel/str.rs              | 19 ++++++++++++++-----
+ rust/kernel/sync.rs             |  4 ++--
+ rust/kernel/sync/lock/global.rs |  3 ++-
+ rust/kernel/workqueue.rs        |  6 +++---
+ 8 files changed, 26 insertions(+), 15 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index d6fafb3633b0..a77d23fe2359 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4150,13 +4150,14 @@ static int bpf_xdp_frags_increase_tail(struct xdp_buff *xdp, int offset)
- 	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
- 	skb_frag_t *frag = &sinfo->frags[sinfo->nr_frags - 1];
- 	struct xdp_rxq_info *rxq = xdp->rxq;
--	unsigned int tailroom;
-+	int tailroom;
+diff --git a/rust/kernel/bug.rs b/rust/kernel/bug.rs
+index ed943960f851..f7cb673b1766 100644
+--- a/rust/kernel/bug.rs
++++ b/rust/kernel/bug.rs
+@@ -80,7 +80,7 @@ macro_rules! warn_flags {
+         // with a valid null-terminated string.
+         unsafe {
+             $crate::bindings::warn_slowpath_fmt(
+-                $crate::c_str!(::core::file!()).as_char_ptr(),
++                $crate::str_to_cstr!(::core::file!()).as_char_ptr(),
+                 line!() as $crate::ffi::c_int,
+                 $flags as $crate::ffi::c_uint,
+                 ::core::ptr::null(),
+diff --git a/rust/kernel/configfs.rs b/rust/kernel/configfs.rs
+index 2339c6467325..930f17bb2041 100644
+--- a/rust/kernel/configfs.rs
++++ b/rust/kernel/configfs.rs
+@@ -1000,7 +1000,7 @@ macro_rules! configfs_attrs {
+                         $crate::configfs::Attribute<$attr, $data, $data> =
+                             unsafe {
+                                 $crate::configfs::Attribute::new(
+-                                    $crate::c_str!(::core::stringify!($name)),
++                                    $crate::str_to_cstr!(::core::stringify!($name)),
+                                 )
+                             };
+                 )*
+diff --git a/rust/kernel/drm/ioctl.rs b/rust/kernel/drm/ioctl.rs
+index cf328101dde4..6a87f489dc88 100644
+--- a/rust/kernel/drm/ioctl.rs
++++ b/rust/kernel/drm/ioctl.rs
+@@ -157,7 +157,7 @@ macro_rules! declare_drm_ioctls {
+                     },
+                     flags: $flags,
+                     name: $crate::str::as_char_ptr_in_const_context(
+-                        $crate::c_str!(::core::stringify!($cmd)),
++                        $crate::str_to_cstr!(::core::stringify!($cmd)),
+                     ),
+                 }
+             ),*];
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index f93f24a60bdd..5802a3507ecc 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -59,7 +59,8 @@ macro_rules! kunit_assert {
  
- 	if (!rxq->frag_size || rxq->frag_size > xdp->frame_sz)
- 		return -EOPNOTSUPP;
+             static FILE: &'static $crate::str::CStr = $file;
+             static LINE: i32 = ::core::line!() as i32 - $diff;
+-            static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
++            static CONDITION: &'static $crate::str::CStr =
++                $crate::str_to_cstr!(stringify!($condition));
  
- 	tailroom = rxq->frag_size - skb_frag_size(frag) -
- 		   skb_frag_off(frag) % rxq->frag_size;
-+	WARN_ON_ONCE(tailroom < 0);
- 	if (unlikely(offset > tailroom))
- 		return -EINVAL;
+             // SAFETY: FFI call without safety requirements.
+             let kunit_test = unsafe { $crate::bindings::kunit_get_current_test() };
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index fa87779d2253..8bb40de007d4 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -376,19 +376,28 @@ fn as_ref(&self) -> &BStr {
+     }
+ }
  
--- 
-2.52.0
+-/// Creates a new [`CStr`] from a string literal.
++/// Creates a new [`CStr`] at compile time.
+ ///
+-/// The string literal should not contain any `NUL` bytes.
++/// Rust supports C string literals since Rust 1.77, and they should be used instead of this macro
++/// where possible. This macro exists to allow static *non-literal* C strings to be created at
++/// compile time. This is most often used in other macros.
++///
++/// # Panics
++///
++/// This macro panics if the operand contains an interior `NUL` byte.
+ ///
+ /// # Examples
+ ///
+ /// ```
+-/// # use kernel::c_str;
++/// # use kernel::str_to_cstr;
+ /// # use kernel::str::CStr;
+-/// const MY_CSTR: &CStr = c_str!("My awesome CStr!");
++/// const MY_CSTR: &CStr = str_to_cstr!(concat!(file!(), ":", line!(), ": My CStr!"));
+ /// ```
+ #[macro_export]
+-macro_rules! c_str {
++macro_rules! str_to_cstr {
++    // NB: we could write `($str:lit) => compile_error!("use a C string literal instead");` here but
++    // that would trigger when the literal is at the top of several macro expansions. That would be
++    // too limiting to macro authors, so we rely on the name as a hint instead.
+     ($str:expr) => {{
+         const S: &str = concat!($str, "\0");
+         const C: &$crate::str::CStr = match $crate::str::CStr::from_bytes_with_nul(S.as_bytes()) {
+diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+index 993dbf2caa0e..ecf02a67ec35 100644
+--- a/rust/kernel/sync.rs
++++ b/rust/kernel/sync.rs
+@@ -154,9 +154,9 @@ macro_rules! static_lock_class {
+ #[macro_export]
+ macro_rules! optional_name {
+     () => {
+-        $crate::c_str!(::core::concat!(::core::file!(), ":", ::core::line!()))
++        $crate::str_to_cstr!(::core::concat!(::core::file!(), ":", ::core::line!()))
+     };
+     ($name:literal) => {
+-        $crate::c_str!($name)
++        $crate::str_to_cstr!($name)
+     };
+ }
+diff --git a/rust/kernel/sync/lock/global.rs b/rust/kernel/sync/lock/global.rs
+index aecbdc34738f..81f46229be7d 100644
+--- a/rust/kernel/sync/lock/global.rs
++++ b/rust/kernel/sync/lock/global.rs
+@@ -272,7 +272,8 @@ macro_rules! global_lock {
+         $pub enum $name {}
+ 
+         impl $crate::sync::lock::GlobalLockBackend for $name {
+-            const NAME: &'static $crate::str::CStr = $crate::c_str!(::core::stringify!($name));
++            const NAME: &'static $crate::str::CStr =
++                $crate::str_to_cstr!(::core::stringify!($name));
+             type Item = $valuety;
+             type Backend = $crate::global_lock_inner!(backend $kind);
+ 
+diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
+index 706e833e9702..7616d71df68e 100644
+--- a/rust/kernel/workqueue.rs
++++ b/rust/kernel/workqueue.rs
+@@ -212,7 +212,7 @@ macro_rules! new_delayed_work {
+         $crate::workqueue::DelayedWork::new(
+             $crate::optional_name!(),
+             $crate::static_lock_class!(),
+-            $crate::c_str!(::core::concat!(
++            $crate::str_to_cstr!(::core::concat!(
+                 ::core::file!(),
+                 ":",
+                 ::core::line!(),
+@@ -223,9 +223,9 @@ macro_rules! new_delayed_work {
+     };
+     ($name:literal) => {
+         $crate::workqueue::DelayedWork::new(
+-            $crate::c_str!($name),
++            $crate::str_to_cstr!($name),
+             $crate::static_lock_class!(),
+-            $crate::c_str!(::core::concat!($name, "_timer")),
++            $crate::str_to_cstr!(::core::concat!($name, "_timer")),
+             $crate::static_lock_class!(),
+         )
+     };
+
+---
+base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
+change-id: 20260302-cstr-rename-macro-64201be6c969
+
+Best regards,
+--  
+Tamir Duberstein <tamird@kernel.org>
 
