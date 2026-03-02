@@ -1,225 +1,375 @@
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011040.outbound.protection.outlook.com [40.107.208.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7940E366DB7;
-	Mon,  2 Mar 2026 15:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772464705; cv=fail; b=c7UGFjHY/+xXSCRPXEBbB2ecnaYGxALGM89zqjmLiThAj5D4QI8kkuLWy1Z+FGTZgK6O8ogRxWGsBNfGiYI0Wkks3ZxJm6+7hB1TQo5XJ7MwnQ7sCZujcfqw0pAymc0gh83/RouTpPamtGzvu79jv9mOiQU+5liD7FbfWIPXcM0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772464705; c=relaxed/simple;
-	bh=mremFYFa83QptwGBt7/ruCQ8135xpQB+RkJVuuVxZSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=GTtRDQG0LzmRLObPsru/mbD5xyc4jW3D/UWNX6wzvuO7zuA9UYZEl285NHQREr15MB9KLX9lC8CNaCtrJLrvT16E7cIEXSCMXDLgFa2TDoqARsemcqsMS7gpXZsThWAYfRW88gT3VhvwTu5Da7J+Ug9K9EZaaZYGqY0AgPHr60U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Um06qx2F; arc=fail smtp.client-ip=40.107.208.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D96F411634
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 15:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772464746; cv=none; b=CBzzC4LUyDPFUtqhxHbziTFeI3+b/MyP1wddmtXTMbL7lHei/FrimZz4/mk35OydaNuz8l4pyxjsbap1+NMfb/Dmztf2X3RXQabpJDNme24ABKIA7LXNc6GIVHmf2ZnflKN+IJqOwKPMi360eNRgq1Cgs907ygG83E9M4WT322c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772464746; c=relaxed/simple;
+	bh=SBa/F/qVq7sz5fyhuzCEoykKdXkA7mmV+zrOVMhMAug=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kVt4OekE90calzsWRoijklmSAVvR1VUvxVM8nEbqIbcacJUWXeW3pV1FYS7BlHxDzYEQL267Qw+flIywH/0bxUZ6spJ+gWRBAeylSZrWBWfFDrrg1I4ZwuY5Epdrr5X4qnJqQ+FmYju4vOJ3/Ane+4iD6bE0dq7DA0M1tVlhQoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NvTt8QVB; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Um06qx2F"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mdML7j3ZIf4kt0FbtKw1+AYthsf7cOyho5CnlHYb8Z+W0tWyZxjRGbWL8MEHdTsolAj06MpCiXOaqQ88GHuunWeXoRXwGbXIhtufb2hW2NlAn8Kw7LopREWCe7w3yuqx4etnun6E4f+Y9jXD/PNxk0lx89vv3q12ZOCH2FeDzYUm4M+x6h1rXRcgQQ+AqP28N7Xk6gnJcpI0Q0DtOjbjpULLBIDh8BRvEcO1VoEXTyfcHcpfPFZ2cVFqybB0xeEXG+hnxTwWRklxFE3X1W8+fCCoQg8xnbhjCAvFgLNmNi5EJFJPejTFASIaajMZE8vAtHqnHGz7jqtJeMlC0ydrmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f/HICPOkfnLsuWEzPJG11u3zF5lVDImTCJoQhRdIH6Y=;
- b=GXaBkn46GxEcVqA2YhafDXs5yqw/rNQoKyZaQzh1jPGuS0Y/qIkAPmLzj6OKZSzNOM+bTqqGSttvi/Z428RB5pg1QiYIju0TUrrkGDHHtNNvewrQ1sPTWdbKlsSWlC6DpP4lEyI15Tfi9/8RfChoSk5ytQPUhtelCepzXpbaMv+g60868sRpTm/i6vrAzF59qWK0CSMLp3y/HsfzsLEs+w1tY0NtB7ia2cu9ZIhGWDjjinVdhwBbilYDDQwxbs36bVCvu6Jpt6JutRN21lXaS/X5cLY37R+K3W/M8r/VF5GHkIJZsRjntlpcfCL+7LSaUm67FrNkFX3yI+e8MAVcUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f/HICPOkfnLsuWEzPJG11u3zF5lVDImTCJoQhRdIH6Y=;
- b=Um06qx2F8KgJrQRKP1XZMcA76JFgCYUCq1gPPmPQeTXC48MdoPit4+a9X7Qo4mkSAi5S821FD/zr3WYYUo2Fj8LOlv49Y7dRUpT8u3cbxvggy7FtMOHr8RPDvICz3x5cj/xMQaqyeJFQ4IqNCKZvPOvQS5UfslQjlVRWWUP/t4rTgmTH6KcIz1cw5RwqEC977A+qWecbYKs/LEa113onT3Ei607MlXzVmU4MiA/rebL6GtwR+Tjoc28mp8pTaTC6eZlOUVQHGzUFj0p1w62iq+QbCaN9+gI3p+RNgj4jsRRreS7q8FxqnAiiRLiq7cGkK1mLR7kTlEg8AQ+zg6UgWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by SA3PR12MB9130.namprd12.prod.outlook.com (2603:10b6:806:37f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.18; Mon, 2 Mar
- 2026 15:18:21 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.014; Mon, 2 Mar 2026
- 15:18:21 +0000
-Date: Mon, 2 Mar 2026 16:18:15 +0100
-From: Andrea Righi <arighi@nvidia.com>
-To: Feng Yang <yangfeng59949@163.com>
-Cc: changwoo@igalia.com, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, sched-ext@lists.linux.dev,
-	shuah@kernel.org, tj@kernel.org, void@manifault.com
-Subject: Re: [PATCH] selftests/sched_ext: Fix the incorrect logic validation
-Message-ID: <aaWqNx-DDtzzSqW6@gpd4>
-References: <aaVAhdw3ZO5kHJ32@gpd4>
- <20260302084130.480694-1-yangfeng59949@163.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302084130.480694-1-yangfeng59949@163.com>
-X-ClientProxiedBy: MI1P293CA0008.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:2::11) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NvTt8QVB"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4807068eacbso38013065e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 07:19:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772464743; x=1773069543; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RYHiq9vO5K9Wfj+l7e6mbuQm3yP/sEw5X27JutSAw+s=;
+        b=NvTt8QVBmldv3PMj2tQOuYqgS9YsbPkJPeRuTJOUtYCqnarsmrcPeyTOQtBUyylovF
+         cvtSMfY1ZqTae4jhuVmEurisTTpHf1s+bJLsBCIGl1Ylf7HAQT8NLIkWlMeLHUJwsnHd
+         M+nNSvhc5fAXvZUIScXS5u+x5sVu239pnfOxIRpG6seQcB92VG93gln1Sf9XmPw5wc0Q
+         s3mGIpc0ci2MHzN8M/QjZ6kGqbIztzzrJ9w4+ua8lMB5IIQ7yID8UjMApWRtOinjjvnG
+         oFeGxz3aRZ52bt1/GKSeVkaY0mqxW1rU9jdHJk2nx3C7yizwmTThpbwrrHuU68sIecUz
+         OxJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772464743; x=1773069543;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RYHiq9vO5K9Wfj+l7e6mbuQm3yP/sEw5X27JutSAw+s=;
+        b=JJDJE24deGKb3D2khbghVKpM1v2Ww6f2VdvJBzUHZRhDVaVGIpS59JWDg4cEvBlito
+         qA0TckCKbXhq6bZiVzQnDjyFCJKlUi5lDiTvKY6b2a9jWIS1goftXbII2l0na/JBkDz7
+         fiif/La3QmyCVWNIm/sEj/3knv/8ECv1YTcry9Sk3069ZxM4d3gkJWzeMHLR4AEEZBRi
+         uv+R3uaPvu1w1R3NUsr8SIgdlNx2B1tE0dM2MVS8LANjpIevmNjiyAZZDFhgTb+fdlV9
+         6VrTOJhOltn2YgtkRsNHdoUon1xxMbuItw8TeByXC+LjxVRVRsxzZ7vDjXRDc2DATC+g
+         WjoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXVDPwjeQbmgjv/fp8ajjSSg+b2ds/i5BRS1nwjSqZwY34K2UyHOO3SZ+TwWWhFrKO74yYmJZZ2aAb4tIKLEtg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywe5T8EWOZB5W0oxoj5G7y5uSQm+ZFxEGNl8K10aq7Ybez4b6oQ
+	2v8lwvFf+befsWdAIgkBWbttpOs8QNT094EXD4Sa3Wg+vG9RTc2039fV
+X-Gm-Gg: ATEYQzy9xDravkgxBI2x1DGOlmaWJeRl+bjbI8r56BphnjteTUpJlbg8Av+inCaBFpT
+	uJNaStOFrZlmjlV6VobgemGI6P62zEVlsSqRItZguxIC2CWBU+gwUOybyhMbqmrU6uLF+4zsnb/
+	P2IwMYPK52fXuTN3IKHWVKK95rXoiDXuuJxs/nwB4JMWQkYBr6QIVOtvxZs13skbWbCr0CiPwkM
+	zOiyvD/Y8oPslmPtCVOYdt5zWyblDuxG3OWCGvGhRVWxi0NjG3qHefC8b3QED3tRbCI/f2aH64N
+	bT9RyQNSUjDg5p2CrCX0KEu3O6rLbbKzJSdOXjJBTwxOjUxJAxoouOjMyEmAe26nL9tdLNMBb3O
+	Qcra38o9cteWI+rj9y+B9TrLPofrzPR84H5oEqZ2eNGTT2VgupQSLAVFoX9fk37TcWgdKUFaAKt
+	k66jiuA21cpf24BAegOkk=
+X-Received: by 2002:a05:600c:3e0b:b0:477:9a28:b0a4 with SMTP id 5b1f17b1804b1-483c9b6d539mr228620945e9.0.1772464742948;
+        Mon, 02 Mar 2026 07:19:02 -0800 (PST)
+Received: from localhost ([2620:10d:c092:500::5:b726])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bfec1a5bsm164598735e9.29.2026.03.02.07.19.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 07:19:01 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/6] bpf: Introduce the bpf_list_del kfunc.
+In-Reply-To: <20260302124028.82420-2-pilgrimtao@gmail.com>
+References: <20260302124028.82420-1-pilgrimtao@gmail.com>
+ <20260302124028.82420-2-pilgrimtao@gmail.com>
+Date: Mon, 02 Mar 2026 15:19:00 +0000
+Message-ID: <87bjh6ntsr.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|SA3PR12MB9130:EE_
-X-MS-Office365-Filtering-Correlation-Id: 05b2b0df-7855-4528-82d4-08de786eef20
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	bZD9QDYD475Ag66xBOQaiPtIzs0LT5M5bRvul/do4tXtzrv04Lo9yI2UQ7q/v78ADVwpuhE1OsqufMCMxC7icvErkovMpntVFs6iDVkbpZGgNuP8KgPPw4HhFaySo5/Q5HLMY9JQQ3IZlzMC6NU9rW78FFS7YwvKqqgsirPqKDeS4o0S1yeviwzQPo2dRV/gOLQnXe7fymPbhZk382wYsAqx+8n2gfNFllI75l4LE6rExhaVszxH/rxHg7RBCBulhfaYE4qdISNVCm0CKo0BFR56FC6Y3dE06nqjBMgCSjrQYwgewQpFDJgZ/0ox0peAftZqpOfDbnkOaeNjJB7KofhsLeuhTQJ6TvzagLZZXOKgwVs0Fab9+80CtFAiRIfFLxqCopXWHw1FrzWQyI60k7k0s6QNHK/qvI5C/uphafc8+mKkYi6De9DE0nLujqFcp7DjsqNfdosIiC9I8SfueuuVVV4Nq0f96ben9Zq9YKFJxmasnuLPKA1d14SvoeZr7FqXS9nrLsge10HPAcMufdn2/LlpWh/vVYNviaacJAQfU9hTJrjpCczlBFJmazoxD7tmTEytdlbKltZaArSrLlIJ0ByE51XBYAmJJj7BaFpV0P9NhdlRrwYOTuyLmR+udw3CrQd5EVVmvdJtWDQM53rzXfzXCpva8z9macEFHu72enN1GQGbIjLGTiAN73zl7LgFDorp1TsIOUdb+/iMCL039AmDXbiITXbxTFja/yk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?2MYpY6AqHXtxh2ysipj/PhZDvRY/ME9ntzDFD/1/Wo+6ei8J4X0xWB1seIW7?=
- =?us-ascii?Q?wK7fJKCWkZ0LHQC0ZHMlwaoxaX3aGWHbhbFL/Q1LhK4HXIJa08rvMkqnAR08?=
- =?us-ascii?Q?bJpssXyjAbqIfGwj7FaTFsIxgUlbzgOnmTSqpZBs96eOegn0JUhD6GL7ECMb?=
- =?us-ascii?Q?7pR7OY6RjtQkQyZ8Cvb4HJJPoauYEhdzPi0aRkSTAOtXV69xdPcl7nG6jzJA?=
- =?us-ascii?Q?jW/NLHASPdhUGBMctHLgqsvB1UMXias6xzuO/FGR5Op80iqbzcgtrpvWTRkn?=
- =?us-ascii?Q?g/vg9DCdetCdpCpoiA90rktMLOKQo+JmVwuOtsugZHyz4PuylinIO7a+sSnj?=
- =?us-ascii?Q?avnprl9fjMd8KRxoUwNV5/29FDNCMm/u84zpJ6joqRV9DdZ3pAAKnNXXNNAE?=
- =?us-ascii?Q?awwwo2JLgkBFVoi+4kXfS+4qUenlzIFUSLgeFVVpoesKke55B0WhGBcs1NG4?=
- =?us-ascii?Q?bLPR2nJfoJDcJFBHBBqgW+ivNXVnUgU3chRRY/tZXL6fcp/vCKjs2+ZKQWC8?=
- =?us-ascii?Q?J/kgo2aRJKgVqpe4otbiPwm6vDM2C/P1+Gt6TM+wzSSzA0mjtjlTAqLb3pqE?=
- =?us-ascii?Q?SMUvWxCdnYJN0/6J/qF0qFDojzLjV9IX+fu4D7tF+jmg6GcdiBBssHMxl+Hr?=
- =?us-ascii?Q?FoDmF0fIxJ0YeyurbVg9AOOM8JlBi6zaSf8aiouVFZme1QN7RRN8Hjsudt3Y?=
- =?us-ascii?Q?HdNYZ1QClmXVHJNGA2PFJuVc3ESlsDB1iNnbuNkOsvFcnFQRNwTS0P2eTyZx?=
- =?us-ascii?Q?ULhJlKkwc4vvGJ4Grp09SgVaZEUvMniI8l3ZdsTa560Zxz4n2b1c3FjSR1Kr?=
- =?us-ascii?Q?Wy8xQ0e48WcUqmy79qSWilbw+c2/HFVaj7SnRtN/HL3Cgzv7Q3W0navk3km4?=
- =?us-ascii?Q?s8ezJju0TLFcRsBUe7uqyztwEybu96N9uYunYkoiYuyIVhd98fqEEaoigH04?=
- =?us-ascii?Q?vKembiaXR9MPtLRtCaKsyo1Bg0s2j1ZELKhKaTWBFT6TBolpSnQuphbr8/GI?=
- =?us-ascii?Q?kan6MKRNWy4SLL+MHFfW+edL3CLpKfG1ZDC4FAJQcr+VO36KRMb01rlDhPNE?=
- =?us-ascii?Q?FSGFvimAxfHvJ+bTjOElNcbxTzLEs4y8FZ0tshHHHDsav9aCErYAjFyzQxw4?=
- =?us-ascii?Q?6vW5BZCvrDPSyaD8h8UQZHBnzYkLXAUSEKynGHS9yudTM64ktDWSoXBGguJK?=
- =?us-ascii?Q?hG40FHDVWKlypZlpqnE26+64o7P0Qjlk3WmgXZByqItbi+rdmMAwiZ5dDHiO?=
- =?us-ascii?Q?eUNjMlwHJmZS6QFsJdv76/83b/26L4kjtuz8z4QbBTutwjZAcU3I4mpJleP3?=
- =?us-ascii?Q?h+TJX/wlBFClPNe+ljtVx7CZpycWbC5CXLE0w2WfxS2nI2m6W+vxA31UrMSM?=
- =?us-ascii?Q?rNYreOaciFZO46/Fly1fxoYh6hfZmVNDplKojyOUb1aP0/Wyh9bRO541xiRP?=
- =?us-ascii?Q?Ngn8HwPucrGCSe7BpVczPV68HnkENgKE2taOxhdmo+7bQGwhH1GiXNmga+5Y?=
- =?us-ascii?Q?JfydD+nMxObVt90gw6KDolS0jwR3USUxrn4OBPlks7XoRhLleh5fekBwBD2j?=
- =?us-ascii?Q?W1+75JaH2IbEUsAahHORmHlfT1wQqpSgJ2aVj4Yaa31rx4LcijGsRSy21Bn/?=
- =?us-ascii?Q?v/nCLEy/n/XJOy8tlwPMYPWLzj36CRkgio1u+oVI6WABGph7GtLW+9G1jTnR?=
- =?us-ascii?Q?/Ba62ny1mzzfAV1bxbqt2MjLMsWm8tTOM5ldjk/AQEqkIpDJ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05b2b0df-7855-4528-82d4-08de786eef20
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 15:18:20.8978
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GXJsiY482RmedsGa6jrX+Bsmm5yWbUyuyzBqulosOaBHoOADXety0HrQL9m7reRhmxLl4aEEMc+/EVZYrcCEiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9130
+Content-Type: text/plain
 
-Hi Feng,
+Chengkaitao <pilgrimtao@gmail.com> writes:
 
-On Mon, Mar 02, 2026 at 04:41:30PM +0800, Feng Yang wrote:
-> On Mon, 2 Mar 2026 08:47:17 +0100, Andrea Righi wrote:
-> > On Mon, Mar 02, 2026 at 02:48:51PM +0800, Feng Yang wrote:
-> > > From: Feng Yang <yangfeng@kylinos.cn>
-> > > 
-> > > When __COMPAT_scx_bpf_pick_idle_cpu_node selects an idle CPU,
-> > > it reports that the CPU should be marked as busy.
-> > > 
-> > > Fixes: 5ae5161820e5 ("selftests/sched_ext: Add NUMA-aware scheduler test")
-> > > Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-> > > ---
-> > >  tools/testing/selftests/sched_ext/numa.bpf.c | 8 ++++----
-> > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/sched_ext/numa.bpf.c b/tools/testing/selftests/sched_ext/numa.bpf.c
-> > > index a79d86ed54a1..98423628b05c 100644
-> > > --- a/tools/testing/selftests/sched_ext/numa.bpf.c
-> > > +++ b/tools/testing/selftests/sched_ext/numa.bpf.c
-> > > @@ -44,12 +44,12 @@ s32 BPF_STRUCT_OPS(numa_select_cpu,
-> > >  	 */
-> > >  	cpu = __COMPAT_scx_bpf_pick_idle_cpu_node(p->cpus_ptr, node,
-> > >  					__COMPAT_SCX_PICK_IDLE_IN_NODE);
-> > > -	if (cpu < 0)
-> > > +	if (cpu < 0) {
-> > >  		cpu = __COMPAT_scx_bpf_pick_any_cpu_node(p->cpus_ptr, node,
-> > >  						__COMPAT_SCX_PICK_IDLE_IN_NODE);
-> > > -
-> > > -	if (is_cpu_idle(cpu, node))
-> > > -		scx_bpf_error("CPU %d should be marked as busy", cpu);
-> > > +		if (is_cpu_idle(cpu, node))
-> > > +			scx_bpf_error("CPU %d should be marked as busy", cpu);
-> > > +	}
-> > 
-> > No, this is not correct. The CPU returned by scx_bpf_pick_idle_cpu_node()
-> > should be marked as busy at this point (bit is set in the idle cpumask),
-> > essentially it has been reserved/allocated by the caller.
-> 
-> Okay, I misunderstood.
-> The CI test of this patch (https://patchwork.kernel.org/project/netdevbpf/list/?series=1058866&state=*) 
-> resulted in the error "CPU 0 should be marked as busy"(https://github.com/kernel-patches/bpf/actions/runs/22548310848/job/65314767856),
-> but I don't see the connection between them that would cause this error. Could you explain why this happens?
-
-The is_cpu_idle() test is going to be always a bit flaky in some cases,
-for what I see we may have two races:
-
-1) if the first call to scx_bpf_pick_idle_cpu_node() returns a negative
-   value, we fallback to "pick any CPU". Between selecting the CPU and
-   checking if it's idle, the task running on the CPU may have released it,
-   allowing the idle task to run and set the idle bit again.
-
-2) Even if the first scx_bpf_pick_idle_cpu_node() returns a cpu >= 0, that
-   CPU might still execute a short-lived task, which then releases it and
-   sets the idle bit again.
-
-Given this, I think the most reliable approach is to remove the
-is_cpu_idle() check here to avoid flakiness and instead implement something
-along the lines of the following. What do you think?
-
-Thanks,
--Andrea
-
- tools/testing/selftests/sched_ext/numa.bpf.c | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
-
-diff --git a/tools/testing/selftests/sched_ext/numa.bpf.c b/tools/testing/selftests/sched_ext/numa.bpf.c
-index a79d86ed54a1b..209dacdbd117e 100644
---- a/tools/testing/selftests/sched_ext/numa.bpf.c
-+++ b/tools/testing/selftests/sched_ext/numa.bpf.c
-@@ -19,18 +19,6 @@ UEI_DEFINE(uei);
- 
- const volatile unsigned int __COMPAT_SCX_PICK_IDLE_IN_NODE;
- 
--static bool is_cpu_idle(s32 cpu, int node)
--{
--	const struct cpumask *idle_cpumask;
--	bool idle;
--
--	idle_cpumask = __COMPAT_scx_bpf_get_idle_cpumask_node(node);
--	idle = bpf_cpumask_test_cpu(cpu, idle_cpumask);
--	scx_bpf_put_cpumask(idle_cpumask);
--
--	return idle;
--}
--
-s32 BPF_STRUCT_OPS(numa_select_cpu,
- 		   struct task_struct *p, s32 prev_cpu, u64 wake_flags)
- {
-@@ -44,12 +32,12 @@ s32 BPF_STRUCT_OPS(numa_select_cpu,
- 	 */
- 	cpu = __COMPAT_scx_bpf_pick_idle_cpu_node(p->cpus_ptr, node,
- 					__COMPAT_SCX_PICK_IDLE_IN_NODE);
--	if (cpu < 0)
-+	if (cpu < 0) {
- 		cpu = __COMPAT_scx_bpf_pick_any_cpu_node(p->cpus_ptr, node,
- 						__COMPAT_SCX_PICK_IDLE_IN_NODE);
--
--	if (is_cpu_idle(cpu, node))
--		scx_bpf_error("CPU %d should be marked as busy", cpu);
-+		if (cpu < 0)
-+			return prev_cpu;
-+	}
- 
- 	if (__COMPAT_scx_bpf_cpu_node(cpu) != node)
- 		scx_bpf_error("CPU %d should be in node %d", cpu, node);
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>
+> If a user holds ownership of a node in the middle of a list, they
+> can directly remove it from the list without strictly adhering to
+> deletion rules from the head or tail.
+>
+> When a kfunc has only one bpf_list_node parameter, supplement the
+> initialization of the corresponding btf_field. Add a new lock_rec
+> member to struct bpf_reference_state for lock holding detection.
+>
+> This is typically paired with bpf_refcount. After calling
+> bpf_list_del, it is generally necessary to drop the reference to
+> the list node twice to prevent reference count leaks.
+>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
+>  include/linux/bpf_verifier.h |  4 +++
+>  kernel/bpf/btf.c             | 33 +++++++++++++++++++---
+>  kernel/bpf/helpers.c         | 17 ++++++++++++
+>  kernel/bpf/verifier.c        | 54 ++++++++++++++++++++++++++++++++++--
+>  4 files changed, 101 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index ef8e45a362d9..e1358b62d6cc 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -261,6 +261,10 @@ struct bpf_reference_state {
+>  	 * it matches on unlock.
+>  	 */
+>  	void *ptr;
+> +	/* For REF_TYPE_LOCK_*: btf_record of the locked object, used for lock
+> +	 * checking in kfuncs such as bpf_list_del.
+> +	 */
+> +	struct btf_record *lock_rec;
+As far as I understand this patch introduces a weaker type of
+verification: we only check that there is some lock held by the
+object of the same type as this node's head, but there is no guarantee
+it's the same instance. Please confirm if I'm right.
+What would it take to implement instance validation instead of
+type-based lock check?
+>  };
+>  
+>  struct bpf_retval_range {
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 4872d2a6c42d..8a977c793d56 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -3785,7 +3785,6 @@ static int btf_find_field_one(const struct btf *btf,
+>  	case BPF_RES_SPIN_LOCK:
+>  	case BPF_TIMER:
+>  	case BPF_WORKQUEUE:
+> -	case BPF_LIST_NODE:
+>  	case BPF_RB_NODE:
+>  	case BPF_REFCOUNT:
+>  	case BPF_TASK_WORK:
+> @@ -3794,6 +3793,27 @@ static int btf_find_field_one(const struct btf *btf,
+>  		if (ret < 0)
+>  			return ret;
+>  		break;
+> +	case BPF_LIST_NODE:
+> +		ret = btf_find_struct(btf, var_type, off, sz, field_type,
+> +				      info_cnt ? &info[0] : &tmp);
+> +		if (ret < 0)
+> +			return ret;
+> +		/* graph_root for verifier: container type and node member name */
+> +		if (info_cnt && var_idx >= 0 && (u32)var_idx < btf_type_vlen(var)) {
+> +			u32 id;
+> +			const struct btf_member *member;
+> +
+> +			for (id = 1; id < btf_nr_types(btf); id++) {
+> +				if (btf_type_by_id(btf, id) == var) {
+> +					info[0].graph_root.value_btf_id = id;
+> +					member = btf_type_member(var) + var_idx;
+> +					info[0].graph_root.node_name =
+> +						__btf_name_by_offset(btf, member->name_off);
+> +					break;
+> +				}
+> +			}
+> +		}
+> +		break;
+>  	case BPF_KPTR_UNREF:
+>  	case BPF_KPTR_REF:
+>  	case BPF_KPTR_PERCPU:
+> @@ -4138,6 +4158,7 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
+>  			if (ret < 0)
+>  				goto end;
+>  			break;
+> +		case BPF_LIST_NODE:
+>  		case BPF_LIST_HEAD:
+>  			ret = btf_parse_list_head(btf, &rec->fields[i], &info_arr[i]);
+>  			if (ret < 0)
+> @@ -4148,7 +4169,6 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
+>  			if (ret < 0)
+>  				goto end;
+>  			break;
+> -		case BPF_LIST_NODE:
+>  		case BPF_RB_NODE:
+>  			break;
+>  		default:
+> @@ -4192,20 +4212,25 @@ int btf_check_and_fixup_fields(const struct btf *btf, struct btf_record *rec)
+>  	int i;
+>  
+>  	/* There are three types that signify ownership of some other type:
+> -	 *  kptr_ref, bpf_list_head, bpf_rb_root.
+> +	 *  kptr_ref, bpf_list_head/node, bpf_rb_root.
+>  	 * kptr_ref only supports storing kernel types, which can't store
+>  	 * references to program allocated local types.
+>  	 *
+>  	 * Hence we only need to ensure that bpf_{list_head,rb_root} ownership
+>  	 * does not form cycles.
+>  	 */
+> -	if (IS_ERR_OR_NULL(rec) || !(rec->field_mask & (BPF_GRAPH_ROOT | BPF_UPTR)))
+> +	if (IS_ERR_OR_NULL(rec) || !(rec->field_mask &
+> +	   (BPF_GRAPH_ROOT | BPF_GRAPH_NODE | BPF_UPTR)))
+>  		return 0;
+> +
+>  	for (i = 0; i < rec->cnt; i++) {
+>  		struct btf_struct_meta *meta;
+>  		const struct btf_type *t;
+>  		u32 btf_id;
+>  
+> +		if (rec->fields[i].type & BPF_GRAPH_NODE)
+> +			rec->fields[i].graph_root.value_rec = rec;
+> +
+>  		if (rec->fields[i].type == BPF_UPTR) {
+>  			/* The uptr only supports pinning one page and cannot
+>  			 * point to a kernel struct
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6eb6c82ed2ee..577af62a9f7a 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2459,6 +2459,22 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+>  	return __bpf_list_del(head, true);
+>  }
+>  
+> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_node *node)
+> +{
+> +	struct bpf_list_node_kern *knode = (struct bpf_list_node_kern *)node;
+> +
+> +	if (unlikely(!knode))
+> +		return NULL;
+> +
+> +	if (WARN_ON_ONCE(!READ_ONCE(knode->owner)))
+> +		return NULL;
+> +
+> +	list_del_init(&knode->list_head);
+> +	WRITE_ONCE(knode->owner, NULL);
+> +
+> +	return node;
+> +}
+> +
+>  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
+>  {
+>  	struct list_head *h = (struct list_head *)head;
+> @@ -4545,6 +4561,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a3390190c26e..8a782772dd36 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -1536,7 +1536,7 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx)
+>  }
+>  
+>  static int acquire_lock_state(struct bpf_verifier_env *env, int insn_idx, enum ref_state_type type,
+> -			      int id, void *ptr)
+> +			      int id, void *ptr, struct btf_record *lock_rec)
+>  {
+>  	struct bpf_verifier_state *state = env->cur_state;
+>  	struct bpf_reference_state *s;
+> @@ -1547,6 +1547,7 @@ static int acquire_lock_state(struct bpf_verifier_env *env, int insn_idx, enum r
+>  	s->type = type;
+>  	s->id = id;
+>  	s->ptr = ptr;
+> +	s->lock_rec = lock_rec;
+>  
+>  	state->active_locks++;
+>  	state->active_lock_id = id;
+> @@ -1662,6 +1663,23 @@ static struct bpf_reference_state *find_lock_state(struct bpf_verifier_state *st
+>  	return NULL;
+>  }
+>  
+> +static bool rec_has_list_matching_node_type(struct bpf_verifier_env *env,
+> +					   const struct btf_record *rec,
+> +					   const struct btf *node_btf, u32 node_btf_id)
+> +{
+> +	u32 i;
+> +
+> +	for (i = 0; i < rec->cnt; i++) {
+> +		if (!(rec->fields[i].type & BPF_LIST_HEAD))
+> +			continue;
+> +		if (btf_struct_ids_match(&env->log, node_btf, node_btf_id, 0,
+> +					rec->fields[i].graph_root.btf,
+> +					rec->fields[i].graph_root.value_btf_id, true))
+> +			return true;
+> +	}
+> +	return false;
+> +}
+> +
+>  static void update_peak_states(struct bpf_verifier_env *env)
+>  {
+>  	u32 cur_states;
+> @@ -8576,7 +8594,8 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno, int flags)
+>  			type = REF_TYPE_RES_LOCK;
+>  		else
+>  			type = REF_TYPE_LOCK;
+> -		err = acquire_lock_state(env, env->insn_idx, type, reg->id, ptr);
+> +		err = acquire_lock_state(env, env->insn_idx, type, reg->id, ptr,
+> +					 reg_btf_record(reg));
+>  		if (err < 0) {
+>  			verbose(env, "Failed to acquire lock state\n");
+>  			return err;
+> @@ -12431,6 +12450,7 @@ enum special_kfunc_type {
+>  	KF_bpf_list_push_back_impl,
+>  	KF_bpf_list_pop_front,
+>  	KF_bpf_list_pop_back,
+> +	KF_bpf_list_del,
+>  	KF_bpf_list_front,
+>  	KF_bpf_list_back,
+>  	KF_bpf_cast_to_kern_ctx,
+> @@ -12491,6 +12511,7 @@ BTF_ID(func, bpf_list_push_front_impl)
+>  BTF_ID(func, bpf_list_push_back_impl)
+>  BTF_ID(func, bpf_list_pop_front)
+>  BTF_ID(func, bpf_list_pop_back)
+> +BTF_ID(func, bpf_list_del)
+>  BTF_ID(func, bpf_list_front)
+>  BTF_ID(func, bpf_list_back)
+>  BTF_ID(func, bpf_cast_to_kern_ctx)
+> @@ -12966,6 +12987,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
+>  	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
+> +	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_back];
+>  }
+> @@ -13088,7 +13110,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+>  	switch (node_field_type) {
+>  	case BPF_LIST_NODE:
+>  		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl]);
+> +		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> +		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del]);
+>  		break;
+>  	case BPF_RB_NODE:
+>  		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
+> @@ -13211,6 +13234,9 @@ __process_kf_arg_ptr_to_graph_node(struct bpf_verifier_env *env,
+>  		return -EINVAL;
+>  	}
+>  
+> +	if (!*node_field)
+> +		*node_field = field;
+> +
+>  	field = *node_field;
+>  
+>  	et = btf_type_by_id(field->graph_root.btf, field->graph_root.value_btf_id);
+> @@ -13237,6 +13263,28 @@ __process_kf_arg_ptr_to_graph_node(struct bpf_verifier_env *env,
+>  		return -EINVAL;
+>  	}
+>  
+> +	/* bpf_list_del: require list head's lock. Use refs[] REF_TYPE_LOCK_MASK
+> +	 * only. At lock time we stored the locked object's btf_record in ref->
+> +	 * lock_rec, so we can get the list value type from the ref directly.
+> +	 */
+> +	if (node_field_type == BPF_LIST_NODE &&
+> +	    meta->func_id == special_kfunc_list[KF_bpf_list_del]) {
+> +		struct bpf_verifier_state *cur = env->cur_state;
+> +
+> +		for (int i = 0; i < cur->acquired_refs; i++) {
+> +			struct bpf_reference_state *s = &cur->refs[i];
+> +
+> +			if (!(s->type & REF_TYPE_LOCK_MASK) || !s->lock_rec)
+> +				continue;
+> +
+> +			if (rec_has_list_matching_node_type(env, s->lock_rec,
+> +							reg->btf, reg->btf_id))
+> +				return 0;
+> +		}
+> +		verbose(env, "bpf_spin_lock must be held for bpf_list_del\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.50.1 (Apple Git-155)
