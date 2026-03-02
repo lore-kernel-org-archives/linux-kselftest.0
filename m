@@ -1,227 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794083630A4;
-	Mon,  2 Mar 2026 12:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5EF737472A
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 12:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772454693; cv=none; b=ZdDyGvDunnMypxl8GBrSbvzBF3uAegBxF6zB+r0oUUw2tmcpFqpf7fOnWkTF/grsp3jGxXyTZsbksbCPC18uATrE0/aRhDxfknIJOFSy5tJe1pyd+/fzZGihEBJ4h9gwyPoCBfU1vBDRDQC1aya5vVs50cGZLZ2U3G5EMBvH09A=
+	t=1772455241; cv=none; b=rt3J/QOG7uhThQJSZMARPA9LZtRO3o9n/s/78f+k+5gQ2gNyh4dQRaAZhmnQwD6A6ZMxTJZux1EdF6yHMC6XZpbWBygG+jjFcwbdpMtI8Uokd0aah6tjOKEzEjIu1oYgPHYiPDcoWGFI/iwKAsqdL1k8ZptSi7HAbM7h7b5IPfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772454693; c=relaxed/simple;
-	bh=Bz91gw/UFgJy37FjCpjZnDjcUFp6jGwPHip7wh8mhkY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kr2+iq45Jjf5nPtOnMAWPFsgkw6N2EfgBjqvoLQOYfVws860TWGMGXeAcqipXsmULZ9wj3PnJEYmj+1OkuEbtLVYYNm0kUdt+cwmxsEBUfIPzUMb9VgXYOeBD/1oJrYPQnsHD+JqNMY3jLf/iuo+cyAyDmhxEUd6GrRXutX4ixc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BYc6sk1G; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772455241; c=relaxed/simple;
+	bh=JMbovVkIHjyw1SkxJf+jyB5p2bx22jbBcT5wRY+P+dQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=swVjuDJDPfndPPoVgmUNzwE9KViTZMt5farx915a3Ms6OUIyJx1mX1qfkSLPXqn7IKJ4IiW8yRWdm4rxn2QbWlg5Oo2A0rLcpZcmRTbBEnELL2AShD00n1nnyUInfJW/+hEW16xpBSuyOg9VH1+PD+qquw4PFBhp9qE4NciXaQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YgFWjEzN; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BYc6sk1G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEF3C19423;
-	Mon,  2 Mar 2026 12:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772454693;
-	bh=Bz91gw/UFgJy37FjCpjZnDjcUFp6jGwPHip7wh8mhkY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BYc6sk1G5JvXe7EV0bBXgeIvOmOm/aBTwORKYd9hCZIlNl+PTdMYZPH8K7ATEf+ZT
-	 7RDFyc3omEwFCNL5HOQ6+PO+CHPdwl4bNxnaV9wD8cqmbyGhyRhKN1ThlsJhglR9J8
-	 cZ90WsIh2yHgB+9b9CrEkLswK4N7ptAR81imTGF6QRRx/zWX5fAJ4gdmvWORVoLGNN
-	 6dsP184C78kNi+t3iBreiZFL2iICfIDSQfhrRYsQ7Tek78zQfnDh0RLH00ZlFghJOv
-	 0UtJyoW5mwUvkGE59emtQvMpYVP2x/wOhV3dhrOJPAuCzmtIyClYkyF/2ezcI6M+s2
-	 aMOnOMKFWhVGg==
-From: Sasha Levin <sashal@kernel.org>
-To: Alice Ryhl <aliceryhl@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	driver-core@lists.linux.dev,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YgFWjEzN"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ae4d48dc2fso4404555ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 04:40:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772455240; x=1773060040; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEZZVDsX2jfTU9OZR6R9bxtazsvL2oFzaTbwqEvIxnU=;
+        b=YgFWjEzNFn6IhEs9pX8fFxIYZ8cotPD2pWWy1pdsBPLiy1z0Ax47HBrK+qnce+PNDf
+         633YtGqXjVYSuLdyfY+uF7GcrOQ3xu4/TDLSydQpzxOXZPP9anNwg21DsQyPWyE+nVRY
+         63SA0iSbxSFobsd7ap1ulhqtCFXIFOlDBwRsgmfwZiqOhe2RfBDL7hvtZb2q92hvgfXM
+         gjeUTJmOOGqN9jQ78hfs0BgDEQaV56KY0COfCnC2JeMfVdINq2jMbpTs+IAWxJrwc54e
+         6pr2B/ZLX4tMiO0FNkGTkdgN+QT6fGA/7I/lAf/xxcCCNXdJ0GS2o9nCwxTQlzVPrGLL
+         MHmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772455240; x=1773060040;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AEZZVDsX2jfTU9OZR6R9bxtazsvL2oFzaTbwqEvIxnU=;
+        b=ia23fDR7hcOGZyzwWaX4oKBcPOYYpKju24nsfMKHUM+ZILBoPGL+igDMQWgMBZGUv6
+         EfDUQ0PJ9e8YFTIk1c+0hHxZr/qQttjbucKjVGq4M3P3NrKFzhZp2stAurCa9YvwrUuF
+         pIacFoMj2g18BHZE0k5nHK/jdq1IKOT1nzhhY1FxMJL1Mx/cQ0eHiVkGU0ep7xznT17N
+         Gx4m+nkUwq8nLk+jZKmo0o22AicxNzJ+ErbRbDy8JPej+R61PztbDp98acbJqcEMf7YG
+         0k8u4QH3r2h8j4+XO06I87ez2l7eznUq6FeHoUbtvh1r11P6RpEyXgk91E+ImsrbrkxL
+         cI1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVxPyx0CnX1+yUQV5q1sh03xdTtLGSmKToM16tCHoMS99+Ii16EYXaU6QvvQFBvmHtuukfimXBZhntBvp3CloE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwC3mzA40EQccYQYi0QyJyh64EyalCp5Dv56PXBpLa6NhLOSecR
+	DiqB11myH0kWrm6BKuTFlBEQ9IG5EtxHL/sDckFUOhL8MnNVhItGswieMsvdJg==
+X-Gm-Gg: ATEYQzxjylZwyFCM7cdqnIb+YNKzPFvAxB5wmPNksgKKuLq/wslIotroB2+XJ9bO7Yd
+	QBaIbGPIqwR2du7I7GytRLU5TilN0/yn0Ep0EPshBk1drzfF1xWcmX/lDU7cbtSqrUDDTggW5tt
+	HVpa2SXR2DHlv37uh2SgEKtOY1/RYzlKBk1nsqVB1SfUNd5bypRJQWI4sOGnQoZHqwWKDmgdPYE
+	ZBrWyOOeMWLVc/Dl1b7xSB/bGL+M67Dl6VoVgR82s/iFPZHwfI8v//eh6801uRIkiW4vW/QSyHv
+	7xihpIoxqQE3h2MjHdi/zknvCO5Ubznw2uJk52UCD7KRjs8Jh/LocTV7YVVXrmQsPtwpddTqUHp
+	8TPALVFWrpugbZVkeDQKV+Mmh0TsX052EYz/+KxFkwZlZg7eRbK+u9WLzxARx0zbSds5uYzDt4P
+	TrxLRvrXz8jY91R/+JyZLUiTuBViBl+qNQtJh2okRpQrus7h5ArEYZhg==
+X-Received: by 2002:a17:903:1110:b0:2a9:616c:1711 with SMTP id d9443c01a7336-2ae2e3f75fdmr136529535ad.42.1772455240071;
+        Mon, 02 Mar 2026 04:40:40 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae3d1956absm67910225ad.14.2026.03.02.04.40.33
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 02 Mar 2026 04:40:39 -0800 (PST)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Sasha Levin <sashal@kernel.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Gow <davidgow@google.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: Re: [CRASH] kunit failures in platform-device-devm
-Date: Mon,  2 Mar 2026 07:31:24 -0500
-Message-ID: <20260302123125.2282292-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <aaRH-aXYKntYyjRS@google.com>
-References: <aaRH-aXYKntYyjRS@google.com>
+Subject: [PATCH v3 0/6] bpf: Extend the bpf_list family of APIs
+Date: Mon,  2 Mar 2026 20:40:22 +0800
+Message-ID: <20260302124028.82420-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This response was AI-generated by bug-bot. The analysis may contain errors - please verify independently.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Hi Alice,
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported. The patches enhance the BPF list API, making it more
+list-like.
 
-Thanks for the detailed report. Here is my analysis.
+Five new kfuncs have been added:
+bpf_list_del: remove a node from the list
+bpf_list_add_impl: insert a node after a given list node
+bpf_list_is_first: check if a node is the first in the list
+bpf_list_is_last: check if a node is the last in the list
+bpf_list_empty: check if the list is empty
 
-___
+Changes in v3:
+- Add a new lock_rec member to struct bpf_reference_state for lock
+  holding detection.
+- Add test cases to verify that the verifier correctly restricts calls
+  to bpf_list_del when the spin_lock is not held.
 
-1. Bug Summary
+Changes in v2:
+- Remove the head parameter from bpf_list_del
+- Add bpf_list_add/is_first/is_last/empty to API and test cases
 
-The platform-device-devm kunit test suite crashes with a general
-protection fault in queued_spin_lock_slowpath() during device
-registration, followed by cascading failures including sysfs duplicate
-filename errors. The root issue is test isolation: earlier kunit tests
-(including the intentional NULL dereference in kunit_test_null_dereference)
-corrupt kernel state, and the platform-device-devm tests use raw
-platform device APIs without kunit-managed cleanup, so they cannot
-recover from or survive this corrupted state. The severity is a test
-infrastructure issue, not a driver core bug.
+Link to v2:
+https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
 
-2. Stack Trace Analysis
+Link to v1:
+https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
 
-First crash (Oops #3 — two earlier oopses already occurred):
+Kaitao Cheng (6):
+  bpf: Introduce the bpf_list_del kfunc.
+  selftests/bpf: Add test cases for bpf_list_del
+  bpf: add bpf_list_add_impl to insert node after a given list node
+  selftests/bpf: Add test case for bpf_list_add_impl
+  bpf: add bpf_list_is_first/last/empty kfuncs
+  selftests/bpf: Add test cases for bpf_list_is_first/is_last/empty
 
-  Oops: general protection fault, probably for non-canonical address 0xb4c3c33fcc9f57f6: 0000 [#3] SMP PTI
-  CPU: 0 UID: 0 PID: 2500 Comm: kunit_try_catch Tainted: G      D  W        N  7.0.0-rc1-00138-g0c21570fbd3d-dirty #3 PREEMPT(lazy)
-  Tainted: [D]=DIE, [W]=WARN, [N]=TEST
-  RIP: 0010:queued_spin_lock_slowpath+0x120/0x1c0
-  RAX: b4c3c340405a5a26 RBX: ffffb222800e3ce8 RCX: 0000000000050000
-  RDX: ffffa0a4fec1ddd0 RSI: 0000000000000010 RDI: ffffa0a4c2b43340
-  Call Trace:
-   <TASK>
-   klist_iter_exit+0x2c/0x70
-   ? __pfx___device_attach_driver+0x10/0x10
-   bus_for_each_drv+0x12a/0x160
-   __device_attach+0xbf/0x160
-   device_initial_probe+0x2f/0x50
-   bus_probe_device+0x8f/0x110
-   device_add+0x23f/0x3d0
-   platform_device_add+0x137/0x1d0
-   platform_device_devm_register_unregister_test+0x6c/0x2e0
-   kunit_try_run_case+0x8f/0x190
-   kunit_generic_run_threadfn_adapter+0x1d/0x40
-   kthread+0x142/0x160
-   ret_from_fork+0xc7/0x1f0
-   ret_from_fork_asm+0x1a/0x30
-   </TASK>
+ include/linux/bpf_verifier.h                  |   4 +
+ kernel/bpf/btf.c                              |  33 +++-
+ kernel/bpf/helpers.c                          |  92 +++++++++++
+ kernel/bpf/verifier.c                         |  76 ++++++++-
+ .../testing/selftests/bpf/bpf_experimental.h  |  39 +++++
+ .../selftests/bpf/progs/refcounted_kptr.c     | 149 ++++++++++++++++++
+ 6 files changed, 385 insertions(+), 8 deletions(-)
 
-The crash point is in queued_spin_lock_slowpath() at
-kernel/locking/qspinlock.c, called from klist_iter_exit() at
-lib/klist.c:311. RAX holds non-canonical address 0xb4c3c340405a5a26,
-indicating corrupted klist data. The calling chain is process context:
-platform_device_devm_register_unregister_test() calls
-platform_device_add() -> device_add() -> bus_probe_device() ->
-__device_attach() -> bus_for_each_drv() (drivers/base/bus.c:420)
-which iterates the bus's klist_drivers. During klist_iter_exit(),
-it tries to acquire the klist spinlock and hits corrupted memory.
-
-Second failure (duplicate sysfs entry):
-
-  sysfs: cannot create duplicate filename '/devices/platform/test'
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x2d/0x70
-   sysfs_create_dir_ns+0xe8/0x130
-   kobject_add_internal+0x1dd/0x360
-   kobject_add+0x88/0xf0
-   device_add+0x171/0x3d0
-   platform_device_add+0x137/0x1d0
-   platform_device_devm_register_get_unregister_with_devm_test+0x6c/0x2f0
-   kunit_try_run_case+0x8f/0x190
-   kunit_generic_run_threadfn_adapter+0x1d/0x40
-   kthread+0x142/0x160
-   ret_from_fork+0xc7/0x1f0
-   ret_from_fork_asm+0x1a/0x30
-   </TASK>
-
-The assertion at drivers/base/test/platform-device-test.c:97 fails
-with ret == -17 (EEXIST) because the first test crashed without
-unregistering its device, leaving "/devices/platform/test" in sysfs.
-
-3. Root Cause Analysis
-
-This is a test isolation problem, not a driver core bug. Two issues
-combine to cause the failures:
-
-(a) Corrupted kernel state from earlier oopses. The Oops header shows
-"[#3]" meaning this is the third kernel oops during the boot. The
-taint flags [D]=DIE and [W]=WARN confirm prior fatal faults. The
-kunit_test_null_dereference() function in lib/kunit/kunit-test.c:117
-intentionally dereferences NULL to test kunit's fault handling. After
-multiple oopses, kernel data structures (including the platform bus
-klist) can be corrupted, which explains the non-canonical address
-(0xb4c3c33fcc9f57f6) seen during spinlock acquisition.
-
-(b) Missing test-managed cleanup. The four tests in
-platform_device_devm_test_suite all use the raw kernel APIs
-platform_device_alloc() and platform_device_add() directly, and all
-use the same hardcoded name "test" with PLATFORM_DEVID_NONE
-(drivers/base/test/platform-device-test.c:62-77). If a test crashes
-before reaching platform_device_unregister(), the device remains
-registered and subsequent tests cannot register a device with the
-same name.
-
-By contrast, the platform_device_find_by_null_test() in the same
-file already uses the kunit-managed helpers kunit_platform_device_alloc()
-and kunit_platform_device_add() from lib/kunit/platform.c (added in
-commit 5ac79730324c "platform: Add test managed platform_device/driver
-APIs"), which automatically unregister the device when the test exits,
-even on crash.
-
-4. Affected Versions
-
-The platform-device-devm tests were introduced in commit b4cc44301b9d
-("drivers: base: Add basic devm tests for platform devices") by
-Maxime Ripard, which predates the kunit-managed platform device helpers
-from commit 5ac79730324c. All kernel versions containing these tests
-are affected by this test isolation issue. This is not a regression in
-the driver core itself.
-
-5. Relevant Commits and Fixes
-
-- b4cc44301b9d ("drivers: base: Add basic devm tests for platform devices")
-  Introduced the test suite with raw platform device APIs.
-
-- 699fb50d99039 ("drivers: base: Free devm resources when unregistering a device")
-  Fixed devm resource release for unprobed devices; updated test expectations.
-
-- 5ac79730324c ("platform: Add test managed platform_device/driver APIs")
-  Added kunit_platform_device_alloc()/kunit_platform_device_add()
-  helpers that automatically clean up on test exit.
-
-- 86a5f32ed8813 ("drivers: base: test: Add ...find_device_by...(... NULL) tests")
-  Added platform_device_find_by_null_test which already uses the
-  kunit-managed helpers correctly.
-
-No fix for this specific test isolation issue exists in mainline yet.
-
-6. Suggested Actions
-
-The devm tests should be updated to use the kunit-managed platform
-device helpers (kunit_platform_device_alloc/kunit_platform_device_add)
-from include/kunit/platform_device.h, similar to how
-platform_device_find_by_null_test() already does. This would ensure
-proper cleanup even when tests crash.
-
-One subtlety: the devm tests specifically test the behavior of
-platform_device_unregister() releasing devm resources, so
-kunit_platform_device_add() (which auto-unregisters) needs to be
-used carefully — the kunit cleanup action should be removed or
-disabled before the explicit unregister call to avoid double-free.
-Alternatively, each test could use a unique device name via
-PLATFORM_DEVID_AUTO to at least prevent the cascading sysfs duplicate
-errors.
-
-For the probed tests (probed_platform_device_devm_register_unregister_test
-and probed_platform_device_devm_register_get_unregister_with_devm_test),
-there is a similar need to register/unregister the fake_driver with
-kunit-managed helpers like kunit_platform_driver_register().
-
-In the short term, you can work around this by running the
-platform-device-devm suite in isolation:
-
-  ./tools/testing/kunit/kunit.py run --make_options LLVM=1 \
-    --arch x86_64 --kconfig_add CONFIG_RUST=y \
-    --kconfig_add CONFIG_PCI=y platform-device-devm
-
-This avoids the corrupted state from earlier intentional-crash tests.
+-- 
+2.50.1 (Apple Git-155)
 
