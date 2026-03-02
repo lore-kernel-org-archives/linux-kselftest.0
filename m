@@ -1,346 +1,330 @@
-Received: from mail-244123.protonmail.ch (mail-244123.protonmail.ch [109.224.244.123])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BD43FB06B;
-	Mon,  2 Mar 2026 15:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E167732861F
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 15:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772465715; cv=none; b=uRROnmOMQ32HKgHaBCiS4grTm7VkXVUlVYnDZxNGP5ljatW+EIy8XY3492mh21zeh27lhnqAdH6c6xxC9B5zjH+vZK9tBRrSSvztfSyNtD+OYAkkXiHoZVrFLk6kMq4gvoQFrXSmZ+fF6e1OfLLPFPDA5dZQfPvxcZEqAh1bCmk=
+	t=1772466064; cv=none; b=GLpoARj24zYIITCZLmdwQYo9chH9NlxiWj6mqJx6nKS6d4irApVomQx9MFRp7qwRCao59pxiI8QYDi1R6+pd4Yve+gTjlN398BJlVTT0yyYNYFa7tS+aOdQ1xNRnY+Smx9+b62NiBrr4CC7WpoJMsWmVjOaSfvcqRHxB+FPu0dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772465715; c=relaxed/simple;
-	bh=V+LNXsXOHKt3EuWsssm3765WRGWiyJ+ep2LC3/3pV64=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o4RixDIUkGQDWcCUFsyfwWzFjBhBAJaNbdL7xh1O+RnvdGsh8LE23p/blX6+j37zXgNDqE8ZtHW+/oAqjmWbQsxsTjH/98SBYDZWFiWR96XyOz5YpBMU4ZUEjxUZoWuy6eyeABX0jgp//sB7mm591C4bIYW2MBYCJOAbwecge50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=JvJxCsc7; arc=none smtp.client-ip=109.224.244.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1772466064; c=relaxed/simple;
+	bh=Sn79Tp4j4e37SQOpZGw6KBv32AznSaZqQjez4uDw8UU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Q8DAM+yy7hOGKAq4DJTxzdV5GAdTdAeHUpcCcd8gWdibWXssE8HQvAr9e94e6afJcrtfXzB6Gftuemq3EuW4BRhqtW0rHiHUSF7LrncDuYpFfXMX9iwRuuLglNZdPU0uMRYv9uwK2xHmgKDs447DnQht8WY78q5cl4GHGFbrPLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EN6PxeIR; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="JvJxCsc7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1772465711; x=1772724911;
-	bh=Ls78EiQXIyqbG4RhJ8iCingmqRLVnCcv62L4JbYTdKM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=JvJxCsc7XOhhqtKbRgaAX6ezOKuuBaDGEji41qAuCY6DPgwo9QlFpmj6Lz4otAiVW
-	 Ifuavq3yJaOj4ARrDVP65sHhSlyeF2NMNgkdm7odE6YqWfsoTDCkL56RF8duzWCvJk
-	 GiD3dFVcCr0gGmLnCbfo4WFiKF4WR0rMvZ6kysNZ+Gk71uiFic4ai7yh3xEk/lsFGK
-	 tIQh90HGCeW9lVBnDBtXl705sGtiPP7YSZp1hFo8ppvQcW7PYaVzyBH+O3NKz2RkKA
-	 hkVqLXQcA8wPTzHCjRAGb61iTE42xaGubeHR8f+YOmYVxqersfDWHG2Tz32jGe+Csj
-	 Sxv17N/WVfydw==
-Date: Mon, 02 Mar 2026 15:35:05 +0000
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: m.wieczorretman@pm.me, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 3/3] selftests/lam: Add test cases for different LAM tag widths
-Message-ID: <954217ee970deb94d5e11d1260fc885732f6b1dd.1772465456.git.m.wieczorretman@pm.me>
-In-Reply-To: <cover.1772465456.git.m.wieczorretman@pm.me>
-References: <cover.1772465456.git.m.wieczorretman@pm.me>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 09891961c6297dc0df6c16095e88f03339a858bb
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EN6PxeIR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772466061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jGDe4JIc5UBthN6hNfTBDgbGPk6BWkYMi6VpaUo3v2k=;
+	b=EN6PxeIRkBYS0L92zd1SE70lMyww0cDphjmoQrxL2qnxBAJbM8V3gjIsBfXv/I+zoi2mPB
+	v7Ea6aRMMWutLz40HTkSEZXtSR+D5UbHA52888XYycrnQV1/PnUTjrR1sywDPdY+d44ejT
+	yIHcouXNhZizw9dSjETetVviXZ3bsbU=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-1-s5WJt1DOOcidKUj6rskWYQ-1; Mon,
+ 02 Mar 2026 10:40:57 -0500
+X-MC-Unique: s5WJt1DOOcidKUj6rskWYQ-1
+X-Mimecast-MFC-AGG-ID: s5WJt1DOOcidKUj6rskWYQ_1772466052
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 97F6618003FC;
+	Mon,  2 Mar 2026 15:40:51 +0000 (UTC)
+Received: from [10.22.65.79] (unknown [10.22.65.79])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 39DCB30001B9;
+	Mon,  2 Mar 2026 15:40:45 +0000 (UTC)
+Message-ID: <3936bd39-2e1c-44b7-8098-e8e950a6df11@redhat.com>
+Date: Mon, 2 Mar 2026 10:40:45 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 8/8] cgroup/cpuset: Call housekeeping_update() without
+ holding cpus_read_lock
+From: Waiman Long <longman@redhat.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260221185418.29319-1-longman@redhat.com>
+ <20260221185418.29319-9-longman@redhat.com> <aaV/Jme7NAooNxZQ@lothringen>
+ <69ec4b3c-818b-4784-9b90-1ac5e977ae58@redhat.com>
+Content-Language: en-US
+In-Reply-To: <69ec4b3c-818b-4784-9b90-1ac5e977ae58@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+On 3/2/26 9:15 AM, Waiman Long wrote:
+> On 3/2/26 7:14 AM, Frederic Weisbecker wrote:
+>> On Sat, Feb 21, 2026 at 01:54:18PM -0500, Waiman Long wrote:
+>>> The current cpuset partition code is able to dynamically update
+>>> the sched domains of a running system and the corresponding
+>>> HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
+>>> "isolcpus=domain,..." boot command line feature at run time.
+>>>
+>>> The housekeeping cpumask update requires flushing a number of different
+>>> workqueues which may not be safe with cpus_read_lock() held as the
+>>> workqueue flushing code may acquire cpus_read_lock() or acquiring locks
+>>> which have locking dependency with cpus_read_lock() down the chain. 
+>>> Below
+>>> is an example of such circular locking problem.
+>>>
+>>>    ======================================================
+>>>    WARNING: possible circular locking dependency detected
+>>>    6.18.0-test+ #2 Tainted: G S
+>>>    ------------------------------------------------------
+>>>    test_cpuset_prs/10971 is trying to acquire lock:
+>>>    ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at: 
+>>> touch_wq_lockdep_map+0x7a/0x180
+>>>
+>>>    but task is already holding lock:
+>>>    ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: 
+>>> cpuset_partition_write+0x85/0x130
+>>>
+>>>    which lock already depends on the new lock.
+>>>
+>>>    the existing dependency chain (in reverse order) is:
+>>>    -> #4 (cpuset_mutex){+.+.}-{4:4}:
+>>>    -> #3 (cpu_hotplug_lock){++++}-{0:0}:
+>>>    -> #2 (rtnl_mutex){+.+.}-{4:4}:
+>>>    -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
+>>>    -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
+>>>
+>>>    Chain exists of:
+>>>      (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
+>> Which workqueue is involved here that holds rtnl_mutex?
+>> Is this an existing problem or added test code?
+>
+> Circular locking dependency here may not necessarily mean that 
+> rtnl_mutex is directly used in a work function.  However it can be 
+> used in a locking chain involving multiple parties that can result in 
+> a deadlock situation if they happen in the right order. So it is 
+> better safe that sorry even if the chance of this occurrence is minimal. 
 
-After the default tag width in LAM (Linear Address Masking) is set to 4
-bits, the value isn't strictly related to the CPU features like LAM_U57
-or LAM_U48. To emphasise this, remove mentions of _U57 from the selftest
-and update the bit width.
+Below is the full lockdep splat, I didn't include the individual stack 
+traces to make the commit log less verbose.
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v3:
-- Redo the patch after the removal of the debugfs part.
+The rtnl_mutex is indeed involved in local_pci_probe().
 
- tools/testing/selftests/x86/lam.c | 86 +++++++++++++++----------------
- 1 file changed, 43 insertions(+), 43 deletions(-)
+Cheers,
+Longman
 
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x8=
-6/lam.c
-index 1919fa6daec0..d8f75387b931 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -26,9 +26,9 @@
-=20
- /* LAM modes, these definitions were copied from kernel code */
- #define LAM_NONE                0
--#define LAM_U57_BITS            6
-+#define LAM_BITS                4
-=20
--#define LAM_U57_MASK            (0x3fULL << 57)
-+#define LAM_MASK                (0xfULL << 57)
- /* arch prctl for LAM */
- #define ARCH_GET_UNTAG_MASK     0x4001
- #define ARCH_ENABLE_TAGGED_ADDR 0x4002
-@@ -175,7 +175,7 @@ static int set_lam(unsigned long lam)
- =09int ret =3D 0;
- =09uint64_t ptr =3D 0;
-=20
--=09if (lam !=3D LAM_U57_BITS && lam !=3D LAM_NONE)
-+=09if (lam !=3D LAM_BITS && lam !=3D LAM_NONE)
- =09=09return -1;
-=20
- =09/* Skip check return */
-@@ -185,8 +185,8 @@ static int set_lam(unsigned long lam)
- =09syscall(SYS_arch_prctl, ARCH_GET_UNTAG_MASK, &ptr);
-=20
- =09/* Check mask returned is expected */
--=09if (lam =3D=3D LAM_U57_BITS)
--=09=09ret =3D (ptr !=3D ~(LAM_U57_MASK));
-+=09if (lam =3D=3D LAM_BITS)
-+=09=09ret =3D (ptr !=3D ~(LAM_MASK));
- =09else if (lam =3D=3D LAM_NONE)
- =09=09ret =3D (ptr !=3D -1ULL);
-=20
-@@ -204,8 +204,8 @@ static unsigned long get_default_tag_bits(void)
- =09=09perror("Fork failed.");
- =09} else if (pid =3D=3D 0) {
- =09=09/* Set LAM mode in child process */
--=09=09if (set_lam(LAM_U57_BITS) =3D=3D 0)
--=09=09=09lam =3D LAM_U57_BITS;
-+=09=09if (set_lam(LAM_BITS) =3D=3D 0)
-+=09=09=09lam =3D LAM_BITS;
- =09=09else
- =09=09=09lam =3D LAM_NONE;
- =09=09exit(lam);
-@@ -230,8 +230,8 @@ static int get_lam(void)
- =09=09return -1;
-=20
- =09/* Check mask returned is expected */
--=09if (ptr =3D=3D ~(LAM_U57_MASK))
--=09=09ret =3D LAM_U57_BITS;
-+=09if (ptr =3D=3D ~(LAM_MASK))
-+=09=09ret =3D LAM_BITS;
- =09else if (ptr =3D=3D -1ULL)
- =09=09ret =3D LAM_NONE;
-=20
-@@ -247,10 +247,10 @@ static uint64_t set_metadata(uint64_t src, unsigned l=
-ong lam)
- =09srand(time(NULL));
-=20
- =09switch (lam) {
--=09case LAM_U57_BITS: /* Set metadata in bits 62:57 */
-+=09case LAM_BITS: /* Set metadata in bits 62:57 */
- =09=09/* Get a random non-zero value as metadata */
--=09=09metadata =3D (rand() % ((1UL << LAM_U57_BITS) - 1) + 1) << 57;
--=09=09metadata |=3D (src & ~(LAM_U57_MASK));
-+=09=09metadata =3D (rand() % ((1UL << LAM_BITS) - 1) + 1) << 57;
-+=09=09metadata |=3D (src & ~(LAM_MASK));
- =09=09break;
- =09default:
- =09=09metadata =3D src;
-@@ -291,7 +291,7 @@ int handle_max_bits(struct testcases *test)
- =09unsigned long bits =3D 0;
-=20
- =09if (exp_bits !=3D LAM_NONE)
--=09=09exp_bits =3D LAM_U57_BITS;
-+=09=09exp_bits =3D LAM_BITS;
-=20
- =09/* Get LAM max tag bits */
- =09if (syscall(SYS_arch_prctl, ARCH_GET_MAX_TAG_BITS, &bits) =3D=3D -1)
-@@ -719,8 +719,8 @@ int do_uring(unsigned long lam)
- =09=09=09uint64_t addr =3D ((uint64_t)fi->iovecs[i].iov_base);
-=20
- =09=09=09switch (lam) {
--=09=09=09case LAM_U57_BITS: /* Clear bits 62:57 */
--=09=09=09=09addr =3D (addr & ~(LAM_U57_MASK));
-+=09=09=09case LAM_BITS: /* Clear bits 62:57 */
-+=09=09=09=09addr =3D (addr & ~(LAM_MASK));
- =09=09=09=09break;
- =09=09=09}
- =09=09=09free((void *)addr);
-@@ -937,14 +937,14 @@ static void run_test(struct testcases *test, int coun=
-t)
- static struct testcases uring_cases[] =3D {
- =09{
- =09=09.later =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_uring,
--=09=09.msg =3D "URING: LAM_U57. Dereferencing pointer with metadata\n",
-+=09=09.msg =3D "URING: LAM. Dereferencing pointer with metadata\n",
- =09},
- =09{
- =09=09.later =3D 1,
- =09=09.expected =3D 1,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_uring,
- =09=09.msg =3D "URING:[Negative] Disable LAM. Dereferencing pointer with m=
-etadata.\n",
- =09},
-@@ -953,14 +953,14 @@ static struct testcases uring_cases[] =3D {
- static struct testcases malloc_cases[] =3D {
- =09{
- =09=09.later =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_malloc,
--=09=09.msg =3D "MALLOC: LAM_U57. Dereferencing pointer with metadata\n",
-+=09=09.msg =3D "MALLOC: LAM. Dereferencing pointer with metadata\n",
- =09},
- =09{
- =09=09.later =3D 1,
- =09=09.expected =3D 2,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_malloc,
- =09=09.msg =3D "MALLOC:[Negative] Disable LAM. Dereferencing pointer with =
-metadata.\n",
- =09},
-@@ -976,41 +976,41 @@ static struct testcases bits_cases[] =3D {
- static struct testcases syscall_cases[] =3D {
- =09{
- =09=09.later =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_syscall,
--=09=09.msg =3D "SYSCALL: LAM_U57. syscall with metadata\n",
-+=09=09.msg =3D "SYSCALL: LAM. syscall with metadata\n",
- =09},
- =09{
- =09=09.later =3D 1,
- =09=09.expected =3D 1,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_syscall,
- =09=09.msg =3D "SYSCALL:[Negative] Disable LAM. Dereferencing pointer with=
- metadata.\n",
- =09},
- =09{
- =09=09.later =3D GET_USER_USER,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D get_user_syscall,
- =09=09.msg =3D "GET_USER: get_user() and pass a properly tagged user point=
-er.\n",
- =09},
- =09{
- =09=09.later =3D GET_USER_KERNEL_TOP,
- =09=09.expected =3D 1,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D get_user_syscall,
- =09=09.msg =3D "GET_USER:[Negative] get_user() with a kernel pointer and t=
-he top bit cleared.\n",
- =09},
- =09{
- =09=09.later =3D GET_USER_KERNEL_BOT,
- =09=09.expected =3D 1,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D get_user_syscall,
- =09=09.msg =3D "GET_USER:[Negative] get_user() with a kernel pointer and t=
-he bottom sign-extension bit cleared.\n",
- =09},
- =09{
- =09=09.later =3D GET_USER_KERNEL,
- =09=09.expected =3D 1,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D get_user_syscall,
- =09=09.msg =3D "GET_USER:[Negative] get_user() and pass a kernel pointer.\=
-n",
- =09},
-@@ -1020,60 +1020,60 @@ static struct testcases mmap_cases[] =3D {
- =09{
- =09=09.later =3D 1,
- =09=09.expected =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.addr =3D HIGH_ADDR,
- =09=09.test_func =3D handle_mmap,
--=09=09.msg =3D "MMAP: First mmap high address, then set LAM_U57.\n",
-+=09=09.msg =3D "MMAP: First mmap high address, then set LAM.\n",
- =09},
- =09{
- =09=09.later =3D 0,
- =09=09.expected =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.addr =3D HIGH_ADDR,
- =09=09.test_func =3D handle_mmap,
--=09=09.msg =3D "MMAP: First LAM_U57, then High address.\n",
-+=09=09.msg =3D "MMAP: First LAM, then High address.\n",
- =09},
- =09{
- =09=09.later =3D 0,
- =09=09.expected =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.addr =3D LOW_ADDR,
- =09=09.test_func =3D handle_mmap,
--=09=09.msg =3D "MMAP: First LAM_U57, then Low address.\n",
-+=09=09.msg =3D "MMAP: First LAM, then Low address.\n",
- =09},
- };
-=20
- static struct testcases inheritance_cases[] =3D {
- =09{
- =09=09.expected =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_inheritance,
--=09=09.msg =3D "FORK: LAM_U57, child process should get LAM mode same as p=
-arent\n",
-+=09=09.msg =3D "FORK: LAM, child process should get LAM mode same as paren=
-t\n",
- =09},
- =09{
- =09=09.expected =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_thread,
--=09=09.msg =3D "THREAD: LAM_U57, child thread should get LAM mode same as =
-parent\n",
-+=09=09.msg =3D "THREAD: LAM, child thread should get LAM mode same as pare=
-nt\n",
- =09},
- =09{
- =09=09.expected =3D 1,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_thread_enable,
- =09=09.msg =3D "THREAD: [NEGATIVE] Enable LAM in child.\n",
- =09},
- =09{
- =09=09.expected =3D 1,
- =09=09.later =3D 1,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_thread,
- =09=09.msg =3D "THREAD: [NEGATIVE] Enable LAM in parent after thread creat=
-ed.\n",
- =09},
- =09{
- =09=09.expected =3D 0,
--=09=09.lam =3D LAM_U57_BITS,
-+=09=09.lam =3D LAM_BITS,
- =09=09.test_func =3D handle_execve,
--=09=09.msg =3D "EXECVE: LAM_U57, child process should get disabled LAM mod=
-e\n",
-+=09=09.msg =3D "EXECVE: LAM, child process should get disabled LAM mode\n"=
-,
- =09},
- };
-=20
-@@ -1224,7 +1224,7 @@ int handle_pasid(struct testcases *test)
- =09=09if (tmp & 0x1) {
- =09=09=09/* run set lam mode*/
- =09=09=09if ((runed & 0x1) =3D=3D 0)=09{
--=09=09=09=09err =3D set_lam(LAM_U57_BITS);
-+=09=09=09=09err =3D set_lam(LAM_BITS);
- =09=09=09=09runed =3D runed | 0x1;
- =09=09=09} else
- =09=09=09=09err =3D 1;
---=20
-2.53.0
+[  909.360022] ======================================================
+[  909.366208] WARNING: possible circular locking dependency detected
+[  909.372387] 7.0.0-rc1-test+ #3 Tainted: G S
+[  909.378044] ------------------------------------------------------
+[  909.384225] test_cpuset_prs/8673 is trying to acquire lock:
+[  909.389798] ffff8890b0fd6558 ((wq_completion)sync_wq){+.+.}-{0:0}, 
+at: touch_wq_lockdep_map+0x7a/0x180
+[  909.399114]
+                but task is already holding lock:
+[  909.404946] ffffffffb9741c10 (cpuset_mutex){+.+.}-{4:4}, at: 
+cpuset_partition_write+0x85/0x130
+[  909.413562]
+                which lock already depends on the new lock.
 
+[  909.421733]
+                the existing dependency chain (in reverse order) is:
+[  909.429213]
+                -> #4 (cpuset_mutex){+.+.}-{4:4}:
+[  909.435056]        __lock_acquire+0x58c/0xbd0
+[  909.439421]        lock_acquire.part.0+0xbd/0x260
+[  909.444129]        __mutex_lock+0x1a7/0x1ba0
+[  909.448411]        cpuset_css_online+0x59/0x410
+[  909.452948]        online_css+0x9b/0x2d0
+[  909.456877]        css_create+0x3c6/0x610
+[  909.460895]        cgroup_apply_control_enable+0x2ff/0x460
+[  909.466384]        cgroup_subtree_control_write+0x79a/0xc70
+[  909.471963]        cgroup_file_write+0x1a5/0x680
+[  909.476582]        kernfs_fop_write_iter+0x3df/0x5f0
+[  909.481550]        vfs_write+0x525/0xfd0
+[  909.485482]        ksys_write+0xf9/0x1d0
+[  909.489410]        do_syscall_64+0x13a/0x1520
+[  909.493778]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  909.499361]
+                -> #3 (cpu_hotplug_lock){++++}-{0:0}:
+[  909.505547]        __lock_acquire+0x58c/0xbd0
+[  909.509914]        lock_acquire.part.0+0xbd/0x260
+[  909.514630]        cpus_read_lock+0x40/0xe0
+[  909.518824]        flush_all_backlogs+0x83/0x4b0
+[  909.523451] unregister_netdevice_many_notify+0x7e8/0x1fa0
+[  909.529465]        default_device_exit_batch+0x356/0x490
+[  909.534788]        ops_undo_list+0x2f4/0x930
+[  909.539067]        cleanup_net+0x40a/0x8f0
+[  909.543168]        process_one_work+0xd8b/0x1320
+[  909.547795]        worker_thread+0x5f3/0xfe0
+[  909.552068]        kthread+0x36c/0x470
+[  909.555830]        ret_from_fork+0x5dc/0x8e0
+[  909.560109]        ret_from_fork_asm+0x1a/0x30
+[  909.564557]
+                -> #2 (rtnl_mutex){+.+.}-{4:4}:
+[  909.570224]        __lock_acquire+0x58c/0xbd0
+[  909.574592]        lock_acquire.part.0+0xbd/0x260
+[  909.579304]        __mutex_lock+0x1a7/0x1ba0
+[  909.583580]        rtnl_net_lock_killable+0x1e/0x70
+[  909.588465]        register_netdev+0x40/0x70
+[  909.592738]        i40e_vsi_setup+0x892/0x14b0 [i40e]
+[  909.597854]        i40e_setup_pf_switch+0xaa1/0xe80 [i40e]
+[  909.603392]        i40e_probe.cold+0xdb0/0x1d1b [i40e]
+[  909.608582]        local_pci_probe+0xdb/0x180
+[  909.612951]        local_pci_probe_callback+0x35/0x80
+[  909.618008]        process_one_work+0xd8b/0x1320
+[  909.622631]        worker_thread+0x5f3/0xfe0
+[  909.626912]        kthread+0x36c/0x470
+[  909.630673]        ret_from_fork+0x5dc/0x8e0
+[  909.634951]        ret_from_fork_asm+0x1a/0x30
+[  909.639399]
+                -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
+[  909.646627]        __lock_acquire+0x58c/0xbd0
+[  909.650994]        lock_acquire.part.0+0xbd/0x260
+[  909.655699]        process_one_work+0xd58/0x1320
+[  909.660321]        worker_thread+0x5f3/0xfe0
+[  909.664602]        kthread+0x36c/0x470
+[  909.668363]        ret_from_fork+0x5dc/0x8e0
+[  909.672641]        ret_from_fork_asm+0x1a/0x30
+[  909.677089]
+                -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
+[  909.683795]        check_prev_add+0xf1/0xc80
+[  909.688068]        validate_chain+0x481/0x560
+[  909.692431]        __lock_acquire+0x58c/0xbd0
+[  909.696797]        lock_acquire.part.0+0xbd/0x260
+[  909.701511]        touch_wq_lockdep_map+0x93/0x180
+[  909.706314]        __flush_workqueue+0x111/0x10b0
+[  909.711026]        housekeeping_update+0x12d/0x2d0
+[  909.715819]        update_parent_effective_cpumask+0x595/0x2440
+[  909.721747]        update_prstate+0x89d/0xce0
+[  909.726105]        cpuset_partition_write+0xc5/0x130
+[  909.731073]        cgroup_file_write+0x1a5/0x680
+[  909.735701]        kernfs_fop_write_iter+0x3df/0x5f0
+[  909.740664]        vfs_write+0x525/0xfd0
+[  909.744592]        ksys_write+0xf9/0x1d0
+[  909.748520]        do_syscall_64+0x13a/0x1520
+[  909.752887]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  909.758465]
+                other info that might help us debug this:
+
+[  909.766466] Chain exists of:
+                  (wq_completion)sync_wq --> cpu_hotplug_lock --> 
+cpuset_mutex
+
+[  909.777679]  Possible unsafe locking scenario:
+
+[  909.783599]        CPU0                    CPU1
+[  909.788130]        ----                    ----
+[  909.792666]   lock(cpuset_mutex);
+[  909.795991] lock(cpu_hotplug_lock);
+[  909.802171]                                lock(cpuset_mutex);
+[  909.808013]   lock((wq_completion)sync_wq);
+[  909.812207]
+                 *** DEADLOCK ***
+
+[  909.818127] 5 locks held by test_cpuset_prs/8673:
+[  909.822830]  #0: ffff888140592440 (sb_writers#7){.+.+}-{0:0}, at: 
+ksys_write+0xf9/0x1d0
+[  909.830839]  #1: ffff889100a49890 (&of->mutex#2){+.+.}-{4:4}, at: 
+kernfs_fop_write_iter+0x260/0x5f0
+[  909.839890]  #2: ffff8890fbfa5368 (kn->active#353){.+.+}-{0:0}, at: 
+kernfs_fop_write_iter+0x2b6/0x5f0
+[  909.849118]  #3: ffffffffb9134d00 (cpu_hotplug_lock){++++}-{0:0}, at: 
+cpuset_partition_write+0x77/0x130
+[  909.858522]  #4: ffffffffb9741c10 (cpuset_mutex){+.+.}-{4:4}, at: 
+cpuset_partition_write+0x85/0x130
+[  909.867576]
+                stack backtrace:
+[  909.871940] CPU: 95 UID: 0 PID: 8673 Comm: test_cpuset_prs Kdump: 
+loaded Tainted: G S                  7.0.0-rc1-test+ #3 PREEMPT(full)
+[  909.871946] Tainted: [S]=CPU_OUT_OF_SPEC
+[  909.871948] Hardware name: Intel Corporation S2600WFD/S2600WFD, BIOS 
+SE5C620.86B.0X.02.0001.043020191705 04/30/2019
+[  909.871950] Call Trace:
+[  909.871952]  <TASK>
+[  909.871955]  dump_stack_lvl+0x6f/0xb0
+[  909.871961]  print_circular_bug.cold+0x38/0x45
+[  909.871968]  check_noncircular+0x146/0x160
+[  909.871975]  check_prev_add+0xf1/0xc80
+[  909.871978]  ? alloc_chain_hlocks+0x13e/0x1d0
+[  909.871982]  ? add_chain_cache+0x11c/0x300
+[  909.871986]  validate_chain+0x481/0x560
+[  909.871991]  __lock_acquire+0x58c/0xbd0
+[  909.871995]  ? lockdep_init_map_type+0x66/0x250
+[  909.872000]  lock_acquire.part.0+0xbd/0x260
+[  909.872004]  ? touch_wq_lockdep_map+0x7a/0x180
+[  909.872009]  ? rcu_is_watching+0x15/0xb0
+[  909.872013]  ? trace_rcu_sr_normal+0x1d5/0x2e0
+[  909.872018]  ? touch_wq_lockdep_map+0x7a/0x180
+[  909.872021]  ? lock_acquire+0x159/0x180
+[  909.872026]  ? touch_wq_lockdep_map+0x7a/0x180
+[  909.872030]  touch_wq_lockdep_map+0x93/0x180
+[  909.872034]  ? touch_wq_lockdep_map+0x7a/0x180
+[  909.872038]  __flush_workqueue+0x111/0x10b0
+[  909.872042]  ? local_clock_noinstr+0xd/0xe0
+[  909.872049]  ? __pfx___flush_workqueue+0x10/0x10
+[  909.872059]  housekeeping_update+0x12d/0x2d0
+[  909.872063]  update_parent_effective_cpumask+0x595/0x2440
+[  909.872070]  update_prstate+0x89d/0xce0
+[  909.872076]  ? __pfx_update_prstate+0x10/0x10
+[  909.872085]  cpuset_partition_write+0xc5/0x130
+[  909.872089]  cgroup_file_write+0x1a5/0x680
+[  909.872093]  ? __pfx_cgroup_file_write+0x10/0x10
+[  909.872097]  ? kernfs_fop_write_iter+0x2b6/0x5f0
+[  909.872102]  ? __pfx_cgroup_file_write+0x10/0x10
+[  909.872105]  kernfs_fop_write_iter+0x3df/0x5f0
+[  909.872109]  vfs_write+0x525/0xfd0
+[  909.872113]  ? __pfx_vfs_write+0x10/0x10
+[  909.872118]  ? __lock_acquire+0x58c/0xbd0
+[  909.872124]  ? find_held_lock+0x32/0x90
+[  909.872130]  ksys_write+0xf9/0x1d0
+[  909.872133]  ? __pfx_ksys_write+0x10/0x10
+[  909.872136]  ? lockdep_hardirqs_on+0x78/0x100
+[  909.872141]  ? do_syscall_64+0xde/0x1520
+[  909.872146]  do_syscall_64+0x13a/0x1520
+[  909.872151]  ? rcu_is_watching+0x15/0xb0
+[  909.872154]  ? entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  909.872157]  ? lockdep_hardirqs_on+0x78/0x100
+[  909.872161]  ? do_syscall_64+0x212/0x1520
+[  909.872166]  ? find_held_lock+0x32/0x90
+[  909.872170]  ? local_clock_noinstr+0xd/0xe0
+[  909.872174]  ? __lock_release.isra.0+0x1a2/0x2c0
+[  909.872178]  ? exc_page_fault+0x78/0xf0
+[  909.872183]  ? rcu_is_watching+0x15/0xb0
+[  909.872186]  ? trace_irq_enable.constprop.0+0x194/0x200
+[  909.872191]  ? lockdep_hardirqs_on_prepare.part.0+0x8e/0x170
+[  909.872196]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  909.872199] RIP: 0033:0x7f877d3e9544
+[  909.872203] Code: 89 02 b8 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 
+00 0f 1f 40 00 f3 0f 1e fa 80 3d a5 cb 0d 00 00 74 13 b8 01 00 00 00 0f 
+05 <48> 3d 00 f0 ff ff 77 54 c3 0f 1f 00 48 83 ec 28 48 89 54 24 18 48
+[  909.872206] RSP: 002b:00007ffd6ff21b28 EFLAGS: 00000202 ORIG_RAX: 
+0000000000000001
+[  909.872210] RAX: ffffffffffffffda RBX: 00007f877d4bf5c0 RCX: 
+00007f877d3e9544
+[  909.872213] RDX: 0000000000000009 RSI: 0000557ff7ec2320 RDI: 
+0000000000000001
+[  909.872215] RBP: 0000000000000009 R08: 0000000000000073 R09: 
+00000000ffffffff
+[  909.872217] R10: 0000000000000000 R11: 0000000000000202 R12: 
+0000000000000009
+[  909.872219] R13: 0000557ff7ec2320 R14: 0000000000000009 R15: 
+00007f877d4bcf00
+[  909.872226]  </TASK>
 
