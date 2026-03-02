@@ -1,129 +1,94 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58633FFADF;
-	Mon,  2 Mar 2026 14:41:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F803FD14B
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 15:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772462480; cv=none; b=lHvX6VYYNWjKedYju1stMrUenbVSyGAQ0NxTA8JvPrZz/T3IXxeHDDdld6Q5JT61UrZgiRieXDQE2Ju4aUI8+e39L+qQIbCHGW6qoJlIbeeV8mXQ1eJrPPUTp898Z+evQN2EgjOL3N9jWjVSgtUOA6Tpaz7phEUKhFUI7J7Fmos=
+	t=1772463865; cv=none; b=Edr/oZj5Y6TPSInkmfgipfwWBvOLp2REXqgcH2mjqs5AvOcZt3klCd1LsZpLtJwWIl1xlwprAAw7v04BBPVwlH2Jn8ldF0mpYwg2oFWL/+4uhn8jXUe85OFnBhgOZHlNrjfXnycWv8Gr/zmBFrwcVrduGkHjtwHnwhaQF2Ak+K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772462480; c=relaxed/simple;
-	bh=gUtBimJLIFo6sIA9f0hJB7P71LFYZn4wPVh7PIdBYGA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=K96uJ/K21e37Pvn0BY7+kcMpcZNAM2sHiKn+wSFUyhZy8O0OKMFRKtaK3Ypeglr69aMk6H+2jLaGxXSD0WBCG03L88wsvQ9kpn6qaFNRuePFq6Oh635OHU8WK/xTCtcmCtgh1Dd/Kjr86FsXEnCAd4jxBtqJUjva1vJtAfNZ618=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=JP9GFH1J; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	s=arc-20240116; t=1772463865; c=relaxed/simple;
+	bh=/n9d+NC8JOM19qYu10Vbdt4z3rtQyN0QXnMlGzk4p90=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZJ+supviKBqQldEyJIUpChre0OSzRtF1scnebtwjEBuZD48Gwp/7ufRlfD3slfYsIXGYz678cQfTmujJfHamLCk4ReY+O4DVMB6bXrtqQlZqV0IUrl8K2c55uBR4M3BezZKih+wpVNUwFFSfUhITdgMFGrf+/9UyYYP2bdp4fuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g/UrCEWD; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="JP9GFH1J"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
-	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
-	bh=6G25lhpEJo6nNMrx0cNvKtFHnOheQyRYCZz/rYYTiWg=; b=JP9GFH1JG7HS8WcfafZ9KbRbsG
-	e60S4iPYIAI4JdNSTW+TJJ48J4Vp0j4m411bXOPpqOBSfIf42rfysBD+v75ehIrI1massOhohZUua
-	VonDNT6+jKFpzd5d1b0Ykz7nSi6M8phTeZt6UaZU+uEdOBELQ6HjD8UHGZhUmXbjzYHkFeZrsuSmQ
-	pC/PvfvmWHTjW1d2Ri7qNs10tDzfEPcte6+PAuNUrTpizE4PvDrWulssCFzPccMlX0Pl/M+5c6z1d
-	H9InSgJpXIE7s0zgDSRn+9E9t8st02MtH8/jxvYQU3i6Sms4ZVYEnzCauwzbPwjOkzmTEIsykZfoe
-	/McUvbWw==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vx4SO-00ETX5-Fd; Mon, 02 Mar 2026 14:41:12 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Mon, 02 Mar 2026 06:40:39 -0800
-Subject: [PATCH net-next] selftests: netconsole: print diagnostic on
- busywait timeout in netcons_basic
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g/UrCEWD"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772463861;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PxXd5uD0uoa/0anu8jDjtKQ562RChNx+PmdQxbvuGhg=;
+	b=g/UrCEWDihyVXhzbUUFgZDqU5+P5cl0s3zn3IK3c57D2uxsc+EFVmvxytaNjKhHUyB3UwQ
+	r19TQm1aJb87/7V3FW9ABOUha23OQO6YNbWaMOYE4WOQhN+ZQmyeGqcEkk7HjCDAXeArqW
+	5+WU0ZrqDufY+//61CFpNNTu3F2alN8=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v2 1/6] bpf: Add fsession to verbose log in check_get_func_ip()
+Date: Mon,  2 Mar 2026 23:03:37 +0800
+Message-ID: <20260302150342.55709-2-leon.hwang@linux.dev>
+In-Reply-To: <20260302150342.55709-1-leon.hwang@linux.dev>
+References: <20260302150342.55709-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260302-netconsole_test_verbose-v1-1-b1be5d30cd7d@debian.org>
-X-B4-Tracking: v=1; b=H4sIAGahpWkC/yXM0QqCMBQG4FcZ59rBmqG0V4mQ6X5rEWexcxRBf
- Peorj/4dhLUDKFgdqpYs+TCFMypMTQ9It9hc6JgyDvfudZ5y9CpsJQXBoXosKKORWDbro9zwiX
- 26UyNoXfFnLfffCWGWsamdPuLLOMTk35jOo4PG/4lRIUAAAA=
-X-Change-ID: 20260302-netconsole_test_verbose-367afde9a7d4
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kernel-team@meta.com, 
- Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.15-dev-f4305
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2235; i=leitao@debian.org;
- h=from:subject:message-id; bh=gUtBimJLIFo6sIA9f0hJB7P71LFYZn4wPVh7PIdBYGA=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBppaGEUIubXetIwMN8yAdPidt9eqi5YMJK3tF2z
- F0AD2q8XFmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaaWhhAAKCRA1o5Of/Hh3
- bWzbD/9yODDQMaTErk/dXpdr3gyNTGNM7geS+H1LyCQHmZOgUr6EI8x5tPQBYRI68B7COrCRYAE
- S26QEhNCeN1Dnz7dYWHjt9zMyjoQONNWVuiqWO3lxr88F8rjZeJBYHqoT+R2YPbTDQgcBEaIeua
- +RxXPPYZUl47HVIQa8E/fMqALWlbd6b4YkG2Dzq8JR4+XuDGvVlpackbvzLbwoly33eKMYr5POx
- s+pwBQkctz4gWCNWVixfBXlrJxJG1kS9ATD4hSECxVltdxvzXqYBC/fgf9q2SAj+3jH19pqs5AC
- eFEnBbNZS5VsN+HzR2jieB4DSwF8hvyox/A8ByBIttsVLPjDreEiRC7MB3PZN6XusthtfvRdzS5
- a4DyavZ/5BJtNZSBD1kLQUSSZVf5mZvq3ysS7yOgMft0O55IwCba0HgXysYhYdVlfcmqpm8Al47
- 8CcdPjfKnPD0r12R5VeVeNotn2fVCzTEp7X5f6cxHkzypDd894NgEiWOn0V2JTm4o41YMWQTYUi
- nYxg4SC/8bvddpSNHWiwiVPrZSvEvMq5ijVvQwCruXyarlbU77ACySYp7kpribYdpIeLNJOyffl
- 1jGxSAHSeWvBGM4F23Be/o6bKXQN15PrhbJnhrOYiG37ZMudKs0MxHpLwbQICCwmVSiAMaZhCXr
- Gr+otGZ2QISKxlA==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The script uses set -euo pipefail, so when busywait times out waiting
-for the netconsole message to arrive, it returns 1 and the script exits
-immediately without printing any error message. As reported by Jakub,
-this makes failures hard to diagnose since the test reports exit=1 with
-no explanation.
+Since bpf_get_func_ip() is supported for fsession, add fsession to the
+verbose log message in check_get_func_ip().
 
-Handle the busywait failure explicitly so that a FAIL message is printed
-before exiting. This is how it looks like now:
+No functional change intended.
 
-	Running with target mode: basic (ipv6)
-	[  167.452561] netconsole selftest: netcons_QdMay
-	FAIL: Timed out waiting (20000 ms) for netconsole message in /tmp/netcons_QdMay
-
-The remaining silent failures under set -e can only happen during the
-setup phase (netdevsim creation, interface configuration, configfs
-writes). So, it is not expected to have any silent failure once the test
-starts.
-
-Note that this issue might be less frequent now, since commit
-a68a9bd086c28 ("selftests: netconsole: Increase port listening timeout")
-increased the timeout that _might_ have been the root cause of these
-random failures in NIPA.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/testing/selftests/drivers/net/netconsole/netcons_basic.sh | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_basic.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_basic.sh
-index 59cf10013ecd5..7976206523b2c 100755
---- a/tools/testing/selftests/drivers/net/netconsole/netcons_basic.sh
-+++ b/tools/testing/selftests/drivers/net/netconsole/netcons_basic.sh
-@@ -58,7 +58,11 @@ do
- 		# Send the message
- 		echo "${MSG}: ${TARGET}" > /dev/kmsg
- 		# Wait until socat saves the file to disk
--		busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+		if ! busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+		then
-+			echo "FAIL: Timed out waiting (${BUSYWAIT_TIMEOUT} ms) for netconsole message in ${OUTPUT_FILE}" >&2
-+			exit "${ksft_fail}"
-+		fi
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fc4ccd1de569..636836a315b7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11493,7 +11493,7 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
  
- 		# Make sure the message was received in the dst part
- 		# and exit
-
----
-base-commit: 01857fc712f6469cab9cc578120cdc80f1c2a634
-change-id: 20260302-netconsole_test_verbose-367afde9a7d4
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+ 	if (type == BPF_PROG_TYPE_TRACING) {
+ 		if (!bpf_prog_has_trampoline(env->prog)) {
+-			verbose(env, "func %s#%d supported only for fentry/fexit/fmod_ret programs\n",
++			verbose(env, "func %s#%d supported only for fentry/fexit/fsession/fmod_ret programs\n",
+ 				func_id_name(func_id), func_id);
+ 			return -ENOTSUPP;
+ 		}
+-- 
+2.52.0
 
