@@ -1,116 +1,146 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630E01C4A20
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 02:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772418911; cv=pass; b=UOzUbQZpFdQl3yrkHuapB7iZG1njNEjYp024mR6G4wayXs1yLZ/5w9wGbKcuOSo6Evgm7Jdp8W/CCJzxNMwtctDykuj2MpDNmP3yV4N8lT52zfcoNTwefy2+bDr6kyqiTautGHWEId0x+POWgpCkt8+y0LQNOWiLSDC8VSxV1Rg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772418911; c=relaxed/simple;
-	bh=WowSggtebeQAqQmCbzVvdv14cYYhPsWFqNIFSCrkQEU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oBQRAM+uZs0AM6nZPnbH3V26cOo2QCfb4BDYyy8PffqHWuP0BiGzkIaNq2/lSb0lFDRZQUEOgehI9dVSuBCP3sny8iTTZYSE2RO1oUXZtuaTnnaD3QvnDwWC2gWodpcHWmsdngFOkkcujAPycdG4qmo8uJ/wTxrqD6LReKIQd9s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FNT4r5xB; arc=pass smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D760250C06
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 03:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772420680; cv=none; b=QN88GVy/PLuVG44f4CbKPexWIEODJff+7J7dVbDF38Y2eWrci77AkZbVv+D9aU9HEH8YDamaiRTsOpsHW15zkkxBk9y4CManyswO1CAFfrIMdUO7FYCMf82AzzVHxMqoe8Y8W1Prp6rvOSt3ABOFA2lppw8q3cbRBhJQZQCctJs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772420680; c=relaxed/simple;
+	bh=tR46XW9A3HMAisk9j68ljgR5ZjGwHuKJlekeL/LAZlU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=u2pM4HW69KiyP1GNH0bcjlI40Vy48tuXjmI+kcmEmOjgl7zVzelLTeTDncvkt+wqdiPKqW4oOHUA5OhYes2D/GEnvhRadxWWNGE4u9aAie2kct3WZ+MkRZ2jInwGPMT6qFWERuersumok2cBLPiXXJ/n5lnPqlp6/zWi2Ex/gWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=V/Cwemf6; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FNT4r5xB"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-65c0891f4e9so6937938a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Mar 2026 18:35:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772418909; cv=none;
-        d=google.com; s=arc-20240605;
-        b=H3z94gSmOHNSIQtR8pGkD9uhcQw89D+iNBTQ6R8BglamGW3YT7/5QKH9637Bj/fI3X
-         wkoRcgh56RHKjTumeNnm4rKxVF4BfsHvc1qotCtQtverywRw+cbQopYZkVFGCF48EU/z
-         nfh6GdmxHNglzy8I/dMGQ8/212jeK0BFzjwFVW97Ae4uwsOT82NyG5dVAVGHdFdrnutL
-         1tJ5335TJH0uyYyikyYx+2I/xWwdfwPKBHsANKeHMBXvbavcFVEkN5KIDe3AwGeOualN
-         RG1uqB0ZGBFYCU8tfIKe5rva12zF15sy9kWTbUDZfL8WI1jgmbyfT2nC/X2DsVdVuGGA
-         3YNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ggnEVg1p2N2TqchDyaQBPBgs+ckYr8IfKORrdMAUP+I=;
-        fh=JslRmyKz4puteu7p/gNM5SCwrgynEIfIiqpyaZdv1JU=;
-        b=Kwuo3IFqpzJ2bMlTEWTLVmnOwiX/trd6ssZt+JCacBr8UM2hC0YFdX3vEZvXuczYnW
-         dY5qjlfZ3n0oBa1teLrY2q0ufcqhZGKJNmuuzKiDfYmP2cUCLVm71Aac3Z0Rc2Qi1n2K
-         Pw1ekvjkIHmcKLXCHB9Or+xTTQYeO9/mak9gi0iLZwa1x/CO6hYoC2VNiSYjWxC88jfR
-         jNtMFSEX3IIzH38/DXDZbqf4BbnW0iMgDHpxW0BUOL3XaAMUf3XXjqOuOuRLusDc61RH
-         sJnNiA5QuBwa6AVTx2pyiMyloR56mTBOaZRMT+1gej4nTe9asBJVZwIp+pjGug2lphDI
-         240Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="V/Cwemf6"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2ba895adfeaso3355155eec.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Mar 2026 19:04:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772418909; x=1773023709; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ggnEVg1p2N2TqchDyaQBPBgs+ckYr8IfKORrdMAUP+I=;
-        b=FNT4r5xBIVMAau559pO7V9uRXGaHmXqTS3RdO3q8ku5W0hQFLj5+tk5tIStJrmxLCw
-         zcl5QykssVNRRGIgWksMdq58mepO3OGLEHDHh9cyY+KRI1rEq40QOVU/gOUdNRCKhPZ8
-         v4hPqel3FIB/sl4UlB2Rfqxs2UQA5NAU9oDDDBQVytjpOq3K54l+m8a30wqUaH67JLE2
-         sEH4hrEpEkGkP5hvVTw6w/5qlGs2rwarOCA8/EyGnzfrW+f4kZBSkMvrtPJ8sLD94M1H
-         wwimjJMlSEOlHb21CKHUhCHVi1/VHx3rscksr8P/Ptkxz8lSMIFVDX5Ld/blMq5UPHzX
-         uwRg==
+        d=sifive.com; s=google; t=1772420679; x=1773025479; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=09QXKRKJ3JXHqocKxuSfCVq5T5Qs6Ms0FJxLLsGjn2I=;
+        b=V/Cwemf65laWoZqccIxctzFNAuB644RRAWKabF75ud0odcK16WoMiRh6na1HicbFik
+         EzfoN+GUdSG5JBsqZxqStZ7JTzqtGwysctPfkkAWjq5QHw9EX1QzryY+tH7mqGz9M0c2
+         JEqHom+x162wXbCANp4gp5nJ/Yzlx0ZZVC6cSTmXJNpaNA1UzO5J/1JgDdangPNTPydc
+         nd98G2xYdgqDD96T54L9RTIWoXX4Yw3zx6+Rz0z/naUyPjlar6rm6Uxk24dhQ+eRBIT7
+         8SJfoXdgmlDb+SPiWgIiLYP1pXjvdJnwa7aQURDA7eQ4hXt6CZuRbbFQjLjvxfqZ9m59
+         jAew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772418909; x=1773023709;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1772420679; x=1773025479;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ggnEVg1p2N2TqchDyaQBPBgs+ckYr8IfKORrdMAUP+I=;
-        b=YxTkC41hTphhgIDgoOkyFAwOWjDeTcoJ8GpBPwCaHWosO8DidPi+3WNfGdmWgEEcgN
-         gNToMScbMCU4YhtQHWxMfcn04SWPcX+FLcp4+zKq05RrX4zwT0Tr+0ottIDiZFhk2HHq
-         rDKrDCZqP8YmD8FYol7mvVxNHl5/HV61lRiFuVbPMfkd0kNqOoRT43MfYB8YI+CpWkAI
-         d4PdyexWdmuSSbEjuT3UwTXqsRGYZDWUVx5a3erVemBr/IHhq2Q8bFMo0LU1JiMHUPKp
-         hj0xbYI2C72ERAiMnuQPK1JLP2STH/OVU+1cH2ECv7/D5zah3yLaVIgjjyP+xPRyq4Ql
-         DIvg==
-X-Forwarded-Encrypted: i=1; AJvYcCXIoRXq46oovK4gIa4S2JB0demRdlwcISLhDxTvRVH62Lxq6zghLpBo2t7NmZ3BtJQ8VGi+v2umRovzoDZb7QU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxulZs54VUOKF8xp0s7uPYN0Zjud7fzDT3q1ugvjmLN+IjsWNz5
-	62o6jOyNXbhNbnyY7SbQsJh3M/tXAEzs3e/+qBO07FU6+/d8zqmWc1wjNJL/Pt7u+KzNr8sGJ2D
-	JKne7fbYo5zUPf9L+2o2Tm5ygES0+iyU=
-X-Gm-Gg: ATEYQzy9GIY4n31kCIp7nMUuDRR217KKlzXQICtbGkz5HcZ5UqEA8G76zFFQ26vQzrQ
-	LacVIDcnfHE6iDYYxidPa/vtXXPPQNmOHaPug9gHGkquhJ2ZsBeGl5TmONeSWuB7WCKLofEVIO9
-	y2Tk2QvuTctgydgmnHLBAtuXPEQoWIeRQKLW4axrPlvAro1QjMaUlt7F9mY5ZW1byL6wprjhoD0
-	9cfM4+BbQ5v7Yt48DsHtPj57HE3lze/Feoc1ST/X+Bc0XRIkSDnC2BG6ql/cNkpp8wtFDf4W2k1
-	Qmrmdg==
-X-Received: by 2002:a17:907:847:b0:b88:227e:3870 with SMTP id
- a640c23a62f3a-b937636cd35mr733944666b.11.1772418908369; Sun, 01 Mar 2026
- 18:35:08 -0800 (PST)
+        bh=09QXKRKJ3JXHqocKxuSfCVq5T5Qs6Ms0FJxLLsGjn2I=;
+        b=ii9zl+oK0r4A5VFc7pHCYAj6p8WGtDq4yWCk7JD0HXoX/sTXJaIOgCAsnnFuMtRxDu
+         aFlbqdSJbIjWyMR3Qa8mXLlm6X3nL41y+//oISoAA7c3IMY2vNFTBAHoJLQQoey6wIUx
+         ZbcpLYn0QgFlSqv5oPQk7nXSpcxc8nPk1JQNUHM3kIZEh+B/xKGEmSVppfsUCoGBd8PJ
+         5yfBAoid8MOa7vFM9gJJNhSwlBhcuJI8v5sCmG9aqPNy9ro2Lv+mJWyhbEX2H76/ORY/
+         q86deHTsHWaa9Q95laBPlj9oFScf9sIeSrVvY11LMfOHWl/KDoJqOZ46YZRbVO38JjzO
+         HIVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW3fnVeIicOqPMlVJDaEL254b+rR05IYrtHPUqKAQm/oNyV9hCDvsXrlE+9+UzaxS41wFER2PwFZvrOg+PTMq0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+xQ0hdC2IdFF9KK4jCGS1zEjfWOSS2sZLfhLAgUHEd+b3Xvml
+	eqHzeEDBpUCZiNGw/F3C7dAuVSLjvDs8++7v0IFjSShPnatNtYm/5A9DLg+e2lZti14=
+X-Gm-Gg: ATEYQzyfzH2xB5Z63Iy7pffBjVynL+7HEM2EJeCdRX3aEfE2S7mDnz3aZ+4u9f8PEjC
+	tlqmXxlS/EAumZbtDamFLXkwQS6G6+O5P1U1bgoWiyf0sMoOAfSidvAX0kd6mbK/jdIJ64T9iZq
+	5xy0eQ3Kp/W6oyqpltKwbEVQ+SokK5QeiSX8qDreIkG6NLksJoHvh2p8gg8y9nom0Dqjjn4VBGe
+	gVc3XCcas4zYgfl9CBBbuSEM8nlZ3kjZgOv2WzuQWMcrvfQK96gemjgxr1vvNg3++AeIj5apefz
+	GetfNG7M1PVU8G+TgHizvPyRiArsln3fLLKKQIUYU2i6VHxnZ7dccVMTe9J1V1LHu0lzri6CoOC
+	q/PpfvxlU4rL7t5H91nRo4sQMjeSefcYUOlskr/zerf/2Ry4szdW2cObcOnbjyRrT+IR3RapFUn
+	nYvMZMzOtLT6nnzlUZWj9FBQ/TsBB0UCGPlLtgQXM=
+X-Received: by 2002:a05:7300:8cac:b0:2bd:cbc7:16ec with SMTP id 5a478bee46e88-2bde1efba67mr4008333eec.24.1772420678394;
+        Sun, 01 Mar 2026 19:04:38 -0800 (PST)
+Received: from sw07.internal.sifive.com ([4.53.31.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1f7e955sm9401254eec.32.2026.03.01.19.04.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Mar 2026 19:04:37 -0800 (PST)
+From: Nylon Chen <nylon.chen@sifive.com>
+Date: Sun, 01 Mar 2026 19:04:34 -0800
+Subject: [PATCH v3] selftests/futex: conditionally include libnuma support
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260301011131.4057-1-teknoraver@meta.com> <8eb8c51eeb87f178e92e68bcfffd02701845c48d.camel@perches.com>
- <CAFnufp0rQ=p2qGcpDdJB-SjW=qNOaxFRTrO1TprhKLtds96bJg@mail.gmail.com>
- <b7d028a084ddda66058504aab72032cb9beaf771.camel@perches.com>
- <CAFnufp3ufMfv8BYLNSqJWoybRMcw5FeuFThp-mRBTU9sYUb=WQ@mail.gmail.com> <e8dee2d6856b6ab4752c93f571a9ba582da070ac.camel@perches.com>
-In-Reply-To: <e8dee2d6856b6ab4752c93f571a9ba582da070ac.camel@perches.com>
-From: Matteo Croce <technoboy85@gmail.com>
-Date: Mon, 2 Mar 2026 03:34:32 +0100
-X-Gm-Features: AaiRm52ScMUM5G_LGvYeYYAEGC7PkIjrwNCUlo_U_Sve5CZCWvMO6wvgqbXnPYs
-Message-ID: <CAFnufp0Fe1X13NXwDLua43BAHsRFZYKLa9FDP3pyRC4-+bb7_Q@mail.gmail.com>
-Subject: Re: [PATCH v2] get_maintainer: add KUnit maintainers for KUnit test files
-To: Joe Perches <joe@perches.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260301-20260128_nylon_chen_sifive_com-v3-1-995ab4cc71aa@sifive.com>
+X-B4-Tracking: v=1; b=H4sIAEL+pGkC/42NWwrCMBREt1Lut5E8pBG/3IeUkCa39oImJZFgK
+ dm7sW7AvzlzYGaDjIkww6XbIGGhTDE0UIcO3GzDHRn5xiC57LkUnO1ByLMJ6yMG42YMJtNEBY2
+ LT2axn7zlQquThTayJJzovR/chsYz5VdM6/5X5Lf9e7pIJliv+OhGzbXX9vqTxyZhqLV+AAiSG
+ jfNAAAA
+X-Change-ID: 20260210-20260128_nylon_chen_sifive_com-ae6fda01734a
+To: tglx@kernel.org, mingo@redhat.com, shuah@kernel.org
+Cc: peterz@infradead.org, dvhart@infradead.org, dave@stgolabs.net, 
+ andrealmeid@igalia.com, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, zong.li@sifive.com, 
+ Nylon Chen <nylon.chen@sifive.com>
+X-Mailer: b4 0.14.3
 
-Il giorno lun 2 mar 2026 alle ore 03:05 Joe Perches <joe@perches.com>
-ha scritto:
->
-> and I think the count of / characters matters
-> but if you send a patch that applies, I'll verify.
->
+Use LIBNUMA_TEST to conditionally add -lnuma to LDLIBS.
+Guard numa header includes with #ifdef LIBNUMA_VER_SUFFICIENT
+to allow compilation without libnuma installed.
 
-I see that it's used in file_match_pattern.
-Anyway I made another simpler patch, I'll send in another standalone
-patch, so it won't be corrupted
+Co-developed-by: Zong Li <zong.li@sifive.com>
+Signed-off-by: Zong Li <zong.li@sifive.com>
+Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
+---
+Changes in v3:
+- Fix invalid Signed-off-by chain by adding Co-developed-by tag
+- Link to v2: https://lore.kernel.org/r/20260210-20260128_nylon_chen_sifive_com-v2-1-630bcb707d7a@sifive.com
 
-> cheers,
+Changes in v2:
+- Remove redundant HAVE_LIBNUMA variable, use existing LIBNUMA_TEST
+- Keep futex_numa_mpol in TEST_GEN_PROGS
+- Conditionally add -lnuma based on LIBNUMA_TEST
+- Use #ifdef LIBNUMA_VER_SUFFICIENT to guard numa headers in source
 
-cheers,
+selftests/futex: conditionally include libnuma support
+---
+ tools/testing/selftests/futex/functional/Makefile          | 5 ++++-
+ tools/testing/selftests/futex/functional/futex_numa_mpol.c | 2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index af7ec309ea78..b65ad750395e 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -4,7 +4,10 @@ LIBNUMA_TEST = $(shell sh -c "$(PKG_CONFIG) numa --atleast-version 2.0.16 > /dev
+ 
+ INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
+ CFLAGS := $(CFLAGS) -g -O2 -Wall -pthread -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64 $(INCLUDES) $(KHDR_INCLUDES) -DLIBNUMA_VER_$(LIBNUMA_TEST)=1
+-LDLIBS := -lpthread -lrt -lnuma
++LDLIBS := -lpthread -lrt
++ifeq ($(LIBNUMA_TEST),SUFFICIENT)
++LDLIBS += -lnuma
++endif
+ 
+ LOCAL_HDRS := \
+ 	../include/futextest.h \
+diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+index 220ef219c823..35ad2177f5af 100644
+--- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
++++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+@@ -10,8 +10,10 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#ifdef LIBNUMA_VER_SUFFICIENT
+ #include <numa.h>
+ #include <numaif.h>
++#endif
+ 
+ #include <linux/futex.h>
+ #include <sys/mman.h>
+
+---
+base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+change-id: 20260210-20260128_nylon_chen_sifive_com-ae6fda01734a
+
+Best regards,
 -- 
-Matteo Croce
+Nylon Chen <nylon.chen@sifive.com>
 
-perl -e 'for($t=0;;$t++){print chr($t*($t>>8|$t>>13)&255)}' |aplay
