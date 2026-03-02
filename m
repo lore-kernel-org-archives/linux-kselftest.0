@@ -1,134 +1,95 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.aperture-lab.de (mail.aperture-lab.de [116.203.183.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC4030F95C
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 05:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC433168E6;
+	Mon,  2 Mar 2026 05:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.183.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772428313; cv=none; b=eCIkDDad+spipX7KAbffsWSDBF0JMMiagLQcon6IrMvaJ0E/Dur+d89Ti9YYumzx8navcXGa2e2Ztxpdba2+nrkTS/+jS95n2lkagw+tSKnmh9YNfYoor8evazehEHhLqPqcr3Epqwcx6Ns6O80Cmn/wokDyXN5bGXAj8GIHkY0=
+	t=1772430052; cv=none; b=NVlWKeSXHSCr98kp+duaOMeGyia5G17jdmKgIvlIAiD3dtiQaadiSHUHzXU7ojZXi1Wz3ISe4sSbaWpNWQVhwdbhMDDydaeehiUQMBF/CYF2ajdKMsuHKz2DuXbPyp368/96AIHdNRZGzGYx9jig1dVPC94PUnV7ulomLGJ0xFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772428313; c=relaxed/simple;
-	bh=geUBL0kK/wKInVEH9hqes9m8DCoTgWFDWJifYaMY/Tg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ht1CvEs4rZOhis/MY6VxUo8KmxOBRhuf8qjT6I7st+4lsNtFTeyh+C1J8tIjFrKeSuk+KMYJborTXwxeqcpGLPyUSQS3c6obqwckoNjQUVMj1Pi5d4xJnUwMnDzJW0FOFkDYj6Letgmcz7aMGDMHBK9fH6RmdBXu+YbTQTrvZmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YIJmqKbw; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YIJmqKbw"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772428299;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=26wtyl/j+Kh33U7EF+9h6Z52FGsp8KNeEOhQlb3WzBs=;
-	b=YIJmqKbwPWqBgNohu3dGEjuB/y3bTo1mA5FgrLJZtNVRdl87rLH5sRrkYxdlM7/F8r5HK/
-	By/mKwoFYUZZb4Mu2zfF0Q00HlDbmF/FNznwDtsnHLeJwzZKpUyWpznbGny1eWNPljT9Qt
-	kH0iCA9l3kJHtkdf7zYa8MIVmO8u6b0=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org,
-	dsahern@kernel.org
-Cc: jiayuan.chen@linux.dev,
-	jiayuan.chen@shopee.com,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
+	s=arc-20240116; t=1772430052; c=relaxed/simple;
+	bh=mxtKwzhqyehoPNgZs5UxSR6JsnKb6vAGvUm2j0rpxbI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=r+utkyzW7rirsHNP6t2G+NeMqBcy5geo6VftCoXgml7VMIAlWfKb+lPkRSq1AaJRL6QFRo8CBpKeiQkWD0Mtg/HLVDV1h3RqA3lyqoEUYfD23Z2n2WcF9ywLx6s86Br5u57hLObXyGF136R5kVx0TtjaoCsTTE0yRazFIi+bt9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c0d3.blue; spf=pass smtp.mailfrom=c0d3.blue; arc=none smtp.client-ip=116.203.183.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c0d3.blue
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c0d3.blue
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DB25554CC65;
+	Mon,  2 Mar 2026 06:40:48 +0100 (CET)
+From: =?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>
+To: bridge@lists.linux.dev
+Cc: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 0/2] net: ipv6: fix panic when IPv4 route references loopback IPv6 nexthop and add selftest
-Date: Mon,  2 Mar 2026 13:11:27 +0800
-Message-ID: <20260302051132.66314-1-jiayuan.chen@linux.dev>
+	linux-kselftest@vger.kernel.org,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Xiao Liang <shaw.leon@gmail.com>,
+	shuah@kernel.org,
+	=?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>
+Subject: [PATCH net-next v3 06/14] net: bridge: mcast: track active state, IPv6 address availability
+Date: Mon,  2 Mar 2026 06:40:00 +0100
+Message-ID: <20260302054008.21638-7-linus.luessing@c0d3.blue>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260302054008.21638-1-linus.luessing@c0d3.blue>
+References: <20260302054008.21638-1-linus.luessing@c0d3.blue>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Last-TLS-Session-Version: TLSv1.3
 
-syzbot reported a kernel panic [1] when an IPv4 route references
-a loopback IPv6 nexthop object:
+If we are the only potential MLD querier but don't have an IPv6
+link-local address configured on our bridge interface then we can't
+create a valid MLD query and in turn can't reliably receive MLD reports
+and can't build a complete MDB. Hence disable the new multicast active
+state variable then. Or reenable it if an IPv6 link-local address
+became available.
 
-BUG: unable to handle page fault for address: ffff8d069e7aa000
-PF: supervisor read access in kernel mode
-PF: error_code(0x0000) - not-present page
-PGD 6aa01067 P4D 6aa01067 PUD 0
-Oops: Oops: 0000 [#1] SMP PTI
-CPU: 2 UID: 0 PID: 530 Comm: ping Not tainted 6.19.0+ #193 PREEMPT
-RIP: 0010:ip_route_output_key_hash_rcu+0x578/0x9e0
-RSP: 0018:ffffd2ffc1573918 EFLAGS: 00010286
-RAX: ffff8d069e7aa000 RBX: ffffd2ffc1573988 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffd2ffc1573978 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff8d060d496000
-R13: 0000000000000000 R14: ffff8d060399a600 R15: ffff8d06019a6ab8
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff8d069e7aa000 CR3: 0000000106eb0001 CR4: 0000000000770ef0
-PKRU: 55555554
-Call Trace:
- <TASK>
- ip_route_output_key_hash+0x86/0x1a0
- __ip4_datagram_connect+0x2b5/0x4e0
- udp_connect+0x2c/0x60
- inet_dgram_connect+0x88/0xd0
- __sys_connect_file+0x56/0x90
- __sys_connect+0xa8/0xe0
- __x64_sys_connect+0x18/0x30
- x64_sys_call+0xfb9/0x26e0
- do_syscall_64+0xd3/0x1510
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+No functional change for the fast/data path yet.
 
-Reproduction:
+Signed-off-by: Linus Lüssing <linus.luessing@c0d3.blue>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+---
+ net/bridge/br_multicast.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-    ip -6 nexthop add id 100 dev lo
-    ip route add 172.20.20.0/24 nhid 100
-    ping -c1 172.20.20.1     # kernel crash
-
-Problem Description
-
-When a standalone IPv6 nexthop object is created with a loopback device,
-fib6_nh_init() misclassifies it as a reject route. Nexthop objects have
-no destination prefix (fc_dst=::), so fib6_is_reject() always matches
-any loopback nexthop. The reject path skips fib_nh_common_init(), leaving
-nhc_pcpu_rth_output unallocated. When an IPv4 route later references
-this nexthop and triggers a route lookup, __mkroute_output() calls
-raw_cpu_ptr(nhc->nhc_pcpu_rth_output) on a NULL pointer, causing a page
-fault.
-
-The reject classification was designed for regular IPv6 routes to prevent
-kernel routing loops, but nexthop objects should not be subject to this
-check since they carry no destination information. Loop prevention is
-handled separately when the route itself is created.
-
-Solution
-
-Patch 1: Add an fc_is_nh flag to fib6_config to explicitly identify
-nexthop object creation and skip the reject check in fib6_nh_init().
-Using fc_dst_len to implicitly distinguish nexthop objects was considered
-but rejected as too fragile, since fib6_nh_init() is shared by multiple
-callers. Unconditionally calling fib_nh_common_init() for all reject
-routes was also considered, but on large machines with many CPUs the
-per-CPU nhc_pcpu_rth_output allocation would waste significant memory
-for pure IPv6 reject routes that never need it.
-
-Patch 2: Add a selftest reproducing the crash scenario.
-
-[1] https://syzkaller.appspot.com/bug?extid=334190e097a98a1b81bb
-
-Jiayuan Chen (2):
-  net: ipv6: fix panic when IPv4 route references loopback IPv6 nexthop
-  selftests: net: add test for IPv4 route with loopback IPv6 nexthop
-
- include/net/ip6_fib.h                       |  1 +
- net/ipv4/nexthop.c                          |  1 +
- net/ipv6/route.c                            |  8 +++++++-
- tools/testing/selftests/net/fib_nexthops.sh | 11 +++++++++++
- 4 files changed, 20 insertions(+), 1 deletion(-)
-
+diff --git a/net/bridge/br_multicast.c b/net/bridge/br_multicast.c
+index b05f00b4d832..12be40a1d0a2 100644
+--- a/net/bridge/br_multicast.c
++++ b/net/bridge/br_multicast.c
+@@ -1123,6 +1123,7 @@ static void br_multicast_notify_active(struct net_bridge_mcast *brmctx,
+  * The multicast active state is set, per protocol family, if:
+  *
+  * - an IGMP/MLD querier is present
++ * - for own IPv6 MLD querier: an IPv6 link-local address is configured on the bridge
+  *
+  * And is unset otherwise.
+  *
+@@ -1220,10 +1221,12 @@ static struct sk_buff *br_ip6_multicast_alloc_query(struct net_bridge_mcast *brm
+ 			       &ip6h->daddr, 0, &ip6h->saddr)) {
+ 		kfree_skb(skb);
+ 		br_opt_toggle(brmctx->br, BROPT_HAS_IPV6_ADDR, false);
++		br_multicast_update_active(brmctx);
+ 		return NULL;
+ 	}
+ 
+ 	br_opt_toggle(brmctx->br, BROPT_HAS_IPV6_ADDR, true);
++	br_multicast_update_active(brmctx);
+ 	ipv6_eth_mc_map(&ip6h->daddr, eth->h_dest);
+ 
+ 	hopopt = (u8 *)(ip6h + 1);
 -- 
-2.43.0
+2.51.0
 
