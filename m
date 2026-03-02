@@ -1,181 +1,109 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011064.outbound.protection.outlook.com [40.107.130.64])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF133FB06D;
-	Mon,  2 Mar 2026 13:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772459876; cv=fail; b=YW78CKPisvi6l2Zta2n185xEE9B/Hm75XzgqG7Gj/c/EBDJV8YoKxVCyl9kyxrIr5nVA+5yTKLuusx4D0q5JCmHP7/nnwPdS4h4veTBu8QP2hr9a9M8mv5klz3LeJ/A+hIjnLjUJ23OCEjWsT06+U9KIsN6AgKg/LH31m1H4wxY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772459876; c=relaxed/simple;
-	bh=Nf2cfuflraSPIPWDRaG8yomviMw3yiH6Fz8wRGC+lXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=JL1ZyPqtwfgjQgZuYMOY0qENcfFMYqsZ2ATE2RMVB2sseiK3ljspxSF2jjiG/82vOq5lVngCz+/cS5y+TUEb/HaINy4tRtU1KQosW39jPUffanx+sYeb5Hf5M5TmB00dZ9M+ipauL8WMoqIkLOr3N5imGa4UHQhXBO14rq7ynXw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=jlEIRmNR; arc=fail smtp.client-ip=40.107.130.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A8D3FB057;
+	Mon,  2 Mar 2026 14:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772460266; cv=none; b=E3yIbQK5XuarsrA6ZNijPhC8FkJQD6EZu/g+HffgsIDtnFoQ5kZcowy8T52vTuVpXeNCVGMtqAxzXL5UCsfN9xX6LJ4MIm2PjGH22LTi8HgLpckJ48ValcqN4Q2EgjsLG1B27Ayb0Lnjz5Vrzr78mJJH4HbVNXW3QCXYNP0nQVk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772460266; c=relaxed/simple;
+	bh=w7DXo3mXh6DNkAzYU9MYWlzqO/9Orncv55I/eELK7uc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QwR8AroBJOpiW9/Z+zWIDIFKttQYkJZ85xuqNreYzxrKHEJkaZuniPMiWPmrp6m4rIYYi8MOS0z8f7RjNyh9TZ9QEuLU2oAePyTprKdht7LGqiYIXU5FXRbPgevK8VWuge67UyFyKSDfpw3VPJ3s5aocW5M+gGDbYiKJLRP8wgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=U2nbza5U; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=O0XwKXPg; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="jlEIRmNR"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FjrLvzIFLnM7TMGdfbMUXLeq4p2Qvogn0cfSaGdpFrOgTtvXwgL08ivk3C3SKk7X8i9wILUWZ7XzB8lv4UF/MXoFutfe3c30BuTg2PVUX72dCoI8TNlhtBXBX1woLFmD3DKBdKpRzp1isjTiIY75XKIBofNKvJP9I3HPXm9Wi+npQyRiO7egutagj9l4+Q1P7HaPKcpOUjao8eDwxNg01AUtYjU+PdtRAiFO4XkMxxhR2jpDUnbOIBTnaKhRvPxT9GQJ+5Xzs1G/M0ZfrAREgriGuOGiuutE2ymVedabshGHQf6rSOEi48QhUkKtjjXjA/EdcOCcljAYqCSIWQPE4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YlXtyCiom48NqFKtbi26x96U3DdRQOGW3HSKTZgaVIw=;
- b=XoX4eMC/1kGnmONT9MMVK19SLYmx6tWBXgzngSIz3SjEwGZV7V8nhFFX6B1Iu2dbRqOHJyQcwnJXYbcnUn4IMFeAcXqL2adPSbxLqys+jcvMSLi0S0ZUWDQ4PFJpq+jw7PnxROiL1aEEp+9Zr8YvOi0PtK/jkAjU3cxtDSyreIUYpcT8yMfXwernrza5m4PKR6mAvHyYrR/6t7vG0rbf+4VYqbT3r1/zjSWxdo1d6dkbQsBTvCiLzgeg0UMCz0IercMsntRa1RqfIGoQhFsj0U5ebX6jcji0/GfKeSqor44TLb8sI8deY0KgSM1zL0pgga0MZXVQtJXwVCrJ0XA2xg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YlXtyCiom48NqFKtbi26x96U3DdRQOGW3HSKTZgaVIw=;
- b=jlEIRmNRqgddU+uzLTcf7LSHFV7XADXDe4TC7k3W1SZFgPzdBZ+gEH7+vYuSxSYcC9ob5TKzBtmv4mwLtOyGB3EwDWW6FLJzWU/rpwD+JuHoV3Gnr01m5lyVoDrH+nXiwkjbyw5+3HauU8ZE8cwcTBfkMsKkAqpQF2XXzj15ZKkF/3Sh8P5gqLfKfHOWdzWErhEs5hVrBkokmET/R9fH5EPPY5AHBRXOBtOskEyxWqw0e6GkTAh4u2SLFs5pRMft3OJ95RdaF+z45JMsD/ZgUw89AgJb4T25HrVDKUW6Vweyf9cvwb1I6zHTjsMJU8ORJ9wliW+tiEpab9SspMhppQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by DB9PR04MB9556.eurprd04.prod.outlook.com (2603:10a6:10:304::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.20; Mon, 2 Mar
- 2026 13:57:51 +0000
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9654.020; Mon, 2 Mar 2026
- 13:57:51 +0000
-Date: Mon, 2 Mar 2026 15:57:47 +0200
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: Petr Machata <petrm@nvidia.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 4/5] selftests: forwarding: extend
- ethtool_std_stats_get with pause statistics
-Message-ID: <ffbxeysgshogwmtraatgh6vtrwo742fpzbgaiyjnmqwxxbzzua@mhsfkhmuiu45>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
- <20260225150648.1542206-5-ioana.ciornei@nxp.com>
- <87bjhaf7d6.fsf@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bjhaf7d6.fsf@nvidia.com>
-X-ClientProxiedBy: AS4P191CA0034.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:657::27) To PAXPR04MB8253.eurprd04.prod.outlook.com
- (2603:10a6:102:1bf::7)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="U2nbza5U";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="O0XwKXPg"
+Date: Mon, 2 Mar 2026 15:04:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1772460261;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cRM2t72DmiN8sur4KC7kJvFl2g3W9LFFAmvpwZMN6BE=;
+	b=U2nbza5Uj3+v1Yz/7NFP1KJEEu3qCsr7TJmPGA7AG/w/PFx5cPc1n3W7rsEmErqOZ4KQnZ
+	UdxuiGENc2+EFgj42FJbMNjUVtRFJ/eqn7lvz517o7RfxxeptrK+1E7IhWU8U/EfnqWPhj
+	5k+iAJ6aEN/kHFgi/PlYX7z3ixlVOLPpEisZdOuJIO9RpmyRAIZKSDNWru3XIgnQN5iT/Z
+	oKatqMsKb6BNZZjY/bI/qPDPcoJj0X3J3HKrah6dzSwk6l79vbv6MGKSCaUPcHXpgwPtoB
+	ng9u0ZkYA1egSpy0969/In5pa2B+//+adSoG0dZEnKVEternS8rsoVnVtPTNkw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1772460261;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cRM2t72DmiN8sur4KC7kJvFl2g3W9LFFAmvpwZMN6BE=;
+	b=O0XwKXPgKku1Br1+V/ezQXVmlbM/8IP4wwnZCgIuF89yo0/6aQDXPujJ+tjFwyLvfgYCyq
+	HND4ATOem2K4dHCQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: bot+bpf-ci@kernel.org
+Cc: dhowells@redhat.com, dwmw2@infradead.org, mcgrof@kernel.org, 
+	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com, 
+	atomlin@atomlin.com, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, 
+	borntraeger@linux.ibm.com, svens@linux.ibm.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, nathan@kernel.org, 
+	nsc@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
+	jolsa@kernel.org, shuah@kernel.org, keyrings@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH 6/8] tools uapi headers: add linux/module_signature.h
+Message-ID: <20260302150248-3bf0b0e6-ab1f-4808-905b-70c6ae1060e4@linutronix.de>
+References: <20260302-module-signature-uapi-v1-6-207d955e0d69@linutronix.de>
+ <b6c00e7ecc633ab02ee8689f5647ce9090cf72d75f5bf9f2cc2c09983d963b58@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|DB9PR04MB9556:EE_
-X-MS-Office365-Filtering-Correlation-Id: b6c41c88-dfd1-41e3-edcc-08de7863b1dc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|19092799006|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	J/zPIoqCL8qCnA1TSKAjG5aB2ze8EMnPM+cJ8NAUhisz86ZzAQRv6rZL2ZwbHhHcUrmv07i/qZukBH3o+l//sS6FhS4owWwHTSC2sPP+3KoPi7Hwvw8DEdTTcm+RrXYn49PYlBCXOqcmk+MmUsB5gjUBpvyvSNYL/0w/SihZBNCQHy1ydrGHHQHguRVWmZXSAMtCEXLTVWTQ+5Mw9NTulXGlAFZTE7smbhXk1PsqsTbO8F5A0YM37ZYl5w7kBjW7NmXFizIMbYp6HeZLY4PtOJc0XrIf0PebKMH9swHVv+lad3bx4QdAlsqiHvyO/xiQ1/AJcm2ZEByTqzjNqn2n8G682xYMBB8GDrXyzfo/tyCJsyOOCZWSuQ6PxzecgrTWMXoxBbfAxKzhIIrzrRSkfwL36UlLbW5Ylse7iHRVXXltQ2yWDGC89Tfl9wwk3ce9Q8xCRXrKrqgx3FJiPB18NanIhBsK22N2zxD/JTEEMrVNVu3cGURreZpbmEg1yTxKUzp6u/9/pLX/jyyrLVp1tvtewAq3Ae2FcGBaiktkckC6gEPJrLT9VUHNL12TfhwpfM/XvWkQpm0gUESfhwz9MrWRGjL3Rr52CZ/vBxsLvFdeFhcPU5ktVsBFDsGV3AabChWVdD1QUn+EAy4kgXj66VUD0leAoqWXxfcWGQxdMjlCOZFTGMRqZusprwyHmZWsV9xyghFLxoyJWALLoAxe/yDOvUrKBPaofFYAD3iONTo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(19092799006)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Ir+QtTHybQJlv+7eYE/cKOf1tBLWPny1cM8Ud9sWyB2cUdEj9G1e5ECZQjQM?=
- =?us-ascii?Q?PGnSiUPTEjEv2HMTIk48sYSUZFfhBa/PlKMN2NLihYHP3BxlkzAlqxnwf0oo?=
- =?us-ascii?Q?M8uuRJx8AvnDWuqCsTjyKhqpOT9JF1S7C/CmDHMO39L0PcyY2PQO7cixacUs?=
- =?us-ascii?Q?sAmThuAG5MG0Ggo/lMlC6ZwVk9BPAmqgzbfpTb3SBsDxteY54eht8oybftq9?=
- =?us-ascii?Q?hj6m+6XjmetfL73Qx+A2dgsSa8RxTpudQwrWQra0DNCB5wgucvAncOtGWSkm?=
- =?us-ascii?Q?pGmdLfwXtIIr+EtegCyjazjJM65mHLIQO9F/3yZqjtEe/N3NqzlF4+ry6iri?=
- =?us-ascii?Q?qpr2TS1kQa9nJvnb2o5QOBDWmmq5Rl8VTxOowVH/b/BEo0YveeYGzospy9rk?=
- =?us-ascii?Q?qdGizHossnxwp01Aow5mEsoffU7VGQSVK9CAQvcsnzPHJijqdo6TbJ6cgsxq?=
- =?us-ascii?Q?IY/Kxjs5EMi54xQ7eDAWdbYD56LdVueOUh0K9uEnO/xl2BA6FLOJmxjfB/5j?=
- =?us-ascii?Q?+n7eVqrITHQ2Ael9uhNlrohZgukVXvh/dEX1kYJlJnLBV3f0IpdQEpNVqZEg?=
- =?us-ascii?Q?nm6mxAmb4O0S7YBnpVtVVmwNQZTrInf/DezkMQYpiB/Ao6YiwZYJFtQdwof3?=
- =?us-ascii?Q?NOzEkADx4Z+Zo4O34ylKv3XmAchWeJ4CKXF4Gc/kLz1LTG2tIJnn7HMR3PpJ?=
- =?us-ascii?Q?4MCdSBJPiEQ7saLA57gbV59ls3+WU8mnUYpgwfKwhPnzhCeO6izd+e4i22Gg?=
- =?us-ascii?Q?tN7hQ0BotgBNTnz282iUO7akN1rq5QVInkev2VCb4Ntag62rDjGSxBs1obmr?=
- =?us-ascii?Q?Dbh5cJCoTpWHO8WE5xku4lRH14S7SegcJOWLR0Wz8Zlql1eEV9babUhTNZaX?=
- =?us-ascii?Q?hMeywa76Cgh32DyThtM8He7U0r5hOFh45sjOls32zrIl7s0TqWavnyLnYWkK?=
- =?us-ascii?Q?c4xqPIQGg8exqNQqlwgREZjkx+bqkUYuyvcMligmf/is9SmGEOlUAMtK2QQA?=
- =?us-ascii?Q?HqMlCXv6Z1AbBNW4j3J28TgrGH8Cpc0MiSrRP9KoSL3hjJSHur+QXn4S4npC?=
- =?us-ascii?Q?5eqcUrnxaJ2FglXwiJ7CoiHl+AP3On1N4pkFBOUxelYnzdxir/169akUsc+n?=
- =?us-ascii?Q?CSJDusSFWxZpk9lW8yrAC6TSQDtedVsdLeT3Oii8jOtl62RFUtB7n1ZmeBAW?=
- =?us-ascii?Q?zAn6RZIXkosG/fPMljYFfk4XKYUO93o82PuvBoxu1/BKF2FlNvDcwj2QmPEq?=
- =?us-ascii?Q?rkdYeXeNC0lGCSkVYaBXCPFd3kOVWGiGaBOxQBPEaxIt0jxX8N8LrrSVNoLj?=
- =?us-ascii?Q?LEHBmsjJBEcsNnahziZ2m7mJ+hHhOFcpJ3DtSjBWDn35EankMyBgOZu2abzw?=
- =?us-ascii?Q?TkONth706JO0gy8mtEetRQhQZMI8Fma+RaodkEnPn7+OFhVLflGPFp5PS1VZ?=
- =?us-ascii?Q?pSjtIluroq1E+/HFFGBRLStgxkqAEoJlnX2jZBdkUmcffslJwgapZBNf1gEi?=
- =?us-ascii?Q?RURSZpzEyFIm6+eWf5c+9aDSMgPkMq8vZs5QqkmY5Mj2lbxIPR1SV8N0Btsp?=
- =?us-ascii?Q?rxE9l3COk71s22QXiqLVeHBoKVJ8ow6ggJ4xyZUikwj0X137HG5eHgjGKq0T?=
- =?us-ascii?Q?7M6YJHJ5J3uuUxRDdLTy+e8PlzFacj3vzSivMCKMxlpWadaSBZ7QF+Q44Iu5?=
- =?us-ascii?Q?vZoUTxyI7jiJp7+bwxqU1hTd9O10O/GMPhW/Ersw2tY4/4Iy5kdM2srO5ctD?=
- =?us-ascii?Q?pK3MwJOnpg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6c41c88-dfd1-41e3-edcc-08de7863b1dc
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 13:57:51.6174
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /qb3ukmKf4rg2R/80hrWEP4ZhRBWn19w7P3XuLIiwTLDsGrVIdNNNhhEpK5XU0AuZH0sK2DgloKH2NV41OO+6g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9556
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6c00e7ecc633ab02ee8689f5647ce9090cf72d75f5bf9f2cc2c09983d963b58@mail.kernel.org>
 
-On Fri, Feb 27, 2026 at 05:38:40PM +0100, Petr Machata wrote:
+On Mon, Mar 02, 2026 at 01:32:34PM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/tools/include/uapi/linux/module_signature.h b/tools/include/uapi/linux/module_signature.h
+> > --- /dev/null
+> > +++ b/tools/include/uapi/linux/module_signature.h
 > 
-> Ioana Ciornei <ioana.ciornei@nxp.com> writes:
+> [ ... ]
 > 
-> > Even though pause frame statistics are not exported through the same
-> > ethtool command, there is no point in adding another helper just for
-> > them. Extent the ethtool_std_stats_get() function so that we are able to
-> > interrogate using the same helper all the standard statistics.
-> >
-> > Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-> > ---
-> >  tools/testing/selftests/net/forwarding/lib.sh | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-> > index a9034f0bb58b..efd236ae1c28 100644
-> > --- a/tools/testing/selftests/net/forwarding/lib.sh
-> > +++ b/tools/testing/selftests/net/forwarding/lib.sh
-> > @@ -831,8 +831,12 @@ ethtool_std_stats_get()
-> >  	local name=$1; shift
-> >  	local src=$1; shift
-> >  
-> > -	ethtool --json -S $dev --groups $grp -- --src $src | \
-> > -		jq '.[]."'"$grp"'"."'$name'"'
-> > +	if [[ "$grp" == "pause" ]]; then
-> > +		ethtool -I --json -a $dev | jq '.[].statistics.'$name
+> > +enum module_signature_type {
+> > +	MODULE_SIGNATURE_TYPE_PKCS7 = 2,	/* Signature in PKCS#7 message */
+> > +	MODULE_SIGNATURE_TYPE_MERKLE = 3,	/* Merkle proof for modules */
+> > +};
 > 
-> I think name needs to be quoted here? In fact, unless the pause group is
-> highly unlikely to ever get a key that contains a dash,
-
-I would expect that the pause group is pretty much set and will not get
-new counters but, sure, I can add the quotes just to be on the safe
-side.
-
-> it should either
-> be quoted in the horrible way the else branch does it, or do this much
-> more readable thing instead:
+> The source UAPI header at include/uapi/linux/module_signature.h does not
+> define MODULE_SIGNATURE_TYPE_MERKLE:
 > 
->         jq --arg name "$name" '.[].statistics[$name]'
+> include/uapi/linux/module_signature.h:
+>     enum module_signature_type {
+>         MODULE_SIGNATURE_TYPE_PKCS7 = 2,
+>     };
 > 
+> Was this value intentionally added here ahead of the kernel header?  It
+> appears to come from the CONFIG_MODULE_HASHES series referenced in the
+> cover letter, but no commit in this series adds it to the kernel UAPI
+> header, so the tools copy diverges from its source at creation time.
 
-Thanks! Wasn't aware of this type of jq variable usage but indeed it
-looks better.
+Indeed, this should only appear in the follow-up CONFIG_MODULE_HASHES series.
+I'll fix it for v2.
 
-> > +	else
-> > +		ethtool --json -S $dev --groups $grp -- --src $src | \
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 > 
-> Since you are touching this line -- can you fix the missing quoting,
-> please?
-
-Sure, I will add them.
-
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22577240517
 > 
-> > +			jq '.[]."'"$grp"'"."'$name'"'
+> AI-authorship-score: low
+> AI-authorship-explanation: Straightforward mechanical UAPI header copy with terse commit message, consistent with experienced kernel developer style from a known Linutronix contributor.
+> issues-found: 1
+> issue-severity-score: low
+> issue-severity-explanation: The tools UAPI copy contains an enum value (MODULE_SIGNATURE_TYPE_MERKLE) not present in the kernel source header, creating a content mismatch that does not affect runtime behavior but violates the convention that tools copies mirror kernel UAPI headers.
 
-And I think $name above needs double quoting as well.
-
-Ioana
