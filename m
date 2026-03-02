@@ -1,232 +1,104 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6F719DF6A
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 10:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5C2332ED0
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 10:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772446544; cv=none; b=sjAmb2GYfgNcCIfbVtpBJUHGZehOWFamL29dmSM2vJGAd/2O8k5NDvT9tMnaQ4FWv+eaM6gg/jukrq36n0QlGKo2POagjx/cdOwQxDpQ60mPptpKf23OU3APX3XzVI8NiJPBv6woyngCtFAAbH6BQYl9/+vcj2aI5wkDLKoYFg8=
+	t=1772447970; cv=none; b=exS3ZUo+5eiZ1ErA5V7DdDHKdB4c+/neQDFl8HsVtF/WrbAXtyqBiCGShVeaUmbtOS6i3sfsNArNtf02w5uCnLofGVmmFut9EKWTND446iK7RZ9MtXIe9HTu0ZL5e7FJFaQ2Agr5R1Ects6+d0WSMaciVfXaoEtcuuw55Irs8ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772446544; c=relaxed/simple;
-	bh=VM2a2BeuVgfGi1ShAXDtMB92p4B/RtLDTkk5cGM+saY=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=VH2qhUEXyMlikQqG8YOt3bdAzK9kThdTAduA/nSwmYg6Y5jGcOA5J/85UWHp38VKdSADZTCNjJMaCSwutZ5M/1ZImey5/t1hIEQthW4ow36JzQFuxEWnqkIZWyFZk/51qU3VlsOkg+FmuxsJGeSWDojCu7rEzOsj9CFFv5FxPr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aERnsOFL; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772447970; c=relaxed/simple;
+	bh=IXVKly4vZrqTzYsukfCbusZZsbWwT/ncueUw5X7V6KQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XiDcK35XbHiEEklRSR9bQBw4dLMn2GuVaSREtqrql9sYq9m3o4DaSg2kLP0nIVE16gHyQzS17v+al0/BbgX7WQFQvh5u7WmST+gvNY5LByjGIO7FF1E34B/sG3qr1XtJVfAFExIpnsvXsInqYhMbdZEtl1mcTxJwkIzuUsXqxP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ingeniumdigital.com; spf=pass smtp.mailfrom=ingeniumdigital.com; dkim=pass (2048-bit key) header.d=ingeniumdigital.com header.i=@ingeniumdigital.com header.b=WRB82fBn; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ingeniumdigital.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ingeniumdigital.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aERnsOFL"
+	dkim=pass (2048-bit key) header.d=ingeniumdigital.com header.i=@ingeniumdigital.com header.b="WRB82fBn"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c2af7d09533so2706710a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 02:39:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ingeniumdigital.com; s=google; t=1772447967; x=1773052767; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OhNp0kZiQhroSex4KBqfau9jIzn8Q9YBLyXvEf6AG2I=;
+        b=WRB82fBn6Mt0KWT3LyX/aTua8f6u6bigfEF3NFsndNoAGHLjlF2DZBGABE5rEZkkCo
+         E/0okwxAhKddlNScGiT9lzCnwWW1bFe4A8t/JcR3SZT+32NYcRLyH99b21NXiTIC1OuR
+         qgWgjZ0Xmi428yuiBwE2l+6C8Klze8pruEtcVqVazzMbgfC9jzBszRBT2s8UMtDF1QML
+         rzvGthu/RpGE4QHcIjl8sSItIczJD2CFCQnwUIeOpnyMH0hSRVae0LFGEgy+hEZbk+ZM
+         e/xsjx1YhRX/GPJOT+S/OT0bcRY7ih/TigTBsllxGDXgJz7wWClFD0wll6w1+I+8VbP2
+         zAgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772447967; x=1773052767;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OhNp0kZiQhroSex4KBqfau9jIzn8Q9YBLyXvEf6AG2I=;
+        b=h/8i44uKtQNy2W+lY56K2ki1hbI/Q1pGpKKMBbAxU2Grj0yH6nMvNtb9GKjRu/wvp+
+         mmZywGdmGofii60cSmrF0i35xvZ+a2p2UgP/f6jdiemj2YkMB1njPQYK6PTzTbWTam7z
+         lSUciKCzdy/SVluQhsl6+txfD3tY3NxaIInnKw+RBeRfkJ0zVPHdulMWZavLy7COrKiL
+         clcvUFxEnUnz8OIb8tanM10esdZD1QgaCG6btIyxLCQ5a7mpIR0ScsKuASCdGaY2j0W1
+         MYgml8IOmMDN7wThz7fz+unRgJpZdYxU2LMEtDdFV+f8w2frw/kDIQRE4NIgJd7lDqFR
+         Lx+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVC1SpgoaziDsZoNoHiqQPuD9AHpnMmtG+HgrVnGbh2UbjFm5dHrHg8HVA1n/OFWOK6dkXdSwy+NI6YFdmSoaw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSZWxozQ5h62gmZ6me5Z8d+1K7fOEzHOx/V01Rn/NXcWSXc/nF
+	8mftpzDBcoxIMLWVDIukj1m/RtEGPFUUs4vlQqMO+tfJI+EyGhwjopKiQzsmeTWnX2T2umqsoUc
+	7mlYwfF5g
+X-Gm-Gg: ATEYQzzeshsHuDi13ohZrEKA56BlmFtzIa812J3azNry2ByHJAxWVrFnzD/3IKVycWZ
+	PhOXu8sZGh/f1by/MurVV8B3bbYG5T8KDUSRDXef5e+FU+lFAW/qUmlNVh9GsV1OvPB1DWhF8xf
+	UNm0LiGePUOi6CNHecYITU7xH+tT5wRHt2nyRojrGU8EXhjtoaWs15acaWSYDjjYK2E+dz7YCTr
+	h+IPx6tl5fm3UnF20XBXsabjuMUPfm67pcmuLgWPSiyF5Oxl7namY+KdDHMmoY2N2FW6eUydCdC
+	hmr4wANuTVVaXU0a+IwmZ+dZY16K2ncGqEqBjuagrk3AXgvt+gnD2VG4kkaXQR4RA8lh7PvOYXF
+	RowK9uWSS3V5HJ1LtHj0lhGUcVcT3LB9cM7sBtKYvucPZYRzfrpJ2WqJ2Z7CH+AFkxfHrPyHgZ0
+	HIrwvI5Xg3B0NjC/Iy79/2HgPYFHyLFgh6CeXxM9fwcw1CYfl1foiYuoeIvOSGuIPSvcIZc0nBg
+	tr3Be8aKA==
+X-Received: by 2002:a17:902:d48d:b0:2aa:d802:a010 with SMTP id d9443c01a7336-2ae2e3e71fdmr110572055ad.10.1772447967486;
+        Mon, 02 Mar 2026 02:39:27 -0800 (PST)
+Received: from ?IPV6:2001:8003:8824:9e00:6d16:7ef9:c827:387c? ([2001:8003:8824:9e00:6d16:7ef9:c827:387c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb6fe4f3sm130805925ad.91.2026.03.02.02.39.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Mar 2026 02:39:26 -0800 (PST)
+Message-ID: <b1ff54a9-bbf0-4a59-976b-4b5dba21359e@ingeniumdigital.com>
+Date: Mon, 2 Mar 2026 18:39:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772446530;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CSeL517KPCXAMzvziO2NinmrAr+nMWkzlUfOO21t6Vc=;
-	b=aERnsOFLNEAqLlHB/bLDI13cu6rZN8FFkuVi6DTSGcbPUom+ThQEt2Hcr2k/fHnDr3RQoF
-	6XerNbJjSsQGJEeUa5C7MU77RVHEXfDonFAjzT8ANp6fzkr6ewMEFyUqqxXEOUG6oKpw1m
-	7ceXuMVeLXMxz2+c3sHcWH+CDafnvKE=
-Date: Mon, 02 Mar 2026 10:15:22 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <e4a2a652784ec206728eb3a929a9892238c61f06@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH net v3 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>
-Cc: "Jay Vosburgh" <jv@jvosburgh.net>, netdev@vger.kernel.org,
- jiayuna.chen@linux.dev, jiayuna.chen@shopee.com, "Jiayuan Chen"
- <jiayuan.chen@shopee.com>,
- syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
- <kpsingh@kernel.org>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
- <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Clark Williams"
- <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Jussi
- Maki" <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rt-devel@lists.linux.dev
-In-Reply-To: <20260302081021.MiQQ_LQr@linutronix.de>
-References: <20260228021918.141002-1-jiayuan.chen@linux.dev>
- <20260228021918.141002-2-jiayuan.chen@linux.dev>
- <999129.1772247707@famine>
- <08041bd78c06981b18b3de90a95e0c951bf1623c@linux.dev>
- <20260302081021.MiQQ_LQr@linutronix.de>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: tool: skip stty when stdin is not a tty
+To: Shuvam Pandey <shuvampandey1@gmail.com>, brendan.higgins@linux.dev,
+ davidgow@google.com
+Cc: raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+References: <20260227123136.91086-1-shuvampandey1@gmail.com>
+Content-Language: fr
+From: David Gow <david@ingeniumdigital.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+In-Reply-To: <20260227123136.91086-1-shuvampandey1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-March 2, 2026 at 16:10, "Sebastian Andrzej Siewior" <bigeasy@linutronix.d=
-e mailto:bigeasy@linutronix.de?to=3D%22Sebastian%20Andrzej%20Siewior%22%2=
-0%3Cbigeasy%40linutronix.de%3E > wrote:
+Le 27/02/2026 à 8:31 PM, Shuvam Pandey a écrit :
+> run_kernel() cleanup and signal_handler() invoke stty unconditionally.
+> When stdin is not a tty (for example in CI or unit tests), this writes
+> noise to stderr.
+> 
+> Call stty only when stdin is a tty.
+> 
+> Add regression tests for these paths:
+> - run_kernel() with non-tty stdin
+> - signal_handler() with non-tty stdin
+> - signal_handler() with tty stdin
+> 
+> Signed-off-by: Shuvam Pandey <shuvampandey1@gmail.com>
+> ---
 
+Reviewed-by: David Gow <david@davidgow.net>
 
->=20
->=20On 2026-02-28 03:36:24 [+0000], Jiayuan Chen wrote:
->=20
->=20>=20
->=20> My only concern is that this will waste a percpu u32 per bond
-> >  device for the majority of bonding use cases (which use modes other =
-than
-> >  balance-rr), which could be a few hundred bytes on a large machine.
-> >=20=20
->=20>  Does everything work reliably if the rr_tx_counter allocation
-> >  happens conditionally on mode =3D=3D BOND_MODE_ROUNDROBIN in bond_se=
-tup, as
-> >  well as in bond_option_mode_set?
-> >=20
->=20=E2=80=A6
->=20
->=20>=20
->=20> An alternative would be to allocate conditionally in bond_init() (s=
-ince the default mode is round-robin)
-> >  and manage allocation/deallocation in bond_option_mode_set() when th=
-e mode changes.
-> >=20
->=20This sounds reasonable.
->=20
->=20>=20
->=20> This is a trade-off between the added complexity of conditional all=
-oc/free across multiple code
-> >  paths and saving a per-CPU u32 for non-round-robin bonds.
-> >=20=20
->=20>  For the per-CPU u32 overhead, it's only 4 extra bytes per CPU per =
-bond device =E2=80=94 and machines with
-> >  that many CPUs tend to have plenty of memory to match.
-> >=20
->=204 bytes is the minimum allocation for per-CPU memory. The memory is
-> already "there" it is just not assigned. So for the 4 byte allocation i=
-t
-> is needed to find a single area (the smallest allocation size).
-> In case there no free block, a new block will be allocated and mapped
-> for each CPU which the part that costs memory.
-> That said, we should not waste memory but it is not _that_ expensive
-> either for a bond device. Things change if here are hundreds of devices=
-.
-
-
-Hi Jay, Sebastian,
-
-Sorry, the conditional alloc/free approach in bond_option_mode_set()
-I suggested earlier doesn't work well on closer inspection.
-
-Since bond_option_mode_set() requires the bond to be down, and as this
-bug shows, the XDP redirect path can still reach a downed bond device,
-we need to carefully order the operations:
-
-when switching to RR, alloc rr_tx_counter before setting mode;
-when switching away, set mode before freeing rr_tx_counter.
-
-Strictly speaking, this also requires smp_wmb()/smp_rmb() pairs to
-guarantee the ordering is visible to other CPUs =E2=80=94 the write side =
-in
-bond_option_mode_set() and the read side in the XDP path.
-
-In practice the race window is very small and unlikely to trigger, but
-leaving out the barriers would look incorrect, and adding them to the
-XDP hot path feels wrong for saving only 4 bytes per CPU per bond device.
-
-
-smp_wmb()/smp_rmb() (no test):=20
-
-diff=20--git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond=
-_main.c
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -4279,12 +4279,6 @@ static int bond_open(struct net_device *bond_dev)
-	struct list_head *iter;
-	struct slave *slave;
-
--     if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_cou=
-nter) {
--             bond->rr_tx_counter =3D alloc_percpu(u32);
--             if (!bond->rr_tx_counter)
--                     return -ENOMEM;
--     }
--
-	/* reset slave->backup and slave->inactive */
-	if (bond_has_slaves(bond)) {
-			bond_for_each_slave(bond, slave, iter) {
-@@ -5532,6 +5526,8 @@ bond_xdp_get_xmit_slave(struct net_device *bond_dev=
-, struct xdp_buff *xdp)
-
-	switch (BOND_MODE(bond)) {
-	case BOND_MODE_ROUNDROBIN:
-+             /* Pairs with smp_wmb() in bond_option_mode_set() */
-+             smp_rmb();
-			slave =3D bond_xdp_xmit_roundrobin_slave_get(bond, xdp);
-			break;
-
-@@ -6411,6 +6407,14 @@ static int bond_init(struct net_device *bond_dev)
-	if (!bond->wq)
-			return -ENOMEM;
-
-+     /* Default mode is round-robin, allocate rr_tx_counter for it.
-+      * For mode changes, bond_option_mode_set() manages the lifecycle.
-+      */
-+     bond->rr_tx_counter =3D alloc_percpu(u32);
-+     if (!bond->rr_tx_counter) {
-+             destroy_workqueue(bond->wq);
-+             return -ENOMEM;
-+     }
-+
-	bond->notifier_ctx =3D false;
-
-diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bon=
-d_options.c
---- a/drivers/net/bonding/bond_options.c
-+++ b/drivers/net/bonding/bond_options.c
-@@ -918,7 +918,27 @@ static int bond_option_mode_set(struct bonding *bond=
-,
-	/* don't cache arp_validate between modes */
-	bond->params.arp_validate =3D BOND_ARP_VALIDATE_NONE;
--     bond->params.mode =3D newval->value;
-+
-+     if (newval->value =3D=3D BOND_MODE_ROUNDROBIN) {
-+             /* Switching to round-robin: allocate before setting mode,
-+              * so XDP path seeing BOND_MODE_ROUNDROBIN always finds
-+              * rr_tx_counter allocated.
-+              */
-+             if (!bond->rr_tx_counter) {
-+                     bond->rr_tx_counter =3D alloc_percpu(u32);
-+                     if (!bond->rr_tx_counter)
-+                             return -ENOMEM;
-+             }
-+             /* Pairs with smp_rmb() in bond_xdp_get_xmit_slave() */
-+             smp_wmb();
-+             bond->params.mode =3D newval->value;
-+     } else {
-+             /* Switching away: set mode first so XDP no longer
-+              * enters RR branch before we free rr_tx_counter.
-+              */
-+             bond->params.mode =3D newval->value;
-+             /* Pairs with smp_rmb() in bond_xdp_get_xmit_slave() */
-+             smp_wmb();
-+             free_percpu(bond->rr_tx_counter);
-+             bond->rr_tx_counter =3D NULL;
-+     }
-
-Thanks,
-Jiayuan
-
-
-> >=20
->=20> Thanks
-> >=20=20
->=20>  -J
-> >=20
->=20Sebastian
->
+Cheers,
+-- David
