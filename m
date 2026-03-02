@@ -1,80 +1,232 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C83639448E;
-	Mon,  2 Mar 2026 10:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6F719DF6A
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 10:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772446122; cv=none; b=CnSSokeZ3Ss0eZo5i4L9WFHmm2K6X/x0T1e6iGcqxKRvYSIbKWLRYFjwzJ1m/v78OwB1W5XvCK/e8qAEDyNHOFn5bqAEacrMkKPC1K0HtwycNNW59/dWW+DnFcD2znAvcXL9C149RAqKkjRthciLVcSf+GMfpq/DAaX206u/Fmc=
+	t=1772446544; cv=none; b=sjAmb2GYfgNcCIfbVtpBJUHGZehOWFamL29dmSM2vJGAd/2O8k5NDvT9tMnaQ4FWv+eaM6gg/jukrq36n0QlGKo2POagjx/cdOwQxDpQ60mPptpKf23OU3APX3XzVI8NiJPBv6woyngCtFAAbH6BQYl9/+vcj2aI5wkDLKoYFg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772446122; c=relaxed/simple;
-	bh=TaxkzrEGBaT9PneQGTQJRqRh50qnh7AQ8q3hOddXbc8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sczouN+QYDJO9osPQTeP/kQ7mFIJhaewXp8KCvfgUEo1rIr6fm6B0p4WrclE41iLIuH+GL7i3xiAibQeMnFicODxk9GIQQ5CIJ02cDzKWOrxyRvFlLXzR1YL2AI+p52S0uAzHlAnSediXa9U+tUTFEchxH6ppFp9TXgOZemNMGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMBR0xHs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772446544; c=relaxed/simple;
+	bh=VM2a2BeuVgfGi1ShAXDtMB92p4B/RtLDTkk5cGM+saY=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=VH2qhUEXyMlikQqG8YOt3bdAzK9kThdTAduA/nSwmYg6Y5jGcOA5J/85UWHp38VKdSADZTCNjJMaCSwutZ5M/1ZImey5/t1hIEQthW4ow36JzQFuxEWnqkIZWyFZk/51qU3VlsOkg+FmuxsJGeSWDojCu7rEzOsj9CFFv5FxPr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aERnsOFL; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMBR0xHs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414FEC2BCAF;
-	Mon,  2 Mar 2026 10:08:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772446122;
-	bh=TaxkzrEGBaT9PneQGTQJRqRh50qnh7AQ8q3hOddXbc8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eMBR0xHsAquhsBNoSljC/y+VT9NeDhyXbcxBUy1vOCVeqkM2ElSn3pTEICwm8IgAv
-	 nlbC8F/SCKv5JBWzrW6Z2/d59ts1MvXaq47jWBxT65/xrZbkR6j735CjSVJLywq1qF
-	 Myyq4VN/bzlw16r1UVvto9YhHs2n/jMfPtjr99CxaTp8WLKVrmBbHz+qFAN1nYlaWB
-	 7OYRp0g/+/BIpyaJxQ/U2X7wrLZH/P0yoFUqmajW48mN5W/S77WyTuVyjy7v6Z7ESa
-	 2HsnsZtmVHVoAUQgA25lJv9GZ6rGDJGGDYaAeIcPOrIyHWAhlhfMBwIXALCPY3GaPB
-	 1FcCkjyA8wU9Q==
-From: Christian Brauner <brauner@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v3] selftests/filesystems: Assume that TIOCGPTPEER is defined
-Date: Mon,  2 Mar 2026 11:08:31 +0100
-Message-ID: <20260302-hahnenkamm-flehen-401a6dfedc64@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260227-selftests-filesystems-devpts-tiocgptpeer-v3-1-07db4d85d5aa@kernel.org>
-References: <20260227-selftests-filesystems-devpts-tiocgptpeer-v3-1-07db4d85d5aa@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aERnsOFL"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772446530;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CSeL517KPCXAMzvziO2NinmrAr+nMWkzlUfOO21t6Vc=;
+	b=aERnsOFLNEAqLlHB/bLDI13cu6rZN8FFkuVi6DTSGcbPUom+ThQEt2Hcr2k/fHnDr3RQoF
+	6XerNbJjSsQGJEeUa5C7MU77RVHEXfDonFAjzT8ANp6fzkr6ewMEFyUqqxXEOUG6oKpw1m
+	7ceXuMVeLXMxz2+c3sHcWH+CDafnvKE=
+Date: Mon, 02 Mar 2026 10:15:22 +0000
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1232; i=brauner@kernel.org; h=from:subject:message-id; bh=TaxkzrEGBaT9PneQGTQJRqRh50qnh7AQ8q3hOddXbc8=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQuTVz6omm5SjhjW7fAri/b7e349hQYs13MXiQxSVBR8 XzRZaPyjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgInEMjL8L9XnMMj9rWtx5lLB g28XG585BRSH9XkYX5rNWLbEOLWdi+Gv8O8gxerexUreN2omB75bm6wzlZO7UyLS5fmk3RIHj65 kAAA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <e4a2a652784ec206728eb3a929a9892238c61f06@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH net v3 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>
+Cc: "Jay Vosburgh" <jv@jvosburgh.net>, netdev@vger.kernel.org,
+ jiayuna.chen@linux.dev, jiayuna.chen@shopee.com, "Jiayuan Chen"
+ <jiayuan.chen@shopee.com>,
+ syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
+ <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
+ <kpsingh@kernel.org>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Clark Williams"
+ <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Jussi
+ Maki" <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev
+In-Reply-To: <20260302081021.MiQQ_LQr@linutronix.de>
+References: <20260228021918.141002-1-jiayuan.chen@linux.dev>
+ <20260228021918.141002-2-jiayuan.chen@linux.dev>
+ <999129.1772247707@famine>
+ <08041bd78c06981b18b3de90a95e0c951bf1623c@linux.dev>
+ <20260302081021.MiQQ_LQr@linutronix.de>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 27 Feb 2026 15:20:35 +0000, Mark Brown wrote:
-> The devpts_pts selftest has an ifdef in case an architecture does not
-> define TIOCGPTPEER, but the handling for this is broken since we need
-> errno to be set to EINVAL in order to skip the test as we should. Given
-> that this ioctl() has been defined since v4.15 we may as well just assume
-> it's there rather than write handling code which will probably never get
-> used.
-> 
-> [...]
+March 2, 2026 at 16:10, "Sebastian Andrzej Siewior" <bigeasy@linutronix.d=
+e mailto:bigeasy@linutronix.de?to=3D%22Sebastian%20Andrzej%20Siewior%22%2=
+0%3Cbigeasy%40linutronix.de%3E > wrote:
 
-Applied to the vfs-7.1.misc branch of the vfs/vfs.git tree.
-Patches in the vfs-7.1.misc branch should appear in linux-next soon.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+>=20
+>=20On 2026-02-28 03:36:24 [+0000], Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> My only concern is that this will waste a percpu u32 per bond
+> >  device for the majority of bonding use cases (which use modes other =
+than
+> >  balance-rr), which could be a few hundred bytes on a large machine.
+> >=20=20
+>=20>  Does everything work reliably if the rr_tx_counter allocation
+> >  happens conditionally on mode =3D=3D BOND_MODE_ROUNDROBIN in bond_se=
+tup, as
+> >  well as in bond_option_mode_set?
+> >=20
+>=20=E2=80=A6
+>=20
+>=20>=20
+>=20> An alternative would be to allocate conditionally in bond_init() (s=
+ince the default mode is round-robin)
+> >  and manage allocation/deallocation in bond_option_mode_set() when th=
+e mode changes.
+> >=20
+>=20This sounds reasonable.
+>=20
+>=20>=20
+>=20> This is a trade-off between the added complexity of conditional all=
+oc/free across multiple code
+> >  paths and saving a per-CPU u32 for non-round-robin bonds.
+> >=20=20
+>=20>  For the per-CPU u32 overhead, it's only 4 extra bytes per CPU per =
+bond device =E2=80=94 and machines with
+> >  that many CPUs tend to have plenty of memory to match.
+> >=20
+>=204 bytes is the minimum allocation for per-CPU memory. The memory is
+> already "there" it is just not assigned. So for the 4 byte allocation i=
+t
+> is needed to find a single area (the smallest allocation size).
+> In case there no free block, a new block will be allocated and mapped
+> for each CPU which the part that costs memory.
+> That said, we should not waste memory but it is not _that_ expensive
+> either for a bond device. Things change if here are hundreds of devices=
+.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+Hi Jay, Sebastian,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.1.misc
+Sorry, the conditional alloc/free approach in bond_option_mode_set()
+I suggested earlier doesn't work well on closer inspection.
 
-[1/1] selftests/filesystems: Assume that TIOCGPTPEER is defined
-      https://git.kernel.org/vfs/vfs/c/f7df26875b9a
+Since bond_option_mode_set() requires the bond to be down, and as this
+bug shows, the XDP redirect path can still reach a downed bond device,
+we need to carefully order the operations:
+
+when switching to RR, alloc rr_tx_counter before setting mode;
+when switching away, set mode before freeing rr_tx_counter.
+
+Strictly speaking, this also requires smp_wmb()/smp_rmb() pairs to
+guarantee the ordering is visible to other CPUs =E2=80=94 the write side =
+in
+bond_option_mode_set() and the read side in the XDP path.
+
+In practice the race window is very small and unlikely to trigger, but
+leaving out the barriers would look incorrect, and adding them to the
+XDP hot path feels wrong for saving only 4 bytes per CPU per bond device.
+
+
+smp_wmb()/smp_rmb() (no test):=20
+
+diff=20--git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond=
+_main.c
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -4279,12 +4279,6 @@ static int bond_open(struct net_device *bond_dev)
+	struct list_head *iter;
+	struct slave *slave;
+
+-     if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_cou=
+nter) {
+-             bond->rr_tx_counter =3D alloc_percpu(u32);
+-             if (!bond->rr_tx_counter)
+-                     return -ENOMEM;
+-     }
+-
+	/* reset slave->backup and slave->inactive */
+	if (bond_has_slaves(bond)) {
+			bond_for_each_slave(bond, slave, iter) {
+@@ -5532,6 +5526,8 @@ bond_xdp_get_xmit_slave(struct net_device *bond_dev=
+, struct xdp_buff *xdp)
+
+	switch (BOND_MODE(bond)) {
+	case BOND_MODE_ROUNDROBIN:
++             /* Pairs with smp_wmb() in bond_option_mode_set() */
++             smp_rmb();
+			slave =3D bond_xdp_xmit_roundrobin_slave_get(bond, xdp);
+			break;
+
+@@ -6411,6 +6407,14 @@ static int bond_init(struct net_device *bond_dev)
+	if (!bond->wq)
+			return -ENOMEM;
+
++     /* Default mode is round-robin, allocate rr_tx_counter for it.
++      * For mode changes, bond_option_mode_set() manages the lifecycle.
++      */
++     bond->rr_tx_counter =3D alloc_percpu(u32);
++     if (!bond->rr_tx_counter) {
++             destroy_workqueue(bond->wq);
++             return -ENOMEM;
++     }
++
+	bond->notifier_ctx =3D false;
+
+diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bon=
+d_options.c
+--- a/drivers/net/bonding/bond_options.c
++++ b/drivers/net/bonding/bond_options.c
+@@ -918,7 +918,27 @@ static int bond_option_mode_set(struct bonding *bond=
+,
+	/* don't cache arp_validate between modes */
+	bond->params.arp_validate =3D BOND_ARP_VALIDATE_NONE;
+-     bond->params.mode =3D newval->value;
++
++     if (newval->value =3D=3D BOND_MODE_ROUNDROBIN) {
++             /* Switching to round-robin: allocate before setting mode,
++              * so XDP path seeing BOND_MODE_ROUNDROBIN always finds
++              * rr_tx_counter allocated.
++              */
++             if (!bond->rr_tx_counter) {
++                     bond->rr_tx_counter =3D alloc_percpu(u32);
++                     if (!bond->rr_tx_counter)
++                             return -ENOMEM;
++             }
++             /* Pairs with smp_rmb() in bond_xdp_get_xmit_slave() */
++             smp_wmb();
++             bond->params.mode =3D newval->value;
++     } else {
++             /* Switching away: set mode first so XDP no longer
++              * enters RR branch before we free rr_tx_counter.
++              */
++             bond->params.mode =3D newval->value;
++             /* Pairs with smp_rmb() in bond_xdp_get_xmit_slave() */
++             smp_wmb();
++             free_percpu(bond->rr_tx_counter);
++             bond->rr_tx_counter =3D NULL;
++     }
+
+Thanks,
+Jiayuan
+
+
+> >=20
+>=20> Thanks
+> >=20=20
+>=20>  -J
+> >=20
+>=20Sebastian
+>
