@@ -1,66 +1,101 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18EC31F99E;
-	Mon,  2 Mar 2026 22:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2A81AF0BB;
+	Mon,  2 Mar 2026 22:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772490663; cv=none; b=VBPDaJF+dvGkdj9alzKSJXZLN0+59QQOliAgTWRHWpmtUfEn8v+UqUm9xqKNNAkrthjeLYTZ/yNz+Dzoz6hO5+EpGovxJdNFI3SqwaEG8hclTdCONAt13zLkU3V3jqvGk9N5Ka0Guj3ihkuPSkk4Twf7xG06iwkj6WUSOOuHpWY=
+	t=1772492375; cv=none; b=mSw4l9pNvOlfObchjrjB6QHk+t0vCTY22/FnDbfRh7YEzojGD9eJ2KT2yxSyZ/PtjzOjs5YRBegRdTrrBoR3/2gByEsQOcbKi2nkYRMA00a23F/MeY7/tUFuXSVyS3dDSlkbdR25pM1/IYTrGGv8HyKdhi4dyvsiHMTvF0PY+Lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772490663; c=relaxed/simple;
-	bh=tZvLePHDcA6nPS3DGdX3TVhrRB3omFsqKk8wwChJqvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s5En0S5qw0IuAkBeXiN1FqYc7hkixBNFX+zR/toWvtWkHvULf/b6YzaF3ZgfkP8+fnh0OVSiqMFPEAjIJXNSujWls6OnmzdvDHOBzPJWXloyti+YA5Xlv2tRsT0jsXkFNwn5JH0uUtfbe+iLdiMuhTYL0nb0fPr5b7/zCENL1+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=p0iUcSca; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1772492375; c=relaxed/simple;
+	bh=FaUBvjel+m4F6ioncCKqn+oV12A2Ri4kSItagqz6d+s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bEa3ZgL6kxAC29Eyk00tzsjpDoLhA6R3+oM2SoBDy99MJS+PXzx049fUaO9WaSn/tiIWidLJBxIXHfh1bClHxCdnDtr8JJMqob6IhkzSXGY1Nj+jdfHdnvPpebECcJv4AgQBXNIEvtg8jflJsxO8CwBviMDF+iMoAXVhd9bYRqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hX8K38/Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="p0iUcSca"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1772490657;
-	bh=tZvLePHDcA6nPS3DGdX3TVhrRB3omFsqKk8wwChJqvI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p0iUcScaLj+aHRl5SpbKIM9COu1svBq25PEsqKZFpE07xFsXZDs+LQ8jM2fjuYu1k
-	 BYix94tXaFONt3XnduyscVQnXfFDgfEaTgmtkW6pBPLAb99hz8gtAmOjgQcojQX3Ik
-	 f3B32p1a3xP4zlTahhgQ3weKmOtt/nXOE6SDwoaA=
-Date: Mon, 2 Mar 2026 23:30:57 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Jordan Richards <jordanrichards@google.com>
-Cc: dmatlack@google.com, jasonmiu@google.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pasha.tatashin@soleen.com, 
-	pratyush@kernel.org, rppt@kernel.org, shuah@kernel.org, w@1wt.eu
-Subject: Re: [PATCH v2 1/2] tools/nolibc: add ftruncate()
-Message-ID: <596c05a0-caee-4696-8136-e89081b7c68a@t-8ch.de>
-References: <ebf0c9fd-9c45-4aa2-8cd7-fe8d5956ce52@t-8ch.de>
- <20260302222043.2432413-1-jordanrichards@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hX8K38/Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9B8C19423;
+	Mon,  2 Mar 2026 22:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772492375;
+	bh=FaUBvjel+m4F6ioncCKqn+oV12A2Ri4kSItagqz6d+s=;
+	h=From:Subject:Date:To:Cc:From;
+	b=hX8K38/YihbQUTenWnyulCNOsMi8mpp1rKjo5y7TcoDlMjVFQbYlXfDrnZjLUjhIV
+	 bLhdRSeE9YbBJa8rMPfzwTs7h+jGOUJMdmNVCSFXyFmyrpGkzBEd4gkAfVhAxYo2E+
+	 XSVXXtzU5Wme2ETMx66S9V6ksdBQ2WPo+LvitF3FirkR100c0m6wPWzdjbDbI5W5A+
+	 5Gs0LmqErjvVSLoktXCNtjk+TLRYGRiPqEFfVzsJ++7bOnRVV28cJ9bwOyPQIm08rd
+	 fkiuDxbNMQK3rlW26wi1WplGwxGf9TUxZAHOF2rHT333hDRJi9Tu7+8jyldI2j284D
+	 6hGcWq0aG9YTQ==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/8] arm64: Implement support for 2025 dpISA extensions
+Date: Mon, 02 Mar 2026 22:53:15 +0000
+Message-Id: <20260302-arm64-dpisa-2025-v1-0-0855e7f41689@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302222043.2432413-1-jordanrichards@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANsUpmkC/yXM0QqCQBCF4VeRuW5gNZugV4kupt2TTpDJjkogv
+ rtbXX4Hzr+SIxucLtVKGYu5vYeC+lBR7HXowJaKqQmNhDoIa35Jy2k0Vy7jiZPI+agQjQCV25j
+ xsM8veb397fP9iTh9O7RtO2/cHQF0AAAA
+X-Change-ID: 20260106-arm64-dpisa-2025-d6673ae6acee
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-38bf1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1868; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=FaUBvjel+m4F6ioncCKqn+oV12A2Ri4kSItagqz6d+s=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpphZOvvoPDojwyp5nvchJkIbV5mZAOyGT+z9jc
+ S0UvmvwFgmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaaYWTgAKCRAk1otyXVSH
+ 0Oo9B/0QunqIb3ShHSa1I9yzEf/odlNOvTyIk7IcSk/6WExkdH455L8Nmu9qNPOLNQM5KdKSzFA
+ opePWiQ5olY1MXC1qCkUwuYs/aZtTNA1HaeBaK1xEndW/tSfMo4hAEeyENVKcu96aVg6uZSbuOe
+ 5nPa1W6vArNG4D0own4pStA0SURH/miR4bRjNO87I8e+jWD00u0zIHUQz9tUfSeBC3a1m7ARkoY
+ i1Qrh44LHcY9nhPe1jXog8FFw4fVr9NyfQRwnByWiQq3fj25QC6w7i5A9PeaokYhQXhQqDivU0p
+ 0BP8UF1Fnm64gTnvMKm5OKfBxGfftsWovR8TwCrU3o5uMFYr
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 2026-03-02 22:20:43+0000, Jordan Richards wrote:
+The 2025 dpISA extensions introduce a number of architecture features
+all of which are fairly straightforward from a kernel point of view
+since they only introduce new instructions, not any architecture state.
 
-(...)
+All the relevant newly added ID registers are already exported by KVM,
+all non-RES0 bits in ID_AA64ZFR0_EL1 and ID_AA64FPFR0_EL1 are writable
+and the updates to ID_AA64ISARx_EL1 are all additional values in already
+exported bitfields.
 
-> > off_t is now always 64bit on nolibc. On 32-bit architectures however
-> > __NR_ftruncate only takes a 32bit value, leading to the wrong kind of
-> > truncation. Use __NR_ftruncate64 instead where available.
-> 
-> Good call. On some archs (arm, mips, ppc) register pairs need to start
-> in an even register. I assume adding a flag like:
-> 
->   #define ARCH_ALIGN_REGISTER_PAIR 1
-> 
-> in "nolibc/arch-xxx.h" is appropriate?
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (8):
+      arm64/hwcap: Generate the KERNEL_HWCAP_ definitions for the hwcaps
+      arm64/sysreg: Update ID_AA64ISAR0_EL1 description to DDI0601 2025-12
+      arm64/sysreg: Update ID_AA64ISAR2_EL1 description to DDI0601 2025-12
+      arm64/sysreg: Update ID_AA64FPFR0_EL1 description to DDI0601 2025-12
+      arm64/sysreg: Update ID_AA64ZFR0_EL1 description to DDI0601 2025-12
+      arm64/sysreg: Update ID_AA64SMFR0_EL1 description to DDI0601 2025-12
+      arm64/cpufeature: Define hwcaps for 2025 dpISA features
+      kselftest/arm64: Add 2025 dpISA coverage to hwcaps
 
-I would use a custom sys_ftruncate64() wrapper function for those.
-Similar to sys_mmap() on some architectures or sys_fork() on s390.
+ Documentation/arch/arm64/elf_hwcaps.rst   |  24 ++++++
+ arch/arm64/include/asm/hwcap.h            | 120 +-----------------------------
+ arch/arm64/include/uapi/asm/hwcap.h       |   8 ++
+ arch/arm64/kernel/cpufeature.c            |  11 +++
+ arch/arm64/kernel/cpuinfo.c               |   8 ++
+ arch/arm64/tools/Makefile                 |   8 +-
+ arch/arm64/tools/gen-kernel-hwcaps.sh     |  23 ++++++
+ arch/arm64/tools/sysreg                   |  20 ++++-
+ tools/testing/selftests/arm64/abi/hwcap.c | 116 +++++++++++++++++++++++++++++
+ 9 files changed, 217 insertions(+), 121 deletions(-)
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260106-arm64-dpisa-2025-d6673ae6acee
 
-(...)
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
-Thomas
