@@ -1,143 +1,129 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A6F413231
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 15:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C93241C0AC
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 15:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772466875; cv=none; b=jyQULztTJTu2Vc1UxLWdKSa+OF8e82ZmWpgyTWQAf/eg/a07Z2Tqvi5QDohdfy4TwNdunyLiZtIDFMYJn071HH0/l4zIZ5ZwtzvKAas3VhuA5Wz8OL0VLyEcYNJV87AR2Oc9Pfj4brkE6omu43DyC1qYc0feu61WsxQC21mccUY=
+	t=1772467062; cv=none; b=t38ywgStatJRyDaqM3c2Xr8unh3MpXzU6lJAXZ3J7C3N1v+FJMVTNj2q0qjCQWK2bQS1ogugSqkFjjba95+fBLOTTEmfUIdiQND3Wv6p01A+LcLR4fWQJd4VRC2EkHukFYWKBDx6TOWMRu9ffUGN3EUW2uynh1Moz9zaH/60igg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772466875; c=relaxed/simple;
-	bh=dDpcbfDi0yi7fEFTxd12xIV5BQ3X3OV+mFeaeykwVCM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A+hhvU7FiWLGRjrEIvgLcmADf54h4cucdCjwWCVzs5lv0+PwTgnCul/qiqWqEoqawbnj7bwDsOzl6s5VUZvJq5GYDUpTJNeO1ZfbJTusPiaI5JHanyMjBgBq+gKEw4BbIHfLQyYraeI3BdUf73DnpWDb+OUgohqgXYrdvEf0+P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=zHZDllC4; arc=none smtp.client-ip=74.125.82.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	s=arc-20240116; t=1772467062; c=relaxed/simple;
+	bh=iYsd3Elf0ik4GJpr4eGq44qKeDc6FOSqBZtqVOSshJc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=IJd7d1xhv/mlEPNSieFf2BD3Dt22ZqVO1cVfmMsDztLlQb7/32dCAqCiO351YlQPvIp62gN//G9yLcVy2p8dNh5QEuYplhscKrpJ7J8mMyI9UixP0dHIDWN5PO8gcGW5YiJmC2uwfrIRWGXSesAbYqaziDvxUw4Pvdsal/UfYQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P1H1H/zY; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="zHZDllC4"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-12758ce1e8dso5527365c88.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 07:54:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P1H1H/zY"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-359918118ebso1872317a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 07:57:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1772466870; x=1773071670; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vYKX84PLbw1ik011AtUFY/JoiQVlKtt+8d30XwsrbyA=;
-        b=zHZDllC4F8vhmIye6X0hKfi9I2znFzlhAdHfhUzK/9PJ1wSMBFVNUcRV2K/Q0E6FbO
-         dGSLu/ViHr6mZbr+JxW8NvqoUglssyBfP4LnrZ1BmfutjquEOmST1/7G3ZETOXSA3Z0y
-         A4Jidrl15Ex/tcF6Vn2k/gjER8+zmvFhkeNhvoIwCZTIa5GZc16Qbo7QHNFDudOqu7CE
-         0ZfH7KVe56T242mitHDwKgrCsLFynQRTJ0MY5TI7EIBEEYNUhAsh6l/UPSPfsESPvRzM
-         kdXFOVjBgWDRvAm1jA4hweX9x96FI8oH3LchAe6U58mnQkFtCsbUjkHTdL3Iee3u5Blt
-         5C9w==
+        d=google.com; s=20230601; t=1772467059; x=1773071859; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ta44dSkyUYoWSHu8DjFcJDUvqHtZprEgi2FuVoYoKhw=;
+        b=P1H1H/zYZoibKL1lGEcVpuz8c6BDWHwJEYFNS4Jua76NRE5innUXZ8hsEA2CcexsiY
+         tClaS3cIVl82DPhOnWJElue/vEuShWsawQNJPPHKMyjjYpcPGXof4w151ZCpr+RBY4K6
+         4CqQQdDWMYZq8GgrWm7qZcgye3SZ2A1fkDZsPTwu/tmKvgtFkWri3Hw1xoXjO29eBwpt
+         Hbtq7XkQHrX0ESOe5DKUZjmqwp8UqJr5JkkB2+BAl7TjfsroiaF3myWgDDN/5eOpJDvV
+         DwMjvTPESSOOTuimsTvxNGBl/f7p2gKop400EIyK0PQAX/tJhLIUxm+zu9fCVfCn5wpy
+         ogCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772466870; x=1773071670;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vYKX84PLbw1ik011AtUFY/JoiQVlKtt+8d30XwsrbyA=;
-        b=LsCDoGlIqhtXJ+5+RI07YFeJAy0YADxX17Q1OTyHzNZKKf7XWBVWzcB7a6gctGQEVt
-         8mjy4wNrgFMxdeA/SJKHDkZQ4BLmAwOOhVMH2rHozuOTYNP7Kngi0STRJa7iNiterZiK
-         X1VXiKOtNfK9VmymCuDRnIBTBXR97obr6IBzeqkrfY3n22TKbNBkit3OZNDSOTQl2d1b
-         xgK4Yc5i6szx+P0GqhUjbXZzyOQ2QoVkZjefTEQsK6dEax+yFG8a61apxTaNDhyAZZCy
-         UNP/Ce5UDU6vuLvVHU9geu5oYXsmmiCZHbImVqC1r0vvu2u1ZlTu4pLgC39e9EJ22IZI
-         JSWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXENo1I8uoWJwA58P0DrljO12xEgirOZ0okBrFL0Sw3+KUR7bGBgcZ1t/NG6qktTvXx8EOYYId2eHEkC71zK+Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJ0dopDHPHjkqCAuf6lHtUTN6XSefF2rddek8Frg/uoDJnCFvK
-	NyC7SECD2JRjJBQFDpubSQzaOZWxhqX87xLcM0ggAPYnR3j6mn5M8W6Nl54x5EaJiNgmArflmft
-	xGd5lB+k=
-X-Gm-Gg: ATEYQzz2cCyKVxdtqy7fzQsNYJMWdUMrUMYykinkvZxk5essbxQtVRKMJx95FRFO1YP
-	ecCVlnIBfqq/rV5ANxvKdXPSyIsGM4UKWpBvD+XS0Vtvj/lRcJVZVfV/h6D26vpJbKr+FYxEvgA
-	bfnB3N7kZVXaoJcpsb99hyllMl/Q3dzjmLY1KNwH20FpP492Wjw661hZOxo+/jR6u2k4oMd0Sr5
-	uI2TmYZQJByUceF0cLxwsNwTKUJNEN6FAQ0qGxf+YX30qBAbfnaC0W+rYyGSN9v0jw4qBg9srPD
-	0c5Xuot58b4uLrNBNxBSiG+9tZwxLP2ijTa3AiwPrh+PgUS4XuaClOzYOt0fFwLlvZUQ8dn5hWc
-	ISuC7yWSqseWFpmqnYgu/CK7mgi4sXsLLSqQHSEa8DZWeHlaYJwAkO9wJQPzNF+jyrV2mY80CTA
-	1YYGMJx+/x67kHGWfGBZyFTuGXAdwnuP2RmVfQ/k3itL1CWNkh3946CoMTRfLbMC0CQZ13nUCHP
-	ir/JnigDsvBuSfX6dR3wOkrMgGchtZH
-X-Received: by 2002:a05:7301:fa0b:b0:2be:617:2ddf with SMTP id 5a478bee46e88-2be06173268mr2046986eec.16.1772466870425;
-        Mon, 02 Mar 2026 07:54:30 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::badb])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1a45a58sm10660215eec.0.2026.03.02.07.54.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Mar 2026 07:54:30 -0800 (PST)
-Message-ID: <90cfcf06-e987-4817-acba-2037a436a744@davidwei.uk>
-Date: Mon, 2 Mar 2026 07:54:28 -0800
+        d=1e100.net; s=20230601; t=1772467059; x=1773071859;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ta44dSkyUYoWSHu8DjFcJDUvqHtZprEgi2FuVoYoKhw=;
+        b=TlcNiUY4MA89VHjOonwBjuouzaHFgbaQ8MpSh8XXVVJ3k+mhrFA1aP4kzntn3wtcHX
+         xIeXliFLZjmdpTzg1tNosliIy6Kun2X1b9d9ec8dI+O0HhyoFCAntFSyz8B3yaqvH2iL
+         6m8IJ6wgj3tBjbZN/hJYCE4YU7ff60hWGBMQa9Og83JrZzn3pJzXQRBJtiFDdBMsyw8R
+         vxOtlNxOptAZc3lrnSJFndVM2zHGlOvAPSN9HnvjpAjcn7z3HZ5bMw1LoglzbYDMFPa8
+         kmfSFFWKjhP9jt/IiPRvbSVAHRvXn3tBWaUy228gR5/B3aT3AIFmHsdYdsN78GPpuLyD
+         /VgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdIrx4AGDtG2Bz07qPOeCwRYmy2PdAxA/Jip4DwRnE16aKGfS3gyvV5YsbCNqe2vAx+2PWwa65inhMdgFeJN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHoTi/az4ZnQBBU+BFIDUGKysp+IM6AwkbnRMuIxlggz97Iick
+	KYpOtnkArmCd5qBXCakBloiLip3Q7DciCHEBSO+ypuoL7yJNzucLL7ACB9n+guqpqrG6lAaTL00
+	lrIyt7Q==
+X-Received: from pjpy12.prod.google.com ([2002:a17:90a:a40c:b0:359:8e40:28c5])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4c0b:b0:359:8cad:bcdc
+ with SMTP id 98e67ed59e1d1-3598cadbd66mr3700334a91.10.1772467059132; Mon, 02
+ Mar 2026 07:57:39 -0800 (PST)
+Date: Mon, 2 Mar 2026 07:57:32 -0800
+In-Reply-To: <20260302090739.464786-1-kai.huang@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/3] selftests: drv-net: iou-zcrx: rework large
- chunks test to use common setup
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, jdamato@fastly.com,
- asml.silence@gmail.com, io-uring@vger.kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260227171305.2848240-1-kuba@kernel.org>
- <20260227171305.2848240-3-kuba@kernel.org>
-Content-Language: en-US
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20260227171305.2848240-3-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260302090739.464786-1-kai.huang@intel.com>
+Message-ID: <aaWzbCEWbStphJPh@google.com>
+Subject: Re: [PATCH] KVM: selftests: Increase 'maxnode' for guest_memfd tests
+From: Sean Christopherson <seanjc@google.com>
+To: Kai Huang <kai.huang@intel.com>
+Cc: pbonzini@redhat.com, shuah@kernel.org, shivankg@amd.com, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 2026-02-27 09:13, Jakub Kicinski wrote:
-> Commit a32bb32d0193 ("selftests: iou-zcrx: test large chunk sizes")
-> and commit de7c600e2d5b ("selftests/net: parametrise iou-zcrx.py with
-> ksft_variants") landed at similar time. The large chunks test was
-> actually not included in the list of tests, so it never run.
-> We haven't noticed that it uses the old-style helpers
-> (_get_combined_channels, _get_current_settings, _set_flow_rule)
-> that were removed by the other commit.
+On Mon, Mar 02, 2026, Kai Huang wrote:
+> Increase 'maxnode' when using 'get_mempolicy' syscall in guest_memfd
+> mmap and NUMA policy tests to fix a failure on one Intel GNR platform.
 > 
-> Rework test_zcrx_large_chunks to reuse the single() setup function
-> and add it to the ksft_run cases list so it actually gets executed.
+> On a CXL-capable platform, the memory affinity of CXL memory regions may
+> not be covered by the SRAT.  Since each CXL memory region is enumerated
+> via a CFMWS table, at early boot the kernel parses all CFMWS tables to
+> detect all CXL memory regions and assigns a 'faked' NUMA node for each
+> of them, starting from the highest NUMA node ID enumerated via the SRAT.
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: dw@davidwei.uk
-> CC: jdamato@fastly.com
-> CC: linux-kselftest@vger.kernel.org
-> ---
->   .../selftests/drivers/net/hw/iou-zcrx.py      | 31 ++++---------------
->   1 file changed, 6 insertions(+), 25 deletions(-)
+> This increases the 'nr_node_ids'.  E.g., on the aforementioned Intel GNR
+> platform which has 4 NUMA nodes and 18 CFMWS tables, it increases to 22.
 > 
-> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> index c27c2064701d..1649c23e05e2 100755
-> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> @@ -135,36 +135,16 @@ SKIP_CODE = 42
->   
->       cfg.require_ipver('6')
->   
-> -    combined_chans = _get_combined_channels(cfg)
-> -    if combined_chans < 2:
-> -        raise KsftSkipEx('at least 2 combined channels required')
-> -    (rx_ring, hds_thresh) = _get_current_settings(cfg)
-> -    port = rand_port()
-> -
-> -    ethtool(f"-G {cfg.ifname} tcp-data-split on")
-> -    defer(ethtool, f"-G {cfg.ifname} tcp-data-split auto")
-> -
-> -    ethtool(f"-G {cfg.ifname} hds-thresh 0")
-> -    defer(ethtool, f"-G {cfg.ifname} hds-thresh {hds_thresh}")
-> -
-> -    ethtool(f"-G {cfg.ifname} rx 64")
-> -    defer(ethtool, f"-G {cfg.ifname} rx {rx_ring}")
-> -
-> -    ethtool(f"-X {cfg.ifname} equal {combined_chans - 1}")
-> -    defer(ethtool, f"-X {cfg.ifname} default")
-> -
-> -    flow_rule_id = _set_flow_rule(cfg, port, combined_chans - 1)
-> -    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
-> -
-> -    rx_cmd = f"{cfg.bin_local} -s -p {port} -i {cfg.ifname} -q {combined_chans - 1} -x 2"
-> -    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {port} -l 12840"
-> +    single(cfg)
+> This results in the 'get_mempolicy' syscall failure on that platform,
+> because currently 'maxnode' is hard-coded to 8 but the 'get_mempolicy'
+> syscall requires the 'maxnode' to be not smaller than the 'nr_node_ids'.
+> 
+> Increase the 'maxnode' to the number of bits of 'unsigned long' (i.e.,
+> 64 on 64-bit systems) to fix this.  Note the 'nodemask' is 'unsigned
+> long', so it makes sense to set 'maxnode' to bits of 'unsigned long'
+> anyway.
+> 
+> This may not cover all systems.  Perhaps a better way is to always set
+> the 'nodemask' and 'maxnode' based on the actual maximum NUMA node ID on
+> the system, but for now just do the simple way.
+> 
 
-Let's use ksft_variants() with both single() and rss()?
+Can you add:
+
+Reported-by: Yi Lai <yi1.lai@intel.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=221014
+Closes: https://lore.kernel.org/all/bug-221014-28872@https.bugzilla.kernel.org%2F
+
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+>  tools/testing/selftests/kvm/guest_memfd_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+> index 618c937f3c90..b434612bc3ec 100644
+> --- a/tools/testing/selftests/kvm/guest_memfd_test.c
+> +++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+> @@ -80,7 +80,7 @@ static void test_mbind(int fd, size_t total_size)
+>  {
+>  	const unsigned long nodemask_0 = 1; /* nid: 0 */
+>  	unsigned long nodemask = 0;
+> -	unsigned long maxnode = 8;
+> +	unsigned long maxnode = sizeof(nodemask) * 8;
+
+Pretty sure this can be:
+
+	unsigned long maxnode = BITS_PER_TYPE(nodemask)
+
+>  	int policy;
+>  	char *mem;
+>  	int ret;
+> 
+> base-commit: a91cc48246605af9aeef1edd32232976d74d9502
+> -- 
+> 2.53.0
+> 
