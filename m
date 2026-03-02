@@ -1,144 +1,124 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC30B30F7EF
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 18:14:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772475300; cv=pass; b=hmjMfau2OQ6wd09iCSPv1a0IrL9uWNWbhhzCWnpyTLpsisaDLw4eqB3IjrhU0jeyf4mQ39J3dwfet+dBgYgZ78dYDJHIRc8ulhyATMO8tbeN9NNr1K1Dx4QC8zmCAy4+EB15KBkOzX9tQZUoahA3e1klRR7LShsRnHWEQ5RUsWA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772475300; c=relaxed/simple;
-	bh=BTi+4ARakd9uxctTdqjtJnxTFNq/yPeOIt/d2iLvfuA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XvP/apoN1a++RF2d5/lsKEnsek05CkvtkGjKDwkoqlvD3+6S1cpa24q35u6awVOscCg/JgovrVN65yF+ggfaP1w6F8JNBZDl1UUX3bQYzOxj480FQ8cr3TgnHi+d5v2xJvv7TCO0TTA0MVp5RygRa8diTBRR1i26+3pLyKc5h5Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bTMZwI8Z; arc=pass smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8D0280A5B
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 18:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772476044; cv=none; b=k1LQck+cONzneAgZXTH4UjMiFiSfI2fZn5Uu/cbjCGZ29TS5269uTNCt1BD3IHSsMv3IM1BkRnBUlgA0fwPrmQD/KGGAXEeR/srnaJKsvn1fzEoTzCju0rMwFyzMKk6SYMz/dx/CAGLr7fDjR6pFvx6Yf5bca9UY4K4MFyclM1o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772476044; c=relaxed/simple;
+	bh=BdFJzu5emJv9dTvAWLyKOoNL81Cc1hzE3KwrVS0bq4U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ou1Fbix+Y5TDVvV2u0fiycE2WQXdsHRMJEjkmWUwkRLgZw36tlt7nwtMqxsTNqCyy18R32MHp1U3sq5ihpUPo4FeILzfYHwpX6joolxQfao3FQ2Qges68YmcP7QY/0C15N+O0CRCXmRcCl3Ap7RkX6sar391sXes2Y68aXzUP5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SP9WaUib; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bTMZwI8Z"
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-389ff6e5885so14600161fa.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 10:14:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772475297; cv=none;
-        d=google.com; s=arc-20240605;
-        b=I5a2hQc6LFo1Vcnd3Frk8+H6vT4QQlsaq76Wmi0NLN4S3d86gIWd9zHYV77wC5UppJ
-         i35NELlZWhzDA39WpsFx0oH1gTZIGvZ5+Bdb6mP6o8nJ2PhcQ8Lbtuj7EDtDH3T+P2/C
-         5alRLuo6NjAqTs0dEbq3Kpebztjy1IIkcC+h71tmZ7ft5pj0FuKuBa+2p/JdUS7SQhil
-         2228tK35dgKe+A4A55jUyCemvS7V/N0rkHhO4WZawL7LT2RAkai2Dw0O9BJU4pItZ6Md
-         fYeRHIId/8HYQ4gNFkJQu6j0Ly9bRXKvP9D26gnhqWQp+2gJj4B7JsyxX73UV/K8JryQ
-         MCZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rZw46QiejIxPJc1G5DNZGnj4KsLWM6jIVrYLGkqOkHQ=;
-        fh=tbmFa16pXAcVLMCDdmhhoY2nn5mFkC+YwbzFqL9z9b8=;
-        b=kkbTbbHikwOLrO/3Rul0/Hj83mCfG7TdyZbDN1IiwKadEQnL3kTAqNy4J0U/wL6nO1
-         LtUVh0P9hwE3fUUBq5pNEwc1xsUlNEFe1keAPeLHRcKdr2oH1Y/kBHlqWauvwvrfnhTb
-         vozkYBq7+nrpHYutA5LuaV9sgoMogYDsZnBUUeCsjBtDgMmE6oaHh1tD+/1epzwhagPU
-         0ZunIL7ETJ/UwzQRiV45GiIXRCAk5Ppy0S0HBK/Lz5uGU7GGRT+/mwCKCR61aC0Mf/6s
-         t47I/zIRRvTY2x0LJRFNLJpu9nC6b08PC3OCItVniE10LqHmoePtbsN6gF1n+7xOMC4q
-         4k4g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772475297; x=1773080097; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rZw46QiejIxPJc1G5DNZGnj4KsLWM6jIVrYLGkqOkHQ=;
-        b=bTMZwI8ZdQqnj4AgTxkJe6IjG1pfNONBuMwDLAvSla2GHqfEkX0h99WhB2RdJaxT+T
-         ujJn1WMtH6ol/zVwaursQALwAzikhqQRDXCXEVQw3oUlr3T6wYY/W1MLeTLqR1U0ivhK
-         o6px54O0EN+5JWoPVTj/QKoXmNd1VRfu++gSIhoN5AiBjhlmwEUJsUfn/rAaKxPB66UU
-         TgVupI8uG5Ma/tMs0zMwft7t0/FZmOkm4e6VdgXJ5uE9PhQ3K1eQqmyVK7Xy56dQ0n+C
-         EdIjgD9nrHWAmhLtECRerfHkXFdZoUUZGd/7Y3fpDuU4gxAd0M745lS0yWkTmNo9M+Rj
-         J7tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772475297; x=1773080097;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=rZw46QiejIxPJc1G5DNZGnj4KsLWM6jIVrYLGkqOkHQ=;
-        b=NTOQu1kXs8wIbHYJvs9hB5bKltWxeLf7mCzghzaOACzBsXqLD1unUa5qwvEPjmT7Qi
-         c6fjZ+/GCzSAP2kWva+IQchD+I38aVxG2UUWpUqBG7ziEDNDwuyhwGFwjoC+Oy2E/1M6
-         wO+vgUb3ff1u8UZqXGxenrsukfHYxo15vIIhwSOfKstJvywL1G8HZfA8yyJsCZvI89g6
-         aFI/svKDhae+oAxF8aYdG84P9c/giT76GShB6ck9pUR3tZCt7h9Gw4mGUwrT54jqlf2T
-         GDsoUvR3VUmu6BWlen3jXsOM85GgG22oy8OHBnbWcInJRxKrKiY2ptjFs25kgUxQX3LS
-         y4RA==
-X-Forwarded-Encrypted: i=1; AJvYcCW/0pLM2+zI+ZTzQbxSui7ourIz48LbTjZhQRUvASzzEzsztJfr7I67B76pQCUBwEs3wNDuCaLuBQ27dMMmjfs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjpmRIHrj25PjIB1L6gz+J/XWWfseYcBBd2Nv/GTQmjQRpKxln
-	HJibzzkZtL9gY8UAPoMozABTLSSXOsHJrd8XJfOBGNkJLk0OtjJJYFhKBNnUNJvwe/+ZYpqK8U1
-	3iFrdrX0eB7QxZ+R9JEVaWRBBJjO0c+WUGtwmhnHB
-X-Gm-Gg: ATEYQzx046+CyH7DADn2AQwTbiEt1Mk5m4ttaYmY3z97bLP+ZJ/5WKgnGxU70CI2HgQ
-	iz2BDh4DzVr1Uj2unui08Wx8DxAM+xolOxM7veeuw2xZ8JgpgHKvIl/V5Bkt/hFTIcqQeDqMSPs
-	I5YjT/KfLI9m7BimxvgVD50+nl+Up6fwE/YhOi63CQMD299N54XwqlEfy/Ei26Iq9qzY2l52YYN
-	q3JvA+37wCqsElW2bN/vwMgCtwPRHS7/Q/Mphmp2N4lXJSRBu5ri1+AOatn+9fqaeYBVjF3RCmI
-	CQlFv8o=
-X-Received: by 2002:a2e:8094:0:b0:389:ed12:9731 with SMTP id
- 38308e7fff4ca-389f1e29849mr81213251fa.16.1772475296490; Mon, 02 Mar 2026
- 10:14:56 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SP9WaUib"
+Message-ID: <ea103a43-7192-4c00-b837-c85ebba6f9b1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772476040;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QZP30HVE2qfuNyrPBqZl8V1Ig0caHRkDPE55WWDj3+I=;
+	b=SP9WaUibvCr02TxS/rYaqUAmYtel7Bg8K7GueawK5vazwc4m1yW8Ze5VyqiugKUyPoc8va
+	GXjKmpgwlKdu3hSBm0VJwHz3SQcg92WAfI20+Jl8lbH8y3mTeKlVwQOy7hX6LSiU8wPsyB
+	YiYhftgYUVb7bfpni3BucHxc9cnF7mQ=
+Date: Mon, 2 Mar 2026 10:27:09 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129212510.967611-4-dmatlack@google.com> <20260225224746.GA3714478@bhelgaas>
- <aZ-Dqi782aafiE_-@google.com> <20260226144057.GA5933@nvidia.com>
- <20260227090449.2a23d06d@shazbot.org> <20260301192236.GQ5933@nvidia.com>
-In-Reply-To: <20260301192236.GQ5933@nvidia.com>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 2 Mar 2026 10:14:29 -0800
-X-Gm-Features: AaiRm53G4DyTBgh8HthgkNXd7A4lLjemXkfCrH3k_RfrPJCtk91UZa8WxDGHRMs
-Message-ID: <CALzav=eJ63gitLatAerrjEc+o3VXcRor3XwA7_o2PmKYnMwCuA@mail.gmail.com>
-Subject: Re: [PATCH v2 03/22] PCI: Inherit bus numbers from previous kernel
- during Live Update
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <helgaas@kernel.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>, 
-	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ankit Agrawal <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, 
-	kexec@lists.infradead.org, kvm@vger.kernel.org, 
-	Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
-	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: Check
+ bpf_mem_cgroup_page_state return value
+To: Hui Zhu <hui.zhu@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+References: <cover.1772270591.git.zhuhui@kylinos.cn>
+ <c6b0c44062f614ddeaae26b17e3a4f1876a9f9ed.1772270591.git.zhuhui@kylinos.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "JP Kobryn (Meta)" <jp.kobryn@linux.dev>
+In-Reply-To: <c6b0c44062f614ddeaae26b17e3a4f1876a9f9ed.1772270591.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, Mar 1, 2026 at 11:22=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> On Fri, Feb 27, 2026 at 09:04:49AM -0700, Alex Williamson wrote:
->
-> > Not only fabric topology, but also routing.
->
-> Yes
->
-> > ACS overrides on the
-> > command line would need to be enforced between the original and kexec
-> > kernel such that IOMMU groups are deterministic.  Thanks,
->
-> That's a good point, I think as a reasonable starting point we should
-> require live update preserved devices to have singleton iommu_groups
-> on both sides. That is easy to check and enforce, and it doesn't
-> matter how the administrator makes that happen.
+On 2/28/26 1:25 AM, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+> 
+> When back-porting test_progs to different kernel versions, I encountered
+> an issue where the test_cgroup_iter_memcg test would falsely pass even
+> when bpf_mem_cgroup_page_state() failed.
+> 
+> This patch adds explicit checks to ensure bpf_mem_cgroup_page_state()
+> doesn't return -1 before validating the actual statistics values.
+> 
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
+>   .../selftests/bpf/prog_tests/cgroup_iter_memcg.c       | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> index 88fc3e83d2b7..9eadfbd3fdb9 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> @@ -53,6 +53,8 @@ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
+>   	if (!ASSERT_OK(read_stats(link), "read stats"))
+>   		goto cleanup;
+>   
+> +	ASSERT_NEQ(memcg_query->nr_anon_mapped, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state NR_ANON_MAPPED");
+>   	ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
+>   
+>   cleanup:
+> @@ -88,6 +90,10 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
+>   	if (!ASSERT_OK(read_stats(link), "read stats"))
+>   		goto cleanup_map;
+>   
+> +	ASSERT_NEQ(memcg_query->nr_file_pages, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state NR_FILE_PAGES");
+> +	ASSERT_NEQ(memcg_query->nr_file_mapped, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state NR_FILE_MAPPED");
+>   	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
+>   	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
+>   
+> @@ -119,6 +125,8 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+>   	if (!ASSERT_OK(read_stats(link), "read stats"))
+>   		goto cleanup;
+>   
+> +	ASSERT_NEQ(memcg_query->nr_shmem, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state NR_SHMEM");
+>   	ASSERT_GT(memcg_query->nr_shmem, 0, "final shmem value");
+>   
+>   cleanup:
+> @@ -144,6 +152,8 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
+>   	if (!ASSERT_OK(read_stats(link), "read stats"))
+>   		goto cleanup;
+>   
+> +	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_vm_events PGFAULT");
+>   	ASSERT_GT(memcg_query->pgfault, 0, "final pgfault val");
+>   
+>   cleanup:
 
-I can add that in the next version.
+Emil mentioned in the v3 thread that we don't need these checks [0]. I
+agree. Now that you're using the bpf co-re enum helpers, the stat
+indexes won't become an issue in a cross-kernel secenario. This patch
+can be dropped.
 
-> You also can't change the ACS flags while traffic is flowing because
-> that changes the fabric routing too. This should take care to enforce
-> that restriction as well.
-
-I'll look into this but will probably defer it to a future series. We
-need several more pieces in place until we are ready to support
-traffic to/from preserved devices during the Live Update.
+[0] 
+https://lore.kernel.org/bpf/DGQXZVBSVEUP.35P5G9QOL9EAT@etsalapatis.com/T/#m7cb6edf90ed4daaeda38b746363317405f198f20
