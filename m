@@ -1,166 +1,176 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3F52DC321
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 21:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29413909BD
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 21:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772486854; cv=none; b=WP7spzoG8+/6P2PPITExpNPTQF2qXCmQYB7H9QnYetSEmp9M+zB7HykHZt0f2l0jt99VAXcXxa+H4wKmZbBUd77V2Pd8UzMG8TATXMFasjiZpJ+cPQUims9X/Z/ZthiN2y/64NSJ3lMHPTIW1I8f8YotSSHv9MVBH92VNKsLK00=
+	t=1772488662; cv=none; b=j6WBb9VTlGEWafFd7YLiwVqdnQ3EReGbJh3aVg8A/Z4nJS3L6lqaZR/kLp9bdEAZK3q4nF5fl1BXI2v62YEuLQD9z3iPO3dZkD7sejY19jrXgmK9sEysWJOJ4HhsHETOha0ebquRaM848i88A4doLUudrEkUXKBkflu9WUEm5Bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772486854; c=relaxed/simple;
-	bh=lEtrREFEG/Uon0huTrzfsotF+dsO3lDntbJMVcBUgYQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T7eom87UFziAM/YYaMHlFqq00oO4wj/+vBYVjpBs+IeE1bXJh3UJ4xOdeQepvovQbt7BICPHP7ffGpE0cWhpfeSZ824kOGCgScXIGWGl/RlCs1zSwIPwNPFfHxo/1ZpBEiYAIXddeH8jTX2aefGSGNrhnVP51u25l8uslZUOD2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p0ub3PW+; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772488662; c=relaxed/simple;
+	bh=rkLPlMUYiUKbkvwZg90We9QKLp263vaP+3vQEnbTceA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YXYvkBEbVudl2u+1uoBcYki90GzVCjSUITQOWAjNyxqZDKWZ81NK4lhnMlz21b6UUupBs6hdmjyBWpS1dVPsNWvos9OelcuxLf1dfWaWGzc74bvQd8XqOwmRqz+v2OyTzRIZ+dukbANgXrBPt7Dl30+XsYPR+MJj5+ewkPhZnOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QekejI2m; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SMLItvVh; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p0ub3PW+"
-Message-ID: <54077b01-7411-439a-a9fe-e38c3c244c6a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772486840;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fYEoBKn0dLabxl3YbJ7cS4O37WwmA5ZZkk+R8UMZ3aU=;
-	b=p0ub3PW+taRrnUNbLqwgCio0WgrH9lu6WMep9DnDpDu+5KLunErdgnYobJxGocUl1//Ei6
-	Riyg0HV7iexHpGprrn5fwkhCUN8dGrIEjWhmaooRNE2wTe/YA/D2Shjo03PHE21lMd2dit
-	EzTofaxxev73DJPkthcRS24G7vMFQOs=
-Date: Mon, 2 Mar 2026 13:26:52 -0800
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QekejI2m";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SMLItvVh"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 622IUh5e3561443
+	for <linux-kselftest@vger.kernel.org>; Mon, 2 Mar 2026 21:57:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=kKGEnQyVqddtbVsVaKzEMP9/
+	0r9eYevQQlpSxYQoULw=; b=QekejI2mpiNgKb1T0/vwrfrCoNAOsem1o8Sw/ucO
+	FHzM/wRfm4PxxcRiftZRmvgH5WcI7YV7n9cfJOH5RtmUKFgnzgo+lE0izVwDhVgT
+	QtJmS0rUZLV9vNYNyjdaZj6nhHI9+BRckTWrNWV1pWx1io7ydCOgP+IA7E3vnuMQ
+	JU8PGldNHy9DY+3C1TyWRmJY+XK7YhYgcIvKBR964pyrJ9V+KTNFTmJznWZLyvGy
+	mbwpAETh2U8fhYV81pQU6KIjAu98mxVBOPWvz02FgrDALKS7ZzlHBkNtND91bXAg
+	8XN7sDhqjzCTy0GT1hJ0TBFV7x/V+DMlyIfvbeIl3J/l/g==
+Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cn9bva411-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 21:57:39 +0000 (GMT)
+Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-1275c2ae713so8279703c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 13:57:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1772488658; x=1773093458; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kKGEnQyVqddtbVsVaKzEMP9/0r9eYevQQlpSxYQoULw=;
+        b=SMLItvVhGHkYqLPq7u9h7zkSM3P5byMM4FjP6EktrQY0KW0ovffUDTMw8bomzRFsdL
+         C6uA+oJybV/PC0ph4bod4opwE1Djzds6QeHizznIeNKC2k4NnBynp3tc5Cn713Jot+2R
+         sHM21U8XU+lcodgol5t8dr/2lzUeadlENpIY7pWK/uwikYfX2adKaLNA0yaKulurJimB
+         RtYtg4/Brz2EK+iQAsldlom56YSXwXY2xmDK0NWS7vPZrGBR2EiW8oHuqiprwi320Hqf
+         XqzM/Fe6iyll3QcYLuQtJJtIHUqR0vN1x+Jih1s8udfGOblVEkMMPwuOqP1M5AAdzOTz
+         8xOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772488658; x=1773093458;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kKGEnQyVqddtbVsVaKzEMP9/0r9eYevQQlpSxYQoULw=;
+        b=mFfGIfWsRtVQZpLODHWHnjUU9r7Oz4FIw+Mkwy3c+AWUEPNLTr7i1+fdcL/MM2DcsH
+         8Nal+T70yLK0M5Sdr6QyOSRZxRsQXaAHpuTdyRJGHGD7cD2GSLiC/GMAmSpQHnNxRT+k
+         Lgf4q6drTNnfJu/StORerlkolvuUu2Vd2G+EkAccM5ps2+w4Px4bw/e/2hFtqbzFAI7C
+         78F5DHnesWjCpXRPRfIdHnqdvAlGD8bWdh5w6e3YEBxN6ldjPIhHzzD+GYCDHCRbeHuZ
+         DF3FmahrrMw9yiPKXw+sgb8Mrhsmg3TQNYCvOoCdqfFYDijpiyz7s1OaerBpuKSaNvzR
+         NicQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUobKA6D8/MVdykZE2fZewkTh+AjkuHhhi9Gt6h6P4nVdHsJbRQPeMQkh7Vc0vLv4NGKWwhlfULYDgd43k7ZdI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3txo0zgAfrxUnzryR8lqpVD9DonUzV/JEl9bjZYXcy8dHmK0Q
+	XcWdwry/eLOegAwp9UkwYlthgjFW3WOUbncYFCdyujvDcGTOi5AZ6+2/G9t2nLdQqfDIugaGElm
+	S6GtiSd+Q2JyQ8PcY6cB12T/ENj9v5BopGH/UPnavVpAyhThdvEOvkXDbkalJ3d5HYsMS9E4=
+X-Gm-Gg: ATEYQzya3rpr9odkfDECH0lmAtTCAwo6ho9pJemrzVjVvJEIuyaK17HeTKjN7VGh/Vi
+	lTQrlP4e/kkelkd9DtLyXjouCTt+AFAwmGCyWjAKVe4FdH5Tm9iQdJYEN5Nn/xyiXN0Rx9f3BCb
+	waNAEEVtJIxICPcUjCVRv3ZASXC8nblqAnsT9iJuNdcJxZS8blIhCqjcx+UinubALlNjpDJewsV
+	Av/tlQqewoF4WvTNLKeBlm+gzBBSYC6YM5hAswcptJDw356CYseoZ0GLwNwSuhKEXE3TwqRkxOG
+	t31g3ak1fDcW/d7c+qwrEXXzney9sTedTTfVpIIcq60yMShYXw3iuRL1J8cZFbUPDehxDS66GvI
+	yRoAQyBy1Asmehw8xPfNt17Uh5Sp9biM=
+X-Received: by 2002:a05:7022:4584:b0:119:e56b:9590 with SMTP id a92af1059eb24-1278fcf8749mr7439090c88.21.1772488658563;
+        Mon, 02 Mar 2026 13:57:38 -0800 (PST)
+X-Received: by 2002:a05:7022:4584:b0:119:e56b:9590 with SMTP id a92af1059eb24-1278fcf8749mr7439077c88.21.1772488658006;
+        Mon, 02 Mar 2026 13:57:38 -0800 (PST)
+Received: from localhost ([140.82.166.162])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdf662eb6dsm7208496eec.2.2026.03.02.13.57.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 13:57:37 -0800 (PST)
+Date: Mon, 2 Mar 2026 15:57:36 -0600
+From: Andrew Jones <andrew.jones@oss.qualcomm.com>
+To: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, Alexandre Ghiti <alex@ghiti.fr>,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>,
+        Albert Ou <aou@eecs.berkeley.edu>, Jiakai Xu <jiakaiPeanut@gmail.com>
+Subject: Re: [PATCH v9 2/3] KVM: selftests: Refactor UAPI tests into
+ dedicated function
+Message-ID: <kxssxvwvt2dyzznftbuudkxt7gonnceou4jrjswyhkhg5vrkgh@26sivnbte6mq>
+References: <20260228005355.823048-1-xujiakai2025@iscas.ac.cn>
+ <20260228005355.823048-3-xujiakai2025@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v8 bpf-next 1/2] bpf: test_run: Fix the null pointer
- dereference issue in bpf_lwt_xmit_push_encap
-To: Feng Yang <yangfeng59949@163.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, posk@google.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260227082133.96951-1-yangfeng59949@163.com>
- <20260227082133.96951-2-yangfeng59949@163.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260227082133.96951-2-yangfeng59949@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260228005355.823048-3-xujiakai2025@iscas.ac.cn>
+X-Proofpoint-GUID: 10UFy-i1aLq5mZJva0JOwHJfpabNnM51
+X-Authority-Analysis: v=2.4 cv=S83UAYsP c=1 sm=1 tr=0 ts=69a607d3 cx=c_pps
+ a=kVLUcbK0zfr7ocalXnG1qA==:117 a=cvcws7F5//HeuvjG1O1erQ==:17
+ a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22
+ a=EUspDBNiAAAA:8 a=pGLkceISAAAA:8 a=oAJ8CtkVvmEuxm3YF40A:9 a=CjuIK1q_8ugA:10
+ a=vr4QvYf-bLy2KjpDp97w:22
+X-Proofpoint-ORIG-GUID: 10UFy-i1aLq5mZJva0JOwHJfpabNnM51
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDE2NCBTYWx0ZWRfX4lgj2soxWnnx
+ 4sLZ3vK+5I+o0VAQMrr9xO5wLzIhsPTI2+2Qi60KRLDvpZGFxYHs3SK2h+K3mGczcses7JxqM7t
+ XRiy6WqtThA5ZhGdraLQnfdYEjZpjCzwvX/VucUSey6pxJnrQFMeQJxFoPQ66GQ5Em3LAzM3qPL
+ VTcbk+UM2ET1Cufe1sSAlpJh7+OxufD2B04cX1ytO5DqzVTFuNSifTTDPKTh5Me19j/XL+DrhYS
+ e0DTTTIY/F3WtrAy+GArQ59ybazSWB1lOQeZcgT76ED/v9/hI5tYJ1j8+xYoC43RDmbLqixhwHE
+ O4lcdUf6C+/Vd2fQ12qXXHs5R0PoVm/C+kK0S7r35GqUvHs08SA1XeYL6UUZ8sKjvUH9BOmXtc9
+ MbRaTBrSYEVugYcT8EWac8UNJn5l/KbaeGBwaqA1VW2hit/04zZMtxVZTjoRm7Cz11CEdJO80yo
+ tz3ciiGGE+CdnnSZPFw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-02_05,2026-03-02_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0 adultscore=0
+ phishscore=0 spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603020164
 
-
-
-On 2/27/26 12:21 AM, Feng Yang wrote:
-> From: Feng Yang <yangfeng@kylinos.cn>
+On Sat, Feb 28, 2026 at 12:53:54AM +0000, Jiakai Xu wrote:
+> Move steal time UAPI tests from steal_time_init() into a separate
+> check_steal_time_uapi() function for better code organization and
+> maintainability.
 > 
-> The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
-> calculate the needed headroom:
+> Previously, x86 and ARM64 architectures performed UAPI validation
+> tests within steal_time_init(), mixing initialization logic with
+> uapi tests.
 > 
-> 	err = skb_cow_head(skb,
-> 			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
+> Changes by architecture:
+> x86_64:
+>   - Extract MSR reserved bits test from steal_time_init()
+>   - Move to check_steal_time_uapi() which tests that setting
+>     MSR_KVM_STEAL_TIME with KVM_STEAL_RESERVED_MASK fails
+> ARM64:
+>   - Extract three UAPI tests from steal_time_init():
+>      Device attribute support check
+>      Misaligned IPA rejection (EINVAL)
+>      Duplicate IPA setting rejection (EEXIST)
+>   - Move all tests to check_steal_time_uapi()
+> RISC-V:
+>   - Add empty check_steal_time_uapi() stub for future use
+>   - No changes to steal_time_init() (had no tests to extract)
 > 
-> But skb->_skb_refdst may not be initialized when the skb is set up by
-> bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
-> in this scenario will trigger null pointer dereference, causing a kernel
-> crash as Yinhao reported:
+> The new check_steal_time_uapi() function:
+>   - Is called once before the per-VCPU test loop
 > 
-> [  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> [  105.186382] #PF: supervisor read access in kernel mode
-> [  105.186388] #PF: error_code(0x0000) - not-present page
-> [  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
-> [  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
-> [  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
-> [  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
-> [  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
-> [  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
-> [  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
-> [  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
-> [  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
-> [  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
-> [  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
-> [  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
-> [  105.186499] PKRU: 55555554
-> [  105.186502] Call Trace:
-> [  105.186507]  <TASK>
-> [  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
-> [  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
-> [  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
-> [  105.186547]  ? ktime_get+0x3c/0xa0
-> [  105.186554]  bpf_test_run+0x195/0x320
-> [  105.186563]  ? bpf_test_run+0x10f/0x320
-> [  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
-> [  105.186590]  __sys_bpf+0x69c/0xa40
-> [  105.186603]  __x64_sys_bpf+0x1e/0x30
-> [  105.186611]  do_syscall_64+0x59/0x110
-> [  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
-> [  105.186649] RIP: 0033:0x7f166a97455d
+> No functional change intended.
 > 
-> Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
-> 
-> Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Closes: https://groups.google.com/g/hust-os-kernel-patches/c/8-a0kPpBW2s
-> Signed-off-by: Yun Lu <luyun@kylinos.cn>
-> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-> Tested-by: syzbot@syzkaller.appspotmail.com
+> Suggested-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
+> Signed-off-by: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+> Signed-off-by: Jiakai Xu <jiakaiPeanut@gmail.com>
 > ---
->   net/bpf/test_run.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 178c4738e63b..54dbda2f6329 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -1156,6 +1156,19 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->   		skb->ip_summed = CHECKSUM_COMPLETE;
->   	}
->   
-> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT && !skb_dst(skb)) {
+> V8 -> V9: Created a temporary VM with one vCPU in
+>            check_steal_time_uapi() instead of adding extra vCPUs to the
+>            main VM.
+>           Made check_steal_time_uapi() parameterless for all architectures.
+> V7 -> V8: Used ST_GPA_BASE directly instead of
+>            st_gva[]/sync_global_to_guest() in x86_64 and ARM64
+>            check_steal_time_uapi().
+>           Created a temporary vcpu in ARM64 check_steal_time_uapi() to
+>            avoid EEXIST when steal_time_init() later sets IPA for vcpu[0].
+>           Removed unnecessary comment in RISC-V check_steal_time_uapi().
+> ---
+>  tools/testing/selftests/kvm/steal_time.c | 67 ++++++++++++++++++------
+>  1 file changed, 51 insertions(+), 16 deletions(-)
 
-Has skb_dst ever been set earlier?
-If not, can the "!skb_dst" test be skipped?
-
-> +		if (!ipv6_bpf_stub) {
-> +			pr_warn_once("Please test this program with the IPv6 module enabled\n");
-> +			ret = -EOPNOTSUPP;
-> +			goto out;
-> +		}
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +		rcu_read_lock();
-> +		skb_dst_set_noref(skb, &net->ipv6.ip6_null_entry->dst);
-> +		rcu_read_unlock();
-> +#endif
-
-Although ip6_null_entry will not be freed, this still does not
-look right to use it after rcu_read_unlock(). Does it have issue to
-just take the dst_hold() first and then skb_dst_set()?
-
-Also move all changes into the IS_ENABLED(CONFIG_IPV6). Something like this:
-
-	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-		if (IS_ENABLED(CONFIG_IPV6) && ipv6_bpf_struct) {
-			dst_hold(&net->ipv6.ip6_null_entry->dst);
-			skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
-		} else {
-			pr_warn_once("Please test this program with the IPv6 module enabled\n");
-			ret = -EOPNOTSUPP;
-			goto out;
-		}
-	}
-
-pw-bot: cr
-
-> +	}
-> +
->   	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
->   	if (ret)
->   		goto out;
-
+Reviewed-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
