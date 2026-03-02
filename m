@@ -1,109 +1,94 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A8D3FB057;
-	Mon,  2 Mar 2026 14:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5A0410D38;
+	Mon,  2 Mar 2026 14:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772460266; cv=none; b=E3yIbQK5XuarsrA6ZNijPhC8FkJQD6EZu/g+HffgsIDtnFoQ5kZcowy8T52vTuVpXeNCVGMtqAxzXL5UCsfN9xX6LJ4MIm2PjGH22LTi8HgLpckJ48ValcqN4Q2EgjsLG1B27Ayb0Lnjz5Vrzr78mJJH4HbVNXW3QCXYNP0nQVk=
+	t=1772460827; cv=none; b=jm3S7zJc32EJrN8Ix+Sk0hZ8uLGtNKeJ+Q0liURsmhADtKaO1xG1125TSmvf+aux7UCMqvSAjm1DlB5+AoK1UrwcX4v/g4wOmVlzXHIQ5a/uhJycDjVJXvZ32/fYBTXKHPBqObwcfZnu96lzK7DzDLBzo21FdUgFm9zsNrNQ9d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772460266; c=relaxed/simple;
-	bh=w7DXo3mXh6DNkAzYU9MYWlzqO/9Orncv55I/eELK7uc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QwR8AroBJOpiW9/Z+zWIDIFKttQYkJZ85xuqNreYzxrKHEJkaZuniPMiWPmrp6m4rIYYi8MOS0z8f7RjNyh9TZ9QEuLU2oAePyTprKdht7LGqiYIXU5FXRbPgevK8VWuge67UyFyKSDfpw3VPJ3s5aocW5M+gGDbYiKJLRP8wgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=U2nbza5U; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=O0XwKXPg; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1772460827; c=relaxed/simple;
+	bh=u8EUg0ZyQmSus3QNbAm2GZpaSK9u1dOI00AgCVKP5EM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Jk/tNDczH+eIkiIGrZtcEC25nzynx5OqWgwOmMwaKu+Lm9lT5kVZuutrikeaG48iATnZL420YmwGRmJzvYmdbi1hfhg9PLOXIDZONbnVWyxP8E9SMrgbFL7YcaI/3VCDfZcmGnvKSIi5wfS8Mz0xt+jc3LSS3dPTSpWNzJM/ED8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FcoOC2CV; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0Tv5IvqX; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="U2nbza5U";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="O0XwKXPg"
-Date: Mon, 2 Mar 2026 15:04:16 +0100
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FcoOC2CV";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0Tv5IvqX"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772460261;
+	s=2020; t=1772460824;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cRM2t72DmiN8sur4KC7kJvFl2g3W9LFFAmvpwZMN6BE=;
-	b=U2nbza5Uj3+v1Yz/7NFP1KJEEu3qCsr7TJmPGA7AG/w/PFx5cPc1n3W7rsEmErqOZ4KQnZ
-	UdxuiGENc2+EFgj42FJbMNjUVtRFJ/eqn7lvz517o7RfxxeptrK+1E7IhWU8U/EfnqWPhj
-	5k+iAJ6aEN/kHFgi/PlYX7z3ixlVOLPpEisZdOuJIO9RpmyRAIZKSDNWru3XIgnQN5iT/Z
-	oKatqMsKb6BNZZjY/bI/qPDPcoJj0X3J3HKrah6dzSwk6l79vbv6MGKSCaUPcHXpgwPtoB
-	ng9u0ZkYA1egSpy0969/In5pa2B+//+adSoG0dZEnKVEternS8rsoVnVtPTNkw==
+	bh=DENFRSmvUruhh7sXW/NRQgaI5tyD0A/XM0dVW35m5wI=;
+	b=FcoOC2CVX0+VLAczxAtyQJXBdVRFcCIEx2yQHLpF9PVaWRZdaYFcaHQaya1Ob1P09TNaz6
+	/uRVGsRlA71sgO/W2HT/Dq+FiH9LUK0DXBMcOTkK+zKQUkgLyZZao4F0wKH4yAwrxBBX92
+	emNpQkufUnqjlndV/+7P8jM0+6jdewHidV8tdQtF26e1cVfYQumP7V+0yejEBcI2FbgVdG
+	ObyxNz5Clr6X9hymbxfIpafzJZ4oNBCYOBBCN+KDD7ZJ7D291a2a7oSbDI1XVQUhMBOLrI
+	IcPICD+PLqkJ4gFeZgQAAZphyAkW+2EDxKCK8Gej4o0ci1So2jzkB1KQjRrdsA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772460261;
+	s=2020e; t=1772460824;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cRM2t72DmiN8sur4KC7kJvFl2g3W9LFFAmvpwZMN6BE=;
-	b=O0XwKXPgKku1Br1+V/ezQXVmlbM/8IP4wwnZCgIuF89yo0/6aQDXPujJ+tjFwyLvfgYCyq
-	HND4ATOem2K4dHCQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: bot+bpf-ci@kernel.org
-Cc: dhowells@redhat.com, dwmw2@infradead.org, mcgrof@kernel.org, 
-	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com, 
-	atomlin@atomlin.com, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, 
-	borntraeger@linux.ibm.com, svens@linux.ibm.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, nathan@kernel.org, 
-	nsc@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
-	jolsa@kernel.org, shuah@kernel.org, keyrings@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH 6/8] tools uapi headers: add linux/module_signature.h
-Message-ID: <20260302150248-3bf0b0e6-ab1f-4808-905b-70c6ae1060e4@linutronix.de>
-References: <20260302-module-signature-uapi-v1-6-207d955e0d69@linutronix.de>
- <b6c00e7ecc633ab02ee8689f5647ce9090cf72d75f5bf9f2cc2c09983d963b58@mail.kernel.org>
+	bh=DENFRSmvUruhh7sXW/NRQgaI5tyD0A/XM0dVW35m5wI=;
+	b=0Tv5IvqXpCLDWZ0lvzuMNiotl7Quzu3ueFrV6/hTWEtEUBvBV0Lnus2GnBiAKIwUN+zCrL
+	eB71SiD5yWkcmlBg==
+Date: Mon, 02 Mar 2026 15:13:28 +0100
+Subject: [PATCH v2 1/5] selftests: kselftest: Treat xpass as successful
+ result
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6c00e7ecc633ab02ee8689f5647ce9090cf72d75f5bf9f2cc2c09983d963b58@mail.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260302-kselftest-harness-v2-1-3143aa41d989@linutronix.de>
+References: <20260302-kselftest-harness-v2-0-3143aa41d989@linutronix.de>
+In-Reply-To: <20260302-kselftest-harness-v2-0-3143aa41d989@linutronix.de>
+To: Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772460823; l=814;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=u8EUg0ZyQmSus3QNbAm2GZpaSK9u1dOI00AgCVKP5EM=;
+ b=8MA4Uz9MF4BNTC69FjxtUUa09KEjCDmtqcPnf/GzjD9EP3ERt7Y8RJx/WeF+Eum8fjxkXvi0w
+ 36+L5Bh2uDuCJ3LFMmU1JcAna/crdwmdiVrEVMr4fludR7NKsS8+FV8
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Mon, Mar 02, 2026 at 01:32:34PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/include/uapi/linux/module_signature.h b/tools/include/uapi/linux/module_signature.h
-> > --- /dev/null
-> > +++ b/tools/include/uapi/linux/module_signature.h
-> 
-> [ ... ]
-> 
-> > +enum module_signature_type {
-> > +	MODULE_SIGNATURE_TYPE_PKCS7 = 2,	/* Signature in PKCS#7 message */
-> > +	MODULE_SIGNATURE_TYPE_MERKLE = 3,	/* Merkle proof for modules */
-> > +};
-> 
-> The source UAPI header at include/uapi/linux/module_signature.h does not
-> define MODULE_SIGNATURE_TYPE_MERKLE:
-> 
-> include/uapi/linux/module_signature.h:
->     enum module_signature_type {
->         MODULE_SIGNATURE_TYPE_PKCS7 = 2,
->     };
-> 
-> Was this value intentionally added here ahead of the kernel header?  It
-> appears to come from the CONFIG_MODULE_HASHES series referenced in the
-> cover letter, but no commit in this series adds it to the kernel UAPI
-> header, so the tools copy diverges from its source at creation time.
+The harness treats these tests as successful, as does pytest.
 
-Indeed, this should only appear in the follow-up CONFIG_MODULE_HASHES series.
-I'll fix it for v2.
+Align kselftest.h to the rest of the ecosystem.
 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22577240517
-> 
-> AI-authorship-score: low
-> AI-authorship-explanation: Straightforward mechanical UAPI header copy with terse commit message, consistent with experienced kernel developer style from a known Linutronix contributor.
-> issues-found: 1
-> issue-severity-score: low
-> issue-severity-explanation: The tools UAPI copy contains an enum value (MODULE_SIGNATURE_TYPE_MERKLE) not present in the kernel source header, creating a content mismatch that does not affect runtime behavior but violates the convention that tools copies mirror kernel UAPI headers.
+None of the Linux selftests seem to actually use this anyways.
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ tools/testing/selftests/kselftest.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index afbcf8412ae5..1e7e73f77fa7 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -399,6 +399,7 @@ static inline __noreturn void ksft_exit_fail(void)
+ #define ksft_finished()			\
+ 	ksft_exit(ksft_plan ==		\
+ 		  ksft_cnt.ksft_pass +	\
++		  ksft_cnt.ksft_xpass +	\
+ 		  ksft_cnt.ksft_xfail +	\
+ 		  ksft_cnt.ksft_xskip)
+ 
+
+-- 
+2.53.0
 
