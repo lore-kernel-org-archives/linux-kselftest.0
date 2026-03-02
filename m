@@ -1,87 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013056.outbound.protection.outlook.com [40.93.201.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8113ED11C;
-	Mon,  2 Mar 2026 13:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772458356; cv=none; b=ry6tllnqMMBcb64Pc+bYD3ZjZMPHf3uzTw/OcdpFNrZ1MhEDrIdzNdPPHoSf1WhMh3+OIauPjEvmM7JOO3OImnfj0/LQ5LlV0JvmT7j0zGSPyb4tmz74LW92qyVDwOiYYhW2/LeVQrxUawbRS47YJ5fV1kGBnCXFISbEK46UgHg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772458356; c=relaxed/simple;
-	bh=MMO6QzhJTBpjIamFxQOPnoG0lDTOenIytlKAn/pj/E4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=kGVnpRHOJ5g9uDKp/8dLcObeRF3KRaqAECu8g1PgyBPrRRonFsb9YuhUW/ThrGBTEudCJ0QYZ5TUHG7VeioYf3Ie8u9IdWMC0mW6xUErNhxtqdQqu+Q6f8wwlKKD8GQrQvEC4IRwpkD4AH+xTik24qkusez9z5B3kRmikGooHQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fEL+VDLf; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43143379EFC;
+	Mon,  2 Mar 2026 13:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.56
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772458720; cv=fail; b=kRCs+mUIaakkk2r9C+QoUuNORsYTxFEvytQf56Bts3yXw2V6gVN2D37reJKu5EsR/Awif2ArVgXBHudKh7muvWWfycRHgCLz/qQUgRfDeQZx56OuTuVp9dSh/FSb17SyisNl3HFeLOZ6LH8NTYugv6IHOUAZId3VPoekGekP/kw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772458720; c=relaxed/simple;
+	bh=kQVKSw+5SCiKOuEa95p6m3wy2OFZ8W2aJ+If2hKygyo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=m5BqGnSSWkBdRuy3iTMNbm5JFuhbXctlI78JHUuhBsdnSRYfYSmNer6X8b0jCv+xoCcE0WAbnQDmmi9YAaGO7R3LOFPsG6msybKvOs/TcQiCw/P2c+mXAnI+Un4tEHYWKzH6ZNpL8eI4SvIEz+zDEbMmfvhyvC3vKcsNk8KptkE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mH4S8c8/; arc=fail smtp.client-ip=40.93.201.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fEL+VDLf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F17BBC2BCAF;
-	Mon,  2 Mar 2026 13:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772458355;
-	bh=MMO6QzhJTBpjIamFxQOPnoG0lDTOenIytlKAn/pj/E4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=fEL+VDLfWgejB2UiD3yfu4w39ugAxlb20659+wBdunWi1Bmc39BavexRTwtcs+1l3
-	 sX93ULfh/tz4Vhr0v3imaxSkT35vp3EVg9Gy+LgXN+2mq96c3xiAwr/WyFIihORW9w
-	 BGpyRT/a1j1nBY0ZjXH/GPrvJyTo9mEc3DN+Xka8m1xkvcDYFegbdDh9ZTD8HmUkK0
-	 nxghDIgYeXQX0sbRhzs9+fSGH8XrM7dswPU2XpiF4ZdmAB25gPYcvE+LjIAqNBNgUi
-	 +UUD9qGbudgTDkVZ7YshLPbkpT5245i6bbuZy3My6iob9UzGq4b2JfAUxFrzM/2uTT
-	 vDicKTI56lTsw==
-Content-Type: multipart/mixed; boundary="===============7930476675043711056=="
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mH4S8c8/"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qylieMUS/nFWT6rBAGqSrlQLfdun46bkFV7Z+5wOw3p/PFKiXrmm80a0emRcsF7GK2B3w7BFRPPbvEntwupb6zpCHW5ZBsIsrM6ttLj4WFhymx2GYaJIQxMVehR+jhEXpzYArArWNKjyco19wg3FntlsHQyPfoFyuLvKBBlnC6Ztl7MXfvR/fqBNsNPOvc8cd4gbq9JtCvv3WWfWpn4LjJ5H3RVJvzPqru1g/jJYwbYVFupnez83D8pVAksUgr2v0jTku++OWQLCXNknA9yVQ1PlhAfQRGiiFmi4iuv7+pM4K2fSzI+W36Mfok5DJQ5Xa9b8MJJpspv3WdHrKSQh/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QXGHIEmmHpRsNzwNPW+fq6dyu62m37Vj2tPHnmzcpqk=;
+ b=gRt9RpBQU6mGl5pBOvnB+BeSsmBKCU+P/r8tumd8qdIzvuDKL5XZjL/qpCSWONCnRRatvxMhOV62FiO7eJpUI4Njsq9nAEQSciXj10Rh6Gc9kqW4suBRvx/5VrtmxVkRAxlLaap4DGOpjMiHsHNYy20dx7gsXbwrFyeXLTDd4jkYcUavuv0g9VePPEQc3zcopq0Rb1X8BIiacwcIjCFBkfQ13xmlCIl/wwT10wQ4dDH/LkLnBo08RPSN9hHDzkvRkY4uXc2Pmt7hrNLRwiVlME15fyNS6omqq+HotBGmsnsC7vzJDz9lGl1s9Kl09gE7Tq3dS9zW4fZe10BJYuw1qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QXGHIEmmHpRsNzwNPW+fq6dyu62m37Vj2tPHnmzcpqk=;
+ b=mH4S8c8/8b7elTBN58zK/dfSPJUy2ImNNE3sBk3EaSwMWGcX3ug7TntjXnZA75CNqlhfGB7FNYbXaMzcODwso1ZrUEmXaTLesAm4Oq5K4RZQHjD3HKvW7DpN8UBepVKYu0BpNEp6kWdStNL1IPDW5otwa8ajMuKxYAi+/U8nk5+wH0dcKDeLBL3FBrPqU7ItEfARi6HQmFlcyIXYCTZ2oKGJ9CVaAd/jFRR+lRz/eb7CyTvV4zHRP1bE1Klh6A92OOikTDkNe1C3+NbXQM/K+dPyIiSPishO0wi7yY39xH+a99Mngwuyv0dw0vnRPmQT5qE0f6jGLbmF8BaXikpp7A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
+ by CY8PR12MB8244.namprd12.prod.outlook.com (2603:10b6:930:72::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.21; Mon, 2 Mar
+ 2026 13:38:36 +0000
+Received: from DS0PR12MB7900.namprd12.prod.outlook.com
+ ([fe80::3033:67fc:3646:c62f]) by DS0PR12MB7900.namprd12.prod.outlook.com
+ ([fe80::3033:67fc:3646:c62f%5]) with mapi id 15.20.9654.014; Mon, 2 Mar 2026
+ 13:38:36 +0000
+Date: Mon, 2 Mar 2026 15:38:26 +0200
+From: Ido Schimmel <idosch@nvidia.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+	jiayuan.chen@shopee.com,
+	syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 1/2] net: ipv6: fix panic when IPv4 route
+ references loopback IPv6 nexthop
+Message-ID: <20260302133826.GA918339@shredder>
+References: <20260302051132.66314-1-jiayuan.chen@linux.dev>
+ <20260302051132.66314-2-jiayuan.chen@linux.dev>
+ <20260302082551.GA814377@shredder>
+ <80cf6abc40af7f2d072bd9c55758849bb05bfa95@linux.dev>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <80cf6abc40af7f2d072bd9c55758849bb05bfa95@linux.dev>
+X-ClientProxiedBy: TL0P290CA0005.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:5::16) To DS0PR12MB7900.namprd12.prod.outlook.com
+ (2603:10b6:8:14e::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b6c00e7ecc633ab02ee8689f5647ce9090cf72d75f5bf9f2cc2c09983d963b58@mail.kernel.org>
-In-Reply-To: <20260302-module-signature-uapi-v1-6-207d955e0d69@linutronix.de>
-References: <20260302-module-signature-uapi-v1-6-207d955e0d69@linutronix.de>
-Subject: Re: [PATCH 6/8] tools uapi headers: add linux/module_signature.h
-From: bot+bpf-ci@kernel.org
-To: thomas.weissschuh@linutronix.de,dhowells@redhat.com,dwmw2@infradead.org,mcgrof@kernel.org,petr.pavlu@suse.com,da.gomez@kernel.org,samitolvanen@google.com,atomlin@atomlin.com,hca@linux.ibm.com,gor@linux.ibm.com,agordeev@linux.ibm.com,borntraeger@linux.ibm.com,svens@linux.ibm.com,zohar@linux.ibm.com,roberto.sassu@huawei.com,dmitry.kasatkin@gmail.com,eric.snowberg@oracle.com,paul@paul-moore.com,jmorris@namei.org,serge@hallyn.com,nathan@kernel.org,nsc@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org
-Cc: keyrings@vger.kernel.org,linux-kernel@vger.kernel.org,linux-modules@vger.kernel.org,linux-s390@vger.kernel.org,linux-integrity@vger.kernel.org,linux-security-module@vger.kernel.org,linux-kbuild@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,thomas.weissschuh@linutronix.de,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Mar 2026 13:32:34 +0000 (UTC)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB7900:EE_|CY8PR12MB8244:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba45c4fe-ec84-4b2a-2229-08de786100f4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	KaWF23UAQcwK40HwfoXrcuS5CnoVv6iecRgYgRVmtXfHIFkrGx8RePyjEPWCn8W3Q90R5JEqy1lPfb0ILbW13zljWs1P4lsdBiqTEPWXbJVLdSh9w/Ijv5YZD4Nl1JI97EfeSn/q0DT0eB7YrCF0sj1penqaup9LMpnm72Hg50ZL2f117OLORQLpiCv4O5csNbul5bBYmYK8W5HocvCkN540jRikwQV4y+az5Di7l9BJ6KSG7WxUaNMpW0nJauWxKfL0J2GGFY2aDftnWSIU4hnCdaIyA17fFWvWUhoS2UtuEcb8EHHfcc+kLORgKZv0tTr6yHjwncMfZmp4UxOQIaiRtyR91x6Rqznlk/HR3KrPUZmHE4eNPKXSq2bwYysR36otcRMEvu8k1AujPH0bPDMGnbfhwlu/2er30oVYepkTze7HwT0Ygbf5oJjsKWwpMlKSTXmHKIv2IHvOxjV22Z0ijglWwe7qgNURwmN+qk96YRr7ShDON5nSla7FS+t2XHwXNRvi5ihE+9Bistb/PM6y9m17AIeVkhsf4GhHz5E5lH5Dc7G3IqGEUh/VC3cqyNm8qt7nL3jd8qNy+uVh8tTpsLHX6SsjR6t/oc4Ic4M968fdJ4twySe058MbVCaSp3u1N6ry5QbOTfeZquPspO2DPGWiwShzrJOdC/djgAQmGQ+yU9LNXT2r9rlK+micKBa8D5a8/RXL72WmMAhPwr5lRiHiY+9DnGO+maesM4Y=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?82pi+kVWy97O2IuEbgX6WUEdoIBY7U2J/uULksk7N6pGjGLexFV/BPDF1+W3?=
+ =?us-ascii?Q?YzZpu7D652q3gIkXcme/BgBUmt/WXWEOuvr0DsRM5j0RaFG9ij9+LIKb7ySH?=
+ =?us-ascii?Q?ML3oJ1VQnX2l9JYWM9CD6m9M82xtBxNp6djyao+nZBYlJwVEfX06P+LrA0SY?=
+ =?us-ascii?Q?em4XoMJ0lhHpUiVDD9eIHDOYhlwEKreg3u2q4y7gERGTiJB6Et43OeU/oqsP?=
+ =?us-ascii?Q?kqkd1ALoyWQtZe3h3FR4T0T8ukdzpRHsTti3eNYEfpSQ3PxlI6SUJboZDKLf?=
+ =?us-ascii?Q?h03t+9TabDQUxWIbb/ffTwgsPU72GROIfDSBVFVx+jwYYktk1j2DSrLclq2p?=
+ =?us-ascii?Q?M3ipq8lI5qvlBaFu5VYZHAF+VPiX+4wkqfAZEKgDhU74zjJ5jgSJPzUe90gi?=
+ =?us-ascii?Q?X6+FcT430TUV2LhFJEXn9Y6wlqRZWeWPcYV/rTrDxErqV2iFQI3h6YauXduZ?=
+ =?us-ascii?Q?lQvrYDe5YNEXV2jxOlpmEI28aws5DFSPBmA0AzsYIWzRrq8aRI2/dTT7MlMm?=
+ =?us-ascii?Q?U4107CtXtELVZnC52NOFmaKhZUsvUYNCt2IfsezfB1TZM2+pA0pX6QFDXjtT?=
+ =?us-ascii?Q?3eWjKXpz9mXO/g/F+Dpi4EUpZUztFZQ/8VAyRbl6cfbJvzhNmwR0tw8fvZCa?=
+ =?us-ascii?Q?EEb/Hckf/U+0rBbGQm9ltRQqTRbeWt0xUhV17YzRTSMzGF56C3x+ypzEy9AN?=
+ =?us-ascii?Q?bW+iSSAOGQFOQfVlzcWsDRqHIWBfll2HKjRmgEBdkbRWxyhrIu6v4++tXAh9?=
+ =?us-ascii?Q?L4GEjLrb/Qy64qMC16J+SLYf05prD7qp1onXSb4k6WZBvTegyYab1PcrG+oE?=
+ =?us-ascii?Q?WnWa5HZGfA5+wwVIrOfB3giOchBYNKQnd5NYR+vY5ffmTSnl5xIeZMQOblI1?=
+ =?us-ascii?Q?djFRSExz1b51BNbeFFLPodb/xVkBmdIsFEaLUOvnnT8eMaBBeV3D1LKjCSHJ?=
+ =?us-ascii?Q?tL29aXS/SmWSN3vZsli8sZd6Sk440OZ84E2Eg2TwjWuMrPEhaXsqy4KoXwdi?=
+ =?us-ascii?Q?Bo2zLi/do1vtf+aX7L3OGA3u/R5ANVPLf+4l+t2fQ9i33Sdl4Dw7jyNmIlDg?=
+ =?us-ascii?Q?WixUB6coPoGqpXzpR7OlrSQGjtsxFOzezpKOYgHdt+74lmjlajKUIfR1DHIe?=
+ =?us-ascii?Q?JUtOpt12MZO4f/v7zl7JVTmioGwEI0nMVTup9reqoccnPRpKLYjzNv2bopVv?=
+ =?us-ascii?Q?2w5ENFZhRioheDD6mY2cL0JvyBaEnEfx2LwYgEZ76ehHCurA3oEVoQ2pIcXp?=
+ =?us-ascii?Q?q+CdoMnRSjxzzfC4ECLIk0K7PETm+F7bPUP4U/JPUA9lDuvArpTA8de2sb0X?=
+ =?us-ascii?Q?VD9HNongdi10viKEJI4N7ntpa5W4qie68V4vzwFNqqJp4YfttNhIUzwnjc7/?=
+ =?us-ascii?Q?/rMic3/oC0AM0o3y/6z8cKKtPHjsHUlurfq12rmzpTS+mYDtiFWsoHNT3cGQ?=
+ =?us-ascii?Q?PsKB4bYfjjpBvcx2JutfS2L3IKdGNRmPKy1MCVakD5Nou4EGvW1X+95VP18x?=
+ =?us-ascii?Q?Yzoe2zDbWpuIuJoanW3PT5m8iNGmK5ru6QsCvk5bdWEg1gWeMhR2V6Uhmm1K?=
+ =?us-ascii?Q?UrH1ogdgtjdb8JSKbwYDbrdT2u1t6Rn0Mh3O0d738PtaeikBcpzavA30dayP?=
+ =?us-ascii?Q?yn9GgBW5xFd8vMNwLKRDcHrzfkrYZCzf1Sh64Q/a/lmBWvmB+nuojc2iHhhi?=
+ =?us-ascii?Q?QdCu9G//8biR/LRPQTSGOtgPGpVwdxDOtgOJzJv/etuBIvNUSpjnXPJCU3BE?=
+ =?us-ascii?Q?bCJQIo0Hgg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba45c4fe-ec84-4b2a-2229-08de786100f4
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 13:38:35.9541
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aYRoXyrLQDQX5mSfjhYjQ/WXs0k5U5dgdvVZxaHXfneo4jTIr27H4UxurUSCVwAtOy2fqIBC8z3r/5IT98ysBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8244
 
---===============7930476675043711056==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Mar 02, 2026 at 09:07:34AM +0000, Jiayuan Chen wrote:
+> Thanks, this is indeed the simplest fix.
+> 
+> Let me walk through each case to confirm my understanding:
+> 
+> Case 1: Explicit reject route (with RTF_REJECT)
+> ip -6 route add unreachable 2001:db8:1::/64
+> 
+> cfg->fc_flags has RTF_REJECT before entering fib6_nh_init(), so the reject path is taken.
+> fib_nh_common_init() is skipped, nhc_pcpu_rth_output is not allocated. This is fine since reject
+> routes never need it.
+> 
+> 
+> Case 2: Loopback implicit reject route (without RTF_REJECT)
+> ip -6 route add 2001:db8::/32 dev lo
+> 
+> cfg->fc_flags does not have RTF_REJECT, so fib6_nh_init() takes the normal path and
+> fib_nh_common_init() allocates nhc_pcpu_rth_output. Later, ip6_route_info_create() calls
+> fib6_is_reject() and marks the route as RTF_REJECT.
+> The allocated nhc_pcpu_rth_output is unused but harmless.
+> 
+> 
+> Case 3: Standalone nexthop object (our bug scenario)
+> ip -6 nexthop add id 100 dev lo
+> 
+> ip route add 172.20.20.0/24 nhid 100
+> cfg->fc_flags does not have RTF_REJECT (nexthop objects never carry route attributes),
+> so fib6_nh_init() takes the normal path and fib_nh_common_init() allocates nhc_pcpu_rth_output.
+> This fixes the crash when an IPv4 route later references this nexthop.
 
-> diff --git a/tools/include/uapi/linux/module_signature.h b/tools/include/uapi/linux/module_signature.h
-> --- /dev/null
-> +++ b/tools/include/uapi/linux/module_signature.h
+Yes, that's my understanding as well.
 
-[ ... ]
-
-> +enum module_signature_type {
-> +	MODULE_SIGNATURE_TYPE_PKCS7 = 2,	/* Signature in PKCS#7 message */
-> +	MODULE_SIGNATURE_TYPE_MERKLE = 3,	/* Merkle proof for modules */
-> +};
-
-The source UAPI header at include/uapi/linux/module_signature.h does not
-define MODULE_SIGNATURE_TYPE_MERKLE:
-
-include/uapi/linux/module_signature.h:
-    enum module_signature_type {
-        MODULE_SIGNATURE_TYPE_PKCS7 = 2,
-    };
-
-Was this value intentionally added here ahead of the kernel header?  It
-appears to come from the CONFIG_MODULE_HASHES series referenced in the
-cover letter, but no commit in this series adds it to the kernel UAPI
-header, so the tools copy diverges from its source at creation time.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22577240517
-
-AI-authorship-score: low
-AI-authorship-explanation: Straightforward mechanical UAPI header copy with terse commit message, consistent with experienced kernel developer style from a known Linutronix contributor.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: The tools UAPI copy contains an enum value (MODULE_SIGNATURE_TYPE_MERKLE) not present in the kernel source header, creating a content mismatch that does not affect runtime behavior but violates the convention that tools copies mirror kernel UAPI headers.
-
---===============7930476675043711056==--
+FWIW, I ran the various FIB selftests with the diff that I suggested and
+didn't see any issues.
