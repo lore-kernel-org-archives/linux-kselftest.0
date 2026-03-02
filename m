@@ -1,214 +1,318 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA34A480345;
-	Mon,  2 Mar 2026 20:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772483404; cv=fail; b=RCRDhON8UPA5ClYi8VWyPW6QbCJhp6rMtX+P28dEWN//Sk3EqiBYaTqDrZzg1UEKchiHdM3osBwaAvFnm+yDom3eZRhwDTdSPVN5hRrXoqqMgu5sWa5KNa1LZkoLqD/xF22e2SJL+sB8DMkmuX76giFP4ejIP/aNvQe7TFfsib0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772483404; c=relaxed/simple;
-	bh=VQFlmU2PzK8wXzzfLiN8F/roz6G/gIxAURRMz/yfrdI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ruy/CY0I4S4zNVQAa06vN6ZBAiaAvKuwDn7P4IkzXvlwjt4uF3CNqy6uccvUWmwaiXxfRtScPe0oW8pcMw7ITJYJyFttis2syvA+mXf4kxVypQ9fhf1PmfySi/yBZf0Rqex73I+vJIGStEElllRFzmwdrYWhR7Z8Rv6fWrbHsG8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MnlmFbaj; arc=fail smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02302492529
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 20:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772484281; cv=none; b=u0NhfOn/Zx5POK7I074ZxhKV9MRiVgYo8tKCyePAFZCHt2k5JFyKbssBcZYgkszav1tsRYyZTriiA70QCHftHYf/dTxZpzu+gIEi03Kf0Ja2KaW4ItkteFB2TbJVTVkKjj6+29DW+qsmtHZ8Dx6J/0kjErX16wU1jHqIhvwLFP4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772484281; c=relaxed/simple;
+	bh=4ukv+spDQIX2E2lhjd+pi/nANVf12Qo7w+qdwYfXwOs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g9dfzHCMGyddMZWx76oGn0nNwITcImuymH9e/YALndGcZ+ArULZJsN3QF2Emk4OSqbn+axeHIqr8ZyYCnUqLgqIw/a4FwQrrVxuGdZobxUikpU+ZAvaKSxuYoUwLYsdVcuFvmclNfDS9SpkTBDzULTCZXaLrP66qTZ6CO8ir0aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C/y2EOAi; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MnlmFbaj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772483402; x=1804019402;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=VQFlmU2PzK8wXzzfLiN8F/roz6G/gIxAURRMz/yfrdI=;
-  b=MnlmFbajp733BQJSjIRXyMnH+zCBwuKK0PRkW+A9j4z9CvYnUqmzB75S
-   dCTyQnqQi9aGCVsX0J8Sfi8M0M3iStrq9PiLuE49eYQctVn71F0zO3VQP
-   4MPhXxuHnpF9jN/+fa52doO9FXLH3AImcIyq1A6UGDZZ3rL85UfR1ntKe
-   5539Lvfd3l/iWOPoaq9g7z5UhropRJKJhYTRhpLnbyhPGPXiRaK+qs9XK
-   xfJhH2wSYrApnjpvXkKfTtLUZOZzPiQkMdnrOpjFbDsbeJJqK0XzULowB
-   GCP4rKoAtJ8KFsz5FoYkolEirrnaGY+ZweZJksActyWiDYI6hoBaO9Npu
-   A==;
-X-CSE-ConnectionGUID: 5vqwFH+6RLaXADYceGx3mA==
-X-CSE-MsgGUID: 0GAyKwEASbqj6Bhz+fV13Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="76106743"
-X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
-   d="scan'208";a="76106743"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 12:30:01 -0800
-X-CSE-ConnectionGUID: YUmQazUdQu2OzoxeAqNxbQ==
-X-CSE-MsgGUID: i1sJDrRmRKecbPr0AbYO3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
-   d="scan'208";a="221928302"
-Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
-  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 12:30:01 -0800
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Mon, 2 Mar 2026 12:30:00 -0800
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Mon, 2 Mar 2026 12:30:00 -0800
-Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.2) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Mon, 2 Mar 2026 12:29:59 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=x8jM4ov8jd4bz/7VGxSlR6p2ZoaF/+eLetYpoijJ9KOzFSzasfBS3xVhS5n/TLSFeS7pv9ngj/SeKPgw1lEeXrNN7DnRtvkcBYD2aOrE5HKZYJ3qlvD50g/zbNm7OR0IKTH4fIGyVywFDGHMCY7hVlEUk36rk+tI0WSIP3q+jnMKjD7NZXqw8KDQab3YNK1HulGlaMUdlCJ9JQDfR41Qc3sK+81Ypig9eqVGPdNtrpRBtGODJbvHBPiRD8ZxO58px+gN8C6d8QdhXjhZ3uwNmEqZ6X8LiuP0ICL7GJVEOlMLSmhf3WHG9CKpNmnf5HhcSJeQRTLp7eJvj4m04WK2og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VQFlmU2PzK8wXzzfLiN8F/roz6G/gIxAURRMz/yfrdI=;
- b=QkrPgDtoegmRVQakwhYbxWofw+oWaIKX25hbVpkqB34CvUYU3qil96ls21Vrk2gq18oHDEMz8m/0dpT/ufMEsaH0CT9q1jOo81HbnrKTjXYaFBCvlk6WiARv+yDT4mton+UyYjtSFXStaLYGxzETMR/Ud3rgkV3suB3ypAwKa0qNhi06l0v5iKoYxHNQrEU2Qjmfkeah5RYrCB6nqK+JstMYQBdXNpAF1itRdF6/sn4EHVDLQXXY0IRe+EHfPu4XwdfevpeXdhg1DLr4gTRJ1fL8oqu/pZAiK2faqy4o2rwGXuJeLViYzMinDEk9mJ60QS9TIMsUm6zwQ048t8uUuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB2650.namprd11.prod.outlook.com (2603:10b6:5:c4::18) by
- CY5PR11MB6282.namprd11.prod.outlook.com (2603:10b6:930:22::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9654.21; Mon, 2 Mar 2026 20:29:56 +0000
-Received: from DM6PR11MB2650.namprd11.prod.outlook.com
- ([fe80::ec1e:bdbd:ecd8:4c86]) by DM6PR11MB2650.namprd11.prod.outlook.com
- ([fe80::ec1e:bdbd:ecd8:4c86%6]) with mapi id 15.20.9654.015; Mon, 2 Mar 2026
- 20:29:56 +0000
-From: "Huang, Kai" <kai.huang@intel.com>
-To: "seanjc@google.com" <seanjc@google.com>
-CC: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "pbonzini@redhat.com"
-	<pbonzini@redhat.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"shivankg@amd.com" <shivankg@amd.com>
-Subject: Re: [PATCH] KVM: selftests: Increase 'maxnode' for guest_memfd tests
-Thread-Topic: [PATCH] KVM: selftests: Increase 'maxnode' for guest_memfd tests
-Thread-Index: AQHcqiQRDFuEX2YLPUiD3cEe6sTY8rWbZkYAgABMGIA=
-Date: Mon, 2 Mar 2026 20:29:55 +0000
-Message-ID: <90417b231575e340159984aad0d95e97142908e6.camel@intel.com>
-References: <20260302090739.464786-1-kai.huang@intel.com>
-	 <aaWzbCEWbStphJPh@google.com>
-In-Reply-To: <aaWzbCEWbStphJPh@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.56.2 (3.56.2-2.fc42) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB2650:EE_|CY5PR11MB6282:EE_
-x-ms-office365-filtering-correlation-id: c4c2c23d-b79f-43cd-291e-08de789a77a5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700021;
-x-microsoft-antispam-message-info: N1qrKAih2LoOf2AxdtB2vFakRhx36Adm/iGwB/emkloa19RMxFPTV5wJl65sxo1pS1P69DopY3M4WkkB8/mUcpYx11u9UOVfWvP/vxBHUYBjuQGG+yILhazZSRwl8j/7YNTroPZ7qWNRpPziGsdR+CRe+7fR4UFNO4M5XnoBe2zBQfAXCvfHztouPMVQxOZP9Ux1FrXXUljxOv7l7v63fGIQTz3pUtefmx7RZT0OiqUM1ZK3URGBOkL3luQGVt5f+bsnMH/R6Pfbh0jQQhQniGabUdfKeI7QvUV6xVFuSr2sAO5wBf+KJk/oXC/sVWGBvzbjTjs/JrILbbxQX9UI5CeowQoMz5xxiPb4DTu4Y7LqTEOCvQfEzPf8m0NSfXWFkcFqA6UJ8DcjkAGlIe5W1UKgkXlD7Do5OvQpWF88TvrcyopV1xd3hvy9sq38wlyrwmyxI1GWa4SmeOguGcp/uHcc9QdiVNnCGv32+tM1XIKmPkqusZz7SJUd11loT+4eAohd8nzX0D93dfN4cinP7lxDWpoiWbILuYl4uURRoV1CMJWjHByDyijeUjdNbqT008bI7XNPQ6B1Xi4zWlWzkrW9HF+TdFwH29xtNCkdSFKSx7t0deVkGE3jYyITv3iDRG5MUzH//Mez/NIgIvrAAh9/8BvQCmupfQhj9S4qVlO+hOAcRDz3l7GSlLWcs1K2xZPTlQvrG/JXjKFGlIpQ5jbJSRZGeyZ36BPYAzw4ynb8JozJltAriPVHfn2co5uc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2650.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UC8xOVA3M1RoY2RJTjJ0d1c3cmZyOW1CbXZoQTl4aFRnVmJoUzdBeCtLb1dy?=
- =?utf-8?B?T2hHZTRuaFlKSWxGWGkyWTRnUFZtTURlUDNyeFdIYmNUV0xLL00zUXJ3bFpK?=
- =?utf-8?B?NThjd0FCV00zSXlzWllEWDNTTHZnNmM0aDNMbTJ2bkdKYXRYN3kzRDRnL0tz?=
- =?utf-8?B?TXV3RXBRa1J2MTJhVlJqNnlpSk5WZ2NyZ0JJVUZtSEtpdmJVYlZYNVpyNGZ5?=
- =?utf-8?B?Tk50Ykh3bzRsZ2RIaXFmWmYvcHd6NjkzSEtlNlh1ejFNNklyai9kWVh5Qldz?=
- =?utf-8?B?V0RsYmFVWGs0bVYyTkk3R28xTFp4bDBIckp0V3JDWHNoc3AvR05zVENxa0pQ?=
- =?utf-8?B?VGlQY0krY1BSQ0R1U1NSdEFHS0d3NkV2MlJOMU5VSjkrMlVTZjdFRjJEd2w3?=
- =?utf-8?B?NWZPRlpBVXJTMUhtV3J6VTVhYzdXaG9adUUxamNQL295U1BWWnpKc2ZYZzhw?=
- =?utf-8?B?c05zWHNEbXMxeERwbUFWUlVoMCt1VTExOUF1eno2RXN2VkVpbXRmWHZIZTJV?=
- =?utf-8?B?aWZ4MjFSd3h5eXdIRGJtWGo5Wk1jN0xHUFpiU3JyakJlUkQ0UWhjcFFBaC8w?=
- =?utf-8?B?U1daa1QvNVhPc3VkUDlESzhyZXYrU0ZZTWZTSFFBdWVQbjl6QUQrdnVxSHFr?=
- =?utf-8?B?Vkc5NEtqWjBRSGNkWlY2WUgxUllHYzZka1B4R1FMcUQ0S1lqc3Jtdi94b29i?=
- =?utf-8?B?S2dyblk3OUJXMzVXc2ZxUCtCT1VRYkgvVWxhSHNMZ3ZSMU1XeHYrSmgxMlRi?=
- =?utf-8?B?a05OSnFUR3RmMEdXT0tnbE5qMXJvbUpUVDdjL015N3FEOTJQV2NCa0pIWGVN?=
- =?utf-8?B?VkF4R20vVGY0WVkzT0IzSjMvWmJ3ZThaZnF4QjVrN2RrQ3ZWU2wwaklBb2c1?=
- =?utf-8?B?Um13MmdmRktlVkJZb1c4bHpZWlhTTWFXSEFFQlowWlZUbUV3MllMMEpONVBs?=
- =?utf-8?B?eDJjWGY5SHFFRDBiUkM2UDlDRTlpNGxERk1DVm9KcU1LZ2hZb3hFc1lDeDE2?=
- =?utf-8?B?RUpKM3FvQ21uTFpBbmllRU0wNzEvckQzbTdOOEVEK3lnTWxZekVoVHloZWwx?=
- =?utf-8?B?WGVwbC9STDhKMzJtcEkvc1F1RFpzTmdMVGpuRjVkaFNEY3NzUmIrdG9GcHJI?=
- =?utf-8?B?dkpvTTN2V0UxeE1zZERRbGFyN1ova1YxU0dHNko2R1A2S2tCMWIzV2VMQjhi?=
- =?utf-8?B?ZTNTUWFZMW1LWDJBUFlNaGJlUmFRS0M1UGtDTHNqT0huZWhVWlhudzdacnBq?=
- =?utf-8?B?K2pSRmlqQWtKOHJ4U243L3lLNC92Sko4eWFHWlgwSjV5WEpDN3lZN0RhU2lj?=
- =?utf-8?B?akRpWFpzNFgyWkwrZ21sQVlZUjZHcHdZMGFuU0NwVEk1RXRiU2FicTVnZUFl?=
- =?utf-8?B?Qy9OL3FYNTZWS3FKazZiN3VpTk04eU9wSGowM0V0dk9tVjdoMFpOcUNQRC81?=
- =?utf-8?B?eHVVUHVDTUxvcDMwVG1ROUFZR0cwelkyRVVmT3JaMWJXdTZHa3l6TW5lZ3hj?=
- =?utf-8?B?c3p0YU5BckJlQ2tvOGRtVDlhVDJEMkxOWGcyek9HVElMSks2MFdncGlrMStM?=
- =?utf-8?B?VXlva1NMdlZSUElWREVBRXUyVXBWNG9UQkFTYUVLdzRRMU53T2RvVThYRU9p?=
- =?utf-8?B?MmtCQjE5cDI4OUNlTWUwWmM2d1JyUFBFS2ZDWjlDaVpPL0d6YWI5YTFsdVJ4?=
- =?utf-8?B?RHJTL2prVWlKbVovQjQ2T0tobW80djlpWWFyTUExeHNoNTdVa2VPczJsSGFl?=
- =?utf-8?B?dkhNa0ZxY1pIV2JYUE9DY0phU1BxUzdhU3RzS3VFbm8xeThvcjBuVVFVMkNk?=
- =?utf-8?B?ZjVWT1hIaHlJU0RoZzMzM3M2T2JodWpPamxVVnhZZkp3cWlmZGdrenZrRVQ1?=
- =?utf-8?B?b0RRaWxBMWg3S3dOVDlyNWhTZUFSYVNGNSsydWV0aDFxQjRiUU0xekVRNkpU?=
- =?utf-8?B?djBvZjFYcGFmNmxmbVdDMzJDMmtCNDBFNlJDZndwY01hQ0JWWWdwUFYyK0ZH?=
- =?utf-8?B?WlBhVndEWVB0NUprUmxpOThoa3VqT3Z2b094WU9hV3JHT3lsRnNRR05HeFdD?=
- =?utf-8?B?ekRUSnVMM1JLazhrMzNtSCsyYndzVDR1ZkI4REk1K29kdXNTSEt4Qit1WU1H?=
- =?utf-8?B?OUh4ZENjcURVNTRWWGVtZlc2T0k4aW1GU3MvVzloOXNtOVp0aEs5Ym02WDAy?=
- =?utf-8?B?cXE0Zkc4SndCYTIybXBXR1BFcldNSU5rWHBCY1ovM2lyaS81TDd4Z0ZlYzdw?=
- =?utf-8?B?N0RpREhBeWZpaGJkL0ZMVFd0Y2FqVy9qRzYxb2hFUzZGcjFMUktjdCt1Y2pG?=
- =?utf-8?B?UEFjWjNyMjc3RmRaU2M4YlZwVktiRG1lbEhBNEVURVpEaFFHMllCdz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <687A8F842C04854B8D723C244984D616@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C/y2EOAi"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-439aeed8a5bso2018227f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 12:44:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772484278; x=1773089078; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PXi9aUNBTEamIc/dINzBjAwejZeZdWklBvTEx/GQ9ms=;
+        b=C/y2EOAijJ3kekRqDfvl7C0rQkTln5pSqjApZqLVVknXu0PioutGtgcm/nkjBbmdih
+         v7ECXseMbRlQl01hEsHZJG2DiUDhsLbolBIEyAzGghMJi+DxaFNFABv/NWEmIFaN2JeN
+         fdJqPX5nwHcS93PNh+FBqUWSym5h+nYa1X+S/r0bzF9MJpvNZm+SOFtBzAXt4YC/+iS/
+         E75hra4eAVYjTsFFp3Hfc4Cy8BZ+oilsE+S00W3D6zw/aVpy7Jf4LsxcfqOYPpmy/zVs
+         TauaJ82gKiiSG8RAgE7N6XSgTxTLnwOO/iIiH4aM6zomMhKY4aojdeYbyAQjsE/rTCkR
+         HDiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772484278; x=1773089078;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PXi9aUNBTEamIc/dINzBjAwejZeZdWklBvTEx/GQ9ms=;
+        b=MEUMytuGwe+AhHXRGz6zIWvYHQAecMP4tyh9pny7ffXdV1ZmXXd4HLyZRiCjjenkij
+         ARSZxXj44PTyGmpt9HBHN1HN9l0tbNnVKS20gDQ/l1u200BaEEnJ4x6WoXwBfu24F7ih
+         Ugu1b6XznoMPwE7vAlKPPREKt4yRxaOztOGMkbcnXek6NUri9iy0klkQ23GZV8UlsHhK
+         cSwzb/tTDmUajvQtce79HUcZ83tNlSW2vxq8GZEjSHcxhN2zHWg/JwIS+ZTVfrk78rdG
+         YccKtScYLzv/+VMYFgOUxmqA5FAhk8Hp9YIxfsHHGYttU7sW6C848sz/fUwJpmnHvKC2
+         cNhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVxm4R+JRFrkiZO/GFXwxDD4OnpNjxhQAJCJD5SKT6q1Vxy7e+sue4nQLdEcU1k58eGOLrCa5/3Y78RjCbeccg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjrW5BIvLKLe5+A4G4SwrPE70vmlwmHtqcEQ1wtPtQ1fgtdZUg
+	zeReQRSEghzd4Poa48yg2Tj8LNdGw8PnUQyeC+GVKLpglizGv4hGKAgL
+X-Gm-Gg: ATEYQzz+cHCnOVgSfHcSSJQ1GUYIR8oF0rTKq9+Ys7/nCyU1j7n4P74uSJqQGGh0oC4
+	oJhmw/+QryRgZ7aUJnHn0/IXSzL5rWvuFY9FvkGbdMBFW2bdtNE3AmnAWXXl0al3sB07L1fP3gu
+	yxsG7OoJPoJQ69ESDuWaHfYLpkFD0zTBpB73+WERCRcDQ2H7zCHEXxY55UhEwCVN+4V2rDQjp7O
+	pTev6dbJy+ji3XLLXGnyziSlRSTFOagqTyzOadzSAOUkqxME6wPXXrbqUyfeV1jG9PEDdnBGikA
+	zUQwk8TY3buE/VXTEC+sFvBnvV867vMswTzWuF8qfuZkvGeZ8ntDLj9HE/TjQWlufwPEtlgjVVq
+	vQcDeWWi4ktpG0CL9eoylY3zOEAmRR+nUrbkjSyLQQ1pAtoJ5H0etcbKaIczBCDhoQd+LGDVDJg
+	hxUsSbwePLnQo7oc73R1w9RL3sMaelqcBDeFrKrXtC+h+ueuejldDJ13awmmrdKRg00lkdV5ZNq
+	0TsR+Y=
+X-Received: by 2002:a05:6000:2401:b0:439:9106:3bb3 with SMTP id ffacd0b85a97d-4399de57098mr24624886f8f.59.1772484278016;
+        Mon, 02 Mar 2026 12:44:38 -0800 (PST)
+Received: from ?IPV6:2001:861:4a40:8620:6e55:aea5:1db9:cf20? ([2001:861:4a40:8620:6e55:aea5:1db9:cf20])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b130abfasm14493935f8f.34.2026.03.02.12.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Mar 2026 12:44:37 -0800 (PST)
+Message-ID: <72bd77ed-51e0-49f2-b67c-0e68340f2070@gmail.com>
+Date: Mon, 2 Mar 2026 21:44:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2650.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4c2c23d-b79f-43cd-291e-08de789a77a5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2026 20:29:55.9994
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y/AdP2e96EzqTBcTYd1dWwl6MrpYKey5FasKlmYRhu5lmuQLkaRzjdXaeqC+AGbbHR5sMwoduLsrD1JVorK3Zg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6282
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: Linux 7.0-rc1 kunit x86_64 run crashes
+To: Shuah Khan <skhan@linuxfoundation.org>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ david@davidgow.net
+Cc: KUnit Development <kunit-dev@googlegroups.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <0b621c07-9359-45fc-b14d-1a86d0b153b0@linuxfoundation.org>
+Content-Language: en-GB
+From: Guillaume Tucker <guillaume.tucker@gmail.com>
+In-Reply-To: <0b621c07-9359-45fc-b14d-1a86d0b153b0@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-T24gTW9uLCAyMDI2LTAzLTAyIGF0IDA3OjU3IC0wODAwLCBTZWFuIENocmlzdG9waGVyc29uIHdy
-b3RlOg0KPiBPbiBNb24sIE1hciAwMiwgMjAyNiwgS2FpIEh1YW5nIHdyb3RlOg0KPiA+IEluY3Jl
-YXNlICdtYXhub2RlJyB3aGVuIHVzaW5nICdnZXRfbWVtcG9saWN5JyBzeXNjYWxsIGluIGd1ZXN0
-X21lbWZkDQo+ID4gbW1hcCBhbmQgTlVNQSBwb2xpY3kgdGVzdHMgdG8gZml4IGEgZmFpbHVyZSBv
-biBvbmUgSW50ZWwgR05SIHBsYXRmb3JtLg0KPiA+IA0KPiA+IE9uIGEgQ1hMLWNhcGFibGUgcGxh
-dGZvcm0sIHRoZSBtZW1vcnkgYWZmaW5pdHkgb2YgQ1hMIG1lbW9yeSByZWdpb25zIG1heQ0KPiA+
-IG5vdCBiZSBjb3ZlcmVkIGJ5IHRoZSBTUkFULiAgU2luY2UgZWFjaCBDWEwgbWVtb3J5IHJlZ2lv
-biBpcyBlbnVtZXJhdGVkDQo+ID4gdmlhIGEgQ0ZNV1MgdGFibGUsIGF0IGVhcmx5IGJvb3QgdGhl
-IGtlcm5lbCBwYXJzZXMgYWxsIENGTVdTIHRhYmxlcyB0bw0KPiA+IGRldGVjdCBhbGwgQ1hMIG1l
-bW9yeSByZWdpb25zIGFuZCBhc3NpZ25zIGEgJ2Zha2VkJyBOVU1BIG5vZGUgZm9yIGVhY2gNCj4g
-PiBvZiB0aGVtLCBzdGFydGluZyBmcm9tIHRoZSBoaWdoZXN0IE5VTUEgbm9kZSBJRCBlbnVtZXJh
-dGVkIHZpYSB0aGUgU1JBVC4NCj4gPiANCj4gPiBUaGlzIGluY3JlYXNlcyB0aGUgJ25yX25vZGVf
-aWRzJy4gIEUuZy4sIG9uIHRoZSBhZm9yZW1lbnRpb25lZCBJbnRlbCBHTlINCj4gPiBwbGF0Zm9y
-bSB3aGljaCBoYXMgNCBOVU1BIG5vZGVzIGFuZCAxOCBDRk1XUyB0YWJsZXMsIGl0IGluY3JlYXNl
-cyB0byAyMi4NCj4gPiANCj4gPiBUaGlzIHJlc3VsdHMgaW4gdGhlICdnZXRfbWVtcG9saWN5JyBz
-eXNjYWxsIGZhaWx1cmUgb24gdGhhdCBwbGF0Zm9ybSwNCj4gPiBiZWNhdXNlIGN1cnJlbnRseSAn
-bWF4bm9kZScgaXMgaGFyZC1jb2RlZCB0byA4IGJ1dCB0aGUgJ2dldF9tZW1wb2xpY3knDQo+ID4g
-c3lzY2FsbCByZXF1aXJlcyB0aGUgJ21heG5vZGUnIHRvIGJlIG5vdCBzbWFsbGVyIHRoYW4gdGhl
-ICducl9ub2RlX2lkcycuDQo+ID4gDQo+ID4gSW5jcmVhc2UgdGhlICdtYXhub2RlJyB0byB0aGUg
-bnVtYmVyIG9mIGJpdHMgb2YgJ3Vuc2lnbmVkIGxvbmcnIChpLmUuLA0KPiA+IDY0IG9uIDY0LWJp
-dCBzeXN0ZW1zKSB0byBmaXggdGhpcy4gIE5vdGUgdGhlICdub2RlbWFzaycgaXMgJ3Vuc2lnbmVk
-DQo+ID4gbG9uZycsIHNvIGl0IG1ha2VzIHNlbnNlIHRvIHNldCAnbWF4bm9kZScgdG8gYml0cyBv
-ZiAndW5zaWduZWQgbG9uZycNCj4gPiBhbnl3YXkuDQo+ID4gDQo+ID4gVGhpcyBtYXkgbm90IGNv
-dmVyIGFsbCBzeXN0ZW1zLiAgUGVyaGFwcyBhIGJldHRlciB3YXkgaXMgdG8gYWx3YXlzIHNldA0K
-PiA+IHRoZSAnbm9kZW1hc2snIGFuZCAnbWF4bm9kZScgYmFzZWQgb24gdGhlIGFjdHVhbCBtYXhp
-bXVtIE5VTUEgbm9kZSBJRCBvbg0KPiA+IHRoZSBzeXN0ZW0sIGJ1dCBmb3Igbm93IGp1c3QgZG8g
-dGhlIHNpbXBsZSB3YXkuDQo+ID4gDQo+IA0KPiBDYW4geW91IGFkZDoNCj4gDQo+IFJlcG9ydGVk
-LWJ5OiBZaSBMYWkgPHlpMS5sYWlAaW50ZWwuY29tPg0KPiBDbG9zZXM6IGh0dHBzOi8vYnVnemls
-bGEua2VybmVsLm9yZy9zaG93X2J1Zy5jZ2k/aWQ9MjIxMDE0DQo+IENsb3NlczogaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvYWxsL2J1Zy0yMjEwMTQtMjg4NzJAaHR0cHMuYnVnemlsbGEua2VybmVs
-Lm9yZyUyRg0KDQpPaCBJIGRpZG4ndCBrbm93IHRoaXMgd2FzIGFscmVhZHkgcmVwb3J0ZWQuICBX
-aWxsIGRvLg0KDQo+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEthaSBIdWFuZyA8a2FpLmh1YW5nQGlu
-dGVsLmNvbT4NCj4gPiAtLS0NCj4gPiAgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL2d1ZXN0
-X21lbWZkX3Rlc3QuYyB8IDIgKy0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCAxIGRlbGV0aW9uKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2t2bS9ndWVzdF9tZW1mZF90ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9r
-dm0vZ3Vlc3RfbWVtZmRfdGVzdC5jDQo+ID4gaW5kZXggNjE4YzkzN2YzYzkwLi5iNDM0NjEyYmMz
-ZWMgMTAwNjQ0DQo+ID4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL2d1ZXN0X21l
-bWZkX3Rlc3QuYw0KPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2t2bS9ndWVzdF9t
-ZW1mZF90ZXN0LmMNCj4gPiBAQCAtODAsNyArODAsNyBAQCBzdGF0aWMgdm9pZCB0ZXN0X21iaW5k
-KGludCBmZCwgc2l6ZV90IHRvdGFsX3NpemUpDQo+ID4gIHsNCj4gPiAgCWNvbnN0IHVuc2lnbmVk
-IGxvbmcgbm9kZW1hc2tfMCA9IDE7IC8qIG5pZDogMCAqLw0KPiA+ICAJdW5zaWduZWQgbG9uZyBu
-b2RlbWFzayA9IDA7DQo+ID4gLQl1bnNpZ25lZCBsb25nIG1heG5vZGUgPSA4Ow0KPiA+ICsJdW5z
-aWduZWQgbG9uZyBtYXhub2RlID0gc2l6ZW9mKG5vZGVtYXNrKSAqIDg7DQo+IA0KPiBQcmV0dHkg
-c3VyZSB0aGlzIGNhbiBiZToNCj4gDQo+IAl1bnNpZ25lZCBsb25nIG1heG5vZGUgPSBCSVRTX1BF
-Ul9UWVBFKG5vZGVtYXNrKQ0KDQpZZWFoLg0KDQpXaWxsIHVwZGF0ZSBhbmQgc2VuZCBvdXQgdjIg
-c29vbiBzaW5jZSB0aGlzIGlzIGEgc2ltcGxlIHBhdGNoLg0K
+Hi Shuah,
+
+On 02/03/2026 18:57, Shuah Khan wrote:
+> All,
+> 
+> I am seeing the following crash on Linux 7.0-rc1  kunit x86_64 run.
+> Is this a known problem?
+
+Yes, and there's a fix attached to this email:
+
+    https://lore.kernel.org/all/20260226-ungeziefer-erzfeind-13425179c7b2@brauner/
+
+It's fixed in next-20260302 but not in mainline yet.
+
+Cheers,
+Guillaume
+
+> ---------------------------------------------------------------------------
+> 
+> Command '['qemu-system-x86_64', '-nodefaults', '-m', '1024', '-kernel', '.kunit/arch/x86/boot/bzImage', '-append', 'kunit.enable=1 console=ttyS0 kunit_shutdown=reboot', '-no-reboot', '-nographic', '-accel', 'kvm', '-accel', 'hvf', '-accel', 'tcg', '-serial', 'stdio', '-bios', 'qboot.rom']' timed out after 300 seconds
+> [10:52:02] [ERROR] Test: string-stream-test: missing expected subtest!
+> [10:52:02]     # string_stream_performance_test: Time elapsed:           1900 us
+> [10:52:02]     # string_stream_performance_test: Total string length:    573890
+> [10:52:02]     # string_stream_performance_test: Bytes requested:        823930
+> [10:52:02]     # string_stream_performance_test: Actual bytes allocated: 1048312
+> [10:52:02] kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
+> [10:52:02] BUG: unable to handle page fault for address: ffff9174c12172b8
+> [10:52:02] #PF: supervisor instruction fetch in kernel mode
+> [10:52:02] #PF: error_code(0x0011) - permissions violation
+> [10:52:02] PGD 563f067 P4D 563f067 PUD 5640067 PMD 80000000012001e3
+> [10:52:02] Oops: Oops: 0011 [#2] SMP NOPTI
+> [10:52:02] CPU: 0 UID: 0 PID: 214 Comm: kunit_try_catch Tainted: G      D          N  7.0.0-rc1 #1 PREEMPT(lazy)
+> [10:52:02] Tainted: [D]=DIE, [N]=TEST
+> [10:52:02] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.1 11/11/2019
+> [10:52:02] RIP: 0010:0xffff9174c12172b8
+> [10:52:02] Code: 00 00 00 00 00 00 00 00 00 00 30 39 01 80 54 99 ff ff 30 39 01 80 54 99 ff ff e0 a9 9a c1 74 91 ff ff 40 ee 86 c1 74 91 ff ff <40> 6d 82 88 ff ff ff ff f8 c1 80 c1 74 91 ff ff 00 00 00 00 00 00
+> [10:52:02] RSP: 0018:ffff995480003f08 EFLAGS: 00010286
+> [10:52:02] RAX: ffff9174c180c1f0 RBX: 0000000000000003 RCX: ffff9174c1397000
+> [10:52:02] RDX: ffff9174c12172b8 RSI: 0000000000000001 RDI: ffff9174c180c1f0
+> [10:52:02] RBP: ffff9174fec1e100 R08: ffff9174c145c6d8 R09: ffffffff880fe68b
+> [10:52:02] R10: ffffffff888080c0 R11: 00000000000000a1 R12: ffff995480003f40
+> [10:52:02] R13: ffff9174c186ee40 R14: 0000000000000002 R15: 0000000000000000
+> [10:52:02] FS:  0000000000000000(0000) GS:ffff91757602e000(0000) knlGS:0000000000000000
+> [10:52:02] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [10:52:02] CR2: ffff9174c12172b8 CR3: 0000000005218000 CR4: 00000000000006f0
+> [10:52:02] Call Trace:
+> [10:52:02]  <IRQ>
+> [10:52:02]  ? rcu_core+0x24b/0x5a0
+> [10:52:02]  ? rcu_core+0x1e9/0x5a0
+> [10:52:02]  ? handle_softirqs+0xc7/0x1d0
+> [10:52:02]  ? irq_exit_rcu+0x47/0x90
+> [10:52:02]  ? sysvec_apic_timer_interrupt+0x69/0x80
+> [10:52:02]  </IRQ>
+> [10:52:02]  <TASK>
+> [10:52:02]  ? asm_sysvec_apic_timer_interrupt+0x1a/0x20
+> [10:52:02]  ? __kmem_cache_free_bulk.part.0+0x105/0x240
+> [10:52:02]  ? __pcs_replace_full_main+0x1ab/0x2f0
+> [10:52:02]  ? kfree+0x158/0x290
+> [10:52:02]  ? string_stream_clear+0x64/0xa0
+> [10:52:02]  ? string_stream_clear+0x64/0xa0
+> [10:52:02]  ? __pfx_kunit_generic_run_threadfn_adapter+0x10/0x10
+> [10:52:02]  ? resource_free_string_stream+0x28/0x70
+> [10:52:02]  ? kunit_remove_resource+0x7b/0xa0
+> [10:52:02]  ? kunit_cleanup+0x38/0x80
+> [10:52:02]  ? kunit_generic_run_threadfn_adapter+0x1c/0x40
+> [10:52:02]  ? kthread+0xc9/0x100
+> [10:52:02]  ? __pfx_kthread+0x10/0x10
+> [10:52:02]  ? ret_from_fork+0x124/0x240
+> [10:52:02]  ? __pfx_kthread+0x10/0x10
+> [10:52:02]  ? ret_from_fork_asm+0x1a/0x30
+> [10:52:02]  </TASK>
+> [10:52:02] CR2: ffff9174c12172b8
+> [10:52:02] ---[ end trace 0000000000000000 ]---
+> [10:52:02] RIP: 0010:kunit_test_null_dereference+0x2f/0x80
+> [10:52:02] Code: 83 ec 10 49 c7 c1 10 af 75 88 49 c7 c0 20 b1 2a 88 ba 01 00 00 00 65 48 8b 05 85 66 93 00 48 89 44 24 08 31 c0 48 8d 4c 24 07 <c7> 04 25 00 00 00 00 00 00 00 00 48 c7 c6 20 30 62 88 48 c7 87 a0
+> [10:52:02] RSP: 0018:ffff9954800e3ed0 EFLAGS: 00010246
+> [10:52:02] RAX: 0000000000000000 RBX: ffff9174c19ab580 RCX: ffff9954800e3ed7
+> [10:52:02] RDX: 0000000000000001 RSI: 0000000000000246 RDI: ffff995480013a78
+> [10:52:02] RBP: ffff9174c186e200 R08: ffffffff882ab120 R09: ffffffff8875af10
+> [10:52:02] R10: 0000000000000001 R11: 00000000000aae60 R12: ffff9954800ebd50
+> [10:52:02] R13: ffff9174c180c180 R14: ffffffff882ab7b0 R15: ffff9174c19ab580
+> [10:52:02] FS:  0000000000000000(0000) GS:ffff91757602e000(0000) knlGS:0000000000000000
+> [10:52:02] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [10:52:02] CR2: ffff9174c12172b8 CR3: 0000000005218000 CR4: 00000000000006f0
+> [10:52:02] Kernel panic - not syncing: Fatal exception in interrupt
+> [10:52:02] Kernel Offset: 0x6e00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [10:52:02] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+> [10:52:02] qemu-system-x86_64: terminating on signal 15 from pid 64729 (python3)
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: string-stream-test: missing subtest result line!
+> [10:52:02] # module: string_stream_test
+> [10:52:02] =============== [CRASHED] string-stream-test ===============
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] [ERROR] Test: main: missing expected subtest!
+> [10:52:02] [CRASHED]
+> [10:52:02] ============================================================
+> [10:52:02] Testing complete. Ran 159 tests: passed: 81, crashed: 68, skipped: 10, errors: 69
+> The kernel seems to have crashed; you can decode the stack traces with:
+> $ scripts/decode_stacktrace.sh .kunit/vmlinux .kunit < .kunit/test.log | tee .kunit/decoded.log | ./tools/testing/kunit/kunit.py parse
+> [10:52:02] Elapsed time: 350.724s total, 4.449s configuring, 46.217s building, 300.058s running
+> 
+
