@@ -1,196 +1,470 @@
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013043.outbound.protection.outlook.com [40.107.162.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C3729E114;
-	Mon,  2 Mar 2026 12:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772455886; cv=fail; b=Pw7l+2+j4wLmT3e9yVyR+9dxvVXGV1fmrwu6xtmN+ueSJoysmpHU6+uGlm9+WifqJEEEuk6AWkNSr6CbL4czi+hdp839walBElcetTVt8Vp1S+jd7kdXjgiIAP9l9LwavZK4IqegApSYALpovV9X2WOenvny5RZNN81FfIbydQE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772455886; c=relaxed/simple;
-	bh=n3F4ahQCuOa3MHK8a7KC0DKKLcSPzYgQ7uyQ1MX2mWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ECFiWI19zOno0eGfe3fEFk/8qbghSr5UkUFEs8fc8b/VyJjCwcCsDNEg2EKwN/oac5hkICr7HxV7m8v5X7gSiy2JxbdaM2m5Wn3CbNt4LL/vJii8FReCfx7rjZ8B2mKGEyGzS55XBBaYsXUzguIO5RpKS9AYs30d2BD/5Iz2l28=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=CNlCeKv4; arc=fail smtp.client-ip=40.107.162.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2977336C0DC
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 12:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772456315; cv=none; b=QKD87qn6cOjv1YgTW4x63uO4bbVMhLZFN+NF8MY1RLi9CSY2cNSonMzh0au1K7cWn/xsTcgXiio5h1izFJ59kYxGBwg5jBSjd7k5/DtB6zApJovNfESttZic2IYthDbIoTduhjC7qlIviwkezj9TE3x7Zlk1MEtBUSxfPh+5ea0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772456315; c=relaxed/simple;
+	bh=t7ne8sEepQQaUZNDqjUlOMC6KRY5vKL/WawxD6FX1q4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mkXILeFDbCeOLpRqe3VJlXptGrSpkWqd3/uIeu0xEdX6QsTpTYwfhdRW/UYxs8aZLavn3PAMEvlBDH+q4j6IQOxn7FBjbTwxMYhVDwZAwFT4MM6yGyj1UJsLq7TLRHgUmAP4Qm2c/Qy0PWbXQwa4rwOqzIhYPcmXDvjIkK4FsBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=YGcx88u/; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="CNlCeKv4"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MPRC9YLFgxawIvFfwrONX5tCUudlrHrEyVafjYApNtrdX9VoXZ/xfg5+j+mbROV1aeTlszUSnHEnSqAEgJJGhCYI6vo4ZlZzXbmUoMaDVtTwSVKhGvi9kYkLsVMb57G9HhZsy6DMNdklwpPu2Q+vCDnEcUflUE2hScqHl0uB5giV8jN8b3gXmiZIvG2LH/xoOPgsbTD8EkJ2sYd7ncqa9sExB0KMiklrGyi+1O8yFtC1zQrvCH+TmW0S/ZeGBQJKyLO3IqbDJbIyvZ3bIfQ8Gax4xW9o4dMyvs/VdjZiTzy1ts2ftQMypzi/LtnQGvD5Uc7W660YyRa0T9U6BMsXzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AU657/auD/wOwSFVxHx7lV8Cyin1uEqH+BUuEcnSK4w=;
- b=BcsV3OO4uW40VIYc0YXUP0snAOh2H8utJmFXGZ9YBirjr21hvxTkx7ndqJDNzeLrUxnY8L8J+UcB3aFYgXZ4/tzSQGiVlHZwbCxqg8hleAtYGo9aeyWw2i0/HRwrtBQRQkuXLYnOp5Efsqhpid01i/v9xKXJVEp9/a6vF7CqGKTRLivO3yT6gpydPoYaM4jfxuRAEqNWixwfR2745y6eiLCqGiOtTl6QM0/Hovf7Cf9UkNqbxRKj1ucyeWGJQt5PYwWtJcQHXi9GdsHHOEOMH8lPfcIuFgvRa846gc3etzNBfM2SdwciKiIYHZqa7I3fNP6bjo1WhgXid4mSW/jr0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AU657/auD/wOwSFVxHx7lV8Cyin1uEqH+BUuEcnSK4w=;
- b=CNlCeKv4hLpM+sKflRicICCJ9KmAiymjvSCle2lXHyhAWvgANz0AsgTYwBqty1pj+ZhkVaAw0hG30gLh/RbH3yuaxSsK8gzD0dhmLiaLqhuFDctu0ymZGULHzNnM6FrqETZJGowqkG8ky50PS8ci6WV51vnlGWm9XbtKSLw9MXoq1N6JHyMQzti2uVYhbmUnceAvbKQEQQrhgeCICEBZos5zWAkF3JSGmBnn18OGJ/NmJIGldYw11prL/qnKiwIFqhyzttKgt0rb+omG9Nd/D0hO6tRrxqeJs6QsBLduHxCJnpx7qEq24ILRQ1ZSUKpa2yYri1vjIYt7ZK70nRWBsw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by PA1PR04MB10625.eurprd04.prod.outlook.com (2603:10a6:102:48a::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.20; Mon, 2 Mar
- 2026 12:51:22 +0000
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9654.020; Mon, 2 Mar 2026
- 12:51:21 +0000
-Date: Mon, 2 Mar 2026 14:51:17 +0200
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 2/5] net: dpaa2-mac: retrieve MAC statistics in
- one firmware command
-Message-ID: <zjs7bsdqnapyd7hbuzqop57mhtxlv4r47rks7atmujxuffozdo@c5hvi6cgpzs5>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
- <20260225150648.1542206-3-ioana.ciornei@nxp.com>
- <aaRktVdeVUubxBLc@horms.kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aaRktVdeVUubxBLc@horms.kernel.org>
-X-ClientProxiedBy: FR4P281CA0055.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:cc::12) To PAXPR04MB8253.eurprd04.prod.outlook.com
- (2603:10a6:102:1bf::7)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="YGcx88u/"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-439b2965d4bso1237231f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 04:58:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall.org; s=google; t=1772456310; x=1773061110; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q/q8i3VA+0zxFWuDAH2PALyC6LMeN0jk/A5Vh4CiUII=;
+        b=YGcx88u/ll4Dx1jTz0/GIMKJ+ZVyDE4Wv+O5T2UEEt9m6QsskjG1OFBS6JAlgVaev9
+         idORSsCP0HO2OhHV3CkV1EYgs3GdTZ1P8FS3TgoSGVi4KdaCGZ7v3dGbSXZVBZM4xSsn
+         sLIRFvJ4551KB80NTPB0bF80tO8wFt7ApIGrmd00ND3EesMt5G5R7MLqIQ3ef77Hhh5j
+         vKMFB2ZWj+baRDP37IKUxVZ7K3yoPVGef6KWH9BibFK9jOLHVtJ82XkLJP+agyJnr2qx
+         owRcGCKiArzKOceiaIfWcvjuHxRESI9TY0/FmodED7NTNmDul8kz6rGkYg/56yWaY8y4
+         DOkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772456310; x=1773061110;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q/q8i3VA+0zxFWuDAH2PALyC6LMeN0jk/A5Vh4CiUII=;
+        b=VOy19uEUlaQVZYTuobWimYPs0PatDw5iO3wN2WPM9JaolY+mQh5k/m1NgB6vY+92Pe
+         1UWxOpf4IoEN9xg/n0aL4hp2+wD2WK1zkG/6RmotjuPBNQb642LRRJugksggDWd+aT9o
+         N92co+nzvO8/5AlD7oJRi4vObVwlpPwX3fHUXq6BwCDe1uABZKwwnMoV7oS6Y6Jj6INt
+         bIiiv6VT8WTC9HJAy5YOqaAVatp4Udl7EiLfuHtz4pYoBj747K+oyi5ITkmS4YiVQ2Pw
+         IOohOWJyBP0QuV9BPburJbeIEaRqhr0BdauT9LD0rPk8hSeKFG0jLMM3vVPIL8BDP8o1
+         2hYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXTkGPDcguESkR9hvKtlk82FHgn9jZL+ifV1tCF5Eh+icMCInbkX56/UMqUZH8Yi6GeQjBHXi6tFDJZu1sC98I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLVoiao4UxirY7OIcPjK/FYZfP3Yumg8nlDC7s5Hc1lyiUrYy6
+	5dHWqBUrlwhYndlRUbwTn0bK+MeQXX4xP0mifaRWeUpDKJ16/MCp24QqrcuniGmsRvo=
+X-Gm-Gg: ATEYQzy5vpNe+XX5qa5NJ2yDVHzUZTVPWcgCAAeWQVx0eM+KDHVnxeLlMQ5Y1tlDbrm
+	LTVuO9sCYs6Bn6HCcouS5nijpfzIi6nwFc5cmOs/a5UoqqA6SOiUXaO2fwigIaUXTxPdSOKrWq+
+	ElTZPzSow1sg00H6TCVKQcfj4QWsfvMANVHYvp1OL67FxymNARYsgt4n1pGJnzocwgPo1LSK9FX
+	FErwmI8Y540ZYAa9wL/dwCCE97haZvymZUhy2SCQ2OGzRLYjY440Z1s8kOu6bXlYTC7JNO4hqkg
+	6cPfNb311znhCWlRabscYCcMIHq5FN3TgDrYIYEqMzt4X0PSvcj+xsp26G1st8Ly/E4JCDV6QuB
+	bthZIWQ4OTGQlrno06kjF3gNa77jJtD8mAVRyFckvy9QS/g/8FLjuPGsc+tyACbFTVcX4nS7aOD
+	eduooxRUw2Sb3RU9QVVQkwrmaOR0Sr4eUj2qOeDITvcI3gAperkfCRkuLvXA==
+X-Received: by 2002:a05:6000:2313:b0:439:84cb:288d with SMTP id ffacd0b85a97d-4399de2cb36mr21367899f8f.41.1772456310000;
+        Mon, 02 Mar 2026 04:58:30 -0800 (PST)
+Received: from localhost (176.111.181.188.kyiv.nat.volia.net. [176.111.181.188])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b03db76bsm12406923f8f.18.2026.03.02.04.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 04:58:29 -0800 (PST)
+Date: Mon, 2 Mar 2026 14:58:27 +0200
+From: Nikolay Aleksandrov <razor@blackwall.org>
+To: Linus =?iso-8859-1?Q?L=FCssing?= <linus.luessing@c0d3.blue>
+Cc: bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Ido Schimmel <idosch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Xiao Liang <shaw.leon@gmail.com>, shuah@kernel.org
+Subject: Re: [PATCH net-next v3 03/14] net: bridge: mcast: avoid sleeping on
+ bridge-down
+Message-ID: <aaWJc1JPqZThLZBe@penguin>
+References: <20260302054008.21638-1-linus.luessing@c0d3.blue>
+ <20260302054008.21638-4-linus.luessing@c0d3.blue>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|PA1PR04MB10625:EE_
-X-MS-Office365-Filtering-Correlation-Id: 045479c5-7fd6-4624-2f84-08de785a675b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|19092799006|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	l9XkzBy7SBMhagYW5e/2dP0Ed0cKw20Ea4dMxDNOoYUXHuxXU09OyetrK8XHzZwFJF65Q6fzp0+O/rUWuc4UFbg1/jfloxLnEXSAeVqg3W6va5yFc5nbZFM830jLDQFNUzFtAZpxKruwB/ryySNpTYxP27KecU8+Ot9XZ0v+TaQiO4SRpWxSQvRIAeQ0Da1gnkTE45ibTdJownPgpy3RBSNwLsbFwrXf6IiptbuB9sRrCwXnhBNlteQoIL7tQZJClKadcstV/euVs9bsmY8XTUd4NjKov+2ijYnornQZShpOv+faW+vuBuo7VzYlH9x0sTpPblfyxQm5DpNXBm0R59CtKDdi655VegZ5/RIe2Nd1ETabELEiSanoMpWy8uJF1MFQC62jzlhwdqXD5R90pGQmsexECTJPyFAa18hvGgZPPHxOasUVknTyqlEBHaTjNHpTdQgDjZkDG77t5jvWRPe6gHEOPBZ91/v6j8GwX5/DWbRrWKvSQ6/VGPYwzsRCVLc4W5sc7MXP3YqCa7F6r7Ey+UprpXLQUbkvZsDtPY4HxlrUtz65o1pPTpXomAPC5IT2esk7wA4VhR+gSn/yLSTAuuGH7YWlNvHxisXsc460wi/XZdx/Fl8bv0hEsMMagHVvFDYIcz/GtHsfco5yditxOlwagxqWLrh/ovmJirv3FuK7ldXMhsZ+byWovMv5/v/pZglXh4XRvpRnaL40LhaHUiNSPAKAWbhFsit25wc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(19092799006)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BaGhmxatfJC3/0tYFc85fLawehhiUd8FSSAvLg5VmTldse79e+pTEinJi8Hu?=
- =?us-ascii?Q?dTpdljZo1nvDU2nUtqMmSH5xLRPpKwVDZFHWqsCH335BEGIWzPLH4MFbeJrl?=
- =?us-ascii?Q?dEFPGNN2Jqugn7lXBimHBex9Ktz0dgL7ipp47kq4uRmTeexxKcoJfHYwW3Sh?=
- =?us-ascii?Q?3ujR4cRV/9jvYGBXKxpPP2Nb11m0nXmsLYHj+sizW9OOgsxI0DghzvL0YmkZ?=
- =?us-ascii?Q?gH1qcUfdaswzGF1wcI2BkG9q801B28HqO12FzDTSChSnQ5OYyUFFNn7B/ISB?=
- =?us-ascii?Q?IbkNWHPX0yWw4CrpEiff+7Z/8O+h8DaB5M4o7qbHy/liG1tq7DoIx9E9ui/i?=
- =?us-ascii?Q?4P5xsEDZwbhuizthyK2bim3i1HpX36fBnwQROYHXUvYekfKwExw0z0dEM728?=
- =?us-ascii?Q?GuXX5AKQ5jues+KhOhiErp95Ug2JBhH/gSQupgSwf6fXd/ukjj5hqnckPCxq?=
- =?us-ascii?Q?PoFFFMUo8YkhG9lgWKhrl5/6/8ldD/I4clGORsHQqaWyFT3V/gRFam34XHmO?=
- =?us-ascii?Q?dtR/SuzNAKQOujJP5GGcekM++CUJnKnGbCLUCAGcFvUXIBpCgZUfIZQn6Ubz?=
- =?us-ascii?Q?U5IsojmTJunzYP8bablZILjvN7P00hLIfmYFYpEFfFwqlLk4zucxuK1RtT9R?=
- =?us-ascii?Q?gH9Srr0JozPtzLK72zVT+2dHWOCElCgLZoPgvjFav5+J8+DdQAtH1BIXGLwO?=
- =?us-ascii?Q?w6zepI1CFIYlvxNxC7rxChgbStcwtTRJBwwr2YW2P1Z7Fv8eDY951r8UnB0W?=
- =?us-ascii?Q?IGqmzF13E5tKHG0d42/wQfhFITIZUIa1A/qOx/Cs4VeLdBRxmZE4P3HW/Ant?=
- =?us-ascii?Q?K8MuVjVAjFvNFe1PGN52zKrn5DFVFr6KDuWxEgYGLgHADUCwLl3ZAoDfyWDr?=
- =?us-ascii?Q?g/ARUHpa76SY0ln43xdsiZfWpu+n3iwUItEaD7rbkqtslhPojDIvaYqpGq6L?=
- =?us-ascii?Q?LvPUcf1CAaevO2FNwZha1mkL3Ddt11MY8HgsiWrB4Bf9pFVLpvV00jVwMq7+?=
- =?us-ascii?Q?T/1ey/lVf/hspIj6lBs6h91lS/KmN41q9ZoxDFh2vTqC/6XYS1UbPFB/25HH?=
- =?us-ascii?Q?rZqKaA7ZUNnljgLRLvJrXMF3o2xsgDlgpjV+2eJDPKJW0iRqfJcsM6osqCrZ?=
- =?us-ascii?Q?rP8sqSHo85zQ5m9wTS5i9/yGOzzoUqp7P36Cgid78npWXugRb7r7T1ioPPDf?=
- =?us-ascii?Q?j7KP4ceH/Oiz4qXVG6db/qME4oKZ3pYMeq+tfMY/36tzJq+Fzeiu9brb9lTW?=
- =?us-ascii?Q?vgWQ3XGhKs9+lKs8Dqa2jDr/7mIq2sqNojQpckWRrzUAdDynhDxu7IOp1n8o?=
- =?us-ascii?Q?y2U554zrd0RGTCJV1UYTAOZpi3ofFvKC/HCeCvayriE8kiKNwfu/4ZdCnpeE?=
- =?us-ascii?Q?xQ9cT5W/UT2jx3/aU0pev85JhTD2IV2Tpu5x1jjTho3ULQUgewyp8e3b3l4O?=
- =?us-ascii?Q?r4MpjsHStPaJMr7ztCOo4UraAif8s5jJY0cud5BoU3dak/L6Toq4P9YL1CLl?=
- =?us-ascii?Q?agrvMclwY3pJBiPlyEz+LH/PJ5Qt5csp2W3RzL67JRQ2YOouXMWzc8t/lDq7?=
- =?us-ascii?Q?ZkfktaTrgHnHrXlKCfAS6K6goxQejaL10VaMGh9Y1r6/Xkt57HKXnGEAJItE?=
- =?us-ascii?Q?3JImrQusb/pCNB32g816wtqSrRqJHd/k7EIJtZR9cBLwlJeB2GispFJ2jAiY?=
- =?us-ascii?Q?u3NG318eHD2W9dMopnL6XnD537piZs/gu2ORPUvxFEK70QM9bUY54J5p4HF4?=
- =?us-ascii?Q?9xMQsw473A=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 045479c5-7fd6-4624-2f84-08de785a675b
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 12:51:21.6156
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z/RlzpyMLaJ8hmn545LIAN7YZkXW1AZqxL9ZYhCiXrdccm9qr8QcqttbYyu/lB2ZVQ2WiMeabX4KMXWTAKCMaQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10625
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260302054008.21638-4-linus.luessing@c0d3.blue>
 
-On Sun, Mar 01, 2026 at 04:09:25PM +0000, Simon Horman wrote:
-> On Wed, Feb 25, 2026 at 05:06:45PM +0200, Ioana Ciornei wrote:
+On Mon, Mar 02, 2026 at 06:39:57AM +0100, Linus Lüssing wrote:
+> We later want to use the multicast lock when setting the bridge
+> interface up or down, to be able to atomically both check all conditions
+> to toggle the multicast active state and to subsequently toggle it.
+> While most variables we check / contexts we check from are serialized
+> (toggled variables through netlink/sysfs) the timer_pending() check is
+> not and might run in parallel.
 > 
-> ...
+> However so far we are not allowed to spinlock __br_multicast_stop() as
+> its call to timer_delete_sync() might sleep. Therefore replacing the
+> sleeping variant with the non-sleeping timer_shutdown(). It is sufficient
+> to only wait for any timer callback to finish when we are freeing the
+> multicast context.
 > 
-> > diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+> While the disadvantage of using a non-syncing variant might lead us to
+> race and still execute its timer callback just after timer_shutdown() was
+> called timer_shutdown() also has the following additional advantage(s):
+> It for one thing clears the callback function pointer and by that avoids
+> rearming. For another a missing function pointer allows us to detect
+> early in the timer callback if we, this timer, were just canceled.
 > 
-> ...
+> In other words, this also allows us to make sure that once
+> timer_shutdown() was called while we do potentially enter its timer
+> callback briefly we never run the main task of this timer. Similar to
+> what a timer_delete_sync() would have avoided, too. Except we are not
+> waiting/sleeping/syncing in br_multicast_stop() but instead (in rare cases)
+> briefly busy-wait/sync a bit later when grabbing the multicast spinlock
+> in the timer callback.
 > 
-> > +static void dpaa2_mac_setup_stats(struct dpaa2_mac *mac, struct dpaa2_mac_stats *stats,
-> > +				  size_t num_stats, const struct dpmac_counter *counters)
-> > +{
-> > +	struct device *dev = mac->net_dev->dev.parent;
-> > +	u32 *cnt_idx;
+> This new check also makes the netif_running() check redundant/obsolete
+> in these contexts.
 > 
-> Hi Ioana,
+> Signed-off-by: Linus Lüssing <linus.luessing@c0d3.blue>
+> ---
+>  net/bridge/br_multicast.c | 128 +++++++++++++++++++++++++++-----------
+>  net/bridge/br_private.h   |   5 ++
+>  net/bridge/br_vlan.c      |   5 ++
+>  3 files changed, 100 insertions(+), 38 deletions(-)
 > 
-> The type of cnt_idx is u32.
-> 
-> > +
-> > +	stats->idx_dma_mem = kcalloc(num_stats, sizeof(u32), GFP_KERNEL);
-> > +	if (!stats->idx_dma_mem)
-> > +		goto out;
-> > +
-> > +	stats->values_dma_mem = kcalloc(num_stats, sizeof(u64), GFP_KERNEL);
-> > +	if (!stats->values_dma_mem)
-> > +		goto err_alloc_values;
-> > +
-> > +	cnt_idx = stats->idx_dma_mem;
-> 
-> As is that of idx_dma_mem. So the types match here.
-> 
-> > +	for (size_t i = 0; i < num_stats; i++)
-> > +		*cnt_idx++ = cpu_to_le32((u32)(counters[i].id));
-> 
-> But here __le32 values are assigned to elements of cnt_idx.
-> 
-> I think that the type of both cnt_idx and stats->idx_dma_mem
-> should probably be __le32 * rather than u32 *.
-> 
-> Flagged by Sparse v0.6.5-rc1.
+> diff --git a/net/bridge/br_multicast.c b/net/bridge/br_multicast.c
+> index 881d866d687a..b90f0e149c40 100644
+> --- a/net/bridge/br_multicast.c
+> +++ b/net/bridge/br_multicast.c
+> @@ -1663,6 +1663,14 @@ static void br_multicast_router_expired(struct net_bridge_mcast_port *pmctx,
+>  	spin_unlock(&br->multicast_lock);
+>  }
+>  
+> +static bool br_multicast_is_stopping(struct net_bridge *br,
+> +				     struct timer_list *timer)
 
-Yes, I missed this. Thanks for catching it!
-> 
-> 
-> ...
-> 
-> >  void dpaa2_mac_get_ethtool_stats(struct dpaa2_mac *mac, u64 *data)
-> >  {
-> > +	struct device *dev = mac->net_dev->dev.parent;
-> >  	struct fsl_mc_device *dpmac_dev = mac->mc_dev;
-> > +	u64 *cnt_values;
-> >  	int i, err;
-> >  	u64 value;
-> 
-> ...
-> 
-> > +	cnt_values = mac->ethtool_stats.values_dma_mem;
-> > +	for (i = 0; i < DPAA2_MAC_NUM_ETHTOOL_STATS; i++)
-> > +		*(data + i) = le64_to_cpu(*cnt_values++);
-> 
-> Likewise, I think the type of both cnt_values and
-> mac->ethtool_stats.values_dma_mem should be __le64 8 rather than u64 *.
-> 
-> And there is a similar problem in patch 3/5 centering on the use of
-> le64_to_cpu() in dpaa2_mac_transfer_stats().
-> 
-> Also flagged by Sparse.
-> 
+both should be const
 
-Yes, this is valid too. Will fix.
+> +{
+> +	lockdep_assert_held_once(&br->multicast_lock);
+> +
+> +	return !timer->function;
+> +}
+> +
+>  static void br_ip4_multicast_router_expired(struct timer_list *t)
+>  {
+>  	struct net_bridge_mcast_port *pmctx = timer_container_of(pmctx, t,
+> @@ -1698,7 +1706,8 @@ static void br_multicast_local_router_expired(struct net_bridge_mcast *brmctx,
+>  					      struct timer_list *timer)
+>  {
+>  	spin_lock(&brmctx->br->multicast_lock);
+> -	if (brmctx->multicast_router == MDB_RTR_TYPE_DISABLED ||
+> +	if (br_multicast_is_stopping(brmctx->br, timer) ||
+> +	    brmctx->multicast_router == MDB_RTR_TYPE_DISABLED ||
+>  	    brmctx->multicast_router == MDB_RTR_TYPE_PERM ||
+>  	    br_ip4_multicast_is_router(brmctx) ||
+>  	    br_ip6_multicast_is_router(brmctx))
+> @@ -1728,10 +1737,11 @@ static void br_ip6_multicast_local_router_expired(struct timer_list *t)
+>  #endif
+>  
+>  static void br_multicast_querier_expired(struct net_bridge_mcast *brmctx,
+> -					 struct bridge_mcast_own_query *query)
+> +					 struct bridge_mcast_own_query *query,
+> +					 struct timer_list *timer)
+>  {
+>  	spin_lock(&brmctx->br->multicast_lock);
+> -	if (!netif_running(brmctx->br->dev) ||
+> +	if (br_multicast_is_stopping(brmctx->br, timer) ||
+>  	    br_multicast_ctx_vlan_global_disabled(brmctx) ||
+>  	    !br_opt_get(brmctx->br, BROPT_MULTICAST_ENABLED))
+>  		goto out;
+> @@ -1747,7 +1757,7 @@ static void br_ip4_multicast_querier_expired(struct timer_list *t)
+>  	struct net_bridge_mcast *brmctx = timer_container_of(brmctx, t,
+>  							     ip4_other_query.timer);
+>  
+> -	br_multicast_querier_expired(brmctx, &brmctx->ip4_own_query);
+> +	br_multicast_querier_expired(brmctx, &brmctx->ip4_own_query, t);
+>  }
+>  
+>  #if IS_ENABLED(CONFIG_IPV6)
+> @@ -1756,7 +1766,7 @@ static void br_ip6_multicast_querier_expired(struct timer_list *t)
+>  	struct net_bridge_mcast *brmctx = timer_container_of(brmctx, t,
+>  							     ip6_other_query.timer);
+>  
+> -	br_multicast_querier_expired(brmctx, &brmctx->ip6_own_query);
+> +	br_multicast_querier_expired(brmctx, &brmctx->ip6_own_query, t);
+>  }
+>  #endif
+>  
+> @@ -4040,10 +4050,12 @@ int br_multicast_rcv(struct net_bridge_mcast **brmctx,
+>  }
+>  
+>  static void br_multicast_query_expired(struct net_bridge_mcast *brmctx,
+> -				       struct bridge_mcast_own_query *query)
+> +				       struct bridge_mcast_own_query *query,
+> +				       struct timer_list *timer)
+>  {
+>  	spin_lock(&brmctx->br->multicast_lock);
+> -	if (br_multicast_ctx_vlan_disabled(brmctx))
+> +	if (br_multicast_is_stopping(brmctx->br, timer) ||
+> +	    br_multicast_ctx_vlan_disabled(brmctx))
+>  		goto out;
+>  
+>  	if (query->startup_sent < brmctx->multicast_startup_query_count)
+> @@ -4059,7 +4071,7 @@ static void br_ip4_multicast_query_expired(struct timer_list *t)
+>  	struct net_bridge_mcast *brmctx = timer_container_of(brmctx, t,
+>  							     ip4_own_query.timer);
+>  
+> -	br_multicast_query_expired(brmctx, &brmctx->ip4_own_query);
+> +	br_multicast_query_expired(brmctx, &brmctx->ip4_own_query, t);
+>  }
+>  
+>  #if IS_ENABLED(CONFIG_IPV6)
+> @@ -4068,7 +4080,7 @@ static void br_ip6_multicast_query_expired(struct timer_list *t)
+>  	struct net_bridge_mcast *brmctx = timer_container_of(brmctx, t,
+>  							     ip6_own_query.timer);
+>  
+> -	br_multicast_query_expired(brmctx, &brmctx->ip6_own_query);
+> +	br_multicast_query_expired(brmctx, &brmctx->ip6_own_query, t);
+>  }
+>  #endif
+>  
+> @@ -4111,29 +4123,30 @@ void br_multicast_ctx_init(struct net_bridge *br,
+>  	seqcount_spinlock_init(&brmctx->ip6_querier.seq, &br->multicast_lock);
+>  #endif
+>  
+> -	timer_setup(&brmctx->ip4_mc_router_timer,
+> -		    br_ip4_multicast_local_router_expired, 0);
+> -	timer_setup(&brmctx->ip4_other_query.timer,
+> -		    br_ip4_multicast_querier_expired, 0);
+> -	timer_setup(&brmctx->ip4_other_query.delay_timer,
+> -		    br_multicast_query_delay_expired, 0);
+> -	timer_setup(&brmctx->ip4_own_query.timer,
+> -		    br_ip4_multicast_query_expired, 0);
+> +	timer_setup(&brmctx->ip4_mc_router_timer, NULL, 0);
+> +	timer_setup(&brmctx->ip4_other_query.timer, NULL, 0);
+> +	timer_setup(&brmctx->ip4_other_query.delay_timer, NULL, 0);
+> +	timer_setup(&brmctx->ip4_own_query.timer, NULL, 0);
+>  #if IS_ENABLED(CONFIG_IPV6)
+> -	timer_setup(&brmctx->ip6_mc_router_timer,
+> -		    br_ip6_multicast_local_router_expired, 0);
+> -	timer_setup(&brmctx->ip6_other_query.timer,
+> -		    br_ip6_multicast_querier_expired, 0);
+> -	timer_setup(&brmctx->ip6_other_query.delay_timer,
+> -		    br_multicast_query_delay_expired, 0);
+> -	timer_setup(&brmctx->ip6_own_query.timer,
+> -		    br_ip6_multicast_query_expired, 0);
+> +	timer_setup(&brmctx->ip6_mc_router_timer, NULL, 0);
+> +	timer_setup(&brmctx->ip6_other_query.timer, NULL, 0);
+> +	timer_setup(&brmctx->ip6_other_query.delay_timer, NULL, 0);
+> +	timer_setup(&brmctx->ip6_own_query.timer, NULL, 0);
+>  #endif
+>  }
+>  
+>  void br_multicast_ctx_deinit(struct net_bridge_mcast *brmctx)
+>  {
+> -	__br_multicast_stop(brmctx);
+> +	timer_shutdown_sync(&brmctx->ip4_mc_router_timer);
+> +	timer_shutdown_sync(&brmctx->ip4_other_query.timer);
+> +	timer_shutdown_sync(&brmctx->ip4_other_query.delay_timer);
+> +	timer_shutdown_sync(&brmctx->ip4_own_query.timer);
+> +#if IS_ENABLED(CONFIG_IPV6)
+> +	timer_shutdown_sync(&brmctx->ip6_mc_router_timer);
+> +	timer_shutdown_sync(&brmctx->ip6_other_query.timer);
+> +	timer_shutdown_sync(&brmctx->ip6_other_query.delay_timer);
+> +	timer_shutdown_sync(&brmctx->ip6_own_query.timer);
+> +#endif
+>  }
+>  
+>  void br_multicast_init(struct net_bridge *br)
+> @@ -4213,9 +4226,27 @@ void br_multicast_leave_snoopers(struct net_bridge *br)
+>  	br_ip6_multicast_leave_snoopers(br);
+>  }
+>  
+> +void br_multicast_reset_timer_cbs(struct net_bridge_mcast *brmctx)
+> +{
+> +	lockdep_assert_held_once(&brmctx->br->multicast_lock);
+> +
+> +	brmctx->ip4_mc_router_timer.function = br_ip4_multicast_local_router_expired;
+> +	brmctx->ip4_other_query.timer.function = br_ip4_multicast_querier_expired;
+> +	brmctx->ip4_other_query.delay_timer.function = br_multicast_query_delay_expired;
+> +	brmctx->ip4_own_query.timer.function = br_ip4_multicast_query_expired;
+> +#if IS_ENABLED(CONFIG_IPV6)
+> +	brmctx->ip6_mc_router_timer.function = br_ip6_multicast_local_router_expired;
+> +	brmctx->ip6_other_query.timer.function = br_ip6_multicast_querier_expired;
+> +	brmctx->ip6_other_query.delay_timer.function = br_multicast_query_delay_expired;
+> +	brmctx->ip6_own_query.timer.function = br_ip6_multicast_query_expired;
+> +#endif
+> +}
+> +
+>  static void __br_multicast_open_query(struct net_bridge *br,
+>  				      struct bridge_mcast_own_query *query)
+>  {
+> +	lockdep_assert_held_once(&br->multicast_lock);
+> +
+>  	query->startup_sent = 0;
+>  
+>  	if (!br_opt_get(br, BROPT_MULTICAST_ENABLED))
+> @@ -4226,13 +4257,15 @@ static void __br_multicast_open_query(struct net_bridge *br,
+>  
+>  static void __br_multicast_open(struct net_bridge_mcast *brmctx)
+>  {
+> +	br_multicast_reset_timer_cbs(brmctx);
+> +
+>  	__br_multicast_open_query(brmctx->br, &brmctx->ip4_own_query);
+>  #if IS_ENABLED(CONFIG_IPV6)
+>  	__br_multicast_open_query(brmctx->br, &brmctx->ip6_own_query);
+>  #endif
+>  }
+>  
+> -void br_multicast_open(struct net_bridge *br)
+> +static void br_multicast_open_locked(struct net_bridge *br)
+>  {
+>  	ASSERT_RTNL();
+>  
+> @@ -4256,17 +4289,26 @@ void br_multicast_open(struct net_bridge *br)
+>  	}
+>  }
+>  
+> +void br_multicast_open(struct net_bridge *br)
+> +{
+> +	spin_lock_bh(&br->multicast_lock);
+> +	br_multicast_open_locked(br);
+> +	spin_unlock_bh(&br->multicast_lock);
+> +}
+> +
+>  static void __br_multicast_stop(struct net_bridge_mcast *brmctx)
+>  {
+> -	timer_delete_sync(&brmctx->ip4_mc_router_timer);
+> -	timer_delete_sync(&brmctx->ip4_other_query.timer);
+> -	timer_delete_sync(&brmctx->ip4_other_query.delay_timer);
+> -	timer_delete_sync(&brmctx->ip4_own_query.timer);
+> +	lockdep_assert_held_once(&brmctx->br->multicast_lock);
+> +
+> +	timer_shutdown(&brmctx->ip4_mc_router_timer);
+> +	timer_shutdown(&brmctx->ip4_other_query.timer);
+> +	timer_shutdown(&brmctx->ip4_other_query.delay_timer);
+> +	timer_shutdown(&brmctx->ip4_own_query.timer);
+>  #if IS_ENABLED(CONFIG_IPV6)
+> -	timer_delete_sync(&brmctx->ip6_mc_router_timer);
+> -	timer_delete_sync(&brmctx->ip6_other_query.timer);
+> -	timer_delete_sync(&brmctx->ip6_other_query.delay_timer);
+> -	timer_delete_sync(&brmctx->ip6_own_query.timer);
+> +	timer_shutdown(&brmctx->ip6_mc_router_timer);
+> +	timer_shutdown(&brmctx->ip6_other_query.timer);
+> +	timer_shutdown(&brmctx->ip6_other_query.delay_timer);
+> +	timer_shutdown(&brmctx->ip6_own_query.timer);
+>  #endif
+>  }
+>  
+> @@ -4317,12 +4359,12 @@ void br_multicast_toggle_one_vlan(struct net_bridge_vlan *vlan, bool on)
+>  
+>  		spin_lock_bh(&br->multicast_lock);
+>  		vlan->priv_flags ^= BR_VLFLAG_MCAST_ENABLED;
+> -		spin_unlock_bh(&br->multicast_lock);
+>  
+>  		if (on)
+>  			__br_multicast_open(&vlan->br_mcast_ctx);
+>  		else
+>  			__br_multicast_stop(&vlan->br_mcast_ctx);
+> +		spin_unlock_bh(&br->multicast_lock);
+>  	} else {
+>  		struct net_bridge_mcast *brmctx;
+>  
+> @@ -4380,6 +4422,7 @@ int br_multicast_toggle_vlan_snooping(struct net_bridge *br, bool on,
+>  	if (!vg)
+>  		return 0;
+>  
+> +	spin_lock_bh(&br->multicast_lock);
+>  	br_opt_toggle(br, BROPT_MCAST_VLAN_SNOOPING_ENABLED, on);
+>  
+>  	/* disable/enable non-vlan mcast contexts based on vlan snooping */
+> @@ -4387,6 +4430,8 @@ int br_multicast_toggle_vlan_snooping(struct net_bridge *br, bool on,
+>  		__br_multicast_stop(&br->multicast_ctx);
+>  	else
+>  		__br_multicast_open(&br->multicast_ctx);
+> +	spin_unlock_bh(&br->multicast_lock);
+> +
+>  	list_for_each_entry(p, &br->port_list, list) {
+>  		if (on)
+>  			br_multicast_disable_port_ctx(&p->multicast_ctx);
+> @@ -4416,7 +4461,7 @@ bool br_multicast_toggle_global_vlan(struct net_bridge_vlan *vlan, bool on)
+>  	return true;
+>  }
+>  
+> -void br_multicast_stop(struct net_bridge *br)
+> +static void br_multicast_stop_locked(struct net_bridge *br)
+>  {
+>  	ASSERT_RTNL();
+>  
+> @@ -4440,6 +4485,13 @@ void br_multicast_stop(struct net_bridge *br)
+>  	}
+>  }
+>  
+> +void br_multicast_stop(struct net_bridge *br)
+> +{
+> +	spin_lock_bh(&br->multicast_lock);
+> +	br_multicast_stop_locked(br);
+> +	spin_unlock_bh(&br->multicast_lock);
+> +}
+> +
+>  void br_multicast_dev_del(struct net_bridge *br)
+>  {
+>  	struct net_bridge_mdb_entry *mp;
+> @@ -4675,7 +4727,7 @@ int br_multicast_toggle(struct net_bridge *br, unsigned long val,
+>  	if (!netif_running(br->dev))
+>  		goto unlock;
+>  
+> -	br_multicast_open(br);
+> +	br_multicast_open_locked(br);
+>  	list_for_each_entry(port, &br->port_list, list)
+>  		__br_multicast_enable_port_ctx(&port->multicast_ctx);
+>  
+> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+> index 4ab6a1f58116..a181a27aa559 100644
+> --- a/net/bridge/br_private.h
+> +++ b/net/bridge/br_private.h
+> @@ -976,6 +976,7 @@ void br_multicast_disable_port(struct net_bridge_port *port);
+>  void br_multicast_init(struct net_bridge *br);
+>  void br_multicast_join_snoopers(struct net_bridge *br);
+>  void br_multicast_leave_snoopers(struct net_bridge *br);
+> +void br_multicast_reset_timer_cbs(struct net_bridge_mcast *brmctx);
+>  void br_multicast_open(struct net_bridge *br);
+>  void br_multicast_stop(struct net_bridge *br);
+>  void br_multicast_dev_del(struct net_bridge *br);
+> @@ -1416,6 +1417,10 @@ static inline void br_multicast_leave_snoopers(struct net_bridge *br)
+>  {
+>  }
+>  
+> +static inline void br_multicast_reset_timer_cbs(struct net_bridge_mcast *brmctx)
+> +{
+> +}
+> +
+>  static inline void br_multicast_open(struct net_bridge *br)
+>  {
+>  }
+> diff --git a/net/bridge/br_vlan.c b/net/bridge/br_vlan.c
+> index 326933b455b3..3facb4eda306 100644
+> --- a/net/bridge/br_vlan.c
+> +++ b/net/bridge/br_vlan.c
+> @@ -325,7 +325,12 @@ static int __vlan_add(struct net_bridge_vlan *v, u16 flags,
+>  			if (err && err != -EOPNOTSUPP)
+>  				goto out;
+>  		}
+> +
 
-Ioana
+extra new line
+
+>  		br_multicast_ctx_init(br, v, &v->br_mcast_ctx);
+> +
+> +		spin_lock_bh(&br->multicast_lock);
+> +		br_multicast_reset_timer_cbs(&v->br_mcast_ctx);
+> +		spin_unlock_bh(&br->multicast_lock);
+
+Have you tested this without bridge IGMP_SNOOPING defined?
+I don't think it will compile.
+
+Also, please avoid spilling multicast lock outside of mcast code. In fact
+why don't you move this in br_multicast_ctx_init?
+
+>  		v->priv_flags |= BR_VLFLAG_GLOBAL_MCAST_ENABLED;
+>  	}
+>  
+> -- 
+> 2.51.0
+> 
