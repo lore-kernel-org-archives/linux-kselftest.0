@@ -1,67 +1,63 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010071.outbound.protection.outlook.com [52.101.193.71])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011040.outbound.protection.outlook.com [40.107.208.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF244314A65;
-	Mon,  2 Mar 2026 15:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7940E366DB7;
+	Mon,  2 Mar 2026 15:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.40
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772464611; cv=fail; b=gzsEMxRMf/6mOI2oNfXdh0GPy6XIgLmgDzBFlrnLfQc1uzHcFzcJxlwERedZ3J4UCGpGkfvRBMstBTj7L1YF84JBiFOgSR/vGQ28iun4YSgh6rK32ijGmjxSfOg+sPaun0Tc+DLd/gUIhpeCsiskB4FgWfbgRfhxtB1v3MVjZ0A=
+	t=1772464705; cv=fail; b=c7UGFjHY/+xXSCRPXEBbB2ecnaYGxALGM89zqjmLiThAj5D4QI8kkuLWy1Z+FGTZgK6O8ogRxWGsBNfGiYI0Wkks3ZxJm6+7hB1TQo5XJ7MwnQ7sCZujcfqw0pAymc0gh83/RouTpPamtGzvu79jv9mOiQU+5liD7FbfWIPXcM0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772464611; c=relaxed/simple;
-	bh=mXdzl2yv9k+JJxYIy7osLBkw+KBgt1gL0NMjGTorz00=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=BoNdbE+0GdCz8QE3txsoY+pksPPiXQgZ9B8UDAspmRfKmNOvhHujNY5c5bP/Glg0HMBjMDT4ySOyDzbbkdTx+XuCK6maYAeDE6H7oNIMm3qhH5hyFmjI7sS8HMbjRSOLYyFwiafcu6Z2LXOhZp1sv9pCCGLLHzlGsNNCj1MDm4M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hAQ8J1pY; arc=fail smtp.client-ip=52.101.193.71
+	s=arc-20240116; t=1772464705; c=relaxed/simple;
+	bh=mremFYFa83QptwGBt7/ruCQ8135xpQB+RkJVuuVxZSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=GTtRDQG0LzmRLObPsru/mbD5xyc4jW3D/UWNX6wzvuO7zuA9UYZEl285NHQREr15MB9KLX9lC8CNaCtrJLrvT16E7cIEXSCMXDLgFa2TDoqARsemcqsMS7gpXZsThWAYfRW88gT3VhvwTu5Da7J+Ug9K9EZaaZYGqY0AgPHr60U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Um06qx2F; arc=fail smtp.client-ip=40.107.208.40
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hAQ8J1pY"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Um06qx2F"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ldDBKW8auVrJ3XHO0OwlVbIYiWNe4fainZMR5GqLgyTiR4vm5OjXENTKkpPyCjNtjQqfoHRSSqVjf2Z2pTFUpgNuD01+UclhlZDK3KQIex0TUVoWiLHdcVZP9cBbwp4WwXTK/f1tpk5vkqSqY6/ZwLNyGg0RpzIyhd/BNImu11zfHILnsuTy1hRWLj/cAVtx04gO+J4M+ilhAdUvSZ9QDCp+MhPJzX+/f7ukeOlqrSs7Tq97ZZ/Q4ol/pxNldWF7w8m/AJGMgNZDqux76KHtM0tIy467dpDm6kC36it0vjT0QNA+TTAp4C8mlInmKN7OZishzf2dhFTzO3eRhv+YOA==
+ b=mdML7j3ZIf4kt0FbtKw1+AYthsf7cOyho5CnlHYb8Z+W0tWyZxjRGbWL8MEHdTsolAj06MpCiXOaqQ88GHuunWeXoRXwGbXIhtufb2hW2NlAn8Kw7LopREWCe7w3yuqx4etnun6E4f+Y9jXD/PNxk0lx89vv3q12ZOCH2FeDzYUm4M+x6h1rXRcgQQ+AqP28N7Xk6gnJcpI0Q0DtOjbjpULLBIDh8BRvEcO1VoEXTyfcHcpfPFZ2cVFqybB0xeEXG+hnxTwWRklxFE3X1W8+fCCoQg8xnbhjCAvFgLNmNi5EJFJPejTFASIaajMZE8vAtHqnHGz7jqtJeMlC0ydrmQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VLyn4UcxC/Lu9PeVbZ/FcDyMD21wfM2LfDqwXD/O6iE=;
- b=oGdClRhefT9vOerSSwJfOo3ZBRvieIBfVJdNT9tZ4NB/YCOrAH9ILDnyM+DO0xL750s7GKYQYOOf04qDswWp2Yel29ASEJMwXJsRHg6iciwn1XyCKmEi8rKbWgWe4da3ytaEdW0dpw7jsAaqDFqF9nk1+VtuhJL/A/1yz+wfxzVkFS/GsjxmKcnbzukRCfJy0JHxcXwDQfPdYptoliqhhmWOHkzmEknghURq+Bm1EJQMegBp6daQ7RfShy4kXRWkE/tClAo+T7ousvG7thP+BeijihWo9itcQ00EJYbWh99uBk+3DLywC5m05RHd0R/klutNSno6tUhZhSMWRRsFNg==
+ bh=f/HICPOkfnLsuWEzPJG11u3zF5lVDImTCJoQhRdIH6Y=;
+ b=GXaBkn46GxEcVqA2YhafDXs5yqw/rNQoKyZaQzh1jPGuS0Y/qIkAPmLzj6OKZSzNOM+bTqqGSttvi/Z428RB5pg1QiYIju0TUrrkGDHHtNNvewrQ1sPTWdbKlsSWlC6DpP4lEyI15Tfi9/8RfChoSk5ytQPUhtelCepzXpbaMv+g60868sRpTm/i6vrAzF59qWK0CSMLp3y/HsfzsLEs+w1tY0NtB7ia2cu9ZIhGWDjjinVdhwBbilYDDQwxbs36bVCvu6Jpt6JutRN21lXaS/X5cLY37R+K3W/M8r/VF5GHkIJZsRjntlpcfCL+7LSaUm67FrNkFX3yI+e8MAVcUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VLyn4UcxC/Lu9PeVbZ/FcDyMD21wfM2LfDqwXD/O6iE=;
- b=hAQ8J1pYb8jiiWxPMPF9jPb1dhGy7DnrllPuO7sPl8vCYb4OBAf/yr2UUhYwQx63qaHRBLsh2NmIzYFUOXIwzup5fWe4xbWIhXUV6gG0wHht0UCbtUIrz9jR2p4aT+Lc+twtWDEax+Htt+Maf9GJEm/IGzs3B+6yb26fSJ49iRtMySmPTWGu4RrQVPFADj4+0l9kf7SXi0ZeDUACk1PdWREcWlGgsph/5ACJ5H/hhGbd/mA0mCSy3bcg+oE2MYp8WcdjyHXOwnwwx0oTwx/+YPqXZegkESCOXP52xRJRuQagfH91uxBu6WSlEgik5NH+xfIxU5+rC6p4iZELXbeuLQ==
+ bh=f/HICPOkfnLsuWEzPJG11u3zF5lVDImTCJoQhRdIH6Y=;
+ b=Um06qx2F8KgJrQRKP1XZMcA76JFgCYUCq1gPPmPQeTXC48MdoPit4+a9X7Qo4mkSAi5S821FD/zr3WYYUo2Fj8LOlv49Y7dRUpT8u3cbxvggy7FtMOHr8RPDvICz3x5cj/xMQaqyeJFQ4IqNCKZvPOvQS5UfslQjlVRWWUP/t4rTgmTH6KcIz1cw5RwqEC977A+qWecbYKs/LEa113onT3Ei607MlXzVmU4MiA/rebL6GtwR+Tjoc28mp8pTaTC6eZlOUVQHGzUFj0p1w62iq+QbCaN9+gI3p+RNgj4jsRRreS7q8FxqnAiiRLiq7cGkK1mLR7kTlEg8AQ+zg6UgWg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8728.namprd12.prod.outlook.com (2603:10b6:610:171::12)
- by PH7PR12MB9104.namprd12.prod.outlook.com (2603:10b6:510:2f3::7) with
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by SA3PR12MB9130.namprd12.prod.outlook.com (2603:10b6:806:37f::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.21; Mon, 2 Mar
- 2026 15:16:43 +0000
-Received: from CH3PR12MB8728.namprd12.prod.outlook.com
- ([fe80::2641:1046:bdf3:93d7]) by CH3PR12MB8728.namprd12.prod.outlook.com
- ([fe80::2641:1046:bdf3:93d7%6]) with mapi id 15.20.9632.017; Mon, 2 Mar 2026
- 15:16:43 +0000
-Message-ID: <f827a42a-be8d-46ea-a6f8-edf0f1ee1a26@nvidia.com>
-Date: Mon, 2 Mar 2026 16:16:38 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/3] selftests: drv-net: iou-zcrx: allocate
- hugepages for large chunks test
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, dw@davidwei.uk, jdamato@fastly.com,
- asml.silence@gmail.com, io-uring@vger.kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260227171305.2848240-1-kuba@kernel.org>
- <20260227171305.2848240-4-kuba@kernel.org>
-Content-Language: en-US
-From: Dragos Tatulea <dtatulea@nvidia.com>
-In-Reply-To: <20260227171305.2848240-4-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0388.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f7::17) To CH3PR12MB8728.namprd12.prod.outlook.com
- (2603:10b6:610:171::12)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.18; Mon, 2 Mar
+ 2026 15:18:21 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.014; Mon, 2 Mar 2026
+ 15:18:21 +0000
+Date: Mon, 2 Mar 2026 16:18:15 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: Feng Yang <yangfeng59949@163.com>
+Cc: changwoo@igalia.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, sched-ext@lists.linux.dev,
+	shuah@kernel.org, tj@kernel.org, void@manifault.com
+Subject: Re: [PATCH] selftests/sched_ext: Fix the incorrect logic validation
+Message-ID: <aaWqNx-DDtzzSqW6@gpd4>
+References: <aaVAhdw3ZO5kHJ32@gpd4>
+ <20260302084130.480694-1-yangfeng59949@163.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260302084130.480694-1-yangfeng59949@163.com>
+X-ClientProxiedBy: MI1P293CA0008.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:2::11) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,118 +65,161 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8728:EE_|PH7PR12MB9104:EE_
-X-MS-Office365-Filtering-Correlation-Id: 05746e33-a1a4-4f93-bfca-08de786eb628
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|SA3PR12MB9130:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05b2b0df-7855-4528-82d4-08de786eef20
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	yCCB8L24TYM2snGAMANiholcWuryxorQ/WopdpfOAnOwqK9S35UL5w7MtCFPMWXQggABvn+dWyRp/pn/bURBxvYVnD7ofvDlkq9yp0vtHVyW8pi9tyLfQZC2/Gpv+pzIXs/vO4UIy6fg70YlPBaFN6WtNw1FxhNkH1PRZhqeC0LGKJvawYMIhHv6UJW/Tf8QhaHnv0VDF5H3uWe+8D2thk8x108fJlkWhn7Q4f7kGyOYwxZclZgl4n56K7ErEVKMCPrX44UQihoPQeGEDflw8EFzdonW3e1ok522YtOfKm+CttlywcPSbGWxi/PaIdz6h+4v+QtIthOm/7Rf+lxZ2O6uZZoBo+3YYqBDK6KNR2jI+98quIFPPU6eX0BuOX4FDYzfWOo4Grmd0ky02WHiytrOoLa55ePu8lchSkOh9o3XjLU+g7j6EIK74uPy4mEmTI5dju5kpEpRt+bnsqWlcsHQ18nGSFdDOdiHXTkkuLrNFlI15XkA2vyOzZfYejtdw7CcGdp5wnXUSa1+1vrmkFqoYb4Wo9QHgVZ2Xp++JcrH4KVaejnVtSA41fSTuFGTlWKNP1BWBFWhRxbrrx2TlHBDQUKmC45T9E9M/U0WP1IVouVN/tm+ZCDk6WKzt2f1/8vDIMDo4ehrPyHG1upgcNQGU1ArYKKQMyJ1CGImBmDlSDDyWx2Rprq2Kt7U4XMm1KvaSkukAiCfMKIfFYzfYdY2aTwdsCCJrvevsiImWic=
+	bZD9QDYD475Ag66xBOQaiPtIzs0LT5M5bRvul/do4tXtzrv04Lo9yI2UQ7q/v78ADVwpuhE1OsqufMCMxC7icvErkovMpntVFs6iDVkbpZGgNuP8KgPPw4HhFaySo5/Q5HLMY9JQQ3IZlzMC6NU9rW78FFS7YwvKqqgsirPqKDeS4o0S1yeviwzQPo2dRV/gOLQnXe7fymPbhZk382wYsAqx+8n2gfNFllI75l4LE6rExhaVszxH/rxHg7RBCBulhfaYE4qdISNVCm0CKo0BFR56FC6Y3dE06nqjBMgCSjrQYwgewQpFDJgZ/0ox0peAftZqpOfDbnkOaeNjJB7KofhsLeuhTQJ6TvzagLZZXOKgwVs0Fab9+80CtFAiRIfFLxqCopXWHw1FrzWQyI60k7k0s6QNHK/qvI5C/uphafc8+mKkYi6De9DE0nLujqFcp7DjsqNfdosIiC9I8SfueuuVVV4Nq0f96ben9Zq9YKFJxmasnuLPKA1d14SvoeZr7FqXS9nrLsge10HPAcMufdn2/LlpWh/vVYNviaacJAQfU9hTJrjpCczlBFJmazoxD7tmTEytdlbKltZaArSrLlIJ0ByE51XBYAmJJj7BaFpV0P9NhdlRrwYOTuyLmR+udw3CrQd5EVVmvdJtWDQM53rzXfzXCpva8z9macEFHu72enN1GQGbIjLGTiAN73zl7LgFDorp1TsIOUdb+/iMCL039AmDXbiITXbxTFja/yk=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8728.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bzQ3WU4rTW1MSWdWNlI4ejBnZGlTYmJiR2twOVdqOC92VHpVZ2ZBWVRHQlRM?=
- =?utf-8?B?ZEdNYjVXeVRsRlhXL2l0blMxdGxJOHFUalJLSWRIMHpnZ0VOeTltWkFFa1Fv?=
- =?utf-8?B?aXRCTkpXS2lxMEJzdWZUUEw4MG9hTGUrcjVHSFB2VDk1YnVxdHhhVGpCVno3?=
- =?utf-8?B?dzAyMGdEeTlKVU9pV09xcnc5aTV1cG9qMU9nWEpQbEl5NGIwNUNCa3UvZURK?=
- =?utf-8?B?cXJDWTBxbko1dk5WbEFKc0ZTdElJZXFnaEVnMUdCSk51VzdKcmUwUk5ZVlZV?=
- =?utf-8?B?dkxJTVhBUDhHZFl5c2p4dUVmSXRMZ3k3SU1Pa0M2eTFTRzd2QTIxc0wwL3pM?=
- =?utf-8?B?SUdTUEdSdTZ6S3Nrd2ZKOUZCajVsRXcyWXVUeVdGV1g5YnIzOWt3V2REbDdk?=
- =?utf-8?B?cGVGRHBWUWJCRUxZazJrWlE0KzJ3ZThCeVQwNzdQekFoWjBMVEQwWFg2TXFL?=
- =?utf-8?B?Y3BTZlhKMFZpWk9XOFNEaW9kMk9TMUNvRHBNUGJwNk5GSzhDbTdOeDBLUTB2?=
- =?utf-8?B?SG9Nb0RJL1A2WlNMK3luSm5QckMzOEZySUN1bTNRQVo2Ky9Qb1hha1JFTE5w?=
- =?utf-8?B?MWFuOURpZ01TV3RJNFdmK1R6Slp4K2UwZVdPYk8wTHBlYnNPMlVZSlBrRXRt?=
- =?utf-8?B?V2czR1NtMEtQYzhPY3ZPN3FQdHA4Z2VtWGN2c0hjVDZrRXVyVzlBaWVjSkd1?=
- =?utf-8?B?eTJXbVg5Y01pbis4d1JIeERYQjVWTlZiQ2xJZ2swZXdQaFU4T1VCTDUzS2Y1?=
- =?utf-8?B?dVl2TDdtcVpjUG1DRVVNM0hqaThiZGtUekhJSVdWRlJOWm14ZHJPRTZSV1FP?=
- =?utf-8?B?Q3IwN1pyQSsvOExhQjZBNVJRWTBmN0J0S0FaUHVyUjV2V3I0dUM0K3Qva1pY?=
- =?utf-8?B?aHVIWEhlSE9HL3BBdHluWGdLL3BrbHVRMmZKTzFmNmpvTk91aFFvT1VRZDlV?=
- =?utf-8?B?cGJxZzZMdTc0d2pKeXA0enZ4eDlxSjJSa0RVcG1nNlVsUHlvUzluWW1tMWth?=
- =?utf-8?B?YnZ6TnZENE5wMXo4ZnNoZ1dOUzVPbncwWk1iMVQrK3JkL1czL1hrb1o4K3lO?=
- =?utf-8?B?enhFQ1MzNWk1Z3NBTXQ2WFVLa2JLYnFUWXJpamJNLzlCUTZ1SnNHTFhndkt5?=
- =?utf-8?B?QVNUZ3RNcHdpQVdzVzJWUU5BdUY0a0RSV2hLanZZbVA1b1RkOWhqSWZzb3R4?=
- =?utf-8?B?SDF0TE1EbmNsUE5HZE5LbEVUQjJQRjBsZFYvdTBmWCsrS3F3SDNVazFQRXVr?=
- =?utf-8?B?UjhBZVJRZjhZMXJrYmpjV3daUEw4dmdOc3NWRmppS2IrakU4MUw1d3g1SFBn?=
- =?utf-8?B?TVpzQ3pKUStadDJVVXhwYW5WamwrK0ZBaEFPL3J2UlBTNEtCaXo3SFBEWGdm?=
- =?utf-8?B?c3RLYmxPV3laODQrTG91eG51Z1h1YTU0SUQvcTc0Mmlra29DMk15a055WE5R?=
- =?utf-8?B?czI4bmg2bEdyTlFBQ21WUDFIZi9NdFgvOTFScXUzWCs0RUtFZnUwUEZDYllw?=
- =?utf-8?B?RDNscFR0bGlkU1NTODdMYVFWRWpieXFPVVpQL2gybHhDZ3JVUjk1VUZqTHVB?=
- =?utf-8?B?ZHlINFk2dHlLUkMrWEJNT0xDdVJHU0liMjRRRHdYaitJKzJOZmRLQVZsbnhz?=
- =?utf-8?B?SDY5bytmN3JyOWQybXg0YzlZUzZxWmkzNXBQYlFEYS82bEsyUTFCWlQxSmFP?=
- =?utf-8?B?akVPYURNb2pIR1FpV1hxc3hQY0luR3h6ZUdaT3l4c0ZSeEdCVTFhRWxSOE1n?=
- =?utf-8?B?YUZ3aUhJZ0xXSUoyTmM5L250YkNhNjU3aGgzVi9UV3Z0dExRNGJUN2xzaUVi?=
- =?utf-8?B?NGFBMWs4eVJHZGNHcExzQTd5aGFQNVNha2EzUmtGTTBHdndNcFcwRWN6WE9t?=
- =?utf-8?B?VitIb0M0ZjY0c1VzSytnT0dIdTkxbE5iSWs0WW9CeENpdnBvMCtZcmtTTHpM?=
- =?utf-8?B?eE9HZGVIRzMvaXp6bnRaTFBGOTZkc3VKeU5aeUpuMURPb0VRUnY3MGV1akxT?=
- =?utf-8?B?R3BKdGd3aE5SMyttTkFaVGo3L2VJOWd0R1NxWXhUUmhQbG9vU29qemdPcU5q?=
- =?utf-8?B?VmhCbktvUFU2YkZWWFBxZ3lLNE1IdW1Zblk2UEdtcWFjVFU5aTJxcmg1MDFz?=
- =?utf-8?B?dVA3YkVDRk9LaFo4bytmVW54VDJFclFwRk5vMnQ3bmJOaHh5SnpvOFRJTFMy?=
- =?utf-8?B?Z3c4K1NTbjI3UkdXZVVJc3RlbW0zMjZRamFBZ2tDNk8vcVl4Q004QS84Tm9o?=
- =?utf-8?B?dzdMMFhRS3NER0hRa2RScnJwOURMQmhwckZWU2FneDhUSWJmRndza09EYmpw?=
- =?utf-8?B?bDlJdis3QlVkcDFnT0FWbGJXWGEwM2hCUWRzOGFLQy9ZY0pIK0NKZz09?=
+	=?us-ascii?Q?2MYpY6AqHXtxh2ysipj/PhZDvRY/ME9ntzDFD/1/Wo+6ei8J4X0xWB1seIW7?=
+ =?us-ascii?Q?wK7fJKCWkZ0LHQC0ZHMlwaoxaX3aGWHbhbFL/Q1LhK4HXIJa08rvMkqnAR08?=
+ =?us-ascii?Q?bJpssXyjAbqIfGwj7FaTFsIxgUlbzgOnmTSqpZBs96eOegn0JUhD6GL7ECMb?=
+ =?us-ascii?Q?7pR7OY6RjtQkQyZ8Cvb4HJJPoauYEhdzPi0aRkSTAOtXV69xdPcl7nG6jzJA?=
+ =?us-ascii?Q?jW/NLHASPdhUGBMctHLgqsvB1UMXias6xzuO/FGR5Op80iqbzcgtrpvWTRkn?=
+ =?us-ascii?Q?g/vg9DCdetCdpCpoiA90rktMLOKQo+JmVwuOtsugZHyz4PuylinIO7a+sSnj?=
+ =?us-ascii?Q?avnprl9fjMd8KRxoUwNV5/29FDNCMm/u84zpJ6joqRV9DdZ3pAAKnNXXNNAE?=
+ =?us-ascii?Q?awwwo2JLgkBFVoi+4kXfS+4qUenlzIFUSLgeFVVpoesKke55B0WhGBcs1NG4?=
+ =?us-ascii?Q?bLPR2nJfoJDcJFBHBBqgW+ivNXVnUgU3chRRY/tZXL6fcp/vCKjs2+ZKQWC8?=
+ =?us-ascii?Q?J/kgo2aRJKgVqpe4otbiPwm6vDM2C/P1+Gt6TM+wzSSzA0mjtjlTAqLb3pqE?=
+ =?us-ascii?Q?SMUvWxCdnYJN0/6J/qF0qFDojzLjV9IX+fu4D7tF+jmg6GcdiBBssHMxl+Hr?=
+ =?us-ascii?Q?FoDmF0fIxJ0YeyurbVg9AOOM8JlBi6zaSf8aiouVFZme1QN7RRN8Hjsudt3Y?=
+ =?us-ascii?Q?HdNYZ1QClmXVHJNGA2PFJuVc3ESlsDB1iNnbuNkOsvFcnFQRNwTS0P2eTyZx?=
+ =?us-ascii?Q?ULhJlKkwc4vvGJ4Grp09SgVaZEUvMniI8l3ZdsTa560Zxz4n2b1c3FjSR1Kr?=
+ =?us-ascii?Q?Wy8xQ0e48WcUqmy79qSWilbw+c2/HFVaj7SnRtN/HL3Cgzv7Q3W0navk3km4?=
+ =?us-ascii?Q?s8ezJju0TLFcRsBUe7uqyztwEybu96N9uYunYkoiYuyIVhd98fqEEaoigH04?=
+ =?us-ascii?Q?vKembiaXR9MPtLRtCaKsyo1Bg0s2j1ZELKhKaTWBFT6TBolpSnQuphbr8/GI?=
+ =?us-ascii?Q?kan6MKRNWy4SLL+MHFfW+edL3CLpKfG1ZDC4FAJQcr+VO36KRMb01rlDhPNE?=
+ =?us-ascii?Q?FSGFvimAxfHvJ+bTjOElNcbxTzLEs4y8FZ0tshHHHDsav9aCErYAjFyzQxw4?=
+ =?us-ascii?Q?6vW5BZCvrDPSyaD8h8UQZHBnzYkLXAUSEKynGHS9yudTM64ktDWSoXBGguJK?=
+ =?us-ascii?Q?hG40FHDVWKlypZlpqnE26+64o7P0Qjlk3WmgXZByqItbi+rdmMAwiZ5dDHiO?=
+ =?us-ascii?Q?eUNjMlwHJmZS6QFsJdv76/83b/26L4kjtuz8z4QbBTutwjZAcU3I4mpJleP3?=
+ =?us-ascii?Q?h+TJX/wlBFClPNe+ljtVx7CZpycWbC5CXLE0w2WfxS2nI2m6W+vxA31UrMSM?=
+ =?us-ascii?Q?rNYreOaciFZO46/Fly1fxoYh6hfZmVNDplKojyOUb1aP0/Wyh9bRO541xiRP?=
+ =?us-ascii?Q?Ngn8HwPucrGCSe7BpVczPV68HnkENgKE2taOxhdmo+7bQGwhH1GiXNmga+5Y?=
+ =?us-ascii?Q?JfydD+nMxObVt90gw6KDolS0jwR3USUxrn4OBPlks7XoRhLleh5fekBwBD2j?=
+ =?us-ascii?Q?W1+75JaH2IbEUsAahHORmHlfT1wQqpSgJ2aVj4Yaa31rx4LcijGsRSy21Bn/?=
+ =?us-ascii?Q?v/nCLEy/n/XJOy8tlwPMYPWLzj36CRkgio1u+oVI6WABGph7GtLW+9G1jTnR?=
+ =?us-ascii?Q?/Ba62ny1mzzfAV1bxbqt2MjLMsWm8tTOM5ldjk/AQEqkIpDJ?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05746e33-a1a4-4f93-bfca-08de786eb628
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8728.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05b2b0df-7855-4528-82d4-08de786eef20
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 15:16:43.5896
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 15:18:20.8978
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N0BQvoh47wvgI8YSx6wp650JIxlK5V14EhVwmDysYT8bSqCVdpDrBm/jaYEI+Z0uqGe4Qt39pZoQSd6uCNFB5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9104
+X-MS-Exchange-CrossTenant-UserPrincipalName: GXJsiY482RmedsGa6jrX+Bsmm5yWbUyuyzBqulosOaBHoOADXety0HrQL9m7reRhmxLl4aEEMc+/EVZYrcCEiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9130
 
+Hi Feng,
 
+On Mon, Mar 02, 2026 at 04:41:30PM +0800, Feng Yang wrote:
+> On Mon, 2 Mar 2026 08:47:17 +0100, Andrea Righi wrote:
+> > On Mon, Mar 02, 2026 at 02:48:51PM +0800, Feng Yang wrote:
+> > > From: Feng Yang <yangfeng@kylinos.cn>
+> > > 
+> > > When __COMPAT_scx_bpf_pick_idle_cpu_node selects an idle CPU,
+> > > it reports that the CPU should be marked as busy.
+> > > 
+> > > Fixes: 5ae5161820e5 ("selftests/sched_ext: Add NUMA-aware scheduler test")
+> > > Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> > > ---
+> > >  tools/testing/selftests/sched_ext/numa.bpf.c | 8 ++++----
+> > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/sched_ext/numa.bpf.c b/tools/testing/selftests/sched_ext/numa.bpf.c
+> > > index a79d86ed54a1..98423628b05c 100644
+> > > --- a/tools/testing/selftests/sched_ext/numa.bpf.c
+> > > +++ b/tools/testing/selftests/sched_ext/numa.bpf.c
+> > > @@ -44,12 +44,12 @@ s32 BPF_STRUCT_OPS(numa_select_cpu,
+> > >  	 */
+> > >  	cpu = __COMPAT_scx_bpf_pick_idle_cpu_node(p->cpus_ptr, node,
+> > >  					__COMPAT_SCX_PICK_IDLE_IN_NODE);
+> > > -	if (cpu < 0)
+> > > +	if (cpu < 0) {
+> > >  		cpu = __COMPAT_scx_bpf_pick_any_cpu_node(p->cpus_ptr, node,
+> > >  						__COMPAT_SCX_PICK_IDLE_IN_NODE);
+> > > -
+> > > -	if (is_cpu_idle(cpu, node))
+> > > -		scx_bpf_error("CPU %d should be marked as busy", cpu);
+> > > +		if (is_cpu_idle(cpu, node))
+> > > +			scx_bpf_error("CPU %d should be marked as busy", cpu);
+> > > +	}
+> > 
+> > No, this is not correct. The CPU returned by scx_bpf_pick_idle_cpu_node()
+> > should be marked as busy at this point (bit is set in the idle cpumask),
+> > essentially it has been reserved/allocated by the caller.
+> 
+> Okay, I misunderstood.
+> The CI test of this patch (https://patchwork.kernel.org/project/netdevbpf/list/?series=1058866&state=*) 
+> resulted in the error "CPU 0 should be marked as busy"(https://github.com/kernel-patches/bpf/actions/runs/22548310848/job/65314767856),
+> but I don't see the connection between them that would cause this error. Could you explain why this happens?
 
-On 27.02.26 18:13, Jakub Kicinski wrote:
-> The large chunks test needs 2MB hugepages for its mmap allocation,
-> but the test system may not have any pre-allocated. Ensure at least
-> 64 hugepages are available before running the test, and restore the
-> original value on cleanup.
-> 
-> While at it strip the stdout, it has a trailing new line.
-> 
-> Before:
->   ok 5 iou-zcrx.test_zcrx_large_chunks # SKIP Can't allocate huge pages
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: dw@davidwei.uk
-> CC: jdamato@fastly.com
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/drivers/net/hw/iou-zcrx.py | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> index 1649c23e05e2..66dd496ec5cf 100755
-> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> @@ -135,13 +135,21 @@ SKIP_CODE = 42
->  
->      cfg.require_ipver('6')
->  
-> +    hp_file = "/proc/sys/vm/nr_hugepages"
-> +    with open(hp_file, 'r+', encoding='utf-8') as f:
-> +        nr_hugepages = int(f.read().strip())
-> +        if nr_hugepages < 64:
-> +            f.seek(0)
-> +            f.write("64")
-> +            defer(lambda: open(hp_file, 'w', encoding='utf-8').write(str(nr_hugepages)))
-> +
->      single(cfg)
->      rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target} -x 2"
->      tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
->  
->      probe = cmd(rx_cmd + " -d", fail=False)
->      if probe.ret == SKIP_CODE:
-> -        raise KsftSkipEx(probe.stdout)
-> +        raise KsftSkipEx(probe.stdout.strip())
->  
-While working on a similar fix I found that the probe here also requires a barrier.
+The is_cpu_idle() test is going to be always a bit flaky in some cases,
+for what I see we may have two races:
+
+1) if the first call to scx_bpf_pick_idle_cpu_node() returns a negative
+   value, we fallback to "pick any CPU". Between selecting the CPU and
+   checking if it's idle, the task running on the CPU may have released it,
+   allowing the idle task to run and set the idle bit again.
+
+2) Even if the first scx_bpf_pick_idle_cpu_node() returns a cpu >= 0, that
+   CPU might still execute a short-lived task, which then releases it and
+   sets the idle bit again.
+
+Given this, I think the most reliable approach is to remove the
+is_cpu_idle() check here to avoid flakiness and instead implement something
+along the lines of the following. What do you think?
 
 Thanks,
-Dragos
+-Andrea
+
+ tools/testing/selftests/sched_ext/numa.bpf.c | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
+
+diff --git a/tools/testing/selftests/sched_ext/numa.bpf.c b/tools/testing/selftests/sched_ext/numa.bpf.c
+index a79d86ed54a1b..209dacdbd117e 100644
+--- a/tools/testing/selftests/sched_ext/numa.bpf.c
++++ b/tools/testing/selftests/sched_ext/numa.bpf.c
+@@ -19,18 +19,6 @@ UEI_DEFINE(uei);
+ 
+ const volatile unsigned int __COMPAT_SCX_PICK_IDLE_IN_NODE;
+ 
+-static bool is_cpu_idle(s32 cpu, int node)
+-{
+-	const struct cpumask *idle_cpumask;
+-	bool idle;
+-
+-	idle_cpumask = __COMPAT_scx_bpf_get_idle_cpumask_node(node);
+-	idle = bpf_cpumask_test_cpu(cpu, idle_cpumask);
+-	scx_bpf_put_cpumask(idle_cpumask);
+-
+-	return idle;
+-}
+-
+s32 BPF_STRUCT_OPS(numa_select_cpu,
+ 		   struct task_struct *p, s32 prev_cpu, u64 wake_flags)
+ {
+@@ -44,12 +32,12 @@ s32 BPF_STRUCT_OPS(numa_select_cpu,
+ 	 */
+ 	cpu = __COMPAT_scx_bpf_pick_idle_cpu_node(p->cpus_ptr, node,
+ 					__COMPAT_SCX_PICK_IDLE_IN_NODE);
+-	if (cpu < 0)
++	if (cpu < 0) {
+ 		cpu = __COMPAT_scx_bpf_pick_any_cpu_node(p->cpus_ptr, node,
+ 						__COMPAT_SCX_PICK_IDLE_IN_NODE);
+-
+-	if (is_cpu_idle(cpu, node))
+-		scx_bpf_error("CPU %d should be marked as busy", cpu);
++		if (cpu < 0)
++			return prev_cpu;
++	}
+ 
+ 	if (__COMPAT_scx_bpf_cpu_node(cpu) != node)
+ 		scx_bpf_error("CPU %d should be in node %d", cpu, node);
