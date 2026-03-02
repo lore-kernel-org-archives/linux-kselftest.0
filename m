@@ -1,65 +1,119 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013018.outbound.protection.outlook.com [52.101.72.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1FDE3FB060;
-	Mon,  2 Mar 2026 14:15:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945F432142B;
+	Mon,  2 Mar 2026 14:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.13
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772460934; cv=fail; b=hsB9jycZQAgZ7Q2Cah/RqTOtYbJot4K4zBVOyqd0HHVWSwQeLGkTBlltDA7+Ou0WNp2VsIdYiKI+G1scCC9Ixx/UI2derKkDuQY+lC63covqWAEivnfTUMznqepvoJSml5vdFxqWekB7grp+ji6B48sydNNG5mTRb4nli2TscaM=
+	t=1772461433; cv=fail; b=oohH2bF8e29OVJADUUZ/U4BlFMBF8cEBWld8XUK3h1du+vHah0+b+eVlZz5YdqPRoSCQdIZtGJhnA+PS7tCszTjtRTorywavavgta/Z3KxWpEr3+rTCyWTQwdukkLDNY8VyZ0/cP137cLjLAth/ydQ/pYR5AXB+xwAZs2RaYbVo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772460934; c=relaxed/simple;
-	bh=SfN2P0epQulc366Vs6SABcfeP3l95fMuYM3EQlkYhG8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=RViDpFCwwhC5kKy06HAMR6Ael3UtgHolefeGc6SIU2hAOIFMrdb8lhBv7x0qC9D0t2/OVH6QxBOUSqq8iF37cyE+FkXkwrk6QDUf1ZFa+Djfn/QGfjY1rf404jiIs4Yof4Gu+eq3n7yNzKE6tx8jXih6qDWca8jalChQGbeVfg0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=HtOJ4bLn; arc=fail smtp.client-ip=52.101.72.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1772461433; c=relaxed/simple;
+	bh=ngAs0F/HPIWvv++5BGVra7FCYbwuox7QxsdLmbRc0GA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ChjLW/LLT7IBOsEoe/6gl49yUL6XMNs4uGp8DzOe/zkNhAMeOvvAuAflwP6VhAlw3JLUWLw9oe0jvNxKEC7gDwrhr2P08YVdx5lbH57b2B6JMtirHE/yhyPzMb0v0gWDrJfpy9bpMA8XYxRTrCo93/Fe8B48jr7ZG+zgprkkPP4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hvwquiQ9; arc=fail smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="HtOJ4bLn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hvwquiQ9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772461432; x=1803997432;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=ngAs0F/HPIWvv++5BGVra7FCYbwuox7QxsdLmbRc0GA=;
+  b=hvwquiQ9qZOvhOoXRsoZBv6KEOEpw2/NYKMI5S2lco1i4f69n+dbMzwa
+   92HzsCHMwuIdQBkIEhmVi4A7kfr1oSIBJslvIv/wZU+i782yYqzzpZaDo
+   EeVe2LU+sVSgA/tneQLTUnBx2nnHWAeZ/AdPvfBhFElajVPUWrP8r/gol
+   LIqMJy9vybVpjk8+TNwAsS6nO73vcn1rZVPnYAMhX/7tmQzc+nLg+WikK
+   tQz0pMwxzTeK3lUwWwhc6zPcSl2OoPR0xtMY637a1lDdC7ImZ6yXuYYC3
+   XQq8l4+iQ1LK1e7/AxjpqZ0eC9603hqnoZpvWaXo/1DDbQi09EASMdw77
+   g==;
+X-CSE-ConnectionGUID: tIVGV1P2Q2+/vRUO91B4tg==
+X-CSE-MsgGUID: BUe2/fU9SW6yyMl35iPhFA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="76069763"
+X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
+   d="scan'208";a="76069763"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 06:23:51 -0800
+X-CSE-ConnectionGUID: Dsu19VLeS5GL1MsyBsefCQ==
+X-CSE-MsgGUID: 9wM73wKmRfWhUF7+P+NP/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
+   d="scan'208";a="216804484"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 06:23:51 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Mon, 2 Mar 2026 06:23:50 -0800
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Mon, 2 Mar 2026 06:23:50 -0800
+Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.12) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Mon, 2 Mar 2026 06:23:50 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lqsQ8X/xnQNodp80wXfdDYQo+XsJuqukHik6K91EV1KijAHZQhSwaEm0g89EJXfznAW6P7J14kGYvvqnz6dChEbMDDx6J/fUpNrZs4r28rW5HLpD7lnGTMu9CsiwK+B8iGALQq7HuoYTP5/xYsl//58uN7QdVC8eOGRhgV7Vfe1vLaTWjVtbbhUEVag4HNfgzHmXg3ofUj0KVXMSupEdbkuUCA6zUc1izAlOnlZoRbY/NIjtWGPt/2yb89CrQGotbOazldH9P07le0K0VtI4DrnNK17+EqvG1WQmHQ4VHMW1v8Yl/hRvTE+cs2LHDeV3EyBqgiUqXYFiS8sXQoETNA==
+ b=TFxNOAp0EoyVBs1grfP/HOSqUwZJqtIbiCYsdRsfKgxt3jrgbZlbrEr8/cG07iVRDorpkqTTSSTOniydc0F2ewLCdC9hhygklvpG6ROCiSY574pzgXy260r4jMM58BvlX+bHU/K4liJ2rwm9nMes69BmOnwo+cjfN8hILJMq9LYLEObkZEwleleYYZs/EapH8teeo6diiEBAKdYVYIDJHCsdldRlvzOZGqpcU49wq3U00WPrMD9bQDtj5ctmj3FkkP/WQQlacG6hySIy+Qnnb5cv/r5KtEmtJFO+XgqnvXIOQ5DammsOSqqRNShXQo9LVPS5j+RjNOJ7/ywRfZpAqw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=238EWjoP5UFA/aRhcokYEeF3cTt3y4Vm4sNdFW3SS0g=;
- b=sPWRxVsU//zsL8iTxZFt0Z6PlbiQDboEZ7MIZZKkUp/0WeagkxcIVg7voqST00Gr/lceFEkmANutkZYx+24gKIjmzmF0Cva1qyHI0gOUKxAOEnp5pRXh+MgpWJYfV47cHssGCcX4mdke9WXrv9W+XZXCkk3NbKMsftDnSm6unmQcQ5ZLdh40bKOLHvg7N/oAMV+OshPqfqcrLuol0SJPYFDjmIi+fyNyzyjhLH130lXQAPPdKDA1DIHMw7P/sTULQlG5V4OLuqpL5gBpJe+N7GdEjovM9/Fwd/NjkfxCMCQuU5H8HMGsmEzhVPCbYZ0aj/qlh2bD1PRQsXPHABPkPQ==
+ bh=pmj5XsF2m3O5MSyrUcWb5Xu9g6zTKfbODESxPWppAks=;
+ b=R7XXhJyVu2iZ+oOjG697b+wHsMU6f7ngYqwuR3LSLc4MDv+NA/B0b1DgWQc6G9Hrf7FavBQGXAmteBDp15ns2PYonZZ3LhzFsALTpG6k7kvCqeOi7nIm+PBrECdQq9wDUJoaHM2OZeAyFPzBCbdXiIzjJcL8zgDYoJ2wOj61cPXFIU5+dCvZvXqteZzH3v0P/T7VJ08wB2eoRoEzLb8t6YK1GrvfPClngxd/ZtadQJcM7dkRUOebkh9w/w8D9RMJEbeJJW9gNPx1NnyqQXcZYP+NBmNL3Jp2Aa6dpxgEqv7TIcy+1kZcHDCtJ0e12E9xwOQawCUneeYc5NmJM7E8zg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=238EWjoP5UFA/aRhcokYEeF3cTt3y4Vm4sNdFW3SS0g=;
- b=HtOJ4bLnvLIlNj3F1XXuWYQ4f9eZhjfS1pGzUZwie441mLZLBdZPbcio+oOXxxKJZorLy7wnrWIOI7AJFgZFFasS6G/XGSDY7PZYMCeXihIbIHYU0gnPE5EuNtXm6LHBJ7dYWkr5suXNc+5aNvX+sNcpM/yEhmw1hUh7frc98pQJxhIBIYG7iXWPR8CctBmBQQYgfaTRA+Jpzi4L6fyLY+yCKRevshdQ6MHzqteIdbt05yzhNwUVoUUJpcr9L1T2X5z+q8mnhTFUarwYzfDked+/NCr/oxSvYuNclX0lVTQBukqSunl40AsmyfBSBWAWgMt0DEhYV7vBYN4aNdMriA==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by PA2PR04MB10333.eurprd04.prod.outlook.com (2603:10a6:102:41a::11) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
+ by BN9PR11MB5323.namprd11.prod.outlook.com (2603:10b6:408:118::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.18; Mon, 2 Mar
- 2026 14:15:29 +0000
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9654.020; Mon, 2 Mar 2026
- 14:15:29 +0000
-Date: Mon, 2 Mar 2026 16:15:25 +0200
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: Petr Machata <petrm@nvidia.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
- ethtool standard counters
-Message-ID: <skvfdukic45r43yqw5wzzubqslrfdepcnghbspwvp7jtmjp2zx@6bqapqyjcpe7>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
- <20260225150648.1542206-6-ioana.ciornei@nxp.com>
- <87fr6mf8gb.fsf@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.21; Mon, 2 Mar
+ 2026 14:23:47 +0000
+Received: from SN7PR11MB7540.namprd11.prod.outlook.com
+ ([fe80::2edd:5c6d:169c:389b]) by SN7PR11MB7540.namprd11.prod.outlook.com
+ ([fe80::2edd:5c6d:169c:389b%6]) with mapi id 15.20.9654.015; Mon, 2 Mar 2026
+ 14:23:46 +0000
+Date: Mon, 2 Mar 2026 15:23:27 +0100
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+CC: <bpf@vger.kernel.org>, Claudiu Manoil <claudiu.manoil@nxp.com>, "Vladimir
+ Oltean" <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
+	<xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Tony Nguyen
+	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "Andrii
+ Nakryiko" <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
+ Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
+	<horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexander Lobakin
+	<aleksander.lobakin@intel.com>, "Bastien Curutchet (eBPF Foundation)"
+	<bastien.curutchet@bootlin.com>, Tushar Vyavahare
+	<tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, Ricardo
+ =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>, Eelco Chaudron
+	<echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, "Toke
+ Hoiland-Jorgensen" <toke@redhat.com>, <imx@lists.linux.dev>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<intel-wired-lan@lists.osuosl.org>, <linux-kselftest@vger.kernel.org>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>
+Subject: Re: [PATCH bpf v3 5/9] i40e: fix registering XDP RxQ info
+Message-ID: <aaWdX7f3yxi8gd6s@soc-5CG4396X81.clients.intel.com>
+References: <20260217132450.1936200-1-larysa.zaremba@intel.com>
+ <20260217132450.1936200-6-larysa.zaremba@intel.com>
+ <aZb7RZMA+7bxcmrL@boxer>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <87fr6mf8gb.fsf@nvidia.com>
-X-ClientProxiedBy: AM5PR0101CA0027.eurprd01.prod.exchangelabs.com
- (2603:10a6:206:16::40) To PAXPR04MB8253.eurprd04.prod.outlook.com
- (2603:10a6:102:1bf::7)
+In-Reply-To: <aZb7RZMA+7bxcmrL@boxer>
+X-ClientProxiedBy: VI1P195CA0083.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:802:59::36) To SN7PR11MB7540.namprd11.prod.outlook.com
+ (2603:10b6:806:340::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,401 +121,209 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|PA2PR04MB10333:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d1fd648-0f01-464c-f391-08de7866285e
+X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|BN9PR11MB5323:EE_
+X-MS-Office365-Filtering-Correlation-Id: 414b664e-9fa8-4413-570d-08de786750c6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	tqsxUdaPyKdjeQJYvvqEEh7EyIEQrzGmIyEerYayc5tJjKYlD3uAn97OyGniaCjaDEMEMFWjQXLVEm9RBr+lHgdSN3AcuSBFde90W4Z6OiK6xTE0xpjfUwfQHyvHGB7JMgNOGIvNXlPmoSqEb/5CVwkyPlqKyXCaLks0fBQH8ILxFEj+UnxxxwaAgVnaEr3Uav3vFC1Q64RFbP1lR4WanxvwjhjY1ca8zNSSCkKiBXDU/DGQvdzvBd1hLtwT5FakDHUiSmzYnFv7WCosM46a9S7C+EOp/77fJ0tHJ0UFJoqksmC7JPzK1PQqepchuuKzFSprVznaBZa20ASER8R1EFmcV1RtJ32/jg5r+mlicXRBn4wZ+YXtrkpRHNMtVls1pIb7OkGdgcVI6NMK9iWTpH1LSDgpD2X6VaKI3v7ikNRct6l/XqvM45zojsIFTBZgXvAtVXulrCYeX/7+aVlc7lK4e1kKBaioWcaxTSTywPUI2izK9IvtdnBW2DVHZnfcNqLFLuBk5ptnW9LOqWpH+8TBsq15JoSHsf7UkdKZ8U7FnlXjb4fyUE9blaliKrWnhrVSdvGV8JDkP1mv3BNO6q9+pYlKdWyWqVieZdnsdpWBVihbH394u3qZSzO8LiJ6ro94osNYqNgeLD9GQxbRd1PpqqYg680sUTzyRmwEt07vA3su4XRGMkXGdmNLTPvzzmkwh/eEvIZ8c7TUzNPvX4uvJ6Xawo1de/Xk/Br1BlU=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?wsHIpGSJKVWS1Oe/a2M+9ngcHzRoK1F774SV9T12/9ZoUFbKKhHOLKP0l5KU?=
- =?us-ascii?Q?G6g9zwJlay/px0zlHLMAGmbifBnauhncmB7xrENt/Em0iKHiZS6BeC1MD+Vi?=
- =?us-ascii?Q?bwqOcfCz62I+44VABXEytdp8LeHQ5TbruDFydE7eX4atxwCe2W+uDygxfZYT?=
- =?us-ascii?Q?mQ0VL3l/r2QkF/nvQlWiwRCM5HS4FW1485+HCzrwaI25Zuzrpk680q3+1ZKD?=
- =?us-ascii?Q?L7EBbPRuWSVcxFkOznFbwLdq7q+KzWgtkRRzke/xWDavLEKxTclXpSttgCt5?=
- =?us-ascii?Q?54djCDXBf83tX7fzaqzC3ajGEKr9Duu9Fo+pQYcrTfhcXBf6DUnF3E855GCp?=
- =?us-ascii?Q?C9TQIYnLFgDDi0O8R6UNp5ZiyDnL84Rq1RXp9l9d4cO9pBvQBr2SCh/uD9Tn?=
- =?us-ascii?Q?BdNeGL8nUPZ554UHy5d1QVUYP6XZu7s+gX0KiQjhHybsxoZlOrD/7OUaMj7Y?=
- =?us-ascii?Q?jEg84AH5i24GwbiRLChsUMmTZ53dniqbxKtg59pJpWv7QrB7QSwTUAFjdTOF?=
- =?us-ascii?Q?7m4okbrWMCPA7N1+b/0tnhr7ANzZpech/YQ/oOuDCekS+Sh8udUWtTUTlKM2?=
- =?us-ascii?Q?+iztdTMmMefPX1qtoXd9YrWIadA4mpo5jrP3qggm0teWlav/ohoB+IQa/aVR?=
- =?us-ascii?Q?xHPiZYTR1FXBAblwU1C0w6u4Vvf3qaU3beU5zQNCT+7wNmjroEtPjBOSLWfh?=
- =?us-ascii?Q?2AnVFkEu8CLRQl6XvB6TXaLaqoR4AYqOOFi7grp/ci32YdnGu39xu4q0hvDb?=
- =?us-ascii?Q?N4JAIzTZQRvgT/sgAiAB1W9/UFzl5ejZh8Y8sQnu3ECraLKFom54GqVeXE/9?=
- =?us-ascii?Q?+na+biWdbDniu5qAAnQfEvz8GX8S4EGmXFsSSNhNwZYSegE+NyEqDbjRXxSr?=
- =?us-ascii?Q?dGRq4gTumX0Zj1FplhxlrMwM0/8x5obk6sX888PnBhuQ9y1j0cTDojtH9la7?=
- =?us-ascii?Q?Zl1wgIbXm9Xhzy1IXEgYBFyZXVNvNcUYV3DC8Nl32v/8wBOMGn+ovdimnqzH?=
- =?us-ascii?Q?akFouwnz5A5lHVSlMg9OvEP4aVOGokHmAe8d1Cr5LW+rYeuObzKglKzbLsKm?=
- =?us-ascii?Q?jWwnl+dBQWz9q/4/P+eIzH6UsGxXPL2nSf7w2qN0w3grh3Wqa2LZsNEnz6H5?=
- =?us-ascii?Q?V2jjw8NG+RJXHNZh3ziltq7ZKSqwHVvzU+EnXnQa8X8ur+mJsfPHuJnOhjyh?=
- =?us-ascii?Q?o8ZnszEQcZPuJaNlCrvoAdgULc27cR46SuMqzM2hleqzcT0X4Rr36SmYicqm?=
- =?us-ascii?Q?FRb5ozLeN9LAK+nxaBaXtQdhXUMx2wfCwi+Or+Ck0HrIeey2xzaBgBI4uJUO?=
- =?us-ascii?Q?uB5FlQ9FbqVgngdC7Ml+MoXxDojucop2YVQfUTqlCfv2HfPMAhs/6MxzM2SM?=
- =?us-ascii?Q?olRUd1NXUtkoiUESjTH4fAcWWVMxMyGa8vFSCld5MHFxLH2D5nveedbxbUMk?=
- =?us-ascii?Q?EX4qcqvUfiNaQxYPcsEKw7mGJS9ZWJKXySjubPN+AVsDfdMlHlJvfNgO4xnI?=
- =?us-ascii?Q?Okh7LIiwSdIUXLaGZ9DT8rKNvKbWM8eq3hPsMNXbpWU0sMl+TTfP5iRK3vs5?=
- =?us-ascii?Q?zQg2Gh8OhSCPQu03EjT4YQw2xQkqmB5aMznFJEuqtiVnW2E2yu9pUQNV2qgk?=
- =?us-ascii?Q?pz0AyP57gbPaQ+/gsq/frS0Df++h2zQGMMo6JkFmTu61TAL0/EYt83E+DQE5?=
- =?us-ascii?Q?j22GCRwIEYa1oUjUEgSvntsqKBREAcNcsjN2QgtbiPcgMP+BEbWEkzjfnrpa?=
- =?us-ascii?Q?rCjnD8XHMA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d1fd648-0f01-464c-f391-08de7866285e
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
+X-Microsoft-Antispam: BCL:0;ARA:13230040|10070799003|366016|1800799024|7416014|376014|7142099003;
+X-Microsoft-Antispam-Message-Info: sYX2AqFyjQupd/gDWbmb7CiK4qUDNKfbfco71EUr8VthvwU3zCoRK0jCc8ehhwz4PZEAJ/aDUdpHfjXjSnxzVidY4hZhbnGj4el3yXQL8BWirkXYau626Mr1HVPz4hcTUwy7YlnBczFGAJERier17tIbdGJjWuieAISIAqwQnYx1RAUVnLUANjpUOBGWKupPHc15BWJd+FNJDYIDm9SxNf7UoIw9+zE61TjWla9xazV8uNPLwomViTlmEvNOJxgyymEbqNglNVtq5qX+mA7IKrgKPDTGgCEYpsH8jAVNNECOfZv1gY/vwGEyt6+DqW6CWgDolNV0JefwPnrTLoyGInR6BzdZpslehoNASpdtIjkSk1tDW0hmrBCsK61u6Q6bFPOl531kWhylGaFohW+hnbJL1rki734/gIw2s3ZV0Y7P6HnOqWFdNjLGfrFOs8p7ZBzb0CWPhixD/AVzRIc22OLg6imBtIjl3+4nOe48zIUIUeNxP6n2VfydsCS1Yn6nye99EMAD/Ym0RJ1XDwMOfY3jCXJVoR8XmN24PS7+/5kC9feu2qLRPmO8DwOwoFtP6onDz5e66v8no2dniCZ9hRdtwkwNuj2XGsdjCiDOuOj40yG2J2i7e0vLxUirVBPV+1B3rzEXFPaPXymJeBPDQfRkHhont37XCebhA9h+ZqP9BaTo8FLuHS86URBJnf0Ij53rXrB5Wh/O1O4KW88dY1fnO0ua//+oj6QmBx9G8A4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(7416014)(376014)(7142099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yC+dSIedwV4syeB8GFxX17GyeUR2J1JC4Jpn1ZzbMG2vamtp6/MzH5u2rEXb?=
+ =?us-ascii?Q?lLJEAuVJAlSPZkwfJP5W6iG7Zgdl9SV59Bo+OnMjOsBZdqoRG8fNn+jVZ726?=
+ =?us-ascii?Q?Eqr3PFCKFR7MPzao5jXJuKIssPhv4WU2Ibd9U1Ca0P8sPRQfZLoCeG228BrR?=
+ =?us-ascii?Q?FYncKeDdjxst2RlpfQR0186M0l9Z4gxej8JEItsDEH4/UYzT2rNWuMcLqasH?=
+ =?us-ascii?Q?tbu/8Lw4XrDQ4O6ExX+dLCCtTojzm36kvzIKuSurRCmTzSCgpNJ0uMAYeI3Q?=
+ =?us-ascii?Q?Z+lY9Wi6V9KAbXQUqGJqBYHwKy4UAukadGTH8WbGoJGf7pitYLmJEG6BIpIX?=
+ =?us-ascii?Q?4TUgXfod5ICRqQ9pzGZZR/Du7fQdtASWjwfCtmMT2LhizYIc75O9jNB16WPT?=
+ =?us-ascii?Q?hif36oD3pJBdJoQ8VmBWDKenpvAYgoysOuCtm+SyRrGeayqYen/BpgPSswrn?=
+ =?us-ascii?Q?mPcV5iLJmjDfmyMwUwXLYjhDkriF0lZYiNHS9xV+V8l60sF0asD8Yl6MJYXS?=
+ =?us-ascii?Q?RnU+JK9gDLX1BN6s++I1HT9dFEQ3HEkgJBudKAk2T3sdOmYGwv+nh33dcJat?=
+ =?us-ascii?Q?mDip2f85L/c4eXElAfiddOJQkBSOMl9jS78X38S5nAy9FLHRSdbOBeObMMX6?=
+ =?us-ascii?Q?5b0HF3sAxpi8RRLEZJOl1EiRJc2c4zL2MHNvMskSwX5MTiwoQO9j/t3w4I5C?=
+ =?us-ascii?Q?w//veg2v8C0NNd9vWGmD4TUFMe0pUejKSIMHfMrmyl0ojKdYKf9a2DiLJHgI?=
+ =?us-ascii?Q?csLI1J1iSolxPVQgvO1fDJFEP954XfR7tWxtiLQwZEPFf5aK+ccupTWIyIY9?=
+ =?us-ascii?Q?ghPBTmu8s43DVbbwjIaqDQJs4qigM0IyQ5HyAPN6STIFG673RLynq8ObIShe?=
+ =?us-ascii?Q?ocJpAD5SKsXE40YLy600DC5iAWQic6GBgBsq4qjQkRARvlF0ZOW3Zc04fn40?=
+ =?us-ascii?Q?4ne78mRDZTco1+vcA69b7t9MuOdq7wkPyHkax/MmsUmgGkzYlG/DeGCoKaUw?=
+ =?us-ascii?Q?VN7H4lY5qeJ1Tz0CYX84NBNr9En5p8aJbUakxReB0zrUCOhYZul46HadOuzl?=
+ =?us-ascii?Q?wh5RVZEtXIGzh6tbQPaMGTbngqy3gJaPu6TByoYmaMBiWOcrkO+Tq5Vns223?=
+ =?us-ascii?Q?0gMRknhwN9UrW3CcByobopP1IQDzaFwSX0rVUKAQWC45dUcV8nW+cUrBTLQR?=
+ =?us-ascii?Q?TYvTYcpvGXUt/C58hHaGmW/m5NMLsmxo7x6OxL1htjriwv3k9OE5IJtFcPRe?=
+ =?us-ascii?Q?AaZxb4Wxy4zWsZ9HXrDK5zV186gjUR2QSpZQPFOh1Dpq4T3FPtH4Y5XHXnQg?=
+ =?us-ascii?Q?xlkbbjLPV+BD3qX2s40/8CV9HmwNlgUsptyHoQ6+tjfUBjeOyuMBg3agtMN8?=
+ =?us-ascii?Q?feCwR3DX8/0Jc5LgDx5WZwta00ALpuz61WmlbEWRU7VJZRE8ceCU6osp4INA?=
+ =?us-ascii?Q?ThFKSQGos+HnjCJ9eb1NTTCzy+MHQtRc34mSDOdtfQDUTwBn9EI5K+9pl1e9?=
+ =?us-ascii?Q?ooKq6Jo5je2ndnHgPDkLbDeA2va6Q5s7Icy66JDUBYq1nb8ZFenZnvro0052?=
+ =?us-ascii?Q?JM7vJpEpQxMFUzuJH7s0zEEhS9tN/xxiY3PVGBShirwwFU5ayMcwjkJVq4jG?=
+ =?us-ascii?Q?H7DQFpnhVrpoEgzct57aY6elVHDVbYIULFWLViKmumz5tIEr8ek4HZEVIRJt?=
+ =?us-ascii?Q?7e6QyblGc2XAG/o/3Yl+2+tp6Yx7/Q1yKwP6r6XgbDOupHz7wCyrRSGgmG2m?=
+ =?us-ascii?Q?S0MudOWbSobFcEX/RfklVNJSzi/8t5D6MUF6RiRCvw+6otstQ89Wmf/U9pKQ?=
+X-MS-Exchange-AntiSpam-MessageData-1: k8pfDQ9+hdMFdB78uDAfHvcORDFOoJBV1yo=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 414b664e-9fa8-4413-570d-08de786750c6
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 14:15:29.3902
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 14:23:46.8315
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eyopPITo+ITfFIm00Sf1Yd4G5qTXU3aJgr1offnaO+29qzSUonvb70Y2dmFU4hRjTi07zZC1gva0iS9atfRjQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA2PR04MB10333
+X-MS-Exchange-CrossTenant-UserPrincipalName: y1/HFY+lblX2WhRg0UE/2J6K2Q0s3uo1hm0e9ITLBZQueNcC5Nm8ow/taK4GXpGv1vNPw3JG+wObXmhOweWICcqVj6B2lECtKWcTVwkpMxU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5323
+X-OriginatorOrg: intel.com
 
-On Fri, Feb 27, 2026 at 04:45:47PM +0100, Petr Machata wrote:
+On Thu, Feb 19, 2026 at 01:00:05PM +0100, Maciej Fijalkowski wrote:
+> On Tue, Feb 17, 2026 at 02:24:43PM +0100, Larysa Zaremba wrote:
+> > Current way of handling XDP RxQ info in i40e has following problems:
+> > * when xsk_buff_pool is detached, memory model is not unregistered before
+> >   registering a new one, this leads to a dangling xsk_buff_pool in the
+> >   memory model table
 > 
-> Ioana Ciornei <ioana.ciornei@nxp.com> writes:
+> What is 'memory model table' in this context?
+>
+
+I mean the hash table where we register the allocator when registering XDP RxQ 
+info.
+
+The paragraph is wrong, we do not have such problem currently, as we do not 
+register pass any non-NULL values as allocator. So I will correct the commit 
+message.
+
+> I believe you are referring to a case where XDP prog is kept alive on
+> interface put you close one socket and then bind the other one?
 > 
-> > Add a new selftest - ethtool_std_stats.sh - which validates the
-> > eth-ctrl, eth-mac and pause standard statistics exported by an
-> > interface. Not all counters can be validated in software, especially
-> > those that are keeping track of errors. Counters such as
-> > SingleCollisionFrames, FrameCheckSequenceErrors etc are not tested nor
-> > included in this new selftest.
-> >
-> > The central part of this patch is the traffic_test() function which
-> > gathers the 'before' counter values, sends a batch of traffic and then
-> > interrogates again the same counters in order to determine if the delta
-> > is on target. The function receives an array through which the caller
-> > can request what counters to be interrogated and, for each of them, what
-> > is their target delta value.
-> >
-> > The output from this selftest looks as follows on a LX2160ARDB board:
-> >
-> > $ ./ethtool_std_stats.sh eth0 eth1
-> > TEST: eth-ctrl tx on eth0 (MACControlFramesTransmitted on eth0)     [ OK ]
-> > TEST: eth-ctrl tx on eth0 (MACControlFramesReceived on eth1)        [ OK ]
-> > TEST: eth-ctrl tx on eth1 (MACControlFramesTransmitted on eth1)     [ OK ]
-> > TEST: eth-ctrl tx on eth1 (MACControlFramesReceived on eth0)        [ OK ]
-> > TEST: eth-mac bcast tx on eth0 (BroadcastFramesXmittedOK on eth0)   [ OK ]
-> > TEST: eth-mac bcast tx on eth0 (FramesTransmittedOK on eth0)        [ OK ]
-> > TEST: eth-mac bcast tx on eth0 (OctetsTransmittedOK on eth0)        [ OK ]
-> > TEST: eth-mac bcast tx on eth0 (MulticastFramesXmittedOK on eth0)   [ OK ]
-> > TEST: eth-mac bcast tx on eth0 (BroadcastFramesReceivedOK on eth1)  [ OK ]
-> > TEST: eth-mac bcast tx on eth0 (FramesReceivedOK on eth1)           [ OK ]
-> > TEST: eth-mac bcast tx on eth0 (OctetsReceivedOK on eth1)           [ OK ]
-> > TEST: eth-mac bcast tx on eth0 (MulticastFramesReceivedOK on eth1)  [ OK ]
-> > TEST: eth-mac mcast tx on eth0 (BroadcastFramesXmittedOK on eth0)   [ OK ]
-> > TEST: eth-mac mcast tx on eth0 (FramesTransmittedOK on eth0)        [ OK ]
-> > TEST: eth-mac mcast tx on eth0 (OctetsTransmittedOK on eth0)        [ OK ]
-> > TEST: eth-mac mcast tx on eth0 (MulticastFramesXmittedOK on eth0)   [ OK ]
-> > TEST: eth-mac mcast tx on eth0 (BroadcastFramesReceivedOK on eth1)  [ OK ]
-> > TEST: eth-mac mcast tx on eth0 (FramesReceivedOK on eth1)           [ OK ]
-> > TEST: eth-mac mcast tx on eth0 (OctetsReceivedOK on eth1)           [ OK ]
-> > TEST: eth-mac mcast tx on eth0 (MulticastFramesReceivedOK on eth1)  [ OK ]
-> > TEST: eth-mac ucast tx on eth0 (BroadcastFramesXmittedOK on eth0)   [ OK ]
-> > TEST: eth-mac ucast tx on eth0 (FramesTransmittedOK on eth0)        [ OK ]
-> > TEST: eth-mac ucast tx on eth0 (OctetsTransmittedOK on eth0)        [ OK ]
-> > TEST: eth-mac ucast tx on eth0 (MulticastFramesXmittedOK on eth0)   [ OK ]
-> > TEST: eth-mac ucast tx on eth0 (BroadcastFramesReceivedOK on eth1)  [ OK ]
-> > TEST: eth-mac ucast tx on eth0 (FramesReceivedOK on eth1)           [ OK ]
-> > TEST: eth-mac ucast tx on eth0 (OctetsReceivedOK on eth1)           [ OK ]
-> > TEST: eth-mac ucast tx on eth0 (MulticastFramesReceivedOK on eth1)  [ OK ]
-> > TEST: pause tx on eth0 (tx_pause_frames on eth0)                    [ OK ]
-> > TEST: pause tx on eth0 (rx_pause_frames on eth1)                    [ OK ]
-> > TEST: pause tx on eth1 (tx_pause_frames on eth1)                    [ OK ]
-> > TEST: pause tx on eth1 (rx_pause_frames on eth0)                    [ OK ]
-> >
-> > Please note that not all MACs are counting the software injected pause
-> > frames as real Tx pause. For example, on a LS1028ARDB the selftest
-> > output will reflect the fact that neither the ENETC MAC, nor the Felix
-> > switch MAC are able to detect Tx pause frames injected by software.
-> >
-> > $ ./ethtool_std_stats.sh eno0 swp0
-> > (...)
-> > TEST: Not all MACs detect injected pause frames                     [XFAIL]
-> > TEST: pause tx on eno0 (rx_pause_frames on swp0)                    [ OK ]
-> > TEST: Not all MACs detect injected pause frames                     [XFAIL]
-> > TEST: pause tx on swp0 (rx_pause_frames on eno0)                    [ OK ]
-> >
-> > Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+> > * frag_size is not updated when xsk_buff_pool is detached or when MTU is
+> >   changed, this leads to growing tail always failing for multi-buffer
+> >   packets.
+> 
+> Good catch, i now see that i40e_change_mtu() only does the link flap and
+> i40e_free_rx_resources() is not called in this path.
+> 
+> > 
+> > Couple XDP RxQ info registering with buffer allocations and unregistering
+> > with cleaning the ring.
+> > 
+> > Fixes: a045d2f2d03d ("i40e: set xdp_rxq_info::frag_size")
+> > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 > > ---
-> >  .../testing/selftests/drivers/net/hw/Makefile |   1 +
-> >  .../drivers/net/hw/ethtool_std_stats.sh       | 192 ++++++++++++++++++
-> >  2 files changed, 193 insertions(+)
-> >  create mode 100755 tools/testing/selftests/drivers/net/hw/ethtool_std_stats.sh
-> >
-> > diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-> > index a64140333a46..d447813a14b2 100644
-> > --- a/tools/testing/selftests/drivers/net/hw/Makefile
-> > +++ b/tools/testing/selftests/drivers/net/hw/Makefile
-> > @@ -26,6 +26,7 @@ TEST_PROGS = \
-> >  	ethtool_extended_state.sh \
-> >  	ethtool_mm.sh \
-> >  	ethtool_rmon.sh \
-> > +	ethtool_std_stats.sh \
-> >  	hw_stats_l3.sh \
-> >  	hw_stats_l3_gre.sh \
-> >  	iou-zcrx.py \
-> > diff --git a/tools/testing/selftests/drivers/net/hw/ethtool_std_stats.sh b/tools/testing/selftests/drivers/net/hw/ethtool_std_stats.sh
-> > new file mode 100755
-> > index 000000000000..4ce8f140a18c
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/drivers/net/hw/ethtool_std_stats.sh
-> > @@ -0,0 +1,192 @@
-> > +#!/bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#shellcheck disable=SC2034 # SC does not see the global variables
+> >  drivers/net/ethernet/intel/i40e/i40e_main.c | 34 ++++++++++++---------
+> >  drivers/net/ethernet/intel/i40e/i40e_txrx.c |  5 +--
+> >  2 files changed, 22 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> > index d3bc3207054f..eaa5b65e6daf 100644
+> > --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> > +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> > @@ -3577,18 +3577,8 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+> >  	if (ring->vsi->type != I40E_VSI_MAIN)
+> >  		goto skip;
+> >  
+> > -	if (!xdp_rxq_info_is_reg(&ring->xdp_rxq)) {
+> > -		err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+> > -					 ring->queue_index,
+> > -					 ring->q_vector->napi.napi_id,
+> > -					 ring->rx_buf_len);
+> > -		if (err)
+> > -			return err;
+> > -	}
+> > -
+> >  	ring->xsk_pool = i40e_xsk_pool(ring);
+> >  	if (ring->xsk_pool) {
+> > -		xdp_rxq_info_unreg(&ring->xdp_rxq);
+> >  		ring->rx_buf_len = xsk_pool_get_rx_frame_size(ring->xsk_pool);
+> >  		err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+> >  					 ring->queue_index,
+> > @@ -3600,17 +3590,23 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+> >  						 MEM_TYPE_XSK_BUFF_POOL,
+> >  						 NULL);
+> >  		if (err)
+> > -			return err;
+> > +			goto unreg_xdp;
+> >  		dev_info(&vsi->back->pdev->dev,
+> >  			 "Registered XDP mem model MEM_TYPE_XSK_BUFF_POOL on Rx ring %d\n",
+> >  			 ring->queue_index);
+> >  
+> >  	} else {
+> > +		err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+> > +					 ring->queue_index,
+> > +					 ring->q_vector->napi.napi_id,
+> > +					 ring->rx_buf_len);
+> > +		if (err)
+> > +			return err;
+> >  		err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
+> >  						 MEM_TYPE_PAGE_SHARED,
+> >  						 NULL);
+> >  		if (err)
+> > -			return err;
+> > +			goto unreg_xdp;
+> >  	}
+> >  
+> >  skip:
+> > @@ -3648,7 +3644,8 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+> >  		dev_info(&vsi->back->pdev->dev,
+> >  			 "Failed to clear LAN Rx queue context on Rx ring %d (pf_q %d), error: %d\n",
+> >  			 ring->queue_index, pf_q, err);
+> > -		return -ENOMEM;
+> > +		err = -ENOMEM;
+> > +		goto unreg_xdp;
+> >  	}
+> >  
+> >  	/* set the context in the HMC */
+> > @@ -3657,7 +3654,8 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+> >  		dev_info(&vsi->back->pdev->dev,
+> >  			 "Failed to set LAN Rx queue context on Rx ring %d (pf_q %d), error: %d\n",
+> >  			 ring->queue_index, pf_q, err);
+> > -		return -ENOMEM;
+> > +		err = -ENOMEM;
+> > +		goto unreg_xdp;
+> >  	}
+> >  
+> >  	/* configure Rx buffer alignment */
+> > @@ -3665,7 +3663,8 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+> >  		if (I40E_2K_TOO_SMALL_WITH_PADDING) {
+> >  			dev_info(&vsi->back->pdev->dev,
+> >  				 "2k Rx buffer is too small to fit standard MTU and skb_shared_info\n");
+> > -			return -EOPNOTSUPP;
+> > +			err = -EOPNOTSUPP;
+> > +			goto unreg_xdp;
+> >  		}
+> >  		clear_ring_build_skb_enabled(ring);
+> >  	} else {
+> > @@ -3695,6 +3694,11 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+> >  	}
+> >  
+> >  	return 0;
+> > +unreg_xdp:
+> > +	if (ring->vsi->type == I40E_VSI_MAIN)
+> > +		xdp_rxq_info_unreg(&ring->xdp_rxq);
 > > +
-> > +ALL_TESTS="
-> > +	test_eth_ctrl_stats
-> > +	test_eth_mac_stats
-> > +	test_pause_stats
-> > +"
-> > +STABLE_MAC_ADDRS=yes
-> > +NUM_NETIFS=2
-> > +lib_dir=$(dirname "$0")
-> > +# shellcheck source=./../../../net/forwarding/lib.sh
-> > +source "$lib_dir"/../../../net/forwarding/lib.sh
+> > +	return err;
+> >  }
+> >  
+> >  /**
+> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> > index cc0b9efc2637..816179c7e271 100644
+> > --- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> > +++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> > @@ -1470,6 +1470,9 @@ void i40e_clean_rx_ring(struct i40e_ring *rx_ring)
+> >  	if (!rx_ring->rx_bi)
+> >  		return;
+> >  
+> > +	if (xdp_rxq_info_is_reg(&rx_ring->xdp_rxq))
+> > +		xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
 > > +
-> > +traffic_test()
-> > +{
-> > +	local iface=$1; shift
-> > +	local neigh=$1; shift
-> > +	local num_tx=$1; shift
-> > +	local pkt_format="$1"; shift
-> > +	local title="$1"; shift
-> > +	declare -a counters=( "${@:2:$1}" ); shift "$(( $1 + 1 ))"
-> 
-> Please make this local -a. declare inside a function also introduces a
-> local variable, so the effect is the same, but using local is more
-> obvious.
-
-Ok.
-
-> 
-> BTW, just a suggestion, personally I'd just make the counters a pure
-> "rest" argument:
-> 
-> 	local -a counters=("$@")
-> 
-> simply because functions usually don't need more than one, and it's
-> easier to use on call site, and easier to understand what's going on.
-
-Why I had this overly complicated retrieval of the array is because I
-started out with multiple arrays and then restructured but forgot about
-this. Will change to just retrieve the "rest".
-
-> > +	local before after delta target_high extra
-> > +	local int grp counter target unit
-> > +	local num_rx=$((num_tx * 2))
-> > +	local xfail_message
-> > +	local src="aggregate"
-> 
-> And local i.
-
-Sure.
-
-> 
-> > +
-> > +	for i in "${!counters[@]}"; do
-> > +		read -r int grp counter target unit xfail_message <<< "${counters[$i]}"
-> > +		before[i]=$(ethtool_std_stats_get "$int" "$grp" "$counter" "$src")
-> > +	done
-> > +
-> > +	# shellcheck disable=SC2086 # needs split options
-> > +	$MZ "$iface" -q -c "$num_tx" $pkt_format
-> > +
-> > +	# shellcheck disable=SC2086 # needs split options
-> > +	$MZ "$neigh" -q -c "$num_rx" $pkt_format
-> > +
-> > +	for i in "${!counters[@]}"; do
-> 
-> There should be a RET=0 here, so that the check_err below gets a clean slate.
-
-You want me to move the RET=0 from some lines below to here, right?
-
-> 
-> > +		read -r int grp counter target unit xfail_message<<< "${counters[$i]}"
-> > +
-> > +		after[i]=$(ethtool_std_stats_get "$int" "$grp" "$counter" "$src")
-> > +		if [[ "${after[$i]}" == "null" ]]; then
-> > +			log_test_skip "$int does not support $grp-$counter"
-> > +			continue;
-> > +		fi
-> > +
-> > +		delta=$((after[i] - before[i]))
-> > +
-> > +		# Allow an extra 1% tolerance for random packets sent by the stack
-> > +		extra=$((num_pkts * unit / 100))
-> > +		target_high=$((target + extra))
-> > +
-> > +		RET=0
-> > +		[ "$delta" -ge "$target" ] && [ "$delta" -le "$target_high" ]
-> > +		err="$?"
-> > +		if [[ $err != 0  ]] && [[ -n $xfail_message ]]; then
-> > +			log_test_xfail "$xfail_message"
-> 
-> I think this should mention the $title as well. I think that the
-> xfail_message could be the log_test's opt_str, so:
-> 
->                         log_test_xfail "$title" "$xfail_message"
-
-Good point.
-
-> 
-> A bit annoying that log_test_xfail clears the retmsg. It does so so that
-> messages from previous runs do not show up, which is desirable in
-> general, but here it would be handy.
-> 
-> > +			continue;
-> > +		fi
-> > +		check_err "$err" "$grp-$counter is not valid on $int (expected $target, got $delta)"
-> > +		log_test "$title" "$counter on $int"
-> > +	done
-> > +}
-> > +
-> > +test_eth_ctrl_stats()
-> > +{
-> > +	local pkt_format="-a own -b bcast 88:08 -p 64"
-> > +	local num_pkts=1000
-> > +	local counters
-> 
-> local -a
-> 
-> (Though yeah, bash doesn't care.)
-
-Ok.
-
-> 
-> > +
-> > +	counters=("$h1 eth-ctrl MACControlFramesTransmitted $num_pkts 1"
-> > +		  "$h2 eth-ctrl MACControlFramesReceived $num_pkts 1")
-> > +	traffic_test "$h1" "$h2" "$num_pkts" "$pkt_format" \
-> > +		"eth-ctrl tx on $h1" \
-> > +		"${#counters[@]}" "${counters[@]}"
-> > +
-> > +	counters=("$h2 eth-ctrl MACControlFramesTransmitted $num_pkts 1"
-> > +		  "$h1 eth-ctrl MACControlFramesReceived $num_pkts 1")
-> > +	traffic_test "$h2" "$h1" "$num_pkts" "$pkt_format" \
-> > +		"eth-ctrl tx on $h2" \
-> > +		"${#counters[@]}" "${counters[@]}"
-> > +}
-> > +
-> > +test_eth_mac_stats()
-> > +{
-> > +	local pkt_size=100
-> > +	local pkt_size_fcs=$((pkt_size + 4))
-> > +	local bcast_pkt_format="-a own -b bcast -p $pkt_size"
-> > +	local mcast_pkt_format="-a own -b -b 01:00:5E:00:00:01 -p $pkt_size"
-> > +	local ucast_pkt_format="-a own -b $h2_mac -p $pkt_size"
-> > +	local num_pkts=2000
-> > +	local octets=$((pkt_size_fcs * num_pkts))
-> > +	local counters
-> 
-> local -a
-
-Ok.
-
-> 
-> > +
-> > +	counters=("$h1 eth-mac BroadcastFramesXmittedOK $num_pkts 1"
-> > +		  "$h1 eth-mac FramesTransmittedOK $num_pkts 1"
-> > +		  "$h1 eth-mac OctetsTransmittedOK $octets $pkt_size_fcs"
-> > +		  "$h1 eth-mac MulticastFramesXmittedOK 0 1"
-> > +		  "$h2 eth-mac BroadcastFramesReceivedOK $num_pkts 1"
-> > +		  "$h2 eth-mac FramesReceivedOK $num_pkts 1"
-> > +		  "$h2 eth-mac OctetsReceivedOK $octets $pkt_size_fcs"
-> > +		  "$h2 eth-mac MulticastFramesReceivedOK 0 1")
-> > +	traffic_test "$h1" "$h2" "$num_pkts" "$bcast_pkt_format" \
-> > +		"eth-mac bcast tx on $h1" \
-> > +		"${#counters[@]}" "${counters[@]}"
-> > +
-> > +	counters=("$h1 eth-mac BroadcastFramesXmittedOK 0 1"
-> > +		  "$h1 eth-mac FramesTransmittedOK $num_pkts 1"
-> > +		  "$h1 eth-mac OctetsTransmittedOK $octets $pkt_size_fcs"
-> > +		  "$h1 eth-mac MulticastFramesXmittedOK $num_pkts 1"
-> > +		  "$h2 eth-mac BroadcastFramesReceivedOK 0 1"
-> > +		  "$h2 eth-mac FramesReceivedOK $num_pkts 1"
-> > +		  "$h2 eth-mac OctetsReceivedOK $octets $pkt_size_fcs"
-> > +		  "$h2 eth-mac MulticastFramesReceivedOK $num_pkts 1")
-> > +	traffic_test "$h1" "$h2" "$num_pkts" "$mcast_pkt_format" \
-> > +		"eth-mac mcast tx on $h1" \
-> > +		"${#counters[@]}" "${counters[@]}"
-> > +
-> > +	counters=("$h1 eth-mac BroadcastFramesXmittedOK 0 1"
-> > +		  "$h1 eth-mac FramesTransmittedOK $num_pkts 1"
-> > +		  "$h1 eth-mac OctetsTransmittedOK $octets $pkt_size_fcs"
-> > +		  "$h1 eth-mac MulticastFramesXmittedOK 0 1"
-> > +		  "$h2 eth-mac BroadcastFramesReceivedOK 0 1"
-> > +		  "$h2 eth-mac FramesReceivedOK $num_pkts 1"
-> > +		  "$h2 eth-mac OctetsReceivedOK $octets $pkt_size_fcs"
-> > +		  "$h2 eth-mac MulticastFramesReceivedOK 0 1")
-> > +	traffic_test "$h1" "$h2" "$num_pkts" "$ucast_pkt_format" \
-> > +		"eth-mac ucast tx on $h1" \
-> > +		"${#counters[@]}" "${counters[@]}"
-> > +}
-> > +
-> > +test_pause_stats()
-> > +{
-> > +	local pkt_format="-a own -b 01:80:c2:00:00:01 88:08:00:01:00:01"
-> > +	local xfail_message="Not all MACs detect injected pause frames"
-> > +	local num_pkts=2000
-> > +	local counters i
-> 
-> counters should be declared local -a
-
-Ok.
-
-> 
-> > +
-> > +	# Check that there is pause frame support
-> > +	for ((i = 1; i <= NUM_NETIFS; ++i)); do
-> > +		if ! ethtool -I --json -a "${NETIFS[p$i]}" > /dev/null 2>&1; then
-> > +			log_test_skip "No support for pause frames, skip tests"
-> > +			exit
-> > +		fi
-> > +	done
-> > +
-> > +	counters=("$h1 pause tx_pause_frames $num_pkts 1 $xfail_message"
-> > +		  "$h2 pause rx_pause_frames $num_pkts 1")
-> > +	traffic_test "$h1" "$h2" "$num_pkts" "$pkt_format" \
-> > +		"pause tx on $h1" \
-> > +		"${#counters[@]}" "${counters[@]}"
-> > +
-> > +	counters=("$h2 pause tx_pause_frames $num_pkts 1 $xfail_message"
-> > +		  "$h1 pause rx_pause_frames $num_pkts 1")
-> > +	traffic_test "$h2" "$h1" "$num_pkts" "$pkt_format" \
-> > +		"pause tx on $h2" \
-> > +		"${#counters[@]}" "${counters[@]}"
-> > +}
-> > +
-> > +setup_prepare()
-> > +{
-> > +	h1=${NETIFS[p1]}
-> > +	h2=${NETIFS[p2]}
-> > +
-> > +	h2_mac=$(mac_get "$h2")
-> > +
-> > +	for iface in $h1 $h2; do
-> 
-> These should be quoted.
-> iface should be local.
-
-Ok.
-
-> > +		ip link set dev "$iface" up
-> 
-> Plesae use defer:
-> 
-> 		ip link set dev "$iface" up
-> 		defer ip link set dev "$iface" down
-> 
-> Then drop the hand-rolled cleanup() altogether. Retain the "trap cleanup
-> EXIT" -- it will pick up forwarding/lib.sh's cleanup(), which calls
-> pre_cleanup and defer_scopes_cleanup().
-
-Sure! Thanks.
+> >  	if (rx_ring->xsk_pool) {
+> >  		i40e_xsk_clean_rx_ring(rx_ring);
+> >  		goto skip_free;
+> > @@ -1527,8 +1530,6 @@ void i40e_clean_rx_ring(struct i40e_ring *rx_ring)
+> >  void i40e_free_rx_resources(struct i40e_ring *rx_ring)
+> >  {
+> >  	i40e_clean_rx_ring(rx_ring);
+> > -	if (rx_ring->vsi->type == I40E_VSI_MAIN)
+> > -		xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
+> >  	rx_ring->xdp_prog = NULL;
+> >  	kfree(rx_ring->rx_bi);
+> >  	rx_ring->rx_bi = NULL;
+> > -- 
+> > 2.52.0
+> > 
