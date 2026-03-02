@@ -1,124 +1,123 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E45390205
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Mar 2026 20:52:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6158E390CAD;
+	Mon,  2 Mar 2026 20:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772484726; cv=none; b=q1lsSw2FAyBZFL3gW/E4thj4BS33BvrpqRB+/v+kszCieO2ITZUzTUj6jbsWu90EZbEyt8Zs+zhG7da574NMgY/rBFI1flPYI/E5pAKpG9Y6gY7gPgU/taUcR1I4/AbdprXdzIfnC7omDAqprCMMXzkERxoFoQIznU1QWtXg/QQ=
+	t=1772484733; cv=none; b=UAb282wwWbyqyHcJsceUFmzJj9uwvcLEiHgR4LtQJLH0AtL/3/U7K/r6+luTaw3+J4TSYA6eMMv1CSaQCFxxDxEQYyJ+QMTWwuxEVBJk4Ity6pCpyxWSBxVGq1coeLV8XbPdl+mgLBCpFylbqzgRuKeWTLjEhriBhHLuBwd00Ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772484726; c=relaxed/simple;
-	bh=YfGdZv0BYcJ0fGzfQ0hp+nngzF4RNGVHPtz3lm0ClMI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=udQ3vqYbvhVBArcIUMlowraoDoayY/Ul+/9SvXZWwmzHM+Zk4+AGfYyCF7tFmxY/6u96OUzT5iD5cJOVNoA9tX213Dz6WMyDqRfihLiBozYiB1WXDih8/g+s4rl4mx8PjT4Qrx2pLTVC0csWkiwzfr3dFv4oBlNXboFfSbvHsdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q12JfWtT; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772484733; c=relaxed/simple;
+	bh=5nkwyikcQXaXCi1A+f+dmyTarjj6BA0S0U62XmKtJ4E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FN8iO18pIoENpAjlbpxdOMew5CxnIJtKXec1Liuaok7Ra+GDPn1M2xF0UA47z1Hhr7RC3iiK6dHFS8foLlrS6fjl7uX86IUbnOyioYG64llHmkGtkEVjwT9XkbV/9sgXGCrxlVyajBrzmLQP/z6CLGenu67KVCOPs8Qf7mkOI+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=COztYI7P; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q12JfWtT"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4837f27cf2dso43710305e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 12:52:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772484723; x=1773089523; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=33QT3kr+fmJUaDM35+MgGGfp5T88w9F+n+7ZGHvWHSQ=;
-        b=Q12JfWtT3v3Wy2F5W0U5RE6BSUGceaWbLZAp2rAYKoKyVuf9uNlIwT1J4lHNHYoKGV
-         Km6nE2sG/gt+26CwQHhl3NGF6TMXQs/xCSD6NvMNw2qNDx4g7NMKGVNGxbFklTdBI94F
-         2lOtFluJ5IMYW8KeBrbwZVOvNQ30xQsJHAnvIJuUZgIKFGzwRBAtAxGjTGE0atyLOD1d
-         ZLBfJpYkL0zIw4JyvPWcSPVwlMa+sTNtSNJRhyNArlsvLscgNaja3Diyes7aj0LyueTv
-         tS9vZhmllMWbBzWLk3NeAEwLFXtZiGUEj7Ss1eyjJ7utgXGXtpFrd08aRrG/Wzq1BZ+6
-         qcTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772484723; x=1773089523;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=33QT3kr+fmJUaDM35+MgGGfp5T88w9F+n+7ZGHvWHSQ=;
-        b=isgj2OHC5qN5POpT0Nf0N1QtzCqXyYWQdbaQURi25H1T0u1Ut9dRnE750lW74VPH3i
-         11S8RNOEecd/UHoAT+Y1q78xWuMn8cZpdsm6MifzwO7U7a4TSAyhJvYsuDWs9cg/Wrr9
-         i1B/InXhOB375uvWrjMfu0fgAPu5R0ZviRi7k7s/FMqwmL5roausW8DIgA0w5J37yYk4
-         QqGvhRx7CxYeTc4MM4SkZ6Zi2UomqJOrzQ+pmtVT995WvxZSXizQmLPYEHYVxOsFWxNE
-         sUloin0UpgBV5da3gqrUP82vKC1D4turR6EZbWrA4TQCPA/jBE4E05srMoibnKG0BP8H
-         ZopQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXiNbhF/ufYTK4XnTdSo84krdtp5yqecz2PT7+j5DqV4E3nPmoohoY3Bzlaki8twHpyNWpFwp2g7S4z0O2JfRY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqhSYmDKz2QPr/TyqUF8cYfPTDVQTeqAOrRUhthOPj7mwbYJrP
-	x99zfzdbTrXmFt2GuKh8Ju7muZ0PuK2ZekXEKkeM3rHBovKKpiIE9L88
-X-Gm-Gg: ATEYQzy3gmtygRdtDuqZWDhGHrfM/HD9DqSK/Y7phj7VXbkUswh2CqO7ey9Bx0wr88u
-	QTjJUV9e3YODb9rU+GuxKziysXUVIIqNREhYV0TJO6CfaQMVAHbBiFjaOOVJbGHk+yh+Dx335Cm
-	lOduDOb/sYolGG45LcbGBy3qCrEpqBZVWQYiHiYMIjCKS8y3FcR05BaQoEfdadD/MApwkKkCJEL
-	7QEoByjz/ankoEvOgv0sEP28bL+k/xIlR/5fQUNpS08bHpGv5EYXYQrpDChs0uzU87ngWNM9/eB
-	O0N2NqgOZlbkqpPNzmEin2xUhngXkeGhEV8uRGA107k6kxyfciMzkYG4ofLCyi3/tRG8aVMxcvr
-	OOQK57MU8dC0T2nRyKwkXu8HTlQ+nE0QwVaHSxlyymwXLt6REIvqZtLFZ9GjGCu6ix2ABUja6O8
-	rO2w5l6RMUGFa9AjxhxqQfvMiD91CoO/4=
-X-Received: by 2002:a05:600c:3b22:b0:479:35e7:a0e3 with SMTP id 5b1f17b1804b1-483c9c2d29amr219756735e9.30.1772484723262;
-        Mon, 02 Mar 2026 12:52:03 -0800 (PST)
-Received: from [127.0.1.1] ([2a01:4b00:f03c:ba00:3081:348a:50c4:2d80])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485126705e5sm898705e9.5.2026.03.02.12.52.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 12:52:02 -0800 (PST)
-From: Jamie Hill-Daniel <clubby789@gmail.com>
-X-Google-Original-From: Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
-Date: Mon, 02 Mar 2026 20:51:52 +0000
-Subject: [PATCH 2/2] selftest: seccomp: Adjust test for using both `STRICT`
- and `FILTER`
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="COztYI7P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772484732; x=1804020732;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5nkwyikcQXaXCi1A+f+dmyTarjj6BA0S0U62XmKtJ4E=;
+  b=COztYI7POV4QYp040egfBAQLbUfY5xlj2c0Xae4NoYDB3Ckk7y3f2zCb
+   USJmX669TifxdRg9sFdIgDFeuSfw91VoYBLic/j8Dozp+kgzsEon7wxS6
+   BO0KANdo/YejKMStfXYF43iUp5dXzEAQgL3L4+Ne1MgGxkkygAsVB+w31
+   2FKU/XHAVJ0mv3gyfbHrqfa0TDXlLuIkUgMrOmaba5IL+U4HuIoGLgLRH
+   /ijS1phXO6v3zVl8WW6fwC6ZjTU2U9m2Ed8pSWw8I3YeLubCpYUvrtXTp
+   7ahbg1vEzcaRcwT/EqTMI/n5ogK5JLw416Kh3C+u7LBWLxFt0OGHJSlNS
+   w==;
+X-CSE-ConnectionGUID: meSyS91PTzqg25b/nVnIVQ==
+X-CSE-MsgGUID: mbbNM7quRWWWA7V8+TuLtw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="77118637"
+X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
+   d="scan'208";a="77118637"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 12:52:11 -0800
+X-CSE-ConnectionGUID: yS909TLyRH6Khi9IYa8F1Q==
+X-CSE-MsgGUID: oR4mSGNHRmGeJzvcaF6jRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
+   d="scan'208";a="221932550"
+Received: from khuang2-desk.gar.corp.intel.com ([10.124.220.2])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 12:52:08 -0800
+From: Kai Huang <kai.huang@intel.com>
+To: seanjc@google.com,
+	pbonzini@redhat.com
+Cc: shuah@kernel.org,
+	shivankg@amd.com,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kai Huang <kai.huang@intel.com>,
+	Yi Lai <yi1.lai@intel.com>
+Subject: [PATCH v2] KVM: selftests: Increase 'maxnode' for guest_memfd tests
+Date: Tue,  3 Mar 2026 09:51:58 +1300
+Message-ID: <20260302205158.178058-1-kai.huang@intel.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260302-seccomp-combined-v1-2-c0cb7acb0f97@hill-daniel.co.uk>
-References: <20260302-seccomp-combined-v1-0-c0cb7acb0f97@hill-daniel.co.uk>
-In-Reply-To: <20260302-seccomp-combined-v1-0-c0cb7acb0f97@hill-daniel.co.uk>
-To: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
- Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- bpf@vger.kernel.org, Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772484719; l=1026;
- i=jamie@hill-daniel.co.uk; s=20260302; h=from:subject:message-id;
- bh=YfGdZv0BYcJ0fGzfQ0hp+nngzF4RNGVHPtz3lm0ClMI=;
- b=1VtSq+i+Ji39cqfhNb37ik+b9kgFWrxGOhMQinjaw2UiJ15WX+qwAGSFORSZYYme2KCGW7kjg
- Lj8s5IVIimODE4g3jrzC7UnqzIpxiz+e4ZOSH29iceRRtT2QbgDMBGz
-X-Developer-Key: i=jamie@hill-daniel.co.uk; a=ed25519;
- pk=ovqCXSlFUjrT82WuRtIuXB13U5n1yfxM6o0M5O5J2tA=
+Content-Transfer-Encoding: 8bit
 
-This test previously tested that applying `STRICT` after `FILTER` is
-impossible - update it to test that it is now possible.
+Increase 'maxnode' when using 'get_mempolicy' syscall in guest_memfd
+mmap and NUMA policy tests to fix a failure on one Intel GNR platform.
 
-Signed-off-by: Jamie Hill-Daniel <jamie@hill-daniel.co.uk>
+On a CXL-capable platform, the memory affinity of CXL memory regions may
+not be covered by the SRAT.  Since each CXL memory region is enumerated
+via a CFMWS table, at early boot the kernel parses all CFMWS tables to
+detect all CXL memory regions and assigns a 'faked' NUMA node for each
+of them, starting from the highest NUMA node ID enumerated via the SRAT.
+
+This increases the 'nr_node_ids'.  E.g., on the aforementioned Intel GNR
+platform which has 4 NUMA nodes and 18 CFMWS tables, it increases to 22.
+
+This results in the 'get_mempolicy' syscall failure on that platform,
+because currently 'maxnode' is hard-coded to 8 but the 'get_mempolicy'
+syscall requires the 'maxnode' to be not smaller than the 'nr_node_ids'.
+
+Increase the 'maxnode' to the number of bits of 'nodemask', which is
+'unsigned long', to fix this.
+
+This may not cover all systems.  Perhaps a better way is to always set
+the 'nodemask' and 'maxnode' based on the actual maximum NUMA node ID on
+the system, but for now just do the simple way.
+
+Reported-by: Yi Lai <yi1.lai@intel.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=221014
+Closes: https://lore.kernel.org/all/bug-221014-28872@https.bugzilla.kernel.org%2F
+Signed-off-by: Kai Huang <kai.huang@intel.com>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 874f17763536..ba042828dcbd 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -516,7 +516,7 @@ TEST(filter_chain_limits)
- 	}
- }
- 
--TEST(mode_filter_cannot_move_to_strict)
-+TEST(mode_filter_combined)
+v1 -> v2:
+ - Add 'Reported-by' and 'Closes" tags.  - Sean
+ - Use BITS_PER_TYPE().  - Sean
+ - Slightly simplify changelog to simply say "increase 'maxnode' to bits
+   of 'nodemask'" to reflect the code better.
+
+---
+ tools/testing/selftests/kvm/guest_memfd_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+index 618c937f3c90..cc329b57ce2e 100644
+--- a/tools/testing/selftests/kvm/guest_memfd_test.c
++++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+@@ -80,7 +80,7 @@ static void test_mbind(int fd, size_t total_size)
  {
- 	struct sock_filter filter[] = {
- 		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-@@ -534,8 +534,7 @@ TEST(mode_filter_cannot_move_to_strict)
- 	ASSERT_EQ(0, ret);
- 
- 	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_STRICT, NULL, 0, 0);
--	EXPECT_EQ(-1, ret);
--	EXPECT_EQ(EINVAL, errno);
-+	ASSERT_EQ(0, ret);
- }
- 
- 
+ 	const unsigned long nodemask_0 = 1; /* nid: 0 */
+ 	unsigned long nodemask = 0;
+-	unsigned long maxnode = 8;
++	unsigned long maxnode = BITS_PER_TYPE(nodemask);
+ 	int policy;
+ 	char *mem;
+ 	int ret;
 
+base-commit: a91cc48246605af9aeef1edd32232976d74d9502
 -- 
 2.53.0
 
