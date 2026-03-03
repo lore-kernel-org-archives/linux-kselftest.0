@@ -1,51 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ACC02628D;
-	Tue,  3 Mar 2026 00:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2C71CD1E4;
+	Tue,  3 Mar 2026 00:46:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772496465; cv=none; b=mqYRSVTkh90tbsY6LMgGQ3aCnR7vws81vf9Rd05FKQHuGg/2/cN3uMpUi05Y5Pluot+KYkZF2dOW4ffrHTLBBVWBu5hI9R++7jPny/djAAmOJVpoyuEpspa3KpR/dp/oGITGQ70ls3jOV++04drL3i2cp4MNvg7MX76z1LtRE9c=
+	t=1772498804; cv=none; b=W57A1RbXMb+O7Ba4LuDp3A9VfxyeDkOR9c7XjQrv6B9oBkBtDzsBtSWbTbmBXCzNgK/RaW97hd/towpvZcqvdbyYdhkE/noryo8GrSBAaVTETzY0afayC+smaEeMvqN6YyWfYLRthLWRVxCjtwsfI4H9Nn0MTWTX4x8PyUAwYWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772496465; c=relaxed/simple;
-	bh=EThN0d1uq2Lnup4NHkAJwhWfP9oJjh6mVRffnmzFeZk=;
+	s=arc-20240116; t=1772498804; c=relaxed/simple;
+	bh=zVa/l8Fm42yEeXCdiqomVcsJChFKyuQE2mXRBuJYV0A=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cPlLOGXcSLp7hcc8WDr1H5RW37pK9sT2GW8m2vf5yYkEqjNuuOVWQVN4EtwBsAvuonP1OwjXP6vL82Es04wbxizJA66/kkfh5UMcs/wPbz2Px/fI/I4GY9jHEvPdSAw8wpE8OVm0AeHXOrxIx3Qi3e09xprubXiloqp+XN+jCfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bK7CARNE; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=dxdVrcU4rqMGbQ5UCx57nnY6qo57B2YaE8zWjRe0ru5aVMZBZOYwD5U7SCRnJqV6f6tK4AsHQ/tHTeqdGOlQ82mPtmZDNDQk/KT/dB6kqyLp527lP2AAUfy+6/r9EaJkthSKa0BdEKf1//dmAHAuXmsZPRHj2JK8MskpZhM/Uf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZWGTnQWy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bK7CARNE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D45C19423;
-	Tue,  3 Mar 2026 00:07:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZWGTnQWy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D11CC19423;
+	Tue,  3 Mar 2026 00:46:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772496464;
-	bh=EThN0d1uq2Lnup4NHkAJwhWfP9oJjh6mVRffnmzFeZk=;
+	s=k20201202; t=1772498804;
+	bh=zVa/l8Fm42yEeXCdiqomVcsJChFKyuQE2mXRBuJYV0A=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bK7CARNE6FxRDwasyLC8hfczkmXG6BxyoZseuFifxv8j/9ClAKS9eG51voK2HGx9P
-	 oseYtanuSWKrbFTDA52ZzfvcvIKNHqjgK2m5iBlCIRAldDniJ6jEVkZXvmaFqecmtZ
-	 ENxZaC1cSs0bUNNGXIbQe9HTzviTAt1zmBUIPvvItHvSe8uhdOBLq1eNRFYPuaHDsV
-	 eFtEpdPfUAzSE4UOuOpZK9RX14oTiVqVpCmoQYAaM6z8Rohq5drekptgDFg75NgMm0
-	 6dPu6/Ks5KVZ50YDGjPLm7/t6AAPGics97qg96nrT0Z0g4yqzPyPHg47hHa8IF8oSG
-	 GYs6oLHE8amgQ==
-Date: Mon, 2 Mar 2026 16:07:43 -0800
+	b=ZWGTnQWyCGsQS/I5f/ABd9t+YJ0EVy1wHUUuw8/NnLoEbYwZQ3lpkZGrfxbJDYoFC
+	 uoykwAsSyJvyQx1CltER7670pgqolWKCp9Z9KU7Tuf5SoaU+1CgiJzZGipYTFViS82
+	 kXOoRk8xh9TUR83yUeFbYraJM4mXUGuXfCzfD1kKa3mbNr6j7Q/gDIfSrimEwhXBKF
+	 ZQN5Ea2CLLrLP6N2IQjZkjck2DqkJxTgyX4wWcEy353Y2v8ReWPhmYFps3PY4sODPq
+	 tUvRveJ939s74+QeET0FG5Ms1g7UPG7CGlONxV9CZSYXwKRvgx+qbJVcZnJXJco0ZT
+	 XAG2qwFK9NpRA==
+Date: Mon, 2 Mar 2026 16:46:42 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Ioana Ciornei <ioana.ciornei@nxp.com>
-Cc: Petr Machata <me@pmachata.org>, Petr Machata <petrm@nvidia.com>,
- netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman
- <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
- ethtool standard counters
-Message-ID: <20260302160743.124531f8@kernel.org>
-In-Reply-To: <7hct7o4rzgygef536al6if2jl45p32ad3tdswyqf25uu5wy5re@2ltu2ems47q7>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
-	<20260225150648.1542206-6-ioana.ciornei@nxp.com>
-	<20260226182223.5eb1b10f@kernel.org>
-	<87ms0ufc0p.fsf@nvidia.com>
-	<20260227164348.63afcc43@kernel.org>
-	<877brxf272.fsf@nvidia.com>
-	<7hct7o4rzgygef536al6if2jl45p32ad3tdswyqf25uu5wy5re@2ltu2ems47q7>
+To: David Wei <dw@davidwei.uk>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ jdamato@fastly.com, asml.silence@gmail.com, io-uring@vger.kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/3] selftests: drv-net: iou-zcrx: wait for
+ memory provider cleanup
+Message-ID: <20260302164642.43375391@kernel.org>
+In-Reply-To: <8489fcbf-ab76-48a9-a21f-d7f6873b9a2f@davidwei.uk>
+References: <20260227171305.2848240-1-kuba@kernel.org>
+	<20260227171305.2848240-2-kuba@kernel.org>
+	<8489fcbf-ab76-48a9-a21f-d7f6873b9a2f@davidwei.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,34 +49,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 2 Mar 2026 14:11:21 +0200 Ioana Ciornei wrote:
-> > I agree that adherence to the drivers/net/README protocol is valuable to
-> > some users and would be good to uphold if reasonable in a given tests.
-> > If that's what you have in mind.
-> > 
-> > There are going to be tests where it's not a great fit, but I think that
-> > of those NUM_NETIFS=2 tests that we currently have, maybe
-> > ethtool_extended_state has a good reason to be obstinate, because it
-> > sets up negotiations and needs an extra unplugged netdevice.  
+On Mon, 2 Mar 2026 07:49:01 -0800 David Wei wrote:
+> > +def mp_clear_wait(cfg):
+> > +    """Wait for io_uring memory providers to clear from all device queues."""
+> > +    deadline = time.time() + 5  
 > 
-> I would add here even ethtool_rmon.sh and this new test that I
+> This is potentially a very long time to wait if code is buggy, as I
+> found out when debugging netkit queue lease. How about reducing this to
+> say 1 second?
 
-I think I already told you that ethool_rmon predates the NIC tests
-and bringing it up in this discussion is irrelevant.
+Just to be clear -- you're saying that 5 seconds is a long time to wait?
+Please note that if this wait times out we're going to fail the test,
+the timeout does not impact the length of a successful run.
 
-> submitted. If you are running with a traffic generator on another board
-> then you can no longer check that the counter's value is as expected
-> (with a 1% tolerance), you can only check the lower bound.
-
-1% tolerance is impractical for any CI with high test count.
-The test will be flaky. And I really doubt that the 1% tolerance
-is really necessary to catch most bugs. We're not trying to validate
-silicon here.
-
-> Additionally, if you are using the same single port also for control
-> traffic towards the remote traffic generator, then you surely cannot
-> reliably check that counters that should not be incremented are indeed
-> not incremented.
-
-I both told you in this conversation how to check the counters,
-and written some existing tests for counters.
+I picked 5 sec because with all the debugs enabled and under QEMU
+scheduling latency spikes can be pretty brutal. I guess I could make it
+3 seconds if it matters a lot?
