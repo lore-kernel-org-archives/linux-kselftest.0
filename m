@@ -1,155 +1,154 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012029.outbound.protection.outlook.com [52.101.48.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009CF29A2;
-	Tue,  3 Mar 2026 07:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772523953; cv=none; b=miiqKOB5JmsEtNQiVywhXbGRlGGxPtQKnSxb239gJ8Saz8SFpniu2QckQ94Fy+ejcyao7L7/Lb4co+P29BHxdJjMadRGU2P3KqANGyAmCyWiCacohFL1/SO9VXOP63MUnPCbuKEMUY9MPkAQru6SXOF7gUnqVrzf9o7WMxXfiaE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772523953; c=relaxed/simple;
-	bh=B9KK+5v5qrWO0rkxw5Wv/C37WTrWF8ca7NsgsFukjUQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fmVKE4mpg+ZmUvTrSYPeP1j07i82xQfM9qgsdVFoSwaByzgvjm2BmGs/xHWFCcoAaspJGCA3sKOV5S2eXwX63g8rJ/L2JKITWeRPyKXUjUGc4veqg8FkbY4QEDRE8p3FmO/zLcHHrjP5nz3/AU6UMdo779/WkIo9ZLlvep6nbbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cYqVJvzD; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18E2383C75;
+	Tue,  3 Mar 2026 07:51:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.29
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772524277; cv=fail; b=QdAjp6D/umEUBku4qh5cF5Nfssp40uXENc9SHYA1xyA9Uml3IL3I751vnkQ2S2+lnPGtatJRZVmlI2mikRlgR2DypwB9RuNKPbVZVaRDFNKVH2cEsWV/8IP0szqyC88i8PUJA1ljFFy1DZD289x1BJU5R3kKEbxcEx3AiHFhFk0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772524277; c=relaxed/simple;
+	bh=lHJd/JxNzoIFto9UcCMlNwTdTIV5zK/m1tdAOWERJHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=kZGOJvzeuPDqmd7ktVoutN05ks/X/otVn44+llQrwESEbtIhnez4We55mVnHNJJ/aQHIoF1HwQH4tf8nHUrmHbViNDGss3sEHSoM+1p5pUbrSZ9R4gN0qDmAAtP/n21sTgP24Dl1xwqc1GiToJbFS68iGS4p91jvNXtAjjN0iTE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dI6ASDPV; arc=fail smtp.client-ip=52.101.48.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cYqVJvzD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=oy
-	8MJl1zCIP4TUwaFErabER2ZVFoaj+u6/XpWLhh5Xs=; b=cYqVJvzDKLJi72s+8i
-	FsUdN3c6xP88AZllnpdlK06xxEB5QgQa3cH4IsKHqfKkCOiOvnnshtR1rvczVECx
-	k+ammi9qriQq2cCTkrW5pAHy0+rkUwTlwHzcI0eyuhUHMqgHsXTJpAcTankfhvFE
-	mQgxx52NAg1zT4eijugStum0g=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAXXjhXkaZpm2IBPA--.46718S3;
-	Tue, 03 Mar 2026 15:44:27 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	posk@google.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yangfeng59949@163.com
-Subject: [PATCH v9 bpf-next 1/2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
-Date: Tue,  3 Mar 2026 15:44:22 +0800
-Message-Id: <20260303074423.172680-2-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260303074423.172680-1-yangfeng59949@163.com>
-References: <20260303074423.172680-1-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dI6ASDPV"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YMH9Cc2VHzuKKQKu2Sk0dJjXTeebCEN+5EL+QYDHSrVHfVY6/vV8+J6Wko9BU2vHnifRj1MvwMcLBl4VZ0Pt4mBc7blEx+S/uIvETRfZFXAGGY8Lp4RoA2AC8parGTzaAUOfPHzS2sAcehULQJn8IlYVDkOlDJI9obxKzdgfcGlQpcpT+yO1aC9XYlCHk5b3C/f1ODxDipv5IefGq18SjZbety8Lg1z3vJRSHlY9jti2cE3EpWgsaQ/hJpTaRe4sE6oGSYDsGlr/Fo4xCiKf/8jfr59gNh1IzJYDqPYcloU1ckeroUgi8d348QZO2tLPaMmpIDcfsr3o0XuNsJRCbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=26h+AJnjdlX+C2a4xxGl6HgAyARHh/bT+gYcQY0Fx6g=;
+ b=yq3onoBVF/51lAoXckCTfhFID4v/nK7PotxShmZ3+WVYJ/Rs84AmT2RpUTd6tjMj0hIaMdbXrVVw44ga6Z3CDFn6EHoDvxS++7/ooTFjL+RcndL0ClX0vuvRp7v8LT5r5HLDqQxkvyq+pBCk5GKya5y621EEsd0IeYtuIY426BNV+dtjpOaRvCpYHVw4rvt5b0FMUlb3RPkTz7o4gc56tw8xviKqyxbxMCVAeo7CeE2u0JaOy+LAbkAepvo2ki6TMgi6tO19n61QIxoY62PJ5BTsFnJpj6FC4vav5Rfmhx15KPXNs4enDttWnOj0SEa3hvqEn09mH3ZKSYzWqYlhbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=26h+AJnjdlX+C2a4xxGl6HgAyARHh/bT+gYcQY0Fx6g=;
+ b=dI6ASDPVs7CB6FJSy/wxdzN8vhgFf1Rnd00AwghEs5qhrTF0bYvx9VdifN5TXtmCHCrTYJhby+9WzQTLEJTMhwIduVWVMTaOtGYEyqQVQ5q78w50eeAQvMKbE75geU+zg+JdavvmLFCDTjXtZ6YdKb4KJJFs9c+RtbvECmaOHy3JB30U1razFGQUBJJCTXcVR8CDxWSV0OWhwMce11zDfyUovQcuFdEW9U5E7G0P0Uh4B0hO6QroGuFvjBJ2JSK9D10lAgLveXBGpcE3917+Bl+szKCKA4kQE35JeSQ3aaqO7LiGMMmIrG1s1GsyHIJK8GaCyXIpPD8A5qTXQmNA2Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by DS0PR12MB8787.namprd12.prod.outlook.com (2603:10b6:8:14e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Tue, 3 Mar
+ 2026 07:51:07 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.022; Tue, 3 Mar 2026
+ 07:51:07 +0000
+Date: Tue, 3 Mar 2026 08:50:54 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: Zhao Mengmeng <zhaomzhao@126.com>
+Cc: tj@kernel.org, void@manifault.com, changwoo@igalia.com,
+	shuah@kernel.org, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	justinstitt@google.com, sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev, zhaomengmeng@kylinos.cn
+Subject: Re: [PATCH 0/3] tools/sched_ext: fix compilation issues
+Message-ID: <aaaS3jirvQudUR4x@gpd4>
+References: <20260303072317.76035-1-zhaomzhao@126.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260303072317.76035-1-zhaomzhao@126.com>
+X-ClientProxiedBy: ZR0P278CA0201.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:6a::14) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAXXjhXkaZpm2IBPA--.46718S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4UWFy5ZF1Utr1UWryfZwb_yoWrWw1UpF
-	WUtrWFgrs5A340qF48Jr4UXw1YvFWvyFW5Xr1avw1jqF1jqr17Xr1ftF4jqrZ8Ar45uF4x
-	J34Ut3Z7tr1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piTmhrUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC0Bt+9mmmkVts3gAA30
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|DS0PR12MB8787:EE_
+X-MS-Office365-Filtering-Correlation-Id: c350f4e2-1c8c-4cfb-82c2-08de78f9a0bf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	lSOOV44dhScGBz3sqsxpw6mfqBLHugD0NWhS2eFSzUYhj/ggtMMQzQzYTqkHm5midPoURtQNE50YDycN2gdTN0xLKxtOQ0DzYyfX1gllMDIyT8WuyM1oCHJtPO5oQsPbpl5wEHlDi6S1WBW02pa4juUrWqhj+ZD/nDBf3LVFmV/tdBcyuwQ3RhuoVIVAETUCrBnqQdEN5kWFQH8c+npfBpYfThJUp5CHyrpzQjjVJpw3+IrzFZjim4nJiqm8AZmCAmFb6E5mqteXDx9s5F46IQSZGVjlWIJiGWPFoerj6ygQMpmw+79V4bnoBql58N97NZP3IZfc0KdLDkBKhJVblYkLCsTeBy63885xjUs4zeD6lMpXfQP5UmDCKCr4ywFdwZIBaToYm1uRhkAqYq/A4V1pOCnTB0RcR9kl8ozJDXYtRmJQLkzf7Jal6RCPOSCDC91Mc9b9dKt2uO6eTS4yw2s3hHTu/ner7Vlbe6wZILVQTMUeP0xTaAkIbGURPFZHOfsaq2pBMWtnIpazOGo3XdFAT8Q4qKKrwJlofB3TUQUI8e5hFmuV2EjpUsomXTAA76W1/7R15xK7LrlC4vFOj4zFAyFVkOuTTBDf3VW3S6sM9zPV1cqhkZbuxpZlpXdfI6qbLgoq8zD7Ole6NnGmb34q6AUe6ac8apenDo1yj4WxDvq5mrnlrNme7pVTyO3fpld0CjXfrAByWoCqDXGHdEXkX77PPvW4UgHyShbQ/DQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?gCKc7kjEUVe+lb6OpvUr0hyBtyui/cv5bV2wjYE4wnbsXIlRl+m6WoVOqSb8?=
+ =?us-ascii?Q?X7h8YVxV+vG3STQtZwuw0nJyOmy8bWVoyhcXrdVmrPMgNbgFI527GQ0/6J/j?=
+ =?us-ascii?Q?xp9q0J+FyrV4bfiUd5LtXtsgfJ+wU5PdjMLB3aagKTTPjrp4ibADpFCygOnK?=
+ =?us-ascii?Q?tFFw5pqdFP+ObN+W3HIv/+WKbPN4Cc3NhM0SV7ltTd3uLrKeqiy58s9vekK5?=
+ =?us-ascii?Q?NizouEabMe+Qx5rmowJ+nrXilxo1bJGztQiof9605CswNRjxGMbkoUIEoGOJ?=
+ =?us-ascii?Q?hsad5o8JjMuVcSNlPXinalw5OPOs93xj8aVLjhtZC23z9eE/MY1K8/Qccl8i?=
+ =?us-ascii?Q?4tBUJwC+4clS8iiDVywtsyC2wW8+SpAh/lFFopfbsHMjuizfnKySwHCWsn/r?=
+ =?us-ascii?Q?HTck/irIrOjfarcXogLn4JuawrvfMqLFtAF240mhzoZojLnDa/kjYxU+eTCG?=
+ =?us-ascii?Q?tTZpgCFqKxyRkiZWuMd+lnLig8MhYYVeF3LAyppvOrnFZqsCDzrlcUp9IQlP?=
+ =?us-ascii?Q?OzE+z4+XjqEUcc5TNcVJmFSwBK4xjQ18Uypw6CqqcyU8AlqV0plM2JKDQPWR?=
+ =?us-ascii?Q?2jx194/Wz/dWmLla1fujat+fh2Tnm9IBHqs2/O6xvWgvTeUKK+9Znw5O2Iop?=
+ =?us-ascii?Q?ySJWhFy9gdPiayekeoVDAJYdyXjv55s1OPr9pzQCwIkLoHbHSbt5IWQKE38m?=
+ =?us-ascii?Q?vC1tYVgojw0pCAnd1fF5cGaKSwFRDZYU3D6tTOPXp39206ggubuGmPBvcGS3?=
+ =?us-ascii?Q?a6kAeQ9EJzIk1qTtMrF7VSrbG6gNjd0KJBdKjT8k8wRzAHMO+o4UUWYO1B82?=
+ =?us-ascii?Q?Ex4HO6+qFEK7wmD1+ZTmJzAODJnowGSW+/eKeYk3NITkT3M41jWZHGugL5se?=
+ =?us-ascii?Q?B72Falwr639aPrV/MQk7Fm1X1+6RWGwLCSEx0/kW0UDTRPYcWcBi0uu6dQjY?=
+ =?us-ascii?Q?dCCyZsTDFHi3T5P+clojgI3S8PRVNae/Ue0I6B68nZXM+LvNLikNeZA5/v4v?=
+ =?us-ascii?Q?urYCJMPHIpIyqvnh/HW3oxH1BcECInLt0XaN2eeEEBIM+GbhBTJVdS60INks?=
+ =?us-ascii?Q?sIxMwYJcgCEwCp9552AKYS4875ArbFyHTxhhGre4Q25ev6AZ0CDnSea+pzp2?=
+ =?us-ascii?Q?bBaSwt7N7OFmQs6SR3amOH5OHAKMAtE7LYeM+9MoLSgjTVQ8bgPvip582Vgv?=
+ =?us-ascii?Q?YUHIt9MXd8ojeGZbRBdvMj9m6Aube04KuSViauIMAESa8Izbptk9PTK7VT7C?=
+ =?us-ascii?Q?0DeXUnvsjbDvclOSZ6miOiohT0C5arQPDT6sOKN8P04SqzsaAmfJnBEdWuEg?=
+ =?us-ascii?Q?CscDPlrMOui/UgiAu5kT/n6M3pbV0u0E4Sp5Uc8R/23LfJYFrQFj70jUcSh/?=
+ =?us-ascii?Q?MF5YxCMpyoJ4ithPLHjaAfoRL/3RKCVltjrTbrC+hWU+EibBf64B5Dd+1CqB?=
+ =?us-ascii?Q?Fp3+ZSMj6FnB17laNUN4D+/Ty2AzxDeWOIKl8+d5MRxBddYboCDZHcxbsIxq?=
+ =?us-ascii?Q?mM3her8SDDPbBsU0unDhYefhgETpTa6NY8jJZ5DTTQuYOmKBgoo5YboMy/eq?=
+ =?us-ascii?Q?c03yrImJ8mcSSwuAiMY6HNkougiZ/OtdJhz7mEzxv1+oqrxcsuhcHiLuh2H6?=
+ =?us-ascii?Q?qokWjBJfUQx0Q3jduhN7aPF7MrLQOFsijnrd98UhSq7UF5dp//+9ANmT8CC9?=
+ =?us-ascii?Q?m0XuRPq71NujSxEJ5ofKUarRGNJ5CCe65rzMD41eqvvnVrRtOYAXrjwydakT?=
+ =?us-ascii?Q?v8KQJ8cE4g=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c350f4e2-1c8c-4cfb-82c2-08de78f9a0bf
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 07:51:07.4505
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nEVB+xpOzV+ffYfBOwM3JPjE0OXhpcQhk87dudhy4H4VOPI5AR71bZj6WwPA0VSwmjtAcd8H6WsjYnG7/miojQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8787
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On Tue, Mar 03, 2026 at 03:23:14PM +0800, Zhao Mengmeng wrote:
+> From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+> 
+> This series addresses compilation issues in the sched_ext (scx)
+> tooling and selftests when using Clang 17.
+> 
+> 1. Add -fms-extensions flags to scheduler and selftests to avoid build
+> warning like "declaration does not declare anything"
+> 2. Use signed div for peek_dsq.bpf.c to avoid clang 17 crash.
 
-The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
-calculate the needed headroom:
+I confirm this removes the annoying warnings and these options are used in
+other BPF selftests as well, so looks good to me.
 
-	err = skb_cow_head(skb,
-			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
+Reviewed-by: Andrea Righi <arighi@nvidia.com>
 
-But skb->_skb_refdst may not be initialized when the skb is set up by
-bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
-in this scenario will trigger null pointer dereference, causing a kernel
-crash as Yinhao reported:
+Thanks!
+-Andrea
 
-[  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[  105.186382] #PF: supervisor read access in kernel mode
-[  105.186388] #PF: error_code(0x0000) - not-present page
-[  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
-[  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
-[  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
-[  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
-[  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
-[  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
-[  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
-[  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
-[  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
-[  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
-[  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
-[  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
-[  105.186499] PKRU: 55555554
-[  105.186502] Call Trace:
-[  105.186507]  <TASK>
-[  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
-[  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
-[  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
-[  105.186547]  ? ktime_get+0x3c/0xa0
-[  105.186554]  bpf_test_run+0x195/0x320
-[  105.186563]  ? bpf_test_run+0x10f/0x320
-[  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
-[  105.186590]  __sys_bpf+0x69c/0xa40
-[  105.186603]  __x64_sys_bpf+0x1e/0x30
-[  105.186611]  do_syscall_64+0x59/0x110
-[  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
-[  105.186649] RIP: 0033:0x7f166a97455d
-
-Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
-
-Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Closes: https://groups.google.com/g/hust-os-kernel-patches/c/8-a0kPpBW2s
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-Tested-by: syzbot@syzkaller.appspotmail.com
----
- net/bpf/test_run.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 178c4738e63b..a086cee1ac6a 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1156,6 +1156,23 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		skb->ip_summed = CHECKSUM_COMPLETE;
- 	}
- 
-+	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-+		ret = -EOPNOTSUPP;
-+
-+#if IS_ENABLED(CONFIG_IPV6)
-+		if (ipv6_bpf_stub) {
-+			dst_hold(&net->ipv6.ip6_null_entry->dst);
-+			skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
-+		} else {
-+			pr_warn_once("Please test this program with the IPv6 module loaded\n");
-+			goto out;
-+		}
-+#else
-+		pr_warn_once("Please test this program with the IPv6 module enabled\n");
-+		goto out;
-+#endif
-+	}
-+
- 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
- 	if (ret)
- 		goto out;
--- 
-2.43.0
-
+> 
+> Zhao Mengmeng (3):
+>   tools/sched_ext: Add -fms-extensions to bpf build flags
+>   selftests/sched_ext: Add -fms-extensions to bpf build flags
+>   selftests/sched_ext: Fix peek_dsq.bpf.c compile error for clang 17
+> 
+>  tools/sched_ext/Makefile                         | 2 ++
+>  tools/testing/selftests/sched_ext/Makefile       | 2 ++
+>  tools/testing/selftests/sched_ext/peek_dsq.bpf.c | 4 ++--
+>  3 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.43.0
+> 
