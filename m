@@ -1,69 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A15830148B;
-	Tue,  3 Mar 2026 01:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA17B373C09
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 01:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772501584; cv=none; b=IC1u+8cBCK7alKO4itomJZzWpkl8RpsJC/yQBr34lvYXwdcV5q7PMoBm/FE0Pc/BdLhBL0kh/0gahgP0mt4XTOnLuyU/BoAdmOLFJN4PysT/MXNtfSUtgLEJ3T+tWW6lj/A9DbEFwkVr2UT/cginq/2rzt5kqEqDevF6H8s5Uvs=
+	t=1772501987; cv=none; b=Wdj/TPOsd6dSDZ9byZKAREWiIKdK9eJ2Wbep/6VXaZS9C40+nKOf+FKTgnGF6o47oYT0TQWOb+ElnGtQSFkuBl4g3nrixDO1+iJ6WQ6QNKkL6/kSh1y2At4CQ7qhuy42mV1xXHIvbCcjIOUXqiYMTFd9/Jbwaw57WM29TOGhjDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772501584; c=relaxed/simple;
-	bh=IUUZMklsuDqt9XDyM9yk4sjEMlG0JCQemvWf3MVHwlE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W5HJdpj9BRDpMqJhCD1ZQR/vRK0cRVlBhK8lbM+WU8g4r9e0IhWFBk5/fFmJlKCqZqkvpQxSY5BCSixaZtpQpxjW+AWQG5bnkl51sMZnLI70s3rUfTW7cezop2PSnuN6rrMwrmISf2jnIcFr9YB2P8JoA3MaDmcxwSu+anffkPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bj1dklSB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772501987; c=relaxed/simple;
+	bh=07/B/y6z/C1XZtHDENUbpuRm2gMOyQUCSFWgbN3Qaeo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k7zhnXRlogDZvCufLadTW1y+NFrx7H5vWOlGqqI46SJAqk5JfumaTHotQVa9FSyr795ouNvFTrHtt02DKmmtG7o4I4YNNWrc/t+vYYR9vox59psFDloJzmYP8aWLZaDwDqmIiwi6rO1DZRJAir1oaCS8bGkHIK3dwRWoC7J6qR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=LAsn0EeH; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bj1dklSB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9B6C19423;
-	Tue,  3 Mar 2026 01:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772501583;
-	bh=IUUZMklsuDqt9XDyM9yk4sjEMlG0JCQemvWf3MVHwlE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Bj1dklSB20+0Kay/8hcYBsj29heJW2oqguhj7spRmyhM8d0TF6NbRWyKNGDjZ0Dvc
-	 3Rsq1JnW2WuGk36M6P9w8+MsFx3wVl0cKkz1lJ3lKIcsUBw3b0qMznwdouEHq/5j+D
-	 y2NfYxMS7DzP0mRyTdHMgbTDhEWqm3fwYSqBaiEA1LlKLXR/BBSSvRM6QWRavvlv8Y
-	 8XdtHbycUO3SV91pgi4YKG/ExD+oYobj3cmt580hxvcoAs4thhzmQKrSz9yDnJDeOO
-	 zmIS4Js6XenCLxEAoTRCF4Ax4M3T9MWRg4om8OmUzj0Y9It+csZRPF2eS20yPnZV0e
-	 JlGtq4Bm1NpEg==
-Date: Mon, 2 Mar 2026 17:33:02 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Allison Henderson <achender@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- pabeni@redhat.com, edumazet@google.com, rds-devel@oss.oracle.com,
- horms@kernel.org, linux-rdma@vger.kernel.org, allison.henderson@oracle.com
-Subject: Re: [PATCH net-next v1 0/2] selftests: rds: refactor and expand rds
- selftests test
-Message-ID: <20260302173302.4d1634be@kernel.org>
-In-Reply-To: <20260302055518.301620-1-achender@kernel.org>
-References: <20260302055518.301620-1-achender@kernel.org>
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="LAsn0EeH"
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-89a0b376fedso719486d6.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 17:39:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1772501985; x=1773106785; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZPbZzuRu+dosfK2R7jpOlV1O8wbpx/a0Ic255VXuhAw=;
+        b=LAsn0EeHSlqVmURyxWAjTLITLYmvdOhgO3Lrw3netcUSV2yvq2UbL5wzxzV7CSlYjX
+         YoyLu9ZR5htKTCZztPuRdgqNrOFMVy3IoQZ1kRDvGr7x2DO+IczAXOgqdkdfWbMcBXuS
+         LaONTfB9+tgD28gFI6IaTvgpwHMDFSbcvIBE/wpaS+vlr+PhDUoevWCd/VY1RRogEMKx
+         klugydNlQczpWuZJGVkibtN1BOXSVD0FAv5x3HAMVyjZPo2JiMBHd689xsu0o+WZFukZ
+         OgOg3x6kVUXrTt63UgRj4w2WBoHApHf24oPwn5cEgtJpoEMH5DR0xwlVNuRHCuAsVN9b
+         gxTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772501985; x=1773106785;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZPbZzuRu+dosfK2R7jpOlV1O8wbpx/a0Ic255VXuhAw=;
+        b=b8/AXO6TZJs8SrDXKpthWNCvwJiBvN6bpmMlKVVSs7ZZLIhBL6IRRHG3jIhBuP3hzu
+         dryd8UnWX5Dv6Ki49znl3gmhLCS17zW1HwoAjt1ZUQ7NViCGZ9Ct84VUhcc4l56A8ySN
+         dOV/NJBdYdSWD6QumyMks9gkhMWwveGSheyXCNASebAYGGAfn/y7kH3mws6uUd/g6SqB
+         ERg+R7gsb/Iy5oC6PEI9IUSzB5SyljQpDiyypyTsInYIZwjOwjOdvOqUq3KzhMv5pzAQ
+         1R0i7yhW4CFYctDFueAzzMNn/HnJ3GENS3tFWseZnS5dArthkucU0ij2iUtBTbA0aRjn
+         6HkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUN92Tp8/iYS5Y0m/LQypydPvBDpS8SIZR02JOh70yECaDdpFv3I/77yJ8UXezK2jNK/oqgaMrphlYn3brUPlU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzphSBXivw6IPOra65VjVAfjSqObxrQxYs5jdsSmnG+HThmctVU
+	GAK4oZjDe+df+BBAYvyuc24SAb72985ibm90hN9NiNlUoo346L9IzK015nnlqUyfM0M=
+X-Gm-Gg: ATEYQzx3ld8ttvUezN9c+8123S4oGOjdu0pPTz4iACHP1FrcE8mhW9rKPLzXWWtL/ql
+	4hwvvdiwa5kCQP65yKW6t3cktx8IEwz3mMiPmpesepHGCN0VfLURJmvuWDBJweiPIAYQCbWUZdY
+	288a5lEVcgyeu8jvKqGZRFS9yj138ZRMtGsMKn6Y6iEuUqVxjTO1wDDtR/cGaH9XzAsLeAYR44W
+	EaDSpirPcB4ni+2KPJH2DcakNroyDVfUMqWEMUpT19qttZhiTPgSQqB6Ip9Pf59TEP4VWmraxNR
+	RRECnz1623ViQnxKLGPAclr8wmc3zX2XSzsnk8gUmT/5ehXafcv5WkmIoCizrbSR46CgBVl9SDb
+	e5MHx308iddHiCqWNs72pAjoBfHLBfFiRyvvM03IEDFIIa2sLUjgRJ5WOf6G3HSdSr0tDE2TZ0A
+	75Tuw4H1pSOzzl1sjZqZlLNo+66hNf0wf/Fg7Lp8V7T/bD9aIOa1ZHQ+fZ4Hu3OnAgLyfHUzvJG
+	ulL
+X-Received: by 2002:a05:6214:2121:b0:89a:df:164 with SMTP id 6a1803df08f44-89a00df0411mr54969726d6.39.1772501984767;
+        Mon, 02 Mar 2026 17:39:44 -0800 (PST)
+Received: from [192.168.86.87] ([136.27.45.11])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899c7374dd7sm121117826d6.32.2026.03.02.17.39.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Mar 2026 17:39:44 -0800 (PST)
+Message-ID: <e5c356f5-2be7-4d24-aa2f-f9d312b7a2c6@davidwei.uk>
+Date: Mon, 2 Mar 2026 17:39:39 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/3] selftests: drv-net: iou-zcrx: wait for
+ memory provider cleanup
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ jdamato@fastly.com, asml.silence@gmail.com, io-uring@vger.kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20260227171305.2848240-1-kuba@kernel.org>
+ <20260227171305.2848240-2-kuba@kernel.org>
+ <8489fcbf-ab76-48a9-a21f-d7f6873b9a2f@davidwei.uk>
+ <20260302164642.43375391@kernel.org>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20260302164642.43375391@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Sun,  1 Mar 2026 22:55:16 -0700 Allison Henderson wrote:
-> This series aims to improve the current rds selftests.  The first patch
-> refactors the existing test.py such that the networking set up can be
-> reused as general purpose infrastructure for other tests.  The existing
-> send and receive code is hoisted into a separate rds_basic.py.  The next
-> patch adds a new rds_stress.py that exercises RDS via the external
-> rds-stress tool from the rds-tools package if it is available on the host.
-> We add two new flags to test.py, -b and -s to select rds_basic or
-> rds_stress respectively.  The intent is to make the RDS selftests more
-> modular and extensible.  Let me know what you all think.
+On 2026-03-02 16:46, Jakub Kicinski wrote:
+> On Mon, 2 Mar 2026 07:49:01 -0800 David Wei wrote:
+>>> +def mp_clear_wait(cfg):
+>>> +    """Wait for io_uring memory providers to clear from all device queues."""
+>>> +    deadline = time.time() + 5
+>>
+>> This is potentially a very long time to wait if code is buggy, as I
+>> found out when debugging netkit queue lease. How about reducing this to
+>> say 1 second?
 > 
-> Questions, comments, suggestions appreciated!
+> Just to be clear -- you're saying that 5 seconds is a long time to wait?
+> Please note that if this wait times out we're going to fail the test,
+> the timeout does not impact the length of a successful run.
+> 
+> I picked 5 sec because with all the debugs enabled and under QEMU
+> scheduling latency spikes can be pretty brutal. I guess I could make it
+> 3 seconds if it matters a lot?
 
-IDK Allison. I tried to integrate the remaining tests with Netdev CI
-this weekend. The two groups of networking tests which can't be run
-like all the other selftests are vsock and RDS. I get vsock being
-different. vsock is used to communicate between VMs and host, setting
-up the vms with the locally built kernel makes it different.
-
-But I'm not exactly sure what makes RDS different. Would you mind
-explaining the challenges with fitting RDS into the ksft framework?
+Hmm, yeah let's leave it at 5 then. Should not be optimising for my
+buggy code.
