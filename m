@@ -1,122 +1,121 @@
-Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB6935CB70;
-	Tue,  3 Mar 2026 14:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305A93B7B9A;
+	Tue,  3 Mar 2026 14:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772548691; cv=none; b=lgQ7KbCrTJ7CwpTTTLqqgOFdoITx0p4UU1Spdzk6/98UJK8cVQNVqjMckOrhtElP/0nfjfiYFrgoG9Li9cro4QH2RXDZoVStvfGUv5qrwIQcO/h9GqIpQ+uZVr4YrtImWY45Hr/YVhlKwuS7frCE8ealMJkBAnMIokBWPqlJmak=
+	t=1772548830; cv=none; b=pbboq5SZqb5D6S2Qm2S1cBZZ4AEMzFxVWjPkIqlf/+mjQ0AIjcHPjrWmJL3nxJxgG44WYjvg7TUyiifHWVonS4xjMz9Z4nTTFJhi9GnEpQPy1hYBF2RMOsFrrC/cWXNYSmYjndfscDLdtzv4wGCzeje0NxeCRAn7QUQOfh8gVz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772548691; c=relaxed/simple;
-	bh=C8/PO83Q2Din2/lr3WwejMQpaaI7Juh5iQMzPDJxdz4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mEpfIfyz5V/NPfneoWJGJOjCVfEZYN5L0x8QskVZcp7BqpdsdvKz7YwnSueEQ7sj/Lu/JZcAtnFPqIRaoGrPkuKz7qCmJuAO3p7KilFRv1y2YoEGiinrPsQNC0A8GDakuf19u7vIQHy0maNVUbcwWQhLI6agbZrunRSnpUxegEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=KIHyNZF9; arc=none smtp.client-ip=52.12.53.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1772548830; c=relaxed/simple;
+	bh=yVTRTYxNUuoFoHtc5rEeYIv25/6vkbs3QVPHROpZfdk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=XjVAJTZwJ8gL7xOGihrCeYWC7O8S/8Az0iEjYRsEgRFr+hK+Qt+/u5XwypALtnYRx0dgoQt1IZ+P2fJNpjcOU2rzDcAtDh6NjDkUOf5s7/IfwPVJZAfxhDUCvPKUqspKVGSxRj9/cD8Z3QZolVYTy6/2XBxeZ9WMx+fARUKRurc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDI1XCc5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="KIHyNZF9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1772548689; x=1804084689;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MpS4sVC3hqe8pCkVdEGIPoy6oo+rArp6AEF/WIq0eFU=;
-  b=KIHyNZF9wru8tnbHQfuyeIA6xDuzMZmugwn1ml+fNWzOySTcseTDpqtb
-   IE44jaKFZ7+jXUc0dwWBAxrHuWW4ZhDC4ToBiDI0CrWkeyk6644bhw8OQ
-   NsY7cE4Fm1GtkzjRLlZF+tpmixP+XqFE3fuhqkCVw0CrX51BOhMOrQW9y
-   Wq/bUfJtJ8SVySKxgH3tRJsDvTHgWK+PcvGqKjyjOpgBX1aSUq6xUb1NO
-   FYCsSnZ9fMb9WFy/Wst7Z/9pIhI2+DDEP1To5bfPXR5MvUysef44p8lFx
-   js7p5cHIRp2aHvqb3Oa78oR9N2dLwuSeYcRn1jbPaANsZEZCx+nZg6FPk
-   g==;
-X-CSE-ConnectionGUID: hEvhgFTESEKkBaKofoRIqA==
-X-CSE-MsgGUID: E94225xzTNSH15MhaFZTRA==
-X-IronPort-AV: E=Sophos;i="6.21,322,1763424000"; 
-   d="scan'208";a="14070024"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 14:38:09 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:26174]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.26.67:2525] with esmtp (Farcaster)
- id 63560b5f-7e28-490b-8e43-a2241f2b96ce; Tue, 3 Mar 2026 14:38:09 +0000 (UTC)
-X-Farcaster-Flow-ID: 63560b5f-7e28-490b-8e43-a2241f2b96ce
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Tue, 3 Mar 2026 14:38:09 +0000
-Received: from 6c7e67c92ceb.amazon.com (10.106.178.6) by
- EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Tue, 3 Mar 2026 14:38:07 +0000
-From: Nathan Gao <zcgao@amazon.com>
-To: <stable@vger.kernel.org>
-CC: <gregkh@linuxfoundation.org>, <sashal@kernel.org>, <davem@davemloft.net>,
-	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<shuah@kernel.org>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<ap420073@gmail.com>, <zcgao@amazon.com>
-Subject: [PATCH 6.1.y] Revert "selftests: net: amt: wait longer for connection before sending packets"
-Date: Tue, 3 Mar 2026 06:37:50 -0800
-Message-ID: <20260303143750.57741-1-zcgao@amazon.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDI1XCc5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C01DC116C6;
+	Tue,  3 Mar 2026 14:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772548829;
+	bh=yVTRTYxNUuoFoHtc5rEeYIv25/6vkbs3QVPHROpZfdk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=TDI1XCc5qo15C36tbi3Gxr2M82tp+3bhaHB7Hq+5evP6I0Yp75uIfinOGOUC1F0uf
+	 yLjGBL9XEhP721kRzaa8xpNCUnrpH9Ed7PbRbTelHXxbhLAX2XqsFgIvc4nhavKFbH
+	 YndyF/2CaEERiCNWS6k2zTtilPj2T8IDbApGnnCvtGPmmqYCGSwmLjIxpxCOvQ+oP0
+	 Zdjby8pwnUD/i3OximY36RfVqzZW+PMJqCxYIi2aLCB8YgzRM6omrF/Tao2OmgZstG
+	 xN9b3ZwwGRjW9NUTHpbgmbtCQJWg87J1ICLx9G4hgnhJTGcbbDrLgZj6vji/BjacK5
+	 xL4HSUYmrNOEA==
+Content-Type: multipart/mixed; boundary="===============8354238778473276078=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D035UWA004.ant.amazon.com (10.13.139.109) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Message-Id: <198ab979488effe54f31ecfb8343e154e65f77f5e419fcdabb93be4f0e48b6f4@mail.kernel.org>
+In-Reply-To: <20260303135219.33726-4-pilgrimtao@gmail.com>
+References: <20260303135219.33726-4-pilgrimtao@gmail.com>
+Subject: Re: [PATCH v4 3/6] bpf: add bpf_list_add_impl to insert node after a given list node
+From: bot+bpf-ci@kernel.org
+To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  3 Mar 2026 14:40:29 +0000 (UTC)
 
-This reverts commit 7724036d4804222007689cd69f248347eb154793 which is
-commit 04708606fd7bdc34b69089a4ff848ff36d7088f9 upstream.
+--===============8354238778473276078==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The reverted patch introduced dependency on lib.sh under net selftests.
-The file was introduced in v6.8-rc1 via commit 25ae948b4478
-("selftests/net: add lib.sh").
+> Returns 0 on success, -EINVAL if 'prev' is not in a list or 'new'
+> is already in a list (or duplicate insertion). On failure, the
+> kernel drops the passed-in node.
 
-Without lib.sh, the amt test fails with:
-./amt.sh: line 76: source: lib.sh: file not found
+The commit message says the kernel drops the passed-in node on
+failure, but looking at the implementation, only the cmpxchg
+failure path actually drops the node:
 
-The whole history of lib.sh includes about 50 commits and considering
-the file never landed on 6.1 it may be better to not introduce it.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+>
+> @@ -2497,6 +2497,32 @@
+>
+> +__bpf_kfunc int bpf_list_add_impl(struct bpf_list_head *head,
+> +				  struct bpf_list_node *new,
+> +				  struct bpf_list_node *prev,
+> +				  void *meta__ign, u64 off)
+> +{
+> +	struct bpf_list_node_kern *kn = (void *)new, *kp = (void *)prev;
+> +	struct btf_struct_meta *meta = meta__ign;
+> +	struct list_head *n = &kn->list_head, *p = &kp->list_head;
+> +
+> +	if (unlikely(!head))
+> +		return -EINVAL;
+> +
+> +	if (WARN_ON_ONCE(READ_ONCE(kp->owner) != head))
+> +		return -EINVAL;
 
-Signed-off-by: Nathan Gao <zcgao@amazon.com>
+These two return paths don't drop 'new' before returning.  The
+verifier unconditionally releases the BPF program's reference to
+the new node via ref_convert_owning_non_owning() followed by
+release_reference(), so nobody holds a reference to it after this
+kfunc returns.
+
+In contrast, __bpf_list_add() always either inserts the node or
+drops it via __bpf_obj_drop_impl():
+
+    static int __bpf_list_add(...) {
+        if (cmpxchg(&node->owner, NULL, BPF_PTR_POISON)) {
+            __bpf_obj_drop_impl((void *)n - off, rec, false);
+            return -EINVAL;
+        }
+        tail ? list_add_tail(n, h) : list_add(n, h);
+        ...
+    }
+
+These early return paths should be unreachable because the
+verifier guarantees head is valid and the lock is held, but
+should the commit message be corrected to match the actual
+behavior, or should the early error paths also drop the node
+for consistency with __bpf_list_add()?
+
+> +
+> +	if (cmpxchg(&kn->owner, NULL, BPF_PTR_POISON)) {
+> +		__bpf_obj_drop_impl((void *)n - off,
+> +			meta ? meta->record : NULL, false);
+> +		return -EINVAL;
+> +	}
+> +
+> +	list_add(n, p);
+> +	WRITE_ONCE(kn->owner, head);
+> +	return 0;
+> +}
+
+
 ---
- tools/testing/selftests/net/amt.sh | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftests/net/amt.sh
-index ea40b469a8c1..7e7ed6c558da 100755
---- a/tools/testing/selftests/net/amt.sh
-+++ b/tools/testing/selftests/net/amt.sh
-@@ -73,8 +73,6 @@
- #       +------------------------+
- #==============================================================================
- 
--source lib.sh
--
- readonly LISTENER=$(mktemp -u listener-XXXXXXXX)
- readonly GATEWAY=$(mktemp -u gateway-XXXXXXXX)
- readonly RELAY=$(mktemp -u relay-XXXXXXXX)
-@@ -242,15 +240,14 @@ test_ipv6_forward()
- 
- send_mcast4()
- {
--	sleep 5
--	wait_local_port_listen ${LISTENER} 4000 udp
-+	sleep 2
- 	ip netns exec "${SOURCE}" bash -c \
- 		'printf "%s %128s" 172.17.0.2 | nc -w 1 -u 239.0.0.1 4000' &
- }
- 
- send_mcast6()
- {
--	wait_local_port_listen ${LISTENER} 6000 udp
-+	sleep 2
- 	ip netns exec "${SOURCE}" bash -c \
- 		'printf "%s %128s" 2001:db8:3::2 | nc -w 1 -u ff0e::5:6 6000' &
- }
--- 
-2.47.3
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22626485740
+--===============8354238778473276078==--
