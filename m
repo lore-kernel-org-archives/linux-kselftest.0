@@ -1,123 +1,91 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB3F492529
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 18:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C5937C904;
+	Tue,  3 Mar 2026 19:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772563692; cv=none; b=t0aRdztqIGkudCrC0NpvqLEzwoU4OkqUZECIKGo0szGGIzKup/7RM/0BP49Ki7iiwXdkf46F1brWLrYkef4i5LGN0ZyvLXqYhysWtxMAYgHPoS3zYlzXXCEjzMwBFlq/pOWToKnWT7uEKDwvxxKH2AQkekSd635T9gZZPkwcC3Y=
+	t=1772565343; cv=none; b=FugV/W3frrqXfUOUH9S2M/V7zdZwTW/cT0DCcmjTn0SaAACjFZBu7U+GL1CC0YWiCV7gT4TtNr5F+kilRIndh4+0qH9655WoeKbVtBgGyJqZKzqAB74dLhy7jwUdL+hW+ftkBLeznKUnUUdInV5TC8PqoJTTyvspZGHVjFz7M6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772563692; c=relaxed/simple;
-	bh=ttzqQEcVrPb/nmW7Y+klXQCF2FmI64whE3fDRja4xHs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nU/LYBk9d9ggUWTFPZnfGQwtGq3JJoJHfRsOEdDF9TDhFloYDWapDUZKhZj2HSGHUHicKLkf0jIx6eTYxevSlcWG/RUoCW+DQC5hwFneNqLNLt3HXgOrrJ7UNhV3hMzp5zgqygv7qZYETqfb2scC2FmcMwM1J1epDyTzpa9v59c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=zm5leosn; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1772565343; c=relaxed/simple;
+	bh=ntcvvjP8obpOAQSTZOCZsIkocrKc0EYZVEgtp1Q0FcE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZBfPzDoI5DCzEb4NIU0rpr81WNWMcGk7gWJQVgLdW7C29nYEHr1NadTzCKAuEev5vpOR2r8P1rBu3NmRxF9srIwJfChW5bH94n0yPCzea5fbJJNUsuGWWtynqZHw4uEhtYMHLsYpcAJNl0B4ofYunaWb4XBVDlXJwRbPiaGwsBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AYTonWmF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="zm5leosn"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3599019ae92so1325699a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 10:48:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1772563690; x=1773168490; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L/gvGEJPIh9oms2y2n2+7WYpJ/cio0F68+jb7Mp93Es=;
-        b=zm5leosnHjkYW8qnNHi3Vasu4XmWIklY8SJ2SMXSMzwKSHcu2M2L/PakC4owyAtP/Y
-         2bdup48hepvbjVdSivCQRUwAGsFMQiPdwenjid0a5NylzS3w1CZmaixQfUf1eDNu9jW/
-         Ca4GZvW3FTCEdW+Ijp3o7ds1OMJKinQoNr3gvNALVdMCkX3uaDRNtlkYixcefhAnHnyp
-         dPlXVpKJu5Uhr1kV1D+MLEDPLRZYnGPw8UyfinDX3tZH4wiEbAtBoixHaaBWU9SYrt98
-         4AGaVibPmTuAcJEfzU8mDfl4FAA147aKLAsjPtF95khhDuPbb5S8XqUBYb/CTWMNhXrO
-         UTSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772563690; x=1773168490;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L/gvGEJPIh9oms2y2n2+7WYpJ/cio0F68+jb7Mp93Es=;
-        b=OdCuxCwfMrVBcxCuYwznWGvnnzRwLo+y/RieC+EVVjw9dm0mCVnOeXyrxWbhF6mwUr
-         yNrf5Xf13SbMqAPDqYCAmNMqb2jxU8eSPthc0GNo8/e4+QC6jj3z31H0p1H1D3tcvRU3
-         SyMXrC3SAldwikESFrj+ZRXGRR+kjslxrNXHXSzFCWkCYlsuckg2sEMpZfpTUC9xvsmr
-         TaqaQYoOr/vt6U5zgZ706ColsruMexqiVv/X6bXu9MMXK0L1FSVY7744GHSAfqi9r1p3
-         kTbgNEErEXAvCTrR1Q22TcgWL4pX3KPLIwyO/Ex9pvFV8VzWRIIgm6rS0qOP0dcXMdNM
-         CrSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW26tajUkSLt8PU4MXyFoSv+UzcB8U6O7si4akdt0EpMDEbjUsQuaeyUKL48pnRZuxBvT0tmjOid2DhYZMY+zk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweAXZPn6qyVq1fA7ccV9iHGkzyS9F/COxsLggyoqQOhZbNyfDW
-	wS2MpZ6JWlIAzr0/xH8LXoJcz63gjdxM4ScbdzXkdAxrp/x+nWVXpTsaIwvInuxb9ho=
-X-Gm-Gg: ATEYQzxXzHNRVwQz0jFmVelYjN8RTSHe0uDQ254m9VqeoIgibzJkPpjGyrhDO7QRgVn
-	2ahlrpVR0tGy1n5qenO/Kk4DVVl8zFCdhDlEHMYRdayCNJLFS91nL075wb25j521Ej3S8+i4BDu
-	vKcJW8bZVsgrYFey5FdMfP4bPz8iIR7mZ+HOwPS6rdbG8oz8qqu/yqS0ICor11iy5DcOVRoX3RU
-	HuKxjegVfU4HRVAaie684Z4e+evkg+4gb6SDzk0FM8K8VphGO0vgDDgZahg0BaiUrCL2eZzaLYT
-	BI3uVkV2u5mdrMV4mEyIdbXpJupECuM0TwdD4cfaox7ghZRYScRXCqFuHzIQlW8NLe+WGVSA+/F
-	Pn2R7fXXFTJpAj/xuXuTjdM3EKYug3jS9xjrWNmHN9HRMP/OcCgMLY5yrbMuWWVfyb2PzRU8tmb
-	RwSCFq
-X-Received: by 2002:a17:90b:2747:b0:340:bc27:97bd with SMTP id 98e67ed59e1d1-35965c3475bmr14809639a91.9.1772563690200;
-        Tue, 03 Mar 2026 10:48:10 -0800 (PST)
-Received: from localhost ([2a03:2880:2ff:56::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3599c3abc40sm2916519a91.14.2026.03.03.10.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 10:48:09 -0800 (PST)
-Date: Tue, 3 Mar 2026 10:48:08 -0800
-From: Joe Damato <joe@dama.to>
-To: Chris J Arges <carges@cloudflare.com>
-Cc: michael.chan@broadcom.com, pavan.chebbi@broadcom.com, kuba@kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AYTonWmF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77026C116C6;
+	Tue,  3 Mar 2026 19:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772565343;
+	bh=ntcvvjP8obpOAQSTZOCZsIkocrKc0EYZVEgtp1Q0FcE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AYTonWmFSYej9IbogOfW1QgZyRhpducblPK/xO6xn84DHW6zv3m+OggJ1kanHBWQB
+	 MaAtooRPcdRZcInZcKX66JAd9W68liuGRX0wc8RvcXdqpNA+eXxRPZ1JFSd9DExh8y
+	 sHBBsHdXpNL2MSffD+3FgRP+qyjqyvksO9+WkKirjQBA4HLZp8SbpvLfRzfcJ/kTf0
+	 cW52vwVTZMn+NEpvbxNu5phErXG6Bwt9OM1DhI+Xsz/KM73OBwOC+SJodDwXhhVbwc
+	 JXyvPDHlOCzDZCDbxB7+Phh3CbTLmhXWghwJ/CX3rGenFgczvBJs9Sf7hf74HOvrCv
+	 D+1YShFKda7uA==
+From: Tycho Andersen <tycho@kernel.org>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ashish Kalra <ashish.kalra@amd.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	John Allen <john.allen@amd.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
 	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 3/4] selftests: net: move common xdp.py
- functions into lib
-Message-ID: <aacs6Nli7ku7uuTn@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Chris J Arges <carges@cloudflare.com>, michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com, kuba@kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
-References: <20260213192449.1294830-1-carges@cloudflare.com>
- <20260303024510.644962-1-carges@cloudflare.com>
- <20260303024510.644962-4-carges@cloudflare.com>
+	Shuah Khan <shuah@kernel.org>
+Cc: Kim Phillips <kim.phillips@amd.com>,
+	Alexey Kardashevskiy <aik@amd.com>,
+	Nikunj A Dadhania <nikunj@amd.com>,
+	kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/5] Revoke supported SEV VM types
+Date: Tue,  3 Mar 2026 12:15:04 -0700
+Message-ID: <20260303191509.1565629-1-tycho@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260303024510.644962-4-carges@cloudflare.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 02, 2026 at 08:43:51PM -0600, Chris J Arges wrote:
-> This moves a few functions which can be useful to other python programs
-> that manipulate XDP programs. This also refactors xdp.py to use the
-> refactored functions.
-> 
-> Signed-off-by: Chris J Arges <carges@cloudflare.com>
-> ---
->  .../selftests/drivers/net/lib/py/__init__.py  |  2 +
->  tools/testing/selftests/drivers/net/xdp.py    | 95 +++++--------------
->  .../testing/selftests/net/lib/py/__init__.py  |  2 +
->  tools/testing/selftests/net/lib/py/bpf.py     | 68 +++++++++++++
->  4 files changed, 95 insertions(+), 72 deletions(-)
->  create mode 100644 tools/testing/selftests/net/lib/py/bpf.py
+From: "Tycho Andersen (AMD)" <tycho@kernel.org>
 
-Took a quick look and it didn't seem like anything changed in this patch from
-the last revision I reviewed:
+Recent SEV firmware [1] does not support SEV-ES VMs when SNP is enabled.
+Sean suggested [2] adding an API so that userspace can check for this
+condition, so do that. Also introduce and use SNP_VERIFY_MITIGATION to
+determine whether it is present or not.
 
-Reviewed-by: Joe Damato <joe@dama.to>
+[1]: https://www.amd.com/en/resources/product-security/bulletin/amd-sb-3023.html
+[2]: https://lore.kernel.org/all/aZyLIWtffvEnmtYh@google.com/
+
+Tycho Andersen (AMD) (5):
+  kvm/sev: don't expose unusable VM types
+  crypto/ccp: introduce SNP_VERIFY_MITIGATION
+  crypto/ccp: export firmware supported vm types
+  kvm/sev: mask off firmware unsupported vm types
+  selftests/kvm: teach sev_*_test about revoking VM types
+
+ arch/x86/kvm/svm/sev.c                        | 16 +++-
+ drivers/crypto/ccp/sev-dev.c                  | 84 +++++++++++++++++++
+ include/linux/psp-sev.h                       | 56 +++++++++++++
+ .../selftests/kvm/x86/sev_init2_tests.c       | 14 ++--
+ .../selftests/kvm/x86/sev_migrate_tests.c     |  2 +-
+ .../selftests/kvm/x86/sev_smoke_test.c        |  4 +-
+ 6 files changed, 162 insertions(+), 14 deletions(-)
+
+
+base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
+-- 
+2.53.0
+
