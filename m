@@ -1,315 +1,122 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D8833E34C
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 14:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772548090; cv=pass; b=M5QPAROyWBxgpzNvlUV8aIW7p/4Yv+O2cWul5CQxymgIE58p37JGjrKfUKkvJIsGq6j4N7wYaHTts5ov63DEEYbjCRPWFi9jstS6sl8RpBpxavk3sJdLU61q50G7ANrIdFtGU8t1mSWGQB0K+fFy3fcuFasywbxh15GUOnquIMM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772548090; c=relaxed/simple;
-	bh=qOdUJuVi1m7ZhJj3GOzZ12rW1y19M/G1m+dBYN2uy5U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gFHd5iDj/l0zDE4WGh/K9jKj3GU0g3ZegGGB7ZnixVF1IiY2axUbug6HZZlSynD3/m2/xmnQNE1jbzhgsVqv04ggelSkXpEyF84bo5nvSmFTwiGU0tE38SokuozQLoU/FS/jJEfjscivuobEB66sd882LPIds7HQA0pIyptqbac=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQyYdUjS; arc=pass smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB6935CB70;
+	Tue,  3 Mar 2026 14:38:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772548691; cv=none; b=lgQ7KbCrTJ7CwpTTTLqqgOFdoITx0p4UU1Spdzk6/98UJK8cVQNVqjMckOrhtElP/0nfjfiYFrgoG9Li9cro4QH2RXDZoVStvfGUv5qrwIQcO/h9GqIpQ+uZVr4YrtImWY45Hr/YVhlKwuS7frCE8ealMJkBAnMIokBWPqlJmak=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772548691; c=relaxed/simple;
+	bh=C8/PO83Q2Din2/lr3WwejMQpaaI7Juh5iQMzPDJxdz4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mEpfIfyz5V/NPfneoWJGJOjCVfEZYN5L0x8QskVZcp7BqpdsdvKz7YwnSueEQ7sj/Lu/JZcAtnFPqIRaoGrPkuKz7qCmJuAO3p7KilFRv1y2YoEGiinrPsQNC0A8GDakuf19u7vIQHy0maNVUbcwWQhLI6agbZrunRSnpUxegEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=KIHyNZF9; arc=none smtp.client-ip=52.12.53.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQyYdUjS"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b936b85cc71so681960366b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 06:28:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772548085; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JfKr+ev9qLx2QrpzE9uGUuoBycX9HqyY8gh16BMeY0pFREJoVUJe+nP4st2B11K2YF
-         3EYQWsj6fFG285U/j4bw4unhPRE8tsMTyXP1AKqdV0nGu8KgDqUyKr7OeTvUlnUGpQHG
-         zMMkMl+PXv0I6luvlYhPprkR2oXr5NccLKJX96ut9kC21ofL78UXjMfjxGd5m9mEXSxZ
-         HsiKjEmG92i3qEoY2pngR/tGvrfvrU+yhbOKMuoDLzOizZplPzD6DVo0KyKoZHtk8mna
-         5bPyIcFBj90RdnwMy3U3cBcwM+Flkpf0mHGWjVkpm/oRa3tnbBycxmGDS9Z7Cz8fzX/z
-         eegg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=esp1UcxTOWDHIY9Li2rUvASCUzf5NNQ0S/tQeT7QTjY=;
-        fh=QS3S+Tfv3G9GpPG2i1e1LlCAdYM7funvdqDP99brz9g=;
-        b=GuP+5CV8AJvnax1/QLHzcQCfv6D0E1A23N7soPaEZ8aKHurLriLOA0AST8AwmFgVpw
-         KfZwzIrFh7GU3UzCEG2I/7wl38OsFuOJKaSCCa681KBuV+aB3DmQX87wQoqMCt+Fi4jT
-         RZ0hUHi89JE+yXOQZFTQzkgoceT+59GwsMZ6CxhfjIOWwcpbBm6/CRdrc45ofTsZ27MS
-         iQldVC6yPjjhofqUZ361cI48lB8YZ75/yCg4OMWceNrpmFJYmudNzNeHew6vbATyQjAw
-         uCppD0xOvS5FrgZTUCZgSY0jICjzhsMyzsva/wTY1x6by/hDBWzAhiTRVy73V86I/Hpj
-         GtVg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="KIHyNZF9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772548085; x=1773152885; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=esp1UcxTOWDHIY9Li2rUvASCUzf5NNQ0S/tQeT7QTjY=;
-        b=ZQyYdUjS8i+neRiYPmlq9CFYbWZvzYvEDUXwu/kFdQnfFKVCJqN831Jfle7A3UjDHQ
-         Wyy61oGXS4gTjqZJWEZN4x9wK4Vz5VMkNHnsP8ROUlLQqi17AMvALNx5EVFuxC6TR1i6
-         zNDJc3Zx4z5Ed33A3QhBC8mqv/F79OTzDHd6AShQC4O/Euh/ZP1Qljw3GtaaEy+3Y/bv
-         tcg76SlNGmUXjtwWZRWXsmMmbkRzxH8lFv0Tk5Ay5RGA4HyYH6nvwMsQ5CPuXIe8etYJ
-         gVYSOt0Xhcc4um1myQxq0sKjyp8KGMJe0wKrR3RA/PH+/c1tNttMU7Iy74lA9aVCvI0M
-         Cvvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772548085; x=1773152885;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=esp1UcxTOWDHIY9Li2rUvASCUzf5NNQ0S/tQeT7QTjY=;
-        b=XJAQtE0ZaNpjdZm4SLf1I+5OxgoDMh3bl8iTqJ7ti61eQ5lp3+6MNczmWgR5S9ogq2
-         NtmhptwltZbgd+KUoH4zTjWhrRmTntO0fuY/LhFP7t6LVzeJWrXBKAsnErsa0Jl+K8+N
-         KLdeL2j0iEz5OFEVNCIJKjaLYgr+kiVWOaNxPWNoxoK6CYMrB5xHa/KxS+ZlvsZHIYg7
-         sXOzeLsTycQ6JUGm0q/St4QZhnNHB2plzdc122nHSZCZW5wynhIZH6eJM/V6RiDGqfNL
-         VSe174hAMM3A2TnyR96XkFtwED9MbT52bYvJ594VUx2H1qmMfSzDt2XbN0NhyGfwuw33
-         IbMw==
-X-Forwarded-Encrypted: i=1; AJvYcCVmA+JSnXylIOHeRd1hakQXB1dPwkjuTXztDtJ1iietK4KcNlUTSc/WqqB38hKb95fDHRmIxSHiel93o27n8RM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBLIrPio1PQUreeOJ3cGUFdNzj/fCCBDQjkjk2d1d21dAF8DlZ
-	1r6bc5ieTYF2cnFlj6SI7v3grXCsyYRwQAM2T7axksWAwvuYyLkOvZxZ4QTggXB9TTY7MMgVbFe
-	ZYRvYVY6XYghG5dCEapiI3K6zZtqimBg=
-X-Gm-Gg: ATEYQzwUscbk3DnBYXS4sida84yHDiY3UDzq6iq0YXj9aKM+VPPmyeDyTHm/q0JvxiO
-	z62gIp9BLyzVe613I0fPxi5TjWPfCRlYosoLxOSEufSsdyUDRUwaprrNmcs4LdXuKbVjqXYZ9x+
-	rXZ27Ftkh4ssLzLAUPybgg5FWIsTPyZIXAz4Dt+hPNdvzkej2jcxgRP5Scy9dtJvL9j/h8l4RMY
-	d9ER8Dh+4l5PFa8+Wp0GddC6rnfAu1oYa6k2fu8naL8Oc5ufgiOMfi3xNhCqjOQSxapfMH89LfV
-	NXc7lTuGyo0560xTOoZ6LFj09Mz5bj7kxfQyqyZuwNIjGxUNx85t
-X-Received: by 2002:a17:906:5957:b0:b8e:92e:d316 with SMTP id
- a640c23a62f3a-b93765684e6mr694232166b.56.1772548084865; Tue, 03 Mar 2026
- 06:28:04 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1772548689; x=1804084689;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MpS4sVC3hqe8pCkVdEGIPoy6oo+rArp6AEF/WIq0eFU=;
+  b=KIHyNZF9wru8tnbHQfuyeIA6xDuzMZmugwn1ml+fNWzOySTcseTDpqtb
+   IE44jaKFZ7+jXUc0dwWBAxrHuWW4ZhDC4ToBiDI0CrWkeyk6644bhw8OQ
+   NsY7cE4Fm1GtkzjRLlZF+tpmixP+XqFE3fuhqkCVw0CrX51BOhMOrQW9y
+   Wq/bUfJtJ8SVySKxgH3tRJsDvTHgWK+PcvGqKjyjOpgBX1aSUq6xUb1NO
+   FYCsSnZ9fMb9WFy/Wst7Z/9pIhI2+DDEP1To5bfPXR5MvUysef44p8lFx
+   js7p5cHIRp2aHvqb3Oa78oR9N2dLwuSeYcRn1jbPaANsZEZCx+nZg6FPk
+   g==;
+X-CSE-ConnectionGUID: hEvhgFTESEKkBaKofoRIqA==
+X-CSE-MsgGUID: E94225xzTNSH15MhaFZTRA==
+X-IronPort-AV: E=Sophos;i="6.21,322,1763424000"; 
+   d="scan'208";a="14070024"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 14:38:09 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:26174]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.26.67:2525] with esmtp (Farcaster)
+ id 63560b5f-7e28-490b-8e43-a2241f2b96ce; Tue, 3 Mar 2026 14:38:09 +0000 (UTC)
+X-Farcaster-Flow-ID: 63560b5f-7e28-490b-8e43-a2241f2b96ce
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Tue, 3 Mar 2026 14:38:09 +0000
+Received: from 6c7e67c92ceb.amazon.com (10.106.178.6) by
+ EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Tue, 3 Mar 2026 14:38:07 +0000
+From: Nathan Gao <zcgao@amazon.com>
+To: <stable@vger.kernel.org>
+CC: <gregkh@linuxfoundation.org>, <sashal@kernel.org>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<shuah@kernel.org>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<ap420073@gmail.com>, <zcgao@amazon.com>
+Subject: [PATCH 6.1.y] Revert "selftests: net: amt: wait longer for connection before sending packets"
+Date: Tue, 3 Mar 2026 06:37:50 -0800
+Message-ID: <20260303143750.57741-1-zcgao@amazon.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220055449.3073-1-tjmercier@google.com> <20260220055449.3073-3-tjmercier@google.com>
- <aZh-orwoaeAh52Bf@slm.duckdns.org> <CAOQ4uxjgXa1q-8-ajSBwza-Tkv91tFP-_wWzCQPW+PwJMehEWA@mail.gmail.com>
- <aZi6_K-pSRwAe7F5@slm.duckdns.org> <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
- <aZju-GFHf8Eez-07@slm.duckdns.org> <CAOQ4uxgzuxaLt2xs5a5snu9CBA_4esQ_+t0Wb6CX4M5OqM5AOA@mail.gmail.com>
- <aZx_8_rJNPF2EYgn@slm.duckdns.org> <20260224-hetzen-zeitnah-a3e1e08367cc@brauner>
-In-Reply-To: <20260224-hetzen-zeitnah-a3e1e08367cc@brauner>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 3 Mar 2026 15:27:52 +0100
-X-Gm-Features: AaiRm52i2NAug7aj4ITPTwYuE6XkZvKlA8xrZKtvkZavq_ZPH4PZm8-pNbBhwCc
-Message-ID: <CAOQ4uxhSL3ZRzNjM6AM_poxeTsYgWb5_f3tO6_4ketg8sFSOBw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
-To: Christian Brauner <brauner@kernel.org>, jack@suse.cz, Tejun Heo <tj@kernel.org>
-Cc: "T.J. Mercier" <tjmercier@google.com>, gregkh@linuxfoundation.org, 
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000f255a4064c1f8291"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D035UWA004.ant.amazon.com (10.13.139.109) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
---000000000000f255a4064c1f8291
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This reverts commit 7724036d4804222007689cd69f248347eb154793 which is
+commit 04708606fd7bdc34b69089a4ff848ff36d7088f9 upstream.
 
-On Tue, Feb 24, 2026 at 12:03=E2=80=AFPM Christian Brauner <brauner@kernel.=
-org> wrote:
->
-> On Mon, Feb 23, 2026 at 06:27:31AM -1000, Tejun Heo wrote:
-> > (cc'ing Christian Brauner)
-> >
-> > On Sat, Feb 21, 2026 at 06:11:28PM +0200, Amir Goldstein wrote:
-> > > On Sat, Feb 21, 2026 at 12:32=E2=80=AFAM Tejun Heo <tj@kernel.org> wr=
-ote:
-> > > >
-> > > > Hello, Amir.
-> > > >
-> > > > On Fri, Feb 20, 2026 at 10:11:15PM +0200, Amir Goldstein wrote:
-> > > > > > Yeah, that can be useful. For cgroupfs, there would probably ne=
-ed to be a
-> > > > > > way to scope it so that it can be used on delegation boundaries=
- too (which
-> > > > > > we can require to coincide with cgroup NS boundaries).
-> > > > >
-> > > > > I have no idea what the above means.
-> > > > > I could ask Gemini or you and I prefer the latter ;)
-> > > >
-> > > > Ah, you chose wrong. :)
-> > > >
-> > > > > What are delegation boundaries and NFS boundaries in this context=
-?
-> > > >
-> > > > cgroup delegation is giving control of a subtree to someone else:
-> > > >
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/=
-Documentation/admin-guide/cgroup-v2.rst#n537
-> > > >
-> > > > There's an old way of doing it by changing perms on some files and =
-new way
-> > > > using cgroup namespace.
-> > > >
-> > > > > > Would it be possible to make FAN_MNT_ATTACH work for that?
-> > > > >
-> > > > > FAN_MNT_ATTACH is an event generated on a mntns object.
-> > > > > If "cgroup NS boundaries" is referring to a mntns object and if
-> > > > > this object is available in the context of cgroup create/destroy
-> > > > > then it should be possible.
-> > > >
-> > > > Great, yes, cgroup namespace way should work then.
-> > > >
-> > > > > But FAN_MNT_ATTACH reports a mountid. Is there a mountid
-> > > > > to report on cgroup create? Probably not?
-> > > >
-> > > > Sorry, I thought that was per-mount recursive file event monitoring=
-.
-> > > > FAN_MARK_MOUNT looks like the right thing if we want to allow monit=
-oring
-> > > > cgroup creations / destructions in a subtree without recursively wa=
-tching
-> > > > each cgroup.
-> > >
-> > > The problem sounds very similar to subtree monitoring for mkdir/rmdir=
- on
-> > > a filesystem, which is a problem that we have not yet solved.
-> > >
-> > > The problem with FAN_MARK_MOUNT is that it does not support the
-> > > events CREATE/DELETE, because those events are currently
-> >
-> > Ah, bummer.
-> >
-> > > monitored in context where the mount is not available and anyway
-> > > what users want to get notified on a deleted file/dir in a subtree
-> > > regardless of the mount through which the create/delete was done.
-> > >
-> > > Since commit 58f5fbeb367ff ("fanotify: support watching filesystems
-> > > and mounts inside userns") and fnaotify groups can be associated
-> > > with a userns.
-> > >
-> > > I was thinking that we can have a model where events are delivered
-> > > to a listener based on whether or not the uid/gid of the object are
-> > > mappable to the userns of the group.
-> >
-> > Given how different NSes can be used independently of each other, it'd
-> > probably be cleaner if it doesn't have to depend on another NS.
-> >
-> > > In a filesystem, this criteria cannot guarantee the subtree isolation=
-.
-> > > I imagine that for delegated cgroups this criteria could match what
-> > > you need, but I am basing this on pure speculation.
-> >
-> > There's a lot of flexibility in the mechanism, so it's difficult to tel=
-l.
-> > e.g. There's nothing preventing somebody from creating two separate sub=
-trees
-> > delegated to the same user.
->
-> Delegation is based on inode ownership I'm not sure how well this will
-> fit into the fanotify model. Maybe the group logic for userns that
-> fanotify added works. I'm not super sure.
->
-> > Christian was mentioning allowing separate super for different cgroup m=
-ounts
-> > in another thread. cc'ing him for context.
->
-> If cgroupfs changes to tmpfs semantics where each mount gives you a new
-> superblock then it's possible to give each container its own superblock.
-> That in turn would make it possible to place fanotify watches on the
-> superblock itself. I think you'd roughly need something like the
-> following permission model:
->
+The reverted patch introduced dependency on lib.sh under net selftests.
+The file was introduced in v6.8-rc1 via commit 25ae948b4478
+("selftests/net: add lib.sh").
 
-It's hard for me to estimate the effort of changing to multi sb model,
-but judging by the length of the email I trimmed below, it does not
-sound trivial...
+Without lib.sh, the amt test fails with:
+./amt.sh: line 76: source: lib.sh: file not found
 
-How do you guys feel about something like this patch which associates
-an owner userns to every cgroup?
+The whole history of lib.sh includes about 50 commits and considering
+the file never landed on 6.1 it may be better to not introduce it.
 
-I have this POC branch from a long time ago [1] to filter all events
-on sb by in_userns() criteria.  The semantics for real filesystems
-were a bit difficult, but perhaps this model can work well for these
-pseudo singleton fs.
+Signed-off-by: Nathan Gao <zcgao@amazon.com>
+---
+ tools/testing/selftests/net/amt.sh | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-I am trying to work on a model that could be useful for both cgroupfs
-and nsfs:
+diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftests/net/amt.sh
+index ea40b469a8c1..7e7ed6c558da 100755
+--- a/tools/testing/selftests/net/amt.sh
++++ b/tools/testing/selftests/net/amt.sh
+@@ -73,8 +73,6 @@
+ #       +------------------------+
+ #==============================================================================
+ 
+-source lib.sh
+-
+ readonly LISTENER=$(mktemp -u listener-XXXXXXXX)
+ readonly GATEWAY=$(mktemp -u gateway-XXXXXXXX)
+ readonly RELAY=$(mktemp -u relay-XXXXXXXX)
+@@ -242,15 +240,14 @@ test_ipv6_forward()
+ 
+ send_mcast4()
+ {
+-	sleep 5
+-	wait_local_port_listen ${LISTENER} 4000 udp
++	sleep 2
+ 	ip netns exec "${SOURCE}" bash -c \
+ 		'printf "%s %128s" 172.17.0.2 | nc -w 1 -u 239.0.0.1 4000' &
+ }
+ 
+ send_mcast6()
+ {
+-	wait_local_port_listen ${LISTENER} 6000 udp
++	sleep 2
+ 	ip netns exec "${SOURCE}" bash -c \
+ 		'printf "%s %128s" 2001:db8:3::2 | nc -w 1 -u ff0e::5:6 6000' &
+ }
+-- 
+2.47.3
 
-If user is capable in userns, user will be able to set an sb
-watch for all events (say DELETE_SELF) on the sb, for objects
-whose owner_userns is in_userns() of the fanotify listener.
-
-This will enable watching for torn down cgroups and namepsaces
-which are visible to said user via delegated cgroups mount
-or via listns().
-
-I would like to allow calling fsnotify_obj_remove() hook with
-encoded object fid (e.g. nsfs_file_handle) instead of the vfs inode,
-so that cgroupfs/nsfs could report dying objects without needing
-to associate a vfs inode with them.
-
-WDYT? Is this an interesting direction to persure?
-
-Thanks,
-Amir.
-
-[1] https://lore.kernel.org/linux-fsdevel/CAOQ4uxgt1Cx5jx3L6iaDvbzCWPv=3Dfc=
-MgLaa9ODkiu9h718MkwQ@mail.gmail.com/
-
---000000000000f255a4064c1f8291
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-cgroup-track-owner_userns-per-cgroup.patch"
-Content-Disposition: attachment; 
-	filename="0001-cgroup-track-owner_userns-per-cgroup.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mmao8jni0>
-X-Attachment-Id: f_mmao8jni0
-
-RnJvbSA0YjNhNTZiOGNhNTQ4MzU0MjE0MzI5NzI5OTk3YTc4YzcyYTAxNmQzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBbWlyIEdvbGRzdGVpbiA8YW1pcjczaWxAZ21haWwuY29tPgpE
-YXRlOiBUdWUsIDMgTWFyIDIwMjYgMTQ6MDQ6MjIgKzAxMDAKU3ViamVjdDogW1BBVENIXSBjZ3Jv
-dXA6IHRyYWNrIG93bmVyX3VzZXJucyBwZXIgY2dyb3VwCgpBZGQgb3duZXJfdXNlcm5zIGZpZWxk
-IHRvIHN0cnVjdCBjZ3JvdXAgdG8gcmVjb3JkIHdoaWNoIHVzZXIgbmFtZXNwYWNlCm93bnMgYSBn
-aXZlbiBjZ3JvdXAuCgpGb3IgaGllcmFyY2h5IHJvb3RzLCB0aGUgb3duZXIgaXMgYWx3YXlzIGlu
-aXRfdXNlcl9ucy4KRm9yIGNncm91cHMgY3JlYXRlZCB2aWEgbWtkaXIgKGNncm91cF9jcmVhdGUo
-KSksIHBvc3NpYmx5IGluc2lkZSBhCmRlbGVnYXRlZCBjZ3JvdXAgbmFtZXNwYWNlLCB0aGUgb3du
-ZXIgaXMgdGhlIHVzZXIgbmFtZXNwYWNlIG9mIHRoZQpjcmVhdGluZyB0YXNrJ3MgY2dyb3VwIG5h
-bWVzcGFjZS4KClRoaXMgZmllbGQgaXMgYSBwcmVyZXF1aXNpdGUgZm9yIGRlbGl2ZXJpbmcgdXNl
-cm5zLXNjb3BlZCBmc25vdGlmeQpldmVudHMgKGUuZy4gRkFOX0RFTEVURV9TRUxGIHZpYSBGQU5f
-RklMRVNZU1RFTV9NQVJLKSB3aGVuIGEgY2dyb3VwIGlzCmRlc3Ryb3llZCwgYWxsb3dpbmcgYSBz
-dWZmaWNpZW50bHkgcHJpdmlsZWdlZCBhZG1pbiBpbnNpZGUgYSBkZWxlZ2F0ZWQKY2dyb3VwIG5h
-bWVzcGFjZSB0byB3YXRjaCBmb3IgY2dyb3VwIHRlYXJkb3duIHdpdGhvdXQgcmVxdWlyaW5nIGFj
-Y2Vzcwp0byB0aGUgZnVsbCBzeXN0ZW0gdmlldy4KClNpZ25lZC1vZmYtYnk6IEFtaXIgR29sZHN0
-ZWluIDxhbWlyNzNpbEBnbWFpbC5jb20+Ci0tLQogaW5jbHVkZS9saW51eC9jZ3JvdXAtZGVmcy5o
-IHwgOCArKysrKysrKwoga2VybmVsL2Nncm91cC9jZ3JvdXAuYyAgICAgIHwgNiArKysrKysKIDIg
-ZmlsZXMgY2hhbmdlZCwgMTQgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGlu
-dXgvY2dyb3VwLWRlZnMuaCBiL2luY2x1ZGUvbGludXgvY2dyb3VwLWRlZnMuaAppbmRleCBiYjky
-ZjVjMTY5Y2EyLi40ZWUzNDQ3OTJhMWQ1IDEwMDY0NAotLS0gYS9pbmNsdWRlL2xpbnV4L2Nncm91
-cC1kZWZzLmgKKysrIGIvaW5jbHVkZS9saW51eC9jZ3JvdXAtZGVmcy5oCkBAIC0zMyw2ICszMyw3
-IEBAIHN0cnVjdCBrZXJuZnNfb3BzOwogc3RydWN0IGtlcm5mc19vcGVuX2ZpbGU7CiBzdHJ1Y3Qg
-c2VxX2ZpbGU7CiBzdHJ1Y3QgcG9sbF90YWJsZV9zdHJ1Y3Q7CitzdHJ1Y3QgdXNlcl9uYW1lc3Bh
-Y2U7CiAKICNkZWZpbmUgTUFYX0NHUk9VUF9UWVBFX05BTUVMRU4gMzIKICNkZWZpbmUgTUFYX0NH
-Uk9VUF9ST09UX05BTUVMRU4gNjQKQEAgLTU1MSw2ICs1NTIsMTMgQEAgc3RydWN0IGNncm91cCB7
-CiAKIAlzdHJ1Y3QgY2dyb3VwX3Jvb3QgKnJvb3Q7CiAKKwkvKgorCSAqIFRoZSB1c2VyIG5hbWVz
-cGFjZSB0aGF0IG93bnMgdGhpcyBjZ3JvdXA6IHRoZSBjcmVhdGluZyB0YXNrJ3MKKwkgKiBjZ3Jv
-dXBfbnMtPnVzZXJfbnMgZm9yIGNoaWxkIGNncm91cHMsIG9yIGluaXRfdXNlcl9ucyBmb3IKKwkg
-KiBoaWVyYXJjaHkgcm9vdHMuICBEZXRlcm1pbmVzIHRoZSBzY29wZSBvZiBmaWxlc3lzdGVtIHdh
-dGNoZXMuCisJICovCisJc3RydWN0IHVzZXJfbmFtZXNwYWNlICpvd25lcl91c2VybnM7CisKIAkv
-KgogCSAqIExpc3Qgb2YgY2dycF9jc2V0X2xpbmtzIHBvaW50aW5nIGF0IGNzc19zZXRzIHdpdGgg
-dGFza3MgaW4gdGhpcwogCSAqIGNncm91cC4gIFByb3RlY3RlZCBieSBjc3Nfc2V0X2xvY2suCmRp
-ZmYgLS1naXQgYS9rZXJuZWwvY2dyb3VwL2Nncm91cC5jIGIva2VybmVsL2Nncm91cC9jZ3JvdXAu
-YwppbmRleCBjMjJjZGE3NzY2ZDg0Li5lMGJlYWY1Y2M4YzQ5IDEwMDY0NAotLS0gYS9rZXJuZWwv
-Y2dyb3VwL2Nncm91cC5jCisrKyBiL2tlcm5lbC9jZ3JvdXAvY2dyb3VwLmMKQEAgLTEzODEsNiAr
-MTM4MSw3IEBAIHN0YXRpYyB2b2lkIGNncm91cF9leGl0X3Jvb3RfaWQoc3RydWN0IGNncm91cF9y
-b290ICpyb290KQogCiB2b2lkIGNncm91cF9mcmVlX3Jvb3Qoc3RydWN0IGNncm91cF9yb290ICpy
-b290KQogeworCXB1dF91c2VyX25zKHJvb3QtPmNncnAub3duZXJfdXNlcm5zKTsKIAlrZnJlZV9y
-Y3Uocm9vdCwgcmN1KTsKIH0KIApAQCAtMjE5NSw2ICsyMTk2LDcgQEAgaW50IGNncm91cF9zZXR1
-cF9yb290KHN0cnVjdCBjZ3JvdXBfcm9vdCAqcm9vdCwgdTMyIHNzX21hc2spCiAJcm9vdF9jZ3Jw
-LT5rbiA9IGtlcm5mc19yb290X3RvX25vZGUocm9vdC0+a2Zfcm9vdCk7CiAJV0FSTl9PTl9PTkNF
-KGNncm91cF9pbm8ocm9vdF9jZ3JwKSAhPSAxKTsKIAlyb290X2NncnAtPmFuY2VzdG9yc1swXSA9
-IHJvb3RfY2dycDsKKwlyb290X2NncnAtPm93bmVyX3VzZXJucyA9IGdldF91c2VyX25zKCZpbml0
-X3VzZXJfbnMpOwogCiAJcmV0ID0gY3NzX3BvcHVsYXRlX2Rpcigmcm9vdF9jZ3JwLT5zZWxmKTsK
-IAlpZiAocmV0KQpAQCAtNTYwNyw2ICs1NjA5LDcgQEAgc3RhdGljIHZvaWQgY3NzX2ZyZWVfcndv
-cmtfZm4oc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQogCQkJY2dyb3VwX3B1dChjZ3JvdXBfcGFy
-ZW50KGNncnApKTsKIAkJCWtlcm5mc19wdXQoY2dycC0+a24pOwogCQkJcHNpX2Nncm91cF9mcmVl
-KGNncnApOworCQkJcHV0X3VzZXJfbnMoY2dycC0+b3duZXJfdXNlcm5zKTsKIAkJCWtmcmVlKGNn
-cnApOwogCQl9IGVsc2UgewogCQkJLyoKQEAgLTU4NDgsNiArNTg1MSw4IEBAIHN0YXRpYyBzdHJ1
-Y3QgY2dyb3VwICpjZ3JvdXBfY3JlYXRlKHN0cnVjdCBjZ3JvdXAgKnBhcmVudCwgY29uc3QgY2hh
-ciAqbmFtZSwKIAlpZiAoIWNncnApCiAJCXJldHVybiBFUlJfUFRSKC1FTk9NRU0pOwogCisJY2dy
-cC0+b3duZXJfdXNlcm5zID0gZ2V0X3VzZXJfbnMoY3VycmVudC0+bnNwcm94eS0+Y2dyb3VwX25z
-LT51c2VyX25zKTsKKwogCXJldCA9IHBlcmNwdV9yZWZfaW5pdCgmY2dycC0+c2VsZi5yZWZjbnQs
-IGNzc19yZWxlYXNlLCAwLCBHRlBfS0VSTkVMKTsKIAlpZiAocmV0KQogCQlnb3RvIG91dF9mcmVl
-X2NncnA7CkBAIC01OTU2LDYgKzU5NjEsNyBAQCBzdGF0aWMgc3RydWN0IGNncm91cCAqY2dyb3Vw
-X2NyZWF0ZShzdHJ1Y3QgY2dyb3VwICpwYXJlbnQsIGNvbnN0IGNoYXIgKm5hbWUsCiBvdXRfY2Fu
-Y2VsX3JlZjoKIAlwZXJjcHVfcmVmX2V4aXQoJmNncnAtPnNlbGYucmVmY250KTsKIG91dF9mcmVl
-X2NncnA6CisJcHV0X3VzZXJfbnMoY2dycC0+b3duZXJfdXNlcm5zKTsKIAlrZnJlZShjZ3JwKTsK
-IAlyZXR1cm4gRVJSX1BUUihyZXQpOwogfQotLSAKMi41My4wCgo=
---000000000000f255a4064c1f8291--
