@@ -1,117 +1,110 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A3B3890EE
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 20:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A523038654B
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 20:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772568529; cv=none; b=ccnPSgMRMAexZCox8L04CBb6jcxLykI/J5xZE99QBp19pqIlXrcPA2caTBo+wtZmTA6oMACDnHCJ40ptk0nJH4LH6FCFSZKi3AtKQFnANsEPaQ61EydKzwWSVgRDNGd60HPisG35pQZeCJ+wqluX0vFtwV2l7o8+JXAIVsb3nbI=
+	t=1772569381; cv=none; b=G4fto8uPmfy2sGhrgciRP9oDhpj5sY7nXGvIMrFTCdBsZ3SRzBNCywgn885JCYob+Uxr7KlMMceIVYZBb2NG/jiIsvtoC/CeAnWSGOjBV/hRTI3E48GFMFmKAGpgZVQNLkW4PtBXfUgTz6otV8TP1EP0r64fAQVIcQRpwQTx8sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772568529; c=relaxed/simple;
-	bh=ISEtte2YRGcmWkrcUHpDS6PMfMZOWkZs5vlInnwzUbA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=csHtuJ/ORPvT5KgwQ/8n2Vw0F92X05PQTwT9IvndGvjDgmLIQdRWeXtnNtmnd69oBNZhv+WBnkyQYS1qBIb/Pk1cYBaSZYykLOFmc777aK6MCy1M+oUrkbKSQ2gCMFmBlGAPqkkQU9wMUE4VwZLKnhgkSnPqzHsAr7DeWZV9LOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HJkcv25a; arc=none smtp.client-ip=74.125.82.44
+	s=arc-20240116; t=1772569381; c=relaxed/simple;
+	bh=ZlkAHRongZW7MFNkY97hZ1B7jfOQGw7I4BaMQXtR3VE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jq+6VeLjWdD3OH/ORj7TAVpeoAW0SIQw0VnYiLZJnCH21VEezlgBN6goTM/4DQASKY9ArsOmfn1oaBakfTw31Ux6xIHsZSogLLbkRR6nnOISDhXdWhJzWAAwLfFuYXfuZWnAysF85b/BQOeAQP9RlWrkOoonDHV4YD28tuiZSwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fNE/Qw6i; arc=none smtp.client-ip=209.85.167.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HJkcv25a"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-1275910b930so3701433c88.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 12:08:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fNE/Qw6i"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-45f194e9a98so2367514b6e.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 12:23:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772568528; x=1773173328; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9yF/aUyo6FiFRr8w9SYSbT1Zd6hZOeTGHVjT13l1hoE=;
-        b=HJkcv25afmCkUv3iLfkgKqnRrPxiIGQbc8eY35jXJy2JamiAwn6n+/2NrnoDWeeH+F
-         Ip89KJrdxqwG/DdWvI8V+oGBpiPYQgGPHrcvJ4PZy7kVhgCUs83bPytcLGrLM9OWpT16
-         BAutvlZgJ/+dH1cy6mMst6RE0mYgTyIZe/tSWqMgHN6xJ177tc0c2fD39iYPWN4kAPEm
-         H0ZEpGSZI39jS1xfKxgKF7PTe6cKc1h0egdst2bOgB7VLoQ6MjFbNKX9x/hg7KuhPOVl
-         qeOqm6/OtPMb0BO24N/AkfeJAClt91AgJjl5Rhi5zQDBsqApA++M+hql2kY9r9JvOPDE
-         aNSA==
+        d=gmail.com; s=20230601; t=1772569379; x=1773174179; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yEdszIU/63CHIO1XYZ9+oYkvoNvBVjVhAjHwY5bSphA=;
+        b=fNE/Qw6iXwv11x5pQMhHnMOMO026BQq0DRI2s/ipH0cfTtUdcNeVkJJZZJxhfxy0L8
+         unPtuMRg2wwgqHWKjfI3zwpVNwvIgQg5zPszQ7iAhkNMI8BvvCyXmknehZY+sAOnR3TH
+         Iq7lNjTpGLTRARHDXsxR453ozjfPQXI+z/7CuiEor2RSpsFGFQR5SHYwEnurshDjz4jU
+         nWcSGeIJIbAv0bTg3xhMrwzEIG1yusQazgh7DhjVDsm+o/4YYLoifFGsZCzbHvTUJNVn
+         QBFj89iDQqksblAFCrtdIrNtVe5YwXbr7dlDEPnhNc8Cm1ii20Sj99N+20vUdsuvSEkk
+         BTBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772568528; x=1773173328;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9yF/aUyo6FiFRr8w9SYSbT1Zd6hZOeTGHVjT13l1hoE=;
-        b=qKxA3HlQxmWTsOlXzA+zKOtNgTfO6NtwwSvpXmC26VxGQOX9Za8kl8dRXIdbvV4vtf
-         Mo3KoXKBotqAI6zYRm68hD6rxTVDS/3X8+QQD5Wm2nKK8Q0d/eqY26juJt5QLHBHxok2
-         bkmN66nPuN2VNGFteYh3M+sXBpBhRkcyy8gaIEqlLxsud057+nJqW69cPYIW28/HXgoX
-         CaaRg0gU0RzhwZCQIQCPTpV5vjxi1qvQD0pA7ToEq4tDYcNl17NPjaglTU0rOQyvJd/N
-         ASDCAHMjdUSIZAvAWUNqp5WQ8amCC+E3sKYUh0qlJnj7wI2gESBB3s9nKFezoL9or6D2
-         8q/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVZM51/J15mgTHY9Z5rGzhwuxgcVHH0O4yqGPn6Z3nW4Be3TnQf/TkHGjnyzr/MAHppxbCNesymJhZjRPZ5oQ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxscoKI4NoEMzMWcBN4HWeQMtjV25BEtZ0lhDq3MuzkvHK2UDC0
-	ldXJiCdytsW7odkBQKoVuyYypr7W0rmNXy+feh071AIhTwHFjGgtq+bS
-X-Gm-Gg: ATEYQzzNJwLESWpwlXQ1p4WiZhRrub4Fx2nZc8oDi3m9wgPBnJf3pHenHVwkxmbhtpc
-	9c6PZIrUsVjbPc9JoydM75FYWL0u9lX5jFxbW/3CmVwsmBJmBdAkR31rcXpESRg7qh5BcVW2r9b
-	6dbMr2iYXweizUbkt6HDao99YvKlznLPuzSftTpM5+lcBbI7uWjqw4KAf4XP4PFy+AE0B8yE/cu
-	f3jPBMgoIsF4hdSmVAvGe8oL9MNafdV3R5rwZe+LcvjoOrwbKoPKLHMUp/XHqSrNwHo2tHNvjEb
-	+Q2tmStxfpgK4dcxsRjAKNzgIj/hOWYAnPf8k6N7XT7y9jnBShQC6nU+96pd9WhW9GzGhMVtUNF
-	ZQ2AaBmdzAkJWzi6EzeSBrYFV61tThZdtsphMv2AY0tmiMbTupVGDZOPAmaf8+APeAiAr4Wyrx4
-	5ycQdEQ+LBbPJ2fEs1BK5sps7E8LxMqzt1RkeIBvZf2H9mFYb45g55zxqGMKftzPuLIHbgluRzT
-	NDhJlL3
-X-Received: by 2002:a05:7022:7a3:b0:127:9432:485f with SMTP id a92af1059eb24-128b0ce47b5mr1159115c88.5.1772568527731;
-        Tue, 03 Mar 2026 12:08:47 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:bf8e:1331:ef2b:145d? ([2620:10d:c090:500::3:4473])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12789a32633sm20160083c88.9.2026.03.03.12.08.45
+        d=1e100.net; s=20230601; t=1772569379; x=1773174179;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yEdszIU/63CHIO1XYZ9+oYkvoNvBVjVhAjHwY5bSphA=;
+        b=J/oTD7f/+xSmU97fzAvpG1y4yYh7IpHdbl8NYkWqWjZfrTlk1wCnNeYgJjFRjdeHom
+         KvDwKpHEGSKtVcO4IokKMwVM8gyyUHySlt/T6WjjwGnzyj/5PiKq4NDm9tbZBumi04DO
+         D58Otk6/0v/vo1R3/N89xxlN/rIUp7gaPY6FWUXYnaGpzwBO6QTxuwMsvg5sKGTstYZL
+         YeqTakKPOEwSwTvBgrn+uPv75cEo30qoZgCAsQ5PJh24x2hOvN937R9joS0SIPUBIWMH
+         Z1UGvUHj9tw+KAqqlXVsiH48lwknX4hXCgNhgMvfv7j0FjrEqqtU6GFpbkecBBITgrP7
+         2YAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXjn7CkQ4v3V3tcuZaebnrTj8/FVfL2VJtmsQXnu7YbE6oNh9eOUeZV39mXTRxy2FZVaBWkh2XpWIGUiWS0HAI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFXBvqQEGY8HakO3ErvylB8KRNWuGRaw2pmpbP4lfCcxBxSHAj
+	UrAZCkzUCSvilPuuo1MFwhcPrRvF31+0EHtzLaeVexUu1TnoqqYIe+nO
+X-Gm-Gg: ATEYQzwy5XpjZGJzG8rz0Up3QJWTYSmhcqgoxSejH65oUXG93hTK8nbhklZ6Hkvkuu0
+	EV0is/hvj2NkJpH7XnEyTTeYU9xMaxiOIpM8OKvz79qQJXfEKPXWpzyzVYsGa0PE4uqI1xEhFNd
+	79sKpG7gsp5tov8O98QCxYJ10YbJRztQEM2XvInuvnN6Waj9zzjPM7tSJKkInorxLuZyeCWY873
+	++N6M2sW8eLTOUhlejjjkfdjcDF1Nu9QF7QRIblfj0P4xWreZyVkqnbbfCKQV6S56lKsf1N0aCz
+	yu6BIpfwfr+qxuk0e7CIcV2Bh2x6VRFFGUUqXdrTGYuT9hFrhqm8INnb7yqMwx32cOUeLUrdNZG
+	1IfRErkgO6firmHPPzxcvcFjCXzR1bhHHrRZXrYNnzscflIfAZvXAiAW1oyWI25GFWO8ds11axM
+	HLR0BUQJPBetNCrrAQRJu7aQ88LWmEbQ==
+X-Received: by 2002:a05:6808:1491:b0:45e:e07c:3fd8 with SMTP id 5614622812f47-464bec61c64mr8375764b6e.43.1772569379579;
+        Tue, 03 Mar 2026 12:22:59 -0800 (PST)
+Received: from localhost ([2a03:2880:12ff:70::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4160cf23977sm15103082fac.4.2026.03.03.12.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 12:08:47 -0800 (PST)
-Message-ID: <24dceff5bf15b6c3e204c69617ac249de497b034.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Add trampolines single
- and multi-level pointer params test coverage
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, 	jolsa@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, 	pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- linux-open-source@crowdstrike.com
-Date: Tue, 03 Mar 2026 12:08:44 -0800
-In-Reply-To: <20260303095427.38981-3-slava.imameev@crowdstrike.com>
-References: <20260303095427.38981-1-slava.imameev@crowdstrike.com>
-	 <20260303095427.38981-3-slava.imameev@crowdstrike.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+        Tue, 03 Mar 2026 12:22:59 -0800 (PST)
+From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Gal Pressman <gal@nvidia.com>,
+	Nimrod Oren <noren@nvidia.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drv-net: rss: Fix error calculation in test_hitless_key_update
+Date: Tue,  3 Mar 2026 12:22:58 -0800
+Message-ID: <20260303202258.1595661-1-dimitri.daskalakis1@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-03-03 at 20:54 +1100, Slava Imameev wrote:
-> Single and multi-level pointer params and return value test coverage
-> for BPF trampolines:
-> - fentry/fexit programs covering struct and void double/triple
->   pointer parameters and return values
-> - verifier context tests covering pointers as parameters, these
->   tests cover single and double pointers to int, enum 32 and 64,
->   void, function, and double pointers to struct, triple pointers
->   for void
-> - verifier context tests covering single and double pointers to
->   float, to check proper error is returned as pointers to float
->   are not supported
-> - verifier context tests covering pointers as return values
-> - verifier context tests for lsm to check trusted parameters
->   handling
-> - verifier context tests covering out-of-bound access after cast
-> - verifier BPF helper tests to validate no change in verifier
->   behavior
->=20
-> Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
-> ---
+This test verifies there are no errors when a devices RSS key is updated
+while traffic is flowing. The current check is a no-op since the last
+sample was subtracted from itself.
 
-Again, I probably miss a point, but with current implementation it
-seems sufficient in verifier_ctx_ptr_param() to add one or two
-tests accessing void** or similar and checking verification log
-to validate that parameter has expected type scalar().
-Why so many tests are necessary?
+Fixes: 933048fec4dd ("selftests: drv-net: rss_ctx: test flow rehashing without impacting traffic")
+Signed-off-by: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+---
+ tools/testing/selftests/drivers/net/hw/rss_ctx.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[...]
+diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
+index 97246eab863a..d7cb30306368 100755
+--- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
++++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
+@@ -357,7 +357,7 @@ def test_hitless_key_update(cfg):
+         tgen.wait_pkts_and_stop(5000)
+ 
+     ksft_lt((t1 - t0).total_seconds(), 0.15)
+-    ksft_eq(errors1 - errors1, 0)
++    ksft_eq(errors1 - errors0, 0)
+     ksft_eq(carrier1 - carrier0, 0)
+ 
+ 
+-- 
+2.47.3
+
