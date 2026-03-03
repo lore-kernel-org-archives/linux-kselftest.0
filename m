@@ -1,302 +1,315 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444D5374E78
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 06:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBFB2149C7B;
+	Tue,  3 Mar 2026 07:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772518945; cv=none; b=guLN75L1u3clL/avheuYkrC6B7RT8/HspXvWwT9QWmrT63uP6+DZz3rFEsHl9FMRXz/1Xxxf+H6v8AlWUxb2/ZgyODRIXwCIz5KTVBcQCiQIkzxcrFgnSWAqxwFFf6hlkGbQQwGm3hjwuSmtUl6s/BWn/Smj3Uln5/S8Rks4z90=
+	t=1772521777; cv=none; b=vE/bPMYUt1UNnnqpsiX14ZsqTfk12+iF1YFjojSa5mLXatA40aX0xPP+DC3/tLM89+LMm1Jt+lTKBjuQCokGKn/HkUHCT0v3UwvHrsb7A4TT+siFGlOOkTx1gvHVHwgK4vDo2hmj1aIHxPeQxyOlhwC3oenbJUECyyAtdacn7BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772518945; c=relaxed/simple;
-	bh=hCH6OUGqlsWIY7zC0dS5OdMmmVu4dEA8EXsuCrydg2w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XbySPUE8y1bOhpk/ynsIcxUcZkekjMzXfp9SpCI27gmvCIGM7JP9ZcjlXUY6z4SXPA74DiTMpDd4PkrPnTcEmC3iexpXncnx5KaGBGkDLiIKx83Liv3ardUjY6bk4TBhjM4DOk9LAYXG+EzHYm2F5/x2aj4JAtyKkEoSWhJvPUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hBFbBJNe; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772521777; c=relaxed/simple;
+	bh=S2hyWDTjtOZ6PFcrmL53uq+Ut9lQFYrRfbPfG5BD0tQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pEhgFUS5NQqNqgeGzj08NY1uOMGc2MPqfmXWvdS2Ih/0CG8LD/rASaDabpLU+rULprvyUGndXj5QvQ7L2paCIu1If69HCy//WDP0BsekhCCJxT3KGP69O24pIJe2iBFjOxwW+9i4EmO6cCfpCqy2+TPvar7SU3woQVa+oSj6ltg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=blV+KjoE; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hBFbBJNe"
-Message-ID: <63622051-f128-4450-8579-97f25305beb5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772518931;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TXvC0W9BK/qCDM2luuVOjFiw+pG7WQpudbkrpHQ06Bk=;
-	b=hBFbBJNeRGCjHua0QjXLgz/eHaN8IFODEb3GXPUD8UbMcTeR5gfAlvWl0O3UihX48thOvt
-	iQ65ft3idSC9hFOIMyAXX0qKP2XgbVR99CJAnOOkPB00eEHxxmhlfz9pNXQ2DLDcq9edGY
-	7UJwXmxf3sVgeP7+cgWF1X5/kjOz/Tk=
-Date: Mon, 2 Mar 2026 22:21:55 -0800
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="blV+KjoE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1772521774;
+	bh=S2hyWDTjtOZ6PFcrmL53uq+Ut9lQFYrRfbPfG5BD0tQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=blV+KjoEK4/magl2I67qFyGBhkUPrpQ1V2CP+03cTLIzwvvSEKOBKBwhp92lHI4WQ
+	 3wzn3soX95MZMFtZ5UZTbqMIvRBNNlIckOppgdpRTnb5vCEbBXMY03cRdWmYzgtMce
+	 sRxm1O2lT9VgEGA4onE7yDBTRqqpOd8kXgeVbCw0=
+Date: Tue, 3 Mar 2026 08:09:33 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Jordan Richards <jordanrichards@google.com>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Mike Rapoport <rppt@kernel.org>, Pratyush Yadav <pratyush@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Willy Tarreau <w@1wt.eu>, Jason Miu <jasonmiu@google.com>, 
+	David Matlack <dmatlack@google.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] tools/nolibc: add ftruncate()
+Message-ID: <c65fdf06-2f69-4c81-be21-a14229eaf1b6@t-8ch.de>
+References: <20260303010039.2969125-1-jordanrichards@google.com>
+ <20260303010039.2969125-2-jordanrichards@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 04/22] vfio/pci: Register a file handler with Live
- Update Orchestrator
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
-Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
- Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
- Alistair Popple <apopple@nvidia.com>,
- Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal
- <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
- Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>,
- Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
- kexec@lists.infradead.org, kvm@vger.kernel.org,
- Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
- =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
- Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>,
- Pranjal Shrivastava <praan@google.com>, Pratyush Yadav
- <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>,
- Samiullah Khawaja <skhawaja@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>,
- =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
- Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>,
- Yi Liu <yi.l.liu@intel.com>
-References: <20260129212510.967611-1-dmatlack@google.com>
- <20260129212510.967611-5-dmatlack@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260129212510.967611-5-dmatlack@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260303010039.2969125-2-jordanrichards@google.com>
 
+Hi Jordan,
 
-在 2026/1/29 13:24, David Matlack 写道:
-> From: Vipin Sharma <vipinsh@google.com>
->
-> Register a live update file handler for vfio-pci device files. Add stub
-> implementations of all required callbacks so that registration does not
-> fail (i.e. to avoid breaking git-bisect).
->
-> This file handler will be extended in subsequent commits to enable a
-> device bound to vfio-pci to run without interruption while the host is
-> going through a kexec Live Update.
->
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Co-developed-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: David Matlack <dmatlack@google.com>
+On 2026-03-03 01:00:38+0000, Jordan Richards wrote:
+> On architectures with 32-bit longs, call the compat syscall
+> __NR_ftruncate64. As off_t is 64-bit it must be split into 2 registers.
+> Unlike llseek() which passes the high and low parts in explicitly named
+> arguments, the order here is endian independent.
+> 
+> Some architectures (arm, mips, ppc) require this pair of registers to
+> be aligned to an even register, so add custom sys_ftruncate64 wrappers
+> for those.
+> 
+> A test case for ftruncate is added which validates negative length or
+> invalid fd return the appropriate error, and checks the length is
+> correct on success.
+
+Thanks, this all looks good in general.
+
+In nolibc-next we renamed all the my_syscall*() functions to
+__nolibc_syscall*(), merging this patch through the liveupdate tree
+will lead to semantic conflicts.
+
+I see different ways to handle this:
+* An an immutable branch to merge into the liveupdate tree
+* Split up the series
+  * Use raw syscall(__NR_ftruncate) in the liveupdate
+    selftests, as it is sufficient for that.
+  * Merge the nolibc bits through the nolibc tree.
+  * Next cycle, switch to proper nolibc ftruncate().
+  * Let Linus handle the conflict when merging the tree.
+
+There are some nitpicks inline, but we can also fix those up when
+applying the patch.
+
+> Signed-off-by: Jordan Richards <jordanrichards@google.com>
 > ---
->   MAINTAINERS                            |  1 +
->   drivers/vfio/pci/Makefile              |  1 +
->   drivers/vfio/pci/vfio_pci.c            |  9 +++-
->   drivers/vfio/pci/vfio_pci_liveupdate.c | 69 ++++++++++++++++++++++++++
->   drivers/vfio/pci/vfio_pci_priv.h       | 14 ++++++
->   include/linux/kho/abi/vfio_pci.h       | 28 +++++++++++
->   6 files changed, 121 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/vfio/pci/vfio_pci_liveupdate.c
->   create mode 100644 include/linux/kho/abi/vfio_pci.h
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a671e3d4e8be..7d6cdecedb05 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -27520,6 +27520,7 @@ F:	Documentation/ABI/testing/debugfs-vfio
->   F:	Documentation/ABI/testing/sysfs-devices-vfio-dev
->   F:	Documentation/driver-api/vfio.rst
->   F:	drivers/vfio/
-> +F:	include/linux/kho/abi/vfio_pci.h
->   F:	include/linux/vfio.h
->   F:	include/linux/vfio_pci_core.h
->   F:	include/uapi/linux/vfio.h
-> diff --git a/drivers/vfio/pci/Makefile b/drivers/vfio/pci/Makefile
-> index e0a0757dd1d2..23305ebc418b 100644
-> --- a/drivers/vfio/pci/Makefile
-> +++ b/drivers/vfio/pci/Makefile
-> @@ -7,6 +7,7 @@ obj-$(CONFIG_VFIO_PCI_CORE) += vfio-pci-core.o
->   
->   vfio-pci-y := vfio_pci.o
->   vfio-pci-$(CONFIG_VFIO_PCI_IGD) += vfio_pci_igd.o
-> +vfio-pci-$(CONFIG_LIVEUPDATE) += vfio_pci_liveupdate.o
->   obj-$(CONFIG_VFIO_PCI) += vfio-pci.o
->   
->   obj-$(CONFIG_MLX5_VFIO_PCI)           += mlx5/
-> diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
-> index 0c771064c0b8..19e88322af2c 100644
-> --- a/drivers/vfio/pci/vfio_pci.c
-> +++ b/drivers/vfio/pci/vfio_pci.c
-> @@ -258,6 +258,10 @@ static int __init vfio_pci_init(void)
->   	int ret;
->   	bool is_disable_vga = true;
->   
-> +	ret = vfio_pci_liveupdate_init();
-> +	if (ret)
-> +		return ret;
-> +
->   #ifdef CONFIG_VFIO_PCI_VGA
->   	is_disable_vga = disable_vga;
->   #endif
-> @@ -266,8 +270,10 @@ static int __init vfio_pci_init(void)
->   
->   	/* Register and scan for devices */
->   	ret = pci_register_driver(&vfio_pci_driver);
-> -	if (ret)
-> +	if (ret) {
-> +		vfio_pci_liveupdate_cleanup();
->   		return ret;
-> +	}
->   
->   	vfio_pci_fill_ids();
->   
-> @@ -281,6 +287,7 @@ module_init(vfio_pci_init);
->   static void __exit vfio_pci_cleanup(void)
->   {
->   	pci_unregister_driver(&vfio_pci_driver);
-> +	vfio_pci_liveupdate_cleanup();
->   }
->   module_exit(vfio_pci_cleanup);
->   
-> diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
-> new file mode 100644
-> index 000000000000..b84e63c0357b
-> --- /dev/null
-> +++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
-> @@ -0,0 +1,69 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (c) 2025, Google LLC.
+>  tools/include/nolibc/arch-arm.h              | 11 +++++
+>  tools/include/nolibc/arch-mips.h             | 11 +++++
+>  tools/include/nolibc/arch-powerpc.h          | 11 +++++
+>  tools/include/nolibc/unistd.h                | 35 ++++++++++++++
+>  tools/testing/selftests/nolibc/nolibc-test.c | 51 ++++++++++++++++++++
+>  5 files changed, 119 insertions(+)
+> 
+> diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+> index 251c42579028..ed65fb674e61 100644
+> --- a/tools/include/nolibc/arch-arm.h
+> +++ b/tools/include/nolibc/arch-arm.h
+> @@ -6,9 +6,11 @@
+>  
+>  #ifndef _NOLIBC_ARCH_ARM_H
+>  #define _NOLIBC_ARCH_ARM_H
 
-The live update support for vfio-pci was initiated in 2025, but 
-developments are into 2026. Update the copyright to 2026 or 2025 - 2026.
+Nit: keep an empty line after the include guards.
 
-Zhu Yanjun
+> +#include <linux/unistd.h>
+>  #include "compiler.h"
+>  #include "crt.h"
+> +#include "std.h"
+>  
+>  /* Syscalls for ARM in ARM or Thumb modes :
+>   *   - registers are 32-bit
+> @@ -196,4 +198,13 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector _s
+>  }
+>  #endif /* NOLIBC_NO_RUNTIME */
+>  
+> +#ifdef __NR_ftruncate64
 
-> + * Vipin Sharma <vipinsh@google.com>
-> + * David Matlack <dmatlack@google.com>
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/kho/abi/vfio_pci.h>
-> +#include <linux/liveupdate.h>
-> +#include <linux/errno.h>
-> +
-> +#include "vfio_pci_priv.h"
-> +
-> +static bool vfio_pci_liveupdate_can_preserve(struct liveupdate_file_handler *handler,
-> +					     struct file *file)
+Should be unnecessary.
+
+> +static __attribute__((unused))
+> +int sys_ftruncate64(int fd, uint32_t length0, uint32_t length1)
 > +{
-> +	return false;
+> +	return my_syscall4(__NR_ftruncate64, fd, 0, length0, length1);
 > +}
+> +#define sys_ftruncate64 sys_ftruncate64
+> +#endif
 > +
-> +static int vfio_pci_liveupdate_preserve(struct liveupdate_file_op_args *args)
+>  #endif /* _NOLIBC_ARCH_ARM_H */
+> diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+> index a72506ceec6b..26d044004ec6 100644
+> --- a/tools/include/nolibc/arch-mips.h
+> +++ b/tools/include/nolibc/arch-mips.h
+> @@ -6,9 +6,11 @@
+>  
+>  #ifndef _NOLIBC_ARCH_MIPS_H
+>  #define _NOLIBC_ARCH_MIPS_H
+
+Also an empty line.
+
+> +#include <linux/unistd.h>
+>  #include "compiler.h"
+>  #include "crt.h"
+> +#include "std.h"
+>  
+>  #if !defined(_ABIO32) && !defined(_ABIN32) && !defined(_ABI64)
+>  #error Unsupported MIPS ABI
+> @@ -269,4 +271,13 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector __
+>  }
+>  #endif /* NOLIBC_NO_RUNTIME */
+>  
+> +#ifdef __NR_ftruncate64
+> +static __attribute__((unused))
+> +int sys_ftruncate64(int fd, uint32_t length0, uint32_t length1)
 > +{
-> +	return -EOPNOTSUPP;
+> +	return my_syscall4(__NR_ftruncate64, fd, 0, length0, length1);
 > +}
+> +#define sys_ftruncate64 sys_ftruncate64
+> +#endif
 > +
-> +static void vfio_pci_liveupdate_unpreserve(struct liveupdate_file_op_args *args)
+>  #endif /* _NOLIBC_ARCH_MIPS_H */
+> diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
+> index e0c7e0b81f7c..71829cb027e8 100644
+> --- a/tools/include/nolibc/arch-powerpc.h
+> +++ b/tools/include/nolibc/arch-powerpc.h
+> @@ -6,9 +6,11 @@
+>  
+>  #ifndef _NOLIBC_ARCH_POWERPC_H
+>  #define _NOLIBC_ARCH_POWERPC_H
+> +#include <linux/unistd.h>
+>  
+>  #include "compiler.h"
+>  #include "crt.h"
+> +#include "std.h"
+>  
+>  /* Syscalls for PowerPC :
+>   *   - stack is 16-byte aligned
+> @@ -218,4 +220,13 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector _s
+>  }
+>  #endif /* NOLIBC_NO_RUNTIME */
+>  
+> +#ifdef __NR_ftruncate64
+> +static __attribute__((unused))
+> +int sys_ftruncate64(int fd, uint32_t length0, uint32_t length1)
 > +{
+> +	return my_syscall4(__NR_ftruncate64, fd, 0, length0, length1);
 > +}
+> +#define sys_ftruncate64 sys_ftruncate64
+> +#endif
 > +
-> +static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
+>  #endif /* _NOLIBC_ARCH_POWERPC_H */
+> diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
+> index bb5e80f3f05d..85ac253f9189 100644
+> --- a/tools/include/nolibc/unistd.h
+> +++ b/tools/include/nolibc/unistd.h
+> @@ -48,6 +48,41 @@ int access(const char *path, int amode)
+>  	return faccessat(AT_FDCWD, path, amode, 0);
+>  }
+>  
+> +#if !defined(sys_ftruncate64) && defined(__NR_ftruncate64)
+> +static __attribute__((unused))
+> +int sys_ftruncate64(int fd, uint32_t length0, uint32_t length1)
 > +{
-> +	return -EOPNOTSUPP;
-> +}
 > +
-> +static void vfio_pci_liveupdate_finish(struct liveupdate_file_op_args *args)
+
+Nit: Spurious empty line.
+
+> +	return my_syscall3(__NR_ftruncate64, fd, length0, length1);
+> +}
+> +#define sys_ftruncate64 sys_ftruncate64
+> +#endif
+> +
+> +static __attribute__((unused))
+> +int sys_ftruncate(int fd, off_t length)
 > +{
-> +}
+> +#ifdef sys_ftruncate64
+> +	union {
+> +		off_t length;
+> +		struct {
+> +			uint32_t length0;
+> +			uint32_t length1;
+> +		};
+> +	} arg;
 > +
-> +static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
-> +	.can_preserve = vfio_pci_liveupdate_can_preserve,
-> +	.preserve = vfio_pci_liveupdate_preserve,
-> +	.unpreserve = vfio_pci_liveupdate_unpreserve,
-> +	.retrieve = vfio_pci_liveupdate_retrieve,
-> +	.finish = vfio_pci_liveupdate_finish,
-> +	.owner = THIS_MODULE,
-> +};
+> +	arg.length = length;
 > +
-> +static struct liveupdate_file_handler vfio_pci_liveupdate_fh = {
-> +	.ops = &vfio_pci_liveupdate_file_ops,
-> +	.compatible = VFIO_PCI_LUO_FH_COMPATIBLE,
-> +};
-> +
-> +int __init vfio_pci_liveupdate_init(void)
-> +{
-> +	if (!liveupdate_enabled())
-> +		return 0;
-> +
-> +	return liveupdate_register_file_handler(&vfio_pci_liveupdate_fh);
-> +}
-> +
-> +void vfio_pci_liveupdate_cleanup(void)
-> +{
-> +	if (!liveupdate_enabled())
-> +		return;
-> +
-> +	liveupdate_unregister_file_handler(&vfio_pci_liveupdate_fh);
-> +}
-> diff --git a/drivers/vfio/pci/vfio_pci_priv.h b/drivers/vfio/pci/vfio_pci_priv.h
-> index 27ac280f00b9..68966ec64e51 100644
-> --- a/drivers/vfio/pci/vfio_pci_priv.h
-> +++ b/drivers/vfio/pci/vfio_pci_priv.h
-> @@ -133,4 +133,18 @@ static inline void vfio_pci_dma_buf_move(struct vfio_pci_core_device *vdev,
->   }
->   #endif
->   
-> +#ifdef CONFIG_LIVEUPDATE
-> +int __init vfio_pci_liveupdate_init(void);
-> +void vfio_pci_liveupdate_cleanup(void);
+> +	return sys_ftruncate64(fd, arg.length0, arg.length1);
 > +#else
-> +static inline int vfio_pci_liveupdate_init(void)
-> +{
-> +	return 0;
+> +	return my_syscall2(__NR_ftruncate, fd, length);
+> +#endif
 > +}
 > +
-> +static inline void vfio_pci_liveupdate_cleanup(void)
+> +static __attribute__((unused))
+> +int ftruncate(int fd, off_t length)
 > +{
+> +	return __sysret(sys_ftruncate(fd, length));
 > +}
-> +#endif /* CONFIG_LIVEUPDATE */
+>  
+>  static __attribute__((unused))
+>  int msleep(unsigned int msecs)
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 1b9d3b2e2491..6a84dfbb4b73 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -969,6 +969,56 @@ int test_fork(enum fork_type type)
+>  	}
+>  }
+>  
+> +int test_ftruncate(void)
+> +{
+> +	int ret;
+> +	int fd;
+> +	struct stat stat_buf;
+> +	const char *filename = "/tmp/ftruncate_test";
 > +
->   #endif
-> diff --git a/include/linux/kho/abi/vfio_pci.h b/include/linux/kho/abi/vfio_pci.h
-> new file mode 100644
-> index 000000000000..37a845eed972
-> --- /dev/null
-> +++ b/include/linux/kho/abi/vfio_pci.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+> +	ret = ftruncate(-1, 0);
+> +	if (ret != -1 || errno != EBADF) {
+> +		errno = EINVAL;
+> +		return __LINE__;
+> +	}
 > +
-> +/*
-> + * Copyright (c) 2025, Google LLC.
-> + * Vipin Sharma <vipinsh@google.com>
-> + * David Matlack <dmatlack@google.com>
-> + */
-> +
-> +#ifndef _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H
-> +#define _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H
-> +
-> +/**
-> + * DOC: VFIO PCI Live Update ABI
-> + *
-> + * This header defines the ABI for preserving the state of a VFIO PCI device
-> + * files across a kexec reboot using LUO.
-> + *
-> + * Device metadata is serialized into memory which is then handed to the next
-> + * kernel via KHO.
-> + *
-> + * This interface is a contract. Any modification to any of the serialization
-> + * structs defined here constitutes a breaking change. Such changes require
-> + * incrementing the version number in the VFIO_PCI_LUO_FH_COMPATIBLE string.
-> + */
-> +
-> +#define VFIO_PCI_LUO_FH_COMPATIBLE "vfio-pci-v1"
-> +
-> +#endif /* _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H */
+> +	fd = open(filename, O_RDWR | O_CREAT);
 
--- 
-Best Regards,
-Yanjun.Zhu
+Missing the mode argument.
+O_TMPFILE would make things easier.
 
+> +	if (fd == -1)
+> +		return __LINE__;
+> +
+> +	ret = ftruncate(fd, -1);
+> +	if (ret != -1 || errno != EINVAL) {
+> +		if (ret == 0)
+> +			errno = EINVAL;
+> +		ret = __LINE__;
+> +		goto end;
+> +	}
+> +
+> +	ret = ftruncate(fd, 42);
+> +	if (ret != 0) {
+> +		ret = __LINE__;
+> +		goto end;
+> +	}
+> +
+> +	ret = fstat(fd, &stat_buf);
+> +	if (ret != 0) {
+> +		ret = __LINE__;
+> +		goto end;
+> +	}
+> +
+> +	if (stat_buf.st_size != 42) {
+> +		errno = EINVAL;
+> +		ret = stat_buf.st_size;
+> +		goto end;
+> +	}
+
+Could you also add a variant which tests that 64-bit values work correctly?
+
+> +
+> +end:
+> +	close(fd);
+> +	unlink(filename);
+> +
+> +	return ret;
+> +}
+> +
+>  int test_stat_timestamps(void)
+>  {
+>  	struct stat st;
+> @@ -1406,6 +1456,7 @@ int run_syscall(int min, int max)
+>  		CASE_TEST(file_stream);       EXPECT_SYSZR(1, test_file_stream()); break;
+>  		CASE_TEST(file_stream_wsr);   EXPECT_SYSZR(1, test_file_stream_wsr()); break;
+>  		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork(FORK_STANDARD)); break;
+> +		CASE_TEST(ftruncate);         EXPECT_SYSZR(1, test_ftruncate()); break;
+>  		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
+>  		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
+>  		CASE_TEST(directories);       EXPECT_SYSZR(proc, test_dirent()); break;
+> -- 
+> 2.53.0.473.g4a7958ca14-goog
+> 
