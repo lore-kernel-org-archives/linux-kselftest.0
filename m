@@ -1,35 +1,54 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A203D39098E;
-	Tue,  3 Mar 2026 04:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A14282F03
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 05:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772513149; cv=none; b=XKsSKYuzyzIDyRF1YspdQPOvP/gNEhdp8TtGhbPjGGhh9/WkifLqiD4bh0oPs6eHXrKVop4DPp6jNNLclNTnJVdlz8BtyGrWg9L3+dXm0iLRPgiYfHJR7WegtLLMJ2sVDFI3PnxBAVyqi4kaGxwxFbjGWV5HdQwUe8NP7/d9+a8=
+	t=1772517239; cv=none; b=YALj7wFI0tTc0qTiDhCJHC4ZVJmR4nd1rchCfNtoYDHa4u0f+rxv6rWqNn/rWH2kMMVSk1WxBIXOBZ6h/DGGqRkX0dE5g5j9d+HY1LpDTBURUSeDk+MiztXk8VuXTFfF8pkXUfmoDfawhrOl3+yjlPiyIsupilAFoEKCLv8bx+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772513149; c=relaxed/simple;
-	bh=0hHa3PRLNTqZRZb4O0Pqr4m5Ozn7pW0ThAPDCAnQo7M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ILR94P21E7d3WzH/Yr9H/dCGjb7Baw54aEPJQ3VaX/3G5LGpeVuQ4iHgPftoSo5k5mWUPK7zupYVwEfugJZUqED72Kx4j0XxpxNo+uFnDTiQH/e/brFeZbKizawvENknDY2VBDSdJYp4HSILGZGFSLJ+1BV6WZa8kVsLqiUjmAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBGvN+s3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772517239; c=relaxed/simple;
+	bh=ZGrj0j/IEip8S1DXZUxjWsPrdRhmssS4yIc31rZ7NRs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Da6SsqOSeo5hnDRaC5xURc2Ph8a5UJzIzqvgs2lEummdQGiUIHPKPhLaL8xqNo/8WSAMvsI0anq8HYcr+XsJbGT36c7w5IuB8Y2CzjFFePN3Y1uhU6gph2jHm6xQs/TN3oteM7+kpnNqTNk6Bv6P/Nd8qEmB5mcu+BQv6pxcVPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XvH6QivB; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBGvN+s3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D54DC116C6;
-	Tue,  3 Mar 2026 04:45:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772513149;
-	bh=0hHa3PRLNTqZRZb4O0Pqr4m5Ozn7pW0ThAPDCAnQo7M=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=UBGvN+s3hKMujlq13mivY5VP1764tRFFzhNmpVp/rPvzlF3t3G2gD4gu8q78+9/9h
-	 J0soVhMX9BbKlquabQifq7dy8IpamGiacXztd+z3Pj2VEM39Ed02EyrzWwuxDGqU+U
-	 fUcb1n90V3so3vgEgeSw4ClM+FpKRLkk2zFwtthfk4cpmxrUSL3F7m/S9SX77N/zKi
-	 JK+LZLqdNQ3MKKEz2sS197yxVl7V6CdFkQbaiD6tp4xUeowjmBC8iE/yqlUEWyvL0K
-	 k24Z4LaeHiIvVHyaq3riUoqljFvbnVw6laBWbeAvOFJvXLCncKdMHUw2R/WAazGvE/
-	 GnRfHyq2UGRyQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02F0B3809A80;
-	Tue,  3 Mar 2026 04:45:52 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XvH6QivB"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772517226;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kM8+aenz/ANMqnQp+57N2W5LB8WvOkGoJfAFS3XVydc=;
+	b=XvH6QivBqp1s/pY5Zf+k5PI81jGpW8mY9PtTyhX6aGYPOrolJOEfaAg/sfzMJpQdnTgT5s
+	WPbDzUG0l6ZQQ/nNn0JbMYNT7Tlv4nN40BH2RQuiomDXdCVDBKpeW/kfJi429QxqvYBo5d
+	PoA+ebzWTtDLPwhDGx9twvAU6NWt9ZM=
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v5 0/2] Fix test_cgroup_iter_memcg issues found during back-porting
+Date: Tue,  3 Mar 2026 13:53:07 +0800
+Message-ID: <cover.1772505399.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,42 +56,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/net: packetdrill: restore
- tcp_rcv_big_endseq.pkt
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177251315080.625663.5571489173567456265.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Mar 2026 04:45:50 +0000
-References: <20260301-tcp_rcv_big_endseq-v1-1-86ab7415ab58@gmail.com>
-In-Reply-To: <20260301-tcp_rcv_big_endseq-v1-1-86ab7415ab58@gmail.com>
-To: Simon Baatz <gmbnomis@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+While back-porting "mm: bpf kfuncs to access memcg data", I
+encountered issues with test_cgroup_iter_memcg, specifically
+in test_kmem.
+The test_cgroup_iter_memcg test would falsely pass when
+bpf_mem_cgroup_page_state() failed due to incompatible enum
+values across kernel versions. Additionally, test_kmem would
+fail on systems with cgroup.memory=nokmem enabled.
 
-On Sun, 01 Mar 2026 09:41:33 +0100 you wrote:
-> From: Simon Baatz <gmbnomis@gmail.com>
-> 
-> Commit 1cc93c48b5d7 ("selftests/net: packetdrill: remove tests for
-> tcp_rcv_*big") removed the test for the reverted commit 1d2fbaad7cd8
-> ("tcp: stronger sk_rcvbuf checks") but also the one for commit
-> 9ca48d616ed7 ("tcp: do not accept packets beyond window").
-> 
-> [...]
+These patches are my fixes for the problems I encountered.
 
-Here is the summary with links:
-  - selftests/net: packetdrill: restore tcp_rcv_big_endseq.pkt
-    https://git.kernel.org/netdev/net/c/3f10543c5bdd
+Changelog:
+v5:
+According to the comments of Emil Tsalapatis and JP Kobryn, dropped
+"selftests/bpf: Check bpf_mem_cgroup_page_state return value".
+v4:
+Fixed wrong git commit log in "bpf: Use bpf_core_enum_value for stats in
+cgroup_iter_memcg".
+v3:
+According to the comments of JP Kobryn, remove kmem subtest from
+cgroup_iter_memcg and fix assertion string in test_pgfault.
+v2:
+According to the comments of JP Kobryn, added bpf_core_enum_value()
+usage in the BPF program to handle cross-kernel enum value differences
+at load-time instead of compile-time.
+Dropped the mm/memcontrol.c patch.
+Modified test_kmem handling: instead of skipping when nokmem is set,
+verify that kmem value is zero as expected.
+According to the comments of bot, fixed assertion message: changed
+"bpf_mem_cgroup_page_state" to "bpf_mem_cgroup_vm_events" for PGFAULT
+check.
 
-You are awesome, thank you!
+Hui Zhu (2):
+  selftests/bpf: Remove kmem subtest from cgroup_iter_memcg
+  bpf: Use bpf_core_enum_value for stats in cgroup_iter_memcg
+
+ .../testing/selftests/bpf/cgroup_iter_memcg.h |  2 --
+ .../bpf/prog_tests/cgroup_iter_memcg.c        | 28 -------------------
+ .../selftests/bpf/progs/cgroup_iter_memcg.c   | 18 ++++++++----
+ 3 files changed, 12 insertions(+), 36 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
