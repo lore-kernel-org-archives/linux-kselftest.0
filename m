@@ -1,104 +1,154 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C054E373C1E
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 01:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772502690; cv=none; b=t9HKw1eYICLPtne3svhUJxaMe1hYOSikSfGilF1edGZNrIN6IegTvbp4WJZIcCv2OMKlkvD0VkVCXxCHwmm1tYeXhjSgoNHDs90ITKuAS5Qj1X8Gu/nlPY27xu2BPvVe8pnYBwV6rtxMiWQcCUX4rNbC+aOJU4/oauVEHpSh990=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772502690; c=relaxed/simple;
-	bh=QR9xC+LbZjTEcw2B3g6RGPgRmzHv4fIjmH/+ye7UnDs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cPIagthA2DPEKsnUxTYiwyu4REmlHBfAYp89eFjpnl61Awr0aQt5WAbOV9PN7pG/XC2bZa70tXs+tsAO95r3lHN/R0VV+7qvCFqb3KyH6VuCOhdMbshWduROyVhjuwXbB1FJTKJxicAkSSWOu7kSLhRlUmxwFHC5XQHge/oFEXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Bm5NO3tr; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23091282F03
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 02:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772504140; cv=pass; b=kDQC8V7ZK61r6P7McaLYkntvB3FRgwe6odbvAA48QNTJBFoIQHiK9RV3QvmPFtz8ABq8ZKmSRS0wRU7tB9u5EODUIrPq/Oinw3MUTFl6m2hWIvOMBNC6YfoTx7FeTCcWoJT6WKmI2Zm2rbgBFvszWA/IkUFBInN3ACiy0bbwuqE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772504140; c=relaxed/simple;
+	bh=0/3WVRTAV68Tqab1dU46QJFgGgY/DfR2M6RH6QxWnpU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kVOj50bHE/rDErIU9mPycSbfSNfG9GdfRTUfMxcIdhnrMrasRxy0qW89lIs2T+F0tK7cy3N93BvDmfy/6+7xpJgTnLSG5Nkeoo95DmaiNd6J85CaesBiLyS9rQRKdvp3JR3D/FVsS1MoJixA8oWhDF1XvXtmHTyYJCOw6h5XgBE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNBqPBSk; arc=pass smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Bm5NO3tr"
-Message-ID: <f38608e1-4e85-4bc4-8872-c9ecf38e5d7e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772502686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H6veD8qM4F+WyZg576UBUjZ2Qmn0u8K3QCi47PEsWrI=;
-	b=Bm5NO3trAPfude3N6WDHXMoo5/emzVqA759MZb7U4Ltx4YakxOrYeuBn5F/zsr8qmw538h
-	Pvgjz5Y+vsWw7ahEeJjuB+JU++N4PnCPLfZo55eb/ypkGWnJ5NWLnmfQsZcZ/A3leEt8Sw
-	S83EC/8fTfoiwKGlHYh7+RS/u8VNsWY=
-Date: Mon, 2 Mar 2026 17:51:18 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNBqPBSk"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-79800183233so70087427b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 18:15:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772504138; cv=none;
+        d=google.com; s=arc-20240605;
+        b=HmuT4zwx2kREXw1FrJZhPjb2rDAkRzqqlqgzGBwl5/6KRAXg02HXmEbCkSQ6I50SoZ
+         XUp6SDL6BT4eQPrjo/cGHIG68rXSXYBvMoBI34aXHIiX7OByi14adtrL/1i2EVUPsSSx
+         hJfNMiup1y+LnsCc2pjLX1jhyDKg2OXMbNKic+zjrhe7jm+vdQVaOXo1Krez+UY19kBt
+         PiFsU/SC/Ekcwdu0TXsWxGuVdZIaxa9Co7xFggxtKEw8lzC2imF9AtNojusO7pr8d+jf
+         bcfUYfVDlKGpFLiMizbtGE4z9yeRljN6x+APyvNLqKSsU4/2T56yLP4s1riao807waov
+         K2Jw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=zoWPPOcgLHeuKkOjDta8aL0tHWF1IewgSZONMaW0bRA=;
+        fh=tde7MxHk8sDkodhShLSAsqjnLPJkKKLfxfvaoGp0p4Y=;
+        b=HuPah41/VTEU+x7l5QVhb8f6wUaA1NpChBfb8FcFgVWkEpCMMsUjckCTDui5oNZew+
+         qbME3GAnVe6W0Lc9B9ok5XyvY8w8V4O8UzA887PZw4hW07nU7rUCEEp/zlA/NQ0NMIb4
+         W7oX44LDLPTwGMW4F95PaSnflvrEEkxRrXSJH6lfzRpNgbLMxejFfxWDhCAQwon4xn8Z
+         cXcwJT4aZvi8YakEX9CggIrE57/SqPwjKpXOdaaEvz8pKoy22X4yHd/97nvkOGTWXats
+         fAX3CCwpdmVqSMtfe4oevQL1hFJiifvhm1X9fsh+G/Yr6LlYfV2ZRm/Gh08PbTOut57h
+         deNw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772504138; x=1773108938; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zoWPPOcgLHeuKkOjDta8aL0tHWF1IewgSZONMaW0bRA=;
+        b=QNBqPBSk4KfCVTVjTyIinlZBn+3CQjBCtOmMgz7sVHE8X6rJcuqWkuwk2VIFMk6lfC
+         okFmjZBtcAlq9V63neEYHHKDa+UmKShLubQEq3OvbQe3qvzarFp765ZzzX14JfPTJzd+
+         Q3FyTLjGpOkJJnow84GBPw9kbasbSfq7OSuZ1o7mnFrSuhyiAVEu2AIAcRJktk2a/kGW
+         piIleR0vuWII93WiG59lPDg///tJOfPtnM2/WDzXjQKRA5385ps2gClagT8iXpNhL2XB
+         +m/GeNJ7P0eFQW3qnSKmRZ5hVBCbLodSSEiH6vmRr60Wa7yjWmyT+bfqfNsgMcViRMsA
+         Fc9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772504138; x=1773108938;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zoWPPOcgLHeuKkOjDta8aL0tHWF1IewgSZONMaW0bRA=;
+        b=xR+2AFVyyIl0S1wZjvmZu+DWz0eMG6POTRvymTPSF6kzYtOxPXQhnfy8903rGBFmaN
+         w8kqDGPPbzQF6BWRYFRToOQaDGEfsGnjhBEnUjk21gW6OK+fm75CgKLLTdKSf2VpBvNP
+         vwR9Omj3ZKQFSfS8WiNKhMBuflcgHBtW0TRcMOfdYx3aWqbLakVcmZW1LPBmDMrHQAoi
+         gLzxz2WzPAQh/WEAIqKZ9OmyR/KeTbGZPpgQ7ur/hV3cd6Pu+q4unb6EQGdBl8A4d/A/
+         aAn/cojpf6ntCTh0bBYceKkjMW/TOBs/jDJjG5Yi6n2K8ePclQ37XVXYrtOaLB/CdcdX
+         tqvw==
+X-Forwarded-Encrypted: i=1; AJvYcCWfOJFjORmAdxN32+VOBn8OiIyRf6jdusNdKc73BN7O/C85x4a0BQB9M814tmtMxKGV391A7fb/BO0oSN5fqEU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzx/XbSA8bJncos3esuvF9DMMPhyPAtYzjKshE+jBR8xqpq13RB
+	syhvtKrVqfcPuzAbsV6/xTiorbFMOa3hg6FjyiXZf0eCAZbtF/rvdbDFAqpLgzXyQEVxOKC+oWX
+	IJRHsfNiVhEYhEa9cwn7kxC58xi9JPtg=
+X-Gm-Gg: ATEYQzwrXV5j3fRgOGBf7nfDc8eftJNwQ6uB8eNeAr/jGrNGGukRwLwppvo7TkJbPN+
+	KT3sujaMdCKysjxiuyq0moiR7Yf4vw1SQeBAKyOyFMy4+eerVMFmkHYcyAQ+aRPvvVVGoZrBJkO
+	n6x9TAb1TYYUT8qS6dXgg3x4iImBAUME8qh8YCNmKx+4pbTcWSNFk+56k9pPwpaNY0PvhPplKYZ
+	mCiGae6TlBpjBr8gAG/hwXPtEqqpNKfnVp0jEtRi977X71k5lt1Vuf3ovnhZaJvm4nDHejykXmX
+	B/692o1y
+X-Received: by 2002:a05:690c:88:b0:797:bc42:9e35 with SMTP id
+ 00721157ae682-798bb3d41e5mr3992027b3.23.1772504138088; Mon, 02 Mar 2026
+ 18:15:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2 3/4] bpf, sockmap: Adapt for the af_unix-specific
- lock
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Willem de Bruijn <willemb@google.com>, Cong Wang <cong.wang@bytedance.com>,
- Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
- <20260207-unix-proto-update-null-ptr-deref-v2-3-9f091330e7cd@rbox.co>
- <CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com>
- <c4eaead1-ad69-42f0-9699-5f2d555a7693@rbox.co>
- <a2f2c260-38e8-4ba3-8655-cffbee046259@linux.dev>
- <b75bbc3f-85fd-4209-9ce1-3bf685ba62ff@rbox.co>
- <d122ed8b-ebfb-4d59-96ce-10c361e76676@linux.dev>
- <1022fcaf-ca38-43d2-84cb-f66a504335e1@rbox.co>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-Content-Language: en-US
-In-Reply-To: <1022fcaf-ca38-43d2-84cb-f66a504335e1@rbox.co>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260228074555.122950-1-sun.jian.kdev@gmail.com>
+ <20260228074555.122950-3-sun.jian.kdev@gmail.com> <aaVgTiHlc4rXvzKJ@krava>
+In-Reply-To: <aaVgTiHlc4rXvzKJ@krava>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Tue, 3 Mar 2026 10:15:26 +0800
+X-Gm-Features: AaiRm51dhpzDzc25XjIGtzB1i-KYwE6RRyra8isDGEkOSSEK9SbBlR_csmNEtRw
+Message-ID: <CABFUUZGAK-kD75QAc8acfoGvPVj+EuaFNLT7rcPcWP7SOnpKqw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] selftests/bpf: bpf_cookie: make perf_event subtest
+ trigger reliably
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/24/26 7:28 AM, Michal Luczaj wrote:
-> On 2/23/26 22:43, Martin KaFai Lau wrote:
->>
->> On 2/11/26 2:02 AM, Michal Luczaj wrote:
->>>> It should also be helpful to be consistent with tcp/udp iter and use
->>>> lock_sock() instead of lock_sock_fast() in bpf_iter_unix_seq_show().
->>> OK, I'll tweak that in v3.
->>
->> Hi, Michal. Are you planning to send v3 soon? I don't think the
->> sock_owned_by_user for the non-tracing prog needs to be addressed in the
->> same set.
-> 
-> Yes, I'm working on it. Sorry for the delay, I'm taking my sweet time to
-> come up with a selftest.
-> 
-> I think I can neatly fit the sock_owned_by_user()-related stuff in this
-> series, but let me know if you'd rather have it separately. Whichever way,
-> I don't mind.
+On Mon, Mar 2, 2026 at 6:02=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> On Sat, Feb 28, 2026 at 03:45:55PM +0800, Sun Jian wrote:
+> > The perf_event subtest relies on SW_CPU_CLOCK sampling to trigger the B=
+PF
+> > -static void burn_cpu(void)
+> > +static void burn_cpu(long loops)
+>
+> nit, there's another burn_cpu in prog_tests/perf_link.c,
+> we could add it to trace_helpers.c or test_progs.c
+>
 
-I think sock_owned_by_user() is not related to the AF_UNIX's sockmap 
-fix. If it is not, it's better to separate it. I think one thing at a 
-time is easier to review.
+happy to refactor into a shared helper if maintainers prefer, but I keep it
+local to minimize the diff.
 
-If they are related somewhat or it's easier to review them together, see 
-if it makes sense to structure them in a way such that the AF_UNIX's 
-sockmap-related fixes and tests are at the beginning of the patch set so 
-that they can be applied first if others need more discussion.
+> >  {
+> > -     volatile int j =3D 0;
+> > +     long j =3D 0;
+> >       cpu_set_t cpu_set;
+> > -     int i, err;
+> > +     long i;
+> > +     int err;
+> >
+> >       /* generate some branches on cpu 0 */
+> >       CPU_ZERO(&cpu_set);
+> > @@ -443,9 +445,10 @@ static void burn_cpu(void)
+> >       err =3D pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &=
+cpu_set);
+> >       ASSERT_OK(err, "set_thread_affinity");
+> >
+> > -     /* spin the loop for a while (random high number) */
+> > -     for (i =3D 0; i < 1000000; ++i)
+> > +     for (i =3D 0; i < loops; ++i) {
+> >               ++j;
+> > +             barrier();
+>
+> what's the rationale for barrier call in here,
+> together with the volatile change above?
+>
 
-Regarding the "Keeping sparse annotations in 
-sock_map_sk_{acquire,release}() required some
-hackery...". Maybe just remove the annotations?
-[ btw, from commit 5b63d0ae94cc, the sparse support is removed and it
-   depends solely on clang now (?). If it is the case, what does clang do
-   on the "sock_or_unix_lock"? ]
+The burn_cpu() loop is only meant to consume CPU time to reliably trigger t=
+he
+SW_CPU_CLOCK perf_event overflow. With an side-effect-free loop, the
+compiler may optimize the loop away or significantly shrink it under -O2.
 
+The old version relied on volatile to prevent the loop from being optimized=
+, but
+checkpatch warns against it. Using barrier() achieves the same goal  =E2=80=
+=94 keep the
+loop intact as a CPU-burn  =E2=80=94 while making the intent more explicit.
+
+Thanks,
+Sun Jian
