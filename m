@@ -1,164 +1,262 @@
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012045.outbound.protection.outlook.com [40.107.200.45])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B7838756E;
-	Tue,  3 Mar 2026 08:41:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772527276; cv=fail; b=TYayhNCUbROIY73krTGCAGI7lUpYMIUUXfuYzV1H3aU+QPQlvqWLGlRgLdAOOIK8ckmeQiYvvHdmmpNQogWro4jxtwWneAObkN9YlLrA/VGRVx+nR9NNyB0XByUgPCrIwJvnLurZKfd+XExy5XtQC2+paqVfkKOyK4+48BFLJJE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772527276; c=relaxed/simple;
-	bh=rQId6PFY5tSxnNiKDJl4KfKIr64EgraBaTGQtwLWTuU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=GcTJFuFvuEkyDdA+jDBO/IgMelxBj2s2BrYXNUsS9KZ83QHIDIUMpyUqsEp9/Mc9rXht0I4aalqoXoEnIbzcPNcdqZH9v4PkzYYN5eOUl/Slp9mibVMtDXwYMxNI0AkQpGKjpUUikcNP3rMWCA37F4X/+SxNt9N5F/vM1sLN58c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=rS+WiODX; arc=fail smtp.client-ip=40.107.200.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFF738C42E;
+	Tue,  3 Mar 2026 09:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772531727; cv=none; b=qQgg/cWCFzGjNuCeBCwuySFgg1+KW7FZB065AQqh7MmbKZ3Q3zTWsdClnFx/oMW19zneDTEeQraCtrDFxp44i9+Mk9wF6KDaNRXUlPXbk5IZnwyCS4rL+MWWp9jKreap/fiE8AMVMG3efFiFWUWNMAM4s6haLh1JVCF2YONjoOk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772531727; c=relaxed/simple;
+	bh=S9/Qs/sGuV7SVQT+vu0p0WWQgUDurNzDlIBBmNi9YxE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uczdBW/AYHZB/NDhhoaIVgEMtkhiqtRDRClQKxafGPf83PwfxorPZxGxLGZn27m7HulUQm/qNmYMSDDqFSbrCDsO7qESfOUAyKI2J+tcda0hVC7jgV8C4CU9ZME1zveFzBSlwq4ibnEuSBcIXx/UPa/Ka61uaZFqqx+vDuca6PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=ACqEVtHd; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="rS+WiODX"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=S9Pn0qfYa9RnkNG6CPlhiuWdqKH5ldXSU6lC/aXUi4ehrAasZQzt6EnFFAGgLm5oIfzRT5YCMk4dEIu/drWEEmmhe0+kn/1B1tbzvxA+9ZXsyvgHzHAooVCacncBzwdAN4JJ3ik6tFql4AOyQzfUUaW3D9aV+4zmnuUp/q7ilqlyjQl5d5A1UEkysp/eLwcGsvkTIzeXTI4qrD6grPI45bSWE0P4ToYkkn+pK7zwZavxioNsnF+dxy8VsQpdNSX6JJBPZlUj0MZ5d+3RCdr6x6YRwUJkwi8qTA5khNmFmGj1xPcrJ0/rMRRo8RGHLCDSlmUtJbxA1MCT1ngFx0DKrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Em3PdSmXk7xG4ymQqCOtMDA/IKC/R39fnew73YBu1hw=;
- b=PpjknO8CixiizLPnGLEd+iV2EHkuYKBEbtxGjaguRswSvrj26Qj+o1V94iOi+9+zd0NkoaEXTtwz/V24I7ZbGwmBHhEPOmWrT8mB06Xb3UIHhDCyCYkFYMLVJ+tHC3etZmT6A+2T2DLCD1entPYVspulOONMP+MAGZ28RakCzWftAIkKh/2BlhVG8EIjTpTSUTTrjhKBqZLgDp0+z+OVXfAig7hdOMy7O18BJDQJRLB49YaG5n0lhZLGZlOPFVP3dQEvyPtNdY4O+fFUqfS1vkKKtiFafWx4EW+10BBQ70g0MhGINnmzl8qfNt70cjZMZYytnSYWmztXRs0OeTnqoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Em3PdSmXk7xG4ymQqCOtMDA/IKC/R39fnew73YBu1hw=;
- b=rS+WiODXG+OEvHd8cZ2NxJNEjvsmdlniNZNr7zaDZAAOfS3qlubc2B2KEvWFLIIYiwFHZxusqRARRetK56I1y+YgqMuZsWvIrVfayISgiNIxNB1we0+bUlrXDVB4KPudpYM6ymcqS8JwK/CYuLvdtbYe71xPVbY7IhJntjFnBFDcis67saUFBHKjO3UPVSH6mrvvHs4MlVzNduYjJADBPfTOzzttxLEqhw2QZGUKI5MOXIvsoxhLv+oY2vJ/vS0SfkYdZ9z8sgNG2akr8V61SLQfjbdT5coTaMdAR5BZnhdMAFsM6L+jP5ivN50GyuOqvaD/WY2ZyvvJbeeWObbonQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8728.namprd12.prod.outlook.com (2603:10b6:610:171::12)
- by SA1PR12MB7125.namprd12.prod.outlook.com (2603:10b6:806:29f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.18; Tue, 3 Mar
- 2026 08:41:11 +0000
-Received: from CH3PR12MB8728.namprd12.prod.outlook.com
- ([fe80::2641:1046:bdf3:93d7]) by CH3PR12MB8728.namprd12.prod.outlook.com
- ([fe80::2641:1046:bdf3:93d7%6]) with mapi id 15.20.9632.017; Tue, 3 Mar 2026
- 08:41:08 +0000
-Message-ID: <25b847e3-b562-4309-92cd-e63f68b625ed@nvidia.com>
-Date: Tue, 3 Mar 2026 09:41:03 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/3] selftests: drv-net: iou-zcrx: allocate
- hugepages for large chunks test
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, dw@davidwei.uk,
- jdamato@fastly.com, asml.silence@gmail.com, io-uring@vger.kernel.org,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20260227171305.2848240-1-kuba@kernel.org>
- <20260227171305.2848240-4-kuba@kernel.org>
- <f827a42a-be8d-46ea-a6f8-edf0f1ee1a26@nvidia.com>
- <20260302182222.245a34d0@kernel.org>
-Content-Language: en-US
-From: Dragos Tatulea <dtatulea@nvidia.com>
-In-Reply-To: <20260302182222.245a34d0@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0138.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:95::17) To CH3PR12MB8728.namprd12.prod.outlook.com
- (2603:10b6:610:171::12)
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="ACqEVtHd"
+Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6236Fln6763086;
+	Tue, 3 Mar 2026 09:54:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:message-id:mime-version:subject:to; s=default; bh=pEQplKdtBIj4L
+	2qCzOsTZaemiKLyoExlh7izHFHAaPA=; b=ACqEVtHdoD5lOcBFDY1Jof73RQBi3
+	lAEmOvP+pcr/09Vo65qxrfzdDtrA+kjeOL1cuz4JjAzU+CqdnIJFVnVUKINmUTFO
+	KAlqD/ODuCCkyMfxN7SEMwf9noeLH+YSraZ2S8QRwJAq2ieSK+OnMcWFOBn9V0GU
+	RlhPpkp20oN7ml35az2i6xPVqnLPWn+VNxpbEXg+brcnMt1BZH7dR8GImRRvXinX
+	ILBKBIiGXm3CTNNwy/DuqqD2/CjZ/fJef+k+DY2fZTPMishqtGl8S8Lo1Drs+Tag
+	9gFoptef8m91XaqBl+HoPSfZ5huBueXMRGh+Mq+DYIM9nJFvZvf2Ed10w==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cmbkwghre-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Mar 2026 09:54:52 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 3 Mar 2026 09:54:46 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
+CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
+        Slava Imameev
+	<slava.imameev@crowdstrike.com>
+Subject: [PATCH bpf-next v4 0/2] bpf: Add multi-level pointer parameter support for trampolines
+Date: Tue, 3 Mar 2026 20:54:24 +1100
+Message-ID: <20260303095427.38981-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8728:EE_|SA1PR12MB7125:EE_
-X-MS-Office365-Filtering-Correlation-Id: 331a980c-9842-4ad0-f4bf-08de79009d64
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	RTodVSKGbnQEtqtiBtGbkBkPZB5zS7lp5muxkqsutZ5muQHpUA766xpGmdy9i7KWoVwlWtuwhXY8/fFdwm1Bdox+ZXHgdQaicAdocERaT3exmpkA0M4YE5O6lMBY7WB5eJxMYkFPde35M7YCCEQhzmU5xHa+vc1EM6UKXpB214TsakGx6jG4+FZGJmubgWaZHvHd9gtENTb4YuZiKn9I4RSej929kTvtGzAC6NddW97AzYV+9n9wAOI+pEqyxJJOncrfGBkeZwtlEyQuRkky/YX++MPx00t6wcIwKH9L3Pn/TczrVb0SLcyknxSDCO9Bddu/vuWkMYmxTS/VsWhJm7DMU/MkhIxhDesvjxQZo1qOgkLVwfgkDdRORFHq31dmnGK0iAhLeJc4plkFNnQdYahXH9gH33KS+Yz7bnHBue3p08g4edFMv6HiufRzGEE3AJkVN10IElwtjDLvSsDWFO9tO3RtmsExRppaQKhbZopvje2rBEyGC4ETDzIxH32rdjqojn/oR1uRym4Fum91c4Fp1cEoUby/h0s2UCd7TKE6hoq0xD7DHTn+VtW+3HocisdJ4rTmEa0JRjgRHG38e5zW+7PgFao7zJQwRDb9VsAhiQ1wPeRAj4PwZ1233O9XXXiIEcJH61jM83mggLILxsEI210FiJrt+2+OxuNpkjYXVM+zjMv3sFbw80Ke2KbEzOyHA3nNr/0PdwXQ+pAlYgPtEb3RXp9iY4CHVbGgzkk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8728.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M0JvRGtYaHNYeW1WdElnRWNIQVgyV3dCbDBLaEdsQmliL3RCUzM4VDBJQ0lN?=
- =?utf-8?B?OUVEbHVNWWRscVdrc3VLRjh4a3BEdnlqS1J4d2FOMm9tbmk5NDJHM0dyUmg3?=
- =?utf-8?B?WHBYd0hGUDc1N3N6QUV0bEhoSitqQWg0RDZCaHovcjE0MHl1N0xLc3NFcC9t?=
- =?utf-8?B?RXpUWVFwNkNKTU5hMkt2eElLUnBBSlVMVzNVMXl0cFlmRFVWZksyRWtKMUkv?=
- =?utf-8?B?Y1dlWS9ManNTdk9lNVNtaFhqWjRWSEtlSGJ0VTJuekpxM2piU2JNLzZGdGFN?=
- =?utf-8?B?d2dwSjNiTTVkWS8wVkpQb2JCWlFqYUh0ZWtGeHhFSXBhU1Nicm42Tms5WkZ3?=
- =?utf-8?B?OHNUQkNCS2hNOStscllKdmY0TGw5OGpVQkxoTkxLYzJwa3ltOVdCRmwxUFh6?=
- =?utf-8?B?YmZqa0w2R1c4cTR4cXJ6YnNlMXlBTHJ4Vkk2YmJINjVhY3hjUE5NeDlCRWI3?=
- =?utf-8?B?dW1PWHdpNGhuNzRwOVhpa3B3NG9oMWxwYU1hcTMyZXNEU2xnUWRlRXlySDZp?=
- =?utf-8?B?VWlMQzU4cGxQUzdlaWZTNWFRZmorU0VRa3hQcGNCQmJlK1VVcE1BWlMzanFX?=
- =?utf-8?B?YUxNVmRtSEdHYjNsTjhicjJXNWloeWR6MXZOR2pRZlFhaXFZbUhJU2E3Y3Bz?=
- =?utf-8?B?T1pMWU4xMlN4cGd1M2M2VFl6WHY1M1VKeHJTMjJKVmdNSmxnNzJnbTVHdlU4?=
- =?utf-8?B?R2QrVWlwTmlyU1BZcFNaNnNPWDQ5Y25RSDhVZEp6aERhcE5KZ0pMRUxZem00?=
- =?utf-8?B?V0tzQXIzaitUaWtLd1F2YlFjL3JuN3JDcTlRbWdyYmxpcXpMdjVhaHVpUEhP?=
- =?utf-8?B?eTVvY1JRdFhLYkp0cE91M0ZMdWFtVk9hVUlKMDVDU0RDcDZnV0NwZldxWjJh?=
- =?utf-8?B?cENabUNEZFBuOVA5b2dTUTljQjQyOU5HcEtyb3lOZkYxcjZXQlNIWGtnMlJs?=
- =?utf-8?B?S2IzQjl6eW02UVhaYmFTWEJNM3JabWZ0MlU1ak9tQzNPREZNMDRnZU00MXJ5?=
- =?utf-8?B?MDY2THc2T0VpdjNvV0xEM05uTWZVRGM5QURsemJWRWtENU00b2MvdkdnWmdV?=
- =?utf-8?B?SG1IRWhRL2d1S2NtdVRab2lYL1pBbWp4YUI5aHBYV2hsQzZQOHZ2YWh5MDR0?=
- =?utf-8?B?bElzMzU1dlNGWXFyTkdqdlhkVDJmZjU1T1FQdll4R2VaUmtHbVBuTnA5NXVa?=
- =?utf-8?B?V2s2eU4rT1JxVklVa3F5U1RGZmRDQUc5UlRRaWNOcFJJc2tUTzgxMFpUUWdm?=
- =?utf-8?B?aitwa29hYk1VUkZDRjZjd0JQZU12SEpJS1FmdkdBNWROcEFEUjRqNHFUdDF5?=
- =?utf-8?B?c2NzeXlXYXc4Z09qR2IvWGRVUmhXR3FrcVJwREx1ZUFSUUtROUUxK2lMZEt4?=
- =?utf-8?B?Q3pHdEFBYXRucGJGZW9uMG94NTlRTnY1cXQvcVFrQ1NSdU93SmVsSzdzS0pw?=
- =?utf-8?B?eHFOcy9mTGd4ME50SytOb080U09Qb0xHU3oyT0IzbUhPL0tSVkh6WHFjTjJj?=
- =?utf-8?B?ODQ5c0EwR1l3NW8rbE9jSEh4WEd4ZThJcDFDem1iVkRvdDh4cE1XVk9Kcllv?=
- =?utf-8?B?bHBUTlNReXJEd3M5TGswMkNNNlpsZGM1SlRRU0hOZVFUK3ZnbkZVajhSWjNX?=
- =?utf-8?B?RVdFc1B0Wml1anVNZVozWXN6WEluREFkV3BoU0JobFRSMHQ3dS85Y04wbmt0?=
- =?utf-8?B?SE1UVXBQS3NlT2hodWQ4c2lLM1JuZTVmRlJVeDZDRkthay9YU01ITUV1UlNN?=
- =?utf-8?B?T0VGb2x0ZEVRNTJPdm96RFUzTlRBdlorRGxiMGJBeG03ZkxOQ0dCdnlvb0Y0?=
- =?utf-8?B?VCthQ3BTYm9PSnlZdFJlWWlpSmF1WCtoQURhTHhIZEpwd1M4R3I5R3ppcGVJ?=
- =?utf-8?B?UTI0WFk1aWliWmplQUpCSjFlQ1lyck1VTEsvSU0zOWY2ZWI3YTBCWjZUY0JW?=
- =?utf-8?B?dCtrcE4ybHdNUmJvRHR6TkMwbTMwK2tSYzFhcVEyUVJTWThaS0ZOWUNGb0Zv?=
- =?utf-8?B?d1NKV0JhdHlSNHowa2p4QlFVeWNhMHRCWGsrZGxMTFZFSDJBbHhseHVEYWdp?=
- =?utf-8?B?YXo3QXJMYkhPMk9qMFpZQzJYTFFNb0RvejczWldBcGFXOUV2YkRqZkpUaDJr?=
- =?utf-8?B?OUdWZEFkYUZjU2hxVzVaV3FzOTU5UFdTbTBmQUpSQ0IxSnRISzFIbGNaOGRP?=
- =?utf-8?B?QjZyMSs4anQ5L3JCanBVRmo1OUs0VlF2d0xTVWdaQlZXcWlvTnBnUURRM1VK?=
- =?utf-8?B?Y0lxcmxzbEkzVk5wSlRtaXFXTUgraGQwaSsvWm94ZExCQmhtQkZxRTdOWXJt?=
- =?utf-8?B?c0oyck1UZFl0MGpmZWx5a29FZnZrcjBuNVJNeHUyUUtjNUdmWnBmUT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 331a980c-9842-4ad0-f4bf-08de79009d64
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8728.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 08:41:08.4950
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MvaYkToaLUZgnwgZn8PpCCgdbhyMVlEP92UEsVpEb4t4AlHc6cCUhQprJXAynWU/a4ZyG60uIU8jDnRPgiy3UA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7125
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH010.crowdstrike.sys (10.100.11.80) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDA3NCBTYWx0ZWRfXxY268R9C+SJq
+ 1OAXTXlvoAuXVTOFTi8wItSUQ4ZOwpRuiR93ziYyX7csprx3/RgJlB9GGPZl7ZZEIKrmpVYfV9l
+ u31Toksi2hsOuSku1i+3Kfbs7QCfLds2p/cGCcmq9wwUqArzKHHl99IOQ04DVnw6pf7a4q7GaQG
+ mwPH/wQlBJpJ6HpnHiu2NL55x976ojpx3oe11qGbFT5Yj0PWEroXtKhPYcX7wZuuHOOu2jgTGUv
+ YETstq3pWzEVbPdOFojEXvOtpRRV/2YWdrzR0Tb2Q7F/0sq6SAlJF6b2quPOHQkGQ7hMxSk7ukU
+ 3rrw9ITRQVnCwcGEaO4XZ8672wKpBbS+kOOH6gjjQvtDX/mcq3szSWQcE+BoMpr3A+kcvSor0L8
+ ZIQA6Q60hp6X6yDi1A+fnFF8sek3nDJSCJR83KTQhvgkF5B+t68fQP90SsIwUe2gFUwSavjky7Y
+ QBYgWlGiMnkP2yhp1zg==
+X-Authority-Analysis: v=2.4 cv=M4RA6iws c=1 sm=1 tr=0 ts=69a6afec cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=VwQbUJbxAAAA:8
+ a=QyXUC8HyAAAA:8 a=WyMQw0lqGAoaf0B3nNEA:9
+X-Proofpoint-GUID: kpgBTCyi04zBQ_oWrgCk_pfDUy0shKcz
+X-Proofpoint-ORIG-GUID: kpgBTCyi04zBQ_oWrgCk_pfDUy0shKcz
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11717
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030074
 
+This is v4 of a series adding support for new pointer types for
+trampoline parameters.
 
+Originally, only support for multi-level pointers was proposed.
+As suggested during review, it was extended to some single level
+pointers. During discussion, it was proposed to add support for any
+pointer type that is not a pointer to structure, with a condition
+like if (!btf_type_is_struct(t)), but I found this might not be
+compatible with some cases, e.g., some tests failed. Though this
+depended on the exact place the check is done - if the check is
+moved before the exit from btf_ctx_access, tests are passed. Anyway,
+this looked like an extension which might conflict with future
+changes for some types falling in the !btf_type_is_struct(t) case.
+Instead, I used explicit type checks to add support only for single
+and multi-level pointer types that are not supported but can be
+supported with scalar. This is a cautious approach which can be
+verified with explicit tests for each type.
 
-On 03.03.26 03:22, Jakub Kicinski wrote:
-> On Mon, 2 Mar 2026 16:16:38 +0100 Dragos Tatulea wrote:
->>> +    hp_file = "/proc/sys/vm/nr_hugepages"
->>> +    with open(hp_file, 'r+', encoding='utf-8') as f:
->>> +        nr_hugepages = int(f.read().strip())
->>> +        if nr_hugepages < 64:
->>> +            f.seek(0)
->>> +            f.write("64")
->>> +            defer(lambda: open(hp_file, 'w', encoding='utf-8').write(str(nr_hugepages)))
->>> +
->>>      single(cfg)
->>>      rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target} -x 2"
->>>      tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
->>>  
->>>      probe = cmd(rx_cmd + " -d", fail=False)
->>>      if probe.ret == SKIP_CODE:
->>> -        raise KsftSkipEx(probe.stdout)
->>> +        raise KsftSkipEx(probe.stdout.strip())
->>>    
->> While working on a similar fix I found that the probe here also requires a barrier.
-> 
-> Hm, I'm not hitting this issue. Maybe because I'm testing in QEMU?
-> If you can still repro after this series could you send a follow up?
-Will do.
+These changes appear to be a safe extension since any future support
+for arrays and output values would require annotation (similar to
+Microsoft SAL), which differentiates between current unannotated
+scalar cases and new annotated cases.
 
-Thanks,
-Dragos
+This series adds BPF verifier support for single- and multi-level
+pointer parameters and return values in BPF trampolines. The
+implementation treats these parameters as SCALAR_VALUE.
+
+The following new single level pointer support is added:
+- pointers to enum, 32 and 64
+- pointers to functions
+
+The following multi-level pointer support is added:
+- multi-level pointers to int
+- multi-level pointers to void
+- multi-level pointers to enum, 32 and 64
+- multi-level pointers to function
+- multi-level pointers to structure
+
+This is consistent with the existing pointers to int and void
+already treated as SCALAR.
+
+This provides consistent logic for single and multi-level pointers
+- if the type is treated as SCALAR for a single level pointer, the
+same is applicable for multi-level pointers, except the pointer to
+struct which is currently PTR_TO_BTF_ID, but in case of multi-level
+pointer it is treated as scalar as the verifier lacks the context
+to infer the size of their target memory regions.
+
+Background:
+
+Prior to these changes, accessing multi-level pointer parameters or
+return values through BPF trampoline context arrays resulted in
+verification failures in btf_ctx_access, producing errors such as:
+
+func '%s' arg%d type %s is not a struct
+
+For example, consider a BPF program that logs an input parameter of
+type struct posix_acl **:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    bpf_printk("__posix_acl_chmod ppacl = %px\n", ppacl);
+    return 0;
+}
+
+This program failed BPF verification with the following error:
+
+libbpf: prog 'trace_posix_acl_chmod': -- BEGIN PROG LOAD LOG --
+0: R1=ctx() R10=fp0
+; int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl,
+gfp_t gfp, umode_t mode) @ posix_acl_monitor.bpf.c:23
+0: (79) r6 = *(u64 *)(r1 +16)         ; R1=ctx() R6_w=scalar()
+1: (79) r1 = *(u64 *)(r1 +0)
+func '__posix_acl_chmod' arg0 type PTR is not a struct
+invalid bpf_context access off=0 size=8
+processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0
+peak_states 0 mark_read 0
+-- END PROG LOAD LOG --
+
+The common workaround involved using helper functions to fetch
+parameter values by passing the address of the context array entry:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    struct posix_acl **pp;
+    bpf_probe_read_kernel(&pp, sizeof(ppacl), &ctx[0]);
+    bpf_printk("__posix_acl_chmod %px\n", pp);
+    return 0;
+}
+
+This approach introduced helper call overhead and created
+inconsistency with parameter access patterns.
+
+Improvements:
+
+With this patch, trampoline programs can directly access multi-level
+pointer parameters, eliminating helper call overhead and explicit ctx
+access while ensuring consistent parameter handling. For example, the
+following ctx access with a helper call:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    struct posix_acl **pp;
+    bpf_probe_read_kernel(&pp, sizeof(pp), &ctx[0]);
+    bpf_printk("__posix_acl_chmod %px\n", pp);
+    ...
+}
+
+is replaced by a load instruction:
+
+SEC("fentry/__posix_acl_chmod")
+int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
+             umode_t mode)
+{
+    bpf_printk("__posix_acl_chmod %px\n", ppacl);
+    ...
+}
+
+The bpf_core_cast macro can be used for deeper level dereferences,
+as illustrated in the tests added by this patch.
+
+v1 -> v2:
+* corrected maintainer's email
+v2 -> v3:
+* Addressed reviewers' feedback:
+	* Changed the register type from PTR_TO_MEM to SCALAR_VALUE.
+	* Modified tests to accommodate SCALAR_VALUE handling.
+* Fixed a compilation error for loongarch
+	* https://lore.kernel.org/oe-kbuild-all/202602181710.tEK6nOl6-lkp@intel.com/
+* Addressed AI bot review
+	* Added a commentary to address a NULL pointer case
+	* Removed WARN_ON
+	* Fixed a commentary
+v3 -> v4:
+* Added more consistent support for single and multi-level pointers
+as suggested by reviewers.
+	* added single level pointers to enum 32 and 64
+	* added single level pointers to functions
+	* harmonized support for single and multi-level pointer types
+	* added new tests to support the above changes
+* Removed create_bad_kaddr that allocated and invalidated kernel VA
+for tests, and replaced it with hardcoded values similar to
+bpf_testmod_return_ptr as suggested by reviewers.
+
+Slava Imameev (2):
+  bpf: Support new pointer param types via SCALAR_VALUE for trampolines
+  selftests/bpf: Add trampolines single and multi-level pointer params
+    test coverage
+
+ kernel/bpf/btf.c                              |  31 +-
+ net/bpf/test_run.c                            | 130 +++++
+ .../prog_tests/fentry_fexit_multi_level_ptr.c | 206 +++++++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../progs/fentry_fexit_pptr_nullable_test.c   |  60 ++
+ .../bpf/progs/fentry_fexit_pptr_test.c        |  67 +++
+ .../bpf/progs/fentry_fexit_void_ppptr_test.c  |  38 ++
+ .../bpf/progs/fentry_fexit_void_pptr_test.c   |  71 +++
+ .../bpf/progs/verifier_ctx_ptr_param.c        | 523 ++++++++++++++++++
+ 9 files changed, 1120 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_fexit_multi_level_ptr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_pptr_nullable_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_pptr_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_void_ppptr_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_void_pptr_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_ptr_param.c
+
+-- 
+2.34.1
+
