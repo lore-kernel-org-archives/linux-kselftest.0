@@ -1,117 +1,302 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736D32F0C62
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 05:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444D5374E78
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 06:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772517271; cv=none; b=HbynRNsQpQ059WiKP086nBhDM835zaPn6zDBcg4jbKowXxoQgr04lzgNs8Ju+VvoPZA1iFj9lSbUZhcwlAd1SsgcuvQjhmLiuT0NOHx+15aU+HNCMOkBNKUiUrKM+orLkecSQFOBlX427QLxmcORwYeCmQoEa1Pv4o/Evm8Lwu0=
+	t=1772518945; cv=none; b=guLN75L1u3clL/avheuYkrC6B7RT8/HspXvWwT9QWmrT63uP6+DZz3rFEsHl9FMRXz/1Xxxf+H6v8AlWUxb2/ZgyODRIXwCIz5KTVBcQCiQIkzxcrFgnSWAqxwFFf6hlkGbQQwGm3hjwuSmtUl6s/BWn/Smj3Uln5/S8Rks4z90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772517271; c=relaxed/simple;
-	bh=6qzHlh10MApeXv7yMNlEmX5cSN6GyQGLqmitHm1kE4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kJ33RwYx+j634kGCN/CsmoKLoBZmBzbsrrWg+v7wCOKu+3GwV5FEGpz5aT0Erkb2N7AeaNMNZ0sg9FM93/mzHIAbBCFFs5n+QmOsWuDeofKh8HfYmuNigIOasubE5a+AldcPkvMF+z1B4dHCa5geGtpgEzdkO3+NRLyHKmX5IOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iqW7blNx; arc=none smtp.client-ip=91.218.175.179
+	s=arc-20240116; t=1772518945; c=relaxed/simple;
+	bh=hCH6OUGqlsWIY7zC0dS5OdMmmVu4dEA8EXsuCrydg2w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XbySPUE8y1bOhpk/ynsIcxUcZkekjMzXfp9SpCI27gmvCIGM7JP9ZcjlXUY6z4SXPA74DiTMpDd4PkrPnTcEmC3iexpXncnx5KaGBGkDLiIKx83Liv3ardUjY6bk4TBhjM4DOk9LAYXG+EzHYm2F5/x2aj4JAtyKkEoSWhJvPUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hBFbBJNe; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iqW7blNx"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hBFbBJNe"
+Message-ID: <63622051-f128-4450-8579-97f25305beb5@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772517268;
+	t=1772518931;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=l6eJEYFrb9LvZqYh0Q45H8GvoxLpNshzFBYH4l9HNuk=;
-	b=iqW7blNxfgMMwNnwuepiufW6U7e5cTFabi7kyBfFiPesIN6hDT91skoAwlY4cZ8ekKRc+o
-	K5QrgLyiwFzkvMBCd2RQLWQNjheKc5eUVoyG68nIoMG+jCQemLoGPj/kEn1XDjaYkI6Eud
-	aRJ/G5foVMSVgcFnUTneZ68dOf+qxmo=
-From: Hui Zhu <hui.zhu@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>,
-	JP Kobryn <jp.kobryn@linux.dev>
-Subject: [PATCH bpf-next v5 2/2] bpf: Use bpf_core_enum_value for stats in cgroup_iter_memcg
-Date: Tue,  3 Mar 2026 13:53:09 +0800
-Message-ID: <ca6eb1a1a4fd7a17ffe995acf52c9a4ceb7bac13.1772505399.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1772505399.git.zhuhui@kylinos.cn>
-References: <cover.1772505399.git.zhuhui@kylinos.cn>
+	bh=TXvC0W9BK/qCDM2luuVOjFiw+pG7WQpudbkrpHQ06Bk=;
+	b=hBFbBJNeRGCjHua0QjXLgz/eHaN8IFODEb3GXPUD8UbMcTeR5gfAlvWl0O3UihX48thOvt
+	iQ65ft3idSC9hFOIMyAXX0qKP2XgbVR99CJAnOOkPB00eEHxxmhlfz9pNXQ2DLDcq9edGY
+	7UJwXmxf3sVgeP7+cgWF1X5/kjOz/Tk=
+Date: Mon, 2 Mar 2026 22:21:55 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v2 04/22] vfio/pci: Register a file handler with Live
+ Update Orchestrator
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Alexander Graf <graf@amazon.com>, Alex Mastro <amastro@fb.com>,
+ Alistair Popple <apopple@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal
+ <ankita@nvidia.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>,
+ Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+ kexec@lists.infradead.org, kvm@vger.kernel.org,
+ Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+ =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
+ Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Pranjal Shrivastava <praan@google.com>, Pratyush Yadav
+ <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>,
+ Samiullah Khawaja <skhawaja@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+ Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>,
+ Yi Liu <yi.l.liu@intel.com>
+References: <20260129212510.967611-1-dmatlack@google.com>
+ <20260129212510.967611-5-dmatlack@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20260129212510.967611-5-dmatlack@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Hui Zhu <zhuhui@kylinos.cn>
 
-Replace hardcoded enum values with bpf_core_enum_value() calls in
-cgroup_iter_memcg test to improve portability across different
-kernel versions.
+在 2026/1/29 13:24, David Matlack 写道:
+> From: Vipin Sharma <vipinsh@google.com>
+>
+> Register a live update file handler for vfio-pci device files. Add stub
+> implementations of all required callbacks so that registration does not
+> fail (i.e. to avoid breaking git-bisect).
+>
+> This file handler will be extended in subsequent commits to enable a
+> device bound to vfio-pci to run without interruption while the host is
+> going through a kexec Live Update.
+>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> Co-developed-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>   MAINTAINERS                            |  1 +
+>   drivers/vfio/pci/Makefile              |  1 +
+>   drivers/vfio/pci/vfio_pci.c            |  9 +++-
+>   drivers/vfio/pci/vfio_pci_liveupdate.c | 69 ++++++++++++++++++++++++++
+>   drivers/vfio/pci/vfio_pci_priv.h       | 14 ++++++
+>   include/linux/kho/abi/vfio_pci.h       | 28 +++++++++++
+>   6 files changed, 121 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/vfio/pci/vfio_pci_liveupdate.c
+>   create mode 100644 include/linux/kho/abi/vfio_pci.h
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a671e3d4e8be..7d6cdecedb05 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -27520,6 +27520,7 @@ F:	Documentation/ABI/testing/debugfs-vfio
+>   F:	Documentation/ABI/testing/sysfs-devices-vfio-dev
+>   F:	Documentation/driver-api/vfio.rst
+>   F:	drivers/vfio/
+> +F:	include/linux/kho/abi/vfio_pci.h
+>   F:	include/linux/vfio.h
+>   F:	include/linux/vfio_pci_core.h
+>   F:	include/uapi/linux/vfio.h
+> diff --git a/drivers/vfio/pci/Makefile b/drivers/vfio/pci/Makefile
+> index e0a0757dd1d2..23305ebc418b 100644
+> --- a/drivers/vfio/pci/Makefile
+> +++ b/drivers/vfio/pci/Makefile
+> @@ -7,6 +7,7 @@ obj-$(CONFIG_VFIO_PCI_CORE) += vfio-pci-core.o
+>   
+>   vfio-pci-y := vfio_pci.o
+>   vfio-pci-$(CONFIG_VFIO_PCI_IGD) += vfio_pci_igd.o
+> +vfio-pci-$(CONFIG_LIVEUPDATE) += vfio_pci_liveupdate.o
+>   obj-$(CONFIG_VFIO_PCI) += vfio-pci.o
+>   
+>   obj-$(CONFIG_MLX5_VFIO_PCI)           += mlx5/
+> diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
+> index 0c771064c0b8..19e88322af2c 100644
+> --- a/drivers/vfio/pci/vfio_pci.c
+> +++ b/drivers/vfio/pci/vfio_pci.c
+> @@ -258,6 +258,10 @@ static int __init vfio_pci_init(void)
+>   	int ret;
+>   	bool is_disable_vga = true;
+>   
+> +	ret = vfio_pci_liveupdate_init();
+> +	if (ret)
+> +		return ret;
+> +
+>   #ifdef CONFIG_VFIO_PCI_VGA
+>   	is_disable_vga = disable_vga;
+>   #endif
+> @@ -266,8 +270,10 @@ static int __init vfio_pci_init(void)
+>   
+>   	/* Register and scan for devices */
+>   	ret = pci_register_driver(&vfio_pci_driver);
+> -	if (ret)
+> +	if (ret) {
+> +		vfio_pci_liveupdate_cleanup();
+>   		return ret;
+> +	}
+>   
+>   	vfio_pci_fill_ids();
+>   
+> @@ -281,6 +287,7 @@ module_init(vfio_pci_init);
+>   static void __exit vfio_pci_cleanup(void)
+>   {
+>   	pci_unregister_driver(&vfio_pci_driver);
+> +	vfio_pci_liveupdate_cleanup();
+>   }
+>   module_exit(vfio_pci_cleanup);
+>   
+> diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
+> new file mode 100644
+> index 000000000000..b84e63c0357b
+> --- /dev/null
+> +++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
+> @@ -0,0 +1,69 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright (c) 2025, Google LLC.
 
-The change adds runtime enum value resolution for:
-- node_stat_item: NR_ANON_MAPPED, NR_SHMEM, NR_FILE_PAGES,
-  NR_FILE_MAPPED
-- vm_event_item: PGFAULT
+The live update support for vfio-pci was initiated in 2025, but 
+developments are into 2026. Update the copyright to 2026 or 2025 - 2026.
 
-This ensures the BPF program can adapt to enum value changes
-between kernel versions.
+Zhu Yanjun
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
----
- .../selftests/bpf/progs/cgroup_iter_memcg.c     | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+> + * Vipin Sharma <vipinsh@google.com>
+> + * David Matlack <dmatlack@google.com>
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/kho/abi/vfio_pci.h>
+> +#include <linux/liveupdate.h>
+> +#include <linux/errno.h>
+> +
+> +#include "vfio_pci_priv.h"
+> +
+> +static bool vfio_pci_liveupdate_can_preserve(struct liveupdate_file_handler *handler,
+> +					     struct file *file)
+> +{
+> +	return false;
+> +}
+> +
+> +static int vfio_pci_liveupdate_preserve(struct liveupdate_file_op_args *args)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static void vfio_pci_liveupdate_unpreserve(struct liveupdate_file_op_args *args)
+> +{
+> +}
+> +
+> +static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static void vfio_pci_liveupdate_finish(struct liveupdate_file_op_args *args)
+> +{
+> +}
+> +
+> +static const struct liveupdate_file_ops vfio_pci_liveupdate_file_ops = {
+> +	.can_preserve = vfio_pci_liveupdate_can_preserve,
+> +	.preserve = vfio_pci_liveupdate_preserve,
+> +	.unpreserve = vfio_pci_liveupdate_unpreserve,
+> +	.retrieve = vfio_pci_liveupdate_retrieve,
+> +	.finish = vfio_pci_liveupdate_finish,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+> +static struct liveupdate_file_handler vfio_pci_liveupdate_fh = {
+> +	.ops = &vfio_pci_liveupdate_file_ops,
+> +	.compatible = VFIO_PCI_LUO_FH_COMPATIBLE,
+> +};
+> +
+> +int __init vfio_pci_liveupdate_init(void)
+> +{
+> +	if (!liveupdate_enabled())
+> +		return 0;
+> +
+> +	return liveupdate_register_file_handler(&vfio_pci_liveupdate_fh);
+> +}
+> +
+> +void vfio_pci_liveupdate_cleanup(void)
+> +{
+> +	if (!liveupdate_enabled())
+> +		return;
+> +
+> +	liveupdate_unregister_file_handler(&vfio_pci_liveupdate_fh);
+> +}
+> diff --git a/drivers/vfio/pci/vfio_pci_priv.h b/drivers/vfio/pci/vfio_pci_priv.h
+> index 27ac280f00b9..68966ec64e51 100644
+> --- a/drivers/vfio/pci/vfio_pci_priv.h
+> +++ b/drivers/vfio/pci/vfio_pci_priv.h
+> @@ -133,4 +133,18 @@ static inline void vfio_pci_dma_buf_move(struct vfio_pci_core_device *vdev,
+>   }
+>   #endif
+>   
+> +#ifdef CONFIG_LIVEUPDATE
+> +int __init vfio_pci_liveupdate_init(void);
+> +void vfio_pci_liveupdate_cleanup(void);
+> +#else
+> +static inline int vfio_pci_liveupdate_init(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void vfio_pci_liveupdate_cleanup(void)
+> +{
+> +}
+> +#endif /* CONFIG_LIVEUPDATE */
+> +
+>   #endif
+> diff --git a/include/linux/kho/abi/vfio_pci.h b/include/linux/kho/abi/vfio_pci.h
+> new file mode 100644
+> index 000000000000..37a845eed972
+> --- /dev/null
+> +++ b/include/linux/kho/abi/vfio_pci.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * Copyright (c) 2025, Google LLC.
+> + * Vipin Sharma <vipinsh@google.com>
+> + * David Matlack <dmatlack@google.com>
+> + */
+> +
+> +#ifndef _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H
+> +#define _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H
+> +
+> +/**
+> + * DOC: VFIO PCI Live Update ABI
+> + *
+> + * This header defines the ABI for preserving the state of a VFIO PCI device
+> + * files across a kexec reboot using LUO.
+> + *
+> + * Device metadata is serialized into memory which is then handed to the next
+> + * kernel via KHO.
+> + *
+> + * This interface is a contract. Any modification to any of the serialization
+> + * structs defined here constitutes a breaking change. Such changes require
+> + * incrementing the version number in the VFIO_PCI_LUO_FH_COMPATIBLE string.
+> + */
+> +
+> +#define VFIO_PCI_LUO_FH_COMPATIBLE "vfio-pci-v1"
+> +
+> +#endif /* _LINUX_LIVEUPDATE_ABI_VFIO_PCI_H */
 
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-index 12f79a44133e..06a385c9d85b 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-@@ -26,11 +26,18 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
- 
- 	bpf_mem_cgroup_flush_stats(memcg);
- 
--	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(memcg, NR_ANON_MAPPED);
--	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
--	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, NR_FILE_PAGES);
--	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, NR_FILE_MAPPED);
--	memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
-+	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(
-+		memcg,
-+		bpf_core_enum_value(enum node_stat_item, NR_ANON_MAPPED));
-+	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(
-+		memcg, bpf_core_enum_value(enum node_stat_item, NR_SHMEM));
-+	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(
-+		memcg, bpf_core_enum_value(enum node_stat_item, NR_FILE_PAGES));
-+	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(
-+		memcg,
-+		bpf_core_enum_value(enum node_stat_item, NR_FILE_MAPPED));
-+	memcg_query.pgfault = bpf_mem_cgroup_vm_events(
-+		memcg, bpf_core_enum_value(enum vm_event_item, PGFAULT));
- 
- 	bpf_put_mem_cgroup(memcg);
- 
 -- 
-2.43.0
+Best Regards,
+Yanjun.Zhu
 
