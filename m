@@ -1,118 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1052E3264F9;
-	Tue,  3 Mar 2026 16:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F693947B2;
+	Tue,  3 Mar 2026 16:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772556212; cv=none; b=PRonpqG+T2iAIWa4zR6SDssOXtDyRMeqUE3qP2+gNfKJe4l9MR1qPg2A8u0foRL6m3aGHmPxrmt4qrIUHGrjABHsIbVHHgO0h+4MdclBS4PlSohSoUX9BnzVnSqNLvv0FDWf17LPaxWe5rFG3tU4C+nHyqwg0M5oVFKWRLVj06g=
+	t=1772556622; cv=none; b=tI3DTwGFABBYl91tKdCB/KRqGRpdeS9WTBn2BYixKinQjdCWTB4+iLoaeb+yPZesfSlY8AF///IeS+WXvjiJx3qcfiVX7pl3O8wTeJMb4CrbDOheqY4GlSXt7tochicMCQWps0N/UcJVPhDIl87W3ER/6u6iXqvlptfx1otgiUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772556212; c=relaxed/simple;
-	bh=f3/xDyTStCTpd5zfjXM5yC44eWuflX5gwy9dXVOkezM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Yg7JpfMf6rNwP1kQdkBtZke+4hKi/EuXsXhksaeDvG3HVgohGGh2y8yTu5vfBv3BnaU53l3xwkRx2BM7FMiHCoczKH9QQqN/97jgHtXvvJsZ/WRfO9B+0eYAMOu6MNR5iN4maLvw/r5gatPRtvUnXHKcKj5K4Ua6uyeCo5p74Lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r7dr3y0k; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772556622; c=relaxed/simple;
+	bh=oznYu8qpAtkyOwyCCIZkJUtlzc9w25YwKKjcm4BmlUY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=D70WAbm9y7oj+vUeDVT39sUf2griWVYJiAbDR6VgM21mpKjEe4/BN/KjV2uFfQaQ0rBq/S5DKrsTjTtd+8uHjn1jk0BI2VV22lQu2ac3AJnQyynN4PPDV7UU37X4A0Ax7oRh8/7S2fCsN8WUXrY01ha00e9EwhWpWd7gf7vURpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HvgtUq1y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r7dr3y0k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1B0C116C6;
-	Tue,  3 Mar 2026 16:43:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HvgtUq1y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC64FC19422;
+	Tue,  3 Mar 2026 16:50:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772556211;
-	bh=f3/xDyTStCTpd5zfjXM5yC44eWuflX5gwy9dXVOkezM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=r7dr3y0koGTrCtVt4Geq4vsS56uE2pnRQZVw0xH8RtiOjva3x4SHto4g+def8shGF
-	 ZrS1+TkuPOzeuWem7cfhMAVKAO69MGIFjpMH0ejCbr9+jNFp2TO3OL+EOPU3f+M2Tg
-	 T86p3uqz9EM5VgYCtVsK8rjQDnO/pSRIkimrf7eDkma8GwsQjPhiTWrU/KmJMCqFBQ
-	 SC5uTS56m2oHU2OEqADy59z3n77PBMBCWJdHw3FgplL47fp4FxvvZhFVuJwz86yBDm
-	 bacKbjm18iptSWhJ3u4ZYbIgRaFxQzRyJEoN+/YZb5oKlK2BX/7fEMJZZPxYYKq6SR
-	 VmkTEOWPjlUNA==
-Date: Tue, 3 Mar 2026 08:43:30 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Ioana Ciornei <ioana.ciornei@nxp.com>
-Cc: Petr Machata <me@pmachata.org>, Petr Machata <petrm@nvidia.com>,
- netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman
- <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
- ethtool standard counters
-Message-ID: <20260303084330.340b6459@kernel.org>
-In-Reply-To: <qnq4vqznmwbgl6auacr7lkpwpzcwh2w26de22pidxhpy676f73@45s2xdpczvsd>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
-	<20260225150648.1542206-6-ioana.ciornei@nxp.com>
-	<20260226182223.5eb1b10f@kernel.org>
-	<87ms0ufc0p.fsf@nvidia.com>
-	<20260227164348.63afcc43@kernel.org>
-	<877brxf272.fsf@nvidia.com>
-	<7hct7o4rzgygef536al6if2jl45p32ad3tdswyqf25uu5wy5re@2ltu2ems47q7>
-	<20260302160743.124531f8@kernel.org>
-	<qnq4vqznmwbgl6auacr7lkpwpzcwh2w26de22pidxhpy676f73@45s2xdpczvsd>
+	s=k20201202; t=1772556622;
+	bh=oznYu8qpAtkyOwyCCIZkJUtlzc9w25YwKKjcm4BmlUY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=HvgtUq1yyhLRygJKgYIf/89IKLXV54FJzJBxbNmVUyoYxjoZVxGYJ9lrssh+JgDn3
+	 Drfqgtc95bjQw+HB6OynSkC13LrdykCXNXZloGSJuZSITfjcpUU4xUkrZsEEO/7V3q
+	 mcjqjT6cN8eaoP4X2x+DgPrap9TyOIybm5boubJtR8wzNyTLWrqCOSuO3wTMDRhUNg
+	 vhkSC0QLSnniIligbicFv0hVgWhsqyndk9JBa0PWv3PDQMmDp7sDeDcX5w1r5kMUPu
+	 ynp/s0e6kiqeKfo6HhtD79J0YjMfl5djPnilfNZce8kVKMXrHhmJsDIrS89YnSu4p8
+	 qqpqZzJTU0fGA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CEB63808200;
+	Tue,  3 Mar 2026 16:50:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: drop test_bpftool.sh
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177255662304.1383432.15450137166284632680.git-patchwork-notify@kernel.org>
+Date: Tue, 03 Mar 2026 16:50:23 +0000
+References: <20260227-bpftool_feature-v1-1-a25860fd52fb@bootlin.com>
+In-Reply-To: <20260227-bpftool_feature-v1-1-a25860fd52fb@bootlin.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9_=3Calexis=2Elothore=40bootlin=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
+ thomas.petazzoni@bootlin.com, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-On Tue, 3 Mar 2026 15:53:41 +0200 Ioana Ciornei wrote:
-> > > I would add here even ethtool_rmon.sh and this new test that I  
-> > 
-> > I think I already told you that ethool_rmon predates the NIC tests
-> > and bringing it up in this discussion is irrelevant.
-> >   
-> > > submitted. If you are running with a traffic generator on another board
-> > > then you can no longer check that the counter's value is as expected
-> > > (with a 1% tolerance), you can only check the lower bound.  
-> > 
-> > 1% tolerance is impractical for any CI with high test count.
-> > The test will be flaky. And I really doubt that the 1% tolerance
-> > is really necessary to catch most bugs. We're not trying to validate
-> > silicon here.
-> >   
-> > > Additionally, if you are using the same single port also for control
-> > > traffic towards the remote traffic generator, then you surely cannot
-> > > reliably check that counters that should not be incremented are indeed
-> > > not incremented.  
-> > 
-> > I both told you in this conversation how to check the counters,
-> > and written some existing tests for counters.  
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Fri, 27 Feb 2026 09:08:47 +0100 you wrote:
+> The test_bpftool.sh script runs a python unittest script checking
+> bpftool json output on different commands. As part of the ongoing effort
+> to get rid of any standalone test, this script should either be
+> converted to test_progs or removed.
 > 
-> Judging by your response it's clear to me that you wanted to transmit
-> something that didn't actually get to me. I am afraid that it's not
-> clear to me what exactly is your feedback and what do you expect as a
-> next step.
+> As validating bpftool json output does not bring much value to the test
+> base (and because it would need test_progs to bring in a json parser),
+> remove the standalone test script.
 > 
-> What I did get:
-> - The new test should work with a single netdevice (and a remote
->   endpoint for traffic generation).
+> [...]
 
-yes
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: drop test_bpftool.sh
+    https://git.kernel.org/bpf/bpf-next/c/7242b0951d2c
 
-> - The test should not check for any upper bound for the ethtool counter
->   value.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-more or less.. you can check for crazy values (bitflips etc).
-Either pick a value too high to be reasonable (100Gbps * time)
-or hardcode some high threshold (2^31?)
 
-> - The test is expected to follow drivers/net/README.rst.
-
-yes
-
-> Does this mean that your feedback is to convert the bash variant that I
-> submitted into a python one which uses lib.py?
-
-It'd certainly be easier for you, but I'm not against building out 
-the necessary support to run traffic from remote in bash.
-
-> If this is your intention, what is the plan for the rmon statistics (or
-> any drivers/net/hw/ bash tests that pre-date the README)? Do you see
-> those eventually getting converted to lib.py? I am merely asking so that
-> I know if I should convert them or they are to be left as is.
-
-Yes, I was planning on doing the conversion once we have some real HW
-testing going in NIPA. If you're willing to convert them - that'd be
-great!
