@@ -1,196 +1,183 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013052.outbound.protection.outlook.com [40.107.159.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4D33563D4
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 13:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772546019; cv=none; b=s30jk4dUTqllGOtDYV92HBcMc0LaT+d5IMTYuBcB0mIkNEFV6aXt/reVF9r1B/dGnhBzzE8KlUIkSzbFojJm2iPz/CwjNgiWYyGUVItJjT5seGmqCk9eH0XyAa8FD2E0rtpQMRMlNckQRg+1w+hMRPzqNx/Dw4e6giCVQsUEO2o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772546019; c=relaxed/simple;
-	bh=3C6ttGuLl8L64Q1LnoiZLd+0O95EfQxJe16UcmlcmDE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SjuaJNC58XXqM+AO520VxxUUEl6hSfXxp18eyPNl26pKCMFSKwIJB+zedYqWV+jE+jfpadPjCd+OlfCDc4EjA5sz7HJ90IP4Qk+RcSg0ahuoPpfvCIuHN896+WKX3In6rgMz/nuQSDzAhx6MrEhSaHanXegXD1q9JM7/oY1m6PI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SpfqORez; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A6335773F;
+	Tue,  3 Mar 2026 13:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772546030; cv=fail; b=d7VIG7JCD0L3SfULPt/utGZIPU/iK7V59Dn975V1plgEEK+3oQbGJ5ReTSwFQe1cI4gQSr+XbtTNkD4MQ0ERZQ99BuflBiuB3mjMQ3mAtmuxOW5xoflloGLLcFKp2703gN5EMTEt5DRyct96F7FR1uEzqXiKQWe/2KQos5KukVg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772546030; c=relaxed/simple;
+	bh=8c6fS41FLXhzqV18dTpG5uJIEuOhALU3484z7OB2O0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=DtzJQzzuFE/kKwYidUBWnL0YTiimgIBjlS6bkEf4wjHELUuaZ8pg/kw5ZlGa0S1B+HvOmq1Ekk98a+nZki/CLpoouYQO2ocY722GyVYQrVBLZNyt6e2Ojvz4bh9qxd2JeOdX0m4KHnNAFXmkIPdqpWxDNnyCoDcrJ8HJkJNvIYs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=koYSZ+QC; arc=fail smtp.client-ip=40.107.159.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SpfqORez"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8273eb7798eso2516468b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 05:53:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772546017; x=1773150817; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/c4HiRtc5xaPbrfb39uLULAmMTx7Jx7ULuDedQkQ4YU=;
-        b=SpfqORezinC1+itMhON7mLIoZjh6QB2tqVtwZ7cLcxllrvfXIxfDJwPjUX7Qvvggn1
-         S707OjdF541jjdVS52mUl005NJaOxX9zp1gWv2vOKF4aeKhTUF5i/Y01JKmXUfmtqsMK
-         il8d0hs2RkrzL0MGDlVtKHsW3YYxBUIMO/LCirlbOKGiR2Ilayyui1iYhhxL7v0++dax
-         UqYwvuECz+ZSDB9FGi7J1iwKo+z04/1rQ+g+LFxEfnEe3M9zi7Wt3mYHWpsh5nu5PF4y
-         axaFxooO76NwbE4xFy7L1WldbKmkarxyINTXzqAyBEuFh5uJigrukza3jai+I1XwIJft
-         tT4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772546017; x=1773150817;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/c4HiRtc5xaPbrfb39uLULAmMTx7Jx7ULuDedQkQ4YU=;
-        b=PJ4aeKnXAvURQMgySiQS2FnaiNB4+M+OydExJP+BuBmBEBM/IrTtJOMEQEzAJ3lErY
-         +zjOyTCC3D36QWDmS6LG/07tThN79fMpCCy59pcPJYJ6OewUNpohoP9SQaPrXRKYV+T6
-         +PcJD50iO0u3m41mcacODbr5XXeCc9fQuS2hfDphxClCD952KW31nF3Fds6/DoSKlKnP
-         Kk7T3ajG6CmZ+tDVSxlRvHolS/oB2aHwW4IRl5tCT6GV+jutDmAp+IKMWqTd837bdTeN
-         5lT38xI+cLIxmCfnHH+uH3WDT1yW+upTtqQOW3ZJLd5tcovOpf1dJ+kz3BiAuqfXgUeo
-         hPUw==
-X-Forwarded-Encrypted: i=1; AJvYcCXi8QAd9sxcFozeo7jucMlzR3N1IclewERNAoArDUd0qxoGqJsfIv1pRco7JXlwC6UxMY6hv5tJiW9n+HPkQPM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvKEdhR7Z4Y/4VWM9L+ZtYOxw3SkrPqaGrpGFmakl4j5cLgHgg
-	1GsCd9ps/LrrijZmsmP7Cjh6fgsAR+rtTy/DoxAp1zSazVafI5zQCOTN
-X-Gm-Gg: ATEYQzycgOirQ2ujr5BwenUD/zdjT2H19VpdNK73pLvKkQ94WWIi+VPkW0TZvPKWKhW
-	vyFlGnguEuTR407CNcLpk2pZmyYhK4O/jhdjSntiCGV0KgzAw/Eedy1kSJbnTe5WWcN+4J53wRq
-	kQj/vAELOFw7DnnF6fXTCJecd1Jv9Vhp5sCdl9xrG2PTPZy+hePaVs4XP96D2R9JyR7qug87GoH
-	2TCOl1oaTX/3v2bMZqdhqKRR3AV572rIDfonHlABVAxNM3DrL5ebFSzzpiavRLhzYQzs8ZzQXLb
-	Xu3n+qTXpQsAgGHtJI6vq/6UzyLiPSrVRTXkM/Lb6Yisc0CXyYOYQDhbRcFnkcKou5/gLMw+6yR
-	owIpqniAKcy2wqLHmDJSD6ZvppjFRDjnGdlk7p3/JektxFx/YTi/YFotbxrVH1+hYJEOLjf/4ww
-	2IflCaGJpzXHM4nThBVd5+XXc8kphvFgMak2yy8cKJx3rQcBX4
-X-Received: by 2002:a05:6a21:1f8a:b0:394:593a:eea4 with SMTP id adf61e73a8af0-395c3b0f750mr14569718637.57.1772546017520;
-        Tue, 03 Mar 2026 05:53:37 -0800 (PST)
-Received: from localhost.localdomain ([113.218.252.129])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa62147esm14689782a12.12.2026.03.03.05.53.28
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Mar 2026 05:53:37 -0800 (PST)
-From: Chengkaitao <pilgrimtao@gmail.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	chengkaitao@kylinos.cn,
-	linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 6/6] selftests/bpf: Add test cases for bpf_list_is_first/is_last/empty
-Date: Tue,  3 Mar 2026 21:52:19 +0800
-Message-ID: <20260303135219.33726-7-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260303135219.33726-1-pilgrimtao@gmail.com>
-References: <20260303135219.33726-1-pilgrimtao@gmail.com>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="koYSZ+QC"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DQIP0ZSWdOG5rNf1QYB/+A6e0viY5SljMxR0BqOwiydTqcckERzZwy8s++FEHiRZqFGAvcE0rQUGL+E3ayfLvYqWLKgfe6Fis9cH1h9EZS1bpUULvk1TjqR2FYhMQP74qbFVAKfohJkazz7O2Tv9VV6LKoiBx2P0ug5ZvseCX7JuR3tcQTEkP6v6a7QlyNGD5z4XAopVR0wgs7pqDYTo0+tiHrMoGaY9uyUutS33GvAhyLE0aqZ6e4UNuEO1WSIhnLBIz1Swpvwrc3Hk+49s5uu1xd19WhnsKcYlgNToJRNC7sO1w4nB+JOG7I6ZMvuzJZKuHL6qaZUK+QY5nIm9VQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vepFM0pr91zFKaVjq0cF4nADlyrwNJIbcNtyCzR3QAo=;
+ b=ukFX44EmIkWjzbxDJzs6FqJEdMG0sx2k4OBSqfVQvGbWpZ4c4Evzq8sxny/h08DDPOR21akCR/SugTdGWRwwA+Mp+N7/v3Tw3xCSUdNcDtOVbc19t3nidcZpZCkODGEPRc1AlVobs3Hunr5gjV4PLtEVKoSyjeji8eBJAyqg82nR2Vv/csAOFbODRbcOKOU5OHdm8szfQ7btBrk+YRfYz8FE+vEYqCZqRBnRt8WoTXtS6Phs8cYkpdc7EVkiVlNFxoFz8Rf4WISw7x5Qo79e2wdT+rSXbePINdERt6Jl+rNbT4cG0i700a0TGUVcKes7MBYoyes89/oelvdRF2Ai+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vepFM0pr91zFKaVjq0cF4nADlyrwNJIbcNtyCzR3QAo=;
+ b=koYSZ+QCB6w4fPyrASKG4lp6fu6ZGjBX+bjF6tz5dpDvty4WNIVY3gDjdjjZLnMT8DGGuGY674M3UOBE2evx7YNviOMW/O7V0LLcUIAj0U2cLeYJw9X4VmKJXMbnNoXK/jlzwYGYyisXq59B7JOxUpNf9rq3g+G3DPZEVp4FnKm1q3j6SaGI7dp5tdJ5ydevXgdstkNFUkBnfdita7i4cUBXrPEgE3HepqFQdpL5cvdBtShyqKE0N39urVllebYJawwh49vvm6bL4vtcaVPYthCl90JIhlBtxdHs0Bi7e3J8Sqzsn/0QriMPUt/cJbOBbIWtTLyPwfVQ+kw64+h9jA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
+ by MRWPR04MB12277.eurprd04.prod.outlook.com (2603:10a6:501:81::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Tue, 3 Mar
+ 2026 13:53:45 +0000
+Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
+ ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9654.022; Tue, 3 Mar 2026
+ 13:53:45 +0000
+Date: Tue, 3 Mar 2026 15:53:41 +0200
+From: Ioana Ciornei <ioana.ciornei@nxp.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Petr Machata <me@pmachata.org>, Petr Machata <petrm@nvidia.com>, 
+	netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
+ ethtool standard counters
+Message-ID: <qnq4vqznmwbgl6auacr7lkpwpzcwh2w26de22pidxhpy676f73@45s2xdpczvsd>
+References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
+ <20260225150648.1542206-6-ioana.ciornei@nxp.com>
+ <20260226182223.5eb1b10f@kernel.org>
+ <87ms0ufc0p.fsf@nvidia.com>
+ <20260227164348.63afcc43@kernel.org>
+ <877brxf272.fsf@nvidia.com>
+ <7hct7o4rzgygef536al6if2jl45p32ad3tdswyqf25uu5wy5re@2ltu2ems47q7>
+ <20260302160743.124531f8@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260302160743.124531f8@kernel.org>
+X-ClientProxiedBy: AM9P195CA0015.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21f::20) To PAXPR04MB8253.eurprd04.prod.outlook.com
+ (2603:10a6:102:1bf::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|MRWPR04MB12277:EE_
+X-MS-Office365-Filtering-Correlation-Id: dfe30ff4-4c6a-4b1f-1e5b-08de792c4923
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	SlcjjwbfvvELKp8JPgJ8BmS/3WLfIkXc9/lLEHkeZUPzslQt/T6zELEqPZyxbN36efDjwYAE2dcU5atwqjmxdG00Hl1cHnoUzeZEXuXUCf8nyzY9Tfp/DCmT7AT8OorOoxpYd/0iaSAi+kheZvEFypwCbWkPQhozbTleW4MgQZHvXs+sXdxN1xY3TQiusOaJv05i9OKf7gaM+MrhQQGaptt3x75UxoGaN+CJsRkWlnnhu65Hl/wGy5j7DiO43FFmgQQ0dWCEZvkCEyqwL8XXCKLtTOvGCANdCAXU+vgdozh6ZyvIl2gTXbqorLepZypo7Zci/0trjkOYE/YNZQS64Hv9Tsn/HhO8dYhI9sPk9hxZuLKAiHP7t9udnvuNwBYA//ixQce60I48zGRmgj1iKrl2m/0Enebhc++UV3dVW6hTyuXN+laScc5pfIPAZw4Rl2+HgKpA2GpEA35/0ISiQLBvjfiLB1Es4+RCCLp19W1IARjd/NS1Q8ycaKVZVwM4YpAYsUSJCp+0GJgDofM4odwG9KySek/1NwEa0Wm3p08brkDUCFKksAHdh+kC+Grcy7EURVp3en7i4A9Am+sIehGQvUCPYrs+j9SIYzo6y4TsLeDNJY2277LTm/l6yDyb7Hla8JHjwBDkU2YxwJflhCRQRj2MU2KOCpT0Ln55qIOGZtuRsXPRbwT1NY70PyQyhEHsjaVMg8uFlnv5cXIez+Xhsd4bY3AsxPgMOfPEO+A=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?PkwU7AhMXEkJtDVnQf8blFx6lqoFBNufCIzJMmDPMwK11q0hYIt3XYGxYIcA?=
+ =?us-ascii?Q?XQcXmhiZ6j1DonOPfITHJ4Tkse8YG4N+egNQXIdAMWVrP3GbFJbRtVjJN52l?=
+ =?us-ascii?Q?zGJNOxKNH30iDBA4Tcjkv6mRXMAUKNAR6D77yPse0JHuRGjY4qJMB9Wl/Xqc?=
+ =?us-ascii?Q?QeAsOy8JcxCNrjre9wsTtyfLJj7woOLNUU3wMibycOvmGtvS6stZUtBgVFUj?=
+ =?us-ascii?Q?fZdsEus4V9HxNuVRXGHTkY630tBylumFXFDy94ERsCBxRWX3TNFe7bhTH7+c?=
+ =?us-ascii?Q?rTXTzc7AD8h6J8QUFnqNMyZ9TE0jdIg16qhvaiO0nxSmf5qe1OV9FulHKmO9?=
+ =?us-ascii?Q?YWf/++I/orponpViLZ5A9x7354JZCz9TLDQe6PKjCOIVUjWJv8sltQmsKMVG?=
+ =?us-ascii?Q?ykRy8Bj6aUPBeAXHn4pJjYwUzwlB68RP/j4Og7CXX/hW4kLXKEJstFhz6pvj?=
+ =?us-ascii?Q?RQtXF9JJMhOSg9obk90zb+C7IPilCQm51j5J0J7REgu3lros1FrWsu01MKHI?=
+ =?us-ascii?Q?JOsxzGIuRR8jBXs6N/Ol/XDl04hytn4lIvPI9iU6aTZt2tYbbb07ZjnQd78A?=
+ =?us-ascii?Q?LoLhQ8eP36s01VI6p1RwGc010LDO8RNxnDu07YMwU8sd+b4U+fPatoojOmcG?=
+ =?us-ascii?Q?IFnsBQudWAEsrQrmBHLDY+7iwCaSs0DU+nsTRtxSrvrQ6QY1dORBxXH6KN1+?=
+ =?us-ascii?Q?LE2AXui0UKlnRp5jUG2WNiaipkaTBOHo5lY3SOWDyTMwTdp4beKemutLIZgj?=
+ =?us-ascii?Q?niKV7V/lXTvYcjxPGlsrrP6eDS2gmHbSrclZlMNxsA5X+Uf83gAhD7rGyV6R?=
+ =?us-ascii?Q?I3dOk3+AuMfMAvloIJT5+s6yB18HMqZ4PRln3v0NkjOD9CyHbj5HRCJwBF9F?=
+ =?us-ascii?Q?O04gF3ZqKBRP5b/QWytgXXPVT1oCaYoGR+RbS0nY7jQq03remBVtSKM+vHUt?=
+ =?us-ascii?Q?V/JRn1L/cZEP83nTR86u0zCRNfaIzr1G6rXwygk9bUJoILUWapLDhNa5kT5p?=
+ =?us-ascii?Q?A46OXXyW8azJe0H9bZaa6UnUW/VJOpJmyCDkE5v/mPFlNqdodrOzE2gbhfox?=
+ =?us-ascii?Q?lXS6rXAOxewNNphHtmvBGTCSJSI4XAYTL8e7FrgIcGGCSppQlXoPsfd5tFki?=
+ =?us-ascii?Q?wEAM7Xn3mc/zurwgd5kzFyPhUWisHKUcaybIrSTWsqHwman5kz9xloGsHgWg?=
+ =?us-ascii?Q?JkBv37uuP8hqUiaFalKXy6nGqdvEkl6hDH6nlc3cJF/OL8xMvqGI6Fpqry9C?=
+ =?us-ascii?Q?ijzs7ppGhq6Ef6TGRuqjWUwJiqCLjRmKSbpHUbeulv7THRW8X5+Gx84CMLyc?=
+ =?us-ascii?Q?VMDFir3LTyFBiMlBqL+gF9KxKycpEZuKj7wDoKeNp1XwGpX0HH7n73SlbOw/?=
+ =?us-ascii?Q?DgccQEsaSCBNJAGIR7Vjg26wo5UBFnq+GfScnkAPDUOSuSBNSYi83hCm9NoS?=
+ =?us-ascii?Q?bMCXCv83qMl0M1XZ/y/1dhd++FKM8H586jwtaWXbSwAwTMJFxZ5TtGcUpyB1?=
+ =?us-ascii?Q?kYgqyuQnDEIBiG/0lOYyknuI3u787dnH/xWAOtCwsRJKp8pE18AxEd3BLcNH?=
+ =?us-ascii?Q?oFe1ZCWEJ46I408e1SMeW2Zyvf9BGl5LTTTK+d9JOL8H3uJuvA6kwmWFGBqt?=
+ =?us-ascii?Q?h/nOhagmjNiUONPxAY48UKb221thJkbpNG3D2in0HwOKOPNHujLapqgnE4JV?=
+ =?us-ascii?Q?INadMXxde2Z2ndFf8D8w3gJxWBToF4uAU4PC1U8pnRRYDXNfcElJS5G6tqUR?=
+ =?us-ascii?Q?/6HB4nk70w=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfe30ff4-4c6a-4b1f-1e5b-08de792c4923
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 13:53:45.5740
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bmVw4GMaYzoK+eqnCsEw9RhSZ8KCdYlvHSbc3o5zxs9ohcQH5euVZczsuFkum3Mwq31jZaajrofEolkIScasDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRWPR04MB12277
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+On Mon, Mar 02, 2026 at 04:07:43PM -0800, Jakub Kicinski wrote:
+> On Mon, 2 Mar 2026 14:11:21 +0200 Ioana Ciornei wrote:
+> > > I agree that adherence to the drivers/net/README protocol is valuable to
+> > > some users and would be good to uphold if reasonable in a given tests.
+> > > If that's what you have in mind.
+> > > 
+> > > There are going to be tests where it's not a great fit, but I think that
+> > > of those NUM_NETIFS=2 tests that we currently have, maybe
+> > > ethtool_extended_state has a good reason to be obstinate, because it
+> > > sets up negotiations and needs an extra unplugged netdevice.  
+> > 
+> > I would add here even ethtool_rmon.sh and this new test that I
+> 
+> I think I already told you that ethool_rmon predates the NIC tests
+> and bringing it up in this discussion is irrelevant.
+> 
+> > submitted. If you are running with a traffic generator on another board
+> > then you can no longer check that the counter's value is as expected
+> > (with a 1% tolerance), you can only check the lower bound.
+> 
+> 1% tolerance is impractical for any CI with high test count.
+> The test will be flaky. And I really doubt that the 1% tolerance
+> is really necessary to catch most bugs. We're not trying to validate
+> silicon here.
+> 
+> > Additionally, if you are using the same single port also for control
+> > traffic towards the remote traffic generator, then you surely cannot
+> > reliably check that counters that should not be incremented are indeed
+> > not incremented.
+> 
+> I both told you in this conversation how to check the counters,
+> and written some existing tests for counters.
 
-Rename test_list_add_del to list_add_del_and_check and extend it to
-cover the new kfuncs: assert list non-empty after insert, assert
-is_first(n) and is_last(m_1) after bpf_list_add, and assert list
-empty after removing both nodes.
+Judging by your response it's clear to me that you wanted to transmit
+something that didn't actually get to me. I am afraid that it's not
+clear to me what exactly is your feedback and what do you expect as a
+next step.
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
----
- .../testing/selftests/bpf/bpf_experimental.h  | 15 +++++++++++
- .../selftests/bpf/progs/refcounted_kptr.c     | 27 +++++++++++++++----
- 2 files changed, 37 insertions(+), 5 deletions(-)
+What I did get:
+- The new test should work with a single netdevice (and a remote
+  endpoint for traffic generation).
+- The test should not check for any upper bound for the ethtool counter
+  value.
+- The test is expected to follow drivers/net/README.rst.
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index fdcc7a054095..056b2de19b06 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -126,6 +126,21 @@ extern int bpf_list_add_impl(struct bpf_list_head *head, struct bpf_list_node *n
- /* Convenience macro to wrap over bpf_list_add_impl */
- #define bpf_list_add(head, new, prev) bpf_list_add_impl(head, new, prev, NULL, 0)
- 
-+/* Description
-+ *	Return true if 'node' is the first node in the list with head 'head'.
-+ */
-+extern bool bpf_list_is_first(struct bpf_list_head *head, struct bpf_list_node *node) __ksym;
-+
-+/* Description
-+ *	Return true if 'node' is the last node in the list with head 'head'.
-+ */
-+extern bool bpf_list_is_last(struct bpf_list_head *head, struct bpf_list_node *node) __ksym;
-+
-+/* Description
-+ *	Return true if the list with head 'head' has no entries.
-+ */
-+extern bool bpf_list_empty(struct bpf_list_head *head) __ksym;
-+
- /* Description
-  *	Remove 'node' from rbtree with root 'root'
-  * Returns
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-index 5a83274e1d26..1b119fe16f5a 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-@@ -367,14 +367,14 @@ long insert_rbtree_and_stash__del_tree_##rem_tree(void *ctx)		\
- INSERT_STASH_READ(true, "insert_stash_read: remove from tree");
- INSERT_STASH_READ(false, "insert_stash_read: don't remove from tree");
- 
--/* Insert one node in tree and list, remove it from tree, add a second
-- * node after it in list with bpf_list_add, then remove both nodes from
-- * list via bpf_list_del.
-+/* Insert one node in tree and list, remove it from tree, add a second node
-+ * after it with bpf_list_add, check bpf_list_is_first/is_last/empty, then
-+ * remove both nodes from list via bpf_list_del.
-  */
- SEC("tc")
--__description("test_list_add_del: test bpf_list_add/del")
-+__description("list_add_del_and_check: test bpf_list_add/del/is_first/is_last/empty")
- __success __retval(0)
--long test_list_add_del(void *ctx)
-+long list_add_del_and_check(void *ctx)
- {
- 	long err = 0;
- 	struct bpf_rb_node *rb;
-@@ -386,6 +386,11 @@ long test_list_add_del(void *ctx)
- 		return err;
- 
- 	bpf_spin_lock(&lock);
-+	if (bpf_list_empty(&head)) {
-+		bpf_spin_unlock(&lock);
-+		return -7;
-+	}
-+
- 	rb = bpf_rbtree_first(&root);
- 	if (!rb) {
- 		bpf_spin_unlock(&lock);
-@@ -418,6 +423,14 @@ long test_list_add_del(void *ctx)
- 		return -8;
- 	}
- 
-+	if (!bpf_list_is_first(&head, &n->l) ||
-+	    !bpf_list_is_last(&head, &m_1->l)) {
-+		bpf_spin_unlock(&lock);
-+		bpf_obj_drop(n);
-+		bpf_obj_drop(m_1);
-+		return -9;
-+	}
-+
- 	l = bpf_list_del(&head, &n->l);
- 	l_1 = bpf_list_del(&head, &m_1->l);
- 	bpf_spin_unlock(&lock);
-@@ -434,6 +447,10 @@ long test_list_add_del(void *ctx)
- 	else
- 		err = -6;
- 
-+	bpf_spin_lock(&lock);
-+	if (!bpf_list_empty(&head))
-+		err = -7;
-+	bpf_spin_unlock(&lock);
- 	return err;
- }
- 
--- 
-2.50.1 (Apple Git-155)
+Does this mean that your feedback is to convert the bash variant that I
+submitted into a python one which uses lib.py?
 
+If this is your intention, what is the plan for the rmon statistics (or
+any drivers/net/hw/ bash tests that pre-date the README)? Do you see
+those eventually getting converted to lib.py? I am merely asking so that
+I know if I should convert them or they are to be left as is.
+
+If I got this all wrong, I'm sorry.
