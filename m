@@ -1,161 +1,154 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 672523264E9;
-	Tue,  3 Mar 2026 17:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C263A5E75
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 17:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772557822; cv=none; b=d88gtJ7MmhkOpEZAOrNrdztZAmdXfhumj8Hc6HmpXYjzMZjVeo7x+ewiF+0yq1RfajfsfANQAUXARu4r6nEeGQ3tzJ2/RHDwF8eQYeKkrlHSJ0+3KGku/rwngX/jXORhM/dNFuQC8NhG1cIK0MxWyixdxe+7l98HkB4NoGWDD4Y=
+	t=1772559138; cv=none; b=JAI9SW6iKaY+0kVqjyUJJlP5Elr8D4Uv5A1m6Behp+ndFqdLbde8MeCcyBkWdGp/NamMNYySmj9scsC4tlX/q2zE3EL2e8HgyaVS/JFmxu7FmPePqeASM81iNAtqN06BxMPpruRfsVtoY0T+KHyDXB3cWazxTMjjEXS2LY9gWRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772557822; c=relaxed/simple;
-	bh=A9iXfbukEYSm7oOGpsIj10Mq3UJmyrTuQYFdomPEYY8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G/7M2pl18Qn7vsQDltW1BshQ6QCvR2mYDMtk7yyvmPjbTJYYYUV+oLmsskksBrybxqoU6lbC2BHl9h3K91VuOJeZr9H4stfKKT9HN9a8c25pUaw743jroZnzAa0zmxVEyyT1zt9hWzFT6kdNwaVFrfqJoQcDVvsRPoKSrKLp3oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 428AB339;
-	Tue,  3 Mar 2026 09:10:13 -0800 (PST)
-Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B2A73F73B;
-	Tue,  3 Mar 2026 09:10:18 -0800 (PST)
-Message-ID: <4449219d-186f-4b5e-9f72-958d1af80f58@arm.com>
-Date: Tue, 3 Mar 2026 17:10:16 +0000
+	s=arc-20240116; t=1772559138; c=relaxed/simple;
+	bh=yMGrdbIwWE2+eYJPYfoBl93xI3liydh55WwC6qSYchA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=BZjQNu1VbGu4tY9Od6F51B1/tOlbEa4C5UCtuiNgfA43WScfmGZ22PtDrMgXq1e8a8R5Y4PkoeOcghtiUtZEyrslellnL35zR7xnmHAICHtZ/EoD5Gb9RsP9+B0TjkpUS66I5ocKtPxWMrSvX8R4e9iSQFUnWbnMyzK5+FrF31A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MtUxZWMT; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MtUxZWMT"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c5269fcecdeso3154024a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 09:32:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772559135; x=1773163935; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aLBg7IZ3pN30EJup7ssRX35zrhsbqgqINeRfna2/jXs=;
+        b=MtUxZWMThBb3FdAXJU+m4EOcD1Wxazl8uX/M4zjkiue16Hhrg9SykoWyuP2mQrr0VF
+         vtswoKY2mZIBXYdXrVUCNoLSQ/HTj3tcbAuWADnzhfbOppMKiGDQFyOpTfrYyk5HHWYC
+         eOulc89cVKweLpPw6AQVmUKkdVsnLfsJx7IDVtpvyYPiowIGN8rlSewnfzuSsR+lPM49
+         5l4Hpp+76z0VH/piKzYyqq1Yuyhv7YhjYxxSGNIopXJ7ZflnqWk2KRaUqpputP1DJG5Q
+         jhlkJm0qw9hVh/7+8XLRg/jE2NcpewRmLCQx/LHuKE6qBxnE79rGYkeRUkmGsjm23LUS
+         O0LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772559135; x=1773163935;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aLBg7IZ3pN30EJup7ssRX35zrhsbqgqINeRfna2/jXs=;
+        b=hwGq46a/MME6RPnwgsv9QHwOYwhBX3NIdhQXOyjKKnF22EUdnwQZMQr7FDXs49ujek
+         qjNXBx2wZGRD7eAjHnc2BdAu5O5hbOex7KgpmHKleMVFWll2tR5YAkvcG2zdjuPbBGYo
+         gQTnx8Qozoe3XSHAVRUadHpTO/05muuIjkhqqthlQ9feKkKo2uA/PKFIPhGMwMjWH27J
+         yOX7V3IESt4XIuynjh3Bzh6XmG2hBiZZjthQQJiGTpdose2amEbANTs0tPlmOyPiiP/m
+         v37ahgI4+/gLCOa2jnGVN6p71+5GBhmvaSO/ojw0VCWJ5i7Np4Fg4mw6An6IEq/DsVtn
+         AUwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU8FjFgGyyDp8lcKVfLyy63Djx9Rgtt1g8zFiuX8sZsvv9XXCfkoceDe71g59VxvwpZ/61SG7Xq+ZQOaV36nCk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHOnexif8gO4hgqWwX8oCodUINVrpob1mllcSWBFXZpmJ8nkx2
+	Yt9a+qI0/rU5iZ3//yweXbABgE5yJxb8fdcHHAno9bs0nVa3hpFLbPuKQVzj09N1L8p9xMHlR1e
+	YRLI9yA==
+X-Received: from pge15.prod.google.com ([2002:a05:6a02:2d0f:b0:bac:6acd:8182])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:2d42:b0:334:87c2:445
+ with SMTP id adf61e73a8af0-395c3b0407fmr15851028637.36.1772559134744; Tue, 03
+ Mar 2026 09:32:14 -0800 (PST)
+Date: Tue, 3 Mar 2026 09:32:13 -0800
+In-Reply-To: <20260224005500.1471972-10-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/5] kselftest/resctrl: Enable CAT and NONCONT_CAT
- tests on ARM
-To: "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>,
- "fenghuay@nvidia.com" <fenghuay@nvidia.com>,
- "reinette.chatre@intel.com" <reinette.chatre@intel.com>,
- "james.morse@arm.com" <james.morse@arm.com>,
- "shuah@kernel.org" <shuah@kernel.org>
-Cc: "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-References: <20260123044034.141247-1-tan.shaopeng@fujitsu.com>
- <a3428306-9fae-4add-890e-ed7b82bea0b8@arm.com>
- <TYWPR01MB9923C04ECCCA9EF4FB49328C8B7EA@TYWPR01MB9923.jpnprd01.prod.outlook.com>
-From: Ben Horgan <ben.horgan@arm.com>
-Content-Language: en-US
-In-Reply-To: <TYWPR01MB9923C04ECCCA9EF4FB49328C8B7EA@TYWPR01MB9923.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260224005500.1471972-1-jmattson@google.com> <20260224005500.1471972-10-jmattson@google.com>
+Message-ID: <aacbHcUbG5WYgSaQ@google.com>
+Subject: Re: [PATCH v5 09/10] KVM: x86: nSVM: Handle restore of legacy nested state
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yosry Ahmed <yosry@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-Hi Shaopeng,
-
-On 3/2/26 07:26, Shaopeng Tan (Fujitsu) wrote:
-> Hello Ben,
-> 
-> Thank you for your reply. 
+On Mon, Feb 23, 2026, Jim Mattson wrote:
+> @@ -2075,9 +2076,15 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
 >  
-> I've made the fixes and re-run the tests on Grace, as you advised.
-> I appreciate your feedback.
-> 
->> This is only guaranteed to clean and invalidate to the point of
->> coherence, PoC. On Grace I expect this is L3/slc and so the cache line
->> there in L3/slc is likely not invalidated or pushed to DRAM.
->> The dsb() for synchronization is missing for aarch64 in sb().
-> 
-> I added dsb() for synchronization for aarch64 as shown below.
+>  	svm_switch_vmcb(svm, &svm->nested.vmcb02);
 >  
-> @@ -27,6 +30,8 @@ static void sb(void)
->  #if defined(__i386) || defined(__x86_64)
->         asm volatile("sfence\n\t"
->                      : : : "memory");
-> +#elif defined(__aarch64__)
-> +       __asm__ __volatile__("dsb sy\n\t" ::: "memory");
->  #endif
->  }
+> -	if (nested_npt_enabled(svm) &&
+> -	    (kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT))
+> -		vmcb_set_gpat(svm->vmcb, kvm_state->hdr.svm.gpat);
+> +	svm->nested.legacy_gpat_semantics =
+> +		nested_npt_enabled(svm) &&
+> +		!(kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT);
+> +	if (nested_npt_enabled(svm)) {
+> +		u64 g_pat = svm->nested.legacy_gpat_semantics ?
+> +			    vcpu->arch.pat : kvm_state->hdr.svm.gpat;
 
-Sorry, if I wasn't clear. The dsb() is required for the synchronization
-of the clean and invalidate operation but the clean and invalidate
-operation has no requirement to clean and invalidate the L3/slc and as
-that's the PoC and so probably just does the clean and invalidate up
-to L2.
+This is all a bit gnarly, e.g. the indentation and wrapping, as well as the logic
+(not that it's wrong, just a bit hard to follow the chain of events).
 
+Rather than set legacy_gpat_semantics directly, what if we clear it by default,
+and then set it %true in the exact path where KVM uses legacy semantics.
+
+	svm->nested.legacy_gpat_semantics = false;
+	if (nested_npt_enabled(svm)) {
+		if (kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT) {
+			vmcb_set_gpat(svm->vmcb, kvm_state->hdr.svm.gpat);
+		} else {
+			svm->nested.legacy_gpat_semantics = true;
+			vmcb_set_gpat(svm->vmcb, vcpu->arch.pat);
+		}
+	}
+
+As a bonus, if the previous patch is deliberately "bad" and does:
+
+	if (nested_npt_enabled(svm)) {
+		if (kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT)
+			vmcb_set_gpat(svm->vmcb, kvm_state->hdr.svm.gpat);
+	}
+
+then the diff for this snippet shrinks to:
+
+@@ -2025,9 +2026,14 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+ 
+        svm_switch_vmcb(svm, &svm->nested.vmcb02);
+ 
++       svm->nested.legacy_gpat_semantics = false;
+        if (nested_npt_enabled(svm)) {
+-               if (kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT)
++               if (kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT) {
+                        vmcb_set_gpat(svm->vmcb, kvm_state->hdr.svm.gpat);
++               } else {
++                       svm->nested.legacy_gpat_semantics = true;
++                       vmcb_set_gpat(svm->vmcb, vcpu->arch.pat);
++               }
+        }
+ 
+        nested_vmcb02_prepare_control(svm);
+
+> +
+> +		vmcb_set_gpat(svm->nested.vmcb02.ptr, g_pat);
+
+I don't like the switch from svm->vmcb to svm->nested.vmcb02.ptr.  For better or
+worse, the existing code uses svm->vmcb, so I think it makes sense to use that.
+If we want to explicitly use vmcb02, then we should capture svm->nested.vmcb02.ptr
+locally as vmcb02 (in a future cleanup patch).
+
+
+> +	}
 >  
->> IIUC the L3 cache is in the nvidia interconnect and so changing the
->> cache portion bitmap would correlate with events from the nvidia
->> interconnect pmu. However, I don't think you are using events from the
->> interconnect.
-> 
-> I used the NVIDIA event  "nvidia_scf_pmu/scf_cache_refill/".
+>  	nested_vmcb02_prepare_control(svm, svm->vmcb->save.rip, svm->vmcb->save.cs.base);
 >  
-> After the above fixes, the running results are as follows: 
-> $ sudo ./resctrl_tests -t cat
-> TAP version 13
-> # Pass: Check kernel supports resctrl filesystem
-> # Pass: Check resctrl mountpoint "/sys/fs/resctrl" exists
-> # resctrl filesystem not mounted
-> 1..3
-> # Starting L3_CAT test ...
-> # Mounting resctrl to "/sys/fs/resctrl"
-> # Cache size :119537664
-> # Writing benchmark parameters to resctrl FS
-> # Write schema "L3:1=fc0" to resctrl FS
-> # Write schema "L3:1=3f" to resctrl FS
-> # Write schema "L3:1=fe0" to resctrl FS
-> # Write schema "L3:1=1f" to resctrl FS
-> # Write schema "L3:1=ff0" to resctrl FS
-> # Write schema "L3:1=f" to resctrl FS
-> # Write schema "L3:1=ff8" to resctrl FS
-> # Write schema "L3:1=7" to resctrl FS
-> # Write schema "L3:1=ffc" to resctrl FS
-> # Write schema "L3:1=3" to resctrl FS
-> # Write schema "L3:1=ffe" to resctrl FS
-> # Write schema "L3:1=1" to resctrl FS
-> # Checking for pass/fail
-> # Number of bits: 6
-> # Average LLC val: 0
-> # Cache span (lines): 933888
-> # Number of bits: 5
-> # Average LLC val: 0
-> # Cache span (lines): 778240
-> # Number of bits: 4
-> # Average LLC val: 0
-> # Cache span (lines): 622592
-> # Number of bits: 3
-> # Average LLC val: 0
-> # Cache span (lines): 466944
-> # Number of bits: 2
-> # Average LLC val: 0
-> # Cache span (lines): 311296
-> # Number of bits: 1
-> # Average LLC val: 0
-> # Cache span (lines): 155648
-> ok 1 L3_CAT: test
-> 
-> The result of the nvidia_scf_pmu/scf_cache_refill event is 0. 
-> I have tried various changes to the perf_event_open() parameters, such as type, read_format, PID etc.. 
-> Although non-zero results were obtained for some parameter combinations, the expected results were not achieved in any scenario. 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 00dba10991a5..ac45702f566e 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -2727,7 +2727,8 @@ static bool svm_pat_accesses_gpat(struct kvm_vcpu *vcpu, bool from_host)
+>  	 * with older kernels.
+>  	 */
+>  	WARN_ON_ONCE(from_host && vcpu->wants_to_run);
+> -	return !from_host && is_guest_mode(vcpu) && nested_npt_enabled(svm);
+> +	return !svm->nested.legacy_gpat_semantics && !from_host &&
+> +		is_guest_mode(vcpu) && nested_npt_enabled(svm);
 
-Could this be because the clean and invalidate doesn't affect the slc/L3?
-
-> Are there any special specifications needed for the perf_event_open() parameters for Grace or Arm architecture?
-
-I'm not sure.
-
-> 
-> The perf_event_open() parameters used when collecting the above results are as follows:
-> perf_event_open({type=PERF_TYPE_RAW, size=0x88 /* PERF_ATTR_SIZE_??? */, config=0xf1, sample_period=0, sample_type=PERF_SAMPLE_IDENTIFIER, read_format=PERF_FORMAT_GROUP, disabled=1, inherit=1, exclude_kernel=1, exclude_hv=1, precise_ip=0 /* arbitrary skid */, exclude_guest=1, exclude_callchain_kernel=1, ...}, 68508, 1, -1, PERF_FLAG_FD_CLOEXEC) = 3
-> Could you please give us your opinion?
->  
-> Also, since this kselftest is for all Arm chips, we need an event common to all chips.
-> Do you have any ideas on what event we should collect?
-
-I don't think there is any common event. Perhaps you could make the
-event to test against an input to the test?
-
-> 
-> Best regards,
-> Shaopeng TAN
-
-Thanks,
-
-Ben
-
+Align indentation (it's a shame return wasn't spelled retturn, it would save many
+spaces).
