@@ -1,54 +1,54 @@
 Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495241E1A33
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 01:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6212253FC
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 01:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772499645; cv=none; b=dv6jNgtK0A7MaGUBsbaU3fF/DxoI8jN1HtYB7lJAbz9RfisS8FpIEKq+YpHu8qdwZWxCzmh9Zk1QuUKh4TUtuLtE57UUIMNkyEk6PiNCWLTyBUhv09OYrCN8SlDmao2PSw296m3NdSlqBHv22rXpvnLG2eJqX8JwDYHMW7H4c/g=
+	t=1772499647; cv=none; b=UKZMNwrmRyj/LnBM7NCgAYvWfjM/fxHRuvxrlBo0TNIZUBaGm/Q1DeZl9CBlNsPJzDUQbzQ23kc2/ywKb45yvFgKbmx1Sqdwv2ge8tjrch2V3QAFQNonZ4CD7PW4jMY7pDcnYf31FVvz+b0Tv3dER0GmuvABsehU+dtFjSMl3Uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772499645; c=relaxed/simple;
-	bh=pZIzdoHBsTFqWgy15ncCajj5m+dgIqKqfVSYDon3jks=;
+	s=arc-20240116; t=1772499647; c=relaxed/simple;
+	bh=7/FinFvGG5NGey3qrTHVrugwW4M2XPFaGsf+Zthw/MA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iPfyXVEqJQ9CJgPZ9BmGON4zkwLSc/5axFHFBMYc8DIU7MOLeB+V+qDfGSnLheLwCQXyoqYoT6plD+oVqsXNP7sF0D7Q1MNZDNUCDcraFtHM81TwtUTCswLlsWAnCifeFKWS67JH8MCzvhYh7TTfSk1BOWsHz4LLgPFd0vqXIbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jordanrichards.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UkAFldir; arc=none smtp.client-ip=74.125.82.201
+	 To:Cc:Content-Type; b=BUP3Oe/VNBK7So69p6PI/T1Hyqx9v/qTkFu+U9bM8dh/ipHNo42q+1wQ7li3gJn8IUxHMU26vKtzz7s2x3DrozobXA609ON/DLNyL7QDSHhRotAEKUXv9J0Wrjsc+zmlfxyGeGidI0XbL/OfdT9yAmXg+PFoO26Ntex/CHB1xi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jordanrichards.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mr3pt4li; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jordanrichards.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UkAFldir"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2bdc1b30ac8so9703537eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 17:00:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mr3pt4li"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2be232ef3d3so2126571eec.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2026 17:00:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772499642; x=1773104442; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772499645; x=1773104445; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6LBYWilsGadQ1Pufl4WrAtKAejCy/lhARa3nYcHQerM=;
-        b=UkAFldirMBSZU+j201vtp2QPuvl0kXZjRh0Qv/WzbzaiZQihoSUqf2KezEJN+e1uVJ
-         Xfms1Yr43LYdI4yXBy0zqLD7ogWOf8/JxCdgI2yCsv9WRU6B8d6p4rwKi4uIq1pSo7az
-         l/AuBIiyzWI7UslcpT4gtIjO48aQCU19YfT3dI4J/WfntMVzHUxPqb2YIs4SgkdAHRoJ
-         4/QLOs+WJMVqb3B3z+Nl1ouTiLM2n5WwycuzOldVkYC1qs+cFJsqj6t7q18//tY2Q7lC
-         YVhFn+al5QmEShCeQ1BACgsaxTPMpP5iQ5tUiGGt1AGUffVM27lyuM2FVCtCwOQIeZMT
-         +/zw==
+        bh=mfeVH3tlpXkPPnmAI2AR7odlrVEab2813t68CJAClt4=;
+        b=Mr3pt4li88DDT0sYNgoYxHDhHIMKrAgQSIxyEQdufcraCBbiZmvjTsUbD7alForrTt
+         CFoH1UBbHCMd6TbMGjX7izBANESdeze+G6g7M0L86Ib4gRmIeqYATJ9MZ8Z2UMahelC5
+         URimnHIeiHbUO5BMk/qe+swzyyabyrTdKTXUs/vLBrc3ldF1gc3Viqbch1qKkM/TZQG8
+         hKs6fP3EC4i5UONR8MwLS8DI7g3ygoT8cLbRDiS1Q4Z7Pw8QZ2FTqFA2hMqvsusj4aiH
+         jg/G4Md29f63tIk6FFgr93yA8zrjaC0ELSShMPjx/8rW4LCdNfm3q5T82ojFVm8ugRM7
+         LSuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772499642; x=1773104442;
+        d=1e100.net; s=20230601; t=1772499645; x=1773104445;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6LBYWilsGadQ1Pufl4WrAtKAejCy/lhARa3nYcHQerM=;
-        b=Ag83RkPun0OgLDVI+oopJhOJwsCMKgZu9YbAN7Huk/QvGeohA4GcgRjlFs0RuHP4ou
-         uLmfZDuOjEMJcixIchqpQ9wIn2xOiKiQWYyXMN0giItnRMVb6t6yVdmwW4g07miOlmo9
-         j5nTBAvmIID1UkH11ff4c6sgJug96PmQk58vG7KUJq2fVZT5C6oHo4CwlaUedbAtNdEY
-         iAz4i43Quc4tPki32O9Ses4tdGnJ5iOyfMyQ+/cqXrTQUCI7h7pcoz4zjoiEJB+EUJss
-         H7Y3Vp3QTtPDzrGdpUPwrt2+LetdrlPHTDsQsJGePDjxDvlqh4OnklY8NiX3rgndWQLu
-         YWzg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ2XAoRvBDBaj/oZuyc8iFTevNcW7QmaBeIpIfLFJG524KySvKZcheclott4zziZrxAYh2QWuhzN+qNUVOEHQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQyOGO9dVl4028pTOq4uyt6qtl+FCP9t52veWVZ7PhvM+JPDMN
-	3x25IhM5U+GjvQq5dzQ0Yfp9eHhPxbfSnxkCUcMdxjDODpMkEwLKRlGzcMmu677sJy+xCdR7YVb
-	1mnzpBRgqflq6nDO1ejiKZiCkAMY3/gN6PdWJDQ==
-X-Received: from dybir8.prod.google.com ([2002:a05:7300:c8c8:b0:2be:1796:e189])
+        bh=mfeVH3tlpXkPPnmAI2AR7odlrVEab2813t68CJAClt4=;
+        b=wZhAzmEGYjra1yDx0/tDgJQF+afkzMjD8X3+d2Af8CuBttCiRJLNTNEfDe+Al9XN60
+         UdQyj510VX3I409sZRMuwni3vM0AlV12FxH5hwlnUM35xo3PTs93ji3+n5HeGz0rXMoV
+         UesizH/ML7sRS7QsxL5VzGeU5jIncfzL1iqHrHn7dgO+5eHKAnW1+3qqDgNV11ODEnb5
+         liQ4TiQrKf4tMsZpQbErzG4hcDnecCa1WYV80XEfqrFlxVcvCVIPC6GdlNlbN4nNXJYi
+         /TIJ1++NDkjWvta541uMIx6h3f31LAGSfXEcVw3ICd/FeJ7iGPEQAMHOqW7xsjlebShw
+         5k3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVa5EEQ9vZ6HNxtR38av8tEDoeOweWZrIpZbUYBdU8k/H6OIMEWqgE8Zkvlq+9puf08gHTQt22/cbVSE6u7L6I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbSK88MmhE68QIl0kGow/xdU6P8R64y+my6slQp5c6FMJl3ohl
+	FUpqbJErE73R+Wl3rna/fXDgTff/+o7+T9r5/1+4ewrAzJnZMBbm1LjlIvTH6+fVKyXXl7oW6cW
+	3YmY89laK28xLq/raweBIzgvsb7RZuR6X+k5NQw==
+X-Received: from dybsl12.prod.google.com ([2002:a05:7301:730c:b0:2bd:fcea:a76f])
  (user=jordanrichards job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:a198:b0:2be:694:5713 with SMTP id 5a478bee46e88-2be069458e8mr3073775eec.36.1772499642072;
- Mon, 02 Mar 2026 17:00:42 -0800 (PST)
-Date: Tue,  3 Mar 2026 01:00:38 +0000
+ 2002:a05:7300:caa:b0:2be:140c:bc4a with SMTP id 5a478bee46e88-2be140cbf63mr2054909eec.3.1772499643785;
+ Mon, 02 Mar 2026 17:00:43 -0800 (PST)
+Date: Tue,  3 Mar 2026 01:00:39 +0000
 In-Reply-To: <20260303010039.2969125-1-jordanrichards@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260303010039.2969125-1-jordanrichards@google.com>
 X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260303010039.2969125-2-jordanrichards@google.com>
-Subject: [PATCH v3 1/2] tools/nolibc: add ftruncate()
+Message-ID: <20260303010039.2969125-3-jordanrichards@google.com>
+Subject: [PATCH v3 2/2] selftests/liveupdate: add end to end test
+ infrastructure and scripts
 From: Jordan Richards <jordanrichards@google.com>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>, Mike Rapoport <rppt@kernel.org>, 
 	Pratyush Yadav <pratyush@kernel.org>, Shuah Khan <shuah@kernel.org>, Willy Tarreau <w@1wt.eu>, 
@@ -69,233 +70,711 @@ Cc: Jason Miu <jasonmiu@google.com>, David Matlack <dmatlack@google.com>, linux-
 	Jordan Richards <jordanrichards@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On architectures with 32-bit longs, call the compat syscall
-__NR_ftruncate64. As off_t is 64-bit it must be split into 2 registers.
-Unlike llseek() which passes the high and low parts in explicitly named
-arguments, the order here is endian independent.
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Some architectures (arm, mips, ppc) require this pair of registers to
-be aligned to an even register, so add custom sys_ftruncate64 wrappers
-for those.
+Add the end to end testing infrastructure required to verify the
+liveupdate feature. This includes a custom init process, a test
+orchestration script, and a batch runner.
 
-A test case for ftruncate is added which validates negative length or
-invalid fd return the appropriate error, and checks the length is
-correct on success.
+The framework consists of:
 
+init.c:
+A lightweight init process that manages the kexec lifecycle.
+It mounts necessary filesystems, determines the current execution
+stage (1 or 2) via the kernel command line, and handles the
+kexec_file_load() sequence to transition between kernels.
+
+luo_test.sh:
+The primary KTAP-compliant test driver. It handles:
+- Kernel configuration merging and building.
+- Cross-compilation detection for x86_64 and arm64.
+- Generation of the initrd containing the test binary and init.
+- QEMU execution with automatic accelerator detection (KVM, HVF,
+ or TCG).
+
+run.sh:
+A wrapper script to discover and execute all `luo_*.c`
+tests across supported architectures, providing a summary of
+pass/fail/skip results.
+
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Co-developed-by: Jordan Richards <jordanrichards@google.com>
 Signed-off-by: Jordan Richards <jordanrichards@google.com>
 ---
- tools/include/nolibc/arch-arm.h              | 11 +++++
- tools/include/nolibc/arch-mips.h             | 11 +++++
- tools/include/nolibc/arch-powerpc.h          | 11 +++++
- tools/include/nolibc/unistd.h                | 35 ++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 51 ++++++++++++++++++++
- 5 files changed, 119 insertions(+)
+ tools/testing/selftests/liveupdate/.gitignore |   1 +
+ tools/testing/selftests/liveupdate/config     |   1 +
+ .../selftests/liveupdate/config.aarch64       |   2 +
+ .../selftests/liveupdate/config.x86_64        |   2 +
+ tools/testing/selftests/liveupdate/init.c     | 179 ++++++++++++
+ .../testing/selftests/liveupdate/luo_test.sh  | 276 ++++++++++++++++++
+ .../selftests/liveupdate/luo_test_utils.c     |  23 +-
+ tools/testing/selftests/liveupdate/run.sh     |  63 ++++
+ 8 files changed, 534 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/liveupdate/config.aarch64
+ create mode 100644 tools/testing/selftests/liveupdate/config.x86_64
+ create mode 100644 tools/testing/selftests/liveupdate/init.c
+ create mode 100755 tools/testing/selftests/liveupdate/luo_test.sh
+ create mode 100755 tools/testing/selftests/liveupdate/run.sh
 
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 251c42579028..ed65fb674e61 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -6,9 +6,11 @@
- 
- #ifndef _NOLIBC_ARCH_ARM_H
- #define _NOLIBC_ARCH_ARM_H
-+#include <linux/unistd.h>
- 
- #include "compiler.h"
- #include "crt.h"
-+#include "std.h"
- 
- /* Syscalls for ARM in ARM or Thumb modes :
-  *   - registers are 32-bit
-@@ -196,4 +198,13 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector _s
- }
- #endif /* NOLIBC_NO_RUNTIME */
- 
-+#ifdef __NR_ftruncate64
-+static __attribute__((unused))
-+int sys_ftruncate64(int fd, uint32_t length0, uint32_t length1)
+diff --git a/tools/testing/selftests/liveupdate/.gitignore b/tools/testing/selftests/liveupdate/.gitignore
+index 661827083ab6..cb08ddb0dfee 100644
+--- a/tools/testing/selftests/liveupdate/.gitignore
++++ b/tools/testing/selftests/liveupdate/.gitignore
+@@ -6,4 +6,5 @@
+ !*.sh
+ !.gitignore
+ !config
++!config.*
+ !Makefile
+diff --git a/tools/testing/selftests/liveupdate/config b/tools/testing/selftests/liveupdate/config
+index 91d03f9a6a39..016d009dba13 100644
+--- a/tools/testing/selftests/liveupdate/config
++++ b/tools/testing/selftests/liveupdate/config
+@@ -1,4 +1,5 @@
+ CONFIG_BLK_DEV_INITRD=y
++CONFIG_DEVTMPFS=y
+ CONFIG_KEXEC_FILE=y
+ CONFIG_KEXEC_HANDOVER=y
+ CONFIG_KEXEC_HANDOVER_ENABLE_DEFAULT=y
+diff --git a/tools/testing/selftests/liveupdate/config.aarch64 b/tools/testing/selftests/liveupdate/config.aarch64
+new file mode 100644
+index 000000000000..445716403925
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/config.aarch64
+@@ -0,0 +1,2 @@
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+diff --git a/tools/testing/selftests/liveupdate/config.x86_64 b/tools/testing/selftests/liveupdate/config.x86_64
+new file mode 100644
+index 000000000000..810d9c9d213e
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/config.x86_64
+@@ -0,0 +1,2 @@
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
+diff --git a/tools/testing/selftests/liveupdate/init.c b/tools/testing/selftests/liveupdate/init.c
+new file mode 100644
+index 000000000000..fb08bd58b9b9
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/init.c
+@@ -0,0 +1,179 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (c) 2025, Google LLC.
++ * Pasha Tatashin <pasha.tatashin@soleen.com>
++ */
++#include <fcntl.h>
++#include <linux/kexec.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mount.h>
++#include <sys/reboot.h>
++#include <sys/syscall.h>
++#include <sys/wait.h>
++#include <unistd.h>
++
++#define COMMAND_LINE_SIZE 2048
++#define KERNEL_IMAGE "/kernel"
++#define INITRD_IMAGE "/initrd.img"
++#define TEST_BINARY "/test_binary"
++
++static int mount_filesystems(void)
 +{
-+	return my_syscall4(__NR_ftruncate64, fd, 0, length0, length1);
-+}
-+#define sys_ftruncate64 sys_ftruncate64
-+#endif
++	if (mount("devtmpfs", "/dev", "devtmpfs", 0, NULL) < 0) {
++		fprintf(stderr, "INIT: Warning: Failed to mount devtmpfs\n");
++		return -1;
++	}
 +
- #endif /* _NOLIBC_ARCH_ARM_H */
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index a72506ceec6b..26d044004ec6 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -6,9 +6,11 @@
- 
- #ifndef _NOLIBC_ARCH_MIPS_H
- #define _NOLIBC_ARCH_MIPS_H
-+#include <linux/unistd.h>
- 
- #include "compiler.h"
- #include "crt.h"
-+#include "std.h"
- 
- #if !defined(_ABIO32) && !defined(_ABIN32) && !defined(_ABI64)
- #error Unsupported MIPS ABI
-@@ -269,4 +271,13 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector __
- }
- #endif /* NOLIBC_NO_RUNTIME */
- 
-+#ifdef __NR_ftruncate64
-+static __attribute__((unused))
-+int sys_ftruncate64(int fd, uint32_t length0, uint32_t length1)
-+{
-+	return my_syscall4(__NR_ftruncate64, fd, 0, length0, length1);
-+}
-+#define sys_ftruncate64 sys_ftruncate64
-+#endif
++	if (mount("debugfs", "/debugfs", "debugfs", 0, NULL) < 0) {
++		fprintf(stderr, "INIT: Failed to mount debugfs\n");
++		return -1;
++	}
 +
- #endif /* _NOLIBC_ARCH_MIPS_H */
-diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
-index e0c7e0b81f7c..71829cb027e8 100644
---- a/tools/include/nolibc/arch-powerpc.h
-+++ b/tools/include/nolibc/arch-powerpc.h
-@@ -6,9 +6,11 @@
- 
- #ifndef _NOLIBC_ARCH_POWERPC_H
- #define _NOLIBC_ARCH_POWERPC_H
-+#include <linux/unistd.h>
- 
- #include "compiler.h"
- #include "crt.h"
-+#include "std.h"
- 
- /* Syscalls for PowerPC :
-  *   - stack is 16-byte aligned
-@@ -218,4 +220,13 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector _s
- }
- #endif /* NOLIBC_NO_RUNTIME */
- 
-+#ifdef __NR_ftruncate64
-+static __attribute__((unused))
-+int sys_ftruncate64(int fd, uint32_t length0, uint32_t length1)
-+{
-+	return my_syscall4(__NR_ftruncate64, fd, 0, length0, length1);
-+}
-+#define sys_ftruncate64 sys_ftruncate64
-+#endif
++	if (mount("proc", "/proc", "proc", 0, NULL) < 0) {
++		fprintf(stderr, "INIT: Failed to mount proc\n");
++		return -1;
++	}
 +
- #endif /* _NOLIBC_ARCH_POWERPC_H */
-diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
-index bb5e80f3f05d..85ac253f9189 100644
---- a/tools/include/nolibc/unistd.h
-+++ b/tools/include/nolibc/unistd.h
-@@ -48,6 +48,41 @@ int access(const char *path, int amode)
- 	return faccessat(AT_FDCWD, path, amode, 0);
- }
- 
-+#if !defined(sys_ftruncate64) && defined(__NR_ftruncate64)
-+static __attribute__((unused))
-+int sys_ftruncate64(int fd, uint32_t length0, uint32_t length1)
-+{
-+
-+	return my_syscall3(__NR_ftruncate64, fd, length0, length1);
-+}
-+#define sys_ftruncate64 sys_ftruncate64
-+#endif
-+
-+static __attribute__((unused))
-+int sys_ftruncate(int fd, off_t length)
-+{
-+#ifdef sys_ftruncate64
-+	union {
-+		off_t length;
-+		struct {
-+			uint32_t length0;
-+			uint32_t length1;
-+		};
-+	} arg;
-+
-+	arg.length = length;
-+
-+	return sys_ftruncate64(fd, arg.length0, arg.length1);
-+#else
-+	return my_syscall2(__NR_ftruncate, fd, length);
-+#endif
++	return 0;
 +}
 +
-+static __attribute__((unused))
-+int ftruncate(int fd, off_t length)
++static long kexec_file_load(int kernel_fd, int initrd_fd,
++			    unsigned long cmdline_len, const char *cmdline,
++			    unsigned long flags)
 +{
-+	return __sysret(sys_ftruncate(fd, length));
++	return syscall(__NR_kexec_file_load, kernel_fd, initrd_fd, cmdline_len,
++		       cmdline, flags);
 +}
- 
- static __attribute__((unused))
- int msleep(unsigned int msecs)
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 1b9d3b2e2491..6a84dfbb4b73 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -969,6 +969,56 @@ int test_fork(enum fork_type type)
- 	}
- }
- 
-+int test_ftruncate(void)
++
++static int kexec_load(void)
 +{
-+	int ret;
++	char cmdline[COMMAND_LINE_SIZE];
++	int kernel_fd, initrd_fd, err;
++	ssize_t len;
 +	int fd;
-+	struct stat stat_buf;
-+	const char *filename = "/tmp/ftruncate_test";
 +
-+	ret = ftruncate(-1, 0);
-+	if (ret != -1 || errno != EBADF) {
-+		errno = EINVAL;
-+		return __LINE__;
++	fd = open("/proc/cmdline", O_RDONLY);
++	if (fd < 0) {
++		fprintf(stderr, "INIT: Failed to read /proc/cmdline\n");
++
++		return -1;
 +	}
 +
-+	fd = open(filename, O_RDWR | O_CREAT);
-+	if (fd == -1)
-+		return __LINE__;
-+
-+	ret = ftruncate(fd, -1);
-+	if (ret != -1 || errno != EINVAL) {
-+		if (ret == 0)
-+			errno = EINVAL;
-+		ret = __LINE__;
-+		goto end;
-+	}
-+
-+	ret = ftruncate(fd, 42);
-+	if (ret != 0) {
-+		ret = __LINE__;
-+		goto end;
-+	}
-+
-+	ret = fstat(fd, &stat_buf);
-+	if (ret != 0) {
-+		ret = __LINE__;
-+		goto end;
-+	}
-+
-+	if (stat_buf.st_size != 42) {
-+		errno = EINVAL;
-+		ret = stat_buf.st_size;
-+		goto end;
-+	}
-+
-+end:
++	len = read(fd, cmdline, sizeof(cmdline) - 1);
 +	close(fd);
-+	unlink(filename);
++	if (len < 0)
++		return -1;
 +
-+	return ret;
++	cmdline[len] = 0;
++	if (len > 0 && cmdline[len - 1] == '\n')
++		cmdline[len - 1] = 0;
++
++	strncat(cmdline, " luo_stage=2", sizeof(cmdline) - strlen(cmdline) - 1);
++
++	kernel_fd = open(KERNEL_IMAGE, O_RDONLY);
++	if (kernel_fd < 0) {
++		fprintf(stderr, "INIT: Failed to open kernel image\n");
++		return -1;
++	}
++
++	initrd_fd = open(INITRD_IMAGE, O_RDONLY);
++	if (initrd_fd < 0) {
++		fprintf(stderr, "INIT: Failed to open initrd image\n");
++		close(kernel_fd);
++		return -1;
++	}
++
++	err = kexec_file_load(kernel_fd, initrd_fd, strlen(cmdline) + 1,
++			      cmdline, 0);
++
++	close(initrd_fd);
++	close(kernel_fd);
++
++	return err;
 +}
 +
- int test_stat_timestamps(void)
++static int run_test(int stage)
++{
++	char stage_arg[32];
++	int status;
++	pid_t pid;
++
++	snprintf(stage_arg, sizeof(stage_arg), "%d", stage);
++
++	pid = fork();
++	if (pid < 0)
++		return -1;
++
++	if (!pid) {
++		char *const argv[] = {TEST_BINARY, "-s", stage_arg, NULL};
++
++		execve(TEST_BINARY, argv, NULL);
++		fprintf(stderr, "INIT: execve failed\n");
++		_exit(1);
++	}
++
++	waitpid(pid, &status, 0);
++
++	return (WIFEXITED(status) && WEXITSTATUS(status) == 0) ? 0 : -1;
++}
++
++static int get_current_stage(void)
++{
++	char cmdline[COMMAND_LINE_SIZE];
++	ssize_t len;
++	int fd;
++
++	fd = open("/proc/cmdline", O_RDONLY);
++	if (fd < 0)
++		return -1;
++
++	len = read(fd, cmdline, sizeof(cmdline) - 1);
++	close(fd);
++
++	if (len < 0)
++		return -1;
++
++	cmdline[len] = 0;
++
++	return strstr(cmdline, "luo_stage=2") ? 2 : 1;
++}
++
++int main(int argc, char *argv[])
++{
++	int current_stage;
++	int err;
++
++	if (mount_filesystems())
++		goto err_reboot;
++
++	current_stage = get_current_stage();
++	if (current_stage < 0) {
++		fprintf(stderr, "INIT: Failed to read cmdline");
++		goto err_reboot;
++	}
++
++	printf("INIT: Starting Stage %d\n", current_stage);
++
++	if (current_stage == 1 && kexec_load()) {
++		fprintf(stderr, "INIT: Failed to load kexec kernel\n");
++		goto err_reboot;
++	}
++
++	if (run_test(current_stage)) {
++		fprintf(stderr, "INIT: Test binary returned failure\n");
++		goto err_reboot;
++	}
++
++	printf("INIT: Stage %d completed successfully.\n", current_stage);
++	reboot(current_stage == 1 ? RB_KEXEC : RB_AUTOBOOT);
++
++	return 0;
++
++err_reboot:
++	reboot(RB_AUTOBOOT);
++
++	return -1;
++}
+diff --git a/tools/testing/selftests/liveupdate/luo_test.sh b/tools/testing/selftests/liveupdate/luo_test.sh
+new file mode 100755
+index 000000000000..1520711b1d35
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/luo_test.sh
+@@ -0,0 +1,276 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++set -ue
++
++CROSS_COMPILE="${CROSS_COMPILE:-""}"
++
++test_dir=$(realpath "$(dirname "$0")")
++kernel_dir=$(realpath "$test_dir/../../../..")
++
++workspace_dir=""
++headers_dir=""
++initrd=""
++KEEP_WORKSPACE=0
++
++source "$test_dir/../kselftest/ktap_helpers.sh"
++
++function get_arch_conf() {
++	local arch=$1
++	if [[ "$arch" == "arm64" ]]; then
++		QEMU_CMD="qemu-system-aarch64 -M virt -cpu max"
++		KERNEL_IMAGE="Image"
++		KERNEL_CMDLINE="console=ttyAMA0"
++	elif [[ "$arch" == "x86" ]]; then
++		QEMU_CMD="qemu-system-x86_64"
++		KERNEL_IMAGE="bzImage"
++		KERNEL_CMDLINE="console=ttyS0"
++	else
++		echo "Unsupported architecture: $arch"
++		exit 1
++	fi
++}
++
++function usage() {
++	cat <<EOF
++$0 [-d build_dir] [-j jobs] [-t target_arch] [-T test_name] [-w workspace_dir] [-k] [-h]
++Options:
++	-d)	path to the kernel build directory (default: .luo_test_build.<arch>)
++	-j)	number of jobs for compilation
++	-t)	run test for target_arch (aarch64, x86_64)
++	-T)	test name to run (default: luo_kexec_simple)
++	-w)	custom workspace directory (default: creates temp dir)
++	-k)	keep workspace directory after successful test
++	-h)	display this help
++EOF
++}
++
++function cleanup() {
++	local exit_code=$?
++
++	if [ -z "$workspace_dir" ]; then
++		ktap_finished
++		return
++	fi
++
++	if [ $exit_code -ne 0 ]; then
++		echo "# Test failed (exit code $exit_code)."
++		echo "# Workspace preserved at: $workspace_dir"
++	elif [ "$KEEP_WORKSPACE" -eq 1 ]; then
++		echo "# Workspace preserved (user request) at: $workspace_dir"
++	else
++		rm -fr "$workspace_dir"
++	fi
++	ktap_print_totals
++
++	exit $exit_code
++}
++trap cleanup EXIT
++
++function skip() {
++	local msg=${1:-""}
++	ktap_test_skip "$msg"
++	exit "$KSFT_SKIP"
++}
++
++function fail() {
++	local msg=${1:-""}
++	ktap_test_fail "$msg"
++	exit "$KSFT_FAIL"
++}
++
++function detect_cross_compile() {
++	local target=$1
++	local host=$(uname -m)
++
++	[[ "$host" == "arm64" ]] && host="aarch64"
++	[[ "$target" == "arm64" ]] && target="aarch64"
++
++	if [[ "$host" == "$target" ]]; then
++		CROSS_COMPILE=""
++		return
++	fi
++
++	if [[ -n "$CROSS_COMPILE" ]]; then
++		return
++	fi
++
++	local candidate=""
++	case "$target" in
++		aarch64) candidate="aarch64-linux-gnu-" ;;
++		x86_64)  candidate="x86_64-linux-gnu-" ;;
++		*)       skip "Auto-detection for target '$target' not supported. Please set CROSS_COMPILE manually." ;;
++	esac
++
++	if command -v "${candidate}gcc" &> /dev/null; then
++		CROSS_COMPILE="$candidate"
++	else
++		skip "Compiler '${candidate}gcc' not found. Please install it (e.g., 'apt install gcc-aarch64-linux-gnu') or set CROSS_COMPILE."
++	fi
++}
++
++function build_kernel() {
++	local build_dir=$1
++	local make_cmd=$2
++	local kimage=$3
++	local target_arch=$4
++
++	local kconfig="$build_dir/.config"
++	local common_conf="$test_dir/config"
++	local arch_conf="$test_dir/config.$target_arch"
++
++	echo "# Building kernel in: $build_dir"
++
++	"$kernel_dir/scripts/kconfig/merge_config.sh" \
++		-Q -m -O "$build_dir" "$common_conf" "$arch_conf" >> /dev/null
++	cat $kconfig
++
++	$make_cmd olddefconfig
++	$make_cmd "$kimage"
++	$make_cmd headers_install INSTALL_HDR_PATH="$headers_dir"
++}
++
++function mkinitrd() {
++	local build_dir=$1
++	local kernel_path=$2
++	local test_name=$3
++
++	# Compile the test binary and the init process
++	"$CROSS_COMPILE"gcc -static -O2 -nostdinc -nostdlib \
++		-I "$headers_dir/include" \
++		-I "$kernel_dir/tools/include/nolibc" \
++		-I "$test_dir" \
++		-o "$workspace_dir/test_binary" \
++		"$test_dir/$test_name.c" "$test_dir/luo_test_utils.c"
++
++	"$CROSS_COMPILE"gcc -s -static -Os -nostdinc -nostdlib		\
++			-fno-asynchronous-unwind-tables -fno-ident	\
++			-fno-stack-protector				\
++			-I "$headers_dir/include"			\
++			-I "$kernel_dir/tools/include/nolibc"		\
++			-o "$workspace_dir/init" "$test_dir/init.c"
++
++	cat > "$workspace_dir/cpio_list_inner" <<EOF
++dir /dev 0755 0 0
++dir /proc 0755 0 0
++dir /debugfs 0755 0 0
++nod /dev/console 0600 0 0 c 5 1
++file /init $workspace_dir/init 0755 0 0
++file /test_binary $workspace_dir/test_binary 0755 0 0
++EOF
++
++	# Generate inner_initrd.cpio
++	"$build_dir/usr/gen_init_cpio" "$workspace_dir/cpio_list_inner" > "$workspace_dir/inner_initrd.cpio"
++
++	cat > "$workspace_dir/cpio_list" <<EOF
++dir /dev 0755 0 0
++dir /proc 0755 0 0
++dir /debugfs 0755 0 0
++nod /dev/console 0600 0 0 c 5 1
++file /init $workspace_dir/init 0755 0 0
++file /kernel $kernel_path 0644 0 0
++file /test_binary $workspace_dir/test_binary 0755 0 0
++file /initrd.img $workspace_dir/inner_initrd.cpio 0644 0 0
++EOF
++
++	# Generate the final initrd
++	"$build_dir/usr/gen_init_cpio" "$workspace_dir/cpio_list" > "$initrd"
++	local size=$(du -h "$initrd" | cut -f1)
++}
++
++function run_qemu() {
++	local qemu_cmd=$1
++	local cmdline=$2
++	local kernel_path=$3
++	local serial="$workspace_dir/qemu.serial"
++
++	cmdline="$cmdline liveupdate=on panic=-1"
++
++	echo "# Serial Log: $serial"
++	timeout 30s $qemu_cmd -m 1G -smp 2 -no-reboot -nographic -nodefaults	\
++		  -accel tcg -accel hvf -accel kvm				\
++		  -serial file:"$serial"					\
++		  -append "$cmdline"						\
++		  -kernel "$kernel_path"					\
++		  -initrd "$initrd"
++
++	local ret=$?
++
++	if [ $ret -eq 124 ]; then
++		fail "QEMU timed out"
++	fi
++
++	grep "TEST PASSED" "$serial" &> /dev/null || fail "Liveupdate failed. Check $serial for details."
++}
++
++function target_to_arch() {
++	local target=$1
++	case $target in
++	     aarch64) echo "arm64" ;;
++	     x86_64) echo "x86" ;;
++	     *) skip "architecture $target is not supported"
++	esac
++}
++
++function main() {
++	local build_dir=""
++	local jobs=$(nproc)
++	local target="$(uname -m)"
++	local test_name="luo_kexec_simple"
++	local workspace_arg=""
++
++	set -o errtrace
++	trap fail ERR
++
++	while getopts 'hd:j:t:T:w:k' opt; do
++		case $opt in
++		d) build_dir="$OPTARG" ;;
++		j) jobs="$OPTARG" ;;
++		t) target="$OPTARG" ;;
++		T) test_name="$OPTARG" ;;
++		w) workspace_arg="$OPTARG" ;;
++		k) KEEP_WORKSPACE=1 ;;
++		h) usage; exit 0 ;;
++		*) echo "Unknown argument $opt"; usage; exit 1 ;;
++		esac
++	done
++
++	ktap_print_header
++	ktap_set_plan 1
++
++	if [ -n "$workspace_arg" ]; then
++		workspace_dir="$(realpath -m "$workspace_arg")"
++		mkdir -p "$workspace_dir"
++	else
++		workspace_dir=$(mktemp -d /tmp/luo-test.XXXXXXXX)
++	fi
++
++	echo "# Workspace created at: $workspace_dir"
++	headers_dir="$workspace_dir/usr"
++	initrd="$workspace_dir/initrd.cpio"
++
++	detect_cross_compile "$target"
++
++	local arch=$(target_to_arch "$target")
++
++	if [ -z "$build_dir" ]; then
++		build_dir="$kernel_dir/.luo_test_build.$arch"
++	fi
++
++	mkdir -p "$build_dir"
++	build_dir=$(realpath "$build_dir")
++	get_arch_conf "$arch"
++
++	local make_cmd="make -s ARCH=$arch CROSS_COMPILE=$CROSS_COMPILE -j$jobs"
++	local make_cmd_build="$make_cmd -C $kernel_dir O=$build_dir"
++
++	build_kernel "$build_dir" "$make_cmd_build" "$KERNEL_IMAGE" "$target"
++
++	local final_kernel="$build_dir/arch/$arch/boot/$KERNEL_IMAGE"
++	mkinitrd "$build_dir" "$final_kernel" "$test_name"
++
++	run_qemu "$QEMU_CMD" "$KERNEL_CMDLINE" "$final_kernel"
++	ktap_test_pass "$test_name succeeded"
++}
++
++main "$@"
+diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c b/tools/testing/selftests/liveupdate/luo_test_utils.c
+index 3c8721c505df..084d76cd79d2 100644
+--- a/tools/testing/selftests/liveupdate/luo_test_utils.c
++++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
+@@ -20,6 +20,7 @@
+ #include <sys/stat.h>
+ #include <errno.h>
+ #include <stdarg.h>
++#include <linux/unistd.h>
+ 
+ #include "luo_test_utils.h"
+ 
+@@ -32,8 +33,8 @@ int luo_create_session(int luo_fd, const char *name)
  {
- 	struct stat st;
-@@ -1406,6 +1456,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(file_stream);       EXPECT_SYSZR(1, test_file_stream()); break;
- 		CASE_TEST(file_stream_wsr);   EXPECT_SYSZR(1, test_file_stream_wsr()); break;
- 		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork(FORK_STANDARD)); break;
-+		CASE_TEST(ftruncate);         EXPECT_SYSZR(1, test_ftruncate()); break;
- 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
- 		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
- 		CASE_TEST(directories);       EXPECT_SYSZR(proc, test_dirent()); break;
+ 	struct liveupdate_ioctl_create_session arg = { .size = sizeof(arg) };
+ 
+-	snprintf((char *)arg.name, LIVEUPDATE_SESSION_NAME_LENGTH, "%.*s",
+-		 LIVEUPDATE_SESSION_NAME_LENGTH - 1, name);
++	strncpy((char *)arg.name, name, LIVEUPDATE_SESSION_NAME_LENGTH);
++	arg.name[LIVEUPDATE_SESSION_NAME_LENGTH - 1] = '\0';
+ 
+ 	if (ioctl(luo_fd, LIVEUPDATE_IOCTL_CREATE_SESSION, &arg) < 0)
+ 		return -errno;
+@@ -45,8 +46,8 @@ int luo_retrieve_session(int luo_fd, const char *name)
+ {
+ 	struct liveupdate_ioctl_retrieve_session arg = { .size = sizeof(arg) };
+ 
+-	snprintf((char *)arg.name, LIVEUPDATE_SESSION_NAME_LENGTH, "%.*s",
+-		 LIVEUPDATE_SESSION_NAME_LENGTH - 1, name);
++	strncpy((char *)arg.name, name, LIVEUPDATE_SESSION_NAME_LENGTH);
++	arg.name[LIVEUPDATE_SESSION_NAME_LENGTH - 1] = '\0';
+ 
+ 	if (ioctl(luo_fd, LIVEUPDATE_IOCTL_RETRIEVE_SESSION, &arg) < 0)
+ 		return -errno;
+@@ -57,7 +58,7 @@ int luo_retrieve_session(int luo_fd, const char *name)
+ int create_and_preserve_memfd(int session_fd, int token, const char *data)
+ {
+ 	struct liveupdate_session_preserve_fd arg = { .size = sizeof(arg) };
+-	long page_size = sysconf(_SC_PAGE_SIZE);
++	long page_size = getpagesize();
+ 	void *map = MAP_FAILED;
+ 	int mfd = -1, ret = -1;
+ 
+@@ -93,7 +94,7 @@ int restore_and_verify_memfd(int session_fd, int token,
+ 			     const char *expected_data)
+ {
+ 	struct liveupdate_session_retrieve_fd arg = { .size = sizeof(arg) };
+-	long page_size = sysconf(_SC_PAGE_SIZE);
++	long page_size = getpagesize();
+ 	void *map = MAP_FAILED;
+ 	int mfd = -1, ret = -1;
+ 
+@@ -204,16 +205,11 @@ void daemonize_and_wait(void)
+ 
+ static int parse_stage_args(int argc, char *argv[])
+ {
+-	static struct option long_options[] = {
+-		{"stage", required_argument, 0, 's'},
+-		{0, 0, 0, 0}
+-	};
+-	int option_index = 0;
+ 	int stage = 1;
+ 	int opt;
+ 
+ 	optind = 1;
+-	while ((opt = getopt_long(argc, argv, "s:", long_options, &option_index)) != -1) {
++	while ((opt = getopt(argc, argv, "s:")) != -1) {
+ 		switch (opt) {
+ 		case 's':
+ 			stage = atoi(optarg);
+@@ -224,6 +220,7 @@ static int parse_stage_args(int argc, char *argv[])
+ 			fail_exit("Unknown argument");
+ 		}
+ 	}
++
+ 	return stage;
+ }
+ 
+@@ -251,7 +248,7 @@ int luo_test(int argc, char *argv[],
+ 		fail_exit("Failed to check for state session");
+ 
+ 	if (target_stage != detected_stage) {
+-		ksft_exit_fail_msg("Stage mismatch Requested --stage %d, but system is in stage %d.\n"
++		ksft_exit_fail_msg("Stage mismatch Requested stage %d, but system is in stage %d.\n"
+ 				   "(State session %s: %s)\n",
+ 				   target_stage, detected_stage, state_session_name,
+ 				   (detected_stage == 2) ? "EXISTS" : "MISSING");
+diff --git a/tools/testing/selftests/liveupdate/run.sh b/tools/testing/selftests/liveupdate/run.sh
+new file mode 100755
+index 000000000000..5637668ef7b6
+--- /dev/null
++++ b/tools/testing/selftests/liveupdate/run.sh
+@@ -0,0 +1,63 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++SCRIPT_DIR=$(dirname "$(realpath "$0")")
++OUTPUT_DIR="$SCRIPT_DIR/results_$(date +%Y%m%d_%H%M%S)"
++TEST_RUNNER="$SCRIPT_DIR/luo_test.sh"
++
++TARGETS=("x86_64" "aarch64")
++
++GREEN='\033[0;32m'
++RED='\033[0;31m'
++YELLOW='\033[1;33m'
++NC='\033[0m'
++
++PASSED=()
++FAILED=()
++SKIPPED=()
++
++mkdir -p "$OUTPUT_DIR"
++
++TEST_NAMES=(
++    "luo_kexec_simple"
++    "luo_multi_session"
++)
++
++for arch in "${TARGETS[@]}"; do
++    for test_name in "${TEST_NAMES[@]}"; do
++        log_file="$OUTPUT_DIR/${arch}_${test_name}.log"
++        echo -n "  -> $arch $test_name ... "
++
++        if "$TEST_RUNNER" -t "$arch" -T "$test_name" > "$log_file" 2>&1; then
++            echo -e "${GREEN}PASS${NC}"
++            PASSED+=("${arch}:${test_name}")
++        else
++            exit_code=$?
++            if [ $exit_code -eq 4 ]; then
++                echo -e "${YELLOW}SKIP${NC}"
++                SKIPPED+=("${arch}:${test_name}")
++            else
++                echo -e "${RED}FAIL${NC}"
++                FAILED+=("${arch}:${test_name}")
++            fi
++        fi
++    done
++    echo ""
++done
++
++echo "========================================="
++echo "             TEST SUMMARY                "
++echo "========================================="
++echo -e "PASSED: ${GREEN}${#PASSED[@]}${NC}"
++echo -e "FAILED: ${RED}${#FAILED[@]}${NC}"
++for fail in "${FAILED[@]}"; do
++    echo -e "  - $fail"
++done
++echo -e "SKIPPED: ${YELLOW}${#SKIPPED[@]}${NC}"
++echo "Logs: $OUTPUT_DIR"
++
++if [ ${#FAILED[@]} -eq 0 ]; then
++    exit 0
++else
++    exit 1
++fi
 -- 
 2.53.0.473.g4a7958ca14-goog
 
