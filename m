@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8907E19ADB0;
-	Tue,  3 Mar 2026 03:14:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDA61A6810;
+	Tue,  3 Mar 2026 03:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772507690; cv=none; b=CvEEFXqQxKvskZrjAv9mLWE80LJmEPQIdGhPfSLBnt4BEr10yR23uvrvE4nvSOuGylRIbcNpcxXQEw5emspwk75bSS3gH4cjlG7mIBMBfBx9mgMGSDtiCMOgNvuRx+leJyxpP9xps9xV+iWkg4PHMLzIvDbvvlTphWihZEyYupo=
+	t=1772508403; cv=none; b=l2bHR3AmJowFyFrb9ZWiqlntTP7jVHv5VPK50C2zXiurKZd+2JGbneYVL91SOcVplecHT0qryt0dNmOJdQtmR5wWjVxjk8bCqyIw7krVTPyk5DNukamyR93FxBoCtnifZa6/1WrAmYujO2G8CEb0mkdzp/celxU3X/O7qEzXdFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772507690; c=relaxed/simple;
-	bh=fkufFEILEgr60R+q2FwGShsko0FhfpQaQOtbm/Dl9K4=;
+	s=arc-20240116; t=1772508403; c=relaxed/simple;
+	bh=4zf61ALQTMK14img1HViSIDfxFknaHCr69Rl17qSQGw=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q8CuQjMveLmsawwaZOIGZj5jQ0XCxmPOjIXqCCw0mc2UEnLqnl4F9mXaiqWUEB78A2tos7dYZ/AUxUDfRCWSDC9bwVgDyWBsHSMgsBEvWLGS5KbmP1X9OE61zQjUpUUjtkQy6d/LX3CJ3jgXle66tg0zZhLL4WZkmavwcjVse7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LQWu+XoT; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=UBm03PgMY975O5aWP/6kSLknKhXHdqO3N9tqzdL7Ul5SBUIVUHgL9eWmN6UcpTnaYxeevr7qyIDxVSwJeIW3Dnf5Tamtuxose+e/zZp+BGuJymxhGpi+vt36UZNc/ZQzPjtPGr0khCNWzXEwLm40jvGsG3cBz1purs2uqLIFaAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZzYK34q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LQWu+XoT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D74BC19423;
-	Tue,  3 Mar 2026 03:14:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZzYK34q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4766C19423;
+	Tue,  3 Mar 2026 03:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772507690;
-	bh=fkufFEILEgr60R+q2FwGShsko0FhfpQaQOtbm/Dl9K4=;
+	s=k20201202; t=1772508402;
+	bh=4zf61ALQTMK14img1HViSIDfxFknaHCr69Rl17qSQGw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LQWu+XoTYOcyh6LMYgIvXa4ZEZxcfojfe2Q2usEm7VJYdH8P+ffjashH8Ygx8Ffae
-	 hL2gZcpVXUw9Dz5Wt/QGR6NCli7MmCl1DbCEkUxww/Kf+HY7ESarYtoW65iXumnhYM
-	 svKRVTBBGb03Huh87q+TbbsTTi75DZOK1l7ic+jg83K+SHRzSJ0bFvE0tMJH3d4CzG
-	 QMlh/9/VdVpIveRArncztY1q+VVvKugReQP+6t/a7LEsDrbdShUGHPbroKnyAU8+R4
-	 jF/xXs7MKNuzPiysgBSYvrjkXeFUrubm6YneeGizHm1VtobgW395tSZFXd7/fJ7T41
-	 m/fSJEjatpoqQ==
-Date: Mon, 2 Mar 2026 19:14:48 -0800
+	b=sZzYK34q0BRTj07TilzGsQwaXUIwwANpvSCCq/V9QelZ5EHSUiF8FPL24xGhjPWTw
+	 /k/VfPBRODiDwVF8MTGdyebPO/HSzlCyaBCfVc8MSodNuEWJaXblnXJ0bJULhRY5lG
+	 glziYAWp9B5Ti71/OQRLLuaNin8ZjvbZVD1N1SqvXX4+Y2Xj1S74JfBzPbz9//ggVo
+	 WCtESLc46MPYF1kEzz8O1hSY/HrPw+PAKHL8h1k93eGDWmcr5eorH6d+jv37SXPTLg
+	 ttKItjGaEyPwHMrqgahjd80aG/McSVbE//TsRlaJIRO3DFGkUFiUJ9+PQqPfw4sp7H
+	 yR+RnyItx4wfA==
+Date: Mon, 2 Mar 2026 19:26:40 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: Tariq Toukan <tariqt@nvidia.com>
 Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
@@ -39,14 +39,12 @@ Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
  <linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
  <linux-kselftest@vger.kernel.org>, Gal Pressman <gal@nvidia.com>, Dragos
  Tatulea <dtatulea@nvidia.com>, Shay Drory <shayd@nvidia.com>, Jiri Pirko
- <jiri@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>, Or Har-Toov
- <ohartoov@nvidia.com>
-Subject: Re: [PATCH net-next V3 10/10] devlink: Document port-level
- resources
-Message-ID: <20260302191448.4750a2b8@kernel.org>
-In-Reply-To: <20260226221916.1800227-11-tariqt@nvidia.com>
+ <jiri@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource
+ support
+Message-ID: <20260302192640.49af074f@kernel.org>
+In-Reply-To: <20260226221916.1800227-1-tariqt@nvidia.com>
 References: <20260226221916.1800227-1-tariqt@nvidia.com>
-	<20260226221916.1800227-11-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,21 +54,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 27 Feb 2026 00:19:16 +0200 Tariq Toukan wrote:
-> +Currently, port-level resources only support the ``GET`` command for viewing
-> +resource information.
+On Fri, 27 Feb 2026 00:19:06 +0200 Tariq Toukan wrote:
+> With this series, users can query per-port resources:
+> 
+> $ devlink port resource show pci/0000:03:00.0/196608
+> pci/0000:03:00.0/196608:
+>   name max_SFs size 20 unit entry
+> 
+> $ devlink port resource show
+> pci/0000:03:00.0/196608:
+>   name max_SFs size 20 unit entry
+> pci/0000:03:00.1/262144:
+>   name max_SFs size 20 unit entry
 
-In case there is v4, AI says:
+Code LGTM, I have a question about having a new cmd, tho.
 
-> +Currently, port-level resources only support the ``GET`` command for viewing
-                                                         ^^^^^
+Does it matter to the user how the resource is scoped? 
+Whether the resource is at the instance level or at the port level?
 
-This isn't a bug, but the terminology here appears inconsistent with the
-rest of the documentation. The document uses user-facing command names
-elsewhere (like "devlink port resource show"), but this line uses "GET
-command" which seems to reference the internal DEVLINK_CMD_PORT_RESOURCE_GET
-netlink command.
+I worry we are mechanically following the design of other commands.
+Since the dump handler is new we could just dump resources with port-id
+there. No existing user space may be using it. Alternatively we could
+add a new attribute to select a bitmask of which scope user wants to
+dump.
 
-Should this be reworded to match the user-facing terminology used throughout
-the rest of the document, perhaps "only support the show command" or
-"only support viewing"?
+I have a strong suspicion that the user will want to access all
+resources of a device. `devlink resource show [$dev]` should dump 
+all resources devlink knows about, including port ones.
+
+What's the reason for the new command?
