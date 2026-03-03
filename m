@@ -1,235 +1,184 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010070.outbound.protection.outlook.com [52.101.56.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E92C426699;
-	Tue,  3 Mar 2026 13:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772543714; cv=none; b=Ej3OKMwLsuDjFo6ziHS29ayLYuXc8FQCD2rax/S/U07pUscTvnpxG62ZNqlxoNoQlRqj2WGJd/2sSRx0i3WHJ3tRxI3hVLz9ZgDLca8JpF0yc7SUz6xD+Fj9e8jWGztL3C9whMMgQwS46A9v1z4fKjjtoAbYe43BIt7pnDEbXiw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772543714; c=relaxed/simple;
-	bh=/MyWbW03chpBJaPzR/BFPiU3CF6WAhtdLIPgT2cm51U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sWW+NikZ4VZvw46DzXn+fJCTfo/mt8Jkr1YbzN1T1Ter3J1RgzB5Gbkiq8MI95kZHp7tOZOyn/0A++IGp8L6VqHoUld/S0yLO74eL7r8tpjSGkrVfRXm/46Rng698YSDpzjt3FLr6na24xGhRpOxLNIgYz0FW4BPfRG3+hCNc3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=p9osVp3v; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21709430BBC;
+	Tue,  3 Mar 2026 13:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772544448; cv=fail; b=XyWani4i7tV1nXROuMLDMZzgf/cEoFfQdSS/UDc2OBbGclPcD1IB5UR6QuP+Ey3xAbXqZyJV0gL+1+YVA8Zi3iqQEkDSRk3/+7xVR8zMBdjgLjfNoZrOWFyhN++BL9CWu0erSI/sU3CeZPMAAMAj/hKGo0HMRwRidUZ1lvmp+8Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772544448; c=relaxed/simple;
+	bh=eNYNqEHNNY/l73xaWLlN0ktc+19G7fp2+vO+JkDJre0=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=WdeN2CsjJ+f24tWUD8QLDecX/WyOsvok4rRh2kp8ybJrFs62c08BQT1QD95NUwQBbjdFMF5Hviy90kLAIAbpC0WfOHPnyWoqE2tP24l6MoSfSiddGjREik+fqAmx1W1g395eVAikhDbLvkZBUrNWiNug/uJryZLZckFze/E/JZQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=t+iSD1TY; arc=fail smtp.client-ip=52.101.56.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="p9osVp3v"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6237I5Fc2246261;
-	Tue, 3 Mar 2026 13:14:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=dnPUKhp1sBymgzQCRaFIsgoe2Dawzv5JW1P6j/OpY
-	CY=; b=p9osVp3vdmoZK/EQWZemxOST/WC+Ix1eLV/2GxlrRm4CtYk3D0QjKF2/j
-	MQKa55wdcKQvq6Aggla+zeSK1c7yR9MUUYXXngxg90fqQAAmxkDl4FT1BIFs9z2M
-	xVxBDHM6CztkSuMvaV2pJRqS/GwmeguicTfuswR2OitqZAL6AwiAqzh/K7CRowHN
-	ZmJLjKujx/ziWdDH10CClpk2vdUkgTOG4Ww6YXeVaxJxATj3t4LztGLWVAI6UZSj
-	5dryug06E5eMWiBlrAQg1rCnwkCLxwLKv2r+QBMbcXlWLiDTvL8IGlHTp6dKdbYh
-	U+XryzWHNl7JpmBNT5RHHK59ts97g==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cksk3truh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 13:14:58 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 623BjWxn027662;
-	Tue, 3 Mar 2026 13:14:57 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cmcwja1jp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 13:14:57 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623DEujj40436020
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 3 Mar 2026 13:14:56 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E777C2004B;
-	Tue,  3 Mar 2026 13:14:55 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 97F0F20043;
-	Tue,  3 Mar 2026 13:14:54 +0000 (GMT)
-Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.in.ibm.com (unknown [9.78.106.17])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  3 Mar 2026 13:14:54 +0000 (GMT)
-From: Hari Bathini <hbathini@linux.ibm.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/bpf: improve test coverage for kfunc call
-Date: Tue,  3 Mar 2026 18:44:53 +0530
-Message-ID: <20260303131453.328674-1-hbathini@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="t+iSD1TY"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=j6KERX94G1ZSeyKnJ1v7GrgXGMomy/cQXLPVM2JC2emkwZ6NHgKd9m7r6o8ZAKAuopBaXUCsqX4nI3KMT7Sk8ofAtqnTv7spWVujCe0eQwn7R1CubmKavoWSkFRjZF+ZC9uYX4CzmDQjGdnwelyzoo/o/YSFse4JJ8+KBjbyO0Fj1VYexhJ/OHECs9qEv7dahJbKTStUF4SnqBjJwF5Fe9FbX/AJsUmiB9Su49pGG1FRU5Ck0HQygn9K+IQAcENiPw7bj1Y6xJh5L84IlJo0P52aMeTKFx3/btylOFoA+hKWrS/qUfqCKvHSRPBeJnueSjxiVvV0095+8SKqxR0ToA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2TClZdrWaJYnrubVFBTZKGyKjpIvmo2c/gg+jvV7xzo=;
+ b=pO0phaQszUaZGAlT1k48ikHBcZb2iCky7Jq3cjQAZgvwDo9NwYSYY2/yXLuIsDXbDTEYuBAkoQyJ52SIW4KBSfB0H15g/4uzfveOGLlVhmk/PSTSKWXEMVWcsFnZlAk/aTLAX35tLDzCDOJs+1KXcUvQRugitj+9TPIOLHFitTmkRz029/6yOmkYlIx598/n6I+0A66MYdUn7IEV7oLtnlXtHH1jOBj/9g+LKcuVaPYH9PBo51tDEP8dBmBeOVIFb3cM/Y2lS3Y0XO/SDm2vjnUiQgymRrNHqClIq7tbZ5/H9ucyTp4fh/IMA1Ztc9jt5RfOqucLYQxbX4BOORwryA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2TClZdrWaJYnrubVFBTZKGyKjpIvmo2c/gg+jvV7xzo=;
+ b=t+iSD1TYI18g5tQ7l+Qt+FiMLHq7dQruePlXEs7T9nX/VHaze4Mal0SnI4BXj1a8DRx/T51FMnJJp5ubbxv/VupQ/jyf/ZTc565WSqutYV6PG+5pAGwQKP9PwxmUAhMkFD334JoXHGTRrJlohwxAh/+qiQLhQTniJY+Ngluj4S/WSc2YuFlYPd1KHFvZDADf11rlpMy1IGZjITC9DFNvdUAkqmmrQlntbyZBfmUBnHddhwrriPJs9WgsU0Z+rREFKNxy/Tao5kGBg5e7TWqLb0+PHzUaGLlT7eheP644X5NQcmBDvYpQHTBHw8C2bke7ZwYd4Z11B74geeqVDznjVQ==
+Received: from SJ0PR03CA0184.namprd03.prod.outlook.com (2603:10b6:a03:2ef::9)
+ by PH7PR12MB5782.namprd12.prod.outlook.com (2603:10b6:510:1d1::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Tue, 3 Mar
+ 2026 13:27:22 +0000
+Received: from SJ1PEPF000023CD.namprd02.prod.outlook.com
+ (2603:10b6:a03:2ef:cafe::4a) by SJ0PR03CA0184.outlook.office365.com
+ (2603:10b6:a03:2ef::9) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.18 via Frontend Transport; Tue,
+ 3 Mar 2026 13:27:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF000023CD.mail.protection.outlook.com (10.167.244.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Tue, 3 Mar 2026 13:27:21 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 3 Mar
+ 2026 05:27:09 -0800
+Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 3 Mar
+ 2026 05:27:04 -0800
+References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
+ <20260225150648.1542206-5-ioana.ciornei@nxp.com>
+ <87bjhaf7d6.fsf@nvidia.com>
+ <ffbxeysgshogwmtraatgh6vtrwo742fpzbgaiyjnmqwxxbzzua@mhsfkhmuiu45>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Ioana Ciornei <ioana.ciornei@nxp.com>
+CC: Petr Machata <petrm@nvidia.com>, <netdev@vger.kernel.org>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S.  Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman
+	<horms@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next 4/5] selftests: forwarding: extend
+ ethtool_std_stats_get with pause statistics
+Date: Tue, 3 Mar 2026 14:06:29 +0100
+In-Reply-To: <ffbxeysgshogwmtraatgh6vtrwo742fpzbgaiyjnmqwxxbzzua@mhsfkhmuiu45>
+Message-ID: <87342hf3h7.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 8b54qjDb-R5ivBcUuCWV5kQCZ84D1uIU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDEwMyBTYWx0ZWRfX7koSo+OIHtDl
- 2IxAg4In0E6t0JkW+wXTtG7vp55D0bC6gPoE/c68QyAy2BVOXK/aVazTEbMaeMZ9X616sIhdRTG
- BFzAZhhcf4Ra0e5heiuVr9DsNEJspwwX8Y9WxCi5N0ZWsC9fDHPRpWWnX0j6pMEq7U3RxKczX41
- SpsmIBKO5MDZYKiKFb1ZZHtbdf/oevcuqHzI/3w4avYv6C++Nf5e/p9/9AdKqhkTIdwt3bG7/3Q
- voGsNGPAQbU4jcrnhfiHVW+8dCbyLn97IHmjk5rTamyOIRdONWdpXfXoucbz9h7+/xsh1U9k4wA
- 4IXHkhBWsJ1aUPqvRylPo0K3NgPeo9MQqW303CH1AS1MlnzMWqpUmBuwao5HV3zilPDiA44Sfa7
- k66vby3ELhY3ufp2871023md5345hRQe5tm0lQ3yPGbQYmT7I2a9VPWPPc6XoeBlczccJBBXuBY
- vyVvG7ir9m9pE1xbZLw==
-X-Authority-Analysis: v=2.4 cv=csCWUl4i c=1 sm=1 tr=0 ts=69a6ded2 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=AYg3Pj_DittMGbcp-hAA:9
-X-Proofpoint-GUID: 8b54qjDb-R5ivBcUuCWV5kQCZ84D1uIU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-02_05,2026-03-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 adultscore=0
- clxscore=1015 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030103
-
-On powerpc, immediate load instructions are sign extended. In case
-of unsigned types, arguments should be explicitly zero-extended by
-the caller. For kfunc call, this needs to be handled in the JIT code.
-While kfunc_call_test4 test case already checks for sign-extension of
-signed argument types in kfunc calls, zero-extension for unsigned
-argument types is being checked with this test case.
-
-Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
----
-
-- powerpc BPF JIT was not handling ABI sign-extension & zero-extension
-  appropriately for kfunc calls. Fixed with:
-
-    https://lore.kernel.org/all/20260303130208.325249-7-hbathini@linux.ibm.com/
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CD:EE_|PH7PR12MB5782:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3024f7b5-78bc-4833-4d0c-08de792899d7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	R37+tm4zve0Xuo4lD+HPFXqs9BYFro2rxVK5dYNIMImt/33wyd6sd54Tpl5m7jqWOBmWk7X6LnJZ+GbZOjN+LXjJAI4Dg0rqByeUl0pYl0N60NOxDIl6JpCjYj1D7XZ/w//drDOfm3Hk6FH5305HR65ezCI6YVNnG6FY6i1MslPUFU9VIOMdmr+vZNCWwbbDbTG6pMWWsZ0dJtwJL3FaQzHDJzFT/bQ3domoB+E8cuRBNXMwZJwYydDV7WNIuRHjIDO1OtA1fb12rrNUeiN73Vww69l7eR91IXRQwaoV0ouydLm/rL3HNXKgNh9RfOvT9Y2bjIycRcxLvpeeIOxb3TAJoXtjM6LHAv7J6ksEn1EKTVmWcepYfu+UUFmPH4Qtt18331yC0Qa+PZAdw2Dls44sHCvhHH4bv3Bj8SpTwFcdsFd565xWEO3EvYuiw3CpmSuxKkx+mK5gMm7aai9fEKY2tWV//uuzLwcLGPFJKupsndAtqXRcIun7e04zYN5v5QYxReBYvCsogElFz70+W1mjXyrm1xtLbWrU/QYaXwicZbM2zy1Ygcq7XpKZn5ilywQ/fAg31ehTe9YsEOt8e3eUIfHZcVanXeMBRGAvUryhaGr4IMrzfxtnjja46Dnq5E1w9fQFNavyJ957s4LMCboVI86R8VG5tk9OlpUCQrTKMya4tbnPjS+4TLDaXwFecOQx+o8gidNN9O5qxUd6RL5JBBMXu3XLYLax3I493fGuUmG8JK4YNXW+n7Wx3RmyZNrQgzKvcD7RuIXsQASQjPRn/Sp4KU1NKD5AW/dEGpNs3SZZTllAOq1rtN+0R2GuVEzeOwx9g3HqtzAFQJlEYQ==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	/szgDRV+pSh9Y7/xYuJTi1soUK8MUh14A2OfI5kU5vGpipVgwiwXU3Aj8/SZ22SRLhNO6L5fKaMsaG/uAxT47WC+oX+CVGcBq3LB41+UN9eJUxFSHlIecn6z7TlC++lQAKF0HJf1Ob0Ha5kRdInWyQCPl1nggyi1J6XIVwS5VoFl1fdTC7sz6KtBRtJCVOyIv9F9b2i/fV6V7fP1JRCzdGtBHE7ygcIwbNSUCFLlRdO9rWobajd/AWUInEBTneCMlXXWpk8X2/Lx3IqyhL1GoupaFjLz97pNm2FcGuNlwnXWzPZIGtnJnD8L6BD2V+/p1VsQYMlqpBAtQF1b7jBC2tsPr9Elh2q4ir5lFugLmSN1CPyeLRzVWdZ6IL/O/2AF6dLd4Rt3IjL6DTzniYUUZMMN+sX9xORLpmcVj6AI2J8YCCfA/o80Dg95w6YzicL1
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 13:27:21.9510
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3024f7b5-78bc-4833-4d0c-08de792899d7
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000023CD.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5782
 
 
- .../selftests/bpf/prog_tests/kfunc_call.c     |  1 +
- .../selftests/bpf/progs/kfunc_call_test.c     | 34 +++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 28 +++++++++++++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
- 4 files changed, 64 insertions(+)
+Ioana Ciornei <ioana.ciornei@nxp.com> writes:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index f79c8e53cb3e..fb06f2485197 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -74,6 +74,7 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	TC_TEST(kfunc_call_test1, 12),
- 	TC_TEST(kfunc_call_test2, 3),
- 	TC_TEST(kfunc_call_test4, -1234),
-+	TC_TEST(kfunc_call_test5, 0),
- 	TC_TEST(kfunc_call_test_ref_btf_id, 0),
- 	TC_TEST(kfunc_call_test_get_mem, 42),
- 	SYSCALL_TEST(kfunc_syscall_test, 0),
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-index 8b86113a0126..a32c3a60fa4f 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-@@ -4,6 +4,40 @@
- #include <bpf/bpf_helpers.h>
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
-+SEC("tc")
-+int kfunc_call_test5(struct __sk_buff *skb)
-+{
-+	struct bpf_sock *sk = skb->sk;
-+	int ret;
-+	u32 val32;
-+	u16 val16;
-+	u8 val8;
-+
-+	if (!sk)
-+		return -1;
-+
-+	sk = bpf_sk_fullsock(sk);
-+	if (!sk)
-+		return -1;
-+
-+	ret = bpf_kfunc_call_test5(0xFF, 0xFFFF, 0xFFFFFFFF);
-+	if (ret)
-+		return ret;
-+
-+	val32 = bpf_get_prandom_u32();
-+	val16 = val32 & 0xFFFF;
-+	val8 = val32 & 0xFF;
-+	ret = bpf_kfunc_call_test5(val8, val16, val32);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_kfunc_call_test5(val8 * 0xFF, val16 * 0xFFFF, val32 * 0xFFFFFFFF);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
- SEC("tc")
- int kfunc_call_test4(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index e62c6b78657f..de4897ddcff1 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -766,6 +766,33 @@ __bpf_kfunc long noinline bpf_kfunc_call_test4(signed char a, short b, int c, lo
- 	return (long)a + (long)b + (long)c + d;
- }
- 
-+__bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u32 c)
-+{
-+	/* Make val as volatile to avoid compiler optimizations on the below checks */
-+	volatile long val = a;
-+
-+	/* Check zero-extension */
-+	if (val != (unsigned long)a)
-+		return 1;
-+	/* Check no sign-extension */
-+	if (val < 0)
-+		return 2;
-+
-+	val = b;
-+	if (val != (unsigned long)b)
-+		return 3;
-+	if (val < 0)
-+		return 4;
-+
-+	val = c;
-+	if (val != (unsigned long)c)
-+		return 5;
-+	if (val < 0)
-+		return 6;
-+
-+	return 0;
-+}
-+
- static struct prog_test_ref_kfunc prog_test_struct = {
- 	.a = 42,
- 	.b = 108,
-@@ -1228,6 +1255,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index b393bf771131..aa0b8d41e71b 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -110,6 +110,7 @@ __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
- int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksym;
- struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
- long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
-+int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
- 
- void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
- void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
--- 
-2.53.0
+> On Fri, Feb 27, 2026 at 05:38:40PM +0100, Petr Machata wrote:
+>> 
+>> Ioana Ciornei <ioana.ciornei@nxp.com> writes:
+>> 
+>> > Even though pause frame statistics are not exported through the same
+>> > ethtool command, there is no point in adding another helper just for
+>> > them. Extent the ethtool_std_stats_get() function so that we are able to
+>> > interrogate using the same helper all the standard statistics.
+>> >
+>> > Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+>> > ---
+>> >  tools/testing/selftests/net/forwarding/lib.sh | 8 ++++++--
+>> >  1 file changed, 6 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+>> > index a9034f0bb58b..efd236ae1c28 100644
+>> > --- a/tools/testing/selftests/net/forwarding/lib.sh
+>> > +++ b/tools/testing/selftests/net/forwarding/lib.sh
+>> > @@ -831,8 +831,12 @@ ethtool_std_stats_get()
+>> >  	local name=$1; shift
+>> >  	local src=$1; shift
+>> >  
+>> > -	ethtool --json -S $dev --groups $grp -- --src $src | \
+>> > -		jq '.[]."'"$grp"'"."'$name'"'
+>> > +	if [[ "$grp" == "pause" ]]; then
+>> > +		ethtool -I --json -a $dev | jq '.[].statistics.'$name
+>> 
+>> I think name needs to be quoted here? In fact, unless the pause group is
+>> highly unlikely to ever get a key that contains a dash,
+>
+> I would expect that the pause group is pretty much set and will not get
+> new counters but, sure, I can add the quotes just to be on the safe
+> side.
 
+Oh, don't get me wrong, I don't believe $name will contain whitespace.
+But I would expect shellcheck to complain about the missing quotes.
+
+>> it should either
+>> be quoted in the horrible way the else branch does it, or do this much
+>> more readable thing instead:
+>> 
+>>         jq --arg name "$name" '.[].statistics[$name]'
+>> 
+>
+> Thanks! Wasn't aware of this type of jq variable usage but indeed it
+> looks better.
+>
+>> > +	else
+>> > +		ethtool --json -S $dev --groups $grp -- --src $src | \
+>> 
+>> Since you are touching this line -- can you fix the missing quoting,
+>> please?
+>
+> Sure, I will add them.
+>
+>> 
+>> > +			jq '.[]."'"$grp"'"."'$name'"'
+>
+> And I think $name above needs double quoting as well.
+
+Oh yeah. That's just going to be an absolute confusion of quotes though.
+Can you convert to the --arg form as well? I think it should be:
+
+			jq --arg grp "$grp" --arg name "$name" \
+				'.[][$grp][$name]'
