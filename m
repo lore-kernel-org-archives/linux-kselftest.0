@@ -1,183 +1,315 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013052.outbound.protection.outlook.com [40.107.159.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A6335773F;
-	Tue,  3 Mar 2026 13:53:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D8833E34C
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 14:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772546030; cv=fail; b=d7VIG7JCD0L3SfULPt/utGZIPU/iK7V59Dn975V1plgEEK+3oQbGJ5ReTSwFQe1cI4gQSr+XbtTNkD4MQ0ERZQ99BuflBiuB3mjMQ3mAtmuxOW5xoflloGLLcFKp2703gN5EMTEt5DRyct96F7FR1uEzqXiKQWe/2KQos5KukVg=
+	t=1772548090; cv=pass; b=M5QPAROyWBxgpzNvlUV8aIW7p/4Yv+O2cWul5CQxymgIE58p37JGjrKfUKkvJIsGq6j4N7wYaHTts5ov63DEEYbjCRPWFi9jstS6sl8RpBpxavk3sJdLU61q50G7ANrIdFtGU8t1mSWGQB0K+fFy3fcuFasywbxh15GUOnquIMM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772546030; c=relaxed/simple;
-	bh=8c6fS41FLXhzqV18dTpG5uJIEuOhALU3484z7OB2O0M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=DtzJQzzuFE/kKwYidUBWnL0YTiimgIBjlS6bkEf4wjHELUuaZ8pg/kw5ZlGa0S1B+HvOmq1Ekk98a+nZki/CLpoouYQO2ocY722GyVYQrVBLZNyt6e2Ojvz4bh9qxd2JeOdX0m4KHnNAFXmkIPdqpWxDNnyCoDcrJ8HJkJNvIYs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=koYSZ+QC; arc=fail smtp.client-ip=40.107.159.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1772548090; c=relaxed/simple;
+	bh=qOdUJuVi1m7ZhJj3GOzZ12rW1y19M/G1m+dBYN2uy5U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gFHd5iDj/l0zDE4WGh/K9jKj3GU0g3ZegGGB7ZnixVF1IiY2axUbug6HZZlSynD3/m2/xmnQNE1jbzhgsVqv04ggelSkXpEyF84bo5nvSmFTwiGU0tE38SokuozQLoU/FS/jJEfjscivuobEB66sd882LPIds7HQA0pIyptqbac=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQyYdUjS; arc=pass smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="koYSZ+QC"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DQIP0ZSWdOG5rNf1QYB/+A6e0viY5SljMxR0BqOwiydTqcckERzZwy8s++FEHiRZqFGAvcE0rQUGL+E3ayfLvYqWLKgfe6Fis9cH1h9EZS1bpUULvk1TjqR2FYhMQP74qbFVAKfohJkazz7O2Tv9VV6LKoiBx2P0ug5ZvseCX7JuR3tcQTEkP6v6a7QlyNGD5z4XAopVR0wgs7pqDYTo0+tiHrMoGaY9uyUutS33GvAhyLE0aqZ6e4UNuEO1WSIhnLBIz1Swpvwrc3Hk+49s5uu1xd19WhnsKcYlgNToJRNC7sO1w4nB+JOG7I6ZMvuzJZKuHL6qaZUK+QY5nIm9VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vepFM0pr91zFKaVjq0cF4nADlyrwNJIbcNtyCzR3QAo=;
- b=ukFX44EmIkWjzbxDJzs6FqJEdMG0sx2k4OBSqfVQvGbWpZ4c4Evzq8sxny/h08DDPOR21akCR/SugTdGWRwwA+Mp+N7/v3Tw3xCSUdNcDtOVbc19t3nidcZpZCkODGEPRc1AlVobs3Hunr5gjV4PLtEVKoSyjeji8eBJAyqg82nR2Vv/csAOFbODRbcOKOU5OHdm8szfQ7btBrk+YRfYz8FE+vEYqCZqRBnRt8WoTXtS6Phs8cYkpdc7EVkiVlNFxoFz8Rf4WISw7x5Qo79e2wdT+rSXbePINdERt6Jl+rNbT4cG0i700a0TGUVcKes7MBYoyes89/oelvdRF2Ai+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vepFM0pr91zFKaVjq0cF4nADlyrwNJIbcNtyCzR3QAo=;
- b=koYSZ+QCB6w4fPyrASKG4lp6fu6ZGjBX+bjF6tz5dpDvty4WNIVY3gDjdjjZLnMT8DGGuGY674M3UOBE2evx7YNviOMW/O7V0LLcUIAj0U2cLeYJw9X4VmKJXMbnNoXK/jlzwYGYyisXq59B7JOxUpNf9rq3g+G3DPZEVp4FnKm1q3j6SaGI7dp5tdJ5ydevXgdstkNFUkBnfdita7i4cUBXrPEgE3HepqFQdpL5cvdBtShyqKE0N39urVllebYJawwh49vvm6bL4vtcaVPYthCl90JIhlBtxdHs0Bi7e3J8Sqzsn/0QriMPUt/cJbOBbIWtTLyPwfVQ+kw64+h9jA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7)
- by MRWPR04MB12277.eurprd04.prod.outlook.com (2603:10a6:501:81::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Tue, 3 Mar
- 2026 13:53:45 +0000
-Received: from PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633]) by PAXPR04MB8253.eurprd04.prod.outlook.com
- ([fe80::2b4e:8130:4419:d633%3]) with mapi id 15.20.9654.022; Tue, 3 Mar 2026
- 13:53:45 +0000
-Date: Tue, 3 Mar 2026 15:53:41 +0200
-From: Ioana Ciornei <ioana.ciornei@nxp.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Petr Machata <me@pmachata.org>, Petr Machata <petrm@nvidia.com>, 
-	netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] selftests: drivers: hw: add tests for the
- ethtool standard counters
-Message-ID: <qnq4vqznmwbgl6auacr7lkpwpzcwh2w26de22pidxhpy676f73@45s2xdpczvsd>
-References: <20260225150648.1542206-1-ioana.ciornei@nxp.com>
- <20260225150648.1542206-6-ioana.ciornei@nxp.com>
- <20260226182223.5eb1b10f@kernel.org>
- <87ms0ufc0p.fsf@nvidia.com>
- <20260227164348.63afcc43@kernel.org>
- <877brxf272.fsf@nvidia.com>
- <7hct7o4rzgygef536al6if2jl45p32ad3tdswyqf25uu5wy5re@2ltu2ems47q7>
- <20260302160743.124531f8@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302160743.124531f8@kernel.org>
-X-ClientProxiedBy: AM9P195CA0015.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:21f::20) To PAXPR04MB8253.eurprd04.prod.outlook.com
- (2603:10a6:102:1bf::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQyYdUjS"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b936b85cc71so681960366b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 06:28:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772548085; cv=none;
+        d=google.com; s=arc-20240605;
+        b=JfKr+ev9qLx2QrpzE9uGUuoBycX9HqyY8gh16BMeY0pFREJoVUJe+nP4st2B11K2YF
+         3EYQWsj6fFG285U/j4bw4unhPRE8tsMTyXP1AKqdV0nGu8KgDqUyKr7OeTvUlnUGpQHG
+         zMMkMl+PXv0I6luvlYhPprkR2oXr5NccLKJX96ut9kC21ofL78UXjMfjxGd5m9mEXSxZ
+         HsiKjEmG92i3qEoY2pngR/tGvrfvrU+yhbOKMuoDLzOizZplPzD6DVo0KyKoZHtk8mna
+         5bPyIcFBj90RdnwMy3U3cBcwM+Flkpf0mHGWjVkpm/oRa3tnbBycxmGDS9Z7Cz8fzX/z
+         eegg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=esp1UcxTOWDHIY9Li2rUvASCUzf5NNQ0S/tQeT7QTjY=;
+        fh=QS3S+Tfv3G9GpPG2i1e1LlCAdYM7funvdqDP99brz9g=;
+        b=GuP+5CV8AJvnax1/QLHzcQCfv6D0E1A23N7soPaEZ8aKHurLriLOA0AST8AwmFgVpw
+         KfZwzIrFh7GU3UzCEG2I/7wl38OsFuOJKaSCCa681KBuV+aB3DmQX87wQoqMCt+Fi4jT
+         RZ0hUHi89JE+yXOQZFTQzkgoceT+59GwsMZ6CxhfjIOWwcpbBm6/CRdrc45ofTsZ27MS
+         iQldVC6yPjjhofqUZ361cI48lB8YZ75/yCg4OMWceNrpmFJYmudNzNeHew6vbATyQjAw
+         uCppD0xOvS5FrgZTUCZgSY0jICjzhsMyzsva/wTY1x6by/hDBWzAhiTRVy73V86I/Hpj
+         GtVg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772548085; x=1773152885; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=esp1UcxTOWDHIY9Li2rUvASCUzf5NNQ0S/tQeT7QTjY=;
+        b=ZQyYdUjS8i+neRiYPmlq9CFYbWZvzYvEDUXwu/kFdQnfFKVCJqN831Jfle7A3UjDHQ
+         Wyy61oGXS4gTjqZJWEZN4x9wK4Vz5VMkNHnsP8ROUlLQqi17AMvALNx5EVFuxC6TR1i6
+         zNDJc3Zx4z5Ed33A3QhBC8mqv/F79OTzDHd6AShQC4O/Euh/ZP1Qljw3GtaaEy+3Y/bv
+         tcg76SlNGmUXjtwWZRWXsmMmbkRzxH8lFv0Tk5Ay5RGA4HyYH6nvwMsQ5CPuXIe8etYJ
+         gVYSOt0Xhcc4um1myQxq0sKjyp8KGMJe0wKrR3RA/PH+/c1tNttMU7Iy74lA9aVCvI0M
+         Cvvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772548085; x=1773152885;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=esp1UcxTOWDHIY9Li2rUvASCUzf5NNQ0S/tQeT7QTjY=;
+        b=XJAQtE0ZaNpjdZm4SLf1I+5OxgoDMh3bl8iTqJ7ti61eQ5lp3+6MNczmWgR5S9ogq2
+         NtmhptwltZbgd+KUoH4zTjWhrRmTntO0fuY/LhFP7t6LVzeJWrXBKAsnErsa0Jl+K8+N
+         KLdeL2j0iEz5OFEVNCIJKjaLYgr+kiVWOaNxPWNoxoK6CYMrB5xHa/KxS+ZlvsZHIYg7
+         sXOzeLsTycQ6JUGm0q/St4QZhnNHB2plzdc122nHSZCZW5wynhIZH6eJM/V6RiDGqfNL
+         VSe174hAMM3A2TnyR96XkFtwED9MbT52bYvJ594VUx2H1qmMfSzDt2XbN0NhyGfwuw33
+         IbMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVmA+JSnXylIOHeRd1hakQXB1dPwkjuTXztDtJ1iietK4KcNlUTSc/WqqB38hKb95fDHRmIxSHiel93o27n8RM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBLIrPio1PQUreeOJ3cGUFdNzj/fCCBDQjkjk2d1d21dAF8DlZ
+	1r6bc5ieTYF2cnFlj6SI7v3grXCsyYRwQAM2T7axksWAwvuYyLkOvZxZ4QTggXB9TTY7MMgVbFe
+	ZYRvYVY6XYghG5dCEapiI3K6zZtqimBg=
+X-Gm-Gg: ATEYQzwUscbk3DnBYXS4sida84yHDiY3UDzq6iq0YXj9aKM+VPPmyeDyTHm/q0JvxiO
+	z62gIp9BLyzVe613I0fPxi5TjWPfCRlYosoLxOSEufSsdyUDRUwaprrNmcs4LdXuKbVjqXYZ9x+
+	rXZ27Ftkh4ssLzLAUPybgg5FWIsTPyZIXAz4Dt+hPNdvzkej2jcxgRP5Scy9dtJvL9j/h8l4RMY
+	d9ER8Dh+4l5PFa8+Wp0GddC6rnfAu1oYa6k2fu8naL8Oc5ufgiOMfi3xNhCqjOQSxapfMH89LfV
+	NXc7lTuGyo0560xTOoZ6LFj09Mz5bj7kxfQyqyZuwNIjGxUNx85t
+X-Received: by 2002:a17:906:5957:b0:b8e:92e:d316 with SMTP id
+ a640c23a62f3a-b93765684e6mr694232166b.56.1772548084865; Tue, 03 Mar 2026
+ 06:28:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8253:EE_|MRWPR04MB12277:EE_
-X-MS-Office365-Filtering-Correlation-Id: dfe30ff4-4c6a-4b1f-1e5b-08de792c4923
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	SlcjjwbfvvELKp8JPgJ8BmS/3WLfIkXc9/lLEHkeZUPzslQt/T6zELEqPZyxbN36efDjwYAE2dcU5atwqjmxdG00Hl1cHnoUzeZEXuXUCf8nyzY9Tfp/DCmT7AT8OorOoxpYd/0iaSAi+kheZvEFypwCbWkPQhozbTleW4MgQZHvXs+sXdxN1xY3TQiusOaJv05i9OKf7gaM+MrhQQGaptt3x75UxoGaN+CJsRkWlnnhu65Hl/wGy5j7DiO43FFmgQQ0dWCEZvkCEyqwL8XXCKLtTOvGCANdCAXU+vgdozh6ZyvIl2gTXbqorLepZypo7Zci/0trjkOYE/YNZQS64Hv9Tsn/HhO8dYhI9sPk9hxZuLKAiHP7t9udnvuNwBYA//ixQce60I48zGRmgj1iKrl2m/0Enebhc++UV3dVW6hTyuXN+laScc5pfIPAZw4Rl2+HgKpA2GpEA35/0ISiQLBvjfiLB1Es4+RCCLp19W1IARjd/NS1Q8ycaKVZVwM4YpAYsUSJCp+0GJgDofM4odwG9KySek/1NwEa0Wm3p08brkDUCFKksAHdh+kC+Grcy7EURVp3en7i4A9Am+sIehGQvUCPYrs+j9SIYzo6y4TsLeDNJY2277LTm/l6yDyb7Hla8JHjwBDkU2YxwJflhCRQRj2MU2KOCpT0Ln55qIOGZtuRsXPRbwT1NY70PyQyhEHsjaVMg8uFlnv5cXIez+Xhsd4bY3AsxPgMOfPEO+A=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8253.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?PkwU7AhMXEkJtDVnQf8blFx6lqoFBNufCIzJMmDPMwK11q0hYIt3XYGxYIcA?=
- =?us-ascii?Q?XQcXmhiZ6j1DonOPfITHJ4Tkse8YG4N+egNQXIdAMWVrP3GbFJbRtVjJN52l?=
- =?us-ascii?Q?zGJNOxKNH30iDBA4Tcjkv6mRXMAUKNAR6D77yPse0JHuRGjY4qJMB9Wl/Xqc?=
- =?us-ascii?Q?QeAsOy8JcxCNrjre9wsTtyfLJj7woOLNUU3wMibycOvmGtvS6stZUtBgVFUj?=
- =?us-ascii?Q?fZdsEus4V9HxNuVRXGHTkY630tBylumFXFDy94ERsCBxRWX3TNFe7bhTH7+c?=
- =?us-ascii?Q?rTXTzc7AD8h6J8QUFnqNMyZ9TE0jdIg16qhvaiO0nxSmf5qe1OV9FulHKmO9?=
- =?us-ascii?Q?YWf/++I/orponpViLZ5A9x7354JZCz9TLDQe6PKjCOIVUjWJv8sltQmsKMVG?=
- =?us-ascii?Q?ykRy8Bj6aUPBeAXHn4pJjYwUzwlB68RP/j4Og7CXX/hW4kLXKEJstFhz6pvj?=
- =?us-ascii?Q?RQtXF9JJMhOSg9obk90zb+C7IPilCQm51j5J0J7REgu3lros1FrWsu01MKHI?=
- =?us-ascii?Q?JOsxzGIuRR8jBXs6N/Ol/XDl04hytn4lIvPI9iU6aTZt2tYbbb07ZjnQd78A?=
- =?us-ascii?Q?LoLhQ8eP36s01VI6p1RwGc010LDO8RNxnDu07YMwU8sd+b4U+fPatoojOmcG?=
- =?us-ascii?Q?IFnsBQudWAEsrQrmBHLDY+7iwCaSs0DU+nsTRtxSrvrQ6QY1dORBxXH6KN1+?=
- =?us-ascii?Q?LE2AXui0UKlnRp5jUG2WNiaipkaTBOHo5lY3SOWDyTMwTdp4beKemutLIZgj?=
- =?us-ascii?Q?niKV7V/lXTvYcjxPGlsrrP6eDS2gmHbSrclZlMNxsA5X+Uf83gAhD7rGyV6R?=
- =?us-ascii?Q?I3dOk3+AuMfMAvloIJT5+s6yB18HMqZ4PRln3v0NkjOD9CyHbj5HRCJwBF9F?=
- =?us-ascii?Q?O04gF3ZqKBRP5b/QWytgXXPVT1oCaYoGR+RbS0nY7jQq03remBVtSKM+vHUt?=
- =?us-ascii?Q?V/JRn1L/cZEP83nTR86u0zCRNfaIzr1G6rXwygk9bUJoILUWapLDhNa5kT5p?=
- =?us-ascii?Q?A46OXXyW8azJe0H9bZaa6UnUW/VJOpJmyCDkE5v/mPFlNqdodrOzE2gbhfox?=
- =?us-ascii?Q?lXS6rXAOxewNNphHtmvBGTCSJSI4XAYTL8e7FrgIcGGCSppQlXoPsfd5tFki?=
- =?us-ascii?Q?wEAM7Xn3mc/zurwgd5kzFyPhUWisHKUcaybIrSTWsqHwman5kz9xloGsHgWg?=
- =?us-ascii?Q?JkBv37uuP8hqUiaFalKXy6nGqdvEkl6hDH6nlc3cJF/OL8xMvqGI6Fpqry9C?=
- =?us-ascii?Q?ijzs7ppGhq6Ef6TGRuqjWUwJiqCLjRmKSbpHUbeulv7THRW8X5+Gx84CMLyc?=
- =?us-ascii?Q?VMDFir3LTyFBiMlBqL+gF9KxKycpEZuKj7wDoKeNp1XwGpX0HH7n73SlbOw/?=
- =?us-ascii?Q?DgccQEsaSCBNJAGIR7Vjg26wo5UBFnq+GfScnkAPDUOSuSBNSYi83hCm9NoS?=
- =?us-ascii?Q?bMCXCv83qMl0M1XZ/y/1dhd++FKM8H586jwtaWXbSwAwTMJFxZ5TtGcUpyB1?=
- =?us-ascii?Q?kYgqyuQnDEIBiG/0lOYyknuI3u787dnH/xWAOtCwsRJKp8pE18AxEd3BLcNH?=
- =?us-ascii?Q?oFe1ZCWEJ46I408e1SMeW2Zyvf9BGl5LTTTK+d9JOL8H3uJuvA6kwmWFGBqt?=
- =?us-ascii?Q?h/nOhagmjNiUONPxAY48UKb221thJkbpNG3D2in0HwOKOPNHujLapqgnE4JV?=
- =?us-ascii?Q?INadMXxde2Z2ndFf8D8w3gJxWBToF4uAU4PC1U8pnRRYDXNfcElJS5G6tqUR?=
- =?us-ascii?Q?/6HB4nk70w=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dfe30ff4-4c6a-4b1f-1e5b-08de792c4923
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8253.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 13:53:45.5740
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bmVw4GMaYzoK+eqnCsEw9RhSZ8KCdYlvHSbc3o5zxs9ohcQH5euVZczsuFkum3Mwq31jZaajrofEolkIScasDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRWPR04MB12277
+References: <20260220055449.3073-1-tjmercier@google.com> <20260220055449.3073-3-tjmercier@google.com>
+ <aZh-orwoaeAh52Bf@slm.duckdns.org> <CAOQ4uxjgXa1q-8-ajSBwza-Tkv91tFP-_wWzCQPW+PwJMehEWA@mail.gmail.com>
+ <aZi6_K-pSRwAe7F5@slm.duckdns.org> <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
+ <aZju-GFHf8Eez-07@slm.duckdns.org> <CAOQ4uxgzuxaLt2xs5a5snu9CBA_4esQ_+t0Wb6CX4M5OqM5AOA@mail.gmail.com>
+ <aZx_8_rJNPF2EYgn@slm.duckdns.org> <20260224-hetzen-zeitnah-a3e1e08367cc@brauner>
+In-Reply-To: <20260224-hetzen-zeitnah-a3e1e08367cc@brauner>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Tue, 3 Mar 2026 15:27:52 +0100
+X-Gm-Features: AaiRm52i2NAug7aj4ITPTwYuE6XkZvKlA8xrZKtvkZavq_ZPH4PZm8-pNbBhwCc
+Message-ID: <CAOQ4uxhSL3ZRzNjM6AM_poxeTsYgWb5_f3tO6_4ketg8sFSOBw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
+To: Christian Brauner <brauner@kernel.org>, jack@suse.cz, Tejun Heo <tj@kernel.org>
+Cc: "T.J. Mercier" <tjmercier@google.com>, gregkh@linuxfoundation.org, 
+	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000f255a4064c1f8291"
 
-On Mon, Mar 02, 2026 at 04:07:43PM -0800, Jakub Kicinski wrote:
-> On Mon, 2 Mar 2026 14:11:21 +0200 Ioana Ciornei wrote:
-> > > I agree that adherence to the drivers/net/README protocol is valuable to
-> > > some users and would be good to uphold if reasonable in a given tests.
-> > > If that's what you have in mind.
-> > > 
-> > > There are going to be tests where it's not a great fit, but I think that
-> > > of those NUM_NETIFS=2 tests that we currently have, maybe
-> > > ethtool_extended_state has a good reason to be obstinate, because it
-> > > sets up negotiations and needs an extra unplugged netdevice.  
-> > 
-> > I would add here even ethtool_rmon.sh and this new test that I
-> 
-> I think I already told you that ethool_rmon predates the NIC tests
-> and bringing it up in this discussion is irrelevant.
-> 
-> > submitted. If you are running with a traffic generator on another board
-> > then you can no longer check that the counter's value is as expected
-> > (with a 1% tolerance), you can only check the lower bound.
-> 
-> 1% tolerance is impractical for any CI with high test count.
-> The test will be flaky. And I really doubt that the 1% tolerance
-> is really necessary to catch most bugs. We're not trying to validate
-> silicon here.
-> 
-> > Additionally, if you are using the same single port also for control
-> > traffic towards the remote traffic generator, then you surely cannot
-> > reliably check that counters that should not be incremented are indeed
-> > not incremented.
-> 
-> I both told you in this conversation how to check the counters,
-> and written some existing tests for counters.
+--000000000000f255a4064c1f8291
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Judging by your response it's clear to me that you wanted to transmit
-something that didn't actually get to me. I am afraid that it's not
-clear to me what exactly is your feedback and what do you expect as a
-next step.
+On Tue, Feb 24, 2026 at 12:03=E2=80=AFPM Christian Brauner <brauner@kernel.=
+org> wrote:
+>
+> On Mon, Feb 23, 2026 at 06:27:31AM -1000, Tejun Heo wrote:
+> > (cc'ing Christian Brauner)
+> >
+> > On Sat, Feb 21, 2026 at 06:11:28PM +0200, Amir Goldstein wrote:
+> > > On Sat, Feb 21, 2026 at 12:32=E2=80=AFAM Tejun Heo <tj@kernel.org> wr=
+ote:
+> > > >
+> > > > Hello, Amir.
+> > > >
+> > > > On Fri, Feb 20, 2026 at 10:11:15PM +0200, Amir Goldstein wrote:
+> > > > > > Yeah, that can be useful. For cgroupfs, there would probably ne=
+ed to be a
+> > > > > > way to scope it so that it can be used on delegation boundaries=
+ too (which
+> > > > > > we can require to coincide with cgroup NS boundaries).
+> > > > >
+> > > > > I have no idea what the above means.
+> > > > > I could ask Gemini or you and I prefer the latter ;)
+> > > >
+> > > > Ah, you chose wrong. :)
+> > > >
+> > > > > What are delegation boundaries and NFS boundaries in this context=
+?
+> > > >
+> > > > cgroup delegation is giving control of a subtree to someone else:
+> > > >
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/=
+Documentation/admin-guide/cgroup-v2.rst#n537
+> > > >
+> > > > There's an old way of doing it by changing perms on some files and =
+new way
+> > > > using cgroup namespace.
+> > > >
+> > > > > > Would it be possible to make FAN_MNT_ATTACH work for that?
+> > > > >
+> > > > > FAN_MNT_ATTACH is an event generated on a mntns object.
+> > > > > If "cgroup NS boundaries" is referring to a mntns object and if
+> > > > > this object is available in the context of cgroup create/destroy
+> > > > > then it should be possible.
+> > > >
+> > > > Great, yes, cgroup namespace way should work then.
+> > > >
+> > > > > But FAN_MNT_ATTACH reports a mountid. Is there a mountid
+> > > > > to report on cgroup create? Probably not?
+> > > >
+> > > > Sorry, I thought that was per-mount recursive file event monitoring=
+.
+> > > > FAN_MARK_MOUNT looks like the right thing if we want to allow monit=
+oring
+> > > > cgroup creations / destructions in a subtree without recursively wa=
+tching
+> > > > each cgroup.
+> > >
+> > > The problem sounds very similar to subtree monitoring for mkdir/rmdir=
+ on
+> > > a filesystem, which is a problem that we have not yet solved.
+> > >
+> > > The problem with FAN_MARK_MOUNT is that it does not support the
+> > > events CREATE/DELETE, because those events are currently
+> >
+> > Ah, bummer.
+> >
+> > > monitored in context where the mount is not available and anyway
+> > > what users want to get notified on a deleted file/dir in a subtree
+> > > regardless of the mount through which the create/delete was done.
+> > >
+> > > Since commit 58f5fbeb367ff ("fanotify: support watching filesystems
+> > > and mounts inside userns") and fnaotify groups can be associated
+> > > with a userns.
+> > >
+> > > I was thinking that we can have a model where events are delivered
+> > > to a listener based on whether or not the uid/gid of the object are
+> > > mappable to the userns of the group.
+> >
+> > Given how different NSes can be used independently of each other, it'd
+> > probably be cleaner if it doesn't have to depend on another NS.
+> >
+> > > In a filesystem, this criteria cannot guarantee the subtree isolation=
+.
+> > > I imagine that for delegated cgroups this criteria could match what
+> > > you need, but I am basing this on pure speculation.
+> >
+> > There's a lot of flexibility in the mechanism, so it's difficult to tel=
+l.
+> > e.g. There's nothing preventing somebody from creating two separate sub=
+trees
+> > delegated to the same user.
+>
+> Delegation is based on inode ownership I'm not sure how well this will
+> fit into the fanotify model. Maybe the group logic for userns that
+> fanotify added works. I'm not super sure.
+>
+> > Christian was mentioning allowing separate super for different cgroup m=
+ounts
+> > in another thread. cc'ing him for context.
+>
+> If cgroupfs changes to tmpfs semantics where each mount gives you a new
+> superblock then it's possible to give each container its own superblock.
+> That in turn would make it possible to place fanotify watches on the
+> superblock itself. I think you'd roughly need something like the
+> following permission model:
+>
 
-What I did get:
-- The new test should work with a single netdevice (and a remote
-  endpoint for traffic generation).
-- The test should not check for any upper bound for the ethtool counter
-  value.
-- The test is expected to follow drivers/net/README.rst.
+It's hard for me to estimate the effort of changing to multi sb model,
+but judging by the length of the email I trimmed below, it does not
+sound trivial...
 
-Does this mean that your feedback is to convert the bash variant that I
-submitted into a python one which uses lib.py?
+How do you guys feel about something like this patch which associates
+an owner userns to every cgroup?
 
-If this is your intention, what is the plan for the rmon statistics (or
-any drivers/net/hw/ bash tests that pre-date the README)? Do you see
-those eventually getting converted to lib.py? I am merely asking so that
-I know if I should convert them or they are to be left as is.
+I have this POC branch from a long time ago [1] to filter all events
+on sb by in_userns() criteria.  The semantics for real filesystems
+were a bit difficult, but perhaps this model can work well for these
+pseudo singleton fs.
 
-If I got this all wrong, I'm sorry.
+I am trying to work on a model that could be useful for both cgroupfs
+and nsfs:
+
+If user is capable in userns, user will be able to set an sb
+watch for all events (say DELETE_SELF) on the sb, for objects
+whose owner_userns is in_userns() of the fanotify listener.
+
+This will enable watching for torn down cgroups and namepsaces
+which are visible to said user via delegated cgroups mount
+or via listns().
+
+I would like to allow calling fsnotify_obj_remove() hook with
+encoded object fid (e.g. nsfs_file_handle) instead of the vfs inode,
+so that cgroupfs/nsfs could report dying objects without needing
+to associate a vfs inode with them.
+
+WDYT? Is this an interesting direction to persure?
+
+Thanks,
+Amir.
+
+[1] https://lore.kernel.org/linux-fsdevel/CAOQ4uxgt1Cx5jx3L6iaDvbzCWPv=3Dfc=
+MgLaa9ODkiu9h718MkwQ@mail.gmail.com/
+
+--000000000000f255a4064c1f8291
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-cgroup-track-owner_userns-per-cgroup.patch"
+Content-Disposition: attachment; 
+	filename="0001-cgroup-track-owner_userns-per-cgroup.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mmao8jni0>
+X-Attachment-Id: f_mmao8jni0
+
+RnJvbSA0YjNhNTZiOGNhNTQ4MzU0MjE0MzI5NzI5OTk3YTc4YzcyYTAxNmQzIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBbWlyIEdvbGRzdGVpbiA8YW1pcjczaWxAZ21haWwuY29tPgpE
+YXRlOiBUdWUsIDMgTWFyIDIwMjYgMTQ6MDQ6MjIgKzAxMDAKU3ViamVjdDogW1BBVENIXSBjZ3Jv
+dXA6IHRyYWNrIG93bmVyX3VzZXJucyBwZXIgY2dyb3VwCgpBZGQgb3duZXJfdXNlcm5zIGZpZWxk
+IHRvIHN0cnVjdCBjZ3JvdXAgdG8gcmVjb3JkIHdoaWNoIHVzZXIgbmFtZXNwYWNlCm93bnMgYSBn
+aXZlbiBjZ3JvdXAuCgpGb3IgaGllcmFyY2h5IHJvb3RzLCB0aGUgb3duZXIgaXMgYWx3YXlzIGlu
+aXRfdXNlcl9ucy4KRm9yIGNncm91cHMgY3JlYXRlZCB2aWEgbWtkaXIgKGNncm91cF9jcmVhdGUo
+KSksIHBvc3NpYmx5IGluc2lkZSBhCmRlbGVnYXRlZCBjZ3JvdXAgbmFtZXNwYWNlLCB0aGUgb3du
+ZXIgaXMgdGhlIHVzZXIgbmFtZXNwYWNlIG9mIHRoZQpjcmVhdGluZyB0YXNrJ3MgY2dyb3VwIG5h
+bWVzcGFjZS4KClRoaXMgZmllbGQgaXMgYSBwcmVyZXF1aXNpdGUgZm9yIGRlbGl2ZXJpbmcgdXNl
+cm5zLXNjb3BlZCBmc25vdGlmeQpldmVudHMgKGUuZy4gRkFOX0RFTEVURV9TRUxGIHZpYSBGQU5f
+RklMRVNZU1RFTV9NQVJLKSB3aGVuIGEgY2dyb3VwIGlzCmRlc3Ryb3llZCwgYWxsb3dpbmcgYSBz
+dWZmaWNpZW50bHkgcHJpdmlsZWdlZCBhZG1pbiBpbnNpZGUgYSBkZWxlZ2F0ZWQKY2dyb3VwIG5h
+bWVzcGFjZSB0byB3YXRjaCBmb3IgY2dyb3VwIHRlYXJkb3duIHdpdGhvdXQgcmVxdWlyaW5nIGFj
+Y2Vzcwp0byB0aGUgZnVsbCBzeXN0ZW0gdmlldy4KClNpZ25lZC1vZmYtYnk6IEFtaXIgR29sZHN0
+ZWluIDxhbWlyNzNpbEBnbWFpbC5jb20+Ci0tLQogaW5jbHVkZS9saW51eC9jZ3JvdXAtZGVmcy5o
+IHwgOCArKysrKysrKwoga2VybmVsL2Nncm91cC9jZ3JvdXAuYyAgICAgIHwgNiArKysrKysKIDIg
+ZmlsZXMgY2hhbmdlZCwgMTQgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGlu
+dXgvY2dyb3VwLWRlZnMuaCBiL2luY2x1ZGUvbGludXgvY2dyb3VwLWRlZnMuaAppbmRleCBiYjky
+ZjVjMTY5Y2EyLi40ZWUzNDQ3OTJhMWQ1IDEwMDY0NAotLS0gYS9pbmNsdWRlL2xpbnV4L2Nncm91
+cC1kZWZzLmgKKysrIGIvaW5jbHVkZS9saW51eC9jZ3JvdXAtZGVmcy5oCkBAIC0zMyw2ICszMyw3
+IEBAIHN0cnVjdCBrZXJuZnNfb3BzOwogc3RydWN0IGtlcm5mc19vcGVuX2ZpbGU7CiBzdHJ1Y3Qg
+c2VxX2ZpbGU7CiBzdHJ1Y3QgcG9sbF90YWJsZV9zdHJ1Y3Q7CitzdHJ1Y3QgdXNlcl9uYW1lc3Bh
+Y2U7CiAKICNkZWZpbmUgTUFYX0NHUk9VUF9UWVBFX05BTUVMRU4gMzIKICNkZWZpbmUgTUFYX0NH
+Uk9VUF9ST09UX05BTUVMRU4gNjQKQEAgLTU1MSw2ICs1NTIsMTMgQEAgc3RydWN0IGNncm91cCB7
+CiAKIAlzdHJ1Y3QgY2dyb3VwX3Jvb3QgKnJvb3Q7CiAKKwkvKgorCSAqIFRoZSB1c2VyIG5hbWVz
+cGFjZSB0aGF0IG93bnMgdGhpcyBjZ3JvdXA6IHRoZSBjcmVhdGluZyB0YXNrJ3MKKwkgKiBjZ3Jv
+dXBfbnMtPnVzZXJfbnMgZm9yIGNoaWxkIGNncm91cHMsIG9yIGluaXRfdXNlcl9ucyBmb3IKKwkg
+KiBoaWVyYXJjaHkgcm9vdHMuICBEZXRlcm1pbmVzIHRoZSBzY29wZSBvZiBmaWxlc3lzdGVtIHdh
+dGNoZXMuCisJICovCisJc3RydWN0IHVzZXJfbmFtZXNwYWNlICpvd25lcl91c2VybnM7CisKIAkv
+KgogCSAqIExpc3Qgb2YgY2dycF9jc2V0X2xpbmtzIHBvaW50aW5nIGF0IGNzc19zZXRzIHdpdGgg
+dGFza3MgaW4gdGhpcwogCSAqIGNncm91cC4gIFByb3RlY3RlZCBieSBjc3Nfc2V0X2xvY2suCmRp
+ZmYgLS1naXQgYS9rZXJuZWwvY2dyb3VwL2Nncm91cC5jIGIva2VybmVsL2Nncm91cC9jZ3JvdXAu
+YwppbmRleCBjMjJjZGE3NzY2ZDg0Li5lMGJlYWY1Y2M4YzQ5IDEwMDY0NAotLS0gYS9rZXJuZWwv
+Y2dyb3VwL2Nncm91cC5jCisrKyBiL2tlcm5lbC9jZ3JvdXAvY2dyb3VwLmMKQEAgLTEzODEsNiAr
+MTM4MSw3IEBAIHN0YXRpYyB2b2lkIGNncm91cF9leGl0X3Jvb3RfaWQoc3RydWN0IGNncm91cF9y
+b290ICpyb290KQogCiB2b2lkIGNncm91cF9mcmVlX3Jvb3Qoc3RydWN0IGNncm91cF9yb290ICpy
+b290KQogeworCXB1dF91c2VyX25zKHJvb3QtPmNncnAub3duZXJfdXNlcm5zKTsKIAlrZnJlZV9y
+Y3Uocm9vdCwgcmN1KTsKIH0KIApAQCAtMjE5NSw2ICsyMTk2LDcgQEAgaW50IGNncm91cF9zZXR1
+cF9yb290KHN0cnVjdCBjZ3JvdXBfcm9vdCAqcm9vdCwgdTMyIHNzX21hc2spCiAJcm9vdF9jZ3Jw
+LT5rbiA9IGtlcm5mc19yb290X3RvX25vZGUocm9vdC0+a2Zfcm9vdCk7CiAJV0FSTl9PTl9PTkNF
+KGNncm91cF9pbm8ocm9vdF9jZ3JwKSAhPSAxKTsKIAlyb290X2NncnAtPmFuY2VzdG9yc1swXSA9
+IHJvb3RfY2dycDsKKwlyb290X2NncnAtPm93bmVyX3VzZXJucyA9IGdldF91c2VyX25zKCZpbml0
+X3VzZXJfbnMpOwogCiAJcmV0ID0gY3NzX3BvcHVsYXRlX2Rpcigmcm9vdF9jZ3JwLT5zZWxmKTsK
+IAlpZiAocmV0KQpAQCAtNTYwNyw2ICs1NjA5LDcgQEAgc3RhdGljIHZvaWQgY3NzX2ZyZWVfcndv
+cmtfZm4oc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQogCQkJY2dyb3VwX3B1dChjZ3JvdXBfcGFy
+ZW50KGNncnApKTsKIAkJCWtlcm5mc19wdXQoY2dycC0+a24pOwogCQkJcHNpX2Nncm91cF9mcmVl
+KGNncnApOworCQkJcHV0X3VzZXJfbnMoY2dycC0+b3duZXJfdXNlcm5zKTsKIAkJCWtmcmVlKGNn
+cnApOwogCQl9IGVsc2UgewogCQkJLyoKQEAgLTU4NDgsNiArNTg1MSw4IEBAIHN0YXRpYyBzdHJ1
+Y3QgY2dyb3VwICpjZ3JvdXBfY3JlYXRlKHN0cnVjdCBjZ3JvdXAgKnBhcmVudCwgY29uc3QgY2hh
+ciAqbmFtZSwKIAlpZiAoIWNncnApCiAJCXJldHVybiBFUlJfUFRSKC1FTk9NRU0pOwogCisJY2dy
+cC0+b3duZXJfdXNlcm5zID0gZ2V0X3VzZXJfbnMoY3VycmVudC0+bnNwcm94eS0+Y2dyb3VwX25z
+LT51c2VyX25zKTsKKwogCXJldCA9IHBlcmNwdV9yZWZfaW5pdCgmY2dycC0+c2VsZi5yZWZjbnQs
+IGNzc19yZWxlYXNlLCAwLCBHRlBfS0VSTkVMKTsKIAlpZiAocmV0KQogCQlnb3RvIG91dF9mcmVl
+X2NncnA7CkBAIC01OTU2LDYgKzU5NjEsNyBAQCBzdGF0aWMgc3RydWN0IGNncm91cCAqY2dyb3Vw
+X2NyZWF0ZShzdHJ1Y3QgY2dyb3VwICpwYXJlbnQsIGNvbnN0IGNoYXIgKm5hbWUsCiBvdXRfY2Fu
+Y2VsX3JlZjoKIAlwZXJjcHVfcmVmX2V4aXQoJmNncnAtPnNlbGYucmVmY250KTsKIG91dF9mcmVl
+X2NncnA6CisJcHV0X3VzZXJfbnMoY2dycC0+b3duZXJfdXNlcm5zKTsKIAlrZnJlZShjZ3JwKTsK
+IAlyZXR1cm4gRVJSX1BUUihyZXQpOwogfQotLSAKMi41My4wCgo=
+--000000000000f255a4064c1f8291--
