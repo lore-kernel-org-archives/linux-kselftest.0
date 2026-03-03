@@ -1,187 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC394949FF
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 16:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1061D4949FD;
+	Tue,  3 Mar 2026 16:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772553680; cv=none; b=WYibEWKJ1P9C5QFK0/jyKio0cEI+xYU0kb7TjR3vp20coOayCypw269Bgwo496UP7HtJpdJHDAzvwBSDsgMspOv7dV2XNHqIDezLHJIme4kX/LB/9AT26KZHcTDnPKcksGXb/P5S1IeoXxWjwKyCY+m2MdYNxgFx3KuWOGyUCVw=
+	t=1772553708; cv=none; b=SsBKtixJs5BKVunOyPfhd7+WSx79lKg+KRpIrMKt3Lm4vwMMBUXEnXv/CLPj3WJKwo59I84pcKhViMeS9ui9Nw0B3rAIyzpkiACCceEyLVDSMDugJ7L2cyq/kYwwmgcw4bDpXCipKH4IsvxgNreJl7P7zgqu21AA7REd/+J+kzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772553680; c=relaxed/simple;
-	bh=kBs6YeVI4ZGaefGQXETZ1A0somIfTOLdEbAPV/EzfKs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Maqs7Ab7jTVLz09VlAlV/+MDG9FXlMXtWLBeLpZ90o+l/oBRUnossUIz0hmTl0NOcfna7wzMfvvL/ITsheWBnntMlhkcVdXp35xM2kzhbfBIXPHbYl+vhgu59PiRWHz5xIk91xt0qJAS7jxnBstxia0ztxcDR/q+CXgN1/J7cRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WbgKm5sO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772553708; c=relaxed/simple;
+	bh=gZkQlr5YEVXuW9a0G2wQiLAsUpIgl/yFyoQA91g2dZc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ZE1FnFZRKeHRpjJKLaVv+e56T+1I5Dfap175c9AZqsQHtwvBuUU/vz+OI47VkMaGdfpe3RjlIrb93sraN3ACt+4RJc+1fa9sG3i3UK6zAw6/jIA4KmQLA89gJdd0SjTGG+tgVgRU6byYpKeiFC4GAzC15XQVnYArR4vMW6VIWkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=shZZJlfE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WbgKm5sO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772553678;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/dUXt5Ka5EUKQpjBNwUoDbUSHKGe/xh8PsikJk52ylI=;
-	b=WbgKm5sOVq6vNJZ1Bo7Shnhhuw+i1mtgZv5VynaL3i9OrjER0+tNfvz7iFErXu6lasudxa
-	EdKU7OeNS9YYIv6/tpimU8k/1HxbwUfn7RUV6O0Z60f/5rlh2FJT0QqLjoEo0dAw7Z96OP
-	Dcf5knC8N8QYlpMGq0kWG0NRV30ifGo=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-516-H2VeZw1rPH6RKyeOnh0WCA-1; Tue,
- 03 Mar 2026 11:01:15 -0500
-X-MC-Unique: H2VeZw1rPH6RKyeOnh0WCA-1
-X-Mimecast-MFC-AGG-ID: H2VeZw1rPH6RKyeOnh0WCA_1772553669
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D3CB31800266;
-	Tue,  3 Mar 2026 16:01:08 +0000 (UTC)
-Received: from [10.22.88.179] (unknown [10.22.88.179])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 333011956053;
-	Tue,  3 Mar 2026 16:00:56 +0000 (UTC)
-Message-ID: <c999838a-cfdf-4556-8416-cb21aa2b69e7@redhat.com>
-Date: Tue, 3 Mar 2026 11:00:54 -0500
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="shZZJlfE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41125C116C6;
+	Tue,  3 Mar 2026 16:01:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772553707;
+	bh=gZkQlr5YEVXuW9a0G2wQiLAsUpIgl/yFyoQA91g2dZc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=shZZJlfEb7bNjg6xWR+8o+dCaJm3SfdmOzxgXop+HrvU/BKRUQz1MMFjHJZISiZlX
+	 jf4xlOZvvEwT/0FEELuaokgm/d6Er3BPMjweUZXXVEorQBgKv0hLFl6fkEgFzSZkue
+	 5knKIzrfFkDQ9Pvi5Vv0UyNCT5qIjqYVBIDQ+/GCIGujV2IM/v/lAWoYfJtyvEwl1F
+	 V+kMdJ9Xvjxi8Uf0kp23EF2ecqT2Di6prZXgjgRC8Dp3hwu2EI6pXHo0ojWPSzgNFJ
+	 h1vtO6VQcZBt7XOTZGnTcJZt9nW7E74kYbkTfvP4Oz+O2jlgNwlncnhgxdvlabi5z1
+	 29A50pbnnD36g==
+Content-Type: multipart/mixed; boundary="===============0027368851576621044=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 7/8] cgroup/cpuset: Defer housekeeping_update() calls
- from CPU hotplug to workqueue
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260221185418.29319-1-longman@redhat.com>
- <20260221185418.29319-8-longman@redhat.com>
- <aaBvc4ikB1H-WQDd@localhost.localdomain>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <aaBvc4ikB1H-WQDd@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <47fbcb9aa941b07054bfef30b802d488688fafdf6df889e78b38313a614b98c1@mail.kernel.org>
+In-Reply-To: <20260303150639.85007-4-leon.hwang@linux.dev>
+References: <20260303150639.85007-4-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,leon.hwang@linux.dev,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  3 Mar 2026 16:01:47 +0000 (UTC)
 
-On 2/26/26 11:06 AM, Frederic Weisbecker wrote:
-> Le Sat, Feb 21, 2026 at 01:54:17PM -0500, Waiman Long a écrit :
->> The cpuset_handle_hotplug() may need to invoke housekeeping_update(),
->> for instance, when an isolated partition is invalidated because its
->> last active CPU has been put offline.
->>
->> As we are going to enable dynamic update to the nozh_full housekeeping
->> cpumask (HK_TYPE_KERNEL_NOISE) soon with the help of CPU hotplug,
->> allowing the CPU hotplug path to call into housekeeping_update() directly
->> from update_isolation_cpumasks() will likely cause deadlock.
-> I am a bit confused here. Why would CPU hotplug path need to call
-> update_isolation_cpumasks() -> housekeeping_update() for
-> HK_TYPE_KERNEL_NOISE?
+--===============0027368851576621044==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Oh, this is not the current behavior. However, to make nohz_full fully 
-dynamically changeable in the near future, we will have to do that 
-eventually.
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 
-Cheers,
-Longman
+[ ... ]
 
+> +	switch (match) {
+> +	case BPF_MAP_OWNER_MATCH_FOR_INIT:
+> +		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+> +			return false;
+> +		break;
+> +
+> +	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
+> +		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
+> +			return false;
+> +		break;
+> +	}
 
->> So we
->> have to defer any call to housekeeping_update() after the CPU hotplug
->> operation has finished. This is now done via the workqueue where
->> the update_hk_sched_domains() function will be invoked via the
->> hk_sd_workfn().
->>
->> An concurrent cpuset control file write may have executed the required
->> update_hk_sched_domains() function before the work function is called. So
->> the work function call may become a no-op when it is invoked.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/cgroup/cpuset.c                        | 31 ++++++++++++++++---
->>   .../selftests/cgroup/test_cpuset_prs.sh       | 11 ++++++-
->>   2 files changed, 36 insertions(+), 6 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 3d0d18bf182f..2c80bfc30bbc 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -1323,6 +1323,16 @@ static void update_hk_sched_domains(void)
->>   		rebuild_sched_domains_locked();
->>   }
->>   
->> +/*
->> + * Work function to invoke update_hk_sched_domains()
->> + */
->> +static void hk_sd_workfn(struct work_struct *work)
->> +{
->> +	cpuset_full_lock();
->> +	update_hk_sched_domains();
->> +	cpuset_full_unlock();
->> +}
->> +
->>   /**
->>    * rm_siblings_excl_cpus - Remove exclusive CPUs that are used by sibling cpusets
->>    * @parent: Parent cpuset containing all siblings
->> @@ -3795,6 +3805,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
->>    */
->>   static void cpuset_handle_hotplug(void)
->>   {
->> +	static DECLARE_WORK(hk_sd_work, hk_sd_workfn);
->>   	static cpumask_t new_cpus;
->>   	static nodemask_t new_mems;
->>   	bool cpus_updated, mems_updated;
->> @@ -3877,11 +3888,21 @@ static void cpuset_handle_hotplug(void)
->>   	}
->>   
->>   
->> -	if (update_housekeeping || force_sd_rebuild) {
->> -		mutex_lock(&cpuset_mutex);
->> -		update_hk_sched_domains();
->> -		mutex_unlock(&cpuset_mutex);
->> -	}
->> +	/*
->> +	 * Queue a work to call housekeeping_update() & rebuild_sched_domains()
->> +	 * There will be a slight delay before the HK_TYPE_DOMAIN housekeeping
->> +	 * cpumask can correctly reflect what is in isolated_cpus.
->> +	 *
->> +	 * We rely on WORK_STRUCT_PENDING_BIT to not requeue a work item that
->> +	 * is still pending. Before the pending bit is cleared, the work data
->> +	 * is copied out and work item dequeued. So it is possible to queue
->> +	 * the work again before the hk_sd_workfn() is invoked to process the
->> +	 * previously queued work. Since hk_sd_workfn() doesn't use the work
->> +	 * item at all, this is not a problem.
->> +	 */
->> +	if (update_housekeeping || force_sd_rebuild)
->> +		queue_work(system_unbound_wq, &hk_sd_work);
-> Nit about recent wq renames:
->
-> s/system_unbound_wq/system_dfl_wq
-Good point. Will send additional patch to do the rename.
->
-> But what makes sure this work is executed by the end of the hotplug operations?
-> Is there a risk for a stale hierarchy to be observed when it shouldn't? Or a
-> stale housekeeping cpumask?
+In the v1 review, Alexei Starovoitov asked for strict conformance
+both ways rather than one-directional validation:
 
-If you look at the work function, it will make a copy of HK_TYPE_DOMAIN 
-cpumask while holding rcu_read_lock(). So the current hotplug operation 
-must have finished at that point. Of course, if there is another 
-hot-add/remove operation right after the rcu_read_lock is released, the 
-cpumask passed down to housekeeping_update() may not be the latest one. 
-In this case, another work will be scheduled to call 
-housekeeping_update() with the new cpumask again.
+    "Don't be fancy. Require strict conformance both ways
+    in *all* patches."
 
-Cheers,
-Longman
+https://lore.kernel.org/bpf/CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com/
+
+The BPF_MAP_OWNER_MATCH_FOR_UPDATE case still uses one-directional
+matching, rejecting only !owner->kprobe_write_ctx && aux->kprobe_write_ctx
+but allowing the reverse.  Was this an intentional design choice, and
+if so, should the changelog note the disagreement?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22630000544
+--===============0027368851576621044==--
