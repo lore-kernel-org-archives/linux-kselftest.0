@@ -1,121 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305A93B7B9A;
-	Tue,  3 Mar 2026 14:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C7E480350
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Mar 2026 15:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772548830; cv=none; b=pbboq5SZqb5D6S2Qm2S1cBZZ4AEMzFxVWjPkIqlf/+mjQ0AIjcHPjrWmJL3nxJxgG44WYjvg7TUyiifHWVonS4xjMz9Z4nTTFJhi9GnEpQPy1hYBF2RMOsFrrC/cWXNYSmYjndfscDLdtzv4wGCzeje0NxeCRAn7QUQOfh8gVz8=
+	t=1772550449; cv=none; b=YzMTxT1g/4iN2/xsAjeu1hFWESLRVmMsW0+qvRI4hfP5+d0LCE+vEj2q0snCx7zFucL5q0Fq8chLnyho9h+6pGypoHFXot6+kFapsRLrKcSfml7jR2papnrHFq4J48nmwiUmQsVULoOsr5C2VhD7qh5vSWhTqzWyoV+zWA4AGeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772548830; c=relaxed/simple;
-	bh=yVTRTYxNUuoFoHtc5rEeYIv25/6vkbs3QVPHROpZfdk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XjVAJTZwJ8gL7xOGihrCeYWC7O8S/8Az0iEjYRsEgRFr+hK+Qt+/u5XwypALtnYRx0dgoQt1IZ+P2fJNpjcOU2rzDcAtDh6NjDkUOf5s7/IfwPVJZAfxhDUCvPKUqspKVGSxRj9/cD8Z3QZolVYTy6/2XBxeZ9WMx+fARUKRurc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDI1XCc5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772550449; c=relaxed/simple;
+	bh=og5BGeFrQ30Aqrda3hTixvdjugHX91yV1mpgepgzpaA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T7wMh5/5ZVQ6TNIPKL6ADd9pMFtw8jbrnE6bqZ0FffRkMi/7Xu0734/L4cnTZjgYipS/8yvhwzyy9V73unVIyiNpnLrH3S5j2XfbMKQGsixcptBI2DjU/EiaBBbKweFDvN263+9HpdX/hqr/vWXyv6njvPS5EohCAYoFcqDVCsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vV1d/3cB; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDI1XCc5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C01DC116C6;
-	Tue,  3 Mar 2026 14:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772548829;
-	bh=yVTRTYxNUuoFoHtc5rEeYIv25/6vkbs3QVPHROpZfdk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=TDI1XCc5qo15C36tbi3Gxr2M82tp+3bhaHB7Hq+5evP6I0Yp75uIfinOGOUC1F0uf
-	 yLjGBL9XEhP721kRzaa8xpNCUnrpH9Ed7PbRbTelHXxbhLAX2XqsFgIvc4nhavKFbH
-	 YndyF/2CaEERiCNWS6k2zTtilPj2T8IDbApGnnCvtGPmmqYCGSwmLjIxpxCOvQ+oP0
-	 Zdjby8pwnUD/i3OximY36RfVqzZW+PMJqCxYIi2aLCB8YgzRM6omrF/Tao2OmgZstG
-	 xN9b3ZwwGRjW9NUTHpbgmbtCQJWg87J1ICLx9G4hgnhJTGcbbDrLgZj6vji/BjacK5
-	 xL4HSUYmrNOEA==
-Content-Type: multipart/mixed; boundary="===============8354238778473276078=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vV1d/3cB"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772550445;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5h/Luh3nfXV7UEzDnO3fH1YL4eWophs4aupwotkiXUk=;
+	b=vV1d/3cBhWQeLop0t2aqFtKHQDZvJMgnpK6nyWiidpr8ShtOIvHjUPKO2gByc0l9t4e3Vq
+	8O/UmIQV5QBRdEmUI65WlpIvVO2ix3kCbtErQyeDcQMCd1ns9cgHI/9sU9HgwYruSjeNRg
+	D26XK7PbN+1mgo0LgUTvszXQ1XMRkUQ=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v3 0/6] bpf: Enhance __bpf_prog_map_compatible()
+Date: Tue,  3 Mar 2026 23:06:33 +0800
+Message-ID: <20260303150639.85007-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <198ab979488effe54f31ecfb8343e154e65f77f5e419fcdabb93be4f0e48b6f4@mail.kernel.org>
-In-Reply-To: <20260303135219.33726-4-pilgrimtao@gmail.com>
-References: <20260303135219.33726-4-pilgrimtao@gmail.com>
-Subject: Re: [PATCH v4 3/6] bpf: add bpf_list_add_impl to insert node after a given list node
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  3 Mar 2026 14:40:29 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============8354238778473276078==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Following discussion in the "bpf: tail calls in sleepable programs" [1],
+this series extends __bpf_prog_map_compatible() with additional per-program
+compatibility checks.
 
-> Returns 0 on success, -EINVAL if 'prev' is not in a list or 'new'
-> is already in a list (or duplicate insertion). On failure, the
-> kernel drops the passed-in node.
+The series validates these attributes:
 
-The commit message says the kernel drops the passed-in node on
-failure, but looking at the implementation, only the cmpxchg
-failure path actually drops the node:
+* kprobe_write_ctx: for uprobe programs that can update pt_regs.
+* call_get_func_ip: for tracing programs using bpf_get_func_ip().
+* call_session_cookie: for fsession programs using bpf_session_cookie().
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
->
-> @@ -2497,6 +2497,32 @@
->
-> +__bpf_kfunc int bpf_list_add_impl(struct bpf_list_head *head,
-> +				  struct bpf_list_node *new,
-> +				  struct bpf_list_node *prev,
-> +				  void *meta__ign, u64 off)
-> +{
-> +	struct bpf_list_node_kern *kn = (void *)new, *kp = (void *)prev;
-> +	struct btf_struct_meta *meta = meta__ign;
-> +	struct list_head *n = &kn->list_head, *p = &kp->list_head;
-> +
-> +	if (unlikely(!head))
-> +		return -EINVAL;
-> +
-> +	if (WARN_ON_ONCE(READ_ONCE(kp->owner) != head))
-> +		return -EINVAL;
+kprobe_write_ctx progs can be abused to modify pt_regs of kprobe progs via
+tail calls. As in the test in patch #6, a kprobe prog can "regs->di = 0;"
+when it runs as a tail callee. Thus, bpf_prog_test_run_opts() gets -EFAULT
+instead of success.
 
-These two return paths don't drop 'new' before returning.  The
-verifier unconditionally releases the BPF program's reference to
-the new node via ref_convert_owning_non_owning() followed by
-release_reference(), so nobody holds a reference to it after this
-kfunc returns.
+call_get_func_ip progs could get a bogus func IP when they run as tail
+callees, because the tail caller does not prepare the func IP on the
+trampoline stack. As in the test in patch #6, it gets the RBX value on
+stack instead of the true func IP.
 
-In contrast, __bpf_list_add() always either inserts the node or
-drops it via __bpf_obj_drop_impl():
+call_session_cookie progs can modify the first arg value on the trampoline
+stack. As in the test in patch #6, bpf_prog_test_run_opts() also gets -EFAULT
+because the first arg is modified by "*cookie = 0;".
 
-    static int __bpf_list_add(...) {
-        if (cmpxchg(&node->owner, NULL, BPF_PTR_POISON)) {
-            __bpf_obj_drop_impl((void *)n - off, rec, false);
-            return -EINVAL;
-        }
-        tail ? list_add_tail(n, h) : list_add(n, h);
-        ...
-    }
+Links:
+[1] https://lore.kernel.org/bpf/20260130081208.1130204-1-jolsa@kernel.org/
 
-These early return paths should be unreachable because the
-verifier guarantees head is valid and the lock is held, but
-should the commit message be corrected to match the actual
-behavior, or should the early error paths also drop the node
-for consistency with __bpf_list_add()?
+Changes:
+v2 -> v3:
+* Address comment from bot+bpf-ci:
+  * Guard call_get_func_ip and call_session_cookie with "has_trampoline" for
+    BPF_MAP_OWNER_MATCH_FOR_INIT.
+* v2: https://lore.kernel.org/bpf/20260302150342.55709-1-leon.hwang@linux.dev/
 
-> +
-> +	if (cmpxchg(&kn->owner, NULL, BPF_PTR_POISON)) {
-> +		__bpf_obj_drop_impl((void *)n - off,
-> +			meta ? meta->record : NULL, false);
-> +		return -EINVAL;
-> +	}
-> +
-> +	list_add(n, p);
-> +	WRITE_ONCE(kn->owner, head);
-> +	return 0;
-> +}
+v1 -> v2:
+* Factor out bpf_map_owner_init() and bpf_map_owner_matches() helpers.
+* Drop the "call_session_is_return" case, because the "is_return" value is
+  always prepared for fsession progs.
+* Address comments from Alexei:
+  * Use bitfields like 'u32 jited:1;'.
+  * Reimplement selftests.
+* v1: https://lore.kernel.org/bpf/20260224154024.12504-1-leon.hwang@linux.dev/
 
+Leon Hwang (6):
+  bpf: Add fsession to verbose log in check_get_func_ip()
+  bpf: Factor out bpf_map_owner_[init,matches]() helpers
+  bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx
+    progs
+  bpf: Disallow !call_get_func_ip progs tail-calling call_get_func_ip
+    progs
+  bpf: Disallow !call_session_cookie progs tail-calling
+    call_session_cookie progs
+  selftests/bpf: Add tests to verify prog_array map compatibility
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ include/linux/bpf.h                           |   9 +-
+ kernel/bpf/core.c                             | 141 +++++---
+ kernel/bpf/verifier.c                         |   2 +-
+ .../selftests/bpf/prog_tests/tailcalls.c      | 319 ++++++++++++++++++
+ .../bpf/progs/tailcall_map_compatible.c       | 103 ++++++
+ 5 files changed, 524 insertions(+), 50 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_map_compatible.c
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22626485740
---===============8354238778473276078==--
+-- 
+2.52.0
+
