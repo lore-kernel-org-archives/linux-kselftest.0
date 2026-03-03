@@ -1,73 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33450374E55;
-	Tue,  3 Mar 2026 02:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022482D592C;
+	Tue,  3 Mar 2026 02:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772504544; cv=none; b=Wt3KlZweZf8RP3oTBXoqKHB7tzjj0YvJKIM9Iu0T6J7noGz0cjzyPoqukY1nxRqd2jq3DEDBFFZyhmamKQ19Luar3tSEJ8dPnsIsDrPykbDLjJJ9I62RtGO34pynIRrUyQ6LbFZv4NtWG/i2SiliQQqqU9giFSrGEy/BEdjSwiM=
+	t=1772504999; cv=none; b=tILfuDG3VcpC3ZyqCndkgy+Wc5e9KxWlHhrKFRCokZra2EEAgu06ivueF1AMSyovABOHHM6NpttLdxhGR/d2FTUmKdQY1varUVO7EmbFbuW2uIaL6sbEfczBxO0X2JM/RCSLnyq/JTXLwsZj3qJi6Q7TqoyqWpUKbkRbthYD1Vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772504544; c=relaxed/simple;
-	bh=FuRaYsMjsWLZvOk//t1aFOvZNRFRtW4K4jW4O/JqU04=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nOiWufr5Nnzgd8lKoUqpyZzBh7N6M0odhmJPG7dKggMbXUAaDOtJmh/tDFI87knxi/z6LT05xzedmqWYb8Ya0b5biqp29zXvOqfZXlQQTAV4zQ1V6za8ZLP3QxrEaEd4onhvvxnUJ+d2zl+ZpDiK6r1HNCdK9Lzj24kJeCSo6e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S4c03HEX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772504999; c=relaxed/simple;
+	bh=/tOQ2HuDjD7aN17fOyiiEDTO0lYnSLoDEoLqiVEPaAg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JvnjoV2XvpfUPO2R2xQpMCQf0n1qIG9ENJiZVTS/i64DdSizCJrZgkOYds9R95jHlRbnkcWEZUkuLzqfVWWOULs/6XEuNdlfaSxN6/x7Uj/tTBU5X6tqe72YNuKCL30gNAPnCo6stH8G+O4eWoz9UmnWZqyQQ7bG1fn+gosfUI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=EgAYVsr1; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4c03HEX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493D3C19423;
-	Tue,  3 Mar 2026 02:22:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772504543;
-	bh=FuRaYsMjsWLZvOk//t1aFOvZNRFRtW4K4jW4O/JqU04=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=S4c03HEXokUtHIW4O9wVWNYrPWhNl4tU4AGHNhFIejFgKY29R9cT0nC6D2NBTmclx
-	 5FcF4Je1jncW6Vzic2j4h6sX3NR+dvrZIhuZCe+uULrHTsBSml7D7Hg0a9wyC8IIcu
-	 u6Fw6C24m8DoiWKtOA9K0N2QdHW9MLA88TwGq9CF65mxLesblK7lYA5ecEjclj3wjO
-	 l7+gu6/Iiiqnt2iQpGkZjxXRr3wtR7OSVXUCiF7FKrh/8oG4NKHA0aG3YqswyTU8U6
-	 VV7nlsNf/MMlBmojvmZN3lxlMFXHXTSaX2LvA51dJULNa1LvMEH6El0K1rKYRnLR4Q
-	 BL1qsS6aGIJDQ==
-Date: Mon, 2 Mar 2026 18:22:22 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Dragos Tatulea <dtatulea@nvidia.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, dw@davidwei.uk,
- jdamato@fastly.com, asml.silence@gmail.com, io-uring@vger.kernel.org,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] selftests: drv-net: iou-zcrx: allocate
- hugepages for large chunks test
-Message-ID: <20260302182222.245a34d0@kernel.org>
-In-Reply-To: <f827a42a-be8d-46ea-a6f8-edf0f1ee1a26@nvidia.com>
-References: <20260227171305.2848240-1-kuba@kernel.org>
-	<20260227171305.2848240-4-kuba@kernel.org>
-	<f827a42a-be8d-46ea-a6f8-edf0f1ee1a26@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="EgAYVsr1"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1772504993; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=2erKEFBrqxpDhMmgJXq5L29fCKJE3QHK/tr2GnFKmvU=;
+	b=EgAYVsr1wVksMX4t9MJoe60CsWhsfxihUt6YtKqrZjX+Fp5RKjrSzmQuTz99577sK0/1rxmegD/B6g6+8e/Apfq7fl8oouNflkfiICeD+NSUOLx56mwz0Vw7VAbaCcz+UXsYqYH7JuyckZBSnmFmKYvKjT0SXUeEOxv0xipnxYk=
+Received: from localhost(mailfrom:yaoyuan@linux.alibaba.com fp:SMTPD_---0X-8D.fI_1772504992 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 03 Mar 2026 10:29:52 +0800
+Date: Tue, 3 Mar 2026 10:29:51 +0800
+From: Yao Yuan <yaoyuan@linux.alibaba.com>
+To: Kai Huang <kai.huang@intel.com>
+Cc: seanjc@google.com, pbonzini@redhat.com, shuah@kernel.org, 
+	shivankg@amd.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Yi Lai <yi1.lai@intel.com>
+Subject: Re: [PATCH v2] KVM: selftests: Increase 'maxnode' for guest_memfd
+ tests
+Message-ID: <m3f3qqqo5dtpiawv777umnkpsdg2edtf7jaioi5by7cq3hjutn@7zvlyamjfu7t>
+References: <20260302205158.178058-1-kai.huang@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260302205158.178058-1-kai.huang@intel.com>
 
-On Mon, 2 Mar 2026 16:16:38 +0100 Dragos Tatulea wrote:
-> > +    hp_file = "/proc/sys/vm/nr_hugepages"
-> > +    with open(hp_file, 'r+', encoding='utf-8') as f:
-> > +        nr_hugepages = int(f.read().strip())
-> > +        if nr_hugepages < 64:
-> > +            f.seek(0)
-> > +            f.write("64")
-> > +            defer(lambda: open(hp_file, 'w', encoding='utf-8').write(str(nr_hugepages)))
-> > +
-> >      single(cfg)
-> >      rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target} -x 2"
-> >      tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
-> >  
-> >      probe = cmd(rx_cmd + " -d", fail=False)
-> >      if probe.ret == SKIP_CODE:
-> > -        raise KsftSkipEx(probe.stdout)
-> > +        raise KsftSkipEx(probe.stdout.strip())
-> >    
-> While working on a similar fix I found that the probe here also requires a barrier.
+On Tue, Mar 03, 2026 at 09:51:58AM +0800, Kai Huang wrote:
+> Increase 'maxnode' when using 'get_mempolicy' syscall in guest_memfd
+> mmap and NUMA policy tests to fix a failure on one Intel GNR platform.
+>
+> On a CXL-capable platform, the memory affinity of CXL memory regions may
+> not be covered by the SRAT.  Since each CXL memory region is enumerated
+> via a CFMWS table, at early boot the kernel parses all CFMWS tables to
+> detect all CXL memory regions and assigns a 'faked' NUMA node for each
+> of them, starting from the highest NUMA node ID enumerated via the SRAT.
+>
+> This increases the 'nr_node_ids'.  E.g., on the aforementioned Intel GNR
+> platform which has 4 NUMA nodes and 18 CFMWS tables, it increases to 22.
+>
+> This results in the 'get_mempolicy' syscall failure on that platform,
+> because currently 'maxnode' is hard-coded to 8 but the 'get_mempolicy'
+> syscall requires the 'maxnode' to be not smaller than the 'nr_node_ids'.
+>
+> Increase the 'maxnode' to the number of bits of 'nodemask', which is
+> 'unsigned long', to fix this.
+>
+> This may not cover all systems.  Perhaps a better way is to always set
+> the 'nodemask' and 'maxnode' based on the actual maximum NUMA node ID on
+> the system, but for now just do the simple way.
 
-Hm, I'm not hitting this issue. Maybe because I'm testing in QEMU?
-If you can still repro after this series could you send a follow up?
+Reviewed-by: Yuan Yao <yaoyuan@linux.alibaba.com>
+
+>
+> Reported-by: Yi Lai <yi1.lai@intel.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=221014
+> Closes: https://lore.kernel.org/all/bug-221014-28872@https.bugzilla.kernel.org%2F
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+>
+> v1 -> v2:
+>  - Add 'Reported-by' and 'Closes" tags.  - Sean
+>  - Use BITS_PER_TYPE().  - Sean
+>  - Slightly simplify changelog to simply say "increase 'maxnode' to bits
+>    of 'nodemask'" to reflect the code better.
+>
+> ---
+>  tools/testing/selftests/kvm/guest_memfd_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+> index 618c937f3c90..cc329b57ce2e 100644
+> --- a/tools/testing/selftests/kvm/guest_memfd_test.c
+> +++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+> @@ -80,7 +80,7 @@ static void test_mbind(int fd, size_t total_size)
+>  {
+>  	const unsigned long nodemask_0 = 1; /* nid: 0 */
+>  	unsigned long nodemask = 0;
+> -	unsigned long maxnode = 8;
+> +	unsigned long maxnode = BITS_PER_TYPE(nodemask);
+>  	int policy;
+>  	char *mem;
+>  	int ret;
+>
+> base-commit: a91cc48246605af9aeef1edd32232976d74d9502
+> --
+> 2.53.0
+>
