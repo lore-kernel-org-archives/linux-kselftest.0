@@ -1,107 +1,174 @@
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022482D592C;
-	Tue,  3 Mar 2026 02:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B7D3D3B3;
+	Tue,  3 Mar 2026 02:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772504999; cv=none; b=tILfuDG3VcpC3ZyqCndkgy+Wc5e9KxWlHhrKFRCokZra2EEAgu06ivueF1AMSyovABOHHM6NpttLdxhGR/d2FTUmKdQY1varUVO7EmbFbuW2uIaL6sbEfczBxO0X2JM/RCSLnyq/JTXLwsZj3qJi6Q7TqoyqWpUKbkRbthYD1Vw=
+	t=1772505128; cv=none; b=kDen1lF2/wHnNLpwWkuRCOVGyNNq9t8Cgypsa/dfrA4PdrhuFIc/SP4fgFr2QzxvQ8rgT/WluhDd+KvyGbG9nkHNFbDPRQRbYhBz2cTGyvE/oi6S4/PYVhY0PEBN4hZ1O5fpNRI6saCIkCw+qEYG4bKCkW/TttZvYNUDFp5zUWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772504999; c=relaxed/simple;
-	bh=/tOQ2HuDjD7aN17fOyiiEDTO0lYnSLoDEoLqiVEPaAg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvnjoV2XvpfUPO2R2xQpMCQf0n1qIG9ENJiZVTS/i64DdSizCJrZgkOYds9R95jHlRbnkcWEZUkuLzqfVWWOULs/6XEuNdlfaSxN6/x7Uj/tTBU5X6tqe72YNuKCL30gNAPnCo6stH8G+O4eWoz9UmnWZqyQQ7bG1fn+gosfUI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=EgAYVsr1; arc=none smtp.client-ip=115.124.30.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1772505128; c=relaxed/simple;
+	bh=JzNrP9tvHInr9SBXJ9N7v1S9tT5FRYcssavAKfUhScQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Z3FCD6Iw4gvxmPE3QDp6916TtxSPVqIN2yZeuBzPxKp9fK6dbMkQUEbRHr5ASWVXfBPobZudtaP5MhF5HboGyoQuA5E7eNXcK53EgP2N4noQeR4+F85KjorVEHT6OEzayhUrenkuheI5fmJzFRR08we5Fvanfz25ncJ49faXlxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mCNKguod; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="EgAYVsr1"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1772504993; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=2erKEFBrqxpDhMmgJXq5L29fCKJE3QHK/tr2GnFKmvU=;
-	b=EgAYVsr1wVksMX4t9MJoe60CsWhsfxihUt6YtKqrZjX+Fp5RKjrSzmQuTz99577sK0/1rxmegD/B6g6+8e/Apfq7fl8oouNflkfiICeD+NSUOLx56mwz0Vw7VAbaCcz+UXsYqYH7JuyckZBSnmFmKYvKjT0SXUeEOxv0xipnxYk=
-Received: from localhost(mailfrom:yaoyuan@linux.alibaba.com fp:SMTPD_---0X-8D.fI_1772504992 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 03 Mar 2026 10:29:52 +0800
-Date: Tue, 3 Mar 2026 10:29:51 +0800
-From: Yao Yuan <yaoyuan@linux.alibaba.com>
-To: Kai Huang <kai.huang@intel.com>
-Cc: seanjc@google.com, pbonzini@redhat.com, shuah@kernel.org, 
-	shivankg@amd.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Yi Lai <yi1.lai@intel.com>
-Subject: Re: [PATCH v2] KVM: selftests: Increase 'maxnode' for guest_memfd
- tests
-Message-ID: <m3f3qqqo5dtpiawv777umnkpsdg2edtf7jaioi5by7cq3hjutn@7zvlyamjfu7t>
-References: <20260302205158.178058-1-kai.huang@intel.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mCNKguod"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=40
+	eoCfJYFRYAYBkfXxMoQX0zv97M5AIQLP2RZTzvyNs=; b=mCNKguodqfkbstEv45
+	PiqlpUdgGN0yXN3Rw4ON1AmgFghZcuuHhHoE5A3nHsEwDba/QUEOweHMwFrqtCwt
+	c4rzrD/AtNIxsTJbPtp2DKlzj5XVQMaU7M6k154wrU9Nz/9pOwwuuESMW2LmUGhB
+	A2ZE9ZW6HP32XroxzEsL8WAgI=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wA3AIH9R6ZpYLR8Ow--.535S2;
+	Tue, 03 Mar 2026 10:31:27 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: arighi@nvidia.com
+Cc: changwoo@igalia.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	shuah@kernel.org,
+	tj@kernel.org,
+	void@manifault.com,
+	yangfeng59949@163.com
+Subject: Re: [PATCH] selftests/sched_ext: Fix the incorrect logic validation
+Date: Tue,  3 Mar 2026 10:31:25 +0800
+Message-Id: <20260303023125.80568-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <aaWqNx-DDtzzSqW6@gpd4>
+References: <aaWqNx-DDtzzSqW6@gpd4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302205158.178058-1-kai.huang@intel.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wA3AIH9R6ZpYLR8Ow--.535S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWr1xKFW8Ww15JryxCr4DJwb_yoWruw4kpa
+	48ua9I9F1DtF13K3y2yr4ktrWFgwn3tan7uw4UJ3W3AF1kWF1xJr1kKr15W3s3ur4vkF1f
+	ZF1vgayxWF48A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JU3DGnUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzx8VjWmmR-8AzAAA3z
 
-On Tue, Mar 03, 2026 at 09:51:58AM +0800, Kai Huang wrote:
-> Increase 'maxnode' when using 'get_mempolicy' syscall in guest_memfd
-> mmap and NUMA policy tests to fix a failure on one Intel GNR platform.
->
-> On a CXL-capable platform, the memory affinity of CXL memory regions may
-> not be covered by the SRAT.  Since each CXL memory region is enumerated
-> via a CFMWS table, at early boot the kernel parses all CFMWS tables to
-> detect all CXL memory regions and assigns a 'faked' NUMA node for each
-> of them, starting from the highest NUMA node ID enumerated via the SRAT.
->
-> This increases the 'nr_node_ids'.  E.g., on the aforementioned Intel GNR
-> platform which has 4 NUMA nodes and 18 CFMWS tables, it increases to 22.
->
-> This results in the 'get_mempolicy' syscall failure on that platform,
-> because currently 'maxnode' is hard-coded to 8 but the 'get_mempolicy'
-> syscall requires the 'maxnode' to be not smaller than the 'nr_node_ids'.
->
-> Increase the 'maxnode' to the number of bits of 'nodemask', which is
-> 'unsigned long', to fix this.
->
-> This may not cover all systems.  Perhaps a better way is to always set
-> the 'nodemask' and 'maxnode' based on the actual maximum NUMA node ID on
-> the system, but for now just do the simple way.
+Hi Andrea,
 
-Reviewed-by: Yuan Yao <yaoyuan@linux.alibaba.com>
+On Mon, 2 Mar 2026 16:18:15 +0100, Andrea Righi wrote:
+> Hi Feng,
+> 
+> On Mon, Mar 02, 2026 at 04:41:30PM +0800, Feng Yang wrote:
+> > On Mon, 2 Mar 2026 08:47:17 +0100, Andrea Righi wrote:
+> > > On Mon, Mar 02, 2026 at 02:48:51PM +0800, Feng Yang wrote:
+> > > > From: Feng Yang <yangfeng@kylinos.cn>
+> > > > 
+> > > > When __COMPAT_scx_bpf_pick_idle_cpu_node selects an idle CPU,
+> > > > it reports that the CPU should be marked as busy.
+> > > > 
+> > > > Fixes: 5ae5161820e5 ("selftests/sched_ext: Add NUMA-aware scheduler test")
+> > > > Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> > > > ---
+> > > >  tools/testing/selftests/sched_ext/numa.bpf.c | 8 ++++----
+> > > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/sched_ext/numa.bpf.c b/tools/testing/selftests/sched_ext/numa.bpf.c
+> > > > index a79d86ed54a1..98423628b05c 100644
+> > > > --- a/tools/testing/selftests/sched_ext/numa.bpf.c
+> > > > +++ b/tools/testing/selftests/sched_ext/numa.bpf.c
+> > > > @@ -44,12 +44,12 @@ s32 BPF_STRUCT_OPS(numa_select_cpu,
+> > > >  	 */
+> > > >  	cpu = __COMPAT_scx_bpf_pick_idle_cpu_node(p->cpus_ptr, node,
+> > > >  					__COMPAT_SCX_PICK_IDLE_IN_NODE);
+> > > > -	if (cpu < 0)
+> > > > +	if (cpu < 0) {
+> > > >  		cpu = __COMPAT_scx_bpf_pick_any_cpu_node(p->cpus_ptr, node,
+> > > >  						__COMPAT_SCX_PICK_IDLE_IN_NODE);
+> > > > -
+> > > > -	if (is_cpu_idle(cpu, node))
+> > > > -		scx_bpf_error("CPU %d should be marked as busy", cpu);
+> > > > +		if (is_cpu_idle(cpu, node))
+> > > > +			scx_bpf_error("CPU %d should be marked as busy", cpu);
+> > > > +	}
+> > > 
+> > > No, this is not correct. The CPU returned by scx_bpf_pick_idle_cpu_node()
+> > > should be marked as busy at this point (bit is set in the idle cpumask),
+> > > essentially it has been reserved/allocated by the caller.
+> > 
+> > Okay, I misunderstood.
+> > The CI test of this patch (https://patchwork.kernel.org/project/netdevbpf/list/?series=1058866&state=*) 
+> > resulted in the error "CPU 0 should be marked as busy"(https://github.com/kernel-patches/bpf/actions/runs/22548310848/job/65314767856),
+> > but I don't see the connection between them that would cause this error. Could you explain why this happens?
+> 
+> The is_cpu_idle() test is going to be always a bit flaky in some cases,
+> for what I see we may have two races:
+> 
+> 1) if the first call to scx_bpf_pick_idle_cpu_node() returns a negative
+>    value, we fallback to "pick any CPU". Between selecting the CPU and
+>    checking if it's idle, the task running on the CPU may have released it,
+>    allowing the idle task to run and set the idle bit again.
+> 
+> 2) Even if the first scx_bpf_pick_idle_cpu_node() returns a cpu >= 0, that
+>    CPU might still execute a short-lived task, which then releases it and
+>    sets the idle bit again.
+> 
+> Given this, I think the most reliable approach is to remove the
+> is_cpu_idle() check here to avoid flakiness and instead implement something
+> along the lines of the following. What do you think?
 
->
-> Reported-by: Yi Lai <yi1.lai@intel.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=221014
-> Closes: https://lore.kernel.org/all/bug-221014-28872@https.bugzilla.kernel.org%2F
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
->
-> v1 -> v2:
->  - Add 'Reported-by' and 'Closes" tags.  - Sean
->  - Use BITS_PER_TYPE().  - Sean
->  - Slightly simplify changelog to simply say "increase 'maxnode' to bits
->    of 'nodemask'" to reflect the code better.
->
-> ---
->  tools/testing/selftests/kvm/guest_memfd_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-> index 618c937f3c90..cc329b57ce2e 100644
-> --- a/tools/testing/selftests/kvm/guest_memfd_test.c
-> +++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-> @@ -80,7 +80,7 @@ static void test_mbind(int fd, size_t total_size)
+That sounds like a good solution. 
+Do I still need to submit the patch for this new approach?
+
+Thanks,
+-Feng
+
+> Thanks,
+> -Andrea
+> 
+>  tools/testing/selftests/sched_ext/numa.bpf.c | 20 ++++----------------
+>  1 file changed, 4 insertions(+), 16 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/sched_ext/numa.bpf.c b/tools/testing/selftests/sched_ext/numa.bpf.c
+> index a79d86ed54a1b..209dacdbd117e 100644
+> --- a/tools/testing/selftests/sched_ext/numa.bpf.c
+> +++ b/tools/testing/selftests/sched_ext/numa.bpf.c
+> @@ -19,18 +19,6 @@ UEI_DEFINE(uei);
+>  
+>  const volatile unsigned int __COMPAT_SCX_PICK_IDLE_IN_NODE;
+>  
+> -static bool is_cpu_idle(s32 cpu, int node)
+> -{
+> -	const struct cpumask *idle_cpumask;
+> -	bool idle;
+> -
+> -	idle_cpumask = __COMPAT_scx_bpf_get_idle_cpumask_node(node);
+> -	idle = bpf_cpumask_test_cpu(cpu, idle_cpumask);
+> -	scx_bpf_put_cpumask(idle_cpumask);
+> -
+> -	return idle;
+> -}
+> -
+> s32 BPF_STRUCT_OPS(numa_select_cpu,
+>  		   struct task_struct *p, s32 prev_cpu, u64 wake_flags)
 >  {
->  	const unsigned long nodemask_0 = 1; /* nid: 0 */
->  	unsigned long nodemask = 0;
-> -	unsigned long maxnode = 8;
-> +	unsigned long maxnode = BITS_PER_TYPE(nodemask);
->  	int policy;
->  	char *mem;
->  	int ret;
->
-> base-commit: a91cc48246605af9aeef1edd32232976d74d9502
-> --
-> 2.53.0
->
+> @@ -44,12 +32,12 @@ s32 BPF_STRUCT_OPS(numa_select_cpu,
+>  	 */
+>  	cpu = __COMPAT_scx_bpf_pick_idle_cpu_node(p->cpus_ptr, node,
+>  					__COMPAT_SCX_PICK_IDLE_IN_NODE);
+> -	if (cpu < 0)
+> +	if (cpu < 0) {
+>  		cpu = __COMPAT_scx_bpf_pick_any_cpu_node(p->cpus_ptr, node,
+>  						__COMPAT_SCX_PICK_IDLE_IN_NODE);
+> -
+> -	if (is_cpu_idle(cpu, node))
+> -		scx_bpf_error("CPU %d should be marked as busy", cpu);
+> +		if (cpu < 0)
+> +			return prev_cpu;
+> +	}
+>  
+>  	if (__COMPAT_scx_bpf_cpu_node(cpu) != node)
+>  		scx_bpf_error("CPU %d should be in node %d", cpu, node);
+> 
+
