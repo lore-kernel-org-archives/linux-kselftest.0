@@ -1,267 +1,182 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA71260592;
-	Wed,  4 Mar 2026 13:19:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D287351C12;
+	Wed,  4 Mar 2026 13:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772630355; cv=none; b=qM50dVb26f19a/eViJacqbiaXnOrOX2U6mSBRqSndWWqsPLU3kHXvrf4iPXRfGnXncqm0sdopJXY4qQvPXMpFb/esehlwSMcN9l5RZqKh608sU1HP7VOOWzZSwjWFmqCZNuzFN8SvqDLKt/k83c7x3yW0zFIvaeV9w0KVPEn0T8=
+	t=1772630777; cv=none; b=D367NN2EEMpoK1EdS0HZVj0Nz9vhWnXl9AeNAzu4qzpcFPxCybX3E0KospeUIE1bmJQFTwYJl+xs4xyt8epJIX5TjaQGzXCw4231JsBwih68YglESiuD+xM+I5K4CHcweq3NEBtinK+iYIOsfCq+8yvrt1lg4Ir94JVmw0Q5FlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772630355; c=relaxed/simple;
-	bh=iO9teAmlJC4dUs2VeHJVVKZOS0flR2zqooYmkpkZims=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pa0nWuKXK4aS6wG98d56NJo8ARpW8w1HX8rpd72D/cTqPM6WLr+ptgqaB5cFdEglBJHmsk0hT52LlaRAQu+bhdT45Ltqsxo9cG28Da7OBgUFyHuzgJuAmZgRvq4GAGPMFGtW2kVDdqlG5v2cFGz9TWgNIvSvZqInvtlpx10FGP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NBycilZh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772630777; c=relaxed/simple;
+	bh=be80xrXFvqsj4B2KiGyXnFiziheG6DObQtQoTIVQ0lg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ce9Nu0JpIGSxliSj4klkYvPxmWDM/8LKnevJz6UUc2nxPXa+gLvSkHlxuet1+D36AHixc+V0gnloTnoNnFm7hYoWTp6lW9dyznjj/qb8P//WF/sg6fZTbhiMEgHBcwNdUwwMt+6kE+ibgi6m/oedx0rW68UAh/PUkfcdGd38A54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mDwbmgrl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NBycilZh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527C0C2BC9E;
-	Wed,  4 Mar 2026 13:19:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mDwbmgrl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259DBC19423;
+	Wed,  4 Mar 2026 13:26:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772630355;
-	bh=iO9teAmlJC4dUs2VeHJVVKZOS0flR2zqooYmkpkZims=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NBycilZh4WQO0JA7EPpRslcT5gNMaR8Q3BygT4jSh/T4S7/yTLOknpQayaecjXz7y
-	 40eE7UKGjbHCUtuBlUMkAxBidZxx1Z84n009moi5oIZoulXRtKcuAuA0n0PfTKCuey
-	 JEq+aBi+Kk8hGlssJ9bK9GIxSsXhOj/JKTPP/EM/7NKSPkp+jIdV1+A0qBT1xePBB2
-	 Vl2kzksllToQOPLWLZoVnY3rZNqk8jNhDKf2P8SMPJ4THzRCU/w2ci10nRmkO7D42F
-	 cZrdnIgowPweqUkHLm3LRKOnFqTBm1q2bPIThDq5A+IeUhk7KI3+4lo+zNZaljUxBy
-	 J/NtbmBhpkiUQ==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To: Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next v2 3/3] selftests: rss_drv: Add RSS indirection table resize tests
-Date: Wed,  4 Mar 2026 14:18:53 +0100
-Message-ID: <20260304131855.3225539-4-bjorn@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260304131855.3225539-1-bjorn@kernel.org>
-References: <20260304131855.3225539-1-bjorn@kernel.org>
+	s=k20201202; t=1772630776;
+	bh=be80xrXFvqsj4B2KiGyXnFiziheG6DObQtQoTIVQ0lg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mDwbmgrlU4thinihsg5IwRF4mQMzvYn7gpVOH906/ciACr3TYYPgMhYz0zthqSDxl
+	 bDVRTlEkxEFPvnJ+UfzmECyMWbs2yz2CNlxEXPBA+owV6SKnV5Pjv2T6u/gqJnfy1A
+	 2s6udaDINTw3Qq3dln22jdTHETSD1wWkwnKIGJ7n8GHESQf/ImR5T++Lw+Dsgw9KBf
+	 XmPmT5G6xpWvULmkkdC7VZxcSbcjbeCD+R8sNYy1PpmJZWGHygYvmI+AUkkgHQOZqa
+	 nqFphxQLD5ZRdpDzDB+iT4ZltnSCNnQkuqJ5IFiw7ju8XiYZ0xQtg6ldzIW9CZA9xf
+	 iQMRA5UGqnULw==
+Date: Wed, 4 Mar 2026 14:26:11 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: jack@suse.cz, Tejun Heo <tj@kernel.org>, 
+	"T.J. Mercier" <tjmercier@google.com>, gregkh@linuxfoundation.org, driver-core@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] kernfs: Send IN_DELETE_SELF and IN_IGNORED
+Message-ID: <20260304-glasig-amtieren-5010757246ae@brauner>
+References: <20260220055449.3073-3-tjmercier@google.com>
+ <aZh-orwoaeAh52Bf@slm.duckdns.org>
+ <CAOQ4uxjgXa1q-8-ajSBwza-Tkv91tFP-_wWzCQPW+PwJMehEWA@mail.gmail.com>
+ <aZi6_K-pSRwAe7F5@slm.duckdns.org>
+ <CAOQ4uxjZZSRBwZ2ZL31juAUu0-sAUnPrJWvQuJ2NDaWZMeq0Fg@mail.gmail.com>
+ <aZju-GFHf8Eez-07@slm.duckdns.org>
+ <CAOQ4uxgzuxaLt2xs5a5snu9CBA_4esQ_+t0Wb6CX4M5OqM5AOA@mail.gmail.com>
+ <aZx_8_rJNPF2EYgn@slm.duckdns.org>
+ <20260224-hetzen-zeitnah-a3e1e08367cc@brauner>
+ <CAOQ4uxhSL3ZRzNjM6AM_poxeTsYgWb5_f3tO6_4ketg8sFSOBw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxhSL3ZRzNjM6AM_poxeTsYgWb5_f3tO6_4ketg8sFSOBw@mail.gmail.com>
 
-Add resize tests to rss_drv.py. Devices without dynamic table sizing
-are skipped via _require_dynamic_indir_size().
+On Tue, Mar 03, 2026 at 03:27:52PM +0100, Amir Goldstein wrote:
+> On Tue, Feb 24, 2026 at 12:03 PM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Mon, Feb 23, 2026 at 06:27:31AM -1000, Tejun Heo wrote:
+> > > (cc'ing Christian Brauner)
+> > >
+> > > On Sat, Feb 21, 2026 at 06:11:28PM +0200, Amir Goldstein wrote:
+> > > > On Sat, Feb 21, 2026 at 12:32 AM Tejun Heo <tj@kernel.org> wrote:
+> > > > >
+> > > > > Hello, Amir.
+> > > > >
+> > > > > On Fri, Feb 20, 2026 at 10:11:15PM +0200, Amir Goldstein wrote:
+> > > > > > > Yeah, that can be useful. For cgroupfs, there would probably need to be a
+> > > > > > > way to scope it so that it can be used on delegation boundaries too (which
+> > > > > > > we can require to coincide with cgroup NS boundaries).
+> > > > > >
+> > > > > > I have no idea what the above means.
+> > > > > > I could ask Gemini or you and I prefer the latter ;)
+> > > > >
+> > > > > Ah, you chose wrong. :)
+> > > > >
+> > > > > > What are delegation boundaries and NFS boundaries in this context?
+> > > > >
+> > > > > cgroup delegation is giving control of a subtree to someone else:
+> > > > >
+> > > > > https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/tree/Documentation/admin-guide/cgroup-v2.rst#n537
+> > > > >
+> > > > > There's an old way of doing it by changing perms on some files and new way
+> > > > > using cgroup namespace.
+> > > > >
+> > > > > > > Would it be possible to make FAN_MNT_ATTACH work for that?
+> > > > > >
+> > > > > > FAN_MNT_ATTACH is an event generated on a mntns object.
+> > > > > > If "cgroup NS boundaries" is referring to a mntns object and if
+> > > > > > this object is available in the context of cgroup create/destroy
+> > > > > > then it should be possible.
+> > > > >
+> > > > > Great, yes, cgroup namespace way should work then.
+> > > > >
+> > > > > > But FAN_MNT_ATTACH reports a mountid. Is there a mountid
+> > > > > > to report on cgroup create? Probably not?
+> > > > >
+> > > > > Sorry, I thought that was per-mount recursive file event monitoring.
+> > > > > FAN_MARK_MOUNT looks like the right thing if we want to allow monitoring
+> > > > > cgroup creations / destructions in a subtree without recursively watching
+> > > > > each cgroup.
+> > > >
+> > > > The problem sounds very similar to subtree monitoring for mkdir/rmdir on
+> > > > a filesystem, which is a problem that we have not yet solved.
+> > > >
+> > > > The problem with FAN_MARK_MOUNT is that it does not support the
+> > > > events CREATE/DELETE, because those events are currently
+> > >
+> > > Ah, bummer.
+> > >
+> > > > monitored in context where the mount is not available and anyway
+> > > > what users want to get notified on a deleted file/dir in a subtree
+> > > > regardless of the mount through which the create/delete was done.
+> > > >
+> > > > Since commit 58f5fbeb367ff ("fanotify: support watching filesystems
+> > > > and mounts inside userns") and fnaotify groups can be associated
+> > > > with a userns.
+> > > >
+> > > > I was thinking that we can have a model where events are delivered
+> > > > to a listener based on whether or not the uid/gid of the object are
+> > > > mappable to the userns of the group.
+> > >
+> > > Given how different NSes can be used independently of each other, it'd
+> > > probably be cleaner if it doesn't have to depend on another NS.
+> > >
+> > > > In a filesystem, this criteria cannot guarantee the subtree isolation.
+> > > > I imagine that for delegated cgroups this criteria could match what
+> > > > you need, but I am basing this on pure speculation.
+> > >
+> > > There's a lot of flexibility in the mechanism, so it's difficult to tell.
+> > > e.g. There's nothing preventing somebody from creating two separate subtrees
+> > > delegated to the same user.
+> >
+> > Delegation is based on inode ownership I'm not sure how well this will
+> > fit into the fanotify model. Maybe the group logic for userns that
+> > fanotify added works. I'm not super sure.
+> >
+> > > Christian was mentioning allowing separate super for different cgroup mounts
+> > > in another thread. cc'ing him for context.
+> >
+> > If cgroupfs changes to tmpfs semantics where each mount gives you a new
+> > superblock then it's possible to give each container its own superblock.
+> > That in turn would make it possible to place fanotify watches on the
+> > superblock itself. I think you'd roughly need something like the
+> > following permission model:
+> >
+> 
+> It's hard for me to estimate the effort of changing to multi sb model,
+> but judging by the length of the email I trimmed below, it does not
+> sound trivial...
+> 
+> How do you guys feel about something like this patch which associates
+> an owner userns to every cgroup?
+> 
+> I have this POC branch from a long time ago [1] to filter all events
+> on sb by in_userns() criteria.  The semantics for real filesystems
+> were a bit difficult, but perhaps this model can work well for these
+> pseudo singleton fs.
+> 
+> I am trying to work on a model that could be useful for both cgroupfs
+> and nsfs:
+> 
+> If user is capable in userns, user will be able to set an sb
+> watch for all events (say DELETE_SELF) on the sb, for objects
+> whose owner_userns is in_userns() of the fanotify listener.
+> 
+> This will enable watching for torn down cgroups and namepsaces
+> which are visible to said user via delegated cgroups mount
+> or via listns().
+> 
+> I would like to allow calling fsnotify_obj_remove() hook with
+> encoded object fid (e.g. nsfs_file_handle) instead of the vfs inode,
+> so that cgroupfs/nsfs could report dying objects without needing
+> to associate a vfs inode with them.
+> 
+> WDYT? Is this an interesting direction to persure?
 
-resize_periodic: set a periodic table (equal 4), shrink channels to
-fold, grow back to unfold. Check the exact pattern is preserved. Has
-main and non-default context variants.
-
-resize_nonperiodic_reject: set a non-periodic table (equal N), verify
-that channel reduction is rejected.
-
-Signed-off-by: Björn Töpel <bjorn@kernel.org>
----
- .../selftests/drivers/net/hw/rss_drv.py       | 163 +++++++++++++++++-
- 1 file changed, 159 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/rss_drv.py b/tools/testing/selftests/drivers/net/hw/rss_drv.py
-index 2d1a33189076..9763760f8306 100755
---- a/tools/testing/selftests/drivers/net/hw/rss_drv.py
-+++ b/tools/testing/selftests/drivers/net/hw/rss_drv.py
-@@ -5,9 +5,9 @@
- Driver-related behavior tests for RSS.
- """
- 
--from lib.py import ksft_run, ksft_exit, ksft_ge
--from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx
--from lib.py import defer, ethtool
-+from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge
-+from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, ksft_raises
-+from lib.py import defer, ethtool, CmdExitFailure
- from lib.py import EthtoolFamily, NlError
- from lib.py import NetDrvEnv
- 
-@@ -45,6 +45,18 @@ def _maybe_create_context(cfg, create_context):
-     return ctx_id
- 
- 
-+def _require_dynamic_indir_size(cfg, ch_max):
-+    """Skip if the device does not dynamically size its indirection table."""
-+    ethtool(f"-X {cfg.ifname} default")
-+    ethtool(f"-L {cfg.ifname} combined 2")
-+    small = len(_get_rss(cfg)['rss-indirection-table'])
-+    ethtool(f"-L {cfg.ifname} combined {ch_max}")
-+    large = len(_get_rss(cfg)['rss-indirection-table'])
-+
-+    if small == large:
-+        raise KsftSkipEx("Device does not dynamically size indirection table")
-+
-+
- @ksft_variants([
-     KsftNamedVariant("main", False),
-     KsftNamedVariant("ctx", True),
-@@ -76,11 +88,154 @@ def indir_size_4x(cfg, create_context):
-         _test_rss_indir_size(cfg, test_max, context=ctx_id)
- 
- 
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_periodic(cfg, create_context):
-+    """Test that a periodic indirection table survives channel changes.
-+
-+    Set a non-default periodic table ([3, 2, 1, 0] x N) via netlink,
-+    reduce channels to trigger a fold, then increase to trigger an
-+    unfold. Using a reversed pattern (instead of [0, 1, 2, 3]) ensures
-+    the test can distinguish a correct fold from a driver that silently
-+    resets the table to defaults. Verify the exact pattern is preserved
-+    and the size tracks the channel count.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+
-+    # Set a non-default periodic pattern via netlink
-+    rss = _get_rss(cfg, context=ctx_id)
-+    orig_size = len(rss['rss-indirection-table'])
-+    pattern = [3, 2, 1, 0] * (orig_size // 4)
-+    req = {'header': {'dev-index': cfg.ifindex}, 'indir': pattern}
-+    if ctx_id:
-+        req['context'] = ctx_id
-+    else:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+    cfg.ethnl.rss_set(req)
-+
-+    # Shrink — should fold
-+    ethtool(f"-L {cfg.ifname} combined 4")
-+    rss = _get_rss(cfg, context=ctx_id)
-+    indir = rss['rss-indirection-table']
-+
-+    ksft_ge(orig_size, len(indir), "Table did not shrink")
-+    ksft_eq(indir, [3, 2, 1, 0] * (len(indir) // 4),
-+            "Folded table has wrong pattern")
-+
-+    # Grow back — should unfold
-+    ethtool(f"-L {cfg.ifname} combined {ch_max}")
-+    rss = _get_rss(cfg, context=ctx_id)
-+    indir = rss['rss-indirection-table']
-+
-+    ksft_eq(len(indir), orig_size, "Table size not restored")
-+    ksft_eq(indir, [3, 2, 1, 0] * (len(indir) // 4),
-+            "Unfolded table has wrong pattern")
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_nonperiodic_reject(cfg, create_context):
-+    """Test that a non-periodic table blocks channel reduction.
-+
-+    Set equal weight across all queues so the table is not periodic
-+    at any smaller size, then verify channel reduction is rejected.
-+    An additional context with a periodic table is created to verify
-+    that validation catches the non-periodic one even when others
-+    are fine.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+    ctx_ref = f"context {ctx_id}" if ctx_id else ""
-+
-+    # Create an extra context with a periodic (foldable) table so that
-+    # the validation must iterate all contexts to find the bad one.
-+    extra_ctx = _maybe_create_context(cfg, True)
-+    ethtool(f"-X {cfg.ifname} context {extra_ctx} equal 2")
-+
-+    ethtool(f"-X {cfg.ifname} {ctx_ref} equal {ch_max}")
-+    if not create_context:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    with ksft_raises(CmdExitFailure):
-+        ethtool(f"-L {cfg.ifname} combined 2")
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_nonperiodic_no_corruption(cfg, create_context):
-+    """Test that a failed resize does not corrupt table or channel count.
-+
-+    Set a non-periodic table, attempt a channel reduction (which must
-+    fail), then verify both the indirection table contents and the
-+    channel count are unchanged.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+    ctx_ref = f"context {ctx_id}" if ctx_id else ""
-+
-+    ethtool(f"-X {cfg.ifname} {ctx_ref} equal {ch_max}")
-+    if not create_context:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    rss_before = _get_rss(cfg, context=ctx_id)
-+
-+    with ksft_raises(CmdExitFailure):
-+        ethtool(f"-L {cfg.ifname} combined 2")
-+
-+    rss_after = _get_rss(cfg, context=ctx_id)
-+    ksft_eq(rss_after['rss-indirection-table'],
-+            rss_before['rss-indirection-table'],
-+            "Indirection table corrupted after failed resize")
-+
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ksft_eq(channels['combined-count'], ch_max,
-+            "Channel count changed after failed resize")
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
-     with NetDrvEnv(__file__) as cfg:
-         cfg.ethnl = EthtoolFamily()
--        ksft_run([indir_size_4x], args=(cfg, ))
-+        ksft_run([indir_size_4x, resize_periodic,
-+                  resize_nonperiodic_reject,
-+                  resize_nonperiodic_no_corruption], args=(cfg, ))
-     ksft_exit()
- 
- 
--- 
-2.53.0
-
+I'd need to see the patches. I barely remember the details tbh.
+It doesn't sound crazy though.
