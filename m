@@ -1,103 +1,154 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DFD35B62D
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 22:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5427537EFF4
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 23:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772663462; cv=none; b=urzTqQtpuBUS6RpbSNBXgVJ4hrxA92FfW2OC6jtPWAUTaAx6LKr2R3DLk/HqTl2Sic0EwYVkolbbXo2wqeyKvBl+JWS5ubalrUkoOlaKGecdrjV3LcSXAKKBVdgzE/Bl9tdGbXiquf0+7sy4ah9Iw4ZGaaTHRGcShGBMe0ZTTEU=
+	t=1772665621; cv=none; b=lwixN05UZlqWQQCjlmXHhUj9UQhBNFtgFKfqPby9u8hTSkhEibsBUDU+FDY4SsLIThhM1fBS5jjYd7KiSttk/KZnN6QXktLbIn97gKptzITUkdOi2X0sH7f0O44t/jgthG+66llLv1f8lw6W14mEMaTVAbqYM+vXD0KreGRdi+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772663462; c=relaxed/simple;
-	bh=3b0QgQI2KwZHXszgh9/7axf/lYL7GsCs8HcBmenTR2M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=asNskGpXYJ3E4AdSxklXP/skXkfyXAKrUasdNijNORGPhwzlzutlXUBuz+vJOqPHZ2FiXqVdz6yPfXpMzNl8lpsMA5/Gur25OhX8Z7+Q+8i4laH1XhYSy12CSxqX2Czja9w2H6hGvE+baMA5kJVoaW67HSG4SVjF7CPykyQAOFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vD2i5SMu; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1772665621; c=relaxed/simple;
+	bh=b1elnpjfkBu0JtZAehyeYhD042b+cAawq85lNBLyT3c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ITY+PjPTRF73jxoDbu2nUDQJY5K3rs3IoRPLB1mnYuXyjj/w6/r7ZKqqEU9YyId0/CYFNrWV5SUi2DeIEDnvIVvNpFkpmBhd6J7QpRDapWNyAxexy4UGSozfC/ROkB1XolAsSoGHL/V3zksJb0LiDJ50Bh93/P8F2HhU8hha4zM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=TZ0KtWAO; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vD2i5SMu"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ae613edd6dso9626405ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 14:31:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="TZ0KtWAO"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-48373a4bca3so46009355e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 15:07:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772663461; x=1773268261; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V3fTU8QManykyH146Geu+QI8WoaA0wZ9bvU2xLy47ZE=;
-        b=vD2i5SMurNFacnyzJMrYluFl7ycNVV6Eo9At/6AlHbmgLGPU4tYAMO97Gw/nDUu4vK
-         qUVNnCjghISReLonASix0SJG8NZ3ppTTxyMPs2JdZZqjmkvjNhFYSAPP61SwgRS9BO5J
-         bdUIHPP5Jfwcz8J/Oqbxdqyu05KBU8Ss6uVLfUEVQ0DAotIUB2gIP0n3ugqCnWRvZxH4
-         uMI99FXZgX3pbJyOOu8QF4MnR8FfJ2jRSk2N29Omd+Y4XWqbW0gd7eQFxsX5bllGJvHh
-         rqnGj+iAKSSz2PQCB6dC5fS8WPbUMPhcRpeTcWKz20/YzpVBWZqsw1x5ebr7g2gJXZ4B
-         uLHg==
+        d=openvpn.net; s=google; t=1772665619; x=1773270419; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t44rK9xj38qm5oEm33J69u0Wi1Wb9BeJbAg95YLqBNo=;
+        b=TZ0KtWAOKH3JRvmgaYhg2VA7d6viZ+iycsKIgseKOoY36ZW/6zLNsyLBRW/6Ge92P9
+         vmeC59gom+aSJ0VB4/OzFcEvrDQ8BdvZ3hlDQrdgnZ+5IxPU9hcGeF1K6p5wESt5tfLa
+         Bwj9D/Z2Qmm2EdhVEY33nU8jlTsVbskMouOlEdLXqrqTJCWaUTOCvf6tGbvpRPFREImP
+         eSqmJBAHmLWW5Ss9LsijQ3hvLIBSCWq1zaaJlP9JGxI5Tqbo9XsVXcKPZR/4KGlLfaE0
+         Btlos0BOHmLQ9eYENvoRnDGUn2IUGoU8mWoRCLRcRoUc2rnd4QPbq5/NgjLxECCZ7I2p
+         mU+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772663461; x=1773268261;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V3fTU8QManykyH146Geu+QI8WoaA0wZ9bvU2xLy47ZE=;
-        b=iHb9SAUHcHwWe7qZgZhcGeHCwAd2dhV/crsF8MyyYj9YORl+M5d8DXQTuD0WJRoEG1
-         6IlXN1yTAVx+w6v555ArEVNnSD8MtluijpG+t/5SsaQuFihAM7JCxlQg1rWbGgqXDxrE
-         24ycmZesn1pUnzWCoc1kqP42iEUPGCQifmqL46ahyp73ZtNiie8jVibKMkFQ8fnHNEjy
-         TVlmTQnnhjg2ahbwAhXJXTjYnZyTsfhvk8R88NdGcbmAT9FmJ25BB8TB4349fBJdpPRe
-         WXnvlc8GizUJG206B+10mitcMCoSxd4/oqQD7Pa2lM94cmC2eW8qfPdObiJxW8PZznWu
-         +B3w==
-X-Forwarded-Encrypted: i=1; AJvYcCVkLyqp7r/MzltJaCTmTazxbC1p/gZjG3J/162a79Exf+oV0JJ21sKaK+cb76wLGioo8zGAKY5AjeIkhQGQU20=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQHCSXic7s6yxszopgqK+V16r2Oe9agyAre9d78Nw8uM9jThYM
-	CwD2yH/+TA1ECu27JRrR0NQzciwMFQyvOBC6kgfNoUNkxlx023OOVTXaQ6CYMpJNnA==
-X-Gm-Gg: ATEYQzxn68snc3+yKj6c5QXIw6gHOeZTGk4q9P8ZUqj552yCmo0l+nnb/1mmXlEoLSe
-	FaVIeUICVuFh2EderyxSGl7az+bowwK21c+yJFRgv/Kmnp7i2d1XFqRRWaHQ0yNkOC+eSSam2N6
-	BW4UwivoKyNLPIJ931CIPyK3aQ9hDE5tAMnQkyjiUOuEFIOUJb36wljGESdzG1OXwkyboSzytlR
-	l/prgnrrPPUD1UNHKt6FTXW65BbSGL14ggP/CQ6sAo82K9FVE8DY5hXmj9KE8kHGhOAWgv10gpy
-	E/it6hCD+bf177f7pLiufy6QHKGyTcQUY5MvtOj+0VgO0CU5u4DvlsjJ8AFZrJ53zbO2NY/cF4p
-	yVR2NG9OIPNkLaVM6Z3zjKi28k6mq+QPcDPxKh19FxdA6yx4C+cfd0NUWR36l6UZM+lcenCyyJq
-	yxDr+xqSegGScsh8jWmFIShNYpDfgO/3YcsDDWh0A0asAJisbUrb97QG+ubdOBRQ==
-X-Received: by 2002:a17:902:e790:b0:2ae:6457:309a with SMTP id d9443c01a7336-2ae6aaf3d37mr32457385ad.37.1772663460415;
-        Wed, 04 Mar 2026 14:31:00 -0800 (PST)
-Received: from google.com (239.23.105.34.bc.googleusercontent.com. [34.105.23.239])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae4cd40e4dsm108183855ad.92.2026.03.04.14.30.59
+        d=1e100.net; s=20230601; t=1772665619; x=1773270419;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=t44rK9xj38qm5oEm33J69u0Wi1Wb9BeJbAg95YLqBNo=;
+        b=MLCLAV3ni03e81IOweNkkL09FUVvnUSlmIfBeBIXdS3WE2QsqjZIVPZkA5FZYRorQl
+         xsuVvA5uDswn6X9FABkEZRb7KG9Oir77zMIgrXApNZTRhUeViDJ3Qvny8gtZushTT75Z
+         VWsJ++yeNdN6/m+Uqg/LGk3N+5h1aMoQXhuI3qE8xCBu6ntJgib9L9eUYwsDfoz/y2X8
+         7Orp0/HVfrUetbKtc4ED0mhEKjObr7Jx0CplAyY4yYZPBminHcr6soS2IRMZI1hGEStb
+         FLUfKsyrk37mkeTSyz+JPjhvFoQ+cjSMHcMIm3KHye/tgjJcwF120O41kWiMHq2T/Sq+
+         jWrw==
+X-Forwarded-Encrypted: i=1; AJvYcCVblXaOR6/eO8drno3/+lZCVjBc21X9c2ZIyyF5LY5oDBmulDvCIgblfIZ0a7k7xIbGDBfjAtiFpxy73X+Jm44=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLKmSrktMVWG2ClY1mBBY+xMC0BO37rCMTCeHgS8EbVWVHc5X8
+	csVKLvLMxTGMEb5aveSA6QCNx97HcKv7O7DY/fyQKhPJhKWoHE4djrnFa81uCNYOOWmQHTe2FvE
+	6/n8qGu/LhPo9FTlCHw/go9+TPBt2oLAVC6HlrU6NCjDdWptIhK9dyGWgl9+kJ9o=
+X-Gm-Gg: ATEYQzx/It45lH3Mg4PgYSYVDSrS1J5g+1KJpStpGOeIhy2rLrnb31qkWVf2II0zJx2
+	nltsDe2pXA2sfWfN4pcipMPeAdTiBYsfPHSCF1ykZ7YI++TRIM8wMlO6KaGWSFcvCgOIftGAnF/
+	69MrJxL3XxMaN63GyZZs8RLDoMrH1PyAL1GEzG5PJGL6ap2mMQ73h83qwyrp3WkWibPBgoCmLMD
+	t7lYM4sHzMLPdj4nlThI/CPt/pStWGoRjuleUi3bnMkUIFwsvwE2yEsmgSdxCMF8A295Ejz42tp
+	wvDy2d2lb8LM7kSg6AfKlrPyDafysQx/JCb6BWORO/CkmXRrJhsI6y/uQ61lT6pzflMSwQ5nUjg
+	8NmB/uxsVEDKZQA0dDqz87IY3fM7iYGO9ZN2LlL8ddW47mpTHMe8FRGPIRHNJbf6sSSVS4+eBMJ
+	XJAZgu+cle61B3oaiUyTWhA2jGv00qIk0wT8o=
+X-Received: by 2002:a05:600c:35d4:b0:483:1403:c47f with SMTP id 5b1f17b1804b1-48519826fb8mr57114595e9.6.1772665618750;
+        Wed, 04 Mar 2026 15:06:58 -0800 (PST)
+Received: from inifinity.mandelbit.com ([2001:67c:2fbc:1:880:4d86:fc53:5d46])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485187caf9fsm87713475e9.7.2026.03.04.15.06.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 14:30:59 -0800 (PST)
-Date: Wed, 4 Mar 2026 22:30:55 +0000
-From: David Matlack <dmatlack@google.com>
-To: Alex Mastro <amastro@fb.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vfio: selftests: fix crash in vfio_dma_mapping_mmio_test
-Message-ID: <aaiyn8ZtRwOiQvfB@google.com>
-References: <20260303-fix-mmio-test-v1-1-78b4a9e46a4e@fb.com>
+        Wed, 04 Mar 2026 15:06:58 -0800 (PST)
+From: Antonio Quartulli <antonio@openvpn.net>
+To: netdev@vger.kernel.org
+Cc: Antonio Quartulli <antonio@openvpn.net>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	horms@kernel.org
+Subject: [PATCH net-next 1/9] selftests: ovpn: allow compiling ovpn-cli.c with mbedtls3
+Date: Thu,  5 Mar 2026 00:06:19 +0100
+Message-ID: <20260304230643.1014-2-antonio@openvpn.net>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260304230643.1014-1-antonio@openvpn.net>
+References: <20260304230643.1014-1-antonio@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260303-fix-mmio-test-v1-1-78b4a9e46a4e@fb.com>
+Content-Transfer-Encoding: 8bit
 
-On 2026-03-03 11:46 AM, Alex Mastro wrote:
-> Remove the __iommu_unmap() call on a region that was never mapped.
-> When __iommu_map() fails (expected for MMIO vaddrs in non-VFIO
-> modes), the region is not added to the dma_regions list, leaving its
-> list_head zero-initialized. If the unmap ioctl returns success,
-> __iommu_unmap() calls list_del_init() on this zeroed node and crashes.
-> 
-> This fixes the iommufd_compat_type1 and iommufd_compat_type1v2
-> test variants.
-> 
-> Fixes: 080723f4d4c3 ("vfio: selftests: Add vfio_dma_mapping_mmio_test")
-> Signed-off-by: Alex Mastro <amastro@fb.com>
-> ---
-> The bug was missed because the test was originally run against a kernel
-> without commit afb47765f923 ("iommufd: Make vfio_compat's unmap succeed
-> if the range is already empty"). Without that fix, the unmap ioctl
-> returned -ENOENT, taking the early return before list_del_init().
+mbedtls 3 installs headers and calls the shared object
+differently than version 2, therefore we must now rely
+on pkgconfig to fill the right C/LDFLAGS.
 
-Thanks for the fix.
+Moreover the mbedtls3 library expects any base64 file to
+have their content on one line.
+Since this change does no break older versions,
+let's change the sample key file format and make mbedtls3
+happy.
 
-Looking back I remember testing your new test out without seeing a
-failure. Turns out I had applied it on top of tag vfio-v6.19-rc1, which
-did not have commit afb47765f923.
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: horms@kernel.org
+Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+---
+ tools/testing/selftests/net/ovpn/Makefile   | 14 ++++++++++----
+ tools/testing/selftests/net/ovpn/data64.key |  6 +-----
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+diff --git a/tools/testing/selftests/net/ovpn/Makefile b/tools/testing/selftests/net/ovpn/Makefile
+index dbe0388c8512..d3a070db0bb5 100644
+--- a/tools/testing/selftests/net/ovpn/Makefile
++++ b/tools/testing/selftests/net/ovpn/Makefile
+@@ -2,19 +2,25 @@
+ # Copyright (C) 2020-2025 OpenVPN, Inc.
+ #
+ CFLAGS = -pedantic -Wextra -Wall -Wl,--no-as-needed -g -O0 -ggdb $(KHDR_INCLUDES)
++CFLAGS += $(shell pkg-config --cflags mbedcrypto-3 mbedtls-3 2>/dev/null)
++
+ VAR_CFLAGS = $(shell pkg-config --cflags libnl-3.0 libnl-genl-3.0 2>/dev/null)
+ ifeq ($(VAR_CFLAGS),)
+ VAR_CFLAGS = -I/usr/include/libnl3
+ endif
+ CFLAGS += $(VAR_CFLAGS)
+ 
++MTLS_LDLIBS= $(shell pkg-config --libs mbedcrypto-3 mbedtls-3 2>/dev/null)
++ifeq ($(MTLS_LDLIBS),)
++MTLS_LDLIBS = -lmbedtls -lmbedcrypto
++endif
++LDLIBS += $(MTLS_LDLIBS)
+ 
+-LDLIBS = -lmbedtls -lmbedcrypto
+-VAR_LDLIBS = $(shell pkg-config --libs libnl-3.0 libnl-genl-3.0 2>/dev/null)
++NL_LDLIBS = $(shell pkg-config --libs libnl-3.0 libnl-genl-3.0 2>/dev/null)
+ ifeq ($(VAR_LDLIBS),)
+-VAR_LDLIBS = -lnl-genl-3 -lnl-3
++NL_LDLIBS = -lnl-genl-3 -lnl-3
+ endif
+-LDLIBS += $(VAR_LDLIBS)
++LDLIBS += $(NL_LDLIBS)
+ 
+ 
+ TEST_FILES = common.sh
+diff --git a/tools/testing/selftests/net/ovpn/data64.key b/tools/testing/selftests/net/ovpn/data64.key
+index a99e88c4e290..d04febcdf5a2 100644
+--- a/tools/testing/selftests/net/ovpn/data64.key
++++ b/tools/testing/selftests/net/ovpn/data64.key
+@@ -1,5 +1 @@
+-jRqMACN7d7/aFQNT8S7jkrBD8uwrgHbG5OQZP2eu4R1Y7tfpS2bf5RHv06Vi163CGoaIiTX99R3B
+-ia9ycAH8Wz1+9PWv51dnBLur9jbShlgZ2QHLtUc4a/gfT7zZwULXuuxdLnvR21DDeMBaTbkgbai9
+-uvAa7ne1liIgGFzbv+Bas4HDVrygxIxuAnP5Qgc3648IJkZ0QEXPF+O9f0n5+QIvGCxkAUVx+5K6
+-KIs+SoeWXnAopELmoGSjUpFtJbagXK82HfdqpuUxT2Tnuef0/14SzVE/vNleBNu2ZbyrSAaah8tE
+-BofkPJUBFY+YQcfZNM5Dgrw3i+Bpmpq/gpdg5w==
++jRqMACN7d7/aFQNT8S7jkrBD8uwrgHbG5OQZP2eu4R1Y7tfpS2bf5RHv06Vi163CGoaIiTX99R3Bia9ycAH8Wz1+9PWv51dnBLur9jbShlgZ2QHLtUc4a/gfT7zZwULXuuxdLnvR21DDeMBaTbkgbai9uvAa7ne1liIgGFzbv+Bas4HDVrygxIxuAnP5Qgc3648IJkZ0QEXPF+O9f0n5+QIvGCxkAUVx+5K6KIs+SoeWXnAopELmoGSjUpFtJbagXK82HfdqpuUxT2Tnuef0/14SzVE/vNleBNu2ZbyrSAaah8tEBofkPJUBFY+YQcfZNM5Dgrw3i+Bpmpq/gpdg5w==
+-- 
+2.52.0
+
