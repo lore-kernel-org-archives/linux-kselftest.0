@@ -1,218 +1,136 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011061.outbound.protection.outlook.com [52.101.62.61])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C26E37E30F;
-	Wed,  4 Mar 2026 09:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772615804; cv=fail; b=DH45EoUgBNDjBEhYe4viOzR18mBT8DzrZXzlL3hUAnUEN/XJQdVqx79aY0A1Zlikytij5vgm5zoBBdBRW1OSh5fXAoWR20tA3/AIMFE2xUTynAUfVBqssqAYPHp5N3PwaAMFmjEQdRnTuEFj8ruR2s4ab5IQaRCnwbVW+xd5Hxs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772615804; c=relaxed/simple;
-	bh=pRW97H8+MS6ohsnATXtQXaXCYMEKMl9AyvzDvcbF9Lo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=JqVeU+XVcytHlnvav0L/017h6x2ADR5ckkUP8XXUTdgsS2Za5e0uZLqQCUS2EBtVWJEsmo4luVJlkigWaYRhTmMiKPK8GFQ2P951bsngKL9VHtO+xRuBn3GeP4CGKEQk2U8dYKP1MfwXbnGqfzFuNRx9AvOpPK11O1aaKnNXfgE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=gepErHvZ; arc=fail smtp.client-ip=52.101.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673E5372675;
+	Wed,  4 Mar 2026 09:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772616147; cv=none; b=MCCZhwz79frlkYjY8Vpvd+Jq4zTT57sMBpByixL46LSwO0rwCqbQ/ChZRSS0HJ+y3NqZUuwO9cPZ2/tyBG+BxWlnfdDIjLcAimC87hW+Uww36apEJbT91+FAChGno4FsQSrvfQcMsKlmbiY9wpCowLIHP//BCJwIHqGPDxPqbLA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772616147; c=relaxed/simple;
+	bh=l0lWwdxWORqLXsJM6tbxvmdK9uvSDQhvLoF0Kob8MYE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dmt/uiKgjDJPL9Yn0hjn97RFNYYHLhrxOGvmE8qvx7tKZRfaqUBbwBjRMpEKWYMxjLRduFstZxocPPO1Mq5q/dshkyzgTJuQ+cOyeUy11RiHoRYQYeQvi5pEu8P02uvmYaVvmqd6QEp5epPBKz0KSiIPihuQMDCHHrxDDLMpNF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jotPM3cx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="gepErHvZ"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SRZpUF9Ba3d06+Ht4eq3i6YbWIJ7O8nDbfL+b4EWc3wLDBgsq8iYejy9k//aIVkhZ8fE0SPCwH8U6kElr03jfoW1D3uOuJH2vQlzzpJxSEPp22elOqAgolJlhSGiXlbrNKjg36ICX/yg/uHJGFEGuzP2WwQyfWOWBgJUI1tAGPMdYGniwegqbzPe74rGqk+8iuaUfN8QIKynxALmupcAvVU1/A47nEv8Wd8D1JTeNfZCOgV4tq9J2cxpo6aI3aJipewrUX+8xfxr/Na2gRsPS/356/3cvnDoLEUS6e1Izm94AYPQqrb4PGgIMuQencmLYNqyIffTdYIBVq7yMaNxNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e0IFaYjdFsiaHebJKVJsA3o2ChyEDVnpRm5LRTx5kPY=;
- b=ERkhU4d8SWipRtwsUQz/o4BS59Z8wcOjv5eP+MmDjyP4vzmipS3FzsPkjouVYmiYi5fgfw/eZ5EIFezWMWBM0vQYyp6D759d6wo0IlkqgB4pv700/i+fabVvQbLEZ2IP6lFVhOzBYn2bOmEcpVZPOzjwBKkk8t5wCxKo4uisXDWf6U0eqrexXfKk1wS7CL0SUURMpmAyYczZtNMJyDM2Waq2W5Gxu8TdAeKlr8Z2NZ2ZKxMMzvo/g9UydVbyhyvytJRgtwUEfxU61IpVSdTCYg9kob0uwLVCOSG+F97YwjJmZ+ZpycGJEwrmHBakqThn5gbJIX9MEp5N2P/C93fEtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e0IFaYjdFsiaHebJKVJsA3o2ChyEDVnpRm5LRTx5kPY=;
- b=gepErHvZFOFzWCQRtI2ESzz4F8JEjNo0ewQBlKN/4fkqlIrXvZe5/H74sWOm07aouipXkxFXDSFGHenfl1hDCmsK12yllxUr7gQCFN+wnimsXq1Y7dBD/RnMezio2JGglO7cglWHz6cInPjpNik3+ljT+6xCDM4GvfwhXT6HGc7mW2hH1YLstOK6kx/G2A9uEZRruFqmny40gmdwcJPmQnH0GQDw2pQhLJuRut82P2NXPuMYmqQSZnu8qXt5UvI+c9YPBs8rfouKmt8oSm76xXYevjayz0U+ZoYiBngNpmQ2+Qs2gEMbNsbmA1WA+K6XA4F2fg/DynYvQz5lDkxgGA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
- by SJ5PPFFA661D690.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::9ab) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Wed, 4 Mar
- 2026 09:16:39 +0000
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f]) by DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f%5]) with mapi id 15.20.9654.022; Wed, 4 Mar 2026
- 09:16:39 +0000
-Date: Wed, 4 Mar 2026 11:16:30 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, jiayuna.chen@linux.dev, jiayuna.chen@shopee.com,
-	Jiayuan Chen <jiayuan.chen@shopee.com>,
-	syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v3 1/2] net: ipv6: fix panic when IPv4 route
- references loopback IPv6 nexthop
-Message-ID: <20260304091630.GA1054438@shredder>
-References: <20260303031318.339716-1-jiayuan.chen@linux.dev>
- <20260303031318.339716-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260303031318.339716-2-jiayuan.chen@linux.dev>
-X-ClientProxiedBy: TL2P290CA0010.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:2::8)
- To DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jotPM3cx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82230C19423;
+	Wed,  4 Mar 2026 09:22:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772616147;
+	bh=l0lWwdxWORqLXsJM6tbxvmdK9uvSDQhvLoF0Kob8MYE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=jotPM3cx/9O4URnSkY8s/5fK1deaT6YQ5CqP+kM9WZUdfTXfXoZPM1fAfxobUk9wu
+	 lekW0CvG1MyBE9imhkba0vcjYml+XHqe5kJ0CyU5nUs2oN0JQJ2LDWCaxC06Zdqow1
+	 uKeWQEyhN2wZdM7KhOXrVu03yqa7pSud0YBxX/2AsIxcT1qu3Xiphok2omuQ1E8OUl
+	 adpzL3pT2Y6kDAyerLt7CO6kGf3ySVP9WirmQqg5z7kS45V/srf51GTX7Fi436QPea
+	 VqYXvCoe5/mBsPsMKn1g2Lpr1gT8xSRTyjPODe3dDN/pcR5zUPS/QZGADNlGGMxYJx
+	 dXdciIMH8y0Dg==
+Message-ID: <af805e55-4372-4c76-8afa-e78c623d50eb@kernel.org>
+Date: Wed, 4 Mar 2026 10:22:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB7900:EE_|SJ5PPFFA661D690:EE_
-X-MS-Office365-Filtering-Correlation-Id: df46179f-04e1-4fc6-ab58-08de79cebe10
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	xPcjYtdlO4OGR7q3QZt5O3xVSzyvMfWFvJMxOq7YyFf8qHYTlvM3PJlN0s9BnXZrK2ZlbQFdwXvILZ2bH0rBa69h3jIjnoIfXaWo/+IiuveQb1nWaUROKURrMl+Kdeg7JlfssewDwAeAQcsemyHRPjuXFtzjbK0OdpUyDUGVy2xvuclTINN4+S82apblzK1xlOIecK3dmb+HUMJ/CNaZ6+3U+L5gEgRWWGdhBWNb9e+bDf3oTTAhyqqGCUzSMQHjpZQP+emp1ROtKcz0rvrbgsf+v+gWaPDGibsWm9WaGFO1JRfpSEJ4RIU7NYv3faFSGODtU1KRbYfgMmCoWY9cJl6ZPwBU6GP2XlItxascN6Z+6jgwGmRhElqW3Gnp+llz/VzhlvwQm2McawAr6IB4wWMBvLefMJUB9fJuvjIugMuN70R36iTlK7V2btEjz6g5RrLaog2J2dFxsCnOhb7Nr73DTm1E+wx2TcpUw9NGZKWvmK7pHALGMe04AwTBYQ2y43MnGj/6BanKyPQxW/xIu+d92vQRXvWP4QrkZWowuVkh+XqQyyGIC2VyHSjQaK+tPRiDob1VRRTW0cYzXc/WeKFmI1P4kdStD5xpuy5kFnvNL65GR1jMrsgdMShwqNYz3unlmdKqeOISG3VRB+EOYe/c+CwqOq+YaLpSLuzEC7iGJvbEYuCfuHVHGCyFAs7ONvukcHVlNgrYVWVHT3rxRyl2n4BAAVgw/AUo7NiODwE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?enEVN6TSRRERM/amPlBkwXwOJ0te6QN7gShgxObwFBShg/6AklfgfGGZ4lbD?=
- =?us-ascii?Q?Xo5SK+pMzdLVefKnqs4zVFDxq+Ku58Y/QfoEdNi143+LW0YW7zdgDwc7bBAK?=
- =?us-ascii?Q?HZvxtTA1rSagEQx2/4BLyPO0FG8//4KbBbXA0iO2LRkYnMxpVqjGpI3fWOL9?=
- =?us-ascii?Q?0gde+i1k3sEwg3ECLSQnDS+XBVgez4cpSzQXPBe718Lxk8xmhRS8CzVFoDjR?=
- =?us-ascii?Q?HNKdPfizpiPBmWnOrPwCjrxB7ShpoyX3Z5fQIprEwUQEJXgehR4pXAdaQasu?=
- =?us-ascii?Q?fLqnf30Ayn0l5ruXPvFDyQVMdPuJCbCwuuHKi07GtCxaxYDRCLJ+SEMgbteu?=
- =?us-ascii?Q?E7PZ58XGcoXiXD8nUzdo4JuIRaD6MtFlxIrw2A8AVUWuu8DEEKyvb9C2qw/6?=
- =?us-ascii?Q?UVYB344cPQeMNh+SIER9zm7BBrfQOUwjMRWhMVjp6AtQlm2aE3U3dSN6l/Ff?=
- =?us-ascii?Q?9Y/iGZd/kyYPMYeufLj6HnP7v0NPROuDk52aNYH6BrL9eo0P4c++1mkTUyvc?=
- =?us-ascii?Q?ydjL1pmTFxVLFbju7MOP2o3Ju6G6sz/apfSIX46UFJ3Vy+1SogVscNGd+H7S?=
- =?us-ascii?Q?l2svWpEz96M/UFsyCB+Hsf+r/jiKnKgjne115UL7gzRsqV4qV0Mx5kYXxo6y?=
- =?us-ascii?Q?m1iXO91qjSP2Eldwr8eFUftKWbE82Z4LPsCfV/h6H+ptPvl4X3jNbliP5nsl?=
- =?us-ascii?Q?I9lmSLwO7d4rIAHSW3T7FCc1kuKCD8Plhg2wf779we8yOVZZfKko/bBLgClN?=
- =?us-ascii?Q?fHinWTuHAu6ChofHb90sV31Q5Q7CugnWGVlhQxC1mRy+TZKom9DbCBGKvFKV?=
- =?us-ascii?Q?xB6lPHTcTIK6mlr050H1JUqonCR66V/mLOiXAi8acLDDuCQAge4BCVZ1ZjI2?=
- =?us-ascii?Q?DraVS3lDEZnkf1qwB5LOSNdRRpx+oV/uPrawHnkGQNuGtxRy8iSU4Ef4j/Eq?=
- =?us-ascii?Q?6ergVEC2qYrz/C/wTS89vKeWGeKivo5R/xsfnguFzreBPIMyzvCQNKyCzScu?=
- =?us-ascii?Q?pgyKwqrpiHeErNTBJQ1iiUJw94RwEu12ZmUljE04Vv5N0AWA1zIZ/3RdVKvr?=
- =?us-ascii?Q?tCnnHhweHS1PabhEO1SmT7rNoam+Mkh/sQgW+oydVcW+FaxPLlwh8eahff4R?=
- =?us-ascii?Q?9M0BB05B5AbAICZrzWENkTfnwmgPNdw5j82Dv7X0/uC6/zSWupz7wxi6Fov8?=
- =?us-ascii?Q?gHaYuocfo+kDIahKrBs8M0tiBDvLgKTMtzr+VU8n/9O7x39geXF2cymTfyvF?=
- =?us-ascii?Q?pkrmXyu3f8KPBqprvQjxDtpW8vaTd8wKueklPw8ifh3I4+ViC7RRppXHGPC4?=
- =?us-ascii?Q?JWMnV4YedAPwRIqASgeR5C34mZQFMyYQP37lUzO0AMDmu2ZMKWUCMwBCU6zt?=
- =?us-ascii?Q?ts5ALIxVahHpNBOaULgYKIYrIrexHiCEqL9SUbEGhXS+4bCDNUP2r/Q+9r8/?=
- =?us-ascii?Q?cz3WK3nybKyBKZr3xFVmB+ev7rbCCvcgy6exnk2cgFhuYg5zhK/nouTQadq3?=
- =?us-ascii?Q?/hI/IciaAurysWRGBuhmP9aAyrHVYnv0E6t5SyNP0JNxLp1t+o0auj/WtAi3?=
- =?us-ascii?Q?sBWAdw/xg92KGVXHj2GhbJ6IdzIBQIXd60Gecboiar2h3eZMgahAKkqLGG4+?=
- =?us-ascii?Q?nJXxzEDp0P/CG98X9wDxDbqn6CyAdoSiLyOjbr1d3gBYd7rSvRoqEmIzNFOu?=
- =?us-ascii?Q?p5e9nu+jXUFOhshwSZWiAncJ5VFkF2KJoBjwo/vlhXcu60uQr0cDf3UQTm0U?=
- =?us-ascii?Q?acm8YhnfgA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df46179f-04e1-4fc6-ab58-08de79cebe10
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7900.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2026 09:16:39.3943
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P23sC+MeoHbt9J2YVi9k2yZ7x+9efgTnhE/fhBj7mzkvsvInj7/LAM0Hsx/dppCUp+XUmOHuhyydar0wSlVXbg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPFFA661D690
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 4/5] mptcp: pm: in-kernel: always mark signal+subflow
+ endp as used
+Content-Language: en-GB, fr-BE
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20260303-net-mptcp-misc-fixes-7-0-rc2-v1-0-4b5462b6f016@kernel.org>
+ <20260303-net-mptcp-misc-fixes-7-0-rc2-v1-4-4b5462b6f016@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
+ YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
+ c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
+ WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
+ CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
+ nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
+ TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
+ nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
+ VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
+ 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
+ YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
+ AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
+ EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
+ /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
+ MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
+ cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
+ iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
+ jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
+ 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
+ VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
+ BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
+ ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
+ 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
+ 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
+ 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
+ mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
+ Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
+ Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
+ Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
+ x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
+ V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
+ Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
+ HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
+ 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
+ Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
+ voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
+ KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
+ UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
+ vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
+ mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
+ JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20260303-net-mptcp-misc-fixes-7-0-rc2-v1-4-4b5462b6f016@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Code looks fine, but see a few comments below
+Hello,
 
-On Tue, Mar 03, 2026 at 11:13:14AM +0800, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> 
-> When a standalone IPv6 nexthop object is created with a loopback device
-> (e.g., "ip -6 nexthop add id 100 dev lo"), fib6_nh_init() misclassifies
-> it as a reject route. This is because nexthop objects have no destination
-> prefix (fc_dst=::), causing fib6_is_reject() to match any loopback
-> nexthop. The reject path skips fib_nh_common_init(), leaving
-> nhc_pcpu_rth_output unallocated. If an IPv4 route later references this
-> nexthop, __mkroute_output() dereferences NULL nhc_pcpu_rth_output and
-> panics.
-> 
-> Simplify the check in fib6_nh_init() to only match explicit reject
-> routes (RTF_REJECT) instead of using fib6_is_reject(). The loopback
-> promotion heuristic in fib6_is_reject() is handled separately by
-> ip6_route_info_create(). After this change, the three cases behave as
-> follows:
+On 03/03/2026 11:56, Matthieu Baerts (NGI0) wrote:
+> Syzkaller managed to find a combination of actions that was generating
+> this warning:
+(...)
 
-s/ip6_route_info_create/ip6_route_info_create_nh/
-
-> 
-> 1. Explicit reject route ("ip -6 route add unreachable 2001:db8::/64"):
->    RTF_REJECT is set, enters reject path, skips fib_nh_common_init().
->    No behavior change.
-> 
-> 2. Implicit loopback reject route ("ip -6 route add 2001:db8::/32 dev lo"):
->    RTF_REJECT is not set, takes normal path, fib_nh_common_init() is
->    called. ip6_route_info_create() still promotes it to reject afterward.
-
-Same here
-
->    nhc_pcpu_rth_output is allocated but unused, which is harmless.
-> 
-> 3. Standalone nexthop object ("ip -6 nexthop add id 100 dev lo"):
->    RTF_REJECT is not set, takes normal path, fib_nh_common_init() is
->    called. nhc_pcpu_rth_output is properly allocated, fixing the crash
->    when IPv4 routes reference this nexthop.
-> 
-> Suggested-by: Ido Schimmel <idosch@nvidia.com>
-> Fixes: 7dd73168e273 ("ipv6: Always allocate pcpu memory in a fib6_nh")
-
-AFAICT, even before this commit fib_nh_common_init() would be skipped for
-nexthop objects that use the loopback device as their nexthop device. I
-suggest blaming the commit that allowed user space to configure IPv4
-routes with nexthop objects:
-
-493ced1ac47c ("ipv4: Allow routes to use nexthop objects")
-
-> Reported-by: syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/698f8482.a70a0220.2c38d7.00ca.GAE@google.com/T/
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> ---
->  net/ipv6/route.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-> index c0350d97307e..fb588a351609 100644
-> --- a/net/ipv6/route.c
-> +++ b/net/ipv6/route.c
-> @@ -3582,7 +3582,6 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
->  	netdevice_tracker *dev_tracker = &fib6_nh->fib_nh_dev_tracker;
->  	struct net_device *dev = NULL;
->  	struct inet6_dev *idev = NULL;
-> -	int addr_type;
->  	int err;
+> diff --git a/net/mptcp/pm_kernel.c b/net/mptcp/pm_kernel.c
+> index b5316a6c7d1b..b2b9df43960e 100644
+> --- a/net/mptcp/pm_kernel.c
+> +++ b/net/mptcp/pm_kernel.c
+> @@ -418,6 +418,15 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
+>  	}
 >  
->  	fib6_nh->fib_nh_family = AF_INET6;
-> @@ -3624,11 +3623,10 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
->  
->  	fib6_nh->fib_nh_weight = 1;
->  
-> -	/* We cannot add true routes via loopback here,
-> -	 * they would result in kernel looping; promote them to reject routes
-> +	/* Only check RTF_REJECT, not fib6_is_reject(): the loopback
-> +	 * promotion heuristic is handled by ip6_route_info_create().
+>  exit:
+> +	/* If an endpoint has both the signal and subflow flags, but it is not
+> +	 * possible to create subflows -- the 'while' loop body above never
+> +	 * executed --  then still mark the endp as used, which is somehow the
+> +	 * case. This avoids issues later when removing the endpoint and calling
+> +	 * __mark_subflow_endp_available(), which expects the increment here.
+> +	 */
 
-Same here (FTR, I suggested a different comment in [1])
+Regarding the AI review [1], I don't think the comment should be more
+precise by stating each case where the 'while' loop body is not
+executed: such comment would easily get outdated when the conditions are
+modified, and we forget to update it. The commit message explains the
+conditions which are used today, but might change later. Also, the
+endpoint is considered as used, not to create a subflow, but to signal
+it in this strange specific case that probably only syzbot will use.
 
->  	 */
-> -	addr_type = ipv6_addr_type(&cfg->fc_dst);
-> -	if (fib6_is_reject(cfg->fc_flags, dev, addr_type)) {
-> +	if (cfg->fc_flags & RTF_REJECT) {
->  		/* hold loopback dev/idev if we haven't done so. */
->  		if (dev != net->loopback_dev) {
->  			if (dev) {
-> -- 
-> 2.43.0
-> 
+[1]
+https://netdev-ai.bots.linux.dev/ai-review.html?id=addc1ffd-bcde-4ce7-80a5-306564dde16f
 
-[1] https://lore.kernel.org/netdev/20260302082551.GA814377@shredder/
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
+
