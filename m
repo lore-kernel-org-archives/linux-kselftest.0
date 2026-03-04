@@ -1,131 +1,142 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2A43D34B8
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 18:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772649463; cv=pass; b=oMukhWtN2lKXeLAa349WmpLkaRaPVTF/4NxZnkguUDAM5TewT5H59yySRbW1afX3tfToB57YQ7YsByeXHSpJMHOaA6Z9kBtZtb6jWi+OUKU/9daiesFaagXnNyfk0ojPGSAYP7IBf8FDIL5CkmSny7Li1R2BdlJgew5rMtURRSA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772649463; c=relaxed/simple;
-	bh=0MAhsQztQctAeKwrF4Xh8Tv+ZEx/NHMxtMK7pSDmIW0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ntGUEp7OnzWBX3aVlpzM/r0oCt9FdTcP4GzCsclUZxJamyVJQvsLia1WinGwviVPwMpallqQVnsFguCJ7klFSXlwnWDojV99oUo0EUVJcbsTPY9VObohODMBheSqP0gbzvgnt0T9NVcS9o1xxDz/lCjr3spBJ7riQU3v02xC3ZU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qxubPyUn; arc=pass smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D313DBD4D;
+	Wed,  4 Mar 2026 19:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772651455; cv=none; b=IQNLBnnJVFJkt8vMY7Tp4pLwmAzoKfAG/JWjY+JaYPshGSlcmA5bqvyBgKJD1Vnl0F8uQSUUi9w2rwaBOZZOUaflpwiy+ydGbAvsVVTxoJ5N9dMQ0WrNy8c+uTbVWpMGZN0fiwk9WnAb+tn8JlZQ2y73D7Cr9sWm3ALILprxEbI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772651455; c=relaxed/simple;
+	bh=DShci9XokdZ/NSZG3qSKubY4POB9Zt7DHcGtyJIHcyU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U/lWY08JPcKKG0irSbPwSZbW5kQkG4fnRJiEBVHTrusjuWrTI45rEsqZmvC7VDXuCuEustAn9UCPtuvpKdb7nmNmswJfm0SDSqfLM5i7WCZJPGqPLmJZavjt+GXpUtSewulWuBMD5Y+/EE6ZH8IGtW5fJxvGRQYQ+PkKxiQAsnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=LvnJ1DXX; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qxubPyUn"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-65fe2d2b744so1265a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 10:37:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772649459; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MhBjjdnSR7xxBqA9n8TLSXuvJfUrzmEkXpgLzkkHDKNiVQChnW0wg9Kcu/P5R5bp+E
-         RZdYbV0kmX5m585jGEeceucCK+523xBYOzhITwj73NADwe076cFMi9Ik7fheVoNJPmjw
-         RXvnKnOWrP8AaRNKgLaGCJ6aWUZO71Hh28sEuOZk8r1CZ5NOe3pem/HF36i2Qit3KhIM
-         I2FdJH/w/kJtosgQjN0a1Cswky8xW+0MT1GIiCPMirNhZ5H/M9qJHOiuMsAAAAS6bPA4
-         tp3c0mUHXQlCYNXxFZwSD4Jslp691TBMJzEY66gOAi22JOhwmP1y1zYw1/EsuEz3ILzk
-         GaNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qyg7JiALUhnTVHTDoz+Wh3a71GEFMfJh5eqsvim4jwM=;
-        fh=f2d4CL+ULjroGgQNT3hMP6GY0FkBEMLcirLqucJHMLw=;
-        b=InWn+rAKb2EEJCOohBzeSRaW7IMz29Rrwf0B58ljDMQ9esQz/lMnvKQpfqX89PbycP
-         YArGHuyNZVvtbSgnZpbaKMEycmRdJdUNO8oDvTXfdYnj0qmB7JacdvDWwRpO5AB7l/lC
-         0CozrAUCSC6A9foFA+xLl0pRqOttcfaLVsoLnBgRMJSXOk+hJvi3onYwZxOdIG4GSav0
-         w32yLUqas/ri++SrfqFUQJcDo5mLAa3QyKvA3UVTe7t7fv1Hm1itfo/58opTRvX9i8WA
-         bc6P+87Rv1VzxdzZAQIrEkQ1t4CJgg26kZRJE13UXyWvp14iWh/wnVJdnUpvWRWECCqe
-         8OJQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772649459; x=1773254259; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qyg7JiALUhnTVHTDoz+Wh3a71GEFMfJh5eqsvim4jwM=;
-        b=qxubPyUnFnbLLaAU23PpztVoNAuXiam5j/NDJOMku8iIKyTbHYROy3ykiQrB6F9wMj
-         P0nYgvo2c33VhCcxQHlzgUD1XZyRQluRbAe50J/mx7xFL/5X7M5RiWp+esE9/D7Kk1li
-         GRcG0tQZTWrMCL0iaKcZdXagKWnQ7+8OIeB++ydCJJoSHXFAUAOETmO4lTykwS8/+o5d
-         yXlB+W3BcqAcXABZ6iWUJk8bsXJa0yfNFCAqFA5YTEP5LW9CtIKMSCL1HM1PE0I6WNQB
-         rLXqRVPCoRcElg4Wa17eVThd13/aDGiuu7ESK77fychFd+C2PP7VjVksZWqcxVGS6W0Q
-         c5Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772649459; x=1773254259;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qyg7JiALUhnTVHTDoz+Wh3a71GEFMfJh5eqsvim4jwM=;
-        b=R3xaKT1sBr+V4P0j5bxooYwTR+MRurlK1BdcNB4BiLWaC9rUrdzic1Rb7zSS4GqnpQ
-         9wQOIrNUoTFryk0CM1TIO0KB3Q71OxxRCl0Bmu9DccEw5HHJqZlNBmMCllwLgF3JxIB7
-         DdEQ2WBSxIust5SdTxYK3eyt3fLO0P66EHo/fMgMKUIDLe5jXVjMKdMjjmF8YNSuSNph
-         6wf41bkxmXGZialSc+dBKnt8te7DYAsX/zcb00IYkSBO4D2SpjojHRO7CP+WJQ2A8Vvs
-         cu8fdZGyT1UDDObgfRhk4Ct87puU1aLA7wNhk5FjQL/qCYJxX68HWQqwWgFtTOwAvuv4
-         4cKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUT9PCAEjujftAK6B2ukBc5VJrJXTiZ5Nbp3debrmex/1zb53IifLBHqRiuYC01c0h8gXDBtsC/fffll4x3ipo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyt4ErUhagDgwGq2+yuM8Njjwv2uQvQdCONe8zZyBp2l4VQwGy0
-	eaCfWDUobq+K7p3lIB2wPpItSBHUO3bMR12VKc/z7oEz5VhIv2YwuL0Hin7SzBlsYQ98I3Ufkox
-	qhWFvZdkOul78i8it5wqwXYI19JlB6YWPFAjuwBnR
-X-Gm-Gg: ATEYQzy0oV1ZV7sn3vTdt5HRkSixxgEykNnwqr0nfG+F/qD2hLv4lfatnniScPOujc7
-	ftwzYz8bu64VN6qTUkIhLp9byMVgl2ZYHCqvFqmTFWUO+201W+3azVmovUCKYc/9WGoz1z0Tc/u
-	oLZAFqSIIOZflJfUXMSyMitvMeYqNNwU42W0tnmiLYY7r+j7gMR6+U8dCuvCjz4e27AssZl75+G
-	AHxHQ70DriApzijuwkkA3XhIAU6qVFNNRVXbd+RjNvlxL04LDN+GwBBwAzewuZaO1tYuibUcA5A
-	HD1QpHmJLS9SU8Lh3w==
-X-Received: by 2002:a05:6402:11c7:b0:65f:76c8:b92f with SMTP id
- 4fb4d7f45d1cf-6612a7ac28bmr49817a12.0.1772649458305; Wed, 04 Mar 2026
- 10:37:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="LvnJ1DXX"
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 624IstYf4087897;
+	Wed, 4 Mar 2026 11:10:39 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=4VIoQUgKhaCGNe4dOfVc
+	ABTgqAfP4dCv/z5W44lfqe0=; b=LvnJ1DXXPIQPBEK4aDif/Zf6xd9c6MzqZ+9t
+	F4ciYZOnZ4PPACxtaaiRpI8zIJ6Wn6rPxgDVKZt8I/h2N8voaPrrMm374DfMSTcW
+	PVUJ1/xHOxwl6M6Y8hgjiTDKS5AhNwLCWNB/+RED6+ytmp90yHLti3IjA9EDwscr
+	hm0a961arDytLHD4ak+xyffhXZmYZ0dZ1FGFhjs+EffJRQHx52U+zZNokW3xJQRG
+	mPMopPKPMU0VfRfNpP9ootyLz9qr/0BTZvzle+zQAWr+1ob5LPc31VwnSp6HRkxG
+	iGmRF6xRN2d28kxbKhK+gsgeL+hloVnv9wHPqRXQxG9XYCYhiA==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4cp9sktute-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 04 Mar 2026 11:10:39 -0800 (PST)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Wed, 4 Mar 2026 19:10:38 +0000
+Date: Wed, 4 Mar 2026 11:10:34 -0800
+From: Alex Mastro <amastro@fb.com>
+To: Yao Yuan <yaoyuan@linux.alibaba.com>
+CC: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>,
+        Shuah Khan <shuah@kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] vfio: selftests: fix crash in vfio_dma_mapping_mmio_test
+Message-ID: <aaiDqjTw4U/h4rPw@devgpu015.cco6.facebook.com>
+References: <20260303-fix-mmio-test-v1-1-78b4a9e46a4e@fb.com>
+ <vps7in2ph6yyb2vl3zuxie7sp2cyzh4endrvdsdjgtqhjxvoqp@po4m7zddafi5>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260224005500.1471972-1-jmattson@google.com> <20260224005500.1471972-9-jmattson@google.com>
- <aahn2ZfDAJTj-Afn@google.com>
-In-Reply-To: <aahn2ZfDAJTj-Afn@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Wed, 4 Mar 2026 10:37:26 -0800
-X-Gm-Features: AaiRm50YWu54ulNxMcZtc5Mz8kw3MXpfQLRVptEK6Cn1xRR91Wdq3CyvdybtG2g
-Message-ID: <CALMp9eR7gKWp8M2Q8Q7vA5hGx5bc12KCh1NZMK33A1dpiKNt+Q@mail.gmail.com>
-Subject: Re: [PATCH v5 08/10] KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Yosry Ahmed <yosry@kernel.org>, Yosry Ahmed <yosry.ahmed@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <vps7in2ph6yyb2vl3zuxie7sp2cyzh4endrvdsdjgtqhjxvoqp@po4m7zddafi5>
+X-Authority-Analysis: v=2.4 cv=Bo2QAIX5 c=1 sm=1 tr=0 ts=69a883af cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=03ozwUkBphtHgyqjj1sw:22 a=FOH2dFAWAAAA:8
+ a=SRrdq9N9AAAA:8 a=flx_U1IVvj_B2srRCewA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-ORIG-GUID: -zRj14eHqtrATpXnV74I4WMEFMN3L4KN
+X-Proofpoint-GUID: -zRj14eHqtrATpXnV74I4WMEFMN3L4KN
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA0MDE1NiBTYWx0ZWRfXzL2pTzbTzcMI
+ GCG4bbepWQCqMhaSMElVp46eMDB+Me+FZGvPOzvP/fslkvohdznqZAQvWt2hP/52uSgDf+u9eO5
+ Z4QdpsxaZXnztKm+u6adn7IMohWGJ3aS/Lclmf8NWDtAAJwLwvekQScZzzaSjeMeezedJ8PP045
+ 0kNHX1Uh8UBLGSBo0mda16M38jDf2VUY2X5/owyIC6CrJVPDK7PCnAh+GsdsOdL+FgyM4qW0xqj
+ 6g/mfcR7tICUtsSeI/nRxFM3w3eggPFz3hzZLS1AZwiuj5LaP5PinaDiX9hdHnMkp/Oj0oKiK4X
+ CO0ZDJbRx21nK0ev6wokncqeAzjYTdGQL4a/dbH7yeIh39sEs12L8mT6EE0haHSBGpPxXGvpQ+X
+ bF40fdBVgIVIXsUYCrsM2a9OWRSnyXfV1b2QrsJzsG3RYnHZTwa0AkMpkNg8UU2fDhch+uY7/+T
+ tOAX9EyBuU2zMvDA39A==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-04_07,2026-03-04_01,2025-10-01_01
 
-On Wed, Mar 4, 2026 at 9:11=E2=80=AFAM Sean Christopherson <seanjc@google.c=
-om> wrote:
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 991ee4c03363..099bf8ac10ee 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -1848,7 +1848,7 @@ static int svm_get_nested_state(struct kvm_vcpu *vc=
-pu,
->         if (is_guest_mode(vcpu)) {
->                 kvm_state.hdr.svm.vmcb_pa =3D svm->nested.vmcb12_gpa;
->                 if (nested_npt_enabled(svm)) {
-> -                       kvm_state.hdr.svm.flags |=3D KVM_STATE_SVM_VALID_=
-GPAT;
-> +                       kvm_state->flags |=3D KVM_STATE_NESTED_GPAT_VALID=
-;
->                         kvm_state.hdr.svm.gpat =3D svm->vmcb->save.g_pat;
->                 }
->                 kvm_state.size +=3D KVM_STATE_NESTED_SVM_VMCB_SIZE;
-> @@ -1914,7 +1914,8 @@ static int svm_set_nested_state(struct kvm_vcpu *vc=
-pu,
->
->         if (kvm_state->flags & ~(KVM_STATE_NESTED_GUEST_MODE |
->                                  KVM_STATE_NESTED_RUN_PENDING |
-> -                                KVM_STATE_NESTED_GIF_SET))
-> +                                KVM_STATE_NESTED_GIF_SET |
-> +                                KVM_STATE_NESTED_GPAT_VALID))
->                 return -EINVAL;
+On Wed, Mar 04, 2026 at 08:47:15AM +0800, Yao Yuan wrote:
+> On Tue, Mar 03, 2026 at 11:46:24AM +0800, Alex Mastro wrote:
+> > Remove the __iommu_unmap() call on a region that was never mapped.
+> > When __iommu_map() fails (expected for MMIO vaddrs in non-VFIO
+> > modes), the region is not added to the dma_regions list, leaving its
+> > list_head zero-initialized. If the unmap ioctl returns success,
+> > __iommu_unmap() calls list_del_init() on this zeroed node and crashes.
+> >
+> > This fixes the iommufd_compat_type1 and iommufd_compat_type1v2
+> > test variants.
+> >
+> > Fixes: 080723f4d4c3 ("vfio: selftests: Add vfio_dma_mapping_mmio_test")
+> > Signed-off-by: Alex Mastro <amastro@fb.com>
+> > ---
+> > The bug was missed because the test was originally run against a kernel
+> > without commit afb47765f923 ("iommufd: Make vfio_compat's unmap succeed
+> > if the range is already empty"). Without that fix, the unmap ioctl
+> > returned -ENOENT, taking the early return before list_del_init().
+> > ---
+> >  tools/testing/selftests/vfio/vfio_dma_mapping_mmio_test.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/vfio/vfio_dma_mapping_mmio_test.c b/tools/testing/selftests/vfio/vfio_dma_mapping_mmio_test.c
+> > index 957a89ce7b3a..d7f25ef77671 100644
+> > --- a/tools/testing/selftests/vfio/vfio_dma_mapping_mmio_test.c
+> > +++ b/tools/testing/selftests/vfio/vfio_dma_mapping_mmio_test.c
+> > @@ -100,7 +100,6 @@ static void do_mmio_map_test(struct iommu *iommu,
+> >  		iommu_unmap(iommu, &region);
+> >  	} else {
+> 
+> Hi Alex,
+> 
+> >  		VFIO_ASSERT_NE(__iommu_map(iommu, &region), 0);
+> > -		VFIO_ASSERT_NE(__iommu_unmap(iommu, &region, NULL), 0);
+> 
+> This is the more simply way to work w/ or w/o commit
+> afb47765f923 ("iommufd: Make vfio_compat's unmap succeed if
+> the range is already empty"), may worth to add this point
+> into the commit message.
 
-Unless I'm missing something, this breaks forward compatibility
-completely. An older kernel will refuse to accept a nested state blob
-with GPAT_VALID set.
+True, but afb47765f923 was already in the vfio tree at the time the new test
+was added in 080723f4d4c3. It was just (my own) negligence that I didn't run
+the selftests against <current kernel>. I wrongly assumed that running the
+selftests against an older kernel that I happened to have installed on my box
+was good enough.
+
+> 
+> For the changes:
+> 
+> Reviewed-by: Yuan Yao <yaoyuan@linux.alibaba.com>
+
+Thank you!
+
+> 
+> >  	}
+> >  }
+> >
+> >
+> > ---
+> > base-commit: 96ca4caf9066f5ebd35b561a521af588a8eb0215
+> > change-id: 20260303-fix-mmio-test-d3bd688105f3
+> >
+> > Best regards,
+> > --
+> > Alex Mastro <amastro@fb.com>
+> >
