@@ -1,240 +1,1280 @@
-Received: from mail-ot1-f98.google.com (mail-ot1-f98.google.com [209.85.210.98])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7B4390211
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 08:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.98
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772612609; cv=pass; b=KtF5IlG5S2GWJ/EYAwbaodkT5eEgeoftlJ2z94Q2fzr7skm4gkpMn79L6anxNoez4dJM9L3UsbQvEigP9IF0GmFrecNmKiHr9QK3GkkAlS4zomu3LnUnl6yocvbADqEtZv1QOkF30YEH7dMxbSksjUYcNgW5GK+dwynpz6efz1o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772612609; c=relaxed/simple;
-	bh=s5e+kgwFBjgzEPBswOTxaYQlbAK+qEtZFL3ejgdTEl8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=frCqI5TnbkDOojNk+p+poGQu+vYW+h4adUdBpZ65zAfTHfVXBxC2OVq2SnztC9UBHGY0/8RaH8lGbBh4T8Pk2Th53jrCBCPOcemB3LWqO8Rnu+dlYV3nCMJhtPuXbHa4q1FXyQ6xiUXFPiTyAgBW3ezeC4JuXrlHK++Zk5O2LrM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Ox2fQ45m; arc=pass smtp.client-ip=209.85.210.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4276E374E6C
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 08:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772612641; cv=none; b=OjC3R9itq3hw1wDW9QOIEYFrEoHX98kYeG0WD9kHQ6jpWT2c9/vsGsixBHpSn3CunGNpNpJpgLxuM5iDyu0ykbsIq8BHBsz+41Edc7Bun2ZLlHMujayAdzpFRNOkICthCi4QOTlnw/KQAYC7aqZyeUPkatH/0qLQMPbZCH1frlU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772612641; c=relaxed/simple;
+	bh=hwA6lpCivxVIjx8KwDWDd/2TIk3vi+tOKsYXiDWGpwE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bj910C1RQoVSQAVcULw5dJM8VzFrrJYJsxp7blO3XqeKjKZx4nW6HGXfGGWWDdEGiPGCgpQCNQBBb8ewCQqgx4hhkgNegHLyNjK9q2PNoD2OobJZQW9yAuZEbtOiswmFX1uDNyiIn+WSxMZySjXzXm3ChZEa1y5j07wgF/drSHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EeR/eSxK; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Ox2fQ45m"
-Received: by mail-ot1-f98.google.com with SMTP id 46e09a7af769-7d596ab0917so4043863a34.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 00:23:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772612606; x=1773217406;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mYi7hpIYqArL0rRrhi5ydhRomOthhV0glciTaQQzT50=;
-        b=OyOgGT3TJCXm4EKFMEpuQWb+ggisyWxJMrjWZbAO/Rh+vcp8gGNl1fkvPgBbCsiSkD
-         xuM9AOZGo3jR0qS62TInYdlB2vGGfiHoOaLBW1oi/bwlEL9qqexO1p6yDiHEE/zUcDQ5
-         /T5aOQBK1d7jfP+FPrphvpsr1RbeqCJnsEVEiDqmRniSosQq0DyenJefo58/oVa53NDL
-         AyWbepFi5r54fUgxz0/HrE1Qcnl4ZN2ZEsgUc06ldZUwyL/KOsNMg33YvZOTbcspS91m
-         Z9cwY6+xOcN9qs+bxKarJ5uRzqa62Ep3sDHrUDYTHgYN3a2UfMNRfOz/xMDlN976ArZl
-         mBlw==
-X-Forwarded-Encrypted: i=2; AJvYcCUvGXpfBbJllk5plYgWeNkSqell5lDlnK5E3sdZ6buEZjtSYTrIwE+w/jpwj7zZd5V3IqYw58f4dvON6GPMYX8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywfk2q4EP0SFhdDVJ9UOiq4w9ROv/0cI/qDJ4jUO49AubEYfSC3
-	SY21iabTwuD3vw3sATLHKQCR3LaZRVJT4a9qRLu3N8Aj51qc4OJesVPcOEiuLIPpdfbf2QEozYl
-	1c1gsaDHFq9d7baZ+UE1LlMm3d76ay3wmPzbFjsapF8hpvuHuxylR87EB4G8av1hKZKXtl8Dn2v
-	9jRfAq3Q0ruY2J7SHeLkV8NDoXMyZJp8NItX37O6mZRPGSbYnCATeI8JtrQdiDaZTXcPd+UZSVE
-	xh61AgYvgbJR9MLt00HHf8=
-X-Gm-Gg: ATEYQzy+bvPeFqdq/QLksOuzi87xvbWOasLu2Kp247Qsx6+H87+/lZp1j+D6z+HyGqY
-	WyWNm4vHIwipGT+o80VrAZBiLjIRvndciAzHlBTRjCky70nsHfj641NbFS6asIIB5N5fowGdlS1
-	RXx36oxlPdB/Y1LcrrjR/jWp0+tcnf+jn8Ts0V4nx1R7OLlZPvdAIk9VzQQrR2IZK8XU58SpWWR
-	RuSb9j5sP+Ew7ThJNeE3TJEBJeACKZOkvxUgR9Ia2neEYRADltu6ChtjvtiNSW3aHfwknwAX0hY
-	gfqX0qW11JhZ3/cikShUDJH7Id2gZ32WoZEz4X0w+7ijuSmIDvybr9IrdicrBuOh9AQFNedTFnP
-	6ToYlqg2NhTQoPkzWof3+mE+56ivnsroc+a8v8GZas8h6l7a1dPuEHqdSE5yfMTx66xUqZfoILJ
-	UwGoTccXzDY2IaRiUkvB8b67PQApXudiNJp8waAR1QEFZGahtpeS/GFSCp
-X-Received: by 2002:a05:6830:70cc:10b0:7ce:5139:301b with SMTP id 46e09a7af769-7d5be361cfamr1889169a34.8.1772612606176;
-        Wed, 04 Mar 2026 00:23:26 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-11.dlp.protect.broadcom.com. [144.49.247.11])
-        by smtp-relay.gmail.com with ESMTPS id 46e09a7af769-7d58661c821sm2240530a34.6.2026.03.04.00.23.25
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Mar 2026 00:23:26 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2ae50386da7so19014055ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 00:23:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772612605; cv=none;
-        d=google.com; s=arc-20240605;
-        b=l2U3KSZafr4QqItOw7cW6a+kjxCh+DvmAAiHcaCVsftyUq3wiWIUN4wSl3FVg5oMGF
-         PBInXmTl3Aq6Rt9qlmkKkC6yaS3TMpn0uydix4b17sxFVem8cY3ooeGQy4hYK8NoP/2f
-         r968ICibFG/q6k1ENJA9dAb2P61b8Q73lVEUCxQ5yRhLwVFrU4XUpgQTkNnujV4zSvX6
-         BalS98/9/1Ix59W/ArmMO5XQgDppsO/PvCS1q660u212kTNzLbKM3APSkHwUN+0D8kck
-         ZSJL/0wX8G1devlQ+xpTk4Cc7m3IZRuB3EcpGeo8eEqM2MU7YxAq61DqIz0nW1EP8HHP
-         5G0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=mYi7hpIYqArL0rRrhi5ydhRomOthhV0glciTaQQzT50=;
-        fh=ieLOgJg3l9uv7uhy4+FVnrX6gapgdVDJmHQ5nzHKh+o=;
-        b=bV4X+opqHSRoN68v0Z4CaEDB3HrXB1lYEljXve75OnomDB1Bz4kfP6yrcH+bIIqgTa
-         I+wpLIA/FxfunI/O5bUeF+xLB7cvoz4MVn0kRLOOP8G2RXtgYJwOYUE0uOu1MbcmcMsb
-         QEdZApx1jlRNpR82z0Z0aMMfz5ADbbskfB3mRQ76vgXrUOER+Uk0tpD3lWL0BpLK9AXl
-         lD4u6L945XUqQHrS6r1lzrz4IlLs6112bHXSyL9UB3L5PlPCllX+7JJcjzmhu7BBbSlj
-         WliAqnc9NnoeHVc5PlUrjIFGupFS3GB/Bp+IrSV/LDgaQ1sKzbVMhkb9k7qp2ywqVuGc
-         UZ9Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EeR/eSxK"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8296d553142so277688b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 00:23:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1772612605; x=1773217405; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mYi7hpIYqArL0rRrhi5ydhRomOthhV0glciTaQQzT50=;
-        b=Ox2fQ45m2mYfvjiJgiE3tXIsgZPRHJRMmTMAYqm1J7m6F2Dq0c+AO0IoUtWq4vFftI
-         oa5vXiqOfJr45QKuT3ytEWollgNL3roFfUjxfxuyW0QhKAKE8kOnfbFHTfBO9F1A29Mr
-         LIlcKaYrygCB1tQ9pTijHVil+/6lUuyImpXXg=
-X-Forwarded-Encrypted: i=1; AJvYcCWRq3lkJ1EKcm6ebyE94zpXwEuuP5JWvJ3he660xrjjPfNk3bAes7TyMKMCEMmngaSx3t7elmbuiyGlcI4YYjU=@vger.kernel.org
-X-Received: by 2002:a17:902:fc8f:b0:2ae:478f:2ef with SMTP id d9443c01a7336-2ae6af3ca00mr11423635ad.28.1772612604768;
-        Wed, 04 Mar 2026 00:23:24 -0800 (PST)
-X-Received: by 2002:a17:902:fc8f:b0:2ae:478f:2ef with SMTP id
- d9443c01a7336-2ae6af3ca00mr11423405ad.28.1772612604339; Wed, 04 Mar 2026
- 00:23:24 -0800 (PST)
+        d=gmail.com; s=20230601; t=1772612637; x=1773217437; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nQ73zfgDaWL9qyuJ1c3cWYTQ05lGxb7i+BoMrrgmH7w=;
+        b=EeR/eSxKfYxcxgT8SR+YsAgQVUz9/EUHT2ORoafO2iftwhriYiLZjcCwm50sr1InfP
+         iwcmQEB28hNA/mFfkM1U9TztLspQChWCBfC+Z8img0BzD3gYQ7pIbo/L0HJ6VoQyV0Ll
+         1iTSOsqZNLGwpxhqbxGmh0cM6QlJA85DuWB6QcwlDqhEKW7DuxAzs+oUcrYhecJmg5wU
+         z2vGT3hZrR5OnapG8KfyJ2+yQzjb5yB72u5zO2gtbwP8Ymwy19W/bfrFV6nSwbDruvSs
+         3395fDdQOM/ulIY2OvS+wjHtCdSo3j7P8XWOECs19w69XTqoysgtnSziYmQLTXqEjUu5
+         dJvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772612637; x=1773217437;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nQ73zfgDaWL9qyuJ1c3cWYTQ05lGxb7i+BoMrrgmH7w=;
+        b=NNdbRQeC6BdgcYhK9hqlkVk35qAPfQhzCrKXWShtGNSWvcK1NWGCiZwtQSL5JrMTnI
+         m6MMy6XZYGO6ZRxGE5fZcrvbOr0YMtV5ypTyh8SfPUnFiwiA7VFkaAdJrsYJYt0aWas4
+         HJQ0KNWMscwP09jUtWVqjFPt594w9etZyYkH7qfpEa8hFa0fZF11JNq7hYRn8mO3FK2n
+         dHZcUeHD+sRF2p+xR/aKfS9W2LvE17mZVThj8EGvJtBOLO1RkNJG1WyxniWjUOV6IIxa
+         XFaD8vR6gbkaY1VHHanZeqWu3c74xzkP7/9FvdZfG5guC2Vgg6V8sfGnxI9ksywoMgHd
+         7fVw==
+X-Forwarded-Encrypted: i=1; AJvYcCV77+h2xmg5BXz162asgJIgRCcCf8rWBzkr3HQ6jpVahQMRi2SNSVXIM6zsehLsXY1jft5FF71gfZuE5rbWgzs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+owQwPprqTES9sU19kAcZnWZacAtlR/YH9daliz2lmLJZIRHE
+	sv72LkDOvnqudg3jD05zS/yIwbefw9WFGDVkPch1cJU1wmF7VbcR70ke
+X-Gm-Gg: ATEYQzweOlCu3nXwIWNM85ucEQONOXPjJK+wkDvyvnmZ1aGUetutqGa5a+9d3FMe5tq
+	SzI2cikQm/yhWITrW8A3UYrsqiIaHFKasGRUSIk3hN+In14H8vSjBvcUiDuh8uuJ6R/LLjjYmeH
+	4c8LnsrDyKj6NyOaOUgu8Uv3WjErBh1fci58SXWjkq1nE+gBtkFyMDXVTnNtzM4d6DY1t8J1SEa
+	hfDTorQb3TblmNMXiS807WppQzYINMFbPyqohEGIMP6Gxx4a79f2yR6pduW/0JDF3uj4w7xxgvj
+	EmXz4pVMPchtRUMKyIROTaxUhQsqOZV8Nbln+TkjyomFtmLucKrumfqgemvu6BUCqXHupnNOVe0
+	rnODkvQwei9GjYP2hDes0qKTnaFMp38+5jwC1k5u+NbM3tkmblrLMz46fJt22F/MLsSCJ9tLnlU
+	TLpClrbHW5nXgTe3ChooNQzi9YW2U1qK723oC7zVZwUpucQ5ZKlHLDrp20W+iHMAdOJyDFVVMGH
+	gJmjrOL3ZsioKQ=
+X-Received: by 2002:a05:6a20:4327:b0:394:36ae:b91e with SMTP id adf61e73a8af0-3982ddb75bcmr1245015637.5.1772612637175;
+        Wed, 04 Mar 2026 00:23:57 -0800 (PST)
+Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa61fcdesm14733236a12.11.2026.03.04.00.23.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 00:23:56 -0800 (PST)
+From: soolaugust@gmail.com
+To: linux-kernel@vger.kernel.org
+Cc: mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	will@kernel.org,
+	boqun@kernel.org,
+	longman@redhat.com,
+	shuah@kernel.org,
+	bigeasy@linutronix.de,
+	jstultz@google.com,
+	kprateek.nayak@amd.com,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev,
+	zhidao su <suzhidao@xiaomi.com>
+Subject: [RFC PATCH] sched/proxy_exec: Extend PE blocked_on chain to rwsem write-side
+Date: Wed,  4 Mar 2026 16:23:48 +0800
+Message-ID: <20260304082348.959786-1-soolaugust@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260303181535.2671734-1-bjorn@kernel.org>
-In-Reply-To: <20260303181535.2671734-1-bjorn@kernel.org>
-From: Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date: Wed, 4 Mar 2026 13:53:12 +0530
-X-Gm-Features: AaiRm52xhRFeluJa04ipSYZlAEEXkV2lyi_Fzn6dEMW4S-pykDswd5iE369Bj08
-Message-ID: <CALs4sv3kt-yrL7MP1mPtMx_ktRRVXANRo9ZQPfA-yDeGM4_Ghw@mail.gmail.com>
-Subject: Re: [PATCH net-next 0/5] ethtool: Dynamic RSS context indirection
- table resizing
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Michael Chan <michael.chan@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Willem de Bruijn <willemb@google.com>
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000a7276c064c2e88bf"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---000000000000a7276c064c2e88bf
-Content-Type: text/plain; charset="UTF-8"
+From: zhidao su <suzhidao@xiaomi.com>
 
->
-> Open items:
->
->  - Pre-existing bug in bnxt: the IFF_RXFH_CONFIGURED guard in
->    bnxt_set_channels() only protects context 0. If context 0 uses
->    defaults but non-default contexts exist, channel changes that
->    change the table size succeed without updating ctx->indir_size for
->    those contexts. The core's ethtool_check_max_channel() prevents
->    invalid queue references but not the size mismatch itself. This
->    series fixes it by resizing all contexts. Should a separate fix be
->    sent to net for the existing bug?
+Proxy Execution currently tracks blocked_on chains only through
+struct mutex. This patch extends the infrastructure to support
+rw_semaphore write-side blocking, allowing PE to eliminate priority
+inversion where a high-priority writer waits for a low-priority
+write lock holder.
 
-You are right. Our re-size requirement check should include checking
-of presence of any additional contexts and fail the channel change.
-So the net effect is that ring 0 would get included/overburdened for
-the additional contexts and that's an issue for sure though its not
-catastrophic.
-So IMO we could have a fix for net..
+Changes:
 
---000000000000a7276c064c2e88bf
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+1. include/linux/sched.h: Generalise blocked_on from struct mutex *
+   to void *, and add a 2-bit blocked_on_type field encoding the
+   primitive type (BLOCKED_ON_NONE/MUTEX/RWSEM). All existing mutex
+   helpers are renamed to _mutex suffix; compatibility wrappers
+   preserve the old names so that mutex.c requires no change.
+   New __set/clear_task_blocked_on_rwsem() helpers are added
+   (void * parameter avoids pulling rwsem.h into sched.h).
 
-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
-/HTPxpDrr4vzZL0yoc9XefyCbdiwfyFl99oBekp+1ZxXc5bZsVhRPVyEWFtCys66nqu5cU2GPT3a
-ySQEHOtIKyGGgzMVvitOzO2suQkoMvu/swsftfgCY/PObdlBZhv0BD97+WwR6CQJh/YEuDDEHYCy
-NDeiVtF3/jwT04bHB7lR9n+AiCSLr9wlgBHGdBFIOmT/XMX3K8fuMMGLq9PpGQEMvYa9QTkE9+zc
-MddiNNh1xtCTG0+kC7KIttdXTnffisXKsX44B8ECAwEAAaOCAd0wggHZMA4GA1UdDwEB/wQEAwIF
-oDAMBgNVHRMBAf8EAjAAMIGTBggrBgEFBQcBAQSBhjCBgzBGBggrBgEFBQcwAoY6aHR0cDovL3Nl
-Y3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyNnNtaW1lY2EyMDIzLmNydDA5BggrBgEF
-BQcwAYYtaHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyNnNtaW1lY2EyMDIzMGUGA1Ud
-IAReMFwwCQYHZ4EMAQUDAzALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgoDAjA0MDIGCCsGAQUFBwIB
-FiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzBBBgNVHR8EOjA4MDagNKAy
-hjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAyMy5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBQAKTaeXHq6D68tUC3boCOFGLCgkjAdBgNVHQ4EFgQUxJ6fps/yOGneJRYDWUKPuLPk
-miYwDQYJKoZIhvcNAQELBQADggIBAI2j2qBMKYV8SLK1ysjOOS54Lpm3geezjBYrWor/BAKGP7kT
-QN61VWg3QlZqiX21KLNeBWzJH7r+zWiS8ykHApTnBlTjfNGF8ihZz7GkpBTa3xDW5rT/oLfyVQ5k
-Wr2OZ268FfZPyAgHYnrfhmojupPS4c7bT9fQyep3P0sAm6TQxmhLDh/HcsloIn7w1QywGRyesbRw
-CFkRbTnhhTS9Tz3pYs5kHbphHY5oF3HNdKgFPrfpF9ei6dL4LlwvQgNlRB6PhdUBL80CJ0UlY2Oz
-jIAKPusiSluFH+NvwqsI8VuId34ug+B5VOM2dWXR/jY0as0Va5Fpjpn1G+jG2pzr1FQu2OHR5GAh
-6Uw50Yh3H77mYK67fCzQVcHrl0qdOLSZVsz/T3qjRGjAZlIDyFRjewxLNunJl/TGtu1jk1ij7Uzh
-PtF4nfZaVnWJowp/gE+Hr21BXA1nj+wBINHA0eufDHd/Y0/MLK+++i3gPTermGBIfadXUj8NGCGe
-eIj4fd2b29HwMCvfX78QR4JQM9dkDoD1ZFClV17bxRPtxhwEU8DzzcGlLfKJhj8IxkLoww9hqNul
-Md+LwA5kUTLPBBl9irP7Rn3jfftdK1MgrNyomyZUZSI1pisbv0Zn/ru3KD3QZLE17esvHAqCfXAZ
-a2vE+o+ZbomB5XkihtQpb/DYrfjAMYICVzCCAlMCAQEwYjBSMQswCQYDVQQGEwJCRTEZMBcGA1UE
-ChMQR2xvYmFsU2lnbiBudi1zYTEoMCYGA1UEAxMfR2xvYmFsU2lnbiBHQ0MgUjYgU01JTUUgQ0Eg
-MjAyMwIMClwVCDIzIfrgd31IMA0GCWCGSAFlAwQCAQUAoIHHMC8GCSqGSIb3DQEJBDEiBCCpU4bS
-ijwwiGsjD46tzZ6wLead60l7GWjx3y/lyKJ/JTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
-CSqGSIb3DQEJBTEPFw0yNjAzMDQwODIzMjVaMFwGCSqGSIb3DQEJDzFPME0wCwYJYIZIAWUDBAEq
-MAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEHMAsGCWCG
-SAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBZe6GRB9d46IZr7eDY6QIpyndOVjX5ccamuXAiSnVw
-pfIXOsYWI6Hbje8MNT2ePYBYijMINL8Nz7F3d4VaEZcjE5zFpx/YGk3ZiBy5UxAI5K6wZHCjjux8
-ShvDplVwo3J1qmADR1DsOzjnmFnY/u6Ql65P6QB/06vc092KBC74xmd5Xfjxjs/Rnfny2LdotVgb
-gENsI823zvS/sjiITQVWZpKsxzPxZn76s/tGiGt+W+iP4Gk9u9LCb13bW1nOka4AYAT6LmcDJS6o
-1LASXJUkxUacTiKHKaxTj6Rt7om0HGiSqruSs9MqaPnGmSNfMYuYF3B9QOxRHzVDzkfkU4ok
---000000000000a7276c064c2e88bf--
+2. kernel/locking/rwsem.c: In rwsem_down_write_slowpath(), call
+   __set_task_blocked_on_rwsem() after entering the wait queue
+   (wait_lock held), re-set it after each schedule() wakeup, and
+   clear it on lock acquisition and on signal-interrupted exit.
+   Pattern mirrors the existing mutex slowpath.
+
+3. kernel/sched/core.c: find_proxy_task() now dispatches on
+   blocked_on_type. The BLOCKED_ON_RWSEM branch acquires
+   sem->wait_lock, re-validates blocked_on, then calls
+   rwsem_owner() to retrieve the write owner (returns NULL for
+   reader-owned sem, which safely terminates the chain). Owner
+   validity checks (on_rq, sched_delayed, cpu, migrating) are
+   shared between both branches.
+
+4. tools/testing/selftests/sched/proxy_exec_test.c: Add TC-4
+   (single-level rwsem write PE) and TC-5 (mixed rwsem->mutex
+   chain). TAP plan updated from 3 to 5.
+
+PREEMPT_RT limitation: rwsem is backed by rwbase_rt/rt_mutex under
+CONFIG_PREEMPT_RT. The new code paths are not compiled on RT kernels;
+on RT blocked_on is never set for rwsem and find_proxy_task()
+terminates cleanly at such nodes.
+
+Signed-off-by: zhidao su <suzhidao@xiaomi.com>
+---
+ include/linux/sched.h                         | 110 ++-
+ kernel/locking/rwsem.c                        |   9 +
+ kernel/sched/core.c                           | 106 ++-
+ .../testing/selftests/sched/proxy_exec_test.c | 763 ++++++++++++++++++
+ 4 files changed, 943 insertions(+), 45 deletions(-)
+ create mode 100644 tools/testing/selftests/sched/proxy_exec_test.c
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index a7b4a980eb2..4bef3618889 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1237,7 +1237,8 @@ struct task_struct {
+ 	struct rt_mutex_waiter		*pi_blocked_on;
+ #endif
+ 
+-	struct mutex			*blocked_on;	/* lock we're blocked on */
++	void				*blocked_on;	/* lock we're blocked on */
++	unsigned int			 blocked_on_type : 2; /* enum blocked_on_type */
+ 
+ #ifdef CONFIG_DETECT_HUNG_TASK_BLOCKER
+ 	/*
+@@ -2178,8 +2179,21 @@ extern int __cond_resched_rwlock_write(rwlock_t *lock) __must_hold(lock);
+ 	__cond_resched_rwlock_write(lock);					\
+ })
+ 
++/*
++ * Type tag for task_struct::blocked_on. Allows PE chain traversal
++ * to handle different lock primitives (mutex, rwsem write-side).
++ */
++enum blocked_on_type {
++	BLOCKED_ON_NONE  = 0,
++	BLOCKED_ON_MUTEX = 1,
++	BLOCKED_ON_RWSEM = 2,
++};
++
+ #ifndef CONFIG_PREEMPT_RT
+-static inline struct mutex *__get_task_blocked_on(struct task_struct *p)
++/* --- mutex blocked_on helpers --- */
++
++static inline struct mutex *
++__get_task_blocked_on_mutex(struct task_struct *p)
+ {
+ 	struct mutex *m = p->blocked_on;
+ 
+@@ -2188,7 +2202,8 @@ static inline struct mutex *__get_task_blocked_on(struct task_struct *p)
+ 	return m;
+ }
+ 
+-static inline void __set_task_blocked_on(struct task_struct *p, struct mutex *m)
++static inline void
++__set_task_blocked_on_mutex(struct task_struct *p, struct mutex *m)
+ {
+ 	struct mutex *blocked_on = READ_ONCE(p->blocked_on);
+ 
+@@ -2204,15 +2219,18 @@ static inline void __set_task_blocked_on(struct task_struct *p, struct mutex *m)
+ 	 */
+ 	WARN_ON_ONCE(blocked_on && blocked_on != m);
+ 	WRITE_ONCE(p->blocked_on, m);
++	p->blocked_on_type = BLOCKED_ON_MUTEX;
+ }
+ 
+-static inline void set_task_blocked_on(struct task_struct *p, struct mutex *m)
++static inline void
++set_task_blocked_on_mutex(struct task_struct *p, struct mutex *m)
+ {
+ 	guard(raw_spinlock_irqsave)(&m->wait_lock);
+-	__set_task_blocked_on(p, m);
++	__set_task_blocked_on_mutex(p, m);
+ }
+ 
+-static inline void __clear_task_blocked_on(struct task_struct *p, struct mutex *m)
++static inline void
++__clear_task_blocked_on_mutex(struct task_struct *p, struct mutex *m)
+ {
+ 	if (m) {
+ 		struct mutex *blocked_on = READ_ONCE(p->blocked_on);
+@@ -2227,21 +2245,91 @@ static inline void __clear_task_blocked_on(struct task_struct *p, struct mutex *
+ 		WARN_ON_ONCE(blocked_on && blocked_on != m);
+ 	}
+ 	WRITE_ONCE(p->blocked_on, NULL);
++	p->blocked_on_type = BLOCKED_ON_NONE;
+ }
+ 
+-static inline void clear_task_blocked_on(struct task_struct *p, struct mutex *m)
++static inline void
++clear_task_blocked_on_mutex(struct task_struct *p, struct mutex *m)
+ {
+ 	guard(raw_spinlock_irqsave)(&m->wait_lock);
+-	__clear_task_blocked_on(p, m);
++	__clear_task_blocked_on_mutex(p, m);
+ }
+-#else
+-static inline void __clear_task_blocked_on(struct task_struct *p, struct rt_mutex *m)
++
++/* Compatibility wrappers — keep mutex.c callers unchanged */
++static inline struct mutex *
++__get_task_blocked_on(struct task_struct *p)
++{
++	return __get_task_blocked_on_mutex(p);
++}
++
++static inline void
++__set_task_blocked_on(struct task_struct *p, struct mutex *m)
+ {
++	__set_task_blocked_on_mutex(p, m);
+ }
+ 
+-static inline void clear_task_blocked_on(struct task_struct *p, struct rt_mutex *m)
++static inline void
++set_task_blocked_on(struct task_struct *p, struct mutex *m)
++{
++	set_task_blocked_on_mutex(p, m);
++}
++
++static inline void
++__clear_task_blocked_on(struct task_struct *p, struct mutex *m)
+ {
++	__clear_task_blocked_on_mutex(p, m);
+ }
++
++static inline void
++clear_task_blocked_on(struct task_struct *p, struct mutex *m)
++{
++	clear_task_blocked_on_mutex(p, m);
++}
++
++/* --- rwsem write-side blocked_on helpers --- */
++
++/*
++ * __set/clear_task_blocked_on_rwsem: called with sem->wait_lock held.
++ * Uses void* to avoid pulling struct rw_semaphore into sched.h.
++ * Callers (rwsem.c) cast sem to void* before passing.
++ */
++static inline void
++__set_task_blocked_on_rwsem(struct task_struct *p, void *sem)
++{
++	void *blocked_on = READ_ONCE(p->blocked_on);
++
++	WARN_ON_ONCE(!sem);
++	/* The task should only be setting itself as blocked */
++	WARN_ON_ONCE(p != current);
++	WARN_ON_ONCE(blocked_on && blocked_on != sem);
++	WRITE_ONCE(p->blocked_on, sem);
++	p->blocked_on_type = BLOCKED_ON_RWSEM;
++}
++
++static inline void
++__clear_task_blocked_on_rwsem(struct task_struct *p, void *sem)
++{
++	if (sem) {
++		void *blocked_on = READ_ONCE(p->blocked_on);
++
++		WARN_ON_ONCE(blocked_on && blocked_on != sem);
++	}
++	WRITE_ONCE(p->blocked_on, NULL);
++	p->blocked_on_type = BLOCKED_ON_NONE;
++}
++
++#else /* CONFIG_PREEMPT_RT */
++
++static inline void
++__clear_task_blocked_on(struct task_struct *p, struct rt_mutex *m)
++{
++}
++
++static inline void
++clear_task_blocked_on(struct task_struct *p, struct rt_mutex *m)
++{
++}
++
+ #endif /* !CONFIG_PREEMPT_RT */
+ 
+ static __always_inline bool need_resched(void)
+diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+index 24df4d98f7d..4ef9893a3e4 100644
+--- a/kernel/locking/rwsem.c
++++ b/kernel/locking/rwsem.c
+@@ -1154,6 +1154,8 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+ 
+ 	if (state == TASK_UNINTERRUPTIBLE)
+ 		hung_task_set_blocker(sem, BLOCKER_TYPE_RWSEM_WRITER);
++	/* PE: mark this task as blocked on the rwsem write lock */
++	__set_task_blocked_on_rwsem(current, sem);
+ 
+ 	for (;;) {
+ 		if (rwsem_try_write_lock(sem, &waiter)) {
+@@ -1187,8 +1189,13 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+ 		set_current_state(state);
+ trylock_again:
+ 		raw_spin_lock_irq(&sem->wait_lock);
++		/* PE: re-set blocked_on after wakeup re-acquires wait_lock */
++		__set_task_blocked_on_rwsem(current, sem);
+ 	}
+ 
++	/* PE: clear blocked_on — lock acquired, wait_lock still held */
++	__clear_task_blocked_on_rwsem(current, sem);
++
+ 	if (state == TASK_UNINTERRUPTIBLE)
+ 		hung_task_clear_blocker();
+ 
+@@ -1201,6 +1208,8 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+ out_nolock:
+ 	__set_current_state(TASK_RUNNING);
+ 	raw_spin_lock_irq(&sem->wait_lock);
++	/* PE: clear blocked_on on signal-interrupted exit */
++	__clear_task_blocked_on_rwsem(current, sem);
+ 	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
+ 	lockevent_inc(rwsem_wlock_fail);
+ 	trace_contention_end(sem, -EINTR);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index dc9f17b35e4..d50c8a90908 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -54,6 +54,7 @@
+ #include <linux/mmu_context.h>
+ #include <linux/mmzone.h>
+ #include <linux/mutex_api.h>
++#include <linux/rwsem.h>
+ #include <linux/nmi.h>
+ #include <linux/nospec.h>
+ #include <linux/perf_event_api.h>
+@@ -6594,35 +6595,69 @@ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
+ 	struct task_struct *owner = NULL;
+ 	int this_cpu = cpu_of(rq);
+ 	struct task_struct *p;
+-	struct mutex *mutex;
+ 
+ 	/* Follow blocked_on chain. */
+ 	for (p = donor; task_is_blocked(p); p = owner) {
+-		mutex = p->blocked_on;
++		void *blocked_lock = READ_ONCE(p->blocked_on);
++		enum blocked_on_type btype = p->blocked_on_type;
++
+ 		/* Something changed in the chain, so pick again */
+-		if (!mutex)
++		if (!blocked_lock)
+ 			return NULL;
+-		/*
+-		 * By taking mutex->wait_lock we hold off concurrent mutex_unlock()
+-		 * and ensure @owner sticks around.
+-		 */
+-		guard(raw_spinlock)(&mutex->wait_lock);
+ 
+-		/* Check again that p is blocked with wait_lock held */
+-		if (mutex != __get_task_blocked_on(p)) {
++		if (btype == BLOCKED_ON_MUTEX) {
++			struct mutex *mutex = blocked_lock;
++
+ 			/*
+-			 * Something changed in the blocked_on chain and
+-			 * we don't know if only at this level. So, let's
+-			 * just bail out completely and let __schedule()
+-			 * figure things out (pick_again loop).
++			 * By taking mutex->wait_lock we hold off concurrent
++			 * mutex_unlock() and ensure @owner sticks around.
+ 			 */
+-			return NULL;
+-		}
++			guard(raw_spinlock)(&mutex->wait_lock);
+ 
+-		owner = __mutex_owner(mutex);
+-		if (!owner) {
+-			__clear_task_blocked_on(p, mutex);
+-			return p;
++			/* Check again that p is blocked with wait_lock held */
++			if (mutex != __get_task_blocked_on(p)) {
++				/*
++				 * Something changed in the blocked_on chain
++				 * and we don't know if only at this level.
++				 * Bail out and let __schedule() figure things
++				 * out (pick_again loop).
++				 */
++				return NULL;
++			}
++
++			owner = __mutex_owner(mutex);
++			if (!owner) {
++				__clear_task_blocked_on(p, mutex);
++				return p;
++			}
++		} else if (btype == BLOCKED_ON_RWSEM) {
++			struct rw_semaphore *sem = blocked_lock;
++
++			/*
++			 * Take sem->wait_lock to serialise against concurrent
++			 * up_write() and ensure the owner pointer is stable.
++			 */
++			guard(raw_spinlock)(&sem->wait_lock);
++
++			/*
++			 * Re-check after acquiring wait_lock: blocked_on
++			 * could have been cleared by a concurrent wakeup.
++			 */
++			if (sem != READ_ONCE(p->blocked_on))
++				return NULL;
++
++			owner = rwsem_owner(sem);
++			if (!owner) {
++				/*
++				 * rwsem is reader-owned or has no writer
++				 * owner. Cannot proxy-execute through
++				 * readers; treat as terminal node.
++				 */
++				return p;
++			}
++		} else {
++			/* Unknown blocked_on type — bail */
++			return NULL;
+ 		}
+ 
+ 		if (!READ_ONCE(owner->on_rq)) {
+@@ -6630,7 +6665,7 @@ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
+ 			 * Owner is off the runqueue; proxy execution cannot
+ 			 * proceed through it. Deactivate the donor so it will
+ 			 * be properly re-enqueued when the owner eventually
+-			 * wakes and releases the mutex.
++			 * wakes and releases the lock.
+ 			 */
+ 			return proxy_deactivate(rq, donor);
+ 		}
+@@ -6658,12 +6693,14 @@ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
+ 
+ 		if (task_on_rq_migrating(owner)) {
+ 			/*
+-			 * One of the chain of mutex owners is currently migrating to this
+-			 * CPU, but has not yet been enqueued because we are holding the
+-			 * rq lock. As a simple solution, just schedule rq->idle to give
+-			 * the migration a chance to complete. Much like the migrate_task
+-			 * case we should end up back in find_proxy_task(), this time
+-			 * hopefully with all relevant tasks already enqueued.
++			 * One of the chain of lock owners is currently
++			 * migrating to this CPU, but has not yet been
++			 * enqueued because we are holding the rq lock. As a
++			 * simple solution, just schedule rq->idle to give
++			 * the migration a chance to complete. Much like the
++			 * migrate_task case we should end up back in
++			 * find_proxy_task(), this time hopefully with all
++			 * relevant tasks already enqueued.
+ 			 */
+ 			return proxy_resched_idle(rq);
+ 		}
+@@ -6683,8 +6720,8 @@ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
+ 			/*
+ 			 * It's possible we interleave with mutex_unlock like:
+ 			 *
+-			 *				lock(&rq->lock);
+-			 *				  find_proxy_task()
++			 *			lock(&rq->lock);
++			 *			  find_proxy_task()
+ 			 * mutex_unlock()
+ 			 *   lock(&wait_lock);
+ 			 *   donor(owner) = current->blocked_donor;
+@@ -6694,13 +6731,14 @@ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
+ 			 *     ...
+ 			 *       ttwu_runnable()
+ 			 *         __task_rq_lock()
+-			 *				  lock(&wait_lock);
+-			 *				  owner == p
++			 *			  lock(&wait_lock);
++			 *			  owner == p
+ 			 *
+-			 * Which leaves us to finish the ttwu_runnable() and make it go.
++			 * Which leaves us to finish the ttwu_runnable() and
++			 * make it go.
+ 			 *
+-			 * So schedule rq->idle so that ttwu_runnable() can get the rq
+-			 * lock and mark owner as running.
++			 * So schedule rq->idle so that ttwu_runnable() can
++			 * get the rq lock and mark owner as running.
+ 			 */
+ 			return proxy_resched_idle(rq);
+ 		}
+diff --git a/tools/testing/selftests/sched/proxy_exec_test.c b/tools/testing/selftests/sched/proxy_exec_test.c
+new file mode 100644
+index 00000000000..30fc58b9738
+--- /dev/null
++++ b/tools/testing/selftests/sched/proxy_exec_test.c
+@@ -0,0 +1,763 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Proxy Execution (PE) selftest
++ *
++ * Tests for the sched_proxy_exec feature. Verifies that the kernel
++ * correctly handles RT priority inheritance through proxy execution.
++ *
++ * TC-1: Basic PE activation — low-prio holder releases lock for high-prio
++ *        waiter within expected time bound.
++ * TC-2: Three-level blocked_on chain — PE chains through B->C so that
++ *        A eventually acquires its mutex.
++ * TC-3: PE deactivate path — SIGSTOP/SIGCONT on holder; high-prio thread
++ *        must still acquire the lock within a generous timeout.
++ */
++
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <pthread.h>
++#include <sched.h>
++#include <errno.h>
++#include <signal.h>
++#include <time.h>
++#include <sys/syscall.h>
++#include <sys/types.h>
++
++static int test_count;
++
++/* ------------------------------------------------------------------ */
++/* Helpers                                                              */
++/* ------------------------------------------------------------------ */
++
++/*
++ * is_proxy_exec_enabled - check whether CONFIG_SCHED_PROXY_EXEC is active
++ *
++ * Try to read /proc/sys/kernel/sched_proxy_exec. If the file exists and
++ * contains a non-zero value the feature is considered enabled. Returns 1
++ * when enabled, 0 otherwise.
++ */
++static int is_proxy_exec_enabled(void)
++{
++	FILE *f;
++	int val = 0;
++
++	f = fopen("/proc/sys/kernel/sched_proxy_exec", "r");
++	if (!f)
++		return 0;
++
++	if (fscanf(f, "%d", &val) != 1)
++		val = 0;
++
++	fclose(f);
++	return val != 0;
++}
++
++/*
++ * set_rt_prio - set the calling thread to SCHED_FIFO at the given priority
++ *
++ * Returns 0 on success, -1 on failure.
++ */
++static int set_rt_prio(int prio)
++{
++	struct sched_param sp = { .sched_priority = prio };
++
++	if (sched_setscheduler(0, SCHED_FIFO, &sp) != 0)
++		return -1;
++	return 0;
++}
++
++/*
++ * print_result - emit a single TAP result line
++ *
++ * Increments the global test counter and prints either "ok N - name" or
++ * "not ok N - name".
++ */
++static void print_result(const char *name, int pass)
++{
++	++test_count;
++	if (pass)
++		printf("ok %d - %s\n", test_count, name);
++	else
++		printf("not ok %d - %s\n", test_count, name);
++}
++
++/*
++ * elapsed_ms - compute elapsed wall-clock milliseconds between two
++ * CLOCK_MONOTONIC timestamps.
++ */
++static long elapsed_ms(const struct timespec *start, const struct timespec *end)
++{
++	long diff_sec  = (long)(end->tv_sec  - start->tv_sec);
++	long diff_nsec = (long)(end->tv_nsec - start->tv_nsec);
++
++	return diff_sec * 1000L + diff_nsec / 1000000L;
++}
++
++/* ------------------------------------------------------------------ */
++/* TC-1: Basic PE activation                                            */
++/* ------------------------------------------------------------------ */
++
++struct tc1_args {
++	pthread_mutex_t *mutex;
++	int              hold_ms;       /* how long to sleep in critical section */
++};
++
++static void *tc1_holder_thread(void *arg)
++{
++	struct tc1_args *a = arg;
++	struct timespec ts = { 0, (long)a->hold_ms * 1000000L };
++
++	/* Become a low-prio RT thread so PE applies. */
++	set_rt_prio(20);
++
++	pthread_mutex_lock(a->mutex);
++	nanosleep(&ts, NULL);
++	pthread_mutex_unlock(a->mutex);
++
++	return NULL;
++}
++
++static void test_basic_pe_activation(void)
++{
++	pthread_t        holder;
++	pthread_mutex_t  mutex = PTHREAD_MUTEX_INITIALIZER;
++	struct tc1_args  args  = { .mutex = &mutex, .hold_ms = 200 };
++	struct timespec  t0, t1;
++	long             ms;
++	int              pass;
++
++	printf("# TC-1: basic PE activation\n");
++
++	/* Spawn the low-prio holder first; let it grab the mutex. */
++	if (pthread_create(&holder, NULL, tc1_holder_thread, &args) != 0) {
++		printf("# TC-1: pthread_create failed: %s\n", strerror(errno));
++		print_result("basic_pe_activation", 0);
++		return;
++	}
++
++	/*
++	 * Give the holder a moment to actually lock the mutex before this
++	 * (main) thread — soon to be prio 80 — tries to acquire it.
++	 */
++	usleep(20000); /* 20 ms */
++
++	/* Raise our own priority so we become the blocked high-prio waiter. */
++	if (set_rt_prio(80) != 0) {
++		printf("# TC-1: set_rt_prio(80) failed: %s\n", strerror(errno));
++		pthread_join(holder, NULL);
++		pthread_mutex_destroy(&mutex);
++		print_result("basic_pe_activation", 0);
++		return;
++	}
++
++	clock_gettime(CLOCK_MONOTONIC, &t0);
++	pthread_mutex_lock(&mutex);
++	clock_gettime(CLOCK_MONOTONIC, &t1);
++	pthread_mutex_unlock(&mutex);
++
++	/* Restore to SCHED_OTHER for the remaining tests. */
++	{
++		struct sched_param sp = { .sched_priority = 0 };
++
++		sched_setscheduler(0, SCHED_OTHER, &sp);
++	}
++
++	pthread_join(holder, NULL);
++	pthread_mutex_destroy(&mutex);
++
++	ms   = elapsed_ms(&t0, &t1);
++	pass = (ms < 300L);
++	printf("# TC-1: acquired mutex in %ld ms (limit 300 ms)\n", ms);
++	print_result("basic_pe_activation", pass);
++}
++
++/* ------------------------------------------------------------------ */
++/* TC-2: Three-level blocked_on chain                                   */
++/* ------------------------------------------------------------------ */
++
++struct tc2_shared {
++	pthread_mutex_t mutex1;
++	pthread_mutex_t mutex2;
++
++	/* Synchronisation: holders signal when they have grabbed the lock. */
++	pthread_mutex_t sync_mutex;
++	pthread_cond_t  sync_cond;
++	int             holders_ready; /* incremented by each holder */
++};
++
++struct tc2_b_args {
++	struct tc2_shared *s;
++};
++
++struct tc2_c_args {
++	struct tc2_shared *s;
++	int                hold_ms;
++};
++
++/* Thread C: holds mutex2, sleeps, releases. */
++static void *tc2_c_thread(void *arg)
++{
++	struct tc2_c_args *a = arg;
++	struct tc2_shared *s = a->s;
++	struct timespec    ts = { 0, (long)a->hold_ms * 1000000L };
++
++	set_rt_prio(20);
++
++	pthread_mutex_lock(&s->mutex2);
++
++	/* Signal that we are ready. */
++	pthread_mutex_lock(&s->sync_mutex);
++	s->holders_ready++;
++	pthread_cond_broadcast(&s->sync_cond);
++	pthread_mutex_unlock(&s->sync_mutex);
++
++	nanosleep(&ts, NULL);
++	pthread_mutex_unlock(&s->mutex2);
++
++	return NULL;
++}
++
++/* Thread B: holds mutex1, then blocks on mutex2. */
++static void *tc2_b_thread(void *arg)
++{
++	struct tc2_b_args *a = arg;
++	struct tc2_shared *s = a->s;
++
++	set_rt_prio(50);
++
++	pthread_mutex_lock(&s->mutex1);
++
++	/* Signal that we are ready. */
++	pthread_mutex_lock(&s->sync_mutex);
++	s->holders_ready++;
++	pthread_cond_broadcast(&s->sync_cond);
++	pthread_mutex_unlock(&s->sync_mutex);
++
++	/* Now block on C. */
++	pthread_mutex_lock(&s->mutex2);
++	pthread_mutex_unlock(&s->mutex2);
++
++	pthread_mutex_unlock(&s->mutex1);
++
++	return NULL;
++}
++
++static void test_three_level_chain(void)
++{
++	struct tc2_shared  shared;
++	struct tc2_b_args  b_args;
++	struct tc2_c_args  c_args;
++	pthread_t          b_tid, c_tid;
++	struct timespec    t0, t1;
++	long               ms;
++	int                pass;
++
++	printf("# TC-2: three-level blocked_on chain\n");
++
++	memset(&shared, 0, sizeof(shared));
++	pthread_mutex_init(&shared.mutex1, NULL);
++	pthread_mutex_init(&shared.mutex2, NULL);
++	pthread_mutex_init(&shared.sync_mutex, NULL);
++	pthread_cond_init(&shared.sync_cond, NULL);
++	shared.holders_ready = 0;
++
++	c_args.s       = &shared;
++	c_args.hold_ms = 100;
++	b_args.s       = &shared;
++
++	/* Start C first so it grabs mutex2 before B tries. */
++	if (pthread_create(&c_tid, NULL, tc2_c_thread, &c_args) != 0) {
++		printf("# TC-2: pthread_create C failed\n");
++		goto cleanup;
++	}
++
++	/* Wait until C holds mutex2. */
++	pthread_mutex_lock(&shared.sync_mutex);
++	while (shared.holders_ready < 1)
++		pthread_cond_wait(&shared.sync_cond, &shared.sync_mutex);
++	pthread_mutex_unlock(&shared.sync_mutex);
++
++	/* Now start B so it grabs mutex1 then blocks on mutex2. */
++	if (pthread_create(&b_tid, NULL, tc2_b_thread, &b_args) != 0) {
++		printf("# TC-2: pthread_create B failed\n");
++		pthread_join(c_tid, NULL);
++		goto cleanup;
++	}
++
++	/* Wait until B holds mutex1. */
++	pthread_mutex_lock(&shared.sync_mutex);
++	while (shared.holders_ready < 2)
++		pthread_cond_wait(&shared.sync_cond, &shared.sync_mutex);
++	pthread_mutex_unlock(&shared.sync_mutex);
++
++	/* Small delay to let B actually block on mutex2. */
++	usleep(10000); /* 10 ms */
++
++	/* Raise our (A's) priority and try to acquire mutex1. */
++	if (set_rt_prio(80) != 0) {
++		printf("# TC-2: set_rt_prio(80) failed: %s\n", strerror(errno));
++		pthread_join(b_tid, NULL);
++		pthread_join(c_tid, NULL);
++		goto cleanup;
++	}
++
++	clock_gettime(CLOCK_MONOTONIC, &t0);
++	pthread_mutex_lock(&shared.mutex1);
++	clock_gettime(CLOCK_MONOTONIC, &t1);
++	pthread_mutex_unlock(&shared.mutex1);
++
++	/* Restore scheduling. */
++	{
++		struct sched_param sp = { .sched_priority = 0 };
++
++		sched_setscheduler(0, SCHED_OTHER, &sp);
++	}
++
++	pthread_join(b_tid, NULL);
++	pthread_join(c_tid, NULL);
++
++	ms   = elapsed_ms(&t0, &t1);
++	pass = (ms < 200L);
++	printf("# TC-2: acquired mutex1 in %ld ms (limit 200 ms)\n", ms);
++	print_result("three_level_chain", pass);
++
++cleanup:
++	pthread_mutex_destroy(&shared.mutex1);
++	pthread_mutex_destroy(&shared.mutex2);
++	pthread_mutex_destroy(&shared.sync_mutex);
++	pthread_cond_destroy(&shared.sync_cond);
++}
++
++/* ------------------------------------------------------------------ */
++/* TC-3: PE deactivate path (owner SIGSTOP)                             */
++/* ------------------------------------------------------------------ */
++
++/* Flag set by SIGALRM handler so we can detect timeout. */
++static volatile sig_atomic_t tc3_alarm_fired;
++
++static void tc3_alarm_handler(int sig)
++{
++	(void)sig;
++	tc3_alarm_fired = 1;
++}
++
++struct tc3_args {
++	pthread_mutex_t *mutex;
++	/* tid for SIGSTOP/SIGCONT from the main thread */
++	pid_t            tid;
++	pthread_mutex_t  ready_mutex;
++	pthread_cond_t   ready_cond;
++	int              ready;
++};
++
++static void *tc3_holder_thread(void *arg)
++{
++	struct tc3_args *a = arg;
++	struct timespec  ts = { 0, 50L * 1000000L }; /* 50 ms sleep */
++
++	set_rt_prio(20);
++
++	/* Record our own tid so main can send signals. */
++	a->tid = (pid_t)syscall(SYS_gettid);
++
++	pthread_mutex_lock(a->mutex);
++
++	/* Signal main that we hold the mutex. */
++	pthread_mutex_lock(&a->ready_mutex);
++	a->ready = 1;
++	pthread_cond_signal(&a->ready_cond);
++	pthread_mutex_unlock(&a->ready_mutex);
++
++	/*
++	 * Sleep inside the critical section.  The main thread will SIGSTOP
++	 * us while we are in here.
++	 */
++	nanosleep(&ts, NULL);
++
++	pthread_mutex_unlock(a->mutex);
++
++	return NULL;
++}
++
++/* Arguments for the SIGCONT helper thread. */
++struct tc3_cont_args {
++	pid_t tid;
++	pid_t pid;
++};
++
++/*
++ * tc3_cont_thread - sleep 1 second then send SIGCONT to the stopped holder.
++ */
++static void *tc3_cont_thread(void *arg)
++{
++	struct tc3_cont_args *ca = arg;
++	struct timespec       ts = { 1, 0 }; /* 1 second */
++
++	nanosleep(&ts, NULL);
++	syscall(SYS_tgkill, ca->pid, ca->tid, SIGCONT);
++	return NULL;
++}
++
++static void test_pe_deactivate_sigstop(void)
++{
++	pthread_t            holder;
++	pthread_t            cont_tid;
++	pthread_mutex_t      mutex = PTHREAD_MUTEX_INITIALIZER;
++	struct tc3_args      args;
++	struct tc3_cont_args cont_args;
++	struct sigaction     sa_alarm, sa_old;
++	struct timespec      t0, t1;
++	long                 ms;
++	int                  pass = 0;
++
++	printf("# TC-3: PE deactivate path (owner SIGSTOP/SIGCONT)\n");
++
++	memset(&args, 0, sizeof(args));
++	args.mutex = &mutex;
++	pthread_mutex_init(&args.ready_mutex, NULL);
++	pthread_cond_init(&args.ready_cond, NULL);
++
++	/* Install SIGALRM handler. */
++	memset(&sa_alarm, 0, sizeof(sa_alarm));
++	sa_alarm.sa_handler = tc3_alarm_handler;
++	sigemptyset(&sa_alarm.sa_mask);
++	sa_alarm.sa_flags = 0;
++	sigaction(SIGALRM, &sa_alarm, &sa_old);
++	tc3_alarm_fired = 0;
++
++	if (pthread_create(&holder, NULL, tc3_holder_thread, &args) != 0) {
++		printf("# TC-3: pthread_create holder failed: %s\n",
++		       strerror(errno));
++		goto cleanup_sig;
++	}
++
++	/* Wait until the holder has the mutex. */
++	pthread_mutex_lock(&args.ready_mutex);
++	while (!args.ready)
++		pthread_cond_wait(&args.ready_cond, &args.ready_mutex);
++	pthread_mutex_unlock(&args.ready_mutex);
++
++	/* SIGSTOP the holder — it is now off the run queue. */
++	syscall(SYS_tgkill, getpid(), args.tid, SIGSTOP);
++
++	/* Raise our priority so we are the high-prio blocked waiter. */
++	if (set_rt_prio(80) != 0) {
++		printf("# TC-3: set_rt_prio(80) failed: %s\n", strerror(errno));
++		syscall(SYS_tgkill, getpid(), args.tid, SIGCONT);
++		pthread_join(holder, NULL);
++		goto cleanup_sig;
++	}
++
++	/* Spawn the SIGCONT helper before blocking; it fires after 1 second. */
++	cont_args.tid = args.tid;
++	cont_args.pid = getpid();
++
++	if (pthread_create(&cont_tid, NULL, tc3_cont_thread, &cont_args) != 0) {
++		printf("# TC-3: pthread_create cont failed: %s\n",
++		       strerror(errno));
++		syscall(SYS_tgkill, getpid(), args.tid, SIGCONT);
++		pthread_join(holder, NULL);
++		goto cleanup_prio;
++	}
++
++	/* Set a 5-second alarm as overall watchdog. */
++	alarm(5);
++
++	clock_gettime(CLOCK_MONOTONIC, &t0);
++	pthread_mutex_lock(&mutex);
++	clock_gettime(CLOCK_MONOTONIC, &t1);
++	pthread_mutex_unlock(&mutex);
++
++	alarm(0); /* cancel watchdog */
++
++	pthread_join(cont_tid, NULL);
++
++	ms   = elapsed_ms(&t0, &t1);
++	pass = (!tc3_alarm_fired && ms < 5000L);
++	printf("# TC-3: acquired mutex in %ld ms (limit 5000 ms, alarm=%d)\n",
++	       ms, (int)tc3_alarm_fired);
++	print_result("pe_deactivate_sigstop", pass);
++
++cleanup_prio:
++	/* Restore scheduling. */
++	{
++		struct sched_param sp = { .sched_priority = 0 };
++
++		sched_setscheduler(0, SCHED_OTHER, &sp);
++	}
++
++	pthread_join(holder, NULL);
++
++cleanup_sig:
++	sigaction(SIGALRM, &sa_old, NULL);
++	pthread_mutex_destroy(&mutex);
++	pthread_mutex_destroy(&args.ready_mutex);
++	pthread_cond_destroy(&args.ready_cond);
++}
++
++/* ------------------------------------------------------------------ */
++/* TC-4: rwsem write-side PE — basic activation                        */
++/* ------------------------------------------------------------------ */
++
++/*
++ * NOTE: This test exercises the rwsem PE integration added by the
++ * proxy-exec-rwsem-support patch.  It uses pthread_rwlock_t as the
++ * user-space analogue of the kernel rw_semaphore.  The kernel PE path
++ * (blocked_on tracking in rwsem_down_write_slowpath) ensures that when
++ * a high-priority writer is blocked on an rwsem held by a low-priority
++ * writer, the holder is proxy-executed at the waiter's priority.
++ *
++ * The timing assertion (< 300 ms) is the same as TC-1: with PE the
++ * holder finishes its 200 ms critical section and releases the lock
++ * within the window.
++ */
++
++struct tc4_args {
++	pthread_rwlock_t *rwlock;
++	int               hold_ms;
++};
++
++static void *tc4_holder_thread(void *arg)
++{
++	struct tc4_args *a = arg;
++	struct timespec  ts = { 0, (long)a->hold_ms * 1000000L };
++
++	/* Become a low-prio RT thread so PE applies. */
++	set_rt_prio(20);
++
++	pthread_rwlock_wrlock(a->rwlock);
++	nanosleep(&ts, NULL);
++	pthread_rwlock_unlock(a->rwlock);
++
++	return NULL;
++}
++
++static void test_rwsem_write_pe_basic(void)
++{
++	pthread_t        holder;
++	pthread_rwlock_t rwlock = PTHREAD_RWLOCK_INITIALIZER;
++	struct tc4_args  args   = { .rwlock = &rwlock, .hold_ms = 200 };
++	struct timespec  t0, t1;
++	long             ms;
++	int              pass;
++
++	printf("# TC-4: rwsem write-side PE activation\n");
++
++	if (pthread_create(&holder, NULL, tc4_holder_thread, &args) != 0) {
++		printf("# TC-4: pthread_create failed: %s\n",
++		       strerror(errno));
++		print_result("rwsem_write_pe_basic", 0);
++		return;
++	}
++
++	/* Give the holder time to acquire the write lock. */
++	usleep(20000); /* 20 ms */
++
++	/* Raise to high prio — we become the blocked writer. */
++	if (set_rt_prio(80) != 0) {
++		printf("# TC-4: set_rt_prio(80) failed: %s\n",
++		       strerror(errno));
++		pthread_join(holder, NULL);
++		pthread_rwlock_destroy(&rwlock);
++		print_result("rwsem_write_pe_basic", 0);
++		return;
++	}
++
++	clock_gettime(CLOCK_MONOTONIC, &t0);
++	pthread_rwlock_wrlock(&rwlock);
++	clock_gettime(CLOCK_MONOTONIC, &t1);
++	pthread_rwlock_unlock(&rwlock);
++
++	{
++		struct sched_param sp = { .sched_priority = 0 };
++
++		sched_setscheduler(0, SCHED_OTHER, &sp);
++	}
++
++	pthread_join(holder, NULL);
++	pthread_rwlock_destroy(&rwlock);
++
++	ms   = elapsed_ms(&t0, &t1);
++	pass = (ms < 300L);
++	printf("# TC-4: acquired write lock in %ld ms (limit 300 ms)\n",
++	       ms);
++	print_result("rwsem_write_pe_basic", pass);
++}
++
++/* ------------------------------------------------------------------ */
++/* TC-5: Mixed chain — rwsem write → mutex                             */
++/* ------------------------------------------------------------------ */
++
++/*
++ * Chain layout:
++ *   A (prio=80) waiting for rwlock write
++ *   B (prio=50) holds rwlock write, waiting for mutex
++ *   C (prio=20) holds mutex, sleeping 300 ms
++ *
++ * With rwsem PE support the chain A→rwlock→B→mutex→C is fully
++ * traversed.  A should acquire the rwlock within 500 ms.
++ */
++
++struct tc5_shared {
++	pthread_rwlock_t rwlock;
++	pthread_mutex_t  mutex;
++
++	pthread_mutex_t  sync_mu;
++	pthread_cond_t   sync_cv;
++	int              ready; /* incremented by B and C when ready */
++};
++
++struct tc5_b_args { struct tc5_shared *s; };
++struct tc5_c_args { struct tc5_shared *s; int hold_ms; };
++
++static void *tc5_c_thread(void *arg)
++{
++	struct tc5_c_args *a = arg;
++	struct tc5_shared *s = a->s;
++	struct timespec    ts = { 0, (long)a->hold_ms * 1000000L };
++
++	set_rt_prio(20);
++
++	pthread_mutex_lock(&s->mutex);
++
++	pthread_mutex_lock(&s->sync_mu);
++	s->ready++;
++	pthread_cond_signal(&s->sync_cv);
++	pthread_mutex_unlock(&s->sync_mu);
++
++	nanosleep(&ts, NULL);
++	pthread_mutex_unlock(&s->mutex);
++	return NULL;
++}
++
++static void *tc5_b_thread(void *arg)
++{
++	struct tc5_b_args *a = arg;
++	struct tc5_shared *s = a->s;
++
++	set_rt_prio(50);
++
++	pthread_rwlock_wrlock(&s->rwlock);
++
++	pthread_mutex_lock(&s->sync_mu);
++	s->ready++;
++	pthread_cond_signal(&s->sync_cv);
++	pthread_mutex_unlock(&s->sync_mu);
++
++	/* Block on the mutex — this is the middle of the PE chain. */
++	pthread_mutex_lock(&s->mutex);
++	pthread_mutex_unlock(&s->mutex);
++
++	pthread_rwlock_unlock(&s->rwlock);
++	return NULL;
++}
++
++static void test_rwsem_mutex_chain(void)
++{
++	pthread_t         tb, tc;
++	struct tc5_shared s = {
++		.rwlock  = PTHREAD_RWLOCK_INITIALIZER,
++		.mutex   = PTHREAD_MUTEX_INITIALIZER,
++		.sync_mu = PTHREAD_MUTEX_INITIALIZER,
++		.sync_cv = PTHREAD_COND_INITIALIZER,
++		.ready   = 0,
++	};
++	struct tc5_b_args bargs = { .s = &s };
++	struct tc5_c_args cargs = { .s = &s, .hold_ms = 300 };
++	struct timespec   t0, t1;
++	long              ms;
++	int               pass;
++
++	printf("# TC-5: mixed rwsem-write -> mutex PE chain\n");
++
++	if (pthread_create(&tc, NULL, tc5_c_thread, &cargs) != 0 ||
++	    pthread_create(&tb, NULL, tc5_b_thread, &bargs) != 0) {
++		printf("# TC-5: pthread_create failed: %s\n",
++		       strerror(errno));
++		print_result("rwsem_mutex_chain", 0);
++		return;
++	}
++
++	/* Wait until both B and C have grabbed their locks. */
++	pthread_mutex_lock(&s.sync_mu);
++	while (s.ready < 2)
++		pthread_cond_wait(&s.sync_cv, &s.sync_mu);
++	pthread_mutex_unlock(&s.sync_mu);
++
++	if (set_rt_prio(80) != 0) {
++		printf("# TC-5: set_rt_prio(80) failed: %s\n",
++		       strerror(errno));
++		pthread_join(tb, NULL);
++		pthread_join(tc, NULL);
++		print_result("rwsem_mutex_chain", 0);
++		return;
++	}
++
++	clock_gettime(CLOCK_MONOTONIC, &t0);
++	pthread_rwlock_wrlock(&s.rwlock);
++	clock_gettime(CLOCK_MONOTONIC, &t1);
++	pthread_rwlock_unlock(&s.rwlock);
++
++	{
++		struct sched_param sp = { .sched_priority = 0 };
++
++		sched_setscheduler(0, SCHED_OTHER, &sp);
++	}
++
++	pthread_join(tb, NULL);
++	pthread_join(tc, NULL);
++	pthread_rwlock_destroy(&s.rwlock);
++	pthread_mutex_destroy(&s.mutex);
++	pthread_mutex_destroy(&s.sync_mu);
++	pthread_cond_destroy(&s.sync_cv);
++
++	ms   = elapsed_ms(&t0, &t1);
++	pass = (ms < 500L);
++	printf("# TC-5: acquired write lock in %ld ms (limit 500 ms)\n",
++	       ms);
++	print_result("rwsem_mutex_chain", pass);
++}
++
++/* ------------------------------------------------------------------ */
++/* main                                                                 */
++/* ------------------------------------------------------------------ */
++
++int main(void)
++{
++	struct sched_param sp = { .sched_priority = 1 };
++
++	/*
++	 * Capability check: attempt to raise to SCHED_FIFO prio 1.  A plain
++	 * EPERM means we lack CAP_SYS_NICE; skip gracefully in that case.
++	 */
++	if (sched_setscheduler(0, SCHED_FIFO, &sp) != 0) {
++		if (errno == EPERM) {
++			printf("1..0 # SKIP: requires CAP_SYS_NICE\n");
++			return 0;
++		}
++		/* Unexpected error — restore SCHED_OTHER and continue. */
++	} else {
++		/* Restore normal scheduling before running tests. */
++		sp.sched_priority = 0;
++		sched_setscheduler(0, SCHED_OTHER, &sp);
++	}
++
++	if (!is_proxy_exec_enabled()) {
++		printf("1..0 # SKIP: CONFIG_SCHED_PROXY_EXEC not enabled\n");
++		return 0;
++	}
++
++	/* TAP plan: five test cases (3 original + 2 rwsem) */
++	printf("1..5\n");
++
++	test_basic_pe_activation();
++	test_three_level_chain();
++	test_pe_deactivate_sigstop();
++	test_rwsem_write_pe_basic();
++	test_rwsem_mutex_chain();
++
++	return 0;
++}
+-- 
+2.43.0
+
