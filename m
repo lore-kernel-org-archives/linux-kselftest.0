@@ -1,108 +1,175 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23BE39479F
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 10:06:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8751D39EF12;
+	Wed,  4 Mar 2026 10:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772618788; cv=none; b=DB704vlz/hxUk1A3VhZq/vkatnZ+wJuBcY0/n0yL89NwwjNcC61Rx5tsQkatokzDKO/0ZhhSJHJbyM61EU1EGTMCw0liZukJzDLIWsAyKYmAZDNGG+0ztbXGULfr+0vtmGEv8kL01OH5XiqfGQ+RnjwV5a3HSPhs5nxPycwQwPA=
+	t=1772619337; cv=none; b=AgYF9aZ3hyhkb1QRepJqWeWvFjCAlfX/V7dI9lczJ+VN4mVxmVYdt/Ca8mbTERJRxQrjBZoHLxwRanABObIUTReT2/vt46akQ0SPC/BaoGGtYHNac1GEZxFhBKmJu79g7oYPfLJpD1lSozqiY/HtmqKNeJusSxrKrweWrNz1+rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772618788; c=relaxed/simple;
-	bh=ZeXpubh4PPtG9yGE/1RyC93eJnLALxoHAHjlztipjqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dCS3jo2VZFqEvzCKQ1fI8Tp1AVnNdiHreus5SKOC6PyM8SEGf2reg2ZURsowaK6koCR7jwy7mvssHTJB99EuLWUQuGYt4dAHK3qy75YJinSZnQIncaRzeTHsVmvgbv3YA5H7sxhZ9EDLoOjrT7LCw91m12bFZQzE9U7WtPHVMI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=IT101ZPF; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="IT101ZPF"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4806ce0f97bso56968335e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 02:06:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1772618785; x=1773223585; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LiDOsrcJRzDUkNqA1ZB1g1zdvhAz8jBlAAYxUsfbSFo=;
-        b=IT101ZPFtmi70Ck1RuultjOCCFI05sbCTRV7QaGg6R7kNVxv8XA70142qqkcunQAiM
-         w3asd//qp41sPpLBEb27bsMpd49HcZShAlJPAD8m5WF8K81289/4nijyBzyLpyzU9qrw
-         Oz0h4EwIIYcp+F42vhKHthsMKAKKrcQz/6gY/xPgNbe3lvP6f1r4rqJDG0iK79fgIgSx
-         SDFVK9UZ+V3rIBSrtuHNZsbVTW4v75e2pLDOgO4GfOKZAaaCX9OlUjYwZ2+aWzBd7tn+
-         1dWtZKy4Fq79vs51pHY3JxJk3tOJsO/zKPQ0j4nrviIEpSF9n6FAPGcV3LLBNDoRvxF1
-         Xh4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772618785; x=1773223585;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LiDOsrcJRzDUkNqA1ZB1g1zdvhAz8jBlAAYxUsfbSFo=;
-        b=PUeNCsIujwUetYc/1Fip23FPzYFu89taI4go3mfHsqw5loR3CR3Qj61wkwWb75p+cs
-         +Jhugmtl4H5onT0QbyBRKrrcMTNVaI4nk00xbhEFthWnpo/hcSDpNv6Sgzlt2trbwCPl
-         1J0wvNxHZzqQdotggjyfZwHJ28QBMHXFZ2a0L5XAAFZrU2OYmIFcPySp5NMOURGkt3AD
-         jAhpr6Lp2AcNIz+Mb2UrAgZ0Fs147+x3R2daZxzl0Ok9WhWHfA22pjnEbuqDDpT+jW4i
-         jFni8YIkmGraq44YWJGNjOAj7+kiCj3CNKZ7mLiO2QC3ndJAPD9AryZsqH1LbiPAarQc
-         SlMw==
-X-Forwarded-Encrypted: i=1; AJvYcCWq4/tvQySXQNu8a7C90ZlKaNvPN7bzTstmij4NA0wnj3bOplR4zH+m/C/Zq1+vzBoFN96ealXEZbGfuD/2WRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9TWqUQg8vSOSlb1cgNr78tCad7rLBq8MUhG/5K/j3DkoOTj1j
-	vCKD0qEQ7Ei+1eBcCgy7ciN3/yggXC5DQk3X4BGGvhztOkcSubW+2ThpYEpCcscT2Dc=
-X-Gm-Gg: ATEYQzybxP23dzVZoU03VXWjoubN0LH4P/+I/2OYi660Wl7p+maX9qNour8gqwOhtDz
-	aZnu+ze7MPs3msF5QuPEMAocWPQLkOHjyOklD9h12/tgSTt0BIr1k14pYRmOPlbYZE8H+oCCCCe
-	hO1ayv1liVWccRrxj8TfbDLb9lBrM078qMwcBJMY9pL8Sem3OmfiOeTQp8Zkd26m0yn7cnHiJEX
-	qljg1/l+ddKcm6IG1KiCrBXSemc4B0HYnX9ltMr+XFsaEtEWfODGkMg8peRGvN676cIiME6JTC6
-	bbnOBY5M3cWE/KHpHfoG8QK8FhCABtcQ6DW5GEli2g4zHNxBSFlNY2HPvPJbcsR+xPT+PS55zPA
-	06W9RK3FIi9kupj7v5vWmRo40vylVUu0eVsaVSngN/L2B51YcQZyrhPvSlAUcRBDx2zRKDVjr4J
-	NeDR36I7WgXZZoJdT3r9t2re+xmZL0IOUBi5Y=
-X-Received: by 2002:a05:600c:3e18:b0:47e:e076:c7a5 with SMTP id 5b1f17b1804b1-48519862e45mr23898775e9.11.1772618785276;
-        Wed, 04 Mar 2026 02:06:25 -0800 (PST)
-Received: from FV6GYCPJ69 ([140.209.217.211])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485188914ddsm50708685e9.12.2026.03.04.02.06.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 02:06:24 -0800 (PST)
-Date: Wed, 4 Mar 2026 11:06:22 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
-	Dragos Tatulea <dtatulea@nvidia.com>, Shay Drory <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
-	Moshe Shemesh <moshe@nvidia.com>, Or Har-Toov <ohartoov@nvidia.com>
-Subject: Re: [PATCH net-next V3 10/10] devlink: Document port-level resources
-Message-ID: <ypgqsnml2lbtx7jnzpy6rqs2cxij4rmw6elcdvcqnmzgqaqxk6@e2d67qjopryt>
-References: <20260226221916.1800227-1-tariqt@nvidia.com>
- <20260226221916.1800227-11-tariqt@nvidia.com>
- <20260302191448.4750a2b8@kernel.org>
+	s=arc-20240116; t=1772619337; c=relaxed/simple;
+	bh=8fEK2GtJ++wMBBCQzSp1x8vrg7ZnwZSQnicWPRc9wbo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=AmLPP9PPIoct6LQZSt6N/s+kX0eP+Fd6loIxfPGkaWhOEPQmg3MBmahDfG+5pufNWJxxkV7qFhlQWoiACDCj7uqqNl5r1T1J9Fw2yQ+TkLlKFA/ZZejcz/Wv2IiXsspu6oZacWFC8UTMSNSs8v/4i2mlRs3DYX1LhXEUymKhcf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com; spf=pass smtp.mailfrom=huawei-partners.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei-partners.com
+Received: from mail.maildlp.com (unknown [172.18.224.83])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fQpSC1NygzHnHK7;
+	Wed,  4 Mar 2026 18:14:35 +0800 (CST)
+Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
+	by mail.maildlp.com (Postfix) with ESMTPS id B08B640086;
+	Wed,  4 Mar 2026 18:15:30 +0800 (CST)
+Received: from [10.123.123.154] (10.123.123.154) by
+ mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 4 Mar 2026 13:15:30 +0300
+Message-ID: <3c9449c1-95c7-4770-8e06-1ee50e263db8@huawei-partners.com>
+Date: Wed, 4 Mar 2026 13:15:29 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302191448.4750a2b8@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 00/10] mm/damon: support multiple goal-based quota
+ tuning algorithms
+To: SeongJae Park <sj@kernel.org>
+CC: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Andrew Morton
+	<akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko
+	<mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, Shuah Khan
+	<shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Suren
+ Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+	<damon@lists.linux.dev>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>
+References: <20260304044122.79394-1-sj@kernel.org>
+Content-Language: en-US
+From: Gutierrez Asier <gutierrez.asier@huawei-partners.com>
+In-Reply-To: <20260304044122.79394-1-sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: mscpeml500003.china.huawei.com (7.188.49.51) To
+ mscpeml500003.china.huawei.com (7.188.49.51)
 
-Tue, Mar 03, 2026 at 04:14:48AM +0100, kuba@kernel.org wrote:
->On Fri, 27 Feb 2026 00:19:16 +0200 Tariq Toukan wrote:
->> +Currently, port-level resources only support the ``GET`` command for viewing
->> +resource information.
->
->In case there is v4, AI says:
->
->> +Currently, port-level resources only support the ``GET`` command for viewing
->                                                         ^^^^^
->
->This isn't a bug, but the terminology here appears inconsistent with the
->rest of the documentation. The document uses user-facing command names
->elsewhere (like "devlink port resource show"), but this line uses "GET
->command" which seems to reference the internal DEVLINK_CMD_PORT_RESOURCE_GET
->netlink command.
->
->Should this be reworded to match the user-facing terminology used throughout
->the rest of the document, perhaps "only support the show command" or
->"only support viewing"?
+Hi SeongJae!
 
-AI does not see the context here. This is in-line with the rest of the
-get commands.
+Nice idea for dynamic environments.
+
+On 3/4/2026 7:41 AM, SeongJae Park wrote:
+> Aim-oriented DAMOS quota auto-tuning uses a single tuning algorithm.
+> The algorithm is designed to find a quota value that should be
+> consistently kept for achieving the aimed goal for long term.  It is
+> useful and reliable at automatically operating systems that have dynamic
+> environments in the long term.
+> 
+> As always, however, no single algorithm fits all.  When the environment
+> has static characteristics or there are control towers in not only the
+> kernel space but also the user space, the algorithm shows some
+> limitations.  In such environments, users want kernel work in a more
+> short term deterministic way.  Actually there were at least two reports
+> [1,2] of such cases.
+> 
+> Extend DAMOS quotas goal to support multiple quota tuning algorithms
+> that users can select.  Keep the current algorithm as the default one,
+> to not break the old users.  Also give it a name, "consist", as it is
+> designed to "consistently" apply the DAMOS action.  And introduce a new
+> tuning algorithm, namely "temporal".  It is designed to apply the DAMOS
+> action only temporally, in a deterministic way.  In more detail, as long
+> as the goal is under-achieved, it uses the maximum quota available.
+> Once the goal is over-achieved, it sets the quota zero.
+
+I'm not sure "temporal" is the best name for this type of behaviour.
+
+How about "by_score?". For example, "damos_goal_tune_esz_bp_by_score" and
+DAMOS_QUOTA_GOAL_TUNER_BY_SCORE.
+
+> Tests
+> =====
+> 
+> I confirmed the feature is working as expected using the latest version
+> of DAMON user-space tool, like below.
+> 
+>     $ # start DAMOS for reclaiming memory aiming 30% free memory
+>     $ sudo ./damo/damo start --damos_action pageout \
+>             --damos_quota_goal_tuner temporal \
+>             --damos_quota_goal node_mem_free_bp 30% 0 \
+>             --damos_quota_interval 1s \
+>             --damos_quota_space 100M
+> 
+> Note that >=3.1.8 version of DAMON user-space tool supports this feature
+> (--damos_quota_goal_tuner).  As expected, DAMOS stops reclaiming memory
+> as soon as the goal amount of free memory is made.  When 'consist' tuner
+> is used, the reclamation was continued even after the goal amount of
+> free memory is made, resulting in more than goal amount of free memory,
+> as expected.
+> 
+> Patch Sequence
+> ==============
+> 
+> First four patches implement the features.  Patch 1 extends core API to
+> allow multiple tuners and make the current tuner as the default and only
+> available tuner, namely 'consist'.  Patch 2 allows future tuners setting
+> zero effective quota.  Patch 3 introduces the second tuner, namely
+> 'temporal'.  Patch 4 further extends DAMON sysfs API to let users use
+> that.
+> 
+> Three following patches (patches 5-7) update design, usage, and ABI
+> documents, respectively.
+> 
+> Final three patches (patches 8-10) are for adding selftests.  The eighth
+> and the ninth patches extend the testing-purpose DAMON sysfs control
+> helper and DAMON status dumping tool to support the newly added feature.
+> The tenth patch extends the existing online commit test to cover the new
+> feature.
+> 
+> References
+> ==========
+> 
+> [1] https://lore.kernel.org/CALa+Y17__d=ZsM1yX+MXx0ozVdsXnFqF4p0g+kATEitrWyZFfg@mail.gmail.com
+> [2] https://lore.kernel.org/20260204022537.814-1-yunjeong.mun@sk.com
+> 
+> Changelog
+> =========
+> 
+> Changes from RFC v1
+> (https://lore.kernel.org/20260212062314.69961-1-sj@kernel.org)
+> - Add selftest for goal_tuner commitment.
+> - Set goal tuner inside damon_new_scheme().
+> - Allow zero size effective size quota.
+> - Update the ABI document.
+> - Wordsmith change descriptions.
+> 
+> SeongJae Park (10):
+>   mm/damon/core: introduce damos_quota_goal_tuner
+>   mm/damon/core: allow quota goals set zero effective size quota
+>   mm/damon/core: introduce DAMOS_QUOTA_GOAL_TUNER_TEMPORAL
+>   mm/damon/sysfs-schemes: implement quotas->goal_tuner file
+>   Docs/mm/damon/design: document the goal-based quota tuner selections
+>   Docs/admin-guide/mm/damon/usage: document goal_tuner sysfs file
+>   Docs/ABI/damon: update for goal_tuner
+>   selftests/damon/_damon_sysfs: support goal_tuner setup
+>   selftests/damon/drgn_dump_damon_status: support quota goal_tuner
+>     dumping
+>   selftests/damon/sysfs.py: test goal_tuner commit
+> 
+>  .../ABI/testing/sysfs-kernel-mm-damon         |  6 ++
+>  Documentation/admin-guide/mm/damon/usage.rst  | 16 +++--
+>  Documentation/mm/damon/design.rst             | 12 ++++
+>  include/linux/damon.h                         | 11 ++++
+>  mm/damon/core.c                               | 60 +++++++++++++++----
+>  mm/damon/sysfs-schemes.c                      | 58 ++++++++++++++++++
+>  tools/testing/selftests/damon/_damon_sysfs.py | 12 +++-
+>  .../selftests/damon/drgn_dump_damon_status.py |  1 +
+>  tools/testing/selftests/damon/sysfs.py        |  7 +++
+>  9 files changed, 166 insertions(+), 17 deletions(-)
+> 
+> 
+> base-commit: bbba4ca6322dd5c4f66fe31b1b374f77a8d2b2e5
+
+-- 
+Asier Gutierrez
+Huawei
+
