@@ -1,125 +1,140 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7BB37186F
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 12:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772626087; cv=pass; b=LlpDEb+0+sv6ylFdk5tlkPnpY/Ze6NNei6bHYcpyJrQY5P24E+bSsoLrpZw3ZnjZ8CbpfNuzuF0QH0v3X/Rd4lAai+hEcjkst0llWMIrPdBoDsUe+gch+IGgCSIakc+m3qk3veFwsUveHlgVao4B0gyXtgT/7/AQ47jLF7FRo7g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772626087; c=relaxed/simple;
-	bh=1ACMBpYZr1Ks6QsmvL+/OL5ndfIMEKJBZNSsy8bTZcY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XPhNFHu4iwLNcOhxsjmcIbFkQsT4Yy8grTUj4JH932beLwNYLtZG0JeECIlKxkeT3TC2qUHU3GC6dNQlYkVOTq+6cXiDLMDb7YVuJEbr5CMQZmmA1zjcHUogimyJKA/BG5koTClUNX26yY48qx/aytBB6gH7DxxFXgI7psNQxiM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=miB9U5oJ; arc=pass smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33FA191F94;
+	Wed,  4 Mar 2026 13:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772630345; cv=none; b=qDl0BAKEX6X27mN7ncRkK6AS+OSdHRNVLOZ6uBY1N+bdC1/bWW/aI533oASsIBMFW3aMecYuEvy13znK2j0pQjx8rian3pNokCDZQkrOcDwLqQLySonTdk3/3N3ANdqLXseLTY9K2dYIDhdPFLwVgyYRD1GacnADtMC+EeiT4cM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772630345; c=relaxed/simple;
+	bh=C1LUb2aaVVJMppU4WEn1TilKT8PcWh18uvF7AdKGFTk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VVyTkihZLxb1vIKx8JSkYQYFjRGIs5kViKGVIvFeme4vo3rIHuSx4IzQaS+YXWmMW/spQG18kDNje0JHnLX3D0McL6Ku+dU3LNi9VxEQEbqn2xMbdt3FMJ1G5TRT2Kaew6ebBR/qvK0t04RBDhUuQoAqJDowwQ+zMXcgOJ/F/Ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ms+4BAi1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="miB9U5oJ"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2b8095668ebso385934eec.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 04:08:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772626084; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eFQ8A1f1UNsBK2xJvosXC9OHaxvicAoGUYxKP+aOkYkCwmp00oH1rnAl5ljIqSYqVO
-         bHdJ9caBtNb/d/v6omGePDhESE+4dmfH0AxbEgZ8sOl3r3DcWsThLN9G9bjjwD3hIkiX
-         Ch/nAxHLidV/eoaaAZfiBYVlveqIyTH/RWtlmNtK+Pe/pVqd4HMumTe6ds2gEkL2vnC/
-         d/3k3dpWf9oASANZBHjPWLrVT5vQIZtVVEI6mVe68BljMh//w49LBWnXjKwA/+UBOr2s
-         /D8Q9KKgeQFWfuIaT7r3Y1EhVngqiJMQF2TDi+rINNGYNrDD61TDCz/KE92xQZj+lvBV
-         f4jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1ACMBpYZr1Ks6QsmvL+/OL5ndfIMEKJBZNSsy8bTZcY=;
-        fh=0DEYF7ZIcGz+3nItiZ5WTN+4GshgD6rU9atAdQimr8E=;
-        b=Rqzg0aNlpzbde6iVw/n7bjEodMGe6o+jiJ4f9TNohbwr62ZJPrV0/HbMti6cVg35Ya
-         1/FvK9f2agjgJpA8Te9/45gV1Y3cxnkFwt3E0xi+DBLiCjhO/qZgnDTdE5rDZRaZh/Cz
-         neHgUfuNq5xrsOh7J+jwUTw43eFxvMg2zvlTVLBGnOWg3wWZQpLpQaByqFpR7vqcR8g4
-         ocbwXB9IGeq1zuKEFyGjZAeRrlnAwhikqFE8+RiiWl98R4BRK0DKKPmeepyjzTLqbD8g
-         RPCBs69EDhxKHrUOzafPmTb9NEcBRaDMCNQAKCwZUSHVFrCBHTgDkGEkOS8QMyk3yqt3
-         DuFA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772626084; x=1773230884; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1ACMBpYZr1Ks6QsmvL+/OL5ndfIMEKJBZNSsy8bTZcY=;
-        b=miB9U5oJOXpo9M1x58aisA0VpdIuubvg+6D/8NMcy9q7uShv30ZijQcfOhFXksLISz
-         aC27NvIfmLKaKNS/isHLzXq++K6MKq5k9WomeLWq9wS9u/AQMZRCJFJey7G8jT+akrcT
-         Oofopi8G3COo1+NwTjiGDRmauSwaFkSv/AxNnrVrsZV05LNeV3lcKbPTuRGrMYdFflTZ
-         oeXIE40wrnL7wxSqcN1mNewBf2CJx+EC89ZGMTgmBL4CZTu4Aqe6jh7YxKTy6crrj8++
-         3B9+jTLHPv40UWYAvXNnaFSvZLecAC878EkNnQgC3vZyr8RFSBpepoH+2aE5RW0ahIij
-         JvnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772626084; x=1773230884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1ACMBpYZr1Ks6QsmvL+/OL5ndfIMEKJBZNSsy8bTZcY=;
-        b=CkZqVuBA59dqjCJaA1QFmXfns1F7ud8wfiQ4v82wd3K7YvqPTNQu+v3ZSZIIfnDjV8
-         k8g7DNAQxRCQcUkDSST9lVAdudyIwPCE0LFfKPQHyrjlQVhQIRE5RTPUzug9V0En13av
-         BC9IjwGDOElxj3C3VGXYsZjtdQWUaIiVNyYUQY7/T9sTXGqZ+4kMLtRGvGYfMx8fDjUb
-         l/GaRD4sQRNzsLzq2A0wwBwjoyfQM0AhoBej79nxRJ0nno3hA2ih4/D2Jzqr+dhhbIoW
-         GvtQZn5Jbi8EEZtGc/4jX4TaCnf1A9xQl2TiBMqwR2A7B1QmUQJY8JZFR1qHOVr/ytft
-         0fcg==
-X-Forwarded-Encrypted: i=1; AJvYcCUch4yRF4tqTb6aFL3VP5xMshffKEORMbiGdWqLjKxKW2P7jaWS3JlCCB6naEQklWAQpedVSJmQWSnDOPbaFBo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+c7wE/auiecVn2GbNnvkbmLsBvs9JAk9xPH9nUF/z31a1le2k
-	/zyfdahm6VyOJCPlS7qoAn19L/M6xyAef3uqSpW8i/nKnBpUaVElj9HFQN+/1sRdKT2ImkeQ1pA
-	JV9RGiNSJrXB6EUOcFcwQgeOsoQu3HwA=
-X-Gm-Gg: ATEYQzxN89GX0r/rfvpJo7KtE7wN++zx86O0FsT8DXbrQFhqWQNQvObrldZIrkqE09x
-	L8U+BAapukjj/syvh+O7JQEBIpRjuGEdd8pE0sz6AmCoxuEaraI7Um6OEwIIC4MF8KqnvqjE3b8
-	lKo0iqDjsWs3ZNfNbkemo2cQd+I4/OBmhjb5gVge8n7501Xiu4lGtMPR2Jyf1rQSyduojnJ7GPi
-	1b99l3e/YVzene5pn63wAlv4berGt4N5Iz5IsPdds1mHvfnI7qwtDgalyjQ0Eh+rstTzzbVt5Lq
-	Y/i1XHoT1Q4ZVrXn9oELO/Tsv6emr4DbsZw1T2Wh9/7oxNSgShz+lOYu99Y5+h66qX2oI28k3QP
-	Pp00ia+5WwaR50N4271Kkkf5E
-X-Received: by 2002:a05:7300:6422:b0:2be:687:5dbc with SMTP id
- 5a478bee46e88-2be311fb70fmr280215eec.6.1772626084203; Wed, 04 Mar 2026
- 04:08:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ms+4BAi1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E170C19423;
+	Wed,  4 Mar 2026 13:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772630345;
+	bh=C1LUb2aaVVJMppU4WEn1TilKT8PcWh18uvF7AdKGFTk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ms+4BAi1nnyGyti6BVz6jeLLcq1MRKH2eE4fOgRLcEcYzp3QJzkThz/G7kCHgI2XZ
+	 Krxo70RgsPhY3ck5qvxIJQ0Vl+8zALgsj1URsVZoqsMaXTG1/f0nz8XPA9eeql2qtO
+	 C+ioX4AlXq36IGdbg/BpTzMuqmCnz5BYiJKZvguPzyLU5Wi2Bd5/I8tZBobeEFCYNo
+	 rLq2kWHCIpRic9x0dsiCMvNrbmyRhscYoIQngsRyJLT2/dd1JPT1t6ZVHA8cBOK3bf
+	 oKFgPu8RmGtfgAWQ5VZ0BqDNYQO9rUD7Q+OeT9v3uihhbNRXXoG0vqQMyzfCI0ydTl
+	 NrBEUXsv9qjQg==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net-next v2 0/3] ethtool: Dynamic RSS context indirection table resizing
+Date: Wed,  4 Mar 2026 14:18:50 +0100
+Message-ID: <20260304131855.3225539-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260224-unused_var_err-v2-1-337f9359d98e@nvidia.com>
- <CANiq72kROq3B=EPfihKM=bvtyqYrbDV-mkFgROdPNjbC6zaBpQ@mail.gmail.com> <cccf55e9-e744-4581-9c14-ffa54bc90faf@davidgow.net>
-In-Reply-To: <cccf55e9-e744-4581-9c14-ffa54bc90faf@davidgow.net>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 4 Mar 2026 13:07:51 +0100
-X-Gm-Features: AaiRm50r77un-a0OluWfu1L_cwMILKtsTRe6GRTs7N5PK9FbFtUQcU2gyqx2S2w
-Message-ID: <CANiq72kXjytTqpYGbNqKKPBZoGFYHT-3JMb08we9kEOqiK4dmQ@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: kunit: fix warning when !CONFIG_PRINTK
-To: David Gow <david@davidgow.net>
-Cc: Alexandre Courbot <acourbot@nvidia.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 4, 2026 at 10:16=E2=80=AFAM David Gow <david@davidgow.net> wrot=
-e:
->
-> This is also sitting in kselftest/kunit-fixes:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
-/commit/?h=3Dkunit-fixes&id=3D7dd34dfc8dfa92a7244242098110388367996ac3
->
-> I don't particularly mind if you'd rather it go through the Rust tree,
-> though. Let me know if you want this removed.
+Hi!
 
-Ah, good, thanks!
+Some NICs (e.g. bnxt) change their RSS indirection table size based on
+the queue count, because the hardware table is a shared resource. The
+ethtool core locks ctx->indir_size at context creation, so drivers
+have to reject channel changes when RSS contexts exist.
 
-I saw your Reviewed-by and no notification of being queued so I
-thought you expected me to pick it up.
+This series adds resize helpers and wires them up in bnxt.
 
-Happy to remove it, but it would be nice to get the Cc: stable@ there
-to avoid having to send it later.
+Patch 1 adds core helpers:
+  ethtool_rxfh_can_resize() - read-only validation
+  ethtool_rxfh_resize() - fold/unfold a raw table in place
+  ethtool_rxfh_ctxs_can_resize() - validate all non-default contexts
+  ethtool_rxfh_ctxs_resize() - resize all non-default contexts,
+    with locking and RSS_NTF notifications
 
-Cheers,
-Miguel
+Patch 2 uses them in bnxt_set_channels(). Validation runs before
+bnxt_close_nic(); actual resize is deferred until after. RSS table
+size only changes on P5 chips with older firmware.
+
+Patch 3 adds HW tests in rss_drv.py (devices without dynamic table
+sizing are skipped):
+  resize_periodic - fold/unfold with a non-default [3,2,1,0]xN
+    pattern, verifying exact content preservation (main + ctx)
+  resize_nonperiodic_reject - non-periodic table blocks channel
+    reduction, with an extra periodic context to exercise
+    multi-context validation (main + ctx)
+  resize_nonperiodic_no_corruption - failed resize leaves table
+    contents and channel count unchanged (main + ctx)
+
+Running the tests:
+
+  # On real hardware
+  sudo NETIF=eth0 ./rss_drv.py
+
+Changes v1 -> v2:
+
+ - Dropped netdevsim support and netdevsim selftest (Jakub)
+ - Split ethtool_rxfh_contexts_resize_all() into separate validate
+   (ethtool_rxfh_ctxs_can_resize) and apply (ethtool_rxfh_ctxs_resize)
+   so drivers can validate before closing the device (Jakub)
+ - Shortened helper names (Jakub)
+ - Replaced scoped_guard(mutex) with explicit mutex_lock/unlock
+   (Jakub)
+ - Removed defensive zero-size check, bare expressions instead of != 0
+   comparisons, ! instead of == 0 (Jakub)
+ - In bnxt, moved bnxt_check_rings() before RSS validation and
+   deferred actual resize to after bnxt_close_nic() (Jakub, Michael)
+ - Added comment that RSS table size only changes on P5 chips with
+   older firmware (Michael)
+ - Use non-default [3,2,1,0]xN pattern set via netlink to distinguish
+   correct fold from driver resetting to defaults (Jakub)
+ - Check exact indirection table pattern, not just set(indir) (Jakub)
+ - Use ksft_raises() instead of try/except/else (Jakub)
+ - Removed queue_count=8 from NetDrvEnv (Jakub)
+ - Added ksft_variants to resize_nonperiodic_reject for ctx coverage
+ - Added extra periodic context in reject test for multi-context
+   validation coverage
+ - Added resize_nonperiodic_no_corruption test
+
+Open items:
+
+ - No user-controlled minimum table size yet. The plan is to record
+   the user-provided indirection table length in the context (e.g.
+   ctx->user_indir_size) and use it as a floor when folding: reject if
+   new_size < user_indir_size. This way the user's original table size
+   serves as an implicit minimum, preventing the driver from shrinking
+   below what the user intended. Left for a follow-up.
+
+
+Björn Töpel (3):
+  ethtool: Add RSS indirection table resize helpers
+  bnxt_en: Resize RSS contexts on channel count change
+  selftests: rss_drv: Add RSS indirection table resize tests
+
+ .../net/ethernet/broadcom/bnxt/bnxt_ethtool.c |  36 +++-
+ include/linux/ethtool.h                       |   4 +
+ net/ethtool/common.c                          | 146 ++++++++++++++++
+ .../selftests/drivers/net/hw/rss_drv.py       | 163 +++++++++++++++++-
+ 4 files changed, 338 insertions(+), 11 deletions(-)
+
+
+base-commit: ed0abfe93fd135dac223e87a3c945017b1fa8bfc
+-- 
+2.53.0
+
