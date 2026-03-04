@@ -1,175 +1,79 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8751D39EF12;
-	Wed,  4 Mar 2026 10:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0684386C36;
+	Wed,  4 Mar 2026 10:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772619337; cv=none; b=AgYF9aZ3hyhkb1QRepJqWeWvFjCAlfX/V7dI9lczJ+VN4mVxmVYdt/Ca8mbTERJRxQrjBZoHLxwRanABObIUTReT2/vt46akQ0SPC/BaoGGtYHNac1GEZxFhBKmJu79g7oYPfLJpD1lSozqiY/HtmqKNeJusSxrKrweWrNz1+rc=
+	t=1772620222; cv=none; b=nBj+vAgNePU5fuhGMdZJGW+dUfHwlh5MKbipqTDQ4puPMeV2QP6bKsKJfJZVeU4KutvNiKiYQWo3JsDKg4aVveMPL1d/XbL68rY/6VrrJBF4gh60/836bC4LC4YDE77MRja8NEYY1q+x6tcsYlJp3qrGvdHpXh7ARkMQxDc79wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772619337; c=relaxed/simple;
-	bh=8fEK2GtJ++wMBBCQzSp1x8vrg7ZnwZSQnicWPRc9wbo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=AmLPP9PPIoct6LQZSt6N/s+kX0eP+Fd6loIxfPGkaWhOEPQmg3MBmahDfG+5pufNWJxxkV7qFhlQWoiACDCj7uqqNl5r1T1J9Fw2yQ+TkLlKFA/ZZejcz/Wv2IiXsspu6oZacWFC8UTMSNSs8v/4i2mlRs3DYX1LhXEUymKhcf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com; spf=pass smtp.mailfrom=huawei-partners.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei-partners.com
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fQpSC1NygzHnHK7;
-	Wed,  4 Mar 2026 18:14:35 +0800 (CST)
-Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
-	by mail.maildlp.com (Postfix) with ESMTPS id B08B640086;
-	Wed,  4 Mar 2026 18:15:30 +0800 (CST)
-Received: from [10.123.123.154] (10.123.123.154) by
- mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 4 Mar 2026 13:15:30 +0300
-Message-ID: <3c9449c1-95c7-4770-8e06-1ee50e263db8@huawei-partners.com>
-Date: Wed, 4 Mar 2026 13:15:29 +0300
+	s=arc-20240116; t=1772620222; c=relaxed/simple;
+	bh=v07LSu7NC2ihIaIjgjrW/HclXgPkr3799pII9Mm0lsU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=e8mL/CkTGUXQLOqXCtfn/lVqiN6ucEDY0+faMPwmCzA+Y5DEcAjJ0LNzEEhjsdG5Vor2QG0fzj1ClkptvJjot1b8o6NiYjFqK1Jzxu3Tvf92o7xA/IdOfqsNdmyMYJqcRvYJCTx3Ho64jlbfx60LO8pL+942BRbrOQiYfigWSPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sxbwk/tb; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sxbwk/tb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4088BC19423;
+	Wed,  4 Mar 2026 10:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772620221;
+	bh=v07LSu7NC2ihIaIjgjrW/HclXgPkr3799pII9Mm0lsU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=Sxbwk/tbUITeCZdXLJSGJz3Ywvs4ebG5eiXQ3ZiteaOQqtrg7jzQ7Xmjsd3qgv9WS
+	 vKqRCXxrdwU8iuuw0suEwAgOPJ6rNDEdmnFlHCeyJ0LXkjpvfYv5uYF5P6Sw0K4rKU
+	 gVH0d3sjk389856+MqfWeJ6aGjxSv7plvIeM0urC5SGn+HkTWQy1yyknupqkmpyPc+
+	 +MEIdBefvQLPUpDkNQ3LRaxHh8mkJnkoAK8exyK1YK4D1EhS7g3jGLoH2/7zPL6s+O
+	 R7qLvtCmeL8/mumHe38rmLMBxnn2s4uGhjE/tjp4NiWVhYWRl/3ZR1cJ01UTPnWCRo
+	 j5+yAxn82nKGA==
+Content-Type: multipart/mixed; boundary="===============2676291065332725965=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 00/10] mm/damon: support multiple goal-based quota
- tuning algorithms
-To: SeongJae Park <sj@kernel.org>
-CC: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Andrew Morton
-	<akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, Jonathan
- Corbet <corbet@lwn.net>, Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko
-	<mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Suren
- Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
-	<damon@lists.linux.dev>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-mm@kvack.org>
-References: <20260304044122.79394-1-sj@kernel.org>
-Content-Language: en-US
-From: Gutierrez Asier <gutierrez.asier@huawei-partners.com>
-In-Reply-To: <20260304044122.79394-1-sj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <c0c51f1bfcaba622755b8b6c874180e0daf3ca307e1991ea892ca5f07e705f4c@mail.kernel.org>
+In-Reply-To: <20260304094429.168521-2-yangfeng59949@163.com>
+References: <20260304094429.168521-2-yangfeng59949@163.com>
+Subject: Re: [PATCH v10 bpf-next 1/2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+From: bot+bpf-ci@kernel.org
+To: yangfeng59949@163.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,posk@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com
+Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,yangfeng59949@163.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  4 Mar 2026 10:30:21 +0000 (UTC)
+
+--===============2676291065332725965==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: mscpeml500003.china.huawei.com (7.188.49.51) To
- mscpeml500003.china.huawei.com (7.188.49.51)
 
-Hi SeongJae!
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 178c4738e63b..565fe8cbcdc9 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -1156,6 +1156,20 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
 
-Nice idea for dynamic environments.
+[ ... ]
 
-On 3/4/2026 7:41 AM, SeongJae Park wrote:
-> Aim-oriented DAMOS quota auto-tuning uses a single tuning algorithm.
-> The algorithm is designed to find a quota value that should be
-> consistently kept for achieving the aimed goal for long term.  It is
-> useful and reliable at automatically operating systems that have dynamic
-> environments in the long term.
-> 
-> As always, however, no single algorithm fits all.  When the environment
-> has static characteristics or there are control towers in not only the
-> kernel space but also the user space, the algorithm shows some
-> limitations.  In such environments, users want kernel work in a more
-> short term deterministic way.  Actually there were at least two reports
-> [1,2] of such cases.
-> 
-> Extend DAMOS quotas goal to support multiple quota tuning algorithms
-> that users can select.  Keep the current algorithm as the default one,
-> to not break the old users.  Also give it a name, "consist", as it is
-> designed to "consistently" apply the DAMOS action.  And introduce a new
-> tuning algorithm, namely "temporal".  It is designed to apply the DAMOS
-> action only temporally, in a deterministic way.  In more detail, as long
-> as the goal is under-achieved, it uses the maximum quota available.
-> Once the goal is over-achieved, it sets the quota zero.
+> +		} else {
+> +			/* For CONFIG_IPV6=n, ipv6_bpf_stub is NULL */
+> +			pr_warn_once("Please test this program with the IPv6 module enabled\n");
 
-I'm not sure "temporal" is the best name for this type of behaviour.
+Martin KaFai Lau's v9 review suggested pr_err_once here instead of
+pr_warn_once.  Since the function also returns -EOPNOTSUPP, should this
+use pr_err_once to match the error severity?
 
-How about "by_score?". For example, "damos_goal_tune_esz_bp_by_score" and
-DAMOS_QUOTA_GOAL_TUNER_BY_SCORE.
+https://lore.kernel.org/bpf/0e88a3ea-9424-40eb-96ea-2d3d1cccac7d@linux.dev/
 
-> Tests
-> =====
-> 
-> I confirmed the feature is working as expected using the latest version
-> of DAMON user-space tool, like below.
-> 
->     $ # start DAMOS for reclaiming memory aiming 30% free memory
->     $ sudo ./damo/damo start --damos_action pageout \
->             --damos_quota_goal_tuner temporal \
->             --damos_quota_goal node_mem_free_bp 30% 0 \
->             --damos_quota_interval 1s \
->             --damos_quota_space 100M
-> 
-> Note that >=3.1.8 version of DAMON user-space tool supports this feature
-> (--damos_quota_goal_tuner).  As expected, DAMOS stops reclaiming memory
-> as soon as the goal amount of free memory is made.  When 'consist' tuner
-> is used, the reclamation was continued even after the goal amount of
-> free memory is made, resulting in more than goal amount of free memory,
-> as expected.
-> 
-> Patch Sequence
-> ==============
-> 
-> First four patches implement the features.  Patch 1 extends core API to
-> allow multiple tuners and make the current tuner as the default and only
-> available tuner, namely 'consist'.  Patch 2 allows future tuners setting
-> zero effective quota.  Patch 3 introduces the second tuner, namely
-> 'temporal'.  Patch 4 further extends DAMON sysfs API to let users use
-> that.
-> 
-> Three following patches (patches 5-7) update design, usage, and ABI
-> documents, respectively.
-> 
-> Final three patches (patches 8-10) are for adding selftests.  The eighth
-> and the ninth patches extend the testing-purpose DAMON sysfs control
-> helper and DAMON status dumping tool to support the newly added feature.
-> The tenth patch extends the existing online commit test to cover the new
-> feature.
-> 
-> References
-> ==========
-> 
-> [1] https://lore.kernel.org/CALa+Y17__d=ZsM1yX+MXx0ozVdsXnFqF4p0g+kATEitrWyZFfg@mail.gmail.com
-> [2] https://lore.kernel.org/20260204022537.814-1-yunjeong.mun@sk.com
-> 
-> Changelog
-> =========
-> 
-> Changes from RFC v1
-> (https://lore.kernel.org/20260212062314.69961-1-sj@kernel.org)
-> - Add selftest for goal_tuner commitment.
-> - Set goal tuner inside damon_new_scheme().
-> - Allow zero size effective size quota.
-> - Update the ABI document.
-> - Wordsmith change descriptions.
-> 
-> SeongJae Park (10):
->   mm/damon/core: introduce damos_quota_goal_tuner
->   mm/damon/core: allow quota goals set zero effective size quota
->   mm/damon/core: introduce DAMOS_QUOTA_GOAL_TUNER_TEMPORAL
->   mm/damon/sysfs-schemes: implement quotas->goal_tuner file
->   Docs/mm/damon/design: document the goal-based quota tuner selections
->   Docs/admin-guide/mm/damon/usage: document goal_tuner sysfs file
->   Docs/ABI/damon: update for goal_tuner
->   selftests/damon/_damon_sysfs: support goal_tuner setup
->   selftests/damon/drgn_dump_damon_status: support quota goal_tuner
->     dumping
->   selftests/damon/sysfs.py: test goal_tuner commit
-> 
->  .../ABI/testing/sysfs-kernel-mm-damon         |  6 ++
->  Documentation/admin-guide/mm/damon/usage.rst  | 16 +++--
->  Documentation/mm/damon/design.rst             | 12 ++++
->  include/linux/damon.h                         | 11 ++++
->  mm/damon/core.c                               | 60 +++++++++++++++----
->  mm/damon/sysfs-schemes.c                      | 58 ++++++++++++++++++
->  tools/testing/selftests/damon/_damon_sysfs.py | 12 +++-
->  .../selftests/damon/drgn_dump_damon_status.py |  1 +
->  tools/testing/selftests/damon/sysfs.py        |  7 +++
->  9 files changed, 166 insertions(+), 17 deletions(-)
-> 
-> 
-> base-commit: bbba4ca6322dd5c4f66fe31b1b374f77a8d2b2e5
+> +			ret = -EOPNOTSUPP;
+> +			goto out;
+> +		}
+> +	}
 
--- 
-Asier Gutierrez
-Huawei
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22664502452
+--===============2676291065332725965==--
