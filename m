@@ -1,84 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6293C2AE8D;
-	Wed,  4 Mar 2026 07:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B151A351C13;
+	Wed,  4 Mar 2026 07:27:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772608460; cv=none; b=GFk+Ol3IeIExfnBu1PEqAm/rIMQP8RLcALvRVhyFwkA842Tm/XbxbFeg+niqGEtajg5nsBJRzG5oFia4XzO9n22gV1XxT4YYX8be+t+I6sDTpknSrybSDfYKgYdJrz9L4RLP7TX1a5PfXEIn3m3zVt+z+yF4mQ4dKutBe2z+CKw=
+	t=1772609245; cv=none; b=d0IcDO5wHx927IQHZswCmdr6T1BKBCPHojqCUMYBB0Gu3RX4vpRI5azCWdRNQevhH9JdsDKVRZktVXdupf673SZo1DRsIEyCS7ZfwgniCTFjwCHrqC0j1xmkpN9S4t3Qqys68ZWZ3q4DV4gxs9UKkbdgIbLYyuW7CyUdVsgzy3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772608460; c=relaxed/simple;
-	bh=cPZJfPbuDa1fkt02QXSIQH0+wvGAsNbNKl/OpOppkw4=;
+	s=arc-20240116; t=1772609245; c=relaxed/simple;
+	bh=AMtw0pjrXtq1GRS+1bfRCOMN9annLt3Tak8oZjmbG7o=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=F91a3e0PQGEPxriQqJlz1y/IdKxuKO8apN9H7utE27phK1u7/8M6l5L5p8bVkEAOjn7MWaAr4amqDasla730V7ZlTf4ngjqlUeCR9EIYFsfVH19f47+6NewL9/Ck59f5ty1BdTTLFI8DFU/mqOs6PL26mkyTVxUfBl/Jd4XJXd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2Nv6Dth; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=SmXSpcSGTVnedwLICJadrO3ZaKN9+6AmMKztw2SOowOi4aCPIY45wVAf3xz6yYuQXzR/Wwya+kvFf8m4a5ApVtKEX4QPzXYVYtqkOSAVcSkIrkVhXkelxnCatZ+iaGEXa3fzZZhEsYsv/aKqDat+sOZYq4XiqxYukuv/CGux8+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OpNGUtLO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2Nv6Dth"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5786DC19423;
-	Wed,  4 Mar 2026 07:14:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OpNGUtLO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1BCC19423;
+	Wed,  4 Mar 2026 07:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772608459;
-	bh=cPZJfPbuDa1fkt02QXSIQH0+wvGAsNbNKl/OpOppkw4=;
+	s=k20201202; t=1772609245;
+	bh=AMtw0pjrXtq1GRS+1bfRCOMN9annLt3Tak8oZjmbG7o=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=B2Nv6DthxweQOzN4B5mA5GUF94adCUfwqJgJZ0DJyTf5mqabGwVAsWGWLhNy8P6+I
-	 g31FjrQWFyZmS3CE8jVMu6ey2jyvfKhlux1CDPpecNyCy3r0a9G6lPO/0giVJM4Mmd
-	 v6q2w6opQF5ZuUkP6wK2nleEQJBf/fijKg7vjBWABnvYEPPTExbjSRvYoJd4vEOyNX
-	 oimsY1dxixhYpwpb6i80C8IwuDzT0mZcM7FUR/RwLC6TUnRH6+Eyt1mq9enjdwGEr8
-	 x2NcNY3sQOxGL9bOapLXLo17/MGKIcp/hdXLj8dLQb7uO6TXuozWMQZKbgBVSUBjjg
-	 F8CxB1kl59W8w==
-Content-Type: multipart/mixed; boundary="===============8248387453652486925=="
+	b=OpNGUtLO0D5qbdbg/ZEwNqPA1InZooEFYZyxyjuNe/5L+KALJYgH7P9aHTR2xPAyP
+	 UzyJpY4Pm7R10Uk3Xu7kkTB4EC8f4Yk+Dm/bsmLnZjujEE1Fy8ys40W8l85uT7dfVi
+	 daz4E/RorSHzjD3RbC+W25eJgt/l7UK4hghmFa5ODWByct66pgk5D7wir0jDXWJTOq
+	 QD4sb1uJXV1tiDVhbg1NRzOMvntg409Vm87kwWcxtCNw1Mc2EyBWhzfCfEeFcR+93x
+	 C7/SrnRqMwfpDyyrUPX4mZwwKwt2LMEBimcjRaL/ClfgEEkviRPXuEZqXhQ2nO9n2C
+	 8Y4Mz81uktr8Q==
+Content-Type: multipart/mixed; boundary="===============1770799269804699519=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <772806bbb78e8d4cfc9525b6122c44496a1c345616a31f0bbb7f8dd12c621844@mail.kernel.org>
-In-Reply-To: <20260304063643.14581-4-jiayuan.chen@linux.dev>
-References: <20260304063643.14581-4-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf-next v1 3/7] tcp_bpf: refactor recvmsg with read actor abstraction
+Message-Id: <f141f5786f2492de54972838d823f02b44300458b1ec78fc61f34cdfac87b183@mail.kernel.org>
+In-Reply-To: <20260304063643.14581-5-jiayuan.chen@linux.dev>
+References: <20260304063643.14581-5-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf-next v1 4/7] tcp_bpf: add splice_read support for sockmap
 From: bot+bpf-ci@kernel.org
 To: jiayuan.chen@linux.dev,bpf@vger.kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com
-Cc: jiayuan.chen@linux.dev,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,kuniyu@google.com,willemb@google.com,dsahern@kernel.org,ncardwell@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,jiapeng.chong@linux.alibaba.com,ihor.solodrai@linux.dev,mhal@rbox.co,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  4 Mar 2026 07:14:19 +0000 (UTC)
+Cc: jiayuan.chen@linux.dev,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,kuniyu@google.com,willemb@google.com,dsahern@kernel.org,ncardwell@google.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,jiapeng.chong@linux.alibaba.com,ihor.solodrai@linux.dev,mhal@rbox.co,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  4 Mar 2026 07:27:24 +0000 (UTC)
 
---===============8248387453652486925==
+--===============1770799269804699519==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 2e26174c9919..6a906bfe3aa4 100644
 > --- a/net/core/skmsg.c
 > +++ b/net/core/skmsg.c
+> @@ -445,6 +445,16 @@ int sk_msg_read_core(struct sock *sk, struct sk_psock *psock,
+>  				copy = actor(actor_arg, page,
+>  					     sge->offset, copy);
+>  			if (!copy) {
+> +				/*
+> +				 * The loop processes msg_rx->sg entries
+> +				 * sequentially and prior entries may
+> +				 * already be consumed. Advance sg.start
+> +				 * so the next call resumes at the correct
+> +				 * entry, otherwise it would revisit
+> +				 * zero-length entries and return -EFAULT.
+> +				 */
+> +				if (!peek)
+> +					msg_rx->sg.start = i;
+>  				copied = copied ? copied : -EFAULT;
+>  				goto out;
+
+The sg.start fix looks correct for the mid-way failure case.
+
+When the splice actor (below) fails on the very first sg entry, copied
+is still 0, so this returns -EFAULT to the caller. For the recvmsg
+actor, -EFAULT is the right error because copy_page_to_iter() returning
+0 means a genuine fault. But for the splice actor, 0 can mean the pipe
+is full (add_to_pipe() returned -EAGAIN) or memory allocation failed.
+
+Would it make sense for sk_msg_splice_actor() to propagate the actual
+error, or for the callers to translate -EFAULT into the appropriate
+errno for their context? Right now the splice path returns -EFAULT to
+userspace for a pipe-full condition, where standard tcp_splice_read()
+would return -EAGAIN:
+
+tcp_bpf_splice_read()
+  -> __tcp_bpf_recvmsg()
+    -> sk_msg_read_core() with sk_msg_splice_actor
+      -> add_to_pipe() returns -EAGAIN (pipe full)
+      -> actor returns 0
+      -> copied = 0 ? 0 : -EFAULT
+    returns -EFAULT
+  returns -EFAULT to userspace
+
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
 
 [ ... ]
 
-> @@ -440,7 +442,8 @@ int __sk_msg_recvmsg(struct sock *sk, ...
->  			if (copy)
-> -				copy = copy_page_to_iter(page, sge->offset, copy, iter);
-> +				copy = actor(actor_arg, page,
-> +					     sge->offset, copy);
+> +static int sk_msg_splice_actor(void *arg, struct page *page,
+> +			       unsigned int offset, size_t len)
+> +{
+> +	struct tcp_bpf_splice_ctx *ctx = arg;
+> +	struct pipe_buffer buf = {
+> +		.ops = &nosteal_pipe_buf_ops,
+> +	};
+> +	ssize_t ret;
+> +
+> +	buf.page = alloc_page(GFP_KERNEL);
+> +	if (!buf.page)
+> +		return 0;
+> +
+> +	memcpy(page_address(buf.page), page_address(page) + offset, len);
+> +	buf.offset = 0;
+> +	buf.len = len;
+> +
+> +	/*
+> +	 * add_to_pipe() calls pipe_buf_release() on failure, which
+> +	 * handles put_page() via nosteal_pipe_buf_ops, so no explicit
+> +	 * cleanup is needed here.
+> +	 */
+> +	ret = add_to_pipe(ctx->pipe, &buf);
+> +	if (ret <= 0)
+> +		return 0;
+> +	return ret;
+> +}
 
-The direct copy_page_to_iter() call is now replaced by the actor
-callback here, but deeper in the same function the peek-path comment
-still references copy_page_to_iter() by name:
-
-net/core/skmsg.c:sk_msg_read_core() {
-    ...
-		} else {
-			/* Lets not optimize peek case if copy_page_to_iter
-			 * didn't copy the entire length lets just break.
-			 */
-			if (copy != sge->length)
-				goto out;
-    ...
-}
-
-Should this comment say "the actor" instead of "copy_page_to_iter"
-now that the copy operation is abstracted behind the callback? Once
-the splice actor is added later in this series, the reference to
-copy_page_to_iter will be inaccurate for that path.
+Both the alloc_page failure and the add_to_pipe failure return 0 here.
+Since sk_msg_read_core() converts actor-returning-0 into -EFAULT when
+no bytes have been copied yet, this means userspace can see -EFAULT for
+what is actually -ENOMEM (allocation failure) or -EAGAIN (pipe full).
+The alloc_page case under memory pressure seems particularly confusing,
+as -EFAULT gives no indication that backing off might help.
 
 
 ---
@@ -86,4 +137,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22658462977
---===============8248387453652486925==--
+--===============1770799269804699519==--
