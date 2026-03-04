@@ -1,131 +1,139 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1309D3A1C9
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 02:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C8F2D248D
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 02:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772591672; cv=pass; b=CcQCAdWJId5m6UaOAAAbd9gkRx+EOr+Mc0j1bBrxqMwDSxEkf9BFnrndlk0oLM4ONBpuMxCUyZ8HeX/1yuQawHA+LO0VwXRDQ44hPwmGUzp11zoyFwOtV5ZyvlseDqUQiOLtVwEop7U+4ORqCyQX7eXYwd1V0sYoPAk3Eixifpc=
+	t=1772591691; cv=pass; b=iadDx/qa2Sy8ZB+0xdn2PjMfjuOebhSli8ak+GuGzVa3zk3APOyqn9Q7vBudYwL1xEmbRkcwarfpYMN1rVFBg2DfYTPcWRabROeqAbJnOGEKRh0h4H7OZCtTNPnAyirQSEnBweXWrjWI86pMb6fq5Usv+17XUJTillt5l5gp5Xk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772591672; c=relaxed/simple;
-	bh=lLvfMUPCqqBJTSJhP3cm5kFNukqeKiBLJqApsgrzImA=;
+	s=arc-20240116; t=1772591691; c=relaxed/simple;
+	bh=2XMl2CMJB5mdDn8gFRtihyqGf2DVsjqEtSyf6fRD1HA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XK2JxQTuZzvCBwOyvfaq5r6NU0Za6vMFBd3GxXMRNR5frITHn1gvAw3QvZfRqX43HR6qigrPsDShR7z04keUN8X5fWkq7epSaLPxgsxiLqkV+OauCJwgrATvJV+lE5WzmsCzdP5dil/McHjoFhs7NHk5DBnwu9Rzv6QBRjhuQrc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FWeJPMEZ; arc=pass smtp.client-ip=209.85.160.54
+	 To:Cc:Content-Type; b=DrZ4ZFvY8ci3rhIL7bu8WFCvxYn5LqjL2va5rpPB0WRe0wBR0ueOK05tgnVVchq9AoTOM6G19lVZ5Rm+/1hIspmpPh5+HrQfijtqQ4L7JaYBudxBnpALMcZ7eSCSM2mFoHYEL8Y7s9wtYNW9XchppLjDHAmG5CYlKe61c5Q3e8Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KyYrgDTa; arc=pass smtp.client-ip=74.125.82.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FWeJPMEZ"
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-4042fe53946so639578fac.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 18:34:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772591670; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KyYrgDTa"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2be22d699c9so91268eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2026 18:34:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772591690; cv=none;
         d=google.com; s=arc-20240605;
-        b=dgNHE8xf8Oj+apip9E1OaIj18Owhfb28hyED0JNubyUC0DRYZjKzXnRz9FWpivrqUM
-         F3ApZsJfRJJ88Ir0g7O0A9xr96tdaEFF0jXwx3SunF5nCVj8rNi73pewzXWO70ZO1jGt
-         qTLzwKvLmg45h23wW4AW3tl2nJTbnoGv6m1mJ/LsHdVFAX7i7exg4zC/p/MBqKyOKuWx
-         CY9BRJWeQhRZkIRGYHEZc0WOZ7LdvGWS/1JQPYWQ4DMvRNeA/Rw1XTdN/rwsfjGKDndr
-         F3uxRxejGzqLF6JKWxfphfnWSIPvgOw4sZozk0O34aRWQEwD5IL4fJ3mWgJ+AYsvRufr
-         /rwA==
+        b=AjfZ+nwlqE2TYMPlGB7PrE69f7bwot2rFkVim4PG8L7gWdlnqUqtkpoykd1Jhdh+o4
+         FUhdFjnjF39k0aX6hQ6hIv+JzxfK2WYycdKOwtpFgncnbkgQBh1/Sou0bJRGPay0h0/D
+         hunPh1Id/GalpGvoOxDAA/XsBwgHP9d6/Pv+Keq4QAIEAOdteq37Y4a33rwnvFvK88kE
+         Aku89aglhtdisxuIHJzxndbK6Dsn8QYvFDyCktMi5hpPqfGSb5xkEqBrIwwrvv7cSpen
+         ThPwYlWlSLTqAoXpDw/8/N6EfU3U5PxN4mA/qYVY52tjK2MD7vbZG4qhdnLL43eCk81D
+         s6xw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=FzAVneWa3Xh7z4I4PhJMo14ZSKYpGv8t7blqiZcWhHc=;
-        fh=vzHHnUvyx9H0idaRvJLleRI1Oh+F84ExanPUpBVs3Q0=;
-        b=X1mvApjH+VhE285UOydmab+r//Z1QgivPc8mlaQkqrXyosiq/zS9JIkkZF0o/byqIZ
-         /UGsAWLRO1WqTXv++cH+AEgmUInlXBMjnAETDjlccuFcl67nncTVU60PjI6G1CrWplsg
-         bFrAX+i7Xb3SCTzhrFapmXDB0N/HJe7Fdgahzhx0EjSm44a+Z9ed/TVhY3W5GdDAkonK
-         ADBUq3q0GP0CE8SHK/5gfWzObjr2RQXwUhjM48xRV9XLZI7zU4XDmohTJ89Qo62DEcpV
-         7L2oX5m+Ns0X+8Kh7eY9x1awOxZnkViH/7liYiybqOtIz2os/H3Hoy4VDSfOLKH6a8kS
-         cAiw==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JkX2+jmYSnw4PjcXqCvYgS+1FwE6mJFHLzb0KkOcleo=;
+        fh=lVDqeHqLF/29VslaYsKxaXVTxfVEJqyPRGR82xusvME=;
+        b=CF2YfG97hLhhZyzx1iKGvQ0tZA7PgPmd0U+h0y564vLIuM9N94+vvKy4MAMtrR15uJ
+         AvkIaPHU06Mx3pio9YTgRm/Bj4Ue6Ur344flPoTgtVNoA3Y6jjHJOVfgFrZ3JtWLsc8H
+         /dB17t0SIOFS1PYGYxzTtCQaqLirQojwWQ6eyqVcaTOrNZoijxQpmrh0TgJdMHgv9CZ9
+         ljSj8nxGmu7+o97hx+DcRRJS8S7XeDXb+ZXZZG0jseB9MSeDt3kFhAAfmGfQuNvHePZi
+         MFduqPX0tnBCGPm3E9gY1QVKaHMiW8ANoTy5P/fS1oWMbO72/jhu5AvG5PhXjyHlksdF
+         kJsg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772591670; x=1773196470; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FzAVneWa3Xh7z4I4PhJMo14ZSKYpGv8t7blqiZcWhHc=;
-        b=FWeJPMEZZ/Q3rcIJtvOumUZQzhFso8O6EppM13EgWSHMMq3yfMpCSyoZgzf7ZjksDf
-         3qZ1IUVQGiUc2Rh2i7wejXoEZEebiBs8gYw05HXAzE0r8Tag7KveUGbf6wZAOMzgSOVa
-         CmOKTYzubD7hRr5HBiPU6QSntd3PM2AQN1D+U7Et9PquoQCyFovcXLwSZQvWb4xC2idR
-         YRFl/pCgqnY0m1jn3bUsJY/yIoWU7uGRhT2vgza3/pnTdHZRAjLZhgBf86hqunGRMnco
-         KN2QyNnoRXFl7KP80DquIGGzy1lF7mHeuKUjYLlkcanCxF4/XAWIZe+zxdV8K1gl83jn
-         PnRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772591670; x=1773196470;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1772591690; x=1773196490; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FzAVneWa3Xh7z4I4PhJMo14ZSKYpGv8t7blqiZcWhHc=;
-        b=eYJGvdzYTy44Rea0fxNMDkJOrCxFI9sFAWufPi7hhgol1yJnOgqc7zHSf+UsUS946z
-         BtYWFAZZ05IEYiuZEgBGXr/qsaTolSVdkm9wLTWWuaZCaIcqtVZNHXdBwARs1uBLuKOG
-         q4Ebj7Ma8daErkqIE4OGjbeg7/QwOpnMEEgyIYCoVcp4X0HGihJaMcTVO4E4A0dTVMcF
-         4+jF1Tmg+0TUa6kWrolDCpjHiSVxp/B5M+z5pcg/nVOIJg245W4MsnNYpIndILu3QPrM
-         BUc4WvOW736Y14Ys+VD4vkyDroKaYhDe199gyvCveRFoMu4UHtihXiApp/Zv2WgpeX7K
-         zX0g==
-X-Forwarded-Encrypted: i=1; AJvYcCWQfDOxkQLx6JSJCR8rrmM6dd6z9u5EUq9tFHwN7LeHV9K6k71eP9BVXEBKNh1VyvJzPVt2olApHcASl1sU5oo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCH5g9kALrMBMIMIHtqrdorh+4k88EvgM3uE4PaR2KFKIdKpDU
-	xsrfXcHCa247dHzpDvr7AkgHAKF4ZbTOcAh50HOLtT+n7joUQhn7jY8miwqbYguk9GXtvVpmFVo
-	tjYu+BmmkdXdtuE/M42bHVNfboJaBTqpdqGQLY0g=
-X-Gm-Gg: ATEYQzwZ4Rl1RsCcZp6Qqa9Lu2SkPMnI7yA3gpVeO/HA5/DnKFFeUlVWBwg0YK9oYcR
-	w7yasBH+83ePNjwqDO6pPau2f81rgwbycuSyF3taenR6LRAMizX2Cujtu/76dlJ3JSueMmYKxmt
-	QuFrvr00mTylSaDZE3dKMfdGD7yzO9aLJyAvBp47DJAnEvwApHVLX6QOhXnRA5+0yDWpSQByV1O
-	Wn/J65eYTveVSs1oBpMqwnDmAgGt/Xi8XmJDngYe6ZIiRPQX8RNoXUg6c+xM5i7x7pmbSDw6n34
-	+bLMMqUtF5Q61P+ysFSv8JCxQoINX9CezmdyHLVYlSG1aF+d/szmGAZ9pGjDJ5jjXzdATi8=
-X-Received: by 2002:a05:6871:72c:b0:409:6ea8:5f7f with SMTP id
- 586e51a60fabf-416ab595928mr311211fac.20.1772591669896; Tue, 03 Mar 2026
- 18:34:29 -0800 (PST)
+        bh=JkX2+jmYSnw4PjcXqCvYgS+1FwE6mJFHLzb0KkOcleo=;
+        b=KyYrgDTaxrrTcH3bP2eNmVNzTYRKS1CXGHj/FyPYvDexJG/SCM+l26/6Yb4mmMGMhB
+         pgBqkV3+ham8gIHmd6HFjA8zpbZzPNiLLY+x07OLuTMKFhVrM9/nLFOh6ECVH1D/RRTk
+         qx+2BeTtyLocbj3eZBMkoiaruZz0eCIzGECOfZwx1jerqrjiOsauVWAY6LFpWiquQYsH
+         zZCzixF9inaE6ZZWSznr7P1AV/QqoeGLAy16KK76CqlYKG10CFiXG1pa33CE6uqVrYd+
+         3NXcLkDB2BclMLJSpe7qNxfX4PERHCa4iHyfH5bDEp+Mijkch+lma7s3VjtKDemlH07p
+         PTYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772591690; x=1773196490;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JkX2+jmYSnw4PjcXqCvYgS+1FwE6mJFHLzb0KkOcleo=;
+        b=gwn1KFJSvu8HoECR+tNwQsUzzzNBu78jlR/P1O0cHG5IGQ+BhAsAq4H+FV04uyxTT/
+         wdGpDY+fkxxz42sn9C7KghXC4Bu5SJZfQFlUCn6tkKY3thb+0Oytcng1mhR3dhDpMLQT
+         f/aaNdXZVNzbIxg9k9sr46gymdycexmE4m/gys6S2vpWWad5HAt5C6dsKe6xuzHQAT2P
+         FCTURdQvYxBxKhlYECax3YYyQGsWAtAN2mITQMCFm3wOGrXjEu7xhu9zmAyQu5r9T0r2
+         weJrTUeieTwPDOkqM7lKAWApgPvyUuAV7Yf4MY5niRVjYq2PcEZlNiF0I8MSnvShJni6
+         b2fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX1gd8hXxYC/wXnbX1NvOWVsPGuP3ugdxxJ4uTjd7JwrmOKH5BK84preLFLGuojwJzZSvwHehe38bchI0Rcia4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzh7l4mg/OZz/5xf0QgFo0jxpma++MnWJD5quJJKKWmTjyK7vG9
+	1+RdYadOMuuq+j7wMuLdlj3EPbTx5fBShLExBKwTIagArS9XgWr+zdnYCek/k1UO60+EAL9FT/a
+	hEOBHMDVZpzXXg/A3XgpTVsLLHqo6a4A=
+X-Gm-Gg: ATEYQzxKKvqp+L0SwcCWg6u7GwaG3UL+rmxAiaWJmJxTlos6AWEAXd0OWooC0frtlVm
+	Ha72Ok+v777/Ws7/zs5jfPZq8EJLshvjFwy4t+mc7SMMP1ygcbafcNUILGt/WC5l1qigTLgcyr0
+	MhUgr1Zkw0H7uXe70KaYVm2cNdmGnPd5Ve1iqGTmhexoQq6IhJz5I0lnChmpMG7iaAtE3L45obT
+	0eBDTk3319wBsjpbOphV5P4XboaPaZLKO2s59/n/jInBVKVy1HZJiJFrNuTuUcYM7IO+wie58Ce
+	AZglbIxm2jA7ucUfkSbdXSOIkRGVEL80XIiHfDBpp016srUV+YcYmUsRNCjl0qO0oDV0g94O+yV
+	tyv8O0/zwqV8ozdtxiic1mrCY
+X-Received: by 2002:a05:7300:ec08:b0:2be:681:91b2 with SMTP id
+ 5a478bee46e88-2be31224556mr94371eec.6.1772591689749; Tue, 03 Mar 2026
+ 18:34:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260228074735.10438-1-mr.navi8680@gmail.com> <20260303181700.25878b2a@kernel.org>
-In-Reply-To: <20260303181700.25878b2a@kernel.org>
-From: Naveen A <mr.navi8680@gmail.com>
-Date: Wed, 4 Mar 2026 08:04:18 +0530
-X-Gm-Features: AaiRm53dKDZnJe4vn8tGAY5vLRHmWRPeD1MU5t8oKL40T2N30omzntlRAwwQ5EY
-Message-ID: <CACQ1SaB0cnBgEAiX0iTM+WXL0cXYOsoi9wMUMvpcK-04hZLhAg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: tc-testing: fix list_categories() crash on
- list type
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, jhs@mojatatu.com, 
-	jiri@resnulli.us, shuah@kernel.org, linux-kernel@vger.kernel.org
+References: <20260224-unused_var_err-v2-1-337f9359d98e@nvidia.com>
+In-Reply-To: <20260224-unused_var_err-v2-1-337f9359d98e@nvidia.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 4 Mar 2026 03:34:36 +0100
+X-Gm-Features: AaiRm53AK__LxyEQZWlm_NkgVJ-LEO_6aeM5Yb2_RK6_R0B-Cz9fKt-Sydu0gx0
+Message-ID: <CANiq72kROq3B=EPfihKM=bvtyqYrbDV-mkFgROdPNjbC6zaBpQ@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: kunit: fix warning when !CONFIG_PRINTK
+To: Alexandre Courbot <acourbot@nvidia.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> How did you find this issue? I can't figure out what's calling this
-> function in the first place.
-
-I encountered this while running the tc-testing selftests locally.
-
-The script raised the error:
-
-TypeError: unhashable type: 'list'
-
-The traceback pointed to list_categories(), where a set(map(...))
-was being created from the 'category' field.
-
-Since 'category' is a list in the test cases, Python attempts to
-insert the list itself into the set, which raises the unhashable
-type error. After tracing this, I updated the logic to flatten the
-category lists and collect unique category names using set.update().
-
-
-On Wed, 4 Mar 2026 at 07:47, Jakub Kicinski <kuba@kernel.org> wrote:
+On Tue, Feb 24, 2026 at 11:38=E2=80=AFAM Alexandre Courbot <acourbot@nvidia=
+.com> wrote:
 >
-> On Sat, 28 Feb 2026 13:17:35 +0530 mr.navi8680@gmail.com wrote:
-> > list_categories() builds a set directly from the 'category'
-> > field of each test case. Since 'category' is a list,
-> > set(map(...)) attempts to insert lists into a set, which
-> > raises:
-> >
-> >   TypeError: unhashable type: 'list'
-> >
-> > Flatten category lists and collect unique category names
-> > using set.update() instead.
+> If `CONFIG_PRINTK` is not set, then the following warnings are issued
+> during build:
 >
-> How did you find this issue?
+>   warning: unused variable: `args`
+>     --> ../rust/kernel/kunit.rs:16:12
+>     |
+>   16 | pub fn err(args: fmt::Arguments<'_>) {
+>     |            ^^^^ help: if this is intentional, prefix it with an und=
+erscore: `_args`
+>     |
+>     =3D note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on =
+by default
 >
-> I can't figure out what's calling this function in the first place.
-> --
-> pw-bot: cr
+>   warning: unused variable: `args`
+>     --> ../rust/kernel/kunit.rs:32:13
+>     |
+>   32 | pub fn info(args: fmt::Arguments<'_>) {
+>     |             ^^^^ help: if this is intentional, prefix it with an un=
+derscore: `_args`
+>
+> Fix this by adding a no-op assignment using `args` when `CONFIG_PRINTK`
+> is not set.
+>
+> Fixes: a66d733da801 ("rust: support running Rust documentation tests as K=
+Unit ones")
+> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+
+Applied to `rust-fixes` -- thanks everyone!
+
+Also Cc: stable@vger.kernel.org
+
+Cheers,
+Miguel
