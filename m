@@ -1,112 +1,77 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEB9351C08
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 05:47:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6B933F378;
+	Wed,  4 Mar 2026 05:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772603258; cv=none; b=j87sDjE4NdPe7Vg3cjkPpCqPsoPLnxqHy+mY8PoLJ81VzB3lydnSHjLdmhApOUVKzWFhiqmU44qJsUqDZhoMeRxPkQpCCQOuYCTRv1lHzdFHflUe/4cwGg0hFEr2iM/f9koCe4uwX0TDqrQ4PXOXKJYoJBFoUM2hy7Q9TpYZObg=
+	t=1772603405; cv=none; b=Vz54bvjwUQXCrd+YxELmEAqFS3B8NmVH9CRxM2wGmIUvDOQ9fbvCZQ7xc1pyonP/uzMZ2nPgZQSSSl9haEgYb+SsVg3YZin0IdEon1qS7zFLroiSQWYnFSGTdR1lyIqfb0lJS06iKMe9cKoDlb/B3jZ5qDRWk7ukZiysaiWGPRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772603258; c=relaxed/simple;
-	bh=wn/euQ0njXoXEa3IcAhDUjQJsCU+35ZsymX2391PKDU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LAJejxVRQ2tCmBxWKpsTZjTLzFwiDEDSOEqU7MWV/XXOqYQlXg9A8jbidb6xc5dAHwpiMc5DiQWZtB20XrR+y686Sxh2UkXIO5E8GXkQO5//WL8LUAvo99lQAvVnCm8Yz3mEpFMML7udWhriNPglJOrdR7jrMx2BociaMNbJXqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wR90e6el; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772603405; c=relaxed/simple;
+	bh=OwFeDaUYsSCEzFq60nmYWQfF86Foh94m+ZRafgHIQVg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=azoeQW/E7btvP/psp1xldyA6fXmt9zUPYZ9kKCtqkdc6akD9uEwhbJOaq6TYGqf6AVlXFDdPJHFz9wtmLG1V9yBbILWUxQKNlFieOmW2UvS0QbVK4DNMoPQUU7TUlT6ny3jhDFHxvypQ+4JhzgjjWeXPJT4OzCu69HWCYXTYSPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+pW484X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wR90e6el"
-Message-ID: <c9cd645f-810b-4dd4-a1ed-27569dca5055@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772603245;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9GOvrSPoqklRKTRkSybSArOnZorW/NqBc/2B7NprcZw=;
-	b=wR90e6elpMiEqeZGZ6SwxdssiYTUfmKlhBgt9tMyCWkj5hz2ELG+hVrKpoBsrwKpON9OeT
-	Xzj5CY6226vzQA8VNxac4amUfpKeP1pxT/TLU4Z7m+oFZAgrB2OscoC2ovJWFyl3bh9pQD
-	TwOb2KzwZlIAM3rQBbOg1+KTMUNE5kw=
-Date: Wed, 4 Mar 2026 13:47:08 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+pW484X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B7BFC19423;
+	Wed,  4 Mar 2026 05:50:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772603404;
+	bh=OwFeDaUYsSCEzFq60nmYWQfF86Foh94m+ZRafgHIQVg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=N+pW484XNio/ZQkGYkrgl7bO4AWHQcRhWRgX8rqm6avLZos0K6kEJMbW7kxVxxVI7
+	 tBdi/xvtKLwa1m4T75GZVDZa2DRkw0BQn58HQs0gH+g2ZbFRukP9RzyN26KvF+QBu5
+	 qdE+ml1uLyKMMyJC68gjXt5Dz79Am9oSvsst+d7W1fVS9yX8z/oGTQRoZ+hG4BdII8
+	 UcoSNoPyJNWWMyZl3hkOdEJq9QDy43uqC4SZz7bHl5zyD47V00E5nkqMtYLRRu1qP6
+	 nQ3QPfHAjCsXzMEazpVFeLrIzKuP2xEUVEakKMiUJL++DOGAwDwnhc5Y27+HSqlWBw
+	 spJSrebcOlVLQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9F4B3808200;
+	Wed,  4 Mar 2026 05:50:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v10 3/8] bpf: Refactor reporting log_true_size
- for prog_load
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260211151115.78013-1-leon.hwang@linux.dev>
- <20260211151115.78013-4-leon.hwang@linux.dev>
- <CAADnVQKc5H=k-++CHxs+Y1ggptRSLRcACLgVaMgOmt=QBT=dkA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQKc5H=k-++CHxs+Y1ggptRSLRcACLgVaMgOmt=QBT=dkA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH] selftests: tc-testing: fix list_categories() crash on
+ list
+ type
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177260340555.1635731.7202537936783562636.git-patchwork-notify@kernel.org>
+Date: Wed, 04 Mar 2026 05:50:05 +0000
+References: <20260228074735.10438-1-mr.navi8680@gmail.com>
+In-Reply-To: <20260228074735.10438-1-mr.navi8680@gmail.com>
+To: Naveen A <mr.navi8680@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, jhs@mojatatu.com,
+ jiri@resnulli.us, shuah@kernel.org, linux-kernel@vger.kernel.org
 
-On 4/3/26 00:32, Alexei Starovoitov wrote:
-> On Wed, Feb 11, 2026 at 7:13 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
+Hello:
 
-[...]
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
->> @@ -6241,7 +6244,11 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
->>                 err = map_freeze(&attr);
->>                 break;
->>         case BPF_PROG_LOAD:
->> -               err = bpf_prog_load(&attr, uattr, size);
->> +               if (from_user && size >= offsetofend(union bpf_attr, log_true_size))
->> +                       log_true_size = uattr.user + offsetof(union bpf_attr, log_true_size);
+On Sat, 28 Feb 2026 13:17:35 +0530 you wrote:
+> From: Naveen Anandhan <mr.navi8680@gmail.com>
 > 
-> So you added 'from_user' gating because
-> you replaced copy_to_bpfptr_offset() with copy_to_user()?
-> This is a drastic change in behavior and you don't even talk about
-> it in the commit log.
-> You said "refactor". This is not a refactoring!
+> list_categories() builds a set directly from the 'category'
+> field of each test case. Since 'category' is a list,
+> set(map(...)) attempts to insert lists into a set, which
+> raises:
 > 
-> This is v10. The common_attr feature is useful, but
-> you really need to think harder about what your patches
-> are doing.
-> 
+> [...]
 
-Refactoring should not introduce any functional changes. If a functional
-change is involved, it should be factored out of the refactoring commit
-into a separate commit with an explanation in the commit log.
+Here is the summary with links:
+  - selftests: tc-testing: fix list_categories() crash on list type
+    https://git.kernel.org/netdev/net/c/fbdfa8da05b6
 
-I'll add this to my self-review checklist.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The intention of 'from_user' was to replace copy_to_bpfptr_offset() with
-copy_to_user(), since the log is always copied to the user-space buffer
-when the log level is not BPF_LOG_KERNEL in
-kernel/bpf/log.c::bpf_verifier_vlog().
-
-The 'from_user' gating will be dropped in v12 to keep this patch as pure
-refactoring.
-
-Thanks,
-Leon
 
