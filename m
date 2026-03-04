@@ -1,232 +1,245 @@
-Received: from fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.72.182.33])
+Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715E13BB40;
-	Wed,  4 Mar 2026 17:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.72.182.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0F73BA22A;
+	Wed,  4 Mar 2026 17:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772644664; cv=none; b=dh1EkDcnDymr79fu6U7C5a8jQyX4kip8jTmUb38i52YlTUHM17M2qfdjaPz1tf4wAb+xkQH8z/MCAAAIaxiwj95yKap72MfSBu2tpwiPAniIhN7PgESMvfQ1ZQC+xw+fjYDvxGCXgB/4tzG6DY4+fjj++8ftXJuaD1n/y5u6f4E=
+	t=1772645261; cv=none; b=Uh1k72MYujx5gvo9IRNA0l9cOjwXP8FAZsMaE5RF27TRXOsD61yI4nJ9AE1nrfake0OYIRkT+QKhSp4NBV5ef2poNctnox+Y2TgY38Niv4IPxjQvHQFGqDm8U1x2ft86vq1i3KZrvH4FiRC6aYeXYXtLluUba/uiEzuQGdiG3dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772644664; c=relaxed/simple;
-	bh=zS2IoNgFK8GIs84v988v1Gkqxk5O7Ci+V3bJWkZ2u/A=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=CeUJxpVPfmP/h2Pfb5YOWk+oTRTX7hngWVrZMI9tZxQ3iihuXrb9MpZarbbaEek7xo35dMg+ReQtWo1lYpcY0G2zMJ/gCkZ+yRz9eqTVHS5l2T/tdgPyEaIe8sdpVcceZLHqLbDyAmfJhK73nC3ZJRpA3fkXwRc/Klkb7v6I0dI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=J0WQJQPq; arc=none smtp.client-ip=3.72.182.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1772645261; c=relaxed/simple;
+	bh=ChRoXIr9yvc9qsnA8M/lFeW4TR0ctexLkYbNu6N5U84=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=fC1MkkZ5bkQwHVpMOW0NbK3sM6paNKxB5ySeg2E0CQPnO9rEnGS2e2dWIWtd2OKyNt5ZF5pZetoFpjW8NEX68jrtrE/2G7/+P7sQ7a9amKknt7b6I+sdTl5HCf1LtNrJjWrLZzCf+/cek5LSU1yGAq53wciFjrJgDML3ImG83kU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=QnC36x3Q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ts0Q+CyL; arc=none smtp.client-ip=202.12.124.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="J0WQJQPq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1772644662; x=1804180662;
-  h=message-id:date:mime-version:reply-to:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=CPgNxadSzjpIoq3NwpOhLARCcrCv7zz8pTRRdyXfzUA=;
-  b=J0WQJQPqEl0uJjsubbOKOEHZ/x1kaN6Uq/wbj2RAGuAQifR6srWYEkvM
-   rWcKhZWdBJYIFFrZTxofYos0fqKR8sjUNCmN37Ca2m1ysijEku1RNniFf
-   Qwb2EprjDfiVHEAY64ez//hVNU1GiDlB8Tb+6HlaxAuON2+z7vCiDt8Y4
-   23CEpTa9Q99yImA768Ad5OpSWM3oksfKlnI1NhsaeNiR+kA8QDZs9TZ3j
-   aQUdnr6iRn17MvoK+khDgvkg3kHMjWgIAZQsBy+rt9zd8yoHm3iNMXnuk
-   kJldyXbK6w1t2KbsWo4Q/RVIvROorb0gIcxDFeT+tfibdHbsXFzlbblC7
-   g==;
-X-CSE-ConnectionGUID: kCX+YtFiRNyIDKqonzWj2Q==
-X-CSE-MsgGUID: rCpAbOjCT3KIJvBbO/BAqg==
-X-IronPort-AV: E=Sophos;i="6.21,324,1763424000"; 
-   d="scan'208";a="10324163"
-Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
-  by internal-fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 17:17:37 +0000
-Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.233:10769]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.8.50:2525] with esmtp (Farcaster)
- id 5c685bb8-c81d-4b86-ac12-2b82286bbda5; Wed, 4 Mar 2026 17:17:36 +0000 (UTC)
-X-Farcaster-Flow-ID: 5c685bb8-c81d-4b86-ac12-2b82286bbda5
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19MTAEUC001.ant.amazon.com (10.252.51.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Wed, 4 Mar 2026 17:17:30 +0000
-Received: from [192.168.5.225] (10.106.83.18) by EX19D005EUB003.ant.amazon.com
- (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Wed, 4 Mar 2026
- 17:17:29 +0000
-Message-ID: <11b78807-00c3-4131-932c-7e32053f9531@amazon.com>
-Date: Wed, 4 Mar 2026 17:17:28 +0000
+	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="QnC36x3Q";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ts0Q+CyL"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailflow.stl.internal (Postfix) with ESMTP id CF9111300F11;
+	Wed,  4 Mar 2026 12:27:30 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 04 Mar 2026 12:27:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
+	 h=cc:cc:content-id:content-transfer-encoding:content-type
+	:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to; s=fm2; t=1772645250; x=1772652450; bh=3hZ85nMdNhByeQ6ZYVQXq
+	B9xKZH1h7PxqhN6Br3f/2c=; b=QnC36x3Q0L6xqckhgTvg0RhzwLtbHJl1LbZae
+	lQOEj5vSYUTnSoVlsVUeyWZ7BFVXvRbadXEoFjlwbuFmtCNoNr5g6QgGwQhny6EB
+	9+TJ1YY5NzwaPEddpx8Dz91sG6J7yavVO6pwgw7K00XnTGDS3NLW2t2kWbKXI/bD
+	ktlVMvv3lLGzjkrFKztKz/lOnCzXc+uBHh8LxWeqUrV0j7rKVCgZlB2ojJtQt8z2
+	d7rwxR8364Xlmf3EIgKF8a79qS4pel2lSzv450kjZmMyfz6Kcgo0Cj+C0la1LVuH
+	RAJl6zvwMmHvuMMDz0X1SnfPo/FXLXgNoyXC5a03JJIhH9prw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-id
+	:content-transfer-encoding:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1772645250; x=1772652450; bh=3hZ85nMdNhByeQ6ZYVQXqB9xKZH1h7PxqhN
+	6Br3f/2c=; b=Ts0Q+CyLeHtsjZa2qIsBBXYiazEhphTAUGF1UbKa8iFCnzq+F9Z
+	tpFVd3j1u8YHNdSWNkE7XrsA0j2gJqzVSc26ea5hkpBzUPp7HikTyqU8MgT8d5Sn
+	K0S/PEf75ZeANH4LYctWTja3+fzREQSau8D4BOrSKlCjqv4jAtKAsgd+2liZrw/f
+	yhpkISLwza5cFE2y/otsnbshQlvQPvvhAHgC8Dayj8qkRqyYJdVOppxQqZ7baCCe
+	Pxahyc9I55JrrKXD3ZrmWi+grgHLziieNuHHwJ8NTIf08TcgkC3sqeG12qJdllH4
+	f8R65rPiQnwJBvcMCC8Z9E2rZ0jDMdrZtnA==
+X-ME-Sender: <xms:gWuoaXqk14uE5s0m_TuMf6ts7a1i3iGW40jvSu4pR9Zi_ZfP5HqcrA>
+    <xme:gWuoaU0B4tFrUIaiHcZUah8p0Kqq7oYK-qlT7K3Nw0nygkSEH7vmRwyVXFm5slPvH
+    sPby8Kgy7liPCAcsrsEpztcXNBGkn-rFcEqJbZ-r4oFfA__sHHhYWDA>
+X-ME-Received: <xmr:gWuoabDRjtyrY32qaPOz5eDHSWtQ4mJweZH9YQJ7da5hObUf-gDGexKT6ARICdu4PKP5Iw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvieeguddtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefujghfofggtgfgfffksehtqhertdertddvnecuhfhrohhmpeflrgihucgg
+    ohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnhgvtheqnecuggftrfgrthhtvg
+    hrnhepueffvedvvdefudejfeeuudfgtdfgudettdevfeeileffhffghfdtjeekhfeitdek
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehjvhesjhhvohhssghurhhghhdrnhgvthdpnhgs
+    pghrtghpthhtohepfedvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehrrgiioh
+    hrsegslhgrtghkfigrlhhlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
+    ohhfthdrnhgvthdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpth
+    htohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohgrmhgrkhhi
+    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmh
+    grihhlrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhrghdp
+    rhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohephh
+    grohhluhhosehgohhoghhlvgdrtghomh
+X-ME-Proxy: <xmx:gWuoaf-EBMU6swfd3wz5-LiaJoCG7pZXDIGa3MJHvemjMva_eYZK7g>
+    <xmx:gWuoaZNqTd9KN2XDAKETzPj03As7PqG8KycivG-2S4CbXR-oS_YByA>
+    <xmx:gWuoaZGIr2ULQaYIa6nntoUlP4dambGdZS1-5PMwloSv7uFI8a5YCQ>
+    <xmx:gWuoaYtTjEINoFXqZu29syBRqZDb08iZ_8KL2A4Cw1Mle9DtJKzvVQ>
+    <xmx:gmuoaQPXxPfDAFDGHFskgUiH2pt0TXhr7IpjI4TKmlobe_WeiAlZ6uUc>
+Feedback-ID: i53714940:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 4 Mar 2026 12:27:29 -0500 (EST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+	id 0A4769FCB4; Wed,  4 Mar 2026 09:27:28 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+	by famine.localdomain (Postfix) with ESMTP id 08F399FC67;
+	Wed,  4 Mar 2026 09:27:28 -0800 (PST)
+From: Jay Vosburgh <jv@jvosburgh.net>
+To: Nikolay Aleksandrov <razor@blackwall.org>
+cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+    jiayuan.chen@shopee.com,
+    syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+    Andrew Lunn <andrew+netdev@lunn.ch>,
+    "David S. Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+    Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+    Daniel Borkmann <daniel@iogearbox.net>,
+    Jesper Dangaard Brouer <hawk@kernel.org>,
+    John Fastabend <john.fastabend@gmail.com>,
+    Stanislav Fomichev <sdf@fomichev.me>,
+    Andrii Nakryiko <andrii@kernel.org>,
+    Martin KaFai Lau <martin.lau@linux.dev>,
+    Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+    Yonghong Song <yonghong.song@linux.dev>,
+    KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+    Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+    Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+    Clark Williams <clrkwllms@kernel.org>,
+    Steven Rostedt <rostedt@goodmis.org>, Jussi Maki <joamaki@gmail.com>,
+    linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+    linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+In-reply-to: <aahWymAi_CtRG0gJ@penguin>
+References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+ <20260304074301.35482-2-jiayuan.chen@linux.dev> <aahWymAi_CtRG0gJ@penguin>
+Comments: In-reply-to Nikolay Aleksandrov <razor@blackwall.org>
+   message dated "Wed, 04 Mar 2026 17:59:06 +0200."
+X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH RFC 15/17] KVM: guest_memfd: implement userfaultfd missing
- mode
-From: Nikita Kalyazin <kalyazin@amazon.com>
-To: Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>
-CC: Andrea Arcangeli <aarcange@redhat.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>, "Liam R. Howlett"
-	<Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>, "Oscar
- Salvador" <osalvador@suse.de>, Paolo Bonzini <pbonzini@redhat.com>, Peter Xu
-	<peterx@redhat.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan
-	<shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka
-	<vbabka@suse.cz>, <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, "david@kernel.org" <david@kernel.org>
-References: <20260127192936.1250096-1-rppt@kernel.org>
- <20260127192936.1250096-16-rppt@kernel.org>
- <90cf68db-2e21-4153-8eb6-2c8ffb398d0d@amazon.com>
-Content-Language: en-US
-In-Reply-To: <90cf68db-2e21-4153-8eb6-2c8ffb398d0d@amazon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EX19D013EUA004.ant.amazon.com (10.252.50.48) To
- EX19D005EUB003.ant.amazon.com (10.252.51.31)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1293119.1772645247.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 04 Mar 2026 09:27:28 -0800
+Message-ID: <1293120.1772645248@famine>
 
-+ David's new email
+Nikolay Aleksandrov <razor@blackwall.org> wrote:
 
+>On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
+>> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+>> =
 
-On 04/03/2026 17:12, Nikita Kalyazin wrote:
-> 
-> 
-> On 27/01/2026 19:29, Mike Rapoport wrote:
->> From: Nikita Kalyazin <kalyazin@amazon.com>
->>
->> userfaultfd missing mode allows populating guest memory with the content
->> supplied by userspace on demand.
->>
->> Extend guest_memfd implementation of vm_uffd_ops to support MISSING
->> mode.
->>
->> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
->> Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
->> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+>> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
+>> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
+>> when the bond mode is round-robin. If the bond device was never brought
+>> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+>> =
+
+>> The XDP redirect path can reach this code even when the bond is not up:
+>> bpf_master_redirect_enabled_key is a global static key, so when any bon=
+d
+>> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+>> interception is enabled for all bond slaves system-wide. This allows th=
+e
+>> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+>> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+>> reached on a bond that was never opened.
+>> =
+
+>> Fix this by allocating rr_tx_counter unconditionally in bond_init()
+>> (ndo_init), which is called by register_netdevice() and covers both
+>> device creation paths (bond_create() and bond_newlink()). This also
+>> handles the case where bond mode is changed to round-robin after device
+>> creation. The conditional allocation in bond_open() is removed. Since
+>> bond_destructor() already unconditionally calls
+>> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
+>> ndo_init, free at destructor.
+>> =
+
+>> Note: rr_tx_counter is only used by round-robin mode, so this
+>> deliberately allocates a per-cpu u32 that goes unused for other modes.
+>> Conditional allocation (e.g., in bond_option_mode_set) was considered
+>> but rejected: the XDP path can race with mode changes on a downed bond,
+>> and adding memory barriers to the XDP hot path is not justified for
+>> saving 4 bytes per CPU.
+>> =
+
+>> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to sla=
+ve device")
+>> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+>> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@g=
+oogle.com/T/
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
 >> ---
->>   virt/kvm/guest_memfd.c | 60 +++++++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 59 insertions(+), 1 deletion(-)
->>
->> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
->> index 087e7632bf70..14cca057fc0e 100644
->> --- a/virt/kvm/guest_memfd.c
->> +++ b/virt/kvm/guest_memfd.c
->> @@ -431,6 +431,14 @@ static vm_fault_t 
->> kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
->>                          ret = VM_FAULT_UFFD_MINOR;
->>                          goto out_folio;
->>                  }
->> +
->> +               /*
->> +                * Check if userfaultfd is registered in missing mode. 
->> If so,
->> +                * check if a folio exists in the page cache. If not, 
->> return
->> +                * VM_FAULT_UFFD_MISSING to trigger the userfaultfd 
->> handler.
->> +                */
->> +               if (userfaultfd_missing(vmf->vma) && 
->> IS_ERR_OR_NULL(folio))
->> +                       return VM_FAULT_UFFD_MISSING;
->>          }
->>
->>          /* folio not in the pagecache, try to allocate */
->> @@ -507,9 +515,59 @@ static bool kvm_gmem_can_userfault(struct 
->> vm_area_struct *vma, vm_flags_t vm_fla
->>          return true;
->>   }
->>
->> +static struct folio *kvm_gmem_folio_alloc(struct vm_area_struct *vma,
->> +                                         unsigned long addr)
->> +{
->> +       struct inode *inode = file_inode(vma->vm_file);
->> +       pgoff_t pgoff = linear_page_index(vma, addr);
->> +       struct mempolicy *mpol;
->> +       struct folio *folio;
->> +       gfp_t gfp;
->> +
->> +       if (unlikely(pgoff >= (i_size_read(inode) >> PAGE_SHIFT)))
->> +               return NULL;
->> +
->> +       gfp = mapping_gfp_mask(inode->i_mapping);
->> +       mpol = mpol_shared_policy_lookup(&GMEM_I(inode)->policy, pgoff);
->> +       mpol = mpol ?: get_task_policy(current);
->> +       folio = folio_alloc_mpol(gfp, 0, mpol, pgoff, numa_node_id());
-> 
-> It looks like folio_alloc_mpol_noprof() and filemap_remove_folio() are 
-> not actually exported to modules.  Would it be ok to export them similar 
-> to how it was done in f634f10809ec ("mm/mempolicy: Export memory policy 
-> symbols")?
-> 
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 3e4579e4b8bb..041c7719e524 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -261,6 +261,7 @@ void filemap_remove_folio(struct folio *folio)
-> 
->          filemap_free_folio(mapping, folio);
->   }
-> +EXPORT_SYMBOL_FOR_MODULES(filemap_remove_folio, "kvm");
-> 
->   /*
->    * page_cache_delete_batch - delete several folios from page cache
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index 3d797d47a040..1dbbbb28a36e 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -2442,6 +2442,7 @@ struct folio *folio_alloc_mpol_noprof(gfp_t gfp, 
-> unsigned int order,
->          set_page_refcounted(page);
->          return page_rmappable_folio(page);
->   }
-> +EXPORT_SYMBOL_FOR_MODULES(folio_alloc_mpol_noprof, "kvm");
-> 
->   /**
->    * vma_alloc_folio - Allocate a folio for a VMA.
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ 
-> commit/?id=f634f10809ec3d51d9529dfb0f99bc7cec1b5eff
-> 
->> +       mpol_cond_put(mpol);
->> +
->> +       return folio;
->> +}
->> +
->> +static int kvm_gmem_filemap_add(struct folio *folio,
->> +                               struct vm_area_struct *vma,
->> +                               unsigned long addr)
->> +{
->> +       struct inode *inode = file_inode(vma->vm_file);
->> +       struct address_space *mapping = inode->i_mapping;
->> +       pgoff_t pgoff = linear_page_index(vma, addr);
->> +       int err;
->> +
->> +       __folio_set_locked(folio);
->> +       err = filemap_add_folio(mapping, folio, pgoff, GFP_KERNEL);
->> +       if (err) {
->> +               folio_unlock(folio);
->> +               return err;
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->> +static void kvm_gmem_filemap_remove(struct folio *folio,
->> +                                   struct vm_area_struct *vma)
->> +{
->> +       filemap_remove_folio(folio);
->> +       folio_unlock(folio);
->> +}
->> +
->>   static const struct vm_uffd_ops kvm_gmem_uffd_ops = {
->> -       .can_userfault = kvm_gmem_can_userfault,
->> +       .can_userfault     = kvm_gmem_can_userfault,
->>          .get_folio_noalloc = kvm_gmem_get_folio_noalloc,
->> +       .alloc_folio       = kvm_gmem_folio_alloc,
->> +       .filemap_add       = kvm_gmem_filemap_add,
->> +       .filemap_remove    = kvm_gmem_filemap_remove,
->>   };
->>   #endif /* CONFIG_USERFAULTFD */
->>
->> -- 
->> 2.51.0
->>
-> 
+>>  drivers/net/bonding/bond_main.c | 19 +++++++++++++------
+>>  1 file changed, 13 insertions(+), 6 deletions(-)
+>> =
 
+>
+>IMO it's not worth it to waste memory in all modes, for an unpopular mode=
+.
+>I think it'd be better to add a null check in bond_rr_gen_slave_id(),
+>READ/WRITE_ONCE() should be enough since it is allocated only once, and
+>freed when the xmit code cannot be reachable anymore (otherwise we'd have
+>more bugs now). The branch will be successfully predicted practically alw=
+ays,
+>and you can also mark the ptr being null as unlikely. That way only RR ta=
+kes
+>a very minimal hit, if any.
+
+	Is what you're suggesting different from Jiayuan's proposal[0],
+in the sense of needing barriers in the XDP hot path to insure ordering?
+
+	If I understand correctly, your suggestion is something like
+(totally untested):
+
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_ma=
+in.c
+index eb27cacc26d7..ac2a4fc0aad0 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding *bond)
+ static int bond_open(struct net_device *bond_dev)
+ {
+ 	struct bonding *bond =3D netdev_priv(bond_dev);
++	u32 __percpu *rr_tx_tmp;
+ 	struct list_head *iter;
+ 	struct slave *slave;
+ =
+
+-	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter)=
+ {
+-		bond->rr_tx_counter =3D alloc_percpu(u32);
+-		if (!bond->rr_tx_counter)
++	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN &&
++	    !READ_ONCE(bond->rr_tx_counter)) {
++		rr_tx_tmp =3D alloc_percpu(u32);
++		if (!rr_tx_tmp)
+ 			return -ENOMEM;
++		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
++
+ 	}
+ =
+
+ 	/* reset slave->backup and slave->inactive */
+@@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *bond=
+)
+ 	struct reciprocal_value reciprocal_packets_per_slave;
+ 	int packets_per_slave =3D bond->params.packets_per_slave;
+ =
+
++	if (!READ_ONCE(bond->rr_tx_counter))
++		packets_per_slave =3D 0;
++
+ 	switch (packets_per_slave) {
+ 	case 0:
+ 		slave_id =3D get_random_u32();
+
+	-J
+
+
+[0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a9892238c61f0=
+6@linux.dev/
+
+---
+	-Jay Vosburgh, jv@jvosburgh.net
