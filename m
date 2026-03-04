@@ -1,152 +1,123 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A3639D6D3;
-	Wed,  4 Mar 2026 09:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40BB1392802
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 10:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772617587; cv=none; b=a7gJy5Prd8eIEyenrSxqyLTKVJ0P+mFhraeXfbiLDMuE7o3qIu60inMFmVrsuGagk85DZr84J6FMEZnAkJQhLT33X2RpHMoHM7y+SBQD004tVT3EXItfm8VwUmrgnWmVGpPcBame3NrkYw2+2ib0XR2GO4jPHb0kV9yY2HFZ+vU=
+	t=1772618714; cv=none; b=QKE7+KDgNbAfyzSRn/4A9bXf4L13GpShGHBEjC07a8S2q8K+DS9mKgdDDPRs5BWE4uEEVqpBtYFUfNRw652YWyV1DYWlSMcwKfCf7qW0zBkWDauTsXhMqZxrAV5rrvXY4RAxUDrgSTGeBf1Yk+bS2xjQDHDz+z4EsG9Wx7U57to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772617587; c=relaxed/simple;
-	bh=IHvvot2ZKfXtsZnCW0snZYODzuu20UCO0AhRTSPRbSo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=p5XMnWwV+hfYQcX3mERYyW5+pMnF6w4+NW+pLxZEYUyEOknI4L4C9mUZK8+Mbo6ORu9VIrbd/r1ffNJDi8u6Xtx7rZiIt1NeWP35E5yM2ra9iAzmIJ7/R3mqkldGfcmgy10zqiGOn6T/nxeyM3tQsbFDFrXgc5VJjolpdIdND6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=fTJjNTI1; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1772618714; c=relaxed/simple;
+	bh=dgVJAhqnOIPqC5PZq8vBwCOU9OzRV/WoR8Mk8PnVt3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b7916RBaXY4TVhNM9e/nfBa4OdZeoTmWn9MsbGMv1vJINCf+AFBXTH2gDQECtyEZmfHOgsvOswQP0JV9AS5ZaboBZihm9TH7StXUBAUBMu/jzK8WpYY2/pI4QocFxa3andg+YQuqxc3eex4WOa2YOhMPY+RW96rRipG39x4dY4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=XsN3t+Kv; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fTJjNTI1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Iv
-	H/4xvRl/PMZEl+uJ5vYYSKnvzvkhOjS5cyB+WO+9Q=; b=fTJjNTI1qyRn2MP3ei
-	g5aGAM/3hNRs9DCgLMO5kh43gdhqkexPsfAKhPK2KHhJbxOQLmM+FzFfjDCkp2ui
-	PcB0DZ1bCtjURRwlbc9+ZD1e5Nb1PzkAJ/BSSvkQAe6Ibkdjn9ZK3NkqN4XFVOTO
-	KXofznjJHhp73ssjUsocu3fBg=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgC3f179_qdpB89zRQ--.55S3;
-	Wed, 04 Mar 2026 17:44:34 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	posk@google.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yangfeng59949@163.com
-Subject: [PATCH v10 bpf-next 1/2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
-Date: Wed,  4 Mar 2026 17:44:28 +0800
-Message-Id: <20260304094429.168521-2-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260304094429.168521-1-yangfeng59949@163.com>
-References: <20260304094429.168521-1-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="XsN3t+Kv"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-483bd7354efso89219235e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 02:05:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1772618710; x=1773223510; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gDnR/GlX5r3MxOQp0wc5+efc8WjR6tGLkWS8cjDDi4=;
+        b=XsN3t+KvRjLmQXyGUq5jGUsYLtOoKckGDvdjFPqdf+t/WgrKa6MuFAOCdwrn/g8WIe
+         nDCe6oN/KroI47pNwQbREv9OVhK/qaQtApRuGJrJPNsVOd/l6yRRCX25RS1NyYTdwb3p
+         jOG3z+IQbhDsiwrq5LBFyGR9t0hpChPYPjUB7HZE31HaMGx9jYjv/som+VbRtbWiDsY1
+         WnXhEoQrS3MNUnX5RjG4CuflIR9eyXQ5OGt7Z5i7gICKuHo1uKY6gLIYSD8Vr5dgq/aP
+         oqes1OLZxrrSZCaWBGcGsDHBlKbuu7j+k5pSqOARsJTikBcEQBvsCtEnGKZ9qpCSbuwS
+         NNAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772618710; x=1773223510;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9gDnR/GlX5r3MxOQp0wc5+efc8WjR6tGLkWS8cjDDi4=;
+        b=Gu6MT6OP1c3xiFQMQv378eDHSSMNFCaYTac9ubrUSdITQ9b7Ijv869tvITtMnSLrpc
+         Q15EaCeRfcoBwVqvi/r2ZTPW9LvJXV63qWVK41a6SKhfBS/hx4A8xeSyN7lM6G8kPDTy
+         GXXJIX1chYzZjb6zeqYvUZgN1dVncKQK8leO5WBx3Rk8G/yCuZGuZ2nMGb1zlO8/qKjz
+         OpjqwPU7H3VXdJBAHtQkHyHLnpft9rsG9FZyFkZQXp5yVFGexfFPWGX/HycC6xV/g6w1
+         jwuGZDzUQPYZeG56FUr3vJYZBomOhInNH69IjL+3gJJhIkqE9vG/bal5KmNUQm0BXVH1
+         +WAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWjt1ooh5+Q8k7DL3NIUTBZ9r4VDsOzQSU3EKq43if3hZX2mhU0OJ1uIO7kPiJDovmvBLjzgR7Y3rW1h1HDOns=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFIvNHdbW8oQldQk8KqMp65ywn70Ro9JwC4DspZXddNa8LFVp6
+	FOcC8uPTwgiAFYe31cB8pSmhideYpHoIttpHNhMxtbxI6GEkMJux8gA/ur2YSAPu344=
+X-Gm-Gg: ATEYQzzgFdmFKtan4cieaf2GKa2LUpJmnzOvSIR0sp8GvPZkf2L6Ey3HUtU2h1DqyA1
+	OGuSgnZRPEMbmf+PcUHxuBzL1TMfuFCjiFyhzZlAKs+FraPthlVddDLLujLIVJH92Ecb2oNpZWi
+	3tOtoMZOxUKU766jT2mrXXfOuSV8MfRG0h+cULUaspL2ehKzlAEt6ZjKUoD1Dd+aiDIbMva8pgJ
+	q7V0OLEczdCgFxxQkbXQW1QNhg27rovR/6M1NLKUWKTihfoTBdpHr2abH22zcVgwhKI3pcsjAnN
+	0q5exBaZmomWr/YuG9vgIDa1DCTrJPIXwqZe/mJle/ouIT7tcsEH4r6UzKvm7CsgPcfqdwKsizy
+	aB3xDtt6/p4iUklUHRFuXTG+Wc6n+679kdDdkQz8hIYrdH9/AYC/fdlssqgSAMyIlziibaLUA0l
+	GKQ20wOTdH735mP7vH78a8ZMdfpCZYescIvVQ=
+X-Received: by 2002:a05:600c:1c06:b0:477:b734:8c53 with SMTP id 5b1f17b1804b1-48519851b59mr26465905e9.12.1772618710225;
+        Wed, 04 Mar 2026 02:05:10 -0800 (PST)
+Received: from FV6GYCPJ69 ([140.209.217.211])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485187b7851sm70235585e9.3.2026.03.04.02.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 02:05:09 -0800 (PST)
+Date: Wed, 4 Mar 2026 11:05:06 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
+	Dragos Tatulea <dtatulea@nvidia.com>, Shay Drory <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
+	Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource support
+Message-ID: <pmxkihhtsskkwsvdia4z2ss4wxpfc4a4kqxkjv5wk3mwdmpzii@6go7pizk2nst>
+References: <20260226221916.1800227-1-tariqt@nvidia.com>
+ <20260302192640.49af074f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgC3f179_qdpB89zRQ--.55S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4UWFy5ZF1Utr1UWryfZwb_yoWrWrWDpF
-	4UtrWFgrsYy340qF48Jr4UJw1YqFWqyFW5Xr1avw1jqF1jqr1xXr1ftF4jqrZ8Ar45ur4x
-	J34Ut3Z7tr1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piyrWrUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzwNEvGmn-wNc2gAA3A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260302192640.49af074f@kernel.org>
 
-From: Feng Yang <yangfeng@kylinos.cn>
+Tue, Mar 03, 2026 at 04:26:40AM +0100, kuba@kernel.org wrote:
+>On Fri, 27 Feb 2026 00:19:06 +0200 Tariq Toukan wrote:
+>> With this series, users can query per-port resources:
+>> 
+>> $ devlink port resource show pci/0000:03:00.0/196608
+>> pci/0000:03:00.0/196608:
+>>   name max_SFs size 20 unit entry
+>> 
+>> $ devlink port resource show
+>> pci/0000:03:00.0/196608:
+>>   name max_SFs size 20 unit entry
+>> pci/0000:03:00.1/262144:
+>>   name max_SFs size 20 unit entry
+>
+>Code LGTM, I have a question about having a new cmd, tho.
+>
+>Does it matter to the user how the resource is scoped? 
+>Whether the resource is at the instance level or at the port level?
+>
+>I worry we are mechanically following the design of other commands.
+>Since the dump handler is new we could just dump resources with port-id
+>there. No existing user space may be using it. Alternatively we could
+>add a new attribute to select a bitmask of which scope user wants to
+>dump.
 
-The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
-calculate the needed headroom:
+You can specify what you want to dump with dump selectors. For example,
+if you are interensted only in port of specific devlink. That should be
+enough for most of the cases, no?
 
-	err = skb_cow_head(skb,
-			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
+>
+>I have a strong suspicion that the user will want to access all
+>resources of a device. `devlink resource show [$dev]` should dump 
+>all resources devlink knows about, including port ones.
+>
+>What's the reason for the new command?
 
-But skb->_skb_refdst may not be initialized when the skb is set up by
-bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
-in this scenario will trigger null pointer dereference, causing a kernel
-crash as Yinhao reported:
-
-[  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[  105.186382] #PF: supervisor read access in kernel mode
-[  105.186388] #PF: error_code(0x0000) - not-present page
-[  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
-[  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
-[  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
-[  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
-[  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
-[  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
-[  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
-[  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
-[  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
-[  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
-[  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
-[  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
-[  105.186499] PKRU: 55555554
-[  105.186502] Call Trace:
-[  105.186507]  <TASK>
-[  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
-[  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
-[  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
-[  105.186547]  ? ktime_get+0x3c/0xa0
-[  105.186554]  bpf_test_run+0x195/0x320
-[  105.186563]  ? bpf_test_run+0x10f/0x320
-[  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
-[  105.186590]  __sys_bpf+0x69c/0xa40
-[  105.186603]  __x64_sys_bpf+0x1e/0x30
-[  105.186611]  do_syscall_64+0x59/0x110
-[  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
-[  105.186649] RIP: 0033:0x7f166a97455d
-
-Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
-
-Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Closes: https://groups.google.com/g/hust-os-kernel-patches/c/8-a0kPpBW2s
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-Tested-by: syzbot@syzkaller.appspotmail.com
----
- net/bpf/test_run.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 178c4738e63b..565fe8cbcdc9 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1156,6 +1156,20 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		skb->ip_summed = CHECKSUM_COMPLETE;
- 	}
- 
-+	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-+		if (ipv6_bpf_stub) {
-+#if IS_ENABLED(CONFIG_IPV6)
-+			dst_hold(&net->ipv6.ip6_null_entry->dst);
-+			skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
-+#endif
-+		} else {
-+			/* For CONFIG_IPV6=n, ipv6_bpf_stub is NULL */
-+			pr_warn_once("Please test this program with the IPv6 module enabled\n");
-+			ret = -EOPNOTSUPP;
-+			goto out;
-+		}
-+	}
-+
- 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
- 	if (ret)
- 		goto out;
--- 
-2.43.0
-
+You are right, one cmd would do. Good thing someone forgot to implement
+dump for it :)
