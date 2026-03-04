@@ -1,38 +1,37 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC0E3537FB
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 11:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1D03537CE
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 11:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772624319; cv=none; b=sQeLe51DPkdyaC8wuLfIBg5kNf8+5+X6ZQGReM9HaYBiUQvnutV95SyZBy2fa9j9qdLR+rC9+qr/DwQR9STaS8vVffe3w23K7W54tb/kN93NAbaz/+h0BeYo6MvL28Z7srcACrtEJHg6GV9PHJx+p3/SfEW7pH7rc6FDUToUVVU=
+	t=1772624323; cv=none; b=BaR0OryOUIo0N8lFDH+60OlixWEQS9P0yX3P2aU5sqJvSITcSoxGWvO5UtQQLtR2I2yKK3f5UoMOQdp+kQEeTW/1OKSjP79JV4lP0RaG1ra9RA0qlqG9PCViwVBXBjTeVWlnT40EfCD02faBsYSBkXXb1XazUmHXDUCc82SgnqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772624319; c=relaxed/simple;
-	bh=AB+Jg90G24Pdqj7NqOc+YfuU/oyLVcby75ANquMxx+U=;
+	s=arc-20240116; t=1772624323; c=relaxed/simple;
+	bh=hYuvfZFIDL2epZbB6+3TRrBKA058KlOCCRxcolYWUiA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E7vhH3NfUPSxVHG7uis5P46gMLNYIhBqVk3jTJAWZI6KZv/pam50Ev/tUTkZtdDiES/nzyLGVaR9cHNrUJ/scL3ML+6bwwkzZ/HqrD0WFkJU4ZEq1mxyw+rRyAEF+BAzKnIvoHOu0rCH8cxwtMJbjjI5OQiUpxdDk4BHIyZGQ2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N+du+Ixo; arc=none smtp.client-ip=95.215.58.178
+	 MIME-Version; b=u55jREpOD6NMLBM7q5JS8WhkQtd327WYezxvzn/fSvuDLlbRUmBd3nP8qdOSxR/mxmTMgG6zVAkrXlHTSyc+/WGwdB9YFC+20cCir+OPCVpRSApS/M2c8JML3PlXyPCokwFHdyyzEbGliiF609/VBML9tLIoI3NVHqeQVa20rec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FuQnxeSY; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N+du+Ixo"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FuQnxeSY"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772624315;
+	t=1772624319;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OAipDTQmbkNskaP08ReNQMxD+aDuMbpRguSE+JWOYdY=;
-	b=N+du+IxozO7ti+hQp/5K+dJP+P1n6cXZoi5g0DzBbc9OHJaloZLV9g92+2pGGVEVA+mOiK
-	SCV23BxzKwt1YBufpAu7QVWziW4MVHSbgoKTxRCBOWJIoLYHeCtkEZfgB6UC8cUU6REtsl
-	XSNHAJtk2dkPMmY+RLBgO0lPoqyvXo0=
+	bh=ODRuQKMggAAl7kuSnucVregyJTgYXXmbngTapckW4oo=;
+	b=FuQnxeSYWWRvrIm9SqC4OBL8Hcx7IXArhHXPQD9IJmNvff6yaSumUyvBhReBbCTykwRc1B
+	3std9PThFmv2IItlt4Zq+tm+1kwCucl5NilAUdFxZHMADlOrWjx+nnAB7zzePt81e8ueyb
+	Y2n/fnSeC+InKXUDglVGUGzDjW7NrSw=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: netdev@vger.kernel.org,
 	idosch@nvidia.com
 Cc: jiayuan.chen@linux.dev,
 	jiayuan.chen@shopee.com,
-	syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com,
 	"David S. Miller" <davem@davemloft.net>,
 	David Ahern <dsahern@kernel.org>,
 	Eric Dumazet <edumazet@google.com>,
@@ -42,9 +41,9 @@ Cc: jiayuan.chen@linux.dev,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v4 1/2] net: ipv6: fix panic when IPv4 route references loopback IPv6 nexthop
-Date: Wed,  4 Mar 2026 19:38:13 +0800
-Message-ID: <20260304113817.294966-2-jiayuan.chen@linux.dev>
+Subject: [PATCH net v4 2/2] selftests: net: add test for IPv4 route with loopback IPv6 nexthop
+Date: Wed,  4 Mar 2026 19:38:14 +0800
+Message-ID: <20260304113817.294966-3-jiayuan.chen@linux.dev>
 In-Reply-To: <20260304113817.294966-1-jiayuan.chen@linux.dev>
 References: <20260304113817.294966-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -58,72 +57,44 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-When a standalone IPv6 nexthop object is created with a loopback device
-(e.g., "ip -6 nexthop add id 100 dev lo"), fib6_nh_init() misclassifies
-it as a reject route. This is because nexthop objects have no destination
-prefix (fc_dst=::), causing fib6_is_reject() to match any loopback
-nexthop. The reject path skips fib_nh_common_init(), leaving
-nhc_pcpu_rth_output unallocated. If an IPv4 route later references this
-nexthop, __mkroute_output() dereferences NULL nhc_pcpu_rth_output and
-panics.
+Add a regression test for a kernel panic that occurs when an IPv4 route
+references an IPv6 nexthop object created on the loopback device.
 
-Simplify the check in fib6_nh_init() to only match explicit reject
-routes (RTF_REJECT) instead of using fib6_is_reject(). The loopback
-promotion heuristic in fib6_is_reject() is handled separately by
-ip6_route_info_create_nh(). After this change, the three cases behave
-as follows:
+The test creates an IPv6 nexthop on lo, binds an IPv4 route to it, then
+triggers a route lookup via ping to verify the kernel does not crash.
 
-1. Explicit reject route ("ip -6 route add unreachable 2001:db8::/64"):
-   RTF_REJECT is set, enters reject path, skips fib_nh_common_init().
-   No behavior change.
+  ./fib_nexthops.sh
+  Tests passed: 249
+  Tests failed:   0
 
-2. Implicit loopback reject route ("ip -6 route add 2001:db8::/32 dev lo"):
-   RTF_REJECT is not set, takes normal path, fib_nh_common_init() is
-   called. ip6_route_info_create_nh() still promotes it to reject
-   afterward. nhc_pcpu_rth_output is allocated but unused, which is
-   harmless.
-
-3. Standalone nexthop object ("ip -6 nexthop add id 100 dev lo"):
-   RTF_REJECT is not set, takes normal path, fib_nh_common_init() is
-   called. nhc_pcpu_rth_output is properly allocated, fixing the crash
-   when IPv4 routes reference this nexthop.
-
-Suggested-by: Ido Schimmel <idosch@nvidia.com>
-Fixes: 493ced1ac47c ("ipv4: Allow routes to use nexthop objects")
-Reported-by: syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/all/698f8482.a70a0220.2c38d7.00ca.GAE@google.com/T/
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
 ---
- net/ipv6/route.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ tools/testing/selftests/net/fib_nexthops.sh | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index c0350d97307e..08b4a324987e 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -3582,7 +3582,6 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
- 	netdevice_tracker *dev_tracker = &fib6_nh->fib_nh_dev_tracker;
- 	struct net_device *dev = NULL;
- 	struct inet6_dev *idev = NULL;
--	int addr_type;
- 	int err;
+diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
+index 21026b667667..6eb7f95e70e1 100755
+--- a/tools/testing/selftests/net/fib_nexthops.sh
++++ b/tools/testing/selftests/net/fib_nexthops.sh
+@@ -1672,6 +1672,17 @@ ipv4_withv6_fcnal()
  
- 	fib6_nh->fib_nh_family = AF_INET6;
-@@ -3624,11 +3623,10 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
+ 	run_cmd "$IP ro replace 172.16.101.1/32 via inet6 2001:db8:50::1 dev veth1"
+ 	log_test $? 2 "IPv4 route with invalid IPv6 gateway"
++
++	# Test IPv4 route with loopback IPv6 nexthop
++	# Regression test: loopback IPv6 nexthop was misclassified as reject
++	# route, skipping nhc_pcpu_rth_output allocation, causing panic when
++	# an IPv4 route references it and triggers __mkroute_output().
++	run_cmd "$IP -6 nexthop add id 20 dev lo"
++	run_cmd "$IP ro add 172.20.20.0/24 nhid 20"
++	run_cmd "ip netns exec $me ping -c1 -W1 172.20.20.1"
++	log_test $? 1 "IPv4 route with loopback IPv6 nexthop (no crash)"
++	run_cmd "$IP ro del 172.20.20.0/24"
++	run_cmd "$IP nexthop del id 20"
+ }
  
- 	fib6_nh->fib_nh_weight = 1;
- 
--	/* We cannot add true routes via loopback here,
--	 * they would result in kernel looping; promote them to reject routes
-+	/* Reset the nexthop device to the loopback device in case of reject
-+	 * routes.
- 	 */
--	addr_type = ipv6_addr_type(&cfg->fc_dst);
--	if (fib6_is_reject(cfg->fc_flags, dev, addr_type)) {
-+	if (cfg->fc_flags & RTF_REJECT) {
- 		/* hold loopback dev/idev if we haven't done so. */
- 		if (dev != net->loopback_dev) {
- 			if (dev) {
+ ipv4_fcnal_runtime()
 -- 
 2.43.0
 
