@@ -1,46 +1,46 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992C638F254;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C58388E54;
 	Wed,  4 Mar 2026 07:49:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772610564; cv=none; b=WvlhDmb0g1hiXQTcDwlsszX9/AsN8Y64AgHVTo43bIfT0iYi/DWWkR0FC56hgk8oYAx3b3u6p/S+IqO2oYNda6TFpD5aAV/2O0qUXdNZAKrooquLrmJtlVnJzHpY37YTmK92nOGPjomyG2pcFITBQe1Sh4hsN4ZL6mQgqzpaNqw=
+	t=1772610565; cv=none; b=njpO+Axijw1+uW00wYkwr/mvmubVvxydPp6Evsa7zzzQkSAVVzu4RFza1Dk5sb/rkCcklukwBVco8BbDU6bRqxbY13H2vS6rCTWul5kNrp59nxKzW26o3L0wMLQHtQa2idjRZTIow2Qa3PDisgOs4Et2hl+gF2TLOA1W6drHogU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772610564; c=relaxed/simple;
-	bh=MNZEUW6M8syIcj66jnZDrROQra2sbKC2bYbyN7iI9dE=;
+	s=arc-20240116; t=1772610565; c=relaxed/simple;
+	bh=vTsakCNMBP/JiyfE0maBlhTpSxLjbgld8L67EO/FYRQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=e934yorbp1C0E0IdWZi909XRuBHHpb9LbL2jY47tzMLK13GpH4kQhPa/7Z/g07r4h1XHCj8Hs6Cb1nmstV/2P2gCCNTSCN3x05z/SppnSBb3J1gnJSglMUs012jnw3Du0+cPv9Y2oDEusNKd0Eg4nOCZaMGb2+utIQztmK4eVNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lTOD78Xe; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=g73Ugvgn; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=bhmTrhHLBstqGy7itGX8yte+eCn0ih+en6qSsKKlmh/8nSTRXt9NTvlQm8ZMex6p+3nvtSB5faFQ2IS7cSgusS10HKSPhfc3/u0ky8vaVw+JjKlDeQt+ZkGMt4gK0QmnEOfi7s5jNZdJx2HgnjYEmX6tE34nNutiZsKV+YTV0C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OmDeB3oP; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=k8PrD8t7; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lTOD78Xe";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="g73Ugvgn"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OmDeB3oP";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="k8PrD8t7"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772610555;
+	s=2020; t=1772610557;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Bg7n45l3BhxjQl2mgK6tZyeAOE3I5YycolIzoCC4NDY=;
-	b=lTOD78Xe94uc1KdWphFN02t8RRANHlqTV+ltXDRfp88yRt+1aIhBO4PYUjTCOqo6c+L9bg
-	jmaAbSdKVYJq5zS+tSlawyW9Q+NOflyF6BMQ4E/ARa9Nc/k7aTdv/iIEW+fgsTsjOTBeB+
-	pqNaBN2ZdPOSINd2p+kyW83xKMSq4yJcABWiLSWzTSZQKA5oP2AsNW/jDNnjNEyy0mCPvC
-	ozz8c2va6gxS17ckMi6wgp4b3FgLAVwrmCNzTErnG9r2qlS44+e42Mv0LJe0OFi4dRnWL+
-	dl0ZYar8Z8OgutWi40Vte94dZZIZe/1X6Hrcx3Rc+y2V4+vvLJxCxrseelo7vA==
+	bh=xrvMf4BjnIv//172y2WecCl7fldL66GRRhNCP6ISZdo=;
+	b=OmDeB3oPYRqS5Pds7LbSMZ82z5frdg/XBQr1OuitHsxauAKnO0Asp7iGdeQHnWpQo09vNP
+	VSo8C6kb2RH3nrWz+XMH1T5TRA2O8nhM/jpjjplbzXVBCEcKjnCp7diG7MCLobQgHX9nMv
+	M9kaZ5phOwVn+feyIaEtnqQiTrqu91jmsLQh+MJYs25cWo89uKRz+EfCE0ENlYVdaGWwom
+	zWd2/fTjiBDv9Mb0sCCd20zl3Y9fodE5Jk/7Hu2HlPI9/OuedL8wxcthP4ZIG65DC8j9jI
+	VnY1wk78wDFRq8fD278zyQq3GfUSl/1/Z1CAGyG2F4iydw8vZ4dtk2U0ZWtncQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772610555;
+	s=2020e; t=1772610557;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Bg7n45l3BhxjQl2mgK6tZyeAOE3I5YycolIzoCC4NDY=;
-	b=g73UgvgnqZt+77yUZp05qYt8zKLP2434x0orfQ+2QiuTsIJXxk3UcM5PQXd5xMNFuAAiwq
-	dKJG/IABFLN8ScAA==
-Date: Wed, 04 Mar 2026 08:49:06 +0100
-Subject: [PATCH v6 09/14] sparc64: vdso: Introduce vdso/processor.h
+	bh=xrvMf4BjnIv//172y2WecCl7fldL66GRRhNCP6ISZdo=;
+	b=k8PrD8t7g4T9k1RbBkh+Gnw7tCdz66nLTMnYXtHRhF2IfQiCW8DWn0M/h8FqtwF1XbPrwm
+	OG2YGiSsNZrmK9BQ==
+Date: Wed, 04 Mar 2026 08:49:09 +0100
+Subject: [PATCH v6 12/14] sparc64: vdso2c: Remove symbol handling
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260304-vdso-sparc64-generic-2-v6-9-d8eb3b0e1410@linutronix.de>
+Message-Id: <20260304-vdso-sparc64-generic-2-v6-12-d8eb3b0e1410@linutronix.de>
 References: <20260304-vdso-sparc64-generic-2-v6-0-d8eb3b0e1410@linutronix.de>
 In-Reply-To: <20260304-vdso-sparc64-generic-2-v6-0-d8eb3b0e1410@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, 
@@ -76,140 +76,120 @@ Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
  linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772610551; l=4546;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772610551; l=3471;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=MNZEUW6M8syIcj66jnZDrROQra2sbKC2bYbyN7iI9dE=;
- b=17XaTEXthlAZd+cHLsVCZsZ7RGr32B6aj0u9EBT6lr2dChc81D5X3sAveJ7v3v/7jDkCGypoW
- yIIPmzALosvDvosr77dMJ4acqURTb45wGP4zJdwYp90fuxyv6epxy/H
+ bh=vTsakCNMBP/JiyfE0maBlhTpSxLjbgld8L67EO/FYRQ=;
+ b=9PH21cG/2X7E36c9qqHa3P/RKp9TuaG7thghoGZ47u6BX1YvcxI9ljMPlO+FV011JY+WVRBkm
+ s6355TnoXWrDzDbxAtEYnvtDiRoMscz/tSTcu8S47SoCwTDr2Fia2cR
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The generic vDSO library expects a vdso/processor.h with an definition of
-cpu_relax().
-
-Split out cpu_relax() into this dedicated header.
+There are no handled symbols left.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Tested-by: Andreas Larsson <andreas@gaisler.com>
 Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 Acked-by: Andreas Larsson <andreas@gaisler.com>
 ---
- arch/sparc/include/asm/processor.h      |  3 +++
- arch/sparc/include/asm/processor_32.h   |  2 --
- arch/sparc/include/asm/processor_64.h   | 25 --------------------
- arch/sparc/include/asm/vdso/processor.h | 41 +++++++++++++++++++++++++++++++++
- 4 files changed, 44 insertions(+), 27 deletions(-)
+ arch/sparc/vdso/vdso2c.c | 10 ----------
+ arch/sparc/vdso/vdso2c.h | 41 +----------------------------------------
+ 2 files changed, 1 insertion(+), 50 deletions(-)
 
-diff --git a/arch/sparc/include/asm/processor.h b/arch/sparc/include/asm/processor.h
-index 18295ea625dd..e34de956519a 100644
---- a/arch/sparc/include/asm/processor.h
-+++ b/arch/sparc/include/asm/processor.h
-@@ -1,6 +1,9 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- #ifndef ___ASM_SPARC_PROCESSOR_H
- #define ___ASM_SPARC_PROCESSOR_H
-+
-+#include <asm/vdso/processor.h>
-+
- #if defined(__sparc__) && defined(__arch64__)
- #include <asm/processor_64.h>
- #else
-diff --git a/arch/sparc/include/asm/processor_32.h b/arch/sparc/include/asm/processor_32.h
-index ba8b70ffec08..a074d313f4f8 100644
---- a/arch/sparc/include/asm/processor_32.h
-+++ b/arch/sparc/include/asm/processor_32.h
-@@ -91,8 +91,6 @@ unsigned long __get_wchan(struct task_struct *);
- extern struct task_struct *last_task_used_math;
- int do_mathemu(struct pt_regs *regs, struct task_struct *fpt);
+diff --git a/arch/sparc/vdso/vdso2c.c b/arch/sparc/vdso/vdso2c.c
+index 70b14a436fe2..e5c61214a0e2 100644
+--- a/arch/sparc/vdso/vdso2c.c
++++ b/arch/sparc/vdso/vdso2c.c
+@@ -58,14 +58,6 @@
  
--#define cpu_relax()	barrier()
+ const char *outfilename;
+ 
+-struct vdso_sym {
+-	const char *name;
+-	int export;
+-};
 -
- extern void (*sparc_idle)(void);
- 
- #endif
-diff --git a/arch/sparc/include/asm/processor_64.h b/arch/sparc/include/asm/processor_64.h
-index 321859454ca4..485070495263 100644
---- a/arch/sparc/include/asm/processor_64.h
-+++ b/arch/sparc/include/asm/processor_64.h
-@@ -182,31 +182,6 @@ unsigned long __get_wchan(struct task_struct *task);
- #define KSTK_EIP(tsk)  (task_pt_regs(tsk)->tpc)
- #define KSTK_ESP(tsk)  (task_pt_regs(tsk)->u_regs[UREG_FP])
- 
--/* Please see the commentary in asm/backoff.h for a description of
-- * what these instructions are doing and how they have been chosen.
-- * To make a long story short, we are trying to yield the current cpu
-- * strand during busy loops.
-- */
--#ifdef	BUILD_VDSO
--#define	cpu_relax()	asm volatile("\n99:\n\t"			\
--				     "rd	%%ccr, %%g0\n\t"	\
--				     "rd	%%ccr, %%g0\n\t"	\
--				     "rd	%%ccr, %%g0\n\t"	\
--				     ::: "memory")
--#else /* ! BUILD_VDSO */
--#define cpu_relax()	asm volatile("\n99:\n\t"			\
--				     "rd	%%ccr, %%g0\n\t"	\
--				     "rd	%%ccr, %%g0\n\t"	\
--				     "rd	%%ccr, %%g0\n\t"	\
--				     ".section	.pause_3insn_patch,\"ax\"\n\t"\
--				     ".word	99b\n\t"		\
--				     "wr	%%g0, 128, %%asr27\n\t"	\
--				     "nop\n\t"				\
--				     "nop\n\t"				\
--				     ".previous"			\
--				     ::: "memory")
--#endif
+-struct vdso_sym required_syms[] = {
+-};
 -
- /* Prefetch support.  This is tuned for UltraSPARC-III and later.
-  * UltraSPARC-I will treat these as nops, and UltraSPARC-II has
-  * a shallower prefetch queue than later chips.
-diff --git a/arch/sparc/include/asm/vdso/processor.h b/arch/sparc/include/asm/vdso/processor.h
-new file mode 100644
-index 000000000000..f7a9adc807f7
---- /dev/null
-+++ b/arch/sparc/include/asm/vdso/processor.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _ASM_SPARC_VDSO_PROCESSOR_H
-+#define _ASM_SPARC_VDSO_PROCESSOR_H
-+
-+#include <linux/compiler.h>
-+
-+#if defined(__arch64__)
-+
-+/* Please see the commentary in asm/backoff.h for a description of
-+ * what these instructions are doing and how they have been chosen.
-+ * To make a long story short, we are trying to yield the current cpu
-+ * strand during busy loops.
-+ */
-+#ifdef	BUILD_VDSO
-+#define	cpu_relax()	asm volatile("\n99:\n\t"			\
-+				     "rd	%%ccr, %%g0\n\t"	\
-+				     "rd	%%ccr, %%g0\n\t"	\
-+				     "rd	%%ccr, %%g0\n\t"	\
-+				     ::: "memory")
-+#else /* ! BUILD_VDSO */
-+#define cpu_relax()	asm volatile("\n99:\n\t"			\
-+				     "rd	%%ccr, %%g0\n\t"	\
-+				     "rd	%%ccr, %%g0\n\t"	\
-+				     "rd	%%ccr, %%g0\n\t"	\
-+				     ".section	.pause_3insn_patch,\"ax\"\n\t"\
-+				     ".word	99b\n\t"		\
-+				     "wr	%%g0, 128, %%asr27\n\t"	\
-+				     "nop\n\t"				\
-+				     "nop\n\t"				\
-+				     ".previous"			\
-+				     ::: "memory")
-+#endif /* BUILD_VDSO */
-+
-+#else /* ! __arch64__ */
-+
-+#define cpu_relax()	barrier()
-+
-+#endif /* __arch64__ */
-+
-+#endif /* _ASM_SPARC_VDSO_PROCESSOR_H */
+ __attribute__((format(printf, 1, 2))) __attribute__((noreturn))
+ static void fail(const char *format, ...)
+ {
+@@ -105,8 +97,6 @@ static void fail(const char *format, ...)
+ #define PUT_BE(x, val)					\
+ 	PBE(x, val, 64, PBE(x, val, 32, PBE(x, val, 16, LAST_PBE(x, val))))
+ 
+-#define NSYMS ARRAY_SIZE(required_syms)
+-
+ #define BITSFUNC3(name, bits, suffix) name##bits##suffix
+ #define BITSFUNC2(name, bits, suffix) BITSFUNC3(name, bits, suffix)
+ #define BITSFUNC(name) BITSFUNC2(name, ELF_BITS, )
+diff --git a/arch/sparc/vdso/vdso2c.h b/arch/sparc/vdso/vdso2c.h
+index ba0794659eb5..bad6a0593f4c 100644
+--- a/arch/sparc/vdso/vdso2c.h
++++ b/arch/sparc/vdso/vdso2c.h
+@@ -17,11 +17,9 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
+ 	unsigned long mapping_size;
+ 	int i;
+ 	unsigned long j;
+-	ELF(Shdr) *symtab_hdr = NULL, *strtab_hdr;
++	ELF(Shdr) *symtab_hdr = NULL;
+ 	ELF(Ehdr) *hdr = (ELF(Ehdr) *)raw_addr;
+ 	ELF(Dyn) *dyn = 0, *dyn_end = 0;
+-	INT_BITS syms[NSYMS] = {};
+-
+ 	ELF(Phdr) *pt = (ELF(Phdr) *)(raw_addr + GET_BE(&hdr->e_phoff));
+ 
+ 	/* Walk the segment table. */
+@@ -72,38 +70,6 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
+ 	if (!symtab_hdr)
+ 		fail("no symbol table\n");
+ 
+-	strtab_hdr = raw_addr + GET_BE(&hdr->e_shoff) +
+-		GET_BE(&hdr->e_shentsize) * GET_BE(&symtab_hdr->sh_link);
+-
+-	/* Walk the symbol table */
+-	for (i = 0;
+-	     i < GET_BE(&symtab_hdr->sh_size) / GET_BE(&symtab_hdr->sh_entsize);
+-	     i++) {
+-		int k;
+-
+-		ELF(Sym) *sym = raw_addr + GET_BE(&symtab_hdr->sh_offset) +
+-			GET_BE(&symtab_hdr->sh_entsize) * i;
+-		const char *name = raw_addr + GET_BE(&strtab_hdr->sh_offset) +
+-			GET_BE(&sym->st_name);
+-
+-		for (k = 0; k < NSYMS; k++) {
+-			if (!strcmp(name, required_syms[k].name)) {
+-				if (syms[k]) {
+-					fail("duplicate symbol %s\n",
+-					     required_syms[k].name);
+-				}
+-
+-				/*
+-				 * Careful: we use negative addresses, but
+-				 * st_value is unsigned, so we rely
+-				 * on syms[k] being a signed type of the
+-				 * correct width.
+-				 */
+-				syms[k] = GET_BE(&sym->st_value);
+-			}
+-		}
+-	}
+-
+ 	if (!name) {
+ 		fwrite(stripped_addr, stripped_len, 1, outfile);
+ 		return;
+@@ -129,10 +95,5 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
+ 	fprintf(outfile, "const struct vdso_image %s_builtin = {\n", name);
+ 	fprintf(outfile, "\t.data = raw_data,\n");
+ 	fprintf(outfile, "\t.size = %lu,\n", mapping_size);
+-	for (i = 0; i < NSYMS; i++) {
+-		if (required_syms[i].export && syms[i])
+-			fprintf(outfile, "\t.sym_%s = %" PRIi64 ",\n",
+-				required_syms[i].name, (int64_t)syms[i]);
+-	}
+ 	fprintf(outfile, "};\n");
+ }
 
 -- 
 2.53.0
