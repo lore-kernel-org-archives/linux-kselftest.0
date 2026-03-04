@@ -1,140 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B151A351C13;
-	Wed,  4 Mar 2026 07:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12664358371
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 07:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772609245; cv=none; b=d0IcDO5wHx927IQHZswCmdr6T1BKBCPHojqCUMYBB0Gu3RX4vpRI5azCWdRNQevhH9JdsDKVRZktVXdupf673SZo1DRsIEyCS7ZfwgniCTFjwCHrqC0j1xmkpN9S4t3Qqys68ZWZ3q4DV4gxs9UKkbdgIbLYyuW7CyUdVsgzy3E=
+	t=1772610218; cv=none; b=FveLwEP7UW4wdhV6F1TH8/lDRFjXHnNeMXxiPyT78sG9YiDOcEOuvRUzcD1EZP52iS6Iv8T8pVtLHfXqZ2UrD3OhRE8ed+iLVNinvcf5+gqjlV/v+NfM07RomOi+FogPBX2BBTe65QL1djmZDSWQQjebkytvNq4rvO7/PJgmKeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772609245; c=relaxed/simple;
-	bh=AMtw0pjrXtq1GRS+1bfRCOMN9annLt3Tak8oZjmbG7o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SmXSpcSGTVnedwLICJadrO3ZaKN9+6AmMKztw2SOowOi4aCPIY45wVAf3xz6yYuQXzR/Wwya+kvFf8m4a5ApVtKEX4QPzXYVYtqkOSAVcSkIrkVhXkelxnCatZ+iaGEXa3fzZZhEsYsv/aKqDat+sOZYq4XiqxYukuv/CGux8+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OpNGUtLO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772610218; c=relaxed/simple;
+	bh=ds9fEzCzgnOh8aZtFA8qphSeg7jiatW+uffLqHndLZk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=j2yNUwDclgHARVr3bgKzKFbdqCDSS59l4bLGJy9eu0UE/7mnvRF3RaeTchwVUu9fU2XMeATSrp/DTetp2La27V4Yy8nhrGlJuaiCmxlJiF4cuLwoWk+JMhQOQ55KGaZvz3e96HXPgeA+UnyKE45Inj4oMcsBYfSqlbN58HQfM0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hPttfdbf; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OpNGUtLO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1BCC19423;
-	Wed,  4 Mar 2026 07:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772609245;
-	bh=AMtw0pjrXtq1GRS+1bfRCOMN9annLt3Tak8oZjmbG7o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=OpNGUtLO0D5qbdbg/ZEwNqPA1InZooEFYZyxyjuNe/5L+KALJYgH7P9aHTR2xPAyP
-	 UzyJpY4Pm7R10Uk3Xu7kkTB4EC8f4Yk+Dm/bsmLnZjujEE1Fy8ys40W8l85uT7dfVi
-	 daz4E/RorSHzjD3RbC+W25eJgt/l7UK4hghmFa5ODWByct66pgk5D7wir0jDXWJTOq
-	 QD4sb1uJXV1tiDVhbg1NRzOMvntg409Vm87kwWcxtCNw1Mc2EyBWhzfCfEeFcR+93x
-	 C7/SrnRqMwfpDyyrUPX4mZwwKwt2LMEBimcjRaL/ClfgEEkviRPXuEZqXhQ2nO9n2C
-	 8Y4Mz81uktr8Q==
-Content-Type: multipart/mixed; boundary="===============1770799269804699519=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hPttfdbf"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772610214;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gkKYESAH5YFAD03Jj76NpTW6HeKRoN5KgHV8fqdKUwk=;
+	b=hPttfdbfoMJn5mkbkpzGib/ixwWVH0nVRqwVGlyIaVXN9oRVzmBs5c5HBelUUTKaec9iba
+	Z4Jz4Xq/vaUOzJG9K2wyfuWbtmATt2rQlm63ShEphIYdfmjN+vIRmhWudq7wFzXodtx9iD
+	4n9V8PUb0fIoIDas7XPnB0O36Oqu4Hg=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: jv@jvosburgh.net,
+	netdev@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,
+	jiayuan.chen@shopee.com,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH net v4 1/2] bonding: fix null-ptr-deref in bond_rr_gen_slave_id()
+Date: Wed,  4 Mar 2026 15:42:57 +0800
+Message-ID: <20260304074301.35482-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f141f5786f2492de54972838d823f02b44300458b1ec78fc61f34cdfac87b183@mail.kernel.org>
-In-Reply-To: <20260304063643.14581-5-jiayuan.chen@linux.dev>
-References: <20260304063643.14581-5-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf-next v1 4/7] tcp_bpf: add splice_read support for sockmap
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com
-Cc: jiayuan.chen@linux.dev,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,kuniyu@google.com,willemb@google.com,dsahern@kernel.org,ncardwell@google.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,jiapeng.chong@linux.alibaba.com,ihor.solodrai@linux.dev,mhal@rbox.co,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  4 Mar 2026 07:27:24 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============1770799269804699519==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -445,6 +445,16 @@ int sk_msg_read_core(struct sock *sk, struct sk_psock *psock,
->  				copy = actor(actor_arg, page,
->  					     sge->offset, copy);
->  			if (!copy) {
-> +				/*
-> +				 * The loop processes msg_rx->sg entries
-> +				 * sequentially and prior entries may
-> +				 * already be consumed. Advance sg.start
-> +				 * so the next call resumes at the correct
-> +				 * entry, otherwise it would revisit
-> +				 * zero-length entries and return -EFAULT.
-> +				 */
-> +				if (!peek)
-> +					msg_rx->sg.start = i;
->  				copied = copied ? copied : -EFAULT;
->  				goto out;
+bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
+check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
+when the bond mode is round-robin. If the bond device was never brought
+up, rr_tx_counter remains NULL, causing a null-ptr-deref.
 
-The sg.start fix looks correct for the mid-way failure case.
+The XDP redirect path can reach this code even when the bond is not up:
+bpf_master_redirect_enabled_key is a global static key, so when any bond
+device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+interception is enabled for all bond slaves system-wide. This allows the
+path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+reached on a bond that was never opened.
 
-When the splice actor (below) fails on the very first sg entry, copied
-is still 0, so this returns -EFAULT to the caller. For the recvmsg
-actor, -EFAULT is the right error because copy_page_to_iter() returning
-0 means a genuine fault. But for the splice actor, 0 can mean the pipe
-is full (add_to_pipe() returned -EAGAIN) or memory allocation failed.
+Fix this by allocating rr_tx_counter unconditionally in bond_init()
+(ndo_init), which is called by register_netdevice() and covers both
+device creation paths (bond_create() and bond_newlink()). This also
+handles the case where bond mode is changed to round-robin after device
+creation. The conditional allocation in bond_open() is removed. Since
+bond_destructor() already unconditionally calls
+free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
+ndo_init, free at destructor.
 
-Would it make sense for sk_msg_splice_actor() to propagate the actual
-error, or for the callers to translate -EFAULT into the appropriate
-errno for their context? Right now the splice path returns -EFAULT to
-userspace for a pipe-full condition, where standard tcp_splice_read()
-would return -EAGAIN:
+Note: rr_tx_counter is only used by round-robin mode, so this
+deliberately allocates a per-cpu u32 that goes unused for other modes.
+Conditional allocation (e.g., in bond_option_mode_set) was considered
+but rejected: the XDP path can race with mode changes on a downed bond,
+and adding memory barriers to the XDP hot path is not justified for
+saving 4 bytes per CPU.
 
-tcp_bpf_splice_read()
-  -> __tcp_bpf_recvmsg()
-    -> sk_msg_read_core() with sk_msg_splice_actor
-      -> add_to_pipe() returns -EAGAIN (pipe full)
-      -> actor returns 0
-      -> copied = 0 ? 0 : -EFAULT
-    returns -EFAULT
-  returns -EFAULT to userspace
-
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-
-[ ... ]
-
-> +static int sk_msg_splice_actor(void *arg, struct page *page,
-> +			       unsigned int offset, size_t len)
-> +{
-> +	struct tcp_bpf_splice_ctx *ctx = arg;
-> +	struct pipe_buffer buf = {
-> +		.ops = &nosteal_pipe_buf_ops,
-> +	};
-> +	ssize_t ret;
-> +
-> +	buf.page = alloc_page(GFP_KERNEL);
-> +	if (!buf.page)
-> +		return 0;
-> +
-> +	memcpy(page_address(buf.page), page_address(page) + offset, len);
-> +	buf.offset = 0;
-> +	buf.len = len;
-> +
-> +	/*
-> +	 * add_to_pipe() calls pipe_buf_release() on failure, which
-> +	 * handles put_page() via nosteal_pipe_buf_ops, so no explicit
-> +	 * cleanup is needed here.
-> +	 */
-> +	ret = add_to_pipe(ctx->pipe, &buf);
-> +	if (ret <= 0)
-> +		return 0;
-> +	return ret;
-> +}
-
-Both the alloc_page failure and the add_to_pipe failure return 0 here.
-Since sk_msg_read_core() converts actor-returning-0 into -EFAULT when
-no bytes have been copied yet, this means userspace can see -EFAULT for
-what is actually -ENOMEM (allocation failure) or -EAGAIN (pipe full).
-The alloc_page case under memory pressure seems particularly confusing,
-as -EFAULT gives no indication that backing off might help.
-
-
+Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ drivers/net/bonding/bond_main.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22658462977
---===============1770799269804699519==--
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 78cff904cdc3..55b5c7a6cb5f 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -4279,12 +4279,6 @@ static int bond_open(struct net_device *bond_dev)
+ 	struct list_head *iter;
+ 	struct slave *slave;
+ 
+-	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
+-		bond->rr_tx_counter = alloc_percpu(u32);
+-		if (!bond->rr_tx_counter)
+-			return -ENOMEM;
+-	}
+-
+ 	/* reset slave->backup and slave->inactive */
+ 	if (bond_has_slaves(bond)) {
+ 		bond_for_each_slave(bond, slave, iter) {
+@@ -6411,6 +6405,19 @@ static int bond_init(struct net_device *bond_dev)
+ 	if (!bond->wq)
+ 		return -ENOMEM;
+ 
++	/* rr_tx_counter is only used in round-robin mode, but we allocate
++	 * it unconditionally because the XDP redirect path
++	 * (xdp_master_redirect -> bond_xdp_get_xmit_slave) can reach here
++	 * even when the bond is not up, and deferring allocation to
++	 * bond_open or bond_option_mode_set would require memory barriers
++	 * on the XDP hot path. The cost is a per-cpu u32 per bond device.
++	 */
++	bond->rr_tx_counter = alloc_percpu(u32);
++	if (!bond->rr_tx_counter) {
++		destroy_workqueue(bond->wq);
++		return -ENOMEM;
++	}
++
+ 	bond->notifier_ctx = false;
+ 
+ 	spin_lock_init(&bond->stats_lock);
+-- 
+2.43.0
+
