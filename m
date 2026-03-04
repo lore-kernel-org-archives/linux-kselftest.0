@@ -1,161 +1,151 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5694735AC0F
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 15:51:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A30535AC0B
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 15:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772639516; cv=none; b=K3EKFZyon+760w/UfQ6RICtoPBrVyMXzqZ9XnaYT6Bpeq81vAIDqSyKvA9I3n77aJtmZ8j+riBkzKXsnrYYTSH4wdpZXe/R0AemNuN1HouqiS/9gBDIcoZbJ7tVBeOZarwvGShSLixhywI4bYJdOZk3XLgXVgYbyGl9aXzSQ1jE=
+	t=1772639952; cv=none; b=aA4CJo5PEjnoyqpnkCSHVoyVY3E0g/C8O9oWOCo5eNzl/Wzdu5jO9hwQTkKeeRnBwPY2r87uUg7J+jxmrwvN58DCfVInJL/lVzvQamKiXWHXKWr3qfP8aT2ncczlR/7PKjePWTLXJ5y06pK2zu5PZwTcfVquZKfaH7GRv/P4S9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772639516; c=relaxed/simple;
-	bh=5ZMjekRXkTF0z/iCnuoeODu/fxct0ji/qztmkBY/S74=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZMMmSTfZmtuMpNu2yM22q+bZWDD84HNGrAvX9am+UKLGlg7y4W+4dMPd3MNcCQ/JCiMTcMhfHOFqUBvQiqjnhT2vM8HxBYYUbOR0CogKGbYbAHRY8gTWl1nU682MdYHxg+b0jeIidAA10x9kHDk3v5bzTlChJ9GA3s2Ajlxbgpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D73aG3y/; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772639952; c=relaxed/simple;
+	bh=sRkO7eLIQ3gUqOEx4ySJKyymRH2K2LfoKGh++9p0oBc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fs9uhgEGYnnrZG58MRIp0EaDuCXdZ3zVZFo2lv+MIWeJOOqTpEcKar2xTxD1f6GB8YgxVyB9c/LAtfr9eX9A1fWY84X1lHDpS+yrrUDCVH9rorx1cUFyfWcPThy8a+ljlYR3CWM2R4J3l1mmHsN++YkrAn9NBO2LCun+kXTSsqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=bCl7mpAT; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D73aG3y/"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2aae4816912so46880045ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 07:51:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="bCl7mpAT"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4807068eacbso58797605e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 07:59:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772639515; x=1773244315; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=biF8JF+x7wlDuvH3bE2Hsuz9zAy0Y4BOSyInAPcrCZc=;
-        b=D73aG3y/NqfX1+q4ak+gD4Jy+0Fkp7hW7TEgPnsPIjaIIZCC1/GYFrBEwc114LWtPI
-         nz2zjxsW0vHUuDxhnSknRnZGPgXgiX848JAGbVM1HRjWIGD2H34ghUOzA6tcmzoX0+4n
-         8EYjvnCu8FXD8CWNrc0khXBHXWu8GIZtGi8ln0PdFs43gwKkZTS3YFvrSkDZzE/GR+to
-         yOguqur9m4lK/75sQJwyGjNJEgN4W+ZiyADtKR5bU3mxRpBSm0jm1jSNFDNM59XtexQD
-         A94Wz76hzc1P/dOjPlb0tJcMYjjWsIOs1RSU/fLAQd9W8F5qXZme1BWEzlZss3l1r/Zc
-         G3JA==
+        d=blackwall.org; s=google; t=1772639949; x=1773244749; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HOSnZzfeSc3oCHq3PRnVd2F+xX7z1Nwp9tzlqrjRhhw=;
+        b=bCl7mpATphtDitT/eSLxiEA6FtOIYGrpkTySJuJVnZiyRj41rVH10N6ylXXNJcoasi
+         JuIc2+hmQ++Ja5/gsKlcal7/XTp+xh8nfblN5go2qu2QJLQeNVnJ4NXThFznSTlyl0We
+         jTJ4oYxSdgPhhjrWcmBvZvZ/csYOhhTtSgkpX+qlwj0k1NCWQwO+2E7QrH56xXdsq3lx
+         np5cNxcuPyXHDADxhrNVpJeKRU2VR5OK2WK51Q8JeGpZsQ4q6w6DstTeKZPVYN6G7lv8
+         cJdfsXJRot7b8jyykENAjFS3lFAIvPoMCDLB7H1wq3p+bynF/CRsfz682RXxQEsIIGv5
+         pA2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772639515; x=1773244315;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=biF8JF+x7wlDuvH3bE2Hsuz9zAy0Y4BOSyInAPcrCZc=;
-        b=XF2eevpZxf+Pe0KHGRgyoIujSNLDzr5a5nZfPb5kE4tTTd/iuXbJJCntPSpvwEvaKs
-         YIrWw0IQ+rtJT5kFI8e5ChBT/GFEqZUElkiElvnSGF6MxbEYHHLOv7t3py+jsQYaHWVd
-         XR8eQZh/Q6mrRzZSNOeqU3ck5AoQex9TqgyUkUYwCmGCed9hvnZcdJPBsJMxvD5UFGtR
-         GhQOsD3EBVEP5Rw9/EqFPt6TltHVKWjh46X69x29k170Mj6e1NgIyWJ7j7wnX0Di8bYC
-         caNvL/yQsIcQQFW55lHfPWINcTiRomx9VO8lOEg9KGbde13iiU5CYWucdS8P5twTZnQK
-         V03A==
-X-Forwarded-Encrypted: i=1; AJvYcCX24qhKGlIQ8dd1t2bl7zDMNZYbi03ZqxKHda1XlZQIJ07kc0ZyWcrlHat08aGhjk7pTRV8CQY/096Acq4sOi8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEpXKhVVOeQ5MM9K5IJAZzJqBRMoh6fs+oylhOrkkA4ga89ijL
-	wp0Xfz4BuYbU6LS9MTjhs29Q8N4e3+mS/PeBFfonD4XbRNhEDAcSjpFm3xMmk/mK
-X-Gm-Gg: ATEYQzybirTnCL6fXZFC8i5sg7PE+7VjDSzUWYiR26YNN6Q6qRAPOHKQRfZTRmgtv42
-	JlUf2MZjrULhnXfcTKXIKTgTb0eYLAqrji9TVttrumuSknFUZrKIXyO0hBGqyCDggWRT7032I/D
-	fKFsetMWTr5mDnGKzQu4Vedlr5Of9ca1xlcBBb3UvCnSoUAd2wm+AXVarbKsrg3DorUqB0/YyA6
-	PvBbstT1qEkeCuIBaDsuqngLbnDpea5TPv+HHe+yJ5+BxdPCyaivA8U2vsVamYveHIZrA8vn8WS
-	wvdXCn2zA5tjHSFUqJuBuobbLBREY4ntSgQMxoCO/56mj/SzMaJPkSSgpl18xS68VRDaChO+eQo
-	Xmjl9xhXixtTP6jf0Oh/l7ZK4qSVTFTD+n3F+O6I6SepUUSxDvLg2CWY5Lw6udnduvxwsZf7XsQ
-	Gc2EQuxFFJOIrlxTYI3fFo+KPM4DXJOxaWOp1K
-X-Received: by 2002:a17:903:2ca:b0:2ae:557e:1f7d with SMTP id d9443c01a7336-2ae6a9ed626mr26021975ad.7.1772639514642;
-        Wed, 04 Mar 2026 07:51:54 -0800 (PST)
-Received: from [172.20.10.5] ([117.20.154.117])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae399acba4sm136890835ad.67.2026.03.04.07.51.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 07:51:53 -0800 (PST)
-Message-ID: <5449f387-1141-464d-a206-172b4d54363b@gmail.com>
-Date: Wed, 4 Mar 2026 23:51:46 +0800
+        d=1e100.net; s=20230601; t=1772639949; x=1773244749;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HOSnZzfeSc3oCHq3PRnVd2F+xX7z1Nwp9tzlqrjRhhw=;
+        b=WQvcj2tXB1/BolBEIvyRSHP6D+WTNV30J04S/DfRsM7EnEOYTiSwihp/eBkKRbJ0Rc
+         A4GVjFfKwSUI8YbIgCAVhdzYPBpTf5O+WmiOlnSzk+b1GzoO8Blfn559luFYYmcKFGmk
+         9iN+urJl7r0o4n7bU8hcX5rfN0OS0GE0snB3uCyMj8qIZy9kARIxClCcdHv54TEGFYTR
+         U0x4uo71yyxyFSMAU37im8FID/vdDKQ0pQK1mv7hVhltS+fx6F3TPap2qD3wKQ/6/BUy
+         Xg3w7E4anjAUgGo+oRExRV/kLIoAX5Nu9uXv6mbM+cU1+flb4MfyWjecbqvGwQQtc6Aj
+         pgLA==
+X-Forwarded-Encrypted: i=1; AJvYcCWYHcNU87TeCbAT3c+Gk6QTLlnIMEP01lGGQVcJ4ghU81jV4QK97mYwsL3zvHP30GYYleSfhCn99qHm+QHtMpg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5a6HA0lNhERTBQc8DTxfJKCPNPHBSCEOJrmf9i+6eoP4orqzK
+	NzpBv6e+amsraeP2pR031pdLtyv/w1AIMsEtFGs2kDQK+Zqnwhj5VGRVyLFiCMaW/+k=
+X-Gm-Gg: ATEYQzxh7lkUbQfhenYyXSNRKaPCaOYTfQSfTZMQK3OVNv80nQoqp0cTAyh/eESl0q7
+	WJAVvHo7XtvKOExKzZ7IEYiqgMaOOsCrOCFbz/+W54FyvMNSheKrYZotOKqIW/rxhxhm8XFlKu9
+	UQJsCZyWhA4VjePngMI9oUZpAxN+eYWOnKaUMg+gex6FOjLr1lC+rEZkka31Ay97HMGhirDN4Hc
+	2ijLyfVHJfd+wyfCLsWnonsgmteOZRvDd2j3ERZwFZHzch1WXuqrZeow2XdWd+m/WVxBvpLfi3+
+	yLyYLbeTmaRnrwwrPdq7r9K9+rDl1MFwuFCcy04fRLj84r1n/7GkcXGN2IQDd1T8vQE93wmv62J
+	G7cKlq8WPITExFYzCszoJVjzi28eMpD0zByauCoIkc50hokduFRX/F9Tr6bVPxaoQrxwpL4PefB
+	X00vmpjuZQpkQmlEzaWtHAsihWWHxZpDL+MPzRItzAvYaWwVJuO27iNubuFQ==
+X-Received: by 2002:a05:600c:3b29:b0:483:7980:4687 with SMTP id 5b1f17b1804b1-48519899381mr45743415e9.17.1772639948325;
+        Wed, 04 Mar 2026 07:59:08 -0800 (PST)
+Received: from localhost (176.111.182.151.kyiv.nat.volia.net. [176.111.182.151])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851acfa177sm21037355e9.4.2026.03.04.07.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 07:59:07 -0800 (PST)
+Date: Wed, 4 Mar 2026 17:59:06 +0200
+From: Nikolay Aleksandrov <razor@blackwall.org>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: jv@jvosburgh.net, netdev@vger.kernel.org, jiayuan.chen@shopee.com,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+Message-ID: <aahWymAi_CtRG0gJ@penguin>
+References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+ <20260304074301.35482-2-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/5] bpf: Extend the bpf_list family of APIs
-To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260304143459.78059-1-pilgrimtao@gmail.com>
-Content-Language: en-US
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <20260304143459.78059-1-pilgrimtao@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260304074301.35482-2-jiayuan.chen@linux.dev>
 
-Hi Kaitao,
-
-I think you should wait for some comments before sending the next revision.
-
-The patch target is missing in subject: [PATCH bpf-next v6 ...
-
-Thanks,
-Leon
-
-On 2026/3/4 22:34, Chengkaitao wrote:
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
 > 
-> In BPF, a list can only be used to implement a stack structure.
-> Due to an incomplete API set, only FIFO or LIFO operations are
-> supported. The patches enhance the BPF list API, making it more
-> list-like.
+> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
+> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
+> when the bond mode is round-robin. If the bond device was never brought
+> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
 > 
-> Four new kfuncs have been added:
-> bpf_list_del: remove a node from the list
-> bpf_list_add_impl: insert a node after a given list node
-> bpf_list_node_is_edge: check if a node is the first or last in the list
-> bpf_list_empty: check if the list is empty
+> The XDP redirect path can reach this code even when the bond is not up:
+> bpf_master_redirect_enabled_key is a global static key, so when any bond
+> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+> interception is enabled for all bond slaves system-wide. This allows the
+> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+> reached on a bond that was never opened.
 > 
-> refactor kfunc checks to table-driven approach, and add test cases for
-> the aforementioned kfuncs.
+> Fix this by allocating rr_tx_counter unconditionally in bond_init()
+> (ndo_init), which is called by register_netdevice() and covers both
+> device creation paths (bond_create() and bond_newlink()). This also
+> handles the case where bond mode is changed to round-robin after device
+> creation. The conditional allocation in bond_open() is removed. Since
+> bond_destructor() already unconditionally calls
+> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
+> ndo_init, free at destructor.
 > 
-> Changes in v6:
-> - Merge [patch v5 (2,4,6)/6] into [patch v6 4/5]
-> - If list_head was 0-initialized, init it
-> - refactor kfunc checks to table-driven approach
+> Note: rr_tx_counter is only used by round-robin mode, so this
+> deliberately allocates a per-cpu u32 that goes unused for other modes.
+> Conditional allocation (e.g., in bond_option_mode_set) was considered
+> but rejected: the XDP path can race with mode changes on a downed bond,
+> and adding memory barriers to the XDP hot path is not justified for
+> saving 4 bytes per CPU.
 > 
-> Changes in v5:
-> - Fix bpf_obj leak on bpf_list_add_impl error
-> 
-> Changes in v4:
-> - [patch v3 1/6] Revert to version v1
-> - Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
-> 
-> Changes in v3:
-> - Add a new lock_rec member to struct bpf_reference_state for lock
->   holding detection.
-> - Add test cases to verify that the verifier correctly restricts calls
->   to bpf_list_del when the spin_lock is not held.
-> 
-> Changes in v2:
-> - Remove the head parameter from bpf_list_del
-> - Add bpf_list_add/is_first/is_last/empty to API and test cases
-> 
-> Link to v5:
-> https://lore.kernel.org/all/20260304031606.43884-1-pilgrimtao@gmail.com/
-> 
-> Link to v4:
-> https://lore.kernel.org/all/20260303135219.33726-1-pilgrimtao@gmail.com/
-> 
-> Link to v3:
-> https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
-> 
-> Link to v2:
-> https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
-> 
-> Link to v1:
-> https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
-> 
-> Kaitao Cheng (5):
->   bpf: Introduce the bpf_list_del kfunc.
->   bpf: Add bpf_list_add_impl to insert node after a given list node
->   bpf: Add bpf_list_is_edge/empty kfuncs
->   selftests/bpf: Add test cases for bpf_list_del/add/is_edge/empty
->   bpf/verifier: refactor kfunc checks to table-driven approach
-> 
->  kernel/bpf/helpers.c                          |  98 ++++++++++
->  kernel/bpf/verifier.c                         | 103 +++++++---
->  .../testing/selftests/bpf/bpf_experimental.h  |  39 ++++
->  .../selftests/bpf/progs/refcounted_kptr.c     | 182 ++++++++++++++++++
->  4 files changed, 398 insertions(+), 24 deletions(-)
+> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> ---
+>  drivers/net/bonding/bond_main.c | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
 > 
 
+IMO it's not worth it to waste memory in all modes, for an unpopular mode.
+I think it'd be better to add a null check in bond_rr_gen_slave_id(),
+READ/WRITE_ONCE() should be enough since it is allocated only once, and
+freed when the xmit code cannot be reachable anymore (otherwise we'd have
+more bugs now). The branch will be successfully predicted practically always,
+and you can also mark the ptr being null as unlikely. That way only RR takes
+a very minimal hit, if any.
+
+Cheers,
+ Nik
