@@ -1,239 +1,176 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2113635B63B
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 15:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772639999; cv=none; b=kWDWvOti540Jcrm0pLDPdKBE+foAkqI0j2UIbhuCcDUgQetGkAF21jPgOEw7h2JoDTuJOadxW+Elxs9LJyQvqmjqfu48daHVz81W24H5VYGc5/ikGq7fSdIDNIa3QTuPzzgSnLyekBpibYZEdeHcZdi1ib/Hy7Xy15Yr9YbiJuU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772639999; c=relaxed/simple;
-	bh=DR72l5rfmF9woJgiiQ+SUs1tFCC5L4Em4zqGl0Tn244=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qs9Z4pTo8DyZiijDbkELIMFS3ZkG+jgCprO1oFhQokVcrZmFQ/94l4u2MEruR16FvC3oSbnn8slINV1F486oFQwfTHLNspUvxOR8PmZnA65hCc2MLpCCHUlNMAS++KVT5rthcsqeia9BbYR14EZEtPdt9eeVrchVPRAOPP8v+5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y9JBwHVl; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1123F3644BD;
+	Wed,  4 Mar 2026 16:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.152.168
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772641463; cv=fail; b=CechUrhG+sARu3jA0PTLHzE9gzWBr/HZldiH/CtfSzqzWvN3OpzaAuwBOMwNS3Hprfiu/SNywPwK7G6j/yFUMin7wY6NHWrNGbVUanaZeS+rb7LCm7cUNmJJ8zvNK4sPvVNbkB6GpvPMT697d212/RDVyif4cm4oo5AEjeTOpIw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772641463; c=relaxed/simple;
+	bh=t+gQEFwCOHDzVaHK+/exe21dLfbV9ApvzKeYNAdrMCI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MacE9nBgdXAnxl/qG/Ko5uEbHnhbqSMzqQ3O/06EElPGc0BDuuMLJSObX4k2KPfMuYIBVdbp5gjL3hm2BnrDEyffpXgYc5/V30ipp8ZVnfbi6CLw40J3Pya2U7dBJNO31ql5zPFyFu0loKr8ciEq7P9GnbBJniaiHZzR6Pymwc8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=SEtc7Ohk; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=UXbg4J9A; arc=fail smtp.client-ip=67.231.152.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y9JBwHVl"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-824adc96ad2so6789564b3a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 07:59:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="SEtc7Ohk";
+	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="UXbg4J9A"
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+	by mx0b-001ae601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6245HEKi2857071;
+	Wed, 4 Mar 2026 10:24:08 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=qotDDPxrdx6prtoiJ7qDijcVj6FKV1rOsh312783bPc=; b=
+	SEtc7Ohk2U1u7lTOEABxnLwl5LX/QE+KKl25B61H0W1saOb8RtSEP+mz0ZICV3JF
+	r6uIPPUpFFaINrexTQlXicok+jKzQ2NOGJ+m5fbc1dG7dJO0E8rBbiEF2lCWxqje
+	UlYhzbS5JE3yRR5UFZuF70am7g8nygnIpJOvq1kuNVRJREzUrPTilxL6aKxFeORN
+	et+9b089StkudOI7aIfK1hCyFwKIwl5BvLCXGFPN9/7b94FjUG61HJK9f0PSJgAC
+	lRuMTx3NL5zhqw8ErmOEwE4gP+2H9ldeXyJkM2Y2ybsunVXELhFck3RXMkawYbyk
+	QRxaR4W5mqRE1aI3tQ2qEw==
+Received: from bn8pr05cu002.outbound.protection.outlook.com (mail-eastus2azon11021141.outbound.protection.outlook.com [52.101.57.141])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 4ckwnn51ky-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 04 Mar 2026 10:24:07 -0600 (CST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MAKv3Hs3Vif5wgt3wDx+/0ypFSpW74Z7NwbqUJocQ33DxbsP1JqstBDaAN20Ok2OCCi35pySMzsVe4Jbyd0gN9LkvNQqhE7ICRheScQ1AojaPHpAsjdvB1qjotVOyKoVVVni2XSML/oW+udf/0G59LHKDWQaLIhNFYGCTQ3RxGN9wQKXZ+UU2ImGHFUISTZb35o51XS748QzgJ3549/S4PUphWsIjC03lkc8p2NSWXWfqCuz5AJc+zWq2pdMo/0Ty8l0yZQ5IXDF6rlVJecounTQRYbktE6QDCieFhTzm19hpqbFzdostAd85zG5y6uHp95M43TwT36Ym4d9eiauBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qotDDPxrdx6prtoiJ7qDijcVj6FKV1rOsh312783bPc=;
+ b=KaGx6lgM58X9RIXFNQT+xNf1joKSOzrlxsIO2D3+W8j0Fpc6HRimzsJn9tEK/+h4fG0i86pvaQMXdiqTzLxZkCCJCuGET+xE39Ha5nGvKeQrOT/n3GXcFeW4ucDHHp1hImdBcZafMqE2VCyYLABSEuXHma23zh5zhjKDkAsXHBrm1kozY9RaAgGKXYG8/iFHB6rSJR9GZ4WlDeQGORSLK2HL7MeZHzqIhL2eBOJLd0fhQSDHX1wNyrbEIlOXfwhdZ9xE3HHBwZuaeCGvkNgNgS2++/lOjf4sn+lWjjV2vVgWt4u9tI65TaQFZhGGUWHI531w3eIWisIDs5HHxj6Ljg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 84.19.233.75) smtp.rcpttodomain=cirrus.com
+ smtp.mailfrom=opensource.cirrus.com; dmarc=fail (p=reject sp=reject pct=100)
+ action=oreject header.from=opensource.cirrus.com; dkim=none (message not
+ signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772639996; x=1773244796; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lkeTvPf0E8KU750qZQOM/g+J3nMAURhvhN+ETGDpHsM=;
-        b=Y9JBwHVlonc4R/ur4Tv8GErnNM95ue3EbkXwkbjDEtRfO39TlGxRB7xeJMGoBjCYuK
-         PsHqhht6FMzOEuxsY6ilPBCbWySDWQmhGcy8nloopD0r/50J74MaEYJkjFfcNBBELgK8
-         216FYfUcAxM+Lg5SMSroArDf0+W1Qn84sZkkCYvGJu5z9/UO/bOL16/jYGWhKxdrGueP
-         dYHthiJPgFuxr6xe7GZ28wo5bJVHvuIOS+n0ITPxlT2ePHIUx8qe1QSO7HCVzEYDnp+U
-         i5h+5cMvn9XHPobayo9K32gny9m2YOX1jLbSGY0gOa6mrPzNl3c8J3Kz5qemvKVwLBn2
-         492w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772639996; x=1773244796;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lkeTvPf0E8KU750qZQOM/g+J3nMAURhvhN+ETGDpHsM=;
-        b=adkghxsFuLKiqfoS6Q3+tCn+UTjbF6AQeHtkECyw7NKptHTVtyRnUJRbbNi7fCRdAe
-         WoNwGhHl2FXZnWGnymeSGMGcTQFMGPVRPFCDo6kpjHUSDVCV87MrjB1PkmRi5Xr5nyiP
-         XEdv6af5VKUGVPpQp64ALdUQLJIw9r4VJKDnog2UkcsNU6xriZARXZJGV4h2TyQBIv05
-         AOEpXaaxSwAROPGu3i4oD89JDEuZQXQrZMwjnRS0YyRJkK1izZdmc+fDHJmk1wLgTJqx
-         2CZJSzVtOsuzQvqFJuHiPG5wVgjR57PO7i/p9BeOxXdrbRrQJrdAjjRp8VssjX7lRBd9
-         WEHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXNPopERWQbWY8BTs0p/H26raM/YQC+XHBgmX15oeVFXkVm9SSWHOlFF1B34Z8hKhSNQfXFHQQt5USMODraqHc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXkv+mYJZOp3zSBmR6a2SZPtnvlC2cfStRsRE2uTfijNMfQrE0
-	PqP4vXlGTuz7zS1kh/ehC00JyOcHNVd//+zZCfV6sCPWPNAXB13CTvC8
-X-Gm-Gg: ATEYQzwUFqJo3aZwMJbGOiJpksRw2Z1LLBt0+LuaUQPQqkzfvW6Rgu3SHHrmY91BqRh
-	aRZYvweX2gaV0hl61JL5tbO+UQ6w9QU6MbdhXooMt1eYhKk835WxO35nUxVVMcFJ3NNWi4PqhcE
-	TTkspZ9DCvxjr3Uzyl9AujP7PbCFtT6mS+KtoMgPnPN8Ble9OuUUCFRHW5Anf6S1oyNO0woG0rB
-	GF2Bc76Ny6TbeXSuEnB8UYvrabaFEBYVoTi8tR2Un1TNzNxMkTIELsmP8Avw9KllbDMUVc5MBTT
-	mlPNCcW2VUC4MERn6m0ABtSRm9zEEuBxWfTnp1rkJbPdQn8gAgYwbjJaVq7upPsKgRLElX4Niqh
-	nuDhkYwHBB9iA8L2ta8UobIPFDtcfJ9Msw8NotN7LM95xtov9IXagYZY4T4n26rDB2TGFJMaOrd
-	H5PT8nIoNHO1v22fDO3t/cE7I5ftOMIs0QQZqo
-X-Received: by 2002:a05:6a21:7a96:b0:38b:e3c1:db44 with SMTP id adf61e73a8af0-3982e23b3e7mr2314723637.58.1772639996403;
-        Wed, 04 Mar 2026 07:59:56 -0800 (PST)
-Received: from [172.20.10.5] ([117.20.154.117])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73818d9502sm1352139a12.21.2026.03.04.07.59.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 07:59:55 -0800 (PST)
-Message-ID: <927c59b1-acae-4013-b552-2d03cc77562b@gmail.com>
-Date: Wed, 4 Mar 2026 23:59:48 +0800
+ d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qotDDPxrdx6prtoiJ7qDijcVj6FKV1rOsh312783bPc=;
+ b=UXbg4J9ABVRtLftej10mSRSHPSn/uEfSYS2W3OWLQHiloE0VLqm2hC9TjnhxqfUC6RMpZIuudFCP7KpCqPyJNoURxui5RXNZ/UbqHtKZ7RP8rW3DANl49GF1K5z9g3AhxcfFxHE9253VFWfqiNsUBirqtlK/n9PF3ESjBDvTksQ=
+Received: from CH2PR16CA0015.namprd16.prod.outlook.com (2603:10b6:610:50::25)
+ by BY5PR19MB3956.namprd19.prod.outlook.com (2603:10b6:a03:22c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Wed, 4 Mar
+ 2026 16:24:05 +0000
+Received: from CH2PEPF0000009E.namprd02.prod.outlook.com
+ (2603:10b6:610:50:cafe::c2) by CH2PR16CA0015.outlook.office365.com
+ (2603:10b6:610:50::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.22 via Frontend Transport; Wed,
+ 4 Mar 2026 16:23:34 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is 84.19.233.75)
+ smtp.mailfrom=opensource.cirrus.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=oreject header.from=opensource.cirrus.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ opensource.cirrus.com discourages use of 84.19.233.75 as permitted sender)
+Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
+ CH2PEPF0000009E.mail.protection.outlook.com (10.167.244.27) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.18
+ via Frontend Transport; Wed, 4 Mar 2026 16:24:04 +0000
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id 2921D406559;
+	Wed,  4 Mar 2026 16:24:03 +0000 (UTC)
+Received: from ediswws06.ad.cirrus.com (ediswws06.ad.cirrus.com [198.90.208.24])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPSA id 0C84D822542;
+	Wed,  4 Mar 2026 16:24:03 +0000 (UTC)
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+To: broonie@kernel.org, brendan.higgins@linux.dev, davidgow@google.com,
+        raemoar63@gmail.com
+Cc: linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: [PATCH 4/4] kunit: config: all_tests: Select CONFIG_GPIOLIB
+Date: Wed,  4 Mar 2026 16:24:02 +0000
+Message-ID: <20260304162402.1714759-5-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260304162402.1714759-1-rf@opensource.cirrus.com>
+References: <20260304162402.1714759-1-rf@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/5] bpf/verifier: refactor kfunc checks to
- table-driven approach
-To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260304143459.78059-1-pilgrimtao@gmail.com>
- <20260304143459.78059-6-pilgrimtao@gmail.com>
-Content-Language: en-US
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <20260304143459.78059-6-pilgrimtao@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000009E:EE_|BY5PR19MB3956:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: a1d2826e-c69b-4e1a-ae59-08de7a0a7429
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|61400799027|82310400026|36860700016|54012099003;
+X-Microsoft-Antispam-Message-Info:
+	Rd9rtBs72Xb0AwAIXJB/51vyXpqw8voabY98MghluqnHa0lEmkzBpxxMf2PPBeo+b8HNGGJ4B6niYTKA+BKlDXCrqETcpNKnmklLkgVFNkxS1xCFWs1f2AJe//4sqnqC0/E8IA/4OrSyfCMEILvkEHKbfTZOVkqbvmADE4j46NibR6BDLcaRyd9PnqyD1rnV+qXlT6a0vC3BgmQz1+e4kRIuNYtOKV25RXLNmMcYtywGLKRqAlo1jsTkXM/VLTTtzvG2gtBdkDFYRJTrKdUm/ubOd+Y8txUSzRWllogK3/aGOr6HzoIHwCXYzLXuEcQ8OEd4X3KfGuJnrj99pBlJNx38UzQbLUdhl800IWDAJ2BEtuStvmV+CtUUzubJZmrIaZTb9/83F8F0iejyNvtu6wD43dymi1NK7Ie0LV2P1+YMA7jhEPESJb3wnSTyp/Xk6jYL2B4LxgDOdsxQNgxzR4SHbXu1YSjJoAoeWdPoiuSlCrFilf5Y0vApmvDH8ACNvp+GcH0UpAt+mOZvQq10rZwZGYIZsTj+zJCAKgH6M+wRWuPJysQhNBKrb66gaYoovKl2V0iy4d6+jq7zQsnkTungpTK8JxlsClW6WpwwvqrlAMFho/ZaeHs8xb7FW+QvZB9t/+275kfrbhd9EVsW8i55xV48mmUs4OS3F+1dd+c1Xs/gZvmUL3pv2rsYeQPXkSzOT5/4A2H3AmMuWvw4hPrYlYvt03fT8M29J5erFEU7uqDCzJNbFKfrI3D0xyo+TjJsBK76/748z7z/oVPUqA==
+X-Forefront-Antispam-Report:
+	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(61400799027)(82310400026)(36860700016)(54012099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	27M948WWrCJnkBm2EhCfwitQgz1rRjW1EJPcATKDVKloWPhwvlNGLUbKHdE4//1n0BMtYAzIkBoN7uBKP4LFpHEnfVM4kwF0XaduEAEe0xtaWQ0I4YR0rr+f8C9DTTKnRaAnQwPPGgwX7nzBMPC7Qg2i5aL13UJZGJGtNoRvrMt8C8fk/Ek0zbnbnThvGRh3eTV1WDX0adOCkAdUiUxWboku6inFzWqkE4apdidi5jHXB+LM1yJTIpq9y/faG9tv2NETPVIS++U2lS7nf/hqLnaM5se4PWlDUpIQRdoykKVmt+97pGXbzutkcE4169Ocza1uEFfZda+S8zT/DcHFPmByaWG7+EB63m0/WT8sY1P92ccLvjpfbfZYmIedaDQuDb7f6gW3huoA5D5buXB0jK+4hTMBtY1O+eEJ4Cy0xBN0sMSmwj4fU0lBr5dspbaY
+X-Exchange-RoutingPolicyChecked:
+	jlonwnH586p/5uKj8M2+U40GzOIUNI7z9autjT19Shl/fzZ7+rPk4n0s8xShMXpkja3qGxFR8Va0t70ibMfUS1mQu37phXTWpOE6pFMG8wsuvy7qpX14TJWwBkYlrGeamVKPtcoVbqbi6qEHX2QXCr4C+575yXLdNwtB3HsAQebZuk7LMWCtIUkCSr+NHytv2NXTyNT8EV6pe52++/eaV9Fu3aPxilx52D8cnnnsh181l3Qsr7+JCcsR+K6bKNsmFmEGUPKmSNX5H9ve+BwsFIrNQGDB+jTRxyA7QEC2hydkkQQK3xzbV9drBup+e+Ok0jOHr3vFT5rdXfBF1zljmw==
+X-OriginatorOrg: opensource.cirrus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2026 16:24:04.8018
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1d2826e-c69b-4e1a-ae59-08de7a0a7429
+X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-CH2PEPF0000009E.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR19MB3956
+X-Proofpoint-GUID: yjv-DFHTxreGSHzgQ9Rj75hGg9fGH9EN
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA0MDEzMyBTYWx0ZWRfXxXW4Dty3yJfY
+ K/jYhggEAVq0BGrPWpZqSIPVTNX2/ulIZecaGH0HLmnq6L7MJXe4AWAqcwBwTV8wf0/TQfHHCQE
+ Plm3azbXHg0JvVSbBUjm4zjI30ldIDD5KV7SqC1jynZ23wdycYzvKmfYvWcCKtK3Pe+yej6qUdd
+ uMDaoJIgBb+06I6rv0rFB8EHjwIHKnJodGp2EXIv6BekKftORdNik2Ell2K6O0Pcz7ldYm7Om57
+ pBQWP23qylLChGfjXTbIHlz3ow59Px7M9axp5h85PLmxO6EmrJjQYI86pP8ToScV2D459yZaq+b
+ vAZjYN/7MQwX8EU4qrrzvqB78GtFGKXrmQCzDN7kB3Ym4MCq1CInC/Ptzw2oz01w+AkY25PWKwQ
+ J4hGm42uv5/7xWEGcrO4vhkEWBST1Bc1u8cpS7NCvOvT7wQLebkgFNxHp3uhpvmYIikQy7jKrQ4
+ rYX/EeC3mTyV+y3QZ7w==
+X-Authority-Analysis: v=2.4 cv=ZaIQ98VA c=1 sm=1 tr=0 ts=69a85ca7 cx=c_pps
+ a=IXZk8buBm3K+4cvqFqH88A==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=Yq5XynenixoA:10 a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=iX4cTi3TZMoOKdANLEfx:22 a=KfkQE9S9VqCBgivYGm0O:22
+ a=w1d2syhTAAAA:8 a=_pdQjNNs5VuZOEkv458A:9
+X-Proofpoint-ORIG-GUID: yjv-DFHTxreGSHzgQ9Rj75hGg9fGH9EN
+X-Proofpoint-Spam-Reason: safe
 
-NIT on the subject prefix: instead of bpf/verifier, it should be one of
-bpf, libbpf, selftests/bpf, bpftool, and "bpf, x86/arm64".
+Add CONFIG_GPIOLIB to the all_tests config so that it can run test
+cases that create dummy GPIO drivers.
 
-So, the subject can be "bpf: refactor kfunc checks using table-driven
-approach in verifier".
+Some tests for the Cirrus Logic cs35l56 ASoC codec driver and
+cirrus_scodec HDA driver create a dummy GPIO driver so they can
+test driver functions that read from the GPIOs. These tests will be
+skipped if CONFIG_GPIOLIB is not set. Ideally we would like them to
+be run when selecting --alltests.
 
-Thanks,
-Leon
+CONFIG_GPIOLIB does not have any dependencies and only enables
+generic library code.
 
-On 2026/3/4 22:34, Chengkaitao wrote:
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
-> 
-> Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
-> checks with btf_id_in_kfunc_table() and static kfunc tables for easier
-> maintenance.
-> 
-> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> ---
->  kernel/bpf/verifier.c | 93 +++++++++++++++++++++++++++++--------------
->  1 file changed, 64 insertions(+), 29 deletions(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d133d18aa0cc..25961cf83a67 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -12600,6 +12600,60 @@ BTF_ID(func, bpf_session_is_return)
->  BTF_ID(func, bpf_stream_vprintk)
->  BTF_ID(func, bpf_stream_print_stack)
->  
-> +static const enum special_kfunc_type bpf_list_api_kfuncs[] = {
-> +	KF_bpf_list_push_front_impl,
-> +	KF_bpf_list_push_back_impl,
-> +	KF_bpf_list_pop_front,
-> +	KF_bpf_list_pop_back,
-> +	KF_bpf_list_del,
-> +	KF_bpf_list_front,
-> +	KF_bpf_list_back,
-> +	KF_bpf_list_add_impl,
-> +	KF_bpf_list_node_is_edge,
-> +	KF_bpf_list_empty,
-> +};
-> +
-> +/* Kfuncs that take a list node argument (bpf_list_node *). */
-> +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] = {
-> +	KF_bpf_list_push_front_impl,
-> +	KF_bpf_list_push_back_impl,
-> +	KF_bpf_list_del,
-> +	KF_bpf_list_add_impl,
-> +	KF_bpf_list_node_is_edge,
-> +};
-> +
-> +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
-> +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] = {
-> +	KF_bpf_rbtree_remove,
-> +	KF_bpf_rbtree_add_impl,
-> +	KF_bpf_rbtree_left,
-> +	KF_bpf_rbtree_right,
-> +};
-> +
-> +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] = {
-> +	KF_bpf_rbtree_add_impl,
-> +	KF_bpf_rbtree_remove,
-> +	KF_bpf_rbtree_first,
-> +	KF_bpf_rbtree_root,
-> +	KF_bpf_rbtree_left,
-> +	KF_bpf_rbtree_right,
-> +};
-> +
-> +static const enum special_kfunc_type bpf_res_spin_lock_kfuncs[] = {
-> +	KF_bpf_res_spin_lock,
-> +	KF_bpf_res_spin_unlock,
-> +	KF_bpf_res_spin_lock_irqsave,
-> +	KF_bpf_res_spin_unlock_irqrestore,
-> +};
-> +
-> +static bool btf_id_in_kfunc_table(u32 btf_id, const enum special_kfunc_type *kfuncs, int n)
-> +{
-> +	for (int i = 0; i < n; i++)
-> +		if (btf_id == special_kfunc_list[kfuncs[i]])
-> +			return true;
-> +	return false;
-> +}
-> +
->  static bool is_task_work_add_kfunc(u32 func_id)
->  {
->  	return func_id == special_kfunc_list[KF_bpf_task_work_schedule_signal] ||
-> @@ -13000,26 +13054,14 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
->  
->  static bool is_bpf_list_api_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_back] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_node_is_edge] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_list_empty];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_list_api_kfuncs,
-> +				     ARRAY_SIZE(bpf_list_api_kfuncs));
->  }
->  
->  static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_first] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_root] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_rbtree_right];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_rbtree_api_kfuncs,
-> +				     ARRAY_SIZE(bpf_rbtree_api_kfuncs));
->  }
->  
->  static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
-> @@ -13037,10 +13079,8 @@ static bool is_bpf_graph_api_kfunc(u32 btf_id)
->  
->  static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
->  {
-> -	return btf_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave] ||
-> -	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore];
-> +	return btf_id_in_kfunc_table(btf_id, bpf_res_spin_lock_kfuncs,
-> +				    ARRAY_SIZE(bpf_res_spin_lock_kfuncs));
->  }
->  
->  static bool is_bpf_arena_kfunc(u32 btf_id)
-> @@ -13129,17 +13169,12 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
->  
->  	switch (node_field_type) {
->  	case BPF_LIST_NODE:
-> -		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_node_is_edge]);
-> +		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_list_node_api_kfuncs,
-> +					    ARRAY_SIZE(bpf_list_node_api_kfuncs));
->  		break;
->  	case BPF_RB_NODE:
-> -		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
-> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_right]);
-> +		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_node_api_kfuncs,
-> +					    ARRAY_SIZE(bpf_rbtree_node_api_kfuncs));
->  		break;
->  	default:
->  		verbose(env, "verifier internal error: unexpected graph node argument type %s\n",
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ tools/testing/kunit/configs/all_tests.config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
+index 422e186cf3cf..e21239dc6fae 100644
+--- a/tools/testing/kunit/configs/all_tests.config
++++ b/tools/testing/kunit/configs/all_tests.config
+@@ -40,6 +40,8 @@ CONFIG_DAMON=y
+ CONFIG_DAMON_VADDR=y
+ CONFIG_DAMON_PADDR=y
+ 
++CONFIG_GPIOLIB=y
++
+ CONFIG_REGMAP_BUILD=y
+ 
+ CONFIG_AUDIT=y
+-- 
+2.47.3
 
