@@ -1,87 +1,56 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B4D3B5314
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 14:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6AC341ADD;
+	Wed,  4 Mar 2026 15:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772634968; cv=none; b=NN5kVTymahrbtDhknWuQIoug17UFThKm2Hxp5TIF3oD1McDsylPwgLXcm4Akk2kY0MHhv2ANPn19qcUJiAg1/DyJghUSg5ttIo3FkBBqe9SrxMM9oZd3bu2uPxeGUBAMVnQMylgDebfD6X3KRwtsggA5ue2CzAVn8j1jcXfZxJE=
+	t=1772636615; cv=none; b=V2TwnQHoDjQoQaOKnxt5dyKXlMEtL9ux8agK/wu0UqNnKU/oDwqcvm90MRmLvsc1KFnm1u56dVXvklJr+n+jZWAD9ehsOYoSQ9arTfvRESQr5XQig3ESOysagU7ygTHF0dwZW6buIvKtcf2D/nyHeCrtcdXUE73Db6nu2OCZleA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772634968; c=relaxed/simple;
-	bh=BqZXOAJGIKKd92V/RAYQDxNC6AlkoRpcSBFvvTkyrIw=;
+	s=arc-20240116; t=1772636615; c=relaxed/simple;
+	bh=mE040friD/D8vUlGR6SF6lCV5t9rYG9oPgW77/JY5bw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lo/mi2AtT8StmdpdwjDOMp1n+IyXtFh3B5N+KByU1lzSMS/vStbxNTc9XjHdqnbuS49jlVO72VjDMhTg/2N3Cv0Ta+WpEInEHL+IoYyos4FWj0rS94L3xchtNBKRSyDI/r5zguOwNFuL31ddFru5yIG/dK6mGuhokVaVHrLEs8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFT0B1eC; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 MIME-Version; b=qr9pN6nIcMdTCTr13xT9w/XlHm0ozhnbjJpOgYLP0X7fY/TmHVNoD9MY6/QTETSJc3vzo+wU1szn5soyqPl/ET2gMtrmPqMx4i4LRIpsE6GUnL9eZkeEyyJ2255+J/8wTsoy1QKGn2lora7Fetpyiyvmr7fLqczrZ9THj34HNPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GJAqghuQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFT0B1eC"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-82748095963so3502983b3a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 06:36:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772634966; x=1773239766; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dc9SHoQTccjHJ9ny8JNU6itOYKrSyJ60RaW6+NKZF+0=;
-        b=YFT0B1eCFTamUd2fHrTmd82K0Hg2jWgof/dUlkj1aGV9skjBGMqkGCuXJHSTngo7z6
-         a+wrR78YQdIeLBJuK03VNpd3nXYZZwf2pnwyMOLCb/TspsdtphpCh6C6sJhyDlizWuHX
-         XM95FTocNPIQ5J3KPsoKzjTAMLpVbhdNKa4KzvLKi7d77B8nLlxc8O9yrbtQLnyCUgKj
-         8cGmP4WRTxYYbRNfnkSLCAGyCbsTye827oSsLu4VV4R+1VRn2BdKWefoFfJYVYkYVnJG
-         72DyQlebzp/Ye9Ds9q7CA2Iizmk1jQNBDCA+eoL41gNzADsaEcpAeDZkiEyZTozG/SUO
-         ooaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772634966; x=1773239766;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dc9SHoQTccjHJ9ny8JNU6itOYKrSyJ60RaW6+NKZF+0=;
-        b=nvqjEUJoDssyoBCsh7sCZz5ZtSRwIxvVUAbYFh8PdflyqmpfxAF8h8MPNuRKOPCjDH
-         GwkQ/4QWpjS2sRb935n/pIhOCmmR8RjXwAsxYTzSFDEbbP8uqahTSx1aHcORv8mZlnP9
-         kGcRMM/1olVscQa7mQkBAnhYc+MrQ6nU9lWfeAYARSCkmnOA4Q5nlYvRcrDlro9Bjmp9
-         RlWixxcb3gFV1JzhpXtDJX1FmKkCvkiqzCG7AcOwhNj8sfIhxX5dgI1qJbWm7hDp+Sp3
-         qcNp+cA1TDuvwrQGxuWao6HMQUTjVXvkkBfxAz+7O+8sw/mp9kB5BdQOwEOSAVZb9g9j
-         Gv8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVE0SBmaFtD7jpDZQsR6/YmSTihUn+m98Uz3so7EGl0Ou3B7b8w70zLKnEVrfSPZyx7RmNq8j5JfRx3psTZMd4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynMA5aKDTcUsYXhADuZi9NqoBH3ZsWvrBOCsQqQ2mrtYs85GXO
-	9szTlfG7GcKBlc2mW4YLuPLaEAZfjHfo2Uvbfz6io+bcZMAsh7ZQX6+c
-X-Gm-Gg: ATEYQzyEUEUQcqoDFamDerJFkNNNwJo0yfY9nGnFbKotdNfTBRwJ2G/pmPPfVbuBQSw
-	ZxGOLQBXpuQNtMEk6rDCrzrEHoOzXQ1bW+ioextPd3Lf8tj2T0rganwo7n3t5CSwy+Ui6h3lEgX
-	ECFJsafAhMcTodQTqja/UXd/RSVYQMFf3lHi+4IuAgvHTvV08uZOAX4TeN58pdC0h007nm1xzjz
-	GbnPqeAmdxTVXRnEUGWraJAdMsNTdDpuE/kvm+aHXhUn8BGuPfIthi9w4g5Vu35ztZb2DzMZY/j
-	1W3xkSATVTOZckMlU/LnEDp4wsgRJjAYrWoQ0Gd0KnkPCLdl/h+j8y3ANjZUubNjcXMbPIaolhq
-	cGpDoJWT/3CkmWx7fWCbprVKGjGtrH+XSg2vQq43UI/vj5ETIphZSUsfOAmvySSrySbH32K5uSu
-	Xr7xzVgYG9JfQaPFeSWh5vkLe2+/0VGapqh5+RAgfnMkAQbEm1fSJmIA==
-X-Received: by 2002:a05:6a00:218b:b0:824:9451:c1e9 with SMTP id d2e1a72fcca58-82972df1b4amr2144267b3a.62.1772634966159;
-        Wed, 04 Mar 2026 06:36:06 -0800 (PST)
-Received: from localhost.localdomain ([113.218.252.150])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82739d87e4csm18470184b3a.15.2026.03.04.06.35.58
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 04 Mar 2026 06:36:05 -0800 (PST)
-From: Chengkaitao <pilgrimtao@gmail.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	chengkaitao@kylinos.cn,
-	linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/5] bpf/verifier: refactor kfunc checks to table-driven approach
-Date: Wed,  4 Mar 2026 22:34:59 +0800
-Message-ID: <20260304143459.78059-6-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260304143459.78059-1-pilgrimtao@gmail.com>
-References: <20260304143459.78059-1-pilgrimtao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GJAqghuQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CAB9C4CEF7;
+	Wed,  4 Mar 2026 15:03:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772636614;
+	bh=mE040friD/D8vUlGR6SF6lCV5t9rYG9oPgW77/JY5bw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GJAqghuQ0TJn+SKiqRfKLM05J6MzDxoz3ubM1FnAUsKVkhZKV/rlhFG8jkc6FrLBQ
+	 rVBxbihRWUo+j/hmjHxVYVU/PyIyG/lsNEyi1T4yWbleHpa1RJct0xyZ6VqTsKK8xM
+	 /NtKB1W0z4N67tvUK8suaSegffaOU3yBHYGtuqI4f4x8DlVzQMT3CIUf0Ww7n3e5qo
+	 MBLukmLDkYuLAHHCsdj3dHmTa0uHdqgjPUJ2K8JZjrHxGstCpXGlDftEIXBE8oNTF+
+	 PAxbThpYqfTUBZSw03Qz2N96iHdBeWUf8bAfHtWR5YO8fcTq2VRcP/pD1gUKbq/05h
+	 GcbgPiA8Z63jQ==
+From: SeongJae Park <sj@kernel.org>
+To: Gutierrez Asier <gutierrez.asier@huawei-partners.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [RFC PATCH v2 00/10] mm/damon: support multiple goal-based quota tuning algorithms
+Date: Wed,  4 Mar 2026 07:03:26 -0800
+Message-ID: <20260304150327.172442-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <3c9449c1-95c7-4770-8e06-1ee50e263db8@huawei-partners.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,148 +59,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+On Wed, 4 Mar 2026 13:15:29 +0300 Gutierrez Asier <gutierrez.asier@huawei-partners.com> wrote:
 
-Replace per-kfunc btf_id chains in list/rbtree/res_lock and graph node
-checks with btf_id_in_kfunc_table() and static kfunc tables for easier
-maintenance.
+> Hi SeongJae!
+> 
+> Nice idea for dynamic environments.
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
----
- kernel/bpf/verifier.c | 93 +++++++++++++++++++++++++++++--------------
- 1 file changed, 64 insertions(+), 29 deletions(-)
+Thank you :)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d133d18aa0cc..25961cf83a67 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12600,6 +12600,60 @@ BTF_ID(func, bpf_session_is_return)
- BTF_ID(func, bpf_stream_vprintk)
- BTF_ID(func, bpf_stream_print_stack)
- 
-+static const enum special_kfunc_type bpf_list_api_kfuncs[] = {
-+	KF_bpf_list_push_front_impl,
-+	KF_bpf_list_push_back_impl,
-+	KF_bpf_list_pop_front,
-+	KF_bpf_list_pop_back,
-+	KF_bpf_list_del,
-+	KF_bpf_list_front,
-+	KF_bpf_list_back,
-+	KF_bpf_list_add_impl,
-+	KF_bpf_list_node_is_edge,
-+	KF_bpf_list_empty,
-+};
-+
-+/* Kfuncs that take a list node argument (bpf_list_node *). */
-+static const enum special_kfunc_type bpf_list_node_api_kfuncs[] = {
-+	KF_bpf_list_push_front_impl,
-+	KF_bpf_list_push_back_impl,
-+	KF_bpf_list_del,
-+	KF_bpf_list_add_impl,
-+	KF_bpf_list_node_is_edge,
-+};
-+
-+/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
-+static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] = {
-+	KF_bpf_rbtree_remove,
-+	KF_bpf_rbtree_add_impl,
-+	KF_bpf_rbtree_left,
-+	KF_bpf_rbtree_right,
-+};
-+
-+static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] = {
-+	KF_bpf_rbtree_add_impl,
-+	KF_bpf_rbtree_remove,
-+	KF_bpf_rbtree_first,
-+	KF_bpf_rbtree_root,
-+	KF_bpf_rbtree_left,
-+	KF_bpf_rbtree_right,
-+};
-+
-+static const enum special_kfunc_type bpf_res_spin_lock_kfuncs[] = {
-+	KF_bpf_res_spin_lock,
-+	KF_bpf_res_spin_unlock,
-+	KF_bpf_res_spin_lock_irqsave,
-+	KF_bpf_res_spin_unlock_irqrestore,
-+};
-+
-+static bool btf_id_in_kfunc_table(u32 btf_id, const enum special_kfunc_type *kfuncs, int n)
-+{
-+	for (int i = 0; i < n; i++)
-+		if (btf_id == special_kfunc_list[kfuncs[i]])
-+			return true;
-+	return false;
-+}
-+
- static bool is_task_work_add_kfunc(u32 func_id)
- {
- 	return func_id == special_kfunc_list[KF_bpf_task_work_schedule_signal] ||
-@@ -13000,26 +13054,14 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
- 
- static bool is_bpf_list_api_kfunc(u32 btf_id)
- {
--	return btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_back] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_node_is_edge] ||
--	       btf_id == special_kfunc_list[KF_bpf_list_empty];
-+	return btf_id_in_kfunc_table(btf_id, bpf_list_api_kfuncs,
-+				     ARRAY_SIZE(bpf_list_api_kfuncs));
- }
- 
- static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
- {
--	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_first] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_root] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
--	       btf_id == special_kfunc_list[KF_bpf_rbtree_right];
-+	return btf_id_in_kfunc_table(btf_id, bpf_rbtree_api_kfuncs,
-+				     ARRAY_SIZE(bpf_rbtree_api_kfuncs));
- }
- 
- static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
-@@ -13037,10 +13079,8 @@ static bool is_bpf_graph_api_kfunc(u32 btf_id)
- 
- static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
- {
--	return btf_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
--	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock] ||
--	       btf_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave] ||
--	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore];
-+	return btf_id_in_kfunc_table(btf_id, bpf_res_spin_lock_kfuncs,
-+				    ARRAY_SIZE(bpf_res_spin_lock_kfuncs));
- }
- 
- static bool is_bpf_arena_kfunc(u32 btf_id)
-@@ -13129,17 +13169,12 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
- 
- 	switch (node_field_type) {
- 	case BPF_LIST_NODE:
--		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_add_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_node_is_edge]);
-+		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_list_node_api_kfuncs,
-+					    ARRAY_SIZE(bpf_list_node_api_kfuncs));
- 		break;
- 	case BPF_RB_NODE:
--		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_left] ||
--		       kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_right]);
-+		ret = btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_node_api_kfuncs,
-+					    ARRAY_SIZE(bpf_rbtree_node_api_kfuncs));
- 		break;
- 	default:
- 		verbose(env, "verifier internal error: unexpected graph node argument type %s\n",
--- 
-2.50.1 (Apple Git-155)
+> 
+> On 3/4/2026 7:41 AM, SeongJae Park wrote:
+> > Aim-oriented DAMOS quota auto-tuning uses a single tuning algorithm.
+> > The algorithm is designed to find a quota value that should be
+> > consistently kept for achieving the aimed goal for long term.  It is
+> > useful and reliable at automatically operating systems that have dynamic
+> > environments in the long term.
+> > 
+> > As always, however, no single algorithm fits all.  When the environment
+> > has static characteristics or there are control towers in not only the
+> > kernel space but also the user space, the algorithm shows some
+> > limitations.  In such environments, users want kernel work in a more
+> > short term deterministic way.  Actually there were at least two reports
+> > [1,2] of such cases.
+> > 
+> > Extend DAMOS quotas goal to support multiple quota tuning algorithms
+> > that users can select.  Keep the current algorithm as the default one,
+> > to not break the old users.  Also give it a name, "consist", as it is
+> > designed to "consistently" apply the DAMOS action.  And introduce a new
+> > tuning algorithm, namely "temporal".  It is designed to apply the DAMOS
+> > action only temporally, in a deterministic way.  In more detail, as long
+> > as the goal is under-achieved, it uses the maximum quota available.
+> > Once the goal is over-achieved, it sets the quota zero.
+> 
+> I'm not sure "temporal" is the best name for this type of behaviour.
 
+I agree there could be a better name.
+
+> 
+> How about "by_score?". For example, "damos_goal_tune_esz_bp_by_score" and
+> DAMOS_QUOTA_GOAL_TUNER_BY_SCORE.
+
+And thank you for the suggestion!
+
+But... I don't think "by_score" is much better, because all tuners are assumed
+to, and actually do the tuning of the quota based on the score.  Or, maybe you
+mean it makes non-zero quota only until the score becomes the goal?  That makes
+sense, but again, in a sense, that's same for "consistent" tuner.
+
+Naming is difficult...
+
+I was also thinking about a few more names, but my conclusion after the self
+discussion was that some of ambitious names are inevitable here.  Otherwise,
+the name will be too long.  I therefore picked the shortest and simplest ones
+on my list, which at least contrasts the current two tuners.  I agree that
+could still be difficult to understand.  But as long as there is a good
+documentation, I think difficult-to-understnd names that encourage users to
+read the document is ok and might even be better in some cases.
+
+I'm of course open to other suggestions.
+
+
+Thanks,
+SJ
+
+[...]
