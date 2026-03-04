@@ -1,128 +1,143 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E945C29B224
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 06:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FBD29994B
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 06:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772605070; cv=none; b=bH19FGQlPa4dOfP4+KlrBGKOytij2lvsdK69f0WMG7BhrSL8DyxiJ39OyewcsDXHW7xqGQsJKWS+p45I5Om9goH0G7q1oqUOp5wmT7KYmp1GNfUbZqZuacicUF40DvvojzoPyNhYgCfbJGJeAfw1JeH0mQZZkqVMyHyww8cF5As=
+	t=1772606245; cv=none; b=hcExJl7wELYPQHtPAyA5sBj2FVohoxeXNaLEM3M2llD+DKFr2djL4MNbTCNCcStsN3/spKPScXPAWPlvn4Zt2dIXUPFiztA9fSWGl4FCIWSMlhrOKWity6nHXSCFBZef+B68yKAbShVOJ/kaYpYKMQWvrHr6FJjAg0eoAlUEBds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772605070; c=relaxed/simple;
-	bh=A4Xtcv5kM6K6vci3wtfbZ4vMYs3E/kbIxMZAcCaxwlg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VSzuAZsX0C3KU0ckclYSeLDLDJN+o2ulrFaX/mKAzW0Ng37fOuRscVpg9JXYsFZBJrbSRYv6Z8Rax4nnoUPetikSaZmjMVuPx7NTdSmVQlLsiBMPn/UwJFh8VTfANmAovmQL65lqCuWHavvUe4sIfhX4DsqBFBDerBlK6cAyWyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G1ztogz3; arc=none smtp.client-ip=91.218.175.184
+	s=arc-20240116; t=1772606245; c=relaxed/simple;
+	bh=C+GWh0X/x+E8K8Heufepk3oNTNdSdcGqi5B/uREcWyM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PZ4nnjlY+U/Fmyl/SmFHfV+tKhnNEc4mKSIl0IktPWBsdP5OqtrLftQuZgPCzYpIk2/h+0Xsoq8A0A9VhCfw2Cma8Zx27U5VgfhCxxysDkoIE5InY9B9CUwB6s2fQtSJyDMHGwgcDcDmfTpTZbsjrgTAyE7ULeLBS2oyHsEjsak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dSdIUZn/; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G1ztogz3"
-Message-ID: <91bad178-9cbe-42db-a91c-01bacfdf9653@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dSdIUZn/"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772605065;
+	t=1772606232;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NmtNQLaw6mVn27gnuT4O9OA3tJ6/3X+wThoJDlyqgko=;
-	b=G1ztogz35lYYrJLq86l9llfZAbHF6iIW2G4izdPZJuehYTp5KTQgG4mTbpq4DP3wpm5CRQ
-	FKD6kLAjS8MpqLVjIrB+jlcQW2lAGlUllBiqhIYcQiqVJuhFYqhet5zzbNh4Q5P04UtFgK
-	Y90PUMwiprF1rhvLdvu8IfC0HVgdeLo=
-Date: Wed, 4 Mar 2026 14:17:31 +0800
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=BezM0d3Efmj5Mb5nol+0YNAjnV5cCAH9C7KVaf9ncPM=;
+	b=dSdIUZn/Je1e4TEMSMz6sz+HWz+Z67hLlAtKW/MRyVywEMHOVKjHo/LTFV+CR0iPzbus5U
+	7SEeOmQamZI4V90SkQbQamxfBYQsMQCgKvpvG5qUExT1RlLbxEE4uCNGgwmpx0z7Mgvb9v
+	mW3Cf0vE+qmUXg97JEPoKMATXtCr9IU=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	john.fastabend@gmail.com,
+	jakub@cloudflare.com
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Michal Luczaj <mhal@rbox.co>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v1 0/7] bpf/sockmap: add splice support for tcp_bpf
+Date: Wed,  4 Mar 2026 14:33:51 +0800
+Message-ID: <20260304063643.14581-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v10 3/8] bpf: Refactor reporting log_true_size
- for prog_load
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260211151115.78013-1-leon.hwang@linux.dev>
- <20260211151115.78013-4-leon.hwang@linux.dev>
- <CAADnVQKc5H=k-++CHxs+Y1ggptRSLRcACLgVaMgOmt=QBT=dkA@mail.gmail.com>
- <c9cd645f-810b-4dd4-a1ed-27569dca5055@linux.dev>
- <CAADnVQJ4E5L8rL-K=yJJZpCeRBvEJZcSKOEQP0kg2ztowhGmvA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQJ4E5L8rL-K=yJJZpCeRBvEJZcSKOEQP0kg2ztowhGmvA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
+Starting from Go 1.22.0, TCPConn implements the WriteTo interface [1],
+which internally uses the splice(2) syscall to transfer data between
+file descriptors [2].
 
+However, for sockets with sockmap enabled, sk_prot is replaced with
+tcp_bpf_prots which does not provide a splice_read callback. When data
+is redirected to a socket's psock ingress queue via bpf_msg_redirect,
+splice(2) cannot read from it because the splice path has no knowledge
+of the psock queue. This causes TCPConn.WriteTo to return 0 bytes,
+effectively breaking Go applications that rely on io.Copy between TCP
+connections when sockmap/BPF is in use [3].
 
-On 4/3/26 13:58, Alexei Starovoitov wrote:
-> On Tue, Mar 3, 2026 at 9:47 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> On 4/3/26 00:32, Alexei Starovoitov wrote:
->>> On Wed, Feb 11, 2026 at 7:13 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>>>
->>
->> [...]
->>
->>>> @@ -6241,7 +6244,11 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
->>>>                 err = map_freeze(&attr);
->>>>                 break;
->>>>         case BPF_PROG_LOAD:
->>>> -               err = bpf_prog_load(&attr, uattr, size);
->>>> +               if (from_user && size >= offsetofend(union bpf_attr, log_true_size))
->>>> +                       log_true_size = uattr.user + offsetof(union bpf_attr, log_true_size);
->>>
->>> So you added 'from_user' gating because
->>> you replaced copy_to_bpfptr_offset() with copy_to_user()?
->>> This is a drastic change in behavior and you don't even talk about
->>> it in the commit log.
->>> You said "refactor". This is not a refactoring!
->>>
->>> This is v10. The common_attr feature is useful, but
->>> you really need to think harder about what your patches
->>> are doing.
->>>
->>
->> Refactoring should not introduce any functional changes. If a functional
->> change is involved, it should be factored out of the refactoring commit
->> into a separate commit with an explanation in the commit log.
->>
->> I'll add this to my self-review checklist.
->>
->> The intention of 'from_user' was to replace copy_to_bpfptr_offset() with
->> copy_to_user(), since the log is always copied to the user-space buffer
->> when the log level is not BPF_LOG_KERNEL in
->> kernel/bpf/log.c::bpf_verifier_vlog().
->>
->> The 'from_user' gating will be dropped in v12 to keep this patch as pure
->> refactoring.
-> 
-> You were told multiple times to avoid copy pasting AI into your emails.
-> Sorry, but this crosses the line for me.
-> Your patches will be ignored for 2 weeks.
+The simplest fix would be registering a splice callback that just calls
+copy_splice_read(), but this results in redundant copies (socket -> kernel
+buffer -> pipe -> destination), which defeats the purpose of splice.
 
-Oops. The above reply was written by my hand. Possibly, the reply
-carried LLM smell because I learnt LLM tongue recently.
+Patch 1 adds splice_read to struct proto and sets it in TCP.
+Patch 2 adds inet_splice_read and uses it in inet_stream_ops.
+Patch 3 refactors tcp_bpf recvmsg with a read actor abstraction.
+Patch 4 adds basic splice_read support for sockmap, but this still
+involves 2 data copies.
+Patch 5 optimizes the splice implementation by transferring page
+ownership directly into the pipe, achieving true zero-copy. Benchmarks
+show performance on par with the read(2) path.
+Patch 6 adds splice selftests. Since splice can seamlessly replace read
+operations, we redefine read to splice in the existing selftests so
+that all existing test cases also cover the splice path.
+Patch 7 adds splice to the sockmap benchmark, which also serves to
+verify the effectiveness of our zero-copy implementation.
 
-As you said, I won't send patches for 2 weeks. :-(
+Benchmark results with rx-verdict-ingress mode (loopback, 8 CPUs):
 
-Thanks,
-Leon
+  read(2):                  ~4292 MB/s
+  splice(2) + zero-copy:    ~4270 MB/s
+  splice(2) + always-copy:  ~2770 MB/s
+
+Zero-copy splice achieves near-parity with read(2), while the
+always-copy fallback is ~35% slower.
+
+[1] https://github.com/golang/go/blob/master/src/net/tcpsock.go#L173
+[2] https://github.com/golang/go/blob/fdf3bee/src/net/tcpsock_posix.go#L57
+[3] https://github.com/jschwinger233/bpf_msg_redirect_bug_reproducer
+
+Jiayuan Chen (7):
+  net: add splice_read to struct proto and set it in tcp_prot/tcpv6_prot
+  inet: add inet_splice_read() and use it in
+    inet_stream_ops/inet6_stream_ops
+  tcp_bpf: refactor recvmsg with read actor abstraction
+  tcp_bpf: add splice_read support for sockmap
+  tcp_bpf: optimize splice_read with zero-copy for non-slab pages
+  selftests/bpf: add splice_read tests for sockmap
+  selftests/bpf: add splice option to sockmap benchmark
+
+ include/linux/skmsg.h                         |  12 +-
+ include/net/inet_common.h                     |   3 +
+ include/net/sock.h                            |   3 +
+ net/core/skmsg.c                              |  34 ++-
+ net/ipv4/af_inet.c                            |  15 +-
+ net/ipv4/tcp_bpf.c                            | 227 +++++++++++++++---
+ net/ipv4/tcp_ipv4.c                           |   1 +
+ net/ipv6/af_inet6.c                           |   2 +-
+ net/ipv6/tcp_ipv6.c                           |   1 +
+ .../selftests/bpf/benchs/bench_sockmap.c      |  57 ++++-
+ .../selftests/bpf/prog_tests/sockmap_basic.c  |  28 ++-
+ .../bpf/prog_tests/sockmap_helpers.h          |  62 +++++
+ .../selftests/bpf/prog_tests/sockmap_strp.c   |  28 ++-
+ 13 files changed, 421 insertions(+), 52 deletions(-)
+
+-- 
+2.43.0
 
