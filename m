@@ -1,166 +1,157 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013057.outbound.protection.outlook.com [40.93.196.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D413B3C15;
-	Wed,  4 Mar 2026 13:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772632502; cv=fail; b=UAEApIUskXy3LenEugW9CkAR1L5veTXBBL1Y4CxHcihrbLwYuaCSSXpQBXwKZc3sKYyULtABkl/Z4CKM92s3TOtYHzYKQ8jNcQMd7Xwao4uIfrI6ZJsomZFJyIc1ukamXVavEuM0Wm1lDhid0LWp4zFlZsVABOwdOcijxrdD/rM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772632502; c=relaxed/simple;
-	bh=dNQWlT2GscCBG6N6hJJpgV3OAIVmgmroogeNaAj7Cik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=r5q7D7ClncrVLKUKyVCSgUPzasU9gMGXC+tZQ1alaRAwHkkH9jWGE7uyGRAvqlIj7boNSk35PUq2z5MxNRP65APSOzJ6H+lHbo9EX/rzLoNj/G7C5E0dwkuFC39YuFFIH66gEyJT/FxZg8f6cdnlaGUMJPp3SCSckd5Ck0f1KpQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=KV85pUj4; arc=fail smtp.client-ip=40.93.196.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE3B3A1A54
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 14:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772634922; cv=none; b=SLnLTnjUsq3qjeCX9Pos8hc8asUWRbSNT1a33CVyChBg65QXDC2CPty3VJmCM7jMjSTmObRzwQPq4C49mxAkV/WV8xbZCaWaiLNgK75kV16rgndvxSlXmQlLeEHb+2NKECX3e56ckRe6ox2DPKZjq1HGSIU3YW7TkRvbIUyuSFA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772634922; c=relaxed/simple;
+	bh=tm9z4rhCez5HLQviad/BMnNVmKmKuVcBpkwCJjwSoVk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sHqXOqH8YhkJ9pRUKoERUuhgeqOXc7kOWMFnjHGmNiPuPAnmC7MtExiX2rN7fYZa5RLIVurj3G7DQZGz30AtlGVgTSGnVuHPtafqmHIm1OS+UrCg7cLR/oxOQWfKh6fZknLZI0sknIBtooDFyOvjMCh71iFdD/cnNdsI5858V18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cCkZjH6K; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KV85pUj4"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qYvOPfC3NEBRNkCaUQiNOPb2NhqdIuwHkRK72ZSDHbw4hnCtyOh2yqdPcWa0X/oY6Tbw0GxH9IJ6Ra4ru1Q3TNI/qKCokulKxi5wuR/Zv90XX9ckXXtdHUAaCeMa6qXtlkUphz29bgIbHAiS9zDVscWj5Tx+X83K14tTNze2VkCrQQZuC1iFk9MJlncAXgKqrt8HATiPw540Bebc5VBGCE0IO9fXgIan40Gy5Fb5Z4tREDaC0gj4O9iF6iOX1MKhMsjFEpb9zUsnVxHx6w1U8S7zaUgtUvnWi6azjgqJEyLhk21uvOVhoTnSPSBTtuRqCeJ5A77OQZb/SjKS8MeEMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4vxT9vDlb5uWXLhj7QymG2+eXPTdBQFKj2pF+k06pnc=;
- b=Rl62Du44IIfGTDHQroOuR+0SaM2X4tkslDfB+YvsG5ccelPKlmMAWsm46sW18EJcpnuW68LrDKouML1t3pjp+hCp1q/hR5eoWKzf2ZYel+gTDOpHwlM/0IjTPXPHuWuBaU0OrV5vgnSyK3IQVINMasXiBGNU6GgQ3NJUxlP1FNkMSA5mykawBf32k1IgEBn4Dfo5QQbig5ACB/xbgJBb3iYi2MskvTq51CKUmST03esDYeBqYtIIW6RGhgtnSpnC38P89B+YJCOSDFHKIGukPZ0RN7RQKyjCVmgoqH5jAo5CdhBQXWjisuco5uSjYpELvpnsmONACMHBUqgQRK/Qaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4vxT9vDlb5uWXLhj7QymG2+eXPTdBQFKj2pF+k06pnc=;
- b=KV85pUj4Cg24VV3HmXUvyNDYO7QvAYZF+BMWIiNQh7F/XnM91R2hAer1hYKyoutcODDBefsggirlnI9dG7dN87ARJxU/p5JaCMUDBIssViM7xkYL56LQe1FPAIsBziuHGXcvGbzJxJGFjtiV9QQKfgV7AWH+YBnWRsRs0xdlE7Oc2z9DfH/Opu7KPmkO8xJs+VH+CDdUVbWmBEmGXmdTzYnk4mNfJRZHzaB0hSLzkSsZCPF1nMHRQIp9uGwXnBc2jzm9WgxBfwmoWPIvXoE0ZcLszxZazS0CnoPPkCJ+MBL6bp6GtPNSD3H663OENIOno823H4qRDs4i1M8ymaFZdQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
- by MN0PR12MB5978.namprd12.prod.outlook.com (2603:10b6:208:37d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Wed, 4 Mar
- 2026 13:54:55 +0000
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f]) by DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f%5]) with mapi id 15.20.9654.022; Wed, 4 Mar 2026
- 13:54:55 +0000
-Date: Wed, 4 Mar 2026 15:54:44 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com,
-	syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v4 1/2] net: ipv6: fix panic when IPv4 route
- references loopback IPv6 nexthop
-Message-ID: <20260304135444.GA1159886@shredder>
-References: <20260304113817.294966-1-jiayuan.chen@linux.dev>
- <20260304113817.294966-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304113817.294966-2-jiayuan.chen@linux.dev>
-X-ClientProxiedBy: TLZP290CA0011.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:9::19) To DS0PR12MB7900.namprd12.prod.outlook.com
- (2603:10b6:8:14e::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cCkZjH6K"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8272a56b91cso5807407b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 06:35:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772634920; x=1773239720; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ww9Gg44/nr/4wT9Ug3u7VZF84qM0My1cXsMZLyLTfi8=;
+        b=cCkZjH6KDc3rfZSUR97IZCxY49d8uBPWZhxsbCjwQ0OU+Fz/7kydz6KFZ5+w3K82gl
+         bKC2d/JX2B5qZmNgmuBbWi7La1zss6d6CpDdDuqMlqJLISxKGxvofJRydk59cNYyoSc+
+         cUMKefLrlCsOtfIBOPcmhheOzTqMsZmCGk4Ny2ha/nBuPNF9fqmeGjLzFNnTR16aOd61
+         1GnnUCGzfbpE7abrI65jCEdDmKljFC21nroxEo5uAjQmiisFwtayfiJ91bL5HhsCO+2D
+         XVxHUT7I55tUT1s4LhYUK4QEeCFJzHpE9PoZuu/r1bS2Ki9IJl29jbuzu7zmazPB7SjE
+         AFAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772634920; x=1773239720;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ww9Gg44/nr/4wT9Ug3u7VZF84qM0My1cXsMZLyLTfi8=;
+        b=jM48gkORKDWpYgUON9mA1BuRaNWZ6KDFmaPfvfLzYsGOF+LYy3lV9Mc375gBRo9Qb2
+         poXYo9QlnK1+Z4bqWvw3VKoZq5YoIzmxwmvKUeYYr4Zva7FO6LyXNfIF0y6YnTAfcqU8
+         qcbFpYnDt4FKOEfKu1LdOwhSK/+AX7AgpFd+V3SRV19g2e/2D11wLP53x4+2q1n89LFv
+         XSBM06mXfk3JKbA+vL8RfqYnH+5S/t6yI/i6Ti7gmYc0MJonAISzcqmWq3G6ynEKAib7
+         X07pFDSj7kGTsSNJMclxZFwC8eu6h9nyz4zO7Ah60lpo6wbE37SH+B9oXpm8im+hLHQE
+         n6Yg==
+X-Forwarded-Encrypted: i=1; AJvYcCUH6d+RD7HE7O6bhQ/GRcztNX6wY/3rYa495x/uI4v2s0/RN9PNGZn0kimfCDewJzcnoHkdkFjqM8gQ66wxoDg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa+RkQwE5hJUpDfPTH5+rlJNnyQRc3bbdSL1vRJxnAM7l+cGEc
+	c4aDgahqrjypCUe3aFuv9Lc3m9kZBurxNnEwBBxC0qHyB0kH6hNv1hLi
+X-Gm-Gg: ATEYQzwnJW9gdAQrGyghuh0UKktkTBxIlWJf6j78bq6H9BuitODW+NIZO/UHxCP+a1W
+	BbyiKFAdVXpGlLrTjc5Vp4yMVR25GSu1MinfpM4iFTNmkL4hkQxp5Pl/DteAnaBRcsN6EWN9oT1
+	HGkOMPo2gStLhNwhprKOm3xQz6i9SswNsH7ex/V7ru0orUBKDXIM2jvuNGrvS5Ye5QM2cqONilC
+	i28OWhz0NeK8V8SL2JE4apsIXaRzNgbuBsoXXh4cu5ThEepJa+SmUNvRyXsGBBCTy2Qz3HRCbvM
+	2cMyjn3erIvUas5oOvr04g3FXJRwcghjEO/xQcAeifVduvh0T4r4YH0iMNEnixJVmFBTR8BT8+2
+	N/z8nmH3kWG+5VqnvMvP3hTghDx+paEzgGUQgtT0jU9Qn+xGfeCWIm/m2tJFIPR6lZNxpref5Yg
+	nXtclP6tJD+9bb85sH4dmycpa1SkxNr4csTom/TNbYiLGPc5BcIyBDHg==
+X-Received: by 2002:a05:6a00:94cf:b0:823:1d04:e280 with SMTP id d2e1a72fcca58-82972b5e2camr1819011b3a.22.1772634920093;
+        Wed, 04 Mar 2026 06:35:20 -0800 (PST)
+Received: from localhost.localdomain ([113.218.252.150])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82739d87e4csm18470184b3a.15.2026.03.04.06.35.05
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 04 Mar 2026 06:35:19 -0800 (PST)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/5] bpf: Extend the bpf_list family of APIs
+Date: Wed,  4 Mar 2026 22:34:54 +0800
+Message-ID: <20260304143459.78059-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB7900:EE_|MN0PR12MB5978:EE_
-X-MS-Office365-Filtering-Correlation-Id: bf2fe8bf-eaa0-4126-823e-08de79f59db7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	lf2fcFfokwh33BxHNNGK86z5y2WzdYIzazDyZbnymHonKS3sAPqcum69+K2xBmFLdeDZp5G8aOcyie+MrbMZMbmiJ7AyTqeHGpXH4OQ57mIbnb9331ij4zAyV0UTlAS+fWCDzHZm+hz1vBFHxVN88I/x+qXX+bUK7TX/sN1LSm7J/zXQQKkEeNhfWNZkGs5CVV/ZYJjlhVUTmugj/Oc6CNrp0jvcDQX+t8kHoAhuA6g47UZSWTklSog8hzAQTHPG/uHN0hphWRYvytcAkbZXF5Z9fx3AG0UCYCdne0USrKy9+xdAeSYzWkLiILtnZfZF0EvaFOj/1L9J0REZ8aZAT579scRVvQ72Pp7bVOIaTBJ3mnbfbauXMcbiMRBgS80kqQQn3bV+24OorZb2g60V1ruZxRmeUP/vt0Ht9aEHfATWZIhI1gpR/oRKYFnq0GEvVe45UYTqlJaNSvLYh3q0zlS9+RYUDDdQ6BnYf+J8v9C0rbusz/6cXTUlN2Nz1v58oWy/pRpcoMNmIF0TRGot+baHq/cQAuQxG4ZtqsEGB6mmvDUn7DY7sMmUJcHwtCLwjU7eHC8KYeYeUh94y8oQPWeQRsA2gLOgYnP3Vasl17q9L4I20sJwMQ+aA8iI8GnqjWg+kj8R5Sh3Q4mjV7Q9zqXkVy6XyIWRxrLeUsQOZuMjZ+P10aOBuPF1NRH8yd+qOD6OLfZ/nwtIWA03e5KIoTTn+w2/ZFmxmj6HY+yBNcU=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?pEzqOv7zLpeEfBW4XxcsW7X4/0qO1bmNLdXq7rS/+JgS/VGXFud33UtRWopY?=
- =?us-ascii?Q?qtt1WaUynxD1BJi4EsdkOX9uA2R9sEGhnJr56g1jJPhC6VhtO95JYlvJsXEh?=
- =?us-ascii?Q?fktoc39EnX0iH5X6XMNrJQ02VBtICDUb0oqHWJHwYLv9D8ghV8pJP1wW9yMB?=
- =?us-ascii?Q?qGLOtnrBMx4QR+vcUE43o4BVKR6Wkd1hPivwRKKL8qTykfL9miXhMnMOL8OR?=
- =?us-ascii?Q?IyPl+3lJuiRK8ctEGuohLdrtIhsq3UChgel8imFXTCD36ySfS0NeQStDUiVg?=
- =?us-ascii?Q?DYJz9rQe81YuNIRZ2ARYBfDeL7L1VQIZmPXyV5S7gFKZTc7aqHgsIxRv9l9k?=
- =?us-ascii?Q?W9f++0GlS2958igMkkYHK7eoLMQsK2HmojojFzPZEtSX74Zvzlc00MCTWfKS?=
- =?us-ascii?Q?6lvzwHI9GOyfsOPzHabo1c+Cl7JfBG3BwCLs3FJ7UW5JfIKIhNcDw9F+/gbw?=
- =?us-ascii?Q?GB5tBCe6sLYpIl08B4S4cKuAUJVdhfRM0fmnpYbryvWE9CVZOYdYdYBXTYSs?=
- =?us-ascii?Q?prrUU3kC4iUu4X9b9a6wxo7yee00w8/jccuAXZuQRBMTMOPdYgq8v9wRwQmK?=
- =?us-ascii?Q?2BpKQzWajWyaCsTxYfE01Ards/9sFBilYdIlSXL0N3aPfcS7aCjRLTltX9PC?=
- =?us-ascii?Q?i9iA801BqjvUJtttE3DzRMzqawi81l6qjkc6ksvnUrf3IdFxmUdVMIzoooeW?=
- =?us-ascii?Q?bUxVQvF0T9RGlnJS/6a7+1AQoDgzPlBy+C+oBKtHmvBrzytyl6vPOQA36ipD?=
- =?us-ascii?Q?1m4vAJbVXdIK0+ugHORf+T57rv4EBwqv+Nwe7EWRbuX6P6hGUcUQE+ztBwdI?=
- =?us-ascii?Q?NeZsyJ1xQmy2DhlEZSZtXCXPbU2xclV70ICbnESlyn7g5e46+qNhzhks19AX?=
- =?us-ascii?Q?74y+bpxxMbZhwFQ2Z+Ig4l0VgPXz0bxbHFAKIxLdEvcZE31EHEeSx+wRDOMF?=
- =?us-ascii?Q?KFWDkgEYxJKnU7/rEU23zmUv6r1PfdvY5D6u+wlER+lZb9QLK7aUUjMnJn22?=
- =?us-ascii?Q?M5kqTs1J4SZbJkarIFIR7TfiupKtZiIerQspVFvuZ8TIh37drF5xul9sRVUg?=
- =?us-ascii?Q?QFupituAcxmYvZTlYoEfnKaIIoDqTwAH37ILBIGeFC7t7FL+mgbDhV8IgzE/?=
- =?us-ascii?Q?Dya8BedDLGSGVQq1wGq8zBEleMf6cFcp6rmZ9xOMSeKdAphNbEQuNlKwBanU?=
- =?us-ascii?Q?oAvaqPuZ0o+3qEAd/4zsMkN5IIa7ZhRXqKdRnx6LbWHl901ex2fszUoRHpDo?=
- =?us-ascii?Q?AqTLApmqwnf5WzZMPoDVwR3vKt3yCQGtsXj+Odesi3o29Jeblv9xeuWj5bW7?=
- =?us-ascii?Q?QeKJOTRtSRCDw6Qddg6aeM6f2tEr7GbDR8W023YDTPgxNOq2oJr7CxXAYSWX?=
- =?us-ascii?Q?5fDzZEIVi94uXUmf6Hwkck7pAMrtfczcWWxgzRYC6BI6iVYAR2sl/cVYsUTy?=
- =?us-ascii?Q?NRZK90tWI/r8jB9CySZV+dUhrEEZx5MQ2+hvi1dQFRZO9nlo3NeyRmZSmcHg?=
- =?us-ascii?Q?Py61d/mG6wYCCzvyER4MKdWKcaqkjRsXHeqqcLnKHkwzchjANVQjoDlJdwIt?=
- =?us-ascii?Q?Pgno4/bMgGaRNsXfdSGE0Fn7u1lSNIWTFKj0HBlc+2TDXh3xQ/tzdTsXtiPK?=
- =?us-ascii?Q?SI8O+111gVz6JRlMZDt2VjNaZe6uc2Wh038o4a19V3FvaQMfRFvKpcv1PXem?=
- =?us-ascii?Q?m4XLHj/5LfuTKr3eja6biW9jvE9W06GFwWl6YDq0S0V+2RdgM5CCd4QDoHtP?=
- =?us-ascii?Q?9unf0QcTLw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf2fe8bf-eaa0-4126-823e-08de79f59db7
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7900.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2026 13:54:55.5133
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G1VIhZED68DpI2KNPzn59Fc0cCzd6O/00ecjvqy8BiIsQbWvrjpm93Cer+gd2yWoi/F0BuX0t8j1zLmF7ZSLHw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5978
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 04, 2026 at 07:38:13PM +0800, Jiayuan Chen wrote:
-> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> 
-> When a standalone IPv6 nexthop object is created with a loopback device
-> (e.g., "ip -6 nexthop add id 100 dev lo"), fib6_nh_init() misclassifies
-> it as a reject route. This is because nexthop objects have no destination
-> prefix (fc_dst=::), causing fib6_is_reject() to match any loopback
-> nexthop. The reject path skips fib_nh_common_init(), leaving
-> nhc_pcpu_rth_output unallocated. If an IPv4 route later references this
-> nexthop, __mkroute_output() dereferences NULL nhc_pcpu_rth_output and
-> panics.
-> 
-> Simplify the check in fib6_nh_init() to only match explicit reject
-> routes (RTF_REJECT) instead of using fib6_is_reject(). The loopback
-> promotion heuristic in fib6_is_reject() is handled separately by
-> ip6_route_info_create_nh(). After this change, the three cases behave
-> as follows:
-> 
-> 1. Explicit reject route ("ip -6 route add unreachable 2001:db8::/64"):
->    RTF_REJECT is set, enters reject path, skips fib_nh_common_init().
->    No behavior change.
-> 
-> 2. Implicit loopback reject route ("ip -6 route add 2001:db8::/32 dev lo"):
->    RTF_REJECT is not set, takes normal path, fib_nh_common_init() is
->    called. ip6_route_info_create_nh() still promotes it to reject
->    afterward. nhc_pcpu_rth_output is allocated but unused, which is
->    harmless.
-> 
-> 3. Standalone nexthop object ("ip -6 nexthop add id 100 dev lo"):
->    RTF_REJECT is not set, takes normal path, fib_nh_common_init() is
->    called. nhc_pcpu_rth_output is properly allocated, fixing the crash
->    when IPv4 routes reference this nexthop.
-> 
-> Suggested-by: Ido Schimmel <idosch@nvidia.com>
-> Fixes: 493ced1ac47c ("ipv4: Allow routes to use nexthop objects")
-> Reported-by: syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/698f8482.a70a0220.2c38d7.00ca.GAE@google.com/T/
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported. The patches enhance the BPF list API, making it more
+list-like.
+
+Four new kfuncs have been added:
+bpf_list_del: remove a node from the list
+bpf_list_add_impl: insert a node after a given list node
+bpf_list_node_is_edge: check if a node is the first or last in the list
+bpf_list_empty: check if the list is empty
+
+refactor kfunc checks to table-driven approach, and add test cases for
+the aforementioned kfuncs.
+
+Changes in v6:
+- Merge [patch v5 (2,4,6)/6] into [patch v6 4/5]
+- If list_head was 0-initialized, init it
+- refactor kfunc checks to table-driven approach
+
+Changes in v5:
+- Fix bpf_obj leak on bpf_list_add_impl error
+
+Changes in v4:
+- [patch v3 1/6] Revert to version v1
+- Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
+
+Changes in v3:
+- Add a new lock_rec member to struct bpf_reference_state for lock
+  holding detection.
+- Add test cases to verify that the verifier correctly restricts calls
+  to bpf_list_del when the spin_lock is not held.
+
+Changes in v2:
+- Remove the head parameter from bpf_list_del
+- Add bpf_list_add/is_first/is_last/empty to API and test cases
+
+Link to v5:
+https://lore.kernel.org/all/20260304031606.43884-1-pilgrimtao@gmail.com/
+
+Link to v4:
+https://lore.kernel.org/all/20260303135219.33726-1-pilgrimtao@gmail.com/
+
+Link to v3:
+https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
+
+Link to v2:
+https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
+
+Link to v1:
+https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (5):
+  bpf: Introduce the bpf_list_del kfunc.
+  bpf: Add bpf_list_add_impl to insert node after a given list node
+  bpf: Add bpf_list_is_edge/empty kfuncs
+  selftests/bpf: Add test cases for bpf_list_del/add/is_edge/empty
+  bpf/verifier: refactor kfunc checks to table-driven approach
+
+ kernel/bpf/helpers.c                          |  98 ++++++++++
+ kernel/bpf/verifier.c                         | 103 +++++++---
+ .../testing/selftests/bpf/bpf_experimental.h  |  39 ++++
+ .../selftests/bpf/progs/refcounted_kptr.c     | 182 ++++++++++++++++++
+ 4 files changed, 398 insertions(+), 24 deletions(-)
+
+-- 
+2.50.1 (Apple Git-155)
+
