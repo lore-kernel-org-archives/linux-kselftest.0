@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5723223BCE3;
-	Wed,  4 Mar 2026 00:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E887A21B1BF;
+	Wed,  4 Mar 2026 00:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772582726; cv=none; b=u5WpWDjbD4noBOo88T/x+D1jvWoX7hToxtwAnWwr3gsnTzjm/lFEzwT6ubmAZvzniqM5MwmohW9t8vE0OH4M3ITi5ZiYxu4mWron9WC/mZPTBD6tihqMjbVS5aqrUHuHFC5zfQaWOCO5tepz7mdB9mRq3HlPvauFpoSzenDpqyk=
+	t=1772582824; cv=none; b=bYxChnRFF7aO+kKY78N+XN5kyNhRAkj7gIu1o/hICGXxt7Po/KKJIb9AbZgh27WYeYVnjuFtODdxF1q1rwZHIM963kcOcDTz0MCKUN2/WRof29LVnhoPtRUPZkxiqg1rMV1rkRKZjxYRIIx0fM/pGgcV5pjjnAn16QIMpyhW96g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772582726; c=relaxed/simple;
-	bh=dJj33vn0uyglOFKOBzUSc21jG+H7CREFob0Sopoc7Ss=;
+	s=arc-20240116; t=1772582824; c=relaxed/simple;
+	bh=DKvD+Lht8o2ly8XEv5qKbz2/Y5MsEFKRtxvkE7ct8Zk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gEpkVsLfeM80SLXgXa5wUXFfWAmgCkYbUN87oWmNz4+fmrVnQ2DzODrCx4yjuTkNQUPXiv9bBI9bEKB4w7C7DjWZrOWaVhUSZC/6JLhFvMt13i6f3appL/z3PWtDfI1YLtRrd7aX6OUk8JMMCAQiRhBIP4IUeP7jf+HcH5UeoJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+WCScYg; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=rfPj5EQfAJD8xPybfwTKrbjbNBr5P71ijH47SVRSVwcYoTVoYHpeBYZ5XHptPGLfkVA0S7ZIkXkDrki5u1y0vsTBQskV50mc7Ivxd3PckSeQMi5WPuhqd1RbEYHFpjaq3OGNDTrXPuwYQtZd7PCqhCMXY8sI8WNukS1AFEuC8A8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vPcFGXMW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+WCScYg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77235C116C6;
-	Wed,  4 Mar 2026 00:05:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vPcFGXMW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4488C116C6;
+	Wed,  4 Mar 2026 00:07:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772582726;
-	bh=dJj33vn0uyglOFKOBzUSc21jG+H7CREFob0Sopoc7Ss=;
+	s=k20201202; t=1772582823;
+	bh=DKvD+Lht8o2ly8XEv5qKbz2/Y5MsEFKRtxvkE7ct8Zk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=C+WCScYgs/78sSR0hSmUT0bOF01jZEHNulnhbIbVo2caJOUGOF910ZmtaqecXg2Pj
-	 GdwIUzpuAg2SioSGYH/cfrC5WfwVrECf9l/h2j33tU35u/JJA/FB9CGMgcZL5nH1VF
-	 vpETpr/9o2B60vloU6Tyr2dUERkJxGFesrqTIrTzYpW7BkKcXdQJmXmlOUM61836OS
-	 juqpa18nAhk5RVZOjZE5VVtHUEGagcPehuzOsFMjAWqB+AM0cE5jvarxnSmhmnrX1G
-	 yIW447koQNAshXJANOzDCyZ6/eRPnT5GLkhXYWoO+cGLKUUUSHGokG72Zjwt/sI4u6
-	 BTVATapdTc0Ew==
-Date: Tue, 3 Mar 2026 16:05:24 -0800
+	b=vPcFGXMW56W9eqU0YHr7fJLZpTGK1a3AN7o1DOxMJ9AdCquwKxHcgZUfvY7tcP2jN
+	 x+wOJOI+4cZ/imfCdvcXfmb74yPkIr5qS8zsxr7Og4xV27cFDUEF2vXC4o+695vUre
+	 1CZIbp29r5+vLeNk4X5NQsjvERAvfb/9Wvauw1J2IjyjQkkK7Oi7J5oyMq6YKhxnos
+	 hKusvQi1gkV9LAWITBFnKZriQt59RfzotWPMfU9OJEZworp7PGpz6tetjPmAkam6X2
+	 hgBQ20izSdr0zB1ti6rykBtBc+nIZlsdquSHYcyn8cNb4zEf71IW1FOBMzkIP2JU8r
+	 iWolFwCl+mRzg==
+Date: Tue, 3 Mar 2026 16:07:02 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc: Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
@@ -35,12 +35,12 @@ Cc: Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
  Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
  linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH net-next 2/5] bnxt_en: Resize RSS contexts on channel
- count change
-Message-ID: <20260303160524.3e07dbfd@kernel.org>
-In-Reply-To: <20260303181535.2671734-3-bjorn@kernel.org>
+Subject: Re: [PATCH net-next 3/5] netdevsim: Add RSS context support with
+ dynamic table sizing
+Message-ID: <20260303160702.7d28437f@kernel.org>
+In-Reply-To: <20260303181535.2671734-4-bjorn@kernel.org>
 References: <20260303181535.2671734-1-bjorn@kernel.org>
-	<20260303181535.2671734-3-bjorn@kernel.org>
+	<20260303181535.2671734-4-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,41 +50,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue,  3 Mar 2026 19:15:30 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
-> -	if (bnxt_get_nr_rss_ctxs(bp, req_rx_rings) !=3D
-> -	    bnxt_get_nr_rss_ctxs(bp, bp->rx_nr_rings) &&
-> -	    netif_is_rxfh_configured(dev)) {
-> -		netdev_warn(dev, "RSS table size change required, RSS table entries mu=
-st be default to proceed\n");
-> -		return -EINVAL;
-> +	if (bnxt_get_nr_rss_ctxs(bp, req_rx_rings) !=3D bnxt_get_nr_rss_ctxs(bp=
-, bp->rx_nr_rings)) {
-> +		u32 new_size =3D bnxt_get_nr_rss_ctxs(bp, req_rx_rings) * BNXT_RSS_TAB=
-LE_ENTRIES_P5;
-> +		u32 old_size =3D bnxt_get_rxfh_indir_size(dev);
-> +
-> +		/* Validate context 0 can be resized before mutating anything */
-> +		if (netif_is_rxfh_configured(dev) &&
-> +		    ethtool_rxfh_indir_can_resize(bp->rss_indir_tbl, old_size, new_siz=
-e)) {
-> +			netdev_warn(dev, "RSS table size change not supported with current in=
-direction table\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		rc =3D ethtool_rxfh_contexts_resize_all(dev, new_size);
-> +		if (rc)
-> +			return rc;
-> +
-> +		/* All validated; apply context 0 resize */
-> +		if (netif_is_rxfh_configured(dev))
-> +			ethtool_rxfh_indir_resize(bp->rss_indir_tbl, old_size, new_size);
->  	}
-> =20
->  	rc =3D bnxt_check_rings(bp, req_tx_rings, req_rx_rings, sh, tcs, tx_xdp=
-);
+On Tue,  3 Mar 2026 19:15:31 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> Add RSS indirection table, hash key, and non-default RSS context
+> support to netdevsim. The create/modify/remove context callbacks are
+> no-ops; the core manages context state in its xarray.
+>=20
+> The table size is dynamic: roundup_pow_of_two(channels) * 16, capped
+> at NSIM_RSS_INDIR_MAX (128). This mimics drivers like bnxt where the
+> table size changes with the queue count.
+>=20
+> nsim_set_channels() uses the core resize helpers to fold/unfold tables
+> on channel count changes, exercising the full resize path.
 
-You resize the tables even if something else fails later on.
-I think either this if () should only contain the validation checks,
-and the actual resizing has to happen later.
-Or you need to "un-resize" (which should never fail so it's fine).
+Let's not bother with netdevsim support?
+Let the HW tests cover this?
+netdevsim was usual when we didn't have HW tests.
