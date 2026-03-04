@@ -1,136 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673E5372675;
-	Wed,  4 Mar 2026 09:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EE137756D;
+	Wed,  4 Mar 2026 09:40:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772616147; cv=none; b=MCCZhwz79frlkYjY8Vpvd+Jq4zTT57sMBpByixL46LSwO0rwCqbQ/ChZRSS0HJ+y3NqZUuwO9cPZ2/tyBG+BxWlnfdDIjLcAimC87hW+Uww36apEJbT91+FAChGno4FsQSrvfQcMsKlmbiY9wpCowLIHP//BCJwIHqGPDxPqbLA=
+	t=1772617228; cv=none; b=f7T4KyS5JFw3MykVN+ziyLCU7/C7wCeq8jozrMjiJ7prpTBx6tL5Ye6FcZ6YEynvqmbJGXl6K2TtlLs+tLAHe61yfFNIRJh/J5ahDrLIqJhJCE2YwESasDyxnv93SlUV6KidAAnKJsVK64rpsSWzFFdocV8JkjBtpE63Iy0u2GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772616147; c=relaxed/simple;
-	bh=l0lWwdxWORqLXsJM6tbxvmdK9uvSDQhvLoF0Kob8MYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dmt/uiKgjDJPL9Yn0hjn97RFNYYHLhrxOGvmE8qvx7tKZRfaqUBbwBjRMpEKWYMxjLRduFstZxocPPO1Mq5q/dshkyzgTJuQ+cOyeUy11RiHoRYQYeQvi5pEu8P02uvmYaVvmqd6QEp5epPBKz0KSiIPihuQMDCHHrxDDLMpNF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jotPM3cx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772617228; c=relaxed/simple;
+	bh=AO4HBzUh5EP6nb40VVibWTz1NPRn67r816VYbLssLbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SwStHmg3rvrIVFuyEsXO10p6Q5+9KeTd5RgaGNGYUK+07r/qYYs9Z2Hxg6LDo4GSbQ9D3W5rdLlmkeZF8zVce219+h7BC7pE6V+y0/dHm+u9s9Ier+oPcyQ1nJbHKxhxqPuteOIoHryj3yW0BbhkFcfPLAj5s5bPnoh4GDa5q+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OAp3voBI; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=K3E4IYZb; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jotPM3cx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82230C19423;
-	Wed,  4 Mar 2026 09:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772616147;
-	bh=l0lWwdxWORqLXsJM6tbxvmdK9uvSDQhvLoF0Kob8MYE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jotPM3cx/9O4URnSkY8s/5fK1deaT6YQ5CqP+kM9WZUdfTXfXoZPM1fAfxobUk9wu
-	 lekW0CvG1MyBE9imhkba0vcjYml+XHqe5kJ0CyU5nUs2oN0JQJ2LDWCaxC06Zdqow1
-	 uKeWQEyhN2wZdM7KhOXrVu03yqa7pSud0YBxX/2AsIxcT1qu3Xiphok2omuQ1E8OUl
-	 adpzL3pT2Y6kDAyerLt7CO6kGf3ySVP9WirmQqg5z7kS45V/srf51GTX7Fi436QPea
-	 VqYXvCoe5/mBsPsMKn1g2Lpr1gT8xSRTyjPODe3dDN/pcR5zUPS/QZGADNlGGMxYJx
-	 dXdciIMH8y0Dg==
-Message-ID: <af805e55-4372-4c76-8afa-e78c623d50eb@kernel.org>
-Date: Wed, 4 Mar 2026 10:22:21 +0100
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OAp3voBI";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="K3E4IYZb"
+Date: Wed, 4 Mar 2026 10:40:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1772617222;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q657n44NPR8EAAxyaBxEl5qa/lvFmu4t7TcVp8HrJ7Y=;
+	b=OAp3voBIC0L4UmhpZ2/EAVtSPuaBfY6rUqIWrxu75Cw+lLn65bvdFd1WzX/AKsNg2gKBiw
+	Z6I9txSZCxn1OKQcxSMdmh03zI8UjppHhFwotw05wqcYEIiumIBoMboVyfq349GiDbXlYQ
+	ufIqW3hTcq/BKDWlpfn1KMe1HKcftN4QrZqKYxZC8ghFt56WFj4Yjc5fpo0eeHCEVYRyzd
+	fp1K19HKj5QkG8YHNN2vzJcArZpDYEemMrqIv7WpG8oLfiwASx4pap/kpsUTx8o4zOTrR5
+	guCmjaNKgPjuAvmbzsFavSth2zFbsgSZHzAvPD5UF7Be9/jDOp7n9W1nr6yLZA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1772617222;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q657n44NPR8EAAxyaBxEl5qa/lvFmu4t7TcVp8HrJ7Y=;
+	b=K3E4IYZbNFpbtPuBz2Nep+jxFPN0D/7DPJh4DozcQd42LeMWFbaL8m7nL21IIouc5ID0z3
+	4mMqBIs4V19rOeAQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, jv@jvosburgh.net,
+	netdev@vger.kernel.org, jiayuan.chen@shopee.com,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+Message-ID: <20260304094020.mrSO02-z@linutronix.de>
+References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+ <20260304074301.35482-2-jiayuan.chen@linux.dev>
+ <4d15be93-b497-4499-996d-9f3a67a2abc6@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 4/5] mptcp: pm: in-kernel: always mark signal+subflow
- endp as used
-Content-Language: en-GB, fr-BE
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260303-net-mptcp-misc-fixes-7-0-rc2-v1-0-4b5462b6f016@kernel.org>
- <20260303-net-mptcp-misc-fixes-7-0-rc2-v1-4-4b5462b6f016@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260303-net-mptcp-misc-fixes-7-0-rc2-v1-4-4b5462b6f016@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4d15be93-b497-4499-996d-9f3a67a2abc6@iogearbox.net>
 
-Hello,
+On 2026-03-04 09:20:27 [+0100], Daniel Borkmann wrote:
+> Arguably it's a corner case, but could we not just do sth like this to
+> actually check if the device is up and if not drop?
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index ba019ded773d..c447fd989a27 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4387,6 +4387,9 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
+>         struct net_device *master, *slave;
+>         master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
+> +       if (unlikely(!(master->flags & IFF_UP)))
+> +               return XDP_ABORTED;
 
-On 03/03/2026 11:56, Matthieu Baerts (NGI0) wrote:
-> Syzkaller managed to find a combination of actions that was generating
-> this warning:
-(...)
+preemption (vcpu scheduled), while paused the other CPU could put the
+device down, or is it too much of a corner case?
+Also, there is also ndo_get_xmit_slave which at this time is only used
+by Infiniband and supports only active-backup mode [0].
 
-> diff --git a/net/mptcp/pm_kernel.c b/net/mptcp/pm_kernel.c
-> index b5316a6c7d1b..b2b9df43960e 100644
-> --- a/net/mptcp/pm_kernel.c
-> +++ b/net/mptcp/pm_kernel.c
-> @@ -418,6 +418,15 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
->  	}
->  
->  exit:
-> +	/* If an endpoint has both the signal and subflow flags, but it is not
-> +	 * possible to create subflows -- the 'while' loop body above never
-> +	 * executed --  then still mark the endp as used, which is somehow the
-> +	 * case. This avoids issues later when removing the endpoint and calling
-> +	 * __mark_subflow_endp_available(), which expects the increment here.
-> +	 */
+[0] https://lore.kernel.org/netdev/999129.1772247707@famine/
 
-Regarding the AI review [1], I don't think the comment should be more
-precise by stating each case where the 'while' loop body is not
-executed: such comment would easily get outdated when the conditions are
-modified, and we forget to update it. The commit message explains the
-conditions which are used today, but might change later. Also, the
-endpoint is considered as used, not to create a subflow, but to signal
-it in this strange specific case that probably only syzbot will use.
+> +
+>         slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
+>         if (slave && slave != xdp->rxq->dev) {
+>                 /* The target device is different from the receiving device, so
 
-[1]
-https://netdev-ai.bots.linux.dev/ai-review.html?id=addc1ffd-bcde-4ce7-80a5-306564dde16f
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+Sebastian
