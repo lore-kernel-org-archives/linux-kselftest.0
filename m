@@ -1,159 +1,130 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB903A255D
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 10:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067DE3A4512
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 10:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772620442; cv=none; b=ZtvPDsgeFzTu502XU57tJKWY9QQL8ndiZRw7hjEXkJ2ANkyKjZ6mz5sKXq0gyXyGvoDAM0e5wKT8Fe2u50wDqsTuwKruepA/TGLOM0c/tzMqP/QDmZYyjzBITL5pIHTeiwbKYU5dIQYImFVPU24PCejSB3Z5rkjpgaT/W2kvAbg=
+	t=1772620463; cv=none; b=OftNz/13p9Lc7gbi1GA8HWlpNaSytJz1ly3+Q7sngHsXCWCpRVLbrodOrdLM8bhLJpzNj9R6DhbUMqW3biTgEQv+YhwM6OAb+9SqUvY1JK434bdbveIsKmuZ6LJA1W5Ol2CO6pd1lMkvh8O4ujEMvQ2hFPT71xOAbSPiZn3oJrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772620442; c=relaxed/simple;
-	bh=T7qbApDTh/+BPFcIJWbS+VwEIwLQbwVVV3rCXDU+yZg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t25pqhmW2YMjNcixPSpwnLxJO3AgENlqVXl3SO9EMW4ACzYCobj6H3/xEI/YOHv+AhX0wKlXC+bANH1ZNPobpBpxvNmJb9I06xDwZwpEJomZHwbmpT0R5hPrCTPPHI03qAy4dIz/qS8G7O4Ly8zZ3W1kOhtl1UWFzDvn8ZuT0FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iDe3i1Nx; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772620463; c=relaxed/simple;
+	bh=rsnQDpKzEj4Z2yTxDa6CF8A7GwiuAZWpSeFHHfKXoIk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iD01rTqz3HlR4hPZgAEN7+Q0OMz/B1No4vFTTdziH8ie8fe4GANY83/oJH6m/vbPm0IpPsEw9UPgvii45UtkxfEj9aKHOykTe8IaOlwm+EvM5zNeOisEVwIS0FS90wxommtfMM9pHo3/DIsfLcDJgiOO6BaAkZuHf7c6dDjKt5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=v2rTtyqr; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iDe3i1Nx"
-Message-ID: <cc7b7d2a-9f7e-41ba-9010-dfbf592a0bbd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772620428;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fLw1Y61P+1OHK0lZCCdzjxduRGAuzbcMcVh9BWRhWW0=;
-	b=iDe3i1Nx8r2NHSxC3qmvCnF11Vif3K/1N3bkZ+yrY6ZhNWrEio5F4731RtCrn4HYshB6yG
-	8NqRrXC/tz+UkvjRqIwVl5iP5Httt9ix1p2+QOt/Jsrsn3WXPHQVZyg37+4M2uB3nxSsoO
-	uSbdt4gxqduq7VbryWsjFjfwHU85Xds=
-Date: Wed, 4 Mar 2026 18:33:39 +0800
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="v2rTtyqr"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4833115090dso68405185e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 02:34:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1772620459; x=1773225259; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=32nyzB5LhHXwJ+wC7E/bptZjPbk/YG6iOgM6+tf22gE=;
+        b=v2rTtyqrqtUBZRZMayOIVCD6cb/dRadEr1ZBV+xfFXusUUFhTF3mrzfOOrD7c/opYZ
+         YQgH0hqbWZKce4PpDbXZ8a8RwGDvrG2M64JofNhHGVUMfdTPYUYdK8tu2d2PoU2Ytkv6
+         LxVxw/wOPG6Q68agLIzHmXKpat2iiGwS7W3V2vTdOhR5rF2g78dN4Bf0MSsOpZ4KidJ8
+         EVzwdyijcHyYft4V3uwpiy3hlz85lFcUsc56iWsFje+KBd3d3vC56CT2Dn12nL00neu+
+         /9KDjPoQY3dgsbyjB7uYkAnKpdBg1V7V46rOb7ItSsVB633YyHNx0zo4R6evplg3NNTC
+         RQgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772620459; x=1773225259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=32nyzB5LhHXwJ+wC7E/bptZjPbk/YG6iOgM6+tf22gE=;
+        b=Aho9RCxHkQQK2eDaTpSeekpK3GsRS5m2jpM/8gke+LFqrfACsyF7Wiv/OjAZO847b8
+         ImaA9NMFHIIij123Q/fFAG9jAact7r0borPEzblf/c/zrYSG8sLrD3eUgnNHWmAnXqBQ
+         rGnCrVEoTumJ/SOT4oPvMoowZuJfs5XZoermt6pIiw3v9KfBo+aUpvPhtKE0aW8iEUq5
+         Udh86Ismgh8Gits/jERquBVZB98OoIq5x4ER/LJdRTRIKHr0kyX95swpXV64EEHpTXqe
+         9Gd9cnO6ANx1xSSu8gLE17ekrPFD2hQgs+Kdty2ayVN8F7tNOEpzTFqABK7yMKwdV5g7
+         glFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1BsJZTJwOlqZ2Ot7PfQTO4r5Xn4Dw3e43DhUwbEvFClRX4x3kmhyO0Ep/boUeEpaHcpHsZdDwpTlOawE88zU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTnFso2Y5gYfNtOdSF3dgo5/OUOiWI0R88dxK5Uc/cxJ1BVQFY
+	ncO0hVM8H1EyqAOOz0VED3dPAuGzl/JE3Z8ACqynokgszt6hb611OnTMhYHb3R9xUWU=
+X-Gm-Gg: ATEYQzz+hXU9o+Gr0kOkZ8f6TJ7fciiBb2OfbLY7L0ZeaAPVX3ana6nAnc7IKAMq+ur
+	EIponnLQRvYu6KYGWp8Ec94FUsbt7UeXb9WtXdEMGaDjBrOYjXfRfO5+it2JorYRQgkipQWVasz
+	baysvm7IwsUYRaInWZ3tQ4BFkQ5v157RUX+MbNDTJAkNrgW1nU1BZ9DT/RLbclFtfI8/cYcq7Gy
+	+/mq2ZhcUi9H+jMhD09cqAelh6U3ZsOp86ZYfJQm4kP7x01vvAGVI8xdpZdmbmasPY4bdVOGRhw
+	1sQJffbkdYwR8Sp1FeX0vRnh1cjCNbUbbIretHLe8Jh0IOvmAQfDrDakiprLDtbqEwQ7cMfrh7L
+	It28OFm2smNeoLw3X3VghIE41HcqnJLVI3ZWujdg60AtFmoQyavfi3yXFpDjrk0wxtX+jQ155o6
+	nw6vBRP0BFcQRvx9CyNImblGgTfbfCpBwYgw==
+X-Received: by 2002:a05:600c:1e2a:b0:465:a51d:d4 with SMTP id 5b1f17b1804b1-48519848388mr21825225e9.6.1772620459148;
+        Wed, 04 Mar 2026 02:34:19 -0800 (PST)
+Received: from FV6GYCPJ69 ([140.209.217.211])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4399c75a25dsm41054094f8f.21.2026.03.04.02.34.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 02:34:18 -0800 (PST)
+Date: Wed, 4 Mar 2026 11:34:13 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, 
+	Dragos Tatulea <dtatulea@nvidia.com>, Shay Drory <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, 
+	Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource support
+Message-ID: <jssifysprwuafkinc3dguspngxmplrngqxvotp76vhvu4e5lp6@e7mdrjqc5rme>
+References: <20260226221916.1800227-1-tariqt@nvidia.com>
+ <20260302192640.49af074f@kernel.org>
+ <pmxkihhtsskkwsvdia4z2ss4wxpfc4a4kqxkjv5wk3mwdmpzii@6go7pizk2nst>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v10 bpf-next 1/2] bpf: test_run: Fix the null pointer
- dereference issue in bpf_lwt_xmit_push_encap
-Content-Language: en-US
-To: Feng Yang <yangfeng59949@163.com>, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- posk@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260304094429.168521-1-yangfeng59949@163.com>
- <20260304094429.168521-2-yangfeng59949@163.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260304094429.168521-2-yangfeng59949@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <pmxkihhtsskkwsvdia4z2ss4wxpfc4a4kqxkjv5wk3mwdmpzii@6go7pizk2nst>
 
-On 4/3/26 17:44, Feng Yang wrote:
-> From: Feng Yang <yangfeng@kylinos.cn>
-> 
-> The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
-> calculate the needed headroom:
-> 
-> 	err = skb_cow_head(skb,
-> 			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
-> 
-> But skb->_skb_refdst may not be initialized when the skb is set up by
-> bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
-> in this scenario will trigger null pointer dereference, causing a kernel
-> crash as Yinhao reported:
-> 
-> [  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> [  105.186382] #PF: supervisor read access in kernel mode
-> [  105.186388] #PF: error_code(0x0000) - not-present page
-> [  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
-> [  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
-> [  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
-> [  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
-> [  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
-> [  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
-> [  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
-> [  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
-> [  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
-> [  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
-> [  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
-> [  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
-> [  105.186499] PKRU: 55555554
-> [  105.186502] Call Trace:
-> [  105.186507]  <TASK>
-> [  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
-> [  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
-> [  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
-> [  105.186547]  ? ktime_get+0x3c/0xa0
-> [  105.186554]  bpf_test_run+0x195/0x320
-> [  105.186563]  ? bpf_test_run+0x10f/0x320
-> [  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
-> [  105.186590]  __sys_bpf+0x69c/0xa40
-> [  105.186603]  __x64_sys_bpf+0x1e/0x30
-> [  105.186611]  do_syscall_64+0x59/0x110
-> [  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
-> [  105.186649] RIP: 0033:0x7f166a97455d
-> 
-> Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
-> 
-> Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Closes: https://groups.google.com/g/hust-os-kernel-patches/c/8-a0kPpBW2s
-> Signed-off-by: Yun Lu <luyun@kylinos.cn>
-> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-> Tested-by: syzbot@syzkaller.appspotmail.com
-> ---
->  net/bpf/test_run.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 178c4738e63b..565fe8cbcdc9 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -1156,6 +1156,20 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->  		skb->ip_summed = CHECKSUM_COMPLETE;
->  	}
->  
-> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-> +		if (ipv6_bpf_stub) {
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +			dst_hold(&net->ipv6.ip6_null_entry->dst);
-> +			skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
-> +#endif
-> +		} else {
-> +			/* For CONFIG_IPV6=n, ipv6_bpf_stub is NULL */
-> +			pr_warn_once("Please test this program with the IPv6 module enabled\n");
-> +			ret = -EOPNOTSUPP;
-> +			goto out;
-> +		}
-> +	}
-> +
+Wed, Mar 04, 2026 at 11:05:06AM +0100, jiri@resnulli.us wrote:
+>Tue, Mar 03, 2026 at 04:26:40AM +0100, kuba@kernel.org wrote:
+>>On Fri, 27 Feb 2026 00:19:06 +0200 Tariq Toukan wrote:
+>>> With this series, users can query per-port resources:
+>>> 
+>>> $ devlink port resource show pci/0000:03:00.0/196608
+>>> pci/0000:03:00.0/196608:
+>>>   name max_SFs size 20 unit entry
+>>> 
+>>> $ devlink port resource show
+>>> pci/0000:03:00.0/196608:
+>>>   name max_SFs size 20 unit entry
+>>> pci/0000:03:00.1/262144:
+>>>   name max_SFs size 20 unit entry
+>>
+>>Code LGTM, I have a question about having a new cmd, tho.
+>>
+>>Does it matter to the user how the resource is scoped? 
+>>Whether the resource is at the instance level or at the port level?
+>>
+>>I worry we are mechanically following the design of other commands.
+>>Since the dump handler is new we could just dump resources with port-id
+>>there. No existing user space may be using it. Alternatively we could
+>>add a new attribute to select a bitmask of which scope user wants to
+>>dump.
+>
+>You can specify what you want to dump with dump selectors. For example,
+>if you are interensted only in port of specific devlink. That should be
+>enough for most of the cases, no?
+>
+>>
+>>I have a strong suspicion that the user will want to access all
+>>resources of a device. `devlink resource show [$dev]` should dump 
+>>all resources devlink knows about, including port ones.
+>>
+>>What's the reason for the new command?
+>
+>You are right, one cmd would do. Good thing someone forgot to implement
+>dump for it :)
 
-NIT: it would be more readable to handle the error path first.
-
-if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-	if (!ipv6_bpf_stub) {
-		pr_warn_once("...");
-		ret = -EOPNOTSUPP;
-		goto out;
-	}
-#if IS_ENABLED(CONFIG_IPV6)
-	dst_hold();
-	skb_dst_set();
-#endif
-}
-
-Thanks,
-Leon
-
->  	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
->  	if (ret)
->  		goto out;
-
+On a second thought, if we merge multiple objects into one dump, how
+does this extend? I mean, the userspace has to check there are no extra
+attributes, as they may be used as a handle to another new object
+introduced in the future... Idk, it's a bit odd.
