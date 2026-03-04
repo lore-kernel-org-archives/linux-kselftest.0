@@ -1,135 +1,128 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A63A3314B7
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 15:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3AF814BF92;
+	Wed,  4 Mar 2026 15:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772637609; cv=none; b=opCcDc5hp/LVWT77R0bNjHl9PSnpvpVwsBL9f69C7sAe8UcpGjnTe/rjhUAn7CQL8QTwHtSeJqKbznm3yxTIQ1GZPlELayDAcpRMzAXOtV30if4vjGoi8pJYi/jsEymbYTAyjdKErIcA1uuaK3xj4zZVppsllSSWaOuWEYVW/NU=
+	t=1772637714; cv=none; b=T383RpaQSs+0mOCUMXoWNRUE4HEyJcMdgR42zgJ9b6POH5kZsScxC1JfL8g8mzkUsX60X84g6OyUAMKuDsPHiwOs1s7UzhykCYN/A4IRF5glYuIv8wJ/cFcs9aoucEC1YKnKsCC8asABPqgJ2HuLwXE3O+IQDZCp8xGjHXwkyMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772637609; c=relaxed/simple;
-	bh=ymmy16BjMJcdh8G+bL7CjvElhjsLisNNHit5+UJLzlM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Ukfcwc2SiyOh54FDMFwdclUzymdomIF0RleW8+iR5TeUMdNIN3ILKdD0HjRQnl3mxdYqyxGdbyfDUJyfqg8a9pS2fD58knkSE16jyt3bELwuZTKhgMCbB5+lXp3LYlZ4wr7H4Suyoc4mHIgNrRn5l0ynDGBniyBd5M6v8gEpyAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ctThmodO; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1772637714; c=relaxed/simple;
+	bh=EVSFeWtFnWKIOJfFAETl8vPB1Cze0V6tyU8guwGha7M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y7j5QB7lTDQavoLZ09QTxGuLIzwpLt7GLyP/X3QoojTd5GJn92IBLR1NI8RqSJnxRAMn6abQdCqDSzAK+yUg7rM7E2zg9azLbprLm3FfqQ+LAg8W/HVd3RWKiISSkGOhfElTRQzGP8LZ4SLQhoGjjNT2AeX4JRH8GctHZcHG2cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hj+cH/kN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ctThmodO"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-359812e4fefso2655935a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 07:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772637608; x=1773242408; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fhVDxVUPn4sMysutwLd1doihcMglzApjUEnzyngJQcA=;
-        b=ctThmodOTSNFb3kgmbSZ/GYMrzAfdDVaHPnzskj4iIXvOJzBmiNkroMZ3CnM6PUMcV
-         RZ7xvjgNl8WufSJzbZlWKl7u20cqm913AoI4U3kmMd0yJ5hCx98XjZYQ9hiFAI2jmGkW
-         pi3HufjXBi9DppljA/9eURhR3uIB361dSH1fyVjXYVZ7fhLeomZoVPyRCD3BgmBFSixA
-         2tjYcQD1ORR0VMJxkwKeN+54mNFCMf7Ab0krgsoVrRfUxJiNJtfPaHfMdV2mRf9b1ppT
-         Y4/Bbp7HPtwTa2fL9JWqQc1WXwcTWvVTYl3KV9PU4BSJTOo2+RW7Gog5xalFqAIz/R6J
-         bC6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772637608; x=1773242408;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fhVDxVUPn4sMysutwLd1doihcMglzApjUEnzyngJQcA=;
-        b=HJcP15KeAggp/L0MkvQw4NU1FRNp5CcxQK3Yq8HMuEqzIPWsc1VsQRvh6yqbDuqOht
-         mpuVol5jTTGrlnjmR7Vn2ugmoJcksnn1XFiHEIydUaaAzE49OTsFbU48lzP0xKp8yueg
-         OCI3Wx0kk/FfpULVRCjZbnVEWloENtjaM/tW2Z44oG7zKpwpH6CbEA+x8aYb9ZVZxbk3
-         0+ZMN3FX1etRhUCQ9+gf7ZYvh/gCYlecIcxl9sEenAxMTeE0Br0Mml7MGYJNaik8N4F6
-         oi3JjUjcVpJE2lAekwbUNvedubHqVGbS2/jU/oLQYjxKr9VImgNMSgsSNJ7WGckGG1Hk
-         +FUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXF15d7/FCL3D7krU5rz0FvmXZE8DDjBa8DV2nL4B/Ik/UcSfGXvRoeLcw74KsM8Nc4Y3HhwyS69fx9gKIMf5o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkQs0GJDEajLAP/ES0HEwpw3aSP3VlCm+lTSPTOPMcd4rpOcnb
-	UjpsGdjjyPAmnowWnNcEvDf1N+z7dpFmGunSwR4iu7N0cuIHtS1rXb7aP/HTdNXPHGRjkVr3C/F
-	+SOIUIw==
-X-Received: from pjbmz4.prod.google.com ([2002:a17:90b:3784:b0:358:fc29:4815])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3e4d:b0:359:8ca0:308d
- with SMTP id 98e67ed59e1d1-359a6d8f5b3mr1977021a91.14.1772637607566; Wed, 04
- Mar 2026 07:20:07 -0800 (PST)
-Date: Wed, 4 Mar 2026 07:20:06 -0800
-In-Reply-To: <5097ff66-b727-4eac-b845-3bd08d1a0ead@suse.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hj+cH/kN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E414DC19423;
+	Wed,  4 Mar 2026 15:21:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772637714;
+	bh=EVSFeWtFnWKIOJfFAETl8vPB1Cze0V6tyU8guwGha7M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=hj+cH/kN15cW2w+zHR/iGObRg6/7ZT1/yml954LV7j0/OV7ffdoNVvryAkeig1LmP
+	 T2N9AHP3og8SFSlZUAWv7YJ+RDZz2DcESp91UiPjLX670MEj3pVdvVexdT6yM7Vqgk
+	 eBv8VxiTvPYj20yN9HY2TMjAb9RStUlaX6UvUWLi5rWEGRBpE8h+uLm9NmDXdP+t6z
+	 Ri+p++P7jdIS+O6Wvk3mw1EVqe6Xf1RaS/nw0C8dGFB3w514EfczLzBoyMO/2MtssH
+	 kLfgBogeacQNYLDOjttNqt6M+PmdK63tJB0bzYPhvjlnok3SA/9Zljh/XfEzSTaC1B
+	 rO3EAS0utAs9w==
+Message-ID: <47b171c6-30d3-4689-bd6e-88881df38dfe@kernel.org>
+Date: Wed, 4 Mar 2026 08:21:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260225-gmem-st-blocks-v2-0-87d7098119a9@google.com>
- <20260225-gmem-st-blocks-v2-2-87d7098119a9@google.com> <5097ff66-b727-4eac-b845-3bd08d1a0ead@suse.com>
-Message-ID: <aahNprLw0_Cdhzxp@google.com>
-Subject: Re: [PATCH RFC v2 2/6] KVM: guest_memfd: Directly allocate folios
- with filemap_alloc_folio()
-From: Sean Christopherson <seanjc@google.com>
-To: Vlastimil Babka <vbabka@suse.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Shuah Khan <shuah@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, rientjes@google.com, 
-	rick.p.edgecombe@intel.com, yan.y.zhao@intel.com, fvdl@google.com, 
-	jthoughton@google.com, vannapurve@google.com, shivankg@amd.com, 
-	michael.roth@amd.com, pratyush@kernel.org, pasha.tatashin@soleen.com, 
-	kalyazin@amazon.com, tabba@google.com, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v4 1/2] net: ipv6: fix panic when IPv4 route
+ references loopback IPv6 nexthop
+Content-Language: en-US
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+ idosch@nvidia.com
+Cc: jiayuan.chen@shopee.com,
+ syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260304113817.294966-1-jiayuan.chen@linux.dev>
+ <20260304113817.294966-2-jiayuan.chen@linux.dev>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20260304113817.294966-2-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 02, 2026, Vlastimil Babka wrote:
-> On 2/25/26 08:20, Ackerley Tng wrote:
-> > __filemap_get_folio_mpol() is parametrized by a bunch of GFP flags, which
+On 3/4/26 4:38 AM, Jiayuan Chen wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
 > 
->                                                            FGP?
+> When a standalone IPv6 nexthop object is created with a loopback device
+> (e.g., "ip -6 nexthop add id 100 dev lo"), fib6_nh_init() misclassifies
+> it as a reject route. This is because nexthop objects have no destination
+> prefix (fc_dst=::), causing fib6_is_reject() to match any loopback
+> nexthop. The reject path skips fib_nh_common_init(), leaving
+> nhc_pcpu_rth_output unallocated. If an IPv4 route later references this
+> nexthop, __mkroute_output() dereferences NULL nhc_pcpu_rth_output and
+> panics.
 > 
-> > adds complexity for the reader. Since guest_memfd doesn't meaningfully use
-> > any of the other FGP flags, undo that complexity by directly calling
-> > filemap_alloc_folio().
-> > 
-> > Directly calling filemap_alloc_folio() also allows the order of 0 to be
-> > explicitly specified, which is the only order guest_memfd supports. This is
-> > easier to understand,
+> Simplify the check in fib6_nh_init() to only match explicit reject
+> routes (RTF_REJECT) instead of using fib6_is_reject(). The loopback
+> promotion heuristic in fib6_is_reject() is handled separately by
+> ip6_route_info_create_nh(). After this change, the three cases behave
+> as follows:
+> 
+> 1. Explicit reject route ("ip -6 route add unreachable 2001:db8::/64"):
+>    RTF_REJECT is set, enters reject path, skips fib_nh_common_init().
+>    No behavior change.
+> 
+> 2. Implicit loopback reject route ("ip -6 route add 2001:db8::/32 dev lo"):
+>    RTF_REJECT is not set, takes normal path, fib_nh_common_init() is
+>    called. ip6_route_info_create_nh() still promotes it to reject
+>    afterward. nhc_pcpu_rth_output is allocated but unused, which is
+>    harmless.
+> 
+> 3. Standalone nexthop object ("ip -6 nexthop add id 100 dev lo"):
+>    RTF_REJECT is not set, takes normal path, fib_nh_common_init() is
+>    called. nhc_pcpu_rth_output is properly allocated, fixing the crash
+>    when IPv4 routes reference this nexthop.
+> 
+> Suggested-by: Ido Schimmel <idosch@nvidia.com>
+> Fixes: 493ced1ac47c ("ipv4: Allow routes to use nexthop objects")
+> Reported-by: syzbot+334190e097a98a1b81bb@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/all/698f8482.a70a0220.2c38d7.00ca.GAE@google.com/T/
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> ---
+>  net/ipv6/route.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+> index c0350d97307e..08b4a324987e 100644
+> --- a/net/ipv6/route.c
+> +++ b/net/ipv6/route.c
+> @@ -3582,7 +3582,6 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
+>  	netdevice_tracker *dev_tracker = &fib6_nh->fib_nh_dev_tracker;
+>  	struct net_device *dev = NULL;
+>  	struct inet6_dev *idev = NULL;
+> -	int addr_type;
+>  	int err;
+>  
+>  	fib6_nh->fib_nh_family = AF_INET6;
+> @@ -3624,11 +3623,10 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
+>  
+>  	fib6_nh->fib_nh_weight = 1;
+>  
+> -	/* We cannot add true routes via loopback here,
+> -	 * they would result in kernel looping; promote them to reject routes
+> +	/* Reset the nexthop device to the loopback device in case of reject
+> +	 * routes.
+>  	 */
+> -	addr_type = ipv6_addr_type(&cfg->fc_dst);
+> -	if (fib6_is_reject(cfg->fc_flags, dev, addr_type)) {
+> +	if (cfg->fc_flags & RTF_REJECT) {
+>  		/* hold loopback dev/idev if we haven't done so. */
+>  		if (dev != net->loopback_dev) {
+>  			if (dev) {
 
-That's debatable.  IMO, one isn't clearly better than the other, especially since
-filemap_lock_folio() is itself a wrapper for __filemap_get_folio_mpol().  And there
-is a cost to open-coding, as it means we risk missing something if there's a change
-in __filemap_get_folio_mpol() that's beneficial to guest_memfd.
 
-As Vlastimil said, if this greatly simplifies accounting, then I'm ok with it.
-But the changelog needs to focus on that aspect, because I don't see this as a
-clear win versus using __filemap_get_folio_mpol().
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-And if we go through with this, we should probably revert 16a542e22339 ("mm/filemap:
-Extend __filemap_get_folio() to support NUMA memory policies"), because guest_memfd
-is/was the only user.
-
-> > +static struct folio *__kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
-> > +{
-> > +	/* TODO: Support huge pages. */
-> > +	struct mempolicy *policy;
-> > +	struct folio *folio;
-> > +	gfp_t gfp;
-> > +	int ret;
-> > +
-> > +	/*
-> > +	 * Fast-path: See if folio is already present in mapping to avoid
-> > +	 * policy_lookup.
-> > +	 */
-> > +	folio = filemap_lock_folio(inode->i_mapping, index);
-> > +	if (!IS_ERR(folio))
-> > +		return folio;
-> > +
-> > +	gfp = mapping_gfp_mask(inode->i_mapping);
-> > +
-> > +	policy = mpol_shared_policy_lookup(&GMEM_I(inode)->policy, index);
-
-This is a potential performance regression.  Previously, KVM would do a policy
-lookup once per retry loop.  Now KVM will do the lookup 
-
-I doubt it will matter in practice, because on EEXIST filemap_lock_folio() should
-be all but guaranteed to find the existing folio.  But it's also something that
-should be easy enough to avoid, and it's also another argument for using
-__filemap_get_folio_mpol() instead of open coding our own version.
