@@ -1,156 +1,117 @@
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B0C37F72F;
-	Wed,  4 Mar 2026 04:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BD537E30A
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Mar 2026 04:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772597034; cv=none; b=exrfOI1PQIMcgXGtkmAj2d8Fn/7duEvVWzELh5tpawgRve+WapTf/a5e6xU/87J6OBnqjJ2sY+ouQHcAIzHtci8L8ecOmGe+oPHhGDLx7OKJdS1t4+42snpD0XfbNWCvfrwJBLg27OZYpsNOAHb7/92ZrDfR/vGp5BE0IhuHDBc=
+	t=1772597166; cv=none; b=TshMKao0FMG6+O6k7dzk4ho8yFmmpEHvjtoYibwKXPFpbzZLntdochGPsaqLZm4YEGO9QvZBhvrJdAJuRf0bEfZRHQbuZftWyTuXwYJJBArfvrwOp6of23wLGOhDVz2PoxoBWOJuG2+6uiGHRU1kjxffko+8YujlRQmDVtCCfSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772597034; c=relaxed/simple;
-	bh=36FpjVBtxAQB5NwKKjzjbclUJy/9nqEWaa9WwPfGJ0s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C5wQeHiPFMDdEwECoQjGPELbMG+Q4G91zL7e/KsU7H5unYB5BqVILuOaQBkgYFYqAt8jA3IxBjDZAJLEW1mUXgYCQDXflfGcvpO2eTEA/yotrb3vlTAzvaslaZJFuuk8aOlEQ2CZFj5mto7W6w7Qvd32cQhFh3XyKzUOoHMK1BM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=z0l1/gC9; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1772597166; c=relaxed/simple;
+	bh=YVxRuP0NXDSbyXtnCqrLI757OLMnWV+voqvrCqEQOlU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k6Juo+lvaU8I0WJ1uOyigGAF6oD3ilL7nXt0u7GiM5aHwiQAEpGBt1EsL0c3b/WLDURgnjBqFk0PBnBMOd5+NDdqnlL9UKS0M7gT3Q+fTdOXxuR0X7X7OvItEC66oPJuEOif9cedd19+UKWeIoIwFIMBhxoLSRk8A29yglSi//Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JGjgKSyX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="z0l1/gC9"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=K0uaACBVh1x7LkH20bvlUt3ZEiQsV/Byfo7bO3qkE0U=;
-	b=z0l1/gC9C8fHpD4xjAvIMvKGXxoOytCuapn5GmNMDZb9WF9e6mc4zbYQy3ckjswNFTFJepDPK
-	yPSL0Pp/ezRdfyHCbJIDa6DvypwLeHzNxeQNgZOk+FVRQ2GCE+EzLsyn+kbFBRvm/UXKVqkQVik
-	6AQId4aQF+t9axYm5JAa0Qo=
-Received: from mail.maildlp.com (unknown [172.19.163.214])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4fQf6h1jBYz1K9Bt;
-	Wed,  4 Mar 2026 11:58:52 +0800 (CST)
-Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
-	by mail.maildlp.com (Postfix) with ESMTPS id D87D940561;
-	Wed,  4 Mar 2026 12:03:40 +0800 (CST)
-Received: from huawei.com (10.50.163.32) by kwepemk500005.china.huawei.com
- (7.202.194.90) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 4 Mar
- 2026 12:03:40 +0800
-From: Yifan Wu <wuyifan50@huawei.com>
-To: <tony.luck@intel.com>, <reinette.chatre@intel.com>, <Dave.Martin@arm.com>,
-	<james.morse@arm.com>, <babu.moger@amd.com>, <shuah@kernel.org>,
-	<tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>, <ben.horgan@arm.com>,
-	<jonathan.cameron@huawei.com>, <wuyifan50@huawei.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>
-CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
-	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
-	<wangzhou1@hisilicon.com>
-Subject: [RFC patch 8/9] selftests/resctrl: Add support for HiSilicon MBM/MBA test
-Date: Wed, 4 Mar 2026 12:03:33 +0800
-Message-ID: <20260304040334.765860-9-wuyifan50@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20260304040334.765860-1-wuyifan50@huawei.com>
-References: <20260304040334.765860-1-wuyifan50@huawei.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JGjgKSyX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772597164;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OVLfMHz3uFZGKoEzvvxcxpvEYhM/ojSOYfndv2rw0os=;
+	b=JGjgKSyXmXqxOX6jp9V6EtTgGCNhmqohYJND5ALy1Fh459/QcFBFmXXdp2FXLyi8GOffMV
+	cY1+uqdrlSFIMlqSCn/fpYhQPOYWoP795+ZEjS0lwKg72IpTMXeKjLVTDh8ZVsglGZcAG2
+	bsG2yg8XsSS6WxtObQNzaQ4OU27+C1Q=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-361-4cjsy1NyPzmCUgOhkCVbLQ-1; Tue,
+ 03 Mar 2026 23:05:58 -0500
+X-MC-Unique: 4cjsy1NyPzmCUgOhkCVbLQ-1
+X-Mimecast-MFC-AGG-ID: 4cjsy1NyPzmCUgOhkCVbLQ_1772597156
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 88F631956089;
+	Wed,  4 Mar 2026 04:05:55 +0000 (UTC)
+Received: from [10.22.64.108] (unknown [10.22.64.108])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CFF9E300019F;
+	Wed,  4 Mar 2026 04:05:51 +0000 (UTC)
+Message-ID: <ca9ee83b-e93c-4f8c-8874-a01de646b458@redhat.com>
+Date: Tue, 3 Mar 2026 23:05:51 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 7/8] cgroup/cpuset: Defer housekeeping_update() calls
+ from CPU hotplug to workqueue
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260221185418.29319-1-longman@redhat.com>
+ <20260221185418.29319-8-longman@redhat.com>
+ <aaBvc4ikB1H-WQDd@localhost.localdomain>
+ <c999838a-cfdf-4556-8416-cb21aa2b69e7@redhat.com>
+ <aadlJm2aUekJdIwS@pavilion.home>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <aadlJm2aUekJdIwS@pavilion.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemk500005.china.huawei.com (7.202.194.90)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-This commit adds the support to check and test this feature on HiSilicon
-platform.
+On 3/3/26 5:48 PM, Frederic Weisbecker wrote:
+> Le Tue, Mar 03, 2026 at 11:00:54AM -0500, Waiman Long a écrit :
+>> On 2/26/26 11:06 AM, Frederic Weisbecker wrote:
+>> If you look at the work function, it will make a copy of HK_TYPE_DOMAIN
+>> cpumask while holding rcu_read_lock().
+> Where?
+>
+>> So the current hotplug operation must
+>> have finished at that point.
+> I'm confused. This is called from sched_cpu_deactivate(), right?
+> So the work is scheduled at that point. But the work does cpuset_full_lock()
+> which includes cpu hotplug read lock, so the sched domain rebuild can only
+> happen at the end of cpu_down().
+>
+> This means that between CPUHP_TEARDOWN_CPU and CPUHP_OFFLINE, the offline
+> CPU still appears in the scheduler topology because the scheduler domains
+> haven't been rebuilt.
+>
+> And even if the work wouldn't cpu hotplug read lock, what guarantees that
+> it executes before reaching CPUHP_TEARDOWN_CPU?
+>
+>> Of course, if there is another hot-add/remove
+>> operation right after the rcu_read_lock is released, the cpumask passed down
+>> to housekeeping_update() may not be the latest one. In this case, another
+>> work will be scheduled to call housekeeping_update() with the new cpumask
+>> again.
+> I'm not so much worried about housekeeping_update() (yet). I'm worried about
+> topology rebuild to happen before CPUHP_TEARDOWN_CPU. Offline CPUs shouldn't
+> exist in the topology.
 
-Specifically, this is because on HiSilicon platform, the mbm_total_bytes
-counter for MBM/MBA is located in the MB_MON, which is distinct from other
-monitoring paths.
+Yes, I am aware that this could be a problem. I am working on a fix 
+patch that will always do a rebuild_sched_domains_cpuslocked() call 
+directly in the hotplug path if needed as shown in the patch that I sent 
+to Jon. I want to get a confirmation first before I send it out. There 
+will be other minor code/comment adjustments as well.
 
-Signed-off-by: Yifan Wu <wuyifan50@huawei.com>
----
- tools/testing/selftests/resctrl/mba_test.c | 24 +++++++++++++++++++---
- tools/testing/selftests/resctrl/mbm_test.c | 23 +++++++++++++++++----
- 2 files changed, 40 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index c41914f6a2e6..ebed2d2d6ce0 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -202,14 +202,32 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- 
- static bool mba_feature_check(const struct resctrl_test *test)
- {
--	return test_resource_feature_check(test) &&
--	       resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes");
-+	unsigned int vendor = get_vendor();
-+	bool feature_exists = false;
-+
-+	switch (vendor) {
-+	case ARCH_INTEL:
-+		feature_exists = test_resource_feature_check(test) &&
-+					resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes");
-+		break;
-+
-+	case ARCH_HISILICON:
-+		feature_exists = test_resource_feature_check(test) &&
-+					resctrl_mon_feature_exists("MB_MON", "mbm_total_bytes");
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	return feature_exists;
-+
- }
- 
- struct resctrl_test mba_test = {
- 	.name = "MBA",
- 	.resource = "MB",
--	.vendor_specific = ARCH_INTEL,
-+	.vendor_specific = ARCH_INTEL | ARCH_HISILICON,
- 	.feature_check = mba_feature_check,
- 	.run_test = mba_run_test,
- 	.cleanup = mba_test_cleanup,
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 1d4ef268db5a..44bb450398e7 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -161,14 +161,29 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 
- static bool mbm_feature_check(const struct resctrl_test *test)
- {
--	return resctrl_mon_feature_exists("L3_MON", "mbm_total_bytes") &&
--	       resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes");
--}
-+	unsigned int vendor = get_vendor();
-+	bool feature_exists = false;
-+
-+	switch (vendor) {
-+	case ARCH_INTEL:
-+		feature_exists = resctrl_mon_feature_exists("L3_MON", "mbm_total_bytes") &&
-+					resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes");
-+		break;
-+
-+	case ARCH_HISILICON:
-+		feature_exists = resctrl_mon_feature_exists("MB_MON", "mbm_total_bytes");
-+		break;
- 
-+	default:
-+		break;
-+	}
-+
-+	return feature_exists;
-+}
- struct resctrl_test mbm_test = {
- 	.name = "MBM",
- 	.resource = "MB",
--	.vendor_specific = ARCH_INTEL,
-+	.vendor_specific = ARCH_INTEL | ARCH_HISILICON,
- 	.feature_check = mbm_feature_check,
- 	.run_test = mbm_run_test,
- 	.cleanup = mbm_test_cleanup,
--- 
-2.33.0
+Cheers,
+Longman
 
