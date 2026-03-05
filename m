@@ -1,88 +1,121 @@
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044A519E98D;
-	Thu,  5 Mar 2026 01:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F8733688A
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 01:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772674626; cv=none; b=XKvVHCi40B3o7eQ3W5H81n46IWrrsHcwfzpYzI4RmAZRlEU+A46BEoQljGSvPNToJy+v3sdV8u8TAs4NlQnhxuqAPP8r+5ARV7zBcKhFLytq4NKzDP3I2zdrwzubLOcpMMM9snzv/8B49oBBxnp+pMTrRsD7qmWnZElL1mKUXEQ=
+	t=1772675771; cv=none; b=mbYoO5LzVnuKuWQrf2+vTgtnvGSLEJ9V6CTJEAaOPJUj2LgcYPnGywV2fvW5gfk2oQyUEcyUMJfpA3B9CDJVXreiLDc2bBfY7hVfoD3dkK9FRCTMI3aes7Bw1kuihFWT59zv8e4z409O5KrZ1dCcJ0gApEzFrjqIhlDe1ZsFQnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772674626; c=relaxed/simple;
-	bh=Uevk0GB5nabvrKrs0N2S+u91XxJSaz29sUMiVgSAUnc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S+o0zh+GUCBsVNGMntgjAQuB1g2oCSa2/b6bUzV9/EuvBHt5KRmLMPUtIDqAy0iPiAg4yPHYYd1Q4wLzbt5pWRKoWRL9pnl30Te80DfsOXKpiJiNf8iN/TjiAiLMTafDZDyL67byPyjC6kdEpZxgw1w2MdygozC9H4RhnMa2Om4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=DvCG0FyU; arc=none smtp.client-ip=113.46.200.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1772675771; c=relaxed/simple;
+	bh=IXGyvNUbtHNwWlO779yACClXsPwAOkeZHizYbHOl/5E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=czgYIp2LSl0sbrIdPXGsUMNxPWXXb5XGHPxnIw/PdjVSApuhO7Y5gbECS4IzdsQC7wHWdQPg9gAiCx2vYsbiRsmxW46J9ZS9qSm+XPZmAmOeba8FxTfn9nS6VAY7mEyPvsFKyq3dpTqqp2V7AOdUvd9Qtw+NqimMCjgyxxrceBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cnWaeW7f; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="DvCG0FyU"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=OfW3VplqAwqPnYpDi9Xi2kjGv6UcJGL67/vONLonH0k=;
-	b=DvCG0FyUOHOUTxq1Ky6Vqx/hHHDjVHJ1DiomkbGf127J7h2OSB/q4jJYeB3hz7onFDsoSuKec
-	pI9PfXuJu6AEZ4O3TBBe3xzPWUnDrtmVS+o32kiOjk+aveJqUQxxWKky0t3SNto05J29PTJOW0p
-	s6Fx/cc3+uQ9UPp0u32TbLM=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4fRBq01VLjzRhTj;
-	Thu,  5 Mar 2026 09:32:12 +0800 (CST)
-Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
-	by mail.maildlp.com (Postfix) with ESMTPS id 02EC54056B;
-	Thu,  5 Mar 2026 09:37:03 +0800 (CST)
-Received: from huawei.com (10.50.163.32) by kwepemk500005.china.huawei.com
- (7.202.194.90) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 5 Mar
- 2026 09:37:02 +0800
-From: Yifan Wu <wuyifan50@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
-	<broonie@kernel.org>, <yeoreum.yun@arm.com>, <jonathan.cameron@huawei.com>,
-	<wuyifan50@huawei.com>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linuxarm@huawei.com>
-CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
-	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
-	<wangzhou1@hisilicon.com>
-Subject: [PATCH v2 2/2] selftests/arm64: Implement cmpbr_sigill() to hwcap test
-Date: Thu, 5 Mar 2026 09:36:38 +0800
-Message-ID: <20260305013638.992301-3-wuyifan50@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20260305013638.992301-1-wuyifan50@huawei.com>
-References: <20260305013638.992301-1-wuyifan50@huawei.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cnWaeW7f"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3590042fa8eso4511090a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 17:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772675769; x=1773280569; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+qfkgX7v8ytZV4SKpMC2pGAv+ee613FIPLowmgLLAh8=;
+        b=cnWaeW7f1Q4ZpEv39mswZnkvAeoPDeYRl5fDf/TKmXmBpviXO54ki9PS9QTZwOMJu9
+         2rOZLAW95zhnwrWfICONt/2kqcVPEoFv0YW37pa9mqvdXFMj2IG9jZLxJFqKF3wq0yEs
+         bhnLcgEKo60TrPbpArmIfpUO+Mi8hlahhZED1mROUiTGULv9BFvRDLYAWPl7EP8ve6D9
+         c9+UnqDwsv8q/j0RKVBK6NyrQNF774SEKz790FYnd+Sq513QqWS791rxhMtMuw+bnwwh
+         u/PUo94kHKP4RhS3nQucFuD8q1/TBA8ooyiPkXZYT1yEY5DigGx/7g5d0N+asd+FUgrd
+         L1UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772675769; x=1773280569;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+qfkgX7v8ytZV4SKpMC2pGAv+ee613FIPLowmgLLAh8=;
+        b=ezR0w7YY5LOjg5SkkFm1c99J2NjTRPVNogq31P1ZxHGdLg25+mw7w2npkxf/bNP0k+
+         fxORW+LP9SOV0lYBgaIe7wucYvdGuiD4YraKTkfXUSu464g/YsEydEdJ5WrxJwYQuwp/
+         GGkvcoyhc7KNNSiV16Iachi/XA5bwvIGR5ntsBsv0f1yV0E/42We7boQIi0CFf5Yv3Vc
+         0nGkWlPwKgbFw2MaTCz9tu80gzSWPKabCR8fkdXkcqbRpBbcp9GI9dtkWAX6Y0JJfYCP
+         H46i9SYPXD4jYj6ngl5XwrJAS+y31FM6nP0Czorq0/avf9JGmSfeQU3vCF9MXMEhQ71F
+         eq1A==
+X-Gm-Message-State: AOJu0YwygUTwNnM28faI/Su6Go08j0r5y77UIZSCwvKEmJhFXnBWej8h
+	YUiOwkQcdu2y+0ktXWSZ2J494Sx/8Q/OkYssfGZdfj4qqgHCiEVYs5/v
+X-Gm-Gg: ATEYQzxx+h2IE3dfeS6g47hZqMHAnsI5I76J92DOuZJc9CpADTZzm9RnjS6QqhFasaQ
+	2mLLS4RLjzUuF99gu8TZmwfegVobM5lrlpjOyW/KUAYQ+cEiYKYO8zRKkEeTVEmXXid6vI/mXL8
+	ui9V6j+f6M+upX2ZsKkchmBFFOfRvgCmKJYYX1cGonQNNW1KSP+bvk//kuutYjxjJ0vjQTIv88r
+	qG5oxNKrB2jqyeEc1PSnnVi7055Aj09UXWv9Z65eWgsXp+QNP3RN/8hqYpBJXB//deeg38igxEi
+	qMxdu9jUizZEFfbGcW7b2c0UVNcLRHAafqZuH/2g7TIVX/z9lv8F8wUmGhNupQFwynfU0RpAt8s
+	5YdrfFCaqcRzYwC4Tez6J3L8Bl00ELZW76zvINJsccOyEnMhyHRVjn6PP2xP6ILHryhvr8xASy3
+	liST/6QHkuGHir0NgbBSKSY2+a0vo=
+X-Received: by 2002:a17:90b:2e45:b0:341:c964:126c with SMTP id 98e67ed59e1d1-359a6a9faa4mr3568604a91.34.1772675768978;
+        Wed, 04 Mar 2026 17:56:08 -0800 (PST)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359b2d6f0eesm199072a91.15.2026.03.04.17.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 17:56:07 -0800 (PST)
+Date: Thu, 5 Mar 2026 01:56:02 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, Brendan Jackman <jackmanb@google.com>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCHv3] selftests: Use ktap helpers for runner.sh
+Message-ID: <aajisr9n2pInS7jm@fedora>
+References: <20260225010833.11301-1-liuhangbin@gmail.com>
+ <DGO2DAIFY07Y.367VMZA7XGT4U@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemk500005.china.huawei.com (7.202.194.90)
+In-Reply-To: <DGO2DAIFY07Y.367VMZA7XGT4U@google.com>
 
-The function executes a CBEQ instruction which is valid if the CPU
-supports the CMPBR extension. The CBEQ branches to skip the following
-UDF instruction, and no SIGILL is generated. Otherwise, it will
-generate a SIGILL.
+Hi Shuah,
 
-Signed-off-by: Yifan Wu <wuyifan50@huawei.com>
----
- tools/testing/selftests/arm64/abi/hwcap.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Is there anything else I need to do to move this patch forward?
 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index c2661a312fc9..e22703d6b97c 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -56,7 +56,8 @@ static void atomics_sigill(void)
- 
- static void cmpbr_sigill(void)
- {
--	/* Not implemented, too complicated and unreliable anyway */
-+	asm volatile(".inst 0x74C00040\n" /* CBEQ w0, w0, +8 */
-+		     "udf #0" : : : "cc"); /* UDF #0 */
- }
- 
- static void crc32_sigill(void)
--- 
-2.33.0
-
+Thanks
+Hangbin
+On Wed, Feb 25, 2026 at 01:06:47PM +0000, Brendan Jackman wrote:
+> On Wed Feb 25, 2026 at 1:08 AM UTC, Hangbin Liu wrote:
+> > Instead of manually writing ktap messages, we should use the formal
+> > ktap helpers in runner.sh. Brendan did some work in d9e6269e3303
+> > ("selftests/run_kselftest.sh: exit with error if tests fail") to make
+> > run_kselftest.sh exit with the correct return value. However, the output
+> > does not include the total results, such as how many tests passed or failed.
+> >
+> > Let’s convert all manually printed messages in runner.sh to use the
+> > formal ktap helpers. Here are what I changed:
+> >
+> >   1. Move TAP header from runner.sh to run_kselftest.sh, since run_kselftest.sh
+> >      is the only caller of run_many().
+> >   2. In run_kselftest.sh, call run_many() in main process to count the
+> >      pass/fail numbers.
+> >   3. In run_kselftest.sh, do not generate kselftest_failures_file. Just
+> >      use ktap_print_totals to report the result.
+> >   4. In runner.sh run_one(), get the return value and use ktap helpers for
+> >      all pass/fail reporting. This allows counting pass/fail numbers in the
+> >      main process.
+> >   5. In runner.sh run_in_netns(), also return the correct rc, so we can
+> >      count results during wait.
+> >
+> > After the change, the printed result looks like:
+> >
+> >   not ok 4 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=1
+> >   # Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+> >
+> >   ]# echo $?
+> >   1
+> >
+> > Tested-by: Brendan Jackman <jackmanb@google.com>
+> 
+> Thanks,
+> 
+> Reviewed-by: Brendan Jackman <jackmanb@google.com>
