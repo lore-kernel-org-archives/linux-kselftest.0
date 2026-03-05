@@ -1,142 +1,168 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30425374183
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 08:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77CC372ED1
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 09:02:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772700412; cv=none; b=h63QEaEwEqm4/cS98UqoezfiOtsJUCGlXiZoD6DJ2FkwYLKyTM30imFeYBBFiALst4OZ66vIH4ScOdazf8gcbdFmVfPFHpimvirjeEd1l3EtW/XJKoVDrhLb2Z9+si3xLWFP+YLw3yKgVbsKNsVt/1X87zuej7iy5tHc/iaRKEk=
+	t=1772701325; cv=none; b=ZY2uXzj6RGi75nTn7Wn2Pd6FDV9jbWkKfXvI6G74pMAJbgBGYDbBgngcY4Do/8NJ3Te9Wtp3oT0YY+S+CVAtr2Ufbk1vAHVzOGAGY4gfXYzNPzx8w15Y9MtGC4hYac1t+veNRkajMQd7ErLX7jt19GqWDcNVlxMxp6xqsbx9kbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772700412; c=relaxed/simple;
-	bh=mdoprt5pfQiawnNQf+PVIE40bn4zUw1G1O5KgSH6WgQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uTJgCW+roxlVCxW6hDcxJtmV7Pdv5rCdRKNzuuSWPO1JB6uhuG8kf7eZvTWUFfL9b8F1tTVBVcJ7gqbWZa/o5z7/jAItmagGKcpz4LGZCYQ/5tKoHuuSD3NqnwUi/m4wIEXkKXaWyN2oy3iblJoT24Uu+ncJdfQOMriHbV2J9Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cQW4Ctv/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772701325; c=relaxed/simple;
+	bh=a5rBpBWOBS3wcPrS5p5QUXqWWF+XclPC5nE6V63Wxrc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cc0DXV7gYEKxjAfHS0az2TujY5ERWo3lYq9h5Uvon8gceukefqPQG0sdIkKAxDe2H3gBwF2xuJ7I29ViBkTf2tIYuP4OpP3TEC68ZT9y5Fuza8Lwwip72vE2OSRSDLVf8qpnrzuE3GOHk4GU7RYb8gLdfnBcW7J7hiNk9uy19+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NQcFUspB; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cQW4Ctv/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772700408;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kcDhn5Pj+q46p8oVnRAtNQqN8KEvJ5Nk8v4t22oVPvw=;
-	b=cQW4Ctv/xLXQLhn4v3Uz6RTRwyaOK2deECL6m/3fdIe6s09kwwQ9hw4Y92ktiUpAhRHZJf
-	TOAa05UIj10xDhtww410+2wEqkWwW1KyGE2lMf5jCMS6takMaCVn/hpydnzk9wZfKp5XVx
-	KdOB+eIYpTkyDvQ2QBhpRX9r/0+0T2o=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-685-xdt8xs7lOW24P8dr1tLnAA-1; Thu,
- 05 Mar 2026 03:46:43 -0500
-X-MC-Unique: xdt8xs7lOW24P8dr1tLnAA-1
-X-Mimecast-MFC-AGG-ID: xdt8xs7lOW24P8dr1tLnAA_1772700401
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 735AD19560A5;
-	Thu,  5 Mar 2026 08:46:41 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.44.32.173])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0FE8E180049D;
-	Thu,  5 Mar 2026 08:46:37 +0000 (UTC)
-From: Paolo Abeni <pabeni@redhat.com>
-To: sun.jian.kdev@gmail.com
-Cc: kuba@kernel.org,
-	shuah@kernel.org,
-	horms@kernel.org,
-	netdev@vger.kernel.org,
-	kees@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	davem@davemloft.net,
-	linux-kernel@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com
-Subject: Re: [v3,v3,1/2] selftests/harness: order TEST_F and XFAIL_ADD constructors
-Date: Thu,  5 Mar 2026 09:46:24 +0100
-Message-ID: <20260305084624.242751-1-pabeni@redhat.com>
-In-Reply-To: <20260225111451.347923-1-sun.jian.kdev@gmail.com>
-References: <20260225111451.347923-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NQcFUspB"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4836f363d0dso68756535e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 01:02:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772701322; x=1773306122; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S/zTahhn2CpHG1q5a+EKiLGuiWwzQcz0c+ixyqTUocs=;
+        b=NQcFUspBceiKtC9AIrxTQ8dCEqD1SRQSOZnPQlNq5l3tCSREpYVPBjWrev4vkSz/bp
+         0ilRXatFfncIO9v49teFORnMEypdk7Nykc4sFKtZoy9SNNwmNxa9+k1PBxQIW0dbCoDg
+         G+AoKDxWlg/dm9DLfmRjpqhBDAYPzP1oa3KLpHs4z7YXWz6br6t5bT33qII42UgYS3gt
+         zXL/YATqAxUw3hAiL3D5cCEoBypoovU2rxSlth0fQ5nfCDYy0klPsFEd2QdUG6Eu721a
+         gKeKv2stdiUWZaKCQ8aoKH7uzCxTxYt6iBVGsAto1N8bESiOBikWAxC6j3sRFtqkQaXl
+         +4Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772701322; x=1773306122;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S/zTahhn2CpHG1q5a+EKiLGuiWwzQcz0c+ixyqTUocs=;
+        b=UNskNJoEDQFeDqi15CB0zjpo7Bzs+kCHGLV1eUXlhR3c84NSmtvvEgwKLK7HXMw7Mk
+         B5Ugwr3KXZq8HbKWWkw2wDmYjxHnltQCS7QxsVekoaaN4SovSCwzCae+qu+2xzlH/k05
+         LhO3pUZJUc3PcBF8zdxNY2MBljLGY6dE24lCoXnIG8Hfoz9TRoUS3oU1Nqe3jeNacX7f
+         9a2jMwcGAZT3LK+FOaneYilJ4ct0vpVF2CdUQ0e7CsfClY1EOp6MNM2fp7H0t75u5sq6
+         PkgcS61wy+SEnk5JIIvEewlR7Qq8tYkzmbwmedTgmwHrPf/JkUkt3N2tdWiqQNAmeHaC
+         0Qug==
+X-Forwarded-Encrypted: i=1; AJvYcCXEudNRukF8Jcb2npJes05uVo63GSuQSfQ5WlC7wpW8Lw/vfKdc4h0vlDFoGKXjhqUFpZKHSTpN2XpakLB1vgM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9C7zQVOjvS9lhIaWH7parFJcSQDIe9YRtWNk4CBaRpFfPXnJl
+	d99OIV5mnx7EMuzQba429IjgxSmtgsGaoy1viAJEjEz9VRVvT3ec7EGH
+X-Gm-Gg: ATEYQzz31rBRPcEgAhK7ldYJgzSpeAEpTFjlQM163oC2zOnzJto3yl7eDOEEjJzGRfr
+	zBB3maGx7lunbPiyxg+ZA3TUc0HF+THzL7MGrdmnHzFea1yXpRJ+YloPje5WQSoKbR3TsZlgHdF
+	hYoPAvo59MDm7Vimrw3am5rFwzZGhoJgdFKzk2SUoU5OAHKODpG6eX+Gqu7RUzF17HfNR58lcEf
+	Oz7oUze1dbyHq+ig2UeP4zn/DduB5DCuM3xJmSYoimbmYkEaBWEYlVU6159lp2Q2YQfh73hqxg0
+	QHGHTv6PLxt6unaPZScEEyDho2u+Yr8OcYKv2sT+RYupqxjXdldsd9/VqF62IxENBxa8YfKUFIv
+	NPBTvyehKPuB7SUCafq5QD5659yRkxABwqiJjeLpQa0M5qoXC7jYpsXxXAKRN/BMFAiJMwNby
+X-Received: by 2002:a05:600c:470d:b0:483:702d:2df with SMTP id 5b1f17b1804b1-485198a4a30mr80355445e9.32.1772701321968;
+        Thu, 05 Mar 2026 01:02:01 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::d99c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851a8955c1sm42249325e9.1.2026.03.05.01.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 01:02:01 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 5 Mar 2026 10:01:59 +0100
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, Song Liu <song@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: livepatch_trampoline: skip
+ when prerequisites are missing
+Message-ID: <aalGh2sjKl_mZp7G@krava>
+References: <20260305030258.5273-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260305030258.5273-1-sun.jian.kdev@gmail.com>
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-selftests/harness: order TEST_F and XFAIL_ADD constructors
-
-This commit fixes a constructor ordering race where XFAIL_ADD() could run
-before TEST_F() and read a NULL _##fixture_##test##_object pointer. The
-fix uses constructor priorities to ensure TEST_F runs first.
-
-> TEST_F() allocates and registers its struct __test_metadata via mmap()
-> inside its constructor, and only then assigns the
-> _##fixture_##test##_object pointer.
->
-> XFAIL_ADD() runs in a constructor too and reads
-> _##fixture_##test##_object to initialize xfail->test. If XFAIL_ADD runs
-> first, xfail->test can be NULL and the expected failure will be reported
-> as FAIL.
->
-> Use constructor priorities to ensure TEST_F registration runs before
-> XFAIL_ADD, without adding extra state or runtime lookups.
->
-> Fixes: 2709473c9386 ("selftests: kselftest_harness: support using xfail")
-
-Should the Fixes: tag point to commit 24cf65a62266 instead?
-
-The existing tag points to 2709473c9386 ("selftests: kselftest_harness:
-support using xfail"), but that commit used static initialization
-(.test = &object) which had no race condition.
-
-The race was actually introduced by commit 24cf65a62266
-("selftests/harness: Share _metadata between forked processes"), which
-changed TEST_F to use constructor-based allocation and also changed
-XFAIL_ADD to read the pointer value in its constructor. This created the
-race where XFAIL_ADD could run before TEST_F and read NULL.
-
+On Thu, Mar 05, 2026 at 11:02:58AM +0800, Sun Jian wrote:
+> livepatch_trampoline relies on livepatch sysfs and livepatch-sample.ko.
+> When CONFIG_LIVEPATCH is disabled or the samples module isn't built, the
+> test fails with ENOENT and causes false failures in minimal CI configs.
+> 
+> Skip the test when livepatch sysfs or the sample module is unavailable.
+> Also avoid writing to livepatch sysfs when it's not present.
+> 
 > Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index 16a119a4656c..4afaef01c22e 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -76,6 +76,9 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
->  		memset(s, c, n);
->  }
->
-> +#define KSELFTEST_PRIO_TEST_F  20000
-> +#define KSELFTEST_PRIO_XFAIL   20001
+> ---
+> 
+> v2:
+>   - Add missing Cc's suggested by get_maintainer.pl
+>   - Prefix subject with bpf-next to avoid Patchwork tree mis-detection
+>   - Drop Fixes tag to avoid verify_fixes issues due to tree mismatch
+>   - No code changes
+> 
+> v1: https://patchew.org/linux/20260227042354.20926-1-sun.jian.kdev@gmail.com/
+> 
+>  .../bpf/prog_tests/livepatch_trampoline.c     | 28 ++++++++++++++++++-
+>  1 file changed, 27 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
+> index 72aa5376c30e..75336d9c2313 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
+> @@ -2,9 +2,12 @@
+>  /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+>  
+>  #include <test_progs.h>
+> +#include <unistd.h>
+>  #include "testing_helpers.h"
+>  #include "livepatch_trampoline.skel.h"
+>  
+> +#define LIVEPATCH_ENABLED_PATH "/sys/kernel/livepatch/livepatch_sample/enabled"
 > +
->  #define TEST_TIMEOUT_DEFAULT 30
->
->  /* Utilities exposed to the test definitions */
-> @@ -465,7 +468,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
->  			fixture_name##_teardown(_metadata, self, variant); \
->  	} \
->  	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
-> -	static void __attribute__((constructor)) \
-> +	static void __attribute__((constructor(KSELFTEST_PRIO_TEST_F))) \
->  			_register_##fixture_name##_##test_name(void) \
->  	{ \
->  		struct __test_metadata *object = mmap(NULL, sizeof(*object), \
-> @@ -880,7 +883,7 @@ struct __test_xfail {
->  		.fixture = &_##fixture_name##_fixture_object, \
->  		.variant = &_##fixture_name##_##variant_name##_object, \
->  	}; \
-> -	static void __attribute__((constructor)) \
-> +	static void __attribute__((constructor(KSELFTEST_PRIO_XFAIL))) \
->  		_register_##fixture_name##_##variant_name##_##test_name##_xfail(void) \
->  	{ \
->  		_##fixture_name##_##variant_name##_##test_name##_xfail.test = \
+>  static int load_livepatch(void)
+>  {
+>  	char path[4096];
+> @@ -19,7 +22,8 @@ static int load_livepatch(void)
+>  static void unload_livepatch(void)
+>  {
+>  	/* Disable the livepatch before unloading the module */
+> -	system("echo 0 > /sys/kernel/livepatch/livepatch_sample/enabled");
+> +	if (!access(LIVEPATCH_ENABLED_PATH, F_OK))
+> +		system("echo 0 > " LIVEPATCH_ENABLED_PATH);
+>  
+>  	unload_module("livepatch_sample", env_verbosity > VERBOSE_NONE);
+>  }
+> @@ -82,6 +86,28 @@ void test_livepatch_trampoline(void)
+>  {
+>  	int retry_cnt = 0;
+>  
+> +	/* Skip if kernel was built without CONFIG_LIVEPATCH */
+> +	if (access("/sys/kernel/livepatch", F_OK)) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * Skip if livepatch-sample.ko was not built (same path logic as
+> +	 * load_livepatch()).
+> +	 */
+> +	{
+> +		char path[4096];
+> +
+> +		snprintf(path, sizeof(path),
+> +			 "%s/samples/livepatch/livepatch-sample.ko",
+> +			 getenv("KBUILD_OUTPUT") ? : "../../../..");
+> +		if (access(path, R_OK)) {
+> +			test__skip();
+> +			return;
+> +		}
+> +	}
+> +
+>  retry:
+>  	if (load_livepatch()) {
 
+load_livepatch returns -ENOENT if we fail to open the file, we could
+check for it instead of putting together the path again
+
+jirka
