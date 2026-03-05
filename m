@@ -1,106 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C82B3CD8B9;
-	Thu,  5 Mar 2026 16:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1CB3CD8B1;
+	Thu,  5 Mar 2026 16:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772727031; cv=none; b=HWakIWTKHn7vl0FOHahYrXvemZ8mrGXABs46qtOXFTC0p59UemjNdzGB+dqGkscZu0yFYC+w0SAyMlAY5Hhxkn4cJ9II0o6U4rnF1p5WlVBtQ21GdD029v1jBSWRzmG5QhJqYHU4Qi0mfgWxzFBvDiUD+QnuQvfJNm2FtufRRyI=
+	t=1772727050; cv=none; b=AIRjjmzX/DocXWWk9WDpTgV0DywZi8Bb5k7g/7rTYrOqFAkEqv0tJs55p7ThGZPLPoiAv2VFw4VuuFkwlgsJRi1M24lUfRMZ4HgN2MNM82roiZG45pIb1pQ+O7byIu056N26ZtufoG8WPUIhv9YPbiDWp6s1MwFQiohL7kSIgl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772727031; c=relaxed/simple;
-	bh=tycp5Wmt2PwmO071xa6900jmB4t73QUD2rRxZZNmfO4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ruNIInXznAmrOKpqMWxWA8X85+Fp+/Rjch/XrugOmX9+p+ukpzxqlaMJLtDZHNffbpUe6FUkftA7M8uHoMtGSeT0DwgYlBDGP+czZkij2J0Gq0GRaECIHcafn8dTTpsNJuMGSguD16YHoyV9dQYzPS4C19w+rCTuJJGwt+AaKWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=urVghGpy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772727050; c=relaxed/simple;
+	bh=1q6rIizXuyYgUo7PEQpRErULcW8ElhJl1i4zMa6SjAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=heluR1IbMWWAoKTAsXnQhYpOVHQMKxQNfP2P8vTJm+p69W97+oOCR5hefizELlaFSA7TOBj1SJ34Nju8rjtNqh3AXcZXOrH/fxkQyCPY7VY8VvLFRmop8HKN6snWFw8AWe6rfjPcqLZ2Qx/wVranQ2PDYwKTePMfkdtlfruxuBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=clkkUYLw; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="urVghGpy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC0BC116C6;
-	Thu,  5 Mar 2026 16:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772727030;
-	bh=tycp5Wmt2PwmO071xa6900jmB4t73QUD2rRxZZNmfO4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=urVghGpy++UlJ7r1vG51Ri2bpxk9iXyoVvZ/JC/0JPFO9UKSNyOa7aZcFhGmH2arE
-	 Aykx7MSviOaak+J2uRdZd/ZKLKe5IFmzO7+3hkjzH9KXU0lI2veTo/BN0S+7ZhWWuX
-	 +TMGbF800AypgqIp5l9IY8s1GbZs5rSKdy+ZgQooTq0LahFun1EEcPglR4licABm/N
-	 ULSI9b/rBovvzLhru0qJg0a6q3EMutUEmmfzhSq8sdxWbUzwxzEhLuNWeC1vYN0c5b
-	 gy1EDiz9GC54Pr0ZJRHWf3uNoxs22QW+rLzxFw3wRiljSXvdyKp2nMAnwFG6pnKG2F
-	 5l8W3UAQ+1gig==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D903808200;
-	Thu,  5 Mar 2026 16:10:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="clkkUYLw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772727048; x=1804263048;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1q6rIizXuyYgUo7PEQpRErULcW8ElhJl1i4zMa6SjAM=;
+  b=clkkUYLwRvkOjwnO+J0Nbg3S02+G2jGYS4a7L86xw4/q1kwbhOE7rvAc
+   dmHfU5GDdgp4qaSNWENMuQ9MF08oTVse8/V0rpkn+YtEncfumHYvWatLl
+   fEqlBx2C2c0zI9DpR4Q7wSZu/wkxfg2+bTBampn/xz05IHrvCwS/aIMUI
+   ko15jM4EYlwR7ohOJSSZBqL4XOOzNu+7mNLEVqIPCrVVaRGGEYF7v9dff
+   rmWkqF6nPW8IwZ/+fiwL0URM0EIcE2CmWSnLaucrGEkirQZBwOzq0VQqW
+   Yibad6qVi2808FnZT+7K1wxANK1bZsRGSVlILcHO/ivtHNEDLgK/rDGco
+   g==;
+X-CSE-ConnectionGUID: UmyW40NIRP2FxHey8gDuIg==
+X-CSE-MsgGUID: I3s1Ef/wQqKSJLkQ5td8IQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="84903339"
+X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
+   d="scan'208";a="84903339"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 08:10:47 -0800
+X-CSE-ConnectionGUID: rxlLxNrzR9u5WN3YdIEWrA==
+X-CSE-MsgGUID: eVd40RDZRNCDSGOIdh3+nw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,103,1770624000"; 
+   d="scan'208";a="216998057"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 05 Mar 2026 08:10:45 -0800
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vyBHf-0000000021t-0gSs;
+	Thu, 05 Mar 2026 16:10:43 +0000
+Date: Thu, 5 Mar 2026 17:10:34 +0100
+From: kernel test robot <lkp@intel.com>
+To: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Sergey Matyukevich <geomatsi@gmail.com>,
+	Andy Chiu <andybnac@gmail.com>, Deepak Gupta <debug@rivosinc.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Charlie Jenkins <thecharlesjenkins@gmail.com>
+Subject: Re: [PATCH 1/4] selftests: riscv: Add definition of BIT() macro
+Message-ID: <202603051713.xu4BUyLe-lkp@intel.com>
+References: <20260305-fix_selftests-v1-1-61b62d23500b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v4 0/2] net: ipv6: fix panic when IPv4 route
- references
- loopback IPv6 nexthop and add selftest
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177272703078.3188128.539055376981723879.git-patchwork-notify@kernel.org>
-Date: Thu, 05 Mar 2026 16:10:30 +0000
-References: <20260304113817.294966-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260304113817.294966-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, idosch@nvidia.com, jiayuan.chen@shopee.com,
- davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260305-fix_selftests-v1-1-61b62d23500b@gmail.com>
 
-Hello:
+Hi Charlie,
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+kernel test robot noticed the following build errors:
 
-On Wed,  4 Mar 2026 19:38:12 +0800 you wrote:
-> syzbot reported a kernel panic [1] when an IPv4 route references
-> a loopback IPv6 nexthop object:
-> 
-> BUG: unable to handle page fault for address: ffff8d069e7aa000
-> PF: supervisor read access in kernel mode
-> PF: error_code(0x0000) - not-present page
-> PGD 6aa01067 P4D 6aa01067 PUD 0
-> Oops: Oops: 0000 [#1] SMP PTI
-> CPU: 2 UID: 0 PID: 530 Comm: ping Not tainted 6.19.0+ #193 PREEMPT
-> RIP: 0010:ip_route_output_key_hash_rcu+0x578/0x9e0
-> RSP: 0018:ffffd2ffc1573918 EFLAGS: 00010286
-> RAX: ffff8d069e7aa000 RBX: ffffd2ffc1573988 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> RBP: ffffd2ffc1573978 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: ffff8d060d496000
-> R13: 0000000000000000 R14: ffff8d060399a600 R15: ffff8d06019a6ab8
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffff8d069e7aa000 CR3: 0000000106eb0001 CR4: 0000000000770ef0
-> PKRU: 55555554
-> Call Trace:
->  <TASK>
->  ip_route_output_key_hash+0x86/0x1a0
->  __ip4_datagram_connect+0x2b5/0x4e0
->  udp_connect+0x2c/0x60
->  inet_dgram_connect+0x88/0xd0
->  __sys_connect_file+0x56/0x90
->  __sys_connect+0xa8/0xe0
->  __x64_sys_connect+0x18/0x30
->  x64_sys_call+0xfb9/0x26e0
->  do_syscall_64+0xd3/0x1510
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> 
-> [...]
+[auto build test ERROR on c107785c7e8dbabd1c18301a1c362544b5786282]
 
-Here is the summary with links:
-  - [net,v4,1/2] net: ipv6: fix panic when IPv4 route references loopback IPv6 nexthop
-    https://git.kernel.org/netdev/net/c/21ec92774d15
-  - [net,v4,2/2] selftests: net: add test for IPv4 route with loopback IPv6 nexthop
-    https://git.kernel.org/netdev/net/c/46c1ef0cfcea
+url:    https://github.com/intel-lab-lkp/linux/commits/Charlie-Jenkins-via-B4-Relay/selftests-riscv-Add-definition-of-BIT-macro/20260305-164838
+base:   c107785c7e8dbabd1c18301a1c362544b5786282
+patch link:    https://lore.kernel.org/r/20260305-fix_selftests-v1-1-61b62d23500b%40gmail.com
+patch subject: [PATCH 1/4] selftests: riscv: Add definition of BIT() macro
+config: riscv-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260305/202603051713.xu4BUyLe-lkp@intel.com/config)
+compiler: riscv64-linux-gnu-gcc (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603051713.xu4BUyLe-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603051713.xu4BUyLe-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from /usr/riscv64-linux-gnu/include/stdint.h:34,
+                    from /usr/lib/gcc-cross/riscv64-linux-gnu/14/include/stdint.h:9,
+                    from tools/testing/selftests/../../../tools/include/linux/types.h:7,
+                    from ./../../../../include/nolibc/std.h:19,
+                    from ./../../../../include/nolibc/nolibc.h:95,
+                    from <command-line>:
+>> /usr/riscv64-linux-gnu/include/bits/stdint-intn.h:27:19: error: conflicting types for 'int64_t'; have '__int64_t' {aka 'long int'}
+      27 | typedef __int64_t int64_t;
+         |                   ^~~~~~~
+   In file included from ./../../../../include/nolibc/std.h:16:
+   ./../../../../include/nolibc/stdint.h:17:29: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
+      17 | typedef   signed long long  int64_t;
+         |                             ^~~~~~~
+   In file included from /usr/riscv64-linux-gnu/include/stdint.h:37:
+>> /usr/riscv64-linux-gnu/include/bits/stdint-uintn.h:27:20: error: conflicting types for 'uint64_t'; have '__uint64_t' {aka 'long unsigned int'}
+      27 | typedef __uint64_t uint64_t;
+         |                    ^~~~~~~~
+   ./../../../../include/nolibc/stdint.h:16:28: note: previous declaration of 'uint64_t' with type 'uint64_t' {aka 'long long unsigned int'}
+      16 | typedef unsigned long long uint64_t;
+         |                            ^~~~~~~~
+   In file included from /usr/riscv64-linux-gnu/include/stdint.h:41:
+>> /usr/riscv64-linux-gnu/include/bits/stdint-least.h:28:25: error: conflicting types for 'int_least64_t'; have '__int_least64_t' {aka 'long int'}
+      28 | typedef __int_least64_t int_least64_t;
+         |                         ^~~~~~~~~~~~~
+   ./../../../../include/nolibc/stdint.h:30:23: note: previous declaration of 'int_least64_t' with type 'int_least64_t' {aka 'long long int'}
+      30 | typedef  int64_t      int_least64_t;
+         |                       ^~~~~~~~~~~~~
+>> /usr/riscv64-linux-gnu/include/bits/stdint-least.h:34:26: error: conflicting types for 'uint_least64_t'; have '__uint_least64_t' {aka 'long unsigned int'}
+      34 | typedef __uint_least64_t uint_least64_t;
+         |                          ^~~~~~~~~~~~~~
+   ./../../../../include/nolibc/stdint.h:31:22: note: previous declaration of 'uint_least64_t' with type 'uint_least64_t' {aka 'long long unsigned int'}
+      31 | typedef uint64_t     uint_least64_t;
+         |                      ^~~~~~~~~~~~~~
+>> /usr/riscv64-linux-gnu/include/stdint.h:51:33: error: conflicting types for 'int_fast64_t'; have 'long int'
+      51 | typedef long int                int_fast64_t;
+         |                                 ^~~~~~~~~~~~
+   ./../../../../include/nolibc/stdint.h:39:24: note: previous declaration of 'int_fast64_t' with type 'int_fast64_t' {aka 'long long int'}
+      39 | typedef  int64_t       int_fast64_t;
+         |                        ^~~~~~~~~~~~
+>> /usr/riscv64-linux-gnu/include/stdint.h:64:33: error: conflicting types for 'uint_fast64_t'; have 'long unsigned int'
+      64 | typedef unsigned long int       uint_fast64_t;
+         |                                 ^~~~~~~~~~~~~
+   ./../../../../include/nolibc/stdint.h:40:23: note: previous declaration of 'uint_fast64_t' with type 'uint_fast64_t' {aka 'long long unsigned int'}
+      40 | typedef uint64_t      uint_fast64_t;
+         |                       ^~~~~~~~~~~~~
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
