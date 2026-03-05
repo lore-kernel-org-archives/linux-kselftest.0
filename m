@@ -1,93 +1,174 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E65239E76
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 01:12:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772673152; cv=none; b=DD+VaR4fJm2KJ+PE1NYtyxrMH0TEtFYhebJSiTr0etdMsh4KSo1XH20QIls2/LuZTsYm9riSDfr2eUISkspnwgR5XvYU7r9NwII0RtInY/l4YKhj/PvNlm8NPmKH3+/wm2kY+JCrIQNk1lKnr2t3zbQZ2zPXhdpZgfCH20xIjwY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772673152; c=relaxed/simple;
-	bh=+fczjmJjwIzzNfnJro34b5Z2j36ZovU7gO1WprJ6x3Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k1rOk9DAfD4T9ezlZvpqtSsh26hndRzDfBR0+Eg/O+PsHvLLVitf5euQdhLl3Jh/gYCMiMSF55jkwT4SMRZCMIpKA+oA+DdQWN63TJLqoaTimF9b8m41KLsBUdBFrgU4modqQFNh/nwhDFKTP37ib7I6oXXAkvD8z+CpRpTl+2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xAbxzMTO; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2ECA6FC5
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 01:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772674303; cv=pass; b=EZVncFMeLt39vqNLImZFDbkYvC7Btv8s1lHdSJnPHRiA/6NZRagwf/guBaDWv3zrPy7Q16+NrvsjPLAHXHohPbF0VxnE/j37JVGrXUQql4slcY/e5H8FgRsn5/dAjnIgGrTYzA5XoRZ3p213Pbm4KOwpYTgQFay908BDOQa+lxQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772674303; c=relaxed/simple;
+	bh=FzeXFe0QvmpsSjZVScEEuXwGhL5+6ueJsl70Abgc3WI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=szU3YAAPm+bsVQc3XakrhknG9fVxA2l1FSM1ypNFk5KQlJOb8LVsIZgJLG9Yd9n9CfSCX0FMiTNMFGYGH1LygSj32YyGSmnz9QfNgV81OlnkXbCgXu+766YFShy4CtHCSsS7V8TjlkDikv3P+JLNP1wDYNvhjzXMp2DwtTT10bs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s9e8BU8R; arc=pass smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xAbxzMTO"
-Message-ID: <ce000648-6f4b-405a-9403-0e4570e7b6bc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772673149;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y5M/ymf0LUsYVhVKhDKK6AT0g7a7OiAXZVmWIxfOlCc=;
-	b=xAbxzMTO+uCh61IKAh2Z0dnEzpydpF2Sv/D19r+445Ch18x5nzLuI7+r8nJu5w7x1Ye53E
-	gj0FTF7Zi00+pXneP0ozSWPwdEX/tBmbqV4pLD3WeOc/uxaQNtRWEk8yYdYuOUjQLLFLEP
-	urUIkT0VGFzMBISNYCq2J2uqNfPtCFw=
-Date: Wed, 4 Mar 2026 17:12:23 -0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s9e8BU8R"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b8fd976e90cso947689966b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 17:31:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772674300; cv=none;
+        d=google.com; s=arc-20240605;
+        b=geYla2H354opSooCvBd5UHFZCgRWpdDlKsihBrbsP0YYo/0+W576b7iH7lo+k0aZXk
+         tBNP3AqUOoVT/pAIGJI14UfVdgoSdVroKjJqQjWgQc2/BT/V3X/UBMqG8XLccZhNilj+
+         FIZF5JERPZ1l8I1ORYmVwd9srW3mqCgEpFkL1wti/uH/J2uPmrLAPGo5qCYMjEndpP59
+         9BscXRBKN3gHTIgKTDfYXS74KDpSGMFFVs0lmc6ZiZisn1fGRHZ2nAAL/Yj2hkbN6yDu
+         ChclWopkWkwrgLfbY6EukpJX94Kf3ZSgkrMH8zMzD3EcoJvBUpctTs2uaHSRUQCqVHMC
+         CvqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=zjpbkErOHnmzrleuvB8p/5mk+s2hfkdeYZi5w75/lRM=;
+        fh=/sJEFbCcTP0w+HMY+koxZWva4I/fwM5FUS6SLeoaXkY=;
+        b=hq+8N3zfHS3C96H/30174twTw0SPX8NOiBQHgWsNCi3w9DReLC7c1/8rmw+UfWyY12
+         aPXSavm4Fu9paKEHfqvdTW7tcnLVTIJNAXW2hq8By3K8L/9wvGpV5ZVPiGGAqnUUZekx
+         umpVzfjatXggVZGtnhtVD8Tr2RGfPdjj3ywJZm8vDQCMWNx4dbnedthQFWcmW4DvYWZI
+         3smXO2reAbRE1Lw8NiCD1uqXNUxYenNQxvaahD5o+smqy8tNV9q361FAU9aFgv4hLFpp
+         TO/LSsK8k7jK69bA9OufrYxyfWoBSPiDDPl1O03YWjZR/cfadddUbyYRnkwxDSyDnvyI
+         kRIQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772674300; x=1773279100; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zjpbkErOHnmzrleuvB8p/5mk+s2hfkdeYZi5w75/lRM=;
+        b=s9e8BU8RLZJRDsFT+ivDFGoP7tvhrjXWq/QnrorauxGLn0LEH6VPaHP0PhZvyrrmzL
+         roEX45tT7KeZssj9UJ0MivCyBXjYGbvIy7heoOUf1OePAX5bzcOmZBVTW+eo2P+8K1WD
+         8ie33tO9NTmPUomn+uVoZ3KmOrn3q5C5vCGfzL1fLUKS5csI866FhioHlky6QVAyZYxy
+         8/nlhHyWsovT51RsqkGlDXEsmx4ejRWu0Yl5C9ij+W2YyJNEVFfcPFSLUswWyuFZOnPr
+         y/tP2oQTi2yvOG1tonYtdbIPZwUjkJpNLbvRTdKFUS039x1XpMBgCGndzjKREBS2owEH
+         KGuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772674300; x=1773279100;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zjpbkErOHnmzrleuvB8p/5mk+s2hfkdeYZi5w75/lRM=;
+        b=XQPXm5BZmbmMP2SzrPkUGJKN3LBb5OmU+LXwIqHz3OZ7b15Y6BByvI9doal/KbLWzt
+         wDG7jvF1cv/pCtSy/yYIP6XEA02XpfJusP84hyNdwTu3lWZxhOVEEyDW9omzoktiB/1I
+         XyD0WULd1rqy9dO7B5x1u+x/7nfD65ERYTiV4xC13vpgtQxeYUi4BHt46raycqdRKSUy
+         MOWCryjOLLWlXekwlQOUaqqd67/ZYK5eCgtoyIh2Mta1pjzVkP5nC4abwUxepcVBRilj
+         UvAdWhB+C5tvbbZQvRDWUceYFbq79br6pmZ7PXrWgydOosuXl3I2sRk9+goO8A4xHPOd
+         AflA==
+X-Forwarded-Encrypted: i=1; AJvYcCWAXK+2DKEHXC/XOQnfc/mes5UPA0GJ8fyRj9EWsv339JKt3Gn8z+rNaH2dNSYC7qTDJiFCfM1UWcGJrM7HC78=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUGJFvQmnswIkDjekDAyKNlo5koYlxkN5arnc/44Y3R8jyowtv
+	l+nqWcVPxT4AcUdK2TvqOYGzuL/bRwhAJKawdf5/W+lW/xaZyDlMMMUObBF/I4+0l0fJ13kfn9S
+	0aAkFrsbUQXFkEkQBjv8VyYnhojeVYAc21V0qaoWf
+X-Gm-Gg: ATEYQzymGeckqvxFr7WWKI0VdiaqPHPwJrl3u6Qr93zZGZFXdLS3zJkn5KFfRTxSEhR
+	XoBZ5sU+GpZ5+sDST7n0kK7UFKefoY6y07IheltPbezu3duqScRmvQcVBnjeZBjRHWkpwtv2mIQ
+	i9fTp2/nwpf7OXK0jIYUELd8RRSFXILGETzAQQrjbGuriIu5VjXyZq2ZEkYZw9dj1O864fr+mkw
+	iMH+vnx/bSfpnxH++qMDbBREt5+mwy3tQLt/phmyMqByTP8KBOf+hKuH3301ianEeQoNTdU0aiu
+	pHYi65WA/TO01oGe2TJxp/ma6szDE0PuYcyU7A==
+X-Received: by 2002:a17:907:97c4:b0:b87:117f:b6ed with SMTP id
+ a640c23a62f3a-b93f11d4fe9mr282867266b.21.1772674299780; Wed, 04 Mar 2026
+ 17:31:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v10 bpf-next 1/2] bpf: test_run: Fix the null pointer
- dereference issue in bpf_lwt_xmit_push_encap
-To: Leon Hwang <leon.hwang@linux.dev>, Feng Yang <yangfeng59949@163.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, posk@google.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260304094429.168521-1-yangfeng59949@163.com>
- <20260304094429.168521-2-yangfeng59949@163.com>
- <cc7b7d2a-9f7e-41ba-9010-dfbf592a0bbd@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <cc7b7d2a-9f7e-41ba-9010-dfbf592a0bbd@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260225210820.177674-1-wusamuel@google.com>
+In-Reply-To: <20260225210820.177674-1-wusamuel@google.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 4 Mar 2026 17:31:27 -0800
+X-Gm-Features: AaiRm52C5xBdZIqfueKu2tL60CZqMfP-hQL6ZTxgaS55rDUh5TRWZ_Zruir6wkY
+Message-ID: <CAG2Kctp1q1QtB1-JT2cgBsYu-WceV1YdSM1sSwNm8pyGtZQ6TA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 0/2] Add wakeup_source iterators
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/4/26 2:33 AM, Leon Hwang wrote:
->> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
->> index 178c4738e63b..565fe8cbcdc9 100644
->> --- a/net/bpf/test_run.c
->> +++ b/net/bpf/test_run.c
->> @@ -1156,6 +1156,20 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->>   		skb->ip_summed = CHECKSUM_COMPLETE;
->>   	}
->>   
->> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
->> +		if (ipv6_bpf_stub) {
->> +#if IS_ENABLED(CONFIG_IPV6)
->> +			dst_hold(&net->ipv6.ip6_null_entry->dst);
->> +			skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
->> +#endif
->> +		} else {
->> +			/* For CONFIG_IPV6=n, ipv6_bpf_stub is NULL */
->> +			pr_warn_once("Please test this program with the IPv6 module enabled\n");
->> +			ret = -EOPNOTSUPP;
->> +			goto out;
->> +		}
->> +	}
->> +
-> NIT: it would be more readable to handle the error path first.
-> 
-> if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-> 	if (!ipv6_bpf_stub) {
-> 		pr_warn_once("...");
-> 		ret = -EOPNOTSUPP;
-> 		goto out;
-> 	}
-> #if IS_ENABLED(CONFIG_IPV6)
-> 	dst_hold();
-> 	skb_dst_set();
-> #endif
+On Wed, Feb 25, 2026 at 1:08=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
+te:
+>
+> This patch series introduces BPF iterators for wakeup_source, enabling
+> BPF programs to efficiently traverse a device's wakeup sources.
+>
+> Currently, inspecting wakeup sources typically involves reading interface=
+s
+> like /sys/class/wakeup/* or debugfs. The repeated syscalls to query the
+> sysfs nodes is inefficient, as there can be hundreds of wakeup_sources, a=
+nd
+> each wakeup source have multiple stats, with one sysfs node per stat.
+> debugfs is unstable and insecure.
+>
+> The iterators utilize pre-existing wakeup_sources_walk_* functions to
+> traverse over the SRCU that backs the list of wakeup_sources.
+>
+> Changes in v5:
+>  - Add CORE definitions for *__local variables to fix s390 build per bpf-=
+ci
+>  - v4 link: https://lore.kernel.org/all/20260211235055.239024-1-wusamuel@=
+google.com/
+>
+> Changes in v4:
+>  - Proper init of variables in ws_iter_check_sleep_times() test per bpf-c=
+i
+>  - Remove PM patch since it's already part of rebase
+>  - v3 link: https://lore.kernel.org/all/20260124012133.2451708-1-wusamuel=
+@google.com/
+>
+> Changes in v3:
+>  - Update wakeup_sources_walk_start() to handle an empty list per bpf-ci
+>  - Simplify read of a struct's field in BPF program selftest per Andrii
+>  - Drop open coded iterators for wakeup_sources
+>  - Fix condition from !get_ws_iter_stream to get_ws_iter_stream in selfte=
+st
+>  - Read event_count instead of wakeup_count in selftest
+>  - v2 link: https://lore.kernel.org/all/20260108225523.3268383-1-wusamuel=
+@google.com/
+>
+> Changes in v2:
+>  - Guard BPF Makefile with CONFIG_PM_SLEEP to fix build errors
+>  - Update copyright from 2025 to 2026
+>  - v1 link: https://lore.kernel.org/all/20251204025003.3162056-1-wusamuel=
+@google.com/
+>
+>
+> Samuel Wu (2):
+>   bpf: Add wakeup_source iterator
+>   selftests/bpf: Add tests for wakeup_sources
+>
+>  kernel/bpf/Makefile                           |   3 +
+>  kernel/bpf/wakeup_source_iter.c               | 103 ++++++
+>  tools/testing/selftests/bpf/config            |   1 +
+>  .../bpf/prog_tests/wakeup_source_iter.c       | 300 ++++++++++++++++++
+>  .../selftests/bpf/progs/wakeup_source_iter.c  |  80 +++++
+>  5 files changed, 487 insertions(+)
+>  create mode 100644 kernel/bpf/wakeup_source_iter.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/wakeup_source_=
+iter.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/wakeup_source_iter.=
+c
+>
+> --
+> 2.53.0.473.g4a7958ca14-goog
+>
 
-I have adapted this change and applied. Thanks.
+Hi Andrii, any thoughts on this patchset? I've addressed your
+suggestion from v2 of this patchset regarding selftest, but nothing
+fundamental has changed since then.
 
+Thanks!
+Sam
