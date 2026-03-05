@@ -1,189 +1,222 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013058.outbound.protection.outlook.com [52.101.72.58])
+Received: from arcturus.nroach44.id.au (arcturus.nroach44.id.au [45.32.188.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C9D3783C4;
-	Thu,  5 Mar 2026 15:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772724334; cv=fail; b=WS2UH9CzYe9PuhxlrNnWVo2X+QXCslE7DbpPCicJhkomPJczNoYnhQo988kA6bPehAgPMIwERj3pUqxFsjd7R6LtQlr1YCH/LFQ3Lw2OdUmUHyfVVlldOke6QtDVaqVRgH6vuL+Ay1ICbvmWkL+MUkVZLnjSErbz/ojrACMmlGg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772724334; c=relaxed/simple;
-	bh=BJ9y5EjNotKUUMr3xUeHXhyAXvbd9EXyy5C1Wluilxk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ns21uo0gO2VIk3LtMCmbNP6IpVUHaUJZss14CpQOevFdLj2z4vz5DrfJujkz68eM/mz8sTI9R+KbQmd485bbe9DW6HQyokHEywlrUEXRqJlGD0K203XK1JqYqFVJxp/5rThr7uV1oievKew9e+fDPNKfJyfmiPTyHujmNjKTHzk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=R0zKqeA2; arc=fail smtp.client-ip=52.101.72.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBE137BE99;
+	Thu,  5 Mar 2026 15:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.32.188.33
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772724342; cv=none; b=l4+wipB9lVpDJfHdBCXds7Z8s6ZnvLimM8DQXRWmQvkUUv3xLCAlcltVo2+0j+QeDPpw1Yyjh1V64TsTf+1vQFhkf4Xvhac8kFdvJsK3LxwdehClYtUJU4sSwu5eW8Q+ISeOnu1bk7EIZrx3EDl3Yw8J4qAYoHtFNFAMOkJeXC0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772724342; c=relaxed/simple;
+	bh=YYARtrHKCTb0FOK3T5y+Ihj4HwkDUufhHFrwTteinjk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PtCXEyOEcsivj9Wc/3NtWbU4hWCBsZGW7Vfeov0lD8wl54uB9j7BFpuL4UhxJeg+7rmf6SWohvzrRDzzUpCI5RWVB3MahuMi78G1cMtM7cDrORYbPYKR8sRteqMm8wWqwyhnWP0WHvrzS4/cVbjpaNbijTho+VGEOPp/XA3nc2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nroach44.id.au; spf=pass smtp.mailfrom=nroach44.id.au; dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b=j93PyeIa; dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b=j93PyeIa; dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b=j6HEjp58; arc=none smtp.client-ip=45.32.188.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nroach44.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nroach44.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="R0zKqeA2"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IMQ7dPrKnNAadCvJ/TRWNxhleL6YmVWIgWpPmunZ7P6ZWPsiFIhVVNuFCCZ/YHJJ6/NDg6dhaT7hq/SZ2o9fYR3/qerHdF35arW/EdwGjraosUmACdQG1qPZpxPSSWHfUC2tqjnhA69gkqwDGUshgnb3XjtUoxig5psVN5LmQX9SBtU9xKpTJWeWbyhXhsZ/xYeMthLZDKP3ZjrrcBbE5xC7kw+jq75BLpXhYtJdbfKLJqEkSINBOR7ikcybDIQHBi/vqEg5wmc2TxA+Vi3O+5AjzJ3rOiEL9Qdc0PQ3yMFct+SOwA5S0X+MaS19HkxYORPZzdcZKBIe+pmsY9sBHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GiD8QosHTo1pYhsdB2T4PoPERyG1vEN0yuWZnLtNRE0=;
- b=mM3IdEwWOSM0AV3g12PsWQjnjCvfDeUBkNXLe57/kaE4QJlHWbvxAVBDQ3ZXHd3tVpBImIn54s1WRjRNBy9i926k34irMyIVrw2ExjXqZReXDAUBbwixYTsFr9moRqdzO9yFgZlSQKNxjGRYMDxxMgNs1CR2iKRf7Xln4CMETPxRZDYc81wMy77Dfun3ngFAaFWAPlq+lzy69LZJF7m498+khJjYFUmQ7t346Xxc0UEHN7ZAoOuKwf+NKROrb65wKQKA4/t/IDw5AHoKMFAHSCOvifbSZIYj2tD5lvq0N9zgzFuwJPVgZ4C7utESBa6IfESc09BscOojpr219oeoRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GiD8QosHTo1pYhsdB2T4PoPERyG1vEN0yuWZnLtNRE0=;
- b=R0zKqeA2WtZxOT+to0e63bEH6REjMKJm4l65INhU+q1fApkMO5tCp2p8dPVMAYqyfdQKiLYwROdOFMaeGsTdoaFa9YyEWJ9EQ4z7MywUS2SXzodXRdXFc6X+KSYu1Ap3nuaIayhycC9FN/st4JVBza+/u1JIxK0WecPbj0x6AEp69dyGIm/dBdj3upXSYVthFO8SvzA9wxpx7OvpZWjjcJGDwbmC8q7f3m8dtUF3e0pVfvM+rFmOfsfA56FB5ucurIY8IluA+LXTAQcWw8NJ/IO7Xye0A+kLZXH9Zz3D3SgDk6d+nwnbNPMQJzOe7iv6AL/W8m0R8KjzfwByz2zYDQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
- by AM9PR04MB8438.eurprd04.prod.outlook.com (2603:10a6:20b:411::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Thu, 5 Mar
- 2026 15:25:27 +0000
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9654.020; Thu, 5 Mar 2026
- 15:25:27 +0000
-Date: Thu, 5 Mar 2026 10:25:12 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Larysa Zaremba <larysa.zaremba@intel.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
-	Tushar Vyavahare <tushar.vyavahare@intel.com>,
-	Jason Xing <kernelxing@tencent.com>,
-	Ricardo B =?utf-8?B?LiBNYXJsaeKImsKucmU=?= <rbm@suse.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	linux-kselftest@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>
-Subject: Re: [PATCH net v5 4/9] ice: change XDP RxQ frag_size from DMA write
- length to xdp.frame_sz
-Message-ID: <aamgWISV_4FkxHag@lizhi-Precision-Tower-5810>
-References: <20260305111253.2317394-5-larysa.zaremba@intel.com>
- <20260305111253.2317394-5-larysa.zaremba@intel.com>
- <20260305150858.3910822-1-Frank.Li@nxp.com>
- <20260305150858.3910822-1-Frank.Li@nxp.com>
- <20260305151828.2zvcp7nemmt45iqa@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260305151828.2zvcp7nemmt45iqa@skbuf>
-X-ClientProxiedBy: PH0PR07CA0039.namprd07.prod.outlook.com
- (2603:10b6:510:e::14) To PA4PR04MB9366.eurprd04.prod.outlook.com
- (2603:10a6:102:2a9::8)
+	dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b="j93PyeIa";
+	dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b="j93PyeIa";
+	dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au header.b="j6HEjp58"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nroach44.id.au;
+	s=dYX2HNEqNNRL; t=1772723874;
+	bh=YYARtrHKCTb0FOK3T5y+Ihj4HwkDUufhHFrwTteinjk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=j93PyeIa/hxoYbwJlySesQT/hFW0bGnjxUp7PlaU1q9wLYvh5tZuSAvv70c9Xo97V
+	 i0SruMJ0Aqkg6uWPmI7WYOVKXJenYEdOYIWKtc3Spc7eBvxarkFKh8KHnB/tYFYWv/
+	 Ky/buNeoRpU30D5NW43F3c0QCIXrhM61fBeEYHJLtLW+stjkIaV5Bo7a70j6qppEuJ
+	 qVEGMPUNxHVlhOOTVilrGfhIJQxOi6A3uGZ/iNbaeysJGcCvVcpTvdwJm08RifXh5y
+	 DTErYcQmsuHkJKTw5r7BOKvp96+v/VzByzoz0Aj2h0iHWH+P5DdEAvAUFhJKsvWQ91
+	 NX9T1XyUjt9dQ==
+Received: from arcturus.nroach44.id.au (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by arcturus.nroach44.id.au (Postfix) with ESMTPS id 969113115A;
+	Thu,  5 Mar 2026 23:17:54 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nroach44.id.au;
+	s=dYX2HNEqNNRL; t=1772723874;
+	bh=YYARtrHKCTb0FOK3T5y+Ihj4HwkDUufhHFrwTteinjk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=j93PyeIa/hxoYbwJlySesQT/hFW0bGnjxUp7PlaU1q9wLYvh5tZuSAvv70c9Xo97V
+	 i0SruMJ0Aqkg6uWPmI7WYOVKXJenYEdOYIWKtc3Spc7eBvxarkFKh8KHnB/tYFYWv/
+	 Ky/buNeoRpU30D5NW43F3c0QCIXrhM61fBeEYHJLtLW+stjkIaV5Bo7a70j6qppEuJ
+	 qVEGMPUNxHVlhOOTVilrGfhIJQxOi6A3uGZ/iNbaeysJGcCvVcpTvdwJm08RifXh5y
+	 DTErYcQmsuHkJKTw5r7BOKvp96+v/VzByzoz0Aj2h0iHWH+P5DdEAvAUFhJKsvWQ91
+	 NX9T1XyUjt9dQ==
+Received: by arcturus.nroach44.id.au (Postfix, from userid 5555)
+	id 7C45E31155; Thu,  5 Mar 2026 23:17:54 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nroach44.id.au;
+	s=dYX2HNEqNNRL; t=1772723852;
+	bh=YYARtrHKCTb0FOK3T5y+Ihj4HwkDUufhHFrwTteinjk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=j6HEjp58CAncqr+uwXPGkZ8lbR369/LG+98D/0XTHkVG3l29sNkU52WgCB9M9dhew
+	 gfYeHT+jf9fW3OfG/GF2ck8167gHXSBgmfi6zT9ikR3LMg0qsPoY8nZSWjrMI8OJMj
+	 kMd1y8ytlCPRepikIB3G0QISj/p2xbEqBa0pK59UYEzty8JgqZBIuj16Yj6eh2Rwin
+	 RqmxUyGdqP+iWTSqkWn4TEleHa5tBEEY1MFUvIEGuDv8GfTrCrGQcMjfyPuSXM+3gd
+	 YedViadoD7BXyM4xh27Cob7Y7tDuZ5rBOkg4Zdw1yQSY4SCVwDPQ2Y427CbPT0C5YX
+	 UV5C2DMMj3FPw==
+Received: from [IPV6:2403:5814:4228:10:6097:a659:11f5:50c] (unknown [IPv6:2403:5814:4228:10:6097:a659:11f5:50c])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by arcturus.nroach44.id.au (Postfix) with ESMTPSA id 3DB73308D6;
+	Thu,  5 Mar 2026 23:17:30 +0800 (AWST)
+Message-ID: <9dfc93b5-8269-4c72-aedc-2a1d5311b4a5@nroach44.id.au>
+Date: Thu, 5 Mar 2026 23:17:28 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|AM9PR04MB8438:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87b89c9f-f0bd-4a22-9ea6-08de7acb6d8a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|19092799006|7416014|1800799024|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	kYETtvjEOb6lmG7A7V/IXP5P0/R0WEb4Iv4RxH06IWPnTovvrYMGc9W/sTfhY4kNbpbvEjGwIDhQuwtJe/2XGYbqL76lTJsjIfBPQjcUJGmLHEWdsomWF9MI0UkRmrT8N2r8hxcx6VWmUEa8EZq631q7IiyNesAGsWiTGvxSaspYYxRg6xBE/IvmEI/AkzKXnroTnf54DKqQRW2SDWE1DyjKiEP+TBiVdWhhU131OtMEbroX0sooi812pZvFVZzyZunmr0XIlsuP2cMIS59zVKR6EeWUX5JaHi4sqQLidDdiJDMYUO7wgc5EoCao7Rj7+EJVfawrDp+5HnPYNWpNTFiGzCP1crfhzGRGYgFbJh6IG+c6L4FdEckN69CTOMSKNbtarICTmmT02vSxB1Q9DqZikIgnQvp6kY1kOpW5KxGlkzi64oDTmsYurIKYAmm5UYQW0L707csh3Jy+snu6Mdu7eY3TDS2ETAwIHvbBdyAqtqTgXcF5adIE79ARMKT2UZESfhGfZN9vTDYSJzlGzp97aOce173jDVqZXknQfOkeJX1Mv8iAobzX8Zg/AtgdqdpsH0iwV4iOHkPbuXFWgV+X8v2pdn+dHhSFThuE2Dbuq7SqsI1vL1jWvlG83ss8EerLptJ/svgnm0svweSCc96x39DK6dMC6cIY15nmS12Xl0rMhWIdQesZkFwSBrhynYQVFEqOelhQxWRS8NKK8FBURsjUshsNDlqlw+8c7fzyNl8hIZX3sC0x16p3RHN0p0NPP+ygZI4/6SXE3DawkxFdgNFSWvUTzxaNkil1UhI=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(19092799006)(7416014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Xts4ZihOis0B6+BUquxfc7sjN2a8Lh7LQqiurPhHPI0TyU2M8cB3RjPZrG0B?=
- =?us-ascii?Q?s97xQGixT2QcPg5280l0gC0YPdyOo+zyrqo5uMv+0dElabSHqG3Ncok/vTrm?=
- =?us-ascii?Q?syJ7+Nh2TuvCoPER+g/QzR1aguvCFpCgFHKMu8h4gHiMxh7Mexmtb4Y1SRCd?=
- =?us-ascii?Q?Cl8WBntNW1VDUn575IT/6KlnfF0ER99T37mk/NKPTqfJ688VE4J37Ob6Fvq+?=
- =?us-ascii?Q?iID05WABjaMCi4dQH/b0IeicesiU42MALcp1WmN6gAMXpItkL/6/uZ13KJp/?=
- =?us-ascii?Q?Ea3E/BffxgahX3wlrsz3I07+BQJPsEVGUTyk5HQxe2z4bWpgEXzjb67SArv4?=
- =?us-ascii?Q?LIieNXSv0kNDOTDmf3YZc0zmKrWJVwHWnr0zQorAyJipPT35JFJXzZHSsfVf?=
- =?us-ascii?Q?w+bU3RXE6U1DCiQKM8LachU65nO6TDT5ZnQ2+UEh96H+WFYqoz6S4/zWnUYJ?=
- =?us-ascii?Q?AVO8m1bynJpaG12sJXYKvfjSkB2XqKStRRep3/E0o3DdZHVx1TjoHQjo+I2u?=
- =?us-ascii?Q?2wkVxtPkyNrA7sjAg0aTBg+a6p7Z8NsVryG6+LMhkQOdcu8Z2hAVhM5nsStl?=
- =?us-ascii?Q?O/Qa4xGW36e79D+MS+bNnbnfpFTFHnXEZf7UK5qJuB3jgLMP77r24YInrLVd?=
- =?us-ascii?Q?4d1yb0NDO8XbR8AC1TP7M7DFrGPV7cQJtRGOGeBClDKxV+b60Tyr8k8EsvbS?=
- =?us-ascii?Q?SY9vk+kThdVByqQNXkh9kxC9Mcmc5JppEiO6X71w/OeHFX6sC3yH88wxoAi2?=
- =?us-ascii?Q?Drby4S+ZMnWeSiQ20UB35K/5IisuhmffA9YYl+Qv1nL40YeIO/EOBp+PDdKQ?=
- =?us-ascii?Q?RaLAIsrmi2jVQhVplJtNXULWUAryutaPV4aoH/Bdssb9d6dVXQshU/pGweuB?=
- =?us-ascii?Q?8RTLqVlU8niSBYJ8wD3zgkmWdigOjeQBBsQ8NjQ6Rwdv+x0ZcNs2+iYo9BmJ?=
- =?us-ascii?Q?aGOyZpe7OOkm+8rVDRxq8lzZGoTgfZQBRsOauJ+eJr+AbY+Tk1qZJj8Nj+LO?=
- =?us-ascii?Q?b7YgoelFSzEOu+Lsx5Ct7L7mbZJNyEzMmAi8uICDYHT7nR9tJgI9ZvpNY5FF?=
- =?us-ascii?Q?HQGKxDc/H0ebVuW/P8ZeY1QMGuAs73yAzh5HTgZjlEj0cjl/LWs37UR+eHV4?=
- =?us-ascii?Q?DgexBuZdl9oAWvS6g0/T1Icc/MOgwiWuHlz5s4IVUAlRZ+drtYKB3V9HFYNT?=
- =?us-ascii?Q?EbyQG8vcsF7xnObX/J52GFJP2tq13U6tllmqxkdAf09/T84VIGNa3cvAUqYb?=
- =?us-ascii?Q?R4MfS7MfNE4v76sitFmZPshVPuP0jay069yfcXa3LG8sPWL97jtFroAN0JXE?=
- =?us-ascii?Q?kVSXE5GwKoYOaCHrNsrIBrzisxZqCKys++eg8Lfm6tCUtIQ/hdK/sXBi0uNM?=
- =?us-ascii?Q?LuMrr8lSsSQFN2AhottyUNa1k3uz4uZ5gqDL/V70p0eGFiRn+eVpOfxgk7+d?=
- =?us-ascii?Q?xCq1rmHa0/wuY5xuUWNQZ5EJAn4DvDQctAjyB9GAPX7vrWgyxg7woxn073h4?=
- =?us-ascii?Q?dtcW+9KkRQO5Rq+c+a/MbZ0pwzY7kI7GLHAmf5tyOFi4JtkEJ5Y0bGZbzgVI?=
- =?us-ascii?Q?z3LR8reG96smeCar9RxClnycmjRBoTL5xUL4noYH3e9hYRLaVJPLARsATWIU?=
- =?us-ascii?Q?JYb8WumFKT//gjyqzVmI3nhlmQD/QZZQguSVONhBp1Pg4VqTWXVfZSmhtVRU?=
- =?us-ascii?Q?XYt9HXugxkvqHKhwlU7F7s+reps1EFFywKN5fZPkBgbl+NpS?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87b89c9f-f0bd-4a22-9ea6-08de7acb6d8a
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2026 15:25:27.5133
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EhoImfD+wNsNesSvS8w8vmC+RUpwkWvlrl5zcQTKQzbB4bIcwFzsYgDa/GMvjX9exXXgRejY4TNCkGpFhQYK/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8438
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 00/14] sparc64: vdso: Switch to the generic vDSO
+ library
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Andy Lutomirski <luto@kernel.org>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
+ <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>,
+ John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King
+ <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>,
+ Thomas Gleixner <tglx@kernel.org>, Christophe Leroy <chleroy@kernel.org>
+Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+ Arnd Bergmann <arnd@kernel.org>
+References: <20260304-vdso-sparc64-generic-2-v6-0-d8eb3b0e1410@linutronix.de>
+Content-Language: en-US
+From: Nathaniel Roach <nroach44@nroach44.id.au>
+In-Reply-To: <20260304-vdso-sparc64-generic-2-v6-0-d8eb3b0e1410@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 05, 2026 at 05:18:28PM +0200, Vladimir Oltean wrote:
-> Hi Frank,
+No (new) issues seen on SPARC T5-2.
+
+On 4/3/26 15:48, Thomas Weißschuh wrote:
+> The generic vDSO provides a lot common functionality shared between
+> different architectures. SPARC is the last architecture not using it,
+> preventing some necessary code cleanup.
 >
-> On Thu, Mar 05, 2026 at 10:08:56AM -0500, Frank Li wrote:
-> > From: Frank Li (AI-BOT) <frank.li@nxp.com>
-> >
-> > > 		if (ring->xsk_pool) {
-> > > -			rx_buf_len =
-> > > -				xsk_pool_get_rx_frame_size(ring->xsk_pool);
-> > > +			u32 frag_size =
-> > > +				xsk_pool_get_rx_frag_step(ring->xsk_pool);
-> >
-> > AI: Variable declaration should be at the start of the block, not inline.
-> > Move `u32 frag_size;` to the top with other declarations.
-> >
-> > Although it allow declear varible at any place now, still perfer AI's
-> > suggest here.
-> >
-> > Frank
+> Make use of the generic infrastructure.
 >
-> A "block" or a "compound statement" in C is the piece of code encircled
-> by { and }. We _do_ have them, so the "u32 frag_size" variable _is_
-> declared at the start of that block, as a matter of fact. There is
-> nothing wrong here, the variable placement is not arbitrary.
-
-Yes, sorry, I missed think "-" at patch when I am reviewing AI's result.
-
+> Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
+> https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
 >
-> Which AI tool signalled this?
-
-Cody, backed should claude.
-
-Frank
+> SPARC64 can not map .bss into userspace, so the vDSO datapages are
+> switched over to be allocated dynamically.
+>
+> Tested on a Niagara T4 and QEMU.
+>
+> This has emantic conflicts with
+> * "vdso: Reject absolute relocations during build" [0]
+> * "vDSO: Respect COMPAT_32BIT_TIME" [1]
+>
+> But I expect both other serieses to need more discussions.
+>
+> [0] https://lore.kernel.org/lkml/20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de/
+> [1] https://lore.kernel.org/lkml/20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de/
+>
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Tested-by: Nathaniel Roach <nroach44@nroach44.id.au> # SPARC T5-2
+> ---
+> Changes in v6:
+> - Provide statically allocated during early boot to avoid canges to the rng core
+> - Use non-compound data pages
+> - Reword commit messages
+> - Rebase on v7.0-rc1
+> - Link to v5: https://lore.kernel.org/r/20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de
+>
+> Changes in v5:
+> - Merge the patches for 'struct page' mapping and dynamic allocation
+> - Zero out newly-allocated data pages
+> - Pick up review tags
+> - Link to v4: https://lore.kernel.org/r/20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de
+>
+> Changes in v4:
+> - Rebase on v6.18-rc1.
+> - Keep inclusion of asm/clocksource.h from linux/clocksource.h
+> - Reword description of "s390/time: Set up vDSO datapage later"
+> - Link to v3: https://lore.kernel.org/r/20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de
+>
+> Changes in v3:
+> - Allocate vDSO data pages dynamically (and lots of preparations for that)
+> - Drop clock_getres()
+> - Fix 32bit clock_gettime() syscall fallback
+> - Link to v2: https://lore.kernel.org/r/20250815-vdso-sparc64-generic-2-v2-0-b5ff80672347@linutronix.de
+>
+> Changes in v2:
+> - Rebase on v6.17-rc1
+> - Drop RFC state
+> - Fix typo in commit message
+> - Drop duplicate 'select GENERIC_TIME_VSYSCALL'
+> - Merge "sparc64: time: Remove architecture-specific clocksource data" into the
+>    main conversion patch. It violated the check in __clocksource_register_scale()
+> - Link to v1: https://lore.kernel.org/r/20250724-vdso-sparc64-generic-2-v1-0-e376a3bd24d1@linutronix.de
+>
+> ---
+> Arnd Bergmann (1):
+>        clocksource: remove ARCH_CLOCKSOURCE_DATA
+>
+> Thomas Weißschuh (13):
+>        vdso/datastore: Reduce scope of some variables in vvar_fault()
+>        vdso/datastore: Drop inclusion of linux/mmap_lock.h
+>        vdso/datastore: Allocate data pages dynamically
+>        sparc64: vdso: Link with -z noexecstack
+>        sparc64: vdso: Remove obsolete "fake section table" reservation
+>        sparc64: vdso: Replace code patching with runtime conditional
+>        sparc64: vdso: Move hardware counter read into header
+>        sparc64: vdso: Move syscall fallbacks into header
+>        sparc64: vdso: Introduce vdso/processor.h
+>        sparc64: vdso: Switch to the generic vDSO library
+>        sparc64: vdso2c: Drop sym_vvar_start handling
+>        sparc64: vdso2c: Remove symbol handling
+>        sparc64: vdso: Implement clock_gettime64()
+>
+>   arch/sparc/Kconfig                         |   3 +-
+>   arch/sparc/include/asm/clocksource.h       |   9 -
+>   arch/sparc/include/asm/processor.h         |   3 +
+>   arch/sparc/include/asm/processor_32.h      |   2 -
+>   arch/sparc/include/asm/processor_64.h      |  25 --
+>   arch/sparc/include/asm/vdso.h              |   2 -
+>   arch/sparc/include/asm/vdso/clocksource.h  |  10 +
+>   arch/sparc/include/asm/vdso/gettimeofday.h | 184 ++++++++++++++
+>   arch/sparc/include/asm/vdso/processor.h    |  41 ++++
+>   arch/sparc/include/asm/vdso/vsyscall.h     |  10 +
+>   arch/sparc/include/asm/vvar.h              |  75 ------
+>   arch/sparc/kernel/Makefile                 |   1 -
+>   arch/sparc/kernel/time_64.c                |   6 +-
+>   arch/sparc/kernel/vdso.c                   |  69 ------
+>   arch/sparc/vdso/Makefile                   |   8 +-
+>   arch/sparc/vdso/vclock_gettime.c           | 380 ++---------------------------
+>   arch/sparc/vdso/vdso-layout.lds.S          |  26 +-
+>   arch/sparc/vdso/vdso.lds.S                 |   2 -
+>   arch/sparc/vdso/vdso2c.c                   |  24 --
+>   arch/sparc/vdso/vdso2c.h                   |  45 +---
+>   arch/sparc/vdso/vdso32/vdso32.lds.S        |   4 +-
+>   arch/sparc/vdso/vma.c                      | 274 ++-------------------
+>   include/linux/clocksource.h                |   6 +-
+>   include/linux/vdso_datastore.h             |   6 +
+>   init/main.c                                |   2 +
+>   kernel/time/Kconfig                        |   4 -
+>   lib/vdso/datastore.c                       |  97 +++++---
+>   27 files changed, 375 insertions(+), 943 deletions(-)
+> ---
+> base-commit: f02e02079ac56b44ff89d4c2189cf7185ab794f3
+> change-id: 20250722-vdso-sparc64-generic-2-25f2e058e92c
+>
+> Best regards,
