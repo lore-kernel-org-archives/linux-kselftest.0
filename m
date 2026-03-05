@@ -1,284 +1,159 @@
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A40534BA4B;
-	Thu,  5 Mar 2026 21:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672BA352C35;
+	Thu,  5 Mar 2026 21:10:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772744640; cv=none; b=kZDDHZBBkllozZB2c7jILU4R7QxE9ZkMiQ2XYOIAmNaG7K1IUTuEVQTBED4jcT1GyDuhgSZfhvUC+1+CFJBicdkjGrpEq8WmgFdYkV9yMvreE0dGaNOXYUUmPctMJXDw1CP7cDnLsJSQQRJXyBJbvIrRo/eCksHSkdLfpSXZWpQ=
+	t=1772745032; cv=none; b=OPSBSPj8/7Q/daaPBmyFFDZ0wbvoXYzeqv1zb1hT4vbp3GFxc6Wz1z9kFwwd1dARsw/4wXEvB5S9BVoD0amTfDwO99+0XXz15qi1JHl3SQzWfYfFBPpAYb/3+wuaTAmuinGCXAP18eBMQX1uJZwWrO7xSjKGkzgY0dhvoFUCExg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772744640; c=relaxed/simple;
-	bh=ajba8rpFeSFjqa5KG8RXrm1I4HwjDwK0ae4x18tOu10=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=PHZPfITd3hZfEDk3vl7PoQulq+vRnaraMrPr/tazv8s4Bx6aoTnVlbWUUCgGcablsJRIOfiNzdTBqoPDtCIb9gim7G3ltw/u7bny9jQ5XPDnEx1+4563G/bmUvExs1caMFdGIAAdNU7gMtyIbtjVSIllLwIRgFhMS/GQzOSvaC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=GRZjokw8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tko4c20R; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
+	s=arc-20240116; t=1772745032; c=relaxed/simple;
+	bh=mWnlCBPFy8iSy+Jncr+afNPVQGlHEW/rXWuCWK74e2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WSbnHEb+m9Wt+wyBxo/ODcfhdA83yClTjkWOlkhPGOSUtNhhTIpRKV9xMpYlD9gAi4keJ+3r29jUz5q/ohymTt8qfuBuxwoVPCx+eRKG80mmvGHdSY2BRz8GJK0h/6ul+tunKsTu7GwuszrK249zw7od4tNjQxjfZ6Bc+Mzmw1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=DLsavV2R; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="GRZjokw8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tko4c20R"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 252C91300CC5;
-	Thu,  5 Mar 2026 16:03:54 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Thu, 05 Mar 2026 16:03:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
-	 h=cc:cc:content-id:content-transfer-encoding:content-type
-	:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to; s=fm2; t=1772744633; x=1772751833; bh=4acJxYys885P1kZExhCla
-	G7wmjnaUlLNMpGvlOc6Dh4=; b=GRZjokw84k3XuIZ33jvcwb3AaqZ0BvmceJU4W
-	VvMm+wCNPqjtIUqX3XPxtMGHQB0SPfZuztaw5IXDKlspPCj783goEmDjkJG+yWe3
-	laX9cFYZG3/vYJVQKD19wNROnI8eFUcSOZmEkcbw6VdNbhBU/cCm1cTjtQGCP/jU
-	Qg5i+suqIBfVPKTvJfhMlPdj68TtJqoeWBWCyXqXdzhCO/f5DuUx5uxRtJ5I1YPr
-	OJYg6V5ZuipREcyekfdPvMrlCKp/XuJCdODbCLzu3WYr+TaD3PY7vLE8txnnPBCH
-	VxY3KiQ9bVbvKn6myU6je9Dz7qYJ+ja9ssDStl0XUrwPoyU5w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-id
-	:content-transfer-encoding:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1772744633; x=1772751833; bh=4acJxYys885P1kZExhClaG7wmjnaUlLNMpG
-	vlOc6Dh4=; b=tko4c20R9D/tnhWb5kg+OcfhEJBH4zEgRHJJM0DTmdQ5q065Wrt
-	l3b7BQfqWpKhusRh9rqmkcqKZiTefB0B5ed8fgE83kt0iVGTaAWK0t5S+2/GENmw
-	JzPO6ZJkqjbUaehtSzApZtssQeOl+fjmCyWoaoV4YpEK1kRotwNYnXXFBreHPMZ0
-	R6dBlZyuOGNxO7oO7PCBBZiMRTkcitSwNv9BuBUZ7IdFYshz6B9CtMYHIbUerDnJ
-	ax+6HBGE2E1Ydy4/Q5/eszqp3Mzfci12x2O1FMYXcUC4XlCdfvRFaBHSNlxSfDGI
-	uQ2GY4Iha6KJF5auvDMjSpjPBUNTeByQrBg==
-X-ME-Sender: <xms:uO-pafKTTkLJfcNuaQfy8ByO5VQWHhLuMuzjNnHl8VzF2Uk5C-IBhg>
-    <xme:uO-paVcOcrB8KeeUr0uzwsjeqUXktgJ0gTXq0IeHj1UPccYR56gti92LvCjSHsLxd
-    YUG-fg_4fq-n-vMeHZqlr5HneL2Yw0iszS3Edknd4_-WLKn2ac1_e0>
-X-ME-Received: <xmr:uO-paWaieWA2ZRkvj2UV-JmSro39q73GJBSaGho2p3AiBR8zUHkC3xn4TxSR9zLpqRq-fg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvieejgedvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephffvvefujghfofggtgfgfffksehtqhertdertddvnecuhfhrohhmpeflrgihucgg
-    ohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnhgvtheqnecuggftrfgrthhtvg
-    hrnhepueffvedvvdefudejfeeuudfgtdfgudettdevfeeileffhffghfdtjeekhfeitdek
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehjvhesjhhvohhssghurhhghhdrnhgvthdpnhgs
-    pghrtghpthhtohepfedvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehrrgiioh
-    hrsegslhgrtghkfigrlhhlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
-    ohhfthdrnhgvthdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpth
-    htohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohgrmhgrkhhi
-    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmh
-    grihhlrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhrghdp
-    rhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohephh
-    grohhluhhosehgohhoghhlvgdrtghomh
-X-ME-Proxy: <xmx:uO-paVXf5v6uE9WfSbjKDRt83GOqG6svuZeRN-hHIfqPv9Qmkn18Jw>
-    <xmx:uO-paUCS4CoEL15ki9YSBwTMTCBC7KZ01wg6taxlNR5P1CP8-DG_iQ>
-    <xmx:uO-paUB104dISLASCy54teg5wRUvgXHZatWVq8h41ZHgvQqJHy444g>
-    <xmx:uO-paTqC1XEEWGelf3A7DfC1PsbJ6RFi8VBj-BR6-VZKODlqnvBXyQ>
-    <xmx:ue-paVLe7-bpVBQJWIq6C0IqHFq-HPTy1OYFo3i1X4euHX9w38FK6a9k>
-Feedback-ID: i53714940:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 5 Mar 2026 16:03:52 -0500 (EST)
-Received: by famine.localdomain (Postfix, from userid 1000)
-	id 4B3549FCB4; Thu,  5 Mar 2026 13:03:51 -0800 (PST)
-Received: from famine (localhost [127.0.0.1])
-	by famine.localdomain (Postfix) with ESMTP id 47C419FC39;
-	Thu,  5 Mar 2026 13:03:51 -0800 (PST)
-From: Jay Vosburgh <jv@jvosburgh.net>
-To: Nikolay Aleksandrov <razor@blackwall.org>
-cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
-    jiayuan.chen@shopee.com,
-    syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
-    Andrew Lunn <andrew+netdev@lunn.ch>,
-    "David S. Miller" <davem@davemloft.net>,
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-    Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-    Daniel Borkmann <daniel@iogearbox.net>,
-    Jesper Dangaard Brouer <hawk@kernel.org>,
-    John Fastabend <john.fastabend@gmail.com>,
-    Stanislav Fomichev <sdf@fomichev.me>,
-    Andrii Nakryiko <andrii@kernel.org>,
-    Martin KaFai Lau <martin.lau@linux.dev>,
-    Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-    Yonghong Song <yonghong.song@linux.dev>,
-    KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-    Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-    Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-    Clark Williams <clrkwllms@kernel.org>,
-    Steven Rostedt <rostedt@goodmis.org>, Jussi Maki <joamaki@gmail.com>,
-    linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-    linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-In-reply-to: <aahsuPt7cY8LxETN@penguin>
-References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
- <20260304074301.35482-2-jiayuan.chen@linux.dev> <aahWymAi_CtRG0gJ@penguin>
- <1293120.1772645248@famine> <aahsuPt7cY8LxETN@penguin>
-Comments: In-reply-to Nikolay Aleksandrov <razor@blackwall.org>
-   message dated "Wed, 04 Mar 2026 19:32:40 +0200."
-X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="DLsavV2R"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
+	Content-Type; bh=5iY5tkbgE71f/1yLuiO8l9s0HnuaGaMfjmHUKuv+0Vk=; b=DLsavV2RjjJS
+	ixmqd/byHBFy5qQLEK60SqMLz7aUmYeNujmN4mbBhwPT5hMlVksKk9OtHk4UYaTWgC/Okr4pSW2VR
+	6loSTS8InFaCjZSLmQkKLQxZKwkyBBNaJ+ifDrXnqLChy2dyqdeth0hsehfT7slgbXjUhmbB7K2vw
+	3Ch/AW/VZc2CxHlgQ9+Ih04fzmdA/8NpicpGv/9X0Z9YRtjIG4MMLFu/yd0xZfK4abL7aif/GUM3o
+	c5c0x2EltLjeKUQefdFEWXxv03NeOq7yNx8KJf6iqaV0wgxWmXbdkZOvbhiBBYi10wkXtS8q5V+WR
+	odhRKH+zAll9iPER/N8N1A==;
+Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
+	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aleksey.oladko@virtuozzo.com>)
+	id 1vyFvx-001doX-0z;
+	Thu, 05 Mar 2026 22:10:08 +0100
+Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 625LA9Bc515326
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Thu, 5 Mar 2026 21:10:09 GMT
+Received: (from root@localhost)
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 625LA1Xj515311;
+	Thu, 5 Mar 2026 21:10:01 GMT
+From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+To: "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>, Nir Dotan <nird@mellanox.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Subject: [PATCH v2] selftests: net: forwarding: fix IPv6 address leak in cleanup
+Date: Thu,  5 Mar 2026 21:10:00 +0000
+Message-ID: <20260305211000.515301-1-aleksey.oladko@virtuozzo.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1356527.1772744631.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Mar 2026 13:03:51 -0800
-Message-ID: <1356528.1772744631@famine>
+Content-Transfer-Encoding: 8bit
 
-Nikolay Aleksandrov <razor@blackwall.org> wrote:
+Several forwarding tests (e.g., gre_multipath.sh) initialize both IPv4
+and IPv6 addresses using simple_if_init, but only clean up IPv4
+in simple_if_fini. This leaves stale IPv6 addresses on the interfaces,
+which causes subsequent tests to fail when they encounter unexpected
+address configuration.
 
->On Wed, Mar 04, 2026 at 09:27:28AM -0800, Jay Vosburgh wrote:
->> Nikolay Aleksandrov <razor@blackwall.org> wrote:
->> =
+The issue can be reproduced by running tests in sequence:
+  # run_kselftest.sh -t net/forwarding:ipip_hier_gre.sh
+  # run_kselftest.sh -t net/forwarding:min_max_mtu.sh
+  TAP version 13
+  1..1
+  # timeout set to 0
+  # selftests: net/forwarding: min_max_mtu.sh
+  # TEST: ping                                                          [ OK ]
+  # TEST: ping6                                                         [ OK ]
+  # TEST: Test maximum MTU configuration                                [ OK ]
+  # TEST: Test traffic, packet size is maximum MTU                      [FAIL]
+  #       Ping6, packet size: 65487 succeeded, but should have failed
+  # TEST: Test minimum MTU configuration                                [ OK ]
+  # TEST: Test traffic, packet size is minimum MTU                      [ OK ]
+  not ok 1 selftests: net/forwarding: min_max_mtu.sh # exit=1
 
->> >On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
->> >> From: Jiayuan Chen <jiayuan.chen@shopee.com>
->> >> =
+Fix this by removing the unused IPv6 argument from simple_if_init in
+tests that don't use IPv6 (gre_multipath.sh, ipip_lib.sh), and by
+adding the missing IPv6 argument to simple_if_fini in tests that
+use IPv6 (gre_multipath_nh.sh, gre_multipath_nh_res.sh).
 
->> >> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NU=
-LL
->> >> check. rr_tx_counter is a per-CPU counter only allocated in bond_ope=
-n()
->> >> when the bond mode is round-robin. If the bond device was never brou=
-ght
->> >> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
->> >> =
-
->> >> The XDP redirect path can reach this code even when the bond is not =
-up:
->> >> bpf_master_redirect_enabled_key is a global static key, so when any =
-bond
->> >> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
->> >> interception is enabled for all bond slaves system-wide. This allows=
- the
->> >> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
->> >> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
->> >> reached on a bond that was never opened.
->> >> =
-
->> >> Fix this by allocating rr_tx_counter unconditionally in bond_init()
->> >> (ndo_init), which is called by register_netdevice() and covers both
->> >> device creation paths (bond_create() and bond_newlink()). This also
->> >> handles the case where bond mode is changed to round-robin after dev=
-ice
->> >> creation. The conditional allocation in bond_open() is removed. Sinc=
-e
->> >> bond_destructor() already unconditionally calls
->> >> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate a=
-t
->> >> ndo_init, free at destructor.
->> >> =
-
->> >> Note: rr_tx_counter is only used by round-robin mode, so this
->> >> deliberately allocates a per-cpu u32 that goes unused for other mode=
-s.
->> >> Conditional allocation (e.g., in bond_option_mode_set) was considere=
-d
->> >> but rejected: the XDP path can race with mode changes on a downed bo=
-nd,
->> >> and adding memory barriers to the XDP hot path is not justified for
->> >> saving 4 bytes per CPU.
->> >> =
-
->> >> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to =
-slave device")
->> >> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
->> >> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GA=
-E@google.com/T/
->> >> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
->> >> ---
->> >>  drivers/net/bonding/bond_main.c | 19 +++++++++++++------
->> >>  1 file changed, 13 insertions(+), 6 deletions(-)
->> >> =
-
->> >
->> >IMO it's not worth it to waste memory in all modes, for an unpopular m=
-ode.
->> >I think it'd be better to add a null check in bond_rr_gen_slave_id(),
->> >READ/WRITE_ONCE() should be enough since it is allocated only once, an=
-d
->> >freed when the xmit code cannot be reachable anymore (otherwise we'd h=
-ave
->> >more bugs now). The branch will be successfully predicted practically =
-always,
->> >and you can also mark the ptr being null as unlikely. That way only RR=
- takes
->> >a very minimal hit, if any.
->> =
-
->> 	Is what you're suggesting different from Jiayuan's proposal[0],
->> in the sense of needing barriers in the XDP hot path to insure ordering=
-?
->> =
-
->> 	If I understand correctly, your suggestion is something like
->> (totally untested):
->> =
-
->
->Basically yes, that is what I'm proposing + an unlikely() around that
->null check since it is really unlikely and will be always predicted
->correctly, this way it's only for RR mode.
-
-	Jiayuan,
-
-	Do you agree that the patch below (including Nikolay's
-suggestion to add "unlikely") resolves the original issue without memory
-waste, and without introducing performance issues (barriers) into the
-XDP path?
-
-	-J
-
-
->> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond=
-_main.c
->> index eb27cacc26d7..ac2a4fc0aad0 100644
->> --- a/drivers/net/bonding/bond_main.c
->> +++ b/drivers/net/bonding/bond_main.c
->> @@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding *bond)
->>  static int bond_open(struct net_device *bond_dev)
->>  {
->>  	struct bonding *bond =3D netdev_priv(bond_dev);
->> +	u32 __percpu *rr_tx_tmp;
->>  	struct list_head *iter;
->>  	struct slave *slave;
->>  =
-
->> -	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_count=
-er) {
->> -		bond->rr_tx_counter =3D alloc_percpu(u32);
->> -		if (!bond->rr_tx_counter)
->> +	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN &&
->> +	    !READ_ONCE(bond->rr_tx_counter)) {
->> +		rr_tx_tmp =3D alloc_percpu(u32);
->> +		if (!rr_tx_tmp)
->>  			return -ENOMEM;
->> +		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
->> +
->>  	}
->>  =
-
->>  	/* reset slave->backup and slave->inactive */
->> @@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *b=
-ond)
->>  	struct reciprocal_value reciprocal_packets_per_slave;
->>  	int packets_per_slave =3D bond->params.packets_per_slave;
->>  =
-
->> +	if (!READ_ONCE(bond->rr_tx_counter))
->> +		packets_per_slave =3D 0;
->> +
->>  	switch (packets_per_slave) {
->>  	case 0:
->>  		slave_id =3D get_random_u32();
->> =
-
->> 	-J
->> =
-
->> =
-
->> [0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a9892238c6=
-1f06@linux.dev/
-
+Fixes: fed926d4f64c ("selftests: forwarding: Add IP tunneling lib")
+Fixes: 902280cacc03 ("selftests: forwarding: Add resilient multipath tunneling nexthop test")
+Fixes: 54818c4c4b93 ("selftests: forwarding: Test multipath tunneling")
+Fixes: e035146d6560 ("selftests: forwarding: Add multipath tunneling nexthop test")
+Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
 ---
-	-Jay Vosburgh, jv@jvosburgh.net
+Changes in v2:
+- In gre_multipath.sh and ipip_lib.sh, remove the unused IPv6 address
+  from simple_if_init instead of adding it to simple_if_fini, since
+  these tests don't use IPv6
+- Link to v1: https://lore.kernel.org/linux-kselftest/20260301124052.GA713428@shredder/T/
+---
+ tools/testing/selftests/net/forwarding/gre_multipath.sh        | 2 +-
+ tools/testing/selftests/net/forwarding/gre_multipath_nh.sh     | 2 +-
+ tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh | 2 +-
+ tools/testing/selftests/net/forwarding/ipip_lib.sh             | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/net/forwarding/gre_multipath.sh b/tools/testing/selftests/net/forwarding/gre_multipath.sh
+index 57531c1d884d..ce4ae74843d9 100755
+--- a/tools/testing/selftests/net/forwarding/gre_multipath.sh
++++ b/tools/testing/selftests/net/forwarding/gre_multipath.sh
+@@ -65,7 +65,7 @@ source lib.sh
+ 
+ h1_create()
+ {
+-	simple_if_init $h1 192.0.2.1/28 2001:db8:1::1/64
++	simple_if_init $h1 192.0.2.1/28
+ 	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
+ }
+ 
+diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
+index 7d5b2b9cc133..c667b81da37f 100755
+--- a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
++++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
+@@ -80,7 +80,7 @@ h1_destroy()
+ {
+ 	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
+ 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
+-	simple_if_fini $h1 192.0.2.1/28
++	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
+ }
+ 
+ sw1_create()
+diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
+index 370f9925302d..d04bad58a96a 100755
+--- a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
++++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
+@@ -80,7 +80,7 @@ h1_destroy()
+ {
+ 	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
+ 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
+-	simple_if_fini $h1 192.0.2.1/28
++	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
+ }
+ 
+ sw1_create()
+diff --git a/tools/testing/selftests/net/forwarding/ipip_lib.sh b/tools/testing/selftests/net/forwarding/ipip_lib.sh
+index 01e62c4ac94d..b255646b737a 100644
+--- a/tools/testing/selftests/net/forwarding/ipip_lib.sh
++++ b/tools/testing/selftests/net/forwarding/ipip_lib.sh
+@@ -144,7 +144,7 @@
+ 
+ h1_create()
+ {
+-	simple_if_init $h1 192.0.2.1/28 2001:db8:1::1/64
++	simple_if_init $h1 192.0.2.1/28
+ 	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
+ }
+ 
+-- 
+2.43.0
+
