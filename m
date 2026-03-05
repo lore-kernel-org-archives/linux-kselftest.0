@@ -1,89 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8B9265606;
-	Thu,  5 Mar 2026 02:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA17F1A6826;
+	Thu,  5 Mar 2026 02:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772678430; cv=none; b=KyKV00aEwDhCLgNejhcbVB2AC4La7hVURfkMwbuwUfYCWxC45faFkoeEsFFmUMtRJvnULnuqPt6Hs/mmWlGmSy5fw/gDKqQxkV0Eq3HoEUoAuP9BMHIWOAr7tiVpUh446dwMcsT6ISkflpIZv4nWx9QHG0hHzpU8clq7MYCWZHw=
+	t=1772679334; cv=none; b=GgB7jpWm6Asi+Q+xY+1igNn92a61P/Up5WAPUCOz1h6vEY8QKUIHsiDMz8DR0PgrOSHIyokmg4mu7g289+07oeyi3C3vz2iYvSvPiJoEIcwMID+BEXyE6BXEvbzGPvPpyStW//PRy8ZRhv36OxijLIo/4s/rVTJESKMSFW9auZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772678430; c=relaxed/simple;
-	bh=nl0dpc9m3TCYaVW1rx0nWk4+O3u2mDH42AihvgONVkQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qZxHvixy4565OzCLqLAcMTQWV71qSIXTvWYcHbKnszVJbbGcYUU0FnwhOwONEXU8+yuEegYAe5oax0FNpz6Dj0+JJvehIvDRHtXU7L4YmkL5f9lo3rJdkFxA7Fd7AE0SM5FSKiCzmWPzj1ewI0PAc1zGoxaAE1+Q7MhNRd6E+Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=biClM33R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772679334; c=relaxed/simple;
+	bh=4d7y/xjgWSGuhuezCdtH2976xfIP6uASlpXYDBGcWGw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GpwMzWHp0/5XZv2wVCLbXbDo4x2E9HgsP/bdxKi7uxS2TCCvYYaOBGMGgHDlpK24WK20PdJTwiwOCUyGOO6Do63HjakRR/EMDPtVdWz1RyL2WbkJUbM0uGHsrxiYWd/dnjKvjx2IP1B5VzwfPusdOISxprwbA5JzPI3vdVGpAaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pYK7YM4m; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="biClM33R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC70C2BC86;
-	Thu,  5 Mar 2026 02:40:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pYK7YM4m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2664C4CEF7;
+	Thu,  5 Mar 2026 02:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772678430;
-	bh=nl0dpc9m3TCYaVW1rx0nWk4+O3u2mDH42AihvgONVkQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=biClM33RByMZAAvt5U5RBOE6tmb+6LBUDw0SFlzfjrbuuu811p7PgOBQH+2qo2RTu
-	 +6RUcAw9lIg207TLb+9m3zBo2VCekuMYA/0CBcSWDlGmOuohY3SzouHDIlBPw5OkrN
-	 FVAUsg+kPyar4Tw6EoP+B69+hDBN++YJfSkU/1LtZyRuQiBxayh55ACclsY2aFHfH8
-	 g7/mXV8C/ZUGMaU1aLYbVOhXN71fGnCvKFyRDdgJrVZHhXtKwEI1GFKEH2TjsV6nou
-	 FoHs9sALZZQBvpD6kDtT+vTyJFV12dHvxRQQ91F04Nf3gM00CUtW0EQP8b0LnJ2Q8h
-	 H5A164ftZ8sjA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FE973808200;
-	Thu,  5 Mar 2026 02:40:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1772679334;
+	bh=4d7y/xjgWSGuhuezCdtH2976xfIP6uASlpXYDBGcWGw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=pYK7YM4m0fnSsQAyhefMcDaOBvn8Y9c20FaOvCpYggIpa60A8z3EWxFyPSfPRL9FU
+	 REN3e4tRWW1m7oG26k1oqS+4aO937R4czODpAvvERAsyQWEQMzozLXDSJml7d3155z
+	 jcXg03aXYVxS0lHpCo0e59gkB2hrJHpLLVbwZU5kMt/dzDbqrUe3XWteUg9Db2G9AZ
+	 7CMUJ2C/mOnC6YdoiPoF+jNUvhw4vyDicAInnAmtwaJ8ckXg8wYOq8SMe7YFrs82cG
+	 +bU8uWFw2JBclJCUuwTUOm5ex6kn+DfB7sKrnPaJvlby8tgUkH8ayRDaMdRV+ro3nH
+	 mC/rbafRFsa9A==
+Date: Wed, 4 Mar 2026 18:55:31 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Larysa Zaremba <larysa.zaremba@intel.com>
+Cc: bpf@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir
+ Oltean <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
+ <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
+ <bastien.curutchet@bootlin.com>, Tushar Vyavahare
+ <tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, "Ricardo
+ B. =?UTF-8?B?TWFybGnDqHJl?=" <rbm@suse.com>, Eelco Chaudron
+ <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, Toke
+ Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Dragos Tatulea
+ <dtatulea@nvidia.com>
+Subject: Re: [PATCH bpf v4 0/9] Address XDP frags having negative tailroom
+Message-ID: <20260304185531.4f49fda4@kernel.org>
+In-Reply-To: <20260302161723.858616-1-larysa.zaremba@intel.com>
+References: <20260302161723.858616-1-larysa.zaremba@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/5] mptcp: misc fixes for v7.0-rc2
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177267843079.2487871.6512624751988502884.git-patchwork-notify@kernel.org>
-Date: Thu, 05 Mar 2026 02:40:30 +0000
-References: 
- <20260303-net-mptcp-misc-fixes-7-0-rc2-v1-0-4b5462b6f016@kernel.org>
-In-Reply-To: 
- <20260303-net-mptcp-misc-fixes-7-0-rc2-v1-0-4b5462b6f016@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, lorenz-frank@web.de
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Mon,  2 Mar 2026 17:17:13 +0100 Larysa Zaremba wrote:
+> Aside from the issue described below, tailroom calculation does not account
+> for pages being split between frags, e.g. in i40e, enetc and
+> AF_XDP ZC with smaller chunks. These series address the problem by
+> calculating modulo (skb_frag_off() % rxq->frag_size) in order to get
+> data offset within a smaller block of memory. Please note, xskxceiver
+> tail grow test passes without modulo e.g. in xdpdrv mode on i40e,
+> because there is not enough descriptors to get to flipped buffers.
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 03 Mar 2026 11:56:01 +0100 you wrote:
-> Here are various unrelated fixes:
-> 
-> - Patch 1: avoid bufferbloat in simult_flows selftest which can cause
->   instabilities. A fix for v5.10.
-> 
-> - Patches 2-3: reduce RM_ADDR lost by not sending it over the same
->   subflow as the one being removed, if possible. A fix for v5.13.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,1/5] selftests: mptcp: more stable simult_flows tests
-    https://git.kernel.org/netdev/net/c/8c09412e584d
-  - [net,2/5] mptcp: pm: avoid sending RM_ADDR over same subflow
-    https://git.kernel.org/netdev/net/c/fb8d0bccb221
-  - [net,3/5] selftests: mptcp: join: check RM_ADDR not sent over same subflow
-    https://git.kernel.org/netdev/net/c/560edd99b5f5
-  - [net,4/5] mptcp: pm: in-kernel: always mark signal+subflow endp as used
-    https://git.kernel.org/netdev/net/c/579a752464a6
-  - [net,5/5] selftests: mptcp: join: check removing signal+subflow endp
-    https://git.kernel.org/netdev/net/c/1777f349ff41
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+This was re-assigned to netdev in pw, I presume by BPF maintainers.
+But it doesn't apply to net. There's a conflict in ice.
+Could you rebase on net and repost?
