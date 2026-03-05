@@ -1,93 +1,106 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1131E1E16
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 01:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE841DE3DC;
+	Thu,  5 Mar 2026 01:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772674466; cv=none; b=DU4jFcvTilmynUf2p2lcNu3gSGmlZm8VJp4RTYTa4jaNEnkGEGj7lA3/3dQ5sM49eZe/lsb16QOCye8ufi3FXPETADZBEj89axxaiOEWo3x03Wtzua1cxklDFo4EfhJPt8LhNdk2wQyEOt9KjIY0AQV0LZ8UVRu8yVjm9vFVCoI=
+	t=1772674626; cv=none; b=sfcjOJ7T9kQg5rHEUek0E4QZePkn/U+tIl/AyqFoiWe8h9FLrzI5IaJSbk3brKAtPPuGbNZv5VvN+gi7Iaa7Z1WpC+GBnLbguUdnjg7tNHTpeaI0JCj+cyyaSh5v4v0ca0h8IwIuMr8CEACHiqynON278wLiu0UDjo+Fm1LElL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772674466; c=relaxed/simple;
-	bh=pWgQ8y71kCvi/Sb21LxjNPt5SMJRWb1n0bWk+ROs/Hk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fTp5GVGrehHyJomO/JuzvZ3uzNxa7NetjD5EYhill+O7Khw8D4gKyHlxgNS2iCTm6iMLpvWzO2Vqv8/B50F451cZALS8XuRoB3zROM9fBBO7eZWvYZ1Dif4DjTzo1Hs4EXt0fGqZv2vTn6gAtq4a5AaQxsrYXR3WJPrqK3UHKMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=a5J0nCAq; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772674626; c=relaxed/simple;
+	bh=Nh3Tqzy2tq5YkixDdaZwou6ipM//83Ht+lhH6CMdjq8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aY3hMLUBPe9yYyDpSgj4z/IuEiA20CAfDjjOfz8iQ/8w8g8aGiv1nK5fzP8dFAem443IK2YJgrvySYz19eRQNg11QwUITw+oQEovpYBzEhTI7H7in5cKdR4EFNZeyBQfKZ0zbdnnd8Xd5Q7xuhYNlvsVwpKU4ca1HXRkXV4D4/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=IinlKN/c; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="a5J0nCAq"
-Message-ID: <d76953ff-841e-4c88-800e-5c761f50d70f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772674462;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZfDN/bvfBCvYWg7+zeSFGz8yRL+iVsNGXGZCk8qgMlc=;
-	b=a5J0nCAqG5IDYwn11YB6UPJ4LkY9w2nm0tjGlR37R6r10VAggTWEd9/Pq7zjy39wK8uqnG
-	lYcnVkFqkKN9+NSRWFAlT1gYYzwJg7GmzXKSMrs0WKNnU84BOqZ9ola2t7crB1PfX+FYbA
-	qcb6hp3kfb82h2Zd5BULQCIBdDF7nvU=
-Date: Thu, 5 Mar 2026 09:34:07 +0800
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="IinlKN/c"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=v4C33E1hX+Vidxc1X+jNPqKj3AvWKe8bmB8EyKplG3U=;
+	b=IinlKN/cVzrSW9tkjALJJ2POGRlDb+TE/+BY10frgaprTHA0kZ4DR2hS57NBAhWgIHS35VOC+
+	Z+Mz7Ci3+YiP8X0pWzsM7l2ETiiC16MiHjpy//EqN4+Uz2BdQN7e6rlEbctqJ1CXYNHE0LIe/wM
+	3J22aNA5sf895TU1nLsjY58=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fRBqF5PL1znTbP;
+	Thu,  5 Mar 2026 09:32:25 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0780240565;
+	Thu,  5 Mar 2026 09:37:02 +0800 (CST)
+Received: from huawei.com (10.50.163.32) by kwepemk500005.china.huawei.com
+ (7.202.194.90) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 5 Mar
+ 2026 09:37:01 +0800
+From: Yifan Wu <wuyifan50@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
+	<broonie@kernel.org>, <yeoreum.yun@arm.com>, <jonathan.cameron@huawei.com>,
+	<wuyifan50@huawei.com>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<linuxarm@huawei.com>
+CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
+	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
+	<wangzhou1@hisilicon.com>
+Subject: [PATCH v2 0/2] selftests/arm64: Fix sve2p1_sigill() and add cmpbr_sigill() for hwcap test
+Date: Thu, 5 Mar 2026 09:36:36 +0800
+Message-ID: <20260305013638.992301-1-wuyifan50@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v10 bpf-next 2/2] selftests/bpf: Add selftests for the
- invocation of bpf_lwt_xmit_push_encap
-Content-Language: en-US
-To: Martin KaFai Lau <martin.lau@linux.dev>, Leon Hwang
- <leon.hwang@linux.dev>, Feng Yang <yangfeng59949@163.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, posk@google.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260304094429.168521-1-yangfeng59949@163.com>
- <20260304094429.168521-3-yangfeng59949@163.com>
- <8f6755ed-d2ae-42ba-8052-2e6fba3d5c69@linux.dev>
- <682b4e08-7c21-4616-b1cc-65923c3ae09a@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <682b4e08-7c21-4616-b1cc-65923c3ae09a@linux.dev>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
-On 5/3/26 09:11, Martin KaFai Lau wrote:
-> On 3/4/26 2:33 AM, Leon Hwang wrote:
->> On 4/3/26 17:44, Feng Yang wrote:
->>> From: Feng Yang <yangfeng@kylinos.cn>
->>>
->>> Calling bpf_lwt_xmit_push_encap will not cause a crash when dst is
->>> missing.
->>>
->>> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
->>> ---
->>>   .../selftests/bpf/prog_tests/lwt_misc.c       |  9 ++++++++
->>>   tools/testing/selftests/bpf/progs/lwt_misc.c  | 22 +++++++++++++++++++
->>>   2 files changed, 31 insertions(+)
->>>   create mode 100644 tools/testing/selftests/bpf/prog_tests/lwt_misc.c
->>>   create mode 100644 tools/testing/selftests/bpf/progs/lwt_misc.c
->>>
->>
->> Unnecessary to create new files.
->>
->> Move the adding test to verifier_lwt.c. prog_tests/verifier.c will run
->> the test.
-> 
-> It is actually the change from v9 to v10. I think leaving it separate is
+Hi all,
 
-Got it.
+This patch series fixes and adds two selftests in the arm64 hwcap
+test suite.
 
-> better. It is not testing the verifier, so logically it does not fit in
-> verifier_lwt.c. It probably won't be the last fix for test_run+lwt, so
-> separating it should be useful going forward.
-> 
+Patch 1/2 fixes the sve2p1_sigill() test to correctly detect the
+FEAT_SVE2p1 feature. Previously, the test incorrectly assumed that
+the presence of FEAT_SVE2.1 implied support for the BFADD
+instruction, which actually depends on the FEAT_SVE_B16B16 feature.
+The test is updated to use the LD1Q instruction, which is
+unambiguously implied by FEAT_SVE2p1.
 
-I realized it after sending the reply. Thanks for the explanation.
+Patch 2/2 implements the cmpbr_sigill() test to correctly detect
+the presence of the CMPBR extension. The test uses the CBEQ
+instruction, which is valid only if the CPU supports the extension.
+If supported, a branch is taken and the UDF instruction is skipped,
+avoiding a SIGILL. Otherwise, the UDF is executed and a SIGILL
+is generated.
 
-Thanks,
-Leon
+These changes improve the accuracy and reliability of the selftests
+for arm64 hardware capability detection.
+
+References:
+
+CBEQ: https://developer.arm.com/documentation/ddi0602/2025-12/Base-Instructions/CB-cc---register---Compare-registers-and-branch-?lang=en
+BFADD: https://developer.arm.com/documentation/ddi0602/2025-12/SVE-Instructions/BFADD--unpredicated---BFloat16-add--unpredicated--?lang=en
+LD1Q: https://developer.arm.com/documentation/ddi0602/2025-12/SVE-Instructions/LD1Q--Gather-load-quadwords-?lang=en
+ID_AA64ZFR0_EL1: https://developer.arm.com/documentation/ddi0601/2025-03/AArch64-Registers/ID-AA64ZFR0-EL1--SVE-Feature-ID-Register-0?lang=en
+
+Change Log:
+v1:
+Fixes the sve2p1_sigill() in patch 1.
+Implements cmpbr_sigill() by the single asm volatile statement.
+Updated the comments.
+
+v1 can be found at:
+https://lore.kernel.org/all/20260227031933.4103333-1-wuyifan50@huawei.com/
+
+Yifan Wu (2):
+  selftest/arm64: Fix sve2p1_sigill() to hwcap test
+  selftests/arm64: Implement cmpbr_sigill() to hwcap test
+
+ tools/testing/selftests/arm64/abi/hwcap.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+-- 
+2.33.0
 
