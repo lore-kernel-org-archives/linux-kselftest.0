@@ -1,54 +1,76 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672BA352C35;
-	Thu,  5 Mar 2026 21:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C72E3612E8
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 22:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772745032; cv=none; b=OPSBSPj8/7Q/daaPBmyFFDZ0wbvoXYzeqv1zb1hT4vbp3GFxc6Wz1z9kFwwd1dARsw/4wXEvB5S9BVoD0amTfDwO99+0XXz15qi1JHl3SQzWfYfFBPpAYb/3+wuaTAmuinGCXAP18eBMQX1uJZwWrO7xSjKGkzgY0dhvoFUCExg=
+	t=1772749336; cv=none; b=IpAMYJvROJexUTGLvRIXlMrh85RaqD2yhANkXe7cUPzcNHMVFNYu8U8fQW5cnEGeLDTIh0vLkms1kRwrLLEF29GanYMdHs5lSwGnusVkDuXSvCOKF9q8hXBRwTsASjAspakyqVbch6jLnVVkD0pzqzipc2P2spUx4x6IqcVPrUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772745032; c=relaxed/simple;
-	bh=mWnlCBPFy8iSy+Jncr+afNPVQGlHEW/rXWuCWK74e2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WSbnHEb+m9Wt+wyBxo/ODcfhdA83yClTjkWOlkhPGOSUtNhhTIpRKV9xMpYlD9gAi4keJ+3r29jUz5q/ohymTt8qfuBuxwoVPCx+eRKG80mmvGHdSY2BRz8GJK0h/6ul+tunKsTu7GwuszrK249zw7od4tNjQxjfZ6Bc+Mzmw1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=DLsavV2R; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1772749336; c=relaxed/simple;
+	bh=6KqCPewtq1kiJ361bvKaKNjRbb67s/elQW4tfah2P7U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PaspaAjvDU9YYGMs69X7DSXPyagpe4QZzKAmMjFRK2ePNkstKvbwg3gLYo+8TEv0Qk95dnXMI0ylv+fFHw0ZWuGSo0mL/Leh5fILp6AhQU4sJAOzy+dCX4QId2TuNXBnVJvPilxGLUXqS2jJl4dzbLiwJ/hMwutq9yOxbaoAcUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lCoG4gLx; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="DLsavV2R"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=5iY5tkbgE71f/1yLuiO8l9s0HnuaGaMfjmHUKuv+0Vk=; b=DLsavV2RjjJS
-	ixmqd/byHBFy5qQLEK60SqMLz7aUmYeNujmN4mbBhwPT5hMlVksKk9OtHk4UYaTWgC/Okr4pSW2VR
-	6loSTS8InFaCjZSLmQkKLQxZKwkyBBNaJ+ifDrXnqLChy2dyqdeth0hsehfT7slgbXjUhmbB7K2vw
-	3Ch/AW/VZc2CxHlgQ9+Ih04fzmdA/8NpicpGv/9X0Z9YRtjIG4MMLFu/yd0xZfK4abL7aif/GUM3o
-	c5c0x2EltLjeKUQefdFEWXxv03NeOq7yNx8KJf6iqaV0wgxWmXbdkZOvbhiBBYi10wkXtS8q5V+WR
-	odhRKH+zAll9iPER/N8N1A==;
-Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
-	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vyFvx-001doX-0z;
-	Thu, 05 Mar 2026 22:10:08 +0100
-Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 625LA9Bc515326
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 5 Mar 2026 21:10:09 GMT
-Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 625LA1Xj515311;
-	Thu, 5 Mar 2026 21:10:01 GMT
-From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>, Nir Dotan <nird@mellanox.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH v2] selftests: net: forwarding: fix IPv6 address leak in cleanup
-Date: Thu,  5 Mar 2026 21:10:00 +0000
-Message-ID: <20260305211000.515301-1-aleksey.oladko@virtuozzo.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lCoG4gLx"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2adff872068so41762095ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 14:22:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772749335; x=1773354135; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bYeE/zgQPJDLRLKshUZvrTFJR1CPgxz/WOMLSdHTUVY=;
+        b=lCoG4gLx7IDymG3IHDEQG3H5ZNI7Y4c08Nz3xGlh2ApEryLNaSA9a3HqaTETy+Yk+6
+         xXbTP5kegsjA3OfjS7cXK5UCvS1eCNqX3txDk6P823tjVbLXLnCC337q6Yu77ZB23WFA
+         wyzWQ5VONMPlwV2bLAaJTEtIJaCsCfphuLr5+n7kzdoUftGwnQx0+KLmcvkB6uYUATWa
+         8tOycPWs7Q4dJBxo8fcv78H3IHlsDebVkyxMhsC4i1b9wHwdI8O9Kwe2aLsXeS6YWXSx
+         MoXM0YMk4fTDMgf462uTmh/YTx5QlAmzb+HOz12alTg59yKeRucC+YiJBy0L+1iSotpy
+         HWqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772749335; x=1773354135;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bYeE/zgQPJDLRLKshUZvrTFJR1CPgxz/WOMLSdHTUVY=;
+        b=DY6wdRid2ErsympWLUB6eadU8WPUXhS8rnsf/vToGFFKs0+ssOQ8Tk27j6FVKjC5mw
+         j/rz7Rsm55R8zpSbVu49mwtOIaHbtMP0NGx+FVJR3zIIDf3j04xI2k5EzNKhW9idvWtf
+         RgEW2uF94YUK68uQ5R4S5poBQ2FdTTegCJQWJMjAI1I+ay0aI8wEjd2Fb8RbMdAkEc6y
+         bZpfH4kYYNIL/hrTlo0l5aSuy/pIn+WhouR1PrKc6TIZH6aLh6RilhW6fDaBPcxCsDIm
+         CkZijD6QE8Qq1NP0Kg73t1Ru+0fwU1ZIsRgRvi/AXyB8Cc2a4eheoPfwcagdAC4lskJr
+         t0zA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpdjYH7vsmnbCRBWCaMcEzGsqV8nD7GS0AdtKcj7Tm6V6rMg8RpLusselhfgChgTF/tLdg5Wxc1kw51vDI/9c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbM8OVSRYLka8Pyeo4ma9jMnnLfatGvpdcnnyGIkDY8iSTgX38
+	0iTcLnSd+9Ysi7ply3kawaDafdj3XBouiwqQfWmAjG1PLxoAAcZeOGTF
+X-Gm-Gg: ATEYQzyshxUfDYCvwnDP2oqschaClQGNslHdGdxgTrlXezjlc8sIAWXAwLqL5GleLPu
+	EclNgoSc/+0EPDXesiM5RplGx/Wju3s3gQU4RAXj0VzoLQyMbtJ7s9PxTpSx12MztmPBsdB4Jny
+	gc6V2v8L24u/xUdkbkW7kLAxjHHRANwCMiPEm+UuiZ0EkP3RR4OZNaNP2PiEgDk5OjnVaaxUVRQ
+	bKVR/uQDeWxR5wIBxqpQC94RuKjRT7BIXwhvPE9yGM0oenvyA5OELr+Qjqej55uy+TfF8fpW6+s
+	+B1zyVf6TvMKExBLju9Jr0/LcSbCG0k/AFUZ0KgtZC4+tk+J0KVUhXdithdf8qCNAyzEvzE2q5q
+	cOcT/CrgQcvLJaLRBIt7qyXv+77SlPD/60VIQ/zBVOqi8fUQmXtpg5oiKlVZRIFKQDbopdoQ/FA
+	aipTy4VO4Sukt7s21CTSj18vb3NqkJBTPtyMl9VhBeQzL8jvfuBolwMxH8At2jJVSUJinJ
+X-Received: by 2002:a17:902:da8d:b0:2ae:5848:baf8 with SMTP id d9443c01a7336-2ae823681bcmr1026315ad.3.1772749334618;
+        Thu, 05 Mar 2026 14:22:14 -0800 (PST)
+Received: from computer.goose-salary.ts.net ([2a09:bac6:d7a5:11cd::1c6:11])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb69f25esm244421305ad.47.2026.03.05.14.22.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 14:22:13 -0800 (PST)
+From: Varun R Mallya <varunrmallya@gmail.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	toke@redhat.com
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	song@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	varunrmallya@gmail.com
+Subject: [PATCH bpf-next] selftests/bpf: Fix const qualifier warning in fexit_bpf2bpf.c
+Date: Fri,  6 Mar 2026 03:51:32 +0530
+Message-ID: <20260305222132.470700-1-varunrmallya@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,103 +79,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Several forwarding tests (e.g., gre_multipath.sh) initialize both IPv4
-and IPv6 addresses using simple_if_init, but only clean up IPv4
-in simple_if_fini. This leaves stale IPv6 addresses on the interfaces,
-which causes subsequent tests to fail when they encounter unexpected
-address configuration.
+Building selftests with
+clang 23.0.0 (6fae863eba8a72cdd82f37e7111a46a70be525e0) triggers
+the following error:
 
-The issue can be reproduced by running tests in sequence:
-  # run_kselftest.sh -t net/forwarding:ipip_hier_gre.sh
-  # run_kselftest.sh -t net/forwarding:min_max_mtu.sh
-  TAP version 13
-  1..1
-  # timeout set to 0
-  # selftests: net/forwarding: min_max_mtu.sh
-  # TEST: ping                                                          [ OK ]
-  # TEST: ping6                                                         [ OK ]
-  # TEST: Test maximum MTU configuration                                [ OK ]
-  # TEST: Test traffic, packet size is maximum MTU                      [FAIL]
-  #       Ping6, packet size: 65487 succeeded, but should have failed
-  # TEST: Test minimum MTU configuration                                [ OK ]
-  # TEST: Test traffic, packet size is minimum MTU                      [ OK ]
-  not ok 1 selftests: net/forwarding: min_max_mtu.sh # exit=1
+  tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c:117:12:
+  error: assigning to 'char *' from 'const char *' discards qualifiers
+  [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
 
-Fix this by removing the unused IPv6 argument from simple_if_init in
-tests that don't use IPv6 (gre_multipath.sh, ipip_lib.sh), and by
-adding the missing IPv6 argument to simple_if_fini in tests that
-use IPv6 (gre_multipath_nh.sh, gre_multipath_nh_res.sh).
+The variable `tgt_name` is declared as `char *`, but it stores the
+result of strstr(prog_name[i], "/"). Since `prog_name[i]` is a
+`const char *`, the returned pointer should also be treated as
+const-qualified.
 
-Fixes: fed926d4f64c ("selftests: forwarding: Add IP tunneling lib")
-Fixes: 902280cacc03 ("selftests: forwarding: Add resilient multipath tunneling nexthop test")
-Fixes: 54818c4c4b93 ("selftests: forwarding: Test multipath tunneling")
-Fixes: e035146d6560 ("selftests: forwarding: Add multipath tunneling nexthop test")
-Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Update `tgt_name` to `const char *` to match the type of the underlying
+string and silence the compiler warning.
+
+Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
 ---
-Changes in v2:
-- In gre_multipath.sh and ipip_lib.sh, remove the unused IPv6 address
-  from simple_if_init instead of adding it to simple_if_fini, since
-  these tests don't use IPv6
-- Link to v1: https://lore.kernel.org/linux-kselftest/20260301124052.GA713428@shredder/T/
----
- tools/testing/selftests/net/forwarding/gre_multipath.sh        | 2 +-
- tools/testing/selftests/net/forwarding/gre_multipath_nh.sh     | 2 +-
- tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh | 2 +-
- tools/testing/selftests/net/forwarding/ipip_lib.sh             | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/gre_multipath.sh b/tools/testing/selftests/net/forwarding/gre_multipath.sh
-index 57531c1d884d..ce4ae74843d9 100755
---- a/tools/testing/selftests/net/forwarding/gre_multipath.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_multipath.sh
-@@ -65,7 +65,7 @@ source lib.sh
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index 23d933f1aec6..92c20803ea76 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -111,7 +111,7 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
+ 		struct bpf_link_info link_info;
+ 		struct bpf_program *pos;
+ 		const char *pos_sec_name;
+-		char *tgt_name;
++		const char *tgt_name;
+ 		__s32 btf_id;
  
- h1_create()
- {
--	simple_if_init $h1 192.0.2.1/28 2001:db8:1::1/64
-+	simple_if_init $h1 192.0.2.1/28
- 	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
- }
- 
-diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-index 7d5b2b9cc133..c667b81da37f 100755
---- a/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh.sh
-@@ -80,7 +80,7 @@ h1_destroy()
- {
- 	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
- 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
--	simple_if_fini $h1 192.0.2.1/28
-+	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
- }
- 
- sw1_create()
-diff --git a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-index 370f9925302d..d04bad58a96a 100755
---- a/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_multipath_nh_res.sh
-@@ -80,7 +80,7 @@ h1_destroy()
- {
- 	ip route del vrf v$h1 2001:db8:2::/64 via 2001:db8:1::2
- 	ip route del vrf v$h1 192.0.2.16/28 via 192.0.2.2
--	simple_if_fini $h1 192.0.2.1/28
-+	simple_if_fini $h1 192.0.2.1/28 2001:db8:1::1/64
- }
- 
- sw1_create()
-diff --git a/tools/testing/selftests/net/forwarding/ipip_lib.sh b/tools/testing/selftests/net/forwarding/ipip_lib.sh
-index 01e62c4ac94d..b255646b737a 100644
---- a/tools/testing/selftests/net/forwarding/ipip_lib.sh
-+++ b/tools/testing/selftests/net/forwarding/ipip_lib.sh
-@@ -144,7 +144,7 @@
- 
- h1_create()
- {
--	simple_if_init $h1 192.0.2.1/28 2001:db8:1::1/64
-+	simple_if_init $h1 192.0.2.1/28
- 	ip route add vrf v$h1 192.0.2.16/28 via 192.0.2.2
- }
- 
+ 		tgt_name = strstr(prog_name[i], "/");
 -- 
-2.43.0
+2.53.0
 
