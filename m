@@ -1,95 +1,95 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5823E5EC1
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 17:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C415F3E1205
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 17:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772730785; cv=none; b=ZjlU0mxUrEeLfSTt2oXqZl51+V6JALkAhhcX2qClnV350nBr1JjkSHf3Mj+JesMAIiTx7fg3pYXEki6lJZPRYHQrQpKiU0xvhGzgqi2e7H+woVa5u6396PirXzV73brEAL1eYQ9/VjKvXuV7ovYp04+8/rXZvj7T8v5OzyGLVJ8=
+	t=1772731177; cv=none; b=ZrZ93qqYlJV0IDkPQUue9a8C/kuBufR9YMUQv8hTsdrS+7al/N9A2pv5kq/coTUgVqCmKBIv9/D0Y7QSDj3IMZ3shk6UDSPfU9xIpfLkqa60kpRgiRMheAqGgUiuqnKx4TI8c6HnNMb5gAPTDBfoI0EQ5/qeEdpxlYnItuZNcHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772730785; c=relaxed/simple;
-	bh=ixNnjRisEKC2+6IAmQnjI9ab+lvosDmX4lcTWF/0UkA=;
+	s=arc-20240116; t=1772731177; c=relaxed/simple;
+	bh=44DsyPZjR3+ZY9GszCDwqZ3g/HaaKmi7IKLakzXhb6E=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LboUKVw6DsWKzoX9rOsxGziGc7knpSrU+F1pJf4HV7aB65ByHe5HSa+6gLulB9hyheBAVksXP8qYweciRazLHbq485mBcOlDvuShv0iSmM8kfOJv75fWDd7wR3+prjBKcXgei/xfUJcti0OBHmkDhjmpcFd6pGo6v3/EQu8Zc40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZGiIbA9t; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=u0J7V227nH5Gd6gAG26Dv9W7BecOQ73/9Xypn2ZcFLFmxWgEa8dO6cadbfFfxy+7BtiHPmZhUEPsftC5u11cdmjSI3ypF2Toy2t32ypqk2GVXbyX4OdC+4kYbls/nFbxcnpxVrn50fZYZ08Wr4GZ8Wjh0KalVzcRFIl+H0XtGHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GCMhfHi0; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZGiIbA9t"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c738662b963so1017256a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 09:13:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GCMhfHi0"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-824af3c6c0cso3550426b3a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 09:19:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772730784; x=1773335584; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772731176; x=1773335976; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tnolfb6uQBsYaAshkkXBLdzTSf21J1HsPObGa5E2rzU=;
-        b=ZGiIbA9tZD1LkwuijnPqvA6nmvxLl6WuSxt81BKxinbPGtntWDXPhqkr1/uiJFjaH5
-         PefThkHP/tmY8+gyh+zeeHkEAKs4iECirniuCHi0njpjiKMu7+1U5uonKmuk3Wcfw83d
-         hlSUoWqfpOIP/h7dDHIxbdlyRQdUjeu2CDQb2yemlsOytCO0kSd7yguw1M9t8kqZHcQ/
-         VHZxwyns/ugG8eUAViJAYiVSFTsKP8jkhEa7reutatBpcoe7tVwrd+Y5INBsrkH1kuRO
-         SssdRs5mb+BPnmp7nClWGZDFwb9Sw6mFWWQ/QGqZLBxDO6LWKYdrL6xrpKqQyXRaUabG
-         Dm5Q==
+        bh=jvL7QI7vtAV/elV7wuwJjb0ouQ5MS/0W571Ri2ejdh8=;
+        b=GCMhfHi039z0xYJI1g53I6vSeQvWegx9IdH6BuHB9ae1dJye7XciAjY25sZ+R7h03a
+         +8xOBbjkbQoXMXG2cuGv+Y2veFW/RDj1y5hIQ9arJaumsbt+DD7s9fQ+Fxo5EtQ6D/9Y
+         lZrJBwy5awiuOgDpLGBPR+qIV+c1a0WI30zX5FlKfodjoW4dwpf7FyC3VVQYUhHFRJQK
+         CyAfo0+LLQxxp5Cw2s0jPVWcxoohsAGoZyFLsp+ZycJHUleAdsbezYwtecTBDmRC+rzE
+         RtcKuYsOKaNzN3NiWSZryIC3JA6h4NJD2Fxpdc4//BsRKlClUn+3qC9Gh5EdT5inx4Pu
+         G25A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772730784; x=1773335584;
+        d=1e100.net; s=20230601; t=1772731176; x=1773335976;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tnolfb6uQBsYaAshkkXBLdzTSf21J1HsPObGa5E2rzU=;
-        b=VthK/cxqy2UjY7fyRYjeRp6UJuNecShQquNHu6FjxZq8fNPajpOFTJXxyuSdkeMt8W
-         QwlWiqojNpfutHgEathIADxr5ZDuEtvug3fAm0TyeI36AvxmvH8oPH6lu7bS9ue/B/aH
-         5wvCHBJEL7hjm64DLNqcZdxiVQS77VsMq064YnfRuuD5pi4U/2MJ5T8SZPhfdyBSdTby
-         +Kze5U4pxF/j1EqfSXEm+rgJVvJ3XkhZXR1woJc90FqZLQstVNmJeNPfCtYmV6+QKhfv
-         uTIY4Bg45CAIXIiPFGf6JkGSHRyZerc/JVaUqm9hdhAwKeucE4njfmpPni9b92dFrpg1
-         AQzA==
-X-Forwarded-Encrypted: i=1; AJvYcCWUDoF1MpZZcbcZPDPtzGl04M0U+RH4Ru3PzW0AHUViLGbXzMh/sd7U52PN5saZ7plfUfZwy6YO3RKO4fNa0f8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIscb5qQmVekboWAHma81xgFdGQf6kh/KWs+LX3XJftfN76ct2
-	QaitQGRccJtFDAS7mgNZQuOhuDbEs1D5zuACaDXwvO1SnOvMS8IkEMYLG46LSGT61fNZ46PQFVG
-	o5ETF4A==
-X-Received: from pgix2.prod.google.com ([2002:a63:db42:0:b0:c6d:cc16:8cee])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6e8a:b0:38d:f2a1:a43f
- with SMTP id adf61e73a8af0-39854a814d6mr239546637.42.1772730783352; Thu, 05
- Mar 2026 09:13:03 -0800 (PST)
-Date: Thu,  5 Mar 2026 09:08:27 -0800
-In-Reply-To: <cover.1771630983.git.ackerleytng@google.com>
+        bh=jvL7QI7vtAV/elV7wuwJjb0ouQ5MS/0W571Ri2ejdh8=;
+        b=rVrBQx2p7/VGpj+AdRXRvrsLnfNAH9TJq2ryXJUlH46RTLtI6+h6lGy3qHQiL0QM1o
+         r9E4+VHpXbuqHjF1ZPDOwCOAns3CBoXCrW364io/HvszNZdpBO59pvxnSQ9S9ZQUOugT
+         YOfWNQAUiSmLWPyEUFgaU5yGvLemeOFJLoDHJ+SWPXGOY+WsRyEPHPzcthKK1OWVbZgw
+         J452QtnCP86l/d4dpqsboYgYQIaCS8ZuE9louCG9+I1Tu4MNpoR2LNcqTVWe6KTOG8qq
+         BNgzaP9DrQvcFMK0VfZnMWLELR+VwzVwDvU5UR2w3Ov7G4CQ4+znTFIP2TG7jvZXDR1h
+         2o0w==
+X-Forwarded-Encrypted: i=1; AJvYcCXts5Qv8Q1v/M0Cyt7aCuZIUsReq2Q/uYmxNiz1+RzdhxuN4WFeMzUbhd+eXYWdJHc8ccGZoOVV6x7jZnCTiNs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWCq9kJvZF+ZJnDDnLNKyddsa9LxdPqHm8NuYar7IlG5c2On6z
+	t5cYXliPEYLpEgrVB9jjdhMorR0obN73xY4PoU+LnaQ0hexvN+bDN/ZWb+XXCYTtuJURWNMZWEs
+	/KL7C3g==
+X-Received: from pfcp25.prod.google.com ([2002:a05:6a00:a259:b0:829:808f:cb8d])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4295:b0:81b:d5d9:a83a
+ with SMTP id d2e1a72fcca58-8299ae60809mr419972b3a.61.1772731175885; Thu, 05
+ Mar 2026 09:19:35 -0800 (PST)
+Date: Thu, 5 Mar 2026 09:19:34 -0800
+In-Reply-To: <20260220004223.4168331-5-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <cover.1771630983.git.ackerleytng@google.com>
-X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <177272511649.1531226.15957182226632150956.b4-ty@google.com>
-Subject: Re: [PATCH v2 0/2] Test MADV_COLLAPSE on guest_memfd
+References: <20260220004223.4168331-1-dmatlack@google.com> <20260220004223.4168331-5-dmatlack@google.com>
+Message-ID: <aam7JsCyQ5Oacvl5@google.com>
+Subject: Re: [PATCH v2 04/10] KVM: selftests: Use u64 instead of uint64_t
 From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, kartikey406@gmail.com, pbonzini@redhat.com, 
-	shuah@kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Ackerley Tng <ackerleytng@google.com>
-Cc: vannapurve@google.com, Liam.Howlett@oracle.com, akpm@linux-foundation.org, 
-	baohua@kernel.org, baolin.wang@linux.alibaba.com, david@kernel.org, 
-	dev.jain@arm.com, i@maskray.me, lance.yang@linux.dev, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, lorenzo.stoakes@oracle.com, 
-	npache@redhat.com, ryan.roberts@arm.com, shy828301@gmail.com, 
-	stable@vger.kernel.org, syzbot+33a04338019ac7e43a44@syzkaller.appspotmail.com, 
-	ziy@nvidia.com
-Content-Type: text/plain; charset="utf-8"
+To: David Matlack <dmatlack@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Andrew Jones <ajones@ventanamicro.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atish.patra@linux.dev>, Bibo Mao <maobibo@loongson.cn>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Colin Ian King <colin.i.king@gmail.com>, David Hildenbrand <david@kernel.org>, Fuad Tabba <tabba@google.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Joey Gouly <joey.gouly@arm.com>, kvmarm@lists.linux.dev, 
+	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	Lisa Wang <wyihan@google.com>, loongarch@lists.linux.dev, 
+	Marc Zyngier <maz@kernel.org>, Maxim Levitsky <mlevitsk@redhat.com>, Nutty Liu <nutty.liu@hotmail.com>, 
+	Oliver Upton <oupton@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, 
+	"Pratik R. Sampat" <prsampat@amd.com>, Rahul Kumar <rk0006818@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Wu Fei <wu.fei9@sanechips.com.cn>, Yosry Ahmed <yosry.ahmed@linux.dev>, 
+	Zenghui Yu <yuzenghui@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, 20 Feb 2026 23:54:34 +0000, Ackerley Tng wrote:
-> syzkaller identified that khugepaged, operating on guest_memfd memory,
-> could cause guest_memfd folios to get collapsed, leading to a WARNing
-> during fault [1].
-> 
-> Add selftest to guard against similar regressions.
-> 
-> Changes in v2:
-> 
-> [...]
+On Fri, Feb 20, 2026, David Matlack wrote:
+> -static uint64_t pread_uint64(int fd, const char *filename, uint64_t index)
+> +static u64 pread_uint64(int fd, const char *filename, u64 index)
 
-Applied to kvm-x86 selftests, thanks!
+I think it's also worth converting the function to pread_u64().
 
-[1/2] KVM: selftests: Wrap madvise() to assert success
-      https://github.com/kvm-x86/linux/commit/58f5d8eebd5c
-[2/2] KVM: selftests: Test MADV_COLLAPSE on guest_memfd
-      https://github.com/kvm-x86/linux/commit/9830209b4ae8
-
---
-https://github.com/kvm-x86/linux/tree/next
+>  {
+> -	uint64_t value;
+> +	u64 value;
+>  	off_t offset = index * sizeof(value);
+>  
+>  	TEST_ASSERT(pread(fd, &value, sizeof(value), offset) == sizeof(value),
