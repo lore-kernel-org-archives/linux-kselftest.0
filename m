@@ -1,171 +1,141 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6C527280A
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 03:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511B23101B2;
+	Thu,  5 Mar 2026 07:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772679794; cv=none; b=rlW6uV/tcSgPtyCPBrI9sviX1H2HAGv6leEpGlRHOoyQRBDDBMZirVM6qG/gg6f2nd7t2yoeZduJC8QZqQtJHctfZFvAsWm8RUqUqZkczZWC8crmAFZZrmTLGTekCuQ6u72swDDoNBta7iq/jhKE03gNosVrTdowvfprem0OKI8=
+	t=1772694717; cv=none; b=AzRUoufifUZPE+Tfw/U40Ib8UDlpuU0jwMpb0cm0gCz/1oZb283gZl+FNGtizV0KfZxT2YVn14Ox2S/4mVneLJyyqsNxMbtToMfuQvcQe2qdRu26hoQbibwVPEZdU5CTc5scmB/o6vgu2eb7lDjCeqdF0QSnwm+7iLRI0XkNor8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772679794; c=relaxed/simple;
-	bh=qG4F646r3A03uFZqgMgj8Cu/cQ6QTmmOz2MQdWFq8TA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AQ15rpJFmG0K/a11A+Q2J2ao7s8iwd4zpq75ct63eWy81YrEI7VF4WnR0BacBZvmeU3qv6gYRSEXFI/Qnt8yIUEz1yw/ABqTXuagUQKkfcjYMpehstYEjoIO89rF9zU44E4OQ+jHtgbDoSw11KUhXIVuAp7whn72CyEsUshi9qQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GEnqGSyJ; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772694717; c=relaxed/simple;
+	bh=CdxA/lDoNCeJgiVSZNMfVTLoyKfuC5y8bX2gqNZcV84=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rgHkRBTGu6KADXwb7yS/gzFultGsQDv12uiMkVyPYnoilqg+60OKFXt0UdkNfxVm9gjg44wocEtJnOwicYzqlzacRRvFpftbD3t5tRCVEaEtihdZsTlKooFcNeq1UbCwCedx4gGGHxUQTdQfLXFh/t2UhrxkYUhKHgc/jQdeXcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=n0fkJZFN; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5Rkjhwne; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GEnqGSyJ"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7986fb839f5so65834567b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2026 19:03:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772679792; x=1773284592; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ougbaORYHxsMlWm77a6+iuoe/ZWgFx+bT/l0ak418rc=;
-        b=GEnqGSyJthze/mX9hGVYpfo0ItYzkYDwlk3qN0OIYJ06qSKKNP6y+iUtiUuzfwfMkg
-         A35cAgxktitBUZkXRAuoK78Etz0X64gX3avA/wUhnF9NrBo8+Q4a9WV5pM5xo4kTf16K
-         8T8mH8l8dZ5DIKx6BLTZL8neUfhpkvcPibBOsDz0K2jbHslZpii5WqTpUaSS82Lkm9MQ
-         YI8S8GcF/W5dLvHNYoH7q/+sOKcloVj/XyICzT0jK+hw7vIwph6yC8lMdxWw4eVD619E
-         MXHNUOayonYrRV+9uEu/zWUApu0bCUEgJ5QznaCZQCSAQRSWzqliA7M+y9S9Gd7QXc9X
-         GR3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772679792; x=1773284592;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ougbaORYHxsMlWm77a6+iuoe/ZWgFx+bT/l0ak418rc=;
-        b=OQFpVDpvB4tNFGxnPlBCLZYwWnYrV/sVeQSo54UVOMWog0AgiDZ+c5GNg0e2ClS05S
-         8AHfjQuTqk0WGlVK5dJmK+c5OX5d0POT+4Fwcf1BTMa7ILOCFPacEkvnj/tc9WJPa19Z
-         PnCEYarsrgtDdbgL0+G0hZeTimi91C07g/iaS8kZci3TeoaUj4XQx4DBsRAAQxfJ90sf
-         zsbKbmedicVJZuRA4FU/gaMdFb3PbwFQY1IQ50bni12hbXYQ/OO7SKpek/aJXU38SVk5
-         ty1BsjfaQk4Rv1BliJDqEzQ/NpjM51HqZnGK6jJZy+VmnLpKP3pnsS7xS+qtsQ4dtc/p
-         66hQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWcE03Sw8Y3GVAxZfEyERVNygLy7I80OU/4uTlUZ+KXSds5sft6tNy2ZL1AaLEvrMoy/Uj7bSyrFydv/Pir5UY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu2jNTYXe+EJQWVUwJBLEIM627LOodM7E4bZmMuGnyezV3UvXO
-	6nXbJ7NqTukkyxaUrh+YT4Uy5rHCALiTWn/rT7WlQuDA/xPGshkiRaKkNwL9zmI+P+XfOebh
-X-Gm-Gg: ATEYQzyJn6fK9BSKyQUSVI7R4Lib4UZlrElPKI647yiveB7rra4WvZo+u3rwnaWdPbr
-	UriP3pQgHogU3bvp51g/V046+nsche/bPHdK/HeijyiAJzXiV/MVFGVvky+G1uJBCeaUbyVrGlU
-	ckflvhagcb66bJhW5t0zCt70HcwZpVjYsZnqa+gfP6bVzsFX2c4Y1asnDmIL4N0UldBCV0qV6eu
-	En3A/3c29/RjPNbYWlTW7+D378yfYiJwrT+ff8S8VGGJUrHeduEoFGJHvo4fIYw0J+ARz/SYTAu
-	lJuYvUDBexMFNm9ccMk8HHas9mKmFKXcVLBauSW3i0vP0Tyh+HBd0KvBaXaMTs5Qbb4VznaLSDA
-	we8u9zKkjNNtRhvSTMxtI8KCqpG4SyZpW3nooXkJQ2z3Fk4Fss7MFqrBwytEuNgeTXhtnf5PSqt
-	qheJpw7CqcW+63asmHk574PQ3/rJRzoaOBkM23f6lre2uqSB07uxBnx0SZnHHH8w4NSY2LtXZmG
-	8anxMbDU+g2MvauiC9vGQrVVUIEPEuJCwWz
-X-Received: by 2002:a05:690c:dc4:b0:798:6401:fd31 with SMTP id 00721157ae682-798c6c0e66dmr39861277b3.15.1772679792149;
-        Wed, 04 Mar 2026 19:03:12 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-79876bf8183sm82350587b3.30.2026.03.04.19.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 19:03:11 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v2 bpf-next] selftests/bpf: livepatch_trampoline: skip when prerequisites are missing
-Date: Thu,  5 Mar 2026 11:02:58 +0800
-Message-ID: <20260305030258.5273-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="n0fkJZFN";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5Rkjhwne"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1772694714;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=o9Rv/g2sSOXoBx4YOHT+TvErcM7jjAJLr2hFIDRxUAc=;
+	b=n0fkJZFNW9Pzw4/56jcf0S5vOQJDa4Ty4URhhRjrX8F5sYZpH6cZ5BpEEmcePdxaE/u7Ae
+	+mJNbwc6AKN5nC4tkXCeMmpjMPeAuwRRTp/yTQTd7OOWRugAt3TZllguLzalIIlp67Bm5O
+	tC8tF94VTEdCOX6qESaJyXQzGhZ2P6P3rZ4qYm8V5k3sfx5qy2KbmOJ6Gy6mXEuakK4dD+
+	lVqWir9+OtHBQFPoB0vdx6u00GK/BNuM/0fR5eyK0RPZFGmnvQn7gXFXpDh44vy2OcqjXf
+	7zhSfRI/3FMngkovpr/Tx92cxp8dqerymRABoDMkc+2PMiqlvkOlYVTtjcnC0g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1772694714;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=o9Rv/g2sSOXoBx4YOHT+TvErcM7jjAJLr2hFIDRxUAc=;
+	b=5RkjhwnejcuSRS2fW76R3LD3peZJAHQGav+2GwR+SMZX3QiQtepiZ0c5iQ4unK5hFIvrHV
+	gFBh1TRGSQY2f/CQ==
+Subject: [PATCH v2 0/8] module: Move 'struct module_signature' to UAPI
+Date: Thu, 05 Mar 2026 08:11:50 +0100
+Message-Id: <20260305-module-signature-uapi-v2-0-dc4d81129dee@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNQQ6CMBBFr0Jm7ZhpDSiuvIdhUewAk2BLWkowh
+ LtbuYDL95L//gaRg3CEe7FB4EWieJdBnwp4Dcb1jGIzgyZd0YU0vr1NI2OU3pk5BcZkJsFKdeZ
+ GrWLdtpC3U+BO1qP7bDIPEmcfPsfNon72X3FRSKjpauuyZLJV/RjFpTl4J+vZMjT7vn8B5pSBk
+ r4AAAA=
+X-Change-ID: 20260302-module-signature-uapi-61fa80b1e2bb
+To: David Howells <dhowells@redhat.com>, 
+ David Woodhouse <dwmw2@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772694712; l=2332;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=CdxA/lDoNCeJgiVSZNMfVTLoyKfuC5y8bX2gqNZcV84=;
+ b=9FyUClW24ZP0BNLsGOQjp6Vf1xA2ehbLzgQTtF4tcedOtFKzNXBx/elbEs7tPtDMI9KUk6nJ1
+ zhyau38au1oAgqN/zKFdzdfil5CGff4Dh8k5PxwgrozQcMJX8JFuSop
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-livepatch_trampoline relies on livepatch sysfs and livepatch-sample.ko.
-When CONFIG_LIVEPATCH is disabled or the samples module isn't built, the
-test fails with ENOENT and causes false failures in minimal CI configs.
+This structure definition is used outside the kernel proper.
+For example in kmod and the kernel build environment.
 
-Skip the test when livepatch sysfs or the sample module is unavailable.
-Also avoid writing to livepatch sysfs when it's not present.
+To allow reuse, move it to a new UAPI header.
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+While it is not a true UAPI, it is a common practice to have
+non-UAPI interface definitions in the kernel's UAPI headers.
+
+This came up as part of my CONFIG_MODULE_HASHES series [0].
+But it is useful on its own and so we get it out of the way.
+
+[0] https://lore.kernel.org/lkml/aZ3OfJJSJgfOb0rJ@levanger/
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
+Changes in v2:
+- Drop spurious definition of MODULE_SIGNATURE_TYPE_MERKLE.
+- s/modules/module/ in two patch subjects.
+- Pick up review tags.
+- Link to v1: https://lore.kernel.org/r/20260302-module-signature-uapi-v1-0-207d955e0d69@linutronix.de
 
-v2:
-  - Add missing Cc's suggested by get_maintainer.pl
-  - Prefix subject with bpf-next to avoid Patchwork tree mis-detection
-  - Drop Fixes tag to avoid verify_fixes issues due to tree mismatch
-  - No code changes
+---
+Thomas Weißschuh (8):
+      extract-cert: drop unused definition of PKEY_ID_PKCS7
+      module: Drop unused signature types
+      module: Give 'enum pkey_id_type' a more specific name
+      module: Give MODULE_SIG_STRING a more descriptive name
+      module: Move 'struct module_signature' to UAPI
+      tools uapi headers: add linux/module_signature.h
+      sign-file: use 'struct module_signature' from the UAPI headers
+      selftests/bpf: verify_pkcs7_sig: Use 'struct module_signature' from the UAPI headers
 
-v1: https://patchew.org/linux/20260227042354.20926-1-sun.jian.kdev@gmail.com/
+ arch/s390/kernel/machine_kexec_file.c              |  6 ++--
+ certs/extract-cert.c                               |  2 --
+ include/linux/module_signature.h                   | 30 +---------------
+ include/uapi/linux/module_signature.h              | 41 ++++++++++++++++++++++
+ kernel/module/signing.c                            |  4 +--
+ kernel/module_signature.c                          |  2 +-
+ scripts/Makefile                                   |  1 +
+ scripts/sign-file.c                                | 19 +++-------
+ security/integrity/ima/ima_modsig.c                |  6 ++--
+ tools/include/uapi/linux/module_signature.h        | 41 ++++++++++++++++++++++
+ .../selftests/bpf/prog_tests/verify_pkcs7_sig.c    | 28 ++-------------
+ 11 files changed, 100 insertions(+), 80 deletions(-)
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260302-module-signature-uapi-61fa80b1e2bb
 
- .../bpf/prog_tests/livepatch_trampoline.c     | 28 ++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-index 72aa5376c30e..75336d9c2313 100644
---- a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-+++ b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-@@ -2,9 +2,12 @@
- /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
- 
- #include <test_progs.h>
-+#include <unistd.h>
- #include "testing_helpers.h"
- #include "livepatch_trampoline.skel.h"
- 
-+#define LIVEPATCH_ENABLED_PATH "/sys/kernel/livepatch/livepatch_sample/enabled"
-+
- static int load_livepatch(void)
- {
- 	char path[4096];
-@@ -19,7 +22,8 @@ static int load_livepatch(void)
- static void unload_livepatch(void)
- {
- 	/* Disable the livepatch before unloading the module */
--	system("echo 0 > /sys/kernel/livepatch/livepatch_sample/enabled");
-+	if (!access(LIVEPATCH_ENABLED_PATH, F_OK))
-+		system("echo 0 > " LIVEPATCH_ENABLED_PATH);
- 
- 	unload_module("livepatch_sample", env_verbosity > VERBOSE_NONE);
- }
-@@ -82,6 +86,28 @@ void test_livepatch_trampoline(void)
- {
- 	int retry_cnt = 0;
- 
-+	/* Skip if kernel was built without CONFIG_LIVEPATCH */
-+	if (access("/sys/kernel/livepatch", F_OK)) {
-+		test__skip();
-+		return;
-+	}
-+
-+	/*
-+	 * Skip if livepatch-sample.ko was not built (same path logic as
-+	 * load_livepatch()).
-+	 */
-+	{
-+		char path[4096];
-+
-+		snprintf(path, sizeof(path),
-+			 "%s/samples/livepatch/livepatch-sample.ko",
-+			 getenv("KBUILD_OUTPUT") ? : "../../../..");
-+		if (access(path, R_OK)) {
-+			test__skip();
-+			return;
-+		}
-+	}
-+
- retry:
- 	if (load_livepatch()) {
- 		if (retry_cnt) {
-
-base-commit: 0b3bb205808195159be633a8cefb602670e856fb
+Best regards,
 -- 
-2.43.0
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
