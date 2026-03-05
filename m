@@ -1,154 +1,284 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5511BD9CE
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 20:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A40534BA4B;
+	Thu,  5 Mar 2026 21:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772741736; cv=none; b=BnhlCMQVnRczHQsHpHY/em2eACa2i+4RuOxSLAhoT+qsCcqd16u499rOqjOy445SUe/X2Y1+MCTPOTka+eSNNAM9N+QII+UYQjRtWuziIo+l62PJQTMTXytv5aBYRBjKlAtJpfd8RuQmiT3goCWEu9pGSoisrzWkTA84LHJbT8s=
+	t=1772744640; cv=none; b=kZDDHZBBkllozZB2c7jILU4R7QxE9ZkMiQ2XYOIAmNaG7K1IUTuEVQTBED4jcT1GyDuhgSZfhvUC+1+CFJBicdkjGrpEq8WmgFdYkV9yMvreE0dGaNOXYUUmPctMJXDw1CP7cDnLsJSQQRJXyBJbvIrRo/eCksHSkdLfpSXZWpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772741736; c=relaxed/simple;
-	bh=UNkfBWoKxhoF1oDNewD87BNjfD5wAIKwW/8SEt4F0KU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=YWACmsq773p1Y60AQ4ky5qHWgg+1TGmcmCrLwKlZbAbLZ6+GdoYGOZC/lJnaIi3Wj1wlXQDPVGlLDKOx5PSasDO4Wc24iVV5lWb4rIV6WMDKu2BXUfbcg7J3H/QOXnMw7NMiX0VlEZO/FuA9AGtqzwEDmHGVMTF4/J6B4RotUyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jch17xj+; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1772744640; c=relaxed/simple;
+	bh=ajba8rpFeSFjqa5KG8RXrm1I4HwjDwK0ae4x18tOu10=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=PHZPfITd3hZfEDk3vl7PoQulq+vRnaraMrPr/tazv8s4Bx6aoTnVlbWUUCgGcablsJRIOfiNzdTBqoPDtCIb9gim7G3ltw/u7bny9jQ5XPDnEx1+4563G/bmUvExs1caMFdGIAAdNU7gMtyIbtjVSIllLwIRgFhMS/GQzOSvaC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=GRZjokw8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tko4c20R; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jch17xj+"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35641c14663so8833974a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 12:15:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772741733; x=1773346533; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q5GQ+iLBA7Lk6r8UZZlNI7qBsJqloLBwP6g5inHdZV0=;
-        b=jch17xj+YowXAg2YA4xFUQQqHcEaiTIL3zrX6XrKIXsGaMaLSiigUJDIl5NR0U+SuD
-         b7iKZkT58UbbkzdxTgHwTAeTOsDdIM7ZD/eimTYiMf3LYi81WO0C8Q/qpEKps97MHcmo
-         nwsN/h3aoDlOT5/GUqpQmWCmm+cXM4smW33sqsU9gCB5pBn3aB8J7t5uAptMt/THssKW
-         6RNtgXv2pDYOihAyHYYEsosBgEtGR8PKRQHGVwPeIeISk7kl5oDraNzaOnyQuAnDxWLo
-         P1io4ItBli450ESVh1a7y4FmJrcX0qsjVflKmHf+Ehg42oiaidPGFByYqQRa5HvYZN6J
-         3NbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772741733; x=1773346533;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q5GQ+iLBA7Lk6r8UZZlNI7qBsJqloLBwP6g5inHdZV0=;
-        b=MImW6xk+3dNoCriRu/p2GyV91UE9006JWMIAN4UfU6on70kd8+LpY0jp7RX+rIijuX
-         f037VST1+C4bYEzYiSzq7u0yJYarqkKuAzW6bh2jhYJkDFmYWgNtrGcKWmZyQ+MIhPg9
-         M3VoHiq8tWRa0o6qZGCKGMqqyjKz/gWiDriM48bvmmwUm4WZhQVBNe4xU8unxkQPDq9U
-         gnmbnurvfP8YnvKh7PseGeIvnF1V97rAFI1C3sTuXJnyR6S1/DhMU2H++kw7bP+qPmUM
-         VE+DzBmXqXvbXCA2OLGtvKi327jaboyyZ/w4tBdWEj6ZDfbUFd478jO6sm8PFKnxy21w
-         1ifg==
-X-Forwarded-Encrypted: i=1; AJvYcCX1pU45ar8o4sWJhbdXgzBvN5+FW/xVcvowGiL3n7cHE9BMweATnlYPm1XIiblJLMtB56OFFll278ruKMRPL40=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQwZ10i9kd7JnCgG8k7bpKSmb9k7f/Dgtu9Si+d6NxtGuJYxzM
-	aBhonMbaweGEh+S2XSwg5bTOINl6rAxhCgzeE8pHy64UFgNyPUqZUVwwhT4PpTr9rl8N0Mz3iEB
-	seBhIKQ==
-X-Received: from pjwx4.prod.google.com ([2002:a17:90a:c2c4:b0:358:e87a:c86b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:518e:b0:359:9cb8:db5
- with SMTP id 98e67ed59e1d1-359a6a6f4fdmr5719092a91.26.1772741733417; Thu, 05
- Mar 2026 12:15:33 -0800 (PST)
-Date: Thu, 5 Mar 2026 12:15:32 -0800
-In-Reply-To: <20260207012339.2646196-4-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="GRZjokw8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tko4c20R"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id 252C91300CC5;
+	Thu,  5 Mar 2026 16:03:54 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Thu, 05 Mar 2026 16:03:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
+	 h=cc:cc:content-id:content-transfer-encoding:content-type
+	:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to; s=fm2; t=1772744633; x=1772751833; bh=4acJxYys885P1kZExhCla
+	G7wmjnaUlLNMpGvlOc6Dh4=; b=GRZjokw84k3XuIZ33jvcwb3AaqZ0BvmceJU4W
+	VvMm+wCNPqjtIUqX3XPxtMGHQB0SPfZuztaw5IXDKlspPCj783goEmDjkJG+yWe3
+	laX9cFYZG3/vYJVQKD19wNROnI8eFUcSOZmEkcbw6VdNbhBU/cCm1cTjtQGCP/jU
+	Qg5i+suqIBfVPKTvJfhMlPdj68TtJqoeWBWCyXqXdzhCO/f5DuUx5uxRtJ5I1YPr
+	OJYg6V5ZuipREcyekfdPvMrlCKp/XuJCdODbCLzu3WYr+TaD3PY7vLE8txnnPBCH
+	VxY3KiQ9bVbvKn6myU6je9Dz7qYJ+ja9ssDStl0XUrwPoyU5w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-id
+	:content-transfer-encoding:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1772744633; x=1772751833; bh=4acJxYys885P1kZExhClaG7wmjnaUlLNMpG
+	vlOc6Dh4=; b=tko4c20R9D/tnhWb5kg+OcfhEJBH4zEgRHJJM0DTmdQ5q065Wrt
+	l3b7BQfqWpKhusRh9rqmkcqKZiTefB0B5ed8fgE83kt0iVGTaAWK0t5S+2/GENmw
+	JzPO6ZJkqjbUaehtSzApZtssQeOl+fjmCyWoaoV4YpEK1kRotwNYnXXFBreHPMZ0
+	R6dBlZyuOGNxO7oO7PCBBZiMRTkcitSwNv9BuBUZ7IdFYshz6B9CtMYHIbUerDnJ
+	ax+6HBGE2E1Ydy4/Q5/eszqp3Mzfci12x2O1FMYXcUC4XlCdfvRFaBHSNlxSfDGI
+	uQ2GY4Iha6KJF5auvDMjSpjPBUNTeByQrBg==
+X-ME-Sender: <xms:uO-pafKTTkLJfcNuaQfy8ByO5VQWHhLuMuzjNnHl8VzF2Uk5C-IBhg>
+    <xme:uO-paVcOcrB8KeeUr0uzwsjeqUXktgJ0gTXq0IeHj1UPccYR56gti92LvCjSHsLxd
+    YUG-fg_4fq-n-vMeHZqlr5HneL2Yw0iszS3Edknd4_-WLKn2ac1_e0>
+X-ME-Received: <xmr:uO-paWaieWA2ZRkvj2UV-JmSro39q73GJBSaGho2p3AiBR8zUHkC3xn4TxSR9zLpqRq-fg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvieejgedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefujghfofggtgfgfffksehtqhertdertddvnecuhfhrohhmpeflrgihucgg
+    ohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnhgvtheqnecuggftrfgrthhtvg
+    hrnhepueffvedvvdefudejfeeuudfgtdfgudettdevfeeileffhffghfdtjeekhfeitdek
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehjvhesjhhvohhssghurhhghhdrnhgvthdpnhgs
+    pghrtghpthhtohepfedvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehrrgiioh
+    hrsegslhgrtghkfigrlhhlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhl
+    ohhfthdrnhgvthdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpth
+    htohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohgrmhgrkhhi
+    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmh
+    grihhlrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhrghdp
+    rhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohephh
+    grohhluhhosehgohhoghhlvgdrtghomh
+X-ME-Proxy: <xmx:uO-paVXf5v6uE9WfSbjKDRt83GOqG6svuZeRN-hHIfqPv9Qmkn18Jw>
+    <xmx:uO-paUCS4CoEL15ki9YSBwTMTCBC7KZ01wg6taxlNR5P1CP8-DG_iQ>
+    <xmx:uO-paUB104dISLASCy54teg5wRUvgXHZatWVq8h41ZHgvQqJHy444g>
+    <xmx:uO-paTqC1XEEWGelf3A7DfC1PsbJ6RFi8VBj-BR6-VZKODlqnvBXyQ>
+    <xmx:ue-paVLe7-bpVBQJWIq6C0IqHFq-HPTy1OYFo3i1X4euHX9w38FK6a9k>
+Feedback-ID: i53714940:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 5 Mar 2026 16:03:52 -0500 (EST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+	id 4B3549FCB4; Thu,  5 Mar 2026 13:03:51 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+	by famine.localdomain (Postfix) with ESMTP id 47C419FC39;
+	Thu,  5 Mar 2026 13:03:51 -0800 (PST)
+From: Jay Vosburgh <jv@jvosburgh.net>
+To: Nikolay Aleksandrov <razor@blackwall.org>
+cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+    jiayuan.chen@shopee.com,
+    syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+    Andrew Lunn <andrew+netdev@lunn.ch>,
+    "David S. Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+    Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+    Daniel Borkmann <daniel@iogearbox.net>,
+    Jesper Dangaard Brouer <hawk@kernel.org>,
+    John Fastabend <john.fastabend@gmail.com>,
+    Stanislav Fomichev <sdf@fomichev.me>,
+    Andrii Nakryiko <andrii@kernel.org>,
+    Martin KaFai Lau <martin.lau@linux.dev>,
+    Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+    Yonghong Song <yonghong.song@linux.dev>,
+    KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+    Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+    Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+    Clark Williams <clrkwllms@kernel.org>,
+    Steven Rostedt <rostedt@goodmis.org>, Jussi Maki <joamaki@gmail.com>,
+    linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+    linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+In-reply-to: <aahsuPt7cY8LxETN@penguin>
+References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+ <20260304074301.35482-2-jiayuan.chen@linux.dev> <aahWymAi_CtRG0gJ@penguin>
+ <1293120.1772645248@famine> <aahsuPt7cY8LxETN@penguin>
+Comments: In-reply-to Nikolay Aleksandrov <razor@blackwall.org>
+   message dated "Wed, 04 Mar 2026 19:32:40 +0200."
+X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260207012339.2646196-1-jmattson@google.com> <20260207012339.2646196-4-jmattson@google.com>
-Message-ID: <aankZK5IAdB6GmDy@google.com>
-Subject: Re: [PATCH v3 3/5] KVM: x86/pmu: Refresh Host-Only/Guest-Only
- eventsel at nested transitions
-From: Sean Christopherson <seanjc@google.com>
-To: Jim Mattson <jmattson@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Yosry Ahmed <yosry.ahmed@linux.dev>, 
-	Mingwei Zhang <mizhang@google.com>, Sandipan Das <sandipan.das@amd.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1356527.1772744631.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 05 Mar 2026 13:03:51 -0800
+Message-ID: <1356528.1772744631@famine>
 
-On Fri, Feb 06, 2026, Jim Mattson wrote:
-> Add amd_pmu_refresh_host_guest_eventsel_hw() to recalculate eventsel_hw for
-> all PMCs based on the current vCPU state. This is needed because Host-Only
-> and Guest-Only counters must be enabled/disabled at:
-> 
->   - SVME changes: When EFER.SVME is modified, counters with Guest-Only bits
->     need their hardware enable state updated.
-> 
->   - Nested transitions: When entering or leaving guest mode, Host-Only
->     counters should be disabled/enabled and Guest-Only counters should be
->     enabled/disabled accordingly.
-> 
-> Add a nested_transition() callback to kvm_x86_ops and call it from
-> enter_guest_mode() and leave_guest_mode() to ensure the PMU state stays
-> synchronized with guest mode transitions.
+Nikolay Aleksandrov <razor@blackwall.org> wrote:
 
-Blech, I'm not a fan of this kvm_x86_ops hook.  I especially don't like calling
-out to vendor code from {enter,leave}_guest_mode().  The subtle dependency on
-vcpu-arch.efer being up-to-date in svm_set_efer() is a little nasty too.
+>On Wed, Mar 04, 2026 at 09:27:28AM -0800, Jay Vosburgh wrote:
+>> Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>> =
 
-More importantly, I think this series is actively buggy, as I don't see anything
-in amd_pmu_refresh_host_guest_eventsel_hw() that restricts it to the mediated
-PMU.  And I'm pretty sure that path will bypass the PMU event filter.  And I
-believe kvm_pmu_recalc_pmc_emulation() also needs to be invoked so that emulated
-instructions are counted correctly.
+>> >On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
+>> >> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+>> >> =
 
-To avoid ordering issues and bugs where event filtering and guest/host handling
-clobber each other, I think we should funnel all processing through KVM_REQ_PMU,
-and then do something like this:
+>> >> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NU=
+LL
+>> >> check. rr_tx_counter is a per-CPU counter only allocated in bond_ope=
+n()
+>> >> when the bond mode is round-robin. If the bond device was never brou=
+ght
+>> >> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+>> >> =
 
-diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
-index 14e2cbab8312..a2a9492063f7 100644
---- a/arch/x86/kvm/kvm_cache_regs.h
-+++ b/arch/x86/kvm/kvm_cache_regs.h
-@@ -227,7 +227,8 @@ static inline void enter_guest_mode(struct kvm_vcpu *vcpu)
- {
-        vcpu->arch.hflags |= HF_GUEST_MASK;
-        vcpu->stat.guest_mode = 1;
--       kvm_x86_call(nested_transition)(vcpu);
-+
-+       kvm_pmu_handle_nested_transition();
- }
- 
- static inline void leave_guest_mode(struct kvm_vcpu *vcpu)
-@@ -240,7 +241,8 @@ static inline void leave_guest_mode(struct kvm_vcpu *vcpu)
-        }
- 
-        vcpu->stat.guest_mode = 0;
--       kvm_x86_call(nested_transition)(vcpu);
-+
-+       kvm_pmu_handle_nested_transition();
- }
- 
- static inline bool is_guest_mode(struct kvm_vcpu *vcpu)
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index 0925246731cb..098dae2d45b4 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -244,6 +244,18 @@ static inline bool kvm_pmu_is_fastpath_emulation_allowed(struct kvm_vcpu *vcpu)
-                                  X86_PMC_IDX_MAX);
- }
- 
-+static inline void kvm_pmu_handle_nested_transition(struct kvm_vcpu *vcpu)
-+{
-+       if (!kvm_vcpu_has_mediated_pmu(vcpu))
-+               return;
-+
-+       if (vcpu_to_pmu(vcpu)->reserved_bits & AMD64_EVENTSEL_HOST_GUEST_MASK)
-+               return;
-+
-+       atomic64_set(&vcpu_to_pmu(vcpu)->__reprogram_pmi, -1ull);
-+       kvm_make_request(KVM_REQ_PMU, vcpu);
-+}
-+
- void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu);
- void kvm_pmu_handle_event(struct kvm_vcpu *vcpu);
- int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned pmc, u64 *data);
+>> >> The XDP redirect path can reach this code even when the bond is not =
+up:
+>> >> bpf_master_redirect_enabled_key is a global static key, so when any =
+bond
+>> >> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+>> >> interception is enabled for all bond slaves system-wide. This allows=
+ the
+>> >> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+>> >> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+>> >> reached on a bond that was never opened.
+>> >> =
+
+>> >> Fix this by allocating rr_tx_counter unconditionally in bond_init()
+>> >> (ndo_init), which is called by register_netdevice() and covers both
+>> >> device creation paths (bond_create() and bond_newlink()). This also
+>> >> handles the case where bond mode is changed to round-robin after dev=
+ice
+>> >> creation. The conditional allocation in bond_open() is removed. Sinc=
+e
+>> >> bond_destructor() already unconditionally calls
+>> >> free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate a=
+t
+>> >> ndo_init, free at destructor.
+>> >> =
+
+>> >> Note: rr_tx_counter is only used by round-robin mode, so this
+>> >> deliberately allocates a per-cpu u32 that goes unused for other mode=
+s.
+>> >> Conditional allocation (e.g., in bond_option_mode_set) was considere=
+d
+>> >> but rejected: the XDP path can race with mode changes on a downed bo=
+nd,
+>> >> and adding memory barriers to the XDP hot path is not justified for
+>> >> saving 4 bytes per CPU.
+>> >> =
+
+>> >> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to =
+slave device")
+>> >> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+>> >> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GA=
+E@google.com/T/
+>> >> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+>> >> ---
+>> >>  drivers/net/bonding/bond_main.c | 19 +++++++++++++------
+>> >>  1 file changed, 13 insertions(+), 6 deletions(-)
+>> >> =
+
+>> >
+>> >IMO it's not worth it to waste memory in all modes, for an unpopular m=
+ode.
+>> >I think it'd be better to add a null check in bond_rr_gen_slave_id(),
+>> >READ/WRITE_ONCE() should be enough since it is allocated only once, an=
+d
+>> >freed when the xmit code cannot be reachable anymore (otherwise we'd h=
+ave
+>> >more bugs now). The branch will be successfully predicted practically =
+always,
+>> >and you can also mark the ptr being null as unlikely. That way only RR=
+ takes
+>> >a very minimal hit, if any.
+>> =
+
+>> 	Is what you're suggesting different from Jiayuan's proposal[0],
+>> in the sense of needing barriers in the XDP hot path to insure ordering=
+?
+>> =
+
+>> 	If I understand correctly, your suggestion is something like
+>> (totally untested):
+>> =
+
+>
+>Basically yes, that is what I'm proposing + an unlikely() around that
+>null check since it is really unlikely and will be always predicted
+>correctly, this way it's only for RR mode.
+
+	Jiayuan,
+
+	Do you agree that the patch below (including Nikolay's
+suggestion to add "unlikely") resolves the original issue without memory
+waste, and without introducing performance issues (barriers) into the
+XDP path?
+
+	-J
+
+
+>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond=
+_main.c
+>> index eb27cacc26d7..ac2a4fc0aad0 100644
+>> --- a/drivers/net/bonding/bond_main.c
+>> +++ b/drivers/net/bonding/bond_main.c
+>> @@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding *bond)
+>>  static int bond_open(struct net_device *bond_dev)
+>>  {
+>>  	struct bonding *bond =3D netdev_priv(bond_dev);
+>> +	u32 __percpu *rr_tx_tmp;
+>>  	struct list_head *iter;
+>>  	struct slave *slave;
+>>  =
+
+>> -	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_count=
+er) {
+>> -		bond->rr_tx_counter =3D alloc_percpu(u32);
+>> -		if (!bond->rr_tx_counter)
+>> +	if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN &&
+>> +	    !READ_ONCE(bond->rr_tx_counter)) {
+>> +		rr_tx_tmp =3D alloc_percpu(u32);
+>> +		if (!rr_tx_tmp)
+>>  			return -ENOMEM;
+>> +		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
+>> +
+>>  	}
+>>  =
+
+>>  	/* reset slave->backup and slave->inactive */
+>> @@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *b=
+ond)
+>>  	struct reciprocal_value reciprocal_packets_per_slave;
+>>  	int packets_per_slave =3D bond->params.packets_per_slave;
+>>  =
+
+>> +	if (!READ_ONCE(bond->rr_tx_counter))
+>> +		packets_per_slave =3D 0;
+>> +
+>>  	switch (packets_per_slave) {
+>>  	case 0:
+>>  		slave_id =3D get_random_u32();
+>> =
+
+>> 	-J
+>> =
+
+>> =
+
+>> [0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a9892238c6=
+1f06@linux.dev/
+
+---
+	-Jay Vosburgh, jv@jvosburgh.net
