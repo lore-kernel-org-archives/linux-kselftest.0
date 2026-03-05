@@ -1,150 +1,127 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0BF36827D;
-	Thu,  5 Mar 2026 23:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772753730; cv=none; b=Ge4foNrEjljbZLu81sEtB6D7BhA7HbgW9vGyQGOzA0Da8AJcQDpW9j8nS5t+GaHP9ciCpcKD1FVNvStrXxIpVOTQ5FJr7vam5FTDqy0n79MY8YnW8a56tu+DPhG9iH+F1haBmk9Todhrc+j3iYgA1QE0+gthq1YqYebd1bWAwVs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772753730; c=relaxed/simple;
-	bh=XGCp/gbBgvkSyAtCgxgVwVbQsCEaGunpuJSjPaIh8lc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=N58okb81zGxEuUrv4KgE4EDoekgQImAv/wN3UdABsbjYmgJTqx1ZEs3n8OQAlstpxcVcdEzvPIaAhD2KKIRPH+ni0W+xnOniDkstMijejWKA9p26Jw5vmxKIxYndueNCv5VzK4QHfv2q1/TOh4jmmErHyW+YF+cQDzPbLoeSe8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=YJQvhVm9; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99DC336922E
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 23:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772754964; cv=pass; b=OxzzIm+p3G2UPO36g00cl+i3xAcMT++YdunOkj3mqhKwWmejqXgkKz+0nB51QJ/BFkhp7J4vawCEFpfPOi5kRXjWlLJXd235t1e203nWMSx5plpPrO3KKL6Au5gZyVXrdXFjpPhKNVRS7n6j6ZvTtE96W2ixVVxf9QxDcp63UpE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772754964; c=relaxed/simple;
+	bh=Bt3605Fsr3U1TBJSaoVz0zQG7fmg1eER/wIuM+DoS2w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BNVvTpnF+2lUOl170f8tdKLhrWVVOT8Y+6VRR61WOHN8+WWm8WbsMDTVl95rSkNGjuQI0Ii3v//tym6DbDFqMS23zaAW8mIiyGK2QHGuSHy1an7DFpkP6ebOMEMBuulwxFPL5rqZ7xk+0LOVSEc4xfucLmvBwh0iTU7Lkrmaeag=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aKrqnNph; arc=pass smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="YJQvhVm9"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vyIDu-00EVC8-N0; Fri, 06 Mar 2026 00:35:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=dCbpzFqSx3F9rEHb6ZJLGJQOxr68Qnt0aViVYMiwJhM=; b=YJQvhVm9GfSyt5rWCW5xnzIQ22
-	ceQVRRSm229Dbqy0h+1MLiulH/WFrpn+ePtiBgvjRmgLy1961A4jfo4gUM45WGIavaLejRfwBsZWj
-	o4GRIFgYryGUo1//BCXFS2O21g6yzXb1R5VC03bbn6sZEZewr2emWzSyrUdf1LHYUXJ+n5jhU3PkZ
-	1ViaHbbGWM5OTr3PajefPJrJRi0zV2CovX9x8Vnxuc2hHTOL5tAUaPcCXv8VVb5J0sV7iogr92Q6G
-	SvC5ygse3ZdQoD7U2nZkd+Jjnd3FTl1A4upT4nwVVzW8yOFfI22WmJJ5QXonVO+iHvZBt+TRfEuZF
-	hYIkaW4g==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vyIDp-0004Ol-8s; Fri, 06 Mar 2026 00:35:13 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vyIDi-0014Px-3p; Fri, 06 Mar 2026 00:35:06 +0100
-Message-ID: <835cea23-d141-4c7a-944d-9861be59fecd@rbox.co>
-Date: Fri, 6 Mar 2026 00:35:02 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aKrqnNph"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-12739fe9a0eso477590c88.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 15:56:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772754963; cv=none;
+        d=google.com; s=arc-20240605;
+        b=H7ROLoyEy55fRR21PlvaOC+BNSorf4srC1l3ir6iEP1Kg53vHl9Nf3YYov5HDlbBAo
+         nV06oRyTWZZUDuALk5V83ZUQi1WXABJ8Q3W7wkLHX+gSFbvn/IKr1gWIvf5J9EtL212Y
+         9s/uoYXhiMToqQJbNnAnl2X7LMZjO8V+SPzrgg7V+UYxL9VpqqFlr48mDAWX9QzGTD11
+         SIq4LKvONJk/kmH1aKWmB3f1qJdjQNaPMQ10VJIfjU633TQDuFJMaJOzDEUE0UEVTYKq
+         b9/cE09GwWypZu8OrW6e7Fn/0XN5T3LX0AyEMbPycZ5Ok9z6r++n354j9OsjwEuNxgpa
+         TwFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Bt3605Fsr3U1TBJSaoVz0zQG7fmg1eER/wIuM+DoS2w=;
+        fh=LQGx7XhZN4lsrXA0v3GAKpCBvk2UwTHy7abY2tah8+s=;
+        b=lISqLbYn6CrHhA5hG6XSDxQxtSWhDvN0ox/OzFnuR0FUHQe6wkG6p3gLx48G0DBEHd
+         nj1I+ACPP9yvl5a7uVQXISHLUp9XaCSkTz3Ht0/qHoi/jF9YiLIp0t7/TzT4J7hQSVw4
+         wZRCZSThDJw8fNnIP4dvZvY9gIjwwak7529fQpObfScA92GE6vYg6ySrk8GH6Mw3Rd4U
+         VsWiVMopBDJcsl48gAMhPOUICajxa0cbyeWUyRnQ51ZjEuY5Jyh8ExUz6xrf7NYArZkR
+         92GFygQjLyK4gHdJupb+6tKWG/rga2sotgCVdu1+kOSWbb6WWuZR1vpDtN/Ke6fvSZyh
+         VkkA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772754963; x=1773359763; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bt3605Fsr3U1TBJSaoVz0zQG7fmg1eER/wIuM+DoS2w=;
+        b=aKrqnNphyLfK77yScaE75JMfPCpW1gpFpZwfvBc/KwO6COB2CpDQZC3DGoZPVwwiO5
+         xejPke2tRAX50x/jkpaVNK3gBM8igtTfyqxkzwFvTGeZekFhsqv2vPgf5YqJOn4MADen
+         O129LnmVzyUEBEFlJjOp/6Z+8nuXAHhFi85Up7K8y4E+lfyL86V9Qv/zCE+1G5e+fdG8
+         1804qWgz0HUMztxqcQbXlEytPa4Df+dB1DrFg+u8ctXWhVjyh4O1I5bhZWG3Q+T3cCCD
+         vmhsDiQc+eMDJvaN2QKMGIV2PTs6EIDaUsNjqx9VhoOlGv6eZMzVnZQZGaCQN5j4KII3
+         vkeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772754963; x=1773359763;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Bt3605Fsr3U1TBJSaoVz0zQG7fmg1eER/wIuM+DoS2w=;
+        b=Mlh9RfwAXJs4LYfeh064gpYdcgMe+q4WjtQI2fjGQIUN1MsFPiV4SAXLn/BmK9nZ+0
+         HDyqogGkJS5ioR12f6nAnDNAGZpFJs+5HQylivM9P9sbawtDiV6ShkU2XaRGAsqIL9Vr
+         WLeYGm6iwl1dE+R3dxBcbmWxqsNx/hf8rwl3kG91rWtoyGqXLCrYnOQGhaDG4mWl89qZ
+         z5N380hSQ7iihK/KutUzLeQ3nr5hIZvBreOPrIjUdkRePpIrR+c8pgTcNxqnY9t7N4pW
+         eu/OhHacHqxNdaZLTf4UiykhWmqDAC4nvGGkeC+UtdtrkQrbFzTFzCPyfnHecELZ5VTv
+         3KCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWMxMj8PB92qXykr9HCG+j+HCpfZryO+NpGJtIHtttNfUfRoDZVbX8Pv3JkAOiK8jjs/M2+lDVPAwnD1uT5ziE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWHubvleON5q0aKMnBJgCG4GpDdwBngmzEogpLLjBmTu1UJ+rd
+	tDCsR92eqwqBK5JwOAcmbrcld6XSDR5Yfzb8Tw2380fR9JW7aEQ/3GL2LuIvu6ov8yOL4e2e4DL
+	7UgupMxw8sOnE52+2csST6Z/DUWOPW04=
+X-Gm-Gg: ATEYQzxx4uKQzUNV4cruIMBy+Agmm0Uxv9HlSUfTWwoyXSQgGAezjvtfDJulj/OoJrs
+	w5IVJzpRHaaEyFoHg5YetN4jmBqoGyQN1y0TzzwHJHJDpM2wUjjKMWBG6kgfYG0moN7l5GnieaY
+	Z67B39QX47WNezrDixJVOUVr+VXEYHuTMnLKfjFHKekt3TPnMAEe1JF5ARGeJrbOoQ+Hu5lG+F7
+	1NCRAw5URYqL6/KXfNlYfiUY/HwHXm0PuuaQGSrQjYJp0GzQDywzNvSJ6ArJIzu8NrXlAI/W7Rb
+	+oBDnkuCcU2LOduDDQaqD7Ij1lgcS7oH6ykY9Fe4xRAqiz+rlCSQ1sOJDYC1MMhsaYa/bBMW/Sy
+	wcFwaZNYBCotS7KME+uBh1kTj
+X-Received: by 2002:a05:7300:af06:b0:2b7:e929:856b with SMTP id
+ 5a478bee46e88-2be4e0f0d27mr43522eec.5.1772754962577; Thu, 05 Mar 2026
+ 15:56:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v2 3/4] bpf, sockmap: Adapt for the af_unix-specific
- lock
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Willem de Bruijn <willemb@google.com>, Cong Wang <cong.wang@bytedance.com>,
- Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
- <20260207-unix-proto-update-null-ptr-deref-v2-3-9f091330e7cd@rbox.co>
- <CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com>
- <c4eaead1-ad69-42f0-9699-5f2d555a7693@rbox.co>
- <a2f2c260-38e8-4ba3-8655-cffbee046259@linux.dev>
- <b75bbc3f-85fd-4209-9ce1-3bf685ba62ff@rbox.co>
- <d122ed8b-ebfb-4d59-96ce-10c361e76676@linux.dev>
- <1022fcaf-ca38-43d2-84cb-f66a504335e1@rbox.co>
- <f38608e1-4e85-4bc4-8872-c9ecf38e5d7e@linux.dev>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <f38608e1-4e85-4bc4-8872-c9ecf38e5d7e@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260224-unused_var_err-v2-1-337f9359d98e@nvidia.com>
+ <CANiq72kROq3B=EPfihKM=bvtyqYrbDV-mkFgROdPNjbC6zaBpQ@mail.gmail.com>
+ <cccf55e9-e744-4581-9c14-ffa54bc90faf@davidgow.net> <CANiq72kXjytTqpYGbNqKKPBZoGFYHT-3JMb08we9kEOqiK4dmQ@mail.gmail.com>
+In-Reply-To: <CANiq72kXjytTqpYGbNqKKPBZoGFYHT-3JMb08we9kEOqiK4dmQ@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 6 Mar 2026 00:55:50 +0100
+X-Gm-Features: AaiRm50VzeXAI15UUkXj2oOE9tivNBlF4lsRD74lRvFS5bND2OsLHuMulTuiXys
+Message-ID: <CANiq72ng68YhZuEWYwZTovXn=y7Ng10QEp7rb9YED9f1SUu2wA@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: kunit: fix warning when !CONFIG_PRINTK
+To: David Gow <david@davidgow.net>, Shuah Khan <shuah@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: Alexandre Courbot <acourbot@nvidia.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/3/26 02:51, Martin KaFai Lau wrote:
-> On 2/24/26 7:28 AM, Michal Luczaj wrote:
->> On 2/23/26 22:43, Martin KaFai Lau wrote:
->>>
->>> On 2/11/26 2:02 AM, Michal Luczaj wrote:
->>>>> It should also be helpful to be consistent with tcp/udp iter and use
->>>>> lock_sock() instead of lock_sock_fast() in bpf_iter_unix_seq_show().
->>>> OK, I'll tweak that in v3.
->>>
->>> Hi, Michal. Are you planning to send v3 soon? I don't think the
->>> sock_owned_by_user for the non-tracing prog needs to be addressed in the
->>> same set.
->>
->> Yes, I'm working on it. Sorry for the delay, I'm taking my sweet time to
->> come up with a selftest.
->>
->> I think I can neatly fit the sock_owned_by_user()-related stuff in this
->> series, but let me know if you'd rather have it separately. Whichever way,
->> I don't mind.
-> 
-> I think sock_owned_by_user() is not related to the AF_UNIX's sockmap 
-> fix. If it is not, it's better to separate it. I think one thing at a 
-> time is easier to review.
+On Wed, Mar 4, 2026 at 1:07=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> Ah, good, thanks!
+>
+> I saw your Reviewed-by and no notification of being queued so I
+> thought you expected me to pick it up.
+>
+> Happy to remove it, but it would be nice to get the Cc: stable@ there
+> to avoid having to send it later.
 
-All right, sending out v3 to reduce the scope:
-https://lore.kernel.org/bpf/20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co/
+Ok, I will remove it since I am not hearing anything, but I will send
+a message to stable now to avoid forgetting about it later.
 
-> If they are related somewhat or it's easier to review them together, see 
-> if it makes sense to structure them in a way such that the AF_UNIX's 
-> sockmap-related fixes and tests are at the beginning of the patch set so 
-> that they can be applied first if others need more discussion.
+Cc'ing Shuah, by the way.
 
-I'd say those changes are related, but things are getting unclear for me, I
-won't insist on keeping them together.
+Thanks!
 
-So. Simply dropping BH locks and introducing sock_owned_by_user() in
-sock_map_update_elem() is not enough. For example, sock_map_seq_show() and
-sock_hash_seq_show() must be adapted before taking the sock lock (as they
-currently run under RCU).
-
-But there's a deeper problem: bpf iters let the bpf code call sockmap
-update when sk's file descriptor is halfway through sock_map_close(). This
-breaks the sockmap contract as the update can happen after
-sock_map_remove_links(), but before saved_close(). sockmap ends up with a
-closed sk that normally would be removed.
-
-For sockmap/sockhash iters this condition can be handled: before running
-the bpf tracer prog, check if sk is still linked to map. Since those are
-sockmap/sockhash iters, if there's no link, it means sk should be skipped.
-
-But I'm not sure about other iters. Plus the case you've mentioned of bpf
-tc progs that can call sockmap update with sk unowned. Hence I stop here
-worried this may be a doomed approach :)
-
-Long story short: feels like taking the spinlocks (without unconditionally
-checking sock_owned_by_user()) in sock_map_update_elem() is the best
-approach. Just as it is currently implemented (+the af_unix special
-casing). Some sks will come owned, some won't. What needs to be added after
-taking the spinlock(s) is a sort of is-sk-being-closed check. Or am I
-missing something?
-
-> Regarding the "Keeping sparse annotations in 
-> sock_map_sk_{acquire,release}() required some
-> hackery...". Maybe just remove the annotations?
-> [ btw, from commit 5b63d0ae94cc, the sparse support is removed and it
->    depends solely on clang now (?). If it is the case, what does clang do
->    on the "sock_or_unix_lock"? ]
-
-Oh, I haven't seen that one, thanks. Will take a look. For now, I've just
-dropped the annotations.
+Cheers,
+Miguel
