@@ -1,88 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359C7366DDE;
-	Thu,  5 Mar 2026 08:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DF623C516
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Mar 2026 08:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772698323; cv=none; b=RFEH/9WsINPMDBdzMAQbLRUGtmjxki7D4xyNvqGdwlBG/CyIK6Xyo0h7KCp2lRPYy3thepRtWzPfkh7fx72TI+GFJGzYU5qAPm3kNayzYmTq3LeS5rrx1rV29hF3KWxbJnfCR1LzvdJV/sFH5X8FKN9GHwgj/lNkHyjP/UhVkjg=
+	t=1772700199; cv=none; b=emz9sec5Bvph66GxOF5+o+3ZloWcAUPNm4+pKdo7TY8OjlMnexHyOT/37SpFCPYEPR1VkH/LMpImfPMehss+mwK5QehArwDPy7Y8YBskOeFGmCKXTx/ADcP/Vr3F479qBVJHF+XY4lXUWOS7tjNlZadUZCB6KHHWlMVCbESuJ0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772698323; c=relaxed/simple;
-	bh=nnM2zjvYkKOyj9s5ooMFB4/ffFs14ySMOoYr/6UGGu0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ViaU6qNIgKsbRg0dnj4iGahI9AOCPkfYowIjXDDe0e6vDAZEvoxDfG3a52rCySrRDqQkMxmZHzP6dWqMHFy4l+qKPrAxD7ycJE+XWbJrrtXH2c+Kms3Q4bXsBe3QlA5J2QA2JQf5UVRHTc0DN+UNkSM5kOaDBcP9raKR0Q5Hf2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GnqTYgNY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772700199; c=relaxed/simple;
+	bh=u0MGYNAw3R2Om4vWGOjTSr99GmxyJZFiyTRBLrX6YfU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sEIEoiz1JinFdVdN68Oj7J9xq/6IK1BdOFVymw3atU6WvUKBMiBmsnCAwbq+N8xZ0QZp84aCxeP+OXrOU8n6OCoRBN2np5rEzYaVBHKxfwMmTOuAmIueV+yxsEtxmzBpQ/WNp/jnbTxVjb7Z4usr2sv1uWDVcbGb4nh0x32ERnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=glOJNtNF; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GnqTYgNY"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E1295C2BCB6;
-	Thu,  5 Mar 2026 08:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772698322;
-	bh=nnM2zjvYkKOyj9s5ooMFB4/ffFs14ySMOoYr/6UGGu0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=GnqTYgNYa7dLqlZLdlp9wbgllkgI69NpZ227nMPQkneMQuhPyzt25/YEcUVVcxiDu
-	 G7jony0ea89QL8V4mmq0OdfGWhQXOZ3YimDmNf1JNgJZRRiGdvuhsX8DsQ8veDGVl5
-	 aX2oPCyj0OHNZL3b2OIZCB/L7u/DzL7gl++CQRZnUPo4rnMV0mmA4HUCX4pbTVGZnw
-	 72wLpm1P0ugcJgBbQ+9VmZNapGi/YTjws6ddUd9ALUNQSTO46OI1dkoXyKXs1MgJke
-	 PmowGO2QlHe3c/qFX49xx6Xc5Pvc1oXfsdl645MVipFPn4kU6Ut3f41kpMq7vyxo7Y
-	 5iRy+bcYLWhmA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4C43EEF31C;
-	Thu,  5 Mar 2026 08:12:02 +0000 (UTC)
-From: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>
-Date: Thu, 05 Mar 2026 00:11:32 -0800
-Subject: [PATCH 4/4] selftests: riscv: Add license to cfi selftest
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="glOJNtNF"
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-64c9cabfe5dso9560455d50.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 00:43:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772700197; x=1773304997; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1CrbCrCECbu++kikZq0nQDYehopFHuwXsfSUPduIJHA=;
+        b=glOJNtNFq/DN10ClthHrmayv/shT5b1DNeUEs7ckGrSE4wVvooePRPuKez8dsPyYVJ
+         435T19Ciy8qXqSC5tZ9P0/aX6Nd9rf+9q0FJqbIK6LNOXFj9j6kBXoNmuHoxmODwTlol
+         kxzTwI1A8YH3CBwltwEh7xMvlTnVm+wCHmBkOK5CQ4r4ccESvpWtvOj9JTcopye9fm58
+         sHD7VL+1FB+CxWvq3v8hJQFFhJOYGYIE6pQF6KL+JtsGHsbTWMcJ31TerH48bVssj3+k
+         1R+ndGtBzXM3QC7X9yhe3lWxn4eFMTAprYUgUpiMBjsNLrIJZik+x5Rc5Mzm7g+y2V8A
+         Es6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772700197; x=1773304997;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1CrbCrCECbu++kikZq0nQDYehopFHuwXsfSUPduIJHA=;
+        b=P1iAicheHECgBq+bIWpW4T21KhH3N7anXO2y7tx6u3JpFwPQJR7tPGrYvXhrBq6iiL
+         7LFUJFjIiFjj8kVD/eNZfM1IMD/DNxwcdowEHoznxebNiecNKIt9IWLgY+CfmdOcPCB5
+         CqYxHJpM9SgW8zNeyDWHnrQufe3VBUkxWeB5eQKSqc1tH0bTQyi3rRawJ4XmS81QWxGm
+         mk+jbL+z0IOFTAcxeVMS/7HvcpZf1bmh7US8GBP8N9e8vdeM/sIs79P7+ReC+rKDe0OR
+         pQ6B6erBWXTW1Yg4yUpYL21Uhhv6zp8d4zsvOqXdkR5/EYQ14ZpzQwzoykJahbCyzffU
+         gPGg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/UmBcnv9wLucI7Fy2WPnuzbrIUtZtvnD115Q2krxEyGGMQ4lY+ff/DzWOvP3ez92bb+1en9ibkJmchn/fzs0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/IDK89RTACGumpoS7gWndZYMdkA2vfrKKP5BVvMHRQwDtXEnN
+	Gkv2RAymglelS5GIKxjFF2GNSz5O0FS0NlpC+Y/yvkoP5Qr0GVbHw5xs
+X-Gm-Gg: ATEYQzzt6YroFypRsPvmIumxO5FtqhmWqu8sDw8LdDHslPdznfFmgkEcNyZZV9xsB/W
+	HoM5DppKO3AMD1XBSFEP3oQDnb3vl+SteOQHCuyqeOrMW2CneGDswNhkNyXloL5vGCchX3VlE9O
+	XVo3qjnyG5z+BLqhtLI28iBO3hf389h77LdXI/Ktn6VSCQXEm7CJo3oL0DuqnYPP4HIcUchwAjp
+	UCGWTo/K8h2mmvWBv00ZPl6g2tl1Y/7dVt2NNWXUJLMmtRTvcF3atb2JT61CJwMOHK+oI2bE+SL
+	DETkRAya16gjdyVAQKGRoVcCqSADzwFW5CNM4J0iZl2OivZK+9AqupSidQzlrIVGHu9AQBI0I21
+	Pve4eXkJj0y84V/pnB5rRdIzvPUDC49W74JQD6UGcGx9T0Lx6twVQPVdPIXNp+23N3ClAG32Ptv
+	+Hc33CZ8RqhK7Naw9B83IkZ4l1atdrQHeS5kj420VWyCdJH7EPeTTeLLI6t5pNinB61Y918pZS3
+	yP1B9W5ee8G3yzoqD1+Ru0ciHfxXxiiKg==
+X-Received: by 2002:a05:690e:1914:b0:644:59ed:dba3 with SMTP id 956f58d0204a3-64d0715a05bmr1217220d50.30.1772700197654;
+        Thu, 05 Mar 2026 00:43:17 -0800 (PST)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64cb7626e56sm8943553d50.15.2026.03.05.00.43.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 00:43:17 -0800 (PST)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: perf_link: avoid failures in concurrent mode
+Date: Thu,  5 Mar 2026 16:43:05 +0800
+Message-ID: <20260305084306.283983-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260305-fix_selftests-v1-4-61b62d23500b@gmail.com>
-References: <20260305-fix_selftests-v1-0-61b62d23500b@gmail.com>
-In-Reply-To: <20260305-fix_selftests-v1-0-61b62d23500b@gmail.com>
-To: Shuah Khan <shuah@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, 
- Sergey Matyukevich <geomatsi@gmail.com>, Andy Chiu <andybnac@gmail.com>, 
- Deepak Gupta <debug@rivosinc.com>
-Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Charlie Jenkins <thecharlesjenkins@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772698321; l=597;
- i=thecharlesjenkins@gmail.com; s=2026030; h=from:subject:message-id;
- bh=BASghyhUbPQR3TaCTFC1Bxb1DJuKTtAvjw5yHhn6X94=;
- b=lJ0mzQxUxYW7xpr4ssXjgSI8+lMx7NSdTsAffUyoUAlkm3NsAqEX0NnmwgQl90DM5nKUkE2Ol
- iwQ51FDEMj1BmgGXixIaUwyqZuUjPg4nvPFvJoh8E5HgBpvT4rK4KgZ
-X-Developer-Key: i=thecharlesjenkins@gmail.com; a=ed25519;
- pk=vpF2USrG+aB6CTbSt34rzJKsAVe/l+GAXo1IomCMETk=
-X-Endpoint-Received: by B4 Relay for thecharlesjenkins@gmail.com/2026030
- with auth_id=663
-X-Original-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
-Reply-To: thecharlesjenkins@gmail.com
+Content-Transfer-Encoding: 8bit
 
-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+perf_link creates a system-wide perf event pinned to CPU 0 (pid=-1, cpu=0)
+and also pins the test thread to CPU 0. Under concurrent selftests this
+can lead to cross-test interference and CPU 0 contention, making the test
+flaky.
 
-The cfi selftest was missing a license so add it.
+Create a per-task perf event instead (pid=0, cpu=-1) and drop CPU pinning
+from burn_cpu(). Use barrier() to prevent the burn loop from being
+optimized away. Drop the serial_ prefix so the test can run in parallel.
+Also remove the stale TODO comment.
 
-Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+Tested:
+  ./test_progs -t perf_link -vv
+  ./test_progs -j$(nproc) -t perf_link -vv
+  for i in $(seq 1 50); do ./test_progs -j$(nproc) -t perf_link; done
+
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
- tools/testing/selftests/riscv/cfi/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ .../selftests/bpf/prog_tests/perf_link.c      | 20 +++++--------------
+ 1 file changed, 5 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/riscv/cfi/Makefile b/tools/testing/selftests/riscv/cfi/Makefile
-index 96a4dc4b69c3..93b4738c0e2e 100644
---- a/tools/testing/selftests/riscv/cfi/Makefile
-+++ b/tools/testing/selftests/riscv/cfi/Makefile
-@@ -1,3 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
- CFLAGS += $(KHDR_INCLUDES)
- CFLAGS += -I$(top_srcdir)/tools/include
+diff --git a/tools/testing/selftests/bpf/prog_tests/perf_link.c b/tools/testing/selftests/bpf/prog_tests/perf_link.c
+index d940ff87fa08..9e3a0d217af8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/perf_link.c
++++ b/tools/testing/selftests/bpf/prog_tests/perf_link.c
+@@ -1,8 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2021 Facebook */
+ #define _GNU_SOURCE
+-#include <pthread.h>
+-#include <sched.h>
++#include <linux/compiler.h>
+ #include <test_progs.h>
+ #include "testing_helpers.h"
+ #include "test_perf_link.skel.h"
+@@ -12,23 +11,14 @@
+ 
+ static void burn_cpu(void)
+ {
+-	volatile int j = 0;
+-	cpu_set_t cpu_set;
+-	int i, err;
+-
+-	/* generate some branches on cpu 0 */
+-	CPU_ZERO(&cpu_set);
+-	CPU_SET(0, &cpu_set);
+-	err = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
+-	ASSERT_OK(err, "set_thread_affinity");
++	int i;
+ 
+ 	/* spin the loop for a while (random high number) */
+ 	for (i = 0; i < 1000000; ++i)
+-		++j;
++		barrier();
+ }
+ 
+-/* TODO: often fails in concurrent mode */
+-void serial_test_perf_link(void)
++void test_perf_link(void)
+ {
+ 	struct test_perf_link *skel = NULL;
+ 	struct perf_event_attr attr;
+@@ -45,7 +35,7 @@ void serial_test_perf_link(void)
+ 	attr.config = PERF_COUNT_SW_CPU_CLOCK;
+ 	attr.freq = 1;
+ 	attr.sample_freq = 1000;
+-	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
++	pfd = syscall(__NR_perf_event_open, &attr, 0, -1, -1, PERF_FLAG_FD_CLOEXEC);
+ 	if (!ASSERT_GE(pfd, 0, "perf_fd"))
+ 		goto cleanup;
  
 
+base-commit: 0b3bb205808195159be633a8cefb602670e856fb
 -- 
-2.52.0
-
+2.43.0
 
