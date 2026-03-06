@@ -1,54 +1,54 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8248D39B957
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5EF3CCA1E
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772807772; cv=none; b=Q24jcqu1v7+k+XAvQaKLl9uPn9ZY2CQEfXgP5jwJWkRELtuFH9NZhrVtdsRERFZhIX4UhpHZ379aNdsqyYb8+lkric+cd6sShegAUS468NKvBBHvM/mPXDaAeLPMfzGuyQ66ZMze0fbLf7y/f7JUu0Tw8NzwYCJX5gAVI6rlklA=
+	t=1772807786; cv=none; b=nlGCfnbUGsSjeKr/X7FKxzvUdX+jj0WtbTFh8uMbVVIerkp5UykkOhYbc5hZA12HsOyNccBvXJkR31DfeEPxwKWguSlX4y2IgqAO4NV/iwfH+6S7Sj3s/TBr5YWdc8WW49068AwXZe4qI6fve5/BqtE/+4ZQ/S8/Dot5jlAgLzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772807772; c=relaxed/simple;
-	bh=QgrpnA9vqWR0LvqBZTQt9eWvlVYE0nDC3NQs7drGfDs=;
+	s=arc-20240116; t=1772807786; c=relaxed/simple;
+	bh=dn97yqhM5JULZE/7AhmPFYcp2Ky9Bl52SQiCDggGIbs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fRDY1NwIjhuUYcvkAiI7Z6UsMJ8ADCaxoRan2q689SChnOe+VuuhBbIHp+0w4SSLqCj0GG7wVTqs/O6KENI0tb1XeAQPUgu824VdXGYfGwwm5lCslxR7D71ut8NEcwTCEbSdTzPXcTYFCYyvIkzaLh6wRLLzRZQ1Z5FQN9C+kyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qzowjEd9; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=JLxBN42jBTHv0FI9BFjOAIxm5pGqA/xTfFiR9U0hZesQOYKkQNRUiPPHTTHuJ4Krjwyar34W4juXeoxdTWVpmZ9LWQi4UG5DMCfFEFVQq8K9X833nzQXd5mx9t1gBVyg1t432PmJi+3SBbFZ2BDzTYZ7kSvJZPRREn4zI928FXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SFZFRL5p; arc=none smtp.client-ip=209.85.221.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qzowjEd9"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48379489438so93303415e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:36:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SFZFRL5p"
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-439ca6a7506so3713078f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:36:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772807768; x=1773412568; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772807783; x=1773412583; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EWtEU3hLDTOygEgGBU2HCNdGhHgmpQrxlmxxTt9Vi8=;
-        b=qzowjEd9pD4cyAlbUXPUcoGDx3DUvenLjITrPIelpbqVy+zhp/cmE4JrVvsEH7ckCM
-         HnXUeScVTrqXaPfq3fvj8l7FzV4MSYgNcFPpEEvPHG4lDOQXWi5jGhe9HwROxb4ULUCy
-         PbUwo6yUk6F9169wD3yGVbQOS5vRUxLoGyeU9Dad4nZOuS+zRGY/vKyx7ZbblNBh5LPu
-         6IAB56okLl6BjSHpI9v03fT/xhPteldg7V7iuZHK3qpsEHBty8y2V4O3R9ahvffT19RI
-         SWeuaAUZTtXD+JpoMNTFMJdBqJad82gpbsEpN8LLKimwslP8mXccCjIvoHBBAVN0F1Qv
-         hOvA==
+        bh=QsVePr8Brwc4uqDNMxUsa63z10B8xk0sNAC+har7PuE=;
+        b=SFZFRL5pIpye/GBPM6/enhQymd0Tpe1g9kEkI0gPyheCwThhhtPxGDovxJ3DQr/g1U
+         rHiPEhGHUd2Rd8+6GFsOjsp92B2Rltcw9PjFMeRJWjWkeNzjdBba2RGE8OZWHwAyKmUB
+         Z+1RRgNkOte6ERU5r/QNKrEAEjp4nKbAnnevDPaFI6S+9+VhF5+1L80xVlS3JNejKP5Y
+         mk2PaFWbm33w29Y2vTfmsD6w2qk1YGFLIQSlkRwIVStC65W/FgNoVkBBs948iDp24/Lu
+         m7EBm5KDvgIf/n42ccp0leO0oNNdKjExpjOlcLKCdzqG2BpNUFf+3x1qF/XTtZg6PO1x
+         9oNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772807768; x=1773412568;
+        d=1e100.net; s=20230601; t=1772807783; x=1773412583;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EWtEU3hLDTOygEgGBU2HCNdGhHgmpQrxlmxxTt9Vi8=;
-        b=t4Ku4IOtA0jKXPJkxJFzks/9cWBiyNH4ZbMLfOCrQvQm2QgN/XEJ3j/IzQVGyd7Blv
-         cUiWmjmMzTXRHGViH2u/6llGrrBGyMGMvascO44PVWkFl3InHfT+/MJsxp4FKXqe7kKJ
-         7+V89LWEJA5PdjeYMExGgJrYbOiulGulVbSv2oZORXwHz8wyBZgdowa2yeEi8zg9oHau
-         XqfZHK9nV9pF7HvWRSwONXC3grbCM981kE4/YxwkfNpd718mJK/C018oDvYuwKhtWIJP
-         AYhWvdvUFWyPwKyyFqJG4DUw7FrTBsLnckhwE2Z4KAoo+XHxjacj+YFzeJ/YBeHSCJML
-         5NEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXAZA7O+yYJiXRHnK20WThYtWr3yxfDz+8vX91T/cWdsDMHvGW9XSLtKWBZU2KdvvnnYCYuqbojSFi/CljEk3I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWIlDXKzEYMVOZMBuJivAyEnVXtQIEdmauGIXooKQQcT2F9OaJ
-	EGR9XQwXnV4iE8leFM4s2dqknX+nePThlkbKEUwAsffjEY5WpZH4zjNtOjdX72IiwE/NyVDq+Ka
-	3E4s/poucRIOwJrR/Mux7LA==
-X-Received: from wmgb17.prod.google.com ([2002:a05:600c:1511:b0:480:6b05:6b98])
+        bh=QsVePr8Brwc4uqDNMxUsa63z10B8xk0sNAC+har7PuE=;
+        b=iDzVWMSqmn7oEFhlgbtncI+Sd9dEDu7ZGSUEO3Ij+XwtKhr+FWdwR4FTksX04ApJk9
+         e1lgD78U7m+VdM8DH60n5Y/J5cYHJ8TASN7x6p61FI+S8ZAmL4XmKfAaTxXF92t1UXhR
+         29nQ4QmIMwrOXiH7495oPzeWW5rdZHj092ELPGxp7ZdS/ZKf/Oyt08tgWVHdJ8AJSPzk
+         wyKDyn4iUOTogF6DiitTvj0iGqJjSj/q+XpqJAhmpGT3y9rMTKBVTildnDzS+Y6cWqWl
+         kRm2XmBW1kaScmQEWsQfn+ylHAsoEhHKrcUx+5FmLvnzj3R6MWPipAqNbvU601xmE8bS
+         ZJoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX2i7y325+YDutM1rZhdbrYv74C+/EZy/xaFI4LjIeDNNNaOdYPxY/VlwDUDKvfikknC5Vl5Jm5x8HtfzpcTjw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywldx2jAPoE6Wn/dppu0OdrDCwKKc2l8S24B/k74s62VhmS4arS
+	KkEzH0yit76gEGrDBp9miDQ5sFD0e3RUEfal5LBLcHtOIcXc4p9gcEqfscYFha52b+osNmIdMnY
+	qkSk+WkooTG/hET9tPrpDSg==
+X-Received: from wrbfn19.prod.google.com ([2002:a05:6000:2893:b0:439:b5ff:8e88])
  (user=vdonnefort job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:64c7:b0:47a:935f:61a0 with SMTP id 5b1f17b1804b1-485268bd694mr39238285e9.0.1772807767833;
- Fri, 06 Mar 2026 06:36:07 -0800 (PST)
-Date: Fri,  6 Mar 2026 14:35:19 +0000
+ 2002:a05:6000:2681:b0:439:c38e:66cc with SMTP id ffacd0b85a97d-439da88ffdamr3828400f8f.46.1772807783068;
+ Fri, 06 Mar 2026 06:36:23 -0800 (PST)
+Date: Fri,  6 Mar 2026 14:35:34 +0000
 In-Reply-To: <20260306143536.339777-1-vdonnefort@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260306143536.339777-1-vdonnefort@google.com>
 X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260306143536.339777-16-vdonnefort@google.com>
-Subject: [PATCH v13 15/32] tracing: selftests: Add trace remote tests
+Message-ID: <20260306143536.339777-31-vdonnefort@google.com>
+Subject: [PATCH v13 30/32] tracing: selftests: Add hypervisor trace remote tests
 From: Vincent Donnefort <vdonnefort@google.com>
 To: rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
 	linux-trace-kernel@vger.kernel.org, maz@kernel.org, oliver.upton@linux.dev, 
@@ -71,554 +71,99 @@ Cc: kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
 	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Exercise the tracefs interface for trace remote with a set of tests to
-check:
-
-  * loading/unloading (unloading.tc)
-  * reset (reset.tc)
-  * size changes (buffer_size.tc)
-  * consuming read (trace_pipe.tc)
-  * non-consuming read (trace.tc)
+Run the trace remote selftests with the trace remote 'hypervisor', This
+trace remote is most likely created when the arm64 KVM nVHE/pKVM
+hypervisor is in use.
 
 Cc: Shuah Khan <skhan@linuxfoundation.org>
 Cc: linux-kselftest@vger.kernel.org
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
 
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc b/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc
 new file mode 100644
-index 000000000000..1a43280ffa97
+index 000000000000..64bf859d6406
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc
-@@ -0,0 +1,25 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/buffer_size.tc
+@@ -0,0 +1,11 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote buffer size
-+# requires: remotes/test
++# description: Test hypervisor trace buffer size
++# requires: remotes/hypervisor/write_event
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/buffer_size.tc
 +
-+test_buffer_size()
-+{
-+    echo 0 > tracing_on
-+    assert_unloaded
-+
-+    echo 4096 > buffer_size_kb
-+    echo 1 > tracing_on
-+    assert_loaded
-+
-+    echo 0 > tracing_on
-+    echo 7 > buffer_size_kb
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+    setup_remote_test
-+    test_buffer_size
-+fi
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/functions b/tools/testing/selftests/ftrace/test.d/remotes/functions
++set -e
++setup_remote "hypervisor"
++test_buffer_size
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc
 new file mode 100644
-index 000000000000..97a09d564a34
+index 000000000000..7fe3b09b34e3
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/functions
-@@ -0,0 +1,88 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+setup_remote()
-+{
-+	local name=$1
-+
-+	[ -e $TRACING_DIR/remotes/$name/write_event ] || exit_unresolved
-+
-+	cd remotes/$name/
-+	echo 0 > tracing_on
-+	clear_trace
-+	echo 7 > buffer_size_kb
-+	echo 0 > events/enable
-+	echo 1 > events/$name/selftest/enable
-+	echo 1 > tracing_on
-+}
-+
-+setup_remote_test()
-+{
-+	[ -d $TRACING_DIR/remotes/test/ ] || modprobe remote_test || exit_unresolved
-+
-+	setup_remote "test"
-+}
-+
-+assert_loaded()
-+{
-+	grep -q "(loaded)" buffer_size_kb
-+}
-+
-+assert_unloaded()
-+{
-+	grep -q "(unloaded)" buffer_size_kb
-+}
-+
-+dump_trace_pipe()
-+{
-+    output=$(mktemp $TMPDIR/remote_test.XXXXXX)
-+    cat trace_pipe > $output &
-+    pid=$!
-+    sleep 1
-+    kill -1 $pid
-+
-+    echo $output
-+}
-+
-+check_trace()
-+{
-+	start_id="$1"
-+	end_id="$2"
-+	file="$3"
-+
-+	# Ensure the file is not empty
-+	test -n "$(head $file)"
-+
-+	prev_ts=0
-+	id=0
-+
-+	# Only keep <timestamp> <id>
-+	tmp=$(mktemp $TMPDIR/remote_test.XXXXXX)
-+	sed -e 's/\[[0-9]*\]\s*\([0-9]*.[0-9]*\): [a-z]* id=\([0-9]*\)/\1 \2/' $file > $tmp
-+
-+	while IFS= read -r line; do
-+		ts=$(echo $line | cut -d ' ' -f 1)
-+		id=$(echo $line | cut -d ' ' -f 2)
-+
-+		test $(echo "$ts>$prev_ts" | bc) -eq 1
-+		test $id -eq $start_id
-+
-+		prev_ts=$ts
-+		start_id=$((start_id + 1))
-+	done < $tmp
-+
-+	test $id -eq $end_id
-+	rm $tmp
-+}
-+
-+get_cpu_ids()
-+{
-+    sed -n 's/^processor\s*:\s*\([0-9]\+\).*/\1/p' /proc/cpuinfo
-+}
-+
-+get_page_size() {
-+    sed -ne 's/^.*data.*size:\([0-9][0-9]*\).*/\1/p' events/header_page
-+}
-+
-+get_selftest_event_size() {
-+    sed -ne 's/^.*field:.*;.*size:\([0-9][0-9]*\);.*/\1/p' events/*/selftest/format | awk '{s+=$1} END {print s}'
-+}
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/reset.tc b/tools/testing/selftests/ftrace/test.d/remotes/reset.tc
-new file mode 100644
-index 000000000000..4d176349b2bc
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/reset.tc
-@@ -0,0 +1,90 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/reset.tc
+@@ -0,0 +1,11 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote reset
-+# requires: remotes/test
++# description: Test hypervisor trace buffer reset
++# requires: remotes/hypervisor/write_event
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/reset.tc
 +
-+check_reset()
-+{
-+    write_event_path="write_event"
-+    taskset=""
-+
-+    clear_trace
-+
-+    # Is the buffer empty?
-+    output=$(dump_trace_pipe)
-+    test $(wc -l $output | cut -d ' ' -f1) -eq 0
-+
-+    if $(echo $(pwd) | grep -q "per_cpu/cpu"); then
-+        write_event_path="../../write_event"
-+        cpu_id=$(echo $(pwd) | sed -e 's/.*per_cpu\/cpu//')
-+        taskset="taskset -c $cpu_id"
-+    fi
-+    rm $output
-+
-+    # Can we properly write a new event?
-+    $taskset echo 7890 > $write_event_path
-+    output=$(dump_trace_pipe)
-+    test $(wc -l $output | cut -d ' ' -f1) -eq 1
-+    grep -q "id=7890" $output
-+    rm $output
-+}
-+
-+test_global_interface()
-+{
-+    output=$(mktemp $TMPDIR/remote_test.XXXXXX)
-+
-+    # Confidence check
-+    echo 123456 > write_event
-+    output=$(dump_trace_pipe)
-+    grep -q "id=123456" $output
-+    rm $output
-+
-+    # Reset single event
-+    echo 1 > write_event
-+    check_reset
-+
-+    # Reset lost events
-+    for i in $(seq 1 10000); do
-+        echo 1 > write_event
-+    done
-+    check_reset
-+}
-+
-+test_percpu_interface()
-+{
-+    [ "$(get_cpu_ids | wc -l)" -ge 2 ] || return 0
-+
-+    for cpu in $(get_cpu_ids); do
-+        taskset -c $cpu echo 1 > write_event
-+    done
-+
-+    check_non_empty=0
-+    for cpu in $(get_cpu_ids); do
-+        cd per_cpu/cpu$cpu/
-+
-+        if [ $check_non_empty -eq 0 ]; then
-+            check_reset
-+            check_non_empty=1
-+        else
-+            # Check we have only reset 1 CPU
-+            output=$(dump_trace_pipe)
-+            test $(wc -l $output | cut -d ' ' -f1) -eq 1
-+            rm $output
-+        fi
-+        cd -
-+    done
-+}
-+
-+test_reset()
-+{
-+    test_global_interface
-+    test_percpu_interface
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+    setup_remote_test
-+    test_reset
-+fi
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
++set -e
++setup_remote "hypervisor"
++test_reset
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc
 new file mode 100644
-index 000000000000..170f7648732a
+index 000000000000..b937c19ca7f9
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
-@@ -0,0 +1,127 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace.tc
+@@ -0,0 +1,11 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote non-consuming read
-+# requires: remotes/test
++# description: Test hypervisor non-consuming trace read
++# requires: remotes/hypervisor/write_event
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/trace.tc
 +
-+test_trace()
-+{
-+	echo 0 > tracing_on
-+    assert_unloaded
-+
-+    echo 7 > buffer_size_kb
-+    echo 1 > tracing_on
-+    assert_loaded
-+
-+    # Simple test: Emit few events and try to read them
-+    for i in $(seq 1 8); do
-+        echo $i > write_event
-+    done
-+
-+    check_trace 1 8 trace
-+
-+    #
-+    # Test interaction with consuming read
-+    #
-+
-+    cat trace_pipe > /dev/null &
-+    pid=$!
-+
-+    sleep 1
-+    kill $pid
-+
-+    test $(wc -l < trace) -eq 0
-+
-+    for i in $(seq 16 32); do
-+        echo $i > write_event
-+    done
-+
-+    check_trace 16 32 trace
-+
-+    #
-+    # Test interaction with reset
-+    #
-+
-+    echo 0 > trace
-+
-+    test $(wc -l < trace) -eq 0
-+
-+    for i in $(seq 1 8); do
-+        echo $i > write_event
-+    done
-+
-+    check_trace 1 8 trace
-+
-+    #
-+    # Test interaction with lost events
-+    #
-+
-+    # Ensure the writer is not on the reader page by reloading the buffer
-+    echo 0 > tracing_on
-+    echo 0 > trace
-+    assert_unloaded
-+    echo 1 > tracing_on
-+    assert_loaded
-+
-+    # Ensure ring-buffer overflow by emitting events from the same CPU
-+    for cpu in $(get_cpu_ids); do
-+        break
-+    done
-+
-+    events_per_page=$(($(get_page_size) / $(get_selftest_event_size))) # Approx: does not take TS into account
-+    nr_events=$(($events_per_page * 2))
-+    for i in $(seq 1 $nr_events); do
-+        taskset -c $cpu echo $i > write_event
-+    done
-+
-+    id=$(sed -n -e '1s/\[[0-9]*\]\s*[0-9]*.[0-9]*: [a-z]* id=\([0-9]*\)/\1/p' trace)
-+    test $id -ne 1
-+
-+    check_trace $id $nr_events trace
-+
-+    #
-+    # Test per-CPU interface
-+    #
-+    echo 0 > trace
-+
-+    for cpu in $(get_cpu_ids) ; do
-+        taskset -c $cpu echo $cpu > write_event
-+    done
-+
-+    for cpu in $(get_cpu_ids); do
-+        cd per_cpu/cpu$cpu/
-+
-+        check_trace $cpu $cpu trace
-+
-+        cd - > /dev/null
-+    done
-+
-+    #
-+    # Test with hotplug
-+    #
-+
-+    [ "$(get_cpu_ids | wc -l)" -ge 2 ] || return 0
-+
-+    echo 0 > trace
-+
-+    for cpu in $(get_cpu_ids); do
-+        echo 0 > /sys/devices/system/cpu/cpu$cpu/online || return 0
-+        break
-+    done
-+
-+    for i in $(seq 1 8); do
-+        echo $i > write_event
-+    done
-+
-+    check_trace 1 8 trace
-+
-+    echo 1 > /sys/devices/system/cpu/cpu$cpu/online
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+
-+    setup_remote_test
-+    test_trace
-+fi
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
++set -e
++setup_remote "hypervisor"
++test_trace
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc
 new file mode 100644
-index 000000000000..669a7288ed7c
+index 000000000000..66aa1b76c147
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
-@@ -0,0 +1,127 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/trace_pipe.tc
+@@ -0,0 +1,11 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote consuming read
-+# requires: remotes/test
++# description: Test hypervisor consuming trace read
++# requires: remotes/hypervisor/write_event
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/trace_pipe.tc
 +
-+test_trace_pipe()
-+{
-+    echo 0 > tracing_on
-+    assert_unloaded
-+
-+    # Emit events from the same CPU
-+    for cpu in $(get_cpu_ids); do
-+        break
-+    done
-+
-+    #
-+    # Simple test: Emit enough events to fill few pages
-+    #
-+
-+    echo 1024 > buffer_size_kb
-+    echo 1 > tracing_on
-+    assert_loaded
-+
-+    events_per_page=$(($(get_page_size) / $(get_selftest_event_size)))
-+    nr_events=$(($events_per_page * 4))
-+
-+    output=$(mktemp $TMPDIR/remote_test.XXXXXX)
-+
-+    cat trace_pipe > $output &
-+    pid=$!
-+
-+    for i in $(seq 1 $nr_events); do
-+        taskset -c $cpu echo $i > write_event
-+    done
-+
-+    echo 0 > tracing_on
-+    sleep 1
-+    kill $pid
-+
-+    check_trace 1 $nr_events $output
-+
-+    rm $output
-+
-+    #
-+    # Test interaction with lost events
-+    #
-+
-+    assert_unloaded
-+    echo 7 > buffer_size_kb
-+    echo 1 > tracing_on
-+    assert_loaded
-+
-+    nr_events=$((events_per_page * 2))
-+    for i in $(seq 1 $nr_events); do
-+        taskset -c $cpu echo $i > write_event
-+    done
-+
-+    output=$(dump_trace_pipe)
-+
-+    lost_events=$(sed -n -e '1s/CPU:.*\[LOST \([0-9]*\) EVENTS\]/\1/p' $output)
-+    test -n "$lost_events"
-+
-+    id=$(sed -n -e '2s/\[[0-9]*\]\s*[0-9]*.[0-9]*: [a-z]* id=\([0-9]*\)/\1/p' $output)
-+    test "$id" -eq $(($lost_events + 1))
-+
-+    # Drop [LOST EVENTS] line
-+    sed -i '1d' $output
-+
-+    check_trace $id $nr_events $output
-+
-+    rm $output
-+
-+    #
-+    # Test per-CPU interface
-+    #
-+
-+    echo 0 > trace
-+    echo 1 > tracing_on
-+
-+    for cpu in $(get_cpu_ids); do
-+        taskset -c $cpu echo $cpu > write_event
-+    done
-+
-+    for cpu in $(get_cpu_ids); do
-+        cd per_cpu/cpu$cpu/
-+        output=$(dump_trace_pipe)
-+
-+        check_trace $cpu $cpu $output
-+
-+        rm $output
-+        cd - > /dev/null
-+    done
-+
-+    #
-+    # Test interaction with hotplug
-+    #
-+
-+    [ "$(get_cpu_ids | wc -l)" -ge 2 ] || return 0
-+
-+    echo 0 > trace
-+
-+    for cpu in $(get_cpu_ids); do
-+        echo 0 > /sys/devices/system/cpu/cpu$cpu/online || return 0
-+        break
-+    done
-+
-+    for i in $(seq 1 8); do
-+        echo $i > write_event
-+    done
-+
-+    output=$(dump_trace_pipe)
-+
-+    check_trace 1 8 $output
-+
-+    rm $output
-+
-+    echo 1 > /sys/devices/system/cpu/cpu$cpu/online
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+
-+    setup_remote_test
-+    test_trace_pipe
-+fi
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc b/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc
++set -e
++setup_remote "hypervisor"
++test_trace_pipe
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc
 new file mode 100644
-index 000000000000..cac2190183f6
+index 000000000000..1dafde3414ab
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc
-@@ -0,0 +1,41 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/hypervisor/unloading.tc
+@@ -0,0 +1,11 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote unloading
-+# requires: remotes/test
++# description: Test hypervisor trace buffer unloading
++# requires: remotes/hypervisor/write_event
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/unloading.tc
 +
-+test_unloading()
-+{
-+    # No reader, writing
-+    assert_loaded
-+
-+    # No reader, no writing
-+    echo 0 > tracing_on
-+    assert_unloaded
-+
-+    # 1 reader, no writing
-+    cat trace_pipe &
-+    pid=$!
-+    sleep 1
-+    assert_loaded
-+    kill $pid
-+    assert_unloaded
-+
-+    # No reader, no writing, events
-+    echo 1 > tracing_on
-+    echo 1 > write_event
-+    echo 0 > tracing_on
-+    assert_loaded
-+
-+    # Test reset
-+    clear_trace
-+    assert_unloaded
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+
-+    setup_remote_test
-+    test_unloading
-+fi
++set -e
++setup_remote "hypervisor"
++test_unloading
 -- 
 2.53.0.473.g4a7958ca14-goog
 
