@@ -1,204 +1,187 @@
-Received: from fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.72.182.33])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC61A29B76F;
-	Fri,  6 Mar 2026 15:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.72.182.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4719D36606C
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 16:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772811735; cv=none; b=LKsC9d3Tfsm2+jVNtv0mxIdtlztHPmy9Cb1+c04BaoUE+oYdo2e2rHZRJ3PbPHKuEJ5hjw7DGjPNutzuHmbqvG7ife2PA9BwAzZjEHLe14HVR8eHqAoP4ecCgkSsaSt3r7dZ8v3Uig2YyvSd2Yqo+BfJ0uv/tae1kSjjF+c+iDw=
+	t=1772813605; cv=none; b=Gpv3mNqkb94/unGaJ5gl8uawvcgCSaJkw4UJ/dArfGtYjgCgXo+/psV9E5TFmYgNpSpi2Crx/2bbvBiT25mnUnihLA5bI8ol0xoMPkXU6D8/Xvehww0FyQz2HmwmoRxDCLQvuqYYoNbIG5eCS8TptnYcgmERjBj3qV2SKABj304=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772811735; c=relaxed/simple;
-	bh=fHxvicr/4x2KROO8aKJnuupOmRnTt0JEjdAoxNKC7a0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NK+EewW1MP2nY5PFdq5Ox+57pLhpQtEIBllSlR03ISN6CyaDAL81wOwMdoPKCAwcQa8pPQ6tuqEC80MMXB4A72JLM3I89EGkcSpWP4Aj2NsMT3oulRNsK1wq1itSmcnBNNJSL7LYn3sEO9bhtBHJugH2mJA7zUJ2+kVMU5i7AVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=HjUgjvU3; arc=none smtp.client-ip=3.72.182.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1772813605; c=relaxed/simple;
+	bh=6ramR1fvhsZBmeuhcDVJvLLvzGmdUw5Q/IjxWV44FFk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ToKkRkuQuX1zK1H/nGul0RYVwodHW1JXBwTymcAmIbxxrzdJ4/99AIYnNj367OuEaVHBUuXkhGh8s8lTCYGvEcwwF2aaaC56GLit/UN8ia7i75YpydKqP6xkdxB5re3zsmdwnf48cL8NfDimXVsz02DKEl6p7t8lDvam4C/EHCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QOoHmhN9; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="HjUgjvU3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1772811734; x=1804347734;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=zlv5A21skW2cpWW+wfG6AmLOagqEDkrIsCoF7K54pBc=;
-  b=HjUgjvU3l8JCmKgYUMw4Ygy9Aim7IUwMscTQgjIYKFQOxN1QCQi3LM9K
-   ZpvWbKNZzIlzvT0SdXoAxPhz2h3U5its1gk5MKhPEVO4j73IR3gwDdtjg
-   1uZxF5FQ+pFTnSOHUSDJN3ygVO+NjEGkVOix0IHzWSti39+6hNK1dMHNj
-   F3ut/ITRAQ+fP58I3H1ZLkMGiesjuWqoQ4KQAqDxH8CL6S5U03xBYX5iH
-   W8FB3OMlqyDjhNo0KEmoVJgZTMVnRYBZxP8vjqcU2KZHyLbA0KKtx0H74
-   xDYhnx+0vn7TqhzNYwbV5V80J6xqT09R+yok7M0sTV820BeTY8XCFor66
-   A==;
-X-CSE-ConnectionGUID: /M9OfjBRTeKqpDhCE8ldMA==
-X-CSE-MsgGUID: 0Bb6xkULS3yW60j2eb25+A==
-X-IronPort-AV: E=Sophos;i="6.23,105,1770595200"; 
-   d="scan'208";a="10435125"
-Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
-  by internal-fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 15:42:09 +0000
-Received: from EX19MTAEUB001.ant.amazon.com [54.240.197.226:28153]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.5.165:2525] with esmtp (Farcaster)
- id 8290e714-6a53-45c7-af32-ec04f3406384; Fri, 6 Mar 2026 15:42:09 +0000 (UTC)
-X-Farcaster-Flow-ID: 8290e714-6a53-45c7-af32-ec04f3406384
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19MTAEUB001.ant.amazon.com (10.252.51.26) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Fri, 6 Mar 2026 15:42:07 +0000
-Received: from [192.168.2.180] (10.106.83.26) by EX19D005EUB003.ant.amazon.com
- (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Fri, 6 Mar 2026
- 15:42:02 +0000
-Message-ID: <6dcbcdcb-bfdd-43a3-b724-599a717c1054@amazon.com>
-Date: Fri, 6 Mar 2026 15:42:01 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QOoHmhN9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772813603;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ltB62fWfgsjHxIIEPtVwdiuBolpYhQWjUTW9f1V37ug=;
+	b=QOoHmhN9Vnm0lP0E3iacu5ckYwLLncS3vr8ZCMjpnw5RSoE/68Zur3723niVDSyjt1SweG
+	AEGDWl+mjRgIjBKcfJ3hvLCaXFMUR2yDHl+++KGwjsH7rHYhPhlTg+9eRrdtCUs30Htjcp
+	pR2KU/Ru7z1ZkAuzHUuoaFDCfu9oDVc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-685-raQa7F1wOEyHngLPiC6lDw-1; Fri,
+ 06 Mar 2026 11:13:20 -0500
+X-MC-Unique: raQa7F1wOEyHngLPiC6lDw-1
+X-Mimecast-MFC-AGG-ID: raQa7F1wOEyHngLPiC6lDw_1772813599
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 878B418002C8;
+	Fri,  6 Mar 2026 16:13:18 +0000 (UTC)
+Received: from jlelli-thinkpadt14gen4.remote.csb (unknown [10.45.224.3])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 099633003E9F;
+	Fri,  6 Mar 2026 16:13:12 +0000 (UTC)
+From: Juri Lelli <juri.lelli@redhat.com>
+Subject: [PATCH RFC 0/7] selftests/sched: Add comprehensive SCHED_DEADLINE
+ test suite
+Date: Fri, 06 Mar 2026 17:10:05 +0100
+Message-Id: <20260306-upstream-deadline-kselftests-v1-0-2b23ef74c46a@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v10 09/15] KVM: guest_memfd: Add flag to remove from
- direct map
-To: "David Hildenbrand (Arm)" <david@kernel.org>, "Kalyazin, Nikita"
-	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
-	<loongarch@lists.linux.dev>
-CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
-	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
-	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
-	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
-	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
-	<willy@infradead.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "lorenzo.stoakes@oracle.com"
-	<lorenzo.stoakes@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
-	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
-	<andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
-	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
-	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
-	<jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
-	<jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
-	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
-	"shuah@kernel.org" <shuah@kernel.org>, "riel@surriel.com" <riel@surriel.com>,
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
-	<jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
-	"kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
-	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
-	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
-	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
-	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
-	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
-	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
-	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
-	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
-	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
-	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
-	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
-	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
-	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
-	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
-	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
-	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
-	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
-	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
-	<xmarcalx@amazon.co.uk>
-References: <20260126164445.11867-1-kalyazin@amazon.com>
- <20260126164445.11867-10-kalyazin@amazon.com>
- <13ed00e1-f0db-4326-a800-2ba306833921@kernel.org>
- <690c22f9-b71a-4f14-9857-008c7c858373@amazon.com>
- <0c0b911c-cda2-44a4-897e-361e02be7da5@kernel.org>
- <936fa782-d937-4b14-b92d-cc8707336e5e@amazon.com>
- <9b4b9f48-595d-46c9-8f77-fc021ac2619c@kernel.org>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-In-Reply-To: <9b4b9f48-595d-46c9-8f77-fc021ac2619c@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D011EUA003.ant.amazon.com (10.252.50.178) To
- EX19D005EUB003.ant.amazon.com (10.252.51.31)
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQrCMBBG4auUWRtIU5qCW8EDuBUXafNHR2taM
+ qkIpXc36vK9xbeSIDGE9tVKCS8WnmKJelfRcHPxCsW+NBltrG60VcssOcE9lYfzI0eoh2AMGZJ
+ Fha5pOweja2upEHNC4PePP9PpeKDLf8rS3zHkL0zb9gHEfTp8hQAAAA==
+X-Change-ID: 20260306-upstream-deadline-kselftests-f7357ae20166
+To: Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Valentin Schneider <vschneid@redhat.com>, 
+ Clark Williams <williams@redhat.com>, Gabriele Monaco <gmonaco@redhat.com>, 
+ Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>, 
+ Luca Abeni <luca.abeni@santannapisa.it>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772813592; l=4656;
+ i=juri.lelli@redhat.com; s=20250626; h=from:subject:message-id;
+ bh=6ramR1fvhsZBmeuhcDVJvLLvzGmdUw5Q/IjxWV44FFk=;
+ b=pgRxKhMzUAYzhCRLufPpi6TRu0PVN31ZMMeNhSxRxQtGW23aNd36KibqqXvFZc1ohTUKcTWga
+ DcywfEPGJi2DLppnxvcE7vweASFme3tXgK18h3DrY/RN9/y5mvkJiAE
+X-Developer-Key: i=juri.lelli@redhat.com; a=ed25519;
+ pk=kSwf88oiY/PYrNMRL/tjuBPiSGzc+U3bD13Zag6wO5Q=
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
+This series introduces a comprehensive test suite for the SCHED_DEADLINE
+scheduler, providing coverage for core functionality, bandwidth admission
+control, and the fair_server (dl-server) mechanism.
 
+I've been playing with/using this set of tests for a while and they
+helped me a little checking for regressions and corner cases. So, I
+guess I've also now found the courage to share this with everyone and
+see what happens. :P
 
-On 06/03/2026 15:16, David Hildenbrand (Arm) wrote:
-> On 3/6/26 15:49, Nikita Kalyazin wrote:
->>
->>
->> On 06/03/2026 14:22, David Hildenbrand (Arm) wrote:
->>> [...]
->>>
->>>>
->>>> Dave pointed earlier that the failures were possible [1].  Do you think
->>>> we can document it better?
->>>
->>> I'm fine with checking that somewhere (to catch any future problems).
->>>
->>> Why not do the WARN_ON_ONCE() in folio_restore_direct_map()?
->>>
->>> Then, carefully document (in the new kerneldoc for
->>> folio_restore_direct_map() etc) that folio_restore_direct_map() is only
->>> allowed after a prior successful folio_zap_direct_map(), and add a
->>> helpful comment above the WARN_ON_ONCE() in folio_restore_direct_map()
->>> that we don't expect errors etc.
->>
->> My only concern about that is the assumptions we make in KVM may not
->> apply to the general case and the WARN_ON_ONCE may become too
->> restrictive compared to proper error handling in some (rare) cases.  For
->> example, is it possible for the folio to migrate in between?
-> 
-> Not without migration support. But then, migration would have to make
-> sure that the destination folio has the direct map removed. So I
-> wouldn't worry about that.
-> 
-> Once you return an error from folio_restore_direct_map(), you better
-> document when/why it happens and how the caller should handle it.
-> 
-> There is nothing existing callers could really do, so it's an
-> implementation detail of the
-> folio_zap_direct_map()/folio_restore_direct_map() functions to make sure
-> it keeps working.
-> 
-> If it ever fails, we'll have to figure out how to keep the interface
-> working.
-> 
-> You can document any restrictions regarding when
-> folio_zap_direct_map()/folio_restore_direct_map() is allowed to be used
-> in the kerneldoc.
+Motivation
+----------
+SCHED_DEADLINE currently lacks dedicated test coverage in kselftest.
+While the scheduler itself is well-tested in production, having automated
+tests helps catch regressions during development and provides examples of
+correct SCHED_DEADLINE usage for developers.
 
-Ok, makes sense to me.
+Development Process
+-------------------
+This series was developed using Claude Code (claude.ai/code), making it
+both a testing improvement and an experiment in itself. The goal is to
+explore what AI-assisted development can contribute to kernel testing
+efforts - from framework design to test implementation to documentation.
 
-> 
-> --
-> Cheers,
-> 
-> David
+All code has been reviewed and validated by the human maintainer, but the
+bulk of the implementation, test design, and even this cover letter were
+produced through iterative collaboration with Claude. This represents an
+experiment in whether AI tools can help scale testing efforts while
+maintaining code quality and kernel development standards.
+
+Feedback on both the test suite itself and this development approach is
+welcome.
+
+Design
+------
+The test framework follows the pattern established by sched_ext selftests,
+using ELF constructors for automatic test registration. This allows tests
+to be self-contained and easily extensible - new tests are added simply by
+defining a struct dl_test and calling REGISTER_DL_TEST().
+
+The suite includes a utility library (dl_util) that provides reusable
+helpers for common operations: setting SCHED_DEADLINE parameters, managing
+bandwidth, controlling CPU topology, and process management.
+
+Series Overview
+---------------
+Patch 1: Framework infrastructure with test discovery and structured output
+Patch 2: Utility library and cpuhog helper program
+Patch 3: Integration with kselftest build system
+Patch 4: Basic functionality tests (scheduling, parameter validation)
+Patch 5: Bandwidth admission control tests
+Patch 6: fair_server (dl-server) tests
+Patch 7: Regression test for ENQUEUE_REPLENISH bug
+
+Testing
+-------
+All tests pass on x86_64 with both VM and bare-metal systems. The tests
+adapt automatically to system configuration, detecting available bandwidth
+and dl-server bandwidth allocations dynamically.
+
+Tests can be run via:
+  make -C tools/testing/selftests TARGETS=sched run_tests
+  make -C tools/testing/selftests/sched/deadline run_tests
+
+Or selectively:
+  cd tools/testing/selftests/sched/deadline
+  make
+  ./runner -h
+
+Current test results:
+  PASSED:  7
+  SKIPPED: 0
+  FAILED:  0
+
+Series also available at
+
+git@github.com:jlelli/linux.git deadline-kselftests-rfc
+
+Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+---
+Juri Lelli (7):
+      selftests/sched: Add SCHED_DEADLINE test framework infrastructure
+      selftests/sched: Add SCHED_DEADLINE utility library
+      selftests/sched: Integrate SCHED_DEADLINE tests into kselftest framework
+      selftests/sched: Add basic SCHED_DEADLINE functionality tests
+      selftests/sched: Add SCHED_DEADLINE bandwidth tests to kselftest
+      selftests/sched: Add SCHED_DEADLINE fair_server tests to kselftest
+      selftests/sched: Add SCHED_DEADLINE ENQUEUE_REPLENISH bug test
+
+ tools/testing/selftests/sched/Makefile             |   8 +
+ tools/testing/selftests/sched/deadline/.gitignore  |   3 +
+ tools/testing/selftests/sched/deadline/Makefile    |  54 +++
+ tools/testing/selftests/sched/deadline/bandwidth.c | 270 +++++++++++
+ tools/testing/selftests/sched/deadline/basic.c     | 127 +++++
+ tools/testing/selftests/sched/deadline/cpuhog.c    | 107 +++++
+ tools/testing/selftests/sched/deadline/dl_test.h   | 238 +++++++++
+ tools/testing/selftests/sched/deadline/dl_util.c   | 530 +++++++++++++++++++++
+ tools/testing/selftests/sched/deadline/dl_util.h   | 294 ++++++++++++
+ .../testing/selftests/sched/deadline/fair_server.c | 260 ++++++++++
+ .../selftests/sched/deadline/replenish_bug.c       | 337 +++++++++++++
+ tools/testing/selftests/sched/deadline/runner.c    | 219 +++++++++
+ 12 files changed, 2447 insertions(+)
+---
+base-commit: d658686a1331db3bb108ca079d76deb3208ed949
+change-id: 20260306-upstream-deadline-kselftests-f7357ae20166
+
+Best regards,
+--  
+Juri Lelli <juri.lelli@redhat.com>
 
