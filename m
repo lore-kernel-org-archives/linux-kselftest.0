@@ -1,81 +1,81 @@
 Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D90369994
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 05:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF172206AC
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 05:47:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772775861; cv=pass; b=DQ4fUmeenfWVbCN6d2S1nW8b9DNermZlCL21wl0S5GzJCPFxunQxXkFA566UwDUlQynpZmHzxcYT/V7A/NXw+E3OjOGqVIDbr46pgyAQmuz+QTXd1qTE1sz/GSogViSBdtbDJlQcJzxG6M1B2tZ3f4EP+Z0O1d1pt2kKu39PdvY=
+	t=1772776080; cv=pass; b=JAQGKsruw2KLQTOgkJazT7rYL2EDc2SpyDGziV9YPsYhhbSOHnb9HjGIc8zytrbfrHl9TQuoaBZaWZjXHHgpEgm4RSRhRVtp/3+JrySnduqk6WIGQt+yLSFPfwnUMgxazKQ3tuQlr3KK62afFB/fInc8KdhBLmyY35pbYTNMDj0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772775861; c=relaxed/simple;
-	bh=PSltAUW3Pbszw31Un6mmbj8jIMad2C1Y1xk6vP+XBsk=;
+	s=arc-20240116; t=1772776080; c=relaxed/simple;
+	bh=FWoKnzFkU1fho+/6SGBYDFjVkFjVU4+0P4fHA5HMTy8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q8H//qNoFjB8lX8LCmoblkFddguy8nRJlnmUlNYFxYu/vcfxOq+DniFaVEnQRMh1w4R1fe6rnH9rQ9XvLYLfoffofcCay0ygP7Z8h49dOQoE8k//unhigPQpbAeEV1eC2TbqoVhYvrC/rBLBq5zSlNH4o3XNdrdtvF6cegcbsxY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tJ64QPdN; arc=pass smtp.client-ip=74.125.82.51
+	 To:Cc:Content-Type; b=OUQ6kyl6DSR1HOVKv9O5ivpP8jzKXR5OtG8dGwDz079Ms1jEloy912RRwsJS0RNsOkNiQDXGT1DcUjGl2XSe7jyDp8s7Rw1pIxKkbsrl0GzZdmTAfeWZQLTxq5gV076MPkbYs+CFABAejtIubzRH4v2X9wMbK1yfmGPg0wS9PCU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2v0e1a9J; arc=pass smtp.client-ip=74.125.82.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tJ64QPdN"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-12776bebe9fso8578546c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 21:44:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772775859; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2v0e1a9J"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1279eced0b9so7600194c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 21:47:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772776077; cv=none;
         d=google.com; s=arc-20240605;
-        b=J7tUClK49Q8NO5BkAk9wD1gUXJFtzOTnw1S03hj0H1n0L6G8+Cqgse9G/+LD4d95+0
-         Oen3HfXfHCDqkrFyZlAstG2+zN/wmrHmMcxPBAQse6tJFF9VsbR9cD+GFUBWJKcQfEII
-         KXsiT2rBjbZl2XHtSEW/3ZFD+4AxInoSII/ERz2qFdgQnJV4NfTSXxdVw6ndbgFTcju0
-         jfgL1UGLr+08j0JH0NvthJ8eQcjdpEIiM1/QFr1x5mHEEtsuE0DZdyeRAV2Xtjd+9oFP
-         O8WuZ/3ZhpAt0UreBeNXNPVHPaqsuXc43bPcG2ITOEew3XHu0QDPLp9qeQLRf0nsWw+P
-         FOEA==
+        b=fn9jh1U8qM6ROjquBncMdJC6X4ul5W6T31n8sKNDb+FFSaENsQ6sySWEP0nzMkYo1S
+         QMQAe2PAfWx3P9hfzpKNLU8GdwfYr1iWhUvOB4djN0bLm1y2Kyb4xbbnCGUi2DOcJ+LV
+         CjqeMKNh8s3a2aGTliHV/VuSbX2KpawohH8U01en/TS2w7BVhdwsbYSuheLExI+/Qi7F
+         aFMg92erf1NNV+GHre31xG7+kSndrudGPtXebirnTe0gqtSxY+YoZFxl1KX0k7isNj5P
+         v95kYVrcGk93cFAJ1qN9CmHkSwh6lJYaXU9M4GxF7Zo47vUab5kXnOrsKcDAysEUR4kl
+         3CWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=tyBv9EeX3mFY/3tVDfQWJsxTKxsHkm5c9r8R+TELfok=;
-        fh=CXQrGGRwzc1gx2MneUFikTUSaHCqDII4dN7pMShc5eU=;
-        b=CUtnMTOf9B45JxbMcpmLAYtuJkKR6LaZs3Tlui4LJj+cjhNhGDGvXBXz4m1xNdH0Y6
-         rqG9GO5dVSc9onPkEGPUrpX1jWrJbgOQVX4zImfUC6T2GP3BVzK9Jgrfn5HsYa2RbCrj
-         c3V/t+EZa4AbXh4CvXXCZ4kZmXNSu+uYkXCe0knSAm/kk38SiD5LczJXzDktpoODXkXl
-         lcFYodRFgia37Ggj4l7wU9EJ1Mwmp3VEvEz0MdsHz7PC6662vmty/xzdMMoloeDuMTSH
-         Ll5KeqgKCMsapr5jwIBpXbr+WQ9Oxlec+cbiVLBlCKpCyhek+Z7iaZ6iWJChCsBil/vp
-         0gzg==;
+        bh=gpXO7mHlaGT+SvMmByXwqY9ET8QOSb7XZwHnLOlPXCw=;
+        fh=f3GVq+8yUnk3QpXpW1prTdL6S+/kFlgAZ8HnecglIkA=;
+        b=kjRf8JMEWFiLqvVuuplW8i0eJTXv64radrJJAtspL9hyM7cGasrNfCtXbIaHIr0Msv
+         4IqQ9BRGxgnCM3b6qESVwGYo07+QgFt3rUzXrg22yZb377R/MRTr1JcSjECmmPc/utS0
+         DT0/W05h/Suc+a2ggcpmGx/vMDiEv0kp3lg4zqajT9JQNtc0GHXUt4F29bXeHn3tCKVG
+         Wxi4shwI8tJm3Cd2tP2ZwZ48hMkS+WLYPA+V6/abgmqWKQNRZ/nZVbd2dcLRrf+MDFeX
+         AUe7tbDKW7jdfICDeR0E2NV/KqC5GMPvwXsIE6twBIIWf7seAuGuIAdLdrpxp2zUVvW3
+         XO6g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772775859; x=1773380659; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772776077; x=1773380877; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tyBv9EeX3mFY/3tVDfQWJsxTKxsHkm5c9r8R+TELfok=;
-        b=tJ64QPdNkYMrwF6kswOu29tm1VHNA77QBY/+JXz5SaKEWEitVwvvAVp5cvWhcawhIH
-         O6NoTmEBJb+sck6Azjo33BI8JpNA8Ml7zmwUXrxb2PCS0quICCPmN2ZMgkjCSiGRg9j6
-         9FJLF7iR59luWOqtdYK5cWG65V6P9/EpWFGEhBiJjQx5aBq3PvyXHNzrRcYbYxA1QsK8
-         6wF1Y37Bi6dTpqpUZgrbSTj8O3ghTdhoIPvNMd5YIRWk79ildQK83VaNaNE6iU3vgxY9
-         KtOM8FsaN08/FY+HkariIl6RVMHBH2MjBQFJdTmkVO2CXSEG4kcFPhS6CwKRMfQQJwL7
-         gBww==
+        bh=gpXO7mHlaGT+SvMmByXwqY9ET8QOSb7XZwHnLOlPXCw=;
+        b=2v0e1a9JEOR8zNQUmfjtW3wi0m/G4WxMvKR7bat+cH/6HNE8pdFJdKITXphSCUbn91
+         5Tgmf5g+6xeOw4ORMP9qvbw/rbc03dmet6xTn3HPz5356yS/uaVgIDGgiKyFD5Sy9rTs
+         tY/U4AXi78fY2aeA8if9lSQsVjD+Mx0WOaPtrS/lrTj0nIMqrUJUEag+suicHin2fOKZ
+         kmjC7RokPiEliw1CBdp8xyXj7lHoG/OpcNsPeKZC5e73qxDKPkTN6sddRxRzLlTmfFXc
+         ZeQIJ5WMVJlYj/w/h4ObZRdRJNwjMEt26dfJOhPQ/Z2G5AYFT6blJgYtxiNyLKLZA8il
+         fvBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772775859; x=1773380659;
+        d=1e100.net; s=20230601; t=1772776077; x=1773380877;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tyBv9EeX3mFY/3tVDfQWJsxTKxsHkm5c9r8R+TELfok=;
-        b=aSY0hPcsVocLwPA7QMpso3L4zdA4SfT+O68w5mTqV9C6YFWv5laNmx3CCE7kyLBVYQ
-         ySJfATeTZZrQPPNG2+P9bR2tm7JXx4pqEXjC63syMcqojB19Yzdi0vVpuAHwq8PAyfDZ
-         Ozw7SNa72Bc0670KtsdwAL5Ut74Yl2G2qqLgZehDTyZs27Uu+rFSJJAkD3JXURiX0833
-         vm2a6UGr7ZjOPKY9ixFgQEsHiG68NAmsl1MhIwBnVC191ty7egLQdlars7JE1sC3tPk0
-         yUjHumKn2JVK59SmP37eQFYGaY6vb5Hfr4rt5VAsHXrY+u7H6fUd4KiYfw729xYIzRKN
-         bBLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXOp8EAVdWBB4GiYuDtQFOQ7O+IvXSi/XEb9MybbjQ5xXiB3YoxINGooOhBtwEqu1o4IdOE2+axAoVMMJcsv74=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVL7354yjbZ/AwU+XlUtyLzkK421zc0CpAsbOsmceyBxMsfM0z
-	I/3JyLqCH4nw7X2+CQTxAS+8FlXcdV67GtJ0m0uYKwx9Kj9GOVe3J84lFFqTK6z7pY58w3+Pvib
-	EIs4ZhJF8tl+TYOF1DsALykdpCHMqHEIvw3CUmX3g
-X-Gm-Gg: ATEYQzyKyZ7ZNkMxwKUzxBQ6+Ahec/cHbl0lA8r8ptS0LlKdBZ3b1x2GExWGLrBZUUM
-	tfGK/7/DQMOR+da2WCvkJsAQGSsZzC91KZjsHhyfP7E4Uc+vKYTVWm+DPd/8PpGWiv+aaIRbZwg
-	yFpet9CSyWwjfBXco/JuJaW/0PcMp/Ovf2Y/AOis1v02ixSl58sdi7ElcE3WHGRudUbyTF2XD+d
-	CpwPaS5QH+JYpXLSn9fSZQ16nl4fQniu2i22wOI8Z0p6CZPY/IZG+eEzIM6VrHdh0zjkyl0X83N
-	JL8Aax7j+hjn2NZo8+MtoeQrWu2X6UnG03o22AT8/IfeA3zTm61wSAVWtnGQ8/9Eb1HCkg+wM3O
-	AbBIrJXc=
-X-Received: by 2002:a05:7022:105:b0:123:2c98:f65d with SMTP id
- a92af1059eb24-128c2dc0787mr413515c88.13.1772775858405; Thu, 05 Mar 2026
- 21:44:18 -0800 (PST)
+        bh=gpXO7mHlaGT+SvMmByXwqY9ET8QOSb7XZwHnLOlPXCw=;
+        b=uCabzUOX42VkFKuEAd9L3HivwuWOyrlcuOe0ZBlGFymo54v+gDS3QSwpM4bbNi3WIz
+         WqtlHGGEIbdZsq7zGY/VfYbGRKmmO0X9KbR+y8eQcqJyuVhdGVVOKnNYXPjEJvVr2ZbE
+         CXXGfUY8DqQPReoq07itCkhZ73AEKkr5+KqKD1MvB7gKqcILABbs+4qhvk2KR4GUrkN6
+         8sXKcIIBFEIqLIWhEH4Vcb3pYB8xmdBoWLJZYxhIZ9REC3paOqvfD12yedOqJXBN1rRr
+         i7+dkHnR3owYk/gqBfr/LOB/GU0M11Mr4k5wRT8NaJkNMcTsTU+/pYwwrgDEvQyBmJDj
+         5UvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWhOA8e8rvkz2K2/UIe3a+84v6PpLWS2at4G1HX+JDjkixBu+kOk8l1GblwI0IFq6EzCUqhVigZyzdagOPEUIw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYqKNNEYJ9ePHJbnOhwYBRnMyuVVnmI2REKl/Ycv594IDHqTyB
+	V/pCX3ae1IZ3yf4C6zfOw/rnxFEI1u39K0uNXCk8Du+k1Mr3sFUUgOZG5Kni/fpdO5hqk2lYkwg
+	iQmXCK6etVqzVLHEilF6htMoBZ6jG5wkNuFwR1vze
+X-Gm-Gg: ATEYQzyjNvy7SYgCNtC7Y/aqcF/jxp86pM5IIMPxQ6TGAEXJOqmbMU/kafj1vyvfBdz
+	qjkpYP3F2K6EuqmXgzYYK/gbewdPgIMaYZJlzCSKo2c3l9uJOE+o9I38+RPNvxBEEebWvjU8qa+
+	5Mh/gNoWbvpI0gRLZmoG4iGy4GhlEqg/7ephtKyIeNxIsrWpfDJG2ww7KWfFLCgp8saIxUcOrt5
+	CkatnjCN7HEo1HYn31shCbAcQH7ybK/oSnk2iZ3wZf6sh8Ljnb3Y8x8rWmQve5BZZbRmdC20BeJ
+	LS/zj6vCOyCknyvzLiJl8GN9MdVGN8slWt9ST77bCipHzTttDlSXifptVjyw1EwLNJY5qNN8vDq
+	90cRjEoM=
+X-Received: by 2002:a05:7022:117:b0:119:e56b:91ec with SMTP id
+ a92af1059eb24-128c2e8b925mr401820c88.29.1772776076587; Thu, 05 Mar 2026
+ 21:47:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,14 +83,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-2-2f0c7410c523@rbox.co>
-In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-2-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
+In-Reply-To: <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
 From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Thu, 5 Mar 2026 21:44:07 -0800
-X-Gm-Features: AaiRm51r32W8zss6RR5Iwx5AUfeklGwhcZVJvjzKbkwk8LxQ9Tbtfu8f2GRTyJQ
-Message-ID: <CAAVpQUCdzpwbu=fOrwCnaCFuD3U5SL73PB2nroqgUB4QdJ69og@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 2/5] bpf, sockmap: Use sock_map_sk_{acquire,release}()
- where open-coded
+Date: Thu, 5 Mar 2026 21:47:43 -0800
+X-Gm-Features: AaiRm51rtVtTlMmtHwM6HAI4yCYAH4c9qJkSJtwY41_Op2u8ii9foodM1xMuJa8
+Message-ID: <CAAVpQUAdOCM1h-G-vU+tdEdOqc5+YoHypKwV_w5m4bAA4Ai8Yw@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
 To: Michal Luczaj <mhal@rbox.co>
 Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
 	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
@@ -109,89 +108,63 @@ Content-Transfer-Encoding: quoted-printable
 
 On Thu, Mar 5, 2026 at 3:32=E2=80=AFPM Michal Luczaj <mhal@rbox.co> wrote:
 >
-> Instead of repeating the same (un)locking pattern, reuse
-> sock_map_sk_{acquire,release}(). This centralizes the code and makes it
-> easier to adapt sockmap to af_unix-specific locking.
+> bpf_iter_unix_seq_show() may deadlock when lock_sock_fast() takes the fas=
+t
+> path and the iter prog attempts to update a sockmap. Which ends up spinni=
+ng
+> at sock_map_update_elem()'s bh_lock_sock():
 >
+> WARNING: possible recursive locking detected
+> test_progs/1393 is trying to acquire lock:
+> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: sock_map_update_elem+0x=
+db/0x1f0
+>
+> but task is already holding lock:
+> ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0=
+xe0
+>
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+>
+>        CPU0
+>        ----
+>   lock(slock-AF_UNIX);
+>   lock(slock-AF_UNIX);
+>
+>  *** DEADLOCK ***
+>
+>  May be due to missing lock nesting notation
+>
+> 4 locks held by test_progs/1393:
+>  #0: ffff88814b59c790 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x59/0x10d=
+0
+>  #1: ffff88811ec25fd8 (sk_lock-AF_UNIX){+.+.}-{0:0}, at: bpf_seq_read+0x4=
+2c/0x10d0
+>  #2: ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0=
+x37/0xe0
+>  #3: ffffffff85a6a7c0 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+=
+0x51d/0xb00
+>
+> Call Trace:
+>  dump_stack_lvl+0x5d/0x80
+>  print_deadlock_bug.cold+0xc0/0xce
+>  __lock_acquire+0x130f/0x2590
+>  lock_acquire+0x14e/0x2b0
+>  _raw_spin_lock+0x30/0x40
+>  sock_map_update_elem+0xdb/0x1f0
+>  bpf_prog_2d0075e5d9b721cd_dump_unix+0x55/0x4f4
+>  bpf_iter_run_prog+0x5b9/0xb00
+>  bpf_iter_unix_seq_show+0x1f7/0x2e0
+>  bpf_seq_read+0x42c/0x10d0
+>  vfs_read+0x171/0xb20
+>  ksys_read+0xff/0x200
+>  do_syscall_64+0x6b/0x3a0
+>  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>
+> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
+> Fixes: 2c860a43dd77 ("bpf: af_unix: Implement BPF iterator for UNIX domai=
+n socket.")
 > Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
->  net/core/sock_map.c | 21 +++++++--------------
->  1 file changed, 7 insertions(+), 14 deletions(-)
->
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 02a68be3002a..7ba6a7f24ccd 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -353,11 +353,9 @@ static void sock_map_free(struct bpf_map *map)
->                 sk =3D xchg(psk, NULL);
->                 if (sk) {
->                         sock_hold(sk);
-> -                       lock_sock(sk);
-> -                       rcu_read_lock();
-> +                       sock_map_sk_acquire(sk);
->                         sock_map_unref(sk, psk);
-> -                       rcu_read_unlock();
-> -                       release_sock(sk);
-> +                       sock_map_sk_release(sk);
->                         sock_put(sk);
->                 }
->         }
-> @@ -1176,11 +1174,9 @@ static void sock_hash_free(struct bpf_map *map)
->                  */
->                 hlist_for_each_entry_safe(elem, node, &unlink_list, node)=
- {
->                         hlist_del(&elem->node);
-> -                       lock_sock(elem->sk);
-> -                       rcu_read_lock();
-> +                       sock_map_sk_acquire(elem->sk);
->                         sock_map_unref(elem->sk, elem);
-> -                       rcu_read_unlock();
-> -                       release_sock(elem->sk);
-> +                       sock_map_sk_release(elem->sk);
->                         sock_put(elem->sk);
->                         sock_hash_free_elem(htab, elem);
->                 }
-> @@ -1676,8 +1672,7 @@ void sock_map_close(struct sock *sk, long timeout)
->         void (*saved_close)(struct sock *sk, long timeout);
->         struct sk_psock *psock;
->
-> -       lock_sock(sk);
-> -       rcu_read_lock();
-> +       sock_map_sk_acquire(sk);
->         psock =3D sk_psock(sk);
->         if (likely(psock)) {
->                 saved_close =3D psock->saved_close;
-> @@ -1685,16 +1680,14 @@ void sock_map_close(struct sock *sk, long timeout=
-)
->                 psock =3D sk_psock_get(sk);
->                 if (unlikely(!psock))
->                         goto no_psock;
-> -               rcu_read_unlock();
->                 sk_psock_stop(psock);
-> -               release_sock(sk);
-> +               sock_map_sk_release(sk);
 
-I think sk_psock_stop() was intentionally put outside
-of rcu_read_lock() to not extend the grace period
-unnecessarily. e.g. while + __sk_msg_free().
-
-Maybe add __sock_map_sk_release() without
-rcu_read_unlock() ?
-
-
-
->                 cancel_delayed_work_sync(&psock->work);
->                 sk_psock_put(sk, psock);
->         } else {
->                 saved_close =3D READ_ONCE(sk->sk_prot)->close;
->  no_psock:
-> -               rcu_read_unlock();
-> -               release_sock(sk);
-> +               sock_map_sk_release(sk);
->         }
->
->         /* Make sure we do not recurse. This is a bug.
->
-> --
-> 2.52.0
->
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
