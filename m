@@ -1,51 +1,51 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F3F37B41F
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 16:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A454D3AEF37
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 16:13:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772813612; cv=none; b=dZvVAIpXaeGdzl6v16QtQACbzBmB0mGtJ/ZLhw7V+uv4v95Ly81qfrYJpavUub3E13eioaABUNM2QKPVONsrmwm8Ms7dm+xIPwq5IXdDZ0v1AEjbHJD3WEVDKoS96JDIgHs5EAemLjuhT1FcJnGuvADKmuxPHni0JWOR9238Tkw=
+	t=1772813616; cv=none; b=GzwQtVvbNWgo7vtMEpsKQnmLf3zhkYnn/JGqNdzqW2SDJ+K9t+LFBUvqiDZnxv00I1yiozo2HLRlj5iiIOBGndZAbXLZlkkBb3nnR83xs0z8siC5XXgNK7WOhh6fIdjzHC23RGUohkmgZO7i2jm/8lpceTdZxUP0MsQ9WjSXMAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772813612; c=relaxed/simple;
-	bh=jJq0hYOd7KM1DJayyjkcFArrTtHSIxiUDjXD0vFf6hg=;
+	s=arc-20240116; t=1772813616; c=relaxed/simple;
+	bh=/bidsxXu9CvWMPjW/tUtwL0K6J6dII3HoXBK9F7Km5U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L3aDQ/MzWSMnWqEdmh9jrpGbwkKpKJpId4IHmvti0vJbK9eu89S8lZajm+6VIMHC/oZhlP7IQNLHvUkceLhugroz+hh5pIt5Jxkg5UAQJoJ9FUBNwn44kyVV07JaFsJ60/zupNeIWjJcObc41oCmcuF3MClhM8Ij4bh+Uq69+oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DPWEGuHY; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:To:Cc; b=pwJI3rJ1aoXkfbXjx2orU8JSl3ajeq42FWbNhD3Q1ucH+cV+HW7C+GvU03IxLeb2MT9OLL5aNW/OXNp8CY/vl1RV45Q+OSB/hL5XqPuEROiWCdNxLNVmi1rBs7uXk/hagy8ECm05Wf//KyWxOJH6QvFTwEEeBsU+jjQfggSBBEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=euzjiDwg; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DPWEGuHY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="euzjiDwg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772813609;
+	s=mimecast20190719; t=1772813613;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pp3EhGkHs8clYca1XkHqcOG+uzD0A0gPqGEyEfk/OdY=;
-	b=DPWEGuHY58IdftcC+tU9+1TtAWG8oBcb6zGJ7jgJKjangfQ4Lbb9SZcVxVFGeQXuZI/H3y
-	J2LdrFCBfPQtN8SVfPQMc0onCLhlKG8FbU0zOGO+Y1hOxENhoqEbFbjRs5pUFgG8hhFn/y
-	qKhJYaS77iy0mtdKNlU9v8n0QouuYgM=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=2Ylt4OCIDgmiM5S9qcgc4QXEM8ZZkVzorMJ3ZH7qWgQ=;
+	b=euzjiDwgIkgdvhvRcGzI9h2tWDeuikaQ6TWnNenCakiW4eKIbQsbUfbWGBJ4K3DolTBmsB
+	GG162bzkBbq9ptFONuY66sYizCY3vHHbr1JYlAppqUQX8b3Qr83IqZS2VthRyOdN+iM4zD
+	5pFWzCWEEY1Z0SCUxkFJXpAMUVtjayk=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-332-e0XU-W0eOUuW0XdYOlTQ4Q-1; Fri,
- 06 Mar 2026 11:13:26 -0500
-X-MC-Unique: e0XU-W0eOUuW0XdYOlTQ4Q-1
-X-Mimecast-MFC-AGG-ID: e0XU-W0eOUuW0XdYOlTQ4Q_1772813604
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-425-EfuozfBdN0amGDcXGDL7Jw-1; Fri,
+ 06 Mar 2026 11:13:30 -0500
+X-MC-Unique: EfuozfBdN0amGDcXGDL7Jw-1
+X-Mimecast-MFC-AGG-ID: EfuozfBdN0amGDcXGDL7Jw_1772813609
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E1E7D19560A7;
-	Fri,  6 Mar 2026 16:13:23 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 94320180035D;
+	Fri,  6 Mar 2026 16:13:28 +0000 (UTC)
 Received: from jlelli-thinkpadt14gen4.remote.csb (unknown [10.45.224.3])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0EA7E3003E9F;
-	Fri,  6 Mar 2026 16:13:18 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F3DB3003EA4;
+	Fri,  6 Mar 2026 16:13:24 +0000 (UTC)
 From: Juri Lelli <juri.lelli@redhat.com>
-Date: Fri, 06 Mar 2026 17:10:06 +0100
-Subject: [PATCH RFC 1/7] selftests/sched: Add SCHED_DEADLINE test framework
- infrastructure
+Date: Fri, 06 Mar 2026 17:10:07 +0100
+Subject: [PATCH RFC 2/7] selftests/sched: Add SCHED_DEADLINE utility
+ library
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,7 +54,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260306-upstream-deadline-kselftests-v1-1-2b23ef74c46a@redhat.com>
+Message-Id: <20260306-upstream-deadline-kselftests-v1-2-2b23ef74c46a@redhat.com>
 References: <20260306-upstream-deadline-kselftests-v1-0-2b23ef74c46a@redhat.com>
 In-Reply-To: <20260306-upstream-deadline-kselftests-v1-0-2b23ef74c46a@redhat.com>
 To: Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
@@ -67,565 +67,800 @@ Cc: Vincent Guittot <vincent.guittot@linaro.org>,
  Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>, 
  Luca Abeni <luca.abeni@santannapisa.it>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772813592; l=15557;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772813592; l=20039;
  i=juri.lelli@redhat.com; s=20250626; h=from:subject:message-id;
- bh=jJq0hYOd7KM1DJayyjkcFArrTtHSIxiUDjXD0vFf6hg=;
- b=TuoorXqdQfHAcRC2W81zD5RaDXkXUUkj8Utgj3E343lMw4pIHfeW9g69s7RF5GLQ/iuVH+T/v
- 64q/nqNGrAUCKBLMycRtMD9FbE88o/NjdYB8VDlr5piMdO35HuYpV3K
+ bh=/bidsxXu9CvWMPjW/tUtwL0K6J6dII3HoXBK9F7Km5U=;
+ b=rS2otwo+UDqDqk2Nf71HjWKywF81dS0wcrYaNuR8O1fv6kTMWjBi2Utz+CoDEO74JTyQW6Htv
+ bBsOiMjFpwgD+JPJSq9p1B9l/a3doFRByY28KnELM5DaGd8GThi7Sww
 X-Developer-Key: i=juri.lelli@redhat.com; a=ed25519;
  pk=kSwf88oiY/PYrNMRL/tjuBPiSGzc+U3bD13Zag6wO5Q=
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Add the foundational infrastructure for SCHED_DEADLINE scheduler tests
-following the pattern established by sched_ext selftests. This provides
-a clean, extensible framework for testing SCHED_DEADLINE functionality.
+Add a comprehensive utility library for SCHED_DEADLINE scheduler tests.
+This library provides reusable helper functions that simplify test
+implementation and reduce code duplication across the test suite.
 
-The framework uses ELF constructors for automatic test registration,
-allowing new tests to be added simply by defining a struct dl_test and
-calling REGISTER_DL_TEST(). The runner discovers all registered tests
-at runtime and executes them serially, providing a simple and consistent
-way to expand test coverage without modifying the test runner itself.
+The utility library provides scheduling operations that wrap the
+sched_setattr and sched_getattr syscalls for setting and querying
+SCHED_DEADLINE parameters. These include dl_set_sched_attr() for
+configuring deadline parameters, dl_get_sched_attr() for querying
+scheduling attributes, dl_get_policy() for reading the policy from
+/proc, and dl_is_deadline_task() for checking if a task is using
+SCHED_DEADLINE. The library uses system headers for struct sched_attr
+to avoid redefinition conflicts and provides full control over
+SCHED_DEADLINE parameters.
 
-The framework provides a complete test lifecycle with setup, run, and
-cleanup phases for each test. Tests can be filtered by name, listed for
-inspection, or run in quiet mode for automated testing environments. The
-framework includes assertion macros such as DL_EQ and DL_FAIL_IF to
-simplify test authoring and provide consistent error reporting. Signal
-handling ensures graceful interruption and cleanup when tests are
-terminated early.
+Bandwidth management helpers allow tests to work within system
+constraints. The dl_get_rt_bandwidth() function reads RT bandwidth
+settings from /proc, while dl_calc_max_bandwidth_percent() calculates
+the available bandwidth for deadline tasks based on current system
+configuration.
 
-This commit establishes the framework without any actual tests. Tests
-will be added in subsequent patches. The framework design is inspired by
-tools/testing/selftests/sched_ext/ but tailored for SCHED_DEADLINE
-testing needs.
+Process management functions simplify creating and managing test
+workloads. The dl_create_cpuhog() function forks and schedules a cpuhog
+process by creating a child process, executing the cpuhog binary, and
+setting SCHED_DEADLINE policy on the child PID after fork. It waits for
+the child to start before configuring the scheduling policy. Supporting
+functions include dl_cleanup_cpuhog() for terminating processes,
+dl_find_cpuhogs() for locating running instances, and dl_wait_for_pid()
+for synchronizing with process startup.
+
+CPU topology helpers enable tests that manipulate CPU hotplug state.
+These include dl_get_online_cpus() for counting available CPUs,
+dl_get_hotpluggable_cpus() for identifying which CPUs can be
+hotplugged, dl_cpu_online() and dl_cpu_offline() for controlling
+hotplug state, and dl_is_cpu_online() for checking current status.
+
+Time conversion utilities provide convenient transformations between
+different time units. These include dl_ms_to_ns() and dl_us_to_ns()
+for converting to nanoseconds, and dl_ns_to_ms() and dl_ns_to_us() for
+converting from nanoseconds.
+
+The library also includes the cpuhog helper program, which performs
+busy looping to consume CPU cycles. This provides a controllable
+workload for testing scheduler behavior under various deadline
+configurations.
 
 Assisted-by: Claude Code: claude-sonnet-4-5@20250929
 Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
 ---
- tools/testing/selftests/sched/deadline/.gitignore |   3 +
- tools/testing/selftests/sched/deadline/Makefile   |  34 ++++
- tools/testing/selftests/sched/deadline/dl_test.h  | 238 ++++++++++++++++++++++
- tools/testing/selftests/sched/deadline/runner.c   | 219 ++++++++++++++++++++
- 4 files changed, 494 insertions(+)
+ tools/testing/selftests/sched/deadline/Makefile  |  14 +-
+ tools/testing/selftests/sched/deadline/cpuhog.c  | 107 ++++++++
+ tools/testing/selftests/sched/deadline/dl_util.c | 335 +++++++++++++++++++++++
+ tools/testing/selftests/sched/deadline/dl_util.h | 227 +++++++++++++++
+ 4 files changed, 680 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/sched/deadline/.gitignore b/tools/testing/selftests/sched/deadline/.gitignore
-new file mode 100644
-index 0000000000000..503a1a968f952
---- /dev/null
-+++ b/tools/testing/selftests/sched/deadline/.gitignore
-@@ -0,0 +1,3 @@
-+runner
-+cpuhog
-+*.o
 diff --git a/tools/testing/selftests/sched/deadline/Makefile b/tools/testing/selftests/sched/deadline/Makefile
-new file mode 100644
-index 0000000000000..fd57794f1a543
---- /dev/null
+index fd57794f1a543..ea3fdfbef459e 100644
+--- a/tools/testing/selftests/sched/deadline/Makefile
 +++ b/tools/testing/selftests/sched/deadline/Makefile
-@@ -0,0 +1,34 @@
-+# SPDX-License-Identifier: GPL-2.0
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-TEST_GEN_PROGS := runner
++TEST_GEN_PROGS := runner cpuhog
+ 
+ # override lib.mk's default rules
+ OVERRIDE_TARGETS := 1
+@@ -11,7 +11,7 @@ CFLAGS += -Wall -O2 -g -pthread
+ OUTPUT_DIR := $(OUTPUT)
+ 
+ # Utility object files
+-UTIL_OBJS :=
++UTIL_OBJS := $(OUTPUT)/dl_util.o
+ 
+ # Test object files (all .c files except runner.c, dl_util.c, cpuhog.c)
+ # Will be populated as we add tests
+@@ -21,6 +21,14 @@ TEST_OBJS :=
+ $(OUTPUT)/runner: runner.c $(UTIL_OBJS) $(TEST_OBJS) dl_test.h | $(OUTPUT_DIR)
+ 	$(CC) $(CFLAGS) -o $@ runner.c $(UTIL_OBJS) $(TEST_OBJS) $(LDFLAGS)
+ 
++# cpuhog helper program
++$(OUTPUT)/cpuhog: cpuhog.c | $(OUTPUT_DIR)
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 +
-+TEST_GEN_PROGS := runner
++# Utility library
++$(OUTPUT)/dl_util.o: dl_util.c dl_util.h | $(OUTPUT_DIR)
++	$(CC) $(CFLAGS) -c $< -o $@
 +
-+# override lib.mk's default rules
-+OVERRIDE_TARGETS := 1
-+include ../../lib.mk
-+
-+CFLAGS += -Wall -O2 -g -pthread
-+
-+OUTPUT_DIR := $(OUTPUT)
-+
-+# Utility object files
-+UTIL_OBJS :=
-+
-+# Test object files (all .c files except runner.c, dl_util.c, cpuhog.c)
-+# Will be populated as we add tests
-+TEST_OBJS :=
-+
-+# Runner binary links utility and test objects
-+$(OUTPUT)/runner: runner.c $(UTIL_OBJS) $(TEST_OBJS) dl_test.h | $(OUTPUT_DIR)
-+	$(CC) $(CFLAGS) -o $@ runner.c $(UTIL_OBJS) $(TEST_OBJS) $(LDFLAGS)
-+
-+$(OUTPUT_DIR):
-+	mkdir -p $@
-+
-+.PHONY: all clean
-+
-+all: $(TEST_GEN_PROGS)
-+
-+clean:
-+	rm -f $(OUTPUT)/runner
-+	rm -f $(OUTPUT)/*.o
-+	rm -f *.o
-diff --git a/tools/testing/selftests/sched/deadline/dl_test.h b/tools/testing/selftests/sched/deadline/dl_test.h
+ $(OUTPUT_DIR):
+ 	mkdir -p $@
+ 
+@@ -29,6 +37,6 @@ $(OUTPUT_DIR):
+ all: $(TEST_GEN_PROGS)
+ 
+ clean:
+-	rm -f $(OUTPUT)/runner
++	rm -f $(OUTPUT)/runner $(OUTPUT)/cpuhog
+ 	rm -f $(OUTPUT)/*.o
+ 	rm -f *.o
+diff --git a/tools/testing/selftests/sched/deadline/cpuhog.c b/tools/testing/selftests/sched/deadline/cpuhog.c
 new file mode 100644
-index 0000000000000..545fae1af6631
+index 0000000000000..55274aa19e879
 --- /dev/null
-+++ b/tools/testing/selftests/sched/deadline/dl_test.h
-@@ -0,0 +1,238 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/tools/testing/selftests/sched/deadline/cpuhog.c
+@@ -0,0 +1,107 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * SCHED_DEADLINE Test Framework
++ * cpuhog: A simple CPU intensive program for testing scheduler behavior
 + *
-+ * Provides infrastructure for testing SCHED_DEADLINE scheduler functionality.
-+ * Tests register themselves using REGISTER_DL_TEST() macro and are
-+ * automatically discovered by the runner at runtime.
++ * This program performs busy looping to consume CPU cycles, useful for
++ * testing scheduler policies like SCHED_DEADLINE.
 + */
 +
-+#ifndef __DL_TEST_H__
-+#define __DL_TEST_H__
-+
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdlib.h>
-+
-+/* Test status return codes */
-+enum dl_test_status {
-+	DL_TEST_PASS = 0,	/* Test passed successfully */
-+	DL_TEST_SKIP,		/* Test skipped (feature unavailable, etc.) */
-+	DL_TEST_FAIL,		/* Test failed */
-+};
-+
-+/**
-+ * struct dl_test - Deadline scheduler test definition
-+ * @name: Short test identifier (e.g., "basic_scheduling")
-+ * @description: Human-readable description of what the test validates
-+ * @setup: Optional callback to prepare test environment
-+ * @run: Required callback to execute test logic
-+ * @cleanup: Optional callback to cleanup test resources
-+ *
-+ * Tests are defined by filling in this structure and registering with
-+ * REGISTER_DL_TEST(). The runner will discover and execute all registered
-+ * tests automatically.
-+ */
-+struct dl_test {
-+	/**
-+	 * name - The name of the test
-+	 *
-+	 * Short identifier used for filtering and reporting. Should be
-+	 * lowercase with underscores (e.g., "bandwidth_admission").
-+	 */
-+	const char *name;
-+
-+	/**
-+	 * description - Human-readable test description
-+	 *
-+	 * Explains what the test validates and why it's important.
-+	 * Displayed when test runs unless quiet mode is enabled.
-+	 */
-+	const char *description;
-+
-+	/**
-+	 * setup - Optional setup callback
-+	 * @ctx: Pointer to context pointer, can be set to pass data to run()
-+	 *
-+	 * Called before run() to prepare test environment. Can allocate
-+	 * resources, check prerequisites, etc.
-+	 *
-+	 * Return:
-+	 * - DL_TEST_PASS: Continue to run()
-+	 * - DL_TEST_SKIP: Skip this test (feature not available, etc.)
-+	 * - DL_TEST_FAIL: Abort test (setup failed)
-+	 *
-+	 * If setup() returns SKIP or FAIL, run() and cleanup() are not called.
-+	 */
-+	enum dl_test_status (*setup)(void **ctx);
-+
-+	/**
-+	 * run - Required test execution callback
-+	 * @ctx: Context pointer set by setup(), or NULL if no setup
-+	 *
-+	 * Executes the actual test logic. This is the main test function.
-+	 *
-+	 * Return:
-+	 * - DL_TEST_PASS: Test passed
-+	 * - DL_TEST_SKIP: Test skipped (unlikely here, prefer setup())
-+	 * - DL_TEST_FAIL: Test failed
-+	 */
-+	enum dl_test_status (*run)(void *ctx);
-+
-+	/**
-+	 * cleanup - Optional cleanup callback
-+	 * @ctx: Context pointer set by setup(), or NULL if no setup
-+	 *
-+	 * Called after run() to cleanup resources. Always runs if setup()
-+	 * succeeded, regardless of run() result. Cannot fail the test.
-+	 */
-+	void (*cleanup)(void *ctx);
-+};
-+
-+/**
-+ * dl_test_register() - Register a test with the framework
-+ * @test: Pointer to test structure
-+ *
-+ * Called by REGISTER_DL_TEST() macro. Don't call directly.
-+ */
-+void dl_test_register(struct dl_test *test);
-+
-+/**
-+ * REGISTER_DL_TEST() - Register a test for auto-discovery
-+ * @__test: Pointer to struct dl_test
-+ *
-+ * Uses ELF constructor attribute to automatically register the test
-+ * when the binary loads. The runner will discover and execute all
-+ * registered tests.
-+ *
-+ * Example:
-+ *   static struct dl_test my_test = {
-+ *       .name = "my_test",
-+ *       .description = "Tests something important",
-+ *       .run = my_test_run,
-+ *   };
-+ *   REGISTER_DL_TEST(&my_test);
-+ */
-+#define __DL_CONCAT(a, b) a##b
-+#define _DL_CONCAT(a, b) __DL_CONCAT(a, b)
-+
-+#define REGISTER_DL_TEST(__test)					\
-+	__attribute__((constructor))					\
-+	static void _DL_CONCAT(___dlregister_, __LINE__)(void)		\
-+	{								\
-+		dl_test_register(__test);				\
-+	}
-+
-+/* Error reporting macros */
-+
-+/**
-+ * DL_ERR() - Print error message with file/line info
-+ */
-+#define DL_ERR(__fmt, ...)						\
-+	do {								\
-+		fprintf(stderr, "ERR: %s:%d\n", __FILE__, __LINE__);	\
-+		fprintf(stderr, __fmt"\n", ##__VA_ARGS__);		\
-+	} while (0)
-+
-+/**
-+ * DL_FAIL() - Fail the test with a message
-+ *
-+ * Prints error message and returns DL_TEST_FAIL. Use in test run() or
-+ * setup() functions.
-+ */
-+#define DL_FAIL(__fmt, ...)						\
-+	do {								\
-+		DL_ERR(__fmt, ##__VA_ARGS__);				\
-+		return DL_TEST_FAIL;					\
-+	} while (0)
-+
-+/**
-+ * DL_FAIL_IF() - Conditionally fail the test
-+ * @__cond: Condition to check
-+ * @__fmt: printf-style format string
-+ *
-+ * If condition is true, fail the test with the given message.
-+ */
-+#define DL_FAIL_IF(__cond, __fmt, ...)					\
-+	do {								\
-+		if (__cond)						\
-+			DL_FAIL(__fmt, ##__VA_ARGS__);			\
-+	} while (0)
-+
-+/* Comparison assertion macros */
-+
-+/**
-+ * DL_EQ() - Assert two values are equal
-+ */
-+#define DL_EQ(_x, _y) \
-+	DL_FAIL_IF((_x) != (_y), \
-+		   "Expected %s == %s (%lld == %lld)", \
-+		   #_x, #_y, (long long)(_x), (long long)(_y))
-+
-+/**
-+ * DL_NE() - Assert two values are not equal
-+ */
-+#define DL_NE(_x, _y) \
-+	DL_FAIL_IF((_x) == (_y), \
-+		   "Expected %s != %s (%lld != %lld)", \
-+		   #_x, #_y, (long long)(_x), (long long)(_y))
-+
-+/**
-+ * DL_LT() - Assert x < y
-+ */
-+#define DL_LT(_x, _y) \
-+	DL_FAIL_IF((_x) >= (_y), \
-+		   "Expected %s < %s (%lld < %lld)", \
-+		   #_x, #_y, (long long)(_x), (long long)(_y))
-+
-+/**
-+ * DL_LE() - Assert x <= y
-+ */
-+#define DL_LE(_x, _y) \
-+	DL_FAIL_IF((_x) > (_y), \
-+		   "Expected %s <= %s (%lld <= %lld)", \
-+		   #_x, #_y, (long long)(_x), (long long)(_y))
-+
-+/**
-+ * DL_GT() - Assert x > y
-+ */
-+#define DL_GT(_x, _y) \
-+	DL_FAIL_IF((_x) <= (_y), \
-+		   "Expected %s > %s (%lld > %lld)", \
-+		   #_x, #_y, (long long)(_x), (long long)(_y))
-+
-+/**
-+ * DL_GE() - Assert x >= y
-+ */
-+#define DL_GE(_x, _y) \
-+	DL_FAIL_IF((_x) < (_y), \
-+		   "Expected %s >= %s (%lld >= %lld)", \
-+		   #_x, #_y, (long long)(_x), (long long)(_y))
-+
-+/**
-+ * DL_ASSERT() - Assert condition is true
-+ */
-+#define DL_ASSERT(_x) \
-+	DL_FAIL_IF(!(_x), "Expected %s to be true", #_x)
-+
-+/**
-+ * DL_BUG_ON() - Fatal assertion (for framework bugs, not test failures)
-+ * @__cond: Condition to check
-+ * @__fmt: Error message
-+ *
-+ * For internal framework consistency checks. If condition is true,
-+ * prints error and aborts. Use for "should never happen" cases.
-+ */
-+#define DL_BUG_ON(__cond, __fmt, ...)					\
-+	do {								\
-+		if (__cond) {						\
-+			fprintf(stderr, "BUG: %s:%d: " __fmt "\n",	\
-+				__FILE__, __LINE__, ##__VA_ARGS__);	\
-+			abort();					\
-+		}							\
-+	} while (0)
-+
-+#endif /* __DL_TEST_H__ */
-diff --git a/tools/testing/selftests/sched/deadline/runner.c b/tools/testing/selftests/sched/deadline/runner.c
-new file mode 100644
-index 0000000000000..358f695423ef5
---- /dev/null
-+++ b/tools/testing/selftests/sched/deadline/runner.c
-@@ -0,0 +1,219 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SCHED_DEADLINE Test Runner
-+ *
-+ * Discovers and executes all registered SCHED_DEADLINE tests.
-+ * Tests are statically linked and register themselves via ELF constructors.
-+ */
-+
++#define _GNU_SOURCE
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <unistd.h>
 +#include <signal.h>
 +#include <string.h>
-+#include <stdbool.h>
-+#include "dl_test.h"
++#include <errno.h>
++#include <sys/types.h>
++#include <time.h>
 +
-+const char help_fmt[] =
-+"Runner for SCHED_DEADLINE scheduler tests.\n"
-+"\n"
-+"All tests are statically linked and run serially. Tests require root\n"
-+"privileges to set SCHED_DEADLINE scheduling policy.\n"
-+"\n"
-+"Usage: %s [-t TEST] [-h]\n"
-+"\n"
-+"  -t TEST       Only run tests whose name includes this string\n"
-+"  -s            Include print output for skipped tests\n"
-+"  -l            List all available tests\n"
-+"  -q            Don't print the test descriptions during run\n"
-+"  -h            Display this help and exit\n";
++static int stop_flag;
 +
-+static volatile int exit_req;
-+static bool quiet, print_skipped, list;
-+
-+#define MAX_DL_TESTS 256
-+
-+static struct dl_test *__dl_tests[MAX_DL_TESTS];
-+static unsigned int __dl_num_tests;
-+
-+static void sigint_handler(int sig)
++static void signal_handler(int sig)
 +{
-+	exit_req = 1;
++	stop_flag = 1;
 +}
 +
-+static void print_test_preamble(const struct dl_test *test, bool quiet)
++static void usage(const char *progname)
 +{
-+	printf("===== START =====\n");
-+	printf("TEST: %s\n", test->name);
-+	if (!quiet)
-+		printf("DESCRIPTION: %s\n", test->description);
-+	printf("OUTPUT:\n");
++	printf("Usage: %s [options]\n", progname);
++	printf("Options:\n");
++	printf("  -t <seconds>  Run for specified seconds (default: infinite)\n");
++	printf("  -v            Verbose output\n");
++	printf("  -h            Show this help\n");
 +}
 +
-+static const char *status_to_result(enum dl_test_status status)
++int main(int argc, char *argv[])
 +{
-+	switch (status) {
-+	case DL_TEST_PASS:
-+	case DL_TEST_SKIP:
-+		return "ok";
-+	case DL_TEST_FAIL:
-+		return "not ok";
-+	default:
-+		return "<UNKNOWN>";
-+	}
-+}
-+
-+static void print_test_result(const struct dl_test *test,
-+			      enum dl_test_status status,
-+			      unsigned int testnum)
-+{
-+	const char *result = status_to_result(status);
-+	const char *directive = status == DL_TEST_SKIP ? "SKIP " : "";
-+
-+	printf("%s %u %s # %s\n", result, testnum, test->name, directive);
-+	printf("=====  END  =====\n");
-+}
-+
-+static bool should_skip_test(const struct dl_test *test, const char *filter)
-+{
-+	return filter && !strstr(test->name, filter);
-+}
-+
-+static enum dl_test_status run_test(const struct dl_test *test)
-+{
-+	enum dl_test_status status;
-+	void *context = NULL;
-+
-+	if (test->setup) {
-+		status = test->setup(&context);
-+		if (status != DL_TEST_PASS)
-+			return status;
-+	}
-+
-+	status = test->run(context);
-+
-+	if (test->cleanup)
-+		test->cleanup(context);
-+
-+	return status;
-+}
-+
-+static bool test_valid(const struct dl_test *test)
-+{
-+	if (!test) {
-+		fprintf(stderr, "NULL test detected\n");
-+		return false;
-+	}
-+
-+	if (!test->name) {
-+		fprintf(stderr,
-+			"Test with no name found. Must specify test name.\n");
-+		return false;
-+	}
-+
-+	if (!test->description) {
-+		fprintf(stderr, "Test %s requires description.\n", test->name);
-+		return false;
-+	}
-+
-+	if (!test->run) {
-+		fprintf(stderr, "Test %s has no run() callback\n", test->name);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	const char *filter = NULL;
-+	unsigned int testnum = 0, i;
-+	unsigned int passed = 0, skipped = 0, failed = 0;
 +	int opt;
++	int duration = 0; /* 0 means infinite */
++	int verbose = 0;
++	time_t start_time, current_time;
++	unsigned long long iterations = 0;
++	unsigned long long last_report = 0;
 +
-+	signal(SIGINT, sigint_handler);
-+	signal(SIGTERM, sigint_handler);
-+
-+	while ((opt = getopt(argc, argv, "qslt:h")) != -1) {
++	while ((opt = getopt(argc, argv, "t:vh")) != -1) {
 +		switch (opt) {
-+		case 'q':
-+			quiet = true;
-+			break;
-+		case 's':
-+			print_skipped = true;
-+			break;
-+		case 'l':
-+			list = true;
-+			break;
 +		case 't':
-+			filter = optarg;
-+			break;
-+		default:
-+			fprintf(stderr, help_fmt, argv[0]);
-+			return opt != 'h';
-+		}
-+	}
-+
-+	for (i = 0; i < __dl_num_tests; i++) {
-+		enum dl_test_status status;
-+		struct dl_test *test = __dl_tests[i];
-+
-+		if (list) {
-+			printf("%s\n", test->name);
-+			if (i == (__dl_num_tests - 1))
-+				return 0;
-+			continue;
-+		}
-+
-+		if (should_skip_test(test, filter)) {
-+			/*
-+			 * Printing the skipped tests and their preambles can
-+			 * add a lot of noise to the runner output. Printing
-+			 * this is only really useful for CI, so let's skip it
-+			 * by default.
-+			 */
-+			if (print_skipped) {
-+				print_test_preamble(test, quiet);
-+				print_test_result(test, DL_TEST_SKIP, ++testnum);
++			duration = atoi(optarg);
++			if (duration <= 0) {
++				fprintf(stderr, "Invalid duration: %s\n", optarg);
++				return 1;
 +			}
-+			continue;
-+		}
-+
-+		print_test_preamble(test, quiet);
-+		status = run_test(test);
-+		print_test_result(test, status, ++testnum);
-+
-+		switch (status) {
-+		case DL_TEST_PASS:
-+			passed++;
 +			break;
-+		case DL_TEST_SKIP:
-+			skipped++;
++		case 'v':
++			verbose = 1;
 +			break;
-+		case DL_TEST_FAIL:
-+			failed++;
-+			break;
-+		}
-+
-+		if (exit_req) {
-+			fprintf(stderr, "\nInterrupted by signal\n");
-+			break;
++		case 'h':
++			usage(argv[0]);
++			return 0;
++		default:
++			usage(argv[0]);
++			return 1;
 +		}
 +	}
 +
-+	printf("\n\n=============================\n\n");
-+	printf("RESULTS:\n\n");
-+	printf("PASSED:  %u\n", passed);
-+	printf("SKIPPED: %u\n", skipped);
-+	printf("FAILED:  %u\n", failed);
++	/* Set up signal handlers for graceful shutdown */
++	signal(SIGINT, signal_handler);
++	signal(SIGTERM, signal_handler);
 +
-+	return failed > 0 ? 1 : 0;
++	if (verbose) {
++		printf("cpuhog starting (PID: %d)\n", getpid());
++		if (duration > 0)
++			printf("Will run for %d seconds\n", duration);
++		else
++			printf("Will run until interrupted\n");
++	}
++
++	start_time = time(NULL);
++
++	/* Main busy loop */
++	while (!stop_flag) {
++		/* Simple busy work - incrementing a counter */
++		iterations++;
++
++		/* Check if we've reached the duration limit */
++		if (duration > 0) {
++			current_time = time(NULL);
++			if (current_time - start_time >= duration)
++				break;
++		}
++
++		/* Print progress every 100M iterations if verbose */
++		if (verbose && (iterations % 100000000ULL == 0)) {
++			if (iterations != last_report) {
++				printf("Completed %llu iterations\n", iterations);
++				last_report = iterations;
++			}
++		}
++	}
++
++	if (verbose) {
++		current_time = time(NULL);
++		printf("cpuhog finished after %ld seconds and %llu iterations\n",
++		       current_time - start_time, iterations);
++	}
++
++	return 0;
 +}
+diff --git a/tools/testing/selftests/sched/deadline/dl_util.c b/tools/testing/selftests/sched/deadline/dl_util.c
+new file mode 100644
+index 0000000000000..0d7c46ba877f3
+--- /dev/null
++++ b/tools/testing/selftests/sched/deadline/dl_util.c
+@@ -0,0 +1,335 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * SCHED_DEADLINE Utility Library Implementation
++ */
 +
-+void dl_test_register(struct dl_test *test)
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <errno.h>
++#include <sys/syscall.h>
++#include <sys/types.h>
++#include <sys/wait.h>
++#include <signal.h>
++#include <time.h>
++#include "dl_util.h"
++
++/* Syscall numbers for sched_setattr/sched_getattr */
++#ifndef __NR_sched_setattr
++#define __NR_sched_setattr 314
++#endif
++
++#ifndef __NR_sched_getattr
++#define __NR_sched_getattr 315
++#endif
++
++/*
++ * Scheduling operations
++ */
++
++static int sched_setattr(pid_t pid, const struct sched_attr *attr,
++			 unsigned int flags)
 +{
-+	DL_BUG_ON(!test_valid(test), "Invalid test found");
-+	DL_BUG_ON(__dl_num_tests >= MAX_DL_TESTS, "Maximum tests exceeded");
-+
-+	__dl_tests[__dl_num_tests++] = test;
++	return syscall(__NR_sched_setattr, pid, attr, flags);
 +}
++
++static int sched_getattr(pid_t pid, struct sched_attr *attr,
++			 unsigned int size, unsigned int flags)
++{
++	return syscall(__NR_sched_getattr, pid, attr, size, flags);
++}
++
++int dl_set_sched_attr(pid_t pid, uint64_t runtime, uint64_t deadline,
++		      uint64_t period)
++{
++	struct sched_attr attr = {
++		.size = sizeof(attr),
++		.sched_policy = SCHED_DEADLINE,
++		.sched_flags = 0,
++		.sched_runtime = runtime,
++		.sched_deadline = deadline,
++		.sched_period = period,
++	};
++
++	return sched_setattr(pid, &attr, 0);
++}
++
++int dl_get_sched_attr(pid_t pid, struct sched_attr *attr)
++{
++	memset(attr, 0, sizeof(*attr));
++	attr->size = sizeof(*attr);
++	return sched_getattr(pid, attr, sizeof(*attr), 0);
++}
++
++int dl_get_policy(pid_t pid)
++{
++	char path[256];
++	char line[256];
++	FILE *f;
++	int policy = -1;
++
++	snprintf(path, sizeof(path), "/proc/%d/sched", pid);
++	f = fopen(path, "r");
++	if (!f)
++		return -1;
++
++	while (fgets(line, sizeof(line), f)) {
++		if (sscanf(line, " policy : %d", &policy) == 1)
++			break;
++	}
++
++	fclose(f);
++	return policy;
++}
++
++bool dl_is_deadline_task(pid_t pid)
++{
++	return dl_get_policy(pid) == SCHED_DEADLINE;
++}
++
++/*
++ * Bandwidth management
++ */
++
++static int read_proc_uint64(const char *path, uint64_t *value)
++{
++	FILE *f;
++	int ret;
++
++	f = fopen(path, "r");
++	if (!f)
++		return -1;
++
++	ret = fscanf(f, "%lu", value);
++	fclose(f);
++
++	return ret == 1 ? 0 : -1;
++}
++
++int dl_get_rt_bandwidth(uint64_t *runtime_us, uint64_t *period_us)
++{
++	int ret;
++
++	ret = read_proc_uint64("/proc/sys/kernel/sched_rt_runtime_us",
++			       runtime_us);
++	if (ret < 0)
++		return ret;
++
++	return read_proc_uint64("/proc/sys/kernel/sched_rt_period_us",
++				period_us);
++}
++
++int dl_calc_max_bandwidth_percent(void)
++{
++	uint64_t runtime_us, period_us;
++	int percent;
++
++	if (dl_get_rt_bandwidth(&runtime_us, &period_us) < 0)
++		return -1;
++
++	if (period_us == 0)
++		return -1;
++
++	percent = (runtime_us * 100) / period_us;
++	return percent > 0 ? percent : 1;
++}
++
++/*
++ * Process management
++ */
++
++pid_t dl_create_cpuhog(uint64_t runtime, uint64_t deadline, uint64_t period,
++		       int duration_secs)
++{
++	pid_t pid;
++	char duration_str[32];
++
++	pid = fork();
++	if (pid < 0)
++		return -1;
++
++	if (pid == 0) {
++		/* Child process */
++		char *args[4];
++
++		args[0] = "./cpuhog";
++		if (duration_secs > 0) {
++			args[1] = "-t";
++			snprintf(duration_str, sizeof(duration_str), "%d",
++				 duration_secs);
++			args[2] = duration_str;
++			args[3] = NULL;
++		} else {
++			args[1] = NULL;
++		}
++
++		/* Just exec - parent will set SCHED_DEADLINE */
++		execvp(args[0], args);
++		/* If exec fails, try without ./ */
++		args[0] = "cpuhog";
++		execvp(args[0], args);
++
++		fprintf(stderr, "Failed to exec cpuhog: %s\n", strerror(errno));
++		exit(1);
++	}
++
++	/* Parent process - wait for child to start then set SCHED_DEADLINE */
++	if (dl_wait_for_pid(pid, 1000) < 0) {
++		kill(pid, SIGKILL);
++		waitpid(pid, NULL, 0);
++		return -1;
++	}
++
++	/* Set SCHED_DEADLINE on the child process */
++	if (dl_set_sched_attr(pid, runtime, deadline, period) < 0) {
++		kill(pid, SIGKILL);
++		waitpid(pid, NULL, 0);
++		return -1;
++	}
++
++	return pid;
++}
++
++void dl_cleanup_cpuhog(pid_t pid)
++{
++	int i;
++
++	if (pid <= 0)
++		return;
++
++	/* Try SIGTERM first */
++	kill(pid, SIGTERM);
++
++	/* Wait up to 1 second for graceful exit */
++	for (i = 0; i < 10; i++) {
++		if (waitpid(pid, NULL, WNOHANG) == pid)
++			return;
++		usleep(100000); /* 100ms */
++	}
++
++	/* Force kill */
++	kill(pid, SIGKILL);
++	waitpid(pid, NULL, 0);
++}
++
++int dl_find_cpuhogs(pid_t *pids, int max_pids)
++{
++	FILE *f;
++	char line[256];
++	int count = 0;
++
++	f = popen("pgrep -x cpuhog", "r");
++	if (!f)
++		return -1;
++
++	while (fgets(line, sizeof(line), f) && count < max_pids) {
++		pid_t pid = atoi(line);
++
++		if (pid > 0)
++			pids[count++] = pid;
++	}
++
++	pclose(f);
++	return count;
++}
++
++int dl_wait_for_pid(pid_t pid, int timeout_ms)
++{
++	char path[256];
++	int elapsed = 0;
++	int interval = 10; /* 10ms polling interval */
++
++	snprintf(path, sizeof(path), "/proc/%d", pid);
++
++	while (elapsed < timeout_ms) {
++		if (access(path, F_OK) == 0)
++			return 0;
++
++		usleep(interval * 1000);
++		elapsed += interval;
++	}
++
++	return -1;
++}
++
++/*
++ * CPU topology operations
++ */
++
++int dl_get_online_cpus(void)
++{
++	return (int)sysconf(_SC_NPROCESSORS_ONLN);
++}
++
++int dl_get_hotpluggable_cpus(int *cpus, int max_cpus)
++{
++	int cpu, count = 0;
++	int max_cpu = (int)sysconf(_SC_NPROCESSORS_CONF);
++	char path[256];
++
++	for (cpu = 1; cpu < max_cpu && count < max_cpus; cpu++) {
++		snprintf(path, sizeof(path),
++			 "/sys/devices/system/cpu/cpu%d/online", cpu);
++
++		/* If the online file exists, the CPU is hotpluggable */
++		if (access(path, F_OK) == 0)
++			cpus[count++] = cpu;
++	}
++
++	return count;
++}
++
++static int write_cpu_online(int cpu, int online)
++{
++	char path[256];
++	FILE *f;
++	int ret;
++
++	snprintf(path, sizeof(path),
++		 "/sys/devices/system/cpu/cpu%d/online", cpu);
++
++	f = fopen(path, "w");
++	if (!f)
++		return -1;
++
++	ret = fprintf(f, "%d\n", online);
++	fclose(f);
++
++	return ret > 0 ? 0 : -1;
++}
++
++int dl_cpu_online(int cpu)
++{
++	return write_cpu_online(cpu, 1);
++}
++
++int dl_cpu_offline(int cpu)
++{
++	return write_cpu_online(cpu, 0);
++}
++
++int dl_is_cpu_online(int cpu)
++{
++	char path[256];
++	FILE *f;
++	int online = -1;
++
++	snprintf(path, sizeof(path),
++		 "/sys/devices/system/cpu/cpu%d/online", cpu);
++
++	f = fopen(path, "r");
++	if (!f) {
++		/* CPU0 often doesn't have an online file (always online) */
++		if (cpu == 0)
++			return 1;
++		return -1;
++	}
++
++	if (fscanf(f, "%d", &online) != 1)
++		online = -1;
++
++	fclose(f);
++	return online;
++}
+diff --git a/tools/testing/selftests/sched/deadline/dl_util.h b/tools/testing/selftests/sched/deadline/dl_util.h
+new file mode 100644
+index 0000000000000..9ab9d055a95a0
+--- /dev/null
++++ b/tools/testing/selftests/sched/deadline/dl_util.h
+@@ -0,0 +1,227 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * SCHED_DEADLINE Utility Library
++ *
++ * Common helper functions for SCHED_DEADLINE scheduler tests.
++ */
++
++#ifndef __DL_UTIL_H__
++#define __DL_UTIL_H__
++
++#include <stdint.h>
++#include <sys/types.h>
++#include <stdbool.h>
++#include <linux/sched/types.h>
++
++/* SCHED_DEADLINE policy number */
++#ifndef SCHED_DEADLINE
++#define SCHED_DEADLINE 6
++#endif
++
++/*
++ * Scheduling operations
++ */
++
++/**
++ * dl_set_sched_attr() - Set SCHED_DEADLINE parameters for a task
++ * @pid: Process ID (0 for current task)
++ * @runtime: Runtime in nanoseconds
++ * @deadline: Deadline in nanoseconds
++ * @period: Period in nanoseconds
++ *
++ * Sets the scheduling policy to SCHED_DEADLINE with the given parameters.
++ *
++ * Return: 0 on success, -1 on error (errno set)
++ */
++int dl_set_sched_attr(pid_t pid, uint64_t runtime, uint64_t deadline,
++		      uint64_t period);
++
++/**
++ * dl_get_sched_attr() - Get scheduling attributes for a task
++ * @pid: Process ID (0 for current task)
++ * @attr: Pointer to sched_attr structure to fill
++ *
++ * Return: 0 on success, -1 on error (errno set)
++ */
++int dl_get_sched_attr(pid_t pid, struct sched_attr *attr);
++
++/**
++ * dl_get_policy() - Get scheduling policy for a task
++ * @pid: Process ID
++ *
++ * Reads the policy from /proc/<pid>/sched.
++ *
++ * Return: Policy number (e.g., 6 for SCHED_DEADLINE), -1 on error
++ */
++int dl_get_policy(pid_t pid);
++
++/**
++ * dl_is_deadline_task() - Check if task is using SCHED_DEADLINE
++ * @pid: Process ID
++ *
++ * Return: true if task uses SCHED_DEADLINE, false otherwise
++ */
++bool dl_is_deadline_task(pid_t pid);
++
++/*
++ * Bandwidth management
++ */
++
++/**
++ * dl_get_rt_bandwidth() - Read RT bandwidth settings
++ * @runtime_us: Pointer to store runtime in microseconds
++ * @period_us: Pointer to store period in microseconds
++ *
++ * Reads from /proc/sys/kernel/sched_rt_runtime_us and
++ * /proc/sys/kernel/sched_rt_period_us.
++ *
++ * Return: 0 on success, -1 on error
++ */
++int dl_get_rt_bandwidth(uint64_t *runtime_us, uint64_t *period_us);
++
++/**
++ * dl_calc_max_bandwidth_percent() - Calculate available bandwidth percentage
++ *
++ * Calculates the maximum bandwidth available per CPU as a percentage,
++ * based on RT bandwidth settings.
++ *
++ * Return: Bandwidth percentage (0-100), or -1 on error
++ */
++int dl_calc_max_bandwidth_percent(void);
++
++/*
++ * Process management
++ */
++
++/**
++ * dl_create_cpuhog() - Fork and create a SCHED_DEADLINE cpuhog process
++ * @runtime: Runtime in nanoseconds
++ * @deadline: Deadline in nanoseconds
++ * @period: Period in nanoseconds
++ * @duration_secs: How long cpuhog should run (0 for infinite)
++ *
++ * Forks a cpuhog process and sets it to SCHED_DEADLINE with the given
++ * parameters. The cpuhog will run for duration_secs seconds.
++ *
++ * Return: PID of cpuhog process, -1 on error
++ */
++pid_t dl_create_cpuhog(uint64_t runtime, uint64_t deadline, uint64_t period,
++		       int duration_secs);
++
++/**
++ * dl_cleanup_cpuhog() - Kill and cleanup a cpuhog process
++ * @pid: PID of cpuhog to kill
++ *
++ * Sends SIGTERM, waits briefly, then SIGKILL if needed.
++ */
++void dl_cleanup_cpuhog(pid_t pid);
++
++/**
++ * dl_find_cpuhogs() - Find all running cpuhog processes
++ * @pids: Array to store PIDs
++ * @max_pids: Size of pids array
++ *
++ * Uses pgrep to find all processes named "cpuhog".
++ *
++ * Return: Number of cpuhog PIDs found, -1 on error
++ */
++int dl_find_cpuhogs(pid_t *pids, int max_pids);
++
++/**
++ * dl_wait_for_pid() - Wait for a process to appear
++ * @pid: Process ID to wait for
++ * @timeout_ms: Timeout in milliseconds
++ *
++ * Polls /proc/<pid> until it exists or timeout expires.
++ *
++ * Return: 0 if process appeared, -1 on timeout
++ */
++int dl_wait_for_pid(pid_t pid, int timeout_ms);
++
++/*
++ * CPU topology operations
++ */
++
++/**
++ * dl_get_online_cpus() - Get number of online CPUs
++ *
++ * Return: Number of online CPUs, -1 on error
++ */
++int dl_get_online_cpus(void);
++
++/**
++ * dl_get_hotpluggable_cpus() - Get list of hotpluggable CPUs
++ * @cpus: Array to store CPU numbers
++ * @max_cpus: Size of cpus array
++ *
++ * Returns CPUs that can be offlined (typically all except CPU0).
++ *
++ * Return: Number of hotpluggable CPUs, -1 on error
++ */
++int dl_get_hotpluggable_cpus(int *cpus, int max_cpus);
++
++/**
++ * dl_cpu_online() - Bring a CPU online
++ * @cpu: CPU number to online
++ *
++ * Writes 1 to /sys/devices/system/cpu/cpu<N>/online.
++ *
++ * Return: 0 on success, -1 on error
++ */
++int dl_cpu_online(int cpu);
++
++/**
++ * dl_cpu_offline() - Take a CPU offline
++ * @cpu: CPU number to offline
++ *
++ * Writes 0 to /sys/devices/system/cpu/cpu<N>/online.
++ *
++ * Return: 0 on success, -1 on error
++ */
++int dl_cpu_offline(int cpu);
++
++/**
++ * dl_is_cpu_online() - Check if CPU is online
++ * @cpu: CPU number
++ *
++ * Return: 1 if online, 0 if offline, -1 on error
++ */
++int dl_is_cpu_online(int cpu);
++
++/*
++ * Time conversion helpers
++ */
++
++/**
++ * dl_ms_to_ns() - Convert milliseconds to nanoseconds
++ */
++static inline uint64_t dl_ms_to_ns(uint64_t ms)
++{
++	return ms * 1000000ULL;
++}
++
++/**
++ * dl_us_to_ns() - Convert microseconds to nanoseconds
++ */
++static inline uint64_t dl_us_to_ns(uint64_t us)
++{
++	return us * 1000ULL;
++}
++
++/**
++ * dl_ns_to_us() - Convert nanoseconds to microseconds
++ */
++static inline uint64_t dl_ns_to_us(uint64_t ns)
++{
++	return ns / 1000ULL;
++}
++
++/**
++ * dl_ns_to_ms() - Convert nanoseconds to milliseconds
++ */
++static inline uint64_t dl_ns_to_ms(uint64_t ns)
++{
++	return ns / 1000000ULL;
++}
++
++#endif /* __DL_UTIL_H__ */
 
 -- 
 2.53.0
