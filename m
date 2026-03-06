@@ -1,87 +1,278 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5FA37C114;
-	Fri,  6 Mar 2026 12:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EB722A7E6
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 12:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772800026; cv=none; b=S0MiPE2M0qL983eD36q+GR8G7RVPNvrTALk7jsZbVd3piMb+Qdl7e7TrLuUF5alNLntu0m4DcK43nqJkF8RiSIknKxNUpEHxO8qrs0eAmhsVyWLsjcfUVxPVoIqom7KJnvH7rFuv8LkRi6lIRIo51sQxENTaYkQSkDsEzvkcGyM=
+	t=1772800755; cv=none; b=ntAS95ntHfaCUJjFKu7wHt5jlvyKRkh9bFblCFYKBHwASJGoS0sR3hvymJues5dKiLhtqDlfuiX6UULruWzw/envRvjpUbSpvNb2UCHgsxU0cYN0avisliuQuOZFBeNOiEj2lZFuXaCotMgQeBzu8w7LJSwRXqKv4d4HcOYdz/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772800026; c=relaxed/simple;
-	bh=gS1ab7LC2PFHxO9DKZFP0ByelNln6nGVZgZNHhOBINk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NAVoh4nstS8K74cDc2Wsiz6D05M97zqsi3TC9o1FCg4E19ikwa+NwCuG87eBv59GUd3qK9vhbd78vLZtwyZomPRc/5AK3X5dfJcDzijgSi9kujOYi92K2xS1oVt37L3FxB//N1pn/nNfk+1Q4zWiSwhX+jhgFPK8Td53cERZXqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ftrxRDST; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772800755; c=relaxed/simple;
+	bh=oPurXisUTqLAk3GU9lZ8DdyLzvmVpIks2kPl7dTV2Kc=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=RSBHrFC6KLURDmh6AhmXGJUWxUuMi0wbMKMpCT61kL7oZ2w2L4jbxB0NJ9lrYbb1zJc+fukLxT3qjzG/xRTrNSeFFwAsEVzYW7ITsln3zWI//Nnr56GoHm6DFqch9QBx82UHY5UftxRW9TSBV5uECZ5ufe0Q2JiZbLjyjDziPUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QE+kvV7W; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ftrxRDST"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0800C4CEF7;
-	Fri,  6 Mar 2026 12:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772800026;
-	bh=gS1ab7LC2PFHxO9DKZFP0ByelNln6nGVZgZNHhOBINk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ftrxRDSTIbFHbdDTju4HkI8Ujof+Thf84cV60zyLlRsFrN2y6MwGrOFosNfxNND21
-	 j0Qsq2ywG9IixB5RZIDRnDUd8SaVbmfc/HfS0pMSuEj8xL9Bfq4a6AT819dv7aBj0g
-	 yzCT+Dd4GVdpjtYugsyK7cYrSs3Cw3hW5+c252wBMTAlr85SlZ8l4cAXx6Z8/Uf8vx
-	 tTpzCEegy/Aq5qJ3fzisM2CoEUlcGaYafP1kD6b5zPPzk8iRbmzVh54qg9s4RWHIcR
-	 R2nv4kh9jIKbZfchjSPeOvbzMeF+X3HE8szBVwINj4F9REGhWFHtoPGg0LFrdT0Y1q
-	 nNxJ3jG1mVlZw==
-From: Will Deacon <will@kernel.org>
-To: catalin.marinas@arm.com,
-	shuah@kernel.org,
-	broonie@kernel.org,
-	yeoreum.yun@arm.com,
-	jonathan.cameron@huawei.com,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linuxarm@huawei.com,
-	Yifan Wu <wuyifan50@huawei.com>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	xiaqinxin@huawei.com,
-	prime.zeng@hisilicon.com,
-	wangyushan12@huawei.com,
-	xuwei5@huawei.com,
-	fanghao11@huawei.com,
-	wangzhou1@hisilicon.com
-Subject: Re: [PATCH v2 0/2] selftests/arm64: Fix sve2p1_sigill() and add cmpbr_sigill() for hwcap test
-Date: Fri,  6 Mar 2026 12:26:53 +0000
-Message-ID: <177279809096.1376203.6124931515335372340.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260305013638.992301-1-wuyifan50@huawei.com>
-References: <20260305013638.992301-1-wuyifan50@huawei.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QE+kvV7W"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772800751;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=27XSKDOLXvEq4qzCWSksKAZGxaT1RZzGT8G1FYmDuRc=;
+	b=QE+kvV7WBLdBL0VW1S/v8XWCoHiWa1Ob18s3mIUTxubrsnz6m5G1xEQWzjPmRKCoXQOjph
+	UKfIIZTisE8wh6PI9rTLUcicN408VYkXd1RVsYCtrUEKcpeOr6sWQines80xPixaf4O642
+	AhhDeXcoSb1hHFsdenyPBMVV2EbmYHs=
+Date: Fri, 06 Mar 2026 12:38:57 +0000
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <6ca5294f793f4d9dbb3efd62de50daa1d2d6950d@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+To: "Nikolay Aleksandrov" <razor@blackwall.org>
+Cc: "Jay Vosburgh" <jv@jvosburgh.net>, netdev@vger.kernel.org,
+ jiayuan.chen@shopee.com,
+ syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
+ <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>, "Hao
+ Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+ "Clark Williams" <clrkwllms@kernel.org>, "Steven Rostedt"
+ <rostedt@goodmis.org>, "Jussi Maki" <joamaki@gmail.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+In-Reply-To: <aarG-99qsXKgPMws@penguin>
+References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
+ <20260304074301.35482-2-jiayuan.chen@linux.dev>
+ <aahWymAi_CtRG0gJ@penguin> <1293120.1772645248@famine>
+ <aahsuPt7cY8LxETN@penguin> <1356528.1772744631@famine>
+ <e08dcb78a13fc69be07d28d032cebe3734797a3a@linux.dev>
+ <aarG-99qsXKgPMws@penguin>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 05 Mar 2026 09:36:36 +0800, Yifan Wu wrote:
-> This patch series fixes and adds two selftests in the arm64 hwcap
-> test suite.
-> 
-> Patch 1/2 fixes the sve2p1_sigill() test to correctly detect the
-> FEAT_SVE2p1 feature. Previously, the test incorrectly assumed that
-> the presence of FEAT_SVE2.1 implied support for the BFADD
-> instruction, which actually depends on the FEAT_SVE_B16B16 feature.
-> The test is updated to use the LD1Q instruction, which is
-> unambiguously implied by FEAT_SVE2p1.
-> 
-> [...]
+March 6, 2026 at 20:22, "Nikolay Aleksandrov" <razor@blackwall.org mailto=
+:razor@blackwall.org?to=3D%22Nikolay%20Aleksandrov%22%20%3Crazor%40blackw=
+all.org%3E > wrote:
 
-Applied first patch to arm64 (for-next/fixes), thanks!
 
-[1/2] selftest/arm64: Fix sve2p1_sigill() to hwcap test
-      https://git.kernel.org/arm64/c/d87c828daa7e
+>=20
+>=20On Fri, Mar 06, 2026 at 02:42:05AM +0000, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> 2026/3/6 05:03, "Jay Vosburgh" <jv@jvosburgh.net mailto:jv@jvosburg=
+h.net?to=3D%22Jay%20Vosburgh%22%20%3Cjv%40jvosburgh.net%3E > wrote:
+> >=20=20
+>=20>=20=20
+>=20>=20=20
+>=20>  Nikolay Aleksandrov <razor@blackwall.org> wrote:
+> >=20=20
+>=20>  >=20
+>=20>  > On Wed, Mar 04, 2026 at 09:27:28AM -0800, Jay Vosburgh wrote:
+> >  >=20
+>=20>  > >=20
+>=20>  > > Nikolay Aleksandrov <razor@blackwall.org> wrote:
+> >  > >=20
+>=20>  > > >On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
+> >  > > >> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+> >  > > >>=20
+>=20>  > > >> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter wit=
+hout a NULL
+> >  > > >> check. rr_tx_counter is a per-CPU counter only allocated in b=
+ond_open()
+> >  > > >> when the bond mode is round-robin. If the bond device was nev=
+er brought
+> >  > > >> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+> >  > > >>=20
+>=20>  > > >> The XDP redirect path can reach this code even when the bon=
+d is not up:
+> >  > > >> bpf_master_redirect_enabled_key is a global static key, so wh=
+en any bond
+> >  > > >> device has native XDP attached, the XDP_TX -> xdp_master_redi=
+rect()
+> >  > > >> interception is enabled for all bond slaves system-wide. This=
+ allows the
+> >  > > >> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+> >  > > >> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id(=
+) to be
+> >  > > >> reached on a bond that was never opened.
+> >  > > >>=20
+>=20>  > > >> Fix this by allocating rr_tx_counter unconditionally in bon=
+d_init()
+> >  > > >> (ndo_init), which is called by register_netdevice() and cover=
+s both
+> >  > > >> device creation paths (bond_create() and bond_newlink()). Thi=
+s also
+> >  > > >> handles the case where bond mode is changed to round-robin af=
+ter device
+> >  > > >> creation. The conditional allocation in bond_open() is remove=
+d. Since
+> >  > > >> bond_destructor() already unconditionally calls
+> >  > > >> free_percpu(bond->rr_tx_counter), the lifecycle is clean: all=
+ocate at
+> >  > > >> ndo_init, free at destructor.
+> >  > > >>=20
+>=20>  > > >> Note: rr_tx_counter is only used by round-robin mode, so th=
+is
+> >  > > >> deliberately allocates a per-cpu u32 that goes unused for oth=
+er modes.
+> >  > > >> Conditional allocation (e.g., in bond_option_mode_set) was co=
+nsidered
+> >  > > >> but rejected: the XDP path can race with mode changes on a do=
+wned bond,
+> >  > > >> and adding memory barriers to the XDP hot path is not justifi=
+ed for
+> >  > > >> saving 4 bytes per CPU.
+> >  > > >>=20
+>=20>  > > >> Fixes: 879af96ffd72 ("net, core: Add support for XDP redire=
+ction to slave device")
+> >  > > >> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmai=
+l.com
+> >  > > >> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.=
+00cc.GAE@google.com/T/
+> >  > > >> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> >  > > >> ---
+> >  > > >> drivers/net/bonding/bond_main.c | 19 +++++++++++++------
+> >  > > >> 1 file changed, 13 insertions(+), 6 deletions(-)
+> >  > > >>=20
+>=20>  > > >
+> >  > > >IMO it's not worth it to waste memory in all modes, for an unpo=
+pular mode.
+> >  > > >I think it'd be better to add a null check in bond_rr_gen_slave=
+_id(),
+> >  > > >READ/WRITE_ONCE() should be enough since it is allocated only o=
+nce, and
+> >  > > >freed when the xmit code cannot be reachable anymore (otherwise=
+ we'd have
+> >  > > >more bugs now). The branch will be successfully predicted pract=
+ically always,
+> >  > > >and you can also mark the ptr being null as unlikely. That way =
+only RR takes
+> >  > > >a very minimal hit, if any.
+> >  > >=20
+>=20>  > > Is what you're suggesting different from Jiayuan's proposal[0]=
+,
+> >  > > in the sense of needing barriers in the XDP hot path to insure o=
+rdering?
+> >  > >=20
+>=20>  > > If I understand correctly, your suggestion is something like
+> >  > > (totally untested):
+> >  > >=20
+>=20>  > Basically yes, that is what I'm proposing + an unlikely() around=
+ that
+> >  > null check since it is really unlikely and will be always predicte=
+d
+> >  > correctly, this way it's only for RR mode.
+> >  >=20
+>=20>  Jiayuan,
+> >=20=20
+>=20>  Do you agree that the patch below (including Nikolay's
+> >  suggestion to add "unlikely") resolves the original issue without me=
+mory
+> >  waste, and without introducing performance issues (barriers) into th=
+e
+> >  XDP path?
+> >=20=20
+>=20>=20=20
+>=20>  Sure, it's basically similar to what my v1 did, but the patch belo=
+w can be more generic.
+> >=20=20
+>=20>  https://lore.kernel.org/netdev/20260224112545.37888-1-jiayuan.chen=
+@linux.dev/T/#m08e3e53a8aa8d837ddc9242f4b14f2651a2b00aa
+> >=20
+>=20IMO that is worse, you'll add 2 new tests and potentially 1 more cach=
+e line
+> for everyone in a hot path that is used a lot and must be kept as fast =
+as possible.
 
-Cheers,
--- 
-Will
+Hi Nikolay,
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+Apologies for the confusion. When I said "the patch below," I was not ref=
+erring to the v1 link,
+but to the diff snippet appended at the bottom of my email.
+
+That specific snippet (using a local temp pointer) is the optimal approac=
+h. It ensures the NULL
+check for bond->rr_tx_counter is handled efficiently without introducing =
+the performance
+overhead or memory waste you were concerned about.
+
+Best regards,
+Jiayuan
+
+
+
+> >=20
+>=20> -J
+> >=20=20
+>=20>  >=20
+>=20>  > >=20
+>=20>  > > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bon=
+ding/bond_main.c
+> >  > > index eb27cacc26d7..ac2a4fc0aad0 100644
+> >  > > --- a/drivers/net/bonding/bond_main.c
+> >  > > +++ b/drivers/net/bonding/bond_main.c
+> >  > > @@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding=
+ *bond)
+> >  > > static int bond_open(struct net_device *bond_dev)
+> >  > > {
+> >  > > struct bonding *bond =3D netdev_priv(bond_dev);
+> >  > > + u32 __percpu *rr_tx_tmp;
+> >  > > struct list_head *iter;
+> >  > > struct slave *slave;
+> >  > >=20
+>=20>  > > - if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr=
+_tx_counter) {
+> >  > > - bond->rr_tx_counter =3D alloc_percpu(u32);
+> >  > > - if (!bond->rr_tx_counter)
+> >  > > + if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN &&
+> >  > > + !READ_ONCE(bond->rr_tx_counter)) {
+> >  > > + rr_tx_tmp =3D alloc_percpu(u32);
+> >  > > + if (!rr_tx_tmp)
+> >  > > return -ENOMEM;
+> >  > > + WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
+> >  > > +
+> >  > > }
+> >  > >=20
+>=20>  > > /* reset slave->backup and slave->inactive */
+> >  > > @@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bon=
+ding *bond)
+> >  > > struct reciprocal_value reciprocal_packets_per_slave;
+> >  > > int packets_per_slave =3D bond->params.packets_per_slave;
+> >  > >=20
+>=20>  > > + if (!READ_ONCE(bond->rr_tx_counter))
+> >  > > + packets_per_slave =3D 0;
+> >  > > +
+> >  > > switch (packets_per_slave) {
+> >  > > case 0:
+> >  > > slave_id =3D get_random_u32();
+> >  > >=20
+>=20>  > > -J
+> >  > >=20
+>=20>  > >=20
+>=20>  > > [0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a=
+9892238c61f06@linux.dev/
+> >  > >
+> >  >=20
+>=20>  ---
+> >  -Jay Vosburgh, jv@jvosburgh.net
+> >
+>
