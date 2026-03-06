@@ -1,67 +1,68 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389C834F255
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 13:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE6A2DAFDE
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 13:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772802360; cv=none; b=qF1hefG0PaEB8FP76pvffn6oF5tsUi04EOqLlLQEknWycrXWWFuptBdS2cdtw8RMjHHvvUdXzTfiGZOK3kqXQzN6r/wugKJ7ssYOFtu074hHP1ejJJo+tH7EXkaFdoiavpAzf66SGAQk37WFctX1OmQwnEPbuiuyhJnl3rTaKec=
+	t=1772803199; cv=none; b=ulFRzBLBD+vMlp67bPrRrMt4+H4L15DgZmYmtIVn/nLvhMvlH2Mduo6wp/BmCgVxZus8S+ERjz2+QZhgD7RwBiWPHAXj5P3xRiLBThiCp1AtGXtPEsoNX1UfdIdyxiXvl38Vx3awyCvunISK//9A9fAwCvDaQmsEgFsER8xc9sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772802360; c=relaxed/simple;
-	bh=quvLNFx0dzRo4ProJ/vdHwIGUIiV542xDUw1+ZsSqNQ=;
+	s=arc-20240116; t=1772803199; c=relaxed/simple;
+	bh=YAN3zX6k38QN3ZqpOCTj8ybcaAgX5y2uZkCzL+UzSlU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NHmRl6p1mu/aeNO22k5M9dV74VDD84rF9dji8VnPuA86r3zhUT5gWoRYFcCCccPAeEP4gJv+KQfwMhejA6bt3yMGvZc1EK0Ae2PFvlDVMhEt2BjkGTEqPxj9RSRxtQAnN0NXocNHiZFOuC4N9LjBZ9tWBwBeJESqeZfaeaoy/Hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=NUMrv+YK; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:Content-Type; b=e412Gxjm9V6J0gzT2NG70sYE2mozoHVtuSsdaHwNHYZ43O8iL3xG6Mk8Zv2ize3c+a/8xYOhsShiRKqKAsEAyYwfCs4pbM1sQDj5Rc4Ypte5fd1g/mIvaGMf61oII+dI5U0Oml2mJWA/wBoZSKzUpELLeRmuj50BiazlKERiBc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=RyueQTB7; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="NUMrv+YK"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-482f454be5bso94390925e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 05:05:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="RyueQTB7"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48375f1defeso69637605e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 05:19:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1772802356; x=1773407156; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1772803195; x=1773407995; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=3sFlLcLIiWA3KVD8eDJmdII6jxrEQxk04g4842tHVZo=;
-        b=NUMrv+YKyhbuLThWZPADGGkKHfQ0SyNJqreN9vhYJLO/OsB8/b9yngFT/R+UW/dU3W
-         W2nDsfk/RAvJl0VpNvPFg2zHDgA/cggtw9sB9v3vQ1fLwYZ72tEUxbhaRqGI48EZGOEl
-         6FoHOupzyJTc7klPr3J0ZzUrkJwxtbiRtfEJj8ddAPE0xzsyzrSAj2kilEsU2iUtYS+/
-         OYHyQZgy3pnHkB98FlcES5ufXaZZ61d0K2rvcS7n1BiEDH1Dyl+JN/5o5Rbre5GbmgG2
-         xq+TRDjPpmODJ2twnAf8DsyHiBuJfdqoTlTF2zeT8yKYLpFcKb33Cmm+5gH4+O/0TqcA
-         G/xg==
+        bh=WH0SOE1yPGM5d8oENv+7AwzPu1v6mjGPGbIBBCX+Bqs=;
+        b=RyueQTB7V6zceVpiVAXGNj5ydtIk+0sV9UiVbc1d//NZjEhoNIZQ6G2EIarjGJju0U
+         4od1uQXcoJccB0SzJb4upescOESA7XOAWzxJsOvC5OIuGjqFQCRHOyLU6KBEiKV7oKpr
+         vZZL3m7M95WdLQyNnnQ08j6Oj0wOvOahniSjQB9b9ZgqSk8+jzSJglqQXdXOzkmCJHDA
+         L5vCY0hzJ+DUtBUXv/7QNCcNSBG0qz/hlUgvwRqANHEAsqaX3u4fuQwNmbjcpIQYtjTn
+         TsO3VYDCKNobzR2MRV5cV8bMlm1VF0b8JREBERsacnDWzIZFCXVYF4aDvApnIOA8GMvI
+         tP9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772802356; x=1773407156;
+        d=1e100.net; s=20230601; t=1772803195; x=1773407995;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3sFlLcLIiWA3KVD8eDJmdII6jxrEQxk04g4842tHVZo=;
-        b=NwdA/4a/Gc1+KQdhxOi2QXZsowGLgdw0LTm2WmA+eMkL8+zbugWi9Uq1cdRUvRJDj0
-         vF055MoAHuwzQ96+LOS4d1fkVSx/0TWXg5IrOQb9BnR+OY05J8M7oYM1hPSmgu1vJuXJ
-         obe+pPby6QMiusy5Qu5V9OSJmEK8P1GrRGDvoi38zOr9lKodKXmQOA3Y40w2awxLRU06
-         Qitqd2TtDz0IMz1D3IKtpS80UoNRZOTMQJg8CGTj09+nUy6bUORsHTvWv6L9OQQ+8PYx
-         JFgmNesbFVSWWpNKxa24qiK2mLZkzg2c7+n+cYtlO0og5EuwkmmfyMwPMqtTGKisjcMD
-         c8jQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8Fl4ipuXkh0iQraKscJQqTyVhAsDlXLM57Y8VdVYXcV2ffvLGCtPyxdvGoNw303RHD7IPRVn591uCXJtRXFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzb18SHqBSlXlAZl8CTCZZR2xRoUTVoKLcbCGKIKAq203QNcI9J
-	M5QL9r0iXnvshmNHvz/gMKEfqBzGLAwnwftosbPkSmAAZ0v+rILbm+WC1+p81z5146CrsOm3nzK
-	iY2LACJkwaA/PsX4lNTzUWKOEdD8JFkf5BWUV/4G7FOkYcxAZ0RXX+uygkCs5Rt8=
-X-Gm-Gg: ATEYQzzO97Lc2e5IjLZJOqKV64rYcLGcg71m31YjLboT0UbyksXKE/SCnlvRJROTSZQ
-	LOXvVdxxtQaMMUIcpIW4E3iiWkPGd9LUiQvORigadAwbbNJnJoosF2z1nknq12sV8itxTKX6T/v
-	YuJHpH8oYROK1kmTn57VsR1DcfKfhmiBs2WEeC23PUybS7/IHS4xHJvj+V6xqEvmYZHrBHOLcYm
-	13LfKDGgkVlt1Auptxk24CFnqeJXAO7sWjhjc16hmKx4nEQx1LDcV1e7/g+RYX+KerstCxcxAIS
-	Hie48iGpl+3JBMhWQRVGKbuH02JoP6sXGAe7dTOtXVkl6lFyOa1rVGl6Svg3qbtiNFaQRqqHugf
-	Rx1gghNfbgqhmsb/RkXV8/x5I1f/csXl1WB6utwW5JsXRWE4JRwfQAMKZN9ififjtjLxqKxEyV4
-	k6yLENCv1/8mlQpttCedz9pNtsV2fGAUI4HODV0yb6CY7PVQjiIRYj7A+xFmkk9w==
-X-Received: by 2002:a05:600c:3e10:b0:480:4a90:1afd with SMTP id 5b1f17b1804b1-485264e7588mr32493645e9.0.1772802356375;
-        Fri, 06 Mar 2026 05:05:56 -0800 (PST)
+        bh=WH0SOE1yPGM5d8oENv+7AwzPu1v6mjGPGbIBBCX+Bqs=;
+        b=TJka7woCmVYwlEFe2Dr6pyz6w8XHxLbLQ0eA6W5hAgEi99e4y7K+v73LHRJlcDY/IQ
+         vpErNP5TdZTJ4kCecjtkKUwTSdK7Rb7nzh5Fl72AYI6WRgytKos7AjwpZ/m2G2jtOJJM
+         uA1EP+OhzdGDvhNIcYAyTmIZ1sNB+UneeTyaoqT6yxWfj6ZQNxqCB/t8XRINoWSXtOew
+         CZyFeSyEKzBle7E1/cDs/4SP67jAkD4Gt4tqzW8VBECDcBSBoUtW8qyYhmXs5+df5YR/
+         OEbSWrc1VycCLSgYWJ1t/gAEsDnBYzalqjn798zIdU7UKcFSr8ceK66RskIHcJXJAiyp
+         mh9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVVh89Px7kcIJaq8VFE4M9AA7S3OC0mQEnPg9ZpWlabmBYAOxPMD5htWNp4/yhtVsuwzCDNOJVLRFItItW2H4I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+BzdZp9GGeaNvbpvMQeNOGn+Y3K7H5gswFkfVf+TBWf3e1Bp4
+	eO+8ZOr4aMtW6SlK1P2i5ZWgSqc01MJoHyO66Cuw9W/iykYZNg3z12nLcoye5tN6L0eS4AIAPj3
+	uTaiGv4IuYvA4pE9rak0qDzdO2EGJNHWVnecCXmptVB7cEeHjbkRpGSbY3qDz6+C9vns/CE+1/2
+	V1
+X-Gm-Gg: ATEYQzy1mMy1m8+TPfrmXX4VDJvu6X0Zue22HhAzT9JjiLbXaNg3UJv7MF22y/xgrxP
+	izu0yfuO/Op93HS3Q/AwUPjY0MQWdi+acw9/CZDiPYNDiuwVPtt80JHNvJ+KltF4yeIbYyrKEJO
+	/TlOW8udenQbB+jYsTf+1SggceswZ+QYUr6YChRgL7ofJht4vjP27k8ZaZUgQRaeIlJgYGiMVZ1
+	jPWIW0phi9l3FIeZL/BAdlutbZPdrPULUvMP/2JGZIbeiDTZR1FrgWijtvgnHmxoYDwhYmurQwW
+	1HmPLI+3jxgHSTjT6OeClzcaNbL6ndLqnEfgZSjOJrOBcHVUnPTLO3AYrwWJbtMIUUoRrsmaACz
+	wQwHaPy947aWaQcAB8S9DZ3dXXmHB1+H1/3gKLHQxB5sXi8o13t8XxqR9k59oAv1R/elQ/d/nOc
+	lEoKuGaH+BqQOCFvqIDIvOI4wsUiPwZa9fBHjH8utq8XCtxPqvY/xxXIKCg70xEA==
+X-Received: by 2002:a05:600c:1e2a:b0:477:b642:9dc1 with SMTP id 5b1f17b1804b1-4852695819cmr32763805e9.20.1772803194821;
+        Fri, 06 Mar 2026 05:19:54 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:e1e0:441c:b462:d279? ([2001:67c:2fbc:1:e1e0:441c:b462:d279])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48527681e2bsm36651985e9.5.2026.03.06.05.05.55
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48523817244sm18887205e9.10.2026.03.06.05.19.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Mar 2026 05:05:55 -0800 (PST)
-Message-ID: <b3197cdc-83db-4739-966c-018f8570070d@openvpn.net>
-Date: Fri, 6 Mar 2026 14:05:53 +0100
+        Fri, 06 Mar 2026 05:19:54 -0800 (PST)
+Message-ID: <029b28a3-2375-46ba-bfe4-6eae82301fd2@openvpn.net>
+Date: Fri, 6 Mar 2026 14:19:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,17 +70,17 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 5/9] selftests: ovpn: add notification parsing
- and matching
+Subject: Re: [PATCH net-next 7/9] selftests: ovpn: check asymmetric peer-id
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: netdev@vger.kernel.org, Ralf Lici <ralf@mandelbit.com>,
  Sabrina Dubroca <sd@queasysnail.net>, Paolo Abeni <pabeni@redhat.com>,
  Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
  <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, horms@kernel.org
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ horms@kernel.org
 References: <20260304230643.1014-1-antonio@openvpn.net>
- <20260304230643.1014-6-antonio@openvpn.net>
- <20260305191732.2bbc386b@kernel.org>
+ <20260304230643.1014-8-antonio@openvpn.net>
+ <20260305192001.1e70393f@kernel.org>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -118,46 +119,43 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  gg9NWuSR3XNVOui/0JRVx4qd3SnsnwsuF5xy+fD0ocYBLuksVmHa4FsJq9113Or2fM+10t1m
  yBIZwIDEBLu9zxGUYLenla/gHde+UnSs+mycN0sya9ahOBTG/57k7w/aQLc=
 Organization: OpenVPN Inc.
-In-Reply-To: <20260305191732.2bbc386b@kernel.org>
+In-Reply-To: <20260305192001.1e70393f@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 06/03/2026 04:17, Jakub Kicinski wrote:
-> On Thu,  5 Mar 2026 00:06:23 +0100 Antonio Quartulli wrote:
->>   .../selftests/net/ovpn/check_requirements.py  | 47 +++++++++++++++++++
+
+On 06/03/2026 04:20, Jakub Kicinski wrote:
+> On Thu,  5 Mar 2026 00:06:25 +0100 Antonio Quartulli wrote:
+>> From: Ralf Lici <ralf@mandelbit.com>
+>>
+>> Extend the base test to verify that the correct peer-id is set in data
+>> packet headers. This is done by capturing ping packets with ngrep during
+>> the initial exchange and matching the first portion of the header
+>> against the expected sequence for every connection.
 > 
-> this file is not included in the Makefile, it should probably be under
-> TEST_FILES ? otherwise when tests are installed with make install this
-> file won't be copied
-
-Right, will do.
-
+> AI asks
 > 
->> +if has_listener_requirements; then
->> +	for p in $(seq 0 ${NUM_PEERS}); do
->> +		setup_listener ${p}
->> +	done
->> +fi
+>> @@ -2204,15 +2217,15 @@ static int ovpn_parse_cmd_args(struct ovpn_ctx *ovpn, int argc, char *argv[])
+>>   		if (argc < 7)
+>>   			return -EINVAL;
 > 
-> There should probably be an else branch which prints some kind of
->   echo "SKIP - requirements missing"
+> The CMD_CONNECT case was correctly updated from 'argc < 6' to 'argc < 7'
+> for the new tx_id argument. However, was CMD_NEW_PEER also updated?
 > 
-> Your requirements.py script prints stuff but the output needs to
-> contain the word SKIP
+> Looking at the usage text, CMD_NEW_PEER now expects:
+>    new_peer <iface> <peer_id> <tx_id> <lport> <raddr> <rport> [vpnaddr]
+> 
+> That's argv[0] through argv[7] for 8 required arguments (indices 0-7),
+> but the check at the start of CMD_NEW_PEER still requires only argc < 7.
+> 
+> With argc=7, argv[7] would be NULL according to the C standard, so when
+> ovpn_parse_new_peer() passes argv[7] as rport and calls getaddrinfo(),
+> the NULL service parameter would silently produce port 0 instead of
+> the intended port.
+> 
+> Should the check be 'argc < 8' instead?
 
-If "has_listener_requirements" is false, the test script still goes on, 
-but it won't check the received netlink notification content.
-
-So we're not really skipping the whole test, just one specific check 
-that requires extra tooling (which is normally found on all standard 
-distros).
-
-
-Do you think we should rather SKIP the whole test so that we can easily 
-spot that something is missing?
-
-
-Regards,
+Right. Some rebase went wrong, sorry about that.
 
 
 -- 
