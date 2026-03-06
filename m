@@ -1,223 +1,115 @@
-Received: from fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.64.237.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E49D3939B0;
-	Fri,  6 Mar 2026 12:49:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.64.237.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AF4392C5C
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 12:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772801362; cv=none; b=JT5Ar+pQuUB9r7Lrvpxb88O8Z6egJKyR2GbfQt5gBTWHA2O/W3c2gMHW1T04/oo9IQKshysIGw5SUSaCQSnqXnx1/Gw6Lui1KGv5AC5RBmvl+sIY2It5F1MQg/lVmWZh0Tc4YDxzdKU9Bo3DyvjYeVys33s5UC+2AyGoAmowqHw=
+	t=1772801362; cv=none; b=HZebSetOJUNtnOtWxSDkFbOoc/GqD4w1sStLrsuoSh8CvfSCE+NLE85oe+NhMcs3GTvreHa4u+8685c8GATuB5w1XGdN8f3Xt3CHswaodauItydGXrWBsF9YKA9Gw8Rc8em2uDThiMUbREDHJ7BtbMtAYVEEve7X8e7b1i2JgG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1772801362; c=relaxed/simple;
-	bh=LR/k1rHM5LZ3hLuYrcHnIwjUhmNmnXoE6cKE5i5BZnc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=E8OpJCIKpUTxQytn1Nhg7bDuJwvz0zo25b44sW4N1lZtLgNVp+mPW5akQAQuzYn733Voj3RBJP3oPYJ8TMA7lg0ZaMcrdM/yStdlCZAblT0vWd/lJPhgMfLAEaoZHDc9+xscEKyshLSqmvpN9TFNzep+KNG6K5cmEOyz+t4inu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=RGDZR/qi; arc=none smtp.client-ip=3.64.237.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	bh=KKJoiskobJLPVewH28+LF9Y4Ux/Lu7qzp3YYxz5tn6o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QgsUy6jNNF0GXpTL2dtsBAZHcAy146FCLT42goghvdahWHgmkhuL94z9subRXJkGRidYlsT85WlWBoxI+H+8JfT/aYxz517yI2ZjXpe2w4g9+anYvF0xwcbZfHQOivQKHtARoQMcamj6NNPhes8KiDAjQLvjw5FF9+pQUMOf/hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YiBLVXcS; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="RGDZR/qi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YiBLVXcS"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c738d1fa6f1so1051877a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 04:49:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1772801360; x=1804337360;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=bRMHQdQ5GfQ08jWBNyGRBN4vXmA9+fBBCWCkl04FNjQ=;
-  b=RGDZR/qij9TjI+VazrRUViMMf/eqy0kia7n7lFKgerHRVadWO6wR+VNT
-   WPekJ+l9DbZufHQLBhkhMl0nl8MjVJEmNeeniWQALuLo+qUaqZYSo7MRS
-   UpNEJlOpSAcA7cAxEy1obY944zV/DLpDH7eaJGNupCDJWrksdF23St++X
-   IH05y5ao3+//u+KHk1G81cohkdtAlhuEYbJ36YnuAzovDKB05lQRLwWmv
-   RjsKaNPSzpvrE1PL+HosVpEL4m6otiVjE+Ndpo2O+8/fB9x1hqfOxXGIb
-   BdAfTB9Ewuw2GYp1dFWUy1HEHbHtnM2aslMv9/Bgcw9od+sLFMLJ2+ivs
-   A==;
-X-CSE-ConnectionGUID: +CBc8LTUTFyKU3vgne5J+A==
-X-CSE-MsgGUID: SsgvaCDKTQyRTYkBnx7yEA==
-X-IronPort-AV: E=Sophos;i="6.23,104,1770595200"; 
-   d="scan'208";a="10334046"
-Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
-  by internal-fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 12:49:17 +0000
-Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.225:27792]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.8.50:2525] with esmtp (Farcaster)
- id 3c65634d-d2ee-42b8-a0db-5e2cd1d9a376; Fri, 6 Mar 2026 12:49:17 +0000 (UTC)
-X-Farcaster-Flow-ID: 3c65634d-d2ee-42b8-a0db-5e2cd1d9a376
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19MTAEUC001.ant.amazon.com (10.252.51.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Fri, 6 Mar 2026 12:49:14 +0000
-Received: from [192.168.2.180] (10.106.83.26) by EX19D005EUB003.ant.amazon.com
- (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Fri, 6 Mar 2026
- 12:49:09 +0000
-Message-ID: <a2d34a91-1d38-4d9d-b7bc-8315245a08a6@amazon.com>
-Date: Fri, 6 Mar 2026 12:49:08 +0000
+        d=gmail.com; s=20230601; t=1772801360; x=1773406160; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=URwHQdDNBcfpjPgIZZmBOCF4w8QPrTIvO91J8esIlCE=;
+        b=YiBLVXcSTIHj8ILpc+aaeq5OtipuOIIV15UYYThMLCMSF2XadjAiyQ4GteUBdwgMEz
+         tCuwl34h4PZ1iM0MI/+9uhWaiZ/yc040U4O55X52PU+9/kXNJ8G89PbhxySSktWqiktH
+         mqdqKaXe0mQ38g2RjjcOGO6Lr4pPExw9D/wdyMvyeLhagG/AQrL2WAqvvXqZGTkmdReL
+         Jm3eMpeYJMhROqyv/OTyB6Qkt+UvaJodh4uh6rUT4bQ9JNdtwL04mWsf4faR+ONpmUK0
+         kIPT9ygP8jRVKZ2mxdFws5ETDRkPrZMARRvb4dDw5xGO3SrvAyfny39fvNWn2JSFDUOu
+         4aRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772801360; x=1773406160;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=URwHQdDNBcfpjPgIZZmBOCF4w8QPrTIvO91J8esIlCE=;
+        b=lNn4QZHkEHwPt/+q2t0mRADSOhIFWZxBOwuWVI7NvjEAmtLFLUurO6PER1JCqwVe3B
+         JZxKCt8MFuc0cP9b3cZkLe//p7U0ZfKO1j4aPgPSrbtM8KwxwSS8Hmsqz/+IX1lQv/od
+         opmRIGGsQk59+Tfwr3ianDeX7hGHswf3RnpOvGniToi4Ixo9UPgaL5SnM5Beoop259d1
+         u3TExku8Les6xs6GWQIEFMbzqofXFkScVNWkPgWb63ZbmaKdIYDOCPAlk5wwSotyBPfW
+         Y3KZYyzJe2JuckPIbzhxVq+O5qEHbjRo8w8fUUpYfT+kVB3B+PIW5ffPQoEXv4kOkEsh
+         TS3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWlv29kXQ2/Uj3emqyq7XhB7XOmc06m02isRmnLQwakqTyAc7vcQ12U3EtG7rLzOpswXY/b6EOzLD0KYjkcipA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyn4ysDhiFX3S3efIqXjrRshR9Lql/uor+9XUI9FbGClAqMcr4Y
+	e0bD85I/RkgekEPZLcTGdeYdaY5y6A56l1ARfkONsXF08qYuw+7zXoRo
+X-Gm-Gg: ATEYQzwXrG2nWcNYVGPwr9TprSn+aWziZbBp6eCpEgcnJvYppJYlUe5r9uoJWXKZSDT
+	/4NVdsWYfHRdr3EHVE+65fKxchOtSgS0SKgJ0FR/kVl3p7frP0ZUY0RwwsWgKztSA8UvGBDzkU4
+	VVRtV29/aZqWXsyYQUW1Nf0W+Y3tSaLaHu/4AJBgzrBLtmcZcvj8s2AEBT0encyy3gl70TPKenW
+	Nf+7qOSeo8JMgd02rRaL8hthEnV/Vq8dFVs18Ug0KMGSrCooTUQX8fh9TkAeG8lSfc6Ow8tqb1M
+	Mj5esdMqccWe5E7TTBItCcYkac2fowprkwm45IHi6W7lCE/0KZX7mXLtWqEcfZGZxjhN4j88eQt
+	Rvfcj5UT4LXIula87b/u4B+adsIFBeKtlPCqnINclewr68YFNvw2CB+vHMR8jbgxDiQmH1E9VzA
+	Zhb31XkDL1C9grUJSWq42agR+g86iE3e8AlwBhir37tQUFr6WhrucVMq/Cy4+24zaW3vRlo1Q3U
+	pc=
+X-Received: by 2002:a17:902:f78f:b0:2ae:6829:d550 with SMTP id d9443c01a7336-2ae8246596amr19671075ad.23.1772801360439;
+        Fri, 06 Mar 2026 04:49:20 -0800 (PST)
+Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e78f77sm27712845ad.21.2026.03.06.04.49.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2026 04:49:20 -0800 (PST)
+From: zhidao su <soolaugust@gmail.com>
+X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
+To: tj@kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Cc: void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	linux-kselftest@vger.kernel.org,
+	Su Zhidao <suzhidao@xiaomi.com>
+Subject: [PATCH 5/5] sched_ext: Document scx_bypass_depth migration path
+Date: Fri,  6 Mar 2026 20:49:01 +0800
+Message-ID: <20260306124901.2653465-5-suzhidao@xiaomi.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v10 04/15] mm/gup: drop local variable in
- gup_fast_folio_allowed
-To: "David Hildenbrand (Arm)" <david@kernel.org>, "Kalyazin, Nikita"
-	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
-	<loongarch@lists.linux.dev>
-CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
-	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
-	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
-	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
-	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
-	<willy@infradead.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "lorenzo.stoakes@oracle.com"
-	<lorenzo.stoakes@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
-	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
-	<andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
-	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
-	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
-	<jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
-	<jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
-	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
-	"shuah@kernel.org" <shuah@kernel.org>, "riel@surriel.com" <riel@surriel.com>,
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
-	<jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
-	"kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
-	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
-	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
-	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
-	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
-	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
-	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
-	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
-	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
-	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
-	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
-	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
-	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
-	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
-	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
-	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
-	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
-	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
-	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
-	<xmarcalx@amazon.co.uk>
-References: <20260126164445.11867-1-kalyazin@amazon.com>
- <20260126164445.11867-5-kalyazin@amazon.com>
- <ebb4beec-13dc-4b94-a1f8-756e7a8ef5af@kernel.org>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-In-Reply-To: <ebb4beec-13dc-4b94-a1f8-756e7a8ef5af@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D015EUB002.ant.amazon.com (10.252.51.123) To
- EX19D005EUB003.ant.amazon.com (10.252.51.31)
+Content-Transfer-Encoding: 8bit
 
+From: Su Zhidao <suzhidao@xiaomi.com>
 
+scx_bypass_depth is a global counter that will be moved into
+struct scx_sched when multi-scheduler support lands. Add a comment
+explaining why READ_ONCE/WRITE_ONCE are used despite bypass_lock
+serialization: modifications are serialized by the lock, but the
+value can be observed locklessly from softirq context (e.g., in
+scx_bypass_lb_timerfn()).
 
-On 05/03/2026 19:07, David Hildenbrand (Arm) wrote:
-> On 1/26/26 17:47, Kalyazin, Nikita wrote:
->> From: Nikita Kalyazin <kalyazin@amazon.com>
->>
->> Move the check for pinning closer to where the result is used.
->> No functional changes.
->>
->> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
->> ---
->>   mm/gup.c | 19 ++++++++-----------
->>   1 file changed, 8 insertions(+), 11 deletions(-)
->>
->> diff --git a/mm/gup.c b/mm/gup.c
->> index 9cad53acbc99..e72dacce3e34 100644
->> --- a/mm/gup.c
->> +++ b/mm/gup.c
->> @@ -2737,18 +2737,9 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
->>    */
->>   static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
->>   {
->> -     bool reject_file_backed = false;
->>        struct address_space *mapping;
->>        unsigned long mapping_flags;
->>
->> -     /*
->> -      * If we aren't pinning then no problematic write can occur. A long term
->> -      * pin is the most egregious case so this is the one we disallow.
->> -      */
->> -     if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) ==
->> -         (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE))
->> -             reject_file_backed = true;
->> -
->>        /* We hold a folio reference, so we can safely access folio fields. */
->>        if (WARN_ON_ONCE(folio_test_slab(folio)))
->>                return false;
->> @@ -2793,8 +2784,14 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
->>         */
->>        if (secretmem_mapping(mapping))
->>                return false;
->> -     /* The only remaining allowed file system is shmem. */
->> -     return !reject_file_backed || shmem_mapping(mapping);
->> +
->> +     /*
->> +      * If we aren't pinning then no problematic write can occur. A long term
->> +      * pin is the most egregious case so this is the one we disallow.
->> +      * Also check the only remaining allowed file system - shmem.
->> +      */
->> +     return (flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) !=
->> +         (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE) || shmem_mapping(mapping);
-> 
-> Best to keep this split and a bit more readable.
-> 
-> /*
->   * If we aren't pinning then no problematic write can occur. A writable
->   * long term pin is the most egregious case, so this is the one we
->   * allow only for ...
->   */
-> if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) !=
->      (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)
->          return true;
-> /* ... hugetlb (which we allowed above already) and shared memory. */
-> return shmem_mapping(mapping);
+Signed-off-by: Su Zhidao <suzhidao@xiaomi.com>
+---
+ kernel/sched/ext.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Makes sense, thank you!
-
-> 
->>   }
->>
->>   static void __maybe_unused gup_fast_undo_dev_pagemap(int *nr, int nr_start,
-> 
-> 
-> --
-> Cheers,
-> 
-> David
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index c269e489902c..b1e5a95682c1 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -33,6 +33,12 @@ static DEFINE_MUTEX(scx_enable_mutex);
+ DEFINE_STATIC_KEY_FALSE(__scx_enabled);
+ DEFINE_STATIC_PERCPU_RWSEM(scx_fork_rwsem);
+ static atomic_t scx_enable_state_var = ATOMIC_INIT(SCX_DISABLED);
++/*
++ * Counts the number of active bypass requests. Protected by bypass_lock
++ * inside scx_bypass(), but read locklessly (e.g., from
++ * scx_bypass_lb_timerfn() in softirq context) using READ_ONCE(). Will
++ * be moved into struct scx_sched when multi-scheduler support lands.
++ */
+ static int scx_bypass_depth;
+ static cpumask_var_t scx_bypass_lb_donee_cpumask;
+ static cpumask_var_t scx_bypass_lb_resched_cpumask;
+-- 
+2.43.0
 
