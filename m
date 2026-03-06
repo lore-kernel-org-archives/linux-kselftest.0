@@ -1,239 +1,106 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FCE34FF50
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 02:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772764943; cv=none; b=YFSonxcyPJ4QYf/siVjiSA5E6wFSde7aN9GdNV2nU2dRh5IWhsWlPrLcbQf7RMcrxiQdDQSOqVK5kH/HUCn7werh2cZL4VkAuJ8uK04GcUN8C4oK4Wutc1iMKCS0GEL8N/C2/IGXqHeR81SXqnZ0gqLstXaDqlCEbBQ3D9GpvnQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772764943; c=relaxed/simple;
-	bh=v4cflm4NiRNKit0+IyjvwCr+f6yIyaerrT9iAHpzkIU=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=fmq2x2TSvMaiduUWnwzf72SbH/ZkydCoa9Ca90f010XARRtlyIcG9R7v5J4EHgSyD0iQU+V5LmjUvShSnAsOPUlurW9HvQiGcQCu4ZSy+K8x9FBCAek3aIVL8qypJU/6EMKZWudOU438PG7FHtBhvGLIE5V9hlxbMHPf789WQig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fnjQCxqX; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB6E35E925
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 02:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772765274; cv=pass; b=GQkqHdnFvz/LCEXC0r8zZaWw1aaEzA767WVoTYk6e/2YcE+DRBY5OR5jYWWz6sQUxftc+dB4oMTKLqZHafJjlkU7CAf9HYnQXDzOgVC59vKPz2/SAAWWnH5XnY4saYQhtlaXYpfkNOKRLwuG/f8Yxug3NP2d+cQ7k+IsSItheK4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772765274; c=relaxed/simple;
+	bh=roDUwwN5trIGJXrQ+SzJRvohhN8jkqd5essBX8nFDGU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qU+JNRlpaBbsge2+fxTNk/8RE+2C+EgXp7jIufcHFUblid8xCgyhG8t25DQKXOdHZKL7FGjQwJb53dmBLSTtmtqcKu8kl2TERWBWzBSjKxYfCayoeWNZcd2MoH6yG8NPjeSat6nQWBKKH5ELr7xcCucBjFg6CkPzCdVkSXdQuwY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBQa1fx4; arc=pass smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fnjQCxqX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBQa1fx4"
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-64cb577e79cso9276558d50.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 18:47:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772765272; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RxGwvMASZctAlVKAo2N1s+F0Kjz7CGFKktbGfOJAVdO2BJO3m9Kz7QFvNUSQmTd3Lt
+         S4P6pDdIiqgjp64cPP4gZesttxW7S5osGE4nSCamzEYWA231aIGnnTOcodrcTdBf5hWz
+         y+HKmlAxbXUGzTuxcUMQY7S0FYy9VuI2Lsg0BUMPtRvmyPAQ90ucytUtGVNcPA9Omd/S
+         JNfanHA7CPaGlnXilDHODW/qn6lnQQDqAtMbOLRG+aEtk0lcT7IR0qRvD2kvJQBR705Y
+         nlbrQjGMNNcF5WPWXC0Gus5GaDQkTmXvgSWlBpsMwMbpb7cF4QJGjlsgakwUuX6J1NgR
+         YaDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=roDUwwN5trIGJXrQ+SzJRvohhN8jkqd5essBX8nFDGU=;
+        fh=WS9RcG97It9NnLnuHxUTK4t6f2igj6Uk5Rd76Cpv1OI=;
+        b=Rqq3j9JI/DCqDnAoZlnU9pRZz6Ou1+BKu/Tqzr/UDEpbwf3i28mz+do3qfg3khHg0v
+         JMqITOOTXzvdSODWXPKp+ZsJ0LDfpZ94H7uRDsfalX7frHOQYOL6JxGx4e5vdmnmxTCh
+         ufKXYcgpSN1MTdqC64+ASVMzxc0kNhtSsUA1wU64qlM1Byeiasr7FASeaTKoShefM0X4
+         q9i6ZaS73l9rt3F26/6wPMpFTj653Rvef6r1kfqbm3TehZPnCRhVuFWmvfr3n9Xcl2PM
+         aIsFngdLOb68d4yvOPs2gjtRgdMePd27nV34p/dD1vaqql//F+/CYBcTIifcFevjIUy2
+         D4rg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772765272; x=1773370072; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=roDUwwN5trIGJXrQ+SzJRvohhN8jkqd5essBX8nFDGU=;
+        b=ZBQa1fx4W8eO++a12Vhz4JvokE1661wG6tR7mvYmsJ8E+iBuHnC78lzHBXDhwuP+nO
+         zMVGmR04Zmm4dEoMpoCB6Ym6Dg/MZafrBgqQYV9whO+5+ovwiQp5HIQmFEfLIkqzgRkb
+         3ggs/LgWTrboxnuTpOEkwV0fnAd9Awsfur9rRzsVDf7W92ips1rhp2vnStOm3AzlbeCB
+         e/FpOiycXD8sKh9vnkcNVWuC3NDkSsyhXobuvQM6WmjtUcCYUh1xn5nNd0lB/gxpcm62
+         tHcRIAmCElR/EqnCMaWbd6qKFytluqtPFJ5QzDoRL2+sTi6Te3I45vTz2rXF0w28wH1Y
+         BC2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772765272; x=1773370072;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=roDUwwN5trIGJXrQ+SzJRvohhN8jkqd5essBX8nFDGU=;
+        b=Mziq0NImgKFybwzhxCSMJklHq/Sx1EHKQ0GwmcESnF3qdh3uWbcNzSw39BjkSoSKK8
+         1Nx1W53c90KiTYBnV3mogtswit/VnUzN8h3YIWksT1av3Ch3x/xUjy2MvrGfN+9QXBv5
+         XDBY1rLIU5/bHm8L4R83BtZ9zcMwwXuzjbi4R4sn0ejONpoiv4fgV8o6ZNgdBYihNzQf
+         sgCfX3VEfbcaWBN923O8TJtMjnrbaappVpPC1s+D3hhoJgR0426fbsWSySKRD7mr+5Gw
+         HYVDgpqY3xFZwyD6DNas/FqWlDh2qk1MzaSIbAT6zYKOsCXod1m9awM0thfreKNuU81y
+         1cyw==
+X-Forwarded-Encrypted: i=1; AJvYcCXV0xeRlRp818MwqYZ3zsfXm0y8Ev+2N8zetgje8gUkd7RlbLONk1qlfoIWW5pbaxlZTHUk1o2Cw7gGuw8y2Q8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHQ+ZJaTYuLtuH9pnHZbiPinsgkl/647HnYMivd1rNNQBcNamD
+	xBfg7DDAHSfcisRkSv9g8ZUUq4ndrOJCOYpQ9+jIjKG/Pf/Zhf8MEJUvdDOJzH7RN+S+CPjhycz
+	7ZDB2Lbq1CShvArcQvNQUmLpV2qlKYso4pQ4JdaLrXzqNQJg=
+X-Gm-Gg: ATEYQzyWJoVoJCogLbP0pst3c429RGnmbWqztIKbChAP3+mD1YLMmH9cLvU1XqLaT2C
+	Gy/6ssd7rnb0a4YuXekNrKQhgxOSihMzLddgc2xBiQO8VG2n+scUgr5V9lrexhHEwLi+6+BcezP
+	qMt3ZmHHAYNFVg3EdGuYv7/mel/hvCGw4+kCB3O9mAnRQqhQVlmBnFDZyq8v8ZIQMCAllPi/+Vy
+	JBUh3Q7Tq9ufWTc01e6aOo0VEkSeu2GwdyDmbLwCCX0Ra4P87OJcnjDdJGvDZBZ4f3fiCPqk48+
+	yR4pCeUO
+X-Received: by 2002:a05:690c:112:b0:798:207:9d4e with SMTP id
+ 00721157ae682-798dd69b1d1mr5036667b3.20.1772765271939; Thu, 05 Mar 2026
+ 18:47:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772764929;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B/7M8Q3sVB0HPgbs9UCg3aqgHeu4f7DPzAlrQa5392Y=;
-	b=fnjQCxqXAMRp37ZcPFn9LlnceurWpFBB9B2+YtuSlaxPqcpkS+UHJi0+LkQoG8VLp90//y
-	g4wAh6ZSpng0H91NYyOONQGjyId1JhnzdUEh/00XwLhdZMZgwvZ5Vjb0lFdFX1oeGVMjEM
-	89ppIQryir/ENCv097hDuCwxq9ZZbDc=
-Date: Fri, 06 Mar 2026 02:42:05 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <e08dcb78a13fc69be07d28d032cebe3734797a3a@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH net v4 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-To: "Jay Vosburgh" <jv@jvosburgh.net>, "Nikolay Aleksandrov"
- <razor@blackwall.org>
-Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com,
- syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>, "Hao
- Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
- "Clark Williams" <clrkwllms@kernel.org>, "Steven Rostedt"
- <rostedt@goodmis.org>, "Jussi Maki" <joamaki@gmail.com>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
-In-Reply-To: <1356528.1772744631@famine>
-References: <20260304074301.35482-1-jiayuan.chen@linux.dev>
- <20260304074301.35482-2-jiayuan.chen@linux.dev>
- <aahWymAi_CtRG0gJ@penguin> <1293120.1772645248@famine>
- <aahsuPt7cY8LxETN@penguin> <1356528.1772744631@famine>
-X-Migadu-Flow: FLOW_OUT
+References: <20260225111451.347923-1-sun.jian.kdev@gmail.com> <177272642704.3184289.3763404212538394213.git-patchwork-notify@kernel.org>
+In-Reply-To: <177272642704.3184289.3763404212538394213.git-patchwork-notify@kernel.org>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Fri, 6 Mar 2026 10:47:41 +0800
+X-Gm-Features: AaiRm51qq--B7Q2ndRqddJildAbFU0yoZwRVNq_kHTuc17z21jkjgAZSCDjm2XY
+Message-ID: <CABFUUZGwaowzgLtMRbZMwKkv_TQkC4NXrVZctAspSB1QGL23XA@mail.gmail.com>
+Subject: Re: [PATCH v3 v3 1/2] selftests/harness: order TEST_F and XFAIL_ADD constructors
+To: patchwork-bot+netdevbpf@kernel.org
+Cc: shuah@kernel.org, kuba@kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, kees@kernel.org, 
+	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, horms@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-2026/3/6 05:03, "Jay Vosburgh" <jv@jvosburgh.net mailto:jv@jvosburgh.net?=
-to=3D%22Jay%20Vosburgh%22%20%3Cjv%40jvosburgh.net%3E > wrote:
+Hi Paolo, Thomas,
+Thanks for the reviews.
 
+Paolo: Agreed on the Fixes tag. I won't resend since the series has already
+been applied to netdev/net.git.
 
->=20
->=20Nikolay Aleksandrov <razor@blackwall.org> wrote:
->=20
->=20>=20
->=20> On Wed, Mar 04, 2026 at 09:27:28AM -0800, Jay Vosburgh wrote:
-> >=20
->=20> >=20
->=20> > Nikolay Aleksandrov <razor@blackwall.org> wrote:
-> > >=20=20
->=20> >  >On Wed, Mar 04, 2026 at 03:42:57PM +0800, Jiayuan Chen wrote:
-> > >  >> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> > >  >>=20
->=20> >  >> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter witho=
-ut a NULL
-> > >  >> check. rr_tx_counter is a per-CPU counter only allocated in bon=
-d_open()
-> > >  >> when the bond mode is round-robin. If the bond device was never=
- brought
-> > >  >> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
-> > >  >>=20
->=20> >  >> The XDP redirect path can reach this code even when the bond =
-is not up:
-> > >  >> bpf_master_redirect_enabled_key is a global static key, so when=
- any bond
-> > >  >> device has native XDP attached, the XDP_TX -> xdp_master_redire=
-ct()
-> > >  >> interception is enabled for all bond slaves system-wide. This a=
-llows the
-> > >  >> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
-> > >  >> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() =
-to be
-> > >  >> reached on a bond that was never opened.
-> > >  >>=20
->=20> >  >> Fix this by allocating rr_tx_counter unconditionally in bond_=
-init()
-> > >  >> (ndo_init), which is called by register_netdevice() and covers =
-both
-> > >  >> device creation paths (bond_create() and bond_newlink()). This =
-also
-> > >  >> handles the case where bond mode is changed to round-robin afte=
-r device
-> > >  >> creation. The conditional allocation in bond_open() is removed.=
- Since
-> > >  >> bond_destructor() already unconditionally calls
-> > >  >> free_percpu(bond->rr_tx_counter), the lifecycle is clean: alloc=
-ate at
-> > >  >> ndo_init, free at destructor.
-> > >  >>=20
->=20> >  >> Note: rr_tx_counter is only used by round-robin mode, so this
-> > >  >> deliberately allocates a per-cpu u32 that goes unused for other=
- modes.
-> > >  >> Conditional allocation (e.g., in bond_option_mode_set) was cons=
-idered
-> > >  >> but rejected: the XDP path can race with mode changes on a down=
-ed bond,
-> > >  >> and adding memory barriers to the XDP hot path is not justified=
- for
-> > >  >> saving 4 bytes per CPU.
-> > >  >>=20
->=20> >  >> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirect=
-ion to slave device")
-> > >  >> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.=
-com
-> > >  >> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00=
-cc.GAE@google.com/T/
-> > >  >> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> > >  >> ---
-> > >  >> drivers/net/bonding/bond_main.c | 19 +++++++++++++------
-> > >  >> 1 file changed, 13 insertions(+), 6 deletions(-)
-> > >  >>=20
->=20> >  >
-> > >  >IMO it's not worth it to waste memory in all modes, for an unpopu=
-lar mode.
-> > >  >I think it'd be better to add a null check in bond_rr_gen_slave_i=
-d(),
-> > >  >READ/WRITE_ONCE() should be enough since it is allocated only onc=
-e, and
-> > >  >freed when the xmit code cannot be reachable anymore (otherwise w=
-e'd have
-> > >  >more bugs now). The branch will be successfully predicted practic=
-ally always,
-> > >  >and you can also mark the ptr being null as unlikely. That way on=
-ly RR takes
-> > >  >a very minimal hit, if any.
-> > >=20=20
->=20> >  Is what you're suggesting different from Jiayuan's proposal[0],
-> > >  in the sense of needing barriers in the XDP hot path to insure ord=
-ering?
-> > >=20=20
->=20> >  If I understand correctly, your suggestion is something like
-> > >  (totally untested):
-> > >=20
->=20> Basically yes, that is what I'm proposing + an unlikely() around th=
-at
-> > null check since it is really unlikely and will be always predicted
-> > correctly, this way it's only for RR mode.
-> >=20
->=20 Jiayuan,
->=20
->=20 Do you agree that the patch below (including Nikolay's
-> suggestion to add "unlikely") resolves the original issue without memor=
-y
-> waste, and without introducing performance issues (barriers) into the
-> XDP path?
+Thomas: Will send a follow-up covering this XFAIL_ADD/TEST_F() ctor
+ordering case.
 
-
-Sure, it's basically similar to what my v1 did, but the patch below can b=
-e more generic.
-
-https://lore.kernel.org/netdev/20260224112545.37888-1-jiayuan.chen@linux.=
-dev/T/#m08e3e53a8aa8d837ddc9242f4b14f2651a2b00aa
-
->  -J
->=20
->=20>=20
->=20> >=20
->=20> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bondin=
-g/bond_main.c
-> > >  index eb27cacc26d7..ac2a4fc0aad0 100644
-> > >  --- a/drivers/net/bonding/bond_main.c
-> > >  +++ b/drivers/net/bonding/bond_main.c
-> > >  @@ -4273,13 +4273,17 @@ void bond_work_cancel_all(struct bonding *=
-bond)
-> > >  static int bond_open(struct net_device *bond_dev)
-> > >  {
-> > >  struct bonding *bond =3D netdev_priv(bond_dev);
-> > >  + u32 __percpu *rr_tx_tmp;
-> > >  struct list_head *iter;
-> > >  struct slave *slave;
-> > >=20=20
->=20> >  - if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_t=
-x_counter) {
-> > >  - bond->rr_tx_counter =3D alloc_percpu(u32);
-> > >  - if (!bond->rr_tx_counter)
-> > >  + if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN &&
-> > >  + !READ_ONCE(bond->rr_tx_counter)) {
-> > >  + rr_tx_tmp =3D alloc_percpu(u32);
-> > >  + if (!rr_tx_tmp)
-> > >  return -ENOMEM;
-> > >  + WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
-> > >  +
-> > >  }
-> > >=20=20
->=20> >  /* reset slave->backup and slave->inactive */
-> > >  @@ -4866,6 +4870,9 @@ static u32 bond_rr_gen_slave_id(struct bondi=
-ng *bond)
-> > >  struct reciprocal_value reciprocal_packets_per_slave;
-> > >  int packets_per_slave =3D bond->params.packets_per_slave;
-> > >=20=20
->=20> >  + if (!READ_ONCE(bond->rr_tx_counter))
-> > >  + packets_per_slave =3D 0;
-> > >  +
-> > >  switch (packets_per_slave) {
-> > >  case 0:
-> > >  slave_id =3D get_random_u32();
-> > >=20=20
->=20> >  -J
-> > >=20=20
->=20> >=20=20
->=20> >  [0] https://lore.kernel.org/netdev/e4a2a652784ec206728eb3a929a98=
-92238c61f06@linux.dev/
-> > >
-> >=20
->=20---
->  -Jay Vosburgh, jv@jvosburgh.net
->
+Regards,
+sun jian
