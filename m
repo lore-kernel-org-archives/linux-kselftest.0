@@ -1,141 +1,215 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8983A1D5AD4;
-	Fri,  6 Mar 2026 00:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772755323; cv=none; b=HDBQgi/OTSydrh5oWOesBnj6ndssCdznO1xRmbKL0O8TDV2ZaWbC3PE70rB/nIxAYhjLoaK8xFryUZ+6FJGYG02fZ5Ub961WDJgFC1J/pS/obXKu9quwGQ0gtPFiCYbH6VC+9KyqqD2A2pzLDziBo7iMGAoTClojCgexTNU41yM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772755323; c=relaxed/simple;
-	bh=fhTfgUIcQ3y4hKSQw3oyq2gN1XbWjUDB8bmqXhAWjqs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Dlv7G1hfH1LFgon/4+vX2J+ghXs+uUfGZkVl70I+tPnhL2sdOHNRTGu6OhtsLOIKsB7Md51x/6SNfdh6s/ZKNcDGGGNDGeBmeeSKu0vKXZjJalcxrg4rsDxmCUTIYg5w6nFwnxs9uyKk2BTkMNqTsud7LQAvFNSVLXThpPc9Mrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=QTuGlxsr; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D252877CB
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 00:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772756123; cv=pass; b=FzbXgnXxC3etVttXn/nPykBAJphuKIfNocYeTtSu+yhO0c2ytZ8jEsbNxDtf28SZZYAY2xYCW+fXEN3uOZ+foKtP58cfYTLqRQWFeHWnZQ3IpaSd6P/yWm9p1YWrIwlWm2/eSUbPHapn6H9LRg95HA3bwOKIRF2i2OCRcOcZSkA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772756123; c=relaxed/simple;
+	bh=FgiWZMdtwShVHnqKD3SYB4X6xZAczCl2quXIiR0wP9w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l2ErsuDEGKlMA/m9y3WnuMLXSWbOYP4ZSDVEl+aUWXm+vR2Ee3ZeVBumwIRVk+QWBIsiCOgX1QkcOGH3D/D3DIDTSWYvu7MlBr95a0pgr0/Qpoz28ibPgSfKlwItQPUaO2ZBiWuqAerB5mcN7jNvrhS9YFbrW0pryr5oU5rXKVw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nRJ7LDsF; arc=pass smtp.client-ip=209.85.221.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="QTuGlxsr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=mINb8Y4urQ3Ce2/gZIEe5yET0uG5j4QIGs1pRxm5EHU=; b=QTuGlxsrnyWl
-	a6AZVwKRMaNpjlrvV7beX3+TQbjdUHs3GyGEqDHDMZ5jzHSVERz7DmG6cDAU2AMImGy5mWNt+aERd
-	LCEmbwg1O4EGxR3OS0DmyxO07U8mOOx1VyH6dLdxFUMkagNXD3MP5bNBahwWj3uDpZVkR8FG9sxCH
-	ImibPGsYk4pA+x1Th0dqb1N07ng7H+Bwzr50t2xzMDBP+LSK6Mn2hXiHwKEGR/nDlMkGXZgJtwbHl
-	BWtzrKx4MgLioXa9jQKWTkWbDIYElzYYCxDHutrpD1knICsorQ/gcX1CoTQdR1v9KWJmZv3afUit+
-	61qbO2uFAlrz/5//2IEPUQ==;
-Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
-	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vyIbt-006GPD-0u;
-	Fri, 06 Mar 2026 01:01:36 +0100
-Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 62601cNp519107
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Fri, 6 Mar 2026 00:01:38 GMT
-Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 62601cNI519106;
-	Fri, 6 Mar 2026 00:01:38 GMT
-From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Aaron Conole <aconole@redhat.com>,
-        Ilya Maximets <imaximet@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Stefano Brivio <sbrivio@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dev@openvswitch.org,
-        Konstantin Khorenko <khorenko@virtuozzo.com>,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH net v3 5/6] selftests: net: run pmtu.sh in netns to avoid host firewall interference
-Date: Fri,  6 Mar 2026 00:01:26 +0000
-Message-ID: <20260306000127.519064-6-aleksey.oladko@virtuozzo.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260306000127.519064-1-aleksey.oladko@virtuozzo.com>
-References: <20260306000127.519064-1-aleksey.oladko@virtuozzo.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nRJ7LDsF"
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-439b611274bso3352363f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 16:15:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772756121; cv=none;
+        d=google.com; s=arc-20240605;
+        b=E4mhDfvBEFzD2Hzq91wvSDi8Emo/xbcrZ9iLiOO3doMVHz8lufLqVypHn5TP7U4l5I
+         BX2Qc8L52T+HmcLx+UkzJn689TQllWQdj7tj4bi3ljNtb+E244H8kWsI7JHwlOkvVqBZ
+         9pI/MKZV28k/KIJ34jsbZ1ft/jkEmnw2X16tdj9mLuyQx6WlgOZZhxm+71b4wUFhQ/3r
+         qX5hFVR9EVxCoe5SadzcGoqqcYnIVniul67KNTU0UpbwcT2nIiE9x5IQ5+3AKrkaT5kn
+         +/2He00dDccJmckmJFKmiesF9bcfCk9EflfLVDsZLv9Korop9JTlJGiCcI5DAXUmknMx
+         tXeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=+jYZ0VJCdbCj+ca5cxk8pP3RkXjQYsLYUpygAtW+QI0=;
+        fh=zSOqvTcJJ1mZTY3CC0FYqysdmCBubbdwB3x+jfCf1UE=;
+        b=XhjgQ8tHwoUwSkUxomjsnWk5WxsUyYwEQT25u4ohtjGct6RbWUY1o0tVWUwjvQDOVr
+         QbNq0iFbAk24DSIMLssxI9TLcvaGqPequ7KnUMccEecZj48ej9g48Y1O0GU7eezWQAXv
+         mYkFszccLojyeHGVbB/3bspk3K1Xx0ZdiRALliyTlBAkvNNRnjdhdsGTxpt6dOf+vqws
+         HJJkDCV+YLN+jgwuU+ljdvt9dCyxx+l1+q91LmM98GfOWWonjBNxHRU514/OBbVCcGvz
+         B1Z/iebynekiOPrjEf2uqiNWfKE/XE7b3o7L0Y0TW4xz0ZP7RNOXPRAjoWTi5hEYDBod
+         3wnQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772756121; x=1773360921; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+jYZ0VJCdbCj+ca5cxk8pP3RkXjQYsLYUpygAtW+QI0=;
+        b=nRJ7LDsFXC6A6m9PZJCEPRtusE8FI7oFSVp5kB/JICPJeyM16zrqaLRcRcKYDRhi37
+         XvYc1uENPuBAsUm4by1TT6gsAlO9E7gqGGU6A04fZQgOrtoG5LskCpzuzx2uy83dk8Ok
+         y4Ehb8VMi9zyaO/PxJNHOdpjPZEhkhtdx8NZom95qEhI3/YdZ01mD7aAWfOgqsqTvSrd
+         pM+Y04qMl0C6fDl8pFzncyQpkroEBk9lBlRlzDlm0M6YaoDSH4gifAvelOF+n8ITKmHQ
+         0Gnqc/SxvmK1AhwT1hqQmvZRKXz1LiZjfALT5Q1ee1hqHl05BqZPpGfX3oPckdkwfute
+         HsIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772756121; x=1773360921;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+jYZ0VJCdbCj+ca5cxk8pP3RkXjQYsLYUpygAtW+QI0=;
+        b=cdkU3Dp0f6DYc9eMOS7Md4R6kG/Wlf6Qn/dB/18+EBahK9ZFmlfv2AKAd+FlKMYc4K
+         /On1Q3wQWjvF5OIv9zqw49Ovn7TXxQhMxJMZkS4rYXtsvKTrQ0eFSTZ2eCCNKL5db1yE
+         Iad+GO+WyTtdoJv5pveP2bN9GOmlCGdmTZaS0aI+dIdnCy7q2LoY3KW781ZiX/+C2B6o
+         5CpRb4+zxYZ5drurA6uWaNptQXC068iUd03FZbH+yNbDRYUWfjWHfRYyPCGhRTYZ3Rwp
+         ypcc/8Kmv52i9zGVq2HDdDlRil5Qa8GtErVWMu2H3qPZHm71PcMPg/QY/F2wBUBmJt1U
+         eU6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVZlqlD8l3Syb67vxXoBU9YoPSma6zLANfiiKnnpCOPRN9IQF+GfjgaW98Wd3z+h3wpXyoap5mMfcOO2DY7I7E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoqlhIQio6W+KOYVDYoyy1P1RKU9DEAd9y7NgSYsdVIgJGekc5
+	D9vw6Witr1h9ZB7xLKcRFoFYYPreQelYfL07QcklR+iX6BDvWrc+HNxTqCBmKJt8SU6A47wQ7Up
+	+Znavy7HqXPWaPxCgUvubukHkEHSdFiI=
+X-Gm-Gg: ATEYQzzfpjUen7FU5PAahUNTt8r8c0uzV1NU2T1HuvD7COOlqkOpiRkK/lmjTKD6Von
+	ZAl7XWwwms2mbThuuO+fb0bSsu2gbdnt/yD7OQP6JGFmNQ5FXLWPiCIAMiAcx5kdfyWSwlTY7yN
+	xdvus3iMZZn/buuy8ambPxFH/0Ci036LIfrBTmoHqcyBz3Vo/9eFdDg2F84vECGDsOZDqktWUca
+	tklZAHPnq/Z3CxAsyt16cxi7eu1v/3Hpzwto9a8U0DrEFErGlQCJRCqHfj7Wlz/KP5Sd8u1cyPK
+	yNlxv4QJMTdzrKRnu8MDUkX8mfSNYpszyuNW4jBr0PjCqM9wdM/oO6dEA8NJAZr3i6qHGQ==
+X-Received: by 2002:a05:6000:400f:b0:439:be3d:e6d7 with SMTP id
+ ffacd0b85a97d-439da89542bmr310661f8f.49.1772756120540; Thu, 05 Mar 2026
+ 16:15:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260304143459.78059-1-pilgrimtao@gmail.com> <20260304143459.78059-2-pilgrimtao@gmail.com>
+In-Reply-To: <20260304143459.78059-2-pilgrimtao@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Fri, 6 Mar 2026 01:14:44 +0100
+X-Gm-Features: AaiRm50Th3E02W_Z0Fo703BJmpmkDRot0Ta26jBExNdWMNb-bf4B_RiNpHtvE4U
+Message-ID: <CAP01T77B_Rae71cYgZ7b+xbYG+qaaUNscLe2c6gpkDj+o6B0ag@mail.gmail.com>
+Subject: Re: [PATCH v6 1/5] bpf: Introduce the bpf_list_del kfunc.
+To: Chengkaitao <pilgrimtao@gmail.com>
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
+	chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Konstantin Khorenko <khorenko@virtuozzo.com>
+On Wed, 4 Mar 2026 at 15:50, Chengkaitao <pilgrimtao@gmail.com> wrote:
+>
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>
+> If a user holds ownership of a node in the middle of a list, they
+> can directly remove it from the list without strictly adhering to
+> deletion rules from the head or tail.
+>
+> We have added an additional parameter bpf_list_head *head to
+> bpf_list_del, as the verifier requires the head parameter to
+> check whether the lock is being held.
+>
+> This is typically paired with bpf_refcount. After calling
+> bpf_list_del, it is generally necessary to drop the reference to
+> the list node twice to prevent reference count leaks.
+>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
+>  kernel/bpf/helpers.c  | 27 +++++++++++++++++++++++++++
+>  kernel/bpf/verifier.c |  6 +++++-
+>  2 files changed, 32 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6eb6c82ed2ee..cc1a096a1f64 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2459,6 +2459,32 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+>         return __bpf_list_del(head, true);
+>  }
+>
+> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
+> +                                              struct bpf_list_node *node)
+> +{
+> +       struct bpf_list_node_kern *knode = (struct bpf_list_node_kern *)node;
+> +       struct list_head *h = (void *)head;
+> +
+> +       /* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+> +        * called on its fields, so init here
+> +        */
+> +       if (unlikely(!h->next)) {
+> +               INIT_LIST_HEAD(h);
+> +               return NULL;
+> +       }
 
-The pmtu.sh kselftest sets up a multi-namespace test topology where the
-host network itself is part of the test setup. Test packets originating
-from the created namespace are expected to reach test interface created
-in the host. When firewall rules are present on the host, this traffic
-may be blocked, causing the test to fail.
+nit: I would avoid doing this here, just for symmetry.
+If we are part of the list after the owner checks, this should be
+initialized correctly anyway.
 
-Run the test in an isolated network namespace to avoid interference
-from host firewall rules.
+> +
+> +       if (unlikely(!knode))
+> +               return NULL;
 
-Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
-Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
----
- tools/testing/selftests/net/Makefile     | 3 ++-
- tools/testing/selftests/net/pmtu-test.sh | 4 ++--
- tools/testing/selftests/net/pmtu.sh      | 4 ++++
- 3 files changed, 8 insertions(+), 3 deletions(-)
- create mode 100755 tools/testing/selftests/net/pmtu.sh
+nit: It seems like node can't (shouldn't) be NULL, so we can lose this check.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index b9eeeffa5fd2..363cd1e2cf8e 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -63,7 +63,7 @@ TEST_PROGS := \
- 	netns-name.sh \
- 	netns-sysctl.sh \
- 	nl_netdev.py \
--	pmtu-test.sh \
-+	pmtu.sh \
- 	psock_snd.sh \
- 	reuseaddr_ports_exhausted.sh \
- 	reuseport_addr_any.sh \
-@@ -194,6 +194,7 @@ TEST_FILES := \
- 	fcnal-test.sh \
- 	in_netns.sh \
- 	lib.sh \
-+	pmtu-test.sh \
- 	settings \
- # end of TEST_FILES
- 
-diff --git a/tools/testing/selftests/net/pmtu-test.sh b/tools/testing/selftests/net/pmtu-test.sh
-index a3323c21f001..2ba6bc0252f0 100755
---- a/tools/testing/selftests/net/pmtu-test.sh
-+++ b/tools/testing/selftests/net/pmtu-test.sh
-@@ -976,7 +976,7 @@ setup_ovs_bridge() {
- 	run_cmd ip link set ovs_br0 up
- 
- 	run_cmd ${ns_c} ip link add veth_C-A type veth peer name veth_A-C
--	run_cmd ${ns_c} ip link set veth_A-C netns 1
-+	run_cmd ${ns_c} ip link set veth_A-C netns $$
- 
- 	run_cmd         ip link set veth_A-C up
- 	run_cmd ${ns_c} ip link set veth_C-A up
-@@ -985,7 +985,7 @@ setup_ovs_bridge() {
- 	setup_ovs_add_if veth_A-C
- 
- 	# Move veth_A-R1 to init
--	run_cmd ${ns_a} ip link set veth_A-R1 netns 1
-+	run_cmd ${ns_a} ip link set veth_A-R1 netns $$
- 	run_cmd ip addr add ${prefix4}.${a_r1}.1/${veth4_mask} dev veth_A-R1
- 	run_cmd ip addr add ${prefix6}:${a_r1}::1/${veth6_mask} dev veth_A-R1
- 	run_cmd ip link set veth_A-R1 up
-diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-new file mode 100755
-index 000000000000..1805fa44a2de
---- /dev/null
-+++ b/tools/testing/selftests/net/pmtu.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+./in_netns.sh ./pmtu-test.sh "$@"
--- 
-2.43.0
-
+> +
+> +       if (WARN_ON_ONCE(READ_ONCE(knode->owner) != head))
+> +               return NULL;
+> +
+> +       list_del_init(&knode->list_head);
+> +       WRITE_ONCE(knode->owner, NULL);
+> +
+> +       return node;
+> +}
+> +
+>  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
+>  {
+>         struct list_head *h = (struct list_head *)head;
+> @@ -4545,6 +4571,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 67c09b43a497..c9557d3fb8dd 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12461,6 +12461,7 @@ enum special_kfunc_type {
+>         KF_bpf_list_push_back_impl,
+>         KF_bpf_list_pop_front,
+>         KF_bpf_list_pop_back,
+> +       KF_bpf_list_del,
+>         KF_bpf_list_front,
+>         KF_bpf_list_back,
+>         KF_bpf_cast_to_kern_ctx,
+> @@ -12521,6 +12522,7 @@ BTF_ID(func, bpf_list_push_front_impl)
+>  BTF_ID(func, bpf_list_push_back_impl)
+>  BTF_ID(func, bpf_list_pop_front)
+>  BTF_ID(func, bpf_list_pop_back)
+> +BTF_ID(func, bpf_list_del)
+>  BTF_ID(func, bpf_list_front)
+>  BTF_ID(func, bpf_list_back)
+>  BTF_ID(func, bpf_cast_to_kern_ctx)
+> @@ -12996,6 +12998,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
+>                btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+>                btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+>                btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
+> +              btf_id == special_kfunc_list[KF_bpf_list_del] ||
+>                btf_id == special_kfunc_list[KF_bpf_list_front] ||
+>                btf_id == special_kfunc_list[KF_bpf_list_back];
+>  }
+> @@ -13118,7 +13121,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+>         switch (node_field_type) {
+>         case BPF_LIST_NODE:
+>                 ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> -                      kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl]);
+> +                      kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> +                      kfunc_btf_id == special_kfunc_list[KF_bpf_list_del]);
+>                 break;
+>         case BPF_RB_NODE:
+>                 ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
+> --
+> 2.50.1 (Apple Git-155)
+>
+>
