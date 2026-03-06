@@ -1,64 +1,64 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5623AA1A5
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77083AE19C
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772805819; cv=none; b=T1r5WG7LzwCfxiEwZnk9qoxooDLKxrviyXwGWDvfR8c37pjuqjz6EYiMwFZpI09DbAkECDYy0Vrd8ykG4oapFak/SVMy0uJtuaPEsp1UK/kIPFQBlTEv0Qc9D3y8SrJJf9LeliTALH7gVrCIBIsUGtSdpVMRMfRVu6I1gtROHwU=
+	t=1772805823; cv=none; b=oEvfJ1fKBRoxvuYOjii8uxAwdhydR+Bp1MrhYTYIOKGIyu3hQjAF2Qp07K0xm6SgtHITT19JLV1ertUf9gY3ftwpFktx/JNkPhiUVq6Rw5nTVlebwkf/H+95s00zUx+wAOOJdjc32zmPUOy8Ysd/6iql7Dl0vs1DhizebtRE9EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772805819; c=relaxed/simple;
-	bh=0OeY0xReBFL8eCyB/FrdWjGk3Mhp+R/qkHPO1eyeEZ0=;
+	s=arc-20240116; t=1772805823; c=relaxed/simple;
+	bh=ELlzxJVqqauBzRnx2M/V3kWxTpAmlO4Sa9vwg7vpvVA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qAXsNblIPhXxNakhxdLx162EF8bZ0fppBSTXMDiCsvwhrVCMuV/XSsfAPfDhYAF7VLDYkO7lmD6YfVyEAg9INAArADmBhKPLht/2RJ0vVtAdYZIXziUwvqDmGANgPWiXzh04+mm/XWslCJNb5aZfQNPhH/VZCT+yxzTHu4Dxd2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=inGOAYTi; arc=none smtp.client-ip=209.85.215.175
+	 MIME-Version; b=rwGMMBCFbs7p1O/o15mKF/xKoldH5LQ6H6kGXh8r4DC5J9oyqc7cr0uFJPJzGddTMPQwZrJ83v/Maxk3yQKBCrmKBlkcnZnhkzjBWyayiXIw5mivCzreVZHzUiexALRVGvezE6GQILXTt2QEvvd0goG+aQmSXQmKA/JjXw/JibQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iJ3ZT/i9; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="inGOAYTi"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c738fecf349so718405a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:03:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iJ3ZT/i9"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ae4d48dc2fso26241185ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:03:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772805818; x=1773410618; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772805821; x=1773410621; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=usOL8l/KNsMfxD0BXV4D931Ky3sdKsa4TTa5Fbius5w=;
-        b=inGOAYTiu0w+RDHWpGxcxVszoD/K/YwzQok9zuj/mp60hMxZbb57QW9DHATR3j11ga
-         r6Y9miONheE85UdyAIH+yCidFPX8lctxyvmg7GeAWBclocK57RzhjLwy7daoLZJTuK0t
-         JLP1QYUsMyrXfhJQlUZdvWTgWQ0kLSpwy3qmS/dgdp7QnPGsAjt68Ada80azYANzDRqu
-         78oCnMny0jYYDTLp9/JVuQOhkmQ/KVv8SNTjyBPhC3Bs0yBHAAgx2cYzYpyhPB29bEpq
-         agbzgWws8qPb6Hk0llYm1i9qebzRd8CWp8K0YWNMzFkQiGtzgZuyJ2pJNx6+MjT6dhwA
-         NX+w==
+        bh=lEmGv2FLRFuslu4qBQwLsjeV3m7Edv0VCgYCAY8R+hU=;
+        b=iJ3ZT/i9pT5F+PL/lUqgCmJRyC7ErME0o8I+Ll/35cu1pjYYAe9qKaZNTUA2yGqoNe
+         mjsGXB3YdGYRHwlgUIvrNxe2bbUY+Lm59Ft1j3uN7WuntEyCOsDGKaob4mvFFAd+5uZ4
+         1cJhqhWr8vIjASvLOcLyZT8/DOjiT3vc4SUHsAnsGQ49Da7bQI8yHG+Oe1EmSfsBYtI7
+         zKLX+rAbRJ7LvSrQWcsIYqAab48bYf7355ZK8R/DjUthaci+TYhqAu2NT7seRVJdc/yD
+         5wceVOlymYEnoiINxwH9sL6wcB/fpIl7B2oeHZSh0iROCPqlGX2MvZNr33AMoY7733Z1
+         bGlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772805818; x=1773410618;
+        d=1e100.net; s=20230601; t=1772805821; x=1773410621;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=usOL8l/KNsMfxD0BXV4D931Ky3sdKsa4TTa5Fbius5w=;
-        b=OyeqSEG+MxiT53tMauMlJQYBCbWRuTslXOM+F66oz611NqANE3qxNLMihaeRGSQas5
-         wsZAXgOlQZI/oldY9Jxirel5lGG2kO/3Ix/q6G1RvX7bcPfvpbVy9aMp1aPSz+eONapf
-         NWtZmmoePFt96ycib751Oe1dr6thMdGofyJi996aK0TjDqARLqvLHWKD0zxhPsS3Iy73
-         NLBVxVcD71wOI+FlQWce3dTbqgfSMVaoXyCRIEdiCpG08GSOIw4LInW5a4Crof8Gaih7
-         2SyiXuiKnTI0XuSvwVB5uPOto3NHXAh1wtTerWCfBhneQc026fTOo3sz6OVWyJlfrHoF
-         mDmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8FJ5oyfkuB1/G6Ndm/ar24bOn/vtUueghg3cHPzV/25cq59H5rRfEZbeTwpVE5zGwoHgC5DNwCgdIUAqo8gE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzU4CwaJrJPTZUmlusfIg5P4iuEI20Hb89fOe+C0ipKJs4f68fA
-	6FDN6lQ6nHSNkN9pWJDodOzBQl6gRKJnP9ak87P7A0ie8c84EvlRXvLU
-X-Gm-Gg: ATEYQzxMoi5OD6bAHOAQA6UMR8Uk1zpzxkNOI9xShgFey2AsAuPe6VTL51vMC4MXtn5
-	FbmSgEK2mRO8siHRqK1gJYLD2vMyMv8GGRi+4j4kgVzCyYNAQyIuWoJUOt+R44QkdnnqOUlnssy
-	LkkKB0teYhloLrY9fxFaWTSTWl8nmMTi4S44cqeZZz62b1pQ6z6UbLeW5ZRcWBuVI4wQUuzA55O
-	r9hYj2EohghLIp/ci1WmlwGJJQv6jwZYyJeK6/s4Bjh8nA9pEOcTaZyqzARMgBUyBt//B6uh915
-	K5tl9WKhcFjtyK1sfR6igXk+XE9PB55B1x4kdSSYPEshn7fMWr4AsHO4bYB3OdFz3aE3PbXgPKf
-	zlALy44oPRMTAP97LNxDdXfGyJXycuPmKi9yQplB62SNrvgLNxcMfVt7NYD+JTW+vx6+xG6/rDo
-	vqbK3MTkBRrs2wMMlMNbO6+jYgeIPAlq5eFgscjmCJQBDVnzUCAoVK5H84/7SseLyjsrwBfYvtJ
-	Cg=
-X-Received: by 2002:a17:903:3a8b:b0:2ad:da28:8c7a with SMTP id d9443c01a7336-2ae829622bemr21398275ad.8.1772805817813;
-        Fri, 06 Mar 2026 06:03:37 -0800 (PST)
+        bh=lEmGv2FLRFuslu4qBQwLsjeV3m7Edv0VCgYCAY8R+hU=;
+        b=SDhB4WiEc1fmx/jxYZLs0hfam3mlMObGu9ZSjjKDwcZM11wbU3ABAR499VvmSK8Pc5
+         NqOaasdUuexlKz6nlOvhNqvgfEF8PKlZJht7+13TTVMLZaDmKik0ogmACzFx1D37mGln
+         oEdv1k13m4jasvcd819SCcMbQkkr/wVE53NDENNbJsU/VSIMQ6c9hNGRaHhDzq9x/7fP
+         3BIXWgNqfcShDInsWQxqtFB7nXryNSL63WngE5lJTw/lwz4A66aBv46VJEARTZCf4XSs
+         XYCRpSqCfpKnmwsQfKAbSSb/0Wq34UxQwP5IrBbVWu5EBPzQ4FtvngZoeEaZ1CWyRuOB
+         rqUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUESXCtkkwbBkr4Ro2aTdCzA34GhSF37oyZqzxsQvkZS12mPuKCPHYDubCQK/CzFLMtmotjp2YobD2xseK4++k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzS9UDZTx5lBOjPymJfdjjokNwU7p/NJWiHRi1ARz0bKXChRUZ2
+	NRtckLxqVOenqxOQ3cexn+Q59KmytQw1dfXl1gMqnGG49u4oTPLDH4lt
+X-Gm-Gg: ATEYQzyXpRs5zvQtVENQoXCgRJDYm4targobhuHCEblQlD++RazDBCBeeO1va0EfMDC
+	tqsAtjIarVI43BAYXQcaKSfbEGaz4f8T3zoEGqiP+J8+UtlaKzmwioQpYV3gNMajQwlkiEO8mod
+	O4OzqQ/TLhpApYBTGDR7fGMRB/UEJxa9ITKiiM/f+2rQn8frsBlRHTmTPeBpjU50773fO3qQlH4
+	KN7uPaMFdxxGoy0WwTygKxcaiI5Zrhp8j+s/hWND0ar6EPuDXY30andGkXdH1EJus3gxJO+OHD8
+	5DdsYv+482VFPbU+WziUyRzXZI4pu6h7DwsMzfYqP+SS1UspW7AMBFuENY5h37qAOk8FYngzhXc
+	A2N51UrHJ13XUeGEOZNvEAptPTMNtkjOxNzFI+Xhy8zoaBdv3r6/cFUcHqo4dEabhyKyyCd0ypV
+	Y++aSxvAaMfKPGYR3Ei/Cveb2BJE9WQbO/xBtxxAlyG3f8hYLqzcDsemeH+AQ5DzUEjOqp3OiAQ
+	o0Bed436gOsTQ==
+X-Received: by 2002:a17:902:c94a:b0:2ae:41d1:344b with SMTP id d9443c01a7336-2ae82418016mr27067745ad.6.1772805821034;
+        Fri, 06 Mar 2026 06:03:41 -0800 (PST)
 Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae840ccb6csm29134715ad.92.2026.03.06.06.03.35
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae840ccb6csm29134715ad.92.2026.03.06.06.03.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 06:03:37 -0800 (PST)
+        Fri, 06 Mar 2026 06:03:40 -0800 (PST)
 From: zhidao su <soolaugust@gmail.com>
 X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
 To: tj@kernel.org,
@@ -69,9 +69,9 @@ Cc: void@manifault.com,
 	changwoo@igalia.com,
 	linux-kselftest@vger.kernel.org,
 	Su Zhidao <suzhidao@xiaomi.com>
-Subject: [PATCH 2/5] sched_ext: Add comments to scx_bypass() for bypass depth semantics
-Date: Fri,  6 Mar 2026 22:03:22 +0800
-Message-ID: <20260306140325.2710927-3-suzhidao@xiaomi.com>
+Subject: [PATCH 3/5] sched_ext: Use rcu_dereference_bh() in scx_bypass_lb_timerfn()
+Date: Fri,  6 Mar 2026 22:03:23 +0800
+Message-ID: <20260306140325.2710927-4-suzhidao@xiaomi.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260306140325.2710927-1-suzhidao@xiaomi.com>
 References: <20260306140325.2710927-1-suzhidao@xiaomi.com>
@@ -85,51 +85,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Su Zhidao <suzhidao@xiaomi.com>
 
-The bypass depth counter (scx_bypass_depth) uses WRITE_ONCE/READ_ONCE
-to communicate that it can be observed locklessly from IRQ context, even
-though modifications are serialized by bypass_lock. The existing code did
-not explain this pattern or the re-queue loop's role in propagating the
-bypass state change to all CPUs.
+scx_bypass_lb_timerfn() runs in softirq (BH) context, so
+rcu_dereference_bh() is the correct RCU accessor. The previous
+rcu_dereference_all() suppresses all sparse warnings and masks
+potential RCU context issues.
 
-Add inline comments to clarify:
-- Why bypass_depth uses WRITE_ONCE/READ_ONCE despite lock protection
-- How the dequeue/enqueue cycle propagates bypass state to all per-CPU queues
+Add a comment noting this is a transitional state: when
+multi-scheduler support lands, the bypass LB timer will become
+per-scheduler and the global scx_root reference will be removed.
 
 Signed-off-by: Su Zhidao <suzhidao@xiaomi.com>
 ---
- kernel/sched/ext.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ kernel/sched/ext.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 56ff5874af94..053d99c58802 100644
+index 053d99c58802..c269e489902c 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -4229,6 +4229,14 @@ static void scx_bypass(bool bypass)
- 	if (bypass) {
- 		u32 intv_us;
+@@ -4170,7 +4170,13 @@ static void scx_bypass_lb_timerfn(struct timer_list *timer)
+ 	int node;
+ 	u32 intv_us;
  
-+		/*
-+		 * Increment bypass depth. Only the first caller (depth 0->1)
-+		 * needs to set up the bypass state; subsequent callers just
-+		 * increment the counter and return. The depth counter is
-+		 * protected by bypass_lock but READ_ONCE/WRITE_ONCE are used
-+		 * to communicate that the value can be observed locklessly
-+		 * (e.g., from scx_bypass_lb_timerfn() in softirq context).
-+		 */
- 		WRITE_ONCE(scx_bypass_depth, scx_bypass_depth + 1);
- 		WARN_ON_ONCE(scx_bypass_depth <= 0);
- 		if (scx_bypass_depth != 1)
-@@ -4263,6 +4271,10 @@ static void scx_bypass(bool bypass)
- 	 *
- 	 * This function can't trust the scheduler and thus can't use
- 	 * cpus_read_lock(). Walk all possible CPUs instead of online.
-+	 *
-+	 * The dequeue/enqueue cycle forces tasks through the updated code
-+	 * paths: in bypass mode, do_enqueue_task() routes to the per-CPU
-+	 * bypass DSQ instead of calling ops.enqueue().
- 	 */
- 	for_each_possible_cpu(cpu) {
- 		struct rq *rq = cpu_rq(cpu);
+-	sch = rcu_dereference_all(scx_root);
++	/*
++	 * scx_bypass_lb_timer is a global timer that fires in softirq
++	 * context while bypass mode is active. Use rcu_dereference_bh()
++	 * matching the BH context. When multi-scheduler support lands,
++	 * this timer will become per-scheduler instance.
++	 */
++	sch = rcu_dereference_bh(scx_root);
+ 	if (unlikely(!sch) || !READ_ONCE(scx_bypass_depth))
+ 		return;
+ 
 -- 
 2.43.0
 
