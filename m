@@ -1,32 +1,30 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428373195FC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12596A945
 	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 08:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772785556; cv=none; b=stTZpA/4WeBBPp7MT3fHlfM4cAXsF2LL0+2kdYFlwUcBSeSttImFtK2wjvkE+CceLpuCaoAZX+AsUC30Jwf2PBZrMTTKMyZuOe09/z4/hfgiEOub8zQSjeYTxPIAyGuJ0uWFUhdXawlspzWc5ltP6jMhwHXMNYwL7a9b9u42PSw=
+	t=1772785557; cv=none; b=APAE6CZd+4DfLbaVQ1zEO0z5KIOEC+Z71XE5jufGTr6knJTwb7X2gRd85Zv+oWSQQSVo7PbFNwbaioY1KEYdkb2IkhD+UXKoo8Dg97CWtQxOQrgyKxWOxtF/Vgn5bfxlqUwnZyqp4lO0Y0X9y2t6qRfG4mZQtnLaSQza1DV4S68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772785556; c=relaxed/simple;
-	bh=cAVGzCQx5mvkDsx4KRnHz0QS/ojujD4lGPVAkryK9bo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bkukEgAo6fB5uBHpENgYP6Z47BBqA0u0lsVHIfmOkoHMA28W2kc3dCEHivskHXB3WB1+ifnm1t56ZIoGKkLAbeOxQiO4bwsWU3z6hRNDp4pI8XZBvKlLDc8HkUZOGRJj/ER3xLC9U24/VY9GOy2bBuXX0pdvfliMtoTgnd/QuF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uuE2mymk; arc=none smtp.client-ip=95.215.58.176
+	s=arc-20240116; t=1772785557; c=relaxed/simple;
+	bh=EJ5zFKKbmNrV6OFgayMyLEx3+LUaBAsVIk6ZHwA4nTg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=RX6RABeHZfgQpDMvJeYlU6HgL9xcniwIquMtxo53fXx4+jt2Laj/MK50OhNH5yPbjk1FI+ZjtdyTUQW+g1HoEMKLNDQN05iRXnEWjvxHDGcNMx4sxP95ThdfrLeUMW7aAEjGA6/DrLL00bQbBtw5lJItmhqkbVp0/89CVl0cIWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X0vivRAu; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uuE2mymk"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X0vivRAu"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772785553;
+	t=1772785544;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fRwTEFVE1nv4Ucdo8I3dAlKSlN3pGwoz+1yzoPOqSK4=;
-	b=uuE2mymk8ugtbPbkMaTZgred2vXiGg3ljPMdxQdNrtT5boxvRS1vTT/8TIzULwAWKusrzP
-	b22+BNg7caEDjMOadgdM4J/o/k/r14NUyYxINMWiklIX2FFqMd3HtOKTXF6gMdsCGdYW2G
-	oOOFxNnocw46G5lTAOBbdpP+p5TJIDg=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wenHDtnE2fTbbdQXawz5GsD7QCtK7EsMUhkDCPsNMAc=;
+	b=X0vivRAur9bgO61V33my/HwQtrysi3vHzGvergnHYIpg62BpRIlNHhr9o/6Rnh+OcXJjr7
+	0izESutrSs10c7+Ct3knzrLQHFNFGvLnPcgWSegAki3w33wXwapgfERkNCempv9oXWpE4w
+	5F8E4+bZRTcUMH1iifREC3VCpu6WbD4=
 From: Zhu Yanjun <yanjun.zhu@linux.dev>
 To: jgg@ziepe.ca,
 	leon@kernel.org,
@@ -35,11 +33,9 @@ To: jgg@ziepe.ca,
 	dsahern@kernel.org,
 	linux-rdma@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/4] RDMA/rxe: Add net namespace support for IPv4/IPv6 sockets
-Date: Fri,  6 Mar 2026 00:24:51 -0800
-Message-ID: <20260306082452.1822-4-yanjun.zhu@linux.dev>
-In-Reply-To: <20260306082452.1822-1-yanjun.zhu@linux.dev>
-References: <20260306082452.1822-1-yanjun.zhu@linux.dev>
+Subject: [PATCH 0/4] RDMA/rxe: Add the support that rxe can work in net namespace
+Date: Fri,  6 Mar 2026 00:24:48 -0800
+Message-ID: <20260306082452.1822-1-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,202 +45,67 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add a net namespace implementation file to rxe to manage the
-lifecycle of IPv4 and IPv6 sockets per network namespace.
+Currently rxe does not work correctly in network namespaces.
 
-This implementation handles the creation and destruction of the
-sockets both for init_net and for dynamically created network
-namespaces. The sockets are initialized when a namespace becomes
-active and are properly released when the namespace is removed.
+When the rdma_rxe module is loaded, a UDP socket listening on port
+4791 is created in init_net. When users run:
 
-This change provides the infrastructure needed for rxe to operate
-correctly in environments using multiple network namespaces.
+    ip link add ... type rxe
 
-Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
----
- drivers/infiniband/sw/rxe/Makefile |   3 +-
- drivers/infiniband/sw/rxe/rxe_ns.c | 134 +++++++++++++++++++++++++++++
- drivers/infiniband/sw/rxe/rxe_ns.h |  17 ++++
- 3 files changed, 153 insertions(+), 1 deletion(-)
+inside another network namespace, the RXE RDMA link is created but it
+cannot function properly because the underlying UDP socket belongs to
+init_net. Other network namespaces cannot use that socket.
+
+To address this issue, this series introduces net namespace support
+for rxe and moves socket management to be per network namespace.
+
+The series first introduces per-net namespace management for the IPv4
+and IPv6 sockets used by rxe. The sockets are created when the network
+namespace becomes active and are released when the namespace is
+destroyed.
+
+Based on this infrastructure, rxe RDMA links are then created and
+destroyed within each network namespace. This ensures that both the
+UDP sockets and RDMA links are correctly scoped to the namespace in
+which they are used.
+
+With these changes, rxe RDMA links can be created and used both in
+init_net and in other network namespaces, and resources are properly
+cleaned up during namespace teardown.
+
+The series also includes a selftest to verify RXE functionality in
+network namespaces.
+
+Zhu Yanjun (4):
+  RDMA/rxe: Add testcase for net namespace rxe
+  RDMA/nldev: Add dellink function pointer
+  RDMA/rxe: Add net namespace support for IPv4/IPv6 sockets
+  RDMA/rxe: Support RDMA link creation and destruction per net namespace
+
+ MAINTAINERS                                   |   1 +
+ drivers/infiniband/core/nldev.c               |   6 +
+ drivers/infiniband/sw/rxe/Makefile            |   3 +-
+ drivers/infiniband/sw/rxe/rxe.c               |  41 ++++-
+ drivers/infiniband/sw/rxe/rxe_net.c           | 122 ++++++++++----
+ drivers/infiniband/sw/rxe/rxe_net.h           |   9 +-
+ drivers/infiniband/sw/rxe/rxe_ns.c            | 156 ++++++++++++++++++
+ drivers/infiniband/sw/rxe/rxe_ns.h            |  17 ++
+ include/rdma/rdma_netlink.h                   |   2 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/rdma/Makefile         |   5 +
+ tools/testing/selftests/rdma/config           |   3 +
+ .../selftests/rdma/rping_between_netns.sh     |  57 +++++++
+ tools/testing/selftests/rdma/rxe_ipv6.sh      |  47 ++++++
+ .../testing/selftests/rdma/socket_with_rxe.sh |  64 +++++++
+ 15 files changed, 493 insertions(+), 41 deletions(-)
  create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.c
  create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.h
+ create mode 100644 tools/testing/selftests/rdma/Makefile
+ create mode 100644 tools/testing/selftests/rdma/config
+ create mode 100755 tools/testing/selftests/rdma/rping_between_netns.sh
+ create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
+ create mode 100755 tools/testing/selftests/rdma/socket_with_rxe.sh
 
-diff --git a/drivers/infiniband/sw/rxe/Makefile b/drivers/infiniband/sw/rxe/Makefile
-index 93134f1d1d0c..3977f4f13258 100644
---- a/drivers/infiniband/sw/rxe/Makefile
-+++ b/drivers/infiniband/sw/rxe/Makefile
-@@ -22,6 +22,7 @@ rdma_rxe-y := \
- 	rxe_mcast.o \
- 	rxe_task.o \
- 	rxe_net.o \
--	rxe_hw_counters.o
-+	rxe_hw_counters.o \
-+	rxe_ns.o
- 
- rdma_rxe-$(CONFIG_INFINIBAND_ON_DEMAND_PAGING) += rxe_odp.o
-diff --git a/drivers/infiniband/sw/rxe/rxe_ns.c b/drivers/infiniband/sw/rxe/rxe_ns.c
-new file mode 100644
-index 000000000000..29d08899dcda
---- /dev/null
-+++ b/drivers/infiniband/sw/rxe/rxe_ns.c
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
-+/*
-+ * Copyright (c) 2016 Mellanox Technologies Ltd. All rights reserved.
-+ * Copyright (c) 2015 System Fabric Works, Inc. All rights reserved.
-+ */
-+
-+#include <net/sock.h>
-+#include <net/netns/generic.h>
-+#include <net/net_namespace.h>
-+#include <linux/module.h>
-+#include <linux/skbuff.h>
-+#include <linux/pid_namespace.h>
-+#include <net/udp_tunnel.h>
-+
-+#include "rxe_ns.h"
-+
-+/*
-+ * Per network namespace data
-+ */
-+struct rxe_ns_sock {
-+	struct sock __rcu *rxe_sk4;
-+	struct sock __rcu *rxe_sk6;
-+};
-+
-+/*
-+ * Index to store custom data for each network namespace.
-+ */
-+static unsigned int rxe_pernet_id;
-+
-+/*
-+ * Called for every existing and added network namespaces
-+ */
-+static int __net_init rxe_ns_init(struct net *net)
-+{
-+	/*
-+	 * create (if not present) and access data item in network namespace
-+	 * (net) using the id (net_id)
-+	 */
-+	struct rxe_ns_sock *ns_sk = net_generic(net, rxe_pernet_id);
-+
-+	rcu_assign_pointer(ns_sk->rxe_sk4, NULL); /* initialize sock 4 socket */
-+	rcu_assign_pointer(ns_sk->rxe_sk6, NULL); /* initialize sock 6 socket */
-+	synchronize_rcu();
-+
-+	return 0;
-+}
-+
-+static void __net_exit rxe_ns_exit(struct net *net)
-+{
-+	/*
-+	 * called when the network namespace is removed
-+	 */
-+	struct rxe_ns_sock *ns_sk = net_generic(net, rxe_pernet_id);
-+	struct sock *rxe_sk4 = NULL;
-+	struct sock *rxe_sk6 = NULL;
-+
-+	rcu_read_lock();
-+	rxe_sk4 = rcu_dereference(ns_sk->rxe_sk4);
-+	rxe_sk6 = rcu_dereference(ns_sk->rxe_sk6);
-+	rcu_read_unlock();
-+
-+	/* close socket */
-+	if (rxe_sk4 && rxe_sk4->sk_socket) {
-+		udp_tunnel_sock_release(rxe_sk4->sk_socket);
-+		rcu_assign_pointer(ns_sk->rxe_sk4, NULL);
-+		synchronize_rcu();
-+	}
-+
-+	if (rxe_sk6 && rxe_sk6->sk_socket) {
-+		udp_tunnel_sock_release(rxe_sk6->sk_socket);
-+		rcu_assign_pointer(ns_sk->rxe_sk6, NULL);
-+		synchronize_rcu();
-+	}
-+}
-+
-+/*
-+ * callback to make the module network namespace aware
-+ */
-+static struct pernet_operations rxe_net_ops __net_initdata = {
-+	.init = rxe_ns_init,
-+	.exit = rxe_ns_exit,
-+	.id = &rxe_pernet_id,
-+	.size = sizeof(struct rxe_ns_sock),
-+};
-+
-+struct sock *rxe_ns_pernet_sk4(struct net *net)
-+{
-+	struct rxe_ns_sock *ns_sk = net_generic(net, rxe_pernet_id);
-+	struct sock *sk;
-+
-+	rcu_read_lock();
-+	sk = rcu_dereference(ns_sk->rxe_sk4);
-+	rcu_read_unlock();
-+
-+	return sk;
-+}
-+
-+void rxe_ns_pernet_set_sk4(struct net *net, struct sock *sk)
-+{
-+	struct rxe_ns_sock *ns_sk = net_generic(net, rxe_pernet_id);
-+
-+	rcu_assign_pointer(ns_sk->rxe_sk4, sk);
-+	synchronize_rcu();
-+}
-+
-+struct sock *rxe_ns_pernet_sk6(struct net *net)
-+{
-+	struct rxe_ns_sock *ns_sk = net_generic(net, rxe_pernet_id);
-+	struct sock *sk;
-+
-+	rcu_read_lock();
-+	sk = rcu_dereference(ns_sk->rxe_sk6);
-+	rcu_read_unlock();
-+
-+	return sk;
-+}
-+
-+void rxe_ns_pernet_set_sk6(struct net *net, struct sock *sk)
-+{
-+	struct rxe_ns_sock *ns_sk = net_generic(net, rxe_pernet_id);
-+
-+	rcu_assign_pointer(ns_sk->rxe_sk6, sk);
-+	synchronize_rcu();
-+}
-+
-+int __init rxe_namespace_init(void)
-+{
-+	return register_pernet_subsys(&rxe_net_ops);
-+}
-+
-+void __exit rxe_namespace_exit(void)
-+{
-+	unregister_pernet_subsys(&rxe_net_ops);
-+}
-diff --git a/drivers/infiniband/sw/rxe/rxe_ns.h b/drivers/infiniband/sw/rxe/rxe_ns.h
-new file mode 100644
-index 000000000000..da5bfcea1274
---- /dev/null
-+++ b/drivers/infiniband/sw/rxe/rxe_ns.h
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
-+/*
-+ * Copyright (c) 2016 Mellanox Technologies Ltd. All rights reserved.
-+ * Copyright (c) 2015 System Fabric Works, Inc. All rights reserved.
-+ */
-+
-+#ifndef RXE_NS_H
-+#define RXE_NS_H
-+
-+struct sock *rxe_ns_pernet_sk4(struct net *net);
-+struct sock *rxe_ns_pernet_sk6(struct net *net);
-+void rxe_ns_pernet_set_sk4(struct net *net, struct sock *sk);
-+void rxe_ns_pernet_set_sk6(struct net *net, struct sock *sk);
-+int __init rxe_namespace_init(void);
-+void __exit rxe_namespace_exit(void);
-+
-+#endif /* RXE_NS_H */
 -- 
 2.52.0
 
