@@ -1,119 +1,148 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317383AE71C
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571AA1BBBFC;
+	Fri,  6 Mar 2026 14:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772805829; cv=none; b=Si49ZbpN4AhB3VHIz48hUm6Ru5RAIxkHSjXDYANWIPVI65XcCj4qIJ+AMQx+d1SP5/lEbjysrbVT5MHg3KO5Ud+BFSWZ+pyvqGA28nqpStnIJOp3FFm5qEaUTsNWvMjAb9dHp9Y02NAC6oHapSbJWWm/RfM6KiTm3PhZzA2SFYU=
+	t=1772805945; cv=none; b=mpDISCFpTA17CHOO1fl38WQpfMwZ8I+DyfuIql0EXozqmDIV4Z/ZoHKipWFhETqU52vVl230qFXOapvbCL2j41wg9EYcpoGIP1wBr2zSOAYmlJpE7/Eu1RNOh8r4Br5TkiAzGUdEWSRigzqUM8gTwWMhc5JsHtAdXEBYM9YoiOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772805829; c=relaxed/simple;
-	bh=KKJoiskobJLPVewH28+LF9Y4Ux/Lu7qzp3YYxz5tn6o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ou3ZO09dF1whw6lONdC2SM8aMvdNtfsR/KyW+XB3524xQRv6IcIE7DEICPWBwXro1HbttnofY2R/hktQF7nM01+RdALorRy5LjXF3mlACqc9ri5zMGfb4kz9n1VRDD3oh4aO9GLEiBidLAW6Phd6a3khwzyrF4Kk4x0euOA1NcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PbF7Tgs1; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772805945; c=relaxed/simple;
+	bh=dT9zWpAVUPz39LgBehJCCTqvqlJ3C9ninrKSWmn9Yk8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tNBpJE2cfOpEMedW8AVpUggeh3+zVWA/gafeO23SlNCRj2r8VW1hhVm5XYvEXrcLGhlXxKVYJCHMVXDEQG60sCyreJIpnDh9mft79m4wRxVBk53IQlPN89p9NQbGMBR+xsXR5m658Lgs+yjOg6rxmbltg/6IFHXTpFqpbbC6gOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=URk51TZ9; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PbF7Tgs1"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ae3a2f6007so47609375ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:03:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772805827; x=1773410627; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=URwHQdDNBcfpjPgIZZmBOCF4w8QPrTIvO91J8esIlCE=;
-        b=PbF7Tgs1GsJhphtrzQmJ9VgOEYENG6F5coDb+YjBmaO6uvDXGuUN377rU5siiEPkFv
-         Z1Hh4pTEkt9f/VjASa0EnZs9nd6eYg0+Z6aNPa16M6pUofUbWmNP1h2Zi9BIoKa7vyoC
-         XPLPRVjQ1vQ9ieCCJzzMwxyAYnBU7htydacT1cM0OQAMHixVpd+2DhEVf9cXo1wgRZ6r
-         VN8pSOD/d0OLmveOmJnOt05HJgY4DUnCAGXUypJ7pb2ebtA/KSTrZL0KjfZ/EjNyce0E
-         mfDKU+IVo0wp4lbA7mm3MKqsFmj+odTPNuv13gZXyQk1gvE9zkA8SM/VpQbeXwP6gh/8
-         xUlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772805827; x=1773410627;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=URwHQdDNBcfpjPgIZZmBOCF4w8QPrTIvO91J8esIlCE=;
-        b=uD5rxX1JyIG8hHEHpjFsui0UC8+V2ZZUkivOWRTi9B3mVx09HATHJQFHZys3pRkX5I
-         7+M8o5K/bL8YZajwq697xR79DD7A0y7Vwg62FrWbEUZTIGprswm0ylebMM2pUpWFY1JF
-         SyLAGQ9YY1a1FRg8mPQCZsn5yyEPLMbJpi1ISRonHlBPn/bvNVfKilUGiuCU1SSUSp1j
-         /eNgVvcgNEG/oLYtDeJDNti9P0nHq/5ah/CcIdRFFXGifnxOuOvz4J1n8ffSYwteKR/j
-         I4diq/w9a0mA5AADlYKNijAPZKzthOHru/xNxgETiEwywOoyk+F3+Fx22EBSBtHJPs+x
-         ZjLg==
-X-Forwarded-Encrypted: i=1; AJvYcCX+T9+h8WQdz4Gx2xCLUil+apTDwb4OxXK3hyYG20Q8wLWM7Q6ERsvOkMT+lcRZvuqsTk6dQ+Jpw5Wq9yfMp6Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4cjCQNkxsuDMky8U4j0WwVF/e+14IW06OlwfwOGkmdHY4HYBF
-	ji11Zoaf6V/AEDNrnaBx3aPZ2UodaolI9DMdmQjdudVPttOl9+OvznqS
-X-Gm-Gg: ATEYQzyvwsvYyePswr26UQk814WBUOaOhCI35tpnBy4EYx/QEGAtb6c+uk9tNnPuNzh
-	IOSZ+1Qexxrw7PvArPzzXFx8tE/5p6EGY/hLo8c5ncW5Co0ecQv+GWtYn+NwcVRZN99/93bd4fd
-	f3wa6NHKGl5VO621xySKb0l+GX7Ov2SIKpe6uTz3ZCClj/kr0yJhwU7ehvp6QPf/A4MLQQlSLeu
-	vcm9b1HCOHv9YAT1c167XAYkv5hvMibuY7qhuP6eXXT915h1GFMOLf9QA5gZccL3Rj4iGGfK0jY
-	spk8tQ94OiGe1pPLEVtB36Kl5IBiN+c7g2HSZPPW7EWGff62ckZCLrhYIpC13nvXqPN/OgBbWhB
-	A8UDRdVliI1SpFdmLNeT24VxB7oCvoT/eQNYp/0fWxARsiYvNnykI9ELwUy48G6vZ80g0G8w/LH
-	o3Dmw0Z8AfdhQs4Tzf5QOySo3f59IoQzl77PgUHtPOxqx/bH5OGwVxfqcX9RU1jLlARMSp8xe9T
-	YXoli0wft8Juw==
-X-Received: by 2002:a17:902:db09:b0:2ae:5723:afa9 with SMTP id d9443c01a7336-2ae8253c933mr27839485ad.53.1772805827270;
-        Fri, 06 Mar 2026 06:03:47 -0800 (PST)
-Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae840ccb6csm29134715ad.92.2026.03.06.06.03.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 06:03:46 -0800 (PST)
-From: zhidao su <soolaugust@gmail.com>
-X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
-To: tj@kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	linux-kselftest@vger.kernel.org,
-	Su Zhidao <suzhidao@xiaomi.com>
-Subject: [PATCH 5/5] sched_ext: Document scx_bypass_depth migration path
-Date: Fri,  6 Mar 2026 22:03:25 +0800
-Message-ID: <20260306140325.2710927-6-suzhidao@xiaomi.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260306140325.2710927-1-suzhidao@xiaomi.com>
-References: <20260306140325.2710927-1-suzhidao@xiaomi.com>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="URk51TZ9"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1vyVnm-00GQRg-Lp; Fri, 06 Mar 2026 15:05:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=qIabD9EgboJOvCt+AFbEC4Iprg7lyK19I//zHW0fAXs=; b=URk51TZ9Z1yAxlQowbKDRY7fdk
+	apCDFDhO+3/qQsrahZvHgUa8GR469jEmU4OY3RXZqf+T6PbOdfrP5u1t2HmBDvNVS9SZ9WCCo/3rM
+	fRfg/1zWZnX9OXYhrVHZXY5qFpMwzHxHxzp587WcdVVsRZP6DnLiVsT9lhG2jc5ErclO/AFveL1P5
+	PNL2TT3to17C9tUncWN67L7Fb2RFsF4jGk+SNJb++d+jWOEsClF6ak46zkYAM1ckZZbvHXnmEZpHO
+	urop+godYf1NFDYk2cJRcTr4JpB0fdEvgJpXhl4+YRa80Hu3dbudVMvuv0ASgORea3qAp1Zr7zy00
+	88sL311g==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1vyVnl-0001b1-IT; Fri, 06 Mar 2026 15:05:13 +0100
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vyVnj-001q6e-E4; Fri, 06 Mar 2026 15:05:11 +0100
+Message-ID: <3bf84a79-7335-483c-b629-2437e360387d@rbox.co>
+Date: Fri, 6 Mar 2026 15:05:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 2/5] bpf, sockmap: Use
+ sock_map_sk_{acquire,release}() where open-coded
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-2-2f0c7410c523@rbox.co>
+ <CAAVpQUCdzpwbu=fOrwCnaCFuD3U5SL73PB2nroqgUB4QdJ69og@mail.gmail.com>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <CAAVpQUCdzpwbu=fOrwCnaCFuD3U5SL73PB2nroqgUB4QdJ69og@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Su Zhidao <suzhidao@xiaomi.com>
+On 3/6/26 06:44, Kuniyuki Iwashima wrote:
+> On Thu, Mar 5, 2026 at 3:32 PM Michal Luczaj <mhal@rbox.co> wrote:
+>>
+>> Instead of repeating the same (un)locking pattern, reuse
+>> sock_map_sk_{acquire,release}(). This centralizes the code and makes it
+>> easier to adapt sockmap to af_unix-specific locking.
+>>
+>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> ---
+>>  net/core/sock_map.c | 21 +++++++--------------
+>>  1 file changed, 7 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+>> index 02a68be3002a..7ba6a7f24ccd 100644
+>> --- a/net/core/sock_map.c
+>> +++ b/net/core/sock_map.c
+>> @@ -353,11 +353,9 @@ static void sock_map_free(struct bpf_map *map)
+>>                 sk = xchg(psk, NULL);
+>>                 if (sk) {
+>>                         sock_hold(sk);
+>> -                       lock_sock(sk);
+>> -                       rcu_read_lock();
+>> +                       sock_map_sk_acquire(sk);
+>>                         sock_map_unref(sk, psk);
+>> -                       rcu_read_unlock();
+>> -                       release_sock(sk);
+>> +                       sock_map_sk_release(sk);
+>>                         sock_put(sk);
+>>                 }
+>>         }
+>> @@ -1176,11 +1174,9 @@ static void sock_hash_free(struct bpf_map *map)
+>>                  */
+>>                 hlist_for_each_entry_safe(elem, node, &unlink_list, node) {
+>>                         hlist_del(&elem->node);
+>> -                       lock_sock(elem->sk);
+>> -                       rcu_read_lock();
+>> +                       sock_map_sk_acquire(elem->sk);
+>>                         sock_map_unref(elem->sk, elem);
+>> -                       rcu_read_unlock();
+>> -                       release_sock(elem->sk);
+>> +                       sock_map_sk_release(elem->sk);
+>>                         sock_put(elem->sk);
+>>                         sock_hash_free_elem(htab, elem);
+>>                 }
+>> @@ -1676,8 +1672,7 @@ void sock_map_close(struct sock *sk, long timeout)
+>>         void (*saved_close)(struct sock *sk, long timeout);
+>>         struct sk_psock *psock;
+>>
+>> -       lock_sock(sk);
+>> -       rcu_read_lock();
+>> +       sock_map_sk_acquire(sk);
+>>         psock = sk_psock(sk);
+>>         if (likely(psock)) {
+>>                 saved_close = psock->saved_close;
+>> @@ -1685,16 +1680,14 @@ void sock_map_close(struct sock *sk, long timeout)
+>>                 psock = sk_psock_get(sk);
+>>                 if (unlikely(!psock))
+>>                         goto no_psock;
+>> -               rcu_read_unlock();
+>>                 sk_psock_stop(psock);
+>> -               release_sock(sk);
+>> +               sock_map_sk_release(sk);
+> 
+> I think sk_psock_stop() was intentionally put outside
+> of rcu_read_lock() to not extend the grace period
+> unnecessarily. e.g. while + __sk_msg_free().
+> 
+> Maybe add __sock_map_sk_release() without
+> rcu_read_unlock() ?
 
-scx_bypass_depth is a global counter that will be moved into
-struct scx_sched when multi-scheduler support lands. Add a comment
-explaining why READ_ONCE/WRITE_ONCE are used despite bypass_lock
-serialization: modifications are serialized by the lock, but the
-value can be observed locklessly from softirq context (e.g., in
-scx_bypass_lb_timerfn()).
-
-Signed-off-by: Su Zhidao <suzhidao@xiaomi.com>
----
- kernel/sched/ext.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index c269e489902c..b1e5a95682c1 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -33,6 +33,12 @@ static DEFINE_MUTEX(scx_enable_mutex);
- DEFINE_STATIC_KEY_FALSE(__scx_enabled);
- DEFINE_STATIC_PERCPU_RWSEM(scx_fork_rwsem);
- static atomic_t scx_enable_state_var = ATOMIC_INIT(SCX_DISABLED);
-+/*
-+ * Counts the number of active bypass requests. Protected by bypass_lock
-+ * inside scx_bypass(), but read locklessly (e.g., from
-+ * scx_bypass_lb_timerfn() in softirq context) using READ_ONCE(). Will
-+ * be moved into struct scx_sched when multi-scheduler support lands.
-+ */
- static int scx_bypass_depth;
- static cpumask_var_t scx_bypass_lb_donee_cpumask;
- static cpumask_var_t scx_bypass_lb_resched_cpumask;
--- 
-2.43.0
+How about dropping this patch completely? The more I stare at it, I see no
+reason why af_unix state lock would matter in any of these places.
 
