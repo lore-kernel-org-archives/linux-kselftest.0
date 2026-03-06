@@ -1,147 +1,104 @@
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBC3371076
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 07:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772780692; cv=pass; b=gZahk39BKtnRKYcuWSavapFrYTAvNaY6TLde6m5USSXge6hBzq4Xydc5mSv2/knRWZM3Ta3Woy17zkmZLb+eLjyD+QKbejBX7qbY9bNO0oeEnNpRTdtijsaX5D7NDnmI7Fl0mZ58+k+C0AM6Py1Co1A0DbCaRK0sMj41R6DSCgo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772780692; c=relaxed/simple;
-	bh=+nlpLSj6Acf1T5Fy14+xUwvr2HwA2i3QvZ87SqnoJ6k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PhguC2EobqAzxCf+oTbAadshWfq0EyBylSmZ/RR6kCmnfqPo7hWv9jacpdBWaCgMFsWykv+WuzAABJxD8q6QbFQAjMezo8dbLOZn+oF5IjQftko9WR0NERfe7v78a/u46kbduzeJv5pJh2PCB0tho9fpkWyDCkUtDiZOmhKz820=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=wVJ31CiO; arc=pass smtp.client-ip=209.85.161.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05E630DECC
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 07:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772781541; cv=none; b=VbmpCbzcwNLvQfI0wtJt13SCIpFfz5NejPBXRvUaM9+MfHZnDBry+cRA8Ntf2B/SpyCKxbyuS33RJ0Xx3my9PPCJX8M4au+kF3t549rIZN5ayX0ysyJ2FP1t/ujWuzs2iGZWhBX4VSjSTmcDCMLqWhalW5nQ8l9ktFW5rRgHK+A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772781541; c=relaxed/simple;
+	bh=TBHdKQ/niOxIqPRFEcUsyKlXisMrw6StRNMquNwcOZE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kioPBV6m81rJpkejCtvvWvm36dmp0vDV7ZW1DXR9ki1WtXohtFM95HdsjKF1rV+0Futj9alaJf8egGqeWDrhFmt6u2N2J6MsLI+BM4PiXN20ML7WKbf9NR1L6fUt4nJ1kJJgmCXdfZpu3XTZjaSJuTJcNFDLKbKi8KWvf0l632Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f41VgX73; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="wVJ31CiO"
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-679efb9eb0dso6728359eaf.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 23:04:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772780688; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WnAuTXj7X+CAsJF5FYGEIi9vvqgmYrRRbQ6mBr1XtLp+F/L3L199BeBpRTkjHkVMfO
-         YH2XCGQGNAXejW47IweQi/O6+FMXpIf/EhYV3ov+6ByzYHcoIiSWQXIrWcjx5u2OWHs5
-         VzFtjlN8w1cPB6Qey/uZoxD+19w9/VE3EXqbroYwhLZ28TiLTTaK2qTUj5GQ5Y4461q9
-         4pB8bntGHrx4YXXKtG4N8nwzuHyXYqBrVokt1amsGXpSoauW6zIGvZv9/JIErCIEK2xa
-         /TO6OBUyZGTRv07KiOJ0og06GBYBnlorm18O6Ef0+Sh8BwZTuPPm05CFc0RbxbLVUC5E
-         X7gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=HVySQsieckJFK9NwiXNz9/fIecprCPpUdU69L33AQGM=;
-        fh=tzeig9dFP+LJPTN7e5nMUBhHviMr8A8WIogfL+e9t80=;
-        b=fw9UfQ1FRfC8M3f/HNq67aP6wGladpurTK7SYqj4rTut+01rq2Fj7n0JurOsy6rUzR
-         HLRjXXEVRpJbtxOqnasK6iX7p4di/ELK2SHufClEg9bnUAMHHy8AzSKDgfExf8LFVrJ+
-         jgp4hrW5zpdxt3nSMCYP49Qfc5SQVBd7JbfIpDSsxWgIhSzvbAmEkC0EUnWN5P7ot5b/
-         h8sfzLyF2kmm01ouTu277SheQl65oXDjuJlPZd6MiHW9hvkDolNnn1V+XRGbgd1ApRMu
-         Ha87PPaQ2QGXmzDmTRBE7Yq7sNM60xDd1hG1DL/kccb19a71P6ApXkVQ6Okv1iH+BF7z
-         lHYw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1772780688; x=1773385488; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HVySQsieckJFK9NwiXNz9/fIecprCPpUdU69L33AQGM=;
-        b=wVJ31CiOIRxdh8damH5PXG8QZ1Cr7wuq16FajrZ7UqLseitFXtou+nXkK9xL9A0hN2
-         jYPhNxgdL8RPkWlFJTuA5cASfi4J/yZPfnLu1YC4kisvcnvS1LRXR/0BYglZWWrRikvS
-         Rie+jrJX3QV91eu4Ra4+H0UT+rCb/jqgWHOn/QxK7QmgmqyTKDT9NORZA09a9lK3jAEJ
-         kg5dawT9fojV0KGRILyVvKEqvE8Pe4WDwxLjc4UYtkhgAS6WXIvmMY7DeiQXdt0NqHcq
-         3Zx6ffO52qFPIt4lwXYb1C0CA3TeGoxqbe0mb3TE0L9WQaHNqjuJqeUB/6ZJxQPynJZE
-         /waQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772780688; x=1773385488;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HVySQsieckJFK9NwiXNz9/fIecprCPpUdU69L33AQGM=;
-        b=oLOwqqApwXq9BUvy4WhPUUv0GuLD8n6ikFABFP/t4rhR4AnqMP5/w8VEnlvg9nZvRj
-         F5GQbMiNQIpaH+k9N8eJOeuSgeyOiT2wOEFoX6zoQgH+Ix0wLicMM6SGoecVESWGJFU3
-         6lTKx88LC10m1tKhxz7GDMZRRRYL1mX/6H4frcLW90Csw/DILHVKS7SN11zG7aQgHVYl
-         VYzjk+7pWr3Ul7GRIe5qSfuRRt19jzEf5o3CrDb1fyKzK3bO82ajMx7eUs7jt3xveBXE
-         IWJ1bAW6hWlpzJ0EcLThNyXXSRojaJ3R6mPoEREuHniGt1JOqBto1k3RJmyyaPWkZtAX
-         1b8w==
-X-Forwarded-Encrypted: i=1; AJvYcCXZsGweDnFvLsgr0lz9tCBQSWsBxXvos4mGI2SRCz5cfdhV3Z/c80NpINEPbZP45FoHDCJeTlFAm0W2bOCng88=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyd9qW590DiC9bI6IT+lJj/U+CMg/mla2O9wBJbL68udq8yNMZK
-	uPbl5rEGfBGN/nij/N92v3WoAN+eFlD72taiWISPhrDon7gfMwp61K/AoL9522H9n/dtFzP3ocy
-	ZVVXY185+QvQO8ZnozBrq/7WZDaGha0fF0zZLTd6O5w==
-X-Gm-Gg: ATEYQzwL5wEY+I/ryz++HEuHdC0qxGasOnc+dxDOV7HCefduL149/mh33q2OxuFBFPD
-	Ci04d//so7z+glNjrmKwF0fntVSR1P0hDDeAPljhwGngCHSqD/PU2op8MvNn0AWz7G2fMgoavvT
-	aRDF9HPxdnzyGRRjFvxsb2rvIjPSMPgK3/n3kIO0A27H2hwEu4zuO9o7CobwREOHMUT68IqrFNp
-	26dcrJpRL0IRWKwFpN6zCfhvWSIv4mzxqnAzW4wYE6jyGMm2uWOh2dLtXMLIyrkbCB6XAiy7r61
-	AIDXpM+1Gng6kj24tqMYRXRDd9StprryoWSyKovZl4W2T3QV/ptO/nxXWO+gXUCFySwMdBUfQjy
-	Qf/MIhNzpJG3QXx6JhbzpILHHvg==
-X-Received: by 2002:a05:6820:1ca3:b0:67a:3dd:3fe7 with SMTP id
- 006d021491bc7-67b9bd2ef0fmr746008eaf.47.1772780688470; Thu, 05 Mar 2026
- 23:04:48 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f41VgX73"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772781538;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GcU4+Q+7Y72wYY/zljENgWyK36V142Rr3SPlRsYuZgo=;
+	b=f41VgX73AmwxXjcZ2Wgo1PBCA5/IEpqX1LFwB3ZmiU5Hqg7eiFFNJbzbgMTVTU2GTI7pd5
+	B+w7LIl0IgoKS+keV7aw3+CtdMklPcAK/cViZAZckbtdYLiVJ2HPZ3PhY9zAPeKD1axSee
+	A1cw7f62t4sZbCidAdu0OQbMdQkxOYY=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-606-3OljcDr9NLCHn2fXGMl8kg-1; Fri,
+ 06 Mar 2026 02:18:55 -0500
+X-MC-Unique: 3OljcDr9NLCHn2fXGMl8kg-1
+X-Mimecast-MFC-AGG-ID: 3OljcDr9NLCHn2fXGMl8kg_1772781534
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A985719560B7;
+	Fri,  6 Mar 2026 07:18:53 +0000 (UTC)
+Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.139])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D3651800361;
+	Fri,  6 Mar 2026 07:18:48 +0000 (UTC)
+From: Li Wang <liwang@redhat.com>
+To: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org
+Cc: Waiman Long <longman@redhat.com>,
+	Christoph Lameter <cl@linux.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Shakeel Butt <shakeelb@google.com>,
+	Tejun Heo <tj@kernel.org>,
+	Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH 1/2] selftests/cgroup: Fix hardcoded page size in test_percpu_basic
+Date: Fri,  6 Mar 2026 15:18:42 +0800
+Message-ID: <20260306071843.149147-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com> <20260120080013.2153519-4-anup.patel@oss.qualcomm.com>
-In-Reply-To: <20260120080013.2153519-4-anup.patel@oss.qualcomm.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Fri, 6 Mar 2026 12:34:37 +0530
-X-Gm-Features: AaiRm52vplQjZIJ_yYHgtG1kWnM8unoFggovyMF3JIYyAr9uZDY-IpREqe4Zs_A
-Message-ID: <CAAhSdy1jeJVHgABQxEzKCqYKLQteVkzM6p5mz2vJBY5A0gmFkg@mail.gmail.com>
-Subject: Re: [PATCH 03/27] RISC-V: KVM: Check host Ssaia extension when
- creating AIA irqchip
-To: Anup Patel <anup.patel@oss.qualcomm.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Atish Patra <atish.patra@linux.dev>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Shuah Khan <shuah@kernel.org>, Andrew Jones <andrew.jones@oss.qualcomm.com>, 
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Tue, Jan 20, 2026 at 1:30=E2=80=AFPM Anup Patel <anup.patel@oss.qualcomm=
-.com> wrote:
->
-> The KVM user-space may create KVM AIA irqchip before checking
-> VCPU Ssaia extension availability so KVM AIA irqchip must fail
-> when host does not have Ssaia extension.
->
-> Fixes: 89d01306e34d ("RISC-V: KVM: Implement device interface for AIA irq=
-chip")
-> Signed-off-by: Anup Patel <anup.patel@oss.qualcomm.com>
+MAX_VMSTAT_ERROR uses a hardcoded page size of 4096, which assumes
+4K pages. This causes test_percpu_basic to fail on systems where
+the kernel is configured with a larger page size, such as aarch64
+systems using 16K or 64K pages, where the maximum permissible
+discrepancy between memory.current and percpu charges is
+proportionally larger.
 
-Queued this as fix for Linux-7.0-rcX
+Replace the hardcoded 4096 with sysconf(_SC_PAGESIZE) to correctly
+derive the page size at runtime regardless of the underlying
+architecture or kernel configuration.
 
-Regards,
-Anup
+Signed-off-by: Li Wang <liwang@redhat.com>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+---
+ tools/testing/selftests/cgroup/test_kmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  arch/riscv/kvm/aia_device.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/riscv/kvm/aia_device.c b/arch/riscv/kvm/aia_device.c
-> index b195a93add1c..bed4d2c8c44c 100644
-> --- a/arch/riscv/kvm/aia_device.c
-> +++ b/arch/riscv/kvm/aia_device.c
-> @@ -11,6 +11,7 @@
->  #include <linux/irqchip/riscv-imsic.h>
->  #include <linux/kvm_host.h>
->  #include <linux/uaccess.h>
-> +#include <linux/cpufeature.h>
->
->  static int aia_create(struct kvm_device *dev, u32 type)
->  {
-> @@ -22,6 +23,9 @@ static int aia_create(struct kvm_device *dev, u32 type)
->         if (irqchip_in_kernel(kvm))
->                 return -EEXIST;
->
-> +       if (!riscv_isa_extension_available(NULL, SSAIA))
-> +               return -ENODEV;
-> +
->         ret =3D -EBUSY;
->         if (kvm_trylock_all_vcpus(kvm))
->                 return ret;
-> --
-> 2.43.0
->
+diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
+index eeabd34bf083..249d79113067 100644
+--- a/tools/testing/selftests/cgroup/test_kmem.c
++++ b/tools/testing/selftests/cgroup/test_kmem.c
+@@ -24,7 +24,7 @@
+  * the maximum discrepancy between charge and vmstat entries is number
+  * of cpus multiplied by 64 pages.
+  */
+-#define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
++#define MAX_VMSTAT_ERROR (sysconf(_SC_PAGESIZE) * 64 * get_nprocs())
+ 
+ #define KMEM_DEAD_WAIT_RETRIES        80
+ 
+-- 
+2.53.0
+
