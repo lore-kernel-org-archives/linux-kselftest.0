@@ -1,225 +1,327 @@
-Received: from fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.197.217.180])
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011015.outbound.protection.outlook.com [40.93.194.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07029372671;
-	Fri,  6 Mar 2026 14:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.197.217.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772808571; cv=none; b=pT8sGb1cTVFpV357036Q3uY8ZQfchEwC+RpZEy5oCqiQdvPHi2LLax+jQ9HVneUVgQQklS8a1p/hGm4DX6hBG2OFfOV004v4OyBy4qdly4UB3yDHviW8oBhTHPS2XfMnzOSmc1ochjPlHZVT5eEuRa5m9BuczFnDQadvsPkrKH8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772808571; c=relaxed/simple;
-	bh=laNYli1TF2KqJ1NK09RHrGK14IKe8N3u2ap5ELxvYaA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BpeAQjiI+6ciQvr9Un4V0GiPByxZJ+Iplc1b2xOGZelSb/UurF5O1/PPRSslqBR82DWKLjAmOGo7gW0IbcfpKrTbkzQgWCqS5iuaDCD7BKBlfCNXrQMQTj4Me2iTZm0MkHdX/f1j6Excxh7KGnR/pC/I0GiPxXgvF82ND6DgB1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=PV2FiYyU; arc=none smtp.client-ip=18.197.217.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14FA830EF87;
+	Fri,  6 Mar 2026 15:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772809354; cv=fail; b=Ol2/NnBAjMvnTHGVHYNRReL5eB9R2DLInOlVMuYvbsBKlEaDDmLXeT9jKyOL+RpxsMfQNyWbu1UprZEGg+6jqE60MpnZF7FJs5Pn1x/tSNpMa7ADORjxYPlp03+oK7bR8in8p0tYeBAviE1Le5VghVTQZGMwRMerUtxBlD+a5I4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772809354; c=relaxed/simple;
+	bh=NGHlT3lGRNI/KOQCbzXQbnF9VX45mO8x/vC5ZdpuKo4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=LH/QC2KYbdVLA0EaSt2HN1hYfiwmkBu9wNVfWmSLWQrnOtzheg4+pRlF2nf41cEH4We8pqRMhAp64bk54FiHfwbHDrsY0Hcw2p6FxBRnnjKkJVGhTzFABhHsxGqnNyr72gBioALa7wA/CTGr8O7NiCxiWK9G1u/hI/ikJjdHTGI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=EnKmHKhQ; arc=fail smtp.client-ip=40.93.194.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="PV2FiYyU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1772808570; x=1804344570;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=NrzHXx0Lp7Elw8ALF5D0u+kNkH3P0Dcowz8U+9XDncM=;
-  b=PV2FiYyUcSj/Ph2peJYSeE+UvdfwoCCv2lcJaDCk502nTuviKEvPJjy1
-   Qdm0ZHtaTIzJTdLIlYVblDkh0kkyo3Hwx0X9sQEu4yMVL116+MsO5Fdsv
-   3xCL0RJFNH2+sXlWwbFVcojNO/9D6VfCsOI+50QGfJQsm6+i79A8I5Y+u
-   36xjcCYkDzVb2XOH4pR20uhqjJXdwOtWXF/hNaBCChkbtw1/IariBX9Zu
-   i5tl/G7si+UQUtE8EE7cRi9Ba8EbW03gdJvonbraqYad64dUhOmQKXZua
-   ECuByklrf5lDZkwc+RcQ5yTHTdAoz3g1WjvL6ROtBpIrJk8grIXtiWI7d
-   w==;
-X-CSE-ConnectionGUID: 5IccaEBNQVSWRB5rNmqQOQ==
-X-CSE-MsgGUID: 2TQ5H7tGR3uCD8Jr0npB8Q==
-X-IronPort-AV: E=Sophos;i="6.23,105,1770595200"; 
-   d="scan'208";a="10436907"
-Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
-  by internal-fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 14:49:25 +0000
-Received: from EX19MTAEUB002.ant.amazon.com [54.240.197.224:3701]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.26.205:2525] with esmtp (Farcaster)
- id 00a2718f-a0c4-43d5-bed7-970a51d610b2; Fri, 6 Mar 2026 14:49:25 +0000 (UTC)
-X-Farcaster-Flow-ID: 00a2718f-a0c4-43d5-bed7-970a51d610b2
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19MTAEUB002.ant.amazon.com (10.252.51.79) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Fri, 6 Mar 2026 14:49:24 +0000
-Received: from [192.168.2.180] (10.106.83.26) by EX19D005EUB003.ant.amazon.com
- (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Fri, 6 Mar 2026
- 14:49:19 +0000
-Message-ID: <936fa782-d937-4b14-b92d-cc8707336e5e@amazon.com>
-Date: Fri, 6 Mar 2026 14:49:18 +0000
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EnKmHKhQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ccRTXE6SSA0mZHa9xpWOL4vIGo4ApLDkCBB0rm9yaV/wyWJ7gmRml0cUfRm9Bv60wkmhD57VlnD4ZZEipEwM1v9MbVCPVptu6wkyTCIQmde/J2mOTC3NpXb3FvTq4DBiN5avc4aYgyLuXl9zn/WG1cFKcGlLC0nV9p4CKNTAx0uEu1Pnz/ay8vNtcn/3t8QTxuzWTbyw386PYizj9K4jGb+mrVxnY0DoRTDDF0x+VKSuOMEYVUFDo1HdAI86SWTyi5gOm311mo8wmTP1YUsfkWcSs2KPeBPvQXuXsPCNdzzoETao0+HcWU5o+eV2UFdH6pSEOxSPgbkzoeDSzMLYhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z69vhUoq+aLaLmaN029RQqKsF+KldoRTK5772KwaTfQ=;
+ b=j19dZco9Y2h7Kd5opA4tuI+0VSx5jIVbCYNkssCiM/axxldm/x8xN6Si6lLwb6spQNemn3o9NWiwb5xkI9JEcMAPeLMc9qqtqVFsQamyVJf7HL7EuklNRGsVXXoTAhSouKTWSzdaQFAsXQkm3bz2NUZxG1g24SR50xXywcIbJCB2qyDnQJ50aPmcIMeYkRT5vsrIWkgRTZhncRWOdexazXNxf2CZ5oX9VfsVSaODOFzkWCADI+IL6UlDRh5+yxtgbZyse39CwxNgNDgmJ1rjGcR/IS64F6tFR8uybGMGhzsJckcPOrFgZV8J+SegLOhg0NMazOJDvwg5cQwYAaO+Bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z69vhUoq+aLaLmaN029RQqKsF+KldoRTK5772KwaTfQ=;
+ b=EnKmHKhQT9uciJokt8WZKHRt2tl5NLo7+N1oEHQ3jbWPAOgOFavobiZf5E3p6oNjI5BtFetoWqb01DTVGoVmlMZW57dY4S8bdwO6iLdmc+KxDA3dPuwZdSpQob+RMGE3CSRUEiKhAshX19EF8777F54nBQgsSNDuP2YGtf9bNajDlQ4WUrS2OyP/O8wcKZ+zbXmcwalQT0mzvHp/45qDKluFrUgAtM6W540XmjYPTSAtUpFZGtBcq7U4Qxd8YvQtdP9AVtKRc5u5nYCg4iDBOlhXBa00UJMUXD9maldObky6JpOYBFohZn6a/abRzzU3QcRC+ha+T4/jaFzk95bTOg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by DM3PR12MB9352.namprd12.prod.outlook.com (2603:10b6:0:4a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.5; Fri, 6 Mar
+ 2026 15:02:21 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.022; Fri, 6 Mar 2026
+ 15:02:21 +0000
+Date: Fri, 6 Mar 2026 16:02:17 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: zhidao su <soolaugust@gmail.com>
+Cc: tj@kernel.org, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+	void@manifault.com, changwoo@igalia.com,
+	linux-kselftest@vger.kernel.org, Su Zhidao <suzhidao@xiaomi.com>
+Subject: Re: [PATCH 4/5] sched_ext/selftests: Add bypass mode operational test
+Message-ID: <aarseQkKjysu83E3@gpd4>
+References: <20260306140325.2710927-1-suzhidao@xiaomi.com>
+ <20260306140325.2710927-5-suzhidao@xiaomi.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260306140325.2710927-5-suzhidao@xiaomi.com>
+X-ClientProxiedBy: MI0P293CA0001.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:44::16) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v10 09/15] KVM: guest_memfd: Add flag to remove from
- direct map
-To: "David Hildenbrand (Arm)" <david@kernel.org>, "Kalyazin, Nikita"
-	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
-	<loongarch@lists.linux.dev>
-CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
-	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
-	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
-	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
-	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
-	<willy@infradead.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "lorenzo.stoakes@oracle.com"
-	<lorenzo.stoakes@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
-	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
-	<andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
-	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
-	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
-	<jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
-	<jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
-	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
-	"shuah@kernel.org" <shuah@kernel.org>, "riel@surriel.com" <riel@surriel.com>,
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
-	<jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
-	"kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
-	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
-	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
-	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
-	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
-	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
-	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
-	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
-	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
-	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
-	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
-	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
-	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
-	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
-	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
-	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
-	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
-	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
-	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
-	<xmarcalx@amazon.co.uk>
-References: <20260126164445.11867-1-kalyazin@amazon.com>
- <20260126164445.11867-10-kalyazin@amazon.com>
- <13ed00e1-f0db-4326-a800-2ba306833921@kernel.org>
- <690c22f9-b71a-4f14-9857-008c7c858373@amazon.com>
- <0c0b911c-cda2-44a4-897e-361e02be7da5@kernel.org>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-In-Reply-To: <0c0b911c-cda2-44a4-897e-361e02be7da5@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D001EUB001.ant.amazon.com (10.252.51.16) To
- EX19D005EUB003.ant.amazon.com (10.252.51.31)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|DM3PR12MB9352:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2bcc1aa1-bb05-4b13-5a5a-08de7b915dd8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	pPgmvlvUdw9dQ+HGqEiifxkcey3HiTkSAwSEjwoG8KDLXjuDrRzTqmvwShA8GW3+td4FMVLWE0QRpTVrM9GeXQXmyejN5HCqOmG91ZlQcTMekX9u3Bgis5JdR+o0hvfsgZmdbdVUkB817fVNFpDHYDafaAi8xnCWxXEmtlEG6DeC5zwcZxs2/rEpZLDjmeBcVgcDznz5vns4t/MDBBxiE2h7C3yZ60hvmuxa5/5uDXNSyH0cspza/ZcGZM703Y7khQOiege7wEubBK8LPciTKK/1enLdZ18y4qPTuMbCJ592D74PnO2dRWG0YcRxBwF1/PY9yBTYoAq9Kfkm1Qy8mzbhKXoGAWX/24bOMA8tOUfwSyfPdiRI1NN7DHJGMkC7q6s7PV6LwbwSkTT5hxiiIrbDP5QJkiKe9hA/ghTDAEJqq61xi29rRdsAzhbYrNdeYqtDZcuh7HlH9fJj1eOAeJmt1o21/vHld8fjf06IWK4F9sHz/UxGdwsg0D5EjRAZdRb4VZ4mFwKq/03H9G0fubVJjC8rRyi2RGPUPYKB/05H3qkrNpIc+c+UwWuFnKzqfde4zYWFS1QrGVIerFlrJjLqT9qT/23ZlWXasnQpLQdX7J6OZoqe67DWjLbQrKvr1mDbfyzQCDTqBj3k6andszw4qC6zzv7+x7W6P9I/Tj8dtxZbDHFnwHLJOMgRB8Wd+VN9PXBggCqE9hNAcTckHScbCfTbQSakX+VDKeEfdj4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?//P2ahZS11Na009gkhmp+LzyJsU/qdP9xMNdbkad6EZSYmNprCxy0OOPPRDp?=
+ =?us-ascii?Q?J/ptrAkDTyqh7um9kMuaBm5ZHkpCFBUcrQESgZQkWwD2h8hL4l+gLaZW84Ct?=
+ =?us-ascii?Q?C3kvPbqgs/RlK7NXxs9DjnwbjtnYynQCe35Ek1t3hCgYfCZKVUQvwN8i7zn7?=
+ =?us-ascii?Q?SgPjRLonup2D6x51b6FVkcq/Cuzxx7Hb+7bz/+XA/HbpFhY4W4BuUPxy9FAe?=
+ =?us-ascii?Q?Y9kEmR3SO2Kl9Qx2ZA+oaYqGq0KYocHVYJWR23CqsdzU1Zf6HdwYNLcwdtlu?=
+ =?us-ascii?Q?Emb52L7VWdKCaWqJ7ZwL/ykyCuki7sVNVxTwIy843DpIrAA2gUY0HHl0M5kN?=
+ =?us-ascii?Q?iFagB87BWzsU32zDOxMbhroq7xCHsnm9TxoPkBaE5dizZ0PAet4bQqttgYIe?=
+ =?us-ascii?Q?b//0v8wyYDjo77gELpC6GheZ0f6Ee2EwThCG6YQyGQXB7mGUcbsVFneQLU5J?=
+ =?us-ascii?Q?5WgUFsbBJwfz3qI4Y4Cno5MQ1Uml9GHcIDYbYYanBbIyCvNM1QHtqwITBujx?=
+ =?us-ascii?Q?lwK20NShPm4h93e4hena/NhjoetyD+7P6o1Tpd8Z2rT81KxsmZZemy82RQtT?=
+ =?us-ascii?Q?rYG6seBhGfsrVjT0kzOK7v4mNcjCVPhPJXNbId6thjOBvvHqCNf6X9xxo/9M?=
+ =?us-ascii?Q?vnnMj34i+9tL1GBQ0ZCWxDFgihM/8q8x4Q+UcfI+t9NdnryCq5uC1tSwkR43?=
+ =?us-ascii?Q?FGwocAUkAV3S5yQyU3gSKmr20ngK2cG8br7lb/RAY4edWST0SxkLD78yB9k5?=
+ =?us-ascii?Q?81Ou9Bt4itrpZsaJcTqs/nS1ZhgMIOEcYI6oQG8zY3oEG04Se6lnW80hZ9AC?=
+ =?us-ascii?Q?sK7p5TaqPXuH/GXPX2ZlGiFuBK6mFAD29g+CVWoX5uvwSPMcXMu6mKfth9Co?=
+ =?us-ascii?Q?PhzzaM2f+3pSxRAwpS4y530ZyNi3oIMZsUL+b9/MiNWgaiA49cHeZj648s+x?=
+ =?us-ascii?Q?Wx9i9B7ILoLbaHSb2IkUGq7wyUYQOXMl2xEON26kPnXOdlPi9QoOELdacmLn?=
+ =?us-ascii?Q?456KfXPLXyG/FULtDUxLyMbN+p6QyxSWPFwg5jyP7TSPCCFOaBpzhWOuufcz?=
+ =?us-ascii?Q?PXLr8BTKa7z9mNzl7XHQxjKqboYiP5/8j8N5jmmRUD6+SXadqxp6W/fxbGa4?=
+ =?us-ascii?Q?X+6nKahJK9B6bvx5y8zQO6196Qv8Y7DzU97QK6pHAO7F/dErXZGSFFlhRu+k?=
+ =?us-ascii?Q?kX9RiIL1WJR0YxVN2BlIl/pc72/Xb8kWNc2UATlCvLhX3cfdyNgbTO5YN94+?=
+ =?us-ascii?Q?JXNiur9LnK/RWiSOFRij2PSUBnckNDE72SYz/auf5osqROZchiD3OCCeTWrL?=
+ =?us-ascii?Q?tSw90bLo+EdrlLrC1thmXXMFYWDqIBLobqDu5lrpymdcxQJg17865iSPItRJ?=
+ =?us-ascii?Q?1jX9UJWRqLMHKgvpuMSCGkXhoab24p1gIssmdi9aX4+J7H72mjp1qqFGdhce?=
+ =?us-ascii?Q?B4SZuyEpPqFdhQZTgL9NacONAdbpLZAsQGM975+ynE5axk79bRAY+MOpUqIv?=
+ =?us-ascii?Q?Ok/RsRtogCr4W9SKHavYpt2qKgvyBkVFOndFpPCK+z0/kxtzRfhleXQ9jIs3?=
+ =?us-ascii?Q?gJUnau3wwrmOXnWVNWoedS2IeOatmQDdIA1GNsxpWC50iv/JSKB0qc6zaICq?=
+ =?us-ascii?Q?3eW0bSbmpsV1CRcA9tqZvK5doDJTvXDIcT6UEi2dbeTVnyvKJFrl6w9isk4/?=
+ =?us-ascii?Q?dOWI5Z5ND6QmvT1cYjYf0I7a30pConc9ufpMhBKH+fUYjRDdsBjd5caX+khQ?=
+ =?us-ascii?Q?cMWKS2RIDg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bcc1aa1-bb05-4b13-5a5a-08de7b915dd8
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2026 15:02:21.0808
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: szyoFMOobGUltphSE/hqBdp0G9u+K5dJe6/VfZazDkq7ysI5mTYxpmY+EZhUYvv3kPzeKrsuIri2P86MFtrcnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9352
 
+Hi,
 
+On Fri, Mar 06, 2026 at 10:03:24PM +0800, zhidao su wrote:
+> From: Su Zhidao <suzhidao@xiaomi.com>
+> 
+> Add a test that verifies the sched_ext bypass mechanism does not
+> prevent tasks from running to completion.
+> 
+> The test attaches a minimal global FIFO scheduler, spawns worker
+> processes that complete a fixed computation, detaches the scheduler
+> (which triggers bypass mode while workers are still active), and
+> verifies all workers complete successfully under bypass mode.
+> 
+> This exercises the scheduler attach/detach lifecycle and verifies
+> that bypass mode (activated during unregistration to guarantee
+> forward progress) does not stall running tasks.
 
-On 06/03/2026 14:22, David Hildenbrand (Arm) wrote:
-> [...]
-> 
->>>> +     /*
->>>> +      * Direct map restoration cannot fail, as the only error condition
->>>> +      * for direct map manipulation is failure to allocate page tables
->>>> +      * when splitting huge pages, but this split would have already
->>>> +      * happened in folio_zap_direct_map() in
->>>> kvm_gmem_folio_zap_direct_map().
->>>> +      * Note that the splitting occurs always because guest_memfd
->>>> +      * currently supports only base pages.
->>>> +      * Thus folio_restore_direct_map() here only updates prot bits.
->>>> +      */
->>>> +     WARN_ON_ONCE(folio_restore_direct_map(folio));
->>>
->>> Which raised the question: why should this function then even return an
->>> error?
->>
->> Dave pointed earlier that the failures were possible [1].  Do you think
->> we can document it better?
-> 
-> I'm fine with checking that somewhere (to catch any future problems).
-> 
-> Why not do the WARN_ON_ONCE() in folio_restore_direct_map()?
-> 
-> Then, carefully document (in the new kerneldoc for
-> folio_restore_direct_map() etc) that folio_restore_direct_map() is only
-> allowed after a prior successful folio_zap_direct_map(), and add a
-> helpful comment above the WARN_ON_ONCE() in folio_restore_direct_map()
-> that we don't expect errors etc.
-
-My only concern about that is the assumptions we make in KVM may not 
-apply to the general case and the WARN_ON_ONCE may become too 
-restrictive compared to proper error handling in some (rare) cases.  For 
-example, is it possible for the folio to migrate in between?
+I'm not sure this selftest adds much value. Implicitly we're already
+testing the validity of bypass in the other sched_ext kselftests: if a task
+is missed or gets stuck due to bypass mode, we would trigger a soft lockup,
+a hung task timeout, or something similar.
 
 > 
-> [...]
+> Signed-off-by: Su Zhidao <suzhidao@xiaomi.com>
+> ---
+>  tools/testing/selftests/sched_ext/Makefile    |   1 +
+>  .../testing/selftests/sched_ext/bypass.bpf.c  |  32 ++++++
+>  tools/testing/selftests/sched_ext/bypass.c    | 105 ++++++++++++++++++
+>  3 files changed, 138 insertions(+)
+>  create mode 100644 tools/testing/selftests/sched_ext/bypass.bpf.c
+>  create mode 100644 tools/testing/selftests/sched_ext/bypass.c
 > 
->>>> -     if (!is_prepared)
->>>> +     if (!is_prepared) {
->>>>                 r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
->>>> +             if (r)
->>>> +                     goto out_unlock;
->>>> +     }
->>>> +
->>>> +     if (kvm_gmem_no_direct_map(folio_inode(folio))) {
->>>> +             r = kvm_gmem_folio_zap_direct_map(folio);
->>>> +             if (r)
->>>> +                     goto out_unlock;
->>>> +     }
->>>
->>>
->>> It's a bit nasty that we have two different places where we have to call
->>> this. Smells error prone.
->>
->> We will actually have 2 more: for the write() syscall and UFFDIO_COPY,
->> and 0 once we have [2]
->>
->> [2] https://lore.kernel.org/linux-mm/20260225-page_alloc-unmapped-v1-0-
->> e8808a03cd66@google.com/
->>
->>>
->>> I was wondering why kvm_gmem_get_folio() cannot handle that?
->>
->> Most of the call sites follow the pattern alloc -> write -> zap so
->> they'll need direct map for some time after the allocation.
->>
-> 
-> Okay. Nasty. :)
-> 
-> --
-> Cheers,
-> 
-> David
+> diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
+> index a3bbe2c7911b..5fb6278d3f97 100644
+> --- a/tools/testing/selftests/sched_ext/Makefile
+> +++ b/tools/testing/selftests/sched_ext/Makefile
+> @@ -162,6 +162,7 @@ endef
+>  all_test_bpfprogs := $(foreach prog,$(wildcard *.bpf.c),$(INCLUDE_DIR)/$(patsubst %.c,%.skel.h,$(prog)))
+>  
+>  auto-test-targets :=			\
+> +	bypass				\
+>  	create_dsq			\
+>  	dequeue				\
+>  	enq_last_no_enq_fails		\
+> diff --git a/tools/testing/selftests/sched_ext/bypass.bpf.c b/tools/testing/selftests/sched_ext/bypass.bpf.c
+> new file mode 100644
+> index 000000000000..cb37c8df6834
+> --- /dev/null
+> +++ b/tools/testing/selftests/sched_ext/bypass.bpf.c
+> @@ -0,0 +1,32 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * BPF scheduler for bypass mode operational test.
+> + *
+> + * Implements a minimal global FIFO scheduler. The userspace side
+> + * attaches this scheduler, runs worker tasks to completion, and
+> + * verifies that tasks complete successfully.
+> + *
+> + * Copyright (c) 2026 Xiaomi Corporation.
+> + */
+> +#include <scx/common.bpf.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +UEI_DEFINE(uei);
+> +
+> +void BPF_STRUCT_OPS(bypass_enqueue, struct task_struct *p, u64 enq_flags)
+> +{
+> +	scx_bpf_dsq_insert(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
+> +}
 
+We could also remove bypass_enqueue() and sched_ext core will do exactly
+the same (implicitly enqueue to SCX_DSQ_GLOBAL).
+
+> +
+> +void BPF_STRUCT_OPS(bypass_exit, struct scx_exit_info *ei)
+> +{
+> +	UEI_RECORD(uei, ei);
+> +}
+> +
+> +SEC(".struct_ops.link")
+> +struct sched_ext_ops bypass_ops = {
+> +	.enqueue		= (void *)bypass_enqueue,
+> +	.exit			= (void *)bypass_exit,
+> +	.name			= "bypass_test",
+> +};
+> diff --git a/tools/testing/selftests/sched_ext/bypass.c b/tools/testing/selftests/sched_ext/bypass.c
+> new file mode 100644
+> index 000000000000..952f09d76bdb
+> --- /dev/null
+> +++ b/tools/testing/selftests/sched_ext/bypass.c
+> @@ -0,0 +1,105 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Verify the sched_ext bypass mechanism: spawn worker tasks and ensure
+> + * they run to completion while a BPF scheduler is active.
+> + *
+> + * The bypass mechanism (activated on scheduler unregistration) must
+> + * guarantee forward progress. This test verifies that worker tasks
+> + * complete successfully when the scheduler is detached.
+> + *
+> + * Copyright (c) 2026 Xiaomi Corporation.
+> + */
+> +#define _GNU_SOURCE
+> +#include <unistd.h>
+> +#include <sys/wait.h>
+> +#include <bpf/bpf.h>
+> +#include <scx/common.h>
+> +#include "scx_test.h"
+> +#include "bypass.bpf.skel.h"
+> +
+> +#define NUM_BYPASS_WORKERS 4
+> +
+> +static void worker_fn(void)
+> +{
+> +	volatile int sum = 0;
+> +	int i;
+> +
+> +	/*
+> +	 * Do enough work to still be running when bpf_link__destroy()
+> +	 * is called, ensuring tasks are active during bypass mode.
+> +	 */
+> +	for (i = 0; i < 10000000; i++)
+> +		sum += i;
+> +}
+> +
+> +static enum scx_test_status setup(void **ctx)
+> +{
+> +	struct bypass *skel;
+> +
+> +	skel = bypass__open();
+> +	SCX_FAIL_IF(!skel, "Failed to open bypass skel");
+> +	SCX_ENUM_INIT(skel);
+> +	SCX_FAIL_IF(bypass__load(skel), "Failed to load bypass skel");
+> +
+> +	*ctx = skel;
+> +	return SCX_TEST_PASS;
+> +}
+> +
+> +static enum scx_test_status run(void *ctx)
+> +{
+> +	struct bypass *skel = ctx;
+> +	struct bpf_link *link;
+> +	pid_t pids[NUM_BYPASS_WORKERS];
+> +	int i, status;
+> +
+> +	link = bpf_map__attach_struct_ops(skel->maps.bypass_ops);
+> +	SCX_FAIL_IF(!link, "Failed to attach bypass scheduler");
+> +
+> +	/*
+> +	 * Spawn worker processes. These must complete successfully
+> +	 * even as the scheduler is active and then detached (which
+> +	 * triggers bypass mode).
+> +	 */
+> +	for (i = 0; i < NUM_BYPASS_WORKERS; i++) {
+> +		pids[i] = fork();
+> +		SCX_FAIL_IF(pids[i] < 0, "fork() failed for worker %d", i);
+> +
+> +		if (pids[i] == 0) {
+> +			worker_fn();
+> +			_exit(0);
+> +		}
+> +	}
+
+There's no synchronization with the parent, so on a fast system the workers
+may even finish the loop before the parent ever detaches the scheduler.
+
+> +
+> +	/*
+> +	 * Detach the scheduler while workers are still running. This
+> +	 * triggers bypass mode, which must guarantee forward progress
+> +	 * for all active tasks.
+> +	 */
+> +	bpf_link__destroy(link);
+> +
+> +	/* Workers must complete successfully under bypass mode */
+> +	for (i = 0; i < NUM_BYPASS_WORKERS; i++) {
+> +		SCX_FAIL_IF(waitpid(pids[i], &status, 0) != pids[i],
+> +			    "waitpid failed for worker %d", i);
+> +		SCX_FAIL_IF(!WIFEXITED(status) || WEXITSTATUS(status) != 0,
+> +			    "Worker %d did not exit cleanly", i);
+> +	}
+> +
+> +	SCX_EQ(skel->data->uei.kind, EXIT_KIND(SCX_EXIT_UNREG));
+> +
+> +	return SCX_TEST_PASS;
+> +}
+> +
+> +static void cleanup(void *ctx)
+> +{
+> +	bypass__destroy(ctx);
+> +}
+> +
+> +struct scx_test bypass_test = {
+> +	.name		= "bypass",
+> +	.description	= "Verify tasks complete during bypass mode",
+> +	.setup		= setup,
+> +	.run		= run,
+> +	.cleanup	= cleanup,
+> +};
+> +REGISTER_SCX_TEST(&bypass_test)
+> -- 
+> 2.43.0
+> 
+
+Thanks,
+-Andrea
