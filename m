@@ -1,45 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05E630DECC
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 07:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5BB9372678
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 07:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772781541; cv=none; b=VbmpCbzcwNLvQfI0wtJt13SCIpFfz5NejPBXRvUaM9+MfHZnDBry+cRA8Ntf2B/SpyCKxbyuS33RJ0Xx3my9PPCJX8M4au+kF3t549rIZN5ayX0ysyJ2FP1t/ujWuzs2iGZWhBX4VSjSTmcDCMLqWhalW5nQ8l9ktFW5rRgHK+A=
+	t=1772781548; cv=none; b=J1nmCvBxideJIeTc8sId5HFK4KkaB9aQz/TwY9qKop5cMwUbXBbD0/aclGqgGAwdj34XszCnNA9hqPTxhnQFCi994zFR8kZsl33cOHue/xN5551sKgJse3yanEAS9UUkrdAO1zEax7BEWu2YSheqEqeOpTKubsdqStp2E1d3Pi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772781541; c=relaxed/simple;
-	bh=TBHdKQ/niOxIqPRFEcUsyKlXisMrw6StRNMquNwcOZE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kioPBV6m81rJpkejCtvvWvm36dmp0vDV7ZW1DXR9ki1WtXohtFM95HdsjKF1rV+0Futj9alaJf8egGqeWDrhFmt6u2N2J6MsLI+BM4PiXN20ML7WKbf9NR1L6fUt4nJ1kJJgmCXdfZpu3XTZjaSJuTJcNFDLKbKi8KWvf0l632Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f41VgX73; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1772781548; c=relaxed/simple;
+	bh=7jFQtJUpvDNvQZ2epYCYWz/JrB9yXOw2gmZgrS8vWQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HpQx4wwsdYkxfVZ8uKzM5bnOiMTml9XuqtuLo1SRZyqOj5LKbdAeZShsXcuWkdj+wu+/6tw5y2wHC64+3chkNteP30XUhV1Xbm4JzWPUtE3FumbXTt6N8XvUbL2gZK8wa/bSyFO3/5FGxwMFMUCmlLoUhz4/uy1v52lsd/o75e0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZqwzOl5x; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f41VgX73"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZqwzOl5x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772781538;
+	s=mimecast20190719; t=1772781546;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GcU4+Q+7Y72wYY/zljENgWyK36V142Rr3SPlRsYuZgo=;
-	b=f41VgX73AmwxXjcZ2Wgo1PBCA5/IEpqX1LFwB3ZmiU5Hqg7eiFFNJbzbgMTVTU2GTI7pd5
-	B+w7LIl0IgoKS+keV7aw3+CtdMklPcAK/cViZAZckbtdYLiVJ2HPZ3PhY9zAPeKD1axSee
-	A1cw7f62t4sZbCidAdu0OQbMdQkxOYY=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AzgkXV/q4FugoUPcVhIeYwxz2edcgNxRERTnTanenis=;
+	b=ZqwzOl5xSRA/SNEoNZ+BbQvp/GYqW3efhYDKXFQ6fPeXcDe3rIEBufmka/QlrQlV/2Oont
+	A9YucOA1EQAoKC4mbdM8LLBhx5jDdudh+JWSVELtOftLkZuDd5F2kDIVMp94nQtYZJyt/I
+	IdFPvfYn642kA2xlnIB+wlhOAEWuEZw=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-606-3OljcDr9NLCHn2fXGMl8kg-1; Fri,
- 06 Mar 2026 02:18:55 -0500
-X-MC-Unique: 3OljcDr9NLCHn2fXGMl8kg-1
-X-Mimecast-MFC-AGG-ID: 3OljcDr9NLCHn2fXGMl8kg_1772781534
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-317-rNchILB_P02UjTbgWVfioQ-1; Fri,
+ 06 Mar 2026 02:19:01 -0500
+X-MC-Unique: rNchILB_P02UjTbgWVfioQ-1
+X-Mimecast-MFC-AGG-ID: rNchILB_P02UjTbgWVfioQ_1772781539
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A985719560B7;
-	Fri,  6 Mar 2026 07:18:53 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 43DFB1800561;
+	Fri,  6 Mar 2026 07:18:59 +0000 (UTC)
 Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.139])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D3651800361;
-	Fri,  6 Mar 2026 07:18:48 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6DC761800361;
+	Fri,  6 Mar 2026 07:18:54 +0000 (UTC)
 From: Li Wang <liwang@redhat.com>
 To: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -51,9 +53,11 @@ Cc: Waiman Long <longman@redhat.com>,
 	Shakeel Butt <shakeelb@google.com>,
 	Tejun Heo <tj@kernel.org>,
 	Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH 1/2] selftests/cgroup: Fix hardcoded page size in test_percpu_basic
-Date: Fri,  6 Mar 2026 15:18:42 +0800
-Message-ID: <20260306071843.149147-1-liwang@redhat.com>
+Subject: [PATCH 2/2] selftests/cgroup: include slab in test_percpu_basic memory check
+Date: Fri,  6 Mar 2026 15:18:43 +0800
+Message-ID: <20260306071843.149147-2-liwang@redhat.com>
+In-Reply-To: <20260306071843.149147-1-liwang@redhat.com>
+References: <20260306071843.149147-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,16 +67,38 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-MAX_VMSTAT_ERROR uses a hardcoded page size of 4096, which assumes
-4K pages. This causes test_percpu_basic to fail on systems where
-the kernel is configured with a larger page size, such as aarch64
-systems using 16K or 64K pages, where the maximum permissible
-discrepancy between memory.current and percpu charges is
-proportionally larger.
+test_percpu_basic() currently compares memory.current against only
+memory.stat:percpu after creating 1000 child cgroups.
 
-Replace the hardcoded 4096 with sysconf(_SC_PAGESIZE) to correctly
-derive the page size at runtime regardless of the underlying
-architecture or kernel configuration.
+Observed failure:
+  #./test_kmem
+  ok 1 test_kmem_basic
+  ok 2 test_kmem_memcg_deletion
+  ok 3 test_kmem_proc_kpagecgroup
+  ok 4 test_kmem_kernel_stacks
+  ok 5 test_kmem_dead_cgroups
+  memory.current 11530240
+  percpu 8440000
+  not ok 6 test_percpu_basic
+
+That assumption is too strict: child cgroup creation also allocates
+slab-backed metadata, so memory.current is expected to be larger than
+percpu alone. One visible path is:
+
+  cgroup_mkdir()
+    cgroup_create()
+      cgroup_addrm_file()
+        cgroup_add_file()
+          __kernfs_create_file()
+            __kernfs_new_node()
+              kmem_cache_zalloc()
+
+These kernfs allocations are charged as slab and show up in
+memory.stat:slab.
+
+Update the check to compare memory.current against (percpu + slab)
+within MAX_VMSTAT_ERROR, and print slab/delta in the failure message to
+improve diagnostics.
 
 Signed-off-by: Li Wang <liwang@redhat.com>
 Cc: Waiman Long <longman@redhat.com>
@@ -83,22 +109,41 @@ Cc: Shakeel Butt <shakeelb@google.com>
 Cc: Tejun Heo <tj@kernel.org>
 Cc: Vlastimil Babka <vbabka@suse.cz>
 ---
- tools/testing/selftests/cgroup/test_kmem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/cgroup/test_kmem.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index eeabd34bf083..249d79113067 100644
+index 249d79113067..4b5799698893 100644
 --- a/tools/testing/selftests/cgroup/test_kmem.c
 +++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -24,7 +24,7 @@
-  * the maximum discrepancy between charge and vmstat entries is number
-  * of cpus multiplied by 64 pages.
-  */
--#define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
-+#define MAX_VMSTAT_ERROR (sysconf(_SC_PAGESIZE) * 64 * get_nprocs())
+@@ -353,7 +353,7 @@ static int test_percpu_basic(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
+ 	char *parent, *child;
+-	long current, percpu;
++	long current, percpu, slab;
+ 	int i;
  
- #define KMEM_DEAD_WAIT_RETRIES        80
+ 	parent = cg_name(root, "percpu_basic_test");
+@@ -379,13 +379,14 @@ static int test_percpu_basic(const char *root)
  
+ 	current = cg_read_long(parent, "memory.current");
+ 	percpu = cg_read_key_long(parent, "memory.stat", "percpu ");
++	slab = cg_read_key_long(parent, "memory.stat", "slab ");
+ 
+-	if (current > 0 && percpu > 0 && labs(current - percpu) <
+-	    MAX_VMSTAT_ERROR)
++	if (current > 0 && percpu > 0 && slab >= 0 &&
++			labs(current - (percpu + slab)) < MAX_VMSTAT_ERROR)
+ 		ret = KSFT_PASS;
+ 	else
+-		printf("memory.current %ld\npercpu %ld\n",
+-		       current, percpu);
++		printf("memory.current %ld\npercpu %ld\nslab %ld\ndelta %ld\n",
++			current, percpu, slab, current - (percpu + slab));
+ 
+ cleanup_children:
+ 	for (i = 0; i < 1000; i++) {
 -- 
 2.53.0
 
