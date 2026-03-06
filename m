@@ -1,97 +1,146 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E4B2D877D
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43DD292B44
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772807426; cv=none; b=oDbYX+BA9UBnoobgtTYBKPYwOCiKdyakGeFdvYO3pR4kf7TXj2YDc7+7LqJczgGKmYJZZ/pPt1g6el/RMVsUKWB+F3+MvZjvcVNuM/J8Fh0ze57umNBB8hT4mLxT7h/Up/+prVKoL0eDPij/wHw+MRZgQXGfeRQ6MIbswhlEBhs=
+	t=1772807479; cv=none; b=oBUpinO6tDUXUOvkNHZVOMzN6bUx3vkt40t408GYPZzbg3PA8P9aD8DkDImBdVj5+mcuq+hwUH6eQpXsqG4PK+jycfrcejG2mwARW3XNpPnXnRz0jmoxINiLENpDo2mhK9aTeqgw7WEM0YBQEK0I4tZeAdIHcvbyxmhTnZmdY0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772807426; c=relaxed/simple;
-	bh=xHwzPHg2PbancKhv5xB7MyGG0IE0UTSxx1kPLT5Uc5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NOYBMFnjOuZr2tF8EGWz6q0Os1UMbzMioL/Ky0hzZlcQOD/u1KUv0WBeoFKrzFek296tI7CQqmbh9VNQNYuw0HFE85IL8Ge9y7K8mEGdLnLKZVx148aMS1H3DwJN9eUM1QkP4Xl/E0JV6HZFjrcSAv9Ap7+G97CJr62NRH6AEQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aXi9E0SK; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1772807479; c=relaxed/simple;
+	bh=1n+l2Bzc+WhA/mNo+1CsZbayb8kjrNbESsp74sL5bu8=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=RbSyNegkKLoM2ABn6TCLs5mDdWIwrgXFY19dXVqF+De4700ltUn+fcQoWG0PQdL3IzqPeEaderSRS3PlYOT+8Oad1mOlmYjmu6xI7g+vOsS5e5jE4GDOOoiemwwq8p+JUmkdmsrjeZgsLkDYdfuo8zxLJdFY20srogqCn2I7QPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qZy+q37Z; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aXi9E0SK"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48329eb96a7so61531945e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:30:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772807423; x=1773412223; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a86oWd1bJB3OKdBhHnrQ36OfJNveNdTbDopRkwqfS6Y=;
-        b=aXi9E0SKbcu9T+ESl8MYjgAno5lS5nDJjFR7ir598zoClxEX7D2qo55VSbXuwS0QJh
-         WqBqDyKDDE92koH7TNdKo4ZXkSumKg9y9yUIz9lvHSaR8yvgyHcmVqXUskTLDh0NovKL
-         eD3zXuWJUTQbhZlmKK6YA/8TCrH692de/Gs/500BgOyjaYmTYIeWFeiQSUOAshyH2LBk
-         hYpHj8NluloXcsaDr8q+XSI17hof2ndavxt9GHi5/VmRfxnk4xD5u8WfzaMpx/+1jcS7
-         8xhkczednhPt983wRS1oQQL8Ndi75c1QayUEIEN0kZKz+4uRCiE9NkfDSn7ZvJjQcu20
-         yF6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772807423; x=1773412223;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a86oWd1bJB3OKdBhHnrQ36OfJNveNdTbDopRkwqfS6Y=;
-        b=LToa2XKLRqmlUOEGZG8HIJuIY9LjvXOlWrQStWxHL1+trROIh0mfwNdiEEhEO5qC1v
-         DQEzq7UN0I9XOuoVpFDq2V733abuzEjr+JarNDzoknka29EmTsSGg6REnAYGetlrd4MH
-         aZRsniM3VQj9M4Sb5wmk98c79Z/jVOWoovUfhwHFBrX/5YrkZtMw1o+J3fHIJJ1TXWnw
-         L4Pe7bRmPDJ0e8lU3Z/rs0xWkpEclQlnSlQc7iXT4ei7hyaGTnJSqFyQ4bjwAH2Uf5/Z
-         XQbtRdNZEwSH9Gd+7+xgww3aLPGawDb8n+ShN6G8Hcq+qJKPiSg2IDHXPFm/LQ2wAMGZ
-         RvLg==
-X-Forwarded-Encrypted: i=1; AJvYcCUceQf0HRwlCeMatqlc+68lBvJT62aSVUWY3DXAorr/h0wWWotqqJsyChLjMCF7sEaBf/MzzgnXm7IeviOki4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy10XvCR6j5DbIzc5zJ42OUvBAP6wVTI22Oav9HJ7THbF8AOcVd
-	8xSw6crWnw2M1Y29PQLEdvoF8+4HSvnQi0Mq6zGOFlyI6kkDWh+96v4d1Am8JvGDyik=
-X-Gm-Gg: ATEYQzzbIM17QUUC0ci9Iuy2KhT0XGLnwlPFheXrPAiKTCfiF17T/fuLe2tEjNJQtAC
-	zLgT6aOwKNleibgJkeVcwMIRFBvf8kL/tdhLORVSKXXqv28jxGcVZ2AphsUL882vuDESqM2c7vX
-	2uLhUbUb76azBbwcPZcpbipVVPGU71tWNHGa2faMh34IJdkaMQwCScECmKFSLzJ6jcOGFTwUnKU
-	7Gu38Ldie5WGKBnizlEg3u6dRmkuQVckJH4H7rgiIts3C9pekvsKrwCO9+FyuRcv56L8p2Zh0jJ
-	rzmuJm4Ir0IVeuRQDFMAyws75c4NZJUSep5AwSQ3nWztfvpsSVibETj+gjM37SP6KuKpEzuwZks
-	LfBdSD/FNulX93LCscWnIsjHF1tBFa24J5kXbmNqfsVoxOET5mMvQ+CiLYX8gugsBWWRFddpqkM
-	GvQ/Z6drj7oNlOcnCuiHDWhR3r7g==
-X-Received: by 2002:a05:600c:6992:b0:480:1e9e:f9c with SMTP id 5b1f17b1804b1-4852692785emr36510585e9.10.1772807423422;
-        Fri, 06 Mar 2026 06:30:23 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dae4b860sm4641780f8f.36.2026.03.06.06.30.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 06:30:22 -0800 (PST)
-Date: Fri, 6 Mar 2026 15:30:20 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests: livepatch: functions.sh: Workaround
- heredoc on older bash
-Message-ID: <aark_LapcGkPjrLu@pathway.suse.cz>
-References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
- <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qZy+q37Z"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-lp-test-trace-v1-2-4b6703cd01a6@suse.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772807465;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NNQUkMOoo/a3N+T0p4O65J8ZNkrPkw2iUb6uTXqG8PU=;
+	b=qZy+q37ZcWNPjsJ4NJNcV4l3pusknZ710FL9RUFVG5VJ4ye9Sjai7xnDTbig5lAuuqeJw/
+	SbPQJ5pHjFBkugbeiAMDizXNXcwkoiPQk4+CFoi2O8AESz/y2uLnfOJMIwEQAhrbqfR0Zr
+	rLjThuf1vAt1s2A7WuRmhzrTSQUJ1k4=
+Date: Fri, 06 Mar 2026 14:31:02 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <834c065e89ccb2d9c3dbeda2677cd6e429cb8f28@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
+To: "Michal Luczaj" <mhal@rbox.co>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Jakub Sitnicki" <jakub@cloudflare.com>,
+ "Eric Dumazet" <edumazet@google.com>, "Kuniyuki Iwashima"
+ <kuniyu@google.com>, "Paolo Abeni" <pabeni@redhat.com>, "Willem de
+ Bruijn" <willemb@google.com>, "David S. Miller" <davem@davemloft.net>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Simon Horman" <horms@kernel.org>,
+ "Yonghong Song" <yhs@fb.com>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
+ <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
+ <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Cong Wang" <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <6b02c177-69a2-4e08-a936-65bfa8e85b7e@rbox.co>
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
+ <b2218c30-a704-4395-a67e-95c62b75586f@linux.dev>
+ <6b02c177-69a2-4e08-a936-65bfa8e85b7e@rbox.co>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri 2026-02-20 11:12:34, Marcos Paulo de Souza wrote:
-> When running current selftests on older distributions like SLE12-SP5 that
-> contains an older bash trips over heredoc. Convert it to plain echo
-> calls, which ends up with the same result.
-> 
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+March 6, 2026 at 22:06, "Michal Luczaj" <mhal@rbox.co mailto:mhal@rbox.co=
+?to=3D%22Michal%20Luczaj%22%20%3Cmhal%40rbox.co%3E > wrote:
 
-JFYI, the patch has been committed into livepatch.git,
-branch for-7.1/ftrace-test.
 
-I have fixed the typo reported by Joe, see
-https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git/commit/?h=for-7.1/ftrace-test&id=920e5001f4beb38685d5b8cac061cb1d2760eeab
+>=20
+>=20On 3/6/26 07:04, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> On 3/6/26 7:30 AM, Michal Luczaj wrote:
+> >=20
+>=20> >=20
+>=20> > @@ -3729,15 +3729,14 @@ static int bpf_iter_unix_seq_show(struct =
+seq_file *seq, void *v)
+> > >  struct bpf_prog *prog;
+> > >  struct sock *sk =3D v;
+> > >  uid_t uid;
+> > >  - bool slow;
+> > >  int ret;
+> > >=20=20
+>=20> >  if (v =3D=3D SEQ_START_TOKEN)
+> > >  return 0;
+> > >=20=20
+>=20> >  - slow =3D lock_sock_fast(sk);
+> > >  + lock_sock(sk);
+> > >=20=20
+>=20> >  - if (unlikely(sk_unhashed(sk))) {
+> > >  + if (unlikely(sock_flag(sk, SOCK_DEAD))) {
+> > >  ret =3D SEQ_SKIP;
+> > >  goto unlock;
+> > >  }
+> > >=20
+>=20>=20=20
+>=20>=20=20
+>=20>  Switching to lock_sock() fixes the deadlock, but it does not provi=
+de mutual
+> >  exclusion with unix_release_sock(), which uses unix_state_lock() exc=
+lusively
+> >  and does not touch lock_sock() at all. So a dying socket can still r=
+each the
+> >  BPF prog concurrently with unix_release_sock() running on another CP=
+U.
+> >=20
+>=20That's right. Note that although the socket is dying, iter holds a
+> reference to it, so the socket is far from being freed (as in: memory
+> released).
+>=20
+>=20>=20
+>=20> Both SOCK_DEAD and the clearing of unix_peer(sk) happen under
+> >  unix_state_lock() in unix_release_sock(). Without taking unix_state_=
+lock()
+> >  before the SOCK_DEAD check, there is a window:
+> >=20
+>=20>  iter unix_release_sock()
+> >  --- lock_sock(sk)
+> >  SOCK_DEAD =3D=3D 0 (check passes)
+> >  unix_state_lock(sk)
+> >  unix_peer(sk) =3D NULL
+> >  sock_set_flag(sk, SOCK_DEAD)
+> >  unix_state_unlock(sk)
+> >  BPF prog runs
+> >  =E2=86=92 accesses unix_peer(sk) =3D=3D NULL =E2=86=92 crash
+> >=20
+>=20>  This was not raised in the v2 discussion.
+> >=20
+>=20It was raised in v1[1]. Conclusion was that bpf prog bytecode directl=
+y
+> accessing unix_peer(sk) is not an issue; bpf machinery will handle any
+> faults. That said, should a "bad" value of unix_peer(sk) end up as a
+> parameter of a bpf helper, yes, that is a well known[2] problem (that h=
+ave
+> a solution unrelated to this series).
+>=20
+>=20[1]:
+> https://lore.kernel.org/bpf/6de6f1bf-c8ee-4dfb-9b8c-f89185946630@linux.=
+dev/
+> [2]:
+> https://lore.kernel.org/bpf/CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs=
+4ox0HhAA@mail.gmail.com/
+>
 
-Best Regards,
-Petr
+Thanks for letting me know.
