@@ -1,143 +1,110 @@
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D52E3148A8
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 01:51:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772761880; cv=none; b=ikNR7rd4k6PHRWukByuf18Dpn4NuifJuWhDPkV583MXuxReXt5b5m4uqRenEHw2ZEBJcyOAxgR6+fzn0OJYUIgIK0cQaAzjsoNROD+hpKc0jPQ31HvCmLizz+xdv5mepjkmZJYoIWduZqroPaabH0maoMnqWgWFmqb+TYH9EFdY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772761880; c=relaxed/simple;
-	bh=tcNTyav7JClu5Wv8r77uDiVJ0pTc0RxQAj+RlqLjX8o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q/Eiripw6dZp7JyvQ5GwPInBB3oc9XjdKBn6NMCXevJnYGRQZ1omKZKjJfiwBDU1zBbL87SaNL6dS1ASl4YVDcptQUP6ecjbpbZ4MFWM94IcQNEdcOUazOT5SAP4zGplCEfksEWd+zvbsO6zEVHYuRwjudx7aSKA0G/GLkRSSa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RPThMdEy; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9095423EA83
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 02:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772762900; cv=pass; b=KWox2jXm7Qwzu/wB9Uhy0WfcBmHcn4/FmQZoXiwJQwtER1krk3CeHqN7X6CGPDigbt0lmtXCRzD++pxu3WVVcYUzwt51VZa/YvZnLts1Ppneptndsk3O+z+r6Xp2pu+k2PL6Qx0T91D3CjvMzTCf+HzOhN/E13M/qQDfTEro858=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772762900; c=relaxed/simple;
+	bh=/Uki9RsKdjh0Yx5MYD7ET7E2uUAT8r6JDmpn2OGZ5ws=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C++SnME6j1IytVopQp9o4MvbyuJPfRlC1lpNFF58ijZcS0n2mOGj3SqNeR8lU09iIH7YKt2hrpoNuf+yo/kPmavK7AN7H5hNU6h0eWwP69Xgt/QTwiwqnhFFHwVLIpHlUzntwI0bfgl/XkDmnMaIhaKAqFLB2l3qB+yICRuFFZM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D9KamQkJ; arc=pass smtp.client-ip=74.125.224.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RPThMdEy"
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-662f9aeb782so6602616eaf.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 17:51:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D9KamQkJ"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-64ad9238d8fso8580026d50.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 18:08:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772762898; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Dlh66+P1I57KeukmUuKD/XZXpgpJVCu5zlploTQMjic51dDKst5juY6pJG4J2PQWJA
+         W3hqh11FWbBDboQxYtd3rGdcGW994DW6paaYiPKvEwyTFfyAjN2Of44nGeb9NAX7uqGO
+         i/qlLG/8GHaFfjX+5komJm9zJ0BtDQo2MyHT0/LOAFPfsm5kAilU5cUVh0YEMIasjEld
+         gNIPqB6fakrjVu/U4qasmUuVtcTkaOSgIPSIYDbJ/jG8T4Be9hFagXMNPsOUPuYgu7W2
+         jVKXZ1+rRWj1Om70Xq31szps817n49ZMiPbUw9UJfqDyUIegaYQuSaZ5iQtrtj2NxT0l
+         yeWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/Uki9RsKdjh0Yx5MYD7ET7E2uUAT8r6JDmpn2OGZ5ws=;
+        fh=c8gfwOhbYkbhPsSXdbHCEEyqlHyocB7TcDgbVPdy2Lg=;
+        b=fJs0rjffatI3nX2C6POQq1GO12xob4gXIIbs5tgTZazzlyzfuZcFjIxcX1ZNMj0Yc4
+         T4QBJCGVyIJxP4xzIOtMUhtL0HcAB/0YLM/ae1mo7Zpp+utU4X3pJ00WsH0nMJNMyiEp
+         vTokpBX8lMykSRFwtpy6cbDlKRg7WXnSlaKEb/2YDSnJwkoD9060VWawR1dg46TSN/5P
+         JAbRVZdViHQAKXibBXbQxKC0rpDB5IbChYo9jGiVTzZRMuS0JKuN8nmj60DBPL92aaNl
+         D2vMRlRgWVLaRG0113tw+2f1LZXw0A49CrmHgY5fILfoRPTg3DdFJ5dvptokSOlXfdLw
+         E3bw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772761874; x=1773366674; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1772762898; x=1773367698; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rjic6E4sYgoKxkNkNG8eG+bbyrYHUHzf7UJjTOVCQkA=;
-        b=RPThMdEyfAVBnSwVFJTGy3QLWLwIbDfIo9KfPZGdF1Fxkknr0njOKrbgEV1bu78xsJ
-         pih2eVbB7/fGnfraLdFOfyLgeR7hyz5ZJhN0n5t3i0j+P9ZP9K54QB2Gp0o5tFErG4kS
-         e4KOpItv0UMMVqqKjxou6TpFvjZl6PFChhIBQAqSfHcQ1Pa8YstxxPnyz2iAQIH89Xkx
-         cj4rZ1O1Xp7Tb0Vg5eN8QTdg5uLt59MYhkAHXRwQw58u3QmnH+LaTn/rvZJ0c66f9jiT
-         uzHJaIY5aWSU5qCzOlJcrTXBzr93qtfPQqVLI5bNTFBHhZOjQOwgoAb4NpntbdRiASjz
-         qxcg==
+        bh=/Uki9RsKdjh0Yx5MYD7ET7E2uUAT8r6JDmpn2OGZ5ws=;
+        b=D9KamQkJzxVp5OWhPai0/1n5H2348UX7/msn5iG9HUgApWIeRwg4yevNhNnSG27pQd
+         8PI93Z922NtwV7SGXTtKpKyzWVFiETCHOCPK96bY1t+/zCJWdZSgRTlZSXISPyUlKjK0
+         udQG6U2L6dN8lk/Ufw0sDtj2qiTstu7StPYPSQAhQUOI8ikpR28Eovi4BUsJN8JJlwjU
+         wnDpuHpIFLHZFDiSUhoRAu5DYH3p0fhZC0Q4adeUA9RmRIn2COQPuetyaxhbRq1SCOB9
+         SM9jk6baHOU1Ml/tdcQQy0izT+9Z5AgAYO8brJvi4tnGj9zb/pM46nmnYGKBPgGspSIS
+         ggag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772761874; x=1773366674;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1772762898; x=1773367698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Rjic6E4sYgoKxkNkNG8eG+bbyrYHUHzf7UJjTOVCQkA=;
-        b=rmGSBR6fX1ypSkcohYggQoTaB0V9KuJdxlp/tgB1C7mRgS/f2GoImFvb0GVm/e1wyL
-         RhkVopArm3ropjxq0VZsEByo80OLdcSNp2ujmqdKc3w3kEJZOP79oR9ZoIAonMjoJsHi
-         6Oi9wqGSwO9tvWgikZ0zgn2MFogZZBXRc60mDue94jHPKbjYUM6WDrBsqBwj0BtBrzKj
-         4CTjvBwEi3gS2QLDUwN2irTpaJhvQ/werx/7QeKsnsxr7gRJY3PqWB9CG7WilCJ9ioVm
-         d87R+IFZInHg/pBeUX8h2bjAKs6hkHRsto3Fpc9/fzZ+fmjZufpUZ0hCxweC5b9pT8w7
-         i+/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXhsA8yrgozPCUDDoATeFCuuD9Ju3cRbTZMMpus33t3pAonBDmcV23SHl0Bwo78m/JOdsDHpppy6StnjIkYr6Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQuRYZSknhlQwEmmGBLMaJUO4c/x6LNzVtduE+h2F3Thsi2PjA
-	rZrBux1gUvONnvxnIUnno9LREUzplOGgLd5RvJeK1rCE0FICZz9MFSSx
-X-Gm-Gg: ATEYQzz4G4F27Ki9r0Yv+zrsfZXeh/acYWpN5NL4lQvZb0e3bLf5DtZSTUw6c26zUSY
-	7oyb1l6c/vXS+mxoDjdeTZSsYT0bssfZG25k16AlwbPLtDWucYI7Z6gNVUaZgh0gIbReiJNnTsY
-	pcm5y9PPWTGp8LOG8JZeK2qMravVNrDN1rX7e8odRYWpQOj8Sr1/qJRk1Zdtc6HlMOye3ChsDe3
-	i9pwBjhGu8K/uNjndS7zDL/ePHh78/KPOhwrq8tXKcfPo6T+Atc93kYdR/F56GQrFyUxDNzKLC4
-	4D8H0TT9LURN1JqpMnKB6wnnEbbKXWvanIGw/e4e4NA/sVO5rS3ojSUNPrVqkK6nd6+nyzi6OzT
-	RMuCon5r5RSEtEQEjwz+Cqk4Ib2D4kEJ12wnnIv5jPz+ABiN3PeSwCt2PNJndA9MwsNPdfsv4Av
-	AC0gefhjMguufnwa8I1anq8kqBTSASnTlZTQMfRGSMipQGkBOe
-X-Received: by 2002:a05:6820:3103:b0:663:11b2:d61d with SMTP id 006d021491bc7-67b9bca1e01mr428086eaf.25.1772761874446;
-        Thu, 05 Mar 2026 17:51:14 -0800 (PST)
-Received: from frodo (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 006d021491bc7-67b9cc1a627sm115245eaf.6.2026.03.05.17.51.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 17:51:13 -0800 (PST)
-From: Jim Cromie <jim.cromie@gmail.com>
-To: linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	amd-gfx@lists.freedesktop.org,
-	intel-gvt-dev@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org
-Cc: Jim Cromie <jim.cromie@gmail.com>,
-	Jason Baron <jbaron@akamai.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 7/7] dyndbg-test: test keyword !value negation
-Date: Thu,  5 Mar 2026 18:50:10 -0700
-Message-ID: <20260306015022.1940986-8-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260306015022.1940986-1-jim.cromie@gmail.com>
-References: <20260306015022.1940986-1-jim.cromie@gmail.com>
+        bh=/Uki9RsKdjh0Yx5MYD7ET7E2uUAT8r6JDmpn2OGZ5ws=;
+        b=Z5yUWolXBKK/nWrL5+xHb0Y8KGgPO6R8x580Gt33DVKZXvUmsvZrsVutWgv5Dldl4n
+         QM+qNeyY6+tpnLkN80HjCEwnIAoHXTrd3W0MLAjzDhalxmxhkXTdqSw9bxyEohdNsQUz
+         5+ro+a0DxqKXoQCXp6oJ7CupPne6JNgBJLXK8pUiZWNFXysR7kR5ox2Kn94FtT1ac+Os
+         1NG3U6frcCdNkXMxsQeE6lieJPJ/eRX64L+rvQPKGPX+hmSLq2+hXH/6zJlQdqoXYLKR
+         qif0zqFpIJ3slULW9bJSM1RzJKg9cQzHsdN/hM6uE39TachR8gsSPfrhb3gFevGpGVPz
+         d8vQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWuVR5QOQZ73Y6C9Z9C90FJZuSnQIgxmcBB2HvqnoSEo2KmOPhHwH9PGFRUnucgrXjnSkCgLgGNEIZ61kK/nMk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwB4mhZO/T8gPMx4cFGIC/aQhpPFZiMKx0sEa0jOUmEf4k3X4PP
+	zq3G2ZYQZOAo+VsEbmZ6IAidMsbMMmWFAcjOmk9Jh91GfVede3vxBX5OHCTccmcGbfGHA/pXGbO
+	5q/mwieAfJCgWv0XJVXoqlTrnzzqRNFM=
+X-Gm-Gg: ATEYQzyMn7a2DFEfPErCRZJBVmBI4bh3+OXNs+CmkInIPd60S/l69ft6dzxz7B492fG
+	DNPs0PGMsDRhH4aTn1CPTHaEauDbdk8FfTWlCRHkTLnfBjWO94X8LX5OyNjprQw+idu5Rr0+CKf
+	k7mMyVM95GEqblhyTzCWv0ZaX6269+WL3b2lkgxYvGFyZgWAK0Drb257b+6lsv6e8H5Yq0F9O0T
+	MMqILZyS/Ct/1W3cI+7EC2vLq9DMcnchVoQrd9YlgnSXQ9PwjBQb++z9DflgyAvvVAEF5heWtod
+	jfz0g5FS
+X-Received: by 2002:a53:b191:0:b0:64c:b68a:f519 with SMTP id
+ 956f58d0204a3-64d14397896mr464727d50.80.1772762898553; Thu, 05 Mar 2026
+ 18:08:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260302071434.311395-1-sun.jian.kdev@gmail.com>
+ <aagWYyrrwUt-poL1@mail.gmail.com> <CABFUUZEdbCMrNyp4kEO7A4KZPn5TKi48+tQvaaYaYuJj5FQ7gA@mail.gmail.com>
+ <CAADnVQJfDYiBHa4f3p_7MpURE_a33+atRbjbcpZ0VmrKFaKkqA@mail.gmail.com>
+In-Reply-To: <CAADnVQJfDYiBHa4f3p_7MpURE_a33+atRbjbcpZ0VmrKFaKkqA@mail.gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Fri, 6 Mar 2026 10:08:08 +0800
+X-Gm-Features: AaiRm506lW5sZ0vhaSfvVU0rEwcX9rsPKby9YutJ4fCIZJpsj4LuhVd5BCEEaHs
+Message-ID: <CABFUUZHv2a0ky84aUKcqvH3o8x=5jpUtZMW=SrrNiD392e0sQA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: skip verif_scale_pyperf600 on -E2BIG jump
+ complexity limit
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
----
- .../dynamic_debug/dyndbg_selftest.sh          | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+On Fri, Mar 6, 2026 at 9:14=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> It's been failing for too long.
+> Pls do a minimal change to its source to workaround this 8k limit.
 
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index 09937dca3056..5c35d7cc5ecf 100755
---- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -350,12 +350,47 @@ function test_mod_submod {
-     ifrmmod test_dynamic_debug
- }
- 
-+function test_negated_keywords {
-+    echo -e "${GREEN}# TEST_NEGATED_KEYWORDS ${NC}"
-+
-+    # Test 1: Disable negated subset from enabled set
-+    # Enables all 6 in init/main.c, then pulses ONLY those that are NOT run_init_process (the 2 blacklist sites) OFF.
-+    ddcmd =_
-+    ddcmd file init/main.c +p
-+    check_match_ct 'init/main.c:.*=p' 6 -r
-+    ddcmd file init/main.c func !run_init_process -p
-+    # Result: 6 - 2 = 4 sites (run_init_process) remain enabled.
-+    check_match_ct 'init/main.c:.*=p' 4 -r
-+    check_match_ct 'run_init_process' 4 -r
-+
-+    # Test 2: Enable negated subset from clean slate
-+    # Negation !run_init_process should match the 2 blacklist sites.
-+    ddcmd =_
-+    ddcmd file init/main.c func !run_init_process +p
-+    # Verify exactly 2 sites enabled
-+    check_match_ct 'init/main.c:.*=p' 2 -r
-+    check_match_ct 'initcall_blacklist[[:space:]]' 1 -r
-+    check_match_ct 'initcall_blacklisted[[:space:]]' 1 -r
-+
-+    # Test 3: Enable negated subset with wildcard
-+    # Negation !run_init_* should match the same 2 blacklist sites.
-+    ddcmd =_
-+    ddcmd file init/main.c func !run_init_* +p
-+    # Verify exactly 2 sites enabled
-+    check_match_ct 'init/main.c:.*=p' 2 -r
-+    check_match_ct 'initcall_blacklist[[:space:]]' 1 -r
-+    check_match_ct 'initcall_blacklisted[[:space:]]' 1 -r
-+
-+    ddcmd =_
-+}
-+
- tests_list=(
-     basic_tests
-     # these require test_dynamic_debug*.ko
-     comma_terminator_tests
-     test_percent_splitting
-     test_mod_submod
-+    test_negated_keywords
- )
- 
- # Run tests
--- 
-2.53.0
-
+Will do, sending v2.
