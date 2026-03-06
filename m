@@ -1,268 +1,223 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.64.237.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2BF3932DA
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 12:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E49D3939B0;
+	Fri,  6 Mar 2026 12:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.64.237.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772801359; cv=none; b=oEdBStHeO6lnTp4qrs6u7QO7K294/VDx1cpqB2kWScHfmzyu2tLiVpR0juTiIv8fK/pqYNBih6vgdZYJte4mqUKICrGcXMZ2bra030cvB3Q9c6yw+yicnsY/q7QI3BOB+mlwntOrkhBWuPM99/8se51ZQ0oQZ7ySPxamDCMSzrs=
+	t=1772801362; cv=none; b=JT5Ar+pQuUB9r7Lrvpxb88O8Z6egJKyR2GbfQt5gBTWHA2O/W3c2gMHW1T04/oo9IQKshysIGw5SUSaCQSnqXnx1/Gw6Lui1KGv5AC5RBmvl+sIY2It5F1MQg/lVmWZh0Tc4YDxzdKU9Bo3DyvjYeVys33s5UC+2AyGoAmowqHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772801359; c=relaxed/simple;
-	bh=BZeeJ1JML7xaZoBvWAKlQYnkV7F90b7mZuzv0ATZ6Jw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kcCRb4zFnkjhOkJjLTwOf+75JrpJmZhmkYfkxhzEzADW2fANMDogEgRl8PVqK9u4LajEEasLJqQVVkGiKpYyQ4mpt9F5enaig+QemNpbfP5B8ACGjUmFBQ5qZOv8ckQVjoWHua/l9mZWM+YIX4W0US1lFXRoo36uosfFRqivBKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ruv+3MI9; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772801362; c=relaxed/simple;
+	bh=LR/k1rHM5LZ3hLuYrcHnIwjUhmNmnXoE6cKE5i5BZnc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=E8OpJCIKpUTxQytn1Nhg7bDuJwvz0zo25b44sW4N1lZtLgNVp+mPW5akQAQuzYn733Voj3RBJP3oPYJ8TMA7lg0ZaMcrdM/yStdlCZAblT0vWd/lJPhgMfLAEaoZHDc9+xscEKyshLSqmvpN9TFNzep+KNG6K5cmEOyz+t4inu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=RGDZR/qi; arc=none smtp.client-ip=3.64.237.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ruv+3MI9"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2a9296b3926so68026355ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 04:49:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="RGDZR/qi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772801357; x=1773406157; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6TnQKdPGtTuRU+46cutq94eviTJ71u1qZiPiKlbjQJQ=;
-        b=Ruv+3MI9uh9UmKCqZJuzUEQDiMDwyf2WsPQ/dzzFIMEcQ1Fsa1Vq7jjPAj/wv5Ku8y
-         NF64Hprvi3encEih0iGaugA792BkY4TOeBUKAlOgtDgrPfA1x+7Yhj0P89BJC7uFGhw+
-         9x/z9DhdZivVjl7mF5KCJ+/iZIioXlNRQ27LfAi+VqPGbTV8vCIpYoRf88dgj1GRQAl3
-         y/N8KObAFi4WxHq6rJPmNgRC08QspaCkz7P0NrclnxKvBSASQA9uF4Pk5oZk8TCkg8L9
-         qBCdp/vu2z+1gtxSfa6RiY3zrKCmBXpshRa3DMmj2oK0KKkDLtthE8ixzp//JlWAq6ih
-         5ymw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772801357; x=1773406157;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6TnQKdPGtTuRU+46cutq94eviTJ71u1qZiPiKlbjQJQ=;
-        b=LoDtvBeF1gV5DT9DeBqKNjf2se3UMVvyfAovRLhKd2BQJFrj+k583wQWo1sMmdLqsv
-         QsT4PHcuTj3N/KNECbJ3x1/AI0Ai+kvP7syt1zth1YAcWUYs2LM+1LN+H3UXohKJwKCm
-         SADXfZZTQegWVqmJoE186sfw8Y3IRHkDj7XiLfk2ICfJTELGN5qbknKbpcgNm8BYJSh9
-         xDkAbR8+jdll8uyOhI1blbQB7wr+mVCVcN8fqDBUL6Q1ke1AdI4lWCJEuJlttfoSk/Ut
-         PDAmsdaZuKsmAHtzG6pFx4BVXhM92+sBg7eYLpOyzLp59ofDdjTUCq+DESOlIYqjnUKJ
-         Nu5g==
-X-Forwarded-Encrypted: i=1; AJvYcCW4BuhNVKyOZnGVksII7ij5152hUhsZxbOrgKNfDo5ccTOYX1GVRypbjdvjFmtUxiDMCLn32ouJ/VOndzV6PcM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrYUQz1MySg2YzfHYDV9XOh92swBVoVypB0vNS8hlzNgi1IJRl
-	Le2vKABglNTTPsLgOkYmMYJKBt/57AJ33SNn13t9Hj/WSsNJuj0IwVzeGOSyTq/p
-X-Gm-Gg: ATEYQzyyos2XHBvKuiRrFDJRjwsz/efAtXD+QGwZbEVp8IKO8tLZfIx0O1FSGNxvXTg
-	p5XTBZH/jD9D2HRVi/rJrgEHngdE5WW7ls6gQcIrJMtljl3gZw3/qZLQDYUbvmbASnQmBZw7lNA
-	VbMBYAwuD68XFAhA4x69O897CP1x2WQ8gcs6Y4MY2PY6bEX1do/wKM1loVf0qPmwy9E0QIrG1+s
-	3PHImgcarmjcn+k/yX9H0yaaWb8i07ErkV3Ow0ia4RIDqCXrKX1rZA4At+n/marEyx3mdWq7iMW
-	ZZ2nHdm0PlweOOX/70JOBHBH9JZ6oJ/uf9kavcQPfA08CbHdeFJVxlc4XxPCmgrPjV3k/b7DXsV
-	jn1Rrw/XsSkh0iX4t8nnG6344l5UjB/hdpm4D5ZvJdVucXBMea5Ua6Iw5wKtZCfusF/eI+wtV3u
-	wOPt1x8OQzo8HsY8ICTA4D+ujrFn0nwaWKXruPN5IBrezitQFd2dciLwkSCnlEUURXtamA/R2iT
-	Bvg7JV/b1zynQ==
-X-Received: by 2002:a17:902:d544:b0:2ae:7f3a:b213 with SMTP id d9443c01a7336-2ae8252fb45mr22420835ad.47.1772801357343;
-        Fri, 06 Mar 2026 04:49:17 -0800 (PST)
-Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e78f77sm27712845ad.21.2026.03.06.04.49.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 04:49:17 -0800 (PST)
-From: zhidao su <soolaugust@gmail.com>
-X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
-To: tj@kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	linux-kselftest@vger.kernel.org,
-	Su Zhidao <suzhidao@xiaomi.com>
-Subject: [PATCH 4/5] sched_ext/selftests: Add bypass mode operational test
-Date: Fri,  6 Mar 2026 20:49:00 +0800
-Message-ID: <20260306124901.2653465-4-suzhidao@xiaomi.com>
-X-Mailer: git-send-email 2.43.0
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1772801360; x=1804337360;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=bRMHQdQ5GfQ08jWBNyGRBN4vXmA9+fBBCWCkl04FNjQ=;
+  b=RGDZR/qij9TjI+VazrRUViMMf/eqy0kia7n7lFKgerHRVadWO6wR+VNT
+   WPekJ+l9DbZufHQLBhkhMl0nl8MjVJEmNeeniWQALuLo+qUaqZYSo7MRS
+   UpNEJlOpSAcA7cAxEy1obY944zV/DLpDH7eaJGNupCDJWrksdF23St++X
+   IH05y5ao3+//u+KHk1G81cohkdtAlhuEYbJ36YnuAzovDKB05lQRLwWmv
+   RjsKaNPSzpvrE1PL+HosVpEL4m6otiVjE+Ndpo2O+8/fB9x1hqfOxXGIb
+   BdAfTB9Ewuw2GYp1dFWUy1HEHbHtnM2aslMv9/Bgcw9od+sLFMLJ2+ivs
+   A==;
+X-CSE-ConnectionGUID: +CBc8LTUTFyKU3vgne5J+A==
+X-CSE-MsgGUID: SsgvaCDKTQyRTYkBnx7yEA==
+X-IronPort-AV: E=Sophos;i="6.23,104,1770595200"; 
+   d="scan'208";a="10334046"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 12:49:17 +0000
+Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.225:27792]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.8.50:2525] with esmtp (Farcaster)
+ id 3c65634d-d2ee-42b8-a0db-5e2cd1d9a376; Fri, 6 Mar 2026 12:49:17 +0000 (UTC)
+X-Farcaster-Flow-ID: 3c65634d-d2ee-42b8-a0db-5e2cd1d9a376
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19MTAEUC001.ant.amazon.com (10.252.51.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 6 Mar 2026 12:49:14 +0000
+Received: from [192.168.2.180] (10.106.83.26) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Fri, 6 Mar 2026
+ 12:49:09 +0000
+Message-ID: <a2d34a91-1d38-4d9d-b7bc-8315245a08a6@amazon.com>
+Date: Fri, 6 Mar 2026 12:49:08 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v10 04/15] mm/gup: drop local variable in
+ gup_fast_folio_allowed
+To: "David Hildenbrand (Arm)" <david@kernel.org>, "Kalyazin, Nikita"
+	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
+	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
+	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
+	<willy@infradead.org>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "lorenzo.stoakes@oracle.com"
+	<lorenzo.stoakes@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
+	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
+	"mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
+	<andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
+	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
+	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
+	<jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
+	<jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
+	"shuah@kernel.org" <shuah@kernel.org>, "riel@surriel.com" <riel@surriel.com>,
+	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com"
+	<jgross@suse.com>, "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
+	"kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
+	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
+	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
+	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
+	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
+	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
+	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
+	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
+	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
+	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
+	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
+	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
+	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
+	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
+	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
+	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
+	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
+	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
+	<xmarcalx@amazon.co.uk>
+References: <20260126164445.11867-1-kalyazin@amazon.com>
+ <20260126164445.11867-5-kalyazin@amazon.com>
+ <ebb4beec-13dc-4b94-a1f8-756e7a8ef5af@kernel.org>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+In-Reply-To: <ebb4beec-13dc-4b94-a1f8-756e7a8ef5af@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D015EUB002.ant.amazon.com (10.252.51.123) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
-From: Su Zhidao <suzhidao@xiaomi.com>
 
-Add a test that verifies the sched_ext bypass mechanism does not
-prevent tasks from running to completion.
 
-The test attaches a minimal global FIFO scheduler, spawns worker
-processes that complete a fixed computation, detaches the scheduler
-(which triggers bypass mode while workers are still active), and
-verifies all workers complete successfully under bypass mode.
+On 05/03/2026 19:07, David Hildenbrand (Arm) wrote:
+> On 1/26/26 17:47, Kalyazin, Nikita wrote:
+>> From: Nikita Kalyazin <kalyazin@amazon.com>
+>>
+>> Move the check for pinning closer to where the result is used.
+>> No functional changes.
+>>
+>> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+>> ---
+>>   mm/gup.c | 19 ++++++++-----------
+>>   1 file changed, 8 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 9cad53acbc99..e72dacce3e34 100644
+>> --- a/mm/gup.c
+>> +++ b/mm/gup.c
+>> @@ -2737,18 +2737,9 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
+>>    */
+>>   static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
+>>   {
+>> -     bool reject_file_backed = false;
+>>        struct address_space *mapping;
+>>        unsigned long mapping_flags;
+>>
+>> -     /*
+>> -      * If we aren't pinning then no problematic write can occur. A long term
+>> -      * pin is the most egregious case so this is the one we disallow.
+>> -      */
+>> -     if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) ==
+>> -         (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE))
+>> -             reject_file_backed = true;
+>> -
+>>        /* We hold a folio reference, so we can safely access folio fields. */
+>>        if (WARN_ON_ONCE(folio_test_slab(folio)))
+>>                return false;
+>> @@ -2793,8 +2784,14 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
+>>         */
+>>        if (secretmem_mapping(mapping))
+>>                return false;
+>> -     /* The only remaining allowed file system is shmem. */
+>> -     return !reject_file_backed || shmem_mapping(mapping);
+>> +
+>> +     /*
+>> +      * If we aren't pinning then no problematic write can occur. A long term
+>> +      * pin is the most egregious case so this is the one we disallow.
+>> +      * Also check the only remaining allowed file system - shmem.
+>> +      */
+>> +     return (flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) !=
+>> +         (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE) || shmem_mapping(mapping);
+> 
+> Best to keep this split and a bit more readable.
+> 
+> /*
+>   * If we aren't pinning then no problematic write can occur. A writable
+>   * long term pin is the most egregious case, so this is the one we
+>   * allow only for ...
+>   */
+> if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) !=
+>      (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)
+>          return true;
+> /* ... hugetlb (which we allowed above already) and shared memory. */
+> return shmem_mapping(mapping);
 
-This exercises the scheduler attach/detach lifecycle and verifies
-that bypass mode (activated during unregistration to guarantee
-forward progress) does not stall running tasks.
+Makes sense, thank you!
 
-Signed-off-by: Su Zhidao <suzhidao@xiaomi.com>
----
- tools/testing/selftests/sched_ext/Makefile    |   1 +
- .../testing/selftests/sched_ext/bypass.bpf.c  |  32 ++++++
- tools/testing/selftests/sched_ext/bypass.c    | 105 ++++++++++++++++++
- 3 files changed, 138 insertions(+)
- create mode 100644 tools/testing/selftests/sched_ext/bypass.bpf.c
- create mode 100644 tools/testing/selftests/sched_ext/bypass.c
-
-diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-index a3bbe2c7911b..5fb6278d3f97 100644
---- a/tools/testing/selftests/sched_ext/Makefile
-+++ b/tools/testing/selftests/sched_ext/Makefile
-@@ -162,6 +162,7 @@ endef
- all_test_bpfprogs := $(foreach prog,$(wildcard *.bpf.c),$(INCLUDE_DIR)/$(patsubst %.c,%.skel.h,$(prog)))
- 
- auto-test-targets :=			\
-+	bypass				\
- 	create_dsq			\
- 	dequeue				\
- 	enq_last_no_enq_fails		\
-diff --git a/tools/testing/selftests/sched_ext/bypass.bpf.c b/tools/testing/selftests/sched_ext/bypass.bpf.c
-new file mode 100644
-index 000000000000..cb37c8df6834
---- /dev/null
-+++ b/tools/testing/selftests/sched_ext/bypass.bpf.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * BPF scheduler for bypass mode operational test.
-+ *
-+ * Implements a minimal global FIFO scheduler. The userspace side
-+ * attaches this scheduler, runs worker tasks to completion, and
-+ * verifies that tasks complete successfully.
-+ *
-+ * Copyright (c) 2026 Xiaomi Corporation.
-+ */
-+#include <scx/common.bpf.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+UEI_DEFINE(uei);
-+
-+void BPF_STRUCT_OPS(bypass_enqueue, struct task_struct *p, u64 enq_flags)
-+{
-+	scx_bpf_dsq_insert(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
-+}
-+
-+void BPF_STRUCT_OPS(bypass_exit, struct scx_exit_info *ei)
-+{
-+	UEI_RECORD(uei, ei);
-+}
-+
-+SEC(".struct_ops.link")
-+struct sched_ext_ops bypass_ops = {
-+	.enqueue		= (void *)bypass_enqueue,
-+	.exit			= (void *)bypass_exit,
-+	.name			= "bypass_test",
-+};
-diff --git a/tools/testing/selftests/sched_ext/bypass.c b/tools/testing/selftests/sched_ext/bypass.c
-new file mode 100644
-index 000000000000..952f09d76bdb
---- /dev/null
-+++ b/tools/testing/selftests/sched_ext/bypass.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Verify the sched_ext bypass mechanism: spawn worker tasks and ensure
-+ * they run to completion while a BPF scheduler is active.
-+ *
-+ * The bypass mechanism (activated on scheduler unregistration) must
-+ * guarantee forward progress. This test verifies that worker tasks
-+ * complete successfully when the scheduler is detached.
-+ *
-+ * Copyright (c) 2026 Xiaomi Corporation.
-+ */
-+#define _GNU_SOURCE
-+#include <unistd.h>
-+#include <sys/wait.h>
-+#include <bpf/bpf.h>
-+#include <scx/common.h>
-+#include "scx_test.h"
-+#include "bypass.bpf.skel.h"
-+
-+#define NUM_BYPASS_WORKERS 4
-+
-+static void worker_fn(void)
-+{
-+	volatile int sum = 0;
-+	int i;
-+
-+	/*
-+	 * Do enough work to still be running when bpf_link__destroy()
-+	 * is called, ensuring tasks are active during bypass mode.
-+	 */
-+	for (i = 0; i < 10000000; i++)
-+		sum += i;
-+}
-+
-+static enum scx_test_status setup(void **ctx)
-+{
-+	struct bypass *skel;
-+
-+	skel = bypass__open();
-+	SCX_FAIL_IF(!skel, "Failed to open bypass skel");
-+	SCX_ENUM_INIT(skel);
-+	SCX_FAIL_IF(bypass__load(skel), "Failed to load bypass skel");
-+
-+	*ctx = skel;
-+	return SCX_TEST_PASS;
-+}
-+
-+static enum scx_test_status run(void *ctx)
-+{
-+	struct bypass *skel = ctx;
-+	struct bpf_link *link;
-+	pid_t pids[NUM_BYPASS_WORKERS];
-+	int i, status;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.bypass_ops);
-+	SCX_FAIL_IF(!link, "Failed to attach bypass scheduler");
-+
-+	/*
-+	 * Spawn worker processes. These must complete successfully
-+	 * even as the scheduler is active and then detached (which
-+	 * triggers bypass mode).
-+	 */
-+	for (i = 0; i < NUM_BYPASS_WORKERS; i++) {
-+		pids[i] = fork();
-+		SCX_FAIL_IF(pids[i] < 0, "fork() failed for worker %d", i);
-+
-+		if (pids[i] == 0) {
-+			worker_fn();
-+			_exit(0);
-+		}
-+	}
-+
-+	/*
-+	 * Detach the scheduler while workers are still running. This
-+	 * triggers bypass mode, which must guarantee forward progress
-+	 * for all active tasks.
-+	 */
-+	bpf_link__destroy(link);
-+
-+	/* Workers must complete successfully under bypass mode */
-+	for (i = 0; i < NUM_BYPASS_WORKERS; i++) {
-+		SCX_FAIL_IF(waitpid(pids[i], &status, 0) != pids[i],
-+			    "waitpid failed for worker %d", i);
-+		SCX_FAIL_IF(!WIFEXITED(status) || WEXITSTATUS(status) != 0,
-+			    "Worker %d did not exit cleanly", i);
-+	}
-+
-+	SCX_EQ(skel->data->uei.kind, EXIT_KIND(SCX_EXIT_UNREG));
-+
-+	return SCX_TEST_PASS;
-+}
-+
-+static void cleanup(void *ctx)
-+{
-+	bypass__destroy(ctx);
-+}
-+
-+struct scx_test bypass_test = {
-+	.name		= "bypass",
-+	.description	= "Verify tasks complete during bypass mode",
-+	.setup		= setup,
-+	.run		= run,
-+	.cleanup	= cleanup,
-+};
-+REGISTER_SCX_TEST(&bypass_test)
--- 
-2.43.0
+> 
+>>   }
+>>
+>>   static void __maybe_unused gup_fast_undo_dev_pagemap(int *nr, int nr_start,
+> 
+> 
+> --
+> Cheers,
+> 
+> David
 
