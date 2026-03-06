@@ -1,113 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332472DF6E6;
-	Fri,  6 Mar 2026 10:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021F43806AD;
+	Fri,  6 Mar 2026 10:45:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772793316; cv=none; b=gEcLrbPdwswU4ncIiKT146OtXILlQC07xbo3mGTswV+TqVITEa7v5+ZZLPqKQaaSH3yXt+5lqEvO4sNMzYhmsE8Lv6ZVLIbMFPpP9RiGm39RwLFriOMapSc2DejRYFHV7rzdwqvo5ehYojb1W0mLb5f59GZv0Zn7PBM//1FG8Fc=
+	t=1772793918; cv=none; b=t5rONrL9yT7kDx7bhefVlfLTp/bncmIc4CfvIPSQqOGFxUYQwHQ4k/ejh6ft4GJs9Jo4qlGEDNLGX/zqrH1EipeIjPIpysUw4b8N/OdMaaApM9ALBtrXu6LIppu3nQzVE7lBB1qDJL8Ptiw7ugBSDFDee6kODKEJ6HG3XJyjg/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772793316; c=relaxed/simple;
-	bh=56j/Dz5yR3NWbJ1+SqrCNPWOzDvXvg3ezeHAGS115bQ=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ZmfNrtDkNvKSVCriS49QKR/LweBILAxvZeE4UNHs0FVt98kkRBjfGzkHhXXnhNVholEfS5o5tHjpbN8lQMyks94NV/KrIBhD+/uMxhwcEduV40jTtLqHeuHW2jjvapoDnPVoaN0wxNFQyEKERp4N/vXHJ6NgzNSEDT0DF0QsFNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ipdj6Jle; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ipdj6Jle"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772793316; x=1804329316;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=56j/Dz5yR3NWbJ1+SqrCNPWOzDvXvg3ezeHAGS115bQ=;
-  b=ipdj6JleeaHhgAKHgolOAe0rGIVqpU/CGbAyJO+fHZ6z+ActPTR775pi
-   hj4d9wUxzR8lxwc964hQMLpRM0aUbKJxm8IO7vfSR/UUKYww046XSb81l
-   kcCDtTc7zC7F2UESXKNRoVVhyk3EkHaIH0pbhAIcVRJ9NEA5ikKoSeE42
-   NF2yO2+PCl6kl1nFDffsqcTVepvcQSE6cRs5KtLLegaSLbSoyko8GHr5u
-   sDycr+xR8MNaCiGQwi7xEnqzIoeBN9jB8KthWzO21eD8f1He614v3o3/G
-   tSLB8faDfs8Xa4OyO8rwggSLAWC4i02+Ca3dRTSAN0kUIBZqSDT94kjbU
-   Q==;
-X-CSE-ConnectionGUID: E1y4UR6uSayJFOmXXy6xHA==
-X-CSE-MsgGUID: V6uLxH3yRda5C7N5Ep81TQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="85374141"
-X-IronPort-AV: E=Sophos;i="6.23,104,1770624000"; 
-   d="scan'208";a="85374141"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 02:35:15 -0800
-X-CSE-ConnectionGUID: VtaWfGO0ToaBZZR6oC1Njg==
-X-CSE-MsgGUID: n+hLaWLIT6usj1bZkx9Vtg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,104,1770624000"; 
-   d="scan'208";a="218924625"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.235])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 02:35:09 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 6 Mar 2026 12:35:04 +0200 (EET)
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: shuah@kernel.org, Dave.Martin@arm.com, james.morse@arm.com, 
-    tony.luck@intel.com, babu.moger@amd.com, fenghuay@nvidia.com, 
-    peternewman@google.com, zide.chen@intel.com, dapeng1.mi@linux.intel.com, 
-    ben.horgan@arm.com, yu.c.chen@intel.com, linux-kselftest@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev
-Subject: Re: [PATCH v2 9/9] selftests/resctrl: Reduce L2 impact on CAT test
-In-Reply-To: <74657e85c607b1494c898353087fa40e80a8af01.1772582958.git.reinette.chatre@intel.com>
-Message-ID: <a36e9760-f59d-5bfe-640f-7ec8679336d4@linux.intel.com>
-References: <cover.1772582958.git.reinette.chatre@intel.com> <74657e85c607b1494c898353087fa40e80a8af01.1772582958.git.reinette.chatre@intel.com>
+	s=arc-20240116; t=1772793918; c=relaxed/simple;
+	bh=8T20Dr5Y2ol8p3ISqwn+YeQCbck4drnFLMVAwmBrZR8=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lZaGaajgypMEiR7RglC5j9NyestIGw5qV7pDYz5MJtsLpkQCHIJA2c8bTGKTj61tpGhn298kgeXpj1EOimxQ3T9v3l0ZlD/sCYsL18KaujI2p651dzTW7HpzTX3w13hRp3dpM+t4WOYDOOAE9q1EQtYz/eme8tiUOSBb50rk13I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fS31t3hYczJ46mg;
+	Fri,  6 Mar 2026 18:44:34 +0800 (CST)
+Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6196D4056B;
+	Fri,  6 Mar 2026 18:45:12 +0800 (CST)
+Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
+ (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 6 Mar
+ 2026 10:45:11 +0000
+Date: Fri, 6 Mar 2026 10:45:10 +0000
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Yifan Wu <wuyifan50@huawei.com>
+CC: <tony.luck@intel.com>, <reinette.chatre@intel.com>, <Dave.Martin@arm.com>,
+	<james.morse@arm.com>, <babu.moger@amd.com>, <shuah@kernel.org>,
+	<tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>, <ben.horgan@arm.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>,
+	<xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
+	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
+	<wangzhou1@hisilicon.com>
+Subject: Re: [RFC patch 0/9] Add support for HiSilicon platforms and
+ refactor
+Message-ID: <20260306104510.0000437b@huawei.com>
+In-Reply-To: <20260304040334.765860-1-wuyifan50@huawei.com>
+References: <20260304040334.765860-1-wuyifan50@huawei.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
+ dubpeml500005.china.huawei.com (7.214.145.207)
 
-On Tue, 3 Mar 2026, Reinette Chatre wrote:
+On Wed, 4 Mar 2026 12:03:25 +0800
+Yifan Wu <wuyifan50@huawei.com> wrote:
 
-> The L3 CAT test loads a buffer into cache that is proportional to the L3
-> size allocated for the workload and measures cache misses when accessing
-> the buffer as a test of L3 occupancy. When loading the buffer it can be
-> assumed that a portion of the buffer will be loaded into the L2 cache and
-> depending on cache design may not be present in L3. It is thus possible
-> for data to not be in L3 but also not trigger an L3 cache miss when
-> accessed.
-> 
-> Reduce impact of L2 on the L3 CAT test by, if L2 allocation is supported,
-> minimizing the portion of L2 that the workload can allocate into. This
-> encourages most of buffer to be loaded into L3 and support better
-> comparison between buffer size, cache portion, and cache misses when
-> accessing the buffer.
-> 
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
->  tools/testing/selftests/resctrl/cat_test.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index 6aac03147d41..26062684a9f4 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -157,6 +157,12 @@ static int cat_test(const struct resctrl_test *test,
->  	if (ret)
->  		goto reset_affinity;
->  
-> +	if (!strcmp(test->resource, "L3") && resctrl_resource_exists("L2")) {
-> +		ret = write_schemata(param->ctrlgrp, "0x1", uparams->cpu, "L2");
-> +		if (ret)
-> +			goto reset_affinity;
-> +	}
-
-This looks similar to what you did in the CMT test. Maybe add a common 
-function for minimizing L2 cache size so it doesn't have to duplicated to 
-all L3 related tests.
-
-> +
->  	perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
->  	pe_fd = perf_open(&pea, bm_pid, uparams->cpu);
->  	if (pe_fd < 0) {
-> 
-
--- 
- i.
-
+For v2 onwards Make sure the cover letter title includes
+selftests/resctl as with the patches.  
+People use that title to decide if they want to open the thread
+so it may be all they ever see.
