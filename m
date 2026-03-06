@@ -1,98 +1,215 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010018.outbound.protection.outlook.com [52.101.56.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4543009E8
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 13:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772804749; cv=none; b=UHfSTGiCauM7jJe1tnw2GSu/G8BLYi42p95TplLesZ1A5mY7hUcwkPHNvEDZ14X4oj6hW+rXR4OnpJpkKcpVCoikzH9s75hPvJSQ+pqvrBczl2RAe6oW3IVkwCpsR4RuVKQ/PqLG5sFbajxjHkyeDXeQXoLmoeCb+eGXMTrVeZU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772804749; c=relaxed/simple;
-	bh=IZcCd046q2xhrrrrEWiiXgi3zY/ph1FdsWl/I7S37Qw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d2c7wkgERI+zFHVpoUIv0Rh5jNZnwAFDBGKcTlXmFxs4KbvhpeRTsM73R9mlkBrU179QWOOKxIfOHDuI405DiJVhepIw1Gm07pirBtspiLr8UuLVRzaFU3aWh7Uk45ofTVoLaO3MHrZVxZIgFk4WdC+QvhoQjh35q1Tlm1VpEVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VR3PDYyw; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063E33AA187;
+	Fri,  6 Mar 2026 14:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772805729; cv=fail; b=OTN/ap9RHp28ksb1urZaZyHljkgiG3iJ7knt+lbUGzZQn2OZyqOKZXBtqrzR8g7TyR6S5gH2tD04Wc2cieUBsWrWJ0IgNbaB/Dhr96C9JtIBCq9cDeTqVxFHhezDLzbLaYA/1BgLTFeRq1lVVVuy0ZcnwgSkIiJ99ag10sZTVE4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772805729; c=relaxed/simple;
+	bh=ScJFd28KSFSB6gkUrJJXLJzzCSyLvAsoVPbuSPK0wUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=c9MZDhas7Mq0gTAzQNvg3yV7OvF9aoJryGUJYVf8YJCSIW5itvWuIJkGO91vTj8ti0yrbTPGCvYMkADg/NHcjI03t3Za3BM6xppVe6gaBXJEOr8A3mUlCU4t5mghizW7DhL+aPG9useKkVPqArGChiCcIme5rMqfJ1t0O4O7Dfs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NzPa5J6O; arc=fail smtp.client-ip=52.101.56.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VR3PDYyw"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-439cd6b09f8so1706471f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 05:45:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772804742; x=1773409542; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OV6EE6RoCxw1rbG3/V3MYG74ysZnRV2qqRKRpT6tbsg=;
-        b=VR3PDYywMouetVyqIQS3SP3yf18vjdDYJO1kbIO8mVu534I5xPTqgPUyHS5KdoTuet
-         R2TilY2To17mpUcOiblicJ0iPIt5ojNsr/1D2lfGsGZFPHSLELt5z+vLxZnUte0pRc1f
-         Mzh9PSaAiRM7P/ugWPwXQ834Dw9ZHezI1i75hAWnbnON6ihB8kp9EDUQiomyTEUgW3WL
-         EaNp2Lc6SyKests2xQkC0d6PVJm/Q2s2Gb3zMfaLRNxPbvAL9g/bsN7PnuR01ggTEOra
-         EPW9HGubz2S6j/XDKXEnkm8q2eTFqsdA71FlORyAuC3yneqbyHbJQO1ri0KjFThqioyI
-         dnBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772804742; x=1773409542;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OV6EE6RoCxw1rbG3/V3MYG74ysZnRV2qqRKRpT6tbsg=;
-        b=hmWiSA/zWUCH/1CHKbPTzu6K/y6K2frElWkr3jfoSC5almWZ8gfvaeFwNsSlYZKkDW
-         53U7ywuQ6cKRdK+RQQiymYkq/3DT2qFkYCqL27hDuoK5DzKiArvBQIdF8bqyTyFRQhRI
-         BKF9ptcOpbiZVlSo6db0q6rkLEk+JQWSegWsrboq4/Vgb1g2C6+QpITWhmxgMeH9zvUk
-         DVnMLwWPKTkC11t+cQLWoyKuPg4F8XHci2dmBzG/z8nQhea+D6XTQ/0HodDQWFxVpyQK
-         9G/3fYQv6/up40+XihIHq+EOw/pgmhpgaKrpmzMlMEi0yJC5Hg4iQ/M1OPot5nw1cK/d
-         x88A==
-X-Forwarded-Encrypted: i=1; AJvYcCVPs8lwpRApxUQKzDQ7bf48hvKhBQ/TIbW2X4Awm52IflOvacwQ7NO+iXLidFa/58IyO9U39pWa2TU1l2LpiXU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXpDedGemLSDSx3kftqhzbTeQT6U3AiO9X6588EBGavz2v8KX6
-	6uRd9pX6y6/iSHa4aNT1HDYzIvgPuG44DFC3Jce2A5FM5pHMGcqOnzg5zdzQ/Mgb+4M=
-X-Gm-Gg: ATEYQzybTMbryfaZ1S17AB/n1DkMiGkwJAX8KdATfj18k7TzxInIdsmdamB87fX98Ri
-	IcO+3ys2sbUlLNxY5/xBuU9XflrqgRfWMnUNiiyoRqtEZ+ePuY7WmHz+twsVSFpIWC1+AkCGcEz
-	Qox8dj7mpaA8K0zpZ8QNbBSBp98peS/UySmEgF3FJFibiJ2S3wtnUSOIpxsJnJeTA6YmNHktqpW
-	17y8pcHnnsMfGk9eLaBzbSpvCwk+2b9/I19XRFnLA6L+/WOEGA0Sqq7lPg9l3crMH0TW/kQfFsL
-	vgBhZjNFSoWJC5EhY+jcNWgN+BzhE9RjYz8Ru2hUjbs+UfeyuUhf9d8XzAV+Qw1uEzR7g+Naf2L
-	z8e2sG1ENPyBFjzwRGtuoMAdWB1DbldfkQJ35IRyQ3ZEqb0UMC33+oaH1eS7jAbl41ODLvK3ikl
-	UBjmaIs25jUwbadSHWq4Zq9YMiLU7rsM0QmiHe
-X-Received: by 2002:a05:6000:3112:b0:439:b79d:b9a5 with SMTP id ffacd0b85a97d-439da35f63fmr3688028f8f.37.1772804741726;
-        Fri, 06 Mar 2026 05:45:41 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dadb29fdsm4191867f8f.16.2026.03.06.05.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 05:45:41 -0800 (PST)
-Date: Fri, 6 Mar 2026 14:45:39 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests: livepatch: test-ftrace: livepatch a
- traced function
-Message-ID: <aarag5K43WElzDqT@pathway.suse.cz>
-References: <20260220-lp-test-trace-v1-0-4b6703cd01a6@suse.com>
- <20260220-lp-test-trace-v1-1-4b6703cd01a6@suse.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NzPa5J6O"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YrmKdBrJ3iQTudyCwHxKlh/KiGySKXattavb6vUu6TrgMgWTJGguA162PfW5xHiB8oOoAnIP1Cvgc/pAdHVM5i9JLqW8iQoMntoR28jI8H5RaqsMyj8ei8sYYg6epn+tGm93eWBZ7BrFIISsyOvGBME4Dqbh6hxlBoAT6KOaLTCiF216brPjGIkzmuJKT3Ik36+iU3+FoFurRmnDY8mlj3cSr7yQmypVCOSRA3FkOcHjMdj1nu1MWYaKw9yVPtgM8TxChEOvPIq6FJk+b2vx+A9eP8dLPbkVvja4CYcgPcRs9bnj/IrL35nuaB/yCfPCvO6h0WiJpA+S+7lF0ZqxoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NAk37lrGEyfZrSBKZZMXXd4PKiqAXOtOZu6nJRCIePw=;
+ b=ZPRlXcMJgacSogS0tkBUmwho5F1j5uGKBQKat90ik5wQLc6zCTqjAyyQ9SHVrolDwjkyLhXbiqm2Kl0ZLeM+rRJCt8gQumCuTzr6K3cFvxMPL4fPN3BfNvjeQN1PdlGTDNwkdUTMS5FdC2DKYrifnNTK8bLDM78W6PtTjrV1wYQjrePIQ5Xn9sarjl6pkFzSM9T39FsyfPWC9rHp1iQEcUap7R0peBKlpUmVNKfTqV9gg2oBMwuGrASbeghu+pWvw6IDXxSPql+NmpoSlS9pcwOlzUDqLkNa67DoJC91tBcSUmfGCkb+GnE6qz+ntPjguTGFPTBeyOjoB2Wr+qCwsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NAk37lrGEyfZrSBKZZMXXd4PKiqAXOtOZu6nJRCIePw=;
+ b=NzPa5J6OiW9QEuOCJCelBzUDwTBnpH9uH06jhCjB5/2jJ9BAgJDN2zJvxcwRKNHek77o2ONKDFZbEqWKDf9L21rdN2t9m3a1NsaH815qP+qY+QvGGgmyqkUVmP5GGS9jgx+LIi7ItXizo++ggTaKe1OFyqExek8OnxGXJeOT2VTuKdnYDNyDvfbcv8q+HnyfUFCHYOHkGuLxGjh7AzIcjfeiPS44JKdvLHYQ1w8kSNNSvf3nOdo0U3v8Xvp59pYuam+0Qu5rRV4m/c4KtukQ+Ztltr6/dvgVsrx9Hn+Mn573QyFbv+Ee3Jc+XB5anrynKRxh0HQvcT/CuvsEJRvMHQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by CH2PR12MB9459.namprd12.prod.outlook.com (2603:10b6:610:27d::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.6; Fri, 6 Mar
+ 2026 14:01:56 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.022; Fri, 6 Mar 2026
+ 14:01:56 +0000
+Date: Fri, 6 Mar 2026 15:01:49 +0100
+From: Andrea Righi <arighi@nvidia.com>
+To: zhidao su <soolaugust@gmail.com>
+Cc: tj@kernel.org, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+	void@manifault.com, changwoo@igalia.com,
+	linux-kselftest@vger.kernel.org, Su Zhidao <suzhidao@xiaomi.com>
+Subject: Re: [PATCH 1/5] sched_ext: Remove deprecated
+ SCX_OPS_HAS_CGROUP_WEIGHT flag
+Message-ID: <aareTeuAos9-Mg2c@gpd4>
+References: <20260306124901.2653465-1-suzhidao@xiaomi.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260306124901.2653465-1-suzhidao@xiaomi.com>
+X-ClientProxiedBy: ZR0P278CA0068.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:21::19) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-lp-test-trace-v1-1-4b6703cd01a6@suse.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|CH2PR12MB9459:EE_
+X-MS-Office365-Filtering-Correlation-Id: fd854555-4964-48b7-1e3d-08de7b88ed75
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	IiiHnPX7eDB5m0hhHkFUFF05a+Qjg50+vG5ptYQawaUvUGv5D6y3YKF5F/uVqtKQS3ClCPYlpbrSayr3dHFlyVcQIwzvbWugWceEKFOvy4x9dTknYlLeP0Y3EtVNQb5tfZho46hS/4RyD50FumAHEcZei6sLyffassAkOSIbdl7pG1OgUJeLsVdw0W0OZRwf6hxa2FnfyuXui4Bsy+bYqUqHYBP+CLa1LSIXjKYcCdWSxLly0bCgeJS/abImPFxyU4cC1TiBwnaBbPSDZRzsSnBlTaGHzZlVOYmDR5s2urhTEMEJC2ysgsIuTsAsZGVA+j31+VCL+dqgKXFb6MHm7jf6Leb9zegLq+XdiR+pZ7t2XjJ34hfy9bwle18Mz4xd7pdbmLKPV0Q4tqAUsE0uhfXa3/321KVcYZZy9k9lwB3nwQraAdrs2GiR7Vw4Ue0iIvz341Db4/YE3cj25AJE7czgFvzZYgyrIDCo+jC1klCDXBMCDOgTYCHY85AOMYPYohOvslZsW7TnFft1QuokOZbnrxQ4Mhp3Qn3nOBLhu90OgYIBwC2XkLDMolY1Myj8FgvEB0LrJ2rRFT1A/ORglJ3ZF9L/7mfoz8WaBGy+8yi7JaBxi45U7qtJ+7nw8+BXoGUXVP/sJz+mz69ikm4j+8535zUWzRbZATVzRTSC2Q4BDjgNP0iqiZjWRdofAJKBOpZ9ACg7vcpKBxyqBldVWoRF70Rhn1spSmMoEs5esRs=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?3pFwdfbBZXdpAg2JPq0AJ1f5aPQ86yJNigtG0e5jTK3+qhvR3kuI/bLmODuv?=
+ =?us-ascii?Q?AGWnJCFr+GZQIF8vTzS+4PFyZXUDUVupLgCoq6OsSl/G1xnSTDWyG8Ij0Uvq?=
+ =?us-ascii?Q?d9l/GMHTmIfnyIBA/ZACUd0tgx6AjWpVjlT98JeS4DnyPRMFy04MxRpS6uUE?=
+ =?us-ascii?Q?CpTPiMgGJFVphbt2GgHnAY3gZqGcRAHDJVgQbLUeyejvYPzYjL0yo6UQc6sL?=
+ =?us-ascii?Q?vauhKpS0L6s35OzIs4HTsms6Qus3xOGpCT7TW0wm3Ov47jS4jd2HM4uSfHok?=
+ =?us-ascii?Q?yUqZX14Ooa5wdhskx2tC8A/sqU4IfmAO/a+GFNiWN5T9TzYUZm/oU4Uu16h/?=
+ =?us-ascii?Q?GoJZLW4xbvkGTdOB3CUp+ABzd9RCNDHqekmyMHdIdi+OdDv0ulFHi91qxBsS?=
+ =?us-ascii?Q?rb32dBwffmpTiOe7bwSUDFoZ+ccg5vUY0Gda6HfkSvnq8gwns9nii/2JHOQ5?=
+ =?us-ascii?Q?MG6sTAZP8U/DfpSIlXwmq5vpJZ4NuGHHCtq90ywDtdpjvg6VuZWtPeGdYzjy?=
+ =?us-ascii?Q?XonOO0SeaAGygylTvEN+5FS8qKIcj5fZrCYOcu4tRC8ymGFNUeDWuHE0pEgG?=
+ =?us-ascii?Q?fizWTle3aSsFbZN2inFJRh2DviHopPpm5xB3B33Fzm/ybZ7YK15WZklMKqM5?=
+ =?us-ascii?Q?miLU04fi+zawVUqg+sCQxVElNWV4FzN5H+yym3m6lkGiFzWoUNXwV+dQ6oQp?=
+ =?us-ascii?Q?lopgbaoRgofx1sI8tWHR18G1ghs04yGoEbrL0QuOSet/uB+FicNit/j2425X?=
+ =?us-ascii?Q?V0W1M5mrh+76ekg/nbB9mUAkFFHPjLBXzQC6jMSqpDsklYh9FBmOblf9NcLx?=
+ =?us-ascii?Q?waDkfoJd0NIuiyVd2gfXpwLZCto7U0oS5yBjSj0UgMOxOPr5AJuEMTmur0hD?=
+ =?us-ascii?Q?QSMnKv/gjk0ugYe3Emp8kqzv/KqVodnfE3hhtZ1HVdvSqZdQn48/qcLjBSN/?=
+ =?us-ascii?Q?EVgG3PA493bYngkoHBGWd+zRoVlPoHO3JrhfTHM9c5ylh3FGItoKZcMuE+sH?=
+ =?us-ascii?Q?skGC4a54jGpwE+IoR9BXRbd5ixLsZ3SADxqhO+h/NyEbAuCIFeo/ZshWIEVl?=
+ =?us-ascii?Q?WN8/tMsH5lRvz2AIFjYqOyv+xaZPBfTkvXPV6TbDgpbe2ugJJ8h5WvHe3k8m?=
+ =?us-ascii?Q?IAgd2ghLqK9/LtM6+Ng7lQ0ExB59gN4jQRXSJ8FfAwJaDeNI0Cl4o/13Os6e?=
+ =?us-ascii?Q?StmG/kKgvFODqldWv/Hf+vto1RsZpBNw999WvngrJAXT8mgABzp9/wdhL9vF?=
+ =?us-ascii?Q?/dzWSHizscoDGkFz35wP/K4d0j2wOqTqioPpSrcUdQV2hwbPfnsUZW26wDbt?=
+ =?us-ascii?Q?pvg6bt+bRtugtwAuqh73CnQ7hsXPjkrTKNUP7pqgFNVV16hiRximgf4qGjaK?=
+ =?us-ascii?Q?Sln/H6BJNr9RtwI1TFrqV82IgkZ89SobLSOkvUMqtRVo4153QPAXdXNOacDc?=
+ =?us-ascii?Q?qkM6WUpf5py9e1/PAvrLJzf1kJzXDG3s9M+dRbR3+xh5EaoJCTf/K4oygdw4?=
+ =?us-ascii?Q?PBV/D7MPuPpxCag2zBOST9QdIWxB5GNILLMSACSZ0TGEayWZshdDQyZQxPTG?=
+ =?us-ascii?Q?Zcht3KRHJkFP+O/4NxZAPjqD6cazdBqzSz6IP4WGwHprOocczl+hYh+3kDbN?=
+ =?us-ascii?Q?TjTnbNE6Al7ReWD8eF05AyDnccIGBuIVbbPrikCR9N8Gy+5yxqRh9ojh+Nh4?=
+ =?us-ascii?Q?cGf3K6fbWlMKtdbovbLxtrUdE/PphInE99C4FXF0P+96gJCo/NvtYqvPLCwV?=
+ =?us-ascii?Q?WDPJwynpmQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd854555-4964-48b7-1e3d-08de7b88ed75
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2026 14:01:56.6069
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: D0cHVDq1DKEAZLk5yZ8uD50O1Ay/afpSUyplyBX0Mx0jd1X75TOA5Wjpc3RjkbJ0iloyBiucOVrAuXKpsLhXQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB9459
 
-On Fri 2026-02-20 11:12:33, Marcos Paulo de Souza wrote:
-> This is basically the inverse case of commit 474eecc882ae
-> ("selftests: livepatch: test if ftrace can trace a livepatched function")
-> but ensuring that livepatch would work on a traced function.
+Hi,
+
+On Fri, Mar 06, 2026 at 08:48:57PM +0800, zhidao su wrote:
+> From: Su Zhidao <suzhidao@xiaomi.com>
 > 
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> SCX_OPS_HAS_CGROUP_WEIGHT was deprecated in 6.15 with a comment
+> 'will be removed on 6.18'. Now that we are at 6.18, remove it.
+> 
+> The flag was a no-op and only triggered a pr_warn() on use. Remove
+> the flag definition, the warning, and update scx_flatcg which was
+> the last in-tree user.
+> 
+> Signed-off-by: Su Zhidao <suzhidao@xiaomi.com>
 
-Looks and works fine to me:
+Please, when sending multiple patches, group them together in the same
+email thread with cover letter email, otherwise it's very unpractical to
+apply and review them.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
+See Documentation/process/submitting-patches.rst.
 
-Best Regards,
-Petr
+Thanks,
+-Andrea
 
-PS: I am going to fix the typo mentioned by Joe and push this patch.
+> ---
+>  kernel/sched/ext.c                              | 3 ---
+>  kernel/sched/ext_internal.h                     | 8 +-------
+>  tools/sched_ext/include/scx/enum_defs.autogen.h | 1 -
+>  tools/sched_ext/scx_flatcg.bpf.c                | 2 +-
+>  4 files changed, 2 insertions(+), 12 deletions(-)
+> 
+> diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+> index c4ccd685259f..56ff5874af94 100644
+> --- a/kernel/sched/ext.c
+> +++ b/kernel/sched/ext.c
+> @@ -5061,9 +5061,6 @@ static int validate_ops(struct scx_sched *sch, const struct sched_ext_ops *ops)
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (ops->flags & SCX_OPS_HAS_CGROUP_WEIGHT)
+> -		pr_warn("SCX_OPS_HAS_CGROUP_WEIGHT is deprecated and a noop\n");
+> -
+>  	if (ops->cpu_acquire || ops->cpu_release)
+>  		pr_warn("ops->cpu_acquire/release() are deprecated, use sched_switch TP instead\n");
+>  
+> diff --git a/kernel/sched/ext_internal.h b/kernel/sched/ext_internal.h
+> index bd26811fea99..3c86c53e1975 100644
+> --- a/kernel/sched/ext_internal.h
+> +++ b/kernel/sched/ext_internal.h
+> @@ -174,19 +174,13 @@ enum scx_ops_flags {
+>  	 */
+>  	SCX_OPS_BUILTIN_IDLE_PER_NODE	= 1LLU << 6,
+>  
+> -	/*
+> -	 * CPU cgroup support flags
+> -	 */
+> -	SCX_OPS_HAS_CGROUP_WEIGHT	= 1LLU << 16,	/* DEPRECATED, will be removed on 6.18 */
+> -
+>  	SCX_OPS_ALL_FLAGS		= SCX_OPS_KEEP_BUILTIN_IDLE |
+>  					  SCX_OPS_ENQ_LAST |
+>  					  SCX_OPS_ENQ_EXITING |
+>  					  SCX_OPS_ENQ_MIGRATION_DISABLED |
+>  					  SCX_OPS_ALLOW_QUEUED_WAKEUP |
+>  					  SCX_OPS_SWITCH_PARTIAL |
+> -					  SCX_OPS_BUILTIN_IDLE_PER_NODE |
+> -					  SCX_OPS_HAS_CGROUP_WEIGHT,
+> +					  SCX_OPS_BUILTIN_IDLE_PER_NODE,
+>  
+>  	/* high 8 bits are internal, don't include in SCX_OPS_ALL_FLAGS */
+>  	__SCX_OPS_INTERNAL_MASK		= 0xffLLU << 56,
+> diff --git a/tools/sched_ext/include/scx/enum_defs.autogen.h b/tools/sched_ext/include/scx/enum_defs.autogen.h
+> index dcc945304760..80c885f781ba 100644
+> --- a/tools/sched_ext/include/scx/enum_defs.autogen.h
+> +++ b/tools/sched_ext/include/scx/enum_defs.autogen.h
+> @@ -91,7 +91,6 @@
+>  #define HAVE_SCX_OPS_SWITCH_PARTIAL
+>  #define HAVE_SCX_OPS_ENQ_MIGRATION_DISABLED
+>  #define HAVE_SCX_OPS_ALLOW_QUEUED_WAKEUP
+> -#define HAVE_SCX_OPS_HAS_CGROUP_WEIGHT
+>  #define HAVE_SCX_OPS_ALL_FLAGS
+>  #define HAVE_SCX_OPSS_NONE
+>  #define HAVE_SCX_OPSS_QUEUEING
+> diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatcg.bpf.c
+> index 0e785cff0f24..a8a9234bb41e 100644
+> --- a/tools/sched_ext/scx_flatcg.bpf.c
+> +++ b/tools/sched_ext/scx_flatcg.bpf.c
+> @@ -960,5 +960,5 @@ SCX_OPS_DEFINE(flatcg_ops,
+>  	       .cgroup_move		= (void *)fcg_cgroup_move,
+>  	       .init			= (void *)fcg_init,
+>  	       .exit			= (void *)fcg_exit,
+> -	       .flags			= SCX_OPS_HAS_CGROUP_WEIGHT | SCX_OPS_ENQ_EXITING,
+> +	       .flags			= SCX_OPS_ENQ_EXITING,
+>  	       .name			= "flatcg");
+> -- 
+> 2.43.0
+> 
