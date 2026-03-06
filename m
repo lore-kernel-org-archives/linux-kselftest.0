@@ -1,64 +1,64 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178C73AE702
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317383AE71C
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772805826; cv=none; b=UYCD7P9YBCQZrshonkpkS3VOJPW7z3zVrZ3zyKq4kx6SCG6R82yLfxYja7iWvdbT9szFyF6QO0iL3zJAM4gfqCv8kUhnwr0WXGNgjn0jwMklIBXY0lSej2VokNwJQo4Iipf/hcadozh5sojbW+I/dGgSnlWruDlTs3itlJF6YtQ=
+	t=1772805829; cv=none; b=Si49ZbpN4AhB3VHIz48hUm6Ru5RAIxkHSjXDYANWIPVI65XcCj4qIJ+AMQx+d1SP5/lEbjysrbVT5MHg3KO5Ud+BFSWZ+pyvqGA28nqpStnIJOp3FFm5qEaUTsNWvMjAb9dHp9Y02NAC6oHapSbJWWm/RfM6KiTm3PhZzA2SFYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772805826; c=relaxed/simple;
-	bh=BZeeJ1JML7xaZoBvWAKlQYnkV7F90b7mZuzv0ATZ6Jw=;
+	s=arc-20240116; t=1772805829; c=relaxed/simple;
+	bh=KKJoiskobJLPVewH28+LF9Y4Ux/Lu7qzp3YYxz5tn6o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JuFd1UrO2OB751tocm3p42kuTBTr2TjDeKZfthBcIW81GscLekybpYpWsbBrzgnVGFW4vZisRSlMswPrBO2nS+hU1yb36AyIELl1cTd7LnNBZMvJ8trPRZkI+BoKW99JGHf8n1UhWiAM5VCG8kejrBDjm8K1U3ZW8xf+FIOkBaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BTynWW/r; arc=none smtp.client-ip=209.85.214.172
+	 MIME-Version; b=Ou3ZO09dF1whw6lONdC2SM8aMvdNtfsR/KyW+XB3524xQRv6IcIE7DEICPWBwXro1HbttnofY2R/hktQF7nM01+RdALorRy5LjXF3mlACqc9ri5zMGfb4kz9n1VRDD3oh4aO9GLEiBidLAW6Phd6a3khwzyrF4Kk4x0euOA1NcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PbF7Tgs1; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BTynWW/r"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ae4e538abdso53691165ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:03:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PbF7Tgs1"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ae3a2f6007so47609375ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:03:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772805824; x=1773410624; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772805827; x=1773410627; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6TnQKdPGtTuRU+46cutq94eviTJ71u1qZiPiKlbjQJQ=;
-        b=BTynWW/rBPZ4TsF4UVh/IPVXD6/0mfdrGZdQmVJ48xToAKHY0g1CDJuqDZb2Zs6TIf
-         wJoQNbl6uRp0C35s+bYbEPtQMCOsgD4En9gqjYPGle+Wr1LkW/TfKWj0P7FFrtLqxcdf
-         KQ2E8sVGvXNIPvS5MeSOGgdVFq9ixcdh+xmyMyX4jTroAcuH/PLyeKz+RHVwkZTPb4et
-         m7c0lKkfg10eG5RwdiAvirjJTSvTl/WInPiqj/mcM4KrU0j/DsDrolUpiG7nD7M9sUcO
-         yuEB8L9izI5nFLyL0UKuGHcGHZKR8EK6zYOLnL4/FX6NS6DyuqVQSNsixd1BREiWzWfB
-         YDdw==
+        bh=URwHQdDNBcfpjPgIZZmBOCF4w8QPrTIvO91J8esIlCE=;
+        b=PbF7Tgs1GsJhphtrzQmJ9VgOEYENG6F5coDb+YjBmaO6uvDXGuUN377rU5siiEPkFv
+         Z1Hh4pTEkt9f/VjASa0EnZs9nd6eYg0+Z6aNPa16M6pUofUbWmNP1h2Zi9BIoKa7vyoC
+         XPLPRVjQ1vQ9ieCCJzzMwxyAYnBU7htydacT1cM0OQAMHixVpd+2DhEVf9cXo1wgRZ6r
+         VN8pSOD/d0OLmveOmJnOt05HJgY4DUnCAGXUypJ7pb2ebtA/KSTrZL0KjfZ/EjNyce0E
+         mfDKU+IVo0wp4lbA7mm3MKqsFmj+odTPNuv13gZXyQk1gvE9zkA8SM/VpQbeXwP6gh/8
+         xUlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772805824; x=1773410624;
+        d=1e100.net; s=20230601; t=1772805827; x=1773410627;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6TnQKdPGtTuRU+46cutq94eviTJ71u1qZiPiKlbjQJQ=;
-        b=Q1jLjO5bWW0fJ5qYXhhWOObJR5FkTzKc83AlGlmmIhXADF1HcCFxhySCUVO/zuVFcZ
-         rJquKr7yZQQlj/T186lLG8lcXHU6sGtDZaBBNCYNVLKCQENY8SHyN04+KHQzOxhx6eDa
-         6VgoUILE/4FrmVATCZ2tKp/solBPodyT/dHSw5rFTkqQtoHbOZu7VWz0WtLPaIYw0j6m
-         02fVww9sPPohgcV+ZqIoWg1gubYPABGJmSKsMTVySdGxnw+K0Y3FWZgSok8nMfXCNn6a
-         EiC25T+QKugmZqp0F2Hi/m5JokrvqhQdWyWdRUIkwRQKUTkHSw1UUsrEmQ6e+rS6xv7/
-         qnjg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3Q0DOSaUSv7jUTNUhop/jBuGjLD3fsdNENdmWWi7uxST9FdCKoGiE7j3ivb1qg7yuPASX6Zs/F/Z5vLPXvwM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYuq6azHFou8MEgna0lwB/Jdohy1cJ2yDPqPNj2BaY4Rsc/em3
-	c1N04RhkyyxU3MCivYbNUNq1nMGEAASbnSRqqUZt0WeJn6a8X+A+UPoK
-X-Gm-Gg: ATEYQzw2sP8TCr46cr8vMmXXG/C4RBiQp6evBPF0rbGp2lJExTTH82N5yqYV1wDLd9H
-	kOvyEedf3ivOXIAmZze3GarVC3ffYkxgfQFQAtskannGnWhxtsTMWi4oHpYnq40IKm/3N1BYl12
-	sEVEKlL5wwckvrhcNuR4Zq6FVL3fdQ2yJMXxdWo5IsiwIXnN3+5BACHFrSNZxyfLVSWPY+i/Ybn
-	N/3pO8jnzGyLho4NTSmgqFFlVAXOQKvF7gW6Q3tEkRA5xgTR68zdestW5UT8CCmzY66vQiqkzJX
-	YHfYwFVGbqo1UMLlwfUYwJNBrsI3ycyI7y5xifOaOw+7jz5QN6yxoaLEIMDe3bUneJBlxr2k/O/
-	XC/Du+ergINtG7/Yo4TeA+qsmQs/KmQ4KmZrhYZ8FKioCYzmfCz9/vl6Vim3+3bHmshf++q8E0V
-	PHWG3h6Ks4GuyzeJK7WlFkHJbumcApbZfeM4upe6uOE0hwcsJr6og3S2Tz+FSnMv1p/cpuKIevK
-	P0=
-X-Received: by 2002:a17:902:f78a:b0:2ae:4948:f866 with SMTP id d9443c01a7336-2ae8239bd5emr22877785ad.22.1772805824108;
-        Fri, 06 Mar 2026 06:03:44 -0800 (PST)
+        bh=URwHQdDNBcfpjPgIZZmBOCF4w8QPrTIvO91J8esIlCE=;
+        b=uD5rxX1JyIG8hHEHpjFsui0UC8+V2ZZUkivOWRTi9B3mVx09HATHJQFHZys3pRkX5I
+         7+M8o5K/bL8YZajwq697xR79DD7A0y7Vwg62FrWbEUZTIGprswm0ylebMM2pUpWFY1JF
+         SyLAGQ9YY1a1FRg8mPQCZsn5yyEPLMbJpi1ISRonHlBPn/bvNVfKilUGiuCU1SSUSp1j
+         /eNgVvcgNEG/oLYtDeJDNti9P0nHq/5ah/CcIdRFFXGifnxOuOvz4J1n8ffSYwteKR/j
+         I4diq/w9a0mA5AADlYKNijAPZKzthOHru/xNxgETiEwywOoyk+F3+Fx22EBSBtHJPs+x
+         ZjLg==
+X-Forwarded-Encrypted: i=1; AJvYcCX+T9+h8WQdz4Gx2xCLUil+apTDwb4OxXK3hyYG20Q8wLWM7Q6ERsvOkMT+lcRZvuqsTk6dQ+Jpw5Wq9yfMp6Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4cjCQNkxsuDMky8U4j0WwVF/e+14IW06OlwfwOGkmdHY4HYBF
+	ji11Zoaf6V/AEDNrnaBx3aPZ2UodaolI9DMdmQjdudVPttOl9+OvznqS
+X-Gm-Gg: ATEYQzyvwsvYyePswr26UQk814WBUOaOhCI35tpnBy4EYx/QEGAtb6c+uk9tNnPuNzh
+	IOSZ+1Qexxrw7PvArPzzXFx8tE/5p6EGY/hLo8c5ncW5Co0ecQv+GWtYn+NwcVRZN99/93bd4fd
+	f3wa6NHKGl5VO621xySKb0l+GX7Ov2SIKpe6uTz3ZCClj/kr0yJhwU7ehvp6QPf/A4MLQQlSLeu
+	vcm9b1HCOHv9YAT1c167XAYkv5hvMibuY7qhuP6eXXT915h1GFMOLf9QA5gZccL3Rj4iGGfK0jY
+	spk8tQ94OiGe1pPLEVtB36Kl5IBiN+c7g2HSZPPW7EWGff62ckZCLrhYIpC13nvXqPN/OgBbWhB
+	A8UDRdVliI1SpFdmLNeT24VxB7oCvoT/eQNYp/0fWxARsiYvNnykI9ELwUy48G6vZ80g0G8w/LH
+	o3Dmw0Z8AfdhQs4Tzf5QOySo3f59IoQzl77PgUHtPOxqx/bH5OGwVxfqcX9RU1jLlARMSp8xe9T
+	YXoli0wft8Juw==
+X-Received: by 2002:a17:902:db09:b0:2ae:5723:afa9 with SMTP id d9443c01a7336-2ae8253c933mr27839485ad.53.1772805827270;
+        Fri, 06 Mar 2026 06:03:47 -0800 (PST)
 Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae840ccb6csm29134715ad.92.2026.03.06.06.03.41
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae840ccb6csm29134715ad.92.2026.03.06.06.03.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 06:03:43 -0800 (PST)
+        Fri, 06 Mar 2026 06:03:46 -0800 (PST)
 From: zhidao su <soolaugust@gmail.com>
 X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
 To: tj@kernel.org,
@@ -69,9 +69,9 @@ Cc: void@manifault.com,
 	changwoo@igalia.com,
 	linux-kselftest@vger.kernel.org,
 	Su Zhidao <suzhidao@xiaomi.com>
-Subject: [PATCH 4/5] sched_ext/selftests: Add bypass mode operational test
-Date: Fri,  6 Mar 2026 22:03:24 +0800
-Message-ID: <20260306140325.2710927-5-suzhidao@xiaomi.com>
+Subject: [PATCH 5/5] sched_ext: Document scx_bypass_depth migration path
+Date: Fri,  6 Mar 2026 22:03:25 +0800
+Message-ID: <20260306140325.2710927-6-suzhidao@xiaomi.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260306140325.2710927-1-suzhidao@xiaomi.com>
 References: <20260306140325.2710927-1-suzhidao@xiaomi.com>
@@ -85,188 +85,35 @@ Content-Transfer-Encoding: 8bit
 
 From: Su Zhidao <suzhidao@xiaomi.com>
 
-Add a test that verifies the sched_ext bypass mechanism does not
-prevent tasks from running to completion.
-
-The test attaches a minimal global FIFO scheduler, spawns worker
-processes that complete a fixed computation, detaches the scheduler
-(which triggers bypass mode while workers are still active), and
-verifies all workers complete successfully under bypass mode.
-
-This exercises the scheduler attach/detach lifecycle and verifies
-that bypass mode (activated during unregistration to guarantee
-forward progress) does not stall running tasks.
+scx_bypass_depth is a global counter that will be moved into
+struct scx_sched when multi-scheduler support lands. Add a comment
+explaining why READ_ONCE/WRITE_ONCE are used despite bypass_lock
+serialization: modifications are serialized by the lock, but the
+value can be observed locklessly from softirq context (e.g., in
+scx_bypass_lb_timerfn()).
 
 Signed-off-by: Su Zhidao <suzhidao@xiaomi.com>
 ---
- tools/testing/selftests/sched_ext/Makefile    |   1 +
- .../testing/selftests/sched_ext/bypass.bpf.c  |  32 ++++++
- tools/testing/selftests/sched_ext/bypass.c    | 105 ++++++++++++++++++
- 3 files changed, 138 insertions(+)
- create mode 100644 tools/testing/selftests/sched_ext/bypass.bpf.c
- create mode 100644 tools/testing/selftests/sched_ext/bypass.c
+ kernel/sched/ext.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-index a3bbe2c7911b..5fb6278d3f97 100644
---- a/tools/testing/selftests/sched_ext/Makefile
-+++ b/tools/testing/selftests/sched_ext/Makefile
-@@ -162,6 +162,7 @@ endef
- all_test_bpfprogs := $(foreach prog,$(wildcard *.bpf.c),$(INCLUDE_DIR)/$(patsubst %.c,%.skel.h,$(prog)))
- 
- auto-test-targets :=			\
-+	bypass				\
- 	create_dsq			\
- 	dequeue				\
- 	enq_last_no_enq_fails		\
-diff --git a/tools/testing/selftests/sched_ext/bypass.bpf.c b/tools/testing/selftests/sched_ext/bypass.bpf.c
-new file mode 100644
-index 000000000000..cb37c8df6834
---- /dev/null
-+++ b/tools/testing/selftests/sched_ext/bypass.bpf.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index c269e489902c..b1e5a95682c1 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -33,6 +33,12 @@ static DEFINE_MUTEX(scx_enable_mutex);
+ DEFINE_STATIC_KEY_FALSE(__scx_enabled);
+ DEFINE_STATIC_PERCPU_RWSEM(scx_fork_rwsem);
+ static atomic_t scx_enable_state_var = ATOMIC_INIT(SCX_DISABLED);
 +/*
-+ * BPF scheduler for bypass mode operational test.
-+ *
-+ * Implements a minimal global FIFO scheduler. The userspace side
-+ * attaches this scheduler, runs worker tasks to completion, and
-+ * verifies that tasks complete successfully.
-+ *
-+ * Copyright (c) 2026 Xiaomi Corporation.
++ * Counts the number of active bypass requests. Protected by bypass_lock
++ * inside scx_bypass(), but read locklessly (e.g., from
++ * scx_bypass_lb_timerfn() in softirq context) using READ_ONCE(). Will
++ * be moved into struct scx_sched when multi-scheduler support lands.
 + */
-+#include <scx/common.bpf.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+UEI_DEFINE(uei);
-+
-+void BPF_STRUCT_OPS(bypass_enqueue, struct task_struct *p, u64 enq_flags)
-+{
-+	scx_bpf_dsq_insert(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
-+}
-+
-+void BPF_STRUCT_OPS(bypass_exit, struct scx_exit_info *ei)
-+{
-+	UEI_RECORD(uei, ei);
-+}
-+
-+SEC(".struct_ops.link")
-+struct sched_ext_ops bypass_ops = {
-+	.enqueue		= (void *)bypass_enqueue,
-+	.exit			= (void *)bypass_exit,
-+	.name			= "bypass_test",
-+};
-diff --git a/tools/testing/selftests/sched_ext/bypass.c b/tools/testing/selftests/sched_ext/bypass.c
-new file mode 100644
-index 000000000000..952f09d76bdb
---- /dev/null
-+++ b/tools/testing/selftests/sched_ext/bypass.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Verify the sched_ext bypass mechanism: spawn worker tasks and ensure
-+ * they run to completion while a BPF scheduler is active.
-+ *
-+ * The bypass mechanism (activated on scheduler unregistration) must
-+ * guarantee forward progress. This test verifies that worker tasks
-+ * complete successfully when the scheduler is detached.
-+ *
-+ * Copyright (c) 2026 Xiaomi Corporation.
-+ */
-+#define _GNU_SOURCE
-+#include <unistd.h>
-+#include <sys/wait.h>
-+#include <bpf/bpf.h>
-+#include <scx/common.h>
-+#include "scx_test.h"
-+#include "bypass.bpf.skel.h"
-+
-+#define NUM_BYPASS_WORKERS 4
-+
-+static void worker_fn(void)
-+{
-+	volatile int sum = 0;
-+	int i;
-+
-+	/*
-+	 * Do enough work to still be running when bpf_link__destroy()
-+	 * is called, ensuring tasks are active during bypass mode.
-+	 */
-+	for (i = 0; i < 10000000; i++)
-+		sum += i;
-+}
-+
-+static enum scx_test_status setup(void **ctx)
-+{
-+	struct bypass *skel;
-+
-+	skel = bypass__open();
-+	SCX_FAIL_IF(!skel, "Failed to open bypass skel");
-+	SCX_ENUM_INIT(skel);
-+	SCX_FAIL_IF(bypass__load(skel), "Failed to load bypass skel");
-+
-+	*ctx = skel;
-+	return SCX_TEST_PASS;
-+}
-+
-+static enum scx_test_status run(void *ctx)
-+{
-+	struct bypass *skel = ctx;
-+	struct bpf_link *link;
-+	pid_t pids[NUM_BYPASS_WORKERS];
-+	int i, status;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.bypass_ops);
-+	SCX_FAIL_IF(!link, "Failed to attach bypass scheduler");
-+
-+	/*
-+	 * Spawn worker processes. These must complete successfully
-+	 * even as the scheduler is active and then detached (which
-+	 * triggers bypass mode).
-+	 */
-+	for (i = 0; i < NUM_BYPASS_WORKERS; i++) {
-+		pids[i] = fork();
-+		SCX_FAIL_IF(pids[i] < 0, "fork() failed for worker %d", i);
-+
-+		if (pids[i] == 0) {
-+			worker_fn();
-+			_exit(0);
-+		}
-+	}
-+
-+	/*
-+	 * Detach the scheduler while workers are still running. This
-+	 * triggers bypass mode, which must guarantee forward progress
-+	 * for all active tasks.
-+	 */
-+	bpf_link__destroy(link);
-+
-+	/* Workers must complete successfully under bypass mode */
-+	for (i = 0; i < NUM_BYPASS_WORKERS; i++) {
-+		SCX_FAIL_IF(waitpid(pids[i], &status, 0) != pids[i],
-+			    "waitpid failed for worker %d", i);
-+		SCX_FAIL_IF(!WIFEXITED(status) || WEXITSTATUS(status) != 0,
-+			    "Worker %d did not exit cleanly", i);
-+	}
-+
-+	SCX_EQ(skel->data->uei.kind, EXIT_KIND(SCX_EXIT_UNREG));
-+
-+	return SCX_TEST_PASS;
-+}
-+
-+static void cleanup(void *ctx)
-+{
-+	bypass__destroy(ctx);
-+}
-+
-+struct scx_test bypass_test = {
-+	.name		= "bypass",
-+	.description	= "Verify tasks complete during bypass mode",
-+	.setup		= setup,
-+	.run		= run,
-+	.cleanup	= cleanup,
-+};
-+REGISTER_SCX_TEST(&bypass_test)
+ static int scx_bypass_depth;
+ static cpumask_var_t scx_bypass_lb_donee_cpumask;
+ static cpumask_var_t scx_bypass_lb_resched_cpumask;
 -- 
 2.43.0
 
