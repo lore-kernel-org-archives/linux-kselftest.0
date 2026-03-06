@@ -1,106 +1,133 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C212221FB1
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 14:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ACFC3368B2;
+	Fri,  6 Mar 2026 14:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772806011; cv=none; b=eGK4f8fZqSvmSawgXw9FoHiaEINqS9pxxLsOFcdQeMBPLPD47IXeBPxysnN3XIaz3IU0vMNX15/eWPfhLy7DZ9mBZyt1MLuOYcf8ntg/Ro3HMc9yp2hm1WBmZBRdVLimeMwq2Od8EYYLMNqXc25Ct1LfD7P7iaxaKmy6KkqbzgE=
+	t=1772806034; cv=none; b=kzJZuS4/bzyfGK4j0F6btD8TlHjIwT6+CtBLUARQ8Nh2UzHzAl8+4rJ8iR/ItfoeJVlUzdqCGKa5Jwc9dwp6IalPtSD6wRT0npdI4XYBVFUTwnvRzJ++EFUDQ/mVqaQSH2nbC6CEROyuApglYsopIIIGIM3wfEvzxLe47q8pKqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772806011; c=relaxed/simple;
-	bh=sdDGYrHeAWacIUyfKNMp+p7ytNhIh+eztoO0wVn8KQY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e5CJ8YvzkVAGlfuR5Am5GMWXu4ct8YWVpa2WgHm1p/Eq7nCC9EHuIjdipYnz9glTvdc5sd4uk7l4DJPbp0GgF7n9lJAkBgDrVy1VyuwMYRzW01L+IxJeyguU13N6Q+OrH45RyHKjuxP+4O76wFyryuHtIHTcCfLQrL0Eea8++q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ks6PXP/P; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772806034; c=relaxed/simple;
+	bh=zOMrDzt6Kt+O7lNavb64k4pt1LqFU3bftY7nK/1uQZA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j44jUUMsZ3XI9fD1hkyLgxcsRT3ne7xevsuJSXVr5t86cVf6+bN74vcXcywQmu56m3E0QFH33B1NgYH2jK81tds4LMfj9rqj1JtfZX0e3BBHyisE2Jw33G1SsPP+mGYMsqEjnV1AmmTupMC4oXYfGSzHZSGsb/cUqC/2BFlGzYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=tZ88noAj; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ks6PXP/P"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-35990245493so3489627a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2026 06:06:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772806010; x=1773410810; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pk0hhHCfbKxfhVzW+kzXBAaDl6vDlZoTgh4BXmvqu64=;
-        b=Ks6PXP/PCAuGu6YWLNqGLVSrbst/+XZXrzVohGlc4JytB9m/saxpaegmv9cIQou5Gc
-         DjC7WLyYjrbVnOxGvLIVnc+gCj2inD8nGafvTpNF11ZVKmBUqzCogj4Ng0llegjdCZgO
-         NAm3ky3UxLpUr6T3FdnQAxgRXn8Y/01+DW8n40siuKxAr+FPcm0fRr5LAHtnyZeH6RFw
-         wyPHKzT9fHSKsxA32B+iAxjRsBQi30L/64/jH0qRpEB8zrLvSDi1CFhZV4kEOEpsnAZk
-         chjEKZGHWDSHnY9Xb0lBPhHRtIHcAaeVyj9L9d2fx6QktdNpy/iHlXgzglh8z71pDmxg
-         7lFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772806010; x=1773410810;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=pk0hhHCfbKxfhVzW+kzXBAaDl6vDlZoTgh4BXmvqu64=;
-        b=Tn0tW2IdhT612oSkctoQVaaj7bx9v5ycWx41tEYvKdhSEW9rWJzYX1sZdv4O4VUcBG
-         bqVFrJ05iKEZx4ZIVOZqRTQQm61Lg/nLiBycIB6S8XSK/Gzn0lgQ19SaKKLLO1Npb2oZ
-         VtKvdv6LHlEYnh3YSpiw3y8daRkFKyQKFVgV/wiFzw89W4BqYZSFg3OOu/RdnjGtCuBU
-         O9R6aG5unzSMf0tlABeQ1rLWJVFHY/axFoIzbyXhXUCcCz/39Hb+dxlbktJOMo9GL7a6
-         p4WFIL8ipLi7lPHkIn2TNaSgV4cqZ82GprGYpQGklccvmg0dIAuAGWqaKXgAz0/M+hSo
-         i6dQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXzuJdNT+wMQLnY7n6En9ms3QnhpoPQB+96oOHV2PM8HnIKq8uaF0GEEUdK4o+3Rasv/2ljKKFysiy2u8Cf5BA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywub6lY1v6JpTuH6tIeTYER0itNYsU3mTCIR7S44PZ/Hi+vviRj
-	apQSo7DQ4I8G2lR/5xECyztioywk8nn1gf8s8PZLCNrL8LFAsALmiK8C
-X-Gm-Gg: ATEYQzyCY76YEcLCe/QeoKVXmTdz7cKitjWA5+DXvnwK3lXztAclgZYTrx1SEn5UYa0
-	+lvhzilXN64XNq8SFSbf1VkTCfG+wkilbFQCGu8orzSKJCUaKEHmqWmeA3WBm/F2Dw3YidYIFbf
-	iDbBvR+cAVrxgAEEsw0oY3zb5vDWSS2I+thKPMbSRs8Y4NggMUxzYOEkQazRLbXBmvzHEOvVsZ9
-	8JGj4AGv/zqTCY2rQmvIhjVmiw7CF7sI2z3X58RXgs6povT5/Ka04xoyaXiQB3FEaMKLbGg4AcO
-	ltH/VH9nHWybDJc83pyr7L2XSSETwEsYiLE6841WLdYMIAQg6hJniScgHKJFBuEiR+GnKfNn8wj
-	fvQIg4oSXMWYR9MGQ2+7BHYNCF8FYM2vK6MtztjSFC9ZD99kGzzwqoBCr0BfRRaIwKBpAYlWVkA
-	5IkS1Tn3QZ3EktssQw9xDWK6g/N3R/+G4453mWfEWM2tF5kki5BDeEjY2C0yePcuajXiLNaDkmM
-	tQ=
-X-Received: by 2002:a17:90b:33c4:b0:359:806c:7a94 with SMTP id 98e67ed59e1d1-359be233997mr2133785a91.7.1772806009846;
-        Fri, 06 Mar 2026 06:06:49 -0800 (PST)
-Received: from mi-HP-ProDesk-680-G6-PCI-Microtower-PC.mioffice.cn ([43.224.245.226])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359b2d60767sm5380734a91.8.2026.03.06.06.06.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 06:06:49 -0800 (PST)
-From: zhidao su <soolaugust@gmail.com>
-X-Google-Original-From: zhidao su <suzhidao@xiaomi.com>
-To: arighi@nvidia.com
-Cc: tj@kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	void@manifault.com,
-	changwoo@igalia.com,
-	linux-kselftest@vger.kernel.org,
-	Su Zhidao <suzhidao@xiaomi.com>
-Subject: Re: [PATCH 1/5] sched_ext: Remove deprecated SCX_OPS_HAS_CGROUP_WEIGHT flag
-Date: Fri,  6 Mar 2026 22:06:44 +0800
-Message-ID: <20260306-reply-andrea-bypass@xiaomi.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <aareTeuAos9-Mg2c@gpd4>
-References: <aareTeuAos9-Mg2c@gpd4>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="tZ88noAj"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1vyVpA-00GQhD-Ue; Fri, 06 Mar 2026 15:06:40 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=tC4hDySprxrT/Gr+j4+xPNKNNmZSdgwoLCHwVwT6ztI=; b=tZ88noAjFpW5Nv/sqE9VS4pza5
+	hPbP4uJ4fe57vF2JmAJ/yKvFEzygbyKWj3mC5t/ylL+43p/IFKIzQFzZyS3gjCR5V9WMm1IKZpBB3
+	liXKtSTtDgsyRZqZxlm79Ncm0HpPJOAXL1O81qTCMRBZKT1flLqgBD66rm8bkVA+XEthNDMYstXE8
+	ipngfsGAbLtFtLQ69Dhze++67yIKq+eqE5UE0gUa+MZKStoDUec4Y7XjHz5kJ/FLuw84ZSbd6tGgr
+	3U6P4zbehVpOOi+kfCEndJeH8JYHTsoksN9R/BTXvYp3mzsgfBRbcdsT1jsSEz+OGyxDq91UQbDMl
+	3JvQNP/A==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1vyVpA-0001kw-Ba; Fri, 06 Mar 2026 15:06:40 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vyVor-0008GC-Mo; Fri, 06 Mar 2026 15:06:21 +0100
+Message-ID: <6b02c177-69a2-4e08-a936-65bfa8e85b7e@rbox.co>
+Date: Fri, 6 Mar 2026 15:06:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 3/5] bpf, sockmap: Fix af_unix iter deadlock
+To: Jiayuan Chen <jiayuan.chen@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-3-2f0c7410c523@rbox.co>
+ <b2218c30-a704-4395-a67e-95c62b75586f@linux.dev>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <b2218c30-a704-4395-a67e-95c62b75586f@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Su Zhidao <suzhidao@xiaomi.com>
+On 3/6/26 07:04, Jiayuan Chen wrote:
+> On 3/6/26 7:30 AM, Michal Luczaj wrote:
+>> @@ -3729,15 +3729,14 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
+>>   	struct bpf_prog *prog;
+>>   	struct sock *sk = v;
+>>   	uid_t uid;
+>> -	bool slow;
+>>   	int ret;
+>>   
+>>   	if (v == SEQ_START_TOKEN)
+>>   		return 0;
+>>   
+>> -	slow = lock_sock_fast(sk);
+>> +	lock_sock(sk);
+>>   
+>> -	if (unlikely(sk_unhashed(sk))) {
+>> +	if (unlikely(sock_flag(sk, SOCK_DEAD))) {
+>>   		ret = SEQ_SKIP;
+>>   		goto unlock;
+>>   	}
+> 
+> 
+> Switching to lock_sock() fixes the deadlock, but it does not provide mutual
+> exclusion with unix_release_sock(), which uses unix_state_lock() exclusively
+> and does not touch lock_sock() at all. So a dying socket can still reach the
+> BPF prog concurrently with unix_release_sock() running on another CPU.
 
-On Fri, Mar 06, 2026 at 03:01:49PM +0100, Andrea Righi wrote:
-> Please, when sending multiple patches, group them together in the same
-> email thread with cover letter email, otherwise it's very unpractical to
-> apply and review them.
+That's right. Note that although the socket is dying, iter holds a
+reference to it, so the socket is far from being freed (as in: memory
+released).
+
+> Both SOCK_DEAD and the clearing of unix_peer(sk) happen under
+> unix_state_lock() in unix_release_sock(). Without taking unix_state_lock()
+> before the SOCK_DEAD check, there is a window:
 >
-> See Documentation/process/submitting-patches.rst.
+> iter                              unix_release_sock()
+> ---  lock_sock(sk)
+> SOCK_DEAD == 0  (check passes)
+>                                   unix_state_lock(sk)
+>                                   unix_peer(sk) = NULL
+>                                   sock_set_flag(sk, SOCK_DEAD)
+>                                   unix_state_unlock(sk)
+> BPF prog runs
+> → accesses unix_peer(sk) == NULL → crash
+>
+> This was not raised in the v2 discussion.
 
-Thanks for the feedback. Apologies for the inconvenience.
+It was raised in v1[1]. Conclusion was that bpf prog bytecode directly
+accessing unix_peer(sk) is not an issue; bpf machinery will handle any
+faults. That said, should a "bad" value of unix_peer(sk) end up as a
+parameter of a bpf helper, yes, that is a well known[2] problem (that have
+a solution unrelated to this series).
 
-I resent the series as a proper patch thread with cover letter:
+[1]:
+https://lore.kernel.org/bpf/6de6f1bf-c8ee-4dfb-9b8c-f89185946630@linux.dev/
+[2]:
+https://lore.kernel.org/bpf/CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs4ox0HhAA@mail.gmail.com/
 
-  Subject: [PATCH 0/5] sched_ext: bypass state machine cleanup and selftest
-  Message-ID: <20260306140325.2710927-1-suzhidao@xiaomi.com>
-
-Sorry for the noise.
-
--- 
-Su Zhidao
