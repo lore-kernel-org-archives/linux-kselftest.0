@@ -1,99 +1,300 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C06F347527;
-	Fri,  6 Mar 2026 08:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE67D378D87
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 08:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772785122; cv=none; b=ne1k0diGmpMwEuQZsN9dMhZcDQFHpLWlCfwvxl7EFtdQRdu6QKcsIc0tlpYAIytMPy4d3usF9mXb10lbXLKKbjXbLNYsLZFVyNMTUWqhoNYKxXfvLTADV/BIsP21UiOcFesZShqr3gtW3CRdRg4zljyfP7rLOZuGgqJCQlyuR0w=
+	t=1772785552; cv=none; b=Tx/gLM6jDPjpDHx77AYoWeXOyTih+JxVCYcCiMXaNrRdJvMhbm0cHYT/qPPbiEwU1xZdKFyydPC5sNLy0zvBvcRWFAXKdMML+yHO3bBr5dm3MCG7q6wL5tNqBV04yAu6OWbMj8gnmwYwpCZJqY0H6p4nPoEqFlgHaVF5gpWT2xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772785122; c=relaxed/simple;
-	bh=ZsPiOkn4S+Pt3awjJ44YVaY3mB0P1i9vZT1PllwFgTU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qBcym8Rssovtub/PhnSV1tumkPUS7NSgF5rB0/SM6xTDmk51iwVRj9iErbAm2foz+4//7Lbwy9XM6RhY+tYwwuQOyQdNKrnAGq3lrAEjtQwgS9+hj3KlatqztHvMQk5jhIghdGeroaLrD5qpzLXOuXJAade6rnOtjNYCnOBPFWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WiyH0r5K; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SrKIHjW9; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1772785552; c=relaxed/simple;
+	bh=LXVzWNtAt9+tfbQ9OLhlLLWElv3Ngu1cWkabeS2R5Rw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JmvPZBXS6A/aY/wrj7YdBuVEIBD5QdZdVkZM0TSy+H/iK0VGhyr8r0dMylIiLE1NKgGAC050h324POnhmF5yE326qJdqgLszHIYZ4xGHSTrNLwLI0cLP+kM+/dLlKsiWzV/EsZc73+bkBvKJlWYp7sLigzQkLDgiCroWswOVIaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EU9oFssg; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WiyH0r5K";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SrKIHjW9"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772785112;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EU9oFssg"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772785546;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cwe0s+wk7JN9r2Y/5QgA01swVhV362gvLVPL+cKTXkI=;
-	b=WiyH0r5KPrk+feBzMmabP2agvivouSNqQGrqIoOi5CNo/2OkOAHima+BpMwdnqi2plNBhz
-	TkZE/yz8LYSvHVJsnozqbupsoyUEYoXGwzdg78RAHZ8yCxuvP7NZe+vh6kefTkHXhexLzM
-	Dj1Wo3k6ltXmQ2pSW+LW5QCsiJSC1SqN+ePOC0ooYbzH635YD+FxE6mM9mGE9xSnH+cqdM
-	jtDF4Up27MLhTfhYYGNgzheHInVXJ2+C1RwcSce3ciDs0RnClbszlYhtHny/aIIPAu1rQl
-	xjEIKoqg2dnM6qapRyF8mkMEyCxxKeIvZ/c29k4Gx2ZKCK0+r5hO6QzPx8AsYw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772785112;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cwe0s+wk7JN9r2Y/5QgA01swVhV362gvLVPL+cKTXkI=;
-	b=SrKIHjW9+XbhnrI+bKfztvey1+ugyf+MtrI+p1vxM3DuWIRzcMz0xZCH9NyG7ai6id7bvF
-	vfcZhtXCMLHqWWDw==
-To: Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Clint George <clintbgeorge@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Nam Cao <namcao@linutronix.de>
-Subject: [PATCH] kselftest/coredump: Fix test failure due to __builtin_trap()
-Date: Fri,  6 Mar 2026 09:18:24 +0100
-Message-ID: <20260306081824.348426-1-namcao@linutronix.de>
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XXBLwIqi/fUCuiRCJKpUhEdjnuAAbkrNIJXFl5SNKAA=;
+	b=EU9oFssgAkP3gSMlOrKCQ1UmRlznL7YaFp7XL58LwtuX/Nyov8UpNjlh/+1Tpjsg8DIdpZ
+	R4fXqy8qQj8ye5ebhhUMGDPF0XWVYOvrDg5nx9a4B+CcsESJyezEw+NUACxhw6PY1qu9UG
+	pCedZ4W2d7FbM2WlSSJL/Na7PZut990=
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+To: jgg@ziepe.ca,
+	leon@kernel.org,
+	zyjzyj2000@gmail.com,
+	yanjun.zhu@linux.dev,
+	dsahern@kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 1/4] RDMA/rxe: Add testcase for net namespace rxe
+Date: Fri,  6 Mar 2026 00:24:49 -0800
+Message-ID: <20260306082452.1822-2-yanjun.zhu@linux.dev>
+In-Reply-To: <20260306082452.1822-1-yanjun.zhu@linux.dev>
+References: <20260306082452.1822-1-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Commit 673a55cc49da ("kselftest/coredump: use __builtin_trap() instead of
-null pointer") changed the plain NULL pointer deference to __builtin_trap()
-because LLVM optimizes the NULL pointer deference away.
-
-However, this makes the test fail on RISC-V, because __builtin_trap()
-raises a SIGTRAP instead of SIGSEGV as expected by the test:
-
- #  RUN           coredump.socket_coredump_signal_sigsegv ...
- Set core_pattern to '@@/tmp/coredump.socket' | 22 =3D=3D 22
- get_peer_pidfd: successfully retrieved pidfd 13
- get_pidfd_info: mask=3D0x57, coredump_mask=3D0x5, coredump_signal=3D5
- socket_coredump_signal_sigsegv: coredump_signal=3D5, expected SIGSEGV=3D11
- # coredump_socket_protocol_test.c:1125:socket_coredump_signal_sigsegv:Expe=
-cted WTERMSIG(status) (5) =3D=3D SIGSEGV (11)
- # socket_coredump_signal_sigsegv: Test terminated by assertion
- #          FAIL  coredump.socket_coredump_signal_sigsegv
- not ok 8 coredump.socket_coredump_signal_sigsegv
-
-Instead of __builtin_trap(), implement the other suggestion from LLVM
-(volatile) to make the test pass.
-
-Signed-off-by: Nam Cao <namcao@linutronix.de>
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
 ---
- tools/testing/selftests/coredump/coredump_test_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/rdma/Makefile         |  5 ++
+ tools/testing/selftests/rdma/config           |  3 +
+ .../selftests/rdma/rping_between_netns.sh     | 57 +++++++++++++++++
+ tools/testing/selftests/rdma/rxe_ipv6.sh      | 47 ++++++++++++++
+ .../testing/selftests/rdma/socket_with_rxe.sh | 64 +++++++++++++++++++
+ 7 files changed, 178 insertions(+)
+ create mode 100644 tools/testing/selftests/rdma/Makefile
+ create mode 100644 tools/testing/selftests/rdma/config
+ create mode 100755 tools/testing/selftests/rdma/rping_between_netns.sh
+ create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
+ create mode 100755 tools/testing/selftests/rdma/socket_with_rxe.sh
 
-diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.c b/too=
-ls/testing/selftests/coredump/coredump_test_helpers.c
-index 5c8adee63641..2c850e0b1b57 100644
---- a/tools/testing/selftests/coredump/coredump_test_helpers.c
-+++ b/tools/testing/selftests/coredump/coredump_test_helpers.c
-@@ -56,7 +56,7 @@ void crashing_child(void)
- 		pthread_create(&thread, NULL, do_nothing, NULL);
-=20
- 	/* crash on purpose */
--	__builtin_trap();
-+	i =3D *(volatile int *)NULL;
- }
-=20
- int create_detached_tmpfs(void)
---=20
-2.47.3
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 61bf550fd37c..3f3aca470d77 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24509,6 +24509,7 @@ L:	linux-rdma@vger.kernel.org
+ S:	Supported
+ F:	drivers/infiniband/sw/rxe/
+ F:	include/uapi/rdma/rdma_user_rxe.h
++F:	tools/testing/selftests/rdma/
+ 
+ SOFTLOGIC 6x10 MPEG CODEC
+ M:	Bluecherry Maintainers <maintainers@bluecherrydvr.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 450f13ba4cca..110e07c0d99d 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -94,6 +94,7 @@ TARGETS += proc
+ TARGETS += pstore
+ TARGETS += ptrace
+ TARGETS += openat2
++TARGETS += rdma
+ TARGETS += resctrl
+ TARGETS += riscv
+ TARGETS += rlimits
+diff --git a/tools/testing/selftests/rdma/Makefile b/tools/testing/selftests/rdma/Makefile
+new file mode 100644
+index 000000000000..362e97f0fb3e
+--- /dev/null
++++ b/tools/testing/selftests/rdma/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++TEST_PROGS := rping_between_netns.sh \
++		rxe_ipv6.sh \
++		socket_with_rxe.sh
++include ../lib.mk
+diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
+new file mode 100644
+index 000000000000..4ffb814e253b
+--- /dev/null
++++ b/tools/testing/selftests/rdma/config
+@@ -0,0 +1,3 @@
++CONFIG_TUN
++CONFIG_VETH
++CONFIG_RDMA_RXE
+diff --git a/tools/testing/selftests/rdma/rping_between_netns.sh b/tools/testing/selftests/rdma/rping_between_netns.sh
+new file mode 100755
+index 000000000000..80b4249dba55
+--- /dev/null
++++ b/tools/testing/selftests/rdma/rping_between_netns.sh
+@@ -0,0 +1,57 @@
++#!/bin/sh
++
++# Notes:
++#
++# 1. Before running this script, please disable the firewall, as it may
++# block UDP port 4791.
++
++# 2. This test script depends on the veth and tun drivers. Before running
++#  the script, please verify that both drivers are available by executing:
++#
++# modinfo veth
++#
++# Make sure these commands return valid module information.
++
++#1. Check if rping can work or not
++exec > /dev/null
++ip netns add test1
++ip netns ls
++ip link add veth-a type veth peer name veth-b
++ip l
++ip link set veth-a netns test1
++ip l
++ip netns exec test1 ip l set veth-a up
++ip netns exec test1 ip addr add 1.1.1.1/24 dev veth-a
++ip netns exec test1 ip l
++ip netns exec test1 ip -4 a
++ip netns exec test1 rdma link add rxe0 type rxe netdev veth-a
++
++#check if socket exist or not
++ip netns exec test1 ss -lun | grep :4791
++
++ip netns exec test1 rdma link
++ip link set veth-b up
++ip addr add 1.1.1.2/24 dev veth-b
++ping -c 3 1.1.1.1 || exit 1
++ip netns exec test1 rping -s -a 1.1.1.1&
++rdma link add rxe1 type rxe netdev veth-b
++rdma link
++
++#check if socket exist or not
++ss -lun | grep :4791
++
++rping -c -a 1.1.1.1 -d -v -C 3 || exit 1
++ip netns ls
++rdma link del rxe1
++
++#check if socket exist or not
++ss -lun | grep :4791
++
++ip netns exec test1 ss -lun | grep :4791
++ip netns exec test1 rdma link del rxe0
++ip netns exec test1 ss -lun | grep :4791
++ip netns del test1
++ip netns ls
++
++modprobe -v -r veth
++modprobe -v -r rdma_rxe
+diff --git a/tools/testing/selftests/rdma/rxe_ipv6.sh b/tools/testing/selftests/rdma/rxe_ipv6.sh
+new file mode 100755
+index 000000000000..9337ac4fd13f
+--- /dev/null
++++ b/tools/testing/selftests/rdma/rxe_ipv6.sh
+@@ -0,0 +1,47 @@
++#!/bin/sh
++
++# Notes:
++#
++# 1. Before running this script, please disable the firewall, as it may
++# block UDP port 4791.
++
++# 2. This test script depends on the veth and tun drivers. Before running
++#  the script, please verify that both drivers are available by executing:
++#
++# modinfo tun
++# modinfo veth
++#
++# Make sure these commands return valid module information.
++
++# 3. ipv6 test.
++# While RXE is conventionally deployed over IPv4, it maintains
++# native support for IPv6. However, IPv6 implementations typically
++# receive less validation and performance tuning in standard use cases.
++exec > /dev/null
++# 1) create ipv6 net namespace
++ip netns add net6
++ip link add veth0 type veth peer name veth1
++ip link set veth1 netns net6
++ip netns exec net6 ip addr add 2001:db8::1/64 dev veth1
++ip netns exec net6 ip link set veth1 up
++
++# 2) Add rdma link
++ip netns exec net6 rdma link add rxe6 type rxe netdev veth1
++
++# 3) check IPv6 UDP 4791 listening port
++if ! ip netns exec net6 ss -ul6n | grep :4791; then
++	echo "Error: udp port 4791 exists"
++	exit 1
++fi
++
++# 4) Delete rxe link
++ip netns exec net6 rdma link del rxe6
++if ip netns exec net6 ss -ul6n | grep :4791; then  # result should be null
++	echo "Error: udp port 4791 exists"
++	exit 1
++fi
++
++# 5) delete net6
++ip netns del net6
++
++modprobe -v -r rdma_rxe
+diff --git a/tools/testing/selftests/rdma/socket_with_rxe.sh b/tools/testing/selftests/rdma/socket_with_rxe.sh
+new file mode 100755
+index 000000000000..676aec63babd
+--- /dev/null
++++ b/tools/testing/selftests/rdma/socket_with_rxe.sh
+@@ -0,0 +1,64 @@
++#!/bin/sh
++
++# Notes:
++#
++# 1. Before running this script, please disable the firewall, as it may
++# block UDP port 4791.
++
++# 2. This test script depends on the veth and tun drivers. Before running
++#  the script, please verify that both drivers are available by executing:
++#
++# modinfo tun
++#
++# Make sure these commands return valid module information.
++
++# Check if socket exist or not
++exec > /dev/null
++ip tuntap add mode tun tun0
++ip -4 a
++ip addr add 1.1.1.1/24 dev tun0
++ip link set tun0 up
++ip -4 a
++rdma link add rxe0 type rxe netdev tun0
++rdma link
++ret=`ss -lun | grep :4791`
++if [ X"$ret" == X"" ]; then
++	echo "Error: udp port 4791 does not exist"
++	exit 1
++fi
++
++ip tuntap add mode tun tun1
++ip -4 a
++ip addr add 2.2.2.2/24 dev tun1
++ip link set tun1 up
++rdma link add rxe1 type rxe netdev tun1
++rdma link
++ret=`ss -lun | grep :4791`
++if [ X"$ret" == X"" ]; then
++	echo "Error: udp port 4791 does not exist"
++	exit 1
++fi
++
++rdma link del rxe1
++rdma link
++ret=`ss -lun | grep :4791`
++if [ X"$ret" == X"" ]; then
++	echo "Error: udp port 4791 doese not exist"
++	exit 1
++fi
++
++rdma link del rxe0
++rdma link
++if ss -lun | grep :4791; then
++	echo "Error: udp port 4791 exists"
++	exit 1
++fi
++
++ip addr del 2.2.2.2/24 dev tun1
++ip tuntap del mode tun tun1
++
++ip addr del 1.1.1.1/24 dev tun0
++ip tuntap del mode tun tun0
++
++modprobe -v -r tun
++modprobe -v -r rdma_rxe
+-- 
+2.52.0
 
