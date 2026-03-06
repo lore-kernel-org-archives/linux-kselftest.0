@@ -1,274 +1,229 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E9F35975;
-	Fri,  6 Mar 2026 00:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772756483; cv=none; b=gHJKfWLoZKlH2BD0CDfpXL9ZelNEfTFFeu8jPk3Oi8n7QRyFgbzaECYG7yMKgbHiA4WnmZ10RnJ7Bz2GGYA+JcfHbDQWu15vPgbSqh0AgA1l1daSrcWVUZMg5vrUc3pjaCQyYeWDFeeuwtEfqAuN/28u0moEK010kzzAzaDWTZM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772756483; c=relaxed/simple;
-	bh=f7KYVhw5pEHwSXD7nd7S6wB4i8qZrmY88A+KR+uCr2c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OHVW9RUHgYMwyUpXQezLyKUbTHhwBguKR5pOO97wpP+uRzRsOlW7gTgti23UNiHO6rxSE2ReM4/BJoeot1x9fgOHzHmFFQpJJR1vkJ2Bb4Wyb/dy2bdnzv5CTAGG8g+HbV8Es9IX+TnopwXOYGXcHXv+ZflwEqWnSVS5bCF2ePE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=AXjAWSob; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14792BE7D1
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Mar 2026 00:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772756945; cv=pass; b=Dn71yIHJhNotoOdxFedq2kfdL2gOqmOdoKWKef4JbcKgzWmin51I3CzQm9aCOE16BahNqolA9jKxamoyGWxH5P1E1tF6d6MAndH+v8xHtGHyCQ4UXUdy0dWwvOIki3ktyNEhzJHCOTjtidKxWT1qGT0JY8EYogKQ3BhPqNyvgVA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772756945; c=relaxed/simple;
+	bh=XiKFz3NSS2GNv0XyH/17O4rXg5FulZKIUJED+ry5tuk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hw3D85bnjfz9RySlDrm5Y/e/xpwiMTSP3mHJMwFGN5Zm35HhGxMyN+rCC+Fm5OqvwM9gbj8VcCnsgSooFFNHCoqURHN0lZItAvrDM3If0fd2Or0uMXkvl+TzsOeJ5WHEA+35vVnsQqcD8BZ1mlZx1gmFG8Y0n0hdzdCZL/aGjCA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c1AR8QQa; arc=pass smtp.client-ip=209.85.128.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="AXjAWSob"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=j5sV4+wUvNOc3xS7CkrG8KEGHYOk7JpcEgiSOK3kguU=; b=AXjAWSobMRol
-	20h18D2GlepRE9enrygSuX0r1WN9naeYhUBjpfWPU5RO5akN8qpT3Y0p3+wKjRVrl1d/LISqtEy/O
-	7384bWx5AGh0MwexSpiRtM50XRNH8YIPWpT9fkjhgdoQOfN7dsIYhEQZDmve3pGtUZPAdElyr8jd9
-	VvtKsRvrSnv/BUZpCvygoIP+huEXXUu9p8eipR+SPHHzl9VrW4fhbLMbyZjcS/5sRiWGHLykE6AkH
-	DGPNFpqh2atETX9aFQAW99JVgREHT0nVJWdBM0SN1ABV7ALMqM9+g8yzSEIo5np4qYoDL+bc83ouH
-	ngm/AAd0YhrMFb6LXmRJRA==;
-Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
-	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vyIuk-006nPE-06;
-	Fri, 06 Mar 2026 01:21:05 +0100
-Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 6260L6d0519684
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Fri, 6 Mar 2026 00:21:06 GMT
-Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 6260L1JW519683;
-	Fri, 6 Mar 2026 00:21:01 GMT
-From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Seth Forshee <sforshee@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, James Morse <james.morse@arm.com>,
-        Babu Moger <babu.moger@amd.com>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-        Abhinav Saxena <xandfury@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH] selftests: do not override CFLAGS set by the build environment
-Date: Fri,  6 Mar 2026 00:21:00 +0000
-Message-ID: <20260306002100.519673-1-aleksey.oladko@virtuozzo.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c1AR8QQa"
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-4806cc07ce7so98819305e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2026 16:29:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772756942; cv=none;
+        d=google.com; s=arc-20240605;
+        b=VDThnBGG76etTr/QRi9Vd1GNmS7bvhf0o5VawsxWdLcVx2dnvAq/8a9ynR0Kw5MAO5
+         EHPBmn4AJaZdnZX9t/5jGk1ssd0GY6j0/ccvmhrNKsVtTMGsTUq/h8w0bfNSeZ8Ck7GH
+         kBAWgl+Idgz7Bx8EUJNEtM27ymk+P+gpJztW0wGH9gsSpc2fmEXPfN8JMQM3npGLUAQo
+         s7ryhbx7S30n6i0LTm+ukjxRzpuSzJ+L+N5DGUyUKP5u7JJP8DLpWxm/6Wj1uXjkcoBm
+         ZmCNWKZHresIUI3VaStfy3bLMkzM/37oCC78wN9DUvuZbGqCTVEaNIv2CJrdpkdqx6R2
+         j8hg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=uGiaxYm5ImeOCKYL6fc2NAkH9q7e9f/RWh+/TVwJexo=;
+        fh=hmXBy9fmQcxLc/pclCd9HfO5Syk+jWZ7HnYhhzkHE/I=;
+        b=Ht5k9OuOipMx+ilAJGhsuJHBvB0qB+DImgOmaFH7OBJYSJwx9489B8ZR6dbcSUmCoA
+         jy0QTksA5DjRRqh9s/id7Jninwnptwa3eCZqGW5gAja2SmZKI5nbeu7gMlkFCqC6ptMF
+         silB9w+7i56NPRKLAdJsjOopaAFDCgTFVyyJ0cY2LXmqAUSmM45T7RJXggu88ulSXynh
+         GgBZsD/9izrVZ+N9D0cEGYn7Z3QOHs/2VcdbkMRJWH4sjSZOrd/63hX4A9Q794AUVLpL
+         Of3tAd2BBeQ5V7DicP1yOg8fkpch2lniuz+QcNzRIXY/I3yWvTjOPEQb1GSC2xkIJGXC
+         9maQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772756942; x=1773361742; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uGiaxYm5ImeOCKYL6fc2NAkH9q7e9f/RWh+/TVwJexo=;
+        b=c1AR8QQa9Ps8Q34Sjl30ZUQ5hf946jkSr9Dd6MdkEABhMdS1ewOGuF/6dwdpPEADxS
+         CsxKY+n/O2Y3bFxe1OjgRuTQT30Xb/8DZ3WEuDzK2mvMcS6P/uqE2+WjHQ8xP4us2lQi
+         aQVyg1Cv5NQYAAA6bu+nQ1x7ztyLMHxUAZfQTnf4dyD1MSeXV7qnJN5o2Y+2T3E5ik9Z
+         DSu9/dAzeTWjBIoro56JT+xLAfXhLmIYn9o1T8BXDP69/uzx8y2iGWk1GwTReW8oa88G
+         83iuDYurWcY8uTd1r+My9x5ufW88lQd4YBba9qj6xSC9J2ibyQcA6tFmeNJXWnsISFej
+         CAkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772756942; x=1773361742;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uGiaxYm5ImeOCKYL6fc2NAkH9q7e9f/RWh+/TVwJexo=;
+        b=s56EEg8WsELSs1+2GmRhRoQ9iI0qSXmwTQKF76fThKppLJJv+VAHvrtndahEJ/+K6j
+         Yk1OJ47vvz3Ybb0oiyYycPsewjZDi8jzlxupOdlYC36jYAZARJNunIaUbjvWp21aT+5E
+         JOJ334TWdjIxU4xfL2kksCR3zkL5AP1XyHI46TI+vNYEp68knDUwzch5vm29K/59u2Xt
+         YsGWDpkRs10PjL6jVx9BJlUjTtLF8pPrPDeQyPz5OGU0hgnGIUxO7NIBfj4ImfKq9+vw
+         wLkDtLJA3P1XC32ekFwfa3g8m+aojeug2TzgSNXhLIOOzh+YzD3h9hU/6r5eFTicsgFB
+         nsTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWt1Kwlq/k4osmorb9gsLnFOn/UcGrX5ISWNb57AkwtbEAKpHNTQhAt/eIq2D3SsCoYw6C9DbtsKIBkWl93hCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxylsbKXqsznq6tOPXYZwlin8C/F7eh5kCmeBm36fFfnzpYpRpi
+	rsOXJiPdh8R5anj6tA8J8EQuUphkzYNwFukz6r3gatxtrNoTjlyMgX8wNzntAA/NLEYAtHuCJ4F
+	dTU0reqWw3keUD4vZ3bPx4iUFkMhxyJU=
+X-Gm-Gg: ATEYQzxmBpPG2QaIh2jwVNWZImPslakiAEFaWlYHrweA4Nm0kCQBsiCxeq30PRfp3JA
+	X64lCB9zR/scGsHPhKBVUl5ryQGghy2bQXh4lf2maB7j7Hp9VYdwV1mMVsvtCSD1P1Zfs1lPtMr
+	uTdC3s+0Xyfa0z8+ZbPSNviDWAmz0gOkaxlO22TVA6Q4P3+cNgVgO9LxHfc9UAe/f3zEwZq9opw
+	LKry7qarDMT7NehoZ9zf7Syen/bUR8kZMilmYvvYYnbnS4lKjX9w3vAEEKkr2oSDhiIRVx5Nh3b
+	L4Vj6nJVtu/HWYlAminwenBWdfrQrcXJlr+DeR5t1Pwfrct2eL45yD6l1Hg=
+X-Received: by 2002:a05:600c:1c08:b0:483:afbb:a086 with SMTP id
+ 5b1f17b1804b1-48526967ad4mr1934295e9.29.1772756941926; Thu, 05 Mar 2026
+ 16:29:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260304143459.78059-1-pilgrimtao@gmail.com> <20260304143459.78059-2-pilgrimtao@gmail.com>
+ <CAP01T77B_Rae71cYgZ7b+xbYG+qaaUNscLe2c6gpkDj+o6B0ag@mail.gmail.com>
+In-Reply-To: <CAP01T77B_Rae71cYgZ7b+xbYG+qaaUNscLe2c6gpkDj+o6B0ag@mail.gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Fri, 6 Mar 2026 01:28:25 +0100
+X-Gm-Features: AaiRm53ceFPu9wI3wikRYo4swDAwjCVEzxIlKQu93tGMaRc6eOn6nkEQJ_Z3FPo
+Message-ID: <CAP01T75uZchsNZfvUDP3Vq5iVUwMky-SfdEBNVbBCmK0hdsB+Q@mail.gmail.com>
+Subject: Re: [PATCH v6 1/5] bpf: Introduce the bpf_list_del kfunc.
+To: Chengkaitao <pilgrimtao@gmail.com>
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
+	chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Some kselftests Makefiles assign CFLAGS using 'CFLAGS=...'
-which overrides any CFLAGS provided by the build environment.
+On Fri, 6 Mar 2026 at 01:14, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> On Wed, 4 Mar 2026 at 15:50, Chengkaitao <pilgrimtao@gmail.com> wrote:
+> >
+> > From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> >
+> > If a user holds ownership of a node in the middle of a list, they
+> > can directly remove it from the list without strictly adhering to
+> > deletion rules from the head or tail.
+> >
+> > We have added an additional parameter bpf_list_head *head to
+> > bpf_list_del, as the verifier requires the head parameter to
+> > check whether the lock is being held.
+> >
+> > This is typically paired with bpf_refcount. After calling
+> > bpf_list_del, it is generally necessary to drop the reference to
+> > the list node twice to prevent reference count leaks.
+> >
+> > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> > ---
+> >  kernel/bpf/helpers.c  | 27 +++++++++++++++++++++++++++
+> >  kernel/bpf/verifier.c |  6 +++++-
+> >  2 files changed, 32 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index 6eb6c82ed2ee..cc1a096a1f64 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+> > @@ -2459,6 +2459,32 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+> >         return __bpf_list_del(head, true);
+> >  }
+> >
+> > +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
+> > +                                              struct bpf_list_node *node)
+> > +{
+> > +       struct bpf_list_node_kern *knode = (struct bpf_list_node_kern *)node;
+> > +       struct list_head *h = (void *)head;
+> > +
+> > +       /* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+> > +        * called on its fields, so init here
+> > +        */
+> > +       if (unlikely(!h->next)) {
+> > +               INIT_LIST_HEAD(h);
+> > +               return NULL;
+> > +       }
+>
+> nit: I would avoid doing this here, just for symmetry.
+> If we are part of the list after the owner checks, this should be
+> initialized correctly anyway.
 
-If the environment set flags, overriding CFLAGS may result in
-inconsistent compiler and linker options and cause build failures,
-for example when building PIE binaries:
+Hmm, looks like I should take my ack back (just in principle, there's
+no bug here).
+I see you copied the comment and check from __bpf_list_del.
+I was looking at rbtree_remove to see whether it did RB_CLEAR_NODE(n).
 
-  # export CFLAGS="-fPIE"
-  # export LDFLAGS="-pie"
-  # make -C tools/testing/selftests/ TARGETS=mount_setattr
-  make: Entering directory '/build/kernel/tools/testing/selftests'
-  make[1]: Entering directory '/build/kernel/tools/testing/selftests/mount_setattr'
-    CC       mount_setattr_test
-  /usr/bin/ld: warning: -z pack-relative-relocs ignored
-  /usr/bin/ld: /tmp/ccikConN.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIE
-  collect2: error: ld returned 1 exit status
-  make[1]: *** [../lib.mk:222: /build/kernel/tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
+I think it's fine to keep this init, but let's try not repeating the
+same logic twice.
+I would make all 3 (pop_front, pop_back, list_del) use __bpf_list_del.
+Just pass h->next, h->prev, or node depending on which one is being called.
 
-Fix this by appending to CFLAGS using 'CFLAGS+=' instead of
-overriding them.
-
-The fix is not applied to the Makefiles in x86, riscv, mm, arm64
-and powerpc as they fully define their flags.
-
-Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
----
- tools/testing/selftests/efivarfs/Makefile             | 2 +-
- tools/testing/selftests/exec/Makefile                 | 2 +-
- tools/testing/selftests/firmware/Makefile             | 4 ++--
- tools/testing/selftests/ipc/Makefile                  | 4 ++--
- tools/testing/selftests/mount/Makefile                | 4 ++--
- tools/testing/selftests/mount_setattr/Makefile        | 2 +-
- tools/testing/selftests/move_mount_set_group/Makefile | 2 +-
- tools/testing/selftests/resctrl/Makefile              | 2 +-
- tools/testing/selftests/safesetid/Makefile            | 2 +-
- tools/testing/selftests/signal/Makefile               | 2 +-
- tools/testing/selftests/timens/Makefile               | 2 +-
- tools/testing/selftests/tty/Makefile                  | 2 +-
- tools/testing/selftests/vDSO/Makefile                 | 2 +-
- 13 files changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/tools/testing/selftests/efivarfs/Makefile b/tools/testing/selftests/efivarfs/Makefile
-index e3181338ba5e..f6c412059af3 100644
---- a/tools/testing/selftests/efivarfs/Makefile
-+++ b/tools/testing/selftests/efivarfs/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--CFLAGS = -Wall
-+CFLAGS += -Wall
- 
- TEST_GEN_FILES := open-unlink create-read
- TEST_PROGS := efivarfs.sh
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index 45a3cfc435cf..54cdefb9ccb0 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--CFLAGS = -Wall
-+CFLAGS += -Wall
- CFLAGS += -Wno-nonnull
- CFLAGS += $(KHDR_INCLUDES)
- 
-diff --git a/tools/testing/selftests/firmware/Makefile b/tools/testing/selftests/firmware/Makefile
-index 7992969deaa2..dd9acf972cf5 100644
---- a/tools/testing/selftests/firmware/Makefile
-+++ b/tools/testing/selftests/firmware/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- # Makefile for firmware loading selftests
--CFLAGS = -Wall \
--         -O2
-+CFLAGS += -Wall \
-+          -O2
- 
- TEST_PROGS := fw_run_tests.sh
- TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_upload.sh fw_lib.sh
-diff --git a/tools/testing/selftests/ipc/Makefile b/tools/testing/selftests/ipc/Makefile
-index 50e9c299fc4a..5a5577767a35 100644
---- a/tools/testing/selftests/ipc/Makefile
-+++ b/tools/testing/selftests/ipc/Makefile
-@@ -3,11 +3,11 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
- ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/i386/)
- ifeq ($(ARCH),i386)
-         ARCH := x86
--	CFLAGS := -DCONFIG_X86_32 -D__i386__
-+	CFLAGS += -DCONFIG_X86_32 -D__i386__
- endif
- ifeq ($(ARCH),x86_64)
- 	ARCH := x86
--	CFLAGS := -DCONFIG_X86_64 -D__x86_64__
-+	CFLAGS += -DCONFIG_X86_64 -D__x86_64__
- endif
- 
- CFLAGS += $(KHDR_INCLUDES)
-diff --git a/tools/testing/selftests/mount/Makefile b/tools/testing/selftests/mount/Makefile
-index 2d9454841644..38361a896363 100644
---- a/tools/testing/selftests/mount/Makefile
-+++ b/tools/testing/selftests/mount/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for mount selftests.
--CFLAGS = -Wall \
--         -O2
-+CFLAGS += -Wall \
-+          -O2
- 
- TEST_PROGS := run_unprivileged_remount.sh run_nosymfollow.sh
- TEST_GEN_FILES := unprivileged-remount-test nosymfollow-test
-diff --git a/tools/testing/selftests/mount_setattr/Makefile b/tools/testing/selftests/mount_setattr/Makefile
-index 4d4f810cdf2c..fbdb8f69b548 100644
---- a/tools/testing/selftests/mount_setattr/Makefile
-+++ b/tools/testing/selftests/mount_setattr/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for mount selftests.
--CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2 -pthread
-+CFLAGS += -g $(KHDR_INCLUDES) -Wall -O2 -pthread
- 
- LOCAL_HDRS += ../filesystems/wrappers.h
- 
-diff --git a/tools/testing/selftests/move_mount_set_group/Makefile b/tools/testing/selftests/move_mount_set_group/Makefile
-index 94235846b6f9..8771a5491ea3 100644
---- a/tools/testing/selftests/move_mount_set_group/Makefile
-+++ b/tools/testing/selftests/move_mount_set_group/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for mount selftests.
--CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2
-+CFLAGS += -g $(KHDR_INCLUDES) -Wall -O2
- 
- TEST_GEN_FILES += move_mount_set_group_test
- 
-diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
-index 984534cfbf1b..1d566a91faa7 100644
---- a/tools/testing/selftests/resctrl/Makefile
-+++ b/tools/testing/selftests/resctrl/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
-+CFLAGS += -g -Wall -O2 -D_FORTIFY_SOURCE=2
- CFLAGS += $(KHDR_INCLUDES)
- 
- TEST_GEN_PROGS := resctrl_tests
-diff --git a/tools/testing/selftests/safesetid/Makefile b/tools/testing/selftests/safesetid/Makefile
-index e815bbf2d0f4..d3811515d8e3 100644
---- a/tools/testing/selftests/safesetid/Makefile
-+++ b/tools/testing/selftests/safesetid/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for SafeSetID selftest.
--CFLAGS = -Wall -O2
-+CFLAGS += -Wall -O2
- LDLIBS = -lcap
- 
- TEST_PROGS := safesetid-test.sh
-diff --git a/tools/testing/selftests/signal/Makefile b/tools/testing/selftests/signal/Makefile
-index e0bf7058d19c..6c437f95132d 100644
---- a/tools/testing/selftests/signal/Makefile
-+++ b/tools/testing/selftests/signal/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--CFLAGS = -Wall
-+CFLAGS += -Wall
- TEST_GEN_PROGS = mangle_uc_sigmask
- TEST_GEN_PROGS += sas
- 
-diff --git a/tools/testing/selftests/timens/Makefile b/tools/testing/selftests/timens/Makefile
-index f0d51d4d2c87..357077792395 100644
---- a/tools/testing/selftests/timens/Makefile
-+++ b/tools/testing/selftests/timens/Makefile
-@@ -1,7 +1,7 @@
- TEST_GEN_PROGS := timens timerfd timer clock_nanosleep procfs exec futex vfork_exec
- TEST_GEN_PROGS_EXTENDED := gettime_perf
- 
--CFLAGS := -Wall -Werror -pthread
-+CFLAGS += -Wall -Werror -pthread
- LDLIBS := -lrt -ldl
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
-index 7f6fbe5a0cd5..e9c22dafe5e1 100644
---- a/tools/testing/selftests/tty/Makefile
-+++ b/tools/testing/selftests/tty/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--CFLAGS = -O2 -Wall
-+CFLAGS += -O2 -Wall
- TEST_GEN_PROGS := tty_tstamp_update tty_tiocsti_test
- LDLIBS += -lcap
- 
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index e361aca22a74..1f4628ceb975 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -11,7 +11,7 @@ TEST_GEN_PROGS += vdso_test_correctness
- TEST_GEN_PROGS += vdso_test_getrandom
- TEST_GEN_PROGS += vdso_test_chacha
- 
--CFLAGS := -std=gnu99 -O2 -Wall -Wstrict-prototypes
-+CFLAGS += -std=gnu99 -O2 -Wall -Wstrict-prototypes
- 
- ifeq ($(CONFIG_X86_32),y)
- LDLIBS += -lgcc_s
--- 
-2.43.0
-
+>
+> > +
+> > +       if (unlikely(!knode))
+> > +               return NULL;
+>
+> nit: It seems like node can't (shouldn't) be NULL, so we can lose this check.
+>
+> > +
+> > +       if (WARN_ON_ONCE(READ_ONCE(knode->owner) != head))
+> > +               return NULL;
+> > +
+> > +       list_del_init(&knode->list_head);
+> > +       WRITE_ONCE(knode->owner, NULL);
+> > +
+> > +       return node;
+> > +}
+> > +
+> >  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
+> >  {
+> >         struct list_head *h = (struct list_head *)head;
+> > @@ -4545,6 +4571,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+> >  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+> >  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+> > +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 67c09b43a497..c9557d3fb8dd 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -12461,6 +12461,7 @@ enum special_kfunc_type {
+> >         KF_bpf_list_push_back_impl,
+> >         KF_bpf_list_pop_front,
+> >         KF_bpf_list_pop_back,
+> > +       KF_bpf_list_del,
+> >         KF_bpf_list_front,
+> >         KF_bpf_list_back,
+> >         KF_bpf_cast_to_kern_ctx,
+> > @@ -12521,6 +12522,7 @@ BTF_ID(func, bpf_list_push_front_impl)
+> >  BTF_ID(func, bpf_list_push_back_impl)
+> >  BTF_ID(func, bpf_list_pop_front)
+> >  BTF_ID(func, bpf_list_pop_back)
+> > +BTF_ID(func, bpf_list_del)
+> >  BTF_ID(func, bpf_list_front)
+> >  BTF_ID(func, bpf_list_back)
+> >  BTF_ID(func, bpf_cast_to_kern_ctx)
+> > @@ -12996,6 +12998,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
+> >                btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> >                btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+> >                btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
+> > +              btf_id == special_kfunc_list[KF_bpf_list_del] ||
+> >                btf_id == special_kfunc_list[KF_bpf_list_front] ||
+> >                btf_id == special_kfunc_list[KF_bpf_list_back];
+> >  }
+> > @@ -13118,7 +13121,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+> >         switch (node_field_type) {
+> >         case BPF_LIST_NODE:
+> >                 ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> > -                      kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl]);
+> > +                      kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> > +                      kfunc_btf_id == special_kfunc_list[KF_bpf_list_del]);
+> >                 break;
+> >         case BPF_RB_NODE:
+> >                 ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
+> > --
+> > 2.50.1 (Apple Git-155)
+> >
+> >
