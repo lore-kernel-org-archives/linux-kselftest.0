@@ -1,30 +1,32 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA609382F36
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Mar 2026 07:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3E4384258
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Mar 2026 07:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772870208; cv=none; b=eVAg0CW8159E7lSvQhRjEMJEw0yCJoHIc68xa41AxRwfhtwb5+wls1khzOd+d4DCC3qP+gT6ZPBAJlNvXLcfzCg9mUzx5TirNLhb78Wcv3ecMU+N59Sk9hslY2ERNqejK2WydVAW3+JGKL6deIgJsR2xIDW1lRLAwE7iOM0vdno=
+	t=1772870208; cv=none; b=W5d4lT92vf91ZwXMhf8AkGq3bzRlLzdACHRG4itf4L+wWb+xXHfqHPpZSXjQJW5LqkxOorgZonVqqv2+i5PN5HuS9n0PmhICRmzPsHQmDWnKo51kWu2jVQ4bWYLVfxMbipt4GvTFsIdaqkIWEtZqDRoNBsQPUm1jw9/4faT9Psw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1772870208; c=relaxed/simple;
-	bh=U8RUUeGilFDHknUNEdd0tSHbnS45+D/2tvZmP3wW9g8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=OLYMgVlPsUqiOC2kh+ycpWlM5Kv3st/HP+84GRp37FoeY41tD6X20ZYELvJ2rJiFhfWwhU8bbE9Xxk2H8kCeGcxYl14OlFp0z9zHnWn6TZK3d1Qfb0FIGP8vQx8LoHD7YL9WyyggUKa+XNStSnq3Hk4f28HdBMRTkvQASXxUT4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hNyqyP7o; arc=none smtp.client-ip=91.218.175.181
+	bh=HURN/M0ydglyf7NiNt8NA9qid+EiKbGh6AVWZHYUeUQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JBUiBaBrnoWJfDTmsq8d8kryoR8sPSl8K9qSXOxTDypuraBp26iEeNhElLCkGx0pqQGLMHgPSFgOJRY+hp6nVNGY/lpQJBAZcGVwdfUjMHrDueeecYpq8OvE/RRKgH91DLvaxgvtRb7SnntQ7LPJLpDdclyNd+RTOEFwzH5H32A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U68QlaFe; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hNyqyP7o"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U68QlaFe"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772870195;
+	t=1772870205;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3mYnBy/bzSeO1vF0Ly6EsmQXiWM6VcKosNNYscEB+1c=;
-	b=hNyqyP7oD23kFoPHgYzmfyJoTM7+EEa3xLxA4asR2cI1Z6XPa60vLBKtNG8ImNoMYy9sCT
-	GUpx0OBbyi2mHbf43LjyRPuZAT/11IJDaCUFnvsqbupkLIQ0+Pia6RpEcuhwyowxmDlah7
-	ouGnuMzRYF6McLMQqy5zDiEasNmsXPE=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kavOweELcbKyCnv5m6Jbe+B7ZhsN+PyJPlEOpICH0aE=;
+	b=U68QlaFeL/cYrhxfCglu6p5BK7+K1VrP9fElTRx/E9UdXnJpKQIzys85xh4ldDfq47RF10
+	1eQEQJJx7khZuUoTAMj0yayW6D6pSyRreO0MANJcHuhhDihOSOsNYw0DIRRlcPv/+sCYAk
+	L85Gz2fkpLtDQ5M6L32GemEgNuE9/IE=
 From: Zhu Yanjun <yanjun.zhu@linux.dev>
 To: jgg@ziepe.ca,
 	leon@kernel.org,
@@ -33,9 +35,11 @@ To: jgg@ziepe.ca,
 	dsahern@kernel.org,
 	linux-rdma@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCHv2 0/4] RDMA/rxe: Add the support that rxe can work in net namespace
-Date: Fri,  6 Mar 2026 23:56:07 -0800
-Message-ID: <20260307075611.3410-1-yanjun.zhu@linux.dev>
+Subject: [PATCH 4/4] RDMA/rxe: Add testcase for net namespace rxe
+Date: Fri,  6 Mar 2026 23:56:11 -0800
+Message-ID: <20260307075611.3410-5-yanjun.zhu@linux.dev>
+In-Reply-To: <20260307075611.3410-1-yanjun.zhu@linux.dev>
+References: <20260307075611.3410-1-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,64 +49,19 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Currently rxe does not work correctly in network namespaces.
+Add 4 testcases for rxe with net namespace.
 
-When the rdma_rxe module is loaded, a UDP socket listening on port
-4791 is created in init_net. When users run:
-
-    ip link add ... type rxe
-
-inside another network namespace, the RXE RDMA link is created but it
-cannot function properly because the underlying UDP socket belongs to
-init_net. Other network namespaces cannot use that socket.
-
-To address this issue, this series introduces net namespace support
-for rxe and moves socket management to be per network namespace.
-
-The series first introduces per-net namespace management for the IPv4
-and IPv6 sockets used by rxe. The sockets are created when the network
-namespace becomes active and are released when the namespace is
-destroyed.
-
-Based on this infrastructure, rxe RDMA links are then created and
-destroyed within each network namespace. This ensures that both the
-UDP sockets and RDMA links are correctly scoped to the namespace in
-which they are used.
-
-With these changes, rxe RDMA links can be created and used both in
-init_net and in other network namespaces, and resources are properly
-cleaned up during namespace teardown.
-
-The series also includes a selftest to verify RXE functionality in
-network namespaces.
-
-V1 -> V2: Fix the problems based on David Ahern.
-
-Zhu Yanjun (4):
-  RDMA/nldev: Add dellink function pointer
-  RDMA/rxe: Add net namespace support for IPv4/IPv6 sockets
-  RDMA/rxe: Support RDMA link creation and destruction per net namespace
-  RDMA/rxe: Add testcase for net namespace rxe
-
- MAINTAINERS                                   |   1 +
- drivers/infiniband/core/nldev.c               |   6 +
- drivers/infiniband/sw/rxe/Makefile            |   3 +-
- drivers/infiniband/sw/rxe/rxe.c               |  38 ++++-
- drivers/infiniband/sw/rxe/rxe_net.c           | 144 +++++++++++++-----
- drivers/infiniband/sw/rxe/rxe_net.h           |   9 +-
- drivers/infiniband/sw/rxe/rxe_ns.c            | 136 +++++++++++++++++
- drivers/infiniband/sw/rxe/rxe_ns.h            |  17 +++
- include/rdma/rdma_netlink.h                   |   2 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/rdma/Makefile         |   7 +
- tools/testing/selftests/rdma/config           |   3 +
- tools/testing/selftests/rdma/rxe_ipv6.sh      |  47 ++++++
- .../selftests/rdma/rxe_rping_between_netns.sh |  57 +++++++
- .../selftests/rdma/rxe_socket_with_netns.sh   |  64 ++++++++
- .../rdma/rxe_test_NETDEV_UNREGISTER.sh        |  38 +++++
- 16 files changed, 526 insertions(+), 47 deletions(-)
- create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.c
- create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.h
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+---
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/rdma/Makefile         |  7 ++
+ tools/testing/selftests/rdma/config           |  3 +
+ tools/testing/selftests/rdma/rxe_ipv6.sh      | 47 ++++++++++++++
+ .../selftests/rdma/rxe_rping_between_netns.sh | 57 +++++++++++++++++
+ .../selftests/rdma/rxe_socket_with_netns.sh   | 64 +++++++++++++++++++
+ .../rdma/rxe_test_NETDEV_UNREGISTER.sh        | 38 +++++++++++
+ 8 files changed, 218 insertions(+)
  create mode 100644 tools/testing/selftests/rdma/Makefile
  create mode 100644 tools/testing/selftests/rdma/config
  create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
@@ -110,6 +69,282 @@ Zhu Yanjun (4):
  create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
  create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 89007f9ed35e..3835857d0192 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24493,6 +24493,7 @@ L:	linux-rdma@vger.kernel.org
+ S:	Supported
+ F:	drivers/infiniband/sw/rxe/
+ F:	include/uapi/rdma/rdma_user_rxe.h
++F:	tools/testing/selftests/rdma/
+ 
+ SOFTLOGIC 6x10 MPEG CODEC
+ M:	Bluecherry Maintainers <maintainers@bluecherrydvr.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 450f13ba4cca..110e07c0d99d 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -94,6 +94,7 @@ TARGETS += proc
+ TARGETS += pstore
+ TARGETS += ptrace
+ TARGETS += openat2
++TARGETS += rdma
+ TARGETS += resctrl
+ TARGETS += riscv
+ TARGETS += rlimits
+diff --git a/tools/testing/selftests/rdma/Makefile b/tools/testing/selftests/rdma/Makefile
+new file mode 100644
+index 000000000000..7dd7cba7a73c
+--- /dev/null
++++ b/tools/testing/selftests/rdma/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++TEST_PROGS := rxe_rping_between_netns.sh \
++		rxe_ipv6.sh \
++		rxe_socket_with_netns.sh \
++		rxe_test_NETDEV_UNREGISTER.sh
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
+new file mode 100644
+index 000000000000..4ffb814e253b
+--- /dev/null
++++ b/tools/testing/selftests/rdma/config
+@@ -0,0 +1,3 @@
++CONFIG_TUN
++CONFIG_VETH
++CONFIG_RDMA_RXE
+diff --git a/tools/testing/selftests/rdma/rxe_ipv6.sh b/tools/testing/selftests/rdma/rxe_ipv6.sh
+new file mode 100755
+index 000000000000..9337ac4fd13f
+--- /dev/null
++++ b/tools/testing/selftests/rdma/rxe_ipv6.sh
+@@ -0,0 +1,47 @@
++#!/bin/sh
++
++# Notes:
++#
++# 1. Before running this script, please disable the firewall, as it may
++# block UDP port 4791.
++
++# 2. This test script depends on the veth and tun drivers. Before running
++#  the script, please verify that both drivers are available by executing:
++#
++# modinfo tun
++# modinfo veth
++#
++# Make sure these commands return valid module information.
++
++# 3. ipv6 test.
++# While RXE is conventionally deployed over IPv4, it maintains
++# native support for IPv6. However, IPv6 implementations typically
++# receive less validation and performance tuning in standard use cases.
++exec > /dev/null
++# 1) create ipv6 net namespace
++ip netns add net6
++ip link add veth0 type veth peer name veth1
++ip link set veth1 netns net6
++ip netns exec net6 ip addr add 2001:db8::1/64 dev veth1
++ip netns exec net6 ip link set veth1 up
++
++# 2) Add rdma link
++ip netns exec net6 rdma link add rxe6 type rxe netdev veth1
++
++# 3) check IPv6 UDP 4791 listening port
++if ! ip netns exec net6 ss -ul6n | grep :4791; then
++	echo "Error: udp port 4791 exists"
++	exit 1
++fi
++
++# 4) Delete rxe link
++ip netns exec net6 rdma link del rxe6
++if ip netns exec net6 ss -ul6n | grep :4791; then  # result should be null
++	echo "Error: udp port 4791 exists"
++	exit 1
++fi
++
++# 5) delete net6
++ip netns del net6
++
++modprobe -v -r rdma_rxe
+diff --git a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+new file mode 100755
+index 000000000000..80b4249dba55
+--- /dev/null
++++ b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+@@ -0,0 +1,57 @@
++#!/bin/sh
++
++# Notes:
++#
++# 1. Before running this script, please disable the firewall, as it may
++# block UDP port 4791.
++
++# 2. This test script depends on the veth and tun drivers. Before running
++#  the script, please verify that both drivers are available by executing:
++#
++# modinfo veth
++#
++# Make sure these commands return valid module information.
++
++#1. Check if rping can work or not
++exec > /dev/null
++ip netns add test1
++ip netns ls
++ip link add veth-a type veth peer name veth-b
++ip l
++ip link set veth-a netns test1
++ip l
++ip netns exec test1 ip l set veth-a up
++ip netns exec test1 ip addr add 1.1.1.1/24 dev veth-a
++ip netns exec test1 ip l
++ip netns exec test1 ip -4 a
++ip netns exec test1 rdma link add rxe0 type rxe netdev veth-a
++
++#check if socket exist or not
++ip netns exec test1 ss -lun | grep :4791
++
++ip netns exec test1 rdma link
++ip link set veth-b up
++ip addr add 1.1.1.2/24 dev veth-b
++ping -c 3 1.1.1.1 || exit 1
++ip netns exec test1 rping -s -a 1.1.1.1&
++rdma link add rxe1 type rxe netdev veth-b
++rdma link
++
++#check if socket exist or not
++ss -lun | grep :4791
++
++rping -c -a 1.1.1.1 -d -v -C 3 || exit 1
++ip netns ls
++rdma link del rxe1
++
++#check if socket exist or not
++ss -lun | grep :4791
++
++ip netns exec test1 ss -lun | grep :4791
++ip netns exec test1 rdma link del rxe0
++ip netns exec test1 ss -lun | grep :4791
++ip netns del test1
++ip netns ls
++
++modprobe -v -r veth
++modprobe -v -r rdma_rxe
+diff --git a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+new file mode 100755
+index 000000000000..676aec63babd
+--- /dev/null
++++ b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+@@ -0,0 +1,64 @@
++#!/bin/sh
++
++# Notes:
++#
++# 1. Before running this script, please disable the firewall, as it may
++# block UDP port 4791.
++
++# 2. This test script depends on the veth and tun drivers. Before running
++#  the script, please verify that both drivers are available by executing:
++#
++# modinfo tun
++#
++# Make sure these commands return valid module information.
++
++# Check if socket exist or not
++exec > /dev/null
++ip tuntap add mode tun tun0
++ip -4 a
++ip addr add 1.1.1.1/24 dev tun0
++ip link set tun0 up
++ip -4 a
++rdma link add rxe0 type rxe netdev tun0
++rdma link
++ret=`ss -lun | grep :4791`
++if [ X"$ret" == X"" ]; then
++	echo "Error: udp port 4791 does not exist"
++	exit 1
++fi
++
++ip tuntap add mode tun tun1
++ip -4 a
++ip addr add 2.2.2.2/24 dev tun1
++ip link set tun1 up
++rdma link add rxe1 type rxe netdev tun1
++rdma link
++ret=`ss -lun | grep :4791`
++if [ X"$ret" == X"" ]; then
++	echo "Error: udp port 4791 does not exist"
++	exit 1
++fi
++
++rdma link del rxe1
++rdma link
++ret=`ss -lun | grep :4791`
++if [ X"$ret" == X"" ]; then
++	echo "Error: udp port 4791 doese not exist"
++	exit 1
++fi
++
++rdma link del rxe0
++rdma link
++if ss -lun | grep :4791; then
++	echo "Error: udp port 4791 exists"
++	exit 1
++fi
++
++ip addr del 2.2.2.2/24 dev tun1
++ip tuntap del mode tun tun1
++
++ip addr del 1.1.1.1/24 dev tun0
++ip tuntap del mode tun tun0
++
++modprobe -v -r tun
++modprobe -v -r rdma_rxe
+diff --git a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+new file mode 100755
+index 000000000000..c30ff905b121
+--- /dev/null
++++ b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+@@ -0,0 +1,38 @@
++#!/bin/sh
++
++# Notes:
++#
++# 1. Before running this script, please disable the firewall, as it may
++# block UDP port 4791.
++
++# 2. This test script depends on the veth and tun drivers. Before running
++#  the script, please verify that both drivers are available by executing:
++#
++# modinfo tun
++# modinfo veth
++#
++# Make sure these commands return valid module information.
++
++# Trigger NETDEV_UNREGISTER
++exec > /dev/null
++ip tuntap add mode tun tun0
++ip -4 a
++ip addr add 1.1.1.1/24 dev tun0
++ip link set tun0 up
++ip -4 a
++rdma link add rxe0 type rxe netdev tun0
++rdma link
++ss -lun | grep :4791
++
++ip l
++ip addr del 1.1.1.1/24 dev tun0
++ip tuntap del mode tun tun0
++
++rdma link
++if ss -lun | grep :4791; then
++	echo "error"
++	exit 1
++fi
++
++modprobe -v -r tun
++modprobe -v -r rdma_rxe
 -- 
 2.52.0
 
