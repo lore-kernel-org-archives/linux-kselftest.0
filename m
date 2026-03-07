@@ -1,774 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3D03081D6;
-	Sat,  7 Mar 2026 09:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6422DAFA5
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Mar 2026 14:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772874158; cv=none; b=C0GXgrC7EG5qoPN1LGeTVMUtnF0xySWaMNVHEUm3lqqJjjzN89qmtPRp6t03xAgCrlZtQZo3otetDXyrl98kYGV65Gq52td9Pmm5uC/UXY0nYo+d3f1SbqTvaA+P0s9kSRjJc190hGv/KLoYi75+4yjH619lQ+ApG41CvomirK8=
+	t=1772892475; cv=none; b=I4LhLEhGJHnnK+a/N+ZVnvgS2smkezza9zGo1aK/JfblYPE6fJUNLB+YaUQow4NMqO5E+QuOWlQtwhVgbkqEc0kI2W521JTXnRsG93vPaQ+EwGh2vPPHqyQqQHr+DDFEbaJqJjh4NMLEZbBYv2SrjdAsRcaTCCC64qNsjLRexBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772874158; c=relaxed/simple;
-	bh=xsZia8cZTPf5dVmEDNK9cMIy9SirTe4oE/oXqX//KVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OhVUN1ebGWOpRmyweLRZQgO2mbwKl7cMHxS0iXDXYsTPz+g+jRY/SY6DHIUiEp16BdlmGSew6yb9yRCSf0+wDzmqPXXEWcAPt9cEDoFpqVZuLezMlvOAWGm9c6RXhS/rAlf8C56hlTTXGNJnazC7vt4Jc7bRNL6rPFI7hjtm4Fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lPP3StuJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772892475; c=relaxed/simple;
+	bh=q0HizNdLQtkBg+6I2Uwr71BFH46+Qf7XsNZYRKQhaSU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gsqwAwLphLkOSr5atoGAQEJ9nmwuVicvj7vjXD7kRvg3/qUoqWNTD1RKzcESggnmSZ61DT1qBcCTq02Bv+s2l6EQlqtKe88zdZMJUIKv1ahq67cbLe9IgTgwc4JAJI93COAatIx1XdqfI6H+CU7fi/l5xDx5SEbF3SnvtULhMFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E0w/g9Nx; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lPP3StuJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358A3C19422;
-	Sat,  7 Mar 2026 09:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772874157;
-	bh=xsZia8cZTPf5dVmEDNK9cMIy9SirTe4oE/oXqX//KVM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lPP3StuJ8UXVzQNPzhzcdZB61B3ohjA3+I+sRAQkpgNkrGVxkireq+JmtORNMPdu/
-	 Z/yrqjpd8LZnLZV/OsKxa/4Clx/TVRoGAf7pYloueBejT9y9zhmyAU7f4uNOCZVSSz
-	 /oVZm37P5dfVazVS1uiU1E9P8FmZcMVHhB66YvJjcbyntVSqPBHNh6VJm3+Wh4JIqZ
-	 orkWnQqkDbNT5mUhZixp5A8loEEcqi1D2YHyWoSnzVSiisMUa11D9Y4wQLL/O24dPW
-	 NRwaiMNa0Ox2Hmqg210Ih4h8ETyyxlUUUORDZjik9XLajD0G3UAzy0FhL25yj0Jvji
-	 rIOH/dEU/q8+w==
-Date: Sat, 7 Mar 2026 11:02:28 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Jordan Richards <jordanrichards@google.com>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Pratyush Yadav <pratyush@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Jason Miu <jasonmiu@google.com>,
-	David Matlack <dmatlack@google.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] selftests/liveupdate: add end to end test
- infrastructure and scripts
-Message-ID: <aavppIjTd1LG5fa-@kernel.org>
-References: <20260303010039.2969125-1-jordanrichards@google.com>
- <20260303010039.2969125-3-jordanrichards@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E0w/g9Nx"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82990763921so2632668b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Mar 2026 06:07:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772892474; x=1773497274; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jdS9yl/p7UlIdGAR7tR/qX6v6/HUi/AMSzKRwMf8jaY=;
+        b=E0w/g9NxXfrlsysae4YQT/Z4nbnodAnvGWqE08bbrpnk1Aq8YcRn0aFEoF/5vlTbWW
+         WujCp1WTHP84Vu9NzWTO5cm19RDvgowO5A8HjFVs/hLEZsuKZhdoCmxRM1kaWWg6hT9c
+         bEfqNF3eBHHzthgEHDGPLfvBskdeKoecQKp8je7JmxvNFEnShD+loq8YA1b8Lr504KP2
+         xELbXsCVqhhCpORruuwseOoRWd68tcGotqQRIRoTxeaZu2zirMid0nJj4pJhOVtCD8Rd
+         sHPN9q7TYpWWhwqC5Xs3rOMAh574q3FGNCxBTWnBEAs5nFnCCOLTUcyPs5aTqQGSpRPX
+         08gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772892474; x=1773497274;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jdS9yl/p7UlIdGAR7tR/qX6v6/HUi/AMSzKRwMf8jaY=;
+        b=pEh7k60CIwx46fYmaRvNk+J71YaMrA/w8PqP8KrpjePokOx93PKVrnoCI9C9vkLDGY
+         zfwZlh7v/otZHzdHSp0wRqWvwbW1SCziRWODi9iKFEx8pkc6YGJXdhLNvQpmqTSQL6fD
+         3QsW4qSMDZvTTz34KB0nLhQkd2kY4wlQxHzkAC3fNjx71mwM10rbx+O61rHmHXCOJ+EN
+         Rs2IHfoGESXTgd6TzNCOL/Pvq1+RP2Jx70DD2EW3Xklzzg+CVzl/TXtb3jdm1COgfYkX
+         2g0J1/voUsizdCvC/6ob39kscDTDjUN9VTbBU359M11TdKdGLOCHYoYGKP/PdoenM29/
+         b43Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWp1vb8yhE8eWDKx9ugJF/3S3+X8PO+x3ytJAwX+H2MVUtpQwXU5msZNyLGvyZLGRFKFHHBNpNdDRp4RS5USew=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4pffpm6WbVWcFUeoygn3sp9Ehxwl41M5tTPmhGBCRDHZ74dm1
+	FlLSV4X9HWPf9iFbVzEKUUoyxgz6OB80HgBGOe3SSCFvXh03FSEeWIBB
+X-Gm-Gg: ATEYQzwMAIbD2onFZo4csME0PJKoS8Sxh5HyTZQ7n5o+J86kJuS4CSteh4/+m9A1IT+
+	8VZQ0kh+yf/zawb4WSdbKtOOOILd8ubhey0JVTVSBDuydjZKlESlkZkiSUDeksD1x6sBRYRSJem
+	swJgGKZe9nn8pqEb5+VF6BwjFJCOWGuaEme5Up+WGsDJvXOQFG4CWOjZdQQVEf1fSXT/mwP43Tz
+	v8zuwl5KgYDETy2FBnFYLrzQS+zPFOfbwrRfbZ7PeUdysCdpj5THAz/K5BZiOBKULCCb2ODMu6p
+	wXC4uQMDLmQY+DcXVXCNOKPdph8MCqzxjzudvnCDQIwGoI7DIYGcB18g04eDU0gksrcG+/svQd5
+	CaOLIOvimSUd6LXIRwfcFv8/7crVBBU724gkGjKaaUidmstlBahsBO51i5nTeypmcQDR6DU5J7j
+	s8GDN+GLIJi0N2ul8pLeYpwSW08GA55jil4ssjU4h9ZyxhSyCaeWU1atIMebuuLZJcyw==
+X-Received: by 2002:a05:6a00:1581:b0:827:26b0:58d6 with SMTP id d2e1a72fcca58-829a30bf515mr4247393b3a.47.1772892473854;
+        Sat, 07 Mar 2026 06:07:53 -0800 (PST)
+Received: from toolbx ([103.103.35.10])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a48ddd18sm4747313b3a.56.2026.03.07.06.07.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Mar 2026 06:07:53 -0800 (PST)
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	ceph-devel@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-nfs@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	v9fs@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	jlayton@kernel.org,
+	chuck.lever@oracle.com,
+	alex.aring@gmail.com,
+	arnd@arndb.de,
+	adilger@dilger.ca,
+	mjguzik@gmail.com,
+	smfrench@gmail.com,
+	richard.henderson@linaro.org,
+	mattst88@gmail.com,
+	linmag7@gmail.com,
+	tsbogend@alpha.franken.de,
+	James.Bottomley@HansenPartnership.com,
+	deller@gmx.de,
+	davem@davemloft.net,
+	andreas@gaisler.com,
+	idryomov@gmail.com,
+	amarkuze@redhat.com,
+	slava@dubeyko.com,
+	agruenba@redhat.com,
+	trondmy@kernel.org,
+	anna@kernel.org,
+	sfrench@samba.org,
+	pc@manguebit.org,
+	ronniesahlberg@gmail.com,
+	sprasad@microsoft.com,
+	tom@talpey.com,
+	bharathsm@microsoft.com,
+	shuah@kernel.org,
+	miklos@szeredi.hu,
+	hansg@kernel.org
+Subject: [PATCH v5 0/4] OPENAT2_REGULAR flag support for openat2
+Date: Sat,  7 Mar 2026 20:06:42 +0600
+Message-ID: <20260307140726.70219-1-dorjoychy111@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260303010039.2969125-3-jordanrichards@google.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Jordan,
+Hi,
 
-On Tue, Mar 03, 2026 at 01:00:39AM +0000, Jordan Richards wrote:
-> From: Pasha Tatashin <pasha.tatashin@soleen.com>
-> 
-> Add the end to end testing infrastructure required to verify the
-> liveupdate feature. This includes a custom init process, a test
-> orchestration script, and a batch runner.
-> 
-> The framework consists of:
-> 
-> init.c:
-> A lightweight init process that manages the kexec lifecycle.
-> It mounts necessary filesystems, determines the current execution
-> stage (1 or 2) via the kernel command line, and handles the
-> kexec_file_load() sequence to transition between kernels.
-> 
-> luo_test.sh:
-> The primary KTAP-compliant test driver. It handles:
-> - Kernel configuration merging and building.
-> - Cross-compilation detection for x86_64 and arm64.
-> - Generation of the initrd containing the test binary and init.
-> - QEMU execution with automatic accelerator detection (KVM, HVF,
->  or TCG).
-> 
-> run.sh:
-> A wrapper script to discover and execute all `luo_*.c`
-> tests across supported architectures, providing a summary of
-> pass/fail/skip results.
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Co-developed-by: Jordan Richards <jordanrichards@google.com>
-> Signed-off-by: Jordan Richards <jordanrichards@google.com>
+I came upon this "Ability to only open regular files" uapi feature suggestion
+from https://uapi-group.org/kernel-features/#ability-to-only-open-regular-files
+and thought it would be something I could do as a first patch and get to
+know the kernel code a bit better.
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+The following filesystems have been tested by building and booting the kernel
+x86 bzImage in a Fedora 43 VM in QEMU. I have tested with OPENAT2_REGULAR that
+regular files can be successfully opened and non-regular files (directory, fifo etc)
+return -EFTYPE.
+- btrfs
+- NFS (loopback)
+- SMB (loopback)
 
-And please keep the tags for patches that don't change between the set
-revisions ;-)
+Changes in v5:
+- EFTYPE is already used in BSDs mentioned in commit message
+- consistently return -EFTYPE in all filesystems
 
-> ---
->  tools/testing/selftests/liveupdate/.gitignore |   1 +
->  tools/testing/selftests/liveupdate/config     |   1 +
->  .../selftests/liveupdate/config.aarch64       |   2 +
->  .../selftests/liveupdate/config.x86_64        |   2 +
->  tools/testing/selftests/liveupdate/init.c     | 179 ++++++++++++
->  .../testing/selftests/liveupdate/luo_test.sh  | 276 ++++++++++++++++++
->  .../selftests/liveupdate/luo_test_utils.c     |  23 +-
->  tools/testing/selftests/liveupdate/run.sh     |  63 ++++
->  8 files changed, 534 insertions(+), 13 deletions(-)
->  create mode 100644 tools/testing/selftests/liveupdate/config.aarch64
->  create mode 100644 tools/testing/selftests/liveupdate/config.x86_64
->  create mode 100644 tools/testing/selftests/liveupdate/init.c
->  create mode 100755 tools/testing/selftests/liveupdate/luo_test.sh
->  create mode 100755 tools/testing/selftests/liveupdate/run.sh
-> 
-> diff --git a/tools/testing/selftests/liveupdate/.gitignore b/tools/testing/selftests/liveupdate/.gitignore
-> index 661827083ab6..cb08ddb0dfee 100644
-> --- a/tools/testing/selftests/liveupdate/.gitignore
-> +++ b/tools/testing/selftests/liveupdate/.gitignore
-> @@ -6,4 +6,5 @@
->  !*.sh
->  !.gitignore
->  !config
-> +!config.*
->  !Makefile
-> diff --git a/tools/testing/selftests/liveupdate/config b/tools/testing/selftests/liveupdate/config
-> index 91d03f9a6a39..016d009dba13 100644
-> --- a/tools/testing/selftests/liveupdate/config
-> +++ b/tools/testing/selftests/liveupdate/config
-> @@ -1,4 +1,5 @@
->  CONFIG_BLK_DEV_INITRD=y
-> +CONFIG_DEVTMPFS=y
->  CONFIG_KEXEC_FILE=y
->  CONFIG_KEXEC_HANDOVER=y
->  CONFIG_KEXEC_HANDOVER_ENABLE_DEFAULT=y
-> diff --git a/tools/testing/selftests/liveupdate/config.aarch64 b/tools/testing/selftests/liveupdate/config.aarch64
-> new file mode 100644
-> index 000000000000..445716403925
-> --- /dev/null
-> +++ b/tools/testing/selftests/liveupdate/config.aarch64
-> @@ -0,0 +1,2 @@
-> +CONFIG_SERIAL_AMBA_PL011=y
-> +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-> diff --git a/tools/testing/selftests/liveupdate/config.x86_64 b/tools/testing/selftests/liveupdate/config.x86_64
-> new file mode 100644
-> index 000000000000..810d9c9d213e
-> --- /dev/null
-> +++ b/tools/testing/selftests/liveupdate/config.x86_64
-> @@ -0,0 +1,2 @@
-> +CONFIG_SERIAL_8250=y
-> +CONFIG_SERIAL_8250_CONSOLE=y
-> diff --git a/tools/testing/selftests/liveupdate/init.c b/tools/testing/selftests/liveupdate/init.c
-> new file mode 100644
-> index 000000000000..fb08bd58b9b9
-> --- /dev/null
-> +++ b/tools/testing/selftests/liveupdate/init.c
-> @@ -0,0 +1,179 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (c) 2025, Google LLC.
-> + * Pasha Tatashin <pasha.tatashin@soleen.com>
-> + */
-> +#include <fcntl.h>
-> +#include <linux/kexec.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <sys/mount.h>
-> +#include <sys/reboot.h>
-> +#include <sys/syscall.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +
-> +#define COMMAND_LINE_SIZE 2048
-> +#define KERNEL_IMAGE "/kernel"
-> +#define INITRD_IMAGE "/initrd.img"
-> +#define TEST_BINARY "/test_binary"
-> +
-> +static int mount_filesystems(void)
-> +{
-> +	if (mount("devtmpfs", "/dev", "devtmpfs", 0, NULL) < 0) {
-> +		fprintf(stderr, "INIT: Warning: Failed to mount devtmpfs\n");
-> +		return -1;
-> +	}
-> +
-> +	if (mount("debugfs", "/debugfs", "debugfs", 0, NULL) < 0) {
-> +		fprintf(stderr, "INIT: Failed to mount debugfs\n");
-> +		return -1;
-> +	}
-> +
-> +	if (mount("proc", "/proc", "proc", 0, NULL) < 0) {
-> +		fprintf(stderr, "INIT: Failed to mount proc\n");
-> +		return -1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static long kexec_file_load(int kernel_fd, int initrd_fd,
-> +			    unsigned long cmdline_len, const char *cmdline,
-> +			    unsigned long flags)
-> +{
-> +	return syscall(__NR_kexec_file_load, kernel_fd, initrd_fd, cmdline_len,
-> +		       cmdline, flags);
-> +}
-> +
-> +static int kexec_load(void)
-> +{
-> +	char cmdline[COMMAND_LINE_SIZE];
-> +	int kernel_fd, initrd_fd, err;
-> +	ssize_t len;
-> +	int fd;
-> +
-> +	fd = open("/proc/cmdline", O_RDONLY);
-> +	if (fd < 0) {
-> +		fprintf(stderr, "INIT: Failed to read /proc/cmdline\n");
-> +
-> +		return -1;
-> +	}
-> +
-> +	len = read(fd, cmdline, sizeof(cmdline) - 1);
-> +	close(fd);
-> +	if (len < 0)
-> +		return -1;
-> +
-> +	cmdline[len] = 0;
-> +	if (len > 0 && cmdline[len - 1] == '\n')
-> +		cmdline[len - 1] = 0;
-> +
-> +	strncat(cmdline, " luo_stage=2", sizeof(cmdline) - strlen(cmdline) - 1);
-> +
-> +	kernel_fd = open(KERNEL_IMAGE, O_RDONLY);
-> +	if (kernel_fd < 0) {
-> +		fprintf(stderr, "INIT: Failed to open kernel image\n");
-> +		return -1;
-> +	}
-> +
-> +	initrd_fd = open(INITRD_IMAGE, O_RDONLY);
-> +	if (initrd_fd < 0) {
-> +		fprintf(stderr, "INIT: Failed to open initrd image\n");
-> +		close(kernel_fd);
-> +		return -1;
-> +	}
-> +
-> +	err = kexec_file_load(kernel_fd, initrd_fd, strlen(cmdline) + 1,
-> +			      cmdline, 0);
-> +
-> +	close(initrd_fd);
-> +	close(kernel_fd);
-> +
-> +	return err;
-> +}
-> +
-> +static int run_test(int stage)
-> +{
-> +	char stage_arg[32];
-> +	int status;
-> +	pid_t pid;
-> +
-> +	snprintf(stage_arg, sizeof(stage_arg), "%d", stage);
-> +
-> +	pid = fork();
-> +	if (pid < 0)
-> +		return -1;
-> +
-> +	if (!pid) {
-> +		char *const argv[] = {TEST_BINARY, "-s", stage_arg, NULL};
-> +
-> +		execve(TEST_BINARY, argv, NULL);
-> +		fprintf(stderr, "INIT: execve failed\n");
-> +		_exit(1);
-> +	}
-> +
-> +	waitpid(pid, &status, 0);
-> +
-> +	return (WIFEXITED(status) && WEXITSTATUS(status) == 0) ? 0 : -1;
-> +}
-> +
-> +static int get_current_stage(void)
-> +{
-> +	char cmdline[COMMAND_LINE_SIZE];
-> +	ssize_t len;
-> +	int fd;
-> +
-> +	fd = open("/proc/cmdline", O_RDONLY);
-> +	if (fd < 0)
-> +		return -1;
-> +
-> +	len = read(fd, cmdline, sizeof(cmdline) - 1);
-> +	close(fd);
-> +
-> +	if (len < 0)
-> +		return -1;
-> +
-> +	cmdline[len] = 0;
-> +
-> +	return strstr(cmdline, "luo_stage=2") ? 2 : 1;
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	int current_stage;
-> +	int err;
-> +
-> +	if (mount_filesystems())
-> +		goto err_reboot;
-> +
-> +	current_stage = get_current_stage();
-> +	if (current_stage < 0) {
-> +		fprintf(stderr, "INIT: Failed to read cmdline");
-> +		goto err_reboot;
-> +	}
-> +
-> +	printf("INIT: Starting Stage %d\n", current_stage);
-> +
-> +	if (current_stage == 1 && kexec_load()) {
-> +		fprintf(stderr, "INIT: Failed to load kexec kernel\n");
-> +		goto err_reboot;
-> +	}
-> +
-> +	if (run_test(current_stage)) {
-> +		fprintf(stderr, "INIT: Test binary returned failure\n");
-> +		goto err_reboot;
-> +	}
-> +
-> +	printf("INIT: Stage %d completed successfully.\n", current_stage);
-> +	reboot(current_stage == 1 ? RB_KEXEC : RB_AUTOBOOT);
-> +
-> +	return 0;
-> +
-> +err_reboot:
-> +	reboot(RB_AUTOBOOT);
-> +
-> +	return -1;
-> +}
-> diff --git a/tools/testing/selftests/liveupdate/luo_test.sh b/tools/testing/selftests/liveupdate/luo_test.sh
-> new file mode 100755
-> index 000000000000..1520711b1d35
-> --- /dev/null
-> +++ b/tools/testing/selftests/liveupdate/luo_test.sh
-> @@ -0,0 +1,276 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -ue
-> +
-> +CROSS_COMPILE="${CROSS_COMPILE:-""}"
-> +
-> +test_dir=$(realpath "$(dirname "$0")")
-> +kernel_dir=$(realpath "$test_dir/../../../..")
-> +
-> +workspace_dir=""
-> +headers_dir=""
-> +initrd=""
-> +KEEP_WORKSPACE=0
-> +
-> +source "$test_dir/../kselftest/ktap_helpers.sh"
-> +
-> +function get_arch_conf() {
-> +	local arch=$1
-> +	if [[ "$arch" == "arm64" ]]; then
-> +		QEMU_CMD="qemu-system-aarch64 -M virt -cpu max"
-> +		KERNEL_IMAGE="Image"
-> +		KERNEL_CMDLINE="console=ttyAMA0"
-> +	elif [[ "$arch" == "x86" ]]; then
-> +		QEMU_CMD="qemu-system-x86_64"
-> +		KERNEL_IMAGE="bzImage"
-> +		KERNEL_CMDLINE="console=ttyS0"
-> +	else
-> +		echo "Unsupported architecture: $arch"
-> +		exit 1
-> +	fi
-> +}
-> +
-> +function usage() {
-> +	cat <<EOF
-> +$0 [-d build_dir] [-j jobs] [-t target_arch] [-T test_name] [-w workspace_dir] [-k] [-h]
-> +Options:
-> +	-d)	path to the kernel build directory (default: .luo_test_build.<arch>)
-> +	-j)	number of jobs for compilation
-> +	-t)	run test for target_arch (aarch64, x86_64)
-> +	-T)	test name to run (default: luo_kexec_simple)
-> +	-w)	custom workspace directory (default: creates temp dir)
-> +	-k)	keep workspace directory after successful test
-> +	-h)	display this help
-> +EOF
-> +}
-> +
-> +function cleanup() {
-> +	local exit_code=$?
-> +
-> +	if [ -z "$workspace_dir" ]; then
-> +		ktap_finished
-> +		return
-> +	fi
-> +
-> +	if [ $exit_code -ne 0 ]; then
-> +		echo "# Test failed (exit code $exit_code)."
-> +		echo "# Workspace preserved at: $workspace_dir"
-> +	elif [ "$KEEP_WORKSPACE" -eq 1 ]; then
-> +		echo "# Workspace preserved (user request) at: $workspace_dir"
-> +	else
-> +		rm -fr "$workspace_dir"
-> +	fi
-> +	ktap_print_totals
-> +
-> +	exit $exit_code
-> +}
-> +trap cleanup EXIT
-> +
-> +function skip() {
-> +	local msg=${1:-""}
-> +	ktap_test_skip "$msg"
-> +	exit "$KSFT_SKIP"
-> +}
-> +
-> +function fail() {
-> +	local msg=${1:-""}
-> +	ktap_test_fail "$msg"
-> +	exit "$KSFT_FAIL"
-> +}
-> +
-> +function detect_cross_compile() {
-> +	local target=$1
-> +	local host=$(uname -m)
-> +
-> +	[[ "$host" == "arm64" ]] && host="aarch64"
-> +	[[ "$target" == "arm64" ]] && target="aarch64"
-> +
-> +	if [[ "$host" == "$target" ]]; then
-> +		CROSS_COMPILE=""
-> +		return
-> +	fi
-> +
-> +	if [[ -n "$CROSS_COMPILE" ]]; then
-> +		return
-> +	fi
-> +
-> +	local candidate=""
-> +	case "$target" in
-> +		aarch64) candidate="aarch64-linux-gnu-" ;;
-> +		x86_64)  candidate="x86_64-linux-gnu-" ;;
-> +		*)       skip "Auto-detection for target '$target' not supported. Please set CROSS_COMPILE manually." ;;
-> +	esac
-> +
-> +	if command -v "${candidate}gcc" &> /dev/null; then
-> +		CROSS_COMPILE="$candidate"
-> +	else
-> +		skip "Compiler '${candidate}gcc' not found. Please install it (e.g., 'apt install gcc-aarch64-linux-gnu') or set CROSS_COMPILE."
-> +	fi
-> +}
-> +
-> +function build_kernel() {
-> +	local build_dir=$1
-> +	local make_cmd=$2
-> +	local kimage=$3
-> +	local target_arch=$4
-> +
-> +	local kconfig="$build_dir/.config"
-> +	local common_conf="$test_dir/config"
-> +	local arch_conf="$test_dir/config.$target_arch"
-> +
-> +	echo "# Building kernel in: $build_dir"
-> +
-> +	"$kernel_dir/scripts/kconfig/merge_config.sh" \
-> +		-Q -m -O "$build_dir" "$common_conf" "$arch_conf" >> /dev/null
-> +	cat $kconfig
-> +
-> +	$make_cmd olddefconfig
-> +	$make_cmd "$kimage"
-> +	$make_cmd headers_install INSTALL_HDR_PATH="$headers_dir"
-> +}
-> +
-> +function mkinitrd() {
-> +	local build_dir=$1
-> +	local kernel_path=$2
-> +	local test_name=$3
-> +
-> +	# Compile the test binary and the init process
-> +	"$CROSS_COMPILE"gcc -static -O2 -nostdinc -nostdlib \
-> +		-I "$headers_dir/include" \
-> +		-I "$kernel_dir/tools/include/nolibc" \
-> +		-I "$test_dir" \
-> +		-o "$workspace_dir/test_binary" \
-> +		"$test_dir/$test_name.c" "$test_dir/luo_test_utils.c"
-> +
-> +	"$CROSS_COMPILE"gcc -s -static -Os -nostdinc -nostdlib		\
-> +			-fno-asynchronous-unwind-tables -fno-ident	\
-> +			-fno-stack-protector				\
-> +			-I "$headers_dir/include"			\
-> +			-I "$kernel_dir/tools/include/nolibc"		\
-> +			-o "$workspace_dir/init" "$test_dir/init.c"
-> +
-> +	cat > "$workspace_dir/cpio_list_inner" <<EOF
-> +dir /dev 0755 0 0
-> +dir /proc 0755 0 0
-> +dir /debugfs 0755 0 0
-> +nod /dev/console 0600 0 0 c 5 1
-> +file /init $workspace_dir/init 0755 0 0
-> +file /test_binary $workspace_dir/test_binary 0755 0 0
-> +EOF
-> +
-> +	# Generate inner_initrd.cpio
-> +	"$build_dir/usr/gen_init_cpio" "$workspace_dir/cpio_list_inner" > "$workspace_dir/inner_initrd.cpio"
-> +
-> +	cat > "$workspace_dir/cpio_list" <<EOF
-> +dir /dev 0755 0 0
-> +dir /proc 0755 0 0
-> +dir /debugfs 0755 0 0
-> +nod /dev/console 0600 0 0 c 5 1
-> +file /init $workspace_dir/init 0755 0 0
-> +file /kernel $kernel_path 0644 0 0
-> +file /test_binary $workspace_dir/test_binary 0755 0 0
-> +file /initrd.img $workspace_dir/inner_initrd.cpio 0644 0 0
-> +EOF
-> +
-> +	# Generate the final initrd
-> +	"$build_dir/usr/gen_init_cpio" "$workspace_dir/cpio_list" > "$initrd"
-> +	local size=$(du -h "$initrd" | cut -f1)
-> +}
-> +
-> +function run_qemu() {
-> +	local qemu_cmd=$1
-> +	local cmdline=$2
-> +	local kernel_path=$3
-> +	local serial="$workspace_dir/qemu.serial"
-> +
-> +	cmdline="$cmdline liveupdate=on panic=-1"
-> +
-> +	echo "# Serial Log: $serial"
-> +	timeout 30s $qemu_cmd -m 1G -smp 2 -no-reboot -nographic -nodefaults	\
-> +		  -accel tcg -accel hvf -accel kvm				\
-> +		  -serial file:"$serial"					\
-> +		  -append "$cmdline"						\
-> +		  -kernel "$kernel_path"					\
-> +		  -initrd "$initrd"
-> +
-> +	local ret=$?
-> +
-> +	if [ $ret -eq 124 ]; then
-> +		fail "QEMU timed out"
-> +	fi
-> +
-> +	grep "TEST PASSED" "$serial" &> /dev/null || fail "Liveupdate failed. Check $serial for details."
-> +}
-> +
-> +function target_to_arch() {
-> +	local target=$1
-> +	case $target in
-> +	     aarch64) echo "arm64" ;;
-> +	     x86_64) echo "x86" ;;
-> +	     *) skip "architecture $target is not supported"
-> +	esac
-> +}
-> +
-> +function main() {
-> +	local build_dir=""
-> +	local jobs=$(nproc)
-> +	local target="$(uname -m)"
-> +	local test_name="luo_kexec_simple"
-> +	local workspace_arg=""
-> +
-> +	set -o errtrace
-> +	trap fail ERR
-> +
-> +	while getopts 'hd:j:t:T:w:k' opt; do
-> +		case $opt in
-> +		d) build_dir="$OPTARG" ;;
-> +		j) jobs="$OPTARG" ;;
-> +		t) target="$OPTARG" ;;
-> +		T) test_name="$OPTARG" ;;
-> +		w) workspace_arg="$OPTARG" ;;
-> +		k) KEEP_WORKSPACE=1 ;;
-> +		h) usage; exit 0 ;;
-> +		*) echo "Unknown argument $opt"; usage; exit 1 ;;
-> +		esac
-> +	done
-> +
-> +	ktap_print_header
-> +	ktap_set_plan 1
-> +
-> +	if [ -n "$workspace_arg" ]; then
-> +		workspace_dir="$(realpath -m "$workspace_arg")"
-> +		mkdir -p "$workspace_dir"
-> +	else
-> +		workspace_dir=$(mktemp -d /tmp/luo-test.XXXXXXXX)
-> +	fi
-> +
-> +	echo "# Workspace created at: $workspace_dir"
-> +	headers_dir="$workspace_dir/usr"
-> +	initrd="$workspace_dir/initrd.cpio"
-> +
-> +	detect_cross_compile "$target"
-> +
-> +	local arch=$(target_to_arch "$target")
-> +
-> +	if [ -z "$build_dir" ]; then
-> +		build_dir="$kernel_dir/.luo_test_build.$arch"
-> +	fi
-> +
-> +	mkdir -p "$build_dir"
-> +	build_dir=$(realpath "$build_dir")
-> +	get_arch_conf "$arch"
-> +
-> +	local make_cmd="make -s ARCH=$arch CROSS_COMPILE=$CROSS_COMPILE -j$jobs"
-> +	local make_cmd_build="$make_cmd -C $kernel_dir O=$build_dir"
-> +
-> +	build_kernel "$build_dir" "$make_cmd_build" "$KERNEL_IMAGE" "$target"
-> +
-> +	local final_kernel="$build_dir/arch/$arch/boot/$KERNEL_IMAGE"
-> +	mkinitrd "$build_dir" "$final_kernel" "$test_name"
-> +
-> +	run_qemu "$QEMU_CMD" "$KERNEL_CMDLINE" "$final_kernel"
-> +	ktap_test_pass "$test_name succeeded"
-> +}
-> +
-> +main "$@"
-> diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c b/tools/testing/selftests/liveupdate/luo_test_utils.c
-> index 3c8721c505df..084d76cd79d2 100644
-> --- a/tools/testing/selftests/liveupdate/luo_test_utils.c
-> +++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
-> @@ -20,6 +20,7 @@
->  #include <sys/stat.h>
->  #include <errno.h>
->  #include <stdarg.h>
-> +#include <linux/unistd.h>
->  
->  #include "luo_test_utils.h"
->  
-> @@ -32,8 +33,8 @@ int luo_create_session(int luo_fd, const char *name)
->  {
->  	struct liveupdate_ioctl_create_session arg = { .size = sizeof(arg) };
->  
-> -	snprintf((char *)arg.name, LIVEUPDATE_SESSION_NAME_LENGTH, "%.*s",
-> -		 LIVEUPDATE_SESSION_NAME_LENGTH - 1, name);
-> +	strncpy((char *)arg.name, name, LIVEUPDATE_SESSION_NAME_LENGTH);
-> +	arg.name[LIVEUPDATE_SESSION_NAME_LENGTH - 1] = '\0';
->  
->  	if (ioctl(luo_fd, LIVEUPDATE_IOCTL_CREATE_SESSION, &arg) < 0)
->  		return -errno;
-> @@ -45,8 +46,8 @@ int luo_retrieve_session(int luo_fd, const char *name)
->  {
->  	struct liveupdate_ioctl_retrieve_session arg = { .size = sizeof(arg) };
->  
-> -	snprintf((char *)arg.name, LIVEUPDATE_SESSION_NAME_LENGTH, "%.*s",
-> -		 LIVEUPDATE_SESSION_NAME_LENGTH - 1, name);
-> +	strncpy((char *)arg.name, name, LIVEUPDATE_SESSION_NAME_LENGTH);
-> +	arg.name[LIVEUPDATE_SESSION_NAME_LENGTH - 1] = '\0';
->  
->  	if (ioctl(luo_fd, LIVEUPDATE_IOCTL_RETRIEVE_SESSION, &arg) < 0)
->  		return -errno;
-> @@ -57,7 +58,7 @@ int luo_retrieve_session(int luo_fd, const char *name)
->  int create_and_preserve_memfd(int session_fd, int token, const char *data)
->  {
->  	struct liveupdate_session_preserve_fd arg = { .size = sizeof(arg) };
-> -	long page_size = sysconf(_SC_PAGE_SIZE);
-> +	long page_size = getpagesize();
->  	void *map = MAP_FAILED;
->  	int mfd = -1, ret = -1;
->  
-> @@ -93,7 +94,7 @@ int restore_and_verify_memfd(int session_fd, int token,
->  			     const char *expected_data)
->  {
->  	struct liveupdate_session_retrieve_fd arg = { .size = sizeof(arg) };
-> -	long page_size = sysconf(_SC_PAGE_SIZE);
-> +	long page_size = getpagesize();
->  	void *map = MAP_FAILED;
->  	int mfd = -1, ret = -1;
->  
-> @@ -204,16 +205,11 @@ void daemonize_and_wait(void)
->  
->  static int parse_stage_args(int argc, char *argv[])
->  {
-> -	static struct option long_options[] = {
-> -		{"stage", required_argument, 0, 's'},
-> -		{0, 0, 0, 0}
-> -	};
-> -	int option_index = 0;
->  	int stage = 1;
->  	int opt;
->  
->  	optind = 1;
-> -	while ((opt = getopt_long(argc, argv, "s:", long_options, &option_index)) != -1) {
-> +	while ((opt = getopt(argc, argv, "s:")) != -1) {
->  		switch (opt) {
->  		case 's':
->  			stage = atoi(optarg);
-> @@ -224,6 +220,7 @@ static int parse_stage_args(int argc, char *argv[])
->  			fail_exit("Unknown argument");
->  		}
->  	}
-> +
->  	return stage;
->  }
->  
-> @@ -251,7 +248,7 @@ int luo_test(int argc, char *argv[],
->  		fail_exit("Failed to check for state session");
->  
->  	if (target_stage != detected_stage) {
-> -		ksft_exit_fail_msg("Stage mismatch Requested --stage %d, but system is in stage %d.\n"
-> +		ksft_exit_fail_msg("Stage mismatch Requested stage %d, but system is in stage %d.\n"
->  				   "(State session %s: %s)\n",
->  				   target_stage, detected_stage, state_session_name,
->  				   (detected_stage == 2) ? "EXISTS" : "MISSING");
-> diff --git a/tools/testing/selftests/liveupdate/run.sh b/tools/testing/selftests/liveupdate/run.sh
-> new file mode 100755
-> index 000000000000..5637668ef7b6
-> --- /dev/null
-> +++ b/tools/testing/selftests/liveupdate/run.sh
-> @@ -0,0 +1,63 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +SCRIPT_DIR=$(dirname "$(realpath "$0")")
-> +OUTPUT_DIR="$SCRIPT_DIR/results_$(date +%Y%m%d_%H%M%S)"
-> +TEST_RUNNER="$SCRIPT_DIR/luo_test.sh"
-> +
-> +TARGETS=("x86_64" "aarch64")
-> +
-> +GREEN='\033[0;32m'
-> +RED='\033[0;31m'
-> +YELLOW='\033[1;33m'
-> +NC='\033[0m'
-> +
-> +PASSED=()
-> +FAILED=()
-> +SKIPPED=()
-> +
-> +mkdir -p "$OUTPUT_DIR"
-> +
-> +TEST_NAMES=(
-> +    "luo_kexec_simple"
-> +    "luo_multi_session"
-> +)
-> +
-> +for arch in "${TARGETS[@]}"; do
-> +    for test_name in "${TEST_NAMES[@]}"; do
-> +        log_file="$OUTPUT_DIR/${arch}_${test_name}.log"
-> +        echo -n "  -> $arch $test_name ... "
-> +
-> +        if "$TEST_RUNNER" -t "$arch" -T "$test_name" > "$log_file" 2>&1; then
-> +            echo -e "${GREEN}PASS${NC}"
-> +            PASSED+=("${arch}:${test_name}")
-> +        else
-> +            exit_code=$?
-> +            if [ $exit_code -eq 4 ]; then
-> +                echo -e "${YELLOW}SKIP${NC}"
-> +                SKIPPED+=("${arch}:${test_name}")
-> +            else
-> +                echo -e "${RED}FAIL${NC}"
-> +                FAILED+=("${arch}:${test_name}")
-> +            fi
-> +        fi
-> +    done
-> +    echo ""
-> +done
-> +
-> +echo "========================================="
-> +echo "             TEST SUMMARY                "
-> +echo "========================================="
-> +echo -e "PASSED: ${GREEN}${#PASSED[@]}${NC}"
-> +echo -e "FAILED: ${RED}${#FAILED[@]}${NC}"
-> +for fail in "${FAILED[@]}"; do
-> +    echo -e "  - $fail"
-> +done
-> +echo -e "SKIPPED: ${YELLOW}${#SKIPPED[@]}${NC}"
-> +echo "Logs: $OUTPUT_DIR"
-> +
-> +if [ ${#FAILED[@]} -eq 0 ]; then
-> +    exit 0
-> +else
-> +    exit 1
-> +fi
-> -- 
-> 2.53.0.473.g4a7958ca14-goog
-> 
+Changes in v4:
+- changed O_REGULAR to OPENAT2_REGULAR
+- OPENAT2_REGULAR does not affect O_PATH
+- atomic_open codepaths updated to work properly for OPENAT2_REGULAR
+- commit message includes the uapi-group URL
+- v3 is at: https://lore.kernel.org/linux-fsdevel/20260127180109.66691-1-dorjoychy111@gmail.com/T/
+
+Changes in v3:
+- included motivation about O_REGULAR flag in commit message e.g., programs not wanting to be tricked into opening device nodes
+- fixed commit message wrongly referencing ENOTREGULAR instead of ENOTREG
+- fixed the O_REGULAR flag in arch/parisc/include/uapi/asm/fcntl.h from 060000000 to 0100000000
+- added 2 commits converting arch/{mips,sparc}/include/uapi/asm/fcntl.h O_* macros from hex to octal
+- v2 is at: https://lore.kernel.org/linux-fsdevel/20260126154156.55723-1-dorjoychy111@gmail.com/T/
+
+Changes in v2:
+- rename ENOTREGULAR to ENOTREG
+- define ENOTREG in uapi/asm-generic/errno.h (instead of errno-base.h) and in arch/*/include/uapi/asm/errno.h files
+- override O_REGULAR in arch/{alpha,sparc,parisc}/include/uapi/asm/fcntl.h due to clash with include/uapi/asm-generic/fcntl.h
+- I have kept the kselftest but now that O_REGULAR and ENOTREG can have different value on different architectures I am not sure if it's right
+- v1 is at: https://lore.kernel.org/linux-fsdevel/20260125141518.59493-1-dorjoychy111@gmail.com/T/
+
+Thanks.
+
+Regards,
+Dorjoy
+
+Dorjoy Chowdhury (4):
+  openat2: new OPENAT2_REGULAR flag support
+  kselftest/openat2: test for OPENAT2_REGULAR flag
+  sparc/fcntl.h: convert O_* flag macros from hex to octal
+  mips/fcntl.h: convert O_* flag macros from hex to octal
+
+ arch/alpha/include/uapi/asm/errno.h           |  2 +
+ arch/alpha/include/uapi/asm/fcntl.h           |  1 +
+ arch/mips/include/uapi/asm/errno.h            |  2 +
+ arch/mips/include/uapi/asm/fcntl.h            | 22 +++++------
+ arch/parisc/include/uapi/asm/errno.h          |  2 +
+ arch/parisc/include/uapi/asm/fcntl.h          |  1 +
+ arch/sparc/include/uapi/asm/errno.h           |  2 +
+ arch/sparc/include/uapi/asm/fcntl.h           | 35 +++++++++---------
+ fs/ceph/file.c                                |  4 ++
+ fs/gfs2/inode.c                               |  6 +++
+ fs/namei.c                                    |  4 ++
+ fs/nfs/dir.c                                  |  4 ++
+ fs/open.c                                     |  4 +-
+ fs/smb/client/dir.c                           | 14 ++++++-
+ include/linux/fcntl.h                         |  2 +
+ include/uapi/asm-generic/errno.h              |  2 +
+ include/uapi/asm-generic/fcntl.h              |  4 ++
+ tools/arch/alpha/include/uapi/asm/errno.h     |  2 +
+ tools/arch/mips/include/uapi/asm/errno.h      |  2 +
+ tools/arch/parisc/include/uapi/asm/errno.h    |  2 +
+ tools/arch/sparc/include/uapi/asm/errno.h     |  2 +
+ tools/include/uapi/asm-generic/errno.h        |  2 +
+ .../testing/selftests/openat2/openat2_test.c  | 37 ++++++++++++++++++-
+ 23 files changed, 127 insertions(+), 31 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.53.0
+
