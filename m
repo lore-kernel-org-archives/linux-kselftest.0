@@ -1,66 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6A930DD16;
-	Sat,  7 Mar 2026 03:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BE8CA5A;
+	Sat,  7 Mar 2026 03:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772853946; cv=none; b=g70QWjTNhftUvCcEVzck7SsDziiywHYlTjvh+NZFMJy76FFMezYLng+1ACj2E5xMskbKl22FQCAPxwKAi0r6H6aimuq67FY/LUVmyVAKsKQlBgI/a2IoJYXuBCZnEOPxp8zzrH5GW8ETF9SSMasEqI1/YTEDwYV3OSrgHj8s5sI=
+	t=1772855410; cv=none; b=ed+OdJSfeEMzQTc+olivbaKRriO+fZJTYoT89StIcdhIAoFQNV5ogXwxclTqqur31RnTJ6CmwoVPhXBMCsk+C9wTW2FbNlWU9R/1IMfKIM2NDRnV5JjpE7XwaaCHKr6Do+hRYfg4jG69E/YxRh3opTz9UJu1QYceoYeJ99Ag4ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772853946; c=relaxed/simple;
-	bh=vV2tyrzl9E9pm6D8j7bYs2l57WznKFyu9SrvQNvLMks=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J2EtjVhNVVRfNEIQBrj5SO0vy+7902p/l+suAsBX7hzeLfP+A3bjNBSdkHFkBMrAAs+3Il5uY+e7GtoVcpd0mUWS3fcALGkjcVl7WgSHltqODXyjdvklH5I9sUbynOlJ0hFgVV88axSTaD9zmYhd4x7AouIiNPbNNQehe99I+H4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMtTzdHz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772855410; c=relaxed/simple;
+	bh=p7EQiPGlxyBmjCH3g3gPtPkS1GF4dOhZ5LgBywc6bPg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hYkFA9GQNq2g7J3OusSaf4kwvs6Y7LK2OTDl9NOK4smIcVC+a9yvfi3hOxDqK2KWOtjvDp2HROumnGmCl3vzr1v6P2r3k0AzQSoRle+UpXC/sPZjKwl/1XgJP67bk+KvA/yUoGb9ZFxFMHxFkn3f56rbqvAHamPJox7kyew513s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bHWfPf4H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMtTzdHz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF320C19422;
-	Sat,  7 Mar 2026 03:25:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bHWfPf4H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB73AC19422;
+	Sat,  7 Mar 2026 03:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772853946;
-	bh=vV2tyrzl9E9pm6D8j7bYs2l57WznKFyu9SrvQNvLMks=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OMtTzdHzLVmYPb3/8OSUdv0i4ChDfL1i3OAEq+N/QoHUdwYA0KzlMD+iDyWc/JQzE
-	 xkdx98YgWk6C7rmvdfQv76OiUlUZx2U26xKT88Gt0Kjnp7rXYdih4y3NXuwE3rqYRB
-	 pXnTpMU2qJVE80jbQXlwMUKgdxdh0uizhIh+lDkHeZON5rFckZbgHHWHzllnvt+aKB
-	 M2803EGk87yLIFKV+WT2XqsLRWObs6ypW6WRE2TTGJtbOD78xAivbkUd1IigDJztTT
-	 8a8CDRDN8+1Dim36Vvob8kt8KXajMx7PLDag6R2VyvKgIP3qbaYpeg1AqTDl6IN9/R
-	 17sPiOMqyXg/w==
-Date: Fri, 6 Mar 2026 19:25:44 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Aaron Conole
- <aconole@redhat.com>, Ilya Maximets <imaximet@redhat.com>, Eelco Chaudron
- <echaudro@redhat.com>, Stefano Brivio <sbrivio@redhat.com>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, dev@openvswitch.org, Konstantin Khorenko
- <khorenko@virtuozzo.com>
-Subject: Re: [PATCH net v3 3/6] selftests: net: run reuseport tests in netns
- to avoid port conflicts
-Message-ID: <20260306192544.358b5cad@kernel.org>
-In-Reply-To: <20260306000127.519064-4-aleksey.oladko@virtuozzo.com>
-References: <20260306000127.519064-1-aleksey.oladko@virtuozzo.com>
-	<20260306000127.519064-4-aleksey.oladko@virtuozzo.com>
+	s=k20201202; t=1772855409;
+	bh=p7EQiPGlxyBmjCH3g3gPtPkS1GF4dOhZ5LgBywc6bPg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=bHWfPf4H0n2QDEQMOOcOTBi9o8erIKm9NK0sTTJHgr9GwCCvul7fwjhY+lTfJxePK
+	 nCHDQZlrvmZMMPWLHXb3Q9OIdtfRWPz2seOJoNVZpf3y92s/ZXFUYGD/pH3XIuZDvD
+	 8jsosbY39Sg13Tol7NyNQZXtyfnduZDD4SdNAzND6uUOdV5Tb4eHu5gKegbKUsAhc5
+	 LmzeM4GxcOmcHYBPhVIp/VxPJVYLiqTZOLfT+xmrSelXyzJvIsR8mSPSo5RRGnDiGL
+	 upmyVUYOIImyjYa26Kql9JL9m/HDlCPqRvGLGxnzKuJ7jAlRhdSPW93yauJ+VB38JL
+	 4DW9/4PzDKpNA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02DBC3808200;
+	Sat,  7 Mar 2026 03:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3 0/6] selftests: net: fix false failures due to
+ missing
+ features and host interference
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177285540880.145254.2317239509731397843.git-patchwork-notify@kernel.org>
+Date: Sat, 07 Mar 2026 03:50:08 +0000
+References: <20260306000127.519064-1-aleksey.oladko@virtuozzo.com>
+In-Reply-To: <20260306000127.519064-1-aleksey.oladko@virtuozzo.com>
+To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, aconole@redhat.com,
+ imaximet@redhat.com, echaudro@redhat.com, sbrivio@redhat.com,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, dev@openvswitch.org
 
-On Fri,  6 Mar 2026 00:01:24 +0000 Aleksei Oladko wrote:
-> Some net kselftests use fixed ports which overlap with process-exporter
-> service already running on the host. When such a conflict happens,
-> the test fail with:
-> 
->   failed to bind receive socket: Address already in use
-> 
-> Instead of changing port numbers, run the affected tests in isolated
-> network namespace to avoid conflicts with running daemons.
+Hello:
 
-Please change the tests accordingly instead of wrapping them all 
-in a script. AFAIU it's a simple matter of adding unshare() calls?
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri,  6 Mar 2026 00:01:21 +0000 you wrote:
+> Hi,
+> 
+> This series addresses several issues in the networking kselftests
+> that cause false-positive failures depending on the host environment,
+> kernel configuration, or library versions.
+> 
+> The main focus of these changes is to isolate tests from the host
+> environment (using namespaces) and to ensure proper fallback or
+> skipping when dependencies are missing.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v3,1/6] selftests: net: fib_tests: skip rp_filter test if cls_basic is unavailable
+    (no matching commit)
+  - [net,v3,2/6] selftests: net: make ovs-dpctl.py fail when pyroute2 is unsupported
+    https://git.kernel.org/netdev/net-next/c/0bcac7b11262
+  - [net,v3,3/6] selftests: net: run reuseport tests in netns to avoid port conflicts
+    (no matching commit)
+  - [net,v3,4/6] selftests: net: rename pmtu.sh to pmtu-test.sh
+    (no matching commit)
+  - [net,v3,5/6] selftests: net: run pmtu.sh in netns to avoid host firewall interference
+    (no matching commit)
+  - [net,v3,6/6] selftests: net: io_uring_zerocopy: enable io_uring for the test
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
