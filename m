@@ -1,166 +1,101 @@
-Received: from mail.aperture-lab.de (mail.aperture-lab.de [116.203.183.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7245355F5C;
-	Sat,  7 Mar 2026 04:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.183.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E327D36C59A
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Mar 2026 07:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772858784; cv=none; b=SsXJorfCZVeU8ASaJWU/hMRm+I0R8FdCd3pZE8sgfhgfJpH+0yrrCy3CSAIjzi/tYsckDBZ7a4M7PaKooXpWknPKxabIZtLuhxuVql+xZzWSlTErFxf5Rrf1GaN5dYfDNxRIsuSowOxwjqxWKQXYzlazG1gC+D/Ms3I6p1HcJxc=
+	t=1772870201; cv=none; b=LraUvK8XgvOVbzx0Wi/iDFjFAa5zby4SA1x+55DPJObYRox4HuA1E874HS5zrt2WvLYOAFTa8rjMZivGlRbunWe6wnGhbb3HndHTpGDBpxRF6mH8t842l31gE242O24H/ne5kOCFRNBfvfElYgZ34IWY+QdwGsdsiFxRcd+hwLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772858784; c=relaxed/simple;
-	bh=z13BXSFHymJ9s0ErD9fYeoIevO4Ibm8FueDQWToATl0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=igzlgk0in8qMSd4rndee/2V0GTb/7QgoscAm5dML3a1eETYNRJf3JCk42OF841VPtE8/16i3sn6U1W4OEJewcKA6ezJ+KpsHOgZLwCA50kku5W09HPHdBZT9kGZ8hRuWWyFB3xqQ6bBkqPZxZqWzPScmMZZG7OHNjZe+6Sk4Kww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c0d3.blue; spf=pass smtp.mailfrom=c0d3.blue; arc=none smtp.client-ip=116.203.183.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c0d3.blue
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c0d3.blue
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4246F54CE95;
-	Sat,  7 Mar 2026 05:46:20 +0100 (CET)
-From: =?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>
-To: bridge@lists.linux.dev
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Xiao Liang <shaw.leon@gmail.com>,
-	shuah@kernel.org,
-	petrm@nvidia.com,
-	=?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>
-Subject: [PATCH net-next v4 14/14] net: bridge: mcast: add inactive state assertions
-Date: Sat,  7 Mar 2026 05:45:48 +0100
-Message-ID: <20260307044548.5230-15-linus.luessing@c0d3.blue>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260307044548.5230-1-linus.luessing@c0d3.blue>
-References: <20260307044548.5230-1-linus.luessing@c0d3.blue>
+	s=arc-20240116; t=1772870201; c=relaxed/simple;
+	bh=vgs6OvFfhn6LgRJBXvD8e7DncJV6JvlCX+BURozjQ2k=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pzvAc3SPyLyI3Yy5EYbCKSl67fSEoE7NCDmQG46hVGpOW7DJnOLXd2tYx/CAjAHOmgIcFsF81Vn+g9WJ+37wLd9sR5Trc182Dnn1fwejMafYoqjWCzPw+gMVxmz3YO9/Cy8v3HG5tz3w7AMb89zqdknuiCr+MuLZ8d8rkbk+wUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fu0GlI/z; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fu0GlI/z"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772870197;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AUMKZd8SUAnYq8W0a6TH01hT+Tx21DpSkFW2LXP37DM=;
+	b=fu0GlI/zl5ja55xkrM7JyjJBPHBj8t0QJ8svzuKM0F+NRBDIiGgoq5RabgEzEXdoO99UYS
+	M+PO5Ox3nfwf9bLMoBkepgn6+CCOu6T9EtDLJtekdILvHjSQALTsbdwvq29BeaHBISx0Zg
+	K3U/CxovfcYBxM/Ujbk56LjfaEcfY1M=
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+To: jgg@ziepe.ca,
+	leon@kernel.org,
+	zyjzyj2000@gmail.com,
+	yanjun.zhu@linux.dev,
+	dsahern@kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 1/4] RDMA/nldev: Add dellink function pointer
+Date: Fri,  6 Mar 2026 23:56:08 -0800
+Message-ID: <20260307075611.3410-2-yanjun.zhu@linux.dev>
+In-Reply-To: <20260307075611.3410-1-yanjun.zhu@linux.dev>
+References: <20260307075611.3410-1-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-Migadu-Flow: FLOW_OUT
 
-To avoid packetloss and as it is very hard from a user's perspective to
-debug multicast snooping related issues it is even more crucial to properly
-switch from an active to an inactive multicast snooping state than the
-other way around.
+The newlink function pointer is added. And the sock listening on port 4791
+is added in the newlink function. So the dellink function is needed to
+remove the sock.
 
-Therefore adding a few kernel warnings if any of our assertions to be in
-an inactive state would fail.
-
-Signed-off-by: Linus Lüssing <linus.luessing@c0d3.blue>
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
 ---
- net/bridge/br_multicast.c | 45 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 41 insertions(+), 4 deletions(-)
+ drivers/infiniband/core/nldev.c | 6 ++++++
+ include/rdma/rdma_netlink.h     | 2 ++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/net/bridge/br_multicast.c b/net/bridge/br_multicast.c
-index aa2edb63a97b..f4b6ea674988 100644
---- a/net/bridge/br_multicast.c
-+++ b/net/bridge/br_multicast.c
-@@ -1426,10 +1426,31 @@ static struct sk_buff *br_multicast_alloc_query(struct net_bridge_mcast *brmctx,
- 	return NULL;
+diff --git a/drivers/infiniband/core/nldev.c b/drivers/infiniband/core/nldev.c
+index 2220a2dfab24..48684930660a 100644
+--- a/drivers/infiniband/core/nldev.c
++++ b/drivers/infiniband/core/nldev.c
+@@ -1824,6 +1824,12 @@ static int nldev_dellink(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 		return -EINVAL;
+ 	}
+ 
++	if (device->link_ops) {
++		err = device->link_ops->dellink(device);
++		if (err)
++			return err;
++	}
++
+ 	ib_unregister_device_and_put(device);
+ 	return 0;
  }
+diff --git a/include/rdma/rdma_netlink.h b/include/rdma/rdma_netlink.h
+index 326deaf56d5d..2fd1358ea57d 100644
+--- a/include/rdma/rdma_netlink.h
++++ b/include/rdma/rdma_netlink.h
+@@ -5,6 +5,7 @@
  
-+static void br_ip4_multicast_assert_inactive(struct net_bridge_mcast *brmctx)
-+{
-+	WARN_ON_ONCE(br_multicast_snooping_active(brmctx, htons(ETH_P_IP),
-+						  NULL));
-+}
-+
-+static void br_ip6_multicast_assert_inactive(struct net_bridge_mcast *brmctx)
-+{
-+	WARN_ON_ONCE(br_multicast_snooping_active(brmctx, htons(ETH_P_IPV6),
-+						  NULL));
-+}
-+
-+static void br_multicast_assert_inactive(struct net_bridge_mcast *brmctx)
-+{
-+	br_ip4_multicast_assert_inactive(brmctx);
-+	br_ip6_multicast_assert_inactive(brmctx);
-+}
-+
- static void br_multicast_toggle_enabled(struct net_bridge *br, bool on)
- {
- 	br_opt_toggle(br, BROPT_MULTICAST_ENABLED, on);
- 	br_multicast_update_active(&br->multicast_ctx);
-+
-+	if (!on)
-+		br_multicast_assert_inactive(&br->multicast_ctx);
- }
+ #include <linux/netlink.h>
+ #include <uapi/rdma/rdma_netlink.h>
++#include <rdma/ib_verbs.h>
  
- struct net_bridge_mdb_entry *br_multicast_new_group(struct net_bridge *br,
-@@ -1899,9 +1920,7 @@ static void br_multicast_querier_expired(struct net_bridge_mcast *brmctx,
- 					 struct bridge_mcast_own_query *query,
- 					 struct timer_list *timer)
- {
--	spin_lock(&brmctx->br->multicast_lock);
--	if (br_multicast_is_stopping(brmctx->br, timer) ||
--	    br_multicast_ctx_vlan_global_disabled(brmctx) ||
-+	if (br_multicast_ctx_vlan_global_disabled(brmctx) ||
- 	    !br_opt_get(brmctx->br, BROPT_MULTICAST_ENABLED))
- 		goto out;
+ struct ib_device;
  
-@@ -1912,7 +1931,6 @@ static void br_multicast_querier_expired(struct net_bridge_mcast *brmctx,
- 	 * if our own querier is disabled, too
- 	 */
- 	br_multicast_update_active(brmctx);
--	spin_unlock(&brmctx->br->multicast_lock);
- }
+@@ -126,6 +127,7 @@ struct rdma_link_ops {
+ 	struct list_head list;
+ 	const char *type;
+ 	int (*newlink)(const char *ibdev_name, struct net_device *ndev);
++	int (*dellink)(struct ib_device *dev);
+ };
  
- static void br_ip4_multicast_querier_expired(struct timer_list *t)
-@@ -1920,7 +1938,16 @@ static void br_ip4_multicast_querier_expired(struct timer_list *t)
- 	struct net_bridge_mcast *brmctx = timer_container_of(brmctx, t,
- 							     ip4_other_query.timer);
- 
-+	spin_lock(&brmctx->br->multicast_lock);
-+	if (br_multicast_is_stopping(brmctx->br, t))
-+		goto out;
-+
- 	br_multicast_querier_expired(brmctx, &brmctx->ip4_own_query, t);
-+
-+	if (!brmctx->multicast_querier)
-+		br_ip4_multicast_assert_inactive(brmctx);
-+out:
-+	spin_unlock(&brmctx->br->multicast_lock);
- }
- 
- #if IS_ENABLED(CONFIG_IPV6)
-@@ -1929,7 +1956,16 @@ static void br_ip6_multicast_querier_expired(struct timer_list *t)
- 	struct net_bridge_mcast *brmctx = timer_container_of(brmctx, t,
- 							     ip6_other_query.timer);
- 
-+	spin_lock(&brmctx->br->multicast_lock);
-+	if (br_multicast_is_stopping(brmctx->br, t))
-+		goto out;
-+
- 	br_multicast_querier_expired(brmctx, &brmctx->ip6_own_query, t);
-+
-+	if (!brmctx->multicast_querier)
-+		br_ip6_multicast_assert_inactive(brmctx);
-+out:
-+	spin_unlock(&brmctx->br->multicast_lock);
- }
- #endif
- 
-@@ -4529,6 +4565,7 @@ static void __br_multicast_stop(struct net_bridge_mcast *brmctx)
- 
- 	/* bridge interface is down, set multicast state to inactive */
- 	br_multicast_update_active(brmctx);
-+	br_multicast_assert_inactive(brmctx);
- }
- 
- void br_multicast_update_vlan_mcast_ctx(struct net_bridge_vlan *v, u8 state)
+ void rdma_link_register(struct rdma_link_ops *ops);
 -- 
-2.53.0
+2.52.0
 
