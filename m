@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FDE33F392;
-	Sat,  7 Mar 2026 19:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AE0329367;
+	Sat,  7 Mar 2026 19:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772912547; cv=none; b=RmLVj4Q13HRk5CETIDyLOqt7RjF+xlMAVz8pqoKbITfDmKscuWB/iA/EotZ8frtf+TsVEHpdQ6VCMYReT5QOisXySoqUwSRzRWBknwjVcyaYsI3sFnjBF17z395Kbyh06skZhcVH/VT28ko7nARvKMo754ILVTb2VFbhTgyJeLY=
+	t=1772913247; cv=none; b=J0GvRiJ2VMD2/4J3l4sqoUU+HgqLzkj2aSG05E7eBbUHDzO51K9BxKfSeItqVO04fNV//qzf8BsFa/YAu9TX0IU2h/OBrhIkC9f5Pt4RHWfl1zwYl898vBmzd81q1f5eYiH56gSnmhqVLcOm+wRCLkmT26mslPA14D7f/zn5Wy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772912547; c=relaxed/simple;
-	bh=XcYOzSBU2Ik0HwEKQuQLPbmzqjVamPRGuDKVpDrdtlQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VoEq0Sl3mAMEWdnBZCRq6gNNJsuGpBpQQkGR0jmhNofXWG8I542S7LuaDYJrBe3jtFrsDv+UxvOfedV1i464HOOygBEb7Zb5bP45uMcFRG/eiEcYsJnFUdyyPBYUjyBOzEIS9VxaCQM5B+Rj9tYnO513kwiMFPMf2nk2iPmvroI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FTzb+iLN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772913247; c=relaxed/simple;
+	bh=7ODZDQJM/Fjl22DmH1XWyzvb3MSVSALXM4f2MjB/9Bw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C1hzhEtylq4iZNhtsgOf2DYifrde05BrUpyH/qowfLaZXnxfOo1aSR9HuLHc2hPUaoIcEiHtbMaB2GRoBHXkexHxqXc1JLRbJQThAJKhezpt9DS3eCuyBeylvptGaGvo/UC6NU3MN6Hf7JjFkz7B3ABJlAJrd0ISj0IFAnrorjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wq2xWmi4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FTzb+iLN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 382E4C19422;
-	Sat,  7 Mar 2026 19:42:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wq2xWmi4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A1FC19422;
+	Sat,  7 Mar 2026 19:54:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772912546;
-	bh=XcYOzSBU2Ik0HwEKQuQLPbmzqjVamPRGuDKVpDrdtlQ=;
+	s=k20201202; t=1772913247;
+	bh=7ODZDQJM/Fjl22DmH1XWyzvb3MSVSALXM4f2MjB/9Bw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=FTzb+iLNu/uBbbSdvLtNPcvv40maRDEccaneyljx8hs90sXB3yQ6NIkDmcP1yiY2V
-	 l4oL3AfHGNf5pNtb5zde1mcXnIT8/nchwCm5tQgndCyA8BaCSxYlF5oc+oDAYUcXa3
-	 ZAI7EHpezLNrc/lXfXJ21FZWlJ+Y8GYEpyqjAgjcqLAw7y75iSm44rNKFQqpQbdJdh
-	 QN7uOCqQix1dem5EPQvQNMg3YJ0tNE+TJ0p2GPZ9qq1wmbRKG1Oy0ApUxmEygjUnDj
-	 kf/si1+GP5vCWQ0lu/n9ku4rzZjtxJ8Pc0TbgXNUFhRcf43zgFNtLVN9zOzAylqdBS
-	 HAI2NK96bH8mQ==
+	b=Wq2xWmi4yYSpo/lcxJhDT7T/lmEBVCzdUEzZ2yMEyV3qoLcloM1VKkdIj7rsIXgVR
+	 FYtUGLSd9bra3Wexb8R0tSfamwTQreuDrEcbOSm1wW6I0lhEhhirxA41zJfXd6+qxi
+	 DCXY4vwLz3zObm8iS8eQASFKWKJRcJH07joiDvCBU/Zf0KIKR4DrFu8oWq/wpdjko3
+	 EhQ0nP2bpfc8BGngw24mek2z0jtmguzblsnmosh3AdMS0CTWU/rmCqpJDbJcBB5eoT
+	 vN0XbGWsW1arlYmE5rlmZ97LKGwjLN5FvnoPxNhNN0vmgyhBezB1dp7SqiOjA4uDaW
+	 5y4/i99PboWoQ==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -44,10 +44,11 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 0/2] mm/damon: test and document power-of-2 min_region_sz requirement
-Date: Sat,  7 Mar 2026 11:42:19 -0800
-Message-ID: <20260307194222.202075-1-sj@kernel.org>
+	linux-mm@kvack.org,
+	wang lian <lianux.mm@gmail.com>
+Subject: [PATCH 0/7] mm/damon: improve/fixup/update ratio calculation, test and documentation
+Date: Sat,  7 Mar 2026 11:53:48 -0800
+Message-ID: <20260307195356.203753-1-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -57,21 +58,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since commit c80f46ac228b ("mm/damon/core: disallow non-power of two
-min_region_sz"), min_region_sz is always restricted to be a power of
-two.  Add a kunit test to confirm the functionality.  Also, the change
-adds a restriction to addr_unit parameter.  Clarify it on the document.
+Yet another batch of misc/minor improvements and fixups.  Use
+mult_frac() instead of the worse open-coding for rate calculations
+(patch 1).  Add a test for a previously found and fixed bug (patch 2).
+Improve and update comments and documentations for easier code review
+and up-to-date information (patches 3-6).  Finally, fix an obvious typo
+(patch 7).
 
-SeongJae Park (2):
-  mm/damon/tests/core-kunit: add a test for damon_commit_ctx()
-  Docs/mm/damon/design: document the power-of-two limitation for
-    addr_unit
+SeongJae Park (7):
+  mm/damon/core: use mult_frac()
+  mm/damon/tests/core-kunit: add a test for damon_is_last_region()
+  mm/damon/core: clarify damon_set_attrs() usages
+  mm/damon: document non-zero length damon_region assumption
+  Docs/admin-guide/mm/damn/lru_sort: fix intervals autotune parameter
+    name
+  Docs/mm/damon/maintainer-profile: use flexible review cadence
+  Docs/mm/damon/index: fix typo: autoamted -> automated
 
- Documentation/mm/damon/design.rst |  2 ++
- mm/damon/tests/core-kunit.h       | 22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ .../admin-guide/mm/damon/lru_sort.rst         |  4 +--
+ Documentation/mm/damon/index.rst              |  2 +-
+ Documentation/mm/damon/maintainer-profile.rst |  8 ++---
+ include/linux/damon.h                         |  2 ++
+ mm/damon/core.c                               | 32 ++++++++++++-------
+ mm/damon/tests/core-kunit.h                   | 23 +++++++++++++
+ 6 files changed, 52 insertions(+), 19 deletions(-)
 
 
-base-commit: 4380f0b6370ead5000b8d155b25a86cb59d68c06
+base-commit: fa1e30b2dede645519bf6743439d3925922651bc
 -- 
 2.47.3
