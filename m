@@ -1,21 +1,22 @@
 Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82902BEFFF;
-	Sun,  8 Mar 2026 02:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB4A7262F;
+	Sun,  8 Mar 2026 02:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772937513; cv=none; b=HC6ixs4nmtXXVlJn9bFdM6ttENvEfQsl52U+9JusskiFx/9MH5NkxXJFCzlskYIqQCtos0vj4Xhf4NvrxRfeRrMMx/URSi5I2mOtSow+n7wo5bdJ7GZWVqCYHsro1bfJB9zHAqgwqrRX1pq2ItOUwaAX4YlAMM0/dn9yNW0KdHw=
+	t=1772937514; cv=none; b=MhMIwk32Lpb0DoEhP4BhXtWQk4RW1L38j5/8l3t9Um2LZPo49BjtQTyOl27VWrkdlNaCPY23PGSwaFTdfNaabK6KvTpWLcmpw01kKTmrDHTRmmrlZZ2agCx8YkBK2bYHABO0iU2kPV4PbGvWiKsJSrs8fUj5WrPtiDK7ocPYGc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772937513; c=relaxed/simple;
-	bh=EpVQKr+amdFGHcTl33KTi2QxjI83B4Xn9xrYpbDZPKc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=r6UrFgtg7JLps72qvaH2Phpnxv2qpVh71VyndKNWQwAuKSnWbQjwMyWEy2xqvUfzph9xyOifXVR7fCvzlvcShrdEYupEPP+eVocQK4h7NqL/RAoXXmQV8eUIPykh5enFkg8iESrq4uFrq8VqupEgCSBFVIVScdSRMYrUxLzRKGg=
+	s=arc-20240116; t=1772937514; c=relaxed/simple;
+	bh=ALKbHQepcVq5V8k0MpNIbqkEH+0BGOCyo4yUnQ7Imzk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YqxgMj/NYc66Z6MhW262P/WM+Tvx/SPNs8JLf32tW0FpegeZwPEyJ/I+h0J5+DWZ3aizPC8PStCnvnkvoyxWz/EGS4kFeheBo9L+3rNbUkM5jtCZVza4KFOja+88f94eEQr7PkY4OFwMdW8r5a9yI4S6KGvGQt/kLDnwHYTp3ew=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
 Received: from fric.. (unknown [210.73.43.101])
-	by APP-03 (Coremail) with SMTP id rQCowABnht0M4axptjIICg--.61997S2;
-	Sun, 08 Mar 2026 10:38:05 +0800 (CST)
+	by APP-03 (Coremail) with SMTP id rQCowABnht0M4axptjIICg--.61997S3;
+	Sun, 08 Mar 2026 10:38:06 +0800 (CST)
 From: Jiakai Xu <xujiakai2025@iscas.ac.cn>
 To: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
@@ -28,11 +29,14 @@ Cc: Shuah Khan <shuah@kernel.org>,
 	Paul Walmsley <pjw@kernel.org>,
 	Atish Patra <atish.patra@linux.dev>,
 	Anup Patel <anup@brainfault.org>,
-	Jiakai Xu <xujiakai2025@iscas.ac.cn>
-Subject: [PATCH v2 0/2] RISC-V: KVM: Fix array out-of-bounds in firmware counter reads
-Date: Sun,  8 Mar 2026 02:38:01 +0000
-Message-Id: <20260308023803.4001232-1-xujiakai2025@iscas.ac.cn>
+	Jiakai Xu <xujiakai2025@iscas.ac.cn>,
+	Jiakai Xu <jiakaiPeanut@gmail.com>
+Subject: [PATCH v2 1/2] RISC-V: KVM: Fix array out-of-bounds in pmu_ctr_read() and pmu_fw_ctr_read_hi()
+Date: Sun,  8 Mar 2026 02:38:02 +0000
+Message-Id: <20260308023803.4001232-2-xujiakai2025@iscas.ac.cn>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260308023803.4001232-1-xujiakai2025@iscas.ac.cn>
+References: <20260308023803.4001232-1-xujiakai2025@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,55 +44,75 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowABnht0M4axptjIICg--.61997S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF4fXw45Cry8Ar47tF4DXFb_yoW8Xr1rpF
-	W3Ka4YkrykJrs7ta43A3ykJr15Xrs5Ca98Gry7Gr18Cr45ZryfXryDKwnxt3WrCrsYqw1j
-	ya1Igas7CFy5Za7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-	0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
-X-CM-SenderInfo: 50xmxthndljiysv6x2xfdvhtffof0/1tbiCQ4ACWmsPqmwfwAAsT
+X-CM-TRANSID:rQCowABnht0M4axptjIICg--.61997S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFWfXF18ZFyrAFy5Jw4xWFg_yoW8try5pr
+	sFkasaq3s5trs2qw1Yyw1Dur4jkw4kGan8GrWUWF18Ar4agry3JFyDu3sxJr43AFW2qa4x
+	tw4F9a4xCFW5Xa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
+	ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
+	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
+	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+	vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
+	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
+	wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU2sj8UUUUU=
+X-CM-SenderInfo: 50xmxthndljiysv6x2xfdvhtffof0/1tbiBwsACWmsPtixMwAAsk
 
-When a guest reads a firmware PMU counter via
-SBI_EXT_PMU_COUNTER_FW_READ or SBI_EXT_PMU_COUNTER_FW_READ_HI without
-first configuring it with SBI_EXT_PMU_COUNTER_CFG_MATCH, the counter's
-event_idx remains SBI_PMU_EVENT_IDX_INVALID (0xFFFFFFFF).
+When a guest invokes SBI_EXT_PMU_COUNTER_FW_READ or
+SBI_EXT_PMU_COUNTER_FW_READ_HI on a firmware counter that has not been
+configured via SBI_EXT_PMU_COUNTER_CFG_MATCH, the pmc->event_idx remains
+SBI_PMU_EVENT_IDX_INVALID (0xFFFFFFFF). get_event_code() extracts the
+lower 16 bits, yielding 0xFFFF (65535), which is then used to index into
+kvpmu->fw_event[]. Since fw_event is only RISCV_KVM_MAX_FW_CTRS (32)
+entries, this triggers an array-index-out-of-bounds:
 
-get_event_code() extracts the lower 16 bits from event_idx, yielding
-0xFFFF, which is then used to index into kvpmu->fw_event[]. Since the
-fw_event array only contains RISCV_KVM_MAX_FW_CTRS entries, this results
-in an out-of-bounds access that can be detected by UBSAN.
+  UBSAN: array-index-out-of-bounds in arch/riscv/kvm/vcpu_pmu.c:255:37
+  index 65535 is out of range for type 'kvm_fw_event [32]'
 
-Patch 1 fixes the issue by validating the firmware event code before
-accessing the fw_event array and returning -EINVAL for invalid values.
+Add a bounds check on fevent_code before accessing the fw_event array,
+returning -EINVAL for invalid event codes.
 
-After fixing the kernel behavior, the existing KVM selftest
-(sbi_pmu_test) fails because it attempts to read firmware counters
-without configuring them first. Patch 2 updates the selftest to
-configure a firmware event before reading the counter and adds a
-negative test to ensure that reading an unconfigured firmware counter
-fails gracefully.
+Fixes: badc386869e2c ("RISC-V: KVM: Support firmware events")
+Fixes: 08fb07d6dcf71 ("RISC-V: KVM: Support 64 bit firmware counters on RV32")
+Signed-off-by: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+Signed-off-by: Jiakai Xu <jiakaiPeanut@gmail.com>
+---
+V1 -> V2:
+- Merged the fixes for pmu_ctr_read() and pmu_fw_ctr_read_hi() into a single
+commit.
+- Removed the pr_warn, simply returning -EINVAL instead.
+---
+ arch/riscv/kvm/vcpu_pmu.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Jiakai Xu (2):
-  RISC-V: KVM: Fix array out-of-bounds in pmu_ctr_read() and
-    pmu_fw_ctr_read_hi()
-  RISC-V: KVM: selftests: Fix firmware counter read in sbi_pmu_test
-
- arch/riscv/kvm/vcpu_pmu.c                     |  4 +++
- .../testing/selftests/kvm/include/riscv/sbi.h | 28 +++++++++++++++++++
- .../selftests/kvm/riscv/sbi_pmu_test.c        | 16 ++++++++++-
- 3 files changed, 47 insertions(+), 1 deletion(-)
-
+diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+index e873430e596b..2ab67f5b99dc 100644
+--- a/arch/riscv/kvm/vcpu_pmu.c
++++ b/arch/riscv/kvm/vcpu_pmu.c
+@@ -227,6 +227,8 @@ static int pmu_fw_ctr_read_hi(struct kvm_vcpu *vcpu, unsigned long cidx,
+ 		return -EINVAL;
+ 
+ 	fevent_code = get_event_code(pmc->event_idx);
++	if (fevent_code >= SBI_PMU_FW_MAX)
++		return -EINVAL;
+ 	pmc->counter_val = kvpmu->fw_event[fevent_code].value;
+ 
+ 	*out_val = pmc->counter_val >> 32;
+@@ -252,6 +254,8 @@ static int pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+ 
+ 	if (pmc->cinfo.type == SBI_PMU_CTR_TYPE_FW) {
+ 		fevent_code = get_event_code(pmc->event_idx);
++		if (fevent_code >= SBI_PMU_FW_MAX)
++			return -EINVAL;
+ 		pmc->counter_val = kvpmu->fw_event[fevent_code].value;
+ 	} else if (pmc->perf_event) {
+ 		pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
 -- 
 2.34.1
 
