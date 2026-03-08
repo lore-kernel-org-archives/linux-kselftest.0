@@ -1,268 +1,226 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3F8332636;
-	Sun,  8 Mar 2026 13:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEA16FC3
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Mar 2026 13:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772975557; cv=none; b=QhiavOZkWV+jHNt7mMFj7sbFCQOpaUiQQVavwxE62l0DTi9Sd1XWdD+OIhdOfZkBGC/C92cRkbuNUG1XgrdckLuxdTRp2XPZlNEzd98LUZLAZk5YFC0ZqphkMCPx2H9sTxhccIuMWJw21gMaPyTabKiJSUqQK39PssUBwKXkXqo=
+	t=1772975964; cv=none; b=dXCo4ADKH4tl+zKEiIVnC8+rop3t3RVrNEexoZr4xJ0mkGdxuSjzVJlTOvFpnt0fpj+nRexh6vAxNUCksmGkCO06qQ8IFU3ZHpoKcxCmmCqCOBBlRjW69Zp3tyr5e9fY+cPyFHM3SnXlwDSSUGu/eT2WiWv5O16qqZghSzZfMgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772975557; c=relaxed/simple;
-	bh=pi+jA2SaVz5VZQibrNj7aQIvOkEoJMAlD8C/xK4hfM8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zl9NesPJU+8XwabMx8uIlT41WuruCivEowfPpjJNSOTr0m/wsoh1jT9/ihtoNVsJmDTF0zDcEOdb8jP/LH8u7hhFpQg95QqAUVKQ6Xl4L67UC2PUKcDQ2J3xFFlCUlAzqJB7npnuxuO01N9gN5nV6az9CYPrkEldD2ZY5A6v+zE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PlNiHoGP; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PlNiHoGP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4BC5C2BC9E;
-	Sun,  8 Mar 2026 13:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772975554;
-	bh=pi+jA2SaVz5VZQibrNj7aQIvOkEoJMAlD8C/xK4hfM8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PlNiHoGPXFH/PUPlGpfolQhpwNpMQNvkdtwZag3oFUv9yxJKSsrvfVvfCabh8Ek1n
-	 /NGHB9Rk/mvSETTFfzJFm7LWxSg6Sc9IPcN1V6A//FDTYTOsIHdCd9wvRdJZJ1jrU0
-	 7mmeL4pY9VaQIGJDaCWdsPWHTxLu3K4x98rm8hWr0yaJ279WuhjvC1Ahz3AUtcWuDJ
-	 LH38KxV+9E2BTPiN9SlpqsbQ6XbjvEyenU4UpV0XdZWPLaKQHfX6DjS+KnkKgcpvkF
-	 W+emIAlo5mNHklXqKP1uoYaqHFl3VFpdXCUVchlIse5//TVsLGpkgwWA4ceYa2lkYV
-	 pBnoCRbo7pY3Q==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To: Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next v3 3/3] selftests: rss_drv: Add RSS indirection table resize tests
-Date: Sun,  8 Mar 2026 14:12:17 +0100
-Message-ID: <20260308131218.3172332-4-bjorn@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260308131218.3172332-1-bjorn@kernel.org>
-References: <20260308131218.3172332-1-bjorn@kernel.org>
+	s=arc-20240116; t=1772975964; c=relaxed/simple;
+	bh=VxgoZKej2zxHVTo6U3V2GDY9zpnHtt7tzpMW+WH8AoQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=bA6IgdKhtifrXs7HpunFX2tfV2S/Mg9JswW6UDiP8uv9F60PTN68RPZa1Sx9WJhdyKvnqNf0irfBPZGKHp99dGgmG2Zdrh9wsVBi9Llfwd5Gc92o3o/7RUygrmxZCyML18CV6d5Ct8FstMRT2b2vUbwF0foxL6uPcIppauDoY+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-67a1e063795so47975094eaf.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 06:19:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772975962; x=1773580762;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xEvJ/INFfVN6lwZ8YdWWHWxn8b628hEFbjYdmQGHNJg=;
+        b=XRxSaOF4Z+CyXV7Dm5K3R5a29EBkIAmn9xbMoUfFXJXA//1yDSJHKUAfg1N2uUyIhD
+         rWtkSsi7HwaKi/aIz9aLbv+g0dRG5KnvP+5fk1GT/C6QKIrzgBJjbuu0RML5srq6q6rt
+         3Iu22jOEfYdxE4k/e+tGNwMTDk8CCg2p+Y6ba9c9jqC5eMcU7BLEk54S2PkMNlK0kPef
+         7RHibK/2K/iCtO3bs68NXzbhvqx2i+1Cb3Zvglnc1Dp44j7r9hc26qnPHudWlwUQkJGy
+         C8q41RUKsAvq5BS0SYpUmt/vWZTSPRnxrnogVeEqOiB1YSvCG+GxuRP+H3Nqm6AsbKOI
+         0WMw==
+X-Forwarded-Encrypted: i=1; AJvYcCXhTYtkjAExq4OzwFUkUrLOYGK+87rZ/JpycQel+k40wWHBcacTe962n80fDizkF+fNfNgVPBVglngkMF2Va/c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBh2/r6n6+W5VNdgcMjVaKjz5xUGvk4KLHDxy+0aOQQ981dpsf
+	QZ0qzo3/wf9x0ziG7yAJWfWalQHR7/VrCpxouCqEOI4gCTtl/ShTSA0DzEBhJfqchebzoK7rkxn
+	W+bVJHu3TgI+rno64I9gVMbkUJZJ0R8GYoyyipPHOIwUZX9jGmC7J5yyJTFg=
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a4a:ee1a:0:b0:67b:b337:d436 with SMTP id
+ 006d021491bc7-67bb337dc70mr300446eaf.10.1772975962336; Sun, 08 Mar 2026
+ 06:19:22 -0700 (PDT)
+Date: Sun, 08 Mar 2026 06:19:22 -0700
+In-Reply-To: <20260307204425.1900467-1-kuba@kernel.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69ad775a.a00a0220.b130.0002.GAE@google.com>
+Subject: [syzbot ci] Re: genetlink: apply reject policy for split ops on the
+ dispatch path
+From: syzbot ci <syzbot+ci571d3086db3b046d@syzkaller.appspotmail.com>
+To: alok.a.tiwari@oracle.com, andrew@lunn.ch, davem@davemloft.net, 
+	edumazet@google.com, horms@kernel.org, kees@kernel.org, kuba@kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	shuah@kernel.org
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Add resize tests to rss_drv.py. Devices without dynamic table sizing
-are skipped via _require_dynamic_indir_size().
+syzbot ci has tested the following series
 
-resize_periodic: set a periodic table (equal 4), shrink channels to
-fold, grow back to unfold. Check the exact pattern is preserved. Has
-main and non-default context variants.
+[v1] genetlink: apply reject policy for split ops on the dispatch path
+https://lore.kernel.org/all/20260307204425.1900467-1-kuba@kernel.org
+* [PATCH net-next 1/2] genetlink: apply reject policy for split ops on the dispatch path
+* [PATCH net-next 2/2] selftests: net: make sure that Netlink rejects unknown attrs in dump
 
-resize_nonperiodic_reject: set a non-periodic table (equal N), verify
-that channel reduction is rejected.
+and found the following issue:
+KASAN: slab-out-of-bounds Read in devlink_nl_dumpit
 
-Tested-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
-Signed-off-by: Björn Töpel <bjorn@kernel.org>
+Full report is available here:
+https://ci.syzbot.org/series/cced225b-516e-4f54-b4f2-57afc46c5c2a
+
+***
+
+KASAN: slab-out-of-bounds Read in devlink_nl_dumpit
+
+tree:      net-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/netdev/net-next.git
+base:      0bcac7b11262557c990da1ac564d45777eb6b005
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/4ea10ec3-e985-401a-a2b5-87b89ca3a776/config
+C repro:   https://ci.syzbot.org/findings/c23aee43-2180-46d5-93cb-e8c1cbcb1c39/c_repro
+syz repro: https://ci.syzbot.org/findings/c23aee43-2180-46d5-93cb-e8c1cbcb1c39/syz_repro
+
+==================================================================
+BUG: KASAN: slab-out-of-bounds in devlink_nl_dumpit+0x2a4/0x410 net/devlink/netlink.c:355
+Read of size 8 at addr ffff88810a48eab0 by task syz.0.17/5954
+
+CPU: 0 UID: 0 PID: 5954 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xba/0x230 mm/kasan/report.c:482
+ kasan_report+0x117/0x150 mm/kasan/report.c:595
+ devlink_nl_dumpit+0x2a4/0x410 net/devlink/netlink.c:355
+ genl_dumpit+0x10b/0x1b0 net/netlink/genetlink.c:1027
+ netlink_dump+0x722/0xe80 net/netlink/af_netlink.c:2325
+ __netlink_dump_start+0x5cb/0x7e0 net/netlink/af_netlink.c:2440
+ genl_family_rcv_msg_dumpit+0x213/0x310 net/netlink/genetlink.c:1076
+ genl_family_rcv_msg net/netlink/genetlink.c:1192 [inline]
+ genl_rcv_msg+0x5e8/0x7a0 net/netlink/genetlink.c:1210
+ netlink_rcv_skb+0x232/0x4b0 net/netlink/af_netlink.c:2550
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1219
+ netlink_unicast_kernel net/netlink/af_netlink.c:1318 [inline]
+ netlink_unicast+0x80f/0x9b0 net/netlink/af_netlink.c:1344
+ netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1894
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg net/socket.c:742 [inline]
+ ____sys_sendmsg+0x972/0x9f0 net/socket.c:2591
+ ___sys_sendmsg+0x2a5/0x360 net/socket.c:2645
+ __sys_sendmsg net/socket.c:2677 [inline]
+ __do_sys_sendmsg net/socket.c:2682 [inline]
+ __se_sys_sendmsg net/socket.c:2680 [inline]
+ __x64_sys_sendmsg+0x1bd/0x2a0 net/socket.c:2680
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f6bf799c799
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff4b3c0b38 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f6bf7c15fa0 RCX: 00007f6bf799c799
+RDX: 0000000000000000 RSI: 0000200000001780 RDI: 0000000000000003
+RBP: 00007f6bf7a32bd9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f6bf7c15fac R14: 00007f6bf7c15fa0 R15: 00007f6bf7c15fa0
+ </TASK>
+
+Allocated by task 5954:
+ kasan_save_stack mm/kasan/common.c:57 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
+ poison_kmalloc_redzone mm/kasan/common.c:398 [inline]
+ __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:415
+ kasan_kmalloc include/linux/kasan.h:263 [inline]
+ __do_kmalloc_node mm/slub.c:5238 [inline]
+ __kmalloc_noprof+0x35c/0x760 mm/slub.c:5250
+ kmalloc_noprof include/linux/slab.h:954 [inline]
+ genl_family_rcv_msg_attrs_parse+0xa3/0x2a0 net/netlink/genetlink.c:941
+ genl_start+0x180/0x6c0 net/netlink/genetlink.c:980
+ __netlink_dump_start+0x469/0x7e0 net/netlink/af_netlink.c:2431
+ genl_family_rcv_msg_dumpit+0x213/0x310 net/netlink/genetlink.c:1076
+ genl_family_rcv_msg net/netlink/genetlink.c:1192 [inline]
+ genl_rcv_msg+0x5e8/0x7a0 net/netlink/genetlink.c:1210
+ netlink_rcv_skb+0x232/0x4b0 net/netlink/af_netlink.c:2550
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1219
+ netlink_unicast_kernel net/netlink/af_netlink.c:1318 [inline]
+ netlink_unicast+0x80f/0x9b0 net/netlink/af_netlink.c:1344
+ netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1894
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg net/socket.c:742 [inline]
+ ____sys_sendmsg+0x972/0x9f0 net/socket.c:2591
+ ___sys_sendmsg+0x2a5/0x360 net/socket.c:2645
+ __sys_sendmsg net/socket.c:2677 [inline]
+ __do_sys_sendmsg net/socket.c:2682 [inline]
+ __se_sys_sendmsg net/socket.c:2680 [inline]
+ __x64_sys_sendmsg+0x1bd/0x2a0 net/socket.c:2680
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+The buggy address belongs to the object at ffff88810a48eaa0
+ which belongs to the cache kmalloc-16 of size 16
+The buggy address is located 0 bytes to the right of
+ allocated 16-byte region [ffff88810a48eaa0, ffff88810a48eab0)
+
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10a48e
+flags: 0x17ff00000000000(node=0|zone=2|lastcpupid=0x7ff)
+page_type: f5(slab)
+raw: 017ff00000000000 ffff888100041640 dead000000000100 dead000000000122
+raw: 0000000000000000 0000000800800080 00000000f5000000 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0xd2cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 11308983860, free_ts 11289885463
+ create_dummy_stack mm/page_owner.c:103 [inline]
+ register_dummy_stack+0x98/0x100 mm/page_owner.c:109
+ init_page_owner+0x2e/0x600 mm/page_owner.c:127
+ invoke_init_callbacks mm/page_ext.c:152 [inline]
+ page_ext_init+0x500/0x540 mm/page_ext.c:490
+ mm_core_init+0x51/0x70 mm/mm_init.c:2735
+page last free pid 1 tgid 1 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ __free_pages_prepare mm/page_alloc.c:1433 [inline]
+ __free_frozen_pages+0xc2b/0xdb0 mm/page_alloc.c:2978
+ ___free_pages_bulk mm/kasan/shadow.c:333 [inline]
+ __kasan_populate_vmalloc_do mm/kasan/shadow.c:385 [inline]
+ __kasan_populate_vmalloc+0x137/0x1d0 mm/kasan/shadow.c:424
+ kasan_populate_vmalloc include/linux/kasan.h:580 [inline]
+ alloc_vmap_area+0xd73/0x14b0 mm/vmalloc.c:2129
+ __get_vm_area_node+0x1f8/0x300 mm/vmalloc.c:3232
+ get_vm_area_caller+0x82/0xb0 mm/vmalloc.c:3283
+ __ioremap_caller+0x3d7/0x620 arch/x86/mm/ioremap.c:292
+ pcim_iomap+0xde/0x2b0 drivers/pci/devres.c:548
+ ahci_init_one+0x99e/0x34b0 drivers/ata/ahci.c:1973
+ local_pci_probe drivers/pci/pci-driver.c:323 [inline]
+ pci_call_probe drivers/pci/pci-driver.c:385 [inline]
+ __pci_device_probe drivers/pci/pci-driver.c:446 [inline]
+ pci_device_probe+0x41a/0xc70 drivers/pci/pci-driver.c:480
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x267/0xaf0 drivers/base/dd.c:661
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:803
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:833
+ __driver_attach+0x3e7/0x710 drivers/base/dd.c:1227
+ bus_for_each_dev+0x23b/0x2c0 drivers/base/bus.c:383
+ bus_add_driver+0x345/0x670 drivers/base/bus.c:715
+ driver_register+0x23a/0x320 drivers/base/driver.c:249
+
+Memory state around the buggy address:
+ ffff88810a48e980: fa fb fc fc 00 00 fc fc fa fb fc fc fa fb fc fc
+ ffff88810a48ea00: fa fb fc fc fa fb fc fc fa fb fc fc fa fb fc fc
+>ffff88810a48ea80: fa fb fc fc 00 00 fc fc 00 06 fc fc 00 00 fc fc
+                                     ^
+ ffff88810a48eb00: fa fb fc fc 00 00 fc fc 00 00 fc fc fa fb fc fc
+ ffff88810a48eb80: 00 00 fc fc 00 00 fc fc fa fb fc fc 00 00 fc fc
+==================================================================
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
 ---
- .../selftests/drivers/net/hw/rss_drv.py       | 163 +++++++++++++++++-
- 1 file changed, 159 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/rss_drv.py b/tools/testing/selftests/drivers/net/hw/rss_drv.py
-index 2d1a33189076..9763760f8306 100755
---- a/tools/testing/selftests/drivers/net/hw/rss_drv.py
-+++ b/tools/testing/selftests/drivers/net/hw/rss_drv.py
-@@ -5,9 +5,9 @@
- Driver-related behavior tests for RSS.
- """
- 
--from lib.py import ksft_run, ksft_exit, ksft_ge
--from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx
--from lib.py import defer, ethtool
-+from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge
-+from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, ksft_raises
-+from lib.py import defer, ethtool, CmdExitFailure
- from lib.py import EthtoolFamily, NlError
- from lib.py import NetDrvEnv
- 
-@@ -45,6 +45,18 @@ def _maybe_create_context(cfg, create_context):
-     return ctx_id
- 
- 
-+def _require_dynamic_indir_size(cfg, ch_max):
-+    """Skip if the device does not dynamically size its indirection table."""
-+    ethtool(f"-X {cfg.ifname} default")
-+    ethtool(f"-L {cfg.ifname} combined 2")
-+    small = len(_get_rss(cfg)['rss-indirection-table'])
-+    ethtool(f"-L {cfg.ifname} combined {ch_max}")
-+    large = len(_get_rss(cfg)['rss-indirection-table'])
-+
-+    if small == large:
-+        raise KsftSkipEx("Device does not dynamically size indirection table")
-+
-+
- @ksft_variants([
-     KsftNamedVariant("main", False),
-     KsftNamedVariant("ctx", True),
-@@ -76,11 +88,154 @@ def indir_size_4x(cfg, create_context):
-         _test_rss_indir_size(cfg, test_max, context=ctx_id)
- 
- 
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_periodic(cfg, create_context):
-+    """Test that a periodic indirection table survives channel changes.
-+
-+    Set a non-default periodic table ([3, 2, 1, 0] x N) via netlink,
-+    reduce channels to trigger a fold, then increase to trigger an
-+    unfold. Using a reversed pattern (instead of [0, 1, 2, 3]) ensures
-+    the test can distinguish a correct fold from a driver that silently
-+    resets the table to defaults. Verify the exact pattern is preserved
-+    and the size tracks the channel count.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+
-+    # Set a non-default periodic pattern via netlink
-+    rss = _get_rss(cfg, context=ctx_id)
-+    orig_size = len(rss['rss-indirection-table'])
-+    pattern = [3, 2, 1, 0] * (orig_size // 4)
-+    req = {'header': {'dev-index': cfg.ifindex}, 'indir': pattern}
-+    if ctx_id:
-+        req['context'] = ctx_id
-+    else:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+    cfg.ethnl.rss_set(req)
-+
-+    # Shrink — should fold
-+    ethtool(f"-L {cfg.ifname} combined 4")
-+    rss = _get_rss(cfg, context=ctx_id)
-+    indir = rss['rss-indirection-table']
-+
-+    ksft_ge(orig_size, len(indir), "Table did not shrink")
-+    ksft_eq(indir, [3, 2, 1, 0] * (len(indir) // 4),
-+            "Folded table has wrong pattern")
-+
-+    # Grow back — should unfold
-+    ethtool(f"-L {cfg.ifname} combined {ch_max}")
-+    rss = _get_rss(cfg, context=ctx_id)
-+    indir = rss['rss-indirection-table']
-+
-+    ksft_eq(len(indir), orig_size, "Table size not restored")
-+    ksft_eq(indir, [3, 2, 1, 0] * (len(indir) // 4),
-+            "Unfolded table has wrong pattern")
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_nonperiodic_reject(cfg, create_context):
-+    """Test that a non-periodic table blocks channel reduction.
-+
-+    Set equal weight across all queues so the table is not periodic
-+    at any smaller size, then verify channel reduction is rejected.
-+    An additional context with a periodic table is created to verify
-+    that validation catches the non-periodic one even when others
-+    are fine.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+    ctx_ref = f"context {ctx_id}" if ctx_id else ""
-+
-+    # Create an extra context with a periodic (foldable) table so that
-+    # the validation must iterate all contexts to find the bad one.
-+    extra_ctx = _maybe_create_context(cfg, True)
-+    ethtool(f"-X {cfg.ifname} context {extra_ctx} equal 2")
-+
-+    ethtool(f"-X {cfg.ifname} {ctx_ref} equal {ch_max}")
-+    if not create_context:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    with ksft_raises(CmdExitFailure):
-+        ethtool(f"-L {cfg.ifname} combined 2")
-+
-+
-+@ksft_variants([
-+    KsftNamedVariant("main", False),
-+    KsftNamedVariant("ctx", True),
-+])
-+def resize_nonperiodic_no_corruption(cfg, create_context):
-+    """Test that a failed resize does not corrupt table or channel count.
-+
-+    Set a non-periodic table, attempt a channel reduction (which must
-+    fail), then verify both the indirection table contents and the
-+    channel count are unchanged.
-+    """
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_max = channels.get('combined-max', 0)
-+    qcnt = channels['combined-count']
-+
-+    if ch_max < 4:
-+        raise KsftSkipEx(f"Not enough queues for the test: max={ch_max}")
-+
-+    defer(ethtool, f"-L {cfg.ifname} combined {qcnt}")
-+
-+    _require_dynamic_indir_size(cfg, ch_max)
-+
-+    ctx_id = _maybe_create_context(cfg, create_context)
-+    ctx_ref = f"context {ctx_id}" if ctx_id else ""
-+
-+    ethtool(f"-X {cfg.ifname} {ctx_ref} equal {ch_max}")
-+    if not create_context:
-+        defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    rss_before = _get_rss(cfg, context=ctx_id)
-+
-+    with ksft_raises(CmdExitFailure):
-+        ethtool(f"-L {cfg.ifname} combined 2")
-+
-+    rss_after = _get_rss(cfg, context=ctx_id)
-+    ksft_eq(rss_after['rss-indirection-table'],
-+            rss_before['rss-indirection-table'],
-+            "Indirection table corrupted after failed resize")
-+
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ksft_eq(channels['combined-count'], ch_max,
-+            "Channel count changed after failed resize")
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
-     with NetDrvEnv(__file__) as cfg:
-         cfg.ethnl = EthtoolFamily()
--        ksft_run([indir_size_4x], args=(cfg, ))
-+        ksft_run([indir_size_4x, resize_periodic,
-+                  resize_nonperiodic_reject,
-+                  resize_nonperiodic_no_corruption], args=(cfg, ))
-     ksft_exit()
- 
- 
--- 
-2.53.0
-
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
