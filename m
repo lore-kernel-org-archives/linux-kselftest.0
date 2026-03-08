@@ -1,47 +1,38 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C8336D4FC;
-	Sat,  7 Mar 2026 20:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82902BEFFF;
+	Sun,  8 Mar 2026 02:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772916271; cv=none; b=Ruu3smn44fR38uGxSLy/qA0CIqs5grE7IYt9AMj9Z1U5EQf+z0oposOwPmavETU72jBC6FC9nc6ORHEngLaHgX1beuTqPwcEivyilnPc3+ZlvJ3FRKL2goBb+/5VPyWufFDVwp7Ph/kgqL5VcKZYZv8QDYXcFx0huE/RcqZyE4c=
+	t=1772937513; cv=none; b=HC6ixs4nmtXXVlJn9bFdM6ttENvEfQsl52U+9JusskiFx/9MH5NkxXJFCzlskYIqQCtos0vj4Xhf4NvrxRfeRrMMx/URSi5I2mOtSow+n7wo5bdJ7GZWVqCYHsro1bfJB9zHAqgwqrRX1pq2ItOUwaAX4YlAMM0/dn9yNW0KdHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772916271; c=relaxed/simple;
-	bh=ATuLAR1sfOT/I7RRK0Fh5KcHBOQUGFu6jWdlyU5vu1I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YQwvnxeTP3AbgOwqpw+rPsJv50/E6ftPF3IXmQltZzZGDk91fHZNjEl+/3M5ErwQnUSCNpAqI/CAiBYs5hAcu1R7jlYmDIopqlVX66VsTtSYC7sxzWoH5x9yKMLSzf/dRYNediiWCgNKgTeixOZbQ0I9SjOSAz+cPPDvDeokcLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EoNCPlCA; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EoNCPlCA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D31C2BC87;
-	Sat,  7 Mar 2026 20:44:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772916270;
-	bh=ATuLAR1sfOT/I7RRK0Fh5KcHBOQUGFu6jWdlyU5vu1I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EoNCPlCAH0+pZmiybC2lFiBmedFQmqkY3HqfRZvg54o2fISYf6JAcY1NR/uhROG0S
-	 6Q5gT22LDssppeg3me6Q7mTG94IvgKY99zht1q3Gih8do7Z0fyKVp2hCFeRdFZh24R
-	 +j6vGsQdzkdLvRKGLRSZqpMIfTYUMvMk0dDB9FVxFWRDtN2uvoTXjAO96LQLsttSU/
-	 PijEricOAmYFXRP5VxLgzS1zNOGEundMMOG2XSOu52zDPKRddaF2IRDprJLP8iCB/0
-	 7PHjHclmjkneuH5bkYSQF+fxdOdEF8dEfium96CZFqJTLB7Bf6KjaRuuncwARWiy6X
-	 AEGZah0i1ubgw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
+	s=arc-20240116; t=1772937513; c=relaxed/simple;
+	bh=EpVQKr+amdFGHcTl33KTi2QxjI83B4Xn9xrYpbDZPKc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=r6UrFgtg7JLps72qvaH2Phpnxv2qpVh71VyndKNWQwAuKSnWbQjwMyWEy2xqvUfzph9xyOifXVR7fCvzlvcShrdEYupEPP+eVocQK4h7NqL/RAoXXmQV8eUIPykh5enFkg8iESrq4uFrq8VqupEgCSBFVIVScdSRMYrUxLzRKGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from fric.. (unknown [210.73.43.101])
+	by APP-03 (Coremail) with SMTP id rQCowABnht0M4axptjIICg--.61997S2;
+	Sun, 08 Mar 2026 10:38:05 +0800 (CST)
+From: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+To: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 2/2] selftests: net: make sure that Netlink rejects unknown attrs in dump
-Date: Sat,  7 Mar 2026 12:44:25 -0800
-Message-ID: <20260307204425.1900467-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260307204425.1900467-1-kuba@kernel.org>
-References: <20260307204425.1900467-1-kuba@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Anup Patel <anup@brainfault.org>,
+	Jiakai Xu <xujiakai2025@iscas.ac.cn>
+Subject: [PATCH v2 0/2] RISC-V: KVM: Fix array out-of-bounds in firmware counter reads
+Date: Sun,  8 Mar 2026 02:38:01 +0000
+Message-Id: <20260308023803.4001232-1-xujiakai2025@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,78 +40,55 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowABnht0M4axptjIICg--.61997S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CF4fXw45Cry8Ar47tF4DXFb_yoW8Xr1rpF
+	W3Ka4YkrykJrs7ta43A3ykJr15Xrs5Ca98Gry7Gr18Cr45ZryfXryDKwnxt3WrCrsYqw1j
+	ya1Igas7CFy5Za7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
+X-CM-SenderInfo: 50xmxthndljiysv6x2xfdvhtffof0/1tbiCQ4ACWmsPqmwfwAAsT
 
-Add a test case for rejecting attrs if policy is not set.
-dev_get dump has no input policy (accepts no attrs).
+When a guest reads a firmware PMU counter via
+SBI_EXT_PMU_COUNTER_FW_READ or SBI_EXT_PMU_COUNTER_FW_READ_HI without
+first configuring it with SBI_EXT_PMU_COUNTER_CFG_MATCH, the counter's
+event_idx remains SBI_PMU_EVENT_IDX_INVALID (0xFFFFFFFF).
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/nl_netdev.py | 33 +++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 6 deletions(-)
+get_event_code() extracts the lower 16 bits from event_idx, yielding
+0xFFFF, which is then used to index into kvpmu->fw_event[]. Since the
+fw_event array only contains RISCV_KVM_MAX_FW_CTRS entries, this results
+in an out-of-bounds access that can be detected by UBSAN.
 
-diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-index 5c66421ab8aa..e3bebd8b5d35 100755
---- a/tools/testing/selftests/net/nl_netdev.py
-+++ b/tools/testing/selftests/net/nl_netdev.py
-@@ -1,11 +1,15 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
--import time
-+"""
-+Tests for the netdev netlink family.
-+"""
-+
-+import errno
- from os import system
--from lib.py import ksft_run, ksft_exit, ksft_pr
--from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_busy_wait
--from lib.py import NetdevFamily, NetdevSimDev, ip
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
-+from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
- 
- 
- def empty_check(nf) -> None:
-@@ -19,6 +23,16 @@ from lib.py import NetdevFamily, NetdevSimDev, ip
-     ksft_eq(len(lo_info['xdp-rx-metadata-features']), 0)
- 
- 
-+def dev_dump_reject_attr(nf) -> None:
-+    """Test that dev-get dump rejects attributes (no dump request policy)."""
-+    with ksft_raises(NlError) as cm:
-+        nf.dev_get({'ifindex': 1}, dump=True)
-+    ksft_eq(cm.exception.nl_msg.error, -errno.EINVAL)
-+    ksft_eq(cm.exception.nl_msg.extack['msg'],
-+            'Attribute failed policy validation', 'bad-attr')
-+    ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.ifindex')
-+
-+
- def napi_list_check(nf) -> None:
-     with NetdevSimDev(queue_count=100) as nsimdev:
-         nsim = nsimdev.nsims[0]
-@@ -243,9 +257,16 @@ from lib.py import NetdevFamily, NetdevSimDev, ip
- 
- 
- def main() -> None:
-+    """ Ksft boiler plate main """
-     nf = NetdevFamily()
--    ksft_run([empty_check, lo_check, page_pool_check, napi_list_check,
--              dev_set_threaded, napi_set_threaded, nsim_rxq_reset_down],
-+    ksft_run([empty_check,
-+              lo_check,
-+              dev_dump_reject_attr,
-+              napi_list_check,
-+              napi_set_threaded,
-+              dev_set_threaded,
-+              nsim_rxq_reset_down,
-+              page_pool_check],
-              args=(nf, ))
-     ksft_exit()
- 
+Patch 1 fixes the issue by validating the firmware event code before
+accessing the fw_event array and returning -EINVAL for invalid values.
+
+After fixing the kernel behavior, the existing KVM selftest
+(sbi_pmu_test) fails because it attempts to read firmware counters
+without configuring them first. Patch 2 updates the selftest to
+configure a firmware event before reading the counter and adds a
+negative test to ensure that reading an unconfigured firmware counter
+fails gracefully.
+
+Jiakai Xu (2):
+  RISC-V: KVM: Fix array out-of-bounds in pmu_ctr_read() and
+    pmu_fw_ctr_read_hi()
+  RISC-V: KVM: selftests: Fix firmware counter read in sbi_pmu_test
+
+ arch/riscv/kvm/vcpu_pmu.c                     |  4 +++
+ .../testing/selftests/kvm/include/riscv/sbi.h | 28 +++++++++++++++++++
+ .../selftests/kvm/riscv/sbi_pmu_test.c        | 16 ++++++++++-
+ 3 files changed, 47 insertions(+), 1 deletion(-)
+
 -- 
-2.53.0
+2.34.1
 
