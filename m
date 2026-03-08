@@ -1,413 +1,218 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012028.outbound.protection.outlook.com [40.107.200.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B917262F
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Mar 2026 14:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1591315B971;
+	Sun,  8 Mar 2026 16:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.28
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772980169; cv=pass; b=pJuwcBPq8U5ljSOKWR4ki6BYKEy8Wlhe9Yn4U21ljOmBtmWzbKHLcg/+mI3wsXZcA9Zvzhsa2rfjMQtXc7K4BlyfeOfU18Kr942AaqiB1GXW7465RvS1inBsk7+FnkN7Q9ARQBTW70YaqlfPLqOU0uJFfdb2T5cNVMAt/WVrNo4=
+	t=1772985806; cv=fail; b=G3025cdnY+S3Wi08zevvLh15ylm7koTgmlu2dkXVXTxECzZEsPbi2DHVJ5yMLuQqnn84Wm/Tu2am93sQAG5uJ8qclkdDRzF5wqtRzoCVA9+1spuwHkZ43NE2KkUwCOtfemVyM2d+5qmoKhAlMET4HqvCwB2N4oHZ/aCGcXzIaCM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772980169; c=relaxed/simple;
-	bh=y/N//R5WtdXTMgX0UCXLyYbN/1JK8lgXJrqU9YO39vA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZyT02KfyOMQ6Ulh+GMysv5W0WSPNIdlNuYAdSkL8n9YScU+kWsfAvhMDLAr9F2cNmyvcj6BrFIVwEWpqj3aj2yI341NlzIvoutd8RZCDFN8suraUgeJOBlBRM5xjrYyLRGySto/pJ00Vcb1cQZoOS/rJqpUkjQXqAt+69hQGbrE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BnOtK7mY; arc=pass smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772985806; c=relaxed/simple;
+	bh=fzQ54SxI40Q34EFCOF6sUAmGa2qzwkRy4/LGw+h2lhY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=sW/erIdw8i2C+j0LtIkrIt7na/K88zzCXyGBqzkCW5Vk7jTuB2GkFs3+T0cDBZ7Xlx+8vh7/j2nWlbujFJ7yCdNKdSXLd1jJix/JtZBpN/xnuJ7WTDTZXNn/a2eAOrFczxytxQ8fGaPR9NHJ+V+mXnF4qZEnP1pT8SR+7wEvdn0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=I1UDWMLP; arc=fail smtp.client-ip=40.107.200.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BnOtK7mY"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-823c56765fdso5379785b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 07:29:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1772980167; cv=none;
-        d=google.com; s=arc-20240605;
-        b=b9hjfkYiEhZa6DSwnvSmlHGFyZtwtEDpTB3suXUTSKwcxk4JAzOjstC5/5N2uzh3Yp
-         AyKe/Xvi2O9SK+zT/qYPzie5FGVsm638iO+qeupEZo5nMK/DU3uqnuLI/3O1uiJjzwUw
-         o0X9+O8dx3eoxzb27R5L5YmFHOS4AmKhcA1ViUOIfgoEE6GMmVkA4lHBaIHhgvgJf9l0
-         8vaaPjKOtZyZQxdKah/OJykLlGEDxH8atnbgryHLQQtASy3zrxnuU+PpkfeKk9pVJLMW
-         6NwHRLDE23xOjaFEPSj+K1ftLfg1fZoZTe+Do31E12pklTLi/mEKPR6UukSax0IPVJ+o
-         Kc7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=z/6NrBvBmwsDMU9KR+Uw724SLeTdYW/wEZrx768r3V4=;
-        fh=LW+PRquBFOk4xC2qi8Zy81eB5P0tOFv2YVmA6U5guWc=;
-        b=eBBg2ZHtQ+1x7PjswxDen3ckvnkcjJ7kqtyHC+Y0EHvCLvEzNjOYFtX54z2ywqXaXf
-         yQbyFevaESZHG+iS2Fv6VNWLklFIip3t5vmRuKhP+1UCb179JMu2tk0UFGZndyvYAjmy
-         Q/qJLMMJWOnasPiuFEs9LQ1jlDz00whFmh9mVKJEBtRIjdHX//KqVAzlNiVSZELK5n79
-         uh88OqDa+Q6wiJDPlHJdfXaGYUztBDZiccwcRdyy4HuTLkCBfGH5Vf5fkHiBdt0cvmg+
-         NgBL6pClQ1GSPacd0aucfdeqFLmR4SJF07P6iWXe+7voCtv75oqUe69f/pzCqWlTrr+D
-         X4+w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772980167; x=1773584967; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z/6NrBvBmwsDMU9KR+Uw724SLeTdYW/wEZrx768r3V4=;
-        b=BnOtK7mY+f605SHRmFzmHcdBSVTo8Wxyu2+3zZenGyLddDhRmlrWBnLmeCrpXeQTi1
-         ckhCV9p0qFaGtJ9KFch+/RZ0Ny4d5DhpugP2fiGesAAhjXrPq+fHZ+R4ZnBAgyTEtgu9
-         cnshAXr3Efnxp+ws8uXYSgU4LikxJy8qWZv858+syGK78Qh/QK1EwkHur21eWYNCmpBJ
-         i2heQQqL2gYnrY2gff9HzbKVAsv8uISIy1Fb7dCD586QwbfP/waYZ9FXsRiHwr49icRz
-         69coKICpKR9Q2VYeEU9vsFeCBI+24CZAA5KXANuXUufjWpXAmKgOx3MYGPy1zxPJ1gH5
-         fyGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772980167; x=1773584967;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=z/6NrBvBmwsDMU9KR+Uw724SLeTdYW/wEZrx768r3V4=;
-        b=Y1QmF94Y7m+hwkDSAQm+eb0ACV0Pq0ssUtef/tLBx74Gf2oNLgM8Cvd4Ym8aNVQTmC
-         +AWezbe42csSo+BZFfC5TKQC/N66QbO2wRSljfvFkHEvYsLTd9ChDI3Pd1yT2xTcVPnK
-         +kc11sOJQpyL+xfrXJ+eB/GFwR+4Z9N41jRl7wsEIa9FAhRJHGp04DRQI/LVAI0WZUq+
-         60Lut667if5yN449cAFJpCWNsnWoB7xJwtggD7EXPYJ87x2LpmyCbfvOYxD2BwDFhe0+
-         oniWRTj9G9+ev298RDmPmmq01mc3Bhhj9dfTTHqfb9i2FZ1FT+ONaohIvKEjXqeCQzWw
-         Dpkg==
-X-Forwarded-Encrypted: i=1; AJvYcCVRhFzD9+mIjMhkM374knPueQrn194uBAzPt9gmJcCBaheYhNkchXlJkUDhiFp9LpNlYcCLKDSmXdOcuohHzKQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrBKh9tQlOcbCkkMDPpBizFBr3DqF/F6MHZwJxxRHm+7wEUqPk
-	rl8zWbJBOoyG1l0WZdY5z3t2eyFLjgjyDEJINdI0COB5YU06eU5zZXNU+DmDHg6+502fuFrNF4w
-	Vzyv2GZkN81ZiNXczF5RXK5GGg2pBH40=
-X-Gm-Gg: ATEYQzxnkeMLaTX+jgz4/gMhLjqB9QVbV6fJmZwB+niTrxSvTi5eZbNKxzega3zHGAp
-	QKUur4NIuczMjKdrJcfd0W80N7j5FQjL+iBKBYVpyI32o4LTmLSP6TNqLVsD23LKC5Olk/H7e58
-	70ox+jnu9FHEntp1pOu4coaPfQ2PtzVguW9QZLeAm8eJdovdxWDYWR5V5FsakHtywvtyTFvbuY6
-	B2J9Yv2xPzf2Oir5IR3uiN+tefOJG51Ku3tmqTM4d+IOx+42IyXzrrjDMGnlQMlDj+We5O48QPj
-	Y3zWFQ==
-X-Received: by 2002:a05:6a00:928c:b0:81a:b602:daf6 with SMTP id
- d2e1a72fcca58-829a2f83f20mr7731332b3a.48.1772980167139; Sun, 08 Mar 2026
- 07:29:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="I1UDWMLP"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Q8+cAu4FYE+weXptm0WeAUrjOt3wcjf3PHAJH/AfIy51go5u8pyzJeGvAMfIJAuKjlJtGK6fBswj5V11nSk/3g1wawE5PQV9AsZWT7wrgXYCtsij9fuoPoL2J0VmlPsKxSAnYBwd9EpyLEcGD4+BC6lJbuyEKs7D+PpUsWwNhfD5GS8dJdVRmf3U26fTzitQEUEqUHkOH3TvSpnzg+JnfYezzeQgQttAQlrjuH998WfSSwsgrslTUwkzv8KJWzJicsq3dBNgPXP0u6Rt4rq2d8irCiZrXIBzKEXhA5spyhHXaMgA/HPtGIQCMwXN8bt6J0pVoeIMyPSDHQR/2NG2uA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6esBwd3eOY4JuflynZMCQdTyAB+HbV3AGWbrM2Uqf7Q=;
+ b=VRihVuWHuK0aPHji3mTPiGMHlHPKqB9m3xQ/kXtEU7BPyr5D7egIw5oxf9jxMcspfE2Qp2j4V3ZY2qjJNODNkjjCr6qPDm7taIv0WtNxO8lcdSL3wFewLpwEvS/cocvOn83mkcMozqojL91lH/NiiNzQtK7S1m+/59YgrzcfaxoFwl83k5w7kE0p7H0RQZ9XQw76BFhGBvJ2iWzJwyT8A9Fftszzi3ICEhzs9xYO5E/2Cc3Usmj2Txp160VBUzMKBYnSWcm7XghrzOvqmupCM3xpB79SKBtAqP3JyHvtbwzlh12ggtgi2JMkcc8c+kXjOwkt4zAa5I2f4aCW7H55lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6esBwd3eOY4JuflynZMCQdTyAB+HbV3AGWbrM2Uqf7Q=;
+ b=I1UDWMLPeS/FHauKW+Nh055vW83Tq36TYE0tnDm7GfVmQQF/BUZZJugMqtA7xGBUge/gKPS2uYmDrzpN4nQ6/SgUbCXb7bS81kc4GucKE9XInoW3jGRCPN1D44lKP1NwE1OnOOFs7R/63Tp/ThJWBSkJAfZ/A+BmV1szQ+OFdI/s03mzE6yAwJ7nIaiU6NziZW0LBdEtpHgiuj13zRjddu5Tg47m4ht8QPWGtxEih5jN+NNI6PlszxebdUEU3mOANuMrqYF6+JgLX0a1ZgWivVTlXugY35GdRULhzx2WdHA1y4+/Er7jQ4RDnt1+zKG6G14dSKDCXOgSIraQrZN9GQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY1PR12MB9558.namprd12.prod.outlook.com (2603:10b6:930:fe::13)
+ by MW4PR12MB6951.namprd12.prod.outlook.com (2603:10b6:303:209::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.9; Sun, 8 Mar
+ 2026 16:03:19 +0000
+Received: from CY1PR12MB9558.namprd12.prod.outlook.com
+ ([fe80::920f:8246:c48b:7ce9]) by CY1PR12MB9558.namprd12.prod.outlook.com
+ ([fe80::920f:8246:c48b:7ce9%4]) with mapi id 15.20.9654.022; Sun, 8 Mar 2026
+ 16:03:19 +0000
+Message-ID: <74dcd7c5-8a2b-49a7-a23c-174d17a61955@nvidia.com>
+Date: Sun, 8 Mar 2026 18:03:11 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource support
+To: Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@resnulli.us>
+Cc: Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ Mark Bloch <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+ Dragos Tatulea <dtatulea@nvidia.com>, Shay Drory <shayd@nvidia.com>,
+ Jiri Pirko <jiri@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>
+References: <20260226221916.1800227-1-tariqt@nvidia.com>
+ <20260302192640.49af074f@kernel.org>
+ <pmxkihhtsskkwsvdia4z2ss4wxpfc4a4kqxkjv5wk3mwdmpzii@6go7pizk2nst>
+ <jssifysprwuafkinc3dguspngxmplrngqxvotp76vhvu4e5lp6@e7mdrjqc5rme>
+ <20260304101522.09da1f58@kernel.org>
+ <np44uzfn6jea56uht4yq4te5clapgj7pk6ygyvkl22wxumwnvt@nrpvzjqzxenq>
+ <20260305063729.7e40775d@kernel.org>
+ <ni23r4jiwgc6zjjsubtl4ujjgxzwpxrylumofdwxgozfnieynm@zirlbneaz6p2>
+ <20260306120301.0ebe1ab2@kernel.org>
+Content-Language: en-US
+From: Or Har-Toov <ohartoov@nvidia.com>
+In-Reply-To: <20260306120301.0ebe1ab2@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0178.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b7::6) To CY1PR12MB9558.namprd12.prod.outlook.com
+ (2603:10b6:930:fe::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304031606.43884-1-pilgrimtao@gmail.com> <20260304031606.43884-5-pilgrimtao@gmail.com>
- <87342fzjq0.fsf@gmail.com>
-In-Reply-To: <87342fzjq0.fsf@gmail.com>
-From: Chengkaitao <pilgrimtao@gmail.com>
-Date: Sun, 8 Mar 2026 22:29:16 +0800
-X-Gm-Features: AaiRm53bYnml7X5G0IwFiciLPE0so5wAI_RBE2RyqprCPZQnLYA0nY9y1vDH3uQ
-Message-ID: <CAAWJmAau_VwGVG1URNmOEKhDwAHQQRkvhWU-Vzd5Fa_jWBxnOw@mail.gmail.com>
-Subject: Re: [PATCH v5 4/6] selftests/bpf: Add test case for bpf_list_add_impl
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY1PR12MB9558:EE_|MW4PR12MB6951:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc59a5b0-56db-49aa-722f-08de7d2c3740
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	og5IuiNma3/hdGXLbQuOvyY+5ryjB37zZM+aiT5t1qXFIAF4GL+ZxkOTOoevWOwA3wQ1UqQuu9/abw3x+BQQataLG7y++CD8LES10hxAVHMS0pji9f7skXb99+GDiGTBGOHeT+kfL6Azmm3ItJ/r7fBDHv1m38nMBvqJuk2THBEJ5wryROmmYCuNXAd/e5IRN1d9MCVdkNcKf1Runh44mtqdZUPPNam00A37c9cHhppMZ020AD2MRZlfaJSCHGkaKf0i3R8IGKivVyWn+JCowFESiL0viGa2NfHESLgnMbYHuds+hcXAkXtp8/Gw0WbRgozKHaAgFAF1HwoqnLLD1qUVkItmJXI9daA0wXZpTH/ABhV5edAXQ5chB+txOZ0zoBTS8aDfCdHU1BkWgvbEiyQZJ16FiJ1pzEPEdnCIJAVVaw+n81DiJ9ICbvSkq/5tUW9+KaStN6wj/LlytdAi11FpVHpKDZNSip7mkUMzQjUQ+gtlFOSggXoXADpFLZaieVtvZi7r3lsv6y0m6+5Y1K9+fE4wC9Aa8VW9EAtZ3K6BjbfnEJVfea2TqsaxDKPQkuu84pDw42LIGevbXI63h51W6B5RBweqneglAUeBJ5oNSejWiw2xwvMXuL+b2Bel6XgYDxIFtAaqaDcjqI8A8+m6paydm70Fm79GT6R4EKSz916IOOurouPwzqdi3F+7Ax7naUnmJ0LQbi+HiidnqF+PT1XpBKsh2yz5oX9Mj0o=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY1PR12MB9558.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MFlFQzg5R1ZDTUxhRVJxdVZTV256TnFVWlFhUDJ1NzJFNW1lWFpUZDVkd3Rz?=
+ =?utf-8?B?OE9rNGIxWTNDU2g5N2hHVGhlTFl4RnhLQkhDM0p5MkdjYTNTSzZaeGxUUHVv?=
+ =?utf-8?B?Zkt3dEt6eG1seE0raG42L0I5cHFJWWp3MWlBUTdzcG9vdXFqMGNyL1U5clla?=
+ =?utf-8?B?aXNtNFFUWXp3Q1BDL2F3eUk4RFRBT1FWTzFPT0ZubE1kcVhpVGV6clVHSitH?=
+ =?utf-8?B?M1MvNGpTZ01UajVXVXlXbDA5YTVOamtNWHdUWUttTzZGRjcwSGt5b0RHc01n?=
+ =?utf-8?B?QWlrT1VxN0lzQlpyTzFNV1pwNk9TTlZzR1FFeFg3Snc2d1hhZjFib0ZiNE56?=
+ =?utf-8?B?aUpSc01Xa1lhL0VJT1dOTUZWWnp5dlNxcmduTVBESGpOSnhEbkNNUGNsb3dk?=
+ =?utf-8?B?bjRaRTN4RkxTRlB6dTZTWHFLYTFuN0s3MlI3QVJiazZ1bzVYSitCTW9Mb3Ry?=
+ =?utf-8?B?VzV2YllOK2llRVU1SzR3MWRCVDZ2cUZhcWtISThaVFAyV1dCMXpEckxVSGFu?=
+ =?utf-8?B?MTAyZVo5UnA5Z2hEMkwwR3VaZ0gwMHk5NWw4T0JtcW5TUXArM3RLQ3RYOHZC?=
+ =?utf-8?B?NldSLzF0N1hkaSt6SFcveTU5UWtZbVNmNUc4RFRTTjdqanVrdm4valRGVHZF?=
+ =?utf-8?B?QXYxaU1NdXZXQ0k4cUJDd2JMdlk5TkEvSnpYVkI2UzlhV3UvTExwUEFCZi9Q?=
+ =?utf-8?B?b25XRlU2YmladzZ4VlJ5b3dPS25Id01nYXFiKzNPRXkwYzFVZHVxcUl5NDhB?=
+ =?utf-8?B?enVkb3ZQTkNJWW1EenJDUE1SNFg3akJmZ2NXWlhwd0hjaTVkWXhwZEM0N0sx?=
+ =?utf-8?B?U0NnelRQZU9oV0E2bjdTbTE3eWxJOEhvM1F3UnA4d2hjaVBzQ3IrNGl5OUpv?=
+ =?utf-8?B?Uk5FYWx2a2VDSFFacG51c0cxbU1lSEJoa2tqZ0ErMmJmYTJPY3B6eUNvbXhQ?=
+ =?utf-8?B?NEJqc3duSEllNnIvYVJOZnhJUzAyWVduMlppc1l5dlJEcUY0RFpyaXlLRDli?=
+ =?utf-8?B?V0xYTjFBaHc0U0xnRDQ5RUNVYy9aVHUwbktHUzRXOUhMUm44UVh3VVlwL3Ry?=
+ =?utf-8?B?d3VMcTl5cFVLVzk0a05HcWxyUllFOVdlWmltVk9VVjlucjN4dDRvc0dLeFR5?=
+ =?utf-8?B?NWw2aS95OWtCN2h4dEd6aFdFRGdSREJ2K2ZvYXJvd2hUTHpUTWNtYnpZdGNG?=
+ =?utf-8?B?YnA5RlE1NFlpNHJiUWhTclF3OG5wR1o3TmVYTUoxV2hadVZkdGNETkF2clYy?=
+ =?utf-8?B?ckZFNEIyVEVaN1BLUnl2ZTFyMjZoNkZkcWwwVm5FalJBbjUzcVp2M2Q0Wnho?=
+ =?utf-8?B?L05tVFJHRVZyWVR3S0pHSXcwT2draWNJdXdQcnZINGlrTjZyYzkxTVZmTCtG?=
+ =?utf-8?B?TVl5K1lwTkllNVBJRG5Md2llMjBCbFdjaS9YSGNCVnZlSWtieDVQbnNITTVT?=
+ =?utf-8?B?bHZrN3c1Mk15TFQ4YzRndlN2eXlCTFlxY0E5emlyMk4xdDhwamppNjFXMUZQ?=
+ =?utf-8?B?NjR6eXEwUGRXNkJGb1d1SlBLZnZTVHVBMzRIdEFTWGh6SXdOZCs4UlpzTDdJ?=
+ =?utf-8?B?UkNKOWRDMS83ak9SY2JIeUpWRmV5L3dWbFI2WHFLelNkaTZUaWVLaldicXE5?=
+ =?utf-8?B?NUs5YWwxN0U1VE9LcGcxSTZwM08vT2hZb05RdjJ2aEtoR3BBU1gyQWQ5bUo4?=
+ =?utf-8?B?YXZLTEVFQWNJZytLZ1k3UXdzWkhkUjJsdnBnTW4vTHBjY1JVVlEvY2Qwem9J?=
+ =?utf-8?B?cWNQYkZVQll1TFk0TmNVSGJBcUJIU3h1QTRpVVl1dlJSeWNGRENMN1BtNVEw?=
+ =?utf-8?B?d2JGbE9WajZWeDFTLzRtLzBzTkUvWkRRMEtsaEhJSUwyWDlaQ1VWSGwzNXhO?=
+ =?utf-8?B?N2IyeFNoVEQvTUhRL0hFVU5hUFd6ZnlNd1RPTy85bFdmbUJIR0VHRW51MklV?=
+ =?utf-8?B?b2FZNGN1bXhNdjZWdGgwd25QeEp4dlBUZldzNkxuNTRGZCtGQ3R1bVhGaFE4?=
+ =?utf-8?B?Rzlla1ZyT1lpQmNGWmx4QmpBVk82VmRveEptSVRjMmVRTHNVMDB4YUdpK1g3?=
+ =?utf-8?B?UzBHbVJnb2tFQVhxS2ZoNjlPVTlxZGNsWk5PVDZ1UncwalBDOWhSU1pXME94?=
+ =?utf-8?B?c25lZnZGWXFiWHh0TkVqaE1pcVZwK2ZqM3dwQzFkaFZ6QWYwREgyR2pHV3VI?=
+ =?utf-8?B?eU1mNEpkMWJINUd0NDMwelM4VDRYS1d4anRmUjFvSVB6a2JDck03MEl3elBK?=
+ =?utf-8?B?UGE5MnJ6WnBZczhCc3RTdWRpbzFndUZna1FpNzlUNHdsQ3JQYXBzKzZRTWFW?=
+ =?utf-8?B?Tkl5ZVR1bHhQcEg4MmVvSmhTKzEvMTRMeXM1TEFaU2hSVnJmZmZPdz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc59a5b0-56db-49aa-722f-08de7d2c3740
+X-MS-Exchange-CrossTenant-AuthSource: CY1PR12MB9558.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2026 16:03:19.4213
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f2pAu1umzzHd7yoVzK22jOq+QrKDAnC6kWmuSj/SnwRZoLcAIHOyhBv/p3BivtELmEN2cmJzs+LkijWkb5iLPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6951
 
-On Wed, Mar 4, 2026 at 11:40=E2=80=AFPM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> Chengkaitao <pilgrimtao@gmail.com> writes:
->
-> > From: Kaitao Cheng <chengkaitao@kylinos.cn>
-> >
-> > Extend refcounted_kptr test to exercise bpf_list_add:
-> > add a second node after the first, then bpf_list_del both nodes.
-> >
-> > To verify the validity of bpf_list_add, also expect the verifier
-> > to reject calls to bpf_list_add made without holding the spin_lock.
-> >
-> > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> > ---
-> >  .../testing/selftests/bpf/bpf_experimental.h  |  16 +++
-> >  .../selftests/bpf/progs/refcounted_kptr.c     | 122 ++++++++++++++++--
-> >  2 files changed, 124 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/tes=
-ting/selftests/bpf/bpf_experimental.h
-> > index 54ec9d307fdc..fdcc7a054095 100644
-> > --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> > +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> > @@ -110,6 +110,22 @@ extern struct bpf_list_node *bpf_list_pop_back(str=
-uct bpf_list_head *head) __ksy
-> >  extern struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
-> >                                         struct bpf_list_node *node) __k=
-sym;
-> should this be available from vmlinux.h?
 
-In v7, I removed most of the function declarations and kept only the
-bpf_list_add macro.
-https://lore.kernel.org/all/20260308134614.29711-5-pilgrimtao@gmail.com/
 
-I have a question: bpf_experimental.h already has many similar declarations
-for other kfuncs=E2=80=94are those redundant too, should we remove them as =
-well?
-or is there a historical reason for keeping them? I would appreciate your
-clarification on this.
+On 06/03/2026 22:03, Jakub Kicinski wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On Fri, 6 Mar 2026 13:13:26 +0100 Jiri Pirko wrote:
+>> Thu, Mar 05, 2026 at 03:37:29PM +0100, kuba@kernel.org wrote:
+>>> On Thu, 5 Mar 2026 08:56:42 +0100 Jiri Pirko wrote:
+>>>> Or, alternatively, we can have per-object dumps as we have for all
+>>>> objects and command right now and leave things simple and
+>>>> straightforward? I mean, I don't really see a benefit of a single dump
+>>>> for more objects :/
+>>>
+>>> What do you mean by straightforward, exactly?
+>>>
+>>> User will most likely want to see all resources of a device in a single
+>>> dump / command.
+>>
+>> Hmm. We actually already have this for region and health reporter dumps.
+>> Only for params we have that separate.
+>> So let's do it for resource too.
+> 
+> That's not a good argument, as I said in my first response to the
+> thread:
+> 
+>    I worry we are mechanically following the design of other commands.
+> 
+> https://lore.kernel.org/all/20260302192640.49af074f@kernel.org/
+> 
 
-> > +/* Description
-> > + *   Insert 'new' after 'prev' in the BPF linked list with head 'head'=
-.
-> > + *   The bpf_spin_lock protecting the list must be held. 'prev' must a=
-lready
-> > + *   be in that list; 'new' must not be in any list. The 'meta' and 'o=
-ff'
-> > + *   parameters are rewritten by the verifier, no need for BPF program=
-s to
-> > + *   set them.
-> > + * Returns
-> > + *   0 on success, -EINVAL if head is NULL, prev is not in the list wi=
-th head,
-> > + *   or new is already in a list.
-> > + */
-> > +extern int bpf_list_add_impl(struct bpf_list_head *head, struct bpf_li=
-st_node *new,
-> > +                          struct bpf_list_node *prev, void *meta, __u6=
-4 off) __ksym;
-> > +
-> > +/* Convenience macro to wrap over bpf_list_add_impl */
-> > +#define bpf_list_add(head, new, prev) bpf_list_add_impl(head, new, pre=
-v, NULL, 0)
-> > +
-> >  /* Description
-> >   *   Remove 'node' from rbtree with root 'root'
-> >   * Returns
-> > diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tool=
-s/testing/selftests/bpf/progs/refcounted_kptr.c
-> > index ac7672cfefb8..5a83274e1d26 100644
-> > --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> > +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> > @@ -367,18 +367,19 @@ long insert_rbtree_and_stash__del_tree_##rem_tree=
-(void *ctx)            \
-> >  INSERT_STASH_READ(true, "insert_stash_read: remove from tree");
-> >  INSERT_STASH_READ(false, "insert_stash_read: don't remove from tree");
-> >
-> > -/* Insert node_data into both rbtree and list, remove from tree, then =
-remove
-> > - * from list via bpf_list_del using the node obtained from the tree.
-> > +/* Insert one node in tree and list, remove it from tree, add a second
-> Use kernel comment style: first line is just "/*" then text starts from
-> the next one.
-> > + * node after it in list with bpf_list_add, then remove both nodes fro=
-m
-> > + * list via bpf_list_del.
-> >   */
-> It sounds like the new test is quite different from the previous, why
-> not add a separate test running new codepaths instead of retrofitting
-> into the existing test?
+Hi,
 
-I merged the three test-case patches into one; they still share a common
-function, as some logic can be reused. I added some log output for
-readability.
+Do you mean that we will register resources per port, but not show with 
+new devlink port resource show.
+Instead, the current devlink resource show dev command will also display 
+the ports of that device?
 
-> >  SEC("tc")
-> > -__description("test_bpf_list_del: remove an arbitrary node from the li=
-st")
-> > +__description("test_list_add_del: test bpf_list_add/del")
-> >  __success __retval(0)
-> > -long test_bpf_list_del(void *ctx)
-> > +long test_list_add_del(void *ctx)
-> >  {
-> > -     long err;
-> > +     long err =3D 0;
-> >       struct bpf_rb_node *rb;
-> > -     struct bpf_list_node *l;
-> > -     struct node_data *n;
-> > +     struct bpf_list_node *l, *l_1;
-> > +     struct node_data *n, *n_1, *m_1;
-> nit: The naming scheme is a little bit confusing.
-> >
-> >       err =3D __insert_in_tree_and_list(&head, &root, &lock);
-> >       if (err)
-> > @@ -392,20 +393,48 @@ long test_bpf_list_del(void *ctx)
-> >       }
-> >
-> >       rb =3D bpf_rbtree_remove(&root, rb);
-> > -     if (!rb) {
-> > -             bpf_spin_unlock(&lock);
-> > +     bpf_spin_unlock(&lock);
-> > +     if (!rb)
-> >               return -5;
-> > -     }
-> >
-> >       n =3D container_of(rb, struct node_data, r);
-> > +     n_1 =3D bpf_obj_new(typeof(*n_1));
-> > +     if (!n_1) {
-> > +             bpf_obj_drop(n);
-> > +             return -1;
-> > +     }
-> > +     m_1 =3D bpf_refcount_acquire(n_1);
-> > +     if (!m_1) {
-> > +             bpf_obj_drop(n);
-> > +             bpf_obj_drop(n_1);
-> > +             return -1;
-> > +     }
-> > +
-> > +     bpf_spin_lock(&lock);
-> > +     if (bpf_list_add(&head, &n_1->l, &n->l)) {
-> > +             bpf_spin_unlock(&lock);
-> > +             bpf_obj_drop(n);
-> > +             bpf_obj_drop(m_1);
-> > +             return -8;
-> > +     }
-> > +
-> >       l =3D bpf_list_del(&head, &n->l);
-> > +     l_1 =3D bpf_list_del(&head, &m_1->l);
-> >       bpf_spin_unlock(&lock);
-> >       bpf_obj_drop(n);
-> > -     if (!l)
-> > -             return -6;
-> > +     bpf_obj_drop(m_1);
-> >
-> > -     bpf_obj_drop(container_of(l, struct node_data, l));
-> > -     return 0;
-> > +     if (l)
-> Can we do early returns, like
-> if (!l)
->    return -6;
-> bpf_obj_drop(l);
-> if (!l_1)
->    return -7;
-> bpf_obj_drop(l_1);
+For example:
 
-This change results in runtime errors, and the error log is provided below.
-********************
-117: (85) call bpf_list_del#101493    ;
-R0=3Dptr_or_null_node_data(id=3D13,ref_obj_id=3D13,off=3D48) refs=3D6,9,11,=
-13
-118: (bf) r9 =3D r0                     ;
-R0=3Dptr_or_null_node_data(id=3D13,ref_obj_id=3D13,off=3D48)
-R9=3Dptr_or_null_node_data(id=3D13,ref_obj_id=3D13,off=3D48) refs=3D6,9,11,=
-13
-; bpf_spin_unlock(&lock); @ refcounted_kptr.c:441
-119: (18) r1 =3D 0xffff00006957bf50     ;
-R1=3Dmap_value(map=3D.bss.A,ks=3D4,vs=3D36,off=3D32) refs=3D6,9,11,13
-121: (85) call bpf_spin_unlock#94     ; refs=3D6,9,11,13
-; bpf_obj_drop(n_rb); @ refcounted_kptr.c:442
-122: (bf) r1 =3D r6                     ; R1=3Dptr_node_data(ref_obj_id=3D6=
-)
-R6=3Dptr_node_data(ref_obj_id=3D6) refs=3D6,9,11,13
-123: (b7) r2 =3D 0                      ; R2=3D0 refs=3D6,9,11,13
-124: (85) call bpf_obj_drop_impl#102200       ; refs=3D9,11,13
-; bpf_obj_drop(n_new_ref); @ refcounted_kptr.c:443
-125: (bf) r1 =3D r7                     ; R1=3Dptr_node_data(ref_obj_id=3D9=
-)
-R7=3Dptr_node_data(ref_obj_id=3D9) refs=3D9,11,13
-126: (b7) r2 =3D 0                      ; R2=3D0 refs=3D9,11,13
-127: (85) call bpf_obj_drop_impl#102200       ; refs=3D11,13
-128: (b7) r0 =3D -11                    ; R0=3D-11 refs=3D11,13
-; if (!l_node) @ refcounted_kptr.c:445
-129: (15) if r8 =3D=3D 0x0 goto pc-22 108: R0=3D-11 R6=3Dscalar() R7=3Dscal=
-ar()
-R8=3D0 R9=3Dptr_or_null_node_data(id=3D13,ref_obj_id=3D13,off=3D48) R10=3Df=
-p0
-refs=3D13
-; } @ refcounted_kptr.c:459
-108: (95) exit
-Unreleased reference id=3D13 alloc_insn=3D117
-BPF_EXIT instruction in main prog would lead to reference leak
-processed 194 insns (limit 1000000) max_states_per_insn 1 total_states
-20 peak_states 20 mark_read 0
-*******************
+$ devlink resource show pci/0000:03:00.0
+   pci/0000:03:00.0:
+     name local_max_SFs size 40 unit entry
+   pci/0000:03:00.0/196608:
+      name max_SFs size 20 unit entry
+   pci/0000:03:00.0/196609:
+      name max_SFs size 20 unit entry
 
->
-> The point of returning different errors per each error path is to make
-> it easy to understand where your test errored out by just looking at err.
-> > +             bpf_obj_drop(container_of(l, struct node_data, l));
-> > +     else
-> > +             err =3D -6;
-> > +
-> > +     if (l_1)
-> > +             bpf_obj_drop(container_of(l_1, struct node_data, l));
-> > +     else
-> > +             err =3D -6;
-> > +
-> > +     return err;
-> >  }
-> >
-> >  SEC("?tc")
-> > @@ -438,6 +467,71 @@ long list_del_without_lock_fail(void *ctx)
-> >       return 0;
-> >  }
-> >
-> > +SEC("?tc")
-> > +__failure __msg("bpf_spin_lock at off=3D32 must be held for bpf_list_h=
-ead")
-> > +long list_add_without_lock_fail(void *ctx)
-> > +{
-> > +     long err =3D 0;
-> > +     struct bpf_rb_node *rb;
-> > +     struct bpf_list_node *l, *l_1;
-> > +     struct node_data *n, *n_1, *m_1;
-> > +
-> > +     err =3D __insert_in_tree_and_list(&head, &root, &lock);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     bpf_spin_lock(&lock);
-> > +     rb =3D bpf_rbtree_first(&root);
-> > +     if (!rb) {
-> > +             bpf_spin_unlock(&lock);
-> > +             return -4;
-> > +     }
-> > +
-> > +     rb =3D bpf_rbtree_remove(&root, rb);
-> > +     bpf_spin_unlock(&lock);
-> > +     if (!rb)
-> > +             return -5;
-> > +
-> > +     n =3D container_of(rb, struct node_data, r);
-> > +     n_1 =3D bpf_obj_new(typeof(*n_1));
-> > +     if (!n_1) {
-> > +             bpf_obj_drop(n);
-> > +             return -1;
-> > +     }
-> > +     m_1 =3D bpf_refcount_acquire(n_1);
-> > +     if (!m_1) {
-> > +             bpf_obj_drop(n);
-> > +             bpf_obj_drop(n_1);
-> > +             return -1;
-> > +     }
-> > +
-> > +     /* Intentionally no lock: verifier should reject bpf_list_add wit=
-hout lock */
-> > +     if (bpf_list_add(&head, &n_1->l, &n->l)) {
-> > +             bpf_obj_drop(n);
-> > +             bpf_obj_drop(m_1);
-> > +             return -8;
-> > +     }
-> > +
-> > +     bpf_spin_lock(&lock);
-> > +     l =3D bpf_list_del(&head, &n->l);
-> > +     l_1 =3D bpf_list_del(&head, &m_1->l);
-> > +     bpf_spin_unlock(&lock);
-> > +     bpf_obj_drop(n);
-> > +     bpf_obj_drop(m_1);
-> > +
-> > +     if (l)
-> > +             bpf_obj_drop(container_of(l, struct node_data, l));
-> > +     else
-> > +             err =3D -6;
-> > +
-> > +     if (l_1)
-> > +             bpf_obj_drop(container_of(l_1, struct node_data, l));
-> > +     else
-> > +             err =3D -6;
-> > +
-> > +     return err;
-> > +}
-> Do we need this big test just to trigger that verifier error?
+Or should we keep the current behavior where devlink resource show dev 
+displays only device-level resources, and only the full dump shows both 
+devices and their ports?
 
-I simplified the "list_del/add_without_lock_fail" test cases, I'm unsure
-if this aligns with community expectations. An alternative would be to
-remove "list_del/add_without_lock_fail" test cases entirely. If you have
-a better approach, please let me know. Thank you.
+For example:
 
-> > +
-> >  SEC("tc")
-> >  __success
-> >  long rbtree_refcounted_node_ref_escapes(void *ctx)
-> > --
-> > 2.50.1 (Apple Git-155)
+$ devlink resource show
+   pci/0000:03:00.0:
+     name local_max_SFs size 40 unit entry
+   pci/0000:03:00.0/196608:
+      name max_SFs size 20 unit entry
+   pci/0000:03:00.0/196609:
+      name max_SFs size 20 unit entry
+   pci/0000:03:00.1:
+     name local_max_SFs size 40 unit entry
+   pci/0000:03:00.1/196608:
+      name max_SFs size 20 unit entry
+   pci/0000:03:00.1/196609:
+      name max_SFs size 20 unit entry
 
-I=E2=80=99ve also made the corresponding fixes based on the other
-suggestions. Please help review them again=EF=BC=8Cthanks.
+Want to confirm which behavior you meant.
 
---=20
-Yours,
-Chengkaitao
+Thanks.
