@@ -1,384 +1,333 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BFC340A62
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Mar 2026 07:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47F9341ACA
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Mar 2026 08:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772956189; cv=none; b=NAIRAClklB5W3E8CRsOExwoWTe0RXxAcw37YhrS8ucPqem+aIyh4+D0s6kGt+9xuDNMRPCiybjBiXpn6KU/HGOAkSpk0wCo5E6WL0O9xroxwqeLBe7TEuafShh6BRX7WS6FPdxkXraCDfmVT4fEuNsMBBdWSVEd/Ms5oZ1JMFyI=
+	t=1772957550; cv=none; b=X1oNWAZk350K2uhM8VA2I5bw8c+QRNDBu9GewRQp4p165ISM7KRof/ZCaAq2bs1z4Qdy25RMbIsivriTcxw6MI5mzSTIJHWyGbs51z5tlGJJnFdakYkccS551kZFsNC+Icvgi/dxoXunDEgrEgwUV9b3PZpDqhMuON6WWe5qp+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772956189; c=relaxed/simple;
-	bh=t5ZXMSl3ZGZWcn2Ci7uhGMatU3X94KPAbLgp4FFFLw0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=q1bCwgL6ACiz5kBbMK6OvOqCLd5LMNHXsoVHXnQgGpbh6UUiPSgjgAm9WuRYoA4DBHqK5Eqp/iQ1xDvaBJunRmbxxBYvzDD9fYyoNLO7rQaKdvjtMNXpfYBwKGo9o56GU8CeqK47lABTxHnhDsw2t+tuOhONv5ZVI0jlXrhu0to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rOuHEg/8; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772957550; c=relaxed/simple;
+	bh=0kPwlAt1NxLAxL28LbMMVyiFMI4P+nR8LU78U7/l6Vk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VZ3LIRvt+YRKpZRjC1aBbwXONY6TfySvaYVhAhasQqUoXP/lx1Si5Fw5R5pWC/7PxNO1a5ccCKbYSaNoah66Tx0tROF07OzV76pj4QK7+dKRGh1pSGWzsZTxxF6q8R08gj5PR8gdYRvbiAM1F7/8aZYJ4DAdrXfK0JDy7ZWIcWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbQ1ckEk; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rOuHEg/8"
-Message-ID: <730903b7-c898-4fba-b375-603a8ccd9067@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772956175;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xd5YyyodN0aLpE6IvpWxgqA/Oh70HevDQwOPA45F8rE=;
-	b=rOuHEg/8UIyczV+zG7XhVok6ohoxrZ90d9lglGLd2ysdeb27fIN7qxjvo/IXUTaRGeQY8Y
-	rQXjBWMvB/DpPFiC5QNv125gzRdXakhCwjGVP1zKPAdAxutcAjqySanwAq25w9qgQ6hzIE
-	OaI+09g3wUiuTqaLQPK8FtLyXZO78gw=
-Date: Sat, 7 Mar 2026 23:49:24 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbQ1ckEk"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8cd751a4e93so82640885a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 00:12:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772957548; x=1773562348; darn=vger.kernel.org;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UyBC5lPUdaSmDiWbOjXi4rnuiWVOWt18d1AlaJG5YLU=;
+        b=gbQ1ckEkeQSXT0TbAiX6sbLL68MDp8ZaB/lP07ATUuV9/kbxKt4gicoTmpyvQigQSG
+         L7avTurspenZfKwz2798Y2BoRSVGiSocwDEgzmBBoi40uBVpMAvHHx65Bvj6PLKKps9h
+         t3I6NB3rp5b4tdJVHtiz0trLd3mh5j72DVtSTtF5toZgVniPD6tH/AT11l5NSuA6K6Ay
+         AGEDWC3Vdzm2W6XFwZy/KtfpkvII5mpxvyF57XCoFGvjySVpcHF3OcU6GyGX04dzNAls
+         iqso7awVViDT7xhxaaTduHQNkQ2Xkqd+XXqOJxpNCKEYQwx46d670PolXUzWwm0+g3RI
+         duaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772957548; x=1773562348;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UyBC5lPUdaSmDiWbOjXi4rnuiWVOWt18d1AlaJG5YLU=;
+        b=JchbnYZlvxTO/IFEQ90+j0HAqD3T67UjpH2oTIZERhCC0A4gZGAtm5bGU+piWbICqy
+         ynwy/eCrRuGgNMZdUUr1W0SVRXUi8fokO2QT4LqSvA8ED/W3wn13CtfjV+3xJNT9iqzw
+         2Ibc2/CVKxiSd7IITfEzYGzDrWjkpaJvmHU2ZQ8eOeDcM7n3i4lfr4rPgZdfNXElL9rt
+         6CI1fazrC+ZD9vcrd90jbJAztOhUzPSV4xMoD9aE3oA1PieMUbbDwHwblebnSIMOAHUg
+         J7ib7JD9OnySyqW8jiSAAYWyW6hdI7QrPCJ+E/ZuR+pRtT0aVO+mmdXivmy8xgALMhZT
+         kRrA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZ5HveEhi4DKsHpgVNcr+Q9BD4nWKcZKNBzGhZNtT4QehqtAe64fII5s89c5YdwTRzodVft1DHXWQvDYWrvmA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdPIPcfWprI1FQZCysv8R9hk+GPnL65ns1ygzG4uHq7U/6DqRO
+	kR4RrGCjdlVJGW6JjrksFBW8iHxjZWHXKYwanwrGcqhewE3X6GwYPjqf
+X-Gm-Gg: ATEYQzzopA0AdV/WtryXddOo2O3AGlrrZib/0//aew+9nCstCAAQY/eY6TCEd063Vv+
+	q6JXgt7czn5d8sawy7K50brQC9X4C2UhA1Vr7lonusHoWAT3gAtSilTI+JbndQFx97yTiwc4Hmc
+	59bwGF7vymMkKCwR3wvESM2KxIUrJRTVmhJpaREVjnUpKL4Rt3QpQBDbbIHWwMEQCR6Iyl3fJS/
+	cs9HGD9rpH2WqtXR2tyWREK9EQDqpLgedc2TdSAnG0+WUWV7KvwhTqLu/v2yv+KSs0CUxFszIn9
+	T5FKzptBKQPNZLHQSZ5cLzPZ/RaQRJ8HJbRVok+brrm7OWuAn6wxiwVpgbZNA9rwHo1ecSMaQnU
+	cOy7K+QY+CUvXetEmMc2pXvrYIjuIIhWcA/649gIyBVmqmslLKCG8WpQbyb3YtvVq0De/ha6GXh
+	p5AExZWRL/ygQsqtO2QMqebj+osH9Y7z2itRQUoYUP5rJ7zSk6V0OUnEJd26PAQw==
+X-Received: by 2002:a05:620a:2a15:b0:8c3:650d:577e with SMTP id af79cd13be357-8cd6d3258c6mr871197785a.4.1772957547466;
+        Sun, 08 Mar 2026 00:12:27 -0800 (PST)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cd6f53bf4esm524182285a.26.2026.03.08.00.12.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Mar 2026 00:12:26 -0800 (PST)
+Message-ID: <b45c98d4e59bb31c3101d6ae2ef5d7cee8b4f6c8.camel@gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: avoid jump seq limit in
+ verif_scale_pyperf600
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: sun jian <sun.jian.kdev@gmail.com>, Alexei Starovoitov
+	 <alexei.starovoitov@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf <bpf@vger.kernel.org>, 
+ "open list:KERNEL SELFTEST FRAMEWORK"	 <linux-kselftest@vger.kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>,  Alexei Starovoitov	 <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh	 <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo	
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
+ <shuah@kernel.org>
+Date: Sun, 08 Mar 2026 00:12:22 -0800
+In-Reply-To: <CABFUUZGV7ZAVY=Y6Py3ytZUzZV0i9otPWADgP9HtVrDzf612ew@mail.gmail.com>
+References: <20260306120024.1032301-1-sun.jian.kdev@gmail.com>
+	 <aar9gzh7QVhezeII@Tunnel>
+	 <CAADnVQJtG9s1CV-qeF8NSgi_UFPgahOXtB3PWiivBooAYC69GA@mail.gmail.com>
+	 <CABFUUZGV7ZAVY=Y6Py3ytZUzZV0i9otPWADgP9HtVrDzf612ew@mail.gmail.com>
+Content-Type: multipart/mixed; boundary="=-eURiOfxFdEHNhEJV5wZ3"
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 4/4] RDMA/rxe: Add testcase for net namespace rxe
-To: jgg@ziepe.ca, leon@kernel.org, zyjzyj2000@gmail.com, dsahern@kernel.org,
- linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
- "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
-References: <20260308074711.24114-1-yanjun.zhu@linux.dev>
- <20260308074711.24114-5-yanjun.zhu@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260308074711.24114-5-yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+
+--=-eURiOfxFdEHNhEJV5wZ3
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, 2026-03-08 at 13:55 +0800, sun jian wrote:
+> On Sat, Mar 7, 2026 at 12:23=E2=80=AFAM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >=20
+> > On Fri, Mar 6, 2026 at 8:15=E2=80=AFAM Paul Chaignon <paul.chaignon@gma=
+il.com> wrote:
+> > Sun Jian,
+> > I asked to do a _minimal_ tweak to pyperf600.
+> > What you did is a drastic change. Pls don't hack tests
+> > just to make them pass. The tests have to be meaningful
+> > and test coverage shouldn't degrade.
+> >=20
+>=20
+> Hi Alexei, Paul,
+>=20
+> I spent some more time looking into this.
+>=20
+> Comparing unmodified pyperf600 bytecode between clang-18 and clang-20, I
+> see fewer instructions with clang-20 and nearly the same number of
+> branches:
+>=20
+> clang-18: 90134 lines of disassembly, 6090 gotos
+> clang-20: 78369 lines of disassembly, 6085 gotos
+>=20
+> So this does not look like a simple program-size increase. What seems to
+> change is the branch layout in the unrolled loop body, which seems to
+> make the verifier DFS go deeper before pruning.
+>=20
+> One useful data point is that a single __on_event() copy does load
+> successfully (that was my v2), while with 2 or more copies it
+> consistently fails at exactly 8193 jumps. In other words, the verifier
+> hits the jump-sequence limit before reaching the second copy.
+>=20
+> I also tried a range of source-level mitigations, but so far I couldn't
+> find one that preserves the test intent and keeps pyperf600 comparable
+> to the other variants:
+>=20
+> - UNROLL_COUNT tuning: 99 does not compile; 100-120 compile but still
+> fail at 8193; 121-145 fail to compile; 146-150 compile but still fail
+> at 8193
+> - early break/goto on !frame_ptr: insufficient for pyperf600, and also
+> hurts pyperf600_nounroll by adding branch points to the 600-iteration loo=
+p
+> - wrapping 5x __on_event() in a non-unrolled loop: verifier still unrolls=
+ it
+> - making get_frame_data() __noinline: still fails
+> - moving the unwind loop into a __noinline subprog: still fails
+> - SUBPROGS / __on_event as __noinline: still fails; codegen changes,
+> but the verifier still hits 8193
+>=20
+> Paul also mentioned trying STACK_MAX_LEN/UNROLL_COUNT and only getting it
+> to work with STACK_MAX_LEN reduced to 180, which would make it too close
+> to pyperf180.
+>=20
+> The only source change I found that passes is reducing __on_event() to a
+> single copy, but that clearly weakens the test as pointed out.
+>=20
+> At this point, I don't have a source-level fix that preserves the test
+> intent.
+
+Hi Sun,
+
+I have an old investigation for the pyperf600 failure reason from March 202=
+4.
+Attaching it to the email. The discussion happened off-list.
+The source-level "mitigation" I found back then still stands:
+
+  --- a/tools/testing/selftests/bpf/progs/pyperf.h
+  +++ b/tools/testing/selftests/bpf/progs/pyperf.h
+  @@ -97,8 +97,15 @@ static __always_inline bool get_frame_data(void *frame=
+_ptr, PidData *pidData,
+                              frame_ptr + pidData->offsets.PyFrameObject_co=
+de);
+  =20
+          // read data from PyCodeObject
+  +#if __BPF_CPU_VERSION__ < 4
+          if (!frame->f_code)
+                  return false;
+  +#else
+  +        asm volatile goto("if %[f_code] =3D=3D 0 goto %l[has_f_code];"
+  +                             :: [f_code]"r"(frame->f_code) :: has_f_code=
+);
+  +        return false;
+  +has_f_code:
+  +#endif
+
+(One needs cpuv4 because of the jump instructions exceeding 16-bit
+ offset ranges are only possible with cpuv4).
+
+The decision back then was that the "mitigation" is too brittle to
+apply and we should leave the test as-is, hoping that verifier would
+get smarter some day and be able to load the program.
+
+Best regards,
+Eduard
+
+--=-eURiOfxFdEHNhEJV5wZ3
+Content-Disposition: attachment; filename="old-pyperf600-investigation.md"
+Content-Transfer-Encoding: base64
+Content-Type: text/markdown; name="old-pyperf600-investigation.md"; charset="UTF-8"
+
+IyBXaGF0IGhhcHBlbmVkCgpUaGUgcHlwZXJmNjAwIHRlc3QgZmFpbHMgdG8gdmVyaWZ5IHdoZW4g
+Y29tcGlsZWQgYnkgcmVjZW50IGNsYW5nIHJldmlzaW9ucy4KVGhlIGxhc3Qga25vd24gZ29vZCBy
+ZXZpc2lvbiBpcyBbMF0sIHRoZSBmaXJzdCBrbm93biBiYWQgcmV2aXNpb24gaXMgWzFdLgpSZXZp
+c2lvbiBbMV0gY29tZXMgZnJvbSB0aGUgcHVsbCByZXF1ZXN0IFsyXS4KClZlcmlmaWVyIGVycm9y
+IHdoZW4gdXNpbmcgcmV2aXNpb24gWzFdOgoKICAgIC4uLgogICAgOyBpZiAoZnJhbWUtPmNvX25h
+bWUpIEAgcHlwZXJmLmg6MTE4CiAgICAyNTQ2MDogKDc5KSByMyA9ICoodTY0ICopKHIxMCAtMzIp
+ICAgIDsgUjNfdz1zY2FsYXIoKSBSMTA9ZnAwIGZwLTMyPW1tbW1tbW1tCiAgICAyNTQ2MTogKDE1
+KSBpZiByMyA9PSAweDAgZ290byBwYys3CiAgICBUaGUgc2VxdWVuY2Ugb2YgODE5MyBqdW1wcyBp
+cyB0b28gY29tcGxleC4KICAgIHZlcmlmaWNhdGlvbiB0aW1lIDgyMjE3NCB1c2VjCiAgICBzdGFj
+ayBkZXB0aCAzNjAKCkFsbCB0ZXN0aW5nIGJlbG93IHdhcyBkb25lIHVzaW5nIHJldmlzaW9ucyBb
+MF0gYW5kIFsxXS4KCiMgcHlwZXJmNjAwIHN0cnVjdHVyZQoKVGhlIHJlbGV2YW50IHBhcnRzIG9m
+IHRoZSB0ZXN0IGxvb2sgYXMgZm9sbG93czoKCiAgICBzdGF0aWMgX19hbHdheXNfaW5saW5lIGJv
+b2wgZ2V0X2ZyYW1lX2RhdGEoLi4uKQogICAgewogICAgICAgIC4uLgogICAgICAgIGlmICghZnJh
+bWUtPmZfY29kZSkKICAgICAgICAgICAgcmV0dXJuIGZhbHNlOwogICAgICAgIC4uLgogICAgICAg
+IGlmIChmcmFtZS0+Y29fZmlsZW5hbWUpIHsgLi4uIH0KICAgICAgICBpZiAoZnJhbWUtPmNvX25h
+bWUpIHsgLi4uIH0KICAgICAgICByZXR1cm4gdHJ1ZTsKICAgIH0KCiAgICBpbnQgX19vbl9ldmVu
+dCguLi4pCiAgICB7CiAgICAgICAgLi4uCiAgICAgICAgI3ByYWdtYSBjbGFuZyBsb29wIHVucm9s
+bChVTlJPTExfQ09VTlQpICAgICAgLy8gIFVOUk9MTF9DT1VOVCA9PSAxNTAKICAgICAgICBmb3Ig
+KGludCBpID0gMDsgaSA8IFNUQUNLX01BWF9MRU47ICsraSkgICAgICAvLyBTVEFDS19NQVhfTEVO
+ID09IDYwMAogICAgICAgICAgICBpZiAoZnJhbWVfcHRyICYmIGdldF9mcmFtZV9kYXRhKC4uLikp
+IHsKICAgICAgICAgICAgICAgIGlmICghc3ltYm9sX2lkKSB7IC4uLiB9CiAgICAgICAgICAgICAg
+ICBpZiAoKnN5bWJvbF9pZCA9PSBuZXdfc3ltYm9sX2lkKSB7IC4uLiB9CiAgICAgICAgICAgICAg
+ICAuLi4KICAgICAgICAgICAgfQogICAgICAgIC4uLgogICAgfQoKICAgIFNFQygicmF3X3RyYWNl
+cG9pbnQva2ZyZWVfc2tiIikKICAgIGludCBvbl9ldmVudChzdHJ1Y3QgYnBmX3Jhd190cmFjZXBv
+aW50X2FyZ3MqIGN0eCkKICAgIHsKICAgICAgICAuLi4KICAgICAgICBfX29uX2V2ZW50KC4uLik7
+CiAgICAgICAgX19vbl9ldmVudCguLi4pOwogICAgICAgIF9fb25fZXZlbnQoLi4uKTsKICAgICAg
+ICBfX29uX2V2ZW50KC4uLik7CiAgICAgICAgX19vbl9ldmVudCguLi4pOwogICAgICAgIC4uLgog
+ICAgfQoKVGhlIGNhbGwgdG8gZ2V0X2ZyYW1lX2RhdGEoKSBpcyBpbmxpbmVkLgpUaGUgbWFpbiB0
+YWtlYXdheXMgYXJlOgotIEJQRiBwcm9ncmFtIGNvbnNpc3RzIG9mIGZpdmUgY2FsbHMgdG8gX19v
+bl9ldmVudCgpOwotIF9fb25fZXZlbnQoKSBoYXMgYSBiaWcgbG9vcCBpbnNpZGU7Ci0gbG9vcCBi
+b2R5IGhhcyA1IGNvbmRpdGlvbmFscwogICh3aGVuIGNvdW50ZWQgd2l0aCBjb25kaXRpb25hbHMg
+aW4gZ2V0X2ZyYW1lX2RhdGEoKSkuCgojIExMVk0gY2hhbmdlIGRlc2NyaXB0aW9uCgpUaGUgcmVs
+ZXZhbnQgcGFydCBvZiBbMV0gaXM6CgogICAgLS0tIGEvbGx2bS9saWIvVHJhbnNmb3Jtcy9TY2Fs
+YXIvTG9vcFVucm9sbFBhc3MuY3BwCiAgICArKysgYi9sbHZtL2xpYi9UcmFuc2Zvcm1zL1NjYWxh
+ci9Mb29wVW5yb2xsUGFzcy5jcHAKICAgIEBAIC0xMjgyLDcgKzEyOTUsNyBAQCB0cnlUb1Vucm9s
+bExvb3AoTG9vcCAqTCwgRG9taW5hdG9yVHJlZSAmRFQsIExvb3BJbmZvICpMSSwgU2NhbGFyRXZv
+bHV0aW9uICZTRSwKICAgICAgIH0KCiAgICAgICAvLyBEbyBub3QgYXR0ZW1wdCBwYXJ0aWFsL3J1
+bnRpbWUgdW5yb2xsaW5nIGluIEZ1bGxMb29wVW5yb2xsaW5nCiAgICAtICBpZiAoT25seUZ1bGxV
+bnJvbGwgJiYgIShVUC5Db3VudCA+PSBNYXhUcmlwQ291bnQpKSB7CiAgICArICBpZiAoT25seUZ1
+bGxVbnJvbGwgJiYgKFVQLkNvdW50IDwgVHJpcENvdW50IHx8IFVQLkNvdW50IDwgTWF4VHJpcENv
+dW50KSkgewogICAgICAgICBMTFZNX0RFQlVHKAogICAgICAgICAgICAgZGJncygpIDw8ICJOb3Qg
+YXR0ZW1wdGluZyBwYXJ0aWFsL3J1bnRpbWUgdW5yb2xsIGluIEZ1bGxMb29wVW5yb2xsLlxuIik7
+CiAgICAgICAgIHJldHVybiBMb29wVW5yb2xsUmVzdWx0OjpVbm1vZGlmaWVkOwoKLSBgVVAuQ291
+bnRgIGlzIGEgcHJlZmVycmVkIG51bWJlciBvZiBpdGVyYXRpb25zIHRvIGJlIHVucm9sbGVkLAog
+IGl0IGlzIDE1MCBmb3IgcHlwZXJmNjAwOwotIGBUcmlwQ291bnRgIGlzIGEgcHJlZGljdGVkIG51
+bWJlciBvciBsb29wIGl0ZXJhdGlvbnMsCiAgaXQgaXMgNjAwIGZvciBweXBlcmY2MDAuCgpUaGUg
+aHVuayBhYm92ZSBkb2VzIGV4YWN0bHkgd2hhdCBjb21tZW50cyBzYXlzOgpwcmV2ZW50cyBwYXJ0
+aWFsIHVucm9sbGluZyBvZiB0aGUgbWFpbiBweXBlcmY2MDAgbG9vcCBvbiBmdWxsCnVucm9sbGlu
+ZyBwYXNzLgoKVGhlcmUgaXMgYWxzbyBhIHBhcnRpYWwgdW5yb2xsaW5nIHBhc3MgZG9uZSBsYXRl
+ciBpbiB0aGUgcGlwZWxpbmUuCgojIExMVk0gY2hhbmdlIGltcGFjdCBvbiBweXBlcmY2MDAKClBy
+aW9yIHRvIFsxXSB0aGUgbG9vcCBpbiBweXBlcmY2MDAgd2FzIHVucm9sbGVkIGJ5IGZ1bGwgdW5y
+b2xsaW5nIHBhc3MsCmFmdGVyIFsxXSBpdCBpcyB1bnJvbGxlZCBieSBwYXJ0aWFsIHVucm9sbGlu
+ZyBwYXNzLgpTdWNoIGNoYW5nZSBjYXVzZXMgYSBzdWJ0bGUgcmVhcnJhbmdlbWVudCBvZiBiYXNp
+YyBibG9ja3MgaW5zaWRlIHRoZQpsb29wIHdoaWNoIHR1cm5zIG91dCB0byBiZSBpbXBvcnRhbnQg
+Zm9yIHRoZSB2ZXJpZmllci4KClRoZSByZWFycmFuZ2VtZW50IG9jY3VycyBpbnNpZGUgaW5saW5l
+ZCBib2R5IG9mIGdldF9mcmFtZV9kYXRhKCk6CgogICAgc3RhdGljIF9fYWx3YXlzX2lubGluZSBi
+b29sIGdldF9mcmFtZV9kYXRhKC4uLikKICAgIHsKICAgICAgICAuLi4KICAgICAgICBpZiAoIWZy
+YW1lLT5mX2NvZGUpCiAgICAgICAgICAgIHJldHVybiBmYWxzZTsKICAgICAgICAuLi4KICAgIH0K
+ClRyYW5zbGF0aW9uIGJlZm9yZSBbMV06ICAgICAgICAgICAgICAgICBUcmFuc2xhdGlvbiBhZnRl
+ciBbMV0KCjsgaWYgKCFmcmFtZS0+Zl9jb2RlKSAgICAgICAgICAgICAgICAgICA7IGlmICghZnJh
+bWUtPmZfY29kZSkKICByMyA9ICoodTY0ICopKHIxMCAtIDB4MzApICAgICAgICAgICAgICAgcjMg
+PSAqKHU2NCAqKShyMTAgLSAweDMwKQogIGlmIHIzICE9IDB4MCBnb3RvICsweDIgPExCQjBfMTk+
+ICAgICAgICBpZiByMyA9PSAweDAgZ290byArMHg0YiA8TEJCMF8zOT4KCkJlZm9yZSBbMV0gdGhl
+IGZhbGwtdGhyb3VnaCBwYXRoIGlzIHRvIGByZXR1cm4gZmFsc2VgLAphZnRlciBbMV0gdGhlIGZh
+bGwtdGhyb3VnaCBwYXRoIGlzIHRvIHRoZSByZXN0IG9mIGdldF9mcmFtZV9kYXRhKCkgYm9keS4K
+ClRoZSBgaWYgKCFmcmFtZS0+Zl9jb2RlKWAgaXMgdGhlIGZpcnN0IGNvbmRpdGlvbmFsIGluIHRo
+ZSBsb29wIGJvZHkKYW5kIGl0IGd1YXJkcyBhbGwgb3RoZXIgY29uZGl0aW9uYWxzIGluIHRoZSBi
+b2R5Cih3aGVuICFmcmFtZV9jb2RlID09IDEgdGhlIHJlc3Qgb2YgY29uZGl0aW9uYWxzIGlzIHNr
+aXBwZWQpLgoKQmVmb3JlIFsxXSB0aGUgdmVyaWZpZXIgd291bGQgcHJvY2VzcyBweXBlcmY2MDAg
+aW4gdGhlIGZvbGxvd2luZyBvcmRlcjoKCi0gX19vbl9ldmVudCgpCiAgLSBwcm9jZXNzIGxvb3Ag
+NjAwIHRpbWVzOgogICAgLSBgaWYgKCFmcmFtZS0+Zl9jb2RlKSByZXR1cm4gZmFsc2VgOgogICAg
+ICAtIGZhbGwtdGhyb3VnaCBpcyB0byBgcmV0dXJuIGZhbHNlYDsKICAgICAgLSBwdXNoIG9uZSBq
+dW1wIHRvIGp1bXAgaGlzdG9yeQogICAgICAtIGFzc3VtZSBmYWxsLXRocm91Z2ggYnJhbmNoIGFu
+ZCBza2lwIHRoZSByZXN0IG9mIHRoZSBsb29wIGJvZHk7Ci0gX19vbl9ldmVudCgpOiBzYW1lIHRo
+aW5nLCBwdXNoIDYwMCBqdW1wcyB0byBqdW1wIGhpc3Rvcnk7Ci0gX19vbl9ldmVudCgpOiBzYW1l
+IHRoaW5nLCBwdXNoIDYwMCBqdW1wcyB0byBqdW1wIGhpc3Rvcnk7Ci0gX19vbl9ldmVudCgpOiBz
+YW1lIHRoaW5nLCBwdXNoIDYwMCBqdW1wcyB0byBqdW1wIGhpc3Rvcnk7Ci0gX19vbl9ldmVudCgp
+OgogIHRoaXMgaXMgdGhlIGxhc3QgY2FsbCB0byBfX29uX2V2ZW50LAogIGFsbCBicmFuY2hlcyB3
+aXRoaW4gaXQgYXJlIHZlcmlmaWVkIGJlZm9yZSBwcm9jZWVkaW5nCiAgd2l0aCBicmFuY2hlcyBw
+dXNoZWQgZm9yIHByZXZpb3VzIGNhbGxzLgoKV2hlbiB0aGUgbG9vcCBpbnNpZGUgdGhlIGxhc3Qg
+Y2FsbCB0byBfX29uX2V2ZW50KCkgaXMgdmVyaWZpZWQgYQpjaGVja3BvaW50IGF0IGl0J3Mgc3Rh
+cnQgYmVjb21lcyB2aWFibGUuCkJyYW5jaGVzIHB1c2hlZCB3aGVuIHByZXZpb3VzIGNhbGxzIHRv
+IF9fb25fZXZlbnQoKSB3ZXJlIHByb2Nlc3NlZAp3b3VsZCBldmVudHVhbGx5IGhpdCB0aGlzIGNo
+ZWNrcG9pbnQgYW5kIHRoZSB3aG9sZSBwcm9jZXNzIHdvdWxkCmNvbnZlcmdlIGV2ZW50dWFsbHku
+ClRodXMsIGF0IGl0J3MgcGVhayB0aGUganVtcCBoaXN0b3J5IGxlbmd0aCB3b3VsZCBiZSB+NjAw
+KjUgPT0gMzAwMC4KCkhvd2V2ZXIsIGFmdGVyIFsxXSB0aGUgZmFsbC10aHJvdWdoIHBhdGggZm9y
+IHRoZSBgaWYgKCFmcmFtZS0+Zl9jb2RlKWAKbGVhZHMgdG8gb3RoZXIgY29uZGl0aW9uYWxzIGlu
+IHRoZSBsb29wIGJvZHksCnB1c2hpbmcgdXAgdG8gNSBjb25kaXRpb25hbHMgdG8ganVtcCBoaXN0
+b3J5IGZvciBlYWNoIGl0ZXJhdGlvbi4KSGVuY2UsIHBlYWsganVtcCBoaXN0b3J5IGxlbmd0aCB3
+b3VsZCBiZSBzb21ldGhpbmcgbGlrZSB+NjAwKjUqNSA9PSAxNTAwMC4KV2hpY2ggaXMgb3V0c2lk
+ZSBvZiBjdXJyZW50IGxpbWl0cyBmb3IgdGhlIHZlcmlmaWVyLgoKIyBQb3NzaWJsZSBmaXggIzE6
+IGNoYW5nZSBweXBlcmY2MDAgYmFzaWMgYmxvY2tzIGxheW91dAoKVGhlIGRpZmYgYmVsb3cgaXMg
+c3VmZmljaWVudCB0byBtYWtlIHRlc3QgdmVyaWZ5IGFnYWluIGFmdGVyIFsxXQood2hlbiB0ZXN0
+ZWQgZm9yIGNwdXY0LCBjcHV2MyBnZW5lcmF0ZXMganVtcHMgb3ZlcmZsb3dpbmcgMTYtYml0IG9m
+ZnNldCk6CgogICAgLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3B5cGVy
+Zi5oCiAgICArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvcHlwZXJmLmgK
+ICAgIEBAIC05Nyw4ICs5NywxMCBAQCBzdGF0aWMgX19hbHdheXNfaW5saW5lIGJvb2wgZ2V0X2Zy
+YW1lX2RhdGEodm9pZCAqZnJhbWVfcHRyLCBQaWREYXRhICpwaWREYXRhLAogICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIGZyYW1lX3B0ciArIHBpZERhdGEtPm9mZnNldHMuUHlGcmFtZU9i
+amVjdF9jb2RlKTsKCiAgICAgICAgICAgIC8vIHJlYWQgZGF0YSBmcm9tIFB5Q29kZU9iamVjdAog
+ICAgLSAgICAgICBpZiAoIWZyYW1lLT5mX2NvZGUpCiAgICAtICAgICAgICAgICAgICAgcmV0dXJu
+IGZhbHNlOwogICAgKyAgICAgICBhc20gdm9sYXRpbGUgZ290bygiaWYgJVtmX2NvZGVdICE9IDAg
+Z290byAlbFtoYXNfZl9jb2RlXSIKICAgICsgICAgICAgICAgICAgICAgICAgICAgICAgOjogW2Zf
+Y29kZV0iciIoZnJhbWUtPmZfY29kZSkgOjogaGFzX2ZfY29kZSk7CiAgICArICAgICAgIHJldHVy
+biBmYWxzZTsKICAgICtoYXNfZl9jb2RlOgogICAgICAgICAgICBicGZfcHJvYmVfcmVhZF91c2Vy
+KCZmcmFtZS0+Y29fZmlsZW5hbWUsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2l6
+ZW9mKGZyYW1lLT5jb19maWxlbmFtZSksCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ZnJhbWUtPmZfY29kZSArIHBpZERhdGEtPm9mZnNldHMuUHlDb2RlT2JqZWN0X2ZpbGVuYW1lKTsK
+CkVmZmVjdGl2ZWx5IHRoaXMgZm9yY2VzIHZlcmlmaWVyIHRvIGZpcnN0IGV4cGxvcmUgYHJldHVy
+biBmYWxzZWAKYnJhbmNoIG9mIHRoZSBmaXJzdCBjb25kaXRpb25hbCBpbiB0aGUgbG9vcCBib2R5
+LApzYW1lIHdheSBpdCB3YXMgZG9uZSBiZWZvcmUgWzFdLgoKKFRoZSBsaWtlbHkvdW5saWtlbHkg
+bWFjcm8gcmVseWluZyBvbiBfX2J1aWx0aW5fZXhwZWN0KCkgZG9uJ3QgZ2l2ZQogdGhlIGRlc2ly
+ZWQgY29kZSBsYXlvdXQgZm9yIHNvbWUgcmVhc29uKS4KCiMgUG9zc2libGUgZml4ICMyOiBjaGFu
+Z2UgcHlwZXJmNjAwIGxpbWl0cwoKVGhlIGRpZmYgYmVsb3cgcmVkdWNlcyB0aGUgbG9vcCBzaXpl
+IHN1ZmZpY2llbnRseSB0byBmaXQgaW5zaWRlIGp1bXAKaGlzdG9yeSAoYWdhaW4sIHdvcmtzIGZv
+ciBjcHV2NCwgYnV0IG5vdCBmb3IgY3B1djMpOgoKICAgIC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL2JwZi9wcm9ncy9weXBlcmY2MDAuYwogICAgKysrIGIvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvYnBmL3Byb2dzL3B5cGVyZjYwMC5jCiAgICBAQCAtMSw2ICsxLDYgQEAKICAgICAvLyBT
+UERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMAogICAgIC8vIENvcHlyaWdodCAoYykgMjAx
+OSBGYWNlYm9vawogICAgLSNkZWZpbmUgU1RBQ0tfTUFYX0xFTiA2MDAKICAgICsjZGVmaW5lIFNU
+QUNLX01BWF9MRU4gMjMwCiAgICAgLyogRnVsbCB1bnJvbGwgb2YgNjAwIGl0ZXJhdGlvbnMgd2ls
+bCBoYXZlIHRvdGFsCiAgICAgICogcHJvZ3JhbSBzaXplIGNsb3NlIHRvIDI5OGsgaW5zbnMgYW5k
+IHRoaXMgbWF5CiAgICAgICogY2F1c2UgQlBGX0pNUCBpbnNuIG91dCBvZiAxNi1iaXQgaW50ZWdl
+ciByYW5nZS4KCiMgUG9zc2libGUgZml4ICMzOiB2ZXJpZmllciBjaGFuZ2VzCgpBbm90aGVyIG9w
+dGlvbiB3b3VsZCBiZSB0byBmb3JnbyBjdXJyZW50IHZlcmlmaWVyIGNvbmRpdGlvbmFsCmV4cGxv
+cmF0aW9uIHJ1bGVzOgp3aGVuIGluc2lkZSBhIGxvb3AsIGRvbid0IGV4cGxvcmUgdGhlIGZhbGwt
+dGhyb3VnaCBicmFuY2ggZmlyc3QsCmluc3RlYWQgcHJlZGljdCB3aGljaCBicmFuY2ggd291bGQg
+cHVzaCBsZXNzIGNvbmRpdGlvbmFscwpvbnRvIGp1bXAgaGlzdG9yeSBhbmQgZXhwbG9yZSB0aGF0
+IGZpcnN0LgoKTmVlZCBtb3JlIHRpbWUgdG8gYXNzZXMgaWYgdGhpcyBhIGZlYXNpYmxlIG9wdGlv
+biBpbiB0ZXJtcyBvZiBhZGRlZCBjb21wbGV4aXR5LgoKIyBMaW5rcwoKWzBdIExhc3QgZ29vZCBy
+ZXZpc2lvbjoKICAgIGMzMjkxMjUzYzNiNSAoIlJldmVydCAiW3NjdWRvXSBbTVRFXSByZXNpemUg
+c3RhY2sgZGVwb3QgZm9yIGFsbG9jYXRpb24gcmluZyBidWZmZXIiICgjODA3NzcpIikKWzFdIEZp
+cnN0IGJyb2tlbiByZXZpc2lvbjoKICAgIDk5ZGRkNzdlZDllMSAoIltMb29wVW5yb2xsXSBJbnRy
+b2R1Y2UgUHJhZ21hVW5yb2xsRnVsbE1heEl0ZXJhdGlvbnMgYXMgYSBoYXJkIGNhcCBvbiBob3cg
+bWFueSBpdGVyYXRpb25zIHdlIHRyeSB0byB1bnJvbGwgKCM3ODY0OCkiKQpbMl0gaHR0cHM6Ly9n
+aXRodWIuY29tL2xsdm0vbGx2bS1wcm9qZWN0L3B1bGwvNzg2NDgK
 
 
-在 2026/3/7 23:47, Zhu Yanjun 写道:
-> Add 4 testcases for rxe with net namespace.
-
-The selftest result is as below:
-
-"
-
-# make -C tools/testing/selftests/ TARGETS=rdma run_tests
-
-make: Entering directory '/root/Development/linux/tools/testing/selftests'
-
-make[1]: Nothing to be done for 'all'.
-TAP version 13
-1..4
-# timeout set to 45
-# selftests: rdma: rxe_rping_between_netns.sh
-# server DISCONNECT EVENT...
-# wait for RDMA_READ_ADV state 10
-ok 1 selftests: rdma: rxe_rping_between_netns.sh
-# timeout set to 45
-# selftests: rdma: rxe_ipv6.sh
-ok 2 selftests: rdma: rxe_ipv6.sh
-# timeout set to 45
-# selftests: rdma: rxe_socket_with_netns.sh
-ok 3 selftests: rdma: rxe_socket_with_netns.sh
-# timeout set to 45
-# selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-make: Leaving directory '/root/Development/linux/tools/testing/selftests'
-
-"
-
-Zhu Yanjun
-
->
-> Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
-> ---
->   MAINTAINERS                                   |  1 +
->   tools/testing/selftests/Makefile              |  1 +
->   tools/testing/selftests/rdma/Makefile         |  7 ++
->   tools/testing/selftests/rdma/config           |  3 +
->   tools/testing/selftests/rdma/rxe_ipv6.sh      | 47 ++++++++++++++
->   .../selftests/rdma/rxe_rping_between_netns.sh | 57 +++++++++++++++++
->   .../selftests/rdma/rxe_socket_with_netns.sh   | 64 +++++++++++++++++++
->   .../rdma/rxe_test_NETDEV_UNREGISTER.sh        | 38 +++++++++++
->   8 files changed, 218 insertions(+)
->   create mode 100644 tools/testing/selftests/rdma/Makefile
->   create mode 100644 tools/testing/selftests/rdma/config
->   create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
->   create mode 100755 tools/testing/selftests/rdma/rxe_rping_between_netns.sh
->   create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
->   create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 89007f9ed35e..3835857d0192 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -24493,6 +24493,7 @@ L:	linux-rdma@vger.kernel.org
->   S:	Supported
->   F:	drivers/infiniband/sw/rxe/
->   F:	include/uapi/rdma/rdma_user_rxe.h
-> +F:	tools/testing/selftests/rdma/
->   
->   SOFTLOGIC 6x10 MPEG CODEC
->   M:	Bluecherry Maintainers <maintainers@bluecherrydvr.com>
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 450f13ba4cca..110e07c0d99d 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -94,6 +94,7 @@ TARGETS += proc
->   TARGETS += pstore
->   TARGETS += ptrace
->   TARGETS += openat2
-> +TARGETS += rdma
->   TARGETS += resctrl
->   TARGETS += riscv
->   TARGETS += rlimits
-> diff --git a/tools/testing/selftests/rdma/Makefile b/tools/testing/selftests/rdma/Makefile
-> new file mode 100644
-> index 000000000000..7dd7cba7a73c
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/Makefile
-> @@ -0,0 +1,7 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +TEST_PROGS := rxe_rping_between_netns.sh \
-> +		rxe_ipv6.sh \
-> +		rxe_socket_with_netns.sh \
-> +		rxe_test_NETDEV_UNREGISTER.sh
-> +
-> +include ../lib.mk
-> diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
-> new file mode 100644
-> index 000000000000..4ffb814e253b
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/config
-> @@ -0,0 +1,3 @@
-> +CONFIG_TUN
-> +CONFIG_VETH
-> +CONFIG_RDMA_RXE
-> diff --git a/tools/testing/selftests/rdma/rxe_ipv6.sh b/tools/testing/selftests/rdma/rxe_ipv6.sh
-> new file mode 100755
-> index 000000000000..9337ac4fd13f
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rxe_ipv6.sh
-> @@ -0,0 +1,47 @@
-> +#!/bin/sh
-> +
-> +# Notes:
-> +#
-> +# 1. Before running this script, please disable the firewall, as it may
-> +# block UDP port 4791.
-> +
-> +# 2. This test script depends on the veth and tun drivers. Before running
-> +#  the script, please verify that both drivers are available by executing:
-> +#
-> +# modinfo tun
-> +# modinfo veth
-> +#
-> +# Make sure these commands return valid module information.
-> +
-> +# 3. ipv6 test.
-> +# While RXE is conventionally deployed over IPv4, it maintains
-> +# native support for IPv6. However, IPv6 implementations typically
-> +# receive less validation and performance tuning in standard use cases.
-> +exec > /dev/null
-> +# 1) create ipv6 net namespace
-> +ip netns add net6
-> +ip link add veth0 type veth peer name veth1
-> +ip link set veth1 netns net6
-> +ip netns exec net6 ip addr add 2001:db8::1/64 dev veth1
-> +ip netns exec net6 ip link set veth1 up
-> +
-> +# 2) Add rdma link
-> +ip netns exec net6 rdma link add rxe6 type rxe netdev veth1
-> +
-> +# 3) check IPv6 UDP 4791 listening port
-> +if ! ip netns exec net6 ss -ul6n | grep :4791; then
-> +	echo "Error: udp port 4791 exists"
-> +	exit 1
-> +fi
-> +
-> +# 4) Delete rxe link
-> +ip netns exec net6 rdma link del rxe6
-> +if ip netns exec net6 ss -ul6n | grep :4791; then  # result should be null
-> +	echo "Error: udp port 4791 exists"
-> +	exit 1
-> +fi
-> +
-> +# 5) delete net6
-> +ip netns del net6
-> +
-> +modprobe -v -r rdma_rxe
-> diff --git a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
-> new file mode 100755
-> index 000000000000..80b4249dba55
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
-> @@ -0,0 +1,57 @@
-> +#!/bin/sh
-> +
-> +# Notes:
-> +#
-> +# 1. Before running this script, please disable the firewall, as it may
-> +# block UDP port 4791.
-> +
-> +# 2. This test script depends on the veth and tun drivers. Before running
-> +#  the script, please verify that both drivers are available by executing:
-> +#
-> +# modinfo veth
-> +#
-> +# Make sure these commands return valid module information.
-> +
-> +#1. Check if rping can work or not
-> +exec > /dev/null
-> +ip netns add test1
-> +ip netns ls
-> +ip link add veth-a type veth peer name veth-b
-> +ip l
-> +ip link set veth-a netns test1
-> +ip l
-> +ip netns exec test1 ip l set veth-a up
-> +ip netns exec test1 ip addr add 1.1.1.1/24 dev veth-a
-> +ip netns exec test1 ip l
-> +ip netns exec test1 ip -4 a
-> +ip netns exec test1 rdma link add rxe0 type rxe netdev veth-a
-> +
-> +#check if socket exist or not
-> +ip netns exec test1 ss -lun | grep :4791
-> +
-> +ip netns exec test1 rdma link
-> +ip link set veth-b up
-> +ip addr add 1.1.1.2/24 dev veth-b
-> +ping -c 3 1.1.1.1 || exit 1
-> +ip netns exec test1 rping -s -a 1.1.1.1&
-> +rdma link add rxe1 type rxe netdev veth-b
-> +rdma link
-> +
-> +#check if socket exist or not
-> +ss -lun | grep :4791
-> +
-> +rping -c -a 1.1.1.1 -d -v -C 3 || exit 1
-> +ip netns ls
-> +rdma link del rxe1
-> +
-> +#check if socket exist or not
-> +ss -lun | grep :4791
-> +
-> +ip netns exec test1 ss -lun | grep :4791
-> +ip netns exec test1 rdma link del rxe0
-> +ip netns exec test1 ss -lun | grep :4791
-> +ip netns del test1
-> +ip netns ls
-> +
-> +modprobe -v -r veth
-> +modprobe -v -r rdma_rxe
-> diff --git a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
-> new file mode 100755
-> index 000000000000..676aec63babd
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
-> @@ -0,0 +1,64 @@
-> +#!/bin/sh
-> +
-> +# Notes:
-> +#
-> +# 1. Before running this script, please disable the firewall, as it may
-> +# block UDP port 4791.
-> +
-> +# 2. This test script depends on the veth and tun drivers. Before running
-> +#  the script, please verify that both drivers are available by executing:
-> +#
-> +# modinfo tun
-> +#
-> +# Make sure these commands return valid module information.
-> +
-> +# Check if socket exist or not
-> +exec > /dev/null
-> +ip tuntap add mode tun tun0
-> +ip -4 a
-> +ip addr add 1.1.1.1/24 dev tun0
-> +ip link set tun0 up
-> +ip -4 a
-> +rdma link add rxe0 type rxe netdev tun0
-> +rdma link
-> +ret=`ss -lun | grep :4791`
-> +if [ X"$ret" == X"" ]; then
-> +	echo "Error: udp port 4791 does not exist"
-> +	exit 1
-> +fi
-> +
-> +ip tuntap add mode tun tun1
-> +ip -4 a
-> +ip addr add 2.2.2.2/24 dev tun1
-> +ip link set tun1 up
-> +rdma link add rxe1 type rxe netdev tun1
-> +rdma link
-> +ret=`ss -lun | grep :4791`
-> +if [ X"$ret" == X"" ]; then
-> +	echo "Error: udp port 4791 does not exist"
-> +	exit 1
-> +fi
-> +
-> +rdma link del rxe1
-> +rdma link
-> +ret=`ss -lun | grep :4791`
-> +if [ X"$ret" == X"" ]; then
-> +	echo "Error: udp port 4791 doese not exist"
-> +	exit 1
-> +fi
-> +
-> +rdma link del rxe0
-> +rdma link
-> +if ss -lun | grep :4791; then
-> +	echo "Error: udp port 4791 exists"
-> +	exit 1
-> +fi
-> +
-> +ip addr del 2.2.2.2/24 dev tun1
-> +ip tuntap del mode tun tun1
-> +
-> +ip addr del 1.1.1.1/24 dev tun0
-> +ip tuntap del mode tun tun0
-> +
-> +modprobe -v -r tun
-> +modprobe -v -r rdma_rxe
-> diff --git a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
-> new file mode 100755
-> index 000000000000..c30ff905b121
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
-> @@ -0,0 +1,38 @@
-> +#!/bin/sh
-> +
-> +# Notes:
-> +#
-> +# 1. Before running this script, please disable the firewall, as it may
-> +# block UDP port 4791.
-> +
-> +# 2. This test script depends on the veth and tun drivers. Before running
-> +#  the script, please verify that both drivers are available by executing:
-> +#
-> +# modinfo tun
-> +# modinfo veth
-> +#
-> +# Make sure these commands return valid module information.
-> +
-> +# Trigger NETDEV_UNREGISTER
-> +exec > /dev/null
-> +ip tuntap add mode tun tun0
-> +ip -4 a
-> +ip addr add 1.1.1.1/24 dev tun0
-> +ip link set tun0 up
-> +ip -4 a
-> +rdma link add rxe0 type rxe netdev tun0
-> +rdma link
-> +ss -lun | grep :4791
-> +
-> +ip l
-> +ip addr del 1.1.1.1/24 dev tun0
-> +ip tuntap del mode tun tun0
-> +
-> +rdma link
-> +if ss -lun | grep :4791; then
-> +	echo "error"
-> +	exit 1
-> +fi
-> +
-> +modprobe -v -r tun
-> +modprobe -v -r rdma_rxe
-
--- 
-Best Regards,
-Yanjun.Zhu
-
+--=-eURiOfxFdEHNhEJV5wZ3--
