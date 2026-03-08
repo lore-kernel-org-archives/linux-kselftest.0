@@ -1,210 +1,174 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6492EB87D
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Mar 2026 16:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7ADF38E5DD
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Mar 2026 17:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772986123; cv=pass; b=k/5gfCSMYVu3ZnUpIofMAO+sOctTEF7p0Rnb6T+QgS1FCtmMEhDzHcKCe/6L17ljRN2SQpx5wewnPsR3ySEsRyyLK3obTkivH28lrkyFbdisLFLWCJ/pJcwzvPxi/r3Ax4Z8lcL+DKjM1mJYA7hoDvfzfC7vDXGs72ufys2I/M0=
+	t=1772989826; cv=pass; b=WmDDLsaSToNvOpRU8ItuzyUElCBO+DKmyRBPTOMNDodEJ6oX9fjrrHn+trYD5ORWrrAqzVDT/0fAmUtTBrgxvaacxPOqHHoE8ccHReW9HJ/B9U9QOyjmv0V2+7MVAfFJT5wGgj9XS+AgsUUwZeNfT44K2OSK2fOnwwy5BuGI6H8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772986123; c=relaxed/simple;
-	bh=B7TMnDq4T146kgiM9Jgq77zoPwPCnu0No9sjdgOMIUc=;
+	s=arc-20240116; t=1772989826; c=relaxed/simple;
+	bh=mPpVNiloCu6uzQI1WxZPytR2t4HpF2nlFZDXYS8kVTE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f+g5hsd54Mm1/86auqmXB/q+f0BCSNB88uC5vSqpgaosSkJmuZ2SZkYGIH7tMm3kagaeWLjNQz2gAydXI4/P+dD7ZPDvptbUSX9FNhHRoOADlj0qeluSujGrIzUN/QN+cO/oJjM6xIVKGbihgKQEFtZjgxG9JRv4Udhdf5Ymv2Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VU6gZ6hO; arc=pass smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=t1SmQK8j4xxUpFHEXSvp5xk1wzsGKeF/x7x95J0NA3Ke3gC9wNIJVToaYo95SyFYY+9vICsBkmyLwTNFqx5XzXzW14xmDjN1+Sg6nAmaZ+FsW1sJGZvgjURj6hynw26McmVmNZQHr/YD0+9wEYwu0GcjOuMmp7TWjnWMZZccHHk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b=V5oii2AP; arc=pass smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VU6gZ6hO"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-439c4bde55cso3430579f8f.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 09:08:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1772986120; cv=none;
+	dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b="V5oii2AP"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5a140efd2d5so1512764e87.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 10:10:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1772989821; cv=none;
         d=google.com; s=arc-20240605;
-        b=RqIiX6yEc8/cizYRobvExlwfJhujgAaXC3OULNxbxiRSQkfGwHZiYuoIK8gp+xqVuh
-         Q7b7DbIbeO31gDkyNU/H4x9ltYTQzdyXzIWSqm9Ani/5beTujAWz+b6GR0xT6Vq8ofFX
-         iL/eS+OPrssDUPV4I1BMAReGQXwoclCGgXgm6as/bacaPnSc8xk6/wHlNYoDF005BM/Q
-         kVQtgP+H1sXqnKpPDMrKfC3DdbdeLUY9yu9JCWZBKDPNrKnv8SfAxFXz1jmb+ruovlNU
-         4H26ac36tPNmksya+e8OvNbJuV14yAIkdQjCU1cRNyISRWUPRm35ie4j//GFW5b3Io1v
-         Ll/A==
+        b=SLyE0f12E/MM6XLInN7TEAFxk7/nlpCHr8PH51Z2pBCs/nwPrCI9IXUnODhpJmoNZF
+         s+vCrWiVYsD0QjONFsDPcAc12k49DMtNjuWq3cdvEMZ1oS6+HOK1hYJXe1sAmsGmPoGA
+         C7fTOD+MJq+5vmX+O1yWQoJZ83uzXeO8cBCpC31LRfJOeEJsIFm/HyRt17ywUJLptzeM
+         b4ZMlov4uCDVaEwPoIa15BCsqrAiBNgwMlBOFfd850YpHI5TJnGI+tLaEj5/nIyW5+07
+         hTh3xmFCJXBGtmCGsy/IaWjreo9cnvGjLRKa7ryAkc+xIsZYQuF/HUdfzh8j2976n61s
+         +iSg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=lnyn0D7v3NtpCCFN+OaTBBhd5BPF9RP5TzZudislDW8=;
-        fh=Dmslk4dKMIxqQHnwjJUoulF8lLSywAMKdeOTD6/4Jxk=;
-        b=cWIkYOYOMnIuTWFywwpGfBHjEAYhb/zSeXtyv5iFpqpuOhVZ7vum2QekiwlNLtPQCv
-         DKtFo0tuYFNM+2Ji0KOuMEoyyt1cK8jwTSSy12Ku/WlaTnw4yyxEGABZQxn8YkvKa2XQ
-         NvRVTl1GHCwvV0Op7MIwGxwh4XKbswJWmId8hkiiDPBYdu6YqePuecsIXFsOscsHtZgP
-         zPb27PApd4w8TJrlsSrQNyIAW4xTmfksVHbOL4v3pnr+onZ31MgLDVFJFXWPj04L30Vi
-         KPsfztmJNydkGHJoSCopq/uSlju/kze4nNGvraPUi/XUp29aTsOMTheVTvE5LThL/bxt
-         yaJw==;
+        bh=gg9ZdLv2ki48mUNl69QeK9y3vC32V/8zR5xNICHMQ28=;
+        fh=2PNbT9Nz/SDAeK0zV44PNwlWbSdUYXGw23FUBCm31mQ=;
+        b=XW4TTsIHMJaJEOwdDtdkeZeAVuW5+McbkN0xOAE2zy4VyDt3CrzaqDenJbqgKxK88d
+         i12jJM1YKjK/4w5cpJqt0WLks27Q4/40tsJgGiQhfR7xj5NgEyuIukXHZRRdp95gq/b3
+         7IUQDDp0xWjljhfKSN2KkU3vjYDxbNF3lbxn/X9d25dr0i6Few9DMPltiW0Y06pPT2bI
+         EqG+Uftj75JYV1dqKlAzkEaLQF9G7Dkz8W2Bdx37yaGNX7uZQVxBtAF795gFVEfiIhv3
+         01RJkEQuq21V+OkiotPOQWS8HwNm32JdL0vO7k2+Eet4uHxLkyrJnnYooXbGBw/BlCMi
+         kb+Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772986120; x=1773590920; darn=vger.kernel.org;
+        d=amacapital-net.20230601.gappssmtp.com; s=20230601; t=1772989821; x=1773594621; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lnyn0D7v3NtpCCFN+OaTBBhd5BPF9RP5TzZudislDW8=;
-        b=VU6gZ6hO0+Vnj2nTL1Kj/fV5OOUWOqmUmPvtJ373MO+0fYxWk7q3cqtZP2e1cX4JMA
-         cGM8axYLQXtQ3sgDjtyoIL8zajH/wuF2uc0NzZa8rztVZPBt110zClDbEXIGbZ2f3FOe
-         JCJow0Wmp5peqyUF09pmPdyMqozDxjVcO2p9xJWnezUAKWEX+vzF24Y8H9CNy5+lrmZz
-         QhckG6B7mf3mDohxPCY2WMI0IagDs4+Bgfd1JubdQEpLOv2R03FQoVmwdc5m5FCtX0x2
-         evjdMqdWI/WuQspKuMD6TIc5IeFUn9ShLsWhQ/eepQsRg7fW90yzkL1fg37LYbnIGWFE
-         VU2w==
+        bh=gg9ZdLv2ki48mUNl69QeK9y3vC32V/8zR5xNICHMQ28=;
+        b=V5oii2AP7iK/gHbMNDsSVEdYvHWzBqwPyeiCJaSxH80cBJ0weDfC5z5Jac3vnz4xBd
+         Tn2ClWoMdMt+leExQaUPFXVNn1yHQ669Vg1RrqJYPh/2X3l9jSvgtmZZiIj1bUZ2IzMa
+         dB3alhLex5Auo3ljWEQXqzrJbKBAnpaXzkW8R3j7dH57EQCqLyyRRuNOPBvBnxDwabY1
+         PCB7f6Teh/1ED3+YhCaqbNuWa+/ytjyR+MjlDNbb0urQBJvJj9Tgkb8oCphjnt8HYU5m
+         JKo9lxiVLkjF2Ntl0hmSDMics51tH/PApK2OBsOlL42naroddrbbIARbX0CgiVbmpphc
+         lFDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772986120; x=1773590920;
+        d=1e100.net; s=20230601; t=1772989821; x=1773594621;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lnyn0D7v3NtpCCFN+OaTBBhd5BPF9RP5TzZudislDW8=;
-        b=TsZjip3bV7e73NxreKKUEoL6yVbaC6XH1DUKOJPaFtoE8LfokaLXGTzJDeIvbO0Ydx
-         yhNuaw/xrxDLBSxn49XzTOplaV1LUvGpN0xe0hKnkdDe7xX/GMarqWkV24tyvkTpYZ9L
-         B2S1pb+MHoX6f8oqbuy7i+p2ZVz12jDZDn0mayWSFzno6xsk3/JE9IqDCF4EjVhkdvlA
-         PrPQJL1KUoJ8aCX2hyjSxoE/vMQgnNMnbmvzJzJsmYNneEm9z+Zp7CiaPyqjzkzKTMil
-         CdeP8nv4aLMOwACtYnvoDo80drwmuWu6cNFx/At7Ku4mUuiMjc/Y0N8mFiY44sqw4S4f
-         25kg==
-X-Forwarded-Encrypted: i=1; AJvYcCUuzNUk8ignxjcwHnJEanBs5GCq1LDDy2axDsqs0w7B46lJT/eCdyLF6SDzO7hXMFDJbUePU8/JZvhZaWsLon4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKL2TntlSKWzGQ4C3I4WxD/la3CwQULWRkmnEXNtw59YbEtT2I
-	t+SZSSKV3WFX8RUPEgXV4NLS/jrxmSWUPXutCxY2ufzikB2aj5iNsgLKN0zNre7Qb6KVmC34eaw
-	vQexakhQ6dDHf/TQhlXyAfQQSStjLVtaabA==
-X-Gm-Gg: ATEYQzxVGv7yDl6pSwLZQYb6uLWfDTbn4Iv6co+AZLBQHX0PZVp7v9MlhTTKTEWk7Tw
-	36fUjtU2LnrT6IaCUpVAotAs3h2hqG2QWBljfe/9yefMzuf3GxdLi1n8JocHU0/xdo9+/YUBswm
-	cTqp/jz3tP6lPQdr+us/q6InQXSI8XtMAsE7Ir3FDFOZicY0gI9I0WRVPSJlcx+ELkt/igkvG9L
-	HLZibPECIOujEfRljX7pGLUFOOYdz9y9pBbUk2TZiGq8jMQEevfCep4HOa8HEYBVus+JxR7ZEdD
-	fqNSqG5LbD32EePEN3d2QxfM+BwDXhZQcLWyzumUkoODys69C/XV/hv1jhRGhrMmYS2Ijmd4KL7
-	Agjd2vcoxH7cpd3+mJL7uV35hVg==
-X-Received: by 2002:a05:6000:18a7:b0:435:e3bd:5838 with SMTP id
- ffacd0b85a97d-439da33af85mr14879681f8f.25.1772986120221; Sun, 08 Mar 2026
- 09:08:40 -0700 (PDT)
+        bh=gg9ZdLv2ki48mUNl69QeK9y3vC32V/8zR5xNICHMQ28=;
+        b=jv1DHm7zzpw7RHjxobaTX2FGbLp8E0MZWbndisqbUX7+JgZCO2HP3PM/n0CfCRedvk
+         uEX4QP5IUdK5nCW7qiH6gryJVxe1EbyfsITUS8TGjUUM0KpUAErmb5oLiuCYm5vLkAU2
+         sFQNMBnic5sTMy0IIHhw0odiC2Q+wzy+Ay9B7CHeVOacCSRvKJuY4VbSzrRK3Su/eXGS
+         keTSb2fNcocicrmPRiV/nxyyBtZ/bXRRi5DX9Pihdt9IFOti9Jypj/Iyv1OvNJJL99bI
+         DjDFrISDet7xSwXJlT/pScvgZw9HZmwQtOkuJctnUolgSB10rDSVFlSkcxlIZekzSR/N
+         14xA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOrKDDGB54aDDGivjecLRt6SipptBK2CRsfLFbyf5tATmKMuQbbghNmrgvTmBZZEgpOaMEJdDbyrjiKCSJ5Eg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz675R/RZxkPgRNXV2KnA9J7aa6JxOlDbGiS/WxB8uJnEFvEsDV
+	RIcJDlbqxFFmUyqf5T9vUG6fOcmOyg3h98ziqHlTQoHpCkCtKiDIfCbZGJGJSDIBd5+p/Y1y+oN
+	tPx6mrxcBeXMFE8eFLlA1IKJdjmbgfJiCIPgcrT/O
+X-Gm-Gg: ATEYQzxk9nldhcxyjKOMsYz5GZxPnpE5DujpJjcC/iiChA7EDXBG+0TJDk/H7vo6dHZ
+	t7wcOQNdRNs6sujMMQYFwJSOYbKlURXcHbALqzSl8IjtIGN9xVRWzISeGGY+Pt7Wm/K4OkVCbqj
+	5ZD5UgxsuHJeM73ZyaMB/sZFQaYx/c0RgwuZZI+upCNZcnlziGRUJAziblcPWFdBpWmOyfkL31s
+	1/GFtFzYgjYNxlRoec2M7FdESEykQFwAkiUjxLOtqjVa5N5GJrlzeeWrgijShBf8IRhK85FtzFQ
+	m83Xl8mPcb5mLFU=
+X-Received: by 2002:a05:6512:10c1:b0:5a1:3539:1181 with SMTP id
+ 2adb3069b0e04-5a13ccc6854mr2584241e87.20.1772989820622; Sun, 08 Mar 2026
+ 10:10:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306120024.1032301-1-sun.jian.kdev@gmail.com>
- <aar9gzh7QVhezeII@Tunnel> <CAADnVQJtG9s1CV-qeF8NSgi_UFPgahOXtB3PWiivBooAYC69GA@mail.gmail.com>
- <CABFUUZGV7ZAVY=Y6Py3ytZUzZV0i9otPWADgP9HtVrDzf612ew@mail.gmail.com> <b45c98d4e59bb31c3101d6ae2ef5d7cee8b4f6c8.camel@gmail.com>
-In-Reply-To: <b45c98d4e59bb31c3101d6ae2ef5d7cee8b4f6c8.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 8 Mar 2026 09:08:29 -0700
-X-Gm-Features: AaiRm52oEOAJUIVk2zitK0o1MXIMBduWUQNq5yKL-R8bfBi2FoMfslNHbKeD1Mk
-Message-ID: <CAADnVQKnBPkybFMOM89OQ+dvPZhpzTYaZa05gDTT-zG9gu8EKg@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/bpf: avoid jump seq limit in verif_scale_pyperf600
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: sun jian <sun.jian.kdev@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20260307140726.70219-1-dorjoychy111@gmail.com>
+ <20260307140726.70219-2-dorjoychy111@gmail.com> <CALCETrXVBA9uGEUdQPEZ2MVdxjLwwcWi5kzhOr1NdOWSSRaROw@mail.gmail.com>
+ <801cf2c42b80d486726ea0a3774e52abcb158100.camel@kernel.org>
+In-Reply-To: <801cf2c42b80d486726ea0a3774e52abcb158100.camel@kernel.org>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Sun, 8 Mar 2026 10:10:05 -0700
+X-Gm-Features: AaiRm53NE6RSEVl9G8ylA7uki0xCjhtuxwfA8HvbEL_OVbVZXAi0saXeclsKpvo
+Message-ID: <CALCETrVt7o+7JCMfTX3Vu9PANJJgR8hB5Z2THcXzam61kG9Gig@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] openat2: new OPENAT2_REGULAR flag support
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Dorjoy Chowdhury <dorjoychy111@gmail.com>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	jack@suse.cz, chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 8, 2026 at 12:12=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
+On Sun, Mar 8, 2026 at 4:40=E2=80=AFAM Jeff Layton <jlayton@kernel.org> wro=
+te:
 >
-> On Sun, 2026-03-08 at 13:55 +0800, sun jian wrote:
-> > On Sat, Mar 7, 2026 at 12:23=E2=80=AFAM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Fri, Mar 6, 2026 at 8:15=E2=80=AFAM Paul Chaignon <paul.chaignon@g=
+> On Sat, 2026-03-07 at 10:56 -0800, Andy Lutomirski wrote:
+> > On Sat, Mar 7, 2026 at 6:09=E2=80=AFAM Dorjoy Chowdhury <dorjoychy111@g=
 mail.com> wrote:
-> > > Sun Jian,
-> > > I asked to do a _minimal_ tweak to pyperf600.
-> > > What you did is a drastic change. Pls don't hack tests
-> > > just to make them pass. The tests have to be meaningful
-> > > and test coverage shouldn't degrade.
+> > >
+> > > This flag indicates the path should be opened if it's a regular file.
+> > > This is useful to write secure programs that want to avoid being
+> > > tricked into opening device nodes with special semantics while thinki=
+ng
+> > > they operate on regular files. This is a requested feature from the
+> > > uapi-group[1].
 > > >
 > >
-> > Hi Alexei, Paul,
+> > I think this needs a lot more clarification as to what "regular"
+> > means.  If it's literally
 > >
-> > I spent some more time looking into this.
+> > > A corresponding error code EFTYPE has been introduced. For example, i=
+f
+> > > openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
+> > > param, it will return -EFTYPE. EFTYPE is already used in BSD systems
+> > > like FreeBSD, macOS.
 > >
-> > Comparing unmodified pyperf600 bytecode between clang-18 and clang-20, =
-I
-> > see fewer instructions with clang-20 and nearly the same number of
-> > branches:
+> > I think this needs more clarification as to what "regular" means,
+> > since S_IFREG may not be sufficient.  The UAPI group page says:
 > >
-> > clang-18: 90134 lines of disassembly, 6090 gotos
-> > clang-20: 78369 lines of disassembly, 6085 gotos
+> > Use-Case: this would be very useful to write secure programs that want
+> > to avoid being tricked into opening device nodes with special
+> > semantics while thinking they operate on regular files. This is
+> > particularly relevant as many device nodes (or even FIFOs) come with
+> > blocking I/O (or even blocking open()!) by default, which is not
+> > expected from regular files backed by =E2=80=9Cfast=E2=80=9D disk I/O. =
+Consider
+> > implementation of a naive web browser which is pointed to
+> > file://dev/zero, not expecting an endless amount of data to read.
 > >
-> > So this does not look like a simple program-size increase. What seems t=
-o
-> > change is the branch layout in the unrolled loop body, which seems to
-> > make the verifier DFS go deeper before pruning.
+> > What about procfs?  What about sysfs?  What about /proc/self/fd/17
+> > where that fd is a memfd?  What about files backed by non-"fast" disk
+> > I/O like something on a flaky USB stick or a network mount or FUSE?
 > >
-> > One useful data point is that a single __on_event() copy does load
-> > successfully (that was my v2), while with 2 or more copies it
-> > consistently fails at exactly 8193 jumps. In other words, the verifier
-> > hits the jump-sequence limit before reaching the second copy.
+> > Are we concerned about blocking open?  (open blocks as a matter of
+> > course.)  Are we concerned about open having strange side effects?
+> > Are we concerned about write having strange side effects?  Are we
+> > concerned about cases where opening the file as root results in
+> > elevated privilege beyond merely gaining the ability to write to that
+> > specific path on an ordinary filesystem?
 > >
-> > I also tried a range of source-level mitigations, but so far I couldn't
-> > find one that preserves the test intent and keeps pyperf600 comparable
-> > to the other variants:
-> >
-> > - UNROLL_COUNT tuning: 99 does not compile; 100-120 compile but still
-> > fail at 8193; 121-145 fail to compile; 146-150 compile but still fail
-> > at 8193
-> > - early break/goto on !frame_ptr: insufficient for pyperf600, and also
-> > hurts pyperf600_nounroll by adding branch points to the 600-iteration l=
-oop
-> > - wrapping 5x __on_event() in a non-unrolled loop: verifier still unrol=
-ls it
-> > - making get_frame_data() __noinline: still fails
-> > - moving the unwind loop into a __noinline subprog: still fails
-> > - SUBPROGS / __on_event as __noinline: still fails; codegen changes,
-> > but the verifier still hits 8193
-> >
-> > Paul also mentioned trying STACK_MAX_LEN/UNROLL_COUNT and only getting =
-it
-> > to work with STACK_MAX_LEN reduced to 180, which would make it too clos=
-e
-> > to pyperf180.
-> >
-> > The only source change I found that passes is reducing __on_event() to =
-a
-> > single copy, but that clearly weakens the test as pointed out.
-> >
-> > At this point, I don't have a source-level fix that preserves the test
-> > intent.
 >
-> Hi Sun,
+> Above the use-case, it also says:
 >
-> I have an old investigation for the pyperf600 failure reason from March 2=
-024.
-> Attaching it to the email. The discussion happened off-list.
-> The source-level "mitigation" I found back then still stands:
+> "O_REGULAR (inspired by the existing O_DIRECTORY flag for open()),
+> which opens a file only if it is of type S_IFREG."
 >
->   --- a/tools/testing/selftests/bpf/progs/pyperf.h
->   +++ b/tools/testing/selftests/bpf/progs/pyperf.h
->   @@ -97,8 +97,15 @@ static __always_inline bool get_frame_data(void *fra=
-me_ptr, PidData *pidData,
->                               frame_ptr + pidData->offsets.PyFrameObject_=
-code);
->
->           // read data from PyCodeObject
->   +#if __BPF_CPU_VERSION__ < 4
->           if (!frame->f_code)
->                   return false;
->   +#else
->   +        asm volatile goto("if %[f_code] =3D=3D 0 goto %l[has_f_code];"
->   +                             :: [f_code]"r"(frame->f_code) :: has_f_co=
-de);
->   +        return false;
->   +has_f_code:
->   +#endif
->
-> (One needs cpuv4 because of the jump instructions exceeding 16-bit
->  offset ranges are only possible with cpuv4).
->
-> The decision back then was that the "mitigation" is too brittle to
-> apply and we should leave the test as-is, hoping that verifier would
-> get smarter some day and be able to load the program.
+> Since we allow programs to open a directory under /proc or /sys using
+> O_DIRECTORY, I don't think we should do anything different here. To the
+> VFS, all of the examples you gave above are S_IFREG "regular files",
+> even if they are backed by something quite irregular.
 
-Back then the hope was that it will be fixed imminently,
-but 2 years later it still fails. So please send your workaround.
+That's certainly a valid and consistent way to define this, but is it usefu=
+l?
 
-I prefer to have 'test_progs' passing all tests without denylist.
+--Andy
