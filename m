@@ -1,75 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADB83ED5BA;
-	Mon,  9 Mar 2026 18:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753A1366831
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 20:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773082505; cv=none; b=t3oM8BKlJDgwzwJgCGl7AxRSK2qVKQ3E8Nc13LPlaLaH4D/LoGbGUtZX2Wc7rKjHzx5Fk/MWcpwO9L15oSa5ei8sB2zaG1w0v5M61q8yblLhUZixHITzcNaWiJpAZiCiNm4aSoyeKjXSAjqQgxjuz7CeYeTB9V/flq0uVqinqvc=
+	t=1773087290; cv=none; b=iREoseuEQamJY+tN3No8HdXZjKhA/Q1UeX8GMfwBoNtvp84BYZ3pA5icgW1bXJZ/R4vitfXKSTrZMyVFgTkEgpk0uoqBd9JY1CTqt4NOhhH/PovJogIanT02Fheqjq3EZGc+Rhe7+DXxwFIsAp9GKwG3naCgYttKSvv7ywR0TRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773082505; c=relaxed/simple;
-	bh=iA52zluXRWMpXdOK4ruJ3MkjDHyulqqdVTyLLan3BPM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=f2zPwDyxvOX+StXkduvxHvFGF3VvkI530B6NBneSTwVkb40j1aYg5TsdmCqeWy/kks7UCeStzRzJ2Lx3TSge/z43z+pVYp6urGOJ1Fj9tTdIZItQCG3JV47e6OAQ572CXEG69osQM4a67OeOAjzynaUjIvJ3U3AlDCP8dU618wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aHc562fV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773087290; c=relaxed/simple;
+	bh=t2ELUrTRrIA43qxN6ICa2HlQbYlezzntw2IcTVfori8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=TK3OgSlrMlVE564481ipUyn/gdq12gPxD9pX1vtEV1r0UejNXLjP3AiH8JCLhFN1KFraw1ncvZ5raDd2nN2YgYHXVm5bPEInZWWEjMwHjTaVQGTcdBOfGfpcxfPwnc51DO0zdejQ6C0DdLkHXPa57VoDlFmGv/4NHsASpR3CDgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WgRGBO0+; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aHc562fV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37029C4CEF7;
-	Mon,  9 Mar 2026 18:55:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773082505;
-	bh=iA52zluXRWMpXdOK4ruJ3MkjDHyulqqdVTyLLan3BPM=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=aHc562fVI3KEQp6nFoV+dchqZTkAUQm1VAp7KeNgcrHlasIw/yW4y0Q5T6QjcVW01
-	 B+w4E2sXqW8H21uEtFG7OWt3MKrnjjaoySjGvkd76blwwOK+Xax1IGCJaXwiT7pZ6l
-	 F9HJlhiyVnEiw6yJVFbc4KmGGd0hkI2Xli+aS2i1wUCSxIC0+6Oj9qe73wVM5hGqpy
-	 BMi4ivGeLV2WaG0Eouf/c8+aLvHx/YHLAr9Kk8ZXLRI65H3skWZGbFcrgPM+zm6DCe
-	 mgLrKKQowa+S/WUMJYatE3eWaQ9qvdUDQLt3I7UUhY2NfdzJQIry7JPMhtfcPnjCL2
-	 HWionBGFUfa3g==
-Message-ID: <83f6ede0-f65e-41a5-8c79-2d0d96cbff5e@kernel.org>
-Date: Mon, 9 Mar 2026 12:55:05 -0600
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WgRGBO0+"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-8299499d587so1823175b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 13:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773087289; x=1773692089; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vcDGw75J1CjJnpglqCPC5b33UOnC1+NDU+DgqlhrL+E=;
+        b=WgRGBO0+3RQ6BaSZPMkHwYilzNG8yrke4nzj1NAESScOp4X6GEQis6YsI7ISlipbAL
+         yYDFZ4mOXT/QRu9wc2T/xvZ8Y2aLoOvC0U0TWM7WF4GyVMktCEYHpV/hrwNt+Egi27aH
+         7nl//d2I8E4pn1k3m/k8A5KjlHiBo5VY+AQSNigeWV1OWhb+MEPI5LpBP5flJe3JdFyW
+         1QF9eoPbQOW/PFrTLUkIuz54K0UiBeFz6FRHkCS52qu7bWKuBjghOLVz7Vfz8PR7o7a2
+         YoTQ+3opfFU3Itul/vLveK0qLdmz8WYTSdT3Z6bsZ+bEfdRJoNYQq+0X2XTnI0RD1ZSD
+         KNuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773087289; x=1773692089;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vcDGw75J1CjJnpglqCPC5b33UOnC1+NDU+DgqlhrL+E=;
+        b=R5bgRaenm1mLd5OQ1J+eoWxC73cFCXES0kkfXuKcHUhX+PxpB2D+vsNlWRjcE8O7/6
+         EAv4QX8UbHDfbe17uf6Q/8Os/g1j3FoGsIy/8d/BThRwQHf3HoqeZm8VJNeaOqMRFIb2
+         HpxD7QWV5V7/MDKH+lDsnHuXInRMEYM0azkzxIoGwkSo+wa8DXGukqgxEQaqW/7ulZVL
+         oLRefUT4udGOiY5KuqeOywgLIyiMhVV/GjHOWAYOhCslP7d2ZPVz707qHbKG0YRiZXn5
+         iTJYATWIjQLaSesW/qG2oJWgVkM8xSxDN7cFXsO0unoPw8smS7eIXbeeHHj/tf3Rb97a
+         0Dfg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+cfsbwyYtPC7hbVCDnegqFDVYMQjBniJLMl2JXZuAdlpJG8DzXgiWCD1fI/50Tgx9oY+UnD6jb7xvBeZMDqY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP3A3mYT+aRIMR/DS91GDGsgzqj0b0pSi+yXsgonRwNjE3agv8
+	cMR5Oht50nLKIh06SexhBIsQ58LdGxjff5pJXqbwDxUVJPMHF2tkRZgd+q6WeBA5c/s17zzvwrf
+	rmc6CVg==
+X-Received: from pfqz27.prod.google.com ([2002:aa7:9e5b:0:b0:821:82a1:fe7d])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4519:b0:821:8ea4:480e
+ with SMTP id d2e1a72fcca58-829a2d88f61mr11174600b3a.10.1773087288647; Mon, 09
+ Mar 2026 13:14:48 -0700 (PDT)
+Date: Mon, 9 Mar 2026 13:14:47 -0700
+In-Reply-To: <CAEvNRgHhFoyh__shK_YefhUOTP4RaG-sivUH=4Gj-2iy1HX+tw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/4] RDMA/rxe: Add the support that rxe can work in net
- namespace
-Content-Language: en-US
-To: Zhu Yanjun <yanjun.zhu@linux.dev>, jgg@ziepe.ca, leon@kernel.org,
- zyjzyj2000@gmail.com, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260308233540.13382-1-yanjun.zhu@linux.dev>
- <45947149-36ef-41f2-8ad0-aa3519344ce0@linux.dev>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <45947149-36ef-41f2-8ad0-aa3519344ce0@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260309-gmem-st-blocks-v3-0-815f03d9653e@google.com>
+ <20260309-gmem-st-blocks-v3-1-815f03d9653e@google.com> <577c4725-7eda-4693-a55a-413572541161@kernel.org>
+ <CAEvNRgHhFoyh__shK_YefhUOTP4RaG-sivUH=4Gj-2iy1HX+tw@mail.gmail.com>
+Message-ID: <aa8qNz_52Qe6x1Kv@google.com>
+Subject: Re: [PATCH RFC v3 1/4] KVM: guest_memfd: Track amount of memory
+ allocated on inode
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	rientjes@google.com, rick.p.edgecombe@intel.com, yan.y.zhao@intel.com, 
+	fvdl@google.com, jthoughton@google.com, vannapurve@google.com, 
+	shivankg@amd.com, michael.roth@amd.com, pratyush@kernel.org, 
+	pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 3/8/26 5:40 PM, Zhu Yanjun wrote:
-> # make -C tools/testing/selftests/ TARGETS=rdma run_tests
-> make: Entering directory '/root/Development/linux/tools/testing/selftests'
-> make[1]: Nothing to be done for 'all'.
-> TAP version 13
-> 1..4
-> # timeout set to 45
-> # selftests: rdma: rxe_rping_between_netns.sh
-> # server DISCONNECT EVENT...
-> # wait for RDMA_READ_ADV state 10
-> ok 1 selftests: rdma: rxe_rping_between_netns.sh
-> # timeout set to 45
-> # selftests: rdma: rxe_ipv6.sh
-> ok 2 selftests: rdma: rxe_ipv6.sh
-> # timeout set to 45
-> # selftests: rdma: rxe_socket_with_netns.sh
-> ok 3 selftests: rdma: rxe_socket_with_netns.sh
-> # timeout set to 45
-> # selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-> ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-> make: Leaving directory '/root/Development/linux/tools/testing/selftests'
-> "
+On Mon, Mar 09, 2026, Ackerley Tng wrote:
+> "David Hildenbrand (Arm)" <david@kernel.org> writes:
 > 
+> > On 3/9/26 10:53, Ackerley Tng wrote:
+> >> The guest memfd currently does not update the inode's i_blocks and i_bytes
+> >> count when memory is allocated or freed. Hence, st_blocks returned from
+> >> fstat() is always 0.
+> >>
+> >> Introduce byte accounting for guest memfd inodes.  When a new folio is
+> >> added to the filemap, add the folio's size.  Use the .invalidate_folio()
+> >> callback to subtract the folio's size from inode fields when folios are
+> >> truncated and removed from the filemap.
+> >>
+> >> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> >> ---
+> >>  virt/kvm/guest_memfd.c | 14 ++++++++++++++
+> >>  1 file changed, 14 insertions(+)
+> >>
+> >> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> >> index 462c5c5cb602a..77219551056a7 100644
+> >> --- a/virt/kvm/guest_memfd.c
+> >> +++ b/virt/kvm/guest_memfd.c
+> >> @@ -136,6 +136,9 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+> >>  					 mapping_gfp_mask(inode->i_mapping), policy);
+> >>  	mpol_cond_put(policy);
+> >>
+> >> +	if (!IS_ERR(folio))
+> >> +		inode_add_bytes(inode, folio_size(folio));
+> >> +
+> >
+> > Can't we have two concurrent calls to __filemap_get_folio_mpol(), and we
+> > don't really know whether our call allocated the folio or simply found
+> > one (the other caller allocated) in the pagecache?
+> >
+> 
+> Ah that is true. Two threads can get past filemap_lock_folio(), then get
+> to __filemap_get_folio_mpol(), and then thread 1 will return from
+> __filemap_get_folio_mpol() with an allocated folio while thread 2
+> returns with the folio allocated by thread 1. Both threads would end up
+> incrementing the number of bytes in the inode.
+> 
+> Sean, Vlastimil, is this a good argument for open coding, like in RFC v2
+> [1]? So that guest_memfd can do inode_add_bytes() specifically when the
+> folio is added to the filemap.
 
-Just put that in the cover letter; no need for followup emails to the set.
+Heh, I assumed that was going to be _the_ argument, i.e. I was expecting the answer
+to my implicit question of "if this greatly simplifies accounting" was going to be
+"trying to do the right thing while using __filemap_get_folio_mpol() is insane".
+
+> An alternative I can think of is to add a callback that is called from
+> within __filemap_add_folio(). Would that be preferred?
+
+Probably not.  Poking around, it definitely seems like guest_memfd is the oddball.
+E.g. as David pointed out, even shmem participates in disk quota stuff, and HugeTLB
+is its own beast.  In other words, I doubt any "real" filesystem will want to hook
+__filemap_add_folio() in this way.
+
+So as I said before, "if this greatly simplifies accounting, then I'm ok with it".
+And it sounds like the answer is an emphatic "yes".  And again as I said before,
+all I ask at this point is that the refactoring changelog focuses on that point.
+
+P.S. In future versions, please explain _why_ you want to add fstat() support,
+i.e. why you want to account allocated bytes/folios.  For folks like me that do
+very little userspace programming, and even less filesystems work, fstat() not
+working means nothing.  Even if the answer is "because literally every other FS
+in Linux works".
