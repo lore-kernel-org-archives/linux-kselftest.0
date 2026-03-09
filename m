@@ -1,87 +1,127 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BF63B8BD2
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 14:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773065878; cv=none; b=Cw5LSl2S8/HWZSR4QvcbjA7tdZoozZ2TU/w4rcR2W20tGo4CooHmJJJ1vMbzJ/zgW5TpOXdibLyyu1kZlBBWg55kvpnI7xxS1+I9qDeP/akOkvS/UETPQLA6Zru0W4rPK77V6gfaZyUtMCPBsbvP/nfMLMW5cyYLwllzGizyi6M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773065878; c=relaxed/simple;
-	bh=JP00T/68OJ4fw7VmMlRaHDEELtwQraenjhzJKPVQkgo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ClxJqPdAst7ESubUGsjTfc/UDuL5DbqaMXkdBaB1U1KBZwOcA3b4Bxxa9z+T2k5LlM0n8invkbQMmrx2nsHC0C4iMEZmkulthQkFy/kedlc07TymeRJgx2+Au60K9ypmdx1rfTJ7R7meqbAobKcT4MZV/w14EnzDrsNnVUc1gTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=syI7mnKv; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16ACD3D75DE
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 15:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773068709; cv=pass; b=IU8P9uIgWYNKkTOhe10n4YePZez/CfEa6hSIK1Wonf+ARp8hEY7LwawPjlVF3p6J1zAdp02wCTHtXJEn2/uOPaSk1RKCmK+E9NBN5kowROW76+etCiY7cKZOksCvklpZMvahG+wycDKLvViHmFuNB/445Bv0LxutUXXzKIOHqaA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773068709; c=relaxed/simple;
+	bh=h506DdISAW0jZvmzWHOqq1yATIV5e0BG5Ps1k2LXKBM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fR9BgKjltz9t8k4UOET5glneZv9Tl0Vlh3xUvVOdKMRYJIZEle9+OBbRdSBCKlqYsJI3th2UpV0EccFd7DY4oxB9rwpgdqJq4RrI3bbX0wfpiR4AE/rq7x0pIPp0N/jqDw9AJSpMSVKJ4f8cDR27WBT3FNtCWxJhpdXk/CLKYhM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1OKV2Oo2; arc=pass smtp.client-ip=74.125.82.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="syI7mnKv"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-358f058973fso11520584a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 07:17:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1OKV2Oo2"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-126ea4e9697so14326c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 08:05:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773068707; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dUfnlQwfCAAgElVgrgSSxdOcMLeBbGlB5l9Z3uIYd3Zu8qNNH4CQQiUHuWxBOns5CB
+         N9zbiG+Y/dd+e6G6W0kMJQGoCkNOAgbwb4Q1PtDRhOrmDCOpPCRdhLeBhRL9a5L6XRrU
+         YjMAV7Bsoh4uuseLvOLBEI56UZUedACqPlg5+QSY3Ylq4nmafxhZk30siSkWLFZtKWWb
+         gHSdS/IndnkI3401RUBw1Fpr6QWsmPIuB9JIUoa/1/OdohQm529kb7BSeWCMJQhfsTao
+         WQSgfM8AemmIaPBkcBkOKKtPRTlSnKqM38U1ePSH5tr5L1UgvGJVk64qyeLJPKUHlJP+
+         cYOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9VyI22y/VeTZdWcSGQANDYhZXVCP9xDCNVvpAO/VOQQ=;
+        fh=YHAzNuRMf4bKi2gGbQ2GeLYs04g63Q1bj8wvO9Oaruc=;
+        b=Ydi43zfbwrmrx3LY01uLJroeV7pP2A8/wSVSk1ID++yCrAqt73WvwEAHbVXHwcRmLU
+         GoB1+0mG1qTVUTT2d6NIPSxi+oApiHoL7NXnX+x+658ZCZIQHJMnt9dolmawffHTo4mn
+         VRtf68oKGCS1jeF/Wjox1zBzcfLmjIzIUctKkdtXNfC2H0UbQrc3ivTggdrKpjXdrMg9
+         lkRJrLuO4iNsRNTNRTJeQTnjEd2vWEUgktIzi156WwIaGrG7mzMeaRq0Lf4baT09PZ3q
+         EEYejDpg5NjDtMkwJpvjsMZcXSwkmoi3wL0Kh0oXyb8P7n4GCGhv4k9RFoblddJOWBPQ
+         BVJg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773065876; x=1773670676; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIXhTxwjRpwa5TAse999ohZvv684PvyRrjqn0wkysxg=;
-        b=syI7mnKvmm9TMan062RW2Eoblm7KU0IBKbxptcfIWh9y0fZ9u+xdKIAlbw++cP3kNL
-         PU45WQKwrzRdsD38YCMRTssTPiEvJxGR07ZR+xgmnHSgBro7yQgsGofam6TAdgQlqm34
-         YaSu0lVdyDXVJvl7HJEbm1zYQXDjlo4B7TvEHbl4zDwt63UwxuO+lQE132FsYK+zKA6J
-         zvdWb41SJ9BmVbnVUk3s55+NhcHA34teau+viv7N4S7lTLM+KyvBeFZB5WbjNe0PiEkQ
-         /mAUDDUXgRqs7/ewmXFGTqFSrVpu7JhXU+rSvKDMh3m4sN3wv2jNQ3kIdzmSiryGwQwO
-         FbsQ==
+        d=google.com; s=20230601; t=1773068707; x=1773673507; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9VyI22y/VeTZdWcSGQANDYhZXVCP9xDCNVvpAO/VOQQ=;
+        b=1OKV2Oo2ZpvrDiIem7vHcExeAzTgPqeXPaLCENvu5K8kJPozVtYggxkGESq9typnHt
+         L4kc+2KJo35EDCSUGcGCEDRFNCRea1Lfk7TwD5cJYwmvGtaSTQ2D/LL92PlhvhgS/ROK
+         LvQ5WdPifdcUCV8931cxIotU41yboxSzu8SDGY24oYFf5QyD/S4qQyh0ZKyY3S9RENwJ
+         JLV8S9c+Y6p1xPuqUvUBfFaNVjP/0+vo35QJ2GqG1o4QmvwJDpFm2NUfe+mYX3T/16ih
+         foMIGYa8iIjQgcr/iQpfxcKWb9ysclIyHYO9UQMDgmcqglkw+ecm0Mm018u/gdjZHwZ8
+         FryA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773065876; x=1773670676;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIXhTxwjRpwa5TAse999ohZvv684PvyRrjqn0wkysxg=;
-        b=aqEmYZGhyqlAuCDQ9ZGlTmyKCWqHuBXi2sPLbGAkNxSv8kBqqZIapGK1ZvsqQzECOG
-         IWXbFxzTI1mvfpKC1Ay/NFBAvBIskII7gQbGmdp2Pdy4aZ3N6QoO+ya2NZxUt/RHSn/6
-         j/SJR5o/wSP20mxjWvsfQVIDKNaucSiPhFXaaP/ivs1/NwpXXcAn1gidXYWlllaVpRXJ
-         dOfh9zFVDbWr3eZ9+WXtCXiftK2S+iyVe+4IxIpQ6AV3z+67aJmTbjNauFKiLb19RkkJ
-         /BFxpDxPAX1Zk/WC+9UNd+zPyTzdjCtyZRG4myYMo6lz5IapCttRki/gknu9YYqoP9Ws
-         /F5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUa895ZoRMwI8mrXO8DEqK/BCRiAQnPQ3pmiyiFodBxSCJtHH5mHRi6oJRit2AOwmJEdAr/hK3j+KfI7/H81Dg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3BgNVDztN6QdpKFiyhJ3rpZs0U5OXMzvr+n2PaqoQsU8zBar4
-	MH0BSxEGUAY+Kj23MAV05GXPtwSFqzTngRrSfr/BXzPu3s9oabGxmqasDcPGjhURi+ZAE97URcc
-	ncvhZ6Q==
-X-Received: from pgww1.prod.google.com ([2002:a05:6a02:2c81:b0:c51:8b09:2a32])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:939f:b0:398:7c6b:889e
- with SMTP id adf61e73a8af0-3987c6b90ccmr6465889637.52.1773065875983; Mon, 09
- Mar 2026 07:17:55 -0700 (PDT)
-Date: Mon, 9 Mar 2026 07:17:48 -0700
-In-Reply-To: <cover.1749672978.git.afranji@google.com>
+        d=1e100.net; s=20230601; t=1773068707; x=1773673507;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9VyI22y/VeTZdWcSGQANDYhZXVCP9xDCNVvpAO/VOQQ=;
+        b=R5qWr7UAyRP2R9aTxH8nLh6AdWR7eSjYThs/DHGk4qKKqkZ/0YM3/ofh8gqua61ODN
+         YvbkqCc5BQU1xkObZ3lTzOOhAWCgYrmrXU/A90RMaqcc5d0jCCzrHOE1E81RkA6uOYZ7
+         TZRQB/CoAT32EKY3Hhia/m/oJ0w2jeVsCkDMixnmcGA5DNM8/jzgGfLE5mwHzaPxBSqK
+         uuZVQVBp8z99ut4wNT//YqwCFKj/TrDTqRI+UG0uyfVCBm6g+TTkwQ1gqX3p9BL3ZZw8
+         xNhINvX/hBlzMfwOcRmZhCMRs6Puj2c3aXxiJDHp78zKMmRC7gZxoUdyFKn03m3gvZJO
+         OVvg==
+X-Forwarded-Encrypted: i=1; AJvYcCXQHXkBuUVOal4/HGfFYDd8ckxMGwJqSxdyPLmdME4NOzy6rtcEGmM+oGxxF/IoIW3zCrSU9RRhStaLn8kbIZc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwOCOf8YWYnNFvehfoOoA+G9P0f1SUUo/frGYWr4HSdFwx4k0M
+	+60Abdzcn1G68Quod9GVSYFdQntv8qW8S1XGvTEv3YywKPNPQjgIIV6jBeJGvTTc/Xbk4pCDi+h
+	cRUbD3DkRHS2d73/51rueGMTnpzscRRm77YoOrxZX
+X-Gm-Gg: ATEYQzwkt3cYyKau9jCn3Yd3SikvGhjGfbm3e3GrxAa4vJaf6tFtJSNccgxMOkm+mpg
+	eNpYy8y4IIKVKJCPBl3QCBHcTCW+AnuEvh2zEIeXZ0QlMfMOJxiVCqbu1awsdGMv++a38EW/HG4
+	v6+onVk7g/EF40KoSVedJT9wd7GnAhr3AnG4OFFAfCviTxveL0fRwLAKxad6LV/3WSQnsIzx/VN
+	Mq/NMTD8urIjFKacGkiqtjfMleB3bLnL3WehiScGzw8PWNI8tOmrUT8UdcDQFT/GQkEmKHDXMgA
+	umk78bPjx8w7vwC176J2rt9vrUFG4XJ/Hib29BU=
+X-Received: by 2002:a05:7022:984:b0:127:9745:c69f with SMTP id
+ a92af1059eb24-128cd6c78e4mr326409c88.9.1773068706409; Mon, 09 Mar 2026
+ 08:05:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1749672978.git.afranji@google.com>
-Message-ID: <aa7WjPHTUDCgsO-U@google.com>
+MIME-Version: 1.0
+References: <cover.1749672978.git.afranji@google.com> <aa7WjPHTUDCgsO-U@google.com>
+In-Reply-To: <aa7WjPHTUDCgsO-U@google.com>
+From: Vishal Annapurve <vannapurve@google.com>
+Date: Mon, 9 Mar 2026 08:04:53 -0700
+X-Gm-Features: AaiRm51CMdt3YQzldlYrLNi93jNDQSQgth1QTuEwDfkO5X2hip81D88zpTx2ItQ
+Message-ID: <CAGtprH8Ls0vTYo_Fq_Tb8DwU8R2J14oaniAYNBOPb15dyaWOXg@mail.gmail.com>
 Subject: Re: [RFC PATCH v2 00/10] Add TDX intra-host migration support
-From: Sean Christopherson <seanjc@google.com>
-To: Ryan Afranji <afranji@google.com>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com, 
+To: Sean Christopherson <seanjc@google.com>
+Cc: Ryan Afranji <afranji@google.com>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	x86@kernel.org, sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com, 
 	dave.hansen@linux.intel.com, dmatlack@google.com, erdemaktas@google.com, 
 	isaku.yamahata@intel.com, kai.huang@intel.com, mingo@redhat.com, 
 	pbonzini@redhat.com, tglx@linutronix.de, zhi.wang.linux@gmail.com, 
 	ackerleytng@google.com, andrew.jones@linux.dev, david@redhat.com, 
 	hpa@zytor.com, kirill.shutemov@linux.intel.com, 
-	linux-kselftest@vger.kernel.org, tabba@google.com, vannapurve@google.com, 
-	yan.y.zhao@intel.com, rick.p.edgecombe@intel.com
-Content-Type: text/plain; charset="us-ascii"
+	linux-kselftest@vger.kernel.org, tabba@google.com, yan.y.zhao@intel.com, 
+	rick.p.edgecombe@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 11, 2025, Ryan Afranji wrote:
-> Hello,
-> 
-> This is RFC v2 for the TDX intra-host migration patch series. It
-> addresses comments in RFC v1 [1] and is rebased onto the latest kvm/next
-> (v6.16-rc1).
-> 
-> This patchset was built on top of the latest TDX selftests [2] and gmem
-> linking [3] RFC patch series.
+On Mon, Mar 9, 2026 at 7:17=E2=80=AFAM Sean Christopherson <seanjc@google.c=
+om> wrote:
+>
+> On Wed, Jun 11, 2025, Ryan Afranji wrote:
+> > Hello,
+> >
+> > This is RFC v2 for the TDX intra-host migration patch series. It
+> > addresses comments in RFC v1 [1] and is rebased onto the latest kvm/nex=
+t
+> > (v6.16-rc1).
+> >
+> > This patchset was built on top of the latest TDX selftests [2] and gmem
+> > linking [3] RFC patch series.
+>
+> In case someone is feeling necromantic, don't bother reviewing this serie=
+s.  I've
+> provided a pile of feedback off-list (I forgot this on-list RFC existed),=
+ and the
+> next version should be have significant changes.
 
-In case someone is feeling necromantic, don't bother reviewing this series.  I've
-provided a pile of feedback off-list (I forgot this on-list RFC existed), and the
-next version should be have significant changes.
+Thanks Sean for the note. We will soon refresh intrahost migration
+support for software-protected VMs and this series. Need to inject
+these features at the right place in the queue of guest_memfd and TDX
+features already under review.
