@@ -1,170 +1,167 @@
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502FC392C40
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 10:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D263A0E85
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 11:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773053105; cv=none; b=ecMtBQ7nHFELYcrQUGX3FJGHCKMxRg1Mq/GCkpsQ6yhPh/Y4YZpz97iD/PqfH2CunoM8naLIgPlFUIjurxJAlKK9IAYGPwwD2XmOP7uY71YvfesbzutN/gQiOeGxNaK3wLBV7uLNR4563Lv+gU0qwlsV8wtC5w2QBSbGfXjZXQc=
+	t=1773056562; cv=none; b=gTtBClcr23vrOEfIa5cGdMv5gLjGV5yyNwk9aPOa3R6LoPhsHwJgm+4I8lXbW3BvdS65CJTrxYKr4ORPcmYrwlerTKHv3oyDKrP2tiDVcWkShbeCyw9nE12eYvQvSXjvlSycDBX/yDJLJgeL4eUR2UnKrODPX5ScM/auJhyJBoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773053105; c=relaxed/simple;
-	bh=jYs0pJTHjkLdfsfBnMIrJb5n7ksT9fbzlweEBr7D4fU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iDHOXUiQcpFd0DnubahxuG4QPACEg0t812utJyhLNoAr2eCUCaGeY6xI9pBLWFrA4GLIh8VIY/qvm8BZNhU6tykICrIvSdKMAal0BqSS9nP2gmhky+vBg+VUUZFIEBGWMH6CIEUSOggD4dxcUylAc2bRPXIioO/CjRLlyWr29ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CaUIfx/3; arc=none smtp.client-ip=74.125.224.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773056562; c=relaxed/simple;
+	bh=Nt5Vw+tkYUE0noyKyk3+fahA9VicdkAnycMJcpDJU1Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j9HHIx04lxGM9z3AbigJM8zubUpZvhpPP7CmWnYqD3ati432fODDyfVjQqgXQsbUCntoW2oCtiPONlmuyvtPOCoe784nfm8mbpttSIvPk3ONjSI0FD7VKrq1497ykWtuUB0haFNLUWVSiV/q87sdkVxB1xlmGjzP2lYzRaicE58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rrEPqHMT; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=uLdBqfyv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rrEPqHMT; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=uLdBqfyv; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CaUIfx/3"
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-64ae222d978so11025995d50.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 03:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773053103; x=1773657903; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cDtJtjT4fzine+ZeyXNiHwdW8ww64N9rv71BsVnohzU=;
-        b=CaUIfx/3Ha9HcYg2MAi8z9nMsKYJ2BID/wmR+SpQtnO+PJvJfEvafH+VFGSf+Qzbgv
-         pND/yqLXAyK3QY9doXt2C8DoC3bQZENqLoKgETD07+NtD3+o0UWivHO5D+wQLvzOMG9k
-         2J16bbwS9MoeH3pcFe+rebZKD8/iPayG+c/E2DU1Oz6Ek0ScIgGI4zLXg/kCR1ly6KIc
-         KLd4Xb4ZT73b4wAvz9penUjN+WpP1cyodauRVNP7qNNKdKl60ghdFanB5A8VHqMS81ri
-         JKWbzrtXB6w2RgDZ8/Gf4LiNP78o22bF2g8HUaCN0OlPsGLxmuUQkvrTC0CHAFJbrYJ0
-         4aGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773053103; x=1773657903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cDtJtjT4fzine+ZeyXNiHwdW8ww64N9rv71BsVnohzU=;
-        b=RG83tA1ZrY3GuIhfu0wyHPJDApzzL6hTMP43o4XwpyLOy3Zw3EcmKzoRqRj5OlvvZK
-         KwQCovPXM/7VtTmgOybqBxA19G3/islkHqDM0rl7/QN8opzWtsSRzZ+jVBLSBkFaCvjm
-         v8oJQUsbXYXkjrR02EJNMCyDMLcDf1TzJ1LFe8jHEoLOJ1TMqLDarss+EX4JFBw6CiUf
-         U2AF7JI1AgLmRVFs8dDaje5s9kuR4Ok9lnNKNejnN2GquW1iy94o3u406mPoiXfGhuT6
-         E/RMpYgncpnZKal0UWqQulM97Cvb++FMMsz7dF7Nd2Tuq1GHgvW5nFvQRwBcm1qf5bxz
-         Gciw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOxo2twYmBIfhhs2ZT1ydCKBTdVYI3R1iSCW223Rt3Oq5W6fQBNSO1av4sqn1JXh7FfWwLJ11+RBnKLjRZCik=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzhvp1B2+eY3NpIQjpORjFkVVv/4pE/aTGartYQyNAqq83kUXLz
-	5n45dPbkuvs1/xEK+EirdrdtFEQAVHhyGu7VyHqZkKwWdSIq9yRsybba
-X-Gm-Gg: ATEYQzzcUEAdjcfWa49tD3KGAR+PvrxVEEC4GWpCNnUYagDaQtE99cB4gseQunlPtAf
-	DNVaWxae5f0VdPqCDosjpHsXOUd7PpDtu1KnrodtyfZJpYTOJk1t7aWOwIXLlMfY7v0EHMIx7Na
-	/fvnLRQ0QgZh5vxgg2VsHoaF+K2LoZP52/RNUUkzVxpkivzv+6BkUpfYafEBAOvLec9iTH81ATy
-	jQRutJ/7rdnmeFmQ/9/lzOkdG6YXP6omyCwFLK+yEuF0aKexI/zUEVL4MHK78a9R2TVBhwxqblY
-	j7lk3ax5XBiieiQygbrlw3Vnow/2fzqxNyqZNKuObWPy02m8I4Hvie8QeygR0myH9alwDvlSBIe
-	IKiOvgJlQUulCgIpmsU0aLSNENDYwPIT05jY1vAcDqWjd+hYRTVfdpEgJWotNZHkse3IxlWEJkg
-	Out2THq0jOzNRmb+7JSXamWucZpi8vRafpUp0p67z7WKdrjM9VrcE927khZWQBtRhRFLBhJm7fk
-	BZeBm8brsydGINXAGJ7DM4GkXg=
-X-Received: by 2002:a05:690e:16d5:b0:64c:c0d0:9088 with SMTP id 956f58d0204a3-64d14350c51mr6706591d50.69.1773053103222;
-        Mon, 09 Mar 2026 03:45:03 -0700 (PDT)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64d176d9574sm4466857d50.18.2026.03.09.03.44.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 03:45:02 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v4 bpf-next] selftests/bpf: livepatch_trampoline: skip when prerequisites are missing
-Date: Mon,  9 Mar 2026 18:44:48 +0800
-Message-ID: <20260309104448.817401-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rrEPqHMT";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="uLdBqfyv";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rrEPqHMT";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="uLdBqfyv"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2FEF34D1FA;
+	Mon,  9 Mar 2026 11:42:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1773056559; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C9dcjx44x1l7Xkd6W45YBGBYjn4gAtqSJ05zAZ1TlVE=;
+	b=rrEPqHMTQV0IUHbUnCr4xfKryl5PN7j/XkwJ1J88Vin40m3Oihx9IljPSyNqfvJJewGWm6
+	W51+bYg0r1O+wOloVQa1Ql6Kukx3WgEr2rjcygN2iVpGyKI/MgDS0txS2uOyTd5n4dnzWD
+	IxANiH2GhF4ORkL5BBi1TDUgaA8MJMQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1773056559;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C9dcjx44x1l7Xkd6W45YBGBYjn4gAtqSJ05zAZ1TlVE=;
+	b=uLdBqfyvHY7lF+c0Q1lRyu/GuQ9uXGhJtEGa28HGIWAE5OPy7yLcSUS6P+ze6ntszL1sne
+	Q6GsfVkcQx1dPaDQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1773056559; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C9dcjx44x1l7Xkd6W45YBGBYjn4gAtqSJ05zAZ1TlVE=;
+	b=rrEPqHMTQV0IUHbUnCr4xfKryl5PN7j/XkwJ1J88Vin40m3Oihx9IljPSyNqfvJJewGWm6
+	W51+bYg0r1O+wOloVQa1Ql6Kukx3WgEr2rjcygN2iVpGyKI/MgDS0txS2uOyTd5n4dnzWD
+	IxANiH2GhF4ORkL5BBi1TDUgaA8MJMQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1773056559;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C9dcjx44x1l7Xkd6W45YBGBYjn4gAtqSJ05zAZ1TlVE=;
+	b=uLdBqfyvHY7lF+c0Q1lRyu/GuQ9uXGhJtEGa28HGIWAE5OPy7yLcSUS6P+ze6ntszL1sne
+	Q6GsfVkcQx1dPaDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 232303EE9E;
+	Mon,  9 Mar 2026 11:42:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Y8WOCC+yrmm1CwAAD6G6ig
+	(envelope-from <jack@suse.cz>); Mon, 09 Mar 2026 11:42:39 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id D4870A09A4; Mon,  9 Mar 2026 12:42:38 +0100 (CET)
+Date: Mon, 9 Mar 2026 12:42:38 +0100
+From: Jan Kara <jack@suse.cz>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	seanjc@google.com, rientjes@google.com, rick.p.edgecombe@intel.com, 
+	yan.y.zhao@intel.com, fvdl@google.com, jthoughton@google.com, vannapurve@google.com, 
+	shivankg@amd.com, michael.roth@amd.com, pratyush@kernel.org, 
+	pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH RFC v3 2/4] KVM: guest_memfd: Set release always on
+ guest_memfd mappings
+Message-ID: <5blfhtmxxudflnekbdd47dh6cu4eherrrdq2n7e4k2em4qiix2@msak4r6zcc22>
+References: <20260309-gmem-st-blocks-v3-0-815f03d9653e@google.com>
+ <20260309-gmem-st-blocks-v3-2-815f03d9653e@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260309-gmem-st-blocks-v3-2-815f03d9653e@google.com>
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLkt8wp3x8qpcm6dn39p5ieksq)];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,suse.cz:email]
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
+X-Spam-Level: 
 
-livepatch_trampoline relies on livepatch sysfs and livepatch-sample.ko.
-When CONFIG_LIVEPATCH is disabled or the samples module isn't built, the
-test fails with ENOENT and causes false failures in minimal CI configs.
+On Mon 09-03-26 09:53:53, Ackerley Tng wrote:
+> Set release always on guest_memfd mappings to enable the use of
+> .invalidate_folio, which performs inode accounting for guest_memfd.
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-Skip the test when livepatch sysfs or the sample module is unavailable.
-Also avoid writing to livepatch sysfs when it's not present.
+I'd fold this into the previous patch because that makes sense only with
+this patch in place. Otherwise feel free to add:
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
-v4:
-  - Drop redundant <errno.h> and <unistd.h> includes; both are already included by test_progs.h (per Jiayuan Chen)
-  - Tested: ./test_progs -t livepatch_trampoline -vv (SKIP when livepatch-sample.ko missing)
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-v3:
-  - Skip on -ENOENT from load_livepatch() instead of duplicating module path logic (suggested by Jiri Olsa)
-  - Tested: ./test_progs -t livepatch_trampoline (SKIP when livepatch-sample.ko missing)
+for the first two patches.
 
-v2:
-  - Skip when /sys/kernel/livepatch is missing
-  - Guard sysfs write in unload_livepatch() when enabled knob is absent
+								Honza
 
-v3: https://lore.kernel.org/bpf/20260309033712.728133-1-sun.jian.kdev@gmail.com/
-v2: https://patchwork.kernel.org/project/netdevbpf/patch/20260305030258.5273-1-sun.jian.kdev@gmail.com/
-v1: https://patchew.org/linux/20260227042354.20926-1-sun.jian.kdev@gmail.com/
-
- .../bpf/prog_tests/livepatch_trampoline.c     | 20 +++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-index 72aa5376c30e..0a12af924a99 100644
---- a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-+++ b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-@@ -5,6 +5,8 @@
- #include "testing_helpers.h"
- #include "livepatch_trampoline.skel.h"
- 
-+#define LIVEPATCH_ENABLED_PATH "/sys/kernel/livepatch/livepatch_sample/enabled"
-+
- static int load_livepatch(void)
- {
- 	char path[4096];
-@@ -19,7 +21,8 @@ static int load_livepatch(void)
- static void unload_livepatch(void)
- {
- 	/* Disable the livepatch before unloading the module */
--	system("echo 0 > /sys/kernel/livepatch/livepatch_sample/enabled");
-+	if (!access(LIVEPATCH_ENABLED_PATH, F_OK))
-+		system("echo 0 > " LIVEPATCH_ENABLED_PATH);
- 
- 	unload_module("livepatch_sample", env_verbosity > VERBOSE_NONE);
- }
-@@ -81,9 +84,22 @@ static void __test_livepatch_trampoline(bool fexit_first)
- void test_livepatch_trampoline(void)
- {
- 	int retry_cnt = 0;
-+	int err;
-+
-+	/* Skip if kernel was built without CONFIG_LIVEPATCH */
-+	if (access("/sys/kernel/livepatch", F_OK)) {
-+		test__skip();
-+		return;
-+	}
- 
- retry:
--	if (load_livepatch()) {
-+	err = load_livepatch();
-+	if (err) {
-+		if (err == -ENOENT) {
-+			test__skip();
-+			return;
-+		}
-+
- 		if (retry_cnt) {
- 			ASSERT_OK(1, "load_livepatch");
- 			goto out;
-
-base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
+> ---
+>  virt/kvm/guest_memfd.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index 77219551056a7..8246b9fbcf832 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -607,6 +607,7 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
+>  	mapping_set_inaccessible(inode->i_mapping);
+>  	/* Unmovable mappings are supposed to be marked unevictable as well. */
+>  	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
+> +	mapping_set_release_always(inode->i_mapping);
+>  
+>  	GMEM_I(inode)->flags = flags;
+>  
+> 
+> -- 
+> 2.53.0.473.g4a7958ca14-goog
+> 
 -- 
-2.43.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
