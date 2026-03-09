@@ -1,169 +1,143 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997D83A63E3
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 11:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C209396B91;
+	Mon,  9 Mar 2026 11:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773056806; cv=none; b=SSnIE8r5FUxHBqGFprK46Mg9lGa53r6+Z4GsLhXaVJUV4ww/qhMK29pmLOSupfj2cnFtV1nEiOI7AJhartRne1xaIjmGTWTkh2Ky8Jt88D6SmWM+uAARQLFPqBGi4QY7r4J8MmECH2JjW7XKB9L2rdqLHV7XJ6vGlPHLNpUEsZY=
+	t=1773057049; cv=none; b=NteKaSaA2wS2XIsOJPjs1bjYifrQ9U+xpYa5nedtH9hz04zLIHDqeiRC6gWEo7YcWpFfQsmK/mZXR/PhlsbmOMTj/a0+uFmGsjM0MfFtbCE2roHE6ePie62YqyIkcLYZF8xjIf5HWktKd4sYHmwVepBxlzhymXmk05pt2o96qPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773056806; c=relaxed/simple;
-	bh=hGRjyFTUo/tFc/SDo2BBMZn6Ono/3kQOwUruOONApUM=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=YHG9acRF9Knbfq5wMErK2469cpA2+niYmV77UlUV1bOFSFcdj5iLcGYiG/ruD0p0LM0L2NPhUR4N3dcTDQS3tRo+B9S/M2ALZMOFm9qVDx3zgrP2plSgQ8a6BRlr0fpWSWilyAlpIVKOCINY1IGetde+RIzqMDjn7QhRAi+h4Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Zozr370E; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773057049; c=relaxed/simple;
+	bh=MKDoMhatF/8bmNy6+4wMS5v8ebUxjWldeMUyNsD//UI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NdtbEumfnRERw/103lpxuhDIIAPn8CduGyB7l6pBgwRKgZ4NzX3Cf6XJiHZ3rreNTJz0ExkE/NdlLbM9pSUSjmaUryH9UjpFeR46OmO0D/Q4WPYErIQFVUGYE3Nf0nu7t9gdBIpRNUq0TcpAvsHRqVOTAYpXBDQMzQY6LmfDabc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=doD57pDQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Zozr370E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="doD57pDQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B42C9C4CEF7;
+	Mon,  9 Mar 2026 11:50:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773057048;
+	bh=MKDoMhatF/8bmNy6+4wMS5v8ebUxjWldeMUyNsD//UI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=doD57pDQPBLH+3BvqxHLNZmaR1BBbeo4If0RPfIqWfW5Z9lEi02liWOf9Tv5JUrie
+	 ufUKiMb9aOonEeLiXnITDfuCrjFo2knisrJoDRPa2HHhr6g8Q34rbFcr5+o53EhB8M
+	 16h/9igRBjHnzQ2hS7sn2zNZnATj63YIOQZ9kLADwIU6Gp/u4v3jiTIak7wA7mfvvN
+	 H7N6uwroorzCmuYVAqpQkgzQ1JId2xSIUTWrqXr+DUUMeugtAo2SA2Td2567bFhNnl
+	 1sq4SYFMELF9394s1kh9A7kMe7MT5K7PVP5Tgmp8NnZFRSLsW3fP9GfdtSjasR6HXT
+	 Cf1PYT7f1gP3A==
+Message-ID: <577c4725-7eda-4693-a55a-413572541161@kernel.org>
+Date: Mon, 9 Mar 2026 12:50:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773056802;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sHJak2AClGtNfYUwsfEt8bzDUEvGEbjk0Vje8pMFORU=;
-	b=Zozr370E00QI+opnsz7umCy2sLqphlDFAnAaYdwI+HUEi6SrR2VIYDHrIKuE+jKmLTtujF
-	4LTbS/Q/309GjXUIK2JmKM93Kb+CbOpAomIw5Bh0IER0xLmwpRGjViuemJli3UJ5Y6oP5R
-	7VNCJdz3T1PDj81jo1JBg5u+glZudis=
-Date: Mon, 09 Mar 2026 11:46:40 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <d820cf981c9e6bd83f03f0e2721c531c217dd9d5@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH v4 bpf-next] selftests/bpf: livepatch_trampoline: skip
- when prerequisites are missing
-To: "Sun Jian" <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
- "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
- "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah
- Khan" <shuah@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
- linux-kselftest@vger.kernel.org, "Sun Jian" <sun.jian.kdev@gmail.com>
-In-Reply-To: <20260309104448.817401-1-sun.jian.kdev@gmail.com>
-References: <20260309104448.817401-1-sun.jian.kdev@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v3 1/4] KVM: guest_memfd: Track amount of memory
+ allocated on inode
+To: Ackerley Tng <ackerleytng@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>, Shuah Khan <shuah@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ seanjc@google.com, rientjes@google.com, rick.p.edgecombe@intel.com,
+ yan.y.zhao@intel.com, fvdl@google.com, jthoughton@google.com,
+ vannapurve@google.com, shivankg@amd.com, michael.roth@amd.com,
+ pratyush@kernel.org, pasha.tatashin@soleen.com, kalyazin@amazon.com,
+ tabba@google.com, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20260309-gmem-st-blocks-v3-0-815f03d9653e@google.com>
+ <20260309-gmem-st-blocks-v3-1-815f03d9653e@google.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260309-gmem-st-blocks-v3-1-815f03d9653e@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-March 9, 2026 at 18:44, "Sun Jian" <sun.jian.kdev@gmail.com mailto:sun.ji=
-an.kdev@gmail.com?to=3D%22Sun%20Jian%22%20%3Csun.jian.kdev%40gmail.com%3E=
- > wrote:
-
-
->=20
->=20livepatch_trampoline relies on livepatch sysfs and livepatch-sample.k=
-o.
-> When CONFIG_LIVEPATCH is disabled or the samples module isn't built, th=
-e
-> test fails with ENOENT and causes false failures in minimal CI configs.
->=20
->=20Skip the test when livepatch sysfs or the sample module is unavailabl=
-e.
-> Also avoid writing to livepatch sysfs when it's not present.
->=20
->=20Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+On 3/9/26 10:53, Ackerley Tng wrote:
+> The guest memfd currently does not update the inode's i_blocks and i_bytes
+> count when memory is allocated or freed. Hence, st_blocks returned from
+> fstat() is always 0.
+> 
+> Introduce byte accounting for guest memfd inodes.  When a new folio is
+> added to the filemap, add the folio's size.  Use the .invalidate_folio()
+> callback to subtract the folio's size from inode fields when folios are
+> truncated and removed from the filemap.
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 > ---
-> v4:
->  - Drop redundant <errno.h> and <unistd.h> includes; both are already i=
-ncluded by test_progs.h (per Jiayuan Chen)
->  - Tested: ./test_progs -t livepatch_trampoline -vv (SKIP when livepatc=
-h-sample.ko missing)
->=20
->=20v3:
->  - Skip on -ENOENT from load_livepatch() instead of duplicating module =
-path logic (suggested by Jiri Olsa)
->  - Tested: ./test_progs -t livepatch_trampoline (SKIP when livepatch-sa=
-mple.ko missing)
->=20
->=20v2:
->  - Skip when /sys/kernel/livepatch is missing
->  - Guard sysfs write in unload_livepatch() when enabled knob is absent
->=20
->=20v3: https://lore.kernel.org/bpf/20260309033712.728133-1-sun.jian.kdev=
-@gmail.com/
-> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20260305030258=
-.5273-1-sun.jian.kdev@gmail.com/
-> v1: https://patchew.org/linux/20260227042354.20926-1-sun.jian.kdev@gmai=
-l.com/
->=20
->=20 .../bpf/prog_tests/livepatch_trampoline.c | 20 +++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
->=20
->=20diff --git a/tools/testing/selftests/bpf/prog_tests/livepatch_trampol=
-ine.c b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-> index 72aa5376c30e..0a12af924a99 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
-> @@ -5,6 +5,8 @@
->  #include "testing_helpers.h"
->  #include "livepatch_trampoline.skel.h"
->=20=20
->=20+#define LIVEPATCH_ENABLED_PATH "/sys/kernel/livepatch/livepatch_samp=
-le/enabled"
-> +
->  static int load_livepatch(void)
->  {
->  char path[4096];
-> @@ -19,7 +21,8 @@ static int load_livepatch(void)
->  static void unload_livepatch(void)
->  {
->  /* Disable the livepatch before unloading the module */
-> - system("echo 0 > /sys/kernel/livepatch/livepatch_sample/enabled");
-> + if (!access(LIVEPATCH_ENABLED_PATH, F_OK))
-> + system("echo 0 > " LIVEPATCH_ENABLED_PATH);
->=20=20
->=20 unload_module("livepatch_sample", env_verbosity > VERBOSE_NONE);
->  }
-> @@ -81,9 +84,22 @@ static void __test_livepatch_trampoline(bool fexit_f=
-irst)
->  void test_livepatch_trampoline(void)
->  {
->  int retry_cnt =3D 0;
-> + int err;
-> +
-> + /* Skip if kernel was built without CONFIG_LIVEPATCH */
-> + if (access("/sys/kernel/livepatch", F_OK)) {
-> + test__skip();
-> + return;
-> + }
->=20=20
-
-
-I=20think Jiri's suggestion in v2 means that you should drop the path che=
-ck=20
-here=20and in unload_livepatch() and just keep checking -ENOENT.
-
--ENOENT returned by load_livepatch() means the ko doesn't exist,
-which happens when either CONFIG_LIVEPATCH is disabled or livepatch_sampl=
-e=20
-is=20not compiled.
-
-
->  retry:
-> - if (load_livepatch()) {
-> + err =3D load_livepatch();
-> + if (err) {
-> + if (err =3D=3D -ENOENT) {
-> + test__skip();
-> + return;
-> + }
+>  virt/kvm/guest_memfd.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index 462c5c5cb602a..77219551056a7 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -136,6 +136,9 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+>  					 mapping_gfp_mask(inode->i_mapping), policy);
+>  	mpol_cond_put(policy);
+>  
+> +	if (!IS_ERR(folio))
+> +		inode_add_bytes(inode, folio_size(folio));
 > +
 
->  if (retry_cnt) {
->  ASSERT_OK(1, "load_livepatch");
->  goto out;
->=20
->=20base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
-> --=20
->=202.43.0
->
+Can't we have two concurrent calls to __filemap_get_folio_mpol(), and we
+don't really know whether our call allocated the folio or simply found
+one (the other caller allocated) in the pagecache?
+
+-- 
+Cheers,
+
+David
