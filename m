@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D453A8727;
-	Mon,  9 Mar 2026 11:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6DF3A8FF0;
+	Mon,  9 Mar 2026 11:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773057302; cv=none; b=CjROXa+2qH8MR1Bx1wxCmYC1i9B5TWC3tCnB3AZW86VMjNjbPqJrz1+BpKxjhaU7TeEpglWqlMrXhF71EouhEVKrixeAzJ3E3zS9bv+mxtR6acIC+WGpcK/vW4wvvIILAxMm4nzikcIe2+PyDyPIE0DBZJJwVCHkFtHRzaa9rBo=
+	t=1773057304; cv=none; b=t15GO/RGxPTzshYICoXrs+QM8IjrUZhnScCZbxHCmPUhD13EuJO3ucEi+GjbbLyOw1SKshJ0r7FlEG56NgcrHEts9PqET978dbPxTCPLb8THRGNbCHg/XystZ+uJw5xZM51RN31eZ/XKrlDpMtYXtpJNxkfRN7PY5ZnAT3QOJJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773057302; c=relaxed/simple;
-	bh=hQMT5ZnC+kM/6V8s8lr4xcjgalTDxyHP1vCCvJobalc=;
+	s=arc-20240116; t=1773057304; c=relaxed/simple;
+	bh=6RXZOME/fI1l63GcOwoRovNmREiLIcVnjWmc5XmjY64=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KQ0DETCog253l9Dc+ZMt6+jhar8k4UvezRw634Ckwel1VNMqMgbT8kkmy4sw5maRh9jhSfGLcZeqxI2Ppf7CH5B8J9u52gDtNzQW6icV1TEJ2QrLzaFDTh5aAs5DWc2JkPUhlnY7pxswUmY7WiYtuJPVbTIkFTGSa+2PEudG5dM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j82uKpnm; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=O3w6Li3Jsar20NpjznS6SW8hQuRy4swDfHPiThS58LemgvLM0CQq+J8HfgS8ugMOx+cv6DueImmQv8lf6OKhVlyxsnv0XCx/Cdim3L+DJb45sYs7yyq/jq1gGGpKXExvDmT9pPoCEQPT8lKd2ZZgqwslMFaIfTuDo2Vrsc/UVwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TQZeh5kB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j82uKpnm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E261CC2BC86;
-	Mon,  9 Mar 2026 11:54:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TQZeh5kB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 310F8C2BCB2;
+	Mon,  9 Mar 2026 11:55:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773057301;
-	bh=hQMT5ZnC+kM/6V8s8lr4xcjgalTDxyHP1vCCvJobalc=;
+	s=k20201202; t=1773057303;
+	bh=6RXZOME/fI1l63GcOwoRovNmREiLIcVnjWmc5XmjY64=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j82uKpnmoFrUvTTCkoOY17tPF5sZCZegqhK196oh4IOsYj3uxdMJQPO+xEB8+B3Jv
-	 EUVZElGrUZiu/ZK/gUwawNjkf8ZO9XtmtVH2FxLFvzTDmoEAOknwNOUPN1rT1Z/Geh
-	 kiIeGzV/ncOGHcFH2dHL22L53TeXvzNulh8dW1JBHbPAWb5C2WSU2SMiexIjc76usk
-	 iNLRP6UHbVU7hXOaUT+d2nO6Utvc0hFkdGQs0N+6emPi85eiI1/BCZCRlcgTqBmM/W
-	 Gdd2vlVAO+vxY+41HKbZSqnKWprM5Fw58Qt2XgG2P5j6lL+kV46PQFpGwUONvGVdx4
-	 8b0CfuywmTEog==
+	b=TQZeh5kBgJ/ZWCqVNeQ+F4HO+HIquSD9vTuIBzKtqtBEJCvEmmR4KehU8FiXOZgIw
+	 OWN6/YnE2DKORuQd4J510m65RqNhfsY0aq6DzmuyBsCg+mNThgyIblpncAJeItvys7
+	 Z1tttz52Y9an2AkpwGj1DtiILYbeyrci6kIOY4+3ebU7AByEMbxutKT3/o8hXu++2z
+	 SRfn55ud3pVBsW0pzL9AwwZ3PgAPTRWA+SIs4otVWV+v5RDcZGVlqxlLoWogEdC1Pr
+	 hkZh8aBQTZTR0azHl5joWDugVJzWStVNhYnklEeDloS3Kg3fJvwPTq9x2hTMagSkvD
+	 QDRdcGjvTcTzA==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Mike Rapoport <rppt@kernel.org>,
@@ -35,9 +35,9 @@ To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 5/6] selftests/liveupdate: add test for operations on a preserved memfd
-Date: Mon,  9 Mar 2026 11:54:38 +0000
-Message-ID: <20260309115441.266805-6-pratyush@kernel.org>
+Subject: [PATCH 6/6] selftests/liveupdate: add fallocate test for memfd
+Date: Mon,  9 Mar 2026 11:54:39 +0000
+Message-ID: <20260309115441.266805-7-pratyush@kernel.org>
 X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
 In-Reply-To: <20260309115441.266805-1-pratyush@kernel.org>
 References: <20260309115441.266805-1-pratyush@kernel.org>
@@ -51,91 +51,100 @@ Content-Transfer-Encoding: 8bit
 
 From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 
-Once a memfd is preserved, certain operations are not allowed to
-succeed since they might make the state of the memfd inconsistent with
-the serialized state. Among these operations are truncating or growing
-the memfd. Writes and reads to already existing memfd should succeed.
+When memory is added to a memfd via fallocate(), it does not get zeroed
+immediately. This is tracked by the absence of the uptodate folio flag.
+Initially, memfd preservation simply saved the folio flags at preserve
+time. This led to a bug, where all writes to un-initialized fallocated
+memory after preserve were lost after live update. This is fixed by
+patch [0] (not in mainline as of writing this).
 
-Add a test that makes sure a preserved memfd does not allow growing or
-shrinking, but does allow reads and writes to existing memory to go
-thorough.
+Add a test that fallocates some memory in a memfd, preserves it, writes
+to it. Then in stage 2 it verifies the written content is still present.
 
-Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
+[0] https://lore.kernel.org/linux-mm/20260223173931.2221759-2-pratyush@kernel.org/
+
 Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 ---
- .../testing/selftests/liveupdate/luo_memfd.c  | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ .../testing/selftests/liveupdate/luo_memfd.c  | 64 +++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
 diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
-index 56106cd09978..75f88101e7b5 100644
+index 75f88101e7b5..dde3c78db50e 100644
 --- a/tools/testing/selftests/liveupdate/luo_memfd.c
 +++ b/tools/testing/selftests/liveupdate/luo_memfd.c
-@@ -39,6 +39,10 @@
- #define ZERO_SESSION_NAME "zero_session"
- #define ZERO_MEMFD_TOKEN 1
+@@ -43,6 +43,11 @@
+ #define PRESERVED_MEMFD_TOKEN 1
+ #define PRESERVED_BUFFER_SIZE SZ_1M
  
-+#define PRESERVED_SESSION_NAME "preserved_session"
-+#define PRESERVED_MEMFD_TOKEN 1
-+#define PRESERVED_BUFFER_SIZE SZ_1M
++#define FALLOCATE_SESSION_NAME "fallocate_session"
++#define FALLOCATE_MEMFD_TOKEN 1
++#define FALLOCATE_BUFFER_SIZE SZ_1M
++#define RANDOM_DATA_FILE_FALLOCATE "luo_random_data_fallocate.bin"
 +
  #define LIVEUPDATE_DEV "/dev/liveupdate"
  static int luo_fd = -1, stage;
  
-@@ -136,6 +140,59 @@ TEST(zero_memfd)
- 	}
+@@ -193,6 +198,65 @@ TEST(preserved_ops)
+ 	ASSERT_EQ(lseek(fd, 0, SEEK_END), PRESERVED_BUFFER_SIZE);
  }
  
 +/*
-+ * Test that preserved memfd can't grow or shrink, but reads and writes still
-+ * work.
++ * Test that an fallocated memfd is preserved across live update and can be
++ * written to after being preserved.
 + */
-+TEST(preserved_ops)
++TEST(fallocate_memfd)
 +{
-+	char write_buffer[128] = {'A'};
 +	int fd, session;
 +	char *buffer;
 +	struct liveupdate_session_preserve_fd preserve_arg = { .size = sizeof(preserve_arg) };
++	struct liveupdate_session_retrieve_fd retrieve_arg = { .size = sizeof(retrieve_arg) };
 +
-+	if (stage != 1)
-+		SKIP(return, "test only expected to run on stage 1");
-+
-+	buffer = malloc(PRESERVED_BUFFER_SIZE);
++	buffer = malloc(FALLOCATE_BUFFER_SIZE);
 +	ASSERT_NE(buffer, NULL);
 +
-+	session = luo_create_session(luo_fd, PRESERVED_SESSION_NAME);
-+	ASSERT_GE(session, 0);
++	switch (stage) {
++	case 1:
++		session = luo_create_session(luo_fd, FALLOCATE_SESSION_NAME);
++		ASSERT_GE(session, 0);
 +
-+	fd = create_random_memfd("preserved_memfd", buffer, PRESERVED_BUFFER_SIZE);
-+	ASSERT_GE(fd, 0);
++		fd = memfd_create("fallocate_memfd", 0);
++		ASSERT_GE(fd, 0);
 +
-+	preserve_arg.fd = fd;
-+	preserve_arg.token = PRESERVED_MEMFD_TOKEN;
-+	ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_PRESERVE_FD, &preserve_arg), 0);
++		/* Fallocate memory but do not write to it yet */
++		ASSERT_EQ(fallocate(fd, 0, 0, FALLOCATE_BUFFER_SIZE), 0);
 +
-+	/*
-+	 * Write to the preserved memfd (within existing size). This should
-+	 * work.
-+	 */
-+	ASSERT_GE(lseek(fd, 0, SEEK_SET), 0);
-+	/* Write buffer is smaller than total file size. */
-+	ASSERT_EQ(write_size(fd, write_buffer, sizeof(write_buffer)), 0);
-+	ASSERT_EQ(verify_fd_content(fd, write_buffer, sizeof(write_buffer)), 0);
++		preserve_arg.fd = fd;
++		preserve_arg.token = FALLOCATE_MEMFD_TOKEN;
++		ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_PRESERVE_FD, &preserve_arg), 0);
 +
-+	/* Try to grow the file using write(). */
++		/* Now write to it after preserving */
++		ASSERT_GE(generate_random_data(buffer, FALLOCATE_BUFFER_SIZE), 0);
++		ASSERT_EQ(save_test_data(RANDOM_DATA_FILE_FALLOCATE, buffer, FALLOCATE_BUFFER_SIZE), 0);
 +
-+	/* First, seek to one byte behind initial size. */
-+	ASSERT_GE(lseek(fd, PRESERVED_BUFFER_SIZE - 1, SEEK_SET), 0);
++		ASSERT_GE(lseek(fd, 0, SEEK_SET), 0);
++		ASSERT_EQ(write_size(fd, buffer, FALLOCATE_BUFFER_SIZE), 0);
 +
-+	/*
-+	 * Then, write some data that should increase the file size. This should
-+	 * fail.
-+	 */
-+	ASSERT_LT(write_size(fd, write_buffer, sizeof(write_buffer)), 0);
-+	ASSERT_EQ(lseek(fd, 0, SEEK_END), PRESERVED_BUFFER_SIZE);
++		daemonize_and_wait();
++		break;
++	case 2:
++		session = luo_retrieve_session(luo_fd, FALLOCATE_SESSION_NAME);
++		ASSERT_GE(session, 0);
 +
-+	/* Try to shrink the file using truncate. This should also fail. */
-+	ASSERT_LT(ftruncate(fd, PRESERVED_BUFFER_SIZE / 2), 0);
-+	ASSERT_EQ(lseek(fd, 0, SEEK_END), PRESERVED_BUFFER_SIZE);
++		ASSERT_EQ(load_test_data(RANDOM_DATA_FILE_FALLOCATE, buffer, FALLOCATE_BUFFER_SIZE), 0);
++
++		retrieve_arg.token = FALLOCATE_MEMFD_TOKEN;
++		ASSERT_GE(ioctl(session, LIVEUPDATE_SESSION_RETRIEVE_FD, &retrieve_arg), 0);
++		fd = retrieve_arg.fd;
++		ASSERT_GE(fd, 0);
++
++		ASSERT_EQ(verify_fd_content(fd, buffer, FALLOCATE_BUFFER_SIZE), 0);
++
++		ASSERT_EQ(luo_session_finish(session), 0);
++		break;
++	default:
++		TH_LOG("Unknown stage %d\n", stage);
++		ASSERT_FALSE(true);
++	}
 +}
 +
  int main(int argc, char *argv[])
