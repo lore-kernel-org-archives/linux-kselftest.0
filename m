@@ -1,69 +1,127 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC4C217659;
-	Mon,  9 Mar 2026 09:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E22238236D
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 09:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773049472; cv=none; b=j7OoEjtxeRnWNH+D50qYIoifuArFmN4tFx/oot0FLBa5zbV3/eO7SFs6IoCc6a6FFtYRKLk5BKIsIFQ8la/ZABNgCPw6caAbZ59QOsh60NL9QjabpVp1dGypnmetexo2yQSZIF7v3bFiadZKI+sFJ/40UXxGNLCbZd1JD6hBK+c=
+	t=1773050056; cv=none; b=rpTkoCLLNkkXNEv1BQktbFcdi7R7TX8sUWxwS80ftbJGBbsP4e3BQqElzWA6KzRWwYTONI36emOBfaUZ1oCKhdrW1uRY4wj/rfo8mdEowzKxiPerrdFekAig5Z3zYKoDrhJ/Fr8MekYn/vnUuDX5g9k5pwLvIHzrHhKb6OMUSpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773049472; c=relaxed/simple;
-	bh=d4JPYcPcD4m8y83els63OMtGXXEhLqe4LG58g5ri42c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tatFrdYZEjX+oV8xTVI20MokcLzdSAmVr9ADfR6gDZbeuXrY7iiiefyk/LrL11VVCK3GO7KRve4dwJmH9u6s3T2Y/oiyAegvDe1nyvvV3MTcrRyZR7Nxr+MqDSmrijyV8g7/F8m+iiJjBAaFW9c9VVkBHupyCObec1VI6emA28o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Gtt0DM7v; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1773050056; c=relaxed/simple;
+	bh=68O4lC98Vin61Vk35g2/k0cZz6nrw+/Eb7DGyikKBoQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=JEgEfs+Tp1Ha7RuSOJfvJ/DXavgNu7GdLKj4i0EoQ/LmP4ZS7QgAZvtmg0oV1DVZsu+26VIBYnPQ2TPP+VgZgKfmkH+PSyuNKDj5OTrAldxzYLCbxnc059lfPqqKdCNWAExDXRKM54dnE9mE+7NeEDkJ9r5+i9pvP6D9TLSu//k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mfarBoXx; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Gtt0DM7v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1773049468;
-	bh=d4JPYcPcD4m8y83els63OMtGXXEhLqe4LG58g5ri42c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gtt0DM7vJBCozWR41sfKlwfqZqNnAPl7uN3F+YGqDQfk5IFs2HL7PDDOET5l8HcWd
-	 ULccko2KzAi9SxB/98EGIPMSzfRXXaqHdDqHY53xKaQB4tHZ/RgfL9OxLQ51ujrh2v
-	 M9rUHdtpjueWG1WJsExfgVQBEy4fl+EtFFqKV2Wg=
-Date: Mon, 9 Mar 2026 10:44:27 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, kees@kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/harness: harness-selftest: cover XFAIL_ADD
- ctor ordering
-Message-ID: <cf8100c4-b746-49ce-a9d7-a89f93aa9c65@t-8ch.de>
-References: <20260309093752.808533-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mfarBoXx"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2ae3f446ccfso82312825ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 02:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773050052; x=1773654852; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pIf0vYFKMELNG2TTEBOnMZwDB9piTsTF1zoj75pjk5Y=;
+        b=mfarBoXxzLr9cwzacMVTJpjp7xdm9dvlrQ7PNJHlTDuCIqKV4evvsfFAQpQGmMJ/Gd
+         /65YWc9ChTqFJRq5WWSjTDqQ8cpJn5A9wbC25aa8nMeiOUlBn1+nNjl9NZgKt7aSm0tI
+         Tc9EBtM5gT3RRfF0Ickc556L70XG9d61bwKL1nVhr9QrjHhaLLoDc/jJjZwbxvbz69ru
+         6mCALJ00Ib7PfHGEtmCGld4w+oQG3MWexD5kKE+WtI2+MMh/JUhVZykR83lHP228+GO1
+         H4GgluuSX00cKxnHb6K3L/xwSDSU3yNs6VfQydGJZrNl+8JrX2i9uefCI2BtCY4YOrZS
+         KiRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773050052; x=1773654852;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pIf0vYFKMELNG2TTEBOnMZwDB9piTsTF1zoj75pjk5Y=;
+        b=Zh/jUNlHcheQ02lZDeaiXY1h+kxInOypZRerj9m4BE5Rp3rADpDtsr8qT3/hmMPZQc
+         xFPRO74/U4cgh5OtEOj1J2qVUZ4D/WiFR+MHOQdy+B/KefviJWjGzUPQRR/GWlinnXvj
+         GZboBkM6XzW4qNLL3dtM220sLiNnZPPdwgDaW1mf5A9Y0GemrSPPgOrmWNhpRpxPFk7d
+         S6t05bGQYKMCuid42rgAvM7F2TiUFCf1UijMyF8oc9p5CbrIM5r5FzGsOnQUy11hssOi
+         9+pJ5rXKgIwXWnNdQj4IsZ3bZrsLq2oH28wKJkd4ueJEZjQfu0HZM6cD3VB17OXRsFnQ
+         5Vag==
+X-Forwarded-Encrypted: i=1; AJvYcCVBuEFqK50w47jAvmWn4mFduKW7iKoRs7onjGcSUs1xs9RIvE/0369U2wBj2ysEODyaYDLFLA1vwl7CfGZdglI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuL14tivE1439rDjPpVrkDwGkgrdCLRzlXsli3vmwgp0MhSPcD
+	B8xe2qVU6P9n5kgfFaqKlg+lWQ3FjWDJoX8ikyYIii3hiV+NfDkc4XEylrRR777n+x6dY0oUH1O
+	qVapnTbnNaoXmZMidDZ+nbtnb9Q==
+X-Received: from plbv8.prod.google.com ([2002:a17:903:44c8:b0:2a3:1bf9:d25])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:e80b:b0:2ae:54b2:27d1 with SMTP id d9443c01a7336-2ae82467157mr111432675ad.44.1773050052185;
+ Mon, 09 Mar 2026 02:54:12 -0700 (PDT)
+Date: Mon, 09 Mar 2026 09:53:51 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260309093752.808533-1-sun.jian.kdev@gmail.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAK+YrmkC/x2MywqDMBAAf0X23KV5oC29FvyAXsVDElcNNrFkR
+ QLivzftcQZmDmBKnhge1QGJds9+jQX0pQI3mzgR+qEwKKEaoVSNU6CAvKF9r25hvGk96nqQQkk JJfokGn3+Dzt4tU/oi7SGCW0y0c2/17IHzPfmGilvcJ5fe4EsdoQAAAA=
+X-Change-Id: 20260225-gmem-st-blocks-733f35d10211
+X-Developer-Key: i=ackerleytng@google.com; a=ed25519; pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773050050; l=1868;
+ i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
+ bh=68O4lC98Vin61Vk35g2/k0cZz6nrw+/Eb7DGyikKBoQ=; b=ESwVyUWcaPjwEE0yP3Xk8C7LGm2Jq8bAYp6gfzWYbQj40hBFC3hJqHMd7GHOzniNAxF11gI5E
+ q/oaiFZvM1hCbkoIMF3gQqAFMwjT0SDV8AXTcEaNL2gvCD6adqoDxsi
+X-Mailer: b4 0.14.3
+Message-ID: <20260309-gmem-st-blocks-v3-0-815f03d9653e@google.com>
+Subject: [PATCH RFC v3 0/4] guest_memfd: Track amount of memory allocated on inode
+From: Ackerley Tng <ackerleytng@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	seanjc@google.com, rientjes@google.com, rick.p.edgecombe@intel.com, 
+	yan.y.zhao@intel.com, fvdl@google.com, jthoughton@google.com, 
+	vannapurve@google.com, shivankg@amd.com, michael.roth@amd.com, 
+	pratyush@kernel.org, pasha.tatashin@soleen.com, kalyazin@amazon.com, 
+	tabba@google.com, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi!
+Hi,
 
-On 2026-03-09 17:37:52+0800, Sun Jian wrote:
-> Add a fixture-based test with a single variant and mark it with
-> XFAIL_ADD(). The test intentionally fails and is expected to be
-> accounted as XFAIL, covering the constructor ordering dependency
-> between TEST_F() registration and XFAIL_ADD() registration.
-> 
-> Suggested-by: Thomas Weißschuh <thomas@t-8ch.de>
+Currently, guest_memfd doesn't update inode's i_blocks or i_bytes at
+all. Hence, st_blocks in the struct populated by a userspace fstat()
+call on a guest_memfd will always be 0. This patch series makes
+guest_memfd track the amount of memory allocated on an inode, which
+allows fstat() to accurately report that on requests from userspace.
 
-I used my wrong email address for this.
-Could you switch it to:
-Thomas Weißschuh <linux@weissschuh.net>
+The inode's i_blocks and i_bytes fields are updated when the folio is
+associated or disassociated from the guest_memfd inode, which are at
+allocation and truncation times respectively.
 
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
->  .../kselftest_harness/harness-selftest.c      | 23 +++++++++++++++++++
+RFC v3 uses the .invalidate_folio() callback to update accounting in inode
+fields at truncation time, and sets AS_RELEASE_ALWAYS for guest_memfd
+mappings to enable .invalidate_folio() for guest_memfd.
 
-Also update harness-selftest.expected with the new output. To verify
-that everything works, run 'make run_tests' from the test directory.
+RFC v3 series is based on kvm-x86/next.
 
->  1 file changed, 23 insertions(+)
++ RFC v2: Removed a full custom implementation of .evict_inode for
+  guest_memfd in favor of adding .unaccount_folio callback.
+  + https://lore.kernel.org/all/20260225-gmem-st-blocks-v2-0-87d7098119a9@google.com/T/
++ RFC v1: https://lore.kernel.org/all/cover.1771826352.git.ackerleytng@google.com/T/
 
-(...)
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
+Ackerley Tng (4):
+      KVM: guest_memfd: Track amount of memory allocated on inode
+      KVM: guest_memfd: Set release always on guest_memfd mappings
+      KVM: selftests: Wrap fstat() to assert success
+      KVM: selftests: Test that st_blocks is updated on allocation
+
+ tools/testing/selftests/kvm/guest_memfd_test.c     | 32 +++++++++++++++-------
+ tools/testing/selftests/kvm/include/kvm_syscalls.h |  2 ++
+ virt/kvm/guest_memfd.c                             | 15 ++++++++++
+ 3 files changed, 39 insertions(+), 10 deletions(-)
+---
+base-commit: 5128b972fb2801ad9aca54d990a75611ab5283a9
+change-id: 20260225-gmem-st-blocks-733f35d10211
+
+Best regards,
+--
+Ackerley Tng <ackerleytng@google.com>
+
