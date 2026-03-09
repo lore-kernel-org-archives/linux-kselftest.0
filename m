@@ -1,170 +1,185 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B26238C23
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 16:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773074267; cv=none; b=KBnSZvnTvKAth7sqUyNn/eKA81b+tqLuWn3YVohLSW09BXQ9XXK5VppSW7iIf6gCsmywdovxgRBkhUveahx/4CEdQRd1VM59+nNvxl/ixcVxmixyUvkgr62GuwhfAv6+NFAn+YcOVXZaGvgN9nt0kJ++jCYVyGU4hOA72vsRaw8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773074267; c=relaxed/simple;
-	bh=zAR72wDXdxq5C9PjPsyeD4QQxyEK/1hXtEl2Xpss9d0=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3E73D7D74
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 16:50:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773075034; cv=pass; b=km56M3IjcmEDlQRuAEcuRXUTB+r+3HYrCzMUyj0+zCHFyBIJ7HQGMDXe5zcnv/XfxLB1kDVptgT9pbTZ5JSrOpTkga+6c0Vj4J1fzw80i/fkjcba0L1aBu0h8aVRvJH9idnApJTxRnJ092/Nnaw/Jo5GAVC8Ja2CdJcWAXjJAHQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773075034; c=relaxed/simple;
+	bh=dElGlCWfTDUCaV3zjXVrwEshlrdMTwzM4Mn069fiLm0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BJY3XaedeTxJl78heb5gFquOpnbW+CTbdLuLK34Ns6mp+9BGT5SSk7+P237O1KpUmKjA6ovgQ1aBAhJcXI2HpTdYSw5YPf/qIazoWdsyDSHb0cUrC8dXKOxjunwlUMy1qfH/N7y71TZp8gNvtRmx6dw45QWItQ4nhUotmgwojGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=c7PVcu0/; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 To:Cc:Content-Type; b=Peu//1p6xu3KctojSddy9Iu7xTmegeglWqHR/aF6PYWD1ndUhLSBnYvvcx7cGSizgG5X6o0VXL4/UXX8xK65vtyxmG4AcbaGNCWzCazZP+LpnD82baIR332Be2s+hEsPkgcvJItslGHAgUYnof10VmxewvlgvWpI/zJDWidQ8Ik=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b=J+Xuet5h; arc=pass smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="c7PVcu0/"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b93698bb57aso593890366b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 09:37:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b="J+Xuet5h"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5a140efd2d5so3014821e87.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 09:50:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773075031; cv=none;
+        d=google.com; s=arc-20240605;
+        b=I8glOSeAfu9tLvgQE/e8rXeY+rRPbEFFDuLOgrCj8zVotlL1bFdyzyxQm1yPy+4mYP
+         Zc8VuAWEioyoUqOxI9N6VWS8jguUle/xa+e/H6PZquiNkX8Euq1m1EAvhLis54Oban3i
+         AzDjil5dVY+ZFCK5dOv5UMTT+Hg+uhJCr7W0Jy+uvO1sK0zl0ZdRFLUm72zQYrIoKBGa
+         sFKLnbfpbChyrl6XlSFJWR77scYFUn0ZmIN4Kz5zb/ailIrwee9IF1qrEOMB2xLFCRik
+         S4yI9s6hw1/onxBsvrQcr5nY2bMo9AB33Esq/AYywk/WNyWWIWCjlZNGOGsnfTXLdf2+
+         J9dA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1qXi97N/dEOi9sir8d8Z87lcT7PElOkZiITQbx2fwCc=;
+        fh=C9LEQ5K57VROQtYRp/qCOJri6Us4DN2X6D94v3Dygjc=;
+        b=dk3QWrxqfaEpT/OPaFwokqOnErq5K7kzcCAki9FwYzp4SnVO5JjMY0O+BroMohLhTc
+         8TSAt8JxG2M16CA9AC1x2H0DLzNAPuVB0d2empJwcPcI+Ysz+QI+jLIsDnX0b3suToMs
+         k2EvqYIKncH99J5hwN+ANGWUxeWiq2XQgt6shsC0aqcdgvOjlNiux9qUFjgc/hvZtrre
+         x+QWYTsgHE43L5fd3InHXqLxTHcv8C4lB0z9gWzK0hzAjCTIoEZgfd+kjrSaqhMDE+A1
+         fs7mfdnxxV5unsB8eeoXa8zJd46B0PeQTIHLfNazcTXVfAPmq+xGJ00dWUt5B+u1g6wm
+         jE0Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1773074264; x=1773679064; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5aGclf2D5Ad+FZRYNo1Igm1i3XSKWX/TJgjzbw+i9o4=;
-        b=c7PVcu0/KDh44ncc8WgM8otk/Wz39ZXNXnHffV5yYG8mRRBJGX+KhEcWutxfRWVZuG
-         86bWJI61yTeHLjyOBBbK+9L9lAk2/3O7V7ZnYfZUxShjN5DtdDz48IyouxM8FWkpbQNU
-         +GTUbyN808liIox5qb6c52OG45yK0EI0f/mFU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773074264; x=1773679064;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=amacapital-net.20230601.gappssmtp.com; s=20230601; t=1773075031; x=1773679831; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5aGclf2D5Ad+FZRYNo1Igm1i3XSKWX/TJgjzbw+i9o4=;
-        b=nF8tZj4BTBndXWbV07M3cq23UsXm+5/I/5eoog2O0YfgItbFlnjB72h5cqcJR+dxp2
-         jHnRtuMQYf387ifFWQc+ITFPxWIrBSHlCqMpjq6OiZDfjOkJ0sUjriEna9xZAVWBZL3r
-         FDTyV4Vvd551QQe/uWrVCzLne84eLEsH+2DM2q/DPvWDjhsb3FO82EdNiVERIVa9C5zz
-         f8/79Ev4M1CCGx/yTy+wwZN/FekfAQx++OR9yYrcNiWzkmPRmUPcMrvT4NS3pVnupOGl
-         9Sk7hfF0AVBmzmKzQiDSp9B0M8MyrTXUhFRqJ9J4sc1z278DBDl4eUdJ+bAuSK0Ds8F5
-         pwOA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1Vy0hI2FUFeNY1Ov8KQBKjIoDS2eqjm0DWgwfrDYCBz1A33X47yfGOYFJ6humNPK/+ftsZlVGi0QerJlsyP0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuGF/tpkna8Z84kU4kJxvxOUfhuVGVJbVZ4LMjkYh4YVKgJDgY
-	FVTeXu4tfBMemarL3bPmsniRLIw5R3NGK52wrdUBcYdziWmLPGgpkOqLVmduHq0W9lieBNn/pRA
-	/U96hddw=
-X-Gm-Gg: ATEYQzxUkuJzilWLAjIoIQS8wMj0laxM0CeQ133wLicpPxSSFIHCHspP2lWYpKrR/x3
-	k6EJ/NZeAhFwUOgcMv5Y6Z+pIrt9emtbr8E+jONf9d/iK34B7K1IwKpha3z3wm5bg+v/WvI/H0r
-	MjwBCixmkAxJSUbgVfZUxX9KSkpvpVeoIPNUEJRCJ5z8Ye0qkjRDw5HwiypboGMxKXWCQhMwSCs
-	i2gDF5utWDKTwjHA/zzX4R11LLSEYQ0+66IUYAn1FVgIn7mXOhk/Q5R8pcubiEi8MEIWg2IH2tj
-	kGa3FBIVRKWOLMGMsHeuW3t+vW9Z4gJgD39BQuFhPoRIiFx4tGYuCFOSGI8piHpggtyaHCgQTWI
-	o7ZZs4WRQIugAlRej945HpgFbOURTz1gz9DNaM5+Y7sOZRvK9N75WrMJKqHkNGdAPDwEjE9h9ZD
-	TVrIFnokOjFz8+bd5Eu6CWZ04jL1glnxHeUZHXbGNJkrQuDDovAqIgmTFiqhm5bd/GfEruCdXOs
-	gbkFv8TOcQ=
-X-Received: by 2002:a17:907:96a4:b0:b93:56a4:d6d3 with SMTP id a640c23a62f3a-b9711850f94mr15957366b.1.1773074263747;
-        Mon, 09 Mar 2026 09:37:43 -0700 (PDT)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b943cca3c0asm342742666b.34.2026.03.09.09.37.43
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Mar 2026 09:37:43 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b942b36de08so503910366b.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 09:37:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWRrThKwHrQ1kqyat23lASwIRJJdeAwFSCOTMNs+mZV31646R0gipLNMssmN4LsEoSxIwuQ4on5K3lzolgK9OI=@vger.kernel.org
-X-Received: by 2002:a17:907:3e10:b0:b96:e1de:db04 with SMTP id
- a640c23a62f3a-b9711a1fe33mr14904266b.18.1773074262570; Mon, 09 Mar 2026
- 09:37:42 -0700 (PDT)
+        bh=1qXi97N/dEOi9sir8d8Z87lcT7PElOkZiITQbx2fwCc=;
+        b=J+Xuet5hbFlie89tCjUFjzDwucKsd4NfrnrH1IlxidGOt/z+KgeLuYLA/G1tJg9YeP
+         C1CoxioVNedpRpnH3i2g1e9rvaDLyL/wWFxrMS/dadrG87skwpJ9ll0VXP5/mb7t/tVB
+         3nTver45s6YBmiBWLR4SANFDP+bIXXTcsmJ6clYmeEH7meYralZNdoAd1IxF7O6aIkco
+         lCWgnoV4P4ikTR0XyXY+GmybQCrbR7LB3OkC8+7VNevH+4CSTtWk0BvwVojn5VB4UwmR
+         IhgPtrXLc4SezqZQwBlfIP/+nK2z8AMiJCr0cknaXTC3MvGuBMz8TIpTguJCHWhMt/xS
+         SObA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773075031; x=1773679831;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1qXi97N/dEOi9sir8d8Z87lcT7PElOkZiITQbx2fwCc=;
+        b=WZJ4Lx1ROd1kL/cRfs8WROL0k4OsnflhPCeReqEtw+rTr2TGGgI7EgSsteQjetbobS
+         HrnQ8+O7i/3h8ktYiXPjQ1xnH6+kLzfGi85GD9t/id+0izqoJu+c4EsNzYo4ZdpyUZKm
+         wqEenGbiBhsSjUiKYAzSZPG0fMuSqxu4SpEUSckpnjwC/vEZygbDAdkw8Qkwx3uvCch3
+         vndchMk+IJIUY7Xrr9OIuEDVLd+WXYkvzewPakzEE3pbVmdeq5PqVKptcR4jeHtF4ug0
+         LRlM2Y2HzPRutwht5xunHPcYEY30nQSvSbbmyTCmgbNDJSVZZockMk2DKNnDG19obTFP
+         vD5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVM7jvGH7SUDWoK86TF1p00/hBBBDn1C3mtjI5hpwOdJh0+AY1L26XfjmPXhU+adrsbOS06NxosvAuGN832BO4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzj8AWVjy6O//ckxv6F5PS66oBei8KckEi6g6Go+ZN6o8KonIvk
+	u0PLJynBnt39Z9rzN+Ihsh2pWN0s3oTD1Lbpbl7TXFPXaQdEavHA0rN3swL7EPgk67n36Z2Lxs7
+	OgyRjjwefzUE+1zqe2yrT3Mus33Q7aG8tLDNjmbBv
+X-Gm-Gg: ATEYQzxogg47yqtsBEejziYtA2sBRPu97klLBIGeDroOeijkHMm9XMuqsgcclAlIEhZ
+	WOJXTUDSMDwlpxt3blv65pak3LX8aQbuoYTkjgYOAKDUUjIpBYTtAbF0WWVQNQvomNiXIcCnubD
+	2MUwjFQcJII9y9pvZZvNjR2GWpZ4MgBuc4nxAi1+ni7+SBvRgXSlPcgbuJNxhuZzqPdlmBEde7z
+	bEz6ELKy0TyNEfEyINKa2GX1sDTP2sCEqz3/MumSZaJzXFv2RLZkaVBDgDvGOFaa32PZhaCjIKD
+	xGC2Zg3/81Fkyjs=
+X-Received: by 2002:a05:6512:33c9:b0:5a1:3d7f:8fbb with SMTP id
+ 2adb3069b0e04-5a13d7f930amr3518616e87.2.1773075030208; Mon, 09 Mar 2026
+ 09:50:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com> <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org> <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
- <aa7qson15uJpL-BL@infradead.org>
-In-Reply-To: <aa7qson15uJpL-BL@infradead.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 9 Mar 2026 09:37:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
-X-Gm-Features: AaiRm52k8FmvIAxaWFSwelL44z7-IyhgZowK3grBWDh2zbSjeLnGfYwalrLVlLs
-Message-ID: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Chuck Lever <chuck.lever@oracle.com>, 
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <raemoar63@gmail.com>, Christian Loehle <christian.loehle@arm.com>
+References: <20260307140726.70219-1-dorjoychy111@gmail.com>
+ <20260307140726.70219-2-dorjoychy111@gmail.com> <CALCETrXVBA9uGEUdQPEZ2MVdxjLwwcWi5kzhOr1NdOWSSRaROw@mail.gmail.com>
+ <801cf2c42b80d486726ea0a3774e52abcb158100.camel@kernel.org>
+ <CALCETrVt7o+7JCMfTX3Vu9PANJJgR8hB5Z2THcXzam61kG9Gig@mail.gmail.com> <20260309-umsturz-herfallen-067eb2df7ec2@brauner>
+In-Reply-To: <20260309-umsturz-herfallen-067eb2df7ec2@brauner>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Mon, 9 Mar 2026 09:50:18 -0700
+X-Gm-Features: AaiRm50Rb5608a_d1ziKt7e3a5xZPZu4oB7F4zw8iu_Gm1KsPQukeeL-PdrpHz4
+Message-ID: <CALCETrWjb+V-zrMT412MtmgDCx9y8simJBQ7+45C9MtdiSMnuw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] openat2: new OPENAT2_REGULAR flag support
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jeff Layton <jlayton@kernel.org>, Dorjoy Chowdhury <dorjoychy111@gmail.com>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 9 Mar 2026 at 08:43, Christoph Hellwig <hch@infradead.org> wrote:
+On Mon, Mar 9, 2026 at 1:58=E2=80=AFAM Christian Brauner <brauner@kernel.or=
+g> wrote:
 >
-> Because it can't f&*^ up the state of random tasks.
+> On Sun, Mar 08, 2026 at 10:10:05AM -0700, Andy Lutomirski wrote:
+> > On Sun, Mar 8, 2026 at 4:40=E2=80=AFAM Jeff Layton <jlayton@kernel.org>=
+ wrote:
+> > >
+> > > On Sat, 2026-03-07 at 10:56 -0800, Andy Lutomirski wrote:
+> > > > On Sat, Mar 7, 2026 at 6:09=E2=80=AFAM Dorjoy Chowdhury <dorjoychy1=
+11@gmail.com> wrote:
+> > > > >
+> > > > > This flag indicates the path should be opened if it's a regular f=
+ile.
+> > > > > This is useful to write secure programs that want to avoid being
+> > > > > tricked into opening device nodes with special semantics while th=
+inking
+> > > > > they operate on regular files. This is a requested feature from t=
+he
+> > > > > uapi-group[1].
+> > > > >
+> > > >
+> > > > I think this needs a lot more clarification as to what "regular"
+> > > > means.  If it's literally
+> > > >
+> > > > > A corresponding error code EFTYPE has been introduced. For exampl=
+e, if
+> > > > > openat2 is called on path /dev/null with OPENAT2_REGULAR in the f=
+lag
+> > > > > param, it will return -EFTYPE. EFTYPE is already used in BSD syst=
+ems
+> > > > > like FreeBSD, macOS.
+> > > >
+> > > > I think this needs more clarification as to what "regular" means,
+> > > > since S_IFREG may not be sufficient.  The UAPI group page says:
+> > > >
+> > > > Use-Case: this would be very useful to write secure programs that w=
+ant
+> > > > to avoid being tricked into opening device nodes with special
+> > > > semantics while thinking they operate on regular files. This is
+> > > > particularly relevant as many device nodes (or even FIFOs) come wit=
+h
+> > > > blocking I/O (or even blocking open()!) by default, which is not
+> > > > expected from regular files backed by =E2=80=9Cfast=E2=80=9D disk I=
+/O. Consider
+> > > > implementation of a naive web browser which is pointed to
+> > > > file://dev/zero, not expecting an endless amount of data to read.
+> > > >
+> > > > What about procfs?  What about sysfs?  What about /proc/self/fd/17
+> > > > where that fd is a memfd?  What about files backed by non-"fast" di=
+sk
+> > > > I/O like something on a flaky USB stick or a network mount or FUSE?
+> > > >
+> > > > Are we concerned about blocking open?  (open blocks as a matter of
+> > > > course.)  Are we concerned about open having strange side effects?
+> > > > Are we concerned about write having strange side effects?  Are we
+> > > > concerned about cases where opening the file as root results in
+> > > > elevated privilege beyond merely gaining the ability to write to th=
+at
+> > > > specific path on an ordinary filesystem?
+>
+> I think this is opening up a barrage of question that I'm not sure are
+> all that useful. The ability to only open regular file isn't intended to
+> defend against hung FUSE or NFS servers or other random Linux
+> special-sauce murder-suicide file descriptor traps. For a lot of those
+> we have O_PATH which can easily function with the new extension. A lot
+> of the other special-sauce files (most anonymous inode fds) cannot even
+> be reopened via e.g., /proc.
 
-Christoph, you make no sense.
+On the flip side, /proc itself can certainly be opened.  Should
+O_REGULAR be able to open the more magical /proc and /sys files?  Are
+there any that are problematic?
 
-"do_exit()" cannot mess up random tasks. It can only exit the
-*current* task. The task that is running right now in that module.
-
-And exiting a task is about the least effed up you can do to a task
-when you are in kernel mode.
-
-Compared to everything else you can do by mistake - like just
-corrupting task state randomly - it's a very benign operation, *and*
-it is obvious both in source code and in behavior. It's not like it is
-some subtle operation.
-
-I'd be *much* more worried about actual subtle bugs, not somebody
-explicitly calling exit.
-
-So what is the actual problem? No more random rants. Explain yourself
-without making wild handwaving gestures.
-
-Now, there are real exports in this area that are actually strange and
-should be removed: for some historical reason we export 'free_task()'
-which makes no sense to me at all (but probably did at some point).
-
-Now *that* is a strange export that can mess up another task in major ways.
-
-[ Ok, I was intrigued and I went and dug into history: we used to do
-it in the oprofile driver many many moons ago. ]
-
-And since I looked at the history of this all due to that odd export,
-that also made it clear that historically we used to export
-complete_and_exit(), which was this beauty:
-
-    NORET_TYPE void complete_and_exit(struct completion *comp, long code)
-    {
-        if (comp)
-                complete(comp);
-
-        do_exit(code);
-    }
-
-so you could always do "do_exit()" by just doing
-"complete_and_exit(NULL, code)".
-
-And yes, that function was exported since at least 2003 (it was
-exported even before that, under the name 'up_and_exit()', and that's
-the point where I couldn't be bothered any more because it predates
-even the old BK history).
-
-Yes, it was indeed renamed to kthread_complete_and_exit() back in
-2021, but that wasn't due to any fundamental "it has to work only on
-kthreads". It was simply because nothing but kthreads used it - and
-because that was also the time when kthread_exit() started doing
-*extra* things over and beyond just the regular do_exit().
-
-So it was a practical thing brought on by kthread changes, not some
-kind of "exit is evil" thing.
-
-And that "ktrhead_exit() does extra things" was the actual bug that
-needed fixing and caused nasty memory corruption due to subtle lack of
-cleanup when it was bypassed.
-
-End result: we've never historically felt that exit() was somehow bad,
-and when we limited it to kthreads and made it special, it caused
-actual bugs.
-
-            Linus
+--Andy
