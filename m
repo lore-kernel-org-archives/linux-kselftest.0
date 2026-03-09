@@ -1,161 +1,191 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F8B274B39
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 05:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744CE329391
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 06:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773035694; cv=none; b=q8bHSoExjtfaR6uhzmqCHzCYF+YFO2IgGKXZ8lZScHeS0YxqH6oHOq3k6yBNCzfPKJ8QFvzPvj07bopsAvuFBSyRue5l3ISGmj+mBjhZgHUk8bttgOOoChsQdnORSU9HMEgskRzQ8p/rU5rrpNgeX5/dEIQSBoXjuNYT/+c77zU=
+	t=1773038020; cv=none; b=qAFldg7ZYD1Yqs97PqwwhyVdxz/ja/opW1rZPX9wC1ADl3Pt6qKyII0N3dd5u0H6HRbQURfJIssP4d6qU6qD4g/i74wSRxb673plrFQJrmODGQmycZGBsGRqrutETa4vmOBg1suUC/eII4150g2q/AOCGJzjuwv36uPFQDTzaKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773035694; c=relaxed/simple;
-	bh=XCl+gIHDKVKF3BHAFazsPTr3zJzg68KTuSoHcRwyrs0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JGX++W5DnZs7qvomxV4CZm3fr+lBezYKKsKEqkw1uOIJZ5vobspUS/ePJFyF2tQjbf6shMZ/eWgxFPadmGcfq/Nk32qrXfwpph/Has/Xz2zDGPGtmxRD9nMkrB6/fxFHPUUNw7DpYmLrlpKBL35EZGuqk4WAv3Gh6LRehSjmBmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=npuQ0r9Z; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773038020; c=relaxed/simple;
+	bh=+SRuM85831/PXhm1hZOO6Mg/9e8NBEVhposo32GwxOY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ppJ6QT4aMwuVxmBKBHRLn5h+YVLl4OjYilpkOmBJF9ADJGUR3bLNQRUBgomD5pRX6vks2OZ8FtcjAzXImBGLNz6v9MrLhj2YlpEQTJD7UNDXAt95pfYgs0dcwHxd0TH2Cbs/Vq1RvVrLfkvA2mAOFwTIFzsWsy/G3dLFTrpjtkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rKZiwJSX; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="npuQ0r9Z"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c7393c6832bso1282899a12.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 22:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773035692; x=1773640492; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=32NNtnzDRxNT0zlaCXiiZQWhn0QJ3pzIuoI+2GweKqc=;
-        b=npuQ0r9Z0ZQPOcBIPtFip/X+1du3ag+nP2jFJjm5c66ui8rviukW/tQ7rSgYDVRK4x
-         BO/iSQbKDICI8WgjqBQLvCaukjC0IehGoMCnt1dPVsuzh5vTHXAEAePa9N1Vx9HJLC54
-         cBogATwH5/mwLWKFk7XxFFZa9gzj9iN+ZR8OttfaseIkDnSLvCBN1L1jQginitnTRdYW
-         hQilOGIMTEDrqd7R9oEOdOrzzN03f4jRjXJtpU9sWvKKKCdaqgZQonbwglg9XiIv/0bA
-         7HAJXpJLAOCI4cQOBez9lnRhyjl5D2qsiKRBDEpiXZ8Po+yoiA5WOy43xHy/lVdT4pww
-         aO0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773035692; x=1773640492;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=32NNtnzDRxNT0zlaCXiiZQWhn0QJ3pzIuoI+2GweKqc=;
-        b=WEngt61TD/R0OBUcdeaW3U4Y+3pDg4QJPzMasj4G4Yjcr3k9CYZMpEq/jxa3J/+POf
-         xS/Dn6OGAgCJDtMdHqmwMdF74ANxqKtwCx8SwsEqOq7L/dfutwH7AZJV/hziVFMoQhI9
-         qrNX/ycDUiEJ/6tKIYkxzIydqq+zhEt4ygMrqLP/ilKio4iJUbjmAkFzVeVFgnKEEIVD
-         xCdhNqwlIiv9kWwQMDY4pwTxDaww3jnsjUcUTozUcIlbtR93rLDrw7jISDGPps6q2vYJ
-         uIztwTLSyckErve44V+NvwowLmOoe3941o72dwJtoKVYojmXYdXQ2BIK7eEV6PeWqhQs
-         thcw==
-X-Forwarded-Encrypted: i=1; AJvYcCWtnVjXUghBiD7CDoXtXwOFVdyL8dapSMwZ2ge9deAWufMgpJJSbwSJd2olZKIW6leevXBMHoeDp7oRwT7OaJU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzISLDIcpl5DEkzxFQbCWoPu/bg4YETPOQK99qeF0oce0skOnW5
-	5njN8O/ZWyCFCiiIrCxA++frmNoei1ZAdIVlXGJDKh2ilqkDPg88r93f
-X-Gm-Gg: ATEYQzz1LtOLQ7otCbu7MItRZWC1Q+V3cGhkbxq3kIbmIOPajzNglBzf9kiAd7M4cJ/
-	v+tZhUMP9DAA7bWzXoy6DBdxHP8dAV9ch9SEWBJgnoLguTLxx3033iWaXoaOM4Zth3TEqrW1/Uf
-	Vive1f/1D74+IOn2uCwkCm+22BWQyWQyPVNchYh3GgU5u2L629RZDsrROxmShP7tYJa/IAhkJzn
-	3JC3OutFhZ7iJGslH5tX/4gZdRk/J/DXjNr1PDsh1Cx7l/p5PZhWI1l/fjz3gVJ2HGjW8Gvp70x
-	wJP469hv9tQ59KDb2r1W3rPH+nmnpw8tRTjXc0xwiEPLT2TfX9jklSs6mYWKFrCqtF/hxOBQ2CK
-	S42z0cpqpSi5V11kO2lgzBbYLwuadJ7rkLrMxmJ1WIWFvLFLfSaHHKkirHT6oydIFtJJL9T9Nta
-	g29M1N4lo/SSODQzxWnbhKvo6qzG9f7qEV1ZzsExqqrB04O1OJqFgsclCIaaSC
-X-Received: by 2002:a05:6a20:1449:b0:35b:b508:b99f with SMTP id adf61e73a8af0-39858fb2c45mr8981210637.1.1773035692584;
-        Sun, 08 Mar 2026 22:54:52 -0700 (PDT)
-Received: from zenbook ([159.196.5.243])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c739e170923sm7933716a12.17.2026.03.08.22.54.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Mar 2026 22:54:52 -0700 (PDT)
-From: Wilfred Mallawa <wilfred.opensource@gmail.com>
-To: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Alistair Francis <alistair.francis@wdc.com>,
-	Damien Le'Moal <dlemoal@kernel.org>,
-	Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Subject: [RFC net-next 3/3] selftest: tls: add tls record zero pad test
-Date: Mon,  9 Mar 2026 15:48:38 +1000
-Message-ID: <20260309054837.2299732-5-wilfred.opensource@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
-References: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rKZiwJSX"
+Message-ID: <8f97dbb5-de94-4ac0-8b3c-e0ce890fffc3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773038016;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PNjq9OVMQ19n1uQjgdtdpJMa6SfrLwmBjiIgVYkqJoc=;
+	b=rKZiwJSX42aiS6fua1F44LKsc/dseamHL85FtfwXZ3PuTPltCFIf8kn0I9A4D2F8L8mWys
+	aNMtQAB/p4PliaFgZ5U6KBGsUVV2Trny2BhvZWd1z7rVX9yej9cp43eUWGPKBre8bXyfo9
+	IPBCrScYIsO5yD1FyteVkyZ/7NvgSWU=
+Date: Mon, 9 Mar 2026 14:33:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v7 1/5] bpf: Introduce the bpf_list_del kfunc.
+Content-Language: en-US
+To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260308134614.29711-1-pilgrimtao@gmail.com>
+ <20260308134614.29711-2-pilgrimtao@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260308134614.29711-2-pilgrimtao@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+On 8/3/26 21:46, Chengkaitao wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> 
+> If a user holds ownership of a node in the middle of a list, they
+> can directly remove it from the list without strictly adhering to
+> deletion rules from the head or tail.
+> 
+> We have added an additional parameter bpf_list_head *head to
+> bpf_list_del, as the verifier requires the head parameter to
+> check whether the lock is being held.
+> 
+> This is typically paired with bpf_refcount. After calling
+> bpf_list_del, it is generally necessary to drop the reference to
+> the list node twice to prevent reference count leaks.
+> 
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
+>  kernel/bpf/helpers.c  | 30 +++++++++++++++++++++++-------
+>  kernel/bpf/verifier.c |  6 +++++-
+>  2 files changed, 28 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6eb6c82ed2ee..01b74c4ac00d 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2426,20 +2426,23 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
+>  	return __bpf_list_add(n, head, true, meta ? meta->record : NULL, off);
+>  }
+>  
+> -static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tail)
+> +static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
+> +					    struct list_head *n)
+>  {
+> -	struct list_head *n, *h = (void *)head;
+> +	struct list_head *h = (void *)head;
+>  	struct bpf_list_node_kern *node;
+>  
+>  	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+>  	 * called on its fields, so init here
+>  	 */
+> -	if (unlikely(!h->next))
+> +	if (unlikely(!h->next)) {
+>  		INIT_LIST_HEAD(h);
+> -	if (list_empty(h))
+> +		return NULL;
+> +	}
+> +
+> +	if (n == h)
+>  		return NULL;
+>  
+> -	n = tail ? h->prev : h->next;
+>  	node = container_of(n, struct bpf_list_node_kern, list_head);
+>  	if (WARN_ON_ONCE(READ_ONCE(node->owner) != head))
+>  		return NULL;
 
-Enable record zero padding using the TLS_TX_RANDOM_PAD socket option for
-a TLS1.3 connection. This only tests the setsockopt()/getsockopt()
-invocations as padding is processed in the kernel.
+This refactoring is worth, because the "struct list_head *n" seems
+better than "bool tail".
 
-Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
----
- tools/testing/selftests/net/tls.c | 45 +++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+But, such refactoring should be a preparatory patch. Importantly,
+refactoring should not introduce functional changes.
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 9e2ccea13d70..a72ba8607ead 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -2997,6 +2997,51 @@ TEST(tls_12_tx_max_payload_len_open_rec)
- 	close(fd);
- }
- 
-+TEST(tls_13_tx_record_zero_padding)
-+{
-+	struct tls_crypto_info_keys tls13;
-+	char const *tx = "how much wood could a woodchuck chuck";
-+	int tx_len = strlen(tx) + 1;
-+	__u8 rx[4096];
-+	__u16 opt, zpad = 2048;
-+	unsigned int optlen = sizeof(opt);
-+	bool notls;
-+	int ret, tx_fd, rx_fd;
-+
-+	tls_crypto_info_init(TLS_1_3_VERSION, TLS_CIPHER_AES_GCM_128,
-+			     &tls13, 1);
-+
-+	ulp_sock_pair(_metadata, &rx_fd, &tx_fd, &notls);
-+	if (notls)
-+		exit(KSFT_SKIP);
-+
-+	/* Setup Keys */
-+	ret = setsockopt(tx_fd, SOL_TLS, TLS_TX, &tls13, tls13.len);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = setsockopt(rx_fd, SOL_TLS, TLS_RX, &tls13, tls13.len);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = setsockopt(tx_fd, SOL_TLS, TLS_TX_RANDOM_PAD, &zpad,
-+			 sizeof(zpad));
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = getsockopt(tx_fd, SOL_TLS, TLS_TX_RANDOM_PAD, &opt, &optlen);
-+	EXPECT_EQ(ret, 0);
-+	EXPECT_EQ(zpad, opt);
-+	EXPECT_EQ(optlen, sizeof(zpad));
-+
-+	ASSERT_EQ(send(tx_fd, tx, tx_len, MSG_EOR), tx_len);
-+	close(tx_fd);
-+
-+	ret = recv(rx_fd, rx, sizeof(rx), 0);
-+	ASSERT_GE(ret, 0);
-+	ASSERT_LE(tx_len, ret);
-+	EXPECT_EQ(memcmp(rx, tx, tx_len), 0);
-+
-+	close(rx_fd);
-+}
-+
- TEST(non_established) {
- 	struct tls12_crypto_info_aes_gcm_256 tls12;
- 	struct sockaddr_in addr;
--- 
-2.53.0
+Thanks,
+Leon
+
+> @@ -2451,12 +2454,24 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tai
+>  
+>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
+>  {
+> -	return __bpf_list_del(head, false);
+> +	struct list_head *h = (void *)head;
+> +
+> +	return __bpf_list_del(head, h->next);
+>  }
+>  
+>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+>  {
+> -	return __bpf_list_del(head, true);
+> +	struct list_head *h = (void *)head;
+> +
+> +	return __bpf_list_del(head, h->prev);
+> +}
+> +
+> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
+> +					       struct bpf_list_node *node)
+> +{
+> +	struct bpf_list_node_kern *kn = (void *)node;
+> +
+> +	return __bpf_list_del(head, &kn->list_head);
+>  }
+>  
+>  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
+> @@ -4545,6 +4560,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 67c09b43a497..c9557d3fb8dd 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12461,6 +12461,7 @@ enum special_kfunc_type {
+>  	KF_bpf_list_push_back_impl,
+>  	KF_bpf_list_pop_front,
+>  	KF_bpf_list_pop_back,
+> +	KF_bpf_list_del,
+>  	KF_bpf_list_front,
+>  	KF_bpf_list_back,
+>  	KF_bpf_cast_to_kern_ctx,
+> @@ -12521,6 +12522,7 @@ BTF_ID(func, bpf_list_push_front_impl)
+>  BTF_ID(func, bpf_list_push_back_impl)
+>  BTF_ID(func, bpf_list_pop_front)
+>  BTF_ID(func, bpf_list_pop_back)
+> +BTF_ID(func, bpf_list_del)
+>  BTF_ID(func, bpf_list_front)
+>  BTF_ID(func, bpf_list_back)
+>  BTF_ID(func, bpf_cast_to_kern_ctx)
+> @@ -12996,6 +12998,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
+>  	       btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
+> +	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
+>  	       btf_id == special_kfunc_list[KF_bpf_list_back];
+>  }
+> @@ -13118,7 +13121,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+>  	switch (node_field_type) {
+>  	case BPF_LIST_NODE:
+>  		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> -		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl]);
+> +		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> +		       kfunc_btf_id == special_kfunc_list[KF_bpf_list_del]);
+>  		break;
+>  	case BPF_RB_NODE:
+>  		ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
 
