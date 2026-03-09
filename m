@@ -1,78 +1,170 @@
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC74E155326;
-	Mon,  9 Mar 2026 03:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CD3270545
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 03:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773025763; cv=none; b=OCU5E/mKc29/u2Jlxw1jgMa4y8T3YDoCiGgAJG89FensU7jAy0Sg4D/4YbpZJfGM/svcofbpLo2ZohUOZj9dXVIE587DqHYPkLpGhzd0TKBih1YCVSTW3iOQ5fJr21A7icx98fOUbAMBO0Y5RcNQIRk4JXswY4efwvPXOAm94uM=
+	t=1773027453; cv=none; b=m2iSG/eebodpuXp4jMXXT3ptoMwG90FpRNPwehN24wPh3EnUg7x/BWZPjpHhZn1sg0kswHkU78nN3y3U1Ii5qJpDlrFM1DXVrln7iaIg3jPh9FtT7L7iBSqgkgQdYa4i/NiKizz57bzWuHSy4Ht517mK42ZmNXAB5I6Ngq6eBTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773025763; c=relaxed/simple;
-	bh=Q2Nz1BcH9RRBF4iLhizJsfmvc3qmnQkniODIUYFP/lw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Nt6/IiSzs9nNVtYYWrhtHMlHkwFSuk8xmTOkzlgGRIb+od3/CxNc1ecOB18qP0ZHe1ZjI5+R2eYYy4Xlg7MU5539tBI/A4oVTgi7tN64Amlg1y7T6l/oHlYHEEz1ioXSCvQ0ZjmYZph8yunCtYk+uYX/EG3oRwUe4cZ2E8oJIwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FpqhkGeb; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1773027453; c=relaxed/simple;
+	bh=nwFTga/392ZpBEUmDyM2fA8sFXdfCsdAuHr9LVqUiAA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DRNN7mcg+V9qjNOEb+ii0RHIcaWDFBl4MgA61sLpzIpLxjHtA1w70Kx3tpHsRcHHK8h14lICj42XbREi3myfs+crlJRyq8/XQBNjUKA9Z6E6eClN9rREmlauBotJ2S/fjsfp09ef8/gUUoyTj1pdkstM55UGct+r6ocrIIelvwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RLNRwKwX; arc=none smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FpqhkGeb"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=hYBQRZKTwAHpVXpWwCMVZ60fQaeOHonHGB4Ho9yspok=;
-	b=FpqhkGebl6Ta9ZzWHJ1Ut0a29QzU7GMLIqi7Aev4zKx+kn6q2fuTcJCnmj+t5GAeO+DwcY9sX
-	Ye7uTe8vtbhv1FjZQWSFCNK0PzXtcwSvVapJmWHchWG7awX/1TWzUkK5vks534l6Inv4iSeu8zm
-	eYtjdEMDNZ8p5Ikd3eR/9A8=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4fThgS4c1Sz1K984;
-	Mon,  9 Mar 2026 11:04:20 +0800 (CST)
-Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3C81140363;
-	Mon,  9 Mar 2026 11:09:12 +0800 (CST)
-Received: from [10.67.120.222] (10.67.120.222) by
- kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 9 Mar 2026 11:09:11 +0800
-Message-ID: <c52f984c-9df8-4eb7-967c-33a605740e84@huawei.com>
-Date: Mon, 9 Mar 2026 11:09:10 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RLNRwKwX"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-128d2e3074fso988196c88.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 20:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773027451; x=1773632251; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lTdaOcT/DU4oMcYTLNfdDr6SytuHIB8obzd/B98sqrw=;
+        b=RLNRwKwXzsaFJKcm6yWIcY01wrf+cTHJ8GaGFx0xvoS2gZnquhwxpmnz9r6yXXjION
+         OAjLHtRVhurJsLWfjqLgUBiy2AJisseu/S/UCLGo2ITGPfB8xQAtYd9+6ESoAAQCE+y8
+         hZ+24qxeHiB9c31TOSMINAq6U3I8zck0qeTa28JjiGgKaXCw+Av5pUIcAib704sTwGEG
+         xxpn5qp8l6SKcWg2oqDWGFf0Fae5KoS6ZucyvDTjGA8pMeJG3w7JpnUbN4PQQBEvlMpy
+         kCzbEHMwDHumQIbpXPmQyj1eYCHdO/CPP/CvtJSETRnADm+HRWV8Czv/1Qt8KCUGyGG5
+         UjGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773027451; x=1773632251;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lTdaOcT/DU4oMcYTLNfdDr6SytuHIB8obzd/B98sqrw=;
+        b=pDKg4L3wOJ2O0B2dNeIQa+orb+xDjnyjUaRsQ5E6sypdonxPGxDewsplb1JLPV1RFQ
+         VS8V1c/RZqjwRNWPQ6di6Rfu2FX1zt/6Lk9KXkQe8NTftgV9MIHQ4sMdi9gbBu6M75sL
+         RM9mAp3O7Bl6e45fDbYzIY2jof6TnJPgonce148e33V4vowV3PMhLWT5bGotxQRdoYwk
+         F/exrIiFh7mOK5CJw70VT0mu7pQsn7T9BBGIcyMm010+m3SlP/INgdE1oEKtphC4Vnzw
+         LwjSL6OktY0i861t1sbzzr1gTOUu+cB6IKj9Rwi1qJ4dvvUmWj0Dy2cRqp5RFjWrzmml
+         JghA==
+X-Forwarded-Encrypted: i=1; AJvYcCWxhym9bmchZHhRpPLF/IYk4WydUyGsi1ULcgyQoe+l0oSD5tMlFBUewrmp09UDYErl21VKfczFYnPx3p2k4wE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIsGh8V05C56D0OP2rgvn+dyTfiH+QqZ/O4bQZKYvLcI05I3TO
+	cVS3eyPRmijPhXgCzejHtZUq+sHuHQwaQc871xV9vM9EunpFTH80DPKN
+X-Gm-Gg: ATEYQzyriN/pbqdpTzN4dvj7x2gtGxvNJr9XohxdHNJ//C7XHy/MQr0069gs+IWUv7T
+	kEkfS2CkT7B+26LvG41mqg8G0ycspu5kvggJzVVbK619BE+hNAlo/pN8J08aDilHEcns9A81RXW
+	XjAQuHVIe2JB5fMCdZqAI5Kh7fyIrqVcb2wNyTnAFOhFemA+iIBqM2QoaS8cQG91ESDC3F9GVJ9
+	n44RGu7eDs2a8UDzoDuhxEigSAIICMY0LyMNTyrZIiRD5XFjimwqbdx6vqATGzjUEd794yQV+Ix
+	MLcAKkpa8sJSL9TxMZIZ7pLL7QPf75uwDF1NEEOfka47kLmKRVc0ClSWiQNe8ZE6/c93E4y/nNa
+	a8YuQlagNcBjowl6QEJksJljX4mHyJkAsUauwTqaWy/jwpt9sK3asmNmENGoiGi4eD6oVk+uRBV
+	5tYCQulAOk0LeF0FPp6CYy0ShH4631z6a72dkNLsjz8QB3czT70yV/329y5qipckKBVMFxpgpLw
+	zUU7vtOcgT7EKmU3bTp0P11pMk=
+X-Received: by 2002:a05:7022:160b:b0:11b:82b8:40ae with SMTP id a92af1059eb24-128c2df15f8mr4769534c88.18.1773027450995;
+        Sun, 08 Mar 2026 20:37:30 -0700 (PDT)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128d8ee3503sm1074922c88.0.2026.03.08.20.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Mar 2026 20:37:30 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-kselftest@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH v3 bpf-next] selftests/bpf: livepatch_trampoline: skip when prerequisites are missing
+Date: Mon,  9 Mar 2026 11:37:12 +0800
+Message-ID: <20260309033712.728133-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC patch 0/9] Add support for HiSilicon platforms and refactor
-To: Jonathan Cameron <jonathan.cameron@huawei.com>
-CC: <tony.luck@intel.com>, <reinette.chatre@intel.com>, <Dave.Martin@arm.com>,
-	<james.morse@arm.com>, <babu.moger@amd.com>, <shuah@kernel.org>,
-	<tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>, <ben.horgan@arm.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>,
-	<xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
-	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
-	<wangzhou1@hisilicon.com>
-References: <20260304040334.765860-1-wuyifan50@huawei.com>
- <20260306104510.0000437b@huawei.com>
-From: wuyifan <wuyifan50@huawei.com>
-In-Reply-To: <20260306104510.0000437b@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemk500005.china.huawei.com (7.202.194.90)
+Content-Transfer-Encoding: 8bit
 
-Hi Jonathan,
+livepatch_trampoline relies on livepatch sysfs and livepatch-sample.ko.
+When CONFIG_LIVEPATCH is disabled or the samples module isn't built, the
+test fails with ENOENT and causes false failures in minimal CI configs.
 
-On 3/6/2026 6:45 PM, Jonathan Cameron wrote:
-> On Wed, 4 Mar 2026 12:03:25 +0800
-> Yifan Wu<wuyifan50@huawei.com> wrote:
->
-> For v2 onwards Make sure the cover letter title includes
-> selftests/resctl as with the patches.
-> People use that title to decide if they want to open the thread
-> so it may be all they ever see.
-Thanks for the suggestion. I will fix and resend it. Looking forward to 
-your review and comments.
+Skip the test when livepatch sysfs or the sample module is unavailable.
+Also avoid writing to livepatch sysfs when it's not present.
 
-Regards,
-Yifan Wu
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+
+v3:
+  - Skip on -ENOENT from load_livepatch() instead of duplicating module path logic (suggested by Jiri Olsa)
+  - Tested: ./test_progs -t livepatch_trampoline (SKIP when livepatch-sample.ko missing)
+
+v2:
+  - Skip when /sys/kernel/livepatch is missing
+  - Guard sysfs write in unload_livepatch() when enabled knob is absent
+
+v2: https://patchwork.kernel.org/project/netdevbpf/patch/20260305030258.5273-1-sun.jian.kdev@gmail.com/
+v1: https://patchew.org/linux/20260227042354.20926-1-sun.jian.kdev@gmail.com/
+
+ .../bpf/prog_tests/livepatch_trampoline.c     | 22 +++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
+index 72aa5376c30e..b306a4070513 100644
+--- a/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
++++ b/tools/testing/selftests/bpf/prog_tests/livepatch_trampoline.c
+@@ -2,9 +2,13 @@
+ /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+ 
+ #include <test_progs.h>
++#include <errno.h>
++#include <unistd.h>
+ #include "testing_helpers.h"
+ #include "livepatch_trampoline.skel.h"
+ 
++#define LIVEPATCH_ENABLED_PATH "/sys/kernel/livepatch/livepatch_sample/enabled"
++
+ static int load_livepatch(void)
+ {
+ 	char path[4096];
+@@ -19,7 +23,8 @@ static int load_livepatch(void)
+ static void unload_livepatch(void)
+ {
+ 	/* Disable the livepatch before unloading the module */
+-	system("echo 0 > /sys/kernel/livepatch/livepatch_sample/enabled");
++	if (!access(LIVEPATCH_ENABLED_PATH, F_OK))
++		system("echo 0 > " LIVEPATCH_ENABLED_PATH);
+ 
+ 	unload_module("livepatch_sample", env_verbosity > VERBOSE_NONE);
+ }
+@@ -81,9 +86,22 @@ static void __test_livepatch_trampoline(bool fexit_first)
+ void test_livepatch_trampoline(void)
+ {
+ 	int retry_cnt = 0;
++	int err;
++
++	/* Skip if kernel was built without CONFIG_LIVEPATCH */
++	if (access("/sys/kernel/livepatch", F_OK)) {
++		test__skip();
++		return;
++	}
+ 
+ retry:
+-	if (load_livepatch()) {
++	err = load_livepatch();
++	if (err) {
++		if (err == -ENOENT) {
++			test__skip();
++			return;
++		}
++
+ 		if (retry_cnt) {
+ 			ASSERT_OK(1, "load_livepatch");
+ 			goto out;
+
+base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
+-- 
+2.43.0
+
