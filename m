@@ -1,151 +1,114 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E70833262C
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Mar 2026 23:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3D0F9C0
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 02:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773013236; cv=none; b=ksZgiBnK+6dfYSO9AHpHTXtS7lwu6RkicoRfYPor0DaeAcCzWf80QXdFJJooQz+68++LGa4npDz9Munc4HTU26jJ7/VCzDOIBRJI+36winTX7nVBbwMWq5rcAxYRVzF8Mk5F9DkOa8ZZZx1S48dblSUtSJwWmj9RMF3MkpfcFYg=
+	t=1773023314; cv=none; b=L9Uc7QEarezCUTXtoqhuu1piRbLL17ytA+gFMw5V67IAmWoq1YZwpNsUF2P1T3uqk201z6T/uAbng8lI9fT50axRbvzmugj8u2MrCbnW1eIWZ/YM1XvaX4FcAkWp9Y2bKJRPDqSvFNV0cxLQI2sFLhYZBBaF2VCNh28BZZWJIHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773013236; c=relaxed/simple;
-	bh=yHmjbSxLlmagRV4Rpas/2hJ6hscNtLqp58PWZhzkyZc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Ky85bmAQsOWD2HY/hwrDzzmin820Qqhm4Syhe3SAaj1w9eszGKZrvvYtYUoYnoAT2Tyw6ZkzyjqpbUMRdDtsR4Jwfy68Z4VL9wFTUcxXo8fyUGRaiUUC8spTWtu2IOUJr7MGvTppunRI5D/v8v57ralgtLRPh9TsekiPf7UyVyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=acWJFGzK; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773023314; c=relaxed/simple;
+	bh=0PnHXD/eeR2S7L31MiPzD6lKHnVR5jRoYM2/It/mKp4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A2zTW5GL0j5FSqoad1F0qES5xEnhw21xH3usAcHWs8IZTWEDWwkzX+T+C+XuGkUjKYfTUsbmqjkWvObrF65pZa9Xh1pSYuldeZvXOEKeIMmmilk3b7AdEQH6kRCpwL7TvcBdSvDXJhgHUXQHAXlYuaG5yXs0u01MdV1ZLyTW45A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+nJB2cC; arc=none smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="acWJFGzK"
-Message-ID: <45947149-36ef-41f2-8ad0-aa3519344ce0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773013233;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oDEjrYDaUt6nPRjGxJ3slajXGASGQDlUUZONcSEfmb8=;
-	b=acWJFGzKk0Zz18oMK7vqF9CI+KfBZC1/7iYUAf5+277FsFM2hLanpO1xRptqLAAodsOkKq
-	+AfZa+rgsXhmC1MZU9y8A2vmFPZHkICuQ9UxH1brVXjRbnrLCDcQwaJ7i5ebdNg1AQwAsb
-	scYd9XVPRnqrzjfgy2VP2IzrmFspZYM=
-Date: Sun, 8 Mar 2026 16:40:26 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+nJB2cC"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1279eced0b9so10086927c88.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 19:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773023312; x=1773628112; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ps1Hfv9yWFYK/K2noVGj+dmwqc5tyuYyDUSGFJyxTPQ=;
+        b=f+nJB2cCym1+ND8xUO2mrmtxcHy4ZhGBuzpCLNKQH7mXJn/X3B0RNAMWbWfOFbbH/7
+         hTaK/ej2XrpfF7MBICDhvW4m8dgsN+E1mOkSSkxeu/RrL/amLzE9psRnCnV3DLyU7sC4
+         DKk4U6KjxetnqKFAje08SFicMeURkK3eeKBLNx+DY8oU5sO+0GKmXnztPBa+HkcTA/Wb
+         tAnyf3TxKZD3xOeiPjrzY05DO9hNMhbPcjU5YPWO+GgiSBcLZpQsHWhPj1UoICpi1K7W
+         0Qcu1s2b52qLTApF03b2g/XEYWknIGjw72xytGBYHSx6ZDa8NesgVXcRauwRAJYmrBLB
+         I9ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773023312; x=1773628112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ps1Hfv9yWFYK/K2noVGj+dmwqc5tyuYyDUSGFJyxTPQ=;
+        b=eOUontimK2623U1kSKqmyPk/6p8h2ixF2B9f6Fz5AL1kefSt8tlZO/K1LmX7AtClod
+         7Z9xXc1Eo+QRQHa0wBc9eKFEOx366tsaLjisauR18ploIYq6F4WYaluRn1mYKtY29sNN
+         0RlK8BCEya/7Af2Sb2+hx+q//lEvJbosryz0XkTdQKtKWDRFC4zNLxfvDz62uGHFzf9z
+         k3FI0ewQHnHfPhCe3F/lUo6HrcH5RS1ZMMjK0amRo+8tq7NgOaZKdjOstwWRNJ9Ke4Gk
+         4l8DDDtWpatZ85mj5aoWqTw6RVF6PiSbYGs44++NuOOtuAwnHN8b/fkcPobx8xrBLqME
+         ViaA==
+X-Forwarded-Encrypted: i=1; AJvYcCV1kWxlPRtG9CtEbZPmPCukCHx0jegilW/1+flWRP8eYz5E2GESETX3nbuo4P/ft2CQrNH323UIcP0QNQ9thOo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsFK4Ri3HzsB5C3zWo2V0PqxwQn+BF6d8xs2s+PA3aBIkN+0cR
+	Y6QNtl/SvNccUwNI6DK9YvfF/uL0kJw+UwXS+Fhp67Yo1ry0ZklVtlE8
+X-Gm-Gg: ATEYQzwU1B1PIO+IEfuItgPraomvS/qM+gFEk+KUpiJQQc1WmjcTGMwjTN9/0mGEYSN
+	gSTXdr0YXxax97iWWr9zVSn4Y7ZsNYw0KuTWizcORRiB7K+MXENR+CDGsNaOW3bieXiX/ksUvTQ
+	9J5SUVzRG/LNuQMmClRyEdfxzHMd3Ig8Y/4Av5o6tud6YeR31UfVQzYEyiY+gSxzMyqM9z/GuOC
+	aE0MynVSLr3piWULEWf0Jpbemr2KvO7K/E3hwZn0LEx8+qgCiYthFdTln0MkLt0Irpngeq8FiM5
+	Ak/3YFic+iYuJk3+tZ4WH2fK/KcBVpPlZx/r8xabvTzSUfSpJfFaj8iyIqlps4tYNHJxDrefFQL
+	HEXhNNwN/RDgwOnwoMt7vfQpUNRm3Rl5qIkP80MWkHzUhVKEPsy7ByZLID6qddeRBFaxDz/wj3p
+	suyd1jV4ayNlCxogJpcR5tlo3eDlRWImh+Plk=
+X-Received: by 2002:a05:7022:4186:b0:128:d5bd:3572 with SMTP id a92af1059eb24-128d5bd39b3mr713023c88.31.1773023311637;
+        Sun, 08 Mar 2026 19:28:31 -0700 (PDT)
+Received: from localhost.localdomain ([104.28.165.128])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128c3d5a85dsm6728418c88.3.2026.03.08.19.28.25
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 08 Mar 2026 19:28:31 -0700 (PDT)
+From: wang lian <lianux.mm@gmail.com>
+To: sj@kernel.org
+Cc: Liam.Howlett@oracle.com,
+	akpm@linux-foundation.org,
+	brendan.higgins@linux.dev,
+	corbet@lwn.net,
+	damon@lists.linux.dev,
+	david@kernel.org,
+	davidgow@google.com,
+	kunit-dev@googlegroups.com,
+	lianux.mm@gmail.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	skhan@linuxfoundation.org,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH 0/7] mm/damon: improve/fixup/update ratio calculation, test and documentation
+Date: Mon,  9 Mar 2026 10:27:59 +0800
+Message-ID: <20260309022759.9010-1-lianux.mm@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260307195356.203753-1-sj@kernel.org>
+References: <20260307195356.203753-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 0/4] RDMA/rxe: Add the support that rxe can work in net
- namespace
-To: jgg@ziepe.ca, leon@kernel.org, zyjzyj2000@gmail.com, dsahern@kernel.org,
- linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
- "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
-References: <20260308233540.13382-1-yanjun.zhu@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260308233540.13382-1-yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+> Yet another batch of misc/minor improvements and fixups.  Use
+> mult_frac() instead of the worse open-coding for rate calculations
+> (patch 1).  Add a test for a previously found and fixed bug (patch 2).
+> Improve and update comments and documentations for easier code review
+> and up-to-date information (patches 3-6).  Finally, fix an obvious typo
+> (patch 7).
 
-在 2026/3/8 16:35, Zhu Yanjun 写道:
-> Currently rxe does not work correctly in network namespaces.
->
-> When the rdma_rxe module is loaded, a UDP socket listening on port
-> 4791 is created in init_net. When users run:
->
->      ip link add ... type rxe
->
-> inside another network namespace, the RXE RDMA link is created but it
-> cannot function properly because the underlying UDP socket belongs to
-> init_net. Other network namespaces cannot use that socket.
->
-> To address this issue, this series introduces net namespace support
-> for rxe and moves socket management to be per network namespace.
->
-> The series first introduces per-net namespace management for the IPv4
-> and IPv6 sockets used by rxe. The sockets are created when the network
-> namespace becomes active and are released when the namespace is
-> destroyed.
->
-> Based on this infrastructure, rxe RDMA links are then created and
-> destroyed within each network namespace. This ensures that both the
-> UDP sockets and RDMA links are correctly scoped to the namespace in
-> which they are used.
->
-> With these changes, rxe RDMA links can be created and used both in
-> init_net and in other network namespaces, and resources are properly
-> cleaned up during namespace teardown.
->
-> The series also includes a selftest to verify RXE functionality in
-> network namespaces.
+Hi SeongJae,
 
-The selftest result is as below:
+Thanks for the patches and the CC!
 
-"
-# make -C tools/testing/selftests/ TARGETS=rdma run_tests
-make: Entering directory '/root/Development/linux/tools/testing/selftests'
-make[1]: Nothing to be done for 'all'.
-TAP version 13
-1..4
-# timeout set to 45
-# selftests: rdma: rxe_rping_between_netns.sh
-# server DISCONNECT EVENT...
-# wait for RDMA_READ_ADV state 10
-ok 1 selftests: rdma: rxe_rping_between_netns.sh
-# timeout set to 45
-# selftests: rdma: rxe_ipv6.sh
-ok 2 selftests: rdma: rxe_ipv6.sh
-# timeout set to 45
-# selftests: rdma: rxe_socket_with_netns.sh
-ok 3 selftests: rdma: rxe_socket_with_netns.sh
-# timeout set to 45
-# selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-make: Leaving directory '/root/Development/linux/tools/testing/selftests'
-"
+I've reviewed the entire series and conducted functional testing on my arm64 environment (native VM). 
+All 28 KUnit tests passed successfully, including
+the newly added damon_test_is_last_region.
 
-Zhu Yanjun
-
->
-> V3 -> V4: Squash all the changes about rxe_ns.c/h into one commit.
-> V2 -> V3: Fix build warnings
-> V1 -> V2: Fix the problems based on David Ahern.
->
->
-> Zhu Yanjun (4):
->    RDMA/nldev: Add dellink function pointer
->    RDMA/rxe: Add net namespace support for IPv4/IPv6 sockets
->    RDMA/rxe: Support RDMA link creation and destruction per net namespace
->    RDMA/rxe: Add testcase for net namespace rxe
->
->   MAINTAINERS                                   |   1 +
->   drivers/infiniband/core/nldev.c               |   6 +
->   drivers/infiniband/sw/rxe/Makefile            |   3 +-
->   drivers/infiniband/sw/rxe/rxe.c               |  38 ++++-
->   drivers/infiniband/sw/rxe/rxe_net.c           | 145 +++++++++++++-----
->   drivers/infiniband/sw/rxe/rxe_net.h           |   9 +-
->   drivers/infiniband/sw/rxe/rxe_ns.c            | 136 ++++++++++++++++
->   drivers/infiniband/sw/rxe/rxe_ns.h            |  17 ++
->   include/rdma/rdma_netlink.h                   |   2 +
->   tools/testing/selftests/Makefile              |   1 +
->   tools/testing/selftests/rdma/Makefile         |   7 +
->   tools/testing/selftests/rdma/config           |   3 +
->   tools/testing/selftests/rdma/rxe_ipv6.sh      |  47 ++++++
->   .../selftests/rdma/rxe_rping_between_netns.sh |  57 +++++++
->   .../selftests/rdma/rxe_socket_with_netns.sh   |  64 ++++++++
->   .../rdma/rxe_test_NETDEV_UNREGISTER.sh        |  38 +++++
->   16 files changed, 527 insertions(+), 47 deletions(-)
->   create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.c
->   create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.h
->   create mode 100644 tools/testing/selftests/rdma/Makefile
->   create mode 100644 tools/testing/selftests/rdma/config
->   create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
->   create mode 100755 tools/testing/selftests/rdma/rxe_rping_between_netns.sh
->   create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
->   create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
->
--- 
+Acked-by: wang lian <lianux.mm@gmail.com>
+--
 Best Regards,
-Yanjun.Zhu
-
+wang lian
