@@ -1,160 +1,171 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E3B376BCE
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 09:11:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773047499; cv=none; b=c5CsxX+OvR/LsdatGbmWMXbnWkzRDeefUoLLTCDG096bInLF4XxXWK1UC2IYKI3BaW2caJZM6XzirC0YZ663iw697QrX4frC7GLpZafvo78Xb/2S+gko8scxeFl3AQgB34bAaqyZJ0lILJlW7TEk9t5YUA79htQmtfAihX77YYI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773047499; c=relaxed/simple;
-	bh=X8hMRIAkzVTHYeJ+gXphdD0BWPvXLc/GBaAY5hI8UFQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KAmS2l8MMZbtjifQ5oqoRCNcsHaPdvIOcQPifxd9bb2qEy+G1TxJthTcWDe42ISqDkL6wwVdz3xDTZcnqYWlTe1LNM7VrSTBwQzgFBYzfg9HyL1cGX+ZgTJZZTj5IPBONjSp9cVmh/hGF1UjIIaiGaYYVrpWPRmJ8ruEYQMY+dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OE/MHp+T; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=mT1ZHdNM; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BD5377EC6
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 09:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773048174; cv=pass; b=htLp48uhmTGXcR2mDBQttcNLFgheXUati2ldNc1qyC/YZhn9472ze7heUm57awLB7/dX8FHgpaPeLO19E2Rg2wI4pVW24EOnX9eZYwWMdwEbrW6wDbyoYsgk5cKng6yxiM1NKlJdcLwVGwBYqWyduqOtCJU8vrJKJpb5iitLYBo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773048174; c=relaxed/simple;
+	bh=upio09NojrFHMRimK65FKWysiVde+qA9+o9ztExC8qM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ArmkWAz2Sbd8IOrJ2G9hQSwNX7IFmiT5YTNADOnTJvwibw1PEyxC2a/5HNoLfXA9rshBIaWHF5Pn0M/ShOnv+JjIi4XdoOSzovuOwllqLQ01c58dvjlUqR5OXXcxMu8OATFpHgnKp7zqNc3fryX3qDO4l3+RHyPp+ukc4kkCr8g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fexixnws; arc=pass smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OE/MHp+T";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="mT1ZHdNM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773047497;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oWnQ6pc6nNaZ1IGr6HMkh6VJu+iJZRS4rFk9lFROKi4=;
-	b=OE/MHp+Ts0p5flqNIuohxIblQ77JtQOQYdgZJmgjL2/XH7GUmo7qFDPJgVkWYgCtzuSDYW
-	tHRKukZPV8tV2s5p6+BGbl58/ZxRL6EKh1JtQuzRSOaGPvp7LJovSb//kcSXsKrdKDfKGb
-	suG3qC9sGlH8D/K87y6vkp/UO5Se9xM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-388-VStWNqWXPV-EW5rfR6K_hg-1; Mon, 09 Mar 2026 05:11:34 -0400
-X-MC-Unique: VStWNqWXPV-EW5rfR6K_hg-1
-X-Mimecast-MFC-AGG-ID: VStWNqWXPV-EW5rfR6K_hg_1773047493
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4806cfffca6so125473155e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 02:11:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fexixnws"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-506a747448dso102119611cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 02:22:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773048171; cv=none;
+        d=google.com; s=arc-20240605;
+        b=A1Tay/m22y041c6kZmiN3NPr0jk+daKrf/ALz9OZ3U360fExdJ7RzmPGxeDGsLrlUM
+         JI6hrBCqf4riH2M7mwelkDQM3c/xDvTdLTnvEkqD11h+VdvtbECtNrkVkqWWvPQsXk+0
+         r1VIlUnE6rqALif+j4DK8sHuqiCAnE54+6rtYkpdhg3kSEMQTkuM+4kD34wKhxMo2Rds
+         2MXt7YPWfLzdm2rJ7Uhd2kFAZGTiI8AC6A+z4NjFGNGTFfUM2Obsej7zeCPEOSmSbVGR
+         8MEMuFsg4fg1ZRBh9w40bYA5B7lmWfujTLZ98+ZFhaoxmP/Y1EGx1y21aumlqCWc632D
+         2H5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=N7fC3bjKwQcF/Me1NQG71BV/tCAMZf7S0tDB0ddNnBM=;
+        fh=vikUWc4TApRxYWjFJYwqjDgr95HEux9VTnrKGsx6AAY=;
+        b=RQSAXBlStmVvsYLG3MZQQGXXjIGMh0AReMRwSrCo2RBkI5oPVF1N+w+130zvm7lQ5P
+         DQZcykwGXti1mbdthkB2I06ZQwcOpGenp4qs3tADzUbQ2onP5zTdfX91oW3nUcu3CDDS
+         ksWL3mWVpRe4NRDjSuIF3p9J03GlEsrHnd8pY2e+kc0vZ3oXC9H+0SZDnk4pIt/sCRqD
+         wEHyEuaP19ex3L4RjdSk24CWVRbycbsZGxGWgBI8vihPcEiBsNs/zT9/sGsup3ZH+r/g
+         iVXZvgVPBkgufehhxslc7tLZcKSi+nhzfyucjEGWWDF4zlVpc+iFxm/Z7kwgbUAeaAPl
+         4VGQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773047493; x=1773652293; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oWnQ6pc6nNaZ1IGr6HMkh6VJu+iJZRS4rFk9lFROKi4=;
-        b=mT1ZHdNM2+uYo1TGH1wAUBWcWHlgyLq56XXl959ajNpraRAMIkHCTRF/8ooXfzrSow
-         fQMIC2flV1SQkeSWgpnFq6dmmLWujBiQ8w9mVRlumpCALhGrneUdzRLMtrSOmwInf/WK
-         2Lahl2SmxczeLPEP1SGwam4in5aEJjS5hhIafP2AQhcX1NjDnmmoxHa9/j2UnlikQLse
-         aefqnIhVBOvLKDeh+EAOiCg1va4owqvbh8+a42rQzIpflIr3oUhTIj7bX8Uw6g787VEt
-         +ffP8jGOcluGEyrAtTCKFCQTisStg6Gb5fG212rXeCpSX0NhkJovzhytWKIw/G8fFyIi
-         YDQw==
+        d=google.com; s=20230601; t=1773048171; x=1773652971; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N7fC3bjKwQcF/Me1NQG71BV/tCAMZf7S0tDB0ddNnBM=;
+        b=fexixnwskWyap/xV0vuQW1vre2lrsKvrlUl4bS1mgw54DXmcLrk0oZJimMGz8kIarm
+         Q3ELG5dzOKm6C5zpFk+F5FrL5QJFHGhnDCU13/B0yhT2a8HHxfZdOsbSRnyxhoxB/S0D
+         yllytPkipre5Wq8gYM4/c85/LFZQS03gacEkv6bbKbQlyp/u1c4E/Ze0EbH1Oy/6i2Sy
+         jeZiBBTSt1G8SRsAwldNqm5V/4Cebb0t36JrukuhrGTxwKAUc576eJXoYXIrEFAXM3l/
+         Ba2HHiCLRMVQou9gdxUyP9Vpzh8HzjcDumT2c8HlRaCLamc/1Sp2sIrSQBmKd3860kcW
+         DCXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773047493; x=1773652293;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oWnQ6pc6nNaZ1IGr6HMkh6VJu+iJZRS4rFk9lFROKi4=;
-        b=bcAP9p720bNGlqYIZOoRmiVPcuzEuBvbIasX3wrn0/nyFtCb1A2T67V4jV16mIBJNP
-         jDW1GZ4nhYFjyUN9sIjPwC1zV0HV8SBlHAuEjEpzEZlKdW0ZuayZ9qYyTMR0kkw3rvvy
-         d8nghzwFMlMnhuniEFp/3/tC+1nTzcCg6rGjUnRaPq1DE6ZaT9G3X2VTaRy3jWfg42Bv
-         90yl+SyYq2dW6zf5UnayCsm8qdgW9xzrZ0cEg3h0wtk+/aUOME+amtxwc4PY+A7Iq+1+
-         N6h1lhcp69JvXJz/KqXjvrByNt7+NKvk4WFHQSHLFmmjFrVmiwnVyBrDaPqzzAGIvzZn
-         SGMg==
-X-Forwarded-Encrypted: i=1; AJvYcCV1iC2luoDkOgG1n/tM4/zDx7SjQFC47UmWn/aAdKhLLw9/y5GJY1Imh7InvuysxkkNah1Ww2XBNTV1uPz3XEE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwT4wR7H5dyOTHXErisSa3ZlCbl2+xxBz7qDfQHbvBF/SZh/Mbd
-	vSM+mD8/2/cUsKwHuQVsl/XYFWJL65JmoimtEGK8TcHt7u2FBB6pxkaraSRBT15g3dVzPmyLv47
-	yYK47Oj63HT/bvTGM4QUCnW5SKKbByPqNZZz4b9qjro5/2hpUxPsr5lTmCsjq4PNJSWPLzQ==
-X-Gm-Gg: ATEYQzxmwurcfKdUHXcWYxDZGFLVhe5JMoI4uaF967BTzbxOU/7WBtHKiNifst2eT2S
-	y/vAs3ogaZaw8KsTj8n0MJFQs/7OdE0SSsQZNWeTvTgkAvur7YFuDb1WGasmcYKz26XsgqosZ6V
-	fGqnZAL9BehPM23QkC7ERZOj2OZXQ3DGLpGR0u+zV4Wzt7jP8+lcG6uCrq0irl59KIoSJ+ySJFs
-	2UXyTIqKW9qsHMtaJFoBLUjMunSngfcb17HEJ1CzU92lVbZE3dMBMl6EGRDIvGJHCyzwwsojqVR
-	IfwC1x7K7OeMmuX7QqNDuN4buP4Tnz40btj97ThjSxp+u/0Zlz2MoA7Kqcjcpw+pROFfe1mKvbS
-	EXSQm65kqE/dmXIOv0H6K+fJY9IzsDdM1uW50Qko/UOuMtRcNPJ0=
-X-Received: by 2002:a05:600c:c8f:b0:483:2c98:4368 with SMTP id 5b1f17b1804b1-4852695aec4mr174709415e9.18.1773047492642;
-        Mon, 09 Mar 2026 02:11:32 -0700 (PDT)
-X-Received: by 2002:a05:600c:c8f:b0:483:2c98:4368 with SMTP id 5b1f17b1804b1-4852695aec4mr174709005e9.18.1773047492134;
-        Mon, 09 Mar 2026 02:11:32 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.82.96])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fa87e56sm321998295e9.0.2026.03.09.02.11.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 02:11:31 -0700 (PDT)
-Date: Mon, 9 Mar 2026 10:11:29 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Gabriele Monaco <gmonaco@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Clark Williams <williams@redhat.com>,
-	Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-	Luca Abeni <luca.abeni@santannapisa.it>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 4/7] selftests/sched: Add basic SCHED_DEADLINE
- functionality tests
-Message-ID: <aa6OwVhOn2sHyMcc@jlelli-thinkpadt14gen4.remote.csb>
-References: <20260306-upstream-deadline-kselftests-v1-0-2b23ef74c46a@redhat.com>
- <20260306-upstream-deadline-kselftests-v1-4-2b23ef74c46a@redhat.com>
- <64fa81f453d7909e5669cc32284f7c9f48f2fea9.camel@redhat.com>
+        d=1e100.net; s=20230601; t=1773048171; x=1773652971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=N7fC3bjKwQcF/Me1NQG71BV/tCAMZf7S0tDB0ddNnBM=;
+        b=Xfb3hOQeEQqkeqpaHTrEVCLZafV1vpLjUmR2FMIZsYdQ3riEHmb2+t2V+ThSn+jNB8
+         jo1QvJgRqsGfGIsikrqAuYV0mEIPDce5A4jBHJK8J5TKi/N6ES7SH63QkTZy6LLs0IPU
+         lGzsqV26/GdLcSMSefP51pgQOL6Bk67sRu9Pq4y0S8JSzWCzRJ+z8RbKRo0/MsFkITeP
+         Je7URQZnzVq39WisIEsrhnzQ1Dlnc+IjhfiitfZxGQZulVV23irHW32RD3fQfshH2Xoe
+         KxQ4ai5Dm9u8Hjh+51ntrxhMQ37ZtnACCG5wpZX/KaZm0RbEt/XOO3KZvLopzZ3W8fG4
+         GDQA==
+X-Forwarded-Encrypted: i=1; AJvYcCWtiDPvNwrCMIIhqul5OHeM2jLNbDX7ykvQ5LcS1njbYMEbuV7Av8gNjMqJaJUEv/hF2fICTIKQjGh/ExqxFa0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyafLyZZYqRPQr0QkcEFOAEEooDDOhmg+xtkxiqTNUmO42dlkWL
+	qMve4Hog8USjoJApZdoZSaidCbdY0j2L0tFwST0MTEoWMtv0aeqP/7OO+eoRUCOyX6zMFYaOhkw
+	OD6ZklCTHQbgpK7MbUqWwDu0rZG102FhE4y6zhpPi
+X-Gm-Gg: ATEYQzyRNdxILopzGJVa8l4tU09/ElD+3cVUg8gbcB53850n2/E/n4sQvcfvT+mIEDB
+	mDdB7iDnsBtZMuOcgd93mx0PB28HDKwcGFyqEdrSKT83vU/VmgindU+nxJtLsKRzdhpaIPwn2kd
+	JvsXElI62XfqXNvpK0YAJeHVzqFJ0wSNpQJN9XYnjIesOE+WPDWSfuq245135vpRgqENiVhEyiA
+	HcFu9O35sEHdRBAHCJomTIpXSx12hCXSP0kfTMvtxkGUd+ZmedusH8cDUsCyWieVK3kUruA4wMV
+	tdBq+aZd6mdQkfGSoA==
+X-Received: by 2002:a05:622a:7c91:b0:509:882:9e72 with SMTP id
+ d75a77b69052e-5090882e153mr50961191cf.1.1773048170529; Mon, 09 Mar 2026
+ 02:22:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <64fa81f453d7909e5669cc32284f7c9f48f2fea9.camel@redhat.com>
+References: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com> <20260309-tcp_rfc7323_retract_wnd_rfc-v3-1-4c7f96b1ec69@gmail.com>
+In-Reply-To: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-1-4c7f96b1ec69@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 9 Mar 2026 10:22:39 +0100
+X-Gm-Features: AaiRm515VzWer9rfQTDKEwoECAFtXOyO-47wB6RLAYk2qz4MnRNOLIFCZe96lfc
+Message-ID: <CANn89i+38t+PpB5duS_-FX_=PwyCQaN2HYohocJBAvZ7Cd8-KQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/6] tcp: implement RFC 7323 window retraction
+ receiver requirements
+To: gmbnomis@gmail.com
+Cc: Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, David Ahern <dsahern@kernel.org>, 
+	Jon Maloy <jmaloy@redhat.com>, Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com, 
+	Shuah Khan <shuah@kernel.org>, Stefano Brivio <sbrivio@redhat.com>, 
+	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	mptcp@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 09/03/26 09:15, Gabriele Monaco wrote:
-> Hello,
-> 
-> On Fri, 2026-03-06 at 17:10 +0100, Juri Lelli wrote:
-> > Add initial test coverage for SCHED_DEADLINE scheduler functionality.
-> > This patch introduces two fundamental tests that validate core
-> > SCHED_DEADLINE behavior using the test framework and utility library.
-> > 
-> > The basic_scheduling test creates a cpuhog process with SCHED_DEADLINE
-> > policy and verifies the scheduling policy is correctly set to policy 6
-> > (SCHED_DEADLINE). It confirms the task executes successfully for the
-> > specified duration using reasonable parameters with 30ms runtime, 100ms
-> > deadline, and 100ms period. This validates the fundamental operation of
-> > setting SCHED_DEADLINE policy and running deadline-scheduled tasks.
-> > 
-> > The parameter_validation test ensures the kernel properly validates
-> > SCHED_DEADLINE parameters. It tests that invalid parameter combinations
-> > such as runtime greater than deadline are correctly rejected with
-> > EINVAL, while valid parameter configurations are accepted. This confirms
-> > the kernel's parameter validation logic is working correctly and
-> > prevents misconfigured deadline tasks from being scheduled.
-> > 
-> > Both tests use the dl_util library for SCHED_DEADLINE operations and
-> > follow the framework pattern with automatic registration via
-> > REGISTER_DL_TEST(). The tests pass cleanly in VM environments with 2
-> > tests passing, 0 skipped, and 0 failed.
-> > 
-> > Assisted-by: Claude Code: claude-sonnet-4-5@20250929
-> > Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-> > ---
-> ...
-> >  
-> > +# Test files
-> > +$(OUTPUT)/basic.o: basic.c dl_test.h dl_util.h | $(OUTPUT_DIR)
-> > +	$(CC) $(CFLAGS) -c $< -o $@
-> > +
-> 
-> This seems a constant in all tests, what about just having make do the trick:
-> 
->   $(OUTPUT)/%.o: %.c dl_test.h dl_util.h | $(OUTPUT_DIR)
->   	$(CC) $(CFLAGS) -c $< -o $@
+On Mon, Mar 9, 2026 at 9:03=E2=80=AFAM Simon Baatz via B4 Relay
+<devnull+gmbnomis.gmail.com@kernel.org> wrote:
+>
+> From: Simon Baatz <gmbnomis@gmail.com>
+>
+> By default, the Linux TCP implementation does not shrink the
+> advertised window (RFC 7323 calls this "window retraction") with the
+> following exceptions:
+>
+> - When an incoming segment cannot be added due to the receive buffer
+>   running out of memory. Since commit 8c670bdfa58e ("tcp: correct
+>   handling of extreme memory squeeze") a zero window will be
+>   advertised in this case. It turns out that reaching the required
+>   memory pressure is easy when window scaling is in use. In the
+>   simplest case, sending a sufficient number of segments smaller than
+>   the scale factor to a receiver that does not read data is enough.
+>
+> - Commit b650d953cd39 ("tcp: enforce receive buffer memory limits by
+>   allowing the tcp window to shrink") addressed the "eating memory"
+>   problem by introducing a sysctl knob that allows shrinking the
+>   window before running out of memory.
+>
+> However, RFC 7323 does not only state that shrinking the window is
+> necessary in some cases, it also formulates requirements for TCP
+> implementations when doing so (Section 2.4).
+>
+> This commit addresses the receiver-side requirements: After retracting
+> the window, the peer may have a snd_nxt that lies within a previously
+> advertised window but is now beyond the retracted window. This means
+> that all incoming segments (including pure ACKs) will be rejected
+> until the application happens to read enough data to let the peer's
+> snd_nxt be in window again (which may be never).
+>
+> To comply with RFC 7323, the receiver MUST honor any segment that
+> would have been in window for any ACK sent by the receiver and, when
+> window scaling is in effect, SHOULD track the maximum window sequence
+> number it has advertised. This patch tracks that maximum window
+> sequence number rcv_mwnd_seq throughout the connection and uses it in
+> tcp_sequence() when deciding whether a segment is acceptable.
+>
+> rcv_mwnd_seq is updated together with rcv_wup and rcv_wnd in
+> tcp_select_window(). If we count tcp_sequence() as fast path, it is
+> read in the fast path. Therefore, rcv_mwnd_seq is put into rcv_wnd's
+> cacheline group.
+>
+> The logic for handling received data in tcp_data_queue() is already
+> sufficient and does not need to be updated.
+>
+> Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
 
-That should work, thanks!
+...
 
-> The rest looks neat.
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index f0ebcc7e287173be6198fd100130e7ba1a1dbf03..c86910d147f2394bf414d7691=
+d8f90ed41c1b0e3 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+> @@ -293,6 +293,7 @@ static u16 tcp_select_window(struct sock *sk)
+>                 tp->pred_flags =3D 0;
+>                 tp->rcv_wnd =3D 0;
+>                 tp->rcv_wup =3D tp->rcv_nxt;
+> +               tcp_update_max_rcv_wnd_seq(tp);
 
-Cool. Thanks again for reviewing.
+Presumably we do not need  tcp_update_max_rcv_wnd_seq() here ?
 
-Best,
-Juri
-
+Otherwise patch looks good, thanks.
