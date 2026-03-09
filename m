@@ -1,165 +1,193 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91AE3D301A
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 17:28:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773077300; cv=none; b=If0MyJTkVnhHdS78FRiSZw+wmJnFjDs2VPdUV/dp92qDdYQ2SKaHXsboJpBLRk4Dp6mVG+v76Rpov39Zg9N1AouikMwPl6xT0x8vijzfM+1nJdP4/OSsYcqxrNlrh7gc9vz6vHXOP+0JpPZDk8SEWirawYe3tKQlNzU16+q8Rdo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773077300; c=relaxed/simple;
-	bh=LcKBSGkUJ4jOZjfNY8MJfZV+UOABBnNyslHE4iTDcoI=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05652C11E6
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 17:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773077577; cv=pass; b=qdhVvbKNt57ZyIMoIev9wRMeSZAebdpsz8RlS+upTYZyMTc6cFVLcQtBSh6gItfSarHhtyJd+jE5RiwmqEm2keeLbbvOshgDBxUX9uM1YQlguSboh9bz18rjqhQ0MP+mtU/GJjvbOfnlwv4itfmT8WDg4TJZBjxJqDLc4nw8ihw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773077577; c=relaxed/simple;
+	bh=UzbVfxnpIrUZlx5xzEFDYneUs+jd4yOAM+H/ydSkGnk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R1v8q8GTxYWWvsGAs4e4qlyhyDDzh6xhtgdndIex0Po+QPsGKju6QlKEnELbMpRHUaTGw4WeycxEVnnP093fqG1uWd9QExQ8EwC5ALt0BhHpHEpDfTAV7ybDTtQcnE5nE/2/nOC/f+gC3kQN1XcWBYFMKlSy1YNr4rBk0MavBYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=RFCQ4RrK; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 To:Cc:Content-Type; b=HWkV0m9kUdwQB45yrcesu9mBrkzsIC7tOnRtl0Y0BQP5gZtvdZT8aWEstWDR4zdy7KWOJl19+j9pOfORJdiNNX0gjZgcsc6Wh5Eh++bBZVnJGjGkS2ZhBxMAgqPo/DhqGDBaWP8KJ54OJ8keQzdc05ueGDAbohFt93KV/7pv1iM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BOqnSEKX; arc=pass smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="RFCQ4RrK"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6615c766e60so6820355a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 10:28:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BOqnSEKX"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5a13d1c6f25so3052284e87.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 10:32:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773077574; cv=none;
+        d=google.com; s=arc-20240605;
+        b=J1qxDBq0AdVMV8bLiF+kQ8WzPEOUM5L3SiU9fz3Nkqj4p4yy9y9aGumEXkHWAt00x+
+         yyVhC0G3PzQ3niiehFMmpa03zef1WCu8Qbj3hv3Mjo861xLEfzTVJyoBZvqg1utOV5wH
+         CmslXnuXXI6tMMOl4K1yI6BfM4QY3tayFnnjNBwiPegSGpkXnUMarwQpI9NYtR1sUqkc
+         RYbGNqkEANRaFt9AmXZXE7/krauG/tZeXIvAexngdFh8KrYyMfXAblK/EsMRG4dRYjFl
+         7N+SseLkvJDKz6aTG5ChsvPCT6QP9z5GBpcxWg8iBO6hHQKv23RvZQ+wbzqi6xSlaBIn
+         6KNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=mL+d40KjyhuL+4bMpXUsYaQzeUUDZaEOQ6AdzLVzNPg=;
+        fh=lWBAEEqRai9rYi1X2JOfNjuuuLrAG7wNK5GVdum6zI8=;
+        b=XxgkAxXFUMWTBK72VUivzWPl0O3YBk8RkoGoIWN/NMhsDmUPkH3CSoIwfANaOoTpVX
+         s9UqEB44OpA7ToaEuKxIVU1nLCJESMvmtOaxBhqS7MbJq4F+3drDmlcvmTSRLZ59dKSW
+         1IAC3KvE4ASuj4cXEoYEf3Vw+R0dwBNAR/9Pp7D762eJq83/jh/xgBHljbvYXKLvEm+q
+         /PlOsbF7sUc211QCqJPrTh6e8NKyfSeIb9Z0o0GvtY4ywqS5TCe6gXtqxKTZ+F9SRWPs
+         vaJEuoR/MCyom+i+/ZV7xhs3pjcJlA41HzteZmtmeSgNnMtVGW2k3WaC0ttrysHYdThV
+         IxTQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1773077297; x=1773682097; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y/0fgmHhC0VOep6ZWbqzX4YfecogO4RJ08oTSaCn8/k=;
-        b=RFCQ4RrKEULd0kQR9j1Dlfs8W8mcLUoGXUqv8QlK2KRAkudol+dq5yBmDKWD6k8PFV
-         Rb6KNME5+ac7pxg8VUn+69aOICx5++rxBZOc+D3mo6rnPhXEUDkqlpJh9nHKbp1YqhYL
-         rYRrrj8tNMlDsy0MQmJJrkMWPLYwq0gfQwPLw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773077297; x=1773682097;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1773077574; x=1773682374; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y/0fgmHhC0VOep6ZWbqzX4YfecogO4RJ08oTSaCn8/k=;
-        b=GHq0c9ff4ZgcZTICOvQU3g83KjHyvoAWFnsuB7fWxnwoouAVGw2G6wL2Sps0mcbxU2
-         hg1x10V5tbtPgavfOwHHjouOsjfuKfNVPUc6GVrTLEETSl5QjWrYAjuyVN3/0lr9HfqO
-         kvDnq0fuCKwW8yh4ZdBqcla9PtVJeNlABjWEBy17BfbJBTYID7j4tK9IerR2NOUq287B
-         ylfN3a0JcoS16GwaTJoV8RtDn4k6ptcCRaniKONCPPiEKAupyktlo9kcxfC/zGcWiiXi
-         XxQVe296AHdUOPpJFNxphtXBQg3PuQoN9bSCaFfq+QXBlC69cqPOCa6+fx2/Pe5sA6gW
-         K6VA==
-X-Forwarded-Encrypted: i=1; AJvYcCX8Gqsxf5G31GW5JLlVCkEQsfsVMze3IqLR5cHPXfkvV0Lg2XsfB/N+15odpVjDtTl2KsC4QjzI2r8I8iYGQFc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCtZfuyVW+A9voh9T+PoUg+LkLSH5ArBK3vjEySGUzcpIXE1KX
-	kXb0n9zIZEbZqQiFepRgtv4Sp2gbFfgbYWyaQrA5wxTH1u8dbQaSblDM9zspwJEUdB8O5tVgppf
-	7NnYCjfA=
-X-Gm-Gg: ATEYQzz4NBQlaWtljQRx6oJdKGd2soAAxgFCPpudph2edy3DDgB5LWe/qY/Ell4PGJP
-	+54bGj+AL2Z+sAwLHL4ceSJ5GPMMDJOv8eSxepoEO88af4ARejIME8yund8bk86ZuRBwMpKWC3V
-	VnmAFxJRSovivxXGGbSvt+t1BHMtyWmKyQMmorld/0UDqz9ZLUQj75jxlbsJmPQUisAl36Yzmmf
-	Cq36j2RlyJoxCMpg2riBcl0cVjFPUWWT8ast8deNCgEIyx78CEppjenCFHcYCMUxXhP3zuoEUxz
-	79I8DGbe3GKEdKxV3wanQ5GMGtQbUYFhRZidaOLILWykF0CkTIp1L3P4sZNoWRk9+bmssYV2lWj
-	ll2SPuD51odMpCPt84NpMmgltrSsAGBb+6sJzRSR+ANtGFFldR3JwZkzX5HOLoWT7qoeLhkH5qb
-	aU0eFT9AmfOu42ol6ARrObbZp2TIIMywhZOzg/rhtcEbaBjAyZCo5uJYzUkZU8GefVWqjKZNDg
-X-Received: by 2002:a17:907:94d3:b0:b93:c5a9:a5ed with SMTP id a640c23a62f3a-b942da4962cmr701172166b.10.1773077297045;
-        Mon, 09 Mar 2026 10:28:17 -0700 (PDT)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b942efb5bc4sm402254866b.30.2026.03.09.10.28.11
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Mar 2026 10:28:16 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-662b933f8d1so384858a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 10:28:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUCcs9pM3EF8XHHtihMQ8mudOgWs1xnDV5M0jR8jjVpDSlHgzgS1aLEv/4WlyQWVhFRCjg5FAYUWO+tW81b1Y4=@vger.kernel.org
-X-Received: by 2002:a05:6402:50d4:b0:65c:23f0:a80d with SMTP id
- 4fb4d7f45d1cf-6619d4e3738mr5814793a12.19.1773077289768; Mon, 09 Mar 2026
- 10:28:09 -0700 (PDT)
+        bh=mL+d40KjyhuL+4bMpXUsYaQzeUUDZaEOQ6AdzLVzNPg=;
+        b=BOqnSEKXUTbxSDH9TGikZ9vPUeq1YbVH2M4vnF6ofADIMO3AXxAhideB7H2xb8DqCd
+         nW/+X93/6a4U2mz8iJEiRMNYSfA1UtCJCn5e5M7hm+yRTZHkT7HgVL5W98GrqnT4URxi
+         kWpClKHjsRtCTfXVRdKyIsn3LMAC/6oNbcCMmt6NZd6q8/aF8OBKgaLSGGfZHI2Falg8
+         SwbNG7WNM0Unw4TFKK3ZaRZgklVCY9rMocJJ17TrGshvEC2WJk9ZsUStHJH6hOEQieaQ
+         CRXOGIvCsGgXQ4PRx4gvuJbqcAF6ruDgGXBMVYgRrofZqpMrF/VMbezUX+TvRBLpjWNq
+         Q5pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773077574; x=1773682374;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mL+d40KjyhuL+4bMpXUsYaQzeUUDZaEOQ6AdzLVzNPg=;
+        b=gJWDYJd1/Pgo8NqNAaWAyVLF9AL0ATzTdE8PvHM0DuyfOpmtrL3NSOVUW25cuR8uq4
+         a14AKQLGJR1ljpQ/5DDHXI4kIJhkfCbPfMute3CJjNy8q8fp3wTa0OYgzJQ4tZ/EDh+u
+         EumeLyGinE9ieDDwocsEKt0vaagFgg5cSKJkiTiMMfvRDxXxRF0v2265uIw2CEjK8iuh
+         14ozXc9Z216nzbvtlB89mo9hEhc+616qevnfldOhdZUYDvGdoWDmAuH+IWycfryHUYUA
+         o93C10CEmw1Iz1wHEk+3TpvtHAQhNTY6qgM4UkfqsUSUHE2gc/gZYLVOYVIgmgCgWlMu
+         jdSg==
+X-Forwarded-Encrypted: i=1; AJvYcCXeWojrutROerSTwj2PD39oO1fyfnzm6iFkIiE6/ig0jhdRKFQuFxjb+kQrhq+uxmw4zLGfd2KBxtMLo6tl4C0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtSXgbdXvzFjCzNscn24np2063P/WiKvPvnKJoNHb+eQx7e9w0
+	76PjrSZph+7wT57ud7HEY6VDPyeW250o/1EJxZJ4YWxjkjtfpx9ucSkrny7Fddp1L0fDVuPvY2y
+	ibJtMLI6DhPpKZcob8HWtUcWBvvr+GA42hIuaLgcy
+X-Gm-Gg: ATEYQzzp9hAy5Qe9LlTUVCMp/o3e2v4Ji734kn0eW4p5shCWIX7BtlWYv3FQdL5Wkjy
+	E9lXlE5z8iJqaiiuA8Nw0gokx36NnZF6W9Uz3o7/+/ImkgCm9myTL/IcE6V93zx0xATqeikTYrl
+	0B2dHJxFFcndG1l9wmcKMOqKrgfFi26pcqWFzi/Yi+fL5Ytj+zcOnDW60d718yNfIVJO+QMKFZD
+	QdAdelL4mdcZyWf0aQRV9DS/jvOzaBvh8MxBs9oT4bLVN0wLzLH7Lox5GwFYJetbEx45KEVdh7R
+	DI+xoEFb
+X-Received: by 2002:a2e:9e89:0:b0:389:fc6b:943f with SMTP id
+ 38308e7fff4ca-38a40b72dbbmr31791631fa.11.1773077573745; Mon, 09 Mar 2026
+ 10:32:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com> <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org> <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
- <aa7qson15uJpL-BL@infradead.org> <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
-In-Reply-To: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 9 Mar 2026 10:27:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi-QpnBHMH4Oa6tsYVhp+Uv+hKU_oedAUnt4icMqwPtzQ@mail.gmail.com>
-X-Gm-Features: AaiRm50OcoxR7YXKVzqClnrYq6PJcpS66d_jgF8-UVsQY5IDs7VWWvYFcU4JSa0
-Message-ID: <CAHk-=wi-QpnBHMH4Oa6tsYVhp+Uv+hKU_oedAUnt4icMqwPtzQ@mail.gmail.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Chuck Lever <chuck.lever@oracle.com>, 
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <raemoar63@gmail.com>, Christian Loehle <christian.loehle@arm.com>
-Content-Type: multipart/mixed; boundary="0000000000000491e3064c9abac4"
-
---0000000000000491e3064c9abac4
+References: <20260129212510.967611-1-dmatlack@google.com> <20260129212510.967611-11-dmatlack@google.com>
+ <20260226170030.5a938c74@shazbot.org> <aaDqhjdLyf1qSTSh@google.com>
+ <20260227084658.3767d801@shazbot.org> <CALzav=fHy23RAzhgkdaL+JA5T2tL9FT6aPgRfXUh7i9zvYCGPA@mail.gmail.com>
+ <20260227105720.522ca97f@shazbot.org>
+In-Reply-To: <20260227105720.522ca97f@shazbot.org>
+From: David Matlack <dmatlack@google.com>
+Date: Mon, 9 Mar 2026 10:32:25 -0700
+X-Gm-Features: AaiRm51UQkPGi_THgF8Q61sl9tHSSk61beTImuWL9a-lckj5dJAcnYvj7LG9bmc
+Message-ID: <CALzav=fjRPa_ZbXu7iFXyemcf_8Kq_dZTWT6c-A0bc6czF_Rdw@mail.gmail.com>
+Subject: Re: [PATCH v2 10/22] vfio/pci: Skip reset of preserved device after
+ Live Update
+To: Alex Williamson <alex@shazbot.org>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, 
+	Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ankit Agrawal <ankita@nvidia.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 9 Mar 2026 at 09:37, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Fri, Feb 27, 2026 at 9:57=E2=80=AFAM Alex Williamson <alex@shazbot.org> =
+wrote:
 >
-> Now, there are real exports in this area that are actually strange and
-> should be removed: for some historical reason we export 'free_task()'
-> which makes no sense to me at all (but probably did at some point).
+> On Fri, 27 Feb 2026 09:07:48 -0800
+> David Matlack <dmatlack@google.com> wrote:
 >
-> Now *that* is a strange export that can mess up another task in major ways.
+> > On Fri, Feb 27, 2026 at 7:47=E2=80=AFAM Alex Williamson <alex@shazbot.o=
+rg> wrote:
+> > >
+> > > On Fri, 27 Feb 2026 00:51:18 +0000
+> > > David Matlack <dmatlack@google.com> wrote:
+> > >
+> > > > On 2026-02-26 05:00 PM, Alex Williamson wrote:
+> > > > > On Thu, 29 Jan 2026 21:24:57 +0000
+> > > > > David Matlack <dmatlack@google.com> wrote:
+> > > > > >
+> > > > > > - vdev->reset_works =3D !ret;
+> > > > > >   pci_save_state(pdev);
+> > > > > >   vdev->pci_saved_state =3D pci_store_saved_state(pdev);
+> > > > >
+> > > > > Isn't this a problem too?  In the first kernel we store the initi=
+al,
+> > > > > post reset state of the device, now we're storing some arbitrary =
+state.
+> > > > > This is the state we're restore when the device is closed.
+> > > >
+> > > > The previous kernel resets the device and restores it back to its
+> > > > post reset state in vfio_pci_liveupdate_freeze() before handing off
+> > > > control to the next kernel. So my intention here is that VFIO will
+> > > > receive the device in that state, allowing it to call
+> > > > pci_store_saved_state() here to capture the post reset state of the
+> > > > device again.
+> > > >
+> > > > Eventually we want to drop the reset in vfio_pci_liveupdate_freeze(=
+) and
+> > > > preserve vdev->pci_saved_state across the Live Update. But I was ho=
+ping
+> > > > to add that in a follow up series to avoid this one getting too lon=
+g.
+> > >
+> > > I appreciate reviewing this in smaller chunks, but how does userspace
+> > > know whether the kernel contains a stub implementation of liveupdate =
+or
+> > > behaves according to the end goal?
+> >
+> > Would a new VFIO_DEVICE_INFO_CAP be a good way to communicate this
+> > information to userspace?
 >
-> [ Ok, I was intrigued and I went and dug into history: we used to do
-> it in the oprofile driver many many moons ago. ]
+> Sorry if I don't have the whole model in my head yet, but is exposing
+> the restriction to the vfio user of the device sufficient to manage the
+> liveupdate orchestration?  For example, a VFIO_DEVICE_INFO_CAP pushes
+> the knowledge to QEMU... what does QEMU do with that knowledge?  Who
+> imposes the policy decision to decide what support is sufficient?
 
-It looks like it should not only no longer be exported, it should
-actually be static to kernel/fork.c. As far as I can tell, that
-historic oprofile use was the only reason ever this was exposed in any
-way.
+Hm.. good questions. I don't think we want userspace inspecting bits
+exposed by the kernel and trying to infer exactly what's being
+preserved and whether it's "good enough" to use. And such a UAPI would
+become tech debt once we finish development, I suspect.
 
-IOW, a patch like the attached is probably a good idea.
+A better approach would be to hide this support from userspace until
+we decide it is ready for production use-cases.
 
-Somebody should probably remind me next merge window (I'm not going to
-make 7.0 bigger, and I find examples of people using
-kretprobe/free_task, which *should* still work just fine with a static
-function, but for all I know if the compiler inlines things it will
-cause issues).
+To enable development and testing, we can add an opt-in mechanism,
+such as CONFIG_EXPERIMENTAL or a kernel parameter. For example, adding
+something like this to vfio_pci_liveupdate_preserve():
 
-Or just add this patch to one of the trees scheduled for next merge
-window. I'm not currently carrying a linux-next branch (I actively
-deleted it because it caused problems due to messing up other peoples
-linux-next branches, so if I ever introduce one I will have to come up
-with a better name anyway)
+if (!IS_ENABLED(CONFIG_EXPERIMENTAL)) {
+        pr_warn("vfio-pci file preservation requires
+CONFIG_EXPERIMENTAL to enable!\n");
+        return -EOPNOTSUPP;
+}
 
-                  Linus
-
---0000000000000491e3064c9abac4
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mmjgdgcc0>
-X-Attachment-Id: f_mmjgdgcc0
-
-IGluY2x1ZGUvbGludXgvc2NoZWQvdGFzay5oIHwgMiAtLQoga2VybmVsL2ZvcmsuYyAgICAgICAg
-ICAgICAgfCAzICstLQogMiBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNCBkZWxldGlv
-bnMoLSkKCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3NjaGVkL3Rhc2suaCBiL2luY2x1ZGUv
-bGludXgvc2NoZWQvdGFzay5oCmluZGV4IDQxZWQ4ODRjZmZjOS4uMGVkYjM2MTA3YWM1IDEwMDY0
-NAotLS0gYS9pbmNsdWRlL2xpbnV4L3NjaGVkL3Rhc2suaAorKysgYi9pbmNsdWRlL2xpbnV4L3Nj
-aGVkL3Rhc2suaApAQCAtMTA2LDggKzEwNiw2IEBAIGV4dGVybiBwaWRfdCB1c2VyX21vZGVfdGhy
-ZWFkKGludCAoKmZuKSh2b2lkICopLCB2b2lkICphcmcsIHVuc2lnbmVkIGxvbmcgZmxhZ3MpCiBl
-eHRlcm4gbG9uZyBrZXJuZWxfd2FpdDQocGlkX3QsIGludCBfX3VzZXIgKiwgaW50LCBzdHJ1Y3Qg
-cnVzYWdlICopOwogaW50IGtlcm5lbF93YWl0KHBpZF90IHBpZCwgaW50ICpzdGF0KTsKIAotZXh0
-ZXJuIHZvaWQgZnJlZV90YXNrKHN0cnVjdCB0YXNrX3N0cnVjdCAqdHNrKTsKLQogLyogc2NoZWRf
-ZXhlYyBpcyBjYWxsZWQgYnkgcHJvY2Vzc2VzIHBlcmZvcm1pbmcgYW4gZXhlYyAqLwogZXh0ZXJu
-IHZvaWQgc2NoZWRfZXhlYyh2b2lkKTsKIApkaWZmIC0tZ2l0IGEva2VybmVsL2ZvcmsuYyBiL2tl
-cm5lbC9mb3JrLmMKaW5kZXggNjUxMTNhMzA0NTE4Li4zODVkODA0MzJhODkgMTAwNjQ0Ci0tLSBh
-L2tlcm5lbC9mb3JrLmMKKysrIGIva2VybmVsL2ZvcmsuYwpAQCAtNTI2LDcgKzUyNiw3IEBAIHZv
-aWQgcHV0X3Rhc2tfc3RhY2soc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCiB9CiAjZW5kaWYKIAot
-dm9pZCBmcmVlX3Rhc2soc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCitzdGF0aWMgdm9pZCBmcmVl
-X3Rhc2soc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCiB7CiAjaWZkZWYgQ09ORklHX1NFQ0NPTVAK
-IAlXQVJOX09OX09OQ0UodHNrLT5zZWNjb21wLmZpbHRlcik7CkBAIC01NTUsNyArNTU1LDYgQEAg
-dm9pZCBmcmVlX3Rhc2soc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCiAJYnBmX3Rhc2tfc3RvcmFn
-ZV9mcmVlKHRzayk7CiAJZnJlZV90YXNrX3N0cnVjdCh0c2spOwogfQotRVhQT1JUX1NZTUJPTChm
-cmVlX3Rhc2spOwogCiB2b2lkIGR1cF9tbV9leGVfZmlsZShzdHJ1Y3QgbW1fc3RydWN0ICptbSwg
-c3RydWN0IG1tX3N0cnVjdCAqb2xkbW0pCiB7Cg==
---0000000000000491e3064c9abac4--
+Once we feel the support is ready, we can just submit a patch to
+delete those lines, and there will be no left-over UAPI.
