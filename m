@@ -1,152 +1,143 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012006.outbound.protection.outlook.com [52.101.53.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362AB2BE7C6;
-	Mon,  9 Mar 2026 17:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.6
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773078567; cv=fail; b=SmTSe05Ka7NEHgmErdmMTB5UE1i725QwhTVtnRcJskecBush5O0RnxSy7efvAninBvWatCyqOwiHaUJmv8a5bRuFYH/GTE+puegPOzF3Q2qQ+ossfiiFqqRg91eBGuzFPMQLVRsU+Ybe9KPajSOekxtF7vUtPQIBjsI31byUl+s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773078567; c=relaxed/simple;
-	bh=eH2al22MuZQ6U1NSDpFsIVm4JCw3Z3/QLaSSAeBjCA4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=RPTa1DLPe73ayRsbW7W+Ov13NiC1XWIGvv1meg3uKhYwDFY46JrGAsFh2UYeAoEiHU24ZEsbKZTKEZmRXx5Nh08WftE+o8awAdepevHDwo68kUtusFwzyuMi0vz8wMPrwRemBvOILb5HulFo8PF9cq2cI4TLCuiELr0FNHTpDeo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=fail (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lNkflZ39 reason="signature verification failed"; arc=fail smtp.client-ip=52.101.53.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AD5339B41
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 18:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773079629; cv=none; b=KccqtVo5jeZiw9L2tJl9zr40ASTUz1+fV37qEKxcp3e2iL6LGm38epAqSTxSm9UgTBeT/ZtrmYvN8SdH0mN8iuubtgO2Ur8wXl3ZuK7kXxVoGlrvgNg8br40F5uZcF9fOzP0rRUTg8ul4hV1M/9I3saaqE0P/GePu8OOrbHX+2U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773079629; c=relaxed/simple;
+	bh=MmljSQnw2lcYLsSo3FghZOv/9z9lThlxmlthDeAKQp4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J6x/PcY0UoWXLFlijWqQss7k82YseuhvXcsurQfbyFOZmqJ6dESrHwjItJmuCLxHfTW08zMqdH1Ngvog0JH5bt/jR3/ot3yhFnLqWtzk9T1M2zWXK5cKazfZ7efQEl80xB0EJHNKtxq3Wn4SGKCCCed/pkH3QaaKl0WfetvGpkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=D3SxbZGT; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lNkflZ39"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YKx7MjV1krQEVyEI6nKgHcmXGdwGJ08klJoMBApFeJH1WiTAbth6Gp8Zumtpy0csJ3PPv02+xCb2hbes4V7YpXMNegLGixs3mtLNt+Q7hJsPA4H78J8f+aX9+THnuWu41tETHpv1pTfbdTtF+AVcq8jMWZYa0sO33nVn5O9/WhUFaa8G40UkS6/1FJl5VI0ld19fj3zVAQFJ1z6gbtXxWxZLsYwGI4WMkFfUm46YEw2XJyZc+zjVM6MMovqjVolrKQkd453PzmJzWLGjjQ/HWTEhSyEPVBg+UHRRWdm2ZUq6pPTSFBKf9oKxjhqMYwcEmZfifjmP5lvHYZhUWdUIGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2XISUieJCqq84QHSHHp00txrPomQt9oqSVjytNquM6A=;
- b=oJBqldyNaAmOHZJzuJM2AjOlP7ITln/i9lsh43IYWTUXU6KVdMrDpzVkKk6RUXDE9fKL57qx/8t40MVmxlJWN/Ds7z4wXr4TiG+0j3RJHk329IDKNsVykrdSf7dwbPZfrHlcyzlVgHzqLyf6oLKLfD7xGBgYrHflwQATI0LVhvJz4cwtK9FENfq6TBuhnJufO48JsSbqHjNmDhHfnVknOpVBGmbJH9vGgxIrM/B2awJ/YPS+2E79y4+/O/wsCRc8p9gfNhkRBjQzYS300HSoUgBZl/qXt5pBcQkLq5AgG/lQdpEgL2prRGwImnzP/0rflHS4TD9Hs/i9Ma3jH5sIow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2XISUieJCqq84QHSHHp00txrPomQt9oqSVjytNquM6A=;
- b=lNkflZ39cMdONkGXbVe4S1qSUwW2dkHzicnwssYYsvhdYkmBP9bh74Z5V2+zCQ9hMwobKyAJx933Nmp0X+LOXSJsgoyegQRcYu3zRGqCpkQ8f+tGUfIszYdXyeML3hhTT5UxdjXrkjMaCaDy+TgBCS73Zb8K4y03gKQZXBocRhruQkCCoUxTlIghCCXkcSfL/WB98gHF1sG8hFWqsDWZFaapFEaa905QzBxXl9f00EPVdmSCEXokWp3mfBKjrSutata5UJeBGQo8muwSyl3YI6iz+T4txQtDLzxiyL6oJ5mVySV3qhbRl60LxzjlNciwPDTAniLTTSElccGnZ/koFA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
- by DS7PR12MB5862.namprd12.prod.outlook.com (2603:10b6:8:79::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9700.11; Mon, 9 Mar 2026 17:49:18 +0000
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f]) by DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f%5]) with mapi id 15.20.9700.003; Mon, 9 Mar 2026
- 17:49:18 +0000
-Date: Mon, 9 Mar 2026 19:49:09 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Linus =?iso-8859-1?Q?L=FCssing?= <linus.luessing@c0d3.blue>
-Cc: bridge@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Xiao Liang <shaw.leon@gmail.com>, shuah@kernel.org,
-	petrm@nvidia.com
-Subject: Re: [PATCH net-next v4 10/14] net: bridge: mcast: track active
- state, bridge up/down
-Message-ID: <20260309174909.GB2044263@shredder>
-References: <20260307044548.5230-1-linus.luessing@c0d3.blue>
- <20260307044548.5230-11-linus.luessing@c0d3.blue>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260307044548.5230-11-linus.luessing@c0d3.blue>
-X-ClientProxiedBy: TLZP290CA0015.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:9::11) To DS0PR12MB7900.namprd12.prod.outlook.com
- (2603:10b6:8:14e::10)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="D3SxbZGT"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439c9bdc1eeso2539057f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 11:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773079626; x=1773684426; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MrfDzIDC5Rwkn3qiBzXUKn7XOVFFMBF2JI8saiP7iIE=;
+        b=D3SxbZGT9Lz/X6NgZ1mHGvVazeFTqbOb+mX+TpTFjbUPJUZY0K/f/Cpxjfm/uOubGF
+         Xrp5QMS93zFqoO8hkb8PLN3q5DdW6V6bVd3++6JIr4AOxVjZT1m9NyBj0ebk45rxlSZo
+         e4cDAcDYIap7KFnDY8Cd1kqK9TsgzK/qdm5j0BJmqoNfCMJkUGBpFy62Xora3AnRWF4N
+         PqsNb06kPaUoxdfoPl+pKNIuwXXUIxhJFXM4MQ5pX6ucOVrSS9Ta84tAbr91pEqYFRZ/
+         r/GxtSS4K69EKQQ3MJ5FaMJSuEVN5vnsIb6b4p7c+/OPcawjwZXqIEIt7rn75plc7fXl
+         IvQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773079626; x=1773684426;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MrfDzIDC5Rwkn3qiBzXUKn7XOVFFMBF2JI8saiP7iIE=;
+        b=lJeLxVgko37aA+hBsKidtDpVHd03Eg8G5w0npG6tldoUwoO/jnDZd5FrIf+HLH+oJ2
+         NRWksoNTNrLAVIQv8x5kYdSo2QNd1ElkpvP1RGLpamM6AtFQuEJw+MAC18mN5z44W54m
+         RHJ0RsFxhrXPcQqcfbb4tmxdMyaoZRdEg6bXV0nzpA8e8pMtPAAQC/0B4PKG3QQo/zuz
+         8c6hK8o9QeF4ebhJ7jacFL4V1YrMPDenaUC5T1yFxnZoAMA/VU4BAMc5jT/uSEcZ8Pff
+         CgN9x0PxzOVxPMqXmCWHyujL4ZOhVkvGSz/HuORr6cU/jEc0F3meuQYWFId6t7bvjI3k
+         D7Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCV0m8Fm1dWBNjN96nhr6cz0o6BQLO0RoxBdGBuFucuFWPPQA1oT5xwMxjGR68pQEwMf29F2k1efCTAC4IE3IDU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUc9oq5pXdOHw0Gks4ZlXNHIyhQEZ2+DPkHspmktYM1QFi0glV
+	oAp5fd3zErK1HZTHIPp+1yarbMA2ZXTsAqPr+vmMvJxu4JhFp4eQUYZemoz+5SaXXzg=
+X-Gm-Gg: ATEYQzzLdOPF3kXv8M7YpdKKagtWvNzZuaLSPrx3/Yv32GnmlK/ZB1LBcoGAJD+5BvP
+	8guFt03RFl9gxHFWUg6OJXd9izYlTcDEIieiV9qjITc6hQe4pMG33HZ2lSMs5pqECLokI/93oPt
+	LJAr8CSNNsyNV6uCLBvk7K6KPnPI0Zm1L6xIMtMCIgZYfrzrr3N8WUSa9U/8EdLxeOz3xcz1R6M
+	8n9EpJvZfkuQzqBB2AKF01cwkbBhWeHb2Az8ECjtnT7tueSvfuR1XKoD1m/9oO9eMMD95wTbGjK
+	9feNwTIYatiseyF41ZT1/FbcWQqrWTVMgXXmylI+lnirzENTLlys9JQlgpNJsmBvMvuX6Jm/X7W
+	fb29eBiRv0tjoGlPYlQDkJIgHT6gW+7RE2JTTR/4HW1eRsv4EFfhgZKhsMPnO/VbsdBmJL4a3Ie
+	Klsg/3jF899sbwIILHNt+P4oC7ffUN0mbZ1wXeMmTjCbI=
+X-Received: by 2002:a05:6000:220d:b0:439:c43a:acb1 with SMTP id ffacd0b85a97d-439da67c0bcmr22231635f8f.35.1773079626120;
+        Mon, 09 Mar 2026 11:07:06 -0700 (PDT)
+Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dae2ba66sm24939422f8f.20.2026.03.09.11.07.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 11:07:05 -0700 (PDT)
+Date: Mon, 9 Mar 2026 19:07:04 +0100
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftest: memcg: Skp memcg_sock test if address family
+ not supported
+Message-ID: <4ddd3jascnb6nt7quhyjfmsgsmtfmjofwmnrgjktz57cfbfymj@6ejbdgbg4lz2>
+References: <20260309160205.651754-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB7900:EE_|DS7PR12MB5862:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe2bde4e-e065-40fe-9d63-08de7e042fdb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	T9ucUy6baPRsjZHixdCq6NdQ5vyfSqw1pacHQGdD2MaDqp72LeOSfavpfJvsXwN7l8LUOx6PdD2f5wd6hnPffG20qk58yZiJJq7SPRP/8wvryTezRKWb1FwIVKkWk8tIp/bGw3cLflql27gS0YZ4F5EWGV/hcR3qUQUhN+23r3PkgbudiAOztMg+PpF4hmSVJzDi3R2YiGFm8EIi2YvE8VKdGM9yUTjqlFVNPIVB6fSbP9Fc7deFj5am/4vLA9gQiOJOmgvqW+w6+zHcLLyU07mAi657Kc3T8aktifyraMzMQ5xas2OCeqzNmB3OUV5+k6eXrNIc9TdU1rAprASxN4dlg4NuJ9bibld74LpK+gJn6KuSVJf+3NjYFhHbnNZ3uMDWVzcORZpDAfB5gvIA862Ia4yOIKZ/V7utTivTbocAUEs86k4tx+hmuFbC4StNkiVW2nDQOJZ3WULxv1Wls1M200hFmVdiq6UqQenac04RZy4tA6wyQA9U0fWeCMtU/Je6k1l1V/yu56A7LOH/UNwvqIakg9FJ2U4WrN5U8+lJXHzi2wNnCv/5bLi3nvyMHI4PzuKol4CYLAwiW+J4bcn5EevjOY7NnUTGN7ZMjfT51Rx8aWacnbpEZFIxOzEXpPErh3iaWIB1BsjQTKdNkIhtrrebUqmzTRcJswQWs6VaHEQeh9dOwPTzn0YzabWEQIpTtqMo6pg8jiUWWoj8aKk8/1b5VREQWV8K/MytsJA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?0rd2piHZbZ788/3BSvIDCWks/PRsEjun4fiOx0Yj6XEDZRvW5JBUseaxnn?=
- =?iso-8859-1?Q?rStSdBoAvBwRSmCCSCKrX3/P+3zm95HMEJJtFJhoO+w3Cftp0lQf6CjwHf?=
- =?iso-8859-1?Q?7+72vW4BHos76w0kIuqigrcLC3TSmzgNU5TQbmAp7kJhN9+Mjd0+NcTndf?=
- =?iso-8859-1?Q?94FNWkhCdxlqU2cXdDzD5GREWZB7JgNzgdB0jsprAsTfJuGe1bHs/Gogsm?=
- =?iso-8859-1?Q?3hF4qg0vTzZkJQmBFQZXjbeJWA0KBJVrCHFTsyF/F5ni/4uWo5FcU6Am2t?=
- =?iso-8859-1?Q?2Ns4fvhQ2FU+UKxEogf0AZh9jKkgvi+S5Rykl8dWeuQ+s5Y5+rAsfc5jmf?=
- =?iso-8859-1?Q?D7Y9P/mSBVrvh4YJFTK2DCVkgYKEoJhJCQBp38tQ4xxDq8QxI/eQi+sOyF?=
- =?iso-8859-1?Q?w0pbJECDWABzHhE9zPYqxdKrMkv9HN6uAOCyi104gB7ujzB99e9E3oz733?=
- =?iso-8859-1?Q?Zr5amD89k+rDWtKkyZVENh566Rj9mJAKmasz3huS4+DHd2YSnn+vF9hGvV?=
- =?iso-8859-1?Q?hr79vkhRk0kWrcnmhmiRF4IyUHMGi+V+h60RAMVGntw0JQJkcbCmoYhuvg?=
- =?iso-8859-1?Q?1gKWpoXz7DI7SrHPKWEZsXLABWNjm09EhjjA958bpVCJacHKX9lyom2Z+5?=
- =?iso-8859-1?Q?kxsDrrKi6eA1KnbyqyF0Rp+n+4XJ220pHIK64tJ0Y3M7Hzw1S7zpjtNXVL?=
- =?iso-8859-1?Q?jMNKTkvvyiIuJmr5nki5aEY4/UY+RaxJUm3hV1Kd4XjsHjcT2Gwg7ag/FR?=
- =?iso-8859-1?Q?Tr95GtObKIhZxTojgMTDqFbdy9p8G09wE8ocoHZ3+cj/W2AyjQZknG/9r2?=
- =?iso-8859-1?Q?hMAyHl5sb1cd7KLEG1p7lpCuFzsdI0CCScuBpLnSKQVdPJ+eZv8tE5mt4u?=
- =?iso-8859-1?Q?KO0Qwhr7sq7aonC/u35/D25M8VSsBSNwNTxFytTCb7o0RhGEqCW1veuoIS?=
- =?iso-8859-1?Q?pZsgVz33jPnUvVrNX6ywTAWGmPJHHmDG1RR6GJ3cCZaG2TJkD2PBELT1wJ?=
- =?iso-8859-1?Q?LF9ePJu3keExnA9W8fhQBCzYgQKyLdmDPPFVBqUggqljONaA1i3SVUk+3N?=
- =?iso-8859-1?Q?G8lGmgLswIuDfu34vr+m/zSm5vhv2R8/4ofzL4znJho0F5uHFhxQpJKTmM?=
- =?iso-8859-1?Q?ZAhOqgAMfK/usGYhwCo6h7JBP48goJDR4HmOUoMjx15Hb0hQjDLspkzLNL?=
- =?iso-8859-1?Q?pIy8peWCLkwkcyEjGhVyhFc5RD1u7z1UAJdzt4W3RZDKoZSeOgOqJkgjPH?=
- =?iso-8859-1?Q?bJk9ksA2KSpFlCfH7/BYphSr8CQjdisHLkwlPoSFkKE7+bR4/HOSRE01OC?=
- =?iso-8859-1?Q?wxkUTNBZewOuQm2FNJVXuOmQOT8AhxWxY/yvlviouAAKf+jb9iX28DV7BA?=
- =?iso-8859-1?Q?25z1vcpMAunMM7C4bAMxvIrOoY2/2pPTk1FbZ4/NNtHwW+HVPUfJ+rljP3?=
- =?iso-8859-1?Q?l8+C0i752oveTmC2B8ynuwLWh4+ZtOtHsdOwGITwgJnDgJK4zGqUC/g/vu?=
- =?iso-8859-1?Q?qzB57wPosGG+ttHeFxxwwcYerP1ht9hcalulkPY44+SRVqRKzQfiumBKD1?=
- =?iso-8859-1?Q?oXIjFqKyQDTkBqOO218SUT/pobSLmDbrEBf0lLGJZMwbckAs/DxrEuQn5S?=
- =?iso-8859-1?Q?9cMm4o0XOLED+2Xb4B44SW7Yt46cN4NRsc8NAGHdHEwCB8ly/Sn2qBXnRB?=
- =?iso-8859-1?Q?GnCy9wnH6VgnRiKk9tfZu5h5W+Cb6x0p6cskVuhYHuodBZdSy7I8ZGa4Qy?=
- =?iso-8859-1?Q?VSdm9Dus9XKi5AGO3MBgKEwhf2I4JoYSCv0dPI6SM3fKUBk6lATowqn21A?=
- =?iso-8859-1?Q?1MLN+4JzSQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe2bde4e-e065-40fe-9d63-08de7e042fdb
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7900.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 17:49:18.4158
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OZmErKLuKKuv8mR2nToS09eatXqI1uc02bIXZSciApWZR+xbuF7W3l1clUurPzUn5kWnkfKf1aKQj5VvL8jAQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5862
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yd53fwzzczbtgjoq"
+Content-Disposition: inline
+In-Reply-To: <20260309160205.651754-1-longman@redhat.com>
 
-On Sat, Mar 07, 2026 at 05:45:44AM +0100, Linus Lüssing wrote:
-> @@ -4431,6 +4437,9 @@ static void __br_multicast_open(struct net_bridge_mcast *brmctx)
->  #if IS_ENABLED(CONFIG_IPV6)
->  	__br_multicast_open_query(brmctx->br, &brmctx->ip6_own_query);
->  #endif
-> +
-> +	/* bridge interface is up, maybe set multicast state to active */
-> +	br_multicast_update_active(brmctx);
->  }
->  
->  static void br_multicast_open_locked(struct net_bridge *br)
-> @@ -4478,6 +4487,9 @@ static void __br_multicast_stop(struct net_bridge_mcast *brmctx)
->  	timer_shutdown(&brmctx->ip6_other_query.delay_timer);
->  	timer_shutdown(&brmctx->ip6_own_query.timer);
->  #endif
-> +
-> +	/* bridge interface is down, set multicast state to inactive */
 
-Noticed this while reviewing patch #14: The comments about the interface
-being up / down are inaccurate when __br_multicast_{open,stop}() are
-called for a per-VLAN multicast context
+--yd53fwzzczbtgjoq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] selftest: memcg: Skp memcg_sock test if address family
+ not supported
+MIME-Version: 1.0
+
+On Mon, Mar 09, 2026 at 12:02:05PM -0400, Waiman Long <longman@redhat.com> =
+wrote:
+> On systems where IPv6 isn't enabled or not configured to support
+> SOCK_STREAM, the test_memcg_sock test always fails.
+
+I think IPv6 is not substantial for the check...
+
+> The purpose of the test_memcg_sock test is to verify that
+> memory.stat.sock and memory.current values are close.
+
+=2E.. so this should work with IPv4 too.
+
+> If the socket() call fails, there is no way we can test that. I
+> believe it is better to just skip the test in this case instead of
+> reporting a test failure hinting that there may be something wrong
+> with the memcg code.
+
+Yes, the skip on (any) socket creation is also (independently) good.
+
+> @@ -1460,6 +1466,9 @@ static int test_memcg_sock(const char *root)
+>  	free(memcg);
+> =20
+>  	return ret;
+> +skip:
+> +	ret =3D KSFT_SKIP;
+> +	goto cleanup;
+
+Maybe make this analogous with other cases where there is no specific skip-=
+label but
+
+	if (err =3D=3D EAFNOSUPPORT) {
+		ret =3D KSFT_SKIP;
+		goto cleanup;
+	}
+
+Thanks,
+Michal
+
+--yd53fwzzczbtgjoq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaa8MRBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AjPoQD+PmjLLORgemm6L6Wd7y1R
+hoB0caqu50AlVSz1SKP3ThsBAP+AO9l6EzSrSBWNiUV7LSV/NsXeLyrdxjriU91M
+fVEL
+=GNSq
+-----END PGP SIGNATURE-----
+
+--yd53fwzzczbtgjoq--
