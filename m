@@ -1,124 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398933B531D
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 16:02:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125DA3E5EC7;
+	Mon,  9 Mar 2026 16:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773072182; cv=none; b=XapSjW7/WmM+QpIb2/GUYAO78bogUYs0AHUP+64n2f0qCH5WRiLe/BOlrAUjDIn/g2/H5TXfxpBCVAVEUvFlUFuaGVZPlqVrktKaSmHGojLDHKidkyfuj9OIkmwae52jEu/17ywhqcAvXx0xi9PEKRJsmm055C6zp+lWYePs2h0=
+	t=1773072257; cv=none; b=AlFVG52CfGfxOz/zFBNOx07K5aAYKOvKkFDx03rPpEh2V+FVNx+b9/TCvA4eGVKVwQGY0LgnmvoxMinBSI9P13ISE3crUsdIisJdLIs/cHDI2b329GtdgRTG5f9g9mjyvfHhPz0r/NsvEgtLBDtC+/oDNOUqJOAzXxtCB72wG7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773072182; c=relaxed/simple;
-	bh=VZ1BIqL8i6P+He8dWltWZCbdPkS9xTO6wWulg2F5f48=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LPyntuEJRTxjKXicc8VFbJinc3faXZnT35dTUkFs+FIFobG5bfOTQZm1vrAJiNtNhWbuhZU+2KHw0hTEcf7gQlDXDx+EDc5GNAAGTCTrzM+lArMiKENNL8RRL5LDnnGZsBjghbZWenP2ayiyNfgD/tBM7dROzgQ/dNslOjj+Fls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d5v83f2r; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d5v83f2r"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773072178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=u4dkpXFG4aTyAb5XVO2UTWBuvIYgMqymSwley3GnlI8=;
-	b=d5v83f2r1dgx0MQ+UKjKzN3GVlU4rV/A8kmxbu7qC65oA09uJufni7ypJHPUKx8gz3NCes
-	9384rArSDjSVnqiAqCH5p+t7K2aSQ77vT4JxU23IgvbrYFxnVRuPlXf6W+pV/0NPnw94nJ
-	4Qr1+grqQUkgtDXTsewmNs2Grv5IDnY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-540-B65hgm3aN2CjtyE_8CYC3A-1; Mon,
- 09 Mar 2026 12:02:54 -0400
-X-MC-Unique: B65hgm3aN2CjtyE_8CYC3A-1
-X-Mimecast-MFC-AGG-ID: B65hgm3aN2CjtyE_8CYC3A_1773072172
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 00B881955D48;
-	Mon,  9 Mar 2026 16:02:29 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.81.138])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 285521955D71;
-	Mon,  9 Mar 2026 16:02:25 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH] selftest: memcg: Skp memcg_sock test if address family not supported
-Date: Mon,  9 Mar 2026 12:02:05 -0400
-Message-ID: <20260309160205.651754-1-longman@redhat.com>
+	s=arc-20240116; t=1773072257; c=relaxed/simple;
+	bh=YQIh3iNHCHXWcQVEVV2uLPxl6ztZn3Z0aolgOoSBPTU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F4MVxdTq8RqQhyhRZHNWSHHcJ09qa4HZ1yE7dCJ93Lp7rejF/MdUHllQ1xM+x1tmUvgKKLVsjMoK7z08orAUip5LyOUqYCeFRbYrRZbxz2AsoH9gPqn3tzAd9Ah3DmVWJJHTK2NA9rAo8K4/T4grRD4O0RWOzaL8921TWEmjOb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
+Received: from local
+	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	 (Exim 4.99)
+	(envelope-from <daniel@makrotopia.org>)
+	id 1vzd5M-000000005at-3Ohq;
+	Mon, 09 Mar 2026 16:04:00 +0000
+Date: Mon, 9 Mar 2026 16:03:57 +0000
+From: Daniel Golle <daniel@makrotopia.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Jonas Gorski <jonas.gorski@gmail.com>
+Subject: [PATCH] selftests: net: local_termination: test link-local protocols
+Message-ID: <a085c707b3085eea58850f125c51a8868c5fb6f1.1773072062.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On systems where IPv6 isn't enabled or not configured to support
-SOCK_STREAM, the test_memcg_sock test always fails. The purpose
-of the test_memcg_sock test is to verify that memory.stat.sock and
-memory.current values are close. If the socket() call fails, there is
-no way we can test that. I believe it is better to just skip the test
-in this case instead of reporting a test failure hinting that there
-may be something wrong with the memcg code.
+Add tests to local_termination.sh to verify that link-local frames
+arrive. On some switches the DSA driver uses bridges to connect the
+user ports to their CPU ports. More "intelligent" switches typically
+don't forward link-local frames, but may trap them to an internal
+microcontroller. The driver may have to change trapping rules, so
+link-local frames end up on the DSA CPU ports instead of being
+silently dropped or trapped to the internal microcontroller of the
+switch.
 
-Fixes: 5f8f019380b8 ("selftests: cgroup/memcontrol: add basic test for socket accounting")
-Signed-off-by: Waiman Long <longman@redhat.com>
+Add two tests which help to validate this has been done correctly:
+ - Link-local STP BPDU should always arrive at the Linux netdev
+ - Link-local LLDP should arrive at standalone ports (and the test
+   should be skipped on bridged ports similar to how it is done
+   for the IEEE1588v2/PTP tests)
+
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- tools/testing/selftests/cgroup/test_memcontrol.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ .../net/forwarding/local_termination.sh       | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 2fb096a2a9f9..3c13ef67fafb 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -1280,8 +1280,11 @@ static int tcp_server(const char *cgroup, void *arg)
- 	saddr.sin6_port = htons(srv_args->port);
+diff --git a/tools/testing/selftests/net/forwarding/local_termination.sh b/tools/testing/selftests/net/forwarding/local_termination.sh
+index 1f2bf6e818477..9bc9d25e71368 100755
+--- a/tools/testing/selftests/net/forwarding/local_termination.sh
++++ b/tools/testing/selftests/net/forwarding/local_termination.sh
+@@ -100,6 +100,15 @@ PTP_1588_IPV6_PDELAY_REQ=" \
+ 00 00 3e 37 63 ff fe cf 17 0e 00 01 00 01 05 7f \
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 \
+ 00 00 00 00 00 00"
++LINK_LOCAL_STP_BPDU=" \
++01:80:c2:00:00:00 00:00:de:ad:be:ef 00 26 42 42 03 \
++00 00 00 00 00 80 00 aa bb cc dd ee ff 00 00 00 00 \
++80 00 aa bb cc dd ee ff 80 01 00 00 14 00 02 00 \
++0f 00"
++LINK_LOCAL_LLDP=" \
++01:80:c2:00:00:0e 00:00:de:ad:be:ef 88:cc 02 07 04 \
++00 11 22 33 44 55 04 05 05 65 74 68 30 06 02 00 \
++78 00 00"
  
- 	sk = socket(AF_INET6, SOCK_STREAM, 0);
--	if (sk < 0)
-+	if (sk < 0) {
-+		/* Pass back errno to the ctl_fd */
-+		write(ctl_fd, &errno, sizeof(errno));
- 		return ret;
-+	}
+ # Disable promisc to ensure we don't receive unknown MAC DA packets
+ export TCPDUMP_EXTRA_FLAGS="-pl"
+@@ -213,7 +222,15 @@ run_test()
+ 	mc_route_destroy $rcv_if_name
+ 	mc_route_destroy $send_if_name
  
- 	if (setsockopt(sk, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) < 0)
- 		goto cleanup;
-@@ -1414,6 +1417,9 @@ static int test_memcg_sock(const char *root)
++	ip maddress add 01:80:c2:00:00:00 dev $rcv_if_name
++	send_raw $send_if_name "$LINK_LOCAL_STP_BPDU"
++	ip maddress del 01:80:c2:00:00:00 dev $rcv_if_name
++
+ 	if [ $skip_ptp = false ]; then
++		ip maddress add 01:80:c2:00:00:0e dev $rcv_if_name
++		send_raw $send_if_name "$LINK_LOCAL_LLDP"
++		ip maddress del 01:80:c2:00:00:0e dev $rcv_if_name
++
+ 		ip maddress add 01:1b:19:00:00:00 dev $rcv_if_name
+ 		send_raw $send_if_name "$PTP_1588_L2_SYNC"
+ 		send_raw $send_if_name "$PTP_1588_L2_FOLLOW_UP"
+@@ -304,7 +321,15 @@ run_test()
+ 		"$smac > $UNKNOWN_MACV6_MC_ADDR3, ethertype IPv6 (0x86dd)" \
+ 		true "$test_name"
  
- 		if (!err)
- 			break;
-+		if (err == EAFNOSUPPORT)
-+			/* Skip if address family not supported by protocol */
-+			goto skip;
- 		if (err != EADDRINUSE)
- 			goto cleanup;
- 
-@@ -1460,6 +1466,9 @@ static int test_memcg_sock(const char *root)
- 	free(memcg);
- 
- 	return ret;
-+skip:
-+	ret = KSFT_SKIP;
-+	goto cleanup;
- }
- 
- /*
++	check_rcv $rcv_if_name "Link-local STP BPDU" \
++		"> 01:80:c2:00:00:00" \
++		true "$test_name"
++
+ 	if [ $skip_ptp = false ]; then
++		check_rcv $rcv_if_name "Link-local LLDP" \
++			"> 01:80:c2:00:00:0e" \
++			true "$test_name"
++
+ 		check_rcv $rcv_if_name "1588v2 over L2 transport, Sync" \
+ 			"ethertype PTP (0x88f7).* PTPv2.* msg type *: sync msg" \
+ 			true "$test_name"
 -- 
 2.53.0
-
