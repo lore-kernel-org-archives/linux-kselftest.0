@@ -1,143 +1,181 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AD5339B41
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 18:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718BC34BA28
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 18:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773079629; cv=none; b=KccqtVo5jeZiw9L2tJl9zr40ASTUz1+fV37qEKxcp3e2iL6LGm38epAqSTxSm9UgTBeT/ZtrmYvN8SdH0mN8iuubtgO2Ur8wXl3ZuK7kXxVoGlrvgNg8br40F5uZcF9fOzP0rRUTg8ul4hV1M/9I3saaqE0P/GePu8OOrbHX+2U=
+	t=1773081322; cv=none; b=hZX8YR06DcGWCFVp11uwR8ZRYmdzDRAkL5SY4+1dzfTh5AIBS8XOpElYbtZ8yPnvKMdj70GUuLmq4Qvji2aLdy2eU9MVYtwlg2DUqWv2KP4C5jKUQzuCV5qX7aSaz/RWZv8AKI/CH9JnbW79g22L4UA5h9c714S4Sk93G6hYps8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773079629; c=relaxed/simple;
-	bh=MmljSQnw2lcYLsSo3FghZOv/9z9lThlxmlthDeAKQp4=;
+	s=arc-20240116; t=1773081322; c=relaxed/simple;
+	bh=srg+dxIhiAQAT4kVm4zitW6wSGv/aiVh6j6o8T2Wnnw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J6x/PcY0UoWXLFlijWqQss7k82YseuhvXcsurQfbyFOZmqJ6dESrHwjItJmuCLxHfTW08zMqdH1Ngvog0JH5bt/jR3/ot3yhFnLqWtzk9T1M2zWXK5cKazfZ7efQEl80xB0EJHNKtxq3Wn4SGKCCCed/pkH3QaaKl0WfetvGpkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=D3SxbZGT; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=osg5ppok4uq6A3bPWrE1WRIvJ6DB3jLLCIWQM7RUOfBi68KYVeqKMMfxOLVVZFpRTfb5DShrR0my/d7aerugecpIN0vBGEblN7LpmZQOJGTQEUjlIHRLL7oBbgwen2gm7uFPhTOyYhMvQsooBNmQ5yaXkHzpu+yioBuapNDLcTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kPetDQ0y; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="D3SxbZGT"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439c9bdc1eeso2539057f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 11:07:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kPetDQ0y"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-439b9b190easo5724664f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 11:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773079626; x=1773684426; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773081320; x=1773686120; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MrfDzIDC5Rwkn3qiBzXUKn7XOVFFMBF2JI8saiP7iIE=;
-        b=D3SxbZGT9Lz/X6NgZ1mHGvVazeFTqbOb+mX+TpTFjbUPJUZY0K/f/Cpxjfm/uOubGF
-         Xrp5QMS93zFqoO8hkb8PLN3q5DdW6V6bVd3++6JIr4AOxVjZT1m9NyBj0ebk45rxlSZo
-         e4cDAcDYIap7KFnDY8Cd1kqK9TsgzK/qdm5j0BJmqoNfCMJkUGBpFy62Xora3AnRWF4N
-         PqsNb06kPaUoxdfoPl+pKNIuwXXUIxhJFXM4MQ5pX6ucOVrSS9Ta84tAbr91pEqYFRZ/
-         r/GxtSS4K69EKQQ3MJ5FaMJSuEVN5vnsIb6b4p7c+/OPcawjwZXqIEIt7rn75plc7fXl
-         IvQA==
+        bh=dHSASEtvOfEiBqmxuf7zhZcsqNoilbHkrVseGDfvsXw=;
+        b=kPetDQ0y6fBaOc5IIyI/eB4U78IWK7YFrH4bskAlLavqNBSWSmv+zPfRHAx5fE7vn7
+         bwH16kkGOJKUeKxtqQNVWzx+gMQKikEf+EHXHlBMtfOWkVtdNisFHJUndOrWB+m52Tbh
+         YF1NRGyd5lZX6nVtVsdQDWl/FHr6s4MTQmXm6QznPYNJZQ9cuQjKritvC7CfIGSRvQ2S
+         UoX4CM9SIYy7oAtexG3njEUeMyAQLx+ANx+zupdgDi5V1cBKlFfN1oifhqeOpBIDbvdn
+         2TqRwFB1FAT89Cs9FWMwvzv17J1Pga4qOYskDm2ZjayvKtsdFRLtDbkD2/2QVTzYoOb/
+         ZO0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773079626; x=1773684426;
+        d=1e100.net; s=20230601; t=1773081320; x=1773686120;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MrfDzIDC5Rwkn3qiBzXUKn7XOVFFMBF2JI8saiP7iIE=;
-        b=lJeLxVgko37aA+hBsKidtDpVHd03Eg8G5w0npG6tldoUwoO/jnDZd5FrIf+HLH+oJ2
-         NRWksoNTNrLAVIQv8x5kYdSo2QNd1ElkpvP1RGLpamM6AtFQuEJw+MAC18mN5z44W54m
-         RHJ0RsFxhrXPcQqcfbb4tmxdMyaoZRdEg6bXV0nzpA8e8pMtPAAQC/0B4PKG3QQo/zuz
-         8c6hK8o9QeF4ebhJ7jacFL4V1YrMPDenaUC5T1yFxnZoAMA/VU4BAMc5jT/uSEcZ8Pff
-         CgN9x0PxzOVxPMqXmCWHyujL4ZOhVkvGSz/HuORr6cU/jEc0F3meuQYWFId6t7bvjI3k
-         D7Bg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0m8Fm1dWBNjN96nhr6cz0o6BQLO0RoxBdGBuFucuFWPPQA1oT5xwMxjGR68pQEwMf29F2k1efCTAC4IE3IDU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUc9oq5pXdOHw0Gks4ZlXNHIyhQEZ2+DPkHspmktYM1QFi0glV
-	oAp5fd3zErK1HZTHIPp+1yarbMA2ZXTsAqPr+vmMvJxu4JhFp4eQUYZemoz+5SaXXzg=
-X-Gm-Gg: ATEYQzzLdOPF3kXv8M7YpdKKagtWvNzZuaLSPrx3/Yv32GnmlK/ZB1LBcoGAJD+5BvP
-	8guFt03RFl9gxHFWUg6OJXd9izYlTcDEIieiV9qjITc6hQe4pMG33HZ2lSMs5pqECLokI/93oPt
-	LJAr8CSNNsyNV6uCLBvk7K6KPnPI0Zm1L6xIMtMCIgZYfrzrr3N8WUSa9U/8EdLxeOz3xcz1R6M
-	8n9EpJvZfkuQzqBB2AKF01cwkbBhWeHb2Az8ECjtnT7tueSvfuR1XKoD1m/9oO9eMMD95wTbGjK
-	9feNwTIYatiseyF41ZT1/FbcWQqrWTVMgXXmylI+lnirzENTLlys9JQlgpNJsmBvMvuX6Jm/X7W
-	fb29eBiRv0tjoGlPYlQDkJIgHT6gW+7RE2JTTR/4HW1eRsv4EFfhgZKhsMPnO/VbsdBmJL4a3Ie
-	Klsg/3jF899sbwIILHNt+P4oC7ffUN0mbZ1wXeMmTjCbI=
-X-Received: by 2002:a05:6000:220d:b0:439:c43a:acb1 with SMTP id ffacd0b85a97d-439da67c0bcmr22231635f8f.35.1773079626120;
-        Mon, 09 Mar 2026 11:07:06 -0700 (PDT)
-Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dae2ba66sm24939422f8f.20.2026.03.09.11.07.05
+        bh=dHSASEtvOfEiBqmxuf7zhZcsqNoilbHkrVseGDfvsXw=;
+        b=K8a/jADc0ACCMMblEhoZ2b46F1ricapdI0PR735/xGoE/rS2VsKOK0CMQUxwFxoekz
+         56c9TJe6qSPHsLp6H/8p/awwjtzs14mdELomUSUwYdIWLzjo7thW8uMMuPAzWsJXM6nU
+         RQN3Ww1/UEzTziV5qOiZVItuu++8zaJ8BRfgk5j0epJO7Qo8gPF4W8mY7QRm47+bIAew
+         igDJ8r5aq6Xj9/avaZ7TvXTm0/EviORRPTvHsC/TXQkhpD/5fH+ekdpCvvMIPF0eDLGv
+         kSbV3dRt0lSznq0KSx+rLk1U1tj8O/zWN4pDGkNvInIvr4F5Hn0nZGZhV4c/LD5f+Df+
+         dHQw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJFFU23gmwiCpolqZQOGV8uOzpMLFxQhTqI+AnGh/c91EZ5v8mxte68360UZ0nw+SwCJ/nmrXMZfmK9KsdDn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXbmXQX5BKTrMteC+zWHPJI/QktOqGTioAQjpWbyrlyCk/CP4L
+	Qja0m+lGv8WmDaPCzyharfYxIPpi9k3bQW8K91SNWr3vy5rvIA+PGTtx
+X-Gm-Gg: ATEYQzwh2ku2HYNFDXFSFaPqwZ/dT4eP8yAOM5fwB/1Ykh8HRDvQ9jjnkJVC70zpb+b
+	qN9GZYm0yDG97iabax8CJl2sketMpOuC6SsgRK10+TafAEKuLZBsQ19avUNGRJfNvI7e0EWmsxn
+	kjtkibnv/rihhtlr/YHCj5fG45r+/e8vHcF8nXwZum990Tdy1L+dIYahq+qmT6b/K5X0zjfmSU0
+	4SlCDTHuakKJlq9hlmLFa7jyhKnd0/oZHGxyZw/HZRbVOnENmc0n9jrb2VBpt7Xz/oYwukTQB0n
+	QKlAb8eSEIkEtFOPHUIOu9zDRTqw2PhK88zJKiOT1yGUtYVMFYzKji2DzqlLr/WV3PUzCEXw9nO
+	DJKtq+G3Ey8DNuyBLcR0i+zSNl26pkJVZp5KfgL711sptdkV12ot4P0ypVAK9kIUFrHERlrNIyt
+	0k3PaPLJ7HT3e9GCLsvbU7V3X2W1/ZZeQP4UaunuuE1e7bkuKqT9Dm/cGw6zA97ePcyRfRB/XsW
+	96KI+CnhHOkQRVvv0g4mA8=
+X-Received: by 2002:a05:6000:2285:b0:439:c67d:9fe8 with SMTP id ffacd0b85a97d-439da3526ddmr20856163f8f.22.1773081319621;
+        Mon, 09 Mar 2026 11:35:19 -0700 (PDT)
+Received: from gandalf.schnuecks.de (p200300c14f1996009e6b00fffe39b8a7.dip0.t-ipconnect.de. [2003:c1:4f19:9600:9e6b:ff:fe39:b8a7])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dad1cb7csm29257753f8f.0.2026.03.09.11.35.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2026 11:07:05 -0700 (PDT)
-Date: Mon, 9 Mar 2026 19:07:04 +0100
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftest: memcg: Skp memcg_sock test if address family
- not supported
-Message-ID: <4ddd3jascnb6nt7quhyjfmsgsmtfmjofwmnrgjktz57cfbfymj@6ejbdgbg4lz2>
-References: <20260309160205.651754-1-longman@redhat.com>
+        Mon, 09 Mar 2026 11:35:19 -0700 (PDT)
+Received: by gandalf.schnuecks.de (Postfix, from userid 500)
+	id AB67F30287C9; Mon, 09 Mar 2026 19:35:18 +0100 (CET)
+Date: Mon, 9 Mar 2026 19:35:18 +0100
+From: Simon Baatz <gmbnomis@gmail.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	David Ahern <dsahern@kernel.org>, Jon Maloy <jmaloy@redhat.com>,
+	Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com,
+	Shuah Khan <shuah@kernel.org>, Stefano Brivio <sbrivio@redhat.com>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev
+Subject: Re: [PATCH net-next v3 1/6] tcp: implement RFC 7323 window
+ retraction receiver requirements
+Message-ID: <aa8S5pEbxXIG5oZQ@gandalf.schnuecks.de>
+References: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com>
+ <20260309-tcp_rfc7323_retract_wnd_rfc-v3-1-4c7f96b1ec69@gmail.com>
+ <CANn89i+38t+PpB5duS_-FX_=PwyCQaN2HYohocJBAvZ7Cd8-KQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yd53fwzzczbtgjoq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260309160205.651754-1-longman@redhat.com>
+In-Reply-To: <CANn89i+38t+PpB5duS_-FX_=PwyCQaN2HYohocJBAvZ7Cd8-KQ@mail.gmail.com>
 
+Hi Eric,
 
---yd53fwzzczbtgjoq
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] selftest: memcg: Skp memcg_sock test if address family
- not supported
-MIME-Version: 1.0
+thank you for the quick review.
 
-On Mon, Mar 09, 2026 at 12:02:05PM -0400, Waiman Long <longman@redhat.com> =
-wrote:
-> On systems where IPv6 isn't enabled or not configured to support
-> SOCK_STREAM, the test_memcg_sock test always fails.
+On Mon, Mar 09, 2026 at 10:22:39AM +0100, Eric Dumazet wrote:
+> On Mon, Mar 9, 2026 at 9:03???AM Simon Baatz via B4 Relay
+> <devnull+gmbnomis.gmail.com@kernel.org> wrote:
+> >
+> > From: Simon Baatz <gmbnomis@gmail.com>
+> >
+> > By default, the Linux TCP implementation does not shrink the
+> > advertised window (RFC 7323 calls this "window retraction") with the
+> > following exceptions:
+> >
+> > - When an incoming segment cannot be added due to the receive buffer
+> >   running out of memory. Since commit 8c670bdfa58e ("tcp: correct
+> >   handling of extreme memory squeeze") a zero window will be
+> >   advertised in this case. It turns out that reaching the required
+> >   memory pressure is easy when window scaling is in use. In the
+> >   simplest case, sending a sufficient number of segments smaller than
+> >   the scale factor to a receiver that does not read data is enough.
+> >
+> > - Commit b650d953cd39 ("tcp: enforce receive buffer memory limits by
+> >   allowing the tcp window to shrink") addressed the "eating memory"
+> >   problem by introducing a sysctl knob that allows shrinking the
+> >   window before running out of memory.
+> >
+> > However, RFC 7323 does not only state that shrinking the window is
+> > necessary in some cases, it also formulates requirements for TCP
+> > implementations when doing so (Section 2.4).
+> >
+> > This commit addresses the receiver-side requirements: After retracting
+> > the window, the peer may have a snd_nxt that lies within a previously
+> > advertised window but is now beyond the retracted window. This means
+> > that all incoming segments (including pure ACKs) will be rejected
+> > until the application happens to read enough data to let the peer's
+> > snd_nxt be in window again (which may be never).
+> >
+> > To comply with RFC 7323, the receiver MUST honor any segment that
+> > would have been in window for any ACK sent by the receiver and, when
+> > window scaling is in effect, SHOULD track the maximum window sequence
+> > number it has advertised. This patch tracks that maximum window
+> > sequence number rcv_mwnd_seq throughout the connection and uses it in
+> > tcp_sequence() when deciding whether a segment is acceptable.
+> >
+> > rcv_mwnd_seq is updated together with rcv_wup and rcv_wnd in
+> > tcp_select_window(). If we count tcp_sequence() as fast path, it is
+> > read in the fast path. Therefore, rcv_mwnd_seq is put into rcv_wnd's
+> > cacheline group.
+> >
+> > The logic for handling received data in tcp_data_queue() is already
+> > sufficient and does not need to be updated.
+> >
+> > Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
+> 
+> ...
+> 
+> > diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> > index f0ebcc7e287173be6198fd100130e7ba1a1dbf03..c86910d147f2394bf414d7691d8f90ed41c1b0e3 100644
+> > --- a/net/ipv4/tcp_output.c
+> > +++ b/net/ipv4/tcp_output.c
+> > @@ -293,6 +293,7 @@ static u16 tcp_select_window(struct sock *sk)
+> >                 tp->pred_flags = 0;
+> >                 tp->rcv_wnd = 0;
+> >                 tp->rcv_wup = tp->rcv_nxt;
+> > +               tcp_update_max_rcv_wnd_seq(tp);
+> 
+> Presumably we do not need  tcp_update_max_rcv_wnd_seq() here ?
 
-I think IPv6 is not substantial for the check...
+When we don't update here and are forced to accept a beyond-window
+packet because the receive queue is empty, we can reach a state where
 
-> The purpose of the test_memcg_sock test is to verify that
-> memory.stat.sock and memory.current values are close.
+ rcv_mwnd_seq < rcv_wup + rcv_wnd == rcv_nxt 
 
-=2E.. so this should work with IPv4 too.
+I noticed this case when instrumenting the kernel and got violations
+of the invariant rcv_wup + rcv_wnd <= rcv_mwnd_seq.
 
-> If the socket() call fails, there is no way we can test that. I
-> believe it is better to just skip the test in this case instead of
-> reporting a test failure hinting that there may be something wrong
-> with the memcg code.
+So, while not strictly needed (tcp_max_receive_window() would still
+be 0 as rcv_nxt > rcv_mwnd_seq), I opted to include the call here to
+keep rcv_mwnd_seq the actual maximum sequence number at all times.
 
-Yes, the skip on (any) socket creation is also (independently) good.
+> 
+> Otherwise patch looks good, thanks.
 
-> @@ -1460,6 +1466,9 @@ static int test_memcg_sock(const char *root)
->  	free(memcg);
-> =20
->  	return ret;
-> +skip:
-> +	ret =3D KSFT_SKIP;
-> +	goto cleanup;
-
-Maybe make this analogous with other cases where there is no specific skip-=
-label but
-
-	if (err =3D=3D EAFNOSUPPORT) {
-		ret =3D KSFT_SKIP;
-		goto cleanup;
-	}
-
-Thanks,
-Michal
-
---yd53fwzzczbtgjoq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaa8MRBsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AjPoQD+PmjLLORgemm6L6Wd7y1R
-hoB0caqu50AlVSz1SKP3ThsBAP+AO9l6EzSrSBWNiUV7LSV/NsXeLyrdxjriU91M
-fVEL
-=GNSq
------END PGP SIGNATURE-----
-
---yd53fwzzczbtgjoq--
+-- 
+Simon Baatz <gmbnomis@gmail.com>
