@@ -1,103 +1,164 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0AC3D6488;
-	Mon,  9 Mar 2026 15:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773071030; cv=none; b=rZcFkDrvntE5DPi1BhLAS2vnv9OIkWiG+lQeQClUYzMrRt1jktdAgmuYZQ8ILzKiNg/WaHvCdstyAFWYiibS5xSsFU7iYQI80cXP/4s36HdtDZ6nzcYa2NkAyEz30K6JGPKu6Ic0xMa5fSzI8l0lbGz4eB3nsNDGFo8SrnEf9eU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773071030; c=relaxed/simple;
-	bh=z5JIIR3l35H57ojW810ekNHpQRdUtfUvDV/Ck2UyYrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kBzUKa+0n79LBP4WJcN74PQQCyukjRdt7A8uFTd2wSGrB/47HusMb9STmrYOSdPBGKwkvkM0e+684OBAzFdmduaYp3qE1mXNiP1EI8eLbY9g+KNYlH/21JHlOC7VqgYMeiXZtBuLycpbj9AL0xVqWvCFxgERYpQRNRTymFUN3v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lHa7ArPq; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F314525A645
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 15:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773071114; cv=pass; b=kX2qc/uEypfYBgvuSlcHL/Ki+wKF4Xzxd9JyErlEVMcyrziG2jG6Txnz3KtJXhTXTWmfLtR9vm1i3iqFjsciGe9jJzHqq8kK8utguUHeSjEYIS1EpCEI2tHK4hiWG25MKuvX9BJv3ltga3w6UR+Z1dy2tYzWHiRft5o2EhnUM0E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773071114; c=relaxed/simple;
+	bh=FQ+rfw6YSM+Ur2t0O+8S8EZHYkkVvAytEeux3uABvPk=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CLyPk1sfIT6EmOcFT/gP/lEhHaVzt0Zo+csFr41twxtjfJl84rC0CDTYVABKAJJRTqxCBQpwAEtOk4G15Ue43mrmhVyabrkhxQ6vmpfreqPEE4O6kC8eEA22CIcwv8SkdvOs+RVP7gAm93sRal7pqEEVn5YCjLla9OMXJXmVrm8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xI5mH1Ok; arc=pass smtp.client-ip=209.85.221.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lHa7ArPq"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uPx63lp+sPMATIo9ouOevMaRufSI74blMCToYQqW7Ks=; b=lHa7ArPqVNC9cAmf9bVeDPgUy6
-	fiNXQt+Kqei8WgabS7/SuhMqAut39oVSCxKSdbI2BDwyOBE3FBlJM30SKvTlGP5FCjXO2Tfyb1T9p
-	abCNmmZfIHwFpWmhFZAhMOZ/V3w1VQN53k/pra2ptD4D/mD5Pkng923q2BDBizQGLdbjM3Aoqhe65
-	IHAiIq6qipjuux0c3AaE1wje02ZRaNC0SBVmBrIt4tzEYIaz/+QJsVINoH1MMHXP+SRc3CLYH0BXh
-	8KvQeN8SzhaFt7r6Y2ragdEJQKAG6hE7Z74ln5+Kc+roxv7snoqBtSW7Rm0LAf+JmXTyd0ue6zOdH
-	4FlESyuw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vzclm-00000007dEu-3NvA;
-	Mon, 09 Mar 2026 15:43:46 +0000
-Date: Mon, 9 Mar 2026 08:43:46 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-Message-ID: <aa7qson15uJpL-BL@infradead.org>
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
- <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org>
- <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xI5mH1Ok"
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-56aebfb4184so5175434e0c.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 08:45:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773071112; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WMmydvFGU8WeETMcbQuhrVaYOWDDEMYUXFcVQ47ZLybJu6PhBchixh/8ZhqvUxxwXE
+         88wFV0Kbek8ohAYGgbZCu8IhIDwLwy8DJ+T6FPb1rp7CpRA7cLxlIxiWta7jbhdReKOJ
+         6akmL9lzf5KUt5Xan+Ue8GdJDZYwLcNXlwNYtb1+gTuornBkMQQqmENi4iHcaqLxqTtL
+         YFDdwGPeekDsmwxzVh1kPIkPA21xBacNI+DM5apinREIOjXImjfLTvukOQ4K93S/+qxS
+         G8Y51BFvmgiqUt9qG2pH6/P8f32XsJaK1lRVvq8JjFRfSPmUsZwOMauCInbjqz4DlNq7
+         fCXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=bKp7UfWwsR+Qtr2/5qSzMlZ35ZQUtFxqOaPiGk/f9/o=;
+        fh=ncM33mb/T7aEFsWg31G0HQNCYivb+evFDW32KdxqzZA=;
+        b=RD/5zcOJBrc/9gN76a1e8Wxc4dBADJ+OPSKKKcdRlaSDs23p+WtTHuhbfyfITC9JO0
+         RiDXNaX6xN/Y3+mLK4TBJhLShUSDjWthx9jf5/FH2GT4zRWbk+kd0VjsUbTKyzHtTM2e
+         bAXUHRt1qm54ufLaH0V7qHqG699amYZ5xdaiOa0VhnQ01eTJ0b5ThlyRKiBb28zKaNEn
+         wwvdNrsiSiJS0ZS0+AyK2jQ7ddhAqgAEdE2U4yHWA83rBvgV/fNl55M5YkAv5ERutc0V
+         YcESMSCM9vT/H1I2ybqWeF/9N6FO9T5kIkCWCKHg57R5JiO9ZBOdsASwHiSG4dzBHnpV
+         FdSA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773071112; x=1773675912; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bKp7UfWwsR+Qtr2/5qSzMlZ35ZQUtFxqOaPiGk/f9/o=;
+        b=xI5mH1OkbEx5rEciwSIW1r8sSiLBgdGlSOlZdRK6ui/M4nAvFHW8cqdINYfAXsV8uG
+         nI8bSnfXg0WmJyzGTT4KYmmik5uOhjiWXFNNN14RCQ6kfG8md8JpD12d9PnsFp8CBb1s
+         M8dPVYwMPiKqykvvLzCaRCNuF6x88XCJz0UtP/nxZjLTELP5LxX3WZ9mmh4rvorqeHDC
+         FyXPy7Jpc0aPA/cTi1HrTrP/p+3xCtoe/TNwAtZwTewTH8loPRekj2HfeUsE0o5Y8BdT
+         E9EMgjx38u6ekuFmEvOkfZ9NWw8lFW9GeB+xS0zv/EBLsB1y0gkdSa1SZtV4LgVKrjRb
+         EGow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773071112; x=1773675912;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bKp7UfWwsR+Qtr2/5qSzMlZ35ZQUtFxqOaPiGk/f9/o=;
+        b=fx32GU2gvSD56vF2h3LjEDy4zoAY9oARATIj/ym34LnxBom1+nsHeCbQKsdr62FgPE
+         L8hNW0tLpUmg3j0ungl7JeoMlEv/qCpUb19kg/RUFL5r7HRFUa/821Frd/bHJy4bm06s
+         U2OVbpJayucM9EGk2ckzimTTTdAOZ6issQJ8dxJjCVfwvAyVBNyi6NZPWW2hsHzoj9jf
+         pDkiKQKCZC+xtqFSBqFNCyu2zPh+X4pfYvqKcdrt1US2ndx8UiJNlwZZjlTZEdGyibdv
+         r2X0qaNq1/Hkj3kDZU9z5gdbDxQRQA47tsmtvL6JM2p9EmOnsvk9/2nmtuUwZSk5y8q3
+         eJug==
+X-Forwarded-Encrypted: i=1; AJvYcCWBPVXmGDGtzujWMJ9OEsXCfJkxhfhBxqZMA3LVl1zdNADuBgPYLxBje2bxqzz4Zat8R1sg2GbY8Q3ANWvpgW4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2wyhjVALNNoViBCQtbVnperhUVDS4FW40Jh+Lb7jRvkPOJQvR
+	hDMRjMW7B5huTKbsJuHM5R6sXNcJheDLLbbm1PwjJ6v1Hu6sLU4hrigmnCZZr3zzIPAC/B+UXM9
+	Xh25pvurtUT5/xaA+g60BAy5Wgg2Mmur2QkLiT173
+X-Gm-Gg: ATEYQzz61JG3oZ6SbaiJw9dup4vGQ5XS49f0VM2XfCmFu4EdbTdz9M/5UXmAbR6SOu3
+	bROI1wO0iqgW0ieCmghHuF3FVLpHYrq0wYZ3MvlZ8mAMsm2sCmdtnGSOj2Ikp9+Iu4v3ibt57aS
+	hM6rgQQPg85KsUiT4qiNKIBopgKK7HMsq4EmQSZSDlcMJXiF1KoG0v8DCGUIIDldQ/9KvdOUYXm
+	dW7XbboPJlC1Ryq6olu4Kcu1LrmQeQ+gp4z7RQpwTJgRxobLi9WQ31aRWUAX7Y7AGvriQoYKUe/
+	BBdNsi9SI51Cz92N03uYYNJrs6O74+k17WjlzZE1Dg==
+X-Received: by 2002:a05:6102:ccf:b0:600:131f:b68a with SMTP id
+ ada2fe7eead31-600131fe1bemr2252059137.23.1773071109964; Mon, 09 Mar 2026
+ 08:45:09 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 9 Mar 2026 08:45:09 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 9 Mar 2026 08:45:09 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <577c4725-7eda-4693-a55a-413572541161@kernel.org>
+References: <20260309-gmem-st-blocks-v3-0-815f03d9653e@google.com>
+ <20260309-gmem-st-blocks-v3-1-815f03d9653e@google.com> <577c4725-7eda-4693-a55a-413572541161@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Date: Mon, 9 Mar 2026 08:45:09 -0700
+X-Gm-Features: AaiRm50NI2W_b1s4wqVK3z2E19_F4wrYli0WrzITukeFFAKkCo-7bYk8Lb2_YMI
+Message-ID: <CAEvNRgHhFoyh__shK_YefhUOTP4RaG-sivUH=4Gj-2iy1HX+tw@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 1/4] KVM: guest_memfd: Track amount of memory
+ allocated on inode
+To: "David Hildenbrand (Arm)" <david@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	seanjc@google.com, rientjes@google.com, rick.p.edgecombe@intel.com, 
+	yan.y.zhao@intel.com, fvdl@google.com, jthoughton@google.com, 
+	vannapurve@google.com, shivankg@amd.com, michael.roth@amd.com, 
+	pratyush@kernel.org, pasha.tatashin@soleen.com, kalyazin@amazon.com, 
+	tabba@google.com, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Mar 06, 2026 at 10:27:26AM -0800, Linus Torvalds wrote:
-> On Fri, 6 Mar 2026 at 06:44, Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > More a comment on the previous patch, but I think exporting do_exit
-> > which can work on any task is a really bad idea.
-> 
-> What is the advantage of a module only being able to do
-> kthread_exit(), and not able to do a regular do_exit()?
+"David Hildenbrand (Arm)" <david@kernel.org> writes:
 
-Because it can't fuck up the state of random tasks.
+> On 3/9/26 10:53, Ackerley Tng wrote:
+>> The guest memfd currently does not update the inode's i_blocks and i_bytes
+>> count when memory is allocated or freed. Hence, st_blocks returned from
+>> fstat() is always 0.
+>>
+>> Introduce byte accounting for guest memfd inodes.  When a new folio is
+>> added to the filemap, add the folio's size.  Use the .invalidate_folio()
+>> callback to subtract the folio's size from inode fields when folios are
+>> truncated and removed from the filemap.
+>>
+>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>> ---
+>>  virt/kvm/guest_memfd.c | 14 ++++++++++++++
+>>  1 file changed, 14 insertions(+)
+>>
+>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+>> index 462c5c5cb602a..77219551056a7 100644
+>> --- a/virt/kvm/guest_memfd.c
+>> +++ b/virt/kvm/guest_memfd.c
+>> @@ -136,6 +136,9 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+>>  					 mapping_gfp_mask(inode->i_mapping), policy);
+>>  	mpol_cond_put(policy);
+>>
+>> +	if (!IS_ERR(folio))
+>> +		inode_add_bytes(inode, folio_size(folio));
+>> +
+>
+> Can't we have two concurrent calls to __filemap_get_folio_mpol(), and we
+> don't really know whether our call allocated the folio or simply found
+> one (the other caller allocated) in the pagecache?
+>
 
-> I think the only real advantage of having a "kthread_exit()" is that
-> it's a nicer name.
+Ah that is true. Two threads can get past filemap_lock_folio(), then get
+to __filemap_get_folio_mpol(), and then thread 1 will return from
+__filemap_get_folio_mpol() with an allocated folio while thread 2
+returns with the folio allocated by thread 1. Both threads would end up
+incrementing the number of bytes in the inode.
 
-That's another one, but not the main point.
+Sean, Vlastimil, is this a good argument for open coding, like in RFC v2
+[1]? So that guest_memfd can do inode_add_bytes() specifically when the
+folio is added to the filemap.
 
-> For example, I'm looking at kernel/vhost_task.c, and the only users
-> are things that *are* modules, and it's not hugely obvious that
-> there's a big advantage to saying "that task handling has to be
-> built-in for those modules".
+An alternative I can think of is to add a callback that is called from
+within __filemap_add_folio(). Would that be preferred?
 
-That's always built in for various good reasons.  As are other
-random do_exit callers.
+[1] https://lore.kernel.org/all/20260225-gmem-st-blocks-v2-2-87d7098119a9@google.com/
 
+> --
+> Cheers,
+>
+> David
