@@ -1,127 +1,141 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16ACD3D75DE
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 15:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773068709; cv=pass; b=IU8P9uIgWYNKkTOhe10n4YePZez/CfEa6hSIK1Wonf+ARp8hEY7LwawPjlVF3p6J1zAdp02wCTHtXJEn2/uOPaSk1RKCmK+E9NBN5kowROW76+etCiY7cKZOksCvklpZMvahG+wycDKLvViHmFuNB/445Bv0LxutUXXzKIOHqaA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773068709; c=relaxed/simple;
-	bh=h506DdISAW0jZvmzWHOqq1yATIV5e0BG5Ps1k2LXKBM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fR9BgKjltz9t8k4UOET5glneZv9Tl0Vlh3xUvVOdKMRYJIZEle9+OBbRdSBCKlqYsJI3th2UpV0EccFd7DY4oxB9rwpgdqJq4RrI3bbX0wfpiR4AE/rq7x0pIPp0N/jqDw9AJSpMSVKJ4f8cDR27WBT3FNtCWxJhpdXk/CLKYhM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1OKV2Oo2; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FBD3D9055;
+	Mon,  9 Mar 2026 15:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773069639; cv=none; b=kYcQxYKb4/v5nX/t4mInJm04neHB7gD+zNhtvC6vvSnrtlOOBHi/LPXpXqQqZwApF6VclzBM0v9ntowb5lropx4ttQOeb8f4IN13RL8SGrkkmk+jukM5+6QqWtx9GE7IeDASGYO8jAJNIyTP7nwunJloQlVz0eao5X6trW8wHnw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773069639; c=relaxed/simple;
+	bh=r1R0k+yX9Ms7pIHEWvGqPr7hU9BrJYZBEPB0TBiT+Co=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lLSeu6bTbgQ5LSWGNiiWIpF/EzVUW4L812PjCWNF7HiIUh5onKIR0eNR35BGnbbeoZQ7GskHcBg0hhzmVA1c9PGmB01cYPSJWD330bznrhdW+5efQm6PgLZu2Pv6NclvgEpE21W806wOdc7FMC2aq7YmKhpSvQW/zkNmJTdYC8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=GifeNRD1; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1OKV2Oo2"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-126ea4e9697so14326c88.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 08:05:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773068707; cv=none;
-        d=google.com; s=arc-20240605;
-        b=dUfnlQwfCAAgElVgrgSSxdOcMLeBbGlB5l9Z3uIYd3Zu8qNNH4CQQiUHuWxBOns5CB
-         N9zbiG+Y/dd+e6G6W0kMJQGoCkNOAgbwb4Q1PtDRhOrmDCOpPCRdhLeBhRL9a5L6XRrU
-         YjMAV7Bsoh4uuseLvOLBEI56UZUedACqPlg5+QSY3Ylq4nmafxhZk30siSkWLFZtKWWb
-         gHSdS/IndnkI3401RUBw1Fpr6QWsmPIuB9JIUoa/1/OdohQm529kb7BSeWCMJQhfsTao
-         WQSgfM8AemmIaPBkcBkOKKtPRTlSnKqM38U1ePSH5tr5L1UgvGJVk64qyeLJPKUHlJP+
-         cYOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9VyI22y/VeTZdWcSGQANDYhZXVCP9xDCNVvpAO/VOQQ=;
-        fh=YHAzNuRMf4bKi2gGbQ2GeLYs04g63Q1bj8wvO9Oaruc=;
-        b=Ydi43zfbwrmrx3LY01uLJroeV7pP2A8/wSVSk1ID++yCrAqt73WvwEAHbVXHwcRmLU
-         GoB1+0mG1qTVUTT2d6NIPSxi+oApiHoL7NXnX+x+658ZCZIQHJMnt9dolmawffHTo4mn
-         VRtf68oKGCS1jeF/Wjox1zBzcfLmjIzIUctKkdtXNfC2H0UbQrc3ivTggdrKpjXdrMg9
-         lkRJrLuO4iNsRNTNRTJeQTnjEd2vWEUgktIzi156WwIaGrG7mzMeaRq0Lf4baT09PZ3q
-         EEYejDpg5NjDtMkwJpvjsMZcXSwkmoi3wL0Kh0oXyb8P7n4GCGhv4k9RFoblddJOWBPQ
-         BVJg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773068707; x=1773673507; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9VyI22y/VeTZdWcSGQANDYhZXVCP9xDCNVvpAO/VOQQ=;
-        b=1OKV2Oo2ZpvrDiIem7vHcExeAzTgPqeXPaLCENvu5K8kJPozVtYggxkGESq9typnHt
-         L4kc+2KJo35EDCSUGcGCEDRFNCRea1Lfk7TwD5cJYwmvGtaSTQ2D/LL92PlhvhgS/ROK
-         LvQ5WdPifdcUCV8931cxIotU41yboxSzu8SDGY24oYFf5QyD/S4qQyh0ZKyY3S9RENwJ
-         JLV8S9c+Y6p1xPuqUvUBfFaNVjP/0+vo35QJ2GqG1o4QmvwJDpFm2NUfe+mYX3T/16ih
-         foMIGYa8iIjQgcr/iQpfxcKWb9ysclIyHYO9UQMDgmcqglkw+ecm0Mm018u/gdjZHwZ8
-         FryA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773068707; x=1773673507;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9VyI22y/VeTZdWcSGQANDYhZXVCP9xDCNVvpAO/VOQQ=;
-        b=R5qWr7UAyRP2R9aTxH8nLh6AdWR7eSjYThs/DHGk4qKKqkZ/0YM3/ofh8gqua61ODN
-         YvbkqCc5BQU1xkObZ3lTzOOhAWCgYrmrXU/A90RMaqcc5d0jCCzrHOE1E81RkA6uOYZ7
-         TZRQB/CoAT32EKY3Hhia/m/oJ0w2jeVsCkDMixnmcGA5DNM8/jzgGfLE5mwHzaPxBSqK
-         uuZVQVBp8z99ut4wNT//YqwCFKj/TrDTqRI+UG0uyfVCBm6g+TTkwQ1gqX3p9BL3ZZw8
-         xNhINvX/hBlzMfwOcRmZhCMRs6Puj2c3aXxiJDHp78zKMmRC7gZxoUdyFKn03m3gvZJO
-         OVvg==
-X-Forwarded-Encrypted: i=1; AJvYcCXQHXkBuUVOal4/HGfFYDd8ckxMGwJqSxdyPLmdME4NOzy6rtcEGmM+oGxxF/IoIW3zCrSU9RRhStaLn8kbIZc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwOCOf8YWYnNFvehfoOoA+G9P0f1SUUo/frGYWr4HSdFwx4k0M
-	+60Abdzcn1G68Quod9GVSYFdQntv8qW8S1XGvTEv3YywKPNPQjgIIV6jBeJGvTTc/Xbk4pCDi+h
-	cRUbD3DkRHS2d73/51rueGMTnpzscRRm77YoOrxZX
-X-Gm-Gg: ATEYQzwkt3cYyKau9jCn3Yd3SikvGhjGfbm3e3GrxAa4vJaf6tFtJSNccgxMOkm+mpg
-	eNpYy8y4IIKVKJCPBl3QCBHcTCW+AnuEvh2zEIeXZ0QlMfMOJxiVCqbu1awsdGMv++a38EW/HG4
-	v6+onVk7g/EF40KoSVedJT9wd7GnAhr3AnG4OFFAfCviTxveL0fRwLAKxad6LV/3WSQnsIzx/VN
-	Mq/NMTD8urIjFKacGkiqtjfMleB3bLnL3WehiScGzw8PWNI8tOmrUT8UdcDQFT/GQkEmKHDXMgA
-	umk78bPjx8w7vwC176J2rt9vrUFG4XJ/Hib29BU=
-X-Received: by 2002:a05:7022:984:b0:127:9745:c69f with SMTP id
- a92af1059eb24-128cd6c78e4mr326409c88.9.1773068706409; Mon, 09 Mar 2026
- 08:05:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="GifeNRD1"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
+	Content-Type; bh=Vr7al+iWN+e4tYvS2CbIZPEqTcbsm+V8cnInmH15LVQ=; b=GifeNRD1Q1T8
+	l9ffQIoyLHST0QKW6NZ364fGyV2nyUxDnjMHNEtwy8co9gtCKy/VgoDRFDenF4zk2yyGMS8hP7Gho
+	kroW/RGODzYJPWqH79FYAPUxMnIkCnFBzFxxwMfvZS+U+n2sQ28K+Y9JzYbmjGKpeHY7ljyWBlVJe
+	eiaIuFOUKznhAcuFnw9gqErLotfb6MicUzlI/tzHDBNO2GV7rFA550JGqofiVTuetDkkVFvC4FFoe
+	9CLRDmfNaI9ycuXcuvgYqJ847ulB2IKhfEqM0blcnc51MEUAU9idv/kLxhyXNoGDSU01eh/J0hCPZ
+	O2hsX/2gLxpHmSlOQS40rQ==;
+Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
+	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aleksey.oladko@virtuozzo.com>)
+	id 1vzcNX-006Tf9-1Z;
+	Mon, 09 Mar 2026 16:20:14 +0100
+Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 629FKMSZ565253
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 9 Mar 2026 15:20:22 GMT
+Received: (from root@localhost)
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 629FKLF8565252;
+	Mon, 9 Mar 2026 15:20:21 GMT
+From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+To: "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Aaron Conole <aconole@redhat.com>,
+        Ilya Maximets <imaximet@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Stefano Brivio <sbrivio@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dev@openvswitch.org,
+        Konstantin Khorenko <khorenko@virtuozzo.com>,
+        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Subject: [PATCH net v4 4/5] selftests: net: run pmtu.sh in netns to avoid host firewall interference
+Date: Mon,  9 Mar 2026 15:20:12 +0000
+Message-ID: <20260309152013.565216-5-aleksey.oladko@virtuozzo.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260309152013.565216-1-aleksey.oladko@virtuozzo.com>
+References: <20260309152013.565216-1-aleksey.oladko@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1749672978.git.afranji@google.com> <aa7WjPHTUDCgsO-U@google.com>
-In-Reply-To: <aa7WjPHTUDCgsO-U@google.com>
-From: Vishal Annapurve <vannapurve@google.com>
-Date: Mon, 9 Mar 2026 08:04:53 -0700
-X-Gm-Features: AaiRm51CMdt3YQzldlYrLNi93jNDQSQgth1QTuEwDfkO5X2hip81D88zpTx2ItQ
-Message-ID: <CAGtprH8Ls0vTYo_Fq_Tb8DwU8R2J14oaniAYNBOPb15dyaWOXg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 00/10] Add TDX intra-host migration support
-To: Sean Christopherson <seanjc@google.com>
-Cc: Ryan Afranji <afranji@google.com>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	x86@kernel.org, sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com, 
-	dave.hansen@linux.intel.com, dmatlack@google.com, erdemaktas@google.com, 
-	isaku.yamahata@intel.com, kai.huang@intel.com, mingo@redhat.com, 
-	pbonzini@redhat.com, tglx@linutronix.de, zhi.wang.linux@gmail.com, 
-	ackerleytng@google.com, andrew.jones@linux.dev, david@redhat.com, 
-	hpa@zytor.com, kirill.shutemov@linux.intel.com, 
-	linux-kselftest@vger.kernel.org, tabba@google.com, yan.y.zhao@intel.com, 
-	rick.p.edgecombe@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 9, 2026 at 7:17=E2=80=AFAM Sean Christopherson <seanjc@google.c=
-om> wrote:
->
-> On Wed, Jun 11, 2025, Ryan Afranji wrote:
-> > Hello,
-> >
-> > This is RFC v2 for the TDX intra-host migration patch series. It
-> > addresses comments in RFC v1 [1] and is rebased onto the latest kvm/nex=
-t
-> > (v6.16-rc1).
-> >
-> > This patchset was built on top of the latest TDX selftests [2] and gmem
-> > linking [3] RFC patch series.
->
-> In case someone is feeling necromantic, don't bother reviewing this serie=
-s.  I've
-> provided a pile of feedback off-list (I forgot this on-list RFC existed),=
- and the
-> next version should be have significant changes.
+From: Konstantin Khorenko <khorenko@virtuozzo.com>
 
-Thanks Sean for the note. We will soon refresh intrahost migration
-support for software-protected VMs and this series. Need to inject
-these features at the right place in the queue of guest_memfd and TDX
-features already under review.
+The pmtu.sh kselftest sets up a multi-namespace test topology where the
+host network itself is part of the test setup. Test packets originating
+from the created namespace are expected to reach test interface created
+in the host. When firewall rules are present on the host, this traffic
+may be blocked, causing the test to fail.
+
+Run the test in an isolated network namespace to avoid interference
+from host firewall rules.
+
+Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
+Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+---
+ tools/testing/selftests/net/Makefile     | 3 ++-
+ tools/testing/selftests/net/pmtu-test.sh | 4 ++--
+ tools/testing/selftests/net/pmtu.sh      | 4 ++++
+ 3 files changed, 8 insertions(+), 3 deletions(-)
+ create mode 100755 tools/testing/selftests/net/pmtu.sh
+
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 8fa6ef771757..09bcfd2db593 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -63,7 +63,7 @@ TEST_PROGS := \
+ 	netns-name.sh \
+ 	netns-sysctl.sh \
+ 	nl_netdev.py \
+-	pmtu-test.sh \
++	pmtu.sh \
+ 	psock_snd.sh \
+ 	reuseaddr_ports_exhausted.sh \
+ 	reuseport_addr_any.sh \
+@@ -190,6 +190,7 @@ TEST_FILES := \
+ 	fcnal-test.sh \
+ 	in_netns.sh \
+ 	lib.sh \
++	pmtu-test.sh \
+ 	settings \
+ # end of TEST_FILES
+ 
+diff --git a/tools/testing/selftests/net/pmtu-test.sh b/tools/testing/selftests/net/pmtu-test.sh
+index a3323c21f001..2ba6bc0252f0 100755
+--- a/tools/testing/selftests/net/pmtu-test.sh
++++ b/tools/testing/selftests/net/pmtu-test.sh
+@@ -976,7 +976,7 @@ setup_ovs_bridge() {
+ 	run_cmd ip link set ovs_br0 up
+ 
+ 	run_cmd ${ns_c} ip link add veth_C-A type veth peer name veth_A-C
+-	run_cmd ${ns_c} ip link set veth_A-C netns 1
++	run_cmd ${ns_c} ip link set veth_A-C netns $$
+ 
+ 	run_cmd         ip link set veth_A-C up
+ 	run_cmd ${ns_c} ip link set veth_C-A up
+@@ -985,7 +985,7 @@ setup_ovs_bridge() {
+ 	setup_ovs_add_if veth_A-C
+ 
+ 	# Move veth_A-R1 to init
+-	run_cmd ${ns_a} ip link set veth_A-R1 netns 1
++	run_cmd ${ns_a} ip link set veth_A-R1 netns $$
+ 	run_cmd ip addr add ${prefix4}.${a_r1}.1/${veth4_mask} dev veth_A-R1
+ 	run_cmd ip addr add ${prefix6}:${a_r1}::1/${veth6_mask} dev veth_A-R1
+ 	run_cmd ip link set veth_A-R1 up
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+new file mode 100755
+index 000000000000..1805fa44a2de
+--- /dev/null
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++./in_netns.sh ./pmtu-test.sh "$@"
+-- 
+2.43.0
+
