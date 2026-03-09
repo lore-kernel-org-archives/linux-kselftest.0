@@ -1,90 +1,80 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3D0F9C0
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 02:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CBC2750FB
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 02:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773023314; cv=none; b=L9Uc7QEarezCUTXtoqhuu1piRbLL17ytA+gFMw5V67IAmWoq1YZwpNsUF2P1T3uqk201z6T/uAbng8lI9fT50axRbvzmugj8u2MrCbnW1eIWZ/YM1XvaX4FcAkWp9Y2bKJRPDqSvFNV0cxLQI2sFLhYZBBaF2VCNh28BZZWJIHA=
+	t=1773023689; cv=none; b=lFMYe9H7GvrWJhWuOdJjlXGmrsZpNIBMbuY4QLaIDnYCxO1wSiusti6TIqA8HOAk5O4tVKbIvSssqKband3tCz8sJ8EBSrUXtbxeyzLI3CUxb8C1fLawbPeRCffOxWl4vGbR61XXlqxw+Y8MY/pWIkyS/l0Qubb6Axm43Ucrf98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773023314; c=relaxed/simple;
-	bh=0PnHXD/eeR2S7L31MiPzD6lKHnVR5jRoYM2/It/mKp4=;
+	s=arc-20240116; t=1773023689; c=relaxed/simple;
+	bh=/eGV/1xbIJhwm6XIn7cfQH/SY3x1TXbIwB1K2JCBqls=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A2zTW5GL0j5FSqoad1F0qES5xEnhw21xH3usAcHWs8IZTWEDWwkzX+T+C+XuGkUjKYfTUsbmqjkWvObrF65pZa9Xh1pSYuldeZvXOEKeIMmmilk3b7AdEQH6kRCpwL7TvcBdSvDXJhgHUXQHAXlYuaG5yXs0u01MdV1ZLyTW45A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+nJB2cC; arc=none smtp.client-ip=74.125.82.53
+	 MIME-Version; b=mg5URuOLa7HbFbzCzsD9lohm8AWoxVMWD6kNs5LnylUrkmJK7q3CBl8Z8LLvcN6tFhZc7bB+u/89pPUqQ5G4yyRaJs3rKhEJD3/3+0A0fsb1CsZo/50Nxfyit8uvr/nEACelUh/2fzEprqxjvlf7dw6/Jk05+ZU7XWiqVu+5fig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AlNgRc41; arc=none smtp.client-ip=74.125.82.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+nJB2cC"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1279eced0b9so10086927c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 19:28:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AlNgRc41"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2bd9a485bd6so6636602eec.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Mar 2026 19:34:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773023312; x=1773628112; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773023687; x=1773628487; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ps1Hfv9yWFYK/K2noVGj+dmwqc5tyuYyDUSGFJyxTPQ=;
-        b=f+nJB2cCym1+ND8xUO2mrmtxcHy4ZhGBuzpCLNKQH7mXJn/X3B0RNAMWbWfOFbbH/7
-         hTaK/ej2XrpfF7MBICDhvW4m8dgsN+E1mOkSSkxeu/RrL/amLzE9psRnCnV3DLyU7sC4
-         DKk4U6KjxetnqKFAje08SFicMeURkK3eeKBLNx+DY8oU5sO+0GKmXnztPBa+HkcTA/Wb
-         tAnyf3TxKZD3xOeiPjrzY05DO9hNMhbPcjU5YPWO+GgiSBcLZpQsHWhPj1UoICpi1K7W
-         0Qcu1s2b52qLTApF03b2g/XEYWknIGjw72xytGBYHSx6ZDa8NesgVXcRauwRAJYmrBLB
-         I9ig==
+        bh=rEBd1cs2oe7i2LMTBttxBgMKfH6i4xUsDVFq4wSxJlE=;
+        b=AlNgRc41hJiiInX17wTb/Tywg+AiCdlCt0VQSHL59Ii4FH+Yx6VO+HmOhinB+E5XFR
+         4Mn2Bh5sgtu0Ur3AGts8ERo5WIgVz4LkjN1SrmbxDxBuZhgBvLCJRfZl+ZY9Y/FBeQ/3
+         c0JFLma7EYQJRe7lnjhAYMoDZrGmWHuoDazuZPvTyWbT4ACHfJulY2L0FZufWuoIqZ6h
+         Tjcc3z61pyh+r8ozHsNJahZivCcC3+/Wr5ndOO7lYEshWIwvse7uAoQuGriiu/e1+7ub
+         WorE7Nr/nYaDLDzzu8s6/wns1EZuBfke1N7onND0zmt4uk9uQ09Lyetp8Fmekk/GkAaM
+         OWUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773023312; x=1773628112;
+        d=1e100.net; s=20230601; t=1773023687; x=1773628487;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Ps1Hfv9yWFYK/K2noVGj+dmwqc5tyuYyDUSGFJyxTPQ=;
-        b=eOUontimK2623U1kSKqmyPk/6p8h2ixF2B9f6Fz5AL1kefSt8tlZO/K1LmX7AtClod
-         7Z9xXc1Eo+QRQHa0wBc9eKFEOx366tsaLjisauR18ploIYq6F4WYaluRn1mYKtY29sNN
-         0RlK8BCEya/7Af2Sb2+hx+q//lEvJbosryz0XkTdQKtKWDRFC4zNLxfvDz62uGHFzf9z
-         k3FI0ewQHnHfPhCe3F/lUo6HrcH5RS1ZMMjK0amRo+8tq7NgOaZKdjOstwWRNJ9Ke4Gk
-         4l8DDDtWpatZ85mj5aoWqTw6RVF6PiSbYGs44++NuOOtuAwnHN8b/fkcPobx8xrBLqME
-         ViaA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1kWxlPRtG9CtEbZPmPCukCHx0jegilW/1+flWRP8eYz5E2GESETX3nbuo4P/ft2CQrNH323UIcP0QNQ9thOo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsFK4Ri3HzsB5C3zWo2V0PqxwQn+BF6d8xs2s+PA3aBIkN+0cR
-	Y6QNtl/SvNccUwNI6DK9YvfF/uL0kJw+UwXS+Fhp67Yo1ry0ZklVtlE8
-X-Gm-Gg: ATEYQzwU1B1PIO+IEfuItgPraomvS/qM+gFEk+KUpiJQQc1WmjcTGMwjTN9/0mGEYSN
-	gSTXdr0YXxax97iWWr9zVSn4Y7ZsNYw0KuTWizcORRiB7K+MXENR+CDGsNaOW3bieXiX/ksUvTQ
-	9J5SUVzRG/LNuQMmClRyEdfxzHMd3Ig8Y/4Av5o6tud6YeR31UfVQzYEyiY+gSxzMyqM9z/GuOC
-	aE0MynVSLr3piWULEWf0Jpbemr2KvO7K/E3hwZn0LEx8+qgCiYthFdTln0MkLt0Irpngeq8FiM5
-	Ak/3YFic+iYuJk3+tZ4WH2fK/KcBVpPlZx/r8xabvTzSUfSpJfFaj8iyIqlps4tYNHJxDrefFQL
-	HEXhNNwN/RDgwOnwoMt7vfQpUNRm3Rl5qIkP80MWkHzUhVKEPsy7ByZLID6qddeRBFaxDz/wj3p
-	suyd1jV4ayNlCxogJpcR5tlo3eDlRWImh+Plk=
-X-Received: by 2002:a05:7022:4186:b0:128:d5bd:3572 with SMTP id a92af1059eb24-128d5bd39b3mr713023c88.31.1773023311637;
-        Sun, 08 Mar 2026 19:28:31 -0700 (PDT)
+        bh=rEBd1cs2oe7i2LMTBttxBgMKfH6i4xUsDVFq4wSxJlE=;
+        b=e8m/+JCCwmP3jH0GeVaCGwvKU53jrM0hetlgdM/Q15Y7UMGqv1PUOvUUsliiFGhWJR
+         tLijQp8WyAh6tABQJ4++ify737iQOvlrS1WcOnDWPg26MIOlnVHzbdpc7KI8NsCq9v9Z
+         0S2w/KM0VOF6eQznK8cyjGhtQ8FtfBTEgpIRgA5FI2C3CPPZhmHrcUs0w1BXavf4VRCp
+         xF/Dwr23bN/drkZYdgqD3BepEXF9n6RMbr8LsoFbZYWjAj6wi4j90Yzf6li5WcyX+q7i
+         CyxMP6vnMcDV9FeNFpZGB1G4LagIIiykBBSHD8IAPdGbdTgOOmtpybgJgUn4R9rgYR4h
+         GL4g==
+X-Forwarded-Encrypted: i=1; AJvYcCXa1LcfWMGxPWgLBNKraNKIlp5BQGkDBdyTcJbGeRDlHUFeqUnwZPiCcwy7dAqQEpa4zFCvM+vdaFbZW2R05aU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7btMPUlbwzFJayDEUnf48YU9k6ft2hA8YslQ63mjTtG/ojs/A
+	27an/LrPVz/CL8SrX/KFvYOIUFcNVqMRs9nr4L9jrMDICO3tLuDaFarl
+X-Gm-Gg: ATEYQzySQvhBaKa4rTKv+K7A04admj51pLdf0uSQBV5GqxxcTh2OiBGB4BMGOgFGlP1
+	fJ6avEAd8lT6DspN8KT4pRq52vhuMEzf25EBhc+JrPdMLQndqgckNN8BHLaIAhRpa+3HQeSWs91
+	+zpnd6YlTBroFiGHlNWsdHlaMN4skJLreBo6m3q5JOjh6OBAmfBLrdHjkDQR6s4vBkggeZNrLSU
+	c24w9euJDfioiJaE2L9D+p4z1IrxxANejilRm5ZF5GGPsXJdh/OIzun1bQ3d2QedX14X1j+WwIF
+	6N+h+9URnDfaH/GKyuTZrPE1+rMKOJXbu1C172+MlWz/vqwfA5VAhJNcxVVOhzpXRdLCw326qun
+	I0D64Z/jhkGu9lRmHPRM6WdlaMU1myHM7S0xcIqURytrYKmSngIWAd4SOgwNSLvw9LbDTXTZJQV
+	GHDqp4yf3nQ28uKanSJ885ZAnRyjWY1QegeCs=
+X-Received: by 2002:a05:7301:3d1a:b0:2be:fe8:8aff with SMTP id 5a478bee46e88-2be4e03b3ebmr4076299eec.18.1773023686622;
+        Sun, 08 Mar 2026 19:34:46 -0700 (PDT)
 Received: from localhost.localdomain ([104.28.165.128])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128c3d5a85dsm6728418c88.3.2026.03.08.19.28.25
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f80cc1dsm7076193eec.3.2026.03.08.19.34.42
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 08 Mar 2026 19:28:31 -0700 (PDT)
+        Sun, 08 Mar 2026 19:34:46 -0700 (PDT)
 From: wang lian <lianux.mm@gmail.com>
 To: sj@kernel.org
-Cc: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
+Cc: akpm@linux-foundation.org,
 	brendan.higgins@linux.dev,
-	corbet@lwn.net,
 	damon@lists.linux.dev,
-	david@kernel.org,
 	davidgow@google.com,
 	kunit-dev@googlegroups.com,
-	lianux.mm@gmail.com,
-	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org,
-	ljs@kernel.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	skhan@linuxfoundation.org,
-	surenb@google.com,
-	vbabka@kernel.org
-Subject: Re: [PATCH 0/7] mm/damon: improve/fixup/update ratio calculation, test and documentation
-Date: Mon,  9 Mar 2026 10:27:59 +0800
-Message-ID: <20260309022759.9010-1-lianux.mm@gmail.com>
+	wang lian <lianux.mm@gmail.com>
+Subject: Re: [PATCH 2/7] mm/damon/tests/core-kunit: add a test for damon_is_last_region()
+Date: Mon,  9 Mar 2026 10:34:06 +0800
+Message-ID: <20260309023406.9784-1-lianux.mm@gmail.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260307195356.203753-1-sj@kernel.org>
-References: <20260307195356.203753-1-sj@kernel.org>
+In-Reply-To: <20260307195356.203753-3-sj@kernel.org>
+References: <20260307195356.203753-3-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,22 +83,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-> Yet another batch of misc/minor improvements and fixups.  Use
-> mult_frac() instead of the worse open-coding for rate calculations
-> (patch 1).  Add a test for a previously found and fixed bug (patch 2).
-> Improve and update comments and documentations for easier code review
-> and up-to-date information (patches 3-6).  Finally, fix an obvious typo
-> (patch 7).
+> There was a bug [1] in damon_is_last_region().  Add a kunit test to not
+> reintroduce the bug.
+
+> [1] https://lore.kernel.org/20260114152049.99727-1-sj@kernel.org/
+
+> Signed-off-by: SeongJae Park <sj@kernel.org>
 
 Hi SeongJae,
 
-Thanks for the patches and the CC!
+I've been following the previous discussion regarding the bug in
+damon_is_last_region() where the arguments of list_is_last() were
+accidentally swapped.
 
-I've reviewed the entire series and conducted functional testing on my arm64 environment (native VM). 
-All 28 KUnit tests passed successfully, including
-the newly added damon_test_is_last_region.
+I have verified this patch by running the KUnit tests on my arm64 native
+environment. The damon_test_is_last_region test case passed as expected,
+confirming that the fix is robust and the regression is effectively
+prevented.
 
-Acked-by: wang lian <lianux.mm@gmail.com>
+Tested-by: wang lian <lianux.mm@gmail.com>
+Reviewed-by: wang lian <lianux.mm@gmail.com>
 --
 Best Regards,
 wang lian
