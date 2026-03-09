@@ -1,119 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22213368B9;
-	Mon,  9 Mar 2026 09:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B813368B9
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 09:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773049023; cv=none; b=b8o3g+53DVKYLFhZ8/c4S3uzBFq7Mmnt/i/LqrbLdP4q7ZdbmmobpcvuJrVJ2HkBS+yZYPJoIy6ClJYpSQ7jf0wTimTb013cRI6K0j7t8S53ojId4PRusKZvWQzcnv8aJgQQ+s8wGY+wZN9lihpNq+SzlSGynq140pb0bD0xijQ=
+	t=1773049083; cv=none; b=qN9kqVliVgWhFiTXN9B/zn3Z5IECaPaMU9OASYqc/QABM4SmwT40y5kGWst19r5FVV/0r4IBdsiYh6V/HwxVfJp5ZS4ylXM5YsVcIf7M/5aZyORVOyVQd0p34/Zeb9Zoa2DCCNXLy09yTIqM1c0+zidvsHbRhyWO3NyExtrxzsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773049023; c=relaxed/simple;
-	bh=hfPMNYiI0Us/JfLHm+ZntEVlSNqxT57YtFaci0q7bNA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cMrJmc5my6zh2xbsRFYqsXm5bSXelfq7MKHFI2iXi+9mRAG0E0TkFfqNICPMVHvB2nICXg+KRjNSWuXzNqZTayM6QR2OZer97NmgrEs4K12RPrSszN264vh1KZEyII+ZWbmAlnkGMargIoKK5mszvQ8TROImkC4k40lS54EN/yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jpQNRM7s; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773049083; c=relaxed/simple;
+	bh=rF8chEsRLAyFifMie09a09vdRaUnkgbDDLWk879DYiY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nCwu0nW1Ctbu5VLNA62kkceKK1NMRsWyHw/sRifvFr3sZZxe9Oet7lhF1fISU0zsgOaGfauTK4JqymHQXTNkMtHm3v3Is5zwGKv9lHe+nkAQFFFSiu8ZY9VFxGekIn5W9AK3y9a9hh/1P4bM9AInpuRccjdqG8H4Zoym37hXhZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JMiON9K4; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jpQNRM7s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D427C4CEF7;
-	Mon,  9 Mar 2026 09:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773049022;
-	bh=hfPMNYiI0Us/JfLHm+ZntEVlSNqxT57YtFaci0q7bNA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jpQNRM7sGBhSX5hthsHBYeMFJmze9uxAMn31l1oMxMFAKQjdsg/pNF2zJbSVHQn1j
-	 vyQUlVy9Mm6LeU7hdFn2DsK7cGaUUr52bONPlYECFFPBjT4Sjkg/kGDtwGB6G4rhlC
-	 KWkAvxmwTJXAzeGskhx05BwsxLPsufLGXlXKNhQzgjGVVhDa5AEFa7Fz90/35kcRLp
-	 Zi2XEf95RJySyl6WHerOFLSOSgKXh3IceA6FvLS0cc1zO9fz3BxK7ZZMxcAOQIBroy
-	 wH9rUYWq56/XtkrEvy4Hng0Jj4rDyTFY3h+NDBkCaVe/45tiDkKWKuKZu7UNohu+Xb
-	 /kXhfGNw2xRTg==
-Date: Mon, 9 Mar 2026 10:36:51 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-Message-ID: <20260309-aufrechnung-flugzeit-f8e22786a8b2@brauner>
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
- <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org>
- <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JMiON9K4"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2ba9c484e5eso10886030eec.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 02:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773049082; x=1773653882; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bMY5TmeO/snHhjB5FHAsBzxAbIw3WrFDM3Ti8e3EvkM=;
+        b=JMiON9K4nL5/JIvknlBpH58eM0ZHiFkMvAueET0Rt93Sr1E7t9/AJZqKQP+UQAtXeQ
+         +lBTbwDa2haRkwvWEdcvUg/2g6GnAuQSutH/IGOf+T8hQ/deFdYRmXNASM0OKJZvu7Kw
+         p3Dfz/K38p27fQ9b8yeb2L82KtJyPlB+qdxwqGQRbewCltTAHYEXLH7/0DPKcdP8Q3F+
+         skZrZ2Vk46Wg4qFtrtVlNGu4He7ZIy39STYdz/XE3JP95VVZa7K/+8rVmgmK8PsSY/sd
+         n90xCz/SsXV+Tpr1g6uMIDXUXdp9PtBg4VWxSBuzl4RpHbJeSyPYdnYFsrkgHmykhXd9
+         SSdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773049082; x=1773653882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bMY5TmeO/snHhjB5FHAsBzxAbIw3WrFDM3Ti8e3EvkM=;
+        b=PXXC/Nm2e9DyVBNhoKy8gSp7JLreYfZoQm+Xz3ghcPE5pOvhBee1+CLxnLsncV7DGS
+         RP0DKuY79/3NUBHzEAhqeKyTe0tBTl1dSFCfOi+VCee3d3wecu4CIXOsvIGQ8dUuaQXS
+         g36P4OPwDd4QF2s028tGf4PGaCeqnQm6MPfpOCdZiJSJL5sUAnpDtKPi6Y2XOT2x2Ynp
+         xpa3sEnqmTI1ArCEVkrn+tIDbTScvtGIFpSSJcNUZZOxj9zR0XOcdjg3l65JYdEWIGJb
+         j2xlebhhcNOu3KLuRJ+9k5foLtxTw3qHQiALQy6zh0iUCcfoyey9+DYRJirBf7cpBvU+
+         9KxA==
+X-Gm-Message-State: AOJu0YwsRzmBVf6mDxcttxg/Zv9QlnTmvROxxSPZdY/dn9KMrPruxPvl
+	O4nDz78TE2YDBcIyenSht6vTiI9AsNGTBU/IsY90XaOq/02awYF3Orf3
+X-Gm-Gg: ATEYQzwaoglsuJvWTlwNa2t0j9ur3IiTAwrscIaQF67v4GqE0NMPnWuYLGdwKmCC45S
+	7D9C/zwqOOem256WjcDvrBAOu0fUnvU/U8QACmIGyMlbQ3d7BdcRXr+ykTvPbwyBhg+Iokcrg0e
+	ZLq4PoD5HSBkebHBLR8Fph4uRYUt2XePuuIfNpBlmGsrnfzsKJozVqETw0+RJ/w1VtQA0rdVBsi
+	QGJjMZfPJ5wc7O6FfN+2c0oXbwZ/fQsG64fA/qZnnCZ7AC+TimJVWmb6jyVjnPp6imF1/UuBtVg
+	k2kmGtnpP4fuqEJDFgq2kHQ57R3vQJOhC3zBXr+hBW9Eggbbg9jq7bkWzlw2lRiWqGsjtyo9nyZ
+	LUU1I7TLNH8RUg+2VHb27ZJPJlyJZSKAGiSx0mvmgsFtlgPNOTX60s7NjRv743AkfqptUdijnaO
+	aJAyne75dXEtHf5TzV0OGZJLuWKmEVwOv6eWcQBldVfo+846zjlqnqQKZzuxZV62PGypupUNSxt
+	I+R3ZSufVc+klzs4J389NIAwL8=
+X-Received: by 2002:a05:7022:629f:b0:128:cf80:deea with SMTP id a92af1059eb24-128cf80e01fmr2251526c88.1.1773049081592;
+        Mon, 09 Mar 2026 02:38:01 -0700 (PDT)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128d989cd36sm2095710c88.1.2026.03.09.02.37.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 02:38:01 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	kees@kernel.org,
+	thomas@t-8ch.de,
+	linux-kernel@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH] selftests/harness: harness-selftest: cover XFAIL_ADD ctor ordering
+Date: Mon,  9 Mar 2026 17:37:52 +0800
+Message-ID: <20260309093752.808533-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 06, 2026 at 10:27:26AM -0800, Linus Torvalds wrote:
-> On Fri, 6 Mar 2026 at 06:44, Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > More a comment on the previous patch, but I think exporting do_exit
-> > which can work on any task is a really bad idea.
-> 
-> What is the advantage of a module only being able to do
-> kthread_exit(), and not able to do a regular do_exit()?
-> 
-> I think the only real advantage of having a "kthread_exit()" is that
-> it's a nicer name.
-> 
-> Because if that's the main issue, then I agree that "do_exit()" is
-> really not a great name, and it matches a very traditional "this is an
-> internal function" naming convention, and not typically a "this is
-> what random modules should use".
-> 
-> So kthread_exit() is a much better name, but it basically *has* to act
-> exactly like do_exit(), and adding a limitation to only work on
-> kthreads doesn't actually seem like an improvement.
-> 
-> Why make a function that is intentionally limited with no real
-> technical upside? It's not like there's any real reason why a module
-> couldn't call exit - we may not have exported it before, but we do
-> have code that looks like it *could* be a module that calls do_exit()
-> today.
-> 
-> For example, I'm looking at kernel/vhost_task.c, and the only users
-> are things that *are* modules, and it's not hugely obvious that
-> there's a big advantage to saying "that task handling has to be
-> built-in for those modules".
-> 
-> So my reaction is that "no, do_exit() is not a great name, but there's
-> no real technical upside to havign a separate kthread_exit()"
-> function.
-> 
-> If it's just about naming, maybe we could just unify it all and call
-> it "task_exit()" or something?
+Add a fixture-based test with a single variant and mark it with
+XFAIL_ADD(). The test intentionally fails and is expected to be
+accounted as XFAIL, covering the constructor ordering dependency
+between TEST_F() registration and XFAIL_ADD() registration.
 
-I have that as a follow-up series... But I didn't want to muddle the two
-patches as this one was meant as a clean-up for the kthread_exit()
-leftover. Now that you've applied the fixup for the BTF thing directly I
-can send both at the same time. Give me a few minutes.
+Suggested-by: Thomas Weißschuh <thomas@t-8ch.de>
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+ .../kselftest_harness/harness-selftest.c      | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-And no, we should definitely not keep kthread_exit() as a separate thing
-around. That just seems weird and clearly that has led to bugs before.
+diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.c b/tools/testing/selftests/kselftest_harness/harness-selftest.c
+index 7820bb5d0e6d..9920ef7e4385 100644
+--- a/tools/testing/selftests/kselftest_harness/harness-selftest.c
++++ b/tools/testing/selftests/kselftest_harness/harness-selftest.c
+@@ -118,6 +118,29 @@ TEST_F(fixture_setup_failure, pass) {
+ 	TH_LOG("after");
+ }
+ 
++FIXTURE(xfail_ctor_ordering) {
++};
++
++FIXTURE_SETUP(xfail_ctor_ordering) {
++}
++
++FIXTURE_TEARDOWN(xfail_ctor_ordering) {
++}
++
++FIXTURE_VARIANT(xfail_ctor_ordering) {
++	int dummy;
++};
++
++FIXTURE_VARIANT_ADD(xfail_ctor_ordering, only) {
++	.dummy = 0,
++};
++
++TEST_F(xfail_ctor_ordering, expected_fail) {
++	ASSERT_EQ(1, 0);
++}
++
++XFAIL_ADD(xfail_ctor_ordering, only, expected_fail);
++
+ int main(int argc, char **argv)
+ {
+ 	/*
 
-The vhost example is good for another reason: the line between a task
-acting as a proper kthread and something that is aking to a kthread is
-very very blurry by now. Let's ignore usermodehelpers for a minute
-(ugh). There's io workers or more generalized - like vhost - user
-workers which are hybrid workers that aren't clearly completely
-userspace conceptually but also aren't clearly kthreads so I'd not want
-to have special-cases for any of them. task_exit() just should to the
-right thing no matter what exactly exits. We also have way to many
-cleanup hooks that need to be called depending on what precisely exists
-to split this over different helpers.
+base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
+-- 
+2.43.0
+
