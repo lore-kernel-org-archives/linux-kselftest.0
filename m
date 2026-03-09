@@ -1,226 +1,624 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010055.outbound.protection.outlook.com [40.93.198.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA533E5ED9;
-	Mon,  9 Mar 2026 16:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773073056; cv=fail; b=W68wDt1AD7BxSjIfMoQTnPWl+vcVtc5LeWX7AB41bf6gAuhhryJNPaBVGOQZaVzQbczY+fKLzJrcq8nlL17rBWaZK+R99k0gbW5ZbYHNlRYTDleqX2IYlYHt2FO7/XicwhqEGdeH2nbFl93WAN6IHZSyomWTnBASga8VVe/GsME=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773073056; c=relaxed/simple;
-	bh=CmGy/xrBhfOvroTHDtLIrX1U1a8A0MUJVuVTLwVa+Hg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=mfnMrQ2D8mPMH4DB4vSV7bOQTTl3iR6FUFD6vUYp6QbCt06sRYVzZunw1AvS3xYO8U74G0u0MZJ7LJrKRf+mfwSfmrL/gjNhoOIFI4m9h9+h34RvTYfw1HFy/BchVAFUGxO0S7R2YG1EvXXBQ+CHo6zgKJye3DF+Qu43BvdiDFs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=fail (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nCDU9/2d reason="signature verification failed"; arc=fail smtp.client-ip=40.93.198.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9213ECBFB
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Mar 2026 16:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773073581; cv=none; b=d1KgZumRJqjJh0tFpBVa60Is3QS6VChpAork1fImMbAIKLDOkkHJOjdRjzCo58bRBY4ypRmEMSrWbmxfg7mApf9eKU2L/xUjpi81nM5ygvvRp0V70ws+hf6Wj2pelFfQXb9KGFt/CDltnv5kJrd3lzHbDFWeb3/uNzVEzC3KoYA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773073581; c=relaxed/simple;
+	bh=QgrpnA9vqWR0LvqBZTQt9eWvlVYE0nDC3NQs7drGfDs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=SvOVpjtT3FBgIft6bfCsctrTWudZCDvxhRCfsaVB3fe+MQ4KTLCT9NMPRbWXyW3Ma3y21G7ajF7kqOWDgAANCNO8CSDVDlebEX94D1xScnLuMYVEXocjson8gxl5FNP5vAnYAPWafk76k6GPGiEriMNsusektckukUY7KpcRpUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qvyVe3iL; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nCDU9/2d"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cEnsK+pXsEUw4CPwk0T43anvc9iHp9K5RUlfh2+saNo87I4HsbsA8GCDvuqo/hKQCKH1o4WqqzwNBEv7Gq9UGzrDYi60qLi4onoDKk+1tgXNBTZlMauSTuOemX0Jtqv03r66GR+kJND78gNQMzI/VwRBQ0Z1XsX8sSpvWremNW4n5WhNl7X0S48CvMwGdi6CYEm0K9iQhtwQ2Xxs+BFdkF8IFQgxU3ige4AZr+GuAI0zpUsRtbWlbJU33D2wmC3AoxC5IisbxTN7sLfms6Sjy4EiBT9irS0fEQymE44CDIC3l0/O7O4at+yySELw9O8mnetaPsji8kEJGwfReYIqIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tpn4nRH92aCttYa3vQXarDUvZcf4Qf0mtK+EcddkjDw=;
- b=di05C8B2N/4t/gmhOW6ZuWcJJryQdB8bl00mvrp6cnxQd8JId6VylsBOameKpE9wUTleJxrneVU764g8VfF1sQvMFfyKijqqB+tQFMcKFwerT/iYYfmh6EwCgBtGq0Becm/G7yNJxOtvmh21XK6rIgMvRno79b4e4BOI1SqNS1VZ2cxf2vTggo5Wl1IC2WxBV6i50QzVC4w/XlM0ANPVqyAeM/hQRaQMq5P6Q8Yg0BKA+HuJk5s5EZgHd0J31KU8iNf5pIXHfiAHkKL5j24hqmecA+6Fypn0vTZqi4ce2fK3Bt77thpcVJ4a6wpat5b2nXQITBqMhRW7aXr8doCrZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tpn4nRH92aCttYa3vQXarDUvZcf4Qf0mtK+EcddkjDw=;
- b=nCDU9/2dqM9MC4+1g2ZHPU3ITBYVHe1j7fM/7KD5N0lelf6SceaiTYyl5rxXL8ZR/OZXeL17hpLkMmX1qvBd/pyvZT/5H0g0ModUQ/eVHZUP2zldB0hqKrYAaFzxRYTEGWzdk7qY3P4uWcMXPciniON32uX7SmZvDAlH4PoQTkBYWefKQq0flQcC+t9QNa5Hmd/I6eFh5LEitewoHAwPHuIPfze+UgpQlL6nWcdcqeHEo4ssDcz+UZwmnJcynce6HuoKdcpVVLCt7AoClb45Qo9YVirUrOEfvgRzefEwtG1OyaUAcr9a18/9JoMDXLB/EiliqX8z+QTTpQvtvkOooQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
- by MN0PR12MB5713.namprd12.prod.outlook.com (2603:10b6:208:370::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.10; Mon, 9 Mar
- 2026 16:17:29 +0000
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f]) by DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f%5]) with mapi id 15.20.9700.003; Mon, 9 Mar 2026
- 16:17:28 +0000
-Date: Mon, 9 Mar 2026 18:17:18 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Linus =?iso-8859-1?Q?L=FCssing?= <linus.luessing@c0d3.blue>
-Cc: bridge@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Xiao Liang <shaw.leon@gmail.com>, shuah@kernel.org,
-	petrm@nvidia.com
-Subject: Re: [PATCH net-next v4 11/14] net: bridge: mcast: track active
- state, prepare for outside lock reads
-Message-ID: <20260309161718.GA2012933@shredder>
-References: <20260307044548.5230-1-linus.luessing@c0d3.blue>
- <20260307044548.5230-12-linus.luessing@c0d3.blue>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260307044548.5230-12-linus.luessing@c0d3.blue>
-X-ClientProxiedBy: TL2P290CA0017.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:3::7)
- To DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qvyVe3iL"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-485389bf0daso8418525e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 09:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773073576; x=1773678376; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7EWtEU3hLDTOygEgGBU2HCNdGhHgmpQrxlmxxTt9Vi8=;
+        b=qvyVe3iLscSQxUHGEXtgxiQgf1i5YJqawtRihmJFGMoOvai6xnBHtjU70P9EI5B+K7
+         T6QAtvYbIgMY0Ra9hCqbRBK/aR8rKq/3YMMzMCtOuBt0CuxEBZijAp4ltat03dESgE6u
+         jXd68+8ldotYmnoL28iAUmgKxHgbt4NyoFqPvNaEySwlB6T2AtUOvagB01H87i6Wu4JB
+         XIMOWq4r23ufcXix44NYpIckRcdlojij6OggVx8PgyGA+7KjzjujvvRqPdUnNTrWeZbA
+         qr2KQn1Ln74By9T7IDYWlINSpwZ1AGJ6T/OQVNMdK2jAalIpVrp8HIZBv77cYbAUrAsw
+         YwaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773073576; x=1773678376;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7EWtEU3hLDTOygEgGBU2HCNdGhHgmpQrxlmxxTt9Vi8=;
+        b=Q5a8K0LldZB+bRgwEFuh2Xutr+S96HYR+ZD0oSLjd3i0Rlj5lPQL+tPd3FKQ7uttGi
+         +qS6jh/rKcHjEr+etNGLT6CsleSWUpq+PlDQc3OQcNoxdx+F1J1vaqYn27IorAi0Jxp6
+         dIn89R4jM33GFq1DvTtbS7P8/A5RYRJx6Wq63xlITDbvehcslcIRZ2DA2RVt+vYh/hag
+         F23tYJZBHKPAF+IxUmm9/HAAfobwg6eTScgdJ58NbBcJnHvVcd1qYLDf9im83COSomN1
+         39mKZoz5usgLWT0bwGuVfyEekbmAH/+fnxv/D/iDGNfwox1Su8OHxMWgniUoAZNG9ViE
+         wiAg==
+X-Forwarded-Encrypted: i=1; AJvYcCWn8V7dZAf2faQUpzqbhhlEOLRRdEegx3bDILbDGqVzGJpUZdcSD4OhHzAjbceVxuiuOVi4sPcrpHFikMzHfeY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+m4PrfO1jstxN4EcKWq75sy0BVSMUMiw/dlUPzRfQff6tOc46
+	utXWb8HAJyRlufx+025tUhruZknXK8WVRRkTIKdeZuaY8xu4nkAzcRKAEMOnxmgtPUKvovZ/YQ+
+	bZP67GNO+aICF5m6qs/kerA==
+X-Received: from wmgp3.prod.google.com ([2002:a05:600c:2043:b0:483:be6e:b81c])
+ (user=vdonnefort job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:4751:b0:485:3ae3:b394 with SMTP id 5b1f17b1804b1-4853ae3b587mr75117615e9.31.1773073575481;
+ Mon, 09 Mar 2026 09:26:15 -0700 (PDT)
+Date: Mon,  9 Mar 2026 16:25:01 +0000
+In-Reply-To: <20260309162516.2623589-1-vdonnefort@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB7900:EE_|MN0PR12MB5713:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d2ae323-362a-488d-ed23-08de7df75b72
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	XUFznokTjH2KVv2FNkk5XSvqwbB6jJYsZIJm0OY4DoReLP2nDW7rO2QtvX3Umz6Z9gQDMN2T5DP516KISG4fLZ0q7W3KekTVFuBgqeZcQ05+92o46HLeoxJzax4EcF10yg6qcfMTk0xZS7D4bdTnHKQ80GpwdG4j1dE4B4t/Z06BS+L9BLzz5OuKsiAMjf79seunF89QdXnnQScXL2n/cppsGjs9GlN3nF6sMvEuOWh+ZNsRbyUBkcUOvVdPwp20AHPhiFzuoOS/wlXmgEDpZzsIzeAlka3y+p1AEtlfUBhdIE6Lq7P5n5fYaXRmlQ/BYMXVn/MBh4DN+5Zf+b/E36ugTw09kJc2Ta+vakRNYzWMscw5+eosAnMNREI25AiAEDI9j7G8vpGUbw4Ewnh+1SFYuzc2pNt3HW/MkWEfRdJOZcYNbxaICsv5aVBiZbLIZVHb9NSgaSeIGfBrg1Q1rxEOIvR21bHbR9xsI+Xx/2/GX2K12tCPGeHvuyF1w1Ou/eRVp9IAI1UFo/KUye/PVsSSpEdyxis6CuKBoa+xcOmikX1pg3w/Mh/SNja9jhxY5E8q3g23uN+WDOhUgGE+yH2m7xK2dul3Njy3OJNTK9WYZUgroo8Mf4pkPTKVRjcepuQWwNmN631CSY+CxAY0S4WaHirtZmChoP94uPj+NN7ZK2bFwywJymEEgXNVgwXjrHINAIG4esXFe6h9KjRgPZ+US+r+P2HvjeGPRl4fQvQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?e5keXBLAfVYgIZfD/rM0vG9f2GmPltZM1odWPMtcIDkBN8W60PDQEE/5xb?=
- =?iso-8859-1?Q?mXuItFXfB6ofv/PYMaZ9P63EnMEv++BQVcnbpSB++BfAlKA4U8zGxGEHkZ?=
- =?iso-8859-1?Q?gM+Hk4/9o0mFSnbdF49Rt3f6SSTy6wHZXcVIym79Uok2D4jW3SRa8zI9jh?=
- =?iso-8859-1?Q?QqdoMFcYX860im+olbVgPpMYk5LT9dqsJ3Qx5hiMB4uusHsnhMrvPbaqMa?=
- =?iso-8859-1?Q?eUufO/3j2NttlF/ckEC9IEOnBF2FTpt7bHU7Hpb71n95VOanqkMyW5KM/Q?=
- =?iso-8859-1?Q?xLgP6Q1aIpOU1PNjTXvnFKMRm95ubCpWMG244xcvwD8BaHrhPgouNHwA39?=
- =?iso-8859-1?Q?QFsC4cHZFsn66mFu6Dxs0ITnG6kQRMvV4z+pnl7E7ySKjUsNGEQG4AUhAd?=
- =?iso-8859-1?Q?C5K9smuE6/DAUcIDw+RUPcyxAYi2A110nQBqPGmFx9KGhdEoxGEzPfCRaJ?=
- =?iso-8859-1?Q?w09MMROy6c2CgEhqaC2QUem542SrSSJJvzVjmZJzzujTtJcUdgpocdzORS?=
- =?iso-8859-1?Q?mF+aMR53FwVMW0QqsoT1SpLXA3w3Ma+cLk+rd2asZDk1hjwAoCMcxNAISq?=
- =?iso-8859-1?Q?hdPuj6W7ElJTAw1hvAJgayYN0ngwFj9D3vb+AM+6rK3uLm6SDxfEoWnLxg?=
- =?iso-8859-1?Q?TBzJIllrso2BLvAzfvN1HozUYuvHYOShw+yUXww/Xn7mthfuLaJgvtyVrj?=
- =?iso-8859-1?Q?AWmsGlBycKo9mVli2i2fv60vZV3o8cBs0I5r9s6tQic5e838ziwJ1JFOMK?=
- =?iso-8859-1?Q?Vg8NCsKt7ZD8hf5mvZj/AovTZ4tkYs7faV8ROCI22DGcHfXpQypiXHEL+q?=
- =?iso-8859-1?Q?wdfTuhs2E+5gi8I8yxT02ApODLFbuGlUrpYspldBmxgYTvgVgT9QusJMck?=
- =?iso-8859-1?Q?hNzWfPMoSxpMVu9UDTOzFhSK4zSaMdzIvG7b80Oq8zRUi2JkpBzr1juQwh?=
- =?iso-8859-1?Q?nVEpZJNyDfRMkK6rCA/ElXdG5mp0mP/5vBajdevOlZxcNBQXRAAucrt4s4?=
- =?iso-8859-1?Q?hteA3gucw7tvAY33r0D4v7by2UF9EWwXI5PPfa45/6QZrMMPnx55U+dOHC?=
- =?iso-8859-1?Q?g+26nBsv/qvlsSITU+gfjTgpTUIZcJbpVxR1BgeGQoaGyum9ssCFB6QqPd?=
- =?iso-8859-1?Q?RAUE6KUSyZ0JU/f7Edt9nJWtEVoKCroRKQMFcjWq/+ibL48Ez6OxydaA7C?=
- =?iso-8859-1?Q?dJ4+9y6ew1fcQMRRstZXgPTJw6XvpMNEe/40fuzzVwxCN3pobebD+sI6HU?=
- =?iso-8859-1?Q?5WlbFen7g1ixaHv0C+R2fPGhffEMwMLxi9Vs/+/axoi2zJRL4zU081j+ah?=
- =?iso-8859-1?Q?e7brnByOsCaQNEdywVBAAuHhABm2Rd/Eyu0V1B1EUKAsiI+52OpXCAFfti?=
- =?iso-8859-1?Q?gj7C/mVfh3PQqXzH4LBFy8L6mV9A3uroy8xRHgPjoQxfpBg16Y6/sjVzo8?=
- =?iso-8859-1?Q?DlbQ2Tp1kAA9EiuYKJay0D5U75JuNckO13XiZpLVxF0yLCfx6izZBKmoKw?=
- =?iso-8859-1?Q?zejibpjyLwaFaEwrt5Qpgi58LPRRAbTlfY4tGcPjr2/qmspUa6u792SEHm?=
- =?iso-8859-1?Q?9RHmPMaB1SjUjQAQCByK32yzo2umUVpUNAMwC8w5J7ZYi0lneYPuqVx2E8?=
- =?iso-8859-1?Q?nD9/U58XgOpF/7hFNBeuVL7h0bPLsLdKgs7rsKTYYXtzkb9Howg5WzQd/z?=
- =?iso-8859-1?Q?+WRaTJK/47wyPqJKn39DIA3Wc41/N/ltKBmvIphzfl9bDae0IPKhAPgUPV?=
- =?iso-8859-1?Q?8pVUSJsfIUfu26JHGvIYTJJaqzDHRjh69qQkeuB9HQwijTvsU3gQn5leXa?=
- =?iso-8859-1?Q?4kWWhLYHKg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d2ae323-362a-488d-ed23-08de7df75b72
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7900.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 16:17:28.4758
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VPLAgUE+s/E7vKjeSIyncZyWYxIuUV0OYekdr4O9arQM/OIg1nYZl8ANqSX7cmNNHEmhFzSuP/YCAA+TlKzb4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5713
+Mime-Version: 1.0
+References: <20260309162516.2623589-1-vdonnefort@google.com>
+X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
+Message-ID: <20260309162516.2623589-16-vdonnefort@google.com>
+Subject: [PATCH v14 15/30] tracing: selftests: Add trace remote tests
+From: Vincent Donnefort <vdonnefort@google.com>
+To: rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
+	linux-trace-kernel@vger.kernel.org, maz@kernel.org, oliver.upton@linux.dev, 
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com
+Cc: kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	jstultz@google.com, qperret@google.com, will@kernel.org, 
+	aneesh.kumar@kernel.org, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, Vincent Donnefort <vdonnefort@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Mar 07, 2026 at 05:45:45AM +0100, Linus Lüssing wrote:
-> We are updating ip{4,6}_active and check all variables their state relies
-> on while holding the bridge multicast spinlock. However we are going to
-> read it without this lock in a follow-up commit on fast/data path, too.
-> 
-> As these variables are only booleans this shouldn't be a problem,
-> ip{4,6}_active will be loaded and stored atomically. And those
-> read sides should converge eventually. But to allow tooling to verify
-> this use the READ_ONCE() and WRITE_ONCE macros.
-> 
-> Signed-off-by: Linus Lüssing <linus.luessing@c0d3.blue>
-> ---
->  net/bridge/br_multicast.c | 24 ++++++++++++++----------
->  1 file changed, 14 insertions(+), 10 deletions(-)
-> 
-> diff --git a/net/bridge/br_multicast.c b/net/bridge/br_multicast.c
-> index cb78f9555db6..6faa484dede7 100644
-> --- a/net/bridge/br_multicast.c
-> +++ b/net/bridge/br_multicast.c
-> @@ -1085,9 +1085,10 @@ static void br_ip4_multicast_update_active(struct net_bridge_mcast *brmctx,
->  					   bool force_inactive)
->  {
->  	if (force_inactive)
-> -		brmctx->ip4_active = false;
-> +		WRITE_ONCE(brmctx->ip4_active, false);
->  	else
-> -		brmctx->ip4_active = br_ip4_multicast_querier_exists(brmctx);
-> +		WRITE_ONCE(brmctx->ip4_active,
-> +			   br_ip4_multicast_querier_exists(brmctx));
->  }
->  
->  static void br_ip6_multicast_update_active(struct net_bridge_mcast *brmctx,
-> @@ -1095,23 +1096,26 @@ static void br_ip6_multicast_update_active(struct net_bridge_mcast *brmctx,
->  {
->  #if IS_ENABLED(CONFIG_IPV6)
->  	if (force_inactive)
-> -		brmctx->ip6_active = false;
-> +		WRITE_ONCE(brmctx->ip6_active, false);
->  	else
-> -		brmctx->ip6_active = br_ip6_multicast_querier_exists(brmctx);
-> +		WRITE_ONCE(brmctx->ip6_active,
-> +			   br_ip6_multicast_querier_exists(brmctx));
->  #endif
->  }
->  
->  static void br_multicast_notify_active(struct net_bridge_mcast *brmctx,
->  				       bool ip4_active_old, bool ip6_active_old)
->  {
-> -	if (brmctx->ip4_active == ip4_active_old &&
-> -	    brmctx->ip6_active == ip6_active_old)
-> +	int ip4_active = brmctx->ip4_active;
-> +	int ip6_active = brmctx->ip6_active;
-> +
-> +	if (ip4_active == ip4_active_old &&
-> +	    ip6_active == ip6_active_old)
->  		return;
->  
->  	br_debug(brmctx->br, "mc_active changed, vid: %i: v4: %i->%i, v6: %i->%i\n",
->  		 brmctx->vlan ? brmctx->vlan->vid : -1,
-> -		 ip4_active_old, brmctx->ip4_active,
-> -		 ip6_active_old, brmctx->ip6_active);
-> +		 ip4_active_old, ip4_active, ip6_active_old, ip6_active);
->  }
+Exercise the tracefs interface for trace remote with a set of tests to
+check:
 
-This hunk seems unnecessary? Pretty sure you can leave this function
-as-is.
+  * loading/unloading (unloading.tc)
+  * reset (reset.tc)
+  * size changes (buffer_size.tc)
+  * consuming read (trace_pipe.tc)
+  * non-consuming read (trace.tc)
 
->  
->  /**
-> @@ -4269,7 +4273,7 @@ void br_multicast_ctx_init(struct net_bridge *br,
->  	brmctx->multicast_membership_interval = 260 * HZ;
->  
->  	brmctx->ip4_querier.port_ifidx = 0;
-> -	brmctx->ip4_active = 0;
-> +	WRITE_ONCE(brmctx->ip4_active, 0);
->  	seqcount_spinlock_init(&brmctx->ip4_querier.seq, &br->multicast_lock);
->  	brmctx->multicast_igmp_version = 2;
->  #if IS_ENABLED(CONFIG_IPV6)
-> @@ -4277,7 +4281,7 @@ void br_multicast_ctx_init(struct net_bridge *br,
->  	brmctx->ip6_querier.port_ifidx = 0;
->  	seqcount_spinlock_init(&brmctx->ip6_querier.seq, &br->multicast_lock);
->  #endif
-> -	brmctx->ip6_active = 0;
-> +	WRITE_ONCE(brmctx->ip6_active, 0);
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
 
-Is this necessary? Who can read the active states while the multicast
-context is still be initialized?
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc b/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc
+new file mode 100644
+index 000000000000..1a43280ffa97
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc
+@@ -0,0 +1,25 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Test trace remote buffer size
++# requires: remotes/test
++
++. $TEST_DIR/remotes/functions
++
++test_buffer_size()
++{
++    echo 0 > tracing_on
++    assert_unloaded
++
++    echo 4096 > buffer_size_kb
++    echo 1 > tracing_on
++    assert_loaded
++
++    echo 0 > tracing_on
++    echo 7 > buffer_size_kb
++}
++
++if [ -z "$SOURCE_REMOTE_TEST" ]; then
++    set -e
++    setup_remote_test
++    test_buffer_size
++fi
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/functions b/tools/testing/selftests/ftrace/test.d/remotes/functions
+new file mode 100644
+index 000000000000..97a09d564a34
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/remotes/functions
+@@ -0,0 +1,88 @@
++# SPDX-License-Identifier: GPL-2.0
++
++setup_remote()
++{
++	local name=$1
++
++	[ -e $TRACING_DIR/remotes/$name/write_event ] || exit_unresolved
++
++	cd remotes/$name/
++	echo 0 > tracing_on
++	clear_trace
++	echo 7 > buffer_size_kb
++	echo 0 > events/enable
++	echo 1 > events/$name/selftest/enable
++	echo 1 > tracing_on
++}
++
++setup_remote_test()
++{
++	[ -d $TRACING_DIR/remotes/test/ ] || modprobe remote_test || exit_unresolved
++
++	setup_remote "test"
++}
++
++assert_loaded()
++{
++	grep -q "(loaded)" buffer_size_kb
++}
++
++assert_unloaded()
++{
++	grep -q "(unloaded)" buffer_size_kb
++}
++
++dump_trace_pipe()
++{
++    output=$(mktemp $TMPDIR/remote_test.XXXXXX)
++    cat trace_pipe > $output &
++    pid=$!
++    sleep 1
++    kill -1 $pid
++
++    echo $output
++}
++
++check_trace()
++{
++	start_id="$1"
++	end_id="$2"
++	file="$3"
++
++	# Ensure the file is not empty
++	test -n "$(head $file)"
++
++	prev_ts=0
++	id=0
++
++	# Only keep <timestamp> <id>
++	tmp=$(mktemp $TMPDIR/remote_test.XXXXXX)
++	sed -e 's/\[[0-9]*\]\s*\([0-9]*.[0-9]*\): [a-z]* id=\([0-9]*\)/\1 \2/' $file > $tmp
++
++	while IFS= read -r line; do
++		ts=$(echo $line | cut -d ' ' -f 1)
++		id=$(echo $line | cut -d ' ' -f 2)
++
++		test $(echo "$ts>$prev_ts" | bc) -eq 1
++		test $id -eq $start_id
++
++		prev_ts=$ts
++		start_id=$((start_id + 1))
++	done < $tmp
++
++	test $id -eq $end_id
++	rm $tmp
++}
++
++get_cpu_ids()
++{
++    sed -n 's/^processor\s*:\s*\([0-9]\+\).*/\1/p' /proc/cpuinfo
++}
++
++get_page_size() {
++    sed -ne 's/^.*data.*size:\([0-9][0-9]*\).*/\1/p' events/header_page
++}
++
++get_selftest_event_size() {
++    sed -ne 's/^.*field:.*;.*size:\([0-9][0-9]*\);.*/\1/p' events/*/selftest/format | awk '{s+=$1} END {print s}'
++}
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/reset.tc b/tools/testing/selftests/ftrace/test.d/remotes/reset.tc
+new file mode 100644
+index 000000000000..4d176349b2bc
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/remotes/reset.tc
+@@ -0,0 +1,90 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Test trace remote reset
++# requires: remotes/test
++
++. $TEST_DIR/remotes/functions
++
++check_reset()
++{
++    write_event_path="write_event"
++    taskset=""
++
++    clear_trace
++
++    # Is the buffer empty?
++    output=$(dump_trace_pipe)
++    test $(wc -l $output | cut -d ' ' -f1) -eq 0
++
++    if $(echo $(pwd) | grep -q "per_cpu/cpu"); then
++        write_event_path="../../write_event"
++        cpu_id=$(echo $(pwd) | sed -e 's/.*per_cpu\/cpu//')
++        taskset="taskset -c $cpu_id"
++    fi
++    rm $output
++
++    # Can we properly write a new event?
++    $taskset echo 7890 > $write_event_path
++    output=$(dump_trace_pipe)
++    test $(wc -l $output | cut -d ' ' -f1) -eq 1
++    grep -q "id=7890" $output
++    rm $output
++}
++
++test_global_interface()
++{
++    output=$(mktemp $TMPDIR/remote_test.XXXXXX)
++
++    # Confidence check
++    echo 123456 > write_event
++    output=$(dump_trace_pipe)
++    grep -q "id=123456" $output
++    rm $output
++
++    # Reset single event
++    echo 1 > write_event
++    check_reset
++
++    # Reset lost events
++    for i in $(seq 1 10000); do
++        echo 1 > write_event
++    done
++    check_reset
++}
++
++test_percpu_interface()
++{
++    [ "$(get_cpu_ids | wc -l)" -ge 2 ] || return 0
++
++    for cpu in $(get_cpu_ids); do
++        taskset -c $cpu echo 1 > write_event
++    done
++
++    check_non_empty=0
++    for cpu in $(get_cpu_ids); do
++        cd per_cpu/cpu$cpu/
++
++        if [ $check_non_empty -eq 0 ]; then
++            check_reset
++            check_non_empty=1
++        else
++            # Check we have only reset 1 CPU
++            output=$(dump_trace_pipe)
++            test $(wc -l $output | cut -d ' ' -f1) -eq 1
++            rm $output
++        fi
++        cd -
++    done
++}
++
++test_reset()
++{
++    test_global_interface
++    test_percpu_interface
++}
++
++if [ -z "$SOURCE_REMOTE_TEST" ]; then
++    set -e
++    setup_remote_test
++    test_reset
++fi
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
+new file mode 100644
+index 000000000000..170f7648732a
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/remotes/trace.tc
+@@ -0,0 +1,127 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Test trace remote non-consuming read
++# requires: remotes/test
++
++. $TEST_DIR/remotes/functions
++
++test_trace()
++{
++	echo 0 > tracing_on
++    assert_unloaded
++
++    echo 7 > buffer_size_kb
++    echo 1 > tracing_on
++    assert_loaded
++
++    # Simple test: Emit few events and try to read them
++    for i in $(seq 1 8); do
++        echo $i > write_event
++    done
++
++    check_trace 1 8 trace
++
++    #
++    # Test interaction with consuming read
++    #
++
++    cat trace_pipe > /dev/null &
++    pid=$!
++
++    sleep 1
++    kill $pid
++
++    test $(wc -l < trace) -eq 0
++
++    for i in $(seq 16 32); do
++        echo $i > write_event
++    done
++
++    check_trace 16 32 trace
++
++    #
++    # Test interaction with reset
++    #
++
++    echo 0 > trace
++
++    test $(wc -l < trace) -eq 0
++
++    for i in $(seq 1 8); do
++        echo $i > write_event
++    done
++
++    check_trace 1 8 trace
++
++    #
++    # Test interaction with lost events
++    #
++
++    # Ensure the writer is not on the reader page by reloading the buffer
++    echo 0 > tracing_on
++    echo 0 > trace
++    assert_unloaded
++    echo 1 > tracing_on
++    assert_loaded
++
++    # Ensure ring-buffer overflow by emitting events from the same CPU
++    for cpu in $(get_cpu_ids); do
++        break
++    done
++
++    events_per_page=$(($(get_page_size) / $(get_selftest_event_size))) # Approx: does not take TS into account
++    nr_events=$(($events_per_page * 2))
++    for i in $(seq 1 $nr_events); do
++        taskset -c $cpu echo $i > write_event
++    done
++
++    id=$(sed -n -e '1s/\[[0-9]*\]\s*[0-9]*.[0-9]*: [a-z]* id=\([0-9]*\)/\1/p' trace)
++    test $id -ne 1
++
++    check_trace $id $nr_events trace
++
++    #
++    # Test per-CPU interface
++    #
++    echo 0 > trace
++
++    for cpu in $(get_cpu_ids) ; do
++        taskset -c $cpu echo $cpu > write_event
++    done
++
++    for cpu in $(get_cpu_ids); do
++        cd per_cpu/cpu$cpu/
++
++        check_trace $cpu $cpu trace
++
++        cd - > /dev/null
++    done
++
++    #
++    # Test with hotplug
++    #
++
++    [ "$(get_cpu_ids | wc -l)" -ge 2 ] || return 0
++
++    echo 0 > trace
++
++    for cpu in $(get_cpu_ids); do
++        echo 0 > /sys/devices/system/cpu/cpu$cpu/online || return 0
++        break
++    done
++
++    for i in $(seq 1 8); do
++        echo $i > write_event
++    done
++
++    check_trace 1 8 trace
++
++    echo 1 > /sys/devices/system/cpu/cpu$cpu/online
++}
++
++if [ -z "$SOURCE_REMOTE_TEST" ]; then
++    set -e
++
++    setup_remote_test
++    test_trace
++fi
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
+new file mode 100644
+index 000000000000..669a7288ed7c
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
+@@ -0,0 +1,127 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Test trace remote consuming read
++# requires: remotes/test
++
++. $TEST_DIR/remotes/functions
++
++test_trace_pipe()
++{
++    echo 0 > tracing_on
++    assert_unloaded
++
++    # Emit events from the same CPU
++    for cpu in $(get_cpu_ids); do
++        break
++    done
++
++    #
++    # Simple test: Emit enough events to fill few pages
++    #
++
++    echo 1024 > buffer_size_kb
++    echo 1 > tracing_on
++    assert_loaded
++
++    events_per_page=$(($(get_page_size) / $(get_selftest_event_size)))
++    nr_events=$(($events_per_page * 4))
++
++    output=$(mktemp $TMPDIR/remote_test.XXXXXX)
++
++    cat trace_pipe > $output &
++    pid=$!
++
++    for i in $(seq 1 $nr_events); do
++        taskset -c $cpu echo $i > write_event
++    done
++
++    echo 0 > tracing_on
++    sleep 1
++    kill $pid
++
++    check_trace 1 $nr_events $output
++
++    rm $output
++
++    #
++    # Test interaction with lost events
++    #
++
++    assert_unloaded
++    echo 7 > buffer_size_kb
++    echo 1 > tracing_on
++    assert_loaded
++
++    nr_events=$((events_per_page * 2))
++    for i in $(seq 1 $nr_events); do
++        taskset -c $cpu echo $i > write_event
++    done
++
++    output=$(dump_trace_pipe)
++
++    lost_events=$(sed -n -e '1s/CPU:.*\[LOST \([0-9]*\) EVENTS\]/\1/p' $output)
++    test -n "$lost_events"
++
++    id=$(sed -n -e '2s/\[[0-9]*\]\s*[0-9]*.[0-9]*: [a-z]* id=\([0-9]*\)/\1/p' $output)
++    test "$id" -eq $(($lost_events + 1))
++
++    # Drop [LOST EVENTS] line
++    sed -i '1d' $output
++
++    check_trace $id $nr_events $output
++
++    rm $output
++
++    #
++    # Test per-CPU interface
++    #
++
++    echo 0 > trace
++    echo 1 > tracing_on
++
++    for cpu in $(get_cpu_ids); do
++        taskset -c $cpu echo $cpu > write_event
++    done
++
++    for cpu in $(get_cpu_ids); do
++        cd per_cpu/cpu$cpu/
++        output=$(dump_trace_pipe)
++
++        check_trace $cpu $cpu $output
++
++        rm $output
++        cd - > /dev/null
++    done
++
++    #
++    # Test interaction with hotplug
++    #
++
++    [ "$(get_cpu_ids | wc -l)" -ge 2 ] || return 0
++
++    echo 0 > trace
++
++    for cpu in $(get_cpu_ids); do
++        echo 0 > /sys/devices/system/cpu/cpu$cpu/online || return 0
++        break
++    done
++
++    for i in $(seq 1 8); do
++        echo $i > write_event
++    done
++
++    output=$(dump_trace_pipe)
++
++    check_trace 1 8 $output
++
++    rm $output
++
++    echo 1 > /sys/devices/system/cpu/cpu$cpu/online
++}
++
++if [ -z "$SOURCE_REMOTE_TEST" ]; then
++    set -e
++
++    setup_remote_test
++    test_trace_pipe
++fi
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc b/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc
+new file mode 100644
+index 000000000000..cac2190183f6
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc
+@@ -0,0 +1,41 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Test trace remote unloading
++# requires: remotes/test
++
++. $TEST_DIR/remotes/functions
++
++test_unloading()
++{
++    # No reader, writing
++    assert_loaded
++
++    # No reader, no writing
++    echo 0 > tracing_on
++    assert_unloaded
++
++    # 1 reader, no writing
++    cat trace_pipe &
++    pid=$!
++    sleep 1
++    assert_loaded
++    kill $pid
++    assert_unloaded
++
++    # No reader, no writing, events
++    echo 1 > tracing_on
++    echo 1 > write_event
++    echo 0 > tracing_on
++    assert_loaded
++
++    # Test reset
++    clear_trace
++    assert_unloaded
++}
++
++if [ -z "$SOURCE_REMOTE_TEST" ]; then
++    set -e
++
++    setup_remote_test
++    test_unloading
++fi
+-- 
+2.53.0.473.g4a7958ca14-goog
 
->  
->  	timer_setup(&brmctx->ip4_mc_router_timer, NULL, 0);
->  	timer_setup(&brmctx->ip4_other_query.timer, NULL, 0);
-> -- 
-> 2.53.0
-> 
