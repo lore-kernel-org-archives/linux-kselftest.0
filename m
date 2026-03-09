@@ -1,42 +1,42 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E263D903D;
-	Mon,  9 Mar 2026 15:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397973D7D6B;
+	Mon,  9 Mar 2026 15:20:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773069639; cv=none; b=s0BLimiTMC+LmggQ6knVQpdJdkFV6v5hQkJEfXNN2pH3vbegG1c6QA/4gVXhV2YKWFI7frvFLujCvW6QFBB0utUo4c1+BYaT0iVA/AoME+dk6rSnVM/r8Y9LEIRJ5kBUBK9xqwPbmTYdHuSxdiEdUJUfcG4wSMPclYwa7v8qndQ=
+	t=1773069639; cv=none; b=DISPbdWy57MQUOjwexUYG9uYdJmuhpJPOO7rjai9pPs0s1c8ytBqUXBJRifNDwwifWlRxMsvuThtMOnCfAsrijer6wsARTOgpo9ZG4iOeW8S8QqiUWBeF8B30J7BLWJVFMl6oPunD+naLFV/95D6aBM0uXcliKrPOBm8MH8VQfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773069639; c=relaxed/simple;
-	bh=DqhTRr8CaIg0WOOkVXziM7LkJ185oCccscWNtuTlliQ=;
+	bh=fAwcoqurxOiP2mlKpuJQinVz/GPCAjW6iExhrTuyN0c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C2dtoUlVcVH6LEm4KLUIeSMOtyftAG2yzlL70qMrv1JBz06mD+gSAuLwWT4YeexO2uzSjFVVyU/4sVyad/IhIjq4oSWeS7HqFiBI5BPxvFhvnPEqKJTcSOIk7K/mmoyVy9EEORInK7w+RkqrvDyiKrfYLqF+vKTd++Tlz+3CG+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=lzaUvGkH; arc=none smtp.client-ip=130.117.225.111
+	 MIME-Version; b=oeapVOBLU0mf/BdAo0LHl4OixrhSdyLTtE4Cd+1wmnHENzkzQTKL748XT/jUeJ0CYnSZxHXQs1/C8qeTdWqWLZmiMiVMCisYyxJY94ffJm+cibYWm7PubR8khyLxATknE2dvemsRK6cfZ2sj3nDr9nsMCbqmXO/UwPStu/DhQoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=KCqC08FQ; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="lzaUvGkH"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="KCqC08FQ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=6UKsTiQKnFSM9Hj1ADDF9mPcImxzZ8Cs+q/b207zLVk=; b=lzaUvGkHwIlx
-	3YhsYfmd/9qscl1jiMZqll0fW8WYuSjIkMUEGYsUHz+cg+iiS+YwyYjir9Uh2qcci9Ecgx3Db0UkI
-	Av7cLm+LsBpasPX7inZLBl306nW9V2XRHNDIadTS4Ol4aS+n5QRPFxVRRQZOco+oDt4L9Zf1qDle3
-	nvs6CFU5oKUd0TKaxss5hFeHTaA2I1OR+jBQhnqy/cl4mnGDeOzrYGrTKdNbDKPo17xaPrhN2ZisV
-	F/3nwlm04V9Vq8PZQ9iCJM1OUSv3DVeLPr54Ehfl50OAjUcfLpUKgnUI1s+svvxv8ChhLI20/KwbR
-	GoL4WgA0xlr4m1Ef5d/HYg==;
+	Content-Type; bh=bW5DtRsamE95vGAdJSFvHf3U93xrRQ4W2Xdb4GAprTM=; b=KCqC08FQ+h5q
+	nBO4+/+g/ETq3ohSG0JmPV13Wqpbtj2b5WJ0J6hbWXkEEP+qw1cl+Z2Ru02gmd/f+KiA7XVcjP2oM
+	bvEdcL+qgsGl8816mr2gZnGoEtiaTzrDuoZoQZo52DMKBaDi5mpJiQmUBfH8R9MZllTBG+vmxtc8p
+	i4rfRMFWSEJSobxKi/KD78jGUR8MYf6sQzA0k+tH2Db97SIaCSHS/S99dv97dZuF/Y56x0oe4OJWK
+	Ix75BMBNysvA7OWQY2txk5jl4xdoIvJ3bJcSLyiagbvsZIt7u7D6pAeUKPdwr0WImAtlI+TOOAIQQ
+	TaygLYPKYv8JUXBpP1Pv3Q==;
 Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
 	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vzcNW-006Tez-0e;
-	Mon, 09 Mar 2026 16:20:13 +0100
+	id 1vzcNY-006TfL-2i;
+	Mon, 09 Mar 2026 16:20:16 +0100
 Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 629FKKIR565249
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 629FKNpU565258
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 9 Mar 2026 15:20:20 GMT
+	Mon, 9 Mar 2026 15:20:23 GMT
 Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 629FKKb6565248;
-	Mon, 9 Mar 2026 15:20:20 GMT
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 629FKNbj565256;
+	Mon, 9 Mar 2026 15:20:23 GMT
 From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
 To: "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
@@ -47,10 +47,11 @@ To: "David S . Miller" <davem@davemloft.net>,
         Stefano Brivio <sbrivio@redhat.com>
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, dev@openvswitch.org,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH net v4 3/5] selftests: net: rename pmtu.sh to pmtu-test.sh
-Date: Mon,  9 Mar 2026 15:20:11 +0000
-Message-ID: <20260309152013.565216-4-aleksey.oladko@virtuozzo.com>
+        Aleksei Oladko <aleksey.oladko@virtuozzo.com>,
+        Konstantin Khorenko <khorenko@virtuozzo.com>
+Subject: [PATCH net v4 5/5] selftests: net: io_uring_zerocopy: enable io_uring for the test
+Date: Mon,  9 Mar 2026 15:20:13 +0000
+Message-ID: <20260309152013.565216-6-aleksey.oladko@virtuozzo.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260309152013.565216-1-aleksey.oladko@virtuozzo.com>
 References: <20260309152013.565216-1-aleksey.oladko@virtuozzo.com>
@@ -62,33 +63,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rename the pmtu.sh test script to pmtu-test.sh. No functional
-changes are made, only the file name is updated.
+The io_uring_zerocopy.sh kselftest assumes that io_uring support is
+enabled on the host system. When io_uring is disabled via the
+kernel.io_uring_disabled sysctl, the test fails.
+
+Explicitly enable io_uring for the test by setting
+kernel.io_uring_disabled=0.
+
+Save the original value of kernel.io_uring_disabled before changing
+it and restore it in cleanup handler to ensure the system state is
+restored regardless of test outcome.
 
 Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
 ---
- tools/testing/selftests/net/Makefile                  | 2 +-
- tools/testing/selftests/net/{pmtu.sh => pmtu-test.sh} | 0
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename tools/testing/selftests/net/{pmtu.sh => pmtu-test.sh} (100%)
+ tools/testing/selftests/net/io_uring_zerocopy_tx.sh | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 605c54c0e8a3..8fa6ef771757 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -63,7 +63,7 @@ TEST_PROGS := \
- 	netns-name.sh \
- 	netns-sysctl.sh \
- 	nl_netdev.py \
--	pmtu.sh \
-+	pmtu-test.sh \
- 	psock_snd.sh \
- 	reuseaddr_ports_exhausted.sh \
- 	reuseport_addr_any.sh \
-diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu-test.sh
-similarity index 100%
-rename from tools/testing/selftests/net/pmtu.sh
-rename to tools/testing/selftests/net/pmtu-test.sh
+diff --git a/tools/testing/selftests/net/io_uring_zerocopy_tx.sh b/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
+index 123439545013..8c3647de9b4c 100755
+--- a/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
++++ b/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
+@@ -77,9 +77,13 @@ esac
+ 
+ # Start of state changes: install cleanup handler
+ 
++old_io_uring_disabled=0
+ cleanup() {
+ 	ip netns del "${NS2}"
+ 	ip netns del "${NS1}"
++	if [ "$old_io_uring_disabled" -ne 0 ]; then
++		sysctl -w -q kernel.io_uring_disabled="$old_io_uring_disabled" 2>/dev/null || true
++	fi
+ }
+ 
+ trap cleanup EXIT
+@@ -122,5 +126,10 @@ do_test() {
+ 	wait
+ }
+ 
++old_io_uring_disabled=$(sysctl -n kernel.io_uring_disabled 2>/dev/null || echo "0")
++if [ "$old_io_uring_disabled" -ne 0 ]; then
++	sysctl -w -q kernel.io_uring_disabled=0
++fi
++
+ do_test "${EXTRA_ARGS}"
+ echo ok
 -- 
 2.43.0
 
