@@ -1,195 +1,157 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629483803CD
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 11:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689413876B0;
+	Tue, 10 Mar 2026 11:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773140948; cv=none; b=uI9uKF+YeRkIh2XnF/+HAgVj9MjH51jqKUF5Dl8/zuAz1GEYBI+XVXhcJZyiZW7ZAezxrRzMDVwgTcqLFfMQPOrmDzKynxKmaLR3bPkhoyzdBrcpdutd4pDC/OvFkljaCI8md/mBcuMxWJ4NkeugTHYRp/lJKcIfML/pNdbx9v0=
+	t=1773141858; cv=none; b=VeTUd4UCVxmrskyMzm87HzIkcQDWfwEELIyEPvzvjZ1z/CToxLjseW9v+5dVrxC0FspmgHKpOYBnGHonHhNYInGF6TpRY3/09ZBDNDsEQ+UforgiDsXIBUu7r+p5CxXdnNwcjB9NiEZ0c6dOD6zKDewFZT5C95Rk+QSbiaE9NP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773140948; c=relaxed/simple;
-	bh=g48GF67Ehta5FNQcdaDnQ80OaoqHQXeDa3iRqDqmCmQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O9J2L3hiv5P4qu264l78yqfrhY4pTJzU0y4oFIfkLGf50pl/ULoGNJaIRDhbUrbbKLWfkhD7zv7oP0WbZX//aUnLBANfhkpikh30ZkJWpc26HpnyLkW7r2DMxSoyAb0/qguogv0fbuVXICylYEjb/i67IFtMNIGRN7gOuTsvtWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M+9SDae3; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773141858; c=relaxed/simple;
+	bh=xT53Ttf/NyogikS/gfdkFymB7LtDXRO0Yz6j+bwKsPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aX1r5lG+WDjqGkk0Fwqqs1hScgJi2aitgJJMRJiBwd2iN1Yn+leS1n+Ocle9dUuoq/aZRRv8QyaTfSaIqHHb0GsFiE2JNGWQHzztFTZdLlqS7cLwTQq3n+LEpqNaqTZtmSs2KQ3Ebcwg2PJ00Bj8qnW5qMgigTuTWtOeqo/7388=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JkOoejQb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M+9SDae3"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773140935;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BqjOCzwoh4qQ8R2n79BwXderUht8dH1U1qDDXCtHGrw=;
-	b=M+9SDae3wrDlhJznygoVI+mezWPeZgLNg2T2DAmqqp+bXNykFhLYIpZPQ/DYnhV69B6CdR
-	8GePTwOIxmaaxiTxeiaRy23ca37K1uI9M7ztwTcD8j6eMjhP8FxM9Bx6kwzZq6vJhPz9EG
-	olRAvEk/6Elb6ZjojNeA4gwo+shnqO8=
-From: Usama Arif <usama.arif@linux.dev>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Usama Arif <usama.arif@linux.dev>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 1/6] selftests/liveupdate: add framework for memfd tests
-Date: Tue, 10 Mar 2026 04:08:45 -0700
-Message-ID: <20260310110847.3519998-1-usama.arif@linux.dev>
-In-Reply-To: <20260309115441.266805-2-pratyush@kernel.org>
-References: 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JkOoejQb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8497BC19423;
+	Tue, 10 Mar 2026 11:24:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773141858;
+	bh=xT53Ttf/NyogikS/gfdkFymB7LtDXRO0Yz6j+bwKsPU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JkOoejQbIY5sFLhLxCkOVN4kxiKJQN7lTCbiqMhI2bPYZCWqCDH0QcPHkf9E94N1P
+	 jGKWxOZDnrBvfZwk3KlNfSPE8lrfyGUmy/E8KZRXnZ3WA2W+jaNVCXVB0fdXzl2Epk
+	 xdyGfd3tLRQx0V4K/FAplurzOKD4T7ZCDXJbb1/yW+bnAtN/DEPHfz+j7RrHKIT4et
+	 mst/xUtfedv4qkVcmjou7az+d7Do3wm3dxVhtCDP9L1/BM2ZP0qghkq/jyHg4SSkSp
+	 MiB5UsygHd+YPYVvodLr6rfXKh/5Fgbcu9NvSb0LZNXu/UpDt3L4jAOcvxUwz9rzo4
+	 xluXx/3QcCvGA==
+Date: Tue, 10 Mar 2026 12:24:05 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Andy Lutomirski <luto@amacapital.net>
+Cc: Jeff Layton <jlayton@kernel.org>, 
+	Dorjoy Chowdhury <dorjoychy111@gmail.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, chuck.lever@oracle.com, 
+	alex.aring@gmail.com, arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com, 
+	smfrench@gmail.com, richard.henderson@linaro.org, mattst88@gmail.com, 
+	linmag7@gmail.com, tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, trondmy@kernel.org, 
+	anna@kernel.org, sfrench@samba.org, pc@manguebit.org, ronniesahlberg@gmail.com, 
+	sprasad@microsoft.com, tom@talpey.com, bharathsm@microsoft.com, shuah@kernel.org, 
+	miklos@szeredi.hu, hansg@kernel.org
+Subject: Re: [PATCH v5 1/4] openat2: new OPENAT2_REGULAR flag support
+Message-ID: <20260310-ausdehnen-wahrnehmen-f9d9c6224799@brauner>
+References: <20260307140726.70219-1-dorjoychy111@gmail.com>
+ <20260307140726.70219-2-dorjoychy111@gmail.com>
+ <CALCETrXVBA9uGEUdQPEZ2MVdxjLwwcWi5kzhOr1NdOWSSRaROw@mail.gmail.com>
+ <801cf2c42b80d486726ea0a3774e52abcb158100.camel@kernel.org>
+ <CALCETrVt7o+7JCMfTX3Vu9PANJJgR8hB5Z2THcXzam61kG9Gig@mail.gmail.com>
+ <20260309-umsturz-herfallen-067eb2df7ec2@brauner>
+ <CALCETrWjb+V-zrMT412MtmgDCx9y8simJBQ7+45C9MtdiSMnuw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CALCETrWjb+V-zrMT412MtmgDCx9y8simJBQ7+45C9MtdiSMnuw@mail.gmail.com>
 
-On Mon,  9 Mar 2026 11:54:34 +0000 Pratyush Yadav <pratyush@kernel.org> wrote:
+On Mon, Mar 09, 2026 at 09:50:18AM -0700, Andy Lutomirski wrote:
+> On Mon, Mar 9, 2026 at 1:58 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Sun, Mar 08, 2026 at 10:10:05AM -0700, Andy Lutomirski wrote:
+> > > On Sun, Mar 8, 2026 at 4:40 AM Jeff Layton <jlayton@kernel.org> wrote:
+> > > >
+> > > > On Sat, 2026-03-07 at 10:56 -0800, Andy Lutomirski wrote:
+> > > > > On Sat, Mar 7, 2026 at 6:09 AM Dorjoy Chowdhury <dorjoychy111@gmail.com> wrote:
+> > > > > >
+> > > > > > This flag indicates the path should be opened if it's a regular file.
+> > > > > > This is useful to write secure programs that want to avoid being
+> > > > > > tricked into opening device nodes with special semantics while thinking
+> > > > > > they operate on regular files. This is a requested feature from the
+> > > > > > uapi-group[1].
+> > > > > >
+> > > > >
+> > > > > I think this needs a lot more clarification as to what "regular"
+> > > > > means.  If it's literally
+> > > > >
+> > > > > > A corresponding error code EFTYPE has been introduced. For example, if
+> > > > > > openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
+> > > > > > param, it will return -EFTYPE. EFTYPE is already used in BSD systems
+> > > > > > like FreeBSD, macOS.
+> > > > >
+> > > > > I think this needs more clarification as to what "regular" means,
+> > > > > since S_IFREG may not be sufficient.  The UAPI group page says:
+> > > > >
+> > > > > Use-Case: this would be very useful to write secure programs that want
+> > > > > to avoid being tricked into opening device nodes with special
+> > > > > semantics while thinking they operate on regular files. This is
+> > > > > particularly relevant as many device nodes (or even FIFOs) come with
+> > > > > blocking I/O (or even blocking open()!) by default, which is not
+> > > > > expected from regular files backed by “fast” disk I/O. Consider
+> > > > > implementation of a naive web browser which is pointed to
+> > > > > file://dev/zero, not expecting an endless amount of data to read.
+> > > > >
+> > > > > What about procfs?  What about sysfs?  What about /proc/self/fd/17
+> > > > > where that fd is a memfd?  What about files backed by non-"fast" disk
+> > > > > I/O like something on a flaky USB stick or a network mount or FUSE?
+> > > > >
+> > > > > Are we concerned about blocking open?  (open blocks as a matter of
+> > > > > course.)  Are we concerned about open having strange side effects?
+> > > > > Are we concerned about write having strange side effects?  Are we
+> > > > > concerned about cases where opening the file as root results in
+> > > > > elevated privilege beyond merely gaining the ability to write to that
+> > > > > specific path on an ordinary filesystem?
+> >
+> > I think this is opening up a barrage of question that I'm not sure are
+> > all that useful. The ability to only open regular file isn't intended to
+> > defend against hung FUSE or NFS servers or other random Linux
+> > special-sauce murder-suicide file descriptor traps. For a lot of those
+> > we have O_PATH which can easily function with the new extension. A lot
+> > of the other special-sauce files (most anonymous inode fds) cannot even
+> > be reopened via e.g., /proc.
+> 
+> On the flip side, /proc itself can certainly be opened.  Should
+> O_REGULAR be able to open the more magical /proc and /sys files?  Are
+> there any that are problematic?
 
-> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
-> 
-> Currently memfd preservation using LUO is only tested indirectly via the
-> luo_multi_session or luo_kexec_simple tests. Their main purpose is to
-> test other live update functionality.
-> 
-> Add a framework for writing memfd tests. The framework hooks into the
-> kselftest harness, but adds some things on top to make it suitable for
-> live update.
-> 
-> The LUO FD (/dev/liveupdate) can only be opened by one process at a
-> time. Each test runs in its own process. This means the LUO FD must be
-> owned by the main process and shared to children. main() opens the LUO
-> FD and shares it to child runners using a global variable.
-> 
-> Live update tests run in two stages. One before kexec and one after.
-> Detect the stage using a special state session. If the session is
-> present, it means the test is in post-kexec state.
-> 
-> Additionally, take in an optional --stage argument that lets callers
-> specify expected stage. This is useful as a safety net to catch LUO core
-> failures. If LUO core fails to preserve the state session properly, this
-> option can help detect this and fail early. Since the option is not
-> recognized by the kselftest harness, remove it from argv before calling
-> test_harness_run().
-> 
-> Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
-> ---
->  tools/testing/selftests/liveupdate/Makefile   |  1 +
->  .../testing/selftests/liveupdate/luo_memfd.c  | 77 +++++++++++++++++++
->  2 files changed, 78 insertions(+)
->  create mode 100644 tools/testing/selftests/liveupdate/luo_memfd.c
-> 
-> diff --git a/tools/testing/selftests/liveupdate/Makefile b/tools/testing/selftests/liveupdate/Makefile
-> index 080754787ede..051daae55eec 100644
-> --- a/tools/testing/selftests/liveupdate/Makefile
-> +++ b/tools/testing/selftests/liveupdate/Makefile
-> @@ -6,6 +6,7 @@ TEST_GEN_PROGS += liveupdate
->  
->  TEST_GEN_PROGS_EXTENDED += luo_kexec_simple
->  TEST_GEN_PROGS_EXTENDED += luo_multi_session
-> +TEST_GEN_PROGS_EXTENDED += luo_memfd
->  
->  TEST_FILES += do_kexec.sh
->  
-> diff --git a/tools/testing/selftests/liveupdate/luo_memfd.c b/tools/testing/selftests/liveupdate/luo_memfd.c
-> new file mode 100644
-> index 000000000000..b779eee18387
-> --- /dev/null
-> +++ b/tools/testing/selftests/liveupdate/luo_memfd.c
-> @@ -0,0 +1,77 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (c) 2026, Google LLC.
-> + * Pratyush Yadav (Google) <pratyush@kernel.org>
-> + */
-> +
-> +/*
-> + * Selftests for memfd preservation via LUO.
-> + */
-> +
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +#include <string.h>
-> +#include <sys/ioctl.h>
-> +#include <unistd.h>
-> +
-> +#include <linux/liveupdate.h>
-> +
-> +#include "../kselftest.h"
-> +#include "../kselftest_harness.h"
-> +
-> +#include "luo_test_utils.h"
-> +
-> +#define STATE_SESSION_NAME "luo-state"
-> +#define STATE_MEMFD_TOKEN 1
-> +
-> +#define LIVEUPDATE_DEV "/dev/liveupdate"
+If procfs job isn't to provide problematic files to userspace I'm not
+sure what it is. Joking aside, I think in general you are of course
+right that procfs is full of files that under a very strict
+interpretation of "regular file" should absolutely not count as a
+regular file. sysfs probably as well and let's ignore debugfs and
+tracefs and all the other magic filesystems or files.
 
-Hello!
+In general, Linux has been so loosey-goosey with "regular file" for such
+a long-time that making OPENAT2_REGULAR come up with some strict
+definition of "this is a regular file - no really, pinky-promise a
+regular one" - is just doomed to fail.
 
-LIVEUPDATE_DEV doesn't seem to be used anywhere?
+The other problem is that we cannot reasonably determine what odd file
+the user really wanted to defend against opening with OPENAT2_REGULAR.
+A caller may really want to open /proc/kmsg and just be sure that
+someone didn't overmount it with a fifo (systemd does that in containers
+iirc).
 
-> +static int luo_fd = -1, stage;
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	int session, expected_stage = 0;
-> +
-> +	/*
-> +	 * The test takes an optional --stage argument. This lets callers
-> +	 * provide the expected stage, and if that doesn't match the test errors
-> +	 * out.
-> +	 *
-> +	 * Look for the stage. Since test_harness_run() doesn't recognize it,
-> +	 * once found, remove it from argv.
-> +	 */
-> +	for (int i = 1; i < argc; i++) {
-> +		if (strcmp(argv[i], "--stage") == 0) {
-> +			if (i + 1 < argc) {
-> +				expected_stage = atoi(argv[i + 1]);
-> +				memmove(&argv[i], &argv[i + 2], (argc - i - 1) * sizeof(char *));
-> +				argc -= 2;
-> +				i--;
-> +			} else {
-> +				ksft_exit_fail_msg("Option --stage requires an argument\n");
-> +			}
-> +		}
-> +	}
-> +
-> +	luo_fd = luo_open_device();
-> +	if (luo_fd < 0)
-> +		ksft_exit_skip("Failed to open %s (%s). Is the luo module loaded?\n",
-> +			       strerror(errno), LUO_DEVICE);
+My personal "hot take" is that adding an api built around a regular file
+with immediate irreversible side-effects for the caller on VFS
+syscall-based open [1] is a bug. Such broken semantics is what ioctl()s
+are for.
 
-Need to reverse strerror(errno) and LUO_DEVICE?
+[1]: I mean specifically open(), openat2() etc. I'm excluding all
+     dedicated APIs that return file descriptors that cannot be reopened
+     via regular lookup.
 
-> +
-> +	session = luo_retrieve_session(luo_fd, STATE_SESSION_NAME);
-> +	if (session == -ENOENT)
-> +		stage = 1;
-> +	else if (session >= 0)
-> +		stage = 2;
-> +	else
-> +		fail_exit("Failed to check for state session");
-> +
-> +	if (expected_stage && expected_stage != stage)
-> +		ksft_exit_fail_msg("Stage mismatch: expected %d, got %d\n",
-> +				   expected_stage, stage);
-> +
-> +	if (stage == 1)
-> +		create_state_file(luo_fd, STATE_SESSION_NAME, STATE_MEMFD_TOKEN, 2);
-> +
-> +	test_harness_run(argc, argv);
-> +}
-> -- 
-> 2.53.0.473.g4a7958ca14-goog
-> 
-> 
+From my pov, what would help is if one had a flexible way to scope opens
+on e.g., filesystem. But imo, that is not policy the kernel can
+reasonably express at the syscall api layer - it would look fugly as
+hell and how many other knobs would we have to add to satisfy all needs.
+I think that is best left to an lsm hooking into security_file_open()
+which can maintain a map of files and filesystems to allow or deny - a
+bpf lsm can do this quite nicely.
