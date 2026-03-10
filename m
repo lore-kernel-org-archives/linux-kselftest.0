@@ -1,157 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689413876B0;
-	Tue, 10 Mar 2026 11:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7110338A70A
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 11:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773141858; cv=none; b=VeTUd4UCVxmrskyMzm87HzIkcQDWfwEELIyEPvzvjZ1z/CToxLjseW9v+5dVrxC0FspmgHKpOYBnGHonHhNYInGF6TpRY3/09ZBDNDsEQ+UforgiDsXIBUu7r+p5CxXdnNwcjB9NiEZ0c6dOD6zKDewFZT5C95Rk+QSbiaE9NP8=
+	t=1773143374; cv=none; b=pmVc0FUN4iig7aMj1ezj/P4pyC2VZEfee4nlPg5uIrwQpHwb39FSV+ysgve7qzAHyFZC17s7CFpB54ca6W7KcluWBTee7NosUAPpuYmIzIKYEHgU1lo3cd9LjWps0RYkMoRynnNCnm0q+XDGLd0BVzIQIvPN/Vs6a+hAWUS32xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773141858; c=relaxed/simple;
-	bh=xT53Ttf/NyogikS/gfdkFymB7LtDXRO0Yz6j+bwKsPU=;
+	s=arc-20240116; t=1773143374; c=relaxed/simple;
+	bh=Zr3qcMn4OLx1slxxG1q/v6XHjn/W58Jij9qVOShgcro=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aX1r5lG+WDjqGkk0Fwqqs1hScgJi2aitgJJMRJiBwd2iN1Yn+leS1n+Ocle9dUuoq/aZRRv8QyaTfSaIqHHb0GsFiE2JNGWQHzztFTZdLlqS7cLwTQq3n+LEpqNaqTZtmSs2KQ3Ebcwg2PJ00Bj8qnW5qMgigTuTWtOeqo/7388=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JkOoejQb; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=TjbURedlWcN+9mjW4gQUsru1NjVWXX/JEHuk5SzNCfIzMdWuiAUWVsQ7Z4QSmUPa+H9R7SySj+1sb8YpZ649/W8ZB/fH85hpjK6bPiLPMf6gEJsYZuMpHEBYkJkHzmR6MrlMu1a4yqEnwOH7/xgw1BHdSFry7MWLwg8XzTVwLRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=PXjZhYpl; arc=none smtp.client-ip=209.85.167.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JkOoejQb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8497BC19423;
-	Tue, 10 Mar 2026 11:24:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773141858;
-	bh=xT53Ttf/NyogikS/gfdkFymB7LtDXRO0Yz6j+bwKsPU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JkOoejQbIY5sFLhLxCkOVN4kxiKJQN7lTCbiqMhI2bPYZCWqCDH0QcPHkf9E94N1P
-	 jGKWxOZDnrBvfZwk3KlNfSPE8lrfyGUmy/E8KZRXnZ3WA2W+jaNVCXVB0fdXzl2Epk
-	 xdyGfd3tLRQx0V4K/FAplurzOKD4T7ZCDXJbb1/yW+bnAtN/DEPHfz+j7RrHKIT4et
-	 mst/xUtfedv4qkVcmjou7az+d7Do3wm3dxVhtCDP9L1/BM2ZP0qghkq/jyHg4SSkSp
-	 MiB5UsygHd+YPYVvodLr6rfXKh/5Fgbcu9NvSb0LZNXu/UpDt3L4jAOcvxUwz9rzo4
-	 xluXx/3QcCvGA==
-Date: Tue, 10 Mar 2026 12:24:05 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Andy Lutomirski <luto@amacapital.net>
-Cc: Jeff Layton <jlayton@kernel.org>, 
-	Dorjoy Chowdhury <dorjoychy111@gmail.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
-	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, chuck.lever@oracle.com, 
-	alex.aring@gmail.com, arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com, 
-	smfrench@gmail.com, richard.henderson@linaro.org, mattst88@gmail.com, 
-	linmag7@gmail.com, tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
-	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
-	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, trondmy@kernel.org, 
-	anna@kernel.org, sfrench@samba.org, pc@manguebit.org, ronniesahlberg@gmail.com, 
-	sprasad@microsoft.com, tom@talpey.com, bharathsm@microsoft.com, shuah@kernel.org, 
-	miklos@szeredi.hu, hansg@kernel.org
-Subject: Re: [PATCH v5 1/4] openat2: new OPENAT2_REGULAR flag support
-Message-ID: <20260310-ausdehnen-wahrnehmen-f9d9c6224799@brauner>
-References: <20260307140726.70219-1-dorjoychy111@gmail.com>
- <20260307140726.70219-2-dorjoychy111@gmail.com>
- <CALCETrXVBA9uGEUdQPEZ2MVdxjLwwcWi5kzhOr1NdOWSSRaROw@mail.gmail.com>
- <801cf2c42b80d486726ea0a3774e52abcb158100.camel@kernel.org>
- <CALCETrVt7o+7JCMfTX3Vu9PANJJgR8hB5Z2THcXzam61kG9Gig@mail.gmail.com>
- <20260309-umsturz-herfallen-067eb2df7ec2@brauner>
- <CALCETrWjb+V-zrMT412MtmgDCx9y8simJBQ7+45C9MtdiSMnuw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="PXjZhYpl"
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-466f00535cfso1998106b6e.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 04:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall.org; s=google; t=1773143372; x=1773748172; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRz2iGuRS5c9gUYKqTban2ycHL3n1P/vxXJWakDhtNM=;
+        b=PXjZhYpl/0RcIXC8chJ7scSvE5Gc0t9PMWcQuLETEA9mAUo997liJ6mkRtJLM98kvK
+         zktcoxY40FQk0tM4to7SERn5YNKhzzaYvNr30l2pBagYy1rYJA29gdPO4UnLUgIzOKQQ
+         gOWObrNLkUTL22syetszXwubcqcbJawC8B4XVal9HvVBQNcdVdChOunuk/AJXe2JstAy
+         aT7sbbbSKuJbqZblzgLp/4ACm73zNfcr0OBJPfDOlTgLPkWmykXksuk74zdVSyafdiFb
+         CcK7on7sPZ+TlthhdaWuXy/c2pH1Leuchq29jfh5IvzgB0rFWEidDmxXoiDG96KGtbZJ
+         9KaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773143372; x=1773748172;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eRz2iGuRS5c9gUYKqTban2ycHL3n1P/vxXJWakDhtNM=;
+        b=wkeIF8M8oK0I/iIb8dPuqjQXVQRVEA2baw2McCF2RoC7Vji6566MwsmqB3esKeUFtO
+         alkj/kFB44e05L2Pkhu84sIl8dh4cP8dE6cHKX+XOK0FT1OknhL6SLOUOBF3NmMy/2np
+         Tjw3taWYhU2L0/EzX/6NN/cj9Ivv7gD4Ziq5jq97kQupzEEkdsDHyQkB7qoQClpONjo3
+         yC59IvZMpgevDcy13cccneC+rweVgzw9E10rNaQi8i8kV4ZxvKMJg/e7DHiyl9jRdI6o
+         Uw+lQSGpcDTD0Fe1eFplpTnl0GFJQIFNpxX8W5o8f2d5AZYVX/eSyp2pIjmGzGXQci2E
+         s6RA==
+X-Forwarded-Encrypted: i=1; AJvYcCUyoD3mD35v3K1fghMvd3gvgWL5iAXPXqUYAAKP81SgOkprEJfy67GRTQgSgfLkaQL2u6R5eGkVccdd0g3eol0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT0K78aL5O68Pw+9JQv3wskAGaFzzzhrZ6pVxKqAoTaW8xG32S
+	EvQWgbbXgAqdxJywHcPSFvvXTaaNYGLF24j+ncOiznGphpFTg3G62YixxkOS1ehZf90=
+X-Gm-Gg: ATEYQzxtC9Dij/9TVn0BYGZxg6+A2/rUQ8CZHI1Io09NOb2xgZSIlxgQmqzir00/6bH
+	M7cAu7B/B9t7VHdGADGGr0nsnPUf061r/rFvf4Q0rn9DUrSTmhJjY8oQBe/VyLoUK3oTh23p5iO
+	SgB2yX85FpZFgZ9KfmGycG3TP8jYaDbAQ8TESpRiAfiZ8rEPExIqin1bQnh2TJmFbO14g5d1kfH
+	syoBbiWrKISFfa9IvwuvN3yFVQk9w0O/oMB8UzaD0Swp6yQ26FE+5T8wT6SN4bddZ21ZDqhd81f
+	t7AoIwT7Hv12AayL0+26IfZH6x3FxtTWOd+982711ZvsJ3T1MAHySbeDvAvsaKYcTyTHipeO8qR
+	P0g0VEqMog+E9Csq1w71ie/QDqambgs8KG24e5C0YeP1uRdO8Tq8M3g8vyF4cdIgOSaElYAEgki
+	o9FxuFoFAsK0RB5creiOsN
+X-Received: by 2002:a05:6808:171a:b0:45c:a040:e53c with SMTP id 5614622812f47-466dcb1c40cmr7605844b6e.32.1773143372180;
+        Tue, 10 Mar 2026 04:49:32 -0700 (PDT)
+Received: from localhost ([216.228.127.131])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-466dfac3472sm7496849b6e.15.2026.03.10.04.49.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 04:49:30 -0700 (PDT)
+Date: Tue, 10 Mar 2026 13:49:25 +0200
+From: Nikolay Aleksandrov <razor@blackwall.org>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v5 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+Message-ID: <abAFRbJNinhN3O5v@penguin>
+References: <20260309030702.128520-1-jiayuan.chen@linux.dev>
+ <20260309030702.128520-2-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALCETrWjb+V-zrMT412MtmgDCx9y8simJBQ7+45C9MtdiSMnuw@mail.gmail.com>
+In-Reply-To: <20260309030702.128520-2-jiayuan.chen@linux.dev>
 
-On Mon, Mar 09, 2026 at 09:50:18AM -0700, Andy Lutomirski wrote:
-> On Mon, Mar 9, 2026 at 1:58 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Sun, Mar 08, 2026 at 10:10:05AM -0700, Andy Lutomirski wrote:
-> > > On Sun, Mar 8, 2026 at 4:40 AM Jeff Layton <jlayton@kernel.org> wrote:
-> > > >
-> > > > On Sat, 2026-03-07 at 10:56 -0800, Andy Lutomirski wrote:
-> > > > > On Sat, Mar 7, 2026 at 6:09 AM Dorjoy Chowdhury <dorjoychy111@gmail.com> wrote:
-> > > > > >
-> > > > > > This flag indicates the path should be opened if it's a regular file.
-> > > > > > This is useful to write secure programs that want to avoid being
-> > > > > > tricked into opening device nodes with special semantics while thinking
-> > > > > > they operate on regular files. This is a requested feature from the
-> > > > > > uapi-group[1].
-> > > > > >
-> > > > >
-> > > > > I think this needs a lot more clarification as to what "regular"
-> > > > > means.  If it's literally
-> > > > >
-> > > > > > A corresponding error code EFTYPE has been introduced. For example, if
-> > > > > > openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
-> > > > > > param, it will return -EFTYPE. EFTYPE is already used in BSD systems
-> > > > > > like FreeBSD, macOS.
-> > > > >
-> > > > > I think this needs more clarification as to what "regular" means,
-> > > > > since S_IFREG may not be sufficient.  The UAPI group page says:
-> > > > >
-> > > > > Use-Case: this would be very useful to write secure programs that want
-> > > > > to avoid being tricked into opening device nodes with special
-> > > > > semantics while thinking they operate on regular files. This is
-> > > > > particularly relevant as many device nodes (or even FIFOs) come with
-> > > > > blocking I/O (or even blocking open()!) by default, which is not
-> > > > > expected from regular files backed by “fast” disk I/O. Consider
-> > > > > implementation of a naive web browser which is pointed to
-> > > > > file://dev/zero, not expecting an endless amount of data to read.
-> > > > >
-> > > > > What about procfs?  What about sysfs?  What about /proc/self/fd/17
-> > > > > where that fd is a memfd?  What about files backed by non-"fast" disk
-> > > > > I/O like something on a flaky USB stick or a network mount or FUSE?
-> > > > >
-> > > > > Are we concerned about blocking open?  (open blocks as a matter of
-> > > > > course.)  Are we concerned about open having strange side effects?
-> > > > > Are we concerned about write having strange side effects?  Are we
-> > > > > concerned about cases where opening the file as root results in
-> > > > > elevated privilege beyond merely gaining the ability to write to that
-> > > > > specific path on an ordinary filesystem?
-> >
-> > I think this is opening up a barrage of question that I'm not sure are
-> > all that useful. The ability to only open regular file isn't intended to
-> > defend against hung FUSE or NFS servers or other random Linux
-> > special-sauce murder-suicide file descriptor traps. For a lot of those
-> > we have O_PATH which can easily function with the new extension. A lot
-> > of the other special-sauce files (most anonymous inode fds) cannot even
-> > be reopened via e.g., /proc.
+On Mon, Mar 09, 2026 at 11:06:58AM +0800, Jiayuan Chen wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
 > 
-> On the flip side, /proc itself can certainly be opened.  Should
-> O_REGULAR be able to open the more magical /proc and /sys files?  Are
-> there any that are problematic?
+> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
+> check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
+> when the bond mode is round-robin. If the bond device was never brought
+> up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+> 
+> The XDP redirect path can reach this code even when the bond is not up:
+> bpf_master_redirect_enabled_key is a global static key, so when any bond
+> device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+> interception is enabled for all bond slaves system-wide. This allows the
+> path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+> bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+> reached on a bond that was never opened.
+> 
+> Fix this by adding a NULL check with unlikely() in bond_rr_gen_slave_id()
+> before dereferencing rr_tx_counter. When rr_tx_counter is NULL (bond was
+> never opened), fall back to get_random_u32() for slave selection. The
+> allocation in bond_open() is kept, with WRITE_ONCE() added to safely
+> publish the pointer to the XDP read side. A plain read suffices for the
+> !bond->rr_tx_counter guard in bond_open() itself, as bond_open() runs
+> under RTNL lock and is the only writer of rr_tx_counter.
+> 
+> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> ---
+>  drivers/net/bonding/bond_main.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
 
-If procfs job isn't to provide problematic files to userspace I'm not
-sure what it is. Joking aside, I think in general you are of course
-right that procfs is full of files that under a very strict
-interpretation of "regular file" should absolutely not count as a
-regular file. sysfs probably as well and let's ignore debugfs and
-tracefs and all the other magic filesystems or files.
+This is Jay's patch + the unlikely change, looks good to me.
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 
-In general, Linux has been so loosey-goosey with "regular file" for such
-a long-time that making OPENAT2_REGULAR come up with some strict
-definition of "this is a regular file - no really, pinky-promise a
-regular one" - is just doomed to fail.
+Cheers,
+ Nik
 
-The other problem is that we cannot reasonably determine what odd file
-the user really wanted to defend against opening with OPENAT2_REGULAR.
-A caller may really want to open /proc/kmsg and just be sure that
-someone didn't overmount it with a fifo (systemd does that in containers
-iirc).
-
-My personal "hot take" is that adding an api built around a regular file
-with immediate irreversible side-effects for the caller on VFS
-syscall-based open [1] is a bug. Such broken semantics is what ioctl()s
-are for.
-
-[1]: I mean specifically open(), openat2() etc. I'm excluding all
-     dedicated APIs that return file descriptors that cannot be reopened
-     via regular lookup.
-
-From my pov, what would help is if one had a flexible way to scope opens
-on e.g., filesystem. But imo, that is not policy the kernel can
-reasonably express at the syscall api layer - it would look fugly as
-hell and how many other knobs would we have to add to satisfy all needs.
-I think that is best left to an lsm hooking into security_file_open()
-which can maintain a map of files and filesystems to allow or deny - a
-bpf lsm can do this quite nicely.
+> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> index 444519078da3..b8ec87625ce3 100644
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+> @@ -4290,9 +4290,11 @@ static int bond_open(struct net_device *bond_dev)
+>  	struct slave *slave;
+>  
+>  	if (BOND_MODE(bond) == BOND_MODE_ROUNDROBIN && !bond->rr_tx_counter) {
+> -		bond->rr_tx_counter = alloc_percpu(u32);
+> -		if (!bond->rr_tx_counter)
+> +		u32 __percpu *rr_tx_tmp = alloc_percpu(u32);
+> +
+> +		if (!rr_tx_tmp)
+>  			return -ENOMEM;
+> +		WRITE_ONCE(bond->rr_tx_counter, rr_tx_tmp);
+>  	}
+>  
+>  	/* reset slave->backup and slave->inactive */
+> @@ -4883,6 +4885,9 @@ static u32 bond_rr_gen_slave_id(struct bonding *bond)
+>  	struct reciprocal_value reciprocal_packets_per_slave;
+>  	int packets_per_slave = bond->params.packets_per_slave;
+>  
+> +	if (unlikely(!READ_ONCE(bond->rr_tx_counter)))
+> +		return get_random_u32();
+> +
+>  	switch (packets_per_slave) {
+>  	case 0:
+>  		slave_id = get_random_u32();
+> -- 
+> 2.43.0
+> 
