@@ -1,299 +1,114 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B5D450917;
-	Tue, 10 Mar 2026 09:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505E3346AE5
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 10:22:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773136300; cv=none; b=Q5OddhxneiF4FQvKPlicIxEBiVZIOgfxPjm577yhOaCBk/6hsoYCjCgauprKH3Cw7beX2WMdnSfykZjZgR7ZuKVxi46rZoI0tFFQOGXqoS6DSBl+Sux/zklst9cnseer41xwvFVvGaDalIv4fOu90Uvh7z8RPP38F4rdwuxGqiA=
+	t=1773138125; cv=none; b=cYHzDXZhHanCxlF1ciAUKB6ZSm3O3SO1UATYLK4/EjxqI21NxHxz5+N41gZ5hyVjvxKPdpWFejW2E/KPu/jVds5XINO59SDpc0gTVCegcZLt1+VNiC77k1wK2Tx+/0eRj2T1DbvgMs6tX3KCStlJIUB6kSEOFk+6VisNWKmTVGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773136300; c=relaxed/simple;
-	bh=ufAQl48D/zHLbiYryDp+XtRa7PRsswcN7OGRccdBlvM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Owpcv8H1TmKwAM7mNEalnTYH2KSJA108iNXe28eSjhFMGMUyTMKuV5XkL8TdB5OKAQIkOMEU9f9+nQe/iXNkuu2ewGP5Q9mDVu//Upczki4oDUGfSU5faxhGAkhz3mq/A8AFRTo9srjxLFMZllYDT/tyUwVJjfjyryA4VS+F/0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lUNse13u; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1773138125; c=relaxed/simple;
+	bh=OblWpqp19kDTyqAGzbzu2Q8zH9UYGbJQfvTQaIiJLRY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IG1/HCx6+C+SzvlNvMcDjQRgrJxUwKcnK/4wS8OMceyHh0pVXNwxHthDJeDPJ6WkrwyweTBM7ya+sHJqDOm133FgVHFAo/Cw3ZsKxBLEARFgth3LUu9N2ZCMXg0r2FQcop82GxmPyInUnpHXpFPIGsRS2ugR7VT5h0uXvB6SFsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K9g2NcIp; arc=none smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lUNse13u"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 629HUh3E1888503;
-	Tue, 10 Mar 2026 09:51:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=CCXEgY
-	VNSLIHqttIpjBfM4opFxQVGZY/tJEQ2JpOh0w=; b=lUNse13uhEku1AkULnPxm+
-	ONduspGGaiNkYVFolbwIP9rx5tzSvojhMUBFCeiWU8QxW+Y9XJgs+7QY1/aATPEA
-	WZYHrrD0mbfkPjrALjSY5qT5URCgy8D1j6JKyleLObXHCdEbGKzEC5rH12Emlx0m
-	20B0kvmAkhGteFXalHPGM6tGcU+1jPu294U9wRoTasAqyp1AO+ty2T1RmqSw8yac
-	WOaJtHAFZN+ZTrW0BSS7Lkh/ORbMQCWaEfTQAVn8pnU/UC/SMgoQqXOotJl2J8S9
-	23Km1B8Gcodd/3613xdzoGbS3ZZuEXJcflAHd6bSCOybobR7yIoOQ/EY/0ELfemQ
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crd1mhxk1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Mar 2026 09:51:17 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62A622jE015653;
-	Tue, 10 Mar 2026 09:51:16 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4crybn8jdg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Mar 2026 09:51:16 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62A9pEW748038182
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Mar 2026 09:51:14 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3A40C20063;
-	Tue, 10 Mar 2026 09:51:14 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1E76E20043;
-	Tue, 10 Mar 2026 09:51:11 +0000 (GMT)
-Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.in.ibm.com (unknown [9.109.243.201])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 10 Mar 2026 09:51:10 +0000 (GMT)
-From: Sayali Patil <sayalip@linux.ibm.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Liam.Howlett@oracle.com, Sayali Patil <sayalip@linux.ibm.com>
-Subject: [PATCH 13/13] selftests/cgroup: extend test_hugetlb_memcg.c to support all huge page sizes
-Date: Tue, 10 Mar 2026 15:19:31 +0530
-Message-ID: <97f1fc6020b1d63d1d73de6edd1525d91e4f7123.1773134177.git.sayalip@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1773134177.git.sayalip@linux.ibm.com>
-References: <cover.1773134177.git.sayalip@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K9g2NcIp"
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-41729dc7d7aso740593fac.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 03:22:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773138123; x=1773742923; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=653FzskN4REwEFDcgD8vcg1axVo0C/yYw7++qUXSZzQ=;
+        b=K9g2NcIpBXFzNnohzdJE2krUeW2/q7S196XA36pQq7vw01Ypx8AfPZNS+ajfWGUwTN
+         DexqIJ+ACkMVg9R8s7RrbWJEreaLXDzBzWd5mITjBXelW3QrSckdJjEcKA05vm+DmZus
+         6yoS5H9Xmw/jhz7ZlnhhWRbrDsdLniSbLMGg3KHmNEm40rbFae5pYym1UPNE7wdhi5at
+         +c42yVift1mS+F9AIkVbj+7hA2+VHuiV5eiho1PjkQFoFNCXG9omq8ixsFrGCLrDmQPk
+         o9n2VNV2AmvzPkXvMHeniKBpg5jG0jJ1gxH/LMegqdD3SlSAHNGd9T5ttIlknAvPvf+E
+         z92A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773138123; x=1773742923;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=653FzskN4REwEFDcgD8vcg1axVo0C/yYw7++qUXSZzQ=;
+        b=S3YIZbbHuqgtHkBlnTuCq5YAxXaOv9yqRMNYvdZoNwgrLBTFvCRumkGL+1OFOo2nhG
+         StPzeO61ZigIBiowOgR7ByydTtQen/5UWVCo5an7MSOQ+HeCbTYlFFEahLLy9OCw1Ii3
+         q9zLuGYE8RglbjlDlNM8OFkYvcMTlXba/d47YwOHY99IvGBw6oP1Qp2Y+aq5JruJ3H4X
+         XCPs+GLixDcSBgfCqTTN+Flhn9yXtxPR/PGHXsr1jwqAwKCznqNh0vnJx/07XLjBirJS
+         ZGQtHM6up2xeIB+HK4CX613geN8IX58pebOOJRsr2sA+kIZ+Rim4zpQ+BwZlSh8RPs6U
+         fD2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWcMy/tnrvmO//U7LFdAWs0hGIly71tfYPrI/PtPfqPYUmJXvst4jJ0JRskz17h5cvJSUrjN2Z8lWJYB5+1fsA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFy2sVKunzgpsHKNtQACUzse8q44BQtJnB2/XmB7dLzz7fgFGf
+	NBOWbIkkOXeRLBw1dhtaUtnXDCZrx+shJgMZoRrc+PtdWjbzdD1oKuxe
+X-Gm-Gg: ATEYQzyZEpXCwKTMqr3lz+EyHxn5v6ugIWvVTEY57GNA1Uj8ANDGiqp0muC3Sv9SO/r
+	NIYx8KpyO6rZfsoeba1wPxk2ABKvvNkEvfw2IJbItX2WPBWfWHVI8m5XMliaIMimevPNyWWylqJ
+	g6Q9RHDGLd9z8uUDvBX/VnwhGEs13p1yDfY/oEvdvIlOSSgcXOZCuV2Iofw1gFtOlFIpllsAKXX
+	+j3iBbWrvvj/zcISAQ0QVtmIVf5dAboQOc7rDXBHm0l2uE/EsG9qRSAvjeHd8jUg1QlzDmXDXB/
+	UOE3ghyrbA82WNiwN/d63cK87WUou7lFeFSgyJ1l14phnAvTBC8EgDM3RGA1Hdh81IkZAwaDW1z
+	u90djH7CZCAbw7qHjKKIJuPM3uEQfTpyXXuW01n0eLdnDpM7aHzgqTO3leRp2sFE2S5n+9Aj7C6
+	//RrvwcxaV9X7OzGMlvKkmLNAPpk8NtLlSeQq1JGwIFlsjN5m+BeZpHcpST0ap6uE2HWragH6NP
+	dE+3fcN1i1UEjIBmYOrB54tHoI=
+X-Received: by 2002:a05:6820:818a:b0:672:e67a:96cf with SMTP id 006d021491bc7-67b9bc81ea2mr9110007eaf.16.1773138123241;
+        Tue, 10 Mar 2026 03:22:03 -0700 (PDT)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-67bb331eee0sm3877789eaf.8.2026.03.10.03.21.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 03:22:02 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH 1/2] selftests/bpf: Fix read_iter buffer termination in test_bpffs
+Date: Tue, 10 Mar 2026 18:21:44 +0800
+Message-ID: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=ds3Wylg4 c=1 sm=1 tr=0 ts=69afe995 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=qf4gfuq51q0A:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8
- a=sc5eBBQPW9lzBnlyZiYA:9 a=3ZKOabzyN94A:10 a=k40Crp0UdiQA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDA4MSBTYWx0ZWRfX+IYdXkj3Hwrp
- JWK/8uU7PTOLBCzu0NSU//hfoghnHiON3UZgxK3QW+ofiA84Yu4HipVxgPr++sxcVWr9bCPyLPq
- S5+LYWl8cXAdkU23MUC6H7VRP+jRAisRM64uwtXfityTaI4x1RSKaHHsWt47jnB363gQwJRPxqn
- kdNfBj8H4/9hJjfDhD6HjytG8HFbE0JyCDlYJinZCeIk0dlkM2RM0ytEMaJli+MA+by6V59IiDq
- pgcBiDgXhO6e30+0ZvMc2rk57ofOURgL8D2C2pBjr4fFdBvP0vQ117AVxsD+OPr6PP0qfIuPwnl
- oQGM3u+nw0bT9PwcpQ+JFdQ8/aCBWpZt/8nJZm7DuL3SkQuE0c0TVYFXVfdL5pnIGsuek7oXMK8
- FZDxebHQvWygfvm5CJre+bbQ4UjEElOhoZiaOR6bOK9msrSBUkOH6K9DrcEh7KCRbrgvW7DG1RI
- fPyERXIaSt5wV1DtSyw==
-X-Proofpoint-GUID: m4HyO0ZIRK_eqt9ccxcPHTQAEcwgKJu7
-X-Proofpoint-ORIG-GUID: atSLOqao42o4kE-yPdnswbyTGD3OzxTC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-10_01,2026-03-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0 clxscore=1015 impostorscore=0 suspectscore=0
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603100081
 
-The hugetlb memcg selftest was previously skipped when the configured
-huge page size was not 2MB, preventing the test from running on systems
-using other default huge page sizes.
+read_iter() always NUL-terminated at the end of the buffer, so strstr()
+could scan uninitialized stack bytes on short reads. Terminate at len and
+use O_RDONLY.
 
-Detect the system's configured huge page size at runtime and use it for
-the allocation instead of assuming a fixed 2MB size. This allows the
-test to run on configurations using non-2MB huge pages and avoids
-unnecessary skips.
-
-Fixes: c0dddb7aa5f8 ("selftests: add a selftest to verify hugetlb usage in memcg")
-Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
- .../selftests/cgroup/test_hugetlb_memcg.c     | 66 ++++++++++++++-----
- 1 file changed, 48 insertions(+), 18 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/test_bpffs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-index f451aa449be6..a449dbec16a8 100644
---- a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-+++ b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-@@ -12,10 +12,15 @@
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+index ea933fd151c3..e8021ff0581c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+@@ -17,11 +17,11 @@ static int read_iter(char *file)
+ 	char buf[1024];
+ 	int fd, len;
  
- #define ADDR ((void *)(0x0UL))
- #define FLAGS (MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB)
--/* mapping 8 MBs == 4 hugepages */
--#define LENGTH (8UL*1024*1024)
- #define PROTECTION (PROT_READ | PROT_WRITE)
- 
-+/*
-+ * This value matches the kernel's MEMCG_CHARGE_BATCH definition:
-+ * see include/linux/memcontrol.h. If the kernel value changes, this
-+ * test constant must be updated accordingly to stay consistent.
-+ */
-+#define MEMCG_CHARGE_BATCH 64U
-+
- /* borrowed from mm/hmm-tests.c */
- static long get_hugepage_size(void)
- {
-@@ -84,11 +89,11 @@ static unsigned int check_first(char *addr)
- 	return *(unsigned int *)addr;
- }
- 
--static void write_data(char *addr)
-+static void write_data(char *addr, size_t length)
- {
- 	unsigned long i;
- 
--	for (i = 0; i < LENGTH; i++)
-+	for (i = 0; i < length; i++)
- 		*(addr + i) = (char)i;
- }
- 
-@@ -96,26 +101,31 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
- {
- 	char *test_group = (char *)arg;
- 	void *addr;
-+	long hpage_size = get_hugepage_size() * 1024;
- 	long old_current, expected_current, current;
- 	int ret = EXIT_FAILURE;
-+	size_t length = 4 * hpage_size;
-+	int pagesize, nr_pages;
-+
-+	pagesize = getpagesize();
- 
- 	old_current = cg_read_long(test_group, "memory.current");
- 	set_nr_hugepages(20);
- 	current = cg_read_long(test_group, "memory.current");
--	if (current - old_current >= MB(2)) {
-+	if (current - old_current >= hpage_size) {
- 		ksft_print_msg(
- 			"setting nr_hugepages should not increase hugepage usage.\n");
- 		ksft_print_msg("before: %ld, after: %ld\n", old_current, current);
- 		return EXIT_FAILURE;
- 	}
- 
--	addr = mmap(ADDR, LENGTH, PROTECTION, FLAGS, 0, 0);
-+	addr = mmap(ADDR, length, PROTECTION, FLAGS, 0, 0);
- 	if (addr == MAP_FAILED) {
- 		ksft_print_msg("fail to mmap.\n");
- 		return EXIT_FAILURE;
- 	}
- 	current = cg_read_long(test_group, "memory.current");
--	if (current - old_current >= MB(2)) {
-+	if (current - old_current >= hpage_size) {
- 		ksft_print_msg("mmap should not increase hugepage usage.\n");
- 		ksft_print_msg("before: %ld, after: %ld\n", old_current, current);
- 		goto out_failed_munmap;
-@@ -124,10 +134,24 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
- 
- 	/* read the first page */
- 	check_first(addr);
--	expected_current = old_current + MB(2);
-+	nr_pages = hpage_size / pagesize;
-+	expected_current = old_current + hpage_size;
- 	current = cg_read_long(test_group, "memory.current");
--	if (!values_close(expected_current, current, 5)) {
--		ksft_print_msg("memory usage should increase by around 2MB.\n");
-+	if (nr_pages < MEMCG_CHARGE_BATCH && current == old_current) {
-+		/*
-+		 * Memory cgroup charging uses per-CPU stocks and batched updates to the
-+		 *  memcg usage counters. For hugetlb allocations, the number of pages
-+		 *  that memcg charges is expressed in base pages (nr_pages), not
-+		 *  in hugepage units. When the charge for an allocation is smaller than
-+		 *  the internal batching threshold  (nr_pages <  MEMCG_CHARGE_BATCH),
-+		 *  it may be fully satisfied from the CPU’s local stock. In such
-+		 *  cases memory.current does not necessarily
-+		 *  increase.
-+		 *  Therefore, Treat a zero delta as valid behaviour here.
-+		 */
-+		ksft_print_msg("no visible memcg charge, allocation consumed from local stock.\n");
-+	} else if (!values_close(expected_current, current, 5)) {
-+		ksft_print_msg("memory usage should increase by ~1 huge page.\n");
- 		ksft_print_msg(
- 			"expected memory: %ld, actual memory: %ld\n",
- 			expected_current, current);
-@@ -135,11 +159,11 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
- 	}
- 
- 	/* write to the whole range */
--	write_data(addr);
-+	write_data(addr, length);
- 	current = cg_read_long(test_group, "memory.current");
--	expected_current = old_current + MB(8);
-+	expected_current = old_current + length;
- 	if (!values_close(expected_current, current, 5)) {
--		ksft_print_msg("memory usage should increase by around 8MB.\n");
-+		ksft_print_msg("memory usage should increase by around 4 huge pages.\n");
- 		ksft_print_msg(
- 			"expected memory: %ld, actual memory: %ld\n",
- 			expected_current, current);
-@@ -147,7 +171,7 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
- 	}
- 
- 	/* unmap the whole range */
--	munmap(addr, LENGTH);
-+	munmap(addr, length);
- 	current = cg_read_long(test_group, "memory.current");
- 	expected_current = old_current;
- 	if (!values_close(expected_current, current, 5)) {
-@@ -162,13 +186,15 @@ static int hugetlb_test_program(const char *cgroup, void *arg)
- 	return ret;
- 
- out_failed_munmap:
--	munmap(addr, LENGTH);
-+	munmap(addr, length);
- 	return ret;
- }
- 
- static int test_hugetlb_memcg(char *root)
- {
- 	int ret = KSFT_FAIL;
-+	int num_pages = 20;
-+	long hpage_size = get_hugepage_size();
- 	char *test_group;
- 
- 	test_group = cg_name(root, "hugetlb_memcg_test");
-@@ -177,7 +203,7 @@ static int test_hugetlb_memcg(char *root)
- 		goto out;
- 	}
- 
--	if (cg_write(test_group, "memory.max", "100M")) {
-+	if (cg_write_numeric(test_group, "memory.max", num_pages * hpage_size * 1024)) {
- 		ksft_print_msg("fail to set cgroup memory limit.\n");
- 		goto out;
- 	}
-@@ -200,6 +226,7 @@ int main(int argc, char **argv)
- {
- 	char root[PATH_MAX];
- 	int ret = EXIT_SUCCESS, has_memory_hugetlb_acc;
-+	long val;
- 
- 	has_memory_hugetlb_acc = proc_mount_contains("memory_hugetlb_accounting");
- 	if (has_memory_hugetlb_acc < 0)
-@@ -208,12 +235,15 @@ int main(int argc, char **argv)
- 		ksft_exit_skip("memory hugetlb accounting is disabled\n");
- 
- 	/* Unit is kB! */
--	if (get_hugepage_size() != 2048) {
--		ksft_print_msg("test_hugetlb_memcg requires 2MB hugepages\n");
-+	val = get_hugepage_size();
-+	if (val < 0) {
-+		ksft_print_msg("Failed to read hugepage size\n");
- 		ksft_test_result_skip("test_hugetlb_memcg\n");
- 		return ret;
- 	}
- 
-+	ksft_print_msg("Hugepage size: %ld kB\n", val);
-+
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
+-	fd = open(file, 0);
++	fd = open(file, O_RDONLY);
+ 	if (fd < 0)
+ 		return -1;
+-	while ((len = read(fd, buf, sizeof(buf))) > 0) {
+-		buf[sizeof(buf) - 1] = '\0';
++	while ((len = read(fd, buf, sizeof(buf) - 1)) > 0) {
++		buf[len] = '\0';
+ 		if (strstr(buf, "iter")) {
+ 			close(fd);
+ 			return 0;
+
+base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
 -- 
-2.52.0
+2.43.0
 
