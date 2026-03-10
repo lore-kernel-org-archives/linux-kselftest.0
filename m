@@ -1,185 +1,221 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CEE36F413
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 12:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773144449; cv=pass; b=ay+MLlfn8smUtCEPfwkLyWyTbnwB1egT6WQNIUValXAsrgbOOX+MWkVlVBe/e/Nwcge9L/PoFf9uf1qveybAYCq/xdYqB/IUP9GV7urx9MVRpbd3G5uSpXuIgMAq7SHMYEH6yT8HDci9YqFahDPPu3FnfxAu5zOy7KB0eV20S8k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773144449; c=relaxed/simple;
-	bh=u4ggnB30E8m47pn9MW6ki0gYz6mdnItwTDOiGvmjL+k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jbK0ayJfYKW9k8+B8Xcf6Vogi/Ffrn3cTFmg+nB8IRDz/1/eutkiWai2ZuJWxDc0wXwQr/LRj7x94eWd5WbFN22+0iPhIU7/z1cfYslUJH5fZdvJEoBDBMsubdRaUkwjSK8686AqnyluD2h0rtZBG1KaYtsP4QOF4AJlWPjgiXs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r/XGqYvo; arc=pass smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBBF38D696;
+	Tue, 10 Mar 2026 12:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773145058; cv=none; b=JiDwH9zWZzFXyuC3+2z7R3ir84ZzQI/IQNpCAOU1mgUmmFt5h8/Gb8cw7shhfbsrXLaa5PNXnWEKvhKfTEzrjfA/WuGy9RMWhutwxZYOP1ov7g2V8OLmTf3ljZXE7im4+1y9bgFNUgMsBSRcwIy6lhuQc2oOpk0nVm1NykHcDc0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773145058; c=relaxed/simple;
+	bh=MVAorFwASedMUQdlRsrssouaBR0ncU3LBy/pU1ACdEg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OoBGbbiTxHc6/ha/+cPa8bL84EbMhPBl2tj1ukceK/fT611UV57vg694Hk/qZK62HbVmPR7amlEKFn59yPlHJ0M6+XLtpxCacNqhcE+LV9MQzYSbWNlTz3jciiN+8pfKYSJt3EwoOglAx8e69KHz8kM9ENw7in3uVv8Ko9AwZCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=vbwNsLxe; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r/XGqYvo"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8cd7ecedf2cso250047385a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 05:07:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773144447; cv=none;
-        d=google.com; s=arc-20240605;
-        b=X/ifc30eyXou5+15ahHj3diatoqrheXklbUB65b42lpSdGPc8f6VPlgt8B4sPphAVH
-         +YDNg3JR8ZCqb0KUOCHT7q800PjoUsVgWPD0pr82lW4ik5xHHvh6+ziLpHQXrxmVjYdF
-         LCoZLiyFHWA+ELPWTAN5Ta64o3yMMs0liBZ7bvLFmEVHIq/Glr0sm6CUtxz9S3h96lZi
-         rgID1mw5lbfBOjQVGV0C0GX9aiXyGmN6/Tqx4reBMoLrZ78oLMIvXfP49vZOVpPhhVZX
-         c81hEjJAG4fnH8Dhzb15zX5MKVJcThPVLOeyLK09UBXb+R4m5yXY3uEUshvuNukwo5Xu
-         W0bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=T8dYRLYkwn5kBNWo/bm2c1XHhtT3zdHO3dRrnUAcL10=;
-        fh=7QWiV9zIBGzY7C48kw8ctPSM1Q4RWSa6usP3c4UC3Ho=;
-        b=cZOoyoctoGqsvemq2AvKDuHLQHB7i+RVwKjYexQMU1a9f8f5HFxRwR1H/Nr9nOv8Fp
-         dFoAqKLXM8/YT79J1kEoPhJQCbytdK0Z+/ekhRINvG7X3sulhEHKdHfCVJwfPN08nV0K
-         c7/yrSfaDfnNmR2f7LVUqXQWK1IWpyOOUqw1dxAG/kBTV1xlORCFupkK9MFoNyEdSJ4L
-         MJj4iRqVpIIUuNxPA7Y6JbiVHVgvUSPGQL5YuhbKYbh4gdCnDEj/0sjXPqdhAk5wa9AQ
-         OoLUOT5TSEIylBA6IwJr5Gel5gvJCzUnULlR1IUClQadUy/7ppnQRNn5WEXPnUX5MxSM
-         7I1A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773144447; x=1773749247; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T8dYRLYkwn5kBNWo/bm2c1XHhtT3zdHO3dRrnUAcL10=;
-        b=r/XGqYvoXIEViqUB4FEx6KRzS3P4ToiYqPYoLeein27DTdBwQzGrF62wHYjwTHG/WY
-         7vS2DeNOA0aZnrMIwsInalrXS6/GAct271oPH80Ht7oYLGESH1SImfgQCFDlbs2imujD
-         8Vavr+Pj9up0Vv1Yg6nTaAVh/Ub2IfMswu5nzjGX3DTeqPyun5ydH6XMpOjgdHQe+OWJ
-         C1Gqbr/HT1VtKAUmLAjHGOLKbAo8qT6oAlyXY1MhL2nAG1qn5keQMWs2qSBpTUbUuOZL
-         Tqse109HWKddniYA9ZJWlyHU+e6i9mxSD+17GLpe2kUkfVDwqJaXXoQph5Fxyti19L7K
-         oMdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773144447; x=1773749247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=T8dYRLYkwn5kBNWo/bm2c1XHhtT3zdHO3dRrnUAcL10=;
-        b=JzRE21zgNYuqr7mFImdZ3wBBe3qysyxrT9a58ni5Do6M5XyaAuHL3YBprWix3xhGCl
-         +R1BMmxYvc/WWy05L8NcAAsGjyaNbJQbHwy4Qjtj/hBvl7pdYgMcpy3H+kTjncO4QEwQ
-         kyY61W72O0wq9q+/qQVYuuStoXy7mGYnTjVsZYP65kwWTHwslN3rMe+sJ02R1wvcovrA
-         pPsSQayyZKaxh/i6+s6eKTZkEMG34l4onvmkfAgldZ9jQg7PxGzj1tbWbEOvu/1KOKMM
-         t4Zzcf6T+XFH5l5HbCaubLEc8WdA/QtEymAo9UVOYinP+6nHtHItRb9kvOiwpYVdwpzw
-         MXhg==
-X-Forwarded-Encrypted: i=1; AJvYcCXJF4upK3f8bryTDn0yIrAqeyXMpxe6baE6fhkcA5AUKuniXhlpenkGI632cg5Bvpgj1gVKhcSFT4Fn4M87owA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJqRcw0sMtWwD6ExR236zBC0+SjIEndKZ8kdoj8cvTRiXETjSE
-	dPCtLdUxFnhJnQ7qqw5PeTLKtRZ2LBgwC3+xIrMiuXgTlHq1rNqtHGqeKspDubZC8t8+GrS2Rgy
-	YTNdy7QCM2cuPfdthMEgveBv6PdlWp8qYXHTWrzNR
-X-Gm-Gg: ATEYQzz8QbVdTgBEZklH9ez8ezujvioIK96bDxt2oM9+Ccm6LdEeJOMcsldkTSPBMDh
-	HkmFzJ7e+09aepkjQjB7GSwh2JbLA8443JPcPXg36sTImqgZZWSu7qEnA6BWRU7WWSF2BZCXpBc
-	jGMXKx+wBvnB5sC/OFlCtz+EnvuJoZAuaiuuZGQ3Xq6QTILaMMVkYwJqsYECStSTueX6NGXS2Xc
-	DdCueeGC7U3MMc13dYBWQE7SuTqcIstXi3DHs/2FhqBbcIBOc8JcHqLJOItpAKbmAK6eR4TFQwV
-	rs6q7pI=
-X-Received: by 2002:a05:620a:4694:b0:8cd:8635:c04f with SMTP id
- af79cd13be357-8cd8635c58emr871773185a.78.1773144446171; Tue, 10 Mar 2026
- 05:07:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="vbwNsLxe"
+Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62A8xuEP1367922;
+	Tue, 10 Mar 2026 12:17:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=yrMvraipRnMkORyFOvU3Oml7ZdrKvDGYUgiDs6XOkFs=; b=vbwN
+	sLxeQCoYwp2+OIKQEb6fM8s74m428M3b6xQE/hdMH8DWNdF/0rujZdIzzYN7BNlZ
+	DgM3HGyuwpPqdmXFo7jTctibYCfFKFZG8xfRvUM/Bj4rTGRvwViZpsyy4vQ8c7rC
+	zG3BY1dBAupoUYtwQDqOJtFZ9pZkip0PipUomd6zFrUlAmPfnt4selycLA3xc0P5
+	mmfa4BlX9msvS819il1sXqauwof9L3EiDd1Sn+22meSKI4kXxK3l5dnubg2h2ep0
+	5GndgMluRofoWgsOrl3lrrzBHXkDMbrtWsW582RXClwPXV9+ULgrTMIz4qeWywju
+	HEPqV5FlNGC5d1Vz0w==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4crxykgynp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Mar 2026 12:17:07 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 10 Mar 2026 12:17:01 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <eddyz87@gmail.com>
+CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
+        <haoluo@google.com>, <horms@kernel.org>, <john.fastabend@gmail.com>,
+        <jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-open-source@crowdstrike.com>, <martin.lau@linux.dev>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
+        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support new pointer param types via SCALAR_VALUE for trampolines
+Date: Tue, 10 Mar 2026 23:16:59 +1100
+Message-ID: <20260310121659.25801-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <c4f4e99f83a98179c3413dd7afe5e7e73a98e4d3.camel@gmail.com>
+References: <c4f4e99f83a98179c3413dd7afe5e7e73a98e4d3.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260309030702.128520-1-jiayuan.chen@linux.dev>
- <20260309030702.128520-2-jiayuan.chen@linux.dev> <abAFRbJNinhN3O5v@penguin> <CANn89i+5yOzdiBTWm4ekc0UvMxQp=mhXbz0rU5WnfxEu3NrAhg@mail.gmail.com>
-In-Reply-To: <CANn89i+5yOzdiBTWm4ekc0UvMxQp=mhXbz0rU5WnfxEu3NrAhg@mail.gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 10 Mar 2026 13:07:15 +0100
-X-Gm-Features: AaiRm52YArIdW70Cdt1Zn-0xdLt1wQ__GHo4CYwly7pfLRtB5zsOkc7ncB8Yknc
-Message-ID: <CANn89iLOyWzWW7w262Vsy2MOMVDXA0+UZGpEbsdLwe6e75mhKQ@mail.gmail.com>
-Subject: Re: [PATCH net v5 1/2] bonding: fix null-ptr-deref in bond_rr_gen_slave_id()
-To: Nikolay Aleksandrov <razor@blackwall.org>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org, jiayuan.chen@shopee.com, 
-	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, 
-	Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-rt-devel@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH012.crowdstrike.sys (10.100.11.82) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Proofpoint-GUID: muf0gwpN1ymRFua10pBAXBtTyZj5PPg1
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDEwNiBTYWx0ZWRfX9rflOR7IFCrl
+ 21yIma0F3kFVahtBclWfwzZlWpUjCPemhbo/tINRuUODJLKM+FFZdufvJxZmhCfLNOKz46+BCTP
+ SjqGpRntpcuue3NTMs50t9Sb1MxWM/XKdZEsdiM3x9pSTVawLZjDlD6YBFTFsrQQn2zubbYGPmP
+ ZeuSGKGWkNlItQfF/iCwEGTCZnly7pkNEmlV0hJYGwklx2BvewIyOotQZnI+UPFnpDHLTlGn/vU
+ xP3vTU73KcLUcnmeAZ9jAILPjun090IzM2PmPUiI9eUnvDdAA6cwXxT4CE7PB17wQX9KkP9Qs0Q
+ RNpLsNNsUV3+kYhILzU2r8VeapNUzcA4/Y9wik+aTGLlPwD4ztcZGnCxIs+BCB6Bge3zkxMpCGh
+ qtk3cmtTeENZKA2Jo8Z3eq4qq4IJGAiOr9tx0y5toBQPzV0QXBpaTwB8vCliWD85mr/GCte3DvI
+ rEvRpIT7V1YESrV51Jw==
+X-Proofpoint-ORIG-GUID: muf0gwpN1ymRFua10pBAXBtTyZj5PPg1
+X-Authority-Analysis: v=2.4 cv=M7FA6iws c=1 sm=1 tr=0 ts=69b00bc3 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=NEAV23lmAAAA:8
+ a=3kasHXYAN1gmPJuvoZgA:9
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11724
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 suspectscore=0 priorityscore=1501
+ malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2603100106
 
-On Tue, Mar 10, 2026 at 1:00=E2=80=AFPM Eric Dumazet <edumazet@google.com> =
-wrote:
->
-> On Tue, Mar 10, 2026 at 12:49=E2=80=AFPM Nikolay Aleksandrov
-> <razor@blackwall.org> wrote:
-> >
-> > On Mon, Mar 09, 2026 at 11:06:58AM +0800, Jiayuan Chen wrote:
-> > > From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> > >
-> > > bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NUL=
-L
-> > > check. rr_tx_counter is a per-CPU counter only allocated in bond_open=
-()
-> > > when the bond mode is round-robin. If the bond device was never broug=
-ht
-> > > up, rr_tx_counter remains NULL, causing a null-ptr-deref.
-> > >
-> > > The XDP redirect path can reach this code even when the bond is not u=
-p:
-> > > bpf_master_redirect_enabled_key is a global static key, so when any b=
-ond
-> > > device has native XDP attached, the XDP_TX -> xdp_master_redirect()
-> > > interception is enabled for all bond slaves system-wide. This allows =
-the
-> > > path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
-> > > bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
-> > > reached on a bond that was never opened.
-> > >
-> > > Fix this by adding a NULL check with unlikely() in bond_rr_gen_slave_=
-id()
-> > > before dereferencing rr_tx_counter. When rr_tx_counter is NULL (bond =
-was
-> > > never opened), fall back to get_random_u32() for slave selection. The
-> > > allocation in bond_open() is kept, with WRITE_ONCE() added to safely
-> > > publish the pointer to the XDP read side. A plain read suffices for t=
-he
-> > > !bond->rr_tx_counter guard in bond_open() itself, as bond_open() runs
-> > > under RTNL lock and is the only writer of rr_tx_counter.
-> > >
-> > > Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to s=
-lave device")
-> > > Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
-> > > Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE=
-@google.com/T/
-> > > Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> > > ---
-> > >  drivers/net/bonding/bond_main.c | 9 +++++++--
-> > >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > >
-> >
-> > This is Jay's patch + the unlikely change, looks good to me.
-> > Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
->
-> Orthogonal to this patch  :
->
->  get_random_u32() typical cost is around 10 to 20 ns, I really wonder
-> if this makes sense
-> for the packets_per_slave =3D=3D 0 or 1 case to haves this kind of
-> randomness in the first place.
->
-> Perhaps we could use a
->
-> static DEFINE_PER_CPU(u32, rr_tx_counter)
->
-> And :
->  slave_id =3D this_cpu_inc_return(rr_tx_counter);
+On Tue, 03 Mar 2026 16:38:57 -0800, Eduard Zingerman wrote:
+> On Wed, 2026-03-04 at 11:22 +1100, Slava Imameev wrote:
+> > On Tue, 03 Mar 2026 14:43:01, Eduard Zingerman wrote:
+> > > On Wed, 2026-03-04 at 08:49 +1100, Slava Imameev wrote:
+> > > > On 2026-03-03 20:05 UTC, Eduard Zingerman wrote:
+> > > > 
+> > > > > > @@ -6902,11 +6921,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+> > > > > >               }
+> > > > > >       }
+> > > > > > 
+> > > > > > -     /*
+> > > > > > -      * If it's a pointer to void, it's the same as scalar from the verifier
+> > > > > > -      * safety POV. Either way, no futher pointer walking is allowed.
+> > > > > > -      */
+> > > > > > -     if (is_void_or_int_ptr(btf, t))
+> > > > > > +     if (is_ptr_treated_as_scalar(btf, t))
+> > > > > >               return true;
+> > > > > 
+> > > > > I'm probably missing a point here, but what's wrong with Alexei's
+> > > > > suggestion to do this instead:
+> > > > > 
+> > > > >         if (is_ptr_treated_as_scalar(btf, t))
+> > > > >                  return true;
+> > > > > ?
+> > > 
+> > > Uh-oh, I copy-pasted the wrong snippet, sorry.
+> > > The correct snippet is:
+> > > 
+> > >          if (btf_type_is_struct_ptr(btf, t))
+> > >                   return true;
+> > > 
+> > > With it the selftests pass (except for `float` tests noted earlier).
+> > > And regardless of selftests, the code below this point will
+> > > error out if `t` is not a pointer to struct.
+> > 
+> > I think you tested with
+> > 
+> > 	if (!btf_type_is_struct_ptr(btf, t))
+> > 		return true;
+> > 
+> > I decided on a narrower condition, as
+> > 
+> > - if (!btf_type_is_struct_ptr(btf, t)) -
+> 
+> Yes, sorry again.
+> 
+> > changes the existing selection condition from "treat only these types
+> > as scalar" to "treat as scalar any type that is not a pointer to
+> > structure". Technically both approaches cover the problem I'm trying
+> > to solve - multilevel pointer support for structures, but the latter is
+> > open-ended and changes the current approach, which checks for pointers
+> > to int and void. So I'm extending this to int, void, enum 32/64,
+> > function, and corresponding multilevel pointers to these types and
+> > multilevel pointers to structures.
+> 
+> BTF is defined for the following non-modifier types:
+> - void        [allowed already]
+> - int         [allowed already]
+> - ptr         [multi-level pointers allowed by your patch]
+> - array       [disallowed?]
+> - struct      [single level pointers allowed already,
+> - union		   multi-level allowed by your patch]
+> - enum/enum64 [allowed by your patch]
+> - func_proto  [allowed by your patch]
+> - float       [disallowed]
+> 
+> And a few not reachable from function fields (I think BTF validation
+> checks that these can't be met, but would be good to double-check.
+> If it doesn't, it should):
+> - func
+> - var
+> - datasec
+> 
+> So, effectively you disallow reading from tracing context fields of
+> type: struct (non-pointer), array, float and a few types that can't be
+> specified for struct fields.
+> 
+> Does not seem necessary, tbh.
 
-I also have mixed feelings about this patch.
+I verified whether PTR->FUNC, PTR->DATASEC, PTR->VAR can be passed to
+btf_ctx_access() in the current mainline.
 
-We probably should detect that the device is not ready before hitting
-something deeper in the stack.
+I added helpers that inject PTR->FUNC, PTR->DATASEC, PTR->VAR as pre or
+post calls to btf_check_meta(). In all cases, the BPF program load
+failed with errors "arg0 type FUNC / DATASEC / VAR is not a struct",
+which indicates that btf_check_meta() can indeed be called with
+PTR->FUNC, PTR->DATASEC, PTR->VAR.
 
-Sure, a NULL deref is avoided, bu what happens next ?
+If the condition for pointer check is changed to
+`if (!btf_type_is_struct_ptr(btf, t))`, these BPF programs will load
+successfully with arguments set to scalar().
 
-We send a packet while the device is not UP, I am pretty sure this
-violates at least some RCU rules in device dismantling.
+Do we accept this change in behavior?
+
+Test case with invalid BTF types injection:
+https://github.com/slava-at-cs/bpf/commit/c49af6500ace4e4aceee01c570e3b067aae7e48c
+
+Branch:
+https://github.com/slava-at-cs/bpf/commits/inject-invalid-btf/
+
+To run test:
+./vmtest.sh -- ./test_progs -t verifier_btf_ctx_access
+
+The verifier log:
+=============
+0: R1=ctx() R10=fp0
+; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
+0: (79) r2 = *(u64 *)(r1 +0)
+func 'bpf_fentry_test_invalid_ptr_func' arg0 type FUNC is not a struct
+invalid bpf_context access off=0 size=8
+processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+=============
+
+=============
+0: R1=ctx() R10=fp0
+; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
+0: (79) r2 = *(u64 *)(r1 +0)
+func 'bpf_fentry_test_invalid_ptr_func' arg0 type DATASEC is not a struct
+invalid bpf_context access off=0 size=8
+processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+=============
+
+=============
+0: R1=ctx() R10=fp0
+; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
+0: (79) r2 = *(u64 *)(r1 +0)
+func 'bpf_fentry_test_invalid_ptr_func' arg0 type VAR is not a struct
+invalid bpf_context access off=0 size=8
+processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+=============
