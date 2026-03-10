@@ -1,97 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B2B2F25F5;
-	Tue, 10 Mar 2026 01:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AAC303CB0
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 02:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773107539; cv=none; b=q4WFWJ8MU4aqVcOl+XpB5h/mMgs/EmWJL71V1mWswD8rNTTkSOQI8Uaz61kIbOmJ/giPG52SK3yp7nJGnNEZw6Ld1GqHyGUF8BhPmbHyO7NRMMDgU62fa8JCldWqzBZMgGWDugYk2fJY9iRuWBvDYuXECdSEoBw1C/coCMCN7Dw=
+	t=1773108341; cv=none; b=s4Bp463Ifd4dTDaJgrz3iCb3y0p/yUjhFCOcyOskSNKl9AeIiKB/a6AbBShMt1+U1uYO14wNV1ua1LGon9vYei39j09HCkfUZg8juPHP7CEEnFYE/PzVacHNiVbxS2YxNBV8+hHCBNPAhAP8tIdhKRsdw4UX5g3B9Wgp8Tt2SEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773107539; c=relaxed/simple;
-	bh=DzKG948gcs5x9YgNVim780sUPGDP+fTXP+UFVdlqzwQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JWiXf8C0ORyP7IFFEhlirk2kAurO8TnualkF6uwPAZ1Sn1Kx9ZOJ+Bt1x6uKCEJV/bP3EGZTcRrN8xNj7w/Bqy1pCkDRkcZ04kQnf/P2Fvjw1E+5s9XVAL8keTOwNngyPemXFCJbIY9IZPAmj87IrisjVCQUJdOZ9cVW7M80Yvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VMr2Fyol; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773108341; c=relaxed/simple;
+	bh=W5AVjXeHdqxm5PYzTmryBI88xuVy0bHLk3Czk6jvrGs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cSgLbJoNs3rAetAnY8MUr7PD1u271b2ATRYVKSrhmPG2UIU5BslqocqUc33O+Iy0c4hh+01E+O3ux4zlkn6oLZBDQGO7AFCXyijbQwHBWKs6L1jVjvRi2yK7YDH938ElSJ5KqCsCYlCAnUFMB2QT1WJFZgwonAJBRNiYLBRa1cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F31taDUG; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VMr2Fyol"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 255A1C4CEF7;
-	Tue, 10 Mar 2026 01:52:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773107539;
-	bh=DzKG948gcs5x9YgNVim780sUPGDP+fTXP+UFVdlqzwQ=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=VMr2FyoleiSoAgr5GCbS2DsKpQypuNkJ0odP4CTSsyb3MCdj7DilVVtf6GfHRhoqy
-	 VWwpp5783Do6EiOrvyPiN7DWdgpHayKLWKfViIGhjLdIczyvlZMzdI6PsN7y0qVj0v
-	 aUI/udlVUbTmryw4xk4FXEwQFQu+2mGo8nA0S3WDCxg24kWFjQZLk4NkdL/t4NN2Wi
-	 ajPgnVetcFuN+G1pGHvkLEL2LnNsiW1TV4/dGY5m0k84yA+sDCHG24v7Ku1uDC+FRn
-	 cdF/8PuQKSiVsLgaqgQmfRtLzVUvws/5szReZWRpC4TN3weCOpBRli428k0MPNwhR2
-	 SI0uq+EuYMtvQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17460FCC9A9;
-	Tue, 10 Mar 2026 01:52:19 +0000 (UTC)
-From: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>
-Subject: [PATCH v2 0/4] selftests: riscv: Fix compilation issues for
- v_ptrace and cfi
-Date: Mon, 09 Mar 2026 18:52:09 -0700
-Message-Id: <20260309-fix_selftests-v2-0-9d5a553a531e@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F31taDUG"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773108338;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UYuQqtHEBc7YbB3gscISEdBsLp6z9TR53HhOrMI9M7c=;
+	b=F31taDUG/PsiNylO2BJv6LgwjhQ1ScOZCg+AolTt7s3LyL9EZC5KcUYnmoYbQmT2BEl4wN
+	ZDoNnSfi2I0ppfEouH+L7f8LSoTUxXGIMzLIhCysCGzquwNydlljOGk/gzEwBeGkU9uFfv
+	7H/1+7QCAJf1i/sYuK7rzjv/jy+Y6NE=
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+To: jgg@ziepe.ca,
+	leon@kernel.org,
+	zyjzyj2000@gmail.com,
+	shuah@kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	dsahern@kernel.org
+Cc: Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: [PATCH v5 0/4] RDMA/rxe: Add the support that rxe can work in net namespace
+Date: Tue, 10 Mar 2026 03:05:14 +0100
+Message-ID: <20260310020519.101415-1-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEl5r2kC/13MTQrCMBCG4auUWRuZJm0EV95DirTptB3oj2RCU
- Erubiy4cfkO8z07CHkmgWuxg6fIwtuaQ58KcFO7jqS4zw0atUWDlRr49RCah0ASRDkzYEuV7Yy
- 7QN48PeWHw7s3uSeWsPn3wcfye/1J9Z8US4XKlp3VvTY1Yncbl5bns9sWaFJKH8LiauKqAAAA
-X-Change-ID: 20260304-fix_selftests-c3f0ae46b3c7
-To: Shuah Khan <shuah@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, 
- Sergey Matyukevich <geomatsi@gmail.com>, Andy Chiu <andybnac@gmail.com>, 
- Deepak Gupta <debug@rivosinc.com>
-Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Charlie Jenkins <thecharlesjenkins@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773107537; l=1204;
- i=thecharlesjenkins@gmail.com; s=2026030; h=from:subject:message-id;
- bh=DzKG948gcs5x9YgNVim780sUPGDP+fTXP+UFVdlqzwQ=;
- b=FLwvV3VuWbMYTOsNB8g4GlIeYcaaWljR8gG/AFM7wyZlqNAq5LMBFTbAVvehUzguocGXLf516
- udEBiYriGz1AGyHpt8l8MWcFqCDNTDkQZ98VWgwZXSgMPD6nLqi8ZgE
-X-Developer-Key: i=thecharlesjenkins@gmail.com; a=ed25519;
- pk=vpF2USrG+aB6CTbSt34rzJKsAVe/l+GAXo1IomCMETk=
-X-Endpoint-Received: by B4 Relay for thecharlesjenkins@gmail.com/2026030
- with auth_id=663
-X-Original-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
-Reply-To: thecharlesjenkins@gmail.com
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-There are a couple of compilation issues of the riscv selftests.
-Coincidentally two of the issues are independent problems with not
-including the header that includes the BIT() macro and the other issue
-is from checkpatch incorrectly suggesting to remove non-redundant
-braces.
+Currently rxe does not work correctly in network namespaces.
 
-Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
----
-Changes in v2:
-- Fix compilation issue reported by kernel test bot and Sergey
-- Link to v1: https://lore.kernel.org/r/20260305-fix_selftests-v1-0-61b62d23500b@gmail.com
+When the rdma_rxe module is loaded, a UDP socket listening on port
+4791 is created in init_net. When users run:
 
----
-Charlie Jenkins (4):
-      selftests: riscv: Add definition of BIT() macro
-      selftests: riscv: Add braces around EXPECT_EQ()
-      riscv: ptrace: Fix BIT() compilation issues
-      selftests: riscv: Add license to cfi selftest
+    ip link add ... type rxe
 
- arch/riscv/include/uapi/asm/ptrace.h                     |  1 +
- tools/testing/selftests/riscv/cfi/Makefile               |  2 ++
- tools/testing/selftests/riscv/vector/Makefile            |  7 +++++--
- tools/testing/selftests/riscv/vector/validate_v_ptrace.c | 16 ++++++++++------
- 4 files changed, 18 insertions(+), 8 deletions(-)
----
-base-commit: c107785c7e8dbabd1c18301a1c362544b5786282
-change-id: ${change-id}
+inside another network namespace, the RXE RDMA link is created but it
+cannot function properly because the underlying UDP socket belongs to
+init_net. Other network namespaces cannot use that socket.
 
-- Charlie
+To address this issue, this series introduces net namespace support
+for rxe and moves socket management to be per network namespace.
 
+The series first introduces per-net namespace management for the IPv4
+and IPv6 sockets used by rxe. The sockets are created when the network
+namespace becomes active and are released when the namespace is
+destroyed.
+
+Based on this infrastructure, rxe RDMA links are then created and
+destroyed within each network namespace. This ensures that both the
+UDP sockets and RDMA links are correctly scoped to the namespace in
+which they are used.
+
+With these changes, rxe RDMA links can be created and used both in
+init_net and in other network namespaces, and resources are properly
+cleaned up during namespace teardown.
+
+The series also includes a selftest to verify RXE functionality in
+network namespaces.
+
+"
+make -C tools/testing/selftests TARGETS=rdma run_tests
+make: Entering directory 'tools/testing/selftests'
+make[1]: Nothing to be done for 'all'.
+TAP version 13
+1..4
+# timeout set to 45
+# selftests: rdma: rxe_rping_between_netns.sh
+ok 1 selftests: rdma: rxe_rping_between_netns.sh
+# timeout set to 45
+# selftests: rdma: rxe_ipv6.sh
+ok 2 selftests: rdma: rxe_ipv6.sh
+# timeout set to 45
+# selftests: rdma: rxe_socket_with_netns.sh
+ok 3 selftests: rdma: rxe_socket_with_netns.sh
+# timeout set to 45
+# selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
+ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
+make: Leaving directory 'tools/testing/selftests'
+"
+
+V4 -> V5: Fix rcu warnings
+V3 -> V4: Squash all the changes about rxe_ns.c/h into one commit.
+V2 -> V3: Fix build warnings
+V1 -> V2: Fix the problems based on David Ahern.
+
+Zhu Yanjun (4):
+  RDMA/nldev: Add dellink function pointer
+  RDMA/rxe: Add net namespace support for IPv4/IPv6 sockets
+  RDMA/rxe: Support RDMA link creation and destruction per net namespace
+  RDMA/rxe: Add testcase for net namespace rxe
+
+ MAINTAINERS                                   |   1 +
+ drivers/infiniband/core/nldev.c               |   6 +
+ drivers/infiniband/sw/rxe/Makefile            |   3 +-
+ drivers/infiniband/sw/rxe/rxe.c               |  38 ++++-
+ drivers/infiniband/sw/rxe/rxe_net.c           | 145 +++++++++++++-----
+ drivers/infiniband/sw/rxe/rxe_net.h           |   9 +-
+ drivers/infiniband/sw/rxe/rxe_ns.c            | 124 +++++++++++++++
+ drivers/infiniband/sw/rxe/rxe_ns.h            |  30 ++++
+ include/rdma/rdma_netlink.h                   |   2 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/rdma/Makefile         |   7 +
+ tools/testing/selftests/rdma/config           |   3 +
+ tools/testing/selftests/rdma/rxe_ipv6.sh      |  63 ++++++++
+ .../selftests/rdma/rxe_rping_between_netns.sh |  85 ++++++++++
+ .../selftests/rdma/rxe_socket_with_netns.sh   |  76 +++++++++
+ .../rdma/rxe_test_NETDEV_UNREGISTER.sh        |  63 ++++++++
+ 16 files changed, 609 insertions(+), 47 deletions(-)
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.c
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.h
+ create mode 100644 tools/testing/selftests/rdma/Makefile
+ create mode 100644 tools/testing/selftests/rdma/config
+ create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
+ create mode 100755 tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+ create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+ create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+
+-- 
+2.53.0
 
