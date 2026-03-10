@@ -1,124 +1,177 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C79D2E65D
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 00:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5383090C6;
+	Tue, 10 Mar 2026 01:05:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773104355; cv=none; b=PVRvbW0P1/voA2QbvWoLfbONHJjoYqgKG3PaJksGcQ5vWLi4NDT3tuufEuPqm12ZYGxi4A7esOQ9T/vamQh5CejWgEjUpvub2x5oSUjvZK7W2riZYzrmyeCF+jA9vMebEzsUoCJI5JyDei2XswIstXHENo4+AbQBbHwMLBakIy8=
+	t=1773104739; cv=none; b=TeiRwWBAQ6p2iqmvaTBAE8F7HtZebchbsiHOhuoCmhzg78wAxSVB64/iNZ4gBYxBIa4ut4dP+EMEHCVHKRTK9sAJFNwaFPKhxp4noX2A6/kVjZHMGj2NvBif8BKkX1mStyUwW4BJ4/BBaZTuXV1zlp/qrmzgmz3unECbbIob8Dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773104355; c=relaxed/simple;
-	bh=acAgMLq2GoV1PYZFMmwQa1oS3NzSELcKigiu1mbKhvc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=GQT++1BepKlO90cQDlcFkGnPmiCcEkPYi3Zej/ta3I8T7IUQiTpyEHMB4kTrRZ5J80zkq7Klk+45aEItivIjGaobAenRWj+ERZ1XfEDAbHq9QPAkdcitZLEzfrXy9hE1emjor1maSCasx7D4f6FKS1KebA4EFHZilOoM1QPqD2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HKkIMrJJ; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773104739; c=relaxed/simple;
+	bh=fBp4nXBnDNZJmCsR8X2jOaOiWLrxo+bveGhLd1RBkFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XGxP8c/BrznAeVuNr0l2tMoXteU6lkrZVkdXZvpC0P1f4Bh70UsqeAMKND8jPod+JYsqMZq598N/5va0ep/3yC+BI7USn1h8C2vdpPBrq//QqWyH75v70s65nPqOayx/Tyv5T41eZGrA6TV+7ukm+arivpHVThc/RT85f2/u7iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iXPCHjCa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HKkIMrJJ"
-Message-ID: <879742b3-da96-44fd-9cbf-ba471b99f03c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773104352;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4LB1WRHoRTnoRAaNtzpjIqZzqOf5EKjDkqzha8+8jEw=;
-	b=HKkIMrJJBFUgZVFrCwdjtOkkYOND6c6eexcVe28Jj+SNm4n4W1xk+xcLgleJ9N2DtGm6z+
-	eLhIUlsUFHz1QsauPyZBAwVo6YCnXzI0uT7CWFkpBsJmSTQJmu2i3Augyk2LC3Wc+MsPja
-	hN4zy+EScf8tkOGzRbObdTudFAqD8ko=
-Date: Mon, 9 Mar 2026 17:59:01 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iXPCHjCa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41162C19423;
+	Tue, 10 Mar 2026 01:05:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773104738;
+	bh=fBp4nXBnDNZJmCsR8X2jOaOiWLrxo+bveGhLd1RBkFs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iXPCHjCa5+tLyFlskpunswITojbf48yGauAKjSbwFrj62NuwQiBkl5ab9daUrxklP
+	 2X1kd/0JilV1ueLI43Cv3BNm+lGeIOKI3FsKo+hLmzRv0+rM7pXUuSFtugeRf4Y2XF
+	 OfmiZaQUxNBk3V8oxq46BlDhc+ZS5pgjtIn33e2pCJvRl/+Hj4BwzQwlz2mfXL6VCl
+	 PUPmYRTT1V0XWOiDVoCVpP6ochcinMteWy/bdAVjdNsjhvta4zKM9/fYSufHuldPHh
+	 /q7NqJVglcvPurW43Ktog1jrUjKonybv1CsYGG+D+z+ZbI1pLVHZB9jAzmxxrmirN0
+	 N6JT/TQUN7c9A==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 00/11] mm/damon: support multiple goal-based quota tuning algorithms
+Date: Mon,  9 Mar 2026 18:05:16 -0700
+Message-ID: <20260310010529.91162-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 2/4] RDMA/rxe: Add net namespace support for IPv4/IPv6
- sockets
-To: David Ahern <dsahern@kernel.org>, jgg@ziepe.ca, leon@kernel.org,
- zyjzyj2000@gmail.com, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Zhu Yanjun <yanjun.zhu@linux.dev>
-References: <20260308233540.13382-1-yanjun.zhu@linux.dev>
- <20260308233540.13382-3-yanjun.zhu@linux.dev>
- <f8315319-3dda-4ab2-97b1-7645c3995d3d@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "yanjun.zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <f8315319-3dda-4ab2-97b1-7645c3995d3d@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On 3/9/26 11:54 AM, David Ahern wrote:
-> On 3/8/26 5:35 PM, Zhu Yanjun wrote:
->> diff --git a/drivers/infiniband/sw/rxe/rxe_ns.c b/drivers/infiniband/sw/rxe/rxe_ns.c
->> new file mode 100644
->> index 000000000000..6fe056c81ef3
->> --- /dev/null
->> +++ b/drivers/infiniband/sw/rxe/rxe_ns.c
->> @@ -0,0 +1,136 @@
->> +// SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
->> +/*
->> + * Copyright (c) 2016 Mellanox Technologies Ltd. All rights reserved.
->> + * Copyright (c) 2015 System Fabric Works, Inc. All rights reserved.
-> 
-> neither of those copyrights are relevant here.
-> 
-> 
-> 
->> +static void rxe_ns_exit(struct net *net)
->> +{
->> +	/* called when the network namespace is removed
->> +	 */
->> +	struct rxe_ns_sock *ns_sk = net_generic(net, rxe_pernet_id);
->> +	struct sock *sk;
->> +
->> +	sk = rcu_dereference(ns_sk->rxe_sk4);
-> 
-> [  323.527911] =============================
-> [  323.527915] WARNING: suspicious RCU usage
-> [  323.527918] 7.0.0-rc1-debug+ #3 Tainted: G        W
-> [  323.527922] -----------------------------
-> [  323.527925] drivers/infiniband/sw/rxe/rxe_ns.c:49 suspicious
-> rcu_dereference_check() usage!
-> [  323.527929]
-> 
->> +	if (sk) {
->> +		rcu_assign_pointer(ns_sk->rxe_sk4, NULL);
->> +		udp_tunnel_sock_release(sk->sk_socket);
->> +	}
->> +
->> +#if IS_ENABLED(CONFIG_IPV6)
->> +	sk = rcu_dereference(ns_sk->rxe_sk6);
-> 
-> [  323.528243] =============================
-> [  323.528245] WARNING: suspicious RCU usage
-> [  323.528248] 7.0.0-rc1-debug+ #3 Tainted: G        W
-> [  323.528251] -----------------------------
-> [  323.528253] drivers/infiniband/sw/rxe/rxe_ns.c:56 suspicious
-> rcu_dereference_check() usage!
-> 
-> 
-> you should always run tests with a debug kernel that has kmemleak and
-> lock debugging enabled.
-> 
-> 
->> +#else /* IPV6 */
->> +
->> +struct sock *rxe_ns_pernet_sk6(struct net *net)
->> +{
->> +	return NULL;
->> +}
->> +
->> +void rxe_ns_pernet_set_sk6(struct net *net, struct sock *sk)
->> +{
->> +}
-> 
-> This branch is typically done as an inline in the header file.
-> 
-> 
+Aim-oriented DAMOS quota auto-tuning uses a single tuning algorithm.
+The algorithm is designed to find a quota value that should be
+consistently kept for achieving the aimed goal for long term.  It is
+useful and reliable at automatically operating systems that have dynamic
+environments in the long term.
 
-Got it. All the above problems are fixed in the latest commit.
+As always, however, no single algorithm fits all.  When the environment
+has static characteristics or there are control towers in not only the
+kernel space but also the user space, the algorithm shows some
+limitations.  In such environments, users want kernel work in a more
+short term deterministic way.  Actually there were at least two reports
+[1,2] of such cases.
 
-Zhu Yanjun
+Extend DAMOS quotas goal to support multiple quota tuning algorithms
+that users can select.  Keep the current algorithm as the default one,
+to not break the old users.  Also give it a name, "consist", as it is
+designed to "consistently" apply the DAMOS action.  And introduce a new
+tuning algorithm, namely "temporal".  It is designed to apply the DAMOS
+action only temporally, in a deterministic way.  In more detail, as long
+as the goal is under-achieved, it uses the maximum quota available.
+Once the goal is over-achieved, it sets the quota zero.
+
+Tests
+=====
+
+I confirmed the feature is working as expected using the latest version
+of DAMON user-space tool, like below.
+
+    $ # start DAMOS for reclaiming memory aiming 30% free memory
+    $ sudo ./damo/damo start --damos_action pageout \
+            --damos_quota_goal_tuner temporal \
+            --damos_quota_goal node_mem_free_bp 30% 0 \
+            --damos_quota_interval 1s \
+            --damos_quota_space 100M
+
+Note that >=3.1.8 version of DAMON user-space tool supports this feature
+(--damos_quota_goal_tuner).  As expected, DAMOS stops reclaiming memory
+as soon as the goal amount of free memory is made.  When 'consist' tuner
+is used, the reclamation was continued even after the goal amount of
+free memory is made, resulting in more than goal amount of free memory,
+as expected.
+
+Patch Sequence
+==============
+
+First four patches implement the features.  Patch 1 extends core API to
+allow multiple tuners and make the current tuner as the default and only
+available tuner, namely 'consist'.  Patch 2 allows future tuners setting
+zero effective quota.  Patch 3 introduces the second tuner, namely
+'temporal'.  Patch 4 further extends DAMON sysfs API to let users use
+that.
+
+Three following patches (patches 5-7) update design, usage, and ABI
+documents, respectively.
+
+Final four patches (patches 8-11) are for adding tests.  The eighth
+patch (patch 8) extends the kunit test for online parameters commit for
+validating the goal_tuner.  The ninth and the tenth patches (patches
+9-10) extend the testing-purpose DAMON sysfs control helper and DAMON
+status dumping tool to support the newly added feature.  The final
+eleventh one (patch 11) extends the existing online commit selftest to
+cover the new feature.
+
+References
+==========
+
+[1] https://lore.kernel.org/CALa+Y17__d=ZsM1yX+MXx0ozVdsXnFqF4p0g+kATEitrWyZFfg@mail.gmail.com
+[2] https://lore.kernel.org/20260204022537.814-1-yunjeong.mun@sk.com
+
+Changelog
+=========
+
+Changes from RFC v2
+(https://lore.kernel.org/20260304044122.79394-1-sj@kernel.org)
+- Rename damos_quota_set() to damos_quota_is_set().
+- Drop unnecessary ->goal_tuner set on damos_new_quota().
+- Add kunit test.
+- Add goal_tuenr kernel-doc comment.
+
+Changes from RFC v1
+(https://lore.kernel.org/20260212062314.69961-1-sj@kernel.org)
+- Add selftest for goal_tuner commitment.
+- Set goal tuner inside damon_new_scheme().
+- Allow zero size effective size quota.
+- Update the ABI document.
+- Wordsmith change descriptions.
+
+SeongJae Park (11):
+  mm/damon/core: introduce damos_quota_goal_tuner
+  mm/damon/core: allow quota goals set zero effective size quota
+  mm/damon/core: introduce DAMOS_QUOTA_GOAL_TUNER_TEMPORAL
+  mm/damon/sysfs-schemes: implement quotas->goal_tuner file
+  Docs/mm/damon/design: document the goal-based quota tuner selections
+  Docs/admin-guide/mm/damon/usage: document goal_tuner sysfs file
+  Docs/ABI/damon: update for goal_tuner
+  mm/damon/tests/core-kunit: test goal_tuner commit
+  selftests/damon/_damon_sysfs: support goal_tuner setup
+  selftests/damon/drgn_dump_damon_status: support quota goal_tuner
+    dumping
+  selftests/damon/sysfs.py: test goal_tuner commit
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  6 ++
+ Documentation/admin-guide/mm/damon/usage.rst  | 16 +++--
+ Documentation/mm/damon/design.rst             | 12 ++++
+ include/linux/damon.h                         | 12 ++++
+ mm/damon/core.c                               | 61 ++++++++++++++++---
+ mm/damon/sysfs-schemes.c                      | 58 ++++++++++++++++++
+ mm/damon/tests/core-kunit.h                   |  3 +
+ tools/testing/selftests/damon/_damon_sysfs.py | 12 +++-
+ .../selftests/damon/drgn_dump_damon_status.py |  1 +
+ tools/testing/selftests/damon/sysfs.py        |  7 +++
+ 10 files changed, 171 insertions(+), 17 deletions(-)
+
+
+base-commit: 65dad07b05cbdda486d599772f908f1df45dd306
+-- 
+2.47.3
