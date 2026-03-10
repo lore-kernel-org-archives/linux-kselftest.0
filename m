@@ -1,111 +1,179 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5C915CD7E
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 21:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F25C3F2100;
+	Tue, 10 Mar 2026 21:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773176532; cv=none; b=mV6hyFzbHQorpE0dWTh9i2UrYz54tcZXIZQGQiBFOibiHi6hkoTp/vkLsjXH/TQhEceViNh8/Mtu7TWNxobBhspYe6eSnBRZexjXIdimyvGcAXRbxc65NZEZ+V59G3Aaq2CxordzzIYCU7z0g4ESFoaEM5bCfiF2x27k++K1o18=
+	t=1773179979; cv=none; b=RwbyH8VcCNykqG8kBlUuynLDfcwRDxGgsbvM8ZSR4pv6fKPJsV35ppAjFBTJoRqn7ZxJviaIhTTlpIys/zDmL4dk+0FSKza3Z4XbGFeCiR+FjgYHVO9ZjCxJfbJ02VqlIIvFJDjlnrUkxyM5utFgCOcT69Dk3DZqEDF2z7JdB5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773176532; c=relaxed/simple;
-	bh=7M6RqCa3r+Fvo1bJI1eG737qtJhnxGLFs/k1/7zJ9bo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GGlkYxwsRmxnpiXoC3Tl31JQRpVT90CSl2HdgOnXZid8xjlT6LWfq1jHeJ5lsadG1PiKGY/Z8IOAL5FBvd78f8GMnSEhJ/jftqM2NES26eKB1jrLa+fAXau0MPue8F93QvhbYCUEi6a5fVQHE9pD7im6NOZz1LHd565gnwhxFkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LlDSNmWe; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773179979; c=relaxed/simple;
+	bh=f13w/2doTpmIhJWf4uNRNpxAIztGNJszb7YjfVlaz/U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cZwxNYMsT9dinPJI6pTMnfTEsIjMPyIxddBMncxEWqEWqLcYGPUSixRb111Cg3JCaPxHBeSE5UgHCBHy5M3mlv4LKD5SP2qJO/k6x99Jjb9pPAeEZ0IyMauGHeIWHp75cif6/PWuvoIWZ8aDorFLP7cpV7aCBLHkeElgi1lDt70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=t3LYsIwZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Hrxy2CcX; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LlDSNmWe"
-Message-ID: <93c8c159-90f0-41f7-81d7-0f10fa7cf373@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773176519;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+aIqV5l3xpZUY9twg+Qr5r/jHLWap/WJiFLLxTmnRvQ=;
-	b=LlDSNmWeurxYAd7Pp3bl/qtf2xPqaGOTcj6d4gpLkvD85kxFZFc4JRhecqkuphuk8BO8Fg
-	YFzoOUVqqHYq3P8QP+ycMtMde937qw0c/L1zQNsAtcZD/5noPWtHFtSA6d8DNCht7kxLVH
-	O1eCQhX+Qv/NHwhd63IKS+B57nKAUtw=
-Date: Tue, 10 Mar 2026 14:01:03 -0700
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="t3LYsIwZ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Hrxy2CcX"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.stl.internal (Postfix) with ESMTP id C0CC01D0013B;
+	Tue, 10 Mar 2026 17:59:36 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Tue, 10 Mar 2026 17:59:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1773179976; x=
+	1773266376; bh=HUoqezWhH6kt8wLNIqdnuF3T0mjP7eY5jUwHwQGXiXs=; b=t
+	3LYsIwZgFiyE0Ol9Q6U576l1PExPjmKZvkHznd8mfT8PrJv1NYkF9uzMoXtVIx0I
+	92iv3K5DWUnLeuPJ4CUFA1jezYJ3OtmgbLqxpIoen1HR7h+O9BX+9G6V5rIWU4ja
+	2dWODUtJDMLLdbCTljP8z/OmqgyQ81Ayj8F6wlt3zJ2VGmjG9XypsdkiI7K31qol
+	J7OSM40nid9hUvCnEDdslWTkXpT4cxGfEpddEbCiPH9aZNb+rl/4yYMwpildGxO7
+	gvxhz6L6FL0GeQEAEzsBkfl36+lXjct0JYS7vOHCqjUwRSY0geTHMU4N/VTBY7lv
+	Vd9DhxgQUH6Rpl/dSRPRg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm1; t=1773179976; x=1773266376; bh=H
+	UoqezWhH6kt8wLNIqdnuF3T0mjP7eY5jUwHwQGXiXs=; b=Hrxy2CcXLOfkJaz6C
+	gdf6VZIb4MkmR78RD0TLNBybZgondCO9tsFslL556/e/Tje3EJHxYeTYx/GAsop9
+	tYCCdNpJRzQfV7+by4agLx+4NHvB1nzHEAySNIBxiynQd74fDwvrKcWTAEpyS0sJ
+	edUbe356Dc1JPjzSy2nicaGA89hCBBh8C95zKu12df0fG4AyEf9BGP1ttXciY5RX
+	GAiUnvcMqt+APqVAC6X919mnPmnP3mY8NtrF7B/oswjS+B2c8bF3QV+759+SULu2
+	JOKMOKVmUwRIQBAAa/n2e6sCObYuTgZkrfF+AazxERtCgDt6dXW6Pb1NMjt9Qtnb
+	hxKdw==
+X-ME-Sender: <xms:SJSwaR9eGJIO4o3ubbk-l511GFEUR0ZKTM_hYQPcDizzQ5SDZLnY-Q>
+    <xme:SJSwafBccaOoUCwc_TYbN3K9e6IbJ6Gi1029NcREDKwZlLFe9ntwtaE3HMtsBFF4h
+    JXJsBNLe0uvkwu-bYs0ZFD-z83LkS4cdp0Q8l6u8VT4j3ULDn8FyTs>
+X-ME-Received: <xmr:SJSwaWQBeqQ7cKTmnVsnsAx191iSEEL_mMehm2q0yDdgP0Fm9B98km5lE4Yp>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvkedvudeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepieeiueeiteehtdefheekhffhgeevuefhteevueeljeeijeeiveehgfeh
+    udfghefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopeeipdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehsugesqhhuvggrshihshhnrghilhdrnhgvthdprhgtphht
+    thhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhksh
+    gvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhunhhi
+    hihusehgohhoghhlvgdrtghomhdprhgtphhtthhopegushgrhhgvrhhnsehkvghrnhgvlh
+    drohhrgh
+X-ME-Proxy: <xmx:SJSwaWuOkjQJnvLI5nmXlkVglgKcRBZh_Oqh0ljCMX8P0oC2YsCFdA>
+    <xmx:SJSwaS08BzFoDbJvaVIU1XZKiQ1mYlR7IiIGEVvR5AN0guGvZn-AoQ>
+    <xmx:SJSwaXURb950NvpjIV0ct9Fj_jkvALDfv5ggWDdLHEsrv3SG6hWi-Q>
+    <xmx:SJSwadJoGfi7s0PT6XHwrRbhV7T9NKEG_7j5yedCkXPHyRMr7sB6Mw>
+    <xmx:SJSwaWKONHZjljmi82wO2uDIX2-96vEp29d0f7-9yR5H4GM9EZlfI_Ux>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 10 Mar 2026 17:59:36 -0400 (EDT)
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: netdev@vger.kernel.org
+Cc: Sabrina Dubroca <sd@queasysnail.net>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	David Ahern <dsahern@kernel.org>
+Subject: [PATCH net 2/2] selftests: rtnetlink: add neighbour update test
+Date: Tue, 10 Mar 2026 22:59:17 +0100
+Message-ID: <d28f72b5b4ff4c9ecbbbde06146a938dcc4c264a.1772894876.git.sd@queasysnail.net>
+X-Mailer: git-send-email 2.51.2
+In-Reply-To: <cover.1772894876.git.sd@queasysnail.net>
+References: <cover.1772894876.git.sd@queasysnail.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 4/4] RDMA/rxe: Add testcase for net namespace rxe
-To: Leon Romanovsky <leon@kernel.org>, Zhu Yanjun <yanjun.zhu@linux.dev>
-Cc: jgg@ziepe.ca, zyjzyj2000@gmail.com, shuah@kernel.org,
- linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dsahern@kernel.org
-References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
- <20260310020519.101415-5-yanjun.zhu@linux.dev>
- <20260310185308.GJ12611@unreal>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <20260310185308.GJ12611@unreal>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+Check that protocol and flags are updated correctly for
+neighbour and pneigh entries.
 
-On 3/10/26 11:53 AM, Leon Romanovsky wrote:
-> On Tue, Mar 10, 2026 at 03:05:18AM +0100, Zhu Yanjun wrote:
->> Add 4 testcases for rxe with net namespace.
->>
->> Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
->> ---
->>   MAINTAINERS                                   |  1 +
->>   tools/testing/selftests/Makefile              |  1 +
->>   tools/testing/selftests/rdma/Makefile         |  7 ++
->>   tools/testing/selftests/rdma/config           |  3 +
->>   tools/testing/selftests/rdma/rxe_ipv6.sh      | 63 ++++++++++++++
->>   .../selftests/rdma/rxe_rping_between_netns.sh | 85 +++++++++++++++++++
->>   .../selftests/rdma/rxe_socket_with_netns.sh   | 76 +++++++++++++++++
->>   .../rdma/rxe_test_NETDEV_UNREGISTER.sh        | 63 ++++++++++++++
->>   8 files changed, 299 insertions(+)
->>   create mode 100644 tools/testing/selftests/rdma/Makefile
->>   create mode 100644 tools/testing/selftests/rdma/config
->>   create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
->>   create mode 100755 tools/testing/selftests/rdma/rxe_rping_between_netns.sh
->>   create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
->>   create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 77fdfcb55f06..bd33edf79150 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -24492,6 +24492,7 @@ L:	linux-rdma@vger.kernel.org
->>   S:	Supported
->>   F:	drivers/infiniband/sw/rxe/
->>   F:	include/uapi/rdma/rdma_user_rxe.h
->> +F:	tools/testing/selftests/rdma/
-> This is wrong place in MAINTAINERS file.
-> You need to add that line to "INFINIBAND SUBSYSTEM" and under RXE to add
-> tools/testing/selftests/rdma/rxe* entry.
+Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+---
+ tools/testing/selftests/net/rtnetlink.sh | 55 ++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-Hi, Leon
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index 248c2b91fe42..5a5ff88321d5 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -28,6 +28,7 @@ ALL_TESTS="
+ 	kci_test_fdb_get
+ 	kci_test_fdb_del
+ 	kci_test_neigh_get
++	kci_test_neigh_update
+ 	kci_test_bridge_parent_id
+ 	kci_test_address_proto
+ 	kci_test_enslave_bonding
+@@ -1160,6 +1161,60 @@ kci_test_neigh_get()
+ 	end_test "PASS: neigh get"
+ }
+ 
++kci_test_neigh_update()
++{
++	dstip=10.0.2.4
++	dstmac=de:ad:be:ef:13:37
++	local ret=0
++
++	for proxy in "" "proxy" ; do
++		# add a neighbour entry without any flags
++		run_cmd ip neigh add $proxy $dstip dev "$devdummy" lladdr $dstmac nud permanent
++		run_cmd_grep $dstip ip neigh show $proxy
++		run_cmd_grep_fail "$dstip dev $devdummy .*\(managed\|use\|router\|extern\)" ip neigh show $proxy
++
++		# set the extern_learn flag, but no other
++		run_cmd ip neigh change $proxy $dstip dev "$devdummy" extern_learn
++		run_cmd_grep "$dstip dev $devdummy .* extern_learn" ip neigh show $proxy
++		run_cmd_grep_fail "$dstip dev $devdummy .* \(managed\|use\|router\)" ip neigh show $proxy
++
++		# flags are reset when not provided
++		run_cmd ip neigh change $proxy $dstip dev "$devdummy"
++		run_cmd_grep $dstip ip neigh show $proxy
++		run_cmd_grep_fail "$dstip dev $devdummy .* extern_learn" ip neigh show $proxy
++
++		# add a protocol
++		run_cmd ip neigh change $proxy $dstip dev "$devdummy" protocol boot
++		run_cmd_grep "$dstip dev $devdummy .* proto boot" ip neigh show $proxy
++
++		# protocol is retained when not provided
++		run_cmd ip neigh change $proxy $dstip dev "$devdummy"
++		run_cmd_grep "$dstip dev $devdummy .* proto boot" ip neigh show $proxy
++
++		# change protocol
++		run_cmd ip neigh change $proxy $dstip dev "$devdummy" protocol static
++		run_cmd_grep "$dstip dev $devdummy .* proto static" ip neigh show $proxy
++
++		# also check an extended flag for non-proxy neighs
++		if [ "$proxy" = "" ]; then
++			run_cmd ip neigh change $proxy $dstip dev "$devdummy" managed
++			run_cmd_grep "$dstip dev $devdummy managed" ip neigh show $proxy
++
++			run_cmd ip neigh change $proxy $dstip dev "$devdummy" lladdr $dstmac
++			run_cmd_grep_fail "$dstip dev $devdummy managed" ip neigh show $proxy
++		fi
++
++		run_cmd ip neigh del $proxy $dstip dev "$devdummy"
++	done
++
++	if [ $ret -ne 0 ];then
++		end_test "FAIL: neigh update"
++		return 1
++	fi
++
++	end_test "PASS: neigh update"
++}
++
+ kci_test_bridge_parent_id()
+ {
+ 	local ret=0
+-- 
+2.51.2
 
-"
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-
-index 77fdfcb55f06..3c6bc0e05fc0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24492,6 +24492,7 @@ L:      linux-rdma@vger.kernel.org
-  S:     Supported
-  F:     drivers/infiniband/sw/rxe/
-  F:     include/uapi/rdma/rdma_user_rxe.h
-+F:     tools/testing/selftests/rdma/rxe*
-
-"
-
-Is it OK?
-
-Zhu Yanjun
-
->
-> Thanks
