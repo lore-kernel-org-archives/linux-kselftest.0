@@ -1,39 +1,43 @@
-Received: from mail-244116.protonmail.ch (mail-244116.protonmail.ch [109.224.244.116])
+Received: from mail-10629.protonmail.ch (mail-10629.protonmail.ch [79.135.106.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39DAE3D348E;
-	Tue, 10 Mar 2026 18:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C643A544A
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 18:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773166111; cv=none; b=X0uSngn2Bqi8hF3lXKIJf4MGRmKV0AgkYMUyzxMVlbcXW3Rz9HzbmOeCcPhxafkRdyCx6lrwgLJP86SGdvLQybdOzS+V1/dxUUFc/6/9G5dldJIqh6T8pjlOtzl9WLoZajGxoS4mdmNSA0KS7Dw6g+IGBF9YQmPHIPY+5O98W+I=
+	t=1773166214; cv=none; b=pLFzRG8yFa/+gyEQbgCK9EidB/VicgLH+iN6+UY9syot5LgNtStyFi6zCIjdEzHGRzc1vU6NQDLryNetr/7PMcyn6SZZJQOaNtVTMPEcWBE8yydT0UmBGYh4ZJZBzl6hNZbdwWYZPWEOY9MfxiTsk8QY/MVpt77eTajoh7tJRvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773166111; c=relaxed/simple;
-	bh=iDyRelz8CGDzDT4VlHyPVr8DvQuMD+iP3RIOuf7hcZA=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HrvxzICEPjSDNs9aGJQO3LZ/FxSQdtNgVQlreOzaCSL99TfW7iSNTD8+t3Jjo2h9GIboy7wMExsYqVgRxYt8I++AClOMkbyp2SgfXb/zhXcTdLEbnBdoWo8qTu3CUMWzp2XPw9/yB40S6+3BHd+yk8CtxjfMq029oitWTuaiDAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=iJbAi81R; arc=none smtp.client-ip=109.224.244.116
+	s=arc-20240116; t=1773166214; c=relaxed/simple;
+	bh=j5wLvr8LwlnWrIygJZcWs0DtypPLq/F9OnNyFW28z24=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dHNDuGnDxjm3bnIoJlvVakYQjLL01WBdGnquVZh7k/3kaASmsecUHgm5zlIVKbEUb6PSqPz5kVSi1hl/imZZe+f1A8Stu8ChdYrM4hOGaZkoaCAQnRoQGFVqkVHfjvhAiYlFIhHvjqqDlKksMatiX5F9t3S4+yyzHZsevDAJ6qI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Mlu7K4Dk; arc=none smtp.client-ip=79.135.106.29
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="iJbAi81R"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Mlu7K4Dk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1773166107; x=1773425307;
-	bh=/c4BcsLBw+8ZDRnuRw/+gRQyl4/fQXV5G/XEqQN1CXc=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=iJbAi81Rn+6qHpXdbRZoJxFpxs+VfAgRjfVU17ABA2Va2qeBmTg5Ne7p7fMRXAHeD
-	 3ICwxMtGC9HBEBV7oczDCfs0EU9fINEUwv0UPw//kctg27NL65rvYfV6x8KaGS30+A
-	 ssldWC1393rorduWyMoRtGu0AiIYvyD/D5JZKuvohcey99AjwZxUlIVRXVgJA7iAiU
-	 WWgGRlYE6Cr4btFDLfGzwlcIKbLFsD+y0A54mgXHorRPuIJBkc5vPA4o8CSJR3c+tA
-	 eeDnfJ8lncBCUM49fwGJcxBuMreTqc89wystf+uReIGVTAcrujZX4r/ktdyS4jv0VF
-	 3EC7IFyY/CENQ==
-Date: Tue, 10 Mar 2026 18:08:20 +0000
-To: bp@alien8.de, ryan.roberts@arm.com, hpa@zytor.com, jgross@suse.com, oleg@redhat.com, tglx@kernel.org, nathan@kernel.org, akpm@linux-foundation.org, baohua@kernel.org, seanjc@google.com, shuah@kernel.org, houwenlong.hwl@antgroup.com, perry.yuan@amd.com, xin@zytor.com, riel@surriel.com, will@kernel.org, mingo@redhat.com, morbo@google.com, peterz@infradead.org, nick.desaulniers+lkml@gmail.com, maciej.wieczor-retman@intel.com, justinstitt@google.com, dave.hansen@linux.intel.com
+	s=protonmail3; t=1773166210; x=1773425410;
+	bh=bstvbVTq8dzGKBXqdfpazqBXKX1YP8fVMr6T8J8DrnQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=Mlu7K4DkA4M408iiJFOxvP45gJeI0j71CFByvsRd3a96DxP069wZFvDQrXGc5iZGX
+	 pNma9Zq0F8OFYLbP8awHXxoWbaSp7n3zJK2NiicvWahgKy3HAiNCP3K2X/WourLheC
+	 2T4U7Fs+eKkcUnCM1zBPPse3T1vy62vmIIb/XixTveNPzRZKM1+VA5we/GgQEQmZZV
+	 4d9rwc0eN1Ds8/Jne/0XcimiStAzZ8ok1Zx0SH4Sl2kKrvo05FtJFMmC7SQJ5wPvwP
+	 7OBxQk9NdXj1/6NfyBcNvJCmLJZqd99hp5h/1WIt0RFJMAkFx0UQ72WfsLNkG6nl1l
+	 B8mz56nROCUbQ==
+Date: Tue, 10 Mar 2026 18:10:06 +0000
+To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>
 From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: sohil.mehta@intel.com, llvm@lists.linux.dev, x86@kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, m.wieczorretman@pm.me
-Subject: [PATCH v4 0/3] x86: Simplifying LAM
-Message-ID: <cover.1773165953.git.m.wieczorretman@pm.me>
+Cc: sohil.mehta@intel.com, m.wieczorretman@pm.me, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 3/3] selftests/lam: Add test cases for different LAM tag widths
+Message-ID: <deccb7a9798b6ffc0abdb6df08e51fa20eb0e08f.1773165953.git.m.wieczorretman@pm.me>
+In-Reply-To: <cover.1773165953.git.m.wieczorretman@pm.me>
+References: <cover.1773165953.git.m.wieczorretman@pm.me>
 Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 3af4bcd6271730e4a8e425a194794acecf223ccc
+X-Pm-Message-ID: f94f5b8339c7df8a1ba71876c3afc8c92e36c551
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,62 +47,302 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-After ChkTag [1] announcement, it's worth preparing a stable x86 linear
-address masking (lam) user interface. One important aspect of lam is the
-tag width, and aligning it with other industry solutions can provide a
-more popular, generalized interface that other technologies could
-utilize.
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 
-ChkTag will use 4-bit tags and since that's the direction other memory
-tagging implementations seem to be taking too (for example Arm's MTE)
-it's reasonable to converge lam in linux to the same specification. Even
-though x86's LAM supports 6-bit tags it is beneficial to shorten lam to
-4 bits as ChkTag will likely be the main user of the interface and such
-connection should simplify things in the future.
+After the tag width in LAM (Linear Address Masking) is set to 4 bits,
+the value isn't strictly related to the CPU features like LAM_U57 or
+LAM_U48. To emphasise this, remove mentions of _U57 from the selftest
+and update the bit width.
 
-If a usecase arises in the future, the 6-bit tags can be made available
-as a debug feature and possible to enable through debugfs.
-
-Changing the tag width has no effect on userspace programs. Due to LAM
-being disabled until LASS is fully supported in the kernel there are yet
-no userspace projects relying on a specific LAM tag width. One known
-exception is the clang compiler and its hwasan support. It is however
-not a problem since there are both no users of hwasan on x86 yet and
-upon closer inspection (when working on x86 KASAN software tag-based
-mode) I found it's not working correctly and needs to be patched.
-
-The patchset also cleans up some comments referencing LAM_U48 which was
-not implemented in the kernel and the comments shouldn't imply it can be
-enabled.
-
-Patches are based on v7.0-rc3
-
+Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+---
 Changelog v4:
-- Remove the 'default' wording from the cover letter and patch messages.
-- Add a paragraph to the cover letter about userspace impact.
+- Remove the 'default' wording.
 
 Changelog v3:
-- Remove the debugfs part and update the rest of the code and patch
-  messages accordingly.
+- Redo the patch after the removal of the debugfs part.
 
-Changelog v2:
-- Extend a char buffer in debugfs read callback to fit the format
-  string.
-
-[1] https://community.intel.com/t5/Blogs/Tech-Innovation/open-intel/ChkTag-=
-x86-Memory-Safety/post/1721490
-
-Maciej Wieczor-Retman (3):
-  x86/process: Shorten the default LAM tag width
-  x86/mm: Cleanup comments where LAM_U48 is mentioned
-  selftests/lam: Add test cases for different LAM tag widths
-
- arch/x86/include/asm/mmu.h        |  2 +-
- arch/x86/include/asm/tlbflush.h   |  2 +-
- arch/x86/kernel/process_64.c      |  8 +--
  tools/testing/selftests/x86/lam.c | 86 +++++++++++++++----------------
- 4 files changed, 49 insertions(+), 49 deletions(-)
+ 1 file changed, 43 insertions(+), 43 deletions(-)
 
+diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x8=
+6/lam.c
+index 1919fa6daec0..d8f75387b931 100644
+--- a/tools/testing/selftests/x86/lam.c
++++ b/tools/testing/selftests/x86/lam.c
+@@ -26,9 +26,9 @@
+=20
+ /* LAM modes, these definitions were copied from kernel code */
+ #define LAM_NONE                0
+-#define LAM_U57_BITS            6
++#define LAM_BITS                4
+=20
+-#define LAM_U57_MASK            (0x3fULL << 57)
++#define LAM_MASK                (0xfULL << 57)
+ /* arch prctl for LAM */
+ #define ARCH_GET_UNTAG_MASK     0x4001
+ #define ARCH_ENABLE_TAGGED_ADDR 0x4002
+@@ -175,7 +175,7 @@ static int set_lam(unsigned long lam)
+ =09int ret =3D 0;
+ =09uint64_t ptr =3D 0;
+=20
+-=09if (lam !=3D LAM_U57_BITS && lam !=3D LAM_NONE)
++=09if (lam !=3D LAM_BITS && lam !=3D LAM_NONE)
+ =09=09return -1;
+=20
+ =09/* Skip check return */
+@@ -185,8 +185,8 @@ static int set_lam(unsigned long lam)
+ =09syscall(SYS_arch_prctl, ARCH_GET_UNTAG_MASK, &ptr);
+=20
+ =09/* Check mask returned is expected */
+-=09if (lam =3D=3D LAM_U57_BITS)
+-=09=09ret =3D (ptr !=3D ~(LAM_U57_MASK));
++=09if (lam =3D=3D LAM_BITS)
++=09=09ret =3D (ptr !=3D ~(LAM_MASK));
+ =09else if (lam =3D=3D LAM_NONE)
+ =09=09ret =3D (ptr !=3D -1ULL);
+=20
+@@ -204,8 +204,8 @@ static unsigned long get_default_tag_bits(void)
+ =09=09perror("Fork failed.");
+ =09} else if (pid =3D=3D 0) {
+ =09=09/* Set LAM mode in child process */
+-=09=09if (set_lam(LAM_U57_BITS) =3D=3D 0)
+-=09=09=09lam =3D LAM_U57_BITS;
++=09=09if (set_lam(LAM_BITS) =3D=3D 0)
++=09=09=09lam =3D LAM_BITS;
+ =09=09else
+ =09=09=09lam =3D LAM_NONE;
+ =09=09exit(lam);
+@@ -230,8 +230,8 @@ static int get_lam(void)
+ =09=09return -1;
+=20
+ =09/* Check mask returned is expected */
+-=09if (ptr =3D=3D ~(LAM_U57_MASK))
+-=09=09ret =3D LAM_U57_BITS;
++=09if (ptr =3D=3D ~(LAM_MASK))
++=09=09ret =3D LAM_BITS;
+ =09else if (ptr =3D=3D -1ULL)
+ =09=09ret =3D LAM_NONE;
+=20
+@@ -247,10 +247,10 @@ static uint64_t set_metadata(uint64_t src, unsigned l=
+ong lam)
+ =09srand(time(NULL));
+=20
+ =09switch (lam) {
+-=09case LAM_U57_BITS: /* Set metadata in bits 62:57 */
++=09case LAM_BITS: /* Set metadata in bits 62:57 */
+ =09=09/* Get a random non-zero value as metadata */
+-=09=09metadata =3D (rand() % ((1UL << LAM_U57_BITS) - 1) + 1) << 57;
+-=09=09metadata |=3D (src & ~(LAM_U57_MASK));
++=09=09metadata =3D (rand() % ((1UL << LAM_BITS) - 1) + 1) << 57;
++=09=09metadata |=3D (src & ~(LAM_MASK));
+ =09=09break;
+ =09default:
+ =09=09metadata =3D src;
+@@ -291,7 +291,7 @@ int handle_max_bits(struct testcases *test)
+ =09unsigned long bits =3D 0;
+=20
+ =09if (exp_bits !=3D LAM_NONE)
+-=09=09exp_bits =3D LAM_U57_BITS;
++=09=09exp_bits =3D LAM_BITS;
+=20
+ =09/* Get LAM max tag bits */
+ =09if (syscall(SYS_arch_prctl, ARCH_GET_MAX_TAG_BITS, &bits) =3D=3D -1)
+@@ -719,8 +719,8 @@ int do_uring(unsigned long lam)
+ =09=09=09uint64_t addr =3D ((uint64_t)fi->iovecs[i].iov_base);
+=20
+ =09=09=09switch (lam) {
+-=09=09=09case LAM_U57_BITS: /* Clear bits 62:57 */
+-=09=09=09=09addr =3D (addr & ~(LAM_U57_MASK));
++=09=09=09case LAM_BITS: /* Clear bits 62:57 */
++=09=09=09=09addr =3D (addr & ~(LAM_MASK));
+ =09=09=09=09break;
+ =09=09=09}
+ =09=09=09free((void *)addr);
+@@ -937,14 +937,14 @@ static void run_test(struct testcases *test, int coun=
+t)
+ static struct testcases uring_cases[] =3D {
+ =09{
+ =09=09.later =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_uring,
+-=09=09.msg =3D "URING: LAM_U57. Dereferencing pointer with metadata\n",
++=09=09.msg =3D "URING: LAM. Dereferencing pointer with metadata\n",
+ =09},
+ =09{
+ =09=09.later =3D 1,
+ =09=09.expected =3D 1,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_uring,
+ =09=09.msg =3D "URING:[Negative] Disable LAM. Dereferencing pointer with m=
+etadata.\n",
+ =09},
+@@ -953,14 +953,14 @@ static struct testcases uring_cases[] =3D {
+ static struct testcases malloc_cases[] =3D {
+ =09{
+ =09=09.later =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_malloc,
+-=09=09.msg =3D "MALLOC: LAM_U57. Dereferencing pointer with metadata\n",
++=09=09.msg =3D "MALLOC: LAM. Dereferencing pointer with metadata\n",
+ =09},
+ =09{
+ =09=09.later =3D 1,
+ =09=09.expected =3D 2,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_malloc,
+ =09=09.msg =3D "MALLOC:[Negative] Disable LAM. Dereferencing pointer with =
+metadata.\n",
+ =09},
+@@ -976,41 +976,41 @@ static struct testcases bits_cases[] =3D {
+ static struct testcases syscall_cases[] =3D {
+ =09{
+ =09=09.later =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_syscall,
+-=09=09.msg =3D "SYSCALL: LAM_U57. syscall with metadata\n",
++=09=09.msg =3D "SYSCALL: LAM. syscall with metadata\n",
+ =09},
+ =09{
+ =09=09.later =3D 1,
+ =09=09.expected =3D 1,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_syscall,
+ =09=09.msg =3D "SYSCALL:[Negative] Disable LAM. Dereferencing pointer with=
+ metadata.\n",
+ =09},
+ =09{
+ =09=09.later =3D GET_USER_USER,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D get_user_syscall,
+ =09=09.msg =3D "GET_USER: get_user() and pass a properly tagged user point=
+er.\n",
+ =09},
+ =09{
+ =09=09.later =3D GET_USER_KERNEL_TOP,
+ =09=09.expected =3D 1,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D get_user_syscall,
+ =09=09.msg =3D "GET_USER:[Negative] get_user() with a kernel pointer and t=
+he top bit cleared.\n",
+ =09},
+ =09{
+ =09=09.later =3D GET_USER_KERNEL_BOT,
+ =09=09.expected =3D 1,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D get_user_syscall,
+ =09=09.msg =3D "GET_USER:[Negative] get_user() with a kernel pointer and t=
+he bottom sign-extension bit cleared.\n",
+ =09},
+ =09{
+ =09=09.later =3D GET_USER_KERNEL,
+ =09=09.expected =3D 1,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D get_user_syscall,
+ =09=09.msg =3D "GET_USER:[Negative] get_user() and pass a kernel pointer.\=
+n",
+ =09},
+@@ -1020,60 +1020,60 @@ static struct testcases mmap_cases[] =3D {
+ =09{
+ =09=09.later =3D 1,
+ =09=09.expected =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.addr =3D HIGH_ADDR,
+ =09=09.test_func =3D handle_mmap,
+-=09=09.msg =3D "MMAP: First mmap high address, then set LAM_U57.\n",
++=09=09.msg =3D "MMAP: First mmap high address, then set LAM.\n",
+ =09},
+ =09{
+ =09=09.later =3D 0,
+ =09=09.expected =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.addr =3D HIGH_ADDR,
+ =09=09.test_func =3D handle_mmap,
+-=09=09.msg =3D "MMAP: First LAM_U57, then High address.\n",
++=09=09.msg =3D "MMAP: First LAM, then High address.\n",
+ =09},
+ =09{
+ =09=09.later =3D 0,
+ =09=09.expected =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.addr =3D LOW_ADDR,
+ =09=09.test_func =3D handle_mmap,
+-=09=09.msg =3D "MMAP: First LAM_U57, then Low address.\n",
++=09=09.msg =3D "MMAP: First LAM, then Low address.\n",
+ =09},
+ };
+=20
+ static struct testcases inheritance_cases[] =3D {
+ =09{
+ =09=09.expected =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_inheritance,
+-=09=09.msg =3D "FORK: LAM_U57, child process should get LAM mode same as p=
+arent\n",
++=09=09.msg =3D "FORK: LAM, child process should get LAM mode same as paren=
+t\n",
+ =09},
+ =09{
+ =09=09.expected =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_thread,
+-=09=09.msg =3D "THREAD: LAM_U57, child thread should get LAM mode same as =
+parent\n",
++=09=09.msg =3D "THREAD: LAM, child thread should get LAM mode same as pare=
+nt\n",
+ =09},
+ =09{
+ =09=09.expected =3D 1,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_thread_enable,
+ =09=09.msg =3D "THREAD: [NEGATIVE] Enable LAM in child.\n",
+ =09},
+ =09{
+ =09=09.expected =3D 1,
+ =09=09.later =3D 1,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_thread,
+ =09=09.msg =3D "THREAD: [NEGATIVE] Enable LAM in parent after thread creat=
+ed.\n",
+ =09},
+ =09{
+ =09=09.expected =3D 0,
+-=09=09.lam =3D LAM_U57_BITS,
++=09=09.lam =3D LAM_BITS,
+ =09=09.test_func =3D handle_execve,
+-=09=09.msg =3D "EXECVE: LAM_U57, child process should get disabled LAM mod=
+e\n",
++=09=09.msg =3D "EXECVE: LAM, child process should get disabled LAM mode\n"=
+,
+ =09},
+ };
+=20
+@@ -1224,7 +1224,7 @@ int handle_pasid(struct testcases *test)
+ =09=09if (tmp & 0x1) {
+ =09=09=09/* run set lam mode*/
+ =09=09=09if ((runed & 0x1) =3D=3D 0)=09{
+-=09=09=09=09err =3D set_lam(LAM_U57_BITS);
++=09=09=09=09err =3D set_lam(LAM_BITS);
+ =09=09=09=09runed =3D runed | 0x1;
+ =09=09=09} else
+ =09=09=09=09err =3D 1;
 --=20
 2.53.0
 
