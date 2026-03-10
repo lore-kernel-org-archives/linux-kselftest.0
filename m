@@ -1,181 +1,185 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FF7261B80
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 01:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC1833993
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 01:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773104781; cv=none; b=SeUWZYay58IGEPQJ7YdRfAs+EhJ+tyvJU+tQMLBTpo00kM94AGmABWB42jY8b1CBQCROALARJZ56jnH4PzaGwDbr9ZvO1iPzWxOydiZ4iGlivED1D+of5qeYFlVX3BO1CrpgOgp8Yfg7UEu6sOU2B6FqubQ0LwgidFE9BAxSihM=
+	t=1773107154; cv=none; b=pC5WHqUsY2sFm5UVRMKspr8mhV7Spa/GgpTdr1Z3FKpFpqXu6ZSMKIZxEqc5y9c79D/Bg7HAX9sxVnZNUafKJ7/uOpZAAXjmC8m8LbPvbo1bf/AvZTP3Fe1rQcUTtWIrcQU8FoYCEUr4a0VPfYANOI08Ks+5ORIHhT00LaHsQqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773104781; c=relaxed/simple;
-	bh=Ps/B2Z4YbD6//yK0FTkoaGlvSB+kH3TEFIAsJhiHCps=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=o8YI16aVnp076yEGth3yjizkIsfhQyyFcG5bTeAWZ/qg5cST2vpG9jXEOaTNSSzVSmFHX4Bhm4jz9ssQWxSQMUBCjCsCSJty6ujUZ6T0EeZnyjBz/UbTsoMXCgmUgyOtE4ZkUd8Cidj1mY2d8tdXuu3IhUvjdpYD0UOAcjgvDl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YCdCasmV; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1773107154; c=relaxed/simple;
+	bh=SPq7NgFqZxgaNG2O9E6O5X6uW4f8iqmz2KIvn6WVjRA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pp/Ux/0031pc9W1ioVa5VrFCGNh+L4LP/xaODS4323Cd13PyPGxZ6f/9jZUaCTNp26Ju1RmI784tqwo9+L/Q9tF77IuoB/5jHfaC5u7LctL7OleiXBuqZEOtSrAVdmGQxpZRaXk074NgbTW7r/X8VqAcfeoLOmR3TV/YKqQx0oE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=THGM0mu+; arc=none smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YCdCasmV"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-829ad81b132so9490384b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 18:06:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="THGM0mu+"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-1273349c56bso14921177c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 18:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773104779; x=1773709579; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O/pJjCJQTxqUtKgBQ/nXqQmMajRmz8+Q8yoKiNddz8s=;
-        b=YCdCasmVb7hZfq0q1E7i+qOoXnasgWLJJCsBBBY3YhG6VdJ8x7uczFdesdQ3nn8LOa
-         OY/D8zVdl9Oe+HR16c8hwj103vyW5gjGU+RoRZcM5FjGlPWsq6ajc1GDMaPOe+TIqMrq
-         9sl+AGcfoqQnQ5YChJNxrXlOZnaXQ0RKHCMZJHuk352zQB8ryB+sJVN3mYuzLcay90op
-         UOZbqfyDE3cMRnZUKOOHW1QokP2iq4WajIo6Eh/BtfHiV5Eh13r4Ngc/zMLRbHPzEZKI
-         1T4AR4tzXKXeHyTQa9TigT+I1vfqiWEWB3Lbd2shUhCEiUw1vjAqMhBddiC/9FD1pzbi
-         Qe8Q==
+        d=gmail.com; s=20230601; t=1773107151; x=1773711951; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sas/jGM9/gBj/qBL5u5kVfFi+K6+9Elbw68TaVWyj4k=;
+        b=THGM0mu+JyHCQt6S+jeDTzmUwfVY6Dsdn+fEpKLiDN5Je/Vk+wGV3RPKy6sFk0DGYr
+         YJkn3KGRd/tnQ/hbNcZsJeIxI8kT6Uq9i/aLrjuspCz6OdJkx0mOHG4lXhb64rq8wsCK
+         g+KNrD9Kxn5GGfQCs/PE3bOtrdFdYD/Ekl00ETDHlwMXUeu6UnoCQwsUBCMWGdOAdbzO
+         hDza9pbycMVbHdNU7qG9DPC+QOhE/g87xUX3ddtvbCO98FUiF31E1oCuTaNs9ewrUvhq
+         kDgLooTs1ofj3zgSVPddHhllDlWehDL4CHELIXrUUVXsy1CM77k+gjBHBfzW5DFh6k2k
+         ALTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773104779; x=1773709579;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O/pJjCJQTxqUtKgBQ/nXqQmMajRmz8+Q8yoKiNddz8s=;
-        b=KcxRfYnHHakKwQPhy6PkX+44K3Z40EFUVNPsqPSanA+33/navXsWlBGYVheyL4jr//
-         swCzOFPdx3W/yvGEPr9urThNZw2k4NR6dpjzmX+HSmaQxhNNYsUiPDbh/rtfB751BGqz
-         mlGz73DWBSntzpxIHvE8hwRZd67HuTJaueWcrDh9N234nYhQOyokMl692em4FMmq5AW3
-         V0XSUSfJ9pPNycIp8IwKDesdMzgwoEaPDp9jymAHaGyC0xq9t0wta+6yd7u59ud2T5Xh
-         2XomEOksIVFcKQ+jhZjeDS3k0skzdtEMA8me3oUi0HSaIXWP+DeBTcWcL9Tbt/NqeEnN
-         a3/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWeHuh2fYcAEgiafKjRWfv1NNSlLSVwpPhbBPNpvp1aFb1LZ/UH04J3rN3mrk6MrHS74XJOyFtSE1VKddxBmnw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCp/srfhTNRCeB8cHWketDTcw99ewh7AvV7Fc+wkGDjgc1nx2C
-	pBn/HZgs5ljQiX7HwSPyX2vSgSl85zmA8GEDC5y7Vlobo5zXF2w8BfpFoXlIguuFGwwaAwMZbIB
-	2UBSW2Q==
-X-Received: from pfld9.prod.google.com ([2002:a05:6a00:1989:b0:7dd:8bba:6393])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3d98:b0:827:3307:170
- with SMTP id d2e1a72fcca58-829a2eaad00mr8915615b3a.37.1773104779156; Mon, 09
- Mar 2026 18:06:19 -0700 (PDT)
-Date: Mon, 9 Mar 2026 18:06:17 -0700
-In-Reply-To: <20260309-gmem-st-blocks-v3-2-815f03d9653e@google.com>
+        d=1e100.net; s=20230601; t=1773107151; x=1773711951;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sas/jGM9/gBj/qBL5u5kVfFi+K6+9Elbw68TaVWyj4k=;
+        b=FwAJ3+UbrMCwk6NWzij5eOf6UwjrkK8FNBUndbve3OWvwR0VPIkBiaInr31GZ2Sgon
+         b9cUsdEUWDOMebf17Ln85/ocJrif0mzr15maYy6lU1MnHdsIlol+K9A1/ve8VwNaB0b8
+         JcAQ+GjmpIxzhqdZk+2yAG/4yu2IHT+QvU2GFYlx7dSIM6Oovu8p7uV9SzTYtZ1MXYyg
+         MxybMXOBCG6bZ46wEEszuQOtZ9WmPTbcCWFMildl9kA2s2616bLDTamaHUV3Gexxmtks
+         adBwzQSwBgJDrdunXHLTBbet/AcA0UfDuaVCeUav7cRjAeXOpYpQITt3cfzYFQdjxZin
+         nJcA==
+X-Forwarded-Encrypted: i=1; AJvYcCXve30FHlbcmxn1/J1kepp58b45vQ5lbgo/jFrUEQWUmN39ubxD5LZtT4iioaniwNH6xC5nkWd6xfT9oVNGmIY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1z1vVx8fTKo35M+u4BTXKqZXEh4f/ETSlug/o7wz5Qi0X0Nc5
+	CnLMJHFPfcJ+QhPFa305UaqsnvQTn15IEjR2lXfmH+O861rByo07CaHi
+X-Gm-Gg: ATEYQzxl1kK8dQz1I3a4qwCi8FFc/C9w9Q6sLC9IA32YP2m9tdqe+c7OaDvPCSINzsJ
+	BjHBePVcKO70ISkbRoxuXcq5XWCKH2HUjwobnHYdrDh8kdD8I/IconWff5L6VBionzTC2Twe5mu
+	53QaNycKm1OCtdPpO19b7pOZ9D3meypww+TY+/1slu9MNqoSNKKoVP/AlLfNrP2gEi/aehWWoHe
+	EVXhwWr9rZuemtecwIa3nydg7vXT7L2sZ3TSv6lRGtdU5kWNUedm9LkXKLF6R40ZYFr3UDU+aZA
+	OgcPmJlfkhpIzktwBBP/HTqeRYVTw3XiUDGTixR+RBqbf4h70P/hszTaEH7NZUle+6wmfADBr7d
+	KRQU09DIaKLqgQOQiNySE7qYCDVy/pdiWM+TXTm9O/vKdmTotkNhworOkEn7MEt2ImwX1+Pxwrt
+	GNf/z1Jwo1eRlt7PghtCBLQyu0D7aXEuQJ
+X-Received: by 2002:a05:7022:6b8e:b0:128:d375:f1d3 with SMTP id a92af1059eb24-128d375f681mr3154192c88.18.1773107150649;
+        Mon, 09 Mar 2026 18:45:50 -0700 (PDT)
+Received: from inky.localdomain ([2601:647:6700:64d0::5c10])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128c3f433d2sm11321482c88.10.2026.03.09.18.45.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 18:45:50 -0700 (PDT)
+Date: Mon, 9 Mar 2026 18:45:46 -0700
+From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Andy Chiu <andybnac@gmail.com>,
+	Deepak Gupta <debug@rivosinc.com>, linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] selftests: riscv: Fix compilation issues for
+ v_ptrace and cfi
+Message-ID: <20260310014546.GA17809@inky.localdomain>
+References: <20260305-fix_selftests-v1-0-61b62d23500b@gmail.com>
+ <aa85yl-c2suNF5LO@curiosity>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260309-gmem-st-blocks-v3-0-815f03d9653e@google.com> <20260309-gmem-st-blocks-v3-2-815f03d9653e@google.com>
-Message-ID: <aa9uiQ_KBcX7X0My@google.com>
-Subject: Re: [PATCH RFC v3 2/4] KVM: guest_memfd: Set release always on
- guest_memfd mappings
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	rientjes@google.com, rick.p.edgecombe@intel.com, yan.y.zhao@intel.com, 
-	fvdl@google.com, jthoughton@google.com, vannapurve@google.com, 
-	shivankg@amd.com, michael.roth@amd.com, pratyush@kernel.org, 
-	pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa85yl-c2suNF5LO@curiosity>
 
-On Mon, Mar 09, 2026, Ackerley Tng wrote:
-> Set release always on guest_memfd mappings to enable the use of
-> .invalidate_folio, which performs inode accounting for guest_memfd.
+On Tue, Mar 10, 2026 at 12:21:14AM +0300, Sergey Matyukevich wrote:
+> Hello Charlie,
 > 
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> ---
->  virt/kvm/guest_memfd.c | 1 +
->  1 file changed, 1 insertion(+)
+> On Thu, Mar 05, 2026 at 12:11:28AM -0800, Charlie Jenkins via B4 Relay wrote:
+> > There are a couple of compilation issues of the riscv selftests.
+> > Coincidentally two of the issues are independent problems with not
+> > including the header that includes the BIT() macro and the other issue
+> > is from checkpatch incorrectly suggesting to remove non-redundant
+> > braces.
+> > 
+> > Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+> > ---
+> > Charlie Jenkins (4):
+> >       selftests: riscv: Add definition of BIT() macro
+> >       selftests: riscv: Add braces around EXPECT_EQ()
+> >       riscv: ptrace: Fix BIT() compilation issues
+> >       selftests: riscv: Add license to cfi selftest
+> > 
+> >  arch/riscv/include/uapi/asm/ptrace.h                     |  1 +
+> >  tools/testing/selftests/riscv/cfi/Makefile               |  2 ++
+> >  tools/testing/selftests/riscv/vector/Makefile            |  2 ++
+> >  tools/testing/selftests/riscv/vector/validate_v_ptrace.c | 16 ++++++++++------
+> >  4 files changed, 15 insertions(+), 6 deletions(-)
+> > ---
+> > base-commit: c107785c7e8dbabd1c18301a1c362544b5786282
+> > change-id: 20260304-fix_selftests-c3f0ae46b3c7
+> > 
+> > Best regards,
+> > -- 
+> > Charlie Jenkins <thecharlesjenkins@gmail.com>
 > 
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 77219551056a7..8246b9fbcf832 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -607,6 +607,7 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
->  	mapping_set_inaccessible(inode->i_mapping);
->  	/* Unmovable mappings are supposed to be marked unevictable as well. */
->  	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
-> +	mapping_set_release_always(inode->i_mapping);
+> Thanks for catching this !
+> 
+> On rc3 I can also reproduce the issue reported by the kernel test robot
+> for v_exec_initval_nolibc.c and vstate_exec_nolibc.c. The following
+> addition to your fixes seems to resolve it:
 
-*sigh*
+I missed that locally since those file compilations were cached for me!
 
-So... an internal AI review bot flagged setting AS_RELEASE_ALWAYS as being
-potentially problematic, and I started poking around, mostly because I was
-curious.  I'm pretty sure the exact scenario painted by the bot isn't possible,
-but I do think a similar issue exists in at least truncate_error_folio().  Or at
-least, *should* exist, but doesn't because of a different bug.
+I think we want to keep those as nolibc so instead we can only add the
+header to the CFLAGS for only the tests that want libc, I'll send out an
+updated version.
 
-On memory error, kvm_gmem_error_folio() will get invoked via this code.  Note
-the "err != 0" check.  kvm_gmem_error_folio() returns MF_DELAYED, which has an
-arbitrary value of '2', and so KVM is always signalling "failure".
+- Charlie
 
-		int err = mapping->a_ops->error_remove_folio(mapping, folio);
-
-		if (err != 0)
-			pr_info("%#lx: Failed to punch page: %d\n", pfn, err);
-		else if (!filemap_release_folio(folio, GFP_NOIO))
-			pr_info("%#lx: failed to release buffers\n", pfn);
-
-I _think_ that's bad?  On x86, if I'm following the breadcrubs correctly, we'll
-end up in this code in kill_me_maybe()
-
-	pr_err("Memory error not recovered");
-	kill_me_now(cb);
-
-and send what I assume is a relatively useless SIGBUS and likely kill the VM.
-
-	struct task_struct *p = container_of(ch, struct task_struct, mce_kill_me);
-
-	p->mce_count = 0;
-	force_sig(SIGBUS);
-
-But even if that's somehow the "right" behavior, we're doing it purely by
-accident.
-
-As for this patch, if we fix that bug by returning 0, then filemap_release_folio()
-is definitely reachable by at least one flow, so I think guest_memfd also needs
-to implement release_folio()?
-
-
-    
-Full AI bot text:
---
-Setting the AS_RELEASE_ALWAYS flag causes folio_needs_release() to return
-true. This correctly triggers .invalidate_folio during truncation, but does
-it also unintentionally expose guest_memfd folios to eviction via
-posix_fadvise(POSIX_FADV_DONTNEED)?
-
-If userspace calls posix_fadvise() on a guest_memfd file, the core mm
-calls mapping_evict_folio(). Because folio_needs_release() is true, it
-calls filemap_release_folio().
-
-Since guest_memfd does not implement a .release_folio address space
-operation, filemap_release_folio() falls back to calling
-try_to_free_buffers(). Could this fallback cause a warning?
-
-fs/buffer.c:try_to_free_buffers() {
-	...
-	/* Misconfigured folio check */
-	if (WARN_ON_ONCE(!folio_buffers(folio)))
-		return true;
-	...
-}
-
-Because the guest_memfd folio has no private data, folio_buffers()
-is NULL, which will trigger this WARN_ON_ONCE.
-
-Furthermore, try_to_free_buffers() returns true, allowing the folio to be
-removed from the page cache. Because this eviction path bypasses
-truncate_cleanup_folio(), it never calls .invalidate_folio.
-
-Does this mean inode_sub_bytes() is skipped, leaking the inode block
-accounting?
-
-Userspace could potentially trigger the warning and infinitely inflate the
-inode's block count with:
-    struct kvm_create_guest_memfd args = { .size = 4096 };
-    int fd = ioctl(kvm_vm_fd, KVM_CREATE_GUEST_MEMFD, &args);
-    fallocate(fd, 0, 0, 4096);
-    posix_fadvise(fd, 0, 4096, POSIX_FADV_DONTNEED);
-Should guest_memfd implement a .release_folio callback that simply
-returns false to prevent these folios from being evicted?
---
+> 
+> diff --git a/tools/testing/selftests/riscv/vector/Makefile b/tools/testing/selftests/riscv/vector/Makefile
+> index 92c4cfe5f34d..48d6cd5e72f6 100644
+> --- a/tools/testing/selftests/riscv/vector/Makefile
+> +++ b/tools/testing/selftests/riscv/vector/Makefile
+> @@ -22,15 +22,13 @@ $(OUTPUT)/vstate_prctl: vstate_prctl.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpe
+>  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+>  
+>  $(OUTPUT)/vstate_exec_nolibc: vstate_exec_nolibc.c
+> -	$(CC) -nostdlib -static -include ../../../../include/nolibc/nolibc.h \
+> -		-Wall $(CFLAGS) $(LDFLAGS) $^ -o $@ -lgcc
+> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+>  
+>  $(OUTPUT)/v_initval: v_initval.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
+>  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+>  
+>  $(OUTPUT)/v_exec_initval_nolibc: v_exec_initval_nolibc.c
+> -	$(CC) -nostdlib -static -include ../../../../include/nolibc/nolibc.h \
+> -		-Wall $(CFLAGS) $(LDFLAGS) $^ -o $@ -lgcc
+> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+>  
+>  $(OUTPUT)/vstate_ptrace: vstate_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
+>  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+> diff --git a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
+> index 4dde05e45a04..e3f062c85452 100644
+> --- a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
+> +++ b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
+> @@ -9,6 +9,10 @@
+>   * To be "clean" all values must be all zeroes.
+>   */
+>  
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <stdio.h>
+> +
+>  #define __stringify_1(x...)	#x
+>  #define __stringify(x...)	__stringify_1(x)
+>  
+> diff --git a/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c b/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
+> index 12f1b1b1c7aa..ecd687bb8359 100644
+> --- a/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
+> +++ b/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
+> @@ -1,6 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  
+> -#include <linux/wait.h>
+> +#include <unistd.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <stdio.h>
+> +
+> +#include <sys/prctl.h>
+> +#include <sys/wait.h>
+>  
+>  #define THIS_PROGRAM "./vstate_exec_nolibc"
+> 
+> 
+> Regards,
+> Sergey
