@@ -1,98 +1,109 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AFA36896E
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 20:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5C915CD7E
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 21:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773174772; cv=none; b=fShpjc6/tr1DxzKWNTIfcW7PpSB7MRO9kLkElZCk9OES7z1/Gkl1INvw5sWjEV+cWcT5X0IkM23Pfk8zzx0ifcza9uDFw10iHRrfoRR2PVZbRFZBDE4vSDgVWqwcprrLc7jhH3dl2+uJvYLbkYDKPo6MBZgG+A3yf1Uu3lsJMhg=
+	t=1773176532; cv=none; b=mV6hyFzbHQorpE0dWTh9i2UrYz54tcZXIZQGQiBFOibiHi6hkoTp/vkLsjXH/TQhEceViNh8/Mtu7TWNxobBhspYe6eSnBRZexjXIdimyvGcAXRbxc65NZEZ+V59G3Aaq2CxordzzIYCU7z0g4ESFoaEM5bCfiF2x27k++K1o18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773174772; c=relaxed/simple;
-	bh=K/Fm97Y4AEzSGBZcKtx4usftaviZNF5VHyoiYD98CVo=;
+	s=arc-20240116; t=1773176532; c=relaxed/simple;
+	bh=7M6RqCa3r+Fvo1bJI1eG737qtJhnxGLFs/k1/7zJ9bo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BxaU9q5kWYTyqPTofdpMjHe/pQLBscHCUAqRLHGHlrlco/ixEVrxAraWPi3Vy7SAMYMwFDhYU1QRRkniU9bHE4f2qPlrUJ5ziZLHNWRSJIyZvVMgvy5CNAI+rViemXVTeywbGMFtsVuH1BXTr7kw+xjiCACEelwJQ+qNHwQwpL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XRV93kWk; arc=none smtp.client-ip=91.218.175.183
+	 In-Reply-To:Content-Type; b=GGlkYxwsRmxnpiXoC3Tl31JQRpVT90CSl2HdgOnXZid8xjlT6LWfq1jHeJ5lsadG1PiKGY/Z8IOAL5FBvd78f8GMnSEhJ/jftqM2NES26eKB1jrLa+fAXau0MPue8F93QvhbYCUEi6a5fVQHE9pD7im6NOZz1LHd565gnwhxFkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LlDSNmWe; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XRV93kWk"
-Message-ID: <eaf37917-76aa-4869-a37b-5a1acb4ba7ae@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LlDSNmWe"
+Message-ID: <93c8c159-90f0-41f7-81d7-0f10fa7cf373@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773174757;
+	t=1773176519;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=I+/Im1WgOzXUxOrElOu4QyfUNde2pMiNwqi2Z33FQB0=;
-	b=XRV93kWkfdVWMR87tVopXUVt/HZLI3gIqLERfYbOqZKLZlzZF592lt5u0t7dRHNk6GduC2
-	6YpmVabQy66YRdwky+2DDzcZJ/frxg+JGfvMpoIGI6/jkB1W5dFSg+uSxhIRNrfTf+fmg6
-	GjqOspG0OWjm1vzuVREjaso8riXUsLc=
-Date: Tue, 10 Mar 2026 13:32:30 -0700
+	bh=+aIqV5l3xpZUY9twg+Qr5r/jHLWap/WJiFLLxTmnRvQ=;
+	b=LlDSNmWeurxYAd7Pp3bl/qtf2xPqaGOTcj6d4gpLkvD85kxFZFc4JRhecqkuphuk8BO8Fg
+	YFzoOUVqqHYq3P8QP+ycMtMde937qw0c/L1zQNsAtcZD/5noPWtHFtSA6d8DNCht7kxLVH
+	O1eCQhX+Qv/NHwhd63IKS+B57nKAUtw=
+Date: Tue, 10 Mar 2026 14:01:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 3/4] RDMA/rxe: Support RDMA link creation and
- destruction per net namespace
+Subject: Re: [PATCH v5 4/4] RDMA/rxe: Add testcase for net namespace rxe
 To: Leon Romanovsky <leon@kernel.org>, Zhu Yanjun <yanjun.zhu@linux.dev>
 Cc: jgg@ziepe.ca, zyjzyj2000@gmail.com, shuah@kernel.org,
  linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
  dsahern@kernel.org
 References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
- <20260310020519.101415-4-yanjun.zhu@linux.dev>
- <20260310185744.GK12611@unreal>
+ <20260310020519.101415-5-yanjun.zhu@linux.dev>
+ <20260310185308.GJ12611@unreal>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <20260310185744.GK12611@unreal>
+In-Reply-To: <20260310185308.GJ12611@unreal>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
-On 3/10/26 11:57 AM, Leon Romanovsky wrote:
-> On Tue, Mar 10, 2026 at 03:05:17AM +0100, Zhu Yanjun wrote:
->> After introducing dellink handling and per-net namespace management
->> for IPv4 and IPv6 sockets, extend rxe to create and destroy RDMA links
->> within each network namespace.
->>
->> With this change, RDMA links can be instantiated both in init_net and
->> in other network namespaces. The lifecycle of the RDMA link is now tied
->> to the corresponding namespace and is properly cleaned up when the
->> namespace or link is removed.
->>
->> This ensures rxe behaves correctly in multi-namespace environments and
->> keeps socket and RDMA link resources consistent across namespace
->> creation and teardown.
+On 3/10/26 11:53 AM, Leon Romanovsky wrote:
+> On Tue, Mar 10, 2026 at 03:05:18AM +0100, Zhu Yanjun wrote:
+>> Add 4 testcases for rxe with net namespace.
 >>
 >> Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
 >> ---
->>   drivers/infiniband/sw/rxe/rxe.c     |  38 +++++++-
->>   drivers/infiniband/sw/rxe/rxe_net.c | 145 +++++++++++++++++++++-------
->>   drivers/infiniband/sw/rxe/rxe_net.h |   9 +-
->>   3 files changed, 146 insertions(+), 46 deletions(-)
-> <...>
->
->> +#define SK_REF_FOR_TUNNEL	2
-> <...>
->
->> +#undef SK_REF_FOR_TUNNEL
-> We typically place defines at the beginning of a file and avoid undefining
-> them. The undef directive is mainly used when a macro is defined inside a
-> function.
+>>   MAINTAINERS                                   |  1 +
+>>   tools/testing/selftests/Makefile              |  1 +
+>>   tools/testing/selftests/rdma/Makefile         |  7 ++
+>>   tools/testing/selftests/rdma/config           |  3 +
+>>   tools/testing/selftests/rdma/rxe_ipv6.sh      | 63 ++++++++++++++
+>>   .../selftests/rdma/rxe_rping_between_netns.sh | 85 +++++++++++++++++++
+>>   .../selftests/rdma/rxe_socket_with_netns.sh   | 76 +++++++++++++++++
+>>   .../rdma/rxe_test_NETDEV_UNREGISTER.sh        | 63 ++++++++++++++
+>>   8 files changed, 299 insertions(+)
+>>   create mode 100644 tools/testing/selftests/rdma/Makefile
+>>   create mode 100644 tools/testing/selftests/rdma/config
+>>   create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
+>>   create mode 100755 tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+>>   create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+>>   create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 77fdfcb55f06..bd33edf79150 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -24492,6 +24492,7 @@ L:	linux-rdma@vger.kernel.org
+>>   S:	Supported
+>>   F:	drivers/infiniband/sw/rxe/
+>>   F:	include/uapi/rdma/rdma_user_rxe.h
+>> +F:	tools/testing/selftests/rdma/
+> This is wrong place in MAINTAINERS file.
+> You need to add that line to "INFINIBAND SUBSYSTEM" and under RXE to add
+> tools/testing/selftests/rdma/rxe* entry.
 
-Defining macros locally helps clarify the intent behind specific values.
+Hi, Leon
 
-By pairing the #define with a trailing #undef, we gain the descriptive
+"
 
-benefits of the macro while maintaining strict control over its visibility.
+diff --git a/MAINTAINERS b/MAINTAINERS
 
-I will put the definition of the MACRO in the function, following your 
-advice.
+index 77fdfcb55f06..3c6bc0e05fc0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24492,6 +24492,7 @@ L:      linux-rdma@vger.kernel.org
+  S:     Supported
+  F:     drivers/infiniband/sw/rxe/
+  F:     include/uapi/rdma/rdma_user_rxe.h
++F:     tools/testing/selftests/rdma/rxe*
 
-Thanks.
+"
+
+Is it OK?
 
 Zhu Yanjun
 
