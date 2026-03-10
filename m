@@ -1,202 +1,267 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B452FDC20;
-	Tue, 10 Mar 2026 15:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12F33B6341
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 16:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773158324; cv=none; b=Blkuicfd2sWwSj7SsNLKVvJSYfPHM4saTeczPIqQGigzrAOhJRfXTePl+FN6t+7YVZo8b81FtOJeEvaXgAQzQLu+E8bBbILkLxVbHkUGC/sQRHhylMX382e2hvmcOqYzYBPlb1ATlcVMeBaV80OeDAwQKRYVQm9feJXFKxlbw/E=
+	t=1773160730; cv=none; b=N+tFCvqavTQMYsbbPglJnQUcLmtUMrszo0hRtnElz+519Tv7Szaucqynh+/73YTaOJT7Ajv0LA2nsOkwslx/kjWJ4Mx7srSr5xmqPKiqYBtg0Hl7XYeY6et4uGLfS2Ja3qim8A+nQLrku0i9/+RTJd0jCyUIroPKBwRF8AnH7D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773158324; c=relaxed/simple;
-	bh=EioQ+s6DALilCIaIqpu0+FK3Uof/SiiRniIzo9QAP+0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mL9cZDT2G6zd3Xf/46yI6HtZA4MPmcyPSB00d+jkZcfBgL/G1gJiM5AgB7uu70UNGjRbW0tHGV2RRULwh/X1f9Wj1jt2Nse2icC9G8wpYOB8Ktm5NhN27MNp+J1/dOjxxIfgL8xUZPbLTADYpfkKxowr3spGNUAg0dD6kCoReYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=DQQrAnE5; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1773160730; c=relaxed/simple;
+	bh=J8Z3AFoLCDAmUNsZx32EA5q0NGLL738C6UZv0sQo2jc=;
+	h=From:To:Cc:Subject:Message-ID:In-Reply-To:References:MIME-Version:
+	 Content-Type:Date; b=ugaCJn1l7RmqlgdO9HFEA+kT/PjHK8bzGKMh3Qqbr76ZkdfTa+LmTfqkNNCuyfzP6BYyulWCIizU8WcC+F80HBTj/RSUu6IujZnqe+IneQMURibG1d6fEndaAlk6JF2ZF1stqWwWZxdKTKUmVQ014AaV+6gA2UgQErkpjO2peQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IZ294Nxe; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=cZ4gae22; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DQQrAnE5"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62AFcc0Q2582839;
-	Tue, 10 Mar 2026 15:58:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=De4g2LAyWvY3GWO7BeINKqb2S28hz
-	YXHWiu9xaz7NEc=; b=DQQrAnE5EBBJNqVzGSrnY5PZvllsaEenaJ/j35CNNMPc+
-	if513RKpVaEAnuw7XCC/8qnWZcAM7Da0/vYEiBDqR1nDB7h3ZL8hLaCeBJwqIcaK
-	84QfpayjX8aD45c4ZrkvbieaRqbpWlxLZWo1VzrjaEjdjBU3VLXmSZBkGrZ52OTq
-	LvpzI4UY3ebYKgCwk7S0jYut+E99lfTGYr/CYGwkJAi3If72KsSKrYwgS54+LTq/
-	uyX3WeEyeyydIV8MV21SB/2iXf3z5oRDZIt1vB8sfwltXKJys9gPTe7Ui/hJQyC8
-	nGM0XfnozDi+tevFOfrF4FPstQEsK05ya7RuBnuCg==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cskyp350n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Mar 2026 15:58:29 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62AEZh1l022712;
-	Tue, 10 Mar 2026 15:58:28 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4crafa9wxk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Mar 2026 15:58:28 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62AFwRjC027022;
-	Tue, 10 Mar 2026 15:58:28 GMT
-Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4crafa9wu5-1;
-	Tue, 10 Mar 2026 15:58:27 +0000
-From: Anthony Yznaga <anthony.yznaga@oracle.com>
-To: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
-        Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
-        surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
-        Jason@zx2c4.com, shuah@kernel.org
-Subject: [PATCH v2 1/2] mm: prevent droppable mappings from being locked
-Date: Tue, 10 Mar 2026 08:58:20 -0700
-Message-ID: <20260310155821.17869-1-anthony.yznaga@oracle.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IZ294Nxe";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="cZ4gae22"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773160724;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WTrJyIjkoDHL73Ra6N52gMw3KMNNm3Z3PiE+LotOIBs=;
+	b=IZ294NxezRm742n7c7UqWTv9zsldZGWZCaQBDeMtMYASEK8Ar8BKkgjega8sjSIoE4rfO+
+	HenWKD5tjfJu6KSVWrsCWTYNk+nKm7Suf0J0OgRPX0aAz5aKqtT5AKz4wnl4ymr8k7JtRp
+	ZxG7JCgIhKWI98J5wXHZPb2wxbVtAlk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-359-OaqMfJOKPJKstvmxShf2mQ-1; Tue, 10 Mar 2026 12:38:42 -0400
+X-MC-Unique: OaqMfJOKPJKstvmxShf2mQ-1
+X-Mimecast-MFC-AGG-ID: OaqMfJOKPJKstvmxShf2mQ_1773160721
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4853b5b0fafso27828605e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 09:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773160721; x=1773765521; darn=vger.kernel.org;
+        h=date:content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WTrJyIjkoDHL73Ra6N52gMw3KMNNm3Z3PiE+LotOIBs=;
+        b=cZ4gae22OdRU+AdXKcX2YUbZtmw5CFfZyvtN0rxf0SjobOH5MQoGz2xm35aCK8n5Zo
+         ErqmX8hIUFAk8nd8lMH6Rs2N3pcy4frFEZV88YYj6g7rmVXt/N7c+wvRQ4xbtgyR3jkn
+         CsMB/dzvtbpAUIe/ERwzRUfE/s8NE/byT1K9rDDwsi+6cgQXd/i8ha/ukkgn9vSiaw22
+         OggwfIkG3nESSwaBVhMyRk3fhgiL9JJbnnCLq8a4JdqMSmMOcHcQ5YfDfyIu6ce4Pj78
+         W/wHJYZo8UWNLTQT9dHRiR4fdCPJ65w53Krzqx5r76FHrRosIaGQ9MwJSZqwblgHSFZT
+         RUAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773160721; x=1773765521;
+        h=date:content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WTrJyIjkoDHL73Ra6N52gMw3KMNNm3Z3PiE+LotOIBs=;
+        b=b1Vwfrok8lYOOds6RRRRXO5stBst7uLp6tvBm9AEYCYsH4brVDtSNKN5m7tDE7hIsc
+         xZxvtpJSkD4yrG5BftmzjuRL4gSLNNQh14mOSEKYWm2+3/6GqCjRmhOyv7+ubdRXI26t
+         GEcaHAvbJG2RmtocklfksA9f4lvhOxUPlfPVfChFv+dyMWA5Pg04tuc4y/lVJQyxD2sE
+         IOYo0Y/rR2OzjKvI8DeM1YvUdu8owx5ggTsLLUMDU+BQn6dOf069afvhpyHSORgcvMa3
+         Bod/M5/L35VCL3dtcEb1so1a46aoCjdV5shN3450LsqJJBX/aGJ85mJRIhYqHq0srpng
+         jYdw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxLHnR+8m7JUnFJboJaP4qNcndE/+0o/KN/h9KMWZzownP8A2z31wrbIAqC6bIdt6BLG2IYOWdRyG36IplKP0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZ8RcsVjQI2OsXvRhXknsd0Z/dvmoB/CgHIwNHBjAnRV63J54H
+	pL3CIzLx0fziZJcCXiD8jic1yYh476SQ8jJR8bzSxV0Z09sDUEwIinLJa9sbz+FlOxwQmUB0CsN
+	zTpd13yjsG0BBMk+AvR6wF9ztplUrf4hVdL9qnu+P8cxj3Xjx9gNvxuOmidbLqw0+REd4xg==
+X-Gm-Gg: ATEYQzz12py8QRn88/oqIBJANtEy04tR7YdfDp0c/QGowrwDG+KeRf23ovRb7H+MSxs
+	xzsCL4qDgfUyeCTWdmFHcfA2QF53xhjmOK/qu7ncVWqzLBbQ8olMwcCv+qPI/c/3kRtvD+m8uyc
+	EYv1HqKAE3s26kewGUPH1y/6XOIKMf6HFT9pMSAZpU3as/1e3Rh8jzyQ1vajjkKgDYKJiDMG6cN
+	9lTZOZsnYBzBozwodf4qOVt51xhIBUQaJH1sisBsgxtMGSjo+AE6/bc03ik4ijf+AiCk1W0zRZ5
+	JCvTFOhCobZUV345x3eBUrJMIRjEuAebLEaS3Jmundgj6qVzYw8gqj4+jJ5PvEv7PDJLhNDFchg
+	uuBqnDFdjjLgWl4bxh2pMoVK1VF2Pr34HdrCUpy4KjmDfJZ4clg==
+X-Received: by 2002:a05:600c:628d:b0:485:39d6:e305 with SMTP id 5b1f17b1804b1-48539d6e3demr141793915e9.23.1773160721173;
+        Tue, 10 Mar 2026 09:38:41 -0700 (PDT)
+X-Received: by 2002:a05:600c:628d:b0:485:39d6:e305 with SMTP id 5b1f17b1804b1-48539d6e3demr141793355e9.23.1773160720561;
+        Tue, 10 Mar 2026 09:38:40 -0700 (PDT)
+Received: from maya.myfinge.rs (ifcgrfdd.trafficplex.cloud. [176.103.220.4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541b6f708sm118851155e9.11.2026.03.10.09.38.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 09:38:40 -0700 (PDT)
+From: Stefano Brivio <sbrivio@redhat.com>
+To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Aaron Conole <aconole@redhat.com>, Ilya Maximets
+ <imaximet@redhat.com>, Eelco Chaudron <echaudro@redhat.com>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, dev@openvswitch.org
+Subject: Re: [PATCH net v4 2/5] selftests: net: run reuseport in an isolated
+ netns
+Message-ID: <20260310173838.143871a1@elisabeth>
+In-Reply-To: <20260309152013.565216-3-aleksey.oladko@virtuozzo.com>
+References: <20260309152013.565216-1-aleksey.oladko@virtuozzo.com>
+	<20260309152013.565216-3-aleksey.oladko@virtuozzo.com>
+Organization: Red Hat
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.49; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-10_03,2026-03-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
- definitions=main-2603100139
-X-Proofpoint-GUID: 3ANEJ9zuxwbaKK0FOosQOnxfOLriMh2V
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDEzOSBTYWx0ZWRfX5pR1s/plwPJM
- MViPNiMklGdGKAA2mkRnPrJ5sLUYq13b+k4KDZ3wGxz6cF/d+3bbrePc2iZR4wvTTA3BSESsG9n
- ec5xBEY8h+RJCi70R3AqT9l/88yHAQftO3gCYtPk6owA1Kitdn/OWQgtXrjuGSb+J3fPrgwEGXI
- v9tyKNmy714ZzMFMK6U2ddyUceTRS5cU1phT/n6+2Ssh4MEev5Ms6qAZMU2mV8T/q24V8Bb8qWf
- dUvajm+yezMBXP2uNHJoWestU2BZ0/WtyiR//PT6O7IRGCSrqlA40Srbu7IYmPrh80SRUPXJvCC
- RxsFUOemI3bNn2j/AQR9Mz3P8V3dpKWrAAefslK1JuFKNCxMQlms1Tmuzq001Tfnxiq34EhC6Pz
- CHI9B+BQDBhy3anvgePs7icHCYliVke8Pe+nZl2UFRxvQftT+N5o5gstxN/sAOlRxgTEFQPqJaI
- haHj9KL8pUAU6gVxnQw==
-X-Proofpoint-ORIG-GUID: 3ANEJ9zuxwbaKK0FOosQOnxfOLriMh2V
-X-Authority-Analysis: v=2.4 cv=XP89iAhE c=1 sm=1 tr=0 ts=69b03fa5 cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
- a=iWkOVUfiZeQ8vpaLj3YA:9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Date: Tue, 10 Mar 2026 17:38:39 +0100 (CET)
 
-Droppable mappings must not be lockable. There is a check for VMAs with
-VM_DROPPABLE set in mlock_fixup() along with checks for other types of
-unlockable VMAs which ensures this when calling mlock()/mlock2().
+Sorry for the late review, just one hint here (no changes requested):
 
-For mlockall(MCL_FUTURE), the check for unlockable VMAs is different.
-In apply_mlockall_flags(), if the flags parameter has MCL_FUTURE set, the
-current task's mm's default VMA flag field mm->def_flags has VM_LOCKED
-applied to it. VM_LOCKONFAULT is also applied if MCL_ONFAULT is also set.
-When these flags are set as default in this manner they are cleared in
-__mmap_complete() for new mappings that do not support mlock. A check for
-VM_DROPPABLE in __mmap_complete() is missing resulting in droppable
-mappings created with VM_LOCKED set. To fix this and reduce that chance of
-similar bugs in the future, introduce and use vma_supports_mlock().
+On Mon,  9 Mar 2026 15:20:10 +0000
+Aleksei Oladko <aleksey.oladko@virtuozzo.com> wrote:
 
-Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always lazily freeable mappings")
-Suggested-by: David Hildenbrand <david@kernel.org>
-Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
----
-v2:
- - Implement vma_supports_mlock() instead of vma flags mask (DavidH)
- - Add selftests (Lorenzo)
+> The reuseport_* tests (bpf, bpf_cpu, bpf_numa, dualstack) currently use
+> a fixed port range. This can cause intermittent test failures when the
+> ports are already in use by other services:
+> 
+>   failed to bind receive socket: Address already in use
+> 
+> To avoid conflicts, run these tests in separate network namespaces using
+> unshare. Each test now has its own isolated network stack, preventing
+> port collisions with the host services.
+> 
+> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+> ---
+>  tools/testing/selftests/net/reuseport_bpf.c       | 11 +++++++++++
+>  tools/testing/selftests/net/reuseport_bpf_cpu.c   | 10 ++++++++++
+>  tools/testing/selftests/net/reuseport_bpf_numa.c  | 10 ++++++++++
+>  tools/testing/selftests/net/reuseport_dualstack.c | 11 +++++++++++
+>  4 files changed, 42 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
+> index b6634d6da3d6..12e48b97b862 100644
+> --- a/tools/testing/selftests/net/reuseport_bpf.c
+> +++ b/tools/testing/selftests/net/reuseport_bpf.c
+> @@ -23,6 +23,7 @@
+>  #include <sys/socket.h>
+>  #include <sys/resource.h>
+>  #include <unistd.h>
+> +#include <sched.h>
+>  
+>  #include "kselftest.h"
+>  
+> @@ -455,8 +456,18 @@ static __attribute__((destructor)) void main_dtor(void)
+>  	setrlimit(RLIMIT_MEMLOCK, &rlim_old);
+>  }
+>  
+> +static void setup_netns(void)
+> +{
+> +	if (unshare(CLONE_NEWNET))
+> +		error(1, errno, "failed to unshare netns");
+> +	if (system("ip link set lo up"))
+> +		error(1, 0, "failed to bring up lo interface in netns");
 
- include/linux/hugetlb_inline.h    |  2 +-
- mm/internal.h                     | 10 ++++++++++
- mm/mlock.c                        | 10 ++++++----
- mm/vma.c                          |  4 +---
- tools/testing/vma/include/stubs.h |  5 +++++
- 5 files changed, 23 insertions(+), 8 deletions(-)
+I don't have much against this approach, except that it needs root /
+UID 0 (but these are BPF tests anyway, and that was also the case for
+3/5 before), and that it's a bit ugly to invoke ip-link like that.
 
-diff --git a/include/linux/hugetlb_inline.h b/include/linux/hugetlb_inline.h
-index 593f5d4e108b..755281fab23d 100644
---- a/include/linux/hugetlb_inline.h
-+++ b/include/linux/hugetlb_inline.h
-@@ -30,7 +30,7 @@ static inline bool is_vma_hugetlb_flags(const vma_flags_t *flags)
- 
- #endif
- 
--static inline bool is_vm_hugetlb_page(struct vm_area_struct *vma)
-+static inline bool is_vm_hugetlb_page(const struct vm_area_struct *vma)
- {
- 	return is_vm_hugetlb_flags(vma->vm_flags);
- }
-diff --git a/mm/internal.h b/mm/internal.h
-index cb0af847d7d9..8c67637abcdd 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -1218,6 +1218,16 @@ static inline struct file *maybe_unlock_mmap_for_io(struct vm_fault *vmf,
- 	}
- 	return fpin;
- }
-+
-+static inline bool vma_supports_mlock(const struct vm_area_struct *vma)
-+{
-+	if (vma->vm_flags & (VM_SPECIAL | VM_DROPPABLE))
-+		return false;
-+	if (vma_is_dax(vma) || is_vm_hugetlb_page(vma))
-+		return false;
-+	return vma != get_gate_vma(current->mm);
-+}
-+
- #else /* !CONFIG_MMU */
- static inline void unmap_mapping_folio(struct folio *folio) { }
- static inline void mlock_new_folio(struct folio *folio) { }
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 2f699c3497a5..73551c71cebf 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -472,10 +472,12 @@ static int mlock_fixup(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 	int ret = 0;
- 	vm_flags_t oldflags = vma->vm_flags;
- 
--	if (newflags == oldflags || (oldflags & VM_SPECIAL) ||
--	    is_vm_hugetlb_page(vma) || vma == get_gate_vma(current->mm) ||
--	    vma_is_dax(vma) || vma_is_secretmem(vma) || (oldflags & VM_DROPPABLE))
--		/* don't set VM_LOCKED or VM_LOCKONFAULT and don't count */
-+	if (newflags == oldflags || vma_is_secretmem(vma) ||
-+	    !vma_supports_mlock(vma))
-+		/*
-+		 * Don't set VM_LOCKED or VM_LOCKONFAULT and don't count.
-+		 * For secretmem, don't allow the memory to be unlocked.
-+		 */
- 		goto out;
- 
- 	vma = vma_modify_flags(vmi, *prev, vma, start, end, &newflags);
-diff --git a/mm/vma.c b/mm/vma.c
-index be64f781a3aa..18c3c5280748 100644
---- a/mm/vma.c
-+++ b/mm/vma.c
-@@ -2589,9 +2589,7 @@ static void __mmap_complete(struct mmap_state *map, struct vm_area_struct *vma)
- 
- 	vm_stat_account(mm, vma->vm_flags, map->pglen);
- 	if (vm_flags & VM_LOCKED) {
--		if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
--					is_vm_hugetlb_page(vma) ||
--					vma == get_gate_vma(mm))
-+		if (!vma_supports_mlock(vma))
- 			vm_flags_clear(vma, VM_LOCKED_MASK);
- 		else
- 			mm->locked_vm += map->pglen;
-diff --git a/tools/testing/vma/include/stubs.h b/tools/testing/vma/include/stubs.h
-index 947a3a0c2566..416bb93f5005 100644
---- a/tools/testing/vma/include/stubs.h
-+++ b/tools/testing/vma/include/stubs.h
-@@ -426,3 +426,8 @@ static inline void vma_adjust_trans_huge(struct vm_area_struct *vma,
- }
- 
- static inline void hugetlb_split(struct vm_area_struct *, unsigned long) {}
-+
-+static inline bool vma_supports_mlock(const struct vm_area_struct *vma)
-+{
-+	return false;
-+}
+Anyway, should you or somebody else ever need a snippet that does this
+as unprivileged user (giving CLONE_NEWUSER at the same time) and without
+external tools or libraries, I made this a while ago:
+
+  https://archives.passt.top/passt-dev/20231206160808.3d312733@elisabeth/
+
+It detaches the network namespace, brings up 'lo' with a minimalistic
+netlink implementation, and lets you do whatever you need there.
+
+I guess ideally it could live under selftests/net/lib/ and be used from
+C programs or as stand-alone tool for shell scripts as well.
+
+I don't see myself polishing things up and proposing that in the
+foreseeable future, but I thought maybe you're interested in it.
+
+> +}
+> +
+>  int main(void)
+>  {
+> +	setup_netns();
+> +
+>  	fprintf(stderr, "---- IPv4 UDP ----\n");
+>  	/* NOTE: UDP socket lookups traverse a different code path when there
+>  	 * are > 10 sockets in a group.  Run the bpf test through both paths.
+> diff --git a/tools/testing/selftests/net/reuseport_bpf_cpu.c b/tools/testing/selftests/net/reuseport_bpf_cpu.c
+> index 2d646174729f..ddfe92f6597a 100644
+> --- a/tools/testing/selftests/net/reuseport_bpf_cpu.c
+> +++ b/tools/testing/selftests/net/reuseport_bpf_cpu.c
+> @@ -228,10 +228,20 @@ static void test(int *rcv_fd, int len, int family, int proto)
+>  		close(rcv_fd[cpu]);
+>  }
+>  
+> +static void setup_netns(void)
+> +{
+> +	if (unshare(CLONE_NEWNET))
+> +		error(1, errno, "failed to unshare netns");
+> +	if (system("ip link set lo up"))
+> +		error(1, 0, "failed to bring up lo interface in netns");
+> +}
+> +
+>  int main(void)
+>  {
+>  	int *rcv_fd, cpus;
+>  
+> +	setup_netns();
+> +
+>  	cpus = sysconf(_SC_NPROCESSORS_ONLN);
+>  	if (cpus <= 0)
+>  		error(1, errno, "failed counting cpus");
+> diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
+> index 2ffd957ffb15..8ec52fc5ef41 100644
+> --- a/tools/testing/selftests/net/reuseport_bpf_numa.c
+> +++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
+> @@ -230,10 +230,20 @@ static void test(int *rcv_fd, int len, int family, int proto)
+>  		close(rcv_fd[node]);
+>  }
+>  
+> +static void setup_netns(void)
+> +{
+> +	if (unshare(CLONE_NEWNET))
+> +		error(1, errno, "failed to unshare netns");
+> +	if (system("ip link set lo up"))
+> +		error(1, 0, "failed to bring up lo interface in netns");
+> +}
+> +
+>  int main(void)
+>  {
+>  	int *rcv_fd, nodes;
+>  
+> +	setup_netns();
+> +
+>  	if (numa_available() < 0)
+>  		ksft_exit_skip("no numa api support\n");
+>  
+> diff --git a/tools/testing/selftests/net/reuseport_dualstack.c b/tools/testing/selftests/net/reuseport_dualstack.c
+> index fb7a59ed759e..0eaf739d0c85 100644
+> --- a/tools/testing/selftests/net/reuseport_dualstack.c
+> +++ b/tools/testing/selftests/net/reuseport_dualstack.c
+> @@ -25,6 +25,7 @@
+>  #include <sys/types.h>
+>  #include <sys/socket.h>
+>  #include <unistd.h>
+> +#include <sched.h>
+>  
+>  static const int PORT = 8888;
+>  
+> @@ -156,10 +157,20 @@ static void test(int *rcv_fds, int count, int proto)
+>  	close(epfd);
+>  }
+>  
+> +static void setup_netns(void)
+> +{
+> +	if (unshare(CLONE_NEWNET))
+> +		error(1, errno, "failed to unshare netns");
+> +	if (system("ip link set lo up"))
+> +		error(1, 0, "failed to bring up lo interface in netns");
+> +}
+> +
+>  int main(void)
+>  {
+>  	int rcv_fds[32], i;
+>  
+> +	setup_netns();
+> +
+>  	fprintf(stderr, "---- UDP IPv4 created before IPv6 ----\n");
+>  	build_rcv_fd(AF_INET, SOCK_DGRAM, rcv_fds, 5);
+>  	build_rcv_fd(AF_INET6, SOCK_DGRAM, &(rcv_fds[5]), 5);
+
 -- 
-2.47.3
+Stefano
 
