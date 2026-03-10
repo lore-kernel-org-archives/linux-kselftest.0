@@ -1,30 +1,32 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AAC303CB0
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 02:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D222B303A15
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 02:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773108341; cv=none; b=s4Bp463Ifd4dTDaJgrz3iCb3y0p/yUjhFCOcyOskSNKl9AeIiKB/a6AbBShMt1+U1uYO14wNV1ua1LGon9vYei39j09HCkfUZg8juPHP7CEEnFYE/PzVacHNiVbxS2YxNBV8+hHCBNPAhAP8tIdhKRsdw4UX5g3B9Wgp8Tt2SEY=
+	t=1773108344; cv=none; b=PLbipCoRnuXSvlYj4YJT1S6mCcucieV7jWdSnbY/GTx77pj/c+1uVzIEzqcmcTYUT86yZMomIAX3G51TceOLd3KFTqe+b7tP9wFjs0UZyCr6h9mVHwOcc03DplSkHwdrwmjhsMTc4WkA0O0V1baPGTua1a38rOgDiHqqJSImYHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773108341; c=relaxed/simple;
-	bh=W5AVjXeHdqxm5PYzTmryBI88xuVy0bHLk3Czk6jvrGs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cSgLbJoNs3rAetAnY8MUr7PD1u271b2ATRYVKSrhmPG2UIU5BslqocqUc33O+Iy0c4hh+01E+O3ux4zlkn6oLZBDQGO7AFCXyijbQwHBWKs6L1jVjvRi2yK7YDH938ElSJ5KqCsCYlCAnUFMB2QT1WJFZgwonAJBRNiYLBRa1cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F31taDUG; arc=none smtp.client-ip=91.218.175.179
+	s=arc-20240116; t=1773108344; c=relaxed/simple;
+	bh=LIdkEGBWo9mZ6u+HWblbI00HwBK7dNvIAibOfxHGI+Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=br9A+SdwLU4NIYPa1NNs6VcZGIggeGPo2Rev1gw8aBseNS6jTyerDmbvA+pwHX5jdxrmsDGltwx+UmXz+EaoinS7O1qIG+7BYZD3bwG8fZhrg8ZX7AtshA6Gxu2j4TEQP9n2oBcPnVZay8c0ZBJ3dQ1K1rFntgXqZKIfAzw1/CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GuWdX+0/; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F31taDUG"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GuWdX+0/"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773108338;
+	t=1773108340;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=UYuQqtHEBc7YbB3gscISEdBsLp6z9TR53HhOrMI9M7c=;
-	b=F31taDUG/PsiNylO2BJv6LgwjhQ1ScOZCg+AolTt7s3LyL9EZC5KcUYnmoYbQmT2BEl4wN
-	ZDoNnSfi2I0ppfEouH+L7f8LSoTUxXGIMzLIhCysCGzquwNydlljOGk/gzEwBeGkU9uFfv
-	7H/1+7QCAJf1i/sYuK7rzjv/jy+Y6NE=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ln2krVl2jzEJNwnoVRufgqLx/4bxUV/txyd9CDOh+dU=;
+	b=GuWdX+0/mD2hqXX+eFB/CgGAkfKRRI2SFzxseM5Dr3WYEXQ8X3/JmaJdngFLzHOpBC6RHr
+	aYYDhpzqHK12BY4B2X7+OeACBqZP+VUod3AK9SxKT7s+2R33UL4+S593baqm9IC221lGYg
+	DX+NZIjn6odce9HtfEdg1rhqOKAmD2s=
 From: Zhu Yanjun <yanjun.zhu@linux.dev>
 To: jgg@ziepe.ca,
 	leon@kernel.org,
@@ -34,9 +36,11 @@ To: jgg@ziepe.ca,
 	linux-kselftest@vger.kernel.org,
 	dsahern@kernel.org
 Cc: Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: [PATCH v5 0/4] RDMA/rxe: Add the support that rxe can work in net namespace
-Date: Tue, 10 Mar 2026 03:05:14 +0100
-Message-ID: <20260310020519.101415-1-yanjun.zhu@linux.dev>
+Subject: [PATCH v5 1/4] RDMA/nldev: Add dellink function pointer
+Date: Tue, 10 Mar 2026 03:05:15 +0100
+Message-ID: <20260310020519.101415-2-yanjun.zhu@linux.dev>
+In-Reply-To: <20260310020519.101415-1-yanjun.zhu@linux.dev>
+References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,95 +50,53 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Currently rxe does not work correctly in network namespaces.
+The newlink function pointer is added. And the sock listening on port 4791
+is added in the newlink function. So the dellink function is needed to
+remove the sock.
 
-When the rdma_rxe module is loaded, a UDP socket listening on port
-4791 is created in init_net. When users run:
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+---
+ drivers/infiniband/core/nldev.c | 6 ++++++
+ include/rdma/rdma_netlink.h     | 2 ++
+ 2 files changed, 8 insertions(+)
 
-    ip link add ... type rxe
-
-inside another network namespace, the RXE RDMA link is created but it
-cannot function properly because the underlying UDP socket belongs to
-init_net. Other network namespaces cannot use that socket.
-
-To address this issue, this series introduces net namespace support
-for rxe and moves socket management to be per network namespace.
-
-The series first introduces per-net namespace management for the IPv4
-and IPv6 sockets used by rxe. The sockets are created when the network
-namespace becomes active and are released when the namespace is
-destroyed.
-
-Based on this infrastructure, rxe RDMA links are then created and
-destroyed within each network namespace. This ensures that both the
-UDP sockets and RDMA links are correctly scoped to the namespace in
-which they are used.
-
-With these changes, rxe RDMA links can be created and used both in
-init_net and in other network namespaces, and resources are properly
-cleaned up during namespace teardown.
-
-The series also includes a selftest to verify RXE functionality in
-network namespaces.
-
-"
-make -C tools/testing/selftests TARGETS=rdma run_tests
-make: Entering directory 'tools/testing/selftests'
-make[1]: Nothing to be done for 'all'.
-TAP version 13
-1..4
-# timeout set to 45
-# selftests: rdma: rxe_rping_between_netns.sh
-ok 1 selftests: rdma: rxe_rping_between_netns.sh
-# timeout set to 45
-# selftests: rdma: rxe_ipv6.sh
-ok 2 selftests: rdma: rxe_ipv6.sh
-# timeout set to 45
-# selftests: rdma: rxe_socket_with_netns.sh
-ok 3 selftests: rdma: rxe_socket_with_netns.sh
-# timeout set to 45
-# selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-ok 4 selftests: rdma: rxe_test_NETDEV_UNREGISTER.sh
-make: Leaving directory 'tools/testing/selftests'
-"
-
-V4 -> V5: Fix rcu warnings
-V3 -> V4: Squash all the changes about rxe_ns.c/h into one commit.
-V2 -> V3: Fix build warnings
-V1 -> V2: Fix the problems based on David Ahern.
-
-Zhu Yanjun (4):
-  RDMA/nldev: Add dellink function pointer
-  RDMA/rxe: Add net namespace support for IPv4/IPv6 sockets
-  RDMA/rxe: Support RDMA link creation and destruction per net namespace
-  RDMA/rxe: Add testcase for net namespace rxe
-
- MAINTAINERS                                   |   1 +
- drivers/infiniband/core/nldev.c               |   6 +
- drivers/infiniband/sw/rxe/Makefile            |   3 +-
- drivers/infiniband/sw/rxe/rxe.c               |  38 ++++-
- drivers/infiniband/sw/rxe/rxe_net.c           | 145 +++++++++++++-----
- drivers/infiniband/sw/rxe/rxe_net.h           |   9 +-
- drivers/infiniband/sw/rxe/rxe_ns.c            | 124 +++++++++++++++
- drivers/infiniband/sw/rxe/rxe_ns.h            |  30 ++++
- include/rdma/rdma_netlink.h                   |   2 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/rdma/Makefile         |   7 +
- tools/testing/selftests/rdma/config           |   3 +
- tools/testing/selftests/rdma/rxe_ipv6.sh      |  63 ++++++++
- .../selftests/rdma/rxe_rping_between_netns.sh |  85 ++++++++++
- .../selftests/rdma/rxe_socket_with_netns.sh   |  76 +++++++++
- .../rdma/rxe_test_NETDEV_UNREGISTER.sh        |  63 ++++++++
- 16 files changed, 609 insertions(+), 47 deletions(-)
- create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.c
- create mode 100644 drivers/infiniband/sw/rxe/rxe_ns.h
- create mode 100644 tools/testing/selftests/rdma/Makefile
- create mode 100644 tools/testing/selftests/rdma/config
- create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
- create mode 100755 tools/testing/selftests/rdma/rxe_rping_between_netns.sh
- create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
- create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
-
+diff --git a/drivers/infiniband/core/nldev.c b/drivers/infiniband/core/nldev.c
+index 2220a2dfab24..48684930660a 100644
+--- a/drivers/infiniband/core/nldev.c
++++ b/drivers/infiniband/core/nldev.c
+@@ -1824,6 +1824,12 @@ static int nldev_dellink(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 		return -EINVAL;
+ 	}
+ 
++	if (device->link_ops) {
++		err = device->link_ops->dellink(device);
++		if (err)
++			return err;
++	}
++
+ 	ib_unregister_device_and_put(device);
+ 	return 0;
+ }
+diff --git a/include/rdma/rdma_netlink.h b/include/rdma/rdma_netlink.h
+index 326deaf56d5d..2fd1358ea57d 100644
+--- a/include/rdma/rdma_netlink.h
++++ b/include/rdma/rdma_netlink.h
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/netlink.h>
+ #include <uapi/rdma/rdma_netlink.h>
++#include <rdma/ib_verbs.h>
+ 
+ struct ib_device;
+ 
+@@ -126,6 +127,7 @@ struct rdma_link_ops {
+ 	struct list_head list;
+ 	const char *type;
+ 	int (*newlink)(const char *ibdev_name, struct net_device *ndev);
++	int (*dellink)(struct ib_device *dev);
+ };
+ 
+ void rdma_link_register(struct rdma_link_ops *ops);
 -- 
 2.53.0
 
