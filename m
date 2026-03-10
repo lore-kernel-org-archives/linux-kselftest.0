@@ -1,372 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011028.outbound.protection.outlook.com [52.101.65.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDD244A730;
-	Tue, 10 Mar 2026 09:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773133329; cv=none; b=JI02k0G/0ECh7U5sm3LQ6BKZu7Bj6s+aoVgArd0cQQquZiJdzpfWjguVYXZdq4J0iZced8VBFEeD/l4wagNG9ec9chCJhK4/BeN71/ArsTh8H0J/zpe1fW7N5Bj3DlFpzxaXFLmSXOAJpcus9KZPw55YsZ+z7ERCtcUN2bc+P3M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773133329; c=relaxed/simple;
-	bh=7/+CScebjqrwjU/XOKnAk989QkKtZNfgllipDqNazeI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LRivcDb5BLAdz84lOavkAG4TPINR9HfxjlKzOoW+pPjEFof6YePeuwi0Pgzvu23A0wsHy5mPkUgckLWsLf9pR0L/367q4KRmWSrnALpxlQ7BIOx5s9dWtvrdJIqTg5NIq1g9oQwD8MSjTb+1wlBbTzN9eoUfD9RcHyflRemHF9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mP8URUXu; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477F843CEED;
+	Tue, 10 Mar 2026 09:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773133690; cv=fail; b=nSYyE49i5vbe6j1D/o4FpBfeGAMk6PJ0MmEqlY2fDDHv2EdR5t1mmXrr0DTSxP22F7BKCpFzEb2dkgxIu/qLLGU9uiZ6zYeonn/3LQ5Dj+MlcSc50Zo8PuR9T9rLEgPP3zP5euK8R5eZ+tR4u/djRHTD0Fmr8Zu/5s+h9mPvvjc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773133690; c=relaxed/simple;
+	bh=FpTDZl764DYCYe8MO8XfzBGT2gG/19FEabaocAfKZjo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=VYjlq5iQGh5V4TLUlWdyultclzu+fyj1Z/n+iwn3QFa1b+SAR5dw44e99PgxzkG9HxYeWmp1gN1P5y01peDnrAFANllYWGC8anhz08tecCPJ/v4frh4FdO0bqoJ646liG1KxNJqisliwh+GofkMW/84DtYNU9zMwkqfvbZLNiOU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=C2RkSwuq; arc=fail smtp.client-ip=52.101.65.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mP8URUXu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A158FC2BC86;
-	Tue, 10 Mar 2026 09:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773133329;
-	bh=7/+CScebjqrwjU/XOKnAk989QkKtZNfgllipDqNazeI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mP8URUXu+gs9UEViDQlvYV+n+TMFtmHuTXHhxdvyLZbokokALF50uLvL1UnkQL/G2
-	 Yk19UQVyYC1mn8IXOS+C8TjvUO96vS21umZVHAeGUKENQuSZ3RASvqhJfaICAgPcCI
-	 ox9lq4XjUTqP1rQ0+iQLfWqoTmHS6vRjuN++dM2iRGsXQePwSMBHMurrCaxxgl5ECS
-	 dKF5Lb8sGO81NJHXwaQXG4Zyhc2xnYYnMSSaBjCXNQ82R017qhftwaDGPgVTgegkDs
-	 7CDAuSGVI0bZDrm8DTYoXW/zk+TGRGX/zk1QByP+JRrWsDr0kJIra4rQ3SmxDkeU8v
-	 +rlaY2Mb1XiXw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.12] bpf: Fix u32/s32 bounds when ranges cross min/max boundary
-Date: Tue, 10 Mar 2026 05:01:15 -0400
-Message-ID: <20260310090145.2709021-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260310090145.2709021-1-sashal@kernel.org>
-References: <20260310090145.2709021-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="C2RkSwuq"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VdPyTd9RUa76a9Kb83xHlTKCjTESsS9sWUNBgN4zzhPNcwzFBfkt3t7wqD3sdaRkX94lhxvuUgJygTZM0bgrXfRgHZ0l3zViNPXQ3mFJsUHoQqKqtk+flgKEvhxzPio6Rl6WI2bJB1qHD7aXQi/bYWdHTNEhWkRivKY6DV0wVAUWxR3bauJFFqbrA9r9nqV3VJA5W7SaslcSKWCoAC42XsDc+YWr+ox6Je083Cq/PifwCe2liYbNs4912IskWgpN6J69e9Q5TI9XMpsPssiM75djr341/4EIlFifrk/CubfccnzhDduaPXIJ7UeUybwT1MyPmmCOnaHCQ9abMPCJ8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6A/LN0/QNqa7kkmB98HsjeVYBVvSEsAzDT3U3GIW9kE=;
+ b=cyTY+KqwKcLCgnxUvMth+/F/fSI/5n71SODtG6AWHlVgarA6dPKVq1hQjmbnfsrR/HGb0L+agTBN6Z5ib8ydSXOcQM8LQCUNyHj43l5WBsAaNBeXDREYJVKPuObwSGbTdvYYbrQqb3FXIPoxIItbDaHhN1GrbGZpAB/pwT/t1r8ahUKjqFKNJY9G4BmCgHQDhgXRuaASecXQCEaPsnlb5b8Bo2fjSiReS8rky4PdrviwOBaC5lRJElY/U1EWQMTKM9OCwkSMYgwhl+YrObEMbq7T1KPvTLZpnGFRFZO9lyyTu2cIimXpWSL7ICrhd1EstM/8Iwkn+W3dn4/taqydnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6A/LN0/QNqa7kkmB98HsjeVYBVvSEsAzDT3U3GIW9kE=;
+ b=C2RkSwuq9iyRuvCyUa5yym/3i2a2zivGeuZjMHmezWq2yKqtVTKZ+KqPYcDZyl+cIDOX3mUa8ubHzsBAJ7sIJ0vliFF4JgrvgtF8NURiMiH1E3f7IoF43QJJON5WnxVKvh+q3V6NEqQP5sdbJMPkryLVKl9sxnCuwXzdtS37wG2LmGN1tSNfcwI3cGfzNEsX2jkxJKPPvo5HCniG/hHzuWnKsOwa07dQnQ2NjYeQtcQ6opPXpH7WqpaXau8E2hzuIYWLEvNT0aVnCrDrHNm/9RkXVIngIAJXuyXu0gtnBeFdw09D805W0xxDkGP3gkSFroq+No19ZUoQUMwoAwfkHQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
+ by GVXPR04MB10852.eurprd04.prod.outlook.com (2603:10a6:150:225::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.25; Tue, 10 Mar
+ 2026 09:08:05 +0000
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9678.023; Tue, 10 Mar 2026
+ 09:08:05 +0000
+Date: Tue, 10 Mar 2026 11:08:02 +0200
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Daniel Golle <daniel@makrotopia.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>
+Subject: Re: [PATCH] selftests: net: local_termination: test link-local
+ protocols
+Message-ID: <20260310090802.3fr4i5wkcyeydlio@skbuf>
+References: <a085c707b3085eea58850f125c51a8868c5fb6f1.1773072062.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a085c707b3085eea58850f125c51a8868c5fb6f1.1773072062.git.daniel@makrotopia.org>
+X-ClientProxiedBy: WA2P291CA0003.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1e::7) To AM9PR04MB8585.eurprd04.prod.outlook.com
+ (2603:10a6:20b:438::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19.6
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|GVXPR04MB10852:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6356e215-08a6-4923-e956-08de7e848a29
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|10070799003|19092799006|7416014|376014|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	sk/pkMqSF3VTo8mox30ijjzgYlObYa7OAkuqyhOqH3+yhoguYhrFaPW6AZai1VspW3PlqwjX+kBXRsmf0/ldke6NrDpKF/4Wlxzq29rTJRoWVbHc5reoeMfiODkTi/0159y92NL95I4dsfHRVooyVgK/a07d2WXyKquprPt9/VnERvzC+Kiv7gNn3kBrgsT4n8y57i7qCPxKM+gLJCfdubLi1bBSfx/NZzcv8u6QO0ZZZGpqjbIfKQDhxcvTtc2UJCoOuf7jDY+tkN9liLsp3h41ulwR1VhnemcKkg93XH0JhJxB+ZSJb3BkMx9MUjpp4D/KXAmZDRsOy/hrunZaaBcGqqmzH7Motqt0lHMFkEdFjzwzohRe1Yaeaa7qSWTn9vZfrPIlxLm7RZsBPWYMvwyIDpNFnmU65i1uWQQ1zXqli7pU/8JckK59FFRab16JOJbfpyCnOo0J698JgohkF7RY+qv6HvKwZuHcXz/fVp2y8DOtUSZcezSjyez+yIl0FyHPefBQLDPPNYCrl8emQeqgWAjECz7iI3VwupIBc3XCZTjtU+vpYrA0kuWyT/d3+J3qon5YruFfZkl5RWTooBsOW5I7QhNJL4qZYCR5loz7zBKxkfpAI2SIc4mUj7sT3Kh98ZxGHLPcC7kdVFgD1YYkRjgUvw1cYvxag/WOwzqgdVjAoe9Fs2qgh+hWVfvTXR5qXdZ4SXQ/wcmuFnniNDoUkKagINp7mkYbupAjogE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(19092799006)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?W2sFoBrmbKor+Bk5fi1M9s1F7ZdauYutZGH6GulByi8O0zb3KLiPpDWEnfba?=
+ =?us-ascii?Q?VpCH5iP3/4r9iL1Vj5paH++uzjToCIyLEbjJ9eWNkLxMa501lfzoQ5hFfYJO?=
+ =?us-ascii?Q?oIwmw/oeFazWNNiJ6Akzw/DqDrorQo/nOw4RpoWwTyheeKWmxnMv1EXMBg1h?=
+ =?us-ascii?Q?sIBBBEgDifXJ4ZtImcCh1acQ6TGwDYTdIvrMBmEkg0QmoHjmN5W3DIPedGqZ?=
+ =?us-ascii?Q?yiZxK9dml6OSl4pAJ/TUZLbvIBx91G0nbe4VThWjlw1ao4PcbiGpx0RV2wJU?=
+ =?us-ascii?Q?zVuCYI+Ma1o+YcIG84ZNY8lDcrTF8/Dfwj6e2Rw6Wh4pTxSEVZPOCECxQhlH?=
+ =?us-ascii?Q?Nhm+EhodFpj4LCdaMy/c9XbGZm0DfX2vYyvrQOWbtYMfPaQ7yDOqJkj8O5Ti?=
+ =?us-ascii?Q?kAlCMeRFfDskx+FMwOLpkxQok/cHlI1rsZvfyPuvVfA0+Kn+y9x0zRkvhmZS?=
+ =?us-ascii?Q?WK+eeTlqC0vPWYkVGECBg6oLAJ3dp3hUHz4WN+5ckTWIixzzezfpXBaSFA6t?=
+ =?us-ascii?Q?AKhfizk8pdMCcMr1z15EjNhCG9lgjzxEybqnBZ33gQ988YkRbsxiOPaQZq0G?=
+ =?us-ascii?Q?84uObpKUH0iU6e/qJbhMFaUkEhI9AWGRit3F7ilTuiZ23SJFhXs6maSauRHZ?=
+ =?us-ascii?Q?8DICqBi+dLP0gvBNQXpiIVioPWVHukDk9HShrvw2rYQhG2VeW4mu9BCGLcgo?=
+ =?us-ascii?Q?pHk2i7FQ6D4F6JwEmW/cwKqkEcwYSGWhODj6PwbjvqpEZdM0NPxgY6DBzKE5?=
+ =?us-ascii?Q?2Uu/ChJVbPGmsFzpDIhLU8DmZ2yK9RdV4usn1V6fRb0UadEXZ5QeXBcREYRb?=
+ =?us-ascii?Q?XDmS8LP5LTtlZVTr7t7A92BIfzbndXKXsWoWwuX8Ls7uDUSvAoLc1g/OTgoP?=
+ =?us-ascii?Q?S+dK5uEKP7D5DwOcszzClWpWEuMGfmtGTt0qAwzIwpB7aGm8fzxphu0dXeyR?=
+ =?us-ascii?Q?AGurk+PgHRqow25hywjOt3tyzQ/DQrSnCMtoeJc8j7zy1Gi4V5DwVNA/MdRa?=
+ =?us-ascii?Q?9VP9EOGhHgCzEZ0zT0OX+hEAAPaPZkKJaUyg88Z6KQc91+hTom+1JcS/fOBy?=
+ =?us-ascii?Q?nY30EvKQ/VqGmloxh2464IMCR2wOZvIErPFcIuuzHWKMmlCmChvkHdJ8NBTJ?=
+ =?us-ascii?Q?UC6AykoqObp2eXuxsloNCIAtxgjz/k0fccuQN6dROhurpsLsjYSmEntDI21v?=
+ =?us-ascii?Q?UJpiRx7CR66lVsfdDA4iIQhSOwtPI+Jl8lXBs+nkCnlquY/8NskuyOYrc6ZX?=
+ =?us-ascii?Q?mrisAuAy/2wkaXRLXGnrhg5B0dGwOW76okLJEL8FvReyBh9ZNfF0VwuLsTus?=
+ =?us-ascii?Q?ddOdL3c1fg0eJHZi36VdtPSm0KxXr01PvSIkHJsP67YtGOtnpq0CzNP5oCsk?=
+ =?us-ascii?Q?skpgpDyJv3BgMFD1suN7yPdgw3d4IJEahtvhCW2oTsen3dyGgZ5/RoNdbIBl?=
+ =?us-ascii?Q?j5VDWmE/EoUSqKyCaDut6Ox/k9aAvubdLuyZCRvjXQpHkQytkYs9fZa5Vbtd?=
+ =?us-ascii?Q?hJiPg2hQjGHM651l+kdo6WTWOHoOkXK7FNrqkvUw2lLpg0BFc82+c+IpvcNu?=
+ =?us-ascii?Q?wbxOVVk7C8Sw+cBaEr0Vs74aDw5WtWkUkkGYa4++lhl8GCArYQrxDyHOgWdz?=
+ =?us-ascii?Q?r+KfNzUkreRiwcunEBDqoCvhN8R3cWxakav4Z/sXe1gYHx5L9F0tPM/LXe4P?=
+ =?us-ascii?Q?52/HNTHLTRPpzR9Lg/je4HADhRzRPDhxJseXLe1iPRr/4yFFcJz55H9sCNYV?=
+ =?us-ascii?Q?KsLkYkHGA2RdOF9KU7r90IORGjmHc8c8b9xrdmufvAP/tas0VyGnK2eumjlf?=
+X-MS-Exchange-AntiSpam-MessageData-1: EacxRQoqbiwf+KK62a89rUs40TJo4kyQcyA=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6356e215-08a6-4923-e956-08de7e848a29
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2026 09:08:05.3133
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9qj7WSvYGaAmgvVFcoJUYsm5UGJMnVYs2Z+NMFUR8P4bW55EMj5pv8EiZJ9hScrqeU+yKIIHs53vOWOr3kbgmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10852
 
-From: Eduard Zingerman <eddyz87@gmail.com>
+On Mon, Mar 09, 2026 at 04:03:57PM +0000, Daniel Golle wrote:
+> Add tests to local_termination.sh to verify that link-local frames
+> arrive. On some switches the DSA driver uses bridges to connect the
+> user ports to their CPU ports. More "intelligent" switches typically
+> don't forward link-local frames, but may trap them to an internal
+> microcontroller. The driver may have to change trapping rules, so
+> link-local frames end up on the DSA CPU ports instead of being
+> silently dropped or trapped to the internal microcontroller of the
+> switch.
+> 
+> Add two tests which help to validate this has been done correctly:
+>  - Link-local STP BPDU should always arrive at the Linux netdev
 
-[ Upstream commit fbc7aef517d8765e4c425d2792409bb9bf2e1f13 ]
+I don't really like the "always" comment here. The only reason why STP
+is part of the forwarding plane and not the control plane is because the
+bridge has stp_state=0. See br_handle_frame():
 
-Same as in __reg64_deduce_bounds(), refine s32/u32 ranges
-in __reg32_deduce_bounds() in the following situations:
+	if (unlikely(is_link_local_ether_addr(dest))) {
+		u16 fwd_mask = p->br->group_fwd_mask_required;
 
-- s32 range crosses U32_MAX/0 boundary, positive part of the s32 range
-  overlaps with u32 range:
+		/*
+		 * See IEEE 802.1D Table 7-10 Reserved addresses
+		 *
+		 * Assignment		 		Value
+		 * Bridge Group Address		01-80-C2-00-00-00
+		 * (MAC Control) 802.3		01-80-C2-00-00-01
+		 * (Link Aggregation) 802.3	01-80-C2-00-00-02
+		 * 802.1X PAE address		01-80-C2-00-00-03
+		 *
+		 * 802.1AB LLDP 		01-80-C2-00-00-0E
+		 *
+		 * Others reserved for future standardization
+		 */
+		fwd_mask |= p->group_fwd_mask;
+		switch (dest[5]) {
+		case 0x00:	/* Bridge Group Address */
+			/* If STP is turned off,
+			   then must forward to keep loop detection */
+			if (p->br->stp_enabled == BR_NO_STP ||
+			    fwd_mask & (1u << dest[5]))
+				goto forward;
+			*pskb = skb;
+			__br_handle_local_finish(skb);
+			return RX_HANDLER_PASS;
 
-  0                                                   U32_MAX
-  |  [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]              |
-  |----------------------------|----------------------------|
-  |xxxxx s32 range xxxxxxxxx]                       [xxxxxxx|
-  0                     S32_MAX S32_MIN                    -1
+perhaps this can be part of the commit message somehow.
 
-- s32 range crosses U32_MAX/0 boundary, negative part of the s32 range
-  overlaps with u32 range:
+>  - Link-local LLDP should arrive at standalone ports (and the test
+>    should be skipped on bridged ports similar to how it is done
+>    for the IEEE1588v2/PTP tests)
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
 
-  0                                                   U32_MAX
-  |              [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]  |
-  |----------------------------|----------------------------|
-  |xxxxxxxxx]                       [xxxxxxxxxxxx s32 range |
-  0                     S32_MAX S32_MIN                    -1
+With that addressed:
 
-- No refinement if ranges overlap in two intervals.
-
-This helps for e.g. consider the following program:
-
-   call %[bpf_get_prandom_u32];
-   w0 &= 0xffffffff;
-   if w0 < 0x3 goto 1f;    // on fall-through u32 range [3..U32_MAX]
-   if w0 s> 0x1 goto 1f;   // on fall-through s32 range [S32_MIN..1]
-   if w0 s< 0x0 goto 1f;   // range can be narrowed to  [S32_MIN..-1]
-   r10 = 0;
-1: ...;
-
-The reg_bounds.c selftest is updated to incorporate identical logic,
-refinement based on non-overflowing range halves:
-
-  ((x ∩ [0, smax]) ∩ (y ∩ [0, smax])) ∪
-  ((x ∩ [smin,-1]) ∩ (y ∩ [smin,-1]))
-
-Reported-by: Andrea Righi <arighi@nvidia.com>
-Reported-by: Emil Tsalapatis <emil@etsalapatis.com>
-Closes: https://lore.kernel.org/bpf/aakqucg4vcujVwif@gpd4/T/
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/r/20260306-bpf-32-bit-range-overflow-v3-1-f7f67e060a6b@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-Now I have a comprehensive understanding of this commit. Let me provide
-my analysis.
-
-## Analysis
-
-### What the commit fixes
-
-This commit fixes a correctness bug in the BPF verifier's
-`__reg32_deduce_bounds()` function. The function was missing logic to
-refine u32/s32 ranges when the s32 range crosses the sign boundary
-(wraps from positive to negative values). The 64-bit counterpart
-`__reg64_deduce_bounds()` already handled this case (added by commit
-00bf8d0c6c9be), but the 32-bit version was incomplete.
-
-### Bug mechanism
-
-When an s32 range crosses the U32_MAX/0 boundary, it splits into two
-intervals: a positive part [0..s32_max] and a negative part
-[s32_min..-1]. If the u32 range overlaps with only ONE of these halves,
-the verifier should be able to narrow both ranges. Without this fix, the
-verifier falls into states where `u32_min_value > u32_max_value`,
-causing **REG INVARIANTS VIOLATION** warnings and rejecting valid BPF
-programs.
-
-### Real-world impact
-
-- **Reported-by**: Andrea Righi (NVIDIA) and Emil Tsalapatis - two
-  independent reporters indicating real-world impact
-- The bug prevents legitimate BPF programs from loading (e.g., scx
-  scheduler programs)
-- The commit message includes a concrete example BPF program that fails
-  without this fix
-- BPF verifier bugs can have **security implications** since incorrect
-  range tracking could potentially allow out-of-bounds memory access if
-  the verifier is too permissive (though this specific bug makes it too
-  restrictive)
-
-### Code change analysis
-
-The kernel change is **small and surgical** - only 24 lines added to
-`__reg32_deduce_bounds()` in `verifier.c`. The logic directly mirrors
-the already-proven 64-bit equivalent at lines 2606-2621, just using
-u32/s32 types instead of u64/s64. The two cases are:
-
-1. u32 range entirely in the positive half of the split s32 range →
-   narrow both
-2. u32 range entirely in the negative half of the split s32 range →
-   narrow both
-
-### Selftest changes
-
-The selftest changes (reg_bounds.c) are more extensive but are test-
-only. They add `range_refine_in_halves()` and `range_union()` helper
-functions and rename `range_improve` to `range_intersection` for
-clarity. These changes mirror the verifier logic and ensure exhaustive
-testing.
-
-### Dependencies
-
-- The 64-bit equivalent (commit 00bf8d0c6c9be) should ideally be present
-  in the stable tree, as the new 32-bit code references
-  `__reg64_deduce_bounds()` in its comments. However, the actual kernel
-  code change is self-contained within `__reg32_deduce_bounds()`.
-- The companion commit d8f4532f56dd1 ("Revert selftests/bpf: Update
-  reg_bound range refinement logic") removes test logic now superseded
-  by this fix's test changes. For backporting, only the verifier.c
-  change is strictly needed.
-
-### Risk assessment
-
-- **Low risk**: The kernel change adds an `else` branch to existing
-  code, only activated when s32 range crosses the sign boundary. When
-  the ranges overlap in two intervals, no refinement is done (safe
-  fallback).
-- **Well-tested**: Has Reviewed-by and Acked-by tags from BPF subsystem
-  experts. Includes comprehensive selftest updates.
-- **Mirrors proven logic**: Directly copies the approach from
-  `__reg64_deduce_bounds()` which has been in mainline since July 2025.
-
-### Stable criteria assessment
-
-- **Fixes a real bug**: YES - verifier invariant violations, program
-  rejection
-- **Obviously correct**: YES - mirrors existing 64-bit logic, reviewed
-  by multiple experts
-- **Small and contained**: YES - 24 lines of kernel code in one function
-- **No new features**: Correct - fixes existing range deduction, no API
-  changes
-- **Security relevant**: BPF verifier correctness is always security-
-  sensitive
-
-## Verification
-
-- Verified `__reg64_deduce_bounds()` at lines 2567-2622 contains the
-  exact same pattern being added to `__reg32_deduce_bounds()` (read from
-  verifier.c)
-- Verified commit 00bf8d0c6c9be ("bpf: Improve bounds when s64 crosses
-  sign boundary") is the 64-bit predecessor by Paul Chaignon (git log +
-  git show)
-- Verified the revert commit d8f4532f56dd1 is companion cleanup of
-  superseded test logic
-- Confirmed two independent Reported-by tags (Andrea Righi/NVIDIA and
-  Emil Tsalapatis) from the commit message
-- Verified the code change is self-contained within
-  `__reg32_deduce_bounds()` by reading verifier.c lines 2460-2488
-- Confirmed the `else` branch only activates when `(u32)s32_min >
-  (u32)s32_max`, meaning s32 range crosses the sign boundary - this is
-  the expected guard condition
-
-**YES**
-
- kernel/bpf/verifier.c                         | 24 +++++++
- .../selftests/bpf/prog_tests/reg_bounds.c     | 62 +++++++++++++++++--
- 2 files changed, 82 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 783d984d7884d..48698c617bebc 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2460,6 +2460,30 @@ static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
- 	if ((u32)reg->s32_min_value <= (u32)reg->s32_max_value) {
- 		reg->u32_min_value = max_t(u32, reg->s32_min_value, reg->u32_min_value);
- 		reg->u32_max_value = min_t(u32, reg->s32_max_value, reg->u32_max_value);
-+	} else {
-+		if (reg->u32_max_value < (u32)reg->s32_min_value) {
-+			/* See __reg64_deduce_bounds() for detailed explanation.
-+			 * Refine ranges in the following situation:
-+			 *
-+			 * 0                                                   U32_MAX
-+			 * |  [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]              |
-+			 * |----------------------------|----------------------------|
-+			 * |xxxxx s32 range xxxxxxxxx]                       [xxxxxxx|
-+			 * 0                     S32_MAX S32_MIN                    -1
-+			 */
-+			reg->s32_min_value = (s32)reg->u32_min_value;
-+			reg->u32_max_value = min_t(u32, reg->u32_max_value, reg->s32_max_value);
-+		} else if ((u32)reg->s32_max_value < reg->u32_min_value) {
-+			/*
-+			 * 0                                                   U32_MAX
-+			 * |              [xxxxxxxxxxxxxx u32 range xxxxxxxxxxxxxx]  |
-+			 * |----------------------------|----------------------------|
-+			 * |xxxxxxxxx]                       [xxxxxxxxxxxx s32 range |
-+			 * 0                     S32_MAX S32_MIN                    -1
-+			 */
-+			reg->s32_max_value = (s32)reg->u32_max_value;
-+			reg->u32_min_value = max_t(u32, reg->u32_min_value, reg->s32_min_value);
-+		}
- 	}
- }
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-index d93a0c7b1786f..db3e25685b68f 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -422,15 +422,69 @@ static bool is_valid_range(enum num_t t, struct range x)
- 	}
- }
- 
--static struct range range_improve(enum num_t t, struct range old, struct range new)
-+static struct range range_intersection(enum num_t t, struct range old, struct range new)
- {
- 	return range(t, max_t(t, old.a, new.a), min_t(t, old.b, new.b));
- }
- 
-+/*
-+ * Result is precise when 'x' and 'y' overlap or form a continuous range,
-+ * result is an over-approximation if 'x' and 'y' do not overlap.
-+ */
-+static struct range range_union(enum num_t t, struct range x, struct range y)
-+{
-+	if (!is_valid_range(t, x))
-+		return y;
-+	if (!is_valid_range(t, y))
-+		return x;
-+	return range(t, min_t(t, x.a, y.a), max_t(t, x.b, y.b));
-+}
-+
-+/*
-+ * This function attempts to improve x range intersecting it with y.
-+ * range_cast(... to_t ...) looses precision for ranges that pass to_t
-+ * min/max boundaries. To avoid such precision loses this function
-+ * splits both x and y into halves corresponding to non-overflowing
-+ * sub-ranges: [0, smin] and [smax, -1].
-+ * Final result is computed as follows:
-+ *
-+ *   ((x ∩ [0, smax]) ∩ (y ∩ [0, smax])) ∪
-+ *   ((x ∩ [smin,-1]) ∩ (y ∩ [smin,-1]))
-+ *
-+ * Precision might still be lost if final union is not a continuous range.
-+ */
-+static struct range range_refine_in_halves(enum num_t x_t, struct range x,
-+					   enum num_t y_t, struct range y)
-+{
-+	struct range x_pos, x_neg, y_pos, y_neg, r_pos, r_neg;
-+	u64 smax, smin, neg_one;
-+
-+	if (t_is_32(x_t)) {
-+		smax = (u64)(u32)S32_MAX;
-+		smin = (u64)(u32)S32_MIN;
-+		neg_one = (u64)(u32)(s32)(-1);
-+	} else {
-+		smax = (u64)S64_MAX;
-+		smin = (u64)S64_MIN;
-+		neg_one = U64_MAX;
-+	}
-+	x_pos = range_intersection(x_t, x, range(x_t, 0, smax));
-+	x_neg = range_intersection(x_t, x, range(x_t, smin, neg_one));
-+	y_pos = range_intersection(y_t, y, range(x_t, 0, smax));
-+	y_neg = range_intersection(y_t, y, range(y_t, smin, neg_one));
-+	r_pos = range_intersection(x_t, x_pos, range_cast(y_t, x_t, y_pos));
-+	r_neg = range_intersection(x_t, x_neg, range_cast(y_t, x_t, y_neg));
-+	return range_union(x_t, r_pos, r_neg);
-+
-+}
-+
- static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t, struct range y)
- {
- 	struct range y_cast;
- 
-+	if (t_is_32(x_t) == t_is_32(y_t))
-+		x = range_refine_in_halves(x_t, x, y_t, y);
-+
- 	y_cast = range_cast(y_t, x_t, y);
- 
- 	/* If we know that
-@@ -444,7 +498,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
- 	 */
- 	if (x_t == S64 && y_t == S32 && y_cast.a <= S32_MAX  && y_cast.b <= S32_MAX &&
- 	    (s64)x.a >= S32_MIN && (s64)x.b <= S32_MAX)
--		return range_improve(x_t, x, y_cast);
-+		return range_intersection(x_t, x, y_cast);
- 
- 	/* the case when new range knowledge, *y*, is a 32-bit subregister
- 	 * range, while previous range knowledge, *x*, is a full register
-@@ -462,7 +516,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
- 		x_swap = range(x_t, swap_low32(x.a, y_cast.a), swap_low32(x.b, y_cast.b));
- 		if (!is_valid_range(x_t, x_swap))
- 			return x;
--		return range_improve(x_t, x, x_swap);
-+		return range_intersection(x_t, x, x_swap);
- 	}
- 
- 	if (!t_is_32(x_t) && !t_is_32(y_t) && x_t != y_t) {
-@@ -480,7 +534,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
- 	}
- 
- 	/* otherwise, plain range cast and intersection works */
--	return range_improve(x_t, x, y_cast);
-+	return range_intersection(x_t, x, y_cast);
- }
- 
- /* =======================
--- 
-2.51.0
-
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
