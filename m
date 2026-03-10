@@ -1,221 +1,143 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBBF38D696;
-	Tue, 10 Mar 2026 12:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265173C9457
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 12:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773145058; cv=none; b=JiDwH9zWZzFXyuC3+2z7R3ir84ZzQI/IQNpCAOU1mgUmmFt5h8/Gb8cw7shhfbsrXLaa5PNXnWEKvhKfTEzrjfA/WuGy9RMWhutwxZYOP1ov7g2V8OLmTf3ljZXE7im4+1y9bgFNUgMsBSRcwIy6lhuQc2oOpk0nVm1NykHcDc0=
+	t=1773145720; cv=none; b=Buu6+oqNqXTYrSkgAVML3nllCfcGumUk8IGlWESA9xsatpONbCvcrD1qZn+58Fhycp6RZKrbDZKxpo8FQ4jT5oDNzaOxBIo4qCL24D5wL5L8cyQsdvIvt50csvdNqsQttwuoYcEzkJpjGJguxrOaZTCLzGw1dekt/7e8/ONQ0NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773145058; c=relaxed/simple;
-	bh=MVAorFwASedMUQdlRsrssouaBR0ncU3LBy/pU1ACdEg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OoBGbbiTxHc6/ha/+cPa8bL84EbMhPBl2tj1ukceK/fT611UV57vg694Hk/qZK62HbVmPR7amlEKFn59yPlHJ0M6+XLtpxCacNqhcE+LV9MQzYSbWNlTz3jciiN+8pfKYSJt3EwoOglAx8e69KHz8kM9ENw7in3uVv8Ko9AwZCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=vbwNsLxe; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1773145720; c=relaxed/simple;
+	bh=ziEQMgEt6cFWlyD+Y8SF8ydZXv730TVs827bnSESCP0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PIAPVHh7M7z+oFI1DqepS3QZNzLdKouRAYnFNXEO/icZoPRFc0w19X44MX3Je38vYocTrIUS2o4Z0KGZrEfXtSoG1gqxvTLCUlH6LE8fs/G6r8CJdpI6g3h6gKj/rMdQKh0fuuYti78mIkmMMvsLGCvxBx4wWYDfqyUs2rc+n1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D9vXL/eY; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=EmhJizYd; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="vbwNsLxe"
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62A8xuEP1367922;
-	Tue, 10 Mar 2026 12:17:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=yrMvraipRnMkORyFOvU3Oml7ZdrKvDGYUgiDs6XOkFs=; b=vbwN
-	sLxeQCoYwp2+OIKQEb6fM8s74m428M3b6xQE/hdMH8DWNdF/0rujZdIzzYN7BNlZ
-	DgM3HGyuwpPqdmXFo7jTctibYCfFKFZG8xfRvUM/Bj4rTGRvwViZpsyy4vQ8c7rC
-	zG3BY1dBAupoUYtwQDqOJtFZ9pZkip0PipUomd6zFrUlAmPfnt4selycLA3xc0P5
-	mmfa4BlX9msvS819il1sXqauwof9L3EiDd1Sn+22meSKI4kXxK3l5dnubg2h2ep0
-	5GndgMluRofoWgsOrl3lrrzBHXkDMbrtWsW582RXClwPXV9+ULgrTMIz4qeWywju
-	HEPqV5FlNGC5d1Vz0w==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4crxykgynp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Mar 2026 12:17:07 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Tue, 10 Mar 2026 12:17:01 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <eddyz87@gmail.com>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
-        <haoluo@google.com>, <horms@kernel.org>, <john.fastabend@gmail.com>,
-        <jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-open-source@crowdstrike.com>, <martin.lau@linux.dev>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
-        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support new pointer param types via SCALAR_VALUE for trampolines
-Date: Tue, 10 Mar 2026 23:16:59 +1100
-Message-ID: <20260310121659.25801-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <c4f4e99f83a98179c3413dd7afe5e7e73a98e4d3.camel@gmail.com>
-References: <c4f4e99f83a98179c3413dd7afe5e7e73a98e4d3.camel@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D9vXL/eY";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="EmhJizYd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773145718;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NE9w9NeJUlvy56dU7aps282nSTS20Xf4YKmb2h8N6aw=;
+	b=D9vXL/eYyga5CcXywDCkovqBTrJLKwlkfVaj4Z9avnXEy6q+JjxmXYD3HgUVUyFcO8yZlW
+	8RkKxcaqJLGW+2mh19x/tTs9J9qQY+b+603mqElQj4rcpX45ckP2PtXVGXlsqLfnD7dicU
+	FFnnb75wvLG0okfjbS69O0Pr1H5xUhw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-523-5GYo5y-BPCqiufzn1j32ow-1; Tue, 10 Mar 2026 08:28:37 -0400
+X-MC-Unique: 5GYo5y-BPCqiufzn1j32ow-1
+X-Mimecast-MFC-AGG-ID: 5GYo5y-BPCqiufzn1j32ow_1773145716
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-485375aa56eso19145105e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 05:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773145715; x=1773750515; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NE9w9NeJUlvy56dU7aps282nSTS20Xf4YKmb2h8N6aw=;
+        b=EmhJizYdZn+HECUY1Zld2iv9HrBt2FC9nEfxF5ttvFCaw9hCFy/J8h5CPeThoW8bW6
+         H7bsr77uLlve4J6cVFY7BRDINsxPV+gyMXKVXsltBgM+aeaXO8/mSOYadXUokK1jH7XL
+         o2dARg7XgjZqFKJt/oBOGABUxlycq0XEddbqDB6RLMHzY6oCts7FnyGONPRHeHOWkmGR
+         JDqIjjcLEe64HHft12qaKc+WkMenJsbAcNgiAce6u8SKSA3NMU9DgDyPscEgudfhoXkl
+         oUB+3WyZjiyuaJw5fQAymoGCz/wSScIvlLvyT1zTlUVphlVdXPx6mpULqm8U7gkYCxDm
+         L6cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773145715; x=1773750515;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NE9w9NeJUlvy56dU7aps282nSTS20Xf4YKmb2h8N6aw=;
+        b=CenAysuw2dHnSbT2jirqVLragm6Uwu2/4SZrrwFRkyia4DNOe2eSxnRbWb/NTTS5cH
+         6pQxajyKJsKZIp7zmCfBchLQ5kUuIFY2cOLSf4HLW3UT4leFlnS+O9aUUOOFRNSSBdBv
+         AqHbppgifumfOGhL46KZT3B+bSVoUb66pv2XnRm+JGG9uZ1HVhju2p4zjZQ2aB4Qkv4H
+         0b2FR6Fmn8zZDCHncsH20Fu4v8eXvSCoCnrZXhR7256Emhh4UN/deonq29qPTQen5yme
+         6KHLe/Qc28Cm2jEx0hZ91Yo1uLpk0ZagsA1MuwVMrnsJ1N2wv3PlqObWSYTE8vPg5Vyw
+         Cmyg==
+X-Forwarded-Encrypted: i=1; AJvYcCVETIll1uelORxxdRpsgrHoaAP6AjMDFv7alQlWCcDw5nuA0t/h896omKsLbleIrsCzTaLd8S04DXaI86i5M3M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzyp24AhHliAE/GZmtsEfXIe8kSOTIcJl0EAmwl02xNHKfaCde9
+	Ah7jen8d/70kBw912iZkkSGcWKlmvpLC8Fe0VfMrGaGAWTR6KExuKysntMKqiVn9QxH/AKDeAdo
+	xMH2L9He/2z407pUoC+FoaJuwlzRo1xj8hhmtQ4JbIPfGKOvmWtsda+tN6NI5m4OscPAjMRe+lA
+	3/sZg=
+X-Gm-Gg: ATEYQzzRFZc9TGeS5+L49CLYiTYiKBeWOt8TkXUHXauALdEhRWcoOxzs+9U16Hp2nh/
+	FNko5xVi14s01Wtq5SfhpUTOQv7YPYyAY1StrnP2gpqG4/V6uR5no6jqrVh7TWfwYqEWg/bn1VE
+	rl1lqFnu149J5KbYDvDR2W0+u44KmGmTiZEuHL5DOMlkMsA5WxbFNvfMBnSPZnBbkaot6ac28ZU
+	P5K/OLpqPkebtMgSlnDenqlHl8pqLWcP5I/dV8ZXTl+/AYXyvcVkOBgourG/nn3dmychq+didEd
+	fcDfsBTSFGnXnPZAkP/yQd3rXJwfWj0ED7rGhiOUzSTetxBPDQ2IO3FUEgt9Vtfkz6xbqWGmxix
+	Rojv+nfv6Ug==
+X-Received: by 2002:a05:600c:470d:b0:485:389b:ee5f with SMTP id 5b1f17b1804b1-485389bf08bmr137552235e9.2.1773145715575;
+        Tue, 10 Mar 2026 05:28:35 -0700 (PDT)
+X-Received: by 2002:a05:600c:470d:b0:485:389b:ee5f with SMTP id 5b1f17b1804b1-485389bf08bmr137551685e9.2.1773145715088;
+        Tue, 10 Mar 2026 05:28:35 -0700 (PDT)
+Received: from [10.43.17.131] ([213.175.37.14])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485419c2930sm124103475e9.0.2026.03.10.05.28.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Mar 2026 05:28:34 -0700 (PDT)
+Message-ID: <6a914824-178a-47c3-98f7-f3c3086ab831@redhat.com>
+Date: Tue, 10 Mar 2026 13:28:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH012.crowdstrike.sys (10.100.11.82) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-GUID: muf0gwpN1ymRFua10pBAXBtTyZj5PPg1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDEwNiBTYWx0ZWRfX9rflOR7IFCrl
- 21yIma0F3kFVahtBclWfwzZlWpUjCPemhbo/tINRuUODJLKM+FFZdufvJxZmhCfLNOKz46+BCTP
- SjqGpRntpcuue3NTMs50t9Sb1MxWM/XKdZEsdiM3x9pSTVawLZjDlD6YBFTFsrQQn2zubbYGPmP
- ZeuSGKGWkNlItQfF/iCwEGTCZnly7pkNEmlV0hJYGwklx2BvewIyOotQZnI+UPFnpDHLTlGn/vU
- xP3vTU73KcLUcnmeAZ9jAILPjun090IzM2PmPUiI9eUnvDdAA6cwXxT4CE7PB17wQX9KkP9Qs0Q
- RNpLsNNsUV3+kYhILzU2r8VeapNUzcA4/Y9wik+aTGLlPwD4ztcZGnCxIs+BCB6Bge3zkxMpCGh
- qtk3cmtTeENZKA2Jo8Z3eq4qq4IJGAiOr9tx0y5toBQPzV0QXBpaTwB8vCliWD85mr/GCte3DvI
- rEvRpIT7V1YESrV51Jw==
-X-Proofpoint-ORIG-GUID: muf0gwpN1ymRFua10pBAXBtTyZj5PPg1
-X-Authority-Analysis: v=2.4 cv=M7FA6iws c=1 sm=1 tr=0 ts=69b00bc3 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=NEAV23lmAAAA:8
- a=3kasHXYAN1gmPJuvoZgA:9
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11724
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1015 suspectscore=0 priorityscore=1501
- malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2603100106
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests/bpf: Fix read_iter buffer termination in
+ test_bpffs
+To: Sun Jian <sun.jian.kdev@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>
+References: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, 03 Mar 2026 16:38:57 -0800, Eduard Zingerman wrote:
-> On Wed, 2026-03-04 at 11:22 +1100, Slava Imameev wrote:
-> > On Tue, 03 Mar 2026 14:43:01, Eduard Zingerman wrote:
-> > > On Wed, 2026-03-04 at 08:49 +1100, Slava Imameev wrote:
-> > > > On 2026-03-03 20:05 UTC, Eduard Zingerman wrote:
-> > > > 
-> > > > > > @@ -6902,11 +6921,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
-> > > > > >               }
-> > > > > >       }
-> > > > > > 
-> > > > > > -     /*
-> > > > > > -      * If it's a pointer to void, it's the same as scalar from the verifier
-> > > > > > -      * safety POV. Either way, no futher pointer walking is allowed.
-> > > > > > -      */
-> > > > > > -     if (is_void_or_int_ptr(btf, t))
-> > > > > > +     if (is_ptr_treated_as_scalar(btf, t))
-> > > > > >               return true;
-> > > > > 
-> > > > > I'm probably missing a point here, but what's wrong with Alexei's
-> > > > > suggestion to do this instead:
-> > > > > 
-> > > > >         if (is_ptr_treated_as_scalar(btf, t))
-> > > > >                  return true;
-> > > > > ?
-> > > 
-> > > Uh-oh, I copy-pasted the wrong snippet, sorry.
-> > > The correct snippet is:
-> > > 
-> > >          if (btf_type_is_struct_ptr(btf, t))
-> > >                   return true;
-> > > 
-> > > With it the selftests pass (except for `float` tests noted earlier).
-> > > And regardless of selftests, the code below this point will
-> > > error out if `t` is not a pointer to struct.
-> > 
-> > I think you tested with
-> > 
-> > 	if (!btf_type_is_struct_ptr(btf, t))
-> > 		return true;
-> > 
-> > I decided on a narrower condition, as
-> > 
-> > - if (!btf_type_is_struct_ptr(btf, t)) -
+On 3/10/26 11:21, Sun Jian wrote:
+> read_iter() always NUL-terminated at the end of the buffer, so strstr()
+> could scan uninitialized stack bytes on short reads. Terminate at len and
+> use O_RDONLY.
 > 
-> Yes, sorry again.
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/test_bpffs.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> > changes the existing selection condition from "treat only these types
-> > as scalar" to "treat as scalar any type that is not a pointer to
-> > structure". Technically both approaches cover the problem I'm trying
-> > to solve - multilevel pointer support for structures, but the latter is
-> > open-ended and changes the current approach, which checks for pointers
-> > to int and void. So I'm extending this to int, void, enum 32/64,
-> > function, and corresponding multilevel pointers to these types and
-> > multilevel pointers to structures.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+> index ea933fd151c3..e8021ff0581c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+> @@ -17,11 +17,11 @@ static int read_iter(char *file)
+>  	char buf[1024];
+>  	int fd, len;
+>  
+> -	fd = open(file, 0);
+> +	fd = open(file, O_RDONLY);
+>  	if (fd < 0)
+>  		return -1;
+> -	while ((len = read(fd, buf, sizeof(buf))) > 0) {
+> -		buf[sizeof(buf) - 1] = '\0';
+> +	while ((len = read(fd, buf, sizeof(buf) - 1)) > 0) {
+> +		buf[len] = '\0';
+
+Does this fix any real issue with the test? I can see one very
+hypothetical false negative when the uninitialized memory would contain
+"iter" but that seems very unlikely to happen.
+
+Viktor
+
+>  		if (strstr(buf, "iter")) {
+>  			close(fd);
+>  			return 0;
 > 
-> BTF is defined for the following non-modifier types:
-> - void        [allowed already]
-> - int         [allowed already]
-> - ptr         [multi-level pointers allowed by your patch]
-> - array       [disallowed?]
-> - struct      [single level pointers allowed already,
-> - union		   multi-level allowed by your patch]
-> - enum/enum64 [allowed by your patch]
-> - func_proto  [allowed by your patch]
-> - float       [disallowed]
-> 
-> And a few not reachable from function fields (I think BTF validation
-> checks that these can't be met, but would be good to double-check.
-> If it doesn't, it should):
-> - func
-> - var
-> - datasec
-> 
-> So, effectively you disallow reading from tracing context fields of
-> type: struct (non-pointer), array, float and a few types that can't be
-> specified for struct fields.
-> 
-> Does not seem necessary, tbh.
+> base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
 
-I verified whether PTR->FUNC, PTR->DATASEC, PTR->VAR can be passed to
-btf_ctx_access() in the current mainline.
-
-I added helpers that inject PTR->FUNC, PTR->DATASEC, PTR->VAR as pre or
-post calls to btf_check_meta(). In all cases, the BPF program load
-failed with errors "arg0 type FUNC / DATASEC / VAR is not a struct",
-which indicates that btf_check_meta() can indeed be called with
-PTR->FUNC, PTR->DATASEC, PTR->VAR.
-
-If the condition for pointer check is changed to
-`if (!btf_type_is_struct_ptr(btf, t))`, these BPF programs will load
-successfully with arguments set to scalar().
-
-Do we accept this change in behavior?
-
-Test case with invalid BTF types injection:
-https://github.com/slava-at-cs/bpf/commit/c49af6500ace4e4aceee01c570e3b067aae7e48c
-
-Branch:
-https://github.com/slava-at-cs/bpf/commits/inject-invalid-btf/
-
-To run test:
-./vmtest.sh -- ./test_progs -t verifier_btf_ctx_access
-
-The verifier log:
-=============
-0: R1=ctx() R10=fp0
-; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
-0: (79) r2 = *(u64 *)(r1 +0)
-func 'bpf_fentry_test_invalid_ptr_func' arg0 type FUNC is not a struct
-invalid bpf_context access off=0 size=8
-processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-=============
-
-=============
-0: R1=ctx() R10=fp0
-; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
-0: (79) r2 = *(u64 *)(r1 +0)
-func 'bpf_fentry_test_invalid_ptr_func' arg0 type DATASEC is not a struct
-invalid bpf_context access off=0 size=8
-processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-=============
-
-=============
-0: R1=ctx() R10=fp0
-; asm volatile ("					\ @ verifier_btf_ctx_access.c:85
-0: (79) r2 = *(u64 *)(r1 +0)
-func 'bpf_fentry_test_invalid_ptr_func' arg0 type VAR is not a struct
-invalid bpf_context access off=0 size=8
-processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-=============
