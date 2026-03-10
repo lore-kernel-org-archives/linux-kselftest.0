@@ -1,179 +1,233 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F25C3F2100;
-	Tue, 10 Mar 2026 21:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C22317166
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 22:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773179979; cv=none; b=RwbyH8VcCNykqG8kBlUuynLDfcwRDxGgsbvM8ZSR4pv6fKPJsV35ppAjFBTJoRqn7ZxJviaIhTTlpIys/zDmL4dk+0FSKza3Z4XbGFeCiR+FjgYHVO9ZjCxJfbJ02VqlIIvFJDjlnrUkxyM5utFgCOcT69Dk3DZqEDF2z7JdB5M=
+	t=1773181246; cv=none; b=JgwbNrojQaIobc3zQpmrlow5X3H9Lnhhj0TJdTDV1krK+2uR+oOj22irDL9/fhwDJPGWux/cgJ4HjN1stDUGqtbwdEEwGtOqyTK+7icAGLsAY27Ep1/DKFwzIMU6SO1L33QtNhXGLNfJWi9Q+Kj82sDGMYG7piFPGIm1vfiALjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773179979; c=relaxed/simple;
-	bh=f13w/2doTpmIhJWf4uNRNpxAIztGNJszb7YjfVlaz/U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cZwxNYMsT9dinPJI6pTMnfTEsIjMPyIxddBMncxEWqEWqLcYGPUSixRb111Cg3JCaPxHBeSE5UgHCBHy5M3mlv4LKD5SP2qJO/k6x99Jjb9pPAeEZ0IyMauGHeIWHp75cif6/PWuvoIWZ8aDorFLP7cpV7aCBLHkeElgi1lDt70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=t3LYsIwZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Hrxy2CcX; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1773181246; c=relaxed/simple;
+	bh=avKNWTDhM6bAwEi61OcG+RVe1r6lZ8VLh2TjI3n/Zsw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OaeCQ/vAKVLaG5YvKLLRXsCVcpJCZErPh2Hz+GbVMc+G7TVLzybW+IJiybwc717tgmEQoeWXcFrLRWxeZs9NKfebM4368fGZ43hLH0lTBygZ3sk6dsgYOo4nsWwJad3pCmn2pXGgucZVNlEHBNBQDJ0bk0zPN0YqB8FyhJjHAIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xau2eUuB; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="t3LYsIwZ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Hrxy2CcX"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.stl.internal (Postfix) with ESMTP id C0CC01D0013B;
-	Tue, 10 Mar 2026 17:59:36 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Tue, 10 Mar 2026 17:59:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1773179976; x=
-	1773266376; bh=HUoqezWhH6kt8wLNIqdnuF3T0mjP7eY5jUwHwQGXiXs=; b=t
-	3LYsIwZgFiyE0Ol9Q6U576l1PExPjmKZvkHznd8mfT8PrJv1NYkF9uzMoXtVIx0I
-	92iv3K5DWUnLeuPJ4CUFA1jezYJ3OtmgbLqxpIoen1HR7h+O9BX+9G6V5rIWU4ja
-	2dWODUtJDMLLdbCTljP8z/OmqgyQ81Ayj8F6wlt3zJ2VGmjG9XypsdkiI7K31qol
-	J7OSM40nid9hUvCnEDdslWTkXpT4cxGfEpddEbCiPH9aZNb+rl/4yYMwpildGxO7
-	gvxhz6L6FL0GeQEAEzsBkfl36+lXjct0JYS7vOHCqjUwRSY0geTHMU4N/VTBY7lv
-	Vd9DhxgQUH6Rpl/dSRPRg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1773179976; x=1773266376; bh=H
-	UoqezWhH6kt8wLNIqdnuF3T0mjP7eY5jUwHwQGXiXs=; b=Hrxy2CcXLOfkJaz6C
-	gdf6VZIb4MkmR78RD0TLNBybZgondCO9tsFslL556/e/Tje3EJHxYeTYx/GAsop9
-	tYCCdNpJRzQfV7+by4agLx+4NHvB1nzHEAySNIBxiynQd74fDwvrKcWTAEpyS0sJ
-	edUbe356Dc1JPjzSy2nicaGA89hCBBh8C95zKu12df0fG4AyEf9BGP1ttXciY5RX
-	GAiUnvcMqt+APqVAC6X919mnPmnP3mY8NtrF7B/oswjS+B2c8bF3QV+759+SULu2
-	JOKMOKVmUwRIQBAAa/n2e6sCObYuTgZkrfF+AazxERtCgDt6dXW6Pb1NMjt9Qtnb
-	hxKdw==
-X-ME-Sender: <xms:SJSwaR9eGJIO4o3ubbk-l511GFEUR0ZKTM_hYQPcDizzQ5SDZLnY-Q>
-    <xme:SJSwafBccaOoUCwc_TYbN3K9e6IbJ6Gi1029NcREDKwZlLFe9ntwtaE3HMtsBFF4h
-    JXJsBNLe0uvkwu-bYs0ZFD-z83LkS4cdp0Q8l6u8VT4j3ULDn8FyTs>
-X-ME-Received: <xmr:SJSwaWQBeqQ7cKTmnVsnsAx191iSEEL_mMehm2q0yDdgP0Fm9B98km5lE4Yp>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvkedvudeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepieeiueeiteehtdefheekhffhgeevuefhteevueeljeeijeeiveehgfeh
-    udfghefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopeeipdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehsugesqhhuvggrshihshhnrghilhdrnhgvthdprhgtphht
-    thhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhksh
-    gvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhunhhi
-    hihusehgohhoghhlvgdrtghomhdprhgtphhtthhopegushgrhhgvrhhnsehkvghrnhgvlh
-    drohhrgh
-X-ME-Proxy: <xmx:SJSwaWuOkjQJnvLI5nmXlkVglgKcRBZh_Oqh0ljCMX8P0oC2YsCFdA>
-    <xmx:SJSwaS08BzFoDbJvaVIU1XZKiQ1mYlR7IiIGEVvR5AN0guGvZn-AoQ>
-    <xmx:SJSwaXURb950NvpjIV0ct9Fj_jkvALDfv5ggWDdLHEsrv3SG6hWi-Q>
-    <xmx:SJSwadJoGfi7s0PT6XHwrRbhV7T9NKEG_7j5yedCkXPHyRMr7sB6Mw>
-    <xmx:SJSwaWKONHZjljmi82wO2uDIX2-96vEp29d0f7-9yR5H4GM9EZlfI_Ux>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 Mar 2026 17:59:36 -0400 (EDT)
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: netdev@vger.kernel.org
-Cc: Sabrina Dubroca <sd@queasysnail.net>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	David Ahern <dsahern@kernel.org>
-Subject: [PATCH net 2/2] selftests: rtnetlink: add neighbour update test
-Date: Tue, 10 Mar 2026 22:59:17 +0100
-Message-ID: <d28f72b5b4ff4c9ecbbbde06146a938dcc4c264a.1772894876.git.sd@queasysnail.net>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <cover.1772894876.git.sd@queasysnail.net>
-References: <cover.1772894876.git.sd@queasysnail.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xau2eUuB"
+Message-ID: <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773181242;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=USTS8bgmtjRodpsAsHJK5v2/OgPARYxfKHdIFoQaapk=;
+	b=xau2eUuBC5kEVoNphuT/ROBU0VOnrt1SDxk9ipiW/6Zmn/Y/PUn5p17FWCJbVsrIKLJvLH
+	vg7vG/Ex3vGPJhr/9F51EwkuhTOwb1DeTTtGhBGjx1Tkgy3UCfddL3QivmJXEIDGPZITMX
+	p4Oh4YC6B6ocaDYYH4XGsxnBHim1GQI=
+Date: Tue, 10 Mar 2026 15:20:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
+To: Michal Luczaj <mhal@rbox.co>, Jiayuan Chen <mrpre@163.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
+ <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
+ <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Check that protocol and flags are updated correctly for
-neighbour and pneigh entries.
 
-Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
----
- tools/testing/selftests/net/rtnetlink.sh | 55 ++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
 
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index 248c2b91fe42..5a5ff88321d5 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -28,6 +28,7 @@ ALL_TESTS="
- 	kci_test_fdb_get
- 	kci_test_fdb_del
- 	kci_test_neigh_get
-+	kci_test_neigh_update
- 	kci_test_bridge_parent_id
- 	kci_test_address_proto
- 	kci_test_enslave_bonding
-@@ -1160,6 +1161,60 @@ kci_test_neigh_get()
- 	end_test "PASS: neigh get"
- }
- 
-+kci_test_neigh_update()
-+{
-+	dstip=10.0.2.4
-+	dstmac=de:ad:be:ef:13:37
-+	local ret=0
-+
-+	for proxy in "" "proxy" ; do
-+		# add a neighbour entry without any flags
-+		run_cmd ip neigh add $proxy $dstip dev "$devdummy" lladdr $dstmac nud permanent
-+		run_cmd_grep $dstip ip neigh show $proxy
-+		run_cmd_grep_fail "$dstip dev $devdummy .*\(managed\|use\|router\|extern\)" ip neigh show $proxy
-+
-+		# set the extern_learn flag, but no other
-+		run_cmd ip neigh change $proxy $dstip dev "$devdummy" extern_learn
-+		run_cmd_grep "$dstip dev $devdummy .* extern_learn" ip neigh show $proxy
-+		run_cmd_grep_fail "$dstip dev $devdummy .* \(managed\|use\|router\)" ip neigh show $proxy
-+
-+		# flags are reset when not provided
-+		run_cmd ip neigh change $proxy $dstip dev "$devdummy"
-+		run_cmd_grep $dstip ip neigh show $proxy
-+		run_cmd_grep_fail "$dstip dev $devdummy .* extern_learn" ip neigh show $proxy
-+
-+		# add a protocol
-+		run_cmd ip neigh change $proxy $dstip dev "$devdummy" protocol boot
-+		run_cmd_grep "$dstip dev $devdummy .* proto boot" ip neigh show $proxy
-+
-+		# protocol is retained when not provided
-+		run_cmd ip neigh change $proxy $dstip dev "$devdummy"
-+		run_cmd_grep "$dstip dev $devdummy .* proto boot" ip neigh show $proxy
-+
-+		# change protocol
-+		run_cmd ip neigh change $proxy $dstip dev "$devdummy" protocol static
-+		run_cmd_grep "$dstip dev $devdummy .* proto static" ip neigh show $proxy
-+
-+		# also check an extended flag for non-proxy neighs
-+		if [ "$proxy" = "" ]; then
-+			run_cmd ip neigh change $proxy $dstip dev "$devdummy" managed
-+			run_cmd_grep "$dstip dev $devdummy managed" ip neigh show $proxy
-+
-+			run_cmd ip neigh change $proxy $dstip dev "$devdummy" lladdr $dstmac
-+			run_cmd_grep_fail "$dstip dev $devdummy managed" ip neigh show $proxy
-+		fi
-+
-+		run_cmd ip neigh del $proxy $dstip dev "$devdummy"
-+	done
-+
-+	if [ $ret -ne 0 ];then
-+		end_test "FAIL: neigh update"
-+		return 1
-+	fi
-+
-+	end_test "PASS: neigh update"
-+}
-+
- kci_test_bridge_parent_id()
- {
- 	local ret=0
--- 
-2.51.2
+On 3/6/26 6:09 AM, Michal Luczaj wrote:
+> On 3/6/26 06:01, Jiayuan Chen wrote:
+>>
+>> On 3/6/26 7:30 AM, Michal Luczaj wrote:
+>>> unix_stream_connect() sets sk_state (`WRITE_ONCE(sk->sk_state,
+>>> TCP_ESTABLISHED)`) _before_ it assigns a peer (`unix_peer(sk) = newsk`).
+>>> sk_state == TCP_ESTABLISHED makes sock_map_sk_state_allowed() believe that
+>>> socket is properly set up, which would include having a defined peer. IOW,
+>>> there's a window when unix_stream_bpf_update_proto() can be called on
+>>> socket which still has unix_peer(sk) == NULL.
+>>>
+>>>             T0 bpf                            T1 connect
+>>>             ------                            ----------
+>>>
+>>>                                   WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
+>>> sock_map_sk_state_allowed(sk)
+>>> ...
+>>> sk_pair = unix_peer(sk)
+>>> sock_hold(sk_pair)
+>>>                                   sock_hold(newsk)
+>>>                                   smp_mb__after_atomic()
+>>>                                   unix_peer(sk) = newsk
+>>>
+>>> BUG: kernel NULL pointer dereference, address: 0000000000000080
+>>> RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
+>>> Call Trace:
+>>>     sock_map_link+0x564/0x8b0
+>>>     sock_map_update_common+0x6e/0x340
+>>>     sock_map_update_elem_sys+0x17d/0x240
+>>>     __sys_bpf+0x26db/0x3250
+>>>     __x64_sys_bpf+0x21/0x30
+>>>     do_syscall_64+0x6b/0x3a0
+>>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>>
+>>> Initial idea was to move peer assignment _before_ the sk_state update[1],
+>>> but that involved an additional memory barrier, and changing the hot path
+>>> was rejected. Then a check during proto update was considered[2], but a
+>>> follow-up discussion[3] concluded the root cause is sockmap taking a wrong
+>>> lock. Or, more specifically, an insufficient lock[4].
+>>>
+>>> Thus, teach sockmap about the af_unix-specific locking: af_unix protects
+>>> critical sections under unix_state_lock() operating on unix_sock::lock.
+>>>
+>>> [1]: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@rbox.co/
+>>> [2]: https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/
+>>> [3]: https://lore.kernel.org/netdev/7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev/
+>>> [4]: https://lore.kernel.org/netdev/CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com/
+>>>
+>>> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+>>> Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
+>>> Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
+>>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>>> ---
+>>>    net/core/sock_map.c | 35 +++++++++++++++++++++++++++++------
+>>>    1 file changed, 29 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+>>> index 7ba6a7f24ccd..6109fbe6f99c 100644
+>>> --- a/net/core/sock_map.c
+>>> +++ b/net/core/sock_map.c
+>>> @@ -12,6 +12,7 @@
+>>>    #include <linux/list.h>
+>>>    #include <linux/jhash.h>
+>>>    #include <linux/sock_diag.h>
+>>> +#include <net/af_unix.h>
+>>>    #include <net/udp.h>
+>>>    
+>>>    struct bpf_stab {
+>>> @@ -115,19 +116,43 @@ int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype)
+>>>    }
+>>>    
+>>>    static void sock_map_sk_acquire(struct sock *sk)
+>>> -	__acquires(&sk->sk_lock.slock)
+>>>    {
+>>>    	lock_sock(sk);
+>>> +
+>>> +	if (sk_is_unix(sk))
+>>> +		unix_state_lock(sk);
+>>> +
+>>>    	rcu_read_lock();
+>>>    }
+>>>    
+>>
+>> This introduces a new ordering constraint: lock_sock() before
+>> unix_state_lock(). Kuniyuki flagged in the v2 review that taking
+>> lock_sock() inside unix_state_lock() in the future would create an
+>> ABBA deadlock, which is exactly why the order was settled this way. However,
+>> the thread did not reach a conclusion on whether that constraint should be
+>> documented in the code.
+>>
+>> Since there is nothing enforcing this ordering mechanically, a brief comment
+>> at sock_map_sk_acquire() would help future readers avoid introducing the
+>> inverse ordering.
+> 
+> Sure, will do.
+> 
+>>>    static void sock_map_sk_release(struct sock *sk)
+>>> -	__releases(&sk->sk_lock.slock)
+>>>    {
+>>>    	rcu_read_unlock();
+>>> +
+>>> +	if (sk_is_unix(sk))
+>>> +		unix_state_unlock(sk);
+>>> +
+>>>    	release_sock(sk);
+>>>    }
+>>>    
+>>> +static inline void sock_map_sk_acquire_fast(struct sock *sk)
+>>> +{
+>>> +	local_bh_disable();
+>>> +	bh_lock_sock(sk);
+>>> +
+>>> +	if (sk_is_unix(sk))
+>>> +		unix_state_lock(sk);
+>>> +}
+>>> +
+>>
+>>
+>> v2 and v3 differ here in a way that deserves a closer look. In v2, AF_UNIX
+>> sockets took only unix_state_lock() in the fast path, skipping
+>> bh_lock_sock() entirely:
+>>
+>> /* v2 */
+>> if (sk_is_unix(sk))
+>>     unix_state_lock(sk);
+>> else
+>>     bh_lock_sock(sk);
+>>
+>> v3 takes both for AF_UNIX sockets.
+>>
+>> bh_lock_sock() protects sock::sk_lock.slock, whereas the state that
+>> actually needs protection here — sk_state and unix_peer() — lives under
+>> unix_sock::lock. Since unix_state_lock() is already sufficient to close
+>> the race against unix_stream_connect(), is bh_lock_sock() still doing
+>> anything useful for AF_UNIX sockets in this path?
+> 
+> Yeah, good point. I think I was just trying to keep the _fast variant
+> aligned with the sleepy one. Which I agree might be unnecessary.
 
+I hope the common use case should not be calling 
+bpf_map_update_elem(sockmap) only.
+
+Beside, from looking at the may_update_sockmap(), I don't know if it is 
+even doable (or useful) to bpf_map_update_elem(unix_sk) in 
+tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking 
+at unix_dgram_sendmsg() => sk_filter(). It was not the original use case 
+when the bpf_map_update_elem(sockmap) support was added iirc.
+
+The only path left is bpf_iter, which I believe was the primary use case 
+when adding bpf_map_update_elem(sockmap) support [1]. It would be nice 
+to avoid bh_lock_sock() when calling from all bpf_iter (tcp/udp/unix) 
+where lock_sock() has already been done. It is more for 
+reading-correctness though. This just came to my mind. 
+has_current_bpf_ctx() can be used to check this. sockopt_lock_sock() has 
+been using it to conditionally take lock_sock() or not. [ I would still 
+keep patch 3 though. ]
+
+[1]: https://lore.kernel.org/bpf/20200821102948.21918-1-lmb@cloudflare.com/
+
+> 
+> In a parallel thread I've asked Kuniyuki if it might be better to
+> completely drop patch 2/5, which would change how we interact with
+> sock_map_close(). Lets see how it goes.
+> 
+
+If patch 2 is dropped, lock_sock() is always needed for unix_sk?
