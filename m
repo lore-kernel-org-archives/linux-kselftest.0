@@ -1,183 +1,276 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011028.outbound.protection.outlook.com [52.101.65.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477F843CEED;
-	Tue, 10 Mar 2026 09:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E57A43E487
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 09:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773133690; cv=fail; b=nSYyE49i5vbe6j1D/o4FpBfeGAMk6PJ0MmEqlY2fDDHv2EdR5t1mmXrr0DTSxP22F7BKCpFzEb2dkgxIu/qLLGU9uiZ6zYeonn/3LQ5Dj+MlcSc50Zo8PuR9T9rLEgPP3zP5euK8R5eZ+tR4u/djRHTD0Fmr8Zu/5s+h9mPvvjc=
+	t=1773133984; cv=pass; b=uvcUCw+hs6TNsBa/XxHYHrvL8iyVoRGgoUh57npQbLo33OmJgQzxP+cAhg9mpux+eIHXKXJZF8v4Ar8tMCYpKqekyLuRMvWNhRf1IN0fY8rBQK9XExBfjDE48VYON3ZaLcomv9SJiWZtQnBqwPD8/u36cbQuensty71/72EclZU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773133690; c=relaxed/simple;
-	bh=FpTDZl764DYCYe8MO8XfzBGT2gG/19FEabaocAfKZjo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=VYjlq5iQGh5V4TLUlWdyultclzu+fyj1Z/n+iwn3QFa1b+SAR5dw44e99PgxzkG9HxYeWmp1gN1P5y01peDnrAFANllYWGC8anhz08tecCPJ/v4frh4FdO0bqoJ646liG1KxNJqisliwh+GofkMW/84DtYNU9zMwkqfvbZLNiOU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=C2RkSwuq; arc=fail smtp.client-ip=52.101.65.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1773133984; c=relaxed/simple;
+	bh=DMhScoMzcATfd7YrXVTcpzy9toGu1J9btlk3raa7pg4=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nh4b2yZfcArg6xHM1VmvgakdyTuMqAa0bN44h4kGbKniXLEmodxWeMo9jqbOKNet/HUHlCUkuvHWtLxMEssc8vz1Hs0j0yntO2pS5yUQoMbodlfFGHsUXK8iQaEWWVX4vejfWOIl/EQq2Jftw2+wz0YXu434Nn3cY1wPPho7trA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ENN79feU; arc=pass smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="C2RkSwuq"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VdPyTd9RUa76a9Kb83xHlTKCjTESsS9sWUNBgN4zzhPNcwzFBfkt3t7wqD3sdaRkX94lhxvuUgJygTZM0bgrXfRgHZ0l3zViNPXQ3mFJsUHoQqKqtk+flgKEvhxzPio6Rl6WI2bJB1qHD7aXQi/bYWdHTNEhWkRivKY6DV0wVAUWxR3bauJFFqbrA9r9nqV3VJA5W7SaslcSKWCoAC42XsDc+YWr+ox6Je083Cq/PifwCe2liYbNs4912IskWgpN6J69e9Q5TI9XMpsPssiM75djr341/4EIlFifrk/CubfccnzhDduaPXIJ7UeUybwT1MyPmmCOnaHCQ9abMPCJ8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6A/LN0/QNqa7kkmB98HsjeVYBVvSEsAzDT3U3GIW9kE=;
- b=cyTY+KqwKcLCgnxUvMth+/F/fSI/5n71SODtG6AWHlVgarA6dPKVq1hQjmbnfsrR/HGb0L+agTBN6Z5ib8ydSXOcQM8LQCUNyHj43l5WBsAaNBeXDREYJVKPuObwSGbTdvYYbrQqb3FXIPoxIItbDaHhN1GrbGZpAB/pwT/t1r8ahUKjqFKNJY9G4BmCgHQDhgXRuaASecXQCEaPsnlb5b8Bo2fjSiReS8rky4PdrviwOBaC5lRJElY/U1EWQMTKM9OCwkSMYgwhl+YrObEMbq7T1KPvTLZpnGFRFZO9lyyTu2cIimXpWSL7ICrhd1EstM/8Iwkn+W3dn4/taqydnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6A/LN0/QNqa7kkmB98HsjeVYBVvSEsAzDT3U3GIW9kE=;
- b=C2RkSwuq9iyRuvCyUa5yym/3i2a2zivGeuZjMHmezWq2yKqtVTKZ+KqPYcDZyl+cIDOX3mUa8ubHzsBAJ7sIJ0vliFF4JgrvgtF8NURiMiH1E3f7IoF43QJJON5WnxVKvh+q3V6NEqQP5sdbJMPkryLVKl9sxnCuwXzdtS37wG2LmGN1tSNfcwI3cGfzNEsX2jkxJKPPvo5HCniG/hHzuWnKsOwa07dQnQ2NjYeQtcQ6opPXpH7WqpaXau8E2hzuIYWLEvNT0aVnCrDrHNm/9RkXVIngIAJXuyXu0gtnBeFdw09D805W0xxDkGP3gkSFroq+No19ZUoQUMwoAwfkHQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by GVXPR04MB10852.eurprd04.prod.outlook.com (2603:10a6:150:225::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.25; Tue, 10 Mar
- 2026 09:08:05 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9678.023; Tue, 10 Mar 2026
- 09:08:05 +0000
-Date: Tue, 10 Mar 2026 11:08:02 +0200
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: Daniel Golle <daniel@makrotopia.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>
-Subject: Re: [PATCH] selftests: net: local_termination: test link-local
- protocols
-Message-ID: <20260310090802.3fr4i5wkcyeydlio@skbuf>
-References: <a085c707b3085eea58850f125c51a8868c5fb6f1.1773072062.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a085c707b3085eea58850f125c51a8868c5fb6f1.1773072062.git.daniel@makrotopia.org>
-X-ClientProxiedBy: WA2P291CA0003.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:1e::7) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ENN79feU"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5a12f6871b2so7194920e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 02:13:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773133981; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GhblF+ILVnGzg/zYUVN6NH5VtL5QZfMpJCfChb2DAo36qsjD/1MxQtT+PprtRwSOvZ
+         5chbS+yaG5l/jU2WJjUlKOxT0K5tiVPIrrC6M/1nWSBXxUkowal5l1INUzSIRQllFzkh
+         kh6DFdm3aFbptdltQ4ivAooDqEfhZgwmQDiFogoT0kf0P6NF2sm+1qkWBDuh12OXpbOx
+         TSvA+On95aDkDTay/BFcoqvClrrpq3yov8RHNx5ViIUYrLX8+TiT9ipMAwPPlRWu9GLZ
+         fLPcBNptVK3iRaWhKPrJUgmNGYmQ86y2ZeBVruf5gkOVctIJY3t/G6QBB0/PrGffS21U
+         roZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=8F2bhMtMSjj2oDQi+clrIi22Hq+QZEwsyB8SqkUi+EM=;
+        fh=FKzSsqZ0MfgxeKYRmARg6NQ7aTWMsK8DHAKUyMNuL8w=;
+        b=PIHjuDM/CgxPkvH/GE9CjYKw3El2Do1ndGDNjv4p6rWLYvQeytdE+nbyySQHCHK18Y
+         1F7nzRfLwqgvwuDhuietlXrb6HuIrOLwmUGe60U1C+GRyu+zZoFalG7xTjVtlp1uNfg5
+         X92zn7rQr3w6m0A/yHbRpIdlt5HhmGaDvPDC+1yRNYw6qWGkX4tZM2p4FGrVRIHMNNK5
+         8R5c6Jo4193sTNBiggrXP/DQMJ72bYfBT5EN5SNZzHJdjFIafaIjeNbvLmcGc1TOD8fO
+         bbMeeHQTG2QYA/mDJ8KgBZEOVMxZ8T9roYWHsmVYqJ5h7R9vGnXbQyPwRiD29m+OllI9
+         479w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773133981; x=1773738781; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8F2bhMtMSjj2oDQi+clrIi22Hq+QZEwsyB8SqkUi+EM=;
+        b=ENN79feUFr/qrg8Pp7VwKbCYYP2ysXj4v3nI9ttqud+iUvAgc1Wk8CU7AaNuvrqbio
+         4jCP9HRPatrJ6j+TyC3r+DfqYaJ4ckEI8J8CVf/HHlko8H6qFUXcygm72wH53++Bj5FY
+         B3Mzs9ixurGFFEh9efLzvAUnyLWtfrMz8NvvYiXcMd3D6M2xR+haA9cUGUJuNeyv1W0Z
+         VY3OnQEWbncNCRZ1gjK4pk6Nqn1a9KVkwKJhuzKEuwMPYFRcd32om0uu1SYK2K3lPZjK
+         lJ4GN152jGanbxMuGiL56Me/AkFD9FdCo3Ad9Xg0Yp93EhiaQnlyul1tdvEV/b2wcT2B
+         HshQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773133981; x=1773738781;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8F2bhMtMSjj2oDQi+clrIi22Hq+QZEwsyB8SqkUi+EM=;
+        b=bIzctVe0jcZp0Spu3f1sQ3c3iqtU2pmnOon7qnRlaGEY0Wvt8zHsapvAOJyZixr2vo
+         MwO+DDsMwh5xYgScqQg49ZRljGukka3yjL+JtlvTI53k8sJBwVKzv64zYIZmjzZXewFi
+         hDVjrUyk8xYtY1ZA+kqK3Q78J2DDbUN/ER6/u7qZC4cXgpsRRuDXapAOxrhJcsjRRjAX
+         +6Ntx8TplljAlOPibt+VYUQJ3n2zGcQddP5eHZ6dQV+off2riHVUq+7EVvIZG7J+8EwP
+         OJuT0gR7d6Qtw5if/Udtk3E9QGUoM0WbQmus3s8x45Szyv5+VHQovUf2kgWRIWqOmbZt
+         VeHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUpto5vuNWuOGOMZ4VLDXO+jpsbtxfzWT8GcXfGBI1dGWxq2BNcU7Z6rtVy9ZtV23dxQuTDmujE/yk0586wZrw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBw54PL6uPxrqVbvRYEfGDb4GX8VD3kAxe5Jk+E0JFpLv/5FxO
+	LTYMFxVDbHEBu/B3QbW5Bh6AYZNFPN2clfzstSy5HXbs8lFvrMxoDDuHOBG09PNnACry3C7IPa1
+	JPbbRsT6nIEHTiXCqd0UWLQXqkOEVeLROSLKQxTHk
+X-Gm-Gg: ATEYQzzdRL/J/3XwnfQWz1Vf+fLwupqHOa6e1k6cv/BDUgUQv/0BAA6cEpswul6ahuy
+	CB87jAZW8s96WaQv392TsGD1bZRJGw/9Pk8BZGtw7B0Ddg604RiYp+PPrhwC3zhVY7LHqNwAIHT
+	FBE7X1Cn6XmyRK/qIHSNXMtIVmvUaRgRnAGJBqZc6vcDzi5uP/nM8dmazVKdk/RLtbs0cQmSR9G
+	nQ/0n1Q4n4GEbWr3mXkStms0KmiewaP/s3g4kTDmebU2w9lrImq+R0KsA4OiIgSm5aEtEErLAec
+	M8aTGUvXalvz0yP/Rk96XtT4weyY+O0Ma8USwl180QGwwcZLVK3cx1cLitLxhJlT3ew8MA==
+X-Received: by 2002:a05:6512:15a0:b0:5a1:3d7f:8f99 with SMTP id
+ 2adb3069b0e04-5a13d7f92a6mr4647476e87.33.1773133980196; Tue, 10 Mar 2026
+ 02:13:00 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 10 Mar 2026 02:12:56 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 10 Mar 2026 02:12:55 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <aa9uiQ_KBcX7X0My@google.com>
+References: <20260309-gmem-st-blocks-v3-0-815f03d9653e@google.com>
+ <20260309-gmem-st-blocks-v3-2-815f03d9653e@google.com> <aa9uiQ_KBcX7X0My@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|GVXPR04MB10852:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6356e215-08a6-4923-e956-08de7e848a29
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|10070799003|19092799006|7416014|376014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	sk/pkMqSF3VTo8mox30ijjzgYlObYa7OAkuqyhOqH3+yhoguYhrFaPW6AZai1VspW3PlqwjX+kBXRsmf0/ldke6NrDpKF/4Wlxzq29rTJRoWVbHc5reoeMfiODkTi/0159y92NL95I4dsfHRVooyVgK/a07d2WXyKquprPt9/VnERvzC+Kiv7gNn3kBrgsT4n8y57i7qCPxKM+gLJCfdubLi1bBSfx/NZzcv8u6QO0ZZZGpqjbIfKQDhxcvTtc2UJCoOuf7jDY+tkN9liLsp3h41ulwR1VhnemcKkg93XH0JhJxB+ZSJb3BkMx9MUjpp4D/KXAmZDRsOy/hrunZaaBcGqqmzH7Motqt0lHMFkEdFjzwzohRe1Yaeaa7qSWTn9vZfrPIlxLm7RZsBPWYMvwyIDpNFnmU65i1uWQQ1zXqli7pU/8JckK59FFRab16JOJbfpyCnOo0J698JgohkF7RY+qv6HvKwZuHcXz/fVp2y8DOtUSZcezSjyez+yIl0FyHPefBQLDPPNYCrl8emQeqgWAjECz7iI3VwupIBc3XCZTjtU+vpYrA0kuWyT/d3+J3qon5YruFfZkl5RWTooBsOW5I7QhNJL4qZYCR5loz7zBKxkfpAI2SIc4mUj7sT3Kh98ZxGHLPcC7kdVFgD1YYkRjgUvw1cYvxag/WOwzqgdVjAoe9Fs2qgh+hWVfvTXR5qXdZ4SXQ/wcmuFnniNDoUkKagINp7mkYbupAjogE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(19092799006)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?W2sFoBrmbKor+Bk5fi1M9s1F7ZdauYutZGH6GulByi8O0zb3KLiPpDWEnfba?=
- =?us-ascii?Q?VpCH5iP3/4r9iL1Vj5paH++uzjToCIyLEbjJ9eWNkLxMa501lfzoQ5hFfYJO?=
- =?us-ascii?Q?oIwmw/oeFazWNNiJ6Akzw/DqDrorQo/nOw4RpoWwTyheeKWmxnMv1EXMBg1h?=
- =?us-ascii?Q?sIBBBEgDifXJ4ZtImcCh1acQ6TGwDYTdIvrMBmEkg0QmoHjmN5W3DIPedGqZ?=
- =?us-ascii?Q?yiZxK9dml6OSl4pAJ/TUZLbvIBx91G0nbe4VThWjlw1ao4PcbiGpx0RV2wJU?=
- =?us-ascii?Q?zVuCYI+Ma1o+YcIG84ZNY8lDcrTF8/Dfwj6e2Rw6Wh4pTxSEVZPOCECxQhlH?=
- =?us-ascii?Q?Nhm+EhodFpj4LCdaMy/c9XbGZm0DfX2vYyvrQOWbtYMfPaQ7yDOqJkj8O5Ti?=
- =?us-ascii?Q?kAlCMeRFfDskx+FMwOLpkxQok/cHlI1rsZvfyPuvVfA0+Kn+y9x0zRkvhmZS?=
- =?us-ascii?Q?WK+eeTlqC0vPWYkVGECBg6oLAJ3dp3hUHz4WN+5ckTWIixzzezfpXBaSFA6t?=
- =?us-ascii?Q?AKhfizk8pdMCcMr1z15EjNhCG9lgjzxEybqnBZ33gQ988YkRbsxiOPaQZq0G?=
- =?us-ascii?Q?84uObpKUH0iU6e/qJbhMFaUkEhI9AWGRit3F7ilTuiZ23SJFhXs6maSauRHZ?=
- =?us-ascii?Q?8DICqBi+dLP0gvBNQXpiIVioPWVHukDk9HShrvw2rYQhG2VeW4mu9BCGLcgo?=
- =?us-ascii?Q?pHk2i7FQ6D4F6JwEmW/cwKqkEcwYSGWhODj6PwbjvqpEZdM0NPxgY6DBzKE5?=
- =?us-ascii?Q?2Uu/ChJVbPGmsFzpDIhLU8DmZ2yK9RdV4usn1V6fRb0UadEXZ5QeXBcREYRb?=
- =?us-ascii?Q?XDmS8LP5LTtlZVTr7t7A92BIfzbndXKXsWoWwuX8Ls7uDUSvAoLc1g/OTgoP?=
- =?us-ascii?Q?S+dK5uEKP7D5DwOcszzClWpWEuMGfmtGTt0qAwzIwpB7aGm8fzxphu0dXeyR?=
- =?us-ascii?Q?AGurk+PgHRqow25hywjOt3tyzQ/DQrSnCMtoeJc8j7zy1Gi4V5DwVNA/MdRa?=
- =?us-ascii?Q?9VP9EOGhHgCzEZ0zT0OX+hEAAPaPZkKJaUyg88Z6KQc91+hTom+1JcS/fOBy?=
- =?us-ascii?Q?nY30EvKQ/VqGmloxh2464IMCR2wOZvIErPFcIuuzHWKMmlCmChvkHdJ8NBTJ?=
- =?us-ascii?Q?UC6AykoqObp2eXuxsloNCIAtxgjz/k0fccuQN6dROhurpsLsjYSmEntDI21v?=
- =?us-ascii?Q?UJpiRx7CR66lVsfdDA4iIQhSOwtPI+Jl8lXBs+nkCnlquY/8NskuyOYrc6ZX?=
- =?us-ascii?Q?mrisAuAy/2wkaXRLXGnrhg5B0dGwOW76okLJEL8FvReyBh9ZNfF0VwuLsTus?=
- =?us-ascii?Q?ddOdL3c1fg0eJHZi36VdtPSm0KxXr01PvSIkHJsP67YtGOtnpq0CzNP5oCsk?=
- =?us-ascii?Q?skpgpDyJv3BgMFD1suN7yPdgw3d4IJEahtvhCW2oTsen3dyGgZ5/RoNdbIBl?=
- =?us-ascii?Q?j5VDWmE/EoUSqKyCaDut6Ox/k9aAvubdLuyZCRvjXQpHkQytkYs9fZa5Vbtd?=
- =?us-ascii?Q?hJiPg2hQjGHM651l+kdo6WTWOHoOkXK7FNrqkvUw2lLpg0BFc82+c+IpvcNu?=
- =?us-ascii?Q?wbxOVVk7C8Sw+cBaEr0Vs74aDw5WtWkUkkGYa4++lhl8GCArYQrxDyHOgWdz?=
- =?us-ascii?Q?r+KfNzUkreRiwcunEBDqoCvhN8R3cWxakav4Z/sXe1gYHx5L9F0tPM/LXe4P?=
- =?us-ascii?Q?52/HNTHLTRPpzR9Lg/je4HADhRzRPDhxJseXLe1iPRr/4yFFcJz55H9sCNYV?=
- =?us-ascii?Q?KsLkYkHGA2RdOF9KU7r90IORGjmHc8c8b9xrdmufvAP/tas0VyGnK2eumjlf?=
-X-MS-Exchange-AntiSpam-MessageData-1: EacxRQoqbiwf+KK62a89rUs40TJo4kyQcyA=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6356e215-08a6-4923-e956-08de7e848a29
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2026 09:08:05.3133
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9qj7WSvYGaAmgvVFcoJUYsm5UGJMnVYs2Z+NMFUR8P4bW55EMj5pv8EiZJ9hScrqeU+yKIIHs53vOWOr3kbgmA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10852
+Date: Tue, 10 Mar 2026 02:12:55 -0700
+X-Gm-Features: AaiRm51A8Xbcuhtm9ZZHMK7hG6LdHLXwjTxvFIPiUIWCbO2N0i2NdJbEHgq4azA
+Message-ID: <CAEvNRgH1RAV0rcaUx717JcHryB6=teXYoGtEzZwGwmy3MWwOcw@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 2/4] KVM: guest_memfd: Set release always on
+ guest_memfd mappings
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	rientjes@google.com, rick.p.edgecombe@intel.com, yan.y.zhao@intel.com, 
+	fvdl@google.com, jthoughton@google.com, vannapurve@google.com, 
+	shivankg@amd.com, michael.roth@amd.com, pratyush@kernel.org, 
+	pasha.tatashin@soleen.com, kalyazin@amazon.com, tabba@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Lisa Wang <wyihan@google.com>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 09, 2026 at 04:03:57PM +0000, Daniel Golle wrote:
-> Add tests to local_termination.sh to verify that link-local frames
-> arrive. On some switches the DSA driver uses bridges to connect the
-> user ports to their CPU ports. More "intelligent" switches typically
-> don't forward link-local frames, but may trap them to an internal
-> microcontroller. The driver may have to change trapping rules, so
-> link-local frames end up on the DSA CPU ports instead of being
-> silently dropped or trapped to the internal microcontroller of the
-> switch.
-> 
-> Add two tests which help to validate this has been done correctly:
->  - Link-local STP BPDU should always arrive at the Linux netdev
+Sean Christopherson <seanjc@google.com> writes:
 
-I don't really like the "always" comment here. The only reason why STP
-is part of the forwarding plane and not the control plane is because the
-bridge has stp_state=0. See br_handle_frame():
+> On Mon, Mar 09, 2026, Ackerley Tng wrote:
+>> Set release always on guest_memfd mappings to enable the use of
+>> .invalidate_folio, which performs inode accounting for guest_memfd.
+>>
+>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>> ---
+>>  virt/kvm/guest_memfd.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+>> index 77219551056a7..8246b9fbcf832 100644
+>> --- a/virt/kvm/guest_memfd.c
+>> +++ b/virt/kvm/guest_memfd.c
+>> @@ -607,6 +607,7 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
+>>  	mapping_set_inaccessible(inode->i_mapping);
+>>  	/* Unmovable mappings are supposed to be marked unevictable as well. */
+>>  	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
+>> +	mapping_set_release_always(inode->i_mapping);
+>
+> *sigh*
+>
+> So... an internal AI review bot flagged setting AS_RELEASE_ALWAYS as being
+> potentially problematic, and I started poking around, mostly because I was
+> curious.  I'm pretty sure the exact scenario painted by the bot isn't possible,
+> but I do think a similar issue exists in at least truncate_error_folio().  Or at
+> least, *should* exist, but doesn't because of a different bug.
+>
+> On memory error, kvm_gmem_error_folio() will get invoked via this code.  Note
+> the "err != 0" check.  kvm_gmem_error_folio() returns MF_DELAYED, which has an
+> arbitrary value of '2', and so KVM is always signalling "failure".
+>
+> 		int err = mapping->a_ops->error_remove_folio(mapping, folio);
+>
+> 		if (err != 0)
+> 			pr_info("%#lx: Failed to punch page: %d\n", pfn, err);
+> 		else if (!filemap_release_folio(folio, GFP_NOIO))
+> 			pr_info("%#lx: failed to release buffers\n", pfn);
+>
+> I _think_ that's bad?  On x86, if I'm following the breadcrubs correctly, we'll
+> end up in this code in kill_me_maybe()
+>
+> 	pr_err("Memory error not recovered");
+> 	kill_me_now(cb);
+>
+> and send what I assume is a relatively useless SIGBUS and likely kill the VM.
+>
+> 	struct task_struct *p = container_of(ch, struct task_struct, mce_kill_me);
+>
+> 	p->mce_count = 0;
+> 	force_sig(SIGBUS);
+>
 
-	if (unlikely(is_link_local_ether_addr(dest))) {
-		u16 fwd_mask = p->br->group_fwd_mask_required;
+Glad you agree that's bad :). We reported this earlier and Lisa has been
+working on a fix. RFC v1 is here [1].
 
-		/*
-		 * See IEEE 802.1D Table 7-10 Reserved addresses
-		 *
-		 * Assignment		 		Value
-		 * Bridge Group Address		01-80-C2-00-00-00
-		 * (MAC Control) 802.3		01-80-C2-00-00-01
-		 * (Link Aggregation) 802.3	01-80-C2-00-00-02
-		 * 802.1X PAE address		01-80-C2-00-00-03
-		 *
-		 * 802.1AB LLDP 		01-80-C2-00-00-0E
-		 *
-		 * Others reserved for future standardization
-		 */
-		fwd_mask |= p->group_fwd_mask;
-		switch (dest[5]) {
-		case 0x00:	/* Bridge Group Address */
-			/* If STP is turned off,
-			   then must forward to keep loop detection */
-			if (p->br->stp_enabled == BR_NO_STP ||
-			    fwd_mask & (1u << dest[5]))
-				goto forward;
-			*pskb = skb;
-			__br_handle_local_finish(skb);
-			return RX_HANDLER_PASS;
+RFC v2 (Lisa is about to post it) will address David's comments by
+aligning shmem to also return MF_DELAYED like guest_memfd, then handling
+MF_DELAYED returned from .error_remove_folio() accordingly so that it's
+not interpreted as a memory failure handling failure.
 
-perhaps this can be part of the commit message somehow.
+[1] https://lore.kernel.org/all/cover.1760551864.git.wyihan@google.com/#r
 
->  - Link-local LLDP should arrive at standalone ports (and the test
->    should be skipped on bridged ports similar to how it is done
->    for the IEEE1588v2/PTP tests)
-> 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
+> But even if that's somehow the "right" behavior, we're doing it purely by
+> accident.
+>
+> As for this patch, if we fix that bug by returning 0, then filemap_release_folio()
+> is definitely reachable by at least one flow, so I think guest_memfd also needs
+> to implement release_folio()?
+>
 
-With that addressed:
+Is posix_fadvise() the one flow you're talking about?
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+It indeed calls filemap_release_folio() through mapping_try_invalidate()
+-> mapping_evict_folio() -> filemap_release_folio().
+
+From Documentation/filesystems/locking.rst:
+
+  ->release_folio() is called when the MM wants to make a change to the
+  folio that would invalidate the filesystem's private data.  For example,
+  it may be about to be removed from the address_space or split.  The folio
+  is locked and not under writeback.  It may be dirty.  The gfp parameter
+  is not usually used for allocation, but rather to indicate what the
+  filesystem may do to attempt to free the private data.  The filesystem may
+  return false to indicate that the folio's private data cannot be freed.
+  If it returns true, it should have already removed the private data from
+  the folio.  If a filesystem does not provide a ->release_folio method,
+  the pagecache will assume that private data is buffer_heads and call
+  try_to_free_buffers().
+
+I could implement .release_folio().
+
+Returning false seems like the easier solution, and is kind of in line
+with the documentation above. A guest_memfd folio does not have private
+data, so without private data, the private data cannot be freed.
+
+(Took me a while to notice that having private data is not the same
+as having something in folio->private, so this doesn't change even after
+the direct map removal series lands.)
+
+Returning false is going to break shrink_folio_list(), but that probably
+won't affect guest_memfd for now.
+
+Returning false also breaks page_cache_pipe_buf_try_steal(). Does anyone
+more familiar with splicing know if that could affect guest_memfd?
+
+Returning true could also work, to indicate that the folio's private
+data has been "removed". I'd also have to do inode_sub_bytes() in
+.release_folio() then, since in mapping_evict_folio(), remove_mapping()
+doesn't call .invalidate_folio().
+
+Then we will have to separately ensure that in truncate_error_folio(),
+guest_memfd doesn't double-deduct the folio's size from the inode. This
+should be semantically correct though, since IIUC .invalidate_folio() is
+when a folio is removed (clean or dirty), but .release_folio() is only
+for clean folios. If .error_remove_folio() returns MF_DELAYED, the
+truncation didn't happen and so there should be no call to
+.release_folio().
+
+>
+>
+> Full AI bot text:
+> --
+> Setting the AS_RELEASE_ALWAYS flag causes folio_needs_release() to return
+> true. This correctly triggers .invalidate_folio during truncation, but does
+> it also unintentionally expose guest_memfd folios to eviction via
+> posix_fadvise(POSIX_FADV_DONTNEED)?
+>
+> If userspace calls posix_fadvise() on a guest_memfd file, the core mm
+> calls mapping_evict_folio(). Because folio_needs_release() is true, it
+> calls filemap_release_folio().
+>
+> Since guest_memfd does not implement a .release_folio address space
+> operation, filemap_release_folio() falls back to calling
+> try_to_free_buffers(). Could this fallback cause a warning?
+>
+> fs/buffer.c:try_to_free_buffers() {
+> 	...
+> 	/* Misconfigured folio check */
+> 	if (WARN_ON_ONCE(!folio_buffers(folio)))
+> 		return true;
+> 	...
+> }
+>
+> Because the guest_memfd folio has no private data, folio_buffers()
+> is NULL, which will trigger this WARN_ON_ONCE.
+>
+> Furthermore, try_to_free_buffers() returns true, allowing the folio to be
+> removed from the page cache. Because this eviction path bypasses
+> truncate_cleanup_folio(), it never calls .invalidate_folio.
+>
+> Does this mean inode_sub_bytes() is skipped, leaking the inode block
+> accounting?
+>
+> Userspace could potentially trigger the warning and infinitely inflate the
+> inode's block count with:
+>     struct kvm_create_guest_memfd args = { .size = 4096 };
+>     int fd = ioctl(kvm_vm_fd, KVM_CREATE_GUEST_MEMFD, &args);
+>     fallocate(fd, 0, 0, 4096);
+>     posix_fadvise(fd, 0, 4096, POSIX_FADV_DONTNEED);
+> Should guest_memfd implement a .release_folio callback that simply
+> returns false to prevent these folios from being evicted?
+> --
