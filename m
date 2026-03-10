@@ -1,477 +1,122 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4934630C621
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 02:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773108350; cv=none; b=C3duPMD5Zk+ZL3WpuiecueMQ5ePL51dVSfB//xwlXtv93tX/LtuKcGT+J9U8sKUc1tKmJDWC8zzIzZ9a+HZqBOVJt3US222SephGObaCno6do5rINKtaxhVqgLHLpo7o0GNJoiRPO+FLyDMNqyMSwxFKH36ceRHXEcC5+vzzADs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773108350; c=relaxed/simple;
-	bh=ojHFus5SjHqV5lmu+P7dtBZ/qNLpW+EOOcJ4IdkgLHU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mDl7EgFmGDTlyORS0wou14WTQTCsAcbt6hKtJ8DuqawdMqnsf0bp/zrE8HpFoOHiP9yVW+OQUSs7En2JEo2w78opjFaL18ZpOMTg9+155pvyvvj9fb7bPMUlX3Gda0kMhS7N7af6pVfrbaMHa+mhBuCTPDTwDJsNdfoo12LOIR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tJPxnxvz; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CEA30C620
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 02:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773108351; cv=pass; b=Vah0YJw/T88CCHSNLBkOvtIQAMMM8uyoZTeOnq19y6R6UXxofFI9TRnawIKHzrACgABqANLG4pCaN/dWgergWUJrFeWiOTlAByqOHBZVQ/53G+NdsQxRJ1bBoyJ1Cj5CBNJQRLg05weoo2Dt2ryRubAduA8tpFg6DlKGgVls1xw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773108351; c=relaxed/simple;
+	bh=k20f8t1EOV/HEyg7uqeU/OGvcbfXWsNUgp/Vg457HkA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LsebSQTrk/ZQAEG1qrut/xjLVJxT0mWWrp0X30X0cvPOtcX43OYAMirKKbtmNW4qpXhGhoRfsjZcYcsPzw6mI8+yxu+dHU6Q/69l6EJKjYZPRSmQ1vse+GpodhK/B8UdkSCqT65zWz/daVwiy7ISUjO8lCVz6e+Qtp4HyNR6ny4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ku1WSM5Z; arc=pass smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tJPxnxvz"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773108346;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5UdrS6Reu97bGbouwJAPrbyQ0s+0tXhdLjIfLI8CfXA=;
-	b=tJPxnxvze5DMpb56NxtkV9iKZehca/TTEhVpJRHaofjlNqj2mv+bX0MstlV3JUGF5GZHHz
-	88g7HBWgq2XHheafwYvMb/+WzJ55WBZvyArqCxAA8oMUxz0e/lVBTSjoABVGPxn5Sk6LGT
-	Nz9fnWK6PRAKe0wSTvkXDfcHz3lZ3Ns=
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-To: jgg@ziepe.ca,
-	leon@kernel.org,
-	zyjzyj2000@gmail.com,
-	shuah@kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	dsahern@kernel.org
-Cc: Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: [PATCH v5 3/4] RDMA/rxe: Support RDMA link creation and destruction per net namespace
-Date: Tue, 10 Mar 2026 03:05:17 +0100
-Message-ID: <20260310020519.101415-4-yanjun.zhu@linux.dev>
-In-Reply-To: <20260310020519.101415-1-yanjun.zhu@linux.dev>
-References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ku1WSM5Z"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-439b2965d4bso7175368f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 19:05:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773108349; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fAnQO2ptSTq09Tqd823XG+WrmAmYti1+qWGTV0WuMwoVwJvPKbSVSm3J6KJx5P8lmJ
+         cGYRaeJ9aNbDaeRHTmN+abMkKZEPr+vx9WehTeO8azFJWrfu1EnZNpJLMb+EXZ+Erhjj
+         ffJNXaLiEpwI244JpYTRMq6B/9nyijdzPTTM4VJdA/UD1MfMO+BxGAqJulnxLthgyoHE
+         qDWVu8y05Z0WPNogJrMN9T2LWF/sgxvkk8t7CcxUCD6/vPYOBrBf3/JHSC6t/ZJxeN12
+         v0hY+Qdc+sfOeYaW9uGTGjCt1CB90vEGgI7CxxVyaE27y2GwgFI50RJpISAmv/VRCnp7
+         hv1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xnHQw4FSCYovPcBM7FdZ3WfrebkEeQSNBMs5Gxas3Ic=;
+        fh=Ms5WGiS8D0fqDz/mvfq6S8suBzL1wTuYyWaI72WnUx4=;
+        b=lSLUMag2iWZo/2+JA5MXjXqXkod+ioQfeqe1RFq7DMuGJ9DjogEJBxbiZ85dPl28sn
+         UXIXUp+kO1p2YNR5BSVtlyJZFbYuIE/sC5VvYI4FpgUGIV3Vzn3L7shBHJKHeo2FZaEp
+         Vz8Hf5cEFKvOfKuQF2r79yZRjAN+8j36qbHkMdC+YJV65OcY6KKOn4iiBUBWPyDXZAk0
+         ABNUjFCvJXcT3HujOq24LHZqUcPyiNb2tsnJr738urSrdZPUs7uqCRGHdRD3a5VdB80g
+         cqj78uQio+QulicxpXgDy4thCPU7ZbiGMuHuY/O4hQ57hmLGDHSFxlG42lCm7+6VFyJs
+         wbFA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773108349; x=1773713149; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xnHQw4FSCYovPcBM7FdZ3WfrebkEeQSNBMs5Gxas3Ic=;
+        b=ku1WSM5Z9CA/HHlyScKafmWYbY9m+1kz0iEmj01TWtjN8oJwlJGbpc8OuKjqYkzFl/
+         bMaj2VaaoFApYVdFrS5BYjdmGuGgdJrdDIP4gGYp5xFa7n66TD6Mf+P4ZEKmQEfEw9Cd
+         yHTTft0NiYjU4Cgwm1VzMlCv4EDMSwua1mWGfvjT04c1sD9jeyNpndL7sWyvpKYvumBk
+         kjvGPWeByC+Un3ga9Vam0wVvzdpzqBKjRLHVK2utKRxCac7ovTOso/eTg6Kh+Uwp+O7O
+         t2wBVZpJ8VRZW8xdIEx0dX1P4hsGJs+aUJWc1sZkIkkytZ28l5G7yzp0XQWBTyfPguOM
+         HuTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773108349; x=1773713149;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=xnHQw4FSCYovPcBM7FdZ3WfrebkEeQSNBMs5Gxas3Ic=;
+        b=nD3asUhIfU9dqQEwcu1amHqxIt+PegzucIqGxmOiv5+YiSR3LkZRrkU+ZN2WSxoe1O
+         +fmPW/BEDZOY4Kt8YK2cGaSvI2kZPh/x372Pkmxjv9aHdlF9TfPWTAeM0ucsLMBmxqIm
+         /rfggFPtYWbmam7ZPb+rJa1vPQiCN82aGtTrUOz/Nmp7rjbM6vILIxy66sP/2enSAdIG
+         +yyg1R/+MsrcTaNIccGuLaCrLCiZsKoLfsAJ970bhTtCD/a3GQ9VH8mqjWmsmxMK7Jus
+         VQhWlkyI9kjZmJ3rGC80uh+oLgJyLVY+hAUJZURVrVdceGz3FegJ3wZkDNsbYpyr7rDc
+         ZBrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUGmIromj9Rx/IZrraSC9pKMmnlLDmH4bbLBATq/8B38T4wm95rO4/37BmNjVQI789Fg59ahGNm3cwDyK72ld8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPDyo0F7PuBvcT+tiYQPOtFt9bySSraNtoMvTHnQAkrDjWrKQl
+	6yfdlaFhmuLZLI/HLcxxlRcQcxIMRHcSCKVoFbxznOl16pdSEjWUiOm/C5FMvy5J069ABBSEGzZ
+	fKfe26hzTHxz93Op+eiESsMTT8cB8VP4=
+X-Gm-Gg: ATEYQzx9pD5ELU2zbbe7OLs46dMqBfDhdRinG2vdOWCCPCaekF/jaCIzV1WoW61GKYn
+	rNzQyFi00W2YcDE4z66YPPxFeQHGPioIH4XgxJ+xkBwjaOtYXFHkRl71wOAbHAWvC3kky/CKiya
+	GN8YsXaKZdt4Hw1qWTWgOuXgQ7IGyhOE/LKUOXjF60WUIDXD7O26QEvSAtvTPiIbr+4Ca6DTXVr
+	i0WlhPKDeVWmu/WRKICy4SuxKO9Yv4UfrlrzfCQ4ZJV9oY5u5oONoSZkNEUbuQSeS5Fa8/+ntVI
+	NwKUmQBRbyEMX/YYIrcOsCvnAXtFr5DMpB3paHPIri3ywfhijGLfRSsoYyxbTD9jOcS6atVMDpM
+	txjZR8Ei1Q+Hts5HmLUAib3XVvg==
+X-Received: by 2002:a05:6000:184a:b0:439:b81f:ada0 with SMTP id
+ ffacd0b85a97d-439da86f76bmr24055151f8f.57.1773108348613; Mon, 09 Mar 2026
+ 19:05:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260308134614.29711-1-pilgrimtao@gmail.com> <20260308134614.29711-5-pilgrimtao@gmail.com>
+ <4f40d120-41d1-4723-a410-63d095d2b31d@linux.dev>
+In-Reply-To: <4f40d120-41d1-4723-a410-63d095d2b31d@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 9 Mar 2026 19:05:37 -0700
+X-Gm-Features: AaiRm50pGcnLkggy7DiI7dJTNRGaKrpS8VH9Vhnq0M5rsIFc9PhWMcBV-OUE32M
+Message-ID: <CAADnVQLC7c+Spmk0VoatWsjA=ok-ofEOxp11L-C1DR+=GVCcTw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 4/5] selftests/bpf: Add test cases for bpf_list_del/add/is_first/is_last/empty
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Chengkaitao <pilgrimtao@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Chengkaitao <chengkaitao@kylinos.cn>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-After introducing dellink handling and per-net namespace management
-for IPv4 and IPv6 sockets, extend rxe to create and destroy RDMA links
-within each network namespace.
+On Sun, Mar 8, 2026 at 11:44=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> > +long list_add_del_and_check(void *ctx)
+> > +{
+> > +     long err =3D 0;
+> > +     struct bpf_rb_node *rb;
+> > +     struct bpf_list_node *l_node, *l_node_ref;
+> > +     struct node_data *n_rb, *n_new, *n_new_ref;
+> > +
+>
+> Prefer inverted Christmas tree style.
 
-With this change, RDMA links can be instantiated both in init_net and
-in other network namespaces. The lifecycle of the RDMA link is now tied
-to the corresponding namespace and is properly cleaned up when the
-namespace or link is removed.
+Just to clarify.
 
-This ensures rxe behaves correctly in multi-namespace environments and
-keeps socket and RDMA link resources consistent across namespace
-creation and teardown.
-
-Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
----
- drivers/infiniband/sw/rxe/rxe.c     |  38 +++++++-
- drivers/infiniband/sw/rxe/rxe_net.c | 145 +++++++++++++++++++++-------
- drivers/infiniband/sw/rxe/rxe_net.h |   9 +-
- 3 files changed, 146 insertions(+), 46 deletions(-)
-
-diff --git a/drivers/infiniband/sw/rxe/rxe.c b/drivers/infiniband/sw/rxe/rxe.c
-index e891199cbdef..b0714f9abe3d 100644
---- a/drivers/infiniband/sw/rxe/rxe.c
-+++ b/drivers/infiniband/sw/rxe/rxe.c
-@@ -8,6 +8,8 @@
- #include <net/addrconf.h>
- #include "rxe.h"
- #include "rxe_loc.h"
-+#include "rxe_net.h"
-+#include "rxe_ns.h"
- 
- MODULE_AUTHOR("Bob Pearson, Frank Zago, John Groves, Kamal Heib");
- MODULE_DESCRIPTION("Soft RDMA transport");
-@@ -200,6 +202,8 @@ void rxe_set_mtu(struct rxe_dev *rxe, unsigned int ndev_mtu)
- 	port->mtu_cap = ib_mtu_enum_to_int(mtu);
- }
- 
-+static struct rdma_link_ops rxe_link_ops;
-+
- /* called by ifc layer to create new rxe device.
-  * The caller should allocate memory for rxe by calling ib_alloc_device.
-  */
-@@ -208,6 +212,7 @@ int rxe_add(struct rxe_dev *rxe, unsigned int mtu, const char *ibdev_name,
- {
- 	rxe_init(rxe, ndev);
- 	rxe_set_mtu(rxe, mtu);
-+	rxe->ib_dev.link_ops = &rxe_link_ops;
- 
- 	return rxe_register_device(rxe, ibdev_name, ndev);
- }
-@@ -231,6 +236,10 @@ static int rxe_newlink(const char *ibdev_name, struct net_device *ndev)
- 		goto err;
- 	}
- 
-+	err = rxe_net_init(ndev);
-+	if (err)
-+		return err;
-+
- 	err = rxe_net_add(ibdev_name, ndev);
- 	if (err) {
- 		rxe_err("failed to add %s\n", ndev->name);
-@@ -240,9 +249,17 @@ static int rxe_newlink(const char *ibdev_name, struct net_device *ndev)
- 	return err;
- }
- 
-+static int rxe_dellink(struct ib_device *dev)
-+{
-+	rxe_net_del(dev);
-+
-+	return 0;
-+}
-+
- static struct rdma_link_ops rxe_link_ops = {
- 	.type = "rxe",
- 	.newlink = rxe_newlink,
-+	.dellink = rxe_dellink,
- };
- 
- static int __init rxe_module_init(void)
-@@ -253,15 +270,24 @@ static int __init rxe_module_init(void)
- 	if (err)
- 		return err;
- 
--	err = rxe_net_init();
--	if (err) {
--		rxe_destroy_wq();
--		return err;
--	}
-+	err = rxe_namespace_init();
-+	if (err)
-+		goto err_destroy_wq;
-+
-+	err = rxe_register_notifier();
-+	if (err)
-+		goto err_namespace_exit;
- 
- 	rdma_link_register(&rxe_link_ops);
-+
- 	pr_info("loaded\n");
- 	return 0;
-+
-+err_namespace_exit:
-+	rxe_namespace_exit();
-+err_destroy_wq:
-+	rxe_destroy_wq();
-+	return err;
- }
- 
- static void __exit rxe_module_exit(void)
-@@ -271,6 +297,8 @@ static void __exit rxe_module_exit(void)
- 	rxe_net_exit();
- 	rxe_destroy_wq();
- 
-+	rxe_namespace_exit();
-+
- 	pr_info("unloaded\n");
- }
- 
-diff --git a/drivers/infiniband/sw/rxe/rxe_net.c b/drivers/infiniband/sw/rxe/rxe_net.c
-index 0bd0902b11f7..59e42814d07f 100644
---- a/drivers/infiniband/sw/rxe/rxe_net.c
-+++ b/drivers/infiniband/sw/rxe/rxe_net.c
-@@ -17,8 +17,7 @@
- #include "rxe.h"
- #include "rxe_net.h"
- #include "rxe_loc.h"
--
--static struct rxe_recv_sockets recv_sockets;
-+#include "rxe_ns.h"
- 
- #ifdef CONFIG_DEBUG_LOCK_ALLOC
- /*
-@@ -101,20 +100,20 @@ static inline void rxe_reclassify_recv_socket(struct socket *sock)
- }
- 
- static struct dst_entry *rxe_find_route4(struct rxe_qp *qp,
-+					 struct net *net,
- 					 struct net_device *ndev,
- 					 struct in_addr *saddr,
- 					 struct in_addr *daddr)
- {
- 	struct rtable *rt;
--	struct flowi4 fl = { { 0 } };
-+	struct flowi4 fl = {};
- 
--	memset(&fl, 0, sizeof(fl));
- 	fl.flowi4_oif = ndev->ifindex;
- 	memcpy(&fl.saddr, saddr, sizeof(*saddr));
- 	memcpy(&fl.daddr, daddr, sizeof(*daddr));
- 	fl.flowi4_proto = IPPROTO_UDP;
- 
--	rt = ip_route_output_key(&init_net, &fl);
-+	rt = ip_route_output_key(net, &fl);
- 	if (IS_ERR(rt)) {
- 		rxe_dbg_qp(qp, "no route to %pI4\n", &daddr->s_addr);
- 		return NULL;
-@@ -125,21 +124,21 @@ static struct dst_entry *rxe_find_route4(struct rxe_qp *qp,
- 
- #if IS_ENABLED(CONFIG_IPV6)
- static struct dst_entry *rxe_find_route6(struct rxe_qp *qp,
-+					 struct net *net,
- 					 struct net_device *ndev,
- 					 struct in6_addr *saddr,
- 					 struct in6_addr *daddr)
- {
- 	struct dst_entry *ndst;
--	struct flowi6 fl6 = { { 0 } };
-+	struct flowi6 fl6 = {};
- 
--	memset(&fl6, 0, sizeof(fl6));
- 	fl6.flowi6_oif = ndev->ifindex;
- 	memcpy(&fl6.saddr, saddr, sizeof(*saddr));
- 	memcpy(&fl6.daddr, daddr, sizeof(*daddr));
- 	fl6.flowi6_proto = IPPROTO_UDP;
- 
--	ndst = ipv6_stub->ipv6_dst_lookup_flow(sock_net(recv_sockets.sk6->sk),
--					       recv_sockets.sk6->sk, &fl6,
-+	ndst = ipv6_stub->ipv6_dst_lookup_flow(net,
-+					       rxe_ns_pernet_sk6(net), &fl6,
- 					       NULL);
- 	if (IS_ERR(ndst)) {
- 		rxe_dbg_qp(qp, "no route to %pI6\n", daddr);
-@@ -160,6 +159,7 @@ static struct dst_entry *rxe_find_route6(struct rxe_qp *qp,
- #else
- 
- static struct dst_entry *rxe_find_route6(struct rxe_qp *qp,
-+					 struct net *net,
- 					 struct net_device *ndev,
- 					 struct in6_addr *saddr,
- 					 struct in6_addr *daddr)
-@@ -174,6 +174,7 @@ static struct dst_entry *rxe_find_route(struct net_device *ndev,
- 					struct rxe_av *av)
- {
- 	struct dst_entry *dst = NULL;
-+	struct net *net;
- 
- 	if (qp_type(qp) == IB_QPT_RC)
- 		dst = sk_dst_get(qp->sk->sk);
-@@ -182,20 +183,22 @@ static struct dst_entry *rxe_find_route(struct net_device *ndev,
- 		if (dst)
- 			dst_release(dst);
- 
-+		net = dev_net(ndev);
-+
- 		if (av->network_type == RXE_NETWORK_TYPE_IPV4) {
- 			struct in_addr *saddr;
- 			struct in_addr *daddr;
- 
- 			saddr = &av->sgid_addr._sockaddr_in.sin_addr;
- 			daddr = &av->dgid_addr._sockaddr_in.sin_addr;
--			dst = rxe_find_route4(qp, ndev, saddr, daddr);
-+			dst = rxe_find_route4(qp, net, ndev, saddr, daddr);
- 		} else if (av->network_type == RXE_NETWORK_TYPE_IPV6) {
- 			struct in6_addr *saddr6;
- 			struct in6_addr *daddr6;
- 
- 			saddr6 = &av->sgid_addr._sockaddr_in6.sin6_addr;
- 			daddr6 = &av->dgid_addr._sockaddr_in6.sin6_addr;
--			dst = rxe_find_route6(qp, ndev, saddr6, daddr6);
-+			dst = rxe_find_route6(qp, net, ndev, saddr6, daddr6);
- #if IS_ENABLED(CONFIG_IPV6)
- 			if (dst)
- 				qp->dst_cookie =
-@@ -624,6 +627,46 @@ int rxe_net_add(const char *ibdev_name, struct net_device *ndev)
- 	return 0;
- }
- 
-+#define SK_REF_FOR_TUNNEL	2
-+
-+static void rxe_sock_put(struct sock *sk,
-+					void (*set_sk)(struct net *, struct sock *),
-+					struct net *net)
-+{
-+	if (refcount_read(&sk->sk_refcnt) > SK_REF_FOR_TUNNEL) {
-+		__sock_put(sk);
-+	} else {
-+		rxe_release_udp_tunnel(sk->sk_socket);
-+		sk = NULL;
-+		set_sk(net, sk);
-+	}
-+}
-+
-+void rxe_net_del(struct ib_device *dev)
-+{
-+	struct rxe_dev *rxe = container_of(dev, struct rxe_dev, ib_dev);
-+	struct net_device *ndev;
-+	struct sock *sk;
-+	struct net *net;
-+
-+	ndev = rxe_ib_device_get_netdev(&rxe->ib_dev);
-+	if (!ndev)
-+		return;
-+
-+	net = dev_net(ndev);
-+
-+	sk = rxe_ns_pernet_sk4(net);
-+	if (sk)
-+		rxe_sock_put(sk, rxe_ns_pernet_set_sk4, net);
-+
-+	sk = rxe_ns_pernet_sk6(net);
-+	if (sk)
-+		rxe_sock_put(sk, rxe_ns_pernet_set_sk6, net);
-+
-+	dev_put(ndev);
-+}
-+#undef SK_REF_FOR_TUNNEL
-+
- static void rxe_port_event(struct rxe_dev *rxe,
- 			   enum ib_event_type event)
- {
-@@ -680,6 +723,7 @@ static int rxe_notify(struct notifier_block *not_blk,
- 	switch (event) {
- 	case NETDEV_UNREGISTER:
- 		ib_unregister_device_queued(&rxe->ib_dev);
-+		rxe_net_del(&rxe->ib_dev);
- 		break;
- 	case NETDEV_CHANGEMTU:
- 		rxe_dbg_dev(rxe, "%s changed mtu to %d\n", ndev->name, ndev->mtu);
-@@ -709,66 +753,97 @@ static struct notifier_block rxe_net_notifier = {
- 	.notifier_call = rxe_notify,
- };
- 
--static int rxe_net_ipv4_init(void)
-+static int rxe_net_ipv4_init(struct net *net)
- {
--	recv_sockets.sk4 = rxe_setup_udp_tunnel(&init_net,
--				htons(ROCE_V2_UDP_DPORT), false);
--	if (IS_ERR(recv_sockets.sk4)) {
--		recv_sockets.sk4 = NULL;
-+	struct sock *sk;
-+	struct socket *sock;
-+
-+	sk = rxe_ns_pernet_sk4(net);
-+	if (sk) {
-+		sock_hold(sk);
-+		return 0;
-+	}
-+
-+	sock = rxe_setup_udp_tunnel(net, htons(ROCE_V2_UDP_DPORT), false);
-+	if (IS_ERR(sock)) {
- 		pr_err("Failed to create IPv4 UDP tunnel\n");
- 		return -1;
- 	}
-+	rxe_ns_pernet_set_sk4(net, sock->sk);
- 
- 	return 0;
- }
- 
--static int rxe_net_ipv6_init(void)
-+static int rxe_net_ipv6_init(struct net *net)
- {
- #if IS_ENABLED(CONFIG_IPV6)
-+	struct sock *sk;
-+	struct socket *sock;
- 
--	recv_sockets.sk6 = rxe_setup_udp_tunnel(&init_net,
--						htons(ROCE_V2_UDP_DPORT), true);
--	if (PTR_ERR(recv_sockets.sk6) == -EAFNOSUPPORT) {
--		recv_sockets.sk6 = NULL;
-+	sk = rxe_ns_pernet_sk6(net);
-+	if (sk) {
-+		sock_hold(sk);
-+		return 0;
-+	}
-+
-+	sock = rxe_setup_udp_tunnel(net, htons(ROCE_V2_UDP_DPORT), true);
-+	if (PTR_ERR(sock) == -EAFNOSUPPORT) {
- 		pr_warn("IPv6 is not supported, can not create a UDPv6 socket\n");
- 		return 0;
- 	}
- 
--	if (IS_ERR(recv_sockets.sk6)) {
--		recv_sockets.sk6 = NULL;
-+	if (IS_ERR(sock)) {
- 		pr_err("Failed to create IPv6 UDP tunnel\n");
- 		return -1;
- 	}
-+
-+	rxe_ns_pernet_set_sk6(net, sock->sk);
-+
- #endif
- 	return 0;
- }
- 
-+int rxe_register_notifier(void)
-+{
-+	int err;
-+
-+	err = register_netdevice_notifier(&rxe_net_notifier);
-+	if (err) {
-+		pr_err("Failed to register netdev notifier\n");
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
- void rxe_net_exit(void)
- {
--	rxe_release_udp_tunnel(recv_sockets.sk6);
--	rxe_release_udp_tunnel(recv_sockets.sk4);
- 	unregister_netdevice_notifier(&rxe_net_notifier);
- }
- 
--int rxe_net_init(void)
-+int rxe_net_init(struct net_device *ndev)
- {
-+	struct net *net;
- 	int err;
- 
--	recv_sockets.sk6 = NULL;
-+	net = dev_net(ndev);
- 
--	err = rxe_net_ipv4_init();
-+	err = rxe_net_ipv4_init(net);
- 	if (err)
- 		return err;
--	err = rxe_net_ipv6_init();
-+
-+	err = rxe_net_ipv6_init(net);
- 	if (err)
- 		goto err_out;
--	err = register_netdevice_notifier(&rxe_net_notifier);
--	if (err) {
--		pr_err("Failed to register netdev notifier\n");
--		goto err_out;
--	}
-+
- 	return 0;
-+
- err_out:
--	rxe_net_exit();
-+	/* If ipv6 error, release ipv4 resource */
-+	struct sock *sk = rxe_ns_pernet_sk4(net);
-+
-+	if (sk)
-+		rxe_sock_put(sk, rxe_ns_pernet_set_sk4, net);
-+
- 	return err;
- }
-diff --git a/drivers/infiniband/sw/rxe/rxe_net.h b/drivers/infiniband/sw/rxe/rxe_net.h
-index 45d80d00f86b..56249677d692 100644
---- a/drivers/infiniband/sw/rxe/rxe_net.h
-+++ b/drivers/infiniband/sw/rxe/rxe_net.h
-@@ -11,14 +11,11 @@
- #include <net/if_inet6.h>
- #include <linux/module.h>
- 
--struct rxe_recv_sockets {
--	struct socket *sk4;
--	struct socket *sk6;
--};
--
- int rxe_net_add(const char *ibdev_name, struct net_device *ndev);
-+void rxe_net_del(struct ib_device *dev);
- 
--int rxe_net_init(void);
-+int rxe_register_notifier(void);
-+int rxe_net_init(struct net_device *ndev);
- void rxe_net_exit(void);
- 
- #endif /* RXE_NET_H */
--- 
-2.53.0
-
+This is not a requirement, but "nice to have" in a new code
+if it doesn't interfere with logical declaration of variables.
