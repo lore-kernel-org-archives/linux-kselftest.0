@@ -1,113 +1,97 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5FC40DFD8;
-	Tue, 10 Mar 2026 13:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011C7391E5D
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 14:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773148283; cv=none; b=tEABEEvqDqa0V7+ESDSq5kmLYcyaOJHELbUu/r5qwWJrzOw1Xw73QwWs6BfwZ+00IHzw7bpJoQbUm0f1cVvNQ2z61Q+UKECAR3uTIkXpjaFGoAvSlWaNs3cu0JlVPLnl6tfuqp4yckFPOSTdn9UO1fmQOTdv2g2C51zD3t3ba/A=
+	t=1773151761; cv=none; b=qlgW/AxoejlxHudowdI0PvKRd7fcwJwoEfQ2VyzGVFTWmnyfCl6YpCpl2Jm1Yt5RcCpFyN/0n7+bFhVfkQYtp34uvbF7n+n+Qv32bZBdgR5XmDoD9/1duACWwQyCvZ88Cmct/x0kEr254tFU96yhl+HsdMWz4aocl1D8NtrWVTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773148283; c=relaxed/simple;
-	bh=5c5DIHV4hT2SeTfqSM2LG61yHypW02KyRFmvcmJdQnk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UbMLsg79aoUQgPLSqaMQHq+6phSGmNFKqhjEBsbqyWbEDSV5tzgJL5+dFXN1DuzMvJkHXBnOR1izy3ISkSS+LrfWnHcXhezTj1/QNdDbze8PNNttWzPhQFL+6HNinqs4lr0eeZXLFannlPzFyrLE9YSR1EuZWcmrPczPyo+eXok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=2IZB0CLI; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1773151761; c=relaxed/simple;
+	bh=W2xN/mCb9NR3m8rj+NKaCGBJXePsMRnw221cQuOXCnU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=H+Y4MOjU+l5oj4nECF45De+oz0jYKHU+7E6hcEmAxM5rJR31zXGWTJGt+iXvKZAx+/NqLWFG0XA7cBxbaq9GJ9iiUiaw0Ag4nvLGv+OCOp59xFD4Ao2fj8+xdFt7kJ9OctO/GccEkqqZXLAfVPgcyhS/pXu9vP1uH/ZJywY6JVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OwviW6v8; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="2IZB0CLI"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=l4GpPH3ubmx3aruEVyuRzz3DC1ibbOvvKhNccLuCdJw=; b=2IZB0CLIMhRCWLDyZPKVLAP3Zi
-	vkxq5N+BauqfWJ2D08pYk2yJx04ORVTcyKmDDrK6LuqW8XMpcwg6np0wljWMF5F1kr01sH+Q+jTrq
-	xDq8JKn+NuwXEQgsNA7+BSOA7KRyX1wksWfz9wKmL9hYInXwz8XUG9LBohaI66rEoRupv9ltfhBxQ
-	B67SFwm+9VlBJyWk6UVQWx2m2KvS0cFVxa8tSFUpKwxJS1FIprhUVpsGM4inI8xOeVYE3OTfvQkpq
-	d83SjBx8OUeAWD15fpQ3CkfgrZHzJdUM6o/iIAO634R5cNSd9paceV9MYix4ApeSzSnk0L+NmiwTZ
-	zlAStFSw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vzwrl-00000009Yu9-2fbO;
-	Tue, 10 Mar 2026 13:11:17 +0000
-Date: Tue, 10 Mar 2026 06:11:17 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-Message-ID: <abAYdbtYE2tHPNnM@infradead.org>
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
- <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org>
- <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
- <aa7qson15uJpL-BL@infradead.org>
- <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OwviW6v8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773151759;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UGaoul3yuJqynOQk2erX7A5QGgPE1g4T37mrg0FVrlk=;
+	b=OwviW6v8EEsUDWEGkyqKHmpQgaAPybp+wu5/+ISGimLqHhs2Kp4cVmqGu0HGlvvomr00hl
+	ncDPzczFU7fCyiAerQPmUBuV6hSk5mh5P5BdgUEgKkGs/gUCjeGc/rRIYRuDOfIg24WoWl
+	7pGvYqV5eGksT+w/0NIWxRG7fkZMhP0=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-345-m5o7F6riMXeKGzQ5SQSztg-1; Tue,
+ 10 Mar 2026 10:09:13 -0400
+X-MC-Unique: m5o7F6riMXeKGzQ5SQSztg-1
+X-Mimecast-MFC-AGG-ID: m5o7F6riMXeKGzQ5SQSztg_1773151747
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D3F51956095;
+	Tue, 10 Mar 2026 14:09:07 +0000 (UTC)
+Received: from [10.22.89.94] (unknown [10.22.89.94])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CD8D61800576;
+	Tue, 10 Mar 2026 14:09:04 +0000 (UTC)
+Message-ID: <ee563439-9ba2-4f0e-8309-fcabc527ec58@redhat.com>
+Date: Tue, 10 Mar 2026 10:09:04 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftest: memcg: Skp memcg_sock test if address family
+ not supported
+From: Waiman Long <longman@redhat.com>
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20260309160205.651754-1-longman@redhat.com>
+ <4ddd3jascnb6nt7quhyjfmsgsmtfmjofwmnrgjktz57cfbfymj@6ejbdgbg4lz2>
+ <38c7a9a2-a8f1-4ae2-9070-73d0ebb42f53@redhat.com>
+Content-Language: en-US
+In-Reply-To: <38c7a9a2-a8f1-4ae2-9070-73d0ebb42f53@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Mon, Mar 09, 2026 at 09:37:26AM -0700, Linus Torvalds wrote:
-> On Mon, 9 Mar 2026 at 08:43, Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > Because it can't f&*^ up the state of random tasks.
-> 
-> Christoph, you make no sense.
+On 3/9/26 8:04 PM, Waiman Long wrote:
+> On 3/9/26 2:07 PM, Michal Koutný wrote:
+>> On Mon, Mar 09, 2026 at 12:02:05PM -0400, Waiman Long 
+>> <longman@redhat.com> wrote:
+>>> On systems where IPv6 isn't enabled or not configured to support
+>>> SOCK_STREAM, the test_memcg_sock test always fails.
+>> I think IPv6 is not substantial for the check...
+> I mentioned it because the current code is using AF_INET6 family.
+>>
+>>> The purpose of the test_memcg_sock test is to verify that
+>>> memory.stat.sock and memory.current values are close.
+>> ... so this should work with IPv4 too.
+> Probably, I will try that out. 
 
-Thanks, I always appreciated rational and detailed answers.
+On my test system, creating a socket with IPv4 does work. However, with 
+IPv4, the memcg_sock test becomes unstable and it fails half of the 
+times as the memory values aren't close enough. It is possible that the 
+assumption that memory values should be close aren't quite true with 
+IPv4. As I am not familiar with the networking code at all, I will let 
+others who have more experience with the networking side to try that out.
 
-> 
-> "do_exit()" cannot mess up random tasks. It can only exit the
-> *current* task. The task that is running right now in that module.
-
-Yes.  And random code should not be able to end arbitrary tasks.
-
-> So what is the actual problem? No more random rants. Explain yourself
-> without making wild handwaving gestures.
-
-Wow, you're a bit aggressive, aren't you?  Maybe take your meds in the
-morning to stay a bit calmer.  As said before I don't think allowing
-random code (and module is a proxy for that) do exit a task.  They
-really should not be exiting random kthreads either, but certainly
-not more than that.
-
-> Now, there are real exports in this area that are actually strange and
-> should be removed: for some historical reason we export 'free_task()'
-> which makes no sense to me at all (but probably did at some point).
-> 
-> Now *that* is a strange export that can mess up another task in major ways.
-
-No argument about that, but that's not the point here.
+Cheers,
+Longman
 
