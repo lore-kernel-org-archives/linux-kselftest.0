@@ -1,180 +1,113 @@
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098883DD500
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 12:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5FC40DFD8;
+	Tue, 10 Mar 2026 13:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773146404; cv=none; b=u/2x9Y/xV5EwWZD38+55IpJ80DJ6Ya/lBIg9hkWHgoMSEN78I4lCw3pEd8xlr9dT/NK1bXUtROp68tP39S5488N1Ah4DsJns8ufS9YVfcDdvkuLbl8vss6WvpxgBaOBWbKrTaogDssSWb/Mn4pvffhf7ATGlhtxoZVd1D/LJSV0=
+	t=1773148283; cv=none; b=tEABEEvqDqa0V7+ESDSq5kmLYcyaOJHELbUu/r5qwWJrzOw1Xw73QwWs6BfwZ+00IHzw7bpJoQbUm0f1cVvNQ2z61Q+UKECAR3uTIkXpjaFGoAvSlWaNs3cu0JlVPLnl6tfuqp4yckFPOSTdn9UO1fmQOTdv2g2C51zD3t3ba/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773146404; c=relaxed/simple;
-	bh=b3fiJZPf+KksQH1z66J9vDcRdtI6eXl/7HGK7rAUDG8=;
+	s=arc-20240116; t=1773148283; c=relaxed/simple;
+	bh=5c5DIHV4hT2SeTfqSM2LG61yHypW02KyRFmvcmJdQnk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JYdmsNzl0JuPZOBl9btItSkJM8NA/V4WHz9rjp8qMQ9ICeXMfsT5p5rjUPoUSgNKCcmk4Mj0mVec08CsuWT0PnOGe85Chzf9MwQIdtVTeswDV8Kj8FnGsj/+Xxc3Kp9/ciTOVJWmLPQOaVAmUnhgJ+p8ut7PQhkxbz4nfUuSqSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=EmVWikST; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=UbMLsg79aoUQgPLSqaMQHq+6phSGmNFKqhjEBsbqyWbEDSV5tzgJL5+dFXN1DuzMvJkHXBnOR1izy3ISkSS+LrfWnHcXhezTj1/QNdDbze8PNNttWzPhQFL+6HNinqs4lr0eeZXLFannlPzFyrLE9YSR1EuZWcmrPczPyo+eXok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=2IZB0CLI; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="EmVWikST"
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-4671cbce2feso386808b6e.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 05:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1773146401; x=1773751201; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mtNh8fAk+ErgpMDFlX2j7RYrdoBeiifVpivZrCpt870=;
-        b=EmVWikST/8CfFRHcbCpySgDWfVI2qrR8f2Y97MpcPLLWR8RPuFqxnuQBUk/eECiOqq
-         qmrlfs6g9pwJ5K4qG7p0rmEZh74stvC7Ntunk+G8OV+7XEXcV4yyRC4JKnhbRuzoo/wF
-         zg3/guyBGv8VlMfpCK/gaKzGZNKwOvSQT6iHtaiYTxwR8XjzQt9Ya9JtH5uGm8P1KdXf
-         IW8UpTeB6WaV2757AhanUBzjU96X2U4vL5u7BaXs9Ioq57zrYsNk5/0AyAlVYL5M12+V
-         JJ4Mrc8Ydj53bI5mIVLiACXQCLThm4Pk1VuMzrVsp33X3qeltn7jTGqcihmn07ktVIJD
-         HvDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773146401; x=1773751201;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mtNh8fAk+ErgpMDFlX2j7RYrdoBeiifVpivZrCpt870=;
-        b=H9GQBPwZYajo0Pdiw6SP8RHV5xVQqIJ7WSWMQWKzt1DLyzPWsfDPyUy5OnuZ8YcIFK
-         gWAqeKxtexvRizFJD5PEUm0s/9w37icUxkio+LV1jHAaVhOJqY0JtpFv9CDo5iE272pA
-         is+s0hgcNg9XTzeBinD8ZJEPAyasHjXT+PxV0kcfRuEaEwe8BT1bCricRK7G5PkQg0Ok
-         Q7gff2Bo87aKmiu2VyjiDJfwklOLvbLITRnMqycYYL3ohR9vDwA/LOuZWDYIISGnArXC
-         uBsf9FiRigECaeS+5MZR6P/2rQqS1t0bplusmtL+GJl+P8figwXCe43x6c7SkMyPr84J
-         hrkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVtpzdailZSGjKrOnk3CfMQ1Y1uzknMumCNDR0gtSMVmw7CCwmiXUDA+1AvHanxw6mhGXlLEpO7+l0LQSX1Bs4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4hz5n4gkkmvwDVY5aWlVA0Fwl7AXq7Gc5xb/NM/1RSRqFs7Jl
-	RlnviXahDvRDcdzO54Hpu7EAqElucU9hdqxQaCRVPz0WCQ4OKL33PD2KQ2wTO4gHHNY=
-X-Gm-Gg: ATEYQzw0HAZJQ6ayja8dePPLuo4YLakGqu4/wxAiwE/NL6s26KQBDn9DG9l+fh7jhP+
-	IV20SjCcP+H4weOHVk6DWmf3OtlpAa2CvMCGVJ8nMVVDoktT9u4P1VGpGYtKldFzZAozPHE0M3r
-	i04dhUQfxqUz4tKGMNkz+gFe7Y2m0TfXqdRHBt2LDAtW5XrwmBZ8dBsbpMq04eFB9LQcqT4Cv1r
-	UFHAoT2rJSTsuL6fWEOD1KHC83xyPcZpkaI6vCz+zxbatN5IoREu06MavkEmT11/HlOrVW/bFqk
-	a/lRBeRv2hixgToOV7S3DJOP0FsFRw4Nn/63me3+hZjQjQ3SsjtoTuNeXE2D8dTRel7inoVsQDt
-	cpAb4tAJTE+oYWY7Hth4rc/SAY47kCZ4a3um/TnkGoauIOpOOOFqyrvraidjV4k7Di2qv2vVO63
-	HQeHXpRHHy9iE460f/7J/e
-X-Received: by 2002:a05:6808:221f:b0:45f:174a:1297 with SMTP id 5614622812f47-466dc69625fmr7733846b6e.0.1773146400893;
-        Tue, 10 Mar 2026 05:40:00 -0700 (PDT)
-Received: from localhost ([216.228.127.131])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-46718c843e6sm2261455b6e.12.2026.03.10.05.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 05:39:59 -0700 (PDT)
-Date: Tue, 10 Mar 2026 14:39:55 +0200
-From: Nikolay Aleksandrov <razor@blackwall.org>
-To: Eric Dumazet <edumazet@google.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
-	jiayuan.chen@shopee.com,
-	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="2IZB0CLI"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=l4GpPH3ubmx3aruEVyuRzz3DC1ibbOvvKhNccLuCdJw=; b=2IZB0CLIMhRCWLDyZPKVLAP3Zi
+	vkxq5N+BauqfWJ2D08pYk2yJx04ORVTcyKmDDrK6LuqW8XMpcwg6np0wljWMF5F1kr01sH+Q+jTrq
+	xDq8JKn+NuwXEQgsNA7+BSOA7KRyX1wksWfz9wKmL9hYInXwz8XUG9LBohaI66rEoRupv9ltfhBxQ
+	B67SFwm+9VlBJyWk6UVQWx2m2KvS0cFVxa8tSFUpKwxJS1FIprhUVpsGM4inI8xOeVYE3OTfvQkpq
+	d83SjBx8OUeAWD15fpQ3CkfgrZHzJdUM6o/iIAO634R5cNSd9paceV9MYix4ApeSzSnk0L+NmiwTZ
+	zlAStFSw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vzwrl-00000009Yu9-2fbO;
+	Tue, 10 Mar 2026 13:11:17 +0000
+Date: Tue, 10 Mar 2026 06:11:17 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH net v5 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-Message-ID: <abARG4sHFdUNqcRV@penguin>
-References: <20260309030702.128520-1-jiayuan.chen@linux.dev>
- <20260309030702.128520-2-jiayuan.chen@linux.dev>
- <abAFRbJNinhN3O5v@penguin>
- <CANn89i+5yOzdiBTWm4ekc0UvMxQp=mhXbz0rU5WnfxEu3NrAhg@mail.gmail.com>
- <CANn89iLOyWzWW7w262Vsy2MOMVDXA0+UZGpEbsdLwe6e75mhKQ@mail.gmail.com>
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
+	Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [PATCH] kthread: remove kthread_exit()
+Message-ID: <abAYdbtYE2tHPNnM@infradead.org>
+References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
+ <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
+ <aaroReSCj1qXUeQb@infradead.org>
+ <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+ <aa7qson15uJpL-BL@infradead.org>
+ <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANn89iLOyWzWW7w262Vsy2MOMVDXA0+UZGpEbsdLwe6e75mhKQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Tue, Mar 10, 2026 at 01:07:15PM +0100, Eric Dumazet wrote:
-> On Tue, Mar 10, 2026 at 1:00 PM Eric Dumazet <edumazet@google.com> wrote:
+On Mon, Mar 09, 2026 at 09:37:26AM -0700, Linus Torvalds wrote:
+> On Mon, 9 Mar 2026 at 08:43, Christoph Hellwig <hch@infradead.org> wrote:
 > >
-> > On Tue, Mar 10, 2026 at 12:49 PM Nikolay Aleksandrov
-> > <razor@blackwall.org> wrote:
-> > >
-> > > On Mon, Mar 09, 2026 at 11:06:58AM +0800, Jiayuan Chen wrote:
-> > > > From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> > > >
-> > > > bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
-> > > > check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
-> > > > when the bond mode is round-robin. If the bond device was never brought
-> > > > up, rr_tx_counter remains NULL, causing a null-ptr-deref.
-> > > >
-> > > > The XDP redirect path can reach this code even when the bond is not up:
-> > > > bpf_master_redirect_enabled_key is a global static key, so when any bond
-> > > > device has native XDP attached, the XDP_TX -> xdp_master_redirect()
-> > > > interception is enabled for all bond slaves system-wide. This allows the
-> > > > path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
-> > > > bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
-> > > > reached on a bond that was never opened.
-> > > >
-> > > > Fix this by adding a NULL check with unlikely() in bond_rr_gen_slave_id()
-> > > > before dereferencing rr_tx_counter. When rr_tx_counter is NULL (bond was
-> > > > never opened), fall back to get_random_u32() for slave selection. The
-> > > > allocation in bond_open() is kept, with WRITE_ONCE() added to safely
-> > > > publish the pointer to the XDP read side. A plain read suffices for the
-> > > > !bond->rr_tx_counter guard in bond_open() itself, as bond_open() runs
-> > > > under RTNL lock and is the only writer of rr_tx_counter.
-> > > >
-> > > > Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
-> > > > Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
-> > > > Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
-> > > > Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> > > > ---
-> > > >  drivers/net/bonding/bond_main.c | 9 +++++++--
-> > > >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > > >
-> > >
-> > > This is Jay's patch + the unlikely change, looks good to me.
-> > > Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-> >
-> > Orthogonal to this patch  :
-> >
-> >  get_random_u32() typical cost is around 10 to 20 ns, I really wonder
-> > if this makes sense
-> > for the packets_per_slave == 0 or 1 case to haves this kind of
-> > randomness in the first place.
-> >
-> > Perhaps we could use a
-> >
-> > static DEFINE_PER_CPU(u32, rr_tx_counter)
-> >
-> > And :
-> >  slave_id = this_cpu_inc_return(rr_tx_counter);
+> > Because it can't f&*^ up the state of random tasks.
 > 
-> I also have mixed feelings about this patch.
-> 
-> We probably should detect that the device is not ready before hitting
-> something deeper in the stack.
-> 
-> Sure, a NULL deref is avoided, bu what happens next ?
-> 
-> We send a packet while the device is not UP, I am pretty sure this
-> violates at least some RCU rules in device dismantling.
+> Christoph, you make no sense.
 
-IIRC when the redirect continues, the packet should get dropped if the device is
-not up (checks at a few places), but that's outside of bond's jurisdiction and
-after the slave id is needed in xdp master redirect's path unfortunately.
-I'm not sure it can reach much further, it just has the master dev's slave id
-generation in its path.
+Thanks, I always appreciated rational and detailed answers.
 
-In any case we shouldn't crash in the slave id generation in the bonding,
-that ndo's only job is to return a slave id.
+> 
+> "do_exit()" cannot mess up random tasks. It can only exit the
+> *current* task. The task that is running right now in that module.
+
+Yes.  And random code should not be able to end arbitrary tasks.
+
+> So what is the actual problem? No more random rants. Explain yourself
+> without making wild handwaving gestures.
+
+Wow, you're a bit aggressive, aren't you?  Maybe take your meds in the
+morning to stay a bit calmer.  As said before I don't think allowing
+random code (and module is a proxy for that) do exit a task.  They
+really should not be exiting random kthreads either, but certainly
+not more than that.
+
+> Now, there are real exports in this area that are actually strange and
+> should be removed: for some historical reason we export 'free_task()'
+> which makes no sense to me at all (but probably did at some point).
+> 
+> Now *that* is a strange export that can mess up another task in major ways.
+
+No argument about that, but that's not the point here.
+
