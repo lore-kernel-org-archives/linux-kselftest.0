@@ -1,260 +1,261 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010031.outbound.protection.outlook.com [52.101.61.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F78342CA9;
-	Tue, 10 Mar 2026 19:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6322B3E8C6A
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 20:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773170137; cv=fail; b=IWfVjphWSeAd1xbOny2Q2iNYtBO0GYoeBFfCsFlahGJjx6VXzCwDnqTQoW0gnK2fXUMCO4ITU0tWFhKkAIpqoPcpOTjMCmTjh5+rHJukqFhjIGNHOlYBBcS6eOl3opBlPwbY8M0ndvbiHz5YZNB/koMdN3FKGo4AcMkcahJ3J+8=
+	t=1773173480; cv=pass; b=K1miJt6X2TH3WGjAdb0ICTAvVDnjkP9B9eKLiCe5c+xI+JQiPxVHJowHMEbQgn1cfOaUCiop5H0UlxK9T668JnaxIl0WLEUcSXNOE0b0NCsnniSGQktodWKDvPjqLPpe4LO6NwjDuJsuf3zJYRlfitu7LtqyTcovZxh6lAlYEDE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773170137; c=relaxed/simple;
-	bh=LPEvkQsoq8pkhSwkD+SsXJkypC5Bz5txjmp4WyH1Qg8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WyIkrnowSaxaTxUy32bXlDLpI9OAGGDAJv8ofC2zkVdB7uwguPhhnyOzm704bt1vztB5NlcHdtTeF1gtNT5kFHagdi3gy9KMgmMw7g3v2Ry7chcaTj7OL0GAu/uSPuCjBAuxG1+rf5k+gYXfCSdnA4UfQyzcaYjeyn/0yEM/MEA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OgpYCF3+; arc=fail smtp.client-ip=52.101.61.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1773173480; c=relaxed/simple;
+	bh=VcbIZ/WmA7ETF97AV4CjkC1KQDUJSW8FrZRfP+0Kr5U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IoxspfR5QsQpZ/H1EVpUq1PtnWwiW+6ZuYDAuDU8kjoYQH9+Kf/8OfntpxOZ1cELXzQPWiVjaubHZ7XDRqnbcaQrPlApjT48wUU/VxxZMpidsUFe5/b+3DtFsQ3U/S9PCN01BZkmmqFHjB8JVf70pG2ieUgzgkI+ykHQ4Oijabk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i5jsQ1Zg; arc=pass smtp.client-ip=209.85.221.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OgpYCF3+"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VAYZWq3PKCEh4s+3Q+TtID9eZcDPQN+PZ8YU2ZaRZaWkCdWGPDL2fggaRlNW3WBV1IJ9GbFY0PFMgp4RlC5iApsiojARlFbdGsChWJ15UEh+eTnH8NmfkRAWZE+ND8zBxxo0E6kikMWaolNAscOV1kNSaQ1JaGob4TapmCFb0FbByIqM3nl0fkNAirsvF3+QTOn75o7wJR9pxJBot4FuiDE0BjlVtvwPsqnk82lFLyj/aUKjnMPiKDRTX6ajzn9MZOeGHJIkwBlFJuAg8p/kUQZ207naIXrBoqYM0pyTeTXh8tr36tTxw5bRFwOtTW2d0PKtjS36KSOJFa9QmY6j4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IUEuUYvVeyn/r4pxeBU6qViM7TFLLDHqfW712/CN0JU=;
- b=EPAJVpqsa6XtlMpyIJpQVZDUMlv9iHAcMA0u8YW7zZsy/Yx30x4amQlqoA50LEiGvX+1b3FeV6L4fxHENy08S1A2prarxnWFx3JRo72EpiC1a+eBkxKKR5egkMzRE2B2pNbMSAsJyqmJ0pfikz0sgeRdXZAf9uuTRrrF0NFDyEi/As/klkCDWA2cXt6czdplKOC8BuwDQTS2vxTXkrde3OBJjzWDMI8zXjAvNTz/wP5QWcBUPY+F94wkzCdTB02AQT7tHCVUODsUpxHK7JaAJqVoe7vTk90nGeX0AFfwEme/a9ad2qSScjtySczmcIIGem8ZmrEs6UBvx2NLT4fu1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IUEuUYvVeyn/r4pxeBU6qViM7TFLLDHqfW712/CN0JU=;
- b=OgpYCF3+4CaMEn/qextvoqL5L7PVA0ls1fWnGUM8XrSG90my244U9zs93XLIkmbmGi8CltGmjQdFoVPlWCjohZme9fdbGOoZEwnNiYlqXUxjbXdG8M5F3/+8/c6aFEWd3aITc4IgP5XcGLg9/ul/okxm1foCf3Pdrsl7fZswaDOHqMKfdlJ2nsZxoNtsFsT1N6wyUWggf74CqTkVgGM5qK6sSwY11y7NYY0VflcW3qpc5dAIVZdW+zlrDObYiPL6lyzT3u2zh+CgFna3Y53cEfRhAzFNMCPBxkG70y2dvUsGmFqdbvNG4cKeCyEisaNnCM6COxQvQD72fPzGPd7J8g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL4PR12MB9478.namprd12.prod.outlook.com (2603:10b6:208:58e::9)
- by IA1PR12MB7520.namprd12.prod.outlook.com (2603:10b6:208:42f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.11; Tue, 10 Mar
- 2026 19:15:31 +0000
-Received: from BL4PR12MB9478.namprd12.prod.outlook.com
- ([fe80::4d08:451e:a51e:33a1]) by BL4PR12MB9478.namprd12.prod.outlook.com
- ([fe80::4d08:451e:a51e:33a1%6]) with mapi id 15.20.9700.010; Tue, 10 Mar 2026
- 19:15:31 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Sayali Patil <sayalip@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>,
- David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@kernel.org>,
- Oscar Salvador <osalvador@suse.de>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>, Liam.Howlett@oracle.com,
- Miaohe Lin <linmiaohe@huawei.com>
-Subject: Re: [PATCH 12/13] selftests/mm: move hwpoison setup into run_test()
- and silence modprobe output for memory-failure category
-Date: Tue, 10 Mar 2026 15:15:26 -0400
-X-Mailer: MailMate (2.0r6290)
-Message-ID: <556E284E-9638-4F4E-8CE4-7158DB914AED@nvidia.com>
-In-Reply-To: <832afc6c34a784ca433b506622cdc98fe9540f79.1773134177.git.sayalip@linux.ibm.com>
-References: <cover.1773134177.git.sayalip@linux.ibm.com>
- <832afc6c34a784ca433b506622cdc98fe9540f79.1773134177.git.sayalip@linux.ibm.com>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: SJ0PR13CA0095.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::10) To BL4PR12MB9478.namprd12.prod.outlook.com
- (2603:10b6:208:58e::9)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i5jsQ1Zg"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-439b790af67so224296f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 13:11:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773173478; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UtkAaTCO9joTDzEhE3gzsxxgkEpi5mEN0ENOIS9G+TBRpPJeLcApD0jTBzZv9YCvZ2
+         pqQLVNZWBzDAcwdJ8X90fgteAviswdwaKYOGwZp8qKC6HTlSgpvtQBF4DhNGQ9G0kCfQ
+         zJhben1ZM9UdRgomDyBzs0W2aFDfOrmSVeBhkw31oiZo7oIoPQ/G+rOkeeroIeUnXygb
+         eCC2R3+qajzHxQzVrfk6El3joXOCAGK/EclxAs6yTG/sT0fqhabKgkg0TRiHCVRaym5f
+         xoK3Hb92+X5/WqxxJLzywPDQkb8lMGW8PumN2Mrq+rS3RQwGgMWX6M2ru4uMWDranWav
+         OKPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=T3umR3Cr9WiTS9b+qrsYcPDG6mxvuCgn4bszgUuEQ+E=;
+        fh=Go0Py532vqhbeQ9t3l0YmQZzLbbAZdsWSgCdFabjph4=;
+        b=SXYFXx4R5K8JezRY+dI5Nr66Hp+ocMH0GraUkGgP6dPZfXDdHZEmyAhCtk5p5IXBJf
+         wuaXDDQ+1K5Ck6JXI/7kN1JgnZkyAGPtBUw4rNP/MvqSpmP7uoEhmaJzyJA31POxIIL+
+         Amylbx5gC4r4wg2ifS9iCoN3vpV3gIshBe+PXXRlVgqVrVHSncHR3Wn8GX5xU7Nw9KsC
+         GAo+X4T2222KHblgOs6qeLdCB97g9VsVnBtDfusb/Pz9jzSPTbqcd01OLq4rVePXHmGS
+         64YW5TVt4ED8v7iTEYRrKMnmM4LAVF6RuU6x02mRRP8SIewtEAkB+umg6QSFhYLLzmyE
+         xudQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773173478; x=1773778278; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T3umR3Cr9WiTS9b+qrsYcPDG6mxvuCgn4bszgUuEQ+E=;
+        b=i5jsQ1Zg61Tx7lePkczxOQRbEYo7tGlcBq8ut93ipLGKUjdwZv1koSbOe1DGGmTRAp
+         o5LanPg+yOaxI+xgLW4b+w39wVo6AyN84GGwsMDdxFk7VFNkGYAUWhsDvsf+YlruGiik
+         5icwM1xTIC/svhzRhU8uqaGXIJl0vG5JNwBEKoM+j2MWefRCY/GfI27QIaKkavT4uwH+
+         o0tbFA268F8cLdfKpPictpJyRsg9zVgzpe0Sd3p05h5J1o24gTlPtBZLQ75ryf2xMebp
+         BiZm5E4PBa1fH172eiU0pNrFyUxuswz3fFsmGN+wHWxySCjUvuJABQgqO4C+YWerhoh9
+         d/eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773173478; x=1773778278;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T3umR3Cr9WiTS9b+qrsYcPDG6mxvuCgn4bszgUuEQ+E=;
+        b=IsmT9Enw5GZkNXg+ZmX2b01os0DfUP2enQ+O9k8wGlEnKighE03tye9zt6OwBYzAYF
+         tPovO2ZwwDC/NyJ1cC348+6DFakRPNff6NmIWiSr+X3lpwX2ryFWUyMqXxbgS9o/EBDf
+         /hehRSQ1Hbnuboacm5kW84Jglv3n0O2ePNdEtwVPJN4gsIfeQddWpORphpkUG269YXcT
+         rEZ1d6Mqx8lWNCyy0hnZLIWTS7BG7QzUh9PssD0SUWeaycKwq+qqKXWZ0a60A7bp3CW0
+         F2Yn/rzgs8ZJj88wD4mBwxWXSzA6rKzIYd88mtCW783MT8bDyQtkCIQ/AZ7Eo/7kn7OP
+         O2IQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPmmYSHXqvVxiYcYbOV1mE1Wqos9KGOEptRm5pLtfruY6N7Qjss1QnfRzrdO/Q0jmUkJuNpNwbbaFhKWslNv4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEWjXfbbEBYRLkawbMG8KkBbTswka0VyQrgeU/BR9jl3UnpQCU
+	AYxHnaKFiG7sEtsrlBaYaeB430EiLM+AAtOdg++WGiDXMisMOB6i4m9PdT0/OkvEBYifSQCrND5
+	WASgzsIQpgPMffX47SERj03ho8crqZZc=
+X-Gm-Gg: ATEYQzy90u6AWdWoTh0bqILLV6pM+va/yl47Mz2WSPSzEoZ1m+YeYbHEqpAB2yw/agc
+	BzfY7K5vyeBLM5uEwUSdC8iy4L9q+1ZiUc/oJm2OEtcpsYE6S4ikK4yQzBISdbZ2tGCenA2oQ+h
+	zbHzuImgt1QnqJdMChejBdVgLIohbd8dGkFhbanzoQ6tkP+Yi8f8HQUPYmEehLAC32WLX/6tIoQ
+	GQZfrX9M9hl0/m3IF1dCzIvaeFyPBDwqkJyGNaPTVh+VHO0ICXk5IqHhB3RMIocL90IiFf1wtpD
+	SXet2229v7YKkru57slu7JFuIECW4nrR5m5eskt9t14FOB7kFE3abYOvtYie8DUNOeeR9TA=
+X-Received: by 2002:a05:6000:2584:b0:439:d084:9e48 with SMTP id
+ ffacd0b85a97d-439eff12b5fmr8927182f8f.5.1773173477509; Tue, 10 Mar 2026
+ 13:11:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL4PR12MB9478:EE_|IA1PR12MB7520:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbe96e9d-6862-495d-763f-08de7ed965b0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|1800799024|376014|18002099003|56012099003|22082099003|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	vTgFJWbzobP/pNVnNoyYVViSz8t0DV+XH/OEIAlvYgvK7nEKXKooyLsFHuUTPJJXieFvfy+alyuD0x2u83sGVOM7+dsUaLiiQiaPJHFyZfcjaqcjNiqlG8fKqO4iHIZJmcDR3IdJu+OnffnrA3u8ctV5sEkSyHASlDBvHye4jsZ4S8E+ZzlOdAYvPVrzEAbaZ+17F5uh2xKNfEawDPRtoxh/3vJUJQFGeduYCRGr/h2e6Sfz7hd85bqukm6tPY7TkaDgVbiy9m5mEUvom1zxJmaHckFUoVf+GOq5kOtSBbHDDeDAdz5aOeRjl8529fPP2qYImPxkgUip98itoBpq92G+ykBoVNsydxrX2eG0/zAaTKZR9ltj8CS9s+04Q7UuDb+wJpjlNSnOyRH5r2coKsxE8Bu6R5MHy4jPnBY6Z2MyYH/ck5hreLK2AsENo0acVtXDNW36xJse0JDHPp0saT62qdf6tEDKlKdlEfBleubYufyWEN/apY+nN6Cn/1+JPz/jqJ/s6ERAWaW7grCzWDRkV8zz5vwCm/x2JtCnB6G6/Aw/gSOYsHivqDWevFixT3OkYWBml0mgGHWz0gUVXFeLrZXTuQ7+/f2S2aljdmg8I9YAc/iBTv/kIAnC1A5I1Sguv6XAb9yoHQ9HXPsNRyIByHDsYYKglaI8UFw/s2hQKGzXitNM7sY+JGn7cPm6nSSys544KZJC6w8uf69L6Gdf9JQj0laLxBYOcwYDUR4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR12MB9478.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014)(18002099003)(56012099003)(22082099003)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?W9HOd7kjf0mXLuZvzzFkGxGOfAKAO/9a07iDfNzs/o2nzs1u/PMRIwLw9TPv?=
- =?us-ascii?Q?xcUh0rQ486JNgv+XyfM/3WnyEZVDXhRY4XrzcAVj4Zih0rp3a7If95lVkJ3O?=
- =?us-ascii?Q?pTTqR2aKvCPkt/4W7T+otSgqtHOWeufG7pdDfF9WojXV/iNQLTumG0NmD2Cd?=
- =?us-ascii?Q?OpEklyXaDnWsczndInOQPe17Xu2ITTQVDAnEihXpab5btwOZjaHjKC/P4UTG?=
- =?us-ascii?Q?AKyEuzjPqvGom525Hs8qlK2PL+tFgs4f8Lx/QhRB/jntgHdBpI4jTkwCLseV?=
- =?us-ascii?Q?WTOUWeEwbCmVJ2rDasPP9mt034ydv+V0e1K+J6kGkzVilcrgI+aQQOhkZVhR?=
- =?us-ascii?Q?05Atwi9wu+j3pW6P8eP7A+LvkXP6DvWCSq56o8El/kWccke1+GUN6kHEy3Ip?=
- =?us-ascii?Q?1DJj72TmZNOqlPS50kCOJi60hRcWoRn/tI964aMZrDrdbwzjS4QWCT3mPMyE?=
- =?us-ascii?Q?3a0Xb4kKCBU7anXJrLYOZmb5YZrV4wWx5VoPJSSaB4jcQjdstG+cDpbL08sN?=
- =?us-ascii?Q?YcjWw04ZXrnwzDgB1a37UsYlDSeDOIW70CX2Xo6dHXRGQ21bcFUzpP+85z1o?=
- =?us-ascii?Q?expIBl0ybDdWOUVDW5rLxMw72d7+vpzdD9SJYh8/fQaIt/TmpQ2bHxGmz5hS?=
- =?us-ascii?Q?l7Q4oU8AJMt9CLnK/CswAVH54MKYb7JFDvT+0Ezl8oAeK58lg2ORG4NTUTiO?=
- =?us-ascii?Q?6OVtkGVsODf3X780iTxU6zSzaRmCqmHPuQg7uj2YpXXfzcgNLRSeIB4AkCxv?=
- =?us-ascii?Q?mUWqDVcJnQP5ahJVkQ0US/cUO9i7S+Iizj2TcKL4jb93DrbcKrGgyitbTpBF?=
- =?us-ascii?Q?N/Qjn1o91So2N3HJFNKcNdTB8wbpAdlkQQi3/4THbN/MXzXMlGotCU6eiSra?=
- =?us-ascii?Q?uGR8MsyejQH6qIJYA+ARlKnb+iwzT81CgkRwkbiq/Q7NhdGeE77Q6HrV7pxn?=
- =?us-ascii?Q?K/F446ZpRPCqcGjLOXwT6gtLBLmtmU/RWDZG3Rfcg4xRolIdl1KyeWxnADyV?=
- =?us-ascii?Q?EAZf6WiUfmL6DWJ9kC+cjoyPZr/ab2bBMtDf/IE1yU8VxLZAqbelo52mUd5f?=
- =?us-ascii?Q?YQRyGOUs1PEj0G6jGcq1YWm3w22GZ9dq/Dc6GgL4bcjsEr4GjqwkJipgZvIq?=
- =?us-ascii?Q?o2Yvh7W4p98rFhdmcebTYFKGAHHOrXF1jYnw0/58QzP/NvicbbcojdnAzsMb?=
- =?us-ascii?Q?thNf29eA08ja1jNsSfuQrp7GcqJajjvsZ/3TVrzG2gITChAYuR3OHG8l4MQa?=
- =?us-ascii?Q?yc6rmY3XJa1OLopRorWIGodB35/h1zWIXDZRJuC41END2PbKD+V4Fyr5U1GC?=
- =?us-ascii?Q?nOSWswvg722MZ1XNfep54D09rRZyk1liUFGejiDvcwFtFc2up2NIwM/y8zGH?=
- =?us-ascii?Q?3rWbVEzfcqfvhsdOyBrCsrGY7m8Eg11Fk8IWaIPTaqhIgp4g1w3jIf3B5F+L?=
- =?us-ascii?Q?M7hGB51E/AG9D7ncgDxAQ9BrmHKioXB+G7owympbH/2orT01WsD+mO26Bd31?=
- =?us-ascii?Q?bBLxOfI0qurHr5pBqpR57ogwoKII0jt9D/MZm/mYm+DXEZgD8aJN7/zrf53s?=
- =?us-ascii?Q?u1LrjjWlSxKRZ0BOI3x41RTM8VW3KppvDQX9ROb7N30Adb2/hVXJRu2GTNhY?=
- =?us-ascii?Q?tShbrTheH0MhLM6GQGAkT5A+127+R5tQ4nUUSQ9UGPZSSKqztBFRacfqx/ao?=
- =?us-ascii?Q?KCvJxG4v4cxn6z0KyrTqi3IZPkZS/ys/8+gcCbfhKfjFDLx7Yo35tzC0zSPq?=
- =?us-ascii?Q?U6VC+RDkog=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbe96e9d-6862-495d-763f-08de7ed965b0
-X-MS-Exchange-CrossTenant-AuthSource: BL4PR12MB9478.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2026 19:15:31.4041
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qgVRxbTm7rPgQ3C17CSnqFXRLD/IS9XMO0LxHU9QHmnlIXrAhauUrtg3eN27+zmM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7520
+References: <20260308134614.29711-1-pilgrimtao@gmail.com> <20260308134614.29711-2-pilgrimtao@gmail.com>
+ <8f97dbb5-de94-4ac0-8b3c-e0ce890fffc3@linux.dev>
+In-Reply-To: <8f97dbb5-de94-4ac0-8b3c-e0ce890fffc3@linux.dev>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 10 Mar 2026 21:10:41 +0100
+X-Gm-Features: AaiRm51DzLYNqWfe42hlK1YZj_mIKI1_ZQ9yMcurPyOpM09KQOLqEoROpBYmAQE
+Message-ID: <CAP01T76Nxy28ZAMi86Ez-WcCpiHKe2EBz4Y2j1XJjrRs=Qp-CA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 1/5] bpf: Introduce the bpf_list_del kfunc.
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
+	chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 10 Mar 2026, at 5:49, Sayali Patil wrote:
+On Mon, 9 Mar 2026 at 07:34, Leon Hwang <leon.hwang@linux.dev> wrote:
+>
+> On 8/3/26 21:46, Chengkaitao wrote:
+> > From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> >
+> > If a user holds ownership of a node in the middle of a list, they
+> > can directly remove it from the list without strictly adhering to
+> > deletion rules from the head or tail.
+> >
+> > We have added an additional parameter bpf_list_head *head to
+> > bpf_list_del, as the verifier requires the head parameter to
+> > check whether the lock is being held.
+> >
+> > This is typically paired with bpf_refcount. After calling
+> > bpf_list_del, it is generally necessary to drop the reference to
+> > the list node twice to prevent reference count leaks.
+> >
+> > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> > ---
+> >  kernel/bpf/helpers.c  | 30 +++++++++++++++++++++++-------
+> >  kernel/bpf/verifier.c |  6 +++++-
+> >  2 files changed, 28 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index 6eb6c82ed2ee..01b74c4ac00d 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+> > @@ -2426,20 +2426,23 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
+> >       return __bpf_list_add(n, head, true, meta ? meta->record : NULL, off);
+> >  }
+> >
+> > -static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tail)
+> > +static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
+> > +                                         struct list_head *n)
+> >  {
+> > -     struct list_head *n, *h = (void *)head;
+> > +     struct list_head *h = (void *)head;
+> >       struct bpf_list_node_kern *node;
+> >
+> >       /* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+> >        * called on its fields, so init here
+> >        */
+> > -     if (unlikely(!h->next))
+> > +     if (unlikely(!h->next)) {
+> >               INIT_LIST_HEAD(h);
+> > -     if (list_empty(h))
+> > +             return NULL;
+> > +     }
+> > +
+> > +     if (n == h)
+> >               return NULL;
 
-> run_vmtests.sh contains special handling to ensure the hwpoison_inject
-> module is available for the memory-failure tests. This logic was
-> implemented outside of run_test(), making the setup category-specific
-> but managed globally.
->
-> Move the hwpoison_inject handling into run_test() and restrict it
-> to the memory-failure category so that:
-> 1. the module is checked and loaded only when memory-failure tests run,=
+Couldn't you keep the list_empty(h) check after INIT_LIST_HEAD(h) as before?
+And we don't need n == h either. You could add a comment that n will
+never match h.
+The verifier should ensure it, since it distinguishes the head and node types.
 
-> 2. the test is skipped if the module or the debugfs interface
-> (/sys/kernel/debug/hwpoison/) is not available.
-> 3. the module is unloaded after the test if it was loaded by the script=
-=2E
->
-> This localizes category-specific setup and makes the test flow
-> consistent with other per-category preparations.
->
-> While updating this logic, fix the module availability check.
-> The script previously used:
->
-> 	modprobe -R hwpoison_inject
->
-> The -R option prints the resolved module name to stdout, causing every
-> run to print:
->
-> 	hwpoison_inject
->
-> in the test output, even when no action is required, introducing
-> unnecessary noise.
->
-> Replace this with:
->
-> 	modprobe -n hwpoison_inject
->
-> which verifies that the module is loadable without producing output,
-> keeping the selftest logs clean and consistent.
->
-> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page t=
-est")
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> ---
->  tools/testing/selftests/mm/run_vmtests.sh | 46 ++++++++++++++---------=
+Let's say the head is uninit. Then list_empty(h) will catch that case.
+Otherwise n might be NULL.
 
->  1 file changed, 28 insertions(+), 18 deletions(-)
->
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
-selftests/mm/run_vmtests.sh
-> index 7273c3e18227..7f3a3027cd9a 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -250,6 +250,27 @@ run_test() {
->  			fi
->  		fi
->
-> +		# Ensure hwpoison_inject is available for memory-failure tests
-> +		if [ "${CATEGORY}" =3D "memory-failure" ]; then
-> +			# Try to load hwpoison_inject if not present.
-> +			HWPOISON_DIR=3D/sys/kernel/debug/hwpoison/
-> +			if [ ! -d "$HWPOISON_DIR" ]; then
-> +				if ! modprobe -n hwpoison_inject > /dev/null 2>&1; then
-> +					echo "Module hwpoison_inject not found, skipping..." \
-> +						| tap_prefix
-> +					skip=3D1
-> +				else
-> +					modprobe hwpoison_inject > /dev/null 2>&1
-> +					LOADED_MOD=3D1
-> +				fi
-> +			fi
-> +
-> +			if [ ! -d "$HWPOISON_DIR" ]; then
-> +				echo "hwpoison debugfs interface not present" | tap_prefix
-> +				skip=3D1
-> +			fi
-> +		fi
-> +
->  		local test=3D$(pretty_name "$*")
->  		local title=3D"running $*"
->  		local sep=3D$(echo -n "$title" | tr "[:graph:][:space:]" -)
-> @@ -261,6 +282,12 @@ run_test() {
->  		else
->  			local ret=3D$ksft_skip
->  		fi
-> +
-> +		# Unload hwpoison_inject if we loaded it
-> +		if [ -n "${LOADED_MOD}" ]; then
-> +			modprobe -r hwpoison_inject > /dev/null 2>&1
-> +		fi
-> +
->  		count_total=3D$(( count_total + 1 ))
->  		if [ $ret -eq 0 ]; then
->  			count_pass=3D$(( count_pass + 1 ))
-> @@ -540,24 +567,7 @@ CATEGORY=3D"page_frag" run_test ./test_page_frag.s=
-h nonaligned
->
->  CATEGORY=3D"rmap" run_test ./rmap
->
-> -# Try to load hwpoison_inject if not present.
-> -HWPOISON_DIR=3D/sys/kernel/debug/hwpoison/
-> -if [ ! -d "$HWPOISON_DIR" ]; then
-> -	if ! modprobe -q -R hwpoison_inject; then
-> -		echo "Module hwpoison_inject not found, skipping..."
-> -	else
-> -		modprobe hwpoison_inject > /dev/null 2>&1
-> -		LOADED_MOD=3D1
-> -	fi
-> -fi
-> -
-> -if [ -d "$HWPOISON_DIR" ]; then
-> -	CATEGORY=3D"memory-failure" run_test ./memory-failure
-> -fi
-> -
-> -if [ -n "${LOADED_MOD}" ]; then
-> -	modprobe -r hwpoison_inject > /dev/null 2>&1
-> -fi
-> +CATEGORY=3D"memory-failure" run_test ./memory-failure
->
->  if [ "${HAVE_HUGEPAGES}" =3D 1 ]; then
->  	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
-> -- =
+After list_empty(h) says false, we definitely have non-null n.
+We just need to check list membership using the owner check, and then
+we're good.
+It will be a less noisy diff.
 
-> 2.52.0
+> >
+> > -     n = tail ? h->prev : h->next;
+> >       node = container_of(n, struct bpf_list_node_kern, list_head);
+> >       if (WARN_ON_ONCE(READ_ONCE(node->owner) != head))
+> >               return NULL;
+>
+> This refactoring is worth, because the "struct list_head *n" seems
+> better than "bool tail".
+>
+> But, such refactoring should be a preparatory patch. Importantly,
+> refactoring should not introduce functional changes.
+>
 
-+Miaohe
+I think it's fine. Let's address this and avoid too many respins now.
+It isn't a lot of code anyway. You could mention in the commit log
+that you chose to refactor __bpf_list_del though.
 
-LGTM.
 
-Acked-by: Zi Yan <ziy@nvidia.com>
 
-Best Regards,
-Yan, Zi
+> Thanks,
+> Leon
+>
+> > @@ -2451,12 +2454,24 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tai
+> >
+> >  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
+> >  {
+> > -     return __bpf_list_del(head, false);
+> > +     struct list_head *h = (void *)head;
+> > +
+> > +     return __bpf_list_del(head, h->next);
+> >  }
+> >
+> >  __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+> >  {
+> > -     return __bpf_list_del(head, true);
+> > +     struct list_head *h = (void *)head;
+> > +
+> > +     return __bpf_list_del(head, h->prev);
+> > +}
+> > +
+> > +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
+> > +                                            struct bpf_list_node *node)
+> > +{
+> > +     struct bpf_list_node_kern *kn = (void *)node;
+> > +
+> > +     return __bpf_list_del(head, &kn->list_head);
+> >  }
+> >
+> >  __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
+> > @@ -4545,6 +4560,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+> >  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+> >  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+> > +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 67c09b43a497..c9557d3fb8dd 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -12461,6 +12461,7 @@ enum special_kfunc_type {
+> >       KF_bpf_list_push_back_impl,
+> >       KF_bpf_list_pop_front,
+> >       KF_bpf_list_pop_back,
+> > +     KF_bpf_list_del,
+> >       KF_bpf_list_front,
+> >       KF_bpf_list_back,
+> >       KF_bpf_cast_to_kern_ctx,
+> > @@ -12521,6 +12522,7 @@ BTF_ID(func, bpf_list_push_front_impl)
+> >  BTF_ID(func, bpf_list_push_back_impl)
+> >  BTF_ID(func, bpf_list_pop_front)
+> >  BTF_ID(func, bpf_list_pop_back)
+> > +BTF_ID(func, bpf_list_del)
+> >  BTF_ID(func, bpf_list_front)
+> >  BTF_ID(func, bpf_list_back)
+> >  BTF_ID(func, bpf_cast_to_kern_ctx)
+> > @@ -12996,6 +12998,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
+> >              btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> >              btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+> >              btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
+> > +            btf_id == special_kfunc_list[KF_bpf_list_del] ||
+> >              btf_id == special_kfunc_list[KF_bpf_list_front] ||
+> >              btf_id == special_kfunc_list[KF_bpf_list_back];
+> >  }
+> > @@ -13118,7 +13121,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+> >       switch (node_field_type) {
+> >       case BPF_LIST_NODE:
+> >               ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+> > -                    kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl]);
+> > +                    kfunc_btf_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> > +                    kfunc_btf_id == special_kfunc_list[KF_bpf_list_del]);
+> >               break;
+> >       case BPF_RB_NODE:
+> >               ret = (kfunc_btf_id == special_kfunc_list[KF_bpf_rbtree_remove] ||
+>
+>
