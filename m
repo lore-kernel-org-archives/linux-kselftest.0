@@ -1,301 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F9B2BD11;
-	Tue, 10 Mar 2026 00:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3875F74C14
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 00:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773104036; cv=none; b=o8iDIRxpnq1u96gWOT8La2C4V1w7yfW36fCH345bdfSFoTCEXDGt8DCHhiuJN+f8UdOdLC04Z8GwMQnNVzwvSrRPr36wKn9ZRpxLa6YapWqeHrKeQB9DncNQ0Fc9GzBrEIT+1tty5Y5VD+a4derq9EYv1HrE65AZOh83DdiM1cs=
+	t=1773104082; cv=none; b=SQwt6+F24xQd5URtluf9sO22AMexXb2yqny4k6L/Yg6djFJRy5HiBYgCDMjaF8+/ZTJlGGHUc6ZeH5zwZ9s/n4AYMpBUGKL/Lq+ZJaaY3ZreRd00WYM31Jk0avV10rayh+TV8pMjq5EWAGvAmGPh0+xCugTk149oYWYyblVs/Nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773104036; c=relaxed/simple;
-	bh=dwgpkViLqZX8234s9U1WGIGUELmodBFEab34fFwqUOE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jx6cLNV0k+aQOMEKdK9Efn/HyIDRirSyInasdmWi6DPllESIYfsELgtAnslYg4UqpwPyCDOo7jXzRc0ZVk5KI7nsVQ+bfhdbs+AijIiWR+JbWz1G/A27V01U2l3Sh+fIEp0Khoh927YTMuqaXjviKAKGqgleoeVrV7POrMUdZvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IPAiC+31; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773104082; c=relaxed/simple;
+	bh=q/3n1xERGFt9pBxbxus768OlQpVMYV691SqiPTwnCNY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=auBtzmJSoR1XdyS6Lpn0A4cTxlDMUjVZgsAjwF7YtbZnXl7L+UsJ6B1HmURBxkArHjuCI4jdlzarAfWl9uKn6Mx1iuEG8deQo2CSury09PBHvA1LYJDqzaNZe9zHfF/Es8z/mL0AIrHCII/qS4Kd9uwX4J64CgFXTRLn0FkUQ9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=CBZ2lG81; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IPAiC+31"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA35C2BCB0;
-	Tue, 10 Mar 2026 00:53:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773104034;
-	bh=dwgpkViLqZX8234s9U1WGIGUELmodBFEab34fFwqUOE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IPAiC+31b9lFtStFJGQpDqInXdczVoj78vepZ0Kd25plPaKFxl0622mjpSMF5t6At
-	 Dhl/hMwoZ34PUs8FXgXiVf6QbTwYKRkfW6JtwIsVnz+1aWZuJlJirjzsPrg2leVVZa
-	 JehW3tJZ7esDN4RtVKiadVitoUVaWWx0K3OvNj3+9l48C/UKOkuRTXJhF24CYnj/rX
-	 oflMAfMlcfCnWivqUzepYYru7K0wM3SHJZldwudfKTaIL+c8McyYAdQHlqZc8ltmy4
-	 fIfTNpjR8DUZsknm8sRwgb6mWmb518cEn4VegYua6aPW/nq1FLSxrh5kTtfxydV0a6
-	 yX4CWwTbV7tsw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net,
-	donald.hunter@gmail.com
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	shuah@kernel.org,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 4/5] tools: ynl: add Python API for easier access to policies
-Date: Mon,  9 Mar 2026 17:53:36 -0700
-Message-ID: <20260310005337.3594225-5-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260310005337.3594225-1-kuba@kernel.org>
-References: <20260310005337.3594225-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="CBZ2lG81"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c73bb6662d8so329659a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2026 17:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1773104080; x=1773708880; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RgT23yH044LlGG/ozIQ2ZblhH3i8dVPmq39iaq5VJ3s=;
+        b=CBZ2lG81bVnNT7LA/ta8D0fvNT2TDXGpNjSvtvazaOwRtHN5nWBk8Oo+JbJ9zhIeaA
+         aCz4q9UQz28WV/E9zJXXXcr3xK6wMEfoZ9DFDNIW/QDsDXgTNwVRUPIzK4elvUT3LydJ
+         HIaqTRoIYfnj/xPYUtvkgwTHci7hu08LYUHZiyDl+gXz8lSEDzyldtJKM3mkwgoFygv4
+         xy3/8I9+0+njhiqGv4btzbTbKWxSk3bhsGCy7VnoODoUDbKhiLhl2qJuMgXglE1QgoiA
+         MjADmZrbYXFp/g4KkT1Rf9Ero1slR2P00AcuixHPNEfVXIKq5nve+rGR1Cfqvf4+R66A
+         NSOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773104080; x=1773708880;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RgT23yH044LlGG/ozIQ2ZblhH3i8dVPmq39iaq5VJ3s=;
+        b=Hn6Vj1aNkfZWo75kdu3xWekwRSuUCyAPAXNH9Xk+n7HrXIAEVW+gCsIQeaf4sfiFlM
+         8jmZ3xPwcWa5kKJ+GQ2364VqvX2YT9S4Ihz/qmlIzKYZG6cZcoco+fgN1N5qwGZDcOUa
+         Mcbo/2flTMmQZTUndJROFFxb32TnasEooaLbsGVDihbkZ8mbW4Yk/OINvba/E/kiZKaP
+         KFH8Sq7vcZnekyZbEXXbkMaPBKQq7riHv+dkuQJJgxLKA8f3r4WBuO+/UekZoWBC/+o2
+         n1eqcHDiPFALXOnu69yPCHMS8lB6IzaYa/Bw4/VVA36xELXIQmdJPT0EjdybiE+wpySP
+         Zh8g==
+X-Forwarded-Encrypted: i=1; AJvYcCWuCBm00D3zy8SvcKiOlndIxtJftKSvHqRp4WEGutlzWEHWa9WPiIrzIVKqdQN9Fk9mMQamUrLeiYRLoq55uac=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZwbXnIH3k4jogKPhyTT0FUEWChNuS4c+FBJoXYinF4wYVpUQ/
+	wrCmZITyumdkS5c3QVYpblAzC32XkEXk1RRHgDKHwX+RCxKle2Q+6s1k8AtdA91oeQs=
+X-Gm-Gg: ATEYQzwvxMLGdaSLzZ7HTx64TPT5yEkfQr3HE4kLhwSHG/8M22eHtWoIgwDYcNU1uZQ
+	ZwZMihRbjmni9eZOS3zVeknsPPa9ruZM0F1vdCZVsVMsUevOsA0HzoH8jiAmtogX50p7YCEc/m9
+	DYdvAT9rpZX3oeJ0vpGzUGoFfHsjF8pn3KNbc4fE7/DRwKeKfeA+pKtK5z7xQFyo+htaYbzYdsg
+	mmqDImhzZgF0voXEHfCJu0/b7Ml8ftXi/GRji1vDpGW+zrEYG3KunAlFgCFJ25sAKJu7jFH9W30
+	wGUY+5BEoLLNAuDVCeUNm3u0A9aVLIk6F4qCLUw7txd1seoxccrNW58ygufdJccsLNPzD3Bf6ou
+	bZtZ0D1nHle3mYnicAXIHJIWLfYgH5O3CdqO89J5PjyZ9WbYDGc/wTcZOUnKKm/tGnf51f1mia8
+	79KJI=
+X-Received: by 2002:a17:903:2c0d:b0:2ae:5bee:f0fd with SMTP id d9443c01a7336-2ae82530643mr146551245ad.51.1773104080629;
+        Mon, 09 Mar 2026 17:54:40 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:7::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae840c9967sm167614145ad.90.2026.03.09.17.54.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 17:54:40 -0700 (PDT)
+Date: Mon, 9 Mar 2026 17:54:39 -0700
+From: Joe Damato <joe@dama.to>
+To: Chris J Arges <carges@cloudflare.com>
+Cc: michael.chan@broadcom.com, pavan.chebbi@broadcom.com, kuba@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v3 4/5] selftests: net: move common xdp.py
+ functions into lib
+Message-ID: <aa9rz54M/NXPvDbw@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	Chris J Arges <carges@cloudflare.com>, michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com, kuba@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, kernel-team@cloudflare.com,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+References: <20260306230600.1628196-1-carges@cloudflare.com>
+ <20260306230600.1628196-5-carges@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260306230600.1628196-5-carges@cloudflare.com>
 
-The format of Netlink policy dump is a bit curious with messages
-in the same dump carrying both attrs and mapping info. Plus each
-message carries a single piece of the puzzle the caller must then
-reassemble.
+On Fri, Mar 06, 2026 at 05:00:19PM -0600, Chris J Arges wrote:
+> This moves a few functions which can be useful to other python programs
+> that manipulate XDP programs. This also refactors xdp.py to use the
+> refactored functions.
+> 
+> Signed-off-by: Chris J Arges <carges@cloudflare.com>
+> ---
+>  .../selftests/drivers/net/lib/py/__init__.py  |  2 +
+>  tools/testing/selftests/drivers/net/xdp.py    | 95 +++++--------------
+>  .../testing/selftests/net/lib/py/__init__.py  |  2 +
+>  tools/testing/selftests/net/lib/py/bpf.py     | 68 +++++++++++++
+>  4 files changed, 95 insertions(+), 72 deletions(-)
+>  create mode 100644 tools/testing/selftests/net/lib/py/bpf.py
 
-I need to do this reassembly for a test, but I think it's generally
-useful. So let's add proper support to YnlFamily to return more
-user-friendly representation. See the various docs in the patch
-for more details.
+Looks unchanged from the v2?
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/net/ynl/pyynl/lib/__init__.py       |   5 +-
- tools/net/ynl/pyynl/lib/ynl.py            | 133 ++++++++++++++++++++++
- tools/testing/selftests/net/lib/py/ynl.py |   6 +-
- 3 files changed, 139 insertions(+), 5 deletions(-)
-
-diff --git a/tools/net/ynl/pyynl/lib/__init__.py b/tools/net/ynl/pyynl/lib/__init__.py
-index 33a96155fb3b..be741985ae4e 100644
---- a/tools/net/ynl/pyynl/lib/__init__.py
-+++ b/tools/net/ynl/pyynl/lib/__init__.py
-@@ -5,11 +5,12 @@
- from .nlspec import SpecAttr, SpecAttrSet, SpecEnumEntry, SpecEnumSet, \
-     SpecFamily, SpecOperation, SpecSubMessage, SpecSubMessageFormat, \
-     SpecException
--from .ynl import YnlFamily, Netlink, NlError, YnlException
-+from .ynl import YnlFamily, Netlink, NlError, NlPolicy, YnlException
- 
- from .doc_generator import YnlDocGenerator
- 
- __all__ = ["SpecAttr", "SpecAttrSet", "SpecEnumEntry", "SpecEnumSet",
-            "SpecFamily", "SpecOperation", "SpecSubMessage", "SpecSubMessageFormat",
-            "SpecException",
--           "YnlFamily", "Netlink", "NlError", "YnlDocGenerator", "YnlException"]
-+           "YnlFamily", "Netlink", "NlError", "NlPolicy", "YnlException",
-+           "YnlDocGenerator"]
-diff --git a/tools/net/ynl/pyynl/lib/ynl.py b/tools/net/ynl/pyynl/lib/ynl.py
-index ec4d95f583fe..e6fcedb597a8 100644
---- a/tools/net/ynl/pyynl/lib/ynl.py
-+++ b/tools/net/ynl/pyynl/lib/ynl.py
-@@ -77,15 +77,22 @@ from .nlspec import SpecFamily
- 
-     # nlctrl
-     CTRL_CMD_GETFAMILY = 3
-+    CTRL_CMD_GETPOLICY = 10
- 
-     CTRL_ATTR_FAMILY_ID = 1
-     CTRL_ATTR_FAMILY_NAME = 2
-     CTRL_ATTR_MAXATTR = 5
-     CTRL_ATTR_MCAST_GROUPS = 7
-+    CTRL_ATTR_POLICY = 8
-+    CTRL_ATTR_OP_POLICY = 9
-+    CTRL_ATTR_OP = 10
- 
-     CTRL_ATTR_MCAST_GRP_NAME = 1
-     CTRL_ATTR_MCAST_GRP_ID = 2
- 
-+    CTRL_ATTR_POLICY_DO = 1
-+    CTRL_ATTR_POLICY_DUMP = 2
-+
-     # Extack types
-     NLMSGERR_ATTR_MSG = 1
-     NLMSGERR_ATTR_OFFS = 2
-@@ -136,6 +143,34 @@ from .nlspec import SpecFamily
-     pass
- 
- 
-+# pylint: disable=too-few-public-methods
-+class NlPolicy:
-+    """Kernel policy for one mode (do or dump) of one operation.
-+
-+    Returned by YnlFamily.get_policy(). Contains a dict of attributes
-+    the kernel accepts, with their validation constraints.
-+
-+    Attributes:
-+        attrs: dict mapping attribute names to policy dicts, e.g.
-+        page-pool-stats-get do policy::
-+
-+            {
-+                'info': {'type': 'nested', 'policy': {
-+                    'id':      {'type': 'uint', 'min-value': 1,
-+                                'max-value': 4294967295},
-+                    'ifindex': {'type': 'u32', 'min-value': 1,
-+                                'max-value': 2147483647},
-+                }},
-+            }
-+
-+        Each policy dict always contains 'type' (e.g. u32, string,
-+        nested). Optional keys: min-value, max-value, min-length,
-+        max-length, mask, policy.
-+    """
-+    def __init__(self, attrs):
-+        self.attrs = attrs
-+
-+
- class NlAttr:
-     ScalarFormat = namedtuple('ScalarFormat', ['native', 'big', 'little'])
-     type_formats = {
-@@ -384,6 +419,52 @@ from .nlspec import SpecFamily
-                     genl_family_name_to_id[fam['name']] = fam
- 
- 
-+# pylint: disable=too-many-nested-blocks
-+def _genl_policy_dump(family_id, op):
-+    op_policy = {}
-+    policy_table = {}
-+
-+    with socket.socket(socket.AF_NETLINK, socket.SOCK_RAW, Netlink.NETLINK_GENERIC) as sock:
-+        sock.setsockopt(Netlink.SOL_NETLINK, Netlink.NETLINK_CAP_ACK, 1)
-+
-+        msg = _genl_msg(Netlink.GENL_ID_CTRL,
-+                        Netlink.NLM_F_REQUEST | Netlink.NLM_F_ACK | Netlink.NLM_F_DUMP,
-+                        Netlink.CTRL_CMD_GETPOLICY, 1)
-+        msg += struct.pack('HHHxx', 6, Netlink.CTRL_ATTR_FAMILY_ID, family_id)
-+        msg += struct.pack('HHI', 8, Netlink.CTRL_ATTR_OP, op)
-+        msg = _genl_msg_finalize(msg)
-+
-+        sock.send(msg, 0)
-+
-+        while True:
-+            reply = sock.recv(128 * 1024)
-+            nms = NlMsgs(reply)
-+            for nl_msg in nms:
-+                if nl_msg.error:
-+                    raise YnlException(f"Netlink error: {nl_msg.error}")
-+                if nl_msg.done:
-+                    return op_policy, policy_table
-+
-+                gm = GenlMsg(nl_msg)
-+                for attr in NlAttrs(gm.raw):
-+                    if attr.type == Netlink.CTRL_ATTR_OP_POLICY:
-+                        for op_attr in NlAttrs(attr.raw):
-+                            for method_attr in NlAttrs(op_attr.raw):
-+                                if method_attr.type == Netlink.CTRL_ATTR_POLICY_DO:
-+                                    op_policy['do'] = method_attr.as_scalar('u32')
-+                                elif method_attr.type == Netlink.CTRL_ATTR_POLICY_DUMP:
-+                                    op_policy['dump'] = method_attr.as_scalar('u32')
-+                    elif attr.type == Netlink.CTRL_ATTR_POLICY:
-+                        for pidx_attr in NlAttrs(attr.raw):
-+                            policy_idx = pidx_attr.type
-+                            for aid_attr in NlAttrs(pidx_attr.raw):
-+                                attr_id = aid_attr.type
-+                                decoded = _genl_decode_policy(aid_attr.raw)
-+                                if policy_idx not in policy_table:
-+                                    policy_table[policy_idx] = {}
-+                                policy_table[policy_idx][attr_id] = decoded
-+
-+
- class GenlMsg:
-     def __init__(self, nl_msg):
-         self.nl = nl_msg
-@@ -516,6 +597,11 @@ from .nlspec import SpecFamily
-       ynl.ntf_subscribe(mcast_name)      -- join a multicast group
-       ynl.check_ntf()                    -- drain pending notifications
-       ynl.poll_ntf(duration=None)        -- yield notifications
-+
-+    Policy introspection allows querying validation criteria from the running
-+    kernel. Allows checking whether kernel supports a given attribute or value.
-+
-+      ynl.get_policy(op_name, mode)      -- query kernel policy for an op
-     """
-     def __init__(self, def_path, schema=None, process_unknown=False,
-                  recv_size=0):
-@@ -1221,3 +1307,50 @@ from .nlspec import SpecFamily
- 
-     def do_multi(self, ops):
-         return self._ops(ops)
-+
-+    def _resolve_policy(self, policy_idx, policy_table, attr_set):
-+        attrs = {}
-+        if policy_idx not in policy_table:
-+            return attrs
-+        for attr_id, decoded in policy_table[policy_idx].items():
-+            if attr_set and attr_id in attr_set.attrs_by_val:
-+                spec = attr_set.attrs_by_val[attr_id]
-+                name = spec['name']
-+            else:
-+                spec = None
-+                name = f'attr-{attr_id}'
-+            if 'policy-idx' in decoded:
-+                sub_set = None
-+                if spec and 'nested-attributes' in spec.yaml:
-+                    sub_set = self.attr_sets[spec.yaml['nested-attributes']]
-+                nested = self._resolve_policy(decoded['policy-idx'],
-+                                              policy_table, sub_set)
-+                del decoded['policy-idx']
-+                decoded['policy'] = nested
-+            attrs[name] = decoded
-+        return attrs
-+
-+    def get_policy(self, op_name, mode):
-+        """Query running kernel for the Netlink policy of an operation.
-+
-+        Allows checking whether kernel supports a given attribute or value.
-+        This method consults the running kernel, not the YAML spec.
-+
-+        Args:
-+            op_name: operation name as it appears in the YAML spec
-+            mode: 'do' or 'dump'
-+
-+        Returns:
-+            NlPolicy with an attrs dict mapping attribute names to
-+            their policy properties (type, min/max, nested, etc.),
-+            or None if the operation has no policy for the given mode.
-+            No policy usually implies that the operation rejects all attributes.
-+        """
-+        op = self.ops[op_name]
-+        op_policy, policy_table = _genl_policy_dump(self.nlproto.family_id,
-+                                                    op.req_value)
-+        if mode not in op_policy:
-+            return None
-+        policy_idx = op_policy[mode]
-+        attrs = self._resolve_policy(policy_idx, policy_table, op.attr_set)
-+        return NlPolicy(attrs)
-diff --git a/tools/testing/selftests/net/lib/py/ynl.py b/tools/testing/selftests/net/lib/py/ynl.py
-index b42986bf39e3..e8aa97936f6c 100644
---- a/tools/testing/selftests/net/lib/py/ynl.py
-+++ b/tools/testing/selftests/net/lib/py/ynl.py
-@@ -13,14 +13,14 @@ from .ksft import ksft_pr, ktap_result
-         SPEC_PATH = KSFT_DIR / "net/lib/specs"
- 
-         sys.path.append(tools_full_path.as_posix())
--        from net.lib.ynl.pyynl.lib import YnlFamily, NlError, Netlink
-+        from net.lib.ynl.pyynl.lib import YnlFamily, NlError, NlPolicy, Netlink
-     else:
-         # Running in tree
-         tools_full_path = KSRC / "tools"
-         SPEC_PATH = KSRC / "Documentation/netlink/specs"
- 
-         sys.path.append(tools_full_path.as_posix())
--        from net.ynl.pyynl.lib import YnlFamily, NlError, Netlink
-+        from net.ynl.pyynl.lib import YnlFamily, NlError, NlPolicy, Netlink
- except ModuleNotFoundError as e:
-     ksft_pr("Failed importing `ynl` library from kernel sources")
-     ksft_pr(str(e))
-@@ -28,7 +28,7 @@ from .ksft import ksft_pr, ktap_result
-     sys.exit(4)
- 
- __all__ = [
--    "NlError", "Netlink", "YnlFamily", "SPEC_PATH",
-+    "NlError", "NlPolicy", "Netlink", "YnlFamily", "SPEC_PATH",
-     "EthtoolFamily", "RtnlFamily", "RtnlAddrFamily",
-     "NetdevFamily", "NetshaperFamily", "DevlinkFamily", "PSPFamily",
- ]
--- 
-2.53.0
-
+Reviewed-by: Joe Damato <joe@dama.to>
