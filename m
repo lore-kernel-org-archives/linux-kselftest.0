@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DAD2F260F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B2B2F25F5;
 	Tue, 10 Mar 2026 01:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773107539; cv=none; b=kmwfc1kp76G1uTbfjxbaF3nG8/qLmXTC0ZVjNYeu8bUuWki3HE88hZ3vqg1RYS4+i6RTaJdMZTHvJ640iacvJdm6qCING5A25RKTGYdirNz0aGL1xSqxrIXCMOkIhJorFlL13r/0/h78eBdyIyKxM67ntdO6t5l2U6FXpPNxM9A=
+	t=1773107539; cv=none; b=q4WFWJ8MU4aqVcOl+XpB5h/mMgs/EmWJL71V1mWswD8rNTTkSOQI8Uaz61kIbOmJ/giPG52SK3yp7nJGnNEZw6Ld1GqHyGUF8BhPmbHyO7NRMMDgU62fa8JCldWqzBZMgGWDugYk2fJY9iRuWBvDYuXECdSEoBw1C/coCMCN7Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773107539; c=relaxed/simple;
-	bh=jKNMW1Kppp086xhKb9OmDqM3phfapbkFQYsfGDjd564=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=I75ELKq231Qu+cBjwrYZtLz+CHlXH2V58JHUzYA0rJIVjtD1zmiUZjYn4lSj3ltruuEjcZUYKUPs8KsZDyyTG9oixCoTrkenWJMIPycvAt8UPG2ZUlAqfysoBYucN+qJeZkNoFCEYbi8IBSTorcJPL/RAKrhAcfd/VT+DTCcdco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GRolZoT/; arc=none smtp.client-ip=10.30.226.201
+	bh=DzKG948gcs5x9YgNVim780sUPGDP+fTXP+UFVdlqzwQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JWiXf8C0ORyP7IFFEhlirk2kAurO8TnualkF6uwPAZ1Sn1Kx9ZOJ+Bt1x6uKCEJV/bP3EGZTcRrN8xNj7w/Bqy1pCkDRkcZ04kQnf/P2Fvjw1E+5s9XVAL8keTOwNngyPemXFCJbIY9IZPAmj87IrisjVCQUJdOZ9cVW7M80Yvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VMr2Fyol; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GRolZoT/"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3CD8DC2BCAF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VMr2Fyol"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 255A1C4CEF7;
 	Tue, 10 Mar 2026 01:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1773107539;
-	bh=jKNMW1Kppp086xhKb9OmDqM3phfapbkFQYsfGDjd564=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=GRolZoT/3lA+J+mDh+PZkIBLqUrY5Ps/rKs56UKlapNkRFs7DU4IVWvFUNHG4TPY5
-	 r1EiBHvW9rMBCoXQxH63rmshPR1EMNSvmsJLHgrJkEroA018APIM/FFpPPLOyILISj
-	 u5WjFVkXa6AUlnxoSfnPbtAX0if6s7cWBT8ci9VADZB1tdx8xCuWDpZKSGac4WGG9/
-	 m4cHfqjX28FYf1+ghdL5YhI1bHfdKcPFQkoQIuOulReV5ok1yg9tBM/jJSfjyGs58U
-	 m38Srt4Imu4YUDC5USHH26E2MUJeFrsiyutANeyLOWH7bLkdoAUxx/HZ9fLN/chL66
-	 QQvL/VqH584Jg==
+	bh=DzKG948gcs5x9YgNVim780sUPGDP+fTXP+UFVdlqzwQ=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=VMr2FyoleiSoAgr5GCbS2DsKpQypuNkJ0odP4CTSsyb3MCdj7DilVVtf6GfHRhoqy
+	 VWwpp5783Do6EiOrvyPiN7DWdgpHayKLWKfViIGhjLdIczyvlZMzdI6PsN7y0qVj0v
+	 aUI/udlVUbTmryw4xk4FXEwQFQu+2mGo8nA0S3WDCxg24kWFjQZLk4NkdL/t4NN2Wi
+	 ajPgnVetcFuN+G1pGHvkLEL2LnNsiW1TV4/dGY5m0k84yA+sDCHG24v7Ku1uDC+FRn
+	 cdF/8PuQKSiVsLgaqgQmfRtLzVUvws/5szReZWRpC4TN3weCOpBRli428k0MPNwhR2
+	 SI0uq+EuYMtvQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FCEAFCC9AA;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17460FCC9A9;
 	Tue, 10 Mar 2026 01:52:19 +0000 (UTC)
 From: Charlie Jenkins via B4 Relay <devnull+thecharlesjenkins.gmail.com@kernel.org>
-Date: Mon, 09 Mar 2026 18:52:11 -0700
-Subject: [PATCH v2 2/4] selftests: riscv: Add braces around EXPECT_EQ()
+Subject: [PATCH v2 0/4] selftests: riscv: Fix compilation issues for
+ v_ptrace and cfi
+Date: Mon, 09 Mar 2026 18:52:09 -0700
+Message-Id: <20260309-fix_selftests-v2-0-9d5a553a531e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -39,10 +40,11 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260309-fix_selftests-v2-2-9d5a553a531e@gmail.com>
-References: <20260309-fix_selftests-v2-0-9d5a553a531e@gmail.com>
-In-Reply-To: <20260309-fix_selftests-v2-0-9d5a553a531e@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEl5r2kC/13MTQrCMBCG4auUWRuZJm0EV95DirTptB3oj2RCU
+ Erubiy4cfkO8z07CHkmgWuxg6fIwtuaQ58KcFO7jqS4zw0atUWDlRr49RCah0ASRDkzYEuV7Yy
+ 7QN48PeWHw7s3uSeWsPn3wcfye/1J9Z8US4XKlp3VvTY1Yncbl5bns9sWaFJKH8LiauKqAAAA
+X-Change-ID: 20260304-fix_selftests-c3f0ae46b3c7
 To: Shuah Khan <shuah@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
  Palmer Dabbelt <palmer@dabbelt.com>, 
  Sergey Matyukevich <geomatsi@gmail.com>, Andy Chiu <andybnac@gmail.com>, 
@@ -50,11 +52,11 @@ To: Shuah Khan <shuah@kernel.org>, Paul Walmsley <pjw@kernel.org>,
 Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
  linux-kernel@vger.kernel.org, Charlie Jenkins <thecharlesjenkins@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773107537; l=2373;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773107537; l=1204;
  i=thecharlesjenkins@gmail.com; s=2026030; h=from:subject:message-id;
- bh=7v3hKOxSt+L+8LtCfZh085q396U9Poj6cOIz6NZfRCU=;
- b=S2N9TZ8zWVgCVD+QvRzprkQEUmAHkc0wdE0k32fG4zPv1gMn1F6ZCLgFxIaK3ZXubqJTZ9voc
- cIxu3B7Sm6hBEdbeQLlyIRpfWbeEc6tgeXvqabXhadGrbzqNGjA6diN
+ bh=DzKG948gcs5x9YgNVim780sUPGDP+fTXP+UFVdlqzwQ=;
+ b=FLwvV3VuWbMYTOsNB8g4GlIeYcaaWljR8gG/AFM7wyZlqNAq5LMBFTbAVvehUzguocGXLf516
+ udEBiYriGz1AGyHpt8l8MWcFqCDNTDkQZ98VWgwZXSgMPD6nLqi8ZgE
 X-Developer-Key: i=thecharlesjenkins@gmail.com; a=ed25519;
  pk=vpF2USrG+aB6CTbSt34rzJKsAVe/l+GAXo1IomCMETk=
 X-Endpoint-Received: by B4 Relay for thecharlesjenkins@gmail.com/2026030
@@ -62,72 +64,34 @@ X-Endpoint-Received: by B4 Relay for thecharlesjenkins@gmail.com/2026030
 X-Original-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
 Reply-To: thecharlesjenkins@gmail.com
 
-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+There are a couple of compilation issues of the riscv selftests.
+Coincidentally two of the issues are independent problems with not
+including the header that includes the BIT() macro and the other issue
+is from checkpatch incorrectly suggesting to remove non-redundant
+braces.
 
-EXPECT_EQ() expands to multiple lines, breaking up one-line if
-statements. This issue was not present in the patch on the mailing list
-but was instead introduced by the maintainer when attempting to fix up
-checkpatch warnings. Add braces around EXPECT_EQ() to avoid the error
-even though checkpatch suggests them to be removed:
-
-validate_v_ptrace.c:626:17: error: ‘else’ without a previous ‘if’
-
-Fixes: 3789d5eecd5a ("selftests: riscv: verify syscalls discard vector context")
-Fixes: 30eb191c895b ("selftests: riscv: verify ptrace rejects invalid vector csr inputs")
-Fixes: 849f05ae1ea6 ("selftests: riscv: verify ptrace accepts valid vector csr values")
 Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
 ---
- tools/testing/selftests/riscv/vector/validate_v_ptrace.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+Changes in v2:
+- Fix compilation issue reported by kernel test bot and Sergey
+- Link to v1: https://lore.kernel.org/r/20260305-fix_selftests-v1-0-61b62d23500b@gmail.com
 
-diff --git a/tools/testing/selftests/riscv/vector/validate_v_ptrace.c b/tools/testing/selftests/riscv/vector/validate_v_ptrace.c
-index 257de36274e9..5724e6eb3309 100644
---- a/tools/testing/selftests/riscv/vector/validate_v_ptrace.c
-+++ b/tools/testing/selftests/riscv/vector/validate_v_ptrace.c
-@@ -291,10 +291,11 @@ TEST(ptrace_v_syscall_clobbering)
- 
- 		/* verify initial vsetvli settings */
- 
--		if (is_xtheadvector_supported())
-+		if (is_xtheadvector_supported()) {
- 			EXPECT_EQ(5UL, regset_data->vtype);
--		else
-+		} else {
- 			EXPECT_EQ(9UL, regset_data->vtype);
-+		}
- 
- 		EXPECT_EQ(regset_data->vlenb, regset_data->vl);
- 		EXPECT_EQ(vlenb, regset_data->vlenb);
-@@ -620,10 +621,11 @@ TEST_F(v_csr_invalid, ptrace_v_invalid_values)
- 
- 		/* verify initial vsetvli settings */
- 
--		if (is_xtheadvector_supported())
-+		if (is_xtheadvector_supported()) {
- 			EXPECT_EQ(5UL, regset_data->vtype);
--		else
-+		} else {
- 			EXPECT_EQ(9UL, regset_data->vtype);
-+		}
- 
- 		EXPECT_EQ(regset_data->vlenb, regset_data->vl);
- 		EXPECT_EQ(vlenb, regset_data->vlenb);
-@@ -828,10 +830,11 @@ TEST_F(v_csr_valid, ptrace_v_valid_values)
- 
- 		/* verify initial vsetvli settings */
- 
--		if (is_xtheadvector_supported())
-+		if (is_xtheadvector_supported()) {
- 			EXPECT_EQ(5UL, regset_data->vtype);
--		else
-+		} else {
- 			EXPECT_EQ(9UL, regset_data->vtype);
-+		}
- 
- 		EXPECT_EQ(regset_data->vlenb, regset_data->vl);
- 		EXPECT_EQ(vlenb, regset_data->vlenb);
+---
+Charlie Jenkins (4):
+      selftests: riscv: Add definition of BIT() macro
+      selftests: riscv: Add braces around EXPECT_EQ()
+      riscv: ptrace: Fix BIT() compilation issues
+      selftests: riscv: Add license to cfi selftest
 
--- 
-2.52.0
+ arch/riscv/include/uapi/asm/ptrace.h                     |  1 +
+ tools/testing/selftests/riscv/cfi/Makefile               |  2 ++
+ tools/testing/selftests/riscv/vector/Makefile            |  7 +++++--
+ tools/testing/selftests/riscv/vector/validate_v_ptrace.c | 16 ++++++++++------
+ 4 files changed, 18 insertions(+), 8 deletions(-)
+---
+base-commit: c107785c7e8dbabd1c18301a1c362544b5786282
+change-id: ${change-id}
+
+- Charlie
 
 
