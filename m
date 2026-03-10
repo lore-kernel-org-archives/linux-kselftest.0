@@ -1,80 +1,80 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD38E3E9290
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 12:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CEE36F413
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 12:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773144046; cv=pass; b=SjAfbMeRcrVe7HX2GtOuXFtUHBE2MnQSwTPhdm3/N2RMm5QvXWwho6rtsXFgxqsKf2mdYeJC/s5lgaGDUbDZhmoT2jAnA5hec8tWQeI1Ut3hSXhiu1A/kqG2QopMnt1RQa/IO8JWTbFS4EpTTcikvO+7lK+QQkYQZPJgxjnWEn0=
+	t=1773144449; cv=pass; b=ay+MLlfn8smUtCEPfwkLyWyTbnwB1egT6WQNIUValXAsrgbOOX+MWkVlVBe/e/Nwcge9L/PoFf9uf1qveybAYCq/xdYqB/IUP9GV7urx9MVRpbd3G5uSpXuIgMAq7SHMYEH6yT8HDci9YqFahDPPu3FnfxAu5zOy7KB0eV20S8k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773144046; c=relaxed/simple;
-	bh=tUzR/Nakid06crM4rvRZ4qf7nSgbgsUvkFMtzxj2kjk=;
+	s=arc-20240116; t=1773144449; c=relaxed/simple;
+	bh=u4ggnB30E8m47pn9MW6ki0gYz6mdnItwTDOiGvmjL+k=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y1SrqutDXIx61gHtY0OxFW4qslXPmBSp/7qevIN/MyqS28SEuPtiV9yKDemg2fqhzE8ZzndnUC7f51BRlyVgw/JHzNcMMceAob1lb0espaGm5kmydGb8yLoaJDidq1vVU0Pu1W5D4ZkyJIdVFD7pH08ZQh+PQix4YN108D5w/NU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qwj+tuCL; arc=pass smtp.client-ip=209.85.160.172
+	 To:Cc:Content-Type; b=jbK0ayJfYKW9k8+B8Xcf6Vogi/Ffrn3cTFmg+nB8IRDz/1/eutkiWai2ZuJWxDc0wXwQr/LRj7x94eWd5WbFN22+0iPhIU7/z1cfYslUJH5fZdvJEoBDBMsubdRaUkwjSK8686AqnyluD2h0rtZBG1KaYtsP4QOF4AJlWPjgiXs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r/XGqYvo; arc=pass smtp.client-ip=209.85.222.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qwj+tuCL"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-506362ac5f7so117246441cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 05:00:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773144044; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r/XGqYvo"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8cd7ecedf2cso250047385a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 05:07:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773144447; cv=none;
         d=google.com; s=arc-20240605;
-        b=J7ACle98mI8Gqv1qSH+21eBxYj3h+NobTpdD0LuFtN9hivzDN8WrnMxYoeSRj8XL/j
-         jiN6UeloMoA14gLS1i6Sr88+B6Crsn6C97IbtwjJ4son26VwHqECQF77+diUY0h2Zf9/
-         ugvCqb294ir/dDVDrbPNjdFameoJ49cqFkpKRj5VkD8g4IsorFOqNkC8PALKaJCeABiF
-         jhDx//ykgezGTp/yUeAhsPm27MmgoiCFXKQ2p6VvJQy8bddeJh3IffWYg172PQK2YFck
-         N1HMBElEbVdethUoCIzUzo0RRvcOUa7kk+mkdEpWQlI9bbexFlBf4DVW3R57F3vQtvPP
-         wkbA==
+        b=X/ifc30eyXou5+15ahHj3diatoqrheXklbUB65b42lpSdGPc8f6VPlgt8B4sPphAVH
+         +YDNg3JR8ZCqb0KUOCHT7q800PjoUsVgWPD0pr82lW4ik5xHHvh6+ziLpHQXrxmVjYdF
+         LCoZLiyFHWA+ELPWTAN5Ta64o3yMMs0liBZ7bvLFmEVHIq/Glr0sm6CUtxz9S3h96lZi
+         rgID1mw5lbfBOjQVGV0C0GX9aiXyGmN6/Tqx4reBMoLrZ78oLMIvXfP49vZOVpPhhVZX
+         c81hEjJAG4fnH8Dhzb15zX5MKVJcThPVLOeyLK09UBXb+R4m5yXY3uEUshvuNukwo5Xu
+         W0bg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+KiPLCC30cbrBmI3zXpnvU6YblX0b2+xRJJpwJf5O1Q=;
-        fh=9mQmXajm3s72GE7+XSZzzSIryFJtB0nOcmOn0ZAjEpQ=;
-        b=gse0+OyF/EkqtCvbTZtmgJ7WTbpay1biNtRBpfvH5SjYzecQl5cnJzebxJ8/m91Ele
-         wuhQF2IeicknGX1rL7iDldIRHivOMIkTioG/qChZ6MANWaYalqQ/zLRw/5nC0bMd7dp/
-         xbmddQk6obs9rithVtzRz+GkHmwEQOXK0bKPL7dfcmFT2d2ByotGhYEDZgWtK1v85uzU
-         n9O3Br4iPUndLbUS8vHNut1s3WVYCAunRNyDzj9jw12GhmPzkjMXxiEU7CgzE334+6aO
-         IKEs4Yyinsd6TiR4oGQ7Zd9ETtGyHgyBf/jmadIaqZYXFJCKaASBzaXzwEBqmn2Wvcc3
-         8A0A==;
+        bh=T8dYRLYkwn5kBNWo/bm2c1XHhtT3zdHO3dRrnUAcL10=;
+        fh=7QWiV9zIBGzY7C48kw8ctPSM1Q4RWSa6usP3c4UC3Ho=;
+        b=cZOoyoctoGqsvemq2AvKDuHLQHB7i+RVwKjYexQMU1a9f8f5HFxRwR1H/Nr9nOv8Fp
+         dFoAqKLXM8/YT79J1kEoPhJQCbytdK0Z+/ekhRINvG7X3sulhEHKdHfCVJwfPN08nV0K
+         c7/yrSfaDfnNmR2f7LVUqXQWK1IWpyOOUqw1dxAG/kBTV1xlORCFupkK9MFoNyEdSJ4L
+         MJj4iRqVpIIUuNxPA7Y6JbiVHVgvUSPGQL5YuhbKYbh4gdCnDEj/0sjXPqdhAk5wa9AQ
+         OoLUOT5TSEIylBA6IwJr5Gel5gvJCzUnULlR1IUClQadUy/7ppnQRNn5WEXPnUX5MxSM
+         7I1A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773144044; x=1773748844; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1773144447; x=1773749247; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+KiPLCC30cbrBmI3zXpnvU6YblX0b2+xRJJpwJf5O1Q=;
-        b=Qwj+tuCLktJKd0NoRvrjoLMdfDN9uUn5J69tYo/ziS4U+8A9ezz8TvdBX2SWtr+1o0
-         oVrumKUp0Zr06B6f07CBVqtxVIzVUHFpLnBrQ/iWqvCkNT/HPvlN1O8vOWrhEypQU8w4
-         IWUQ4EpYm62MLVZun2Hqw7gFQSF06mk+wJoEu988bT3cb/S+/CkaYRoil786ZN+JHmfG
-         nRdHS2JGd4v1x/ir5L/8ofnKCgwYyqtv769MzCapTxmDlXq5OoTHqgF06GbfTP5YpnZF
-         tTtjQKbU9lAutMiUPerFYih1jbQIYxYNuOvmU25VyyIEIzuV6D1ua1CnW3jyDK41LJPm
-         LpRw==
+        bh=T8dYRLYkwn5kBNWo/bm2c1XHhtT3zdHO3dRrnUAcL10=;
+        b=r/XGqYvoXIEViqUB4FEx6KRzS3P4ToiYqPYoLeein27DTdBwQzGrF62wHYjwTHG/WY
+         7vS2DeNOA0aZnrMIwsInalrXS6/GAct271oPH80Ht7oYLGESH1SImfgQCFDlbs2imujD
+         8Vavr+Pj9up0Vv1Yg6nTaAVh/Ub2IfMswu5nzjGX3DTeqPyun5ydH6XMpOjgdHQe+OWJ
+         C1Gqbr/HT1VtKAUmLAjHGOLKbAo8qT6oAlyXY1MhL2nAG1qn5keQMWs2qSBpTUbUuOZL
+         Tqse109HWKddniYA9ZJWlyHU+e6i9mxSD+17GLpe2kUkfVDwqJaXXoQph5Fxyti19L7K
+         oMdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773144044; x=1773748844;
+        d=1e100.net; s=20230601; t=1773144447; x=1773749247;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+KiPLCC30cbrBmI3zXpnvU6YblX0b2+xRJJpwJf5O1Q=;
-        b=jC1ehHVvdNf6mRdmYTOM6iKVMuwn+rznV6uUpqmoJBM2EgJDzW5aZU+q4XOqnKkWKW
-         dEzPBPiWCDZhX9UMdiSVHFKUGG1UPdBFKg0idMq0vAzfQXQyUt5NniTJDenQB6VUIQxT
-         omZPIXSAXW0aPPZwFxzz7PxpOb0jJaXEpCaWPFRew53DBT6nIGKGaYLidNrCMs+hz++E
-         ZvBvO4rFHo0OtMO1W4Ja6Fjttieup/EJcaPRwBCRE9bKkmYKHSpDxC/83ui382SABvWq
-         0PqHDxrCIzO0eqsg06CNMaeOZ2HNECNjA2mGc2JFxZWOM7UeuJfsihlasCKAPuLUbWKp
-         4xpg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzBTZwMAnDH50Fr2X0N/sa/QLBbZ5IFFrOYpr9NZR7fA55M64j6Hy8eSDQVV86If/tJKjEQJ4awmbBUg3jaTk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAf9GRyUB3ff05OG7t9HFuaYd/JtxZvUa+RLVDyI8fWDHDHIfM
-	uU42vYyIYoaEivIWZ5F2H4FQCtCPAmYUqUAKdvL1gPsahJUcmX8VALeq5fB5mn8xMKl4AntBYOj
-	uu/P1M5gwS9I4dxQrgeC98uAUTYBUbzySBhDsma1v
-X-Gm-Gg: ATEYQzzFZnTTtYTy6+fVqQou0esZ41AkCkSOMENZuktcpKYAaySZk0em7aYiwVfNGir
-	cd2fIE0SAF+g/05deCNAT0EUeS3xh1s7loSozKQFdzKY7EYEiOPOeqiA6G6zpM5XPewodaOyd0S
-	blaAL/LldFHYb85+0K9WklFr9xGDcvNe+xj3F2n4VXG4lmd4/JJMEab7YbLzKF4k5n1hWH3ULQC
-	5yceSmzzb6njcMzpwJmbk4MQ3cw1QNPenprU8HhonGd7kczoT23AjuJ73QhfwGdMTJSh2FyfmDb
-	MvOCeas=
-X-Received: by 2002:a05:622a:1a9d:b0:509:22ac:99ca with SMTP id
- d75a77b69052e-50922aca02amr50931071cf.36.1773144042675; Tue, 10 Mar 2026
- 05:00:42 -0700 (PDT)
+        bh=T8dYRLYkwn5kBNWo/bm2c1XHhtT3zdHO3dRrnUAcL10=;
+        b=JzRE21zgNYuqr7mFImdZ3wBBe3qysyxrT9a58ni5Do6M5XyaAuHL3YBprWix3xhGCl
+         +R1BMmxYvc/WWy05L8NcAAsGjyaNbJQbHwy4Qjtj/hBvl7pdYgMcpy3H+kTjncO4QEwQ
+         kyY61W72O0wq9q+/qQVYuuStoXy7mGYnTjVsZYP65kwWTHwslN3rMe+sJ02R1wvcovrA
+         pPsSQayyZKaxh/i6+s6eKTZkEMG34l4onvmkfAgldZ9jQg7PxGzj1tbWbEOvu/1KOKMM
+         t4Zzcf6T+XFH5l5HbCaubLEc8WdA/QtEymAo9UVOYinP+6nHtHItRb9kvOiwpYVdwpzw
+         MXhg==
+X-Forwarded-Encrypted: i=1; AJvYcCXJF4upK3f8bryTDn0yIrAqeyXMpxe6baE6fhkcA5AUKuniXhlpenkGI632cg5Bvpgj1gVKhcSFT4Fn4M87owA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJqRcw0sMtWwD6ExR236zBC0+SjIEndKZ8kdoj8cvTRiXETjSE
+	dPCtLdUxFnhJnQ7qqw5PeTLKtRZ2LBgwC3+xIrMiuXgTlHq1rNqtHGqeKspDubZC8t8+GrS2Rgy
+	YTNdy7QCM2cuPfdthMEgveBv6PdlWp8qYXHTWrzNR
+X-Gm-Gg: ATEYQzz8QbVdTgBEZklH9ez8ezujvioIK96bDxt2oM9+Ccm6LdEeJOMcsldkTSPBMDh
+	HkmFzJ7e+09aepkjQjB7GSwh2JbLA8443JPcPXg36sTImqgZZWSu7qEnA6BWRU7WWSF2BZCXpBc
+	jGMXKx+wBvnB5sC/OFlCtz+EnvuJoZAuaiuuZGQ3Xq6QTILaMMVkYwJqsYECStSTueX6NGXS2Xc
+	DdCueeGC7U3MMc13dYBWQE7SuTqcIstXi3DHs/2FhqBbcIBOc8JcHqLJOItpAKbmAK6eR4TFQwV
+	rs6q7pI=
+X-Received: by 2002:a05:620a:4694:b0:8cd:8635:c04f with SMTP id
+ af79cd13be357-8cd8635c58emr871773185a.78.1773144446171; Tue, 10 Mar 2026
+ 05:07:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,12 +82,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260309030702.128520-1-jiayuan.chen@linux.dev>
- <20260309030702.128520-2-jiayuan.chen@linux.dev> <abAFRbJNinhN3O5v@penguin>
-In-Reply-To: <abAFRbJNinhN3O5v@penguin>
+ <20260309030702.128520-2-jiayuan.chen@linux.dev> <abAFRbJNinhN3O5v@penguin> <CANn89i+5yOzdiBTWm4ekc0UvMxQp=mhXbz0rU5WnfxEu3NrAhg@mail.gmail.com>
+In-Reply-To: <CANn89i+5yOzdiBTWm4ekc0UvMxQp=mhXbz0rU5WnfxEu3NrAhg@mail.gmail.com>
 From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 10 Mar 2026 13:00:30 +0100
-X-Gm-Features: AaiRm509jDZ3zVYhIbanKsEufYLYkGg_h_Pmpop0SOjPwGN3a_7GxccBpHV9Ooo
-Message-ID: <CANn89i+5yOzdiBTWm4ekc0UvMxQp=mhXbz0rU5WnfxEu3NrAhg@mail.gmail.com>
+Date: Tue, 10 Mar 2026 13:07:15 +0100
+X-Gm-Features: AaiRm52YArIdW70Cdt1Zn-0xdLt1wQ__GHo4CYwly7pfLRtB5zsOkc7ncB8Yknc
+Message-ID: <CANn89iLOyWzWW7w262Vsy2MOMVDXA0+UZGpEbsdLwe6e75mhKQ@mail.gmail.com>
 Subject: Re: [PATCH net v5 1/2] bonding: fix null-ptr-deref in bond_rr_gen_slave_id()
 To: Nikolay Aleksandrov <razor@blackwall.org>
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org, jiayuan.chen@shopee.com, 
@@ -107,61 +107,79 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org, jiayuan.chen@
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 10, 2026 at 12:49=E2=80=AFPM Nikolay Aleksandrov
-<razor@blackwall.org> wrote:
+On Tue, Mar 10, 2026 at 1:00=E2=80=AFPM Eric Dumazet <edumazet@google.com> =
+wrote:
 >
-> On Mon, Mar 09, 2026 at 11:06:58AM +0800, Jiayuan Chen wrote:
-> > From: Jiayuan Chen <jiayuan.chen@shopee.com>
+> On Tue, Mar 10, 2026 at 12:49=E2=80=AFPM Nikolay Aleksandrov
+> <razor@blackwall.org> wrote:
 > >
-> > bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
-> > check. rr_tx_counter is a per-CPU counter only allocated in bond_open()
-> > when the bond mode is round-robin. If the bond device was never brought
-> > up, rr_tx_counter remains NULL, causing a null-ptr-deref.
-> >
-> > The XDP redirect path can reach this code even when the bond is not up:
-> > bpf_master_redirect_enabled_key is a global static key, so when any bon=
-d
-> > device has native XDP attached, the XDP_TX -> xdp_master_redirect()
-> > interception is enabled for all bond slaves system-wide. This allows th=
-e
-> > path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
-> > bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
-> > reached on a bond that was never opened.
-> >
-> > Fix this by adding a NULL check with unlikely() in bond_rr_gen_slave_id=
+> > On Mon, Mar 09, 2026 at 11:06:58AM +0800, Jiayuan Chen wrote:
+> > > From: Jiayuan Chen <jiayuan.chen@shopee.com>
+> > >
+> > > bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NUL=
+L
+> > > check. rr_tx_counter is a per-CPU counter only allocated in bond_open=
 ()
-> > before dereferencing rr_tx_counter. When rr_tx_counter is NULL (bond wa=
-s
-> > never opened), fall back to get_random_u32() for slave selection. The
-> > allocation in bond_open() is kept, with WRITE_ONCE() added to safely
-> > publish the pointer to the XDP read side. A plain read suffices for the
-> > !bond->rr_tx_counter guard in bond_open() itself, as bond_open() runs
-> > under RTNL lock and is the only writer of rr_tx_counter.
+> > > when the bond mode is round-robin. If the bond device was never broug=
+ht
+> > > up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+> > >
+> > > The XDP redirect path can reach this code even when the bond is not u=
+p:
+> > > bpf_master_redirect_enabled_key is a global static key, so when any b=
+ond
+> > > device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+> > > interception is enabled for all bond slaves system-wide. This allows =
+the
+> > > path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+> > > bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+> > > reached on a bond that was never opened.
+> > >
+> > > Fix this by adding a NULL check with unlikely() in bond_rr_gen_slave_=
+id()
+> > > before dereferencing rr_tx_counter. When rr_tx_counter is NULL (bond =
+was
+> > > never opened), fall back to get_random_u32() for slave selection. The
+> > > allocation in bond_open() is kept, with WRITE_ONCE() added to safely
+> > > publish the pointer to the XDP read side. A plain read suffices for t=
+he
+> > > !bond->rr_tx_counter guard in bond_open() itself, as bond_open() runs
+> > > under RTNL lock and is the only writer of rr_tx_counter.
+> > >
+> > > Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to s=
+lave device")
+> > > Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+> > > Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE=
+@google.com/T/
+> > > Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> > > ---
+> > >  drivers/net/bonding/bond_main.c | 9 +++++++--
+> > >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > >
 > >
-> > Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to sla=
-ve device")
-> > Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
-> > Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@g=
-oogle.com/T/
-> > Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> > ---
-> >  drivers/net/bonding/bond_main.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> >
+> > This is Jay's patch + the unlikely change, looks good to me.
+> > Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 >
-> This is Jay's patch + the unlikely change, looks good to me.
-> Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+> Orthogonal to this patch  :
+>
+>  get_random_u32() typical cost is around 10 to 20 ns, I really wonder
+> if this makes sense
+> for the packets_per_slave =3D=3D 0 or 1 case to haves this kind of
+> randomness in the first place.
+>
+> Perhaps we could use a
+>
+> static DEFINE_PER_CPU(u32, rr_tx_counter)
+>
+> And :
+>  slave_id =3D this_cpu_inc_return(rr_tx_counter);
 
-Orthogonal to this patch  :
+I also have mixed feelings about this patch.
 
- get_random_u32() typical cost is around 10 to 20 ns, I really wonder
-if this makes sense
-for the packets_per_slave =3D=3D 0 or 1 case to haves this kind of
-randomness in the first place.
+We probably should detect that the device is not ready before hitting
+something deeper in the stack.
 
-Perhaps we could use a
+Sure, a NULL deref is avoided, bu what happens next ?
 
-static DEFINE_PER_CPU(u32, rr_tx_counter)
-
-And :
- slave_id =3D this_cpu_inc_return(rr_tx_counter);
+We send a packet while the device is not UP, I am pretty sure this
+violates at least some RCU rules in device dismantling.
