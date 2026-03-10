@@ -1,51 +1,49 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8EA2D948D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B452FDC20;
 	Tue, 10 Mar 2026 15:58:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773158324; cv=none; b=nl9HHuXmzQEscM3twuVr9xlsCyEI7fsUi78aj7nC8da3Ec1gTYJ06G+yfxUi1Iozk/NIlPBJ6j5RHMoiaylBxnA5iZUS5PmyZUN0bhbnv/kQeE0XJLsz7Rw4PMQt2ggubB3+1fGjd4udkX/3VEK3DwP78b4ikchGmwr3eXru6+Q=
+	t=1773158324; cv=none; b=Blkuicfd2sWwSj7SsNLKVvJSYfPHM4saTeczPIqQGigzrAOhJRfXTePl+FN6t+7YVZo8b81FtOJeEvaXgAQzQLu+E8bBbILkLxVbHkUGC/sQRHhylMX382e2hvmcOqYzYBPlb1ATlcVMeBaV80OeDAwQKRYVQm9feJXFKxlbw/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773158324; c=relaxed/simple;
-	bh=SXJEL/84HovYccZ9vOrEqH8GsLWDDVH0vpuiH4J6BuE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CXSUfJltj3JVk1s0rrh6mBMgAue2xcCoZDE2EnhZzYaJToSCTuHaEsnnr369oMjqVC2KtcFR7QdcTFx69irJyBl/lZU24KA1Gs6bFTQvoxHfOzw70x99YSFJM/WPI4AM2DJyt+ePJi6wp4iZUnaD/y6i2n19GryMbqb8esPfg34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UzaWdN9I; arc=none smtp.client-ip=205.220.165.32
+	bh=EioQ+s6DALilCIaIqpu0+FK3Uof/SiiRniIzo9QAP+0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mL9cZDT2G6zd3Xf/46yI6HtZA4MPmcyPSB00d+jkZcfBgL/G1gJiM5AgB7uu70UNGjRbW0tHGV2RRULwh/X1f9Wj1jt2Nse2icC9G8wpYOB8Ktm5NhN27MNp+J1/dOjxxIfgL8xUZPbLTADYpfkKxowr3spGNUAg0dD6kCoReYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=DQQrAnE5; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UzaWdN9I"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DQQrAnE5"
 Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62A9ovME1719663;
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62AFcc0Q2582839;
 	Tue, 10 Mar 2026 15:58:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=KILNH
-	PFhZkB/epKpICgOxbnFyklyzYF7FlY8WQTGTpo=; b=UzaWdN9I7qC4DIwxgIPFi
-	iQmIVD+655Hl3pkyB6uKXxQxInsunyLlBQGBBx8Kpagek8bm6a5z1P5QKD4lA/HE
-	E24rLIIS21o6Jsr2nK2Ek/4cW0oGng65qcEkPHkPPtIMOx1/PvR+u2aZLQZV1f/M
-	hofmxX25UpouCzjVG8fDpsRQZA3LdZZOryE+3CnWY6/4UNF2Afz+T8LdE7siWjce
-	LMvfW3l7ZFJIMjkoJga42MaJt4/N2Gdvv05SZjNp/heTE5Q5dZQkCbW3cizf5D3S
-	n55c4E6uGdWT2MpTh/SKJG8annbmODnaEgm5quizhW0F0oGcxHYX9yAeT2GmQjuL
-	g==
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=De4g2LAyWvY3GWO7BeINKqb2S28hz
+	YXHWiu9xaz7NEc=; b=DQQrAnE5EBBJNqVzGSrnY5PZvllsaEenaJ/j35CNNMPc+
+	if513RKpVaEAnuw7XCC/8qnWZcAM7Da0/vYEiBDqR1nDB7h3ZL8hLaCeBJwqIcaK
+	84QfpayjX8aD45c4ZrkvbieaRqbpWlxLZWo1VzrjaEjdjBU3VLXmSZBkGrZ52OTq
+	LvpzI4UY3ebYKgCwk7S0jYut+E99lfTGYr/CYGwkJAi3If72KsSKrYwgS54+LTq/
+	uyX3WeEyeyydIV8MV21SB/2iXf3z5oRDZIt1vB8sfwltXKJys9gPTe7Ui/hJQyC8
+	nGM0XfnozDi+tevFOfrF4FPstQEsK05ya7RuBnuCg==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cskyp350q-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cskyp350n-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Mar 2026 15:58:30 +0000 (GMT)
+	Tue, 10 Mar 2026 15:58:29 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62AF4TLE022760;
-	Tue, 10 Mar 2026 15:58:30 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62AEZh1l022712;
+	Tue, 10 Mar 2026 15:58:28 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4crafa9wyb-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4crafa9wxk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Mar 2026 15:58:29 +0000
+	Tue, 10 Mar 2026 15:58:28 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62AFwRjE027022;
-	Tue, 10 Mar 2026 15:58:29 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62AFwRjC027022;
+	Tue, 10 Mar 2026 15:58:28 GMT
 Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4crafa9wu5-2;
-	Tue, 10 Mar 2026 15:58:29 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4crafa9wu5-1;
+	Tue, 10 Mar 2026 15:58:27 +0000
 From: Anthony Yznaga <anthony.yznaga@oracle.com>
 To: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -53,12 +51,10 @@ Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
         Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
         surenb@google.com, mhocko@suse.com, jannh@google.com, pfalcato@suse.de,
         Jason@zx2c4.com, shuah@kernel.org
-Subject: [PATCH v2 2/2] selftests/mm: verify droppable mappings cannot be locked
-Date: Tue, 10 Mar 2026 08:58:21 -0700
-Message-ID: <20260310155821.17869-2-anthony.yznaga@oracle.com>
+Subject: [PATCH v2 1/2] mm: prevent droppable mappings from being locked
+Date: Tue, 10 Mar 2026 08:58:20 -0700
+Message-ID: <20260310155821.17869-1-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260310155821.17869-1-anthony.yznaga@oracle.com>
-References: <20260310155821.17869-1-anthony.yznaga@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,164 +69,134 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 sp
  mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
  definitions=main-2603100139
-X-Proofpoint-GUID: oyz9zc_Zust4hy0UWhisJ0Qjfd6uCtps
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDEzOSBTYWx0ZWRfX1iBG67dp9wN/
- Ll2TaXxKxOMgKFyRkxcea61Fo4AB9u85VHcLtsNfVSQtXTTxfGXMmGYlMB6naxLdPzKuHzU5lcD
- P1d/KPiQ/KdiXdHCMRxSer8jrybEWmzeHnzMzd8gYBhrNxxwrkUCK3Fv6DB+IqIFYH2mytfE/pO
- Wy2WF2jCmPvM4+HrK8korvzyS6BTyIQLbx33lbUeopILSIpOlr5BfH+IB0VeJurE7hN65eePYXd
- ZPt9Kr2R/3ALFWgx9Ee3aNsvk5QdmU1dQFgsEsLs5arUT9ITO46LJRNEXEyKZF0fY8qFX3n7dgb
- 7g0LmT2Y4q654d01AwkpN4O2d4oYGNzhYRNno9bZJ6JmicUob2X9ayFM7F6+YeD4z0GsoMPB4K3
- BUJXwNKFMTIlKtqOytdsfthuz4pV+Y4VU57LVazHPQavIQrOkaatMiml6xW1VAmEV4UhTTvEIHj
- 6/BsvTh+D3VP4ZD4vXg==
-X-Proofpoint-ORIG-GUID: oyz9zc_Zust4hy0UWhisJ0Qjfd6uCtps
-X-Authority-Analysis: v=2.4 cv=XP89iAhE c=1 sm=1 tr=0 ts=69b03fa6 cx=c_pps
+X-Proofpoint-GUID: 3ANEJ9zuxwbaKK0FOosQOnxfOLriMh2V
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzEwMDEzOSBTYWx0ZWRfX5pR1s/plwPJM
+ MViPNiMklGdGKAA2mkRnPrJ5sLUYq13b+k4KDZ3wGxz6cF/d+3bbrePc2iZR4wvTTA3BSESsG9n
+ ec5xBEY8h+RJCi70R3AqT9l/88yHAQftO3gCYtPk6owA1Kitdn/OWQgtXrjuGSb+J3fPrgwEGXI
+ v9tyKNmy714ZzMFMK6U2ddyUceTRS5cU1phT/n6+2Ssh4MEev5Ms6qAZMU2mV8T/q24V8Bb8qWf
+ dUvajm+yezMBXP2uNHJoWestU2BZ0/WtyiR//PT6O7IRGCSrqlA40Srbu7IYmPrh80SRUPXJvCC
+ RxsFUOemI3bNn2j/AQR9Mz3P8V3dpKWrAAefslK1JuFKNCxMQlms1Tmuzq001Tfnxiq34EhC6Pz
+ CHI9B+BQDBhy3anvgePs7icHCYliVke8Pe+nZl2UFRxvQftT+N5o5gstxN/sAOlRxgTEFQPqJaI
+ haHj9KL8pUAU6gVxnQw==
+X-Proofpoint-ORIG-GUID: 3ANEJ9zuxwbaKK0FOosQOnxfOLriMh2V
+X-Authority-Analysis: v=2.4 cv=XP89iAhE c=1 sm=1 tr=0 ts=69b03fa5 cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
  a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=RD47p0oAkeU5bO7t-o6f:22 a=yPCof4ZbAAAA:8 a=_qCjRXgy2aYRKG6zBr8A:9
+ a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
+ a=iWkOVUfiZeQ8vpaLj3YA:9
 
-Verify that a mapping created with MAP_DROPPABLE cannot be locked
-via mlock(), and that it will not be locked if it's created after
-mlockall(MCL_FUTURE).
+Droppable mappings must not be lockable. There is a check for VMAs with
+VM_DROPPABLE set in mlock_fixup() along with checks for other types of
+unlockable VMAs which ensures this when calling mlock()/mlock2().
 
+For mlockall(MCL_FUTURE), the check for unlockable VMAs is different.
+In apply_mlockall_flags(), if the flags parameter has MCL_FUTURE set, the
+current task's mm's default VMA flag field mm->def_flags has VM_LOCKED
+applied to it. VM_LOCKONFAULT is also applied if MCL_ONFAULT is also set.
+When these flags are set as default in this manner they are cleared in
+__mmap_complete() for new mappings that do not support mlock. A check for
+VM_DROPPABLE in __mmap_complete() is missing resulting in droppable
+mappings created with VM_LOCKED set. To fix this and reduce that chance of
+similar bugs in the future, introduce and use vma_supports_mlock().
+
+Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always lazily freeable mappings")
+Suggested-by: David Hildenbrand <david@kernel.org>
 Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 ---
- tools/testing/selftests/mm/mlock2-tests.c | 78 ++++++++++++++++++++---
- 1 file changed, 69 insertions(+), 9 deletions(-)
+v2:
+ - Implement vma_supports_mlock() instead of vma flags mask (DavidH)
+ - Add selftests (Lorenzo)
 
-diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
-index b474f2b20def..b5790e717dd6 100644
---- a/tools/testing/selftests/mm/mlock2-tests.c
-+++ b/tools/testing/selftests/mm/mlock2-tests.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #define _GNU_SOURCE
- #include <sys/mman.h>
-+#include <linux/mman.h>
- #include <stdint.h>
- #include <unistd.h>
- #include <string.h>
-@@ -163,14 +164,17 @@ static int lock_check(unsigned long addr)
- 	return (vma_rss == vma_size);
- }
+ include/linux/hugetlb_inline.h    |  2 +-
+ mm/internal.h                     | 10 ++++++++++
+ mm/mlock.c                        | 10 ++++++----
+ mm/vma.c                          |  4 +---
+ tools/testing/vma/include/stubs.h |  5 +++++
+ 5 files changed, 23 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/hugetlb_inline.h b/include/linux/hugetlb_inline.h
+index 593f5d4e108b..755281fab23d 100644
+--- a/include/linux/hugetlb_inline.h
++++ b/include/linux/hugetlb_inline.h
+@@ -30,7 +30,7 @@ static inline bool is_vma_hugetlb_flags(const vma_flags_t *flags)
  
--static int unlock_lock_check(char *map)
-+static int unlock_lock_check(char *map, bool mlock_supported)
+ #endif
+ 
+-static inline bool is_vm_hugetlb_page(struct vm_area_struct *vma)
++static inline bool is_vm_hugetlb_page(const struct vm_area_struct *vma)
  {
--	if (is_vmflag_set((unsigned long)map, LOCKED)) {
-+	if (!is_vmflag_set((unsigned long)map, LOCKED))
-+		return 0;
+ 	return is_vm_hugetlb_flags(vma->vm_flags);
+ }
+diff --git a/mm/internal.h b/mm/internal.h
+index cb0af847d7d9..8c67637abcdd 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -1218,6 +1218,16 @@ static inline struct file *maybe_unlock_mmap_for_io(struct vm_fault *vmf,
+ 	}
+ 	return fpin;
+ }
 +
-+	if (mlock_supported)
- 		ksft_print_msg("VMA flag %s is present on page 1 after unlock\n", LOCKED);
--		return 1;
--	}
-+	else
-+		ksft_print_msg("VMA flag %s is present on an unsupported VMA\n", LOCKED);
- 
--	return 0;
-+	return 1;
- }
- 
- static void test_mlock_lock(void)
-@@ -196,7 +200,7 @@ static void test_mlock_lock(void)
- 		ksft_exit_fail_msg("munlock(): %s\n", strerror(errno));
- 	}
- 
--	ksft_test_result(!unlock_lock_check(map), "%s: Unlocked\n", __func__);
-+	ksft_test_result(!unlock_lock_check(map, true), "%s: Unlocked\n", __func__);
- 	munmap(map, 2 * page_size);
- }
- 
-@@ -296,7 +300,7 @@ static void test_munlockall0(void)
- 		ksft_exit_fail_msg("munlockall(): %s\n", strerror(errno));
- 	}
- 
--	ksft_test_result(!unlock_lock_check(map), "%s: No locked memory\n", __func__);
-+	ksft_test_result(!unlock_lock_check(map, true), "%s: No locked memory\n", __func__);
- 	munmap(map, 2 * page_size);
- }
- 
-@@ -336,7 +340,61 @@ static void test_munlockall1(void)
- 		ksft_exit_fail_msg("munlockall() %s\n", strerror(errno));
- 	}
- 
--	ksft_test_result(!unlock_lock_check(map), "%s: No locked memory\n", __func__);
-+	ksft_test_result(!unlock_lock_check(map, true), "%s: No locked memory\n", __func__);
-+	munmap(map, 2 * page_size);
++static inline bool vma_supports_mlock(const struct vm_area_struct *vma)
++{
++	if (vma->vm_flags & (VM_SPECIAL | VM_DROPPABLE))
++		return false;
++	if (vma_is_dax(vma) || is_vm_hugetlb_page(vma))
++		return false;
++	return vma != get_gate_vma(current->mm);
 +}
 +
-+/*
-+ * Droppable memory should not be lockable.
-+ */
-+static void test_mlock_droppable(void)
+ #else /* !CONFIG_MMU */
+ static inline void unmap_mapping_folio(struct folio *folio) { }
+ static inline void mlock_new_folio(struct folio *folio) { }
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 2f699c3497a5..73551c71cebf 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -472,10 +472,12 @@ static int mlock_fixup(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 	int ret = 0;
+ 	vm_flags_t oldflags = vma->vm_flags;
+ 
+-	if (newflags == oldflags || (oldflags & VM_SPECIAL) ||
+-	    is_vm_hugetlb_page(vma) || vma == get_gate_vma(current->mm) ||
+-	    vma_is_dax(vma) || vma_is_secretmem(vma) || (oldflags & VM_DROPPABLE))
+-		/* don't set VM_LOCKED or VM_LOCKONFAULT and don't count */
++	if (newflags == oldflags || vma_is_secretmem(vma) ||
++	    !vma_supports_mlock(vma))
++		/*
++		 * Don't set VM_LOCKED or VM_LOCKONFAULT and don't count.
++		 * For secretmem, don't allow the memory to be unlocked.
++		 */
+ 		goto out;
+ 
+ 	vma = vma_modify_flags(vmi, *prev, vma, start, end, &newflags);
+diff --git a/mm/vma.c b/mm/vma.c
+index be64f781a3aa..18c3c5280748 100644
+--- a/mm/vma.c
++++ b/mm/vma.c
+@@ -2589,9 +2589,7 @@ static void __mmap_complete(struct mmap_state *map, struct vm_area_struct *vma)
+ 
+ 	vm_stat_account(mm, vma->vm_flags, map->pglen);
+ 	if (vm_flags & VM_LOCKED) {
+-		if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
+-					is_vm_hugetlb_page(vma) ||
+-					vma == get_gate_vma(mm))
++		if (!vma_supports_mlock(vma))
+ 			vm_flags_clear(vma, VM_LOCKED_MASK);
+ 		else
+ 			mm->locked_vm += map->pglen;
+diff --git a/tools/testing/vma/include/stubs.h b/tools/testing/vma/include/stubs.h
+index 947a3a0c2566..416bb93f5005 100644
+--- a/tools/testing/vma/include/stubs.h
++++ b/tools/testing/vma/include/stubs.h
+@@ -426,3 +426,8 @@ static inline void vma_adjust_trans_huge(struct vm_area_struct *vma,
+ }
+ 
+ static inline void hugetlb_split(struct vm_area_struct *, unsigned long) {}
++
++static inline bool vma_supports_mlock(const struct vm_area_struct *vma)
 +{
-+	char *map;
-+	unsigned long page_size = getpagesize();
-+
-+	/*
-+	 * Ensure MCL_FUTURE is not set.
-+	 */
-+	if (mlockall(MCL_CURRENT))
-+		ksft_exit_fail_msg("mlockall(MCL_CURRENT): %s\n", strerror(errno));
-+	if (munlockall())
-+		ksft_exit_fail_msg("munlockall() %s\n", strerror(errno));
-+
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap error: %s", strerror(errno));
-+
-+	if (mlock2_(map, 2 * page_size, 0)) {
-+		munmap(map, 2 * page_size);
-+		ksft_exit_fail_msg("mlock2(0): %s\n", strerror(errno));
-+	}
-+
-+	ksft_test_result(!unlock_lock_check(map, false), "%s: droppable memory not locked\n",
-+			__func__);
-+
-+	munmap(map, 2 * page_size);
++	return false;
 +}
-+
-+static void test_mlockall_future_droppable(void)
-+{
-+	char *map;
-+	unsigned long page_size = getpagesize();
-+
-+	if (mlockall(MCL_CURRENT | MCL_FUTURE))
-+		ksft_exit_fail_msg("mlockall(MCL_CURRENT | MCL_FUTURE): %s\n", strerror(errno));
-+
-+	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
-+
-+	ksft_test_result(!unlock_lock_check(map, false), "%s: droppable memory not locked\n",
-+			__func__);
-+
-+	if (munlockall()) {
-+		munmap(map, 2 * page_size);
-+		ksft_exit_fail_msg("munlockall() %s\n", strerror(errno));
-+	}
-+
- 	munmap(map, 2 * page_size);
- }
- 
-@@ -442,7 +500,7 @@ int main(int argc, char **argv)
- 
- 	munmap(map, size);
- 
--	ksft_set_plan(13);
-+	ksft_set_plan(15);
- 
- 	test_mlock_lock();
- 	test_mlock_onfault();
-@@ -451,6 +509,8 @@ int main(int argc, char **argv)
- 	test_lock_onfault_of_present();
- 	test_vma_management(true);
- 	test_mlockall();
-+	test_mlock_droppable();
-+	test_mlockall_future_droppable();
- 
- 	ksft_finished();
- }
 -- 
 2.47.3
 
