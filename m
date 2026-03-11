@@ -1,248 +1,129 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2193AF66A;
-	Wed, 11 Mar 2026 07:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773214425; cv=none; b=ep8GGrpGArV3fxwdgFjvG2FEkEMD7TK54qEwykFaPN1lKjnUqiAgIsMGCDa7BKuPj4i0kGShnJtYjszCDaqYF4G1nSwhhf9Fiv93oyC3q9nqfXTqQOLYFbdleMhGBe/JWuDl/X/tX7kamuKpAc3BbVA2E/ZTEYn0LeZhWu8yFKc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773214425; c=relaxed/simple;
-	bh=TnUwwV/B77eColgu+FTC3LP0ebszg38zOzmJYiOft34=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T9+ionISt273aC8znEZn24TN1PZvIZTRZ7kH9judtGgigcBLlBeEN4x2GSNeCnWArZJyoxx2NQhojWjZVojn2mmjuaJQMOs+zmig0JVq2SOILuvh7eWoDIE2D/gM03JaSfZQza2Yvto5LZ70ZVlzfO72YV/GLPzWw6P407EEW8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EWvhKPJ1; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7D831F9B7
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 07:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773215772; cv=pass; b=s+7SepWkqWcpV8WoEd9yosrWn7DF5hlKov8OSc5Q+eGdezW155fDeW6M9i6rEcZ86r279glhl0mb5mmCsBx5uviDur+CS4x2Cz9WRffRBplVWHpiwv2LAW9bbH2o6AKO0Kpn4WccnoVIkL6XmE7fyeh1RbiU1rOWpuhetJtWa/k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773215772; c=relaxed/simple;
+	bh=lAGj6nwkp++G9k/rSCeEKSrGzcAUEaSnQ17uO7koJgk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JJJ5+Ubp258rV6tIeWJVLEkNJWThaW04BYb8V6oo6y+Rg3Oxb4jym/18zkUqD/7ZPLWakmbLC5Qe4Ngq5fO34FNIgUDr4YlqoAACGVC5AktrMDLh0PjTbJpps31abn+J2g/g2qD4Il/LT5mybNwmEI8NmrJ3JoZ46gJrneAi/9s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IjpNT1Sl; arc=pass smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EWvhKPJ1"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id A077B4E42612;
-	Wed, 11 Mar 2026 07:33:36 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 710D560004;
-	Wed, 11 Mar 2026 07:33:36 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D351D10369B30;
-	Wed, 11 Mar 2026 08:33:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773214415; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=n3wH772870P9IpL8j8omLHGVOBI6gpvI4kazRBxkKQU=;
-	b=EWvhKPJ1D02MgJTIdcjo6/tweA8f7JrxrAEY+uuuroqhEwOwZydPWLbS0Y4laB6GseyYgO
-	UdFSQrUUuAqN2ezIfgS7Z15b5D1fbQHlSzAlHIJGg9Ws4t7hG7iNxc+eyWjxO25e9p1YCX
-	JOUUpjSr3avSsNbQUtvMNrIBrZU1RihcEQEj4hjZEUVmB9gijeuoW1DDqORtn7y4fUYEYt
-	S2Te6EQEonBfw5A2O4iAuDSHrFrbXyB61DBLRL6YCj8KlSJWxpf+0lGPsJTdN1RdM2Etdb
-	LxotNJPIK+3HMww6dmYslKQAnR/S7r21luxnLVLWxksi4glXhvQD6WXz0ihxJQ==
-Message-ID: <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
-Date: Wed, 11 Mar 2026 08:33:26 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IjpNT1Sl"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-78fc4425b6bso138959947b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 00:56:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773215768; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QqRn4FhIjb+gYQUh9SqelNTKZDpyopmgMmaUxtbAA2ZBLzA0mK4gp6tQiuDcCKaE2m
+         C7YOvLd2u7zftSRdEQq3qBdgPZD+VDYAWHgFftV4Vpo6MKVpoPgV6ZoIUhbqb3t58i7h
+         D5z0RUhwkZSfhIfXa47Nq2umg5Mp38KQxpA4SXSlzvNIjTLGMrj5B9t7+dJSm6ve68XY
+         SRKqnwC1xwaRrEGY7Ni8Ivwf4zYHRTFcPPGZI6JLTfX3syLjagOr7NVRO9Q1j1jcPeFs
+         ThpCHD9OcU2Mk/m30BZ8RDmNcvFixhQl5Ah3lXsl4OXmhsZu6gvv1F9Pv3WLtynrRris
+         M3vA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
+        fh=Ok08VfYyTiM3owvDnwkcGjM1euog8zJIRCRevkvVmNQ=;
+        b=PRccPZ4lPuvrulAY58VUZs/ky8+4ZLBgDqmoAj580x4lWYY/z23i0+ub+ZruzoBKpy
+         YmME4ffNT9gcyTZpAgT/3EMwnV9fsxjCEwtrOPfpguOV3pPa0aQXjS1E7KxT/HD0ZDbo
+         kqQu1Yszuivd0xWG2mHQNWZs4x7SKden85hH+yYfVAsCMC6w5aNtOl2mVKZCft8DLjJR
+         XcXVuJIlqLHOGvn40VE3QQvMyBCigtuAiMReqE+IX4xu36Mk2b08oBuQlvQ72ecD7YTE
+         xUovmNKicHIOu40eMylKxw6SWZG5zhDM3KuPzdZ5KW36IPy6ReM6niyqAmyI2Jwyhg98
+         d0bg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773215768; x=1773820568; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
+        b=IjpNT1SlxlKtc9YXp5U0aFqnpqWyK0m+bOzVnDOkyI+zsMmbyytD6uiu0UiZDZ0KJt
+         pp1www2jjQdTjkJ9NYwrP0sSWl0njQyDKN15odjgWfyNK5/4idOOKVFhLqGi6TKDpTpR
+         AcxvHCeWjn6KfkD33/dOE3DNzeD1RapOYtDTkoAQ8VXiuMIqcU5zv81s/hRhxGUpHI/R
+         gVldmfbldF5jQxCrtbC6iXx6/RZ53Pjtj5NxuPzGI9yTdX6IiBcvDkUZqP0mBOlPnVzM
+         aEIikeSQibtBVzsMSeg2p0eKzUDOzptOvJSRa6f7o+zXRcnW2j3MitLfGovp3Yk+gd5U
+         vJKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773215768; x=1773820568;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+EtDzf/2qX0/pcxNehTrmnkTztfsdGIQ04FR+hwnLr4=;
+        b=v47F89Iwd1eGVZi/h4mnNlTX64KH2FJRrimMqCzrzJ+szJOiONM6N9YbaFzR+I8sd7
+         qaV2KcmYVW66GAjiPrzJ+AbZFeXMO4hSk6DtNnDlRvpyp+Ouy1zskcX5nNd+RnZyRRSk
+         4omdmqshc/XLDDbNzBr4lmS9AKpdqMdHxQzL8rOgBt7pspkCBP5FJ9FXkZIQXgrImwAa
+         y8eu/qdXMMFihBlS5LhqBKVqLfgP7dNwZS6E9Yt4vmXsg+to1zY9V+/VYRWnssmOb/M+
+         TQU2+wgOlStlb5VCZpj28HHunWdsXnWHYnjgp9IXKHkiR61fX+2QgTItysmpe2rALYPG
+         fRWA==
+X-Forwarded-Encrypted: i=1; AJvYcCW3c9yhwnlt3lpnU1EDnAW57C2ErH/1A4j8EJYQ5rcLRL2CRQY7eimR9WKl0a3I4Zn/L5aauaMmYek8ia1sun4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq+IRyuyTO1eXNgExBAGuuwT2uuSd/bl/NFkWuTXiMaKxy4dQO
+	yiMer6FDR/I8NwWkEuCY90swmcFUuR1Rn4BFYbeoU9KbapEgL0JMEVsgYXJ+YWvcCM/NIapQt2g
+	z0jC5oUlUgcgqhNR+ahPYs76S5c6vhj8=
+X-Gm-Gg: ATEYQzw15sRsPVBu9Q+sCphUzVc7p+/o/pfdFHxW7g1r1C4Q62aiaSKV3AzWETAvIWD
+	XRuOZL5V7nnV+vlRA76kQzXpaF+EmsQUhS0gagx2CTGFp82WYNgABt6p+cvZelh85VgF+oTHByT
+	BblTS5T+BnEpbQPeCKmtyJWX+fV5wWmuxycTtm91JO04P7RvEmF4ZFbgoVicBQP0fmY3IfeNep5
+	mfdXtG5Hy2IXY1reDO/+/3GyC35TsKW5J63GHOo0CpDGinmUFI3otfR108UyvFhCyW0dq6ni6e1
+	Z1h5A1Lhur2vw/B+MUqzKKEaiovotA==
+X-Received: by 2002:a05:690c:2704:b0:797:f13a:c571 with SMTP id
+ 00721157ae682-79917fa5df5mr12806597b3.58.1773215768327; Wed, 11 Mar 2026
+ 00:56:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
- definitions
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter
- <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Naveen Mamindlapalli
- <naveenm@marvell.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>
-Cc: Danielle Ratson <danieller@nvidia.com>,
- Hariprasad Kelam <hkelam@marvell.com>, Ido Schimmel <idosch@nvidia.com>,
- Kory Maincent <kory.maincent@bootlin.com>, Leon Romanovsky
- <leon@kernel.org>, Michael Chan <michael.chan@broadcom.com>,
- Oleksij Rempel <o.rempel@pengutronix.de>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>,
- Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Saeed Mahameed <saeedm@nvidia.com>,
- Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
- Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-References: <20260310104743.907818-1-bjorn@kernel.org>
- <20260310104743.907818-3-bjorn@kernel.org>
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <20260310104743.907818-3-bjorn@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20260310102145.857810-1-sun.jian.kdev@gmail.com>
+ <20260310102145.857810-2-sun.jian.kdev@gmail.com> <f0d1eb34-2d6a-487a-b486-3dc64c25df6c@redhat.com>
+In-Reply-To: <f0d1eb34-2d6a-487a-b486-3dc64c25df6c@redhat.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Wed, 11 Mar 2026 15:55:58 +0800
+X-Gm-Features: AaiRm53EkzwZReT_wk7QVC-Ygi0J86_yaQ2oUG5Ism0on_mG6PZTKx-yHNgXT0M
+Message-ID: <CABFUUZFQfoVRJ6HJqadHhWNj4FVOk=snuSmuEepMD6jZfyrpJQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests/bpf: Skip bpffs debug iter checks when
+ unavailable in test_bpffs
+To: Viktor Malik <vmalik@redhat.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi again Björn,
+On Tue, Mar 10, 2026 at 8:32=E2=80=AFPM Viktor Malik <vmalik@redhat.com> wr=
+ote:
+>
+> I don't think this is a good approach as it will mask genuine bugs that
+> would cause the files to be missing/inaccessible with one of the above
+> error codes.
+>
+Hi Viktor=EF=BC=8C
 
-First, thanks for iterating so quick !
+I don't think this change masks bugs in a silent way. It prints an explicit
+INFO line when maps.debug/progs.debug are unavailable due to
+EPERM/EACCES/ENOENT, and it still fails on other errors or unexpected
+iterator output.
 
-On 10/03/2026 11:47, Björn Töpel wrote:
-> Add the netlink YAML spec and auto-generated UAPI header for a unified
-> loopback interface covering MAC, PCS, PHY, and pluggable module
-> components.
-> 
-> Each loopback point is described by a nested entry attribute
-> containing:
-> 
->  - component  where in the path (MAC, PCS, PHY, MODULE)
->  - name       subsystem label, e.g. "cmis-host" or "cmis-media"
->  - id         optional instance selector (e.g. PHY id, port id)
->  - supported  bitmask of supported directions
->  - direction  NEAR_END, FAR_END, or 0 (disabled)
-> 
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
-> ---
->  Documentation/netlink/specs/ethtool.yaml      | 123 ++++++++++++++++++
->  .../uapi/linux/ethtool_netlink_generated.h    |  59 +++++++++
->  2 files changed, 182 insertions(+)
-> 
-> diff --git a/Documentation/netlink/specs/ethtool.yaml b/Documentation/netlink/specs/ethtool.yaml
-> index 4707063af3b4..8bd14a3c946a 100644
-> --- a/Documentation/netlink/specs/ethtool.yaml
-> +++ b/Documentation/netlink/specs/ethtool.yaml
-> @@ -211,6 +211,49 @@ definitions:
->          name: discard
->          value: 31
->  
-> +  -
-> +    name: loopback-component
-> +    type: enum
-> +    doc: |
-> +      Loopback component. Identifies where in the network path the
-> +      loopback is applied.
-> +    entries:
-> +      -
-> +        name: mac
-> +        doc: MAC loopback. Loops traffic at the MAC block.
-> +      -
-> +        name: pcs
-> +        doc: |
-> +          PCS loopback. Loops traffic at the PCS sublayer between the
-> +          MAC and the PHY.
-> +      -
-> +        name: phy
-> +        doc: |
-> +          Ethernet PHY loopback. This refers to the Ethernet PHY managed
-> +          by phylib, not generic PHY drivers. A Base-T SFP module
-> +          containing an Ethernet PHY driven by Linux should report
-> +          loopback under this component, not module.
-> +      -
-> +        name: module
-> +        doc: |
-> +          Pluggable module (e.g. CMIS (Q)SFP) loopback. Covers loopback
-> +          modes controlled via module firmware or EEPROM registers. When
-> +          Linux drives an Ethernet PHY inside the module via phylib, use
-> +          the phy component instead.
+> If you really need to execute the rest of the test cases in the file,
+> how about you split the test into subtests and then just add the failing
+> subtest to your DENYLIST?
 
-So to get back on Andrew's remarks, let's see if we can get something
-closer to 802.3.
+Proper subtests  would require reworking the current fork-based flow to
+report SKIP/FAIL to the harness, which would be a larger refactor than
+intended here.
 
-Here, we have loopback at various locations, which all depends on the
-Ethernet standard you use.
+My goal is to keep this as a minimal change while still achieving the main
+purpose of this test: exercising the core bpffs operations (pinning and
+renameat2 semantics), which are independent of the debug iterator files,
+and clearly reporting when the iterator checks couldn't be performed.
 
-It's usually in the PCS, PMA or PMD components. Thing is, we may have
-these in multiple places in our link.
-
-If we take an example with a 10G PHY, we may have :
-
-+----SoC-----+
-|            |
-|  MAC       |- drivers/net/ethernet
-|   |        |
-| Base-R PCS |- could be in drivers/net/pcs, or directly
-|   |        | in the MAC driver
-|   |        |
-|  SerDes    |- May be in drivers/phy, maybe handled by firmware,
-|   |        |  maybe by the MAC driver, maybe by the PCS driver ?
-+---|--------+
-    |
-    | 10GBase-R
-    |
-+---|-PHY+
-|   |    |
-| SerDes | \
-|   |    | |
-|  PCS   | |
-|   |    |  > All of that handled by the drivers/net/phy PHY driver
-|  PMA   | |
-|   |    | |
-|  PMD   | /
-+---|----+
-    |
-    v 10GBaseT
-
-So even the "PCS" loopback component is a bit ambiguous, are we talking
-about the PHY PCS or the MAC PCS ?
-
-Another thing to consider is that there may be multiple PCSs in the SoC
-(e.g. a BaseX and a BaseR PCS like we have in mvpp2), the one in use
-depends on the current interface between the MAC and the PHY.
-
-Another open question is, do we deal with loopbacks that may affect
-multi-netdev links ? Like the multi-lane modes we discussed with fbnic,
-or even for embedded, interfaces such as QSGMII ?
-
-As for the SerDes on the MAC side (say, the comphy on Marvell devices),
-can we say it's a PMA for 10GBase-KR ? Or is it something that's simply
-out of spec ?
-
-So I'd say, maybe we should not have a PCS loopback component at all,
-but instead loopback at the well-defined components on our link, that is:
-
- - MAC => MAC loopack, PCS on the MAC side, SerDes on the SoC, etc.
- - PHY => Loopbacks on the PCS/PHY/PMA withing the PHY device
- - Module => For non-PHY (Q)SFPs
-
-The important part would therefore to get the "name" part right, making
-sure we don't fall into driver specific names.
-
-We can name that 'pcs', 'pma', 'pmd', or maybe even 'mii' ? Let's see :
-
-+----SoC-----+
-|            |
-|  MAC       |- component = MAC, name = 'mac'
-|   |        |
-| Base-R PCS |- component = MAC, name = 'pcs'
-|   |        |
-|   |        |
-|  SerDes    |- component = MAC, name = 'mii' ?
-|   |        |
-+---|--------+
-    |
-    | 10GBase-R
-    |
-+---|-PHY+
-|   |    |
-| SerDes | - component = PHY, name = 'mii' ?
-|   |    |
-|  PCS   | - component = PHY, name = 'pcs'
-|   |    |
-|  PMA   | - component = PHY, name = 'pma'
-|   |    |
-|  PMD   |- component = PHY, name = 'pmd' or 'mdi' ?
-+---|----+
-    |
-    v 10GBaseT
-
-Sorry that's a lot of questions and I don't expect you to have the
-answer, but as what you've come-up with is taking a good shape, it's
-important to decide on the overall design and draw some lines about
-what do we support, and how :(
-
-> +  -
-> +    name: loopback-direction
-> +    type: flags
-> +    doc: |
-> +      Loopback direction flags. Used as a bitmask in supported, and as
-> +      a single value in direction.
-> +    entries:
-> +      -
-> +        name: near-end
-> +        doc: Near-end loopback; host-loop-host
-> +      -
-> +        name: far-end
-> +        doc: Far-end loopback; line-loop-line
-
-I was browsing 802.3, it uses the terminlogy of "local loopback" vs
-"remote loopback", I suggest we use those.
-
-Maxime
+Regards,
+Sun Jian
