@@ -1,86 +1,200 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3921EDA0F
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 02:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB2F1B86C7;
+	Wed, 11 Mar 2026 02:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773195474; cv=none; b=Q4ps5n+ZNpMXmGqK2OLsZbs8/mCKSJLwhK0+ZD2J5xdqXODOBJoUvDWhGOEfcamARdcXn0E4XMtWgG1xWyGAuS+17Fe79VCw22fdmbzaAK74aqDqYpYWxSkstXJvhZm60B4T7exST0WM1rr3YFrX+4giBmsHOl3fFsJJKzuPOmw=
+	t=1773195680; cv=none; b=BHURk3M3jyqzin6n5XbrWQCMi8y285lg3Zo3O82CLAeOhXIxbwG/29RW+PI6biURgsOdh8jeN6rCjzV5cSBDgUvf5rgMy5D/O5LvbOdRd+yP8e5X3ebJWWz46jcpGPETxUzG87Zr+O9ESn4ENuHX8Y+JH984rrFEaLzgOizfHLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773195474; c=relaxed/simple;
-	bh=CZeHveheAeadX0UEZpxNLvWqoeKOmWKP6TM+p1mI3Cc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YosOrIUdysWIf5VeGedMcq1TrpvmMjzNanj86yekOtBcbP7onbE25JuKi17rFp8UwLODz84+VqML6AeIy7wjEXZHjM/nglZ/ig1zy4lQvJFyxc+0LmFmP1x9lhK4w3YhH1hlKr7sSE0tzfSPvhytoZ/62wQ67SNBLAQWHeL6xYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LmuO4hWA; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773195680; c=relaxed/simple;
+	bh=UENQBWEPJFUI22yOQgmdwpS79ecZZ9WPiRvZjleY30w=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=TWXmufA+bTqJpULuHw75f+CjRoB8W9PTpQbhs1MDzHhzeOsJLtCW5pl9BpdlhA8Fd5G9lan1/GLEX7d5izrZebLFDz49EXgGc7DlEFa09rLyDEoKly59U5xXJVFhOdjNCt9yLKyib8EZlInB0OhtoEPN+XEjjf95lYLhedGTgO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=VaDLSTo9; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmuO4hWA"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a8fba3f769so59606615ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 19:17:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773195472; x=1773800272; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lNIznmqrMaqnx+se5M0cKItTRTQ1UgUfNOmgMa/FK0s=;
-        b=LmuO4hWAcwfWz8/Ktov1da9O3Ya+6U9EQUsMYjaLZbcftzmZ0C2yeACA3SNKAYHgto
-         /m/TmJ05ibgidsAVEEPJuVsofhSGwCTgCX362SBMYD+0U6CbpFpN5I21G44HVFW0O+cy
-         jQe1fD5ezd260luhEy3qi3KqfaWgCvBZCCWUhKtfi7+mSPgVweU23x7i+Uok64aIn8WQ
-         G0aHN1gKcJkd919eN7w+zcdSu28Ur4RW7jnVBBBw5DWludwDvtsqkAzCOhiJZvOwF2tH
-         wDEydBoq5ezMt8lSaMInz+E1OZjaTjvWdiswznoyxOATGDxEMUhF9H9YPqIA4aYQeKOQ
-         Qw/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773195472; x=1773800272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lNIznmqrMaqnx+se5M0cKItTRTQ1UgUfNOmgMa/FK0s=;
-        b=kJJPE2Fna5261HSkHQFP9F9amrkwZBSeTfh7CxHZ0lUvCh5Xi8NMCY2BMF89mxUREN
-         mfwOT2hlRGzVUzu2QbpjBwDQ/h5Cl9VuujS6JQyYWKDOJ42Ys6uweQiBGcTMQMj77O/M
-         n3lV+7SWyHjCys+tX0Vi8d084nvWgBMqVUp/xNY7r3hBzihChkVkjU9rxgLKFSUd/uSr
-         2dVgBQGuiP1gAfirfhlcPdiQX4TCFBM8Fpg5cRKtRe1plmchGMUusjYoFd5Nvtz7DDVr
-         Hm8HFrY791r6RG1R994yqnNRb+J9kawJ0J3k7VySdZtEiRAP8C7TuJqK3lDTphLd+hPx
-         uTNQ==
-X-Gm-Message-State: AOJu0Yxzrqd1En9s8MTZIplR0MBdKM3304UNicDk1DC6+IF+jBMvqyT9
-	jmsUOuDfZLGlLUuOqqgrH252caMSXqqX+9eTcP/pp1eEfg2Zoie19YgS
-X-Gm-Gg: ATEYQzxkS46Dt9HtTDh/N52H2LeSkbFFnixzYqPrUfZiDNBzGOTlaoFEJDFewWYYRsJ
-	b06BQDMcZPAb9NHjQiqOeil7Lr24g5rHBXCY10hX2x93HX2xkOuZLhclw8HTveypogp5MmLQQj/
-	KCRurJ00eb6oGtHJ1Dv2LrN5abNIJFUpQi8RnDRRgFA2Kcuvufglq7VI51GbM6zVAUSNiTzBAAT
-	IX1Z6tRPp1xCWEMlqgQzLhsyjagywdN2ejbJTvXgg25lmTbGBpvo7ZOfV0NoqR0fNmv2dL8FLl/
-	Wu7MPkdlV6SCPJMNy5/HXi4fklfXC1+8bLGNyvD/YZd73jeDSYY29OmRGdj3fHPilizOOQElEc/
-	YhLzKboUUIeAg7ssS0SdbDoLBThPbxR2n1IdpC05F00FGO5sLGEMP+Ph3tyCiizUqUlvXOkg+u3
-	WlvPsrYxAkRS7KhLIj2jdOtbKoh1g=
-X-Received: by 2002:a17:903:3887:b0:2ae:69d3:5b9f with SMTP id d9443c01a7336-2aeae928e9dmr10936355ad.52.1773195472364;
-        Tue, 10 Mar 2026 19:17:52 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aeae34dff2sm5892155ad.57.2026.03.10.19.17.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 19:17:51 -0700 (PDT)
-Date: Wed, 11 Mar 2026 02:17:46 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, Brendan Jackman <jackmanb@google.com>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCHv3] selftests: Use ktap helpers for runner.sh
-Message-ID: <abDQyvRGhRIsRGaU@fedora>
-References: <20260225010833.11301-1-liuhangbin@gmail.com>
- <DGO2DAIFY07Y.367VMZA7XGT4U@google.com>
- <aajisr9n2pInS7jm@fedora>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="VaDLSTo9"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ZCPwodAJ50NcwUGxjO5nSSMRczLJa4bA27Dqr3fPsmo=;
+	b=VaDLSTo9Y77YlIdlNU4uAQGJ4ccq+8+6s5Ez6s4KRr+5JQhnmLFG8DS6DsOmRS3uhAdi3SV4y
+	wa0QgKD1i3LevuTYZMk6ysWDLpxeLvS2HUxrC8cQJdqt6SNCRN+Xh65bBzXblCiSq66gBGPzHzQ
+	OoMQQjXUNv70m3k82BT/5zI=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4fVvVj3V7ZzpTLn;
+	Wed, 11 Mar 2026 10:15:57 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 87F0D4056A;
+	Wed, 11 Mar 2026 10:21:08 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 11 Mar 2026 10:21:08 +0800
+Received: from [10.173.124.160] (10.173.124.160) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 11 Mar 2026 10:21:07 +0800
+Subject: Re: [PATCH 12/13] selftests/mm: move hwpoison setup into run_test()
+ and silence modprobe output for memory-failure category
+To: Zi Yan <ziy@nvidia.com>, Sayali Patil <sayalip@linux.ibm.com>
+CC: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, Ritesh Harjani <ritesh.list@gmail.com>,
+	David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@kernel.org>,
+	"Oscar Salvador" <osalvador@suse.de>, Lorenzo Stoakes
+	<lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>, Muhammad Usama
+ Anjum <usama.anjum@collabora.com>, <Liam.Howlett@oracle.com>
+References: <cover.1773134177.git.sayalip@linux.ibm.com>
+ <832afc6c34a784ca433b506622cdc98fe9540f79.1773134177.git.sayalip@linux.ibm.com>
+ <556E284E-9638-4F4E-8CE4-7158DB914AED@nvidia.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <ae5108d1-4bf1-7b48-b299-ea3f12ee50e1@huawei.com>
+Date: Wed, 11 Mar 2026 10:21:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aajisr9n2pInS7jm@fedora>
+In-Reply-To: <556E284E-9638-4F4E-8CE4-7158DB914AED@nvidia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-On Thu, Mar 05, 2026 at 01:56:09AM +0000, Hangbin Liu wrote:
-> Hi Shuah,
+On 2026/3/11 3:15, Zi Yan wrote:
+> On 10 Mar 2026, at 5:49, Sayali Patil wrote:
 > 
-> Is there anything else I need to do to move this patch forward?
+>> run_vmtests.sh contains special handling to ensure the hwpoison_inject
+>> module is available for the memory-failure tests. This logic was
+>> implemented outside of run_test(), making the setup category-specific
+>> but managed globally.
+>>
+>> Move the hwpoison_inject handling into run_test() and restrict it
+>> to the memory-failure category so that:
+>> 1. the module is checked and loaded only when memory-failure tests run,
+>> 2. the test is skipped if the module or the debugfs interface
+>> (/sys/kernel/debug/hwpoison/) is not available.
+>> 3. the module is unloaded after the test if it was loaded by the script.
+>>
+>> This localizes category-specific setup and makes the test flow
+>> consistent with other per-category preparations.
+>>
+>> While updating this logic, fix the module availability check.
+>> The script previously used:
+>>
+>> 	modprobe -R hwpoison_inject
+>>
+>> The -R option prints the resolved module name to stdout, causing every
+>> run to print:
+>>
+>> 	hwpoison_inject
+>>
+>> in the test output, even when no action is required, introducing
+>> unnecessary noise.
+>>
+>> Replace this with:
+>>
+>> 	modprobe -n hwpoison_inject
+>>
+>> which verifies that the module is loadable without producing output,
+>> keeping the selftest logs clean and consistent.
+>>
+>> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
+>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+>> ---
+>>  tools/testing/selftests/mm/run_vmtests.sh | 46 ++++++++++++++---------
+>>  1 file changed, 28 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+>> index 7273c3e18227..7f3a3027cd9a 100755
+>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>> @@ -250,6 +250,27 @@ run_test() {
+>>  			fi
+>>  		fi
+>>
+>> +		# Ensure hwpoison_inject is available for memory-failure tests
+>> +		if [ "${CATEGORY}" = "memory-failure" ]; then
+>> +			# Try to load hwpoison_inject if not present.
+>> +			HWPOISON_DIR=/sys/kernel/debug/hwpoison/
+>> +			if [ ! -d "$HWPOISON_DIR" ]; then
+>> +				if ! modprobe -n hwpoison_inject > /dev/null 2>&1; then
+>> +					echo "Module hwpoison_inject not found, skipping..." \
+>> +						| tap_prefix
+>> +					skip=1
+>> +				else
+>> +					modprobe hwpoison_inject > /dev/null 2>&1
+>> +					LOADED_MOD=1
+>> +				fi
+>> +			fi
+>> +
+>> +			if [ ! -d "$HWPOISON_DIR" ]; then
+>> +				echo "hwpoison debugfs interface not present" | tap_prefix
+>> +				skip=1
+>> +			fi
+>> +		fi
+>> +
+>>  		local test=$(pretty_name "$*")
+>>  		local title="running $*"
+>>  		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+>> @@ -261,6 +282,12 @@ run_test() {
+>>  		else
+>>  			local ret=$ksft_skip
+>>  		fi
+>> +
+>> +		# Unload hwpoison_inject if we loaded it
+>> +		if [ -n "${LOADED_MOD}" ]; then
+>> +			modprobe -r hwpoison_inject > /dev/null 2>&1
+>> +		fi
+>> +
+>>  		count_total=$(( count_total + 1 ))
+>>  		if [ $ret -eq 0 ]; then
+>>  			count_pass=$(( count_pass + 1 ))
+>> @@ -540,24 +567,7 @@ CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
+>>
+>>  CATEGORY="rmap" run_test ./rmap
+>>
+>> -# Try to load hwpoison_inject if not present.
+>> -HWPOISON_DIR=/sys/kernel/debug/hwpoison/
+>> -if [ ! -d "$HWPOISON_DIR" ]; then
+>> -	if ! modprobe -q -R hwpoison_inject; then
+>> -		echo "Module hwpoison_inject not found, skipping..."
+>> -	else
+>> -		modprobe hwpoison_inject > /dev/null 2>&1
+>> -		LOADED_MOD=1
+>> -	fi
+>> -fi
+>> -
+>> -if [ -d "$HWPOISON_DIR" ]; then
+>> -	CATEGORY="memory-failure" run_test ./memory-failure
+>> -fi
+>> -
+>> -if [ -n "${LOADED_MOD}" ]; then
+>> -	modprobe -r hwpoison_inject > /dev/null 2>&1
+>> -fi
+>> +CATEGORY="memory-failure" run_test ./memory-failure
+>>
+>>  if [ "${HAVE_HUGEPAGES}" = 1 ]; then
+>>  	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
+>> -- 
+>> 2.52.0
+> 
+> +Miaohe
+> 
+> LGTM.
+> 
+> Acked-by: Zi Yan <ziy@nvidia.com>
 
-ping
+LGTM. Thanks both.
 
-Hangbin
+Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Thanks.
+.
