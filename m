@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9C935B658;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D95835A387;
 	Wed, 11 Mar 2026 22:01:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773266492; cv=none; b=nMq+wDUp5N75U2iQfqZ6Td0TjY1zkVppECMKDHtWCHoThapWCAsCSmviksxBC7TxPMdECfGfYADZidc9BZ6LAt0+8czUzNFsPPIe6jCFu1mVJM6nxB8TBVqySqldAjMHSBPa/b6pQampMbIumfxJnVh7i4emSSjbg+7Hj2D3hvw=
+	t=1773266492; cv=none; b=H5GVXKDYw5WlJ2KW6py71e7X/H8ZBV57CnJRX3tFvu89VSTI7m7M6jL2Q1QnspvF7R0Z5PMPyLuJSQB08acmVpad23HOatLwbr90SYmgMs7/MbMI9lky/iHuVBfn8IpCUTi6y4Jom9KOC8Uda5va+Z5PrI9kJYmwobMQiViqWdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773266492; c=relaxed/simple;
-	bh=+yVXS7454Sh1Jf02UggP0hD9+jM4HyKK2AjFU+7L+bg=;
+	bh=DQ9Zc0Q7xc6dZOq15nfDtuT6wEnkMqTtKK6Bhc6CYPI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nZp4pQmJMbjEW6NHy1PoOpRcy+lS2cyZs5+MZay4JoiPlyDH30tZnqjtRSoz3oS4e0SWOtltN1r2GxGfMjuMUAkBarBpnW6of6yxKekglkreciU3qiwX8DBPzU9MDA4B6mpn8i75FB+HGYyAsytGED7YbM5c3pcR5KCtjsKdOXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Fk/lcCyz; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=RzUAQqYt0feDkv2DKg3h8xt8lStoWjvTEZJclQISciSe1kIUC9uHJE4gf2dawS0BVZTwhlbpEoEWyXdH02CbTUFe6eP6xUou6W34jjS/7VZjy69I/1GFb06QwJDrkQZeDZDEEQzQrkfFZqX1jlCA8OxSK0kaLg6mouA4g0/xENc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Z1QaMm+U; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Fk/lcCyz"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Z1QaMm+U"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1773266488;
-	bh=+yVXS7454Sh1Jf02UggP0hD9+jM4HyKK2AjFU+7L+bg=;
+	bh=DQ9Zc0Q7xc6dZOq15nfDtuT6wEnkMqTtKK6Bhc6CYPI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Fk/lcCyzEEl7qmAJQWdJCiLppRjFzFZicCGVxHIetiBF/d+IGgmKIFEBk/HZgOW3C
-	 Kvx02UJmeZzDj/VA40jP87Vt/Mw6aRPVlZ5PmzdJMXjglfK+Jn45oT3g5rwO3bt3cg
-	 PCvirqKy2XH7t8NU3UuF5y6dLdoYio9KgtduvzPI=
+	b=Z1QaMm+ULA5QJ+M8hUnN1h45YC142/a9fJMeBY/w66uB91mKSG3oPPF06la2fpDWz
+	 /7oK8QrPrO1UiVyNzf8/TcbRKrX/Df6CA+WCwHGQkhR6cFIv/zrxeLtBpkKPzHrQ94
+	 0zjwMTSigBflEWaqaR6zRDvScrPGRGQHvYd4/O8g=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 11 Mar 2026 23:00:50 +0100
-Subject: [PATCH 2/4] selftests/nolibc: validate NOLIBC_IGNORE_ERRNO
- compilation
+Date: Wed, 11 Mar 2026 23:00:52 +0100
+Subject: [PATCH 4/4] tools/nolibc: add err.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,54 +34,151 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260311-nolibc-err-h-v1-2-735a9de7f15d@weissschuh.net>
+Message-Id: <20260311-nolibc-err-h-v1-4-735a9de7f15d@weissschuh.net>
 References: <20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net>
 In-Reply-To: <20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773266488; l=1549;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773266488; l=3075;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=+yVXS7454Sh1Jf02UggP0hD9+jM4HyKK2AjFU+7L+bg=;
- b=thwH4L4fgLg7KziPs99NZupYfcCePC9XK0/7V/hDHbdEJ70fLlfCz23InMdNh8HZEQv/+pYjD
- s/g3GQtIs3RCBnkkLcz6lYgylSo9kPs8Slgp+RkrH2W2f9M/U1uGDb6
+ bh=DQ9Zc0Q7xc6dZOq15nfDtuT6wEnkMqTtKK6Bhc6CYPI=;
+ b=Ns1nx88qAYwjYB7FtBsijU3e5BA1Kgpt9MbVs6r0CCOKTnwwXVE3bstzF0UCqIb7hf0I8YgAg
+ EMC8+Q5wZ8BDRN3Q0pCLQMAjJyrUqr7KnhdEh5Jm/mGILfjXN+0w03L
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-When NOLIBC_IGNORE_ERRNO is set, various bits of nolibc are disabled.
-
-Make sure that all the ifdeffery does not result in any compilation
-errors by compiling a dummy source file.
+Add a few convenient helpers to print error and warning messages.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile.include           | 2 +-
- tools/testing/selftests/nolibc/nolibc-test-ignore-errno.c | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ tools/include/nolibc/Makefile |  1 +
+ tools/include/nolibc/err.h    | 91 +++++++++++++++++++++++++++++++++++++++++++
+ tools/include/nolibc/nolibc.h |  1 +
+ 3 files changed, 93 insertions(+)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile.include b/tools/testing/selftests/nolibc/Makefile.include
-index 6455373d56be..41a0039f774c 100644
---- a/tools/testing/selftests/nolibc/Makefile.include
-+++ b/tools/testing/selftests/nolibc/Makefile.include
-@@ -9,4 +9,4 @@ CFLAGS_NOLIBC_TEST  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -
- 		$(call cc-option,-fno-stack-protector) $(call cc-option,-Wmissing-prototypes) \
- 		$(_CFLAGS_STACKPROTECTOR) $(_CFLAGS_SANITIZER)
- 
--NOLIBC_TEST_SOURCES := nolibc-test.c nolibc-test-linkage.c
-+NOLIBC_TEST_SOURCES := nolibc-test.c nolibc-test-linkage.c nolibc-test-ignore-errno.c
-diff --git a/tools/testing/selftests/nolibc/nolibc-test-ignore-errno.c b/tools/testing/selftests/nolibc/nolibc-test-ignore-errno.c
+diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
+index 1958dda98895..5d242312943f 100644
+--- a/tools/include/nolibc/Makefile
++++ b/tools/include/nolibc/Makefile
+@@ -30,6 +30,7 @@ all_files := \
+ 		ctype.h \
+ 		dirent.h \
+ 		elf.h \
++		err.h \
+ 		errno.h \
+ 		fcntl.h \
+ 		getopt.h \
+diff --git a/tools/include/nolibc/err.h b/tools/include/nolibc/err.h
 new file mode 100644
-index 000000000000..aea816da4fca
+index 000000000000..2373c4999b71
 --- /dev/null
-+++ b/tools/testing/selftests/nolibc/nolibc-test-ignore-errno.c
-@@ -0,0 +1,6 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/tools/include/nolibc/err.h
+@@ -0,0 +1,91 @@
++/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
++/*
++ * formatted error message for NOLIBC
++ * Copyright (C) 2026 Thomas Weißschuh <linux@weissschuh.net>
++ */
 +
-+#define NOLIBC_IGNORE_ERRNO
++/* make sure to include all global symbols */
++#include "nolibc.h"
 +
-+/* Include all of nolibc and make sure everything compiles */
-+#include <stdlib.h>
++#ifndef _NOLIBC_ERR_H
++#define _NOLIBC_ERR_H
++
++#include "errno.h"
++#include "stdarg.h"
++#include "sys.h"
++
++static __attribute__((unused))
++void vwarn(const char *fmt, va_list args)
++{
++#ifndef NOLIBC_IGNORE_ERRNO
++	fprintf(stderr, "%s: ", program_invocation_short_name);
++#endif
++	vfprintf(stderr, fmt, args);
++	fprintf(stderr, ": %m\n");
++}
++
++static __attribute__((unused))
++void vwarnx(const char *fmt, va_list args)
++{
++#ifndef NOLIBC_IGNORE_ERRNO
++	fprintf(stderr, "%s: ", program_invocation_short_name);
++#endif
++	vfprintf(stderr, fmt, args);
++	fprintf(stderr, "\n");
++}
++
++static __attribute__((unused))
++void warn(const char *fmt, ...)
++{
++	va_list args;
++
++	va_start(args, fmt);
++	vwarn(fmt, args);
++	va_end(args);
++}
++
++static __attribute__((unused))
++void warnx(const char *fmt, ...)
++{
++	va_list args;
++
++	va_start(args, fmt);
++	vwarnx(fmt, args);
++	va_end(args);
++}
++
++static __attribute__((noreturn, unused))
++void verr(int eval, const char *fmt, va_list args)
++{
++	vwarn(fmt, args);
++	exit(eval);
++}
++
++static __attribute__((noreturn, unused))
++void verrx(int eval, const char *fmt, va_list args)
++{
++	warnx(fmt, args);
++	exit(eval);
++}
++
++static __attribute__((noreturn, unused))
++void err(int eval, const char *fmt, ...)
++{
++	va_list args;
++
++	va_start(args, fmt);
++	verr(eval, fmt, args);
++	va_end(args);
++}
++
++static __attribute__((noreturn, unused))
++void errx(int eval, const char *fmt, ...)
++{
++	va_list args;
++
++	va_start(args, fmt);
++	verrx(eval, fmt, args);
++	va_end(args);
++}
++
++#endif /* _NOLIBC_ERR_H */
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index d1d08b7f8599..fe8195483b6d 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -130,6 +130,7 @@
+ #include "getopt.h"
+ #include "poll.h"
+ #include "math.h"
++#include "err.h"
+ 
+ /* Used by programs to avoid std includes */
+ #define NOLIBC
 
 -- 
 2.53.0
