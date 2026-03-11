@@ -1,308 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A0E2F1FED;
-	Wed, 11 Mar 2026 18:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773254162; cv=none; b=G3wL/wMPZ5isAt+g0It+aU/mlXysvWWMzQ9W8hVeRfKiUGkOtis9puOZ7ZMQ3hDtkHDnSpmZy4aalRqb2pD4xBunbdKSg1a+GWS8K5xeHNpqKKC4q0FZDnSOmbJMpQUC4U6LV3N1UdwezjH/iMV7cLeggXlYutw9Ve/c2AhBJTc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773254162; c=relaxed/simple;
-	bh=Lab18BB3orM/nud1CgsXXO+rESiy+sNlGvfoXi3Mvvg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gqqr8isjdXOMQ3b7PKmsWz4mW7Epa1G3c4PmUDAiNk6zbVAfuR5UURvFnNfXMEEcemauTQJAMWbcjwy2K25ChaY9EPKzrWrVL4f0nYEnE7YUkwYCzshRwrsr4uzXDrnWhUJZf6NIh0DzvRGeMykiGZxvdOLO+43RghjThWxO9JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uuuiGpmx; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8102C35F617
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 18:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773254525; cv=pass; b=VhSGtqNBdkTbaZnlEBxE2QAerWlWi0d/qJnT/wlURmnq5j+2WayG379vDztWsg7uwH6mnuMgHnW1sf2RcpbGQLNdIk9v7WPGnnFiganxfHTECizHTRlKSCBs2MFbiJX4Ng5vSwqM3CTW/2/06Mr5D1rUFqRKnJvms5T8cjj2qb0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773254525; c=relaxed/simple;
+	bh=LpTDiNlHjR7RogeTiDXmpnsy0/5Mme6VyuFnUyJsEkM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I7nj0ZXHx/VajqVpFxwU+rcYfiLXojSt4ti/9h2fwvSx3lFUR7sK87A4B1y6ZeE0beNIOYrBNC5USmcTEfCDMJnDOqgcc9Uflc7QIyiduHliBaMGQVXFbNcxiEIm6cJT67iedkCe3BCr0pltvgCXHXjmosa+GVkgdxTRHiQkYaE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v8gsj13T; arc=pass smtp.client-ip=209.85.221.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uuuiGpmx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DEC2C2BCB0;
-	Wed, 11 Mar 2026 18:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773254161;
-	bh=Lab18BB3orM/nud1CgsXXO+rESiy+sNlGvfoXi3Mvvg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=uuuiGpmxS7BPZc6lu67IfUDvZv1exAeM6z2bbeiKZtt7SKQPlS/qzRA2qlXphwqY7
-	 48qmYJD9W49N9PRr0D/FPUzMYGp41eZPwIFx11JlwhGZFWmKtGPqcTQ5h5LISrYla0
-	 ewngPBJy2HoqIlLRVw8HOCg0WLb9I7QagKLYdVOMw4worh9vfOhDa4ZecoUAzgwUjo
-	 8Pseio+pjqizc40Sj89RB9qMd3k6toHQef2V57fW0Git3vYdYEbGU3QJauov32yXzp
-	 kZRgmEiUshkSN5BsN9DoLgCBX69WojWDosYKL4DnE2rbTaSvEF0QM5mMlRg9X1NPvn
-	 Ei0+2+Bwp+4oA==
-Date: Wed, 11 Mar 2026 11:35:50 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Donald Hunter <donald.hunter@gmail.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- shuah@kernel.org, sdf@fomichev.me, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 0/5] tools: ynl: policy query support
-Message-ID: <20260311113550.6b493008@kernel.org>
-In-Reply-To: <m2jyviob64.fsf@gmail.com>
-References: <20260310005337.3594225-1-kuba@kernel.org>
-	<177319682153.3014711.5472638473199917370.git-patchwork-notify@kernel.org>
-	<m2jyviob64.fsf@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v8gsj13T"
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-56afafef7aeso250879e0c.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 11:42:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773254522; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZBdg56GPPg60RC8fbHvrUDKZEiT+lWhEnzWEDVyyPv+HIk3lHEclz4ud+ZZIqzh5lm
+         RJV0UlE8Z5ttpUHDmw3d4NCoiTOuAam4OtyQ9dYUEUoskHmJVtNGlmY5Fx8p8Y+v2KnD
+         jF9t7VTqVxGpXMFyRd7F2uuXjzYzJ4lAPRMgpTk8e7SZBOjeJHNG2le0Q3qYG7pQB9IX
+         f55Ombx+yyRhPTxhpDDLGMMpL0GfUG6UJyTL2lzT0eEsAtDJkVQm7sdJ4nsMS3jwhiPz
+         HjZs2C/u7ydgr/w+VCLFjXzEYL6Spypt8LAbr/Aq6JG3eJCTdRY8U/pVltHvWmbuUBmJ
+         GJIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=BcgUYRkLhII9+M7j2ixLhI6ILk1g0NW1TskzYd0mvUw=;
+        fh=RJORCQbgwOyURoPmDyf6nZArWKlt6+goZhmJr41zEUg=;
+        b=RZ5Ptgtjs8t7h545L4q8uVyUDuINdhcITG4GBdGly7BsHtCCTXp3IPo55y8iSLd7Q3
+         bSN1s/pjhLytDuT0dVivPi1CzLsBYJZYSRPQAip2z4v+ls+7hkPe/2rypUowl0epZXk3
+         U4STWkVxxPsadeU3ZVkk9jMkKFZg/YTxdxLp16Qf4QS0IhfvM0MOwvVoSohIs54rsyfS
+         U2YtV0sMn4xbgs7HPvdkMtv1T1xYjdIxKBppPmWyTTQtsTDkH9qRG1nTuaQJQ0pkfb3c
+         CPRmHe4M69DTuAPHaOUYEaCDxhMArXpFWcl9huukt9acgIxEpoeaWHiu1AjFwT4gu2AV
+         xE1A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773254522; x=1773859322; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BcgUYRkLhII9+M7j2ixLhI6ILk1g0NW1TskzYd0mvUw=;
+        b=v8gsj13Tksz8etj60QllyLjje/yQt0um9lDizHDWFnR7kO3xoEphI2Gm0fhZi26mD7
+         ePj9w9EUcSEk3ZCMrkpEZEbBCANbzd8P8CurJfjnlK3cWaad4ELQm9vunkMlO+2NKKNk
+         wUcAtgAoozQ3Br1jGi29cfDOCfmo42Zu+rIvv8oLOH3tQQ6ZVqBIPBYVpgzoe2tK5/yD
+         PTmmh1o6zyupuqP2xJDw6cURlTBp+HdeN05uuQKUwnhFc6GUayK+utVZzmJvkSMZXJL+
+         JaJ2OAQq92qCNYO8nInnxybR6wedhz+VGs5YEg+bHBt5qd6UsX5k04D+uCxoCkwcpG+9
+         bNKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773254522; x=1773859322;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BcgUYRkLhII9+M7j2ixLhI6ILk1g0NW1TskzYd0mvUw=;
+        b=rUO3eYfz/EhlFfK+K7JVMw6oH/DNybhnXiXz8rJGOauPdoVd/o0eP6D3gpy7xcYNlW
+         +wDQHe3V9Wkw/WMfi1nxoFe2/nSh2Z2i66No77fVtEnkpNebrCbOlbf2yoFnXpEg1HvJ
+         tJmuSfe7jz9Pk6rKASKPkKZ2Hth6/RaQdLfkDHTiykEGmkTbt8RRnb6nPinmU/vJrkXH
+         eaxTL2oJG9fPnIj2WH7ywdCNf+8HQSq1mENZxQMbRPKd7FZPtMPTLEkibwi1h4KXzrXc
+         MEGM1tryONQ3iMTOGF1Y1ymo5R9VxPnBU+pCLJy+SI4NZ6K9hcCMYOLqSBkxhy36884j
+         Um1g==
+X-Forwarded-Encrypted: i=1; AJvYcCWF4m0md4nfHePgj2KSQUUy/VDA9ZJnXm8dH0f/+zPvJZ2FfsO4JSIEM6emc+ih+exlA4NjLoBuk9t7Rky35+c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsQlk+ivlUr2rQbwPiz4vcO8cZISpKjkca/08GESQJ9wwl/fuO
+	XK1+LnbWuTZ6bl2wjKK+rGIII/6xhWTjP8nMszc23Zo2aUce2z4xCKPj/Q94PwPCYYJFxumUpf1
+	s+5C9WI2vf4wUTPsJtH9hXKlIu1fx6Kkpklfs585w
+X-Gm-Gg: ATEYQzxotziQr2PMF8yRwa2hpDSpcoaBgVnht+pDVS7aqyr+efwiMQczIn10BwT7nOT
+	x7l37Hhvcbl8vjkLxJtREjMVGGTMYAXEy3ZQuxtY5pMFsq2KtvcpNBSqICUQHyhnlRweKp5LOBH
+	EHNHzw9jqCP0stJt/LWS6hauX4KZNwqcp9o32J2Wwu6O0jjBc0k3mcJWnaeb5nlsfN+Henhj/+j
+	QUd/rSW9O7IosBJyLQ3+hlxTzF1VES9Lu3Tz+dcPFCO2RHCXtdFvjNhcGNoG1+fh6hh0rS8TsQt
+	wKttlSK8ZtFK39eC
+X-Received: by 2002:a05:6102:3a06:b0:5ff:30de:a421 with SMTP id
+ ada2fe7eead31-601def3286cmr1502772137.30.1773254521696; Wed, 11 Mar 2026
+ 11:42:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260311110523.26624-1-liwang@redhat.com> <nynf44sljfbjeftotwow56w7nz4j3zkgnoor3ulljq5ajo4lgq@fogtfchssfnt>
+In-Reply-To: <nynf44sljfbjeftotwow56w7nz4j3zkgnoor3ulljq5ajo4lgq@fogtfchssfnt>
+From: Yosry Ahmed <yosryahmed@google.com>
+Date: Wed, 11 Mar 2026 11:41:24 -0700
+X-Gm-Features: AaiRm53fgVwmf0GEDRK_ykCE-CN6tKvUHuAWz4QWlmQ7q9ESPBd5nH95Yjefi8w
+Message-ID: <CAJD7tkaX8XP_JH0VQ+nN3HZhewQzGM8Yv7okeu+aJs-ETArnuw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] selftests/cgroup: detect and handle global zswap
+ state in test_zswap
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: Li Wang <liwang@redhat.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Muchun Song <muchun.song@linux.dev>, Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 11 Mar 2026 11:30:59 +0000 Donald Hunter wrote:
-> > On Mon,  9 Mar 2026 17:53:32 -0700 you wrote:  
-> >> Improve the Netlink policy support in YNL. This series grew out of
-> >> improvements to policy checking, when writing selftests I realized
-> >> that instead of doing all the policy parsing in the test we're
-> >> better off making it part of YNL itself.
-> >> 
-> >> Patch 1 adds pad handling, apparently we never hit pad with commonly
-> >> used families. nlctrl policy dumps use pad more frequently.
-> >> Patch 2 is a trivial refactor.
-> >> Patch 3 pays off some technical debt in terms of documentation.
-> >> The YnlFamily class is growing in size and it's quite hard to
-> >> find its members. So document it a little bit.
-> >> Patch 4 is the main dish, the implementation of get_policy(op)
-> >> in YnlFamily.
-> >> Patch 5 plugs the new functionality into the CLI.  
-> 
-> I was mid review
+> >  int main(int argc, char **argv)
+> >  {
+> >       char root[PATH_MAX];
+> > -     int i;
+> > +     int i, orig_zswap_state;
+> >
+> >       ksft_print_header();
+> >       ksft_set_plan(ARRAY_SIZE(tests));
+> >       if (cg_find_unified_root(root, sizeof(root), NULL))
+> >               ksft_exit_skip("cgroup v2 isn't mounted\n");
+> >
+> > -     if (!zswap_configured())
+> > +     orig_zswap_state = zswap_enabled_state();
+> > +
+> > +     if (orig_zswap_state == -1)
+> >               ksft_exit_skip("zswap isn't configured\n");
+> > +     else if (orig_zswap_state == 0 && !enable_zswap())
+> > +             ksft_exit_skip("zswap is disabled and cannot be enabled\n");
+>
+> I should simply check the enablement state and skip if it's not
+> satisfactory (possibly printing an instructive message what to tweak).
+> (To keep the test dummy and leave it up to who's reponsible for the environment.)
 
-Sorry about that! :( I didn't see any reply to the one liner for a few
-days I thought you may be AFK :)
-
-> looking at a couple of issues:
-> 
-> - It would be good to fail more gracefully for netlink-raw families
-
-This one I saw, but I figured the message that gets printed is...
-reasonable. For low level functionality like policies we should 
-assume user is relatively advanced? The policies are spotty
-even in genetlink, a lot of families don't link them up properly :(
-So explaining all of this is a bit of a rabbit hole.
-
-> - I get "RecursionError: maximum recursion depth exceeded" for nl80211
-
-:o Missed this one completely! My feeling is that we should lean into
-the NlPolicy class more, and avoid rendering the full structure upfront.
-WDYT about the following?
-
-diff --git a/tools/net/ynl/pyynl/cli.py b/tools/net/ynl/pyynl/cli.py
-index fc9e84754e4b..ff0cfbdc82e4 100755
---- a/tools/net/ynl/pyynl/cli.py
-+++ b/tools/net/ynl/pyynl/cli.py
-@@ -16,7 +16,8 @@ import textwrap
- 
- # pylint: disable=no-name-in-module,wrong-import-position
- sys.path.append(pathlib.Path(__file__).resolve().parent.as_posix())
--from lib import YnlFamily, Netlink, NlError, SpecFamily, SpecException, YnlException
-+from lib import SpecFamily, SpecException
-+from lib import YnlFamily, Netlink, NlError, NlPolicy, YnlException
- 
- SYS_SCHEMA_DIR='/usr/share/ynl'
- RELATIVE_SCHEMA_DIR='../../../../Documentation/netlink'
-@@ -79,6 +80,8 @@ RELATIVE_SCHEMA_DIR='../../../../Documentation/netlink'
-             return bytes.hex(o)
-         if isinstance(o, set):
-             return sorted(o)
-+        if isinstance(o, NlPolicy):
-+            return o.to_dict()
-         return json.JSONEncoder.default(self, o)
- 
- 
-@@ -313,11 +316,11 @@ RELATIVE_SCHEMA_DIR='../../../../Documentation/netlink'
-     if args.policy:
-         if args.do:
-             pol = ynl.get_policy(args.do, 'do')
--            output(pol.attrs if pol else None)
-+            output(pol if pol else None)
-             args.do = None
-         if args.dump:
-             pol = ynl.get_policy(args.dump, 'dump')
--            output(pol.attrs if pol else None)
-+            output(pol if pol else None)
-             args.dump = None
- 
-     if args.ntf:
-diff --git a/tools/net/ynl/pyynl/lib/ynl.py b/tools/net/ynl/pyynl/lib/ynl.py
-index 0eedeee465d8..4411f1902ae4 100644
---- a/tools/net/ynl/pyynl/lib/ynl.py
-+++ b/tools/net/ynl/pyynl/lib/ynl.py
-@@ -143,32 +143,113 @@ from .nlspec import SpecFamily
-     pass
- 
- 
--# pylint: disable=too-few-public-methods
- class NlPolicy:
-     """Kernel policy for one mode (do or dump) of one operation.
- 
--    Returned by YnlFamily.get_policy(). Contains a dict of attributes
--    the kernel accepts, with their validation constraints.
-+    Returned by YnlFamily.get_policy(). Attributes of the policy
-+    are accessible as attributes of the object. Nested policies
-+    can be accessed indexing the object like a dictionary::
- 
--    Attributes:
--        attrs: dict mapping attribute names to policy dicts, e.g.
--        page-pool-stats-get do policy::
-+        pol = ynl.get_policy('page-pool-stats-get', 'do')
-+        pol['info'].type            # 'nested'
-+        pol['info']['id'].type      # 'uint'
-+        pol['info']['id'].min_value # 1
- 
--            {
--                'info': {'type': 'nested', 'policy': {
--                    'id':      {'type': 'uint', 'min-value': 1,
--                                'max-value': 4294967295},
--                    'ifindex': {'type': 'u32', 'min-value': 1,
--                                'max-value': 2147483647},
--                }},
--            }
-+    Each policy entry always has a 'type' attribute (e.g. u32, string,
-+    nested). Optional attributes depending on the 'type': min-value,
-+    max-value, min-length, max-length, mask.
- 
--        Each policy dict always contains 'type' (e.g. u32, string,
--        nested). Optional keys: min-value, max-value, min-length,
--        max-length, mask, policy.
-+    Policies can form infinite nesting loops. These loops are trimmed
-+    when policy is converted to a dict with pol.to_dict().
-     """
--    def __init__(self, attrs):
--        self.attrs = attrs
-+    def __init__(self, ynl, policy_idx, policy_table, attr_set, props=None):
-+        self._policy_idx = policy_idx
-+        self._policy_table = policy_table
-+        self._ynl = ynl
-+        self._props = props or {}
-+        self._entries = {}
-+        if policy_idx is not None and policy_idx in policy_table:
-+            for attr_id, decoded in policy_table[policy_idx].items():
-+                if attr_set and attr_id in attr_set.attrs_by_val:
-+                    spec = attr_set.attrs_by_val[attr_id]
-+                    name = spec['name']
-+                else:
-+                    spec = None
-+                    name = f'attr-{attr_id}'
-+                self._entries[name] = (spec, decoded)
-+
-+    def __getitem__(self, name):
-+        """Descend into a nested policy by attribute name."""
-+        spec, decoded = self._entries[name]
-+        props = dict(decoded)
-+        child_idx = None
-+        child_set = None
-+        if 'policy-idx' in props:
-+            child_idx = props.pop('policy-idx')
-+            if spec and 'nested-attributes' in spec.yaml:
-+                child_set = self._ynl.attr_sets[spec.yaml['nested-attributes']]
-+        return NlPolicy(self._ynl, child_idx, self._policy_table,
-+                        child_set, props)
-+
-+    def __getattr__(self, name):
-+        """Access this policy entry's own properties (type, min-value, etc.).
-+
-+        Underscores in the name are converted to dashes, so that
-+        pol.min_value looks up "min-value".
-+        """
-+        key = name.replace('_', '-')
-+        try:
-+            # Hack for level-0 which we still want to have .type but we don't
-+            # want type to pointlessly show up in the dict / JSON form.
-+            if not self._props and name == "type":
-+                return "nested"
-+            return self._props[key]
-+        except KeyError:
-+            raise AttributeError(name)
-+
-+    def get(self, name, default=None):
-+        """Look up a child policy entry by attribute name, with a default."""
-+        try:
-+            return self[name]
-+        except KeyError:
-+            return default
-+
-+    def __contains__(self, name):
-+        return name in self._entries
-+
-+    def __len__(self):
-+        return len(self._entries)
-+
-+    def __iter__(self):
-+        return iter(self._entries)
-+
-+    def keys(self):
-+        """Return attribute names accepted by this policy."""
-+        return self._entries.keys()
-+
-+    def to_dict(self, seen=None):
-+        """Convert to a plain dict, suitable for JSON serialization.
-+
-+        Nested NlPolicy objects are expanded recursively. Cyclic
-+        references are trimmed (resolved to just {"type": "nested"}).
-+        """
-+        if seen is None:
-+            seen = set()
-+        result = dict(self._props)
-+        if self._policy_idx is not None:
-+            if self._policy_idx not in seen:
-+                seen = seen | {self._policy_idx}
-+                children = {}
-+                for name in self:
-+                    children[name] = self[name].to_dict(seen)
-+                if self._props:
-+                    result['policy'] = children
-+                else:
-+                    result = children
-+        return result
-+
-+    def __repr__(self):
-+        return repr(self.to_dict())
- 
- 
- class NlAttr:
-@@ -1308,28 +1389,6 @@ from .nlspec import SpecFamily
-     def do_multi(self, ops):
-         return self._ops(ops)
- 
--    def _resolve_policy(self, policy_idx, policy_table, attr_set):
--        attrs = {}
--        if policy_idx not in policy_table:
--            return attrs
--        for attr_id, decoded in policy_table[policy_idx].items():
--            if attr_set and attr_id in attr_set.attrs_by_val:
--                spec = attr_set.attrs_by_val[attr_id]
--                name = spec['name']
--            else:
--                spec = None
--                name = f'attr-{attr_id}'
--            if 'policy-idx' in decoded:
--                sub_set = None
--                if spec and 'nested-attributes' in spec.yaml:
--                    sub_set = self.attr_sets[spec.yaml['nested-attributes']]
--                nested = self._resolve_policy(decoded['policy-idx'],
--                                              policy_table, sub_set)
--                del decoded['policy-idx']
--                decoded['policy'] = nested
--            attrs[name] = decoded
--        return attrs
--
-     def get_policy(self, op_name, mode):
-         """Query running kernel for the Netlink policy of an operation.
- 
-@@ -1341,8 +1400,8 @@ from .nlspec import SpecFamily
-             mode: 'do' or 'dump'
- 
-         Returns:
--            NlPolicy with an attrs dict mapping attribute names to
--            their policy properties (type, min/max, nested, etc.),
-+            NlPolicy acting as a read-only dict mapping attribute names
-+            to their policy properties (type, min/max, nested, etc.),
-             or None if the operation has no policy for the given mode.
-             Empty policy usually implies that the operation rejects
-             all attributes.
-@@ -1353,5 +1412,4 @@ from .nlspec import SpecFamily
-         if mode not in op_policy:
-             return None
-         policy_idx = op_policy[mode]
--        attrs = self._resolve_policy(policy_idx, policy_table, op.attr_set)
--        return NlPolicy(attrs)
-+        return NlPolicy(self, policy_idx, policy_table, op.attr_set)
++1
