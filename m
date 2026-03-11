@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E2C37189B;
-	Wed, 11 Mar 2026 16:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AEF3DDDB6;
+	Wed, 11 Mar 2026 16:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773247214; cv=none; b=D1CT2SdusnNzXhVVZ/42INOLMfgJhy/ubj4yQxXL6c1dVy4otULUd7U+aImzVFgbwfK/qhDBwrbaz1GwW566lHc5snnTLq3rH+OirrdxWMC9A1r9ZxTQnBeUK+jiN7ovoNuKkQSsGMOt1Cye16DYZ6ZB/NZpv6g2V1W/aFzJtGE=
+	t=1773247217; cv=none; b=d1qcT/IZwej0Xk45I15JFWxUkPJ9LT5g2hwX7nt0m7Pie16I9jsdT5qnc4hXxAX1Kxjz6R/8sSuV6VKhjView36gp2sJJPGl+Kv1Rh7isl2L8AVP066JmnmTCO4SYvs094GBkVbGm+VtLnkumSMRZSR0tc7lsPNRqqV7Vn1fX28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773247214; c=relaxed/simple;
-	bh=+JE5L+xvjhi3Jlb8VJlMA4JbNpsHgjnPtFV9mdr/h64=;
+	s=arc-20240116; t=1773247217; c=relaxed/simple;
+	bh=3haxPrvoOERxfJywZ9OYABdIOP9HtBpqmHOCHCOKxLM=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fK2Xa/lz1XFyVE4Sj6lXFCtpql+EWqxtNiTuP+Ga8r7Tfr3mbPOhvz9vhdIxA5q5wjt9Hs1kZvXTS+1tv6ktTy8V0LPmDR2p2/ExhSkA/36O7HXRkVC3CeNI23bSjnxbakSam4wyS5/ibY9KqcwHtlTsBuirmQls8I4FFGUbuN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ddn/o5XZ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=LG92gO3LWefgNL8xxZ5gs1SlfDHGlhhShyyuIUBdK0hshUO4M2NP2xZOiXPCWSnziZgP37t8Oqb2wSvVKXzrA4HwJ4nx3yGvMnl+J7F7KvFI2irtdrtFBblvyxrGAasj8dKTsya12szeQAhMHJNQ1cPM36nH9b0/6X939imlpt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfDNqoWF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ddn/o5XZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ADF0C4CEF7;
-	Wed, 11 Mar 2026 16:40:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfDNqoWF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3130C4CEF7;
+	Wed, 11 Mar 2026 16:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773247214;
-	bh=+JE5L+xvjhi3Jlb8VJlMA4JbNpsHgjnPtFV9mdr/h64=;
+	s=k20201202; t=1773247216;
+	bh=3haxPrvoOERxfJywZ9OYABdIOP9HtBpqmHOCHCOKxLM=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Ddn/o5XZ4XvZtUS1H/70hTLllJ8ZWrzwhO0GAz7ANLgG6mDzia4F1U331WrHD0FEP
-	 Q21ratCyb58vZD74W7M2BrpgROkdqOjyzODyHGWQjZlR7Z5uLHEBB9CPdDjTOn+t7v
-	 qvPGgc5GRIaRKBBkhIubfwK2N/fCvN/zgMgY94OovzvIYY2Og97K1w+Jilm9ozciJP
-	 muRmxqzlv6gt0NcXjd6aUoBk5eF7cBZb1yUVWiJ5gh3aEwCMA+80hnVJ/igCQbkGVz
-	 0U9brA7wPsWYi7zhVgzHm4jwpa9oyNXv8UduP1v0cwZtQDqhrtdVCy53z6FrD1JzUF
-	 mxPJvnYBq8XmA==
+	b=VfDNqoWFYhdujhV9IOYoLDVkX6/RaS8MBI+l0fR0aQB/YDbCwCc6QWj3c2DVinfZV
+	 rPxqoqFlnGzDj+ZVJVENOUknqzOkyPp4PzbAm4ruwYFOexE6YnT9BZpwjZ8aPncmge
+	 t88TnIPqXhzP+jAnEPy/jX3F6PUPONhbpqGNwXZHMdMWQepTw9yJF0f2sPWV144E2S
+	 MImIrH1gw3oZU2rc+/dR2UcfbbNRV67BW0GULaVpqJ06ZseE4GRMVoopOBE4P3eaVA
+	 o09sOWb2tSJw6F6H9UhVbyWJBP5sXGVMmYpsa9KhJk5MMWLImoBkE/Z14CW7+/vrx/
+	 4n0z4tX0lD1Yg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FE793808200;
-	Wed, 11 Mar 2026 16:40:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D093808200;
+	Wed, 11 Mar 2026 16:40:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -37,42 +37,40 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 1/2] selftests/bpf: filter by pid to avoid cross-test
- interference
+Subject: Re: [PATCH v4 bpf-next] selftests/bpf: livepatch_trampoline: skip
+ when
+ prerequisites are missing
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177324720981.3744293.13534304462989539724.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Mar 2026 16:40:09 +0000
-References: <20260306083330.518627-1-sun.jian.kdev@gmail.com>
-In-Reply-To: <20260306083330.518627-1-sun.jian.kdev@gmail.com>
+ <177324721255.3744293.12344401725525506418.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Mar 2026 16:40:12 +0000
+References: <20260309104448.817401-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <20260309104448.817401-1-sun.jian.kdev@gmail.com>
 To: sun jian <sun.jian.kdev@gmail.com>
-Cc: andrii@kernel.org, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
+Cc: bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ rostedt@goodmis.org, jiayuan.chen@linux.dev, linux-kselftest@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri,  6 Mar 2026 16:33:29 +0800 you wrote:
-> The test installs a kprobe on __sys_connect and checks that
-> bpf_probe_write_user() can modify the syscall argument. However, any
-> concurrent thread in any other test that calls connect() will also
-> trigger the kprobe and have its sockaddr silently overwritten, causing
-> flaky failures in unrelated tests.
+On Mon,  9 Mar 2026 18:44:48 +0800 you wrote:
+> livepatch_trampoline relies on livepatch sysfs and livepatch-sample.ko.
+> When CONFIG_LIVEPATCH is disabled or the samples module isn't built, the
+> test fails with ENOENT and causes false failures in minimal CI configs.
 > 
-> Constrain the hook to the current test process by filtering on a PID
-> stored as a global variable in .bss. Initialize the .bss value from
-> user space before bpf_object__load() using bpf_map__set_initial_value(),
-> and validate the bss map value size to catch layout mismatches.
+> Skip the test when livepatch sysfs or the sample module is unavailable.
+> Also avoid writing to livepatch sysfs when it's not present.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3,1/2] selftests/bpf: filter by pid to avoid cross-test interference
-    https://git.kernel.org/bpf/bpf-next/c/70ce840d5f5b
-  - [v3,2/2] selftests/bpf: drop serial restriction
-    https://git.kernel.org/bpf/bpf-next/c/aa181c7d642c
+  - [v4,bpf-next] selftests/bpf: livepatch_trampoline: skip when prerequisites are missing
+    https://git.kernel.org/bpf/bpf-next/c/c02e0ab8aeec
 
 You are awesome, thank you!
 -- 
