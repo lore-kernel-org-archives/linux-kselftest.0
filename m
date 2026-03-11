@@ -1,106 +1,137 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB58E20C029
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 16:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773244892; cv=none; b=ESMPcVhCOLljHxiZhHbF12s9Qgtv+p26jlHEfvSsN5l2BUpE1XhkxDbTRvHmoudjvk+irJxu1bOcKmPZ2Bb6yeHNEcbrvHWidVU+g0IbV78XizjjwjsI2w09B48VGXi5Ir3ECWIBZQPPTxmMBsgiajQO/ibNvkaT5/1+26hNp3Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773244892; c=relaxed/simple;
-	bh=dAGZ9QDB/AHQYbwzsn1M1UQyB+pSq+QxswCJaxDDu24=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sxgyXXI572VeZkIWDRge65G0UrrE3VoQXVNbM/QaT7GbaDSnjm9F/wzaTHO0hCUTzJprfGBE4N8rhfrSDjolQESxnBdm7BNezki+8apRYKKOuAQDF7HRCBrzyqKKgUOOSakj+zp9AZimQHap7sY0yBU7CWey9a3H41l598rDkt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=T7eoa007; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7813B369215
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 16:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773244977; cv=pass; b=e4zQzgrLe65WIaXHbU65vat9zm7/AoZdEiZSxn0aW1eAnz3el1fZSyMF5WOPnBAjatLysORWMrCHeJJP8WHyRh/tCDl6/6D9u+NUN3Sv38f/TZZ8D7x9hc1S1QMXcaCMmck+gqgb5/tPj481n5729FyHJ7UaQmvRbfwzt/echqU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773244977; c=relaxed/simple;
+	bh=TTGYknl5DMVw66RIprGNex8QxI0DcgJDnPePFyUvgSo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bz8MMEdUTCHrEZasja3IdGem+CTJBcSKNogPw4u0zE5EYQz2d5fuwvhdLTYuq52NqLmbMyGBLy/3V4QgDRDFSxB0YaFHY7WhwC1HZnge4vmO2fUbhLTmIVdnXtTAIPp6UsU8nbEO334puwTSC60vrgeJgraiOwZl3VzbNtRFzEY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LJk+dXwK; arc=pass smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="T7eoa007"
-Message-ID: <8a3c7f14-b3d1-4208-acbd-76e5db6c5320@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773244877;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oNLVd2r8mGNBLCXONY/Iw3RP+/fVmudHh8AMMFKtpgg=;
-	b=T7eoa007BVw9qMjpjq/4/VBG87w4s7+0T8oqqgUYtqzr42Q8zRLZrQFJMdRPGrA0mrxij5
-	W3DVTQp89FUCmPsJAqcYTcubh9bLsrWUDTBCOaPy9tCsAVspeipcyKCG7KJSsD6OYJxRPb
-	spLeEXgijisarBZtiXgC+0kGwalFLgM=
-Date: Thu, 12 Mar 2026 00:00:46 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LJk+dXwK"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b79f8f7ea43so2274415166b.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 09:02:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773244975; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gud/DyyqkQLMaq1FtRB+9pn71RDhTR062Y5iR9SM+1eSUvmEnVUypjBF2yg8nV445M
+         FmnwRttFQHKWWAqZZJ2IR9FHFvnmNmL+oyGpJVfOl29fscH25vERnKYartqvXfW9z6uF
+         AOdu/xp8HS1lJ5mWEWAZKxH4PX9Mi1LpJYog+KrXgyPYGMnugFCpBSvkeroNf+/kzCs8
+         CelRyVkpWzeWJjvFbugL5sOGfMxGSXWgq+34IxZ0LokClaSvkMR3JxygdZJe+seg+viD
+         wTCxqhhxZdAq76ieIBqeMkeAi19Kbl5x7tG4i+yopHltknVDabXXxkbWVOVrJAl9nezT
+         is7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UAvqaxfPguwjQoaqkzApmgLeUnEZxmw7DGBlz6NQr7k=;
+        fh=Sjr4DApNUvopzCAkTW5Xre26hOMgLKc4MXDszLywxj0=;
+        b=Qdb3Gr2EKU4GE31IlHHBhq88oblSUb6kA/EdfE3SAvLqJvWSlQ9T1ZTudEJ9COTZBf
+         WNBpFFVDDWIuvEr5raIl5FnF6UX5LZyjpygL1JjN0jHr5EfemE8L2uxciNRIajMnI9ia
+         86lOs9dcQj70INh3kub4rWIHbUYb6F9V/pOMgilwAhIxYXH83F7nvgZtNORwcK1nNlJV
+         jzqwN0ZyzufsppPbhc8Guy9moWIj9H2DBLTPYA8sSh77hKGNYhkivVpZGEz0VW/fzEW1
+         7UkVDiajL/BO7y1MpPT2yc02tuZn2e6gL+zGzLf7V2O5JdTZXp8YQH88BMbmWA2JcF1r
+         Bgmw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773244975; x=1773849775; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UAvqaxfPguwjQoaqkzApmgLeUnEZxmw7DGBlz6NQr7k=;
+        b=LJk+dXwKiSRqYB3vp3XTUpL3w4DjOP8FKD7KSueVKx32s0QGkdrjvOzKzdifW8MzQj
+         fm4XkR4VWvL+OoMavnMC57XhN4BslwTwtkFaX52Sl585gC9ar/vjLeFWtOA13DYF41+5
+         1Ns+z7hRCbOGC2ppcA9SmcArrddyG5BQ8nIAzYgppJUeeGNELm0txLOTp3zAslyu4iLV
+         YIwpvZBe5/0DIe4lMbIKzs2YFhI/1RBBbKRtzX/1rcIM24izQRs5KbnsClaTfqrgUPwk
+         buKTkI//n859RgJeaW2oUV5Z07kWMCMVYGOgzBLThPwrPhQM/Ut1EVvZL0dv6DiiM5UX
+         t/Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773244975; x=1773849775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UAvqaxfPguwjQoaqkzApmgLeUnEZxmw7DGBlz6NQr7k=;
+        b=FkZ15jrSabI/ppLL4Cv5yDR08MjEiuDhLYvzBdCVDEUQfbokPotVyXjzE5Scv7goqI
+         fY17S0rArAplsJcMcYkCptKIx1TOWLEsU43ZWPQ4LBahRj9K5uerV8ARuW83pS1/bG6n
+         coe/V+01+ugsZraNFMNWGTZKzkbgLjECt9BU3fVqUc8vld5wNAzChBs0BBNlUekg5GPw
+         OMLswfToushmOIffJeAog2VMPWT6CTfrNagm/8X2BotTSLHqSalM8v43lF2rU3z+hspF
+         8paVTKWGw1jf7Mt1nwAia5MokWDreJM2Px6PoNMgNm3Dnge1oJg8IWVnyMI8DgSFETv3
+         cxIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVk3+rn7+r2ZBKvnRAvcCBjHQl0+5gWbvsEc2Q7b0sLjBUk6y1R3oTagMTJIM50/agYzDvuq2YoKDS+61BJRZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKYN7ibNfKE0Q+To14qwysqwswMQkCaogwWaaIACcmp38pPF+X
+	YyDoARL6ObvBzqiGmCK7SyGlN7LI0Yuo8A0aqHtGSdAGpUx37wpj/1HfWZpsgHBbMd+Jy0BdovC
+	Z1aFzYuLj95euLboqfny4osmACcimqEY=
+X-Gm-Gg: ATEYQzzCJ42UB4QvFa9gcvPFt9u38ob8dKGyKD1+F1wH6QQ7DQ0gyWafVvceh+RKbvR
+	f8Eb8Y8HQK8+YA2ugvjmtzP7ZrcQtNEyUrM5xu6pCBBJQX2tS0jxmcj5iuKYwzIyBX3e/VcslW9
+	/r3EkEAJ1ampZksvw89rmMlt3jNbzLfKfHM6hbBlamUPQvUX+bCk1Yd/L5N70ft3hL1nsTzcA5w
+	fspCi+dcPzcHAvkWTqS3c65uwTsTLUp6vf6dTF3YEXjZZSLw3lvpFmz4oXqSfqX7/c/a8uxwF/3
+	LkQJpIcqy49p+mlMDF8UoedSdo68GIotJu13ElBg+UlC/1ESqsA2QGZyVVG4b8OjVcb3lRrleIy
+	xGgfXgLELBsn9qtESxn4ZUB5Spg==
+X-Received: by 2002:a17:906:fd87:b0:b96:eb58:92bd with SMTP id
+ a640c23a62f3a-b972e5aea9dmr196747766b.49.1773244974508; Wed, 11 Mar 2026
+ 09:02:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Feng Yang <yangfeng@kylinos.cn>, Menglong Dong <menglong8.dong@gmail.com>,
- Puranjay Mohan <puranjay@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>,
- LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>, kernel-patches-bot@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>
-References: <20260303150639.85007-4-leon.hwang@linux.dev>
- <47fbcb9aa941b07054bfef30b802d488688fafdf6df889e78b38313a614b98c1@mail.kernel.org>
- <CAP01T74sqmUAL7=PuzFPNbghX+6N_OzrsZiOHcMEMtg01CuL4A@mail.gmail.com>
- <94cfdbdc-833a-4838-af84-e0989e988418@linux.dev>
- <CAP01T74w4KVMn9bEwpQXrk+bqcUxzb6VW1SQ_QvNy0A4EY-9Jg@mail.gmail.com>
- <CAADnVQJ=NGUydRq9SghNgoo2a3JZqz4498Sk81t4CfdHm0vSHA@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQJ=NGUydRq9SghNgoo2a3JZqz4498Sk81t4CfdHm0vSHA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260303131453.328674-1-hbathini@linux.ibm.com>
+ <CAADnVQKuARvSirPjnTcSifLPunCiKC4Nenq0Mr61GpzbW5WxWg@mail.gmail.com> <bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com>
+In-Reply-To: <bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 11 Mar 2026 09:02:41 -0700
+X-Gm-Features: AaiRm50_VeFbt_qfNvj0SBCBDMtHqyGYVr_6h5_paNycvlXuoc5cm8NuE_iIB6Y
+Message-ID: <CAADnVQ+4N4WWLxan_qibZ7HmONJyMZaP=RF+a9tMSPoz=0LqkQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: improve test coverage for kfunc call
+To: Hari Bathini <hbathini@linux.ibm.com>
+Cc: Eduard <eddyz87@gmail.com>, Vineet Gupta <vineet.gupta@linux.dev>, 
+	"Jose E. Marchesi" <jemarch@gnu.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/3/11 23:44, Alexei Starovoitov wrote:
-> On Wed, Mar 11, 2026 at 2:22 AM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
->>
+On Wed, Mar 11, 2026 at 8:10=E2=80=AFAM Hari Bathini <hbathini@linux.ibm.co=
+m> wrote:
+>
+> >
+> >> +
+> >> +       /* Check zero-extension */
+> >> +       if (val !=3D (unsigned long)a)
+> >> +               return 1;
+> >> +       /* Check no sign-extension */
+> >> +       if (val < 0)
+> >> +               return 2;
+> >> +
+> >> +       val =3D b;
+> >> +       if (val !=3D (unsigned long)b)
+> >> +               return 3;
+> >> +       if (val < 0)
+> >> +               return 4;
+> >> +
+> >> +       val =3D c;
+> >> +       if (val !=3D (unsigned long)c)
+> >> +               return 5;
+> >> +       if (val < 0)
+> >> +               return 6;
+> >> +
+> >> +       return 0;
+> >> +}
+> >
+> > Overall this looks very useful.
+> > I would expand with another test where a,b,c are s8,s16,s32.
+>
+> Slightly different approach but kfunc_call_test4/bpf_kfunc_call_test4
+> cover signed arguments already?
 
-[...]
-
->>
->> I agree but the main question is whether such a case is realistic, are
->> we going to have write_ctx programs tail calling this way?
->> Tail calls are already pretty rare, thinking more about it extension
->> programs are probably also broken wrt checks in this set.
->> bpf_check_attach_target is doing none of these things for
->> prog_extension = true. Nobody reported a problem, so I doubt anyone is
->> hitting this.
->> It probably also needs to be fixed.
->> Since you noticed it, we should close the gap conservatively for now,
->> and wait for a real use case to pop up before enabling this one-way.
-> 
-> +1
-> tail_calls in general hopefully will be deprecated soon.
-> As soon as we have support for indirect calls there won't be any reason
-> for tail calls to exist. (other than not breaking current users).
-> We definitely don't want to open it up further.
-> So the simplest fix.
-
-Got it.
-
-Will follow the both-ways check approach in the next revision.
-
-Will apply the conservative check to extension programs using another
-patch series, after verifying the potential issues for them.
-
-Thanks,
-Leon
-
+Ahh. Then may be tweak it to adopt similar fine grained
+error reporting as your bpf_kfunc_call_test5()
+or go other way around an collapse all errors the way test4 is doing it.
