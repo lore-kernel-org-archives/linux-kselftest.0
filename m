@@ -1,521 +1,179 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9E03BD235
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 07:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773215810; cv=none; b=McSs6EzOM8p6N8AA93UXMsq+6/CJfLfSApjsQOxjenK70UkC/bOAHgs623hH184PApB3LLAEQxCDB1K5x0jR8pvk7B9PNp0aafjSyxinYbPR8d7IYZiCrazhMmKpfBlC1+tKNbypYJWtLiU81NaA0o4Jxc9pPHiV9G11oV+Pm5U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773215810; c=relaxed/simple;
-	bh=kX5kLQG5J1Hlmj0ExCOTkwchnPLs0mj06XQzcCCourE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GPA/OSWcQuou9k93EYzTVxf2en8Z61a56r69kHkY66ESusyRU4DIVNW3MuAKa+lAhlL8WnoA7M40tnnvx1NTXcsLMlR8tnk5lO4PS9ENQPLWDKtyAhY1LMOimXD+22cO7G6pGqk4XVMZqs8rDVShpZR8rnpcVQ8QUbfCy91e8V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PZBHLDL3; arc=none smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E5F3C0631
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 08:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773218091; cv=pass; b=hUBv/ZB3SYFm9kc/xn6++7Y7qVBdEyumCU6Wz6clpvYO27jHFqsYRLyT+KdAQDbqR9q/klDAPdmx7D6SaCFtDpEccEqmC110CIT9AWgnc6Zv9Sq5gZxoIxzOZt1yK2dvS/x10S8cerDrjdWlNtIttEoZGplOzawrlMGHD5pi6Os=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773218091; c=relaxed/simple;
+	bh=SsapxUY06a7cs9bBuRB3R8cKxgdqx7oMrI3eEaj8qe8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TDPhjM3gHpwKeoOJeaADR2pROo2VvE1D69b771mGLOt7qdIKU/FrEDGH6I6vexA/4FoVZ4JdLdXMAWMBxr8awm+4cx9wOTc3udQ82Seo/whnr3FH9zZREONJVGmhfpYaOoTt4ey5ghx0JWIRYKGz1qKzWWFI8Iyz2Yw0o2GTVCg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hlk4Q8yu; arc=pass smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PZBHLDL3"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-467166cb638so1023953b6e.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 00:56:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hlk4Q8yu"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-509101189edso31582611cf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 01:34:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773218084; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OBEDlJgKyTJuiRBdLlazfxKsQWybKzu1YoUgUi++Ff4lhXI1MWOp8T03tRzZeGWxO1
+         MRTeT8138Pc3V+7jzAbBZnelh/esWuxUxkd+FW0eG3nBa7uEhhcOEQnxEKqBoGOwkDTY
+         xYGsZLilagaGeslcDxiI8yEHSTtMkafHz7+Ic3gGdjJ/hBKTIw7vrvRawDhPl9nPmaWL
+         1HdzbyGPoyKgyrPvLl0fSMylIXx8jyIVh+aTJ4HagkCKe3kIXb/3peeGWJ1ABZ4Eo11y
+         7gRe8L+M7kvmjhrixjdEI0+Ft3EzPUmOt+6frb3od8eHjU4AJ6GIhzUyd53h+yzB/j/r
+         MaYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=infw2GOKBa/xQ0FaqhlrOevyT/EEGe52s1hqFD6TVIs=;
+        fh=toxYHkkP115RpXcuWBgCHCAsFbTO4JQXU4CHrUEMcfE=;
+        b=d6nRxb6RwdEeDTAxq3RCjCNF1wJ2EAja9Ymzl8XVvQibngrIiRRNKAPI1E9EmZnkuk
+         rZZQDhJYCbbcWOWqGt271+wxcAx1i0O/j1yk9ERnx+Vs2jerP4o6P4aUu+QL1M66CKVy
+         hYYv90jRz58ieSpkbCJJ8R/CCSe2E2cjjzCB3BibRiDgL/vLyiVMCqm6+kRnMG6bqMgG
+         mXSAx8FfTSTOLhN8pZpWVcyHJyth+nWiEwjVzCQSCe6BWNw9V6NqdxMYNy2N++zzfPHr
+         XvcmqEqwlrSaY5KX/PAN9AZvr9mZjLrAIwxMjnzo1BwPSU3OYZEdLohyZMfV2/UgAeU0
+         l2KQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773215801; x=1773820601; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1773218084; x=1773822884; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Aqy84kuwqTRqlBZVM3vX2nv7L0enzcNB2UtOtxRx+lU=;
-        b=PZBHLDL39zcZG6HXPIcAxfLZmW/1UBXziWefHTsZB0zSjmJpFQ/8jlQw55QEaGmEOk
-         WHyrLakg4VHmAm/y8pIKlmIwugrrnvmIWT3+6BGJZtoC+ouu5gVllfQCyS72QKXw8/2a
-         YE0n67s6gihcRahMXSXNVmChmPlauGN3d4rkF+pTirates39ekmIRdP8QsOgRPVRSukA
-         +BeNnPYMGvq9fcM+9vG4VsQ9bXP/IZQDS5svDDiLoEg+7EHoo+DRmWGPXbENGMCSJtA/
-         EGt+V4GJAVYly5HVCKqU5WuWL494GdMkUBFQGXxsqP+HTh88dNnZqwPYnH7hULJqlG30
-         2ErA==
+        bh=infw2GOKBa/xQ0FaqhlrOevyT/EEGe52s1hqFD6TVIs=;
+        b=hlk4Q8yuViuaZ1defw2+7C1/3pvIVJguTIjEDJ+mqoYMaxn6LVrLcHXfndrlvY7qzu
+         rhrSJ8jHMNez9R37G8qhA868kTE64M7NLAFtnUWyJxkpUg+7VuKzbrlm8TbozbcriFdm
+         aTOoQJMBsDG6mZsab2j5c3+Up/oNto26+SNMFS+nh7j97f0rFlqEMLHwhrUzhPw2ouOx
+         k/H08RstCdFj5vaN3KiYkGmrMydgtowhs1KeWl/YrfsHewWHCtbc89umaMT92PSVKvSg
+         qcZBsClFH8t0EfRf4DIFzLXGU9mGpp+bIHiX7Yui7/SFApAe3RCMSdi2mkx28cO4GbMQ
+         FLNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773215801; x=1773820601;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1773218084; x=1773822884;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Aqy84kuwqTRqlBZVM3vX2nv7L0enzcNB2UtOtxRx+lU=;
-        b=W/dIBpUXeDTD2fSkf8q+saaRgn6Au1BoA2xyRuku1J2fEV2P+lLJg0b1k7L1eB5oGU
-         X/LioSNAyWaaOKoSZPThYKIweYuU7di3USL4Zi5JUqaCnSZV9wnoBMKtZCLhmrRO9IeX
-         Fds8OT/fT7I2J8GHR8mIPN1NngVXqGCz8RRLaaiifqG3hkPQCzMVuuL6Sols1EUTN3Ow
-         Mz/SCy54uxAJLvo/xfPQHo3hUhmzDUFHkPd4feYmg8GTOA1FeVaJBtpwmffLih2RDd7E
-         FvutIP2vvjEzPcG79T8SZHFJHOx/nNicTrSF1vFmjWhCZDoT1ESiOTP2olOQle2ZCkma
-         4eFw==
-X-Forwarded-Encrypted: i=1; AJvYcCU/yG/UTrL4lm9CKT2omReK45vNBh8wKJOhLl5T4sFzH7yIjP5CtRy6nSecvk0eTJg7iHPdVpcLsxVXKdXt75M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXCOHjlkl3AWbuPFUxHgmLJQFq5z2cu5QHeoTqtPb2Bel0+nQS
-	1kI/GxD1iyXamODT9mpb2I/bYGWvfkUVxWQkowqQdqgwjhoSYCBOAs8r
-X-Gm-Gg: ATEYQzwpq90Hz4ESO3L0uzEPrngoP2dbdWLRV3dgWXNesxcRw/sznsJidpBsdqr2L1f
-	k6eAhvY2iz85hEWknEFRSCCVOslp1+MeoCV1SVn8tNHizFOuFAgbQ4qTXBpVE6mk8bHgFrtrVaR
-	wGgK9oo49lwDEAcdW3nRY24190PqD8iFEKbzlxauNBdDPcf+YoVzVWyzkgIx08OjvGufTe8W9s9
-	3TxaWsGaVRYZCRoqUJiskCl1x6q1uuYEN75O+ZaziqOQKY03RZrG7yeqp0MjEhSFpgiIYZllPEC
-	ndNb5rRrYhPg8i0KwCtVJKFtHewUG5ODOSKiFjQIeyKL/ubxsXYJmfuzmmqW/odwd7RIfL1KYXY
-	CZcPXkqXTgqu7dgueCKGiYp7jNCH8vwNagZ2K1D6rY9UNdEwC/GGkWazV8vN+aNmDBUdp/lKiQB
-	4U89Ov4X+faTz8nSQsdWFHcFOWbDcZGwgWidkH6uFXSEq/Q09b6LBaKEq4xe7Ibb9lwCtkzzCR6
-	2RKN2IXTfZaRDs+vUanCgn482CvERwOwRTR2v5uyfSRihX4
-X-Received: by 2002:a05:6808:f8a:b0:450:4782:2b0e with SMTP id 5614622812f47-4673346f783mr849508b6e.15.1773215800832;
-        Wed, 11 Mar 2026 00:56:40 -0700 (PDT)
-Received: from localhost.localdomain (108-212-132-20.lightspeed.irvnca.sbcglobal.net. [108.212.132.20])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e6ae0e3sm1568938fac.16.2026.03.11.00.56.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 00:56:40 -0700 (PDT)
-From: Wesley Atwell <atwellwea@gmail.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	ncardwell@google.com,
-	dsahern@kernel.org,
-	matttbe@kernel.org,
-	martineau@kernel.org,
-	netdev@vger.kernel.org,
-	mptcp@lists.linux.dev
-Cc: kuniyu@google.com,
-	horms@kernel.org,
-	geliang@kernel.org,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	0x7f454c46@gmail.com,
-	linux-doc@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	atwellwea@gmail.com
-Subject: [PATCH net 7/7] selftests: tcp_ao: cover legacy and extended TCP_REPAIR_WINDOW layouts
-Date: Wed, 11 Mar 2026 01:56:00 -0600
-Message-Id: <20260311075600.948413-8-atwellwea@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260311075600.948413-1-atwellwea@gmail.com>
-References: <20260311075600.948413-1-atwellwea@gmail.com>
+        bh=infw2GOKBa/xQ0FaqhlrOevyT/EEGe52s1hqFD6TVIs=;
+        b=MdjbAz/itBz6xzHjbDJ5cl2EeBPCCSwF4F9isISMdF6/grXRKRV3W2Z6Trr8djpF/9
+         C2k5o3yEzpGe1MQyw42e9eapprItWdFlUO7DAypwlx4gmqngc9Vya8MedX8JLqR0SQGi
+         rodZUufRU3TiCHaHJQoedTn0uvieI9btzNzTzKrWG4h34hS6hPlqfFL5teYOLIQxiTyX
+         Md2dGHnKvS6DIvUt69IXx+zb4I7tYFlHg43B+5xXAfzkf3YFsbvznTdnWPoyuIOt2z5L
+         w+OVI4DnIOlsaSuX1aIMUg2Hr16ctaQHstlaRiJE5Ct6GbIxqJj/Ivc4fvi2gZzGWV6T
+         H9FA==
+X-Forwarded-Encrypted: i=1; AJvYcCWmEWpbcPy5563fORLCEwL4gwEUrFj/YJYZHf+fSrygj96WGFdZ+DWoLQaCiBl738xRe2pMYrgApgQ2HGlwkcQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaoE5zNG3uZQ12IR1kZiJvKCpnIsGuoFz15SatS0T6LfASi1hY
+	xxlT+g2Xpkfu4iWWgfRgV2Tmi5nmyv638cDEz4wqgAQfvBugxvGVZBQNKQT9JUchKtATLG9pHz6
+	qMarfbXl8Z8UAavYq5PSh6TPCVxbklvSWJOGsXQIF
+X-Gm-Gg: ATEYQzw+3mycSRs3b/gqpYS35u1ds1AWb8HC8foabjhCjxZe4tH+NdiTaioUxpYRhyw
+	QrW2bzDsQodbSlFwTkHPVluIdimBotX1R9yX/38TefZP05RLUi3WDlT+7ME6cFO5f238rPaFGZH
+	yN5BPKz0zBZerhyhdIL6wiFKBU2i/l0z1UMCOD+yURu83Yh5kcEaeK2xd4T1wmngYEC/eLCe8Cl
+	ViT5F8z4I4ykHevxZW4O3QSzc9o5yOO0B5F/9AE5x8vFVYy/ItK7zAg0kYfXVUiSqMJX6GgXBiY
+	4mGbHwcc
+X-Received: by 2002:ac8:5f89:0:b0:509:20de:4ada with SMTP id
+ d75a77b69052e-5093a18950amr18737181cf.48.1773218083994; Wed, 11 Mar 2026
+ 01:34:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260311075600.948413-1-atwellwea@gmail.com>
+In-Reply-To: <20260311075600.948413-1-atwellwea@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 11 Mar 2026 09:34:32 +0100
+X-Gm-Features: AaiRm52wCKdcSWz9oNAzUWL_GQOag0jSamOEmON1h9c132p0nbosojJsMVy1eJA
+Message-ID: <CANn89i+dojcg=TDh6E1++g_TM7qdcpnyu47n2Q9DRW_w73TjzA@mail.gmail.com>
+Subject: Re: [PATCH net 0/7] tcp: preserve advertised rwnd accounting across
+ receive-memory decisions
+To: Wesley Atwell <atwellwea@gmail.com>, Simon Baatz <gmbnomis@gmail.com>
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, 
+	ncardwell@google.com, dsahern@kernel.org, matttbe@kernel.org, 
+	martineau@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+	kuniyu@google.com, horms@kernel.org, geliang@kernel.org, corbet@lwn.net, 
+	skhan@linuxfoundation.org, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, 0x7f454c46@gmail.com, 
+	linux-doc@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Extend the repair helpers and selftests so the ABI contract is pinned
-down in-tree.
+On Wed, Mar 11, 2026 at 8:56=E2=80=AFAM Wesley Atwell <atwellwea@gmail.com>=
+ wrote:
+>
+> This series keeps sender-visible TCP receive-window accounting tied to th=
+e
+> scaling basis that was in force when the window was advertised.
+>
+> Problem
+> -------
+>
+> `tp->rcv_wnd` is an advertised promise to the sender, but later
+> receive-memory admission and clamping could reconstruct that promise
+> through the mutable live `scaling_ratio`. After ratio drift, the stack
+> could retain or advertise a receive window that no longer matched the
+> local hard rmem budget.
+>
+> Fix
+> ---
+>
+> - store the advertise-time scaling basis alongside `tp->rcv_wnd`
+> - refresh that pair at the TCP and MPTCP receive-window write sites
+> - consume the snapshot in receive-memory admission, clamping, and the
+>   scaled-window quantization path
+> - preserve the snapshot across `TCP_REPAIR_WINDOW` restore when userspace
+>   provides it, and fall back safely when legacy userspace cannot
+> - expose the accounting in tracepoints and cover the ABI/runtime contract
+>   in selftests
+>
 
-The TCP-AO restore coverage now exercises both the exact and legacy
-TCP_REPAIR_WINDOW layouts, verifies that intermediate lengths are
-rejected, and keeps the packetdrill coverage for the advertised-window
-receive-memory regressions in the same net selftest series.
+Your series will heavily conflict with Simon's one
 
-Signed-off-by: Wesley Atwell <atwellwea@gmail.com>
----
- .../net/packetdrill/tcp_rcv_toobig.pkt        | 35 +++++++
- .../packetdrill/tcp_rcv_toobig_default.pkt    | 97 +++++++++++++++++++
- .../testing/selftests/net/tcp_ao/lib/aolib.h  | 56 +++++++++--
- .../testing/selftests/net/tcp_ao/lib/repair.c | 18 ++--
- .../selftests/net/tcp_ao/self-connect.c       | 61 ++++++++++--
- 5 files changed, 244 insertions(+), 23 deletions(-)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rcv_toobig.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rcv_toobig_default.pkt
+https://patchwork.kernel.org/project/netdevbpf/list/?series=3D1063486&state=
+=3D%2A&archive=3Dboth
 
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_toobig.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_toobig.pkt
-new file mode 100644
-index 000000000000..723c739ddc32
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_toobig.pkt
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+--mss=1000
-+
-+`./defaults.sh`
-+
-+    0 `nstat -n`
-+
-+// Establish a connection.
-+   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_RCVBUF, [20000], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 win 18980 <mss 1460,nop,wscale 0>
-+  +.1 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 < P. 1:20001(20000) ack 1 win 257
-+ +.04 > .  1:1(0) ack 20001 win 18000
-+
-+   +0 setsockopt(4, SOL_SOCKET, SO_RCVBUF, [12000], 4) = 0
-+   +0 < P. 20001:80001(60000) ack 1 win 257
-+   +0 > .  1:1(0) ack 20001 win 18000
-+
-+   +0 read(4, ..., 20000) = 20000
-+
-+// A too big packet is accepted if the receive queue is empty, but the
-+// stronger admission path must not zero the receive buffer while doing so.
-+   +0 < P. 20001:80001(60000) ack 1 win 257
-+   +0 > .  1:1(0) ack 80001 win 0
-+   +0 %{ assert SK_MEMINFO_RCVBUF > 0, SK_MEMINFO_RCVBUF }%
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_rcv_toobig_default.pkt b/tools/testing/selftests/net/packetdrill/tcp_rcv_toobig_default.pkt
-new file mode 100644
-index 000000000000..b2e4950e0b83
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_rcv_toobig_default.pkt
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+--mss=1000
-+
-+`./defaults.sh
-+sysctl -q net.ipv4.tcp_moderate_rcvbuf=0`
-+
-+// Establish a connection on the default receive buffer. Leave a large skb in
-+// the queue, then deliver another one which still fits the remaining rwnd.
-+// We should grow sk_rcvbuf to honor the already-advertised window instead of
-+// dropping the packet.
-+   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1000,nop,nop,sackOK,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <...>
-+  +.1 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+// Exchange enough data to get past the completely fresh-socket case while
-+// still keeping the receive buffer at its 128kB default.
-+   +0 < P. 1:65001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 65001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 65001:130001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 130001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 130001:195001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 195001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 195001:260001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 260001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 260001:325001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 325001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 325001:390001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 390001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 390001:455001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 455001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 455001:520001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 520001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 520001:585001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 585001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 585001:650001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 650001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 650001:715001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 715001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 715001:780001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 780001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 780001:845001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 845001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 845001:910001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 910001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 910001:975001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 975001
-+   +0 read(4, ..., 65000) = 65000
-+
-+   +0 < P. 975001:1040001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 1040001
-+   +0 read(4, ..., 65000) = 65000
-+
-+// Leave about 60kB queued, then accept another large skb which still fits
-+// the rwnd we already exposed to the peer. The regression is the drop; the
-+// exact sk_rcvbuf growth path is an implementation detail.
-+   +0 < P. 1040001:1102001(62000) ack 1 win 257
-+   * > .  1:1(0) ack 1102001
-+
-+   +0 < P. 1102001:1167001(65000) ack 1 win 257
-+   * > .  1:1(0) ack 1167001
-+   +0 read(4, ..., 127000) = 127000
-diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-index ebb2899c12fe..ff259795a4a0 100644
---- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-+++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-@@ -13,6 +13,7 @@
- #include <linux/snmp.h>
- #include <linux/tcp.h>
- #include <netinet/in.h>
-+#include <stddef.h>
- #include <stdarg.h>
- #include <stdbool.h>
- #include <stdlib.h>
-@@ -671,17 +672,42 @@ struct tcp_sock_state {
- 	int timestamp;
- };
- 
--extern void __test_sock_checkpoint(int sk, struct tcp_sock_state *state,
--				   void *addr, size_t addr_size);
-+/* Legacy userspace stops before the snapshot field and therefore exercises
-+ * the kernel's unknown-snapshot fallback path.
-+ */
-+static inline socklen_t test_tcp_repair_window_legacy_size(void)
-+{
-+	return offsetof(struct tcp_repair_window, rcv_wnd_scaling_ratio);
-+}
-+
-+static inline socklen_t test_tcp_repair_window_exact_size(void)
-+{
-+	return sizeof(struct tcp_repair_window);
-+}
-+
-+void __test_sock_checkpoint_opt(int sk, struct tcp_sock_state *state,
-+				socklen_t trw_len,
-+				void *addr, size_t addr_size);
- static inline void test_sock_checkpoint(int sk, struct tcp_sock_state *state,
- 					sockaddr_af *saddr)
- {
--	__test_sock_checkpoint(sk, state, saddr, sizeof(*saddr));
-+	__test_sock_checkpoint_opt(sk, state, test_tcp_repair_window_exact_size(),
-+				   saddr, sizeof(*saddr));
-+}
-+
-+static inline void test_sock_checkpoint_legacy(int sk,
-+					       struct tcp_sock_state *state,
-+					       sockaddr_af *saddr)
-+{
-+	__test_sock_checkpoint_opt(sk, state, test_tcp_repair_window_legacy_size(),
-+				   saddr, sizeof(*saddr));
- }
- extern void test_ao_checkpoint(int sk, struct tcp_ao_repair *state);
--extern void __test_sock_restore(int sk, const char *device,
--				struct tcp_sock_state *state,
--				void *saddr, void *daddr, size_t addr_size);
-+void __test_sock_restore_opt(int sk, const char *device,
-+			     struct tcp_sock_state *state,
-+			     socklen_t trw_len,
-+			     void *saddr, void *daddr,
-+			     size_t addr_size);
- static inline void test_sock_restore(int sk, struct tcp_sock_state *state,
- 				     sockaddr_af *saddr,
- 				     const union tcp_addr daddr,
-@@ -690,7 +716,23 @@ static inline void test_sock_restore(int sk, struct tcp_sock_state *state,
- 	sockaddr_af addr;
- 
- 	tcp_addr_to_sockaddr_in(&addr, &daddr, htons(dport));
--	__test_sock_restore(sk, veth_name, state, saddr, &addr, sizeof(addr));
-+	__test_sock_restore_opt(sk, veth_name, state,
-+				test_tcp_repair_window_exact_size(),
-+				saddr, &addr, sizeof(addr));
-+}
-+
-+static inline void test_sock_restore_legacy(int sk,
-+					    struct tcp_sock_state *state,
-+					    sockaddr_af *saddr,
-+					    const union tcp_addr daddr,
-+					    unsigned int dport)
-+{
-+	sockaddr_af addr;
-+
-+	tcp_addr_to_sockaddr_in(&addr, &daddr, htons(dport));
-+	__test_sock_restore_opt(sk, veth_name, state,
-+				test_tcp_repair_window_legacy_size(),
-+				saddr, &addr, sizeof(addr));
- }
- extern void test_ao_restore(int sk, struct tcp_ao_repair *state);
- extern void test_sock_state_free(struct tcp_sock_state *state);
-diff --git a/tools/testing/selftests/net/tcp_ao/lib/repair.c b/tools/testing/selftests/net/tcp_ao/lib/repair.c
-index 9893b3ba69f5..befbd0f72db5 100644
---- a/tools/testing/selftests/net/tcp_ao/lib/repair.c
-+++ b/tools/testing/selftests/net/tcp_ao/lib/repair.c
-@@ -66,8 +66,9 @@ static void test_sock_checkpoint_queue(int sk, int queue, int qlen,
- 		test_error("recv(%d): %d", qlen, ret);
- }
- 
--void __test_sock_checkpoint(int sk, struct tcp_sock_state *state,
--			    void *addr, size_t addr_size)
-+void __test_sock_checkpoint_opt(int sk, struct tcp_sock_state *state,
-+				socklen_t trw_len,
-+				void *addr, size_t addr_size)
- {
- 	socklen_t len = sizeof(state->info);
- 	int ret;
-@@ -82,9 +83,9 @@ void __test_sock_checkpoint(int sk, struct tcp_sock_state *state,
- 	if (getsockname(sk, addr, &len) || len != addr_size)
- 		test_error("getsockname(): %d", (int)len);
- 
--	len = sizeof(state->trw);
-+	len = trw_len;
- 	ret = getsockopt(sk, SOL_TCP, TCP_REPAIR_WINDOW, &state->trw, &len);
--	if (ret || len != sizeof(state->trw))
-+	if (ret || len != trw_len)
- 		test_error("getsockopt(TCP_REPAIR_WINDOW): %d", (int)len);
- 
- 	if (ioctl(sk, SIOCOUTQ, &state->outq_len))
-@@ -160,9 +161,10 @@ static void test_sock_restore_queue(int sk, int queue, void *buf, int len)
- 	} while (len > 0);
- }
- 
--void __test_sock_restore(int sk, const char *device,
--			 struct tcp_sock_state *state,
--			 void *saddr, void *daddr, size_t addr_size)
-+void __test_sock_restore_opt(int sk, const char *device,
-+			     struct tcp_sock_state *state,
-+			     socklen_t trw_len,
-+			     void *saddr, void *daddr, size_t addr_size)
- {
- 	struct tcp_repair_opt opts[4];
- 	unsigned int opt_nr = 0;
-@@ -215,7 +217,7 @@ void __test_sock_restore(int sk, const char *device,
- 	}
- 	test_sock_restore_queue(sk, TCP_RECV_QUEUE, state->in.buf, state->inq_len);
- 	test_sock_restore_queue(sk, TCP_SEND_QUEUE, state->out.buf, state->outq_len);
--	if (setsockopt(sk, SOL_TCP, TCP_REPAIR_WINDOW, &state->trw, sizeof(state->trw)))
-+	if (setsockopt(sk, SOL_TCP, TCP_REPAIR_WINDOW, &state->trw, trw_len))
- 		test_error("setsockopt(TCP_REPAIR_WINDOW)");
- }
- 
-diff --git a/tools/testing/selftests/net/tcp_ao/self-connect.c b/tools/testing/selftests/net/tcp_ao/self-connect.c
-index 2c73bea698a6..a7edd72ab28d 100644
---- a/tools/testing/selftests/net/tcp_ao/self-connect.c
-+++ b/tools/testing/selftests/net/tcp_ao/self-connect.c
-@@ -4,6 +4,7 @@
- #include "aolib.h"
- 
- static union tcp_addr local_addr;
-+static bool checked_repair_window_lens;
- 
- static void __setup_lo_intf(const char *lo_intf,
- 			    const char *addr_str, uint8_t prefix)
-@@ -30,8 +31,40 @@ static void setup_lo_intf(const char *lo_intf)
- #endif
- }
- 
-+/* The repair ABI accepts exactly the legacy and extended layouts. */
-+static void test_repair_window_len_contract(int sk)
-+{
-+	struct tcp_repair_window trw = {};
-+	socklen_t len = test_tcp_repair_window_exact_size();
-+	socklen_t bad_len = test_tcp_repair_window_legacy_size() + 1;
-+	int ret;
-+
-+	if (checked_repair_window_lens)
-+		return;
-+
-+	checked_repair_window_lens = true;
-+
-+	ret = getsockopt(sk, SOL_TCP, TCP_REPAIR_WINDOW, &trw, &len);
-+	if (ret || len != test_tcp_repair_window_exact_size())
-+		test_error("getsockopt(TCP_REPAIR_WINDOW): %d", (int)len);
-+
-+	len = bad_len;
-+	ret = getsockopt(sk, SOL_TCP, TCP_REPAIR_WINDOW, &trw, &len);
-+	if (ret == 0 || errno != EINVAL)
-+		test_fail("repair-window get rejects invalid len");
-+	else
-+		test_ok("repair-window get rejects invalid len");
-+
-+	ret = setsockopt(sk, SOL_TCP, TCP_REPAIR_WINDOW, &trw, bad_len);
-+	if (ret == 0 || errno != EINVAL)
-+		test_fail("repair-window set rejects invalid len");
-+	else
-+		test_ok("repair-window set rejects invalid len");
-+}
-+
- static void tcp_self_connect(const char *tst, unsigned int port,
--			     bool different_keyids, bool check_restore)
-+			     bool different_keyids, bool check_restore,
-+			     bool legacy_repair_window)
- {
- 	struct tcp_counters before, after;
- 	uint64_t before_aogood, after_aogood;
-@@ -109,7 +142,11 @@ static void tcp_self_connect(const char *tst, unsigned int port,
- 	}
- 
- 	test_enable_repair(sk);
--	test_sock_checkpoint(sk, &img, &addr);
-+	test_repair_window_len_contract(sk);
-+	if (legacy_repair_window)
-+		test_sock_checkpoint_legacy(sk, &img, &addr);
-+	else
-+		test_sock_checkpoint(sk, &img, &addr);
- #ifdef IPV6_TEST
- 	addr.sin6_port = htons(port + 1);
- #else
-@@ -123,7 +160,11 @@ static void tcp_self_connect(const char *tst, unsigned int port,
- 		test_error("socket()");
- 
- 	test_enable_repair(sk);
--	__test_sock_restore(sk, "lo", &img, &addr, &addr, sizeof(addr));
-+	__test_sock_restore_opt(sk, "lo", &img,
-+				legacy_repair_window ?
-+				test_tcp_repair_window_legacy_size() :
-+				test_tcp_repair_window_exact_size(),
-+				&addr, &addr, sizeof(addr));
- 	if (different_keyids) {
- 		if (test_add_repaired_key(sk, DEFAULT_TEST_PASSWORD, 0,
- 					  local_addr, -1, 7, 5))
-@@ -165,20 +206,24 @@ static void *client_fn(void *arg)
- 
- 	setup_lo_intf("lo");
- 
--	tcp_self_connect("self-connect(same keyids)", port++, false, false);
-+	tcp_self_connect("self-connect(same keyids)", port++, false, false, false);
- 
- 	/* expecting rnext to change based on the first segment RNext != Current */
- 	trace_ao_event_expect(TCP_AO_RNEXT_REQUEST, local_addr, local_addr,
- 			      port, port, 0, -1, -1, -1, -1, -1, 7, 5, -1);
--	tcp_self_connect("self-connect(different keyids)", port++, true, false);
--	tcp_self_connect("self-connect(restore)", port, false, true);
-+	tcp_self_connect("self-connect(different keyids)", port++, true, false, false);
-+	tcp_self_connect("self-connect(restore)", port, false, true, false);
-+	port += 2; /* restore test restores over different port */
-+	tcp_self_connect("self-connect(restore, legacy repair window)",
-+			 port, false, true, true);
- 	port += 2; /* restore test restores over different port */
- 	trace_ao_event_expect(TCP_AO_RNEXT_REQUEST, local_addr, local_addr,
- 			      port, port, 0, -1, -1, -1, -1, -1, 7, 5, -1);
- 	/* intentionally on restore they are added to the socket in different order */
- 	trace_ao_event_expect(TCP_AO_RNEXT_REQUEST, local_addr, local_addr,
- 			      port + 1, port + 1, 0, -1, -1, -1, -1, -1, 5, 7, -1);
--	tcp_self_connect("self-connect(restore, different keyids)", port, true, true);
-+	tcp_self_connect("self-connect(restore, different keyids)",
-+			 port, true, true, false);
- 	port += 2; /* restore test restores over different port */
- 
- 	return NULL;
-@@ -186,6 +231,6 @@ static void *client_fn(void *arg)
- 
- int main(int argc, char *argv[])
- {
--	test_init(5, client_fn, NULL);
-+	test_init(8, client_fn, NULL);
- 	return 0;
- }
--- 
-2.34.1
+I suggest you rebase/retest/resend after we merge it.
 
+> Series layout
+> -------------
+>
+> 1. track the receive-window snapshot state and helpers
+> 2. refresh the snapshot when TCP advertises or initializes windows
+> 3. use the snapshot in receive-memory admission and clamping
+> 4. extend `TCP_REPAIR_WINDOW` for exact restore plus legacy compatibility
+> 5. refresh the TCP shadow window snapshot in MPTCP
+> 6. expose rmem/backlog state in `rcvbuf_grow` tracepoints
+> 7. cover legacy and extended repair-window layouts in selftests
+>
+> Testing
+> -------
+>
+> - `git diff --check origin/main..HEAD`
+> - `scripts/checkpatch.pl --strict --show-types` on patches 1-7
+> - `make -j8 headers`
+> - `make -j8 net/ipv4/tcp_input.o net/ipv4/tcp_output.o net/ipv4/tcp_minis=
+ocks.o net/ipv4/tcp.o`
+> - `make -j8 C=3D1 CF=3D'-D__CHECK_ENDIAN__' W=3D1 net/ipv4/tcp_input.o ne=
+t/ipv4/tcp_output.o net/ipv4/tcp_minisocks.o net/ipv4/tcp.o`
+> - `make SPHINXDIRS=3D'networking/net_cachelines' htmldocs`
+> - `make -j8 vmlinux bzImage modules`
+> - `make -C tools/testing/selftests/net/tcp_ao -j8`
+> - `make -C tools/testing/selftests/net/mptcp -j8`
+> - `packetdrill --dry_run` for `tcp_rcv_toobig.pkt` and
+>   `tcp_rcv_toobig_default.pkt`
+> - `virtme-run` guest pass for both packetdrill tests
+> - feature-enabled guest pass for `restore_ipv4`, `self-connect_ipv4`, and
+>   `mptcp_sockopt.sh`
+>
+> Thanks,
+> Wesley
+>
+> ---
+> base-commit: 908c344d5cfa0ee6efb3226d22ea661e078ebfa0
+> --
+> 2.43.0
+>
