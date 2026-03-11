@@ -1,117 +1,174 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1EF3B635F;
-	Wed, 11 Mar 2026 09:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093533644DE
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 09:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773221983; cv=none; b=cha6d/c+HcHJx/G3XjUwjaxorRWXrkBMi7k3n7caz478Q/2Kmndtezz2tugqWAHOZjJy/ATCtc+QwyddJfbnq+JIZ0tAZSFv3qwpBKbtr+p9G0Jx4FB5BmNb7d2bKbUwGqbK88JRinKT0D6pHGb85LWDSTS09XSmANHYdaxGL/8=
+	t=1773222878; cv=none; b=leaCdqA9aN1HDgKnwccFBpxd/FRxU5OVHEVlou/t30sZFM7/n/e6Ww0B7gjdmkSQI9Le7rq3zMKvDFpP8YcuxMipaodhCiD+DYxm6CnRMvuQP17nDQDMniTFN/Ap2zdRrXqQLTNmyRnoq2qyXxuhYv5Mnx4MH0zAH2cK8fnYbYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773221983; c=relaxed/simple;
-	bh=kwws0QFsc/Rj6B+30BoBsKU876QiSOsxCsvNnV9Vex0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bBY/kq9KY3dsxipbT0PP9xtZ91Ukv0Dwr+Q6S+gTd1nRykcPePxAISf2tlKWY5OngWuh7xePFkbk++muUGNUPxyfQu3umhCFpVBeKTzEEaOZ3oBy7YkBsvejZa8l9Y/sYjqpi959VGXF4NleIkDFxwSeB2V1IhF+NtekGKhuTvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12848169C;
-	Wed, 11 Mar 2026 02:39:35 -0700 (PDT)
-Received: from [10.57.83.156] (unknown [10.57.83.156])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F4453F836;
-	Wed, 11 Mar 2026 02:39:39 -0700 (PDT)
-Message-ID: <2d14e8b7-a7c3-46ba-b1d2-6bb6404c08fa@arm.com>
-Date: Wed, 11 Mar 2026 09:39:37 +0000
+	s=arc-20240116; t=1773222878; c=relaxed/simple;
+	bh=rtxIzOGs24KHK20FXt+aGc7dWtSYSvUJYnte2movCcE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fwPzs7Wn1XmBHxYASnMm7h+TzLBa95KUtudwcB8Nh9it6ioUPX0MGgadt/qLqdGdzuOlp2qVBpOBbG7BDAfhyCvoZ3o/DLxGMULU3V2bWOC17H8CLXsxA5D0Uz6L85IYR2buM1p4PGW7XUDzep04ucmObvKU8fnKMViQFY+nr9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pe+yqPrj; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xQlVpttI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pe+yqPrj; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xQlVpttI; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pe+yqPrj";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xQlVpttI";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pe+yqPrj";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xQlVpttI"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 47D044D1F6;
+	Wed, 11 Mar 2026 09:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1773222874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sxiJpIkDUFuoJGi52S6NRrnTVEEE9NEolRRadyXj58w=;
+	b=pe+yqPrjdbl4R+8tIibZZbAP74IXafLXeJDKRBPWq1i0ai9bOcTjcP6y9HIEcNWlXlA0pF
+	REuNeMQtPcHya7je1lxfJb59oYn5wI8mKw9XwVGtoKqJKa/Bj2wXYmCE1wjjlzIx4sbkU7
+	Pqg6+svi2U2EMvZ7yOhflRGKCHwYgAI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1773222874;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sxiJpIkDUFuoJGi52S6NRrnTVEEE9NEolRRadyXj58w=;
+	b=xQlVpttIzplcCI5s7qpHiSGShn1Cvtihko//2/njdvXMUXOHue8e9GSG6Mm1Hen6qkrdyS
+	/bzU+AnE2RKx+BAA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=pe+yqPrj;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=xQlVpttI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1773222874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sxiJpIkDUFuoJGi52S6NRrnTVEEE9NEolRRadyXj58w=;
+	b=pe+yqPrjdbl4R+8tIibZZbAP74IXafLXeJDKRBPWq1i0ai9bOcTjcP6y9HIEcNWlXlA0pF
+	REuNeMQtPcHya7je1lxfJb59oYn5wI8mKw9XwVGtoKqJKa/Bj2wXYmCE1wjjlzIx4sbkU7
+	Pqg6+svi2U2EMvZ7yOhflRGKCHwYgAI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1773222874;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sxiJpIkDUFuoJGi52S6NRrnTVEEE9NEolRRadyXj58w=;
+	b=xQlVpttIzplcCI5s7qpHiSGShn1Cvtihko//2/njdvXMUXOHue8e9GSG6Mm1Hen6qkrdyS
+	/bzU+AnE2RKx+BAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4AF873F961;
+	Wed, 11 Mar 2026 09:54:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id V0ANDtk7sWl3cAAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Wed, 11 Mar 2026 09:54:33 +0000
+Date: Wed, 11 Mar 2026 09:54:31 +0000
+From: Pedro Falcato <pfalcato@suse.de>
+To: Anthony Yznaga <anthony.yznaga@oracle.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, jannh@google.com, Jason@zx2c4.com, shuah@kernel.org
+Subject: Re: [PATCH v2 1/2] mm: prevent droppable mappings from being locked
+Message-ID: <s5pp37sswbp4g5lw37eszhsduwcgmxbd2jufigjvlwtjzun357@ztzjh6nhhezx>
+References: <20260310155821.17869-1-anthony.yznaga@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/7] selftests/sched: Add SCHED_DEADLINE utility
- library
-To: Juri Lelli <juri.lelli@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Valentin Schneider <vschneid@redhat.com>,
- Clark Williams <williams@redhat.com>, Gabriele Monaco <gmonaco@redhat.com>,
- Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
- Luca Abeni <luca.abeni@santannapisa.it>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260306-upstream-deadline-kselftests-v1-0-2b23ef74c46a@redhat.com>
- <20260306-upstream-deadline-kselftests-v1-2-2b23ef74c46a@redhat.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <20260306-upstream-deadline-kselftests-v1-2-2b23ef74c46a@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260310155821.17869-1-anthony.yznaga@oracle.com>
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:email];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Queue-Id: 47D044D1F6
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
+X-Spam-Level: 
 
-On 3/6/26 16:10, Juri Lelli wrote:
-> Add a comprehensive utility library for SCHED_DEADLINE scheduler tests.
-> This library provides reusable helper functions that simplify test
-> implementation and reduce code duplication across the test suite.
+On Tue, Mar 10, 2026 at 08:58:20AM -0700, Anthony Yznaga wrote:
+> Droppable mappings must not be lockable. There is a check for VMAs with
+> VM_DROPPABLE set in mlock_fixup() along with checks for other types of
+> unlockable VMAs which ensures this when calling mlock()/mlock2().
 > 
-> The utility library provides scheduling operations that wrap the
-> sched_setattr and sched_getattr syscalls for setting and querying
-> SCHED_DEADLINE parameters. These include dl_set_sched_attr() for
-> configuring deadline parameters, dl_get_sched_attr() for querying
-> scheduling attributes, dl_get_policy() for reading the policy from
-> /proc, and dl_is_deadline_task() for checking if a task is using
-> SCHED_DEADLINE. The library uses system headers for struct sched_attr
-> to avoid redefinition conflicts and provides full control over
-> SCHED_DEADLINE parameters.
+> For mlockall(MCL_FUTURE), the check for unlockable VMAs is different.
+> In apply_mlockall_flags(), if the flags parameter has MCL_FUTURE set, the
+> current task's mm's default VMA flag field mm->def_flags has VM_LOCKED
+> applied to it. VM_LOCKONFAULT is also applied if MCL_ONFAULT is also set.
+> When these flags are set as default in this manner they are cleared in
+> __mmap_complete() for new mappings that do not support mlock. A check for
+> VM_DROPPABLE in __mmap_complete() is missing resulting in droppable
+> mappings created with VM_LOCKED set. To fix this and reduce that chance of
+> similar bugs in the future, introduce and use vma_supports_mlock().
 > 
-> Bandwidth management helpers allow tests to work within system
-> constraints. The dl_get_rt_bandwidth() function reads RT bandwidth
-> settings from /proc, while dl_calc_max_bandwidth_percent() calculates
-> the available bandwidth for deadline tasks based on current system
-> configuration.
-> 
-> Process management functions simplify creating and managing test
-> workloads. The dl_create_cpuhog() function forks and schedules a cpuhog
-> process by creating a child process, executing the cpuhog binary, and
-> setting SCHED_DEADLINE policy on the child PID after fork. It waits for
-> the child to start before configuring the scheduling policy. Supporting
-> functions include dl_cleanup_cpuhog() for terminating processes,
-> dl_find_cpuhogs() for locating running instances, and dl_wait_for_pid()
-> for synchronizing with process startup.
-> 
-> CPU topology helpers enable tests that manipulate CPU hotplug state.
-> These include dl_get_online_cpus() for counting available CPUs,
-> dl_get_hotpluggable_cpus() for identifying which CPUs can be
-> hotplugged, dl_cpu_online() and dl_cpu_offline() for controlling
-> hotplug state, and dl_is_cpu_online() for checking current status.
-> 
-> Time conversion utilities provide convenient transformations between
-> different time units. These include dl_ms_to_ns() and dl_us_to_ns()
-> for converting to nanoseconds, and dl_ns_to_ms() and dl_ns_to_us() for
-> converting from nanoseconds.
-> 
-> The library also includes the cpuhog helper program, which performs
-> busy looping to consume CPU cycles. This provides a controllable
-> workload for testing scheduler behavior under various deadline
-> configurations.
-> 
-> Assisted-by: Claude Code: claude-sonnet-4-5@20250929
-> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+> Fixes: 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always lazily freeable mappings")
+> Suggested-by: David Hildenbrand <david@kernel.org>
+> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+
+Reviewed-by: Pedro Falcato <pfalcato@suse.de>
 > ---
->  tools/testing/selftests/sched/deadline/Makefile  |  14 +-
->  tools/testing/selftests/sched/deadline/cpuhog.c  | 107 ++++++++
->  tools/testing/selftests/sched/deadline/dl_util.c | 335 +++++++++++++++++++++++
->  tools/testing/selftests/sched/deadline/dl_util.h | 227 +++++++++++++++
->  4 files changed, 680 insertions(+), 3 deletions(-)
+> v2:
+>  - Implement vma_supports_mlock() instead of vma flags mask (DavidH)
+>  - Add selftests (Lorenzo)
 > 
-> diff --git a/tools/testing/selftests/sched/deadline/Makefile b/tools/testing/selftests/sched/deadline/Makefile
-> index fd57794f1a543..ea3fdfbef459e 100644
-> --- a/tools/testing/selftests/sched/deadline/Makefile
-> +++ b/tools/testing/selftests/sched/deadline/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
+>  include/linux/hugetlb_inline.h    |  2 +-
+>  mm/internal.h                     | 10 ++++++++++
+>  mm/mlock.c                        | 10 ++++++----
+>  mm/vma.c                          |  4 +---
+>  tools/testing/vma/include/stubs.h |  5 +++++
+>  5 files changed, 23 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/hugetlb_inline.h b/include/linux/hugetlb_inline.h
+> index 593f5d4e108b..755281fab23d 100644
+> --- a/include/linux/hugetlb_inline.h
+> +++ b/include/linux/hugetlb_inline.h
+> @@ -30,7 +30,7 @@ static inline bool is_vma_hugetlb_flags(const vma_flags_t *flags)
 >  
-> -TEST_GEN_PROGS := runner
-> +TEST_GEN_PROGS := runner cpuhog
+>  #endif
 >  
+> -static inline bool is_vm_hugetlb_page(struct vm_area_struct *vma)
+> +static inline bool is_vm_hugetlb_page(const struct vm_area_struct *vma)
+>  {
+>  	return is_vm_hugetlb_flags(vma->vm_flags);
+>  }
 
-This runs cpuhog as a test as well which prints misleading timeouts.
+I don't like this. In case a future backport depends on the constification
+of the is_vm_hugetlb_page() argument, they'll be hardpressed to bring the
+whole patch in. But it looks like we're going to do it anyway...
 
+-- 
+Pedro
