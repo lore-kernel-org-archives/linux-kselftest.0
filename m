@@ -1,263 +1,150 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12242989B5
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 22:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BA8395DAC
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 22:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773269137; cv=none; b=DsXMJQQFmvBUvVyKLNC7nTalckM0OLNKIa8gqlNJG0vB7AkXEeqbQHtJQZLpFBVY+s6+Fs+nfJMM+UCxFt5UrShpjpx+K1ugohh8vF9T0qr5cGAFodWgIWYTQ2qn8GWCh8KPvR25Rb0RH8cUWURGUP9Ld9ujuQ4pM3e14csH4Bo=
+	t=1773269523; cv=none; b=lMa3OgTkDYbaXkoNhiFI6CZ69Xb6h5uM1Nyz9u72lVeeWS7BNtTsvD9XAd/VpJTW+Vqdd/AQMWMMnHILyiOVeMsd8lyTir7a4S7kv5T+2lRPSQZ5tvAf6LRy9KfEuZnD523A73Xpo5oLtcH+eshxGbbW+OFaBfjbTQDtQXuyP0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773269137; c=relaxed/simple;
-	bh=PNbbiOaNcGHl2UMfM/KFHObdewCXhiz9WDMujIAl5F8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fshdG47TEtOOuMAbxKrGJQlA6yhjQJ/EzQK5NtWGe4i0tcrcJROrxQo1YpsRyBam/Fbemhadne5s4UqY1VYGDlIHYluPB1wlwI2mLDsefzu1d/qe0Y1dx/8Hd2qlnV7RCxWmBVe9Q/lN+nXfgs/5fmUB0tNaAcpRpUKd0OuEmZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KvLK79v7; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773269523; c=relaxed/simple;
+	bh=BNgPwPNdRfG7AAZSM7vrwFEPrTaHE8eG6nOZX8dy+pI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q6Aw/2KVSytWQmzQmNCpb1TooFlxRmQ5CmWFpwj+hRY/XvqGNry5QlERW7oAC6mI7MjPRx8LaNLIqizr0DzssY3mLnldErc5AYVZO0XTZSOGsF4aXfedAJOE7c/tLWOq2x0VauLqFrtuJXpxQcNhNWBSz7yk5dVb3ZzUfq+TvVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PRTaHnKE; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KvLK79v7"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48540355459so2852605e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 15:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773269134; x=1773873934; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e/Qc5twxAvR18BnVKuzO1KzLsNKi8PlkxaLqVdwZBnc=;
-        b=KvLK79v7nQ6HCHRXIRDj/ncDbRTsG+KYgWveitetxuZI3KSgqDH4kK0v4gpuDXH4kw
-         zyb5B9u2NSEq0c59UMRR2Rv30IyEEd/sQMa1Sop0+sFMzZCEiicqwJCxjKwO94AXCTpY
-         1oByGxb1z8zVAujQc0aamFAw4Sgqev878EeZl5gacRvF/YwY577L74V7mTUenbzZ/LE3
-         oh8mp/KJ7kfUpXxAuXadCuW08Evv0HBlHNwTERepFDr6HzFfuxiioIY05WB9iY9t1qYA
-         r7gXm/xLwxnyLFcPzD7q7v+DKlZhlin3xjNdzQOGnzZHZi+t5C8IVIz1GsC8p1TGryUo
-         rB7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773269134; x=1773873934;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e/Qc5twxAvR18BnVKuzO1KzLsNKi8PlkxaLqVdwZBnc=;
-        b=eoJx/S9CWBbrw7X6UbLAybuqDlthUXq2A1LfO28VGV5cSJc+8dB69fICbDz1W8rqa3
-         ysEo/jxx0TBxSV2vGIQSTlZ7wpA/jLwzA7/fQ9FG3o+RZe7KAJn9G5rTs7dM2X6I2fKu
-         YTRKmBOWWfMFXQdp3flMubiXsSMvhQ385bfbvrS06fdvbthiZXTfHbXtAcuC7687NaYA
-         wg5DOzp94YRVeV4USeLRQLg/T/h6cUh6izGDje45nZJgvt2kEyH4uR5R8JeUn9CSKoGA
-         03pVCitXEwY4XZpTKLQ/wt64HtniRyEy7sud9w57SE8AgA1OdEz1CYI8KUXx2XgqgQX4
-         LxuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBAKLSszVZKa1N4ImycwTG3IcWgpY2tUFC6gckuP+Hv9HY4bm2lxxx+KEJkf2VWGgPwf8H3dBlD4T1EtrHYUQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/VNTwnCqwdpVzTkxWlWX/P1QDL23AA0zSlxAOo3vc94kUu82y
-	uJGvsOE7ecy+nZIK//3qsfQlSAhBbLHIrCDYONHnDHzepRfs9bmqcQEq
-X-Gm-Gg: ATEYQzy1c3p5bVRyDbEP2izSjZ25K5XY3pG8/IooEiKKTjbg/5QuMHLRvmsJY8sIc+0
-	3VcoWUt8hOK8Zt3DmV0yu57qWo7GnCvI3hp7y1X0QhF18U2VUM/rhkgSQ2OmLtV44/Jt9IJKKRo
-	UP3ZBSWEuRi6+9A9wALYCgggS96KfvaFlqS+ChxLKMh1YXc3AKc3GWZP3UnLo39rxlrfy1ATTlq
-	Twg0YrppXo1llXup8hZ3lrCAHdaz+eJFkqNjH6w4TQz4zHFzcSFS4jAjWl+v1He6T/xDOuD88vm
-	ZRX+7pXDQoIgnkLGUCvqTR1sLAv9MYp3lbFFSCl/DiOqk1gKH3Z71AFyx4yWsb9J8gjv7/wjnhk
-	PkHt+CTOBYIkoa62mK08MFq4V1prlWVc+XtYhygxVPpmUFSkpJLFWvTcLqf1Q/cdErIwC1qvH4m
-	efYGW2pfHslzk=
-X-Received: by 2002:a05:600c:3593:b0:485:2fc5:39f with SMTP id 5b1f17b1804b1-4854b10d130mr72491895e9.29.1773269133678;
-        Wed, 11 Mar 2026 15:45:33 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b0c3878sm28827415e9.16.2026.03.11.15.45.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 15:45:33 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 11 Mar 2026 23:45:30 +0100
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
-Message-ID: <abHwii5stH93Vz5E@krava>
-References: <20260303150639.85007-1-leon.hwang@linux.dev>
- <20260303150639.85007-4-leon.hwang@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PRTaHnKE"
+Message-ID: <fd4b639f-be69-4b5a-bb05-e8302da8c87a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773269520;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XF0zY5nxeMwHSaorzU3I/GigfgLaCZBP1WnpmhBNilM=;
+	b=PRTaHnKEGQ4RBcMFvHgeZj58EHaduYeuRL5Fjg5HRt+vWS5lmJ/QifLrCOF/z0c4Pe6PPT
+	Rl4C1rYUwvd1WXAQ6bUltQS/A7hyGLtHnRN7qIoVKWSKRwv40rRQHUTaogMhcSOgZ0XFu6
+	h13Hmg1KqdESUZ6y/jdbR7RM5Gi4pv4=
+Date: Wed, 11 Mar 2026 15:51:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260303150639.85007-4-leon.hwang@linux.dev>
-
-On Tue, Mar 03, 2026 at 11:06:36PM +0800, Leon Hwang wrote:
-> Uprobe programs that modify regs require different runtime assumptions
-> than those that do not. Mixing !kprobe_write_ctx progs with
-> kprobe_write_ctx progs via tail calls could break these assumptions.
-> 
-> To address this, reject the combination of !kprobe_write_ctx progs with
-> kprobe_write_ctx progs in bpf_map_owner_matches(), which prevents the
-> tail callee from modifying regs unexpectedly.
-
-hi,
-could you please give some example where this is actual problem?
-I'd expect it's up to user (whoever installs the tailcall map) to
-avoid such situations.
-
-thanks,
-jirka
+Subject: Re: [PATCH v5 4/4] RDMA/rxe: Add testcase for net namespace rxe
+To: Leon Romanovsky <leon@kernel.org>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: jgg@ziepe.ca, zyjzyj2000@gmail.com, shuah@kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dsahern@kernel.org
+References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
+ <20260310020519.101415-5-yanjun.zhu@linux.dev>
+ <20260310185308.GJ12611@unreal>
+ <93c8c159-90f0-41f7-81d7-0f10fa7cf373@linux.dev>
+ <20260311085108.GV12611@unreal>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <20260311085108.GV12611@unreal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-> 
-> Also reject kprobe_write_ctx mismatches during initialization to
-> prevent bypassing the above restriction.
-> 
-> Without this check, the above restriction can be bypassed as follows.
-> 
-> struct {
-> 	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-> 	__uint(max_entries, 1);
-> 	__uint(key_size, 4);
-> 	__uint(value_size, 4);
-> } jmp_table SEC(".maps");
-> 
-> SEC("?kprobe")
-> int prog_a(struct pt_regs *regs)
-> {
-> 	regs->ax = 0;
-> 	bpf_tail_call_static(regs, &jmp_table, 0);
-> 	return 0;
-> }
-> 
-> SEC("?kprobe")
-> int prog_b(struct pt_regs *regs)
-> {
-> 	bpf_tail_call_static(regs, &jmp_table, 0);
-> 	return 0;
-> }
-> 
-> The jmp_table is shared between prog_a and prog_b.
-> 
-> * Load prog_a.
->   At this point, owner->kprobe_write_ctx=true.
-> * Load prog_b.
->   At this point, prog_b passes the compatibility check.
-> * Add prog_a to jmp_table.
-> * Attach prog_b to a kernel function.
-> 
-> When the kernel function runs, prog_a will unexpectedly modify regs.
-> 
-> Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  include/linux/bpf.h |  7 ++++---
->  kernel/bpf/core.c   | 30 +++++++++++++++++++++++++-----
->  2 files changed, 29 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 05b34a6355b0..dbafed52b2ba 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -285,9 +285,10 @@ struct bpf_list_node_kern {
->   */
->  struct bpf_map_owner {
->  	enum bpf_prog_type type;
-> -	bool jited;
-> -	bool xdp_has_frags;
-> -	bool sleepable;
-> +	u32 jited:1;
-> +	u32 xdp_has_frags:1;
-> +	u32 sleepable:1;
-> +	u32 kprobe_write_ctx:1;
->  	u64 storage_cookie[MAX_BPF_CGROUP_STORAGE_TYPE];
->  	const struct btf_type *attach_func_proto;
->  	enum bpf_attach_type expected_attach_type;
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index b24a613d99f2..121a697d4da5 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2390,6 +2390,7 @@ static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_pro
->  	owner->jited = fp->jited;
->  	owner->xdp_has_frags = aux->xdp_has_frags;
->  	owner->sleepable = fp->sleepable;
-> +	owner->kprobe_write_ctx = aux->kprobe_write_ctx;
->  	owner->expected_attach_type = fp->expected_attach_type;
->  	owner->attach_func_proto = aux->attach_func_proto;
->  	for_each_cgroup_storage_type(i)
-> @@ -2397,8 +2398,14 @@ static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_pro
->  			aux->cgroup_storage[i]->cookie : 0;
->  }
->  
-> +enum bpf_map_owner_match_type {
-> +	BPF_MAP_OWNER_MATCH_FOR_INIT,
-> +	BPF_MAP_OWNER_MATCH_FOR_UPDATE,
-> +};
-> +
->  static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
-> -				  enum bpf_prog_type prog_type)
-> +				  enum bpf_prog_type prog_type,
-> +				  enum bpf_map_owner_match_type match)
->  {
->  	struct bpf_map_owner *owner = map->owner;
->  	struct bpf_prog_aux *aux = fp->aux;
-> @@ -2411,6 +2418,18 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
->  	    owner->sleepable != fp->sleepable)
->  		return false;
->  
-> +	switch (match) {
-> +	case BPF_MAP_OWNER_MATCH_FOR_INIT:
-> +		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
-> +			return false;
-> +		break;
-> +
-> +	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
-> +		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
-> +			return false;
-> +		break;
-> +	}
-> +
->  	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
->  	    owner->expected_attach_type != fp->expected_attach_type)
->  		return false;
-> @@ -2436,7 +2455,8 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
->  }
->  
->  static bool __bpf_prog_map_compatible(struct bpf_map *map,
-> -				      const struct bpf_prog *fp)
-> +				      const struct bpf_prog *fp,
-> +				      enum bpf_map_owner_match_type match)
->  {
->  	enum bpf_prog_type prog_type = resolve_prog_type(fp);
->  	bool ret = false;
-> @@ -2453,7 +2473,7 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
->  		bpf_map_owner_init(map->owner, fp, prog_type);
->  		ret = true;
->  	} else {
-> -		ret = bpf_map_owner_matches(map, fp, prog_type);
-> +		ret = bpf_map_owner_matches(map, fp, prog_type, match);
->  	}
->  err:
->  	spin_unlock(&map->owner_lock);
-> @@ -2470,7 +2490,7 @@ bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp)
->  	if (bpf_prog_is_dev_bound(fp->aux))
->  		return false;
->  
-> -	return __bpf_prog_map_compatible(map, fp);
-> +	return __bpf_prog_map_compatible(map, fp, BPF_MAP_OWNER_MATCH_FOR_UPDATE);
->  }
->  
->  static int bpf_check_tail_call(const struct bpf_prog *fp)
-> @@ -2485,7 +2505,7 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
->  		if (!map_type_contains_progs(map))
->  			continue;
->  
-> -		if (!__bpf_prog_map_compatible(map, fp)) {
-> +		if (!__bpf_prog_map_compatible(map, fp, BPF_MAP_OWNER_MATCH_FOR_INIT)) {
->  			ret = -EINVAL;
->  			goto out;
->  		}
-> -- 
-> 2.52.0
-> 
+On 3/11/26 1:51 AM, Leon Romanovsky wrote:
+> On Tue, Mar 10, 2026 at 02:01:03PM -0700, Yanjun.Zhu wrote:
+>> On 3/10/26 11:53 AM, Leon Romanovsky wrote:
+>>> On Tue, Mar 10, 2026 at 03:05:18AM +0100, Zhu Yanjun wrote:
+>>>> Add 4 testcases for rxe with net namespace.
+>>>>
+>>>> Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+>>>> ---
+>>>>    MAINTAINERS                                   |  1 +
+>>>>    tools/testing/selftests/Makefile              |  1 +
+>>>>    tools/testing/selftests/rdma/Makefile         |  7 ++
+>>>>    tools/testing/selftests/rdma/config           |  3 +
+>>>>    tools/testing/selftests/rdma/rxe_ipv6.sh      | 63 ++++++++++++++
+>>>>    .../selftests/rdma/rxe_rping_between_netns.sh | 85 +++++++++++++++++++
+>>>>    .../selftests/rdma/rxe_socket_with_netns.sh   | 76 +++++++++++++++++
+>>>>    .../rdma/rxe_test_NETDEV_UNREGISTER.sh        | 63 ++++++++++++++
+>>>>    8 files changed, 299 insertions(+)
+>>>>    create mode 100644 tools/testing/selftests/rdma/Makefile
+>>>>    create mode 100644 tools/testing/selftests/rdma/config
+>>>>    create mode 100755 tools/testing/selftests/rdma/rxe_ipv6.sh
+>>>>    create mode 100755 tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+>>>>    create mode 100755 tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+>>>>    create mode 100755 tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index 77fdfcb55f06..bd33edf79150 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -24492,6 +24492,7 @@ L:	linux-rdma@vger.kernel.org
+>>>>    S:	Supported
+>>>>    F:	drivers/infiniband/sw/rxe/
+>>>>    F:	include/uapi/rdma/rdma_user_rxe.h
+>>>> +F:	tools/testing/selftests/rdma/
+>>> This is wrong place in MAINTAINERS file.
+>>> You need to add that line to "INFINIBAND SUBSYSTEM" and under RXE to add
+>>> tools/testing/selftests/rdma/rxe* entry.
+>> Hi, Leon
+>>
+>> "
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>
+>> index 77fdfcb55f06..3c6bc0e05fc0 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -24492,6 +24492,7 @@ L:      linux-rdma@vger.kernel.org
+>>   S:     Supported
+>>   F:     drivers/infiniband/sw/rxe/
+>>   F:     include/uapi/rdma/rdma_user_rxe.h
+>> +F:     tools/testing/selftests/rdma/rxe*
+>>
+>> "
+>>
+>> Is it OK?
+> It is not sufficient. We also need to be CCed on changes to
+> tools/testing/selftests/rdma/Makefile. For that reason, you should place
+> tools/testing/selftests/rdma/ under the "INFINIBAND SUBSYSTEM" as well.
+
+Got it. If I get you correctly, the final diff should be as below. If 
+you agree, I will send out the latest commits out very soon.
+
+
+"
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 77fdfcb55f06..2aba0bf49053 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12551,6 +12551,7 @@ F:      include/uapi/linux/if_infiniband.h
+  F:     include/uapi/rdma/
+  F:     samples/bpf/ibumad_kern.c
+  F:     samples/bpf/ibumad_user.c
++F:     tools/testing/selftests/rdma/
+
+  INGENIC JZ4780 NAND DRIVER
+  M:     Harvey Hunt <harveyhuntnexus@gmail.com>
+@@ -24492,6 +24493,7 @@ L:      linux-rdma@vger.kernel.org
+  S:     Supported
+  F:     drivers/infiniband/sw/rxe/
+  F:     include/uapi/rdma/rdma_user_rxe.h
++F:     tools/testing/selftests/rdma/rxe*
+
+  SOFTLOGIC 6x10 MPEG CODEC
+  M:     Bluecherry Maintainers <maintainers@bluecherrydvr.com>
+
+"
+
+Zhu Yanjun
+
+>
+> Thanks
+>
+>> Zhu Yanjun
+>>
+>>> Thanks
