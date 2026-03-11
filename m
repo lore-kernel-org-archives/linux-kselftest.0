@@ -1,88 +1,125 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7ACF331A76;
-	Wed, 11 Mar 2026 19:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E39938839F
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 20:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773257848; cv=none; b=BLxWASL3JqNqDYyuTWuS1T1TrLUtAYBZHwhAjyNQMZV2ENfAUY9fLjL6zTejiCw087C0IgxmVCxwzN8PIpLaAnJQbvojaRXO4aV00YekoNzkuBnXqzatgstHXSd9REPKP+dXqHgq2eAb34ebUJWsi8AkNkONVYwQR0mDz4Q8rh4=
+	t=1773259550; cv=none; b=a73yyytMDIj2CdQ1eWwWcUsOBN86Ry3f9U5PdJxglbihNfxQm4BaOS+bQf7ZEQabGQ37Axh23e4ZtY8hx7dOEy2cpZQM/k2l/BIwoLKK1O5YjtFR8nlsz0eSmujN2+TfcvhNCUKdLgaH95HgjJV5jkq3c4CTf+d7u8eFHCYFV/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773257848; c=relaxed/simple;
-	bh=6jurl6Rf0zj4uPC6QLg//I6pI8LkP/UEBlFXK4sA+Ro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PHaaB6nAXtauj1aLw+homlZaet+UgqfPDdCLlQHNdKJ/zobZpnSoaMhlVz+vk2Y9+GH50gRGW66hY4O9STibJj5MxldUzwWLCpsV10Neu38peA/TNMmzyaWAfBVISSd5Umc84sna3/xOrPlUlQPR8Izsd4dlrc6uw0hNAsLtxZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ZYei+IfG; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1773259550; c=relaxed/simple;
+	bh=8vIF8Lb5ykzhrFBUJxIpixRKe7Zi6mpz235W7zqSAmw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ohqtVAhiGOeRzq6EZ8I4Kl2cw8shMMliYhbCflIjF4JQXLcr/JiXRKE9scx+MQz1wHEnyaDLqAgLkDYJePLvo094LVo5VmpiYiEVaLcmqkSa3w+wUkOvGMw3GUJvamVzaUKK3VDRzx6lJO7szgaYum/1XlpvhrBfNUog2Ynx5i4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZejbzGCR; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ZYei+IfG"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=beEtVvUryGAcp/KY4RfPpaaoPzXn1sjxBLfBcJlVyrM=; b=ZYei+IfGTVv6TduN/E8kAlsfsk
-	bYhkMItgO4q4MWM6giDPal5uuX6zfWvkpmFt/6YpB5WPpz7mYJRRi+ZbiMyWsOjdVDp9vze2wxZH2
-	4WGejucuNvj+b36SHv9sMQP3n+pS71ebXy2NxoEI7sYTBJo6t/HOy4OCSjlZ5/8ibee0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1w0PMm-00BEEG-6G; Wed, 11 Mar 2026 20:37:12 +0100
-Date: Wed, 11 Mar 2026 20:37:12 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Naveen Mamindlapalli <naveenm@marvell.com>,
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Hariprasad Kelam <hkelam@marvell.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
- definitions
-Message-ID: <0d2eaeb0-b47e-4ab6-a440-9d163cc27345@lunn.ch>
-References: <20260310104743.907818-1-bjorn@kernel.org>
- <20260310104743.907818-3-bjorn@kernel.org>
- <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
- <87tsum3b1o.fsf@all.your.base.are.belong.to.us>
- <ed30934a-4931-40e5-a659-6fc8d12741b5@lunn.ch>
- <acb7ff65-3fed-4a89-a560-f09b53acea9d@bootlin.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZejbzGCR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773259547;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XAhyUCPdN0YxPo/49Qsd/d35pyJg70HQ5AoWjWJKM4M=;
+	b=ZejbzGCRb9uGWr+k5O3YMnd6cbaxisD6wmW5R3JngTCPRPjd2WHkQqUolGwlKWBy+OliIc
+	oU8ufq0lHEREXOrsjRAogmRuLByEB7mWEVOM+/7Fj/u5yYlVL+5M53Qk+ZtTfTvwiGG51U
+	XNvdNC73fddJ2YqJ3U+7msIAimnx1DI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-192-mfchlU81My2mdCgh7zI6mA-1; Wed,
+ 11 Mar 2026 16:05:43 -0400
+X-MC-Unique: mfchlU81My2mdCgh7zI6mA-1
+X-Mimecast-MFC-AGG-ID: mfchlU81My2mdCgh7zI6mA_1773259539
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 019E218005B8;
+	Wed, 11 Mar 2026 20:05:39 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.90.45])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A497330002D2;
+	Wed, 11 Mar 2026 20:05:35 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tejun Heo <tj@kernel.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v3] selftest: memcg: Skip memcg_sock test if address family not supported
+Date: Wed, 11 Mar 2026 16:05:26 -0400
+Message-ID: <20260311200526.885899-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acb7ff65-3fed-4a89-a560-f09b53acea9d@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-> > https://gist.github.com/mjball/9cd028ac793ae8b351df1379f1e721f9
-> > 
-> > enum gets you around level 9. string around level 3.
-> > 
-> > 	Andrew
-> 
-> Oh didn't know that manifesto.
+The test_memcg_sock test in memcontrol.c sets up an IPv6 socket and
+send data over it to consume memory and verify that memory.stat.sock
+and memory.current values are close.
 
-Rusty has not been involved in kernel work for around 10 years. But it
-is much older than that, a keynote from Ottawa Linux Symposium 2003.
+On systems where IPv6 isn't enabled or not configured to support
+SOCK_STREAM, the test_memcg_sock test always fails.  When the socket()
+call fails, there is no way we can test the memory consumption and
+verify the above claim. I believe it is better to just skip the test
+in this case instead of reporting a test failure hinting that there
+may be something wrong with the memcg code.
 
-https://ozlabs.org/~rusty/ols-2003-keynote/img0.html
+Fixes: 5f8f019380b8 ("selftests: cgroup/memcontrol: add basic test for socket accounting")
+Acked-by: Michal Koutný <mkoutny@suse.com>
+Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ tools/testing/selftests/cgroup/test_memcontrol.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-      Andrew
+ [v3] Add tags and fix typo in subject line
+
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 2fb096a2a9f9..a25eb097b31c 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -1280,8 +1280,11 @@ static int tcp_server(const char *cgroup, void *arg)
+ 	saddr.sin6_port = htons(srv_args->port);
+ 
+ 	sk = socket(AF_INET6, SOCK_STREAM, 0);
+-	if (sk < 0)
++	if (sk < 0) {
++		/* Pass back errno to the ctl_fd */
++		write(ctl_fd, &errno, sizeof(errno));
+ 		return ret;
++	}
+ 
+ 	if (setsockopt(sk, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) < 0)
+ 		goto cleanup;
+@@ -1412,6 +1415,12 @@ static int test_memcg_sock(const char *root)
+ 			goto cleanup;
+ 		close(args.ctl[0]);
+ 
++		/* Skip if address family not supported by protocol */
++		if (err == EAFNOSUPPORT) {
++			ret = KSFT_SKIP;
++			goto cleanup;
++		}
++
+ 		if (!err)
+ 			break;
+ 		if (err != EADDRINUSE)
+-- 
+2.53.0
 
