@@ -1,119 +1,116 @@
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDD82C0285
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 19:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773255734; cv=pass; b=KeFV064/2NqRpvBrycd9Nsfi5K+2BmeFJVBqyWSpAiGq5gZN4oMEZ2pZdj8kl6/mfGkuy7qD5xb5hHQ0CRVfUnKciWQb2d4llRUjYSahrMSeK8Rd/cA6Nr8anMS10TEOi8lOpZAuhHGmYgEplSEoJnCRcmRWnXWGSmE+100+3+I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773255734; c=relaxed/simple;
-	bh=zfJqOZ06tqpuB+99lsouSYSt086di6qkELN4k/vFd34=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C9ehSqk0jAE0yGSBtRnu13sCX6k4WGTa7H56R9ZnUvW863momawVCTNtyseouiIMnHLA7heDMVhE85aYtzJpxZ3k6EgLsb2Qp+XYcuCprq4jFifMAruVHe/u5GhAAChh98wIr8YKZVr4lx6bOfDcKIZJ8GtHmH2rRSkMQtPgH34=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TBeRX0md; arc=pass smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE99934753B
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 19:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773256134; cv=none; b=JOFLDg2Xyq+MHnc/ZaZmLhDNuPHdfIIjkgHTxEO1w+DoJXXs/hvbKDbEm93iRlnEqi+Gr37g9BHpF7LMkgD05KSxlbWPcmLD3A0c3a6e6b9IsZNm311OSgV1bEzOIa2wXhBu8+yPe+XZ4RuiWbKPZtKLIAnR6cFBW1bFAs0WrLI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773256134; c=relaxed/simple;
+	bh=7+3/2NPdvKij0w5HAXrVpW+FkPx0tCYsr2lkYsD6yV4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Rmnn+RdjIxVFVzur4ZRVXUF0Bq54F1RSKV2hQhQ9MOSxRG5eQTJCDFbJ8/ico2I69qoQV8YV40AiLxiNzhQnCY2cDWpt21LE71cDmkAEnRDfeLDMTzatt3w3OyMfg13TPrVR5RwlTSkELrsL8ZjnTSvXrJnNVgfff5djPxXpDQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ft13rTG/; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TBeRX0md"
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-56af6737b4fso147759e0c.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 12:02:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773255732; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BwX4WH4YrEl7Cf0pAYTljhinoXbtulpBaubPe5ipyem1H3klfjfUOC7Z6PG2Bk9RTQ
-         TyFLwdCEkUSwSnH5/dJkeL5RV4aDSg/SQfSgN2Ovz82PH3ENl2pa2zrz7Ctdrh1R1qyX
-         sBRXsWmpLrzaXhLoM2fKmtdUlEzPHCxKDBXM90G4oOXh5KQMvXLOM+C+yeRTKpR8YU0m
-         bq0GRBee05uGvjUAfLgJChaHpWIvotD1cPFg2CAVPt3T+QY8phPlkG9mMVzbNnx+PIso
-         S3OVyyrFs0QnNDBQCcGE1kQud2Fj+p8OU666eyo28TzauZNjnrLibI2EC5vcOz12+bup
-         zX+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=uz9lbPCFP48Ap7OMGU3ZIKIL3RFhqYcqtAKyrJSk2Fs=;
-        fh=y9AwH/+rDfvEJUaHCSu1emqoSC0AhfY0AzO5q+VFeTA=;
-        b=VgXE1j9BQX2qCq+26WzHBEsAwbU294gXay/NM/iguH7UOVDeAxGuXlp9L3fijlnhz8
-         JcHBbUoVIomDrRdrMBDmMzwaoKhALYufCKUzIyPC+8oVfgxEcvidAwhStb+Dj+/5bpsQ
-         p3TcLv/ivKiP5F61J4seOBPhl682PTLmsKhG5QWG3JMD3GaC3liutcmG0uSUy4QTcmTC
-         T8Ry7sU0YeD8UPXmZudxrf1XUFJkDlTbh5FY739sszw6uNqBBFqSSTu1gfOqDO0F8pCv
-         YNFYuUonIwFSsTjq1gnTmk0D9IOx2BYIJKNrtJcYX9tJmbZmAE6ad0ZI5jZJGaL7bJOr
-         7+qQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773255732; x=1773860532; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uz9lbPCFP48Ap7OMGU3ZIKIL3RFhqYcqtAKyrJSk2Fs=;
-        b=TBeRX0mdCa/OJSsnURlJq28BnpIiGWxG1EZ5MPsnBogKFWji/GN21IkvrgygHANh5i
-         3IQRhvveKadISnBmnzvZ+swljzXy6TZOB3ZdUuzZYXoak/bXsnssmDeW6lyU7TAFRGSC
-         EiEBcKEbFNPJyjIOP6lBPBuBS/Y5e2NaEA+1gDrZM4FVyat4qR3ckLLEaDGsR7YXm1YO
-         dbBXBvdLAmMC7Cqy8Y3STOoW4JKkPfEDZR4VVh7mqxGS8kzOxft8id7EXVkjmv75EyOP
-         PO6KzXDFEc0WnNl5s9i4mtTQbt3KfOpF+wADrtb3JS7ylFVwNjH/CJDJ117nbPjlVqDU
-         wDvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773255732; x=1773860532;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uz9lbPCFP48Ap7OMGU3ZIKIL3RFhqYcqtAKyrJSk2Fs=;
-        b=snwUkgOeJKkPT805wgH16owJ6Yq1vKJTapqIG1Kf5n9BFTB06e2B5EUkWAdjoLLzdb
-         URWAfeeg2JJcEbAg+xaxZcZPNpH9EUcXXP8a4iDDcP6TO3pL6cIWc363oY+d6aV6NZd4
-         tdTDpi9vNUZd/Ao2wh1JfOb6AyrGnuSg7k+ErA/dWAquWrUHttT9HQlXaMPAN18wyhZb
-         IL2G1bsX/xRIX24vgUzvQ181gp4/YMY8vFwjzKoFKVh18JhGdjIAIoJHAjga60SBtGy+
-         u+NswOqiXspBzfw3+jcGKLZyIYmIqcIKaOkargoPl2vff5GPtPmA9YxOf84YcwqQ85CN
-         W6CA==
-X-Gm-Message-State: AOJu0YxdeNWrmjI4FJT2GlFKXH73Vvw2SzGIDlCW80R3h0dqjO7OVIAm
-	XRLSSjEYyVzhNapL2a0TST/0a1uFbYXgF5+0wOniwDNvJXkmTYVmoDIaNe30tNWDZxX7zfbHX7R
-	szgEjS9vuPFYqRTc4HBLZaBMweoAC4otfuzsAfN2s
-X-Gm-Gg: ATEYQzwNWiZLXvbHSnQcq9q7QylHcO2NlKOK2SyCT6OaGfOHWQbJbu4ztWTJnJeKqHj
-	izg+JdY1RE9beh9JZoCmhKdXNeppJ4CeeRiQrykrFbn+yOq4Ch2+6oibH91akRWMmTxd5DtUTLV
-	jmpfS6a30q7p6jzz0ViGeur2glCHFAUT6f4+vn/qHdJ/SiY6PNRGvfcRo1JlEMj/z0BUiTmAXPW
-	ouA2TMDb13RvusgMZSOp+g2GopKFYih68twIcrrQvr6ssay6BatCnBAN5JS2cFGyP2WhtRxRk83
-	4XwCtQ==
-X-Received: by 2002:a05:6122:3124:b0:559:67df:5889 with SMTP id
- 71dfb90a1353d-56b4746b3bemr1279193e0c.6.1773255720320; Wed, 11 Mar 2026
- 12:02:00 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ft13rTG/"
+Message-ID: <a658ac9c-c25f-4235-9c7c-e3fed35b4a8a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773256114;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xJOiG4fotX9XX9rru93M+rAuocfwhkAomq2GSVrwsL4=;
+	b=ft13rTG/4sTVsno6cGstB5Cf1sOky+lRq1gX5ssjlX63JReMCf4Qkbasg5a0LzfKJHuh5X
+	IQYKpwYbERb4nbunZscs56gSu2X8dYDXLjfF1OWjtpfwRHLf38/vB/Hw5jHW7tu1gnfifC
+	ks/gjq+NhioA+BZI41jKLbtbgMZuVbA=
+Date: Wed, 11 Mar 2026 12:08:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311110523.26624-1-liwang@redhat.com> <20260311110523.26624-4-liwang@redhat.com>
-In-Reply-To: <20260311110523.26624-4-liwang@redhat.com>
-From: Yosry Ahmed <yosryahmed@google.com>
-Date: Wed, 11 Mar 2026 12:01:24 -0700
-X-Gm-Features: AaiRm53iDnGUJF5u0qqalvkYJgTqMlUyE1Y1xwWQJeyH2Stn3OuZlTpplmBlfwY
-Message-ID: <CAJD7tkawFFwiV72S5eJfmqaH63k+kisMNLPrc8-u-9taGRanCQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] selftest/cgroup: fix zswap test_no_invasive_cgroup_shrink
- on 64K pagesize system
-To: Li Wang <liwang@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	akpm@linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Muchun Song <muchun.song@linux.dev>, Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v5 3/4] RDMA/rxe: Support RDMA link creation and
+ destruction per net namespace
+To: Leon Romanovsky <leon@kernel.org>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: jgg@ziepe.ca, zyjzyj2000@gmail.com, shuah@kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dsahern@kernel.org
+References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
+ <20260310020519.101415-4-yanjun.zhu@linux.dev>
+ <20260310185744.GK12611@unreal>
+ <eaf37917-76aa-4869-a37b-5a1acb4ba7ae@linux.dev>
+ <20260311084523.GU12611@unreal>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <20260311084523.GU12611@unreal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Mar 11, 2026 at 4:06=E2=80=AFAM Li Wang <liwang@redhat.com> wrote:
->
-> The test_no_invasive_cgroup_shrink and allocate_bytes use a hardcoded
-> stride of 4095 bytes when touching allocated pages. On systems with 64K
-> page size, this results in writing to the same page multiple times
-> instead of touching all pages, leading to insufficient memory pressure.
->
-> Additionally, the original memory limits and allocation sizes are too
-> small for 64K page size systems. With only 1M memory.max, there are
-> very few pages available, and a zswap.max of 10K may not provide enough
-> room to store even a single compressed page. This can cause OOM kills
-> or false positives due to insufficient zswap writeback being triggered.
->
-> Fix these issues by:
-> - Using sysconf(_SC_PAGESIZE) instead of the hardcoded 4095 stride in
->   both allocate_bytes() and test_no_invasive_cgroup_shrink().
 
-AFAICT there are other instances of hardcoded 4095 and 4096 values in
-the test, do you mind having a separate patch that updates all of them
-to the runtime value?
+On 3/11/26 1:45 AM, Leon Romanovsky wrote:
+> On Tue, Mar 10, 2026 at 01:32:30PM -0700, Yanjun.Zhu wrote:
+>> On 3/10/26 11:57 AM, Leon Romanovsky wrote:
+>>> On Tue, Mar 10, 2026 at 03:05:17AM +0100, Zhu Yanjun wrote:
+>>>> After introducing dellink handling and per-net namespace management
+>>>> for IPv4 and IPv6 sockets, extend rxe to create and destroy RDMA links
+>>>> within each network namespace.
+>>>>
+>>>> With this change, RDMA links can be instantiated both in init_net and
+>>>> in other network namespaces. The lifecycle of the RDMA link is now tied
+>>>> to the corresponding namespace and is properly cleaned up when the
+>>>> namespace or link is removed.
+>>>>
+>>>> This ensures rxe behaves correctly in multi-namespace environments and
+>>>> keeps socket and RDMA link resources consistent across namespace
+>>>> creation and teardown.
+>>>>
+>>>> Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+>>>> ---
+>>>>    drivers/infiniband/sw/rxe/rxe.c     |  38 +++++++-
+>>>>    drivers/infiniband/sw/rxe/rxe_net.c | 145 +++++++++++++++++++++-------
+>>>>    drivers/infiniband/sw/rxe/rxe_net.h |   9 +-
+>>>>    3 files changed, 146 insertions(+), 46 deletions(-)
+>>> <...>
+>>>
+>>>> +#define SK_REF_FOR_TUNNEL	2
+>>> <...>
+>>>
+>>>> +#undef SK_REF_FOR_TUNNEL
+>>> We typically place defines at the beginning of a file and avoid undefining
+>>> them. The undef directive is mainly used when a macro is defined inside a
+>>> function.
+>> Defining macros locally helps clarify the intent behind specific values.
+>>
+>> By pairing the #define with a trailing #undef, we gain the descriptive
+>>
+>> benefits of the macro while maintaining strict control over its visibility.
+> Zhu,
+>
+> Tell your AI that, in the context of Linux kernel code, its response
+> is incorrect.
+
+Got it. I will place this define at the beginning of a file and avoid 
+undefining it.
+
+The latest commit will be sent out very soon.
+
+Zhu Yanjun
+
+>
+> Thanks
+>
+>> I will put the definition of the MACRO in the function, following your
+>> advice.
+>>
+>> Thanks.
+>>
+>> Zhu Yanjun
+>>
+>>> Thanks
