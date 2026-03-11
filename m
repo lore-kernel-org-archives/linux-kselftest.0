@@ -1,158 +1,120 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D6D33D6EE
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 21:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D01C1B4138;
+	Wed, 11 Mar 2026 21:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773265390; cv=none; b=IYlsG0NeVsikPI1itdJZG8NhPbXe9Gi4hCt9IsJY6jMWs19caAIue06YVfJgJu58w/XRyMgGIoVbnZspWaPMX+88eUqEEIo8FkXtgPz3b0ln4tio9ADGFX1wGZxTNHEzVaQhtiU2yu0Pr5XSh7tVUy09EzebpPAziJsqmqaDXsU=
+	t=1773265903; cv=none; b=NCnTAVFQWTodrbljYCGXULPFo1pcbV/ezP1ahiNPsznt9pAKR7JS4+YGJFr22l0VOwLnjw98hodoWw+MYtvGkzL9C1jfcq564QcNjP7pswAxJfsj1VWdLyZbjfxao3KNFGuQ2iYGJX5SDabUHCLpiRxvEwfRwqaMaFe/gvrDr8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773265390; c=relaxed/simple;
-	bh=cJ7O0ZLD0Pd5i+N/UryeSxeBbtkb1V+krtTpKFUgCQE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jB5HDifPgzDY8bo+YBdbAUVQ+j2SMbS4b7VM1P1GJHvqSN0ygeaTUrFvd1OUgISKFjtv9wx+yhCI1q0VUGH054M3zJw643lKLas2Tn89kN44DRYA3QeGhMHN6w2JPKnWs1UMxAr7TtEFuIC+7+CEb+BnUQ3mTOFyr7cUqR43kAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u2YC5kn5; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1773265903; c=relaxed/simple;
+	bh=Ky9x4Qc7sXMth54WdQkScEx8aBLAUtoTYC5EOd6QHxo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kirH1Dxr8ZcCkLz9BShAPPapML9f+calzP99PhVohWbeDFMznko5a6j37001W7iDhPfOx6GyskJHpwNkpZGBB1Xqxb+zD9eZEkFLRRH8c6pzE5+n5zdwIRHEu0Z4SazKmWmxnDpnfPfaerR59ELZh41JngmsffpC+MofqYlb1TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dx7jFacZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u2YC5kn5"
-Message-ID: <bc410b38-f5ab-47cf-a434-fa4f43751921@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773265387;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oY0ScjjYBmbgesl65ClATdNaDwRrK4lWRWVjLXSQrjY=;
-	b=u2YC5kn5TmPwfryYEjMFgHQzd5h4eTKlPtBYCgUwaBqasWFA4drPEdJMCN13+e73nEndcL
-	oBC6yVMPjNQu37+6/rEArC1/32PpJ9WwGioiRErOhEv9exc7OrQA4JQN1dWDBlumZKW/E2
-	4rYWs/phHEC+VQ6OPg/Okg4Nfe1K5gU=
-Date: Wed, 11 Mar 2026 14:42:52 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dx7jFacZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E2CC4CEF7;
+	Wed, 11 Mar 2026 21:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773265903;
+	bh=Ky9x4Qc7sXMth54WdQkScEx8aBLAUtoTYC5EOd6QHxo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Dx7jFacZSSM5wqhX2HqVl7lUpW0BEE9MOC0zg7RjB5ksIwDxAWiFZ8g3y/bFQrOJU
+	 KgyyZReYbkucYayZ/KcL7xAyjIJahjFxos8+5wjc172EkvLwKREPg6fUMCTTHH9e5e
+	 0SRr79WK766w8sZqtz4gS07VU1undwunt1g8fnAM8l9uaJP+41+dKTEgKAzgAC6bf/
+	 ZZLf4g5j9YtyfB0DJtKhpkgq99a3yhBGia1Y7+OvqI0ggZIZSbgKqyCcmC73P8o5ei
+	 3riUM+OF6hL5IX1V96Jb/coHSW0x2b0lzPO3IE2wBzbwAzqmJfj2pYMsEB2v8Ifrtc
+	 tyBfX4sVpALLQ==
+Date: Wed, 11 Mar 2026 14:51:26 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Or Har-Toov <ohartoov@nvidia.com>
+Cc: Jiri Pirko <jiri@resnulli.us>, Tariq Toukan <tariqt@nvidia.com>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Donald
+ Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Saeed
+ Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Mark Bloch
+ <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman
+ <gal@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>, Shay Drory
+ <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, Moshe Shemesh
+ <moshe@nvidia.com>
+Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource
+ support
+Message-ID: <20260311145126.7dcca532@kernel.org>
+In-Reply-To: <5de5103e-e2e4-4b72-9c3c-22847728fbb8@nvidia.com>
+References: <20260226221916.1800227-1-tariqt@nvidia.com>
+	<20260302192640.49af074f@kernel.org>
+	<pmxkihhtsskkwsvdia4z2ss4wxpfc4a4kqxkjv5wk3mwdmpzii@6go7pizk2nst>
+	<jssifysprwuafkinc3dguspngxmplrngqxvotp76vhvu4e5lp6@e7mdrjqc5rme>
+	<20260304101522.09da1f58@kernel.org>
+	<np44uzfn6jea56uht4yq4te5clapgj7pk6ygyvkl22wxumwnvt@nrpvzjqzxenq>
+	<20260305063729.7e40775d@kernel.org>
+	<ni23r4jiwgc6zjjsubtl4ujjgxzwpxrylumofdwxgozfnieynm@zirlbneaz6p2>
+	<20260306120301.0ebe1ab2@kernel.org>
+	<74dcd7c5-8a2b-49a7-a23c-174d17a61955@nvidia.com>
+	<20260309133341.7e08b35d@kernel.org>
+	<5de5103e-e2e4-4b72-9c3c-22847728fbb8@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] selftests/bpf: improve test coverage for kfunc call
-To: Hari Bathini <hbathini@linux.ibm.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Eduard <eddyz87@gmail.com>, "Jose E. Marchesi" <jemarch@gnu.org>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20260303131453.328674-1-hbathini@linux.ibm.com>
- <CAADnVQKuARvSirPjnTcSifLPunCiKC4Nenq0Mr61GpzbW5WxWg@mail.gmail.com>
- <bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com>
- <CAADnVQ+4N4WWLxan_qibZ7HmONJyMZaP=RF+a9tMSPoz=0LqkQ@mail.gmail.com>
- <09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 3/11/26 11:03 AM, Hari Bathini wrote:
->
-> On 11/03/26 9:32 pm, Alexei Starovoitov wrote:
->> On Wed, Mar 11, 2026 at 8:10 AM Hari Bathini <hbathini@linux.ibm.com> 
->> wrote:
->>>
->>>>
->>>>> +
->>>>> +       /* Check zero-extension */
->>>>> +       if (val != (unsigned long)a)
->>>>> +               return 1;
->>>>> +       /* Check no sign-extension */
->>>>> +       if (val < 0)
->>>>> +               return 2;
->>>>> +
->>>>> +       val = b;
->>>>> +       if (val != (unsigned long)b)
->>>>> +               return 3;
->>>>> +       if (val < 0)
->>>>> +               return 4;
->>>>> +
->>>>> +       val = c;
->>>>> +       if (val != (unsigned long)c)
->>>>> +               return 5;
->>>>> +       if (val < 0)
->>>>> +               return 6;
->>>>> +
->>>>> +       return 0;
->>>>> +}
->>>>
->>>> Overall this looks very useful.
->>>> I would expand with another test where a,b,c are s8,s16,s32.
->>>
->>> Slightly different approach but kfunc_call_test4/bpf_kfunc_call_test4
->>> cover signed arguments already?
->>
->> Ahh. Then may be tweak it to adopt similar fine grained
->> error reporting as your bpf_kfunc_call_test5()
->
-> I Prefer this.
->
-> Does the below change to bpf_kfunc_call_test4 look fine:
->
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c 
-> b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 48dcaf93bb9f..6237c2222633 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -760,8 +760,30 @@ __bpf_kfunc struct sock 
-> *bpf_kfunc_call_test3(struct sock *sk)
->
->  __bpf_kfunc long noinline bpf_kfunc_call_test4(signed char a, short 
-> b, int c, long d)
+On Wed, 11 Mar 2026 20:24:08 +0200 Or Har-Toov wrote:
+> For the dump-it command:
+> devlink resource show
+> pci/0000:03:00.0:
+> <resource>
+> pci/0000:03:00.0/196608:
+> <port-resource>
+> pci/0000:03:00.0/196609:
+> <port-resource>
+> pci/0000:03:00.1:
+> <resource>
+> pci/0000:03:00.1/262144:
+> <port-resource>
+> 
+> devlink resource show scope port
+> pci/0000:03:00.0/196608:
+> <port-resource>
+> pci/0000:03:00.0/196609:
+> <port-resource>
+> pci/0000:03:00.1/262144:
+> <port-resource>
+> 
+> devlink resource show scope dev
+> pci/0000:03:00.0:
+> <resource>
+> pci/0000:03:00.1:
+> <resource>
 
-I might regret for bringing this up as it could be yet another ABI 
-fiasco between gcc and llvm.
+LGTM
 
-As per C standard, sign of unadorned char (i.e. w/o explicit signed or 
-unsigned prefix) is ABI defined.
-For gcc-bpf char is specified to be signed.
-So test4 has s8, while new test5 has u8. Would it make sense to have an 
-additional test without signed/unsigned annotation for char ?
-This will flag any discrepancy between the two compilers.
+> For the do-it command:
+> devlink resource show pci/0000:03:00.0
+> pci/0000:03:00.0:
+> <resource>
+> pci/0000:03:00.0/196608:
+> <port-resource>
+> pci/0000:03:00.0/196609:
+> <port-resource>
+> 
+> devlink resource show pci/0000:03:00.0 scope port
+> pci/0000:03:00.0/196608:
+> <port-resource>
+> pci/0000:03:00.0/196609:
+> <port-resource>
+> 
+> devlink resource show pci/0000:03:00.0  scope dev
+> pci/0000:03:00.0:
+> <resource>
 
-Thx,
--Vineet
-
->  {
-> +       /*
-> +        * Make val as volatile to avoid compiler optimizations.
-> +        * Verify that negative signed values remain negative after
-> +        * sign-extension (JIT must sign-extend, not zero-extend).
-> +        */
-> +       volatile long val;
-> +
-> +       /* val will be positive, if JIT does zero-extension instead of 
-> sign-extension */
-> +       val = a;
-> +       if (val >= 0)
-> +               return 1;
-> +
-> +       val = b;
-> +       if (val >= 0)
-> +               return 2;
-> +
-> +       val = c;
-> +       if (val >= 0)
-> +               return 3;
-> +
->         /* Provoke the compiler to assume that the caller has 
-> sign-extended a,
->          * b and c on platforms where this is required (e.g. s390x).
-> +        *
-> +        * Original behavior: return sum for backward compatibility
->          */
->         return (long)a + (long)b + (long)c + d;
->  }
->
->
-> - Hari
-
+Do we have to touch doit? Maybe we should let doit be what it is now
+and consider it legacy going forward? doit which is in fact a filtered
+dump is a bit of a mistake in the first place, from Netlink's
+perspective.
