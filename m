@@ -1,137 +1,204 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485E23D9034
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 11:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862B43DCDB8;
+	Wed, 11 Mar 2026 11:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773227169; cv=none; b=hT6G7foUKUMXmI8PGliZ2kW/3qnUD/Vjjs4qU5ZVMXvResZRlMtjUUoUFRe+hQcv9Cy9O40RG1gQ7Jrm9VrimCt/CEDcXO9nQhOQvrUBE9CnYRQsh6Puse4DKlB/8rbR8D//uyJTmiJhDbQ2F7FSWxj1IxouZS81B/6q/Uhlayw=
+	t=1773228336; cv=none; b=Z3Zn5mXrac21OKifMcTQkDyhqwpVmgAa3V7He2S/aL5ob8NFaPCBp8godl4C+mdTtm8MzlTpejhA11nzvM7UBpNKOg4NNUPlFxMGfjGD9T7tALfwlmN4gtQaox6G+7Of7C44f+39UJjSuFb8uw//gu6sJst3AwtX7BO7g5JAMso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773227169; c=relaxed/simple;
-	bh=NAkRnW+3beKJ3rvextrWkcfSHPDeq/CJu5mW2WK0VWM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LrOL3vrpkQrPSYogtrRAsBiAZphjEnXBmfKFRivVEfvE0fc6r121piMqRekTv1P5/FW11Q1EEic+nSaG8VJV1/NwSaO/c3oZR5NSNFcO9mLSUIIN1lvSc1NltYnlEbnFIX4rtXLhHGyCtElhwFIyigvy7HkaDS208XNHZlfk1MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X0Xc6USf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773228336; c=relaxed/simple;
+	bh=g2Y9MMMbhifyD8xLlvkjBkRE67yfHE5Dqvk7AeX9N9w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sg9eIK/e8UmWnS9RXlCYcLlT+i+P/AsZO5Gvi0Oc7dVG7WrLm1jdfKx44Rv+LkC74Q1s4MmP6OpwUXvb6ftC8D9hRgdC9sVAcRYzb/QFVN44C52jM9Vzs4ZsC7nUrQSnVBdfjWpRD6ZxlV/JIoX1/cMy1kOkMj80iYhv9ml7cRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OLWyz3wL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X0Xc6USf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773227165;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jaQ/ZzEhZt4ymG/02ZgI+lGSkMVG7VPxwBvRb7hAOvw=;
-	b=X0Xc6USfrQ6MZC4OMQZuYLCIhwbboBfP47SBrjPWag0z9gw7sX896gIxw0o820/Zy60R5L
-	19gqKH0gJJLit/6AjnOFZW+ydL2IzP382QMifMokZHs0SYMJPf+LuwZ8n6lgn5cZEX6Zs0
-	6wczo9sF7NX+f/XXUPUnF2u4o/RYi48=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-339-nhbugbZVPoGVvKr5P6BbfQ-1; Wed,
- 11 Mar 2026 07:06:01 -0400
-X-MC-Unique: nhbugbZVPoGVvKr5P6BbfQ-1
-X-Mimecast-MFC-AGG-ID: nhbugbZVPoGVvKr5P6BbfQ_1773227160
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 048891956050;
-	Wed, 11 Mar 2026 11:06:00 +0000 (UTC)
-Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.99])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8CE0B1956095;
-	Wed, 11 Mar 2026 11:05:54 +0000 (UTC)
-From: Li Wang <liwang@redhat.com>
-To: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Tejun Heo <tj@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Yosry Ahmed <yosryahmed@google.com>
-Subject: [PATCH 5/5] selftest/cgroup: fix zswap attempt_writeback() on 64K pagesize system
-Date: Wed, 11 Mar 2026 19:05:23 +0800
-Message-ID: <20260311110523.26624-5-liwang@redhat.com>
-In-Reply-To: <20260311110523.26624-1-liwang@redhat.com>
-References: <20260311110523.26624-1-liwang@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OLWyz3wL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5BA3C2BC86;
+	Wed, 11 Mar 2026 11:25:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773228336;
+	bh=g2Y9MMMbhifyD8xLlvkjBkRE67yfHE5Dqvk7AeX9N9w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OLWyz3wL7cjrXH3nCYFFOCr6iBlPMoNfNKuHBkEz9i9TuXzLeg51ZAzTrQu/IqSN8
+	 7wfMjDnru52+BTWs5gMNyWzcHWvW9yt4WnxGvGye9oFDTy3ZQeUEYt7WAiI1c5hNN3
+	 bp/fhfoY2U0wSt4a1+z0iV1aJ5Q+1fPSTRP7uPyvRnRqi6D3OQWX1kkRb3hWyuzeiN
+	 TVLwxtL1hiZgkuXCs/ofSIfFSLHf5Aa1kq67BoqxaLLsJJEZ1b+7pZ+d6CsmaKl1O6
+	 XMgI3i4yJloFaaemM9iBUiPo72GHO6foAkw7xbjShZjFd/MKLRgWmbcPtB2/+umUEA
+	 uzPjNC4TqgD2A==
+Date: Wed, 11 Mar 2026 11:25:30 +0000
+From: "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+To: Anthony Yznaga <anthony.yznaga@oracle.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, david@kernel.org, 
+	Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, 
+	shuah@kernel.org
+Subject: Re: [PATCH v2 2/2] selftests/mm: verify droppable mappings cannot be
+ locked
+Message-ID: <55662200-c212-4146-bc23-7f3d210de3ee@lucifer.local>
+References: <20260310155821.17869-1-anthony.yznaga@oracle.com>
+ <20260310155821.17869-2-anthony.yznaga@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260310155821.17869-2-anthony.yznaga@oracle.com>
 
-In attempt_writeback(), a memsize of 4M only covers 64 pages on 64K
-page size systems. When memory.reclaim is called, the kernel prefers
-reclaiming clean file pages (binary, libc, linker, etc.) over swapping
-anonymous pages. With only 64 pages of anonymous memory, the reclaim
-target can be largely or entirely satisfied by dropping file pages,
-resulting in very few or zero anonymous pages being pushed into zswap.
+On Tue, Mar 10, 2026 at 08:58:21AM -0700, Anthony Yznaga wrote:
+> Verify that a mapping created with MAP_DROPPABLE cannot be locked
+> via mlock(), and that it will not be locked if it's created after
+> mlockall(MCL_FUTURE).
+>
+> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 
-This causes zswap_usage to be extremely small or zero, making
-zswap_usage/2 insufficient to create meaningful writeback pressure.
-The test then fails because no writeback is triggered.
+Can confirm this test fails before your patch and passes after, so LGTM :)
 
-On 4K page size systems this is not an issue because 4M covers 1024
-pages, and file pages are a small fraction of the reclaim target.
+Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
+Tested-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
 
-Scale memsize up to 64M on systems with page size larger than 4K, so
-that enough anonymous pages are allocated to reliably populate zswap
-and trigger writeback. The original 4M is kept for 4K page size systems
-to avoid unnecessary memory usage and test runtime.
-
-=== Error Log ===
-  # uname -rm
-  6.12.0-211.el10.ppc64le ppc64le
-
-  # getconf PAGESIZE
-  65536
-
-  # ./test_zswap
-  TAP version 13
-  1..7
-  ok 1 test_zswap_usage
-  ok 2 test_swapin_nozswap
-  ok 3 test_zswapin
-  not ok 4 test_zswap_writeback_enabled
-  ...
-
-Signed-off-by: Li Wang <liwang@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Michal Koutný <mkoutny@suse.com>
-Cc: Muchun Song <muchun.song@linux.dev>
-Cc: Nhat Pham <nphamcs@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Yosry Ahmed <yosryahmed@google.com>
----
- tools/testing/selftests/cgroup/test_zswap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 30d3fbf6b4fb..2d065184eea4 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -264,7 +264,7 @@ static int test_zswapin(const char *root)
- static int attempt_writeback(const char *cgroup, void *arg)
- {
- 	long pagesize = sysconf(_SC_PAGESIZE);
--	size_t memsize = MB(4);
-+	size_t memsize = pagesize > 4096 ? MB(64): MB(4);
- 	char buf[pagesize];
- 	long zswap_usage;
- 	bool wb_enabled = *(bool *) arg;
--- 
-2.53.0
-
+> ---
+>  tools/testing/selftests/mm/mlock2-tests.c | 78 ++++++++++++++++++++---
+>  1 file changed, 69 insertions(+), 9 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
+> index b474f2b20def..b5790e717dd6 100644
+> --- a/tools/testing/selftests/mm/mlock2-tests.c
+> +++ b/tools/testing/selftests/mm/mlock2-tests.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #define _GNU_SOURCE
+>  #include <sys/mman.h>
+> +#include <linux/mman.h>
+>  #include <stdint.h>
+>  #include <unistd.h>
+>  #include <string.h>
+> @@ -163,14 +164,17 @@ static int lock_check(unsigned long addr)
+>  	return (vma_rss == vma_size);
+>  }
+>
+> -static int unlock_lock_check(char *map)
+> +static int unlock_lock_check(char *map, bool mlock_supported)
+>  {
+> -	if (is_vmflag_set((unsigned long)map, LOCKED)) {
+> +	if (!is_vmflag_set((unsigned long)map, LOCKED))
+> +		return 0;
+> +
+> +	if (mlock_supported)
+>  		ksft_print_msg("VMA flag %s is present on page 1 after unlock\n", LOCKED);
+> -		return 1;
+> -	}
+> +	else
+> +		ksft_print_msg("VMA flag %s is present on an unsupported VMA\n", LOCKED);
+>
+> -	return 0;
+> +	return 1;
+>  }
+>
+>  static void test_mlock_lock(void)
+> @@ -196,7 +200,7 @@ static void test_mlock_lock(void)
+>  		ksft_exit_fail_msg("munlock(): %s\n", strerror(errno));
+>  	}
+>
+> -	ksft_test_result(!unlock_lock_check(map), "%s: Unlocked\n", __func__);
+> +	ksft_test_result(!unlock_lock_check(map, true), "%s: Unlocked\n", __func__);
+>  	munmap(map, 2 * page_size);
+>  }
+>
+> @@ -296,7 +300,7 @@ static void test_munlockall0(void)
+>  		ksft_exit_fail_msg("munlockall(): %s\n", strerror(errno));
+>  	}
+>
+> -	ksft_test_result(!unlock_lock_check(map), "%s: No locked memory\n", __func__);
+> +	ksft_test_result(!unlock_lock_check(map, true), "%s: No locked memory\n", __func__);
+>  	munmap(map, 2 * page_size);
+>  }
+>
+> @@ -336,7 +340,61 @@ static void test_munlockall1(void)
+>  		ksft_exit_fail_msg("munlockall() %s\n", strerror(errno));
+>  	}
+>
+> -	ksft_test_result(!unlock_lock_check(map), "%s: No locked memory\n", __func__);
+> +	ksft_test_result(!unlock_lock_check(map, true), "%s: No locked memory\n", __func__);
+> +	munmap(map, 2 * page_size);
+> +}
+> +
+> +/*
+> + * Droppable memory should not be lockable.
+> + */
+> +static void test_mlock_droppable(void)
+> +{
+> +	char *map;
+> +	unsigned long page_size = getpagesize();
+> +
+> +	/*
+> +	 * Ensure MCL_FUTURE is not set.
+> +	 */
+> +	if (mlockall(MCL_CURRENT))
+> +		ksft_exit_fail_msg("mlockall(MCL_CURRENT): %s\n", strerror(errno));
+> +	if (munlockall())
+> +		ksft_exit_fail_msg("munlockall() %s\n", strerror(errno));
+> +
+> +	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
+> +	if (map == MAP_FAILED)
+> +		ksft_exit_fail_msg("mmap error: %s", strerror(errno));
+> +
+> +	if (mlock2_(map, 2 * page_size, 0)) {
+> +		munmap(map, 2 * page_size);
+> +		ksft_exit_fail_msg("mlock2(0): %s\n", strerror(errno));
+> +	}
+> +
+> +	ksft_test_result(!unlock_lock_check(map, false), "%s: droppable memory not locked\n",
+> +			__func__);
+> +
+> +	munmap(map, 2 * page_size);
+> +}
+> +
+> +static void test_mlockall_future_droppable(void)
+> +{
+> +	char *map;
+> +	unsigned long page_size = getpagesize();
+> +
+> +	if (mlockall(MCL_CURRENT | MCL_FUTURE))
+> +		ksft_exit_fail_msg("mlockall(MCL_CURRENT | MCL_FUTURE): %s\n", strerror(errno));
+> +
+> +	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
+> +
+> +	ksft_test_result(!unlock_lock_check(map, false), "%s: droppable memory not locked\n",
+> +			__func__);
+> +
+> +	if (munlockall()) {
+> +		munmap(map, 2 * page_size);
+> +		ksft_exit_fail_msg("munlockall() %s\n", strerror(errno));
+> +	}
+> +
+>  	munmap(map, 2 * page_size);
+>  }
+>
+> @@ -442,7 +500,7 @@ int main(int argc, char **argv)
+>
+>  	munmap(map, size);
+>
+> -	ksft_set_plan(13);
+> +	ksft_set_plan(15);
+>
+>  	test_mlock_lock();
+>  	test_mlock_onfault();
+> @@ -451,6 +509,8 @@ int main(int argc, char **argv)
+>  	test_lock_onfault_of_present();
+>  	test_vma_management(true);
+>  	test_mlockall();
+> +	test_mlock_droppable();
+> +	test_mlockall_future_droppable();
+>
+>  	ksft_finished();
+>  }
+> --
+> 2.47.3
+>
