@@ -1,146 +1,111 @@
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7F53DCDB4
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 11:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC3D375AB4
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 11:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773229487; cv=none; b=iIPcCgsbLjMjCeoJKsc7lScH6IAF4pAHv9z1XPx6KakpSTjlmWsWJArZ3erYWphhDnRfIfzLrTsZetMgz/zvjJWenCSfmqmgQANRctRTfgexhd8xvot+4eHUoLVaZgxTO4k+pmqbxIsGcZVFdpHyo4Im8TL725PDRcQeBgyute4=
+	t=1773229793; cv=none; b=gRlDbyCPXFGz9/d8MAXMY1qv3tkhOTPaD1FG8pQJCzQOR+0RvGslavs77yRAcpMVOGw68yv78BuK3RtVxuoNbRDVqrS6TEdNPit0V71cEuw+Ai5/fy3tupbicEzX6186iwenkXfQnDnK4ZC7yLLT1XRSLWnkc6Qt2qFHQp3RNnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773229487; c=relaxed/simple;
-	bh=91YPfEButMB4Dd2zOu5KgfkAt2bAzw+tFr6ttZBOtAQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PwyJCHzeAcMFMZmzoVhEvtG7s0lgO/phj9EICB8VAEc/04kkVhcaRidpCf2XgayC3V3ZpmlmGNBKaVTInz8UqCiPmK3aIm767WWfuw3ICgJCERu2+gIZK7amJh0PiKa+Y5DR9G5AcjihAwIarjdeKEnnN5rJcfPoB8A5Vz3q3jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1773229793; c=relaxed/simple;
+	bh=kqXVxGne/MWyib/ntpXgb3tQGa6smsxb82pVRytJqLA=;
+	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
+	 MIME-Version:Content-Type; b=KX24gM3xpRIeYJY/cFCl8e6LLBDY0jRe4cOQQgTqADBpaDSxgpVeVFUeJqD+Hkcv/K6kcEv9tI1GUHThqo4rEjAMdwxjbPADoYX4QuAXfeKF56BW8jisYka79Y7FI0RAwA78+5wiQNuhC9+UrW8mFRSQmBPWwBCmH2E0ppDpH6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ET6O/QAb; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-56afafef7aeso5399832e0c.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 04:44:46 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ET6O/QAb"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-439f5abc829so1430031f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 04:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773229790; x=1773834590; darn=vger.kernel.org;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3gtZWJKK71/PDQsHfoE3LMJRE6oUsBVmqxC597OJfIU=;
+        b=ET6O/QAbDRbZxAf6vYWT/KmfSU0kQ6/f8dhdtZi9tXJU/XCCJqkM9iuA8z/pY/01mQ
+         pwJ13qH1IvNNhexgd8cmapOc7ZCIH3EaHoUf5aKzZVRLcl3uN4K4yrtNNNP5BGMNezNw
+         IfKFo4h2H7/MslhCb2oOLmToAg514m6mY9AUaVWMqdygE5hvklSuVEdGb7/qO4EM93NL
+         3whpakSDkNOidDapdaISrzm5Z1v4iA1k4KCZjkKZ4M/pGjxPhfISadnJRBEIM2I/bJ5r
+         B79trOhuYsNXK1edw5vSAUu5AxJYrfScdiuPD8RRBIs/3/D2fsA2DJOHxdDO7Mj80Oz8
+         yQ2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773229485; x=1773834285;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+7KfcYBgSfUu6P1T8nEVd1qT43qw4ZZIvyTvKKhSf7M=;
-        b=aDbX3UGF6LoRSEFIBXNEkqQRjwTZ3su7aqkzTlGlUNamZs/WATRGP2Sb/ie7eDKOk4
-         yb/NjD7jizvGLzvSaDOoxKoxdEaQF0UlKgAoitIVya93xYf3gbKerKZXX9uch/2J2YjN
-         1wFJbMj690+tbRH6H6va2drv6d2Yudpt6AGI3lb2n6CctIg4d8jSDLRfAkMbqUy3RWYJ
-         AeaT1XesK473hyps7B1a6bslFpJLOqpDn3avJ5/G69vOgPvfzZtxK7JUwKTbE715DIxK
-         F3JKijtd9PzxMIxjUrQpqGoV7dzNxNFkkpjO1uO7wr5aBmPb33aJUQ7N36krxeXlYgLS
-         K5cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVf3M9rZPH2OBGb8wDdCmuL3MJKpI6X77ujsqx47myssfzSJa/hqTkFlZ/Z0vc0ppRbqr5e1d3BhkzfvSSzpaQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi15UyTs/FdMLGt6NvLXe6phWXwwfekgoXEeDhmA2nBUCSTgb0
-	RpoyYcCRPjiV5gmoh/afFLbRNLENywwGudsqZCMIfEENVkulflhMaRlZHtrPShu3
-X-Gm-Gg: ATEYQzyw+xuhJHKtBuu0RrOqk7XDOHVQ15B8CRHpp3vWIIUqv76PQ/6YM+bFe2Xh25C
-	Fogwrlis26kDkJDcQcmxYrH553ZspI1XtQx9ukJ6/2P7pWGuk5jqqW7FfTjWXdwzSgv580SPigU
-	BJFZX2mVeIGu4Tsc6dWgrtuluBnRuxwZehdK0ZsrH7Uid+K84Me7rEsBJgmVeQ+Q2WdoPc9U6Ej
-	0NlMFLDj30RKXjrOEZrh6LwsDfvcQ9ZGFW+eAu6I+lqtXtcgzLlA4Dr7l5DDcRH7JIMwG84J86k
-	a2aodlwM/RlhZWr/U5lW3CVo05PT5wvagX0zhmxj6mUC7/lDapObV+4qx/vWctvgG1nWAtYYB9n
-	o3XnPSOgZsO/YCDD7u4Bj+8/j3sEOlj+GNaY137mUodcglpNR40kul8oaVHO5diedPpemFT+83d
-	yTIHzK+ITy8UD3y1e9DkXnM4+eSbWzqZMqzmQvAxJeVdWL+93E7KP+C652ZybgqLUf
-X-Received: by 2002:a05:6122:8c23:b0:566:963a:1648 with SMTP id 71dfb90a1353d-56b4754084bmr822288e0c.16.1773229485083;
-        Wed, 11 Mar 2026 04:44:45 -0700 (PDT)
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56b461c905fsm962617e0c.0.2026.03.11.04.44.44
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2026 04:44:44 -0700 (PDT)
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-56afafef7aeso5399811e0c.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 04:44:44 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXFiaGtg/UQxI1MBPlTpdfQR+NNW4nMyhSp1HvgmMGacmDFcs90SyKz5S4sNKHMqHGVaGoQ/ybZ120CQb7Rb1k=@vger.kernel.org
-X-Received: by 2002:a05:6102:2aca:b0:600:20:74f8 with SMTP id
- ada2fe7eead31-601deb937d1mr897288137.13.1773229483828; Wed, 11 Mar 2026
- 04:44:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773229790; x=1773834590;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3gtZWJKK71/PDQsHfoE3LMJRE6oUsBVmqxC597OJfIU=;
+        b=KFNRKi0DK80/5XcIMQy/lqH4MHtXO1wxR1oQNkLzs+l6n5LiA4cTF7fIbrPfM6bQP6
+         GnhYDvYG+1UtMUF0vd9sJLDFHbKjBLxX2WWH7Ij8hrzE41C9ZRZcl4K0PyjV46scVYzo
+         XcoFe3msSXMGOn7aLFit6uqvCfXbB1trJxDuUEcdIso7lmwHMlyoXZf05PcEV8jX0Yq8
+         FzCWrSOjGpe9+KzvlfCgAXAkLVkNV13PF6lxMBuHYWOG4nXPTky0AuzMMthmUsroca9R
+         p8huZ/9ezzVu4q6pCtnW7qSzZW/W3XChyxPCGFNIeqxTy/KUTsO1vBjunyl+mrRZirxz
+         +ySA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfJzqm6f7ZcTlgjKlmUccNW/2l42TwcRZRs6EDyJz5lEJFMRMQoRs5O5JjeUVuFUP3HbJUL7jf4Ks8nV70do8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIIJNZFoRqHyGC/8SztZfG4r+ByO+wrHGy/8JTp4lIM8PoF3KX
+	iHxUnJ5Rdg2A3dVsuMMv7ejIbwoc5bVIzDZAwvAsD3RY2iAJ4CNme4NDi1sAng==
+X-Gm-Gg: ATEYQzwVyNkYRulWUw6zKWGYlwNL20J8JULbh8smd+OHkNSpB5dzJKgT0C9xwrLS1kS
+	No1ie418YveYDqEfqiO+7D0Npkd4TUws5sXCmgrCoKspWYNSjwcUmH+br80nHBmPYVi3JzNk8/7
+	nAQzgwREKsrEvgn3Z5cVuG62wAt/C8YP2HDLyVNDpzrKGen1cDvTx/pZCtfXBiYSXjwC+3iKsuG
+	uUWtT32CX+rvUwMbV32Z2hkRpO3dOmEEZef6Zc40av2OkAN/r0u6PJe6aYwQonVdsOd2PhymORf
+	5MbupsE5SLfaUEd6rr/8QtYUfjx76Fl/EKSSzvWvC+8dDb7+mkrUOQ9U1swEX4byG+f7tN/HYLI
+	SRrvYHT4JOLFRdS0/ggF9a8OdcglSTEs0ibITF9JcIw4d2h/DJOAfqKU88jUWRgsL85WEAHzsMg
+	IzcsZ+f7QyvEpMG6DxzscOl7TQoQ==
+X-Received: by 2002:a05:6000:381:b0:439:b628:90e0 with SMTP id ffacd0b85a97d-439f822a51emr4501917f8f.28.1773229789792;
+        Wed, 11 Mar 2026 04:49:49 -0700 (PDT)
+Received: from imac ([88.97.103.74])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f818d5eesm7181960f8f.1.2026.03.11.04.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 04:49:49 -0700 (PDT)
+From: Donald Hunter <donald.hunter@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net,  netdev@vger.kernel.org,  edumazet@google.com,
+  pabeni@redhat.com,  andrew+netdev@lunn.ch,  horms@kernel.org,
+  shuah@kernel.org,  sdf@fomichev.me,  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 0/5] tools: ynl: policy query support
+In-Reply-To: <177319682153.3014711.5472638473199917370.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Mar 2026 11:30:59 +0000
+Message-ID: <m2jyviob64.fsf@gmail.com>
+References: <20260310005337.3594225-1-kuba@kernel.org>
+	<177319682153.3014711.5472638473199917370.git-patchwork-notify@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260223061726.82161-1-tzungbi@kernel.org> <20260223061726.82161-2-tzungbi@kernel.org>
-In-Reply-To: <20260223061726.82161-2-tzungbi@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 11 Mar 2026 12:44:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU0Xb=Moca5LUex+VxyHQa2-uYJgYf4hzHiSEjDCQQT=Q@mail.gmail.com>
-X-Gm-Features: AaiRm526CPdI3xsQIkHSFIKuUm3bmXqbgoDrLhuyzTn4LwLbPOLadWtxPY6y_FQ
-Message-ID: <CAMuHMdU0Xb=Moca5LUex+VxyHQa2-uYJgYf4hzHiSEjDCQQT=Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] gpio: Access `gpio_bus_type` in gpiochip_setup_dev()
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Bartosz Golaszewski <brgl@kernel.org>, Linus Walleij <linusw@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-Hi Tzung-Bi,
+patchwork-bot+netdevbpf@kernel.org writes:
 
-On Mon, 23 Feb 2026 at 07:17, Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> To make the intent clear, access `gpio_bus_type` only when it's ready in
-> gpiochip_setup_dev().
+> Hello:
 >
-> Reviewed-by: Linus Walleij <linusw@kernel.org>
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-
-Thanks for your patch, which is now commit cc11f4ef666fbca0 ("gpio:
-Access `gpio_bus_type` in gpiochip_setup_dev()") in gpio/gpio/for-next.
-
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -901,6 +901,8 @@ static int gpiochip_setup_dev(struct gpio_device *gdev)
->         struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
->         int ret;
+> This series was applied to netdev/net-next.git (main)
+> by Jakub Kicinski <kuba@kernel.org>:
 >
-> +       gdev->dev.bus = &gpio_bus_type;
-> +
->         /*
->          * If fwnode doesn't belong to another device, it's safe to clear its
->          * initialized flag.
-> @@ -1082,7 +1084,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->          * then make sure they get free():ed there.
->          */
->         gdev->dev.type = &gpio_dev_type;
-> -       gdev->dev.bus = &gpio_bus_type;
->         gdev->dev.parent = gc->parent;
->         device_set_node(&gdev->dev, gpiochip_choose_fwnode(gc));
->
+> On Mon,  9 Mar 2026 17:53:32 -0700 you wrote:
+>> Improve the Netlink policy support in YNL. This series grew out of
+>> improvements to policy checking, when writing selftests I realized
+>> that instead of doing all the policy parsing in the test we're
+>> better off making it part of YNL itself.
+>> 
+>> Patch 1 adds pad handling, apparently we never hit pad with commonly
+>> used families. nlctrl policy dumps use pad more frequently.
+>> Patch 2 is a trivial refactor.
+>> Patch 3 pays off some technical debt in terms of documentation.
+>> The YnlFamily class is growing in size and it's quite hard to
+>> find its members. So document it a little bit.
+>> Patch 4 is the main dish, the implementation of get_policy(op)
+>> in YnlFamily.
+>> Patch 5 plugs the new functionality into the CLI.
 
-Postponing this assignment does have an impact on early
-messages. E.g. on RBTX4927:
+I was mid review, looking at a couple of issues:
 
-    -gpio gpiochip0: Static allocation of GPIO base is deprecated, use
-dynamic allocation.
-    + gpiochip0: Static allocation of GPIO base is deprecated, use
-dynamic allocation.
+- It would be good to fail more gracefully for netlink-raw families
+- I get "RecursionError: maximum recursion depth exceeded" for nl80211
 
-Or with CONFIG_DEBUG_GPIO=y, e.g. on BeagleBone black:
+Happy to address these in a followup.
 
-    -gpio gpiochip0: (gpio-0-31): created GPIO range 0->7 ==>
-44e10800.pinmux PIN 0->7
-    -gpio gpiochip0: (gpio-0-31): created GPIO range 8->11 ==>
-44e10800.pinmux PIN 90->93
-    -gpio gpiochip0: (gpio-0-31): created GPIO range 12->27 ==>
-44e10800.pinmux PIN 12->27
-    -gpio gpiochip0: (gpio-0-31): created GPIO range 28->31 ==>
-44e10800.pinmux PIN 30->33
-    + gpiochip0: (gpio-0-31): created GPIO range 0->7 ==>
-44e10800.pinmux PIN 0->7
-    + gpiochip0: (gpio-0-31): created GPIO range 8->11 ==>
-44e10800.pinmux PIN 90->93
-    + gpiochip0: (gpio-0-31): created GPIO range 12->27 ==>
-44e10800.pinmux PIN 12->27
-    + gpiochip0: (gpio-0-31): created GPIO range 28->31 ==>
-44e10800.pinmux PIN 30->33
-     [...]
-
-Note the spaces at the beginning of the printed lines.
-Reverting the commit re-adds the "gpio" prefix.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Cheers,
+Donald.
