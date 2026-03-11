@@ -1,188 +1,213 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD74C32AAAB
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 20:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773259882; cv=pass; b=LvWaEDjtNya1hSg/wlOWAQWPfxzqGApI5LwSIr0CveUxbnXq516UOfBznlnH9sD77CykSjImuYjoirwPRMcA3bTJYysmCvJSbhiuKUTIRLLWDa1AA4QY9/MtVmT8KX3bsTAoZDWbAin5OTQq2acz81Os18wHXg+AXqYJbVdjaf4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773259882; c=relaxed/simple;
-	bh=JBLO345+S9XrXFNW2YoDPZsRBR3hdD4cmIiYnWNmANk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QGAKduX4d3/syVsFaAMsovAuCwDRfAmuwcRFyL68kRxM0eDJx//Uz5ifCEy3rK3drnJh3cseZc9aVIGT9Qx89Hw15MGSZX74FRnWD6H+EptsrlCW/wQacvd5oAcbg5vJx6YEBobiwuQMSIn7qO8bQqseiZFdcthYA9qRnAtQjOc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nt0+G4tw; arc=pass smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E840822126C
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 21:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773264686; cv=none; b=kbueYDEtcBsvH/AjpcntLyOVxu4wUqGIAgvII6F4ThCMPcn6RIKMLMixggiObHBT4kxoXGa4n97Bay6VqFfTGwCibpnthmkt3ctn8TXMKiG4T7YvBw62EKHcIzC49hSqqlsITHTUawqtGIDSrXLKNwg3xr3aYOuy1aiu+ZMwlYg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773264686; c=relaxed/simple;
+	bh=c83sDHtMZGgmWT39aIisxMkV8QZsjptaj9QxOf0Cuwg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=p6KmlzIoRHqTzFZ/gf/aM5pH4IHv7FExefgsyDb1flDDktJVMNG8RJtPul6XZyHa/oa86gIg5uNPFDEexIvdiZtVJzUMp8OUbb6Fiy4GkrHUDQJrQf3qAG9XfgVLYW6y/wZT0y3I6IF17Iiqay1VK7sKxbLjXmjXXLx7loPUfks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=RrwUEm0z; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nt0+G4tw"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439b6d9c981so218042f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 13:11:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773259879; cv=none;
-        d=google.com; s=arc-20240605;
-        b=h/vYn1eJIPMuctgkzj8j6X8bTcU/wwUym1NNCymNEm/5psE0kXDHwiaOIS87EHCU7E
-         8NJbc+cqytEi4q/lUUqJsBOwesrpXU326bVmoJbmOw9/QwWaH6jzZiCGtD1X8VgJutaC
-         8H8J8hh1IHyLAq7Lro/ZV8tAEcL4SHHfYJYJqKw4yM2bcIUyxZ6ZRlTOXEiczBRdCopN
-         eVQjR4jP6IDIhAwwVm4T7bb6BIvNX9Ag6+RNop+ogC75v6EZQWf461qADyexusyzfu6T
-         wS/ANYV8uS9f5Xm86HufgLlrC2yZsfuxHUB+MCj7Ow6XW8kkLi4U+gNQxN7HI7edsev8
-         NtqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EseT1hnQ62+LvGjpt3g7L4awuAgBAfDddMzVDpsX9lo=;
-        fh=aWuKK/st+N2RcMqCzCtJjCVaSU+fG5CCx7+5wBFdVFE=;
-        b=NJlo2migFD4hhaSsD4qJ7iXMk0NzkcrHLkwf630p/LPYwQzjCJ8oiKS+1rz1ZfIkmw
-         0SXtWa6Kf7S3aYx7u4UjdSDxmZOWA404hTnmUdjywdwKB/2I0kWElwqifqUQnjPhmYKW
-         FG/SuCVza/tOinKZ+0nsGTgMKPV2IbRqRVzYaXJrp7mmMCpZtPwkTwJ7ETHYzK2minsZ
-         3PdeqRf2sMEwwxS92u/+8KVHjVl7bpWvt2cLmMSSgORQm4SucEsAfZEHu2R0uDnOteAv
-         DbqUe7bY5bZsBsym5JRtNuk4qsD2GARlsgNapF58jZhEiiuKvy2lRHLTHXlv40gNYrmL
-         eY0Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RrwUEm0z"
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-4138136f02eso254961fac.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 14:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773259879; x=1773864679; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EseT1hnQ62+LvGjpt3g7L4awuAgBAfDddMzVDpsX9lo=;
-        b=Nt0+G4twsD60K87Qbd/OmOwsbaIoIcK9pHaarrOkAiDAbpD0Tkoox8ooSJ2usjPvg+
-         Pc2zy/QLm7T5+WShEg0IS5MIiKKBHhdcUCrPhOged6m1fyoUCY1KLGaAZRzzX3Lqn3pj
-         LPYWJ+MUEhI/4e/ICJVREzwYq6NH2NDMzH9Ls4Ac8ndiyTNKpPX8ojparDyPCJbMrTDQ
-         6l+uWcsUUJqrppr831fwxWrsjplKmXo9Sm1POlcIW9Kc6VcyhrB3T+jcmNp3wrQZHJLN
-         GSBqzwlgjGa/0DKobEzhwsPr3uhBnJf6Y7YmSLB1W+wpJn7rAMW8K/ZpRhfyg4RU+pD8
-         rY8g==
+        d=cloudflare.com; s=google09082023; t=1773264683; x=1773869483; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lT7OY2GNLRRTQ6yGPrWNzwOwj8gZsZvwkTPkyqlRx3M=;
+        b=RrwUEm0zlX76Y4puZsOOpjHCew5NbqPdFe6kLaxHJ9mJrehQi97DVp66KjKq5+fqIr
+         AESzaBKIjhNLiqMVd0vwjbY7Fz4/zZJJ/x0ctTjr5mfDoleWslEQH0SyDJoRNzzGLoMC
+         48Gml41tTC2svXh0BgoWOQjA9elqZsco6jasZSrNISnt3eYtT59DyXbifIOF2gYtfa5p
+         z0PoKVjnD20C5cm/NeTWqAXY1oG5P9Vy8333QD15tLbBBQsrfSxxCu2+jdAhxUG9kOLY
+         kRiNO5SV979EliJWMRrCGndV7GFpI611XIV1vvRar3/tUloR5i4mkh4166SfPpCRbvH/
+         bpwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773259879; x=1773864679;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EseT1hnQ62+LvGjpt3g7L4awuAgBAfDddMzVDpsX9lo=;
-        b=YaAHd5nH2PfZpZcOAc/xVQRT39oBHKBAfEzwGqBipuOhG9jxhGgTBtQ36YBQVEK5rK
-         wkqYG4dWgzZfoFmZLg7Kjgcpdn9qHIDe2GoFXnDGvEgY8iVIF/dKVDeS4tp00g6Z+4Vu
-         ntwopafWcKsl9ZIeCjqCuFf7g7hmGWbjJKRa/1fFq6I1M1EPmOFlI8Fnn2gyjlOJwa/5
-         rIzo1qrX2Fjv+5jSPLu6izKFw8TegPbs5afz5xGBrBMEnNdfs5XiAXvTprbynAJdcbiv
-         rzqK2BEUomW4i5sErbW9gxK8Pdu28OOKzQg7LUDGc1vF86byL5F8rIr1fhyIcU8o/3WM
-         rBew==
-X-Forwarded-Encrypted: i=1; AJvYcCVcK+MK7fdxLbGORiTnIZSxjObziUGSzrLG887CG2jIhWa9iTbdy0bRB3dU61vtDGWK2zUdsU27rGAkJgHqjy8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBfovmbCBL75Xf/e01ntmauXwd6VtBzeUDxES3ykvHZ/UxK0Ir
-	KuskTZ4eUl1Q4tZrleP1dkm+LCPk9pBwFhQzhbH46UAULxPigzQRK8BArO4zG1jMK6mrW/UQy+R
-	U8a+nqToQ6Dcm6+wvKaNuWrk8uks0FI0=
-X-Gm-Gg: ATEYQzzIkGe6KdbNtSXhOTifCL5TYv8Ve6jbolS7ph5zj7ILOUBrDbfe8oWDgvmLpVN
-	f/SS2/E0mla6LrkUCIu3OuogqSpi10nG3p3KwIm0qipKjai8VTTPp2Xf1uarZtpSw96az+Icfwk
-	0P/M7QakK19sA3j4akjfUsA2vFNC9L+PcTX8JBAQT+bbvEp25s0d5w+yIJSp7e0hpfYj45y4+Jx
-	DD7xxPet6ePwp7ZaU21n1yAuXloF/WaKlVzpRowiPwjxA1oBXo44hO+WEp0Bk5cdPaC6zLyQ16e
-	oNOwhNCVvYamHKmfJd/yWhev6C072WMofzDjZAi5rNpE6n+DO24yUoRc+pmIoLCGMdCRODawWW3
-	gRY/+6p2MWkBv6q/owFKc2fOpjw==
-X-Received: by 2002:a05:6000:1886:b0:436:1597:7c7c with SMTP id
- ffacd0b85a97d-439fdf64e97mr1872250f8f.13.1773259878935; Wed, 11 Mar 2026
- 13:11:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773264683; x=1773869483;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lT7OY2GNLRRTQ6yGPrWNzwOwj8gZsZvwkTPkyqlRx3M=;
+        b=YIWCBsTLfvL/bgvlay3NfiyEYMLOofw4VHV5iXEHDzkAHxVlBS4A5ze/kIhRq4U6dT
+         u9X3ZjYD4LlkFblVzEZLqE/fRj6J94kEpfCgPA/sP51TQu77eF+7PXpwu8QmOvw1p7bs
+         N0WzUgcH/BhbUb4GqPfg91U2raDgWDwAcrq8DvToTI71ZkfN9hKy1SY0YgWoNpeYSpkK
+         wZe+3bNexiG10/C0K2+Ehu9SyzEFzPwUlhLphqHToQHMB5bxM/aCCJXxb+TAca0haMSp
+         QrCUbVc/7ALhzzHcetHKN/fadosk9gQ8aZmcmtLEBNuG94sWVfCJBicG2mRJuiFbEyHt
+         LAWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV3GMwcIYQolXuSqTJDRxWpSFIID2GYu0uJunPGnI86NTPbjIEQtyqnTYhZENA9SoHmWAiOTUOwe8gHY7dXAUM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIwAhmZZFqIEXAtixfY9hM1fdCtU/qsXsKvwvOjZ/h6pWuPSG8
+	j7RMgCkT/WZhZz37mGhdjqxIBzhP5RtKB8w+jEFUH/YUhkMogSAGB5Lu35p3YQ+TXdFglb++Dlp
+	sJgq27kXkuA==
+X-Gm-Gg: ATEYQzzYwnEBNCC7aX7nCnNVlrL4FnNeWmwdtOiD66/EMQoC6V9/aOW76iGgP2d3Ih9
+	XumZtT+nSE0gPiziVE4VBT+Mmn6uQpjnnSeg61IC8BJeJgO+EZ27TXsqGlblz9jcXZJpbLsQ0lf
+	RTwnddlURHqnAEic49aOU3XfyM/XvP9IXWwd+efrDolRlepnj5ooPjIWEacFn7BfJiVdASgc3j+
+	/Z2BRkPX0U41Cjox1aJUMbTF6BIwGxpZDR6oPISKeECaJkiG6bs07n6YI/W3rIr69LZhuaSxnhS
+	kc21SZxiFySVwdk8LS4mtANUssX+5rJjcaALzx44t54D/AEexHhMJ/x+ouYEWtuy4D6r5VvlYPc
+	SRpizIW2N75gPI+WFqjMwZT52sI4UMLBbrN87Cs4jTs6QsZomUf3RpKndumbzH6223P6SAz/JKq
+	XdeEbXHGE=
+X-Received: by 2002:a05:6871:c8e8:b0:417:4d3:1751 with SMTP id 586e51a60fabf-4177cbc0afemr2554702fac.51.1773264682724;
+        Wed, 11 Mar 2026 14:31:22 -0700 (PDT)
+Received: from [127.0.1.1] ([2a09:bac5:947d:4e6::7d:82])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e1fb90csm3530413fac.4.2026.03.11.14.31.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 14:31:22 -0700 (PDT)
+From: Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF LSM
+ programs via BPF kfuncs
+Date: Wed, 11 Mar 2026 16:31:16 -0500
+Message-Id: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260303131453.328674-1-hbathini@linux.ibm.com>
- <CAADnVQKuARvSirPjnTcSifLPunCiKC4Nenq0Mr61GpzbW5WxWg@mail.gmail.com>
- <bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com> <CAADnVQ+4N4WWLxan_qibZ7HmONJyMZaP=RF+a9tMSPoz=0LqkQ@mail.gmail.com>
- <09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
-In-Reply-To: <09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 11 Mar 2026 13:11:07 -0700
-X-Gm-Features: AaiRm52MBkV8zoxY8Kd4D7gtJGs6xSsnBy7_9iwlYcaSkrmO1185Sd5jCetVIec
-Message-ID: <CAADnVQKXN9dABYf=T+rfgP2ngDRYC8+-rS8G-881EiEXdVQW-Q@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: improve test coverage for kfunc call
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: Eduard <eddyz87@gmail.com>, Vineet Gupta <vineet.gupta@linux.dev>, 
-	"Jose E. Marchesi" <jemarch@gnu.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACTfsWkC/x2MQQqDMBAAvxL23IVoqw1eCz6gV/GwNmvdg1GyK
+ oL498YeB2bmAOUorFCZAyJvojKFBNnNwGeg8GUUnxhym5c2swV2c4+0elk8KgePI6tS0h7k3N2
+ WT6LOQarnyL3s/3MD7/plrjDwvkB7nj+1WrsudwAAAA==
+X-Change-ID: 20260105-bpf-auditd-send-message-4a883067aab8
+To: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+ "Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ audit@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kernel-team@cloudflare.com, Frederick Lawler <fred@cloudflare.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4248; i=fred@cloudflare.com;
+ h=from:subject:message-id; bh=c83sDHtMZGgmWT39aIisxMkV8QZsjptaj9QxOf0Cuwg=;
+ b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpsd8n9jExOwY7o7vGO2DRL/PAuhexDPVJt7YTU
+ J9BUtH+/MCJAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCabHfJwAKCRCrJbR2A5LT
+ bSiQEACPtWTnlmslusEnuOQDnGDS4N1FtR7aFG6hDI7yVEwaImE6tXGY+mSrd1YI1Zx+ZOhgdff
+ 5GWPT8Y2SdW9MCXBYuKAueFZWHxjvvYuKimRdPhmZ1IeIoNVsUEgY6+V3o1md+ZCF8v04xyjFAV
+ kQdPCLhT2v0AgnDm1pIfVg/RqqreoZU6f4brM2tfC0S2dHy8HPP455izuXCzz4Zp8dgbwifdvSs
+ 0f4v4E4KqMbDISxrrgKjEUiZoyaUOoP5LAtSiW7asJQp7+2qBtFRuQnSkXlkQGWSJf3lckuzFlc
+ Ifd1x7TvTyT+98QJ33TdXN5JFeI5TKtO8UUG5PjikHSJ5MvGk+a/UWj0QlJQp+7yYUDhxfTIjZp
+ iKdsmll/RLcBA3RvNLN40ttiowey43rAvkQEG7DfcUgRwyPIIwH5Lf+/u5XndHACqcXtSqYXFGU
+ 61gMi3RKoQJxP/BXomczV/l5dz7r0G6NwOPE7XBG1Iq7I9wG24weoA5S1gnAiR2queukCYJgJHv
+ eQ0co8fwRCrpcZYd7IqaKVjTxRJJH9r9AiiyBgLOxRmBUX4G9h09WE3xXYQKlsyhQ5NsIPxUt+J
+ 8Yryhoc2ZQasaMZh/uA7CyVK8ZAcHS8pa2VPEaTLLpPQjAEyBF8VBocT55GvBVcZ0ayioCL8B/s
+ MloN+OPwk/6rXpg==
+X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
+ fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
 
-On Wed, Mar 11, 2026 at 11:03=E2=80=AFAM Hari Bathini <hbathini@linux.ibm.c=
-om> wrote:
->
->
->
-> On 11/03/26 9:32 pm, Alexei Starovoitov wrote:
-> > On Wed, Mar 11, 2026 at 8:10=E2=80=AFAM Hari Bathini <hbathini@linux.ib=
-m.com> wrote:
-> >>
-> >>>
-> >>>> +
-> >>>> +       /* Check zero-extension */
-> >>>> +       if (val !=3D (unsigned long)a)
-> >>>> +               return 1;
-> >>>> +       /* Check no sign-extension */
-> >>>> +       if (val < 0)
-> >>>> +               return 2;
-> >>>> +
-> >>>> +       val =3D b;
-> >>>> +       if (val !=3D (unsigned long)b)
-> >>>> +               return 3;
-> >>>> +       if (val < 0)
-> >>>> +               return 4;
-> >>>> +
-> >>>> +       val =3D c;
-> >>>> +       if (val !=3D (unsigned long)c)
-> >>>> +               return 5;
-> >>>> +       if (val < 0)
-> >>>> +               return 6;
-> >>>> +
-> >>>> +       return 0;
-> >>>> +}
-> >>>
-> >>> Overall this looks very useful.
-> >>> I would expand with another test where a,b,c are s8,s16,s32.
-> >>
-> >> Slightly different approach but kfunc_call_test4/bpf_kfunc_call_test4
-> >> cover signed arguments already?
-> >
-> > Ahh. Then may be tweak it to adopt similar fine grained
-> > error reporting as your bpf_kfunc_call_test5()
->
-> I Prefer this.
->
-> Does the below change to bpf_kfunc_call_test4 look fine:
->
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 48dcaf93bb9f..6237c2222633 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -760,8 +760,30 @@ __bpf_kfunc struct sock
-> *bpf_kfunc_call_test3(struct sock *sk)
->
->   __bpf_kfunc long noinline bpf_kfunc_call_test4(signed char a, short b,
-> int c, long d)
->   {
-> +       /*
-> +        * Make val as volatile to avoid compiler optimizations.
-> +        * Verify that negative signed values remain negative after
-> +        * sign-extension (JIT must sign-extend, not zero-extend).
-> +        */
-> +       volatile long val;
-> +
-> +       /* val will be positive, if JIT does zero-extension instead of
-> sign-extension */
-> +       val =3D a;
-> +       if (val >=3D 0)
-> +               return 1;
-> +
-> +       val =3D b;
-> +       if (val >=3D 0)
-> +               return 2;
-> +
-> +       val =3D c;
-> +       if (val >=3D 0)
-> +               return 3;
-> +
->          /* Provoke the compiler to assume that the caller has
-> sign-extended a,
->           * b and c on platforms where this is required (e.g. s390x).
+The motivation behind the change is to give BPF LSM developers the
+ability to report accesses via the audit subsystem much like how LSMs
+operate today.
 
-While at it reformat the comment to proper kernel style.
+Series:
 
-the rest lgtm.
+Patch 1: Introduces bpf_audit_*() kfuncs
+Patch 2: Enables bpf_audit_*() kfuns
+Patch 3: Prepares audit helpers used for testing
+Patch 4: Adds self tests
+
+Documentation will be added when this becomes a versioned series.
+
+Key features:
+
+1. Audit logs include type=AUDIT_BPF_LSM_ACCESS, BPF program ID, and comm
+that triggered the hook by default
+
+We wanted audit log consumers to be able to track who and what created
+the entry. prog-id=%d is already used for BPF LOAD/UNLOAD logs, thus
+is reused here for this distinction. Though, it may be better to use
+the tag instead to capture which _specific_ version of the program
+made the log, since prog-id can be reused.
+
+2. Leverages BPF KF_AQUIRE/KF_RELEASE semantics to force use of
+  bpf_audit_log_end().
+
+One side effect of this decision is that the BPF documentation states
+that these flags allow the pointer to struct bpf_audit_context to be 
+stored in a map, and then exchanged through bpf_kptr_xchg(). However,
+there's prior work with net/netfilter/nf_conntrack_bpf.c such that the
+struct is not exposed as a kptr to support that functionality nor is
+that supplying a dtor function. The verifier will not allow this use case
+due to not exposing the __kptr. Ideally, we don't want the pointer to
+be exchanged anyway because the reporting program can become ambiguous.
+I am sure there are other edge cases WRT to keeping the audit buffer in a
+strange state too that I cannot think of at this moment.
+
+3. All bpf_audit_log_*() functions are destructive
+
+The audit subsystem allows for AUDIT_FAIL_PANIC to be set when the
+subsystem can detect that missing events. Further, some call paths may
+invoke a BUG_ON(). Therefore all the functions are marked destructive.
+
+4. Functions are callable once per bpf_audit_context
+
+The rationale for this was to prevent abuse. Logs with repeated fields
+are not helpful, and may not be handled by user space audit coherently.
+
+This is in the same vein as not providing a audit_format() wrapper.
+
+Similarly, some functions such as bpf_audit_log_path() and
+bpf_audit_log_file() report the same information, thus can be
+interchangeable in use.
+
+5. API wraps security/lsm_audit.c
+
+lsm_audit.c functions are multiplexed and not handled by BPF verifier
+very well, thus the wrapped functions are isolated to their sole
+purpose for use within hooks.
+
+Key considerations:
+
+1. Audit field ordering
+
+AFAIK, user space audit is particular about what fields are
+present and their order. This patch series does not address ordering.
+
+My assumption is that the first three fields: type, prog-id, pid, comm
+are well known, and user space can make an assumption that other
+fields after those can appear in any order.
+
+If that is not acceptable, I would propose that we leverage the struct
+common_audit_data type order to be the order--much like how the type is
+used for log_once() functionality.
+
+I am open to other ideas.
+
+Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+---
+Frederick Lawler (4):
+      audit: Implement bpf_audit_log_*() wrappers
+      audit/security: Enable audit BPF kfuncs
+      selftests/bpf: Add audit helpers for BPF tests
+      selftests/bpf: Add lsm_audit_kfuncs tests
+
+ include/linux/lsm_audit.h                          |   1 +
+ include/uapi/linux/audit.h                         |   1 +
+ security/Makefile                                  |   2 +
+ security/lsm_audit_kfuncs.c                        | 306 +++++++++++
+ tools/testing/selftests/bpf/Makefile               |   3 +-
+ tools/testing/selftests/bpf/audit_helpers.c        | 281 ++++++++++
+ tools/testing/selftests/bpf/audit_helpers.h        |  55 ++
+ .../selftests/bpf/prog_tests/lsm_audit_kfuncs.c    | 598 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_lsm_audit_kfuncs.c    | 263 +++++++++
+ 9 files changed, 1509 insertions(+), 1 deletion(-)
+---
+base-commit: ca0f39a369c5f927c3d004e63a5a778b08a9df94
+change-id: 20260105-bpf-auditd-send-message-4a883067aab8
+
+Best regards,
+-- 
+Frederick Lawler <fred@cloudflare.com>
+
