@@ -1,161 +1,308 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9803E9283;
-	Wed, 11 Mar 2026 18:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A0E2F1FED;
+	Wed, 11 Mar 2026 18:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773253664; cv=none; b=LCpvAzQj1y9XtYytlnF5v3/ioqbJnrSR7VMZ70g8iNW91u9RPWlTiXXnpaa/Jc0AEpTYhvXMY/JE684sWGToSGQTVsUbeD3rDExfWBhj8TbnN9wNPOysYQ1BULL2cUHxTTV9HRQ2Xz4XBSWepF1ipwspH5t4dKn+BnWaHYHtozw=
+	t=1773254162; cv=none; b=G3wL/wMPZ5isAt+g0It+aU/mlXysvWWMzQ9W8hVeRfKiUGkOtis9puOZ7ZMQ3hDtkHDnSpmZy4aalRqb2pD4xBunbdKSg1a+GWS8K5xeHNpqKKC4q0FZDnSOmbJMpQUC4U6LV3N1UdwezjH/iMV7cLeggXlYutw9Ve/c2AhBJTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773253664; c=relaxed/simple;
-	bh=+4zE8MzfCw3j/mayliXaBGpAQSD5BmOr8BCx3h2GBpE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ro9QJlo8acXYfxmnpyk3vCkkfzkIBOws/uCwgfC5qUl6xO8y6/OWnYZa0AkbsL2WkFdSg1+32gYzLCFK2vZrGcR2uF5DDsJ21yS4eXoxPW/rwZSCwWsciyDzfooNFfl1ThgLyk6vlkiqeVDpG81bclwPD5D/VkEh83rUcdVHOjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FQLpPE65; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773254162; c=relaxed/simple;
+	bh=Lab18BB3orM/nud1CgsXXO+rESiy+sNlGvfoXi3Mvvg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Gqqr8isjdXOMQ3b7PKmsWz4mW7Epa1G3c4PmUDAiNk6zbVAfuR5UURvFnNfXMEEcemauTQJAMWbcjwy2K25ChaY9EPKzrWrVL4f0nYEnE7YUkwYCzshRwrsr4uzXDrnWhUJZf6NIh0DzvRGeMykiGZxvdOLO+43RghjThWxO9JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uuuiGpmx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FQLpPE65"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C22C19421;
-	Wed, 11 Mar 2026 18:27:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uuuiGpmx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DEC2C2BCB0;
+	Wed, 11 Mar 2026 18:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773253663;
-	bh=+4zE8MzfCw3j/mayliXaBGpAQSD5BmOr8BCx3h2GBpE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FQLpPE655qYMd4FZjdglEG1HmDxGiy24OSFXjHtjaQK74Xc2BTbIUVvWVloFE7XU/
-	 0K5p8ZXS3vA6qYAvWjrIZjBj5lDo2LuHscyeVt6t4nb7xeaa0IMsWJzY+TBA8R2W5t
-	 t9swbCAjPOJyIhD+i5NWLL/oOH1F2t7OANqtVsf2M8x3tC70/n2dVHQCkIf/a5oRZ5
-	 miEwFhm1F2A14hCnL3GiNLzqU8sHVQp0egReEZxt/vk9OZEtBBxNwAEKm/w96NtwKs
-	 WAv4UbL5LTBxaIq8DCMSVwqsdeeq+qSpdU3qydGo4hJogF013QfGU7t5QZX+MX7nQF
-	 kmno4WEf2SP5w==
-Message-ID: <334053df-9824-4bfe-b37c-8711d0a5a9bd@kernel.org>
-Date: Wed, 11 Mar 2026 19:27:34 +0100
+	s=k20201202; t=1773254161;
+	bh=Lab18BB3orM/nud1CgsXXO+rESiy+sNlGvfoXi3Mvvg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=uuuiGpmxS7BPZc6lu67IfUDvZv1exAeM6z2bbeiKZtt7SKQPlS/qzRA2qlXphwqY7
+	 48qmYJD9W49N9PRr0D/FPUzMYGp41eZPwIFx11JlwhGZFWmKtGPqcTQ5h5LISrYla0
+	 ewngPBJy2HoqIlLRVw8HOCg0WLb9I7QagKLYdVOMw4worh9vfOhDa4ZecoUAzgwUjo
+	 8Pseio+pjqizc40Sj89RB9qMd3k6toHQef2V57fW0Git3vYdYEbGU3QJauov32yXzp
+	 kZRgmEiUshkSN5BsN9DoLgCBX69WojWDosYKL4DnE2rbTaSvEF0QM5mMlRg9X1NPvn
+	 Ei0+2+Bwp+4oA==
+Date: Wed, 11 Mar 2026 11:35:50 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Donald Hunter <donald.hunter@gmail.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, sdf@fomichev.me, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 0/5] tools: ynl: policy query support
+Message-ID: <20260311113550.6b493008@kernel.org>
+In-Reply-To: <m2jyviob64.fsf@gmail.com>
+References: <20260310005337.3594225-1-kuba@kernel.org>
+	<177319682153.3014711.5472638473199917370.git-patchwork-notify@kernel.org>
+	<m2jyviob64.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v3 2/6] mptcp: keep rcv_mwnd_seq in sync with
- subflow rcv_wnd
-Content-Language: fr
-To: Simon Baatz <gmbnomis@gmail.com>
-Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- mptcp@lists.linux.dev, Eric Dumazet <edumazet@google.com>,
- Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- David Ahern <dsahern@kernel.org>, Jon Maloy <jmaloy@redhat.com>,
- Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com,
- Shuah Khan <shuah@kernel.org>, Stefano Brivio <sbrivio@redhat.com>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>
-References: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com>
- <20260309-tcp_rfc7323_retract_wnd_rfc-v3-2-4c7f96b1ec69@gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-2-4c7f96b1ec69@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Hi Simon,
-
-On 09/03/2026 09:02, Simon Baatz via B4 Relay wrote:
-> From: Simon Baatz <gmbnomis@gmail.com>
+On Wed, 11 Mar 2026 11:30:59 +0000 Donald Hunter wrote:
+> > On Mon,  9 Mar 2026 17:53:32 -0700 you wrote:  
+> >> Improve the Netlink policy support in YNL. This series grew out of
+> >> improvements to policy checking, when writing selftests I realized
+> >> that instead of doing all the policy parsing in the test we're
+> >> better off making it part of YNL itself.
+> >> 
+> >> Patch 1 adds pad handling, apparently we never hit pad with commonly
+> >> used families. nlctrl policy dumps use pad more frequently.
+> >> Patch 2 is a trivial refactor.
+> >> Patch 3 pays off some technical debt in terms of documentation.
+> >> The YnlFamily class is growing in size and it's quite hard to
+> >> find its members. So document it a little bit.
+> >> Patch 4 is the main dish, the implementation of get_policy(op)
+> >> in YnlFamily.
+> >> Patch 5 plugs the new functionality into the CLI.  
 > 
-> MPTCP shares a receive window across subflows and applies it at the
-> subflow level by adjusting each subflow's rcv_wnd when needed.  With
-> the new TCP tracking of the maximum advertised window sequence,
-> rcv_mwnd_seq must stay consistent with these subflow-level rcv_wnd
-> adjustments.
+> I was mid review
 
-Thank you for these modifications!
+Sorry about that! :( I didn't see any reply to the one liner for a few
+days I thought you may be AFK :)
 
-> Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
-> ---
->  net/mptcp/options.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> looking at a couple of issues:
 > 
-> diff --git a/net/mptcp/options.c b/net/mptcp/options.c
-> index 43df4293f58bfbd8a8df6bf24b9f15e0f9e238f6..8a1c5698983cff3082d68290626dd8f1e044527f 100644
-> --- a/net/mptcp/options.c
-> +++ b/net/mptcp/options.c
+> - It would be good to fail more gracefully for netlink-raw families
 
-(...)
+This one I saw, but I figured the message that gets printed is...
+reasonable. For low level functionality like policies we should 
+assume user is relatively advanced? The policies are spotty
+even in genetlink, a lot of families don't link them up properly :(
+So explaining all of this is a bit of a rabbit hole.
 
-> @@ -1338,8 +1339,9 @@ static void mptcp_set_rwin(struct tcp_sock *tp, struct tcphdr *th)
->  		 */
->  		rcv_wnd_new = rcv_wnd_old;
->  		win = rcv_wnd_old - ack_seq;
-> -		tp->rcv_wnd = min_t(u64, win, U32_MAX);
-> -		new_win = tp->rcv_wnd;
-> +		new_win = min_t(u64, win, U32_MAX);
-> +		tp->rcv_wnd = new_win;
+> - I get "RecursionError: maximum recursion depth exceeded" for nl80211
 
-Out of curiosity, why did you change the two lines above?
-(even if it makes sense, the diff is a bit confusing, and the commit
-message doesn't mention this :) )
+:o Missed this one completely! My feeling is that we should lean into
+the NlPolicy class more, and avoid rendering the full structure upfront.
+WDYT about the following?
 
-> +		tcp_update_max_rcv_wnd_seq(tp);
-
-
-This patch adding this new helper each time rcv_wnd is modified looks
-good to me:
-
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-
-
-Note: just in case a new version is needed, checkpatch reported an error
-in patch 4/6 because of a trailing whitespace (+ No space is necessary
-after a cast in patch 1/6), see:
-
-  https://github.com/multipath-tcp/mptcp_net-next/actions/runs/22844479818
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+diff --git a/tools/net/ynl/pyynl/cli.py b/tools/net/ynl/pyynl/cli.py
+index fc9e84754e4b..ff0cfbdc82e4 100755
+--- a/tools/net/ynl/pyynl/cli.py
++++ b/tools/net/ynl/pyynl/cli.py
+@@ -16,7 +16,8 @@ import textwrap
+ 
+ # pylint: disable=no-name-in-module,wrong-import-position
+ sys.path.append(pathlib.Path(__file__).resolve().parent.as_posix())
+-from lib import YnlFamily, Netlink, NlError, SpecFamily, SpecException, YnlException
++from lib import SpecFamily, SpecException
++from lib import YnlFamily, Netlink, NlError, NlPolicy, YnlException
+ 
+ SYS_SCHEMA_DIR='/usr/share/ynl'
+ RELATIVE_SCHEMA_DIR='../../../../Documentation/netlink'
+@@ -79,6 +80,8 @@ RELATIVE_SCHEMA_DIR='../../../../Documentation/netlink'
+             return bytes.hex(o)
+         if isinstance(o, set):
+             return sorted(o)
++        if isinstance(o, NlPolicy):
++            return o.to_dict()
+         return json.JSONEncoder.default(self, o)
+ 
+ 
+@@ -313,11 +316,11 @@ RELATIVE_SCHEMA_DIR='../../../../Documentation/netlink'
+     if args.policy:
+         if args.do:
+             pol = ynl.get_policy(args.do, 'do')
+-            output(pol.attrs if pol else None)
++            output(pol if pol else None)
+             args.do = None
+         if args.dump:
+             pol = ynl.get_policy(args.dump, 'dump')
+-            output(pol.attrs if pol else None)
++            output(pol if pol else None)
+             args.dump = None
+ 
+     if args.ntf:
+diff --git a/tools/net/ynl/pyynl/lib/ynl.py b/tools/net/ynl/pyynl/lib/ynl.py
+index 0eedeee465d8..4411f1902ae4 100644
+--- a/tools/net/ynl/pyynl/lib/ynl.py
++++ b/tools/net/ynl/pyynl/lib/ynl.py
+@@ -143,32 +143,113 @@ from .nlspec import SpecFamily
+     pass
+ 
+ 
+-# pylint: disable=too-few-public-methods
+ class NlPolicy:
+     """Kernel policy for one mode (do or dump) of one operation.
+ 
+-    Returned by YnlFamily.get_policy(). Contains a dict of attributes
+-    the kernel accepts, with their validation constraints.
++    Returned by YnlFamily.get_policy(). Attributes of the policy
++    are accessible as attributes of the object. Nested policies
++    can be accessed indexing the object like a dictionary::
+ 
+-    Attributes:
+-        attrs: dict mapping attribute names to policy dicts, e.g.
+-        page-pool-stats-get do policy::
++        pol = ynl.get_policy('page-pool-stats-get', 'do')
++        pol['info'].type            # 'nested'
++        pol['info']['id'].type      # 'uint'
++        pol['info']['id'].min_value # 1
+ 
+-            {
+-                'info': {'type': 'nested', 'policy': {
+-                    'id':      {'type': 'uint', 'min-value': 1,
+-                                'max-value': 4294967295},
+-                    'ifindex': {'type': 'u32', 'min-value': 1,
+-                                'max-value': 2147483647},
+-                }},
+-            }
++    Each policy entry always has a 'type' attribute (e.g. u32, string,
++    nested). Optional attributes depending on the 'type': min-value,
++    max-value, min-length, max-length, mask.
+ 
+-        Each policy dict always contains 'type' (e.g. u32, string,
+-        nested). Optional keys: min-value, max-value, min-length,
+-        max-length, mask, policy.
++    Policies can form infinite nesting loops. These loops are trimmed
++    when policy is converted to a dict with pol.to_dict().
+     """
+-    def __init__(self, attrs):
+-        self.attrs = attrs
++    def __init__(self, ynl, policy_idx, policy_table, attr_set, props=None):
++        self._policy_idx = policy_idx
++        self._policy_table = policy_table
++        self._ynl = ynl
++        self._props = props or {}
++        self._entries = {}
++        if policy_idx is not None and policy_idx in policy_table:
++            for attr_id, decoded in policy_table[policy_idx].items():
++                if attr_set and attr_id in attr_set.attrs_by_val:
++                    spec = attr_set.attrs_by_val[attr_id]
++                    name = spec['name']
++                else:
++                    spec = None
++                    name = f'attr-{attr_id}'
++                self._entries[name] = (spec, decoded)
++
++    def __getitem__(self, name):
++        """Descend into a nested policy by attribute name."""
++        spec, decoded = self._entries[name]
++        props = dict(decoded)
++        child_idx = None
++        child_set = None
++        if 'policy-idx' in props:
++            child_idx = props.pop('policy-idx')
++            if spec and 'nested-attributes' in spec.yaml:
++                child_set = self._ynl.attr_sets[spec.yaml['nested-attributes']]
++        return NlPolicy(self._ynl, child_idx, self._policy_table,
++                        child_set, props)
++
++    def __getattr__(self, name):
++        """Access this policy entry's own properties (type, min-value, etc.).
++
++        Underscores in the name are converted to dashes, so that
++        pol.min_value looks up "min-value".
++        """
++        key = name.replace('_', '-')
++        try:
++            # Hack for level-0 which we still want to have .type but we don't
++            # want type to pointlessly show up in the dict / JSON form.
++            if not self._props and name == "type":
++                return "nested"
++            return self._props[key]
++        except KeyError:
++            raise AttributeError(name)
++
++    def get(self, name, default=None):
++        """Look up a child policy entry by attribute name, with a default."""
++        try:
++            return self[name]
++        except KeyError:
++            return default
++
++    def __contains__(self, name):
++        return name in self._entries
++
++    def __len__(self):
++        return len(self._entries)
++
++    def __iter__(self):
++        return iter(self._entries)
++
++    def keys(self):
++        """Return attribute names accepted by this policy."""
++        return self._entries.keys()
++
++    def to_dict(self, seen=None):
++        """Convert to a plain dict, suitable for JSON serialization.
++
++        Nested NlPolicy objects are expanded recursively. Cyclic
++        references are trimmed (resolved to just {"type": "nested"}).
++        """
++        if seen is None:
++            seen = set()
++        result = dict(self._props)
++        if self._policy_idx is not None:
++            if self._policy_idx not in seen:
++                seen = seen | {self._policy_idx}
++                children = {}
++                for name in self:
++                    children[name] = self[name].to_dict(seen)
++                if self._props:
++                    result['policy'] = children
++                else:
++                    result = children
++        return result
++
++    def __repr__(self):
++        return repr(self.to_dict())
+ 
+ 
+ class NlAttr:
+@@ -1308,28 +1389,6 @@ from .nlspec import SpecFamily
+     def do_multi(self, ops):
+         return self._ops(ops)
+ 
+-    def _resolve_policy(self, policy_idx, policy_table, attr_set):
+-        attrs = {}
+-        if policy_idx not in policy_table:
+-            return attrs
+-        for attr_id, decoded in policy_table[policy_idx].items():
+-            if attr_set and attr_id in attr_set.attrs_by_val:
+-                spec = attr_set.attrs_by_val[attr_id]
+-                name = spec['name']
+-            else:
+-                spec = None
+-                name = f'attr-{attr_id}'
+-            if 'policy-idx' in decoded:
+-                sub_set = None
+-                if spec and 'nested-attributes' in spec.yaml:
+-                    sub_set = self.attr_sets[spec.yaml['nested-attributes']]
+-                nested = self._resolve_policy(decoded['policy-idx'],
+-                                              policy_table, sub_set)
+-                del decoded['policy-idx']
+-                decoded['policy'] = nested
+-            attrs[name] = decoded
+-        return attrs
+-
+     def get_policy(self, op_name, mode):
+         """Query running kernel for the Netlink policy of an operation.
+ 
+@@ -1341,8 +1400,8 @@ from .nlspec import SpecFamily
+             mode: 'do' or 'dump'
+ 
+         Returns:
+-            NlPolicy with an attrs dict mapping attribute names to
+-            their policy properties (type, min/max, nested, etc.),
++            NlPolicy acting as a read-only dict mapping attribute names
++            to their policy properties (type, min/max, nested, etc.),
+             or None if the operation has no policy for the given mode.
+             Empty policy usually implies that the operation rejects
+             all attributes.
+@@ -1353,5 +1412,4 @@ from .nlspec import SpecFamily
+         if mode not in op_policy:
+             return None
+         policy_idx = op_policy[mode]
+-        attrs = self._resolve_policy(policy_idx, policy_table, op.attr_set)
+-        return NlPolicy(attrs)
++        return NlPolicy(self, policy_idx, policy_table, op.attr_set)
