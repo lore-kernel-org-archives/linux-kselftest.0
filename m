@@ -1,131 +1,158 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB3719046E
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 13:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72CED25FA05
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 13:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773234927; cv=none; b=r0xBTpScZC8+Ck06lQm8pjvB53BXVPgI1T8QdpVmtt1RyLcuHUePCdYLeMmppGBuzSSoL08Dr2uDkPIYGgOcj5WZxgQOtG4YOGb6jLuk7d8LGz6qh1+bVE2DyjzS0adXkJqe2/+FqTdCsNK3l20XQVJtUmiKunrigLtPXSvHRcE=
+	t=1773235230; cv=none; b=Bh5Aakc587G8CGaHlobjl44RzBpibKW/HjIlDzujLgMN9+3ucajTd8NpcAdlDvN6rWX6u27QS0PRY5V/HCqpXmWLLJwXp+BOslRpcXJwj2KBOwzv/hyoB+DhIK9bUDErv2qpBWIa9cx449fpr+aN31PgQ+EgPwjfgbAEbTv77jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773234927; c=relaxed/simple;
-	bh=sM8sWCWyfxfWkraNbQY+CNP5G8vS4Cs+vWDjTm7OQG8=;
+	s=arc-20240116; t=1773235230; c=relaxed/simple;
+	bh=Ln56xTSBPHuo+wORJTPbGKQ+7LG8v507ISOtSTL0l9o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aTqF5Mhyf3xgia1lYW1aFzZ7j+WOMsMQnvEx9/Oy0e4lrJwOWZsp4ACduXhekz+6lTk7q5795S4hzaN+ZlFuVcupCNrwtxlAZkfxQKB9buvDTpYE8Uxpp0CnKicQFI8+yoQamcMsoImFRhZVkHFEAMj95wyYymWSYuruUTg6dOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iDQdcv7j; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q4qms/Kp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=iOvabC1OgaJW6YkOXR/CkqgJS1Imd1D2fm7HcDjD13KsFNQCQm/tolarAoWCb0Y8HE/CvRAHyz1vQxTiE+/uU79VQOTUpKG5nSXr/LNNsvQ1AP/d+yEa0TJFzoHrnTLh/+OY9rrXgwm3RVzyqwI2iogSxpyLYnKuoNSU4wGiTMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NGHsWpF2; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iDQdcv7j";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q4qms/Kp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773234925;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MDulTWN6uxyFsZIlXHpD7hEvveDQhSXIzocA83Bdsbg=;
-	b=iDQdcv7jUftWijAcWWemv5uERVM7yy9lhQ0LjRKcURQp0ufhhIL1mVs2lQU8GL0S0oCHZw
-	4yhbfcohUyRoFgw/+aDr1cOImrb+9t8kiSUYdHS8qsmsk2ZKEG1CZ+Gr3d54jxga3uLdzK
-	NIOqO9+Y+8vzg4tSk8Km7WbD5XhM27c=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-169-kb2POi0EMH6LAommjYmz6g-1; Wed, 11 Mar 2026 09:15:24 -0400
-X-MC-Unique: kb2POi0EMH6LAommjYmz6g-1
-X-Mimecast-MFC-AGG-ID: kb2POi0EMH6LAommjYmz6g_1773234923
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-48542d5aa9eso16707315e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 06:15:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NGHsWpF2"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-439bc14dcf4so793395f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 06:20:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1773234923; x=1773839723; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1773235228; x=1773840028; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MDulTWN6uxyFsZIlXHpD7hEvveDQhSXIzocA83Bdsbg=;
-        b=Q4qms/KpI8KSyhGdFRDGVLPNBKIn3aGWc7+LX4VaxxNc0mGYpbcg7h+sb+/CIzptik
-         I5h2ZCS7+eruollEHJpiht1NJ/OooieVxo4ipvJ5cdQQ83lR/GvFnVkGBtmYEUUONXYm
-         VvAFWybiZbQMcReU8IUjbUoX/5lBRH0q24stP4Q8cU6Z99SbvJbipoms1lYTlJnHklcG
-         Eqo/j7znYn9Ilb53oc6hhR88MqGfUFiLDkBmk+WlrE7TtofraZpCXM9R3iEOcMvsW/hF
-         OtVWME0VVU++LM3zmuyDHIb8OuT/3/xBUnxwWiAydftEPToxPIQcXu3trRVzz14Cw3ca
-         TZ5g==
+        bh=bY9qxO4iOxelF76gPsclTlF3JjBmbJed/4XnE6XgRH8=;
+        b=NGHsWpF2bHJWnDyUcF5V+d2FyvVu7U/t9I2i4vcpPn/3CLbiVEezZVsK67di8zVyNF
+         tIqK7xuTggNlnnPuKE1ry00GQAcjNDMnq+AX+Rr10cIMHeHxBBUycIzoa9wcHWJY4n+5
+         PWTmH0o7vv8wQ5s/EVQi/f6lj4csk3/dNNSn4a3jWVQUVRIcGaBVLbJPSLpbifCh78eX
+         kQxbYg/3Nii2U4zQio7SatkULDkb1CvIypBHZRONnNBisOVPYZrVdgBSuk0pYlTEYc6A
+         QStOh8Rri2HpMyELqadkBhyAYF3b7QZqMqI4t6F+jmtxihXrNHFwIJfuVjpxUbbkNvgR
+         kIvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773234923; x=1773839723;
+        d=1e100.net; s=20230601; t=1773235228; x=1773840028;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MDulTWN6uxyFsZIlXHpD7hEvveDQhSXIzocA83Bdsbg=;
-        b=POK5e9IglGDWikKvFNsnfpY5UbcQITt3pUNteMzsHeZYuLFTEcaskvKfA4J/CO7tjn
-         EdOxkH3QxZV5x7S7ZaL5LCjd5mloDIOhdLUSswoeleNtfJzKhUlqnvkyEsaE3ZUux6Hj
-         j89tTzSwagdOCU7fC0HMqQUmkOXG4efb4ZUOiH7ENWGuvBcd4XN1EQoOlTDEEz4WIXdH
-         3oQ9US1bk+5utBcgN/QJMHpYpLkCivP/upWEULe3gb4i6LwnZuDF82dd9b2jdt8VDfzX
-         rE1HibzqjbKHyhNxGZCl6thi5mjA5rMJRDXNv+JsHjJ8C2c3RtbH4obFs6PVFDbQyz8F
-         O9/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXH+hvg2g1xwpV/qQXoutBBgVImFIVlvBlMlkIMx58MWlpatOWeKNjlMQB7eWlb/lUVXZOfiC07S4yRmAo/dMM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW1ujnUVTIUO59Mi6CQZ5050H9NslpE8KWG+WrmeW7q/X+zqhN
-	s7Z6cCvVj6IyGJccSmz4ScETy4k1JlM9Q1snQGXULmQODkXXGbuI2jpApRJE9vwl1btpAS7Pz3m
-	CLESqCWKp3Hs6R89tSMM0gfj3e9YUEVOoNX6S6Wj9cNkqP4mk61/ZFle0hoG6MqJ0MYh++w==
-X-Gm-Gg: ATEYQzz38H+Tbn6HoIgtLsr6R3J8J+SLNVycBwX9ltFkt0i3oiqvfKsg3+tlG6tZK/L
-	WfjVc7EC9a/6aZnM6aH4fzSxlpqN7n/TylEDVLqj4fFsKRN6Uo1tmg5MJzylUQJbpKOh4IL5CYc
-	lsPqpNhn3enKIkEZQgTtr6TTWzjGYiii1fAnQAU5Bqb1hUPs1hGHq5018CxF23R/us8kLFUTJg0
-	dyLxPR/1lj02XHqMeAC3DrJ0qkmcfBL4yVDMevdimwYNcvPB/gyJ2rQIVhjw7/x80gmKjXKdNn1
-	UKc6pl8ygIW6fu4y5a+c7dgTCRakODsLvnwyUSOzdBA/ryQnXlTdwRdKBIoEF+2stHYQcPDpS5j
-	DL+Y4sU8IhY66hMyt7qWQC1DEhkwLYPch5WsKzHXUkgVTMLGg+xQ=
-X-Received: by 2002:a05:600c:4fd6:b0:485:3ff1:d5ed with SMTP id 5b1f17b1804b1-4854b0a6b99mr46583275e9.1.1773234922826;
-        Wed, 11 Mar 2026 06:15:22 -0700 (PDT)
-X-Received: by 2002:a05:600c:4fd6:b0:485:3ff1:d5ed with SMTP id 5b1f17b1804b1-4854b0a6b99mr46582735e9.1.1773234922296;
-        Wed, 11 Mar 2026 06:15:22 -0700 (PDT)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.82.96])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f818e9eesm8133718f8f.3.2026.03.11.06.15.21
+        bh=bY9qxO4iOxelF76gPsclTlF3JjBmbJed/4XnE6XgRH8=;
+        b=A4fAHrdBhi+UjvERt8xxeQWl6KyIFHKpv5S9l8fQk2/9veJhlypp6hVkAttxmdqQiu
+         tCrUYQ2xpiy3jAl2Gxl+BFAT5cooPuTdiB3MZk8bRCVVA0ttP2TQYuXQ+SNRV8CRt9ga
+         mecyvHEZ/JhZp9+sd2DcYZt3rgWt8F/L1Q2UDWRChUzj4Cao1S1E9DWEgWCdXGIDNZNV
+         /hZ7AqvWMFRY250eOQg2JuJ3WOYhqvOO6N9gAwFfFjvt5fUZ0z+ZIwwnmBnU3KMhYhxF
+         PSJyxH/szHY75ecIuJWDJ4+Whk+T8K+5nRHeZGLcszPE91TACUvXTyUNNtanb8HZJLAE
+         FEWw==
+X-Gm-Message-State: AOJu0YxfK6W9NyzEue7o7Okb+XoDOQVhckYI9h8aYyw1H0p3Y9w38J9u
+	Nj+Z7YB3EESW2FU2aN4JYVRrLEwAKn2sKN6xLA9yusWg8VYpikD077sn+vY4WWwGW64=
+X-Gm-Gg: ATEYQzztc34Fpp14xIRIcT4ixf5UMXHmCMmq/aaGzQOIVU6KHW41gYu5Wjh25YllnRy
+	1OVmiawFJaLhMMJUVtJj/6dQHBuGVYOq3x3UhYN9I/OQLhg/Yf9QkQiq7BctM09DwdatB4WFxvB
+	44ksIkktXbw5ijO3TFOvhiuF8t2VRFIJeralGKkDTW3o/STj3XWgGiZE2IOR2IzrbvZCuTk6vr0
+	FAE4BpEM+Pkjy2nTZO4QLCSKU9/ccI2bnGmj+T2WpYn9kO3SM+U0tsxPUk/IhFDWWO76AHXoUJu
+	ZCN8lKSPKwBI2+x/Pnu9c4Iw5zhDYhS2eDAvN4Hi4SyGNBQ4I6lXMgzbeJm6g8/GvzAXjWdJw0y
+	kwoNX5g8ZM/0yZEZuO4MSiPDcU3aLAeC1+VNJNg+pThoPlH3Wh0MsGTUQlUkgYp9U2ZdFigCD+E
+	H8YPDsgZ83WVByHD9A2NadiKKemVs+dK3Ghnx1fOJTgRY=
+X-Received: by 2002:a05:6000:4283:b0:439:d0ac:8a8f with SMTP id ffacd0b85a97d-439eff12b6amr13844406f8f.1.1773235227788;
+        Wed, 11 Mar 2026 06:20:27 -0700 (PDT)
+Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f821d095sm7037911f8f.32.2026.03.11.06.20.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 06:15:21 -0700 (PDT)
-Date: Wed, 11 Mar 2026 14:15:19 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Clark Williams <williams@redhat.com>,
-	Gabriele Monaco <gmonaco@redhat.com>,
-	Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-	Luca Abeni <luca.abeni@santannapisa.it>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 2/7] selftests/sched: Add SCHED_DEADLINE utility
- library
-Message-ID: <abFq55y4gINhxvUW@jlelli-thinkpadt14gen4.remote.csb>
-References: <20260306-upstream-deadline-kselftests-v1-0-2b23ef74c46a@redhat.com>
- <20260306-upstream-deadline-kselftests-v1-2-2b23ef74c46a@redhat.com>
- <2d14e8b7-a7c3-46ba-b1d2-6bb6404c08fa@arm.com>
+        Wed, 11 Mar 2026 06:20:26 -0700 (PDT)
+Date: Wed, 11 Mar 2026 14:20:25 +0100
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Li Wang <liwang@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	akpm@linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
+	Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH 1/5] selftests/cgroup: detect and handle global zswap
+ state in test_zswap
+Message-ID: <nynf44sljfbjeftotwow56w7nz4j3zkgnoor3ulljq5ajo4lgq@fogtfchssfnt>
+References: <20260311110523.26624-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="z3cvcq7geocohxmw"
 Content-Disposition: inline
-In-Reply-To: <2d14e8b7-a7c3-46ba-b1d2-6bb6404c08fa@arm.com>
+In-Reply-To: <20260311110523.26624-1-liwang@redhat.com>
 
-On 11/03/26 09:39, Christian Loehle wrote:
-> On 3/6/26 16:10, Juri Lelli wrote:
 
-...
+--z3cvcq7geocohxmw
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/5] selftests/cgroup: detect and handle global zswap
+ state in test_zswap
+MIME-Version: 1.0
 
-> > diff --git a/tools/testing/selftests/sched/deadline/Makefile b/tools/testing/selftests/sched/deadline/Makefile
-> > index fd57794f1a543..ea3fdfbef459e 100644
-> > --- a/tools/testing/selftests/sched/deadline/Makefile
-> > +++ b/tools/testing/selftests/sched/deadline/Makefile
-> > @@ -1,6 +1,6 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  
-> > -TEST_GEN_PROGS := runner
-> > +TEST_GEN_PROGS := runner cpuhog
-> >  
-> 
-> This runs cpuhog as a test as well which prints misleading timeouts.
-> 
+Hi.
 
-Yeah, will fix/remove.
+On Wed, Mar 11, 2026 at 07:05:19PM +0800, Li Wang <liwang@redhat.com> wrote:
+> +static bool disable_zswap(void)
+> +{
+> +	int st;
+> +	char n[] =3D "N\n";
+> +
+> +	st =3D zswap_enabled_state();
+> +	if (st =3D=3D 0)
+> +		return true;
+> +	if (st < 0)
+> +		return false;
+> +
+> +	if (write_text("/sys/module/zswap/parameters/enabled", n, strlen(n)) >=
+=3D 0) {
+> +		if (zswap_enabled_state() =3D=3D 0)
+> +			return true;
+> +	}
+> +
+> +	ksft_print_msg("Failed to disable zswap\n");
 
-Thanks!
-Juri
+Hm, so this can fail?
 
+> +	return false;
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+>  	char root[PATH_MAX];
+> -	int i;
+> +	int i, orig_zswap_state;
+> =20
+>  	ksft_print_header();
+>  	ksft_set_plan(ARRAY_SIZE(tests));
+>  	if (cg_find_unified_root(root, sizeof(root), NULL))
+>  		ksft_exit_skip("cgroup v2 isn't mounted\n");
+> =20
+> -	if (!zswap_configured())
+> +	orig_zswap_state =3D zswap_enabled_state();
+> +
+> +	if (orig_zswap_state =3D=3D -1)
+>  		ksft_exit_skip("zswap isn't configured\n");
+> +	else if (orig_zswap_state =3D=3D 0 && !enable_zswap())
+> +		ksft_exit_skip("zswap is disabled and cannot be enabled\n");
+
+I should simply check the enablement state and skip if it's not
+satisfactory (possibly printing an instructive message what to tweak).
+(To keep the test dummy and leave it up to who's reponsible for the environ=
+ment.)
+
+My 0.02=E2=82=AC,
+Michal
+
+--z3cvcq7geocohxmw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCabFsFRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AiAPAEAv69wPQKB4206xWxOp8YG
+0H68wyXMSd860S+S/a87drABAOlbjNgjuF/SbmNcW/Q8NhjLUGVle5SLn2TYZi3J
+h+oN
+=JhMB
+-----END PGP SIGNATURE-----
+
+--z3cvcq7geocohxmw--
