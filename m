@@ -1,185 +1,197 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D95835A387;
-	Wed, 11 Mar 2026 22:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9A62D97B9
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 22:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773266492; cv=none; b=H5GVXKDYw5WlJ2KW6py71e7X/H8ZBV57CnJRX3tFvu89VSTI7m7M6jL2Q1QnspvF7R0Z5PMPyLuJSQB08acmVpad23HOatLwbr90SYmgMs7/MbMI9lky/iHuVBfn8IpCUTi6y4Jom9KOC8Uda5va+Z5PrI9kJYmwobMQiViqWdc=
+	t=1773266535; cv=none; b=EIsgu7XT6D73WJfbT0SD9WL58atBQdZ+r26EU6QPGA0MX1k5nEOQnvKc8r/19SHLcRhRjS4XW0NsWGJFRssrxqeV4w8vtvTWf8sBVZkdkaw7ieHO7MQ77YCHr0GsYrA4kyhsOrasteCJAviTRpNx8+y9cTmP0vin9Mtsjo+BmAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773266492; c=relaxed/simple;
-	bh=DQ9Zc0Q7xc6dZOq15nfDtuT6wEnkMqTtKK6Bhc6CYPI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RzUAQqYt0feDkv2DKg3h8xt8lStoWjvTEZJclQISciSe1kIUC9uHJE4gf2dawS0BVZTwhlbpEoEWyXdH02CbTUFe6eP6xUou6W34jjS/7VZjy69I/1GFb06QwJDrkQZeDZDEEQzQrkfFZqX1jlCA8OxSK0kaLg6mouA4g0/xENc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Z1QaMm+U; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1773266535; c=relaxed/simple;
+	bh=UgLryemejYDkrKLQCHN3ggWk/1jIuVfpQTdJfgI4uBg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UK3xX/BqZ+2nnXxXP1dKSfYJTYo/t1y91j0+2qXguQnP9Dhw5V9KwOlcMFmjhI+ZIUAfLn4uzOSsM7EOGa9toCWNdcEKeMt6RmnT5MOjFt3oXXYQBo87T9tSSPdT7zWHirYWezq5LKXf8rfK8n7i4029bOXil+UI/5AQU2PzF0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b5uQGk0l; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Z1QaMm+U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1773266488;
-	bh=DQ9Zc0Q7xc6dZOq15nfDtuT6wEnkMqTtKK6Bhc6CYPI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Z1QaMm+ULA5QJ+M8hUnN1h45YC142/a9fJMeBY/w66uB91mKSG3oPPF06la2fpDWz
-	 /7oK8QrPrO1UiVyNzf8/TcbRKrX/Df6CA+WCwHGQkhR6cFIv/zrxeLtBpkKPzHrQ94
-	 0zjwMTSigBflEWaqaR6zRDvScrPGRGQHvYd4/O8g=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 11 Mar 2026 23:00:52 +0100
-Subject: [PATCH 4/4] tools/nolibc: add err.h
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b5uQGk0l"
+Message-ID: <6a8b0983-a198-470a-8125-b0133ccb7032@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773266522;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fDrvhZooVIidtSklPGb5zNTEhhukwtMPI7dovIzwlNw=;
+	b=b5uQGk0l1X3OV/lTxvXyprilkWy7U8Brk1R90gGRI8/KRkeUHaUEpbicrDsgvaM0xZpr5H
+	u8PQUi3+LziKEcY0+L8VaohJ3CJrdAXYTlqlBdeoO6IFzTwP7ILXaa+y555hPXey5KN1b6
+	Qpt1MMcvNtjoRnIT5joPxYp2w9XXTIA=
+Date: Wed, 11 Mar 2026 15:01:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [PATCH v5 1/4] RDMA/nldev: Add dellink function pointer
+To: Leon Romanovsky <leon@kernel.org>, Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: jgg@ziepe.ca, zyjzyj2000@gmail.com, shuah@kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dsahern@kernel.org
+References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
+ <20260310020519.101415-2-yanjun.zhu@linux.dev>
+ <20260310190140.GL12611@unreal>
+ <5700c718-d10e-4b23-adfc-c14ee1930b18@linux.dev>
+ <20260311085434.GW12611@unreal>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <20260311085434.GW12611@unreal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260311-nolibc-err-h-v1-4-735a9de7f15d@weissschuh.net>
-References: <20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net>
-In-Reply-To: <20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773266488; l=3075;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=DQ9Zc0Q7xc6dZOq15nfDtuT6wEnkMqTtKK6Bhc6CYPI=;
- b=Ns1nx88qAYwjYB7FtBsijU3e5BA1Kgpt9MbVs6r0CCOKTnwwXVE3bstzF0UCqIb7hf0I8YgAg
- EMC8+Q5wZ8BDRN3Q0pCLQMAjJyrUqr7KnhdEh5Jm/mGILfjXN+0w03L
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Migadu-Flow: FLOW_OUT
 
-Add a few convenient helpers to print error and warning messages.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+On 3/11/26 1:54 AM, Leon Romanovsky wrote:
+> On Tue, Mar 10, 2026 at 06:58:00PM -0700, Yanjun.Zhu wrote:
+>> On 3/10/26 12:01 PM, Leon Romanovsky wrote:
+>>> It is an RXE‑specific description, but you are adding code to the general
+>>> nldev path. Please clarify that this behavior applies only to RXE, and
+>>> include examples showing when and how it is invoked. In particular, explain
+>>> how the socket is cleaned up if delink is not called.
+>> Hi, Leon
+>>
+>> You are correct that this logic should be driver-specific. I will add an
+>> explicit check for RDMA_DRIVER_RXE in the nldev path to ensure this behavior
+>> is strictly scoped to RXE and does not impact other drivers (like iWARP).
+> No, you don't need this driver_id check, because iWARP doesn't have link_ops->dellink,
+> but you should document the rationale and how it is triggered for RXE.
+>
+> Thanks
+
+Hi, Leaon
+
+Got it. The commit log explains how the netdev_notifier mechanism is 
+used to clean up the related resources.
+
+In the source code, additional comments have been added to explain how 
+the dellink operation for rxe is triggered. For iWARP, this change 
+should not make any difference because iWARP does not implement the 
+dellink function.
+
+The commit is shown below. Please take a look and share your comments. 
+If you agree, I will send out the latest commits out very soon.
+
+ From c05038dcdf69c5985837736a8926ba76d9f3e8e4 Mon Sep 17 00:00:00 2001
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+Date: Fri, 23 Sep 2022 16:52:45 +0000
+Subject: [PATCH 1/1] RDMA/nldev: Add dellink function pointer
+
+The newlink function pointer was previously added to support
+dynamic RDMA link creation. In the RXE driver, this path creates
+a transport socket listening on port 4791. Consequently, a dellink
+function pointer is required to ensure these sockets are properly
+closed when a user administratively removes a link via rdma link
+delete <dev>.
+
+Furthermore, RXE does not rely solely on this nldev path for resource
+management. It also monitors the underlying net_device state via a
+registered netdev_notifier. The rxe_net_event callback serves as a
+fallback mechanism to ensure that transport sockets are forcibly closed
+and all resources are released even if dellink is not explicitly called
+(e.g., if the parent NIC interface is removed or the driver is forcefully
+unloaded).
+
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
 ---
- tools/include/nolibc/Makefile |  1 +
- tools/include/nolibc/err.h    | 91 +++++++++++++++++++++++++++++++++++++++++++
- tools/include/nolibc/nolibc.h |  1 +
- 3 files changed, 93 insertions(+)
+  drivers/infiniband/core/nldev.c | 12 ++++++++++++
+  include/rdma/rdma_netlink.h     |  2 ++
+  2 files changed, 14 insertions(+)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 1958dda98895..5d242312943f 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -30,6 +30,7 @@ all_files := \
- 		ctype.h \
- 		dirent.h \
- 		elf.h \
-+		err.h \
- 		errno.h \
- 		fcntl.h \
- 		getopt.h \
-diff --git a/tools/include/nolibc/err.h b/tools/include/nolibc/err.h
-new file mode 100644
-index 000000000000..2373c4999b71
---- /dev/null
-+++ b/tools/include/nolibc/err.h
-@@ -0,0 +1,91 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * formatted error message for NOLIBC
-+ * Copyright (C) 2026 Thomas Weißschuh <linux@weissschuh.net>
-+ */
-+
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
-+#ifndef _NOLIBC_ERR_H
-+#define _NOLIBC_ERR_H
-+
-+#include "errno.h"
-+#include "stdarg.h"
-+#include "sys.h"
-+
-+static __attribute__((unused))
-+void vwarn(const char *fmt, va_list args)
-+{
-+#ifndef NOLIBC_IGNORE_ERRNO
-+	fprintf(stderr, "%s: ", program_invocation_short_name);
-+#endif
-+	vfprintf(stderr, fmt, args);
-+	fprintf(stderr, ": %m\n");
-+}
-+
-+static __attribute__((unused))
-+void vwarnx(const char *fmt, va_list args)
-+{
-+#ifndef NOLIBC_IGNORE_ERRNO
-+	fprintf(stderr, "%s: ", program_invocation_short_name);
-+#endif
-+	vfprintf(stderr, fmt, args);
-+	fprintf(stderr, "\n");
-+}
-+
-+static __attribute__((unused))
-+void warn(const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	vwarn(fmt, args);
-+	va_end(args);
-+}
-+
-+static __attribute__((unused))
-+void warnx(const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	vwarnx(fmt, args);
-+	va_end(args);
-+}
-+
-+static __attribute__((noreturn, unused))
-+void verr(int eval, const char *fmt, va_list args)
-+{
-+	vwarn(fmt, args);
-+	exit(eval);
-+}
-+
-+static __attribute__((noreturn, unused))
-+void verrx(int eval, const char *fmt, va_list args)
-+{
-+	warnx(fmt, args);
-+	exit(eval);
-+}
-+
-+static __attribute__((noreturn, unused))
-+void err(int eval, const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	verr(eval, fmt, args);
-+	va_end(args);
-+}
-+
-+static __attribute__((noreturn, unused))
-+void errx(int eval, const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	verrx(eval, fmt, args);
-+	va_end(args);
-+}
-+
-+#endif /* _NOLIBC_ERR_H */
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index d1d08b7f8599..fe8195483b6d 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -130,6 +130,7 @@
- #include "getopt.h"
- #include "poll.h"
- #include "math.h"
-+#include "err.h"
- 
- /* Used by programs to avoid std includes */
- #define NOLIBC
+diff --git a/drivers/infiniband/core/nldev.c 
+b/drivers/infiniband/core/nldev.c
+index 2220a2dfab24..34f5faf80d9c 100644
+--- a/drivers/infiniband/core/nldev.c
++++ b/drivers/infiniband/core/nldev.c
+@@ -1824,6 +1824,18 @@ static int nldev_dellink(struct sk_buff *skb, 
+struct nlmsghdr *nlh,
+          return -EINVAL;
+      }
 
++    /*
++     * This path is triggered by the 'rdma link delete' administrative 
+command.
++     * For Soft-RoCE (RXE), we ensure that transport sockets are closed 
+here.
++     * Note: iWARP driver does not implement .dellink, so this logic is
++     * implicitly scoped to driver supporting dynamic link deletion 
+like RXE.
++     */
++    if (device->link_ops && device->link_ops->dellink) {
++        err = device->link_ops->dellink(device);
++        if (err)
++            return err;
++    }
++
+      ib_unregister_device_and_put(device);
+      return 0;
+  }
+diff --git a/include/rdma/rdma_netlink.h b/include/rdma/rdma_netlink.h
+index 326deaf56d5d..2fd1358ea57d 100644
+--- a/include/rdma/rdma_netlink.h
++++ b/include/rdma/rdma_netlink.h
+@@ -5,6 +5,7 @@
+
+  #include <linux/netlink.h>
+  #include <uapi/rdma/rdma_netlink.h>
++#include <rdma/ib_verbs.h>
+
+  struct ib_device;
+
+@@ -126,6 +127,7 @@ struct rdma_link_ops {
+      struct list_head list;
+      const char *type;
+      int (*newlink)(const char *ibdev_name, struct net_device *ndev);
++    int (*dellink)(struct ib_device *dev);
+  };
+
+  void rdma_link_register(struct rdma_link_ops *ops);
 -- 
 2.53.0
 
+>
+>> This function path is primarily invoked when a user executes the
+>> administrative command: rdma link delete <dev>.
+>>
+>> Regarding socket cleanup: RXE does not rely solely on this path for resource
+>> management. It monitors the underlying net_device state via a registered
+>> netdev_notifier. Even if delink is not explicitly called (e.g., if the
+>> parent interface is removed or the driver is forcefully unloaded), the
+>> rxe_net_event callback ensures that the transport sockets are forcibly
+>> closed and all allocated resources are released when the parent net_device
+>> is destroyed.
+>>
+>> The code diff is as below:
+>>
+>> --- a/drivers/infiniband/core/nldev.c
+>> +++ b/drivers/infiniband/core/nldev.c
+>> @@ -1824,6 +1824,12 @@ static int nldev_dellink(struct sk_buff *skb, struct
+>> nlmsghdr *nlh,
+>>                  return -EINVAL;
+>>          }
+>>
+>> +       if (device->link_ops && device->ops.driver_id == RDMA_DRIVER_RXE) {
+>> +               err = device->link_ops->dellink(device);
+>> +               if (err)
+>> +                       return err;
+>> +       }
+>> +
+>>          ib_unregister_device_and_put(device);
+>>          return 0;
+>>   }
+>>
+>> Zhu Yanjun
+>>
+>>
