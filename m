@@ -1,276 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3315371897;
-	Wed, 11 Mar 2026 03:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773199726; cv=none; b=aE8ltHQ4+/9iCG/vh67YWg9TJrZtNVsjOXyc53Dc3sFp3sWc3Kxf+c1Fo/tJVos1K5Lnp2FaFZPV3p5M+WVDFDhmspu3yH1ULWvzJ+jh7FMAHrG1jfRUoryz2pnEt9KaSL+A9OkhhtWgijuvV1TOHssrnRZ34aYD9z05eQyHGVU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773199726; c=relaxed/simple;
-	bh=ozkFpTiB6QF7JITd+KpqRuvxbeNYrnmmlp2eJSkGLM8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N3QpJgRSSuIzz0EzSbu9OnowBGjmgSj8P3JxmAc2RwHBYfBfQLwachor08t4TZloqmz61lzMjwXiucBYe8PgeBZ+hVuT2K0X6BmY0aWJr8b1BTZsYJcg118YEZBr3yRjAWHAN/+yRad+Eel0w2yWGGzTGCkSR5qDe2OXsYgjbGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TXxXpKim; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEA9175A99
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 04:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773202221; cv=pass; b=gKIC14Xbj0tCvw9yXNrQGQTVWoxT2blSfkGjng/E+VGY1d3zWr2MNxC5uujD3p5LlNPNPxauY1T2/Xhfesp5M0eyuBgzzt4rd+TTENjZya9Jff88L4y8roM5GBP5L6ZczV8HFWIu3AX7DRvZZ4Hr45UlZrVmIsjR9P3yQuYbs5o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773202221; c=relaxed/simple;
+	bh=MBEHeJJqSEBgW4Nd1+NCcQSg5LShs4baZxRE586zPOM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YJRO+ZVSpbelS/16THlKvm5zm7Ec44Z5YcHbnJdMTawmmoh7KfrKQniE+FO4X+/JT+sCViBgdVQSniUNSDJlW0K3uzVLuY4uqm0VFnRBs4HKRNujt9Z3J4aG95h8UtzC9SFxsmNanyL8Q1liM1Phw7M/RnvYr/YULWv+IDgiYRw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IUlCSaOY; arc=pass smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TXxXpKim"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A861C116C6;
-	Wed, 11 Mar 2026 03:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773199726;
-	bh=ozkFpTiB6QF7JITd+KpqRuvxbeNYrnmmlp2eJSkGLM8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TXxXpKimkpqq6GEezpclNwBACek76JrO0lUouYmZmunEcw6G9oOSWltpmSwAKUSKl
-	 gruePLmrq1eme8HVlhpjosWYDZindYMwJAf8PyqrAc1sy9BEqnFKgE+2lvQ2gEJ7r/
-	 aZtghXIabUe32CGVjTIsQ7de2WCMRA4BQ0AjPHvkSfgabDgFsc7HWyvSD7URzM7emM
-	 NtVAO2RbvXzuZKM1AqJeN0zyH0HpDgZq5PnWGHfmKhHj3PpW6USN41SqqZKmQSLZ4K
-	 hXZJt6CQbObS1J623eZKCfoaR7duzgVzKCQCa9j7IDkFExgkhfia4sEOpMg5GKGISb
-	 HTmpk/fWxEGWA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 4/4] selftests: net: add test for Netlink policy dumps
-Date: Tue, 10 Mar 2026 20:28:39 -0700
-Message-ID: <20260311032839.417748-5-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260311032839.417748-1-kuba@kernel.org>
-References: <20260311032839.417748-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IUlCSaOY"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12776bebe9fso799194c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2026 21:10:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773202218; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Nlvp/jDEixlMa5xCfi3dq2U3uPQsK2ikYiJG+PeVK3MGccH0jW0fiK326zv1dtWSNa
+         oUpSF74xwIPWYYqbdiwokLbyeO6TW16IovzsWNCn/b0j7l/cTbRwVB5V8oRJM+Wnx3iT
+         oxMrHMXxXc0CqEJ1tYCDR4+6NO5G7G/ddGcy9O7xmlq+QiY1QKznPSqqYx74jNp8jftf
+         XQKx2PtRWT38iOkAe2xwSApc03T7tx4vAmRly3pZ0fmrm57/r5wwNm6UEQccsV+jafTr
+         LRXhmOE2iMO7kM6N0OHItyJjCDMrizFJbsTiqQNIVQQSyY4S2umF+kv+cNPKb3brkrK8
+         ZHcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=MBEHeJJqSEBgW4Nd1+NCcQSg5LShs4baZxRE586zPOM=;
+        fh=gtqX1tuJe+MNojx+SQYeL1K+9BmVVUKOLvSQB/5rpmM=;
+        b=JFRkRztWDqc7c7M6AtvcoXSuMHsDrYff3d77nytjnxy4j6fI4VuPXNMkJEss9A4Y8m
+         jkS50NcUBOr50skfW+WtVyN6N6k3YyB15O57IVSnc2xv5AS768UJEZ/OxNh/yFDW1EhR
+         Uzm52za9oxxIvLAUW3OdjOF7n3K9zfqvd093NmdCxs+2zwG75LcX6Fg1DH0CEs6XgpN7
+         /7OYQeH2aQoCLuRM+RYvJWWkChA1oY05the1RtUU7Y2KugVavLd8zJCl4+hFlaYUNU4n
+         qhjGTVRL6dECHxtsrDRhoCr/G6OebNCZ2CSVNDj7ssCZXVbkVKBLiV8Of2r3N1gG6QJU
+         Mdxg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773202218; x=1773807018; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MBEHeJJqSEBgW4Nd1+NCcQSg5LShs4baZxRE586zPOM=;
+        b=IUlCSaOYcDYoSvYKTPlStN2t5DPJi4OYzPrBd7EQtLELTsckelsLUKoBmVLg576/kS
+         CKwK2yIwIpfkN2LaHN7w5K8PfKyItbIgfKGLGHLo7wBPdfOJGTgHTqvsqzF36fT028I8
+         YCc5I0z9K6tJhsM099yGsoQ0Xz/OuFLY6AQEGKdhX+gUZUpe7TRcp/sOnb2N87tVo0dv
+         /5gzpFdb4rPfN4oCJJ8tbFvhQlWFp34vtOx3KOnZBkZFcR6iKJAQGRfhmc/os2w28yNj
+         5EnLVmNzDwxE5RwtyQwE36zILmH4/npNDg1aYq1ZloWlYOS3Qe0cLM+8FVw7WqEkhpOW
+         9cCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773202218; x=1773807018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MBEHeJJqSEBgW4Nd1+NCcQSg5LShs4baZxRE586zPOM=;
+        b=BCqSC93MjPJJxEBbDUZcVZZwMZqbfxT/GIkAms8/FIlhIwgeaf943R6KavKkZ9Ri/w
+         lzUmnEJ4vbufZg0/8vdg4ddNRZ5wYjej58al/OD9F2UzWPkej5bw4o6wRixsYzwsqWIJ
+         pwIi2C0d43R6KhTWYOV4O4mETIpVxfDz5pPJmynK0TFw7x/30y2N5RqKoiqLIWJESxrU
+         1auA3MAQGGSJjgjCB9z+cmqnr6TvDCPl4Fu3sg1n858ziAvDz3LAoFSRNks3JEJsgmmj
+         uHdJdFJwIOZ577EnLwtL8Z+V2GTBsUkV1SOazNK0taIYavDO2+nXnJRIQzmb1Tq9tCR8
+         d/rg==
+X-Forwarded-Encrypted: i=1; AJvYcCU2O08aDMjt3hEKk8dvUgjtNMb0mqAp18tA/bkmG0erZRoHrcvn4ONiRzdNkcKx0UF/349ugMzKVQO5dSsQsr4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziPcV+nBapAaOIIhhcjo9wn5cXpscdhY8oE2H0yq+ibdFaqXgQ
+	jeRUESqnMauWP76bsG+m/mQH7EYZ8HNHMSgkQr2kIqBL23CGbLsfKNbqPPSb4iniJprTNhr+04b
+	NdWwEhW7icm41FPbYmiGvNhJV+kaDPrvCakKa/B4u
+X-Gm-Gg: ATEYQzz85QTA6psVhQZKCdJ6V2C8TI09JwDDdYWB7VrBxdA5OyGed7eriYGw/0ICWaj
+	g3hgmlgup7/27eiYQAhyDEV7C8AVlDxFHRFBAQuOrGA32U73CvEUtY1/1PK7aATe/ROA1DHh7qx
+	7iydzbV3Jl5US3efO+49pJL0yUJm4MiPunMC/B5eVDsRPH/mfFvhxHi44v+X6AVh+Qf301IXP3X
+	0IFAxT3MEYpMxvqj99zBfkWqgw0/gne8hZl9J5pOUgTw12hVh973+/HCKL8Xf+rncukfAnGHATj
+	Gn7fMj8TundLVjqEofCllsseZhoUZkxfX3mTOYXt//l3jyLeXBRCuKAtY6K1Bncb5oFD2OQ=
+X-Received: by 2002:a05:7022:fa3:b0:11b:f056:a19b with SMTP id
+ a92af1059eb24-128e77af41emr591178c88.18.1773202217272; Tue, 10 Mar 2026
+ 21:10:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1772894876.git.sd@queasysnail.net> <d28f72b5b4ff4c9ecbbbde06146a938dcc4c264a.1772894876.git.sd@queasysnail.net>
+In-Reply-To: <d28f72b5b4ff4c9ecbbbde06146a938dcc4c264a.1772894876.git.sd@queasysnail.net>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Tue, 10 Mar 2026 21:10:06 -0700
+X-Gm-Features: AaiRm53pv_QQgxejGOlkcf490qHoypqLXDfrkM6zmrqE_kvKIqB5u7SSItGllIs
+Message-ID: <CAAVpQUCF2bLS98J5HHg4VVPMpuYm-TncZfFfQ8m-D_1mLRpxkw@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] selftests: rtnetlink: add neighbour update test
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, David Ahern <dsahern@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add validation for the nlctrl family, accessing family info and
-dumping policies.
+On Tue, Mar 10, 2026 at 2:59=E2=80=AFPM Sabrina Dubroca <sd@queasysnail.net=
+> wrote:
+>
+> Check that protocol and flags are updated correctly for
+> neighbour and pneigh entries.
+>
+> Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
 
-  TAP version 13
-  1..4
-  ok 1 nl_nlctrl.getfamily_do
-  ok 2 nl_nlctrl.getfamily_dump
-  ok 3 nl_nlctrl.getpolicy_dump
-  ok 4 nl_nlctrl.getpolicy_by_op
-  # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/net/Makefile          |   1 +
- .../testing/selftests/net/lib/py/__init__.py  |   5 +-
- tools/testing/selftests/net/lib/py/ynl.py     |  10 +-
- tools/testing/selftests/net/nl_nlctrl.py      | 135 ++++++++++++++++++
- 4 files changed, 148 insertions(+), 3 deletions(-)
- create mode 100755 tools/testing/selftests/net/nl_nlctrl.py
-
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index a24ea64e2ae8..6bced3ed798b 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -65,6 +65,7 @@ TEST_PROGS := \
- 	netns-name.sh \
- 	netns-sysctl.sh \
- 	nl_netdev.py \
-+	nl_nlctrl.py \
- 	pmtu.sh \
- 	psock_snd.sh \
- 	reuseaddr_ports_exhausted.sh \
-diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
-index 54e84282781c..e0c920041a58 100644
---- a/tools/testing/selftests/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/net/lib/py/__init__.py
-@@ -15,7 +15,8 @@ from .nsim import NetdevSim, NetdevSimDev
- from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
-     bpftool, ip, ethtool, bpftrace, rand_port, rand_ports, wait_port_listen, \
-     wait_file, tool
--from .ynl import NlError, YnlFamily, EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily
-+from .ynl import NlError, NlctrlFamily, YnlFamily, \
-+    EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily
- from .ynl import NetshaperFamily, DevlinkFamily, PSPFamily, Netlink
- 
- __all__ = ["KSRC",
-@@ -31,4 +32,4 @@ __all__ = ["KSRC",
-            "NetdevSim", "NetdevSimDev",
-            "NetshaperFamily", "DevlinkFamily", "PSPFamily", "NlError",
-            "YnlFamily", "EthtoolFamily", "NetdevFamily", "RtnlFamily",
--           "RtnlAddrFamily", "Netlink"]
-+           "NlctrlFamily", "RtnlAddrFamily", "Netlink"]
-diff --git a/tools/testing/selftests/net/lib/py/ynl.py b/tools/testing/selftests/net/lib/py/ynl.py
-index e8aa97936f6c..2e567062aa6c 100644
---- a/tools/testing/selftests/net/lib/py/ynl.py
-+++ b/tools/testing/selftests/net/lib/py/ynl.py
-@@ -30,7 +30,8 @@ from .ksft import ksft_pr, ktap_result
- __all__ = [
-     "NlError", "NlPolicy", "Netlink", "YnlFamily", "SPEC_PATH",
-     "EthtoolFamily", "RtnlFamily", "RtnlAddrFamily",
--    "NetdevFamily", "NetshaperFamily", "DevlinkFamily", "PSPFamily",
-+    "NetdevFamily", "NetshaperFamily", "NlctrlFamily", "DevlinkFamily",
-+    "PSPFamily",
- ]
- 
- #
-@@ -63,6 +64,13 @@ __all__ = [
-         super().__init__((SPEC_PATH / Path('net_shaper.yaml')).as_posix(),
-                          schema='', recv_size=recv_size)
- 
-+
-+class NlctrlFamily(YnlFamily):
-+    def __init__(self, recv_size=0):
-+        super().__init__((SPEC_PATH / Path('nlctrl.yaml')).as_posix(),
-+                         schema='', recv_size=recv_size)
-+
-+
- class DevlinkFamily(YnlFamily):
-     def __init__(self, recv_size=0):
-         super().__init__((SPEC_PATH / Path('devlink.yaml')).as_posix(),
-diff --git a/tools/testing/selftests/net/nl_nlctrl.py b/tools/testing/selftests/net/nl_nlctrl.py
-new file mode 100755
-index 000000000000..d19e206c2c02
---- /dev/null
-+++ b/tools/testing/selftests/net/nl_nlctrl.py
-@@ -0,0 +1,135 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+Tests for the nlctrl genetlink family (family info and policy dumps).
-+"""
-+
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import ksft_eq, ksft_ge, ksft_true, ksft_in, ksft_not_in
-+from lib.py import NetdevFamily, EthtoolFamily, NlctrlFamily
-+
-+
-+def getfamily_do(ctrl) -> None:
-+    """Query a single family by name and validate its ops."""
-+    fam = ctrl.getfamily({'family-name': 'netdev'})
-+    ksft_eq(fam['family-name'], 'netdev')
-+    ksft_true(fam['family-id'] > 0)
-+
-+    # The format of ops is quite odd, [{$idx: {"id"...}}, {$idx: {"id"...}}]
-+    # Discard the indices and re-key by command id.
-+    ops_by_id = {v['id']: v for op in fam['ops'] for v in op.values()}
-+    ksft_eq(len(ops_by_id), len(fam['ops']))
-+
-+    # All ops should have a policy (either do or dump has one)
-+    for op in ops_by_id.values():
-+        ksft_in('cmd-cap-haspol', op['flags'],
-+                comment=f"op {op['id']} missing haspol")
-+
-+    # dev-get (id 1) should support both do and dump
-+    ksft_in('cmd-cap-do', ops_by_id[1]['flags'])
-+    ksft_in('cmd-cap-dump', ops_by_id[1]['flags'])
-+
-+    # qstats-get (id 12) is dump-only
-+    ksft_not_in('cmd-cap-do', ops_by_id[12]['flags'])
-+    ksft_in('cmd-cap-dump', ops_by_id[12]['flags'])
-+
-+    # napi-set (id 14) is do-only and requires admin
-+    ksft_in('cmd-cap-do', ops_by_id[14]['flags'])
-+    ksft_not_in('cmd-cap-dump', ops_by_id[14]['flags'])
-+    ksft_in('admin-perm', ops_by_id[14]['flags'])
-+
-+    # Notification-only commands (dev-add/del/change-ntf etc.) must
-+    # not appear in the ops list since they have no do/dump handlers.
-+    for ntf_id in [2, 3, 4, 6, 7, 8]:
-+        ksft_not_in(ntf_id, ops_by_id,
-+                    comment=f"ntf-only cmd {ntf_id} should not be in ops")
-+
-+
-+def getfamily_dump(ctrl) -> None:
-+    """Dump all families and verify expected entries."""
-+    families = ctrl.getfamily({}, dump=True)
-+    ksft_ge(len(families), 2)
-+
-+    names = [f['family-name'] for f in families]
-+    ksft_in('nlctrl', names, comment="nlctrl not found in family dump")
-+    ksft_in('netdev', names, comment="netdev not found in family dump")
-+
-+
-+def getpolicy_dump(_ctrl) -> None:
-+    """Dump policies for ops using get_policy() and validate results.
-+
-+    Test with netdev (split ops) where do and dump can have different
-+    policies, and with ethtool (full ops) where they always share one.
-+    """
-+    # -- netdev (split ops) --
-+    ndev = NetdevFamily()
-+
-+    # dev-get: do has a real policy with ifindex, dump has no policy
-+    # (only the reject-all policy with maxattr=0)
-+    pol = ndev.get_policy('dev-get', 'do')
-+    ksft_in('ifindex', pol.attrs,
-+            comment="dev-get do policy should have ifindex")
-+    ksft_eq(pol.attrs.get('ifindex', {}).get('type'), 'u32')
-+
-+    pol_dump = ndev.get_policy('dev-get', 'dump')
-+    ksft_eq(len(pol_dump.attrs), 0,
-+            comment="dev-get should not accept any attrs")
-+
-+    # napi-get: both do and dump have real policies
-+    pol_do = ndev.get_policy('napi-get', 'do')
-+    ksft_ge(len(pol_do.attrs), 1)
-+
-+    pol_dump = ndev.get_policy('napi-get', 'dump')
-+    ksft_ge(len(pol_dump.attrs), 1)
-+
-+    # -- ethtool (full ops) --
-+    et = EthtoolFamily()
-+
-+    # strset-get (has both do and dump, full ops share policy)
-+    pol_do = et.get_policy('strset-get', 'do')
-+    ksft_ge(len(pol_do.attrs), 1, comment="strset-get should have a do policy")
-+
-+    pol_dump = et.get_policy('strset-get', 'dump')
-+    ksft_ge(len(pol_dump.attrs), 1,
-+            comment="strset-get should have a dump policy")
-+
-+    # Same policy means same attribute names
-+    ksft_eq(set(pol_do.attrs.keys()), set(pol_dump.attrs.keys()))
-+
-+    # linkinfo-set is do-only (SET command), no dump
-+    pol_do = et.get_policy('linkinfo-set', 'do')
-+    ksft_ge(len(pol_do.attrs), 1,
-+            comment="linkinfo-set should have a do policy")
-+
-+    pol_dump = et.get_policy('linkinfo-set', 'dump')
-+    ksft_eq(pol_dump, None,
-+            comment="linkinfo-set should not have a dump policy")
-+
-+
-+def getpolicy_by_op(_ctrl) -> None:
-+    """Query policy for specific ops, check attr names are resolved."""
-+    ndev = NetdevFamily()
-+
-+    # dev-get do policy should have named attributes from the spec
-+    pol = ndev.get_policy('dev-get', 'do')
-+    ksft_ge(len(pol.attrs), 1)
-+    # All attr names should be resolved (no 'attr-N' fallbacks)
-+    for name in pol.attrs:
-+        ksft_true(not name.startswith('attr-'),
-+                  comment=f"unresolved attr name: {name}")
-+
-+
-+def main() -> None:
-+    """ Ksft boiler plate main """
-+    ctrl = NlctrlFamily()
-+    ksft_run([getfamily_do,
-+              getfamily_dump,
-+              getpolicy_dump,
-+              getpolicy_by_op],
-+             args=(ctrl, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.53.0
-
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
