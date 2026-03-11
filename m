@@ -1,179 +1,170 @@
-Received: from eggs.gnu.org (eggs.gnu.org [209.51.188.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E56830C35F;
-	Wed, 11 Mar 2026 22:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.51.188.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987E3371894
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 22:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773266752; cv=none; b=jpyhZNZBp0xs0oATa1b6Tu3P9ri+HyG1HOjuAUN/9l4Ljy7QKMDngLzCMc1PahmVqealmgJVXLF7gPA+6Y3ucaPrgin1KGf1H0h1ehgoLaTtmJWlU0mse3HKYHCM1z4T7rdP6RY/fIeh11GKxFxlB+ZePbcilpQaRpGOvjoVGxk=
+	t=1773266894; cv=none; b=HRew1YaAdT9zkvn1GF+47/ai7G6lm7YPqssj255Rs/TXbeCgG/Pn7FQSL6TEm1lbZgpgNhvppznESN8cbC1mDScID1UvevUilcfqFpbw6mkIpjEW1nnrVdN3N+hG2H1dgKtkPocECQbm5rkS08bYsxYNSrfLzr0LI1ca53Npl0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773266752; c=relaxed/simple;
-	bh=91FB1AHgMra9+09mR5vmCO8/+mAJlbaKOvMg7cw5oiQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FbA/XTTMxMZkRzj/DKFYh6KPuUHgFjpgAe4aEJVBxseO/EKLo7L6kmN1XF+SYnMvtWDC3cA/2HkBGcGKCbA+t/X8HeFaHb0xNu5j6/EffPJpklHYPGLZuhB/K/oQU5G/wF0A9w6+1KcOsVc893tYCt151axksRE4tqPE9AgRx0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gnu.org; spf=pass smtp.mailfrom=gnu.org; dkim=pass (2048-bit key) header.d=gnu.org header.i=@gnu.org header.b=nJx57wff; arc=none smtp.client-ip=209.51.188.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gnu.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnu.org
+	s=arc-20240116; t=1773266894; c=relaxed/simple;
+	bh=eckzTySEcXipLe+VU78GzpoVPoQ+1K7RQ8jMl1qup7I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lLxwwCDefsThkNqYUsxdliBcF+Zc/J5fVCMcQOtVqS41GoBxSJ1XFl8P6kGPMI1mi2+1afsTYTNgfmhuVy+c372lSbm5FrAOchZkvQgrkGwiX8gbBxbNUIV8NR/3Z14NkW5d7YzGc+M9nLO7JfVRHCQbxZhgcNhzteCRcOZHcos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m2ajF0F7; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gnu.org header.i=@gnu.org header.b="nJx57wff"
-Received: from fencepost.gnu.org ([2001:470:142:3::e])
-	by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.90_1)
-	(envelope-from <jemarch@gnu.org>)
-	id 1w0RgY-0003pd-Qm; Wed, 11 Mar 2026 18:05:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
-	s=fencepost-gnu-org; h=MIME-Version:Date:References:In-Reply-To:Subject:To:
-	From; bh=91FB1AHgMra9+09mR5vmCO8/+mAJlbaKOvMg7cw5oiQ=; b=nJx57wffxM6REzmbNKnz
-	7yXTcwapKnUKxuyJigAeg16q8y0vg1MUk7GbQSvOi1+9cvxb2X4eZNRHKihREJ4YMNAYrfw72ldIp
-	BpOZ72y0g0/3E3cfqwKuIANgqsMae925KuP/PPMzSQVz+zn5xkDTW7uV+pSQ8QlQIvVDvZW4CqhFQ
-	W/snMRlBkk7N45joxfIgHb9JNzfJViWT8qSkCU45VRuUuQOgLq53jAwGAOyVIQJcWDc/72rhi73oc
-	xtU3HOicpOEjt6BL8FsZ6+xGNg475ZIHtlJBm/G1I5om8Wn4pQjs1Z0jn9CoIeTy3+5sEoqNxuB6I
-	iQrlbt2b7yfnJA==;
-From: "Jose E. Marchesi" <jemarch@gnu.org>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-Cc: Hari Bathini <hbathini@linux.ibm.com>,  Alexei Starovoitov
- <alexei.starovoitov@gmail.com>,  Eduard <eddyz87@gmail.com>,  bpf
- <bpf@vger.kernel.org>,  Alexei Starovoitov <ast@kernel.org>,  Daniel
- Borkmann <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,
-  Shuah Khan <shuah@kernel.org>,  "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] selftests/bpf: improve test coverage for kfunc call
-In-Reply-To: <bc410b38-f5ab-47cf-a434-fa4f43751921@linux.dev>
-References: <20260303131453.328674-1-hbathini@linux.ibm.com>
-	<CAADnVQKuARvSirPjnTcSifLPunCiKC4Nenq0Mr61GpzbW5WxWg@mail.gmail.com>
-	<bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com>
-	<CAADnVQ+4N4WWLxan_qibZ7HmONJyMZaP=RF+a9tMSPoz=0LqkQ@mail.gmail.com>
-	<09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
-	<bc410b38-f5ab-47cf-a434-fa4f43751921@linux.dev>
-Date: Wed, 11 Mar 2026 23:05:37 +0100
-Message-ID: <87pl5af2dq.fsf@gnu.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m2ajF0F7"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852a8482fcso2268845e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 15:08:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773266890; x=1773871690; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jXJIXQ3qsiPhJua6yI0vMRP9sGOp7VDYpCWyFHFNhZU=;
+        b=m2ajF0F7tZ3pWTkmxKLpUvcukAjc418XjqfW3veoVlHoJf/+u6zefr92CIEXoZE65+
+         N+c0izwroUGApIkU1EJaMw+0dC+KnGd0e9QVQcmEOi1/82fpm6vN5A4VzvS0q+Rs7RMt
+         d3P3z2CndMqf9v48cUnC/PXQ9CmRIDb0bmX9brh+H2L6OVefBA5W1uN6VuOIhOxpqVak
+         nrwi1GYtK3NHOmOT9JAgW9ABrz7561JZokhXkdx3G6kWc4UBbmdQk1TRPhP9Mycb8IMr
+         KfKC+BMcjJfSZv4OVsZymuuD88+Ty0WkuwE+27mP+qt7FUX4vhy3oNVUeQ6yvQ1sRPc8
+         86mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773266890; x=1773871690;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jXJIXQ3qsiPhJua6yI0vMRP9sGOp7VDYpCWyFHFNhZU=;
+        b=MHohOCbLEgAZ0yLe3BvnfmQXILOHAczbL9frvamHW2D4kH9JUgaMCThS2PEd0mFrOk
+         v7n+9ulZhNNnv/3RxWi3+PfpIoEsI9f+yCohPTtkrfbEUa+2UvPoEzW5/3CCEkiRzTJS
+         z5mlFe5B0A+eJcYPtknItUgplOpfjhg9rdOmoBpgoqV+R9dyw99g4Y8/UqOl41wKmB89
+         DanewOOZSQBJR1us51WjJgyFl61mkNOrTHHJ32HyFscSpvrZmQ1aguk8vZ+ZC6aBxsyb
+         ZAEDQiQgjvg06m2Wm7jl/IM6xJMExbRCHSp7RjZVO/BZpgBqgaMnn63JtAbRkhYruA9u
+         sWJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWAjFvWDJ9pSlnaEgPLRf88Fv9e6qxHEe0eP5b9VayoM9H8nYT2VSXnE4TGcbAtKFdoA0110n+sn2ZXagP34BM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGEcH/F1Ah0LzRHbHCEMAw5GZjkU0CW60rnkNk0libpxEbvrK/
+	+0Om8I8N+PVF8nPzh/mI0BK7sflwk3/3GIOSD7ZF2MjX6M0K2x6uuw8K
+X-Gm-Gg: ATEYQzybSXKtGpX4gRoKNS6lVzi4T7OyqdEwxUfMzWCNTVScH2jUNNOnfIQuJj8JV7b
+	dh0L9dn4P5YygdaER21swyl4XwLe35YRxfljU83TDHoASkwN7kgAfqmRP+yWVY2QhOctF0bPQuV
+	rrimFlir3njaIJzv5gpVnKAQQVusg7Gh1QNgqA2xClIj47qdkSE41M/Cv3ZDWJZ2yybN0uywY1M
+	8FSfpc4HFIeJBmCbjiIZS+oyvAI9YBorgqzI4NM1Uz5sPNLa3Yt4xujD0xGM8/7DwocatLEp1Gh
+	rZypN67yu5o0/12e+0Ykim1tCBVLu7HaXrCGC2S776g3EzPiVUzfspNghVVWSJDI5Q5XjGiAdi7
+	3ehy62SBpH9/2OTVJ7gDmxIpKigUuG5OQaIKLGmlUw1CKOKw7euA39v4mJ/Xu0fHBb1bWSd+h0q
+	YOn5pE36SQTaoPs4L2KVa7oY03eII0PO8mEmCmVIpdK/hGV9TbM0+6duPyK2aJ2v5wAtSMoML1
+X-Received: by 2002:a05:600c:3b16:b0:485:3e6c:aabc with SMTP id 5b1f17b1804b1-4854b107dddmr62988565e9.19.1773266889508;
+        Wed, 11 Mar 2026 15:08:09 -0700 (PDT)
+Received: from gandalf.schnuecks.de (p5b2e2ef5.dip0.t-ipconnect.de. [91.46.46.245])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541aa73dasm512043875e9.2.2026.03.11.15.08.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 15:08:09 -0700 (PDT)
+Received: by gandalf.schnuecks.de (Postfix, from userid 500)
+	id 989BA302FC8A; Wed, 11 Mar 2026 23:08:08 +0100 (CET)
+Date: Wed, 11 Mar 2026 23:08:08 +0100
+From: Simon Baatz <gmbnomis@gmail.com>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	mptcp@lists.linux.dev, Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	David Ahern <dsahern@kernel.org>, Jon Maloy <jmaloy@redhat.com>,
+	Jason Xing <kerneljasonxing@gmail.com>, mfreemon@cloudflare.com,
+	Shuah Khan <shuah@kernel.org>, Stefano Brivio <sbrivio@redhat.com>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>
+Subject: Re: [PATCH net-next v3 2/6] mptcp: keep rcv_mwnd_seq in sync with
+ subflow rcv_wnd
+Message-ID: <abHnyJInqmGNIWiq@gandalf.schnuecks.de>
+References: <20260309-tcp_rfc7323_retract_wnd_rfc-v3-0-4c7f96b1ec69@gmail.com>
+ <20260309-tcp_rfc7323_retract_wnd_rfc-v3-2-4c7f96b1ec69@gmail.com>
+ <334053df-9824-4bfe-b37c-8711d0a5a9bd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <334053df-9824-4bfe-b37c-8711d0a5a9bd@kernel.org>
+
+Hi Matt,
+
+On Wed, Mar 11, 2026 at 07:27:34PM +0100, Matthieu Baerts wrote:
+> Hi Simon,
+> 
+> On 09/03/2026 09:02, Simon Baatz via B4 Relay wrote:
+> > From: Simon Baatz <gmbnomis@gmail.com>
+> > 
+> > MPTCP shares a receive window across subflows and applies it at the
+> > subflow level by adjusting each subflow's rcv_wnd when needed.  With
+> > the new TCP tracking of the maximum advertised window sequence,
+> > rcv_mwnd_seq must stay consistent with these subflow-level rcv_wnd
+> > adjustments.
+> 
+> Thank you for these modifications!
+> 
+> > Signed-off-by: Simon Baatz <gmbnomis@gmail.com>
+> > ---
+> >  net/mptcp/options.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/net/mptcp/options.c b/net/mptcp/options.c
+> > index 43df4293f58bfbd8a8df6bf24b9f15e0f9e238f6..8a1c5698983cff3082d68290626dd8f1e044527f 100644
+> > --- a/net/mptcp/options.c
+> > +++ b/net/mptcp/options.c
+> 
+> (...)
+> 
+> > @@ -1338,8 +1339,9 @@ static void mptcp_set_rwin(struct tcp_sock *tp, struct tcphdr *th)
+> >  		 */
+> >  		rcv_wnd_new = rcv_wnd_old;
+> >  		win = rcv_wnd_old - ack_seq;
+> > -		tp->rcv_wnd = min_t(u64, win, U32_MAX);
+> > -		new_win = tp->rcv_wnd;
+> > +		new_win = min_t(u64, win, U32_MAX);
+> > +		tp->rcv_wnd = new_win;
+> 
+> Out of curiosity, why did you change the two lines above?
+> (even if it makes sense, the diff is a bit confusing, and the commit
+> message doesn't mention this :) )
+
+I wanted to keep tcp_update_max_rcv_wnd_seq() calls close to the
+respective update sites (same pattern everywhere).  In the original
+form
+
+tp->rcv_wnd = min_t(u64, win, U32_MAX);
+tcp_update_max_rcv_wnd_seq(tp);
+new_win = tp->rcv_wnd;
+
+the ordering suggests that tcp_update_max_rcv_wnd_seq() might modify
+tp->rcv_wnd.
+
+So, I changed it for legibility.  Now, I realize it made the
+diff harder to read.  I might have optimized the wrong metric here ;-)
+
+> 
+> > +		tcp_update_max_rcv_wnd_seq(tp);
+> 
+> 
+> This patch adding this new helper each time rcv_wnd is modified looks
+> good to me:
+> 
+> Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> 
+> 
+> Note: just in case a new version is needed, checkpatch reported an error
+> in patch 4/6 because of a trailing whitespace (+ No space is necessary
+> after a cast in patch 1/6), see:
+> 
+>   https://github.com/multipath-tcp/mptcp_net-next/actions/runs/22844479818
+
+Thanks. I will change that if there is a v4.
 
 
-> On 3/11/26 11:03 AM, Hari Bathini wrote:
->>
->> On 11/03/26 9:32 pm, Alexei Starovoitov wrote:
->>> On Wed, Mar 11, 2026 at 8:10=E2=80=AFAM Hari Bathini
->>> <hbathini@linux.ibm.com> wrote:
->>>>
->>>>>
->>>>>> +
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Check zero-extension */
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val !=3D (unsigned long)a)
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 return 1;
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Check no sign-extension */
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val < 0)
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 return 2;
->>>>>> +
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 val =3D b;
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val !=3D (unsigned long)b)
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 return 3;
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val < 0)
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 return 4;
->>>>>> +
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 val =3D c;
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val !=3D (unsigned long)c)
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 return 5;
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val < 0)
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 return 6;
->>>>>> +
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->>>>>> +}
->>>>>
->>>>> Overall this looks very useful.
->>>>> I would expand with another test where a,b,c are s8,s16,s32.
->>>>
->>>> Slightly different approach but kfunc_call_test4/bpf_kfunc_call_test4
->>>> cover signed arguments already?
->>>
->>> Ahh. Then may be tweak it to adopt similar fine grained
->>> error reporting as your bpf_kfunc_call_test5()
->>
->> I Prefer this.
->>
->> Does the below change to bpf_kfunc_call_test4 look fine:
->>
->> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
->> b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
->> index 48dcaf93bb9f..6237c2222633 100644
->> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
->> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
->> @@ -760,8 +760,30 @@ __bpf_kfunc struct sock
->> *bpf_kfunc_call_test3(struct sock *sk)
->>
->> =C2=A0__bpf_kfunc long noinline bpf_kfunc_call_test4(signed char a, short
->> b, int c, long d)
->
-> I might regret for bringing this up as it could be yet another ABI
-> fiasco between gcc and llvm.
-
-char is signed in BPF in both compilers, matching x86.
-
-> As per C standard, sign of unadorned char (i.e. w/o explicit signed or
-> unsigned prefix) is ABI defined.
-> For gcc-bpf char is specified to be signed.
-> So test4 has s8, while new test5 has u8. Would it make sense to have
-> an additional test without signed/unsigned annotation for char ?
-> This will flag any discrepancy between the two compilers.
->
-> Thx,
-> -Vineet
->
->> =C2=A0{
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Make val as volatile to av=
-oid compiler optimizations.
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Verify that negative signe=
-d values remain negative after
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * sign-extension (JIT must s=
-ign-extend, not zero-extend).
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 volatile long val;
->> +
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* val will be positive, if JIT do=
-es zero-extension instead
->> of sign-extension */
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 val =3D a;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val >=3D 0)
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 return 1;
->> +
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 val =3D b;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val >=3D 0)
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 return 2;
->> +
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 val =3D c;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (val >=3D 0)
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 return 3;
->> +
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Provoke the compiler to as=
-sume that the caller has
->> sign-extended a,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * b and c on platforms =
-where this is required (e.g. s390x).
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Original behavior: return =
-sum for backward compatibility
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return (long)a + (long)b + (l=
-ong)c + d;
->> =C2=A0}
->>
->>
->> - Hari
+-- 
+Simon Baatz <gmbnomis@gmail.com>
