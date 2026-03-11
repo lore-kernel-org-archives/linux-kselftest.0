@@ -1,49 +1,25 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB8A2EA731
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 14:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CCF392C27;
+	Wed, 11 Mar 2026 14:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773238666; cv=none; b=tWRZq3jNZTdmSBc6yWzCb2m3zoQrW9DlanVl4VwCrR55Hgm1XibdabXejfjdFCDTqmuzPZ3+P5Ie64qX/Bykr/MFUi3J8u4qECvNkpqISpn2Go3SLW65hnevwGhEJA6FnbYudfbfZfMHxVI5/kpsX0/uii8kiDQw1eqB2ysbrhw=
+	t=1773239185; cv=none; b=pXQm8IRo0oymeMLQOoBxGcD+RoTQ6AJzo7QxROU/Whklb0WMb1h5T+Ir8dciDPH+EtX7G4TdIglGgIRakw04BX9uL76nxkOynF8qNDDXttY5x98mV4aOiYrurM8eaYsHCQmPXdwEFlG+/ZF0/0BEv0kHc8LSKkIK7TXwE6pgiJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773238666; c=relaxed/simple;
-	bh=F4ThM70N14D7WqCIFJvVReqZ4AoaM2J8nf2lReuds9U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=M9mUmeaYm6S1VqlNWfXM2ddR1pyUEzxDYFvG/3PbYs8q53veV07QQF4IvgDSfXufNGDLeHbRpYIR6VVSaW0o/4fbbqHm2rN+vK0tYGsfhGxkFeG4daVD5rmVcBzdh8O5tBOAw5YDlgYpG+tObGUp8uLCq9aAe1xsxhFEZqNhqrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HKHLeiGo; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HKHLeiGo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773238664;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8aP5eMflMCUNlRkDOW0RWxKmlwhMbtbh/1Qm40wa/18=;
-	b=HKHLeiGoXG7+k3oH6GqGvfcwbnjQvWsykubeExRhK/TE67R3EHDAO4iFjIGGs//eDSkMbs
-	OHBRkKg4y+7IHjuoAgRegh1oGl9yXlDykAo9pFZGp3rh8hT85ZNP5UETJ00SB2n97I/0l6
-	1SHkx0H8r+qLBcZk/Se/+ayWNdjmE9U=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-301-Ru_SNn1xPkGDi3zjdGy7Yg-1; Wed,
- 11 Mar 2026 10:17:41 -0400
-X-MC-Unique: Ru_SNn1xPkGDi3zjdGy7Yg-1
-X-Mimecast-MFC-AGG-ID: Ru_SNn1xPkGDi3zjdGy7Yg_1773238660
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0F53E195605F;
-	Wed, 11 Mar 2026 14:17:40 +0000 (UTC)
-Received: from [10.22.89.250] (unknown [10.22.89.250])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 62BEC1956095;
-	Wed, 11 Mar 2026 14:17:39 +0000 (UTC)
-Message-ID: <4238fec3-1a37-4924-b13e-a42d2454412c@redhat.com>
-Date: Wed, 11 Mar 2026 10:17:38 -0400
+	s=arc-20240116; t=1773239185; c=relaxed/simple;
+	bh=nec+lHXQhG8vejTJJCAfoQlVH/vpIyvzztoAVuieMIU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=YTdZUgDJF/ixK0LmaUiWgJdiFOU0K9NpICgRBFACs9blWMBPv0oisB073Ih9oDEjYzOMi5O6AZZHwPZMSftxxDNZW2y5HwVfvx73TmWk206/ugrH0nrS/xDyoYcnT7+hdtP1EV6DYLJsucJU5hQ/OWkF9k8u64fyMQTghfTe+n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11B25165C;
+	Wed, 11 Mar 2026 07:26:17 -0700 (PDT)
+Received: from [10.1.25.79] (e127648.arm.com [10.1.25.79])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43C2D3F7BD;
+	Wed, 11 Mar 2026 07:26:21 -0700 (PDT)
+Message-ID: <1d09f674-0c0b-47fc-abaf-6db6b01c775c@arm.com>
+Date: Wed, 11 Mar 2026 14:26:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,48 +27,68 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [ISSUE] cgroup: test_percpu_basic fails on PREEMPT_RT due to lazy
- percpu stat flushing
-To: Lucas Liu <hongzliu@redhat.com>, cgroups@vger.kernel.org,
+Subject: Re: [PATCH RFC 5/7] selftests/sched: Add SCHED_DEADLINE bandwidth
+ tests to kselftest
+From: Christian Loehle <christian.loehle@arm.com>
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Valentin Schneider <vschneid@redhat.com>,
+ Clark Williams <williams@redhat.com>, Gabriele Monaco <gmonaco@redhat.com>,
+ Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+ Luca Abeni <luca.abeni@santannapisa.it>, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-References: <CAEnjF8FxM2CGgGC0R42R7R4=udHMtkwV9bCVcw7NDq7KTZMLkg@mail.gmail.com>
+References: <20260306-upstream-deadline-kselftests-v1-0-2b23ef74c46a@redhat.com>
+ <20260306-upstream-deadline-kselftests-v1-5-2b23ef74c46a@redhat.com>
+ <129bb66c-74fa-4795-8d79-6c8e10a66e17@arm.com>
+ <abFsuvsmEdoypYs4@jlelli-thinkpadt14gen4.remote.csb>
+ <da6b6b85-25f1-4b22-9638-d68b161331a4@arm.com>
 Content-Language: en-US
-Cc: Li Wang <liwan@redhat.com>
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <CAEnjF8FxM2CGgGC0R42R7R4=udHMtkwV9bCVcw7NDq7KTZMLkg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <da6b6b85-25f1-4b22-9638-d68b161331a4@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 3/11/26 4:49 AM, Lucas Liu wrote:
-> Hi recently I met this issue
->   ./test_kmem
-> ok 1 test_kmem_basic
-> ok 2 test_kmem_memcg_deletion
-> ok 3 test_kmem_proc_kpagecgroup
-> ok 4 test_kmem_kernel_stacks
-> ok 5 test_kmem_dead_cgroups
-> memory.current 24514560
-> percpu 15280000
-> not ok 6 test_percpu_basic
->
-> In this test the memory.current 24514560, percpu 15280000, Diff ~9.2MB.
->
-> #define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
->
-> in this part (8cpus) MAX_VMSTAT_ERROR is 4M memory. On the RT kernel,
-> the labs(current - percpu) is 9.2M, that is the root cause for this
-> failure. I am not sure what value is suitable for this case(2M per cpu
-> maybe?)
+On 3/11/26 13:44, Christian Loehle wrote:
+> On 3/11/26 13:23, Juri Lelli wrote:
+>> On 11/03/26 09:31, Christian Loehle wrote:
+>>> On 3/6/26 16:10, Juri Lelli wrote:
+>>
+>> ...
+>>
+>>>> +	/* Start one cpuhog per CPU at max bandwidth */
+>>>> +	printf("  Starting %d cpuhog tasks at max bandwidth...\n", num_cpus);
+>>>> +
+>>>> +	for (i = 0; i < num_cpus; i++) {
+>>>> +		pids[i] = dl_create_cpuhog(runtime_ns, deadline_ns, period_ns, 0);
+>>>> +		if (pids[i] < 0) {
+>>>> +			printf("  Task %d failed to start: %s\n",
+>>>> +			       i + 1, strerror(errno));
+>>>> +			goto cleanup;
+>>>> +		}
+>>>> +		started++;
+>>>> +	}
+>>>
+>>> Would it be okay to just have one task per max-cap CPU to make this pass on HMP?
+>>> Or something more sophisticated?
+>>>
+>>
+>> On HMP we should probably have max bandwidth hogs on big CPUs and then
+>> scale runtime (bandwidth) considering smaller CPUs capacities. Cannot
+>> quickly check atm, but that info (max cap per-CPU) is available
+>> somewhere in sys or proc, is it?
+> 
+> Yes it's here:
+> /sys/devices/system/cpu/cpu0/cpu_capacity
+> 
+> FWIW I've attached the two patches to get a pass out of arm64 HMP.
 
-Li Wang had posted patches to address some of the problems in this test.
+Wait nevermind, this isn't right, this would expect a 10 CPU system with
+[1024, 128, 128, 128, 128, 128, 128, 128, 128, 128]
+= 2176
+would allow for 2 1024-equivalent hogs, but that is obviously wrong as
+the capacity -> bandwidth calculation must be capped in practice by
+only summing the k-highest-cap-CPUs if there's only k deadline-tasks.
 
-https://lore.kernel.org/lkml/20260306071843.149147-2-liwang@redhat.com/
-
-It could be the case that lazy percpu stat flushing can also be a factor 
-here. In this case, we may need to reread the stat counters again 
-several time with some delay to solve this problem.
-
-Cheers,
-Longman
-
+Let me go and read how this is actually supposed to work.
