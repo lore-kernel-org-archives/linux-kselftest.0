@@ -1,122 +1,210 @@
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8102C35F617
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 18:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA927355F53
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 18:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773254525; cv=pass; b=VhSGtqNBdkTbaZnlEBxE2QAerWlWi0d/qJnT/wlURmnq5j+2WayG379vDztWsg7uwH6mnuMgHnW1sf2RcpbGQLNdIk9v7WPGnnFiganxfHTECizHTRlKSCBs2MFbiJX4Ng5vSwqM3CTW/2/06Mr5D1rUFqRKnJvms5T8cjj2qb0=
+	t=1773254882; cv=pass; b=Neq3TqlRDnfr2zsM0RPsvj7GXUXt7eYYvCH/KyF4vA+4e/YSR5ykK41YUpwWrNqQW8Qk5iLX8vqiglJzs1mXLw+t/VhEtKYNrVToY9niKPjOnG4kWnO9fOZSw1l8stkfmOh55ZQg3c+Gir1hS8H0IHli4nbkRahB9wfI3G2Qqqs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773254525; c=relaxed/simple;
-	bh=LpTDiNlHjR7RogeTiDXmpnsy0/5Mme6VyuFnUyJsEkM=;
+	s=arc-20240116; t=1773254882; c=relaxed/simple;
+	bh=T7kuCnGv+MPhajgFi1ytSn4Nh0USvlRRcKcpeiEc3aE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I7nj0ZXHx/VajqVpFxwU+rcYfiLXojSt4ti/9h2fwvSx3lFUR7sK87A4B1y6ZeE0beNIOYrBNC5USmcTEfCDMJnDOqgcc9Uflc7QIyiduHliBaMGQVXFbNcxiEIm6cJT67iedkCe3BCr0pltvgCXHXjmosa+GVkgdxTRHiQkYaE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v8gsj13T; arc=pass smtp.client-ip=209.85.221.171
+	 To:Cc:Content-Type; b=tZBMwQG4dlvTFend5XBR2CmT16JSK/foCrozHvKaqAhlUoJAolRp2mu0sYkwJMV67I0oXtAfFEe2wmIDhSlWp5+FEBfXRcHjlmLI5gTGfN7kVh6dRaiU7cXfvQ2p8bbM2b2XXtH+oZwdq+z9vAAbYhD7M9BDEHiE/mdhyz8S4EU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g+85Onll; arc=pass smtp.client-ip=209.85.217.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v8gsj13T"
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-56afafef7aeso250879e0c.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 11:42:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773254522; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g+85Onll"
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-5ffe0a56b29so66444137.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 11:48:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773254880; cv=none;
         d=google.com; s=arc-20240605;
-        b=ZBdg56GPPg60RC8fbHvrUDKZEiT+lWhEnzWEDVyyPv+HIk3lHEclz4ud+ZZIqzh5lm
-         RJV0UlE8Z5ttpUHDmw3d4NCoiTOuAam4OtyQ9dYUEUoskHmJVtNGlmY5Fx8p8Y+v2KnD
-         jF9t7VTqVxGpXMFyRd7F2uuXjzYzJ4lAPRMgpTk8e7SZBOjeJHNG2le0Q3qYG7pQB9IX
-         f55Ombx+yyRhPTxhpDDLGMMpL0GfUG6UJyTL2lzT0eEsAtDJkVQm7sdJ4nsMS3jwhiPz
-         HjZs2C/u7ydgr/w+VCLFjXzEYL6Spypt8LAbr/Aq6JG3eJCTdRY8U/pVltHvWmbuUBmJ
-         GJIg==
+        b=VD1/Waqj+C5khizrXCdcPAVZHAyKCipkKO7A+HKNjcoXJLWhAbwzOd60CNFoF+ub1P
+         PZveEXuL1+AjOiS7K18kgqpZq5ZLPXFEEIIbSACVRtrhBGvVJYfqv4LMqH5RJT/Ik0XH
+         Z+2W+ulqzNQAcxju+zmMQM+fTwgdGkVaU+ssZOj9FMjB9MHLpSDk4Fz7ZttHUWFAbdKC
+         jUUPofOh7jTE2KfxgA47anh97yAljZy3BdWZeVUs9PBM0o9Ma/bGbDK1NaqBGI63wqiD
+         k3PxAi5UOUcUlAgRDESEOrBsCtO/qLjM9PuGkJl3YU3CZ7VOKtu4tODERPrtFJQ6OILI
+         /UZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=BcgUYRkLhII9+M7j2ixLhI6ILk1g0NW1TskzYd0mvUw=;
-        fh=RJORCQbgwOyURoPmDyf6nZArWKlt6+goZhmJr41zEUg=;
-        b=RZ5Ptgtjs8t7h545L4q8uVyUDuINdhcITG4GBdGly7BsHtCCTXp3IPo55y8iSLd7Q3
-         bSN1s/pjhLytDuT0dVivPi1CzLsBYJZYSRPQAip2z4v+ls+7hkPe/2rypUowl0epZXk3
-         U4STWkVxxPsadeU3ZVkk9jMkKFZg/YTxdxLp16Qf4QS0IhfvM0MOwvVoSohIs54rsyfS
-         U2YtV0sMn4xbgs7HPvdkMtv1T1xYjdIxKBppPmWyTTQtsTDkH9qRG1nTuaQJQ0pkfb3c
-         CPRmHe4M69DTuAPHaOUYEaCDxhMArXpFWcl9huukt9acgIxEpoeaWHiu1AjFwT4gu2AV
-         xE1A==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=aAxpEJ8kY7+FRgHAo3nQvpaEqdFKu/X+ltjWb2tMaRY=;
+        fh=y9AwH/+rDfvEJUaHCSu1emqoSC0AhfY0AzO5q+VFeTA=;
+        b=iK4QXGJc201agvSaggeaMD5W7y9ljpumkov+zz51OctIug61f0M+Xo7VXN90MweghZ
+         biva6TVUV26zG94htjRG1BFNlK4xpCOZyTulozWZT9/OVod+BVMmNBSnA4GinGbjQ0kg
+         b70mCHK5nE1C600wE0xX+Mm8AVFBlfV6ff5uBfSi4pnrvr3sfydNP4oJ2k+dgXOqmvxo
+         ZtG9KsXahkoJY886+jCR4p+z6AO89AUcLmhXhJ0pEEIaEj8d2X/yS8HYPE1l51CEyoi1
+         6o2cJrfedIQ9J6V14FjcCrKA53kxyEkvFBP+vUowG1lkEa9WI5tDw1+DOfOOjnknU61Z
+         NGig==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773254522; x=1773859322; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BcgUYRkLhII9+M7j2ixLhI6ILk1g0NW1TskzYd0mvUw=;
-        b=v8gsj13Tksz8etj60QllyLjje/yQt0um9lDizHDWFnR7kO3xoEphI2Gm0fhZi26mD7
-         ePj9w9EUcSEk3ZCMrkpEZEbBCANbzd8P8CurJfjnlK3cWaad4ELQm9vunkMlO+2NKKNk
-         wUcAtgAoozQ3Br1jGi29cfDOCfmo42Zu+rIvv8oLOH3tQQ6ZVqBIPBYVpgzoe2tK5/yD
-         PTmmh1o6zyupuqP2xJDw6cURlTBp+HdeN05uuQKUwnhFc6GUayK+utVZzmJvkSMZXJL+
-         JaJ2OAQq92qCNYO8nInnxybR6wedhz+VGs5YEg+bHBt5qd6UsX5k04D+uCxoCkwcpG+9
-         bNKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773254522; x=1773859322;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1773254880; x=1773859680; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BcgUYRkLhII9+M7j2ixLhI6ILk1g0NW1TskzYd0mvUw=;
-        b=rUO3eYfz/EhlFfK+K7JVMw6oH/DNybhnXiXz8rJGOauPdoVd/o0eP6D3gpy7xcYNlW
-         +wDQHe3V9Wkw/WMfi1nxoFe2/nSh2Z2i66No77fVtEnkpNebrCbOlbf2yoFnXpEg1HvJ
-         tJmuSfe7jz9Pk6rKASKPkKZ2Hth6/RaQdLfkDHTiykEGmkTbt8RRnb6nPinmU/vJrkXH
-         eaxTL2oJG9fPnIj2WH7ywdCNf+8HQSq1mENZxQMbRPKd7FZPtMPTLEkibwi1h4KXzrXc
-         MEGM1tryONQ3iMTOGF1Y1ymo5R9VxPnBU+pCLJy+SI4NZ6K9hcCMYOLqSBkxhy36884j
-         Um1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWF4m0md4nfHePgj2KSQUUy/VDA9ZJnXm8dH0f/+zPvJZ2FfsO4JSIEM6emc+ih+exlA4NjLoBuk9t7Rky35+c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsQlk+ivlUr2rQbwPiz4vcO8cZISpKjkca/08GESQJ9wwl/fuO
-	XK1+LnbWuTZ6bl2wjKK+rGIII/6xhWTjP8nMszc23Zo2aUce2z4xCKPj/Q94PwPCYYJFxumUpf1
-	s+5C9WI2vf4wUTPsJtH9hXKlIu1fx6Kkpklfs585w
-X-Gm-Gg: ATEYQzxotziQr2PMF8yRwa2hpDSpcoaBgVnht+pDVS7aqyr+efwiMQczIn10BwT7nOT
-	x7l37Hhvcbl8vjkLxJtREjMVGGTMYAXEy3ZQuxtY5pMFsq2KtvcpNBSqICUQHyhnlRweKp5LOBH
-	EHNHzw9jqCP0stJt/LWS6hauX4KZNwqcp9o32J2Wwu6O0jjBc0k3mcJWnaeb5nlsfN+Henhj/+j
-	QUd/rSW9O7IosBJyLQ3+hlxTzF1VES9Lu3Tz+dcPFCO2RHCXtdFvjNhcGNoG1+fh6hh0rS8TsQt
-	wKttlSK8ZtFK39eC
-X-Received: by 2002:a05:6102:3a06:b0:5ff:30de:a421 with SMTP id
- ada2fe7eead31-601def3286cmr1502772137.30.1773254521696; Wed, 11 Mar 2026
- 11:42:01 -0700 (PDT)
+        bh=aAxpEJ8kY7+FRgHAo3nQvpaEqdFKu/X+ltjWb2tMaRY=;
+        b=g+85OnllYfNAAar0xlIjsc3zUQ83BO//dPMmtsfQZ19pJ1A2Zz5tBJW76g9FE8JuHT
+         UY7RLGcmgSqXa3K66wwN7Ehyw9GIi9+/mYhbHLVxksvIl20US+mmcuwqWSVMUSW8ZFiE
+         v40qY8hPLDYysZdk8F3fg7sCym8VQOwrNWlFN9VBAGf8QAwU8N8Tzm76F63jdFOSkck7
+         itw4rQfxvYF3mk2gZHjHokz1+3DUbD+do6ZkKire1HktFdr4s1pA3n9K8Lv826x2xuq8
+         GbgYOFjQFBuQbHlEoXtkHk3lzl0M6cJhJVDjLFz4b9Y8a1muxTCi5OWkpxKKA54AHG8M
+         QMiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773254880; x=1773859680;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aAxpEJ8kY7+FRgHAo3nQvpaEqdFKu/X+ltjWb2tMaRY=;
+        b=GEDfs/K3dN35ueiVzn5GhtqCpdts38YWEloPBwGUNWR9sWuyO8zROkNXkjNi3TGIFI
+         h6nPucqi4o1qWkPNf2i9W1DbFvrSzJEy0shodJJB+ptBaeXNIWxEVk37RYUWPyH9YQSF
+         97KEp4AWWcBbpreo6JU58zLttTIHXhcdUTqSCHStOr/5O4/Rs/YXfaVVojLKMxuH5586
+         yXRNNZjPmUYfvQ9i6SSxp3fBUTAyHNDpp5te9ynhl4l435B0dqziyK5A1vC8ZIxBQ967
+         k9ybA7GHCVhRPFPb7vdA8fv9HPAcVnuUHDhB18ZkJnqhWAxrtU+FhXhj6zJTC9zeGdkB
+         itlw==
+X-Gm-Message-State: AOJu0YyCt2vTiuQggEqtwJrufCgk10SeSopJDwnsNnole6HaxZhDoWU1
+	0dlIox/r9hvjLAiMPlMW4LBZej1cHWiNEP7TZiBFau5VGv7tcfocYMwlda8SgTjkwkwv83agCLE
+	KdZfqtE3K7Apr8kDvwbJVOvTj3qJYBG6340EbsAXM
+X-Gm-Gg: ATEYQzzlVTzHy4w/UKH6bdjkgqU2wtI+aWwA4gfXLpQmVoohbS2sYbRqefGqBuKhs7c
+	RAzlo1YoE1Z+WewoHe08eaEQLo+4sQiLmJngeojxXtJdooAtzNKzVELBYt0k/g1MCibiFdN22t+
+	3tMh0jgII7IdfJ3TKJlf86hHQRA5hb2LTiUp+TrrY4EH/XcFYZDQVc9ij6w5om5FBCrsHjB8554
+	5r19Leofgr0Q8sVetkpGEwOA87qTcgZEfP/abDjjs7cC50g5kRLbg8QVe0Vwhp+6SuijwJSZCTs
+	Zf9qAA==
+X-Received: by 2002:a05:6102:d8c:b0:5ff:f950:2184 with SMTP id
+ ada2fe7eead31-601deec184cmr1237874137.20.1773254879004; Wed, 11 Mar 2026
+ 11:47:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311110523.26624-1-liwang@redhat.com> <nynf44sljfbjeftotwow56w7nz4j3zkgnoor3ulljq5ajo4lgq@fogtfchssfnt>
-In-Reply-To: <nynf44sljfbjeftotwow56w7nz4j3zkgnoor3ulljq5ajo4lgq@fogtfchssfnt>
+References: <20260311110523.26624-1-liwang@redhat.com>
+In-Reply-To: <20260311110523.26624-1-liwang@redhat.com>
 From: Yosry Ahmed <yosryahmed@google.com>
-Date: Wed, 11 Mar 2026 11:41:24 -0700
-X-Gm-Features: AaiRm53fgVwmf0GEDRK_ykCE-CN6tKvUHuAWz4QWlmQ7q9ESPBd5nH95Yjefi8w
-Message-ID: <CAJD7tkaX8XP_JH0VQ+nN3HZhewQzGM8Yv7okeu+aJs-ETArnuw@mail.gmail.com>
+Date: Wed, 11 Mar 2026 11:47:22 -0700
+X-Gm-Features: AaiRm53fRV2TmohY-D30EpYfhqzBFeER8Ei_LKLWx_mz9_j4_3BJLjVgC7rSGxE
+Message-ID: <CAJD7tkad2Q5Dt4On91tgsXDcmORYQsBAB-CbM=EY270nJ5y_Pw@mail.gmail.com>
 Subject: Re: [PATCH 1/5] selftests/cgroup: detect and handle global zswap
  state in test_zswap
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Li Wang <liwang@redhat.com>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+To: Li Wang <liwang@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	akpm@linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
 	Muchun Song <muchun.song@linux.dev>, Nhat Pham <nphamcs@gmail.com>, Tejun Heo <tj@kernel.org>, 
 	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> >  int main(int argc, char **argv)
-> >  {
-> >       char root[PATH_MAX];
-> > -     int i;
-> > +     int i, orig_zswap_state;
-> >
-> >       ksft_print_header();
-> >       ksft_set_plan(ARRAY_SIZE(tests));
-> >       if (cg_find_unified_root(root, sizeof(root), NULL))
-> >               ksft_exit_skip("cgroup v2 isn't mounted\n");
-> >
-> > -     if (!zswap_configured())
-> > +     orig_zswap_state = zswap_enabled_state();
-> > +
-> > +     if (orig_zswap_state == -1)
-> >               ksft_exit_skip("zswap isn't configured\n");
-> > +     else if (orig_zswap_state == 0 && !enable_zswap())
-> > +             ksft_exit_skip("zswap is disabled and cannot be enabled\n");
+On Wed, Mar 11, 2026 at 4:05=E2=80=AFAM Li Wang <liwang@redhat.com> wrote:
 >
-> I should simply check the enablement state and skip if it's not
-> satisfactory (possibly printing an instructive message what to tweak).
-> (To keep the test dummy and leave it up to who's reponsible for the environment.)
+> test_zswap currently checks only for zswap presence via /sys/module/zswap=
+,
+> but does not account for the global runtime state in
+> /sys/module/zswap/parameters/enabled.
+>
+> If zswap is configured but globally disabled, zswap cgroup tests may run =
+in
+> an invalid environment and fail spuriously.
+>
+> Add helpers to:
+>   - detect the runtime zswap enabled state,
+>   - enable zswap when it is initially disabled,
+>   - restore the original state after tests complete.
+>
+> Skip the test when zswap state cannot be determined (e.g. unsupported or
+> unreadable), and keep existing behavior when zswap is already enabled.
+>
+> This makes test_zswap more robust across systems where zswap is built but
+> disabled by default.
+>
+> Signed-off-by: Li Wang <liwang@redhat.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Michal Koutn=C3=BD <mkoutny@suse.com>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Nhat Pham <nphamcs@gmail.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Shakeel Butt <shakeel.butt@linux.dev>
+> Cc: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  tools/testing/selftests/cgroup/test_zswap.c | 77 ++++++++++++++++++++-
+>  1 file changed, 75 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/=
+selftests/cgroup/test_zswap.c
+> index 64ebc3f3f203..1c80f4af9683 100644
+> --- a/tools/testing/selftests/cgroup/test_zswap.c
+> +++ b/tools/testing/selftests/cgroup/test_zswap.c
+> @@ -594,18 +594,88 @@ static bool zswap_configured(void)
+>         return access("/sys/module/zswap", F_OK) =3D=3D 0;
+>  }
+>
+> +static int zswap_enabled_state(void)
 
-+1
+Just zswap_enabled() is good.
+
+> +{
+> +       char buf[16];
+> +       ssize_t n;
+> +
+> +       if (!zswap_configured())
+> +               return -1;
+
+Return 0 here, zswap is disabled for all intents and purposes.
+
+> +
+> +       n =3D read_text("/sys/module/zswap/parameters/enabled", buf, size=
+of(buf));
+> +       if (n < 0 || n =3D=3D 0)
+> +               return -1;
+
+if (read_text(..) <=3D 0)
+
+> +
+> +       switch (buf[0]) {
+> +       case 'Y':
+> +       case 'y':
+> +       case '1':
+> +               return 1;
+> +       case 'N':
+> +       case 'n':
+> +       case '0':
+
+Can a read really return any of these values? Or just Y/N?
+
+> +               return 0;
+> +       default:
+> +               return -1;
+> +       }
+> +}
+> +
+[..]
+>  int main(int argc, char **argv)
+>  {
+>         char root[PATH_MAX];
+> -       int i;
+> +       int i, orig_zswap_state;
+>
+>         ksft_print_header();
+>         ksft_set_plan(ARRAY_SIZE(tests));
+>         if (cg_find_unified_root(root, sizeof(root), NULL))
+>                 ksft_exit_skip("cgroup v2 isn't mounted\n");
+>
+> -       if (!zswap_configured())
+> +       orig_zswap_state =3D zswap_enabled_state();
+> +
+> +       if (orig_zswap_state =3D=3D -1)
+>                 ksft_exit_skip("zswap isn't configured\n");
+> +       else if (orig_zswap_state =3D=3D 0 && !enable_zswap())
+> +               ksft_exit_skip("zswap is disabled and cannot be enabled\n=
+");
+
+As Michal mentioned, skip the test if zswap is not enabled.
+
+Assuming zswap_enabled() only returns -1 if it fails to read the
+module param (and zswap_configured() is true), then we should probably
+fail instead of skip, as it means something is wrong with the test or
+the module param.
