@@ -1,93 +1,93 @@
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C5D3803D2
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 18:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDD82C0285
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 19:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773255553; cv=pass; b=QJDExj4JpiMe7eYKx+MXt5uQ+ZWcgKVlb+MIEoJDyFN54kGtkrTicGbORYSHtp0rJubphAd/WTT4feHdym+InbKq0MjTuZqOuyXQvt85ardvAjG/Am3WJ5GsZMiEVy9nxVD7DbcP7ywlnDKA2lpRFozpFmZocs+zvWdEbhM1Vt0=
+	t=1773255734; cv=pass; b=KeFV064/2NqRpvBrycd9Nsfi5K+2BmeFJVBqyWSpAiGq5gZN4oMEZ2pZdj8kl6/mfGkuy7qD5xb5hHQ0CRVfUnKciWQb2d4llRUjYSahrMSeK8Rd/cA6Nr8anMS10TEOi8lOpZAuhHGmYgEplSEoJnCRcmRWnXWGSmE+100+3+I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773255553; c=relaxed/simple;
-	bh=RHOQnICtwtIbHF0ju6bUMVthJhDP+CN2OunBzuzQvdM=;
+	s=arc-20240116; t=1773255734; c=relaxed/simple;
+	bh=zfJqOZ06tqpuB+99lsouSYSt086di6qkELN4k/vFd34=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nnyBDOmUeitaOVEkHENsnm5aobB7veJxAuZy7xWiYWrlImkf7uCuvx9RGqrxtR7eCOpmpZhZSiyzV8YvB+29FEU7/lE39gW04ubko6Cnj5ttBDpB3TGgUyP6okPsTmoYvk+cIG9vhWM5k05Bwc7ZugW7OoXzRCf5o15an3PhtNc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WLr/dPRf; arc=pass smtp.client-ip=209.85.222.46
+	 To:Cc:Content-Type; b=C9ehSqk0jAE0yGSBtRnu13sCX6k4WGTa7H56R9ZnUvW863momawVCTNtyseouiIMnHLA7heDMVhE85aYtzJpxZ3k6EgLsb2Qp+XYcuCprq4jFifMAruVHe/u5GhAAChh98wIr8YKZVr4lx6bOfDcKIZJ8GtHmH2rRSkMQtPgH34=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TBeRX0md; arc=pass smtp.client-ip=209.85.221.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WLr/dPRf"
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-94de63dea9aso89412241.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 11:59:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773255551; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TBeRX0md"
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-56af6737b4fso147759e0c.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 12:02:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773255732; cv=none;
         d=google.com; s=arc-20240605;
-        b=BiQVC73nMut2yu7Pxq1Z4guKY5ZGkYs76xOcjdiuoybZibb/P0XxDt1V6tnfVEk2u2
-         dTwPRDGJCSVkDYYmhDsQwvhP19uaH3r71mDUNnx+Y+Gx3WY2Pdb5uZ/PvHTAnTs5UolR
-         CWLiFsjqQ94lcyplvx9qEnI7gxm5Uabnzss8vxlpG8uFfVsXjtSffQHDe/ifdlhAmOL3
-         zRuVgUvl3wUliTQLQ7UGIH0n+EwW8drx3gNR9ufCM0LMfsLumw7maKw2K9n2jVnT23w3
-         oFnWvOA+QPGTg7EyXx49ozT5xWH21+9Iyqm1afeC7hBfxnnBovgcPLsJTrP9q4Rwq2zi
-         p3CQ==
+        b=BwX4WH4YrEl7Cf0pAYTljhinoXbtulpBaubPe5ipyem1H3klfjfUOC7Z6PG2Bk9RTQ
+         TyFLwdCEkUSwSnH5/dJkeL5RV4aDSg/SQfSgN2Ovz82PH3ENl2pa2zrz7Ctdrh1R1qyX
+         sBRXsWmpLrzaXhLoM2fKmtdUlEzPHCxKDBXM90G4oOXh5KQMvXLOM+C+yeRTKpR8YU0m
+         bq0GRBee05uGvjUAfLgJChaHpWIvotD1cPFg2CAVPt3T+QY8phPlkG9mMVzbNnx+PIso
+         S3OVyyrFs0QnNDBQCcGE1kQud2Fj+p8OU666eyo28TzauZNjnrLibI2EC5vcOz12+bup
+         zX+g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=bciw34v7t0IyVuChEacEVc0ZCJfvKonKs/M56CZBfrs=;
+        bh=uz9lbPCFP48Ap7OMGU3ZIKIL3RFhqYcqtAKyrJSk2Fs=;
         fh=y9AwH/+rDfvEJUaHCSu1emqoSC0AhfY0AzO5q+VFeTA=;
-        b=YCI/oiSt+P6XZ8+eE5wp50DOhqhhgTNsS/vVDCZ7NcfK0TYX8/n+uLVBMY8nrErRI+
-         vBvacSXaftPV7osdfrUENUscRuEZNlbPxQpzZyuP++/gViGchBIlkRJ1OE6Q5MUS2eq7
-         XI2rpZZHZsXjZie21WQrOlyTdVyDGM8OMDYCJIVhC3zE59sfiz8k3QYNmsBQdiXvQiqZ
-         bEa2gWs3SG3dC4wBKLI66B6G5JRGfpIuxip/ZQF5cMIBIj7jY3t2j50dXpL3vrD6/WpT
-         ArmJmYc37ttVZiOH9Vfx9sLL8b1dHDqWy+Qh6MuBjamZqXqodQjjCjWLyCoF7yDKjdaN
-         J+gw==;
+        b=VgXE1j9BQX2qCq+26WzHBEsAwbU294gXay/NM/iguH7UOVDeAxGuXlp9L3fijlnhz8
+         JcHBbUoVIomDrRdrMBDmMzwaoKhALYufCKUzIyPC+8oVfgxEcvidAwhStb+Dj+/5bpsQ
+         p3TcLv/ivKiP5F61J4seOBPhl682PTLmsKhG5QWG3JMD3GaC3liutcmG0uSUy4QTcmTC
+         T8Ry7sU0YeD8UPXmZudxrf1XUFJkDlTbh5FY739sszw6uNqBBFqSSTu1gfOqDO0F8pCv
+         YNFYuUonIwFSsTjq1gnTmk0D9IOx2BYIJKNrtJcYX9tJmbZmAE6ad0ZI5jZJGaL7bJOr
+         7+qQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773255551; x=1773860351; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1773255732; x=1773860532; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bciw34v7t0IyVuChEacEVc0ZCJfvKonKs/M56CZBfrs=;
-        b=WLr/dPRfQagtsE1UlLu6qh//njp47HpVKfo4AXqHcWcf4mKmOxwLk++IN25N3TdZj5
-         g1Gulz3oHFYV4qp6ymVbwZc9fdw5+sa6dn5JwT2ULAj0e51vgcEolIlidNYRdHn0gd04
-         PNzCxyCtWrQHqMVY38xikSBWycU/xaIPf/qFiFK9EnGofl0PGZmpwPkq2b1kxKhWFwfv
-         rrdrbah/H70dniy5ZOH5tGbDzUcW2PmjG7erd7h7gMSGL4tSugu2/HPXM84DxJAPSoFh
-         DUr0gKF2IHGrxlBcPMdBBC92L/xZod1CgMzgajucc2NBk+FmwltEWY7Awuq1K3LzIpz5
-         VExA==
+        bh=uz9lbPCFP48Ap7OMGU3ZIKIL3RFhqYcqtAKyrJSk2Fs=;
+        b=TBeRX0mdCa/OJSsnURlJq28BnpIiGWxG1EZ5MPsnBogKFWji/GN21IkvrgygHANh5i
+         3IQRhvveKadISnBmnzvZ+swljzXy6TZOB3ZdUuzZYXoak/bXsnssmDeW6lyU7TAFRGSC
+         EiEBcKEbFNPJyjIOP6lBPBuBS/Y5e2NaEA+1gDrZM4FVyat4qR3ckLLEaDGsR7YXm1YO
+         dbBXBvdLAmMC7Cqy8Y3STOoW4JKkPfEDZR4VVh7mqxGS8kzOxft8id7EXVkjmv75EyOP
+         PO6KzXDFEc0WnNl5s9i4mtTQbt3KfOpF+wADrtb3JS7ylFVwNjH/CJDJ117nbPjlVqDU
+         wDvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773255551; x=1773860351;
+        d=1e100.net; s=20230601; t=1773255732; x=1773860532;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=bciw34v7t0IyVuChEacEVc0ZCJfvKonKs/M56CZBfrs=;
-        b=k49ASDPNRklEQrZJhwMbRir9YY3rI4ldXT+4Obe3XHBESo8mDS6NfRxva4Fk/rQXed
-         eC0w2UIVB7+cr8TfUQ2/wq+7qXBOWX0kXMawfWq4Sn8ENhbr0sYq9IrRSvwVVUefgtQd
-         HD8Zd6K+vgc7X3dA6sINlbCRypAaaidvh94Li0U4rp/Y1CNScb5onRaGccwIxoZwmPJA
-         ToivrRCHNnC9BDixy85pXbI43T4t8oOmNk/5LGB/a6yyslk/GRzdDl1aV7+cUHmukoQo
-         GrdeyJ0GN3MBD3XFStvprjdTajEgsXDdr8qHydZMo5iTsmY2LJlXfj4fYmtD/830bOUG
-         Q/IA==
-X-Gm-Message-State: AOJu0YzC9YGTRt1lZotUvAnwYEnx8nzYCkx0XlDNZ+5jQ+Qc2LVNS7aM
-	8EJEmtT7o2yc5BsgKlDRgt2eDxYU0drqGyqcGYRy71ZIWaPMbjB773hvP2k3eMa9zvmkd6bQ/IZ
-	aO2g7fbNBtd6ug4p+4nBdgYAtLtTzMsO5gAOZ0gbruVeTmn0Z5bo9gPtz
-X-Gm-Gg: ATEYQzyxVF2590Ssz5K44DOdE42EP4/0Cyckm+Tag6W73/djmX3+l9tUXoND5XYvB6i
-	ITA2ZyD6ULQkTmQ4V7TC3BBwgPlq7xhqMlKWYTDcqcLDaSQyZvXYaoiFRtMZFpiCS+zDUTtyHhH
-	DUtiMiB6idAgd1S17M2nH6jQBZkJH4m+6abwLJYIDfHzrYU1ajeT7A97hzcg9bHZRZvc/fzJHvQ
-	1/cTzdqy8jfDs8P2fO1A6nB9Ochc1TpJFMCY7BPtvqZhHtwRdqNb2/B60ACkUetKapvDEW4KdXz
-	9oSrwg==
-X-Received: by 2002:a05:6102:4404:b0:5ff:c7bd:27e2 with SMTP id
- ada2fe7eead31-601def4cd2emr1426502137.22.1773255551119; Wed, 11 Mar 2026
- 11:59:11 -0700 (PDT)
+        bh=uz9lbPCFP48Ap7OMGU3ZIKIL3RFhqYcqtAKyrJSk2Fs=;
+        b=snwUkgOeJKkPT805wgH16owJ6Yq1vKJTapqIG1Kf5n9BFTB06e2B5EUkWAdjoLLzdb
+         URWAfeeg2JJcEbAg+xaxZcZPNpH9EUcXXP8a4iDDcP6TO3pL6cIWc363oY+d6aV6NZd4
+         tdTDpi9vNUZd/Ao2wh1JfOb6AyrGnuSg7k+ErA/dWAquWrUHttT9HQlXaMPAN18wyhZb
+         IL2G1bsX/xRIX24vgUzvQ181gp4/YMY8vFwjzKoFKVh18JhGdjIAIoJHAjga60SBtGy+
+         u+NswOqiXspBzfw3+jcGKLZyIYmIqcIKaOkargoPl2vff5GPtPmA9YxOf84YcwqQ85CN
+         W6CA==
+X-Gm-Message-State: AOJu0YxdeNWrmjI4FJT2GlFKXH73Vvw2SzGIDlCW80R3h0dqjO7OVIAm
+	XRLSSjEYyVzhNapL2a0TST/0a1uFbYXgF5+0wOniwDNvJXkmTYVmoDIaNe30tNWDZxX7zfbHX7R
+	szgEjS9vuPFYqRTc4HBLZaBMweoAC4otfuzsAfN2s
+X-Gm-Gg: ATEYQzwNWiZLXvbHSnQcq9q7QylHcO2NlKOK2SyCT6OaGfOHWQbJbu4ztWTJnJeKqHj
+	izg+JdY1RE9beh9JZoCmhKdXNeppJ4CeeRiQrykrFbn+yOq4Ch2+6oibH91akRWMmTxd5DtUTLV
+	jmpfS6a30q7p6jzz0ViGeur2glCHFAUT6f4+vn/qHdJ/SiY6PNRGvfcRo1JlEMj/z0BUiTmAXPW
+	ouA2TMDb13RvusgMZSOp+g2GopKFYih68twIcrrQvr6ssay6BatCnBAN5JS2cFGyP2WhtRxRk83
+	4XwCtQ==
+X-Received: by 2002:a05:6122:3124:b0:559:67df:5889 with SMTP id
+ 71dfb90a1353d-56b4746b3bemr1279193e0c.6.1773255720320; Wed, 11 Mar 2026
+ 12:02:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311110523.26624-1-liwang@redhat.com> <20260311110523.26624-5-liwang@redhat.com>
-In-Reply-To: <20260311110523.26624-5-liwang@redhat.com>
+References: <20260311110523.26624-1-liwang@redhat.com> <20260311110523.26624-4-liwang@redhat.com>
+In-Reply-To: <20260311110523.26624-4-liwang@redhat.com>
 From: Yosry Ahmed <yosryahmed@google.com>
-Date: Wed, 11 Mar 2026 11:58:34 -0700
-X-Gm-Features: AaiRm53qE8mZD9vnALocAiC-cDh7w8EM119yOXDFPhiLFXcIOIQ_USUe1dV5sDc
-Message-ID: <CAJD7tkZ8nrb75a7UWGif-Z28ByRPv0tS87hacuyf4L+xDjJ6sw@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selftest/cgroup: fix zswap attempt_writeback() on 64K
- pagesize system
+Date: Wed, 11 Mar 2026 12:01:24 -0700
+X-Gm-Features: AaiRm53iDnGUJF5u0qqalvkYJgTqMlUyE1Y1xwWQJeyH2Stn3OuZlTpplmBlfwY
+Message-ID: <CAJD7tkawFFwiV72S5eJfmqaH63k+kisMNLPrc8-u-9taGRanCQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] selftest/cgroup: fix zswap test_no_invasive_cgroup_shrink
+ on 64K pagesize system
 To: Li Wang <liwang@redhat.com>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	akpm@linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>, 
@@ -99,72 +99,21 @@ Content-Transfer-Encoding: quoted-printable
 
 On Wed, Mar 11, 2026 at 4:06=E2=80=AFAM Li Wang <liwang@redhat.com> wrote:
 >
-> In attempt_writeback(), a memsize of 4M only covers 64 pages on 64K
-> page size systems. When memory.reclaim is called, the kernel prefers
-> reclaiming clean file pages (binary, libc, linker, etc.) over swapping
-> anonymous pages. With only 64 pages of anonymous memory, the reclaim
-> target can be largely or entirely satisfied by dropping file pages,
-> resulting in very few or zero anonymous pages being pushed into zswap.
+> The test_no_invasive_cgroup_shrink and allocate_bytes use a hardcoded
+> stride of 4095 bytes when touching allocated pages. On systems with 64K
+> page size, this results in writing to the same page multiple times
+> instead of touching all pages, leading to insufficient memory pressure.
 >
-> This causes zswap_usage to be extremely small or zero, making
-> zswap_usage/2 insufficient to create meaningful writeback pressure.
-> The test then fails because no writeback is triggered.
+> Additionally, the original memory limits and allocation sizes are too
+> small for 64K page size systems. With only 1M memory.max, there are
+> very few pages available, and a zswap.max of 10K may not provide enough
+> room to store even a single compressed page. This can cause OOM kills
+> or false positives due to insufficient zswap writeback being triggered.
 >
-> On 4K page size systems this is not an issue because 4M covers 1024
-> pages, and file pages are a small fraction of the reclaim target.
->
-> Scale memsize up to 64M on systems with page size larger than 4K, so
-> that enough anonymous pages are allocated to reliably populate zswap
-> and trigger writeback. The original 4M is kept for 4K page size systems
-> to avoid unnecessary memory usage and test runtime.
->
-> =3D=3D=3D Error Log =3D=3D=3D
->   # uname -rm
->   6.12.0-211.el10.ppc64le ppc64le
->
->   # getconf PAGESIZE
->   65536
->
->   # ./test_zswap
->   TAP version 13
->   1..7
->   ok 1 test_zswap_usage
->   ok 2 test_swapin_nozswap
->   ok 3 test_zswapin
->   not ok 4 test_zswap_writeback_enabled
->   ...
->
-> Signed-off-by: Li Wang <liwang@redhat.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Michal Koutn=C3=BD <mkoutny@suse.com>
-> Cc: Muchun Song <muchun.song@linux.dev>
-> Cc: Nhat Pham <nphamcs@gmail.com>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Shakeel Butt <shakeel.butt@linux.dev>
-> Cc: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  tools/testing/selftests/cgroup/test_zswap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/=
-selftests/cgroup/test_zswap.c
-> index 30d3fbf6b4fb..2d065184eea4 100644
-> --- a/tools/testing/selftests/cgroup/test_zswap.c
-> +++ b/tools/testing/selftests/cgroup/test_zswap.c
-> @@ -264,7 +264,7 @@ static int test_zswapin(const char *root)
->  static int attempt_writeback(const char *cgroup, void *arg)
->  {
->         long pagesize =3D sysconf(_SC_PAGESIZE);
-> -       size_t memsize =3D MB(4);
-> +       size_t memsize =3D pagesize > 4096 ? MB(64): MB(4);
+> Fix these issues by:
+> - Using sysconf(_SC_PAGESIZE) instead of the hardcoded 4095 stride in
+>   both allocate_bytes() and test_no_invasive_cgroup_shrink().
 
-pagesize << 10 or pagesize * 1024?
-
->         char buf[pagesize];
->         long zswap_usage;
->         bool wb_enabled =3D *(bool *) arg;
-> --
-> 2.53.0
->
+AFAICT there are other instances of hardcoded 4095 and 4096 values in
+the test, do you mind having a separate patch that updates all of them
+to the runtime value?
