@@ -1,994 +1,158 @@
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC1B3612DD
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 21:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D6D33D6EE
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 21:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773264695; cv=none; b=SRFfPXZcWujDSAvDb+7pg3M9fnaip2VXzglD0IRmShYHYdZP7RUmcO51RHuI5DRo4bY8R6Yzs0EyXHx75ypH9Rr1CBP02p/QmANlMfaT62Dr6u061YM8FWTzvVZb9UYaXqRFXnliHh8CNQJZvg9nKB2xSYgaG1bDAEpAPnU7YcU=
+	t=1773265390; cv=none; b=IYlsG0NeVsikPI1itdJZG8NhPbXe9Gi4hCt9IsJY6jMWs19caAIue06YVfJgJu58w/XRyMgGIoVbnZspWaPMX+88eUqEEIo8FkXtgPz3b0ln4tio9ADGFX1wGZxTNHEzVaQhtiU2yu0Pr5XSh7tVUy09EzebpPAziJsqmqaDXsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773264695; c=relaxed/simple;
-	bh=B986+q0EPyEQDvxqJ//qZ7hW3q9zmixUG/Y18ImATFE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ci/Bh6Kj6iM9lMGxYHClMnlzR0oaHL18MqhSoQntMjjCf1sADy9oaKp/JiDYwlSm1m1ZxtNIG4FZGUJZYUSS+q6eAKHCCJSFrfTihUhLQBWTOcKQ/mfxfIwGw9GX1RSYm8zc3imE3OVxPeoxqqVwndk2Gfh7Nk2giXtZdtZMLIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=N3g3PA0N; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1773265390; c=relaxed/simple;
+	bh=cJ7O0ZLD0Pd5i+N/UryeSxeBbtkb1V+krtTpKFUgCQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jB5HDifPgzDY8bo+YBdbAUVQ+j2SMbS4b7VM1P1GJHvqSN0ygeaTUrFvd1OUgISKFjtv9wx+yhCI1q0VUGH054M3zJw643lKLas2Tn89kN44DRYA3QeGhMHN6w2JPKnWs1UMxAr7TtEFuIC+7+CEb+BnUQ3mTOFyr7cUqR43kAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u2YC5kn5; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="N3g3PA0N"
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-41708e43f61so156900fac.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 14:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1773264691; x=1773869491; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tthSI5YwBPQg2S9IxaV+bU7gsd9dh2H/s6cG0iD4L0E=;
-        b=N3g3PA0NvgIS8AEBI5hqU5WyfQL2hU2jygUqQxqAReQk1Ig6TnyqS+QPUCr4quJvCh
-         uY3X/ALSuUCLmyBAgNXZX7vK92UvVeJ4pBLtNNJg1SsnXyUMJZBhCcOp2csMAkl1BF7l
-         8ZL2IPMq8Xk7gS2jwaj8Nc1F5D79LgO2VgYFewcVL1cZ+ZMJk21BWFuBPEEMwa7W8Ufx
-         cp8eWhoPzf8YlTl/hui83+HyEcLJ6MkCOiuwwHo7MRgdidMBsZA6PJEzQ7O/fg5lQlTA
-         ETW0ANocyg4MiNtAS4QMWrmDgKCJGM9xcio3WFlfJuvoLwCTWPziy1j/u7Ta+GFwUO8T
-         dd+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773264691; x=1773869491;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tthSI5YwBPQg2S9IxaV+bU7gsd9dh2H/s6cG0iD4L0E=;
-        b=bWildHiOlFbEUf4PLE+hR1mxlj4wH1QpFTk2cZ+u5+AenKVza4zXl4eZre7uj3usQG
-         ITDJJ0M2GAUnt9kqK07OJ7QSQDWXhiFEQumVWAJf2MGOxpU/SDEQ1Ef8zar/cyZTgbkh
-         BbkkHFpV+/MJB/PrStV8UFGYXAC1h71vzV0ksoTirJw/kgB3b9yywoHuKJ/3fTkOYzGa
-         RTFPf9gWnqvLxhsdKFWGB/EkLmC9MOCJkkVW6CDcl1c6ySPgGzkHDqVb9C29XJisCRsD
-         trNgJbsfj6S7BPmyR+TZlacoxYsS36Ps1wHzLbb31oMr0hWJEka6FwjTUmOxU63p6cmJ
-         VB9w==
-X-Forwarded-Encrypted: i=1; AJvYcCWS1mO0/7I0lPBUd73JuK3GuAxp8ajIaadZMP1q+Xm5/ZnuZMxgeaqzyshHDPFT30izM9M7MWhjNNo6r95O85E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGniUayS52MYNijR2Ss1lPy2LpPUUDB0gAd9wOGu8kyKKyEyKc
-	emxMD38SB8+Q1QVOL9hlL8IDXKWJLlu+ZfbWSpTaOfwXacd5WFWlZH2KaUaewz7wEk0=
-X-Gm-Gg: ATEYQzy+HSErYZtC1g7tNGo2SC6G2/AOfaMv6HHL+zHX4kvkXCrenDO3dXGziOqX+fr
-	MAuij0n7N7SHg1yuAUVlg4MGGPZdd64eKD9OYpkiXr5XpojhT+uAunwBqOWLNZijbD0vc8WylFE
-	K6qt6+YItAU+a1gVNWyUTo2RsDE8k35SdX/NxNQzQ/iz8PxkBkpRaUKIkPu6T99TEkWXLLatLga
-	joCydwECs2MyB/jZC/+horJZkoUav3HB3BrnSg0wp4Nh77k9NjKEtSGReStIwfNg1vTjhfKOuHO
-	ZdOMX+IoVcQzHi+T0RqfhaLHihEnPtvrXPE1buvBFxOEMr9qFrJN2zGkcgonGsxCvtArtYnDhcS
-	7noleXFsGyG5vK0gQffWwSEyrONCsrNovqd74uqjPLqFwssOaDpggjymmcPhXq3lq5/eTbt20BT
-	GMmFzfp1s=
-X-Received: by 2002:a05:6870:b0ce:b0:417:3bef:8964 with SMTP id 586e51a60fabf-4177c60a84cmr2552985fac.2.1773264691153;
-        Wed, 11 Mar 2026 14:31:31 -0700 (PDT)
-Received: from [127.0.1.1] ([2a09:bac5:947d:4e6::7d:82])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e1fb90csm3530413fac.4.2026.03.11.14.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 14:31:30 -0700 (PDT)
-From: Frederick Lawler <fred@cloudflare.com>
-Date: Wed, 11 Mar 2026 16:31:20 -0500
-Subject: [PATCH RFC bpf-next 4/4] selftests/bpf: Add lsm_audit_kfuncs tests
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u2YC5kn5"
+Message-ID: <bc410b38-f5ab-47cf-a434-fa4f43751921@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773265387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oY0ScjjYBmbgesl65ClATdNaDwRrK4lWRWVjLXSQrjY=;
+	b=u2YC5kn5TmPwfryYEjMFgHQzd5h4eTKlPtBYCgUwaBqasWFA4drPEdJMCN13+e73nEndcL
+	oBC6yVMPjNQu37+6/rEArC1/32PpJ9WwGioiRErOhEv9exc7OrQA4JQN1dWDBlumZKW/E2
+	4rYWs/phHEC+VQ6OPg/Okg4Nfe1K5gU=
+Date: Wed, 11 Mar 2026 14:42:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260311-bpf-auditd-send-message-v1-4-10a62db5c92f@cloudflare.com>
-References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
-In-Reply-To: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
-To: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
- "Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
- =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
- audit@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kernel-team@cloudflare.com, Frederick Lawler <fred@cloudflare.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=22647; i=fred@cloudflare.com;
- h=from:subject:message-id; bh=B986+q0EPyEQDvxqJ//qZ7hW3q9zmixUG/Y18ImATFE=;
- b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpsd8ox7VoA9tHygH6CdWnV5yXxCKCXYsthDZcm
- zaAQBG5hfWJAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCabHfKAAKCRCrJbR2A5LT
- bSQ2D/4saIy2ZXQv1HF99uhbehkV7IRPcjBS9V9Xt+dosdvExoSYyqjUn0xk3ijXA4OZkfEYb5h
- 8Gre4xk+Q7VGn3Miht9uAiJJdNtJlZw7sJNJd1MyHXCv1Swb5wLxFOXG0QkabUYyu5G20ea6zYO
- KuJtTQLZN9YKJi/zWU/znZxwUNTHG6E4oLP0VbzdtL4WrSgMXNWzvYQXOIxF56M/SffERpRQkwa
- w+llPjdQRzpy6guEjAhpw4hy/m8rnD6d0d5T4oeL0kNMq6x0+WN3rzDNdkCWyYlrWaMHI9iE1IV
- WLMPk6cg5HYVhrb1F4DwDxgjWKQZAUr3hlZEikDOXuLGTjJ28pSsTWktfCYB5n1uCmfGJNZXAuA
- PTmJyXU+9L6ae/tNQXUByEIxNaJJMa8+BVZ5GETk7aS1Xy82ZWRySspyaiZ/wZ+SVbGjBowYVSE
- 68QhCrWrDjbgtgnaanRb4voF8KK25DqaOq/nJF5uXVciVLq7fMhlC6as5zvt0GtHj0offiJxKSL
- 4E/ncYWuKa4cbA1azHiyW+LmIM1x+G4RhsIbAVwfW9DB7TAzEM/2PzhEOTix2dtx68Sh0QMftge
- ufMiElHIbEbcXbfh3x3/XKXT/Lxu91HZZe4sOnrNnrZsjWSIG3Xl+IifdE+hEQjRWprzqtFc5Jv
- PBPmakjl+HSaGhw==
-X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
- fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
+Subject: Re: [PATCH] selftests/bpf: improve test coverage for kfunc call
+To: Hari Bathini <hbathini@linux.ibm.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Eduard <eddyz87@gmail.com>, "Jose E. Marchesi" <jemarch@gnu.org>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Shuah Khan <shuah@kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20260303131453.328674-1-hbathini@linux.ibm.com>
+ <CAADnVQKuARvSirPjnTcSifLPunCiKC4Nenq0Mr61GpzbW5WxWg@mail.gmail.com>
+ <bbf6a46c-37e9-4d8d-968e-a99bb12dcc14@linux.ibm.com>
+ <CAADnVQ+4N4WWLxan_qibZ7HmONJyMZaP=RF+a9tMSPoz=0LqkQ@mail.gmail.com>
+ <09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <09b101af-9722-4c45-bda0-c8a3dd417c03@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add selftests for the audit kfunc BPF LSM functionality including
-both the test program and BPF progs.
+On 3/11/26 11:03 AM, Hari Bathini wrote:
+>
+> On 11/03/26 9:32 pm, Alexei Starovoitov wrote:
+>> On Wed, Mar 11, 2026 at 8:10 AM Hari Bathini <hbathini@linux.ibm.com> 
+>> wrote:
+>>>
+>>>>
+>>>>> +
+>>>>> +       /* Check zero-extension */
+>>>>> +       if (val != (unsigned long)a)
+>>>>> +               return 1;
+>>>>> +       /* Check no sign-extension */
+>>>>> +       if (val < 0)
+>>>>> +               return 2;
+>>>>> +
+>>>>> +       val = b;
+>>>>> +       if (val != (unsigned long)b)
+>>>>> +               return 3;
+>>>>> +       if (val < 0)
+>>>>> +               return 4;
+>>>>> +
+>>>>> +       val = c;
+>>>>> +       if (val != (unsigned long)c)
+>>>>> +               return 5;
+>>>>> +       if (val < 0)
+>>>>> +               return 6;
+>>>>> +
+>>>>> +       return 0;
+>>>>> +}
+>>>>
+>>>> Overall this looks very useful.
+>>>> I would expand with another test where a,b,c are s8,s16,s32.
+>>>
+>>> Slightly different approach but kfunc_call_test4/bpf_kfunc_call_test4
+>>> cover signed arguments already?
+>>
+>> Ahh. Then may be tweak it to adopt similar fine grained
+>> error reporting as your bpf_kfunc_call_test5()
+>
+> I Prefer this.
+>
+> Does the below change to bpf_kfunc_call_test4 look fine:
+>
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c 
+> b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> index 48dcaf93bb9f..6237c2222633 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> @@ -760,8 +760,30 @@ __bpf_kfunc struct sock 
+> *bpf_kfunc_call_test3(struct sock *sk)
+>
+>  __bpf_kfunc long noinline bpf_kfunc_call_test4(signed char a, short 
+> b, int c, long d)
 
-Assisted-by: Claude:claude-4.5-opus
-Signed-off-by: Frederick Lawler <fred@cloudflare.com>
----
- .../selftests/bpf/prog_tests/lsm_audit_kfuncs.c    | 598 +++++++++++++++++++++
- .../selftests/bpf/progs/test_lsm_audit_kfuncs.c    | 263 +++++++++
- 2 files changed, 861 insertions(+)
+I might regret for bringing this up as it could be yet another ABI 
+fiasco between gcc and llvm.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_audit_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/lsm_audit_kfuncs.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..de18e1a3c79578d4151a12a029f2a9e6cc7648e3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_audit_kfuncs.c
-@@ -0,0 +1,598 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Cloudflare */
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <linux/audit.h>
-+#include <linux/netlink.h>
-+#include <netinet/in.h>
-+#include <sys/ioctl.h>
-+#include <sys/socket.h>
-+#include <sys/stat.h>
-+#include <sys/un.h>
-+
-+#include "audit_helpers.h"
-+#include "test_lsm_audit_kfuncs.skel.h"
-+#include "test_progs.h"
-+
-+#ifndef AUDIT_BPF_LSM_ACCESS
-+#define AUDIT_BPF_LSM_ACCESS 1427
-+#endif
-+
-+static inline struct sockaddr_in addr4(void)
-+{
-+	return (struct sockaddr_in){
-+		.sin_family = AF_INET,
-+		.sin_port = htons(1234),
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+	};
-+}
-+
-+static inline struct sockaddr_in6 addr6(void)
-+{
-+	return (struct sockaddr_in6){
-+		.sin6_family = AF_INET6,
-+		.sin6_port = htons(1234),
-+		.sin6_addr = in6addr_loopback,
-+	};
-+}
-+
-+static int bind_connect(const struct sockaddr *addr, int addrlen)
-+{
-+	int err;
-+	int sock;
-+	int opt = 1;
-+	socklen_t optlen = sizeof(opt);
-+
-+	sock = socket(addr->sa_family, SOCK_STREAM, 0);
-+	if (!ASSERT_OK_FD(sock, "socket"))
-+		return 1;
-+
-+	err = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, optlen);
-+	if (!ASSERT_OK(err, "setsockopt"))
-+		goto done;
-+
-+	err = bind(sock, addr, addrlen);
-+	if (!ASSERT_OK(err, "bind"))
-+		goto done;
-+
-+	err = connect(sock, addr, addrlen);
-+	ASSERT_OK(err, "connect");
-+
-+	err = getsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, &optlen);
-+	ASSERT_OK(err, "getsockopt");
-+
-+done:
-+	close(sock);
-+	return err;
-+}
-+
-+static void test_audit_log_sockaddr_src(struct audit_observer *obs,
-+					struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct sockaddr_in sin = addr4();
-+	struct sockaddr_in6 sin6 = addr6();
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_sockaddr_src);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"bind4\" saddr=127.0.0.1 src=1234 netif=lo",
-+			      1);
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"bind6\" saddr=::1 src=1234 netif=lo", 1);
-+
-+	if (bind_connect((const struct sockaddr *)&sin, sizeof(sin)))
-+		goto done;
-+
-+	if (bind_connect((const struct sockaddr *)&sin6, sizeof(sin6)))
-+		goto done;
-+
-+	ASSERT_OK(audit_observer_wait(obs), "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+done:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_sockaddr_dest(struct audit_observer *obs,
-+					 struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct sockaddr_in sin = addr4();
-+	struct sockaddr_in6 sin6 = addr6();
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_sockaddr_dest);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"connect4\" daddr=127.0.0.1 dest=1234 netif=lo",
-+			      1);
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"connect6\" daddr=::1 dest=1234 netif=lo",
-+			      1);
-+
-+	if (bind_connect((const struct sockaddr *)&sin, sizeof(sin)))
-+		goto out;
-+
-+	if (bind_connect((const struct sockaddr *)&sin6, sizeof(sin6)))
-+		goto out;
-+
-+	ASSERT_OK(audit_observer_wait(obs), "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_sock(struct audit_observer *obs,
-+				struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct sockaddr_in sin = addr4();
-+	struct sockaddr_in6 sin6 = addr6();
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_sock);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"sock4\" laddr=127.0.0.1 lport=1234 faddr=127.0.0.1 fport=1234 netif=lo",
-+			1);
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"sock6\" laddr=::1 lport=1234 faddr=::1 fport=1234 netif=lo",
-+			1);
-+
-+	if (bind_connect((const struct sockaddr *)&sin, sizeof(sin)))
-+		goto out;
-+
-+	if (bind_connect((const struct sockaddr *)&sin6, sizeof(sin6)))
-+		goto out;
-+
-+	ASSERT_OK(audit_observer_wait(obs), "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_sock_unix(struct audit_observer *obs,
-+				     struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct sockaddr_un addr;
-+	struct bpf_link *link;
-+	char expected[256];
-+	char sun_path[108];
-+	int server_fd = -1;
-+	int opt = 1;
-+	socklen_t optlen = sizeof(opt);
-+	int err;
-+
-+	snprintf(sun_path, sizeof(sun_path), "/root/tmp/bpf_audit_test_%d.sock",
-+		 getpid());
-+
-+	/* Ensure directory exists */
-+	mkdir("/root/tmp", 0755);
-+	unlink(sun_path);
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_sock_unix);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	snprintf(expected, sizeof(expected), "cause=\"sock_unix\" path=\"%s\"",
-+		 sun_path);
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS, expected, 1);
-+
-+	memset(&addr, 0, sizeof(addr));
-+	addr.sun_family = AF_UNIX;
-+	strncpy(addr.sun_path, sun_path, sizeof(addr.sun_path) - 1);
-+
-+	server_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-+	if (!ASSERT_OK_FD(server_fd, "socket"))
-+		goto out;
-+
-+	err = bind(server_fd, (struct sockaddr *)&addr, sizeof(addr));
-+	if (!ASSERT_OK(err, "bind"))
-+		goto out;
-+
-+	err = getsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, &optlen);
-+	ASSERT_OK(err, "getsockopt");
-+
-+	ASSERT_OK(audit_observer_wait(obs), "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	if (server_fd >= 0)
-+		close(server_fd);
-+	unlink(sun_path);
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_file(struct audit_observer *obs,
-+				struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct bpf_link *link;
-+	int err;
-+	int fd;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_file);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"file\" path=\"/dev/null\" dev=\"devtmpfs\" ino=4",
-+			1);
-+
-+	fd = open("/dev/null", O_RDONLY);
-+	close(fd);
-+	if (!ASSERT_OK_FD(fd, "open(/dev/null)"))
-+		goto out;
-+
-+	err = audit_observer_wait(obs);
-+	ASSERT_OK(err, "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_path(struct audit_observer *obs,
-+				struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct bpf_link *link;
-+	int err;
-+	int fd;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_file_path);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"path\" path=\"/dev/null\" dev=\"devtmpfs\" ino=4",
-+			      1);
-+
-+	fd = open("/dev/null", O_RDONLY);
-+	close(fd);
-+	if (!ASSERT_OK_FD(fd, "open(/dev/null)"))
-+		goto out;
-+
-+	err = audit_observer_wait(obs);
-+	ASSERT_OK(err, "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_dentry(struct audit_observer *obs,
-+				  struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct bpf_link *link;
-+	char expected[128];
-+	char buf[64];
-+	int err;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_dentry);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	snprintf(expected, sizeof(expected),
-+		 "cause=\"dentry\" name=\"exe\" dev=");
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS, expected, 1);
-+
-+	/* readlink triggers inode_readlink hook */
-+	err = readlink("/proc/self/exe", buf, sizeof(buf));
-+	if (!ASSERT_GT(err, 0, "readlink(/proc/self/exe)"))
-+		goto out;
-+
-+	err = audit_observer_wait(obs);
-+	ASSERT_OK(err, "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_inode(struct audit_observer *obs,
-+				 struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct bpf_link *link;
-+	char expected[128];
-+	struct stat st;
-+	int err;
-+	int fd;
-+
-+	if (!ASSERT_OK(stat("/dev/null", &st), "stat(/dev/null)"))
-+		return;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_inode);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	snprintf(expected, sizeof(expected),
-+		 "cause=\"inode\" name=\"null\" dev=\"devtmpfs\" ino=%lu",
-+		 st.st_ino);
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS, expected, 1);
-+
-+	fd = open("/dev/null", O_RDONLY);
-+	close(fd);
-+	if (!ASSERT_OK_FD(fd, "open(/dev/null)"))
-+		goto out;
-+
-+	err = audit_observer_wait(obs);
-+	ASSERT_OK(err, "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_task(struct audit_observer *obs,
-+				struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct bpf_link *link;
-+	char expected[128];
-+	pid_t pid;
-+	int err;
-+
-+	pid = getpid();
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_task);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	snprintf(expected, sizeof(expected),
-+		 "cause=\"task\" opid=%d ocomm=\"test_progs\"", pid);
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS, expected, 1);
-+
-+	err = getpgid(pid);
-+	if (!ASSERT_GT(err, -1, "pid pgid match"))
-+		goto out;
-+
-+	err = audit_observer_wait(obs);
-+	ASSERT_OK(err, "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_cap(struct audit_observer *obs,
-+			       struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct bpf_link *link;
-+	int err;
-+	int fd;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_cap);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"cap\" capability=", 1);
-+
-+	fd = open("/proc/kallsyms", O_RDONLY);
-+	close(fd);
-+	if (!ASSERT_OK_FD(fd, "open(/proc/kallsyms)"))
-+		goto out;
-+
-+	err = audit_observer_wait(obs);
-+	ASSERT_OK(err, "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_ioctl_op(struct audit_observer *obs,
-+				    struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct bpf_link *link;
-+	char expected[128];
-+	struct stat st;
-+	int err;
-+	int fd;
-+
-+	if (!ASSERT_OK(stat("/dev/null", &st), "stat(/dev/null)"))
-+		return;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_ioctl_op);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	snprintf(expected, sizeof(expected),
-+		 "cause=\"ioctl_op\" path=\"/dev/null\" dev=\"devtmpfs\" ino=%lu ioctlcmd=0x%x",
-+		st.st_ino, TCGETS);
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS, expected, 1);
-+
-+	fd = open("/dev/null", O_RDONLY);
-+	if (!ASSERT_OK_FD(fd, "open(/dev/null)"))
-+		goto out;
-+
-+	/* ioctl will fail with ENOTTY but the LSM hook fires regardless */
-+	ioctl(fd, TCGETS, NULL);
-+	close(fd);
-+
-+	err = audit_observer_wait(obs);
-+	ASSERT_OK(err, "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_audit_log_sleepable(struct audit_observer *obs,
-+				     struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct bpf_link *link;
-+	int err;
-+	int fd;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_sleepable);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"sleepable\" path=\"/dev/null\" dev=\"devtmpfs\" ino=4",
-+		1);
-+
-+	fd = open("/dev/null", O_RDONLY);
-+	close(fd);
-+	if (!ASSERT_OK_FD(fd, "open(/dev/null)"))
-+		goto out;
-+
-+	err = audit_observer_wait(obs);
-+	ASSERT_OK(err, "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void
-+test_audit_log_sockaddr_both_null(struct audit_observer *obs,
-+				  struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct sockaddr_in sin = addr4();
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_sockaddr_both_null);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	/* Should see cause but no saddr/daddr since both were NULL */
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"sockaddr_both_null\"", 1);
-+
-+	bind_connect((const struct sockaddr *)&sin, sizeof(sin));
-+
-+	ASSERT_OK(audit_observer_wait(obs), "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+	bpf_link__destroy(link);
-+}
-+
-+static void
-+test_audit_log_sockaddr_small_addrlen(struct audit_observer *obs,
-+				      struct test_lsm_audit_kfuncs *skel)
-+{
-+	struct sockaddr_in sin = addr4();
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach_lsm(skel->progs.test_sockaddr_small_addrlen);
-+	if (!ASSERT_OK_PTR(link, "attach"))
-+		return;
-+
-+	audit_observer_reset(obs);
-+
-+	/* Should see cause but no saddr since addrlen was too small */
-+	audit_observer_expect(obs, AUDIT_BPF_LSM_ACCESS,
-+			      "cause=\"sockaddr_small_addrlen\"", 1);
-+
-+	bind_connect((const struct sockaddr *)&sin, sizeof(sin));
-+
-+	ASSERT_OK(audit_observer_wait(obs), "audit_observer_wait");
-+	ASSERT_TRUE(audit_observer_check_satisfied(obs),
-+		    "all expectations met");
-+
-+	bpf_link__destroy(link);
-+}
-+
-+void test_lsm_audit_kfuncs(void)
-+{
-+	struct test_lsm_audit_kfuncs *skel = NULL;
-+	struct audit_observer obs;
-+	FILE *log = NULL;
-+	int audit_fd;
-+
-+	audit_fd = audit_init();
-+	if (!ASSERT_GE(audit_fd, 0, "audit_init"))
-+		return;
-+
-+	if (env.verbosity > VERBOSE_NONE)
-+		log = env.stdout_saved;
-+
-+	audit_observer_init(&obs, audit_fd, log, 500);
-+
-+	skel = test_lsm_audit_kfuncs__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel load"))
-+		goto close_prog;
-+
-+	if (test__start_subtest("net")) {
-+		test_audit_log_sockaddr_src(&obs, skel);
-+		test_audit_log_sockaddr_dest(&obs, skel);
-+		test_audit_log_sockaddr_both_null(&obs, skel);
-+		test_audit_log_sockaddr_small_addrlen(&obs, skel);
-+		test_audit_log_sock(&obs, skel);
-+		test_audit_log_sock_unix(&obs, skel);
-+	}
-+
-+	if (test__start_subtest("file")) {
-+		test_audit_log_file(&obs, skel);
-+		test_audit_log_path(&obs, skel);
-+		test_audit_log_dentry(&obs, skel);
-+		test_audit_log_inode(&obs, skel);
-+	}
-+
-+	if (test__start_subtest("task")) {
-+		test_audit_log_task(&obs, skel);
-+		test_audit_log_cap(&obs, skel);
-+	}
-+
-+	if (test__start_subtest("ioctl"))
-+		test_audit_log_ioctl_op(&obs, skel);
-+
-+	if (test__start_subtest("sleepable"))
-+		test_audit_log_sleepable(&obs, skel);
-+
-+close_prog:
-+	test_lsm_audit_kfuncs__destroy(skel);
-+	audit_cleanup(audit_fd);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_lsm_audit_kfuncs.c b/tools/testing/selftests/bpf/progs/test_lsm_audit_kfuncs.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..952ba09fce638f3bd14c18060a5baa3ccaec19ca
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_lsm_audit_kfuncs.c
-@@ -0,0 +1,263 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Cloudflare */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include <errno.h>
-+
-+#define AF_UNIX 1
-+#define AF_INET 2
-+#define AF_INET6 10
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("lsm/socket_bind")
-+int BPF_PROG(test_sockaddr_src, struct socket *sock, struct sockaddr *address,
-+	     int addrlen)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	switch (address->sa_family) {
-+	case AF_INET:
-+		bpf_audit_log_cause(ac, "bind4");
-+		break;
-+	case AF_INET6:
-+		bpf_audit_log_cause(ac, "bind6");
-+	}
-+
-+	bpf_audit_log_net_sockaddr(ac, 1, address, NULL, addrlen);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/socket_connect")
-+int BPF_PROG(test_sockaddr_dest, struct socket *sock, struct sockaddr *address,
-+	     int addrlen)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	switch (address->sa_family) {
-+	case AF_INET:
-+		bpf_audit_log_cause(ac, "connect4");
-+		break;
-+	case AF_INET6:
-+		bpf_audit_log_cause(ac, "connect6");
-+	}
-+
-+	bpf_audit_log_net_sockaddr(ac, 1, NULL, address, addrlen);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/socket_bind")
-+int BPF_PROG(test_sockaddr_both_null, struct socket *sock,
-+	     struct sockaddr *address, int addrlen)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "sockaddr_both_null");
-+	bpf_audit_log_net_sockaddr(ac, 1, NULL, NULL, addrlen);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/socket_bind")
-+int BPF_PROG(test_sockaddr_small_addrlen, struct socket *sock,
-+	     struct sockaddr *address, int addrlen)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	if (address->sa_family != AF_INET)
-+		return -EINVAL;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "sockaddr_small_addrlen");
-+	bpf_audit_log_net_sockaddr(ac, 1, address, NULL, 1);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/socket_getsockopt")
-+int BPF_PROG(test_sock, struct socket *sock, int level, int optname)
-+{
-+	struct bpf_audit_context *ac;
-+	struct sock *sk = sock->sk;
-+
-+	if (!sk)
-+		return -EINVAL;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	switch (sk->__sk_common.skc_family) {
-+	case AF_INET:
-+		bpf_audit_log_cause(ac, "sock4");
-+		break;
-+	case AF_INET6:
-+		bpf_audit_log_cause(ac, "sock6");
-+	}
-+
-+	bpf_audit_log_net_sock(ac, 1, sock);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/socket_getsockopt")
-+int BPF_PROG(test_sock_unix, struct socket *sock, int level, int optname)
-+{
-+	struct bpf_audit_context *ac;
-+	struct sock *sk = sock->sk;
-+
-+	if (!sk || sk->__sk_common.skc_family != AF_UNIX)
-+		return -EINVAL;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "sock_unix");
-+	bpf_audit_log_net_sock(ac, 0, sock);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/file_open")
-+int BPF_PROG(test_file, struct file *file)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "file");
-+	bpf_audit_log_file(ac, file);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/file_open")
-+int BPF_PROG(test_file_path, struct file *file)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "path");
-+	bpf_audit_log_path(ac, &file->f_path);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/inode_readlink")
-+int BPF_PROG(test_dentry, struct dentry *dentry)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "dentry");
-+	bpf_audit_log_dentry(ac, dentry);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/file_open")
-+int BPF_PROG(test_inode, struct file *file)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "inode");
-+	bpf_audit_log_inode(ac, file->f_inode);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/task_getpgid")
-+int BPF_PROG(test_task, struct task_struct *task)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "task");
-+	bpf_audit_log_task(ac, task);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/capable")
-+int BPF_PROG(test_cap, const struct cred *cred, struct user_namespace *ns,
-+	     int cap, unsigned int opts)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "cap");
-+	bpf_audit_log_cap(ac, cap);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm/file_ioctl")
-+int BPF_PROG(test_ioctl_op, struct file *file, unsigned int cmd,
-+	     unsigned long arg)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "ioctl_op");
-+	bpf_audit_log_ioctl_op(ac, file, cmd);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
-+SEC("lsm.s/file_open")
-+int BPF_PROG(test_sleepable, struct file *file)
-+{
-+	struct bpf_audit_context *ac;
-+
-+	ac = bpf_audit_log_start();
-+	if (!ac)
-+		return -ENOMEM;
-+
-+	bpf_audit_log_cause(ac, "sleepable");
-+	bpf_audit_log_file(ac, file);
-+	bpf_audit_log_end(ac);
-+	return 0;
-+}
-+
+As per C standard, sign of unadorned char (i.e. w/o explicit signed or 
+unsigned prefix) is ABI defined.
+For gcc-bpf char is specified to be signed.
+So test4 has s8, while new test5 has u8. Would it make sense to have an 
+additional test without signed/unsigned annotation for char ?
+This will flag any discrepancy between the two compilers.
 
--- 
-2.43.0
+Thx,
+-Vineet
+
+>  {
+> +       /*
+> +        * Make val as volatile to avoid compiler optimizations.
+> +        * Verify that negative signed values remain negative after
+> +        * sign-extension (JIT must sign-extend, not zero-extend).
+> +        */
+> +       volatile long val;
+> +
+> +       /* val will be positive, if JIT does zero-extension instead of 
+> sign-extension */
+> +       val = a;
+> +       if (val >= 0)
+> +               return 1;
+> +
+> +       val = b;
+> +       if (val >= 0)
+> +               return 2;
+> +
+> +       val = c;
+> +       if (val >= 0)
+> +               return 3;
+> +
+>         /* Provoke the compiler to assume that the caller has 
+> sign-extended a,
+>          * b and c on platforms where this is required (e.g. s390x).
+> +        *
+> +        * Original behavior: return sum for backward compatibility
+>          */
+>         return (long)a + (long)b + (long)c + d;
+>  }
+>
+>
+> - Hari
 
