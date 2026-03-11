@@ -1,253 +1,208 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596723C73C5
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 09:06:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCED93D413D
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 09:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.66
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773220011; cv=pass; b=lvMOzB7hQvG/B9PlEux0kOzEBkyWWEGcZTXYNZ8eVWYss1wSV+BRIL2roEh2xOdI8itpmzzI0pGTR1brkNUXeYGiZwR7GCqB2wJ+JJT9UO2KnE/xmZ88DHYb3Y9izkxYDk0Lx/YvKhY8XaMbdPUYRBkYlkHklxTri4szN5dtSoc=
+	t=1773220957; cv=pass; b=mbN4R6q4GNeR8zIy4FDAVty+QRgV95ILvf0EU/fy+OKWY6BG6grkQfRaozuqeWYuZHX9sBdf4rfUelvY1h6qGWAipePfvcxQM7rX7XSa/zR09Ecx84sOxdXs3BFmXcMttRzhCdQdS8tFsKZVgDUq8/55etuj5IBrfWyMrCEPYw8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773220011; c=relaxed/simple;
-	bh=g/ROASbeaF/IjWI2I8zqA9k4mfccxN4DNjH2eSqizNk=;
+	s=arc-20240116; t=1773220957; c=relaxed/simple;
+	bh=YACcX35xOsZaWzEwi+YLtodbEl58LHKv9PHt6kgvIE4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EslcLtdyZz+YADviO3u7dtotkWpW2jPaQCrEKT778/Y58tKrH16vux/GstuZEwLjd4H389yELiGJqHCfcD9wifDbyWHvXnNp0wbn4Zb4p1pZV8MkMHwfwGfyZSiAkgD0HH79KgYuwBtcBVFRwGnciURYLK2M/Mv0kaZM5QhFNBw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R179TJlQ; arc=pass smtp.client-ip=209.85.128.67
+	 To:Cc:Content-Type; b=QAHQ4J2b/e3AEnRvFzi2aS7S0LNxzzOxwnNG6alvWkXSLyjs0JJw1NglArb4w0TSQM8kJLCMa0JyFiDTuroHoZPoCp/R62PWOHZMqngcgqsXDqFc4fzL6NrcRvoEr1TBozRtPgfCpy9D7MjQaiCIg88DvzClvbZmfPL2Pt/nM9M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ickx9bIH; arc=pass smtp.client-ip=209.85.221.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R179TJlQ"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-4852e9ca034so41759715e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 02:06:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773220003; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ickx9bIH"
+Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-439cd6b0aedso5710651f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 02:22:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773220952; cv=none;
         d=google.com; s=arc-20240605;
-        b=E9FBdE8esy2x7CfTd2zBwEoyQXDNtO6ApMHwUwmuwO/z1uY1Chs5yPoBj8kXb/OCEd
-         LN07tIYTig9t+8B66fTgo9xH9V1Y3/bgtyWLjgsFHCHWE6ZbfT5UYv1u33yA2yPvrIon
-         tNpfVoRc7wUGNN25Yiw0Y5EiRFSHK/qenKgiaRnJQ3BE/3i1nClyELpqUbgVdRJ+21Qa
-         1WkarjNsB8j1S5ZDqBeGqdBko+QqqLTC8m7yKBuLQCfswAs3VHGWfKWVnw9RiAEpob4J
-         ooILdw9bXXIkMxRUstEurFS41FVa0C1DFyEjdsJGnn6OUX4Y6/WEJjwowwiocFFWOk0I
-         EScw==
+        b=SyWACAxo/2Uhm0w2S+FSiej78vuHCgJZZOT09pLIi9TzhCf9uIgBcDanouRov8UaxD
+         Az++hWj25Moowfp6kH9MxsZ1cFOdYbINSVxHSd3J7qP6ctbNkUxcOuHwSHoBXE3vLqZ0
+         Qh7N0B2FAJq9QYDUXmSvrKPZ0MlwMXE5CcJBLwUZuC01xARvkxFGAZJK7mbXsuBkBAMW
+         YYZZNUY15IojYxtKdstf/6J6cYnynxKAuiibTNoN9pLg8HU/CCbONSxrmA0oh/mvqR0l
+         wdKHzlTJDAY0jwqZrFZ+j4K48SocLxKEPdu+GjF3CTtpNr9bgZd/5QQ1OZZIPIWRJB1z
+         ZkOg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=N1EaLBSYYrgNyCVq+XkPC1rTN11UT3UwwE/Ba6Rikgk=;
-        fh=LzxeyCt1jLYxstT/GfXyhLlWx3B1DqX+dxqML4Iqrbc=;
-        b=ZlvA68qidE1icNb77gs8Mae/3/wEZQWYQ0D0Ke57rk/UA1huXs3XVwc2Vhrj2pLtDA
-         qPZrg+W8jwv24PbT09KbzrrzeT3MrWF8vJgP9T+IEz3t2ky7yPsIrD3p6u30YIrChWvu
-         SlcW7DEloPIDbzu9CTMltrSEbT8CUso7Sv3YVZ0h5NI5xKFOWySqC7zi86KBlL+C26Vr
-         /Jyd5SKxqLSe2NOybSajbPsQqDjd8sOxrEHYOJuAVaz9g79avVjE29UFcs+Xr+N6LQrL
-         ZRQ8MtaEnPE6A8Cl24FYto8NE4lpHwLQOwRUYOUi5sKS3HH8iYSAxhTx6sI0pUwYrYKv
-         qJsg==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=lFgMihWsoMtZghWDDXPtR/BAjR1Y+4atLFgxslVUViE=;
+        fh=kCyRLDh5J3gIiREFLY8j0Np5W6jJYz493Cq4oJBa4aA=;
+        b=dSDTzDY1PEfVfKYokqpAuIy8zTLSkjeCmDxiHol/Ykt6KIwXH6zXfbk9BjO1L4V/O5
+         Wu4a/ZgSdg7GgWlLARhQup1BnRENlCV1rae7IRwQrPuRXP7AVQnF9pxpnPneltYSk5As
+         YIKExT+Os5dUM+5xFHUDD0Ch3SgKiMkg/eAEmYN7Jr/Zgr92tDkwzj1UoAuCjHMJMtDD
+         KXwxr4+7d6aKFXmQwkXswYdJFNdiFcHSrUw1og0WSUj8LlhQOjzh+HTAk5CDEX/JLh3H
+         spQk009d7Pl7FE9DPXMgLSznIYIy2iPsNZxJVRYYtw9Htwrv0e+iK/SlcZK2ArO1o8NA
+         XFxQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773220003; x=1773824803; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N1EaLBSYYrgNyCVq+XkPC1rTN11UT3UwwE/Ba6Rikgk=;
-        b=R179TJlQj+90ACKC8VEMuXbcKKJbuPlSv/j/HMnCxb9AHx7p8f8Njb9H0DxzgDVVeP
-         2dKThypdzDjHOKFoBFdUw1fmGI0G+oKNWfAFlXzWMbcwLqLexFVIjJvMCoALxylRDjaV
-         1d320ymnvbiIJH1O4fNHolBnlGW8l+Qs+T5B82h0SKLuUC4fTzy9R82B8IrjxV2awYnf
-         kTzDJFDCeBPPtsalDokwYhhg0xNHNj3sCZZJIlPHiH0sCOb35jv5Lc9KM9KWB27sNDt1
-         vNQif9LFXbJfSUR1Epmm5KHlh2SW34WDpQm0P/6ZARih0Hx45KWAu8diKRMArYIB/PPn
-         8u0w==
+        d=gmail.com; s=20230601; t=1773220952; x=1773825752; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lFgMihWsoMtZghWDDXPtR/BAjR1Y+4atLFgxslVUViE=;
+        b=ickx9bIHtBU+sEi1aRGjZqo71gBfwNnWragbJ5Y8eH6yQJeAOCXmN2Cs0w4diTS98P
+         fAHrLuQUe90UVcLlBnQ7IckbzDv9YyEf/SsjmvzrA4l+teUaYAT5UV/+0oqPhMP+sFTe
+         Bx3o8QJABxpQrLpMey/y0vFDienmPw6fZSFBf/8AiVUV3YbWRc7K1ZcaNtJTQQnXsmIJ
+         Fpsg0G2Hs0P8gzaZis4iEpH1EBHNUWzoAIpTm1HlkLUFWdPTJekar4JDGd6F8beE2d5N
+         CwC2T9QKkwm8Ogr8r6qMCmzFcXwh9jPLR+K41Pg40VIbP64xQiFc92GWxhPIpA8XjUF3
+         54FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773220003; x=1773824803;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=N1EaLBSYYrgNyCVq+XkPC1rTN11UT3UwwE/Ba6Rikgk=;
-        b=g/Dualy5Tvane8ov2oU/Ewi0afAemNdfFqObeFZcs/MiI8n68eBUGm2sERgypU3Uj/
-         q9hOrN0mykmtnNprqx+OocuJY7/uSMrdaKQTjWK12q6DOe5bDhNf+9kp2wfzeGDEv4fi
-         L/N66mlEH/qrRbUKSjryDfdH7XUNAqD6GlJPCPOA8D3Sw6hSl3bqSa20LODDeqDnaWDg
-         +lsnNRUX4smB+OIXW/VFqaF7HtxiZ6sMcDARbM/SO+1MQl73P7C/jH2247J8eANO6n47
-         V0Is2wJ48bw4+LedGXN93WtlxMo7mqcrl/vStjCvWNE3H1nYCQm49TgCM5yjY585I+y9
-         lFsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjOz78WAZHyw3e/E8WP1oX40lSPw/psA9mG54miapY6eLg04pLb/jenDPgId30bSrlQ0Yp1iFN3tJ7w8UWKDc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVthOhT5FKb+2uDaXruA7Ki4O/Qt1rwz3CpTD5cYo75DZPq6PX
-	Z/67MZZ5KYSd4TmkOqhpWBKeuundId2SgS4T0qTfDAMS6O6iLpk6BLmrsy5L86NEWYQ+yq4qSC+
-	NyEcDpm5xQlE44BhG0igls3IOVoPxN6g=
-X-Gm-Gg: ATEYQzxC2g7L9HMC9BoU1FgH7ZvxBqAMMxV4OOYWjxrvd7NrxDr7k+mHfgLxnCbSwct
-	1/q0GZMqqc2O9h6++EJqMQF+PzolytpfaJZpciHckO2ZDcM0efhsYbafg+m1P7hta9aQNiV1TY3
-	pr7IaQdfhszIgc7FgmUjyybrJ3Y7v8M1ICLquxSpHQzWOeCGB018xoHiCEmt2fzRPkWmtVNhh/q
-	poisFZCxUTT3AezKZAF9JU6yr1X/dchOPygd509xvhWooL48qf896EfLS7GGCIDVjviZnVPsSS7
-	/ISHudXzDvcizZfY1KmdeGB9BkbqHvh62weuazigkzwTqiRlzMbUsRMKgo6D
-X-Received: by 2002:a05:600c:8b0a:b0:485:3ae8:2236 with SMTP id
- 5b1f17b1804b1-4854b123cd6mr28330295e9.32.1773220003052; Wed, 11 Mar 2026
- 02:06:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773220952; x=1773825752;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lFgMihWsoMtZghWDDXPtR/BAjR1Y+4atLFgxslVUViE=;
+        b=l9nXcum+SfgmGUm904yaa2cyFET4xpKGjyAP1XIW8cgUNw6nJKfeqtDNH9WdaD4xVK
+         NeyIN05aeuYMHDX6fOdngpnkEQ4L0fTAFnF7DEvNTmofi7MOuqFA+sMWFk0xMbD4YuW7
+         2HxV6obrIByBHAT0Cjn54FUwi9v8asGUQF9ByC60OlO97rVS+mee6OAbW2CAzms8/zJs
+         PhgJkSfHMADqXpGOp/KhMi2vgelby0P/h04k5hCQM8lc9vN/4CYGwsca+yvabRp1IV9m
+         9FE6FpSXre9t+FKH5H1e71UKIbSlmLURaIFcP0+Fhzg03gE+G3SPRMT8fkp/hGMFfxDk
+         4GLg==
+X-Forwarded-Encrypted: i=1; AJvYcCWGi7jLG59xkoFP4Hu3H4WMDMv6fxeNS3qVXXkb+3xGEGTyV2hS7A6569e5eS8pgZzy9kjIQbJ7eksVhUfYPJY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1CpuC6SM8aC/1LHzMLY0ddCkiA+CbbkFTgjJIgDErZLiDcRqe
+	JY/r4oRful6WY1GoESqjSl284rsWOJDV67d7ObNY08sRThhemGTInA79qIkF98qdIunqkv+ZjpN
+	gWGBEVafGtyTrAbH15EDzM9HH5LejWHE=
+X-Gm-Gg: ATEYQzyxXGVDZ567Tq0RQqP09ky6Qefh7eflaQ6yZY8V10qhF9kkU5lvmkCQZqkiQva
+	udZVIhMoZwi0kU6mYN3WJ1Zg5dvdoju5thHRTzHO3Gbv9Ky3esGAVayIOlLftM7ubv+WSI9kI8r
+	BJccrib+IMm/LnGavAcWEOiG2yF2tUK5e5u5BnhVIglYqiFYgX0RhgD5vqNtIwtZwwpcV9oGcjV
+	OvgXsWS6YjARhORnqHfnlJMh2Vy+dUdorGoelbNxF80NZWRcA/Fhl3Cdvh1yyV++W4bpl9N0H4I
+	ndPC2SGGZu45GKCeBduKeMZ2zTk9y4oybT+2hnQSgry9ZLP2DtBn52N1UUlP
+X-Received: by 2002:a5d:5e01:0:b0:439:bcc2:bf0a with SMTP id
+ ffacd0b85a97d-439f81e7e25mr3490492f8f.23.1773220951904; Wed, 11 Mar 2026
+ 02:22:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260225210820.177674-1-wusamuel@google.com> <CAG2Kctp1q1QtB1-JT2cgBsYu-WceV1YdSM1sSwNm8pyGtZQ6TA@mail.gmail.com>
- <CAP01T776Ni9R6CT_phx5wNDUoN13Tztz3DD5ZgKWedNLx7Nb0g@mail.gmail.com>
- <CAP01T77EZDLhjwtZBSt+DXLG-ftHfows-p_6FgXZQDQGowcDtw@mail.gmail.com> <CAG2KctrkGjk3SMQ=8-rrYnKCTUseSmBV+kg+=OyT9M2mBT1bwg@mail.gmail.com>
-In-Reply-To: <CAG2KctrkGjk3SMQ=8-rrYnKCTUseSmBV+kg+=OyT9M2mBT1bwg@mail.gmail.com>
+References: <20260303150639.85007-4-leon.hwang@linux.dev> <47fbcb9aa941b07054bfef30b802d488688fafdf6df889e78b38313a614b98c1@mail.kernel.org>
+ <CAP01T74sqmUAL7=PuzFPNbghX+6N_OzrsZiOHcMEMtg01CuL4A@mail.gmail.com> <94cfdbdc-833a-4838-af84-e0989e988418@linux.dev>
+In-Reply-To: <94cfdbdc-833a-4838-af84-e0989e988418@linux.dev>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 11 Mar 2026 10:06:06 +0100
-X-Gm-Features: AaiRm52PHPIATVHLejy9VoMDSkcJIo-xhDv2D3PD2a7QMCb-5IDtVAgsuRLOLOM
-Message-ID: <CAP01T77YFR9227YpTZin-i7w-hNLWMM9ANuzmiAzLwzPGJ=gEw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 0/2] Add wakeup_source iterators
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+Date: Wed, 11 Mar 2026 10:21:53 +0100
+X-Gm-Features: AaiRm50nAQdzlpHM51HW1PyT3VT1H1H64hcFybhjy9jwHkvvigOgK5QbW0gQV78
+Message-ID: <CAP01T74w4KVMn9bEwpQXrk+bqcUxzb6VW1SQ_QvNy0A4EY-9Jg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Disallow !kprobe_write_ctx progs
+ tail-calling kprobe_write_ctx progs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, yangfeng@kylinos.cn, 
+	menglong8.dong@gmail.com, puranjay@kernel.org, bjorn@kernel.org, 
+	pulehui@huawei.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	kernel-patches-bot@fb.com, martin.lau@kernel.org, clm@meta.com, 
+	ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, 11 Mar 2026 at 01:23, Samuel Wu <wusamuel@google.com> wrote:
+On Wed, 11 Mar 2026 at 07:08, Leon Hwang <leon.hwang@linux.dev> wrote:
 >
-> On Sat, Mar 7, 2026 at 12:17=E2=80=AFPM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
+> On 11/3/26 01:23, Kumar Kartikeya Dwivedi wrote:
+> > On Tue, 3 Mar 2026 at 17:04, <bot+bpf-ci@kernel.org> wrote:
+> >>
+> >>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> >>> --- a/kernel/bpf/core.c
+> >>> +++ b/kernel/bpf/core.c
+> >>
+> >> [ ... ]
+> >>
+> >>> +     switch (match) {
+> >>> +     case BPF_MAP_OWNER_MATCH_FOR_INIT:
+> >>> +             if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+> >>> +                     return false;
+> >>> +             break;
+> >>> +
+> >>> +     case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
+> >>> +             if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
+> >>> +                     return false;
+> >>> +             break;
+> >>> +     }
+> >>
+> >> In the v1 review, Alexei Starovoitov asked for strict conformance
+> >> both ways rather than one-directional validation:
+> >>
+> >>     "Don't be fancy. Require strict conformance both ways
+> >>     in *all* patches."
+> >>
+> >> https://lore.kernel.org/bpf/CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com/
+> >>
+> >> The BPF_MAP_OWNER_MATCH_FOR_UPDATE case still uses one-directional
+> >> matching, rejecting only !owner->kprobe_write_ctx && aux->kprobe_write_ctx
+> >> but allowing the reverse.  Was this an intentional design choice, and
+> >> if so, should the changelog note the disagreement?
+> >>
 > >
-> > On Sat, 7 Mar 2026 at 00:28, Kumar Kartikeya Dwivedi <memxor@gmail.com>=
- wrote:
->
-> [...]
->
-> > > I think it's still unclear why this cannot be achieved by exploring
-> > > what Andrii proposed initially in [0], i.e. by using existing
-> > > primitives and adding extra kfuncs where necessary to solve
-> > > bottlenecks, and I didn't see any indication where it was explored
-> > > sufficiently.
-> > >
-> This is my bad, I misinterpreted/misunderstood Andrii's original
-> proposal to apply only to open-coded BPF iterators, hence the follow
-> up patches with them removed. However, I don't disagree this can be
-> achieved via open-coding. Both proposals are viable to traverse wakeup
-> sources via BPF, however I see two distinct advantages of the BPF
-> iterator:
->
-> 1. Iterators provide a stable kernel interface that decouples the BPF
-> code from the kernel's internal data structures and refactors
-
-I think this is my concern; committing to a stable interface that
-we'll have to maintain forever.
-It's a narrow use case that can be better served by dedicated kfuncs
-and rolling your own solution.
-There will be no end to the number of iterators if we keep making one
-for every linked list in the kernel.
-
-It would be different if the synchronization scheme for the
-wakeup_sources list was really complicated and hard to express inline
-in the verifier, but that is not the case.
-
-> 2. If wakeup sources are accessible via BPF, the next step should be
-> to deprecate the existing interfaces for wakeup sources, such as the
-> sysfs and debugfs stats. In that case, a text-based BPF iterator
-> output will provide less friction during the transition.
->
-
-I would agree if this was a one-to-one conversion, where you just
-replace the directory for look up.
-But you'll be reading from one file vs several, so it's already a
-non-trivial change in the consumer.
-At that point, the conversion burden doesn't have the same weight in
-deciding whether to stick with textual representation.
-
-> > > I think all we need is the wakeup source read_lock()/unlock() APIs as
-> > > KF_ACQUIRE/KF_RELEASE kfuncs. Just need to ensure we pair each lock
-> > > with unlock by passing the index, which can be an opaque value
-> > > returned from the kfunc (e.g. dummy empty struct pointer encoding the
-> > > index). Then you can use bpf_for() to open-code the list iteration.
+> > Let's follow the approach Alexei outlined, while the changes look ok
+> > to me, let's remove the one way check and just do
+> > owner->kprobe_write_ctx != aux->kprobe_write_ctx, same for the other
+> > two checks. With this we can also get rid of this INIT vs UPDATE
+> > distinction.
 > >
-> > I had a longer discussion with Paul on this. When having multiple open
-> > SRCU sections, mixing nested calls doesn't flatten the protection
-> > scopes and leads to all kinds of issues, an example of which is in
-> > [0]. That said, in this case, the verifier isn't tracking what the
-> > underlying SRCU section protects or isn't even aware of it, all it
-> > needs to ensure is that section is closed eventually, out-of-order
-> > unlocks are ok, it would just exist to allow looking at the list in a
-> > stable fashion using safe bpf_core_cast() accesses.
+> > Other than that I think patches are good, please also test both
+> > directions in the selftest in next respin.
 > >
-> > So, I just wanted to clarify why I think this should be perfectly ok.
-> >
-> >   [0]: https://www.kernel.org/pub/linux/kernel/people/paulmck/Answers/R=
-CU/SRCUhoha.html
-> >
-> > (if you are like me, please follow the link at the bottom of [0]
-> > before feeling good about understanding the example).
 >
-> Appreciate the thoughtful feedback from you and Paul. The example was
-> nuanced but well-explained by the post, however, a key difference I
-> see is that the BPF iterator solution creates continuous locking
-> segments during traversal, as opposed to hand-over-hand locking in the
-> example provided. I could be missing something fundamental here- do
-> you mind elaborating?
-
-It was just an illustration to identify what guarantees the verifier
-would need to enforce.
-The most we need to do is just ensure SRCU indices are passed back
-during unlock, in whatever order.
-Critical section will be using bpf_core_cast() anyway to do safe
-walking of the list.
-With the KF_ACQUIRE/KF_RELEASE kfuncs you will still have a continuous
-locking segment.
-Just enclose your list walking loop between lock() and unlock().
-
+> Hi Kumar,
 >
-> >
-> > > The iterator would become unnecessary, and everything can be done fro=
-m
-> > > a syscall program's BPF_PROG_RUN invocation. I didn't
-> > > check how we can get the pointer to the wakeup_sources LIST_HEAD, but
-> > > you could try several options (__ksym,
-> > > bpf_kallsyms_lookup_name+bpf_core_cast and then walk it, or return
-> > > pointer from a new kfunc and walk it using bpf_for()+bpf_core_cast())=
-.
-> > >
+> Thanks for your review.
 >
-> Getting the static variable is key to the open-coded approach, but a
-> clean way forward isn't obvious to me. Passing around raw addresses
-> seems brittle and can raise security concerns. The wrapper kfunc to
-
-I don't understand the security concern. All of this happens inside
-the BPF program.
-If you're writing these addresses to user space and leaking them, it's your=
- bug.
-You can do that with iterators too. You have all the raw addresses
-available to you.
-
-> get the static address might be the best option, but it feels like it
-> violates the power subsystem's encapsulation. The iterator approach
-> abstracts all of this cleanly.
+> I agreed that both-ways check could simplify the code. But, the UX could
+> not be great.
 >
-> > > Also, how much speed up does this really provide? It is hard to
-> > > understand the motivation from the current cover letter. Is the
-> > > bottleneck due to opening multiple files in sysfs? You will still hav=
-e
-> > > to read text and parse text from the iterator's output in your curren=
-t
-> > > solution. Wouldn't it be faster if you just used a syscall program,
-> > > and used binary output (using a ring buffer) to stream data to user
-> > > space?
+> Let me explain it with an example.
 >
-> With the BPF iterator approach on a Pixel 6 in a quiescent state, I'm
-> seeing a 10x speedup when traversing wakeup sources; the speedup would
-> likely be even greater on a loaded system.
+> struct {
+>         __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+>         __uint(max_entries, 1);
+>         __uint(key_size, sizeof(__u32));
+>         __uint(value_size, sizeof(__u32));
+> } jmp_table SEC(".maps");
 >
+> SEC("?kprobe")
+> int prog_a(struct pt_regs *regs)
+> {
+>         regs->ax = 0;
+>         bpf_tail_call_static(regs, &jmp_table, 0);
+>         return 0;
+> }
+>
+> SEC("?kprobe")
+> int prog_b(struct pt_regs *regs)
+> {
+>         return 0;
+> }
+>
+> prog_a is kprobe_write_ctx.
+> prog_b is !kprobe_write_ctx. And, it will be added to jmp_table.
+>
+> With both-ways check, prog_b is required to modify regs. I think it's
+> too restrictive for users to use prog_b as tail callee.
+>
+> With one-way-check of this patch, prog_b can be used as tail callee to
+> keep regs as-is.
+>
+> This was what I was concerned about, and the reason why I did not follow
+> Alexei's approach.
 
-I'm sure you can replicate it with the approach described above.
-It might even be faster than parsing text from the file.
-
-> As alluded to earlier, the next step is to remove the
-> /sys/class/wakeup node and debugfs nodes. My apologies for not
-> explicitly listing this in the cover letter, but ultimately this would
-> save memory by removing those nodes, eliminate work by not creating
-> the nodes, and improve performance with a faster traversal, all while
-> transparently replacing legacy interfaces.
-
-And you can do that regardless of the type of solution chosen above.
+I agree but the main question is whether such a case is realistic, are
+we going to have write_ctx programs tail calling this way?
+Tail calls are already pretty rare, thinking more about it extension
+programs are probably also broken wrt checks in this set.
+bpf_check_attach_target is doing none of these things for
+prog_extension = true. Nobody reported a problem, so I doubt anyone is
+hitting this.
+It probably also needs to be fixed.
+Since you noticed it, we should close the gap conservatively for now,
+and wait for a real use case to pop up before enabling this one-way.
 
 >
-> Thanks!
-> Sam
+> Thanks,
+> Leon
 >
-> [...]
