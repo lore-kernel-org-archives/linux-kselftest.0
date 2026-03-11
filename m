@@ -1,31 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28C6288505;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA39930C35F;
 	Wed, 11 Mar 2026 22:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773266492; cv=none; b=or8xn5ZOZQqDW/ug2BJ231msiW+0lFYQlkNUffohBQbObUg6wigDjZKIbwN3D1rZjAybxnHoIX4EuDx2Lc4sTMlLcPIBqckf3P3UWrVCsQ2KoE/ohTC02WyCPA8iigITh4l+hDFCLjLvPAlY+bamI95bm3RTs1kYGXhE/4bzLTQ=
+	t=1773266492; cv=none; b=iM7G0563c9HWpSpcOhy1F31k6ZKHFuM2ER2DezC64CnMHAnLRmDm/cBxwFS4bDKiktAaZ/vrh7t0BBoAQwPmJjcbfFJTi+7BMzj+R5/Z0fBNTwLCuqQNhxPuC5u8NDx+T7ziin0FBfCxJhomxhCa6EGinMHZn20XgW0fnxhKDS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773266492; c=relaxed/simple;
-	bh=78BTdrVcibHfIVMHXW+6UBL/3BC+jZrGBnj/JndqAy4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=W0Ont9cGL9DMMiwtXe5cjt5IyOz5Dwg0MGYiEyLm+kOel2qL47PkkLQw0FaWXiSQcO+sGP9JqPK2/+7HjphgMNFXiMVlQVRezbeLHVsYUs6hIW+w72dNPa3L6d5jQhT/YWJ8to7wOKOoKsACdugvAbqBYJ/x+NKK/2rtBjsrLvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hgBOepK7; arc=none smtp.client-ip=159.69.126.157
+	bh=K/p/6td6qQEvWG9AhaOSyDEDNlhhNk5HXL1E1wSA3s8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=IsEEsR1MIj63K/6eufsBpD+S8CrhkIsfiyQg5ZBZtL8GGOQLdMhK5LAMEoe1BLIWufdna2hoR5gM0QCTrbC94ICTbeF+ay8WnN1NTxT6TMeH/vEZKx3sMbdA/pLnA0MWDq9gmkG2txyISJQwiyW22bvBXa7zCkgt0u8izInC5+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=dGT0lr30; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hgBOepK7"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="dGT0lr30"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1773266488;
-	bh=78BTdrVcibHfIVMHXW+6UBL/3BC+jZrGBnj/JndqAy4=;
-	h=From:Subject:Date:To:Cc:From;
-	b=hgBOepK7hGBsCIwUyPyJH7PCjfQaMc9UwffNF2TfUkWumsSndn5T6ytKKH6MV8ie6
-	 oPOw46C7fwOvU4Q1zhRmdRWQuOoQyCoWWLxbuAGdgcWay0cMN78m503GHnyKQ+Thuu
-	 UNgSqticTkpV/7pJcGBJWa5LCPIT3W2E36zXiYxA=
+	bh=K/p/6td6qQEvWG9AhaOSyDEDNlhhNk5HXL1E1wSA3s8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=dGT0lr304xSrDnbq7H73UlI/O9oXgAKF5tG+qW/gMv5gAd7Hl50nQ/N5/6c7l4CQ7
+	 mBhuuC70gN342M9xUL7+79NIyH8D+l7a3Z6D6FZzr/IbI+hs+KE5bSxkmUInij9ahS
+	 Nt59abswR0BFj9nXgjOHvkJE5qO3nREImDv2Gp1U=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/4] tools/nolibc: add err.h
-Date: Wed, 11 Mar 2026 23:00:48 +0100
-Message-Id: <20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net>
+Date: Wed, 11 Mar 2026 23:00:49 +0100
+Subject: [PATCH 1/4] selftests/nolibc: add a variable for nolibc-test
+ source files
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,48 +35,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDY0ND3bz8nMykZN3UoiLdDN2UNGOzRHPTlJSUNAsloJaCotS0zAqwcdG
- xtbUAtCXYm14AAAA=
-X-Change-ID: 20260311-nolibc-err-h-df36a75dddf8
+Message-Id: <20260311-nolibc-err-h-v1-1-735a9de7f15d@weissschuh.net>
+References: <20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net>
+In-Reply-To: <20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773266488; l=1248;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773266488; l=3019;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=78BTdrVcibHfIVMHXW+6UBL/3BC+jZrGBnj/JndqAy4=;
- b=oTI0AiQE/mVVuVRwMybZneYO+h9ML1It4olYm7pApzu6xoKFhTyBnYX6VCvZk9nxfspVWHvkZ
- cmoikSnH7ioChK9TDq5MHYKqHWulnCoTB2DN3Vok7fX7Gb1z7BXgXqw
+ bh=K/p/6td6qQEvWG9AhaOSyDEDNlhhNk5HXL1E1wSA3s8=;
+ b=390NenVbU3rNlFf0ICz3LEitM6PQpYWwFUcVK2fZj9Bk2e/wj7tNxkqWek84vtUGc0l8PkztX
+ NRRfuYV/hxsAxAHLwbSqvLjm5eH5eJUsmfvtWq2SSmtw23wrtPyeI0O
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Add a few convenient helpers to print error and warning messages.
+The list of the nolibc-test source files is repeated many times.
+Another source file is about to be added, adding to the mess.
+
+Introduce a common variable instead.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (4):
-      selftests/nolibc: add a variable for nolibc-test source files
-      selftests/nolibc: validate NOLIBC_IGNORE_ERRNO compilation
-      tools/nolibc: add support for program_invocation_{,short_}name
-      tools/nolibc: add err.h
+ tools/testing/selftests/nolibc/Makefile         | 4 ++--
+ tools/testing/selftests/nolibc/Makefile.include | 2 ++
+ tools/testing/selftests/nolibc/Makefile.nolibc  | 8 ++++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
- tools/include/nolibc/Makefile                      |  1 +
- tools/include/nolibc/crt.h                         | 26 +++++++
- tools/include/nolibc/err.h                         | 91 ++++++++++++++++++++++
- tools/include/nolibc/errno.h                       |  2 +
- tools/include/nolibc/nolibc.h                      |  1 +
- tools/testing/selftests/nolibc/Makefile            |  4 +-
- tools/testing/selftests/nolibc/Makefile.include    |  2 +
- tools/testing/selftests/nolibc/Makefile.nolibc     |  8 +-
- .../selftests/nolibc/nolibc-test-ignore-errno.c    |  6 ++
- tools/testing/selftests/nolibc/nolibc-test.c       |  2 +
- 10 files changed, 137 insertions(+), 6 deletions(-)
----
-base-commit: db4f34cc063d68f329fc543a5808fe53e61fc796
-change-id: 20260311-nolibc-err-h-df36a75dddf8
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 0370489d938b..6bace04227a7 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -13,9 +13,9 @@ $(OUTPUT)/nolibc-test: CFLAGS = -nostdlib -nostdinc -static \
+ 	 -isystem $(top_srcdir)/tools/include/nolibc -isystem $(top_srcdir)/usr/include \
+ 	 $(CFLAGS_NOLIBC_TEST)
+ $(OUTPUT)/nolibc-test: LDLIBS = $(if $(LLVM),,-lgcc)
+-$(OUTPUT)/nolibc-test: nolibc-test.c nolibc-test-linkage.c | headers
++$(OUTPUT)/nolibc-test: $(NOLIBC_TEST_SOURCES) | headers
+ 
+-$(OUTPUT)/libc-test: nolibc-test.c nolibc-test-linkage.c
++$(OUTPUT)/libc-test: $(NOLIBC_TEST_SOURCES)
+ 	$(call msg,CC,,$@)
+ 	$(Q)$(LINK.c) $^ -o $@
+ 
+diff --git a/tools/testing/selftests/nolibc/Makefile.include b/tools/testing/selftests/nolibc/Makefile.include
+index 66287fafbbe0..6455373d56be 100644
+--- a/tools/testing/selftests/nolibc/Makefile.include
++++ b/tools/testing/selftests/nolibc/Makefile.include
+@@ -8,3 +8,5 @@ _CFLAGS_SANITIZER ?= $(call cc-option,-fsanitize=undefined -fsanitize-trap=all)
+ CFLAGS_NOLIBC_TEST  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wextra \
+ 		$(call cc-option,-fno-stack-protector) $(call cc-option,-Wmissing-prototypes) \
+ 		$(_CFLAGS_STACKPROTECTOR) $(_CFLAGS_SANITIZER)
++
++NOLIBC_TEST_SOURCES := nolibc-test.c nolibc-test-linkage.c
+diff --git a/tools/testing/selftests/nolibc/Makefile.nolibc b/tools/testing/selftests/nolibc/Makefile.nolibc
+index f5704193038f..2d32cec1105f 100644
+--- a/tools/testing/selftests/nolibc/Makefile.nolibc
++++ b/tools/testing/selftests/nolibc/Makefile.nolibc
+@@ -302,12 +302,12 @@ sysroot/$(ARCH)/include:
+ 	$(Q)$(MAKE) -C $(srctree)/tools/include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone headers_check
+ 	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
+ 
+-nolibc-test: nolibc-test.c nolibc-test-linkage.c sysroot/$(ARCH)/include
++nolibc-test: $(NOLIBC_TEST_SOURCES) sysroot/$(ARCH)/include
+ 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
+-	  -nostdlib -nostdinc -static -Isysroot/$(ARCH)/include nolibc-test.c nolibc-test-linkage.c $(LIBGCC)
++	  -nostdlib -nostdinc -static -Isysroot/$(ARCH)/include $(NOLIBC_TEST_SOURCES) $(LIBGCC)
+ 
+-libc-test: nolibc-test.c nolibc-test-linkage.c
+-	$(QUIET_CC)$(HOSTCC) -o $@ nolibc-test.c nolibc-test-linkage.c
++libc-test: $(NOLIBC_TEST_SOURCES)
++	$(QUIET_CC)$(HOSTCC) -o $@ $(NOLIBC_TEST_SOURCES)
+ 
+ # local libc-test
+ run-libc-test: libc-test
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.53.0
 
