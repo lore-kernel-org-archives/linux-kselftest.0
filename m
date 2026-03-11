@@ -1,310 +1,207 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B753BADB2
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 10:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECB93D6CC9
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 11:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773226308; cv=none; b=OHnfOSSa+vydEy2nR4YpMDobk70TGBM+9eCRqZOmyJpveRrZBQ+hXYUInig4d9hwl1MyUcnVmJKzvT3hfYTPxZ8fXgDC+ji4s/aZNGpc8/IlTXU47o+rFa/ySee+Axt04IJEP5F0JBi1JSBDDyEw8bp+6BNL/OBc02T4cxFc+X0=
+	t=1773227146; cv=none; b=njagcJ7+U1RO8LNu3Gp0oTS8/1fqo2NCxBWk75NZLft8cobxJ2pJa7oKWgkAEQKWis/PuUjsFTvdfxbu2snIjf1ox8mn8L6zK0YCV6aUWvrkWl9PgbVHPAFa6xWXwgJt0IVPkEVCJznbyJ9QSg8YjHwsswVM1QefNhiNxFXxN74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773226308; c=relaxed/simple;
-	bh=aIPDFmWpiu2n2j6R0cgXmVexdXwuiIG9at9lCRrofUM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JrX21DMpP1xo0E4sQrdXaDt15SMWgpPFh8+t3XP0QeywBOmU/hPwGykC+aCivJ3IYKFQKtjsZDNvkWOhdXeW7WPYwYAH2k7iECOhMeG4yQRccKQOhV0MQ7VpB0OMRplRlljGuzh0KG4tPr0rEaUKVk5S9njXbAQWrg8udNUN3QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w0H9O-0004vc-L2; Wed, 11 Mar 2026 11:50:50 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w0H9K-004qSb-2P;
-	Wed, 11 Mar 2026 11:50:48 +0100
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w0H9L-0000000DLHf-44Eu;
-	Wed, 11 Mar 2026 11:50:47 +0100
-Date: Wed, 11 Mar 2026 11:50:47 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Naveen Mamindlapalli <naveenm@marvell.com>,
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Hariprasad Kelam <hkelam@marvell.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next 02/11] ethtool: Add loopback netlink UAPI
- definitions
-Message-ID: <abFJB6mZc-0qNbrd@pengutronix.de>
-References: <20260310104743.907818-1-bjorn@kernel.org>
- <20260310104743.907818-3-bjorn@kernel.org>
- <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
+	s=arc-20240116; t=1773227146; c=relaxed/simple;
+	bh=Hj5N+L2XYZKo6huM6pFqNdQ3tPjB5fdhYefLo+5H6eE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=a3ZDH3wpIR36xjH10f5/xSsLZyXamA2FOA9MCG1AMDke3Zs5yMG0M84VUKxmO/ypwqMyvCqTGNv4MzRjzsp265Z7+6Ti2C3PX2SaJEnI+kmAHkxMNr8Y6skAyQsNtYzm2QTA+JwCfWGJEtCiEGUaUzaezCeIivps3dw/XZbDEiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=duz5YKpz; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="duz5YKpz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773227142;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sed4Re6GN4uugIRwWKcjTOf13jkp6kq5XzAIG+lyY2g=;
+	b=duz5YKpzcLsr+0swfRqxBZE+riYvJyQ+NBPUX5ieTXB73IXru0/h0Hz+rm4tuDUPJb/DQC
+	NXd98cVG+6M0QjupalTUXfmh5OTWCz3F50Pbmo+WD1aINxzH6Yl6ezGtmcJhFGgVZJXCi7
+	WB0IcZEI3J/OUjdzB7v/lpJ4jAmTQ3Y=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-437-Z6j5M8V1Pe-F26VG3WsYnA-1; Wed,
+ 11 Mar 2026 07:05:36 -0400
+X-MC-Unique: Z6j5M8V1Pe-F26VG3WsYnA-1
+X-Mimecast-MFC-AGG-ID: Z6j5M8V1Pe-F26VG3WsYnA_1773227135
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 983511955F2D;
+	Wed, 11 Mar 2026 11:05:34 +0000 (UTC)
+Received: from fedora-laptop-x1.redhat.com (unknown [10.72.112.99])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 981F01956095;
+	Wed, 11 Mar 2026 11:05:28 +0000 (UTC)
+From: Li Wang <liwang@redhat.com>
+To: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Yosry Ahmed <yosryahmed@google.com>
+Subject: [PATCH 1/5] selftests/cgroup: detect and handle global zswap state in test_zswap
+Date: Wed, 11 Mar 2026 19:05:19 +0800
+Message-ID: <20260311110523.26624-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <580debbb-8f6c-4b60-95ef-22c68480ded1@bootlin.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kselftest@vger.kernel.org
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hi all,
+test_zswap currently checks only for zswap presence via /sys/module/zswap,
+but does not account for the global runtime state in
+/sys/module/zswap/parameters/enabled.
 
-On Wed, Mar 11, 2026 at 08:33:26AM +0100, Maxime Chevallier wrote:
-> Hi again Björn,
-> 
-> First, thanks for iterating so quick !
-> 
-> On 10/03/2026 11:47, Björn Töpel wrote:
-> > Add the netlink YAML spec and auto-generated UAPI header for a unified
-> > loopback interface covering MAC, PCS, PHY, and pluggable module
-> > components.
-> > 
-> > Each loopback point is described by a nested entry attribute
-> > containing:
-> > 
-> >  - component  where in the path (MAC, PCS, PHY, MODULE)
-> >  - name       subsystem label, e.g. "cmis-host" or "cmis-media"
-> >  - id         optional instance selector (e.g. PHY id, port id)
-> >  - supported  bitmask of supported directions
-> >  - direction  NEAR_END, FAR_END, or 0 (disabled)
-> > 
-> > Signed-off-by: Björn Töpel <bjorn@kernel.org>
-> > ---
-> >  Documentation/netlink/specs/ethtool.yaml      | 123 ++++++++++++++++++
-> >  .../uapi/linux/ethtool_netlink_generated.h    |  59 +++++++++
-> >  2 files changed, 182 insertions(+)
-> > 
-> > diff --git a/Documentation/netlink/specs/ethtool.yaml b/Documentation/netlink/specs/ethtool.yaml
-> > index 4707063af3b4..8bd14a3c946a 100644
-> > --- a/Documentation/netlink/specs/ethtool.yaml
-> > +++ b/Documentation/netlink/specs/ethtool.yaml
-> > @@ -211,6 +211,49 @@ definitions:
-> >          name: discard
-> >          value: 31
-> >  
-> > +  -
-> > +    name: loopback-component
-> > +    type: enum
-> > +    doc: |
-> > +      Loopback component. Identifies where in the network path the
-> > +      loopback is applied.
-> > +    entries:
-> > +      -
-> > +        name: mac
-> > +        doc: MAC loopback. Loops traffic at the MAC block.
-> > +      -
-> > +        name: pcs
-> > +        doc: |
-> > +          PCS loopback. Loops traffic at the PCS sublayer between the
-> > +          MAC and the PHY.
-> > +      -
-> > +        name: phy
-> > +        doc: |
-> > +          Ethernet PHY loopback. This refers to the Ethernet PHY managed
-> > +          by phylib, not generic PHY drivers. A Base-T SFP module
-> > +          containing an Ethernet PHY driven by Linux should report
-> > +          loopback under this component, not module.
-> > +      -
-> > +        name: module
-> > +        doc: |
-> > +          Pluggable module (e.g. CMIS (Q)SFP) loopback. Covers loopback
-> > +          modes controlled via module firmware or EEPROM registers. When
-> > +          Linux drives an Ethernet PHY inside the module via phylib, use
-> > +          the phy component instead.
-> 
-> So to get back on Andrew's remarks, let's see if we can get something
-> closer to 802.3.
-> 
-> Here, we have loopback at various locations, which all depends on the
-> Ethernet standard you use.
-> 
-> It's usually in the PCS, PMA or PMD components. Thing is, we may have
-> these in multiple places in our link.
-> 
-> If we take an example with a 10G PHY, we may have :
-> 
-> +----SoC-----+
-> |            |
-> |  MAC       |- drivers/net/ethernet
-> |   |        |
-> | Base-R PCS |- could be in drivers/net/pcs, or directly
-> |   |        | in the MAC driver
-> |   |        |
-> |  SerDes    |- May be in drivers/phy, maybe handled by firmware,
-> |   |        |  maybe by the MAC driver, maybe by the PCS driver ?
-> +---|--------+
->     |
->     | 10GBase-R
->     |
-> +---|-PHY+
-> |   |    |
-> | SerDes | \
-> |   |    | |
-> |  PCS   | |
-> |   |    |  > All of that handled by the drivers/net/phy PHY driver
-> |  PMA   | |
-> |   |    | |
-> |  PMD   | /
-> +---|----+
->     |
->     v 10GBaseT
-> 
-> So even the "PCS" loopback component is a bit ambiguous, are we talking
-> about the PHY PCS or the MAC PCS ?
-> 
-> Another thing to consider is that there may be multiple PCSs in the SoC
-> (e.g. a BaseX and a BaseR PCS like we have in mvpp2), the one in use
-> depends on the current interface between the MAC and the PHY.
-> 
-> Another open question is, do we deal with loopbacks that may affect
-> multi-netdev links ? Like the multi-lane modes we discussed with fbnic,
-> or even for embedded, interfaces such as QSGMII ?
-> 
-> As for the SerDes on the MAC side (say, the comphy on Marvell devices),
-> can we say it's a PMA for 10GBase-KR ? Or is it something that's simply
-> out of spec ?
-> 
-> So I'd say, maybe we should not have a PCS loopback component at all,
-> but instead loopback at the well-defined components on our link, that is:
-> 
->  - MAC => MAC loopack, PCS on the MAC side, SerDes on the SoC, etc.
->  - PHY => Loopbacks on the PCS/PHY/PMA withing the PHY device
->  - Module => For non-PHY (Q)SFPs
-> 
-> The important part would therefore to get the "name" part right, making
-> sure we don't fall into driver specific names.
-> 
-> We can name that 'pcs', 'pma', 'pmd', or maybe even 'mii' ? Let's see :
-> 
-> +----SoC-----+
-> |            |
-> |  MAC       |- component = MAC, name = 'mac'
-> |   |        |
-> | Base-R PCS |- component = MAC, name = 'pcs'
-> |   |        |
-> |   |        |
-> |  SerDes    |- component = MAC, name = 'mii' ?
-> |   |        |
-> +---|--------+
->     |
->     | 10GBase-R
->     |
-> +---|-PHY+
-> |   |    |
-> | SerDes | - component = PHY, name = 'mii' ?
-> |   |    |
-> |  PCS   | - component = PHY, name = 'pcs'
-> |   |    |
-> |  PMA   | - component = PHY, name = 'pma'
-> |   |    |
-> |  PMD   |- component = PHY, name = 'pmd' or 'mdi' ?
-> +---|----+
->     |
->     v 10GBaseT
-> 
-> Sorry that's a lot of questions and I don't expect you to have the
-> answer, but as what you've come-up with is taking a good shape, it's
-> important to decide on the overall design and draw some lines about
-> what do we support, and how :(
-> 
-> > +  -
-> > +    name: loopback-direction
-> > +    type: flags
-> > +    doc: |
-> > +      Loopback direction flags. Used as a bitmask in supported, and as
-> > +      a single value in direction.
-> > +    entries:
-> > +      -
-> > +        name: near-end
-> > +        doc: Near-end loopback; host-loop-host
-> > +      -
-> > +        name: far-end
-> > +        doc: Far-end loopback; line-loop-line
-> 
-> I was browsing 802.3, it uses the terminlogy of "local loopback" vs
-> "remote loopback", I suggest we use those.
+If zswap is configured but globally disabled, zswap cgroup tests may run in
+an invalid environment and fail spuriously.
 
-I do not want to overload this initial series with complex topology problems,
-but we must ensure the proposed UAPI does not block future extensions. I am
-currently investigating automated datapath diagnostic, and a flat component +
-name model will eventually fail us.
+Add helpers to:
+  - detect the runtime zswap enabled state,
+  - enable zswap when it is initially disabled,
+  - restore the original state after tests complete.
 
-Looking at the current patch:
-- component (MAC, PCS, PHY, MODULE)
-- name (subsystem label)
-- id (local instance selector)
-- direction (near-end / far-end): These terms become highly ambiguous in
-  branching topologies (like CPU port on DSA switches).
+Skip the test when zswap state cannot be determined (e.g. unsupported or
+unreadable), and keep existing behavior when zswap is already enabled.
 
-mixed loopbacks across complex interconnects, userspace will eventually need a
-Directed Acyclic Graph (DAG) model.
+This makes test_zswap more robust across systems where zswap is built but
+disabled by default.
 
-By adopting a DAG topology now, we can reduce the load on the initial
-implementation and bypass much of the ongoing naming discussions, as components
-are identified by their topological relations rather than arbitrary string
-labels.
+Signed-off-by: Li Wang <liwang@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Michal Koutný <mkoutny@suse.com>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Nhat Pham <nphamcs@gmail.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Yosry Ahmed <yosryahmed@google.com>
+---
+ tools/testing/selftests/cgroup/test_zswap.c | 77 ++++++++++++++++++++-
+ 1 file changed, 75 insertions(+), 2 deletions(-)
 
-Can we design the netlink attributes now to ensure we are not blocked from
-adding the following fields later:
-
-- node_id: Global system ID. This also allows us to attach more diagnostic
-  points (e.g., hardware counters) to exact subcomponents.
-
-- parent_node_id: Upstream pointer for tree reconstruction.
-
-- action: Bitmask of hardware modes (e.g., LOOPBACK, GENERATE) to allow
-  simultaneous operations on a single node. See 6.3.1.3.1 Loopback Modes in:
-  https://www.ti.com/lit/ds/symlink/dp83tg720s-q1.pdf?ts=1773225830126
-
-- supported_actions: Bitmask of capabilities (e.g., can this node do LOOPBACK
-  and GENERATE simultaneously?).
-
-- direction: Towards parent / from parent.
-
-- operational_constraints: MTU limits (e.g., FEC corrupts loopbacks >1522
-  bytes), clock injection requirements (e.g., stmmac requires external Rx
-  clocks), and required interface modes (e.g. loopback on FEC works only in
-  MII mode)
-
-If we hardcode a flat list assumption into the framework now, it will break
-when we try to automate tests across datapath forks (e.g., SoC -> DSA Switch ->
-PHYs) or handle complex industrial PHYs... :)
-
-Best Regards,
-Oleksij
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+index 64ebc3f3f203..1c80f4af9683 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -594,18 +594,88 @@ static bool zswap_configured(void)
+ 	return access("/sys/module/zswap", F_OK) == 0;
+ }
+ 
++static int zswap_enabled_state(void)
++{
++	char buf[16];
++	ssize_t n;
++
++	if (!zswap_configured())
++		return -1;
++
++	n = read_text("/sys/module/zswap/parameters/enabled", buf, sizeof(buf));
++	if (n < 0 || n == 0)
++		return -1;
++
++	switch (buf[0]) {
++	case 'Y':
++	case 'y':
++	case '1':
++		return 1;
++	case 'N':
++	case 'n':
++	case '0':
++		return 0;
++	default:
++		return -1;
++	}
++}
++
++static bool enable_zswap(void)
++{
++	int st;
++	char y[] = "Y\n";
++
++	st = zswap_enabled_state();
++	if (st == 1)
++		return true;
++	if (st < 0)
++		return false;
++
++	if (write_text("/sys/module/zswap/parameters/enabled", y, strlen(y)) >= 0) {
++		if (zswap_enabled_state() == 1)
++			return true;
++	}
++
++	ksft_print_msg("Failed to enable zswap\n");
++	return false;
++}
++
++static bool disable_zswap(void)
++{
++	int st;
++	char n[] = "N\n";
++
++	st = zswap_enabled_state();
++	if (st == 0)
++		return true;
++	if (st < 0)
++		return false;
++
++	if (write_text("/sys/module/zswap/parameters/enabled", n, strlen(n)) >= 0) {
++		if (zswap_enabled_state() == 0)
++			return true;
++	}
++
++	ksft_print_msg("Failed to disable zswap\n");
++	return false;
++}
++
+ int main(int argc, char **argv)
+ {
+ 	char root[PATH_MAX];
+-	int i;
++	int i, orig_zswap_state;
+ 
+ 	ksft_print_header();
+ 	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+-	if (!zswap_configured())
++	orig_zswap_state = zswap_enabled_state();
++
++	if (orig_zswap_state == -1)
+ 		ksft_exit_skip("zswap isn't configured\n");
++	else if (orig_zswap_state == 0 && !enable_zswap())
++		ksft_exit_skip("zswap is disabled and cannot be enabled\n");
+ 
+ 	/*
+ 	 * Check that memory controller is available:
+@@ -632,5 +702,8 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
++	if (orig_zswap_state == 0)
++		disable_zswap();
++
+ 	ksft_finished();
+ }
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.53.0
+
