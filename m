@@ -1,35 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BEA36D512;
-	Wed, 11 Mar 2026 02:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDBB2F616B;
+	Wed, 11 Mar 2026 03:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773196829; cv=none; b=kzTRswd+SDNw17rC9UfsOJU3eASX7nXsByfiJRnxiBMlWHRo43oan6PGwzC+TcFrBjIoZLnnOXJ5H3VepfsdRx7Rteisci/BiWXwQ8tMZlAls+9zIbH11eGZ6IQ8WK9s0+yJmPrveMH0nb+kabxPmWLhO/0FtSbz0KkcOmdChoM=
+	t=1773199725; cv=none; b=n9BCTydvG6aapfRME3qT4hj2uGdhi0kCrcThi0iCdhiZyAwKLPQjRrjMEk1lr8WfFoEjEMIIK09AL2VfnXlhQ4zlN22YN6BUC3FbiE4vQthRdYgzMHAu3BWSJtOQsfklxKq7eiowRQb3CR+FpSbee3s0gfllRbKwlUkuheZupsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773196829; c=relaxed/simple;
-	bh=pfSrSo0DsLNTG03+tBUhx7H36IVMP9zoocdqJ4kONIA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XD9W7/LPGW32yiZ0HCDZ3NYgS/up3OcmlhO80m9i0g4HTPli5MIkXGr4dLw4a2Mf8QnSXtenVuDqb7Gsi1iK4+NXUMjvBj8B3G7yIRc0Mqx4CdjsPY3xR2bCyM0sx8wtK5DH0HADyuHpuGWaJ0ouYITkhB8E+R1GVqUGPqfMN7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GM+QNiKu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773199725; c=relaxed/simple;
+	bh=LZpW7//jVbQ3b28dY4yr/U1hAe/Gvc+12IE+cO/BbYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IA9cYoKMcRbdhQrCzQMoPmo/QILu0ZoqPveQ3QsgxefrG7mI256WslCDKTzPWiUQOSZQEyLR7npxNFKqOt/sLKp8FTbuu5KH4FTEmC3YFZBZ2uYUsrSA6USvFNAXKpBzSyRmEtTM34xa6cxhAZcZF1O0q9KTp2wc0AKKf54C8dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ax647F5x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GM+QNiKu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B12DC2BC9E;
-	Wed, 11 Mar 2026 02:40:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ax647F5x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3866AC4CEF7;
+	Wed, 11 Mar 2026 03:28:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773196829;
-	bh=pfSrSo0DsLNTG03+tBUhx7H36IVMP9zoocdqJ4kONIA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GM+QNiKuF9+WY9KFlYGuRfaG/soOQxtREUlSIv+1yTcwQSBFZV1Napi7WzC+E+dsD
-	 rDJQI5yYG2Vz7JuM7a9xBd/hBjz3IdloQi5DZnkOQ2SAfKR+eCF7EX8NQvJ66oVH2R
-	 AtaqDXTgER0/0Zg48XtmAan+Oon0eM1W5YCotRP6sTupjrCJrnCNtvEpJEazAw6iGy
-	 n/WkN9RMlK0/3cSfux0yC1GndC8ariwSizzNNEbqD3rURLnGsFTUov5N5PV23GLr/p
-	 mP2pIdadbTvhqbdw1hNQbNqkMAUMWHTaxY+rtodR87doPW0wQBJqxWjJ5/4azD4wDU
-	 uqFbgjiWtuUeA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D7B3808200;
-	Wed, 11 Mar 2026 02:40:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1773199724;
+	bh=LZpW7//jVbQ3b28dY4yr/U1hAe/Gvc+12IE+cO/BbYk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ax647F5x+qT+685CLwN1MKr3OcgXFbyaifB+B6bjq1ONl/JG9B0VJM8OrU3Betb1X
+	 DlREqI+cI4KM2TeQFB2mVIV6bpcT0o8hNStVwJBO3kHkqVSU3s6AOlLYvJFTb1qPq8
+	 Nrm3NQNi1tysSRREZ29fpotkn4k67PlQFgRZb7e0hQNlTig8ej7jPBT+OADMGmy6lI
+	 tLnNddnGMhSgL/SSmz9X5wuz1V/dHsLPClt31I1L97A6IuFKxtAdw/H4grMOsdRVAn
+	 p+0qanvC1kuvdjyQTSrNIKmLfskneUqMupzN02ZtqxaTw/akY2lCD/iz+1kLLI+ILp
+	 1vmw/8TEbDnmQ==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next v2 0/4] genetlink: apply reject policy for split ops on the dispatch path
+Date: Tue, 10 Mar 2026 20:28:35 -0700
+Message-ID: <20260311032839.417748-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,43 +46,35 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: drv-net: rss: Add retries to
- test_rss_key_indir to reduce flakes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177319682554.3014711.9553555271793224929.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Mar 2026 02:40:25 +0000
-References: <20260309204215.2110486-1-dimitri.daskalakis1@gmail.com>
-In-Reply-To: <20260309204215.2110486-1-dimitri.daskalakis1@gmail.com>
-To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-Cc: davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- noren@nvidia.com, gal@nvidia.com, pavan.chebbi@broadcom.com,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Hello:
+Looks like I somehow missed adding default reject policies to commands
+in families using split Netlink ops. I realized this randomly trying
+to dump page pools for a specific device and always getting all of them
+back. The per-device dump is simply not implemented so the request
+should have been rejected. Patch 2 is the real change, the rest is
+just accompaniment.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+v2:
+ - add patch 1 to avoid breaking devlink
+ - add a lot more tests
+v1: https://lore.kernel.org/20260307204425.1900467-1-kuba@kernel.org
 
-On Mon,  9 Mar 2026 13:42:15 -0700 you wrote:
-> The test generates 16 flows, and verifies that traffic is distributed
-> across two queues via the NICs RSS indirection table. The likelihood of the
-> flows skewing to a single queue is high, so we retry sending traffic up to
-> 3 times.
-> 
-> Alternatively, we could increase the number of generated flows. But
-> debug kernels may struggle to ramp this many flows.
-> 
-> [...]
+Jakub Kicinski (4):
+  genetlink: use maxattr of 0 for the reject policy
+  genetlink: apply reject policy for split ops on the dispatch path
+  selftests: net: make sure that Netlink rejects unknown attrs in dump
+  selftests: net: add test for Netlink policy dumps
 
-Here is the summary with links:
-  - [net-next] selftests: drv-net: rss: Add retries to test_rss_key_indir to reduce flakes
-    https://git.kernel.org/netdev/net-next/c/690043b95c18
+ tools/testing/selftests/net/Makefile          |   1 +
+ net/netlink/genetlink.c                       |  20 +--
+ net/netlink/policy.c                          |   4 +-
+ .../testing/selftests/net/lib/py/__init__.py  |   5 +-
+ tools/testing/selftests/net/lib/py/ynl.py     |  10 +-
+ tools/testing/selftests/net/nl_netdev.py      |  32 ++++-
+ tools/testing/selftests/net/nl_nlctrl.py      | 135 ++++++++++++++++++
+ 7 files changed, 186 insertions(+), 21 deletions(-)
+ create mode 100755 tools/testing/selftests/net/nl_nlctrl.py
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0
 
