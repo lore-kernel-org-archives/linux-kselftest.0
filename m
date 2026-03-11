@@ -1,120 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D01C1B4138;
-	Wed, 11 Mar 2026 21:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28C6288505;
+	Wed, 11 Mar 2026 22:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773265903; cv=none; b=NCnTAVFQWTodrbljYCGXULPFo1pcbV/ezP1ahiNPsznt9pAKR7JS4+YGJFr22l0VOwLnjw98hodoWw+MYtvGkzL9C1jfcq564QcNjP7pswAxJfsj1VWdLyZbjfxao3KNFGuQ2iYGJX5SDabUHCLpiRxvEwfRwqaMaFe/gvrDr8o=
+	t=1773266492; cv=none; b=or8xn5ZOZQqDW/ug2BJ231msiW+0lFYQlkNUffohBQbObUg6wigDjZKIbwN3D1rZjAybxnHoIX4EuDx2Lc4sTMlLcPIBqckf3P3UWrVCsQ2KoE/ohTC02WyCPA8iigITh4l+hDFCLjLvPAlY+bamI95bm3RTs1kYGXhE/4bzLTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773265903; c=relaxed/simple;
-	bh=Ky9x4Qc7sXMth54WdQkScEx8aBLAUtoTYC5EOd6QHxo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kirH1Dxr8ZcCkLz9BShAPPapML9f+calzP99PhVohWbeDFMznko5a6j37001W7iDhPfOx6GyskJHpwNkpZGBB1Xqxb+zD9eZEkFLRRH8c6pzE5+n5zdwIRHEu0Z4SazKmWmxnDpnfPfaerR59ELZh41JngmsffpC+MofqYlb1TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dx7jFacZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773266492; c=relaxed/simple;
+	bh=78BTdrVcibHfIVMHXW+6UBL/3BC+jZrGBnj/JndqAy4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=W0Ont9cGL9DMMiwtXe5cjt5IyOz5Dwg0MGYiEyLm+kOel2qL47PkkLQw0FaWXiSQcO+sGP9JqPK2/+7HjphgMNFXiMVlQVRezbeLHVsYUs6hIW+w72dNPa3L6d5jQhT/YWJ8to7wOKOoKsACdugvAbqBYJ/x+NKK/2rtBjsrLvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hgBOepK7; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dx7jFacZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E2CC4CEF7;
-	Wed, 11 Mar 2026 21:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773265903;
-	bh=Ky9x4Qc7sXMth54WdQkScEx8aBLAUtoTYC5EOd6QHxo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Dx7jFacZSSM5wqhX2HqVl7lUpW0BEE9MOC0zg7RjB5ksIwDxAWiFZ8g3y/bFQrOJU
-	 KgyyZReYbkucYayZ/KcL7xAyjIJahjFxos8+5wjc172EkvLwKREPg6fUMCTTHH9e5e
-	 0SRr79WK766w8sZqtz4gS07VU1undwunt1g8fnAM8l9uaJP+41+dKTEgKAzgAC6bf/
-	 ZZLf4g5j9YtyfB0DJtKhpkgq99a3yhBGia1Y7+OvqI0ggZIZSbgKqyCcmC73P8o5ei
-	 3riUM+OF6hL5IX1V96Jb/coHSW0x2b0lzPO3IE2wBzbwAzqmJfj2pYMsEB2v8Ifrtc
-	 tyBfX4sVpALLQ==
-Date: Wed, 11 Mar 2026 14:51:26 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Or Har-Toov <ohartoov@nvidia.com>
-Cc: Jiri Pirko <jiri@resnulli.us>, Tariq Toukan <tariqt@nvidia.com>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Donald
- Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Saeed
- Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Mark Bloch
- <mbloch@nvidia.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, Gal Pressman
- <gal@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>, Shay Drory
- <shayd@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, Moshe Shemesh
- <moshe@nvidia.com>
-Subject: Re: [PATCH net-next V3 00/10] devlink: add per-port resource
- support
-Message-ID: <20260311145126.7dcca532@kernel.org>
-In-Reply-To: <5de5103e-e2e4-4b72-9c3c-22847728fbb8@nvidia.com>
-References: <20260226221916.1800227-1-tariqt@nvidia.com>
-	<20260302192640.49af074f@kernel.org>
-	<pmxkihhtsskkwsvdia4z2ss4wxpfc4a4kqxkjv5wk3mwdmpzii@6go7pizk2nst>
-	<jssifysprwuafkinc3dguspngxmplrngqxvotp76vhvu4e5lp6@e7mdrjqc5rme>
-	<20260304101522.09da1f58@kernel.org>
-	<np44uzfn6jea56uht4yq4te5clapgj7pk6ygyvkl22wxumwnvt@nrpvzjqzxenq>
-	<20260305063729.7e40775d@kernel.org>
-	<ni23r4jiwgc6zjjsubtl4ujjgxzwpxrylumofdwxgozfnieynm@zirlbneaz6p2>
-	<20260306120301.0ebe1ab2@kernel.org>
-	<74dcd7c5-8a2b-49a7-a23c-174d17a61955@nvidia.com>
-	<20260309133341.7e08b35d@kernel.org>
-	<5de5103e-e2e4-4b72-9c3c-22847728fbb8@nvidia.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hgBOepK7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1773266488;
+	bh=78BTdrVcibHfIVMHXW+6UBL/3BC+jZrGBnj/JndqAy4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=hgBOepK7hGBsCIwUyPyJH7PCjfQaMc9UwffNF2TfUkWumsSndn5T6ytKKH6MV8ie6
+	 oPOw46C7fwOvU4Q1zhRmdRWQuOoQyCoWWLxbuAGdgcWay0cMN78m503GHnyKQ+Thuu
+	 UNgSqticTkpV/7pJcGBJWa5LCPIT3W2E36zXiYxA=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/4] tools/nolibc: add err.h
+Date: Wed, 11 Mar 2026 23:00:48 +0100
+Message-Id: <20260311-nolibc-err-h-v1-0-735a9de7f15d@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDY0ND3bz8nMykZN3UoiLdDN2UNGOzRHPTlJSUNAsloJaCotS0zAqwcdG
+ xtbUAtCXYm14AAAA=
+X-Change-ID: 20260311-nolibc-err-h-df36a75dddf8
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773266488; l=1248;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=78BTdrVcibHfIVMHXW+6UBL/3BC+jZrGBnj/JndqAy4=;
+ b=oTI0AiQE/mVVuVRwMybZneYO+h9ML1It4olYm7pApzu6xoKFhTyBnYX6VCvZk9nxfspVWHvkZ
+ cmoikSnH7ioChK9TDq5MHYKqHWulnCoTB2DN3Vok7fX7Gb1z7BXgXqw
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Wed, 11 Mar 2026 20:24:08 +0200 Or Har-Toov wrote:
-> For the dump-it command:
-> devlink resource show
-> pci/0000:03:00.0:
-> <resource>
-> pci/0000:03:00.0/196608:
-> <port-resource>
-> pci/0000:03:00.0/196609:
-> <port-resource>
-> pci/0000:03:00.1:
-> <resource>
-> pci/0000:03:00.1/262144:
-> <port-resource>
-> 
-> devlink resource show scope port
-> pci/0000:03:00.0/196608:
-> <port-resource>
-> pci/0000:03:00.0/196609:
-> <port-resource>
-> pci/0000:03:00.1/262144:
-> <port-resource>
-> 
-> devlink resource show scope dev
-> pci/0000:03:00.0:
-> <resource>
-> pci/0000:03:00.1:
-> <resource>
+Add a few convenient helpers to print error and warning messages.
 
-LGTM
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (4):
+      selftests/nolibc: add a variable for nolibc-test source files
+      selftests/nolibc: validate NOLIBC_IGNORE_ERRNO compilation
+      tools/nolibc: add support for program_invocation_{,short_}name
+      tools/nolibc: add err.h
 
-> For the do-it command:
-> devlink resource show pci/0000:03:00.0
-> pci/0000:03:00.0:
-> <resource>
-> pci/0000:03:00.0/196608:
-> <port-resource>
-> pci/0000:03:00.0/196609:
-> <port-resource>
-> 
-> devlink resource show pci/0000:03:00.0 scope port
-> pci/0000:03:00.0/196608:
-> <port-resource>
-> pci/0000:03:00.0/196609:
-> <port-resource>
-> 
-> devlink resource show pci/0000:03:00.0  scope dev
-> pci/0000:03:00.0:
-> <resource>
+ tools/include/nolibc/Makefile                      |  1 +
+ tools/include/nolibc/crt.h                         | 26 +++++++
+ tools/include/nolibc/err.h                         | 91 ++++++++++++++++++++++
+ tools/include/nolibc/errno.h                       |  2 +
+ tools/include/nolibc/nolibc.h                      |  1 +
+ tools/testing/selftests/nolibc/Makefile            |  4 +-
+ tools/testing/selftests/nolibc/Makefile.include    |  2 +
+ tools/testing/selftests/nolibc/Makefile.nolibc     |  8 +-
+ .../selftests/nolibc/nolibc-test-ignore-errno.c    |  6 ++
+ tools/testing/selftests/nolibc/nolibc-test.c       |  2 +
+ 10 files changed, 137 insertions(+), 6 deletions(-)
+---
+base-commit: db4f34cc063d68f329fc543a5808fe53e61fc796
+change-id: 20260311-nolibc-err-h-df36a75dddf8
 
-Do we have to touch doit? Maybe we should let doit be what it is now
-and consider it legacy going forward? doit which is in fact a filtered
-dump is a bit of a mistake in the first place, from Netlink's
-perspective.
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
