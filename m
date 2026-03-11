@@ -1,200 +1,93 @@
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB2F1B86C7;
-	Wed, 11 Mar 2026 02:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEB824A076;
+	Wed, 11 Mar 2026 02:40:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773195680; cv=none; b=BHURk3M3jyqzin6n5XbrWQCMi8y285lg3Zo3O82CLAeOhXIxbwG/29RW+PI6biURgsOdh8jeN6rCjzV5cSBDgUvf5rgMy5D/O5LvbOdRd+yP8e5X3ebJWWz46jcpGPETxUzG87Zr+O9ESn4ENuHX8Y+JH984rrFEaLzgOizfHLQ=
+	t=1773196825; cv=none; b=Y1+2kG7LveGoKNntIw50t+Qbz5pGur3JFS6LEjOSVCtj5H8F/dfzX+Fz36uXo9l7H0E+G0+uqKUYUKMQt+DO/qEsA5Alz16Yjxx9tDhHMJ3QK2SItMBNdgtnVt7zcY8p5q0o5otefopXdqEgTCYEAbAaZK8cX4NrDJMZnDyyn/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773195680; c=relaxed/simple;
-	bh=UENQBWEPJFUI22yOQgmdwpS79ecZZ9WPiRvZjleY30w=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=TWXmufA+bTqJpULuHw75f+CjRoB8W9PTpQbhs1MDzHhzeOsJLtCW5pl9BpdlhA8Fd5G9lan1/GLEX7d5izrZebLFDz49EXgGc7DlEFa09rLyDEoKly59U5xXJVFhOdjNCt9yLKyib8EZlInB0OhtoEPN+XEjjf95lYLhedGTgO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=VaDLSTo9; arc=none smtp.client-ip=113.46.200.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1773196825; c=relaxed/simple;
+	bh=egK2cl2ZnUqY3I2vs+Er5QqP9FOygAy5JUBJ+9WkLLE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Kh8RtKEWjqSSIHgBctiXanoxrBUqOg1+4sn7Xh0O//w16v2huZAzuisJWQyQ0vyeX2MjKTtlyN1XYI12sbZ9PYBzOLCoM4azqoiFoS3IC1s5yYS5G156ctHJ9PhSiEe3Fm7ukj/LxXJkMR4q40rsUu6rRicyx42lud2xxdENQ3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btk+gJgb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="VaDLSTo9"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ZCPwodAJ50NcwUGxjO5nSSMRczLJa4bA27Dqr3fPsmo=;
-	b=VaDLSTo9Y77YlIdlNU4uAQGJ4ccq+8+6s5Ez6s4KRr+5JQhnmLFG8DS6DsOmRS3uhAdi3SV4y
-	wa0QgKD1i3LevuTYZMk6ysWDLpxeLvS2HUxrC8cQJdqt6SNCRN+Xh65bBzXblCiSq66gBGPzHzQ
-	OoMQQjXUNv70m3k82BT/5zI=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4fVvVj3V7ZzpTLn;
-	Wed, 11 Mar 2026 10:15:57 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 87F0D4056A;
-	Wed, 11 Mar 2026 10:21:08 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 11 Mar 2026 10:21:08 +0800
-Received: from [10.173.124.160] (10.173.124.160) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 11 Mar 2026 10:21:07 +0800
-Subject: Re: [PATCH 12/13] selftests/mm: move hwpoison setup into run_test()
- and silence modprobe output for memory-failure category
-To: Zi Yan <ziy@nvidia.com>, Sayali Patil <sayalip@linux.ibm.com>
-CC: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, Ritesh Harjani <ritesh.list@gmail.com>,
-	David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@kernel.org>,
-	"Oscar Salvador" <osalvador@suse.de>, Lorenzo Stoakes
-	<lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>, Muhammad Usama
- Anjum <usama.anjum@collabora.com>, <Liam.Howlett@oracle.com>
-References: <cover.1773134177.git.sayalip@linux.ibm.com>
- <832afc6c34a784ca433b506622cdc98fe9540f79.1773134177.git.sayalip@linux.ibm.com>
- <556E284E-9638-4F4E-8CE4-7158DB914AED@nvidia.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <ae5108d1-4bf1-7b48-b299-ea3f12ee50e1@huawei.com>
-Date: Wed, 11 Mar 2026 10:21:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btk+gJgb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13690C19423;
+	Wed, 11 Mar 2026 02:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773196825;
+	bh=egK2cl2ZnUqY3I2vs+Er5QqP9FOygAy5JUBJ+9WkLLE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=btk+gJgbssjC+uPxVzV65QaP3N5RLaudxWPexVAIVoHYIfgEVsZ3CF2tdgqfLWjfJ
+	 x2Vfxlwu8rMyIl+oQph3Jb2CPG7839uKy2od8bG6TdrTrWtHq3YTAZpu7Cg+xNJcEE
+	 4CXKN2TA8DBXLy3j7mA3sumjj2n5sJ4CXeyKqsh1vpphu+g3o8h/0B/A39SUqVgniS
+	 q15cJOnPqUGdOB75DykpIu5KUwMU7sRBsMdTi0hhE5Rwf09IyJnqOaWrQR624uFgKr
+	 3xT1zc1+kCvK7e5Pfv5FUQVjTmfw6FN0tPNqC9AWvlokMX8ovmW1vyikjF4/+uTUD+
+	 VGraev8NOO94w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9ECE3808200;
+	Wed, 11 Mar 2026 02:40:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <556E284E-9638-4F4E-8CE4-7158DB914AED@nvidia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/5] tools: ynl: policy query support
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177319682153.3014711.5472638473199917370.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Mar 2026 02:40:21 +0000
+References: <20260310005337.3594225-1-kuba@kernel.org>
+In-Reply-To: <20260310005337.3594225-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, donald.hunter@gmail.com, netdev@vger.kernel.org,
+ edumazet@google.com, pabeni@redhat.com, andrew+netdev@lunn.ch,
+ horms@kernel.org, shuah@kernel.org, sdf@fomichev.me,
+ linux-kselftest@vger.kernel.org
 
-On 2026/3/11 3:15, Zi Yan wrote:
-> On 10 Mar 2026, at 5:49, Sayali Patil wrote:
-> 
->> run_vmtests.sh contains special handling to ensure the hwpoison_inject
->> module is available for the memory-failure tests. This logic was
->> implemented outside of run_test(), making the setup category-specific
->> but managed globally.
->>
->> Move the hwpoison_inject handling into run_test() and restrict it
->> to the memory-failure category so that:
->> 1. the module is checked and loaded only when memory-failure tests run,
->> 2. the test is skipped if the module or the debugfs interface
->> (/sys/kernel/debug/hwpoison/) is not available.
->> 3. the module is unloaded after the test if it was loaded by the script.
->>
->> This localizes category-specific setup and makes the test flow
->> consistent with other per-category preparations.
->>
->> While updating this logic, fix the module availability check.
->> The script previously used:
->>
->> 	modprobe -R hwpoison_inject
->>
->> The -R option prints the resolved module name to stdout, causing every
->> run to print:
->>
->> 	hwpoison_inject
->>
->> in the test output, even when no action is required, introducing
->> unnecessary noise.
->>
->> Replace this with:
->>
->> 	modprobe -n hwpoison_inject
->>
->> which verifies that the module is loadable without producing output,
->> keeping the selftest logs clean and consistent.
->>
->> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
->> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
->> ---
->>  tools/testing/selftests/mm/run_vmtests.sh | 46 ++++++++++++++---------
->>  1 file changed, 28 insertions(+), 18 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
->> index 7273c3e18227..7f3a3027cd9a 100755
->> --- a/tools/testing/selftests/mm/run_vmtests.sh
->> +++ b/tools/testing/selftests/mm/run_vmtests.sh
->> @@ -250,6 +250,27 @@ run_test() {
->>  			fi
->>  		fi
->>
->> +		# Ensure hwpoison_inject is available for memory-failure tests
->> +		if [ "${CATEGORY}" = "memory-failure" ]; then
->> +			# Try to load hwpoison_inject if not present.
->> +			HWPOISON_DIR=/sys/kernel/debug/hwpoison/
->> +			if [ ! -d "$HWPOISON_DIR" ]; then
->> +				if ! modprobe -n hwpoison_inject > /dev/null 2>&1; then
->> +					echo "Module hwpoison_inject not found, skipping..." \
->> +						| tap_prefix
->> +					skip=1
->> +				else
->> +					modprobe hwpoison_inject > /dev/null 2>&1
->> +					LOADED_MOD=1
->> +				fi
->> +			fi
->> +
->> +			if [ ! -d "$HWPOISON_DIR" ]; then
->> +				echo "hwpoison debugfs interface not present" | tap_prefix
->> +				skip=1
->> +			fi
->> +		fi
->> +
->>  		local test=$(pretty_name "$*")
->>  		local title="running $*"
->>  		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
->> @@ -261,6 +282,12 @@ run_test() {
->>  		else
->>  			local ret=$ksft_skip
->>  		fi
->> +
->> +		# Unload hwpoison_inject if we loaded it
->> +		if [ -n "${LOADED_MOD}" ]; then
->> +			modprobe -r hwpoison_inject > /dev/null 2>&1
->> +		fi
->> +
->>  		count_total=$(( count_total + 1 ))
->>  		if [ $ret -eq 0 ]; then
->>  			count_pass=$(( count_pass + 1 ))
->> @@ -540,24 +567,7 @@ CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
->>
->>  CATEGORY="rmap" run_test ./rmap
->>
->> -# Try to load hwpoison_inject if not present.
->> -HWPOISON_DIR=/sys/kernel/debug/hwpoison/
->> -if [ ! -d "$HWPOISON_DIR" ]; then
->> -	if ! modprobe -q -R hwpoison_inject; then
->> -		echo "Module hwpoison_inject not found, skipping..."
->> -	else
->> -		modprobe hwpoison_inject > /dev/null 2>&1
->> -		LOADED_MOD=1
->> -	fi
->> -fi
->> -
->> -if [ -d "$HWPOISON_DIR" ]; then
->> -	CATEGORY="memory-failure" run_test ./memory-failure
->> -fi
->> -
->> -if [ -n "${LOADED_MOD}" ]; then
->> -	modprobe -r hwpoison_inject > /dev/null 2>&1
->> -fi
->> +CATEGORY="memory-failure" run_test ./memory-failure
->>
->>  if [ "${HAVE_HUGEPAGES}" = 1 ]; then
->>  	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
->> -- 
->> 2.52.0
-> 
-> +Miaohe
-> 
-> LGTM.
-> 
-> Acked-by: Zi Yan <ziy@nvidia.com>
+Hello:
 
-LGTM. Thanks both.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+On Mon,  9 Mar 2026 17:53:32 -0700 you wrote:
+> Improve the Netlink policy support in YNL. This series grew out of
+> improvements to policy checking, when writing selftests I realized
+> that instead of doing all the policy parsing in the test we're
+> better off making it part of YNL itself.
+> 
+> Patch 1 adds pad handling, apparently we never hit pad with commonly
+> used families. nlctrl policy dumps use pad more frequently.
+> Patch 2 is a trivial refactor.
+> Patch 3 pays off some technical debt in terms of documentation.
+> The YnlFamily class is growing in size and it's quite hard to
+> find its members. So document it a little bit.
+> Patch 4 is the main dish, the implementation of get_policy(op)
+> in YnlFamily.
+> Patch 5 plugs the new functionality into the CLI.
+> 
+> [...]
 
-Thanks.
-.
+Here is the summary with links:
+  - [net-next,1/5] tools: ynl: handle pad type during decode
+    https://git.kernel.org/netdev/net-next/c/7b1309c33927
+  - [net-next,2/5] tools: ynl: move policy decoding out of NlMsg
+    https://git.kernel.org/netdev/net-next/c/c26fda6212b8
+  - [net-next,3/5] tools: ynl: add short doc to class YnlFamily
+    https://git.kernel.org/netdev/net-next/c/8bbcfce5db97
+  - [net-next,4/5] tools: ynl: add Python API for easier access to policies
+    https://git.kernel.org/netdev/net-next/c/77a6401a8722
+  - [net-next,5/5] tools: ynl: cli: add --policy support
+    https://git.kernel.org/netdev/net-next/c/d6df5e9b2a56
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
