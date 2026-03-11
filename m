@@ -1,95 +1,161 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B0B2773CC
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 12:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF2528507E;
+	Wed, 11 Mar 2026 13:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773233339; cv=none; b=ovz2DSUNIImeZBbD/CWwZ4h0YSXcRXRe7am90sLIKRRzJOQWuL3/8W7moQ2huk6FSLgzZOLnhUJ9hRIOksM6RYGm0xElOlPHZypC+5LmEEedpA1tM7cnFe/s3uREjwtoklqkbRLqL4kI4ANyUDSV9FiDT+Dt54MsoSRiaPbyY8w=
+	t=1773234487; cv=none; b=pirMBszawCXNK3gXZpU7/5Fsbwjhd6ADFJDS1wdk9KWFTCsSVFqgqKfzqwpkIXtxq8aH37AtG43paMRQD6mvpYFVWSWYqbtSwA9ETzuOYVefLNXtyNORRuRmkd1x2d0nIOgGBrRFQxEHWJqaH1bXKh1zZPvLpZAYBBgvYrkMQiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773233339; c=relaxed/simple;
-	bh=xcZpsPLRj4+t91HOPhvrSX6TCcutsqBZTrGwFvx+E0Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=boDu1C0Xzvx6F6on/ba+OsSIyZAv4r9v+A3fRxnHLvHMju+Bt/QpT2l+9ZVNoV8nSpGGQ9jAYfJRrpGi7+zQNt4HwP5Cad+2QcByYYbykd9cqKRB6qLRoyUts4xLePo5XOOqB8fM2EOhBIjFdaiZ9oQSPgFs9L7rk4sbNyRttaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SAlBq8xa; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773234487; c=relaxed/simple;
+	bh=8E+RklUDOEWGr3ASBSUDYmUqwJJzbYjGPEsS2dVw21c=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rOH2CapqnthCMvKe2byU5EarQI0cxHwWnu3JX0/VBKp6L84oyAGR/cBYGXz/YaR9Gm6lOfbDW8URtocf3AZCJHDZ/WIZjZukh+7/1F63WQXVH4xSNev83xp9cSRNjZTfkUU3LtcOV3q2M8kK+pXRTJ+wJFHkdt4gAKpNeoUetBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=ddBrJh5K; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SAlBq8xa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773233336;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J8EogtX9KqkwlCTtPWzX2zysM9V7W8qju+U/TiK9m24=;
-	b=SAlBq8xaKDTk7UsRTkARpe/A7MQQxjlyiVU/cDzCOI4SIRoq+K0l/VveKrxqBdO/Mf93ac
-	x/uSwsbZCFrskifwoi9HXU/uZSL0UdoTQ2apX4G8WyqHivFQd97CcCtrrI+GhcTKvutOxn
-	aaTr3EJwMjCq/fSNTlNE/qJxpWx7HXE=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-108-eeoS19fpM2eiU-KewMbZQw-1; Wed,
- 11 Mar 2026 08:48:53 -0400
-X-MC-Unique: eeoS19fpM2eiU-KewMbZQw-1
-X-Mimecast-MFC-AGG-ID: eeoS19fpM2eiU-KewMbZQw_1773233331
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3A86119560A3;
-	Wed, 11 Mar 2026 12:48:51 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.88.168])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EBCD13000223;
-	Wed, 11 Mar 2026 12:48:48 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Cc: "David S . Miller" <davem@davemloft.net>,  Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
- <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  Ilya Maximets <imaximet@redhat.com>,  Eelco Chaudron
- <echaudro@redhat.com>,  Stefano Brivio <sbrivio@redhat.com>,
-  netdev@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  dev@openvswitch.org
-Subject: Re: [PATCH net v4 1/5] selftests: net: make ovs-dpctl.py fail when
- pyroute2 is unsupported
-In-Reply-To: <20260309152013.565216-2-aleksey.oladko@virtuozzo.com> (Aleksei
-	Oladko's message of "Mon, 9 Mar 2026 15:20:09 +0000")
-References: <20260309152013.565216-1-aleksey.oladko@virtuozzo.com>
-	<20260309152013.565216-2-aleksey.oladko@virtuozzo.com>
-Date: Wed, 11 Mar 2026 08:48:47 -0400
-Message-ID: <f7t7brir0pc.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="ddBrJh5K"
+Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62B9TbZK983285;
+	Wed, 11 Mar 2026 13:07:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=SrAeFWtveCtEjyE93SCzkC8c47nJq1JLGeA5lKkS2Y8=; b=ddBr
+	Jh5KHnMGBWqk+k3l/jEWGCFQC2jacrZpcM/i4rdK1IoC9xUVz8RrlbC2azQq4Om7
+	G/kHIsd2LhFgg7dv61Pbfo0LMHJDihuM1l5SmtUxVQMZFHX2szlZWZH6F0PdhPkk
+	vPoRaMl71fxdSvTWoliuIIiDveOwrrUpQZOm5iFisHn9TIMKi0KyTD3iCz7lDa1t
+	fSzdl2zVsrju3kzIOp3zbCy+GTCWU4krZ6+e+ZAyxxgGg42HJ+e2BGEdKmdaxPlX
+	EL681UyCPZkyEyprR4lkAr7YpYrlZtrOuH8Znrzdp7fbjawQ15KLJV+s8vHP+snf
+	X8eC+MRg932SktvdWA==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cu5tf8nrq-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Mar 2026 13:07:20 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 11 Mar 2026 13:07:14 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <eddyz87@gmail.com>
+CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
+        <haoluo@google.com>, <horms@kernel.org>, <john.fastabend@gmail.com>,
+        <jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-open-source@crowdstrike.com>, <martin.lau@linux.dev>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
+        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support new pointer param types via SCALAR_VALUE for trampolines
+Date: Thu, 12 Mar 2026 00:07:11 +1100
+Message-ID: <20260311130711.33966-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <979c7539ac475b3c428f609066e947844b6dd8b0.camel@gmail.com>
+References: <979c7539ac475b3c428f609066e947844b6dd8b0.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-ClientProxiedBy: 04WPEXCH013.crowdstrike.sys (10.100.11.83) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Proofpoint-ORIG-GUID: CcdMPNc4NXEkZivWkmHMQ8qkEE15fTCU
+X-Authority-Analysis: v=2.4 cv=ANV8z2x0 c=1 sm=1 tr=0 ts=69b16908 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=vDKVRhTs-M86Ea50iKLw:22 a=pvr0aSInfWstAloVo1wA:9
+X-Proofpoint-GUID: CcdMPNc4NXEkZivWkmHMQ8qkEE15fTCU
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDExMCBTYWx0ZWRfX/V+SIEDRrIH3
+ h0B1M2lbaQBFT+v3Dg0wWy2BTGQXEZTuW7b4NDCsxWl9xb08kla2l2yZc+jVYgqzk9NpbOTtib0
+ Z1cjWH3uaYHv6a8rH3HZENZfN6p7zb+gImb3xZTTwNGauYqJXGScdMmvYDY3ooMrVVV+bxpsdkD
+ kAkJAtlyAd52JuIVeXHz72Gomb1C/fCy9lPL3I3Apl5clT2gPEdW6B60+oW4Wi/Pi5aR6in/Vaa
+ roqtfC4f9FWbPvrGZR1HgdZT3sXt7SMBgERzyZ3cFbyhM4FYne/gL/24Xia+LtXt/qNI5QiYRIV
+ nGHi4BAkHj6lP3dHxNxTnaFKYTGYqmsyN2qIxZdRQmuDBNstGVAEvOa2Un5BIXxpL/oNARiX7FI
+ etg8So2gFqC4pRFdY0ahNWUS4kXKU4QxzCLmcgh1XGk7VOqPrEvh7ahMfYK1XB2gRH9HuJfYJQD
+ oiMog9E2xIj+9qEZHpg==
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11726
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ clxscore=1015 lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603110110
 
-Aleksei Oladko <aleksey.oladko@virtuozzo.com> writes:
+Tue, 10 Mar 2026 11:52:10 -0700, Eduard Zingerman wrote:
+> [...]
+> 
+> > I verified whether PTR->FUNC, PTR->DATASEC, PTR->VAR can be passed to
+> > btf_ctx_access() in the current mainline.
+> > 
+> > I added helpers that inject PTR->FUNC, PTR->DATASEC, PTR->VAR as pre or
+> > post calls to btf_check_meta(). In all cases, the BPF program load
+> > failed with errors "arg0 type FUNC / DATASEC / VAR is not a struct",
+> > which indicates that btf_check_meta() can indeed be called with
+> > PTR->FUNC, PTR->DATASEC, PTR->VAR.
+> > 
+> > If the condition for pointer check is changed to
+> > `if (!btf_type_is_struct_ptr(btf, t))`, these BPF programs will load
+> > successfully with arguments set to scalar().
+> > 
+> > Do we accept this change in behavior?
+> 
+> Kernel validates BTF before loading, see kernel/bpf/btf.c:btf_resolve().
+> Validation is applied to kernel, module and program-level BTF.
+> Does BTF containing PTR->DATASEC and PTR->VAR pass validation?
+> If it does, validation should be updated to reject such cases.
+> For PTR->FUNC, which one is legit PTR->FUNC or PTR->FUNC_PROTO?
+> The legit one should be allowed and invalid should be rejected
+> at validation phase.
+> 
+> You can craft invalid BTF as in the following selftest:
+> tools/testing/selftests/bpf/prog_tests/btf.c.
+> 
+> [...]
 
-> The pmtu.sh kselftest configures OVS using ovs-dpctl.py and falls back
-> to ovs-vsctl only when ovs-dpctl.py fails. However, ovs-dpctl.py exits
-> with a success status when the installed pyroute2 package version is
-> lower than 0.6, even though the OVS datapath is not configured.
->
-> As a result, pmtu.sh assumes that the setup was successful and
-> continues running the test, which later fails due to the missing
-> OVS configuration.
->
-> Fix the exit code handling in ovs-dpctl.py so that pmtu.sh can detect
-> that the setup did not complete successfully and fall back to
-> ovs-vsctl.
->
-> Fixes: 962e8a01eab9 ("selftests: openvswitch: Add version check for pyroute2")
-> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-> ---
+Invalid BTF pointer types PTR->DATASEC, PTR->FUNC, PTR->VAR are
+rejected by btf_ptr_resolve(), which is called through the sequence
+btf_check_all_types()->btf_resolve()->btf_ptr_resolve().
 
-Still LGTM (but this is already in net-next as 0bcac7b11262 so does it
-need to be included still?  Actually I think it should be in 'net')
+PTR->FUNC_PROTO is a valid type.
 
-(including tag just in case)
-Reviewed-by: Aaron Conole <aconole@redhat.com>
+vmlinux BTF is processed by btf_parse_vmlinux, which calls
+btf_parse_base. Since btf_parse_base doesn't call btf_check_all_types,
+it becomes possible to invoke btf_ctx_access with PTR->DATASEC,
+PTR->FUNC, PTR->VAR in case of vmlinux BTF.
+
+Modules and programs BTF are processed by btf_parse, which calls
+btf_check_all_types and detects invalid pointer types, so
+btf_ctx_access cannot see PTR->DATASEC, PTR->FUNC, PTR->VAR in
+these cases.
+
+If btf_check_all_types is added to btf_parse_base, invalid pointer
+types get detected inside btf_parse_vmlinux, resulting in failure
+to process vmlinux BTF and effectively disabling BPF. libbpf
+returns this error:
+libbpf: Error in bpf_object__probe_loading(): -EINVAL. Couldn't load
+trivial BPF program. Make sure your kernel supports BPF
+(CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big
+enough value.
+
+If vmlinux BTF is trusted not to contain invalid types like
+PTR->DATASEC, PTR->FUNC, PTR->VAR, which seems reasonable, we can
+conclude that btf_ctx_access will never observe these types.
+
+Adopting the view that vmlinux BTF is consistent, we can replace
+btf_ctx_access's condition for inferring scalar() for pointers
+from "if (is_void_or_int_ptr(btf, t))" to
+"if (!btf_type_is_struct_ptr(btf, t))".
+
+Otherwise, we need to either check types for vmlinux BTF,
+incurring additional cost, or use explicit checks for pointer types
+that can be inferred as scalar by btf_ctx_access to exclude invalid
+types. This would let invalid pointer types be rejected with an
+error like "func 'bpf_fentry_test_invalid_ptr_func' arg0 type FUNC
+is not a struct".
 
