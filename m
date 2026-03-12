@@ -1,213 +1,276 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6634375AC4
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 17:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493053F1654
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 17:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773335366; cv=pass; b=m8+UzCMfGOWj2vph9Cp4ylKNqjQ1QlFjWl24pd3zjQ2hXAlms+w+1ZCRYrFfqPIFt+MxeQEeu9VlCC5Hp1isnVgZAzrLtEAf/LPkw3VoMu72rumxyj27bTFBn1ybfK5IxjyEhWo+805rWNrD7/xjhjigqTdkdC5hHCo8MIGrnbA=
+	t=1773335633; cv=pass; b=dOCjVvIBhVAQtyEn9yogReWaoIVCmS+ZEysZGuNIRU6OPmf6OajJ2eH95AspOblDJ7WYDQlIK88S+BT4IdpVUYGYrj/KCmr/sWAvgQvKWmlYvDrx1W48lJ5XJSPzogDP1zkcCxwS8IN8yvTOkjBCktX7y0/gG5RXIr4ZfZ1y1+k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773335366; c=relaxed/simple;
-	bh=ZRzJY2ObgcTB7nGTVYTG2VYI3uro3EmTYW29Zx/ZnbQ=;
+	s=arc-20240116; t=1773335633; c=relaxed/simple;
+	bh=Qarh+60tr9Vhypw9EaR6FndlagE17HBNIP90zwt0hAc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BxYTfEt0VHnCd5rO8dBkWqZdF6S61Wul49FUtCVcHzuPKCF9iBoGjPlLq8hKFAnng912GMCrjlxrh3teLISS/5LlcX9C2gRdsIr5uxAhECR3AmYaAFV/Yo304io6o/M4wxeIaT5cctPYlx1BgXPkq0Ji4dUzGTRqMJBxkAE8rCY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCyp+KV7; arc=pass smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=agMcKJT1yMNXycI1rY5Kb5b02Bq1gODqNL84fNkXugFxzrXYWsohMpsHpRGV4yghgB1GDPy/hXkbSG0VTqe8bKfjH43KicwzzCf23IaCJRadeLEuR8GU6GyFQ95oWU5t9EXe+K437kE3lRW94Cvo6Fpx8XMfkWV6uwSW0p3CcnM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g1pOUXo1; arc=pass smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCyp+KV7"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-439b94a19fdso1238643f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 10:09:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773335362; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g1pOUXo1"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b942a41c5fcso164350266b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 10:13:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773335628; cv=none;
         d=google.com; s=arc-20240605;
-        b=fcmZPosZyGDnaG+AU8fzJivRDLiQbNgoAFmXNaEcByhKcvt3s8fRsIXw+9nVoal25X
-         titMrweyeRMvgwH3WqY7Q/bIyrSoIlO2N2/44UFGBVA/7/zBYGEFt3FuSwAy7hi7VI+6
-         33wYnjsVtK584I4ViPf7OxJmcqje291CDJUiGSlJ0cWdPMlAc1s4Q4K/syjg8gTpSn6f
-         gzkfTIURxhv7esBgEJE4Gj6Hl41izWgjvFrpJIYiG6oAsEBfQt3K7KbNbuCNhmeeVz9f
-         TkgzJauUTTjjHIYcaUKnzslVtvN42U/fnxjleo0GxM8Ya++hlDwW8DKQhlnb0/S4vs2O
-         pNyA==
+        b=XH9l7LVPZ//P0F7M4oZ6hFwQJx8QJERrnoZmLs26HVAiNXXv3NwfJkrIAJ1kbp7eis
+         1JvMXJ9IQABDCNudpfZ8XnlA00yslLpIQrUJWeJ5gtHgJNeXsrM7DiN05Ly0M759MRwj
+         EwLoUcrx0pRGWW2PZI52DWQtnyh77VTVa/O8+B6pDUfDoW8ZuzoXWQqJiSEvvBS3iy1M
+         ezhikWkKNGty6y9ebPnI8Pq/DPytnraBPd/FCBUslUUUliQ/lx7VG1y2ZRkaBfSJ9rsn
+         uG66SZZQhrJ1D22vaGdymmZf5AxCn654vg3lvXQq20luBpV0uhgVGbk4rxnuCFHVBXlJ
+         RIzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ca7e/nulN7+L0c5qx1XkBQ2nSRx248vt+mBctdgT14A=;
-        fh=Hj424uOUwvgvut9jBsvOiGyOloEeIh3+v/6s/VydCVg=;
-        b=cniVFhE6dWPgTG1AqRXUvo5zHkRe+oPBHsk0Y3DUZZVukOWxeSHjVeJ24uyPZuWnVl
-         g8UfmoANVRB2VAtigrcjHZTF9iRzj/gH52H/vXqf8VOKfLRQ0CzabuSf5LCRwHe+L4Pr
-         /4pjnFzOgXW2wI5WqFd61MwJ/zCR9S0rvc1W1UR2hq1IlqlqWpaWimtMbGhL6YmZ0zym
-         UKh/aPLgzBlWCg9V2tag5uDKYOqzOxrdA7F4E8lg64ELNtqxfFso8gcPkzP1SzTRCuSM
-         jXrBlqT24wSbc63dTSCY1oTPzpsO5Q+KZdplR21UNFSurFCALUjg4sosciKLtbefNb4b
-         xvuA==;
+        bh=Q3Us2s0ytc91Z8HkFiJJSVXFlWx4veaTgJEHu++sdXI=;
+        fh=nEGpxJIDUCG016So/T+b5QdfCVdf687tcHxc4XxZWuw=;
+        b=JiyZAJgAOzNf9MFBni3coD1NHgMf3sic9pUYmUX6YklWTiYT/vCtrnYrCdnlT6cJGX
+         BBncX39YxGYrLQA76v2P1MCnfl5Z7M/IkP4mbs86ONPdJ4a9F426j5XXvxiwekUrK+id
+         xcmEANuon5BB6ThSO08XlugfBrUICDpBDl52lOgLWu0+DdD/4wUVbLBXwP62azAQALGn
+         uF1yDKM9v5K4WrMBpzz4D56vOOLvhkD3YDzxpQdsZXlfMoyzxCJX8ntHKbG7mIYuogT8
+         L3/lNCwjqe259orkPQG/ZnarYDheEe+EGWxfZ550yBLL3+g0mNAW33x3MrdzktDhBldu
+         y86w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773335362; x=1773940162; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1773335628; x=1773940428; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ca7e/nulN7+L0c5qx1XkBQ2nSRx248vt+mBctdgT14A=;
-        b=bCyp+KV7oS+R9cfykWj3jq3HF9jTT0jJhVit5/EAfvfjz2LQKBrOPpMG9xv5BtC0pT
-         6LnJYtutYuN5sZ7vLu7WpAlJKhifCSkD//OZ98fhmbTwXLl6et9i8eLEWKMciwmvWpxJ
-         S2s30qKa8Wcek9Ed1dPjhHMsyxPP6KocKRX3aOjXK34IqCJUPpqX73rYr8k7GISxdREL
-         yoLIGTgDBVt+hN9wdT+CwiBaiwFlWh+kE4PblUWFShj5MeT3EZvoIv1j0pcSflp2YYQ2
-         GNwR4dSBIEY89EyajmL6PMUbMf+dso3P3OUxXBjS7FwWG8JYGGgvft276qoN3+m81d0z
-         feJA==
+        bh=Q3Us2s0ytc91Z8HkFiJJSVXFlWx4veaTgJEHu++sdXI=;
+        b=g1pOUXo1yEw3tcztV5PQwIUH9r6cnDWFyoK/aC8JfPNMQy3+UOqEl1Aus7NL5Dt5mL
+         gpiUzDbuF33wDg014yhrGIOElGAkJ6iTsF++R+18WlzjCDgBFZ91G69mB1jkwzr6thZe
+         7PrTTXIOZRk2HFyl3yKZdudMp6g0jyhYdoS/bzYbK3ez/KtIAcZCPQ1GitNQr4iHrRKy
+         +VOAHExXDllB7c4yihXidC70frGFR0drYirJuaJDlzoPvz1ig8tTVBbhGaX4StI+Toi8
+         ct/4KkGWylV6tK4R+Ot/oGZpAsA0Or+LyHlw1MJpuwySMFr9hql8o8idZ6l7QtX68bOt
+         BruQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773335362; x=1773940162;
+        d=1e100.net; s=20230601; t=1773335628; x=1773940428;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ca7e/nulN7+L0c5qx1XkBQ2nSRx248vt+mBctdgT14A=;
-        b=i6wS33PU8aYEa+lz+6hUREBoPn5vaYzrp2lo5uL+cX+fiMT7TG3CydCYl+9W7MEP+Z
-         4n4v2ZblJFseDFnscKncdAbpT1UNJfk95KosP9VcdQYrM7VreciMamy73rsABrgiwnMz
-         6MUfBzESwC6F15Z25OeaY9VaKuKQa5B2R2WlQjgAYOFpiwur1QN0nFP0ZcINqJ/VEgOA
-         vXmFFHM2zs/Usl0ypuBHtPK1491Aj1sQyhozUb0X3sQ3SMn/7vmGynZRk4mi297oi6PH
-         IwqZqupfVNjAadBjrLgNpeCSqX0UtLMa13SVwrIziru6UMmaA66sstnu7lxKWSSsVUYE
-         M+Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCV1G26YQP3+oIKNPGOayTtn+zVTHQIGy2JzsF0DtGUkhHNelXqwNUmxcXOcz0MeygEfmLEJTymIzIR26QNyD4s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpN68+sLYahqTkWTissxnwqf6UnNcXAEIejnrQ24hrucX1ryj8
-	0x+9now+EWTyjx7+Ql6LbZB9cl8S8tR9ob5uSm0okhdtldpOgVkD0wQfLxapxLL9tEsHSggcRhA
-	yjwV4Pt2/D9uyC9d6Y73jEFEyHXEyYXR0LoYYcbU=
-X-Gm-Gg: ATEYQzwPABJkfKqeuhM2Yg2+NU0sEfIS81Dzfwt7rH3dnrusZr6H9w077uJCqfQY8fD
-	gLJBkLLNiTOMrlXsTARwcz+i7f4eqxNKDPSlE6XsQ6FlziMOeaEk/N44b6vyX3GjRMY+qmgpaWJ
-	TXpC2WujV7MRy1vk39TofFrnv195q1v7ZIfLyB7v4xFseXq6d3AdfcRGnKEU/SOtPpHZi5aj+xR
-	+FjtdLn3z8LvH/pKfi9Ytcc45n6Rg/5EBz1sO9u5NLKbdvXoOQoaiyX0iCNPSfzp4Xr/XitZThU
-	MUZJtSHIuKa5xmuBEZXlouKdQqTcdrPaKUS0HUY=
-X-Received: by 2002:a05:6000:230e:b0:439:cb23:9108 with SMTP id
- ffacd0b85a97d-43a04d79e04mr927872f8f.4.1773335361546; Thu, 12 Mar 2026
- 10:09:21 -0700 (PDT)
+        bh=Q3Us2s0ytc91Z8HkFiJJSVXFlWx4veaTgJEHu++sdXI=;
+        b=VNBuTSStpvO6w2h+icmSq6HvPP8jcnmM8AN+5Q+jgvuRDQ/yvpdYYWAqlqnKGuLTCx
+         JCvWy81XjQgZj/G0gLO3g367wBkCmaTr4f+CD7A9sJmFWN+JBkqRlAGIzYs6FYv1nl9L
+         qOwY24IvgX3XlU1WPgrOMWne9yL28ziw/S5G/WB0fc8BF0aioc+MH6HeNMSpteSFmX17
+         8py9gf58aB+Wy6qSq1yqeq6YfUlLWaq5rXHr0/+nuaf9zRk5dtpcYWr/3HJfPWoh2cCg
+         oL4voDZM3Up6z5NXH72VAZa2zxTWaCnL+xDEbZ8gvUFlYPXA0M8r8bHinEeMeK3/ql5+
+         8pNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVaQZmCgzgS2dwwt6yoxPvkzHWfj5tezUw98nwz6lPtqSBC4tbcw1VWK/SYCWmt1VAeUTqLvNtrP6hlDLoIWKE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUvkawwgTQTetqXP7QVcKVM+Z3MBrgxZ7MkZq5JUvphw99Kq5v
+	5H9l6BbLcy8hhbNIaxnSIxp/E/YugnSaanqDvbRsj6l9JvmmJsWWtfD4hcJ33tiUhx+uNhkDrMP
+	QVF5m3whMbiTILVWLM1rZBv4cZLMX/BPio9yTu6kR
+X-Gm-Gg: ATEYQzwur4ycbX1WlfBCHqqI7so5O5S+SaOyU7EG7CMe9Q4gU85UoAam6yeBJCQ8lrl
+	eh6V98ovyJLsiQiGooRCkTOxin2e12bP696Msc3SjX88iK7+fnvhoIMhhIes9OLMyvU+TqlVuse
+	L74yBCA5uozsMzlQQEzn7WQcI056MUW25t5P2BPgE/OXiS04ZmkPFAJaiW2BVmpj1vu+5csYVgF
+	19EZXNJZZUFgnNu0PzsmUAkYDU/h/B2MNPuY6voQyBYovrLSAoVQjq0FsyH/U+Q4MJdOAk9QWrv
+	0etqUhVgrsJ2xDIF9LS7MZYAyLSq1zybcRkT+Q==
+X-Received: by 2002:a17:906:68d:b0:b96:ff4f:11ec with SMTP id
+ a640c23a62f3a-b9765376406mr10240466b.44.1773335627950; Thu, 12 Mar 2026
+ 10:13:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260311110523.26624-1-liwang@redhat.com> <20260311110523.26624-2-liwang@redhat.com>
- <CAJD7tkZn0LupDzCX61oQWbVvVmoMYmsnxBcHZYMjVvB58BqVqA@mail.gmail.com> <abI6jydN-XnagHmt@redhat.com>
-In-Reply-To: <abI6jydN-XnagHmt@redhat.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Thu, 12 Mar 2026 10:09:10 -0700
-X-Gm-Features: AaiRm51kjrVQqPg27yQDZoVwRMFondJK6sEWrnOc9MbMJI8C4UQRCAJ2TWq3o6s
-Message-ID: <CAKEwX=O69LepTsB1tJO1otDziyE4Oi3PAW=jShiTxQ=Hg7dB-Q@mail.gmail.com>
-Subject: Re: [PATCH 2/5] selftests/cgroup: avoid OOM in test_swapin_nozswap
-To: Li Wang <liwang@redhat.com>
-Cc: Yosry Ahmed <yosryahmed@google.com>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>
+References: <20260225210820.177674-1-wusamuel@google.com> <CAG2Kctp1q1QtB1-JT2cgBsYu-WceV1YdSM1sSwNm8pyGtZQ6TA@mail.gmail.com>
+ <CAP01T776Ni9R6CT_phx5wNDUoN13Tztz3DD5ZgKWedNLx7Nb0g@mail.gmail.com>
+ <CAP01T77EZDLhjwtZBSt+DXLG-ftHfows-p_6FgXZQDQGowcDtw@mail.gmail.com>
+ <CAG2KctrkGjk3SMQ=8-rrYnKCTUseSmBV+kg+=OyT9M2mBT1bwg@mail.gmail.com> <CAP01T77YFR9227YpTZin-i7w-hNLWMM9ANuzmiAzLwzPGJ=gEw@mail.gmail.com>
+In-Reply-To: <CAP01T77YFR9227YpTZin-i7w-hNLWMM9ANuzmiAzLwzPGJ=gEw@mail.gmail.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Thu, 12 Mar 2026 10:13:36 -0700
+X-Gm-Features: AaiRm51B_dIIfyACyk-OAOec3hanGlP08SBv_HehG83WVK_MCf0gXzElUeZ7ZiY
+Message-ID: <CAG2KctqiMYUChu7stigNj1UKmWgPyWAt6T1G9imu1QqnQ3NyGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 0/2] Add wakeup_source iterators
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: "Paul E . McKenney" <paulmck@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 11, 2026 at 9:01=E2=80=AFPM Li Wang <liwang@redhat.com> wrote:
+On Wed, Mar 11, 2026 at 2:06=E2=80=AFAM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
 >
-> On Wed, Mar 11, 2026 at 11:50:05AM -0700, Yosry Ahmed wrote:
-> > On Wed, Mar 11, 2026 at 4:05=E2=80=AFAM Li Wang <liwang@redhat.com> wro=
-te:
-> > >
-> > > test_swapin_nozswap can hit OOM before reaching its assertions on som=
-e
-> > > setups. The test currently sets memory.max=3D8M and then allocates/re=
-ads
-> > > 32M with memory.zswap.max=3D0, which may over-constrain reclaim and k=
-ill
-> > > the workload process.
-> > >
-> > > Raise memory.max to 24M so the workload can make forward progress, an=
-d
-> > > lower the swap_peak expectation from 24M to 8M to keep the check robu=
-st
-> > > across environments.
-> > >
-> > > The test intent is unchanged: verify that swapping happens while zswa=
-p
-> > > remains unused when memory.zswap.max=3D0.
-> > >
-> > > =3D=3D=3D Error Logs =3D=3D=3D
-> > >
-> > >   # ./test_zswap
-> > >   TAP version 13
-> > >   1..7
-> > >   ok 1 test_zswap_usage
-> > >   not ok 2 test_swapin_nozswap
-> > >   ...
-> > >
-> > >   # dmesg
-> > >   [271641.879153] test_zswap invoked oom-killer: gfp_mask=3D0xcc0(GFP=
-_KERNEL), order=3D0, oom_score_adj=3D0
-> > >   [271641.879168] CPU: 1 UID: 0 PID: 177372 Comm: test_zswap Kdump: l=
-oaded Not tainted 6.12.0-211.el10.ppc64le #1 VOLUNTARY
-> > >   [271641.879171] Hardware name: IBM,9009-41A POWER9 (architected) 0x=
-4e0202 0xf000005 of:IBM,FW940.02 (UL940_041) hv:phyp pSeries
-> > >   [271641.879173] Call Trace:
-> > >   [271641.879174] [c00000037540f730] [c00000000127ec44] dump_stack_lv=
-l+0x88/0xc4 (unreliable)
-> > >   [271641.879184] [c00000037540f760] [c0000000005cc594] dump_header+0=
-x5c/0x1e4
-> > >   [271641.879188] [c00000037540f7e0] [c0000000005cb464] oom_kill_proc=
-ess+0x324/0x3b0
-> > >   [271641.879192] [c00000037540f860] [c0000000005cbe48] out_of_memory=
-+0x118/0x420
-> > >   [271641.879196] [c00000037540f8f0] [c00000000070d8ec] mem_cgroup_ou=
-t_of_memory+0x18c/0x1b0
-> > >   [271641.879200] [c00000037540f990] [c000000000713888] try_charge_me=
-mcg+0x598/0x890
-> > >   [271641.879204] [c00000037540fa70] [c000000000713dbc] charge_memcg+=
-0x5c/0x110
-> > >   [271641.879207] [c00000037540faa0] [c0000000007159f8] __mem_cgroup_=
-charge+0x48/0x120
-> > >   [271641.879211] [c00000037540fae0] [c000000000641914] alloc_anon_fo=
-lio+0x2b4/0x5a0
-> > >   [271641.879215] [c00000037540fb60] [c000000000641d58] do_anonymous_=
-page+0x158/0x6b0
-> > >   [271641.879218] [c00000037540fbd0] [c000000000642f8c] __handle_mm_f=
-ault+0x4bc/0x910
-> > >   [271641.879221] [c00000037540fcf0] [c000000000643500] handle_mm_fau=
-lt+0x120/0x3c0
-> > >   [271641.879224] [c00000037540fd40] [c00000000014bba0] ___do_page_fa=
-ult+0x1c0/0x980
-> > >   [271641.879228] [c00000037540fdf0] [c00000000014c44c] hash__do_page=
-_fault+0x2c/0xc0
-> > >   [271641.879232] [c00000037540fe20] [c0000000001565d8] do_hash_fault=
-+0x128/0x1d0
-> > >   [271641.879236] [c00000037540fe50] [c000000000008be0] data_access_c=
-ommon_virt+0x210/0x220
-> > >   [271641.879548] Tasks state (memory values in pages):
-> > >   ...
-> > >   [271641.879550] [  pid  ]   uid  tgid total_vm      rss rss_anon rs=
-s_file rss_shmem pgtables_bytes swapents oom_score_adj name
-> > >   [271641.879555] [ 177372]     0 177372      571        0        0  =
-      0         0    51200       96             0 test_zswap
-> > >   [271641.879562] oom-kill:constraint=3DCONSTRAINT_MEMCG,nodemask=3D(=
-null),cpuset=3D/,mems_allowed=3D0,oom_memcg=3D/no_zswap_test,task_memcg=3D/=
-no_zswap_test,task=3Dtest_zswap,pid=3D177372,uid=3D0
-> > >   [271641.879578] Memory cgroup out of memory: Killed process 177372 =
-(test_zswap) total-vm:36544kB, anon-rss:0kB, file-rss:0kB, shmem-rss:0kB, U=
-ID:0 pgtables:50kB oom_score_adj:0
+> On Wed, 11 Mar 2026 at 01:23, Samuel Wu <wusamuel@google.com> wrote:
 > >
-> > Why are we getting an OOM kill when there's a swap device? Is the
-> > device slow / not keeping up with reclaim pace?
+> > On Sat, Mar 7, 2026 at 12:17=E2=80=AFPM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> > >
+> > > On Sat, 7 Mar 2026 at 00:28, Kumar Kartikeya Dwivedi <memxor@gmail.co=
+m> wrote:
+> >
+> > [...]
+> >
+> > > > I think it's still unclear why this cannot be achieved by exploring
+> > > > what Andrii proposed initially in [0], i.e. by using existing
+> > > > primitives and adding extra kfuncs where necessary to solve
+> > > > bottlenecks, and I didn't see any indication where it was explored
+> > > > sufficiently.
+> > > >
+> > This is my bad, I misinterpreted/misunderstood Andrii's original
+> > proposal to apply only to open-coded BPF iterators, hence the follow
+> > up patches with them removed. However, I don't disagree this can be
+> > achieved via open-coding. Both proposals are viable to traverse wakeup
+> > sources via BPF, however I see two distinct advantages of the BPF
+> > iterator:
+> >
+> > 1. Iterators provide a stable kernel interface that decouples the BPF
+> > code from the kernel's internal data structures and refactors
 >
-> This is a good question. The OOM is triggered very likely because memcg
-> reclaim can't make forward progress fast enough within the retry budget
-> of try_charge_memcg.
+> I think this is my concern; committing to a stable interface that
+> we'll have to maintain forever.
+> It's a narrow use case that can be better served by dedicated kfuncs
+> and rolling your own solution.
+> There will be no end to the number of iterators if we keep making one
+> for every linked list in the kernel.
 >
-> Looking at the OOM info, the system has 64K pages, so memory.max=3D8M giv=
-es
-> only 128 pages. At OOM time, RSS is 0 and swapents is only 96. Swap space
-> itself isn't full, the charge path simply gave up trying to reclaim.
+> It would be different if the synchronization scheme for the
+> wakeup_sources list was really complicated and hard to express inline
+> in the verifier, but that is not the case.
 >
-> The core issue, I guess, is that with memory.zswap.max=3D0, every page
-> reclaimed must go through the real block device. The charge path works
-> like this: a page fault fires, charge_memcg tries to charge 64K to the
-> cgroup, the cgroup is at its limit, so try_charge_memcg attempts direct
-> reclaim to free space. If the swap device can't drain pages fast enough,
-> the reclaim attempts within the retry loop fail to bring usage below
-> memory.max, and the kernel invokes OOM, even though swap space is
-> technically available.
->
-> Raising memory.max to 24M gives reclaim a much larger pool to work with,
-> so it can absorb I/O latency without exhausting its retry budget.
 
-Hmmm, perhaps we should change all these constants to multiples of
-base page size of a system?
+I completely agree it's a viable approach, it seems to come down to
+where/who carries the maintenance burden. Regardless, let me explore
+how to prototype this cleanly to handle the details like the static
+address, and then we will have something concrete for comparisons. I
+appreciate the alternative suggestion and the feedback here.
+
+> > 2. If wakeup sources are accessible via BPF, the next step should be
+> > to deprecate the existing interfaces for wakeup sources, such as the
+> > sysfs and debugfs stats. In that case, a text-based BPF iterator
+> > output will provide less friction during the transition.
+> >
+>
+> I would agree if this was a one-to-one conversion, where you just
+> replace the directory for look up.
+> But you'll be reading from one file vs several, so it's already a
+> non-trivial change in the consumer.
+> At that point, the conversion burden doesn't have the same weight in
+> deciding whether to stick with textual representation.
+
+My understanding is that most (all?) current consumers ultimately want
+the aggregate list of wakeup source stats, not a single node in
+isolation; the reason there are multiple nodes is to adhere to the
+precedent that sysfs nodes contain a singular stat. A single
+text-based output node with the aggregated stats would be a
+straightforward change that simplifies userspace code consuming these
+stats.
+
+> > > > I think all we need is the wakeup source read_lock()/unlock() APIs =
+as
+> > > > KF_ACQUIRE/KF_RELEASE kfuncs. Just need to ensure we pair each lock
+> > > > with unlock by passing the index, which can be an opaque value
+> > > > returned from the kfunc (e.g. dummy empty struct pointer encoding t=
+he
+> > > > index). Then you can use bpf_for() to open-code the list iteration.
+> > >
+> > > I had a longer discussion with Paul on this. When having multiple ope=
+n
+> > > SRCU sections, mixing nested calls doesn't flatten the protection
+> > > scopes and leads to all kinds of issues, an example of which is in
+> > > [0]. That said, in this case, the verifier isn't tracking what the
+> > > underlying SRCU section protects or isn't even aware of it, all it
+> > > needs to ensure is that section is closed eventually, out-of-order
+> > > unlocks are ok, it would just exist to allow looking at the list in a
+> > > stable fashion using safe bpf_core_cast() accesses.
+> > >
+> > > So, I just wanted to clarify why I think this should be perfectly ok.
+> > >
+> > >   [0]: https://www.kernel.org/pub/linux/kernel/people/paulmck/Answers=
+/RCU/SRCUhoha.html
+> > >
+> > > (if you are like me, please follow the link at the bottom of [0]
+> > > before feeling good about understanding the example).
+> >
+> > Appreciate the thoughtful feedback from you and Paul. The example was
+> > nuanced but well-explained by the post, however, a key difference I
+> > see is that the BPF iterator solution creates continuous locking
+> > segments during traversal, as opposed to hand-over-hand locking in the
+> > example provided. I could be missing something fundamental here- do
+> > you mind elaborating?
+>
+> It was just an illustration to identify what guarantees the verifier
+> would need to enforce.
+> The most we need to do is just ensure SRCU indices are passed back
+> during unlock, in whatever order.
+> Critical section will be using bpf_core_cast() anyway to do safe
+> walking of the list.
+> With the KF_ACQUIRE/KF_RELEASE kfuncs you will still have a continuous
+> locking segment.
+> Just enclose your list walking loop between lock() and unlock().
+>
+> >
+> > >
+> > > > The iterator would become unnecessary, and everything can be done f=
+rom
+> > > > a syscall program's BPF_PROG_RUN invocation. I didn't
+> > > > check how we can get the pointer to the wakeup_sources LIST_HEAD, b=
+ut
+> > > > you could try several options (__ksym,
+> > > > bpf_kallsyms_lookup_name+bpf_core_cast and then walk it, or return
+> > > > pointer from a new kfunc and walk it using bpf_for()+bpf_core_cast(=
+)).
+> > > >
+> >
+> > Getting the static variable is key to the open-coded approach, but a
+> > clean way forward isn't obvious to me. Passing around raw addresses
+> > seems brittle and can raise security concerns. The wrapper kfunc to
+>
+> I don't understand the security concern. All of this happens inside
+> the BPF program.
+> If you're writing these addresses to user space and leaking them, it's yo=
+ur bug.
+> You can do that with iterators too. You have all the raw addresses
+> available to you.
+>
+> > get the static address might be the best option, but it feels like it
+> > violates the power subsystem's encapsulation. The iterator approach
+> > abstracts all of this cleanly.
+> >
+> > > > Also, how much speed up does this really provide? It is hard to
+> > > > understand the motivation from the current cover letter. Is the
+> > > > bottleneck due to opening multiple files in sysfs? You will still h=
+ave
+> > > > to read text and parse text from the iterator's output in your curr=
+ent
+> > > > solution. Wouldn't it be faster if you just used a syscall program,
+> > > > and used binary output (using a ring buffer) to stream data to user
+> > > > space?
+> >
+> > With the BPF iterator approach on a Pixel 6 in a quiescent state, I'm
+> > seeing a 10x speedup when traversing wakeup sources; the speedup would
+> > likely be even greater on a loaded system.
+> >
+>
+> I'm sure you can replicate it with the approach described above.
+> It might even be faster than parsing text from the file.
+>
+> > As alluded to earlier, the next step is to remove the
+> > /sys/class/wakeup node and debugfs nodes. My apologies for not
+> > explicitly listing this in the cover letter, but ultimately this would
+> > save memory by removing those nodes, eliminate work by not creating
+> > the nodes, and improve performance with a faster traversal, all while
+> > transparently replacing legacy interfaces.
+>
+> And you can do that regardless of the type of solution chosen above.
+>
+> >
+> > Thanks!
+> > Sam
+> >
+> > [...]
