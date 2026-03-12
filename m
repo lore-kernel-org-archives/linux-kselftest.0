@@ -1,176 +1,189 @@
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA553B9DA5;
-	Thu, 12 Mar 2026 09:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1495936CDFB
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 10:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773308298; cv=none; b=mYQ2MGCKJdaZsC3w9o14Jc63vPbjv66YGXOOgswutDFt2XM7bP8xG7P/Gcu+g4YsjYzQ92E28MBhOQ4PKcl7bb0rMV0zEqe17652F7nANTZVXUOT1MFr8PtIkPmq0N78QQvE5T535r5Bb5bxOopb5r+5yNxK+ix7DYHyHLJrpCk=
+	t=1773310697; cv=none; b=Y14CZpjGfDxL0oK8HQsEFeZrMGTGGNQpZDJsqef0oIm3SRpVPWDNufWbzBgkHk4T7W1AGQpAdC+F4dqn8JXr1UwcTSeiio7UAW5XY7ke9BmGaBGMqa9po/o66YPz43JDj4BZ6da1H9qH6BM+CN46+qP7Chg0W7ax+VygANDKr1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773308298; c=relaxed/simple;
-	bh=yFvK4TL7xsQGtUZ3aYppmkhAkjRmfVgtLz+/kUGSF4Y=;
+	s=arc-20240116; t=1773310697; c=relaxed/simple;
+	bh=KRa4nEL6VAUnm3fAZ8Iplu+mkuF9gZAzbtyCij9zg54=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CoTDjW+2b/6M+rLWtnoBASnq/C+QZInu9NhP/L7NamTOriDy0Bre16+Nhui4zTqJ1RopJkYeKmmbuidc+FsAUMyl2FxYQ/KVqNT5ApVLbzHm7XkGek6r765DToEWGwK3plP0PShagDFtS1JlRF5ZwoB3dF5QkpW44Yhc5LCdnTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=nEv3gFay; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y6of0yp7LRZtQjMnrbdBZPKVkcpkK2g9U3MUDLtZITmfeH8nkIKkF3uj3CzjkojU8NCEnOHy2yFRCBvX66i1KJlFcxm3Dnr3eP4pTdYGiOd49PJ63eleiHKm/NBQLG9NfITOOhUmSwiVN0KJNVFpZVliz9xg37QB2Fw8H1CX0t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d2XNUNdc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=capZ3wXv; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="nEv3gFay"
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4fWjGL4f51z9tQg;
-	Thu, 12 Mar 2026 10:38:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1773308282;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d2XNUNdc";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="capZ3wXv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773310695;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=T4nPgKWUxbLSsXAZ7xnpvCJoD9xpuvM/yonZzi7ZuXE=;
-	b=nEv3gFayAZ9w4Dp1cWiq1UcmZbr+AVxZWSDwTVJzyq2a7dTgA8EWt3TPcSPeAw3jej6OXW
-	Pcy6WVyRafrQdwLnMhWua8km15WTIsPP2Egxk8ctZ2kwiHp04CE+ci72MIAnUbB2X3uFr2
-	m9TbgCaTUcnFmJKSHe98mj5hqI3Qzay9DRe0Umfx2oh7eNC/jG4i1DJ1cS6QrP9wELYs37
-	/9UaaXlTa5JuDMVGuxNl72vYPCySNn0PNn4gl11j4ufYX2X3WGume6qmtDEr6kyiwR0x9C
-	cxiPW6KyqQRJuzfkOfZeC+MVhuRec3d3eJIEUNq8AGc2z7YeAIhaADmP9uHRBQ==
-Date: Thu, 12 Mar 2026 18:37:10 +0900
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Andy Lutomirski <luto@amacapital.net>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Jeff Layton <jlayton@kernel.org>, Dorjoy Chowdhury <dorjoychy111@gmail.com>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	viro@zeniv.linux.org.uk, jack@suse.cz, chuck.lever@oracle.com, alex.aring@gmail.com, 
-	arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
-	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, tsbogend@alpha.franken.de, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, 
-	idryomov@gmail.com, amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
-	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
-	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, bharathsm@microsoft.com, 
-	shuah@kernel.org, miklos@szeredi.hu, hansg@kernel.org
-Subject: Re: [PATCH v5 1/4] openat2: new OPENAT2_REGULAR flag support
-Message-ID: <2026-03-12-naughty-cyan-tower-bats-CiRzU7@cyphar.com>
-References: <20260307140726.70219-1-dorjoychy111@gmail.com>
- <20260307140726.70219-2-dorjoychy111@gmail.com>
- <CALCETrXVBA9uGEUdQPEZ2MVdxjLwwcWi5kzhOr1NdOWSSRaROw@mail.gmail.com>
- <801cf2c42b80d486726ea0a3774e52abcb158100.camel@kernel.org>
- <CALCETrVt7o+7JCMfTX3Vu9PANJJgR8hB5Z2THcXzam61kG9Gig@mail.gmail.com>
- <20260309-umsturz-herfallen-067eb2df7ec2@brauner>
- <2026-03-11-regular-sore-census-shops-DqYcUT@cyphar.com>
- <CALCETrVMF3VBr0cuEYOg-M_u+hX77Jfdujv3ZMtLGCzHgOcsGA@mail.gmail.com>
+	bh=v+Ji6hNrczoVrWaESBn86h3gDK3SZFevfxChGYgg3H0=;
+	b=d2XNUNdceQZDR8ZWuHQMjRBS0k12dbL+PxW99EQpS73cTv38m79wmEbQzHTcYjx43uBOVK
+	Sw3HXggZB9WqyjhMyNSh7ZpXcdLloauxVHGSXHkt1vCdPgjR+jjJfT8HJf3pUZds5pvDR0
+	u+YEiwTQXME7dfCsCjXgcFVNfnf4+bY=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-479-n33SvxlVMHyqaHyGHFRHOA-1; Thu, 12 Mar 2026 06:18:14 -0400
+X-MC-Unique: n33SvxlVMHyqaHyGHFRHOA-1
+X-Mimecast-MFC-AGG-ID: n33SvxlVMHyqaHyGHFRHOA_1773310693
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8299499d582so3229232b3a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 03:18:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773310693; x=1773915493; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=v+Ji6hNrczoVrWaESBn86h3gDK3SZFevfxChGYgg3H0=;
+        b=capZ3wXvdA9v+pth5rWa7wSYHWM68bCpLNPVrycN8DFP1GUe+WA9ufMlZby9qs/t0B
+         mSU6Z+ovsfJGocpHip8OCKlNuJqrUZJauF5AeN80YUvJ9+pmlWZkhWyJEcYd2fWP8zL8
+         xGfPfSlM+LaBAX4gmduVurNjuZTrLaC1cXGn3ryo9A1ya5ScyvniYlbsGOC5I0u8pHQR
+         ul3tGGx2vo363HRRqZKw0ti3L91HMzD5FDPflYV12Wo/EbRqigHIlNx7IIEkwtMo5Ni9
+         g/Vb7XtUVcbngTKIyLGP9DgyVo9R74el2BJw6DKUeB3/IM8xJZgr28NKK5cJfLgDmWgm
+         y0Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773310693; x=1773915493;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v+Ji6hNrczoVrWaESBn86h3gDK3SZFevfxChGYgg3H0=;
+        b=cH10utDWC5evIxtKaOlBrQUOVCc2WjCDa68t3iHw7qxa+sht0G9SAh0euFkYvNjXh8
+         TltAi6Jpsz6NNJLctpdG/dKkkXeKeFuGhnREnACOh6y3nupMMst6SDIcvJOuuUkTnver
+         CI1u5OqzTLbDJD6g+3xKAalzjsjaOrRfJFxAG6HXCr39mD6JrqDEH4hklqlo4u7Cm4LE
+         4Ws+8PPjcFt1wj4zMS2ajAZA+SgTlLS4v0nbTCzwKgeiPtkS2+Yh01y/2ZjT/v6MzDJN
+         FmAZmDaviWagsXzQeGsM6i/7A9OtRpQSofvmPOvo16r+sCExbpwbFGwetwN354d+mC8Y
+         4rgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV374H6QYwp5wn0f1kyGE76zHN3RAfZiI12TQwUslC/1Sxpxnaop3FM6rF+SOfS6yF33azkDJUBxdmSXCmioGw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVnXYXzAr448VKWA3EjdIZcLAV8l4SQJPQ8gVTLrgaMBtuPQ/h
+	dcn19tnSwDf2Zysxv4w7zYmNWybn8kXybJ+qsQ+xbhSrdP3Kx3quDBX5k6LjelGYl7rpQR6yiWy
+	Eq8DyMpawtXS8KqYoGqVZ/N8e0p2dNxenh/dCM8u0zTg92g5BDQovIlwVzbQciZcWQtr7og==
+X-Gm-Gg: ATEYQzyNtpN6yRkGWYkFA9MLDcarzoh4gm3ZxY9qbD/o4P85/Mn3V2+O/6IIy0m9Bsl
+	SQzfU13GZa7q9Vbwvx/EyoCUFyL++ebXpkvBuUBUHMfSGzUnF3iBinSVm2zqI1L5gnkuK+7p+dT
+	C/tT/IRRK79nTjTKruOMm9xufGOBFFqUaRV7z8eVBeAjdEHhwgSNr+w/l2kW8tgysy+J4FZpKTh
+	0pyNcTPklqG/g8VHnJMqzve0lXrwe9bizKH/2zydOjs81aT5z/7BtcL4hnYdfEZKDiGUhlItAxa
+	m9a79qEpsooG9KokzbAwTcU7cegqLAYKAtzTK/ekVIK5QQkusihrQveiw2vqVfiOxIKBeHL0uV4
+	9xYSatFClu45K26eWkQ==
+X-Received: by 2002:a05:6a00:4c90:b0:823:5270:ef48 with SMTP id d2e1a72fcca58-829f7108c0bmr5039377b3a.33.1773310692838;
+        Thu, 12 Mar 2026 03:18:12 -0700 (PDT)
+X-Received: by 2002:a05:6a00:4c90:b0:823:5270:ef48 with SMTP id d2e1a72fcca58-829f7108c0bmr5039356b3a.33.1773310692404;
+        Thu, 12 Mar 2026 03:18:12 -0700 (PDT)
+Received: from redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a06fe211csm2635592b3a.0.2026.03.12.03.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2026 03:18:11 -0700 (PDT)
+Date: Thu, 12 Mar 2026 18:18:09 +0800
+From: Li Wang <liwang@redhat.com>
+To: Waiman Long <longman@redhat.com>, Lucas Liu <hongzliu@redhat.com>
+Cc: cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Li Wang <liwan@redhat.com>
+Subject: Re: [ISSUE] cgroup: test_percpu_basic fails on PREEMPT_RT due to
+ lazy percpu stat flushing
+Message-ID: <abKS4Qt72UP8rYS_@redhat.com>
+References: <CAEnjF8FxM2CGgGC0R42R7R4=udHMtkwV9bCVcw7NDq7KTZMLkg@mail.gmail.com>
+ <4238fec3-1a37-4924-b13e-a42d2454412c@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="i7hwymh2jbrl5osk"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CALCETrVMF3VBr0cuEYOg-M_u+hX77Jfdujv3ZMtLGCzHgOcsGA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4238fec3-1a37-4924-b13e-a42d2454412c@redhat.com>
 
+Waiman Long wrote:
 
---i7hwymh2jbrl5osk
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 1/4] openat2: new OPENAT2_REGULAR flag support
-MIME-Version: 1.0
+> On 3/11/26 4:49 AM, Lucas Liu wrote:
+> > Hi recently I met this issue
+> >   ./test_kmem
+> > ok 1 test_kmem_basic
+> > ok 2 test_kmem_memcg_deletion
+> > ok 3 test_kmem_proc_kpagecgroup
+> > ok 4 test_kmem_kernel_stacks
+> > ok 5 test_kmem_dead_cgroups
+> > memory.current 24514560
+> > percpu 15280000
+> > not ok 6 test_percpu_basic
+> > 
+> > In this test the memory.current 24514560, percpu 15280000, Diff ~9.2MB.
+> > 
+> > #define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
+> > 
+> > in this part (8cpus) MAX_VMSTAT_ERROR is 4M memory. On the RT kernel,
+> > the labs(current - percpu) is 9.2M, that is the root cause for this
+> > failure. I am not sure what value is suitable for this case(2M per cpu
+> > maybe?)
+> 
+> Li Wang had posted patches to address some of the problems in this test.
+> 
+> https://lore.kernel.org/lkml/20260306071843.149147-2-liwang@redhat.com/
+> 
+> It could be the case that lazy percpu stat flushing can also be a factor
+> here. In this case, we may need to reread the stat counters again several
+> time with some delay to solve this problem.
 
-On 2026-03-11, Andy Lutomirski <luto@amacapital.net> wrote:
-> On Tue, Mar 10, 2026 at 9:49=E2=80=AFPM Aleksa Sarai <cyphar@cyphar.com> =
-wrote:
-> >
-> > On 2026-03-09, Christian Brauner <brauner@kernel.org> wrote:
-> > > > > On Sat, 2026-03-07 at 10:56 -0800, Andy Lutomirski wrote:
-> > > > > > I think this needs more clarification as to what "regular" mean=
-s,
-> > > > > > since S_IFREG may not be sufficient.  The UAPI group page says:
-> > > > > >
-> > > > > > Use-Case: this would be very useful to write secure programs th=
-at want
-> > > > > > to avoid being tricked into opening device nodes with special
-> > > > > > semantics while thinking they operate on regular files. This is
-> > > > > > particularly relevant as many device nodes (or even FIFOs) come=
- with
-> > > > > > blocking I/O (or even blocking open()!) by default, which is not
-> > > > > > expected from regular files backed by =E2=80=9Cfast=E2=80=9D di=
-sk I/O. Consider
-> > > > > > implementation of a naive web browser which is pointed to
-> > > > > > file://dev/zero, not expecting an endless amount of data to rea=
-d.
-> > > > > >
-> > > > > > What about procfs?  What about sysfs?  What about /proc/self/fd=
-/17
-> > > > > > where that fd is a memfd?  What about files backed by non-"fast=
-" disk
-> > > > > > I/O like something on a flaky USB stick or a network mount or F=
-USE?
-> > > > > >
-> > > > > > Are we concerned about blocking open?  (open blocks as a matter=
- of
-> > > > > > course.)  Are we concerned about open having strange side effec=
-ts?
-> > > > > > Are we concerned about write having strange side effects?  Are =
-we
-> > > > > > concerned about cases where opening the file as root results in
-> > > > > > elevated privilege beyond merely gaining the ability to write t=
-o that
-> > > > > > specific path on an ordinary filesystem?
-> > >
-> > > I think this is opening up a barrage of question that I'm not sure are
-> > > all that useful. The ability to only open regular file isn't intended=
- to
-> > > defend against hung FUSE or NFS servers or other random Linux
-> > > special-sauce murder-suicide file descriptor traps. For a lot of those
-> > > we have O_PATH which can easily function with the new extension. A lot
-> > > of the other special-sauce files (most anonymous inode fds) cannot ev=
-en
-> > > be reopened via e.g., /proc.
-> >
-> > Indeed, I see OPENAT2_REGULAR as a way of optimising the tedious checks
-> > that userspace does using O_PATH+/proc/self/fd/$n re-opening when
-> > dealing with regular files.
->=20
-> Can you give a brief decription or a link to what these checks are and
-> what problem they solve?
+When memory.stat is read, the kernel calls mem_cgroup_flush_stats(), which
+invokes cgroup_rstat_flush() to drain per-cpu counters before returning
+results. So in the normal read path, stats are flushed, they aren't
+arbitrarily stale at the point this test reads them.
 
-There are a few variations, but in this particular case they are just
-doing fstat() and then checking whether the file is a regular file
-(i.e., S_IFREG) or not.
+The "lazy" aspect, my understand, is that background flushing maybe skipped
+sometime, as there is an situation: __mem_cgroup_flush_stats() skips the
+flush if the total pending update is below a threshold, i.e.
 
-A container rootfs can contain arbitrary files (because container images
-are just tar archives, usually with no restrictions on inodes -- a fair
-few container runtimes assume that the devices cgroup is sufficient to
-protect against the container overwriting your rootfs). The S_IFREG
-check avoids an administrative process from being tricked into opening a
-block device or an endlessly-streaming FIFO -- if you also use
-RESOLVE_NO_XDEV you can also make sure that you don't land on procfs or
-sysfs by accident.
+  575  static bool memcg_vmstats_needs_flush(struct memcg_vmstats *vmstats)
+  576  {
+  577          return atomic64_read(&vmstats->stats_updates) >
+  578                  MEMCG_CHARGE_BATCH * num_online_cpus();
+  579  }
 
-I will say that in a previous version of this patchset I said that I
-would prefer this be done with an allow-bitmask of S_IFMT rather than a
-single O_REGULAR toggle -- this would allow for usecases such as "only
-open a regular file or directory" (inode_type_can_chattr() from systemd
-is a practical example of this kind of usage) or "anything except for
-block/char devices", but the definition of S_IFBLK (S_IFCHR|S_IFDIR)
-makes this a little too ugly. :/
+So the "lazy" could happen on a machine with too many CPUs, that threshold
+can be non-trivial and could contribute a few MB of discrepancy.
 
---=20
-Aleksa Sarai
-https://www.cyphar.com/
+But my failure observed on a 3CPUs box, it shouldn't go with "lazy" skip.
 
---i7hwymh2jbrl5osk
-Content-Type: application/pgp-signature; name="signature.asc"
+ # ./test_kmem
+ TAP version 13
+ 1..6
+ ok 1 test_kmem_basic
+ ok 2 test_kmem_memcg_deletion
+ ok 3 test_kmem_proc_kpagecgroup
+ ok 4 test_kmem_kernel_stacks
+ ok 5 test_kmem_dead_cgroups
+ memory.current 11530240
+ percpu 8440000
+ not ok 6 test_percpu_basic
+ # Totals: pass:5 fail:1 xfail:0 xpass:0 skip:0 error:0
+ 
+ # uname -r
+ 6.12.0-211.el10.aarch64
+ 
+ # getconf PAGE_SIZE
+ 4096
+ 
+ # lscpu
+ Architecture:                aarch64
+   CPU op-mode(s):            32-bit, 64-bit
+   Byte Order:                Little Endian
+ CPU(s):                      3
+   On-line CPU(s) list:       0-2
+ ...
 
------BEGIN PGP SIGNATURE-----
+Even on Lucas's test system, (8cpus), I assume the pagesize is 4k, the
+threashold is 2M is still less than the failed result:
+  64 × 8 = 512 pages = 512 × 4096 = 2 MB
 
-iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCabKJRRsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQKJf60rfpRG+vawEA1WxGEhn5Rc+wid/VGVxs
-yznMgHiA2Xe1m0YMiUy78u4BAJfditiWc61238EqwnDAWlH4X0xzDBvmXWOUuex3
-vw0K
-=3QVZ
------END PGP SIGNATURE-----
+Bose on the above two testing, the lazy produce deviation is not
+like the root cause.
 
---i7hwymh2jbrl5osk--
+-- 
+Regards,
+Li Wang
+
