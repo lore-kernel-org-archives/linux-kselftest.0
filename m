@@ -1,64 +1,64 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9A23D6F
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 00:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C19E2DF68
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 00:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773276391; cv=none; b=lhr8fNA9teSuJ3n2UN9Bbu1tRjYy/gDd5R4EPZAEut1ffDFC03VXL7DiCfN1ZJM80JSL82R0zRwysFpZtbK1YUy+FeLOwQJsrw0gRRG22c103YgszEbSFed9Rv+TGs4rZGXI/Tr2f2e+eBeTy2PaUkL0atw56cAb90fvX7rZrxo=
+	t=1773276921; cv=none; b=iGZc+VASkjPADiqn0V9BcUdWVR8CSl0zqmUm/sgJ3nOSREwG9VNjCzE+BVovbbZxvzowTSLt0PcfXahr2bOrIUjD1Xlc9VggQTNN2u6Kglkawc4XAsQeRBYjTCXAbL7G0zKotvcxTwj60i6GQNbbWZBMcU6yvaWnhVZ7QTUnhpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773276391; c=relaxed/simple;
-	bh=k+OMvBaKqjMs5h2T5BpFDOCJMnSBk/gTUU9E3vPFuVs=;
+	s=arc-20240116; t=1773276921; c=relaxed/simple;
+	bh=6LSdL98ZotrSRX1eDbvuLKAzwAbASYg/e5rmWSoeKG4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=O7l1HrduFLOCHVQdRLvgv4kJnB+VFbfrWu1aOvk/NwasBMdrrjWnFyIQ7/ssVKBPKjMP6t3UaTp3KuJQYh/9D9tJhxdtSIhhLyKc+jXywAOkhWLXOlgayVrdN8pPYq6ro6AvwFZ2jJ++uxQp6MFfuqSly3ch5i/53yaY4IjIfSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=euiUWFn6; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=KNMjAt53v+9h5BUw+wfdjEFJmjk7jzUiyBJXxjLbMB+rY2mjoKJoNmPt20P8vXQNr2Z6ahzfp5bpXhof5qkl9Jm2LobsSjYaQV811nqWHSlq8V1vQ0GabTzFFPPDIDp6lunhVb5cpqZYBnadQpTZa2NMwnY1SJIsg9o3HT8DZ9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gt86lFdv; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="euiUWFn6"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2ae4cdfc468so4514515ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 17:46:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gt86lFdv"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35a02f3b8e2so2039430a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 17:55:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773276389; x=1773881189; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1773276919; x=1773881719; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lsBEEmQ4QEyMQKvOuCt8YoNJx778DkMri6fYDa3ahb0=;
-        b=euiUWFn6mgzfNj9xuhHwdPw9NkO60+EZY8Oshfz75QBI1NRJ3EZj54pL4Mcu9zgkwd
-         71EgIMEdyE0G9d6hVHVMqRAc1olzh9WnUSbaKFtopaDBxX2ijRCNQu5thhE6jMb9HIO6
-         2kXR0ZXnucU1W3L8epTSslD39oiGFBbOf/+njxAnoeWRsUhUy7NxnOm4BrnHN7S1RkZv
-         83EtdX0e4v2yV+BV8Tgxow2pr8HNklI9dw6+VEg8NhuXuMxoj+urhw9AkyJtZ4HBH8Ns
-         hFpVV76OAMhDfBgNq+H6g12jo6p2wAdAktltQVVxFhb/GtGk9AyExgHDWr2llVo88pUi
-         r57A==
+        bh=InAOGSfJmiIFK9a61D7u+f/DlACEHE44oAFbK2VnT1w=;
+        b=gt86lFdvS8byq+SkI8gmJlYZvHjk3is39CxVbmIBPrOtmSeOVH7pIyLp2M5BvSFKF3
+         hDRM3fEYFiy5utFH8NDChSGItSAqUuMv7k4zFJ8nESYI3YafY50wh/mxOjBlVkC78Gy7
+         Mi2ZIBS3KqpPKkmb5wz+Rou64SZLgQQF4eQfdHMwUkxntG5Ii/DJUfeuUVTAnzpezzAW
+         zsL9fOYFQMF0Aa9OQCjXxYop5Otf12d599Kwnxo0P6kAFI1gdIaqazywAOOTP/k/Lk8p
+         xmZ7y5upMd3C9x8Ir5938mg2nWjvO7jSiFzKkVF9QNII4O5JPjNRw/Id1cBwTbhEVheB
+         zZ4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773276389; x=1773881189;
+        d=1e100.net; s=20230601; t=1773276919; x=1773881719;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lsBEEmQ4QEyMQKvOuCt8YoNJx778DkMri6fYDa3ahb0=;
-        b=lN8HT0yfmsWywm43MCqxPesBw49UYvqLwCUDm36ziJZ6FQXCh8nYL7Wubis8QZYD62
-         bAczdaF4GVPk9mgG6M3vS8DFIDa+4Yz2HC4Ufkdgk0gOSUCLcGVWfDgrLfvpe0Bx6ge+
-         Lk51kOljrJlQHbGV4+Le3lXUZ0N/P1BYG58yb6O3XVBKn3dyxsW4oIFqyni3XliukjJM
-         EYrxGHMzL4HDq/jL6dnJg5Lkz6FW9uCVYVIlxyB2o7AE0ts4HbQZw6Y/yncTTp6Uw1AX
-         H3JMnbbOPAHa0dYP+YdB4FYl2GD/2anZDkYJ8PvVvIee4vKk28R1xuOY8Tda95Jh8H0B
-         +48w==
-X-Forwarded-Encrypted: i=1; AJvYcCX+t8T8fT2FYJ6/kqfBvoZDVZtp2g3gjU5io2dbjr5BV16RWeXFu358ulauuCJFCrxpc3gUlfOVBYPZAFfvTUA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXPY7dZaxDpfuZkFvyCbgV7rn7j2Ju71whpmFZtee/VTQSNJma
-	DXFgJq4jg4i+d7Z8vHe+5Njy+BMhMvsZyJWcgJg+9xI027DIx5q7Vaf+4P/Kjsl76ViGHDqpgBH
-	pKuCGCw==
-X-Received: from plgo7.prod.google.com ([2002:a17:902:d4c7:b0:2ae:a8cf:e820])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:18b:b0:2ae:456d:b836
- with SMTP id d9443c01a7336-2aeae8f4d8bmr43372785ad.47.1773276388915; Wed, 11
- Mar 2026 17:46:28 -0700 (PDT)
-Date: Wed, 11 Mar 2026 17:46:27 -0700
-In-Reply-To: <20251114151828.98165-2-kalyazin@amazon.com>
+        bh=InAOGSfJmiIFK9a61D7u+f/DlACEHE44oAFbK2VnT1w=;
+        b=Mq100ivR4q1LebqrRT95IQ1afQDbnp8ozEBS0xtt5TPYNgwXTO+Q7zCJh6K7odknGa
+         CmFNNnf/oO3ZtWAOGbEvruWqMN9nKsjOg2Pm3Xgndgn3rDYNjNMMM3jE0iflGO0pdKkt
+         DoSH9hLbkWoqdy2ry3jgLNicZ8yS7VVT+8KlFi9Fg4Z/lEkiOtsXhJbpKGjFmHd0Zz9w
+         OG+ZQRQ1a0qGRzfO2DbA5txRHpjFUiG2YHSzq5h5UyaV2fwZueerQhri6nM/aU4IdJze
+         e0PcBUUVPa+0eKv4EUlONjksuqhiTd4Va6McaZADE8aHmwZB5eSMYIjuLUh3kApulc32
+         afJA==
+X-Forwarded-Encrypted: i=1; AJvYcCVK0zGfWG9/CoGQQenH9r97fIGkcMLx5S6loMKBCZebqUp8Re5fXPU9mhwQsmqEEwKDYHE380AmUCWdvHroM1U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwgbjfNKWlrKzzcv8iIZacPqpuR5hsU7ZEBsY44btUsGJcuXaT
+	4YliiDh8f8fAXcKXSVBakEIuchGskPvyEoYhYFGm0rWX8t/DEI36ON77zhEABrIVXBJWb/pY5F3
+	21lKrcg==
+X-Received: from pgld31.prod.google.com ([2002:a63:e1f:0:b0:c66:4fdd:d41a])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:2989:b0:398:4a5c:d5a3
+ with SMTP id adf61e73a8af0-398c60e4390mr4170819637.34.1773276919379; Wed, 11
+ Mar 2026 17:55:19 -0700 (PDT)
+Date: Wed, 11 Mar 2026 17:55:18 -0700
+In-Reply-To: <20251114151828.98165-3-kalyazin@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20251114151828.98165-1-kalyazin@amazon.com> <20251114151828.98165-2-kalyazin@amazon.com>
-Message-ID: <abIM43oUcfIYMnBc@google.com>
-Subject: Re: [PATCH v7 1/2] KVM: guest_memfd: add generic population via write
+References: <20251114151828.98165-1-kalyazin@amazon.com> <20251114151828.98165-3-kalyazin@amazon.com>
+Message-ID: <abIO9teJUlGMj16T@google.com>
+Subject: Re: [PATCH v7 2/2] KVM: selftests: update guest_memfd write tests
 From: Sean Christopherson <seanjc@google.com>
 To: Nikita Kalyazin <kalyazin@amazon.co.uk>
 Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>, "shuah@kernel.org" <shuah@kernel.org>, 
@@ -73,109 +73,39 @@ Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>, "shuah@kernel.org" <shuah@kerne
 Content-Type: text/plain; charset="us-ascii"
 
 On Fri, Nov 14, 2025, Nikita Kalyazin wrote:
-> ---
->  Documentation/virt/kvm/api.rst |  2 ++
->  include/linux/kvm_host.h       |  2 +-
->  include/uapi/linux/kvm.h       |  1 +
->  virt/kvm/guest_memfd.c         | 52 ++++++++++++++++++++++++++++++++++
->  4 files changed, 56 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 57061fa29e6a..9541e95fc2ed 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6448,6 +6448,8 @@ specified via KVM_CREATE_GUEST_MEMFD.  Currently defined flags:
->                                 without INIT_SHARED will be marked private).
->                                 Shared memory can be faulted into host userspace
->                                 page tables. Private memory cannot.
-> +  GUEST_MEMFD_FLAG_WRITE       Enable using write() on the guest_memfd file
-> +                               descriptor.
-
-Not the greatest place for it due to limited space, but the page alignment and
-shared restrictions should be documented, and this seems to be the best spot.
-And whatever we do on a partial copy also needs to be documented.  E.g.
-
-  GUEST_MEMFD_FLAG_WRITE       Enable using write() on the guest_memfd file
-                               descriptor.  The start and size of the write
-                               must be page aligned, and all pages must be in
-                               a SHARED state.  If the full buffer cannot be
-                               copied for a given page, <something happens>.
-
-> @@ -421,6 +423,53 @@ void kvm_gmem_init(struct module *module)
->  	kvm_gmem_fops.owner = module;
->  }
->  
-> +static bool kvm_gmem_supports_write(struct inode *inode)
+> +static void test_write_supported(int fd, size_t total_size)
 > +{
-> +	const u64 flags = (u64)inode->i_private;
+> +	size_t page_size = getpagesize();
+> +	void *buf = NULL;
+> +	int ret;
 > +
-> +	return flags & GUEST_MEMFD_FLAG_WRITE;
-> +}
+> +	ret = posix_memalign(&buf, page_size, total_size);
+> +	TEST_ASSERT_EQ(ret, 0);
 > +
-> +static int kvm_gmem_write_begin(const struct kiocb *kiocb,
-> +				struct address_space *mapping,
-> +				loff_t pos, unsigned int len,
-> +				struct folio **folio, void **fsdata)
-> +{
-> +	struct inode *inode = file_inode(kiocb->ki_filp);
+> +	ret = pwrite(fd, buf, page_size, total_size);
+> +	TEST_ASSERT(ret == -1, "writing past the file size on a guest_mem fd should fail");
+> +	TEST_ASSERT_EQ(errno, EINVAL);
 > +
-> +	if (!kvm_gmem_supports_write(inode))
-
-Eh, no need for a helper, especially since flags is now easier to get at:
-
-	if (!(GMEM_I(inode)->flags | GUEST_MEMFD_FLAG_WRITE))
-		return -ENODEV;
-
-I also think we should leave ourselves a safety net for in-place conversion, and
-WARN if the gmem instance isn't INIT_SHARED:
-
-	if (WARN_ON_ONCE(!(GMEM_I(inode)->flags & GUEST_MEMFD_FLAG_INIT_SHARED)))
-		return -EBUSY;
-
-That will also provide a good place to actually verify the memory is shared once
-in-place conversion comes along.
-
-> +		return -ENODEV;
+> +	ret = pwrite(fd, buf, 1, 0);
+> +	TEST_ASSERT(ret == -1, "writing an unaligned count a guest_mem fd should fail");
+> +	TEST_ASSERT_EQ(errno, EINVAL);
 > +
-> +	if (pos + len > i_size_read(inode))
-> +		return -EINVAL;
+> +	ret = pwrite(fd, buf, page_size, 1);
+> +	TEST_ASSERT(ret == -1, "writing to an unaligned offset a guest_mem fd should fail");
+> +	TEST_ASSERT_EQ(errno, EINVAL);
 > +
-> +	if (!IS_ALIGNED(pos, PAGE_SIZE) || !IS_ALIGNED(len, PAGE_SIZE))
-> +		return -EINVAL;
-> +
-> +	*folio = kvm_gmem_get_folio(inode, pos >> PAGE_SHIFT);
-> +	if (IS_ERR(*folio))
-> +		return PTR_ERR(*folio);
-> +
-> +	return 0;
-> +}
-> +
-> +static int kvm_gmem_write_end(const struct kiocb *kiocb,
-> +			      struct address_space *mapping,
-> +			      loff_t pos, unsigned int len,
-> +			      unsigned int copied,
-> +			      struct folio *folio, void *fsdata)
-> +{
-> +	if (!folio_test_uptodate(folio)) {
-> +		folio_zero_range(folio, copied, len - copied);
+> +	ret = pwrite(fd, buf, page_size, 0);
+> +	TEST_ASSERT(ret == page_size, "write on a guest_mem fd should succeed");
 
-Hmm, do we actually want to zero and silently ignore the failure?  Given the
-intended use case, silently failing here would be a terrible outcome.  Would it
-makes sense to instead do this?
+This write should actually verify a given pattern is written, not just that the
+write() returned success.  There should also be testcases for writes that fail,
+e.g. on the first page and also on the nth page.
 
-	if (len != copied)
-		return -EFAULT;
-
-	if (!folio_test_uptodate(folio))
-		folio_mark_uptodate(folio);
-
-	folio_unlock(folio);
-	folio_put(folio);
-
-	return copied;
-
-That will cause generic_perform_write() to report -EFAULT if no pages were written,
-or IIUC, return the position of the last _full_ page that was written.  Then in
-the unlikely scenario userspace wants to retry, they can retry starting at the
-page that was partially written.  That seems like what VMMs generally would want,
-not silent failure.
+In a perfect world, there would also be testcases for partial writes, but I'm not
+entirely sure how to make that happen, e.g. I'm not sure if an munmap() can pull
+the rug out from under __copy_from_iter().  If we go with the -EFAULT behavior,
+the test can map two pages, then use a separate helper thread to munmap() the pages
+after a delay.  Then in the pwrite() thread, verify all bytes are written on success?
+I'm not sure that's interesting enought to warrant the development cost and effort
+though, e.g. it doesn't seem wildly different than the deterministic "entire page
+failed" case.
