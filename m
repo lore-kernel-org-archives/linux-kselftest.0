@@ -1,135 +1,267 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE1636D4FD;
-	Thu, 12 Mar 2026 05:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773292160; cv=none; b=pBoVGY+9UK5YFeO+aT7zj3HWvIXx/wtWkByRN5JcxbpLZfw5DjwFXEbT2kSik9ZBGqiQIyQG/31BRLL8vUZ+rMDfaxkQv8YGoSZNbYPygGUmfuRLTkqX/fl8Z5XxbMbqDwaO6ZkZak/pJtLfTENe0A9otcGNtKrrQqHxc/H+5jw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773292160; c=relaxed/simple;
-	bh=61bM1dGRtflgjhd7CA1L36YvIDrvruy/oC2IgohJNm8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=anDAP+Cqhkc0MmcoCcaQlv3pfNR/QDKoFmz7MNmdbj2bXepJ7w/jNBR67MCeUGzcUkVtiWNxFvSkoYj2k6GFCbTjiFNLEi74LTUynL0rWsJne9C4MAvV+KGKSk+5F8MvABRNRi9nukRtxiZInvFeEWX+8CLLDnzolMKjqBOspzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OzxwKAzK; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1446C26ED25
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 05:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773294303; cv=pass; b=FyTNoJt2H8wyMkpury9w5goCgXCSTtzYXpsT6nQ8XR2IWvnYJ5RwAtkQXkF2/IQmsyHgRPVKfpKtkwcs2SczqkKYkhtdy5tUMq8FIuLNF3I0bd6S8siNrQm4eJSwI7WCIopEfUK4KYnMefsx/hj4dE8bUR4C/Jm2s0soST78DQQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773294303; c=relaxed/simple;
+	bh=GmJK/N0KBkRxDo+pqiY/6G+ZRXyparhw1yW+Cxl6e28=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FeLngpHAsuVBC+qHGFdNuFFo3GRvwIpQG9YIWHN/nVw1QU6UI6sH2P39Y1LrwSyE2tlauKDLXCDMbVjmFSDNdWLBz2ELflSfcHAFw7YeZOxU2T5erGDiWuTCkr9MdexLlQl61MZjec6o/XS7MgjkxG3Yh/uoHJJx1W7gXTqWYYs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VdZJT0Tx; arc=pass smtp.client-ip=209.85.217.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OzxwKAzK"
-Message-ID: <434a9a8c-f369-435a-b8bf-d9ae85558c8e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1773292155;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q+sCxcvOZ4JJqPc6t51Nhtj+5M0ZfUINwSFsj4CHAPM=;
-	b=OzxwKAzKeUX5tvzKQ5wWRaUPgV4XD+n9rDUb8MfKoTIi4g1RytJKNM0A/OmmpJPr7mxewq
-	kN8T3WqBJlLn8P7YJwAOFkR6hE9GHQK1JmkGo/00RSxBJqiEI4DPSOocwOiAqLKH/tooeQ
-	B5lgF6NtFOPUyVLAXE8waK88IRdKzW8=
-Date: Wed, 11 Mar 2026 22:09:09 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VdZJT0Tx"
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-5ffe7b6f751so428652137.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 22:45:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773294301; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FaNLulM2eYhtpkQ1aJw5RDH6vOvwg9kSczNjU1ozSRp5A4gCOuPvB0syyGEl16Jcps
+         /usVzGAP3K9VOY9gd4bD7s7NvEpTCfpS07gtQ8c/zn+sqxV1GyEWOUMkRe2bX8NhKVqy
+         TB2kA3aALDFvYAR3kjqbiWkNpoxEPtvkk9cvTdoFIGA3iNJl3IltrzdUTtjyX76YZPWi
+         Bt29IheMpKb7NrA1zOzS9cbtQ83Z/FR38PsWa23OGL31jGKg1SW5tRaCK3MFUzdT9bLe
+         e+FdCng0SDMqj/hzz/aWtEu7N80BilwnoyiXkAitFXxW5aY0rynxVVGX+Kq9u6OjO0gA
+         VLXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=WHL+cdGBVdeYzUrRkXUnxuFTgvkDYPGLTyvabwlDW1U=;
+        fh=lKPe3yQ4RCSNl/tp46csEGQH+IrVPUljRZW1Ea+32Y4=;
+        b=OnG0JJ25AZs3T+cjm20oqGxwBft520S5sUU+TuOTNUZsA5A1xgegsG1o6NbAS5vHyB
+         ELTf8IN9cM8/ReF8FTsSQ5KxOXSM16uBbpQ5O4WjGRlg1SbO9DTL7/oJhbb2GNhc/Vkg
+         fzvxfqrobIzpKn5ztGoYJVdpWRi+NYtmDc4Mwbzt94ucJAMWD7x+aPuRBX6jJ72GTPdC
+         bhGvpPYTOCFzckXU2xgGeyzRuNxBBhPJM+sjwLZEGYZMp3GyYZoezunLOJHcFL3ZGuOl
+         o+cg/BGcTcNtM6cRmj+qX2bHkDD9fVUM2HqmuODH+7JMzYAVjQkqeVWVZi8kJf2iw4R8
+         setA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773294301; x=1773899101; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WHL+cdGBVdeYzUrRkXUnxuFTgvkDYPGLTyvabwlDW1U=;
+        b=VdZJT0TxrE2a9giQrcsUQtWWCibe1Z2In7NV0CRlZMWbacWoFRZzPJiR7FY93c03j9
+         2yAo6IHTgN6vy8NV77CVpW+HhOc8Y55Q1whsRU7GuexdhiOif0pMktOgLab0yQH24Xmb
+         eY626NrC06XAbL+FuZen1nZxylloOh0Xe89KQ40vjxWjixm6s10qgZ4tccTY1C/SL9YU
+         idN+6ZtprApYPnh/eGiR+dkQwu97WSop2d6awTVostO+SsiP5p9csP3pOO148vafEevW
+         oby0MD9CpiBWwPQcNfulnvgZ3CI41epjzwTw2bXTqHx8ZBGK0yocieKobEXt292GR1Sr
+         CfPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773294301; x=1773899101;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WHL+cdGBVdeYzUrRkXUnxuFTgvkDYPGLTyvabwlDW1U=;
+        b=NNXhed+l9b0VK1k//aMIfpeUnTeObJltUubztGvtQiY6rRjTpy7fCptzR33q5ZyIga
+         I4DN1grQ2f+HDngofEZtBM6ZjmSeNZ4ulA6Ox1XMRJSLYY9miY9SAp2I1VcWIUkBhTJw
+         0h9AgUSvVqL2989NrFhg8w8gFPB/FORa+OtHErj/4HegDMGh7ISxOkgdFvSGFF34bCe1
+         6iVSVzyzS0gXY10btajCeP9e1mgvEH8KOZ04MhogTLa0gtwhBhoaqoDaEsY90l+oLNP0
+         YJHZqkuOL4MFSaoZggdz6P97Z21fwOB+WLJsEtHAV5onw1Ay0gWBoRHlNoS6GVC8MJL0
+         e2hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnCO0PTzZABAvVHKyL7FnHZb42fUWlt9WR3qJOfjsIltA3j6ZZyKE9bh2yUvHw1dOSsynwEfeZkWNGQH5DuFg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo5oONVvGf6rE0/hP8MnKzgZt+bVyy0RjQ1MJUGc2S3QerzqqF
+	ufyJTRiqJ6izaqm9gEyveXd0ByYYldDlOYuBJLq6JLm4HIPnqBfOuyE0xZlsqtEr3Jn545xNXH9
+	hccEWQN5OyGViYkljRkfso1v11++Y+uATROW1lqFh
+X-Gm-Gg: ATEYQzzkvGFetCq/GMIT5YEbtosqUv18L3UkRZFx3h42Xoh+p9GdvyjOYNjPR++RAxH
+	a6fCIT9uKgA5yZAB9p3NoBLQpZDBUsCIsdNCQcDeXSeRIIkFVpi5kyr250wswPQkrIcQHvlu38A
+	K1A/r/fN9WFa9yYJkfXC/ZFIvNxtpuQKHLjNpC4aGnA83WmRnM2p8SyWAzWY1aB976UPbgOOdQw
+	uQxykncg/3l3xTZghC8CHoKhpumpKDTiHzoOSI6EITrI7zGD/SaMFMXKLGjvhY7fBbpvzEJwJgv
+	tlFolPqjEMGC4tqAs9tyFEneNuaP6jwau9x41A==
+X-Received: by 2002:a05:6102:418e:b0:5ff:ba2d:17c1 with SMTP id
+ ada2fe7eead31-601deb8f595mr2321310137.9.1773294300559; Wed, 11 Mar 2026
+ 22:45:00 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 11 Mar 2026 22:44:59 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 11 Mar 2026 22:44:59 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
+References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
+ <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5 1/4] RDMA/nldev: Add dellink function pointer
-To: David Ahern <dsahern@kernel.org>, Leon Romanovsky <leon@kernel.org>,
- "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
-Cc: jgg@ziepe.ca, zyjzyj2000@gmail.com, shuah@kernel.org,
- linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260310020519.101415-1-yanjun.zhu@linux.dev>
- <20260310020519.101415-2-yanjun.zhu@linux.dev>
- <20260310190140.GL12611@unreal>
- <5700c718-d10e-4b23-adfc-c14ee1930b18@linux.dev>
- <20260311085434.GW12611@unreal>
- <6a8b0983-a198-470a-8125-b0133ccb7032@linux.dev>
- <b5c2053c-f911-4e0d-8589-4d969bd580a4@kernel.org>
- <e8e1fc5b-7772-40c5-8214-b4f9d4a10d98@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <e8e1fc5b-7772-40c5-8214-b4f9d4a10d98@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Date: Wed, 11 Mar 2026 22:44:59 -0700
+X-Gm-Features: AaiRm50qY80lG_kPAevYiMiI4iaIYG-rOHvoXqEdwljZn3zJnS7kUqoIvI7enLE
+Message-ID: <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
+To: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	bp@alien8.de, brauner@kernel.org, chao.p.peng@intel.com, 
+	chao.p.peng@linux.intel.com, chenhuacai@kernel.org, corbet@lwn.net, 
+	dave.hansen@linux.intel.com, david@kernel.org, hpa@zytor.com, 
+	ira.weiny@intel.com, jgg@nvidia.com, jmattson@google.com, jroedel@suse.de, 
+	jthoughton@google.com, maobibo@loongson.cn, mathieu.desnoyers@efficios.com, 
+	maz@kernel.org, mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
+	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
+	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, seanjc@google.com, shivankg@amd.com, shuah@kernel.org, 
+	steven.price@arm.com, tabba@google.com, tglx@linutronix.de, 
+	vannapurve@google.com, vbabka@suse.cz, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com
+Content-Type: text/plain; charset="UTF-8"
 
+Ackerley Tng <ackerleytng@google.com> writes:
 
-在 2026/3/11 20:59, Zhu Yanjun 写道:
->
-> 在 2026/3/11 19:04, David Ahern 写道:
->> On 3/11/26 4:01 PM, Yanjun.Zhu wrote:
->>
->>> Got it. The commit log explains how the netdev_notifier mechanism is
->> netdev notifiers are the NETDEV_UNREGISTER and friends. This dellink
->> handler is not related to that; this is an IB stack thing when the rxe
->> link is removed.
->>
->>> used to clean up the related resources.
->>>
->>> In the source code, additional comments have been added to explain how
->>> the dellink operation for rxe is triggered. For iWARP, this change
->>> should not make any difference because iWARP does not implement the
->>> dellink function.
->>>
->>> The commit is shown below. Please take a look and share your comments.
->>> If you agree, I will send out the latest commits out very soon.
->>>
->>>  From c05038dcdf69c5985837736a8926ba76d9f3e8e4 Mon Sep 17 00:00:00 2001
->>> From: Zhu Yanjun <yanjun.zhu@linux.dev>
->>> Date: Fri, 23 Sep 2022 16:52:45 +0000
->>> Subject: [PATCH 1/1] RDMA/nldev: Add dellink function pointer
->>>
->>> The newlink function pointer was previously added to support
->>> dynamic RDMA link creation. In the RXE driver, this path creates
->>> a transport socket listening on port 4791. Consequently, a dellink
->>> function pointer is required to ensure these sockets are properly
->>> closed when a user administratively removes a link via rdma link
->>> delete <dev>.
->>>
->>> Furthermore, RXE does not rely solely on this nldev path for resource
->>> management. It also monitors the underlying net_device state via a
->>> registered netdev_notifier. The rxe_net_event callback serves as a
->>> fallback mechanism to ensure that transport sockets are forcibly closed
->>> and all resources are released even if dellink is not explicitly called
->>> (e.g., if the parent NIC interface is removed or the driver is 
->>> forcefully
->>> unloaded).
->> IMHO, this explanation belongs in the patch that implements dellink 
->> for rxe.
->>
->> This patch adds the handler to allow link implementations to cleanup any
->> resources created by newklink as needed.
-> Thanks for the feedback. I agree that the detailed explanation of 
-> RXE's resource management (like sockets and notifiers) is more 
-> appropriate for the subsequent patch that implements the RXE dellink 
-> handler.
->
-> I will update the commit message for this patch to focus solely on the 
-> addition of the dellink infrastructure in the RDMA core, and move the 
-> RXE-specific details to the next patch in the series.
+Here's iteration 2 of the attributes, after getting a much clearer idea
+of the use cases across platforms at the last guest_memfd biweekly.
 
-Hi,
+Please comment in this context! I'm planning for this text to make it to
+Documentation/virt/kvm/api.rst.
 
-I would like to use the following as the commit log. It seems simple and 
-direct.
-
-"
-
-Add a dellink function pointer to rdma_link_ops to allow drivers to 
-clean up resources created during newlink.
-"
-
-Thanks,
-
-Zhu Yanjun
-
-
->
-> Zhu Yanjun
+> Ackerley Tng <ackerleytng@google.com> writes:
 >
 >>
--- 
-Best Regards,
-Yanjun.Zhu
+>> [...snip...]
+>>
+>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>> index 23ec0b0c3e22..26e80745c8b4 100644
+>> --- a/Documentation/virt/kvm/api.rst
+>> +++ b/Documentation/virt/kvm/api.rst
+>> @@ -117,7 +117,7 @@ description:
+>>        x86 includes both i386 and x86_64.
+>>
+>>    Type:
+>> -      system, vm, or vcpu.
+>> +      system, vm, vcpu or guest_memfd.
+>>
+>>    Parameters:
+>>        what parameters are accepted by the ioctl.
+>> @@ -6523,11 +6523,22 @@ the capability to be present.
+>>  ---------------------------------
+>>
+>>  :Capability: KVM_CAP_MEMORY_ATTRIBUTES2
+>> -:Architectures: x86
+>> -:Type: vm ioctl
+>> +:Architectures: all
+>> +:Type: vm, guest_memfd ioctl
+>>  :Parameters: struct kvm_memory_attributes2 (in/out)
+>>  :Returns: 0 on success, <0 on error
+>>
+>> +Errors:
+>> +
+>> +  ========== ===============================================================
+>> +  EINVAL     The specified `offset` or `size` were invalid (e.g. not
+>> +             page aligned, causes an overflow, or size is zero).
+>> +  EFAULT     The parameter address was invalid.
+>> +  EAGAIN     Some page within requested range had unexpected refcounts. The
+>> +             offset of the page will be returned in `error_offset`.
+>> +  ENOMEM     Ran out of memory trying to track private/shared state
+      EOPNOTSUPP The specified content policy is not supported while
+                 setting the requested attribute
+>> +  ========== ===============================================================
+>> +
+>>  KVM_SET_MEMORY_ATTRIBUTES2 is an extension to
+>>  KVM_SET_MEMORY_ATTRIBUTES that supports returning (writing) values to
+>>  userspace.  The original (pre-extension) fields are shared with
+>> @@ -6538,15 +6549,42 @@ Attribute values are shared with KVM_SET_MEMORY_ATTRIBUTES.
+>>  ::
+>>
+>>    struct kvm_memory_attributes2 {
+>> -	__u64 address;
+>> +	/* in */
+>> +	union {
+>> +		__u64 address;
+>> +		__u64 offset;
+>> +	};
+>>  	__u64 size;
+>>  	__u64 attributes;
+>>  	__u64 flags;
+>> -	__u64 reserved[12];
+>> +	/* out */
+>> +	__u64 error_offset;
+>> +	__u64 reserved[11];
+>>    };
+>>
+>>    #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
+>>
+>> +Set attributes for a range of offsets within a guest_memfd to
+>> +KVM_MEMORY_ATTRIBUTE_PRIVATE to limit the specified guest_memfd backed
+>> +memory range for guest_use. Even if KVM_CAP_GUEST_MEMFD_MMAP is
+>> +supported, after a successful call to set
+>> +KVM_MEMORY_ATTRIBUTE_PRIVATE, the requested range will not be mappable
+>> +into host userspace and will only be mappable by the guest.
+>> +
+>> +To allow the range to be mappable into host userspace again, call
+>> +KVM_SET_MEMORY_ATTRIBUTES2 on the guest_memfd again with
+>> +KVM_MEMORY_ATTRIBUTE_PRIVATE unset.
+>> +
+>> +If this ioctl returns -EAGAIN, the offset of the page with unexpected
+>> +refcounts will be returned in `error_offset`. This can occur if there
+>> +are transient refcounts on the pages, taken by other parts of the
+>> +kernel.
+>> +
+>> +Userspace is expected to figure out how to remove all known refcounts
+>> +on the shared pages, such as refcounts taken by get_user_pages(), and
+>> +try the ioctl again. A possible source of these long term refcounts is
+>> +if the guest_memfd memory was pinned in IOMMU page tables.
+>> +
 
+Memory *content* policies can be requested while setting memory
+attributes. This defines:
+
+  - What the host reads after a private to shared conversion
+  - What the guest reads after a shared to private conversion (if
+    applicable)
+
+The policy definitions below provide more details:
+
+``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_ZERO`` (default)
+
+  On a private to shared conversion, the host will read zeros from the
+  converted memory on the next fault after successful return of the
+  KVM_SET_MEMORY_ATTRIBUTES2 ioctl.
+
+  This is not supported (-EOPNOTSUPP) for a shared to private
+  conversion. While some CoCo implementations do zero memory contents
+  such that the guest reads zeros after conversion, the guest is not
+  expected to trust host-provided zeroing, hence as a UAPI policy, KVM
+  does not make any such guarantees.
+
+  For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle
+  will support this policy and ensure zeroing for conversions in both
+  directions.
+
+``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_PRESERVE``
+
+  On private/shared conversions in both directions, memory contents
+  will be preserved and readable. As a concrete example, if the host
+  writes ``0xbeef`` to memory and converts the memory to shared, the
+  guest will also read ``0xbeef``, after any necessary hardware or
+  software provided decryption. After a reverse shared to private
+  conversion, the host will also read ``0xbeef``.
+
+  pKVM (ARM) is the first user of this policy. Since pKVM does not
+  protect memory with encryption, a content policy to preserve memory
+  will not will not involve any decryption. The guest will be able to
+  read what the host wrote with full content preservation.
+
+  For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle
+  will support this policy and the contents of converted memory will
+  be preserved.
+
+``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_NONE``
+
+  This is an explicit request that KVM provide no guarantees on memory
+  contents after conversion. Neither host nor guest should expect any
+  guarantees about the memory contents after conversion.
+
+  For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle will
+  support this policy and every byte of converted memory will read
+  ``0xab``.
+
+>>  See also: :ref: `KVM_SET_MEMORY_ATTRIBUTES`.
+>>
+>
+> [...snip...]
+>
