@@ -1,59 +1,233 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4619310655;
-	Thu, 12 Mar 2026 15:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96393DCD84
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 15:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773328764; cv=none; b=pOpdmPSV2oTDPnQdsdrstOK/0EM8ODkpnUZS3KOJajwzVyw8ajQmROuzW4BuNGLpHPFqicOlxnG0X6u3ySFE1n+YNXdWmr7asNxi3ZE8MeMNbolls7genETODojLbCGSSLnxxrXMJWLG0WPte6Go9wtEA0ixDRzpbwb+WSijZKo=
+	t=1773330273; cv=none; b=hugqETLFEiI072dD++3RVmIIijVVzKjbYN4ppxoBF50LOtCB8h8HBlPiYoXG+D5r7zXE5wktFMBUaTudFMdER/ozFpkJjWSyrcUm+GKAKdP7NgiVkahPC8+RpPV431KPGYrgShpxOSGE8qTubpREKXsTgsQVdo8W/1chKwvFqjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773328764; c=relaxed/simple;
-	bh=sOswyamaty815adp4oHchgJKP78qnaSCZU50yYAAvGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=feL6mZCU3dcAf02HYp+5CDmBKjnUkqKClAAZ8zdcGy339+ASl0A6GFusDPkDx8xgpE4LHocbUari6Kx3S5k2fvKyjEgQ+SiVPCpHSNj+ONW9Mxz82IPtpjd5h+wloMMqlrbknUNJcIaf2LGu2YiYAILJd005pnoqLtNv+YQYk0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O4SrkK6H; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773330273; c=relaxed/simple;
+	bh=576TIn2jifWj7C0GPxk/j0rxm6nFEdPvdqAY5vC0peA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=nMSzv4nLexM4np7lg4SLupLOkfadWtDIKfiwEull7y7TxDzABIUuFGWerwAelKfGWQxA78lJBGTS4oiFGfDwjqjy8RaVhm8euQuia77el7IwhrDv8LQ/5d5Atalfd9XlA/qxbJRd1aHmzVPc0fxAWHRB8uiVX+vMMKvKWih7zFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oJBZ0lBQ; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4SrkK6H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B61C4CEF7;
-	Thu, 12 Mar 2026 15:19:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773328764;
-	bh=sOswyamaty815adp4oHchgJKP78qnaSCZU50yYAAvGg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=O4SrkK6HqJc6P8LO9JFX/NEi89adx8usy2vv9LB2/2sxxOOui8JrxZhlltqm25XeD
-	 vGKbfybKCRcKzD3Xioe+icrqug2lfyj/99JqApZGHduKHQKsAQMnLxjHb5O0M3ibvJ
-	 PCx/qGDnH7NmjWe9ldxGPHFmw9BD6tJ6w9HAEugVxvtG0XE77z/LEkHuAEv3HXSilQ
-	 NKpDN2Qoe3a3bYtEDvx65gz8WLQBSDIQiNlrHpZHxZXIG3V0GROwqWYEv0YbwA6oIl
-	 pZS87Wqv25e/AQ92nAZOl6MiGtaZhp+Px6Z1e9sGLxrcorfk7v5vXaAD3XlGUKkxHw
-	 DK9kTL3pNRzQQ==
-Date: Thu, 12 Mar 2026 08:19:23 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Ioana Ciornei <ioana.ciornei@nxp.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman
- <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/9] selftests: drivers: bash support for
- remote traffic generators
-Message-ID: <20260312081923.01b0537d@kernel.org>
-In-Reply-To: <20260312141740.295353-1-ioana.ciornei@nxp.com>
-References: <20260312141740.295353-1-ioana.ciornei@nxp.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oJBZ0lBQ"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35a032cdd78so4895118a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 08:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773330267; x=1773935067; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DfjX+chjGEd0BK+/hAaiX1yXd2SlEDAudQ7PcUmbUhE=;
+        b=oJBZ0lBQ4b04zIfcaNl/XackVgqW5ZO1YLBQmDf42CwPsejhIR9UfDGVl1U/zScm5O
+         B/C05dMbK6Vl5rUrWnPtZWcy0PtENecw/cUK40G1rnFZbtsAF1KPVzXK12anrPKc0RK9
+         bND5/c31cTkGMisdTOIWGSsARDurM0oUFInsisS9P7hMf+3exDtnSH+X+yJPX0UoTWqw
+         rCJ72t/rXcuBNPEKAgdfJCbxuQljSYCos739fz/wBRIaDsYS0yBsVpPfcgNAwXyVLLYC
+         qX+kGrawofFi5STJYyiUJzhaUkBcWZPPj3SaHuF6T2W0nsE0LZ+YjdzqwTNijeHHGHsA
+         ZmHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773330267; x=1773935067;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DfjX+chjGEd0BK+/hAaiX1yXd2SlEDAudQ7PcUmbUhE=;
+        b=O8a+s7M2BPa8U+1kwuLTBrVt41LTJsrN/2FSjb6cO99BuxVgSj4gcQYkEFojCLAzA0
+         2ETlRS5ed6uC8PwS/knDLTKpVpKApf91AE1w3cGM6z4mDxFc68Y7BHZ8q9OW4aOIun5b
+         lsxTAVSNH7+2vxPF1+voYtDHrzRQ000LnJIh+B/tqTAs2dlfBCI2FnyvPJzF810ZWCDU
+         iH+lujPpbMxnl4yfgFvQcQKjV9nWLc5lgVqRWyWqN89DoeJfAVwl47x7Wa1Ej427qAFO
+         EqF1mEW1AlE4VFf5JNNXwlwi4l4nJcV6PX9QKakKt/HZAolrak8wfTlpxMvqZ/l0ZbdK
+         Y41w==
+X-Forwarded-Encrypted: i=1; AJvYcCXY+TYs4/H/vrkJT42lSI+b/Nj3KtF99O9ECQEX9YtzmTzxXOsW0iy3yFNWLBTcU2t8RAD41kMnX6RnZah3BxY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxryIXgktGD5ky/Ir7AQOv1P+7SIOW2nlPAIT01DyQk3tcbgwkV
+	CrYU+gtQLtBwZihUvYkOD8LBox75wNyQiBbdJUVAJAzWh2yOZwKVJVhyogCwH4OX+PDMdCxPGA1
+	j4/aKVg==
+X-Received: from pjpq11.prod.google.com ([2002:a17:90a:a00b:b0:359:803b:2e2b])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1d03:b0:359:8f13:667d
+ with SMTP id 98e67ed59e1d1-35a22055567mr113663a91.27.1773330266114; Thu, 12
+ Mar 2026 08:44:26 -0700 (PDT)
+Date: Thu, 12 Mar 2026 08:44:24 -0700
+In-Reply-To: <CA+EHjTy2urW2Tj5czQDKUHdri7FCLfw2mafTgmmtFs+-7ueoiw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
+ <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
+ <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com> <CA+EHjTy2urW2Tj5czQDKUHdri7FCLfw2mafTgmmtFs+-7ueoiw@mail.gmail.com>
+Message-ID: <abLfWHf89TxWqeGZ@google.com>
+Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, bp@alien8.de, 
+	brauner@kernel.org, chao.p.peng@intel.com, chao.p.peng@linux.intel.com, 
+	chenhuacai@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com, 
+	david@kernel.org, hpa@zytor.com, ira.weiny@intel.com, jgg@nvidia.com, 
+	jmattson@google.com, jroedel@suse.de, jthoughton@google.com, 
+	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
+	mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
+	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
+	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, shivankg@amd.com, shuah@kernel.org, steven.price@arm.com, 
+	tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, 12 Mar 2026 16:17:31 +0200 Ioana Ciornei wrote:
-> This patch set aims to add the necessary support so that bash written
-> selftests are also able to easily run with a remote traffic generator
-> system, either be it in another netns or one accessible through ssh.
+On Thu, Mar 12, 2026, Fuad Tabba wrote:
+> Hi Ackerley,
+> 
+> Before getting into the UAPI semantics, thank you for all the heavy
+> lifting you've done here. Figuring out how to make it all work across
+> the different platforms is not easy :)
+> 
+> <snip>
+> 
+> > The policy definitions below provide more details:
 
-I think this breaks a lot of tests:
-https://netdev.bots.linux.dev/contest.html?pw-n=0&branch=net-next-2026-03-12--15-00&pw-n=0&pass=0
--- 
-pw-bot: cr
+Please drop "CONTENT_POLICY" from the KVM documentation.  From KVM's perspective,
+these are not "policy", they are purely properties of the underlying memory.
+Userspace will likely use the attributes to implement policy of some kind, but
+KVM straight up doesn't care.
+
+> > ``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_ZERO`` (default)
+
+The default behavior absolutely cannot be something that's not supported on
+every conversion type.
+
+> >
+> >   On a private to shared conversion, the host will read zeros from the
+> >   converted memory on the next fault after successful return of the
+> >   KVM_SET_MEMORY_ATTRIBUTES2 ioctl.
+> >
+> >   This is not supported (-EOPNOTSUPP) for a shared to private
+> >   conversion. While some CoCo implementations do zero memory contents
+> >   such that the guest reads zeros after conversion, the guest is not
+> >   expected to trust host-provided zeroing, hence as a UAPI policy, KVM
+> >   does not make any such guarantees.
+> 
+> The rationale for not supporting this in the UAPI isn't quite right
+> and I think that the prohibition should be removed. It's true that the
+> guest is not expected to trust host-provided zeroing. However, if the
+> VMM invokes this ioctl with the ZERO policy, the zeroing is performed
+> by the hypervisor, not by the (untrusted) host.
+
+What entity zeros the data doesn't matter as far as KVM's ABI is concerned.  That's
+a motivating favor to providing ZERO, e.g. it allow userspace to elide additional
+zeroing when it _knows_ the memory holds zeros, but that's orthogonal to KVM's
+contract with userspace.
+
+> Although pKVM handles fresh, zeroed memory provisioning via donation
+> rather than attribute conversion, stating that the UAPI cannot make
+> guarantees due to trust boundaries is incorrect. The hypervisor is
+
+We should avoid using "hypervisor", because (a) it means different things to
+different people and (b) even when there's consensus on what "hypervisor" means,
+whether or not the hypervisor is trusted varies per implementation.
+
+> need to be careful witho precisely the entity the guest trusts to enforce
+> this.
+> 
+> The UAPI should define the semantics for a shared-to-private ZERO
+> conversion, even if current architectures return -EOPNOTSUPP because
+> they handle fresh memory provisioning via other mechanisms (like
+> pKVM's donation path).
+> 
+> How about something like the following:
+> 
+> On a shared to private conversion, the hypervisor will zero the memory
+
+Again, say _nothing_ about "the hypervisor".  _How_ or when anything happens is
+completely irrelevant, the only thing that matters here is _what_ happens.
+
+> contents before mapping it into the guest's private address space,
+> preventing the untrusted host from injecting arbitrary data into the
+> guest. If an architecture handles zeroed-provisioning via mechanisms
+> other than attribute conversion, it may return -EOPNOTSUPP.
+
+No.  I am 100% against bleeding vendor specific information into KVM's ABI for
+this.  What the vendor code does is irrelevant, the _only_ thing that matters
+here is KVM's contract with userspace.
+
+That doesn't mean pKVM guests can't rely on memory being zeroed, but that is a
+contract between pKVM and its guests, not between KVM and host userspace.
+
+> >   For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle
+> >   will support this policy and ensure zeroing for conversions in both
+> >   directions.
+> >
+> > ``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_PRESERVE``
+> >
+> >   On private/shared conversions in both directions, memory contents
+> >   will be preserved and readable. As a concrete example, if the host
+> >   writes ``0xbeef`` to memory and converts the memory to shared, the
+> >   guest will also read ``0xbeef``, after any necessary hardware or
+> >   software provided decryption. After a reverse shared to private
+> >   conversion, the host will also read ``0xbeef``.
+> 
+> I think that this example is backwards. If the host writes to memory,
+> that memory is already shared, isn't it? Converting it to shared is
+> redundant. More importantly, if memory undergoes a shared-to-private
+> conversion, the host must lose access entirely.
+
+Ya, it's messed up.
+
+> Maybe a clearer example would reflect actual payload injection and
+> bounce buffer sharing:
+> - Shared-to-Private (Payload Injection): The host writes a payload
+> (e.g., 0xbeef) to shared memory and converts it to private. The guest
+> reads 0xbeef in its private address space. The host loses access.
+> - Private-to-Shared (Bounce Buffer): The guest writes 0xbeef to
+> private memory and converts it to shared. The host reads 0xbeef.
+> 
+> >   pKVM (ARM) is the first user of this policy. Since pKVM does not
+> >   protect memory with encryption, a content policy to preserve memory
+> >   will not will not involve any decryption. The guest will be able to
+> >   read what the host wrote with full content preservation.
+> 
+> This is correct, but to be precise, I think it should explicitly
+> mention Stage-2 page tables as the protection mechanism, maybe:
+
+pKVM shouldn't be mentioned in here at all.
+
+---
+By default, KVM makes no guarantees about the in-memory values after memory is
+convert to/from shared/private.  Optionally, userspace may instruct KVM to
+ensure the contents of memory are zeroed or preserved, e.g. to enable in-place
+sharing of data, or as an optimization to avoid having to re-zero memory when
+the trusted entity guarantees the memory will be zeroed after conversion.
+
+The behaviors supported by a given KVM instance can be queried via <cap>.  If
+the requested behavior is an unsupported, KVM will return -EOPNOTSUPP and
+reject the conversion request.  Note!  The "ZERO" request is only support for
+private to shared conversion!
+
+``KVM_SET_MEMORY_ATTRIBUTES2_ZERO``
+
+  On conversion, KVM guarantees all entities that have "allowed" access to the
+  memory will read zeros.  E.g. on private to shared conversion, both trusted
+  and untrusted code will read zeros.
+
+  Zeroing is currently only supported for private-to-shared conversions, as KVM
+  in general is untrusted and thus cannot guarantee the guest (or any trusted
+  entity) will read zeros after conversion.  Note, some CoCo implementations do
+  zero memory contents such that the guest reads zeros after conversion, and
+  the guest may choose to rely on that behavior.  But that's a contract between
+  the trusted CoCo entity and the guest, not between KVM and the guest.
+
+``KVM_SET_MEMORY_ATTRIBUTES2_PRESERVE``
+
+  On conversion, KVM guarantees memory contents will be preserved with respect
+  to the last written unencrypted value.  As a concrete example, if the host
+  writes ``0xbeef`` to shared memory and converts the memory to private, the
+  guest will also read ``0xbeef``, even if the in-memory data is encrypted as
+  part of the conversion.  And vice versa, if the guest writes ``0xbeef`` to
+  private memory and then converts the memory to shared, the host (and guest)
+  will read ``0xbeef`` (if the memory is accessible).
