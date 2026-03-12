@@ -1,257 +1,168 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470E43FEB07;
-	Thu, 12 Mar 2026 18:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2437E33E34E
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 18:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773339456; cv=none; b=NbmDJpRHUyHeW7D9bpu5ZRuvnSpDuc/xoKr+k3KDY+AU+D4easM8XxUZw1XH0l8c9a5pQStzhHBu637tzmLjIPN0eRMyseEXoTDMzT2PufTfbb+nt3nc0xlRnVcp4ODOviPtpnu+WUyrCbgWY/UaNKyLddl/0GvqAgCndD+AU/Y=
+	t=1773339782; cv=none; b=n4lLW+A1nXCV2ymJOIXHJQl40mdDrkyGrkpuiZbhgk2pWFkiFdZMWweGP3EBqVmtQ1XEtv9g3YJ0TjMoQdsvOUKGxW+9grvCY149s0sPZPEx6YrEznhUMaKbGFjq3/qn7srxMJwtt2gpgecbEkd88qpmOtdURc7d71L7n7R7TAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773339456; c=relaxed/simple;
-	bh=oseE2rbEt6AvnSSYQiq+1Dcp8V/0TQwolE8LQt7EC+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tByBQODuvM4sooflSIXLSG91uRfS3mEDZR1cTt5jDoi0/CG7jJRVa2BnXGh2MqGwqOGOQwQfVYvmUvr1TDhf7h5Trk3yMKu0o14PX+N6hrAq320NPibHwSqkzpmFYpilYUHHa9F0Ec3vEnY9uH+5GiTpe3uUSA1b1gF4Qxq6HaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75E22165C;
-	Thu, 12 Mar 2026 11:17:26 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B4223F73B;
-	Thu, 12 Mar 2026 11:17:30 -0700 (PDT)
-Date: Thu, 12 Mar 2026 18:17:28 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, will@kernel.org, maz@kernel.org,
-	oupton@kernel.org, miko.lenczewski@arm.com, kevin.brodsky@arm.com,
-	broonie@kernel.org, ardb@kernel.org, suzuki.poulose@arm.com,
-	lpieralisi@kernel.org, joey.gouly@arm.com, yuzenghui@huawei.com
-Subject: Re: [PATCH v15 5/8] arm64: futex: support futex with FEAT_LSUI
-Message-ID: <abMDOC5DYEm74And@arm.com>
-References: <20260227151705.1275328-1-yeoreum.yun@arm.com>
- <20260227151705.1275328-6-yeoreum.yun@arm.com>
+	s=arc-20240116; t=1773339782; c=relaxed/simple;
+	bh=g6YRGDjYxBKu8MGO9lQLASK4R3cQW72fIQHlz3OkUDM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HtVagf5s1HHPnGxJ+p0h764GU2P2xCSY292seGFhNPCs9CfZWzjDZ/c/0QhM99ZIIE5g1pxTQmYJH9w8kZXzIbUAMwyrPZWMTOBUa4s1UHDKY3jvauDTOvLVQ5yRrndQT64ACVU+UzT01HAR0JadXom8B5n5Y8CB4lfpiQzZ9WU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sxCAVJVd; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sxCAVJVd"
+Message-ID: <02e68ebf-5782-4632-aed8-0026a3aab96b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773339779;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F5m9WLRDks/gQ0io//zmrr+zH79F0yxD0HjSLUsTqJM=;
+	b=sxCAVJVdvT34lmdReeK/lCrmdVGsle2U9eRfsfXmr67kbZHbtOlbAk3zrcN4CrLwNHIdzc
+	e3cRHCln3ULrYHEfQ4pBfdBvbS2LYMZu0Bk7vyEgX2c/tHv9/s6ORS1HlLZYYqx7p+hd+M
+	UKPGmYHuM56TW46aQ1oJx9rNhbpyHnw=
+Date: Thu, 12 Mar 2026 11:22:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260227151705.1275328-6-yeoreum.yun@arm.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: improve test coverage for
+ kfunc call
+Content-Language: en-GB
+To: Hari Bathini <hbathini@linux.ibm.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+References: <20260312080113.843408-1-hbathini@linux.ibm.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260312080113.843408-1-hbathini@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Feb 27, 2026 at 03:17:02PM +0000, Yeoreum Yun wrote:
-> +#ifdef CONFIG_ARM64_LSUI
-> +
-> +/*
-> + * FEAT_LSUI is supported since Armv9.6, where FEAT_PAN is mandatory.
-> + * However, this assumption may not always hold:
-> + *
-> + *   - Some CPUs advertise FEAT_LSUI but lack FEAT_PAN.
-> + *   - Virtualisation or ID register overrides may expose invalid
-> + *     feature combinations.
-> + *
-> + * Rather than disabling FEAT_LSUI when FEAT_PAN is absent, wrap LSUI
-> + * instructions with uaccess_ttbr0_enable()/disable() when
-> + * ARM64_SW_TTBR0_PAN is enabled.
-> + */
 
-I'd just keep this comment in the commit log. Here you could simply say
-that user access instructions don't require (hardware) PAN toggling. It
-should be obvious why we use ttbr0 toggling like for other uaccess
-routines.
 
-> +#define LSUI_FUTEX_ATOMIC_OP(op, asm_op)				\
-> +static __always_inline int						\
-> +__lsui_futex_atomic_##op(int oparg, u32 __user *uaddr, int *oval)	\
-> +{									\
-> +	int ret = 0;							\
-> +	int oldval;							\
-> +									\
-> +	uaccess_ttbr0_enable();						\
-> +									\
-> +	asm volatile("// __lsui_futex_atomic_" #op "\n"			\
-> +	__LSUI_PREAMBLE							\
-> +"1:	" #asm_op "al	%w3, %w2, %1\n"					\
+On 3/12/26 1:01 AM, Hari Bathini wrote:
+> On powerpc, immediate load instructions are sign extended. In case
+> of unsigned types, arguments should be explicitly zero-extended by
+> the caller. For kfunc call, this needs to be handled in the JIT code.
+> In bpf_kfunc_call_test4(), that tests for sign-extension of signed
+> argument types in kfunc calls, add some additional failure checks.
+> And add bpf_kfunc_call_test5() to test zero-extension of unsigned
+> argument types in kfunc calls.
+>
+> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
 
-As I mentioned on a previous patch, can we not use named operators here?
+LGTM with a nit below.
 
-> +"2:\n"									\
-> +	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)				\
-> +	: "+r" (ret), "+Q" (*uaddr), "=r" (oldval)			\
-> +	: "r" (oparg)							\
-> +	: "memory");							\
-> +									\
-> +	uaccess_ttbr0_disable();					\
-> +									\
-> +	if (!ret)							\
-> +		*oval = oldval;						\
-> +	return ret;							\
-> +}
-> +
-> +LSUI_FUTEX_ATOMIC_OP(add, ldtadd)
-> +LSUI_FUTEX_ATOMIC_OP(or, ldtset)
-> +LSUI_FUTEX_ATOMIC_OP(andnot, ldtclr)
-> +LSUI_FUTEX_ATOMIC_OP(set, swpt)
-> +
-> +static __always_inline int
-> +__lsui_cmpxchg64(u64 __user *uaddr, u64 *oldval, u64 newval)
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+
+> ---
+>
+> Changes in v2:
+> - Added asm version of the selftest for consistent testing across
+>    different BPF ISA versions.
+> - Added comments clearly stating the intent of the test cases.
+> - Updated sign-extension selftest to have additional failure checks.
+>
+>
+>   .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
+>   .../selftests/bpf/progs/kfunc_call_test.c     | 98 +++++++++++++++++++
+>   .../selftests/bpf/test_kmods/bpf_testmod.c    | 54 +++++++++-
+>   .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
+>   4 files changed, 154 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> index f79c8e53cb3e..62f3fb79f5d1 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> @@ -74,6 +74,8 @@ static struct kfunc_test_params kfunc_tests[] = {
+>   	TC_TEST(kfunc_call_test1, 12),
+>   	TC_TEST(kfunc_call_test2, 3),
+>   	TC_TEST(kfunc_call_test4, -1234),
+> +	TC_TEST(kfunc_call_test5, 0),
+> +	TC_TEST(kfunc_call_test5_asm, 0),
+>   	TC_TEST(kfunc_call_test_ref_btf_id, 0),
+>   	TC_TEST(kfunc_call_test_get_mem, 42),
+>   	SYSCALL_TEST(kfunc_syscall_test, 0),
+> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> index 8b86113a0126..5edc51564f71 100644
+> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> @@ -2,8 +2,106 @@
+>   /* Copyright (c) 2021 Facebook */
+>   #include <vmlinux.h>
+>   #include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+>   #include "../test_kmods/bpf_testmod_kfunc.h"
+>   
+> +SEC("tc")
+> +int kfunc_call_test5(struct __sk_buff *skb)
 > +{
-> +	int ret = 0;
+> +	struct bpf_sock *sk = skb->sk;
+> +	int ret;
+> +	u32 val32;
+> +	u16 val16;
+> +	u8 val8;
 > +
-> +	uaccess_ttbr0_enable();
+> +	if (!sk)
+> +		return -1;
 > +
-> +	asm volatile("// __lsui_cmpxchg64\n"
-> +	__LSUI_PREAMBLE
-> +"1:	casalt	%2, %3, %1\n"
-> +"2:\n"
-> +	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)
-> +	: "+r" (ret), "+Q" (*uaddr), "+r" (*oldval)
-> +	: "r" (newval)
-> +	: "memory");
+> +	sk = bpf_sk_fullsock(sk);
+> +	if (!sk)
+> +		return -1;
 > +
-> +	uaccess_ttbr0_disable();
-> +
-> +	return ret;
+> +	/*
+> +	 * Test with constant values to verify zero-extension.
+> +	 * ISA-dependent BPF asm:
+> +	 *   With ALU32:    w1 = 0xFF; w2 = 0xFFFF; w3 = 0xFFFFffff
+> +	 *   Without ALU32: r1 = 0xFF; r2 = 0xFFFF; r3 = 0xFFFFffff
+> +	 * Both zero-extend to 64-bit before the kfunc call.
+> +	 */
+> +	ret = bpf_kfunc_call_test5(0xFF, 0xFFFF, 0xFFFFffffULL);
 
-So here it returns EFAULT only if the check failed. The EAGAIN is only
-possible in cmpxchg32. That's fine but I have more comments below.
+Can we just use 0xFFFFffff instead of 0xFFFFffffULL?
 
-> +}
-> +
-> +static __always_inline int
-> +__lsui_cmpxchg32(u32 __user *uaddr, u32 oldval, u32 newval, u32 *oval)
-> +{
-> +	u64 __user *uaddr64;
-> +	bool futex_pos, other_pos;
-> +	int ret, i;
-> +	u32 other, orig_other;
-> +	union {
-> +		u32 futex[2];
-> +		u64 raw;
-> +	} oval64, orig64, nval64;
-> +
-> +	uaddr64 = (u64 __user *) PTR_ALIGN_DOWN(uaddr, sizeof(u64));
-
-Nit: we don't use space after the type cast.
-
-> +	futex_pos = !IS_ALIGNED((unsigned long)uaddr, sizeof(u64));
-> +	other_pos = !futex_pos;
-> +
-> +	oval64.futex[futex_pos] = oldval;
-> +	ret = get_user(oval64.futex[other_pos], (u32 __user *)uaddr64 + other_pos);
 > +	if (ret)
-> +		return -EFAULT;
+> +		return ret;
 > +
-> +	ret = -EAGAIN;
-> +	for (i = 0; i < FUTEX_MAX_LOOPS; i++) {
-
-I was wondering if we still need the FUTEX_MAX_LOOPS bound with LSUI. I
-guess with CAS we can have some malicious user that keeps updating the
-futex location or the adjacent one on another CPU. However, I think we'd
-need to differentiate between futex_atomic_cmpxchg_inatomic() use and
-the eor case.
-
-> +		orig64.raw = nval64.raw = oval64.raw;
-> +
-> +		nval64.futex[futex_pos] = newval;
-
-I'd keep orig64.raw = oval64.raw and set the nval64 separately (I find
-it clearer, not sure the compiler cares much):
-
-		nval64.futex[futex_pos] = newval;
-		nval64.futex[other_pos] = oval64.futex[other_pos];
-
-> +
-> +		if (__lsui_cmpxchg64(uaddr64, &oval64.raw, nval64.raw))
-> +			return -EFAULT;
-> +
-> +		oldval = oval64.futex[futex_pos];
-> +		other = oval64.futex[other_pos];
-> +		orig_other = orig64.futex[other_pos];
-> +
-> +		if (other == orig_other) {
-> +			ret = 0;
-> +			break;
-> +		}
-
-Is this check correct? What if the cmpxchg64 failed because futex_pos
-was changed but other_pos remained the same, it will just report success
-here. You need to compare the full 64-bit value to ensure the cmpxchg64
-succeeded.
-
-> +	}
-> +
-> +	if (!ret)
-> +		*oval = oldval;
-> +
-> +	return ret;
-> +}
-> +
-> +static __always_inline int
-> +__lsui_futex_atomic_and(int oparg, u32 __user *uaddr, int *oval)
-> +{
-> +	/*
-> +	 * Undo the bitwise negation applied to the oparg passed from
-> +	 * arch_futex_atomic_op_inuser() with FUTEX_OP_ANDN.
-> +	 */
-> +	return __lsui_futex_atomic_andnot(~oparg, uaddr, oval);
-> +}
-> +
-> +static __always_inline int
-> +__lsui_futex_atomic_eor(int oparg, u32 __user *uaddr, int *oval)
-> +{
-> +	u32 oldval, newval, val;
-> +	int ret, i;
-> +
-> +	if (get_user(oldval, uaddr))
-> +		return -EFAULT;
+> +	val32 = bpf_get_prandom_u32();
+> +	val16 = val32 & 0xFFFF;
+> +	val8 = val32 & 0xFF;
+> +	ret = bpf_kfunc_call_test5(val8, val16, val32);
+> +	if (ret)
+> +		return ret;
 > +
 > +	/*
-> +	 * there are no ldteor/stteor instructions...
+> +	 * Test multiplication with different operand sizes:
+> +	 *
+> +	 * val8 * 0xFF:
+> +	 *   - Both operands promote to int (32-bit signed)
+> +	 *   - Result: 32-bit multiplication, truncated to u8, then zero-extended
+> +	 *
+> +	 * val16 * 0xFFFF:
+> +	 *   - Both operands promote to int (32-bit signed)
+> +	 *   - Result: 32-bit multiplication, truncated to u16, then zero-extended
+> +	 *
+> +	 * val32 * 0xFFFFffffULL:
+> +	 *   - val32 (u32) promotes to unsigned long long (due to ULL suffix)
+> +	 *   - Result: 64-bit unsigned multiplication, truncated to u32, then zero-extended
 > +	 */
-> +	for (i = 0; i < FUTEX_MAX_LOOPS; i++) {
-> +		newval = oldval ^ oparg;
+> +	ret = bpf_kfunc_call_test5(val8 * 0xFF, val16 * 0xFFFF, val32 * 0xFFFFffffULL);
+> +	if (ret)
+> +		return ret;
 > +
-> +		ret = __lsui_cmpxchg32(uaddr, oldval, newval, &val);
-
-Since we have a FUTEX_MAX_LOOPS here, do we need it in cmpxchg32 as
-well?
-
-For eor, we need a loop irrespective of whether futex_pos or other_pos
-have changed. For cmpxchg, we need the loop only if other_pos has
-changed and return -EAGAIN if futex_pos has changed since the caller
-needs to update oldval and call again.
-
-So try to differentiate these cases, maybe only keep the loop outside
-cmpxchg32 (I haven't put much though into it).
-
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (val == oldval) {
-> +			*oval = val;
-> +			return 0;
-> +		}
-
-I can see you are adding another check here for the actual value which
-solves the other_pos comparison earlier but that's only for eor and not
-the __lsui_futex_cmpxchg() case.
-
-> +
-> +		oldval = val;
-> +	}
-> +
-> +	return -EAGAIN;
+> +	return 0;
 > +}
-> +
-> +static __always_inline int
-> +__lsui_futex_cmpxchg(u32 __user *uaddr, u32 oldval, u32 newval, u32 *oval)
-> +{
-> +	return __lsui_cmpxchg32(uaddr, oldval, newval, oval);
-> +}
-> +#endif	/* CONFIG_ARM64_LSUI */
 
--- 
-Catalin
+[...]
+
