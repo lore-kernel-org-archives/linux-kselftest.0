@@ -1,267 +1,445 @@
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1446C26ED25
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 05:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773294303; cv=pass; b=FyTNoJt2H8wyMkpury9w5goCgXCSTtzYXpsT6nQ8XR2IWvnYJ5RwAtkQXkF2/IQmsyHgRPVKfpKtkwcs2SczqkKYkhtdy5tUMq8FIuLNF3I0bd6S8siNrQm4eJSwI7WCIopEfUK4KYnMefsx/hj4dE8bUR4C/Jm2s0soST78DQQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773294303; c=relaxed/simple;
-	bh=GmJK/N0KBkRxDo+pqiY/6G+ZRXyparhw1yW+Cxl6e28=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FeLngpHAsuVBC+qHGFdNuFFo3GRvwIpQG9YIWHN/nVw1QU6UI6sH2P39Y1LrwSyE2tlauKDLXCDMbVjmFSDNdWLBz2ELflSfcHAFw7YeZOxU2T5erGDiWuTCkr9MdexLlQl61MZjec6o/XS7MgjkxG3Yh/uoHJJx1W7gXTqWYYs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VdZJT0Tx; arc=pass smtp.client-ip=209.85.217.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E3A33F5AC
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2026 06:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773296461; cv=none; b=hKh6nBmsr8SRFhqJ2rKAXvMMHjj48rjxkTjdDCxoyNAWOQaMIqEtH3WFmHdUGQ7+ErEf2KG36iwfUmrWdHDk1Z9osLWaN7hwSLIpZWhRhzOCnpWZYcVfU+YwHcaxje8TMC/8VFvZZuhvZFPK79a8ZawFINZRu4cDN34E7CzUCCQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773296461; c=relaxed/simple;
+	bh=yX+P25SFQt+hKWowT6l//ymslHAMD4h2kwPp7q1L1cU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X9WkrxvLa6Zl1RjLBoXgxeM8lvwv9hnfGjkJfKH4AOTzhQohNrRQXaK9D9MJ/4NBLuEUlhsX3/8nJxVkbkRHasUBj2rVs0Mb+aZCx+QiyS/I4pElFqvPVk5Uurjco0S4ElGGLUlewo5TBtx6DbcNQ66QLZSLVRYcBOwTc+jgURY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tQTBZUwi; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VdZJT0Tx"
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-5ffe7b6f751so428652137.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2026 22:45:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773294301; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FaNLulM2eYhtpkQ1aJw5RDH6vOvwg9kSczNjU1ozSRp5A4gCOuPvB0syyGEl16Jcps
-         /usVzGAP3K9VOY9gd4bD7s7NvEpTCfpS07gtQ8c/zn+sqxV1GyEWOUMkRe2bX8NhKVqy
-         TB2kA3aALDFvYAR3kjqbiWkNpoxEPtvkk9cvTdoFIGA3iNJl3IltrzdUTtjyX76YZPWi
-         Bt29IheMpKb7NrA1zOzS9cbtQ83Z/FR38PsWa23OGL31jGKg1SW5tRaCK3MFUzdT9bLe
-         e+FdCng0SDMqj/hzz/aWtEu7N80BilwnoyiXkAitFXxW5aY0rynxVVGX+Kq9u6OjO0gA
-         VLXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=WHL+cdGBVdeYzUrRkXUnxuFTgvkDYPGLTyvabwlDW1U=;
-        fh=lKPe3yQ4RCSNl/tp46csEGQH+IrVPUljRZW1Ea+32Y4=;
-        b=OnG0JJ25AZs3T+cjm20oqGxwBft520S5sUU+TuOTNUZsA5A1xgegsG1o6NbAS5vHyB
-         ELTf8IN9cM8/ReF8FTsSQ5KxOXSM16uBbpQ5O4WjGRlg1SbO9DTL7/oJhbb2GNhc/Vkg
-         fzvxfqrobIzpKn5ztGoYJVdpWRi+NYtmDc4Mwbzt94ucJAMWD7x+aPuRBX6jJ72GTPdC
-         bhGvpPYTOCFzckXU2xgGeyzRuNxBBhPJM+sjwLZEGYZMp3GyYZoezunLOJHcFL3ZGuOl
-         o+cg/BGcTcNtM6cRmj+qX2bHkDD9fVUM2HqmuODH+7JMzYAVjQkqeVWVZi8kJf2iw4R8
-         setA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773294301; x=1773899101; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WHL+cdGBVdeYzUrRkXUnxuFTgvkDYPGLTyvabwlDW1U=;
-        b=VdZJT0TxrE2a9giQrcsUQtWWCibe1Z2In7NV0CRlZMWbacWoFRZzPJiR7FY93c03j9
-         2yAo6IHTgN6vy8NV77CVpW+HhOc8Y55Q1whsRU7GuexdhiOif0pMktOgLab0yQH24Xmb
-         eY626NrC06XAbL+FuZen1nZxylloOh0Xe89KQ40vjxWjixm6s10qgZ4tccTY1C/SL9YU
-         idN+6ZtprApYPnh/eGiR+dkQwu97WSop2d6awTVostO+SsiP5p9csP3pOO148vafEevW
-         oby0MD9CpiBWwPQcNfulnvgZ3CI41epjzwTw2bXTqHx8ZBGK0yocieKobEXt292GR1Sr
-         CfPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773294301; x=1773899101;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WHL+cdGBVdeYzUrRkXUnxuFTgvkDYPGLTyvabwlDW1U=;
-        b=NNXhed+l9b0VK1k//aMIfpeUnTeObJltUubztGvtQiY6rRjTpy7fCptzR33q5ZyIga
-         I4DN1grQ2f+HDngofEZtBM6ZjmSeNZ4ulA6Ox1XMRJSLYY9miY9SAp2I1VcWIUkBhTJw
-         0h9AgUSvVqL2989NrFhg8w8gFPB/FORa+OtHErj/4HegDMGh7ISxOkgdFvSGFF34bCe1
-         6iVSVzyzS0gXY10btajCeP9e1mgvEH8KOZ04MhogTLa0gtwhBhoaqoDaEsY90l+oLNP0
-         YJHZqkuOL4MFSaoZggdz6P97Z21fwOB+WLJsEtHAV5onw1Ay0gWBoRHlNoS6GVC8MJL0
-         e2hQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnCO0PTzZABAvVHKyL7FnHZb42fUWlt9WR3qJOfjsIltA3j6ZZyKE9bh2yUvHw1dOSsynwEfeZkWNGQH5DuFg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo5oONVvGf6rE0/hP8MnKzgZt+bVyy0RjQ1MJUGc2S3QerzqqF
-	ufyJTRiqJ6izaqm9gEyveXd0ByYYldDlOYuBJLq6JLm4HIPnqBfOuyE0xZlsqtEr3Jn545xNXH9
-	hccEWQN5OyGViYkljRkfso1v11++Y+uATROW1lqFh
-X-Gm-Gg: ATEYQzzkvGFetCq/GMIT5YEbtosqUv18L3UkRZFx3h42Xoh+p9GdvyjOYNjPR++RAxH
-	a6fCIT9uKgA5yZAB9p3NoBLQpZDBUsCIsdNCQcDeXSeRIIkFVpi5kyr250wswPQkrIcQHvlu38A
-	K1A/r/fN9WFa9yYJkfXC/ZFIvNxtpuQKHLjNpC4aGnA83WmRnM2p8SyWAzWY1aB976UPbgOOdQw
-	uQxykncg/3l3xTZghC8CHoKhpumpKDTiHzoOSI6EITrI7zGD/SaMFMXKLGjvhY7fBbpvzEJwJgv
-	tlFolPqjEMGC4tqAs9tyFEneNuaP6jwau9x41A==
-X-Received: by 2002:a05:6102:418e:b0:5ff:ba2d:17c1 with SMTP id
- ada2fe7eead31-601deb8f595mr2321310137.9.1773294300559; Wed, 11 Mar 2026
- 22:45:00 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 11 Mar 2026 22:44:59 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 11 Mar 2026 22:44:59 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
-References: <cover.1770071243.git.ackerleytng@google.com> <86ad28b767524e1e654b9c960e39ca8bfb24c114.1770071243.git.ackerleytng@google.com>
- <CAEvNRgFMNywpDRr+WeNsVj=MnsbhZp9H3j0QRDo_eOP+kGCNJw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tQTBZUwi"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1773296456;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2vVMS1rputcYuq9qQkm4lsbyxPvoAkHcTLgoqyv28Ts=;
+	b=tQTBZUwiaA4PEGqFl4UTHNZ76YCImuwYACCCIlnvvnJQ06GCFnD2A420JFEnRFxP+RHDUO
+	vB/6zbWH8U4qUfHCDbzf6or/u98zgI8q9OzLGkCW3CzcHapmfHng2oiAA+VUuK7OdFb+6/
+	rESHRMdJb/Y9KmWru3ArDr5MoIYRoi4=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v1] selftests/bpf: Improve connect_force_port test reliability
+Date: Thu, 12 Mar 2026 14:20:26 +0800
+Message-ID: <20260312062042.387367-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 11 Mar 2026 22:44:59 -0700
-X-Gm-Features: AaiRm50qY80lG_kPAevYiMiI4iaIYG-rOHvoXqEdwljZn3zJnS7kUqoIvI7enLE
-Message-ID: <CAEvNRgG-L+GBcm+u_thGvXAxV-Nqzu5VtgXy0PfND6SG0FiyVg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 09/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
-To: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	bp@alien8.de, brauner@kernel.org, chao.p.peng@intel.com, 
-	chao.p.peng@linux.intel.com, chenhuacai@kernel.org, corbet@lwn.net, 
-	dave.hansen@linux.intel.com, david@kernel.org, hpa@zytor.com, 
-	ira.weiny@intel.com, jgg@nvidia.com, jmattson@google.com, jroedel@suse.de, 
-	jthoughton@google.com, maobibo@loongson.cn, mathieu.desnoyers@efficios.com, 
-	maz@kernel.org, mhiramat@kernel.org, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	pbonzini@redhat.com, prsampat@amd.com, qperret@google.com, 
-	ricarkol@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, seanjc@google.com, shivankg@amd.com, shuah@kernel.org, 
-	steven.price@arm.com, tabba@google.com, tglx@linutronix.de, 
-	vannapurve@google.com, vbabka@suse.cz, willy@infradead.org, wyihan@google.com, 
-	yan.y.zhao@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Ackerley Tng <ackerleytng@google.com> writes:
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-Here's iteration 2 of the attributes, after getting a much clearer idea
-of the use cases across platforms at the last guest_memfd biweekly.
+No functional changes.
 
-Please comment in this context! I'm planning for this text to make it to
-Documentation/virt/kvm/api.rst.
+The connect_force_port test can fail intermittently because the
+hardcoded server ports (60123/60124) may already be in use by other
+tests or processes in CI environments [1].
 
-> Ackerley Tng <ackerleytng@google.com> writes:
->
->>
->> [...snip...]
->>
->> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
->> index 23ec0b0c3e22..26e80745c8b4 100644
->> --- a/Documentation/virt/kvm/api.rst
->> +++ b/Documentation/virt/kvm/api.rst
->> @@ -117,7 +117,7 @@ description:
->>        x86 includes both i386 and x86_64.
->>
->>    Type:
->> -      system, vm, or vcpu.
->> +      system, vm, vcpu or guest_memfd.
->>
->>    Parameters:
->>        what parameters are accepted by the ioctl.
->> @@ -6523,11 +6523,22 @@ the capability to be present.
->>  ---------------------------------
->>
->>  :Capability: KVM_CAP_MEMORY_ATTRIBUTES2
->> -:Architectures: x86
->> -:Type: vm ioctl
->> +:Architectures: all
->> +:Type: vm, guest_memfd ioctl
->>  :Parameters: struct kvm_memory_attributes2 (in/out)
->>  :Returns: 0 on success, <0 on error
->>
->> +Errors:
->> +
->> +  ========== ===============================================================
->> +  EINVAL     The specified `offset` or `size` were invalid (e.g. not
->> +             page aligned, causes an overflow, or size is zero).
->> +  EFAULT     The parameter address was invalid.
->> +  EAGAIN     Some page within requested range had unexpected refcounts. The
->> +             offset of the page will be returned in `error_offset`.
->> +  ENOMEM     Ran out of memory trying to track private/shared state
-      EOPNOTSUPP The specified content policy is not supported while
-                 setting the requested attribute
->> +  ========== ===============================================================
->> +
->>  KVM_SET_MEMORY_ATTRIBUTES2 is an extension to
->>  KVM_SET_MEMORY_ATTRIBUTES that supports returning (writing) values to
->>  userspace.  The original (pre-extension) fields are shared with
->> @@ -6538,15 +6549,42 @@ Attribute values are shared with KVM_SET_MEMORY_ATTRIBUTES.
->>  ::
->>
->>    struct kvm_memory_attributes2 {
->> -	__u64 address;
->> +	/* in */
->> +	union {
->> +		__u64 address;
->> +		__u64 offset;
->> +	};
->>  	__u64 size;
->>  	__u64 attributes;
->>  	__u64 flags;
->> -	__u64 reserved[12];
->> +	/* out */
->> +	__u64 error_offset;
->> +	__u64 reserved[11];
->>    };
->>
->>    #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
->>
->> +Set attributes for a range of offsets within a guest_memfd to
->> +KVM_MEMORY_ATTRIBUTE_PRIVATE to limit the specified guest_memfd backed
->> +memory range for guest_use. Even if KVM_CAP_GUEST_MEMFD_MMAP is
->> +supported, after a successful call to set
->> +KVM_MEMORY_ATTRIBUTE_PRIVATE, the requested range will not be mappable
->> +into host userspace and will only be mappable by the guest.
->> +
->> +To allow the range to be mappable into host userspace again, call
->> +KVM_SET_MEMORY_ATTRIBUTES2 on the guest_memfd again with
->> +KVM_MEMORY_ATTRIBUTE_PRIVATE unset.
->> +
->> +If this ioctl returns -EAGAIN, the offset of the page with unexpected
->> +refcounts will be returned in `error_offset`. This can occur if there
->> +are transient refcounts on the pages, taken by other parts of the
->> +kernel.
->> +
->> +Userspace is expected to figure out how to remove all known refcounts
->> +on the shared pages, such as refcounts taken by get_user_pages(), and
->> +try the ioctl again. A possible source of these long term refcounts is
->> +if the guest_memfd memory was pinned in IOMMU page tables.
->> +
+Fix this by using dynamically assigned ports (port 0) for start_server
+and propagating the actual port to the BPF programs at runtime via
+skel->bss->port. Convert the test from the legacy bpf_object__open_file
+loading model to the skeleton (skel) pattern, which provides direct
+access to BPF global variables without introducing maps or other
+mechanisms.
 
-Memory *content* policies can be requested while setting memory
-attributes. This defines:
+Test:
 
-  - What the host reads after a private to shared conversion
-  - What the guest reads after a shared to private conversion (if
-    applicable)
+  ./test_progs -a connect_force_port -v
 
-The policy definitions below provide more details:
+  test_v4:PASS:skel4_open_and_load 0 nsec
+  attach_progs:PASS:attach connect 0 nsec
+  attach_progs:PASS:attach getpeername 0 nsec
+  attach_progs:PASS:attach getsockname 0 nsec
+  run_tests:PASS:start_server tcp 0 nsec
+  run_tests:PASS:get_socket_local_port 0 nsec
+  run_tests:PASS:connect_to_fd 0 nsec
+  run_tests:PASS:verify_ports 0 nsec
+  run_tests:PASS:start_server udp 0 nsec
+  run_tests:PASS:get_socket_local_port 0 nsec
+  run_tests:PASS:connect_to_fd 0 nsec
+  run_tests:PASS:verify_ports 0 nsec
+  test_v6:PASS:skel6_open_and_load 0 nsec
+  attach_progs:PASS:attach connect 0 nsec
+  attach_progs:PASS:attach getpeername 0 nsec
+  attach_progs:PASS:attach getsockname 0 nsec
+  run_tests:PASS:start_server tcp 0 nsec
+  run_tests:PASS:get_socket_local_port 0 nsec
+  run_tests:PASS:connect_to_fd 0 nsec
+  run_tests:PASS:verify_ports 0 nsec
+  run_tests:PASS:start_server udp 0 nsec
+  run_tests:PASS:get_socket_local_port 0 nsec
+  run_tests:PASS:connect_to_fd 0 nsec
+  run_tests:PASS:verify_ports 0 nsec
+  #80      connect_force_port:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 
-``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_ZERO`` (default)
+[1] https://github.com/kernel-patches/bpf/actions/runs/22697676317/job/65808536038
 
-  On a private to shared conversion, the host will read zeros from the
-  converted memory on the next fault after successful return of the
-  KVM_SET_MEMORY_ATTRIBUTES2 ioctl.
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+---
+ .../bpf/prog_tests/connect_force_port.c       | 190 +++++++++---------
+ .../selftests/bpf/progs/connect_force_port4.c |  10 +-
+ .../selftests/bpf/progs/connect_force_port6.c |  10 +-
+ 3 files changed, 108 insertions(+), 102 deletions(-)
 
-  This is not supported (-EOPNOTSUPP) for a shared to private
-  conversion. While some CoCo implementations do zero memory contents
-  such that the guest reads zeros after conversion, the guest is not
-  expected to trust host-provided zeroing, hence as a UAPI policy, KVM
-  does not make any such guarantees.
+diff --git a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
+index 24d553109f8dd..3e62f9b9f1d94 100644
+--- a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
++++ b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
+@@ -3,6 +3,8 @@
+ #include <test_progs.h>
+ #include "cgroup_helpers.h"
+ #include "network_helpers.h"
++#include "connect_force_port4.skel.h"
++#include "connect_force_port6.skel.h"
+ 
+ static int verify_ports(int family, int fd,
+ 			__u16 expected_local, __u16 expected_peer)
+@@ -46,122 +48,122 @@ static int verify_ports(int family, int fd,
+ 	return 0;
+ }
+ 
+-static int run_test(int cgroup_fd, int server_fd, int family, int type)
++static int attach_progs(int cgroup_fd, int family,
++			int connect_fd, int getpeername_fd,
++			int getsockname_fd)
+ {
+ 	bool v4 = family == AF_INET;
+-	__u16 expected_local_port = v4 ? 22222 : 22223;
+-	__u16 expected_peer_port = 60000;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	const char *obj_file = v4 ? "connect_force_port4.bpf.o" : "connect_force_port6.bpf.o";
+-	int fd, err;
+-	__u32 duration = 0;
+-
+-	obj = bpf_object__open_file(obj_file, NULL);
+-	if (!ASSERT_OK_PTR(obj, "bpf_obj_open"))
++	int err;
++
++	err = bpf_prog_attach(connect_fd, cgroup_fd,
++			      v4 ? BPF_CGROUP_INET4_CONNECT :
++				   BPF_CGROUP_INET6_CONNECT, 0);
++	if (!ASSERT_OK(err, "attach connect"))
+ 		return -1;
+ 
+-	err = bpf_object__load(obj);
+-	if (!ASSERT_OK(err, "bpf_obj_load")) {
+-		err = -EIO;
+-		goto close_bpf_object;
+-	}
++	err = bpf_prog_attach(getpeername_fd, cgroup_fd,
++			      v4 ? BPF_CGROUP_INET4_GETPEERNAME :
++				   BPF_CGROUP_INET6_GETPEERNAME, 0);
++	if (!ASSERT_OK(err, "attach getpeername"))
++		return -1;
+ 
+-	prog = bpf_object__find_program_by_name(obj, v4 ?
+-						"connect4" :
+-						"connect6");
+-	if (CHECK(!prog, "find_prog", "connect prog not found\n")) {
+-		err = -EIO;
+-		goto close_bpf_object;
+-	}
++	err = bpf_prog_attach(getsockname_fd, cgroup_fd,
++			      v4 ? BPF_CGROUP_INET4_GETSOCKNAME :
++				   BPF_CGROUP_INET6_GETSOCKNAME, 0);
++	if (!ASSERT_OK(err, "attach getsockname"))
++		return -1;
+ 
+-	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd, v4 ?
+-			      BPF_CGROUP_INET4_CONNECT :
+-			      BPF_CGROUP_INET6_CONNECT, 0);
+-	if (err) {
+-		log_err("Failed to attach BPF program");
+-		goto close_bpf_object;
+-	}
++	return 0;
++}
+ 
+-	prog = bpf_object__find_program_by_name(obj, v4 ?
+-						"getpeername4" :
+-						"getpeername6");
+-	if (CHECK(!prog, "find_prog", "getpeername prog not found\n")) {
+-		err = -EIO;
+-		goto close_bpf_object;
++static int run_tests(int cgroup_fd, int family, unsigned short *bss_port)
++{
++	int types[] = {SOCK_STREAM, SOCK_DGRAM};
++	bool v4 = family == AF_INET;
++	__u16 expected_local_port = v4 ? 22222 : 22223;
++	__u16 expected_peer_port = 60000;
++	int server_fd, port, fd, i;
++
++	for (i = 0; i < ARRAY_SIZE(types); i++) {
++		/* Log the socket type to identify which test is running. */
++		server_fd = start_server(family, types[i], NULL, 0, 0);
++		if (!ASSERT_GE(server_fd, 0,
++			       types[i] == SOCK_STREAM ? "start_server tcp" :
++							 "start_server udp"))
++			return -1;
++
++		port = get_socket_local_port(server_fd);
++		if (!ASSERT_GE(port, 0, "get_socket_local_port")) {
++			close(server_fd);
++			return -1;
++		}
++		*bss_port = ntohs(port);
++
++		fd = connect_to_fd(server_fd, 0);
++		if (!ASSERT_GE(fd, 0, "connect_to_fd")) {
++			close(server_fd);
++			return -1;
++		}
++
++		ASSERT_OK(verify_ports(family, fd, expected_local_port,
++				       expected_peer_port), "verify_ports");
++		close(fd);
++		close(server_fd);
+ 	}
+ 
+-	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd, v4 ?
+-			      BPF_CGROUP_INET4_GETPEERNAME :
+-			      BPF_CGROUP_INET6_GETPEERNAME, 0);
+-	if (err) {
+-		log_err("Failed to attach BPF program");
+-		goto close_bpf_object;
+-	}
++	return 0;
++}
+ 
+-	prog = bpf_object__find_program_by_name(obj, v4 ?
+-						"getsockname4" :
+-						"getsockname6");
+-	if (CHECK(!prog, "find_prog", "getsockname prog not found\n")) {
+-		err = -EIO;
+-		goto close_bpf_object;
+-	}
++static void test_v4(int cgroup_fd)
++{
++	struct connect_force_port4 *skel;
+ 
+-	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd, v4 ?
+-			      BPF_CGROUP_INET4_GETSOCKNAME :
+-			      BPF_CGROUP_INET6_GETSOCKNAME, 0);
+-	if (err) {
+-		log_err("Failed to attach BPF program");
+-		goto close_bpf_object;
+-	}
++	skel = connect_force_port4__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel4_open_and_load"))
++		return;
+ 
+-	fd = connect_to_fd(server_fd, 0);
+-	if (fd < 0) {
+-		err = -1;
+-		goto close_bpf_object;
+-	}
++	if (attach_progs(cgroup_fd, AF_INET,
++			 bpf_program__fd(skel->progs.connect4),
++			 bpf_program__fd(skel->progs.getpeername4),
++			 bpf_program__fd(skel->progs.getsockname4)))
++		goto out;
+ 
+-	err = verify_ports(family, fd, expected_local_port,
+-			   expected_peer_port);
+-	close(fd);
++	run_tests(cgroup_fd, AF_INET, &skel->bss->port);
+ 
+-close_bpf_object:
+-	bpf_object__close(obj);
+-	return err;
++out:
++	connect_force_port4__destroy(skel);
++}
++
++static void test_v6(int cgroup_fd)
++{
++	struct connect_force_port6 *skel;
++
++	skel = connect_force_port6__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel6_open_and_load"))
++		return;
++
++	if (attach_progs(cgroup_fd, AF_INET6,
++			 bpf_program__fd(skel->progs.connect6),
++			 bpf_program__fd(skel->progs.getpeername6),
++			 bpf_program__fd(skel->progs.getsockname6)))
++		goto out;
++
++	run_tests(cgroup_fd, AF_INET6, &skel->bss->port);
++
++out:
++	connect_force_port6__destroy(skel);
+ }
+ 
+ void test_connect_force_port(void)
+ {
+-	int server_fd, cgroup_fd;
++	int cgroup_fd;
+ 
+ 	cgroup_fd = test__join_cgroup("/connect_force_port");
+ 	if (CHECK_FAIL(cgroup_fd < 0))
+ 		return;
+ 
+-	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 60123, 0);
+-	if (CHECK_FAIL(server_fd < 0))
+-		goto close_cgroup_fd;
+-	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET, SOCK_STREAM));
+-	close(server_fd);
+-
+-	server_fd = start_server(AF_INET6, SOCK_STREAM, NULL, 60124, 0);
+-	if (CHECK_FAIL(server_fd < 0))
+-		goto close_cgroup_fd;
+-	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET6, SOCK_STREAM));
+-	close(server_fd);
+-
+-	server_fd = start_server(AF_INET, SOCK_DGRAM, NULL, 60123, 0);
+-	if (CHECK_FAIL(server_fd < 0))
+-		goto close_cgroup_fd;
+-	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET, SOCK_DGRAM));
+-	close(server_fd);
+-
+-	server_fd = start_server(AF_INET6, SOCK_DGRAM, NULL, 60124, 0);
+-	if (CHECK_FAIL(server_fd < 0))
+-		goto close_cgroup_fd;
+-	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET6, SOCK_DGRAM));
+-	close(server_fd);
+-
+-close_cgroup_fd:
++	test_v4(cgroup_fd);
++	test_v6(cgroup_fd);
++
+ 	close(cgroup_fd);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/connect_force_port4.c b/tools/testing/selftests/bpf/progs/connect_force_port4.c
+index 27a632dd382e0..d2beff466902e 100644
+--- a/tools/testing/selftests/bpf/progs/connect_force_port4.c
++++ b/tools/testing/selftests/bpf/progs/connect_force_port4.c
+@@ -14,6 +14,8 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++unsigned short port = 0;
++
+ struct svc_addr {
+ 	__be32 addr;
+ 	__be16 port;
+@@ -40,7 +42,7 @@ int connect4(struct bpf_sock_addr *ctx)
+ 	if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) != 0)
+ 		return 0;
+ 
+-	/* Rewire service 1.2.3.4:60000 to backend 127.0.0.1:60123. */
++	/* Rewire service 1.2.3.4:60000 to backend 127.0.0.1:port. */
+ 	if (ctx->user_port == bpf_htons(60000)) {
+ 		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0,
+ 					  BPF_SK_STORAGE_GET_F_CREATE);
+@@ -51,7 +53,7 @@ int connect4(struct bpf_sock_addr *ctx)
+ 		orig->port = ctx->user_port;
+ 
+ 		ctx->user_ip4 = bpf_htonl(0x7f000001);
+-		ctx->user_port = bpf_htons(60123);
++		ctx->user_port = bpf_htons(port);
+ 	}
+ 	return 1;
+ }
+@@ -63,7 +65,7 @@ int getsockname4(struct bpf_sock_addr *ctx)
+ 		return 1;
+ 
+ 	/* Expose local server as 1.2.3.4:60000 to client. */
+-	if (ctx->user_port == bpf_htons(60123)) {
++	if (ctx->user_port == bpf_htons(port)) {
+ 		ctx->user_ip4 = bpf_htonl(0x01020304);
+ 		ctx->user_port = bpf_htons(60000);
+ 	}
+@@ -79,7 +81,7 @@ int getpeername4(struct bpf_sock_addr *ctx)
+ 		return 1;
+ 
+ 	/* Expose service 1.2.3.4:60000 as peer instead of backend. */
+-	if (ctx->user_port == bpf_htons(60123)) {
++	if (ctx->user_port == bpf_htons(port)) {
+ 		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0, 0);
+ 		if (orig) {
+ 			ctx->user_ip4 = orig->addr;
+diff --git a/tools/testing/selftests/bpf/progs/connect_force_port6.c b/tools/testing/selftests/bpf/progs/connect_force_port6.c
+index 19cad93e612fc..7b5f3c6040cc4 100644
+--- a/tools/testing/selftests/bpf/progs/connect_force_port6.c
++++ b/tools/testing/selftests/bpf/progs/connect_force_port6.c
+@@ -13,6 +13,8 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++unsigned short port = 0;
++
+ struct svc_addr {
+ 	__be32 addr[4];
+ 	__be16 port;
+@@ -39,7 +41,7 @@ int connect6(struct bpf_sock_addr *ctx)
+ 	if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) != 0)
+ 		return 0;
+ 
+-	/* Rewire service [fc00::1]:60000 to backend [::1]:60124. */
++	/* Rewire service [fc00::1]:60000 to backend [::1]:port. */
+ 	if (ctx->user_port == bpf_htons(60000)) {
+ 		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0,
+ 					  BPF_SK_STORAGE_GET_F_CREATE);
+@@ -56,7 +58,7 @@ int connect6(struct bpf_sock_addr *ctx)
+ 		ctx->user_ip6[1] = 0;
+ 		ctx->user_ip6[2] = 0;
+ 		ctx->user_ip6[3] = bpf_htonl(1);
+-		ctx->user_port = bpf_htons(60124);
++		ctx->user_port = bpf_htons(port);
+ 	}
+ 	return 1;
+ }
+@@ -68,7 +70,7 @@ int getsockname6(struct bpf_sock_addr *ctx)
+ 		return 1;
+ 
+ 	/* Expose local server as [fc00::1]:60000 to client. */
+-	if (ctx->user_port == bpf_htons(60124)) {
++	if (ctx->user_port == bpf_htons(port)) {
+ 		ctx->user_ip6[0] = bpf_htonl(0xfc000000);
+ 		ctx->user_ip6[1] = 0;
+ 		ctx->user_ip6[2] = 0;
+@@ -87,7 +89,7 @@ int getpeername6(struct bpf_sock_addr *ctx)
+ 		return 1;
+ 
+ 	/* Expose service [fc00::1]:60000 as peer instead of backend. */
+-	if (ctx->user_port == bpf_htons(60124)) {
++	if (ctx->user_port == bpf_htons(port)) {
+ 		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0, 0);
+ 		if (orig) {
+ 			ctx->user_ip6[0] = orig->addr[0];
+-- 
+2.43.0
 
-  For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle
-  will support this policy and ensure zeroing for conversions in both
-  directions.
-
-``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_PRESERVE``
-
-  On private/shared conversions in both directions, memory contents
-  will be preserved and readable. As a concrete example, if the host
-  writes ``0xbeef`` to memory and converts the memory to shared, the
-  guest will also read ``0xbeef``, after any necessary hardware or
-  software provided decryption. After a reverse shared to private
-  conversion, the host will also read ``0xbeef``.
-
-  pKVM (ARM) is the first user of this policy. Since pKVM does not
-  protect memory with encryption, a content policy to preserve memory
-  will not will not involve any decryption. The guest will be able to
-  read what the host wrote with full content preservation.
-
-  For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle
-  will support this policy and the contents of converted memory will
-  be preserved.
-
-``KVM_SET_MEMORY_ATTRIBUTES2_CONTENT_POLICY_NONE``
-
-  This is an explicit request that KVM provide no guarantees on memory
-  contents after conversion. Neither host nor guest should expect any
-  guarantees about the memory contents after conversion.
-
-  For testing purposes, the KVM_X86_SW_PROTECTED_VM testing vehicle will
-  support this policy and every byte of converted memory will read
-  ``0xab``.
-
->>  See also: :ref: `KVM_SET_MEMORY_ATTRIBUTES`.
->>
->
-> [...snip...]
->
